@@ -18,7 +18,7 @@
 		src.teleport(user)
 
 /obj/effect/portal/attackby(obj/item/weapon/O as obj, mob/user as mob)
-	if(O == creator)
+	if (O == creator)
 		to_chat(user, "<span class='warning'>You close the portal prematurely.</span>")
 		qdel(src)
 	else
@@ -30,16 +30,16 @@
 		src.teleport(M)
 */
 /obj/effect/portal/Crossed(AM as mob|obj,var/no_tp=0)
-	if(no_tp)
+	if (no_tp)
 		return
-	if(istype(AM,/obj/item/projectile/beam))
+	if (istype(AM,/obj/item/projectile/beam))
 		var/obj/item/projectile/beam/B = AM
 		B.wait = 1
 	spawn()
 		teleport(AM)
 
 /obj/effect/portal/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover,/obj/effect/beam))
+	if (istype(mover,/obj/effect/beam))
 		return 0
 	else
 		return ..()
@@ -51,28 +51,28 @@
 		qdel(src)
 
 /obj/effect/portal/Destroy()
-	if(undergoing_deletion)
+	if (undergoing_deletion)
 		return
 	undergoing_deletion = 1
 	playsound(loc,'sound/effects/portal_close.ogg',60,1)
 
 	purge_beams()
 	owner = null
-	if(target)
-		if(istype(target,/obj/effect/portal) && !istype(creator,/obj/item/weapon/gun/portalgun))
+	if (target)
+		if (istype(target,/obj/effect/portal) && !istype(creator,/obj/item/weapon/gun/portalgun))
 			qdel(target)
 		target = null
-	if(creator)
-		if(istype(creator,/obj/item/weapon/hand_tele))
+	if (creator)
+		if (istype(creator,/obj/item/weapon/hand_tele))
 			var/obj/item/weapon/hand_tele/H = creator
 			H.portals -= src
 			creator = null
-		else if(istype(creator,/obj/item/weapon/gun/portalgun))
+		else if (istype(creator,/obj/item/weapon/gun/portalgun))
 			var/obj/item/weapon/gun/portalgun/P = creator
-			if(src == P.blue_portal)
+			if (src == P.blue_portal)
 				P.blue_portal = null
 				P.sync_portals()
-			else if(src == P.red_portal)
+			else if (src == P.red_portal)
 				P.red_portal = null
 				P.sync_portals()
 	var/datum/effect/effect/system/spark_spread/aeffect = new
@@ -95,7 +95,7 @@ var/list/portal_cache = list()
 /obj/effect/portal/proc/blend_icon(var/obj/effect/portal/P)
 	var/turf/T = P.loc
 
-	if(!("icon[initial(T.icon)]_iconstate[T.icon_state]" in portal_cache))//If the icon has not been added yet
+	if (!("icon[initial(T.icon)]_iconstate[T.icon_state]" in portal_cache))//If the icon has not been added yet
 		var/icon/I1 = icon(icon,"portal_mask")//Generate it.
 		var/icon/I2 = icon(initial(T.icon),T.icon_state)
 		I1.Blend(I2,ICON_MULTIPLY)
@@ -104,7 +104,7 @@ var/list/portal_cache = list()
 	overlays += portal_cache["icon[initial(T.icon)]_iconstate[T.icon_state]"]
 
 /obj/effect/portal/proc/teleport(atom/movable/M as mob|obj)
-	if(istype(M, /obj/effect)) //sparks don't teleport
+	if (istype(M, /obj/effect)) //sparks don't teleport
 		return
 	if (M.anchored&&istype(M, /obj/mecha))
 		return
@@ -114,49 +114,49 @@ var/list/portal_cache = list()
 		return
 	if (istype(M, /atom/movable))
 		var/area/A = get_area(target)
-		if(A && A.anti_ethereal)
+		if (A && A.anti_ethereal)
 			visible_message("<span class='sinister'>A dark form vaguely ressembling a hand reaches through the portal and tears it apart before anything can go through.</span>")
 			qdel(src)
 		else
 			do_teleport(M, target, 0, 1, 1, 1, 'sound/effects/portal_enter.ogg', 'sound/effects/portal_exit.ogg')
-			if(ismob(M))
+			if (ismob(M))
 				var/mob/target = M
-				if(target.mind && owner)
+				if (target.mind && owner)
 					log_attack("[target.name]([target.ckey]) entered a portal made by [owner.name]([owner.ckey]) at [loc]([x],[y],[z]), exiting at [target.loc]([target.x],[target.y],[target.z]).")
 
 /obj/effect/portal/beam_connect(var/obj/effect/beam/B)
-	if(istype(B))
-		if(B.HasSource(src))
+	if (istype(B))
+		if (B.HasSource(src))
 			return // Prevent infinite loops.
 		..()
 	handle_beams()
 
 /obj/effect/portal/beam_disconnect(var/obj/effect/beam/B)
-	if(istype(B))
-		if(B.HasSource(src))
+	if (istype(B))
+		if (B.HasSource(src))
 			return // Prevent infinite loops.
 		..()
 	handle_beams()
 
 /obj/effect/portal/handle_beams()
-	if(target && istype(target,/obj/effect/portal))
+	if (target && istype(target,/obj/effect/portal))
 		var/obj/effect/portal/PE = target
 		PE.purge_beams()
 
 	add_beams()
 
 /obj/effect/portal/proc/purge_beams()
-	for(var/obj/effect/beam/BE in exit_beams)
+	for (var/obj/effect/beam/BE in exit_beams)
 		exit_beams -= BE
 		qdel(BE)
 
 /obj/effect/portal/proc/add_beams()
-	if((!beams) || (!beams.len) || !target || !istype(target,/obj/effect/portal))
+	if ((!beams) || (!beams.len) || !target || !istype(target,/obj/effect/portal))
 		return
 
 	var/obj/effect/portal/PE = target
 
-	for(var/obj/effect/beam/emitter/BE in beams)
+	for (var/obj/effect/beam/emitter/BE in beams)
 		var/list/spawners = list(src)
 		spawners |= BE.sources
 		var/obj/effect/beam/emitter/beam = new(PE.loc)

@@ -38,20 +38,20 @@
 	var/list/construct_spells = list()
 
 /mob/living/simple_animal/construct/construct_chat_check(setting)
-	if(!mind)
+	if (!mind)
 		return
 
-	if(mind in ticker.mode.cult)
+	if (mind in ticker.mode.cult)
 		return 1
 
 /mob/living/simple_animal/construct/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
-	if(..())
+	if (..())
 		return 1
-	if(message_mode == MODE_HEADSET && construct_chat_check(0))
+	if (message_mode == MODE_HEADSET && construct_chat_check(0))
 		var/turf/T = get_turf(src)
 		log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Cult channel: [html_encode(speech.message)]")
-		for(var/mob/M in mob_list)
-			if(M.construct_chat_check(2) /*receiving check*/ || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
+		for (var/mob/M in mob_list)
+			if (M.construct_chat_check(2) /*receiving check*/ || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
 				to_chat(M, "<span class='sinister'><b>[src.name]:</b> [html_encode(speech.message)]</span>")
 		return 1
 
@@ -75,16 +75,16 @@
 	real_name = name
 	add_language(LANGUAGE_CULT)
 	default_language = all_languages[LANGUAGE_CULT]
-	for(var/spell in construct_spells)
+	for (var/spell in construct_spells)
 		src.add_spell(new spell, "const_spell_ready")
 	updateicon()
 
 /mob/living/simple_animal/construct/Die()
 	..()
-	for(var/i=0;i<3;i++)
+	for (var/i=0;i<3;i++)
 		new /obj/item/weapon/ectoplasm (src.loc)
-	for(var/mob/M in viewers(src, null))
-		if((M.client && !( M.blinded )))
+	for (var/mob/M in viewers(src, null))
+		if ((M.client && !( M.blinded )))
 			M.show_message("<span class='warning'>[src] collapses in a shattered heap. </span>")
 	ghostize()
 	qdel (src)
@@ -105,8 +105,8 @@
 
 
 /mob/living/simple_animal/construct/attack_animal(mob/living/simple_animal/M as mob)
-	if(istype(M, /mob/living/simple_animal/construct/builder))
-		if(src.health >= src.maxHealth)
+	if (istype(M, /mob/living/simple_animal/construct/builder))
+		if (src.health >= src.maxHealth)
 			to_chat(M, "<span class='notice'>[src] has nothing to mend.</span>")
 			return
 		health = min(maxHealth, health + 5) // Constraining health to maxHealth
@@ -114,10 +114,10 @@
 	else
 		M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.attacktext] [src.name] ([src.ckey])</font>")
 		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.attacktext] by [M.name] ([M.ckey])</font>")
-		if(M.melee_damage_upper <= 0)
+		if (M.melee_damage_upper <= 0)
 			M.emote("[M.friendly] \the <EM>[src]</EM>")
 		else
-			if(M.attack_sound)
+			if (M.attack_sound)
 				playsound(loc, M.attack_sound, 50, 1, 1)
 			M.visible_message("<span class='attack'>\The <EM>[M]</EM> [M.attacktext] \the <EM>[src]</EM>!</span>")
 			add_logs(M, src, "attacked", admin=1)
@@ -126,11 +126,11 @@
 
 /mob/living/simple_animal/construct/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	user.delayNextAttack(8)
-	if(O.force)
+	if (O.force)
 		var/damage = O.force
 		if (O.damtype == HALLOSS)
 			damage = 0
-		if(istype(O,/obj/item/weapon/nullrod))
+		if (istype(O,/obj/item/weapon/nullrod))
 			damage *= 2
 			purge = 3
 		adjustBruteLoss(damage)
@@ -167,30 +167,30 @@
 
 /mob/living/simple_animal/construct/armoured/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	user.delayNextAttack(8)
-	if(O.force)
-		if(O.force >= 11)
+	if (O.force)
+		if (O.force >= 11)
 			var/damage = O.force
 			if (O.damtype == HALLOSS)
 				damage = 0
 			adjustBruteLoss(damage)
-			for(var/mob/M in viewers(src, null))
+			for (var/mob/M in viewers(src, null))
 				if ((M.client && !( M.blinded )))
 					M.show_message("<span class='danger'>\The [src] has been attacked with [O] by [user]. </span>")
 		else
-			for(var/mob/M in viewers(src, null))
+			for (var/mob/M in viewers(src, null))
 				if ((M.client && !( M.blinded )))
 					M.show_message("<span class='danger'>[O] bounces harmlessly off of \the [src]. </span>")
 	else
 		to_chat(usr, "<span class='warning'>This weapon is ineffective, it does no damage.</span>")
-		for(var/mob/M in viewers(src, null))
+		for (var/mob/M in viewers(src, null))
 			if ((M.client && !( M.blinded )))
 				M.show_message("<span class='warning'>[user] gently taps \the [src] with [O]. </span>")
 
 
 /mob/living/simple_animal/construct/armoured/bullet_act(var/obj/item/projectile/P)
-	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
+	if (istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
 		var/reflectchance = 80 - round(P.damage/3)
-		if(prob(reflectchance))
+		if (prob(reflectchance))
 			adjustBruteLoss(P.damage * 0.5)
 			visible_message("<span class='danger'>\The [P.name] gets reflected by \the [src]'s shell!</span>", \
 							"<span class='userdanger'>\The [P.name] gets reflected by \the [src]'s shell!</span>")
@@ -285,22 +285,22 @@
 
 /mob/living/simple_animal/construct/behemoth/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	user.delayNextAttack(8)
-	if(O.force)
-		if(O.force >= 11)
+	if (O.force)
+		if (O.force >= 11)
 			var/damage = O.force
 			if (O.damtype == HALLOSS)
 				damage = 0
 			adjustBruteLoss(damage)
-			for(var/mob/M in viewers(src, null))
+			for (var/mob/M in viewers(src, null))
 				if ((M.client && !( M.blinded )))
 					M.show_message("<span class='danger'>\The [src] has been attacked with [O] by [user]. </span>")
 		else
-			for(var/mob/M in viewers(src, null))
+			for (var/mob/M in viewers(src, null))
 				if ((M.client && !( M.blinded )))
 					M.show_message("<span class='danger'>\The [O] bounces harmlessly off of [src]. </span>")
 	else
 		to_chat(usr, "<span class='warning'>This weapon is ineffective, it does no damage.</span>")
-		for(var/mob/M in viewers(src, null))
+		for (var/mob/M in viewers(src, null))
 			if ((M.client && !( M.blinded )))
 				M.show_message("<span class='warning'>[user] gently taps \the [src] with [O]. </span>")
 
@@ -341,7 +341,7 @@
 	overlays = 0
 	var/overlay_layer = ABOVE_LIGHTING_LAYER
 	var/overlay_plane = LIGHTING_PLANE
-	if(layer != MOB_LAYER) // ie it's hiding
+	if (layer != MOB_LAYER) // ie it's hiding
 		overlay_layer = FLOAT_LAYER
 		overlay_plane = FLOAT_PLANE
 
@@ -359,20 +359,20 @@
 	set desc = "Teleport a cultist to your location"
 	if (istype(usr,/mob/living/simple_animal/constructbehemoth))
 
-		if(usr.energy<300)
+		if (usr.energy<300)
 			to_chat(usr, "<span class='warning'>You do not have enough power stored!</span>")
 			return
 
-		if(usr.stat)
+		if (usr.stat)
 			return
 
 		usr.energy -= 300
 	var/list/mob/living/cultists = new
-	for(var/datum/mind/H in ticker.mode.cult)
+	for (var/datum/mind/H in ticker.mode.cult)
 		if (istype(H.current,/mob/living))
 			cultists+=H.current
 			var/mob/cultist = input("Choose the one who you want to summon", "Followers of Geometer") as null|anything in (cultists - usr)
-			if(!cultist)
+			if (!cultist)
 				return
 			if (cultist == usr) //just to be sure.
 				return
@@ -382,25 +382,25 @@
 ////////////////HUD//////////////////////
 
 /mob/living/simple_animal/construct/Life()
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
 
 	. = ..()
 
-	if(.)
+	if (.)
 		regular_hud_updates()
 
 
 /mob/living/simple_animal/construct/regular_hud_updates()
-	if(fire)
-		if(fire_alert)
+	if (fire)
+		if (fire_alert)
 			fire.icon_state = "fire1"
 		else
 			fire.icon_state = "fire0"
 	update_pull_icon()
 
-	if(purged)
-		if(purge > 0)
+	if (purged)
+		if (purge > 0)
 			purged.icon_state = "purge1"
 		else
 			purged.icon_state = "purge0"
@@ -410,21 +410,21 @@
 
 /mob/living/simple_animal/construct/armoured/regular_hud_updates()
 	..()
-	if(healths)
-		switch(health)
-			if(250 to INFINITY)
+	if (healths)
+		switch (health)
+			if (250 to INFINITY)
 				healths.icon_state = "juggernaut_health0"
-			if(208 to 249)
+			if (208 to 249)
 				healths.icon_state = "juggernaut_health1"
-			if(167 to 207)
+			if (167 to 207)
 				healths.icon_state = "juggernaut_health2"
-			if(125 to 166)
+			if (125 to 166)
 				healths.icon_state = "juggernaut_health3"
-			if(84 to 124)
+			if (84 to 124)
 				healths.icon_state = "juggernaut_health4"
-			if(42 to 83)
+			if (42 to 83)
 				healths.icon_state = "juggernaut_health5"
-			if(1 to 41)
+			if (1 to 41)
 				healths.icon_state = "juggernaut_health6"
 			else
 				healths.icon_state = "juggernaut_health7"
@@ -432,42 +432,42 @@
 
 /mob/living/simple_animal/construct/behemoth/regular_hud_updates()
 	..()
-	if(healths)
-		switch(health)
-			if(750 to INFINITY)
+	if (healths)
+		switch (health)
+			if (750 to INFINITY)
 				healths.icon_state = "juggernaut_health0"
-			if(625 to 749)
+			if (625 to 749)
 				healths.icon_state = "juggernaut_health1"
-			if(500 to 624)
+			if (500 to 624)
 				healths.icon_state = "juggernaut_health2"
-			if(375 to 499)
+			if (375 to 499)
 				healths.icon_state = "juggernaut_health3"
-			if(250 to 374)
+			if (250 to 374)
 				healths.icon_state = "juggernaut_health4"
-			if(125 to 249)
+			if (125 to 249)
 				healths.icon_state = "juggernaut_health5"
-			if(1 to 124)
+			if (1 to 124)
 				healths.icon_state = "juggernaut_health6"
 			else
 				healths.icon_state = "juggernaut_health7"
 
 /mob/living/simple_animal/construct/builder/regular_hud_updates()
 	..()
-	if(healths)
-		switch(health)
-			if(50 to INFINITY)
+	if (healths)
+		switch (health)
+			if (50 to INFINITY)
 				healths.icon_state = "artificer_health0"
-			if(42 to 49)
+			if (42 to 49)
 				healths.icon_state = "artificer_health1"
-			if(34 to 41)
+			if (34 to 41)
 				healths.icon_state = "artificer_health2"
-			if(26 to 33)
+			if (26 to 33)
 				healths.icon_state = "artificer_health3"
-			if(18 to 25)
+			if (18 to 25)
 				healths.icon_state = "artificer_health4"
-			if(10 to 17)
+			if (10 to 17)
 				healths.icon_state = "artificer_health5"
-			if(1 to 9)
+			if (1 to 9)
 				healths.icon_state = "artificer_health6"
 			else
 				healths.icon_state = "artificer_health7"
@@ -476,21 +476,21 @@
 
 /mob/living/simple_animal/construct/wraith/regular_hud_updates()
 	..()
-	if(healths)
-		switch(health)
-			if(75 to INFINITY)
+	if (healths)
+		switch (health)
+			if (75 to INFINITY)
 				healths.icon_state = "wraith_health0"
-			if(62 to 74)
+			if (62 to 74)
 				healths.icon_state = "wraith_health1"
-			if(50 to 61)
+			if (50 to 61)
 				healths.icon_state = "wraith_health2"
-			if(37 to 49)
+			if (37 to 49)
 				healths.icon_state = "wraith_health3"
-			if(25 to 36)
+			if (25 to 36)
 				healths.icon_state = "wraith_health4"
-			if(12 to 24)
+			if (12 to 24)
 				healths.icon_state = "wraith_health5"
-			if(1 to 11)
+			if (1 to 11)
 				healths.icon_state = "wraith_health6"
 			else
 				healths.icon_state = "wraith_health7"
@@ -498,21 +498,21 @@
 
 /mob/living/simple_animal/construct/harvester/regular_hud_updates()
 	..()
-	if(healths)
-		switch(health)
-			if(150 to INFINITY)
+	if (healths)
+		switch (health)
+			if (150 to INFINITY)
 				healths.icon_state = "harvester_health0"
-			if(125 to 149)
+			if (125 to 149)
 				healths.icon_state = "harvester_health1"
-			if(100 to 124)
+			if (100 to 124)
 				healths.icon_state = "harvester_health2"
-			if(75 to 99)
+			if (75 to 99)
 				healths.icon_state = "harvester_health3"
-			if(50 to 74)
+			if (50 to 74)
 				healths.icon_state = "harvester_health4"
-			if(25 to 49)
+			if (25 to 49)
 				healths.icon_state = "harvester_health5"
-			if(1 to 24)
+			if (1 to 24)
 				healths.icon_state = "harvester_health6"
 			else
 				healths.icon_state = "harvester_health7"

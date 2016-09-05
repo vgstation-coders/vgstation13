@@ -24,7 +24,7 @@
 
 /obj/machinery/computer/HolodeckControl/attack_hand(var/mob/user as mob)
 
-	if(..())
+	if (..())
 		return
 	user.set_machine(src)
 	var/dat
@@ -45,18 +45,18 @@
 //	dat += "<A href='?src=\ref[src];turnoff=1'>((Shutdown System)</font>)</A><BR>"
 	dat += "Please ensure that only holographic weapons are used in the holodeck if a combat simulation has been loaded.<BR>"
 
-	if(emagged)
+	if (emagged)
 		dat += {"<A href='?src=\ref[src];burntest=1'>(<font color=red>Begin Atmospheric Burn Simulation</font>)</A><BR>
 			Ensure the holodeck is empty before testing.<BR>
 			<BR>
 			<A href='?src=\ref[src];wildlifecarp=1'>(<font color=red>Begin Wildlife Simulation</font>)</A><BR>
 			Ensure the holodeck is empty before testing.<BR>
 			<BR>"}
-		if(issilicon(user))
+		if (issilicon(user))
 			dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=green>Re-Enable Safety Protocols?</font>)</A><BR>"
 		dat += "Safety Protocols are <font color=red> DISABLED </font><BR>"
 	else
-		if(issilicon(user))
+		if (issilicon(user))
 			dat += "<A href='?src=\ref[src];AIoverride=1'>(<font color=red>Override Safety Protocols?</font>)</A><BR>"
 
 		dat += {"<BR>
@@ -66,90 +66,90 @@
 	return
 
 /obj/machinery/computer/HolodeckControl/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 	else
 		usr.set_machine(src)
 
-		if(href_list["emptycourt"])
+		if (href_list["emptycourt"])
 			target = locate(/area/holodeck/source_emptycourt)
-			if(target)
+			if (target)
 				loadProgram(target)
 
-		else if(href_list["boxingcourt"])
+		else if (href_list["boxingcourt"])
 			target = locate(/area/holodeck/source_boxingcourt)
-			if(target)
+			if (target)
 				loadProgram(target)
 
-		else if(href_list["basketball"])
+		else if (href_list["basketball"])
 			target = locate(/area/holodeck/source_basketball)
-			if(target)
+			if (target)
 				loadProgram(target)
 
-		else if(href_list["thunderdomecourt"])
+		else if (href_list["thunderdomecourt"])
 			target = locate(/area/holodeck/source_thunderdomecourt)
-			if(target)
+			if (target)
 				loadProgram(target)
 
-		else if(href_list["beach"])
+		else if (href_list["beach"])
 			target = locate(/area/holodeck/source_beach)
-			if(target)
+			if (target)
 				loadProgram(target)
 
-		else if(href_list["desert"])
+		else if (href_list["desert"])
 			target = locate(/area/holodeck/source_desert)
-			if(target)
+			if (target)
 				loadProgram(target)
 
-		else if(href_list["space"])
+		else if (href_list["space"])
 			target = locate(/area/holodeck/source_space)
-			if(target)
+			if (target)
 				loadProgram(target)
 
-		else if(href_list["picnicarea"])
+		else if (href_list["picnicarea"])
 			target = locate(/area/holodeck/source_picnicarea)
-			if(target)
+			if (target)
 				loadProgram(target)
 
-		else if(href_list["snowfield"])
+		else if (href_list["snowfield"])
 			target = locate(/area/holodeck/source_snowfield)
-			if(target)
+			if (target)
 				loadProgram(target)
 
-		else if(href_list["theatre"])
+		else if (href_list["theatre"])
 			target = locate(/area/holodeck/source_theatre)
-			if(target)
+			if (target)
 				loadProgram(target)
 
-		else if(href_list["meetinghall"])
+		else if (href_list["meetinghall"])
 			target = locate(/area/holodeck/source_meetinghall)
-			if(target)
+			if (target)
 				loadProgram(target)
 
-		else if(href_list["turnoff"])
+		else if (href_list["turnoff"])
 			target = locate(/area/holodeck/source_plating)
-			if(target)
+			if (target)
 				loadProgram(target)
 
-		else if(href_list["burntest"])
-			if(!emagged)
+		else if (href_list["burntest"])
+			if (!emagged)
 				return
 			target = locate(/area/holodeck/source_burntest)
-			if(target)
+			if (target)
 				loadProgram(target)
 
-		else if(href_list["wildlifecarp"])
-			if(!emagged)
+		else if (href_list["wildlifecarp"])
+			if (!emagged)
 				return
 			target = locate(/area/holodeck/source_wildlife)
-			if(target)
+			if (target)
 				loadProgram(target)
 
-		else if(href_list["AIoverride"])
-			if(!issilicon(usr))
+		else if (href_list["AIoverride"])
+			if (!issilicon(usr))
 				return
 			emagged = !emagged
-			if(emagged)
+			if (emagged)
 				message_admins("[key_name_admin(usr)] overrode the holodeck's safeties")
 				log_game("[key_name(usr)] overrode the holodeck's safeties")
 				visible_message("<span class='warning'>Warning: Holodeck safeties overriden. Please contact Nanotrasen maintenance and cease all operation if you are not source of that command.</span>")
@@ -168,7 +168,7 @@
 
 /obj/machinery/computer/HolodeckControl/emag(mob/user as mob)
 	playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
-	if(emagged)
+	if (emagged)
 		return //No spamming
 	emagged = 1
 	visible_message("<span class='warning'>[user] swipes a card into the holodeck reader.</span>","<span class='notice'>You swipe the electromagnetic card into the holocard reader.</span>")
@@ -199,24 +199,24 @@
 
 /obj/machinery/computer/HolodeckControl/process()
 	//Note : This was moved BEFORE the process() parent that deals with power and co. to avoid item cheesing from cutting off equipment power !
-	for(var/item in holographic_items)
-		if(!(get_turf(item) in linkedholodeck))
+	for (var/item in holographic_items)
+		if (!(get_turf(item) in linkedholodeck))
 			derez(item, 0)
 
-	if(!..())
+	if (!..())
 		return
-	if(active)
-		if(!checkInteg(linkedholodeck))
+	if (active)
+		if (!checkInteg(linkedholodeck))
 			damaged = 1
 			target = locate(/area/holodeck/source_plating)
-			if(target)
+			if (target)
 				loadProgram(target)
 			active = 0
-			for(var/mob/M in range(10,src))
+			for (var/mob/M in range(10,src))
 				M.show_message("The holodeck overloads!")
 
-			for(var/turf/T in linkedholodeck)
-				if(prob(30))
+			for (var/turf/T in linkedholodeck)
+				if (prob(30))
 					var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 					s.set_up(2, 1, T)
 					s.start()
@@ -228,16 +228,16 @@
 
 	holographic_items.Remove(obj)
 
-	if(obj == null)
+	if (obj == null)
 		return
 
-	if(isobj(obj))
+	if (isobj(obj))
 		var/mob/M = obj.loc
-		if(ismob(M))
+		if (ismob(M))
 			M.u_equip(obj, 0)
 			M.update_icons()	//so their overlays update
 
-	if(!silent)
+	if (!silent)
 		var/obj/oldobj = obj
 		visible_message("The [oldobj.name] fades away!")
 	qdel(obj)
@@ -245,33 +245,33 @@
 /obj/machinery/computer/HolodeckControl/proc/checkInteg(var/area/A)
 
 
-	for(var/turf/T in A)
-		if(istype(T, /turf/space))
+	for (var/turf/T in A)
+		if (istype(T, /turf/space))
 			return 0
 	return 1
 
 /obj/machinery/computer/HolodeckControl/proc/togglePower(var/toggleOn = 0)
 
 
-	if(toggleOn)
+	if (toggleOn)
 		var/area/targetsource = locate(/area/holodeck/source_emptycourt)
 		holographic_items = targetsource.copy_contents_to(linkedholodeck)
 
 		spawn(30)
-			for(var/obj/effect/landmark/L in linkedholodeck)
-				if(L.name=="Atmospheric Test Start")
+			for (var/obj/effect/landmark/L in linkedholodeck)
+				if (L.name=="Atmospheric Test Start")
 					spawn(20)
 						var/turf/T = get_turf(L)
 						var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 						s.set_up(2, 1, T)
 						s.start()
-						if(T)
+						if (T)
 							T.temperature = 5000
 							T.hotspot_expose(50000,50000,1,surfaces=1)
 
 		active = 1
 	else
-		for(var/item in holographic_items)
+		for (var/item in holographic_items)
 			derez(item)
 		var/area/targetsource = locate(/area/holodeck/source_plating)
 		targetsource.copy_contents_to(linkedholodeck , 1)
@@ -280,10 +280,10 @@
 /obj/machinery/computer/HolodeckControl/proc/loadProgram(var/area/A)
 
 
-	if(world.time < (last_change + 25))
-		if(world.time < (last_change + 15))//To prevent super-spam clicking, reduced process size and annoyance -Sieve
+	if (world.time < (last_change + 25))
+		if (world.time < (last_change + 15))//To prevent super-spam clicking, reduced process size and annoyance -Sieve
 			return
-		for(var/mob/M in range(3,src))
+		for (var/mob/M in range(3,src))
 			M.show_message("<B>ERROR. Recalibrating projetion apparatus.</B>")
 			last_change = world.time
 			return
@@ -291,42 +291,42 @@
 	last_change = world.time
 	active = 1
 
-	for(var/item in holographic_items)
+	for (var/item in holographic_items)
 		derez(item)
 
-	for(var/obj/effect/decal/cleanable/blood/B in linkedholodeck)
+	for (var/obj/effect/decal/cleanable/blood/B in linkedholodeck)
 		returnToPool(B)
 
-	for(var/mob/living/simple_animal/hostile/carp/holocarp/holocarp in linkedholodeck)
+	for (var/mob/living/simple_animal/hostile/carp/holocarp/holocarp in linkedholodeck)
 		qdel(holocarp)
 
 	holographic_items = A.copy_contents_to(linkedholodeck , 1)
 
-	if(emagged)
-		for(var/obj/item/weapon/holo/esword/H in linkedholodeck)
+	if (emagged)
+		for (var/obj/item/weapon/holo/esword/H in linkedholodeck)
 			H.damtype = BRUTE
 
 	spawn(30)
-		for(var/obj/effect/landmark/L in linkedholodeck)
-			if(L.name=="Atmospheric Test Start")
+		for (var/obj/effect/landmark/L in linkedholodeck)
+			if (L.name=="Atmospheric Test Start")
 				spawn(20)
 					var/turf/T = get_turf(L)
 					var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 					s.set_up(2, 1, T)
 					s.start()
-					if(T)
+					if (T)
 						T.temperature = 5000
 						T.hotspot_expose(50000,50000,1,surfaces=1)
-			if(L.name=="Holocarp Spawn")
+			if (L.name=="Holocarp Spawn")
 				new /mob/living/simple_animal/hostile/carp/holocarp(L.loc)
 
 /obj/machinery/computer/HolodeckControl/proc/emergencyShutdown()
 	//Get rid of any items
-	for(var/item in holographic_items)
+	for (var/item in holographic_items)
 		derez(item)
 	//Turn it back to the regular non-holographic room
 	target = locate(/area/holodeck/source_plating)
-	if(target)
+	if (target)
 		loadProgram(target)
 
 	var/area/targetsource = locate(/area/holodeck/source_plating)
@@ -349,8 +349,8 @@
 		..()
 		spawn(4)
 			update_icon()
-			for(var/direction in cardinal)
-				if(istype(get_step(src,direction),/turf/simulated/floor))
+			for (var/direction in cardinal)
+				if (istype(get_step(src,direction),/turf/simulated/floor))
 					var/turf/simulated/floor/FF = get_step(src,direction)
 					FF.update_icon() //so siding get updated properly
 
@@ -382,9 +382,9 @@
 	return // HOLOTABLE DOES NOT GIVE A FUCK
 
 /obj/structure/table/holotable/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
+	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
 		var/obj/item/weapon/grab/G = W
-		if(G.state<GRAB_AGGRESSIVE)
+		if (G.state<GRAB_AGGRESSIVE)
 			to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 			return
 		G.affecting.forceMove(src.loc)
@@ -393,11 +393,11 @@
 		qdel(W)
 		return
 
-	if(iswrench(W))
+	if (iswrench(W))
 		to_chat(user, "It's a holotable!  There are no bolts!")
 		return
 
-	if(isrobot(user))
+	if (isrobot(user))
 		return
 
 /obj/structure/table/holotable/wood
@@ -424,22 +424,22 @@
 	flags = ON_BORDER
 
 /obj/structure/holowindow/Uncross(var/atom/movable/mover, var/turf/target)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if (istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(flags & ON_BORDER)
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
+	if (flags & ON_BORDER)
+		if (target) //Are we doing a manual check to see
+			if (get_dir(loc, target) == dir)
 				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)
+		else if (mover.dir == dir) //Or are we using move code
+			if (density)
 				mover.Bump(src)
 			return !density
 	return 1
 
 /obj/structure/holowindow/Cross(atom/movable/mover, turf/target, height = 0)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if (istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
+	if (get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 		return !density
 	return 1
 
@@ -468,7 +468,7 @@
 		_color = "red"
 
 /obj/item/weapon/holo/esword/IsShield()
-	if(active)
+	if (active)
 		return 1
 	return 0
 
@@ -481,7 +481,7 @@
 
 /obj/item/weapon/holo/esword/attack_self(mob/living/user as mob)
 	active = !active
-	if(active)
+	if (active)
 		force = 30
 		icon_state = "sword[_color]"
 		w_class = W_CLASS_LARGE
@@ -516,9 +516,9 @@
 	throwpass = 1
 
 /obj/structure/holohoop/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
+	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
 		var/obj/item/weapon/grab/G = W
-		if(G.state<GRAB_AGGRESSIVE)
+		if (G.state<GRAB_AGGRESSIVE)
 			to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 			return
 
@@ -528,16 +528,16 @@
 		qdel(W)
 		return
 	else if (istype(W, /obj/item) && get_dist(src,user)<2)
-		if(user.drop_item(W, src.loc))
+		if (user.drop_item(W, src.loc))
 			visible_message("<span class='notice'>[user] dunks [W] into the [src]!</span>")
 			return
 
 /obj/structure/holohoop/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover,/obj/item) && mover.throwing)
+	if (istype(mover,/obj/item) && mover.throwing)
 		var/obj/item/I = mover
-		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
+		if (istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
 			return
-		if(prob(50))
+		if (prob(50))
 			I.forceMove(src.loc)
 			visible_message("<span class='notice'>Swish! \the [I] lands in \the [src].</span>")
 		else
@@ -577,15 +577,15 @@
 	to_chat(user, "The device is a solid button, there's nothing you can do with it!")
 
 /obj/machinery/readybutton/attack_hand(mob/user as mob)
-	if(user.stat || stat & (NOPOWER|BROKEN))
+	if (user.stat || stat & (NOPOWER|BROKEN))
 		to_chat(user, "This device is not powered.")
 		return
 
 	currentarea = get_area(src.loc)
-	if(!currentarea)
+	if (!currentarea)
 		qdel(src)
 
-	if(eventstarted)
+	if (eventstarted)
 		to_chat(usr, "The event has already begun!")
 		return
 
@@ -594,16 +594,16 @@
 
 	var/numbuttons = 0
 	var/numready = 0
-	for(var/obj/machinery/readybutton/button in currentarea)
+	for (var/obj/machinery/readybutton/button in currentarea)
 		numbuttons++
 		if (button.ready)
 			numready++
 
-	if(numbuttons == numready)
+	if (numbuttons == numready)
 		begin_event()
 
 /obj/machinery/readybutton/update_icon()
-	if(ready)
+	if (ready)
 		icon_state = "auth_on"
 	else
 		icon_state = "auth_off"
@@ -613,8 +613,8 @@
 
 	eventstarted = 1
 
-	for(var/obj/structure/holowindow/W in currentarea)
+	for (var/obj/structure/holowindow/W in currentarea)
 		qdel(W)
 
-	for(var/mob/M in currentarea)
+	for (var/mob/M in currentarea)
 		to_chat(M, "FIGHT!")

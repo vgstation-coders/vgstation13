@@ -26,10 +26,10 @@
 	..()
 
 /obj/item/weapon/robot_module/emp_act(severity)
-	if(modules)
-		for(var/obj/O in modules)
+	if (modules)
+		for (var/obj/O in modules)
 			O.emp_act(severity)
-	if(emag)
+	if (emag)
 		emag.emp_act(severity)
 	..()
 	return
@@ -43,7 +43,7 @@
 						LANGUAGE_SKRELLIAN = 0, LANGUAGE_GUTTER = 0, LANGUAGE_MONKEY = 0,
 						LANGUAGE_MOUSE = 0, LANGUAGE_HUMAN = 0)
 	added_languages = list()
-	if(!isMoMMI(R))
+	if (!isMoMMI(R))
 		add_languages(R)
 	AddToProfiler()
 	src.modules += new /obj/item/device/flashlight(src)
@@ -55,9 +55,9 @@
 	return
 
 obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable clicking the slot of a module to equip it.
-	for(var/obj/item/I in modules)
+	for (var/obj/item/I in modules)
 		I.mouse_opacity = 2
-	if(emag)
+	if (emag)
 		emag.mouse_opacity = 2
 
 /obj/item/weapon/robot_module/proc/respawn_consumable(var/mob/living/silicon/robot/R)
@@ -66,8 +66,8 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 /obj/item/weapon/robot_module/proc/rebuild()//Rebuilds the list so it's possible to add/remove items from the module
 	var/list/temp_list = modules
 	modules = list()
-	for(var/obj/O in temp_list)
-		if(O)
+	for (var/obj/O in temp_list)
+		if (O)
 			modules += O
 
 /obj/item/weapon/robot_module/standard
@@ -101,8 +101,8 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 
 /obj/item/weapon/robot_module/standard/respawn_consumable(var/mob/living/silicon/robot/R)
 	// Recharge baton battery
-	for(var/obj/item/weapon/melee/baton/B in src.modules)
-		if(B && B.bcell)
+	for (var/obj/item/weapon/melee/baton/B in src.modules)
+		if (B && B.bcell)
 			B.bcell.give(175)
 	// Replenish ointment and bandages
 	var/list/what = list (
@@ -113,7 +113,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 		if (!(locate(T) in src.modules))
 			src.modules -= null
 			var/obj/item/stack/O = new T(src)
-			if(istype(O,/obj/item/stack/medical))
+			if (istype(O,/obj/item/stack/medical))
 				O.max_amount = 15
 			src.modules += O
 			O.amount = 1
@@ -178,7 +178,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 		if (!(locate(T) in src.modules))
 			src.modules -= null
 			var/obj/item/stack/O = new T(src)
-			if(istype(O,/obj/item/stack/medical))
+			if (istype(O,/obj/item/stack/medical))
 				O.max_amount = 15
 			src.modules += O
 			O.amount = 1
@@ -228,32 +228,32 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 		if (!(locate(T) in src.modules))
 			src.modules -= null
 			var/obj/item/stack/O = new T(src)
-			if(istype(O,/obj/item/stack/cable_coil))
+			if (istype(O,/obj/item/stack/cable_coil))
 				O.max_amount = 50
 			src.modules += O
 			O.amount = 1
 	return
 
 /obj/item/weapon/robot_module/engineering/recharge_consumable(var/mob/living/silicon/robot/R)
-	for(var/T in src.modules)
-		if(!(locate(T) in src.modules)) //Remove nulls
+	for (var/T in src.modules)
+		if (!(locate(T) in src.modules)) //Remove nulls
 			src.modules -= null
 
 	recharge_tick++
-	if(recharge_tick < recharge_time)
+	if (recharge_tick < recharge_time)
 		return 0
 	recharge_tick = 0
-	if(R && R.cell)
+	if (R && R.cell)
 		respawn_consumable(R)
 		var/list/um = R.contents|R.module.modules
 		// ^ makes sinle list of active (R.contents) and inactive modules (R.module.modules)
-		for(var/obj/item/stack/O in um)
+		for (var/obj/item/stack/O in um)
 			// Engineering
-			if(istype(O,/obj/item/stack/cable_coil))
-				if(O.amount < 50)
+			if (istype(O,/obj/item/stack/cable_coil))
+				if (O.amount < 50)
 					O.amount += 1
 					R.cell.use(50) 		//Take power from the borg...
-				if(O.amount > 50)
+				if (O.amount > 50)
 					O.amount = 50
 
 
@@ -274,10 +274,10 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 
 /obj/item/weapon/robot_module/security/respawn_consumable(var/mob/living/silicon/robot/R)
 	// Recharge baton battery
-	for(var/obj/item/M in src.modules)
-		if(istype(M,/obj/item/weapon/melee/baton))
+	for (var/obj/item/M in src.modules)
+		if (istype(M,/obj/item/weapon/melee/baton))
 			var/obj/item/weapon/melee/baton/B=M
-			if(B && B.bcell)
+			if (B && B.bcell)
 				B.bcell.give(175)
 
 /obj/item/weapon/robot_module/janitor
@@ -382,7 +382,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 		if (!(locate(T) in src.modules))
 			src.modules -= null
 			var/obj/item/stack/O = new T(src)
-			if(istype(O,/obj/item/stack/package_wrap))
+			if (istype(O,/obj/item/stack/package_wrap))
 				O.max_amount = 24
 			src.modules += O
 			O.amount = 1
@@ -415,11 +415,11 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	fix_modules()
 
 /obj/item/weapon/robot_module/proc/add_languages(var/mob/living/silicon/robot/R)
-	for(var/language in languages)
-		if(R.add_language(language, languages[language]))
+	for (var/language in languages)
+		if (R.add_language(language, languages[language]))
 			added_languages |= language
 
 /obj/item/weapon/robot_module/proc/remove_languages(var/mob/living/silicon/robot/R)
-	for(var/language in added_languages)
+	for (var/language in added_languages)
 		R.remove_language(language)
 	added_languages.len = 0

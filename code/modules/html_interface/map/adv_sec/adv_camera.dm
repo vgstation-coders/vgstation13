@@ -15,20 +15,20 @@
 	if (src.z > 6)
 		to_chat(user, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 	adv_camera.show(user, (current ? current.z : z))
-	if(current)
+	if (current)
 		user.reset_view(current)
 	user.machine = src
 	return
 
 /obj/machinery/computer/security/advanced/check_eye(var/mob/user as mob)
 	if (( ( get_dist(user, src) > 1 ) || !( user.canmove ) || ( user.blinded )) && (!istype(user, /mob/living/silicon)))
-		if(user.machine == src)
+		if (user.machine == src)
 			user.machine = null
 		return null
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return null
 	user.reset_view(current)
 	return 1
@@ -100,7 +100,7 @@ var/global/datum/interactive_map/camera/adv_camera = new
 
 /datum/interactive_map/camera/updateFor(hclient_or_mob, datum/html_interface/hi, z, single)
 	//copy pasted code but given so many cameras i dont want to iterate over the entire worlds worth of cams, so we save our data based on zlevel
-	if(!single)
+	if (!single)
 		hi.callJavaScript("clearAll", new/list(), hclient_or_mob)
 	data = zlevel_data["[z]"]
 	for (var/list/L in data)
@@ -112,7 +112,7 @@ var/global/datum/interactive_map/camera/adv_camera = new
 /datum/interactive_map/camera/update(z, ignore_unused = FALSE, var/obj/machinery/camera/single, adding = 0)
 	if (src.interfaces["[z]"])
 		var/zz = text2num(z)
-		if(!zz)
+		if (!zz)
 			zz = z
 		var/datum/html_interface/hi = src.interfaces["[zz]"]
 		var/ID
@@ -127,20 +127,20 @@ var/global/datum/interactive_map/camera/adv_camera = new
 		if (ignore_unused || hi.isUsed())
 			var/list/results = list()
 			var/list/ourcams = camerasbyzlevel["[z]"]
-			if(!istype(single))
+			if (!istype(single))
 				for (var/obj/machinery/camera/C in ourcams)
 					var/turf/pos = get_turf(C)
-					if(!pos)
+					if (!pos)
 						camerasbyzlevel["[zz]"] -= C
 						continue
-					if(pos.z != zz)
+					if (pos.z != zz)
 						camerasbyzlevel["[zz]"] -= C //bad zlevel
-						if(pos.z == map.zMainStation || pos.z == map.zAsteroid)
+						if (pos.z == map.zMainStation || pos.z == map.zAsteroid)
 							camerasbyzlevel["[zz]"] |= C //try to fix the zlevel list.
 						continue
 					ID="\ref[C]"
 					status = C.alarm_on //1 = alarming 0 = all is well
-					if(!C.can_use())
+					if (!C.can_use())
 						continue
 						// weve already cleared the board son.status = -1 //mark this shit for removal
 					name = C.c_tag
@@ -154,15 +154,15 @@ var/global/datum/interactive_map/camera/adv_camera = new
 					results[++results.len]=list(ID, status, name,area,pos_x,pos_y,pos_z,see_x,see_y)
 			else
 				var/turf/pos = get_turf(single)
-				if(pos.z != zz)
+				if (pos.z != zz)
 					camerasbyzlevel["[zz]"] -= single //bad zlevel
-					if(pos.z == map.zMainStation || pos.z == map.zAsteroid)
+					if (pos.z == map.zMainStation || pos.z == map.zAsteroid)
 						camerasbyzlevel["[zz]"] |= single //try to fix the zlevel list
 					else
 						adding = 2 //Set to remove
 				ID="\ref[single]"
 				status = single.alarm_on //1 = alarming 0 = all is well
-				if(!single.can_use())
+				if (!single.can_use())
 					adding = 2 //mark this shit for removal
 				name = single.c_tag
 				var/area/AA = get_area(single)
@@ -191,22 +191,22 @@ var/global/datum/interactive_map/camera/adv_camera = new
 	. = ..()
 
 	var/los = hclient.client.mob.html_mob_check(/obj/machinery/computer/security/advanced)
-	if(!los)
+	if (!los)
 		hclient.client.mob.reset_view(hclient.client.mob)
 
 	return (. && los)
 
 /datum/interactive_map/camera/Topic(href, href_list[], datum/html_interface_client/hclient)
 	//world.log << "[src.type] topic call"
-	if(..())
+	if (..())
 		//world.log << "[src.type] topic call handled by parent"
 		return // Our parent handled it the topic call
 	if (istype(hclient))
 		if (hclient && hclient.client && hclient.client.mob && isliving(hclient.client.mob))
 			var/mob/living/L = hclient.client.mob
 			usr = L
-			for(var/obj/machinery/computer/security/advanced/A in html_machines)
-				if(usr.machine == A)
+			for (var/obj/machinery/computer/security/advanced/A in html_machines)
+				if (usr.machine == A)
 					A.Topic(href, href_list, hclient)
 					break
 
@@ -220,16 +220,16 @@ var/global/datum/interactive_map/camera/adv_camera = new
 
 /obj/machinery/computer/security/advanced/Topic(href, href_list)
 	//world.log << "[src.type] topic call"
-	if(..())
+	if (..())
 		return 0
 
-	if(href_list["cancel"])
+	if (href_list["cancel"])
 		usr.reset_view(null)
 		current = null
-	if(href_list["view"])
+	if (href_list["view"])
 		var/obj/machinery/camera/cam = locate(href_list["view"])
-		if(cam)
-			if(isAI(usr))
+		if (cam)
+			if (isAI(usr))
 				var/mob/living/silicon/ai/A = usr
 				A.eyeobj.forceMove(get_turf(cam))
 				A.client.eye = A.eyeobj

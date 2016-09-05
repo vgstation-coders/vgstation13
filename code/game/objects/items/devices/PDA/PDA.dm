@@ -343,7 +343,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 /obj/item/device/pda/captain/New()
 	..()
-	for(var/app_type in (typesof(/datum/pda_app) - /datum/pda_app))	//yes, the captain is such a baller that his PDA has all the apps by default.
+	for (var/app_type in (typesof(/datum/pda_app) - /datum/pda_app))	//yes, the captain is such a baller that his PDA has all the apps by default.
 		var/datum/pda_app/app = new app_type()						//will have to edit that when emagged/hidden apps get added.
 		app.onInstall(src)
 
@@ -466,11 +466,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/list/plist = list()
 	var/list/namecounts = list()
 
-	if(usr.stat == 2)
+	if (usr.stat == 2)
 		to_chat(usr, "You can't send PDA messages because you are dead!")
 		return
 
-	if(src.aiPDA.toff)
+	if (src.aiPDA.toff)
 		to_chat(usr, "Turn on your receiver in order to send messages.")
 		return
 
@@ -503,7 +503,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	set category = "AI Commands"
 	set name = "Send Message"
 	set src in usr
-	if(usr.isDead())
+	if (usr.isDead())
 		to_chat(usr, "You can't send PDA messages because you are dead!")
 		return
 	var/list/plist = available_pdas()
@@ -519,7 +519,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	set category = "AI Commands"
 	set name = "Toggle Sender/Receiver"
 	set src in usr
-	if(usr.isDead())
+	if (usr.isDead())
 		to_chat(usr, "You can't do that because you are dead!")
 		return
 	toff = !toff
@@ -530,7 +530,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	set category = "AI Commands"
 	set name = "Toggle Ringer"
 	set src in usr
-	if(usr.isDead())
+	if (usr.isDead())
 		to_chat(usr, "You can't do that because you are dead!")
 		return
 	silent=!silent
@@ -541,17 +541,17 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	set category = "AI Commands"
 	set name = "Show Message Log"
 	set src in usr
-	if(usr.isDead())
+	if (usr.isDead())
 		to_chat(usr, "You can't do that because you are dead!")
 		return
 	var/HTML = "<html><head><title>AI PDA Message Log</title></head><body>[tnote]</body></html>"
 	usr << browse(HTML, "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
 
 /mob/living/silicon/ai/proc/cmd_show_message_log()
-	if(usr.isDead())
+	if (usr.isDead())
 		to_chat(usr, "You can't do that because you are dead!")
 		return
-	if(!isnull(aiPDA))
+	if (!isnull(aiPDA))
 		var/HTML = "<html><head><title>AI PDA Message Log</title></head><body>[aiPDA.tnote]</body></html>"
 		usr << browse(HTML, "window=log;size=400x444;border=1;can_resize=1;can_close=1;can_minimize=0")
 	else
@@ -575,7 +575,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 /obj/item/device/pda/New()
 	..()
 	PDAs += src
-	if(default_cartridge)
+	if (default_cartridge)
 		cartridge = new default_cartridge(src)
 	new /obj/item/weapon/pen(src)
 	MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
@@ -587,15 +587,15 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	didyouknow = pick(facts)
 
 /obj/item/device/pda/proc/can_use(mob/user)
-	if(user && ismob(user))
-		if(user.incapacitated())
+	if (user && ismob(user))
+		if (user.incapacitated())
 			return 0
-		if(loc == user)
+		if (loc == user)
 			return 1
 	return 0
 
 /obj/item/device/pda/GetAccess()
-	if(id)
+	if (id)
 		return id.GetAccess()
 	else
 		return ..()
@@ -608,7 +608,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 /obj/item/device/pda/MouseDrop(obj/over_object as obj, src_location, over_location)
 	var/mob/M = usr
-	if((!istype(over_object, /obj/screen)) && can_use(M))
+	if ((!istype(over_object, /obj/screen)) && can_use(M))
 		return attack_self(M)
 	return
 
@@ -617,7 +617,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 	user.set_machine(src)
 
-	if(active_uplink_check(user))
+	if (active_uplink_check(user))
 		return
 
 	var/dat = {"<html><head><title>Personal Data Assistant</title></head><body bgcolor=\"#808000\"><style>a, a:link, a:visited, a:active, a:hover { color: #000000; }img {border-style:none;}</style>
@@ -637,7 +637,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		switch (mode)
 			if (0)
 
-				if(user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
+				if (user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
 					var/datum/asset/simple/C = new/datum/asset/simple/pda()
 					send_asset_list(user.client, C.assets)
 
@@ -661,18 +661,18 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				if (cartridge)
 					if (cartridge.access_clown)
 						dat += "<li><a href='byond://?src=\ref[src];choice=Honk'><img src=pda_honk.png> Honk Synthesizer</a></li>"
-					if(cartridge.access_status_display)
+					if (cartridge.access_status_display)
 						dat += "<li><a href='byond://?src=\ref[src];choice=42'><img src=pda_status.png> Set Status Display</a></li>"
 
 				dat += "</ul>"
 				dat += {"<h4>Applications</h4>"}
 
-				if(applications.len == 0)
+				if (applications.len == 0)
 					dat += {"<i>No application currently installed.</i>"}
 				else
 					dat += {"<ul>"}
-					for(var/datum/pda_app/app in applications)
-						if(app.menu)
+					for (var/datum/pda_app/app in applications)
+						if (app.menu)
 							dat += {"<li><a href='byond://?src=\ref[src];choice=[app.menu]'>[app.icon ? "<img src=[app.icon].png> " : ""][app.name]</a></li>"}
 						else
 							dat += {"<li>[app.icon ? "<img src=[app.icon].png> " : ""][app.name]</li>"}
@@ -704,13 +704,13 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						dat += {"<h4>Security Functions</h4>
 							<ul>
 							<li><a href='byond://?src=\ref[src];choice=45'><img src=pda_cuffs.png> Security Records</A></li>"}
-					if(istype(cartridge.radio, /obj/item/radio/integrated/beepsky))
+					if (istype(cartridge.radio, /obj/item/radio/integrated/beepsky))
 
 						dat += {"<li><a href='byond://?src=\ref[src];choice=46'><img src=pda_cuffs.png> Security Bot Access</a></li>
 							</ul>"}
 					else
 						dat += "</ul>"
-					if(cartridge.access_quartermaster)
+					if (cartridge.access_quartermaster)
 
 						dat += {"<h4>Quartermaster Functions:</h4>
 							<ul>
@@ -738,7 +738,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				dat += {"<li><a href='byond://?src=\ref[src];choice=3'><img src=pda_atmos.png> Atmospheric Scan</a></li>
 					<li><a href='byond://?src=\ref[src];choice=Light'><img src=pda_flashlight.png> [fon ? "Disable" : "Enable"] Flashlight</a></li>"}
 				if (pai)
-					if(pai.loc != src)
+					if (pai.loc != src)
 						pai = null
 					else
 
@@ -775,7 +775,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					for (var/obj/item/device/pda/P in sortNames(get_viewable_pdas()))
 						if (P == src)
 							continue
-						if(P.hidden)
+						if (P.hidden)
 							continue
 						dat += "<li><a href='byond://?src=\ref[src];choice=Message;target=\ref[P]'>[P]</a>"
 						if (id && !istype(P,/obj/item/device/pda/ai))
@@ -792,7 +792,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				if (count == 0)
 					dat += "None detected.<br>"
 
-			if(21)
+			if (21)
 
 				dat += {"<h4><img src=pda_mail.png> SpaceMessenger V3.9.4</h4>
 					<a href='byond://?src=\ref[src];choice=Clear'><img src=pda_blank.png> Clear Messages</a>
@@ -825,7 +825,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 							Oxygen: [round(o2_level*100)]%<br>
 							Carbon Dioxide: [round(co2_level*100)]%<br>
 							Plasma: [round(plasma_level*100)]%<br>"}
-						if(unknown_level > 0.01)
+						if (unknown_level > 0.01)
 							dat += "OTHER: [round(unknown_level)]%<br>"
 					dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
 				dat += "<br>"
@@ -834,9 +834,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 				dat += {"<h4><img src=pda_chatroom.png> Nanotrasen Relay Chat</h4>
 					<h4><img src=pda_menu.png> Detected Channels</h4>: <li>"}
-				for(var/datum/chatroom/C in chatrooms)
+				for (var/datum/chatroom/C in chatrooms)
 					dat += "<a href='byond://?src=\ref[src];pdachannel=[C.name]'>#[html_encode(lowertext(C.name))]"
-					if(C.password != "")
+					if (C.password != "")
 						dat += " <img src=pda_locked.png>"
 					dat += "</li>"
 
@@ -844,7 +844,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 				dat += {"<h4><img src=pda_notes.png> Crew Manifest</h4>
 					Entries cannot be modified from this terminal.<br><br>"}
-				if(data_core)
+				if (data_core)
 					dat += data_core.get_manifest(1) // make it monochrome
 				dat += "<br>"
 
@@ -864,7 +864,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			if (PDA_APP_RINGER)
 				var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
 				dat += {"<h4>Ringer Application</h4>"}
-				if(app)
+				if (app)
 					dat += {"
 					Status: <a href='byond://?src=\ref[src];choice=toggleDeskRinger'>[app.status ? "On" : "Off"]</a><br>
 					Frequency:
@@ -879,7 +879,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			if (PDA_APP_SPAMFILTER)
 				var/datum/pda_app/spam_filter/app = locate(/datum/pda_app/spam_filter) in applications
 				dat += {"<h4>Spam Filtering Application</h4>"}
-				if(app)
+				if (app)
 					dat += {"
 					<ul>
 					<li>[(app.function == 2) ? "<b>Block the spam.</b>" : "<a href='byond://?src=\ref[src];choice=setFilter;filter=2'>Block the spam.</a>"]</li>
@@ -891,11 +891,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			if (PDA_APP_BALANCECHECK)
 				var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in applications
 				dat += {"<h4><img src=[app.icon].png> Virtual Wallet and Balance Check Application</h4>"}
-				if(app)
-					if(!id)
+				if (app)
+					if (!id)
 						dat += {"<i>Insert an ID card in the PDA to use this application.</i>"}
 					else
-						if(!id.virtual_wallet)
+						if (!id.virtual_wallet)
 							id.update_virtual_wallet()
 						dat += {"<hr>
 							<h5>Virtual Wallet</h5>
@@ -906,17 +906,17 @@ var/global/list/obj/item/device/pda/PDAs = list()
 							<ul>
 							"}
 						var/list/v_log = list()
-						for(var/e in id.virtual_wallet.transaction_log)
+						for (var/e in id.virtual_wallet.transaction_log)
 							v_log += e
-						for(var/datum/transaction/T in reverseRange(v_log))
+						for (var/datum/transaction/T in reverseRange(v_log))
 							dat += {"<li>\[[T.time]\] [T.amount]$, [T.purpose] at [T.source_terminal]</li>"}
 						dat += {"</ul><hr>"}
-						if(!(app.linked_db))
+						if (!(app.linked_db))
 							app.reconnect_database()
-						if(app.linked_db)
-							if(app.linked_db.activated)
+						if (app.linked_db)
+							if (app.linked_db.activated)
 								var/datum/money_account/D = app.linked_db.attempt_account_access(id.associated_account_number, 0, 2, 0)
-								if(D)
+								if (D)
 									dat += {"
 										<h5>Bank Account</h5>
 										Owner: <b>[D.owner_name]</b><br>
@@ -926,10 +926,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 										<ul>
 										"}
 									var/list/t_log = list()
-									for(var/e in D.transaction_log)
+									for (var/e in D.transaction_log)
 										t_log += e
-									for(var/datum/transaction/T in reverseRange(t_log))
-										if(T.purpose == "Account creation")//always the last element of the reverse transaction_log
+									for (var/datum/transaction/T in reverseRange(t_log))
+										if (T.purpose == "Account creation")//always the last element of the reverse transaction_log
 											dat += {"</ul>
 												On [(DD == 1) ? "[((MM-2)%12)+1]" : "[MM]"]/[((DD-2)%30)+1]/[(DD == MM == 1) ? "[game_year - 1]" : "[game_year]"]:
 												<ul>
@@ -937,7 +937,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 												</ul>"}
 										else
 											dat += {"<li>\[[T.time]\] [T.amount]$, [T.purpose] at [T.source_terminal]</li>"}
-									if(!D.transaction_log.len)
+									if (!D.transaction_log.len)
 										dat += {"</ul>"}
 								else
 									dat += {"
@@ -958,25 +958,25 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			if (PDA_APP_STATIONMAP)
 				var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
 				dat += {"<h4>Station Map Application</h4>"}
-				if(app)
+				if (app)
 					var/turf/T = get_turf(src.loc)
 
-					if(!fexists("icons/pda_icons/pda_minimap_[map.nameShort].png"))
+					if (!fexists("icons/pda_icons/pda_minimap_[map.nameShort].png"))
 						dat += {"<span class='warning'>It appears that our services have yet to produce a minimap of this station. We apologize for the inconvenience.</span>"}
 
-					if(T.z == map.zMainStation)
+					if (T.z == map.zMainStation)
 						dat += {"Current Location: <b>[T.loc.name] ([T.x-WORLD_X_OFFSET[map.zMainStation]],[T.y-WORLD_Y_OFFSET[map.zMainStation]],1)</b><br>"}	//it's a "Station Map" app, so it only gives information reguarding
 					else																									//the station's z-level
 						dat += {"Current Location: <b>Unknown</b><br>"}
 
-					if(fexists("icons/pda_icons/pda_minimap_[map.nameShort].png"))
+					if (fexists("icons/pda_icons/pda_minimap_[map.nameShort].png"))
 						dat += {"
 						<div style="position: relative; left: 0; top: 0;">
 						<img src="pda_minimap_[map.nameShort].png" style="position: relative; top: 0; left: 0;"/>
 						"}
-						if(T.z == map.zMainStation)
+						if (T.z == map.zMainStation)
 							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [T.x + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
-						for(var/datum/minimap_marker/mkr in app.markers)
+						for (var/datum/minimap_marker/mkr in app.markers)
 							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation] + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
 						dat += {"</div>"}
 
@@ -985,9 +985,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						<div style="position: relative; left: 0; top: 0;">
 						<img src="pda_minimap_bg_notfound.png" style="position: relative; top: 0; left: 0;"/>
 						"}
-						if(T.z == map.zMainStation)
+						if (T.z == map.zMainStation)
 							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [T.x + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
-						for(var/datum/minimap_marker/mkr in app.markers)
+						for (var/datum/minimap_marker/mkr in app.markers)
 							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation] + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
 						dat += {"</div>"}
 
@@ -996,9 +996,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					<div style="position: relative; left: 0; top: 0;">
 					<img src="pda_minimap_bg.png" style="position: relative; top: 0; left: 0;"/>
 					"}
-					if(T.z == map.zMainStation)
+					if (T.z == map.zMainStation)
 						dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + 247]px; left: [T.x-8]px;"/>"}
-					for(var/datum/minimap_marker/mkr in app.markers)
+					for (var/datum/minimap_marker/mkr in app.markers)
 						dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET) * -1) + 247]px; left: [mkr.x+WORLD_X_OFFSET-8]px;"/>"}
 
 					dat += {"</div>"}
@@ -1009,27 +1009,27 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					<a href='byond://?src=\ref[src];choice=minimapMarker;mMark=add'>Add New Marker</a>
 					"}
 
-					if(!(app.markers.len))
+					if (!(app.markers.len))
 						dat += {"<br><span class='warning'>no markers</span>"}
 					else
 						dat +={"<ul>"}
-						for(var/datum/minimap_marker/mkr in app.markers)
+						for (var/datum/minimap_marker/mkr in app.markers)
 							dat += {"<li>[mkr.name] ([mkr.x]/[mkr.y]) <a href='byond://?src=\ref[src];choice=removeMarker;rMark=[mkr.num]'>remove</a></li>"}
 						dat += {"</ul>"}
 
 			if (PDA_APP_SNAKEII)
-				if(user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
+				if (user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
 					var/datum/asset/simple/C = new/datum/asset/simple/pda_snake()
 					send_asset_list(user.client, C.assets)
 
 				var/datum/pda_app/snake/app = locate(/datum/pda_app/snake) in applications
 				dat += {"<h4><img src=[app.icon].png> Snake II  <a href='byond://?src=\ref[src];choice=snakeVolume;vChange=-1'><b>-</b></a><img src="snake_volume[app.volume].png"/><a href='byond://?src=\ref[src];choice=snakeVolume;vChange=1'><b>+</b></a></h4>"}
-				if(app)
+				if (app)
 					dat += {"<br>
 						<div style="position: relative; left: 0; top: 0;">
 						<img src="snake_background.png" style="position: relative; top: 0; left: 0;"/>
 						"}
-					if(!app.ingame)
+					if (!app.ingame)
 						dat += {"<a href='byond://?src=\ref[src];choice=snakeNewGame'><img src="snake_newgame.png" style="position: absolute; top: 50px; left: 100px;"/></a>"}
 						dat += {"<img src="snake_highscore.png" style="position: absolute; top: 90px; left: 50px;"/>"}
 						var/list/templist = app.highscores[app.snake_game.level]
@@ -1046,83 +1046,83 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						var/list/snakebestlist = snake_best_players[app.snake_game.level]
 						dat += "<br>(Station Highscore held by <B>[snakebestlist[app.labyrinth+1]]</B>)"
 						dat += "<br>Set speed: "
-						for(var/x=1;x<=9;x++)
-							if(x == app.snake_game.level)
+						for (var/x=1;x<=9;x++)
+							if (x == app.snake_game.level)
 								dat += "<B>[x]</B>, "
 							else
 								dat += "<a href='byond://?src=\ref[src];choice=snakeLevel;sLevel=[x]'>[x]</a>, "
 						dat += "<br>Set labyrinth: [!app.labyrinth ? "<b>None</b>" : "<a href='byond://?src=\ref[src];choice=snakeLabyrinth;lType=0'>None</a>"], "
-						for(var/x=1;x<=7;x++)
-							if(x == app.labyrinth)
+						for (var/x=1;x<=7;x++)
+							if (x == app.labyrinth)
 								dat += "<B>[x]</B>, "
 							else
 								dat += "<a href='byond://?src=\ref[src];choice=snakeLabyrinth;lType=[x]'>[x]</a>, "
 						dat += "<br>Gyroscope (orient yourself to control): "
-						if(app.snake_game.gyroscope)
+						if (app.snake_game.gyroscope)
 							dat += "<a href='byond://?src=\ref[src];choice=snakeGyro;gSet=0'>ON</a>"
 						else
 							dat +="<a href='byond://?src=\ref[src];choice=snakeGyro;gSet=1'>OFF</a>"
 					else
-						if(app.labyrinth)
+						if (app.labyrinth)
 							dat += {"<img src="snake_maze[app.labyrinth].png" style="position: absolute; top: 0px; left: 0px;"/>"}
-						for(var/datum/snake/body/B in app.snake_game.snakeparts)
+						for (var/datum/snake/body/B in app.snake_game.snakeparts)
 							var/body_dir = ""
-							if(B.life == 1)
-								switch(B.dir)
-									if(EAST)
+							if (B.life == 1)
+								switch (B.dir)
+									if (EAST)
 										body_dir = "pda_snake_bodytail_east"
-									if(WEST)
+									if (WEST)
 										body_dir = "pda_snake_bodytail_west"
-									if(NORTH)
+									if (NORTH)
 										body_dir = "pda_snake_bodytail_north"
-									if(SOUTH)
+									if (SOUTH)
 										body_dir = "pda_snake_bodytail_south"
-							else if(B.life > 1)
-								if(B.corner)
-									switch(B.dir)
-										if(EAST)
-											switch(B.corner)
-												if(SOUTH)
+							else if (B.life > 1)
+								if (B.corner)
+									switch (B.dir)
+										if (EAST)
+											switch (B.corner)
+												if (SOUTH)
 													body_dir = "pda_snake_bodycorner_eastsouth2"
-												if(NORTH)
+												if (NORTH)
 													body_dir = "pda_snake_bodycorner_eastnorth2"
-										if(WEST)
-											switch(B.corner)
-												if(SOUTH)
+										if (WEST)
+											switch (B.corner)
+												if (SOUTH)
 													body_dir = "pda_snake_bodycorner_westsouth2"
-												if(NORTH)
+												if (NORTH)
 													body_dir = "pda_snake_bodycorner_westnorth2"
-										if(NORTH)
-											switch(B.corner)
-												if(EAST)
+										if (NORTH)
+											switch (B.corner)
+												if (EAST)
 													body_dir = "pda_snake_bodycorner_eastnorth"
-												if(WEST)
+												if (WEST)
 													body_dir = "pda_snake_bodycorner_westnorth"
-										if(SOUTH)
-											switch(B.corner)
-												if(EAST)
+										if (SOUTH)
+											switch (B.corner)
+												if (EAST)
 													body_dir = "pda_snake_bodycorner_eastsouth"
-												if(WEST)
+												if (WEST)
 													body_dir = "pda_snake_bodycorner_westsouth"
 								else
-									switch(B.dir)
-										if(EAST)
+									switch (B.dir)
+										if (EAST)
 											body_dir = "pda_snake_body_east"
-										if(WEST)
+										if (WEST)
 											body_dir = "pda_snake_body_west"
-										if(NORTH)
+										if (NORTH)
 											body_dir = "pda_snake_body_north"
-										if(SOUTH)
+										if (SOUTH)
 											body_dir = "pda_snake_body_south"
 
-								if(B.isfull)
+								if (B.isfull)
 									body_dir += "_full"
-							if(!B.flicking)
+							if (!B.flicking)
 								dat += {"<img src="[body_dir].png" style="position: absolute; top: [(B.y * 16 * -1) + 152]px; left: [B.x * 16 - 16]px;"/>"}
 
 						dat += {"<img src="pda_snake_egg.png" style="position: absolute; top: [(app.snake_game.next_egg.y * 16 * -1) + 152]px; left: [app.snake_game.next_egg.x * 16 - 16]px;"/>"}
 
-						if(app.snake_game.next_bonus.life > 0)
+						if (app.snake_game.next_bonus.life > 0)
 							dat += {"<img src="pda_snake_bonus[app.snake_game.next_bonus.bonustype].png" style="position: absolute; top: [(app.snake_game.next_bonus.y * 16 * -1) + 152]px; left: [app.snake_game.next_bonus.x * 16 - 8]px;"/>"}
 							dat += {"<img src="pda_snake_bonus[app.snake_game.next_bonus.bonustype].png" style="position: absolute; top: [(180 * -1) + 152]px; left: [280 - 8]px;"/>"}
 							dat += {"<img src="snake_[round(app.snake_game.next_bonus.life / 10) % 10].png" style="position: absolute; top: [(182 * -1) + 152]px; left: [302 - 8]px;"/>"}
@@ -1134,20 +1134,20 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						dat += {"<img src="snake_[app.snake_game.snakescore % 10].png" style="position: absolute; top: [(182 * -1) + 152]px; left: [50 - 8]px;"/>"}
 
 						var/head_dir = ""
-						switch(app.snake_game.head.dir)
-							if(EAST)
+						switch (app.snake_game.head.dir)
+							if (EAST)
 								head_dir = "pda_snake_head_east"
-							if(WEST)
+							if (WEST)
 								head_dir = "pda_snake_head_west"
-							if(NORTH)
+							if (NORTH)
 								head_dir = "pda_snake_head_north"
-							if(SOUTH)
+							if (SOUTH)
 								head_dir = "pda_snake_head_south"
-						if(app.snake_game.head.open_mouth)
+						if (app.snake_game.head.open_mouth)
 							head_dir += "_open"
-						if(!app.snake_game.head.flicking)
+						if (!app.snake_game.head.flicking)
 							dat += {"<img src="[head_dir].png" style="position: absolute; top: [(app.snake_game.head.y * 16 * -1) + 152]px; left: [app.snake_game.head.x * 16 - 16]px;"/>"}
-						if(app.paused)
+						if (app.paused)
 							dat += {"<a href='byond://?src=\ref[src];choice=snakeUnPause'><img src="snake_pause.png" style="position: absolute; top: 50px; left: 128px;"/></a>"}
 					dat += {"</div>"}
 
@@ -1159,47 +1159,47 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						"}
 
 			if (PDA_APP_MINESWEEPER)
-				if(user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
+				if (user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
 					var/datum/asset/simple/C = new/datum/asset/simple/pda_mine()
 					send_asset_list(user.client, C.assets)
 
 				var/datum/pda_app/minesweeper/app = locate(/datum/pda_app/minesweeper) in applications
 				dat += {"<h4><img src=[app.icon].png> Minesweeper</h4>"}
-				if(app)
+				if (app)
 					dat += {"<br>
 						<div style="position: relative; left: 0; top: 0;">
 						<img src="minesweeper_bg_[app.minesweeper_game.current_difficulty].png" style="position: relative; top: 0; left: 0;"/>
 						"}
-					if(!app.ingame)
-						for(var/datum/mine_tile/T in app.minesweeper_game.tiles)
+					if (!app.ingame)
+						for (var/datum/mine_tile/T in app.minesweeper_game.tiles)
 							dat += {"<a href='byond://?src=\ref[src];choice=mineNewGame;mTile=\ref[T]'><img src="minesweeper_tile_full.png" style="position: absolute; top: [(T.y * 16 * -1) + (app.minesweeper_game.rows * 16)]px; left: [T.x * 16]px;"/></a>"}
 					else
-						for(var/datum/mine_tile/T in app.minesweeper_game.tiles)
+						for (var/datum/mine_tile/T in app.minesweeper_game.tiles)
 							var/mine_icon = ""
-							if(T.dug)
-								if(T.mined)
+							if (T.dug)
+								if (T.mined)
 									mine_icon = "minesweeper_tile_mine_splode"
-								else if(T.num)
+								else if (T.num)
 									mine_icon = "minesweeper_tile_[T.num]"
 								else
 									mine_icon = "minesweeper_tile_empty"
 
 							else
-								if(T.mined && app.minesweeper_game.gameover)
-									if(T.flagged == 1)
+								if (T.mined && app.minesweeper_game.gameover)
+									if (T.flagged == 1)
 										mine_icon = "minesweeper_tile_flag"
 									else
 										mine_icon = "minesweeper_tile_mine_unsplode"
-								else if(T.flagged == 1)
-									if(app.minesweeper_game.gameover)
+								else if (T.flagged == 1)
+									if (app.minesweeper_game.gameover)
 										mine_icon = "minesweeper_tile_mine_wrong"
 									else
 										mine_icon = "minesweeper_tile_flag"
-								else if(T.flagged == 2)
+								else if (T.flagged == 2)
 									mine_icon = "minesweeper_tile_question"
 								else
 									mine_icon = "minesweeper_tile_full"
-							if(T.selected && !app.minesweeper_game.gameover)
+							if (T.selected && !app.minesweeper_game.gameover)
 								mine_icon += "_selected"
 							dat += {"<a href='byond://?src=\ref[src];choice=mineDig;mTile=\ref[T]'><img src="[mine_icon].png" style="position: absolute; top: [(T.y * 16 * -1) + (app.minesweeper_game.rows * 16)]px; left: [T.x * 16]px;"/></a>"}
 						dat += {"<a href='byond://?src=\ref[src];choice=mineFlag'><img src="minesweeper_flag.png" style="position: absolute; top: [app.minesweeper_game.rows * 16 + 48]px; left: 16px;"/></a>"}
@@ -1211,8 +1211,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 					dat += {"<img src="minesweeper_frame_counter.png" style="position: absolute; top: -33px; left: 21px;"/>"}
 					var/mine_counter = app.minesweeper_game.initial_mines
-					for(var/datum/mine_tile/T in app.minesweeper_game.tiles)
-						if(T.flagged == 1)
+					for (var/datum/mine_tile/T in app.minesweeper_game.tiles)
+						if (T.flagged == 1)
 							mine_counter--
 					dat += {"<img src="minesweeper_counter_[round(mine_counter / 100) % 10].png" style="position: absolute; top: -32px; left: 22px;"/>"}
 					dat += {"<img src="minesweeper_counter_[round(mine_counter / 10) % 10].png" style="position: absolute; top: -32px; left: 35px;"/>"}
@@ -1221,7 +1221,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					dat += {"<img src="minesweeper_frame_counter.png" style="position: absolute; top: -33px; left: [(app.minesweeper_game.columns * 16)-30]px;"/>"}
 					var/time_counter = round((world.time - app.minesweeper_game.timer)/10)
 					time_counter = min(999,time_counter)
-					if(!app.ingame || app.minesweeper_game.gameover)
+					if (!app.ingame || app.minesweeper_game.gameover)
 						time_counter = app.minesweeper_game.end_timer
 					dat += {"<img src="minesweeper_counter_[round(time_counter / 100) % 10].png" style="position: absolute; top: -32px; left: [(app.minesweeper_game.columns * 16)-29]px;"/>"}
 					dat += {"<img src="minesweeper_counter_[round(time_counter / 10) % 10].png" style="position: absolute; top: -32px; left: [(app.minesweeper_game.columns * 16)-16]px;"/>"}
@@ -1231,88 +1231,88 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					dat += {"<img src="minesweeper_border_cornerbotleft.png" style="position: absolute; top: [(app.minesweeper_game.rows * 16)]px; left: 0px;"/>"}
 					dat += {"<img src="minesweeper_border_cornertopright.png" style="position: absolute; top: -16px; left: [(app.minesweeper_game.columns * 16) + 16]px;"/>"}
 					dat += {"<img src="minesweeper_border_cornerbotright.png" style="position: absolute; top: [(app.minesweeper_game.rows * 16)]px; left: [(app.minesweeper_game.columns * 16) + 16]px;"/>"}
-					for(var/x=1;x<=app.minesweeper_game.columns;x++)
+					for (var/x=1;x<=app.minesweeper_game.columns;x++)
 						dat += {"<img src="minesweeper_border_top.png" style="position: absolute; top: -16px; left: [16*x]px;"/>"}
-					for(var/x=1;x<=app.minesweeper_game.columns;x++)
+					for (var/x=1;x<=app.minesweeper_game.columns;x++)
 						dat += {"<img src="minesweeper_border_bot.png" style="position: absolute; top: [(app.minesweeper_game.rows * 16)]px; left: [16*x]px;"/>"}
-					for(var/y=0;y<app.minesweeper_game.rows;y++)
+					for (var/y=0;y<app.minesweeper_game.rows;y++)
 						dat += {"<img src="minesweeper_border_left.png" style="position: absolute; top: [16*y]px; left: 0px;"/>"}
-					for(var/y=0;y<app.minesweeper_game.rows;y++)
+					for (var/y=0;y<app.minesweeper_game.rows;y++)
 						dat += {"<img src="minesweeper_border_right.png" style="position: absolute; top: [16*y]px; left: [(app.minesweeper_game.columns * 16) + 16]px;"/>"}
 
 
 					dat += {"</div>"}
-					if(app.minesweeper_game.current_difficulty != "custom")
+					if (app.minesweeper_game.current_difficulty != "custom")
 						dat += {"<br>[app.minesweeper_game.current_difficulty] difficulty highscore held by <b>[minesweeper_best_players[app.minesweeper_game.current_difficulty]]</b> (in <b>[minesweeper_station_highscores[app.minesweeper_game.current_difficulty]]</b> seconds)"}
 
 
 			if (PDA_APP_SPESSPETS)
-				if(user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
+				if (user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
 					var/datum/asset/simple/C = new/datum/asset/simple/pda_spesspets()
 					send_asset_list(user.client, C.assets)
 
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
 				dat += {"<h4><img src=[app.icon].png> Spess Pets</h4>"}
-				if(app)
+				if (app)
 					dat += {"<br>Name = [app.petname]<br>Level = [app.level]<br>
 						<div style="position: relative; left: 0; top: 0;">
 						<img src="spesspets_bg.png" style="position: relative; top: 0; left: 0;"/>
 						"}
-					switch(app.game_state)
-						if(0)	//First Statup
+					switch (app.game_state)
+						if (0)	//First Statup
 							dat += {"<br><a href='byond://?src=\ref[src];choice=eggPrev'><img src="pda_snake_arrow_west.png"></a><a href='byond://?src=\ref[src];choice=eggNext'><img src="pda_snake_arrow_east.png"></a>"}
 
 							dat += {"<a href='byond://?src=\ref[src];choice=eggChose'><img src="spesspets_egg0.png" style="position: absolute; top: 32px; left: 32px;"/></a>"}
 							dat += {"</div>"}
-						if(1)	//Hatching
+						if (1)	//Hatching
 							var/eggstate = 0
-							if(app.hatching > 1200)
+							if (app.hatching > 1200)
 								eggstate = 3
-							else if(app.hatching > 600)
+							else if (app.hatching > 600)
 								eggstate = 2
-							else if(app.hatching > 300)
+							else if (app.hatching > 300)
 								eggstate = 1
 							dat += {"<img src="spesspets_egg[eggstate].png" style="position: absolute; top: 32px; left: 32px;"/>"}
-							if(eggstate >= 2)
+							if (eggstate >= 2)
 								dat += {"<a href='byond://?src=\ref[src];choice=eggHatch'><img src="spesspets_hatch.png" style="position: absolute; top: 64px; left: 0px;"/></a>"}
 
-						if(2)	//Normal
-							if(app.ishungry)
+						if (2)	//Normal
+							if (app.ishungry)
 								dat += {"<img src="spesspets_hunger.png" style="position: absolute; top: 32px; left: 64px;"/>"}
-							if(app.isdirty)
+							if (app.isdirty)
 								dat += {"<img src="spesspets_dirty.png" style="position: absolute; top: 32px; left: 96px;"/>"}
-							if(app.ishurt)
+							if (app.ishurt)
 								dat += {"<img src="spesspets_hurt.png" style="position: absolute; top: 32px; left: 128px;"/>"}
-							if(app.isatwork)
+							if (app.isatwork)
 								dat += {"<img src="spesspets_mine.png" style="position: absolute; top: 32px; left: 32px;"/>"}
 							else
 								dat += {"<img src="spesspets_[app.race].png" style="position: absolute; top: 0px; left: 0px;"/>"}
-								if(app.issleeping)
+								if (app.issleeping)
 									dat += {"<img src="spesspets_sleep.png" style="position: absolute; top: 0px; left: 32px;"/>"}
 								else
 									dat += {"<a href='byond://?src=\ref[src];choice=eggTalk'><img src="spesspets_talk.png" style="position: absolute; top: 96px; left: 0px;"/></a>"}
 									dat += {"<a href='byond://?src=\ref[src];choice=eggWalk'><img src="spesspets_walk.png" style="position: absolute; top: 96px; left: 32px;"/></a>"}
-									if(app.ishungry)
+									if (app.ishungry)
 										dat += {"<a href='byond://?src=\ref[src];choice=eggFeed'><img src="spesspets_feed.png" style="position: absolute; top: 96px; left: 64px;"/></a>"}
-									if(app.isdirty)
+									if (app.isdirty)
 										dat += {"<a href='byond://?src=\ref[src];choice=eggClean'><img src="spesspets_clean.png" style="position: absolute; top: 96px; left: 96px;"/></a>"}
-									if(app.ishurt)
+									if (app.ishurt)
 										dat += {"<a href='byond://?src=\ref[src];choice=eggHeal'><img src="spesspets_heal.png" style="position: absolute; top: 112px; left: 0px;"/></a>"}
 									dat += {"<a href='byond://?src=\ref[src];choice=eggFight'><img src="spesspets_fight.png" style="position: absolute; top: 112px; left: 32px;"/></a>"}
 									dat += {"<a href='byond://?src=\ref[src];choice=eggVisit'><img src="spesspets_visit.png" style="position: absolute; top: 112px; left: 64px;"/></a>"}
-									if(app.level >= 16)
+									if (app.level >= 16)
 										dat += {"<a href='byond://?src=\ref[src];choice=eggWork'><img src="spesspets_work.png" style="position: absolute; top: 112px; left: 96px;"/></a>"}
-							if(app.total_coins)
+							if (app.total_coins)
 								dat += {"<a href='byond://?src=\ref[src];choice=eggRate'><img src="spesspets_rate.png" style="position: absolute; top: 96px; left: 128px;"/></a>"}
-							if(app.total_coins)
+							if (app.total_coins)
 								dat += {"<a href='byond://?src=\ref[src];choice=eggCash'><img src="spesspets_cash.png" style="position: absolute; top: 112px; left: 128px;"/></a>"}
 
 							dat += {"</div>"}
-						if(3)	//Dead
+						if (3)	//Dead
 							dat += {"</div>"}
-					if(app.last_spoken != "")
+					if (app.last_spoken != "")
 						dat += {"<br><br><br><br>[app.last_spoken]"}
-					if(app.total_coins)
+					if (app.total_coins)
 						dat += {"<br>nanocoins: [app.total_coins]"}
 
 			else//Else it links to the cart menu proc. Although, it really uses menu hub 4--menu 4 doesn't really exist as it simply redirects to hub.
@@ -1328,38 +1328,38 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	//Looking for master was kind of pointless since PDAs don't appear to have one.
 	//if ((src in U.contents) || ( istype(loc, /turf) && in_range(src, U) ) )
 
-	if(can_use(U)) //Why reinvent the wheel? There's a proc that does exactly that.
+	if (can_use(U)) //Why reinvent the wheel? There's a proc that does exactly that.
 		add_fingerprint(U)
 		U.set_machine(src)
 
-		switch(href_list["choice"])
+		switch (href_list["choice"])
 
 //BASIC FUNCTIONS===================================
 
-			if("Close")//Self explanatory
+			if ("Close")//Self explanatory
 				U.unset_machine()
 				U << browse(null, "window=pda")
 				return
-			if("Refresh")//Refresh, goes to the end of the proc.
-			if("Return")//Return
-				if((mode<=9) || (locate(mode) in pda_app_menus))
+			if ("Refresh")//Refresh, goes to the end of the proc.
+			if ("Return")//Return
+				if ((mode<=9) || (locate(mode) in pda_app_menus))
 					mode = 0
 				else
 					mode = round(mode/10)//TODO: fix this shit up
-					if((mode==4) || (mode==5))//Fix for cartridges. Redirects to hub.
+					if ((mode==4) || (mode==5))//Fix for cartridges. Redirects to hub.
 						mode = 0
-					else if(mode >= 40 && mode <= 53)//Fix for cartridges. Redirects to refresh the menu.
+					else if (mode >= 40 && mode <= 53)//Fix for cartridges. Redirects to refresh the menu.
 						cartridge.mode = mode
 						cartridge.unlock()
 			if ("Authenticate")//Checks for ID
 				id_check(U, 1)
-			if("UpdateInfo")
+			if ("UpdateInfo")
 				ownjob = id.assignment
 				name = "PDA-[owner] ([ownjob])"
-			if("Eject")//Ejects the cart, only done from hub.
+			if ("Eject")//Ejects the cart, only done from hub.
 				if (!isnull(cartridge))
 					var/turf/T = loc
-					if(ismob(T))
+					if (ismob(T))
 						T = T.loc
 					cartridge.forceMove(T)
 					scanmode = SCANMODE_NONE
@@ -1369,63 +1369,63 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 //MENU FUNCTIONS===================================
 
-			if("0")//Hub
+			if ("0")//Hub
 				mode = 0
-			if("1")//Notes
+			if ("1")//Notes
 				mode = 1
-			if("2")//Messenger
+			if ("2")//Messenger
 				mode = 2
-			if("21")//Read messeges
+			if ("21")//Read messeges
 				mode = 21
-			if("3")//Atmos scan
+			if ("3")//Atmos scan
 				mode = 3
-			if("4")//Redirects to hub
+			if ("4")//Redirects to hub
 				mode = 0
-			if("41")
+			if ("41")
 				mode = 41
-			if("chatroom") // chatroom hub
+			if ("chatroom") // chatroom hub
 				mode = 5
 
 //APPLICATIONS FUNCTIONS===========================
 
-			if(PDA_APP_RINGER)
+			if (PDA_APP_RINGER)
 				mode = PDA_APP_RINGER
-			if("toggleDeskRinger")
+			if ("toggleDeskRinger")
 				var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
-				if(app)
+				if (app)
 					app.status = !(app.status)
-			if("ringerFrequency")
+			if ("ringerFrequency")
 				var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
-				if(app)
+				if (app)
 					var/i = app.frequency + text2num(href_list["rfreq"])
-					if(i < MINIMUM_FREQUENCY)
+					if (i < MINIMUM_FREQUENCY)
 						i = 1201
-					if(i > MAXIMUM_FREQUENCY)
+					if (i > MAXIMUM_FREQUENCY)
 						i = 1599
 					app.frequency = i
-			if(PDA_APP_SPAMFILTER)
+			if (PDA_APP_SPAMFILTER)
 				mode = PDA_APP_SPAMFILTER
-			if("setFilter")
+			if ("setFilter")
 				var/datum/pda_app/spam_filter/app = locate(/datum/pda_app/spam_filter) in applications
-				if(app)
+				if (app)
 					app.function = text2num(href_list["filter"])
-			if(PDA_APP_BALANCECHECK)
+			if (PDA_APP_BALANCECHECK)
 				mode = PDA_APP_BALANCECHECK
-			if("printCurrency")
+			if ("printCurrency")
 				var/mob/user = usr
 				var/amount = round(input("How much money do you wish to print?", "Currency Printer", 0) as num)
-				if(!amount || (amount < 0) || (id.virtual_wallet.money <= 0))
+				if (!amount || (amount < 0) || (id.virtual_wallet.money <= 0))
 					to_chat(user, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Invalid value.'</span>")
 					return
-				if(amount > id.virtual_wallet.money)
+				if (amount > id.virtual_wallet.money)
 					amount = id.virtual_wallet.money
-				if(amount > 10000) // prevent crashes
+				if (amount > 10000) // prevent crashes
 					to_chat(user, "[bicon(src)]<span class='notice'>The PDA's screen flashes, 'Maximum single withdrawl limit reached, defaulting to 10,000.'</span>")
 					amount = 10000
 
 				id.virtual_wallet.money -= amount
 				withdraw_arbitrary_sum(user,amount)
-				if(prob(50))
+				if (prob(50))
 					playsound(get_turf(src), 'sound/items/polaroid1.ogg', 50, 1)
 				else
 					playsound(get_turf(src), 'sound/items/polaroid2.ogg', 50, 1)
@@ -1439,27 +1439,27 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				T.time = worldtime2text()
 				id.virtual_wallet.transaction_log.Add(T)
 
-			if(PDA_APP_STATIONMAP)
+			if (PDA_APP_STATIONMAP)
 				mode = PDA_APP_STATIONMAP
 
-			if("minimapMarker")
+			if ("minimapMarker")
 				var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
-				switch(href_list["mMark"])
-					if("x")
+				switch (href_list["mMark"])
+					if ("x")
 						var/new_x = input("Please input desired X coordinate.", "Station Map App", app.markx) as num
 						var/x_validate=new_x+WORLD_X_OFFSET[map.zMainStation]
-						if(x_validate < (world.maxx/2 - PDA_MINIMAP_WIDTH/2) || x_validate > (world.maxx/2 + PDA_MINIMAP_WIDTH/2))
+						if (x_validate < (world.maxx/2 - PDA_MINIMAP_WIDTH/2) || x_validate > (world.maxx/2 + PDA_MINIMAP_WIDTH/2))
 							to_chat(usr, "<span class='caution'>Error: Invalid X coordinate.</span>")
 						else
 							app.markx = new_x
-					if("y")
+					if ("y")
 						var/new_y = input("Please input desired Y coordinate.", "Station Map App", app.marky) as num
 						var/y_validate=new_y+WORLD_Y_OFFSET[map.zMainStation]
-						if(y_validate < (world.maxy/2 - PDA_MINIMAP_WIDTH/2) || y_validate > (world.maxy/2 + PDA_MINIMAP_WIDTH/2))
+						if (y_validate < (world.maxy/2 - PDA_MINIMAP_WIDTH/2) || y_validate > (world.maxy/2 + PDA_MINIMAP_WIDTH/2))
 							to_chat(usr, "<span class='caution'>Error: Invalid Y coordinate.</span>")
 						else
 							app.marky = new_y
-					if("add")
+					if ("add")
 						var/marker_name = copytext(sanitize(input("Give a name to your marker", "Station Map App", "default marker") as null|text),1,MAX_NAME_LEN)
 						var/datum/minimap_marker/mkr = new/datum/minimap_marker()
 						mkr.x = app.markx
@@ -1468,7 +1468,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						app.markers += mkr
 						mkr.num = app.markers.len
 
-			if("removeMarker")
+			if ("removeMarker")
 				var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
 				var/to_remove = text2num(href_list["rMark"])
 				var/datum/minimap_marker/mkr = app.markers[to_remove]
@@ -1477,97 +1477,97 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 //GAME FUNCTIONS====================================
 
-			if(PDA_APP_SNAKEII)
+			if (PDA_APP_SNAKEII)
 				mode = PDA_APP_SNAKEII
 
-			if("snakeNewGame")
+			if ("snakeNewGame")
 				var/datum/pda_app/snake/app = locate(/datum/pda_app/snake) in applications
 				app.ingame = 1
 				app.snake_game.game_start()
 				app.game_tick(usr)
 
-			if("snakeUp")
+			if ("snakeUp")
 				var/datum/pda_app/snake/app = locate(/datum/pda_app/snake) in applications
 				app.snake_game.lastinput = NORTH
 
-			if("snakeLeft")
+			if ("snakeLeft")
 				var/datum/pda_app/snake/app = locate(/datum/pda_app/snake) in applications
 				app.snake_game.lastinput = WEST
 
-			if("snakeRight")
+			if ("snakeRight")
 				var/datum/pda_app/snake/app = locate(/datum/pda_app/snake) in applications
 				app.snake_game.lastinput = EAST
 
-			if("snakeDown")
+			if ("snakeDown")
 				var/datum/pda_app/snake/app = locate(/datum/pda_app/snake) in applications
 				app.snake_game.lastinput = SOUTH
 
-			if("snakeUnPause")
+			if ("snakeUnPause")
 				var/datum/pda_app/snake/app = locate(/datum/pda_app/snake) in applications
 				app.pause(usr)
 
-			if("snakeLabyrinth")
+			if ("snakeLabyrinth")
 				var/datum/pda_app/snake/app = locate(/datum/pda_app/snake) in applications
 				app.labyrinth = text2num(href_list["lType"])
 				app.snake_game.set_labyrinth(text2num(href_list["lType"]))
 
-			if("snakeLevel")
+			if ("snakeLevel")
 				var/datum/pda_app/snake/app = locate(/datum/pda_app/snake) in applications
 				app.snake_game.level = text2num(href_list["sLevel"])
 
-			if("snakeGyro")
+			if ("snakeGyro")
 				var/datum/pda_app/snake/app = locate(/datum/pda_app/snake) in applications
 				app.snake_game.gyroscope = text2num(href_list["gSet"])
 
-			if("snakeVolume")
+			if ("snakeVolume")
 				var/datum/pda_app/snake/app = locate(/datum/pda_app/snake) in applications
 				app.volume += text2num(href_list["vChange"])
 				app.volume = max(0,app.volume)
 				app.volume = min(6,app.volume)
 
-			if(PDA_APP_MINESWEEPER)
+			if (PDA_APP_MINESWEEPER)
 				mode = PDA_APP_MINESWEEPER
 
-			if("mineNewGame")
+			if ("mineNewGame")
 				var/datum/pda_app/minesweeper/app = locate(/datum/pda_app/minesweeper) in applications
 				var/datum/mine_tile/T = locate(href_list["mTile"])
 				app.ingame = 1
 				app.minesweeper_game.game_start(T)
 				app.game_tick(usr)
 
-			if("mineDig")
+			if ("mineDig")
 				var/datum/pda_app/minesweeper/app = locate(/datum/pda_app/minesweeper) in applications
 				var/datum/mine_tile/T = locate(href_list["mTile"])
 				app.minesweeper_game.dig_tile(T)
 				app.game_tick(usr)
 
-			if("mineFlag")
+			if ("mineFlag")
 				var/datum/pda_app/minesweeper/app = locate(/datum/pda_app/minesweeper) in applications
-				if(!app.minesweeper_game.gameover)
-					for(var/datum/mine_tile/T in app.minesweeper_game.tiles)
-						if(!T.dug && T.selected)
-							if(!T.flagged)
+				if (!app.minesweeper_game.gameover)
+					for (var/datum/mine_tile/T in app.minesweeper_game.tiles)
+						if (!T.dug && T.selected)
+							if (!T.flagged)
 								T.flagged = 1
-							else if(T.flagged == 2)
+							else if (T.flagged == 2)
 								T.flagged = 1
 							else
 								T.flagged = 0
 
-			if("mineQuestion")
+			if ("mineQuestion")
 				var/datum/pda_app/minesweeper/app = locate(/datum/pda_app/minesweeper) in applications
-				if(!app.minesweeper_game.gameover)
-					for(var/datum/mine_tile/T in app.minesweeper_game.tiles)
-						if(!T.dug && T.selected)
-							if(!T.flagged)
+				if (!app.minesweeper_game.gameover)
+					for (var/datum/mine_tile/T in app.minesweeper_game.tiles)
+						if (!T.dug && T.selected)
+							if (!T.flagged)
 								T.flagged = 2
-							else if(T.flagged == 1)
+							else if (T.flagged == 1)
 								T.flagged = 2
 							else
 								T.flagged = 0
 
-			if("mineSettings")
+			if ("mineSettings")
 				var/datum/pda_app/minesweeper/app = locate(/datum/pda_app/minesweeper) in applications
-				if(alert(usr, "Changing the settings will reset the game, are you sure?", "Minesweeper Settings", "Yes", "No") != "Yes")
+				if (alert(usr, "Changing the settings will reset the game, are you sure?", "Minesweeper Settings", "Yes", "No") != "Yes")
 					return
 				var/list/difficulties = list(
 					"beginner",
@@ -1579,7 +1579,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				app.minesweeper_game.set_difficulty(choice)
 				app.ingame = 0
 
-			if("mineReset")
+			if ("mineReset")
 				var/datum/pda_app/minesweeper/app = locate(/datum/pda_app/minesweeper) in applications
 				app.minesweeper_game.face = "press"
 				app.game_update(usr)
@@ -1587,65 +1587,65 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				app.minesweeper_game.reset_game()
 				app.ingame = 0
 
-			if(PDA_APP_SPESSPETS)
+			if (PDA_APP_SPESSPETS)
 				mode = PDA_APP_SPESSPETS
 
-			if("eggPrev")
+			if ("eggPrev")
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
 				app.previous_egg()
 
-			if("eggNext")
+			if ("eggNext")
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
 				app.next_egg()
 
-			if("eggChose")
+			if ("eggChose")
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
 				app.game_state = 1
 				app.game_tick(usr)
 				app.petname = copytext(sanitize(input(usr, "What name for your new pet?", "Name your new pet", "[app.petname]") as null|text),1,MAX_NAME_LEN)
 				app.last_spoken = ""
 
-			if("eggHatch")
+			if ("eggHatch")
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
 				app.button_hatch()
 
-			if("eggTalk")
+			if ("eggTalk")
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
 				app.button_talk()
 
-			if("eggWalk")
+			if ("eggWalk")
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
 				app.button_walk()
 
-			if("eggFeed")
+			if ("eggFeed")
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
 				app.button_feed()
 
-			if("eggClean")
+			if ("eggClean")
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
 				app.button_clean()
 
-			if("eggHeal")
+			if ("eggHeal")
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
 				app.button_heal()
 
-			if("eggFight")
+			if ("eggFight")
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
 				app.button_fight()
 
-			if("eggVisit")
+			if ("eggVisit")
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
 				app.button_visit()
 
-			if("eggWork")
+			if ("eggWork")
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
 				app.button_work()
 
-			if("eggRate")
+			if ("eggRate")
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
 				app.button_rates()
 
-			if("eggCash")
+			if ("eggCash")
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
 				app.button_cash()
 
@@ -1653,42 +1653,42 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 //MAIN FUNCTIONS===================================
 
-			if("Light")
-				if(fon)
+			if ("Light")
+				if (fon)
 					fon = 0
 					set_light(0)
 				else
 					fon = 1
 					set_light(f_lum)
-			if("Medical Scan")
-				if(scanmode == SCANMODE_MEDICAL)
+			if ("Medical Scan")
+				if (scanmode == SCANMODE_MEDICAL)
 					scanmode = SCANMODE_NONE
-				else if((!isnull(cartridge)) && (cartridge.access_medical))
+				else if ((!isnull(cartridge)) && (cartridge.access_medical))
 					scanmode = SCANMODE_MEDICAL
-			if("Reagent Scan")
-				if(scanmode == SCANMODE_REAGENT)
+			if ("Reagent Scan")
+				if (scanmode == SCANMODE_REAGENT)
 					scanmode = SCANMODE_NONE
-				else if((!isnull(cartridge)) && (cartridge.access_reagent_scanner))
+				else if ((!isnull(cartridge)) && (cartridge.access_reagent_scanner))
 					scanmode = SCANMODE_REAGENT
-			if("Halogen Counter")
-				if(scanmode == SCANMODE_HALOGEN)
+			if ("Halogen Counter")
+				if (scanmode == SCANMODE_HALOGEN)
 					scanmode = SCANMODE_NONE
-				else if((!isnull(cartridge)) && (cartridge.access_engine))
+				else if ((!isnull(cartridge)) && (cartridge.access_engine))
 					scanmode = SCANMODE_HALOGEN
-			if("Honk")
+			if ("Honk")
 				if ( !(last_honk && world.time < last_honk + 20) )
 					playsound(loc, 'sound/items/bikehorn.ogg', 50, 1)
 					last_honk = world.time
-			if("Gas Scan")
-				if(scanmode == SCANMODE_ATMOS)
+			if ("Gas Scan")
+				if (scanmode == SCANMODE_ATMOS)
 					scanmode = SCANMODE_NONE
-				else if((!isnull(cartridge)) && (cartridge.access_atmos))
+				else if ((!isnull(cartridge)) && (cartridge.access_atmos))
 					scanmode = SCANMODE_ATMOS
-			if("Device Analyser")
-				if(scanmode == SCANMODE_DEVICE)
+			if ("Device Analyser")
+				if (scanmode == SCANMODE_DEVICE)
 					scanmode = SCANMODE_NONE
-				else if((!isnull(cartridge)) && (cartridge.access_mechanic))
-					if(!dev_analys)
+				else if ((!isnull(cartridge)) && (cartridge.access_mechanic))
+					if (!dev_analys)
 						dev_analys = new(src) //let's create that device analyser
 						dev_analys.cant_drop = 1
 						dev_analys.max_designs = 5
@@ -1707,23 +1707,23 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						var/log = replacetext(n, "\n", "(new line)")//no intentionally spamming admins with 100 lines, nice try
 						log_say("[src] notes - [U] changed the text to: [log]")
 						message_admins("[src] notes - [U] changed the text to: [log]", 1)
-						for(var/mob/dead/observer/M in player_list)
-							if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA))
+						for (var/mob/dead/observer/M in player_list)
+							if (M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA))
 								M.show_message("<span class='game say'>[src] notes - <span class = 'name'>[U]</span> changed the text to:</span> [log]")
 				else
 					U << browse(null, "window=pda")
 					return
-			if("Toggle Messenger")
+			if ("Toggle Messenger")
 				toff = !toff
-			if("Toggle Ringer")//If viewing texts then erase them, if not then toggle silent status
+			if ("Toggle Ringer")//If viewing texts then erase them, if not then toggle silent status
 				silent = !silent
-			if("Clear")//Clears messages
+			if ("Clear")//Clears messages
 				tnote = null
-			if("Ringtone")
+			if ("Ringtone")
 				var/t = input(U, "Please enter new ringtone", name, ttone) as text
 				if (in_range(src, U) && loc == U)
 					if (t)
-						if(src.hidden_uplink && hidden_uplink.check_trigger(U, trim(lowertext(t)), trim(lowertext(lock_code))))
+						if (src.hidden_uplink && hidden_uplink.check_trigger(U, trim(lowertext(t)), trim(lowertext(lock_code))))
 							to_chat(U, "The PDA softly beeps.")
 							U << browse(null, "window=pda")
 							src.mode = 0
@@ -1733,25 +1733,25 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				else
 					U << browse(null, "window=pda")
 					return
-			if("Message")
+			if ("Message")
 				var/obj/item/device/pda/P = locate(href_list["target"])
 				src.create_message(U, P)
 
-			if("transferFunds")
-				if(!id)
+			if ("transferFunds")
+				if (!id)
 					return
 				var/obj/item/device/pda/P = locate(href_list["target"])
 				var/amount = round(input("How much money do you wish to transfer to [P.owner]?", "Money Transfer", 0) as num)
-				if(!amount || (amount < 0) || (id.virtual_wallet.money <= 0))
+				if (!amount || (amount < 0) || (id.virtual_wallet.money <= 0))
 					to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Invalid value.'</span>")
 					return
-				if(amount > id.virtual_wallet.money)
+				if (amount > id.virtual_wallet.money)
 					amount = id.virtual_wallet.money
 
-				switch(P.receive_funds(owner,amount,name))
-					if(1)
+				switch (P.receive_funds(owner,amount,name))
+					if (1)
 						to_chat(usr, "[bicon(src)]<span class='notice'>The PDA's screen flashes, 'Transaction complete!'</span>")
-					if(2)
+					if (2)
 						to_chat(usr, "[bicon(src)]<span class='notice'>The PDA's screen flashes, 'Transaction complete! The recipient will earn the funds once he enters his ID in his PDA.'</span>")
 					else
 						to_chat(usr, "[bicon(src)]<span class='warning'>The PDA's screen flashes, 'Error, transaction canceled'</span>")
@@ -1767,10 +1767,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				T.time = worldtime2text()
 				id.virtual_wallet.transaction_log.Add(T)
 
-			if("Send Honk")//Honk virus
-				if(istype(cartridge, /obj/item/weapon/cartridge/clown))//Cartridge checks are kind of unnecessary since everything is done through switch.
+			if ("Send Honk")//Honk virus
+				if (istype(cartridge, /obj/item/weapon/cartridge/clown))//Cartridge checks are kind of unnecessary since everything is done through switch.
 					var/obj/item/device/pda/P = locate(href_list["target"])//Leaving it alone in case it may do something useful, I guess.
-					if(!isnull(P))
+					if (!isnull(P))
 						if (!P.toff && cartridge:honk_charges > 0)
 							cartridge:honk_charges--
 							U.show_message("<span class='notice'>Virus sent!</span>", 1)
@@ -1780,10 +1780,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				else
 					U << browse(null, "window=pda")
 					return
-			if("Send Silence")//Silent virus
-				if(istype(cartridge, /obj/item/weapon/cartridge/mime))
+			if ("Send Silence")//Silent virus
+				if (istype(cartridge, /obj/item/weapon/cartridge/mime))
 					var/obj/item/device/pda/P = locate(href_list["target"])
-					if(!isnull(P))
+					if (!isnull(P))
 						if (!P.toff && cartridge:mime_charges > 0)
 							cartridge:mime_charges--
 							U.show_message("<span class='notice'>Virus sent!</span>", 1)
@@ -1798,27 +1798,27 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 //SYNDICATE FUNCTIONS===================================
 
-			if("Toggle Door")
-				if(cartridge && cartridge.access_remote_door)
-					for(var/obj/machinery/door/poddoor/M in poddoors)
-						if(M.id_tag == cartridge.remote_door_id)
-							if(M.density)
+			if ("Toggle Door")
+				if (cartridge && cartridge.access_remote_door)
+					for (var/obj/machinery/door/poddoor/M in poddoors)
+						if (M.id_tag == cartridge.remote_door_id)
+							if (M.density)
 								M.open()
 								to_chat(U, "<span class='notice'>The shuttle's outer airlock is now open!</span>")
 							else
 								M.close()
 								to_chat(U, "<span class='notice'>The shuttle's outer airlock is now closed!</span>")
 
-			if("Detonate")//Detonate PDA
-				if(istype(cartridge, /obj/item/weapon/cartridge/syndicate))
+			if ("Detonate")//Detonate PDA
+				if (istype(cartridge, /obj/item/weapon/cartridge/syndicate))
 					var/obj/item/device/pda/P = locate(href_list["target"])
-					if(!isnull(P))
+					if (!isnull(P))
 						if (!P.toff && cartridge:shock_charges > 0)
 							cartridge:shock_charges--
 
 							var/difficulty = 0
 
-							if(P.cartridge)
+							if (P.cartridge)
 								difficulty += P.cartridge.access_medical
 								difficulty += P.cartridge.access_security
 								difficulty += P.cartridge.access_engine
@@ -1828,7 +1828,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 							else
 								difficulty += 2
 
-							if(prob(difficulty * 12) || (P.hidden_uplink))
+							if (prob(difficulty * 12) || (P.hidden_uplink))
 								U.show_message("<span class='warning'>An error flashes on your [src].</span>", 1)
 							else if (prob(difficulty * 3))
 								U.show_message("<span class='warning'>Energy feeds back into your [src]!</span>", 1)
@@ -1849,20 +1849,20 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					return
 
 //pAI FUNCTIONS===================================
-			if("pai")
-				switch(href_list["option"])
-					if("1")		// Configure pAI device
+			if ("pai")
+				switch (href_list["option"])
+					if ("1")		// Configure pAI device
 						pai.attack_self(U)
-					if("2")		// Eject pAI device
+					if ("2")		// Eject pAI device
 						var/turf/T = get_turf(src.loc)
-						if(T)
+						if (T)
 							pai.forceMove(T)
 
 //LINK FUNCTIONS===================================
 
 			else//Cartridge menu linking
 				mode = text2num(href_list["choice"])
-				if(cartridge)
+				if (cartridge)
 					cartridge.mode = mode
 					cartridge.unlock()
 	else//If not in range, can't interact or not using the pda.
@@ -1879,7 +1879,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		honkamt--
 		playsound(loc, 'sound/items/bikehorn.ogg', 30, 1)
 
-	if(U.machine == src && href_list["skiprefresh"]!="1")//Final safety.
+	if (U.machine == src && href_list["skiprefresh"]!="1")//Final safety.
 		attack_self(U)//It auto-closes the menu prior if the user is not in range and so on.
 	else
 		U.unset_machine()
@@ -1888,9 +1888,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 //Convert money from the virtual wallet into physical bills
 /obj/item/device/pda/proc/withdraw_arbitrary_sum(var/mob/user,var/arbitrary_sum)
-	if(istype(user,/mob/living/carbon/human))
+	if (istype(user,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = user
-		if(istype(H.wear_id,/obj/item/weapon/storage/wallet))
+		if (istype(H.wear_id,/obj/item/weapon/storage/wallet))
 			dispense_cash(arbitrary_sum,H.wear_id)
 			to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your physical wallet!</span>")
 			return
@@ -1899,26 +1899,26 @@ var/global/list/obj/item/device/pda/PDAs = list()
 //Receive money transferred from another PDA
 /obj/item/device/pda/proc/receive_funds(var/creditor_name,var/arbitrary_sum,var/other_pda)
 	var/turf/U = get_turf(src)
-	if(!silent)
+	if (!silent)
 		playsound(U, 'sound/machines/twobeep.ogg', 50, 1)
 
 	for (var/mob/O in hearers(3, U))
-		if(!silent)
+		if (!silent)
 			O.show_message(text("[bicon(src)] *[src.ttone]*"))
 
 	var/mob/living/L = null
-	if(src.loc && isliving(src.loc))
+	if (src.loc && isliving(src.loc))
 		L = src.loc
 	else
 		L = get_holder_of_type(src, /mob/living/silicon)
 
-	if(L)
+	if (L)
 		to_chat(L, "[bicon(src)] <b>Money transfer from [creditor_name] ([arbitrary_sum]$) </b>[id ? "" : "Insert your ID in the PDA to receive the funds."]")
 
 	tnote += "<i><b>&larr; Money transfer from [creditor_name] ([arbitrary_sum]$)<br>"
 
-	if(id)
-		if(!id.virtual_wallet)
+	if (id)
+		if (!id.virtual_wallet)
 			id.update_virtual_wallet()
 		id.virtual_wallet.money += arbitrary_sum
 		var/datum/transaction/T = new()
@@ -1936,8 +1936,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 //Receive money transferred from another PDA
 /obj/item/device/pda/proc/receive_incoming_transactions(var/obj/item/weapon/card/id/ID_card)
-	for(var/transac in incoming_transactions)
-		if(!id.virtual_wallet)
+	for (var/transac in incoming_transactions)
+		if (!id.virtual_wallet)
 			id.update_virtual_wallet()
 		id.virtual_wallet.money += transac[2]
 		var/datum/transaction/T = new()
@@ -1952,7 +1952,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	incoming_transactions = list()
 
 	var/mob/living/L = null
-	if(src.loc && isliving(src.loc))
+	if (src.loc && isliving(src.loc))
 		L = src.loc
 	to_chat(L, "[bicon(src)]<span class='notice'> <b>Transactions successfully received! </b></span>")
 
@@ -1983,69 +1983,69 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	if (last_text && world.time < last_text + 5)
 		return
 
-	if(!can_use(U))
+	if (!can_use(U))
 		return
 
 	last_text = world.time
 	// check if telecomms I/O route 1459 is stable
 	//var/telecomms_intact = telecomms_process(P.owner, owner, t)
 	var/obj/machinery/message_server/useMS = null
-	if(message_servers)
+	if (message_servers)
 		for (var/obj/machinery/message_server/MS in message_servers)
 		//PDAs are now dependant on the Message Server.
-			if(MS.active)
+			if (MS.active)
 				useMS = MS
 				break
 
 	var/datum/signal/signal = src.telecomms_process()
 
 	var/useTC = 0
-	if(signal)
-		if(signal.data["done"])
+	if (signal)
+		if (signal.data["done"])
 			useTC = 1
 			var/turf/pos = get_turf(P)
-			if(pos.z in signal.data["level"])
+			if (pos.z in signal.data["level"])
 				useTC = 2
 				//Let's make this barely readable
-				if(signal.data["compression"] > 0)
+				if (signal.data["compression"] > 0)
 					t = Gibberish(t, signal.data["compression"] + 50)
 
-	if(useMS && useTC) // only send the message if it's stable
-		if(useTC != 2) // Does our recepient have a broadcaster on their level?
+	if (useMS && useTC) // only send the message if it's stable
+		if (useTC != 2) // Does our recepient have a broadcaster on their level?
 			to_chat(U, "ERROR: Cannot reach recepient.")
 			return
 		useMS.send_pda_message("[P.owner]","[owner]","[t]")
 
 		tnote += "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
 		P.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[src]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
-		for(var/mob/dead/observer/M in player_list)
-			if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
+		for (var/mob/dead/observer/M in player_list)
+			if (M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
 				M.show_message("<span class='game say'>PDA Message - <span class='name'>[owner]</span> -> <span class='name'>[P.owner]</span>: <span class='message'>[t]</span></span>")
 
 
 		if (prob(15)) //Give the AI a chance of intercepting the message
 			var/who = src.owner
-			if(prob(50))
+			if (prob(50))
 				who = P:owner
-			for(var/mob/living/silicon/ai/ai in mob_list)
+			for (var/mob/living/silicon/ai/ai in mob_list)
 				// Allows other AIs to intercept the message but the AI won't intercept their own message.
-				if(ai.aiPDA != P && ai.aiPDA != src)
+				if (ai.aiPDA != P && ai.aiPDA != src)
 					ai.show_message("<i>Intercepted message from <b>[who]</b>: [t]</i>")
 
 		if (!P.silent)
 			playsound(P.loc, 'sound/machines/twobeep.ogg', 50, 1)
 		for (var/mob/O in hearers(3, P.loc))
-			if(!P.silent)
+			if (!P.silent)
 				O.show_message(text("[bicon(P)] *[P.ttone]*"))
 		//Search for holder of the PDA.
 		var/mob/living/L = null
-		if(P.loc && isliving(P.loc))
+		if (P.loc && isliving(P.loc))
 			L = P.loc
 		//Maybe they are a pAI!
 		else
 			L = get_holder_of_type(P, /mob/living/silicon)
 
-		if(L)
+		if (L)
 			L.show_message("[bicon(P)] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[src]'>Reply</a>)", 2)
 
 		log_pda("[usr] (PDA: [src.name]) sent \"[t]\" to [P.name]")
@@ -2060,11 +2060,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	set name = "Remove id"
 	set src in usr
 
-	if(issilicon(usr))
+	if (issilicon(usr))
 		return
 
 	if ( can_use(usr) )
-		if(id)
+		if (id)
 			remove_id()
 		else
 			to_chat(usr, "<span class='notice'>This PDA does not have an ID in it.</span>")
@@ -2082,15 +2082,15 @@ obj/item/device/pda/CtrlClick()
 	set name = "Remove pen"
 	set src in usr
 
-	if(issilicon(usr))
+	if (issilicon(usr))
 		return
 
 	if ( can_use(usr) )
 		var/obj/item/weapon/pen/O = locate() in src
-		if(O)
+		if (O)
 			if (istype(loc, /mob))
 				var/mob/M = loc
-				if(M.get_active_hand() == null)
+				if (M.get_active_hand() == null)
 					M.put_in_hands(O)
 					to_chat(usr, "<span class='notice'>You remove \the [O] from \the [src].</span>")
 					return
@@ -2107,75 +2107,75 @@ obj/item/device/pda/AltClick()
 	return ..()
 
 /obj/item/device/pda/proc/id_check(mob/user as mob, choice as num)//To check for IDs; 1 for in-pda use, 2 for out of pda use.
-	if(choice == 1)
+	if (choice == 1)
 		if (id)
 			remove_id()
 		else
 			var/obj/item/I = user.get_active_hand()
 			if (istype(I, /obj/item/weapon/card/id))
-				if(user.drop_item(I, src))
+				if (user.drop_item(I, src))
 					id = I
 	else
 		var/obj/item/weapon/card/I = user.get_active_hand()
 		if (istype(I, /obj/item/weapon/card/id) && I:registered_name)
 			var/obj/old_id = id
-			if(user.drop_item(I, src))
+			if (user.drop_item(I, src))
 				id = I
 				user.put_in_hands(old_id)
-	if(id && incoming_transactions.len)
+	if (id && incoming_transactions.len)
 		receive_incoming_transactions(id)
 	return
 
 // access to status display signals
 /obj/item/device/pda/attackby(obj/item/C as obj, mob/user as mob)
 	..()
-	if(istype(C, /obj/item/weapon/cartridge) && !cartridge)
-		if(user.drop_item(C, src))
+	if (istype(C, /obj/item/weapon/cartridge) && !cartridge)
+		if (user.drop_item(C, src))
 			cartridge = C
 			to_chat(user, "<span class='notice'>You insert [cartridge] into [src].</span>")
-			if(cartridge.radio)
+			if (cartridge.radio)
 				cartridge.radio.hostpda = src
 
-	else if(istype(C, /obj/item/weapon/card/id))
+	else if (istype(C, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/idcard = C
-		if(!idcard.registered_name)
+		if (!idcard.registered_name)
 			to_chat(user, "<span class='notice'>\The [src] rejects the ID.</span>")
 			return
-		if(!owner)
+		if (!owner)
 			owner = idcard.registered_name
 			ownjob = idcard.assignment
 			name = "PDA-[owner] ([ownjob])"
 			to_chat(user, "<span class='notice'>Card scanned.</span>")
 		else
 			//Basic safety check. If either both objects are held by user or PDA is on ground and card is in hand.
-			if(((src in user.contents) && (C in user.contents)) || (istype(loc, /turf) && in_range(src, user) && (C in user.contents)) )
-				if( can_use(user) )//If they can still act.
+			if (((src in user.contents) && (C in user.contents)) || (istype(loc, /turf) && in_range(src, user) && (C in user.contents)) )
+				if ( can_use(user) )//If they can still act.
 					id_check(user, 2)
 					to_chat(user, "<span class='notice'>You put the ID into \the [src]'s slot.</span>")
-					if(incoming_transactions.len)
+					if (incoming_transactions.len)
 						receive_incoming_transactions(id)
 					updateSelfDialog()//Update self dialog on success.
 			return	//Return in case of failed check or when successful.
 		updateSelfDialog()//For the non-input related code.
-	else if(istype(C, /obj/item/device/paicard) && !src.pai)
-		if(user.drop_item(C, src))
+	else if (istype(C, /obj/item/device/paicard) && !src.pai)
+		if (user.drop_item(C, src))
 			pai = C
 			to_chat(user, "<span class='notice'>You slot \the [C] into [src].</span>")
 			updateUsrDialog()
-	else if(istype(C, /obj/item/weapon/pen))
+	else if (istype(C, /obj/item/weapon/pen))
 		var/obj/item/weapon/pen/O = locate() in src
-		if(O)
+		if (O)
 			to_chat(user, "<span class='notice'>There is already a pen in \the [src].</span>")
 		else
-			if(user.drop_item(C, src))
+			if (user.drop_item(C, src))
 				to_chat(user, "<span class='notice'>You slide \the [C] into \the [src].</span>")
-	else if(istype(C,/obj/item/weapon/spacecash))
-		if(!id)
+	else if (istype(C,/obj/item/weapon/spacecash))
+		if (!id)
 			to_chat(user, "[bicon(src)]<span class='warning'>There is no ID in the PDA!</span>")
 			return
 		var/obj/item/weapon/spacecash/dosh = C
 		id.virtual_wallet.money += dosh.worth * dosh.amount
-		if(prob(50))
+		if (prob(50))
 			playsound(loc, 'sound/items/polaroid1.ogg', 50, 1)
 		else
 			playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
@@ -2196,47 +2196,47 @@ obj/item/device/pda/AltClick()
 	return
 
 /obj/item/device/pda/attack(mob/living/carbon/C, mob/living/user as mob)
-	if(istype(C))
-		switch(scanmode)
+	if (istype(C))
+		switch (scanmode)
 
-			if(SCANMODE_MEDICAL)
+			if (SCANMODE_MEDICAL)
 				healthanalyze(C,user,0)
 
-			if(SCANMODE_FORENSIC)
+			if (SCANMODE_FORENSIC)
 				if (!istype(C:dna, /datum/dna))
 					to_chat(user, "<span class='notice'>No fingerprints found on [C]</span>")
-				else if(!istype(C, /mob/living/carbon/monkey))
-					if(!isnull(C:gloves))
+				else if (!istype(C, /mob/living/carbon/monkey))
+					if (!isnull(C:gloves))
 						to_chat(user, "<span class='notice'>No fingerprints found on [C]</span>")
 				else
 					to_chat(user, text("<span class='notice'>[C]'s Fingerprints: [md5(C:dna.uni_identity)]</span>"))
 				if ( !(C:blood_DNA) )
 					to_chat(user, "<span class='notice'>No blood found on [C]</span>")
-					if(C:blood_DNA)
+					if (C:blood_DNA)
 						qdel(C:blood_DNA)
 						C:blood_DNA = null
 				else
 					to_chat(user, "<span class='notice'>Blood found on [C]. Analysing...</span>")
 					spawn(15)
-						for(var/blood in C:blood_DNA)
+						for (var/blood in C:blood_DNA)
 							to_chat(user, "<span class='notice'>Blood type: [C:blood_DNA[blood]]\nDNA: [blood]</span>")
 
-			if(SCANMODE_HALOGEN)
+			if (SCANMODE_HALOGEN)
 				for (var/mob/O in viewers(C, null))
 					O.show_message("<span class='warning'>[user] has analyzed [C]'s radiation levels!</span>", 1)
 
 				user.show_message("<span class='notice'>Analyzing Results for [C]:</span>")
-				if(C.radiation)
+				if (C.radiation)
 					user.show_message("<span class='good'>Radiation Level: </span>[C.radiation]")
 				else
 					user.show_message("<span class='notice'>No radiation detected.</span>")
 
 /obj/item/device/pda/afterattack(atom/A as mob|obj|turf|area, mob/user as mob)
-	if(scanmode == SCANMODE_ATMOS)
-		if(atmos_analys)
+	if (scanmode == SCANMODE_ATMOS)
+		if (atmos_analys)
 			atmos_analys.cant_drop = 1
-			if(A.Adjacent(user))
-				if(!A.attackby(atmos_analys, user))
+			if (A.Adjacent(user))
+				if (!A.attackby(atmos_analys, user))
 					atmos_analys.afterattack(A, user, 1)
 
 	if (!scanmode && istype(A, /obj/item/weapon/paper) && owner)
@@ -2245,12 +2245,12 @@ obj/item/device/pda/AltClick()
 
 
 /obj/item/device/pda/preattack(atom/A as mob|obj|turf|area, mob/user as mob)
-	switch(scanmode)
-		if(SCANMODE_REAGENT)
-			if(!A.Adjacent(user))
+	switch (scanmode)
+		if (SCANMODE_REAGENT)
+			if (!A.Adjacent(user))
 				return
-			if(!isnull(A.reagents))
-				if(A.reagents.reagent_list.len > 0)
+			if (!isnull(A.reagents))
+				if (A.reagents.reagent_list.len > 0)
 					var/reagents_length = A.reagents.reagent_list.len
 					to_chat(user, "<span class='notice'>[reagents_length] chemical agent[reagents_length > 1 ? "s" : ""] found.</span>")
 					for (var/datum/reagent/re in A.reagents.reagent_list)
@@ -2262,12 +2262,12 @@ obj/item/device/pda/AltClick()
 			. = 1
 
 		if (SCANMODE_DEVICE)
-			if(dev_analys) //let's use this instead. Much neater
-				if(A.Adjacent(user))
+			if (dev_analys) //let's use this instead. Much neater
+				if (A.Adjacent(user))
 					return dev_analys.preattack(A, user, 1)
 
 /obj/item/device/pda/proc/explode() //This needs tuning.
-	if(!src.detonate)
+	if (!src.detonate)
 		return
 	var/turf/T = get_turf(src.loc)
 
@@ -2275,7 +2275,7 @@ obj/item/device/pda/AltClick()
 		var/mob/M = loc
 		M.show_message("<span class='warning'>Your [src] explodes!</span>", 1)
 
-	if(T)
+	if (T)
 		T.hotspot_expose(700,125,surfaces=istype(loc,/turf))
 
 		explosion(T, -1, -1, 2, 3)
@@ -2287,15 +2287,15 @@ obj/item/device/pda/AltClick()
 	PDAs -= src
 	if (src.id)
 		src.id.forceMove(get_turf(src.loc))
-	if(src.pai)
+	if (src.pai)
 		src.pai.forceMove(get_turf(src.loc))
 	..()
 
 /obj/item/device/pda/Del()
 	var/loop_count = 0
-	while(null in PDAs)
+	while (null in PDAs)
 		PDAs.Remove(null)
-		if(loop_count > 10)
+		if (loop_count > 10)
 			break
 		loop_count++
 	PDAs -= src
@@ -2324,7 +2324,7 @@ obj/item/device/pda/AltClick()
 	for (var/obj/item/device/pda/P in PDAs)
 		if (!P.owner)
 			continue
-		else if(P.hidden)
+		else if (P.hidden)
 			continue
 		else if (P == src)
 			continue
@@ -2367,14 +2367,14 @@ obj/item/device/pda/AltClick()
 
 // Pass along the pulse to atoms in contents, largely added so pAIs are vulnerable to EMP
 /obj/item/device/pda/emp_act(severity)
-	for(var/atom/A in src)
+	for (var/atom/A in src)
 		A.emp_act(severity)
 
 /proc/get_viewable_pdas()
 	. = list()
 	// Returns a list of PDAs which can be viewed from another PDA/message monitor.
-	for(var/obj/item/device/pda/P in PDAs)
-		if(!P.owner || P.toff || P.hidden)
+	for (var/obj/item/device/pda/P in PDAs)
+		if (!P.owner || P.toff || P.hidden)
 			continue
 		. += P
 	return .

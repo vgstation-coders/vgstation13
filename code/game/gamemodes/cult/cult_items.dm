@@ -20,19 +20,19 @@
 	return
 
 /obj/item/weapon/melee/cultblade/attack(mob/living/target as mob, mob/living/carbon/human/user as mob)
-	if(!checkcult || iscultist(user))
+	if (!checkcult || iscultist(user))
 		playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 		return ..()
 	else
 		user.Paralyse(5)
 		to_chat(user, "<span class='warning'>An unexplicable force powerfully repels the sword from [target]!</span>")
 		var/datum/organ/external/affecting = user.get_active_hand_organ()
-		if(affecting && affecting.take_damage(rand(force/2, force))) //random amount of damage between half of the blade's force and the full force of the blade.
+		if (affecting && affecting.take_damage(rand(force/2, force))) //random amount of damage between half of the blade's force and the full force of the blade.
 			user.UpdateDamageIcon()
 
 
 /obj/item/weapon/melee/cultblade/pickup(mob/living/user as mob)
-	if(checkcult && !iscultist(user))
+	if (checkcult && !iscultist(user))
 		to_chat(user, "<span class='warning'>An overwhelming feeling of dread comes over you as you pick up the cultist's sword. It would be wise to be rid of this blade quickly.</span>")
 		user.Dizzy(120)
 

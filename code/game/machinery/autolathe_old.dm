@@ -115,7 +115,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 
 /obj/machinery/autolathe/power_change()
 	..()
-	if(!(stat & (BROKEN|NOPOWER)))
+	if (!(stat & (BROKEN|NOPOWER)))
 		SetLuminosity(2)
 	else
 		SetLuminosity(0)
@@ -123,7 +123,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 /obj/machinery/autolathe/proc/wires_win(mob/user as mob)
 	var/dat as text
 	dat += "Autolathe Wires:<BR>"
-	for(var/wire in src.wires)
+	for (var/wire in src.wires)
 		dat += text("[wire] Wire: <A href='?src=\ref[src];wire=[wire];act=wire'>[src.wires[wire] ? "Mend" : "Cut"]</A> <A href='?src=\ref[src];wire=[wire];act=pulse'>Pulse</A><BR>")
 	dat += text("The red light is [src.disabled ? "off" : "on"].<BR>")
 	dat += text("The green light is [src.shocked ? "off" : "on"].<BR>")
@@ -136,58 +136,58 @@ var/global/list/autolathe_recipes_hidden = list( \
 	dat = text("<B>Metal Amount:</B> [src.m_amount] cm<sup>3</sup> (MAX: [max_m_amount])<BR>\n<FONT color=blue><B>Glass Amount:</B></FONT> [src.g_amount] cm<sup>3</sup> (MAX: [max_g_amount])<HR>")
 	var/list/objs = list()
 	objs += src.L
-	if(src.hacked)
+	if (src.hacked)
 		objs += src.LL
-	for(var/obj/t in objs)
+	for (var/obj/t in objs)
 		var/title = "[t.name] ([t.m_amt] m /[t.g_amt] g)"
-		if(m_amount < t.m_amt || g_amount < t.g_amt)
+		if (m_amount < t.m_amt || g_amount < t.g_amt)
 			dat += title + "<br>"
 			continue
 		dat += "<A href='?src=\ref[src];make=\ref[t]'>[title]</A>"
-		if(istype(t, /obj/item/stack))
+		if (istype(t, /obj/item/stack))
 			var/obj/item/stack/S = t
 			var/max_multiplier = min(S.max_amount, S.m_amt ? round(m_amount/S.m_amt):INFINITY, S.g_amt ? round(g_amount/S.g_amt):INFINITY)
-			if(max_multiplier > 1)
+			if (max_multiplier > 1)
 				dat += " |"
-			if(max_multiplier > 10)
+			if (max_multiplier > 10)
 				dat += " <A href='?src=\ref[src];make=\ref[t];multiplier=[10]'>x[10]</A>"
-			if(max_multiplier > 25)
+			if (max_multiplier > 25)
 				dat += " <A href='?src=\ref[src];make=\ref[t];multiplier=[25]'>x[25]</A>"
-			if(max_multiplier > 1)
+			if (max_multiplier > 1)
 				dat += " <A href='?src=\ref[src];make=\ref[t];multiplier=[max_multiplier]'>x[max_multiplier]</A>"
 		dat += "<br>"
 	user << browse("<HTML><HEAD><TITLE>Autolathe Control Panel</TITLE></HEAD><BODY><TT>[dat]</TT></BODY></HTML>", "window=autolathe_regular")
 	onclose(user, "autolathe_regular")
 
 /obj/machinery/autolathe/interact(mob/user as mob)
-	if(..())
+	if (..())
 		return
-	if(src.shocked)
+	if (src.shocked)
 		src.shock(user,50)
-	if(panel_open)
+	if (panel_open)
 		wires_win(user,50)
 		return
-	if(src.disabled)
+	if (src.disabled)
 		to_chat(user, "<span class='warning'>You press the button, but nothing happens.</span>")
 		return
 	regular_win(user)
 	return
 
 /obj/machinery/autolathe/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(busy)
+	if (busy)
 		to_chat(user, "<span class='warning'>\The [src] is busy. Please wait for the completion of previous operation.</span>")
 		return 1
-	if(..()) //this has to be above the stat check, because it doesn't require power
+	if (..()) //this has to be above the stat check, because it doesn't require power
 		return 1
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return 1
-	if(isrobot(user))
-		if(!isMoMMI(user))
+	if (isrobot(user))
+		if (!isMoMMI(user))
 			to_chat(user, "<span class='warning'>\The [src] refuses your inbuilt module.</span>")
 			return 1
 		else
 			var/mob/living/silicon/robot/mommi/M = user
-			if(M.is_in_modules(O, permit_sheets=1))
+			if (M.is_in_modules(O, permit_sheets=1))
 				to_chat(user, "<span class='warning'>\The [src] refuses your inbuilt module.</span>")
 				return 1
 	if (src.m_amount + O.m_amt > max_m_amount)
@@ -212,13 +212,13 @@ var/global/list/autolathe_recipes_hidden = list( \
 	var/obj/item/stack/stack
 	var/m_amt = O.m_amt
 	var/g_amt = O.g_amt
-	if(istype(O, /obj/item/stack))
+	if (istype(O, /obj/item/stack))
 		stack = O
 		amount = stack.amount
-		if(m_amt)
+		if (m_amt)
 			amount = min(amount, round((max_m_amount-src.m_amount)/m_amt))
 			flick("autolathe_o",src)//plays metal insertion animation
-		if(g_amt)
+		if (g_amt)
 			amount = min(amount, round((max_g_amount-src.g_amount)/g_amt))
 			flick("autolathe_r",src)//plays glass insertion animation
 		stack.use(amount)
@@ -238,11 +238,11 @@ var/global/list/autolathe_recipes_hidden = list( \
 	return 1 // SO WE DONT GET AFTERATTACK CALLED
 
 /obj/machinery/autolathe/crowbarDestroy(mob/user)
-	if(..() == 1)
-		if(m_amount >= 3750)
+	if (..() == 1)
+		if (m_amount >= 3750)
 			var/obj/item/stack/sheet/metal/G = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 			G.amount = round(m_amount / 3750)
-		if(g_amount >= 3750)
+		if (g_amount >= 3750)
 			var/obj/item/stack/sheet/glass/glass/G = new /obj/item/stack/sheet/glass/glass(src.loc)
 			G.amount = round(g_amount / 3750)
 		return 1
@@ -257,22 +257,22 @@ var/global/list/autolathe_recipes_hidden = list( \
 
 
 /obj/machinery/autolathe/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 	usr.set_machine(src)
 	src.add_fingerprint(usr)
-	if(!busy)
-		if(href_list["make"])
+	if (!busy)
+		if (href_list["make"])
 			var/turf/T = get_step(src.loc, get_dir(src,usr))
 
 			// critical exploit fix start -walter0o
 			var/obj/item/template = null
 			var/attempting_to_build = locate(href_list["make"])
 
-			if(!attempting_to_build)
+			if (!attempting_to_build)
 				return
 
-			if(locate(attempting_to_build, src.L) || locate(attempting_to_build, src.LL)) // see if the requested object is in one of the construction lists, if so, it is legit -walter0o
+			if (locate(attempting_to_build, src.L) || locate(attempting_to_build, src.LL)) // see if the requested object is in one of the construction lists, if so, it is legit -walter0o
 				template = attempting_to_build
 
 			else // somebody is trying to exploit, alert admins -walter0o
@@ -286,15 +286,15 @@ var/global/list/autolathe_recipes_hidden = list( \
 
 			var/multiplier = text2num(href_list["multiplier"])
 
-			if(!multiplier)
+			if (!multiplier)
 				multiplier = 1
 			var/max_multiplier = 1
 
-			if(istype(template, /obj/item/stack)) // stacks are the only items which can have a multiplier higher than 1 -walter0o
+			if (istype(template, /obj/item/stack)) // stacks are the only items which can have a multiplier higher than 1 -walter0o
 				var/obj/item/stack/S = template
 				max_multiplier = min(S.max_amount, S.m_amt?round(m_amount/S.m_amt):INFINITY, S.g_amt?round(g_amount/S.g_amt):INFINITY)  // pasta from regular_win() to make sure the numbers match -walter0o
 
-			if((multiplier > max_multiplier) || (multiplier <= 0)) // somebody is trying to exploit, alert admins-walter0o
+			if ((multiplier > max_multiplier) || (multiplier <= 0)) // somebody is trying to exploit, alert admins-walter0o
 
 				var/turf/LOC = get_turf(usr)
 				message_admins("[key_name_admin(usr)] tried to exploit an autolathe with multiplier set to <u>[multiplier]</u> on <u>[template]</u>  ! ([LOC ? "<a href='?_src_=holder;adminplayerobservecoodjump=1;X=[LOC.x];Y=[LOC.y];Z=[LOC.z]'>JMP</a>" : "null"])" , 0)
@@ -302,7 +302,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 				return
 
 			var/power = max(2000, (template.m_amt+template.g_amt)*multiplier/5)
-			if(src.m_amount >= template.m_amt*multiplier && src.g_amount >= template.g_amt*multiplier)
+			if (src.m_amount >= template.m_amt*multiplier && src.g_amount >= template.g_amt*multiplier)
 				busy = 1
 				use_power(power)
 				icon_state = "autolathe"
@@ -314,12 +314,12 @@ var/global/list/autolathe_recipes_hidden = list( \
 						spawn(round(build_delay/time_coeff))
 							src.m_amount -= template.m_amt*multiplier
 							src.g_amount -= template.g_amt*multiplier
-							if(src.m_amount < 0)
+							if (src.m_amount < 0)
 								src.m_amount = 0
-							if(src.g_amount < 0)
+							if (src.g_amount < 0)
 								src.g_amount = 0
 							var/obj/new_item
-							if(istype(template, /obj/item/stack/sheet/metal))
+							if (istype(template, /obj/item/stack/sheet/metal))
 								new_item = getFromPool(/obj/item/stack/sheet/metal, T)
 							else
 								new_item = new template.type(T)
@@ -328,37 +328,37 @@ var/global/list/autolathe_recipes_hidden = list( \
 								S.amount = multiplier
 							busy = 0
 							src.updateUsrDialog()
-		if(href_list["act"])
+		if (href_list["act"])
 			var/temp_wire = href_list["wire"]
-			if(href_list["act"] == "pulse")
+			if (href_list["act"] == "pulse")
 				if (!istype(usr.get_active_hand(), /obj/item/device/multitool))
 					to_chat(usr, "<span class='warning'>You need a multitool!</span>")
 				else
-					if(src.wires[temp_wire])
+					if (src.wires[temp_wire])
 						to_chat(usr, "<span class='warning'>You can't pulse a cut wire.</span>")
 					else
-						if(src.hack_wire == temp_wire && !emagged)
+						if (src.hack_wire == temp_wire && !emagged)
 							src.hacked = !src.hacked
 							spawn(100) src.hacked = !src.hacked
-						if(src.disable_wire == temp_wire)
+						if (src.disable_wire == temp_wire)
 							src.disabled = !src.disabled
 							src.shock(usr,50)
 							spawn(100) src.disabled = !src.disabled
-						if(src.shock_wire == temp_wire)
+						if (src.shock_wire == temp_wire)
 							src.shocked = !src.shocked
 							src.shock(usr,50)
 							spawn(100) src.shocked = !src.shocked
-			if(href_list["act"] == "wire")
+			if (href_list["act"] == "wire")
 				if (!istype(usr.get_active_hand(), /obj/item/weapon/wirecutters))
 					to_chat(usr, "<span class='warning'>You need wirecutters!</span>")
 				else
 					wires[temp_wire] = !wires[temp_wire]
-					if(src.hack_wire == temp_wire && !emagged)
+					if (src.hack_wire == temp_wire && !emagged)
 						src.hacked = !src.hacked
-					if(src.disable_wire == temp_wire)
+					if (src.disable_wire == temp_wire)
 						src.disabled = !src.disabled
 						src.shock(usr,50)
-					if(src.shock_wire == temp_wire)
+					if (src.shock_wire == temp_wire)
 						src.shocked = !src.shocked
 						src.shock(usr,50)
 	else
@@ -367,7 +367,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 	return
 
 /obj/machinery/autolathe/emag(mob/user)
-	if(!hacked && !emagged)
+	if (!hacked && !emagged)
 		playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
 		hacked = emagged
@@ -375,13 +375,13 @@ var/global/list/autolathe_recipes_hidden = list( \
 /obj/machinery/autolathe/RefreshParts()
 	..()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/matter_bin/MB in component_parts)
+	for (var/obj/item/weapon/stock_parts/matter_bin/MB in component_parts)
 		T += MB.rating
 	resource_store_coeff = T/2
 	max_m_amount = 150000.0 * resource_store_coeff
 	max_g_amount = 75000.0 * resource_store_coeff
 	T = 0
-	for(var/obj/item/weapon/stock_parts/manipulator/MA in component_parts)
+	for (var/obj/item/weapon/stock_parts/manipulator/MA in component_parts)
 		T += MA.rating
 	time_coeff = T
 	T = 0

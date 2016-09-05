@@ -31,62 +31,62 @@
 
 /datum/game_mode/traitor/pre_setup()
 
-	if(config.protect_roles_from_antagonist)
+	if (config.protect_roles_from_antagonist)
 		restricted_jobs += protected_jobs
 
 	var/list/possible_traitors = get_players_for_role(ROLE_TRAITOR)
 
 	// stop setup if no possible traitors
-	if(!possible_traitors.len)
+	if (!possible_traitors.len)
 		return 0
 
 	var/num_traitors = 1
 
-	if(config.traitor_scaling)
+	if (config.traitor_scaling)
 		num_traitors = max(required_enemies, round((num_players())/(traitor_scaling_coeff)))
 	else
 		num_traitors = Clamp(num_players(), required_enemies, traitors_possible)
 
-	for(var/datum/mind/player in possible_traitors)
-		for(var/job in restricted_jobs)
-			if(player.assigned_role == job)
+	for (var/datum/mind/player in possible_traitors)
+		for (var/job in restricted_jobs)
+			if (player.assigned_role == job)
 				possible_traitors -= player
 
-	if(possible_traitors.len < required_enemies) //fixes double agent starting with 1 traitor
+	if (possible_traitors.len < required_enemies) //fixes double agent starting with 1 traitor
 		return 0
 
-	for(var/j = 0, j < num_traitors, j++)
+	for (var/j = 0, j < num_traitors, j++)
 		if (!possible_traitors.len)
 			break
 		var/datum/mind/traitor = pick(possible_traitors)
 		possible_traitors -= traitor
-		if(traitor.special_role == "traitor")
+		if (traitor.special_role == "traitor")
 			continue
 		traitors += traitor
 		traitor.special_role = "traitor"
 
-	if(!traitors.len)
+	if (!traitors.len)
 		return 0
 	return 1
 
 
 /datum/game_mode/traitor/post_setup()
-	for(var/datum/mind/traitor in traitors)
+	for (var/datum/mind/traitor in traitors)
 		forge_traitor_objectives(traitor)
 		spawn(rand(10,100))
 			finalize_traitor(traitor)
 			greet_traitor(traitor)
 	modePlayer += traitors
-	if(!mixed)
+	if (!mixed)
 		spawn (rand(waittime_l, waittime_h))
-			if(!mixed)
+			if (!mixed)
 				send_intercept()
 		..()
 	return 1
 
 
 /datum/game_mode/proc/forge_traitor_objectives(var/datum/mind/traitor)
-	if(istype(traitor.current, /mob/living/silicon))
+	if (istype(traitor.current, /mob/living/silicon))
 		var/datum/objective/assassinate/kill_objective = new
 		kill_objective.owner = traitor
 		kill_objective.find_target()
@@ -96,25 +96,25 @@
 		survive_objective.owner = traitor
 		traitor.objectives += survive_objective
 
-		if(prob(10))
+		if (prob(10))
 			var/datum/objective/block/block_objective = new
 			block_objective.owner = traitor
 			traitor.objectives += block_objective
 
 	else
-		switch(rand(1,100))
-			if(1 to 33)
+		switch (rand(1,100))
+			if (1 to 33)
 				var/datum/objective/assassinate/kill_objective = new
 				kill_objective.owner = traitor
 				kill_objective.find_target()
 				traitor.objectives += kill_objective
 				/*vg edit
-			if(34 to 50)
+			if (34 to 50)
 				var/datum/objective/brig/brig_objective = new
 				brig_objective.owner = traitor
 				brig_objective.find_target()
 				traitor.objectives += brig_objective
-			if(51 to 66)
+			if (51 to 66)
 				var/datum/objective/harm/harm_objective = new
 				harm_objective.owner = traitor
 				harm_objective.find_target()
@@ -125,20 +125,20 @@
 				steal_objective.owner = traitor
 				steal_objective.find_target()
 				traitor.objectives += steal_objective
-		switch(rand(1,100))
-			if(1 to 30) // Die glorious death
+		switch (rand(1,100))
+			if (1 to 30) // Die glorious death
 				if (!(locate(/datum/objective/die) in traitor.objectives) && !(locate(/datum/objective/steal) in traitor.objectives))
 					var/datum/objective/die/die_objective = new
 					die_objective.owner = traitor
 					traitor.objectives += die_objective
 				else
-					if(prob(85))
+					if (prob(85))
 						if (!(locate(/datum/objective/escape) in traitor.objectives))
 							var/datum/objective/escape/escape_objective = new
 							escape_objective.owner = traitor
 							traitor.objectives += escape_objective
 					else
-						if(prob(50))
+						if (prob(50))
 							if (!(locate(/datum/objective/hijack) in traitor.objectives))
 								var/datum/objective/hijack/hijack_objective = new
 								hijack_objective.owner = traitor
@@ -148,13 +148,13 @@
 								var/datum/objective/minimize_casualties/escape_objective = new
 								escape_objective.owner = traitor
 								traitor.objectives += escape_objective
-			if(31 to 90)
+			if (31 to 90)
 				if (!(locate(/datum/objective/escape) in traitor.objectives))
 					var/datum/objective/escape/escape_objective = new
 					escape_objective.owner = traitor
 					traitor.objectives += escape_objective
 			else
-				if(prob(50))
+				if (prob(50))
 					if (!(locate(/datum/objective/hijack) in traitor.objectives))
 						var/datum/objective/hijack/hijack_objective = new
 						hijack_objective.owner = traitor
@@ -183,7 +183,7 @@
 
 /datum/game_mode/proc/finalize_traitor(var/datum/mind/traitor)
 	//We are firing the alert here, because silicons have a special syndicate intro, courtesy of old mysterious content maker
-	if(istype(traitor.current, /mob/living/silicon))
+	if (istype(traitor.current, /mob/living/silicon))
 		add_law_zero(traitor.current)
 		traitor.current << sound('sound/voice/AISyndiHack.ogg')
 	else
@@ -199,8 +199,8 @@
 /datum/game_mode/traitor/process()
 	// Make sure all objectives are processed regularly, so that objectives
 	// which can be checked mid-round are checked mid-round.
-	for(var/datum/mind/traitor_mind in traitors)
-		for(var/datum/objective/objective in traitor_mind.objectives)
+	for (var/datum/mind/traitor_mind in traitors)
+		for (var/datum/objective/objective in traitor_mind.objectives)
 			objective.check_completion()
 	return 0
 
@@ -213,12 +213,12 @@
 
 	//Begin code phrase.
 	to_chat(killer, "The Syndicate provided you with the following information on how to identify their agents:")
-	if(prob(80))
+	if (prob(80))
 		to_chat(killer, "<span class='warning'>Code Phrase: </span>[syndicate_code_phrase]")
 		killer.mind.store_memory("<b>Code Phrase</b>: [syndicate_code_phrase]")
 	else
 		to_chat(killer, "Unfortunately, the Syndicate did not provide you with a code phrase.")
-	if(prob(80))
+	if (prob(80))
 		to_chat(killer, "<span class='warning'>Code Response: </span>[syndicate_code_response]")
 		killer.mind.store_memory("<b>Code Response</b>: [syndicate_code_response]")
 	else
@@ -229,26 +229,26 @@
 
 /datum/game_mode/proc/auto_declare_completion_traitor()
 	var/text = ""
-	if(traitors.len)
+	if (traitors.len)
 		var/icon/logo = icon('icons/mob/mob.dmi', "synd-logo")
 		end_icons += logo
 		var/tempstate = end_icons.len
 		text += {"<BR><img src="logo_[tempstate].png"> <FONT size = 2><B>The traitors were:</B></FONT> <img src="logo_[tempstate].png">"}
-		for(var/datum/mind/traitor in traitors)
+		for (var/datum/mind/traitor in traitors)
 			var/traitorwin = 1
 
-			if(traitor.current)
+			if (traitor.current)
 				var/icon/flat = getFlatIcon(traitor.current, SOUTH, 1, 1)
 				end_icons += flat
 				tempstate = end_icons.len
 				text += {"<br><img src="logo_[tempstate].png"> <b>[traitor.key]</b> was <b>[traitor.name]</b> ("}
-				if(traitor.current.stat == DEAD)
+				if (traitor.current.stat == DEAD)
 					text += "died"
 					flat.Turn(90)
 					end_icons[tempstate] = flat
 				else
 					text += "survived"
-				if(traitor.current.real_name != traitor.name)
+				if (traitor.current.real_name != traitor.name)
 					text += " as [traitor.current.real_name]"
 			else
 				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
@@ -258,10 +258,10 @@
 				text += "body destroyed"
 			text += ")"
 
-			if(traitor.objectives.len)//If the traitor had no objectives, don't need to process this.
+			if (traitor.objectives.len)//If the traitor had no objectives, don't need to process this.
 				var/count = 1
-				for(var/datum/objective/objective in traitor.objectives)
-					if(objective.check_completion())
+				for (var/datum/objective/objective in traitor.objectives)
+					if (objective.check_completion())
 						text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='green'><B>Success!</B></font>"
 						feedback_add_details("traitor_objective","[objective.type]|SUCCESS")
 					else
@@ -271,22 +271,22 @@
 					count++
 
 			var/special_role_text
-			if(traitor.special_role)
+			if (traitor.special_role)
 				special_role_text = lowertext(traitor.special_role)
 			else
 				special_role_text = "antagonist"
 
-			if(traitorwin)
+			if (traitorwin)
 				text += "<br><font color='green'><B>The [(traitor in implanted) ? "greytide" : special_role_text] was successful!</B></font>"
 				feedback_add_details("traitor_success","SUCCESS")
 			else
 				text += "<br><font color='red'><B>The [(traitor in implanted) ? "greytide" : special_role_text] has failed!</B></font>"
 				feedback_add_details("traitor_success","FAIL")
 
-			if(traitor.total_TC)
-				if(traitor.spent_TC)
+			if (traitor.total_TC)
+				if (traitor.spent_TC)
 					text += "<br><span class='sinister'>TC Remaining : [traitor.total_TC - traitor.spent_TC]/[traitor.total_TC] - The tools used by the [(traitor in implanted) ? "greytide" : special_role_text] were:"
-					for(var/entry in traitor.uplink_items_bought)
+					for (var/entry in traitor.uplink_items_bought)
 						text += "<br>[entry]"
 					text += "</span>"
 				else
@@ -307,7 +307,7 @@
 	// find a radio! toolbox(es), backpack, belt, headset
 	var/loc = ""
 	var/obj/item/R = locate(/obj/item/device/pda) in traitor_mob.contents //Hide the uplink in a PDA if available, otherwise radio
-	if(!R)
+	if (!R)
 		R = locate(/obj/item/device/radio) in traitor_mob.contents
 
 	if (!R)
@@ -346,14 +346,14 @@
 			traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [pda_pass] ([R.name] [loc]).")
 			traitor_mob.mind.total_TC += R.hidden_uplink.uses
 	//Begin code phrase.
-	if(!safety)//If they are not a rev. Can be added on to.
+	if (!safety)//If they are not a rev. Can be added on to.
 		to_chat(traitor_mob, "The Syndicate provided you with the following information on how to identify other agents:")
-		if(prob(80))
+		if (prob(80))
 			to_chat(traitor_mob, "<span class='warning'>Code Phrase: </span>[syndicate_code_phrase]")
 			traitor_mob.mind.store_memory("<b>Code Phrase</b>: [syndicate_code_phrase]")
 		else
 			to_chat(traitor_mob, "Unfortunetly, the Syndicate did not provide you with a code phrase.")
-		if(prob(80))
+		if (prob(80))
 			to_chat(traitor_mob, "<span class='warning'>Code Response: </span>[syndicate_code_response]")
 			traitor_mob.mind.store_memory("<b>Code Response</b>: [syndicate_code_response]")
 		else
@@ -363,65 +363,65 @@
 
 	// Tell them about people they might want to contact.
 	var/mob/living/carbon/human/M = get_nt_opposed()
-	if(M && M != traitor_mob)
+	if (M && M != traitor_mob)
 		to_chat(traitor_mob, "We have received credible reports that [M.real_name] might be willing to help our cause. If you need assistance, consider contacting them.")
 		traitor_mob.mind.store_memory("<b>Potential Collaborator</b>: [M.real_name]")
 
 /datum/game_mode/proc/update_traitor_icons_added(datum/mind/traitor_mind)
 	var/ref = "\ref[traitor_mind]"
-	if(ref in implanter)
-		if(traitor_mind.current)
-			if(traitor_mind.current.client)
+	if (ref in implanter)
+		if (traitor_mind.current)
+			if (traitor_mind.current.client)
 				var/I = image('icons/mob/mob.dmi', loc = traitor_mind.current, icon_state = "greytide_head")
 				traitor_mind.current.client.images += I
-	for(var/headref in implanter)
+	for (var/headref in implanter)
 		var/datum/mind/head = locate(headref)
-		for(var/datum/mind/t_mind in implanter[headref])
-			if(head)
-				if(head.current)
-					if(head.current.client)
+		for (var/datum/mind/t_mind in implanter[headref])
+			if (head)
+				if (head.current)
+					if (head.current.client)
 						var/I = image('icons/mob/mob.dmi', loc = t_mind.current, icon_state = "greytide")
 						head.current.client.images += I
-				if(t_mind.current)
-					if(t_mind.current.client)
+				if (t_mind.current)
+					if (t_mind.current.client)
 						var/I = image('icons/mob/mob.dmi', loc = head.current, icon_state = "greytide_head")
 						t_mind.current.client.images += I
-				if(t_mind.current)
-					if(t_mind.current.client)
+				if (t_mind.current)
+					if (t_mind.current.client)
 						var/I = image('icons/mob/mob.dmi', loc = t_mind.current, icon_state = "greytide")
 						t_mind.current.client.images += I
 
 /datum/game_mode/proc/update_traitor_icons_removed(datum/mind/traitor_mind)
-	for(var/headref in implanter)
+	for (var/headref in implanter)
 		var/datum/mind/head = locate(headref)
-		for(var/datum/mind/t_mind in implanter[headref])
-			if(t_mind.current)
-				if(t_mind.current.client)
-					for(var/image/I in t_mind.current.client.images)
-						if((I.icon_state == "greytide" || I.icon_state == "greytide_head") && I.loc == traitor_mind.current)
+		for (var/datum/mind/t_mind in implanter[headref])
+			if (t_mind.current)
+				if (t_mind.current.client)
+					for (var/image/I in t_mind.current.client.images)
+						if ((I.icon_state == "greytide" || I.icon_state == "greytide_head") && I.loc == traitor_mind.current)
 							//world.log << "deleting [traitor_mind] overlay"
 							//del(I)
 							t_mind.current.client.images -= I
-		if(head)
+		if (head)
 			//world.log << "found [head.name]"
-			if(head.current)
-				if(head.current.client)
-					for(var/image/I in head.current.client.images)
-						if((I.icon_state == "greytide" || I.icon_state == "greytide_head") && I.loc == traitor_mind.current)
+			if (head.current)
+				if (head.current.client)
+					for (var/image/I in head.current.client.images)
+						if ((I.icon_state == "greytide" || I.icon_state == "greytide_head") && I.loc == traitor_mind.current)
 							//world.log << "deleting [traitor_mind] overlay"
 							//del(I)
 							head.current.client.images -= I
-	if(traitor_mind.current)
-		if(traitor_mind.current.client)
-			for(var/image/I in traitor_mind.current.client.images)
-				if(I.icon_state == "greytide" || I.icon_state == "greytide_head")
+	if (traitor_mind.current)
+		if (traitor_mind.current.client)
+			for (var/image/I in traitor_mind.current.client.images)
+				if (I.icon_state == "greytide" || I.icon_state == "greytide_head")
 					//del(I)
 					traitor_mind.current.client.images -= I
 
 /datum/game_mode/proc/remove_traitor_mind(datum/mind/traitor_mind, datum/mind/head)
 	//var/list/removal
 	var/ref = "\ref[head]"
-	if(ref in implanter)
+	if (ref in implanter)
 		implanter[ref] -= traitor_mind
 	implanted -= traitor_mind
 	traitors -= traitor_mind

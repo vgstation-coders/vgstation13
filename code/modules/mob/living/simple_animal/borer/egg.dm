@@ -27,7 +27,7 @@
 	icon_state = "borer egg-grown"
 	processing_objects.Add(src)
 
-	if(!recruiter)
+	if (!recruiter)
 		recruiter = new(src)
 		recruiter.display_name = "borer"
 		recruiter.role = ROLE_BORER
@@ -41,7 +41,7 @@
 		recruiter.recruited.Add(src, "recruiter_recruited")
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/Hatch()
-	if(hatching)
+	if (hatching)
 		return
 	processing_objects.Remove(src)
 	icon_state="borer egg-triggered"
@@ -61,7 +61,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/recruiter_recruited(var/list/args)
 	var/mob/dead/observer/O = args["player"]
-	if(O)
+	if (O)
 		var/turf/T = get_turf(src)
 		src.visible_message("<span class='notice'>\The [name] bursts open!</span>")
 		var/mob/living/simple_animal/borer/B = new (T, child_prefix_index)
@@ -76,19 +76,19 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/process()
 	var/turf/location = get_turf(src)
-	if(!location)
+	if (!location)
 		return
 	var/datum/gas_mixture/environment = location.return_air()
 	//testing("[type]/PROCESS() - plasma: [environment.toxins]")
 	var/meets_conditions=1
-	for(var/gas_id in required_mols)
-		if(environment.vars[gas_id] <= required_mols[gas_id])
+	for (var/gas_id in required_mols)
+		if (environment.vars[gas_id] <= required_mols[gas_id])
 			meets_conditions=0
-	if(meets_conditions)
+	if (meets_conditions)
 		src.Hatch()
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype( W, /obj/item/toy/crayon ))
+	if (istype( W, /obj/item/toy/crayon ))
 		return
 	else
 		..()

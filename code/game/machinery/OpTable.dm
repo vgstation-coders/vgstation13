@@ -17,7 +17,7 @@
 
 /obj/machinery/optable/New()
 	..()
-	for(dir in list(NORTH,EAST,SOUTH,WEST))
+	for (dir in list(NORTH,EAST,SOUTH,WEST))
 		computer = locate(/obj/machinery/computer/operating, get_step(src, dir))
 		if (computer)
 			break
@@ -26,24 +26,24 @@
 
 /obj/machinery/optable/ex_act(severity)
 
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			//SN src = null
 			qdel(src)
 			return
-		if(2.0)
+		if (2.0)
 			if (prob(50))
 				//SN src = null
 				qdel(src)
 				return
-		if(3.0)
+		if (3.0)
 			if (prob(25))
 				src.density = 0
 		else
 	return
 
 /obj/machinery/optable/blob_act()
-	if(prob(75))
+	if (prob(75))
 		qdel(src)
 
 /obj/machinery/optable/attack_paw(mob/user as mob)
@@ -57,10 +57,10 @@
 		qdel(src)
 
 /obj/machinery/optable/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0))
+	if (air_group || (height==0))
 		return 1
 
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+	if (istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
 	else
 		return 0
@@ -70,27 +70,27 @@
 
 	if ((( istype(O, /obj/item/weapon) ) || user.get_active_hand() == O))
 
-		if(user.drop_item(O))
+		if (user.drop_item(O))
 			if (O.loc != src.loc)
 				step(O, get_dir(O, src))
 		return
 	else
-		if(!ismob(O)) //humans only
+		if (!ismob(O)) //humans only
 			return
-		if(O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
+		if (O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
 			return
-		if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
+		if (user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
 			return
-		if(O.anchored || !Adjacent(user) || !user.Adjacent(src)) // is the mob anchored, too far away from you, or are you too far away from the source
+		if (O.anchored || !Adjacent(user) || !user.Adjacent(src)) // is the mob anchored, too far away from you, or are you too far away from the source
 			return
-		if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
+		if (istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
 			return
-		if(!ishuman(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
+		if (!ishuman(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
 			return
-		if(user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
+		if (user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
 			return
 		var/mob/living/L = O
-		if(!istype(L) || L.locked_to || L == user)
+		if (!istype(L) || L.locked_to || L == user)
 			return
 
 		take_victim(L, user)
@@ -144,32 +144,32 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(usr.isUnconscious() || !ishuman(usr) || usr.locked_to || usr.restrained())
+	if (usr.isUnconscious() || !ishuman(usr) || usr.locked_to || usr.restrained())
 		return
 
 	take_victim(usr, usr)
 
 /obj/machinery/optable/attackby(obj/item/weapon/W as obj, mob/living/carbon/user as mob)
-	if(iswrench(W))
+	if (iswrench(W))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		if(do_after(user, src, 40))
+		if (do_after(user, src, 40))
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-			switch(rating)
-				if(1)
+			switch (rating)
+				if (1)
 					new /obj/item/weapon/stock_parts/scanning_module(src.loc)
-				if(2)
+				if (2)
 					new /obj/item/weapon/stock_parts/scanning_module/adv(src.loc)
-				if(3)
+				if (3)
 					new /obj/item/weapon/stock_parts/scanning_module/adv/phasic(src.loc)
 			new /obj/structure/table/reinforced(src.loc)
 			qdel(src)
 		return
 	if (istype(W, /obj/item/weapon/grab))
-		if(iscarbon(W:affecting))
+		if (iscarbon(W:affecting))
 			take_victim(W:affecting,usr)
 			returnToPool(W)
 			return
-	if(isrobot(user))
+	if (isrobot(user))
 		return
 	//user.drop_item(W, src.loc) why?
 	return

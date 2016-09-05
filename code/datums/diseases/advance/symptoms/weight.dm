@@ -26,10 +26,10 @@ Bonus
 
 /datum/symptom/weight_gain/Activate(var/datum/disease/advance/A)
 	..()
-	if(prob(SYMPTOM_ACTIVATION_PROB))
+	if (prob(SYMPTOM_ACTIVATION_PROB))
 		var/mob/living/M = A.affected_mob
-		switch(A.stage)
-			if(1, 2, 3, 4)
+		switch (A.stage)
+			if (1, 2, 3, 4)
 				to_chat(M, "<span class='notice'>[pick("You feel blubbery.", "You feel full.")]</span>")
 			else
 				M.overeatduration = min(M.overeatduration + 100, 600)
@@ -67,10 +67,10 @@ Bonus
 
 /datum/symptom/weight_loss/Activate(var/datum/disease/advance/A)
 	..()
-	if(prob(SYMPTOM_ACTIVATION_PROB))
+	if (prob(SYMPTOM_ACTIVATION_PROB))
 		var/mob/living/M = A.affected_mob
-		switch(A.stage)
-			if(1, 2, 3, 4)
+		switch (A.stage)
+			if (1, 2, 3, 4)
 				to_chat(M, "<span class='notice'>[pick("You feel hungry.", "You crave for food.")]</span>")
 			else
 				to_chat(M, "<span class='notice'>Your stomach rumbles.</span>")
@@ -109,10 +109,10 @@ Bonus
 
 /datum/symptom/weight_loss/Activate(var/datum/disease/advance/A)
 	..()
-	if(prob(SYMPTOM_ACTIVATION_PROB))
+	if (prob(SYMPTOM_ACTIVATION_PROB))
 		var/mob/living/M = A.affected_mob
-		switch(A.stage)
-			if(4, 5)
+		switch (A.stage)
+			if (4, 5)
 				M.overeatduration = 0
 				M.nutrition = 400
 

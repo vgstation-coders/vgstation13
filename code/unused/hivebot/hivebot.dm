@@ -2,7 +2,7 @@
 	to_chat(src, "<span class='notice'>Your icons have been generated!</span>")
 	updateicon()
 
-	if(mainframe)
+	if (mainframe)
 		dependent = 1
 		src.real_name = mainframe:name
 		src.name = src.real_name
@@ -15,16 +15,16 @@
 
 
 /mob/living/silicon/hivebot/proc/pick_module()
-	if(src.module)
+	if (src.module)
 		return
 	var/mod = input("Please, select a module!", "Robot", null, null) as null|anything in list("Combat", "Engineering")
-	if(src.module || !mod)
+	if (src.module || !mod)
 		return
-	switch(mod)
-		if("Combat")
+	switch (mod)
+		if ("Combat")
 			src.module = new /obj/item/weapon/hive_module/standard(src)
 
-		if("Engineering")
+		if ("Engineering")
 			src.module = new /obj/item/weapon/hive_module/engineering(src)
 
 
@@ -42,8 +42,8 @@
 /mob/living/silicon/hivebot/Stat()
 	..()
 
-	if(statpanel("Status"))
-		if(emergency_shuttle.online && emergency_shuttle.location < 2)
+	if (statpanel("Status"))
+		if (emergency_shuttle.online && emergency_shuttle.location < 2)
 			var/timeleft = emergency_shuttle.timeleft()
 			if (timeleft)
 				stat(null, "ETA-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
@@ -54,7 +54,7 @@
 	return 0
 
 /mob/living/silicon/hivebot/ex_act(severity)
-	if(!blinded)
+	if (!blinded)
 		flash_eyes(visual = 1, affect_silicon = 1)
 
 	if (src.stat == 2 && src.client)
@@ -65,25 +65,25 @@
 		del(src)
 		return
 
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			if (src.stat != 2)
 				adjustBruteLoss(100)
 				adjustFireLoss(100)
 				src.gib(1)
 				return
-		if(2.0)
+		if (2.0)
 			if (src.stat != 2)
 				adjustBruteLoss(60)
 				adjustFireLoss(60)
-		if(3.0)
+		if (3.0)
 			if (src.stat != 2)
 				adjustBruteLoss(30)
 
 	src.updatehealth()
 
 /mob/living/silicon/hivebot/meteorhit(obj/O as obj)
-	for(var/mob/M in viewers(src, null))
+	for (var/mob/M in viewers(src, null))
 		M.show_message(text("<span class='warning'>[src] has been hit by [O]</span>"), 1)
 		//Foreach goto(19)
 	if (src.health > 0)
@@ -135,11 +135,11 @@
 			src.updatehealth()
 		return
 
-	else if(flag == PROJECTILE_LASER)
+	else if (flag == PROJECTILE_LASER)
 		if (src.stat != 2)
 			src.bruteloss += 20
 			src.updatehealth()
-	else if(flag == PROJECTILE_PULSE)
+	else if (flag == PROJECTILE_PULSE)
 		if (src.stat != 2)
 			src.bruteloss += 40
 			src.updatehealth()
@@ -153,12 +153,12 @@
 		if ((!( yes ) || src.now_pushing))
 			return
 		src.now_pushing = 1
-		if(ismob(AM))
+		if (ismob(AM))
 			var/mob/tmob = AM
 			/*if(istype(tmob, /mob/living/carbon/human) && (M_FAT in tmob.mutations))
-				if(prob(20))
-					for(var/mob/M in viewers(src, null))
-						if(M.client)
+				if (prob(20))
+					for (var/mob/M in viewers(src, null))
+						if (M.client)
 							to_chat(M, M << "<span class='danger'>[src] fails to push [tmob]'s fat ass out of the way.</span>")
 					src.now_pushing = 0
 					//src.unlock_medal("That's No Moon, That's A Gourmand!", 1)
@@ -183,7 +183,7 @@
 			src.adjustBruteLoss(-30)
 			src.updatehealth()
 			src.add_fingerprint(user)
-			for(var/mob/O in viewers(user, null))
+			for (var/mob/O in viewers(user, null))
 				O.show_message(text("<span class='warning'>[user] has fixed some of the dents on [src]!</span>"), 1)
 		else
 			to_chat(user, "Need more welding fuel!")
@@ -205,7 +205,7 @@
 		src.grabbed_by += G
 		G.synch()
 		playsound(src.loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-		for(var/mob/O in viewers(src, null))
+		for (var/mob/O in viewers(src, null))
 			O.show_message(text("<span class='warning'>[] has grabbed [] passively!</span>", M, src), 1)
 
 	else if (M.a_intent == "hurt")
@@ -214,36 +214,36 @@
 		/*
 			if (M.class == "combat")
 				damage += 15
-				if(prob(20))
+				if (prob(20))
 					src.weakened = max(src.weakened,4)
 					src.stunned = max(src.stunned,4)
 		*/
 			playsound(src.loc, 'sound/weapons/slash.ogg', 25, 1, -1)
-			for(var/mob/O in viewers(src, null))
+			for (var/mob/O in viewers(src, null))
 				O.show_message(text("<span class='danger'>[] has slashed at []!</span>", M, src), 1)
-			if(prob(8))
+			if (prob(8))
 				flash_eyes(visual = 1, affect_silicon = 1)
 			src.adjustBruteLoss(damage)
 			src.updatehealth()
 		else
 			playsound(src.loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
-			for(var/mob/O in viewers(src, null))
+			for (var/mob/O in viewers(src, null))
 				O.show_message(text("<span class='danger'>[] took a swipe at []!</span>", M, src), 1)
 			return
 
 	else if (M.a_intent == "disarm")
-		if(!(src.lying))
+		if (!(src.lying))
 			var/randn = rand(1, 100)
 			if (randn <= 40)
 				src.stunned = 5
 				step(src,get_dir(M,src))
 				spawn(5) step(src,get_dir(M,src))
 				playsound(src.loc, 'sound/weapons/slash.ogg', 50, 1, -1)
-				for(var/mob/O in viewers(src, null))
+				for (var/mob/O in viewers(src, null))
 					O.show_message(text("<span class='danger'>[] has pushed back []!</span>", M, src), 1)
 			else
 				playsound(src.loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
-				for(var/mob/O in viewers(src, null))
+				for (var/mob/O in viewers(src, null))
 					O.show_message(text("<span class='danger'>[] attempted to push back []!</span>", M, src), 1)
 	return
 
@@ -254,21 +254,21 @@
 
 /mob/living/silicon/hivebot/proc/allowed(mob/M)
 	//check if it doesn't require any access at all
-	if(src.check_access(null))
+	if (src.check_access(null))
 		return 1
 	return 0
 
 /mob/living/silicon/hivebot/proc/check_access(obj/item/weapon/card/id/I)
-	if(!istype(src.req_access, /list)) //something's very wrong
+	if (!istype(src.req_access, /list)) //something's very wrong
 		return 1
 
 	var/list/L = src.req_access
-	if(!L.len) //no requirements
+	if (!L.len) //no requirements
 		return 1
-	if(!I || !istype(I, /obj/item/weapon/card/id) || !I.access) //not ID or no access
+	if (!I || !istype(I, /obj/item/weapon/card/id) || !I.access) //not ID or no access
 		return 0
-	for(var/req in src.req_access)
-		if(!(req in I.access)) //doesn't have this access
+	for (var/req in src.req_access)
+		if (!(req in I.access)) //doesn't have this access
 			return 0
 	return 1
 
@@ -277,7 +277,7 @@
 
 	src.overlays.len = 0
 
-	if(src.stat == 0)
+	if (src.stat == 0)
 		src.overlays += image(icon = icon, icon_state = "eyes")
 	else
 		src.overlays -= image(icon = icon, icon_state = "eyes")
@@ -286,7 +286,7 @@
 /mob/living/silicon/hivebot/proc/installed_modules()
 
 
-	if(!src.module)
+	if (!src.module)
 		src.pick_module()
 		return
 	var/dat = "<HEAD><TITLE>Modules</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>\n"
@@ -302,12 +302,12 @@
 	<B>Installed Modules</B><BR><BR>"}
 
 	for (var/obj in src.module.modules)
-		if(src.activated(obj))
+		if (src.activated(obj))
 			dat += text("[obj]: <B>Activated</B><BR>")
 		else
 			dat += text("[obj]: <A HREF=?src=\ref[src];act=\ref[obj]>Activate</A><BR>")
 /*
-		if(src.activated(obj))
+		if (src.activated(obj))
 			dat += text("[obj]: \[<B>Activated</B> | <A HREF=?src=\ref[src];deact=\ref[obj]>Deactivate</A>\]<BR>")
 		else
 			dat += text("[obj]: \[<A HREF=?src=\ref[src];act=\ref[obj]>Activate</A> | <B>Deactivated</B>\]<BR>")
@@ -329,18 +329,18 @@
 
 	if (href_list["act"])
 		var/obj/item/O = locate(href_list["act"])
-		if(activated(O))
+		if (activated(O))
 			to_chat(src, "Already activated")
 			return
-		if(!src.module_state_1)
+		if (!src.module_state_1)
 			src.module_state_1 = O
 			O.layer = 20
 			src.contents += O
-		else if(!src.module_state_2)
+		else if (!src.module_state_2)
 			src.module_state_2 = O
 			O.layer = 20
 			src.contents += O
-		else if(!src.module_state_3)
+		else if (!src.module_state_3)
 			src.module_state_3 = O
 			O.layer = 20
 			src.contents += O
@@ -350,14 +350,14 @@
 
 	if (href_list["deact"])
 		var/obj/item/O = locate(href_list["deact"])
-		if(activated(O))
-			if(src.module_state_1 == O)
+		if (activated(O))
+			if (src.module_state_1 == O)
 				src.module_state_1 = null
 				src.contents -= O
-			else if(src.module_state_2 == O)
+			else if (src.module_state_2 == O)
 				src.module_state_2 = null
 				src.contents -= O
-			else if(src.module_state_3 == O)
+			else if (src.module_state_3 == O)
 				src.module_state_3 = null
 				src.contents -= O
 			else
@@ -368,23 +368,23 @@
 	return
 
 /mob/living/silicon/hivebot/proc/uneq_active()
-	if(isnull(src.module_active))
+	if (isnull(src.module_active))
 		return
-	if(src.module_state_1 == src.module_active)
+	if (src.module_state_1 == src.module_active)
 		if (src.client)
 			src.client.screen -= module_state_1
 		src.contents -= module_state_1
 		src.module_active = null
 		src.module_state_1 = null
 		src.inv1.icon_state = "inv1"
-	else if(src.module_state_2 == src.module_active)
+	else if (src.module_state_2 == src.module_active)
 		if (src.client)
 			src.client.screen -= module_state_2
 		src.contents -= module_state_2
 		src.module_active = null
 		src.module_state_2 = null
 		src.inv2.icon_state = "inv2"
-	else if(src.module_state_3 == src.module_active)
+	else if (src.module_state_3 == src.module_active)
 		if (src.client)
 			src.client.screen -= module_state_3
 		src.contents -= module_state_3
@@ -394,11 +394,11 @@
 
 
 /mob/living/silicon/hivebot/proc/activated(obj/item/O)
-	if(src.module_state_1 == O)
+	if (src.module_state_1 == O)
 		return 1
-	else if(src.module_state_2 == O)
+	else if (src.module_state_2 == O)
 		return 1
-	else if(src.module_state_3 == O)
+	else if (src.module_state_3 == O)
 		return 1
 	else
 		return 0
@@ -431,7 +431,7 @@ Frequency:
 
 	var/t7 = 1
 	if (src.restrained())
-		for(var/mob/M in range(src, 1))
+		for (var/mob/M in range(src, 1))
 			if ((M.pulling == src && M.stat == 0 && !( M.restrained() )))
 				t7 = null
 	if ((t7 && (src.pulling && ((get_dist(src, src.pulling) <= 1 || src.pulling.loc == src.loc) && (src.client && src.client.moving)))))
@@ -439,16 +439,16 @@ Frequency:
 		. = ..()
 
 		if (src.pulling && src.pulling.loc)
-			if(!( isturf(src.pulling.loc) ))
+			if (!( isturf(src.pulling.loc) ))
 				src.stop_pulling()
 				return
 			else
-				if(Debug)
+				if (Debug)
 					diary <<"src.pulling disappeared? at [__LINE__] in mob.dm - src.pulling = [src.pulling]"
 					diary <<"REPORT THIS"
 
 		/////
-		if(src.pulling && src.pulling.anchored)
+		if (src.pulling && src.pulling.anchored)
 			src.stop_pulling()
 			return
 
@@ -465,7 +465,7 @@ Frequency:
 						if (prob(75))
 							var/obj/item/weapon/grab/G = pick(M.grabbed_by)
 							if (istype(G, /obj/item/weapon/grab))
-								for(var/mob/O in viewers(M, null))
+								for (var/mob/O in viewers(M, null))
 									O.show_message(text("<span class='warning'>[G.affecting] has been pulled from [G.assailant]'s grip by [src]</span>"), 1)
 								returnToPool(G)
 						else
@@ -494,7 +494,7 @@ Frequency:
 	return_mainframe()
 
 /mob/living/silicon/hivebot/proc/return_mainframe()
-	if(mainframe)
+	if (mainframe)
 		mainframe.return_to(src)
 	else
 		to_chat(src, "<span class='warning'>You lack a dedicated mainframe!</span>")

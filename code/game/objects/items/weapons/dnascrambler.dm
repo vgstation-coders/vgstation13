@@ -7,22 +7,22 @@
 	var/used = null
 
 	update_icon()
-		if(used)
+		if (used)
 			icon_state = "b0"
 		else
 			icon_state = "b10"
 
 	attack(mob/M as mob, mob/user as mob)
-		if(!M || !user)
+		if (!M || !user)
 			return
 
-		if(!ishuman(M) || !ishuman(user))
+		if (!ishuman(M) || !ishuman(user))
 			return
 
-		if(src.used)
+		if (src.used)
 			return
 
-		if(M == user)
+		if (M == user)
 			user.visible_message("<span class='danger'>[user.name] injects \himself with [src]!</span>")
 			src.injected(user,user)
 		else

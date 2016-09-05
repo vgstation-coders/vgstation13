@@ -47,38 +47,38 @@ var/global/list/mixed_allowed = list(
 	modes = list()
 	picked_antags = list()
 
-	if(mixed_modes.len)
-		for(var/M in mixed_modes)
+	if (mixed_modes.len)
+		for (var/M in mixed_modes)
 			var/datum/game_mode/GM = config.pick_mode(M)
 			GM.mixed = 1
-			if(GM.pre_setup())
+			if (GM.pre_setup())
 				modes += GM
 			else
 				qdel(GM)
 	else
 		var/list/datum/game_mode/possible = typesof(/datum/game_mode) - list(/datum/game_mode, /datum/game_mode/mixed)
-		while(modes.len < 3)
-			if(!possible.len)
+		while (modes.len < 3)
+			if (!possible.len)
 				break
 			var/datum/game_mode/ourmode = pick(possible)
 			possible -= ourmode
-			if(!initial(ourmode.can_be_mixed))
+			if (!initial(ourmode.can_be_mixed))
 				continue
 			var/datum/game_mode/M = new ourmode
 			// I put this in a separate block just in case BYOND does something silly with &&
 
 			M.mixed = 1
 
-			if(!M.pre_setup())
+			if (!M.pre_setup())
 				qdel(M)
 				continue
 			//modePlayer += M.modePlayer
 			modes += M
-	if(!modes.len)
+	if (!modes.len)
 		. = 0
 	else
 		var/keylist[]
-		for(var/datum/mind/mind in modePlayer)
+		for (var/datum/mind/mind in modePlayer)
 			keylist += mind
 		log_admin("The gamemode setup for mixed started with [modes.len] mode\s [jointext(modes, " ")] with [jointext(keylist, " ")] as antag\s.")
 		message_admins("The gamemode setup for mixed started with [modes.len] mode\s.")
@@ -86,30 +86,30 @@ var/global/list/mixed_allowed = list(
 
 
 /datum/game_mode/mixed/post_setup()
-	for(var/datum/game_mode/M in modes)
+	for (var/datum/game_mode/M in modes)
 		spawn() M.post_setup()
 	spawn (rand(waittime_l, waittime_h))
-		if(!mixed)
+		if (!mixed)
 			send_intercept()
 
 /datum/game_mode/mixed/check_finished()
-	for(var/datum/game_mode/M in modes)
-		if(M.check_finished())
+	for (var/datum/game_mode/M in modes)
+		if (M.check_finished())
 			return 1
 /datum/game_mode/mixed/declare_completion()
-	for(var/datum/game_mode/M in modes)
+	for (var/datum/game_mode/M in modes)
 		M.declare_completion()
 
 /datum/game_mode/mixed/add_cultist(datum/mind/cult_mind)
 	var/datum/game_mode/cult/cult_round = find_active_mode("cult")
-	if(cult_round)
+	if (cult_round)
 		cult_round.add_cultist(..())
 	else
 		..()
 
 /datum/game_mode/mixed/remove_cultist(var/datum/mind/cult_mind, var/show_message = 1, var/log=1)
 	var/datum/game_mode/cult/cult_round = find_active_mode("cult")
-	if(cult_round)
+	if (cult_round)
 		cult_round.remove_cultist(..())
 	else
 		..()

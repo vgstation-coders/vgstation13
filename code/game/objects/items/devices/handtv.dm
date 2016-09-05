@@ -8,13 +8,13 @@ var/global/list/camera_bugs = list()
 	var/network
 
 /obj/item/device/handtv/attack_self(mob/user as mob)
-	if(!network && user.mind)
+	if (!network && user.mind)
 		network = "\ref[user.mind]"
 	var/list/cameras = list()
-	for(var/obj/item/device/camera_bug/C in camera_bugs)
-		if(C.network == network)
+	for (var/obj/item/device/camera_bug/C in camera_bugs)
+		if (C.network == network)
 			cameras += C
-	if(!cameras.len)
+	if (!cameras.len)
 		to_chat(user, "<span class='warning'>No camera bugs found.</span>")
 		return
 	var/list/friendly_cameras = new/list()
@@ -26,13 +26,13 @@ var/global/list/camera_bugs = list()
 		user.unset_machine()
 		user.reset_view(user)
 		return
-	for(var/obj/item/device/camera_bug/C in cameras)
+	for (var/obj/item/device/camera_bug/C in cameras)
 		if (C.c_tag == target)
 			target = C
 			break
-	if(user.stat)
+	if (user.stat)
 		return
-	if(target)
+	if (target)
 		user.client.eye = target
 		user.set_machine(src)
 		src.current = target

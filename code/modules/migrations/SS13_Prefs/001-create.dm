@@ -25,8 +25,8 @@
 	`nanotrasen_relation`	TEXT,
 	UNIQUE(player_ckey, player_slot)
 );"}
-	if(!hasTable("players"))
-		if(!execute(sql))
+	if (!hasTable("players"))
+		if (!execute(sql))
 			return FALSE
 
 	sql={"CREATE TABLE `body` (
@@ -51,8 +51,8 @@
 	FOREIGN KEY(player_ckey, player_slot) REFERENCES players(player_ckey, player_slot) ON DELETE CASCADE,
 	UNIQUE(player_ckey, player_slot)
 );"}
-	if(!hasTable("body"))
-		if(!execute(sql))
+	if (!hasTable("body"))
+		if (!execute(sql))
 			return FALSE
 
 	sql={"CREATE TABLE `jobs` (
@@ -72,8 +72,8 @@
 	FOREIGN KEY(player_ckey, player_slot) REFERENCES players(player_ckey, player_slot) ON DELETE CASCADE,
 	UNIQUE(player_ckey, player_slot)
 );"}
-	if(!hasTable("jobs"))
-		if(!execute(sql))
+	if (!hasTable("jobs"))
+		if (!execute(sql))
 			return FALSE
 
 
@@ -85,8 +85,8 @@
 	PRIMARY KEY (`ckey`, `slot`, `role`),
 	FOREIGN KEY (`ckey`, `slot`) REFERENCES `players` (`player_ckey`, `player_slot`) ON DELETE CASCADE
 );"}
-	if(!hasTable("client_roles"))
-		if(!execute(sql))
+	if (!hasTable("client_roles"))
+		if (!execute(sql))
 			return FALSE
 
 
@@ -108,8 +108,8 @@
 	`kidneys`	TEXT,
 	`liver`	TEXT
 );"}
-	if(!hasTable("limbs"))
-		if(!execute(sql))
+	if (!hasTable("limbs"))
+		if (!execute(sql))
 			return FALSE
 
 
@@ -131,8 +131,8 @@
 	`usewmp`	INTEGER,
 	`usenanoui`	INTEGER
 );"}
-	if(!hasTable("client"))
-		if(!execute(sql))
+	if (!hasTable("client"))
+		if (!execute(sql))
 			return FALSE
 
 	return TRUE

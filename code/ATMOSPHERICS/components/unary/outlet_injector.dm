@@ -28,8 +28,8 @@
 	return 0
 
 /obj/machinery/atmospherics/unary/outlet_injector/update_icon()
-	if(node)
-		if(on && !(stat & NOPOWER))
+	if (node)
+		if (on && !(stat & NOPOWER))
 			icon_state = "hon"
 		else
 			icon_state = "hoff"
@@ -39,14 +39,14 @@
 	..()
 	if (istype(loc, /turf/simulated/floor) && node)
 		var/turf/simulated/floor/floor = loc
-		if(floor.floor_tile && node.alpha == 128)
+		if (floor.floor_tile && node.alpha == 128)
 			underlays.Cut()
 	return
 
 /obj/machinery/atmospherics/unary/outlet_injector/power_change()
 	var/old_stat = stat
 	..()
-	if(old_stat != stat)
+	if (old_stat != stat)
 		update_icon()
 
 
@@ -54,35 +54,35 @@
 	. = ..()
 	injecting = 0
 
-	if(!on || stat & NOPOWER)
+	if (!on || stat & NOPOWER)
 		return
 
-	if(air_contents.temperature > 0)
+	if (air_contents.temperature > 0)
 		var/transfer_moles = (air_contents.return_pressure())*volume_rate/(air_contents.temperature * R_IDEAL_GAS_EQUATION)
 
 		var/datum/gas_mixture/removed = air_contents.remove(transfer_moles)
 
 		loc.assume_air(removed)
 
-		if(network)
+		if (network)
 			network.update = 1
 
 	return 1
 
 /obj/machinery/atmospherics/unary/outlet_injector/proc/inject()
-	if(on || injecting)
+	if (on || injecting)
 		return 0
 
 	injecting = 1
 
-	if(air_contents.temperature > 0)
+	if (air_contents.temperature > 0)
 		var/transfer_moles = (air_contents.return_pressure())*volume_rate/(air_contents.temperature * R_IDEAL_GAS_EQUATION)
 
 		var/datum/gas_mixture/removed = air_contents.remove(transfer_moles)
 
 		loc.assume_air(removed)
 
-		if(network)
+		if (network)
 			network.update = 1
 
 	flick("inject", src)
@@ -90,11 +90,11 @@
 /obj/machinery/atmospherics/unary/outlet_injector/proc/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
-	if(frequency)
+	if (frequency)
 		radio_connection = radio_controller.add_object(src, frequency)
 
 /obj/machinery/atmospherics/unary/outlet_injector/proc/broadcast_status()
-	if(!radio_connection)
+	if (!radio_connection)
 		return 0
 
 	var/datum/signal/signal = getFromPool(/datum/signal)
@@ -120,24 +120,24 @@
 	set_frequency(frequency)
 
 /obj/machinery/atmospherics/unary/outlet_injector/receive_signal(datum/signal/signal)
-	if(!signal.data["tag"] || (signal.data["tag"] != id_tag) || (signal.data["sigtype"]!="command") || (signal.data["type"] && signal.data["type"] != "injector"))
+	if (!signal.data["tag"] || (signal.data["tag"] != id_tag) || (signal.data["sigtype"]!="command") || (signal.data["type"] && signal.data["type"] != "injector"))
 		return 0
 
-	if("power" in signal.data)
+	if ("power" in signal.data)
 		on = text2num(signal.data["power"])
 
-	if("power_toggle" in signal.data)
+	if ("power_toggle" in signal.data)
 		on = !on
 
-	if("inject" in signal.data)
+	if ("inject" in signal.data)
 		spawn inject()
 		return
 
-	if("set_volume_rate" in signal.data)
+	if ("set_volume_rate" in signal.data)
 		var/number = text2num(signal.data["set_volume_rate"])
 		volume_rate = Clamp(number, 0, air_contents.volume)
 
-	if("status" in signal.data)
+	if ("status" in signal.data)
 		spawn(2)
 			broadcast_status()
 		return //do not update_icon
@@ -149,8 +149,8 @@
 	update_icon()
 
 /obj/machinery/atmospherics/unary/outlet_injector/hide(var/i) //to make the little pipe section invisible, the icon changes.
-	if(node)
-		if(on)
+	if (node)
+		if (on)
 			icon_state = "[i == 1 && istype(loc, /turf/simulated) ? "h" : "" ]on"
 		else
 			icon_state = "[i == 1 && istype(loc, /turf/simulated) ? "h" : "" ]off"

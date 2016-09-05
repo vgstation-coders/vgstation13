@@ -38,9 +38,9 @@
 /proc/strip_html_simple(var/t,var/limit=MAX_MESSAGE_LEN)
 	var/list/strip_chars = list("<",">")
 	t = copytext(t,1,limit)
-	for(var/char in strip_chars)
+	for (var/char in strip_chars)
 		var/index = findtext(t, char)
-		while(index)
+		while (index)
 			t = copytext(t, 1, index) + copytext(t, index+1)
 			index = findtext(t, char)
 	return t
@@ -70,9 +70,9 @@
 
 //Removes a few problematic characters
 /proc/sanitize_simple(var/t,var/list/repl_chars = list("\n"="#","\t"="#","�"="�"))
-	for(var/char in repl_chars)
+	for (var/char in repl_chars)
 		var/index = findtext(t, char)
-		while(index)
+		while (index)
 			t = copytext(t, 1, index) + repl_chars[char] + copytext(t, index+1)
 			index = findtext(t, char)
 	return t
@@ -94,7 +94,7 @@
 /proc/reverse_text(txt)
   var/i = length(txt)+1
   . = ""
-  while(--i)
+  while (--i)
     . += copytext(txt,i,i+1)
 
 /*
@@ -103,25 +103,25 @@
 /proc/reject_bad_text(const/text, var/max_length = 512)
 	var/text_length = length(text)
 
-	if(text_length > max_length)
+	if (text_length > max_length)
 		return // message too long
 
 	var/non_whitespace = FALSE
 
-	for(var/i = 1 to text_length)
-		switch(text2ascii(text, i))
-			if(62, 60, 92, 47)
+	for (var/i = 1 to text_length)
+		switch (text2ascii(text, i))
+			if (62, 60, 92, 47)
 				return // rejects the text if it contains these bad characters: <, >, \ or /
-			if(127 to 255)
+			if (127 to 255)
 				return // rejects weird letters like �
-			if(0 to 31)
+			if (0 to 31)
 				return // more weird stuff
-			if(32)
+			if (32)
 				continue //whitespace
 			else
 				non_whitespace = TRUE
 
-	if(non_whitespace)
+	if (non_whitespace)
 		return text // only accepts the text if it has some non-spaces
 
 // Used to get a sanitized input.
@@ -131,25 +131,25 @@
 
 //Filters out undesirable characters from names
 /proc/reject_bad_name(var/t_in, var/allow_numbers=0, var/max_length=MAX_NAME_LEN)
-	if(!t_in || length(t_in) > max_length)
+	if (!t_in || length(t_in) > max_length)
 		return //Rejects the input if it is null or if it is longer then the max length allowed
 
 	var/number_of_alphanumeric	= 0
 	var/last_char_group			= 0
 	var/t_out = ""
 
-	for(var/i=1, i<=length(t_in), i++)
+	for (var/i=1, i<=length(t_in), i++)
 		var/ascii_char = text2ascii(t_in,i)
-		switch(ascii_char)
+		switch (ascii_char)
 			// A  .. Z
-			if(65 to 90)			//Uppercase Letters
+			if (65 to 90)			//Uppercase Letters
 				t_out += ascii2text(ascii_char)
 				number_of_alphanumeric++
 				last_char_group = 4
 
 			// a  .. z
-			if(97 to 122)			//Lowercase Letters
-				if(last_char_group<2)
+			if (97 to 122)			//Lowercase Letters
+				if (last_char_group<2)
 					t_out += ascii2text(ascii_char-32)	//Force uppercase first character
 				else
 					t_out += ascii2text(ascii_char)
@@ -157,48 +157,48 @@
 				last_char_group = 4
 
 			// 0  .. 9
-			if(48 to 57)			//Numbers
-				if(!last_char_group)
+			if (48 to 57)			//Numbers
+				if (!last_char_group)
 					continue	//suppress at start of string
-				if(!allow_numbers)
+				if (!allow_numbers)
 					continue
 				t_out += ascii2text(ascii_char)
 				number_of_alphanumeric++
 				last_char_group = 3
 
 			// '  -  .
-			if(39,45,46)			//Common name punctuation
-				if(!last_char_group)
+			if (39,45,46)			//Common name punctuation
+				if (!last_char_group)
 					continue
 				t_out += ascii2text(ascii_char)
 				last_char_group = 2
 
 			// ~   |   @  :  #  $  %  &  *  +
-			if(126,124,64,58,35,36,37,38,42,43)			//Other symbols that we'll allow (mainly for AI)
-				if(!last_char_group)
+			if (126,124,64,58,35,36,37,38,42,43)			//Other symbols that we'll allow (mainly for AI)
+				if (!last_char_group)
 					continue	//suppress at start of string
-				if(!allow_numbers)
+				if (!allow_numbers)
 					continue
 				t_out += ascii2text(ascii_char)
 				last_char_group = 2
 
 			//Space
-			if(32)
-				if(last_char_group <= 1)
+			if (32)
+				if (last_char_group <= 1)
 					continue	//suppress double-spaces and spaces at start of string
 				t_out += ascii2text(ascii_char)
 				last_char_group = 1
 			else
 				return
 
-	if(number_of_alphanumeric < 2)
+	if (number_of_alphanumeric < 2)
 		return		//protects against tiny names like "A" and also names like "' ' ' ' ' ' ' '"
 
-	if(last_char_group == 1)
+	if (last_char_group == 1)
 		t_out = copytext(t_out,1,length(t_out))	//removes the last character (in this case a space)
 
-	for(var/bad_name in list("space","floor","wall","r-wall","monkey","unknown","inactive ai","plating"))	//prevents these common metagamey names
-		if(cmptext(t_out,bad_name))
+	for (var/bad_name in list("space","floor","wall","r-wall","monkey","unknown","inactive ai","plating"))	//prevents these common metagamey names
+		if (cmptext(t_out,bad_name))
 			return	//(not case sensitive)
 
 	return t_out
@@ -243,7 +243,7 @@ proc/checkhtml(var/t)
 //Returns the position of the substring or 0 if it was not found
 /proc/dd_hassuffix(text, suffix)
 	var/start = length(text) - length(suffix)
-	if(start)
+	if (start)
 		return findtext(text, suffix, start, null)
 	return
 
@@ -251,7 +251,7 @@ proc/checkhtml(var/t)
 //Returns the position of the substring or 0 if it was not found
 /proc/dd_hassuffix_case(text, suffix)
 	var/start = length(text) - length(suffix)
-	if(start)
+	if (start)
 		return findtextEx(text, suffix, start, null)
 
 /*
@@ -266,13 +266,13 @@ proc/checkhtml(var/t)
 
 //Adds 'u' number of spaces ahead of the text 't'
 /proc/add_lspace(t, u)
-	while(length(t) < u)
+	while (length(t) < u)
 		t = " [t]"
 	return t
 
 //Adds 'u' number of spaces behind the text 't'
 /proc/add_tspace(t, u)
-	while(length(t) < u)
+	while (length(t) < u)
 		t = "[t] "
 	return t
 
@@ -304,13 +304,13 @@ proc/checkhtml(var/t)
 	var/new_message = message
 	var/size = length(message)
 	var/delta = length - size
-	if(size == length)
+	if (size == length)
 		return new_message
-	if(size > length)
+	if (size > length)
 		return copytext(new_message, 1, length + 1)
-	if(delta == 1)
+	if (delta == 1)
 		return new_message + " "
-	if(delta % 2)
+	if (delta % 2)
 		new_message = " " + new_message
 		delta--
 	var/spaces = add_lspace("",delta/2-1)
@@ -319,7 +319,7 @@ proc/checkhtml(var/t)
 //Limits the length of the text. Note: MAX_MESSAGE_LEN and MAX_NAME_LEN are widely used for this purpose
 /proc/dd_limittext(message, length)
 	var/size = length(message)
-	if(size <= length)
+	if (size <= length)
 		return message
 	return copytext(message, 1, length + 1)
 
@@ -328,17 +328,17 @@ proc/checkhtml(var/t)
 //is in the other string at the same spot (assuming it is not a replace char).
 //This is used for fingerprints
 	var/newtext = text
-	if(length(text) != length(compare))
+	if (length(text) != length(compare))
 		return 0
-	for(var/i = 1, i < length(text), i++)
+	for (var/i = 1, i < length(text), i++)
 		var/a = copytext(text,i,i+1)
 		var/b = copytext(compare,i,i+1)
 //if it isn't both the same letter, or if they are both the replacement character
 //(no way to know what it was supposed to be)
-		if(a != b)
-			if(a == replace) //if A is the replacement char
+		if (a != b)
+			if (a == replace) //if A is the replacement char
 				newtext = copytext(newtext,1,i) + b + copytext(newtext, i+1)
-			else if(b == replace) //if B is the replacement char
+			else if (b == replace) //if B is the replacement char
 				newtext = copytext(newtext,1,i) + a + copytext(newtext, i+1)
 			else //The lists disagree, Uh-oh!
 				return 0
@@ -347,12 +347,12 @@ proc/checkhtml(var/t)
 /proc/stringpercent(var/text,character = "*")
 //This proc returns the number of chars of the string that is the character
 //This is used for detective work to determine fingerprint completion.
-	if(!text || !character)
+	if (!text || !character)
 		return 0
 	var/count = 0
-	for(var/i = 1, i <= length(text), i++)
+	for (var/i = 1, i <= length(text), i++)
 		var/a = copytext(text,i,i+1)
-		if(a == character)
+		if (a == character)
 			count++
 	return count
 
@@ -367,19 +367,19 @@ proc/checkhtml(var/t)
 	var/origtext = "[parts[1]]"
 	var/len      = length(origtext)
 	var/offset   = len % 3
-	for(var/i=1;i<=len;i++)
+	for (var/i=1;i<=len;i++)
 		c = copytext(origtext,i,i+1)
 		. += c
-		if((i%3)==offset && i!=len)
+		if ((i%3)==offset && i!=len)
 			. += sep
-	if(parts.len==2)
+	if (parts.len==2)
 		. += ".[parts[2]]"
 
 var/global/list/watt_suffixes = list("W", "KW", "MW", "GW", "TW", "PW", "EW", "ZW", "YW")
 /proc/format_watts(var/number)
-	if(number<0)
+	if (number<0)
 		return "-[format_watts(number)]"
-	if(number==0)
+	if (number==0)
 		return "0 W"
 
 	var/i=1
@@ -437,45 +437,45 @@ var/list/number_units=list(
 )
 
 /proc/num2words(var/number, var/zero="zero", var/minus="minus", var/hundred="hundred", var/list/digits=number_digits, var/list/tens=number_tens, var/list/units=number_units, var/recursion=0)
-	if(!isnum(number))
+	if (!isnum(number))
 		warning("num2words fed a non-number: [number]")
 		return list()
 	number=round(number)
 	//testing("num2words [recursion] ([number])")
-	if(number == 0)
+	if (number == 0)
 		return list(zero)
 
-	if(number < 0)
+	if (number < 0)
 		return list(minus) + num2words(abs(number), zero, minus, hundred, digits, tens, units, recursion+1)
 
 	var/list/out=list()
-	if(number < 1000)
+	if (number < 1000)
 		var/hundreds = round(number/100)
 		//testing(" ([recursion]) hundreds=[hundreds]")
-		if(hundreds)
+		if (hundreds)
 			out += num2words(hundreds, zero, minus, hundred, digits, tens, units, recursion+1) + list(hundred)
 			number %= 100
 
-	if(number < 100)
+	if (number < 100)
 		// Teens
-		if(number <= 19)
+		if (number <= 19)
 			out.Add(digits[number])
 		else
 			var/tens_place = tens[round(number/10)+1]
 			//testing(" ([recursion]) tens_place=[round(number/10)+1] = [tens_place]")
-			if(tens_place!=null)
+			if (tens_place!=null)
 				out.Add(tens_place)
 			number = number%10
 			//testing(" ([recursion]) number%10+1 = [number+1] = [digits[number+1]]")
-			if(number>0)
+			if (number>0)
 				out.Add(digits[number])
 	else
 		var/i=1
-		while(round(number) > 0)
+		while (round(number) > 0)
 			var/unit_number = number%1000
 			//testing(" ([recursion]) [number]%1000 = [unit_number] ([i])")
-			if(unit_number > 0)
-				if(units[i])
+			if (unit_number > 0)
+				if (units[i])
 					//testing(" ([recursion]) units = [units[i]]")
 					out = list(units[i]) + out
 				out = num2words(unit_number, zero, minus, hundred, digits, tens, units, recursion+1) + out

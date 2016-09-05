@@ -63,21 +63,21 @@ var/global/list/atmos_controllers = list()
 	return interact(user)
 
 /obj/machinery/computer/atmoscontrol/attack_hand(mob/user)
-	if(..())
+	if (..())
 		return
 	return interact(user)
 
 /obj/machinery/computer/atmoscontrol/interact(mob/user)
-	if(allowed(user))
+	if (allowed(user))
 		overridden = 1
-	else if(!emagged)
+	else if (!emagged)
 		overridden = 0
 
 	return ui_interact(user)
 
 
 /obj/machinery/computer/atmoscontrol/attackby(var/obj/item/I as obj, var/mob/user as mob)
-	if(istype(I, /obj/item/weapon/card/emag) && !emagged)
+	if (istype(I, /obj/item/weapon/card/emag) && !emagged)
 		user.visible_message("<span class='warning'>\The [user] swipes \a [I] through \the [src], causing the screen to flash!</span>",\
 			"<span class='warning'>You swipe your [I] through \the [src], the screen flashing as you gain full control.</span>",\
 			"You hear the swipe of a card through a reader, and an electronic warble.")
@@ -87,18 +87,18 @@ var/global/list/atmos_controllers = list()
 	return ..()
 
 /obj/machinery/computer/atmoscontrol/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
-	if(user.stat && !isobserver(user))
+	if (user.stat && !isobserver(user))
 		return
 
 	var/list/data[0]
 	data["alarm"]=null
-	if(current)
+	if (current)
 		data += current.get_nano_data(user,TRUE)
 		data["alarm"] = "\ref[current]"
 
 	var/list/alarms=list()
-	for(var/obj/machinery/alarm/alarm in sortNames(machines)) // removing sortAtom because nano updates it just enough for the lag to happen
-		if(!is_in_filter(alarm.areaMaster.type))
+	for (var/obj/machinery/alarm/alarm in sortNames(machines)) // removing sortAtom because nano updates it just enough for the lag to happen
+		if (!is_in_filter(alarm.areaMaster.type))
 			continue // NO ACCESS 4 U
 		var/turf/pos = get_turf(alarm)
 		var/list/alarm_data=list()
@@ -130,7 +130,7 @@ var/global/list/atmos_controllers = list()
 
 		ui.open()
 		// Auto update every Master Controller tick
-		if(current)
+		if (current)
 			ui.set_auto_update(1)
 	else
 		// The UI is already open so push the new data to it
@@ -139,31 +139,31 @@ var/global/list/atmos_controllers = list()
 
 
 /obj/machinery/computer/atmoscontrol/proc/is_in_filter(var/typepath)
-	if(!filter)
+	if (!filter)
 		return 1 // YEP.  TOTALLY.
 	return typepath in filter
 
 //a bunch of this is copied from atmos alarms
 /obj/machinery/computer/atmoscontrol/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 0
-	if(href_list["close"])
-		if(usr.machine == src)
+	if (href_list["close"])
+		if (usr.machine == src)
 			usr.unset_machine()
 		return 1
-	if(href_list["reset"])
+	if (href_list["reset"])
 		current = null
 
-	if(href_list["alarm"])
+	if (href_list["alarm"])
 		current = locate(href_list["alarm"])
 		//updateUsrDialog()
 		return 1
 
-	if(current)
-		if(href_list["command"])
+	if (current)
+		if (href_list["command"])
 			var/device_id = href_list["id_tag"]
-			switch(href_list["command"])
-				if(
+			switch (href_list["command"])
+				if (
 					"power",
 					"adjust_external_pressure",
 					"checks",
@@ -176,18 +176,18 @@ var/global/list/atmos_controllers = list()
 					"scrubbing"
 				)
 					var/val
-					if(href_list["val"])
+					if (href_list["val"])
 						val=text2num(href_list["val"])
 					else
 						var/newval = input("Enter new value") as num|null
-						if(isnull(newval))
+						if (isnull(newval))
 							return 0
 						val = newval
 					current.send_signal(device_id, list (href_list["command"] = val))
 					spawn(3)
 						return 1
 				//if("adjust_threshold") //was a good idea but required very wide window
-				if("set_threshold")
+				if ("set_threshold")
 					var/env = href_list["env"]
 					var/threshold = text2num(href_list["var"])
 					var/list/selected = current.TLV[env]
@@ -206,67 +206,67 @@ var/global/list/atmos_controllers = list()
 					else
 						newval = round(newval,0.01)
 						selected[threshold] = newval
-					if(threshold == 1)
-						if(selected[1] > selected[2])
+					if (threshold == 1)
+						if (selected[1] > selected[2])
 							selected[2] = selected[1]
-						if(selected[1] > selected[3])
+						if (selected[1] > selected[3])
 							selected[3] = selected[1]
-						if(selected[1] > selected[4])
+						if (selected[1] > selected[4])
 							selected[4] = selected[1]
-					if(threshold == 2)
-						if(selected[1] > selected[2])
+					if (threshold == 2)
+						if (selected[1] > selected[2])
 							selected[1] = selected[2]
-						if(selected[2] > selected[3])
+						if (selected[2] > selected[3])
 							selected[3] = selected[2]
-						if(selected[2] > selected[4])
+						if (selected[2] > selected[4])
 							selected[4] = selected[2]
-					if(threshold == 3)
-						if(selected[1] > selected[3])
+					if (threshold == 3)
+						if (selected[1] > selected[3])
 							selected[1] = selected[3]
-						if(selected[2] > selected[3])
+						if (selected[2] > selected[3])
 							selected[2] = selected[3]
-						if(selected[3] > selected[4])
+						if (selected[3] > selected[4])
 							selected[4] = selected[3]
-					if(threshold == 4)
-						if(selected[1] > selected[4])
+					if (threshold == 4)
+						if (selected[1] > selected[4])
 							selected[1] = selected[4]
-						if(selected[2] > selected[4])
+						if (selected[2] > selected[4])
 							selected[2] = selected[4]
-						if(selected[3] > selected[4])
+						if (selected[3] > selected[4])
 							selected[3] = selected[4]
 
 					//Sets the temperature the built-in heater/cooler tries to maintain.
-					if(env == "temperature")
-						if(current.target_temperature < selected[2])
+					if (env == "temperature")
+						if (current.target_temperature < selected[2])
 							current.target_temperature = selected[2]
-						if(current.target_temperature > selected[3])
+						if (current.target_temperature > selected[3])
 							current.target_temperature = selected[3]
 
 					spawn(1)
 						return 1
 			return 0
 
-		if(href_list["screen"])
+		if (href_list["screen"])
 			current.screen = text2num(href_list["screen"])
 			//spawn(1)
 			//	updateUsrDialog()
 			return 1
 
-		if(href_list["atmos_unlock"])
-			switch(href_list["atmos_unlock"])
-				if("0")
+		if (href_list["atmos_unlock"])
+			switch (href_list["atmos_unlock"])
+				if ("0")
 					current.air_doors_close(1)
-				if("1")
+				if ("1")
 					current.air_doors_open(1)
 
-		if(href_list["atmos_alarm"])
+		if (href_list["atmos_alarm"])
 			current.alarmActivated=1
 			current.areaMaster.updateDangerLevel()
 			//spawn(1)
 				//src.updateUsrDialog()
 			current.update_icon()
 			return 1
-		if(href_list["atmos_reset"])
+		if (href_list["atmos_reset"])
 			current.alarmActivated=0
 			current.areaMaster.updateDangerLevel()
 			//spawn(1)
@@ -274,28 +274,28 @@ var/global/list/atmos_controllers = list()
 			current.update_icon()
 			return 1
 
-		if(href_list["mode"])
+		if (href_list["mode"])
 			current.mode = text2num(href_list["mode"])
 			current.apply_mode()
 			//spawn(5)
 				//src.updateUsrDialog()
 			return 1
 
-		if(href_list["preset"])
+		if (href_list["preset"])
 			current.preset = text2num(href_list["preset"])
 			current.apply_preset()
 			//spawn(5)
 				//src.updateUsrDialog()
 			return 1
 
-		if(href_list["temperature"])
+		if (href_list["temperature"])
 			var/list/selected = current.TLV["temperature"]
 			var/max_temperature = min(selected[3] - T0C, MAX_TEMPERATURE)
 			var/min_temperature = max(selected[2] - T0C, MIN_TEMPERATURE)
 			var/input_temperature = input("What temperature would you like the system to maintain? (Capped between [min_temperature]C and [max_temperature]C)", "Thermostat Controls") as num|null
-			if(input_temperature==null)
+			if (input_temperature==null)
 				return 0
-			if(input_temperature > max_temperature || input_temperature < min_temperature)
+			if (input_temperature > max_temperature || input_temperature < min_temperature)
 				to_chat(usr, "Temperature must be between [min_temperature]C and [max_temperature]C")
 			else
 				current.target_temperature = input_temperature + T0C

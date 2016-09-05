@@ -1,7 +1,7 @@
 /mob/living/silicon/hivebot/Life()
 	set invisibility = 0
 	set background = 1
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
 
 	if (src.monkeyizing)
@@ -16,11 +16,11 @@
 
 	handle_regular_status_updates()
 
-	if(client)
+	if (client)
 		src.shell = 0
 		handle_regular_hud_updates()
 		update_items()
-		if(dependent)
+		if (dependent)
 			mainframe_check()
 
 	update_canmove()
@@ -40,7 +40,7 @@
 		use_power()
 
 			if (src.energy)
-				if(src.energy <= 0)
+				if (src.energy <= 0)
 					death()
 
 				else if (src.energy <= 10)
@@ -50,11 +50,11 @@
 					src.module_state_3 = null
 					src.energy -=1
 				else
-					if(src.module_state_1)
+					if (src.module_state_1)
 						src.energy -=1
-					if(src.module_state_2)
+					if (src.module_state_2)
 						src.energy -=1
-					if(src.module_state_3)
+					if (src.module_state_3)
 						src.energy -=1
 					src.energy -=1
 					src.blinded = 0
@@ -64,7 +64,7 @@
 				src.stat = 1
 
 		update_canmove()
-			if(incapacitated())
+			if (incapacitated())
 				canmove = 0
 			else
 				canmove = 1
@@ -74,7 +74,7 @@
 
 			health = src.health_max - (getFireLoss() + getBruteLoss())
 
-			if(health <= 0)
+			if (health <= 0)
 				death()
 
 			if (src.stat != 2) //Alive.
@@ -135,18 +135,18 @@
 
 			if (src.healths)
 				if (src.stat != 2)
-					switch(health)
-						if(health_max to INFINITY)
+					switch (health)
+						if (health_max to INFINITY)
 							src.healths.icon_state = "health0"
-						if(src.health_max*0.80 to src.health_max)
+						if (src.health_max*0.80 to src.health_max)
 							src.healths.icon_state = "health1"
-						if(src.health_max*0.60 to src.health_max*0.80)
+						if (src.health_max*0.60 to src.health_max*0.80)
 							src.healths.icon_state = "health2"
-						if(src.health_max*0.40 to src.health_max*0.60)
+						if (src.health_max*0.40 to src.health_max*0.60)
 							src.healths.icon_state = "health3"
-						if(src.health_max*0.20 to src.health_max*0.40)
+						if (src.health_max*0.20 to src.health_max*0.40)
 							src.healths.icon_state = "health4"
-						if(0 to health_max*0.20)
+						if (0 to health_max*0.20)
 							src.healths.icon_state = "health5"
 						else
 							src.healths.icon_state = "health6"
@@ -154,27 +154,27 @@
 					src.healths.icon_state = "health7"
 
 			if (src.cells)
-				switch(src.energy)
-					if(src.energy_max*0.75 to INFINITY)
+				switch (src.energy)
+					if (src.energy_max*0.75 to INFINITY)
 						src.cells.icon_state = "charge4"
-					if(0.5*src.energy_max to 0.75*src.energy_max)
+					if (0.5*src.energy_max to 0.75*src.energy_max)
 						src.cells.icon_state = "charge3"
-					if(0.25*src.energy_max to 0.5*src.energy_max)
+					if (0.25*src.energy_max to 0.5*src.energy_max)
 						src.cells.icon_state = "charge2"
-					if(0 to 0.25*src.energy_max)
+					if (0 to 0.25*src.energy_max)
 						src.cells.icon_state = "charge1"
 					else
 						src.cells.icon_state = "charge0"
 
-			switch(src.bodytemperature) //310.055 optimal body temp
+			switch (src.bodytemperature) //310.055 optimal body temp
 
-				if(335 to INFINITY)
+				if (335 to INFINITY)
 					src.bodytemp.icon_state = "temp2"
-				if(320 to 335)
+				if (320 to 335)
 					src.bodytemp.icon_state = "temp1"
-				if(300 to 320)
+				if (300 to 320)
 					src.bodytemp.icon_state = "temp0"
-				if(260 to 300)
+				if (260 to 300)
 					src.bodytemp.icon_state = "temp-1"
 				else
 					src.bodytemp.icon_state = "temp-2"
@@ -205,7 +205,7 @@
 					if (!( src.machine.check_eye(src) ))
 						src.reset_view(null)
 				else
-					if(!client.adminobs)
+					if (!client.adminobs)
 						reset_view(null)
 
 			return 1
@@ -215,16 +215,16 @@
 			if (src.client)
 				src.client.screen -= src.contents
 				src.client.screen += src.contents
-			if(src.module_state_1)
+			if (src.module_state_1)
 				src.module_state_1:screen_loc = ui_inv1
-			if(src.module_state_2)
+			if (src.module_state_2)
 				src.module_state_2:screen_loc = ui_inv2
-			if(src.module_state_3)
+			if (src.module_state_3)
 				src.module_state_3:screen_loc = ui_inv3
 
 		mainframe_check()
-			if(mainframe)
-				if(mainframe.stat == 2)
+			if (mainframe)
+				if (mainframe.stat == 2)
 					mainframe.return_to(src)
 			else
 				death()

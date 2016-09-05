@@ -77,55 +77,55 @@
 
 /mob/living/simple_animal/hostile/bear/Move()
 	..()
-	if(stat != DEAD)
-		if(loc && istype(loc,/turf/space))
+	if (stat != DEAD)
+		if (loc && istype(loc,/turf/space))
 			icon_state = default_icon_space
 		else
 			icon_state = default_icon_floor
 
 
 /mob/living/simple_animal/hostile/bear/Life()
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
 	. =..()
-	if(!.)
+	if (!.)
 		return
 
-	switch(stance)
+	switch (stance)
 
-		if(HOSTILE_STANCE_TIRED)
+		if (HOSTILE_STANCE_TIRED)
 			stop_automated_movement = 1
 			stance_step++
-			if(stance_step >= 10) //rests for 10 ticks
-				if(target && target in ListTargets())
+			if (stance_step >= 10) //rests for 10 ticks
+				if (target && target in ListTargets())
 					stance = HOSTILE_STANCE_ATTACK //If the mob he was chasing is still nearby, resume the attack, otherwise go idle.
 				else
 					stance = HOSTILE_STANCE_IDLE
 
-		if(HOSTILE_STANCE_ALERT)
+		if (HOSTILE_STANCE_ALERT)
 			stop_automated_movement = 1
 			var/found_mob = 0
-			if(target && target in ListTargets())
-				if(CanAttack(target))
+			if (target && target in ListTargets())
+				if (CanAttack(target))
 					stance_step = max(0, stance_step) //If we have not seen a mob in a while, the stance_step will be negative, we need to reset it to 0 as soon as we see a mob again.
 					stance_step++
 					found_mob = 1
 					src.dir = get_dir(src,target)	//Keep staring at the mob
 
-					if(stance_step in list(1,4,7)) //every 3 ticks
+					if (stance_step in list(1,4,7)) //every 3 ticks
 						var/action = pick( list( "growls at [target]", "stares angrily at [target]", "prepares to attack [target]", "closely watches [target]" ) )
-						if(action)
+						if (action)
 							emote(action)
-			if(!found_mob)
+			if (!found_mob)
 				stance_step--
 
-			if(stance_step <= -20) //If we have not found a mob for 20-ish ticks, revert to idle mode
+			if (stance_step <= -20) //If we have not found a mob for 20-ish ticks, revert to idle mode
 				stance = HOSTILE_STANCE_IDLE
-			if(stance_step >= 7)   //If we have been staring at a mob for 7 ticks,
+			if (stance_step >= 7)   //If we have been staring at a mob for 7 ticks,
 				stance = HOSTILE_STANCE_ATTACK
 
-		if(HOSTILE_STANCE_ATTACKING)
-			if(stance_step >= 20)	//attacks for 20 ticks, then it gets tired and needs to rest
+		if (HOSTILE_STANCE_ATTACKING)
+			if (stance_step >= 20)	//attacks for 20 ticks, then it gets tired and needs to rest
 				emote( "is worn out and needs to rest" )
 				stance = HOSTILE_STANCE_TIRED
 				stance_step = 0
@@ -135,14 +135,14 @@
 
 
 /mob/living/simple_animal/hostile/bear/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(stance != HOSTILE_STANCE_ATTACK && stance != HOSTILE_STANCE_ATTACKING)
+	if (stance != HOSTILE_STANCE_ATTACK && stance != HOSTILE_STANCE_ATTACKING)
 		stance = HOSTILE_STANCE_ALERT
 		stance_step = 6
 		target = user
 	..()
 
 /mob/living/simple_animal/hostile/bear/attack_hand(mob/living/carbon/human/M as mob)
-	if(stance != HOSTILE_STANCE_ATTACK && stance != HOSTILE_STANCE_ATTACKING)
+	if (stance != HOSTILE_STANCE_ATTACK && stance != HOSTILE_STANCE_ATTACKING)
 		stance = HOSTILE_STANCE_ALERT
 		stance_step = 6
 		target = M
@@ -153,13 +153,13 @@
 
 /mob/living/simple_animal/hostile/bear/CanAttack(var/atom/the_target)
 	. = ..()
-	for(var/obj/effect/decal/cleanable/crayon/C in get_turf(the_target))
-		if(!C.on_wall && C.name == "o") //drawing a circle around yourself is the only way to ward off space bears!
+	for (var/obj/effect/decal/cleanable/crayon/C in get_turf(the_target))
+		if (!C.on_wall && C.name == "o") //drawing a circle around yourself is the only way to ward off space bears!
 			return 0
 
 /mob/living/simple_animal/hostile/bear/FindTarget()
 	. = ..()
-	if(.)
+	if (.)
 		emote("stares alertly at [.]")
 		stance = HOSTILE_STANCE_ALERT
 

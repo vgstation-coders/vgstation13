@@ -8,11 +8,11 @@
 	var/genomes_to_give = 10 //seeing as the new changeling won't have had a whole round to prepare, they get some genomes free
 
 /obj/item/changeling_vial/attack_self(mob/user as mob)
-	if(istype(user, /mob/living/carbon/human))
+	if (istype(user, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = user
-		if(H.mind)
+		if (H.mind)
 			var/datum/mind/M = H.mind
-			if(!ischangeling(H))
+			if (!ischangeling(H))
 				user.visible_message("<span class='warning'>As [user] crushes the vial, a mass of black goo leaps at \his face!.</span>","<span class='warning'>As you try to remove the cap, you crush the vial in your hand!</span> <span class='danger'>A mass of black goo leaps at you from the vial!</span>")
 				playsound(get_turf(src), "shatter", 20, 1)
 				M.make_new_changeling(0,1)

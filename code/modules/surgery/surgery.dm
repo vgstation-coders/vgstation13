@@ -28,24 +28,24 @@
 	return 0
 
 /datum/surgery_step/proc/check_anesthesia(var/mob/living/carbon/human/target)
-	if( (target.sleeping>0 || target.stat))
+	if ( (target.sleeping>0 || target.stat))
 		return 1
-	if(prob(25)) // Pain is tolerable?  Pomf wanted this. - N3X
+	if (prob(25)) // Pain is tolerable?  Pomf wanted this. - N3X
 		return 1
 	return 0
 
 	// Checks if this step applies to the mutantrace of the user.
 /datum/surgery_step/proc/is_valid_mutantrace(mob/living/carbon/human/target)
-	if(!hasorgans(target))
+	if (!hasorgans(target))
 		return 0
 
-	if(allowed_species)
-		for(var/species in allowed_species)
-			if(target.dna.mutantrace == species)
+	if (allowed_species)
+		for (var/species in allowed_species)
+			if (target.dna.mutantrace == species)
 				return 1
 
-	if(disallowed_species)
-		for(var/species in disallowed_species)
+	if (disallowed_species)
+		for (var/species in disallowed_species)
 			if (target.dna.mutantrace == species)
 				return 0
 
@@ -62,7 +62,7 @@
 	// does stuff to begin the step, usually just printing messages. Moved germs transfering and bloodying here too
 /datum/surgery_step/proc/begin_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	if(!affected)
+	if (!affected)
 		return 0
 	if (can_infect && affected)
 		spread_germs_to_organ(affected, user)
@@ -72,7 +72,7 @@
 			H.bloody_hands(target,0)
 		if (blood_level > 1)
 			H.bloody_body(target,0)
-	if(istype(tool,/obj/item/weapon/scalpel/laser) || istype(tool,/obj/item/weapon/retractor/manager))
+	if (istype(tool,/obj/item/weapon/scalpel/laser) || istype(tool,/obj/item/weapon/retractor/manager))
 		tool.icon_state = "[initial(tool.icon_state)]_on"
 		spawn(max_duration * tool.surgery_speed)//in case the player doesn't go all the way through the step (if he moves away, puts the tool away,...)
 			tool.icon_state = "[initial(tool.icon_state)]_off"
@@ -80,7 +80,7 @@
 
 	// does stuff to end the step, which is normally print a message + do whatever this step changes
 /datum/surgery_step/proc/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	if(istype(tool,/obj/item/weapon/scalpel/laser) || istype(tool,/obj/item/weapon/retractor/manager))
+	if (istype(tool,/obj/item/weapon/scalpel/laser) || istype(tool,/obj/item/weapon/retractor/manager))
 		tool.icon_state = "[initial(tool.icon_state)]_off"
 	return
 
@@ -89,34 +89,34 @@
 	return null
 
 proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
-	if(!istype(user) || !istype(E))
+	if (!istype(user) || !istype(E))
 		return
 
 	var/germ_level = user.germ_level
-	if(user.gloves)
+	if (user.gloves)
 		germ_level = user.gloves.germ_level
-	if(!(E.status & (ORGAN_ROBOT|ORGAN_PEG))) //Germs on robotic limbs bad
+	if (!(E.status & (ORGAN_ROBOT|ORGAN_PEG))) //Germs on robotic limbs bad
 		E.germ_level = max(germ_level,E.germ_level) //as funny as scrubbing microbes out with clean gloves is - no.
 
 proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
-	if(!istype(M,/mob/living/carbon/human))
+	if (!istype(M,/mob/living/carbon/human))
 		return 0
 	if (user.a_intent == I_HURT)	//check for Hippocratic Oath
 		return 0
 	var/sleep_fail = 0
 	var/clumsy = 0
-	if(ishuman(user))
+	if (ishuman(user))
 		var/mob/living/carbon/human/H = user
 		clumsy = ((M_CLUMSY in H.mutations) && prob(50))
-	for(var/datum/surgery_step/S in surgery_steps)
+	for (var/datum/surgery_step/S in surgery_steps)
 		//check if tool is right or close enough and if this step is possible
 		sleep_fail = 0
-		if(S.tool_quality(tool))
+		if (S.tool_quality(tool))
 			var/canuse = S.can_use(user, M, user.zone_sel.selecting, tool)
-			if(canuse == -1)
+			if (canuse == -1)
 				sleep_fail = 1
-			if(canuse && S.is_valid_mutantrace(M) && !(M in S.doing_surgery))
-				if(!S.can_operate(user, M, user.zone_sel.selecting, tool)) //ruh oh, we picked this step, but we can't actually do it for some special raisin
+			if (canuse && S.is_valid_mutantrace(M) && !(M in S.doing_surgery))
+				if (!S.can_operate(user, M, user.zone_sel.selecting, tool)) //ruh oh, we picked this step, but we can't actually do it for some special raisin
 					return 1
 				M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] started by [user.name] ([user.ckey])</font>")
 				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Started surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
@@ -125,21 +125,21 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 				S.begin_step(user, M, user.zone_sel.selecting, tool)		//start on it
 				var/selection = user.zone_sel.selecting
 				//We had proper tools! (or RNG smiled.) and user did not move or change hands.
-				if(do_mob(user, M, rand(S.min_duration, S.max_duration) * tool.surgery_speed) && (prob(S.tool_quality(tool) / (sleep_fail + clumsy + 1))) && selection == user.zone_sel.selecting)
+				if (do_mob(user, M, rand(S.min_duration, S.max_duration) * tool.surgery_speed) && (prob(S.tool_quality(tool) / (sleep_fail + clumsy + 1))) && selection == user.zone_sel.selecting)
 					M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] successfully completed by [user.name] ([user.ckey])</font>")
 					user.attack_log += text("\[[time_stamp()]\] <font color='red'>Successfully completed surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
 					log_attack("<font color='red'>[user.name] ([user.ckey]) used \the [tool] to successfully complete surgery type [S.type] on [M.name] ([M.ckey])</font>")
 					S.end_step(user, M, user.zone_sel.selecting, tool)		//finish successfully
 				else
 					if ((tool in user.contents) && (user.Adjacent(M)))											//or
-						if(sleep_fail)
+						if (sleep_fail)
 							to_chat(user, "<span class='warning'>The patient is squirming around in pain!</span>")
 							M.emote("scream",,, 1)
 						M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] failed by [user.name] ([user.ckey])</font>")
 						user.attack_log += text("\[[time_stamp()]\] <font color='red'>Failed surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
 						log_attack("<font color='red'>[user.name] ([user.ckey]) used \the [tool] to fail the surgery type [S.type] on [M.name] ([M.ckey])</font>")
 						S.fail_step(user, M, user.zone_sel.selecting, tool)		//malpractice~
-				if(M) //good, we still exist
+				if (M) //good, we still exist
 					S.doing_surgery -= M
 				else
 					S.doing_surgery.Remove(null) //get rid of that now null reference
@@ -154,14 +154,14 @@ proc/sort_surgeries()
 	var/swapped = 1
 	while (gap > 1 || swapped)
 		swapped = 0
-		if(gap > 1)
+		if (gap > 1)
 			gap = round(gap / 1.247330950103979)
-		if(gap < 1)
+		if (gap < 1)
 			gap = 1
-		for(var/i = 1; gap + i <= surgery_steps.len; i++)
+		for (var/i = 1; gap + i <= surgery_steps.len; i++)
 			var/datum/surgery_step/l = surgery_steps[i]		//Fucking hate
 			var/datum/surgery_step/r = surgery_steps[gap+i]	//how lists work here
-			if(l.priority < r.priority)
+			if (l.priority < r.priority)
 				surgery_steps.Swap(i, gap + i)
 				swapped = 1
 

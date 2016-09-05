@@ -48,7 +48,7 @@
 		return
 
 	barsigns.len = 0
-	for(var/bartype in typesof(/datum/barsign))
+	for (var/bartype in typesof(/datum/barsign))
 		var/datum/barsign/signinfo = new bartype
 		barsigns[signinfo.name] = signinfo
 
@@ -56,19 +56,19 @@
 
 /obj/structure/sign/double/barsign/proc/pick_sign()
 	var/picked_name = input("Available Signage", "Bar Sign", "Cancel") as null|anything in barsigns
-	if(!picked_name)
+	if (!picked_name)
 		return
 
 	var/datum/barsign/picked = barsigns[picked_name]
 	icon_state = picked.icon
 	name = picked.name
-	if(picked.desc)
+	if (picked.desc)
 		desc = picked.desc
 	else
 		desc = "It displays \"[name]\"."
 
 /obj/structure/sign/double/barsign/cultify()
-	if(!cult)
+	if (!cult)
 		icon_state = "narsiebistro"
 		name = "Narsie Bistro"
 		desc = "The last pub before the World's End."

@@ -10,7 +10,7 @@
 
 
 /obj/machinery/atmospherics/unary/cap/hide(var/i)
-	if(level == 1 && istype(loc, /turf/simulated))
+	if (level == 1 && istype(loc, /turf/simulated))
 		invisibility = i ? 101 : 0
 	update_icon()
 
@@ -74,25 +74,25 @@
 
 
 /obj/machinery/atmospherics/unary/cap/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	if(istype(W, /obj/item/device/rcd/rpd) || istype(W, /obj/item/device/pipe_painter))
+	if (istype(W, /obj/item/device/rcd/rpd) || istype(W, /obj/item/device/pipe_painter))
 		return // Coloring pipes.
 
-	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/red))
+	if (istype(W, /obj/item/weapon/reagent_containers/glass/paint/red))
 		src.color = PIPE_COLOR_RED
 		to_chat(user, "<span class='warning'>You paint the pipe red.</span>")
 		update_icon()
 		return 1
-	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/blue))
+	if (istype(W, /obj/item/weapon/reagent_containers/glass/paint/blue))
 		src.color = PIPE_COLOR_BLUE
 		to_chat(user, "<span class='warning'>You paint the pipe blue.</span>")
 		update_icon()
 		return 1
-	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/green))
+	if (istype(W, /obj/item/weapon/reagent_containers/glass/paint/green))
 		src.color = PIPE_COLOR_GREEN
 		to_chat(user, "<span class='warning'>You paint the pipe green.</span>")
 		update_icon()
 		return 1
-	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/yellow))
+	if (istype(W, /obj/item/weapon/reagent_containers/glass/paint/yellow))
 		src.color = PIPE_COLOR_ORANGE
 		to_chat(user, "<span class='warning'>You paint the pipe yellow.</span>")
 		update_icon()

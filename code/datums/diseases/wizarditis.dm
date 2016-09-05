@@ -26,63 +26,63 @@ STI KALY - blind
 /datum/disease/wizarditis/stage_act()
 	..()
 
-	switch(stage)
-		if(2)
-			if(prob(1)&&prob(50))
+	switch (stage)
+		if (2)
+			if (prob(1)&&prob(50))
 				affected_mob.say(pick("You shall not pass!", "Expeliarmus!", "By Merlins beard!", "Feel the power of the Dark Side!"))
-			if(prob(1)&&prob(50))
+			if (prob(1)&&prob(50))
 				to_chat(affected_mob, "<span class='warning'>You feel [pick("that you don't have enough mana.", "that the winds of magic are gone.", "an urge to summon familiar.")]</span>")
 
 
-		if(3)
-			if(prob(1)&&prob(50))
+		if (3)
+			if (prob(1)&&prob(50))
 				affected_mob.say(pick("NEC CANTIO!","AULIE OXIN FIERA!", "STI KALY!", "TARCOL MINTI ZHERI!"))
-			if(prob(1)&&prob(50))
+			if (prob(1)&&prob(50))
 				to_chat(affected_mob, "<span class='warning'>You feel [pick("the magic bubbling in your veins","that this location gives you a +1 to INT","an urge to summon familiar.")].</span>")
 
-		if(4)
+		if (4)
 
-			if(prob(1))
+			if (prob(1))
 				affected_mob.say(pick("NEC CANTIO!","AULIE OXIN FIERA!","STI KALY!","EI NATH!"))
 				return
-			if(prob(1)&&prob(50))
+			if (prob(1)&&prob(50))
 				to_chat(affected_mob, "<span class='warning'>You feel [pick("the tidal wave of raw power building inside","that this location gives you a +2 to INT and +1 to WIS","an urge to teleport")].</span>")
 				spawn_wizard_clothes(50)
-			if(prob(1)&&prob(1))
+			if (prob(1)&&prob(1))
 				teleport()
 	return
 
 
 
 /datum/disease/wizarditis/proc/spawn_wizard_clothes(var/chance = 0)
-	if(istype(affected_mob, /mob/living/carbon/human))
+	if (istype(affected_mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = affected_mob
-		if(prob(chance))
-			if(!istype(H.head, /obj/item/clothing/head/wizard))
-				if(H.head)
+		if (prob(chance))
+			if (!istype(H.head, /obj/item/clothing/head/wizard))
+				if (H.head)
 					H.drop_from_inventory(H.head)
 				H.head = new /obj/item/clothing/head/wizard(H)
 				H.head.hud_layerise()
 			return
-		if(prob(chance))
-			if(!istype(H.wear_suit, /obj/item/clothing/suit/wizrobe))
-				if(H.wear_suit)
+		if (prob(chance))
+			if (!istype(H.wear_suit, /obj/item/clothing/suit/wizrobe))
+				if (H.wear_suit)
 					H.drop_from_inventory(H.wear_suit)
 				H.wear_suit = new /obj/item/clothing/suit/wizrobe(H)
 				H.wear_suit.hud_layerise()
 			return
-		if(prob(chance))
-			if(!istype(H.shoes, /obj/item/clothing/shoes/sandal))
-				if(H.shoes)
+		if (prob(chance))
+			if (!istype(H.shoes, /obj/item/clothing/shoes/sandal))
+				if (H.shoes)
 					H.drop_from_inventory(H.shoes)
 				H.shoes = new /obj/item/clothing/shoes/sandal(H)
 				H.hud_layerise()
 			return
 	else
 		var/mob/living/carbon/H = affected_mob
-		if(prob(chance))
-			if(!istype(H.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/staff))
-				if(H.drop_item(H.get_held_item_by_index(GRASP_RIGHT_HAND)))
+		if (prob(chance))
+			if (!istype(H.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/staff))
+				if (H.drop_item(H.get_held_item_by_index(GRASP_RIGHT_HAND)))
 					H.put_in_r_hand( new /obj/item/weapon/staff(H) )
 			return
 	return
@@ -91,32 +91,32 @@ STI KALY - blind
 
 /datum/disease/wizarditis/proc/teleport()
 	var/list/theareas = new/list()
-	for(var/area/AR in orange(80, affected_mob))
-		if(theareas.Find(AR) || isspace(AR))
+	for (var/area/AR in orange(80, affected_mob))
+		if (theareas.Find(AR) || isspace(AR))
 			continue
 		theareas += AR
 
-	if(!theareas)
+	if (!theareas)
 		return
 
 	var/area/thearea = pick(theareas)
 
 	var/list/L = list()
-	for(var/turf/T in get_area_turfs(thearea.type))
-		if(T.z != affected_mob.z)
+	for (var/turf/T in get_area_turfs(thearea.type))
+		if (T.z != affected_mob.z)
 			continue
-		if(T.name == "space")
+		if (T.name == "space")
 			continue
-		if(!T.density)
+		if (!T.density)
 			var/clear = 1
-			for(var/obj/O in T)
-				if(O.density)
+			for (var/obj/O in T)
+				if (O.density)
 					clear = 0
 					break
-			if(clear)
+			if (clear)
 				L+=T
 
-	if(!L)
+	if (!L)
 		return
 
 	affected_mob.say("SCYAR NILA [uppertext(thearea.name)]!")

@@ -22,7 +22,7 @@
 /obj/item/organ/brain/New()
 	..()
 	spawn(5)
-		if(brainmob && brainmob.client)
+		if (brainmob && brainmob.client)
 			brainmob.client.screen.len = null //clear the hud
 
 /obj/item/organ/brain/proc/transfer_identity(var/mob/living/carbon/H)
@@ -32,7 +32,7 @@
 	brainmob.real_name = H.real_name
 	brainmob.dna = H.dna.Clone()
 	brainmob.timeofhostdeath = H.timeofdeath
-	if(H.mind)
+	if (H.mind)
 		H.mind.transfer_to(brainmob)
 
 	to_chat(brainmob, "<span class='notice'>You feel slightly disoriented. That's normal when you're just a brain.</span>")
@@ -40,12 +40,12 @@
 
 /obj/item/organ/brain/examine(mob/user)
 	..()
-	if(brainmob)
-		if(brainmob.client)
+	if (brainmob)
+		if (brainmob.client)
 			to_chat(user, "<span class='notice'>You can feel the small spark of life still left in this one.</span>")
 			return
 		var/mob/dead/observer/ghost = get_ghost_from_mind(brainmob.mind)
-		if(ghost && ghost.client && ghost.can_reenter_corpse)
+		if (ghost && ghost.client && ghost.can_reenter_corpse)
 			to_chat(user, "<span class='deadsay'>It seems particularly lifeless, but not yet gone. Perhaps it will regain some of its luster later...</span>")
 			return
 		to_chat(user, "<span class='deadsay'>This one seems unresponsive.</span>")// Should probably make this more realistic, but this message ties it in with MMI errors.
@@ -58,16 +58,16 @@
 	var/mob/living/carbon/human/H = target
 	H.dropBorers()
 	var/obj/item/organ/brain/B = src
-	if(istype(B) && istype(H))
+	if (istype(B) && istype(H))
 		B.transfer_identity(target)
 
 /obj/item/organ/brain/replaced(var/mob/living/target)
 
-	if(target.key)
+	if (target.key)
 		target.ghostize()
 
-	if(brainmob)
-		if(brainmob.mind)
+	if (brainmob)
+		if (brainmob.mind)
 			brainmob.mind.transfer_to(target)
 		else
 			target.key = brainmob.key

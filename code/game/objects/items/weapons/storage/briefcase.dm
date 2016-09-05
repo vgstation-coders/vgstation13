@@ -40,7 +40,7 @@
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
 	msg_admin_attack("[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A>)")
-	if(!iscarbon(user))
+	if (!iscarbon(user))
 		M.LAssailant = null
 	else
 		M.LAssailant = user
@@ -56,9 +56,9 @@
 			M.Paralyse(time)
 		else
 			M.Stun(time)
-		if(M.stat != 2)
+		if (M.stat != 2)
 			M.stat = 1
-		for(var/mob/O in viewers(M, null))
+		for (var/mob/O in viewers(M, null))
 			O.show_message(text("<span class='danger'>[] has been knocked unconscious!</span>", M), 1, "<span class='warning'>You hear someone fall.</span>", 2)
 	else
 		to_chat(M, text("<span class='warning'>[] tried to knock you unconcious!</span>",user))
@@ -82,39 +82,39 @@
 	var/obj/item/stored_item = null //what's in the false bottom. If it's a gun, we can fire it
 
 /obj/item/weapon/storage/briefcase/false_bottomed/Destroy()
-	if(stored_item)//since the stored_item isn't in the briefcase' contents we gotta remind the game to delete it here.
+	if (stored_item)//since the stored_item isn't in the briefcase' contents we gotta remind the game to delete it here.
 		qdel(stored_item)
 		stored_item = null
 	..()
 
 /obj/item/weapon/storage/briefcase/false_bottomed/afterattack(var/atom/A, mob/user)
 	..()
-	if(stored_item && istype(stored_item, /obj/item/weapon/gun) && get_dist(A, user) > 1)
+	if (stored_item && istype(stored_item, /obj/item/weapon/gun) && get_dist(A, user) > 1)
 		var/obj/item/weapon/gun/stored_gun = stored_item
 		stored_gun.Fire(A, user)
 	return
 
 /obj/item/weapon/storage/briefcase/false_bottomed/attackby(var/obj/item/item, mob/user)
-	if(isscrewdriver(item))
-		if(!bottom_open && !busy_hunting)
+	if (isscrewdriver(item))
+		if (!bottom_open && !busy_hunting)
 			to_chat(user, "You begin to hunt around the rim of \the [src]...")
 			busy_hunting = 1
-			if(do_after(user, src, 20))
-				if(user)
+			if (do_after(user, src, 20))
+				if (user)
 					to_chat(user, "You pry open the false bottom!")
 				bottom_open = 1
 			busy_hunting = 0
-		else if(bottom_open)
+		else if (bottom_open)
 			to_chat(user, "You push the false bottom down and close it with a click[stored_item ? ", with \the [stored_item] snugly inside." : "."]")
 			bottom_open = 0
-	else if(bottom_open)
-		if(stored_item)
+	else if (bottom_open)
+		if (stored_item)
 			to_chat(user, "<span class='warning'>There's already something in the false bottom!</span>")
 			return
-		if(item.w_class > W_CLASS_MEDIUM)
+		if (item.w_class > W_CLASS_MEDIUM)
 			to_chat(user, "<span class='warning'>\The [item] is too big to fit in the false bottom!</span>")
 			return
-		if(!user.drop_item(item))
+		if (!user.drop_item(item))
 			user << "<span class='warning'>\The [item] is stuck to your hands!</span>"
 			return
 
@@ -126,7 +126,7 @@
 		return ..()
 
 /obj/item/weapon/storage/briefcase/false_bottomed/attack_hand(mob/user)
-	if(bottom_open && stored_item)
+	if (bottom_open && stored_item)
 		user.put_in_hands(stored_item)
 		to_chat(user, "You pull out \the [stored_item] from \the [src]'s false bottom.")
 		stored_item = null

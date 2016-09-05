@@ -29,9 +29,9 @@
 
 
 /obj/mecha/combat/honker/melee_action(target)
-	if(!melee_can_hit)
+	if (!melee_can_hit)
 		return
-	else if(istype(target, /mob))
+	else if (istype(target, /mob))
 		step_away(target,src,15)
 	return
 
@@ -85,7 +85,7 @@
 
 						function get_rand_color_string() {
 						    var color = new Array;
-						    for(var i=0;i<3;i++){
+						    for (var i=0;i<3;i++){
 						        color.push(Math.floor(Math.random()*255));
 						    }
 						    return "rgb("+color.toString()+")";
@@ -126,10 +126,10 @@
 
 
 /obj/mecha/combat/honker/get_equipment_list()
-	if(!equipment.len)
+	if (!equipment.len)
 		return
 	var/output = "<b>Honk-ON-Systems:</b><div style=\"margin-left: 15px;\">"
-	for(var/obj/item/mecha_parts/mecha_equipment/MT in equipment)
+	for (var/obj/item/mecha_parts/mecha_equipment/MT in equipment)
 		output += "[selected==MT?"<b id='\ref[MT]'>":"<a id='\ref[MT]' href='?src=\ref[src];select_equip=\ref[MT]'>"][MT.get_equip_info()][selected==MT?"</b>":"</a>"]<br>"
 	output += "</div>"
 	return output
@@ -138,8 +138,8 @@
 
 /obj/mecha/combat/honker/mechstep(direction)
 	var/result = step(src,direction)
-	if(result)
-		if(!squeak)
+	if (result)
+		if (!squeak)
 			playsound(src, "clownstep", 70, 1)
 			squeak = 1
 		else
@@ -149,8 +149,8 @@
 obj/mecha/combat/honker/Topic(href, href_list)
 	..()
 	if (href_list["play_sound"])
-		switch(href_list["play_sound"])
-			if("sadtrombone")
+		switch (href_list["play_sound"])
+			if ("sadtrombone")
 				playsound(src, 'sound/misc/sadtrombone.ogg', 50)
 	return
 

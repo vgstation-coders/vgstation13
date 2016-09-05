@@ -1,9 +1,9 @@
 
 // Called when the item is in the active hand, and clicked; alternately, there is an 'activate held object' verb or you can hit pagedown.
 /obj/item/proc/attack_self(mob/user)
-	if(flags & TWOHANDABLE)
-		if(!(flags & MUSTTWOHAND))
-			if(wielded)
+	if (flags & TWOHANDABLE)
+		if (!(flags & MUSTTWOHAND))
+			if (wielded)
 				. = src.unwield(user)
 			else
 				. = src.wield(user)
@@ -13,14 +13,14 @@
 	return
 
 /atom/movable/attackby(obj/item/W, mob/user)
-	if(W && !(W.flags&NOBLUDGEON))
+	if (W && !(W.flags&NOBLUDGEON))
 		visible_message("<span class='danger'>[src] has been hit by [user] with [W].</span>")
 
 /mob/living/attackby(obj/item/I, mob/user, var/no_delay = 0, var/originator = null)
-	if(!no_delay)
+	if (!no_delay)
 		user.delayNextAttack(10)
-	if(istype(I) && ismob(user))
-		if(originator)
+	if (istype(I) && ismob(user))
+		if (originator)
 			I.attack(src, user, null, originator)
 		else
 			I.attack(src, user)
@@ -38,13 +38,13 @@
 	return
 
 obj/item/proc/get_clamped_volume()
-	if(src.force && src.w_class)
+	if (src.force && src.w_class)
 		return Clamp((src.force + src.w_class) * 4, 30, 100)// Add the item's force to its weight class and multiply by 4, then clamp the value between 30 and 100
-	else if(!src.force && src.w_class)
+	else if (!src.force && src.w_class)
 		return Clamp(src.w_class * 6, 10, 100) // Multiply the item's weight class by 6, then clamp the value between 10 and 100
 
 /obj/item/proc/attack(mob/living/M as mob, mob/living/user as mob, def_zone, var/originator = null)
-	if(originator)
+	if (originator)
 		return handle_attack(src, M, user, def_zone, originator)
 	else
 		return handle_attack(src, M, user, def_zone)
@@ -63,8 +63,8 @@ obj/item/proc/get_clamped_volume()
 	if (hitsound)
 		playsound(get_turf(M.loc), I.hitsound, 50, 1, -1)
 	/////////////////////////
-	if(originator)
-		if(ismob(originator))
+	if (originator)
+		if (ismob(originator))
 			originator.lastattacked = M
 			M.lastattacker = originator
 			add_logs(originator, M, "attacked", object=I.name, addition="(INTENT: [uppertext(originator.a_intent)]) (DAMTYE: [uppertext(I.damtype)])")
@@ -78,64 +78,64 @@ obj/item/proc/get_clamped_volume()
 	/////////////////////////
 
 	var/power = I.force
-	if(M_HULK in user.mutations)
+	if (M_HULK in user.mutations)
 		power *= 2
 
-	if(!istype(M, /mob/living/carbon/human))
-		if(istype(M, /mob/living/carbon/slime))
+	if (!istype(M, /mob/living/carbon/human))
+		if (istype(M, /mob/living/carbon/slime))
 			var/mob/living/carbon/slime/slime = M
-			if(prob(25))
+			if (prob(25))
 				to_chat(user, "<span class='warning'>[I] passes right through [M]!</span>")
 				return 0
 
-			if(power > 0)
+			if (power > 0)
 				slime.attacked += 10
 
-			if(slime.Discipline && prob(50))	// wow, buddy, why am I getting attacked??
+			if (slime.Discipline && prob(50))	// wow, buddy, why am I getting attacked??
 				slime.Discipline = 0
 
-			if(power >= 3)
-				if(istype(slime, /mob/living/carbon/slime/adult))
-					if(prob(5 + round(power/2)))
+			if (power >= 3)
+				if (istype(slime, /mob/living/carbon/slime/adult))
+					if (prob(5 + round(power/2)))
 
-						if(slime.Victim)
-							if(prob(80) && !slime.client)
+						if (slime.Victim)
+							if (prob(80) && !slime.client)
 								slime.Discipline++
 						slime.Victim = null
 						slime.anchored = 0
 
 						spawn()
-							if(slime)
+							if (slime)
 								slime.SStun = 1
 								sleep(rand(5,20))
-								if(slime)
+								if (slime)
 									slime.SStun = 0
 
 						spawn(0)
-							if(slime)
+							if (slime)
 								slime.canmove = 0
 								step_away(slime, user)
-								if(prob(25 + power))
+								if (prob(25 + power))
 									sleep(2)
-									if(slime && user)
+									if (slime && user)
 										step_away(slime, user)
 								slime.canmove = 1
 
 				else
-					if(prob(10 + power*2))
-						if(slime)
-							if(slime.Victim)
-								if(prob(80) && !slime.client)
+					if (prob(10 + power*2))
+						if (slime)
+							if (slime.Victim)
+								if (prob(80) && !slime.client)
 									slime.Discipline++
 
-									if(slime.Discipline == 1)
+									if (slime.Discipline == 1)
 										slime.attacked = 0
 
 								spawn()
-									if(slime)
+									if (slime)
 										slime.SStun = 1
 										sleep(rand(5,20))
-										if(slime)
+										if (slime)
 											slime.SStun = 0
 
 							slime.Victim = null
@@ -143,51 +143,51 @@ obj/item/proc/get_clamped_volume()
 
 
 						spawn(0)
-							if(slime && user)
+							if (slime && user)
 								step_away(slime, user)
 								slime.canmove = 0
-								if(prob(25 + power*4))
+								if (prob(25 + power*4))
 									sleep(2)
-									if(slime && user)
+									if (slime && user)
 										step_away(slime, user)
 								slime.canmove = 1
 
 
 		var/showname = "."
-		if(user)
+		if (user)
 			showname = "[user]"
-		if(!(user in viewers(M, null)))
+		if (!(user in viewers(M, null)))
 			showname = "."
 
-		if(originator)
-			if(istype(originator, /mob/living/simple_animal/borer))
+		if (originator)
+			if (istype(originator, /mob/living/simple_animal/borer))
 				var/mob/living/simple_animal/borer/B = originator
-				if(B.host == user)
-					if(B.hostlimb == LIMB_RIGHT_ARM)
+				if (B.host == user)
+					if (B.hostlimb == LIMB_RIGHT_ARM)
 						showname = "[user]'s right arm"
-					else if(B.hostlimb == LIMB_LEFT_ARM)
+					else if (B.hostlimb == LIMB_LEFT_ARM)
 						showname = "[user]'s left arm"
 
 		//make not the same mistake as me, these messages are only for slimes
-		if(istype(I.attack_verb,/list) && I.attack_verb.len)
+		if (istype(I.attack_verb,/list) && I.attack_verb.len)
 			M.visible_message("<span class='danger'>[showname] [pick(I.attack_verb)] [M] with [I].</span>", \
 				"<span class='userdanger'>[showname] [pick(I.attack_verb)] you with [I].</span>")
-		else if(I.force == 0)
+		else if (I.force == 0)
 			M.visible_message("<span class='danger'>[showname] [pick("taps","pats")] [M] with [I].</span>", \
 				"<span class='userdanger'>[showname] [pick("taps","pats")] you with [I].</span>")
 		else
 			M.visible_message("<span class='danger'>[showname] attacks [M] with [I].</span>", \
 				"<span class='userdanger'>[showname] attacks you with [I].</span>")
 
-		if(!showname && user)
-			if(user.client)
-				if(originator)
-					if(istype(originator, /mob/living/simple_animal/borer))
+		if (!showname && user)
+			if (user.client)
+				if (originator)
+					if (istype(originator, /mob/living/simple_animal/borer))
 						var/mob/living/simple_animal/borer/BO = originator
-						if(BO.host == user)
-							if(BO.hostlimb == LIMB_RIGHT_ARM)
+						if (BO.host == user)
+							if (BO.hostlimb == LIMB_RIGHT_ARM)
 								to_chat(user, "<span class='warning'>Your right arm attacks [M] with [I]!</span>")
-							else if(BO.hostlimb == LIMB_LEFT_ARM)
+							else if (BO.hostlimb == LIMB_LEFT_ARM)
 								to_chat(user, "<span class='warning'>Your left arm attacks [M] with [I]!</span>")
 					else
 						to_chat(user, "<span class='warning'>You attack [M] with [I]!</span>")
@@ -195,20 +195,20 @@ obj/item/proc/get_clamped_volume()
 					to_chat(user, "<span class='warning'>You attack [M] with [I]!</span>")
 
 
-	if(istype(M, /mob/living/carbon/human))
+	if (istype(M, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M
-		if(originator)
+		if (originator)
 			. = H.attacked_by(I, user, def_zone, originator)
 		else
 			. = H.attacked_by(I, user, def_zone)
 	else
-		switch(I.damtype)
-			if("brute")
-				if(istype(src, /mob/living/carbon/slime))
+		switch (I.damtype)
+			if ("brute")
+				if (istype(src, /mob/living/carbon/slime))
 					M.adjustBrainLoss(power)
 
 				else
-					if(istype(M, /mob/living/carbon/monkey))
+					if (istype(M, /mob/living/carbon/monkey))
 						var/mob/living/carbon/monkey/K = M
 						power = K.defense(power,def_zone)
 					M.take_organ_damage(power)
@@ -216,9 +216,9 @@ obj/item/proc/get_clamped_volume()
 						var/turf/location = M.loc
 						if (istype(location, /turf/simulated))
 							location:add_blood_floor(M)
-			if("fire")
+			if ("fire")
 				if (!(M_RESIST_COLD in M.mutations))
-					if(istype(M, /mob/living/carbon/monkey))
+					if (istype(M, /mob/living/carbon/monkey))
 						var/mob/living/carbon/monkey/K = M
 						power = K.defense(power,def_zone)
 					M.take_organ_damage(0, power)

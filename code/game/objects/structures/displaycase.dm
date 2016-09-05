@@ -7,22 +7,22 @@
 
 /obj/structure/displaycase_frame/Destroy()
 	..()
-	if(circuit)
+	if (circuit)
 		qdel(circuit)
 		circuit = null
 
 /obj/structure/displaycase_frame/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	var/pstate=state
 	var/turf/T=get_turf(src)
-	switch(state)
-		if(0)
-			if(istype(W, /obj/item/weapon/circuitboard/airlock) && W:icon_state != "door_electronics_smoked")
-				if(user.drop_item(W, src))
+	switch (state)
+		if (0)
+			if (istype(W, /obj/item/weapon/circuitboard/airlock) && W:icon_state != "door_electronics_smoked")
+				if (user.drop_item(W, src))
 					circuit=W
 					circuit.installed = 1
 					state++
 					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-			if(iscrowbar(W))
+			if (iscrowbar(W))
 				var/obj/machinery/constructable_frame/machine_frame/MF = new /obj/machinery/constructable_frame/machine_frame(T)
 				MF.state = 1
 				MF.set_build_state(1)
@@ -31,10 +31,10 @@
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 				return
 
-		if(1)
-			if(isscrewdriver(W))
+		if (1)
+			if (isscrewdriver(W))
 				var/obj/structure/displaycase/C=new(T)
-				if(circuit.one_access)
+				if (circuit.one_access)
 					C.req_access = null
 					C.req_one_access = circuit.conf_access
 				else
@@ -43,19 +43,19 @@
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 				qdel(src)
 				return
-			if(iscrowbar(W))
+			if (iscrowbar(W))
 				circuit.forceMove(T)
 				circuit.installed = 0
 				circuit=null
 				state--
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-	if(pstate!=state)
+	if (pstate!=state)
 		pstate=state
 		update_icon()
 
 /obj/structure/displaycase_frame/update_icon()
-	switch(state)
-		if(1)
+	switch (state)
+		if (1)
 			icon_state="box_glass_circuit"
 		else
 			icon_state="box_glass"
@@ -78,7 +78,7 @@
 
 /obj/structure/displaycase/Destroy()
 	..()
-	if(circuit)
+	if (circuit)
 		qdel(circuit)
 		circuit = null
 	dump()
@@ -108,20 +108,20 @@
 /obj/structure/displaycase/examine(mob/user)
 	..()
 	var/msg = "<span class='info'>Peering through the glass, you see that it contains:</span>"
-	if(occupant)
+	if (occupant)
 		msg+= "[bicon(occupant)] <span class='notice'>\A [occupant]</span>"
 	else
 		msg+= "Nothing."
 	to_chat(user, msg)
 
 /obj/structure/displaycase/proc/dump()
-	if(occupant)
+	if (occupant)
 		occupant.forceMove(get_turf(src))
 		occupant=null
 	occupant_overlay=null
 
 /obj/structure/displaycase/ex_act(severity)
-	switch(severity)
+	switch (severity)
 		if (1)
 			getFromPool(/obj/item/weapon/shard, loc)
 			if (occupant)
@@ -147,7 +147,7 @@
 /obj/structure/displaycase/blob_act()
 	if (prob(75))
 		getFromPool(/obj/item/weapon/shard, loc)
-		if(occupant)
+		if (occupant)
 			dump()
 		qdel(src)
 
@@ -164,18 +164,18 @@
 	return
 
 /obj/structure/displaycase/update_icon()
-	if(src.destroyed)
+	if (src.destroyed)
 		src.icon_state = "glassbox2b"
 	else
 		src.icon_state = "glassbox2[locked]"
 	overlays = 0
-	if(occupant)
+	if (occupant)
 		var/icon/occupant_icon=getFlatIcon(occupant)
 		occupant_icon.Scale(19,19)
 		occupant_overlay = image(occupant_icon)
 		occupant_overlay.pixel_x= 8 * PIXEL_MULTIPLIER
 		occupant_overlay.pixel_y= 8 * PIXEL_MULTIPLIER
-		if(locked)
+		if (locked)
 			occupant_overlay.alpha=128//ChangeOpacity(0.5)
 		//underlays += occupant_overlay
 		overlays += occupant_overlay
@@ -183,18 +183,18 @@
 
 
 /obj/structure/displaycase/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/card/id))
+	if (istype(W, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/I=W
-		if(!check_access(I))
+		if (!check_access(I))
 			to_chat(user, "<span class='rose'>Access denied.</span>")
 			return
 		locked = !locked
-		if(!locked)
+		if (!locked)
 			to_chat(user, "[bicon(src)] <span class='notice'>\The [src] clicks as locks release, and it slowly opens for you.</span>")
 		else
 			to_chat(user, "[bicon(src)] <span class='notice'>You close \the [src] and swipe your card, locking it.</span>")
 		update_icon()
-	else if(iscrowbar(W) && (!locked || destroyed))
+	else if (iscrowbar(W) && (!locked || destroyed))
 		user.visible_message("[user.name] pries \the [src] apart.", \
 			"You pry \the [src] apart.", \
 			"You hear something pop.")
@@ -202,15 +202,15 @@
 		playsound(T, 'sound/items/Crowbar.ogg', 50, 1)
 		dump()
 		var/obj/item/weapon/circuitboard/airlock/C=circuit
-		if(!C)
+		if (!C)
 			C=new (src)
 			C.installed = 1
 		C.one_access=!(req_access && req_access.len>0)
-		if(!C.one_access)
+		if (!C.one_access)
 			C.conf_access=req_access
 		else
 			C.conf_access=req_one_access
-		if(!destroyed)
+		if (!destroyed)
 			var/obj/structure/displaycase_frame/F=new(T)
 			F.state=1
 			F.circuit=C
@@ -222,16 +222,16 @@
 			circuit=null
 			new /obj/machinery/constructable_frame/machine_frame(T)
 		qdel(src)
-	else if(user.a_intent == I_HURT)
+	else if (user.a_intent == I_HURT)
 		user.delayNextAttack(8)
 		src.health -= W.force
 		src.healthcheck()
 		..()
 	else
-		if(locked)
+		if (locked)
 			to_chat(user, "<span class='rose'>It's locked, you can't put anything into it.</span>")
-		else if(!occupant)
-			if(user.drop_item(W, src))
+		else if (!occupant)
+			if (user.drop_item(W, src))
 				to_chat(user, "<span class='notice'>You insert \the [W] into \the [src], and it floats as the hoverfield activates.</span>")
 				occupant=W
 				update_icon()
@@ -244,31 +244,31 @@
 
 /obj/structure/displaycase/attack_hand(mob/user as mob)
 	if (destroyed)
-		if(occupant)
+		if (occupant)
 			dump()
 			to_chat(user, "<span class='danger'>You smash your fist into the delicate electronics at the bottom of the case, and deactivate the hoverfield permanently.</span>")
 			src.add_fingerprint(user)
 			update_icon()
 	else
-		if(user.a_intent == I_HURT)
+		if (user.a_intent == I_HURT)
 			user.delayNextAttack(8)
 			user.visible_message("<span class='danger'>[user.name] kicks \the [src]!</span>", \
 				"<span class='danger'>You kick \the [src]!</span>", \
 				"You hear glass crack.")
 			src.health -= 2
 			healthcheck()
-		else if(!locked)
-			if(ishuman(user))
-				if(!ue)
+		else if (!locked)
+			if (ishuman(user))
+				if (!ue)
 					to_chat(user, "<span class='notice'>You press your thumb against the fingerprint scanner, registering your identity with the case.</span>")
 					ue = getPrint(user)
 					return
-				if(ue!=getPrint(user))
+				if (ue!=getPrint(user))
 					to_chat(user, "<span class='rose'>Access denied.</span>")
 					return
 
 				to_chat(user, "<span class='notice'>You press your thumb against the fingerprint scanner, and deactivate the hoverfield built into the case.</span>")
-				if(occupant)
+				if (occupant)
 					dump()
 					update_icon()
 				else

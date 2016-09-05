@@ -6,47 +6,47 @@
 
 
 /proc/infect_virus2(var/mob/living/carbon/M,var/datum/disease2/disease/disease,var/forced = 0)
-	if(prob(disease.infectionchance))
-		if(M.virus2)
+	if (prob(disease.infectionchance))
+		if (M.virus2)
 			return
 		else
 			var/score = 0
-			if(!forced)
-				if(istype(M, /mob/living/carbon/human))
-					if(M:gloves)
+			if (!forced)
+				if (istype(M, /mob/living/carbon/human))
+					if (M:gloves)
 						score += 5
-					if(istype(M:wear_suit, /obj/item/clothing/suit/space))
+					if (istype(M:wear_suit, /obj/item/clothing/suit/space))
 						score += 10
-					if(istype(M:wear_suit, /obj/item/clothing/suit/bio_suit))
+					if (istype(M:wear_suit, /obj/item/clothing/suit/bio_suit))
 						score += 10
-					if(istype(M:head, /obj/item/clothing/head/helmet/space))
+					if (istype(M:head, /obj/item/clothing/head/helmet/space))
 						score += 5
-					if(istype(M:head, /obj/item/clothing/head/bio_hood))
+					if (istype(M:head, /obj/item/clothing/head/bio_hood))
 						score += 5
-				if(M.wear_mask)
+				if (M.wear_mask)
 					score += 5
-					if((istype(M:wear_mask, /obj/item/clothing/mask) || istype(M:wear_mask, /obj/item/clothing/mask/surgical)) && !M.internal)
+					if ((istype(M:wear_mask, /obj/item/clothing/mask) || istype(M:wear_mask, /obj/item/clothing/mask/surgical)) && !M.internal)
 						score += 5
-					if(M.internal)
+					if (M.internal)
 						score += 5
 
-			if(score > 15)
+			if (score > 15)
 				return
-		//	else if(score == 20 && prob(95))
+		//	else if (score == 20 && prob(95))
 		//		return
-			else if(score == 15 && prob(75))
+			else if (score == 15 && prob(75))
 				return
-			else if(score == 10 && prob(55))
+			else if (score == 10 && prob(55))
 				return
-			else if(score == 5 && prob(35))
+			else if (score == 5 && prob(35))
 				return
 
 			M.virus2 = disease.getcopy()
 			M.virus2.minormutate()
 			M.virus2.uniqueID = disease.uniqueID
 
-			for(var/datum/disease2/resistance/res in M.resistances)
-				if(res.resistsdisease(M.virus2))
+			for (var/datum/disease2/resistance/res in M.resistances)
+				if (res.resistsdisease(M.virus2))
 					M.virus2 = null
 
 
@@ -56,25 +56,25 @@
 
 	proc/resistsdisease(var/datum/disease2/disease/virus2)
 		var/list/res2 = list()
-		for(var/datum/disease2/effect/e in resistances)
+		for (var/datum/disease2/effect/e in resistances)
 			res2 += e.type
-		for(var/datum/disease2/effectholder/holder in virus2)
-			if(!(holder.effect.type in res2))
+		for (var/datum/disease2/effectholder/holder in virus2)
+			if (!(holder.effect.type in res2))
 				return 0
 			else
 				res2 -= holder.effect.type
-		if(res2.len > 0)
+		if (res2.len > 0)
 			return 0
 		else
 			return 1
 
 	New(var/datum/disease2/disease/virus2)
-		for(var/datum/disease2/effectholder/h in virus2.effects)
+		for (var/datum/disease2/effectholder/h in virus2.effects)
 			resistances += h.effect.type
 
 
 /proc/infect_mob_random(var/mob/living/carbon/M)
-	if(!M.virus2)
+	if (!M.virus2)
 		M.virus2 = new /datum/disease2/disease
 		M.virus2.makerandom()
 
@@ -115,37 +115,37 @@
 	proc/issame(var/datum/disease2/disease/disease)
 		var/list/types = list()
 		var/list/types2 = list()
-		for(var/datum/disease2/effectholder/d in effects)
+		for (var/datum/disease2/effectholder/d in effects)
 			types += d.effect.type
 		var/equal = 1
 
-		for(var/datum/disease2/effectholder/d in disease.effects)
+		for (var/datum/disease2/effectholder/d in disease.effects)
 			types2 += d.effect.type
 
-		for(var/type in types)
-			if(!(type in types2))
+		for (var/type in types)
+			if (!(type in types2))
 				equal = 0
 		return equal
 
 	proc/activate(var/mob/living/carbon/mob)
-		if(dead)
+		if (dead)
 			mob.virus2 = null
 			return
-		if(mob.stat == 2)
+		if (mob.stat == 2)
 			return
-	/*	if(mob.radiation > 50)
-			if(prob(1))
+	/*	if (mob.radiation > 50)
+			if (prob(1))
 				majormutate()
-	*/	if(mob.reagents.has_reagent(SPACEACILLIN))
+	*/	if (mob.reagents.has_reagent(SPACEACILLIN))
 			return
-		if(prob(stageprob) && prob(25 + (clicks/100)) && stage != 4)
+		if (prob(stageprob) && prob(25 + (clicks/100)) && stage != 4)
 			stage++
 			clicks = 0
-		for(var/datum/disease2/effectholder/e in effects)
+		for (var/datum/disease2/effectholder/e in effects)
 			e.runeffect(mob,stage)
 
 	proc/cure_added(var/datum/disease2/resistance/res)
-		if(res.resistsdisease(src))
+		if (res.resistsdisease(src))
 			dead = 1
 
 	proc/majormutate()
@@ -159,7 +159,7 @@
 		disease.infectionchance = infectionchance
 		disease.spreadtype = spreadtype
 		disease.stageprob = stageprob
-		for(var/datum/disease2/effectholder/holder in effects)
+		for (var/datum/disease2/effectholder/holder in effects)
 //			to_chat(world, "adding effects")
 			var/datum/disease2/effectholder/newholder = new /datum/disease2/effectholder
 			newholder.effect = new holder.effect.type
@@ -246,7 +246,7 @@
 	name = "Monkism syndrome"
 	stage = 4
 	activate(var/mob/living/carbon/mob,var/multiplier)
-		if(istype(mob,/mob/living/carbon/human))
+		if (istype(mob,/mob/living/carbon/human))
 			var/mob/living/carbon/human/h = mob
 			h.monkeyize()
 
@@ -308,26 +308,26 @@
 	var/stage = 0
 
 	proc/runeffect(var/mob/living/carbon/human/mob,var/stage)
-		if(happensonce > -1 && effect.stage <= stage && prob(chance))
+		if (happensonce > -1 && effect.stage <= stage && prob(chance))
 			effect.activate(mob)
-			if(happensonce == 1)
+			if (happensonce == 1)
 				happensonce = -1
 
 	proc/getrandomeffect()
 		var/list/datum/disease2/effect/list = list()
-		for(var/e in (typesof(/datum/disease2/effect) - /datum/disease2/effect))
+		for (var/e in (typesof(/datum/disease2/effect) - /datum/disease2/effect))
 //			to_chat(world, "Making [e]")
 			var/datum/disease2/effect/f = new e
-			if(f.stage == src.stage)
+			if (f.stage == src.stage)
 				list += f
 		effect = pick(list)
 		chance = rand(1,6)
 
 	proc/minormutate()
-		switch(pick(1,2,3,4,5))
-			if(1)
+		switch (pick(1,2,3,4,5))
+			if (1)
 				chance = rand(0,100)
-			if(2)
+			if (2)
 				multiplier = rand(1,effect.maxm)
 	proc/majormutate()
 		getrandomeffect()

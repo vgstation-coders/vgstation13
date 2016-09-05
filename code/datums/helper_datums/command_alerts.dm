@@ -33,7 +33,7 @@
 	'sound/AI/outbreak_after.ogg',
 	)
 
-	for(var/word in vox_sentence)
+	for (var/word in vox_sentence)
 		play_vox_sound(word,STATION_Z,null)
 
 ///////BIOHAZARD UPDATED
@@ -245,7 +245,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 /datum/command_alert/meteor_round/announce()
 	meteor_delay = rand(4500, 6000)
-	if(prob(70)) //slightly off-scale
+	if (prob(70)) //slightly off-scale
 		message = "A meteor storm has been detected in proximity of [station_name()] and is expected to strike within [round((rand(meteor_delay - 600, meteor_delay + 600))/600)] minutes. A backup emergency shuttle is being dispatched and emergency gear should be teleported into your station's Bar area in [supply_delay/10] seconds."
 	else
 		message = "A meteor storm has been detected in proximity of [station_name()] and is expected to strike within [round((rand(meteor_delay - 1800, meteor_delay + 1800))/600)] minutes. A backup emergency shuttle is being dispatched and emergency gear should be teleported into your station's Bar area in [supply_delay/10] seconds."
@@ -433,9 +433,9 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Rogue Drone Alert"
 
 /datum/command_alert/rogue_drone/announce()
-	if(prob(33))
+	if (prob(33))
 		message = "A combat drone wing operating out of the NMV Icarus has failed to return from a sweep of this sector, if any are sighted approach with caution."
-	else if(prob(50))
+	else if (prob(50))
 		message = "Contact has been lost with a combat drone wing operating out of the NMV Icarus. If any are sighted in the area, approach with caution."
 	else
 		message = "Unidentified hackers have targeted a combat drone wing deployed from the NMV Icarus. If any are sighted in the area, approach with caution."

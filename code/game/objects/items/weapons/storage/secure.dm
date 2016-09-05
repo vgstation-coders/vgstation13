@@ -32,7 +32,7 @@
 	to_chat(user, "<span class='info'>The service panel is [src.open ? "open" : "closed"].</span>")
 
 /obj/item/weapon/storage/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(locked)
+	if (locked)
 		if ( istype(W, /obj/item/weapon/card/emag) && (!src.emagged))
 			emagged = 1
 			src.overlays += image('icons/obj/storage.dmi', icon_sparking)
@@ -75,7 +75,7 @@
 
 /obj/item/weapon/storage/secure/MouseDrop(over_object, src_location, over_location)
 	if (locked)
-		if(Adjacent(usr))
+		if (Adjacent(usr))
 			src.add_fingerprint(usr)
 		return
 	..()
@@ -124,7 +124,7 @@
 				if (length(src.code) > 5)
 					src.code = "ERROR"
 		src.add_fingerprint(usr)
-		for(var/mob/M in viewers(1, src.loc))
+		for (var/mob/M in viewers(1, src.loc))
 			if ((M.client && M.machine == src))
 				src.attack_self(M)
 			return
@@ -162,7 +162,7 @@
 		src.show_to(user)
 	else
 		..()
-		for(var/mob/M in range(1))
+		for (var/mob/M in range(1))
 			if (M.s_active == src)
 				src.close(M)
 		src.orient2hud(user)
@@ -178,12 +178,12 @@
 	update_icon()
 
 /obj/item/weapon/storage/secure/briefcase/update_icon()
-	if(locked || emagged)
+	if (locked || emagged)
 		item_state = "secure-g"
 	else
 		item_state = "secure-r"
 
-	if(ismob(loc))
+	if (ismob(loc))
 		var/mob/M = loc
 		M.update_inv_hands()
 
@@ -202,7 +202,7 @@
 
 		var/t = user:zone_sel.selecting
 		if (t == LIMB_HEAD)
-			if(ishuman(M))
+			if (ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if (H.stat < 2 && H.health < 50 && prob(90))
 				// ******* Check
@@ -214,9 +214,9 @@
 						H.Paralyse(time)
 					else
 						H.Stun(time)
-					if(H.stat != 2)
+					if (H.stat != 2)
 						H.stat = 1
-					for(var/mob/O in viewers(H, null))
+					for (var/mob/O in viewers(H, null))
 						O.show_message(text("<span class='danger'>[] has been knocked unconscious!</span>", H), 1, "<span class='warning'>You hear someone fall.</span>", 2)
 				else
 					to_chat(H, text("<span class='warning'>[] tried to knock you unconcious!</span>",user))
@@ -256,7 +256,7 @@
 	name="WMD Storage"
 
 /obj/item/weapon/storage/secure/safe/clown/New()
-	for(var/i=0;i<10;i++)
+	for (var/i=0;i<10;i++)
 		new /obj/item/weapon/reagent_containers/food/snacks/pie(src)
 
 /obj/item/weapon/storage/secure/safe/HoS/New()

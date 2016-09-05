@@ -1,6 +1,6 @@
 /obj/item/weapon/gun/projectile/hecate
-	name = "\improper PGM Hécate II"
-	desc = "An Anti-Materiel Rifle. You can read \"Fabriqué en Haute-Savoie\" on the receiver. Whatever that means..."
+	name = "\improper PGM Hï¿½cate II"
+	desc = "An Anti-Materiel Rifle. You can read \"Fabriquï¿½ en Haute-Savoie\" on the receiver. Whatever that means..."
 	icon = 'icons/obj/gun_experimental.dmi'
 	icon_state = "hecate"
 	item_state = null
@@ -22,33 +22,33 @@
 	return 0
 
 /obj/item/weapon/gun/projectile/hecate/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
-	if(flag)	return //we're placing gun on a table or in backpack
-	if(harm_labeled >= min_harm_label)
+	if (flag)	return //we're placing gun on a table or in backpack
+	if (harm_labeled >= min_harm_label)
 		to_chat(user, "<span class='warning'>A label sticks the trigger to the trigger guard!</span>")//Such a new feature, the player might not know what's wrong if it doesn't tell them.
 
 		return
-	if(wielded)
+	if (wielded)
 		Fire(A,user,params, "struggle" = struggle)
 	else
 		to_chat(user, "<span class='warning'>You must dual-wield \the [src] before you can fire it!</span>")
 
 /obj/item/weapon/gun/projectile/hecate/update_wield(mob/user)
-	if(wielded)
+	if (wielded)
 		inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_64x64.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_64x64.dmi')
-		if(user && user.client)
+		if (user && user.client)
 			user.regenerate_icons()
 			var/client/C = user.client
 			backup_view = C.view
 			C.changeView(C.view * 2)
 	else
 		inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
-		if(user && user.client)
+		if (user && user.client)
 			user.regenerate_icons()
 			var/client/C = user.client
 			C.changeView(backup_view)
 
 /obj/item/weapon/gun/projectile/hecate/attack_self(mob/user)
-	if(wielded)
+	if (wielded)
 		unwield(user)
 	else
 		wield(user)

@@ -31,7 +31,7 @@
 /mob/living/simple_animal/hostile/humanoid/diona/Life()
 	.=..()
 
-	if(health < maxHealth)
+	if (health < maxHealth)
 		health++
 
 /mob/living/simple_animal/hostile/humanoid/diona/spearman

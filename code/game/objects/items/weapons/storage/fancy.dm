@@ -40,9 +40,9 @@
 
 /obj/item/weapon/storage/fancy/examine(mob/user)
 	..()
-	if(contents.len <= 0)
+	if (contents.len <= 0)
 		to_chat(user, "<span class='info'>There are no [src.icon_type][plural_type] left in the box.</span>")
-	else if(contents.len == 1)
+	else if (contents.len == 1)
 		to_chat(user, "<span class='info'>There is one [src.icon_type] left in the box.</span>")
 	else
 		to_chat(user, "<span class='info'>There are [src.contents.len] [src.icon_type][plural_type] in the box.</span>")
@@ -71,10 +71,10 @@
 
 /obj/item/weapon/storage/fancy/donut_box/New()
 	..()
-	if(empty)
+	if (empty)
 		update_icon() //Make it look actually empty
 		return
-	for(var/i = 1; i <= storage_slots; i++)
+	for (var/i = 1; i <= storage_slots; i++)
 		new /obj/item/weapon/reagent_containers/food/snacks/donut/normal(src)
 	return
 
@@ -104,13 +104,13 @@
 
 /obj/item/weapon/storage/fancy/egg_box/New()
 	..()
-	if(empty)
+	if (empty)
 		update_icon() //Make it look actually empty
 		return
-	for(var/i = 1; i <= storage_slots; i++)
-		if(egg_type == "chicken")
+	for (var/i = 1; i <= storage_slots; i++)
+		if (egg_type == "chicken")
 			new /obj/item/weapon/reagent_containers/food/snacks/egg(src)
-		if(egg_type == "vox")
+		if (egg_type == "vox")
 			new /obj/item/weapon/reagent_containers/food/snacks/egg/vox(src)
 	return
 
@@ -142,7 +142,7 @@
 	..()
 	if (empty)
 		return
-	for(var/i=1; i <= storage_slots; i++)
+	for (var/i=1; i <= storage_slots; i++)
 		new /obj/item/candle(src)
 	return
 
@@ -183,16 +183,16 @@
 /obj/item/weapon/storage/fancy/crayons/update_icon()
 	overlays = list() //resets list
 	overlays += image('icons/obj/crayons.dmi',"crayonbox")
-	for(var/obj/item/toy/crayon/crayon in contents)
+	for (var/obj/item/toy/crayon/crayon in contents)
 		overlays += image('icons/obj/crayons.dmi',crayon.colourName)
 
 /obj/item/weapon/storage/fancy/crayons/attackby(obj/item/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/toy/crayon))
-		switch(W:colourName)
-			if("mime")
+	if (istype(W,/obj/item/toy/crayon))
+		switch (W:colourName)
+			if ("mime")
 				to_chat(usr, "This crayon is too sad to be contained in this box.")
 				return
-			if("rainbow")
+			if ("rainbow")
 				to_chat(usr, "This crayon is too powerful to be contained in this box.")
 				return
 	. = ..()
@@ -223,31 +223,31 @@
 
 /obj/item/weapon/storage/fancy/matchbox/New()
 	..()
-	if(empty)
+	if (empty)
 		update_icon() //Make it look actually empty
 		return
-	for(var/i = 1; i <= storage_slots; i++)
+	for (var/i = 1; i <= storage_slots; i++)
 		new matchtype(src)
 	update_icon()
 
 /obj/item/weapon/storage/fancy/matchbox/update_icon()
 
 	var/contentpercent = (contents.len/storage_slots)*100
-	if(contentpercent < 33) //Looks empty, actually not a single row full because logic
+	if (contentpercent < 33) //Looks empty, actually not a single row full because logic
 		icon_state = "[initial(icon_state)]_e"
 		return
-	else if(contentpercent < 65) //1 row full, 1 row almost full
+	else if (contentpercent < 65) //1 row full, 1 row almost full
 		icon_state = "[initial(icon_state)]_almostempty"
 		return
-	else if(contentpercent < 100) //At least one of the first row removed
+	else if (contentpercent < 100) //At least one of the first row removed
 		icon_state = "[initial(icon_state)]_almostfull"
 		return
-	else if(contentpercent == 100)
+	else if (contentpercent == 100)
 		icon_state = "[initial(icon_state)]"
 		return
 
 /obj/item/weapon/storage/fancy/matchbox/attackby(obj/item/weapon/match/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/match) && !W.lit)
+	if (istype(W, /obj/item/weapon/match) && !W.lit)
 		W.lit = 1
 		W.update_brightness()
 	return
@@ -283,7 +283,7 @@
 /obj/item/weapon/storage/fancy/cigarettes/New()
 	..()
 	flags |= NOREACT
-	for(var/i = 1 to storage_slots)
+	for (var/i = 1 to storage_slots)
 		new /obj/item/clothing/mask/cigarette(src)
 	create_reagents(15 * storage_slots)//so people can inject cigarettes without opening a packet, now with being able to inject the whole one
 
@@ -300,16 +300,16 @@
 
 /obj/item/weapon/storage/fancy/cigarettes/remove_from_storage(obj/item/W as obj, atom/new_location)
 	var/obj/item/clothing/mask/cigarette/C = W
-	if(!istype(C))
+	if (!istype(C))
 		return // what
 	reagents.trans_to(C, (reagents.total_volume/contents.len))
 	..()
 
 /obj/item/weapon/storage/fancy/cigarettes/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	if(!istype(M, /mob))
+	if (!istype(M, /mob))
 		return
 
-	if(M == user && user.zone_sel.selecting == "mouth" && contents.len > 0 && !user.wear_mask)
+	if (M == user && user.zone_sel.selecting == "mouth" && contents.len > 0 && !user.wear_mask)
 		var/obj/item/clothing/mask/cigarette/W = new /obj/item/clothing/mask/cigarette(user)
 		reagents.trans_to(W, (reagents.total_volume/contents.len))
 		user.equip_to_slot_if_possible(W, slot_wear_mask)
@@ -344,7 +344,7 @@
 
 /obj/item/weapon/storage/fancy/vials/New()
 	..()
-	for(var/i=1; i <= storage_slots; i++)
+	for (var/i=1; i <= storage_slots; i++)
 		new /obj/item/weapon/reagent_containers/glass/beaker/vial(src)
 	return
 
@@ -372,7 +372,7 @@
 	src.overlays.len = 0
 	if (!broken)
 		overlays += image(icon, src, "led[locked]")
-		if(locked)
+		if (locked)
 			overlays += image(icon, src, "cover")
 	else
 		overlays += image(icon, src, "ledb")
@@ -404,20 +404,20 @@
 
 /obj/item/weapon/storage/fancy/flares/New()
 	..()
-	if(empty)
+	if (empty)
 		update_icon() //Make it look actually empty
 		return
-	for(var/i=1; i <= storage_slots; i++)
+	for (var/i=1; i <= storage_slots; i++)
 		new /obj/item/device/flashlight/flare(src)
 	return
 
 /obj/item/weapon/storage/fancy/flares/attackby(var/obj/item/device/flashlight/flare/F, var/user as mob) //if it's on or empty, we don't want it
-	if(!istype(F))
+	if (!istype(F))
 		return
-	if(F.on)
+	if (F.on)
 		to_chat(user, "You can't put a lit flare in the box!")
 		return
-	if(!F.fuel)
+	if (!F.fuel)
 		to_chat(user, "This flare is empty!")
 		return
 	. = ..()
@@ -437,15 +437,15 @@
 
 /obj/item/weapon/storage/fancy/food_box/chicken_bucket/New()
 	..()
-	for(var/i=1; i <= storage_slots; i++)
+	for (var/i=1; i <= storage_slots; i++)
 		new /obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick(src)
 	return
 
 /obj/item/weapon/storage/fancy/food_box/chicken_bucket/remove_from_storage(obj/item/W as obj, atom/new_location)
 	..()
-	if(!contents.len)
+	if (!contents.len)
 		new/obj/item/trash/chicken_bucket(get_turf(src.loc))
-		if(istype(src.loc,/mob/living/carbon))
+		if (istype(src.loc,/mob/living/carbon))
 			var/mob/living/carbon/C = src.loc
 			C.u_equip(src, 0)
 		qdel(src)
@@ -478,7 +478,7 @@
 
 /obj/item/weapon/storage/fancy/food_box/slider_box/New()
 	..()
-	for(var/i=1, i <= storage_slots; i++)
+	for (var/i=1, i <= storage_slots; i++)
 		new slider_type(src)
 
 /obj/item/weapon/storage/fancy/food_box/slider_box/synth

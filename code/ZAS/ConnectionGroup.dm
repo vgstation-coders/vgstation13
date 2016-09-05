@@ -74,7 +74,7 @@ Class Procs:
 /connection_edge/proc/remove_connection(connection/c)
 //	to_chat(world, "Connection removed: [type] Coefficient: [coefficient-1]")
 	coefficient--
-	if(coefficient <= 0)
+	if (coefficient <= 0)
 		erase()
 
 /connection_edge/proc/contains_zone(zone/Z)
@@ -87,47 +87,47 @@ Class Procs:
 
 /connection_edge/proc/flow(list/movable, differential, repelled, flipped = 0)
 	//Flipped tells us if we are going from A to B or from B to A.
-	if(!zas_settings.Get(/datum/ZAS_Setting/airflow_push))
+	if (!zas_settings.Get(/datum/ZAS_Setting/airflow_push))
 		return
-	for(var/atom/movable/M in movable)
-		if(!M.AirflowCanPush())
+	for (var/atom/movable/M in movable)
+		if (!M.AirflowCanPush())
 			continue
 		//If they're already being tossed, don't do it again.
-		if(M.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay))
+		if (M.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay))
 			continue
-		if(M.airflow_speed)
+		if (M.airflow_speed)
 			continue
 
 		//Check for knocking people over
-		if(ismob(M) && differential > zas_settings.Get(/datum/ZAS_Setting/airflow_stun_pressure))
-			if(M:status_flags & GODMODE)
+		if (ismob(M) && differential > zas_settings.Get(/datum/ZAS_Setting/airflow_stun_pressure))
+			if (M:status_flags & GODMODE)
 				continue
 			M:airflow_stun()
 
-		if(M.check_airflow_movable(differential))
+		if (M.check_airflow_movable(differential))
 			//Check for things that are in range of the midpoint turfs.
 			var/list/close_turfs = list()
-			for(var/turf/U in connecting_turfs)
-				if(get_dist(M,U) < world.view)
+			for (var/turf/U in connecting_turfs)
+				if (get_dist(M,U) < world.view)
 					close_turfs += U
-			if(!close_turfs.len)
+			if (!close_turfs.len)
 				continue
 
 			M.airflow_dest = pick(close_turfs) //Pick a random midpoint to fly towards.
 
-			if(M)
-				if(repelled)
-					if(flipped)
-						if(!(M.loc in src:A.contents))
+			if (M)
+				if (repelled)
+					if (flipped)
+						if (!(M.loc in src:A.contents))
 							continue
-					else if(!(M.loc in src:B.contents))
+					else if (!(M.loc in src:B.contents))
 						continue
 					M.RepelAirflowDest(differential/5)
 				else
-					if(flipped)
-						if(!(M.loc in src:B.contents))
+					if (flipped)
+						if (!(M.loc in src:B.contents))
 							continue
-					else if(!(M.loc in src:A.contents))
+					else if (!(M.loc in src:A.contents))
 						continue
 					M.GotoAirflowDest(differential/10)
 
@@ -149,12 +149,12 @@ Class Procs:
 /connection_edge/zone/add_connection(connection/c)
 	. = ..()
 	connecting_turfs.Add(c.A)
-	if(c.direct())
+	if (c.direct())
 		direct++
 
 /connection_edge/zone/remove_connection(connection/c)
 	connecting_turfs.Remove(c.A)
-	if(c.direct())
+	if (c.direct())
 		direct--
 	. = ..()
 
@@ -167,12 +167,12 @@ Class Procs:
 	. = ..()
 
 /connection_edge/zone/tick()
-	if(A.invalid || B.invalid)
+	if (A.invalid || B.invalid)
 		erase()
 		return
 //	to_chat(world, "[id]: Tick [air_master.current_cycle]: \...")
-	if(direct)
-		if(air_master.equivalent_pressure(A, B))
+	if (direct)
+		if (air_master.equivalent_pressure(A, B))
 //			to_chat(world, "merged.")
 			erase()
 			air_master.merge(A, B)
@@ -186,13 +186,13 @@ Class Procs:
 //	to_chat(world, "equalized.")
 
 	var/differential = A.air.return_pressure() - B.air.return_pressure()
-	if(abs(differential) < zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
+	if (abs(differential) < zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
 		return
 
 	var/list/attracted
 	var/list/repelled
 	var/flipped = 0
-	if(differential > 0)
+	if (differential > 0)
 		attracted = A.movables()
 		repelled = B.movables()
 	else
@@ -205,7 +205,7 @@ Class Procs:
 
 //Helper proc to get connections for a zone.
 /connection_edge/zone/proc/get_connected_zone(zone/from)
-	if(A == from)
+	if (A == from)
 		return B
 	else
 		return A
@@ -239,7 +239,7 @@ Class Procs:
 	return A == Z
 
 /connection_edge/unsimulated/tick()
-	if(A.invalid)
+	if (A.invalid)
 		erase()
 		return
 //	to_chat(world, "[id]: Tick [air_master.current_cycle]: To [B]!")
@@ -248,7 +248,7 @@ Class Procs:
 	air_master.mark_zone_update(A)
 
 	var/differential = A.air.return_pressure() - air.return_pressure()
-	if(abs(differential) < zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
+	if (abs(differential) < zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
 		return
 
 	var/list/attracted = A.movables()
@@ -288,7 +288,7 @@ proc/ShareRatio(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 		temp_avg = (A.temperature * full_heat_capacity + B.temperature * s_full_heat_capacity) / (full_heat_capacity + s_full_heat_capacity)
 
 	//WOOT WOOT TOUCH THIS AND YOU ARE A RETARD
-	if(connecting_tiles && sharing_lookup_table.len >= connecting_tiles) //6 or more interconnecting tiles will max at 42% of air moved per tick.
+	if (connecting_tiles && sharing_lookup_table.len >= connecting_tiles) //6 or more interconnecting tiles will max at 42% of air moved per tick.
 		ratio = sharing_lookup_table[connecting_tiles]
 	//WOOT WOOT TOUCH THIS AND YOU ARE A RETARD
 
@@ -306,9 +306,9 @@ proc/ShareRatio(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 
 	B.temperature = max(0, (B.temperature - temp_avg) * (1-ratio) + temp_avg )
 
-	for(var/datum/gas/G in A.trace_gases)
+	for (var/datum/gas/G in A.trace_gases)
 		var/datum/gas/H = locate(G.type) in B.trace_gases
-		if(H)
+		if (H)
 			var/G_avg = (G.moles*size + H.moles*share_size) / (size+share_size)
 			G.moles = (G.moles - G_avg) * (1-ratio) + G_avg
 
@@ -320,9 +320,9 @@ proc/ShareRatio(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 			G.moles = (G.moles - G_avg) * (1-ratio) + G_avg
 			H.moles = (H.moles - G_avg) * (1-ratio) + G_avg
 
-	for(var/datum/gas/G in B.trace_gases)
+	for (var/datum/gas/G in B.trace_gases)
 		var/datum/gas/H = locate(G.type) in A.trace_gases
-		if(!H)
+		if (!H)
 			H = new G.type
 			A.trace_gases += H
 			var/G_avg = (G.moles*size) / (size+share_size)
@@ -332,14 +332,14 @@ proc/ShareRatio(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 	A.update_values()
 	B.update_values()
 
-	if(A.compare(B))
+	if (A.compare(B))
 		return 1
 	else
 		return 0
 
 proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 	//A modified version of ShareRatio for spacing gas at the same rate as if it were going into a large airless room.
-	if(!unsimulated_tiles)
+	if (!unsimulated_tiles)
 		return 0
 
 	var
@@ -355,7 +355,7 @@ proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 	var/tileslen
 	var/share_size
 
-	if(istype(unsimulated_tiles, /datum/gas_mixture))
+	if (istype(unsimulated_tiles, /datum/gas_mixture))
 		var/datum/gas_mixture/avg_unsim = unsimulated_tiles
 		unsim_oxygen = avg_unsim.oxygen
 		unsim_co2 = avg_unsim.carbon_dioxide
@@ -365,11 +365,11 @@ proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 		share_size = max(1, max(size + 3, 1) + avg_unsim.group_multiplier)
 		tileslen = avg_unsim.group_multiplier
 
-		if(dbg_output)
+		if (dbg_output)
 			to_chat(world, "O2: [unsim_oxygen] N2: [unsim_nitrogen] Size: [share_size] Tiles: [tileslen]")
 
-	else if(istype(unsimulated_tiles, /list))
-		if(!unsimulated_tiles.len)
+	else if (istype(unsimulated_tiles, /list))
+		if (!unsimulated_tiles.len)
 			return 0
 		// We use the same size for the potentially single space tile
 		// as we use for the entire room. Why is this?
@@ -380,7 +380,7 @@ proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 		share_size = max(1, max(size + 3, 1) + unsimulated_tiles.len)
 		var/correction_ratio = share_size / unsimulated_tiles.len
 
-		for(var/turf/T in unsimulated_tiles)
+		for (var/turf/T in unsimulated_tiles)
 			unsim_oxygen += T.oxygen
 			unsim_co2 += T.carbon_dioxide
 			unsim_nitrogen += T.nitrogen
@@ -418,13 +418,13 @@ proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 
 		temp_avg = 0
 
-	if((full_heat_capacity + unsim_heat_capacity) > 0)
+	if ((full_heat_capacity + unsim_heat_capacity) > 0)
 		temp_avg = (A.temperature * full_heat_capacity + unsim_temperature * unsim_heat_capacity) / (full_heat_capacity + unsim_heat_capacity)
 
-	if(sharing_lookup_table.len >= tileslen) //6 or more interconnecting tiles will max at 42% of air moved per tick.
+	if (sharing_lookup_table.len >= tileslen) //6 or more interconnecting tiles will max at 42% of air moved per tick.
 		ratio = sharing_lookup_table[tileslen]
 
-	if(dbg_output)
+	if (dbg_output)
 		to_chat(world, "Ratio: [ratio]")
 		to_chat(world, "Avg O2: [oxy_avg] N2: [nit_avg]")
 
@@ -435,13 +435,13 @@ proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 
 	A.temperature = max(TCMB, (A.temperature - temp_avg) * (1 - ratio) + temp_avg )
 
-	for(var/datum/gas/G in A.trace_gases)
+	for (var/datum/gas/G in A.trace_gases)
 		var/G_avg = (G.moles * size) / (size + share_size)
 		G.moles = (G.moles - G_avg) * (1 - ratio) + G_avg
 
 	A.update_values()
 
-	if(dbg_output)
+	if (dbg_output)
 		to_chat(world, "Result: [abs(old_pressure - A.return_pressure())] kPa")
 
 	return abs(old_pressure - A.return_pressure())
@@ -451,8 +451,8 @@ proc/ShareHeat(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 	//This implements a simplistic version of the Stefan-Boltzmann law.
 	var/energy_delta = ((A.temperature - B.temperature) ** 4) * 5.6704e-8 * connecting_tiles * 2.5
 	var/maximum_energy_delta = max(0, min(A.temperature * A.heat_capacity() * A.group_multiplier, B.temperature * B.heat_capacity() * B.group_multiplier))
-	if(maximum_energy_delta > abs(energy_delta))
-		if(energy_delta < 0)
+	if (maximum_energy_delta > abs(energy_delta))
+		if (energy_delta < 0)
 			maximum_energy_delta *= -1
 		energy_delta = maximum_energy_delta
 

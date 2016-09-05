@@ -28,25 +28,25 @@ Attach to transfer valve and open. BOOM.
 
 /atom/proc/burnFireFuel(var/used_fuel_ratio,var/used_reactants_ratio)
 	fire_fuel -= (fire_fuel * used_fuel_ratio * used_reactants_ratio) //* 5
-	if(fire_fuel<=0.1)
+	if (fire_fuel<=0.1)
 		//testing("[src] ashifying (BFF)!")
 		ashify()
 
 /atom/proc/ashify()
-	if(!on_fire)
+	if (!on_fire)
 		return
 	new ashtype(src.loc)
 	qdel(src)
 
 /atom/proc/extinguish()
 	on_fire=0
-	if(fire_overlay)
+	if (fire_overlay)
 		overlays -= fire_overlay
 
 /atom/proc/ignite(var/temperature)
 	on_fire=1
 	//visible_message("\The [src] bursts into flame!")
-	if(fire_dmi && fire_sprite)
+	if (fire_dmi && fire_sprite)
 		fire_overlay = image(fire_dmi,fire_sprite)
 		overlays += fire_overlay
 
@@ -57,7 +57,7 @@ Attach to transfer valve and open. BOOM.
 	return //lolidk
 
 /atom/proc/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(autoignition_temperature && !on_fire && exposed_temperature > autoignition_temperature)
+	if (autoignition_temperature && !on_fire && exposed_temperature > autoignition_temperature)
 		ignite(exposed_temperature)
 		return 1
 	return 0
@@ -67,15 +67,15 @@ Attach to transfer valve and open. BOOM.
 
 /turf/simulated/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	var/obj/effect/E = null
-	if(soot_type)
+	if (soot_type)
 		E = locate(soot_type) in src
-	if(..())
+	if (..())
 		return 1
-	if(molten || on_fire)
-		if(istype(E))
+	if (molten || on_fire)
+		if (istype(E))
 			qdel(E)
 		return 0
-	if(!E && soot_type && prob(25))
+	if (!E && soot_type && prob(25))
 		new soot_type(src)
 
 	return 0
@@ -84,21 +84,21 @@ Attach to transfer valve and open. BOOM.
 
 /turf/simulated/hotspot_expose(exposed_temperature, exposed_volume, soh, surfaces)
 	var/obj/effect/effect/foam/fire/W = locate() in contents
-	if(istype(W))
+	if (istype(W))
 		return 0
-	if(fire_protection > world.time-300)
+	if (fire_protection > world.time-300)
 		return 0
-	if(locate(/obj/fire) in src)
+	if (locate(/obj/fire) in src)
 		return 1
 	var/datum/gas_mixture/air_contents = return_air()
-	if(!air_contents || exposed_temperature < PLASMA_MINIMUM_BURN_TEMPERATURE)
+	if (!air_contents || exposed_temperature < PLASMA_MINIMUM_BURN_TEMPERATURE)
 		return 0
 
 	var/igniting = 0
 
-	if(air_contents.check_combustability(src, surfaces))
+	if (air_contents.check_combustability(src, surfaces))
 		igniting = 1
-		if(! (locate(/obj/fire) in src))
+		if (! (locate(/obj/fire) in src))
 			new /obj/fire(src)
 
 	return igniting
@@ -106,12 +106,12 @@ Attach to transfer valve and open. BOOM.
 // ignite_temp: 0 = Don't check, just get fuel.
 /turf/simulated/proc/getAmtFuel(var/ignite_temp=0)
 	var/fuel_found=0
-	if(!ignite_temp || src.autoignition_temperature<ignite_temp)
+	if (!ignite_temp || src.autoignition_temperature<ignite_temp)
 		fuel_found += src.getFireFuel()
-	for(var/atom/A in src)
-		if(!A)
+	for (var/atom/A in src)
+		if (!A)
 			continue
-		if(ignite_temp && A.autoignition_temperature>ignite_temp)
+		if (ignite_temp && A.autoignition_temperature>ignite_temp)
 			continue
 		fuel_found += A.getFireFuel()
 	return fuel_found
@@ -134,17 +134,17 @@ Attach to transfer valve and open. BOOM.
 /obj/fire/proc/Extinguish()
 	var/turf/simulated/S=loc
 
-	if(istype(S))
+	if (istype(S))
 		S.extinguish()
 
-	for(var/atom/A in loc)
+	for (var/atom/A in loc)
 		A.extinguish()
 
 	qdel(src)
 
 
 /obj/fire/process()
-	if(timestopped)
+	if (timestopped)
 		return 0
 	. = 1
 
@@ -166,12 +166,12 @@ Attach to transfer valve and open. BOOM.
 
 	//since the air is processed in fractions, we need to make sure not to have any minuscle residue or
 	//the amount of moles might get to low for some functions to catch them and thus result in wonky behaviour
-	if(air_contents.oxygen < 0.1)
+	if (air_contents.oxygen < 0.1)
 		air_contents.oxygen = 0
-	if(air_contents.toxins < 0.1)
+	if (air_contents.toxins < 0.1)
 		air_contents.toxins = 0
-	if(fuel)
-		if(fuel.moles < 0.1)
+	if (fuel)
+		if (fuel.moles < 0.1)
 			air_contents.trace_gases.Remove(fuel)
 
 	// Check if there is something to combust.
@@ -183,10 +183,10 @@ Attach to transfer valve and open. BOOM.
 	//get a firelevel and set the icon
 	var/firelevel = air_contents.calculate_firelevel(S)
 
-	if(firelevel > 6)
+	if (firelevel > 6)
 		icon_state = "3"
 		set_light(7, 3)
-	else if(firelevel > 2.5)
+	else if (firelevel > 2.5)
 		icon_state = "2"
 		set_light(5, 2)
 	else
@@ -194,10 +194,10 @@ Attach to transfer valve and open. BOOM.
 		set_light(3, 1)
 
 	//im not sure how to implement a version that works for every creature so for now monkeys are firesafe
-	for(var/mob/living/carbon/human/M in loc)
+	for (var/mob/living/carbon/human/M in loc)
 		M.FireBurn(firelevel, air_contents.temperature, air_contents.return_pressure() ) //Burn the humans!
 
-	for(var/atom/A in loc)
+	for (var/atom/A in loc)
 		A.fire_act(air_contents, air_contents.temperature, air_contents.return_volume())
 
 
@@ -205,31 +205,31 @@ Attach to transfer valve and open. BOOM.
 	S.fire_act(air_contents, air_contents.temperature, air_contents.return_volume())
 
 	//spread
-	for(var/direction in cardinal)
-		if(S.open_directions & direction) //Grab all valid bordering tiles
+	for (var/direction in cardinal)
+		if (S.open_directions & direction) //Grab all valid bordering tiles
 
 			var/turf/simulated/enemy_tile = get_step(S, direction)
 
-			if(istype(enemy_tile))
+			if (istype(enemy_tile))
 				var/datum/gas_mixture/acs = enemy_tile.return_air()
 
-				if(!acs)
+				if (!acs)
 					continue
-				if(!acs.check_recombustability(enemy_tile))
+				if (!acs.check_recombustability(enemy_tile))
 					continue
 				//If extinguisher mist passed over the turf it's trying to spread to, don't spread and
 				//reduce firelevel.
 				var/obj/effect/effect/foam/fire/W = locate() in enemy_tile
-				if(istype(W))
+				if (istype(W))
 					firelevel -= 3
 					continue
-				if(enemy_tile.fire_protection > world.time-30)
+				if (enemy_tile.fire_protection > world.time-30)
 					firelevel -= 1.5
 					continue
 
 				//Spread the fire.
-				if(!(locate(/obj/fire) in enemy_tile))
-					if( prob( 50 + 50 * (firelevel/zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier)) ) && S.Cross(null, enemy_tile, 0,0) && enemy_tile.Cross(null, S, 0,0))
+				if (!(locate(/obj/fire) in enemy_tile))
+					if ( prob( 50 + 50 * (firelevel/zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier)) ) && S.Cross(null, enemy_tile, 0,0) && enemy_tile.Cross(null, S, 0,0))
 						new/obj/fire(enemy_tile)
 
 	//seperate part of the present gas
@@ -237,7 +237,7 @@ Attach to transfer valve and open. BOOM.
 	var/datum/gas_mixture/flow = air_contents.remove_ratio(zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate))
 ///////////////////////////////// FLOW HAS BEEN CREATED /// DONT DELETE THE FIRE UNTIL IT IS MERGED BACK OR YOU WILL DELETE AIR ///////////////////////////////////////////////
 
-	if(flow)
+	if (flow)
 		flow.zburn(S, 1)
 
 		//merge the air back
@@ -269,20 +269,20 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 	//  In the aforementioned cases, it's null. - N3X.
 	var/value = 0
 
-	if((temperature > PLASMA_MINIMUM_BURN_TEMPERATURE || force_burn) && check_recombustability(T))
+	if ((temperature > PLASMA_MINIMUM_BURN_TEMPERATURE || force_burn) && check_recombustability(T))
 		var/total_fuel = 0
 		var/datum/gas/volatile_fuel/fuel = locate() in trace_gases
 
 		total_fuel += toxins
 
-		if(fuel)
+		if (fuel)
 		//Volatile Fuel
 			total_fuel += fuel.moles
 
 		var/can_use_turf=(T && istype(T))
-		if(can_use_turf)
-			for(var/atom/A in T)
-				if(!A)
+		if (can_use_turf)
+			for (var/atom/A in T)
+				if (!A)
 					continue
 				total_fuel += A.getFireFuel()
 
@@ -313,22 +313,22 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 		oxygen -= min(oxygen, total_oxygen * used_reactants_ratio )
 
 		toxins -= min(toxins, (toxins * used_fuel_ratio * used_reactants_ratio ) * 3)
-		if(toxins < 0)
+		if (toxins < 0)
 			toxins = 0
 
 		carbon_dioxide += max(2 * total_fuel, 0)
 
-		if(fuel)
+		if (fuel)
 			fuel.moles -= (fuel.moles * used_fuel_ratio * used_reactants_ratio) * 5 //Fuel burns 5 times as quick
-			if(fuel.moles <= 0)
+			if (fuel.moles <= 0)
 				qdel (fuel)
 				fuel = null
 
-		if(can_use_turf)
-			if(T.getFireFuel()>0)
+		if (can_use_turf)
+			if (T.getFireFuel()>0)
 				T.burnFireFuel(used_fuel_ratio, used_reactants_ratio)
-			for(var/atom/A in T)
-				if(A.getFireFuel()>0)
+			for (var/atom/A in T)
+				if (A.getFireFuel()>0)
 					A.burnFireFuel(used_fuel_ratio, used_reactants_ratio)
 
 		//calculate the energy produced by the reaction and then set the new temperature of the mix
@@ -343,34 +343,34 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 
 	var/datum/gas/volatile_fuel/fuel = locate() in trace_gases
 
-	if(oxygen && (toxins || fuel))
-		if(QUANTIZE(toxins * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE)
+	if (oxygen && (toxins || fuel))
+		if (QUANTIZE(toxins * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE)
 			return 1
-		if(fuel && QUANTIZE(fuel.moles * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ)
+		if (fuel && QUANTIZE(fuel.moles * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ)
 			return 1
 
 	// Check if we're actually in a turf or not before trying to check object fires.
 	// Moved here to unbreak tankbombs - N3X
-	if(!T)
+	if (!T)
 		return 0
 
-	if(!istype(T))
+	if (!istype(T))
 		warning("check_recombustability being asked to check a [T.type] instead of /turf.")
 		return 0
 
 	// We have to check all objects in order to extinguish object fires.
 	var/still_burning=0
-	for(var/atom/A in T)
-		if(!A)
+	for (var/atom/A in T)
+		if (!A)
 			continue
-		if(!oxygen/* || A.autoignition_temperature > temperature*/)
+		if (!oxygen/* || A.autoignition_temperature > temperature*/)
 			A.extinguish()
 			continue
-//		if(!A.autoignition_temperature)
+//		if (!A.autoignition_temperature)
 //			continue // Don't fuck with things that don't burn.
-		if(QUANTIZE(A.getFireFuel() * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= A.volatility)
+		if (QUANTIZE(A.getFireFuel() * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= A.volatility)
 			still_burning=1
-		else if(A.on_fire)
+		else if (A.on_fire)
 			//A.extinguish()
 			A.ashify()
 
@@ -380,24 +380,24 @@ datum/gas_mixture/proc/check_combustability(var/turf/T, var/objects)
 	//this check comes up very often and is thus centralized here to ease adding stuff
 	// zburn is used in tank fires, as well. This check, among others, broke tankbombs. - N3X
 	/*
-	if(!istype(T))
+	if (!istype(T))
 		warning("check_combustability being asked to check a [T.type] instead of /turf.")
 		return 0
 	*/
 
 	var/datum/gas/volatile_fuel/fuel = locate() in trace_gases
 
-	if(oxygen && (toxins || fuel))
-		if(QUANTIZE(toxins * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE)
+	if (oxygen && (toxins || fuel))
+		if (QUANTIZE(toxins * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= MOLES_PLASMA_VISIBLE)
 			return 1
-		if(fuel && QUANTIZE(fuel.moles * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ)
+		if (fuel && QUANTIZE(fuel.moles * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= BASE_ZAS_FUEL_REQ)
 			return 1
 
-	if(objects && istype(T))
-		for(var/atom/A in T)
-			if(!A || !oxygen || A.autoignition_temperature > temperature)
+	if (objects && istype(T))
+		for (var/atom/A in T)
+			if (!A || !oxygen || A.autoignition_temperature > temperature)
 				continue
-			if(QUANTIZE(A.getFireFuel() * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= A.volatility)
+			if (QUANTIZE(A.getFireFuel() * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= A.volatility)
 				return 1
 
 	return 0
@@ -409,23 +409,23 @@ datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
 	var/total_fuel = 0
 	var/firelevel = 0
 
-	if(check_recombustability(T))
+	if (check_recombustability(T))
 
 		total_fuel += toxins
 
-		if(T && istype(T))
+		if (T && istype(T))
 			total_fuel += T.getFireFuel()
 
-			for(var/atom/A in T)
-				if(A)
+			for (var/atom/A in T)
+				if (A)
 					total_fuel += A.getFireFuel()
 
-		if(fuel)
+		if (fuel)
 			total_fuel += fuel.moles
 
 		var/total_combustables = (total_fuel + oxygen)
 
-		if(total_fuel > 0 && oxygen > 0)
+		if (total_fuel > 0 && oxygen > 0)
 
 			//slows down the burning when the concentration of the reactants is low
 			var/dampening_multiplier = total_combustables / (total_combustables + nitrogen + carbon_dioxide)
@@ -454,20 +454,20 @@ datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
 
 	//Get heat transfer coefficients for clothing.
 
-	for(var/obj/item/clothing/C in src)
-		if(is_holding_item(C))
+	for (var/obj/item/clothing/C in src)
+		if (is_holding_item(C))
 			continue
 
-		if( C.max_heat_protection_temperature >= last_temperature )
-			if(!is_slot_hidden(C.body_parts_covered,FULL_HEAD))
+		if ( C.max_heat_protection_temperature >= last_temperature )
+			if (!is_slot_hidden(C.body_parts_covered,FULL_HEAD))
 				head_exposure = 0
-			if(!is_slot_hidden(C.body_parts_covered,UPPER_TORSO))
+			if (!is_slot_hidden(C.body_parts_covered,UPPER_TORSO))
 				chest_exposure = 0
-			if(!is_slot_hidden(C.body_parts_covered,LOWER_TORSO))
+			if (!is_slot_hidden(C.body_parts_covered,LOWER_TORSO))
 				groin_exposure = 0
-			if(!is_slot_hidden(C.body_parts_covered,LEGS))
+			if (!is_slot_hidden(C.body_parts_covered,LEGS))
 				legs_exposure = 0
-			if(!is_slot_hidden(C.body_parts_covered,ARMS))
+			if (!is_slot_hidden(C.body_parts_covered,ARMS))
 				arms_exposure = 0
 	//minimize this for low-pressure enviroments
 	var/mx = 5 * firelevel/zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier) * min(pressure / ONE_ATMOSPHERE, 1)

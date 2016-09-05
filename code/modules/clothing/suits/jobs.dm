@@ -161,14 +161,14 @@
 		set category = "Object"
 		set src in usr
 
-		if(usr.incapacitated())
+		if (usr.incapacitated())
 			return 0
 
-		switch(icon_state)
-			if("ia_jacket_open")
+		switch (icon_state)
+			if ("ia_jacket_open")
 				src.icon_state = "ia_jacket"
 				to_chat(usr, "You button up the jacket.")
-			if("ia_jacket")
+			if ("ia_jacket")
 				src.icon_state = "ia_jacket_open"
 				to_chat(usr, "You unbutton the jacket.")
 			else
@@ -191,14 +191,14 @@
 		set category = "Object"
 		set src in usr
 
-		if(usr.incapacitated())
+		if (usr.incapacitated())
 			return 0
 
-		switch(icon_state)
-			if("fr_jacket_open")
+		switch (icon_state)
+			if ("fr_jacket_open")
 				src.icon_state = "fr_jacket"
 				to_chat(usr, "You button up the jacket.")
-			if("fr_jacket")
+			if ("fr_jacket")
 				src.icon_state = "fr_jacket_open"
 				to_chat(usr, "You unbutton the jacket.")
 		usr.update_inv_wear_suit()	//so our overlays update

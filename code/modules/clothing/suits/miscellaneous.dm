@@ -190,14 +190,14 @@
 	set category = "Object"
 	set src in usr
 
-	if(!usr.canmove || usr.isUnconscious() || usr.restrained())
+	if (!usr.canmove || usr.isUnconscious() || usr.restrained())
 		return 0
 
-	if(src.icon_state == "suitjacket_blue_open")
+	if (src.icon_state == "suitjacket_blue_open")
 		src.icon_state = "suitjacket_blue"
 		src.item_state = "suitjacket_blue"
 		to_chat(usr, "You button up the suit jacket.")
-	else if(src.icon_state == "suitjacket_blue")
+	else if (src.icon_state == "suitjacket_blue")
 		src.icon_state = "suitjacket_blue_open"
 		src.item_state = "suitjacket_blue_open"
 		to_chat(usr, "You unbutton the suit jacket.")
@@ -341,7 +341,7 @@
 
 /obj/item/clothing/suit/soldiercoat
 	name = "Soldier's Coat"
-	desc = "Und das heißt: Erika"
+	desc = "Und das heiï¿½t: Erika"
 	icon_state = "soldiersuit"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 
@@ -408,31 +408,31 @@
 	icon_state = "clownpiece-fly"
 
 /obj/item/clothing/suit/clownpiece/flying/attack_hand(var/mob/living/carbon/human/H)
-	if(!istype(H))
+	if (!istype(H))
 		return ..()
-	if((src == H.wear_suit) && H.flying)
+	if ((src == H.wear_suit) && H.flying)
 		H.flying = 0
 		animate(H, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER, time = 1, loop = 1)
 		animate(H, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
 		animate(H)
-		if(H.lying)//aka. if they have just been stunned
+		if (H.lying)//aka. if they have just been stunned
 			H.pixel_y -= 6 * PIXEL_MULTIPLIER
 	..()
 
 /obj/item/clothing/suit/clownpiece/flying/equipped(var/mob/user, var/slot)
 	var/mob/living/carbon/human/H = user
-	if(!istype(H)) return
-	if((slot == slot_wear_suit) && !user.flying)
+	if (!istype(H)) return
+	if ((slot == slot_wear_suit) && !user.flying)
 		user.flying = 1
 		animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER, time = 10, loop = 1, easing = SINE_EASING)
 
 /obj/item/clothing/suit/clownpiece/flying/dropped(mob/user as mob)
-	if(user.flying)
+	if (user.flying)
 		user.flying = 0
 		animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER, time = 1, loop = 1)
 		animate(user, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
 		animate(user)
-		if(user.lying)//aka. if they have just been stunned
+		if (user.lying)//aka. if they have just been stunned
 			user.pixel_y -= 6 * PIXEL_MULTIPLIER
 	..()
 
@@ -470,7 +470,7 @@
 
 /obj/item/clothing/suit/spaceblanket/attackby(obj/item/W,mob/user)
 	..()
-	if(istype(W,/obj/item/clothing/head/bearpelt) && !bearpelt)
+	if (istype(W,/obj/item/clothing/head/bearpelt) && !bearpelt)
 		to_chat(user,"<span class='notice'>You add \the [W] to \the [src].</span>")
 		qdel(W)
 		qdel(src)

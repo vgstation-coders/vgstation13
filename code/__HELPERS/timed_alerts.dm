@@ -1,7 +1,7 @@
 /client/var/timed_alert/timed_alert
 
 /client/proc/timed_alert(time = 300,target,message,title,button1,button2,button3)
-	if(timed_alert)
+	if (timed_alert)
 		return ""
 
 	timed_alert = new(target,message,title,button1,button2,button3)
@@ -11,7 +11,7 @@
 /mob/proc/timed_alert(time,message,title,button1,button2,button3)
 	var/selected_button = ""
 
-	if(client)
+	if (client)
 		selected_button = client.timed_alert(time,src,message,title,button1,button2,button3)
 
 	return selected_button

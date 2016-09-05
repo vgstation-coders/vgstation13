@@ -5,18 +5,18 @@
 
 /obj/structure/closet/secure_closet/freezer/update_icon()
 	overlays.len = 0
-	if(broken)
+	if (broken)
 		icon_state = icon_broken
 	else
-		if(!opened)
-			if(locked)
+		if (!opened)
+			if (locked)
 				icon_state = icon_locked
 			else
 				icon_state = icon_closed
-			if(welded)
+			if (welded)
 				overlays += image(icon = icon, icon_state = "welded")
 		else
-			if(exploded)
+			if (exploded)
 				icon_state = icon_exploded
 				return
 			icon_state = icon_opened
@@ -28,13 +28,13 @@
 
 	//Bomb in here? (using same search as space transits searching for nuke disk)
 	var/list/bombs = search_contents_for(/obj/item/device/transfer_valve)
-	if(!isemptylist(bombs)) // You're fucked.
+	if (!isemptylist(bombs)) // You're fucked.
 		..(severity)
 
-	if(severity == 1)
+	if (severity == 1)
 		//If it's not open, we need to override the normal open proc and set everything ourselves
 		//Otherwise, you can cheese this by simply welding it shut, or if the lock is engaged
-		if(!opened)
+		if (!opened)
 			opened = 1
 			density = 0
 			dump_contents()
@@ -46,10 +46,10 @@
 	return
 
 /obj/structure/closet/secure_closet/freezer/can_close()
-	if(exploded) //Door blew off, can't close it anymore
+	if (exploded) //Door blew off, can't close it anymore
 		return 0
-	for(var/obj/structure/closet/closet in get_turf(src))
-		if(closet != src && !closet.wall_mounted)
+	for (var/obj/structure/closet/closet in get_turf(src))
+		if (closet != src && !closet.wall_mounted)
 			return 0
 	return 1
 
@@ -60,7 +60,7 @@
 	New()
 		..()
 		sleep(2)
-		for(var/i = 0, i < 3, i++)
+		for (var/i = 0, i < 3, i++)
 			new /obj/item/weapon/reagent_containers/food/drinks/flour(src)
 		new /obj/item/weapon/reagent_containers/food/condiment/sugar(src)
 		return
@@ -84,7 +84,7 @@
 	New()
 		..()
 		sleep(2)
-		for(var/i = 0, i < 4, i++)
+		for (var/i = 0, i < 4, i++)
 			new /obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey(src)
 		return
 
@@ -103,11 +103,11 @@
 	New()
 		..()
 		sleep(2)
-		for(var/i = 0, i < 5, i++)
+		for (var/i = 0, i < 5, i++)
 			new /obj/item/weapon/reagent_containers/food/drinks/milk(src)
-		for(var/i = 0, i < 5, i++)
+		for (var/i = 0, i < 5, i++)
 			new /obj/item/weapon/reagent_containers/food/drinks/soymilk(src)
-		for(var/i = 0, i < 2, i++)
+		for (var/i = 0, i < 2, i++)
 			new /obj/item/weapon/storage/fancy/egg_box(src)
 		return
 

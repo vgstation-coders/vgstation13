@@ -11,30 +11,30 @@
 	New()
 		..()
 		spawn(2)
-			if(istype(src.loc,/obj/machinery/computer2))
+			if (istype(src.loc,/obj/machinery/computer2))
 				host = src.loc
 				host.peripherals.Add(src)
 //			var/setup_id = "\ref[src]"
 //			src.id = copytext(setup_id,4,(length(setup_id)-1) )
 
 	Del()
-		if(host)
+		if (host)
 			host.peripherals.Remove(src)
 		..()
 
 
 	proc
 		receive_command(obj/source, command, datum/signal/signal)
-			if((source != host) || !(src in host))
+			if ((source != host) || !(src in host))
 				return 1
 
-			if(!command)
+			if (!command)
 				return 1
 
 			return 0
 
 		send_command(command, datum/signal/signal)
-			if(!command || !host)
+			if (!command || !host)
 				return
 
 			src.host.receive_command(src, command, signal)
@@ -48,7 +48,7 @@
 	var/datum/radio_frequency/radio_connection
 	New()
 		..()
-		if(radio_controller)
+		if (radio_controller)
 			initialize()
 
 	initialize()
@@ -61,25 +61,25 @@
 			radio_connection = radio_controller.add_object(src, frequency)
 
 	receive_command(obj/source, command, datum/signal/signal)
-		if(..())
+		if (..())
 			return
 
-		if(!signal || !radio_connection)
+		if (!signal || !radio_connection)
 			return
 
-		switch(command)
-			if("send signal")
+		switch (command)
+			if ("send signal")
 				src.radio_connection.post_signal(src, signal)
 
 		return
 
 	receive_signal(datum/signal/signal)
-		if(!signal || (signal.encryption && signal.encryption != code))
+		if (!signal || (signal.encryption && signal.encryption != code))
 			return
 
 		var/datum/signal/newsignal = new
 		newsignal.data = signal.data
-		if(src.code)
+		if (src.code)
 			newsignal.encryption = src.code
 
 		send_command("radio signal",newsignal)
@@ -92,24 +92,24 @@
 	var/printing = 0
 
 	receive_command(obj/source,command, datum/signal/signal)
-		if(..())
+		if (..())
 			return
 
-		if(!signal)
+		if (!signal)
 			return
 
-		if((command == "print") && !src.printing)
+		if ((command == "print") && !src.printing)
 			src.printing = 1
 
 			var/print_data = signal.data["data"]
 			var/print_title = signal.data["title"]
-			if(!print_data)
+			if (!print_data)
 				src.printing = 0
 				return
 			spawn(50)
 				var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( src.host.loc )
 				P.info = print_data
-				if(print_title)
+				if (print_title)
 					P.name = "paper - '[print_title]'"
 
 				src.printing = 0
@@ -124,16 +124,16 @@
 	var/last_vend = 0 //Delay between vends if manually activated(ie a dude is holding it and shaking stuff out)
 
 	receive_command(obj/source,command, datum/signal/signal)
-		if(..())
+		if (..())
 			return
 
-		if(command == "vend prize")
+		if (command == "vend prize")
 			src.vend_prize()
 
 		return
 
 	attack_self(mob/user as mob)
-		if( (last_vend + 400) < world.time)
+		if ( (last_vend + 400) < world.time)
 			to_chat(user, "You shake something out of [src]!")
 			src.vend_prize()
 			src.last_vend = world.time
@@ -147,25 +147,25 @@
 		var/prizeselect = rand(1,4)
 		var/turf/prize_location = null
 
-		if(src.host)
+		if (src.host)
 			prize_location = src.host.loc
 		else
 			prize_location = get_turf(src)
 
-		switch(prizeselect)
-			if(1)
+		switch (prizeselect)
+			if (1)
 				prize = new /obj/item/weapon/money( prize_location )
 				prize.name = "space ticket"
 				prize.desc = "It's almost like actual currency!"
-			if(2)
+			if (2)
 				prize = new /obj/item/beacon( prize_location )
 				prize.name = "electronic blink toy game"
 				prize.desc = "Blink.  Blink.  Blink."
-			if(3)
+			if (3)
 				prize = new /obj/item/weapon/lighter/zippo( prize_location )
 				prize.name = "Burno Lighter"
 				prize.desc = "Almost like a decent lighter!"
-			if(4)
+			if (4)
 				prize = new /obj/item/weapon/c_tube( prize_location )
 				prize.name = "toy sword"
 				prize.icon = 'icons/obj/weapons.dmi'
@@ -179,7 +179,7 @@
 	var/obj/item/weapon/card/id/authid = null
 
 	attack_self(mob/user as mob)
-		if(authid)
+		if (authid)
 			to_chat(user, "The card falls out.")
 			src.authid.forceMove(get_turf(user))
 			src.authid = null
@@ -187,20 +187,20 @@
 		return
 
 	receive_command(obj/source,command, datum/signal/signal)
-		if(..())
+		if (..())
 			return
 
-		if(!signal || (signal.data["ref_id"] != "\ref[src]") )
+		if (!signal || (signal.data["ref_id"] != "\ref[src]") )
 			return
 
-		switch(command)
-			if("eject card")
-				if(src.authid)
+		switch (command)
+			if ("eject card")
+				if (src.authid)
 					src.authid.forceMove(src.host.loc)
 					src.authid = null
-			if("add card access")
+			if ("add card access")
 				var/new_access = signal.data["access"]
-				if(!new_access)
+				if (!new_access)
 					return
 
 

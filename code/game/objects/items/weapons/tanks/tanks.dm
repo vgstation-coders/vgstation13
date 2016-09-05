@@ -32,11 +32,11 @@
 	return
 
 /obj/item/weapon/tank/Destroy()
-	if(air_contents)
+	if (air_contents)
 		qdel(air_contents)
 		air_contents = null
 
-	if(istype(loc, /obj/machinery/portable_atmospherics))
+	if (istype(loc, /obj/machinery/portable_atmospherics))
 		var/obj/machinery/portable_atmospherics/holder = loc
 		holder.holding = null
 
@@ -72,17 +72,17 @@
 
 	to_chat(user, "<span class='info'>\The [bicon(icon)][src] feels [descriptive]</span>")
 
-	if(air_contents.volume * 10 < volume)
+	if (air_contents.volume * 10 < volume)
 		to_chat(user, "<span class='danger'>The meter on the [src.name] indicates you are almost out of gas!</span>")
 		playsound(user, 'sound/effects/alert.ogg', 50, 1)
 
 /obj/item/weapon/tank/blob_act()
-	if(prob(50))
+	if (prob(50))
 		var/turf/location = src.loc
 		if (!( istype(location, /turf) ))
 			qdel(src)
 
-		if(src.air_contents)
+		if (src.air_contents)
 			location.assume_air(air_contents)
 
 		qdel(src)
@@ -104,7 +104,7 @@
 		LB.blow(src)
 		src.add_fingerprint(user)
 	else if (istype(W, /obj/item/clothing/gloves/latex))
-		if(air_contents.return_pressure())
+		if (air_contents.return_pressure())
 			to_chat(user, "You inflate \the [W] using \the [src].")
 			qdel(W)
 			var/obj/item/latexballon/LB1 = new (get_turf(user))
@@ -117,7 +117,7 @@
 			to_chat(user, "<span class='warning'>There's no gas in the tank.</span>")
 
 
-	if(istype(W, /obj/item/device/assembly_holder))
+	if (istype(W, /obj/item/device/assembly_holder))
 		bomb_assemble(W,user)
 
 /obj/item/weapon/tank/attack_self(mob/user as mob)
@@ -129,9 +129,9 @@
 /obj/item/weapon/tank/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 
 	var/using_internal
-	if(istype(loc,/mob/living/carbon))
+	if (istype(loc,/mob/living/carbon))
 		var/mob/living/carbon/location = loc
-		if(location.internal==src)
+		if (location.internal==src)
 			using_internal = 1
 
 	// this is the data which will be sent to the ui
@@ -143,9 +143,9 @@
 	data["valveOpen"] = using_internal ? 1 : 0
 
 	data["maskConnected"] = 0
-	if(istype(loc,/mob/living/carbon))
+	if (istype(loc,/mob/living/carbon))
 		var/mob/living/carbon/location = loc
-		if(location.internal == src || (location.wear_mask && (location.wear_mask.flags & MASKINTERNALS)))
+		if (location.internal == src || (location.wear_mask && (location.wear_mask.flags & MASKINTERNALS)))
 			data["maskConnected"] = 1
 
 	// update the ui if it exists, returns null if no ui is passed/found
@@ -163,8 +163,8 @@
 
 /obj/item/weapon/tank/Topic(href, href_list)
 	..()
-	if(href_list["close"])
-		if(usr.machine == src)
+	if (href_list["close"])
+		if (usr.machine == src)
 			usr.unset_machine()
 		return 1
 	if (usr.stat|| usr.restrained())
@@ -182,16 +182,16 @@
 			src.distribute_pressure += cp
 		src.distribute_pressure = min(max(round(src.distribute_pressure), 0), TANK_MAX_RELEASE_PRESSURE)
 	if (href_list["stat"])
-		if(istype(loc,/mob/living/carbon))
+		if (istype(loc,/mob/living/carbon))
 			var/mob/living/carbon/location = loc
-			if(location.internal == src)
+			if (location.internal == src)
 				location.internal = null
 				location.internals.icon_state = "internal0"
 				to_chat(usr, "<span class='notice'>You close the tank release valve.</span>")
 				if (location.internals)
 					location.internals.icon_state = "internal0"
 			else
-				if(location.wear_mask && (location.wear_mask.flags & MASKINTERNALS))
+				if (location.wear_mask && (location.wear_mask.flags & MASKINTERNALS))
 					location.internal = src
 					to_chat(usr, "<span class='notice'>You open \the [src] valve.</span>")
 					if (location.internals)
@@ -216,11 +216,11 @@
 	return 1
 
 /obj/item/weapon/tank/proc/remove_air_volume(volume_to_return)
-	if(!air_contents)
+	if (!air_contents)
 		return null
 
 	var/tank_pressure = air_contents.return_pressure()
-	if(tank_pressure < distribute_pressure)
+	if (tank_pressure < distribute_pressure)
 		distribute_pressure = tank_pressure
 
 	var/moles_needed = distribute_pressure*volume_to_return/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
@@ -229,24 +229,24 @@
 
 /obj/item/weapon/tank/process()
 	//Allow for reactions
-	if(air_contents)
+	if (air_contents)
 		air_contents.react()
 	check_status()
 
 
 /obj/item/weapon/tank/proc/check_status()
 	//Handle exploding, leaking, and rupturing of the tank
-	if(timestopped)
+	if (timestopped)
 		return
 
 	var/cap = 0
 	var/uncapped = 0
-	if(!air_contents)
+	if (!air_contents)
 		return 0
 
 	var/pressure = air_contents.return_pressure()
-	if(pressure > TANK_FRAGMENT_PRESSURE)
-		if(!istype(src.loc,/obj/item/device/transfer_valve))
+	if (pressure > TANK_FRAGMENT_PRESSURE)
+		if (!istype(src.loc,/obj/item/device/transfer_valve))
 			message_admins("Explosive tank rupture! last key to touch the tank was [src.fingerprintslast].")
 			log_game("Explosive tank rupture! last key to touch the tank was [src.fingerprintslast].")
 //		to_chat(world, "<span class='warning'>[x],[y] tank is exploding: [pressure] kPa</span>")
@@ -256,7 +256,7 @@
 		air_contents.react()
 		pressure = air_contents.return_pressure()
 		var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
-		if(range > MAX_EXPLOSION_RANGE)
+		if (range > MAX_EXPLOSION_RANGE)
 			cap = 1
 			uncapped = range
 		range = min(range, MAX_EXPLOSION_RANGE)		// was 8 - - - Changed to a configurable define -- TLE
@@ -265,12 +265,12 @@
 //		to_chat(world, "<span class='notice'>Exploding Pressure: [pressure] kPa, intensity: [range]</span>")
 
 		explosion(epicenter, round(range*0.25), round(range*0.5), round(range), round(range*1.5), 1, cap)
-		if(cap)
-			for(var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
-				if(bhangmeter)
+		if (cap)
+			for (var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
+				if (bhangmeter)
 					bhangmeter.sense_explosion(epicenter.x,epicenter.y,epicenter.z,round(uncapped*0.25), round(uncapped*0.5), round(uncapped),"???", cap)
 
-		if(istype(src.loc,/obj/item/device/transfer_valve))
+		if (istype(src.loc,/obj/item/device/transfer_valve))
 			var/obj/item/device/transfer_valve/TV = src.loc
 			TV.child_ruptured(src, range)
 
@@ -278,11 +278,11 @@
 
 		return
 
-	else if(pressure > TANK_RUPTURE_PRESSURE)
+	else if (pressure > TANK_RUPTURE_PRESSURE)
 //		to_chat(world, "<span class='warning'>[x],[y] tank is rupturing: [pressure] kPa, integrity [integrity]</span>")
-		if(integrity <= 0)
+		if (integrity <= 0)
 			var/turf/simulated/T = get_turf(src)
-			if(!T)
+			if (!T)
 				return
 			T.assume_air(air_contents)
 			playsound(get_turf(src), 'sound/effects/spray.ogg', 10, 1, -3)
@@ -293,16 +293,16 @@
 		else
 			integrity--
 
-	else if(pressure > TANK_LEAK_PRESSURE)
+	else if (pressure > TANK_LEAK_PRESSURE)
 //		to_chat(world, "<span class='warning'>[x],[y] tank is leaking: [pressure] kPa, integrity [integrity]</span>")
-		if(integrity <= 0)
+		if (integrity <= 0)
 			var/turf/simulated/T = get_turf(src)
-			if(!T)
+			if (!T)
 				return
 			var/datum/gas_mixture/leaked_gas = air_contents.remove_ratio(0.25)
 			T.assume_air(leaked_gas)
 		else
 			integrity--
 
-	else if(integrity < 3)
+	else if (integrity < 3)
 		integrity++

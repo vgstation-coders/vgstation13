@@ -13,7 +13,7 @@ var/global/list/whitelisted_species = list("Human")
 /proc/buildSpeciesLists()
 	var/datum/language/L
 	var/datum/species/S
-	for(. in (typesof(/datum/language)-/datum/language))
+	for (. in (typesof(/datum/language)-/datum/language))
 		L = new .
 		all_languages[L.name] = L
 	for (var/language_name in all_languages)
@@ -21,10 +21,10 @@ var/global/list/whitelisted_species = list("Human")
 		language_keys[":[lowertext(L.key)]"] = L
 		language_keys[".[lowertext(L.key)]"] = L
 		language_keys["#[lowertext(L.key)]"] = L
-	for(. in (typesof(/datum/species)-/datum/species))
+	for (. in (typesof(/datum/species)-/datum/species))
 		S = new .
 		all_species[S.name] = S
-		if(S.flags & IS_WHITELISTED)
+		if (S.flags & IS_WHITELISTED)
 			whitelisted_species += S.name
 	return
 
@@ -134,40 +134,40 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/New()
 	..()
-	if(all_species[name])
+	if (all_species[name])
 		var/datum/species/globalspeciesholder = all_species[name]
 		default_blocks = globalspeciesholder.default_blocks.Copy()
 		default_mutations = globalspeciesholder.default_mutations.Copy()
 
 /datum/species/Destroy()
-	if(myhuman)
+	if (myhuman)
 		myhuman = null
 	..()
 
 /datum/species/proc/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
-	if(H.dna)
-		if(length(speech.message) >= 2)
-			for(var/gene_type in H.active_genes)
+	if (H.dna)
+		if (length(speech.message) >= 2)
+			for (var/gene_type in H.active_genes)
 				var/datum/dna/gene/gene = dna_genes[gene_type]
-				if(!gene.block)
+				if (!gene.block)
 					continue
-				if(gene.OnSay(H,speech))
+				if (gene.OnSay(H,speech))
 					return 0
 	return 1
 
 /datum/species/proc/clear_organs(var/mob/living/carbon/human/H)
-	if(H.organs)
+	if (H.organs)
 		H.organs.len=0
-	if(H.internal_organs)
-		for(var/datum/organ/internal/I in H.internal_organs)
+	if (H.internal_organs)
+		for (var/datum/organ/internal/I in H.internal_organs)
 			// I.Remove(H) // THIS DOES NOTHING AT THE MOMENT
 			qdel(I) // These don't get special garbage collection as is so they never get gotten from pool
 		H.internal_organs.len=0
-	if(H.organs_by_name)
+	if (H.organs_by_name)
 		H.organs_by_name.len=0
-	if(H.internal_organs_by_name)
+	if (H.internal_organs_by_name)
 		H.internal_organs_by_name.len=0
-	if(H.grasp_organs)
+	if (H.grasp_organs)
 		H.grasp_organs.len = 0
 
 
@@ -189,21 +189,21 @@ var/global/list/whitelisted_species = list("Human")
 	H.organs_by_name[LIMB_RIGHT_FOOT] = new/datum/organ/external/r_foot(H.organs_by_name[LIMB_RIGHT_LEG])
 
 	H.internal_organs = list()
-	for(var/organ in has_organ)
+	for (var/organ in has_organ)
 		var/organ_type = has_organ[organ]
 		var/datum/organ/internal/O = new organ_type(H)
-		if(O.CanInsert(H))
+		if (O.CanInsert(H))
 			H.internal_organs_by_name[organ] = O
 			O.Insert(H)
 
-	for(var/name in H.organs_by_name)
+	for (var/name in H.organs_by_name)
 		var/datum/organ/external/OE = H.organs_by_name[name]
 
 		H.organs += OE
-		if(OE.grasp_id)
+		if (OE.grasp_id)
 			H.grasp_organs += OE
 
-	for(var/datum/organ/external/O in H.organs)
+	for (var/datum/organ/external/O in H.organs)
 		O.owner = H
 
 /datum/species/proc/handle_post_spawn(var/mob/living/carbon/human/H) //Handles anything not already covered by basic species assignment.
@@ -215,12 +215,12 @@ var/global/list/whitelisted_species = list("Human")
 // Sent from /datum/lung_gas/metabolizable.
 /datum/species/proc/receiveGas(var/gas_id, var/ratio, var/moles, var/mob/living/carbon/human/H)
 	//testing("receiveGas: [gas_id] ? [breath_type] - ratio=[ratio], moles=[moles]")
-	if(ratio <= 0 || gas_id != breath_type)
+	if (ratio <= 0 || gas_id != breath_type)
 		//testing("  ratio is 0 or gas_id doesn't match up, adding oxyLoss.")
 		H.adjustOxyLoss(HUMAN_MAX_OXYLOSS)
 		H.failed_last_breath = 1
 		return 0
-	else if(ratio >= 1)
+	else if (ratio >= 1)
 		//testing("  we cool")
 		H.failed_last_breath = 0
 		H.adjustOxyLoss(-5)
@@ -235,7 +235,7 @@ var/global/list/whitelisted_species = list("Human")
 
 // Used for species-specific names (Vox, etc)
 /datum/species/proc/makeName(var/gender,var/mob/living/carbon/C=null)
-	if(gender==FEMALE)
+	if (gender==FEMALE)
 		return capitalize(pick(first_names_female)) + " " + capitalize(pick(last_names))
 	else
 		return capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
@@ -359,7 +359,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/i = 0
 	var/newname = ""
 
-	while(i<=sounds)
+	while (i<=sounds)
 		i++
 		newname += pick(vox_name_syllables)
 	return capitalize(newname)
@@ -588,10 +588,10 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/vox/equip(var/mob/living/carbon/human/H)
 	// Unequip existing suits and hats.
-	if(H.mind.assigned_role != "MODE")
+	if (H.mind.assigned_role != "MODE")
 		H.u_equip(H.wear_suit,1)
 		H.u_equip(H.head,1)
-	if(H.mind.assigned_role!="Clown")
+	if (H.mind.assigned_role!="Clown")
 		H.u_equip(H.wear_mask,1)
 
 	H.equip_or_collect(new /obj/item/clothing/mask/breath/vox(H), slot_wear_mask)
@@ -599,89 +599,89 @@ var/global/list/whitelisted_species = list("Human")
 	var/helm=/obj/item/clothing/head/helmet/space/vox/civ
 	var/tank_slot = slot_s_store
 	var/tank_slot_name = "suit storage"
-	switch(H.mind.assigned_role)
+	switch (H.mind.assigned_role)
 
-		if("Bartender")
+		if ("Bartender")
 			suit=/obj/item/clothing/suit/space/vox/civ/bartender
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/bartender
-		if("Chef")
+		if ("Chef")
 			suit=/obj/item/clothing/suit/space/vox/civ/chef
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/chef
-		if("Botanist")
+		if ("Botanist")
 			suit=/obj/item/clothing/suit/space/vox/civ/botanist
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/botanist
-		if("Janitor")
+		if ("Janitor")
 			suit=/obj/item/clothing/suit/space/vox/civ/janitor
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/janitor
-		if("Cargo Technician","Quartermaster")
+		if ("Cargo Technician","Quartermaster")
 			suit=/obj/item/clothing/suit/space/vox/civ/cargo
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/cargo
-		if("Chaplain")
+		if ("Chaplain")
 			suit=/obj/item/clothing/suit/space/vox/civ/chaplain
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/chaplain
-		if("Librarian")
+		if ("Librarian")
 			suit=/obj/item/clothing/suit/space/vox/civ/librarian
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/librarian
 
-		if("Chief Engineer")
+		if ("Chief Engineer")
 			suit=/obj/item/clothing/suit/space/vox/civ/engineer/ce
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer/ce
-		if("Station Engineer")
+		if ("Station Engineer")
 			suit=/obj/item/clothing/suit/space/vox/civ/engineer
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer
-		if("Atmospheric Technician")
+		if ("Atmospheric Technician")
 			suit=/obj/item/clothing/suit/space/vox/civ/engineer/atmos
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos
 
-		if("Scientist","Roboticist")
+		if ("Scientist","Roboticist")
 			suit=/obj/item/clothing/suit/space/vox/civ/science
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/science
-		if("Research Director")
+		if ("Research Director")
 			suit=/obj/item/clothing/suit/space/vox/civ/science/rd
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/science/rd
 
-		if("Medical Doctor")
+		if ("Medical Doctor")
 			suit=/obj/item/clothing/suit/space/vox/civ/medical
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical
-		if("Paramedic")
+		if ("Paramedic")
 			suit=/obj/item/clothing/suit/space/vox/civ/medical/paramedic
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic
-		if("Geneticist")
+		if ("Geneticist")
 			suit=/obj/item/clothing/suit/space/vox/civ/medical/geneticist
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/geneticist
-		if("Virologist")
+		if ("Virologist")
 			suit=/obj/item/clothing/suit/space/vox/civ/medical/virologist
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/virologist
-		if("Chemist")
+		if ("Chemist")
 			suit=/obj/item/clothing/suit/space/vox/civ/medical/chemist
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/chemist
-		if("Chief Medical Officer")
+		if ("Chief Medical Officer")
 			suit=/obj/item/clothing/suit/space/vox/civ/medical/cmo
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/cmo
 
-		if("Head of Security","Warden","Detective","Security Officer")
+		if ("Head of Security","Warden","Detective","Security Officer")
 			suit=/obj/item/clothing/suit/space/vox/civ/security
 			helm=/obj/item/clothing/head/helmet/space/vox/civ/security
 
-//		if("Clown","Mime")
+//		if ("Clown","Mime")
 //			tank_slot=null
 //			tank_slot_name = "hand"
-		if("Trader")
+		if ("Trader")
 			suit = /obj/item/clothing/suit/space/vox/pressure
 			helm = /obj/item/clothing/head/helmet/space/vox/pressure
 
-		if("MODE") // Gamemode stuff
-			switch(H.mind.special_role)
-				if("Wizard")
+		if ("MODE") // Gamemode stuff
+			switch (H.mind.special_role)
+				if ("Wizard")
 					suit = null
 					helm = null
 					tank_slot = null
 					tank_slot_name = "hand"
-	if(suit)
+	if (suit)
 		H.equip_or_collect(new suit(H), slot_wear_suit)
-	if(helm)
+	if (helm)
 		H.equip_or_collect(new helm(H), slot_head)
-	if(tank_slot)
+	if (tank_slot)
 		H.equip_or_collect(new/obj/item/weapon/tank/nitrogen(H), tank_slot)
 	else
 		H.put_in_hands(new/obj/item/weapon/tank/nitrogen(H))
@@ -695,23 +695,23 @@ var/global/list/whitelisted_species = list("Human")
 	var/i = 0
 	var/newname = ""
 
-	while(i<=sounds)
+	while (i<=sounds)
 		i++
 		newname += pick(vox_name_syllables)
 	return capitalize(newname)
 
 /datum/species/vox/handle_post_spawn(var/mob/living/carbon/human/H)
-	if(myhuman != H)
+	if (myhuman != H)
 		return
 	updatespeciescolor(H)
 	H.update_icon()
 
 /datum/species/vox/updatespeciescolor(var/mob/living/carbon/human/H)
-	switch(H.s_tone)
-		if(3)
+	switch (H.s_tone)
+		if (3)
 			icobase = 'icons/mob/human_races/vox/r_voxgry.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_voxgry.dmi'
-		if(2)
+		if (2)
 			icobase = 'icons/mob/human_races/vox/r_voxbrn.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_voxbrn.dmi'
 		else
@@ -793,20 +793,20 @@ var/global/list/whitelisted_species = list("Human")
 	return capitalize(pick(golem_names))
 
 /datum/species/golem/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
-	if(!isgolem(H))
+	if (!isgolem(H))
 		return
 	var/datum/mind/golemmind = H.mind
-	if(!istype(golemmind,/datum/mind))	//not a mind
+	if (!istype(golemmind,/datum/mind))	//not a mind
 		golemmind = null
-	for(var/atom/movable/I in H.contents)
+	for (var/atom/movable/I in H.contents)
 		I.forceMove(H.loc)
 	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-g", sleeptime = 15)
 	var/mob/living/adamantine_dust/A = new(H.loc)
-	if(golemmind)
+	if (golemmind)
 		A.mind = golemmind
 		H.mind = null
 		golemmind.current = A
-		if(H.real_name)
+		if (H.real_name)
 			A.real_name = H.real_name
 			A.desc = "The remains of what used to be [A.real_name]."
 		A.key = H.key
@@ -822,23 +822,23 @@ var/global/list/whitelisted_species = list("Human")
 	density = 0
 
 /mob/living/adamantine_dust/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/slime_extract/adamantine))
+	if (istype(I, /obj/item/slime_extract/adamantine))
 		var/obj/item/slime_extract/adamantine/A = I
-		if(A.Uses)
-			if(!mind)
+		if (A.Uses)
+			if (!mind)
 				to_chat(user, "<span class='warning'>You press \the [A] into \the [src], but nothing happens.</span>")
 			else
-				if(!client)
+				if (!client)
 					to_chat(user, "<span class='notice'>As you press \the [A] into \the [src], it shudders briefly, but falls still.</span>")
 					var/mob/dead/observer/ghost = get_ghost_from_mind(mind)
-					if(ghost && ghost.client && ghost.can_reenter_corpse)
+					if (ghost && ghost.client && ghost.can_reenter_corpse)
 						ghost << 'sound/effects/adminhelp.ogg'
 						to_chat(ghost, "<span class='interface big'><span class='bold'>Someone is trying to resurrect you. Return to your body if you want to live again!</span> \
 							(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 				else
 					anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "reverse-dust-g", sleeptime = 15)
 					var/mob/living/carbon/human/golem/G = new /mob/living/carbon/human/golem
-					if(!real_name)
+					if (!real_name)
 						real_name = G.species.makeName()
 					to_chat(user, "<span class='notice'>As you press \the [A] into \the [src], it is consumed. [real_name] reconstitutes itself!.</span>")
 					qdel(A)

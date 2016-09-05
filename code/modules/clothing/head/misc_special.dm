@@ -36,10 +36,10 @@
 	set category = "Object"
 	set name = "Adjust welding mask"
 	set src in usr
-	if(!usr)
+	if (!usr)
 		return //PANIC
-	if(!usr.incapacitated())
-		if(src.up)
+	if (!usr.incapacitated())
+		if (src.up)
 			src.up = !src.up
 			src.body_parts_covered |= FACE
 			eyeprot = 3
@@ -73,15 +73,15 @@
 	var/processing = 0 //I dont think this is used anywhere.
 
 /obj/item/clothing/head/cakehat/process()
-	if(!onfire)
+	if (!onfire)
 		processing_objects.Remove(src)
 		return
 
 	var/turf/location = src.loc
-	if(istype(location, /mob/))
+	if (istype(location, /mob/))
 		var/mob/living/carbon/human/M = location
-		if(istype(M))
-			if(M.head == src || M.is_holding_item(src))
+		if (istype(M))
+			if (M.head == src || M.is_holding_item(src))
 				location = M.loc
 		else
 			return
@@ -90,7 +90,7 @@
 		location.hotspot_expose(700, 1)
 
 /obj/item/clothing/head/cakehat/attack_self(mob/user as mob)
-	if(status > 1)
+	if (status > 1)
 		return
 	src.onfire = !( src.onfire )
 	if (src.onfire)
@@ -118,7 +118,7 @@
 	body_parts_covered = EARS|HEAD
 
 /obj/item/clothing/head/ushanka/attack_self(mob/user as mob)
-	if(src.icon_state == "ushankadown")
+	if (src.icon_state == "ushankadown")
 		src.icon_state = "ushankaup"
 		src.item_state = "ushankaup"
 		body_parts_covered = HEAD
@@ -144,7 +144,7 @@
 	var/on = 0
 
 	attack_self(mob/user)
-		if(!isturf(user.loc))
+		if (!isturf(user.loc))
 			to_chat(user, "You cannot turn the light on while in this [user.loc]")//To prevent some lighting anomalities.
 
 			return
@@ -152,7 +152,7 @@
 		icon_state = "hardhat[on]_[_color]"
 		item_state = "hardhat[on]_[_color]"
 
-		if(on)
+		if (on)
 			set_light(brightness_on)
 		else
 			set_light(0)
@@ -170,7 +170,7 @@
 	siemens_coefficient = 1.5
 
 	update_icon(var/mob/living/carbon/human/user)
-		if(!istype(user))
+		if (!istype(user))
 			return
 		mob = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kitty")
 		mob2 = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kitty2")

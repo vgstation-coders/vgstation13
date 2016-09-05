@@ -41,7 +41,7 @@
 	set category = "Object"
 	set src in range(0)
 
-	if(tank)
+	if (tank)
 		to_chat(usr, "You twist the valve and pop the tank out of [src].")
 		tank.forceMove(usr.loc)
 		tank = null
@@ -52,8 +52,8 @@
 		to_chat(usr, "There's no tank in [src].")
 
 /obj/item/weapon/storage/pneumatic/attackby(obj/item/W as obj, mob/user as mob)
-	if(!tank && istype(W,/obj/item/weapon/tank))
-		if(!user.drop_item(W, src.tank_container))
+	if (!tank && istype(W,/obj/item/weapon/tank))
+		if (!user.drop_item(W, src.tank_container))
 			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
 			return
 
@@ -68,7 +68,7 @@
 /obj/item/weapon/storage/pneumatic/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>The valve is dialed to [pressure_setting]%.</span>")
-	if(tank)
+	if (tank)
 		to_chat(user, "<span class='info'>The tank dial reads [tank.air_contents.return_pressure()] kPa.</span>")
 	else
 		to_chat(user, "<span class='warning'>Nothing is attached to the tank valve!</span>")
@@ -83,7 +83,7 @@
 	else if (locate (/obj/structure/table, src.loc))
 		return
 
-	else if(target == user)
+	else if (target == user)
 		return
 
 	if (length(contents) == 0)
@@ -94,7 +94,7 @@
 
 /obj/item/weapon/storage/pneumatic/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
 	if (length(contents) > 0)
-		if(user.a_intent == I_HURT)
+		if (user.a_intent == I_HURT)
 			user.visible_message("<span class='danger'>\The [user] fires \the [src] point blank at [M]!</span>")
 			Fire(M,user)
 			return
@@ -128,7 +128,7 @@
 
 	var/obj/item/object = contents[1]
 	var/speed = ((fire_pressure*tank.volume)/object.w_class)/force_divisor //projectile speed.
-	if(speed>80)
+	if (speed>80)
 		speed = 80 //damage cap.
 
 	user.visible_message("<span class='danger'>[user] fires [src] and launches [object] at [target]!</span>","<span class='danger'>You fire [src] and launch [object] at [target]!</span>")
@@ -136,7 +136,7 @@
 	src.remove_from_storage(object,user.loc)
 	object.throw_at(target,10,speed)
 
-	if(istype(object,/obj/item/weapon/reagent_containers/food/snacks) && ishuman(target) && object.Adjacent(target))
+	if (istype(object,/obj/item/weapon/reagent_containers/food/snacks) && ishuman(target) && object.Adjacent(target))
 		object.attack(target,target) //This way it is instant
 
 	var/lost_gas_amount = tank.air_contents.total_moles*(pressure_setting/100)

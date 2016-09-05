@@ -30,40 +30,40 @@
 
 /obj/machinery/transformer/update_icon()
 	..()
-	if(stat & (BROKEN|NOPOWER) || cooldown_time > world.time)
+	if (stat & (BROKEN|NOPOWER) || cooldown_time > world.time)
 		icon_state = "separator-AO0"
 	else
 		icon_state = initial(icon_state)
 
 /obj/machinery/transformer/Bumped(var/atom/movable/AM)
-	if(cooldown_state)
+	if (cooldown_state)
 		return
 
 	// Crossed didn't like people lying down.
-	if(ishuman(AM))
+	if (ishuman(AM))
 		// Only humans can enter from the west side, while lying down.
 		var/move_dir = get_dir(loc, AM.loc)
 		var/mob/living/carbon/human/H = AM
-		if((transform_standing || H.lying) && move_dir == EAST)// || move_dir == WEST)
+		if ((transform_standing || H.lying) && move_dir == EAST)// || move_dir == WEST)
 			AM.forceMove(src.loc)
 			do_transform(AM)
 	//Shit bugs out if theres too many items on the enter side conveyer
-	else if(istype(AM, /obj/item))
+	else if (istype(AM, /obj/item))
 		var/move_dir = get_dir(loc, AM.loc)
-		if(move_dir == EAST)
+		if (move_dir == EAST)
 			AM.forceMove(src.loc)
 
 /obj/machinery/transformer/proc/do_transform(var/mob/living/carbon/human/H)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
-	if(cooldown_state)
+	if (cooldown_state)
 		return
 
-	if(!transform_dead && H.stat == DEAD)
+	if (!transform_dead && H.stat == DEAD)
 		playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
 		return
 
-	if(jobban_isbanned(H, "Cyborg"))
+	if (jobban_isbanned(H, "Cyborg"))
 		src.visible_message("<span class='danger'>\The [src.name] throws an exception. Lifeform not compatible with factory.</span>")
 		return
 
@@ -76,7 +76,7 @@
 	sleep(5)
 
 	var/mob/living/silicon/robot/R = H.Robotize(1) // Delete the items or they'll all pile up in a single tile and lag
-	if(R)
+	if (R)
 		R.cell.maxcharge = robot_cell_charge
 		R.cell.charge = robot_cell_charge
 
@@ -89,7 +89,7 @@
 
 	spawn(50)
 		playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 0)
-		if(R)
+		if (R)
 			R.weakened = 0
 
 	// Activate the cooldown
@@ -101,25 +101,25 @@
 	..()
 	var/old_cooldown_state=cooldown_state
 	cooldown_state = cooldown_time > world.time
-	if(cooldown_state!=old_cooldown_state)
+	if (cooldown_state!=old_cooldown_state)
 		update_icon()
-		if(!cooldown_state)
+		if (!cooldown_state)
 			playsound(get_turf(src), 'sound/machines/ping.ogg', 50, 0)
 
 /obj/machinery/transformer/conveyor/New()
 	..()
 	var/turf/T = loc
-	if(T)
+	if (T)
 		// Spawn Conveyour Belts
 
 		//East
 		var/turf/east = locate(T.x + 1, T.y, T.z)
-		if(istype(east, /turf/simulated/floor))
+		if (istype(east, /turf/simulated/floor))
 			new /obj/machinery/conveyor/auto(east, WEST)
 
 		// West
 		var/turf/west = locate(T.x - 1, T.y, T.z)
-		if(istype(west, /turf/simulated/floor))
+		if (istype(west, /turf/simulated/floor))
 			new /obj/machinery/conveyor/auto(west, WEST)
 
 /obj/machinery/transformer/attack_ai(var/mob/user)
@@ -127,7 +127,7 @@
 
 /obj/machinery/transformer/interact(var/mob/user)
 	var/data=""
-	if(cooldown_state)
+	if (cooldown_state)
 		data += {"<b>Recalibrating.</b> Time left: [(cooldown_time - world.time)/10] seconds."}
 	else
 		data += {"<p style="color:red;font-weight:bold;"><blink>ROBOTICIZER ACTIVE.</blink></p>"}
@@ -147,19 +147,19 @@
 	popup.open()
 
 /obj/machinery/transformer/Topic(href, href_list)
-	if(!isAI(usr))
+	if (!isAI(usr))
 		to_chat(usr, "<span class='warning'>This machine is way above your pay-grade.</span>")
 		return 0
-	if(!("act" in href_list))
+	if (!("act" in href_list))
 		return 0
-	switch(href_list["act"])
-		if("force_class")
+	switch (href_list["act"])
+		if ("force_class")
 			var/list/modules = list("(Robot's Choice)")
 			modules += getAvailableRobotModules()
 			var/sel_mod = input("Please, select a module!", "Robot", null, null) as null|anything in modules
-			if(!sel_mod)
+			if (!sel_mod)
 				return
-			if(sel_mod == "(Robot's Choice)")
+			if (sel_mod == "(Robot's Choice)")
 				force_borg_module = null
 			else
 				force_borg_module = sel_mod

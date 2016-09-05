@@ -119,7 +119,7 @@ var/global/list/thing_storm_types = list(
 /datum/event/thing_storm/setup()
 	endWhen	= rand(30, 60) + 10 //From 30 seconds to one minute
 	var/list/possible_names=list()
-	for(var/storm_id in thing_storm_types)
+	for (var/storm_id in thing_storm_types)
 		possible_names += storm_id
 	storm_name=pick(possible_names)
 
@@ -173,13 +173,13 @@ var/global/list/thing_storm_types = list(
 
 /datum/event/thing_storm/blob_storm/tick()
 	var/chosen_dir = meteor_wave(rand(20, 40), types = thing_storm_types[storm_name])
-	if(!cores_spawned)
+	if (!cores_spawned)
 		var/living = 0
-		for(var/mob/living/M in player_list)
-			if(M.stat == CONSCIOUS)
+		for (var/mob/living/M in player_list)
+			if (M.stat == CONSCIOUS)
 				living++
 		cores_spawned = round(living/BLOB_CORE_PROPORTION) //Cores spawned depends on living players
-		for(var/i = 0 to cores_spawned)
+		for (var/i = 0 to cores_spawned)
 			spawn_meteor(chosen_dir, /obj/item/projectile/meteor/blob/core)
 
 /datum/event/thing_storm/blob_storm/announce()

@@ -41,7 +41,7 @@
 	anchored = 1
 
 /obj/structure/stacklifter/attack_hand(mob/user as mob)
-	if(in_use)
+	if (in_use)
 		to_chat(user, "<span class='notice'>It's already in use - wait a bit.</span>")
 		return
 	else
@@ -52,7 +52,7 @@
 		user.forceMove(loc)
 		var/bragmessage = pick("pushing it to the limit","going into overdrive","burning with determination","rising up to the challenge", "getting strong now","getting ripped")
 		user.visible_message("<B>[user] is [bragmessage]!</B>")
-		for(var/lifts = 1 to 6)
+		for (var/lifts = 1 to 6)
 			if (user.loc != loc)
 				break
 			sleep(3)
@@ -78,7 +78,7 @@
 	anchored = 1
 
 /obj/structure/weightlifter/attack_hand(mob/user as mob)
-	if(in_use)
+	if (in_use)
 		to_chat(user, "<span class='notice'>It's already in use - wait a bit.</span>")
 		return
 	else
@@ -93,7 +93,7 @@
 		var/bragmessage = pick("pushing it to the limit","going into overdrive","burning with determination","rising up to the challenge", "getting strong now","getting ripped")
 		user.visible_message("<B>[user] is [bragmessage]!</B>")
 		user.pixel_y = 5 * PIXEL_MULTIPLIER
-		for(var/reps = 1 to 6)
+		for (var/reps = 1 to 6)
 			if (user.loc != loc)
 				break
 

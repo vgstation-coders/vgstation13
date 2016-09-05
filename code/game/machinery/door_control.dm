@@ -37,7 +37,7 @@
 
 /obj/machinery/door_control/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
-	if(wires & 2)
+	if (wires & 2)
 		return src.attack_hand(user)
 	else
 		to_chat(user, "Error, no route to host.")
@@ -56,7 +56,7 @@
 	/* For later implementation
 	if (isscrewdriver(W))
 	{
-		if(wiresexposed)
+		if (wiresexposed)
 			icon_state = "doorctrl0"
 			wiresexposed = 0
 
@@ -67,16 +67,16 @@
 		return
 	}
 	*/
-	if(istype(W, /obj/item/device/detective_scanner))
+	if (istype(W, /obj/item/device/detective_scanner))
 		return
 	return src.attack_hand(user)
 
 /obj/machinery/door_control/attack_hand(mob/user as mob)
 	src.add_fingerprint(usr)
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 
-	if(!allowed(user) && (wires & 1))
+	if (!allowed(user) && (wires & 1))
 		to_chat(user, "<span class='warning'>Access Denied.</span>")
 		flick("doorctrl-denied",src)
 		return
@@ -85,29 +85,29 @@
 	icon_state = "doorctrl1"
 	add_fingerprint(user)
 
-	if(normaldoorcontrol)
-		for(var/obj/machinery/door/airlock/D in range(range))
-			if(D.id_tag == src.id_tag)
+	if (normaldoorcontrol)
+		for (var/obj/machinery/door/airlock/D in range(range))
+			if (D.id_tag == src.id_tag)
 				spawn(0)
-				if(D)
-					if(D.density)
+				if (D)
+					if (D.density)
 						D.open()
 					else
 						D.close()
 					return
-				if(specialfunctions & IDSCAN)
+				if (specialfunctions & IDSCAN)
 					D.aiDisabledIdScanner = !D.aiDisabledIdScanner
-				if(specialfunctions & BOLTS)
-					if(!D.isWireCut(4) && D.arePowerSystemsOn())
+				if (specialfunctions & BOLTS)
+					if (!D.isWireCut(4) && D.arePowerSystemsOn())
 						D.locked = !D.locked
 						D.update_icon()
-				if(specialfunctions & SHOCK)
+				if (specialfunctions & SHOCK)
 					D.secondsElectrified = D.secondsElectrified ? 0 : -1
-				if(specialfunctions & SAFE)
+				if (specialfunctions & SAFE)
 					D.safe = !D.safe
 
 	else
-		for(var/obj/machinery/door/poddoor/M in poddoors)
+		for (var/obj/machinery/door/poddoor/M in poddoors)
 			if (M.id_tag == src.id_tag)
 				if (M.density)
 					spawn( 0 )
@@ -118,12 +118,12 @@
 						M.close()
 						return
 	spawn(15)
-		if(!(stat & NOPOWER))
+		if (!(stat & NOPOWER))
 			icon_state = "doorctrl0"
 
 /obj/machinery/door_control/power_change()
 	..()
-	if(stat & NOPOWER)
+	if (stat & NOPOWER)
 		icon_state = "doorctrl-p"
 	else
 		icon_state = "doorctrl0"
@@ -141,15 +141,15 @@
 
 /obj/machinery/driver_button/attackby(obj/item/weapon/W, mob/user as mob)
 	. = ..()
-	if(.)
+	if (.)
 		return .
 
-	if(istype(W, /obj/item/device/detective_scanner))
+	if (istype(W, /obj/item/device/detective_scanner))
 		return
 
-	if(iswrench(W))
+	if (iswrench(W))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		if(do_after(user, src, 30))
+		if (do_after(user, src, 30))
 			to_chat(user, "<span class='notice'>You detach \the [src] from the wall.</span>")
 			new/obj/item/mounted/frame/driver_button(get_turf(src))
 			qdel(src)
@@ -167,9 +167,9 @@
 /obj/machinery/driver_button/attack_hand(mob/user as mob)
 
 	src.add_fingerprint(usr)
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
-	if(active)
+	if (active)
 		return
 	add_fingerprint(user)
 
@@ -183,20 +183,20 @@
 	active = 1
 	icon_state = "launcheract"
 
-	for(var/obj/machinery/door/poddoor/M in poddoors)
+	for (var/obj/machinery/door/poddoor/M in poddoors)
 		if (M.id_tag == src.id_tag)
 			spawn()
 				M.open()
 
 	sleep(20)
 
-	for(var/obj/machinery/mass_driver/M in mass_drivers)
-		if(M.id_tag == src.id_tag)
+	for (var/obj/machinery/mass_driver/M in mass_drivers)
+		if (M.id_tag == src.id_tag)
 			M.drive()
 
 	sleep(50)
 
-	for(var/obj/machinery/door/poddoor/M in poddoors)
+	for (var/obj/machinery/door/poddoor/M in poddoors)
 		if (M.id_tag == src.id_tag)
 			spawn()
 				M.close()

@@ -70,7 +70,7 @@
 
 /datum/node/expression/operator/New()
 	.=..()
-	if(!src.name)
+	if (!src.name)
 		src.name = "[src.type]"
 
 /datum/node/expression/operator/ToString()
@@ -109,7 +109,7 @@
 /datum/node/expression/value/variable/New(ident)
 	. = ..()
 	id = ident
-	if(istext(id))
+	if (istext(id))
 		id = new(id)
 
 /datum/node/expression/value/variable/ToString()

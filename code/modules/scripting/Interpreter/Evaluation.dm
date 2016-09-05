@@ -2,104 +2,104 @@
 	return (istype(x, /datum) || istype(x, /list) || istype(x, /savefile) || istype(x, /client) || (x == world))
 
 /datum/n_Interpreter/proc/Eval(datum/node/expression/exp)
-	if(istype(exp, /datum/node/expression/FunctionCall))
+	if (istype(exp, /datum/node/expression/FunctionCall))
 		return RunFunction(exp)
 
-	else if(istype(exp, /datum/node/expression/operator))
+	else if (istype(exp, /datum/node/expression/operator))
 		return EvalOperator(exp)
 
-	else if(istype(exp, /datum/node/expression/value/literal))
+	else if (istype(exp, /datum/node/expression/value/literal))
 		var/datum/node/expression/value/literal/lit = exp
 		return lit.value
 
-	else if(istype(exp, /datum/node/expression/value/reference))
+	else if (istype(exp, /datum/node/expression/value/reference))
 		var/datum/node/expression/value/reference/ref = exp
 		return ref.value
 
-	else if(istype(exp, /datum/node/expression/value/variable))
+	else if (istype(exp, /datum/node/expression/value/variable))
 		var/datum/node/expression/value/variable/v = exp
-		if(!v.object)
+		if (!v.object)
 			return Eval(GetVariable(v.id.id_name))
 		else
 			var/datum/D
-			if(istype(v.object, /datum/node/identifier))
+			if (istype(v.object, /datum/node/identifier))
 				D = GetVariable(v.object:id_name)
 			else
 				D = v.object
 
 			D = Eval(D)
-			if(!isobject(D))
+			if (!isobject(D))
 				return null
 
-			if(!D.vars.Find(v.id.id_name))
+			if (!D.vars.Find(v.id.id_name))
 				RaiseError(new/datum/runtimeError/UndefinedVariable("[v.object.ToString()].[v.id.id_name]"))
 				return null
 
 			return Eval(D.vars[v.id.id_name])
 
-	else if(istype(exp, /datum/node/expression))
+	else if (istype(exp, /datum/node/expression))
 		RaiseError(new/datum/runtimeError/UnknownInstruction())
 
 	else
 		return exp
 
 /datum/n_Interpreter/proc/EvalOperator(datum/node/expression/operator/exp)
-	if(istype(exp, /datum/node/expression/operator/binary))
+	if (istype(exp, /datum/node/expression/operator/binary))
 		var/datum/node/expression/operator/binary/bin = exp
 		try // This way we can forgo sanity in the actual evaluation (other than divide by 0).
-			switch(bin.type)
-				if(/datum/node/expression/operator/binary/Equal)
+			switch (bin.type)
+				if (/datum/node/expression/operator/binary/Equal)
 					return Equal(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/NotEqual)
+				if (/datum/node/expression/operator/binary/NotEqual)
 					return NotEqual(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/Greater)
+				if (/datum/node/expression/operator/binary/Greater)
 					return Greater(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/Less)
+				if (/datum/node/expression/operator/binary/Less)
 					return Less(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/GreaterOrEqual)
+				if (/datum/node/expression/operator/binary/GreaterOrEqual)
 					return GreaterOrEqual(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/LessOrEqual)
+				if (/datum/node/expression/operator/binary/LessOrEqual)
 					return LessOrEqual(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/LogicalAnd)
+				if (/datum/node/expression/operator/binary/LogicalAnd)
 					return LogicalAnd(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/LogicalOr)
+				if (/datum/node/expression/operator/binary/LogicalOr)
 					return LogicalOr(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/LogicalXor)
+				if (/datum/node/expression/operator/binary/LogicalXor)
 					return LogicalXor(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/BitwiseAnd)
+				if (/datum/node/expression/operator/binary/BitwiseAnd)
 					return BitwiseAnd(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/BitwiseOr)
+				if (/datum/node/expression/operator/binary/BitwiseOr)
 					return BitwiseOr(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/BitwiseXor)
+				if (/datum/node/expression/operator/binary/BitwiseXor)
 					return BitwiseXor(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/Add)
+				if (/datum/node/expression/operator/binary/Add)
 					return Add(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/Subtract)
+				if (/datum/node/expression/operator/binary/Subtract)
 					return Subtract(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/Multiply)
+				if (/datum/node/expression/operator/binary/Multiply)
 					return Multiply(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/Divide)
+				if (/datum/node/expression/operator/binary/Divide)
 					return Divide(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/Power)
+				if (/datum/node/expression/operator/binary/Power)
 					return Power(Eval(bin.exp), Eval(bin.exp2))
 
-				if(/datum/node/expression/operator/binary/Modulo)
+				if (/datum/node/expression/operator/binary/Modulo)
 					return Modulo(Eval(bin.exp), Eval(bin.exp2))
 
 				else
@@ -110,17 +110,17 @@
 
 	else
 		try
-			switch(exp.type)
-				if(/datum/node/expression/operator/unary/Minus)
+			switch (exp.type)
+				if (/datum/node/expression/operator/unary/Minus)
 					return Minus(Eval(exp.exp))
 
-				if(/datum/node/expression/operator/unary/LogicalNot)
+				if (/datum/node/expression/operator/unary/LogicalNot)
 					return LogicalNot(Eval(exp.exp))
 
-				if(/datum/node/expression/operator/unary/BitwiseNot)
+				if (/datum/node/expression/operator/unary/BitwiseNot)
 					return BitwiseNot(Eval(exp.exp))
 
-				if(/datum/node/expression/operator/unary/group)
+				if (/datum/node/expression/operator/unary/group)
 					return Eval(exp.exp)
 
 				else
@@ -176,7 +176,7 @@
 	return a - b
 
 /datum/n_Interpreter/proc/Divide(a, b)
-	if(b == 0)
+	if (b == 0)
 		RaiseError(new/datum/runtimeError/DivisionByZero())
 		return null
 

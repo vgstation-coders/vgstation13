@@ -5,7 +5,7 @@
 /datum/controller/process/garbage/setup()
 	name = "garbage"
 
-	if(!garbageCollector)
+	if (!garbageCollector)
 		garbageCollector = new
 
 /datum/controller/process/garbage/doWork()

@@ -57,7 +57,7 @@
 
 	// reading from a list("stage" = damage) is pretty difficult, so build two separate
 	// lists from them instead
-	for(var/V in stages)
+	for (var/V in stages)
 		desc_list += V
 		damage_list += stages[V]
 
@@ -77,7 +77,7 @@
 
 // returns 1 if there's a next stage, 0 otherwise
 /datum/wound/proc/next_stage()
-	if(current_stage + 1 > src.desc_list.len)
+	if (current_stage + 1 > src.desc_list.len)
 		return 0
 
 	current_stage++
@@ -93,12 +93,12 @@
 // checks whether the wound has been appropriately treated
 // always returns 1 for wounds that don't need to be treated
 /datum/wound/proc/is_treated()
-	if(!needs_treatment)
+	if (!needs_treatment)
 		return 1
 
-	if(damage_type == BRUISE || damage_type == CUT)
+	if (damage_type == BRUISE || damage_type == CUT)
 		return bandaged
-	else if(damage_type == BURN)
+	else if (damage_type == BURN)
 		return salved
 
 // checks if wound is considered open for external infections
@@ -131,7 +131,7 @@
 		germ_level = 0
 		return 0
 
-	if(damage_type == BRUISE && !bleeding())
+	if (damage_type == BRUISE && !bleeding())
 		return 0
 
 	var/dam_coef = round(damage/10)
@@ -146,7 +146,7 @@
 	return 0
 
 /datum/wound/proc/heal_damage(amount, heals_internal = 0)
-	if(src.internal && !heals_internal)
+	if (src.internal && !heals_internal)
 		// heal nothing
 		return amount
 
@@ -154,7 +154,7 @@
 	amount -= healed_damage
 	src.damage -= healed_damage
 
-	while(src.damage / src.amount < damage_list[current_stage] && current_stage < src.desc_list.len)
+	while (src.damage / src.amount < damage_list[current_stage] && current_stage < src.desc_list.len)
 		current_stage++
 	desc = desc_list[current_stage]
 	src.min_damage = damage_list[current_stage]
@@ -167,7 +167,7 @@
 	src.damage += damage
 	bleed_timer += damage / BLOODLOSS_SPEED_MULTIPLIER
 
-	while(src.current_stage > 1 && src.damage_list[current_stage-1] <= src.damage)
+	while (src.current_stage > 1 && src.damage_list[current_stage-1] <= src.damage)
 		src.current_stage--
 
 	src.desc = desc_list[current_stage]

@@ -6,7 +6,7 @@
 	volume = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/snackbar/on_reagent_change()
-	if(!reagents.total_volume)  //This should only happen if a chemical reaction removes the reagents from the bar
+	if (!reagents.total_volume)  //This should only happen if a chemical reaction removes the reagents from the bar
 		icon_state = "" //So it isn't visible in the 1/10th of a second before it is deleted
 		spawn(1) //A small delay is needed before deleting to allow for reactions to occur
 			qdel(src) //We don't want empty snack bars
@@ -22,11 +22,11 @@
 /obj/item/weapon/reagent_containers/food/snacks/snackbar/proc/update_name()
 	var/newname = ""
 	var/i = 0
-	for(var/datum/reagent/r in reagents.reagent_list)
+	for (var/datum/reagent/r in reagents.reagent_list)
 		i++
-		if(i == 1)
+		if (i == 1)
 			newname += "[r.name]"
-		else if(i == reagents.reagent_list.len)
+		else if (i == reagents.reagent_list.len)
 			newname += " and [r.name]"
 		else
 			newname += ", [r.name]"

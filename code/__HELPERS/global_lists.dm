@@ -47,7 +47,7 @@ var/global/list/sec_hud_users = list() //list of all entities using a security H
 	var/list/paths
 	//Surgery Steps - Initialize all /datum/surgery_step into a list
 	paths = typesof(/datum/surgery_step)-/datum/surgery_step
-	for(var/T in paths)
+	for (var/T in paths)
 		var/datum/surgery_step/S = new T
 		surgery_steps += S
 	sort_surgeries()
@@ -59,9 +59,9 @@ var/global/list/sec_hud_users = list() //list of all entities using a security H
 
 	for (var/reaction in chemical_reactions_list)
 		. += "chemical_reactions_list\[\"[reaction]\"\] = \"[chemical_reactions_list[reaction]]\"\n"
-		if(islist(chemical_reactions_list[reaction]))
+		if (islist(chemical_reactions_list[reaction]))
 			var/list/L = chemical_reactions_list[reaction]
-			for(var/t in L)
+			for (var/t in L)
 				. += "    has: [t]\n"
 	to_chat(world, .)
 */

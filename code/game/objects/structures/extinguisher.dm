@@ -10,11 +10,11 @@
 
 
 /obj/structure/extinguisher_cabinet/attackby(obj/item/O, mob/user)
-	if(isrobot(user) || isalien(user))
+	if (isrobot(user) || isalien(user))
 		return
-	if(istype(O, /obj/item/weapon/extinguisher))
-		if(!has_extinguisher && opened)
-			if(user.drop_item(O, src))
+	if (istype(O, /obj/item/weapon/extinguisher))
+		if (!has_extinguisher && opened)
+			if (user.drop_item(O, src))
 				has_extinguisher = O
 				to_chat(user, "<span class='notice'>You place [O] in [src].</span>")
 		else
@@ -25,9 +25,9 @@
 
 
 /obj/structure/extinguisher_cabinet/attack_hand(mob/user)
-	if(isrobot(user) || isalien(user))
+	if (isrobot(user) || isalien(user))
 		return
-	if(has_extinguisher)
+	if (has_extinguisher)
 		user.put_in_hands(has_extinguisher)
 		to_chat(user, "<span class='notice'>You take [has_extinguisher] from [src].</span>")
 		has_extinguisher = null
@@ -37,7 +37,7 @@
 	update_icon()
 
 /obj/structure/extinguisher_cabinet/attack_tk(mob/user)
-	if(has_extinguisher)
+	if (has_extinguisher)
 		has_extinguisher.forceMove(loc)
 		to_chat(user, "<span class='notice'>You telekinetically remove [has_extinguisher] from [src].</span>")
 		has_extinguisher = null
@@ -52,11 +52,11 @@
 
 
 /obj/structure/extinguisher_cabinet/update_icon()
-	if(!opened)
+	if (!opened)
 		icon_state = "extinguisher_closed"
 		return
-	if(has_extinguisher)
-		if(istype(has_extinguisher, /obj/item/weapon/extinguisher/mini))
+	if (has_extinguisher)
+		if (istype(has_extinguisher, /obj/item/weapon/extinguisher/mini))
 			icon_state = "extinguisher_mini"
 		else
 			icon_state = "extinguisher_full"

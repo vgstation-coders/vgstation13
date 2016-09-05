@@ -29,7 +29,7 @@
 
 
 /spell/targeted/equip_item/robesummon/cast(list/targets, mob/user = usr)
-	switch(pick(valid_outfits))
+	switch (pick(valid_outfits))
 
 		if (ROBES_BLUE)
 			equipped_summons = list("[slot_head]" = /obj/item/clothing/head/wizard,
@@ -41,12 +41,12 @@
 									"[slot_wear_suit]" = /obj/item/clothing/suit/wizrobe/red,
 									"[slot_shoes]" = /obj/item/clothing/shoes/sandal)
 
-		if(ROBES_MARISA)
+		if (ROBES_MARISA)
 			equipped_summons = list("[slot_head]" = /obj/item/clothing/head/wizard/marisa,
 									"[slot_wear_suit]" = /obj/item/clothing/suit/wizrobe/marisa,
 									"[slot_shoes]" = /obj/item/clothing/shoes/sandal/marisa)
 
-		if(ROBES_SUIT)
+		if (ROBES_SUIT)
 			equipped_summons = list("[slot_head]" = /obj/item/clothing/head/helmet/space/rig/wizard,
 									"[slot_wear_suit]" = /obj/item/clothing/suit/space/rig/wizard,
 									"[slot_shoes]" = /obj/item/clothing/shoes/sandal,
@@ -59,7 +59,7 @@
 	..()
 
 /spell/targeted/equip_item/robesummon/empower_spell()
-	if(!valid_outfits.Find(ROBES_SUIT))
+	if (!valid_outfits.Find(ROBES_SUIT))
 		valid_outfits = list(ROBES_SUIT)
 		spell_levels[Sp_POWER]++
 
@@ -70,7 +70,7 @@
 
 
 /spell/targeted/equip_item/robesummon/get_upgrade_info(upgrade_type, level)
-	if(upgrade_type == Sp_POWER)
+	if (upgrade_type == Sp_POWER)
 		return "Make the spell summon a gem-encrusted hardsuit and internals."
 	return ..()
 

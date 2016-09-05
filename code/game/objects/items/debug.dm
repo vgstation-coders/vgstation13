@@ -22,7 +22,7 @@
 	update_icon()
 
 /obj/item/debug/screamer/update_icon()
-	if(on)
+	if (on)
 		processing_objects.Add(src)
 	else
 		processing_objects.Remove(src)
@@ -31,7 +31,7 @@
 
 /obj/item/debug/screamer/attackby(var/obj/item/weapon/W, var/mob/user)
 	..()
-	if(!on && W.is_hot())
+	if (!on && W.is_hot())
 		visible_message("<span class='notice'>[user] lights [src] with [W].</span>")
 		say("[user] TURNS ME ON WITH THEIR [W]")
 		on=1
@@ -42,12 +42,12 @@
 	..(message, speaking=all_languages[lang_id])
 
 /obj/item/debug/screamer/process()
-	if(!on)
+	if (!on)
 		return
 	say(pick(things_to_say))
 
 /obj/item/debug/screamer/attack_hand(var/mob/user)
-	if(on)
+	if (on)
 		visible_message("<span class='notice'>[user] extinguishes [src].</span>")
 		on=0
 		update_icon()

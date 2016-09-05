@@ -111,23 +111,23 @@
 	postProcessComplex()
 		..()
 		var/list/all_floors=list()
-		for(var/surprise_room/room in rooms)
+		for (var/surprise_room/room in rooms)
 			var/list/w_cand=room.GetTurfs(TURF_FLOOR)
 			all_floors |= w_cand
 			var/egged=0
-			while(w_cand.len>0)
+			while (w_cand.len>0)
 				var/turf/weed_turf = pick(w_cand)
 				w_cand -= weed_turf
-				if(weed_turf.density)
+				if (weed_turf.density)
 					continue
-				if(locate(/obj/effect/alien) in weed_turf)
+				if (locate(/obj/effect/alien) in weed_turf)
 					continue
-				if(weed_turf && !egged)
+				if (weed_turf && !egged)
 					new /obj/effect/alien/weeds/node(weed_turf)
 					weeds += weed_turf
 					break
 
-		for(var/e=0;e<eggs_left;e++)
+		for (var/e=0;e<eggs_left;e++)
 			var/turf/egg_turf = pick(all_floors)
-			if(egg_turf && !(locate(/obj/effect/alien) in egg_turf))
+			if (egg_turf && !(locate(/obj/effect/alien) in egg_turf))
 				new /obj/effect/alien/egg(egg_turf)

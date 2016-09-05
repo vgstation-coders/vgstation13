@@ -15,7 +15,7 @@
 		return
 	if (monkeyizing)
 		return
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
 
 	..()
@@ -23,15 +23,15 @@
 	if (stat != DEAD) //still breathing
 
 		// GROW!
-		if(growth < LARVA_GROW_TIME)
+		if (growth < LARVA_GROW_TIME)
 			growth++
 
 		//First, resolve location and get a breath
-		if(air_master.current_cycle%4==2)
+		if (air_master.current_cycle%4==2)
 			//Only try to take a breath every 4 seconds, unless suffocating
 			spawn(0) breathe()
 		else //Still give containing object the chance to interact
-			if(istype(loc, /obj/))
+			if (istype(loc, /obj/))
 				var/obj/location_as_object = loc
 				location_as_object.handle_internal_lifeform(src, 0)
 		//Mutations and radiation
@@ -58,13 +58,13 @@
 	update_canmove()
 
 	// Grabbing
-	for(var/obj/item/weapon/grab/G in src)
+	for (var/obj/item/weapon/grab/G in src)
 		G.process()
 
 	//some kind of bug in canmove() isn't properly calling update_icons, so this is here as a placeholder
 	update_icons()
 
-	if(client)
+	if (client)
 		handle_regular_hud_updates()
 
 
@@ -73,22 +73,22 @@
 	proc/breathe()
 
 
-		if(reagents.has_reagent(LEXORIN))
+		if (reagents.has_reagent(LEXORIN))
 			return
-		if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell))
+		if (istype(loc, /obj/machinery/atmospherics/unary/cryo_cell))
 			return
 
 		var/datum/gas_mixture/environment = loc.return_air()
 		var/datum/gas_mixture/breath
 		// HACK NEED CHANGING LATER
-		if(health < 0)
+		if (health < 0)
 			losebreath++
 
-		if(losebreath>0) //Suffocating so do not take a breath
+		if (losebreath>0) //Suffocating so do not take a breath
 			losebreath--
 			if (prob(75)) //High chance of gasping for air
 				spawn emote("gasp")
-			if(istype(loc, /obj/))
+			if (istype(loc, /obj/))
 				var/obj/location_as_object = loc
 				location_as_object.handle_internal_lifeform(src, 0)
 		else
@@ -96,11 +96,11 @@
 			breath = get_breath_from_internal(BREATH_VOLUME)
 
 			//No breath from internal atmosphere so get breath from location
-			if(!breath)
-				if(istype(loc, /obj/))
+			if (!breath)
+				if (istype(loc, /obj/))
 					var/obj/location_as_object = loc
 					breath = location_as_object.handle_internal_lifeform(src, BREATH_VOLUME)
-				else if(istype(loc, /turf/))
+				else if (istype(loc, /turf/))
 					var/breath_moles = 0
 					/*if(environment.return_pressure() > ONE_ATMOSPHERE)
 						// Loads of air around (pressure effect will be handled elsewhere), so lets just take a enough to fill our lungs at normal atmos pressure (using n = Pv/RT)
@@ -113,33 +113,33 @@
 					breath = loc.remove_air(breath_moles)
 
 					// Handle chem smoke effect  -- Doohl
-					for(var/obj/effect/effect/smoke/chem/smoke in view(1, src))
-						if(smoke.reagents.total_volume)
+					for (var/obj/effect/effect/smoke/chem/smoke in view(1, src))
+						if (smoke.reagents.total_volume)
 							smoke.reagents.reaction(src, INGEST)
 							spawn(5)
-								if(smoke)
+								if (smoke)
 									smoke.reagents.copy_to(src, 10) // I dunno, maybe the reagents enter the blood stream through the lungs?
 							break // If they breathe in the nasty stuff once, no need to continue checking
 
 
 			else //Still give containing object the chance to interact
-				if(istype(loc, /obj/))
+				if (istype(loc, /obj/))
 					var/obj/location_as_object = loc
 					location_as_object.handle_internal_lifeform(src, 0)
 
 		handle_breath(breath)
 
-		if(breath)
+		if (breath)
 			loc.assume_air(breath)
 
 
 	proc/get_breath_from_internal(volume_needed)
-		if(internal)
+		if (internal)
 			if (!contents.Find(internal))
 				internal = null
 			if (!wear_mask || !(wear_mask.flags & MASKINTERNALS) )
 				internal = null
-			if(internal)
+			if (internal)
 				if (internals)
 					internals.icon_state = "internal1"
 				return internal.remove_air_volume(volume_needed)
@@ -149,10 +149,10 @@
 		return null
 
 	proc/handle_breath(datum/gas_mixture/breath)
-		if((status_flags & GODMODE) || (flags & INVULNERABLE))
+		if ((status_flags & GODMODE) || (flags & INVULNERABLE))
 			return
 
-		if(!breath || (breath.total_moles == 0))
+		if (!breath || (breath.total_moles == 0))
 			//Aliens breathe in vaccuum
 			return 0
 
@@ -162,7 +162,7 @@
 		//Partial pressure of the toxins in our breath
 		var/Toxins_pp = (breath.toxins/breath.total_moles())*breath_pressure
 
-		if(Toxins_pp) // Detect toxins in air
+		if (Toxins_pp) // Detect toxins in air
 
 			AdjustPlasma(breath.toxins*250)
 			toxins_alert = max(toxins_alert, 1)
@@ -176,8 +176,8 @@
 		breath.toxins -= toxins_used
 		breath.oxygen += toxins_used
 
-		if(breath.temperature > (T0C+66) && !(M_RESIST_HEAT in mutations)) // Hot air hurts :(
-			if(prob(20))
+		if (breath.temperature > (T0C+66) && !(M_RESIST_HEAT in mutations)) // Hot air hurts :(
+			if (prob(20))
 				to_chat(src, "<span class='danger'>You feel a searing heat in your lungs !</span>")
 			fire_alert = max(fire_alert, 1)
 		else
@@ -189,22 +189,22 @@
 
 
 	proc/handle_chemicals_in_body()
-		if(reagents)
+		if (reagents)
 			reagents.metabolize(src)
 
-		if(M_FAT in mutations)
-			if(nutrition < 100)
-				if(prob(round((50 - nutrition) / 100)))
+		if (M_FAT in mutations)
+			if (nutrition < 100)
+				if (prob(round((50 - nutrition) / 100)))
 					to_chat(src, "<span class='notice'>You feel fit again!</span>")
 					mutations.Add(M_FAT)
 		else
-			if(nutrition > 500)
-				if(prob(5 + round((nutrition - LARVA_GROW_TIME) / 2)))
+			if (nutrition > 500)
+				if (prob(5 + round((nutrition - LARVA_GROW_TIME) / 2)))
 					to_chat(src, "<span class='danger'>You suddenly feel blubbery!</span>")
 					mutations.Add(M_FAT)
 
 		burn_calories(2*HUNGER_FACTOR / 3)
-		if(!stat)
+		if (!stat)
 			burn_calories(HUNGER_FACTOR / 3)
 		if (drowsyness > 0)
 			drowsyness = max(0, drowsyness - 1)
@@ -215,7 +215,7 @@
 
 		confused = max(0, confused - 1)
 		// decrement dizziness counter, clamped to 0
-		if(resting)
+		if (resting)
 			dizziness = max(0, dizziness - 5)
 			jitteriness = max(0, jitteriness - 5)
 		else
@@ -229,34 +229,34 @@
 	proc/handle_regular_status_updates()
 		updatehealth()
 
-		if(stat == DEAD)	//DEAD. BROWN BREAD. SWIMMING WITH THE SPESS CARP
+		if (stat == DEAD)	//DEAD. BROWN BREAD. SWIMMING WITH THE SPESS CARP
 			blinded = 1
 			silent = 0
 		else				//ALIVE. LIGHTS ARE ON
-			if(health < -25 || !has_brain())
+			if (health < -25 || !has_brain())
 				death()
 				blinded = 1
 				silent = 0
 				return 1
 
 			//UNCONSCIOUS. NO-ONE IS HOME
-			if( (getOxyLoss() > 25) || (0 > health) )
+			if ( (getOxyLoss() > 25) || (0 > health) )
 				//if( health <= 20 && prob(1) )
 				//	spawn(0)
 				//		emote("gasp")
-				if(!reagents.has_reagent(INAPROVALINE))
+				if (!reagents.has_reagent(INAPROVALINE))
 					adjustOxyLoss(1)
 				Paralyse(3)
 
-			if(paralysis)
+			if (paralysis)
 				AdjustParalysis(-2)
 				blinded = 1
 				stat = UNCONSCIOUS
-			else if(sleeping)
+			else if (sleeping)
 				sleeping = max(sleeping-1, 0)
 				blinded = 1
 				stat = UNCONSCIOUS
-				if( prob(10) && health )
+				if ( prob(10) && health )
 					spawn(0)
 						emote("hiss_")
 			//CONSCIOUS
@@ -264,40 +264,40 @@
 				stat = CONSCIOUS
 
 			/*	What in the living hell is this?*/
-			if(move_delay_add > 0)
+			if (move_delay_add > 0)
 				move_delay_add = max(0, move_delay_add - rand(1, 2))
 
 			//Eyes
-			if(sdisabilities & BLIND)	//disabled-blind, doesn't get better on its own
+			if (sdisabilities & BLIND)	//disabled-blind, doesn't get better on its own
 				blinded = 1
-			else if(eye_blind)			//blindness, heals slowly over time
+			else if (eye_blind)			//blindness, heals slowly over time
 				eye_blind = max(eye_blind-1,0)
 				blinded = 1
-			else if(eye_blurry)	//blurry eyes heal slowly
+			else if (eye_blurry)	//blurry eyes heal slowly
 				eye_blurry = max(eye_blurry-1, 0)
 
 			//Ears
-			if(sdisabilities & DEAF)	//disabled-deaf, doesn't get better on its own
+			if (sdisabilities & DEAF)	//disabled-deaf, doesn't get better on its own
 				ear_deaf = max(ear_deaf, 1)
-			else if(ear_deaf)			//deafness, heals slowly over time
+			else if (ear_deaf)			//deafness, heals slowly over time
 				ear_deaf = max(ear_deaf-1, 0)
-			else if(ear_damage < 25)	//ear damage heals slowly under this threshold.
+			else if (ear_damage < 25)	//ear damage heals slowly under this threshold.
 				ear_damage = max(ear_damage-0.05, 0)
 
 			//Other
-			if(stunned)
+			if (stunned)
 				AdjustStunned(-1)
 
-			if(weakened)
+			if (weakened)
 				weakened = max(weakened-1,0)	//before you get mad Rockdtben: I done this so update_canmove isn't called multiple times
 
-			if(stuttering)
+			if (stuttering)
 				stuttering = max(stuttering-1, 0)
 
-			if(silent)
+			if (silent)
 				silent = max(silent-1, 0)
 
-			if(druggy)
+			if (druggy)
 				druggy = max(druggy-1, 0)
 		return 1
 
@@ -316,16 +316,16 @@
 
 		if (healths)
 			if (stat != 2)
-				switch(health)
-					if(25 to INFINITY)
+				switch (health)
+					if (25 to INFINITY)
 						healths.icon_state = "health0"
-					if(19 to 25)
+					if (19 to 25)
 						healths.icon_state = "health1"
-					if(13 to 19)
+					if (13 to 19)
 						healths.icon_state = "health2"
-					if(7 to 13)
+					if (7 to 13)
 						healths.icon_state = "health3"
-					if(0 to 7)
+					if (0 to 7)
 						healths.icon_state = "health4"
 					else
 						healths.icon_state = "health5"
@@ -346,7 +346,7 @@
 		if (client)
 			clear_fullscreens()
 
-			if(src.eye_blind || src.blinded)
+			if (src.eye_blind || src.blinded)
 				overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
 			if (src.disabilities & NEARSIGHTED)
 				overlay_fullscreen("impaired", /obj/screen/fullscreen/impaired)
@@ -360,7 +360,7 @@
 				if (!( machine.check_eye(src) ))
 					reset_view(null)
 			else
-				if(client && !client.adminobs)
+				if (client && !client.adminobs)
 					reset_view(null)
 
 		return 1

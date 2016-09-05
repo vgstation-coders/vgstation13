@@ -31,13 +31,13 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 	attached = attachedto
 
 	var/mob/M = attachedto
-	if(istype(M))
+	if (istype(M))
 		sight = M.sight
 		see_invisible = M.see_invisible
 
 /* An equally nonsense and good idea, keep stationary hearers from moving, but without a second list
 track virtualhearers how are you going to REMOVE virtualhearers
-	if(is_type_in_list(attachedto,stationary_hearers))
+	if (is_type_in_list(attachedto,stationary_hearers))
 		virtualhearers -= src
 */
 /mob/virtualhearer/Destroy()
@@ -49,7 +49,7 @@ track virtualhearers how are you going to REMOVE virtualhearers
 	return
 
 /mob/virtualhearer/Hear(var/datum/speech/speech, var/rendered_speech="")
-	if(attached)
+	if (attached)
 		attached.Hear(args)
 	else
 		returnToPool(src)
@@ -71,13 +71,13 @@ track virtualhearers how are you going to REMOVE virtualhearers
 
 /mob/proc/change_sight(adding, removing, copying)
 	var/oldsight = sight
-	if(copying)
+	if (copying)
 		sight = copying
-	if(adding)
+	if (adding)
 		sight |= adding
-	if(removing)
+	if (removing)
 		sight &= ~removing
-	if(sight != oldsight)
-		for(var/mob/virtualhearer/VH in virtualhearers)
-			if(VH.attached == src)
+	if (sight != oldsight)
+		for (var/mob/virtualhearer/VH in virtualhearers)
+			if (VH.attached == src)
 				VH.sight = sight

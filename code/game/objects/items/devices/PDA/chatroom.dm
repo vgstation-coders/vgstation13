@@ -12,5 +12,5 @@ var/list/chatrooms = list()
 	var/operator = "" // name of the operator
 
 /datum/chatroom/proc/attempt_connect(var/obj/item/device/pda/device, var/obj/password)
-	if(!device)
+	if (!device)
 		return

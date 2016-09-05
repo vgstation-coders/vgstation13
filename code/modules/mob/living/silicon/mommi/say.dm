@@ -10,9 +10,9 @@
 
 /mob/living/silicon/robot/mommi/handle_inherent_channels(var/datum/speech/speech, var/message_mode)
 	. = ..()
-	if(.)
+	if (.)
 		return .
-	if(src.keeper)
+	if (src.keeper)
 		speech.message = trim(speech.message)
 		if (!speech.message)
 			return
@@ -28,6 +28,6 @@
 		for (var/mob/S in player_list)
 			var/mob/living/silicon/robot/mommi/test = S
 			// TODO: Add test.damage_control_network == damage_control_network to first test.
-			if((istype(test) && test.keeper) || istype(S,/mob/dead/observer))
+			if ((istype(test) && test.keeper) || istype(S,/mob/dead/observer))
 				handle_render(S,rendered,src)
 		return 1

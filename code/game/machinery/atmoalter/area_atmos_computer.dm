@@ -29,7 +29,7 @@
 		return
 
 	attack_hand(var/mob/user as mob)
-		if(..(user))
+		if (..(user))
 			return
 		src.add_fingerprint(usr)
 		var/dat = {"
@@ -75,7 +75,7 @@
 				<font color="red">[status]</font><br>
 				<a href="?src=\ref[src];scan=1">Scan</a>
 				<table border="1" width="90%">"}
-		for(var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber in connectedscrubbers)
+		for (var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber in connectedscrubbers)
 			dat += {"
 					<tr>
 						<td>[scrubber.name]</td>
@@ -91,18 +91,18 @@
 		status = ""
 
 	Topic(href, href_list)
-		if(..())
+		if (..())
 			return
 		usr.set_machine(src)
 		src.add_fingerprint(usr)
 
 
-		if(href_list["scan"])
+		if (href_list["scan"])
 			scanscrubbers()
-		else if(href_list["toggle"])
+		else if (href_list["toggle"])
 			var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber = locate(href_list["scrub"])
 
-			if(!validscrubber(scrubber))
+			if (!validscrubber(scrubber))
 				spawn(20)
 					status = "ERROR: Couldn't connect to scrubber! (timeout)"
 					connectedscrubbers -= scrubber
@@ -113,7 +113,7 @@
 			scrubber.update_icon()
 
 	proc/validscrubber( var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber as obj )
-		if(!isobj(scrubber) || get_dist(scrubber.loc, src.loc) > src.range || scrubber.loc.z != src.loc.z)
+		if (!isobj(scrubber) || get_dist(scrubber.loc, src.loc) > src.range || scrubber.loc.z != src.loc.z)
 			return 0
 
 		return 1
@@ -122,12 +122,12 @@
 		connectedscrubbers = new()
 
 		var/found = 0
-		for(var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber in range(range, src.loc))
-			if(istype(scrubber))
+		for (var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber in range(range, src.loc))
+			if (istype(scrubber))
 				found = 1
 				connectedscrubbers += scrubber
 
-		if(!found)
+		if (!found)
 			status = "ERROR: No scrubber found!"
 
 		src.updateUsrDialog()
@@ -137,23 +137,23 @@
 	zone = "This computer is working in a wired network limited to this area."
 
 	validscrubber( var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber as obj )
-		if(!isobj(scrubber))
+		if (!isobj(scrubber))
 			return 0
 
 		/*
 		wow this is stupid, someone help me
 		*/
 		var/turf/T_src = get_turf(src)
-		if(!T_src.loc)
+		if (!T_src.loc)
 			return 0
 		var/area/A_src = T_src.loc
 
 		var/turf/T_scrub = get_turf(scrubber)
-		if(!T_scrub.loc)
+		if (!T_scrub.loc)
 			return 0
 		var/area/A_scrub = T_scrub.loc
 
-		if(A_scrub != A_src)
+		if (A_scrub != A_src)
 			return 0
 
 		return 1
@@ -164,19 +164,19 @@
 		var/found = 0
 
 		var/turf/T = get_turf(src)
-		if(!T.loc)
+		if (!T.loc)
 			return
 		var/area/A = get_area_master(T)
-		for(var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber in machines)
+		for (var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber in machines)
 			var/turf/T2 = get_turf(scrubber)
-			if(T2 && T2.loc)
+			if (T2 && T2.loc)
 				var/area/A2 = T2.loc
-				if(istype(A2) && A2 == A )
+				if (istype(A2) && A2 == A )
 					connectedscrubbers += scrubber
 					found = 1
 
 
-		if(!found)
+		if (!found)
 			status = "ERROR: No scrubber found!"
 
 		src.updateUsrDialog()

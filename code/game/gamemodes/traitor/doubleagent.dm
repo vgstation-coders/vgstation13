@@ -18,44 +18,44 @@
 
 /datum/game_mode/traitor/double_agents/post_setup()
 	var/i = 0
-	for(var/datum/mind/traitor in traitors)
+	for (var/datum/mind/traitor in traitors)
 		i++
-		if(i + 1 > traitors.len)
+		if (i + 1 > traitors.len)
 			i = 0
 		target_list[traitor] = traitors[i + 1]
 	..()
 
 /datum/game_mode/traitor/double_agents/pre_setup()
 
-	if(config.protect_roles_from_antagonist)
+	if (config.protect_roles_from_antagonist)
 		restricted_jobs += protected_jobs
 
 	var/list/possible_traitors = get_players_for_role(ROLE_TRAITOR)
 
 	// stop setup if no possible traitors
-	if(!possible_traitors.len)
+	if (!possible_traitors.len)
 		log_admin("Failed to set-up a round of double agents. Couldn't find any volunteers to be traitors.")
 		message_admins("Failed to set-up a round of double agents. Couldn't find any volunteers to be traitors.")
 		return 0
 
 	var/num_traitors = 1
 
-	if(config.traitor_scaling)
+	if (config.traitor_scaling)
 		num_traitors = max(required_enemies, round((num_players())/(traitor_scaling_coeff)))
 	else
 		num_traitors = Clamp(num_players(), required_enemies, traitors_possible)
 
-	for(var/datum/mind/player in possible_traitors)
-		for(var/job in restricted_jobs)
-			if(player.assigned_role == job)
+	for (var/datum/mind/player in possible_traitors)
+		for (var/job in restricted_jobs)
+			if (player.assigned_role == job)
 				possible_traitors -= player
 
-	if(possible_traitors.len < required_enemies) //fixes double agent starting with 1 traitor
+	if (possible_traitors.len < required_enemies) //fixes double agent starting with 1 traitor
 		log_admin("Failed to set-up a round of double agents. Couldn't find enough volunteers to be traitors.")
 		message_admins("Failed to set-up a round of double agents. Couldn't find enough volunteers to be traitors.")
 		return 0
 
-	for(var/j = 0, j < num_traitors, j++)
+	for (var/j = 0, j < num_traitors, j++)
 		if (!possible_traitors.len)
 			break
 		var/datum/mind/traitor = pick(possible_traitors)
@@ -63,11 +63,11 @@
 		traitor.special_role = "traitor"
 		possible_traitors.Remove(traitor)
 
-	if(!traitors.len)
+	if (!traitors.len)
 		log_admin("Failed to set-up a round of double agents. Couldn't find any volunteers to be traitors.")
 		message_admins("Failed to set-up a round of double agents. Couldn't find any volunteers to be traitors.")
 		return 0
-	if(traitors.len < required_enemies)
+	if (traitors.len < required_enemies)
 		log_admin("Failed to set-up a round of double agents. Couldn't find enough volunteers to be traitors.")
 		message_admins("Failed to set-up a round of double agents. Couldn't find enough volunteers to be traitors.")
 		return 0
@@ -78,36 +78,36 @@
 
 /datum/game_mode/traitor/double_agents/forge_traitor_objectives(var/datum/mind/traitor)
 
-	if(target_list.len > 1)
+	if (target_list.len > 1)
 		// Assassinate
 		var/datum/objective/assassinate/kill_objective = new
 		kill_objective.owner = traitor
 		kill_objective.target = target_list[traitor]
-		if(kill_objective.target && kill_objective.target != traitor)
+		if (kill_objective.target && kill_objective.target != traitor)
 			kill_objective.explanation_text = "Assassinate [kill_objective.target.current.real_name], the [kill_objective.target.special_role]."
 		else //Something went wrong, so give them a random assasinate objective
 			kill_objective.find_target()
 		traitor.objectives += kill_objective
 
-	if(prob(20))
+	if (prob(20))
 		var/datum/mind/protector = pick(traitors - traitor)
 
-		if(protector)
+		if (protector)
 			var/datum/objective/assassinate/kill_objective = new
 			kill_objective.owner = traitor
 			kill_objective.find_target()
 
 			//Make sure that the target exists, and that we don't already have an objective to protect the target
 			var/block_objective_generation = 0
-			if(!kill_objective.target)
+			if (!kill_objective.target)
 				block_objective_generation = 1
 			else
-				for(var/datum/objective/protect/P in traitor.objectives)
-					if(P.target == kill_objective.target)
+				for (var/datum/objective/protect/P in traitor.objectives)
+					if (P.target == kill_objective.target)
 						block_objective_generation = 1
 						break
 
-			if(!block_objective_generation)
+			if (!block_objective_generation)
 				kill_objective.explanation_text = "[kill_objective.explanation_text] Be wary, they may be under protection of another agent."
 				traitor.objectives += kill_objective
 
@@ -118,7 +118,7 @@
 				protector.objectives += protect_objective
 
 	// Escape
-	if(prob(15))
+	if (prob(15))
 		var/datum/objective/hijack/hijack_objective = new
 		hijack_objective.owner = traitor
 		traitor.objectives += hijack_objective
@@ -134,7 +134,7 @@
 /datum/game_mode/traitor/double_agents/greet_traitor(var/datum/mind/traitor)
 	to_chat(traitor.current, "<B><font size=3 color=red>You are the double agent.<br>Relations with the other groups in the Syndicate Coalition have gone south, take the other agents out before they do the same to you.</font></B>")
 	var/obj_count = 1
-	for(var/datum/objective/objective in traitor.objectives)
+	for (var/datum/objective/objective in traitor.objectives)
 		to_chat(traitor.current, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
 		obj_count++
 	traitor.current << sound('sound/voice/syndicate_intro.ogg')

@@ -9,12 +9,12 @@
 	return (BRUTELOSS|FIRELOSS)
 
 /obj/item/weapon/melee/energy/is_hot()
-	if(active)
+	if (active)
 		return heat_production
 	return 0
 
 /obj/item/weapon/melee/energy/is_sharp()
-	if(active)
+	if (active)
 		return sharpness
 	return 0
 
@@ -54,14 +54,14 @@
 
 
 /obj/item/weapon/melee/energy/sword/IsShield()
-	if(active)
+	if (active)
 		return 1
 	return 0
 
 /obj/item/weapon/melee/energy/sword/New()
 	..()
 	_color = pick("red","blue","green","purple")
-	if(!active_state)
+	if (!active_state)
 		active_state = base_state + _color
 	update_icon()
 
@@ -75,10 +75,10 @@
 	return
 
 /obj/item/weapon/melee/energy/sword/proc/toggleActive(mob/user, var/togglestate = "") //you can use togglestate to manually set the sword on or off
-	switch(togglestate)
-		if("on")
+	switch (togglestate)
+		if ("on")
 			active = 1
-		if("off")
+		if ("off")
 			active = 0
 		else
 			active = !active
@@ -99,14 +99,14 @@
 	update_icon()
 
 /obj/item/weapon/melee/energy/sword/update_icon()
-	if(active && _color)
+	if (active && _color)
 		icon_state = active_state
 	else
 		icon_state = "[base_state][active]"
 
 /obj/item/weapon/melee/energy/sword/attackby(obj/item/weapon/W, mob/living/user)
 	..()
-	if(istype(W, /obj/item/weapon/melee/energy/sword))
+	if (istype(W, /obj/item/weapon/melee/energy/sword))
 		to_chat(user, "<span class='notice'>You attach the ends of the two energy swords, making a single double-bladed weapon! You're cool.</span>")
 		new /obj/item/weapon/dualsaber(user.loc)
 		qdel(W)
@@ -131,7 +131,7 @@
 
 
 /obj/item/weapon/melee/energy/sword/bsword/IsShield()
-	if(active)
+	if (active)
 		return 1
 	return 0
 
@@ -141,7 +141,7 @@
 	return
 
 /obj/item/weapon/melee/energy/sword/bsword/update_icon()
-	if(active)
+	if (active)
 		icon_state = active_state
 		name = "energized bananium sword"
 		desc = "Advanced technology from a long forgotten clown civilization."
@@ -151,7 +151,7 @@
 		desc = "It's yellow."
 
 /obj/item/weapon/melee/energy/sword/bsword/attackby(obj/item/weapon/W, mob/living/user)
-	if(istype(W, /obj/item/weapon/melee/energy/sword/bsword))
+	if (istype(W, /obj/item/weapon/melee/energy/sword/bsword))
 		to_chat(user, "<span class='notice'>You attach the ends of the two energized bananium swords, making a bushel bruiser! That's dangerous.</span>")
 		new /obj/item/weapon/dualsaber/bananabunch(user.loc)
 		qdel(W)

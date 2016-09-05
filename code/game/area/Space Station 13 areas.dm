@@ -71,10 +71,10 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 var/list/teleportlocs = list()
 
 proc/process_teleport_locs()
-	for(var/area/AR in areas)
-		if(istype(AR, /area/shuttle) || istype(AR, /area/syndicate_station) || istype(AR, /area/wizard_station))
+	for (var/area/AR in areas)
+		if (istype(AR, /area/shuttle) || istype(AR, /area/syndicate_station) || istype(AR, /area/wizard_station))
 			continue
-		if(teleportlocs.Find(AR.name))
+		if (teleportlocs.Find(AR.name))
 			continue
 		var/turf/picked = safepick(get_area_turfs(AR.type))
 		if (picked && picked.z == map.zMainStation)
@@ -86,10 +86,10 @@ proc/process_teleport_locs()
 var/list/ghostteleportlocs = list()
 
 proc/process_ghost_teleport_locs()
-	for(var/area/AR in areas)
-		if(ghostteleportlocs.Find(AR.name))
+	for (var/area/AR in areas)
+		if (ghostteleportlocs.Find(AR.name))
 			continue
-		if(istype(AR, /area/turret_protected/aisat) || istype(AR, /area/derelict) || istype(AR, /area/tdome))
+		if (istype(AR, /area/turret_protected/aisat) || istype(AR, /area/derelict) || istype(AR, /area/tdome))
 			ghostteleportlocs += AR.name
 			ghostteleportlocs[AR.name] = AR
 		var/turf/picked = safepick(get_area_turfs(AR.type))
@@ -102,8 +102,8 @@ proc/process_ghost_teleport_locs()
 var/global/list/adminbusteleportlocs = list()
 
 proc/process_adminbus_teleport_locs()
-	for(var/area/AR in areas)
-		if(adminbusteleportlocs.Find(AR.name))
+	for (var/area/AR in areas)
+		if (adminbusteleportlocs.Find(AR.name))
 			continue
 		var/turf/picked = safepick(get_area_turfs(AR.type))
 		if (picked)
@@ -1439,13 +1439,13 @@ proc/process_adminbus_teleport_locs()
 		..()
 
 		spawn(10) //let objects set up first
-			for(var/turf/turfToGrayscale in src)
-				if(turfToGrayscale.icon)
+			for (var/turf/turfToGrayscale in src)
+				if (turfToGrayscale.icon)
 					var/icon/newIcon = icon(turfToGrayscale.icon)
 					newIcon.GrayScale()
 					turfToGrayscale.icon = newIcon
-				for(var/obj/objectToGrayscale in turfToGrayscale) //1 level deep, means tables, apcs, locker, etc, but not locker contents
-					if(objectToGrayscale.icon)
+				for (var/obj/objectToGrayscale in turfToGrayscale) //1 level deep, means tables, apcs, locker, etc, but not locker contents
+					if (objectToGrayscale.icon)
 						var/icon/newIcon = icon(objectToGrayscale.icon)
 						newIcon.GrayScale()
 						objectToGrayscale.icon = newIcon
@@ -2267,16 +2267,16 @@ var/list/the_station_areas = list (
 	process()
 
 /area/beach/Entered(atom/movable/Obj,atom/OldLoc)
-	if(ismob(Obj))
-		if(Obj:client)
+	if (ismob(Obj))
+		if (Obj:client)
 			mysound.status = SOUND_UPDATE
 			Obj << mysound
 	return
 
 //This only works when using Move() to exit the area
 /area/beach/Exited(atom/movable/Obj)
-	if(ismob(Obj))
-		if(Obj:client)
+	if (ismob(Obj))
+		if (Obj:client)
 			mysound.status = SOUND_PAUSED | SOUND_UPDATE
 			Obj << mysound
 
@@ -2285,18 +2285,18 @@ var/list/the_station_areas = list (
 
 	var/sound/S = null
 	var/sound_delay = 0
-	if(prob(25))
+	if (prob(25))
 		S = sound(file=pick('sound/ambience/seag1.ogg','sound/ambience/seag2.ogg','sound/ambience/seag3.ogg'), volume=50)
 		sound_delay = rand(0, 50)
 
-	for(var/mob/living/carbon/human/H in src)
-//			if(H.s_tone > -55)	//ugh...nice/novel idea but please no.
+	for (var/mob/living/carbon/human/H in src)
+//			if (H.s_tone > -55)	//ugh...nice/novel idea but please no.
 //				H.s_tone--
 //				H.update_body()
-		if(H.client)
+		if (H.client)
 			mysound.status = SOUND_UPDATE
 			H << mysound
-			if(S)
+			if (S)
 				spawn(sound_delay)
 					H << S
 

@@ -10,22 +10,22 @@ Aoe turf spells have two useful flags: IGNOREDENSE and IGNORESPACE. These are ex
 	var/turf_override = null //To override choose targets (where default choose targets is used)
 
 /spell/aoe_turf/choose_targets(mob/user = usr)
-	if(turf_override)
+	if (turf_override)
 		var/list/override = list(turf_override)
 		turf_override = null
 		return override
 
 	var/list/targets = list()
 
-	for(var/turf/target in view_or_range(range, holder, selection_type))
-		if(!(target in view_or_range(inner_radius, holder, selection_type)))
-			if(target.density && (spell_flags & IGNOREDENSE))
+	for (var/turf/target in view_or_range(range, holder, selection_type))
+		if (!(target in view_or_range(inner_radius, holder, selection_type)))
+			if (target.density && (spell_flags & IGNOREDENSE))
 				continue
-			if(istype(target, /turf/space) && (spell_flags & IGNORESPACE))
+			if (istype(target, /turf/space) && (spell_flags & IGNORESPACE))
 				continue
 			targets += target
 
-	if(!targets.len) //doesn't waste the spell
+	if (!targets.len) //doesn't waste the spell
 		return
 
 	return targets

@@ -30,27 +30,27 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 	)
 
 /obj/machinery/mirror/proc/get_deflections(var/in_dir)
-	if(dir in list(EAST, WEST))
+	if (dir in list(EAST, WEST))
 		//testing("[src]: Detected orientation: \\, in_dir=[in_dir], dir=[dir]")
-		switch(in_dir) // \\ orientation
-			if(NORTH)
+		switch (in_dir) // \\ orientation
+			if (NORTH)
 				return list(EAST)
-			if(SOUTH)
+			if (SOUTH)
 				return list(WEST)
-			if(EAST)
+			if (EAST)
 				return list(NORTH)
-			if(WEST)
+			if (WEST)
 				return list(SOUTH)
 	else
 		//testing("[src]: Detected orientation: /, in_dir=[in_dir], dir=[dir]")
-		switch(in_dir) // / orientation
-			if(NORTH)
+		switch (in_dir) // / orientation
+			if (NORTH)
 				return list(WEST)
-			if(SOUTH)
+			if (SOUTH)
 				return list(EAST)
-			if(EAST)
+			if (EAST)
 				return list(SOUTH)
-			if(WEST)
+			if (WEST)
 				return list(NORTH)
 
 /obj/machinery/mirror/Destroy()
@@ -91,23 +91,23 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 
 /obj/machinery/mirror/wrenchAnchor(var/mob/user)
 	. = ..()
-	if(. == 1)
-		if(beams && beams.len)
+	if (. == 1)
+		if (beams && beams.len)
 			kill_all_beams()
 			update_beams()
 	return .
 
 /obj/machinery/mirror/beam_connect(var/obj/effect/beam/emitter/B)
-	if(istype(B))
-		if(B.HasSource(src))
+	if (istype(B))
+		if (B.HasSource(src))
 			return // Prevent infinite loops.
 		..()
 		powerchange_hooks[B]=B.power_change.Add(src,"on_power_change")
 		update_beams()
 
 /obj/machinery/mirror/beam_disconnect(var/obj/effect/beam/emitter/B)
-	if(istype(B))
-		if(B.HasSource(src))
+	if (istype(B))
+		if (B.HasSource(src))
 			return // Prevent infinite loops.
 		..()
 		B.power_change.Remove(powerchange_hooks[B])
@@ -120,8 +120,8 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 	update_beams()
 
 /obj/machinery/mirror/proc/kill_all_beams()
-	for(var/i=1;i<=4;i++)
-		if(i > emitted_beams.len)
+	for (var/i=1;i<=4;i++)
+		if (i > emitted_beams.len)
 			break
 		var/obj/effect/beam/beam = emitted_beams[i]
 		qdel(beam)
@@ -139,20 +139,20 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 	var/i = 0 // Iteration index.
 
 	// Initialize list.
-	for(i=1;i<=4;i++)
+	for (i=1;i<=4;i++)
 		beam_dirs[i]=list()
 
 	// For tracking recursion.
 	var/list/spawners = list(src)
 
 	//testing("Beam count: [beams.len]")
-	if(beams && beams.len>0 && anchored)
+	if (beams && beams.len>0 && anchored)
 		// Figure out what we're getting hit by.
 		//var/BN=0
-		for(var/obj/effect/beam/B in beams)
+		for (var/obj/effect/beam/B in beams)
 			//BN++
 			//testing("Processing beam #[BN]")
-			if(B.HasSource(src))
+			if (B.HasSource(src))
 				warning("Ignoring beam [B] due to recursion.")
 				continue // Prevent infinite loops.
 
@@ -166,17 +166,17 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 			// Figure out how much power to emit in each direction
 			var/list/deflections = get_deflections(beamdir)
 			var/splitpower=1
-			if(istype(B, /obj/effect/beam/emitter))
+			if (istype(B, /obj/effect/beam/emitter))
 				var/obj/effect/beam/emitter/EB=B
 				splitpower = round(EB.power/nsplits, 0.1) // Remember, round() is equivalent to other languages' floor().
-			if(splitpower<0.1)
+			if (splitpower<0.1)
 				continue
-			for(i=1;i<=nsplits;i++)
+			for (i=1;i<=nsplits;i++)
 				var/splitdir = deflections[i]
 				var/diridx = cardinal.Find(splitdir)
 				var/list/dirdata = beam_dirs[diridx]
 
-				if(!(B.type in dirdata))
+				if (!(B.type in dirdata))
 					dirdata[B.type] = splitpower
 					//testing(" splitdir=[splitdir], splitpower=[splitpower]")
 				else
@@ -186,16 +186,16 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 
 
 	// Emit beams.
-	if(emitted_beams.len < 4)
+	if (emitted_beams.len < 4)
 		emitted_beams.len = 4
-	for(i=1;i<=4;i++)
+	for (i=1;i<=4;i++)
 		var/cdir = cardinal[i]
 		var/list/dirdata = beam_dirs[i]
 		var/delbeam=0
 		var/obj/effect/beam/beam
-		if(dirdata.len > 0)
+		if (dirdata.len > 0)
 			//testing("cdir=[cdir]")
-			for(var/beamtype in dirdata)
+			for (var/beamtype in dirdata)
 				var/newbeam=0
 				beam = emitted_beams[i]
 				// If there's a beam and it's changed, nuke the existing beam.
@@ -205,28 +205,28 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 					beam=null
 
 				// No beam?  Make one.
-				if(!beam)
+				if (!beam)
 					beam = new beamtype(loc)
 					emitted_beams[i]=beam
 					beam.dir=cdir
 					newbeam=1
 
-				if(istype(beam, /obj/effect/beam/emitter))
+				if (istype(beam, /obj/effect/beam/emitter))
 					var/obj/effect/beam/emitter/EB=beam
 					EB.power = dirdata[beamtype]
 
 				overlays += beam.get_machine_underlay(cdir)
 
-				if(newbeam)
+				if (newbeam)
 					beam.emit(spawn_by=spawners)
-				else if(istype(beam, /obj/effect/beam/emitter))
+				else if (istype(beam, /obj/effect/beam/emitter))
 					var/obj/effect/beam/emitter/EB=beam
 					EB.set_power(EB.power)
 				break
 		else // dirdata.len == 0
 			delbeam=1
 		beam = emitted_beams[i] // One last check.
-		if(delbeam && beam)
+		if (delbeam && beam)
 			qdel(beam)
 			emitted_beams[i]=null
 

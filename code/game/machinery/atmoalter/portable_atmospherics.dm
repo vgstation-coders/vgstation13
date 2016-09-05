@@ -22,12 +22,12 @@
 	. = ..()
 	spawn()
 		var/obj/machinery/atmospherics/unary/portables_connector/port = locate() in loc
-		if(port)
+		if (port)
 			connect(port)
 			update_icon()
 
 /obj/machinery/portable_atmospherics/process()
-	if(!connected_port) //only react when pipe_network will not it do it for you
+	if (!connected_port) //only react when pipe_network will not it do it for you
 		//Allow for reactions
 		air_contents.react()
 	else
@@ -43,11 +43,11 @@
 
 /obj/machinery/portable_atmospherics/proc/connect(obj/machinery/atmospherics/unary/portables_connector/new_port)
 	//Make sure not already connected to something else
-	if(connected_port || !new_port || new_port.connected_device)
+	if (connected_port || !new_port || new_port.connected_device)
 		return 0
 
 	//Make sure are close enough for a valid connection
-	if(new_port.loc != loc)
+	if (new_port.loc != loc)
 		return 0
 
 	//Perform the connection
@@ -58,18 +58,18 @@
 
 	//Actually enforce the air sharing
 	var/datum/pipe_network/network = connected_port.return_network(src)
-	if(network && !network.gases.Find(air_contents))
+	if (network && !network.gases.Find(air_contents))
 		network.gases += air_contents
 		network.update = 1
 
 	return 1
 
 /obj/machinery/portable_atmospherics/proc/disconnect()
-	if(!connected_port)
+	if (!connected_port)
 		return 0
 
 	var/datum/pipe_network/network = connected_port.return_network(src)
-	if(network)
+	if (network)
 		network.gases -= air_contents
 
 	anchored = 0
@@ -90,13 +90,13 @@
 		if (src.holding)
 			return 0
 		var/obj/item/weapon/tank/T = W
-		if(user.drop_item(T, src))
+		if (user.drop_item(T, src))
 			src.holding = T
 			update_icon()
 			return 1
 
 	else if (iswrench(W))
-		if(connected_port)
+		if (connected_port)
 			disconnect()
 			to_chat(user, "<span class='notice'>You disconnect [name] from the port.</span>")
 			update_icon()
@@ -105,11 +105,11 @@
 			return 1
 		else
 			var/obj/machinery/atmospherics/unary/portables_connector/possible_port = locate(/obj/machinery/atmospherics/unary/portables_connector/) in loc
-			if(possible_port)
-				if(connect(possible_port))
+			if (possible_port)
+				if (connect(possible_port))
 					to_chat(user, "<span class='notice'>You connect [name] to the port.</span>")
 					var/datum/gas/sleeping_agent/S = locate() in src.air_contents.trace_gases
-					if(src.air_contents.toxins > 0 || (istype(S)))
+					if (src.air_contents.toxins > 0 || (istype(S)))
 						log_admin("[usr]([ckey(usr.key)]) connected a canister that contains \[[src.air_contents.toxins > 0 ? "Toxins" : ""] [istype(S) ? " N2O" : ""]\] to a connector_port at [loc.x], [loc.y], [loc.z]")
 					update_icon()
 					pixel_x = possible_port.pixel_x
@@ -119,11 +119,11 @@
 					to_chat(user, "<span class='notice'>[name] failed to connect to the port.</span>")
 					return 0
 			else
-				if(..())
+				if (..())
 					return 1 //Give a chance for the wrench flag if it is wrenchable, it's not snowflake if I say it isn't ya hear!
 				to_chat(user, "<span class='notice'>Nothing happens.</span>")
 				return 0
-	if(..()) //Let the other machine flags have a shot
+	if (..()) //Let the other machine flags have a shot
 		return 1
 
 	else if ((istype(W, /obj/item/device/analyzer)) && get_dist(user, src) <= 1)

@@ -61,7 +61,7 @@ var/global/datum/controller/processScheduler/processScheduler
 
 /datum/controller/processScheduler/proc/setup()
 	// There can be only one
-	if(processScheduler && (processScheduler != src))
+	if (processScheduler && (processScheduler != src))
 		del(src)
 		return 0
 
@@ -80,7 +80,7 @@ var/global/datum/controller/processScheduler/processScheduler
 		process()
 
 /datum/controller/processScheduler/proc/process()
-	while(isRunning)
+	while (isRunning)
 		checkRunningProcesses()
 		queueProcesses()
 		runQueuedProcesses()
@@ -90,7 +90,7 @@ var/global/datum/controller/processScheduler/processScheduler
 	isRunning = 0
 
 /datum/controller/processScheduler/proc/checkRunningProcesses()
-	for(var/datum/controller/process/p in running)
+	for (var/datum/controller/process/p in running)
 		p.update()
 
 		if (isnull(p)) // Process was killed
@@ -100,16 +100,16 @@ var/global/datum/controller/processScheduler/processScheduler
 		var/previousStatus = p.getPreviousStatus()
 
 		// Check status changes
-		if(status != previousStatus)
+		if (status != previousStatus)
 			//Status changed.
-			switch(status)
-				if(PROCESS_STATUS_PROBABLY_HUNG)
+			switch (status)
+				if (PROCESS_STATUS_PROBABLY_HUNG)
 					message_admins("Process '[p.name]' may be hung.")
-				if(PROCESS_STATUS_HUNG)
+				if (PROCESS_STATUS_HUNG)
 					message_admins("Process '[p.name]' is hung and will be restarted.")
 
 /datum/controller/processScheduler/proc/queueProcesses()
-	for(var/datum/controller/process/p in processes)
+	for (var/datum/controller/process/p in processes)
 		// Don't double-queue, don't queue running processes
 		if (p.disabled || p.running || p.queued || !p.idle)
 			continue
@@ -123,7 +123,7 @@ var/global/datum/controller/processScheduler/processScheduler
 			setQueuedProcessState(p)
 
 /datum/controller/processScheduler/proc/runQueuedProcesses()
-	for(var/datum/controller/process/p in queued)
+	for (var/datum/controller/process/p in queued)
 		runProcess(p)
 
 /datum/controller/processScheduler/proc/addProcess(var/datum/controller/process/process)
@@ -237,7 +237,7 @@ var/global/datum/controller/processScheduler/processScheduler
 
 	var/lastRunTime = time - last_start[process]
 
-	if(lastRunTime < 0)
+	if (lastRunTime < 0)
 		lastRunTime = 0
 
 	recordRunTime(process, lastRunTime)
@@ -248,7 +248,7 @@ var/global/datum/controller/processScheduler/processScheduler
  */
 /datum/controller/processScheduler/proc/recordRunTime(var/datum/controller/process/process, time)
 	last_run_time[process] = time
-	if(time > highest_run_time[process])
+	if (time > highest_run_time[process])
 		highest_run_time[process] = time
 
 	var/list/lastTwenty = last_twenty_run_times[process]
@@ -266,11 +266,11 @@ var/global/datum/controller/processScheduler/processScheduler
 
 	var/t = 0
 	var/c = 0
-	for(var/time in lastTwenty)
+	for (var/time in lastTwenty)
 		t += time
 		c++
 
-	if(c > 0)
+	if (c > 0)
 		return t / c
 	return c
 

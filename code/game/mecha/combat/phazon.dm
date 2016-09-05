@@ -30,9 +30,9 @@
 	return
 
 /obj/mecha/combat/phazon/Bump(var/atom/obstacle)
-	if(phasing && get_charge()>=phasing_energy_drain)
+	if (phasing && get_charge()>=phasing_energy_drain)
 		spawn()
-			if(can_move)
+			if (can_move)
 				can_move = 0
 				flick("phazon-phase", src)
 				src.forceMove(get_step(src,src.dir))
@@ -44,7 +44,7 @@
 	return
 
 /obj/mecha/combat/phazon/click_action(atom/target,mob/user)
-	if(phasing)
+	if (phasing)
 		src.occupant_message("Unable to interact with objects while phasing")
 		return
 	else

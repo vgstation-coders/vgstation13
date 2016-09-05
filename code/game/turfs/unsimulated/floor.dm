@@ -4,21 +4,21 @@
 	icon_state = "Floor3"
 
 /turf/unsimulated/floor/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			new/obj/effect/decal/cleanable/soot(src)
-		if(2.0)
-			if(prob(65))
+		if (2.0)
+			if (prob(65))
 				new/obj/effect/decal/cleanable/soot(src)
-		if(3.0)
-			if(prob(20))
+		if (3.0)
+			if (prob(20))
 				new/obj/effect/decal/cleanable/soot(src)
 
 /turf/unsimulated/floor/attack_paw(user as mob)
 	return src.attack_hand(user)
 
 /turf/unsimulated/floor/cultify()
-	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
+	if ((icon_state != "cult")&&(icon_state != "cult-narsie"))
 		name = "engraved floor"
 		icon_state = "cult"
 		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1,anim_plane = OBJ_PLANE)
@@ -42,7 +42,7 @@
 /turf/unsimulated/floor/mars/New()
 	..()
 
-	if(prob(30))
+	if (prob(30))
 		icon_state = "ironsand[rand(1,15)]"
 
 /turf/unsimulated/floor/mars/air

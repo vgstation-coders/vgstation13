@@ -14,7 +14,7 @@
 	projectile_type = "/obj/item/projectile/ion"
 
 /obj/item/weapon/gun/energy/ionrifle/emp_act(severity)
-	if(severity <= 2)
+	if (severity <= 2)
 		power_supply.use(round(power_supply.maxcharge / severity))
 		update_icon()
 	else
@@ -65,10 +65,10 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 
 /obj/item/weapon/gun/energy/staff/process()
 	charge_tick++
-	if(charge_tick < 4)
+	if (charge_tick < 4)
 		return 0
 	charge_tick = 0
-	if(!power_supply)
+	if (!power_supply)
 		return 0
 	power_supply.give(200)
 	return 1
@@ -77,20 +77,20 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 	return
 
 /obj/item/weapon/gun/energy/staff/process_chambered()
-	if(!..())
+	if (!..())
 		return 0
 	var/obj/item/projectile/change/P=in_chamber
-	if(P && istype(P))
+	if (P && istype(P))
 		P.changetype=changetype
 	return 1
 
 /obj/item/weapon/gun/energy/staff/attack_self(var/mob/living/user)
-	if(world.time < next_changetype)
+	if (world.time < next_changetype)
 		to_chat(user, "<span class='warning'>[src] is still recharging.</span>")
 		return
 
 	var/selected = input("You squint at the dial conspicuously mounted on the side of your staff.","Staff of Change") as null|anything in list("random")+available_staff_transforms
-	if(!selected)
+	if (!selected)
 		return
 
 	if (selected == "furry")
@@ -98,8 +98,8 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 	else
 		to_chat(user, "<span class='info'>You have selected to make your next victim have a [selected] form.</span>")
 
-	switch(selected)
-		if("random")
+	switch (selected)
+		if ("random")
 			changetype=null
 		else
 			changetype=selected
@@ -133,25 +133,25 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 
 /obj/item/weapon/gun/energy/staff/destruction_wand/process()
 	..()
-	if(power_supply.charge == power_supply.maxcharge && !lifekiller && !power_notice)
-		if(istype(src.loc, /mob/living/carbon))
+	if (power_supply.charge == power_supply.maxcharge && !lifekiller && !power_notice)
+		if (istype(src.loc, /mob/living/carbon))
 			var/mob/living/carbon/C = src.loc
 			to_chat(C, "<span class='notice'>[src] pulses, full of energy.</span>")
 			power_notice = 1
-	else if(power_supply.charge < power_supply.maxcharge)
+	else if (power_supply.charge < power_supply.maxcharge)
 		power_notice = 0
 
 /obj/item/weapon/gun/energy/staff/destruction_wand/attack(atom/target as mob|obj|turf|area, mob/living/user as mob, def_zone)
-	if(target == user && !mouthshoot)
-		if(!(power_supply.charge == charge_cost || lifekiller))
-			if(!lifekiller)
+	if (target == user && !mouthshoot)
+		if (!(power_supply.charge == charge_cost || lifekiller))
+			if (!lifekiller)
 				to_chat(user, "<span class='notice'>[src] fizzles quietly.</span>")
 			else
 				to_chat(user, "<span class='warning'>[src] is not ready to fire again!</span>")
 			return
 		mouthshoot = 1
 		target.visible_message("<span class='warning'>[user] turns [src] on themself, ready to invoke its power...</span>")
-		if(!do_after(user,src, 40))
+		if (!do_after(user,src, 40))
 			target.visible_message("<span class='notice'>[user] decided life was worth living</span>")
 			mouthshoot = 0
 			return
@@ -165,17 +165,17 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 		src.Fire(target,user,0,0,0)
 
 /obj/item/weapon/gun/energy/staff/destruction_wand/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
-	if(power_supply.charge == charge_cost || lifekiller)
-		if(!istype(target, /turf/simulated/wall) && !istype(target, /turf/simulated/floor))
-			if(!istype(target, /mob/living))
-				if(!target.singularity_act())
+	if (power_supply.charge == charge_cost || lifekiller)
+		if (!istype(target, /turf/simulated/wall) && !istype(target, /turf/simulated/floor))
+			if (!istype(target, /mob/living))
+				if (!target.singularity_act())
 					to_chat(user, "<span class='notice'>This entity is too powerful to be destroyed!</span>")
 					return
-			else if(target.flags & INVULNERABLE)
+			else if (target.flags & INVULNERABLE)
 				to_chat(user, "<span class='notice'>This entity is too powerful to be destroyed!</span>")
 				return
-		if(istype(target, /mob/living))
-			if(!lifekiller)
+		if (istype(target, /mob/living))
+			if (!lifekiller)
 				to_chat(user, "<span class='notice'>[src] fizzles quietly.</span>")
 				return
 			var/mob/living/L = target
@@ -185,18 +185,18 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 								 "<span class='warning'>You destroy [target] with [src]!</span>")
 			playsound(user, fire_sound, 50, 1)
 			power_supply.use(charge_cost)
-		else if(istype(target, /turf))
-			if(istype(target, /turf/simulated/wall))
+		else if (istype(target, /turf))
+			if (istype(target, /turf/simulated/wall))
 				user.visible_message("<span class='warning'>[user] erases the [target.name] with [src]!</span>", \
 									 "<span class='warning'>You erase the [target.name] with [src]!</span>")
 				playsound(user, fire_sound, 50, 1)
 				power_supply.use(charge_cost)
-				if(istype(target, /turf/simulated/wall/r_wall))
+				if (istype(target, /turf/simulated/wall/r_wall))
 					target.ex_act(1.0)
 				else
 					var/turf/simulated/wall/W = target
 					W.dismantle_wall(1,1)
-			else if(istype(target, /turf/simulated/floor))
+			else if (istype(target, /turf/simulated/floor))
 				to_chat(user, "<span class='notice'>[src] fizzles quietly.</span>")
 				return
 			else
@@ -238,10 +238,10 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 
 /obj/item/weapon/gun/energy/floragun/process()
 	charge_tick++
-	if(charge_tick < 4)
+	if (charge_tick < 4)
 		return 0
 	charge_tick = 0
-	if(!power_supply)
+	if (!power_supply)
 		return 0
 	power_supply.give(100)
 	update_icon()
@@ -249,25 +249,25 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 
 /obj/item/weapon/gun/energy/floragun/process_chambered()
 	. = ..()
-	if(istype(in_chamber, /obj/item/projectile/energy/floramut))
+	if (istype(in_chamber, /obj/item/projectile/energy/floramut))
 		var/obj/item/projectile/energy/floramut/P = in_chamber
 		P.mutstrength = src.mutstrength
 
 /obj/item/weapon/gun/energy/floragun/attack_self(mob/living/user as mob)
-	switch(mode)
-		if(0)
+	switch (mode)
+		if (0)
 			mode = 1
 			charge_cost = 100
 			to_chat(user, "<span class='warning'>The [src.name] is now set to improve harvests.</span>")
 			projectile_type = "/obj/item/projectile/energy/florayield"
 			modifystate = "florayield"
-		if(1)
+		if (1)
 			mode = 0
 			charge_cost = mutstrength * 10
 			to_chat(user, "<span class='warning'>The [src.name] is now set to induce mutations.</span>")
 			projectile_type = "/obj/item/projectile/energy/floramut"
 			modifystate = "floramut"
-		if(2)
+		if (2)
 			to_chat(user, "<span class='warning'>The [src.name] appears to be locked into one mode.</span>")
 			return
 	update_icon()
@@ -276,7 +276,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 /obj/item/weapon/gun/energy/floragun/verb/SetMutationStrength()
 	set name = "Set mutation strength"
 	set category = "Object"
-	if(mode == 2)
+	if (mode == 2)
 		mutstrength = input(usr, "Enter new mutation strength level (15-25):", "Somatoray Gamma Ray Threshold", mutstrength) as num
 		mutstrength = Clamp(round(mutstrength), 15, 25)
 	else
@@ -284,7 +284,7 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 		mutstrength = Clamp(round(mutstrength), 1, 15)
 
 /obj/item/weapon/gun/energy/floragun/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(isEmag(W) || issolder(W))
+	if (isEmag(W) || issolder(W))
 		if (mode == 2)
 			to_chat(user, "The safeties are already de-activated.")
 		else
@@ -299,9 +299,9 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 			update_icon()
 
 /obj/item/weapon/gun/energy/floragun/afterattack(obj/target, mob/user, flag)
-	if(flag && istype(target,/obj/machinery/portable_atmospherics/hydroponics))
+	if (flag && istype(target,/obj/machinery/portable_atmospherics/hydroponics))
 		var/obj/machinery/portable_atmospherics/hydroponics/tray = target
-		if(process_chambered())
+		if (process_chambered())
 			user.visible_message("<span class='danger'> \The [user] fires \the [src] into \the [tray]!</span>")
 			Fire(target,user)
 		return
@@ -331,10 +331,10 @@ var/available_staff_transforms=list("monkey","robot","slime","xeno","human","fur
 
 /obj/item/weapon/gun/energy/meteorgun/process()
 	charge_tick++
-	if(charge_tick < recharge_time)
+	if (charge_tick < recharge_time)
 		return 0
 	charge_tick = 0
-	if(!power_supply)
+	if (!power_supply)
 		return 0
 	power_supply.give(100)
 
@@ -368,7 +368,7 @@ obj/item/weapon/gun/energy/staff/focus
 	charge_cost = 100
 
 obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
-	if(projectile_type == "/obj/item/projectile/forcebolt")
+	if (projectile_type == "/obj/item/projectile/forcebolt")
 		charge_cost = 250
 		to_chat(user, "<span class='warning'>The [src.name] will now strike a small area.</span>")
 		projectile_type = "/obj/item/projectile/forcebolt/strong"
@@ -396,7 +396,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	..()
 */
 /obj/item/weapon/gun/energy/kinetic_accelerator/attack_self(var/mob/living/user/L)
-	if(overheat || recent_reload)
+	if (overheat || recent_reload)
 		return
 	power_supply.give(500)
 	playsound(src.loc, 'sound/weapons/shotgunpump.ogg', 60, 1)
@@ -429,15 +429,15 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/process() //Every [recharge_time] ticks, recharge a shot for the cyborg
 	charge_tick++
-	if(charge_tick < 3)
+	if (charge_tick < 3)
 		return 0
 	charge_tick = 0
 
-	if(!power_supply)
+	if (!power_supply)
 		return 0 //sanity
-	if(isrobot(src.loc))
+	if (isrobot(src.loc))
 		var/mob/living/silicon/robot/R = src.loc
-		if(R && R.cell)
+		if (R && R.cell)
 			R.cell.use(charge_cost) 		//Take power from the borg...
 			power_supply.give(charge_cost)	//... to recharge the shot
 
@@ -445,7 +445,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	return 1
 
 /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg/restock()
-	if(power_supply.charge < power_supply.maxcharge)
+	if (power_supply.charge < power_supply.maxcharge)
 		power_supply.give(charge_cost)
 		update_icon()
 	else
@@ -473,10 +473,10 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 
 /obj/item/weapon/gun/energy/radgun/process()
 	charge_tick++
-	if(charge_tick < 4)
+	if (charge_tick < 4)
 		return 0
 	charge_tick = 0
-	if(!power_supply)
+	if (!power_supply)
 		return 0
 	power_supply.give(100)
 	update_icon()
@@ -516,11 +516,11 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	power_supply.charge = 0
 
 /obj/item/weapon/gun/energy/bison/attack_self(mob/user as mob)
-	if(pumping || !power_supply)
+	if (pumping || !power_supply)
 		return
 	pumping = 1
 	power_supply.charge = min(power_supply.charge + 200,power_supply.maxcharge)
-	if(power_supply.charge >= power_supply.maxcharge)
+	if (power_supply.charge >= power_supply.maxcharge)
 		playsound(get_turf(src), 'sound/machines/click.ogg', 25, 1)
 		to_chat(user, "<span class='rose'>You pull the pump at the back of the gun. Looks like the inner battery is fully charged now.</span>")
 	else
@@ -531,7 +531,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	update_icon()
 
 /obj/item/weapon/gun/energy/bison/update_icon()
-	if(power_supply.charge >= power_supply.maxcharge)
+	if (power_supply.charge >= power_supply.maxcharge)
 		icon_state = "bison100"
 	else if (power_supply.charge > 0)
 		icon_state = "bison50"
@@ -573,18 +573,18 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	var/maxlevel = power_supply.maxcharge
 	var/level = power_supply.charge
 	var/newlevel = 0
-	if(level == maxlevel)
+	if (level == maxlevel)
 		newlevel = SPUR_FULL_POWER
-	else if(level >= ((maxlevel/3)*2))
+	else if (level >= ((maxlevel/3)*2))
 		newlevel = SPUR_HIGH_POWER
-	else if(level >= (maxlevel/3))
+	else if (level >= (maxlevel/3))
 		newlevel = SPUR_MEDIUM_POWER
-	else if(level >= charge_cost)
+	else if (level >= charge_cost)
 		newlevel = SPUR_LOW_POWER
 	else
 		newlevel = SPUR_NO_POWER
 
-	if(firelevel >= newlevel)
+	if (firelevel >= newlevel)
 		firelevel = newlevel
 		set_firesound()
 		return
@@ -592,32 +592,32 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	firelevel = newlevel
 	set_firesound()
 	var/levelupsound = null
-	switch(firelevel)
-		if(SPUR_LOW_POWER)
+	switch (firelevel)
+		if (SPUR_LOW_POWER)
 			levelupsound = 'sound/weapons/spur_chargelow.ogg'
-		if(SPUR_MEDIUM_POWER)
+		if (SPUR_MEDIUM_POWER)
 			levelupsound = 'sound/weapons/spur_chargemed.ogg'
-		if(SPUR_HIGH_POWER)
+		if (SPUR_HIGH_POWER)
 			levelupsound = 'sound/weapons/spur_chargehigh.ogg'
-		if(SPUR_FULL_POWER)
+		if (SPUR_FULL_POWER)
 			levelupsound = 'sound/weapons/spur_chargefull.ogg'
 
-	if(levelupsound)
-		for(var/mob/M in get_turf(src))
+	if (levelupsound)
+		for (var/mob/M in get_turf(src))
 			M.playsound_local(M, levelupsound, 100, 0, null, FALLOFF_SOUNDS, 0)
 			spawn(1)
 				M.playsound_local(M, levelupsound, 75, 0, null, FALLOFF_SOUNDS, 0)
 
 
 /obj/item/weapon/gun/energy/polarstar/proc/set_firesound()
-	switch(firelevel)
-		if(SPUR_HIGH_POWER,SPUR_FULL_POWER)
+	switch (firelevel)
+		if (SPUR_HIGH_POWER,SPUR_FULL_POWER)
 			fire_sound = 'sound/weapons/spur_high.ogg'
 			recoil = 1
-		if(SPUR_MEDIUM_POWER)
+		if (SPUR_MEDIUM_POWER)
 			fire_sound = 'sound/weapons/spur_medium.ogg'
 			recoil = 0
-		if(SPUR_LOW_POWER,SPUR_NO_POWER)
+		if (SPUR_LOW_POWER,SPUR_NO_POWER)
 			fire_sound = 'sound/weapons/spur_low.ogg'
 			recoil = 0
 	return
@@ -646,10 +646,10 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 
 /obj/item/weapon/gun/energy/polarstar/spur/process()
 	charge_tick++
-	if(charge_tick < 2)
+	if (charge_tick < 2)
 		return 0
 	charge_tick = 0
-	if(!power_supply)
+	if (!power_supply)
 		return 0
 	power_supply.give(100)
 	levelChange()

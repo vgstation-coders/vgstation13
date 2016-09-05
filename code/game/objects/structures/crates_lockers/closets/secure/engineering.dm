@@ -12,7 +12,7 @@
 	New()
 		..()
 		sleep(2)
-		if(prob(50))
+		if (prob(50))
 			new /obj/item/weapon/storage/backpack/industrial(src)
 		else
 			new /obj/item/weapon/storage/backpack/satchel_eng(src)
@@ -106,7 +106,7 @@
 	New()
 		..()
 		sleep(2)
-		if(prob(50))
+		if (prob(50))
 			new /obj/item/weapon/storage/backpack/industrial(src)
 		else
 			new /obj/item/weapon/storage/backpack/satchel_eng(src)
@@ -137,7 +137,7 @@
 	New()
 		..()
 		sleep(2)
-		if(prob(50))
+		if (prob(50))
 			new /obj/item/weapon/storage/backpack(src)
 		else
 			new /obj/item/weapon/storage/backpack/satchel_norm(src)
@@ -172,7 +172,7 @@
 	New()
 		..()
 		sleep(2)
-		if(prob(50))
+		if (prob(50))
 			new /obj/item/weapon/storage/backpack/industrial(src)
 		else
 			new /obj/item/weapon/storage/backpack/satchel_eng(src)
@@ -188,7 +188,7 @@
 		new /obj/item/device/assembly_frame(src)
 		new /obj/item/device/assembly_frame(src)
 
-		if(prob(50))
+		if (prob(50))
 			new /obj/item/clothing/head/welding(src)
 		else
 			new /obj/item/clothing/glasses/welding(src)
@@ -213,12 +213,12 @@
 		new /obj/machinery/power/supermatter/shard(src)
 
 /obj/structure/closet/crate/secure/large/reinforced/shard/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover,/obj/machinery/power/supermatter))
+	if (istype(mover,/obj/machinery/power/supermatter))
 		return 1
 	. = ..()
 
 /obj/structure/closet/crate/secure/large/reinforced/shard/can_close()
-	for(var/obj/machinery/power/supermatter/S in loc)
-		if(S.damage) //This is what I like to call predicting the metagame
+	for (var/obj/machinery/power/supermatter/S in loc)
+		if (S.damage) //This is what I like to call predicting the metagame
 			return 0
 	return ..()

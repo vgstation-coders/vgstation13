@@ -66,7 +66,7 @@
 
 
 /obj/machinery/computer/arcade/proc/import_game_data(var/obj/item/weapon/circuitboard/arcade/A)
-	if(!A || !A.game_data || !A.game_data.len)
+	if (!A || !A.game_data || !A.game_data.len)
 		return
 	name = A.game_data["name"]
 	emagged = A.game_data["emagged"]
@@ -80,9 +80,9 @@
 	blocked = A.game_data["blocked"]
 
 /obj/machinery/computer/arcade/proc/export_game_data(var/obj/item/weapon/circuitboard/arcade/A)
-	if(!A)
+	if (!A)
 		return
-	if(!A.game_data)
+	if (!A.game_data)
 		A.game_data = list()
 	A.game_data.len = 0
 	A.game_data["name"] = name
@@ -105,7 +105,7 @@
 	return src.attack_hand(user)
 
 /obj/machinery/computer/arcade/attack_hand(mob/user as mob)
-	if(..())
+	if (..())
 		return
 	user.set_machine(src)
 	var/dat = "<a href='byond://?src=\ref[src];close=1'>Close</a>"
@@ -128,7 +128,7 @@
 	return
 
 /obj/machinery/computer/arcade/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 
 	if (!src.blocked && !src.gameover)
@@ -137,7 +137,7 @@
 			var/attackamt = rand(2,6)
 			src.temp = "You attack for [attackamt] damage!"
 			src.updateUsrDialog()
-			if(turtle > 0)
+			if (turtle > 0)
 				turtle--
 
 			sleep(10)
@@ -164,7 +164,7 @@
 			var/chargeamt = rand(4,7)
 			src.temp = "You regain [chargeamt] points"
 			src.player_mp += chargeamt
-			if(turtle > 0)
+			if (turtle > 0)
 				turtle--
 
 			src.updateUsrDialog()
@@ -176,7 +176,7 @@
 		usr << browse(null, "window=arcade")
 
 	else if (href_list["newgame"]) //Reset everything
-		if(is_cheater(usr))
+		if (is_cheater(usr))
 			return
 
 		temp = "New Round"
@@ -187,7 +187,7 @@
 		gameover = 0
 		turtle = 0
 
-		if(emagged)
+		if (emagged)
 			src.New()
 			emagged = 0
 
@@ -197,11 +197,11 @@
 
 /obj/machinery/computer/arcade/proc/arcade_action()
 	if ((src.enemy_mp <= 0) || (src.enemy_hp <= 0))
-		if(!gameover)
+		if (!gameover)
 			src.gameover = 1
 			src.temp = "[src.enemy_name] has fallen! Rejoice!"
 
-			if(emagged)
+			if (emagged)
 				feedback_inc("arcade_win_emagged")
 				new /obj/item/clothing/head/collectable/petehat(src.loc)
 				new /obj/item/device/maracas/cubanpete(src.loc)
@@ -211,15 +211,15 @@
 				src.New()
 				emagged = 0
 
-			else if(!contents.len)
+			else if (!contents.len)
 				feedback_inc("arcade_win_normal")
 				var/prizeselect = pickweight(prizes)
 				new prizeselect(src.loc)
 
-				if(istype(prizeselect, /obj/item/toy/gun)) //Ammo comes with the gun
+				if (istype(prizeselect, /obj/item/toy/gun)) //Ammo comes with the gun
 					new /obj/item/toy/ammo/gun(src.loc)
 
-				else if(istype(prizeselect, /obj/item/clothing/suit/syndicatefake)) //Helmet is part of the suit
+				else if (istype(prizeselect, /obj/item/clothing/suit/syndicatefake)) //Helmet is part of the suit
 					new	/obj/item/clothing/head/syndicatefake(src.loc)
 
 			else //admins can varedit arcades to have special prizes via contents, but it removes the prize rather than spawn a new one
@@ -242,7 +242,7 @@
 			src.gameover = 1
 			sleep(10)
 			src.temp = "You have been drained! GAME OVER"
-			if(emagged)
+			if (emagged)
 				feedback_inc("arcade_loss_mana_emagged")
 				usr.gib()
 			else
@@ -261,7 +261,7 @@
 	if ((src.player_mp <= 0) || (src.player_hp <= 0))
 		src.gameover = 1
 		src.temp = "You have been crushed! GAME OVER"
-		if(emagged)
+		if (emagged)
 			feedback_inc("arcade_loss_hp_emagged")
 			usr.gib()
 		else
@@ -271,7 +271,7 @@
 	return
 
 /obj/machinery/computer/arcade/emag(mob/user as mob)
-	if(is_cheater(user))
+	if (is_cheater(user))
 		return
 
 	temp = "If you die in the game, you die for real!"
@@ -290,41 +290,41 @@
 	src.updateUsrDialog()
 
 /obj/machinery/computer/arcade/emp_act(severity)
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		..(severity)
 		return
 	var/empprize = null
 	var/num_of_prizes = 0
-	switch(severity)
-		if(1)
+	switch (severity)
+		if (1)
 			num_of_prizes = rand(1,4)
-		if(2)
+		if (2)
 			num_of_prizes = rand(0,2)
-	for(num_of_prizes; num_of_prizes > 0; num_of_prizes--)
+	for (num_of_prizes; num_of_prizes > 0; num_of_prizes--)
 		empprize = pickweight(prizes)
 		new empprize(src.loc)
 
 	..(severity)
 
 /obj/machinery/computer/arcade/togglePanelOpen(var/obj/toggleitem, mob/user)
-	if(is_cheater(user))
+	if (is_cheater(user))
 		return
 
 	var/obj/item/weapon/circuitboard/arcade/A
-	if(circuit)
+	if (circuit)
 		A = new
 		export_game_data(A)
 	..(toggleitem, user, A)
 
 /obj/machinery/computer/arcade/kick_act()
 	..()
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 
-	if(is_cheater(usr))
+	if (is_cheater(usr))
 		return
 
-	if(!emagged && prob(5)) //Bug
+	if (!emagged && prob(5)) //Bug
 		temp = "|eW R0vnb##[rand(0,9)]#"
 		player_hp = rand(1,30)
 		player_mp = rand(1,10)
@@ -335,10 +335,10 @@
 
 /obj/machinery/computer/arcade/proc/is_cheater(mob/user as mob)
 	var/cheater = 0
-	if(emagged && !gameover)
-		if(stat & (NOPOWER|BROKEN))
+	if (emagged && !gameover)
+		if (stat & (NOPOWER|BROKEN))
 			return cheater
-		else if(user in cheaters)
+		else if (user in cheaters)
 			to_chat(usr, "<span class='danger'>[src.enemy_name] throws a bomb at you for trying to cheat him again.</span>")
 			explosion(get_turf(src.loc),-1,0,2)//IED sized explosion
 			user.gib()

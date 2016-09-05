@@ -49,7 +49,7 @@
 	Sets <curToken> to the next token in the <tokens> list, or null if there are no more tokens.
 */
 /datum/n_Parser/proc/NextToken()
-	if(index >= tokens.len)
+	if (index >= tokens.len)
 		curToken = null
 	else
 		curToken = tokens[++index]
@@ -76,45 +76,45 @@
 
 /datum/n_Parser/nS_Parser/Parse()
 	ASSERT(tokens)
-	for(,src.index <= src.tokens.len, src.index++)
+	for (,src.index <= src.tokens.len, src.index++)
 		curToken = tokens[index]
-		switch(curToken.type)
-			if(/datum/token/keyword)
+		switch (curToken.type)
+			if (/datum/token/keyword)
 				var/datum/n_Keyword/kw = options.keywords[curToken.value]
 				kw = new kw()
-				if(kw)
-					if(!kw.Parse(src))
+				if (kw)
+					if (!kw.Parse(src))
 						return
 
-			if(/datum/token/word)
+			if (/datum/token/word)
 				var/datum/token/ntok
-				if(index + 1 > tokens.len)
+				if (index + 1 > tokens.len)
 					errors += new/datum/scriptError/BadToken(curToken)
 					continue
 
 				ntok = tokens[index + 1]
 
-				if(!istype(ntok, /datum/token/symbol))
+				if (!istype(ntok, /datum/token/symbol))
 					errors += new/datum/scriptError/BadToken(ntok)
 					continue
 
-				if(ntok.value == "(")
+				if (ntok.value == "(")
 					ParseFunctionStatement()
 
-				else if(options.assign_operators.Find(ntok.value))
+				else if (options.assign_operators.Find(ntok.value))
 					ParseAssignment()
 
 				else
 					errors += new/datum/scriptError/BadToken(ntok)
 					continue
 
-				if(!istype(curToken, /datum/token/end))
+				if (!istype(curToken, /datum/token/end))
 					errors += new/datum/scriptError/ExpectedToken(";", curToken)
 					continue
 
-			if(/datum/token/symbol)
-				if(curToken.value == "}")
-					if(!EndBlock())
+			if (/datum/token/symbol)
+				if (curToken.value == "}")
+					if (!EndBlock())
 						errors += new/datum/scriptError/BadToken(curToken)
 						continue
 
@@ -122,7 +122,7 @@
 					errors += new/datum/scriptError/BadToken(curToken)
 					continue
 
-			if(/datum/token/end)
+			if (/datum/token/end)
 				warnings += new/datum/scriptError/BadToken(curToken)
 				continue
 
@@ -133,11 +133,11 @@
 	return global_block
 
 /datum/n_Parser/nS_Parser/proc/CheckToken(val, type, err = 1, skip = 1)
-	if(curToken.value != val || !istype(curToken, type))
-		if(err)
+	if (curToken.value != val || !istype(curToken, type))
+		if (err)
 			errors += new/datum/scriptError/ExpectedToken(val, curToken)
 		return 0
-	if(skip)
+	if (skip)
 		NextToken()
 
 	return 1
@@ -147,7 +147,7 @@
 	curBlock = B
 
 /datum/n_Parser/nS_Parser/proc/EndBlock()
-	if(curBlock == global_block)
+	if (curBlock == global_block)
 		return 0
 
 	curBlock = blocks.Pop()
@@ -155,7 +155,7 @@
 
 /datum/n_Parser/nS_Parser/proc/ParseAssignment()
 	var/name = curToken.value
-	if(!options.IsValidID(name))
+	if (!options.IsValidID(name))
 		errors += new/datum/scriptError/InvalidID(curToken)
 		return
 
@@ -165,7 +165,7 @@
 	stmt.var_name = new(name)
 	NextToken()
 
-	if(t)
+	if (t)
 		stmt.value = new t()
 		stmt.value:exp = new/datum/node/expression/value/variable(stmt.var_name)
 		stmt.value:exp2 = ParseExpression()
@@ -175,31 +175,31 @@
 	curBlock.statements += stmt
 
 /datum/n_Parser/nS_Parser/proc/ParseFunctionStatement()
-	if(!istype(curToken, /datum/token/word))
+	if (!istype(curToken, /datum/token/word))
 		errors += new/datum/scriptError("Bad identifier in function call.")
 		return
 
 	var/datum/node/statement/FunctionCall/stmt=new
 	stmt.func_name = curToken.value
 	NextToken() //skip function name
-	if(!CheckToken("(", /datum/token/symbol)) //Check for and skip open parenthesis
+	if (!CheckToken("(", /datum/token/symbol)) //Check for and skip open parenthesis
 		return
 	var/loops = 0
-	for()
+	for ()
 		loops++
-		if(loops >= 800)
+		if (loops >= 800)
 			errors +=new/datum/scriptError("Cannot find ending params.")
 			return
 
-		if(!curToken)
+		if (!curToken)
 			errors+=new/datum/scriptError/EndOfFile()
 			return
-		if(istype(curToken, /datum/token/symbol) && curToken.value == ")")
+		if (istype(curToken, /datum/token/symbol) && curToken.value == ")")
 			curBlock.statements += stmt
 			NextToken() //Skip close parenthesis
 			return
 
 		var/datum/node/expression/P = ParseParamExpression(check_functions = 1)
 		stmt.parameters += P
-		if(istype(curToken, /datum/token/symbol) && curToken.value == ",")
+		if (istype(curToken, /datum/token/symbol) && curToken.value == ",")
 			NextToken()

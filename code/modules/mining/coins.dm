@@ -17,7 +17,7 @@
 	pixel_y = rand(-8, 0)
 
 /obj/item/weapon/coin/recycle(var/datum/materials/rec)
-	if(material==null)
+	if (material==null)
 		return NOT_RECYCLABLE
 	rec.addAmount(material, 0.2) // 5 coins per sheet.
 	return w_type
@@ -88,13 +88,13 @@
 	icon_state = "coin_mythril"
 
 /obj/item/weapon/coin/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/stack/cable_coil) )
+	if (istype(W,/obj/item/stack/cable_coil) )
 		var/obj/item/stack/cable_coil/CC = W
-		if(string_attached)
+		if (string_attached)
 			to_chat(user, "<span class='notice'>There already is a string attached to this coin.</span>")
 			return
 
-		if(CC.amount <= 0)
+		if (CC.amount <= 0)
 			to_chat(user, "<span class='notice'>This cable coil appears to be empty.</span>")
 			qdel(CC)
 			CC = null
@@ -104,8 +104,8 @@
 		string_attached = 1
 		to_chat(user, "<span class='notice'>You attach a string to the coin.</span>")
 		CC.use(1)
-	else if(istype(W,/obj/item/weapon/wirecutters) )
-		if(!string_attached)
+	else if (istype(W,/obj/item/weapon/wirecutters) )
+		if (!string_attached)
 			..()
 			return
 

@@ -11,10 +11,10 @@
 	return
 
 /obj/structure/largecrate/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iscrowbar(W))
+	if (iscrowbar(W))
 		new /obj/item/stack/sheet/wood(src)
 		var/turf/T = get_turf(src)
-		for(var/obj/O in contents)
+		for (var/obj/O in contents)
 			O.forceMove(T)
 		user.visible_message("<span class='notice'>[user] pries \the [src] open.</span>", \
 							 "<span class='notice'>You pry open \the [src].</span>", \
@@ -36,7 +36,7 @@
 	..()
 
 /obj/structure/largecrate/lisa/attackby(obj/item/weapon/W as obj, mob/user as mob)	//ugly but oh well
-	if(iscrowbar(W))
+	if (iscrowbar(W))
 		new /mob/living/simple_animal/corgi/Lisa(loc)
 	..()
 
@@ -45,7 +45,7 @@
 	icon_state = "lisacrate"
 
 /obj/structure/largecrate/cow/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iscrowbar(W))
+	if (iscrowbar(W))
 		new /mob/living/simple_animal/cow(loc)
 	..()
 
@@ -54,7 +54,7 @@
 	icon_state = "lisacrate"
 
 /obj/structure/largecrate/goat/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iscrowbar(W))
+	if (iscrowbar(W))
 		new /mob/living/simple_animal/hostile/retaliate/goat(loc)
 	..()
 
@@ -63,14 +63,14 @@
 	icon_state = "lisacrate"
 
 /obj/structure/largecrate/chick/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iscrowbar(W))
+	if (iscrowbar(W))
 		var/num = rand(4, 6)
-		for(var/i = 0, i < num, i++)
+		for (var/i = 0, i < num, i++)
 			new /mob/living/simple_animal/chick(loc)
 	..()
 
 /obj/structure/largecrate/porcelain/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iscrowbar(W))
+	if (iscrowbar(W))
 		var/obj/structure/toilet/T = new (loc)
 		T.anchored = 0
 		var/obj/structure/sink/S = new (loc)
@@ -78,8 +78,8 @@
 	..()
 
 /obj/structure/largecrate/showers/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iscrowbar(W))
-		for(var/i = 0, i < 2, i++)
+	if (iscrowbar(W))
+		for (var/i = 0, i < 2, i++)
 			var/obj/machinery/shower/S = new (loc)
 			S.anchored = 0
 			S.panel_open = 1

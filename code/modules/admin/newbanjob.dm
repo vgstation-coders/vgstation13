@@ -2,13 +2,13 @@ var/savefile/Banlistjob
 
 
 /proc/_jobban_isbanned(var/client/clientvar, var/rank)
-	if(!clientvar)
+	if (!clientvar)
 		return 1
 	ClearTempbansjob()
 	var/id = clientvar.computer_id
 	var/key = clientvar.ckey
 	if (guest_jobbans(rank))
-		if(config.guest_jobban && IsGuestKey(key))
+		if (config.guest_jobban && IsGuestKey(key))
 			return 1
 	Banlistjob.cd = "/base"
 	if (Banlistjob.dir.Find("[key][id][rank]"))
@@ -66,7 +66,7 @@ var/savefile/Banlistjob
 	if (temp)
 		UpdateTime()
 		bantimestamp = CMinutes + minutes
-	if(rank == "Heads")
+	if (rank == "Heads")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Head of Personnel")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Captain")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Head of Security")
@@ -74,76 +74,76 @@ var/savefile/Banlistjob
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Research Director")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Chief Medical Officer")
 		return 1
-	if(rank == "Security")
+	if (rank == "Security")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Head of Security")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Warden")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Detective")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Security Officer")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Cyborg")
 		return 1
-	if(rank == "Engineering")
+	if (rank == "Engineering")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Station Engineer")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Atmospheric Technician")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Chief Engineer")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Cyborg")
 		return 1
-	if(rank == "Research")
+	if (rank == "Research")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Scientist")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Geneticist")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Chief Medical Officer")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Research Director")
 		return 1
-	if(rank == "Medical")
+	if (rank == "Medical")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Geneticist")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Medical Doctor")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Chief Medical Officer")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Chemist")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Cyborg")
 		return 1
-	if(rank == "CE_Station_Engineer")
+	if (rank == "CE_Station_Engineer")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Station Engineer")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Chief Engineer")
 		return 1
-	if(rank == "CE_Atmospheric_Tech")
+	if (rank == "CE_Atmospheric_Tech")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Atmospheric Technician")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Chief Engineer")
 		return 1
-	if(rank == "CE_Shaft_Miner")
+	if (rank == "CE_Shaft_Miner")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Shaft Miner")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Chief Engineer")
 		return 1
-	if(rank == "Chemist_RD_CMO")
+	if (rank == "Chemist_RD_CMO")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Chief Medical Officer")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Research Director")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Chemist")
 		return 1
-	if(rank == "Geneticist_RD_CMO")
+	if (rank == "Geneticist_RD_CMO")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Chief Medical Officer")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Research Director")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Geneticist")
 		return 1
-	if(rank == "MD_CMO")
+	if (rank == "MD_CMO")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Chief Medical Officer")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Medical Doctor")
 		return 1
-	if(rank == "Scientist_RD")
+	if (rank == "Scientist_RD")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Research Director")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Scientist")
 		return 1
-	if(rank == "AI_Cyborg")
+	if (rank == "AI_Cyborg")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Cyborg")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "AI")
 		return 1
-	if(rank == "Detective_HoS")
+	if (rank == "Detective_HoS")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Detective")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Head of Security")
 		return 1
-	if(rank == "Virologist_RD_CMO")
+	if (rank == "Virologist_RD_CMO")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Chief Medical Officer")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Research Director")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Virologist")
 		return 1
-	if(rank == "Misc")
+	if (rank == "Misc")
 		AddBanjob(ckey, computerid, reason, bannedby, temp, minutes, "Trader")
 		return 1
 
@@ -178,7 +178,7 @@ var/savefile/Banlistjob
 	if (!Banlistjob.dir.Remove(foldername))
 		return 0
 
-	if(!usr)
+	if (!usr)
 		log_admin("Banjob Expired: [key]")
 		message_admins("Banjob Expired: [key]")
 	else
@@ -228,20 +228,20 @@ var/savefile/Banlistjob
 	usr << browse(dat, "window=unbanp;size=875x400")
 
 /*/datum/admins/proc/permjobban(ckey, computerid, reason, bannedby, temp, minutes, rank)
-	if(AddBanjob(ckey, computerid, reason, usr.ckey, 0, 0, job))
+	if (AddBanjob(ckey, computerid, reason, usr.ckey, 0, 0, job))
 		to_chat(M, "<span class='warning'><BIG><B>You have been banned from [job] by [usr.client.ckey].\nReason: [reason].</B></BIG></span>")
 		to_chat(M, "<span class='warning'>This is a permanent ban.</span>")
-		if(config.banappeals)
+		if (config.banappeals)
 			to_chat(M, "<span class='warning'>To try to resolve this matter head to [config.banappeals]</span>")
 		else
 			to_chat(M, "<span class='warning'>No ban appeals URL has been set.</span>")
 		log_admin("[usr.client.ckey] has banned from [job] [ckey].\nReason: [reason]\nThis is a permanent ban.")
 		message_admins("<span class='warning'>[usr.client.ckey] has banned from [job] [ckey].\nReason: [reason]\nThis is a permanent ban.</span>")
 /datum/admins/proc/timejobban(ckey, computerid, reason, bannedby, temp, minutes, rank)
-	if(AddBanjob(ckey, computerid, reason, usr.ckey, 1, mins, job))
+	if (AddBanjob(ckey, computerid, reason, usr.ckey, 1, mins, job))
 		to_chat(M, "<span class='warning'><BIG><B>You have been jobbanned from [job] by [usr.client.ckey].\nReason: [reason].</B></BIG></span>")
 		to_chat(M, "<span class='warning'>This is a temporary ban, it will be removed in [mins] minutes.</span>")
-		if(config.banappeals)
+		if (config.banappeals)
 			to_chat(M, "<span class='warning'>To try to resolve this matter head to [config.banappeals]</span>")
 		else
 			to_chat(M, "<span class='warning'>No ban appeals URL has been set.</span>")
@@ -257,10 +257,10 @@ var/savefile/Banlistjob
 	var/i
 	var/last
 
-	for(i=0, i<1001, i++)
+	for (i=0, i<1001, i++)
 		var/a = pick(1,0)
 		var/b = pick(1,0)
-		if(b)
+		if (b)
 			Banlistjob.cd = "/base"
 			Banlistjob.dir.Add("trash[i]trashid[i]")
 			Banlistjob.cd = "/base/trash[i]trashid[i]"

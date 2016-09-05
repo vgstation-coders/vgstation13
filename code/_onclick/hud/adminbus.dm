@@ -248,19 +248,19 @@
 		mymob.gui_icons.adminbus_tdobs,
 		)
 
-	for(var/i=1;i<=16;i++)
+	for (var/i=1;i<=16;i++)
 		var/obj/screen/adminbus/S = getFromPool(/obj/screen/adminbus)
 		S.icon = 'icons/adminbus/32x32.dmi'
 		S.icon_state = ""
 		S.screen_loc = "[12-round(i/2)]:[WORLD_ICON_SIZE/2*((i-1)%2)],14:[WORLD_ICON_SIZE/2]"
 		mymob.gui_icons.rearviews[i] = S
 
-	for(var/i=1;i<=16;i++)
+	for (var/i=1;i<=16;i++)
 		mymob.client.screen += mymob.gui_icons.rearviews[i]
 
 
 /datum/hud/proc/remove_adminbus_hud()
-	for(var/i=1;i<=16;i++)
+	for (var/i=1;i<=16;i++)
 		mymob.client.screen -= mymob.gui_icons.rearviews[i]
 
 	mymob.client.screen -= list(

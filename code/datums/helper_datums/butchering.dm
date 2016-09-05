@@ -23,7 +23,7 @@
 	initial_amount = amount
 
 /datum/butchering_product/proc/spawn_result(location, mob/parent)
-	if(amount > 0)
+	if (amount > 0)
 		amount--
 		return new result(location)
 
@@ -41,46 +41,46 @@
 	stored_in_organ = LIMB_HEAD //Cutting a LIMB_HEAD off will transfer teeth to the head object
 
 /datum/butchering_product/teeth/desc_modifier(mob/parent, mob/user)
-	if(amount == initial_amount)
+	if (amount == initial_amount)
 		return
-	if(!isliving(parent))
+	if (!isliving(parent))
 		return
 
 	var/mob/living/L = parent
 
-	if(ishuman(L))
+	if (ishuman(L))
 		var/mob/living/carbon/human/H = L
 		var/datum/organ/external/head = H.get_organ(LIMB_HEAD)
-		if((head.status & ORGAN_DESTROYED) || !head)
+		if ((head.status & ORGAN_DESTROYED) || !head)
 			return //If he has no head, you can't see whether he has teeth or not!
 
 		var/obj/item/clothing/mask/M = H.wear_mask
-		if(istype(M) && is_slot_hidden(M,MOUTH))
+		if (istype(M) && is_slot_hidden(M,MOUTH))
 			return //If his mouth is covered, we can't see his teeth
 
 	var/pronoun = "Its"
-	if(L.gender == MALE)
+	if (L.gender == MALE)
 		pronoun = "His"
-	if(L.gender == FEMALE)
+	if (L.gender == FEMALE)
 		pronoun = "Her"
 
-	if(amount == 0)
+	if (amount == 0)
 		return "[pronoun] teeth are gone. "
 	else
-		if(parent.Adjacent(user))
+		if (parent.Adjacent(user))
 			return "[(initial_amount - amount)] of [lowertext(pronoun)] teeth are missing."
 		else
 			return "Some of [lowertext(pronoun)] teeth are missing. "
 
 #define ALL_TEETH -1
 /datum/butchering_product/teeth/spawn_result(location, mob/parent, drop_amount = ALL_TEETH)
-	if(amount <= 0)
+	if (amount <= 0)
 		return
 
 	var/obj/item/stack/teeth/T = new(location)
 	T.update_name(parent) //Change name of the teeth - from the default "teeth" to "corgi teeth", for example
 
-	if(drop_amount == ALL_TEETH) //Drop ALL teeth
+	if (drop_amount == ALL_TEETH) //Drop ALL teeth
 		T.amount = amount
 		amount = 0
 	else //Drop a random amount
@@ -116,11 +116,11 @@
 	verb_gerund = "skinning"
 
 /datum/butchering_product/skin/desc_modifier(mob/parent)
-	if(!amount)
+	if (!amount)
 		var/pronoun = "It"
-		if(parent.gender == MALE)
+		if (parent.gender == MALE)
 			pronoun = "He"
-		if(parent.gender == FEMALE)
+		if (parent.gender == FEMALE)
 			pronoun = "She"
 		return "[pronoun] has been skinned. "
 
@@ -149,7 +149,7 @@
 
 /datum/butchering_product/skin/xeno/spawn_result(location)
 	..()
-	if(!amount) //If all chitin was removed
+	if (!amount) //If all chitin was removed
 		new /obj/item/stack/sheet/animalhide/xeno(location)
 
 /datum/butchering_product/skin/monkey
@@ -164,7 +164,7 @@
 	amount = 8 //Amount of legs that all normal spiders have
 
 /datum/butchering_product/spider_legs/desc_modifier()
-	if(amount < 8)
+	if (amount < 8)
 		return "It only has [amount] [amount==1 ? "leg" : "legs"]. "
 
 //=============Alien claws========
@@ -175,7 +175,7 @@
 	verb_gerund = "declawing"
 
 /datum/butchering_product/xeno_claw/desc_modifier()
-	if(!amount)
+	if (!amount)
 		return "Its claws have been cut off. "
 
 //======frog legs
@@ -187,7 +187,7 @@
 	amount = 2 //not a magic number, frogs have 2 legs
 
 /datum/butchering_product/frog_leg/desc_modifier()
-	if(amount < 2)
+	if (amount < 2)
 		return "It only has [amount] [amount==1 ? "leg" : "legs"]. "
 
 #define TEETH_FEW		/datum/butchering_product/teeth/few		//4-8

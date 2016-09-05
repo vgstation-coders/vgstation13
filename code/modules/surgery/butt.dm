@@ -52,7 +52,7 @@
 ///////sepARATE ANUS///////
 /datum/surgery_step/butt/seperate_anus/tool_quality(obj/item/tool)
 	. = ..()
-	if(!tool.is_sharp())
+	if (!tool.is_sharp())
 		return 0
 
 /datum/surgery_step/butt/seperate_anus
@@ -123,7 +123,7 @@
 
 ///////CAUTERIZE BUTT/////////
 /datum/surgery_step/butt/cauterize_butt/tool_quality(obj/item/tool)
-	if(tool.is_hot())
+	if (tool.is_hot())
 		for (var/T in allowed_tools)
 			if (istype(tool,T))
 				return allowed_tools[T]

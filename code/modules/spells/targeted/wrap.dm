@@ -16,7 +16,7 @@
 
 /spell/targeted/wrapping_paper/cast(var/list/targets, mob/user)
 	..()
-	for(var/mob/living/target in targets)
+	for (var/mob/living/target in targets)
 		var/obj/present = new /obj/structure/strange_present(target.loc,target)
 		if (target.client)
 			target.client.perspective = EYE_PERSPECTIVE

@@ -66,7 +66,7 @@ Class Procs:
 	src.A = A
 	src.B = B
 	zoneA = A.zone
-	if(!istype(B))
+	if (!istype(B))
 		mark_space()
 		edge = air_master.get_edge(A.zone,B)
 		edge.add_connection(src)
@@ -99,32 +99,32 @@ Class Procs:
 
 /connection/proc/update()
 //	to_chat(world, "Updated, \...")
-	if(!istype(A,/turf/simulated))
+	if (!istype(A,/turf/simulated))
 //		to_chat(world, "Invalid A.")
 		erase()
 		return
 
 	var/block_status = air_master.air_blocked(A,B)
-	if(block_status & AIR_BLOCKED)
+	if (block_status & AIR_BLOCKED)
 //		to_chat(world, "Blocked connection.")
 		erase()
 		return
-	else if(block_status & ZONE_BLOCKED)
-		if(direct())
+	else if (block_status & ZONE_BLOCKED)
+		if (direct())
 			mark_indirect()
 		else
 			mark_direct()
 
 	var/b_is_space = (!istype(B,/turf/simulated))
 
-	if(state & CONNECTION_SPACE)
-		if(!b_is_space)
+	if (state & CONNECTION_SPACE)
+		if (!b_is_space)
 //			to_chat(world, "Invalid B.")
 			erase()
 			return
-		if(A.zone != zoneA)
+		if (A.zone != zoneA)
 //			to_chat(world, "Zone changed, \...")
-			if(!A.zone)
+			if (!A.zone)
 				erase()
 //				to_chat(world, "erased.")
 				return
@@ -137,20 +137,20 @@ Class Procs:
 //		to_chat(world, "valid.")
 		return
 
-	else if(b_is_space)
+	else if (b_is_space)
 //		to_chat(world, "Invalid B.")
 		erase()
 		return
 
-	if(A.zone == B.zone)
+	if (A.zone == B.zone)
 //		to_chat(world, "A == B")
 		erase()
 		return
 
-	if(A.zone != zoneA || (zoneB && (B.zone != zoneB)))
+	if (A.zone != zoneA || (zoneB && (B.zone != zoneB)))
 
 //		to_chat(world, "Zones changed, \...")
-		if(A.zone && B.zone)
+		if (A.zone && B.zone)
 			edge.remove_connection(src)
 			edge = air_master.get_edge(A.zone, B.zone)
 			edge.add_connection(src)

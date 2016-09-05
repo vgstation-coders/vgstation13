@@ -17,9 +17,9 @@
 	return
 
 /obj/item/assembly/shock_kit/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iswrench(W))
+	if (iswrench(W))
 		var/turf/T = loc
-		if(ismob(T))
+		if (ismob(T))
 			T = T.loc
 		part1.forceMove(T)
 		part2.forceMove(T)
@@ -42,7 +42,7 @@
 //but honestly I think just using the electropack for the whole signal-receiving thing works out much better.
 //This proc never ever gets called unless the electropack calls it directly, see electropack.dm
 /obj/item/assembly/shock_kit/receive_signal()
-	if(istype(loc, /obj/structure/bed/chair/e_chair))
+	if (istype(loc, /obj/structure/bed/chair/e_chair))
 		var/obj/structure/bed/chair/e_chair/C = loc
 		C.shock()
 	return

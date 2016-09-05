@@ -14,7 +14,7 @@
 /obj/item/blueprints/mommiprints/Topic(href, href_list)
 	if ((usr.restrained() || usr.stat || usr.get_active_hand() != src))
 		return 1
-	if(..())
+	if (..())
 		return 1
 
 /obj/item/blueprints/mommiprints/interact()

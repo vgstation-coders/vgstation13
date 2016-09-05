@@ -21,7 +21,7 @@
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/glasses/hud/health/process_hud(var/mob/M)
-	if(harm_labeled < min_harm_label)
+	if (harm_labeled < min_harm_label)
 		process_med_hud(M)
 
 
@@ -41,11 +41,11 @@
 	eyeprot = 1
 
 /obj/item/clothing/glasses/hud/security/jensenshades/harm_label_update()
-	if(harm_labeled >= min_harm_label)
+	if (harm_labeled >= min_harm_label)
 		vision_flags |= BLIND
 	else
 		vision_flags &= ~BLIND
 
 /obj/item/clothing/glasses/hud/security/process_hud(var/mob/M)
-	if(harm_labeled < min_harm_label)
+	if (harm_labeled < min_harm_label)
 		process_sec_hud(M,1)

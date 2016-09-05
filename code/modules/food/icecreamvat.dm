@@ -32,17 +32,17 @@
 // Processing //////////////////////////////////////////////////
 
 /obj/machinery/cooking/icemachine/takeIngredient(var/obj/item/I,mob/user)
-	if(istype(I,/obj/item/weapon/reagent_containers/glass))
-		if(!src.beaker)
-			if(user.drop_item(I, src))
+	if (istype(I,/obj/item/weapon/reagent_containers/glass))
+		if (!src.beaker)
+			if (user.drop_item(I, src))
 				src.beaker = I
 				. = 1
 				to_chat(user, "<span class='notice'>You add the [I.name] to the [src.name].</span>")
 				src.updateUsrDialog()
 		else
 			to_chat(user, "<span class='warning'>The [src.name] already has a beaker.</span>")
-	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/icecream))
-		if(!I.reagents.has_reagent(SPRINKLES))
+	else if (istype(I,/obj/item/weapon/reagent_containers/food/snacks/icecream))
+		if (!I.reagents.has_reagent(SPRINKLES))
 			I.reagents.add_reagent(SPRINKLES,1)
 			I.overlays += image('icons/obj/kitchen.dmi',src,SPRINKLES)
 			I.name += " with sprinkles"
@@ -61,13 +61,13 @@
 	return attack_hand(user)
 
 /obj/machinery/cooking/icemachine/attack_hand(mob/user)
-	if(istype(user,/mob/dead/observer))
+	if (istype(user,/mob/dead/observer))
 		to_chat(user, "Your ghostly hand goes straight through.")
 	user.set_machine(src)
 	var/dat = ""
-	if(src.beaker)
+	if (src.beaker)
 		dat += "<A href='?src=\ref[src];eject=1'>Eject container and end transfer.</A><BR>"
-		if(!src.beaker.reagents.total_volume)
+		if (!src.beaker.reagents.total_volume)
 			dat += "Container is empty.<BR><HR>"
 		else
 			dat += src.showReagents(1)
@@ -86,53 +86,53 @@
 // HTML Menu ///////////////////////////////////////////////////
 
 /obj/machinery/cooking/icemachine/Topic(href,href_list)
-	if(..())
+	if (..())
 		return
 	src.add_fingerprint(usr)
 	usr.set_machine(src)
 
-	if(href_list["close"])
+	if (href_list["close"])
 		usr << browse(null,"window=cream_master")
 		usr.unset_machine()
 
-	else if(href_list["add"] && href_list["amount"] && src.beaker)
+	else if (href_list["add"] && href_list["amount"] && src.beaker)
 		var/id = href_list["add"]
 		var/amount = text2num(href_list["amount"])
-		if(amount > 0)
+		if (amount > 0)
 			src.beaker.reagents.trans_id_to(src,id,amount)
 
-	else if(href_list["remove"] && href_list["amount"])
+	else if (href_list["remove"] && href_list["amount"])
 		var/id = href_list["remove"]
 		var/amount = text2num(href_list["amount"])
-		if(src.reagents.has_reagent(id))
-			if(src.beaker)
+		if (src.reagents.has_reagent(id))
+			if (src.beaker)
 				reagents.trans_id_to(src.beaker,id,amount)
 			else
 				reagents.remove_reagent(id,amount)
 
-	else if(href_list["main"])
+	else if (href_list["main"])
 		src.attack_hand(usr)
 
-	else if(href_list["eject"] && src.beaker)
+	else if (href_list["eject"] && src.beaker)
 		src.reagents.trans_to(src.beaker,src.reagents.total_volume)
 		src.beaker.forceMove(src.loc)
 		src.beaker = null
 
-	else if(href_list["synthcond"] && href_list["type"])
-		switch(text2num(href_list["type"]))
-			if(2)
+	else if (href_list["synthcond"] && href_list["type"])
+		switch (text2num(href_list["type"]))
+			if (2)
 				. = pick(COLA,DR_GIBB,SPACE_UP,SPACEMOUNTAINWIND)
-			if(3)
+			if (3)
 				. = pick(KAHLUA,VODKA,RUM,GIN)
-			if(4)
+			if (4)
 				. = CREAM
-			if(5)
+			if (5)
 				. = WATER
 		src.reagents.add_reagent(.,5)
 
-	else if(href_list["createcup"] || href_list["createcone"])
+	else if (href_list["createcup"] || href_list["createcone"])
 		var/obj/item/weapon/reagent_containers/food/C
-		if(href_list["createcup"])
+		if (href_list["createcup"])
 			C = new/obj/item/weapon/reagent_containers/food/snacks/icecream/icecreamcup(src.loc)
 		else
 			C = new/obj/item/weapon/reagent_containers/food/snacks/icecream/icecreamcone(src.loc)
@@ -148,7 +148,7 @@
 
 /obj/machinery/cooking/icemachine/proc/showToppings()
 	var/dat = ""
-	if(src.reagents.total_volume <= 500)
+	if (src.reagents.total_volume <= 500)
 		dat += "<HR>"
 		dat += "<strong>Add fillings:</strong><BR>"
 		dat += "<A href='?src=\ref[src];synthcond=1;type=2'>Soda</A><BR>"
@@ -165,19 +165,19 @@
 /obj/machinery/cooking/icemachine/proc/showReagents(container)
 	//1 = beaker / 2 = internal
 	var/dat = ""
-	if(container == 1)
+	if (container == 1)
 		dat += "The container has:<BR>"
-		for(var/datum/reagent/R in src.beaker.reagents.reagent_list)
+		for (var/datum/reagent/R in src.beaker.reagents.reagent_list)
 			dat += "[R.volume] unit(s) of [R.name] | "
 			dat += "<A href='?src=\ref[src];add=[R.id];amount=5'>(5)</A> "
 			dat += "<A href='?src=\ref[src];add=[R.id];amount=10'>(10)</A> "
 			dat += "<A href='?src=\ref[src];add=[R.id];amount=15'>(15)</A> "
 			dat += "<A href='?src=\ref[src];add=[R.id];amount=[R.volume]'>(All)</A>"
 			dat += "<BR>"
-	else if(container == 2)
+	else if (container == 2)
 		dat += "<BR>The Cream-Master has:<BR>"
-		if(src.reagents.total_volume)
-			for(var/datum/reagent/R in src.reagents.reagent_list)
+		if (src.reagents.total_volume)
+			for (var/datum/reagent/R in src.reagents.reagent_list)
 				dat += "[R.volume] unit(s) of [R.name] | "
 				dat += "<A href='?src=\ref[src];remove=[R.id];amount=5'>(5)</A> "
 				dat += "<A href='?src=\ref[src];remove=[R.id];amount=10'>(10)</A> "

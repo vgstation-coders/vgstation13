@@ -33,7 +33,7 @@
 
 
 		on = !on
-		if(on)
+		if (on)
 			turn_on()
 		else
 			turn_off()
@@ -45,25 +45,25 @@
 		set src in view(1)
 		turn_off()
 		dir = turn(dir, -90)
-		if(on)
+		if (on)
 			turn_on()
 
 	Move(var/atom/newloc,var/newdir)
 		. = ..(newloc,newdir)
-		if(on && . && isturf(newloc))
+		if (on && . && isturf(newloc))
 			turn_off()
 			turn_on()
 		return .
 
 	proc/turn_on()
-		if(!isturf(loc))
+		if (!isturf(loc))
 			return
 
 		beam = new(loc, dir, wavelength, 1, 1)
 		beam.master = src
 
 	proc/turn_off()
-		if(beam)
+		if (beam)
 			beam.remove()
 
 	dropped()

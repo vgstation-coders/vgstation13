@@ -21,25 +21,25 @@
 	name = "[prefix] door"
 
 /obj/machinery/door/mineral/Bumped(atom/user)
-	if(operating)
+	if (operating)
 		return
 
-	if(istype(user, /obj/mecha))
+	if (istype(user, /obj/mecha))
 		open()
 	else if (istype(user, /obj/machinery/bot))
 		open()
-	else if(ismob(user))
+	else if (ismob(user))
 		var/mob/M = user
-		if(M.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //This is what we call blind trust
+		if (M.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //This is what we call blind trust
 			return
 		TryToSwitchState(user)
 	return
 
 
 /obj/machinery/door/mineral/attack_ai(mob/user as mob) //those aren't really machinery, they're just big fucking slabs of a mineral
-	if(isAI(user)) //so the AI can't open it
+	if (isAI(user)) //so the AI can't open it
 		return
-	else if(isrobot(user) && get_dist(user,src) <= 1) //but robots can, not remotely though
+	else if (isrobot(user) && get_dist(user,src) <= 1) //but robots can, not remotely though
 		return TryToSwitchState(user) //also >nesting if statements
 
 /obj/machinery/door/mineral/attack_paw(mob/user as mob)
@@ -49,16 +49,16 @@
 	return TryToSwitchState(user)
 
 /obj/machinery/door/mineral/proc/TryToSwitchState(mob/user as mob)
-	if(operating)
+	if (operating)
 		return
 
-	if(!user.restrained() && (user.size > SIZE_TINY))
+	if (!user.restrained() && (user.size > SIZE_TINY))
 		add_fingerprint(user)
 		SwitchState()
 	return
 
 /obj/machinery/door/mineral/proc/SwitchState()
-	if(!density)
+	if (!density)
 		return close()
 	else
 		return open()
@@ -72,13 +72,13 @@
 	return ..()
 
 /obj/machinery/door/mineral/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/pickaxe))
+	if (istype(W,/obj/item/weapon/pickaxe))
 		var/obj/item/weapon/pickaxe/digTool = W
 		to_chat(user, "You start digging \the [src].")
-		if(do_after(user, src, digTool.digspeed*hardness) && src)
+		if (do_after(user, src, digTool.digspeed*hardness) && src)
 			to_chat(user, "You finished digging.")
 			return Dismantle()
-	else if(istype(W, /obj/item/weapon/card))
+	else if (istype(W, /obj/item/weapon/card))
 		to_chat(user, "You swipe your card at \the [src], petulantly expecting a result.")
 		return
 	else
@@ -89,34 +89,34 @@
 	return
 
 /obj/machinery/door/mineral/proc/CheckHardness()
-	if(hardness <= 0)
+	if (hardness <= 0)
 		Dismantle(1)
 	return
 
 /obj/machinery/door/mineral/proc/Dismantle(devastated = 0)
 	var/obj/item/stack/ore
-	if(src.prefix == "metal")
+	if (src.prefix == "metal")
 		ore = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 	else
 		var/P = text2path("/obj/item/stack/sheet/mineral/[prefix]")
 		ore = new P(get_turf(src))
 	ore.amount = oreAmount
-	if(devastated)
+	if (devastated)
 		ore.amount -= 2
 	qdel(src)
 	return
 
 /obj/machinery/door/mineral/ex_act(severity = 1)
-	switch(severity)
-		if(1)
+	switch (severity)
+		if (1)
 			Dismantle(1)
-		if(2)
-			if(prob(20))
+		if (2)
+			if (prob(20))
 				Dismantle(1)
 			else
 				hardness--
 				CheckHardness()
-		if(3)
+		if (3)
 			hardness -= 0.1
 			CheckHardness()
 	return
@@ -159,18 +159,18 @@
 	hardness = 4
 
 /obj/machinery/door/mineral/transparent/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/weldingtool))
+	if (istype(W,/obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
-		if(WT.remove_fuel(0, user))
+		if (WT.remove_fuel(0, user))
 			TemperatureAct(100)
 	return ..()
 
 /obj/machinery/door/mineral/transparent/plasma/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(exposed_temperature > 300)
+	if (exposed_temperature > 300)
 		TemperatureAct(exposed_temperature)
 
 /obj/machinery/door/mineral/transparent/plasma/proc/TemperatureAct(temperature)
-	for(var/turf/simulated/floor/target_tile in range(2,loc))
+	for (var/turf/simulated/floor/target_tile in range(2,loc))
 
 		var/datum/gas_mixture/napalm = new //Napalm? Whelp. There should be a better way for this.
 
@@ -200,7 +200,7 @@
 
 /obj/machinery/door/mineral/wood/Dismantle(devastated = 0)
 	var/obj/item/stack/resource = new/obj/item/stack/sheet/wood
-	if(!devastated)
+	if (!devastated)
 		resource.amount = oreAmount
 		new resource(get_turf(src))
 	qdel(src)
@@ -217,14 +217,14 @@
 	soundeffect = 'sound/effects/attackblob.ogg'
 
 /obj/machinery/door/mineral/resin/TryToSwitchState(atom/user)
-	if(isalien(user) && !operating)
+	if (isalien(user) && !operating)
 		add_fingerprint(user)
 		SwitchState()
 
 /obj/machinery/door/mineral/resin/open()
 	..()
 	spawn(close_delay)
-		if(!operating && !density)
+		if (!operating && !density)
 			close()
 
 /obj/machinery/door/mineral/resin/Dismantle(devastated = 0)

@@ -32,19 +32,19 @@
 	set name = "Toggle Chameleon Projector Scanning"
 	set category = "Object"
 
-	if(usr.isUnconscious())
+	if (usr.isUnconscious())
 		return
 
 	cham_proj_scan = !cham_proj_scan
 	to_chat(usr, "You [cham_proj_scan ? "activate":"deactivate"] [src]'s scanning function")
 
 /obj/item/device/chameleon/preattack(atom/target, mob/user , proximity)
-	if(!proximity)
+	if (!proximity)
 		return
-	if(!cham_proj_scan) //Is scanning disabled ?
+	if (!cham_proj_scan) //Is scanning disabled ?
 		return
-	if(!active_dummy)
-		if(istype(target, /obj/item) && !istype(target, /obj/item/weapon/disk/nuclear) || istype(target, /mob))
+	if (!active_dummy)
+		if (istype(target, /obj/item) && !istype(target, /obj/item/weapon/disk/nuclear) || istype(target, /mob))
 			playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1, -6)
 			to_chat(user, "<span class='notice'>Scanned [target].</span>")
 			saved_item = target.type
@@ -54,9 +54,9 @@
 			return 1
 
 /obj/item/device/chameleon/proc/toggle()
-	if(!can_use || !saved_item)
+	if (!can_use || !saved_item)
 		return
-	if(active_dummy)
+	if (active_dummy)
 		eject_all()
 		//playsound(get_turf(src), 'sound/effects/pop.ogg', 100, 1, -6)
 		del(active_dummy)
@@ -73,7 +73,7 @@
 	else
 		//playsound(get_turf(src), 'sound/effects/pop.ogg', 100, 1, -6)
 		var/obj/O = new saved_item(src)
-		if(!O)
+		if (!O)
 			return
 		var/obj/effect/dummy/chameleon/C = new/obj/effect/dummy/chameleon(usr.loc)
 		C.activate(O, usr, saved_icon, saved_icon_state, saved_overlays, src)
@@ -90,13 +90,13 @@
 			can_use = 1
 
 /obj/item/device/chameleon/proc/disrupt(var/delete_dummy = 1)
-	if(active_dummy)
+	if (active_dummy)
 		var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread
 		spark_system.set_up(5, 0, src)
 		spark_system.attach(src)
 		spark_system.start()
 		eject_all()
-		if(delete_dummy)
+		if (delete_dummy)
 			qdel(active_dummy)
 		active_dummy = null
 		can_use = 0
@@ -104,9 +104,9 @@
 			can_use = 1
 
 /obj/item/device/chameleon/proc/eject_all()
-	for(var/atom/movable/A in active_dummy)
+	for (var/atom/movable/A in active_dummy)
 		A.forceMove(active_dummy.loc)
-		if(ismob(A))
+		if (ismob(A))
 			var/mob/M = A
 			M.reset_view(null)
 			M.layer = MOB_LAYER //Reset the mob's layer
@@ -134,43 +134,43 @@
 	master.active_dummy = src
 
 /obj/effect/dummy/chameleon/attackby()
-	for(var/mob/M in src)
+	for (var/mob/M in src)
 		to_chat(M, "<span class='warning'>Your chameleon-projector deactivates.</span>")
 	master.disrupt()
 
 /obj/effect/dummy/chameleon/attack_hand()
-	for(var/mob/M in src)
+	for (var/mob/M in src)
 		to_chat(M, "<span class='warning'>Your chameleon-projector deactivates.</span>")
 	master.disrupt()
 
 /obj/effect/dummy/chameleon/ex_act()
-	for(var/mob/M in src)
+	for (var/mob/M in src)
 		to_chat(M, "<span class='warning'>Your chameleon-projector deactivates.</span>")
 	master.disrupt()
 
 /obj/effect/dummy/chameleon/bullet_act()
-	for(var/mob/M in src)
+	for (var/mob/M in src)
 		to_chat(M, "<span class='warning'>Your chameleon-projector deactivates.</span>")
 	..()
 	master.disrupt()
 
 /obj/effect/dummy/chameleon/relaymove(var/mob/user, direction)
-	if(istype(loc, /turf/space))
+	if (istype(loc, /turf/space))
 		return //No magical space movement!
 
-	if(can_move)
+	if (can_move)
 		can_move = 0
-		switch(user.bodytemperature)
-			if(300 to INFINITY)
+		switch (user.bodytemperature)
+			if (300 to INFINITY)
 				spawn(8)
 					can_move = 1
-			if(295 to 300)
+			if (295 to 300)
 				spawn(11)
 					can_move = 1
-			if(280 to 295)
+			if (280 to 295)
 				spawn(14)
 					can_move = 1
-			if(260 to 280)
+			if (260 to 280)
 				spawn(18)
 					can_move = 1
 			else

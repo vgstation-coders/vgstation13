@@ -11,7 +11,7 @@
 	opacity = 0
 
 /obj/structure/curtain/bullet_act(obj/item/projectile/P, def_zone)
-	if(!P.nodamage)
+	if (!P.nodamage)
 		visible_message("<span class='warning'>[P] tears \the [src] down!</span>")
 		qdel(src)
 	else
@@ -24,7 +24,7 @@
 
 /obj/structure/curtain/proc/toggle()
 	opacity = !opacity
-	if(opacity)
+	if (opacity)
 		icon_state = "closed"
 		layer = CLOSED_CURTAIN_LAYER
 	else
@@ -32,9 +32,9 @@
 		layer = OPEN_CURTAIN_LAYER
 
 /obj/structure/curtain/attackby(obj/item/W, mob/user)
-	if(iswirecutter(W))
+	if (iswirecutter(W))
 		playsound(loc, 'sound/items/Wirecutter.ogg', 50, 1)
-		if(do_after(user, src, 10))
+		if (do_after(user, src, 10))
 			to_chat(user, "<span class='notice'>You cut the shower curtains down.</span>")
 			var/obj/item/stack/sheet/mineral/plastic/A = getFromPool(/obj/item/stack/sheet/mineral/plastic, get_turf(src))
 			A.amount = 4

@@ -18,23 +18,23 @@
 
 /obj/item/weapon/gun/portalgun/examine(mob/user)
 	..()
-	switch(setting)
-		if(0)
+	switch (setting)
+		if (0)
 			to_chat(user, "It's current setting is <span style='color: #0066FF;'>blue</span>.")
-		if(1)
+		if (1)
 			to_chat(user, "It's current setting is <span style='color: #FF6600;'>red</span>.")
 
 /obj/item/weapon/gun/portalgun/Destroy()
-	if(blue_portal)
+	if (blue_portal)
 		qdel(blue_portal)
 		blue_portal = null
-	if(red_portal)
+	if (red_portal)
 		qdel(red_portal)
 		red_portal = null
 	..()
 
 /obj/item/weapon/gun/portalgun/process_chambered()
-	if(in_chamber)
+	if (in_chamber)
 		return 1
 	in_chamber = new/obj/item/projectile/portalgun(src)
 	var/obj/item/projectile/portalgun/P = in_chamber
@@ -43,12 +43,12 @@
 	return 1
 
 /obj/item/weapon/gun/portalgun/attack_self(mob/user)
-	switch(setting)
-		if(0)
+	switch (setting)
+		if (0)
 			setting = 1
 			fire_sound = 'sound/weapons/portalgun_red.ogg'
 			to_chat(user, "Now set to fire <span style='color: #FF6600;'>red portals</span>.")
-		if(1)
+		if (1)
 			setting = 0
 			fire_sound = 'sound/weapons/portalgun_blue.ogg'
 			to_chat(user, "Now set to fire <span style='color: #0066FF;'>blue portals</span>.")
@@ -60,21 +60,21 @@
 	item_state = "portalgun[setting]"
 
 /obj/item/weapon/gun/portalgun/proc/open_portal(var/proj_setting,var/turf/T,var/atom/A = null,var/mob/firer)
-	if(!T)
+	if (!T)
 		return
 
 	var/obj/effect/portal/new_portal = new(T,3000)//Portal Gun-made portals stay open for 5 minutes by default.
 
-	switch(setting)
-		if(0)
-			if(blue_portal)
+	switch (setting)
+		if (0)
+			if (blue_portal)
 				qdel(blue_portal)
 				blue_portal = null
 			blue_portal = new_portal
 			blue_portal.creator = src
 			blue_portal.owner = firer
-		if(1)
-			if(red_portal)
+		if (1)
+			if (red_portal)
 				qdel(red_portal)
 				red_portal = null
 			red_portal = new_portal
@@ -84,17 +84,17 @@
 
 	sync_portals()
 
-	if(A && isliving(A))
+	if (A && isliving(A))
 		new_portal.Crossed(A)
 
 /obj/item/weapon/gun/portalgun/proc/sync_portals()
-	if(!blue_portal)
-		if(red_portal)
+	if (!blue_portal)
+		if (red_portal)
 			red_portal.overlays.len = 0
 			red_portal.target = null
 		return
-	if(!red_portal)
-		if(blue_portal)
+	if (!red_portal)
+		if (blue_portal)
 			blue_portal.overlays.len = 0
 			blue_portal.target = null
 		return

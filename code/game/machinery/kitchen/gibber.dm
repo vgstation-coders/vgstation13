@@ -47,12 +47,12 @@ obj/machinery/gibber/New()
 	return
 
 /obj/machinery/gibber/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(operating)
+	if (operating)
 		to_chat(user, "<span class='notice'>[src] is currently gibbing something!</span>")
 		return
 
 	..()
-	if(istype(O,/obj/item/weapon/grab))
+	if (istype(O,/obj/item/weapon/grab))
 		return handleGrab(O,user)
 	else
 		to_chat(user, "<span class='warning'>This item is not suitable for the gibber!</span>")
@@ -65,7 +65,7 @@ obj/machinery/gibber/New()
 	overlays.len = 0
 	if (dirty)
 		src.overlays += image('icons/obj/kitchen.dmi', "grbloody")
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 	if (!occupant)
 		src.overlays += image('icons/obj/kitchen.dmi', "grjam")
@@ -82,15 +82,15 @@ obj/machinery/gibber/New()
 	return
 
 /obj/machinery/gibber/attack_hand(mob/user as mob)
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
-	if(!anchored)
+	if (!anchored)
 		to_chat(user, "<span class='warning'>[src] must be anchored first!</span>")
 		return
-	if(operating)
+	if (operating)
 		to_chat(user, "<span class='warning'>[src] is locked and running</span>")
 		return
-	if(!(src.occupant))
+	if (!(src.occupant))
 		to_chat(user, "<span class='warning'>[src] is empty!</span>")
 		return
 	else
@@ -98,27 +98,27 @@ obj/machinery/gibber/New()
 
 // OLD /obj/machinery/gibber/attackby(obj/item/weapon/grab/G as obj, mob/user as mob)
 /obj/machinery/gibber/proc/handleGrab(obj/item/weapon/grab/G as obj, mob/user as mob)
-	if(!anchored)
+	if (!anchored)
 		to_chat(user, "<span class='warning'>[src] must be anchored first!</span>")
 		return
-	if(src.occupant)
+	if (src.occupant)
 		to_chat(user, "<span class='warning'>[src] is full! Empty it first.</span>")
 		return
 	if (!( istype(G, /obj/item/weapon/grab)) || !(istype(G.affecting, /mob/living/carbon/human)))
 		to_chat(user, "<span class='warning'>This item is not suitable for [src]!</span>")
 		return
-	if(G.affecting.abiotic(1))
+	if (G.affecting.abiotic(1))
 		to_chat(user, "<span class='warning'>Subject may not have abiotic items on.</span>")
 		return
 
 	user.visible_message("<span class='warning'>[user] starts to put [G.affecting] into the gibber!</span>", \
 		drugged_message = "<span class='warning'>[user] starts dancing with [G.affecting] near the gibber!</span>")
 	src.add_fingerprint(user)
-	if(do_after(user, src, 30) && G && G.affecting && !occupant)
+	if (do_after(user, src, 30) && G && G.affecting && !occupant)
 		user.visible_message("<span class='warning'>[user] stuffs [G.affecting] into the gibber!</span>", \
 			drugged_message = "<span class='warning'>[G.affecting] suddenly disappears! How did \he do that?</span>")
 		var/mob/M = G.affecting
-		if(M.client)
+		if (M.client)
 			M.client.perspective = EYE_PERSPECTIVE
 			M.client.eye = src
 		M.forceMove(src)
@@ -127,15 +127,15 @@ obj/machinery/gibber/New()
 		update_icon()
 
 /obj/machinery/gibber/MouseDrop_T(mob/target, mob/user)
-	if(target != user || !istype(user, /mob/living/carbon/human) || user.incapacitated() || get_dist(user, src) > 1)
+	if (target != user || !istype(user, /mob/living/carbon/human) || user.incapacitated() || get_dist(user, src) > 1)
 		return
-	if(!anchored)
+	if (!anchored)
 		to_chat(user, "<span class='warning'>[src] must be anchored first!</span>")
 		return
-	if(src.occupant)
+	if (src.occupant)
 		to_chat(user, "<span class='warning'>[src] is full! Empty it first.</span>")
 		return
-	if(user.abiotic(1))
+	if (user.abiotic(1))
 		to_chat(user, "<span class='warning'>Subject may not have abiotic items on.</span>")
 		return
 
@@ -145,13 +145,13 @@ obj/machinery/gibber/New()
 		"<span class='warning'>You start climbing into the [src].</span>", \
 		drugged_message = "<span class='warning'>[user] starts dancing like a ballerina!</span>")
 
-	if(do_after(user, src, 30) && user && !occupant && !isnull(src.loc))
+	if (do_after(user, src, 30) && user && !occupant && !isnull(src.loc))
 
 		user.visible_message("<span class='warning'>[user] climbs into the [src]</span>", \
 			"<span class='warning'>You climb into the [src].</span>", \
 			drugged_message = "<span class='warning'>[src] consumes [user]!</span>")
 
-		if(user.client)
+		if (user.client)
 			user.client.perspective = EYE_PERSPECTIVE
 			user.client.eye = src
 		user.forceMove(src)
@@ -173,7 +173,7 @@ obj/machinery/gibber/New()
 	if (!src.occupant)
 		return
 	for (var/atom/movable/x in src.contents)
-		if(x in component_parts)
+		if (x in component_parts)
 			continue
 		x.forceMove(src.loc)
 	if (src.occupant.client)
@@ -186,9 +186,9 @@ obj/machinery/gibber/New()
 
 
 /obj/machinery/gibber/proc/startgibbing(mob/user as mob)
-	if(src.operating)
+	if (src.operating)
 		return
-	if(!src.occupant)
+	if (!src.occupant)
 		visible_message("<span class='warning'>You hear a loud metallic grinding sound.</span>", \
 			drugged_message = "<span class='warning'>You faintly hear a guitar solo.</span>")
 		return
@@ -202,7 +202,7 @@ obj/machinery/gibber/New()
 	var/sourcenutriment = src.occupant.nutrition / 15
 	var/sourcetotalreagents
 
-	if(src.occupant.reagents)
+	if (src.occupant.reagents)
 		sourcetotalreagents = src.occupant.reagents.total_volume
 
 	var/totalslabs = src.occupant.size
@@ -215,7 +215,7 @@ obj/machinery/gibber/New()
 		newmeat.subjectjob = sourcejob
 		newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
 
-		if(src.occupant.reagents)
+		if (src.occupant.reagents)
 			src.occupant.reagents.trans_to (newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
 
 		allmeat[i] = newmeat
@@ -224,7 +224,7 @@ obj/machinery/gibber/New()
 	user.attack_log += "\[[time_stamp()]\] Gibbed <B>[key_name(src.occupant)]</B>"
 	log_attack("<B>[key_name(user)]</B> gibbed <B>[key_name(src.occupant)]</B>")
 
-	if(!iscarbon(user))
+	if (!iscarbon(user))
 		src.occupant.LAssailant = null
 	else
 		src.occupant.LAssailant = user
@@ -267,10 +267,10 @@ obj/machinery/gibber/New()
 	Bumped(user)
 
 /obj/machinery/gibber/autogibber/Bumped(var/atom/A)
-	if(stat & (BROKEN | NOPOWER))
+	if (stat & (BROKEN | NOPOWER))
 		return
 	use_power(100)
-	if(isliving(A))
+	if (isliving(A))
 		var/mob/living/M = A
 		M.visible_message("<span class='warning'>[M] is forcefully sucked into \the [src]!</span>", \
 			drugged_message = "<span class='warning'>[M] suddenly vanishes! How did \he do that?</span>")
@@ -278,7 +278,7 @@ obj/machinery/gibber/New()
 		startautogibbing(M)
 
 /obj/machinery/gibber/autogibber/proc/startautogibbing(mob/living/victim as mob)
-	if(!victim)
+	if (!victim)
 		visible_message("<span class='warning'>You hear a loud metallic grinding sound.</span>", \
 			drugged_message = "<span class='warning'>You faintly hear a guitar solo.</span>")
 		return
@@ -289,7 +289,7 @@ obj/machinery/gibber/New()
 	var/sourcejob = victim.job
 	var/sourcenutriment = victim.nutrition / 15
 	var/sourcetotalreagents
-	if(victim.reagents)
+	if (victim.reagents)
 		sourcetotalreagents = victim.reagents.total_volume
 
 	var/totalslabs = victim.size
@@ -297,7 +297,7 @@ obj/machinery/gibber/New()
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
 	for (var/i=1 to totalslabs)
 		var/obj/item/weapon/reagent_containers/food/snacks/meat/newmeat = null
-		if(istype(victim, /mob/living/carbon/human))
+		if (istype(victim, /mob/living/carbon/human))
 			var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newhmeat = new /obj/item/weapon/reagent_containers/food/snacks/meat/human(src)
 			newhmeat.name = sourcename + newhmeat.name
 			newhmeat.subjectname = sourcename
@@ -307,12 +307,12 @@ obj/machinery/gibber/New()
 		else
 			newmeat = victim.drop_meat(src)
 
-		if(newmeat==null)
+		if (newmeat==null)
 			return
 
 		newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
 
-		if(victim.reagents)
+		if (victim.reagents)
 			victim.reagents.trans_to (newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from them
 
 		allmeat[i] = newmeat
@@ -320,13 +320,13 @@ obj/machinery/gibber/New()
 	victim.attack_log += "\[[time_stamp()]\] Was auto-gibbed by <B>[src]</B>" //One shall not simply gib a mob unnoticed!
 	log_attack("<B>[src]</B> auto-gibbed <B>[key_name(victim)]</B>")
 	victim.death(1)
-	if(ishuman(victim) || ismonkey(victim) || isalien(victim))
+	if (ishuman(victim) || ismonkey(victim) || isalien(victim))
 		var/obj/item/organ/brain/B = new(src.loc)
 		B.transfer_identity(victim)
 		var/turf/Tx = locate(src.x - 2, src.y, src.z)
 		B.forceMove(src.loc)
 		B.throw_at(Tx,2,3)
-		if(isalien(victim))
+		if (isalien(victim))
 			var/obj/effect/decal/cleanable/blood/gibs/xeno/O = getFromPool(/obj/effect/decal/cleanable/blood/gibs/xeno, Tx)
 			O.New(Tx,2)
 		else

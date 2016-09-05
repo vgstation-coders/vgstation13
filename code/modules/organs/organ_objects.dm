@@ -18,45 +18,45 @@
 /obj/item/organ/attack_self(mob/user as mob)
 
 	// Convert it to an edible form, yum yum.
-	if(!robotic && user.a_intent == I_HELP && user.zone_sel.selecting == "mouth")
+	if (!robotic && user.a_intent == I_HELP && user.zone_sel.selecting == "mouth")
 		bitten(user)
 		return
 
 /obj/item/organ/New()
 	..()
 	create_reagents(5)
-	if(!robotic)
+	if (!robotic)
 		processing_objects += src
 	spawn(1)
 		update()
 
 /obj/item/organ/Del()
-	if(!robotic)
+	if (!robotic)
 		processing_objects -= src
 	..()
 
 /obj/item/organ/process()
 
-	if(robotic)
+	if (robotic)
 		processing_objects -= src
 		return
 
 	// Don't process if we're in a freezer, an MMI or a stasis bag. //TODO: ambient temperature?
-	if(istype(loc,/obj/item/device/mmi) || istype(loc,/obj/item/bodybag/cryobag) || istype(loc,/obj/structure/closet/crate/freezer))
+	if (istype(loc,/obj/item/device/mmi) || istype(loc,/obj/item/bodybag/cryobag) || istype(loc,/obj/structure/closet/crate/freezer))
 		return
 
-	if(fresh && prob(40))
+	if (fresh && prob(40))
 		fresh--
 		var/datum/reagent/blood = reagents.reagent_list[BLOOD]
 		blood_splatter(src,blood,1)
 
 	health -= rand(1,3)
-	if(health <= 0)
+	if (health <= 0)
 		die()
 
 /obj/item/organ/proc/die()
 	name = "dead [initial(name)]"
-	if(dead_icon)
+	if (dead_icon)
 		icon_state = dead_icon
 	health = 0
 	processing_objects -= src
@@ -68,10 +68,10 @@
 
 	robotic = (organ_data && organ_data.robotic) ? organ_data.robotic : 1
 
-	if(prosthetic_name)
+	if (prosthetic_name)
 		name = prosthetic_name
 
-	if(prosthetic_icon)
+	if (prosthetic_icon)
 		icon_state = prosthetic_icon
 	else
 		//TODO: convert to greyscale.
@@ -79,16 +79,16 @@
 /obj/item/organ/proc/update()
 
 
-	if(!organ_tag || !organ_type)
+	if (!organ_tag || !organ_type)
 		return
 
-	if(!organ_data)
+	if (!organ_data)
 		organ_data = new organ_type
 
-	if(robotic)
+	if (robotic)
 		organ_data.robotic = robotic
 
-	if(organ_data.robotic >= 2)
+	if (organ_data.robotic >= 2)
 		roboticize()
 
 // Brain is defined in brain_item.dm.
@@ -215,10 +215,10 @@
 /obj/item/organ/proc/removed(var/mob/living/target,var/mob/living/user)
 
 
-	if(!target || !user)
+	if (!target || !user)
 		return
 
-	if(organ_data.vital)
+	if (organ_data.vital)
 		user.attack_log += "\[[time_stamp()]\]<font color='red'> removed a vital organ ([src]) from [target.name] ([target.ckey]) (INTENT: [uppertext(user.a_intent)])</font>"
 		target.attack_log += "\[[time_stamp()]\]<font color='orange'> had a vital organ ([src]) removed by [user.name] ([user.ckey]) (INTENT: [uppertext(user.a_intent)])</font>"
 		msg_admin_attack("[user.name] ([user.ckey]) removed a vital organ ([src]) from [target.name] ([target.ckey]) (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
@@ -229,23 +229,23 @@
 	..()
 
 	var/inflamed = 0
-	for(var/datum/disease/appendicitis/appendicitis in target.viruses)
+	for (var/datum/disease/appendicitis/appendicitis in target.viruses)
 		inflamed = 1
 		appendicitis.cure()
 		target.resistances += appendicitis
 
-	if(inflamed)
+	if (inflamed)
 		icon_state = "appendixinflamed"
 		name = "inflamed appendix"
 
 /obj/item/organ/eyes/removed(var/mob/living/target,var/mob/living/user)
 
-	if(!eye_colour)
+	if (!eye_colour)
 		eye_colour = list(0,0,0)
 
 	..() //Make sure target is set so we can steal their eye colour for later.
 	var/mob/living/carbon/human/H = target
-	if(istype(H))
+	if (istype(H))
 		eye_colour = list(
 			H.r_eyes ? H.r_eyes : 0,
 			H.g_eyes ? H.g_eyes : 0,
@@ -265,7 +265,7 @@
 
 	// Apply our eye colour to the target.
 	var/mob/living/carbon/human/H = target
-	if(istype(H) && eye_colour)
+	if (istype(H) && eye_colour)
 		H.r_eyes = eye_colour[1]
 		H.g_eyes = eye_colour[2]
 		H.b_eyes = eye_colour[3]
@@ -274,7 +274,7 @@
 /obj/item/organ/proc/bitten(mob/user)
 
 
-	if(robotic)
+	if (robotic)
 		return
 
 	to_chat(user, "<span class='notice'>You take an experimental bite out of \the [src].</span>")
@@ -290,11 +290,11 @@
 	// Pass over the blood.
 	reagents.trans_to(O, reagents.total_volume)
 
-	if(fingerprints)
+	if (fingerprints)
 		O.fingerprints = fingerprints.Copy()
-	if(fingerprintshidden)
+	if (fingerprintshidden)
 		O.fingerprintshidden = fingerprintshidden.Copy()
-	if(fingerprintslast)
+	if (fingerprintslast)
 		O.fingerprintslast = fingerprintslast
 
 	user.put_in_active_hand(O)

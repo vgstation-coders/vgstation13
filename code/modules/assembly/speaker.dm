@@ -19,27 +19,27 @@
 
 /obj/item/device/assembly/speaker/attack_self(mob/user as mob)
 	var/new_msg = sanitize(input(user,"Enter new message for the [src]","NanoSpeaker Settings",message))
-	if(!Adjacent(user))
+	if (!Adjacent(user))
 		return
 
 	message = new_msg
 
 	var/datum/language/language
-	if(user.stat == DEAD) //ENGAGE SPOOKS!
+	if (user.stat == DEAD) //ENGAGE SPOOKS!
 		language = all_languages["Spooky"]
 	src.say("New message: [message]", language)
 
 /obj/item/device/assembly/speaker/attackby(obj/item/W as obj, mob/user as mob)
 	..()
-	if(istype(W,/obj/item/weapon/pen)) //pen
+	if (istype(W,/obj/item/weapon/pen)) //pen
 		var/tmp/new_name = sanitize(input(user,"Enter new name for the [src]","NanoSpeaker Settings",name))
-		if(new_name != "")
+		if (new_name != "")
 			name = "[real_name] ([new_name])"
 		else
 			name = real_name
 
 /obj/item/device/assembly/speaker/say(message, var/datum/language/speaking, var/atom/movable/radio=src)
-	if(istype(loc, /obj/item/device/assembly_frame)) //When put in assembly frames, the speakers can't be heard.
+	if (istype(loc, /obj/item/device/assembly_frame)) //When put in assembly frames, the speakers can't be heard.
 		var/obj/item/device/assembly_frame/F = loc //This is a workaround
 		F.say(message, speaking, radio)
 	else
@@ -50,7 +50,7 @@
 /*
 /obj/item/device/assembly/speaker/proc/say(var/msg=message as text)
 	var/tmp/location = get_turf(src)
-	for(var/mob/O in hearers(location, null)) //to all living
+	for (var/mob/O in hearers(location, null)) //to all living
 		O.show_message("<span class='game say'><span class='name'>[src]</span> beeps, \"[msg]\"",2)
 */
 

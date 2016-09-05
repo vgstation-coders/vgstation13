@@ -31,17 +31,17 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 /datum/wires/New(var/atom/holder)
 	..()
 	src.holder = holder
-	if(!istype(holder, holder_type))
+	if (!istype(holder, holder_type))
 		CRASH("Our holder is null/the wrong type!")
 		return
 
 	// Generate new wires
-	if(random)
+	if (random)
 		GenerateWires()
 	// Get the same wires
 	else
 		// We don't have any wires to copy yet, generate some and then copy it.
-		if(!same_wires[holder_type])
+		if (!same_wires[holder_type])
 			GenerateWires()
 			same_wires[holder_type] = src.wires.Copy()
 		else
@@ -49,18 +49,18 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 			src.wires = wires // Reference the wires list.
 
 /datum/wires/Destroy()
-	if(holder)
+	if (holder)
 		holder = null
 
 /datum/wires/proc/GenerateWires()
 	var/list/colours_to_pick = wireColours.Copy() // Get a copy, not a reference.
 	var/list/indexes_to_pick = list()
 	//Generate our indexes
-	for(var/i = 1; i < MAX_FLAG && i < (1 << wire_count); i += i)
+	for (var/i = 1; i < MAX_FLAG && i < (1 << wire_count); i += i)
 		indexes_to_pick += i
 	colours_to_pick.len = wire_count // Downsize it to our specifications.
 
-	while(colours_to_pick.len && indexes_to_pick.len)
+	while (colours_to_pick.len && indexes_to_pick.len)
 		// Pick and remove a colour
 		var/colour = pick_n_take(colours_to_pick)
 
@@ -71,12 +71,12 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 		//wires = shuffle(wires)
 
 /datum/wires/proc/Interact(var/mob/living/user)
-	if(!istype(user))
+	if (!istype(user))
 		return 0
 	var/html = null
-	if(holder && CanUse(user))
+	if (holder && CanUse(user))
 		html = GetInteractWindow()
-	if(html)
+	if (html)
 		user.set_machine(holder)
 	//user << browse(html, "window=wires;size=[window_x]x[window_y]")
 	//onclose(user, "wires")
@@ -86,7 +86,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 	popup.open()
 
 /datum/wires/proc/GetWireName(var/i)
-	if(wire_names.len)
+	if (wire_names.len)
 		return wire_names["[i]"]
 
 /datum/wires/proc/GetInteractWindow()
@@ -94,10 +94,10 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 	html += "<h3>Exposed Wires</h3>"
 	html += "<table[table_options]>"
 
-	for(var/colour in wires)
+	for (var/colour in wires)
 		html += "<tr>"
 		html += "<td[row_options1]><font color='[colour]'>[capitalize(colour)]</font>"
-		if(check_wires && wire_names && wires[colour])
+		if (check_wires && wire_names && wires[colour])
 			html += " ([GetWireName(wires[colour])])"
 		html += "</td>"
 		html += "<td[row_options2]>"
@@ -111,41 +111,41 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 
 /datum/wires/Topic(href, href_list)
 	..()
-	if(in_range(holder, usr) && isliving(usr))
+	if (in_range(holder, usr) && isliving(usr))
 
 		var/mob/living/L = usr
-		if(CanUse(L) && href_list["action"])
+		if (CanUse(L) && href_list["action"])
 			var/obj/item/I = L.get_active_hand()
 			holder.add_hiddenprint(L)
-			if(href_list["cut"]) // Toggles the cut/mend status
-				if(iswirecutter(I))
+			if (href_list["cut"]) // Toggles the cut/mend status
+				if (iswirecutter(I))
 					var/colour = href_list["cut"]
 					CutWireColour(colour)
 					holder.investigation_log(I_WIRES, "|| [GetWireName(wires[colour]) || colour] wire [IsColourCut(colour) ? "cut" : "mended"] by [key_name(usr)] ([src.type])")
 				else
 					to_chat(L, "<span class='error'>You need wirecutters!</span>")
 
-			else if(href_list["pulse"])
-				if(istype(I, /obj/item/device/multitool))
+			else if (href_list["pulse"])
+				if (istype(I, /obj/item/device/multitool))
 					var/colour = href_list["pulse"]
 					PulseColour(colour)
 					holder.investigation_log(I_WIRES, "|| [GetWireName(wires[colour]) || colour] wire pulsed by [key_name(usr)] ([src.type])")
 				else
 					to_chat(L, "<span class='error'>You need a multitool!</span>")
 
-			else if(href_list["attach"])
+			else if (href_list["attach"])
 				var/colour = href_list["attach"]
 				// Detach
-				if(IsAttached(colour))
+				if (IsAttached(colour))
 					var/obj/item/O = Detach(colour)
-					if(O)
+					if (O)
 						L.put_in_hands(O)
 						holder.investigation_log(I_WIRES, "|| [O] \ref[O] detached from [GetWireName(wires[colour]) || colour] wire by [key_name(usr)] ([src.type])")
 
 				// Attach
 				else
-					if(istype(I, /obj/item/device/assembly/signaler))
-						if(L.drop_item(I))
+					if (istype(I, /obj/item/device/assembly/signaler))
+						if (L.drop_item(I))
 							Attach(colour, I)
 							holder.investigation_log(I_WIRES, "|| [I] \ref[I] attached to [GetWireName(wires[colour]) || colour] wire by [key_name(usr)] ([src.type])")
 					else
@@ -157,7 +157,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 		// Update Window
 			Interact(usr)
 
-	if(href_list["close"])
+	if (href_list["close"])
 		usr << browse(null, "window=wires")
 		usr.unset_machine(holder)
 
@@ -186,13 +186,13 @@ var/const/POWER = 8
 
 /datum/wires/door/UpdateCut(var/index, var/mended)
 	var/obj/machinery/door/airlock/A = holder
-	switch(index)
-		if(BOLTED)
-		if(!mended)
+	switch (index)
+		if (BOLTED)
+		if (!mended)
 			A.bolt()
-	if(SHOCKED)
+	if (SHOCKED)
 		A.shock()
-	if(SAFETY )
+	if (SAFETY )
 		A.safety()
 
 */
@@ -206,12 +206,12 @@ var/const/POWER = 8
 	PulseIndex(GetIndex(colour))
 
 /datum/wires/proc/PulseIndex(var/index)
-	if(IsIndexCut(index))
+	if (IsIndexCut(index))
 		return
 	UpdatePulsed(index)
 
 /datum/wires/proc/GetIndex(var/colour)
-	if(wires[colour])
+	if (wires[colour])
 		var/index = wires[colour]
 		return index
 	else
@@ -233,27 +233,27 @@ var/const/POWER = 8
 //
 
 /datum/wires/proc/IsAttached(var/colour)
-	if(signallers[colour])
+	if (signallers[colour])
 		return 1
 	return 0
 
 /datum/wires/proc/GetAttached(var/colour)
-	if(signallers[colour])
+	if (signallers[colour])
 		return signallers[colour]
 	return null
 
 /datum/wires/proc/Attach(var/colour, var/obj/item/device/assembly/signaler/S)
-	if(colour && S)
-		if(!IsAttached(colour))
+	if (colour && S)
+		if (!IsAttached(colour))
 			signallers[colour] = S
 			S.forceMove(holder)
 			S.connected = src
 			return S
 
 /datum/wires/proc/Detach(var/colour)
-	if(colour)
+	if (colour)
 		var/obj/item/device/assembly/signaler/S = GetAttached(colour)
-		if(S)
+		if (S)
 			signallers -= colour
 			S.connected = null
 			S.forceMove(holder.loc)
@@ -261,8 +261,8 @@ var/const/POWER = 8
 
 
 /datum/wires/proc/Pulse(var/obj/item/device/assembly/signaler/S)
-	for(var/colour in signallers)
-		if(S == signallers[colour])
+	for (var/colour in signallers)
+		if (S == signallers[colour])
 			PulseColour(colour)
 			holder.investigation_log(I_WIRES, "|| [GetWireName(wires[colour]) || colour] wire pulsed by \a [S] \ref[S] ([src.type])")
 			break
@@ -277,7 +277,7 @@ var/const/POWER = 8
 	CutWireIndex(index)
 
 /datum/wires/proc/CutWireIndex(var/index)
-	if(IsIndexCut(index))
+	if (IsIndexCut(index))
 		wires_status &= ~index
 		UpdateCut(index, 1)
 	else
@@ -289,10 +289,10 @@ var/const/POWER = 8
 	CutWireIndex(r)
 
 /datum/wires/proc/CutAll()
-	for(var/i = 1; i < MAX_FLAG && i < (1 << wire_count); i += i)
+	for (var/i = 1; i < MAX_FLAG && i < (1 << wire_count); i += i)
 		CutWireIndex(i)
 
 /datum/wires/proc/IsAllCut()
-	if(wires_status == (1 << wire_count) - 1)
+	if (wires_status == (1 << wire_count) - 1)
 		return 1
 	return 0

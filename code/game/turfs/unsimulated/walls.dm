@@ -27,9 +27,9 @@
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
-	if(istype(W,/obj/item/weapon/solder) && bullet_marks)
+	if (istype(W,/obj/item/weapon/solder) && bullet_marks)
 		var/obj/item/weapon/solder/S = W
-		if(!S.remove_fuel(bullet_marks*2,user))
+		if (!S.remove_fuel(bullet_marks*2,user))
 			return
 		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
 		to_chat(user, "<span class='notice'>You remove the bullet marks with \the [W].</span>")
@@ -46,8 +46,8 @@ turf/unsimulated/wall/splashscreen
 	New()
 		var/path = "icons/splashworks/"
 		var/list/filenames = flist(path)
-		for(var/filename in filenames)
-			if(copytext(filename, length(filename)) == "/")
+		for (var/filename in filenames)
+			if (copytext(filename, length(filename)) == "/")
 				filenames -= filename
 		icon = file("[path][pick(filenames)]")
 

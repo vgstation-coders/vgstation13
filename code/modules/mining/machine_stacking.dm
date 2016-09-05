@@ -15,7 +15,7 @@
 
 /obj/machinery/computer/stacking_unit/New()
 	. = ..()
-	if(ticker)
+	if (ticker)
 		initialize()
 
 /obj/machinery/computer/stacking_unit/attack_ai(mob/user)
@@ -27,12 +27,12 @@
 	interact(user)
 
 /obj/machinery/computer/stacking_unit/interact(mob/user)
-	if(stat & (NOPOWER | BROKEN))
+	if (stat & (NOPOWER | BROKEN))
 		return
 
-	if(!stacker_data)
+	if (!stacker_data)
 		request_status()
-		if(!stacker_data) //Still no data.
+		if (!stacker_data) //Still no data.
 			to_chat(user, "<span class='warning'>Unable to find a stacking machine.</span>")
 			user.unset_machine(src)
 			return
@@ -41,9 +41,9 @@
 
 	var/dat = ""
 
-	for(var/typepath in stacker_data["stacks"])
+	for (var/typepath in stacker_data["stacks"])
 		var/list/stack = stacker_data["stacks"][typepath]
-		if(stack && stack["amount"])
+		if (stack && stack["amount"])
 			dat += "[stack["name"]]: [stack["amount"]] <A href='?src=\ref[src];release=[typepath]'>Release</A><br>"
 
 	dat += text("<br>Stacking: []", stacker_data["stack_amt"])
@@ -53,19 +53,19 @@
 	popup.open()
 
 /obj/machinery/computer/stacking_unit/Topic(href, href_list)
-	if(href_list["close"])
-		if(usr.machine == src)
+	if (href_list["close"])
+		if (usr.machine == src)
 			usr.unset_machine(src)
 		return 1
 
 	. = ..()
-	if(.)
+	if (.)
 		return
 
 	usr.set_machine(src)
 	add_fingerprint(usr)
 
-	if(href_list["release"])
+	if (href_list["release"])
 		var/list/signal_data = list("release" = href_list["release"])
 		send_signal(signal_data)
 
@@ -73,7 +73,7 @@
 		return 1
 
 /obj/machinery/computer/stacking_unit/proc/send_signal(var/list/data)
-	if(!radio_connection)
+	if (!radio_connection)
 		return
 
 	var/datum/signal/signal = getFromPool(/datum/signal)
@@ -85,7 +85,7 @@
 	radio_connection.post_signal(src, signal)
 
 /obj/machinery/computer/stacking_unit/initialize()
-	if(frequency)
+	if (frequency)
 		set_frequency(frequency)
 
 /obj/machinery/computer/stacking_unit/proc/set_frequency(var/new_frequency)
@@ -94,10 +94,10 @@
 	radio_connection = radio_controller.add_object(src, frequency)
 
 /obj/machinery/computer/stacking_unit/receive_signal(datum/signal/signal)
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 
-	if(!signal.data["tag"] || signal.data["tag"] != stacker_tag)
+	if (!signal.data["tag"] || signal.data["tag"] != stacker_tag)
 		return
 
 	stacker_data = signal.data //Get dat data
@@ -147,12 +147,12 @@
 
 /obj/machinery/mineral/stacking_machine/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/matter_bin/bin in component_parts)
+	for (var/obj/item/weapon/stock_parts/matter_bin/bin in component_parts)
 		T += bin.rating
 	max_moved = initial(max_moved) * (T / 3)
 
 	T = 0 //reusing T here because muh RAM.
-	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+	for (var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
 		T += C.rating - 1
 	idle_power_usage = initial(idle_power_usage) - (T * (initial(idle_power_usage) / 4))//25% power usage reduction for an advanced capacitor, 50% for a super one.
 
@@ -171,11 +171,11 @@
 
 	mover = new
 
-	if(ticker)
+	if (ticker)
 		initialize()
 
 /obj/machinery/mineral/stacking_machine/update_icon()
-	if(stat & (NOPOWER | BROKEN))
+	if (stat & (NOPOWER | BROKEN))
 		icon_state = "stacker_o"
 	else
 		icon_state = "stacker"
@@ -189,19 +189,19 @@
 	var/turf/in_T = get_step(src, in_dir)
 	var/turf/out_T = get_step(src, out_dir)
 
-	if(!in_T.Cross(mover, in_T) || !in_T.Enter(mover) || !out_T.Cross(mover, out_T) || !out_T.Enter(mover))
+	if (!in_T.Cross(mover, in_T) || !in_T.Enter(mover) || !out_T.Cross(mover, out_T) || !out_T.Enter(mover))
 		return
 
 	var/obj/item/stack/stack
 	var/moved = 0
-	for(var/atom/movable/A in in_T.contents)
-		if(A.anchored)
+	for (var/atom/movable/A in in_T.contents)
+		if (A.anchored)
 			continue
 
-		if(istype(A, /obj/item/stack))
+		if (istype(A, /obj/item/stack))
 			var/obj/item/stack/stackA = A
 
-			if(!("[stackA.type]" in stacks))
+			if (!("[stackA.type]" in stacks))
 				stack = getFromPool(stackA.type, src)
 				stack.amount = stackA.amount
 			else
@@ -216,23 +216,23 @@
 			A.forceMove(out_T)
 
 		moved ++
-		if(moved >= max_moved)
+		if (moved >= max_moved)
 			break
 
-	for(var/typepath in stacks)
+	for (var/typepath in stacks)
 		stack = stacks[typepath]
-		if(stack.amount >= stack_amt)
+		if (stack.amount >= stack_amt)
 			release_stack(typepath)
 
 	broadcast_status()
 
 /obj/machinery/mineral/stacking_machine/proc/release_stack(var/typepath, var/forced = 0)
-	if(!(typepath in stacks)) //What, we don't even have this stack
+	if (!(typepath in stacks)) //What, we don't even have this stack
 		return
 
 	var/turf/out_T = get_step(src, out_dir)
 
-	if(out_T.density && !forced)//forced is here so we can eject the stacks during decon
+	if (out_T.density && !forced)//forced is here so we can eject the stacks during decon
 		return
 
 	var/obj/item/stack/stack = stacks[typepath]
@@ -244,12 +244,12 @@
 	stacked.forceMove(out_T)
 	stack.amount -= release_amount
 
-	if(stack.amount == 0)
+	if (stack.amount == 0)
 		stacks.Remove(typepath)
 		returnToPool(stack)
 
 /obj/machinery/mineral/stacking_machine/proc/send_signal(list/data)
-	if(!radio_connection)
+	if (!radio_connection)
 		return
 
 	var/datum/signal/signal = getFromPool(/datum/signal)
@@ -264,7 +264,7 @@
 	var/list/data = list()
 	var/list/stack_data[stacks.len]
 
-	for(var/stack_id in stacks)
+	for (var/stack_id in stacks)
 		var/obj/item/stack/stack = stacks[stack_id]
 		stack_data[stack_id] = list(
 			"amount" = stack.amount,
@@ -277,7 +277,7 @@
 	send_signal(data)
 
 /obj/machinery/mineral/stacking_machine/initialize()
-	if(frequency)
+	if (frequency)
 		set_frequency(frequency)
 
 /obj/machinery/mineral/stacking_machine/proc/set_frequency(var/new_frequency)
@@ -286,13 +286,13 @@
 	radio_connection = radio_controller.add_object(src, frequency)
 
 /obj/machinery/mineral/stacking_machine/receive_signal(var/datum/signal/signal)
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 
-	if(!signal.data["tag"] || signal.data["tag"] != id_tag)
+	if (!signal.data["tag"] || signal.data["tag"] != id_tag)
 		return
 
-	if(signal.data["release"])
+	if (signal.data["release"])
 		release_stack(signal.data["release"])
 		broadcast_status()
 		return 1
@@ -308,14 +308,14 @@
 	"}
 
 //For the purposes of this proc, 1 = in, 2 = out.
-//Yes the implementation is overkill but I felt bad for hardcoding it with gigantic if()s and shit.
+//Yes the implementation is overkill but I felt bad for hardcoding it with gigantic if ()s and shit.
 /obj/machinery/mineral/stacking_machine/multitool_topic(mob/user, list/href_list, obj/item/device/multitool/P)
-	if("changedir" in href_list)
+	if ("changedir" in href_list)
 		var/changingdir = text2num(href_list["changedir"])
 		changingdir = Clamp(changingdir, 1, 2)//No runtimes from HREF exploits.
 
 		var/newdir = input("Select the new direction", name, "North") as null|anything in list("North", "South", "East", "West")
-		if(!newdir)
+		if (!newdir)
 			return 1
 		newdir = text2dir(newdir)
 
@@ -324,7 +324,7 @@
 		dirlist[changingdir] = -1 //Make the dir that's being changed -1 so it doesn't see itself.
 
 		var/conflictingdir = dirlist.Find(newdir) //Check if the dir is conflicting with another one
-		if(conflictingdir) //Welp, it is.
+		if (conflictingdir) //Welp, it is.
 			dirlist[conflictingdir] = olddir //Set it to the olddir of the dir we're changing.
 
 		dirlist[changingdir] = newdir //Set the changindir to the selected dir.

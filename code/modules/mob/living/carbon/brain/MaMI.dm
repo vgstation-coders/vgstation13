@@ -7,13 +7,13 @@
 	var/obj/item/device/mmi/posibrain/posibrain = null
 
 /obj/item/organ/brain/mami/attackby(obj/item/O, mob/user)
-	if(istype(O,/obj/item/device/mmi/posibrain) && !brainmob)
+	if (istype(O,/obj/item/device/mmi/posibrain) && !brainmob)
 		posibrain = O
-		if(!posibrain.brainmob || !posibrain.brainmob.mind || !posibrain.brainmob.ckey)
+		if (!posibrain.brainmob || !posibrain.brainmob.mind || !posibrain.brainmob.ckey)
 			to_chat(user, "<span class='warning'>You aren't sure where this brain came from, but you're pretty sure it's a useless brain.</span>")
 			posibrain = null
 			return
-		if(!user.drop_item(posibrain, src))
+		if (!user.drop_item(posibrain, src))
 			user << "<span class='warning'>You can't let go of \the [src]!</span>"
 			return
 
@@ -34,10 +34,10 @@
 	return ..()
 
 /obj/item/organ/brain/mami/attack_self(mob/user)
-	if(brainmob && !posibrain)
+	if (brainmob && !posibrain)
 		posibrain = new(src)
 		posibrain.reset_search()
-	if(posibrain)
+	if (posibrain)
 		to_chat(user, "You upend \the [src], dropping its contents onto the floor.")
 		posibrain.forceMove(user.loc)
 		posibrain.brainmob = brainmob

@@ -43,7 +43,7 @@
 	melt_temperature = 0 // Doesn't melt.
 
 /turf/simulated/floor/vox/wood/New()
-	if(floor_tile)
+	if (floor_tile)
 		returnToPool(floor_tile)
 		floor_tile = null
 	floor_tile = getFromPool(/obj/item/stack/tile/wood, null)
@@ -56,7 +56,7 @@
 	floor_tile
 
 /turf/simulated/floor/light/New()
-	if(floor_tile)
+	if (floor_tile)
 		returnToPool(floor_tile)
 		floor_tile = null
 	floor_tile = getFromPool(/obj/item/stack/tile/light, null)
@@ -64,7 +64,7 @@
 	var/n = name //just in case commands rename it in the ..() call
 	..()
 	spawn(4)
-		if(src)
+		if (src)
 			update_icon()
 			name = n
 
@@ -106,14 +106,14 @@
 	melt_temperature = 0 // Doesn't melt.
 
 /turf/simulated/floor/engine/attackby(obj/item/weapon/C as obj, mob/user as mob)
-	if(!C)
+	if (!C)
 		return
-	if(!user)
+	if (!user)
 		return
-	if(iswrench(C))
+	if (iswrench(C))
 		to_chat(user, "<span class='notice'>Removing rods...</span>")
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 80, 1)
-		if(do_after(user, src, 30) && istype(src, /turf/simulated/floor/engine)) // Somehow changing the turf does NOT kill the current running proc.
+		if (do_after(user, src, 30) && istype(src, /turf/simulated/floor/engine)) // Somehow changing the turf does NOT kill the current running proc.
 			new /obj/item/stack/rods(src, 2)
 			ChangeTurf(/turf/simulated/floor)
 			var/turf/simulated/floor/F = src
@@ -121,22 +121,22 @@
 			return
 
 /turf/simulated/floor/engine/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			if(prob(80))
+	switch (severity)
+		if (1.0)
+			if (prob(80))
 				src.ReplaceWithLattice()
-			else if(prob(50))
+			else if (prob(50))
 				src.ChangeTurf(get_underlying_turf())
 			else
 				var/turf/simulated/floor/F = src
 				F.make_plating()
-		if(2.0)
-			if(prob(50))
+		if (2.0)
+			if (prob(50))
 				var/turf/simulated/floor/F = src
 				F.make_plating()
 			else
 				return
-		if(3.0)
+		if (3.0)
 			return
 
 /turf/simulated/floor/engine/cult
@@ -157,7 +157,7 @@
 
 /turf/simulated/floor/engine/n20/New()
 	..()
-	if(src.air)
+	if (src.air)
 		// EXACTLY the same code as fucking roomfillers.  If this doesn't work, something's fucked.
 		var/datum/gas/sleeping_agent/trace_gas = new
 		air.trace_gases += trace_gas
@@ -195,7 +195,7 @@
 /turf/simulated/floor/plating/deck/update_icon()
 	icon_plating = "deck"
 	..()
-	if(!floor_tile)
+	if (!floor_tile)
 		name = "deck"
 		icon_state = "deck"
 		desc = "Children love to play on this deck."
@@ -215,7 +215,7 @@
 
 /turf/simulated/floor/plating/New()
 	..()
-	if(floor_tile)
+	if (floor_tile)
 		returnToPool(floor_tile)
 		floor_tile = null
 
@@ -270,7 +270,7 @@
 	floor_tile
 
 /turf/simulated/floor/grass/New()
-	if(floor_tile)
+	if (floor_tile)
 		returnToPool(floor_tile)
 		floor_tile = null
 	floor_tile = getFromPool(/obj/item/stack/tile/grass, null)
@@ -278,10 +278,10 @@
 	icon_state = "grass[pick("1","2","3","4")]"
 	..()
 	spawn(4)
-		if(src)
+		if (src)
 			update_icon()
-			for(var/direction in cardinal)
-				if(istype(get_step(src,direction),/turf/simulated/floor))
+			for (var/direction in cardinal)
+				if (istype(get_step(src,direction),/turf/simulated/floor))
 					var/turf/simulated/floor/FF = get_step(src,direction)
 					FF.update_icon() //so siding get updated properly
 
@@ -292,20 +292,20 @@
 	var/has_siding=1
 
 /turf/simulated/floor/carpet/New()
-	if(floor_tile)
+	if (floor_tile)
 		returnToPool(floor_tile)
 		floor_tile = null
 	floor_tile = getFromPool(/obj/item/stack/tile/carpet, null)
 	floor_tile.New() //I guess New() isn't ran on objects spawned without the definition of a turf to house them, ah well.
-	if(!icon_state)
+	if (!icon_state)
 		icon_state = initial(icon_state)
 	..()
-	if(has_siding)
+	if (has_siding)
 		spawn(4)
-			if(src)
+			if (src)
 				update_icon()
-				for(var/direction in alldirs)
-					if(istype(get_step(src,direction),/turf/simulated/floor))
+				for (var/direction in alldirs)
+					if (istype(get_step(src,direction),/turf/simulated/floor))
 						var/turf/simulated/floor/FF = get_step(src,direction)
 						FF.update_icon() //so siding get updated properly
 
@@ -318,7 +318,7 @@
 	floor_tile
 
 /turf/simulated/floor/arcade/New()
-	if(floor_tile)
+	if (floor_tile)
 		returnToPool(floor_tile)
 		floor_tile = null
 	floor_tile = getFromPool(/obj/item/stack/tile/arcade, null)
@@ -331,7 +331,7 @@
 	broken = prob(71) // 5 of the icon states are "damaged" icons, 2 are burned.
 	burnt  = !broken
 
-	if(broken)
+	if (broken)
 		icon_state = pick("damaged1", "damaged2", "damaged3", "damaged4", "damaged5")
 
 	else // Burnt states.
@@ -371,7 +371,7 @@
 	broken = prob(75) // 3 of the icon states are "damaged" icons, 1 is burned.
 	burnt  = !broken
 
-	if(broken)
+	if (broken)
 		icon_state = pick("platingdmg1", "platingdmg2", "platigndmg3")
 
 	else // Burnt state.

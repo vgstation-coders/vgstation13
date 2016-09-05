@@ -22,8 +22,8 @@
 	overlays = 0
 
 /obj/machinery/singularity/narsie/large/exit/process()
-	for(var/mob/M in player_list)
-		if(M.client)
+	for (var/mob/M in player_list)
+		if (M.client)
 			M.see_rift(src)
 	eat()
 
@@ -34,7 +34,7 @@
 
 	if (istype(A, /mob/living/))
 		var/mob/living/L = A
-		if(L.locked_to && istype(L.locked_to,/obj/structure/bed/))
+		if (L.locked_to && istype(L.locked_to,/obj/structure/bed/))
 			var/turf/O = L.locked_to
 			do_teleport(O, pick(endgame_safespawns))
 			L.forceMove(O.loc)

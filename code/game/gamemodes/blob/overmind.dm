@@ -26,7 +26,7 @@
 	blob_overminds += src
 	..()
 	spawn(10)
-		if(src.mind)
+		if (src.mind)
 			src.mind.special_role = "Blob"
 
 /mob/camera/blob/Destroy()
@@ -54,20 +54,20 @@
 	update_health()
 
 /mob/camera/blob/Topic(href, href_list)
-	if(usr != src)
+	if (usr != src)
 		return
 	..()
 	if (href_list["blobjump"])//We only let blobs jump to where there are blobs.
 		var/turf/dest = locate(href_list["blobjump"])
-		if(dest)
+		if (dest)
 			var/turf/closest_turf = null
-			for(var/turf/T in spiral_block(dest,7))
+			for (var/turf/T in spiral_block(dest,7))
 				var/obj/effect/blob/B = locate() in T
-				if(B)
+				if (B)
 					closest_turf = T
 					break
-			if(closest_turf)
-				if(closest_turf != dest)
+			if (closest_turf)
+				if (closest_turf != dest)
 					to_chat(src, "<span class='notice'>Jumping to closest blob from the target.</span>")
 				loc = closest_turf
 			else
@@ -75,7 +75,7 @@
 
 
 /mob/camera/blob/proc/update_health()
-	if(blob_core && hud_used)
+	if (blob_core && hud_used)
 		var/matrix/M = matrix()
 		M.Scale(1,blob_core.health/blob_core.maxhealth)
 		var/total_offset = (60 + (100*(blob_core.health/blob_core.maxhealth))) * PIXEL_MULTIPLIER
@@ -84,37 +84,37 @@
 		hud_used.mymob.gui_icons.blob_coverRIGHT.maptext = "[blob_core.health]"
 
 		var/severity = 0
-		switch(round(blob_core.health))
-			if(167 to 199)
+		switch (round(blob_core.health))
+			if (167 to 199)
 				severity = 1
-			if(134 to 166)
+			if (134 to 166)
 				severity = 2
-			if(100 to 133)
+			if (100 to 133)
 				severity = 3
-			if(67 to 99)
+			if (67 to 99)
 				severity = 4
-			if(34 to 66)
+			if (34 to 66)
 				severity = 5
-			if(-INFINITY to 33)
+			if (-INFINITY to 33)
 				severity = 6
 
-		if(severity >= 5)
+		if (severity >= 5)
 			hud_used.mymob.gui_icons.blob_healthbar.icon_state = "healthcrit"
 		else
 			hud_used.mymob.gui_icons.blob_healthbar.icon_state = "health"
 
-		if(severity > 0)
+		if (severity > 0)
 			overlay_fullscreen("damage", /obj/screen/fullscreen/brute, severity)
 		else
 			clear_fullscreen("damage")
 
 /mob/camera/blob/proc/add_points(var/points)
-	if(points != 0)
+	if (points != 0)
 		blob_points = Clamp(blob_points + points, 0, max_blob_points)
 		stat_collection.blobblob.res_generated += points
 
 	//Updating the HUD
-	if(hud_used)
+	if (hud_used)
 		var/matrix/M = matrix()
 		M.Scale(1,blob_points/max_blob_points)
 		var/total_offset = (60 + (100*(blob_points/max_blob_points))) * PIXEL_MULTIPLIER
@@ -122,7 +122,7 @@
 		hud_used.mymob.gui_icons.blob_powerbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
 		hud_used.mymob.gui_icons.blob_coverLEFT.maptext = "[blob_points]"
 		hud_used.mymob.gui_icons.blob_coverLEFT.maptext_x = 4*PIXEL_MULTIPLIER
-		if(blob_points >= 100)
+		if (blob_points >= 100)
 			hud_used.mymob.gui_icons.blob_coverLEFT.maptext_x = 1
 
 		hud_used.mymob.gui_icons.blob_spawnblob.color = grayscale
@@ -134,19 +134,19 @@
 		hud_used.mymob.gui_icons.blob_rally.color = grayscale
 		hud_used.mymob.gui_icons.blob_taunt.color = grayscale
 
-		if(blob_points >= 5)
+		if (blob_points >= 5)
 			hud_used.mymob.gui_icons.blob_spawnblob.color = null
 			hud_used.mymob.gui_icons.blob_rally.color = null
-		if(blob_points >= 10)
+		if (blob_points >= 10)
 			hud_used.mymob.gui_icons.blob_spawnstrong.color = null
-		if(blob_points >= 15)
+		if (blob_points >= 15)
 			hud_used.mymob.gui_icons.blob_taunt.color = null
-		if(blob_points >= 40)
+		if (blob_points >= 40)
 			hud_used.mymob.gui_icons.blob_spawnresource.color = null
-		if(blob_points >= 60)
+		if (blob_points >= 60)
 			hud_used.mymob.gui_icons.blob_spawnfactory.color = null
 			hud_used.mymob.gui_icons.blob_spawnnode.color = null
-		if(blob_points >= 100)
+		if (blob_points >= 100)
 			hud_used.mymob.gui_icons.blob_spawncore.color = null
 
 /mob/camera/blob/say(var/message)
@@ -154,7 +154,7 @@
 		return
 
 	if (src.client)
-		if(client.prefs.muted & MUTE_IC)
+		if (client.prefs.muted & MUTE_IC)
 			to_chat(src, "You cannot send IC messages (muted).")
 			return
 		if (src.client.handle_spam_prevention(message,MUTE_IC))
@@ -178,13 +178,13 @@
 	var/rendered = "<font color=\"#EE4000\"><i><span class='game say'>Blob Telepathy, <span class='name'>[name]</span> <span class='message'>[message_a]</span></span></i></font>"
 
 	for (var/mob/camera/blob/S in mob_list)
-		if(istype(S))
+		if (istype(S))
 			S.show_message(rendered, 2)
 
 	log_blobspeak("[key_name(usr)]: [rendered]")
 
 	for (var/mob/M in dead_mob_list)
-		if(!istype(M,/mob/new_player) && !istype(M,/mob/living/carbon/brain)) //No meta-evesdropping
+		if (!istype(M,/mob/new_player) && !istype(M,/mob/living/carbon/brain)) //No meta-evesdropping
 			rendered = "<font color=\"#EE4000\"><i><span class='game say'>Blob Telepathy, <span class='name'>[name]</span> <a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a> <span class='message'>[message_a]</span></span></i></font>"
 			M.show_message(rendered, 2)
 
@@ -212,7 +212,7 @@
 /mob/camera/blob/Stat()
 	..()
 	if (statpanel("Blob Status"))
-		if(blob_core)
+		if (blob_core)
 			stat(null, "Core Health: [blob_core.health]")
 		stat(null, "Power Stored: [blob_points]/[max_blob_points]")
 		stat(null, "Blob Total Size: [blobs.len]")
@@ -222,20 +222,20 @@
 
 /mob/camera/blob/Move(var/NewLoc, var/Dir = 0)
 	var/obj/effect/blob/B = locate() in range("3x3", NewLoc)
-	if(B)
+	if (B)
 		forceEnter(B.loc)
 	else
 		B = locate() in range("3x3", src.loc)
 
-	if(!B) //PANIC, WE'RE NOWHERE NEAR ANYTHING
+	if (!B) //PANIC, WE'RE NOWHERE NEAR ANYTHING
 		var/newrange = 3 //slowly grows outwards, looking for the nearest blob tile. Should not take very long to find it.
 		while (1)
 			newrange++
 			B = locate() in range("[newrange]x[newrange]", src.loc)
-			if(B)
+			if (B)
 				forceEnter(B.loc)
 				break
-			if(newrange > maxjumprange) //to avoid going in an infinite loop
+			if (newrange > maxjumprange) //to avoid going in an infinite loop
 				break
 
 		// Update on_moved listeners.
@@ -246,26 +246,26 @@
 	INVOKE_EVENT(on_moved,list("loc"=NewLoc))
 
 /mob/camera/blob/proc/update_specialblobs()
-	if(client && gui_icons)
-		for(var/i=1;i<=24;i++)
+	if (client && gui_icons)
+		for (var/i=1;i<=24;i++)
 			client.screen -= gui_icons.specialblobs[i]
 			var/obj/screen/specialblob/S = gui_icons.specialblobs[i]
 			var/obj/effect/blob/B = null
-			if(i<=special_blobs.len)
+			if (i<=special_blobs.len)
 				B = special_blobs[i]
-			if(!B)
+			if (!B)
 				S.icon_state = ""
 				S.name = ""
 				S.linked_blob = null
 			else
-				switch(B.type)
-					if(/obj/effect/blob/core)
+				switch (B.type)
+					if (/obj/effect/blob/core)
 						S.icon_state = "smallcore"
-					if(/obj/effect/blob/resource)
+					if (/obj/effect/blob/resource)
 						S.icon_state = "smallresource"
-					if(/obj/effect/blob/factory)
+					if (/obj/effect/blob/factory)
 						S.icon_state = "smallfactory"
-					if(/obj/effect/blob/node)
+					if (/obj/effect/blob/node)
 						S.icon_state = "smallnode"
 				S.name = "Jump to Blob"
 				S.linked_blob = B

@@ -9,7 +9,7 @@
 	icon_state = "remains"
 
 /obj/effect/decal/remains/human/attack_hand(mob/user)
-	if(icon_state == "remains")
+	if (icon_state == "remains")
 		user.put_in_hands(new /obj/item/weapon/skull(user))
 		icon_state = "remains_noskull"
 

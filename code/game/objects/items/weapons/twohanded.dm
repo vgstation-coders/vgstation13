@@ -19,30 +19,30 @@
 	var/obj/item/wielding = null
 
 /obj/item/offhand/dropped(user)
-	if(!wielding)
+	if (!wielding)
 		returnToPool(src)
 		return null
 	return wielding.unwield(user)
 
 
 /obj/item/offhand/unwield(user)
-	if(!wielding)
+	if (!wielding)
 		returnToPool(src)
 		return null
 	return wielding.unwield(user)
 
 /obj/item/offhand/preattack(atom/target, mob/user, proximity_flag, click_parameters)
-	if(!proximity_flag)
+	if (!proximity_flag)
 		return
-	if(istype(target, /obj/item/weapon/storage)) //we place automatically
+	if (istype(target, /obj/item/weapon/storage)) //we place automatically
 		return
-	if(wielding)
-		if(!target.attackby(wielding, user))
+	if (wielding)
+		if (!target.attackby(wielding, user))
 			wielding.afterattack(target, user, proximity_flag, click_parameters)
 		return 1
 
 /obj/item/offhand/attack_self(mob/user)
-	if(!wielding)
+	if (!wielding)
 		qdel(src)
 		return null
 	return wielding.unwield(user)
@@ -74,7 +74,7 @@
 	..()
 	item_state = "fireaxe[wielded ? 1 : 0]"
 	force = wielded ? 40 : initial(force)
-	if(user)
+	if (user)
 		user.update_inv_hands()
 
 /obj/item/weapon/fireaxe/suicide_act(mob/user)
@@ -82,14 +82,14 @@
 		return (BRUTELOSS)
 
 /obj/item/weapon/fireaxe/afterattack(atom/A as mob|obj|turf|area, mob/user as mob, proximity)
-	if(!proximity)
+	if (!proximity)
 		return
 	..()
-	if(A && wielded && (istype(A,/obj/structure/window))) //destroys windows and grilles in one hit
+	if (A && wielded && (istype(A,/obj/structure/window))) //destroys windows and grilles in one hit
 		user.delayNextAttack(8)
-		if(istype(A,/obj/structure/window))
+		if (istype(A,/obj/structure/window))
 			var/pdiff=performWallPressureCheck(A.loc)
-			if(pdiff>0)
+			if (pdiff>0)
 				message_admins("[A] with pdiff [pdiff] fire-axed by [user.real_name] ([formatPlayerPanel(user,user.ckey)]) at [formatJumpTo(A.loc)]!")
 				log_admin("[A] with pdiff [pdiff] fire-axed by [user.real_name] ([user.ckey]) at [A.loc]!")
 			var/obj/structure/window/W = A
@@ -121,24 +121,24 @@
 	item_state = "dualsaber[wielded ? 1 : 0]"
 	force = wielded ? 30 : 3
 	w_class = wielded ? 5 : 2
-	if(user)
+	if (user)
 		user.update_inv_hands()
 	playsound(get_turf(src), wielded ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1)
 	return
 
 /obj/item/weapon/dualsaber/attack(target as mob, mob/living/user as mob)
 	..()
-	if((M_CLUMSY in user.mutations) && (wielded) &&prob(40))
+	if ((M_CLUMSY in user.mutations) && (wielded) &&prob(40))
 		to_chat(user, "<span class='warning'>You twirl around a bit before losing your balance and impaling yourself on the [src].</span>")
 		user.take_organ_damage(20,25)
 		return
-	if((wielded) && prob(50))
-		spawn for(var/i=1, i<=8, i++)
+	if ((wielded) && prob(50))
+		spawn for (var/i=1, i<=8, i++)
 			user.dir = turn(user.dir, 45)
 			sleep(1)
 
 /obj/item/weapon/dualsaber/IsShield()
-	if(wielded)
+	if (wielded)
 		return 1
 	else
 		return 0
@@ -165,24 +165,24 @@
 	item_state = "bananabunch[wielded ? 1 : 0]"
 	force = wielded ? 30 : 3
 	w_class = wielded ? 5 : 2
-	if(user)
+	if (user)
 		user.update_inv_hands()
 	playsound(get_turf(src), wielded ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1)
 	return
 
 /obj/item/weapon/dualsaber/bananabunch/attack(target as mob, mob/living/user as mob)
-	if(user.mind && !(user.mind.assigned_role == "Clown"))
+	if (user.mind && !(user.mind.assigned_role == "Clown"))
 		to_chat(user, "<span class='warning'>Your clumsy hands fumble and you slice yourself open with [src].</span>")
 		user.take_organ_damage(40,50)
 		return
-	if((wielded) && (user.mind.assigned_role == "Clown"))
+	if ((wielded) && (user.mind.assigned_role == "Clown"))
 		..()
-		spawn for(var/i=1, i<=8, i++)
+		spawn for (var/i=1, i<=8, i++)
 			user.dir = turn(user.dir, 45)
 			sleep(1)
 
 /obj/item/weapon/dualsaber/bananabunch/IsShield()
-	if(wielded)
+	if (wielded)
 		return 1
 	else
 		return 0
@@ -217,12 +217,12 @@
 	item_state = "hfrequency[wielded ? 1 : 0]"
 	force = wielded ? 200 : 50
 	sharpness = wielded ? 100 : 2
-	if(user)
+	if (user)
 		user.update_inv_hands()
 	return
 
 /obj/item/weapon/katana/hfrequency/IsShield()
-	if(wielded)
+	if (wielded)
 		return 1
 	else
 		return 0
@@ -250,10 +250,10 @@
 	item_state = "[base_state][wielded ? 1 : 0]"
 
 	force = base_force
-	if(wielded)
+	if (wielded)
 		force += 8
 
-	if(user)
+	if (user)
 		user.update_inv_hands()
 	return
 

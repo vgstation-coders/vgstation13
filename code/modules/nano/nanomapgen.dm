@@ -20,10 +20,10 @@
 	set category = "Mapping"
 	set name = "Generate NanoUI Map"
 
-	if(!holder)
+	if (!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
-	if(alert("Sure you want to do this? It will cause a lot of lag", "generate maps", "Yes", "No") == "No")
+	if (alert("Sure you want to do this? It will cause a lot of lag", "generate maps", "Yes", "No") == "No")
 		return
 	message_admins("[ckey]/[src] started nanoui map generation")
 	log_admin("[ckey]/[src] started nanoui map generation")
@@ -34,10 +34,10 @@
 	set category = "Mapping"
 	set name = "Generate all NanoUI Maps"
 
-	if(!holder)
+	if (!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
-	if(alert("Sure you want to do this? It will cause a lot of lag", "generate maps", "Yes", "No") == "No")
+	if (alert("Sure you want to do this? It will cause a lot of lag", "generate maps", "Yes", "No") == "No")
 		return
 	message_admins("[ckey]/[src] started nanoui map generation")
 	log_admin("[ckey]/[src] started nanoui map generation")
@@ -47,9 +47,9 @@
 /client/proc/nanomapgen_DumpTile(var/startX = 1, var/startY = 1, var/currentZ = 1, var/endX = -1, var/endY = -1, var/allz = 0)
 
 
-	if(currentZ == 2)
-		if(allz)
-			if(currentZ < world.maxz)
+	if (currentZ == 2)
+		if (allz)
+			if (currentZ < world.maxz)
 				var/newz = currentZ+1
 				.(1,1,newz,-1,-1,1)
 		else
@@ -79,11 +79,11 @@
 	to_chat(world, "NanoMapGen: <B>GENERATE MAP ([startX],[startY],[currentZ]) to ([endX],[endY],[currentZ])</B>")
 
 	var/count = 0;
-	for(var/WorldX = startX, WorldX <= endX, WorldX++)
-		for(var/WorldY = startY, WorldY <= endY, WorldY++)
+	for (var/WorldX = startX, WorldX <= endX, WorldX++)
+		for (var/WorldY = startY, WorldY <= endY, WorldY++)
 
 			var/atom/Turf = locate(WorldX, WorldY, currentZ)
-			if(Turf.type == /turf/space)
+			if (Turf.type == /turf/space)
 				continue
 			var/icon/TurfIcon = new(Turf.icon, Turf.icon_state, Turf, 1, 0)
 			TurfIcon.Scale(NANOMAP_ICON_SIZE, NANOMAP_ICON_SIZE)
@@ -106,8 +106,8 @@
 
 	if (Tile.Width() != NANOMAP_MAX_ICON_DIMENSION || Tile.Height() != NANOMAP_MAX_ICON_DIMENSION)
 		return NANOMAP_BADOUTPUT
-	if(allz)
-		if(currentZ < world.maxz)
+	if (allz)
+		if (currentZ < world.maxz)
 			var/newz = currentZ+1
 			.(1,1,newz,-1,-1,1)
 	return NANOMAP_SUCCESS

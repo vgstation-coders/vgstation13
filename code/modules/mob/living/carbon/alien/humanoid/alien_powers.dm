@@ -6,13 +6,13 @@ These are general powers. Specific powers are stored under the appropriate alien
 Doesn't work on other aliens/AI.*/
 
 /mob/living/carbon/alien/proc/powerc(X, Y)//Y is optional, checks for weed planting. X can be null.
-	if(stat)
+	if (stat)
 		to_chat(src, "<span class='alien'>You must be conscious to do this.</span>")
 		return 0
-	else if(X && getPlasma() < X)
+	else if (X && getPlasma() < X)
 		to_chat(src, "<span class='alien'>Not enough plasma stored.</span>")
 		return 0
-	else if(Y && (!isturf(src.loc) || istype(src.loc, /turf/space)))
+	else if (Y && (!isturf(src.loc) || istype(src.loc, /turf/space)))
 		to_chat(src, "<span class='alien'>Bad place for a garden!</span>")
 		return 0
 	else
@@ -40,9 +40,9 @@ Doesn't work on other aliens/AI.*/
 	set desc = "Makes all nearby facehuggers activate"
 	set category = "Alien"
 
-	if(powerc(5))
+	if (powerc(5))
 		AdjustPlasma(-5)
-		for(var/obj/item/clothing/mask/facehugger/F in range(8,user))
+		for (var/obj/item/clothing/mask/facehugger/F in range(8,user))
 			F.GoActive()
 		emote("roar")
 	return
@@ -65,11 +65,11 @@ Doesn't work on other aliens/AI.*/
 	var/storedmessage
 
 /spell/targeted/alienwhisper/channel_spell(mob/user = usr, skipcharge = 0, force_remove = 0)
-	if(!..()) //We only make it to this point if we succeeded in channeling or are removing channeling
+	if (!..()) //We only make it to this point if we succeeded in channeling or are removing channeling
 		return 0
-	if(user.spell_channeling && !force_remove)
+	if (user.spell_channeling && !force_remove)
 		storedmessage = sanitize(input("Message:", "Alien Whisper") as text|null)
-		if(!storedmessage) //They refused to supply a spell channeling
+		if (!storedmessage) //They refused to supply a spell channeling
 			channel_spell(force_remove = 1)
 			return 0
 	else
@@ -77,19 +77,19 @@ Doesn't work on other aliens/AI.*/
 	return 1
 
 /spell/targeted/alienwhisper/is_valid_target(var/target)
-	if(!(spell_flags & INCLUDEUSER) && target == usr)
+	if (!(spell_flags & INCLUDEUSER) && target == usr)
 		return 0
-	if(get_dist(usr, target) > range) //Shouldn't be necessary but a good check in case of overrides
+	if (get_dist(usr, target) > range) //Shouldn't be necessary but a good check in case of overrides
 		return 0
 	return istype(target, /mob)
 
 /spell/targeted/alienwhisper/cast(var/list/targets, mob/user)
 	var/mob/M = targets[1]
-	if(!storedmessage) //Compatibility if someone reverts this to SELECTABLE from WAIT_FOR_CLICK
+	if (!storedmessage) //Compatibility if someone reverts this to SELECTABLE from WAIT_FOR_CLICK
 		storedmessage = sanitize(input("Message:", "Alien Whisper") as text|null)
-		if(!storedmessage)
+		if (!storedmessage)
 			return 1
-	if(storedmessage)
+	if (storedmessage)
 		var/turf/T = get_turf(user)
 		log_say("[key_name(user)] (@[T.x],[T.y],[T.z]) Alien Whisper: [storedmessage]")
 		to_chat(M, "<span class='alien'>You hear a strange, alien voice in your head... <em>[storedmessage]</span></em>")
@@ -113,10 +113,10 @@ Doesn't work on other aliens/AI.*/
 /spell/targeted/alientransferplasma/cast(var/list/targets, mob/user)
 	var/mob/living/carbon/alien/M = targets[1]
 	var/amount = input(user, "Amount:", "Transfer Plasma to [M]") as num
-	if(amount)
+	if (amount)
 		amount = abs(round(amount))
 		holder_var_amount = amount
-		if(check_charge(user = user) && get_dist(user, M) <= range) //Since input is a blocking operation
+		if (check_charge(user = user) && get_dist(user, M) <= range) //Since input is a blocking operation
 			take_charge(user = user)
 			to_chat(M, "<span class='alien'>\The [user] has transfered [amount] plasma to you.</span>")
 			to_chat(user, "<span class='alien'>You have trasferred [amount] plasma to [M]</span>")
@@ -145,11 +145,11 @@ Doesn't work on other aliens/AI.*/
 	proj_step_delay = 0.2
 
 /spell/targeted/projectile/alienneurotoxin/is_valid_target(var/target, mob/user)
-	if(!(spell_flags & INCLUDEUSER) && target == usr)
+	if (!(spell_flags & INCLUDEUSER) && target == usr)
 		return 0
-	if(get_dist(usr, target) > range)
+	if (get_dist(usr, target) > range)
 		return 0
-	if(isalien(target))
+	if (isalien(target))
 		to_chat(user, "<span class='alien'>Your allies are not valid targets.</span>")
 		return 0
 	return !istype(target,/area)
@@ -158,18 +158,18 @@ Doesn't work on other aliens/AI.*/
 	var/atom/target = targets[1]
 	var/turf/U = get_turf(target)
 	var/visible_message_target
-	if(!istype(target,/mob))
+	if (!istype(target,/mob))
 		var/list/nearby_mobs = list()
-		for(var/mob/living/M in hearers(1, U))
-			if(isalien(M))
+		for (var/mob/living/M in hearers(1, U))
+			if (isalien(M))
 				continue
 			nearby_mobs += M
-		if(nearby_mobs.len)
+		if (nearby_mobs.len)
 			visible_message_target = pick(nearby_mobs)
 	else
 		visible_message_target = target
 
-	if(visible_message_target)
+	if (visible_message_target)
 		user.visible_message("<span class='alien'>\The [user] spits neurotoxin at [visible_message_target] !</span>", "<span class='alien'>You spit neurotoxin at [visible_message_target] !</span>")
 	else
 		user.visible_message("<span class='alien'>\The [user] spits a salvo of neurotoxin !</span>", "<span class='alien'>You spit out neurotoxin !</span>")
@@ -208,9 +208,9 @@ Doesn't work on other aliens/AI.*/
 	range = 1
 
 /spell/alienacid/is_valid_target(var/atom/target, mob/user)
-	if(get_dist(user, target) > range) //Shouldn't be necessary but a good check in case of overrides
+	if (get_dist(user, target) > range) //Shouldn't be necessary but a good check in case of overrides
 		return 0
-	if(!ismob(target) && target.acidable())
+	if (!ismob(target) && target.acidable())
 		return 1
 	to_chat(user, "<span class='alien'>You cannot dissolve this object.</span>")
 	return 0
@@ -223,17 +223,17 @@ Doesn't work on other aliens/AI.*/
 	set desc = "Drench an object in acid, destroying it over time."
 	set category = null
 
-	if(ismob(O)) //This sort of thing may be possible by manually calling the verb, not sure
+	if (ismob(O)) //This sort of thing may be possible by manually calling the verb, not sure
 		return
 
-	if(powerc(200))
-		if(O in oview(1))
+	if (powerc(200))
+		if (O in oview(1))
 			acidify(O, usr)
 		else
 			to_chat(usr, "<span class='alien'>Target is too far away.</span>")
 
 /proc/acidify(atom/O, mob/user)
-	if(O.acidable())
+	if (O.acidable())
 		new /obj/effect/alien/acid(get_turf(O), O)
 		user.visible_message("<span class='alien'>\The [usr] vomits globs of vile stuff all over [O]. It begins to sizzle and melt under the bubbling mess of acid!</span>")
 	else
@@ -247,7 +247,7 @@ Doesn't work on other aliens/AI.*/
 	override_base = "alien"
 
 /spell/aoe_turf/alienregurgitate/cast_check(skipcharge = 0, mob/user)
-	if(!istype(user, /mob/living/carbon/alien/humanoid)) //why do they have this shit anyway
+	if (!istype(user, /mob/living/carbon/alien/humanoid)) //why do they have this shit anyway
 		return 0
 	return ..()
 
@@ -277,7 +277,7 @@ Doesn't work on other aliens/AI.*/
 a
 /spell/aoe_turf/conjure/alienegg/cast(list/targets, mob/user)
 	. = ..()
-	if(!.) //Returning 1 if we failed to cast
+	if (!.) //Returning 1 if we failed to cast
 		stat_collection.xeno.eggs_laid++
 
 ///////////////////////////////////
@@ -305,7 +305,7 @@ a
 
 /spell/aoe_turf/evolve/drone/cast_check(skipcharge = 0, mob/user)
 	var/mob/living/carbon/alien/humanoid/queen/Q = locate(/mob/living/carbon/alien/humanoid/queen) in living_mob_list
-	if(Q && Q.key)
+	if (Q && Q.key)
 		to_chat(user, "<span class='notice'>We already have an alive queen.</span>")
 		return 0
 	return ..()
@@ -317,7 +317,7 @@ a
 /spell/aoe_turf/evolve/drone/cast(list/targets, mob/living/carbon/user)
 	..()
 	var/mob/living/carbon/alien/humanoid/queen/new_xeno = new(get_turf(user))
-	for(var/datum/language/L in user.languages)
+	for (var/datum/language/L in user.languages)
 		new_xeno.add_language(L.name)
 	user.mind.transfer_to(new_xeno)
 	user.transferImplantsTo(new_xeno)
@@ -345,25 +345,25 @@ a
 	<B>Drones</B> are the working class, offering the largest plasma storage and generation. They are the only caste which may evolve again, turning into the dreaded alien queen."}
 	to_chat(user, explanation_message)
 	spawning = input(user, "Please choose which alien caste you shall evolve to.", "Evolving Choice Menu", null) as null|anything in list("Hunter","Sentinel","Drone","Repeat Explanation")
-	while(spawning == "Repeat Explanation")
+	while (spawning == "Repeat Explanation")
 		to_chat(user, explanation_message)
 		spawning = input(user, "Please choose which alien caste you shall evolve to.", "Evolving Choice Menu", null) as null|anything in list("Hunter","Sentinel","Drone","Repeat Explanation")
-	if(spawning == null)
+	if (spawning == null)
 		return 0
-	switch(spawning)
-		if("Hunter")
+	switch (spawning)
+		if ("Hunter")
 			spawning = /mob/living/carbon/alien/humanoid/hunter
-		if("Sentinel")
+		if ("Sentinel")
 			spawning = /mob/living/carbon/alien/humanoid/sentinel
-		if("Drone")
+		if ("Drone")
 			spawning = /mob/living/carbon/alien/humanoid/drone
 	return ..()
 
 /spell/aoe_turf/evolve/larva/cast(list/targets, mob/living/carbon/user)
 	var/mob/living/carbon/alien/humanoid/new_xeno = new spawning(get_turf(user))
-	for(var/datum/language/L in user.languages)
+	for (var/datum/language/L in user.languages)
 		new_xeno.add_language(L.name)
-	if(user.mind)
+	if (user.mind)
 		user.mind.transfer_to(new_xeno)
 	user.transferImplantsTo(new_xeno)
 	user.transferBorers(new_xeno)
@@ -379,7 +379,7 @@ a
 	charge_max = 0
 
 /spell/aoe_turf/alien_hide/cast(list/targets, mob/user)
-	if(user.plane != HIDING_MOB_PLANE)
+	if (user.plane != HIDING_MOB_PLANE)
 		user.plane = HIDING_MOB_PLANE
 		user.visible_message("<span class='danger'>[src] scurries to the ground !</span>", "<span class='alien'>You are now hiding.</span>")
 	else
@@ -390,13 +390,13 @@ a
 
 /*
 /mob/living/carbon/alien/humanoid/AltClickOn(var/atom/A)
-	if(ismob(A))
+	if (ismob(A))
 		neurotoxin(A)
 		return
 	. = ..()
 
 /mob/living/carbon/alien/humanoid/CtrlClickOn(var/atom/A)
-	if(isalien(A))
+	if (isalien(A))
 		transfer_plasma(A)
 		return
 	. = ..()

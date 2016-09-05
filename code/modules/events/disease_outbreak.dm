@@ -11,20 +11,20 @@
 /datum/event/disease_outbreak/start()
 	var/virus_type = pick(/datum/disease/dnaspread, /datum/disease/advance/flu, /datum/disease/advance/cold, /datum/disease/brainrot, /datum/disease/magnitis)
 
-	for(var/mob/living/carbon/human/H in shuffle(living_mob_list))
+	for (var/mob/living/carbon/human/H in shuffle(living_mob_list))
 		var/foundAlready = 0	// don't infect someone that already has the virus
 		var/turf/T = get_turf(H)
-		if(!T)
+		if (!T)
 			continue
-		if(T.z != map.zMainStation)
+		if (T.z != map.zMainStation)
 			continue
-		for(var/datum/disease/D in H.viruses)
+		for (var/datum/disease/D in H.viruses)
 			foundAlready = 1
-		if(H.stat == 2 || foundAlready)
+		if (H.stat == 2 || foundAlready)
 			continue
 
-		if(virus_type == /datum/disease/dnaspread)		//Dnaspread needs strain_data set to work.
-			if((!H.dna) || (H.sdisabilities & BLIND))	//A blindness disease would be the worst.
+		if (virus_type == /datum/disease/dnaspread)		//Dnaspread needs strain_data set to work.
+			if ((!H.dna) || (H.sdisabilities & BLIND))	//A blindness disease would be the worst.
 				continue
 			var/datum/disease/dnaspread/D = new
 			D.strain_data["name"] = H.real_name

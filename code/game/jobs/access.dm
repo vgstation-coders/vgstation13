@@ -103,9 +103,9 @@
 //returns 1 if this mob has sufficient access to use this object
 /obj/proc/allowed(var/mob/M)
 	set_up_access()
-	if(!M || !istype(M))
+	if (!M || !istype(M))
 		return 0 // I guess?  This seems to happen when AIs use something.
-	if(M.hasFullAccess()) // AI, robots, adminghosts, etc.
+	if (M.hasFullAccess()) // AI, robots, adminghosts, etc.
 		return 1
 	var/list/ACL = M.GetAccess()
 	return can_access(ACL,req_access,req_one_access)
@@ -121,50 +121,50 @@
 
 /obj/proc/set_up_access()
 	//These generations have been moved out of /obj/New() because they were slowing down the creation of objects that never even used the access system.
-	if(!src.req_access)
+	if (!src.req_access)
 		src.req_access = list()
-		if(src.req_access_txt)
+		if (src.req_access_txt)
 			var/list/req_access_str = splittext(req_access_txt,";")
-			for(var/x in req_access_str)
+			for (var/x in req_access_str)
 				var/n = text2num(x)
-				if(n)
+				if (n)
 					req_access += n
 
-	if(!src.req_one_access)
+	if (!src.req_one_access)
 		src.req_one_access = list()
-		if(src.req_one_access_txt)
+		if (src.req_one_access_txt)
 			var/list/req_one_access_str = splittext(req_one_access_txt,";")
-			for(var/x in req_one_access_str)
+			for (var/x in req_one_access_str)
 				var/n = text2num(x)
-				if(n)
+				if (n)
 					req_one_access += n
 
 /obj/proc/check_access(obj/item/I)
 	set_up_access()
 	var/list/ACL = list()
-	if(I)
+	if (I)
 		ACL=I.GetAccess()
 	return can_access(ACL,req_access,req_one_access)
 
 
 /obj/proc/check_access_list(var/list/L)
 	set_up_access()
-	if(!src.req_access  && !src.req_one_access)
+	if (!src.req_access  && !src.req_one_access)
 		return 1
-	if(!istype(src.req_access, /list))
+	if (!istype(src.req_access, /list))
 		return 1
-	if(!src.req_access.len && (!src.req_one_access || !src.req_one_access.len))
+	if (!src.req_access.len && (!src.req_one_access || !src.req_one_access.len))
 		return 1
-	if(!L)
+	if (!L)
 		return 0
-	if(!istype(L, /list))
+	if (!istype(L, /list))
 		return 0
-	for(var/req in src.req_access)
-		if(!(req in L)) //doesn't have this access
+	for (var/req in src.req_access)
+		if (!(req in L)) //doesn't have this access
 			return 0
-	if(src.req_one_access && src.req_one_access.len)
-		for(var/req in src.req_one_access)
-			if(req in L) //has an access from the single access list
+	if (src.req_one_access && src.req_one_access.len)
+		for (var/req in src.req_one_access)
+			if (req in L) //has an access from the single access list
 				return 1
 		return 0
 	return 1
@@ -173,55 +173,55 @@
 // Allows more flexible access checks.
 /proc/can_access(var/list/L, var/list/req_access=null,var/list/req_one_access=null)
 	// No perms set?  He's in.
-	if(!req_access  && !req_one_access)
+	if (!req_access  && !req_one_access)
 		return 1
 	// Fucked permissions set?  He's in.
-	if(!istype(req_access, /list))
+	if (!istype(req_access, /list))
 		return 1
 	// Blank permissions set?  He's in.
-	if(!req_access.len && (!req_one_access || !req_one_access.len))
+	if (!req_access.len && (!req_one_access || !req_one_access.len))
 		return 1
 
 	// User doesn't have any accesses?  Fuck off.
-	if(!L)
+	if (!L)
 		return 0
-	if(!istype(L, /list))
+	if (!istype(L, /list))
 		return 0
 
 	// Doesn't have a req_access
-	for(var/req in req_access)
-		if(!(req in L)) //doesn't have this access
+	for (var/req in req_access)
+		if (!(req in L)) //doesn't have this access
 			return 0
 
 	// If he has at least one req_one access, he's in.
-	if(req_one_access && req_one_access.len)
-		for(var/req in req_one_access)
-			if(req in L) //has an access from the single access list
+	if (req_one_access && req_one_access.len)
+		for (var/req in req_one_access)
+			if (req in L) //has an access from the single access list
 				return 1
 		return 0
 	return 1
 
 /proc/wpermit(var/mob/M) //weapons permit checking
 	var/list/L = M.GetAccess()
-	if(access_weapons in L)
+	if (access_weapons in L)
 		return 1
 	return 0
 
 /proc/get_centcom_access(job)
-	switch(job)
-		if("VIP Guest")
+	switch (job)
+		if ("VIP Guest")
 			return list(access_cent_general, access_cent_living)
-		if("Thunderdome Overseer")
+		if ("Thunderdome Overseer")
 			return list(access_cent_general, access_cent_thunder)
-		if("Emergency Responder")
+		if ("Emergency Responder")
 			return (get_ert_access() | list(access_cent_general, access_cent_ert, access_cent_specops))
-		if("Emergency Responders Leader")
+		if ("Emergency Responders Leader")
 			return (get_ert_access() | list(access_cent_general, access_cent_ert, access_change_ids, access_heads, access_captain, access_cent_specops))
-		if("Death Commando")
+		if ("Death Commando")
 			return (get_all_accesses() | list(access_cent_general, access_cent_specops))
-		if("Creed Commander")
+		if ("Creed Commander")
 			return (get_all_accesses() | list(access_cent_general, access_cent_specops, access_cent_ert, access_cent_creed))
-		if("Supreme Commander")
+		if ("Supreme Commander")
 			return (get_all_accesses() | get_all_centcom_access())//Mr.Centcom gets station all access as well
 
 /proc/get_all_accesses()
@@ -258,222 +258,222 @@
 		)
 
 /proc/get_region_accesses(var/code)
-	switch(code)
-		if(0)
+	switch (code)
+		if (0)
 			return get_all_accesses()
-		if(1) //security
+		if (1) //security
 			return list(access_sec_doors, access_weapons, access_security, access_brig, access_armory, access_forensics_lockers, access_court, access_hos)
-		if(2) //medbay
+		if (2) //medbay
 			return list(access_medical, access_genetics, access_morgue, access_chemistry, access_paramedic, access_virology, access_surgery, access_cmo)
-		if(3) //research
+		if (3) //research
 			return list(access_research, access_tox, access_tox_storage, access_robotics, access_mechanic, access_xenobiology, access_rd)
-		if(4) //engineering and maintenance
+		if (4) //engineering and maintenance
 			return list(access_construction, access_maint_tunnels, access_engine, access_engine_equip, access_external_airlocks, access_tech_storage, access_mechanic, access_atmospherics, access_ce)
-		if(5) //command
+		if (5) //command
 			return list(access_heads, access_RC_announce, access_keycard_auth, access_change_ids, access_ai_upload, access_teleporter, access_eva, access_tcomsat, access_gateway, access_all_personal_lockers, access_heads_vault, access_hop, access_captain)
-		if(6) //station general
+		if (6) //station general
 			return list(access_shop, access_kitchen,access_bar, access_hydroponics, access_janitor, access_chapel_office, access_crematorium, access_library, access_theatre, access_lawyer, access_clown, access_mime)
-		if(7) //supply
+		if (7) //supply
 			return list(access_mailsorting, access_mining, access_mining_station, access_cargo, access_qm, access_taxi)
 
 /proc/get_region_accesses_name(var/code)
-	switch(code)
-		if(0)
+	switch (code)
+		if (0)
 			return "All"
-		if(1) //security
+		if (1) //security
 			return "Security"
-		if(2) //medbay
+		if (2) //medbay
 			return "Medbay"
-		if(3) //research
+		if (3) //research
 			return "Research"
-		if(4) //engineering and maintenance
+		if (4) //engineering and maintenance
 			return "Engineering"
-		if(5) //command
+		if (5) //command
 			return "Command"
-		if(6) //station general
+		if (6) //station general
 			return "Station General"
-		if(7) //supply
+		if (7) //supply
 			return "Supply"
 
 
 /proc/get_access_desc(A)
-	switch(A)
-		if(access_shop)
+	switch (A)
+		if (access_shop)
 			return "Shop"
-		if(access_cargo)
+		if (access_cargo)
 			return "Cargo Bay"
-		if(access_cargo_bot)
+		if (access_cargo_bot)
 			return "Cargo Bot Delivery"
-		if(access_security)
+		if (access_security)
 			return "Security"
-		if(access_brig)
+		if (access_brig)
 			return "Holding Cells"
-		if(access_court)
+		if (access_court)
 			return "Courtroom"
-		if(access_forensics_lockers)
+		if (access_forensics_lockers)
 			return "Forensics"
-		if(access_medical)
+		if (access_medical)
 			return "Medical"
-		if(access_genetics)
+		if (access_genetics)
 			return "Genetics Lab"
-		if(access_morgue)
+		if (access_morgue)
 			return "Morgue"
-		if(access_tox)
+		if (access_tox)
 			return "R&D Lab"
-		if(access_tox_storage)
+		if (access_tox_storage)
 			return "Toxins Lab"
-		if(access_chemistry)
+		if (access_chemistry)
 			return "Chemistry Lab"
-		if(access_rd)
+		if (access_rd)
 			return "Research Director"
-		if(access_bar)
+		if (access_bar)
 			return "Bar"
-		if(access_janitor)
+		if (access_janitor)
 			return "Custodial Closet"
-		if(access_engine)
+		if (access_engine)
 			return "Engineering"
-		if(access_engine_equip)
+		if (access_engine_equip)
 			return "Power Equipment"
-		if(access_maint_tunnels)
+		if (access_maint_tunnels)
 			return "Maintenance"
-		if(access_external_airlocks)
+		if (access_external_airlocks)
 			return "External Airlocks"
-		if(access_emergency_storage)
+		if (access_emergency_storage)
 			return "Emergency Storage"
-		if(access_change_ids)
+		if (access_change_ids)
 			return "ID Computer"
-		if(access_ai_upload)
+		if (access_ai_upload)
 			return "AI Upload"
-		if(access_teleporter)
+		if (access_teleporter)
 			return "Teleporter"
-		if(access_eva)
+		if (access_eva)
 			return "EVA"
-		if(access_heads)
+		if (access_heads)
 			return "Bridge"
-		if(access_captain)
+		if (access_captain)
 			return "Captain"
-		if(access_all_personal_lockers)
+		if (access_all_personal_lockers)
 			return "Personal Lockers"
-		if(access_chapel_office)
+		if (access_chapel_office)
 			return "Chapel Office"
-		if(access_tech_storage)
+		if (access_tech_storage)
 			return "Technical Storage"
-		if(access_atmospherics)
+		if (access_atmospherics)
 			return "Atmospherics"
-		if(access_crematorium)
+		if (access_crematorium)
 			return "Crematorium"
-		if(access_armory)
+		if (access_armory)
 			return "Armory"
-		if(access_construction)
+		if (access_construction)
 			return "Construction Areas"
-		if(access_kitchen)
+		if (access_kitchen)
 			return "Kitchen"
-		if(access_hydroponics)
+		if (access_hydroponics)
 			return "Hydroponics"
-		if(access_library)
+		if (access_library)
 			return "Library"
-		if(access_lawyer)
+		if (access_lawyer)
 			return "Law Office"
-		if(access_robotics)
+		if (access_robotics)
 			return "Robotics"
-		if(access_virology)
+		if (access_virology)
 			return "Virology"
-		if(access_psychiatrist)
+		if (access_psychiatrist)
 			return "Psychiatrist's Office"
-		if(access_cmo)
+		if (access_cmo)
 			return "Chief Medical Officer"
-		if(access_qm)
+		if (access_qm)
 			return "Quartermaster"
-		if(access_clown)
+		if (access_clown)
 			return "HONK! Access"
-		if(access_mime)
+		if (access_mime)
 			return "Silent Access"
-		if(access_surgery)
+		if (access_surgery)
 			return "Surgery"
-		if(access_theatre)
+		if (access_theatre)
 			return "Theatre"
-		if(access_manufacturing)
+		if (access_manufacturing)
 			return "Manufacturing"
-		if(access_research)
+		if (access_research)
 			return "Science"
-		if(access_mining)
+		if (access_mining)
 			return "Mining"
-		if(access_mining_office)
+		if (access_mining_office)
 			return "Mining Office"
-		if(access_mailsorting)
+		if (access_mailsorting)
 			return "Cargo Office"
-		if(access_mint)
+		if (access_mint)
 			return "Mint"
-		if(access_mint_vault)
+		if (access_mint_vault)
 			return "Mint Vault"
-		if(access_heads_vault)
+		if (access_heads_vault)
 			return "Main Vault"
-		if(access_mining_station)
+		if (access_mining_station)
 			return "Mining EVA"
-		if(access_xenobiology)
+		if (access_xenobiology)
 			return "Xenobiology Lab"
-		if(access_hop)
+		if (access_hop)
 			return "Head of Personnel"
-		if(access_hos)
+		if (access_hos)
 			return "Head of Security"
-		if(access_ce)
+		if (access_ce)
 			return "Chief Engineer"
-		if(access_RC_announce)
+		if (access_RC_announce)
 			return "RC Announcements"
-		if(access_keycard_auth)
+		if (access_keycard_auth)
 			return "Keycode Auth. Device"
-		if(access_tcomsat)
+		if (access_tcomsat)
 			return "Telecommunications"
-		if(access_gateway)
+		if (access_gateway)
 			return "Gateway"
-		if(access_sec_doors)
+		if (access_sec_doors)
 			return "Brig"
 // /vg/ shit
-		if(access_paramedic)
+		if (access_paramedic)
 			return "Paramedic Station"
-		if(access_weapons)
+		if (access_weapons)
 			return "Weapon Permit"
-		if(access_taxi)
+		if (access_taxi)
 			return "Taxi Shuttle"
-		if(access_mechanic)
+		if (access_mechanic)
 			return "Workshop"
 
 
 /proc/get_centcom_access_desc(A)
-	switch(A)
-		if(access_cent_general)
+	switch (A)
+		if (access_cent_general)
 			return "Centcom Common Areas"
-		if(access_cent_thunder)
+		if (access_cent_thunder)
 			return "Thunderdome"
-		if(access_cent_storage)
+		if (access_cent_storage)
 			return "Centcom Storage"
-		if(access_cent_living)
+		if (access_cent_living)
 			return "Centcom Living Areas"
-		if(access_cent_medical)
+		if (access_cent_medical)
 			return "Centcom Medbay"
-		if(access_cent_teleporter)
+		if (access_cent_teleporter)
 			return "Centcom Teleporter"
-		if(access_cent_specops)
+		if (access_cent_specops)
 			return "Special Ops"
-		if(access_cent_ert)
+		if (access_cent_ert)
 			return "Emergency Response Team"
-		if(access_cent_creed)
+		if (access_cent_creed)
 			return "Creed Officer"
-		if(access_cent_captain)
+		if (access_cent_captain)
 			return "Centcom Captain"
 
 // Cache - N3X
 var/global/list/all_jobs
 /proc/get_all_jobs()
 	// Have cache?  Use cache.
-	if(all_jobs)
+	if (all_jobs)
 		return all_jobs
 
 	// Rebuild cache.
 	all_jobs=list()
-	for(var/jobtype in typesof(/datum/job) - /datum/job)
+	for (var/jobtype in typesof(/datum/job) - /datum/job)
 		var/datum/job/jobdatum = new jobtype
-		if(jobdatum.info_flag & JINFO_SILICON)
+		if (jobdatum.info_flag & JINFO_SILICON)
 			continue
 		all_jobs.Add(jobdatum.title)
 	return all_jobs
@@ -485,30 +485,30 @@ var/global/list/all_jobs
 proc/FindNameFromID(var/mob/living/carbon/human/H)
 	ASSERT(istype(H))
 	var/obj/item/weapon/card/id/C = H.get_active_hand()
-	if( istype(C) || istype(C, /obj/item/device/pda) )
+	if ( istype(C) || istype(C, /obj/item/device/pda) )
 		var/obj/item/weapon/card/id/ID = C
 
-		if( istype(C, /obj/item/device/pda) )
+		if ( istype(C, /obj/item/device/pda) )
 			var/obj/item/device/pda/pda = C
 			ID = pda.id
-		if(!istype(ID))
+		if (!istype(ID))
 			ID = null
 
-		if(ID)
+		if (ID)
 			return ID.registered_name
 
 	C = H.wear_id
 
-	if( istype(C) || istype(C, /obj/item/device/pda) )
+	if ( istype(C) || istype(C, /obj/item/device/pda) )
 		var/obj/item/weapon/card/id/ID = C
 
-		if( istype(C, /obj/item/device/pda) )
+		if ( istype(C, /obj/item/device/pda) )
 			var/obj/item/device/pda/pda = C
 			ID = pda.id
-		if(!istype(ID))
+		if (!istype(ID))
 			ID = null
 
-		if(ID)
+		if (ID)
 			return ID.registered_name
 
 proc/get_all_job_icons() //For all existing HUD icons

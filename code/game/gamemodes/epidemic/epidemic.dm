@@ -29,12 +29,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 /datum/game_mode/epidemic/pre_setup()
 	doctors = 0
-	for(var/mob/new_player/player in mob_list)
-		if(player.mind.assigned_role in list("Chief Medical Officer","Medical Doctor"))
+	for (var/mob/new_player/player in mob_list)
+		if (player.mind.assigned_role in list("Chief Medical Officer","Medical Doctor"))
 			doctors++
 			break
 
-	if(doctors < 1)
+	if (doctors < 1)
 		return 0
 
 	return 1
@@ -72,7 +72,7 @@
 
 	// add an extra law to the AI to make sure it cooperates with the heads
 	var/extra_law = "Crew authorized to know of pathogen [virus_name]'s existence are: Heads of command, any crew member with loyalty implant. Do not allow unauthorized personnel to gain knowledge of [virus_name]. Aid authorized personnel in quarantining and neutrlizing the outbreak. This law overrides all other laws."
-	for(var/mob/living/silicon/ai/M in mob_list)
+	for (var/mob/living/silicon/ai/M in mob_list)
 		M.add_ion_law(extra_law)
 		to_chat(M, "<span class='danger'></span>" + extra_law)
 
@@ -98,17 +98,17 @@
 
 	// scan the crew for possible infectees
 	var/list/crew = list()
-	for(var/mob/living/carbon/human/H in mob_list) if(H.client)
+	for (var/mob/living/carbon/human/H in mob_list) if (H.client)
 		// heads should not be infected
-		if(H.mind.assigned_role in command_positions)
+		if (H.mind.assigned_role in command_positions)
 			continue
 		crew += H
 
-	if(crew.len < 2)
+	if (crew.len < 2)
 		to_chat(world, "<span class='warning'>There aren't enough players for this mode!</span>")
 		to_chat(world, "<span class='warning'>Rebooting world in 5 seconds.</span>")
 
-		if(blackbox)
+		if (blackbox)
 			blackbox.save_all_data_to_sql()
 		sleep(50)
 		world.Reboot()
@@ -123,9 +123,9 @@
 	// keep track of initial infectees
 	var/list/infectees = list()
 
-	for(var/i = 0, i < lethal_amount, i++)
+	for (var/i = 0, i < lethal_amount, i++)
 		var/mob/living/carbon/human/H = pick(crew)
-		if(lethal.uniqueID in H.virus2)
+		if (lethal.uniqueID in H.virus2)
 			i--
 			continue
 		H.virus2["[lethal.uniqueID]"] = lethal.getcopy()
@@ -139,7 +139,7 @@
 	stage = 1
 
 	spawn (rand(waittime_l, waittime_h))
-		if(!mixed)
+		if (!mixed)
 			send_intercept()
 
 
@@ -147,19 +147,19 @@
 
 
 /datum/game_mode/epidemic/process()
-	if(stage == 1 && cruiser_seconds() < 60 * 30)
+	if (stage == 1 && cruiser_seconds() < 60 * 30)
 		announce_to_kill_crew()
 		stage = 2
-	else if(stage == 2 && cruiser_seconds() <= 60 * 5)
+	else if (stage == 2 && cruiser_seconds() <= 60 * 5)
 		command_alert("Inbound cruiser detected on collision course. Scans indicate the ship to be armed and ready to fire. Estimated time of arrival: 5 minutes.", "[station_name()] Early Warning System")
 		stage = 3
-	else if(stage == 3 && cruiser_seconds() <= 0)
+	else if (stage == 3 && cruiser_seconds() <= 0)
 		crew_lose()
 		stage = 4
 
 	checkwin_counter++
-	if(checkwin_counter >= 20)
-		if(!finished)
+	if (checkwin_counter >= 20)
+		if (!finished)
 			ticker.mode.check_win()
 		checkwin_counter = 0
 	return 0
@@ -170,15 +170,15 @@
 /datum/game_mode/epidemic/check_win()
 	var/alive = 0
 	var/sick = 0
-	for(var/mob/living/carbon/human/H in mob_list)
-		if(H.key && H.stat != 2)
+	for (var/mob/living/carbon/human/H in mob_list)
+		if (H.key && H.stat != 2)
 			alive++
-		if(H.virus2.len && H.stat != 2)
+		if (H.virus2.len && H.stat != 2)
 			sick++
 
-	if(alive == 0)
+	if (alive == 0)
 		finished = 2
-	if(sick == 0)
+	if (sick == 0)
 		finished = 1
 	return
 
@@ -186,7 +186,7 @@
 //Checks if the round is over//
 ///////////////////////////////
 /datum/game_mode/epidemic/check_finished()
-	if(finished != 0)
+	if (finished != 0)
 		return 1
 	else
 		return 0
@@ -196,8 +196,8 @@
 ///////////////////////////////////////////
 /datum/game_mode/epidemic/proc/crew_lose()
 	ticker.mode:explosion_in_progress = 1
-	for(var/mob/M in mob_list)
-		if(M.client)
+	for (var/mob/M in mob_list)
+		if (M.client)
 			M << 'sound/machines/Alarm.ogg'
 	to_chat(world, "<span class='danger'>Incoming missile detected.. Impact in 10..</span>")
 	for (var/i=9 to 1 step -1)
@@ -205,9 +205,9 @@
 		to_chat(world, "<span class='danger'>[i]..</span>")
 	sleep(10)
 	enter_allowed = 0
-	if(ticker)
+	if (ticker)
 		ticker.station_explosion_cinematic(0,null)
-		if(ticker.mode)
+		if (ticker.mode)
 			ticker.mode:station_was_nuked = 1
 			ticker.mode:explosion_in_progress = 0
 	finished = 2
@@ -218,10 +218,10 @@
 //Announces the end of the game with all relavent information stated//
 //////////////////////////////////////////////////////////////////////
 /datum/game_mode/epidemic/declare_completion()
-	if(finished == 1)
+	if (finished == 1)
 		feedback_set_details("round_end_result","win - epidemic cured")
 		to_chat(world, "<span class='danger'><FONT size = 3> The virus outbreak was contained! The crew wins!</FONT></span>")
-	else if(finished == 2)
+	else if (finished == 2)
 		feedback_set_details("round_end_result","loss - rev heads killed")
 		to_chat(world, "<span class='danger'><FONT size = 3> The crew succumbed to the epidemic!</FONT></span>")
 	..()

@@ -5,16 +5,16 @@
 	icon = null
 	invisibility = 101
 
-	for(var/datum/organ/external/E in src.organs)
-		if(istype(E, /datum/organ/external/chest) || istype(E, /datum/organ/external/groin)) //Really bad stuff happens when either get removed
+	for (var/datum/organ/external/E in src.organs)
+		if (istype(E, /datum/organ/external/chest) || istype(E, /datum/organ/external/groin)) //Really bad stuff happens when either get removed
 			continue
 		//Only make the limb drop if it's not too damaged
-		if(prob(100 - E.get_damage()))
+		if (prob(100 - E.get_damage()))
 			//Override the current limb status and don't cause an explosion
 			E.droplimb(1, 1)
 
 	var/gib_radius = 0
-	if(reagents.has_reagent(LUBE))
+	if (reagents.has_reagent(LUBE))
 		gib_radius = 6 //Your insides are all lubed, so gibs travel much further
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)
@@ -30,40 +30,40 @@
 
 	dropBorers(1)
 
-	if(istype(src, /mob/living/carbon/human/manifested))
+	if (istype(src, /mob/living/carbon/human/manifested))
 		anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-hm", sleeptime = 15)
 	else
 		anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 15)
 
 	var/datum/organ/external/head_organ = get_organ(LIMB_HEAD)
-	if(head_organ.status & ORGAN_DESTROYED)
+	if (head_organ.status & ORGAN_DESTROYED)
 		new /obj/effect/decal/remains/human/noskull(loc)
 	else
 		new /obj/effect/decal/remains/human(loc)
 	qdel(src)
 
 /mob/living/carbon/human/Destroy()
-	if(mind && species && (species.name == "Manifested") && (mind in ticker.mode.cult))//manifested ghosts are removed from the cult once their bodies are destroyed
+	if (mind && species && (species.name == "Manifested") && (mind in ticker.mode.cult))//manifested ghosts are removed from the cult once their bodies are destroyed
 		ticker.mode.update_cult_icons_removed(mind)
 		ticker.mode.cult -= mind
 
 	species = null
 
-	if(decapitated)
+	if (decapitated)
 		decapitated.origin_body = null
 		decapitated = null
 
 	..()
 
-	for(var/obj/Overlays/O in obj_overlays)
+	for (var/obj/Overlays/O in obj_overlays)
 		returnToPool(O)
 
 	obj_overlays = null
 
 /mob/living/carbon/human/death(gibbed)
-	if(stat == DEAD)
+	if (stat == DEAD)
 		return
-	if(healths)
+	if (healths)
 		healths.icon_state = "health7"
 	stat = DEAD
 	dizziness = 0
@@ -71,13 +71,13 @@
 
 	//If we have brain worms, dump 'em.
 	var/mob/living/simple_animal/borer/B=has_brain_worms()
-	if(B && B.controlling)
+	if (B && B.controlling)
 		to_chat(src, "<span class='danger'>Your host has died.  You reluctantly release control.</span>")
 		to_chat(B.host_brain, "<span class='danger'>Just before your body passes, you feel a brief return of sensation.  You are now in control...  And dead.</span>")
 		do_release_control(0)
 
 	//Check for heist mode kill count.
-	if(ticker.mode && ( istype( ticker.mode,/datum/game_mode/heist) ) )
+	if (ticker.mode && ( istype( ticker.mode,/datum/game_mode/heist) ) )
 		//Check for last assailant's mutantrace.
 		/*if( LAssailant && ( istype( LAssailant,/mob/living/carbon/human ) ) )
 			var/mob/living/carbon/human/V = LAssailant
@@ -85,22 +85,22 @@
 				*/ //Not currently feasible due to terrible LAssailant tracking.
 //		to_chat(world, "Vox kills: [vox_kills]")
 		vox_kills++ //Bad vox. Shouldn't be killing humans.
-	if(ishuman(LAssailant))
+	if (ishuman(LAssailant))
 		var/mob/living/carbon/human/H=LAssailant
-		if(H.mind)
+		if (H.mind)
 			H.mind.kills += "[name] ([ckey])"
 
-	if(!gibbed)
+	if (!gibbed)
 		emote("deathgasp") //Let the world KNOW WE ARE DEAD
 
 		update_canmove()
 
 	tod = worldtime2text() //Weasellos time of death patch
-	if(mind)
+	if (mind)
 		mind.store_memory("Time of death: [tod]", 0)
-		if(!suiciding) //Cowards don't count
+		if (!suiciding) //Cowards don't count
 			score["deadcrew"]++ //Someone died at this point, and that's terrible
-	if(ticker && ticker.mode)
+	if (ticker && ticker.mode)
 //		world.log << "k"
 		sql_report_death(src)
 		ticker.mode.check_win() //Calls the rounds wincheck, mainly for wizard, malf, and changeling now
@@ -108,12 +108,12 @@
 	return ..(gibbed)
 
 /mob/living/carbon/human/proc/makeSkeleton()
-	if(SKELETON in src.mutations)
+	if (SKELETON in src.mutations)
 		return
 
-	if(f_style)
+	if (f_style)
 		f_style = "Shaved"
-	if(h_style)
+	if (h_style)
 		h_style = "Bald"
 	update_hair(0)
 
@@ -124,11 +124,11 @@
 	return
 
 /mob/living/carbon/human/proc/ChangeToHusk()
-	if(M_HUSK in mutations)
+	if (M_HUSK in mutations)
 		return
-	if(f_style)
+	if (f_style)
 		f_style = "Shaved" //We only change the icon_state of the hair datum, so it doesn't mess up their UI/UE
-	if(h_style)
+	if (h_style)
 		h_style = "Bald"
 	update_hair(0)
 

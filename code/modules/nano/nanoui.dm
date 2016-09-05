@@ -140,11 +140,11 @@ nanoui is used to open and update nano browser uis
   */
 
 /datum/nanoui/proc/check_interactive()
-	if(user.mutations && user.mutations.len)
-		if(M_TK in user.mutations)
+	if (user.mutations && user.mutations.len)
+		if (M_TK in user.mutations)
 			return 1
-	if(isrobot(user))
-		if(src_object in view(7, user))
+	if (isrobot(user))
+		if (src_object in view(7, user))
 			return 1
 	return (isAI(user) || !distance_check || isAdminGhost(user))
 
@@ -160,17 +160,17 @@ nanoui is used to open and update nano browser uis
 		set_status(STATUS_INTERACTIVE, push_update) // interactive (green visibility)
 	else
 		var/dist = 0
-		if(istype(src_object, /atom))
+		if (istype(src_object, /atom))
 			var/atom/A = src_object
-			if(isobserver(user))
+			if (isobserver(user))
 				var/mob/dead/observer/O = user
 				var/ghost_flags = 0
-				if(A.ghost_write)
+				if (A.ghost_write)
 					ghost_flags |= PERMIT_ALL
-				if(canGhostWrite(O,A,"",ghost_flags) || isAdminGhost(O))
+				if (canGhostWrite(O,A,"",ghost_flags) || isAdminGhost(O))
 					set_status(STATUS_INTERACTIVE, push_update) // interactive (green visibility)
 					return
-				else if(canGhostRead(O,A,ghost_flags))
+				else if (canGhostRead(O,A,ghost_flags))
 					set_status(STATUS_UPDATE, push_update)
 					return
 			dist = get_dist(src_object, user)
@@ -437,7 +437,7 @@ nanoui is used to open and update nano browser uis
   * @return nothing
   */
 /datum/nanoui/proc/open()
-	if(!user.client)
+	if (!user.client)
 		return
 
 	var/window_size = ""
@@ -467,7 +467,7 @@ nanoui is used to open and update nano browser uis
   * @return nothing
   */
 /datum/nanoui/proc/on_close_winset()
-	if(!user)
+	if (!user)
 		return
 	var/params = "\ref[src]"
 
@@ -503,19 +503,19 @@ nanoui is used to open and update nano browser uis
 
 	// This is used to toggle the nano map ui
 	var/map_update = 0
-	if(href_list["showMap"])
+	if (href_list["showMap"])
 		set_show_map(text2num(href_list["showMap"]))
 		map_update = 1
 
-	if(href_list["zlevel"])
+	if (href_list["zlevel"])
 		var/listed_zlevels = list(map.zMainStation, map.zTCommSat, map.zDerelict, map.zAsteroid, map.zDeepSpace)
 		var/newz = input("Choose Z-Level to view.","Z-Levels",1) as null|anything in listed_zlevels
-		if(!newz || isnull(newz))
+		if (!newz || isnull(newz))
 			return 0
-		if(!(newz in listed_zlevels))
+		if (!(newz in listed_zlevels))
 			to_chat(usr, "<span class='danger'>Unable to establish a connection</span>")
 			return 0
-		if(newz != map_z_level)
+		if (newz != map_z_level)
 			set_map_z_level(newz)
 			map_update = 1
 

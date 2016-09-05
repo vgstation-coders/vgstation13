@@ -14,8 +14,8 @@
 	var/opened=0
 
 /obj/machinery/telepad/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(isscrewdriver(W))
-		if(opened)
+	if (isscrewdriver(W))
+		if (opened)
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "<span class = 'caution'>You secure the access port on \the [src].</span>")
 			opened = 0
@@ -23,8 +23,8 @@
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "<span class = 'caution'>You open \the [src]'s access port.</span>")
 			opened = 1
-	if(istype(W, /obj/item/bluespace_crystal) && opened)
-		if(amplifier)
+	if (istype(W, /obj/item/bluespace_crystal) && opened)
+		if (amplifier)
 			to_chat(user, "<span class='warning'>There's something in the booster coil already.</span>")
 			return
 		playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
@@ -33,7 +33,7 @@
 		W.forceMove(src)
 		amplifier=W
 		return
-	if(iscrowbar(W) && opened && amplifier)
+	if (iscrowbar(W) && opened && amplifier)
 		to_chat(user, "<span class='notice'>You carefully pry \the [amplifier] from \the [src].</span>")
 		var/obj/item/bluespace_crystal/C=amplifier
 		C.forceMove(get_turf(src))

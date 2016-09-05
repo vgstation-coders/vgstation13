@@ -13,7 +13,7 @@
 	var/message
 
 /datum/scriptError/New(msg = null)
-	if(msg)
+	if (msg)
 		message = msg
 
 /datum/scriptError/BadToken
@@ -22,10 +22,10 @@
 
 /datum/scriptError/BadToken/New(datum/token/t)
 	token = t
-	if(t && t.line)
+	if (t && t.line)
 		message = "[t.line]: [message]"
 
-	if(istype(t))
+	if (istype(t))
 		message += "[t.value]"
 
 	else
@@ -57,12 +57,12 @@
 	message = "Expected: '"
 
 /datum/scriptError/ExpectedToken/New(id, datum/token/T)
-	if(T && T.line)
+	if (T && T.line)
 		message = "[T.line]: [message]"
 
 	message += "[id]'. "
 
-	if(T)
+	if (T)
 		message += "Found '[T.value]'."
 
 
@@ -77,7 +77,7 @@
 
 /datum/scriptError/ParameterFunction/New(datum/token/t)
 	var/line = "?"
-	if(t)
+	if (t)
 		line = t.line
 	message = "[line]: [message]"
 
@@ -99,11 +99,11 @@
 */
 /datum/runtimeError/proc/ToString()
 	. = "[name]: [message]"
-	if(!stack.Top())
+	if (!stack.Top())
 		return
 
 	. += "\nStack:"
-	while(stack.Top())
+	while (stack.Top())
 		var/datum/node/statement/FunctionCall/stmt = stack.Pop()
 		. += "\n\t [stmt.func_name]()"
 

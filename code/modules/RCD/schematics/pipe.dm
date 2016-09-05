@@ -12,25 +12,25 @@
 	flags		= RCD_RANGE
 
 /datum/rcd_schematic/decon_pipes/attack(var/atom/A, var/mob/user)
-	if(!istype(A, /atom/movable))
+	if (!istype(A, /atom/movable))
 		return 1
 
 	var/atom/movable/AM = A
 
-	if(!is_type_in_list(AM, list(/obj/item/pipe, /obj/item/pipe_meter, /obj/item/pipe_gsensor, /obj/structure/disposalconstruct)))
+	if (!is_type_in_list(AM, list(/obj/item/pipe, /obj/item/pipe_meter, /obj/item/pipe_gsensor, /obj/structure/disposalconstruct)))
 		return 1
 
 	to_chat(user, "Destroying Pipe...")
 	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
-	if(!do_after(user, AM, 5))
+	if (!do_after(user, AM, 5))
 		return 1
 
-	if(!AM)
+	if (!AM)
 		return 1
 
 	playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
 
-	if(istype(AM, /obj/item/pipe))
+	if (istype(AM, /obj/item/pipe))
 		returnToPool(A)
 	else
 		qdel(AM)
@@ -57,13 +57,13 @@
 /datum/rcd_schematic/paint_pipes/New(var/obj/item/device/rcd/n_master)
 	. = ..()
 
-	if(!master || !master.interface)
+	if (!master || !master.interface)
 		return
 
 	//Add the colour CSS defines to the master's interface's HEAD.
 	var/color_css
 
-	for(var/color_name in available_colors)
+	for (var/color_name in available_colors)
 		var/color = available_colors[color_name]
 		if (color == "custom")
 			color = "#000000"
@@ -88,9 +88,9 @@
 
 /datum/rcd_schematic/paint_pipes/get_HTML()
 	. += "<h4>Colour Choice:</h4>"
-	for(var/color_name in available_colors)
+	for (var/color_name in available_colors)
 		var/selected = ""
-		if(color_name == selected_color)
+		if (color_name == selected_color)
 			selected = " selected"
 		if (selected_color == "custom")
 			selected_color = input("Select Colour to change the pipe to", "Custom Pipe Colour", selected_color) as color
@@ -103,7 +103,7 @@
 			Mass Colouration: <b><A href='?src=\ref[master.interface];set_mass_colour=1'>[mass_colour_on]</a></b>"}
 
 /datum/rcd_schematic/paint_pipes/attack(var/atom/A, var/mob/user)
-	if(!istype(A, /obj/machinery/atmospherics))
+	if (!istype(A, /obj/machinery/atmospherics))
 		return 1
 
 	var/obj/machinery/atmospherics/O = A
@@ -111,9 +111,9 @@
 	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
 	if (selected_color in available_colors)
 		selected_color = available_colors[selected_color]
-	if(mass_colour && world.timeofday < last_colouration + colouring_delay)
+	if (mass_colour && world.timeofday < last_colouration + colouring_delay)
 		return "We aren't ready to mass paint again; please wait [(last_colouration+colouring_delay)-world.timeofday] more seconds!"
-	if(mass_colour && istype(O, /obj/machinery/atmospherics/pipe))
+	if (mass_colour && istype(O, /obj/machinery/atmospherics/pipe))
 		var/obj/machinery/atmospherics/pipe/pipe_to_colour = O
 		var/datum/pipeline/pipe_line = pipe_to_colour.parent
 		var/list/pipeline_members = pipe_line.members
@@ -130,11 +130,11 @@
 	user.visible_message("<span class='notice'>[user] paints \the [O] [selected_color].</span>","<span class='notice'>You paint \the [O] [selected_color].</span>")
 
 /datum/rcd_schematic/paint_pipes/Topic(var/href, var/list/href_list)
-	if(href_list["set_color"])
-		if(href_list["set_color"] in available_colors)
+	if (href_list["set_color"])
+		if (href_list["set_color"] in available_colors)
 			selected_color = href_list["set_color"]
 			master.update_options_menu()
-	if(href_list["set_mass_colour"])
+	if (href_list["set_mass_colour"])
 		mass_colour = mass_colour ? 0:1
 		master.update_options_menu()
 	return 1
@@ -147,12 +147,12 @@
 	flags		= RCD_RANGE | RCD_GET_TURF
 
 /datum/rcd_schematic/gsensor/attack(var/atom/A, var/mob/user)
-	if(!isturf(A))
+	if (!isturf(A))
 		return
 
 	to_chat(user, "Building gas sensor...")
 	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
-	if(!do_after(user, A, 20))
+	if (!do_after(user, A, 20))
 		return 1
 
 	playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
@@ -164,12 +164,12 @@
 	flags		= RCD_RANGE | RCD_GET_TURF
 
 /datum/rcd_schematic/pmeter/attack(var/atom/A, var/mob/user)
-	if(!isturf(A))
+	if (!isturf(A))
 		return
 
 	to_chat(user, "Building pipe meter...")
 	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
-	if(!do_after(user, A, 20))
+	if (!do_after(user, A, 20))
 		return 1
 
 	playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
@@ -189,11 +189,11 @@
 
 /datum/rcd_schematic/pipe/New(var/obj/item/device/rcd/n_master)
 	. = ..()
-	if(n_master) // So we don't do this in case we're created for asset registering.
+	if (n_master) // So we don't do this in case we're created for asset registering.
 		selected_dir = get_base_dir()
 
 /datum/rcd_schematic/pipe/proc/get_base_dir()
-	if(pipe_type == PIPE_BENT)
+	if (pipe_type == PIPE_BENT)
 		return NORTHEAST
 
 	return NORTH
@@ -201,13 +201,13 @@
 /datum/rcd_schematic/pipe/register_assets()
 	var/list/dir_list = get_dirs()
 
-	for(var/dir in dir_list)
+	for (var/dir in dir_list)
 		register_icon(dir)
 
 /datum/rcd_schematic/pipe/send_assets(var/client/client)
 	var/list/dir_list = get_dirs()
 
-	for(var/dir in dir_list)
+	for (var/dir in dir_list)
 		send_icon(client, dir)
 
 	send_asset(client, "RPD-layer-blended-1.png")
@@ -218,17 +218,17 @@
 
 
 /datum/rcd_schematic/pipe/proc/get_dirs()
-	switch(pipe_type)
-		if(PIPE_UNARY, PIPE_TRINARY)
+	switch (pipe_type)
+		if (PIPE_UNARY, PIPE_TRINARY)
 			. = cardinal
 
-		if(PIPE_BINARY)
+		if (PIPE_BINARY)
 			. = list(NORTH, EAST)
 
-		if(PIPE_BENT)
+		if (PIPE_BENT)
 			. = diagonal
 
-		if(PIPE_TRIN_M)
+		if (PIPE_TRIN_M)
 			. = alldirs
 
 		else
@@ -245,7 +245,7 @@
 
 	. += "<h4>Layers</h4>"
 
-	if(layer)
+	if (layer)
 		. += {"
 		<div class="layer_holder">
 			<a class="no_dec" href="?src=\ref[master.interface];set_layer=1"><div class="layer vertical one 			[layer == 1 ? "selected" : ""]"></div></a>
@@ -267,32 +267,32 @@
 
 	. += "<h4>Directions</h4>"
 
-	switch(pipe_type)
-		if(PIPE_BINARY)
+	switch (pipe_type)
+		if (PIPE_BINARY)
 			. += render_dir_image(NORTH,		"Vertical")
 			. += render_dir_image(EAST,			"Horizontal")
 
-		if(PIPE_UNARY)
+		if (PIPE_UNARY)
 			. += render_dir_image(NORTH,		"North")
 			. += render_dir_image(EAST,			"East")
 			. += render_dir_image(SOUTH,		"South")
 			. += render_dir_image(WEST,			"West")
 
-		if(PIPE_BENT)
+		if (PIPE_BENT)
 			. += render_dir_image(NORTHWEST,	"West to North")
 			. += render_dir_image(NORTHEAST,	"North to East")
 			. += "<br/>"
 			. += render_dir_image(SOUTHWEST,	"South to West")
 			. += render_dir_image(SOUTHEAST,	"East to South")
 
-		if(PIPE_TRINARY)
+		if (PIPE_TRINARY)
 			. += render_dir_image(NORTH,		"West South East")
 			. += render_dir_image(EAST,			"North West South")
 			. += "<br/>"
 			. += render_dir_image(SOUTH,		"East North West")
 			. += render_dir_image(WEST,			"South East North")
 
-		if(PIPE_TRIN_M)
+		if (PIPE_TRIN_M)
 			. += render_dir_image(NORTH,		"West South East")
 			. += render_dir_image(EAST,			"North West South")
 			. += "<br/>"
@@ -309,15 +309,15 @@
 
 /datum/rcd_schematic/pipe/proc/render_dir_image(var/dir, var/title)
 	var/selected = ""
-	if(selected_dir == dir)
+	if (selected_dir == dir)
 		selected = " class='selected'"
 
 	return "<a href='?src=\ref[master.interface];set_dir=[dir]'[selected] title='[title]'><img src='RPD_[pipe_id]_[dir].png'/></a>"
 
 /datum/rcd_schematic/pipe/Topic(var/href, var/href_list)
-	if(href_list["set_dir"])
+	if (href_list["set_dir"])
 		var/dir = text2num(href_list["set_dir"])
-		if(!(dir in alldirs) || selected_dir == dir)
+		if (!(dir in alldirs) || selected_dir == dir)
 			return 1
 
 		selected_dir = dir
@@ -325,9 +325,9 @@
 
 		return 1
 
-	if(href_list["set_layer"] && layer) //Only handle this is layer is nonzero.
+	if (href_list["set_layer"] && layer) //Only handle this is layer is nonzero.
 		var/n_layer = Clamp(round(text2num(href_list["set_layer"])), 1, 5)
-		if(layer == n_layer) //No point doing anything.
+		if (layer == n_layer) //No point doing anything.
 			return 1
 
 		layer = n_layer
@@ -338,7 +338,7 @@
 	playsound(get_turf(user), 'sound/machines/click.ogg', 50, 1)
 	var/thislayer = layer
 	var/thisdir = selected_dir
-	if(!do_after(user, A, 20))
+	if (!do_after(user, A, 20))
 		return 1
 
 	playsound(get_turf(user), 'sound/items/Deconstruct.ogg', 50, 1)
@@ -349,11 +349,11 @@
 	P.add_fingerprint(user)
 
 /datum/rcd_schematic/pipe/select(var/mob/user, var/datum/rcd_schematic/old_schematic)
-	if(!istype(old_schematic, /datum/rcd_schematic/pipe))
+	if (!istype(old_schematic, /datum/rcd_schematic/pipe))
 		return ..()
 
 	var/datum/rcd_schematic/pipe/P = old_schematic
-	if(P.layer)
+	if (P.layer)
 		layer = P.layer
 
 	return ..()
@@ -374,7 +374,7 @@
 
 /datum/rcd_schematic/pipe/disposal/render_dir_image(var/dir, var/title)
 	var/selected = ""
-	if(selected_dir == dir)
+	if (selected_dir == dir)
 		selected = " class='selected'"
 
 	return "<a href='?src=\ref[master.interface];set_dir=[dir]'[selected] title='[title]'><img src='RPD_D_[pipe_id]_[dir].png'/></a>"
@@ -382,7 +382,7 @@
 /datum/rcd_schematic/pipe/disposal/attack(var/atom/A, var/mob/user)
 	to_chat(user, "Building Pipes ...")
 	playsound(get_turf(user), 'sound/machines/click.ogg', 50, 1)
-	if(!do_after(user, A, 20))
+	if (!do_after(user, A, 20))
 		return 1
 
 	playsound(get_turf(user), 'sound/items/Deconstruct.ogg', 50, 1)
@@ -484,7 +484,7 @@ var/global/list/disposalpipeID2State = list(
 	pipe_type	= PIPE_UNARY
 
 /datum/rcd_schematic/pipe/layer_adapter/register_icon(var/dir)
-	for(var/layer = PIPING_LAYER_MIN to PIPING_LAYER_MAX)
+	for (var/layer = PIPING_LAYER_MIN to PIPING_LAYER_MAX)
 		register_asset("RPD_[pipe_id]_[dir]_[layer].png", new/icon('icons/obj/atmospherics/pipe_adapter.dmi', "adapter_[layer]", dir))
 
 /datum/rcd_schematic/pipe/layer_adapter/send_icon(var/client/client, var/dir)
@@ -493,7 +493,7 @@ var/global/list/disposalpipeID2State = list(
 
 /datum/rcd_schematic/pipe/layer_adapter/render_dir_image(var/dir, var/title)
 	var/selected = ""
-	if(selected_dir == dir)
+	if (selected_dir == dir)
 		selected = " class='selected'"
 
 	return "<a href='?src=\ref[master.interface];set_dir=[dir]'[selected] title='[title]'><img src='RPD_[pipe_id]_[dir]_[layer].png'/></a>"

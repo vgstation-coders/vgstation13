@@ -24,48 +24,48 @@
 	var/use_cooldown = 5 SECONDS
 
 /obj/item/weapon/melee/lance/attack_self(mob/user)
-	if(trigger)
+	if (trigger)
 		raise_lance(user)
 	else
-		if(world.time > last_used + use_cooldown)
+		if (world.time > last_used + use_cooldown)
 			lower_lance(user)
 		else
 			to_chat(user, "<span class='warning'>You are not ready to couch \the [src] yet!</span>")
 
 /obj/item/weapon/melee/lance/proc/lower_lance(mob/user)
-	if(!trigger)
+	if (!trigger)
 		trigger = new(get_step(usr, usr.dir), usr, src)
-		if(user)
+		if (user)
 			user.visible_message("<span class='danger'>[user] couches \the [src]!</span>", "<span class='notice'>You couch \the [src] and prepare to charge.</span>")
 		item_state = "lance_lowered"
 		force = initial(force)
 		attack_verb = couch_attack_verbs
 
-	if(isliving(loc))
+	if (isliving(loc))
 		var/mob/living/owner = loc
 
 		owner.update_inv_hand(owner.active_hand)
 
 /obj/item/weapon/melee/lance/proc/raise_lance(mob/user)
-	if(trigger)
+	if (trigger)
 		qdel(trigger)
 
 	trigger = null
 
-	if(user)
+	if (user)
 		user.visible_message("<span class='danger'>[user] raises \the [src].</span>", "<span class='notice'>You raise \the [src].</span>")
 	item_state = "lance"
 	force = initial(force)
 	attack_verb = default_attack_verbs
 	last_used = world.time
 
-	if(isliving(loc))
+	if (isliving(loc))
 		var/mob/living/owner = loc
 
 		owner.update_inv_hand(owner.active_hand)
 
 /obj/item/weapon/melee/lance/attack(mob/living/M, mob/living/user)
-	if(istype(M) && trigger) //Lance is couched
+	if (istype(M) && trigger) //Lance is couched
 		return trigger.Crossed(M)
 
 	return ..()
@@ -99,20 +99,20 @@
 	processing_objects.Remove(src)
 	owner = null
 
-	if(L)
+	if (L)
 		L.trigger = null
 		L = null
 
 	..()
 
 /obj/effect/lance_trigger/process()
-	if(!L)
+	if (!L)
 		return qdel(src)
 
-	if(!owner || !isturf(owner.loc))
+	if (!owner || !isturf(owner.loc))
 		return L.raise_lance()
 
-	if(amount_of_turfs_charged > 0 && (world.time - last_moved) >= 3)
+	if (amount_of_turfs_charged > 0 && (world.time - last_moved) >= 3)
 		to_chat(owner, "<span class='notice'>You momentarily lose control of \the [L].</span>")
 		L.raise_lance()
 		return
@@ -120,52 +120,52 @@
 /obj/effect/lance_trigger/forceMove(turf/new_loc)
 	var/old_last_move = last_move //Old direction
 
-	if(amount_of_turfs_charged > 0 && (world.time - last_moved) >= 3) //More than 2/10 of a second since last moved
+	if (amount_of_turfs_charged > 0 && (world.time - last_moved) >= 3) //More than 2/10 of a second since last moved
 		to_chat(owner, "<span class='notice'>You momentarily lose control of \the [L].</span>")
 		L.raise_lance()
 		return
 
 	.=..()
 
-	if(amount_of_turfs_charged > 0 && last_move != old_last_move) //Changed direction of the charge
+	if (amount_of_turfs_charged > 0 && last_move != old_last_move) //Changed direction of the charge
 		to_chat(owner, "<span class='notice'>You momentarily lose control of \the [L].</span>")
 		L.raise_lance()
 		return
 
-	if(!L)
+	if (!L)
 		return
 	amount_of_turfs_charged++
 	L.force += 3
 
-	if(amount_of_turfs_charged > 0)
-		if(istype(new_loc))
-			for(var/mob/living/victim in new_loc)
-				if(victim.lying)
+	if (amount_of_turfs_charged > 0)
+		if (istype(new_loc))
+			for (var/mob/living/victim in new_loc)
+				if (victim.lying)
 					continue
 
 				return Crossed(victim)
 
 /obj/effect/lance_trigger/Crossed(atom/movable/O)
-	if(!L || !owner)
+	if (!L || !owner)
 		return qdel(src)
-	if(L.loc != owner)
+	if (L.loc != owner)
 		return qdel(src)
-	if(!isturf(owner.loc))
+	if (!isturf(owner.loc))
 		L.raise_lance()
 		return
 
-	if(O != owner && isliving(O))
+	if (O != owner && isliving(O))
 		var/mob/living/victim = O
-		if(!victim.lying)
+		if (!victim.lying)
 			var/base_damage = 3
 
 			base_damage = min(base_damage * amount_of_turfs_charged, 72) //Max damage potential is reached at 34 turfs
 
-			if(ishuman(victim))
+			if (ishuman(victim))
 				var/mob/living/carbon/human/H = victim
 				var/datum/organ/external/affecting = H.get_organ(ran_zone(owner.zone_sel.selecting))
 
-				if(H.check_shields(base_damage, "the couched lance"))
+				if (H.check_shields(base_damage, "the couched lance"))
 					H.visible_message("<span class='danger'>[H] blocks \the [owner]'s [src.L.name] hit.</span>", "<span class='notice'>You block \the [owner]'s couched [src.L.name].</span>")
 					return
 
@@ -177,14 +177,14 @@
 			victim.visible_message("<span class='danger'>[victim] has been impaled by [owner]'s [src.L.name]!</span>", "<span class='userdanger'>You were impaled by [owner]'s [src.L.name]!</span>")
 
 
-			if(amount_of_turfs_charged >= 5)
+			if (amount_of_turfs_charged >= 5)
 				victim.Weaken(min(amount_of_turfs_charged-5, 5))//Stun begins at 5 charged turfs. Maximum effect at 10 charged turfs
 
-			if(amount_of_turfs_charged >= 10)
+			if (amount_of_turfs_charged >= 10)
 				victim.throw_at(get_edge_target_turf(get_turf(victim), last_move), amount_of_turfs_charged * 0.25, 0.1)
 
 			amount_of_turfs_charged -= 30
-			if(amount_of_turfs_charged <= 0)
+			if (amount_of_turfs_charged <= 0)
 				L.raise_lance()
 
 	return ..()

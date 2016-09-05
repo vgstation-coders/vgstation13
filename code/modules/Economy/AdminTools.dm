@@ -1,46 +1,46 @@
 /datum/admins/proc/EconomyPanel(action, hrefs)
-    if(!check_rights(R_FUN))
+    if (!check_rights(R_FUN))
         return
 
     var/dat= "<head><title>Economy Tools</title></head>"
     var/datum/money_account/detailed_account_view
     var/creating_new_account
 
-    if(hrefs["econ_panel"] != "open")
-        switch(hrefs["econ_panel"])
-            if("create_account")
+    if (hrefs["econ_panel"] != "open")
+        switch (hrefs["econ_panel"])
+            if ("create_account")
                 creating_new_account = 1
-            if("finalise_create_account")
+            if ("finalise_create_account")
                 var/account_name = hrefs["holder_name"]
                 var/starting_funds = max(text2num(hrefs["starting_funds"]), 0)
                 create_account(account_name, starting_funds, src)
                 creating_new_account = 0
-            if("view_account_detail")
+            if ("view_account_detail")
                 var/index = text2num(hrefs["account_index"])
-                if(index && index <= all_money_accounts.len)
+                if (index && index <= all_money_accounts.len)
                     detailed_account_view = all_money_accounts[index]
-            if("view_accounts_list")
+            if ("view_accounts_list")
                 detailed_account_view = null
                 creating_new_account = 0
-            if("edit_balance")
+            if ("edit_balance")
                 var/acc_num = text2num(hrefs["account_num"])
                 var/datum/money_account/acc = get_money_account_global(acc_num)
-                if(acc)
+                if (acc)
                     var/new_balance = input(usr, "Select a new balance for this account", "New balance", acc.money) as null|num
-                    if(new_balance && new_balance >= 0)
+                    if (new_balance && new_balance >= 0)
                         acc.money = new_balance
                     detailed_account_view = acc
-            if("edit_wage_payout")
+            if ("edit_wage_payout")
                 var/acc_num = text2num(hrefs["account_num"])
                 var/datum/money_account/acc = get_money_account_global(acc_num)
-                if(acc)
+                if (acc)
                     var/new_payout = input(usr, "Select a new payout for this account", "New payout", acc.wage_gain) as null|num
-                    if(new_payout && new_payout >= 0)
+                    if (new_payout && new_payout >= 0)
                         acc.wage_gain = new_payout
                     detailed_account_view = acc
 
 
-    if(creating_new_account)
+    if (creating_new_account)
 
         dat += {"
             <a href='?src=\ref[src];econ_panel=view_accounts_list;'>Return to accounts list</a>
@@ -53,7 +53,7 @@
             <input type='submit' value='Create'><br>
             </form>"}
     else
-        if(detailed_account_view)
+        if (detailed_account_view)
 
             dat += {"
                 <a href='?src=\ref[src];econ_panel=view_accounts_list;'>Return to accounts list</a><hr>
@@ -70,7 +70,7 @@
                 <td><b>Value</b></td>
                 <td><b>Source terminal ID</b></td>
                 </tr>"}
-            for(var/datum/transaction/T in detailed_account_view.transaction_log)
+            for (var/datum/transaction/T in detailed_account_view.transaction_log)
 
                 dat += {"<tr>
                     <td>[T.date]</td>
@@ -85,7 +85,7 @@
 
             dat += {"<a href='?src=\ref[src];econ_panel=create_account;'>Create new account</a><br><br>
                 <table border=1 style='width:100%'>"}
-            for(var/i=1, i<=all_money_accounts.len, i++)
+            for (var/i=1, i<=all_money_accounts.len, i++)
                 var/datum/money_account/D = all_money_accounts[i]
 
                 dat += {"<tr>

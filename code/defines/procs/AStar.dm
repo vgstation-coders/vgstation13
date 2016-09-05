@@ -67,13 +67,13 @@ length to avoid portals or something i guess?? Not that they're counted right no
 	var/i
 	L.Add(A)
 	i = L.len -1
-	while(i > 0 &&  call(cmp)(L[i],A) >= 0) //place the element at it's right position using the compare proc
+	while (i > 0 &&  call(cmp)(L[i],A) >= 0) //place the element at it's right position using the compare proc
 		L.Swap(i,i+1) 						//last inserted element being first in case of ties (optimization)
 		i--
 
 //removes and returns the first element in the queue
 /PriorityQueue/proc/Dequeue()
-	if(!L.len)
+	if (!L.len)
 		return 0
 	. = L[1]
 	Remove(.)
@@ -94,19 +94,19 @@ length to avoid portals or something i guess?? Not that they're counted right no
 
 //return the element at the i_th position
 /PriorityQueue/proc/Get(var/i)
-	if(i > L.len || i < 1)
+	if (i > L.len || i < 1)
 		return 0
 	return L[i]
 
 //replace the passed element at it's right position using the cmp proc
 /PriorityQueue/proc/ReSort(var/atom/A)
 	var/i = Seek(A)
-	if(i == 0)
+	if (i == 0)
 		return
-	while(i < L.len && call(cmp)(L[i],L[i+1]) > 0)
+	while (i < L.len && call(cmp)(L[i],L[i+1]) > 0)
 		L.Swap(i,i+1)
 		i++
-	while(i > 1 && call(cmp)(L[i],L[i-1]) <= 0) //last inserted element being first in case of ties (optimization)
+	while (i > 1 && call(cmp)(L[i],L[i-1]) <= 0) //last inserted element being first in case of ties (optimization)
 		L.Swap(i,i-1)
 		i--
 
@@ -147,9 +147,9 @@ proc/PathWeightCompare(PathNode/a, PathNode/b)
 proc/SeekTurf(var/PriorityQueue/Queue, var/turf/T)
 	var/i = 1
 	var/PathNode/PN
-	while(i < Queue.L.len + 1)
+	while (i < Queue.L.len + 1)
 		PN = Queue.L[i]
-		if(PN.source == T)
+		if (PN.source == T)
 			return i
 		i++
 	return 0
@@ -164,14 +164,14 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 
 	//sanitation
 	start = get_turf(start)
-	if(!start)
+	if (!start)
 		return 0
 
 	//initialization
 	open.Enqueue(new /PathNode(start,null,0,call(start,dist)(end),0))
 
 	//then run the main loop
-	while(!open.IsEmpty() && !path)
+	while (!open.IsEmpty() && !path)
 	{
 			//get the lower f node on the open list
 		cur = open.Dequeue() //get the lower f turf in the open list
@@ -179,18 +179,18 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 
 		//if we only want to get near the target, check if we're close enough
 		var/closeenough
-		if(mintargetdist)
+		if (mintargetdist)
 			closeenough = call(cur.source,dist)(end) <= mintargetdist
 
 		//if too many steps, abandon that path
-		if(maxnodedepth && (cur.nt > maxnodedepth))
+		if (maxnodedepth && (cur.nt > maxnodedepth))
 			continue
 
 		//found the target turf (or close enough), let's create the path to it
-		if(cur.source == end || closeenough)
+		if (cur.source == end || closeenough)
 			path = new()
 			path.Add(cur.source)
-			while(cur.prevNode)
+			while (cur.prevNode)
 				cur = cur.prevNode
 				path.Add(cur.source)
 			break
@@ -198,22 +198,22 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 		//IMPLEMENTATION TO FINISH
 		//do we really need this minnodedist ???
 		/*if(minnodedist && maxnodedepth)
-			if(call(cur.source,minnodedist)(end) + cur.nt >= maxnodedepth)
+			if (call(cur.source,minnodedist)(end) + cur.nt >= maxnodedepth)
 				continue
 		*/
 
 		//get adjacents turfs using the adjacent proc, checking for access with id
 		var/list/L = call(cur.source,adjacent)(id,closed)
 
-		for(var/turf/T in L)
-			if(T == exclude)
+		for (var/turf/T in L)
+			if (T == exclude)
 				continue
 
 			var/newg = cur.g + call(cur.source,dist)(T)
-			if(!T.PNode) //is not already in open list, so add it
+			if (!T.PNode) //is not already in open list, so add it
 				open.Enqueue(new /PathNode(T,cur,newg,call(T,dist)(end),cur.nt+1))
 			else //is already in open list, check if it's a better way from the current turf
-				if(newg < T.PNode.g)
+				if (newg < T.PNode.g)
 					T.PNode.prevNode = cur
 					T.PNode.g = newg
 					T.PNode.calc_f()
@@ -222,18 +222,18 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 	}
 
 	//cleaning after us
-	for(var/PathNode/PN in open.L)
+	for (var/PathNode/PN in open.L)
 		PN.source.PNode = null
-	for(var/turf/T in closed)
+	for (var/turf/T in closed)
 		T.PNode = null
 
 	//if the path is longer than maxnodes, then don't return it
-	if(path && maxnodes && path.len > (maxnodes + 1))
+	if (path && maxnodes && path.len > (maxnodes + 1))
 		return 0
 
 	//reverse the path to get it from start to finish
-	if(path)
-		for(var/i = 1; i <= path.len/2; i++)
+	if (path)
+		for (var/i = 1; i <= path.len/2; i++)
 			path.Swap(i,path.len-i+1)
 
 	return path
@@ -252,29 +252,29 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 /proc/LinkBlockedWithAccess(turf/A, turf/B, obj/item/weapon/card/id/ID)
 
 
-	if(A == null || B == null)
+	if (A == null || B == null)
 		return 1
 	var/adir = get_dir(A,B)
 	var/rdir = get_dir(B,A)
-	if(adir & (adir-1))	//	diagonal
+	if (adir & (adir-1))	//	diagonal
 		var/turf/iStep = get_step(A,adir&(NORTH|SOUTH))
-		if(!iStep.density && !LinkBlockedWithAccess(A,iStep, ID) && !LinkBlockedWithAccess(iStep,B,ID))
+		if (!iStep.density && !LinkBlockedWithAccess(A,iStep, ID) && !LinkBlockedWithAccess(iStep,B,ID))
 			return 0
 
 		var/turf/pStep = get_step(A,adir&(EAST|WEST))
-		if(!pStep.density && !LinkBlockedWithAccess(A,pStep,ID) && !LinkBlockedWithAccess(pStep,B,ID))
+		if (!pStep.density && !LinkBlockedWithAccess(A,pStep,ID) && !LinkBlockedWithAccess(pStep,B,ID))
 			return 0
 
 		return 1
 
-	if(DirBlockedWithAccess(A,adir, ID))
+	if (DirBlockedWithAccess(A,adir, ID))
 		return 1
 
-	if(DirBlockedWithAccess(B,rdir, ID))
+	if (DirBlockedWithAccess(B,rdir, ID))
 		return 1
 
-	for(var/obj/O in B)
-		if(O.density && !istype(O, /obj/machinery/door) && !(O.flags & ON_BORDER))
+	for (var/obj/O in B)
+		if (O.density && !istype(O, /obj/machinery/door) && !(O.flags & ON_BORDER))
 			return 1
 
 	return 0
@@ -282,44 +282,44 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 // Returns true if direction is blocked from loc
 // Checks doors against access with given ID
 /proc/DirBlockedWithAccess(turf/loc,var/dir,var/obj/item/weapon/card/id/ID)
-	for(var/obj/structure/window/D in loc)
-		if(!D.density)
+	for (var/obj/structure/window/D in loc)
+		if (!D.density)
 			continue
-		if(D.dir == SOUTHWEST)
+		if (D.dir == SOUTHWEST)
 			return 1 //full-tile window
-		if(D.dir == dir)
+		if (D.dir == dir)
 			return 1 //matching border window
 
-	for(var/obj/machinery/door/D in loc)
-		if(!D.CanAStarPass(ID,dir))
+	for (var/obj/machinery/door/D in loc)
+		if (!D.CanAStarPass(ID,dir))
 			return 1
 	return 0
 
 // Returns true if a link between A and B is blocked
 // Movement through doors allowed if door is open
 /proc/LinkBlocked(turf/A, turf/B)
-	if(A == null || B == null)
+	if (A == null || B == null)
 		return 1
 	var/adir = get_dir(A,B)
 	var/rdir = get_dir(B,A)
-	if(adir & (adir-1)) //diagonal
+	if (adir & (adir-1)) //diagonal
 		var/turf/iStep = get_step(A,adir & (NORTH|SOUTH)) //check the north/south component
-		if(!iStep.density && !LinkBlocked(A,iStep) && !LinkBlocked(iStep,B))
+		if (!iStep.density && !LinkBlocked(A,iStep) && !LinkBlocked(iStep,B))
 			return 0
 
 		var/turf/pStep = get_step(A,adir & (EAST|WEST)) //check the east/west component
-		if(!pStep.density && !LinkBlocked(A,pStep) && !LinkBlocked(pStep,B))
+		if (!pStep.density && !LinkBlocked(A,pStep) && !LinkBlocked(pStep,B))
 			return 0
 
 		return 1
 
-	if(DirBlocked(A,adir))
+	if (DirBlocked(A,adir))
 		return 1
-	if(DirBlocked(B,rdir))
+	if (DirBlocked(B,rdir))
 		return 1
 
-	for(var/obj/O in B)
-		if(O.density && !istype(O, /obj/machinery/door) && !(O.flags & ON_BORDER))
+	for (var/obj/O in B)
+		if (O.density && !istype(O, /obj/machinery/door) && !(O.flags & ON_BORDER))
 			return 1
 
 	return 0
@@ -327,16 +327,16 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 // Returns true if direction is blocked from loc
 // Checks if doors are open
 /proc/DirBlocked(turf/loc,var/dir)
-	for(var/obj/structure/window/D in loc)
-		if(!D.density)
+	for (var/obj/structure/window/D in loc)
+		if (!D.density)
 			continue
-		if(D.dir == SOUTHWEST)
+		if (D.dir == SOUTHWEST)
 			return 1 //full-tile window
-		if(D.dir == dir)
+		if (D.dir == dir)
 			return 1 //matching border window
 
-	for(var/obj/machinery/door/D in loc)
-		if(!D.density)//if the door is open
+	for (var/obj/machinery/door/D in loc)
+		if (!D.density)//if the door is open
 			continue
 		else
 			return 1	// if closed, it's a real, air blocking door

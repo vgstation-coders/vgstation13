@@ -18,25 +18,25 @@
 
 /obj/item/stack/rods/afterattack(atom/Target, mob/user, adjacent, params)
 	var/busy = 0
-	if(adjacent)
-		if(isturf(Target) || istype(Target, /obj/structure/lattice))
+	if (adjacent)
+		if (isturf(Target) || istype(Target, /obj/structure/lattice))
 			var/turf/T = get_turf(Target)
 			var/obj/item/stack/rods/R = src
 			var/obj/structure/lattice/L = T.canBuildCatwalk(R)
-			if(istype(L))
-				if(R.amount < 2)
+			if (istype(L))
+				if (R.amount < 2)
 					to_chat(user, "<span class='warning'>You need atleast 2 rods to build a catwalk!</span>")
 					return
-				if(busy) //We are already building a catwalk, avoids stacking catwalks
+				if (busy) //We are already building a catwalk, avoids stacking catwalks
 					return
 				to_chat(user, "<span class='notice'>You begin to build a catwalk.</span>")
 				busy = 1
-				if(do_after(user, Target, 30))
+				if (do_after(user, Target, 30))
 					busy = 0
-					if(R.amount < 2)
+					if (R.amount < 2)
 						to_chat(user, "<span class='warning'>You ran out of rods!</span>")
 						return
-					if(!istype(L) || L.loc != T)
+					if (!istype(L) || L.loc != T)
 						to_chat(user, "<span class='warning'>You need a lattice first!</span>")
 						return
 					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
@@ -46,7 +46,7 @@
 					qdel(L)
 					return
 
-			if(T.canBuildLattice(R))
+			if (T.canBuildLattice(R))
 				to_chat(user, "<span class='notice'>Constructing support lattice ...</span>")
 				playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1)
 				new /obj/structure/lattice(T)
@@ -54,14 +54,14 @@
 				return
 
 /obj/item/stack/rods/attackby(obj/item/W as obj, mob/user as mob)
-	if(iswelder(W))
+	if (iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 
-		if(amount < 2)
+		if (amount < 2)
 			to_chat(user, "<span class='warning'>You need at least two rods to do this.</span>")
 			return
 
-		if(WT.remove_fuel(0,user))
+		if (WT.remove_fuel(0,user))
 			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal)
 			M.amount = 1
 			M.forceMove(get_turf(usr)) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
@@ -81,29 +81,29 @@
 /obj/item/stack/rods/attack_self(mob/user as mob)
 	src.add_fingerprint(user)
 
-	if(!istype(user.loc, /turf))
+	if (!istype(user.loc, /turf))
 		return 0
 
-	if(locate(/obj/structure/grille, user.loc))
-		for(var/obj/structure/grille/G in user.loc)
-			if(G.broken)
+	if (locate(/obj/structure/grille, user.loc))
+		for (var/obj/structure/grille/G in user.loc)
+			if (G.broken)
 				G.health = initial(G.health)
 				G.healthcheck()
 				use(1)
 			else
 				return 1
 	else
-		if(amount < 2)
+		if (amount < 2)
 			to_chat(user, "<span class='notice'>You need at least two rods to do this.</span>")
 			return
 
 		to_chat(user, "<span class='notice'>Assembling grille...</span>")
 
-		if(!do_after(user, get_turf(src), 10))
+		if (!do_after(user, get_turf(src), 10))
 			return
 
 		var/obj/structure/grille/Grille = getFromPool(/obj/structure/grille, user.loc)
-		if(!Grille)
+		if (!Grille)
 			Grille = new(user.loc)
 		to_chat(user, "<span class='notice'>You assembled a grille!</span>")
 		Grille.add_fingerprint(user)

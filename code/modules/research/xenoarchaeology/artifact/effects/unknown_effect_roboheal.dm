@@ -7,7 +7,7 @@
 	effect_type = pick(3,4)
 
 /datum/artifact_effect/roboheal/DoEffectTouch(var/mob/user)
-	if(user)
+	if (user)
 		if (istype(user, /mob/living/silicon/robot))
 			var/mob/living/silicon/robot/R = user
 			to_chat(R, "<span class='notice'>Your systems report damaged components mending by themselves!</span>")
@@ -16,9 +16,9 @@
 			return 1
 
 /datum/artifact_effect/roboheal/DoEffectAura()
-	if(holder)
+	if (holder)
 		for (var/mob/living/silicon/robot/M in range(src.effectrange,holder))
-			if(prob(10))
+			if (prob(10))
 				to_chat(M, "<span class='notice'>SYSTEM ALERT: Beneficial energy field detected!</span>")
 			M.adjustBruteLoss(-1)
 			M.adjustFireLoss(-1)
@@ -26,7 +26,7 @@
 		return 1
 
 /datum/artifact_effect/roboheal/DoEffectPulse()
-	if(holder)
+	if (holder)
 		for (var/mob/living/silicon/robot/M in range(src.effectrange,holder))
 			to_chat(M, "<span class='notice'>SYSTEM ALERT: Structural damage has been repaired by energy pulse!</span>")
 			M.adjustBruteLoss(-10)

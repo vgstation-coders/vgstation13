@@ -4,8 +4,8 @@
 
 /datum/mind/proc/findJobTask(var/typepath,var/options=0)
 	var/datum/job_objective/task = locate(typepath) in src.job_objectives
-	if(!istype(task,typepath))
-		if(options & FINDJOBTASK_DEFAULT_NEW)
+	if (!istype(task,typepath))
+		if (options & FINDJOBTASK_DEFAULT_NEW)
 			task = new typepath()
 			src.job_objectives += task
 	return task
@@ -32,7 +32,7 @@
 	units_completed += count
 
 /datum/job_objective/proc/is_completed()
-	if(!completed)
+	if (!completed)
 		completed = check_for_completion()
 	return completed
 
@@ -42,30 +42,30 @@
 /datum/game_mode/proc/declare_job_completion()
 	var/text = "<FONT size = 2><B>Job Completion:</B></FONT>"
 	var/numEmployees=0
-	for(var/datum/mind/employee in ticker.minds)
-		if(!employee.job_objectives.len)//If the employee had no objectives, don't need to process this.
+	for (var/datum/mind/employee in ticker.minds)
+		if (!employee.job_objectives.len)//If the employee had no objectives, don't need to process this.
 			continue
-		if(!employee.assigned_role=="MODE")//If the employee is a gamemode thing, skip.
+		if (!employee.assigned_role=="MODE")//If the employee is a gamemode thing, skip.
 			continue
 		numEmployees++
 		var/tasks_completed=0
 
 		//text += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job]:\n"
 		text += "<br>[employee.key] was [employee.name], the [employee.assigned_role] ("
-		if(employee.current)
-			if(employee.current.stat == DEAD)
+		if (employee.current)
+			if (employee.current.stat == DEAD)
 				text += "died"
 			else
 				text += "survived"
-			if(employee.current.real_name != employee.name)
+			if (employee.current.real_name != employee.name)
 				text += " as [employee.current.real_name]"
 		else
 			text += "body destroyed"
 		text += ")"
 
 		var/count = 1
-		for(var/datum/job_objective/objective in employee.job_objectives)
-			if(objective.is_completed(1))
+		for (var/datum/job_objective/objective in employee.job_objectives)
+			if (objective.is_completed(1))
 				text += "<br><B>Task #[count]</B>: [objective.get_description()] <font color='green'><B>Completed!</B></font>"
 				feedback_add_details("employee_objective","[objective.type]|SUCCESS")
 				tasks_completed++
@@ -74,13 +74,13 @@
 				feedback_add_details("employee_objective","[objective.type]|FAIL")
 			count++
 
-		if(tasks_completed>=1)
+		if (tasks_completed>=1)
 			text += "<br><font color='green'><B>The [employee.assigned_role] did their fucking job!</B></font>"
 			feedback_add_details("employee_success","SUCCESS")
 		else
 			text += "<br><font color='red'><B>The [employee.assigned_role] was a worthless sack of shit!</B></font>"
 			feedback_add_details("employee_success","FAIL")
-	if(numEmployees>0)
+	if (numEmployees>0)
 		to_chat(world, text)
 	return 1
 
@@ -101,13 +101,13 @@ var/hopobjectives = pick("Require that staff take a daily exercise regiment.", "
 			var/touristobjectives = pick("Take pictures of all the things. All of them.", "Befriend a clown.", "Convince a mime to speak.", "Get hired on the station.", "Become an assistant.", "Escape with your camera.")
 			var/clownobjectives = pick("You are a mouse.", "Grunt ominously whenever possible.", "Epilepsy is fun, flicker lights whenever you can!", "Your name is Joe 6-pack.", "Refer to humans as puppies.", "Insult heads of staff on every request, while acquiescing.", "Advertise parties in your office, but don't deliver.", "Prevent non-dwarves from operating the power core.", "The ship needs elected officials.", "Only bearded people are human.", "Turn on the microphone on every intercom you see.", "Wrench is a lightbulb.", "Toolbox is a medkit.", "Everyone is wearing a pretty pink dress!", "The monkeys are plotting a hostile takeover of the ship. Inform the crew, and get them to take action against this", "Refer to the captain as \"Princess\" at all times.", "The crew must construct additional pylons.", "You must always lie.", "All answers must be in the form of a question.", "The station is an airplane.", "Happiness is mandatory.", "Today is laundry day.", "The word \"it\" is painful to you.", "You must act passive aggressively.", "Crew ranks have been reversed.", "It's Friday.", "It's backwards day.", "Give relationship advice to anyone who speaks to you.", "You are the ship psychologist.  Give advice to the crew.", "You do not have to do anything for anyone unless they say \"please\"." )
 			var/mimeobjectives = pick("...", "...", "...", "...", "...", "...", "<span class='warning'>The narrator appears to try gesturing your objective to you, but fails miserably.</span>")
-			var/chaplainobjectives = pick("Convert at least three other people to your religion..", "Hold a proper space burial.", "Build a shrine to your deity.", "Collect Ð18 in donations.", "Start a cult.", "Get someone to confess.", "Do your own radio show over the intercoms and accept calls.")
+			var/chaplainobjectives = pick("Convert at least three other people to your religion..", "Hold a proper space burial.", "Build a shrine to your deity.", "Collect ï¿½18 in donations.", "Start a cult.", "Get someone to confess.", "Do your own radio show over the intercoms and accept calls.")
 
 			//Civilian Jobs
 			var/bartenderobjectives = pick("Make 10 successful coctails.", "Make a gargle blaster.", "Hack the vending machine and acquire robusters delight.", "Stop people from having bar fights over the jukebox.", "Prevent people from getting to the jukebox.", "Make doctors delight.", "Put out as many drinks in the bar as you can.", "Attempt to get the whole crew to come to the bar and get drunk.", "Shoot the clown with your shotgun.", "Start selling cigarettes.", "Win on the space arcade.", "Tell stories to the crew while drunk.", "Attempt to redecorate your bar.")
 			var/chefobjectives = pick("Sell your food", "Successfully make 10 unique dishes.", "Gather all the monkeys on the station just to get meat from them.", "Say \"BORK BORK BORK\" after every few sentences.", "Use your blender to make unique drinks out of food.", "Get the botanist to harvest vegetables and fruits for you.", "Make an assburger.", "Make a penisburger.", "Make a clown burger.", "Call failed dishes salads.", "Keep your kitchen clean.")
 			var/janitorobjectives = pick("No filth shall be spared!", "Make sure the tiles infront of security doors are extra shiny at all times.", "If the bar becomes messy, demand a raise from the Head of Personel.", "Constantly suck up to the staff.", "Attempt to wash all the floors on the station.", "Replace any missing lights you see on the station.", "Acquire a vintage watertank.")
-			var/quartermasterobjectives = pick("Acquire Ð100 from crew members.", "Declare that you can not import goods as there is a war going on and the tariffs would be too high.", "Wrap and relabel every package you send out.", "Require payments for every crate ordered.", "Only accept orders with stamps on them.", "Order a party crate for the clown.")
+			var/quartermasterobjectives = pick("Acquire ï¿½100 from crew members.", "Declare that you can not import goods as there is a war going on and the tariffs would be too high.", "Wrap and relabel every package you send out.", "Require payments for every crate ordered.", "Only accept orders with stamps on them.", "Order a party crate for the clown.")
 			var/engineerobjectives = pick("Build a disposal transportation network", "Extend the ships territory", "Repair the communications satellite.", "Finish the construction near security.", "Finish the construction below hydroponics.", "Turn on the engine.", "Attempt to make the engine more efficient.")
 			var/roboticistobjectives = pick("Build a Medibot of every color", "Give custom names to each of your special little creations", "Outclass the janitor by making 5 Clean-bots spread through the ship", "Outclass security by making 4 securitrons and 1 ED209")
 			var/detectiveobjectives = pick("Monologue at every chance regardless of if you have listeners.", "Track down leads.", "Snoop on the scientists.", "Snoop on the doctors.", "Snoop on the engineers.", "Snoop on the security staff.", "Snoop on the Captain.", "Snoop on the Head of Personnel.")

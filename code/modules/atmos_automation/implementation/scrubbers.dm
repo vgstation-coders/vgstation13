@@ -20,7 +20,7 @@
 	children = list(null)
 
 /datum/automation/set_scrubber_mode/process()
-	if(scrubber)
+	if (scrubber)
 		parent.send_signal(list ("tag" = scrubber, "sigtype"="command", "scrubbing" = mode), RADIO_FROM_AIRALARM)
 	return 0
 
@@ -29,18 +29,18 @@
 
 /datum/automation/set_scrubber_mode/Topic(href,href_list)
 	. = ..()
-	if(.)
+	if (.)
 		return
 
-	if(href_list["set_mode"])
+	if (href_list["set_mode"])
 		mode = !mode
 		parent.updateUsrDialog()
 		return 1
 
-	if(href_list["set_scrubber"])
+	if (href_list["set_scrubber"])
 		var/list/injector_names = list()
-		for(var/obj/machinery/atmospherics/unary/vent_scrubber/S in atmos_machines)
-			if(!isnull(S.id_tag) && S.frequency == parent.frequency)
+		for (var/obj/machinery/atmospherics/unary/vent_scrubber/S in atmos_machines)
+			if (!isnull(S.id_tag) && S.frequency == parent.frequency)
 				injector_names |= S.id_tag
 
 		scrubber = input("Select a scrubber:", "Scrubbers", scrubber) as null | anything in injector_names
@@ -68,23 +68,23 @@
 	..(aa)
 
 /datum/automation/set_scrubber_power/process()
-	if(scrubber)
+	if (scrubber)
 		parent.send_signal(list ("tag" = scrubber, "sigtype"="command", "power" = state, "type" = "scrubber"), RADIO_FROM_AIRALARM)
 
 /datum/automation/set_scrubber_power/GetText()
 	return  "Set Scrubber <a href=\"?src=\ref[src];set_scrubber=1\">[fmtString(scrubber)]</a> power to <a href=\"?src=\ref[src];set_power=1\">[state ? "on" : "off"]</a>."
 
 /datum/automation/set_scrubber_power/Topic(href,href_list)
-	if(..())
+	if (..())
 		return
-	if(href_list["set_power"])
+	if (href_list["set_power"])
 		state = !state
 		parent.updateUsrDialog()
 		return 1
-	if(href_list["set_scrubber"])
+	if (href_list["set_scrubber"])
 		var/list/injector_names=list()
-		for(var/obj/machinery/atmospherics/unary/vent_scrubber/S in atmos_machines)
-			if(!isnull(S.id_tag) && S.frequency == parent.frequency)
+		for (var/obj/machinery/atmospherics/unary/vent_scrubber/S in atmos_machines)
+			if (!isnull(S.id_tag) && S.frequency == parent.frequency)
 				injector_names|=S.id_tag
 		scrubber = input("Select a scrubber:", "Scrubbers", scrubber) as null|anything in injector_names
 		parent.updateUsrDialog()
@@ -120,39 +120,39 @@ var/global/list/gas_labels=list(
 	scrubber = json["scrubber"]
 
 	var/list/newgasses=json["gasses"]
-	for(var/key in newgasses)
+	for (var/key in newgasses)
 		gasses[key] = newgasses[key]
 
 /datum/automation/set_scrubber_gasses/process()
-	if(scrubber)
+	if (scrubber)
 		var/list/data = list ("tag" = scrubber, "sigtype" = "command")
-		for(var/gas in gasses)
+		for (var/gas in gasses)
 			data[gas + "_scrub"] = gasses[gas]
 		parent.send_signal(data, RADIO_FROM_AIRALARM)
 
 /datum/automation/set_scrubber_gasses/GetText()
 	var/txt = "Set Scrubber <a href=\"?src=\ref[src];set_scrubber=1\">[fmtString(scrubber)]</a> to scrub "
-	for(var/gas in gasses)
+	for (var/gas in gasses)
 		txt += " [gas_labels[gas]] (<a href=\"?src=\ref[src];tog_gas=[gas]\">[gasses[gas] ? "on" : "off"]</a>),"
 	return txt
 
 /datum/automation/set_scrubber_gasses/Topic(href,href_list)
 	. = ..()
-	if(.)
+	if (.)
 		return
 
-	if(href_list["tog_gas"])
+	if (href_list["tog_gas"])
 		var/gas = href_list["tog_gas"]
-		if(!(gas in gasses))
+		if (!(gas in gasses))
 			return
 		gasses[gas] = !gasses[gas]
 		parent.updateUsrDialog()
 		return 1
 
-	if(href_list["set_scrubber"])
+	if (href_list["set_scrubber"])
 		var/list/injector_names = list()
-		for(var/obj/machinery/atmospherics/unary/vent_scrubber/S in atmos_machines)
-			if(!isnull(S.id_tag) && S.frequency == parent.frequency)
+		for (var/obj/machinery/atmospherics/unary/vent_scrubber/S in atmos_machines)
+			if (!isnull(S.id_tag) && S.frequency == parent.frequency)
 				injector_names |= S.id_tag
 
 		scrubber = input("Select a scrubber:", "Scrubbers", scrubber) as null | anything in injector_names

@@ -3,7 +3,7 @@
 	set desc = "Enter an air vent and crawl through the pipe system."
 	set category = "Robot Commands"
 	var/pipe = start_ventcrawl()
-	if(pipe)
+	if (pipe)
 		handle_ventcrawl(pipe)
 
 
@@ -12,22 +12,22 @@
 	set desc = "Allows to hide beneath tables or certain items. Toggled on or off."
 	set category = "Robot Commands"
 
-	if(stat != CONSCIOUS)
+	if (stat != CONSCIOUS)
 		return
 	var/mob/living/silicon/robot/mommi/R = src
-	if(!R.canmove)
+	if (!R.canmove)
 		return
 
 	if (plane != HIDING_MOB_PLANE)
 		plane = HIDING_MOB_PLANE
 		to_chat(src, text("<span class='notice'>You are now hiding.</span>"))
-		for(var/mob/O in oviewers(src, null))
+		for (var/mob/O in oviewers(src, null))
 			if ((O.client && !( O.blinded )))
 				to_chat(O, "<B>[src] tries to hide itself!</B>")
 	else
 		plane = MOB_PLANE
 		to_chat(src, text("<span class='notice'>You have stopped hiding.</span>"))
-		for(var/mob/O in oviewers(src, null))
+		for (var/mob/O in oviewers(src, null))
 			if ((O.client && !( O.blinded )))
 				to_chat(O, "[src] slowly peeks up...")
 	updateicon()

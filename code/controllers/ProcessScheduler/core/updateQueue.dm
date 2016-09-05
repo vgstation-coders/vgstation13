@@ -69,7 +69,7 @@
 
 	uq_dbg("Copying [toCopy.len] items for processing.")
 
-	for(var/i=toCopy.len,i>0,)
+	for (var/i=toCopy.len,i>0,)
 		objects.len++
 		objects[objects.len] = toCopy[i--]
 
@@ -84,12 +84,12 @@
 	uq_dbg("UpdateQueue completed run.")
 
 /datum/updateQueue/proc/checkWorker()
-	if(istype(currentWorker))
+	if (istype(currentWorker))
 		// If world.timeofday has rolled over, then we need to adjust.
-		if(world.timeofday < currentWorker.lastStart)
+		if (world.timeofday < currentWorker.lastStart)
 			currentWorker.lastStart -= 864000
 
-		if(world.timeofday - currentWorker.lastStart > adjustedWorkerTimeout)
+		if (world.timeofday - currentWorker.lastStart > adjustedWorkerTimeout)
 			// This worker is a bit slow, let's spawn a new one and kill the old one.
 			uq_dbg("Current worker is lagging... starting a new one.")
 			killWorker()
@@ -100,7 +100,7 @@
 
 /datum/updateQueue/proc/startWorker()
 	// only run the worker if we have objects to work on
-	if(objects.len)
+	if (objects.len)
 		uq_dbg("Starting worker process.")
 
 		// No need to create a fresh worker if we already have one...

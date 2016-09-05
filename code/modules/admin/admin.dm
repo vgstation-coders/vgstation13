@@ -7,16 +7,16 @@ var/global/floorIsLava = 0
 /proc/message_admins(var/msg)
 	msg = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[msg]</span></span>"
 	log_adminwarn(msg)
-	for(var/client/C in admins)
-		if(R_ADMIN & C.holder.rights)
+	for (var/client/C in admins)
+		if (R_ADMIN & C.holder.rights)
 			to_chat(C, msg)
 
 /proc/msg_admin_attack(var/text) //Toggleable Attack Messages
 	var/rendered = "<span class=\"admin\"><span class=\"prefix\">ADMIN LOG:</span> <span class=\"message\">[text]</span></span>"
 	log_adminwarn(rendered)
-	for(var/client/C in admins)
-		if(R_ADMIN & C.holder.rights)
-			if(C.prefs.toggles & CHAT_ATTACKLOGS)
+	for (var/client/C in admins)
+		if (R_ADMIN & C.holder.rights)
+			if (C.prefs.toggles & CHAT_ATTACKLOGS)
 				var/msg = rendered
 				to_chat(C, msg)
 
@@ -32,7 +32,7 @@ var/global/floorIsLava = 0
 	set name = "Show Player Panel"
 	set desc="Edit player (respawn, ban, heal, etc)"
 
-	if(!M)
+	if (!M)
 		to_chat(usr, "You seem to be selecting a mob that doesn't exist anymore.")
 		return
 	if (!istype(src,/datum/admins))
@@ -45,15 +45,15 @@ var/global/floorIsLava = 0
 	var/body = {"<html><head><title>Options for [M.key]</title></head>
 <body>Options panel for <b>[M]</b>"}
 	var/species_description
-	if(M.client)
+	if (M.client)
 
 		body += {"played by <b>[M.client]</b>
 			\[<A href='?src=\ref[src];editrights=show'>[M.client.holder ? M.client.holder.rank : "Player"]</A>\]"}
-	if(istype(M, /mob/new_player))
+	if (istype(M, /mob/new_player))
 		body += " <B>Hasn't Entered Game</B> "
 	else
 		body += " \[<A href='?src=\ref[src];revive=\ref[M]'>Heal</A>\] "
-	if(ishuman(M))
+	if (ishuman(M))
 		var/mob/living/carbon/human/H = M
 		species_description = "[H.species ? H.species.name : "<span class='danger'><b>No Species</b></span>"]"
 	body += {"
@@ -75,7 +75,7 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];notes=show;mob=\ref[M]'>Notes</A>
 	"}
 
-	if(M.client)
+	if (M.client)
 		body += "| <A HREF='?src=\ref[src];sendtoprison=\ref[M]'>Prison</A> | "
 		var/muted = M.client.prefs.muted
 		body += {"<br><b>Mute: </b>
@@ -101,27 +101,27 @@ var/global/floorIsLava = 0
 	body += M.player_panel_controls(usr)
 
 	if (M.client)
-		if(!istype(M, /mob/new_player))
+		if (!istype(M, /mob/new_player))
 
 			body += {"<br><br>
 				<b>Transformation:</b>
 				<br>"}
 			//Monkey
-			if(ismonkey(M))
+			if (ismonkey(M))
 				body += "<B>Monkeyized</B> | "
 			else
 				body += "<A href='?src=\ref[src];monkeyone=\ref[M]'>Monkeyize</A> | "
 
 			//Corgi
-			if(iscorgi(M))
+			if (iscorgi(M))
 				body += "<B>Corgized</B> | "
 			else
 				body += "<A href='?src=\ref[src];corgione=\ref[M]'>Corgize</A> | "
 
 			//AI / Cyborg
-			if(isAI(M))
+			if (isAI(M))
 				body += "<B>Is an AI</B> "
-			else if(ishuman(M))
+			else if (ishuman(M))
 				body += {"<A href='?src=\ref[src];makeai=\ref[M]'>Make AI</A> |
 					<A href='?src=\ref[src];makerobot=\ref[M]'>Make Robot</A> |
 					<A href='?src=\ref[src];makemommi=\ref[M]'>Make MoMMI</A> |
@@ -131,26 +131,26 @@ var/global/floorIsLava = 0
 				"}
 
 			//Simple Animals
-			if(isanimal(M))
+			if (isanimal(M))
 				body += "<A href='?src=\ref[src];makeanimal=\ref[M]'>Re-Animalize</A> | "
 			else
 				body += "<A href='?src=\ref[src];makeanimal=\ref[M]'>Animalize</A> | "
 
 			//Hands
-			if(ishuman(M))
+			if (ishuman(M))
 				body += "<A href='?src=\ref[src];changehands=\ref[M]'>Change amount of hands (current: [M.held_items.len])</A> | "
 
 			// DNA2 - Admin Hax
-			if(iscarbon(M) && !isbrain(M) && !isalien(M))
+			if (iscarbon(M) && !isbrain(M) && !isalien(M))
 				body += "<br><br>"
 				body += "<b>DNA Blocks:</b><br><table border='0'><tr><th>&nbsp;</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>"
 				var/bname
-				for(var/block=1;block<=DNA_SE_LENGTH;block++)
-					if(((block-1)%5)==0)
+				for (var/block=1;block<=DNA_SE_LENGTH;block++)
+					if (((block-1)%5)==0)
 						body += "</tr><tr><th>[block-1]</th>"
 					bname = assigned_blocks[block]
 					body += "<td>"
-					if(bname)
+					if (bname)
 						var/bstate=M.dna.GetSEState(block)
 						var/bcolor="[(bstate)?"#006600":"#ff0000"]"
 						body += "<A href='?src=\ref[src];togmutate=\ref[M];block=[block]' style='color:[bcolor];'>[bname]</A><sub>[block]</sub>"
@@ -160,7 +160,7 @@ var/global/floorIsLava = 0
 				body += "</tr></table>"
 
 			// Law Admin Hax
-			if(issilicon(M) && M:laws)
+			if (issilicon(M) && M:laws)
 				body += "<br><br>"
 				body += "<b>Laws:</b><br />"
 				var/datum/ai_laws/L = M:laws
@@ -211,13 +211,13 @@ var/global/floorIsLava = 0
 	// language toggles
 	body += "<br><br><b>Languages:</b><br>"
 	var/f = 1
-	for(var/k in all_languages)
+	for (var/k in all_languages)
 		var/datum/language/L = all_languages[k]
-		if(!f)
+		if (!f)
 			body += " | "
 		else
 			f = 0
-		if(L in M.languages)
+		if (L in M.languages)
 			body += "<a href='?src=\ref[src];toglang=\ref[M];lang=[html_encode(k)]' style='color:#006600'>[k]</a>"
 		else
 			body += "<a href='?src=\ref[src];toglang=\ref[M];lang=[html_encode(k)]' style='color:#ff0000'>[k]</a>"
@@ -251,7 +251,7 @@ var/global/floorIsLava = 0
 	set category = "Admin"
 	set name = "Lookup bans on Computer ID"
 
-	if(!usr)
+	if (!usr)
 		return
 	if (!istype(src,/datum/admins))
 		src = usr.client.holder
@@ -260,7 +260,7 @@ var/global/floorIsLava = 0
 		return
 	checkSessionKey()
 	var/cid = input("Type computer ID", "CID", 0) as num | null
-	if(cid)
+	if (cid)
 		usr << link(getVGPanel("rapsheet", admin = 1, query = list("cid" = cid)))
 //	to_chat(usr, link("[config.vgws_base_url]/index.php/rapsheet/?s=[sessKey]&cid=[cid]"))
 	return
@@ -269,7 +269,7 @@ var/global/floorIsLava = 0
 	set category = "Admin"
 	set name = "Lookup bans on CKEY"
 
-	if(!usr)
+	if (!usr)
 		return
 	if (!istype(src,/datum/admins))
 		src = usr.client.holder
@@ -287,7 +287,7 @@ var/global/floorIsLava = 0
 	var/savefile/S=new("data/player_notes.sav")
 	var/list/note_keys
 	S >> note_keys
-	if(!note_keys)
+	if (!note_keys)
 		dat += "No notes found."
 	else
 		dat += "<table>"
@@ -296,27 +296,27 @@ var/global/floorIsLava = 0
 		// Display the notes on the current page
 		var/number_pages = note_keys.len / PLAYER_NOTES_ENTRIES_PER_PAGE
 		// Emulate ceil(why does BYOND not have ceil)
-		if(number_pages != round(number_pages))
+		if (number_pages != round(number_pages))
 			number_pages = round(number_pages) + 1
 		var/page_index = page - 1
-		if(page_index < 0 || page_index >= number_pages)
+		if (page_index < 0 || page_index >= number_pages)
 			return
 
 		var/lower_bound = page_index * PLAYER_NOTES_ENTRIES_PER_PAGE + 1
 		var/upper_bound = (page_index + 1) * PLAYER_NOTES_ENTRIES_PER_PAGE
 		upper_bound = min(upper_bound, note_keys.len)
-		for(var/index = lower_bound, index <= upper_bound, index++)
+		for (var/index = lower_bound, index <= upper_bound, index++)
 			var/t = note_keys[index]
 			dat += "<tr><td><a href='?src=\ref[src];notes=show;ckey=[t]'>[t]</a></td></tr>"
 
 		dat += "</table><br>"
 
 		// Display a footer to select different pages
-		for(var/index = 1, index <= number_pages, index++)
-			if(index == page)
+		for (var/index = 1, index <= number_pages, index++)
+			if (index == page)
 				dat += "<b>"
 			dat += "<a href='?src=\ref[src];notes=list;index=[index]'>[index]</a> "
-			if(index == page)
+			if (index == page)
 				dat += "</b>"
 
 	usr << browse(dat, "window=player_notes;size=400x400")
@@ -326,7 +326,7 @@ var/global/floorIsLava = 0
 	var/savefile/info = new("data/player_saves/[copytext(key, 1, 2)]/[key]/info.sav")
 	var/list/infos
 	info >> infos
-	if(!infos || !infos.len)
+	if (!infos || !infos.len)
 		return 0
 	else
 		return 1
@@ -336,23 +336,23 @@ var/global/floorIsLava = 0
 	var/list/infos
 	info >> infos
 	var/list/noteslist = list()
-	if(!infos)
+	if (!infos)
 		return list("1" = "No notes found for [key]")
 	else
 		var/i = 0
 
-		for(var/datum/player_info/I in infos)
+		for (var/datum/player_info/I in infos)
 			i += 1
-			if(!I.timestamp)
+			if (!I.timestamp)
 				I.timestamp = "Pre-4/3/2012"
-			if(!I.rank)
+			if (!I.rank)
 				I.rank = "N/A"
 			/*noteslist["note:[i]"] = "[I.content]"
 			noteslist["author:[i]"] = "[I.author]"
 			noteslist["rank:[i]"] = "[I.rank]"
 			noteslist["timestamp:[i]"] = "[I.timestamp]"*/
 			noteslist["[i]"] = "<font color=#008800>[I.content]</font> <i>by [I.author] ([I.rank])</i> on <i><font color=blue>[I.timestamp]</i></font>"
-	if(!noteslist.len)
+	if (!noteslist.len)
 		noteslist["1"] = "No notes found for [key]"
 	return noteslist
 /datum/admins/proc/show_player_info(var/key as text)
@@ -371,24 +371,24 @@ var/global/floorIsLava = 0
 	var/savefile/info = new("data/player_saves/[copytext(key, 1, 2)]/[key]/info.sav")
 	var/list/infos
 	info >> infos
-	if(!infos)
+	if (!infos)
 		dat += "No information found on the given key.<br>"
 	else
 		var/update_file = 0
 		var/i = 0
-		for(var/datum/player_info/I in infos)
+		for (var/datum/player_info/I in infos)
 			i += 1
-			if(!I.timestamp)
+			if (!I.timestamp)
 				I.timestamp = "Pre-4/3/2012"
 				update_file = 1
-			if(!I.rank)
+			if (!I.rank)
 				I.rank = "N/A"
 				update_file = 1
 			dat += "<font color=#008800>[I.content]</font> <i>by [I.author] ([I.rank])</i> on <i><font color=blue>[I.timestamp]</i></font> "
-			if(I.author == usr.key || check_rights(R_PERMISSIONS, show_msg = 0))
+			if (I.author == usr.key || check_rights(R_PERMISSIONS, show_msg = 0))
 				dat += "<A href='?src=\ref[src];remove_player_info=[key];remove_index=[i]'>Remove</A>"
 			dat += "<br><br>"
-		if(update_file)
+		if (update_file)
 			info << infos
 
 	dat += {"<br>
@@ -410,13 +410,13 @@ var/global/floorIsLava = 0
 	var/dat
 	dat = text("<HEAD><TITLE>Admin Newscaster</TITLE></HEAD><H3>Admin Newscaster Unit</H3>")
 
-	switch(admincaster_screen)
-		if(0)
+	switch (admincaster_screen)
+		if (0)
 			dat += {"Welcome to the admin newscaster.<BR> Here you can add, edit and censor every newspiece on the network.
 				<BR>Feed channels and stories entered through here will be uneditable and handled as official news by the rest of the units.
 				<BR>Note that this panel allows full freedom over the news network, there are no constrictions except the few basic ones. Don't break things!</FONT>
 			"}
-			if(news_network.wanted_issue)
+			if (news_network.wanted_issue)
 				dat+= "<HR><A href='?src=\ref[src];ac_view_wanted=1'>Read Wanted Issue</A>"
 
 			dat+= {"<HR><BR><A href='?src=\ref[src];ac_create_channel=1'>Create Feed Channel</A>
@@ -426,7 +426,7 @@ var/global/floorIsLava = 0
 			"}
 
 			var/wanted_already = 0
-			if(news_network.wanted_issue)
+			if (news_network.wanted_issue)
 				wanted_already = 1
 
 			dat+={"<HR><B>Feed Security functions:</B><BR>
@@ -435,13 +435,13 @@ var/global/floorIsLava = 0
 				<BR><A href='?src=\ref[src];ac_menu_censor_channel=1'>Mark Feed Channel with Nanotrasen D-Notice (disables and locks the channel.</A>
 				<BR><HR><A href='?src=\ref[src];ac_set_signature=1'>The newscaster recognises you as:<BR> <FONT COLOR='green'>[src.admincaster_signature]</FONT></A>
 			"}
-		if(1)
+		if (1)
 			dat+= "Station Feed Channels<HR>"
-			if( isemptylist(news_network.network_channels) )
+			if ( isemptylist(news_network.network_channels) )
 				dat+="<I>No active channels found...</I>"
 			else
-				for(var/datum/feed_channel/CHANNEL in news_network.network_channels)
-					if(CHANNEL.is_admin_channel)
+				for (var/datum/feed_channel/CHANNEL in news_network.network_channels)
+					if (CHANNEL.is_admin_channel)
 						dat+="<B><FONT style='BACKGROUND-COLOR: LightGreen'><A href='?src=\ref[src];ac_show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A></FONT></B><BR>"
 					else
 						dat+="<B><A href='?src=\ref[src];ac_show_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR></B>"
@@ -449,7 +449,7 @@ var/global/floorIsLava = 0
 				<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Back</A>
 			"}
 
-		if(2)
+		if (2)
 			dat+={"
 				Creating new Feed Channel...
 				<HR><B><A href='?src=\ref[src];ac_set_channel_name=1'>Channel Name</A>:</B> [src.admincaster_feed_channel.channel_name]<BR>
@@ -457,7 +457,7 @@ var/global/floorIsLava = 0
 				<B><A href='?src=\ref[src];ac_set_channel_lock=1'>Will Accept Public Feeds</A>:</B> [(src.admincaster_feed_channel.locked) ? ("NO") : ("YES")]<BR><BR>
 				<BR><A href='?src=\ref[src];ac_submit_new_channel=1'>Submit</A><BR><BR><A href='?src=\ref[src];ac_setScreen=[0]'>Cancel</A><BR>
 			"}
-		if(3)
+		if (3)
 			dat+={"
 				Creating new Feed Message...
 				<HR><B><A href='?src=\ref[src];ac_set_channel_receiving=1'>Receiving Channel</A>:</B> [src.admincaster_feed_channel.channel_name]<BR>" //MARK
@@ -465,51 +465,51 @@ var/global/floorIsLava = 0
 				<B><A href='?src=\ref[src];ac_set_new_message=1'>Message Body</A>:</B> [src.admincaster_feed_message.body] <BR>
 				<BR><A href='?src=\ref[src];ac_submit_new_message=1'>Submit</A><BR><BR><A href='?src=\ref[src];ac_setScreen=[0]'>Cancel</A><BR>
 			"}
-		if(4)
+		if (4)
 			dat+={"
 					Feed story successfully submitted to [src.admincaster_feed_channel.channel_name].<BR><BR>
 					<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Return</A><BR>
 				"}
-		if(5)
+		if (5)
 			dat+={"
 				Feed Channel [src.admincaster_feed_channel.channel_name] created successfully.<BR><BR>
 				<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Return</A><BR>
 			"}
-		if(6)
+		if (6)
 			dat+="<B><FONT COLOR='maroon'>ERROR: Could not submit Feed story to Network.</B></FONT><HR><BR>"
-			if(src.admincaster_feed_channel.channel_name=="")
+			if (src.admincaster_feed_channel.channel_name=="")
 				dat+="<FONT COLOR='maroon'>�Invalid receiving channel name.</FONT><BR>"
-			if(src.admincaster_feed_message.body == "" || src.admincaster_feed_message.body == "\[REDACTED\]")
+			if (src.admincaster_feed_message.body == "" || src.admincaster_feed_message.body == "\[REDACTED\]")
 				dat+="<FONT COLOR='maroon'>�Invalid message body.</FONT><BR>"
 			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[3]'>Return</A><BR>"
-		if(7)
+		if (7)
 			dat+="<B><FONT COLOR='maroon'>ERROR: Could not submit Feed Channel to Network.</B></FONT><HR><BR>"
-			if(src.admincaster_feed_channel.channel_name =="" || src.admincaster_feed_channel.channel_name == "\[REDACTED\]")
+			if (src.admincaster_feed_channel.channel_name =="" || src.admincaster_feed_channel.channel_name == "\[REDACTED\]")
 				dat+="<FONT COLOR='maroon'>�Invalid channel name.</FONT><BR>"
 			var/check = 0
-			for(var/datum/feed_channel/FC in news_network.network_channels)
-				if(FC.channel_name == src.admincaster_feed_channel.channel_name)
+			for (var/datum/feed_channel/FC in news_network.network_channels)
+				if (FC.channel_name == src.admincaster_feed_channel.channel_name)
 					check = 1
 					break
-			if(check)
+			if (check)
 				dat+="<FONT COLOR='maroon'>�Channel name already in use.</FONT><BR>"
 			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[2]'>Return</A><BR>"
-		if(9)
+		if (9)
 			dat+="<B>[src.admincaster_feed_channel.channel_name]: </B><FONT SIZE=1>\[created by: <FONT COLOR='maroon'>[src.admincaster_feed_channel.author]</FONT>\]</FONT><HR>"
-			if(src.admincaster_feed_channel.censored)
+			if (src.admincaster_feed_channel.censored)
 				dat+={"
 					<FONT COLOR='red'><B>ATTENTION: </B></FONT>This channel has been deemed as threatening to the welfare of the station, and marked with a Nanotrasen D-Notice.<BR>
 					No further feed story additions are allowed while the D-Notice is in effect.</FONT><BR><BR>
 				"}
 			else
-				if( isemptylist(src.admincaster_feed_channel.messages) )
+				if ( isemptylist(src.admincaster_feed_channel.messages) )
 					dat+="<I>No feed messages found in channel...</I><BR>"
 				else
 					var/i = 0
-					for(var/datum/feed_message/MESSAGE in src.admincaster_feed_channel.messages)
+					for (var/datum/feed_message/MESSAGE in src.admincaster_feed_channel.messages)
 						i++
 						dat+="-[MESSAGE.body] <BR>"
-						if(MESSAGE.img)
+						if (MESSAGE.img)
 							usr << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
 							dat+="<img src='tmp_photo[i].png' width = '180'><BR><BR>"
 						dat+="<FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
@@ -517,118 +517,118 @@ var/global/floorIsLava = 0
 				<BR><HR><A href='?src=\ref[src];ac_refresh=1'>Refresh</A>
 				<BR><A href='?src=\ref[src];ac_setScreen=[1]'>Back</A>
 			"}
-		if(10)
+		if (10)
 			dat+={"
 				<B>Nanotrasen Feed Censorship Tool</B><BR>
 				<FONT SIZE=1>NOTE: Due to the nature of news Feeds, total deletion of a Feed Story is not possible.<BR>
 				Keep in mind that users attempting to view a censored feed will instead see the \[REDACTED\] tag above it.</FONT>
 				<HR>Select Feed channel to get Stories from:<BR>
 			"}
-			if(isemptylist(news_network.network_channels))
+			if (isemptylist(news_network.network_channels))
 				dat+="<I>No feed channels found active...</I><BR>"
 			else
-				for(var/datum/feed_channel/CHANNEL in news_network.network_channels)
+				for (var/datum/feed_channel/CHANNEL in news_network.network_channels)
 					dat+="<A href='?src=\ref[src];ac_pick_censor_channel=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR>"
 			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Cancel</A>"
-		if(11)
+		if (11)
 			dat+={"
 				<B>Nanotrasen D-Notice Handler</B><HR>
 				<FONT SIZE=1>A D-Notice is to be bestowed upon the channel if the handling Authority deems it as harmful for the station's
 				morale, integrity or disciplinary behaviour. A D-Notice will render a channel unable to be updated by anyone, without deleting any feed
 				stories it might contain at the time. You can lift a D-Notice if you have the required access at any time.</FONT><HR>
 			"}
-			if(isemptylist(news_network.network_channels))
+			if (isemptylist(news_network.network_channels))
 				dat+="<I>No feed channels found active...</I><BR>"
 			else
-				for(var/datum/feed_channel/CHANNEL in news_network.network_channels)
+				for (var/datum/feed_channel/CHANNEL in news_network.network_channels)
 					dat+="<A href='?src=\ref[src];ac_pick_d_notice=\ref[CHANNEL]'>[CHANNEL.channel_name]</A> [(CHANNEL.censored) ? ("<FONT COLOR='red'>***</FONT>") : ()]<BR>"
 
 			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Back</A>"
-		if(12)
+		if (12)
 			dat+={"
 				<B>[src.admincaster_feed_channel.channel_name]: </B><FONT SIZE=1>\[ created by: <FONT COLOR='maroon'>[src.admincaster_feed_channel.author]</FONT> \]</FONT><BR>
 				<FONT SIZE=2><A href='?src=\ref[src];ac_censor_channel_author=\ref[src.admincaster_feed_channel]'>[(src.admincaster_feed_channel.author=="\[REDACTED\]") ? ("Undo Author censorship") : ("Censor channel Author")]</A></FONT><HR>
 			"}
-			if( isemptylist(src.admincaster_feed_channel.messages) )
+			if ( isemptylist(src.admincaster_feed_channel.messages) )
 				dat+="<I>No feed messages found in channel...</I><BR>"
 			else
-				for(var/datum/feed_message/MESSAGE in src.admincaster_feed_channel.messages)
+				for (var/datum/feed_message/MESSAGE in src.admincaster_feed_channel.messages)
 					dat+={"
 						-[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>
 						<FONT SIZE=2><A href='?src=\ref[src];ac_censor_channel_story_body=\ref[MESSAGE]'>[(MESSAGE.body == "\[REDACTED\]") ? ("Undo story censorship") : ("Censor story")]</A>  -  <A href='?src=\ref[src];ac_censor_channel_story_author=\ref[MESSAGE]'>[(MESSAGE.author == "\[REDACTED\]") ? ("Undo Author Censorship") : ("Censor message Author")]</A></FONT><BR>
 					"}
 			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[10]'>Back</A>"
-		if(13)
+		if (13)
 			dat+={"
 				<B>[src.admincaster_feed_channel.channel_name]: </B><FONT SIZE=1>\[ created by: <FONT COLOR='maroon'>[src.admincaster_feed_channel.author]</FONT> \]</FONT><BR>
 				Channel messages listed below. If you deem them dangerous to the station, you can <A href='?src=\ref[src];ac_toggle_d_notice=\ref[src.admincaster_feed_channel]'>Bestow a D-Notice upon the channel</A>.<HR>
 			"}
-			if(src.admincaster_feed_channel.censored)
+			if (src.admincaster_feed_channel.censored)
 				dat+={"
 					<FONT COLOR='red'><B>ATTENTION: </B></FONT>This channel has been deemed as threatening to the welfare of the station, and marked with a Nanotrasen D-Notice.<BR>
 					No further feed story additions are allowed while the D-Notice is in effect.</FONT><BR><BR>
 				"}
 			else
-				if( isemptylist(src.admincaster_feed_channel.messages) )
+				if ( isemptylist(src.admincaster_feed_channel.messages) )
 					dat+="<I>No feed messages found in channel...</I><BR>"
 				else
-					for(var/datum/feed_message/MESSAGE in src.admincaster_feed_channel.messages)
+					for (var/datum/feed_message/MESSAGE in src.admincaster_feed_channel.messages)
 						dat+="-[MESSAGE.body] <BR><FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR>"
 
 			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[11]'>Back</A>"
-		if(14)
+		if (14)
 			dat+="<B>Wanted Issue Handler:</B>"
 			var/wanted_already = 0
 			var/end_param = 1
-			if(news_network.wanted_issue)
+			if (news_network.wanted_issue)
 				wanted_already = 1
 				end_param = 2
-			if(wanted_already)
+			if (wanted_already)
 				dat+="<FONT SIZE=2><BR><I>A wanted issue is already in Feed Circulation. You can edit or cancel it below.</FONT></I>"
 			dat+={"
 				<HR>
 				<A href='?src=\ref[src];ac_set_wanted_name=1'>Criminal Name</A>: [src.admincaster_feed_message.author] <BR>
 				<A href='?src=\ref[src];ac_set_wanted_desc=1'>Description</A>: [src.admincaster_feed_message.body] <BR>
 			"}
-			if(wanted_already)
+			if (wanted_already)
 				dat+="<B>Wanted Issue created by:</B><FONT COLOR='green'> [news_network.wanted_issue.backup_author]</FONT><BR>"
 			else
 				dat+="<B>Wanted Issue will be created under prosecutor:</B><FONT COLOR='green'> [src.admincaster_signature]</FONT><BR>"
 			dat+="<BR><A href='?src=\ref[src];ac_submit_wanted=[end_param]'>[(wanted_already) ? ("Edit Issue") : ("Submit")]</A>"
-			if(wanted_already)
+			if (wanted_already)
 				dat+="<BR><A href='?src=\ref[src];ac_cancel_wanted=1'>Take down Issue</A>"
 			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Cancel</A>"
-		if(15)
+		if (15)
 			dat+={"
 				<FONT COLOR='green'>Wanted issue for [src.admincaster_feed_message.author] is now in Network Circulation.</FONT><BR><BR>
 				<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Return</A><BR>
 			"}
-		if(16)
+		if (16)
 			dat+="<B><FONT COLOR='maroon'>ERROR: Wanted Issue rejected by Network.</B></FONT><HR><BR>"
-			if(src.admincaster_feed_message.author =="" || src.admincaster_feed_message.author == "\[REDACTED\]")
+			if (src.admincaster_feed_message.author =="" || src.admincaster_feed_message.author == "\[REDACTED\]")
 				dat+="<FONT COLOR='maroon'>�Invalid name for person wanted.</FONT><BR>"
-			if(src.admincaster_feed_message.body == "" || src.admincaster_feed_message.body == "\[REDACTED\]")
+			if (src.admincaster_feed_message.body == "" || src.admincaster_feed_message.body == "\[REDACTED\]")
 				dat+="<FONT COLOR='maroon'>�Invalid description.</FONT><BR>"
 			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Return</A><BR>"
-		if(17)
+		if (17)
 			dat+={"
 				<B>Wanted Issue successfully deleted from Circulation</B><BR>
 				<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Return</A><BR>
 			"}
-		if(18)
+		if (18)
 			dat+={"
 				<B><FONT COLOR ='maroon'>-- STATIONWIDE WANTED ISSUE --</B></FONT><BR><FONT SIZE=2>\[Submitted by: <FONT COLOR='green'>[news_network.wanted_issue.backup_author]</FONT>\]</FONT><HR>
 				<B>Criminal</B>: [news_network.wanted_issue.author]<BR>
 				<B>Description</B>: [news_network.wanted_issue.body]<BR>
 				<B>Photo:</B>:
 			"}
-			if(news_network.wanted_issue.img)
+			if (news_network.wanted_issue.img)
 				usr << browse_rsc(news_network.wanted_issue.img, "tmp_photow.png")
 				dat+="<BR><img src='tmp_photow.png' width = '180'>"
 			else
 				dat+="None"
 			dat+="<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Back</A><BR>"
-		if(19)
+		if (19)
 			dat+={"
 				<FONT COLOR='green'>Wanted issue for [src.admincaster_feed_message.author] successfully edited.</FONT><BR><BR>
 				<BR><A href='?src=\ref[src];ac_setScreen=[0]'>Return</A><BR>
@@ -644,27 +644,27 @@ var/global/floorIsLava = 0
 
 
 /datum/admins/proc/Jobbans()
-	if(!check_rights(R_BAN))
+	if (!check_rights(R_BAN))
 		return
 
 	var/dat = "<B>Job Bans!</B><HR><table>"
-	for(var/t in jobban_keylist)
+	for (var/t in jobban_keylist)
 		var/r = t
-		if( findtext(r,"##") )
+		if ( findtext(r,"##") )
 			r = copytext( r, 1, findtext(r,"##") )//removes the description
 		dat += text("<tr><td>[t] (<A href='?src=\ref[src];removejobban=[r]'>unban</A>)</td></tr>")
 	dat += "</table>"
 	usr << browse(dat, "window=ban;size=400x400")
 
 /datum/admins/proc/Game()
-	if(!check_rights(0))
+	if (!check_rights(0))
 		return
 
 	var/dat = {"
 		<center><B>Game Panel</B></center><hr>\n
 		<A href='?src=\ref[src];c_mode=1'>Change Game Mode</A><br>
 		"}
-	if(master_mode == "secret")
+	if (master_mode == "secret")
 		dat += "<A href='?src=\ref[src];f_secret=1'>(Force Secret Mode)</A><br>"
 
 	dat += {"
@@ -687,7 +687,7 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];vsc=default'>Choose a default ZAS setting</A><br>
 		"}
 
-	if(wages_enabled)
+	if (wages_enabled)
 		dat += "<A href='?src=\ref[src];wages_enabled=disable'>Disable wages</A><br>"
 	else
 		dat += "<A href='?src=\ref[src];wages_enabled=enable'>Enable wages</A><br>"
@@ -697,27 +697,27 @@ var/global/floorIsLava = 0
 	return
 
 /datum/admins/proc/Secrets()
-	if(!check_rights(0))
+	if (!check_rights(0))
 		return
 
 	var/dat = "<B>The first rule of adminbuse is: you don't talk about the adminbuse.</B><HR>"
 
-	if(check_rights(R_FUN,0) || check_rights(R_ADMINBUS,0))
+	if (check_rights(R_FUN,0) || check_rights(R_ADMINBUS,0))
 		dat += {"
 			<B>Fourth-Wall Demolition</B><BR>
 			<BR>
 			"}
-	if(check_rights(R_ADMINBUS,0))
+	if (check_rights(R_ADMINBUS,0))
 		dat += {"
 			<A href='?src=\ref[src];secretsfun=spawnadminbus'>Spawn an Adminbus</A><BR>
 			"}
-	if(check_rights(R_FUN,0))
+	if (check_rights(R_FUN,0))
 		dat += {"
 			<A href='?src=\ref[src];secretsfun=spawnselfdummy'>Spawn yourself as a Test Dummy</A><BR>
 			<BR>
 			"}
 
-	if(check_rights(R_ADMIN,0))
+	if (check_rights(R_ADMIN,0))
 		dat += {"
 			<B>Admin Secrets</B><BR>
 			<BR>
@@ -734,7 +734,7 @@ var/global/floorIsLava = 0
 			<BR>
 			"}
 
-	if(check_rights(R_FUN,0))
+	if (check_rights(R_FUN,0))
 		dat += {"
 			<B>'Random' Events</B><BR>
 			<BR>
@@ -812,7 +812,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=meteorstorm'>Trigger an undending Meteor Storm</A><BR>
 			"}
 
-	if(check_rights(R_SERVER,0))
+	if (check_rights(R_SERVER,0))
 
 		dat += {"
 			<BR>
@@ -824,7 +824,7 @@ var/global/floorIsLava = 0
 
 	dat += "<BR>"
 
-	if(check_rights(R_FUN,0))
+	if (check_rights(R_FUN,0))
 		dat += {"
 			<B>Security Level Elevated</B><BR>
 			<BR>
@@ -850,7 +850,7 @@ var/global/floorIsLava = 0
 /datum/admins/proc/shuttle_magic()
 	var/dat = "<b>WARNING:</b> server may explode!<hr><br>"
 
-	if(!istype(selected_shuttle))
+	if (!istype(selected_shuttle))
 		dat += "<a href='?src=\ref[src];shuttle_select=1'>Select a shuttle</a><hr>"
 	else
 		dat += {"Selected shuttle: <b>[selected_shuttle.name]</b> (<i>[selected_shuttle.type]</i>)<br>
@@ -897,16 +897,16 @@ var/global/floorIsLava = 0
 	if (!usr.client.holder)
 		return
 	var/confirm = alert("Restart the game world?", "Restart", "Yes", "Cancel")
-	if(confirm == "Cancel")
+	if (confirm == "Cancel")
 		return
-	if(confirm == "Yes")
+	if (confirm == "Yes")
 		to_chat(world, "<span class='warning'><b>Restarting world!</b> <span class='notice'>Initiated by [usr.client.holder.fakekey ? "Admin" : usr.key]!</span>")
 		log_admin("[key_name(usr)] initiated a reboot.")
 
 		feedback_set_details("end_error","admin reboot - by [usr.key] [usr.client.holder.fakekey ? "(stealth)" : ""]")
 		feedback_add_details("admin_verb","R") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-		if(blackbox)
+		if (blackbox)
 			blackbox.save_all_data_to_sql()
 
 		CallHook("Reboot",list())
@@ -925,15 +925,15 @@ var/global/floorIsLava = 0
 	set name = "Announce"
 	set desc="Announce your desires to the world"
 
-	if(!check_rights(0))
+	if (!check_rights(0))
 		return
 
 	var/message = input("Global message to send, input nothing to cancel.", "Admin Announce", null, null) as message
 
-	if(!message)
+	if (!message)
 		return
 
-	if(!check_rights(R_SERVER, 0))
+	if (!check_rights(R_SERVER, 0))
 		message = adminscrub(message, 500)
 	to_chat(world, "<span class='notice'><b>[usr.client.holder.fakekey ? "Administrator" : usr.key] Announces:</b>\n \t [message]</span>")
 	log_admin("Announce: [key_name(usr)] : [message]")
@@ -979,10 +979,10 @@ var/global/floorIsLava = 0
 	set desc="Start the round RIGHT NOW"
 	set name="Start Now"
 
-	if(!ticker)
+	if (!ticker)
 		alert("Unable to start the game as it is not set up.")
 		return
-	if(ticker.current_state == GAME_STATE_PREGAME)
+	if (ticker.current_state == GAME_STATE_PREGAME)
 		ticker.current_state = GAME_STATE_SETTING_UP
 		log_admin("[usr.key] has started the game.")
 		message_admins("<font color='blue'>[usr.key] has started the game.</font>")
@@ -1053,13 +1053,13 @@ var/global/floorIsLava = 0
 	set desc="Delay the game start/end"
 	set name="Delay"
 
-	if(!check_rights(R_ADMIN))
+	if (!check_rights(R_ADMIN))
 		return
 	if (!ticker || ticker.current_state != GAME_STATE_PREGAME)
-		if(ticker.delay_end == 2)
+		if (ticker.delay_end == 2)
 			to_chat(world, "<font size=4><span class='danger'>World Reboot triggered by [key_name(usr)]!</font></span>")
 			log_admin("<font size=4><span class='danger'>World Reboot triggered by [key_name(usr)]!</font></span>")
-			if(watchdog.waiting)
+			if (watchdog.waiting)
 				watchdog.signal_ready()
 			else
 				world.Reboot()
@@ -1112,9 +1112,9 @@ var/global/floorIsLava = 0
 	set desc="Reboots the server post haste"
 	set name="Immediate Reboot"
 
-	if(!usr.client.holder)
+	if (!usr.client.holder)
 		return
-	if( alert("Reboot server?",,"Yes","No") == "No")
+	if ( alert("Reboot server?",,"Yes","No") == "No")
 		return
 	to_chat(world, "<span class='warning'><b>Rebooting world!</b> <span class='notice'>Initiated by [usr.client.holder.fakekey ? "Admin" : usr.key]!</span>")
 	log_admin("[key_name(usr)] initiated an immediate reboot.")
@@ -1122,7 +1122,7 @@ var/global/floorIsLava = 0
 	feedback_set_details("end_error","immediate admin reboot - by [usr.key] [usr.client.holder.fakekey ? "(stealth)" : ""]")
 	feedback_add_details("admin_verb","IR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-	if(blackbox)
+	if (blackbox)
 		blackbox.save_all_data_to_sql()
 
 	CallHook("Reboot",list())
@@ -1152,31 +1152,31 @@ var/global/floorIsLava = 0
 ////////////////////////////////////////////////////////////////////////////////////////////////ADMIN HELPER PROCS
 
 /proc/is_special_character(mob/M as mob) // returns 1 for specail characters and 2 for heroes of gamemode
-	if(!ticker || !ticker.mode)
+	if (!ticker || !ticker.mode)
 		return 0
 	if (!istype(M))
 		return 0
-	if(isrev(M) || isrevhead(M))
+	if (isrev(M) || isrevhead(M))
 		if (ticker.mode.config_tag == "revolution")
 			return 2
 		return 1
-	if(iscult(M))
+	if (iscult(M))
 		if (ticker.mode.config_tag == "cult")
 			return 2
 		return 1
-	if(ismalf(M))
+	if (ismalf(M))
 		if (ticker.mode.config_tag == "malfunction")
 			return 2
 		return 1
-	if(isnukeop(M))
+	if (isnukeop(M))
 		if (ticker.mode.config_tag == "nuclear")
 			return 2
 		return 1
-	if(iswizard(M))
+	if (iswizard(M))
 		if (ticker.mode.config_tag == "wizard")
 			return 2
 		return 1
-	if(ischangeling(M))
+	if (ischangeling(M))
 		if (ticker.mode.config_tag == "changeling")
 			return 2
 		return 1
@@ -1184,33 +1184,33 @@ var/global/floorIsLava = 0
 		if (ticker.mode.config_tag == "borer")
 			return 2
 		return 1*/
-	if(isbadmonkey(M))
+	if (isbadmonkey(M))
 		if (ticker.mode.config_tag == "monkey")
 			return 2
 		return 1
-	if(isrobot(M))
+	if (isrobot(M))
 		var/mob/living/silicon/robot/R = M
-		if(R.emagged)
+		if (R.emagged)
 			return 1
-	if(M.mind&&M.mind.special_role)//If they have a mind and special role, they are some type of traitor or antagonist.
+	if (M.mind&&M.mind.special_role)//If they have a mind and special role, they are some type of traitor or antagonist.
 		return 1
 
 	return 0
 
 /*
 /datum/admins/proc/get_sab_desc(var/target)
-	switch(target)
-		if(1)
+	switch (target)
+		if (1)
 			return "Destroy at least 70% of the plasma canisters on the station"
-		if(2)
+		if (2)
 			return "Destroy the AI"
-		if(3)
+		if (3)
 			var/count = 0
-			for(var/mob/living/carbon/monkey/Monkey in world)
-				if(Monkey.z == map.zMainStation)
+			for (var/mob/living/carbon/monkey/Monkey in world)
+				if (Monkey.z == map.zMainStation)
 					count++
 			return "Kill all [count] of the monkeys on the station"
-		if(4)
+		if (4)
 			return "Cut power to at least 80% of the station"
 		else
 			return "Error: Invalid sabotage target: [target]"
@@ -1220,27 +1220,27 @@ var/global/floorIsLava = 0
 	set desc = "(atom path) Spawn an atom"
 	set name = "Spawn"
 
-	if(!check_rights(R_SPAWN))
+	if (!check_rights(R_SPAWN))
 		return
 
 	var/list/matches = new()
 
-	for(var/path in typesof(/atom))
-		if(findtext("[path]", object))
+	for (var/path in typesof(/atom))
+		if (findtext("[path]", object))
 			matches += path
 
-	if(matches.len==0)
+	if (matches.len==0)
 		return
 
 	var/chosen
-	if(matches.len==1)
+	if (matches.len==1)
 		chosen = matches[1]
 	else
 		chosen = input("Select an atom type", "Spawn Atom", matches[1]) as null|anything in matches
-		if(!chosen)
+		if (!chosen)
 			return
 
-	if(ispath(chosen,/turf))
+	if (ispath(chosen,/turf))
 		var/turf/T = get_turf(usr.loc)
 		T.ChangeTurf(chosen)
 	else
@@ -1254,10 +1254,10 @@ var/global/floorIsLava = 0
 	set desc = "Edit mobs's memory and role"
 	set name = "Show Traitor Panel"
 
-	if(!istype(M))
+	if (!istype(M))
 		to_chat(usr, "This can only be used on instances of type /mob")
 		return
-	if(!M.mind)
+	if (!M.mind)
 		to_chat(usr, "This mob has no mind!")
 		return
 
@@ -1303,11 +1303,11 @@ var/global/floorIsLava = 0
 
 /datum/admins/proc/output_ai_laws()
 	var/ai_number = 0
-	for(var/mob/living/silicon/S in mob_list)
+	for (var/mob/living/silicon/S in mob_list)
 		ai_number++
-		if(isAI(S))
+		if (isAI(S))
 			to_chat(usr, "<b>AI [key_name(S, usr)]'s laws:</b>")
-		else if(isrobot(S))
+		else if (isrobot(S))
 			var/mob/living/silicon/robot/R = S
 			to_chat(usr, "<b>CYBORG [key_name(S, usr)] [R.connected_ai?"(Slaved to: [R.connected_ai])":"(Independant)"]: laws:</b>")
 		else if (ispAI(S))
@@ -1316,7 +1316,7 @@ var/global/floorIsLava = 0
 		else
 			to_chat(usr, "<b>SOMETHING SILICON [key_name(S, usr)]'s laws:</b>")
 
-		if(ispAI(S))
+		if (ispAI(S))
 			var/mob/living/silicon/pai/pAI = S
 			pAI.show_directives(usr)
 		else if (S.laws == null)
@@ -1324,7 +1324,7 @@ var/global/floorIsLava = 0
 		else
 			S.laws.show_laws(usr)
 
-	if(!ai_number)
+	if (!ai_number)
 		to_chat(usr, "<b>No AIs located</b>")//Just so you know the thing is actually working and not just ignoring you.
 
 
@@ -1337,7 +1337,7 @@ var/global/floorIsLava = 0
 		to_chat(src, "Only administrators may use this command.")
 		return
 
-	if(istype(H))
+	if (istype(H))
 		H.regenerate_icons()
 
 //
@@ -1434,7 +1434,7 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 	if (tomob.ckey)
 		question = "This mob already has a user ([tomob.key]) in control of it! "
 	question += "Are you sure you want to place [frommob.name]([frommob.key]) in control of [tomob.name]?"
-	if(alert(question, "Place ghost in control of mob?", "Yes", "No") != "Yes")
+	if (alert(question, "Place ghost in control of mob?", "Yes", "No") != "Yes")
 		return 1
 
 	if (!frommob || !tomob) //make sure the mobs don't go away while we waited for a response

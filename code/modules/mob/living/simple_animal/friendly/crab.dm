@@ -22,14 +22,14 @@
 	var/obj/item/inventory_mask
 
 /mob/living/simple_animal/crab/Life()
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
 	..()
 	//CRAB movement
-	if(!ckey && !stat)
-		if(isturf(src.loc) && !resting && !locked_to)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
+	if (!ckey && !stat)
+		if (isturf(src.loc) && !resting && !locked_to)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
 			turns_since_move++
-			if(turns_since_move >= turns_per_move)
+			if (turns_since_move >= turns_per_move)
 				Move(get_step(src,pick(4,8)))
 				turns_since_move = 0
 	regenerate_icons()
@@ -45,10 +45,10 @@
 
 //LOOK AT THIS - ..()??
 /mob/living/simple_animal/crab/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(iswirecutter(O))
-		if(stat == DEAD)
+	if (iswirecutter(O))
+		if (stat == DEAD)
 			return ..()
-		if(prob(50))
+		if (prob(50))
 			to_chat(user, "<span class='danger'>This kills the crab.</span>")
 			health -= 20
 			Die()

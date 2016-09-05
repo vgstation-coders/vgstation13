@@ -55,7 +55,7 @@ var/list/all_doors = list()
 	forceinvertredraw = 1
 
 /obj/machinery/door/projectile_check()
-	if(opacity)
+	if (opacity)
 		return PROJREACT_WALLS
 	else
 		return PROJREACT_WINDOWS
@@ -64,7 +64,7 @@ var/list/all_doors = list()
 	if (ismob(AM))
 		var/mob/M = AM
 
-		if(!M.restrained() && (M.size > SIZE_TINY))
+		if (!M.restrained() && (M.size > SIZE_TINY))
 			bump_open(M)
 
 		return
@@ -83,7 +83,7 @@ var/list/all_doors = list()
 		if (density)
 			if (mecha.occupant && !operating && (allowed(mecha.occupant) || check_access_list(mecha.operation_req_access)))
 				open()
-			else if(!operating)
+			else if (!operating)
 				playsound(src.loc, 'sound/machines/denied.ogg', 50, 1)
 				door_animate("deny")
 
@@ -92,26 +92,26 @@ var/list/all_doors = list()
 
 		if (density)
 			if (vehicle.locked_atoms.len && !operating && allowed(vehicle.locked_atoms[1]))
-				if(istype(vehicle, /obj/structure/bed/chair/vehicle/wizmobile))
+				if (istype(vehicle, /obj/structure/bed/chair/vehicle/wizmobile))
 					vehicle.forceMove(get_step(vehicle,vehicle.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
 				open()
-			else if(!operating)
+			else if (!operating)
 				playsound(src.loc, 'sound/machines/denied.ogg', 50, 1)
 				door_animate("deny")
 
 /obj/machinery/door/proc/bump_open(mob/user as mob)
 	// TODO: analyze this
-	if(user.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //Fakkit
+	if (user.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //Fakkit
 		return
 
 	add_fingerprint(user)
 
-	if(!requiresID())
+	if (!requiresID())
 		user = null
 
-	if(allowed(user))
+	if (allowed(user))
 		open()
-	else if(!operating)
+	else if (!operating)
 		playsound(src.loc, 'sound/machines/denied.ogg', 50, 1)
 		door_animate("deny")
 
@@ -137,7 +137,7 @@ var/list/all_doors = list()
 				var/datum/organ/external/O = H.get_organ(LIMB_HEAD)
 
 				// TODO: analyze the called proc
-				if(O.take_damage(10, 0))
+				if (O.take_damage(10, 0))
 					H.UpdateDamageIcon()
 					O = null
 			else
@@ -154,7 +154,7 @@ var/list/all_doors = list()
 
 
 /obj/machinery/door/attackby(obj/item/I as obj, mob/user as mob)
-	if(..())
+	if (..())
 		return 1
 
 	if (istype(I, /obj/item/device/detective_scanner))
@@ -175,11 +175,11 @@ var/list/all_doors = list()
 			return open()
 
 	playsound(src.loc, 'sound/machines/denied.ogg', 50, 1)
-	if(density) //Why are we playing a denied animation on an OPEN DOOR
+	if (density) //Why are we playing a denied animation on an OPEN DOOR
 		door_animate("deny")
 
 /obj/machinery/door/blob_act()
-	if(prob(BLOB_PROBABILITY))
+	if (prob(BLOB_PROBABILITY))
 		qdel(src)
 
 /obj/machinery/door/proc/door_animate(var/animation as text)
@@ -192,7 +192,7 @@ var/list/all_doors = list()
 	sleep(animation_delay)
 
 /obj/machinery/door/update_icon()
-	if(!density)
+	if (!density)
 		icon_state = "[prefix]door_open"
 	else
 		icon_state = "[prefix]door_closed"
@@ -201,13 +201,13 @@ var/list/all_doors = list()
 
 
 /obj/machinery/door/proc/open()
-	if(!density)
+	if (!density)
 		return 1
-	if(operating > 0)
+	if (operating > 0)
 		return
-	if(!ticker)
+	if (!ticker)
 		return 0
-	if(!operating)
+	if (!operating)
 		operating = 1
 
 	door_animate("opening")
@@ -221,14 +221,14 @@ var/list/all_doors = list()
 	update_nearby_tiles()
 	//update_freelook_sight()
 
-	if(operating == 1)
+	if (operating == 1)
 		operating = 0
 
 	return 1
 
 /obj/machinery/door/proc/autoclose()
 	var/obj/machinery/door/airlock/A = src
-	if(!A.density && !A.operating && !A.locked && !A.welded && A.autoclose && !A.jammed)
+	if (!A.density && !A.operating && !A.locked && !A.welded && A.autoclose && !A.jammed)
 		close()
 	return
 
@@ -247,12 +247,12 @@ var/list/all_doors = list()
 		src.set_opacity(1)
 		// Copypasta!!!
 		var/obj/effect/beam/B = locate() in loc
-		if(B)
+		if (B)
 			qdel(B)
 
 	// TODO: rework how fire works on doors
 	var/obj/fire/F = locate() in loc
-	if(F)
+	if (F)
 		qdel(F)
 
 	update_nearby_tiles()
@@ -262,7 +262,7 @@ var/list/all_doors = list()
 	. = ..()
 	all_doors += src
 
-	if(density)
+	if (density)
 		// above most items if closed
 		layer = closed_layer
 
@@ -272,8 +272,8 @@ var/list/all_doors = list()
 
 		explosion_resistance = 0
 
-	if(width > 1)
-		if(dir in list(EAST, WEST))
+	if (width > 1)
+		if (dir in list(EAST, WEST))
 			bound_width = width * WORLD_ICON_SIZE
 			bound_height = WORLD_ICON_SIZE
 		else
@@ -283,7 +283,7 @@ var/list/all_doors = list()
 	update_nearby_tiles()
 
 /obj/machinery/door/cultify()
-	if(invisibility != INVISIBILITY_MAXIMUM)
+	if (invisibility != INVISIBILITY_MAXIMUM)
 		invisibility = INVISIBILITY_MAXIMUM
 		density = 0
 		anim(target = src, a_icon = 'icons/effects/effects.dmi', a_icon_state = "breakdoor", sleeptime = 10)
@@ -295,17 +295,17 @@ var/list/all_doors = list()
 	..()
 
 /obj/machinery/door/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group)
+	if (air_group)
 		return 0
-	if(istype(mover))
-		if(mover.checkpass(PASSGLASS))
+	if (istype(mover))
+		if (mover.checkpass(PASSGLASS))
 			return !opacity
-		if(mover.checkpass(PASSDOOR))
+		if (mover.checkpass(PASSDOOR))
 			return 1
 	return !density
 
 /obj/machinery/door/Crossed(AM as mob|obj) //Since we can't actually quite open AS the car goes through us, we'll do the next best thing: open as the car goes into our tile.
-	if(istype(AM, /obj/structure/bed/chair/vehicle/wizmobile)) //Which is not 100% correct for things like windoors but it's close enough.
+	if (istype(AM, /obj/structure/bed/chair/vehicle/wizmobile)) //Which is not 100% correct for things like windoors but it's close enough.
 		open()
 	return ..()
 
@@ -314,10 +314,10 @@ var/list/all_doors = list()
 
 
 /obj/machinery/door/emp_act(severity)
-	if(prob(20/severity) && (istype(src,/obj/machinery/door/airlock) || istype(src,/obj/machinery/door/window)) )
+	if (prob(20/severity) && (istype(src,/obj/machinery/door/airlock) || istype(src,/obj/machinery/door/window)) )
 		open(6)
-	if(prob(40/severity))
-		if(secondsElectrified == 0)
+	if (prob(40/severity))
+		if (secondsElectrified == 0)
 			secondsElectrified = -1
 			spawn(300)
 				secondsElectrified = 0
@@ -325,14 +325,14 @@ var/list/all_doors = list()
 
 
 /obj/machinery/door/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			qdel(src)
-		if(2.0)
-			if(prob(25))
+		if (2.0)
+			if (prob(25))
 				qdel(src)
-		if(3.0)
-			if(prob(80))
+		if (3.0)
+			if (prob(80))
 				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 				s.set_up(2, 1, src)
 				s.start()
@@ -342,10 +342,10 @@ var/list/all_doors = list()
 	return 1
 
 /obj/machinery/door/proc/update_nearby_tiles(var/turf/T)
-	if(!air_master)
+	if (!air_master)
 		return 0
 
-	if(!T)
+	if (!T)
 		T = get_turf(src)
 	update_heat_protection(T)
 	air_master.mark_for_update(T)
@@ -360,8 +360,8 @@ var/list/all_doors = list()
 	update_nearby_tiles()
 
 /obj/machinery/door/proc/update_heat_protection(var/turf/simulated/source)
-	if(istype(source))
-		if(src.density && (src.opacity || src.heat_proof))
+	if (istype(source))
+		if (src.density && (src.opacity || src.heat_proof))
 			source.thermal_conductivity = DOOR_HEAT_TRANSFER_COEFFICIENT
 		else
 			source.thermal_conductivity = initial(source.thermal_conductivity)
@@ -373,8 +373,8 @@ var/list/all_doors = list()
 /obj/machinery/door/Move(new_loc, new_dir)
 	update_nearby_tiles()
 	. = ..()
-	if(width > 1)
-		if(dir in list(EAST, WEST))
+	if (width > 1)
+		if (dir in list(EAST, WEST))
 			bound_width = width * WORLD_ICON_SIZE
 			bound_height = WORLD_ICON_SIZE
 		else

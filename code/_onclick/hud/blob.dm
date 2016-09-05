@@ -129,7 +129,7 @@
 		mymob.gui_icons.blob_taunt,
 		)
 
-	for(var/i=1;i<=24;i++)
+	for (var/i=1;i<=24;i++)
 		var/obj/screen/specialblob/S = getFromPool(/obj/screen/specialblob)
 		S.icon = 'icons/mob/screen1_blob.dmi'
 		S.icon_state = ""
@@ -137,12 +137,12 @@
 		S.screen_loc = "[1 + round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE],NORTH"
 		mymob.gui_icons.specialblobs[i] = S
 
-	for(var/i=1;i<=24;i++)
+	for (var/i=1;i<=24;i++)
 		mymob.client.screen += mymob.gui_icons.specialblobs[i]
 
 /*
 /datum/hud/proc/remove_blob_hud()
-	for(var/i=1;i<=24;i++)
+	for (var/i=1;i<=24;i++)
 		mymob.client.screen -= mymob.gui_icons.specialblobs[i]
 
 	mymob.client.screen -= list(

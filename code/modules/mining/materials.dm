@@ -11,7 +11,7 @@
 */
 
 proc/initialize_materials()
-	for(var/matdata in typesof(/datum/material) - /datum/material)
+	for (var/matdata in typesof(/datum/material) - /datum/material)
 		var/datum/material/mat = new matdata
 		material_list += list(mat.id = mat)
 		initial_materials += list(mat.id = 0)
@@ -27,10 +27,10 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	holder = newholder
 	storage = list()
 
-	if(!material_list)
+	if (!material_list)
 		initialize_materials()
 
-	if(!storage.len)
+	if (!storage.len)
 		storage = initial_materials.Copy()
 
 /datum/materials/Destroy()
@@ -38,20 +38,20 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 
 /datum/materials/resetVariables(args)
 	var/newargs
-	if(args)
+	if (args)
 		newargs = args + "storage"
 	else
 		newargs = "storage"
 
 	..(arglist(newargs))
 
-	if(!initial_materials)
+	if (!initial_materials)
 		initialize_materials()
 
 	storage = initial_materials.Copy()
 
 /datum/materials/proc/addAmount(var/mat_id,var/amount)
-	if(!(mat_id in storage))
+	if (!(mat_id in storage))
 		warning("addAmount(): Unknown material [mat_id]!")
 		return
 	// I HATE BYOND
@@ -63,43 +63,43 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	src.addFrom(mats,zero_after=1)
 
 /datum/materials/proc/addFrom(var/datum/materials/mats, var/zero_after=0)
-	if(mats == null)
+	if (mats == null)
 		return
-	for(var/mat_id in storage)
-		if(mats.storage[mat_id]>0)
+	for (var/mat_id in storage)
+		if (mats.storage[mat_id]>0)
 			storage[mat_id] += mats.storage[mat_id]
-			if(zero_after)
+			if (zero_after)
 				mats.storage[mat_id] = 0
 
 /datum/materials/proc/getVolume()
 	var/volume=0
-	for(var/mat_id in storage)
+	for (var/mat_id in storage)
 		volume += storage[mat_id]
 	return volume
 
 //Gives total value, doing mat value * stored mat
 /datum/materials/proc/getValue()
 	var/value=0
-	for(var/mat_id in storage)
+	for (var/mat_id in storage)
 		var/datum/material/mat = getMaterial(mat_id)
 		value += mat.value * storage[mat_id]
 	return value
 
 /datum/materials/proc/removeAmount(var/mat_id,var/amount)
-	if(!(mat_id in storage))
+	if (!(mat_id in storage))
 		warning("removeAmount(): Unknown material [mat_id]!")
 		return
 	addAmount(mat_id,-amount)
 
 /datum/materials/proc/getAmount(var/mat_id)
-	if(!(mat_id in storage))
+	if (!(mat_id in storage))
 		warning("getAmount(): Unknown material [mat_id]!")
 		return 0
 
 	return storage[mat_id]
 
 /datum/materials/proc/getMaterial(var/mat_id)
-	if(!(mat_id in material_list))
+	if (!(mat_id in material_list))
 		warning("getMaterial(): Unknown material [mat_id]!")
 		return 0
 
@@ -108,7 +108,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/materials/proc/makeSheets(var/atom/loc)
 	for (var/id in storage)
 		var/amount = getAmount(id)
-		if(amount)
+		if (amount)
 			var/datum/material/mat = getMaterial(id)
 			getFromPool(mat.sheettype, loc, Floor(amount / mat.cc_per_sheet))
 
@@ -129,7 +129,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	var/value=0
 
 /datum/material/New()
-	if(processed_name=="")
+	if (processed_name=="")
 		processed_name=name
 
 /datum/material/iron

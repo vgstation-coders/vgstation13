@@ -62,27 +62,27 @@
 
 /mob/living/simple_animal/hostile/humanoid/cult/priest/Shoot()
 	var/mob/living/L = target
-	if(L.isUnconscious())
+	if (L.isUnconscious())
 		return
 
-	switch(rand(0,2))
-		if(0) //damage
+	switch (rand(0,2))
+		if (0) //damage
 			var/dmg = rand(10,20)
 			to_chat(L, "<span class='userdanger'>Pain surges through your body and horrible visions flash through your mind!</span>")
 			L.emote("scream", , , 1)
 			L.adjustBruteLoss(dmg)
-		if(1) //deaf
+		if (1) //deaf
 			var/mob/living/carbon/human/H = L
-			if(!istype(H))
+			if (!istype(H))
 				return
 
 			H.ear_damage += rand(1, 3)
 
-			if(H.ear_deaf <= 0)
+			if (H.ear_deaf <= 0)
 				to_chat(L, "<span class='userdanger'>All of the sudden, horrifying screams start filling your head. You can't hear anything else aside from them!</span>")
 				H.ear_deaf += rand(3,10)
 				H << 'sound/effects/creepyshriek.ogg'
-		if(2) //emp
+		if (2) //emp
 			empulse(get_turf(src), 3, 5, 7)
 
 /obj/effect/landmark/corpse/cult

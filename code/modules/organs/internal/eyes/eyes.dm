@@ -12,9 +12,9 @@
 
 
 /datum/organ/internal/eyes/process() //Eye damage replaces the old eye_stat var.
-	if(is_broken())
+	if (is_broken())
 		owner.eye_blind = 2
-	if(is_bruised())
+	if (is_bruised())
 		owner.eye_blind = 0
 		owner.eye_blurry = 2
 

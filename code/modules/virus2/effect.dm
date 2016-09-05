@@ -12,32 +12,32 @@
 	virus=D
 
 /datum/disease2/effectholder/proc/runeffect(var/mob/living/carbon/human/mob,var/stage)
-	if(happensonce > -1 && effect.stage <= stage && prob(chance))
+	if (happensonce > -1 && effect.stage <= stage && prob(chance))
 		effect.activate(mob)
-		if(happensonce == 1)
+		if (happensonce == 1)
 			happensonce = -1
 
 /datum/disease2/effectholder/proc/getrandomeffect(var/badness = 1)
-	if(effect)
+	if (effect)
 		virus.log += "<br />[timestamp()] Effect [effect.name] [chance]% is now "
 	else
 		virus.log += "<br />[timestamp()] Added effect "
 	var/list/datum/disease2/effect/list = list()
-	for(var/e in (typesof(/datum/disease2/effect) - /datum/disease2/effect))
+	for (var/e in (typesof(/datum/disease2/effect) - /datum/disease2/effect))
 		var/datum/disease2/effect/f = new e
 		if (f.badness > badness)	//we don't want such strong effects
 			continue
-		if(f.stage == src.stage)
+		if (f.stage == src.stage)
 			list += f
 	effect = pick(list)
 	chance = rand(1,6)
 	virus.log += "[effect.name] [chance]%:"
 
 /datum/disease2/effectholder/proc/minormutate()
-	switch(pick(1,2,3,4,5))
-		if(1)
+	switch (pick(1,2,3,4,5))
+		if (1)
 			chance = rand(0,effect.chance_maxm)
-		if(2)
+		if (2)
 			multiplier = rand(1,effect.maxm)
 
 /datum/disease2/effectholder/proc/majormutate()
@@ -64,8 +64,8 @@
 		to_chat(mob, "<span class='warning'>You feel something tearing its way out of your stomach...</span>")
 		mob.adjustToxLoss(10)
 		mob.updatehealth()
-		if(prob(40))
-			if(mob.client)
+		if (prob(40))
+			if (mob.client)
 				mob.client.mob = new/mob/living/carbon/alien/larva(mob.loc)
 			else
 				new/mob/living/carbon/alien/larva(mob.loc)
@@ -87,7 +87,7 @@
 	name = "Creosote Syndrome"
 	stage = 4
 /datum/disease2/effect/minttoxin/activate(var/mob/living/carbon/mob,var/multiplier)
-	if(istype(mob) && mob.reagents.get_reagent_amount(MINTTOXIN) < 5)
+	if (istype(mob) && mob.reagents.get_reagent_amount(MINTTOXIN) < 5)
 		to_chat(mob, "<span class='notice'>You feel a minty freshness</span>")
 		mob.reagents.add_reagent(MINTTOXIN, 5)
 
@@ -116,7 +116,7 @@
 	stage = 4
 	badness = 2
 /datum/disease2/effect/monkey/activate(var/mob/living/carbon/mob,var/multiplier)
-	if(istype(mob,/mob/living/carbon/human))
+	if (istype(mob,/mob/living/carbon/human))
 		var/mob/living/carbon/human/h = mob
 		h.monkeyize()
 
@@ -125,10 +125,10 @@
 	stage = 4
 	badness = 2
 /datum/disease2/effect/catbeast/activate(var/mob/living/carbon/mob,var/multiplier)
-	if(istype(mob,/mob/living/carbon/human))
+	if (istype(mob,/mob/living/carbon/human))
 		var/mob/living/carbon/human/h = mob
-		if(h.species.name != "Tajaran")
-			if(h.set_species("Tajaran"))
+		if (h.species.name != "Tajaran")
+			if (h.set_species("Tajaran"))
 				h.regenerate_icons()
 
 /datum/disease2/effect/voxpox
@@ -136,10 +136,10 @@
 	stage = 4
 	badness = 2
 /datum/disease2/effect/voxpox/activate(var/mob/living/carbon/mob,var/multiplier)
-	if(istype(mob,/mob/living/carbon/human))
+	if (istype(mob,/mob/living/carbon/human))
 		var/mob/living/carbon/human/h = mob
-		if(h.species.name != "Vox")
-			if(h.set_species("Vox"))
+		if (h.species.name != "Vox")
+			if (h.set_species("Vox"))
 				h.regenerate_icons()
 
 /datum/disease2/effect/suicide
@@ -173,7 +173,7 @@
 	name = "Shutdown Syndrome"
 	stage = 4
 /datum/disease2/effect/organs/activate(var/mob/living/carbon/mob,var/multiplier)
-	if(istype(mob, /mob/living/carbon/human))
+	if (istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
 		var/organ = pick(list(LIMB_RIGHT_ARM,LIMB_LEFT_ARM,LIMB_RIGHT_LEG,LIMB_RIGHT_LEG))
 		var/datum/organ/external/E = H.organs_by_name[organ]
@@ -183,7 +183,7 @@
 			for (var/datum/organ/external/C in E.children)
 				C.status |= ORGAN_DEAD
 		H.update_body(1)
-		if(multiplier < 1)
+		if (multiplier < 1)
 			multiplier = 1
 		H.adjustToxLoss(15*multiplier)
 
@@ -192,7 +192,7 @@
 
 
 /datum/disease2/effect/organs/deactivate(var/mob/living/carbon/mob,var/multiplier)
-	if(istype(mob, /mob/living/carbon/human))
+	if (istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
 		for (var/datum/organ/external/E in H.organs)
 			E.status &= ~ORGAN_DEAD
@@ -207,7 +207,7 @@
 	name = "Longevity Syndrome"
 	stage = 4
 /datum/disease2/effect/immortal/activate(var/mob/living/carbon/mob,var/multiplier)
-	if(istype(mob, /mob/living/carbon/human))
+	if (istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
 		for (var/datum/organ/external/E in H.organs)
 			if (E.status & ORGAN_BROKEN && prob(30))
@@ -216,7 +216,7 @@
 	mob.apply_damages(heal_amt,heal_amt,heal_amt,heal_amt)
 
 /datum/disease2/effect/immortal/deactivate(var/mob/living/carbon/mob,var/multiplier)
-	if(istype(mob, /mob/living/carbon/human))
+	if (istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
 		to_chat(H, "<span class='notice'>You suddenly feel hurt and old...</span>")
 		H.age += 8
@@ -228,13 +228,13 @@
 	name = "Fragile Bones Syndrome"
 	stage = 4
 /datum/disease2/effect/bones/activate(var/mob/living/carbon/mob,var/multiplier)
-	if(istype(mob, /mob/living/carbon/human))
+	if (istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
 		for (var/datum/organ/external/E in H.organs)
 			E.min_broken_damage = max(5, E.min_broken_damage - 30)
 
 /datum/disease2/effect/bones/deactivate(var/mob/living/carbon/mob,var/multiplier)
-	if(istype(mob, /mob/living/carbon/human))
+	if (istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
 		for (var/datum/organ/external/E in H.organs)
 			E.min_broken_damage = initial(E.min_broken_damage)
@@ -244,7 +244,7 @@
 	stage = 4
 /datum/disease2/effect/scc/activate(var/mob/living/carbon/mob,var/multiplier)
 	//
-	if(!ishuman(mob))
+	if (!ishuman(mob))
 		return 0
 	var/mob/living/carbon/human/H = mob
 	mob.reagents.add_reagent(PACID, 10)
@@ -252,7 +252,7 @@
 	shake_camera(mob,5*multiplier)
 
 	for (var/datum/organ/external/E in H.organs)
-		if(pick(1,0))
+		if (pick(1,0))
 			//
 			E.createwound(CUT, pick(2,4,6,8,10))
 			E.fracture()
@@ -266,13 +266,13 @@
 	stage = 4
 /datum/disease2/effect/necrosis/activate(var/mob/living/carbon/mob, var/multiplier)
 
-	if(ishuman(mob)) //Only works on humans properly since it needs to do organ work
+	if (ishuman(mob)) //Only works on humans properly since it needs to do organ work
 		var/mob/living/carbon/human/H = mob
 		var/inst = pick(1, 2, 3)
 
-		switch(inst)
+		switch (inst)
 
-			if(1)
+			if (1)
 				to_chat(H, "<span class='warning'>A chunk of meat falls off of you!</span>")
 				var/totalslabs = 1
 				var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
@@ -281,7 +281,7 @@
 				var/sourcenutriment = H.nutrition / 15
 				//var/sourcetotalreagents = mob.reagents.total_volume
 
-				for(var/i = 1 to totalslabs)
+				for (var/i = 1 to totalslabs)
 					var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new
 					newmeat.name = sourcename + newmeat.name
 					newmeat.subjectname = sourcename
@@ -295,26 +295,26 @@
 					meatslab.forceMove(get_turf(H))
 					meatslab.throw_at(Tx, i, 3)
 
-					if(!Tx.density)
+					if (!Tx.density)
 						var/obj/effect/decal/cleanable/blood/gibs/D = getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx)
 						D.New(Tx,i)
 
-			if(2)
-				for(var/datum/organ/external/E in H.organs)
-					if(pick(1, 0))
+			if (2)
+				for (var/datum/organ/external/E in H.organs)
+					if (pick(1, 0))
 						E.droplimb(1)
 
-			if(3)
-				if(H.species.name != "Skellington")
+			if (3)
+				if (H.species.name != "Skellington")
 					to_chat(H, "<span class='warning'>Your necrotic skin ruptures!</span>")
 
-					for(var/datum/organ/external/E in H.organs)
-						if(pick(1,0))
+					for (var/datum/organ/external/E in H.organs)
+						if (pick(1,0))
 							E.createwound(CUT, pick(2, 4, 6, 8, 10))
 
-					if(prob(30))
-						if(H.species.name != "Skellington")
-							if(H.set_species("Skellington"))
+					if (prob(30))
+						if (H.species.name != "Skellington")
+							if (H.set_species("Skellington"))
 								to_chat(mob, "<span class='warning'>A massive amount of flesh sloughs off your bones!</span>")
 								H.regenerate_icons()
 				else
@@ -372,7 +372,7 @@
 	..()
 
 /obj/item/clothing/mask/gas/virusclown_hat/equipped(var/mob/user, var/slot, hand_index)
-	if(hand_index == GRASP_LEFT_HAND) //what the heck
+	if (hand_index == GRASP_LEFT_HAND) //what the heck
 		canremove = 1		//curses!
 	..()
 
@@ -386,10 +386,10 @@
 	//var/src = mob
 	var/hack = mob.loc
 	var/turf/simulated/T = get_turf(hack)
-	if(!T)
+	if (!T)
 		return
 	var/datum/gas_mixture/GM = new
-	if(prob(10))
+	if (prob(10))
 		GM.toxins += 100
 		//GM.temperature = 1500+T0C //should be enough to start a fire
 		to_chat(mob, "<span class='warning'>You exhale a large plume of toxic gas!</span>")
@@ -436,7 +436,7 @@
 	name = "Lazy Mind Syndrome"
 	stage = 3
 /datum/disease2/effect/mind/activate(var/mob/living/carbon/mob,var/multiplier)
-	if(istype(mob, /mob/living/carbon/human))
+	if (istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
 		var/datum/organ/internal/brain/B = H.internal_organs_by_name["brain"]
 		if (B && B.damage < B.min_broken_damage)
@@ -501,14 +501,14 @@
 	name = "Hyper-perspiration Effect"
 	stage = 3
 /datum/disease2/effect/sweat/activate(var/mob/living/carbon/mob,var/multiplier)
-	if(prob(30))
+	if (prob(30))
 		mob.emote("me",1,"is sweating profusely!")
 
-		if(istype(mob.loc,/turf/simulated))
+		if (istype(mob.loc,/turf/simulated))
 			var/turf/simulated/T = mob.loc
-			if(T.wet < 1)
+			if (T.wet < 1)
 				T.wet = 1
-				if(T.wet_overlay)
+				if (T.wet_overlay)
 					T.overlays -= T.wet_overlay
 					T.wet_overlay = null
 				T.wet_overlay = image('icons/effects/water.dmi',T,"wet_floor")
@@ -516,7 +516,7 @@
 				spawn(800)
 					if (istype(T) && T.wet < 2)
 						T.wet = 0
-						if(T.wet_overlay)
+						if (T.wet_overlay)
 							T.overlays -= T.wet_overlay
 							T.wet_overlay = null
 
@@ -528,37 +528,37 @@
 	name = "Elvisism"
 	stage = 3
 /datum/disease2/effect/elvis/activate(var/mob/living/carbon/mob,var/multiplier)
-	if(!istype(mob))
+	if (!istype(mob))
 		return
 
 	var/mob/living/carbon/human/H = mob
 	var/obj/item/clothing/glasses/virussunglasses = new /obj/item/clothing/glasses/virussunglasses
-	if(H.glasses && !istype(H.glasses, /obj/item/clothing/glasses/virussunglasses))
+	if (H.glasses && !istype(H.glasses, /obj/item/clothing/glasses/virussunglasses))
 		mob.u_equip(H.glasses,1)
 		mob.equip_to_slot(virussunglasses, slot_glasses)
-	if(!slot_glasses)
+	if (!slot_glasses)
 		mob.equip_to_slot(virussunglasses, slot_glasses)
 	mob.confused += 10
 
-	if(pick(0,1))
+	if (pick(0,1))
 		mob.say(pick("Uh HUH!", "Thank you, Thank you very much...", "I ain't nothin' but a hound dog!", "Swing low, sweet chariot!"))
 	else
 		mob.emote("me",1,pick("curls his lip!", "gyrates his hips!", "thrusts his hips!"))
 
-	if(istype(H))
+	if (istype(H))
 
-		if(H.species.name == "Human" && !(H.f_style == "Pompadour"))
+		if (H.species.name == "Human" && !(H.f_style == "Pompadour"))
 			spawn(50)
 				H.h_style = "Pompadour"
 				H.update_hair()
 
-		if(H.species.name == "Human" && !(H.f_style == "Elvis Sideburns"))
+		if (H.species.name == "Human" && !(H.f_style == "Elvis Sideburns"))
 			spawn(50)
 				H.f_style = "Elvis Sideburns"
 				H.update_hair()
 /datum/disease2/effect/elvis/deactivate(var/mob/living/carbon/mob,var/multiplier)
-	if(ishuman(mob))
-		if(mob:glasses && istype(mob:glasses, /obj/item/clothing/glasses/virussunglasses))
+	if (ishuman(mob))
+		if (mob:glasses && istype(mob:glasses, /obj/item/clothing/glasses/virussunglasses))
 			mob:glasses.canremove = 1
 			mob.u_equip(mob:glasses,1)
 
@@ -586,10 +586,10 @@
 /datum/disease2/effect/pthroat/activate(var/mob/living/carbon/mob,var/multiplier)
 	//
 	var/obj/item/clothing/mask/gas/virusclown_hat = new /obj/item/clothing/mask/gas/virusclown_hat
-	if(mob.wear_mask && !istype(mob.wear_mask, /obj/item/clothing/mask/gas/virusclown_hat))
+	if (mob.wear_mask && !istype(mob.wear_mask, /obj/item/clothing/mask/gas/virusclown_hat))
 		mob.u_equip(mob.wear_mask,1)
 		mob.equip_to_slot(virusclown_hat, slot_wear_mask)
-	if(!mob.wear_mask)
+	if (!mob.wear_mask)
 		mob.equip_to_slot(virusclown_hat, slot_wear_mask)
 	mob.reagents.add_reagent(PSILOCYBIN, 20)
 	mob.say(pick("HONK!", "Honk!", "Honk.", "Honk?", "Honk!!", "Honk?!", "Honk..."))
@@ -619,15 +619,15 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 /datum/disease2/effect/horsethroat/activate(var/mob/living/carbon/mob,var/multiplier)
 
 
-	if(!(mob.type in compatible_mobs))
+	if (!(mob.type in compatible_mobs))
 		return
 
 
 	var/obj/item/clothing/mask/horsehead/magic/magichead = new /obj/item/clothing/mask/horsehead/magic
-	if(mob.wear_mask && !istype(mob.wear_mask, /obj/item/clothing/mask/horsehead/magic))
+	if (mob.wear_mask && !istype(mob.wear_mask, /obj/item/clothing/mask/horsehead/magic))
 		mob.u_equip(mob.wear_mask,1)
 		mob.equip_to_slot(magichead, slot_wear_mask)
-	if(!mob.wear_mask)
+	if (!mob.wear_mask)
 		mob.equip_to_slot(magichead, slot_wear_mask)
 	to_chat(mob, "<span class='warning'>You feel a little horse!</span>")
 
@@ -663,9 +663,9 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 		mob.reagents.add_reagent(DERMALINE, 4)
 	mob.emote("me",1,"exhales slowly.")
 
-	if(ishuman(H))
+	if (ishuman(H))
 		var/datum/organ/external/chest/chest = H.get_organ(LIMB_CHEST)
-		for(var/datum/organ/internal/I in chest.internal_organs)
+		for (var/datum/organ/internal/I in chest.internal_organs)
 			I.damage = 0
 
 
@@ -700,7 +700,7 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	stage = 2
 /datum/disease2/effect/cough/activate(var/mob/living/carbon/mob,var/multiplier)
 	mob.say("*cough")
-	for(var/mob/living/carbon/M in oview(2,mob))
+	for (var/mob/living/carbon/M in oview(2,mob))
 		mob.spread_disease_to(M)
 
 /datum/disease2/effect/hungry
@@ -719,9 +719,9 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	name = "Hair Loss"
 	stage = 2
 /datum/disease2/effect/hair/activate(var/mob/living/carbon/mob,var/multiplier)
-	if(istype(mob, /mob/living/carbon/human))
+	if (istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
-		if(H.species.name == "Human" && !(H.h_style == "Bald") && !(H.h_style == "Balding Hair"))
+		if (H.species.name == "Human" && !(H.h_style == "Bald") && !(H.h_style == "Balding Hair"))
 			to_chat(H, "<span class='danger'>Your hair starts to fall out in clumps...</span>")
 			spawn(50)
 				H.h_style = "Balding Hair"
@@ -760,9 +760,9 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	name = "Bearding"
 	stage = 2
 /datum/disease2/effect/beard/activate(var/mob/living/carbon/mob,var/multiplier)
-	if(istype(mob, /mob/living/carbon/human))
+	if (istype(mob, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = mob
-		if(H.species.name == "Human" && !(H.f_style == "Full Beard"))
+		if (H.species.name == "Human" && !(H.f_style == "Full Beard"))
 			to_chat(H, "<span class='warning'>Your chin and neck itch!.</span>")
 			spawn(50)
 				H.f_style = "Full Beard"
@@ -779,7 +779,7 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 /datum/disease2/effect/bloodynose/activate(var/mob/living/carbon/mob,var/multiplier)
 	if (prob(30))
 		var/obj/effect/decal/cleanable/blood/D= locate(/obj/effect/decal/cleanable/blood) in get_turf(mob)
-		if(D==null)
+		if (D==null)
 			D = getFromPool(/obj/effect/decal/cleanable/blood, get_turf(mob))
 			D.New(D.loc)
 
@@ -799,7 +799,7 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	if (prob(30))
 		mob.say("*cough")
 		var/obj/effect/decal/cleanable/blood/viralsputum/D= locate(/obj/effect/decal/cleanable/blood/viralsputum) in get_turf(mob)
-		if(!D)
+		if (!D)
 			D = getFromPool(/obj/effect/decal/cleanable/blood/viralsputum, get_turf(mob))
 			D.New(D.loc)
 
@@ -826,10 +826,10 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	mob.say("*sneeze")
 	if (prob(50))
 		var/obj/effect/decal/cleanable/mucus/M= locate(/obj/effect/decal/cleanable/mucus) in get_turf(mob)
-		if(M==null)
+		if (M==null)
 			M = new(get_turf(mob))
 		else
-			if(M.dry)
+			if (M.dry)
 				M.dry=0
 		M.virus2 |= virus_copylist(mob.virus2)
 

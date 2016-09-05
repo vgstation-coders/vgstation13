@@ -21,11 +21,11 @@ var/global/cockroach_egg_amount = 0
 	cockroach_egg_amount++
 
 /obj/item/weapon/reagent_containers/food/snacks/roach_eggs/process()
-	if(is_in_valid_nest(src)) //_macros.dm
+	if (is_in_valid_nest(src)) //_macros.dm
 		amount_grown += rand(1,2)
 
-		if(amount_grown >= 41)
-			if(animal_count[/mob/living/simple_animal/cockroach] < ANIMAL_CHILD_CAP)
+		if (amount_grown >= 41)
+			if (animal_count[/mob/living/simple_animal/cockroach] < ANIMAL_CHILD_CAP)
 				hatch()
 			else
 				die()
@@ -33,7 +33,7 @@ var/global/cockroach_egg_amount = 0
 		die()
 
 /obj/item/weapon/reagent_containers/food/snacks/roach_eggs/Destroy()
-	if(amount_grown)
+	if (amount_grown)
 		die()
 
 	cockroach_egg_amount--

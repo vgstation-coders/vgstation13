@@ -17,7 +17,7 @@
 	planner = new(src)
 
 /obj/item/pipe_planner/attackby(var/obj/item/I, mob/user, params)
-	if(get_turf(src) == src.loc)
+	if (get_turf(src) == src.loc)
 		return planner.action(I, user, params)
 	return ..()
 
@@ -30,14 +30,14 @@
 
 	var/temp_dis = 0
 	var/temp_mod = 0
-	if(holder.dir & (EAST|WEST))
+	if (holder.dir & (EAST|WEST))
 		temp_dis = x_pos
 		temp_mod = PIPING_LAYER_P_X
 	else
 		temp_dis = y_pos
 		temp_mod = PIPING_LAYER_P_Y
 
-	if(temp_dis - 16 == 0)
+	if (temp_dis - 16 == 0)
 		return 0
 
 	found_id = Floor(abs(temp_dis - 16), abs(temp_mod)) / (temp_mod * sign(temp_dis - 16))
@@ -45,9 +45,9 @@
 	return found_id
 
 /datum/context_click/pipe_planner/action(obj/item/used_item, mob/user, params)
-	if(istype(used_item, /obj/item/pipe))
+	if (istype(used_item, /obj/item/pipe))
 		var/obj/item/pipe/pipe = used_item
-		if(user.drop_item(pipe, get_turf(holder)))
+		if (user.drop_item(pipe, get_turf(holder)))
 			var/dis = PIPING_LAYER_DEFAULT + (PIPING_LAYER_INCREMENT * return_clicked_id_by_params(params))
 			pipe.setPipingLayer(dis)
 			return 1

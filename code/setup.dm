@@ -16,7 +16,7 @@
 #define MAX_VALUE 65535
 
 #ifdef PROFILE_MACHINES
-#define CHECK_DISABLED(TYPE) if(disable_##TYPE) return
+#define CHECK_DISABLED(TYPE) if (disable_##TYPE) return
 var/global/disable_scrubbers = 0
 var/global/disable_vents     = 0
 #else
@@ -1311,14 +1311,14 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 //#define JUSTFUCKMYSHITUP 1
 #ifdef JUSTFUCKMYSHITUP
-#define writepanic(a) if(ticker && ticker.current_state >= 3 && world.cpu > 100) write_panic(a)
+#define writepanic(a) if (ticker && ticker.current_state >= 3 && world.cpu > 100) write_panic(a)
 #warning IMA FUCK YOUR SHIT UP
 var/proccalls = 1
 //keep a list of last 10 proccalls maybe?
 /proc/write_panic(a)
 	set background = 1
 	panicfile["[proccalls]"] << a
-	if(++proccalls > 200)
+	if (++proccalls > 200)
 		proccalls = 1
 
 #else

@@ -42,25 +42,25 @@
 	var/highlighting_connected_floors = 0
 
 /obj/item/device/assembly/light_tile_control/activate()
-	if(!..())
+	if (!..())
 		return 0
 
 	change_floors()
 
 /obj/item/device/assembly/light_tile_control/afterattack(atom/A, mob/user, proximity_flag)
-	if(istype(A, /obj/item/stack/tile/light))
+	if (istype(A, /obj/item/stack/tile/light))
 		to_chat(user, "<span class='notice'>\The [A] must be installed into the floor before it can be controlled by \the [src]!</span>")
 		return
 
 	var/turf/simulated/floor/T = A
-	if(!istype(T))
+	if (!istype(T))
 		return
-	if(!istype(T.floor_tile, /obj/item/stack/tile/light))
+	if (!istype(T.floor_tile, /obj/item/stack/tile/light))
 		to_chat(user, "<span class='notice'>\The [src] is only compactible with light tiles.</span>")
 		return
 
-	if(work_mode == MODE_ADDING)
-		if(connected_floors.Find(T))
+	if (work_mode == MODE_ADDING)
+		if (connected_floors.Find(T))
 			to_chat(user, "<span class='notice'>\The [T] is already in \the [src]'s memory.</span>")
 			return
 
@@ -92,19 +92,19 @@
 	onclose(user, "\ref[src]")
 
 /obj/item/device/assembly/light_tile_control/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 
-	if(href_list["show_connections"]) //Highlight all connected floors for 10 seconds
-		if(last_used + cooldown_max > world.time)
+	if (href_list["show_connections"]) //Highlight all connected floors for 10 seconds
+		if (last_used + cooldown_max > world.time)
 			to_chat(usr, "<span class='notice'>\The [src] is not responding.</span>")
 			return
 
 		var/mob/user = usr
-		if(!user || !user.client)
+		if (!user || !user.client)
 			return
 
-		for(var/turf/T in connected_floors)
+		for (var/turf/T in connected_floors)
 			highlight_turf(T, user)
 
 		highlighting_connected_floors = 1
@@ -113,45 +113,45 @@
 		spawn(10 SECONDS)
 			highlighting_connected_floors = 0
 
-			if(user.client)
+			if (user.client)
 				user.client.images -= image_overlays
 
 			image_overlays = list()
 
-	if(href_list["toggle_mode"])
-		if(work_mode == MODE_ADDING)
+	if (href_list["toggle_mode"])
+		if (work_mode == MODE_ADDING)
 			work_mode = MODE_DELETING
 			to_chat(usr, "<span class='info'>When applied to light floors, \the [src] will now disconnect from them.</span>")
 		else
 			work_mode = MODE_ADDING
 			to_chat(usr, "<span class='info'>When applied to light floors, \the [src] will now connect to them.</span>")
 
-		if(usr)
+		if (usr)
 			attack_self(usr)
 
-	if(href_list["toggle_set_state"])
+	if (href_list["toggle_set_state"])
 		set_state = !set_state
 
-		if(set_state)
+		if (set_state)
 			to_chat(usr, "<span class='info'>Light floors will be turned on.</span>")
 		else
 			to_chat(usr, "<span class='info'>Light floors will be turned off.</span>")
 
-		if(usr)
+		if (usr)
 			attack_self(usr)
 
-	if(href_list["delete_all"])
+	if (href_list["delete_all"])
 		to_chat(usr, "<span class='notice'>Disconnected [connected_floors.len] tiles from the network.</span>")
 
 		connected_floors = list()
 
-		if(usr)
+		if (usr)
 			attack_self(usr)
 
-	if(href_list["change_color"])
+	if (href_list["change_color"])
 		var/new_color = input(usr, "Please select a new color for \the [src].", "[src]", rgb(color_r,color_g,color_b)) as color
 
-		if(..())
+		if (..())
 			return
 
 		color_r = hex2num(copytext(new_color, 2, 4))
@@ -160,30 +160,30 @@
 
 		to_chat(usr, "<span class='info'>Changed color to [color_r];[color_g];[color_b]!</span>")
 
-		if(usr)
+		if (usr)
 			attack_self(usr)
 
-	if(href_list["apply"])
+	if (href_list["apply"])
 		change_floors()
 
-	if(href_list["refresh"])
-		if(usr)
+	if (href_list["refresh"])
+		if (usr)
 			attack_self(usr)
 
 /obj/item/device/assembly/light_tile_control/proc/change_floors()
-	if(last_used + cooldown_max > world.time)
+	if (last_used + cooldown_max > world.time)
 		return
 
 	var/turf/our_turf = get_turf(src)
 
-	for(var/turf/simulated/floor/T in connected_floors)
-		if(T.z != our_turf.z)
+	for (var/turf/simulated/floor/T in connected_floors)
+		if (T.z != our_turf.z)
 			connected_floors.Remove(T)
 			continue
 
 		var/obj/item/stack/tile/light/light_tile = T.floor_tile
 
-		if(!istype(light_tile)) //Not a light tile
+		if (!istype(light_tile)) //Not a light tile
 			connected_floors.Remove(T)
 			continue
 
@@ -198,16 +198,16 @@
 /obj/item/device/assembly/light_tile_control/proc/add_turf_to_memory(turf/T)
 	connected_floors.Add(T)
 
-	if(usr && highlighting_connected_floors)
+	if (usr && highlighting_connected_floors)
 		highlight_turf(T, usr)
 
 /obj/item/device/assembly/light_tile_control/proc/del_turf_from_memory(turf/T)
-	if(!connected_floors.Remove(T))
+	if (!connected_floors.Remove(T))
 		return //Don't do the next part if the turf isn't in connected_floors
 
-	if(usr && highlighting_connected_floors)
-		for(var/image/I in image_overlays)
-			if(I.loc == T)
+	if (usr && highlighting_connected_floors)
+		for (var/image/I in image_overlays)
+			if (I.loc == T)
 				image_overlays -= I
 				usr.client.images -= I
 

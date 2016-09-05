@@ -91,26 +91,26 @@
 
 /obj/machinery/reagentgrinder/proc/user_moved(var/list/args)
 	var/event/E = args["event"]
-	if(!targetMoveKey)
+	if (!targetMoveKey)
 		E.handlers.Remove("\ref[src]:user_moved")
 		return
 
 	var/turf/T = args["loc"]
 
-	if(!Adjacent(T))
-		if(E.holder)
+	if (!Adjacent(T))
+		if (E.holder)
 			E.holder.on_moved.Remove(targetMoveKey)
 		detach()
 
 
 /obj/machinery/reagentgrinder/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/matter_bin/M in component_parts)
+	for (var/obj/item/weapon/stock_parts/matter_bin/M in component_parts)
 		T += M.rating-1
 	limit = initial(limit)+(T * 5)
 
 	T = 0
-	for(var/obj/item/weapon/stock_parts/micro_laser/M in component_parts)
+	for (var/obj/item/weapon/stock_parts/micro_laser/M in component_parts)
 		T += M.rating-1
 	speed_multiplier = initial(speed_multiplier)+(T * 0.50)
 
@@ -119,20 +119,20 @@
 	return
 
 /obj/machinery/reagentgrinder/togglePanelOpen(var/obj/toggleitem, mob/user)
-	if(beaker)
+	if (beaker)
 		to_chat(user, "You can't reach \the [src]'s maintenance panel with the beaker in the way!")
 		return -1
 	return ..()
 
 /obj/machinery/reagentgrinder/crowbarDestroy(mob/user)
-	if(beaker)
+	if (beaker)
 		to_chat(user, "You can't do that while \the [src] has a beaker loaded!")
 		return -1
 	return ..()
 
 /obj/machinery/reagentgrinder/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
-	if(..())
+	if (..())
 		return 1
 
 	if (istype(O,/obj/item/weapon/reagent_containers/glass) || \
@@ -145,12 +145,12 @@
 			to_chat(user, "You can't load a beaker while the maintenance panel is open.")
 			return 0
 		else
-			if(!user.drop_item(O, src))
+			if (!user.drop_item(O, src))
 				to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
 				return
 
 			src.beaker =  O
-			if(user.type == /mob/living/silicon/robot)
+			if (user.type == /mob/living/silicon/robot)
 				var/mob/living/silicon/robot/R = user
 				R.uneq_active()
 				targetMoveKey =  R.on_moved.Add(src, "user_moved")
@@ -159,21 +159,21 @@
 			src.updateUsrDialog()
 			return 1
 
-	if(holdingitems && holdingitems.len >= limit)
+	if (holdingitems && holdingitems.len >= limit)
 		to_chat(usr, "The machine cannot hold any more items.")
 		return 1
 
 	//Fill machine with bags
-	if(istype(O, /obj/item/weapon/storage/bag/plants)||istype(O, /obj/item/weapon/storage/bag/chem))
+	if (istype(O, /obj/item/weapon/storage/bag/plants)||istype(O, /obj/item/weapon/storage/bag/chem))
 		var/obj/item/weapon/storage/bag/B = O
 		for (var/obj/item/G in O.contents)
 			B.remove_from_storage(G,src)
 			holdingitems += G
-			if(holdingitems && holdingitems.len >= limit) //Sanity checking so the blender doesn't overfill
+			if (holdingitems && holdingitems.len >= limit) //Sanity checking so the blender doesn't overfill
 				to_chat(user, "You fill the All-In-One grinder to the brim.")
 				break
 
-		if(!O.contents.len)
+		if (!O.contents.len)
 			to_chat(user, "You empty the [O] into the All-In-One grinder.")
 
 		src.updateUsrDialog()
@@ -183,7 +183,7 @@
 		to_chat(user, "Cannot refine into a reagent.")
 		return 1
 
-	if(!user.drop_item(O, src))
+	if (!user.drop_item(O, src))
 		user << "<span class='notice'>\The [O] is stuck to your hands!</span>"
 		return 1
 
@@ -211,7 +211,7 @@
 	var/beaker_contents = ""
 	var/dat = list()
 
-	if(!inuse)
+	if (!inuse)
 		for (var/obj/item/O in holdingitems)
 			processing_chamber += "\A [O.name]<BR>"
 
@@ -224,10 +224,10 @@
 			is_beaker_ready = 1
 			beaker_contents = "<B>The beaker contains:</B><br>"
 			var/anything = 0
-			for(var/datum/reagent/R in beaker.reagents.reagent_list)
+			for (var/datum/reagent/R in beaker.reagents.reagent_list)
 				anything = 1
 				beaker_contents += "[R.volume] - [R.name]<br>"
-			if(!anything)
+			if (!anything)
 				beaker_contents += "Nothing<br>"
 
 
@@ -240,7 +240,7 @@
 
 			dat += {"<A href='?src=\ref[src];action=grind'>Grind the reagents</a><BR>
 				<A href='?src=\ref[src];action=juice'>Juice the reagents</a><BR><BR>"}
-		if(holdingitems && holdingitems.len > 0)
+		if (holdingitems && holdingitems.len > 0)
 			dat += "<A href='?src=\ref[src];action=eject'>Eject the reagents</a><BR>"
 		if (beaker)
 			dat += "<A href='?src=\ref[src];action=detach'>Detach the beaker</a><BR>"
@@ -255,15 +255,15 @@
 
 
 /obj/machinery/reagentgrinder/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 	usr.set_machine(src)
-	switch(href_list["action"])
+	switch (href_list["action"])
 		if ("grind")
 			grind()
-		if("juice")
+		if ("juice")
 			juice()
-		if("eject")
+		if ("eject")
 			eject()
 		if ("detach")
 			detach()
@@ -274,9 +274,9 @@
 	if (!beaker)
 		return
 	beaker.forceMove(src.loc)
-	if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
+	if (istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
 		var/mob/living/silicon/robot/R = beaker:holder:loc
-		if(R.module_state_1 == beaker || R.module_state_2 == beaker || R.module_state_3 == beaker)
+		if (R.module_state_1 == beaker || R.module_state_2 == beaker || R.module_state_3 == beaker)
 			beaker.forceMove(R)
 		else
 			beaker.forceMove(beaker:holder)
@@ -284,8 +284,8 @@
 	update_icon()
 
 /obj/machinery/reagentgrinder/AltClick()
-	if(!usr.incapacitated() && Adjacent(usr) && beaker && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()) && !inuse)
-		if(holdingitems.len)
+	if (!usr.incapacitated() && Adjacent(usr) && beaker && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()) && !inuse)
+		if (holdingitems.len)
 			grind()
 		else
 			detach()
@@ -298,14 +298,14 @@
 	if (holdingitems && holdingitems.len == 0)
 		return
 
-	for(var/obj/item/O in holdingitems)
+	for (var/obj/item/O in holdingitems)
 		O.forceMove(src.loc)
 		holdingitems -= O
 	holdingitems = list()
 
 /obj/machinery/reagentgrinder/proc/is_allowed(var/obj/item/weapon/reagent_containers/O)
 	for (var/i in blend_items)
-		if(istype(O, i))
+		if (istype(O, i))
 			return 1
 	return 0
 
@@ -315,13 +315,13 @@
 			return blend_items[i]
 
 /obj/machinery/reagentgrinder/proc/get_allowed_snack_by_id(var/obj/item/weapon/reagent_containers/food/snacks/O)
-	for(var/i in blend_items)
-		if(istype(O, i))
+	for (var/i in blend_items)
+		if (istype(O, i))
 			return blend_items[i]
 
 /obj/machinery/reagentgrinder/proc/get_allowed_juice_by_id(var/obj/item/weapon/reagent_containers/food/snacks/O)
-	for(var/i in juice_items)
-		if(istype(O, i))
+	for (var/i in juice_items)
+		if (istype(O, i))
 			return juice_items[i]
 
 /obj/machinery/reagentgrinder/proc/get_grownweapon_amount(var/obj/item/weapon/grown/O)
@@ -347,7 +347,7 @@
 
 /obj/machinery/reagentgrinder/proc/juice()
 	power_change()
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 	if (!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
 		return
@@ -362,7 +362,7 @@
 			break
 
 		var/allowed = get_allowed_juice_by_id(O)
-		if(isnull(allowed))
+		if (isnull(allowed))
 			break
 
 		for (var/r_id in allowed)
@@ -381,7 +381,7 @@
 
 
 	power_change()
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 	if (!beaker || (beaker && beaker.reagents.total_volume >= beaker.reagents.maximum_volume))
 		return
@@ -396,15 +396,15 @@
 			break
 
 		var/allowed = get_allowed_snack_by_id(O)
-		if(isnull(allowed))
+		if (isnull(allowed))
 			break
 
 		for (var/r_id in allowed)
 
 			var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
 			var/amount = allowed[r_id]
-			if(amount <= 0)
-				if(amount == 0)
+			if (amount <= 0)
+				if (amount == 0)
 					if (O.reagents != null && O.reagents.has_reagent(NUTRIMENT))
 						beaker.reagents.add_reagent(r_id, min(O.reagents.get_reagent_amount(NUTRIMENT), space))
 						O.reagents.remove_reagent(NUTRIMENT, min(O.reagents.get_reagent_amount(NUTRIMENT), space))
@@ -419,7 +419,7 @@
 			if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 				break
 
-		if(O.reagents.reagent_list.len == 0)
+		if (O.reagents.reagent_list.len == 0)
 			remove_object(O)
 
 	//Sheets
@@ -427,7 +427,7 @@
 		var/allowed = get_allowed_by_id(O)
 		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 			break
-		for(var/i = 1; i <= round(O.amount, 1); i++)
+		for (var/i = 1; i <= round(O.amount, 1); i++)
 			for (var/r_id in allowed)
 				var/space = beaker.reagents.maximum_volume - beaker.reagents.total_volume
 				var/amount = allowed[r_id]
@@ -439,7 +439,7 @@
 				break
 
 	//xenoarch
-	for(var/obj/item/weapon/rocksliver/O in holdingitems)
+	for (var/obj/item/weapon/rocksliver/O in holdingitems)
 		if (beaker.reagents.total_volume >= beaker.reagents.maximum_volume)
 			break
 		var/allowed = get_allowed_by_id(O)
@@ -458,7 +458,7 @@
 			break
 		var/amount = O.reagents.total_volume
 		O.reagents.trans_to(beaker, amount)
-		if(!O.reagents.total_volume)
+		if (!O.reagents.total_volume)
 			remove_object(O)
 
 	//All other generics

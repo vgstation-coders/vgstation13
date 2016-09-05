@@ -16,7 +16,7 @@
 		qdel(src)
 
 /obj/item/mounted/frame/try_build(turf/on_wall, mob/user)
-	if(..()) //if we pass the parent tests
+	if (..()) //if we pass the parent tests
 		var/turf/turf_loc = get_turf(user)
 
 		if (src.mount_reqs.Find("simfloor") && !istype(turf_loc, /turf/simulated/floor))

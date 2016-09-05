@@ -50,9 +50,9 @@
 
 /obj/machinery/zero_point_emitter/attack_hand(mob/user as mob)
 	src.add_fingerprint(user)
-	if(state == 2)
-		if(!src.locked)
-			if(src.active==1)
+	if (state == 2)
+		if (!src.locked)
+			if (src.active==1)
 				src.active = 0
 				to_chat(user, "You turn off the [src].")
 				src.use_power = 1
@@ -72,21 +72,21 @@
 
 /obj/machinery/zero_point_emitter/emp_act(var/severity)//Emitters are hardened but still might have issues
 	use_power(1000)
-/*	if((severity == 1)&&prob(1)&&prob(1))
-		if(src.active)
+/*	if ((severity == 1)&&prob(1)&&prob(1))
+		if (src.active)
 			src.active = 0
 			src.use_power = 1	*/
 	return 1
 
 /obj/machinery/zero_point_emitter/process()
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
-	if(src.state != 2)
+	if (src.state != 2)
 		src.active = 0
 		return
-	if(((src.last_shot + src.fire_delay) <= world.time) && (src.active == 1))
+	if (((src.last_shot + src.fire_delay) <= world.time) && (src.active == 1))
 		src.last_shot = world.time
-		if(src.shot_number < 3)
+		if (src.shot_number < 3)
 			src.fire_delay = 2
 			src.shot_number ++
 		else
@@ -95,19 +95,19 @@
 		use_power(1000)
 		var/obj/item/projectile/beam/emitter/A = getFromPool(/obj/item/projectile/beam/emitter, loc)
 		playsound(get_turf(src), 'sound/weapons/emitter.ogg', 25, 1)
-		if(prob(35))
+		if (prob(35))
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 			s.set_up(5, 1, src)
 			s.start()
 		A.dir = src.dir
-		switch(dir)
-			if(NORTH)
+		switch (dir)
+			if (NORTH)
 				A.yo = 20
 				A.xo = 0
-			if(EAST)
+			if (EAST)
 				A.yo = 0
 				A.xo = 20
-			if(WEST)
+			if (WEST)
 				A.yo = 0
 				A.xo = -20
 			else // Any other
@@ -116,7 +116,7 @@
 		A.process()	//TODO: Carn: check this out
 
 /obj/machinery/zero_point_emitter/emag(mob/user)
-	if(!emagged)
+	if (!emagged)
 		locked = 0
 		emagged = 1
 		user.visible_message("[user.name] emags the [src.name].","<span class='warning'>You short out the lock.</span>")
@@ -124,15 +124,15 @@
 	return -1
 
 /obj/machinery/zero_point_emitter/attackby(obj/item/W, mob/user)
-	if(..())
+	if (..())
 		return 1
 
-	if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
-		if(emagged)
+	if (istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
+		if (emagged)
 			to_chat(user, "<span class='warning'>The lock seems to be broken</span>")
 			return
-		if(src.allowed(user))
-			if(active)
+		if (src.allowed(user))
+			if (active)
 				src.locked = !src.locked
 				to_chat(user, "The controls are now [src.locked ? "locked." : "unlocked."]")
 			else
@@ -150,9 +150,9 @@
 	return
 
 /obj/machinery/zero_point_emitter/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
-	if( href_list["input"] )
+	if ( href_list["input"] )
 		var/i = text2num(href_list["input"])
 		var/d = i
 		var/new_power = energy + d
@@ -160,22 +160,22 @@
 		new_power = min(new_power,0.01)		//highest possible value
 		energy = new_power
 		//
-		for(var/obj/machinery/computer/lasercon/comp in machines)
-			if(comp.id == src.id)
+		for (var/obj/machinery/computer/lasercon/comp in machines)
+			if (comp.id == src.id)
 				comp.updateDialog()
-	else if( href_list["online"] )
+	else if ( href_list["online"] )
 		active = !active
 		//
-		for(var/obj/machinery/computer/lasercon/comp in machines)
-			if(comp.id == src.id)
+		for (var/obj/machinery/computer/lasercon/comp in machines)
+			if (comp.id == src.id)
 				comp.updateDialog()
-	else if( href_list["freq"] )
+	else if ( href_list["freq"] )
 		var/amt = text2num(href_list["freq"])
 		var/new_freq = frequency + amt
 		new_freq = max(new_freq,1)		//lowest possible value
 		new_freq = min(new_freq,20000)	//highest possible value
 		frequency = new_freq
 		//
-		for(var/obj/machinery/computer/lasercon/comp in machines)
-			if(comp.id == src.id)
+		for (var/obj/machinery/computer/lasercon/comp in machines)
+			if (comp.id == src.id)
 				comp.updateDialog()

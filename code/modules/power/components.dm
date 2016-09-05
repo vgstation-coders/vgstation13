@@ -49,22 +49,22 @@
 /datum/power_connection/proc/addToTurf()
 	// Get AND REMEMBER the turf that's going to hold the ref.
 	turf = get_turf(parent)
-	if(!turf)
+	if (!turf)
 		// We've been sucked into a black hole, god help us
 		return
-	if(turf.power_connections == null)
+	if (turf.power_connections == null)
 		turf.power_connections = list(src)
 	else
 		turf.power_connections += src
 
 /datum/power_connection/proc/removeFromTurf()
-	if(!turf)
+	if (!turf)
 		return
 	// We don't grab the current turf here because we're removing the reference from the turf that has it.
 	turf.power_connections -= src
 
 	// Clean up after ourselves.
-	if(turf.power_connections.len == 0)
+	if (turf.power_connections.len == 0)
 		turf.power_connections = null
 
 	// Tell the rest of the code that we're turfless.
@@ -80,21 +80,21 @@
 
 // common helper procs for all power machines
 /datum/power_connection/proc/add_avail(var/amount)
-	if(get_powernet())
+	if (get_powernet())
 		powernet.newavail += amount
 
 /datum/power_connection/proc/add_load(var/amount)
-	if(get_powernet())
+	if (get_powernet())
 		powernet.load += amount
 
 /datum/power_connection/proc/get_surplus()
-	if(get_powernet())
+	if (get_powernet())
 		return powernet.avail-powernet.load
 	else
 		return 0
 
 /datum/power_connection/proc/get_avail()
-	if(get_powernet())
+	if (get_powernet())
 		return powernet.avail
 	else
 		return 0
@@ -104,14 +104,14 @@
 	return powernet
 
 /datum/power_connection/proc/check_rebuild()
-	if(!build_status)
+	if (!build_status)
 		return 0
-	for(var/obj/structure/cable/C in parent.loc)
-		if(C.check_rebuild())
+	for (var/obj/structure/cable/C in parent.loc)
+		if (C.check_rebuild())
 			return 1
 
 /datum/power_connection/proc/getPowernetNodes()
-	if(!get_powernet())
+	if (!get_powernet())
 		return list()
 	return powernet.nodes
 
@@ -119,17 +119,17 @@
 // returns true if the area has power on given channel (or doesn't require power)
 // defaults to power_channel
 /datum/power_connection/proc/powered(chan = channel)
-	if(!parent || !parent.loc)
+	if (!parent || !parent.loc)
 		return 0
 
 	// If you're using a consumer, you need power.
 	//if(!use_power)
 	//	return 1
 
-	if(isnull(parent.areaMaster) || !parent.areaMaster)
+	if (isnull(parent.areaMaster) || !parent.areaMaster)
 		return 0						// if not, then not powered.
 
-	if((machine_flags & FIXED2WORK) && !parent.anchored)
+	if ((machine_flags & FIXED2WORK) && !parent.anchored)
 		return 0
 
 	return parent.areaMaster.powered(chan)		// return power status of the area.
@@ -137,10 +137,10 @@
 // increment the power usage stats for an area
 // defaults to power_channel
 /datum/power_connection/proc/use_power(amount, chan = channel)
-	if(isnull(parent.areaMaster) || !parent.areaMaster)
+	if (isnull(parent.areaMaster) || !parent.areaMaster)
 		return 0						// if not, then not powered.
 
-	if(!powered(chan)) //no point in trying if we don't have power
+	if (!powered(chan)) //no point in trying if we don't have power
 		return 0
 
 	parent.areaMaster.use_power(amount, chan)
@@ -158,7 +158,7 @@
 
 	var/obj/structure/cable/C = T.get_cable_node() // check if we have a node cable on the machine turf, the first found is picked
 
-	if(!C || !C.get_powernet())
+	if (!C || !C.get_powernet())
 		return 0
 
 	C.powernet.add_component(src)
@@ -168,7 +168,7 @@
 // remove and disconnect the machine from its current powernet
 /datum/power_connection/proc/disconnect()
 	connected=0
-	if(!get_powernet())
+	if (!get_powernet())
 		build_status = 0
 		return 0
 
@@ -183,15 +183,15 @@
 	var/cdir
 	var/turf/T
 
-	for(var/card in cardinal)
+	for (var/card in cardinal)
 		T = get_step(parent.loc, card)
 		cdir = get_dir(T, parent.loc)
 
-		for(var/obj/structure/cable/C in T)
-			if(C.get_powernet())
+		for (var/obj/structure/cable/C in T)
+			if (C.get_powernet())
 				continue
 
-			if(C.d1 == cdir || C.d2 == cdir)
+			if (C.d1 == cdir || C.d2 == cdir)
 				. += C
 
 // returns all the cables in neighbors turfs,
@@ -202,23 +202,23 @@
 	var/cdir
 	var/turf/T
 
-	for(var/card in cardinal)
+	for (var/card in cardinal)
 		T = get_step(parent.loc, card)
 		cdir = get_dir(T, parent.loc)
 
-		for(var/obj/structure/cable/C in T)
-			if(C.d1 == cdir || C.d2 == cdir)
+		for (var/obj/structure/cable/C in T)
+			if (C.d1 == cdir || C.d2 == cdir)
 				. += C
 
 // returns all the NODES (O-X) cables WITHOUT a powernet in the turf the machine is located at
 /datum/power_connection/proc/get_indirect_connections()
 	. = list()
 
-	for(var/obj/structure/cable/C in parent.loc)
-		if(C.get_powernet())
+	for (var/obj/structure/cable/C in parent.loc)
+		if (C.get_powernet())
 			continue
 
-		if(C.d1 == 0) // the cable is a node cable
+		if (C.d1 == 0) // the cable is a node cable
 			. += C
 
 ////////////////////////////////////////////////
@@ -226,7 +226,7 @@
 ///////////////////////////////////////////////
 
 /datum/power_connection/proc/addStaticPower(value, powerchannel)
-	if(!parent.areaMaster)
+	if (!parent.areaMaster)
 		return
 	parent.areaMaster.addStaticPower(value, powerchannel)
 
@@ -254,11 +254,11 @@
 	INVOKE_EVENT(power_changed,list("consumer"=src))
 
 /datum/power_connection/consumer/process()
-	if(use)
+	if (use)
 		auto_use_power()
 
 /datum/power_connection/consumer/proc/auto_use_power()
-	if(!powered(channel))
+	if (!powered(channel))
 		return 0
 
 	switch (use)
@@ -286,15 +286,15 @@
 /datum/power_connection/consumer/terminal/connect()
 	..()
 
-	for(var/d in cardinal)
+	for (var/d in cardinal)
 		var/turf/T = get_step(parent, d)
-		for(var/obj/machinery/power/terminal/term in T)
-			if(term && term.dir == turn(d, 180))
+		for (var/obj/machinery/power/terminal/term in T)
+			if (term && term.dir == turn(d, 180))
 				terminal = term
 				break
-		if(terminal)
+		if (terminal)
 			break
-	if(terminal)
+	if (terminal)
 		terminal.master = parent
 		//parent.update_icon()
 
@@ -320,7 +320,7 @@
 
 	cable = T.get_cable_node() // check if we have a node cable on the machine turf, the first found is picked
 
-	if(!cable || !cable.get_powernet())
+	if (!cable || !cable.get_powernet())
 		return 0
 
 	cable.powernet.add_component(src)
@@ -331,17 +331,17 @@
 // returns true if the area has power on given channel (or doesn't require power)
 // defaults to power_channel
 /datum/power_connection/consumer/cable/powered(chan = channel)
-	if(!parent || !parent.loc)
+	if (!parent || !parent.loc)
 		return 0
 
 	// If you're using a consumer, you need power.
 	//if(!use_power)
 	//	return 1
 
-	if(isnull(powernet) || !powernet || !cable)
+	if (isnull(powernet) || !powernet || !cable)
 		return 0						// if not, then not powered.
 
-	if((machine_flags & FIXED2WORK) && !parent.anchored)
+	if ((machine_flags & FIXED2WORK) && !parent.anchored)
 		return 0
 
 	return 1 // We have a powernet and a cable, so we're okay.

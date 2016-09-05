@@ -88,11 +88,11 @@
 
 /obj/effect/landmark/catechizer_spawn/New()
 	spawn()
-		if(!isturf(loc))
+		if (!isturf(loc))
 			return
 
 		var/list/all_spawns = list()
-		for(var/obj/effect/landmark/catechizer_spawn/S in get_area(src))
+		for (var/obj/effect/landmark/catechizer_spawn/S in get_area(src))
 			all_spawns.Add(S)
 
 		var/obj/effect/true_spawn = pick(all_spawns)
@@ -100,7 +100,7 @@
 
 		var/obj/item/weapon/melee/morningstar/catechizer/original = new(get_turf(true_spawn))
 
-		for(var/obj/effect/S in all_spawns)
+		for (var/obj/effect/S in all_spawns)
 			new /mob/living/simple_animal/hostile/mimic/crate/item(get_turf(S), original) //Make copies
 			qdel(S)
 

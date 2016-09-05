@@ -14,7 +14,7 @@
 	icon_state = "uglyminearmed"
 
 /obj/effect/mine/Crossed(mob/living/carbon/AM)
-	if(istype(AM))
+	if (istype(AM))
 		visible_message("<font color='red'>[AM] triggered the [bicon(src)] [src]</font>")
 		trigger(AM)
 
@@ -38,8 +38,8 @@
 	name = "Plasma Mine"
 
 /obj/effect/mine/plasma/trigger(AM)
-	for(var/turf/simulated/floor/target in range(1,src))
-		if(!target.blocks_air)
+	for (var/turf/simulated/floor/target in range(1,src))
+		if (!target.blocks_air)
 			var/datum/gas_mixture/payload = new
 			payload.toxins = 30
 			target.zone.air.merge(payload)
@@ -64,7 +64,7 @@
 	//note: im lazy
 
 	for (var/turf/simulated/floor/target in range(1,src))
-		if(!target.blocks_air)
+		if (!target.blocks_air)
 
 			var/datum/gas_mixture/payload = new
 			var/datum/gas/sleeping_agent/trace_gas = new
@@ -80,7 +80,7 @@
 	name = "Stun Mine"
 
 /obj/effect/mine/stun/trigger(mob/AM)
-	if(ismob(AM))
+	if (ismob(AM))
 		AM.Stun(30)
 	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 	s.set_up(3, 1, src)

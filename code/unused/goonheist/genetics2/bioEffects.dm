@@ -20,8 +20,8 @@
 	lockedTries = 10
 
 	OnLife()
-		if(hasvar(owner, "blinded") && hasvar(owner, "glasses"))
-			if(!istype(owner:glasses, /obj/item/clothing/glasses/visor))
+		if (hasvar(owner, "blinded") && hasvar(owner, "glasses"))
+			if (!istype(owner:glasses, /obj/item/clothing/glasses/visor))
 				owner:blinded = 1
 		return
 
@@ -73,8 +73,8 @@
 
 	OnLife()
 		owner.radiation = max(owner.radiation, 20)
-		for(var/mob/living/L in range(1, owner))
-			if(L == owner)
+		for (var/mob/living/L in range(1, owner))
+			if (L == owner)
 				continue
 			to_chat(L, "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>")
 			L.radiation += 5
@@ -134,7 +134,7 @@
 
 	OnLife()
 		if (ishuman(owner))
-			if(!istype(owner:mutantrace, /datum/mutantrace/dwarf))
+			if (!istype(owner:mutantrace, /datum/mutantrace/dwarf))
 				holder.RemoveEffect(id)
 		return
 
@@ -150,10 +150,10 @@
 	reclaim_fail = 15
 
 	OnLife()
-		if(owner.client && hasvar(owner, "blind") && hasvar(owner, "stat") && hasvar(owner, "blinded") && hasvar(owner, "glasses") && hasvar(owner, "hud_used"))
-			if(!owner:blinded)
-				if(!istype(owner:glasses, /obj/item/clothing/glasses/regular))
-					for(var/obj/screen/O in owner:hud_used.vimpaired)
+		if (owner.client && hasvar(owner, "blind") && hasvar(owner, "stat") && hasvar(owner, "blinded") && hasvar(owner, "glasses") && hasvar(owner, "hud_used"))
+			if (!owner:blinded)
+				if (!istype(owner:glasses, /obj/item/clothing/glasses/regular))
+					for (var/obj/screen/O in owner:hud_used.vimpaired)
 						O.add_to_client(owner:client)
 		return
 
@@ -191,15 +191,15 @@
 		if ((prob(10) && owner:paralysis <= 1 && owner:r_Tourette < 1))
 			owner:stunned = max(10, owner:stunned)
 			spawn( 0 )
-				switch(rand(1, 3))
-					if(1 to 2)
+				switch (rand(1, 3))
+					if (1 to 2)
 						owner:emote("twitch")
-					if(3)
+					if (3)
 						if (owner:client)
 							var/enteredtext = winget(owner, "mainwindow.input", "text")
 							if ((copytext(enteredtext,1,6) == "say \"") && length(enteredtext) > 5)
 								winset(owner, "mainwindow.input", "text=\"\"")
-								if(prob(50))
+								if (prob(50))
 									owner:say(uppertext(copytext(enteredtext,6,0)))
 								else
 									owner:say(copytext(enteredtext,6,0))
@@ -464,7 +464,7 @@
 		return
 
 	OnLife()
-		if((world.timeofday - owner.l_move_time) >= 30 && can_act(owner))
+		if ((world.timeofday - owner.l_move_time) >= 30 && can_act(owner))
 			owner.invisibility = 1
 			owner.overlays -= over
 			owner.overlays += over
@@ -631,7 +631,7 @@
 
 	OnLife()
 		if (prob(10))
-			for(var/mob/living/carbon/C in view(6,get_turf(owner)))
+			for (var/mob/living/carbon/C in view(6,get_turf(owner)))
 				if (C == owner)
 					continue
 				if (src.variant == 2)

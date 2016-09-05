@@ -20,18 +20,18 @@
 	icon_state = "syndishuttle"
 
 /obj/machinery/computer/salvage_ship/proc/salvage_move_to(area/destination as area)
-	if(moving)
+	if (moving)
 		return
-	if(lastMove + SALVAGE_SHIP_COOLDOWN > world.time)
+	if (lastMove + SALVAGE_SHIP_COOLDOWN > world.time)
 		return
 	var/area/dest_location = locate(destination)
-	if(curr_location == dest_location)
+	if (curr_location == dest_location)
 		return
 
 	moving = 1
 	lastMove = world.time
 
-	if(curr_location.z != dest_location.z)
+	if (curr_location.z != dest_location.z)
 		var/area/transit_location = locate(/area/shuttle/salvage/transit)
 		curr_location.move_contents_to(transit_location)
 		curr_location = transit_location
@@ -44,7 +44,7 @@
 
 
 /obj/machinery/computer/salvage_ship/attackby(obj/item/I as obj, mob/user as mob)
-	if(!..())
+	if (!..())
 		return attack_hand(user)
 
 /obj/machinery/computer/salvage_ship/attack_ai(mob/user as mob)
@@ -55,7 +55,7 @@
 	return attack_hand(user)
 
 /obj/machinery/computer/salvage_ship/attack_hand(mob/user as mob)
-	if(!allowed(user))
+	if (!allowed(user))
 		to_chat(user, "<span class='warning'>Access Denied.</span>")
 		return
 
@@ -85,36 +85,36 @@
 	return
 
 /obj/machinery/computer/salvage_ship/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 
 	usr.set_machine(src)
 
-	if(href_list["salvage"])
+	if (href_list["salvage"])
 		salvage_move_to(/area/shuttle/salvage/start)
-	else if(href_list["start"])
+	else if (href_list["start"])
 		salvage_move_to(/area/shuttle/salvage/start)
-	else if(href_list["arrivals"])
+	else if (href_list["arrivals"])
 		salvage_move_to(/area/shuttle/salvage/arrivals)
-	else if(href_list["derelict"])
+	else if (href_list["derelict"])
 		salvage_move_to(/area/shuttle/salvage/derelict)
-	else if(href_list["djstation"])
+	else if (href_list["djstation"])
 		salvage_move_to(/area/shuttle/salvage/djstation)
-	else if(href_list["north"])
+	else if (href_list["north"])
 		salvage_move_to(/area/shuttle/salvage/north)
-	else if(href_list["east"])
+	else if (href_list["east"])
 		salvage_move_to(/area/shuttle/salvage/east)
-	else if(href_list["south"])
+	else if (href_list["south"])
 		salvage_move_to(/area/shuttle/salvage/south)
-	else if(href_list["commssat"])
+	else if (href_list["commssat"])
 		salvage_move_to(/area/shuttle/salvage/commssat)
-	else if(href_list["mining"])
+	else if (href_list["mining"])
 		salvage_move_to(/area/shuttle/salvage/mining)
-	else if(href_list["abandoned_ship"])
+	else if (href_list["abandoned_ship"])
 		salvage_move_to(/area/shuttle/salvage/abandoned_ship)
-	else if(href_list["clown_asteroid"])
+	else if (href_list["clown_asteroid"])
 		salvage_move_to(/area/shuttle/salvage/clown_asteroid)
-	else if(href_list["trading_post"])
+	else if (href_list["trading_post"])
 		salvage_move_to(/area/shuttle/salvage/trading_post)
 
 	add_fingerprint(usr)

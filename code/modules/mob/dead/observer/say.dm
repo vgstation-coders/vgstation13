@@ -5,7 +5,7 @@
 		return
 
 	if (src.client)
-		if(src.client.prefs.muted & MUTE_DEADCHAT)
+		if (src.client.prefs.muted & MUTE_DEADCHAT)
 			to_chat(src, "<span class='warning'>You cannot talk in deadchat (muted).</span>")
 			return
 
@@ -37,7 +37,7 @@
 		if (source_turf in view(src))
 			rendered_speech = "<B>[rendered_speech]</B>"
 	else
-		if(client && client.prefs)
+		if (client && client.prefs)
 			if (!speech.frequency)
 				if ((client.prefs.toggles & CHAT_GHOSTEARS) != CHAT_GHOSTEARS)
 					say_testing(src, "/mob/dead/observer/Hear(): CHAT_GHOSTEARS is disabled, blocking. ([client.prefs.toggles] & [CHAT_GHOSTEARS]) = [client.prefs.toggles & CHAT_GHOSTEARS]")

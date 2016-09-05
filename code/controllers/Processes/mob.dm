@@ -8,14 +8,14 @@
 
 /datum/controller/process/mob/started()
 	..()
-	if(!mob_list)
+	if (!mob_list)
 		mob_list = list()
 
 /datum/controller/process/mob/doWork()
 	if (mob_list)
-		for(var/atom/m in mob_list)
-			if(m)
-				if(m.timestopped)
+		for (var/atom/m in mob_list)
+			if (m)
+				if (m.timestopped)
 					continue
 				m:Life()
 				scheck()

@@ -47,7 +47,7 @@
 /atom/movable/New()
 	. = ..()
 	areaMaster = get_area_master(src)
-	if((flags & HEAR) && !ismob(src))
+	if ((flags & HEAR) && !ismob(src))
 		getFromPool(/mob/virtualhearer, src)
 
 	locked_atoms            = list()
@@ -81,14 +81,14 @@
 	..()
 
 /proc/delete_profile(var/type, code = 0)
-	if(!ticker || ticker.current_state < 3)
+	if (!ticker || ticker.current_state < 3)
 		return
-	if(code == 0)
+	if (code == 0)
 		if (!("[type]" in del_profiling))
 			del_profiling["[type]"] = 0
 
 		del_profiling["[type]"] += 1
-	else if(code == 1)
+	else if (code == 1)
 		if (!("[type]" in ghdel_profiling))
 			ghdel_profiling["[type]"] = 0
 
@@ -101,9 +101,9 @@
 		soft_dels += 1
 
 /atom/movable/Del()
-	if((flags & HEAR) && !ismob(src))
-		for(var/mob/virtualhearer/VH in virtualhearers)
-			if(VH.attached == src)
+	if ((flags & HEAR) && !ismob(src))
+		for (var/mob/virtualhearer/VH in virtualhearers)
+			if (VH.attached == src)
 				returnToPool(VH)
 
 	if (gcDestroyed)
@@ -120,36 +120,36 @@
 	..()
 
 /atom/movable/Move(newLoc,Dir=0,step_x=0,step_y=0)
-	if(!loc || !newLoc)
+	if (!loc || !newLoc)
 		return 0
 	//set up glide sizes before the move
 	//ensure this is a step, not a jump
 
 	//. = ..(NewLoc,Dir,step_x,step_y)
-	if(timestopped)
-		if(!pulledby || pulledby.timestopped) //being moved by our wizard maybe?
+	if (timestopped)
+		if (!pulledby || pulledby.timestopped) //being moved by our wizard maybe?
 			return 0
 	var/move_delay = max(5 * world.tick_lag, 1)
-	if(ismob(src))
+	if (ismob(src))
 		var/mob/M = src
-		if(M.client)
+		if (M.client)
 			move_delay = (3+(M.client.move_delayer.next_allowed - world.time))*world.tick_lag
 
 	var/can_pull_tether = 0
-	if(tether)
-		if(tether.attempt_to_follow(src,newLoc))
+	if (tether)
+		if (tether.attempt_to_follow(src,newLoc))
 			can_pull_tether = 1
 		else
 			return 0
 	glide_size = Ceiling(WORLD_ICON_SIZE / move_delay * world.tick_lag) - 1 //We always split up movements into cardinals for issues with diagonal movements.
 	var/atom/oldloc = loc
-	if((bound_height != WORLD_ICON_SIZE || bound_width != WORLD_ICON_SIZE) && (loc == newLoc))
+	if ((bound_height != WORLD_ICON_SIZE || bound_width != WORLD_ICON_SIZE) && (loc == newLoc))
 		. = ..()
 
 		update_dir()
 		return
 
-	if(loc != newLoc)
+	if (loc != newLoc)
 		if (!(Dir & (Dir - 1))) //Cardinal move
 			. = ..()
 		else //Diagonal move, split it into cardinal moves
@@ -177,24 +177,24 @@
 						. = step(src, SOUTH)
 
 
-	if(. && locked_atoms && locked_atoms.len)	//The move was succesful, update locked atoms.
+	if (. && locked_atoms && locked_atoms.len)	//The move was succesful, update locked atoms.
 		spawn(0)
-			for(var/atom/movable/AM in locked_atoms)
+			for (var/atom/movable/AM in locked_atoms)
 				var/datum/locking_category/category = locked_atoms[AM]
 				category.update_lock(AM)
 
 	update_dir()
 
-	if(!loc || (loc == oldloc && oldloc != newLoc))
+	if (!loc || (loc == oldloc && oldloc != newLoc))
 		last_move = 0
 		return
 
 	update_client_hook(loc)
 
-	if(tether && can_pull_tether && !tether_pull)
+	if (tether && can_pull_tether && !tether_pull)
 		tether.follow(src,oldloc)
 		var/datum/chain/tether_datum = tether.chain_datum
-		if(!tether_datum.Check_Integrity())
+		if (!tether_datum.Check_Integrity())
 			tether_datum.snap = 1
 			tether_datum.Delete_Chain()
 
@@ -210,16 +210,16 @@
 
 //The reason behind change_dir()
 /atom/movable/proc/update_dir()
-	for(var/atom/movable/AM in locked_atoms)
-		if(dir != AM.dir)
+	for (var/atom/movable/AM in locked_atoms)
+		if (dir != AM.dir)
 			AM.change_dir(dir, src)
 
 //Like forceMove(), but for dirs!
 /atom/movable/proc/change_dir(new_dir, var/changer)
-	if(locked_to && changer != locked_to)
+	if (locked_to && changer != locked_to)
 		return
 
-	if(new_dir != dir)
+	if (new_dir != dir)
 		dir = new_dir
 		update_dir()
 
@@ -254,7 +254,7 @@
 	return 1
 
 /atom/movable/proc/unlock_from()
-	if(!locked_to)
+	if (!locked_to)
 		return 0
 
 	locked_to.unlock_atom(src)
@@ -285,8 +285,8 @@
 	return locked && locked.len
 
 /atom/movable/proc/recycle(var/datum/materials/rec)
-	if(materials)
-		for(var/matid in materials.storage)
+	if (materials)
+		for (var/matid in materials.storage)
 			var/datum/material/material = materials.getMaterial(matid)
 			rec.addAmount(matid, materials.storage[matid] / material.cc_per_sheet) //the recycler's material is read as 1 = 1 sheet
 			materials.storage[matid] = 0
@@ -299,7 +299,7 @@
 	return
 
 /atom/movable/Bump(atom/Obstacle)
-	if(src.throwing)
+	if (src.throwing)
 		src.throw_impact(Obstacle)
 		src.throwing = 0
 
@@ -308,7 +308,7 @@
 
 /atom/movable/proc/forceMove(atom/destination,var/no_tp=0)
 
-	if(loc)
+	if (loc)
 		loc.Exited(src)
 
 	last_moved = world.time
@@ -316,19 +316,19 @@
 	var/old_loc = loc
 	loc = destination
 
-	if(loc)
+	if (loc)
 		last_move = get_dir(old_loc, loc)
 
 		loc.Entered(src)
-		if(isturf(loc))
+		if (isturf(loc))
 			var/area/A = get_area_master(loc)
 			A.Entered(src)
 
-			for(var/atom/movable/AM in loc)
+			for (var/atom/movable/AM in loc)
 				AM.Crossed(src,no_tp)
 
 
-	for(var/atom/movable/AM in locked_atoms)
+	for (var/atom/movable/AM in locked_atoms)
 		var/datum/locking_category/category = locked_atoms[AM]
 		category.update_lock(AM)
 
@@ -339,30 +339,30 @@
 	return 1
 
 /atom/movable/proc/update_client_hook(atom/destination)
-	if(locate(/mob) in src)
-		for(var/client/C in parallax_on_clients)
-			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
+	if (locate(/mob) in src)
+		for (var/client/C in parallax_on_clients)
+			if ((get_turf(C.eye) == destination) && (C.mob.hud_used))
 				C.mob.hud_used.update_parallax_values()
 
 /mob/update_client_hook(atom/destination)
-	if(locate(/mob) in src)
-		for(var/client/C in parallax_on_clients)
-			if((get_turf(C.eye) == destination) && (C.mob.hud_used))
+	if (locate(/mob) in src)
+		for (var/client/C in parallax_on_clients)
+			if ((get_turf(C.eye) == destination) && (C.mob.hud_used))
 				C.mob.hud_used.update_parallax_values()
-	else if(client && hud_used)
+	else if (client && hud_used)
 		hud_used.update_parallax_values()
 
 /atom/movable/proc/forceEnter(atom/destination)
-	if(destination)
-		if(loc)
+	if (destination)
+		if (loc)
 			loc.Exited(src)
 		loc = destination
 		loc.Entered(src)
-		if(isturf(destination))
+		if (isturf(destination))
 			var/area/A = get_area_master(destination)
 			A.Entered(src)
 
-		for(var/atom/movable/AM in locked_atoms)
+		for (var/atom/movable/AM in locked_atoms)
 			AM.forceMove(loc)
 
 		update_client_hook(destination)
@@ -372,44 +372,44 @@
 /atom/movable/proc/hit_check(var/speed, mob/user)
 	. = 1
 
-	if(src.throwing)
-		for(var/atom/A in get_turf(src))
-			if(A == src)
+	if (src.throwing)
+		for (var/atom/A in get_turf(src))
+			if (A == src)
 				continue
 
-			if(isliving(A))
+			if (isliving(A))
 				var/mob/living/L = A
-				if(L.lying)
+				if (L.lying)
 					continue
 				src.throw_impact(L, speed, user)
 
-				if(src.throwing == 1) //If throwing == 1, the throw was weak and will stop when it hits a dude. If a hulk throws this item, throwing is set to 2 (so the item will pass through multiple mobs)
+				if (src.throwing == 1) //If throwing == 1, the throw was weak and will stop when it hits a dude. If a hulk throws this item, throwing is set to 2 (so the item will pass through multiple mobs)
 					src.throwing = 0
 					. = 0
 
-			else if(isobj(A))
-				if(A.density && !A.throwpass)	// **TODO: Better behaviour for windows which are dense, but shouldn't always stop movement
+			else if (isobj(A))
+				if (A.density && !A.throwpass)	// **TODO: Better behaviour for windows which are dense, but shouldn't always stop movement
 					src.throw_impact(A, speed, user)
 					src.throwing = 0
 					. = 0
 
 /atom/movable/proc/throw_at(atom/target, range, speed, override = 1, var/fly_speed = 0) //fly_speed parameter: if 0, does nothing. Otherwise, changes how fast the object flies WITHOUT affecting damage!
-	if(!target || !src)
+	if (!target || !src)
 		return 0
-	if(override)
+	if (override)
 		sound_override = 1
 	//use a modified version of Bresenham's algorithm to get from the atom's current position to that of the target
 
 	throwing = 1
-	if(!speed)
+	if (!speed)
 		speed = throw_speed
-	if(!fly_speed)
+	if (!fly_speed)
 		fly_speed = speed
 
 	var/mob/user
-	if(usr)
+	if (usr)
 		user = usr
-		if(M_HULK in usr.mutations)
+		if (M_HULK in usr.mutations)
 			src.throwing = 2 // really strong throw!
 
 	var/dist_x = abs(target.x - src.x)
@@ -432,24 +432,24 @@
 
 	. = 1
 
-	if(dist_x > dist_y)
+	if (dist_x > dist_y)
 		var/error = dist_x/2 - dist_y
 
 
 		var/tS = 0
-		while(src && target &&((((src.x < target.x && dx == EAST) || (src.x > target.x && dx == WEST)) && dist_travelled < range) || (a && a.has_gravity == 0)  || istype(src.loc, /turf/space)) && src.throwing && istype(src.loc, /turf))
+		while (src && target &&((((src.x < target.x && dx == EAST) || (src.x > target.x && dx == WEST)) && dist_travelled < range) || (a && a.has_gravity == 0)  || istype(src.loc, /turf/space)) && src.throwing && istype(src.loc, /turf))
 			// only stop when we've gone the whole distance (or max throw range) and are on a non-space tile, or hit something, or hit the end of the map, or someone picks it up
-			if(tS && dist_travelled)
+			if (tS && dist_travelled)
 				timestopped = loc.timestopped
 				tS = 0
-			if(timestopped && !dist_travelled)
+			if (timestopped && !dist_travelled)
 				timestopped = 0
 				tS = 1
-			while((loc.timestopped || timestopped) && dist_travelled)
+			while ((loc.timestopped || timestopped) && dist_travelled)
 				sleep(3)
-			if(error < 0)
+			if (error < 0)
 				var/atom/step = get_step(src, dy)
-				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
+				if (!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
 					. = 0
 					break
 
@@ -458,12 +458,12 @@
 				error += dist_x
 				dist_travelled++
 				dist_since_sleep++
-				if(dist_since_sleep >= fly_speed)
+				if (dist_since_sleep >= fly_speed)
 					dist_since_sleep = 0
 					sleep(1)
 			else
 				var/atom/step = get_step(src, dx)
-				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
+				if (!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
 					. = 0
 					break
 
@@ -472,20 +472,20 @@
 				error -= dist_y
 				dist_travelled++
 				dist_since_sleep++
-				if(dist_since_sleep >= fly_speed)
+				if (dist_since_sleep >= fly_speed)
 					dist_since_sleep = 0
 					sleep(1)
 			a = get_area(src.loc)
 	else
 		var/error = dist_y/2 - dist_x
-		while(src && target &&((((src.y < target.y && dy == NORTH) || (src.y > target.y && dy == SOUTH)) && dist_travelled < range) || (a && a.has_gravity == 0)  || istype(src.loc, /turf/space)) && src.throwing && istype(src.loc, /turf))
+		while (src && target &&((((src.y < target.y && dy == NORTH) || (src.y > target.y && dy == SOUTH)) && dist_travelled < range) || (a && a.has_gravity == 0)  || istype(src.loc, /turf/space)) && src.throwing && istype(src.loc, /turf))
 			// only stop when we've gone the whole distance (or max throw range) and are on a non-space tile, or hit something, or hit the end of the map, or someone picks it up
-			if(timestopped)
+			if (timestopped)
 				sleep(1)
 				continue
-			if(error < 0)
+			if (error < 0)
 				var/atom/step = get_step(src, dx)
-				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
+				if (!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
 					. = 0
 					break
 
@@ -494,12 +494,12 @@
 				error += dist_y
 				dist_travelled++
 				dist_since_sleep++
-				if(dist_since_sleep >= fly_speed)
+				if (dist_since_sleep >= fly_speed)
 					dist_since_sleep = 0
 					sleep(1)
 			else
 				var/atom/step = get_step(src, dy)
-				if(!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
+				if (!step) // going off the edge of the map makes get_step return null, don't let things go off the edge
 					. = 0
 					break
 
@@ -508,7 +508,7 @@
 				error -= dist_x
 				dist_travelled++
 				dist_since_sleep++
-				if(dist_since_sleep >= fly_speed)
+				if (dist_since_sleep >= fly_speed)
 					dist_since_sleep = 0
 					sleep(1)
 
@@ -516,7 +516,7 @@
 
 	//done throwing, either because it hit something or it finished moving
 	src.throwing = 0
-	if(isobj(src))
+	if (isobj(src))
 		src.throw_impact(get_turf(src), speed, user)
 
 /atom/movable/change_area(oldarea, newarea)
@@ -551,13 +551,13 @@
 	return
 
 /atom/movable/proc/attempt_to_follow(var/atom/movable/A,var/turf/T)
-	if(anchored)
+	if (anchored)
 		return 0
-	if(get_dist(T,loc) <= 1)
+	if (get_dist(T,loc) <= 1)
 		return 1
 	else
 		var/turf/U = get_turf(A)
-		if(!U)
+		if (!U)
 			return null
 		return src.forceMove(U)
 
@@ -579,8 +579,8 @@
 
 /atom/movable/proc/removeHear()
 	flags &= ~HEAR
-	for(var/mob/virtualhearer/VH in virtualhearers)
-		if(VH.attached == src)
+	for (var/mob/virtualhearer/VH in virtualhearers)
+		if (VH.attached == src)
 			returnToPool(VH)
 
 //Can it be moved by a shuttle?
@@ -589,31 +589,31 @@
 
 /atom/movable/proc/Process_Spacemove(check_drift)
 	var/dense_object = 0
-	for(var/turf/turf in oview(1,src))
-		if(!turf.has_gravity(src))
+	for (var/turf/turf in oview(1,src))
+		if (!turf.has_gravity(src))
 			continue
 
 		dense_object++
 		break
 
-	if(!dense_object && (locate(/obj/structure/lattice) in oview(1, src)))
+	if (!dense_object && (locate(/obj/structure/lattice) in oview(1, src)))
 		dense_object++
-	if(!dense_object && (locate(/obj/structure/catwalk) in oview(1, src)))
+	if (!dense_object && (locate(/obj/structure/catwalk) in oview(1, src)))
 		dense_object++
-	if(!dense_object && (locate(/obj/effect/blob) in oview(1, src)))
+	if (!dense_object && (locate(/obj/effect/blob) in oview(1, src)))
 		dense_object++
 
 	//Lastly attempt to locate any dense objects we could push off of
 	//TODO: If we implement objects drifing in space this needs to really push them
 	//Due to a few issues only anchored and dense objects will now work.
-	if(!dense_object)
-		for(var/obj/O in oview(1, src))
-			if((O) && (O.density) && (O.anchored))
+	if (!dense_object)
+		for (var/obj/O in oview(1, src))
+			if ((O) && (O.density) && (O.anchored))
 				dense_object++
 				break
 
 	//Nothing to push off of so end here
-	if(!dense_object)
+	if (!dense_object)
 		return 0
 
 	//If not then we can reset inertia and move
@@ -624,13 +624,13 @@
 
 
 /atom/movable/proc/apply_inertia(direction)
-	if(isturf(loc))
+	if (isturf(loc))
 		var/turf/T = loc
-		if(!T.has_gravity())
+		if (!T.has_gravity())
 			src.inertia_dir = direction
 			step(src, src.inertia_dir)
 			return 1
-	else if(istype(loc, /atom/movable))
+	else if (istype(loc, /atom/movable))
 		var/atom/movable/AM = loc
 		return AM.apply_inertia(direction)
 
@@ -639,14 +639,14 @@
 
 /atom/movable/proc/process_inertia(turf/start)
 	set waitfor = 0
-	if(Process_Spacemove(1))
+	if (Process_Spacemove(1))
 		inertia_dir  = 0
 		return
 
 	sleep(5)
 
-	if(can_apply_inertia() && (src.loc == start))
-		if(!inertia_dir)
+	if (can_apply_inertia() && (src.loc == start))
+		if (!inertia_dir)
 			return //inertia_dir = last_move
 
 		step(src, inertia_dir)

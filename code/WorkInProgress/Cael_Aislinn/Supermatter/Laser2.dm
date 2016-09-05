@@ -19,7 +19,7 @@
 
 /obj/machinery/computer/laser/process()
 	/*if(on)
-		if(!first)
+		if (!first)
 			src.first = new /obj/beam/e_beam(src.loc)
 			src.first.master = src
 			src.first.dir = src.dir
@@ -28,17 +28,17 @@
 			src.first.phase = src.phase
 			src.first.phase_variance = src.phase_variance
 			step(first, dir)
-			if(first)
+			if (first)
 				src.first.updatebeam()
 		else
 			src.first.updatebeam()
 	else
-		if(first)
+		if (first)
 			del first*/
 
 /obj/machinery/computer/laser/proc/setpower(var/powera)
 	/*src.power = powera
-	if(first)
+	if (first)
 		first.setpower(src.power)*/
 
 /*
@@ -58,8 +58,8 @@
 	sd_SetLuminosity(1, 1, 4)
 
 /obj/beam/e_beam/proc/updatebeam()
-	if(!next)
-		if(get_step(src.loc,src.dir))
+	if (!next)
+		if (get_step(src.loc,src.dir))
 			var/obj/beam/e_beam/e = new /obj/beam/e_beam(src.loc)
 			e.dir = src.dir
 			src.next = e
@@ -69,9 +69,9 @@
 			src.phase+=src.phase_variance
 			e.freq = src.freq
 			e.phase_variance = src.phase_variance
-			if(src.loc.density == 0)
-				for(var/atom/o in src.loc.contents)
-					if(o.density || o == src.master || (ismob(o) && !istype(o, /mob/dead)) )
+			if (src.loc.density == 0)
+				for (var/atom/o in src.loc.contents)
+					if (o.density || o == src.master || (ismob(o) && !istype(o, /mob/dead)) )
 						o.laser_act(src)
 						del src
 						return
@@ -80,7 +80,7 @@
 				del e
 				return
 			step(e,e.dir)
-			if(e)
+			if (e)
 				e.updatebeam()
 	else
 		next.updatebeam()
@@ -89,7 +89,7 @@
 	return
 
 /mob/living/carbon/laser_act(var/obj/beam/e_beam/b)
-	for(var/t in organs)
+	for (var/t in organs)
 		var/datum/organ/external/affecting = organs["[t]"]
 		if (affecting.take_damage(0, b.power/400,0,0))
 			UpdateDamageIcon(1)
@@ -104,7 +104,7 @@
 
 /obj/beam/e_beam/proc/setpower(var/powera)
 	src.power = powera
-	if(src.next)
+	if (src.next)
 		src.next.setpower(powera)
 
 /obj/beam/e_beam/Bumped()
@@ -121,7 +121,7 @@
 	return
 
 /obj/beam/e_beam/Destroy()
-	if(next)
+	if (next)
 		del(next)
 	..()
 	return

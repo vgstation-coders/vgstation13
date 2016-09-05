@@ -20,7 +20,7 @@ Mineral Sheets
 	var/recyck_mat
 
 /obj/item/stack/sheet/mineral/recycle(var/datum/materials/rec)
-	if(!recyck_mat)
+	if (!recyck_mat)
 		return 0
 
 	rec.addAmount(recyck_mat, amount)

@@ -10,7 +10,7 @@
 	var/destroyed = 0
 
 /obj/structure/lamarr/ex_act(severity)
-	switch(severity)
+	switch (severity)
 		if (1)
 			getFromPool(/obj/item/weapon/shard, loc)
 			Break()
@@ -51,7 +51,7 @@
 	return
 
 /obj/structure/lamarr/update_icon()
-	if(src.destroyed)
+	if (src.destroyed)
 		src.icon_state = "labcageb[src.occupied]"
 	else
 		src.icon_state = "labcage[src.occupied]"
@@ -72,7 +72,7 @@
 		return
 	else
 		to_chat(usr, text("<span class='notice'>You kick the lab cage.</span>"))
-		for(var/mob/O in oviewers())
+		for (var/mob/O in oviewers())
 			if ((O.client && !( O.blinded )))
 				to_chat(O, text("<span class='warning'>[] kicks the lab cage.</span>", usr))
 		src.health -= 2
@@ -80,7 +80,7 @@
 		return
 
 /obj/structure/lamarr/proc/Break()
-	if(occupied)
+	if (occupied)
 		new /obj/item/clothing/mask/facehugger/lamarr(src.loc)
 		occupied = 0
 	update_icon()
@@ -99,9 +99,9 @@
 	create_reagents(15)
 
 /obj/item/clothing/mask/facehugger/lamarr/process()
-	if(istype(loc, /mob/living/carbon/human))
+	if (istype(loc, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = loc
-		if(src.reagents)
+		if (src.reagents)
 			for (var/datum/reagent/current_reagent in src.reagents.reagent_list)
 				if (current_reagent.id == CREATINE)
 					to_chat(H, "<span class='warning'>[src]'s body contorts and expands!</span>")
@@ -110,7 +110,7 @@
 					H.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/gun/projectile/hivehand/I = new (get_turf(H))
 
-					if(index)
+					if (index)
 						H.put_in_hand(index, I)
 					qdel(src)
 
@@ -118,8 +118,8 @@
 	..()
 
 /obj/item/clothing/mask/facehugger/lamarr/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/reagent_containers/syringe))
-		if(src.loc == user && user.is_holding_item(W))
+	if (istype(W, /obj/item/weapon/reagent_containers/syringe))
+		if (src.loc == user && user.is_holding_item(W))
 			processing_objects.Add(src)
 	else
 		..(W, user)

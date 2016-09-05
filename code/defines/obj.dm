@@ -8,13 +8,13 @@
 		return attack_hand(user)
 
 	attack_hand(mob/user as mob)
-		switch(alert("Travel back to ss13?",,"Yes","No"))
-			if("Yes")
-				if(user.z != src.z)
+		switch (alert("Travel back to ss13?",,"Yes","No"))
+			if ("Yes")
+				if (user.z != src.z)
 					return
 				user.loc.loc.Exited(user)
 				user.forceMove(pick(latejoin))
-			if("No")
+			if ("No")
 				return
 
 /obj/effect/mark
@@ -69,19 +69,19 @@
 	"}
 	var/even = 0
 	// sort mobs
-	for(var/datum/data/record/t in sortRecord(data_core.general))
+	for (var/datum/data/record/t in sortRecord(data_core.general))
 		var/name = t.fields["name"]
 		var/rank = t.fields["rank"]
 		var/real_rank = t.fields["real_rank"]
-		if(OOC)
+		if (OOC)
 			var/active = 0
 			var/SSD = 0
-			for(var/mob/M in player_list)
-				if(M.real_name == name)
-					if(!M.client)
+			for (var/mob/M in player_list)
+				if (M.real_name == name)
+					if (!M.client)
 						SSD = 1
 						break
-					if(M.client && M.client.inactivity <= 10 * 60 * 10)
+					if (M.client && M.client.inactivity <= 10 * 60 * 10)
 						active = 1
 						break
 			isactive[name] = (SSD ? "SSD" : (active ? "Active" : "Inactive"))
@@ -90,85 +90,85 @@
 //			to_chat(world, "[name]: [rank]")
 			//cael - to prevent multiple appearances of a player/job combination, add a continue after each line
 		var/department = 0
-		if(real_rank in command_positions)
+		if (real_rank in command_positions)
 			heads[name] = rank
 			department = 1
-		if(real_rank in security_positions)
+		if (real_rank in security_positions)
 			sec[name] = rank
 			department = 1
-		if(real_rank in engineering_positions)
+		if (real_rank in engineering_positions)
 			eng[name] = rank
 			department = 1
-		if(real_rank in medical_positions)
+		if (real_rank in medical_positions)
 			med[name] = rank
 			department = 1
-		if(real_rank in science_positions)
+		if (real_rank in science_positions)
 			sci[name] = rank
 			department = 1
-		if(real_rank in cargo_positions)
+		if (real_rank in cargo_positions)
 			cgo[name] = rank
 			department = 1
-		if(real_rank in civilian_positions)
+		if (real_rank in civilian_positions)
 			civ[name] = rank
 			department = 1
-		if(real_rank in nonhuman_positions)
+		if (real_rank in nonhuman_positions)
 			bot[name] = rank
 			department = 1
-		if(!department && !(name in heads))
+		if (!department && !(name in heads))
 			misc[name] = rank
-	if(heads.len > 0)
+	if (heads.len > 0)
 		dat += "<tr><th colspan=3>Heads</th></tr>"
-		for(name in heads)
+		for (name in heads)
 			dat += "<tr[even ? " class='alt'" : ""]><td>[name]</td><td>[heads[name]]</td><td>[isactive[name]]</td></tr>"
 			even = !even
 
-	if(sec.len > 0)
+	if (sec.len > 0)
 		dat += "<tr><th colspan=3>Security</th></tr>"
-		for(name in sec)
+		for (name in sec)
 			dat += "<tr[even ? " class='alt'" : ""]><td>[name]</td><td>[sec[name]]</td><td>[isactive[name]]</td></tr>"
 			even = !even
 
-	if(eng.len > 0)
+	if (eng.len > 0)
 		dat += "<tr><th colspan=3>Engineering</th></tr>"
-		for(name in eng)
+		for (name in eng)
 			dat += "<tr[even ? " class='alt'" : ""]><td>[name]</td><td>[eng[name]]</td><td>[isactive[name]]</td></tr>"
 			even = !even
 
-	if(med.len > 0)
+	if (med.len > 0)
 		dat += "<tr><th colspan=3>Medical</th></tr>"
-		for(name in med)
+		for (name in med)
 			dat += "<tr[even ? " class='alt'" : ""]><td>[name]</td><td>[med[name]]</td><td>[isactive[name]]</td></tr>"
 			even = !even
 
-	if(sci.len > 0)
+	if (sci.len > 0)
 		dat += "<tr><th colspan=3>Science</th></tr>"
-		for(name in sci)
+		for (name in sci)
 			dat += "<tr[even ? " class='alt'" : ""]><td>[name]</td><td>[sci[name]]</td><td>[isactive[name]]</td></tr>"
 			even = !even
 
-	if(cgo.len > 0)
+	if (cgo.len > 0)
 		dat += "<tr><th colspan=3>Cargo</th></tr>"
-		for(name in cgo)
+		for (name in cgo)
 			dat += "<tr[even ? " class='alt'" : ""]><td>[name]</td><td>[cgo[name]]</td><td>[isactive[name]]</td></tr>"
 			even = !even
 
-	if(civ.len > 0)
+	if (civ.len > 0)
 		dat += "<tr><th colspan=3>Civilian</th></tr>"
-		for(name in civ)
+		for (name in civ)
 			dat += "<tr[even ? " class='alt'" : ""]><td>[name]</td><td>[civ[name]]</td><td>[isactive[name]]</td></tr>"
 			even = !even
 
 	// in case somebody is insane and added them to the manifest, why not
-	if(bot.len > 0)
+	if (bot.len > 0)
 		dat += "<tr><th colspan=3>Silicon</th></tr>"
-		for(name in bot)
+		for (name in bot)
 			dat += "<tr[even ? " class='alt'" : ""]><td>[name]</td><td>[bot[name]]</td><td>[isactive[name]]</td></tr>"
 			even = !even
 
 	// misc guys
-	if(misc.len > 0)
+	if (misc.len > 0)
 		dat += "<tr><th colspan=3>Miscellaneous</th></tr>"
-		for(name in misc)
+		for (name in misc)
 			dat += "<tr[even ? " class='alt'" : ""]><td>[name]</td><td>[misc[name]]</td><td>[isactive[name]]</td></tr>"
 			even = !even
 
@@ -188,7 +188,7 @@ using /obj/effect/datacore/proc/manifest_inject( ), or manifest_insert( )
 var/global/list/PDA_Manifest = list()
 
 /obj/effect/datacore/proc/get_manifest_json()
-	if(PDA_Manifest.len)
+	if (PDA_Manifest.len)
 		return PDA_Manifest
 	var/heads[0]
 	var/sec[0]
@@ -199,61 +199,61 @@ var/global/list/PDA_Manifest = list()
 	var/civ[0]
 	var/bot[0]
 	var/misc[0]
-	for(var/datum/data/record/t in data_core.general)
+	for (var/datum/data/record/t in data_core.general)
 		var/name = sanitize(t.fields["name"])
 		var/rank = sanitize(t.fields["rank"])
 		var/real_rank = t.fields["real_rank"]
 		var/isactive = t.fields["p_stat"]
 		var/department = 0
 		var/depthead = 0 			// Department Heads will be placed at the top of their lists. Too bad all the procs that get the manifest call get_manifest(), which can't do this without a rewrite.
-		if(real_rank in command_positions)
+		if (real_rank in command_positions)
 			heads[++heads.len] = list("name" = name, "rank" = rank, "active" = isactive)
 			department = 1
 			depthead = 1
-			if(rank=="Captain" && heads.len != 1)
+			if (rank=="Captain" && heads.len != 1)
 				heads.Swap(1,heads.len)
 
-		if(real_rank in security_positions)
+		if (real_rank in security_positions)
 			sec[++sec.len] = list("name" = name, "rank" = rank, "active" = isactive)
 			department = 1
-			if(depthead && sec.len != 1)
+			if (depthead && sec.len != 1)
 				sec.Swap(1,sec.len)
 
-		if(real_rank in engineering_positions)
+		if (real_rank in engineering_positions)
 			eng[++eng.len] = list("name" = name, "rank" = rank, "active" = isactive)
 			department = 1
-			if(depthead && eng.len != 1)
+			if (depthead && eng.len != 1)
 				eng.Swap(1,eng.len)
 
-		if(real_rank in medical_positions)
+		if (real_rank in medical_positions)
 			med[++med.len] = list("name" = name, "rank" = rank, "active" = isactive)
 			department = 1
-			if(depthead && med.len != 1)
+			if (depthead && med.len != 1)
 				med.Swap(1,med.len)
 
-		if(real_rank in science_positions)
+		if (real_rank in science_positions)
 			sci[++sci.len] = list("name" = name, "rank" = rank, "active" = isactive)
 			department = 1
-			if(depthead && sci.len != 1)
+			if (depthead && sci.len != 1)
 				sci.Swap(1,sci.len)
 
-		if(real_rank in cargo_positions)
+		if (real_rank in cargo_positions)
 			cgo[++cgo.len] = list("name" = name, "rank" = rank, "active" = isactive)
 			department = 1
-			if(depthead && cgo.len != 1)
+			if (depthead && cgo.len != 1)
 				cgo.Swap(1,cgo.len)
 
-		if(real_rank in civilian_positions)
+		if (real_rank in civilian_positions)
 			civ[++civ.len] = list("name" = name, "rank" = rank, "active" = isactive)
 			department = 1
-			if(depthead && civ.len != 1)
+			if (depthead && civ.len != 1)
 				civ.Swap(1,civ.len)
 
-		if(real_rank in nonhuman_positions)
+		if (real_rank in nonhuman_positions)
 			bot[++bot.len] = list("name" = name, "rank" = rank, "active" = isactive)
 			department = 1
 
-		if(!department && !(name in heads))
+		if (!department && !(name in heads))
 			misc[++misc.len] = list("name" = name, "rank" = rank, "active" = isactive)
 
 
@@ -326,7 +326,7 @@ var/global/list/PDA_Manifest = list()
 	siemens_coefficient = 1
 
 /obj/item/weapon/beach_ball/afterattack(atom/target as mob|obj|turf|area, mob/user as mob)
-	if(user.drop_item(src))
+	if (user.drop_item(src))
 		src.throw_at(target, throw_range, throw_speed)
 
 /obj/effect/stop
@@ -337,7 +337,7 @@ var/global/list/PDA_Manifest = list()
 	// name = ""
 
 /obj/effect/stop/Uncross(atom/movable/mover)
-	if(victim == mover)
+	if (victim == mover)
 		return 0
 	return 1
 
@@ -359,22 +359,22 @@ var/global/list/PDA_Manifest = list()
 	src.theworld = theworld
 
 /obj/effect/stop/sleeping/Crossed(atom/movable/A)
-	if(sleeptime > world.time)
-		if(ismob(A))
+	if (sleeptime > world.time)
+		if (ismob(A))
 			var/mob/living/L = A
-			if(L.client)
+			if (L.client)
 				L.client.move_delayer.next_allowed = sleeptime //So we don't need to check timestopped in client/move
-			if(L.mind != owner)
-				if(!L.stat)
+			if (L.mind != owner)
+				if (!L.stat)
 					L.playsound_local(src, theworld == 1 ? 'sound/effects/theworld2.ogg' : 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
 				//L.Paralyse(round(((sleeptime - world.time)/10)/2, 1))
 				//L.update_canmove()
-				if(!(L in ourspell.affected))
+				if (!(L in ourspell.affected))
 					invertcolor(L)
 					ourspell.affected += L
 					ourspell.recursive_timestop(L)
 		else
-			if(!(A in ourspell.affected))
+			if (!(A in ourspell.affected))
 				invertcolor(A)
 				ourspell.affected += A
 				ourspell.recursive_timestop(A)

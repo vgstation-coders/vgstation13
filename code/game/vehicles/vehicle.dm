@@ -95,7 +95,7 @@
 	return internal_tank*/
 
 /obj/vehicle/proc/add_cell(var/obj/item/weapon/cell/C=null)
-	if(C)
+	if (C)
 		C.forceMove(src)
 		cell = C
 		return
@@ -125,7 +125,7 @@
 	//pr_give_air = new /datum/global_iterator/vehicle_tank_give_air(list(src)            //Same here -Agouri
 
 /obj/vehicle/proc/check_for_support()
-	if(locate(/obj/structure/grille, orange(1, src)) || locate(/obj/structure/lattice, orange(1, src)) || locate(/turf/simulated, orange(1, src)) || locate(/turf/unsimulated, orange(1, src)))
+	if (locate(/obj/structure/grille, orange(1, src)) || locate(/obj/structure/lattice, orange(1, src)) || locate(/turf/simulated, orange(1, src)) || locate(/turf/unsimulated, orange(1, src)))
 		return 1
 	else
 		return 0
@@ -147,8 +147,8 @@
 	delay = 7
 
 	process(var/obj/vehicle/V as obj, direction)
-		if(direction)
-			if(!step(V, direction)||V.check_for_support())
+		if (direction)
+			if (!step(V, direction)||V.check_for_support())
 				src.stop()
 		else
 			src.stop()
@@ -158,34 +158,34 @@
 /datum/global_iterator/mecha_internal_damage // processing internal damage
 
 	process(var/obj/mecha/mecha)
-		if(!mecha.hasInternalDamage())
+		if (!mecha.hasInternalDamage())
 			return stop()
-		if(mecha.hasInternalDamage(MECHA_INT_FIRE))
-			if(!mecha.hasInternalDamage(MECHA_INT_TEMP_CONTROL) && prob(5))
+		if (mecha.hasInternalDamage(MECHA_INT_FIRE))
+			if (!mecha.hasInternalDamage(MECHA_INT_TEMP_CONTROL) && prob(5))
 				mecha.clearInternalDamage(MECHA_INT_FIRE)
-			if(mecha.internal_tank)
-				if(mecha.internal_tank.return_pressure()>mecha.internal_tank.maximum_pressure && !(mecha.hasInternalDamage(MECHA_INT_TANK_BREACH)))
+			if (mecha.internal_tank)
+				if (mecha.internal_tank.return_pressure()>mecha.internal_tank.maximum_pressure && !(mecha.hasInternalDamage(MECHA_INT_TANK_BREACH)))
 					mecha.setInternalDamage(MECHA_INT_TANK_BREACH)
 				var/datum/gas_mixture/int_tank_air = mecha.internal_tank.return_air()
-				if(int_tank_air && int_tank_air.return_volume()>0) //heat the air_contents
+				if (int_tank_air && int_tank_air.return_volume()>0) //heat the air_contents
 					int_tank_air.temperature = min(6000+T0C, int_tank_air.temperature+rand(10,15))
-			if(mecha.cabin_air && mecha.cabin_air.return_volume()>0)
+			if (mecha.cabin_air && mecha.cabin_air.return_volume()>0)
 				mecha.cabin_air.temperature = min(6000+T0C, mecha.cabin_air.return_temperature()+rand(10,15))
-				if(mecha.cabin_air.return_temperature()>mecha.max_temperature/2)
+				if (mecha.cabin_air.return_temperature()>mecha.max_temperature/2)
 					mecha.take_damage(4/round(mecha.max_temperature/mecha.cabin_air.return_temperature(),0.1),"fire")
-		if(mecha.hasInternalDamage(MECHA_INT_TEMP_CONTROL)) //stop the mecha_preserve_temp loop datum
+		if (mecha.hasInternalDamage(MECHA_INT_TEMP_CONTROL)) //stop the mecha_preserve_temp loop datum
 			mecha.pr_int_temp_processor.stop()
-		if(mecha.hasInternalDamage(MECHA_INT_TANK_BREACH)) //remove some air from internal tank
-			if(mecha.internal_tank)
+		if (mecha.hasInternalDamage(MECHA_INT_TANK_BREACH)) //remove some air from internal tank
+			if (mecha.internal_tank)
 				var/datum/gas_mixture/int_tank_air = mecha.internal_tank.return_air()
 				var/datum/gas_mixture/leaked_gas = int_tank_air.remove_ratio(0.10)
-				if(mecha.loc && hascall(mecha.loc,"assume_air"))
+				if (mecha.loc && hascall(mecha.loc,"assume_air"))
 					mecha.loc.assume_air(leaked_gas)
 				else
 					qdel(leaked_gas)
 					leaked_gas = null
-		if(mecha.hasInternalDamage(MECHA_INT_SHORT_CIRCUIT))
-			if(mecha.get_charge())
+		if (mecha.hasInternalDamage(MECHA_INT_SHORT_CIRCUIT))
+			if (mecha.get_charge())
 				mecha.spark_system.start()
 				mecha.cell.charge -= min(20,mecha.cell.charge)
 				mecha.cell.maxcharge -= min(20,mecha.cell.maxcharge)

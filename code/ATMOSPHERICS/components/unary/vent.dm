@@ -25,7 +25,7 @@
 		return// Turning off the vent is a PITA. - N3X
 
 	// New GC does this sometimes
-	if(!loc)
+	if (!loc)
 		return
 
 	//air_contents.mingle_with_turf(loc)
@@ -33,21 +33,21 @@
 	var/datum/gas_mixture/removed = air_contents.remove(volume)
 
 	loc.assume_air(removed)
-	if(network)
+	if (network)
 		network.update = TRUE
 
 	return 1
 
 
 /obj/machinery/atmospherics/unary/vent/update_icon()
-	if(node)
+	if (node)
 		icon_state = "intact"
 	else
 		icon_state = "exposed"
 	..()
 	if (istype(loc, /turf/simulated/floor) && node)
 		var/turf/simulated/floor/floor = loc
-		if(floor.floor_tile && node.alpha == 128)
+		if (floor.floor_tile && node.alpha == 128)
 			underlays.Cut()
 
 

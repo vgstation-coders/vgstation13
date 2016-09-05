@@ -56,7 +56,7 @@
 
 /datum/speech/proc/scramble()
 	var/datum/speech/clone = clone()
-	if(language)
+	if (language)
 		clone.message = language.scramble(message)
 	else
 		clone.message = stars(message, 10)
@@ -74,15 +74,15 @@
 #endif
 	var/rendered=message
 	// Sanity
-	if(!lquote)
+	if (!lquote)
 		lquote="\""
-	if(!rquote)
+	if (!rquote)
 		rquote="\""
 	rendered="<span class='[jointext(message_classes, " ")]'>[lquote][html_encode(rendered)][rquote]</span>"
-	if(language)
+	if (language)
 		rendered=language.render_speech(src, rendered)
 	else
-		if(speaker)
+		if (speaker)
 			rendered=speaker.say_quote(rendered)
 		else
 			warning("Speaker not set! (message=\"[message]\")")
@@ -92,7 +92,7 @@
 	return rendered
 
 /datum/speech/proc/render_as_name()
-	if(as_name && as_name != name)
+	if (as_name && as_name != name)
 		return " (as [as_name])"
 	return ""
 
@@ -107,20 +107,20 @@
 	radio = null
 
 /datum/speech/proc/get_real_name()
-	if(ismob(speaker))
+	if (ismob(speaker))
 		var/mob/M = speaker
 		return M.real_name
 	return name
 
 /datum/speech/proc/get_key()
-	if(ismob(speaker))
+	if (ismob(speaker))
 		var/mob/M = speaker
-		if(M.client)
+		if (M.client)
 			return M.key
 	return null
 
 /datum/speech/proc/to_signal(var/datum/signal/signal)
-	if(speaker)
+	if (speaker)
 		signal.data["mob"]      = speaker
 		signal.data["mobtype"]  = speaker.type
 
@@ -146,7 +146,7 @@
 /datum/speech/proc/from_signal(var/datum/signal/signal)
 	frequency = signal.frequency
 
-	if("mob" in signal.data)
+	if ("mob" in signal.data)
 		speaker = signal.data["mob"]
 
 	message  = signal.data["message"]
@@ -160,11 +160,11 @@
 	rquote   = signal.data["right_quote"]
 
 	var/list/data = signal.data["message_classes"]
-	if(data)
+	if (data)
 		message_classes=data.Copy()
 
 	data = signal.data["wrapper_classes"]
-	if(data)
+	if (data)
 		wrapper_classes=data.Copy()
 
 /datum/speech/proc/set_language(var/lang_id)

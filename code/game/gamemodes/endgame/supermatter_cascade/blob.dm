@@ -24,11 +24,11 @@
 
 /turf/unsimulated/wall/supermatter/process()
 	// Only check infrequently.
-	if(next_check>world.time)
+	if (next_check>world.time)
 		return
 
 	// No more available directions? Shut down process().
-	if(avail_dirs.len==0)
+	if (avail_dirs.len==0)
 		processing_objects.Remove(src)
 		return 1
 
@@ -39,36 +39,36 @@
 	var/pdir = pick(avail_dirs)
 	avail_dirs -= pdir
 	var/turf/T=get_step(src,pdir)
-	if(istype(T, /turf/unsimulated/wall/supermatter/))
+	if (istype(T, /turf/unsimulated/wall/supermatter/))
 		avail_dirs -= pdir
 		return
 
 	// EXPAND DONG
-	if(isturf(T))
+	if (isturf(T))
 		// This is normally where a growth animation would occur
 //		new /obj/effect/overlay/bluespacify(T)
 		spawn(10)
 			// Nom.
-			for(var/atom/movable/A in T)
-				if(A)
-					if(istype(A,/mob/living))
+			for (var/atom/movable/A in T)
+				if (A)
+					if (istype(A,/mob/living))
 						qdel(A)
 						A = null
-					else if(istype(A,/mob)) // Observers, AI cameras.
+					else if (istype(A,/mob)) // Observers, AI cameras.
 						continue
 					qdel(A)
 					A = null
 				tcheck(80,1)
 			T.ChangeTurf(type)
 			var/turf/unsimulated/wall/supermatter/SM = T
-			if(SM.avail_dirs)
+			if (SM.avail_dirs)
 				SM.avail_dirs -= get_dir(T, src)
 
 /turf/unsimulated/wall/supermatter/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
 /turf/unsimulated/wall/supermatter/attack_robot(mob/user as mob)
-	if(Adjacent(user))
+	if (Adjacent(user))
 		return attack_hand(user)
 	else
 		to_chat(user, "<span class = \"warning\">What the fuck are you doing?</span>")
@@ -102,7 +102,7 @@
 
 
 /turf/unsimulated/wall/supermatter/Bumped(atom/AM as mob|obj)
-	if(istype(AM, /mob/living))
+	if (istype(AM, /mob/living))
 		AM.visible_message("<span class=\"warning\">\The [AM] slams into \the [src] inducing a resonance... \his body starts to glow and catch flame before flashing into ash.</span>",\
 		"<span class=\"danger\">You slam into \the [src] as your ears are filled with unearthly ringing. Your last thought is \"Oh, fuck.\"</span>",\
 		"<span class=\"warning\">You hear an unearthly noise as a wave of heat washes over you.</span>")
@@ -116,7 +116,7 @@
 
 
 /turf/unsimulated/wall/supermatter/proc/Consume(var/mob/living/user)
-	if(istype(user,/mob/dead/observer))
+	if (istype(user,/mob/dead/observer))
 		return
 
 	qdel(user)

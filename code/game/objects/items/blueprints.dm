@@ -35,10 +35,10 @@
 
 /obj/item/blueprints/Topic(href, href_list)
 	. = ..()
-	if(.)
+	if (.)
 		return
 
-	switch(href_list["action"])
+	switch (href_list["action"])
 		if ("create_area")
 			if (!(get_area_type() in can_create_areas_in))
 				interact()
@@ -97,7 +97,7 @@ move an amendment</a> to the drawing.</p>
 /obj/item/blueprints/proc/get_area_type(var/area/A = get_area())
 	if (isspace(A))
 		return AREA_SPACE
-	else if(istype(A, /area/station/custom))
+	else if (istype(A, /area/station/custom))
 		return AREA_BLUEPRINTS
 
 	var/list/SPECIALS = list(
@@ -120,12 +120,12 @@ move an amendment</a> to the drawing.</p>
 /obj/item/blueprints/proc/create_area()
 //	to_chat(world, "DEBUG: create_area")
 	var/res = detect_room(get_turf(usr))
-	if(!istype(res,/list))
-		switch(res)
-			if(ROOM_ERR_SPACE)
+	if (!istype(res,/list))
+		switch (res)
+			if (ROOM_ERR_SPACE)
 				to_chat(usr, "<span class='warning'>The new area must be completely airtight!</span>")
 				return
-			if(ROOM_ERR_TOOLARGE)
+			if (ROOM_ERR_TOOLARGE)
 				to_chat(usr, "<span class='warning'>The new area too large!</span>")
 				return
 			else
@@ -133,9 +133,9 @@ move an amendment</a> to the drawing.</p>
 				return
 	var/list/turf/turfs = res
 	var/str = trim(stripped_input(usr,"New area name:","Blueprint Editing", "", MAX_NAME_LEN))
-	if(!str || !length(str)) //cancel
+	if (!str || !length(str)) //cancel
 		return
-	if(length(str) > 50)
+	if (length(str) > 50)
 		to_chat(usr, "<span class='warning'>Name too long.</span>")
 		return
 	var/area/station/custom/newarea = new
@@ -143,9 +143,9 @@ move an amendment</a> to the drawing.</p>
 	newarea.name = str
 	newarea.tag = "[newarea.type]/[md5(str)]"
 	newarea.contents.Add(turfs)
-	for(var/turf/T in turfs)
+	for (var/turf/T in turfs)
 		T.change_area(oldarea,newarea)
-		for(var/atom/allthings in T.contents)
+		for (var/atom/allthings in T.contents)
 			allthings.change_area(oldarea,newarea)
 	newarea.addSorted()
 
@@ -159,13 +159,13 @@ move an amendment</a> to the drawing.</p>
 //	to_chat(world, "DEBUG: edit_area")
 	var/prevname = "[areachanged.name]"
 	var/str = trim(stripped_input(usr,"New area name:","Blueprint Editing", prevname, MAX_NAME_LEN))
-	if(!str || !length(str) || str==prevname) //cancel
+	if (!str || !length(str) || str==prevname) //cancel
 		return
-	if(length(str) > 50)
+	if (length(str) > 50)
 		to_chat(usr, "<span class='warning'>Text too long.</span>")
 		return
 	areachanged.name = str
-	for(var/atom/allthings in areachanged.contents)
+	for (var/atom/allthings in areachanged.contents)
 		allthings.change_area(prevname,areachanged)
 	to_chat(usr, "<span class='notice'>You set the area '[prevname]' title to '[str]'.</span>")
 	interact()
@@ -174,22 +174,22 @@ move an amendment</a> to the drawing.</p>
 	var/area/station/custom/areadeleted = get_area()
 	var/area/space = get_area(locate(1,1,2)) //xd
 
-	if(alert(usr,"Are you sure you want to erase \"[areadeleted]\" from the blueprints?","Blueprint Editing","Yes","No") != "Yes")
+	if (alert(usr,"Are you sure you want to erase \"[areadeleted]\" from the blueprints?","Blueprint Editing","Yes","No") != "Yes")
 		return
 	else
-		if(!Adjacent(user))
+		if (!Adjacent(user))
 			return
-		if(!(areadeleted == get_area()))
+		if (!(areadeleted == get_area()))
 			return //if the blueprints are no longer in the area, return
-		if(!istype(areadeleted))
+		if (!istype(areadeleted))
 			return //to make sure AGAIN that the area we're deleting is blueprint
 
 	var/list/C = areadeleted.contents.Copy() //because areadeleted.contents is slow
-	for(var/turf/T in C)
+	for (var/turf/T in C)
 		space.contents.Add(T)
 		T.change_area(areadeleted,space)
 
-		for(var/atom/movable/AM in T.contents)
+		for (var/atom/movable/AM in T.contents)
 			AM.change_area(areadeleted,space)
 	to_chat(usr, "You've erased the \"[areadeleted]\" from the blueprints.")
 
@@ -206,12 +206,12 @@ move an amendment</a> to the drawing.</p>
 		return BORDER_BETWEEN
 
 	for (var/obj/structure/window/W in T2)
-		if(turn(dir,180) == W.dir)
+		if (turn(dir,180) == W.dir)
 			return BORDER_BETWEEN
 		if (W.is_fulltile())
 			return BORDER_2NDTILE
-	for(var/obj/machinery/door/window/D in T2)
-		if(turn(dir,180) == D.dir)
+	for (var/obj/machinery/door/window/D in T2)
+		if (turn(dir,180) == D.dir)
 			return BORDER_BETWEEN
 	if (locate(/obj/machinery/door) in T2)
 		return BORDER_2NDTILE
@@ -225,7 +225,7 @@ move an amendment</a> to the drawing.</p>
 /obj/item/blueprints/proc/detect_room(var/turf/first)
 	var/list/turf/found = new
 	var/list/turf/pending = list(first)
-	while(pending.len)
+	while (pending.len)
 		if (found.len+pending.len > 300)
 			return ROOM_ERR_TOOLARGE
 		var/turf/T = pending[1] //why byond havent list::pop()?
@@ -233,12 +233,12 @@ move an amendment</a> to the drawing.</p>
 		for (var/dir in cardinal)
 			var/skip = 0
 			for (var/obj/structure/window/W in T)
-				if(dir == W.dir || (W.is_fulltile()))
+				if (dir == W.dir || (W.is_fulltile()))
 					skip = 1; break
 			if (skip)
 				continue
-			for(var/obj/machinery/door/window/D in T)
-				if(dir == D.dir)
+			for (var/obj/machinery/door/window/D in T)
+				if (dir == D.dir)
 					skip = 1; break
 			if (skip)
 				continue
@@ -247,14 +247,14 @@ move an amendment</a> to the drawing.</p>
 			if (!isturf(NT) || (NT in found) || (NT in pending))
 				continue
 
-			switch(check_tile_is_border(NT,dir))
-				if(BORDER_NONE)
+			switch (check_tile_is_border(NT,dir))
+				if (BORDER_NONE)
 					pending+=NT
-				if(BORDER_BETWEEN)
+				if (BORDER_BETWEEN)
 					//do nothing, may be later i'll add 'rejected' list as optimization
-				if(BORDER_2NDTILE)
+				if (BORDER_2NDTILE)
 					found+=NT //tile included to new area, but we dont seek more
-				if(BORDER_SPACE)
+				if (BORDER_SPACE)
 					return ROOM_ERR_SPACE
 		found+=T
 	return found

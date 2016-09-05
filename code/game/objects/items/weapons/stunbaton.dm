@@ -34,9 +34,9 @@
 	return
 
 /obj/item/weapon/melee/baton/proc/deductcharge(var/chrgdeductamt)
-	if(bcell)
-		if(bcell.use(chrgdeductamt))
-			if(bcell.charge < hitcost)
+	if (bcell)
+		if (bcell.use(chrgdeductamt))
+			if (bcell.charge < hitcost)
 				status = 0
 				update_icon()
 			return 1
@@ -46,10 +46,10 @@
 			return 0
 
 /obj/item/weapon/melee/baton/update_icon()
-	if(status)
+	if (status)
 		icon_state = "[initial(name)]_active"
 		item_state = "baton1"
-	else if(!bcell)
+	else if (!bcell)
 		icon_state = "[initial(name)]_nocell"
 		item_state = "baton0"
 	else
@@ -63,23 +63,23 @@
 
 /obj/item/weapon/melee/baton/examine(mob/user)
 	..()
-	if(bcell)
+	if (bcell)
 		to_chat(user, "<span class='info'>The baton is [round(bcell.percent())]% charged.</span>")
-	if(!bcell)
+	if (!bcell)
 		to_chat(user, "<span class='warning'>The baton does not have a power source installed.</span>")
 
 /obj/item/weapon/melee/baton/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/cell))
-		if(!bcell)
-			if(user.drop_item(W, src))
+	if (istype(W, /obj/item/weapon/cell))
+		if (!bcell)
+			if (user.drop_item(W, src))
 				bcell = W
 				to_chat(user, "<span class='notice'>You install a cell in [src].</span>")
 				update_icon()
 		else
 			to_chat(user, "<span class='notice'>[src] already has a cell.</span>")
 
-	else if(isscrewdriver(W))
-		if(bcell)
+	else if (isscrewdriver(W))
+		if (bcell)
 			bcell.updateicon()
 			bcell.forceMove(get_turf(src.loc))
 			bcell = null
@@ -91,14 +91,14 @@
 	return
 
 /obj/item/weapon/melee/baton/attack_self(mob/user)
-	if(status && (M_CLUMSY in user.mutations) && prob(50))
+	if (status && (M_CLUMSY in user.mutations) && prob(50))
 		user.simple_message("<span class='warning'>You grab the [src] on the wrong side.</span>",
 			"<span class='danger'>The [name] blasts you with its power!</span>")
 		user.Weaken(stunforce*3)
 		playsound(loc, "sparks", 75, 1, -1)
 		deductcharge(hitcost)
 		return
-	if(bcell && bcell.charge >= hitcost)
+	if (bcell && bcell.charge >= hitcost)
 		status = !status
 		user.simple_message("<span class='notice'>[src] is now [status ? "on" : "off"].</span>",
 			"<span class='notice'>[src] is now [pick("drowsy","hungry","thirsty","bored","unhappy")].</span>")
@@ -106,7 +106,7 @@
 		update_icon()
 	else
 		status = 0
-		if(!bcell)
+		if (!bcell)
 			user.simple_message("<span class='warning'>[src] does not have a power source!</span>",
 				"<span class='warning'>[src] has no pulse and its soul has departed...</span>")
 		else
@@ -116,40 +116,40 @@
 	add_fingerprint(user)
 
 /obj/item/weapon/melee/baton/attack(mob/M, mob/user)
-	if(status && (M_CLUMSY in user.mutations) && prob(50))
+	if (status && (M_CLUMSY in user.mutations) && prob(50))
 		user.simple_message("<span class='danger'>You accidentally hit yourself with [src]!</span>",
 			"<span class='danger'>The [name] goes mad!</span>")
 		user.Weaken(stunforce*3)
 		deductcharge(hitcost)
 		return
 
-	if(isrobot(M))
+	if (isrobot(M))
 		..()
 		return
-	if(!isliving(M))
+	if (!isliving(M))
 		return
 
 	var/mob/living/L = M
 
 	var/hit = 1
-	if(user.a_intent == I_HURT)
+	if (user.a_intent == I_HURT)
 		hit = ..()
-		if(hit)
+		if (hit)
 			playsound(loc, "swing_hit", 50, 1, -1)
 	else
 		hit = -1
-		if(!status)
+		if (!status)
 			L.visible_message("<span class='attack'>[L] has been prodded with the [src] by [user]. Luckily it was off.</span>",
 				self_drugged_message="<span class='warning'>The [name] decides to spare this one.</span>")
 			return
 
-	if(status && hit)
-		if(hit == -1)
+	if (status && hit)
+		if (hit == -1)
 			//Copypasted from human/attacked_by()
 			var/target_zone = get_zone_with_miss_chance(user.zone_sel.selecting, L)
-			if(user == L) // Attacking yourself can't miss
+			if (user == L) // Attacking yourself can't miss
 				target_zone = user.zone_sel.selecting
-			if(!target_zone && !L.stat)
+			if (!target_zone && !L.stat)
 				visible_message("<span class='danger'>[user] misses [L] with \the [src]!</span>")
 				return
 		user.lastattacked = L
@@ -164,21 +164,21 @@
 			self_drugged_message="<span class='userdanger'>[user]'s [src.name] sucks the life right out of you!</span>")
 		playsound(loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
 
-		if(isrobot(loc))
+		if (isrobot(loc))
 			var/mob/living/silicon/robot/R = loc
-			if(R && R.cell)
+			if (R && R.cell)
 				R.cell.use(hitcost)
 		else
 			deductcharge(hitcost)
 
-		if(ishuman(L))
+		if (ishuman(L))
 			var/mob/living/carbon/human/H = L
 			H.forcesay(hit_appends)
 
 		user.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [L.name] ([L.ckey]) with [name]</font>"
 		L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by [user.name] ([user.ckey]) with [name]</font>"
 		log_attack("<font color='red'>[user.name] ([user.ckey]) stunned [L.name] ([L.ckey]) with [name]</font>" )
-		if(!iscarbon(user))
+		if (!iscarbon(user))
 			M.LAssailant = null
 		else
 			M.LAssailant = user
@@ -186,10 +186,10 @@
 /obj/item/weapon/melee/baton/throw_impact(atom/hit_atom)
 	foundmob = directory[ckey(fingerprintslast)]
 	if (prob(50))
-		if(istype(hit_atom, /mob/living))
+		if (istype(hit_atom, /mob/living))
 			var/mob/living/L = hit_atom
-			if(status)
-				if(foundmob)
+			if (status)
+				if (foundmob)
 					foundmob.lastattacked = L
 					L.lastattacker = foundmob
 
@@ -200,21 +200,21 @@
 				L.visible_message("<span class='danger'>[L] has been stunned with [src] by [foundmob ? foundmob : "Unknown"]!</span>")
 				playsound(loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
 
-				if(isrobot(loc))
+				if (isrobot(loc))
 					var/mob/living/silicon/robot/R = loc
-					if(R && R.cell)
+					if (R && R.cell)
 						R.cell.use(hitcost)
 				else
 					deductcharge(hitcost)
 
-				if(ishuman(L))
+				if (ishuman(L))
 					var/mob/living/carbon/human/H = L
 					H.forcesay(hit_appends)
 
 				foundmob.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [L.name] ([L.ckey]) with [name]</font>"
 				L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by thrown [src] by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""])</font>"
 				log_attack("<font color='red'>Flying [src.name], thrown by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) stunned [L.name] ([L.ckey])</font>" )
-				if(!iscarbon(foundmob))
+				if (!iscarbon(foundmob))
 					L.LAssailant = null
 				else
 					L.LAssailant = foundmob
@@ -223,14 +223,14 @@
 	return ..()
 
 /obj/item/weapon/melee/baton/emp_act(severity)
-	if(bcell)
+	if (bcell)
 		deductcharge(1000 / severity)
-		if(bcell.reliability != 100 && prob(50/severity))
+		if (bcell.reliability != 100 && prob(50/severity))
 			bcell.reliability -= 10 / severity
 	..()
 
 /obj/item/weapon/melee/baton/restock()
-	if(bcell)
+	if (bcell)
 		bcell.charge = bcell.maxcharge
 
 //Makeshift stun baton. Replacement for stun gloves.

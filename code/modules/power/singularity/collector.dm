@@ -34,15 +34,15 @@ var/global/list/rad_collectors = list()
 			investigation_log(I_SINGULO,"<font color='red'>out of fuel</font>.")
 			P.air_contents.toxins = 0
 			eject()
-		else if(!active)
+		else if (!active)
 			return
 		else
 			P.air_contents.toxins -= (0.001 * drain_ratio)
 			P.air_contents.update_values()
 
 /obj/machinery/power/rad_collector/attack_hand(mob/user as mob)
-	if(anchored)
-		if(!src.locked)
+	if (anchored)
+		if (!src.locked)
 			toggle_power()
 			user.visible_message("<span class='notice'>[user] turns the [src] [active? "on":"off"].</span>", \
 			"<span class='notice'>You turn the [src] [active? "on":"off"].</span>")
@@ -54,31 +54,31 @@ var/global/list/rad_collectors = list()
 ..()
 
 /obj/machinery/power/rad_collector/attackby(obj/item/W, mob/user)
-	if(..())
+	if (..())
 		return 1
-	else if(istype(W, /obj/item/device/analyzer) || istype(W, /obj/item/device/multitool))
-		if(active)
+	else if (istype(W, /obj/item/device/analyzer) || istype(W, /obj/item/device/multitool))
+		if (active)
 			to_chat(user, "<span class='notice'>\The [W] registers that [format_watts(last_power)] is being produced every cycle.</span>")
 		else
 			to_chat(user, "<span class='notice'>\The [W] registers that the unit is currently not producing power.</span>")
 		return 1
-	else if(istype(W, /obj/item/weapon/tank/plasma))
-		if(!src.anchored)
+	else if (istype(W, /obj/item/weapon/tank/plasma))
+		if (!src.anchored)
 			to_chat(user, "<span class='warning'>\The [src] needs to be secured to the floor first.</span>")
 			return 1
-		if(src.P)
+		if (src.P)
 			to_chat(user, "<span class='warning'>A plasma tank is already loaded.</span>")
 			return 1
-		if(user.drop_item(W, src))
+		if (user.drop_item(W, src))
 			src.P = W
 			update_icons()
-	else if(iscrowbar(W))
-		if(P && !src.locked)
+	else if (iscrowbar(W))
+		if (P && !src.locked)
 			eject()
 			return 1
-	else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
+	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if (src.allowed(user))
-			if(active)
+			if (active)
 				src.locked = !src.locked
 				to_chat(user, "<span class='notice'>The controls are now [src.locked ? "locked." : "unlocked."]</span>")
 			else
@@ -91,11 +91,11 @@ var/global/list/rad_collectors = list()
 		return
 
 /obj/machinery/power/rad_collector/wrenchAnchor(mob/user)
-	if(P)
+	if (P)
 		to_chat(user, "<span class='warning'>Remove the plasma tank first.</span>")
 		return
-	if(..() == 1)
-		if(anchored)
+	if (..() == 1)
+		if (anchored)
 			connect_to_network()
 		else
 			disconnect_from_network()
@@ -104,8 +104,8 @@ var/global/list/rad_collectors = list()
 	return -1
 
 /obj/machinery/power/rad_collector/ex_act(severity)
-	switch(severity)
-		if(2, 3)
+	switch (severity)
+		if (2, 3)
 			eject()
 
 	return ..()
@@ -114,14 +114,14 @@ var/global/list/rad_collectors = list()
 	locked = 0
 	last_power = 0
 
-	if(isnull(P))
+	if (isnull(P))
 		return
 
 	P.forceMove(get_turf(src))
 	P.reset_plane_and_layer()
 	P = null
 
-	if(active)
+	if (active)
 		toggle_power()
 	else
 		update_icons()
@@ -134,17 +134,17 @@ var/global/list/rad_collectors = list()
 
 /obj/machinery/power/rad_collector/proc/update_icons()
 	overlays.len = 0
-	if(P)
+	if (P)
 		overlays += image('icons/obj/singularity.dmi', "ptank")
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
-	if(active)
+	if (active)
 		overlays += image('icons/obj/singularity.dmi', "on")
 
 /obj/machinery/power/rad_collector/proc/toggle_power()
 	active = !active
 
-	if(active)
+	if (active)
 		icon_state = "ca_on"
 		flick("ca_active", src)
 	else

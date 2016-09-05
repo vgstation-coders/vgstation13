@@ -42,7 +42,7 @@
 		var/law = src.laws.supplied[index]
 
 		if (length(law) > 0)
-			if(src.lawcheck.len >= number+1)
+			if (src.lawcheck.len >= number+1)
 				if (src.lawcheck[number+1] == "Yes")
 					src.say(";[number]. [law]")
 					sleep(10)
@@ -105,15 +105,15 @@
 	else
 		who = src
 
-	if(lawupdate)
+	if (lawupdate)
 		if (connected_ai)
-			if(connected_ai.stat || connected_ai.control_disabled)
+			if (connected_ai.stat || connected_ai.control_disabled)
 				to_chat(src, "<b>AI signal lost, unable to sync laws.</b>")
 
 			else
 				lawsync()
 				to_chat(src, "<b>Laws synced with AI, be sure to note any changes.</b>")
-				if(mind && mind.special_role == "traitor" && mind.original == src)
+				if (mind && mind.special_role == "traitor" && mind.original == src)
 					to_chat(src, "<b>Remember, your AI does NOT share or know about your law 0.")
 		else
 			to_chat(src, "<b>No AI selected to sync laws with, disabling lawsync protocol.</b>")
@@ -142,7 +142,7 @@
 				laws.ion[index] = temp
 
 		if (!is_special_character(src) || mind.original != src)
-			if(master.zeroth_borg) //If the AI has a defined law zero specifically for its borgs, give it that one, otherwise give it the same one. --NEO
+			if (master.zeroth_borg) //If the AI has a defined law zero specifically for its borgs, give it that one, otherwise give it the same one. --NEO
 				temp = master.zeroth_borg
 			else
 				temp = master.zeroth

@@ -19,13 +19,13 @@
 	var/cylinder = null
 
 /obj/item/weapon/gun/projectile/revialver/Destroy()
-	if(cylinder)
+	if (cylinder)
 		qdel(cylinder)
 		cylinder = null
 	..()
 
 /obj/item/weapon/gun/projectile/revialver/attack_self(mob/user as mob)
-	if(!cylinder)
+	if (!cylinder)
 		return
 
 	var/obj/item/weapon/cylinder/C = cylinder
@@ -34,18 +34,18 @@
 	playsound(user, 'sound/weapons/switchblade.ogg', 50, 1)
 
 /obj/item/weapon/gun/projectile/revialver/proc/spin()
-	if(!cylinder)
+	if (!cylinder)
 		return
 
 	var/obj/item/weapon/cylinder/C = cylinder
 	C.current_chamber = rand(1,6)
 
 /obj/item/weapon/gun/projectile/revialver/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/cylinder))
-		if(cylinder)
+	if (istype(W, /obj/item/weapon/cylinder))
+		if (cylinder)
 			to_chat(user, "There is already a cylinder loaded into \the [src].")
 			return
-		if(!user.drop_item(W, src))
+		if (!user.drop_item(W, src))
 			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
 			return 1
 		to_chat(user, "You load \the [W] into \the [src].")
@@ -55,7 +55,7 @@
 	update_verbs()
 
 /obj/item/weapon/gun/projectile/revialver/proc/update_verbs()
-	if(cylinder)
+	if (cylinder)
 		verbs += /obj/item/weapon/gun/projectile/revialver/verb/remove_cylinder
 		verbs += /obj/item/weapon/gun/projectile/revialver/verb/spin_cylinder
 	else
@@ -67,11 +67,11 @@
 	set category = "Object"
 	set src in range(0)
 
-	if(usr.isUnconscious())
+	if (usr.isUnconscious())
 		to_chat(usr, "You can't do that while unconscious.")
 		return
 
-	if(!cylinder)
+	if (!cylinder)
 		return
 
 	var/obj/item/weapon/cylinder/C = cylinder
@@ -89,11 +89,11 @@
 	set category = "Object"
 	set src in range(0)
 
-	if(usr.isUnconscious())
+	if (usr.isUnconscious())
 		to_chat(usr, "You can't do that while unconscious.")
 		return
 
-	if(!cylinder)
+	if (!cylinder)
 		return
 
 	to_chat(usr, "You spin \the [src]'s cylinder.")
@@ -104,13 +104,13 @@
 
 /obj/item/weapon/gun/projectile/revialver/examine(mob/user)
 	..()
-	if(cylinder)
+	if (cylinder)
 		var/obj/item/weapon/cylinder/C = cylinder
 		var/chambercount = 0
-		for(var/i = 1; i<=6; i++)
-			if(C.chambers[i])
+		for (var/i = 1; i<=6; i++)
+			if (C.chambers[i])
 				chambercount += 1
-		if(chambercount)
+		if (chambercount)
 			to_chat(user, "<span class='info'>There [chambercount > 1 ? "are" : "is"] [chambercount] vial[chambercount > 1 ? "s loaded" : " loaded"] into \the [src]'s cylinder.</span>")
 	else
 		to_chat(user, "<span class='info'>There doesn't appear to be a cylinder loaded into \the [src].</span>")
@@ -129,13 +129,13 @@
 		return
 
 	var/obj/item/weapon/cylinder/C = cylinder
-	if(!(C.chambers[C.current_chamber]))
+	if (!(C.chambers[C.current_chamber]))
 		click_empty(user)
 		return
 
-	if(flag)
+	if (flag)
 		return //we're placing gun on a table or in backpack
-	if(harm_labeled >= min_harm_label)
+	if (harm_labeled >= min_harm_label)
 		to_chat(user, "<span class='warning'>A label sticks the trigger to the trigger guard!</span>")//Such a new feature, the player might not know what's wrong if it doesn't tell them.
 		return
 
@@ -147,7 +147,7 @@
 	C.chambers[C.current_chamber] = null
 	V.user = user
 	in_chamber = V
-	if(Fire(A,user,params, "struggle" = struggle))
+	if (Fire(A,user,params, "struggle" = struggle))
 		return
 	else
 		V.vial = null

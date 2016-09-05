@@ -15,15 +15,15 @@
 /obj/machinery/wish_granter/attack_hand(var/mob/user as mob)
 	usr.set_machine(src)
 
-	if(charges <= 0)
+	if (charges <= 0)
 		to_chat(user, "<span class='notice'>\the [src] lies silent.</span>")
 		return
 
-	else if(!istype(user, /mob/living/carbon/human))
+	else if (!istype(user, /mob/living/carbon/human))
 		to_chat(user, "<span class='sinister'>You feel a dark stirring inside of \the [src], something you want nothing of! Your instincts are better than any man's.</span>")
 		return
 
-	else if(is_special_character(user))
+	else if (is_special_character(user))
 		to_chat(user, "<span class='sinister'>Even to a heart as dark as yours, you know nothing good will come out of messing with \the [src]! Something instinctual pulls you away.</span>")
 
 	else if (!insisting)
@@ -60,7 +60,7 @@
 				user.mutations.Add(M_TK)
 
 			/* Not used
-			if(!(HEAL in user.mutations))
+			if (!(HEAL in user.mutations))
 				user.mutations.Add(HEAL)
 			*/
 
@@ -74,7 +74,7 @@
 			user.mind.objectives += silence
 
 			var/obj_count = 1
-			for(var/datum/objective/OBJ in user.mind.objectives)
+			for (var/datum/objective/OBJ in user.mind.objectives)
 				to_chat(user, "<B>Objective #[obj_count]</B>: [OBJ.explanation_text]")
 				obj_count++
 

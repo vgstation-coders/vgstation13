@@ -24,10 +24,10 @@
 	H.emote("me", 1, "starts turning very red..")
 
 /datum/genetics/side_effect/genetic_burn/finish(mob/living/carbon/human/H)
-	if(!H.reagents.has_reagent(DEXALIN))
-		for(var/organ_name in H.organs_by_name)
+	if (!H.reagents.has_reagent(DEXALIN))
+		for (var/organ_name in H.organs_by_name)
 			var/datum/organ/external/E = H.organs_by_name[organ_name]
-			if(E)
+			if (E)
 				E.take_damage(0, 5, 0)
 
 /datum/genetics/side_effect/bone_snap
@@ -41,10 +41,10 @@
 	H.emote("me", 1, "'s limbs start shivering uncontrollably.")
 
 /datum/genetics/side_effect/bone_snap/finish(mob/living/carbon/human/H)
-	if(!H.reagents.has_reagent(BICARIDINE))
+	if (!H.reagents.has_reagent(BICARIDINE))
 		var/organ_name = pick(H.organs_by_name)
 		var/datum/organ/external/E = H.organs_by_name[organ_name]
-		if(E)
+		if (E)
 			E.take_damage(20, 0, 0)
 			E.fracture()
 
@@ -59,7 +59,7 @@
 		H.emote("me", 1, "has drool running down from his mouth.")
 
 	finish(mob/living/carbon/human/H)
-		if(!H.reagents.has_reagent(ANTI_TOXIN))
+		if (!H.reagents.has_reagent(ANTI_TOXIN))
 			H.monkeyize()**/
 
 /datum/genetics/side_effect/confuse
@@ -73,24 +73,24 @@
 	H.emote("me", 1, "has drool running down from his mouth.")
 
 /datum/genetics/side_effect/confuse/finish(mob/living/carbon/human/H)
-	if(!H.reagents.has_reagent(ANTI_TOXIN))
+	if (!H.reagents.has_reagent(ANTI_TOXIN))
 		H.confused += 100
 
 proc/trigger_side_effect(mob/living/carbon/human/H)
 	spawn
-		if(!istype(H))
+		if (!istype(H))
 			return
 		var/tp = pick(typesof(/datum/genetics/side_effect) - /datum/genetics/side_effect)
 		var/datum/genetics/side_effect/S = new tp
 
 		S.start(H)
 		spawn(20)
-			if(!istype(H))
+			if (!istype(H))
 				return
 			H.Weaken(rand(0, S.duration / 50))
 		sleep(S.duration)
 
-		if(!istype(H))
+		if (!istype(H))
 			return
 		H.SetWeakened(0)
 		S.finish(H)

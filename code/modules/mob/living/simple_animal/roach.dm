@@ -63,14 +63,14 @@
 	health = maxHealth
 
 /mob/living/simple_animal/cockroach/Die(var/gore = 1)
-	if(gore)
+	if (gore)
 
 		var/obj/effect/decal/remains = new /obj/effect/decal/cleanable/cockroach_remains(src.loc)
 		remains.dir = src.dir
 		remains.pixel_x = src.pixel_x
 		remains.pixel_y = src.pixel_y
 
-		if(flying)
+		if (flying)
 			animate(remains, pixel_y = pixel_y - 8 * PIXEL_MULTIPLIER, 5, 1) //Fall down gracefully
 
 		playsound(get_turf(src), pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg'), 40, 1) //Splat
@@ -84,62 +84,62 @@
 		return ..()
 
 /mob/living/simple_animal/cockroach/Crossed(mob/living/O)
-	if(!istype(O))
+	if (!istype(O))
 		return
 
-	if(src.size > O.size - 2)
+	if (src.size > O.size - 2)
 		return //Human sized dudes can stomp default-sized cockroaches just fine. For bigger roaches you need bigger dudes
-	if(flying)
+	if (flying)
 		return
-	if(O.a_intent == I_HELP)
+	if (O.a_intent == I_HELP)
 		return //Must be on harm intent to stomp
-	if(O.isUnconscious())
+	if (O.isUnconscious())
 		return
 
-	if(prob(15))
+	if (prob(15))
 		Die(gore = 1)
 
 /mob/living/simple_animal/cockroach/wander_move(turf/dest)
 	..()
 
 	//First, check for any food in our new surroundings
-	for(var/obj/item/weapon/reagent_containers/food/F in loc)
+	for (var/obj/item/weapon/reagent_containers/food/F in loc)
 		//If there is food, climb on it (using pixel_x and pixel_y manipulation)
 		animate(src, pixel_x = F.pixel_x + rand(-4,4) * PIXEL_MULTIPLIER, pixel_y = F.pixel_y + rand(-4,4) * PIXEL_MULTIPLIER, rand(10,20), 1)
 
 		layer = F.layer + 0.01
 
-		if(flying)
+		if (flying)
 			stop_flying(anim = 0)
 
 		spawn()
 			turns_since_move -= rand(5,20) //Stay here for a while. turns_since_move is set to 0 immediately after this proc, so the spawn() is required.
 
-			if((last_laid_eggs + egg_laying_cooldown < world.time) && prob(egg_laying_chance)) //75% chance of laying eggs under food
+			if ((last_laid_eggs + egg_laying_cooldown < world.time) && prob(egg_laying_chance)) //75% chance of laying eggs under food
 				sleep(rand(1,5) SECONDS)
 
 				//And yeah, roaches can lay eggs on their own eggs. This is kinda intended
 
-				if(F && F.reagents)
+				if (F && F.reagents)
 					F.reagents.add_reagent(TOXIN, rand(0.2,0.6)) //Add some toxin to the food
 					lay_eggs()
 
 		return //Don't do anything after that
 
 	//Then, check for any trash
-	for(var/obj/item/trash/T in loc)
+	for (var/obj/item/trash/T in loc)
 		//If there is trash, climb under it (using pixel_x, pixel_y and layer manipulation)
 		animate(src, pixel_x = T.pixel_x, pixel_y = T.pixel_y, rand(10,30), 1)
 
 		layer = T.layer - 0.01
 
-		if(flying)
+		if (flying)
 			stop_flying(anim = 0)
 
 		spawn()
 			turns_since_move -= rand(5,20) //Stay here for a while
 
-			if((last_laid_eggs + egg_laying_cooldown < world.time) && prob(egg_laying_chance * 0.25)) //Chance of laying eggs under trash is 1/4 of normal
+			if ((last_laid_eggs + egg_laying_cooldown < world.time) && prob(egg_laying_chance * 0.25)) //Chance of laying eggs under trash is 1/4 of normal
 				sleep(rand(1,5) SECONDS)
 
 				lay_eggs()
@@ -148,7 +148,7 @@
 
 	//If there's no food, check for any walls to climb on
 	var/turf/simulated/wall/T = dest //If we attempted to move into a wall
-	if(istype(T))
+	if (istype(T))
 		var/check_dir = get_dir(src, dest)
 
 		//Climb on it!
@@ -167,18 +167,18 @@
 /mob/living/simple_animal/cockroach/Move()
 	..()
 
-	if(!flying)
+	if (!flying)
 		reset_plane_and_layer() //Since cucarachas can hide under trash (which modifies their layer), this is kinda necessary
 
 /mob/living/simple_animal/cockroach/adjustBruteLoss() //When receiving damage
 	..()
 
-	if(health > 0) //Still alive
+	if (health > 0) //Still alive
 
-		if(!flying)
+		if (!flying)
 			start_flying()
 
-		if(usr)
+		if (usr)
 			var/mob/user = usr
 			var/turf/new_location = get_step(src, turn(get_dir(src,user),180)) //Walk away from the source of the damage
 
@@ -188,7 +188,7 @@
 			stop_flying()
 
 /mob/living/simple_animal/cockroach/proc/start_flying(var/anim = 1)
-	if(isUnconscious())
+	if (isUnconscious())
 		return
 
 	speed = -4
@@ -207,7 +207,7 @@
 
 	plane = MOB_PLANE
 
-	if(anim)
+	if (anim)
 		animate(src, pixel_y = pixel_y + 8 * PIXEL_MULTIPLIER, 10, 1, ELASTIC_EASING)
 
 /mob/living/simple_animal/cockroach/proc/stop_flying(var/anim = 1)
@@ -224,11 +224,11 @@
 
 	reset_plane_and_layer()
 
-	if(anim)
+	if (anim)
 		animate(src, pixel_y = pixel_y - 8 * PIXEL_MULTIPLIER, 5, 1, ELASTIC_EASING)
 
 /mob/living/simple_animal/cockroach/proc/lay_eggs()
-	if((cockroach_egg_amount >= max_unhatchable_eggs_in_world) && (animal_count[src.type] >= ANIMAL_CHILD_CAP)) //If roaches can't breed anymore (too many of them), and there are more than 30 eggs in the world, don't create eggs
+	if ((cockroach_egg_amount >= max_unhatchable_eggs_in_world) && (animal_count[src.type] >= ANIMAL_CHILD_CAP)) //If roaches can't breed anymore (too many of them), and there are more than 30 eggs in the world, don't create eggs
 		last_laid_eggs = world.time
 		return
 
@@ -239,7 +239,7 @@
 	E.pixel_x = src.pixel_x
 	E.pixel_y = src.pixel_y
 
-	if((animal_count[src.type] < ANIMAL_CHILD_CAP))
+	if ((animal_count[src.type] < ANIMAL_CHILD_CAP))
 		last_laid_eggs = world.time //If the eggs can hatch, cooldown is 30 seconds
 		E.fertilize()
 
@@ -248,7 +248,7 @@
 		last_laid_eggs = world.time - 60 SECONDS //If roaches can't breed, they lay eggs slower.
 
 /mob/living/simple_animal/cockroach/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/weapon/newspaper))
+	if (istype(W, /obj/item/weapon/newspaper))
 		user.visible_message("<span class='danger'>[user] swats \the [src] with \the [W]!</span>", "<span class='danger'>You swat \the [src] with \the [W].</span>")
 		W.desc = "[initial(W.desc)] <span class='notice'>There is a splattered [src] on the back.</span>"
 
@@ -266,17 +266,17 @@
 	return //Survive nuclear blasts
 
 /mob/living/simple_animal/cockroach/reagent_act(id, method, volume)
-	if(isDead())
+	if (isDead())
 		return
 
 	.=..()
 
-	switch(id)
-		if(TOXIN)
+	switch (id)
+		if (TOXIN)
 			Die(gore = 0)
 
 /mob/living/simple_animal/cockroach/bite_act(mob/living/carbon/human/H)
-	if(size >= H.size)
+	if (size >= H.size)
 		return
 
 	playsound(get_turf(H),'sound/items/eatfood.ogg', rand(10,50), 1)

@@ -51,12 +51,12 @@
 	update_icon()
 
 /obj/item/weapon/reagent_containers/syringe/attack_self(mob/user as mob)
-	switch(mode)
-		if(SYRINGE_DRAW)
+	switch (mode)
+		if (SYRINGE_DRAW)
 			mode = SYRINGE_INJECT
-		if(SYRINGE_INJECT)
+		if (SYRINGE_INJECT)
 			mode = SYRINGE_DRAW
-		if(SYRINGE_BROKEN)
+		if (SYRINGE_BROKEN)
 			return
 	update_icon()
 
@@ -68,18 +68,18 @@
 	return attack_hand(user)
 
 /obj/item/weapon/reagent_containers/syringe/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
-	if(proximity_flag == 0) // not adjacent
+	if (proximity_flag == 0) // not adjacent
 		return
 
-	if(!target.reagents)
+	if (!target.reagents)
 		return
 
-	if(mode == SYRINGE_BROKEN)
+	if (mode == SYRINGE_BROKEN)
 		to_chat(user, "<span class='warning'>\The [src] is broken!</span>")
 		return
 
 	if (user.a_intent == I_HURT && ismob(target))
-		if((M_CLUMSY in user.mutations) && prob(50))
+		if ((M_CLUMSY in user.mutations) && prob(50))
 			target = user
 
 		if (target != user && !can_stab) // You still can stab yourself if you're clumsy, honk
@@ -95,15 +95,15 @@
 		handle_inject(target, user)
 
 /obj/item/weapon/reagent_containers/syringe/update_icon()
-	if(mode == SYRINGE_BROKEN)
+	if (mode == SYRINGE_BROKEN)
 		icon_state = "broken"
 		overlays.len = 0
 		return
 	var/rounded_vol = round(reagents.total_volume,5)
 	overlays.len = 0
-	if(ismob(loc))
+	if (ismob(loc))
 		var/injoverlay
-		switch(mode)
+		switch (mode)
 			if (SYRINGE_DRAW)
 				injoverlay = "draw"
 			if (SYRINGE_INJECT)
@@ -112,7 +112,7 @@
 	icon_state = "[rounded_vol]"
 	item_state = "syringe_[rounded_vol]"
 
-	if(reagents.total_volume)
+	if (reagents.total_volume)
 		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "syringe10")
 
 		filling.icon_state = "syringe[rounded_vol]"
@@ -141,9 +141,9 @@
 		if (reagents.has_reagent(BLOOD)) // TODO Current reagent system can't handle multiple blood sources properly
 			to_chat(user, "<span class='warning'>There is already a blood sample in this syringe!</span>")
 			return
-		if(ishuman(target))
+		if (ishuman(target))
 			var/mob/living/carbon/human/H = target
-			if(H.species && (H.species.chem_flags & NO_INJECT))
+			if (H.species && (H.species.chem_flags & NO_INJECT))
 				user.visible_message("<span class='warning'>[user] attempts to poke [H] with \the [src] but it won't go in!</span>", "<span class='notice'>You fail to pierce [H] with \the [src]</span>")
 				return
 
@@ -268,7 +268,7 @@
 			return
 
 		var/hit_area = affecting.display_name
-		if((user != target) && H.check_shields(7, "the [src.name]"))
+		if ((user != target) && H.check_shields(7, "the [src.name]"))
 			return
 
 		// Check for protection on the targeted area and show messages
@@ -299,7 +299,7 @@
 	src.update_icon()
 
 /obj/item/weapon/reagent_containers/syringe/restock()
-	if(mode == 2) //SYRINGE_BROKEN
+	if (mode == 2) //SYRINGE_BROKEN
 		mode = 0 //SYRINGE_DRAW
 		update_icon()
 

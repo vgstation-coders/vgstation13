@@ -144,19 +144,19 @@ var/const/POS_HEADER = {"<html>
 /obj/machinery/pos/New()
 	..()
 	id = current_pos_id++
-	if(ticker)
+	if (ticker)
 		initialize()
 	update_icon()
 
 /obj/machinery/pos/initialize()
 	..()
-	if(department)
+	if (department)
 		linked_account = department_accounts[department]
 	else
 		linked_account = station_account
 
 /obj/machinery/pos/proc/AddToOrder(var/name, var/units)
-	if(!(name in products))
+	if (!(name in products))
 		return 0
 	var/line_item/LI = products[name]
 	var/line_item/LIC = new
@@ -188,7 +188,7 @@ var/const/POS_HEADER = {"<html>
 				<th>Line Total</th>
 			</tr>"}
 	var/subtotal=0
-	for(var/i=1;i<=line_items.len;i++)
+	for (var/i=1;i<=line_items.len;i++)
 		var/line_item/LI = line_items[i]
 		var/linetotal=LI.units*LI.price
 		receipt += "<tr class=\"[(i%2)?"even":"odd"]\"><th>[LI.name]</th><td>[LI.units]</td><td>$[num2septext(LI.price)]</td><td>$[num2septext(linetotal)]</td></tr>"
@@ -240,8 +240,8 @@ var/const/POS_HEADER = {"<html>
 				<th>...</th>
 			</tr>"}
 	var/subtotal=0
-	if(line_items.len>0)
-		for(var/i=1;i<=line_items.len;i++)
+	if (line_items.len>0)
+		for (var/i=1;i<=line_items.len;i++)
 			var/line_item/LI = line_items[i]
 			var/linetotal=LI.units*LI.price
 			receipt += {"<tr class=\"[(i%2)?"even":"odd"]\">
@@ -254,9 +254,9 @@ var/const/POS_HEADER = {"<html>
 			subtotal += linetotal
 	var/taxes = POS_TAX_RATE*subtotal
 	var/presets = "<i>(No presets available)</i>"
-	if(products.len>0)
+	if (products.len>0)
 		presets = {"<select name="preset">""}
-		for(var/pid in products)
+		for (var/pid in products)
 			var/line_item/product = products[pid]
 			presets += {"<option value="[pid]">[product.name]</option>"}
 		presets += "</select>"
@@ -294,7 +294,7 @@ var/const/POS_HEADER = {"<html>
 				<th># Sold</th>
 				<th>...</th>
 			</tr>"}
-	for(var/i in products)
+	for (var/i in products)
 		var/line_item/LI = products[i]
 		dat += {"<tr class=\"[(i%2)?"even":"odd"]\">
 			<th><a href="?src=\ref[src];setpname=[i]">[LI.name]</a></th>
@@ -315,7 +315,7 @@ var/const/POS_HEADER = {"<html>
 /obj/machinery/pos/proc/ExportScreen()
 	var/dat={"<fieldset><legend>Export Products as CSV</legend>
 		<textarea>"}
-	for(var/i in products)
+	for (var/i in products)
 		var/line_item/LI = products[i]
 		dat += "[LI.name],[LI.price]\n"
 	dat += {"</textarea>
@@ -361,22 +361,22 @@ var/const/POS_HEADER = {"<html>
 
 /obj/machinery/pos/update_icon()
 	overlays = 0
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
-	if(logged_in)
+	if (logged_in)
 		overlays += image(icon = icon, icon_state = "pos-working")
 	else
 		overlays += image(icon = icon, icon_state = "pos-standby")
 
 /obj/machinery/pos/attack_robot(var/mob/user)
-	if(isMoMMI(user))
+	if (isMoMMI(user))
 		return attack_hand(user)
 	return ..()
 
 /obj/machinery/pos/attack_hand(var/mob/user)
 	user.set_machine(src)
 	var/logindata=""
-	if(logged_in)
+	if (logged_in)
 		logindata={"<a href="?src=\ref[src];logout=1">[logged_in.name]</a>"}
 	var/dat = POS_HEADER + {"
 	<div class="navbar">
@@ -386,20 +386,20 @@ var/const/POS_HEADER = {"<html>
 		<a href="?src=\ref[src];screen=[POS_SCREEN_PRODUCTS]">Products</a> |
 		<a href="?src=\ref[src];screen=[POS_SCREEN_SETTINGS]">Settings</a>
 	</div>"}
-	switch(screen)
-		if(POS_SCREEN_LOGIN)
+	switch (screen)
+		if (POS_SCREEN_LOGIN)
 			dat += LoginScreen()
-		if(POS_SCREEN_ORDER)
+		if (POS_SCREEN_ORDER)
 			dat += OrderScreen()
-		if(POS_SCREEN_FINALIZE)
+		if (POS_SCREEN_FINALIZE)
 			dat += FinalizeScreen()
-		if(POS_SCREEN_PRODUCTS)
+		if (POS_SCREEN_PRODUCTS)
 			dat += ProductsScreen()
-		if(POS_SCREEN_EXPORT)
+		if (POS_SCREEN_EXPORT)
 			dat += ExportScreen()
-		if(POS_SCREEN_IMPORT)
+		if (POS_SCREEN_IMPORT)
 			dat += ImportScreen()
-		if(POS_SCREEN_SETTINGS)
+		if (POS_SCREEN_SETTINGS)
 			dat += SettingsScreen()
 
 	dat += "</body></html>"
@@ -408,46 +408,46 @@ var/const/POS_HEADER = {"<html>
 	return
 
 /obj/machinery/pos/Topic(var/href, var/list/href_list)
-	if(..(href,href_list))
+	if (..(href,href_list))
 		return
-	if("logout" in href_list)
-		if(alert(src, "You sure you want to log out?", "Confirm", "Yes", "No")!="Yes")
+	if ("logout" in href_list)
+		if (alert(src, "You sure you want to log out?", "Confirm", "Yes", "No")!="Yes")
 			return
 		logged_in=null
 		screen=POS_SCREEN_LOGIN
 		update_icon()
 		src.attack_hand(usr)
 		return
-	if(usr != logged_in)
-		if(logged_in)
+	if (usr != logged_in)
+		if (logged_in)
 			to_chat(usr, "<span class='warning'>[logged_in.name] is already logged in.  You cannot use this machine until they log out.</span>")
 		return
-	if("act" in href_list)
-		switch(href_list["act"])
-			if("Reset")
+	if ("act" in href_list)
+		switch (href_list["act"])
+			if ("Reset")
 				NewOrder()
 				screen=POS_SCREEN_ORDER
-			if("Finalize Sale")
+			if ("Finalize Sale")
 				var/subtotal=0
-				if(line_items.len>0)
-					for(var/i=1;i<=line_items.len;i++)
+				if (line_items.len>0)
+					for (var/i=1;i<=line_items.len;i++)
 						var/line_item/LI = line_items[i]
 						subtotal += LI.units*LI.price
 				var/taxes = POS_TAX_RATE*subtotal
 				credits_needed=taxes+subtotal
 				say("Your total is $[num2septext(credits_needed)].  Please insert credit chips or swipe your ID.")
 				screen=POS_SCREEN_FINALIZE
-			if("Add Product")
+			if ("Add Product")
 				var/line_item/LI = new
 				LI.name=sanitize(href_list["name"])
 				LI.price=text2num(href_list["price"])
 				products["[products.len+1]"]=LI
-			if("Add to Order")
+			if ("Add to Order")
 				AddToOrder(href_list["preset"],text2num(href_list["units"]))
-			if("Add Products")
-				for(var/list/line in splittext(href_list["csv"],"\n"))
+			if ("Add Products")
+				for (var/list/line in splittext(href_list["csv"],"\n"))
 					var/list/cells = splittext(line,",")
-					if(cells.len<2)
+					if (cells.len<2)
 						to_chat(usr, "<span class='warning'>The CSV must have at least two columns: Product Name, followed by Price (as a number).</span>")
 						src.attack_hand(usr)
 						return
@@ -455,43 +455,43 @@ var/const/POS_HEADER = {"<html>
 					LI.name=sanitize(cells[1])
 					LI.price=text2num(cells[2])
 					products["[products.len+1]"]=LI
-			if("Export Products")
+			if ("Export Products")
 				screen=POS_SCREEN_EXPORT
-			if("Import Products")
+			if ("Import Products")
 				screen=POS_SCREEN_IMPORT
-			if("Save Settings")
+			if ("Save Settings")
 				var/datum/money_account/new_linked_account = get_money_account(text2num(href_list["payableto"]),z)
-				if(!new_linked_account)
+				if (!new_linked_account)
 					to_chat(usr, "<span class='warning'>Unable to link new account.</span>")
 				else
 					linked_account = new_linked_account
 				screen=POS_SCREEN_SETTINGS
-	else if("screen" in href_list)
+	else if ("screen" in href_list)
 		screen=text2num(href_list["screen"])
-	else if("rmproduct" in href_list)
+	else if ("rmproduct" in href_list)
 		products.Remove(href_list["rmproduct"])
-	else if("removefromorder" in href_list)
+	else if ("removefromorder" in href_list)
 		RemoveFromOrder(text2num(href_list["removefromorder"]))
-	else if("setunits" in href_list)
+	else if ("setunits" in href_list)
 		var/lid = text2num(href_list["setunits"])
 		var/newunits = input(usr,"Enter the units sold.") as num
-		if(!newunits)
+		if (!newunits)
 			return
 		var/line_item/LI = line_items[lid]
 		LI.units = newunits
 		line_items[lid]=LI
-	else if("setpname" in href_list)
+	else if ("setpname" in href_list)
 		var/newtext = sanitize(input(usr,"Enter the product's name."))
-		if(!newtext)
+		if (!newtext)
 			return
 		var/pid = href_list["setpname"]
 		var/line_item/LI = products[pid]
-		if(LI)
+		if (LI)
 			LI.name = newtext
 			products[pid]=LI
-	else if("setprice" in href_list)
+	else if ("setprice" in href_list)
 		var/newprice = input(usr,"Enter the product's price.") as num
-		if(!newprice)
+		if (!newprice)
 			return
 		var/pid = href_list["setprice"]
 		var/line_item/LI = products[pid]
@@ -500,9 +500,9 @@ var/const/POS_HEADER = {"<html>
 	src.attack_hand(usr)
 
 /obj/machinery/pos/attackby(var/atom/movable/A, var/mob/user)
-	if(istype(A,/obj/item/weapon/card/id))
+	if (istype(A,/obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/I = A
-		if(!logged_in)
+		if (!logged_in)
 			user.visible_message("<span class='notice'>The machine beeps, and logs you in</span>","You hear a beep.")
 			logged_in = user
 			screen=POS_SCREEN_ORDER
@@ -510,20 +510,20 @@ var/const/POS_HEADER = {"<html>
 			src.attack_hand(user) //why'd you use usr nexis, why
 			return
 		else
-			if(!linked_account)
+			if (!linked_account)
 				visible_message("<span class='warning'>The machine buzzes, and flashes \"NO LINKED ACCOUNT\" on the screen.</span>","You hear a buzz.")
 				flick(src,"pos-error")
 				return
-			if(screen!=POS_SCREEN_FINALIZE)
+			if (screen!=POS_SCREEN_FINALIZE)
 				visible_message("<span class='notice'>The machine buzzes.</span>","<span class='warning'>You hear a buzz.</span>")
 				flick(src,"pos-error")
 				return
 			var/datum/money_account/acct = get_card_account(I)
-			if(!acct)
+			if (!acct)
 				visible_message("<span class='warning'>The machine buzzes, and flashes \"NO ACCOUNT\" on the screen.</span>","You hear a buzz.")
 				flick(src,"pos-error")
 				return
-			if(credits_needed > acct.money)
+			if (credits_needed > acct.money)
 				visible_message("<span class='warning'>The machine buzzes, and flashes \"NOT ENOUGH FUNDS\" on the screen.</span>","You hear a buzz.")
 				flick(src,"pos-error")
 				return
@@ -533,25 +533,25 @@ var/const/POS_HEADER = {"<html>
 			acct.charge(credits_needed,linked_account,"Purchase at POS #[id].")
 			credits_needed=0
 			screen=POS_SCREEN_ORDER
-	else if(istype(A,/obj/item/weapon/spacecash))
-		if(!linked_account)
+	else if (istype(A,/obj/item/weapon/spacecash))
+		if (!linked_account)
 			visible_message("<span class='warning'>The machine buzzes, and flashes \"NO LINKED ACCOUNT\" on the screen.</span>","You hear a buzz.")
 			flick(src,"pos-error")
 			return
-		if(!logged_in || screen!=POS_SCREEN_FINALIZE)
+		if (!logged_in || screen!=POS_SCREEN_FINALIZE)
 			visible_message("<span class='notice'>The machine buzzes.</span>","<span class='warning'>You hear a buzz.</span>")
 			flick(src,"pos-error")
 			return
 		var/obj/item/weapon/spacecash/C=A
 		credits_held += C.worth*C.amount
-		if(credits_held >= credits_needed)
+		if (credits_held >= credits_needed)
 			visible_message("<span class='notice'>The machine beeps, and begins printing a receipt</span>","You hear a beep and the sound of paper being shredded.")
 			PrintReceipt()
 			NewOrder()
 			credits_held -= credits_needed
 			credits_needed=0
 			screen=POS_SCREEN_ORDER
-			if(credits_held)
+			if (credits_held)
 				var/obj/item/weapon/storage/box/B = new(loc)
 				dispense_cash(credits_held,B)
 				B.name="change"

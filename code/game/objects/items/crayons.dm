@@ -76,7 +76,7 @@ var/global/list/all_graffitis = list(
 	uses = 0
 
 /obj/item/toy/crayon/mime/attack_self(mob/living/user as mob) //inversion
-	if(colour != "#FFFFFF" && shadeColour != "#000000")
+	if (colour != "#FFFFFF" && shadeColour != "#000000")
 		colour = "#FFFFFF"
 		shadeColour = "#000000"
 		to_chat(user, "You will now draw in white and black with this crayon.")
@@ -101,24 +101,24 @@ var/global/list/all_graffitis = list(
 #define FONT_SIZE "6pt"
 #define FONT_NAME "Comic Sans MS"
 /obj/item/toy/crayon/afterattack(atom/target, mob/user as mob, proximity)
-	if(!proximity)
+	if (!proximity)
 		return
 
-	if(istype(target, /turf/simulated))
+	if (istype(target, /turf/simulated))
 		var/drawtype = input("Choose what you'd like to draw.", "Crayon scribbles") in list("graffiti","rune","letter","text")
 		var/preference
 		var/alignment = "center" //For text
 		var/drawtime = 50
 
-		switch(drawtype)
-			if("letter")
+		switch (drawtype)
+			if ("letter")
 				drawtype = input("Choose the letter.", "Crayon scribbles") in list("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z")
 				to_chat(user, "You start drawing a letter on the [target.name].")
-			if("graffiti")
+			if ("graffiti")
 				var/list/graffitis = list("Random" = "graffiti") + all_graffitis
-				if(istype(user,/mob/living/carbon/human))
+				if (istype(user,/mob/living/carbon/human))
 					var/mob/living/carbon/human/M=user
-					if(M.getBrainLoss() >= 60)
+					if (M.getBrainLoss() >= 60)
 						graffitis = list(
 							"Cancel"="cancel",
 							"Dick"="dick[rand(1,3)]",
@@ -126,29 +126,29 @@ var/global/list/all_graffitis = list(
 							)
 				preference = input("Choose the graffiti.", "Crayon scribbles") as null|anything in graffitis
 
-				if(!preference)
+				if (!preference)
 					return
 
 				drawtype=graffitis[preference]
 				to_chat(user, "You start drawing graffiti on \the [target].")
-			if("rune")
+			if ("rune")
 				to_chat(user, "You start drawing a rune on \the [target].")
-			if("text")
+			if ("text")
 				#define MAX_LETTERS 15
 				preference = input("Write some text here (maximum [MAX_LETTERS] letters).", "Crayon scribbles") as null|text
 				preference = copytext(preference, 1, MAX_LETTERS)
 				#undef MAX_LETTERS
 
 				var/letter_amount = length(replacetext(preference, " ", ""))
-				if(!letter_amount) //If there is no text
+				if (!letter_amount) //If there is no text
 					return
 				drawtime = 4 * letter_amount //10 letters = 4 seconds
 
 				alignment = input("Select vertical text alignment (your text is \"[preference]\")", "Crayon scribbles") as null|anything in list("middle", "bottom", "top")
-				if(!alignment)
+				if (!alignment)
 					return
 
-				if(user.client)
+				if (user.client)
 					var/image/I = image(icon = null) //Create an empty image. You can't just do "image()" for some reason, at least one argument is needed
 					I.maptext = {"<span style="color:[colour];font-size:[FONT_SIZE];font-family:'[FONT_NAME]';" valign="[alignment]">[preference]</span>"}
 					I.loc = get_turf(target)
@@ -163,20 +163,20 @@ var/global/list/all_graffitis = list(
 					I.loc = null
 					I = null
 
-					if(continue_drawing != "Yes")
+					if (continue_drawing != "Yes")
 						return
 
 				to_chat(user, "You start writing \"[preference]\" on \the [target].")
 
-		if(!user.Adjacent(target))
+		if (!user.Adjacent(target))
 			return
-		if(target.density && !cardinal.Find(get_dir(user, target))) //Drawing on a wall and not standing in a cardinal direction - don't draw
+		if (target.density && !cardinal.Find(get_dir(user, target))) //Drawing on a wall and not standing in a cardinal direction - don't draw
 			to_chat(user, "<span class='warning'>You can't reach \the [target] from here!</span>")
 			return
 
-		if(instant || do_after(user,target, drawtime))
+		if (instant || do_after(user,target, drawtime))
 			var/obj/effect/decal/cleanable/C
-			if(drawtype == "text")
+			if (drawtype == "text")
 				C = new /obj/effect/decal/cleanable(target)
 				C.name = "written text"
 				C.desc = "\"[preference]\", written in crayon."
@@ -188,7 +188,7 @@ var/global/list/all_graffitis = list(
 			else
 				C = new /obj/effect/decal/cleanable/crayon(target,colour,shadeColour,drawtype)
 
-			if(target.density && (C.loc != get_turf(user))) //Drawn on a wall (while standing on a floor)
+			if (target.density && (C.loc != get_turf(user))) //Drawn on a wall (while standing on a floor)
 				C.forceMove(get_turf(user))
 
 				var/angle = dir2angle_t(get_dir(C, target))
@@ -199,9 +199,9 @@ var/global/list/all_graffitis = list(
 
 			to_chat(user, "You finish drawing.")
 			target.add_fingerprint(user)		// Adds their fingerprints to the floor the crayon is drawn on.
-			if(uses)
+			if (uses)
 				uses--
-				if(!uses)
+				if (!uses)
 					to_chat(user, "<span class='warning'>You used up your crayon!</span>")
 					qdel(src)
 	return
@@ -210,12 +210,12 @@ var/global/list/all_graffitis = list(
 #undef FONT_NAME
 
 /obj/item/toy/crayon/attack(mob/M as mob, mob/user as mob)
-	if(M == user)
+	if (M == user)
 		to_chat(user, "You take a bite of the crayon. Delicious!")
 		user.nutrition += 5
-		if(uses)
+		if (uses)
 			uses -= 5
-			if(uses <= 0)
+			if (uses <= 0)
 				to_chat(user, "<span class='warning'>You ate your crayon!</span>")
 				qdel(src)
 	else

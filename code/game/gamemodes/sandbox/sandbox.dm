@@ -17,7 +17,7 @@
 
 /datum/game_mode/sandbox/post_setup()
 	..()
-	for(var/mob/M in player_list)
+	for (var/mob/M in player_list)
 		M.CanBuild()
 	//if(emergency_shuttle)
 	//	emergency_shuttle.always_fake_recall = 1

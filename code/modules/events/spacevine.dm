@@ -4,7 +4,7 @@
 
 /datum/event/spacevine/start()
 	//biomass is basically just a resprited version of space vines
-	if(prob(50))
+	if (prob(50))
 		spacevine_infestation()
 	else
 		biomass_infestation()

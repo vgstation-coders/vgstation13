@@ -14,7 +14,7 @@
 /obj/machinery/computer/curer/attackby(var/obj/I as obj, var/mob/user as mob)
 	/*if(istype(I, /obj/item/weapon/screwdriver))
 		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-		if(do_after(user, src, 20))
+		if (do_after(user, src, 20))
 			if (src.stat & BROKEN)
 				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
@@ -38,9 +38,9 @@
 				A.icon_state = "4"
 				A.anchored = 1
 				del(src)*/
-	if(istype(I,/obj/item/weapon/virusdish))
+	if (istype(I,/obj/item/weapon/virusdish))
 		var/mob/living/carbon/c = user
-		if(!dish)
+		if (!dish)
 
 			dish = I
 			c.drop_item()
@@ -60,18 +60,18 @@
 	return
 
 /obj/machinery/computer/curer/attack_hand(var/mob/user as mob)
-	if(..())
+	if (..())
 		return
 	user.machine = src
 	var/dat
-	if(curing)
+	if (curing)
 		dat = "Antibody production in progress"
-	else if(virusing)
+	else if (virusing)
 		dat = "Virus production in progress"
-	else if(dish)
+	else if (dish)
 		dat = "Virus dish inserted"
-		if(dish.virus2)
-			if(dish.growth >= 100)
+		if (dish.virus2)
+			if (dish.growth >= 100)
 				dat += "<BR><A href='?src=\ref[src];antibody=1'>Begin antibody production</a>"
 				dat += "<BR><A href='?src=\ref[src];virus=1'>Begin virus production</a>"
 			else
@@ -90,28 +90,28 @@
 /obj/machinery/computer/curer/process()
 	..()
 
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 	use_power(500)
 	src.updateDialog()
 
-	if(curing)
+	if (curing)
 		curing -= 1
-		if(curing == 0)
+		if (curing == 0)
 			icon_state = "dna"
-			if(dish.virus2)
+			if (dish.virus2)
 				createcure(dish.virus2)
-	if(virusing)
+	if (virusing)
 		virusing -= 1
-		if(virusing == 0)
+		if (virusing == 0)
 			icon_state = "dna"
-			if(dish.virus2)
+			if (dish.virus2)
 				createvirus(dish.virus2)
 
 	return
 
 /obj/machinery/computer/curer/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
 		usr.machine = src
@@ -124,7 +124,7 @@
 			virusing = 30
 			dish.growth -= 100
 			src.icon_state = "dna"
-		else if(href_list["eject"])
+		else if (href_list["eject"])
 			dish.forceMove(src.loc)
 			dish = null
 
@@ -136,7 +136,7 @@
 /obj/machinery/computer/curer/proc/createcure(var/datum/disease2/disease/virus2)
 	var/obj/item/weapon/cureimplanter/implanter = new /obj/item/weapon/cureimplanter(src.loc)
 	implanter.resistance = new /datum/disease2/resistance(dish.virus2)
-	if(probG("Virus curing",3))
+	if (probG("Virus curing",3))
 		implanter.works = 0
 	else
 		implanter.works = rand(1,2)
@@ -151,5 +151,5 @@
 
 
 /obj/machinery/computer/curer/proc/state(var/msg)
-	for(var/mob/O in hearers(src, null))
+	for (var/mob/O in hearers(src, null))
 		O.show_message("[bicon(src)] <span class='notice'>[msg]</span>", 2)

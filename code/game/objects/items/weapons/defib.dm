@@ -30,30 +30,30 @@
 
 /obj/item/weapon/melee/defibrillator/update_icon()
 	icon_state = "defib"
-	if(ready)
+	if (ready)
 		icon_state += "paddleout"
 	else
 		icon_state += "paddlein"
-	switch(charges/initial(charges))
-		if(0.7 to INFINITY) //Just in case the defib somehow gets more charges than initial
+	switch (charges/initial(charges))
+		if (0.7 to INFINITY) //Just in case the defib somehow gets more charges than initial
 			icon_state += "_full"
-		if(0.4 to 0.6)
+		if (0.4 to 0.6)
 			icon_state += "_half"
-		if(0.01 to 0.3) //Make sure it's really empty dawg
+		if (0.01 to 0.3) //Make sure it's really empty dawg
 			icon_state += "_low"
 		else
 			icon_state += "_empty"
 	return
 
 /obj/item/weapon/melee/defibrillator/attack_self(mob/user)
-	if(charges || ready)
-		if((M_CLUMSY in user.mutations) && prob(50) && charges)
+	if (charges || ready)
+		if ((M_CLUMSY in user.mutations) && prob(50) && charges)
 			to_chat(user, "<span class='warning'>You touch the paddles together, shorting the device.</span>")
 			sparks.start()
 			playsound(get_turf(src),'sound/items/defib.ogg',50,1)
 			user.Weaken(5)
 			var/mob/living/carbon/human/H = user
-			if(ishuman(user))
+			if (ishuman(user))
 				H.apply_damage(20, BURN)
 			charges--
 			update_icon()
@@ -71,13 +71,13 @@
 	..()
 	item_state = "fireaxe[wielded ? 1 : 0]"
 	force = wielded ? 40 : 10
-	if(user)
+	if (user)
 		user.update_inv_hands()
 
 /obj/item/weapon/melee/defibrillator/attackby(obj/item/weapon/W,mob/user)
-	if(istype(W,/obj/item/weapon/card/emag))
+	if (istype(W,/obj/item/weapon/card/emag))
 		emagged = !src.emagged
-		if(emagged)
+		if (emagged)
 			to_chat(user, "<span class='warning'>You short out [src]'s safety protocols.</span>")
 			overlays += image(icon = icon, icon_state = "defib_emag")
 		else
@@ -88,16 +88,16 @@
 	return
 
 /obj/item/weapon/melee/defibrillator/attack(mob/M,mob/user)
-	if(!ishuman(M))
+	if (!ishuman(M))
 		to_chat(user, "<span class='warning'>You can't defibrilate [M]. You don't even know where to put the paddles!</span>")
-	else if(!charges)
+	else if (!charges)
 		to_chat(user, "<span class='warning'>[src] is out of charges.</span>")
-	else if(!ready)
+	else if (!ready)
 		to_chat(user, "<span class='warning'>Take the paddles out first.</span>")
 	else
 		var/mob/living/carbon/human/target = M
-		if(!(target.stat == 2 || target.stat == DEAD))
-			if(emagged)
+		if (!(target.stat == 2 || target.stat == DEAD))
+			if (emagged)
 				shockAttack(target,user)
 			else
 				to_chat(user, "<span class='warning'>[src] buzzes: Vital signs detected.</span>")
@@ -117,7 +117,7 @@
 		user.attack_log += "\[[time_stamp()]\]<font color='red'> Shocked [target.name] ([target.ckey]) with an emagged [src.name]</font>"
 		target.attack_log += "\[[time_stamp()]\]<font color='orange'> Shocked by [user.name] ([user.ckey]) with an emagged [src.name]</font>"
 		log_attack("<font color='red'>[user.name] ([user.ckey]) shocked [target.name] ([target.ckey]) with an emagged [src.name]</font>" )
-		if(!iscarbon(user))
+		if (!iscarbon(user))
 			target.LAssailant = null
 		else
 			target.LAssailant = user
@@ -130,27 +130,27 @@
 /obj/item/weapon/melee/defibrillator/proc/attemptDefib(mob/living/carbon/human/target,mob/user)
 	user.visible_message("<span class='notice'>[user] starts setting up the paddles on [target]'s chest</span>", \
 	"<span class='notice'>You start setting up the paddles on [target]'s chest</span>")
-	if(do_after(user,target,30))
+	if (do_after(user,target,30))
 		sparks.start()
 		playsound(get_turf(src),'sound/items/defib.ogg',50,1)
 		charges--
 		update_icon()
 		to_chat(user, "<span class='notice'>You shock [target] with the paddles.</span>")
 		var/datum/organ/external/head/head = target.get_organ(LIMB_HEAD)
-		if(!head || head.status & ORGAN_DESTROYED || M_NOCLONE in target.mutations  || !target.has_brain() || target.suiciding == 1)
+		if (!head || head.status & ORGAN_DESTROYED || M_NOCLONE in target.mutations  || !target.has_brain() || target.suiciding == 1)
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
 			return
-		if(target.wear_suit && istype(target.wear_suit,/obj/item/clothing/suit/armor) && prob(95)) //75 ? Let's stay realistic here
+		if (target.wear_suit && istype(target.wear_suit,/obj/item/clothing/suit/armor) && prob(95)) //75 ? Let's stay realistic here
 			to_chat(user, "<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
 			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 			return
-		if(target.w_uniform && istype(target.w_uniform,/obj/item/clothing/under) && prob(50))
+		if (target.w_uniform && istype(target.w_uniform,/obj/item/clothing/under) && prob(50))
 			to_chat(user, "<span class='warning'>[src] buzzes: Defibrillation failed. Please apply on bare skin.</span>")
 			target.apply_damage(rand(1,5),BURN,LIMB_CHEST)
 			return
-		if(target.mind && !target.client) //Let's call up the ghost! Also, bodies with clients only, thank you.
+		if (target.mind && !target.client) //Let's call up the ghost! Also, bodies with clients only, thank you.
 			var/mob/dead/observer/ghost = get_ghost_from_mind(target.mind)
-			if(ghost && ghost.client && ghost.can_reenter_corpse)
+			if (ghost && ghost.client && ghost.can_reenter_corpse)
 				ghost << 'sound/effects/adminhelp.ogg'
 				to_chat(ghost, "<span class='interface big'><span class='bold'>Someone is trying to revive your body. Return to it if you want to be resurrected!</span> \
 					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
@@ -160,12 +160,12 @@
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
 			return
 		var/datum/organ/internal/heart/heart = target.internal_organs_by_name["heart"]
-		if(prob(25))
+		if (prob(25))
 			heart.damage += 5 //Allow the defibrilator to possibly worsen heart damage. Still rare enough to just be the "clone damage" of the defib
 		target.apply_damage(-target.getOxyLoss(),OXY)
 		target.updatehealth()
 		target.visible_message("<span class='danger'>[target]'s body convulses a bit.</span>")
-		if(target.health > config.health_threshold_dead)
+		if (target.health > config.health_threshold_dead)
 			target.timeofdeath = 0
 			target.visible_message("<span class='notice'>[src] beeps: Defibrillation successful.</span>")
 

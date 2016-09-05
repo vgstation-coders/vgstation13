@@ -18,40 +18,40 @@
 /obj/machinery/computer/am_engine/New()
 	..()
 	spawn( 24 )
-		for(var/obj/machinery/power/am_engine/engine/E in power_machines)
-			if(E.engine_id == src.engine_id)
+		for (var/obj/machinery/power/am_engine/engine/E in power_machines)
+			if (E.engine_id == src.engine_id)
 				src.connected_E = E
-		for(var/obj/machinery/power/am_engine/injector/I in power_machines)
-			if(I.engine_id == src.engine_id)
+		for (var/obj/machinery/power/am_engine/injector/I in power_machines)
+			if (I.engine_id == src.engine_id)
 				src.connected_I = I
 	return
 
 /obj/machinery/computer/am_engine/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 	usr.machine = src
 
-	if(!href_list["operation"])
+	if (!href_list["operation"])
 		return
-	switch(href_list["operation"])
+	switch (href_list["operation"])
 		// main interface
-		if("activate")
+		if ("activate")
 			src.connected_E.engine_process()
-		if("engine")
+		if ("engine")
 			src.state = STATE_ENGINE
-		if("injector")
+		if ("injector")
 			src.state = STATE_INJECTOR
-		if("main")
+		if ("main")
 			src.state = STATE_DEFAULT
-		if("login")
+		if ("login")
 			var/mob/M = usr
 			var/obj/item/weapon/card/id/I = M.equipped()
 			if (I && istype(I))
-				if(src.check_access(I))
+				if (src.check_access(I))
 					authenticated = 1
-		if("deactivate")
+		if ("deactivate")
 			src.connected_E.stopping = 1
-		if("logout")
+		if ("logout")
 			authenticated = 0
 
 	src.updateUsrDialog()
@@ -64,27 +64,27 @@
 	return src.attack_hand(user)
 
 /obj/machinery/computer/am_engine/attack_hand(var/mob/user as mob)
-	if(..())
+	if (..())
 		return
 	user.machine = src
 	var/dat = "<head><title>Engine Computer</title></head><body>"
-	switch(src.state)
-		if(STATE_DEFAULT)
+	switch (src.state)
+		if (STATE_DEFAULT)
 			if (src.authenticated)
 				dat += "<BR>\[ <A HREF='?src=\ref[src];operation=logout'>Log Out</A> \]<br>"
 				dat += "<BR>\[ <A HREF='?src=\ref[src];operation=engine'>Engine Menu</A> \]"
 				dat += "<BR>\[ <A HREF='?src=\ref[src];operation=injector'>Injector Menu</A> \]"
 			else
 				dat += "<BR>\[ <A HREF='?src=\ref[src];operation=login'>Log In</A> \]"
-		if(STATE_INJECTOR)
-			if(src.connected_I.injecting)
+		if (STATE_INJECTOR)
+			if (src.connected_I.injecting)
 				dat += "<BR>\[ Injecting \]<br>"
 			else
 				dat += "<BR>\[ Injecting not in progress \]<br>"
-		if(STATE_ENGINE)
-			if(src.connected_E.stopping)
+		if (STATE_ENGINE)
+			if (src.connected_E.stopping)
 				dat += "<BR>\[ STOPPING \]"
-			else if(src.connected_E.operating && !src.connected_E.stopping)
+			else if (src.connected_E.operating && !src.connected_E.stopping)
 				dat += "<BR>\[ <A HREF='?src=\ref[src];operation=deactivate'>Emergency Stop</A> \]"
 			else
 				dat += "<BR>\[ <A HREF='?src=\ref[src];operation=activate'>Activate Engine</A> \]"

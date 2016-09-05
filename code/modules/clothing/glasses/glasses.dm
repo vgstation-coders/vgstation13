@@ -135,12 +135,12 @@
 	set name = "Adjust welding goggles"
 	set src in usr
 	var/mob/C = usr
-	if(!usr)
-		if(!ismob(loc))
+	if (!usr)
+		if (!ismob(loc))
 			return
 		C = loc
-	if(!C.incapacitated())
-		if(src.up)
+	if (!C.incapacitated())
+		if (src.up)
 			src.up = !src.up
 			eyeprot = 2
 			body_parts_covered |= EYES
@@ -209,10 +209,10 @@
 	eyeprot = -2 //prepare for your eyes to get shit on
 
 	emp_act(severity)
-		if(istype(src.loc, /mob/living/carbon/human))
+		if (istype(src.loc, /mob/living/carbon/human))
 			var/mob/living/carbon/human/M = src.loc
 			to_chat(M, "<span class='warning'>The Optical Thermal Scanner overloads and blinds you!</span>")
-			if(M.glasses == src)
+			if (M.glasses == src)
 				M.eye_blind = 3
 				M.eye_blurry = 5
 				M.disabilities |= NEARSIGHTED
@@ -235,7 +235,7 @@
 	min_harm_label = 3
 	harm_label_examine = list("<span class='info'>A tiny label is on the lens.</span>","<span class='warning'>A label covers the lens!</span>")
 /obj/item/clothing/glasses/thermal/monocle/harm_label_update()
-	if(harm_labeled < min_harm_label)
+	if (harm_labeled < min_harm_label)
 		vision_flags |= SEE_MOBS
 		see_invisible |= SEE_INVISIBLE_MINIMUM
 		invisa_view = 2
@@ -252,7 +252,7 @@
 	min_harm_label = 3
 	harm_label_examine = list("<span class='info'>A tiny label is on the lens.</span>","<span class='warning'>A label covers the lens!</span>")
 /obj/item/clothing/glasses/thermal/eyepatch/harm_label_update()
-	if(harm_labeled < min_harm_label)
+	if (harm_labeled < min_harm_label)
 		vision_flags |= SEE_MOBS
 		see_invisible |= SEE_INVISIBLE_MINIMUM
 		invisa_view = 2

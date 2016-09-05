@@ -62,9 +62,9 @@
 */
 var/list/all_radios = list()
 /proc/add_radio(var/obj/item/radio, freq)
-	if(!freq || !radio)
+	if (!freq || !radio)
 		return
-	if(!all_radios["[freq]"])
+	if (!all_radios["[freq]"])
 		all_radios["[freq]"] = list(radio)
 		return freq
 
@@ -72,15 +72,15 @@ var/list/all_radios = list()
 	return freq
 
 /proc/remove_radio(var/obj/item/radio, freq)
-	if(!freq || !radio)
+	if (!freq || !radio)
 		return
-	if(!all_radios["[freq]"])
+	if (!all_radios["[freq]"])
 		return
 
 	all_radios["[freq]"] -= radio
 
 /proc/remove_radio_all(var/obj/item/radio)
-	for(var/freq in all_radios)
+	for (var/freq in all_radios)
 		all_radios["[freq]"] -= radio
 /*
 Frequency range: 1200 to 1600
@@ -197,7 +197,7 @@ var/global/datum/controller/radio/radio_controller
 /datum/controller/radio/proc/add_object(const/obj/device, const/_frequency, var/filter = null as text|null)
 	var/datum/radio_frequency/frequency = return_frequency(_frequency)
 
-	if(isnull(frequency))
+	if (isnull(frequency))
 		frequency = new
 		frequency.frequency = _frequency
 		frequencies[num2text(_frequency)] = frequency
@@ -208,10 +208,10 @@ var/global/datum/controller/radio/radio_controller
 /datum/controller/radio/proc/remove_object(const/obj/device, const/_frequency)
 	var/datum/radio_frequency/frequency = return_frequency(_frequency)
 
-	if(frequency)
+	if (frequency)
 		frequency.remove_listener(device)
 
-		if(frequency.devices.len <= 0)
+		if (frequency.devices.len <= 0)
 			frequencies.Remove(num2text(_frequency))
 
 	return 1
@@ -229,33 +229,33 @@ var/global/datum/controller/radio/radio_controller
 	//var/N_nf=0
 	//var/Nt=0
 	var/turf/start_point
-	if(range)
+	if (range)
 		start_point = get_turf(source)
-		if(!start_point)
+		if (!start_point)
 			returnToPool(signal)
 			return 0
 
 	if (filter) //here goes some copypasta. It is for optimisation. -rastaf0
-		for(var/obj/device in devices[filter])
-			if(device == source)
+		for (var/obj/device in devices[filter])
+			if (device == source)
 				continue
-			if(range)
+			if (range)
 				var/turf/end_point = get_turf(device)
-				if(!end_point)
+				if (!end_point)
 					continue
 				//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
-				if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
+				if (start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
 					continue
 			device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
-		for(var/obj/device in devices["_default"])
-			if(device == source)
+		for (var/obj/device in devices["_default"])
+			if (device == source)
 				continue
-			if(range)
+			if (range)
 				var/turf/end_point = get_turf(device)
-				if(!end_point)
+				if (!end_point)
 					continue
 				//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
-				if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
+				if (start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
 					continue
 			device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
 			//N_f++
@@ -264,15 +264,15 @@ var/global/datum/controller/radio/radio_controller
 		for (var/next_filter in devices)
 			//var/list/obj/DDD = devices[next_filter]
 			//Nt+=DDD.len
-			for(var/obj/device in devices[next_filter])
-				if(device == source)
+			for (var/obj/device in devices[next_filter])
+				if (device == source)
 					continue
-				if(range)
+				if (range)
 					var/turf/end_point = get_turf(device)
-					if(!end_point)
+					if (!end_point)
 						continue
 					//if(max(abs(start_point.x-end_point.x), abs(start_point.y-end_point.y)) <= range)
-					if(start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
+					if (start_point.z!=end_point.z || get_dist(start_point, end_point) > range)
 						continue
 				device.receive_signal(signal, TRANSMISSION_RADIO, frequency)
 				//N_nf++
@@ -283,12 +283,12 @@ var/global/datum/controller/radio/radio_controller
 	returnToPool(signal)
 
 /datum/radio_frequency/proc/add_listener(const/obj/device, var/filter)
-	if(!filter) // FIXME
+	if (!filter) // FIXME
 		filter = "_default"
 
 	var/list/devices_at_filter = devices[filter]
 
-	if(isnull(devices_at_filter))
+	if (isnull(devices_at_filter))
 		devices_at_filter = new
 		devices[filter] = devices_at_filter
 
@@ -300,14 +300,14 @@ var/global/datum/controller/radio/radio_controller
 	// 1. check if it's an object
 	// 2. check if it has contents
 	// 3. check if the device is in contents
-	if(devices_at_filter && devices_at_filter.len && devices_at_filter.Find(device))
+	if (devices_at_filter && devices_at_filter.len && devices_at_filter.Find(device))
 		devices_at_filter.Remove(device)
 
-		if(devices_at_filter.len <= 0)
+		if (devices_at_filter.len <= 0)
 			devices.Remove(filter)
 
 /datum/radio_frequency/remove_listener(const/obj/device)
-	for(var/filter in devices)
+	for (var/filter in devices)
 		..(device, filter)
 
 var/list/pointers = list()
@@ -316,14 +316,14 @@ var/list/pointers = list()
 	set name = "Debug Signals"
 	set category = "Debug"
 
-	if(!holder)
+	if (!holder)
 		return
 
 	to_chat(src, "There are [pointers.len] pointers:")
-	for(var/p in pointers)
+	for (var/p in pointers)
 		to_chat(src, p)
 		var/datum/signal/S = locate(p)
-		if(istype(S))
+		if (istype(S))
 			to_chat(src, S.debug_print())
 
 /obj/proc/receive_signal(datum/signal/signal, receive_method, receive_param)
@@ -373,13 +373,13 @@ var/list/pointers = list()
 		. = "signal = {source = '[source]' ()\n"
 	for (var/i in data)
 		. += "data\[\"[i]\"\] = \"[data[i]]\"\n"
-		if(islist(data[i]))
+		if (islist(data[i]))
 			var/list/L = data[i]
-			for(var/t in L)
+			for (var/t in L)
 				. += "data\[\"[i]\"\] list has: [t]"
 
 /datum/signal/proc/sanitize_data()
-	for(var/d in data)
+	for (var/d in data)
 		var/val = data[d]
-		if(istext(val))
+		if (istext(val))
 			data[d] = strip_html_simple(val)

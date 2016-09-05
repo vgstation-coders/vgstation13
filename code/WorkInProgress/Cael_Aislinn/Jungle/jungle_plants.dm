@@ -14,7 +14,7 @@
 	var/stump = 0
 
 /obj/structure/bush/New()
-	if(prob(20))
+	if (prob(20))
 		opacity = 1
 
 /obj/structure/bush/Bumped(M as mob)
@@ -27,18 +27,18 @@
 
 /obj/structure/bush/attackby(var/obj/I as obj, var/mob/user as mob)
 	//hatchets can clear away undergrowth
-	if(istype(I, /obj/item/weapon/hatchet) && !stump)
-		if(indestructable)
+	if (istype(I, /obj/item/weapon/hatchet) && !stump)
+		if (indestructable)
 			//this bush marks the edge of the map, you can't destroy it
 			to_chat(user, "<span class='warning'>You flail away at the undergrowth, but it's too thick here.</span>")
 		else
 			user.visible_message("<span class='danger'><b>[user] begins clearing away [src].</b>","<span class='warning'>You begin clearing away [src].</span></span>")
 			spawn(rand(15,30))
-				if(get_dist(user,src) < 2)
+				if (get_dist(user,src) < 2)
 					to_chat(user, "<span class='notice'>You clear away [src].</span>")
 					var/obj/item/stack/sheet/wood/W = new(src.loc)
 					W.amount = rand(3,15)
-					if(prob(50))
+					if (prob(50))
 						icon_state = "stump[rand(1,2)]"
 						name = "cleared foliage"
 						desc = "There used to be dense undergrowth here."
@@ -85,7 +85,7 @@ var/jungle_plants_init = 0
 
 
 /obj/structure/jungle_plant/New()
-	if(!jungle_plants_init)
+	if (!jungle_plants_init)
 		init_jungle_plants()
 
 	fruit_type = rand(1,7)
@@ -100,7 +100,7 @@ var/jungle_plants_init = 0
 	plant_strength = rand(20,200)
 
 /obj/structure/jungle_plant/attack_hand(var/mob/user as mob)
-	if(fruits_left > 0)
+	if (fruits_left > 0)
 		fruits_left--
 		to_chat(user, "<span class='notice'>You pick a fruit off [src].</span>")
 

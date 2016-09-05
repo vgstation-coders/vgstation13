@@ -5,21 +5,21 @@ json_writer
 			. = list()
 			. += "{"
 			var/i = 1
-			for(var/k in L)
+			for (var/k in L)
 				var/val = L[k]
 				. += {"\"[k]\":[write(val)]"}
-				if(i++ < L.len)
+				if (i++ < L.len)
 					. += ","
 			.+= "}"
 			. = jointext(.,"")
 
 		write(val)
-			if(isnum(val))
+			if (isnum(val))
 				return num2text(val, 100)
-			else if(isnull(val))
+			else if (isnull(val))
 				return "null"
-			else if(istype(val, /list))
-				if(is_associative(val))
+			else if (istype(val, /list))
+				if (is_associative(val))
 					return WriteObject(val)
 				else
 					return write_array(val)
@@ -29,25 +29,25 @@ json_writer
 		write_array(list/L)
 			. = list()
 			. += "\["
-			for(var/i = 1 to L.len)
+			for (var/i = 1 to L.len)
 				. += write(L[i])
-				if(i < L.len)
+				if (i < L.len)
 					. += ","
 			. += "]"
 			. = jointext(., "")
 
 		write_string(txt)
 			var/static/list/json_escape = list("\\", "\"", "'", "\n")
-			for(var/targ in json_escape)
+			for (var/targ in json_escape)
 				var/start = 1
-				while(start <= length(txt))
+				while (start <= length(txt))
 					var/i = findtext(txt, targ, start)
-					if(!i)
+					if (!i)
 						break
-					if(targ == "\n")
+					if (targ == "\n")
 						txt = copytext(txt, 1, i) + "\\n" + copytext(txt, i+2)
 						start = i + 1 // 1 character added
-					if(targ == "'")
+					if (targ == "'")
 						txt = copytext(txt, 1, i) + "`" + copytext(txt, i+1) // apostrophes fuck shit up...
 						start = i + 1 // 1 character added
 					else
@@ -57,7 +57,7 @@ json_writer
 			return {""[txt]""}
 
 		is_associative(list/L)
-			for(var/key in L)
+			for (var/key in L)
 				// if the key is a list that means it's actually an array of lists (stupid Byond...)
-				if(!isnum(key) && !istype(key, /list))
+				if (!isnum(key) && !istype(key, /list))
 					return TRUE

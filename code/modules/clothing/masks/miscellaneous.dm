@@ -106,7 +106,7 @@
 	siemens_coefficient = 0.9
 
 /obj/item/clothing/mask/horsehead/treat_mask_speech(var/datum/speech/speech)
-	if(src.voicechange)
+	if (src.voicechange)
 		speech.message = pick("NEEIIGGGHHHH!", "NEEEIIIIGHH!", "NEIIIGGHH!", "HAAWWWWW!", "HAAAWWW!")
 
 /obj/item/clothing/mask/chapmask

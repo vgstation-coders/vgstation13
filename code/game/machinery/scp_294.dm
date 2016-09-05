@@ -21,11 +21,11 @@
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/chem_dispenser/scp_294/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
-	if((user.stat && !isobserver(user)) || user.restrained())
+	if ((user.stat && !isobserver(user)) || user.restrained())
 		return
-	if(!chemical_reagents_list || !chemical_reagents_list.len)
+	if (!chemical_reagents_list || !chemical_reagents_list.len)
 		return
 	// this is the data which will be sent to the ui
 	var/data[0]
@@ -33,8 +33,8 @@
 
 	var containerContents[0]
 	var containerCurrentVolume = 0
-	if(container && container.reagents && container.reagents.reagent_list.len)
-		for(var/datum/reagent/R in container.reagents.reagent_list)
+	if (container && container.reagents && container.reagents.reagent_list.len)
+		for (var/datum/reagent/R in container.reagents.reagent_list)
 			containerContents.Add(list(list("name" = R.name, "volume" = R.volume))) // list in a list because Byond merges the first list...
 			containerCurrentVolume += R.volume
 	data["beakerContents"] = containerContents
@@ -58,15 +58,15 @@
 		ui.open()
 
 /obj/machinery/chem_dispenser/scp_294/Topic(href, href_list)
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return 0 // don't update UIs attached to this object
 
-	if(href_list["ejectBeaker"])
-		if(container)
+	if (href_list["ejectBeaker"])
+		if (container)
 			detach()
 
-	if(href_list["input"])
-		if(container)
+	if (href_list["input"])
+		if (container)
 			var/input_reagent = input("Enter the name of any liquid", "Input") as text
 			if (input_reagent in prohibited_reagents)
 				say("OUT OF RANGE")
@@ -74,8 +74,8 @@
 			else
 				var/obj/item/weapon/reagent_containers/glass/X = src.container
 				var/datum/reagents/U = X.reagents
-				if(!U)
-					if(!X.gcDestroyed)
+				if (!U)
+					if (!X.gcDestroyed)
 						X.create_reagents(X.volume)
 					else
 						qdel(X)

@@ -12,7 +12,7 @@
 /obj/structure/ore_box/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/ore))
 		var/obj/item/weapon/ore/O = W
-		if(O.material)
+		if (O.material)
 			materials.addAmount(O.material, 1)
 			user.u_equip(W,0)
 			returnToPool(W)
@@ -20,8 +20,8 @@
 		var/turf/T=get_turf(src)
 		var/obj/item/weapon/storage/S = W
 		S.hide_from(usr)
-		for(var/obj/item/weapon/ore/O in S.contents)
-			if(O.material)
+		for (var/obj/item/weapon/ore/O in S.contents)
+			if (O.material)
 				S.remove_from_storage(O,T) //This will remove the item.
 				materials.addAmount(O.material, 1)
 				returnToPool(O)
@@ -30,9 +30,9 @@
 
 /obj/structure/ore_box/attack_hand(mob/user as mob)
 	var/dat = "<b>The contents of the ore box reveal...</b><ul>"
-	for(var/ore_id in materials.storage)
+	for (var/ore_id in materials.storage)
 		var/datum/material/mat = materials.getMaterial(ore_id)
-		if(materials.storage[ore_id] > 0)
+		if (materials.storage[ore_id] > 0)
 			dat += "<li><b>[mat.name]:</b> [materials.storage[ore_id]]</li>"
 
 	dat += "</ul><A href='?src=\ref[src];removeall=1'>Empty box</A>"
@@ -40,15 +40,15 @@
 	return
 
 /obj/structure/ore_box/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 	usr.set_machine(src)
 	src.add_fingerprint(usr)
-	if(href_list["removeall"])
-		for(var/ore_id in materials.storage)
+	if (href_list["removeall"])
+		for (var/ore_id in materials.storage)
 			var/datum/material/mat = materials.getMaterial(ore_id)
-			if(mat.oretype)
-				for(var/i=0;i<materials.storage[ore_id];i++)
+			if (mat.oretype)
+				for (var/i=0;i<materials.storage[ore_id];i++)
 					getFromPool(mat.oretype, get_turf(src))
 				materials.removeAmount(ore_id, materials.storage[ore_id])
 		to_chat(usr, "<span class='notice'>You empty the box.</span>")

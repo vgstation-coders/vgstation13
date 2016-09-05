@@ -55,11 +55,11 @@
 
 /obj/machinery/power/generator/Destroy()
 	. = ..()
-	if(circ1)
+	if (circ1)
 		circ1.linked_generator = null
 		circ1 = null
 
-	if(circ2)
+	if (circ2)
 		circ2.linked_generator = null
 		circ2 = null
 
@@ -203,43 +203,43 @@
 //and a circulator to the WEST of the generator connects first to the NORTH, then to the SOUTH
 //note that the circulator's outlet dir is it's always facing dir, and it's inlet is always the reverse
 /obj/machinery/power/generator/proc/reconnect()
-	if(circ1)
+	if (circ1)
 		circ1.linked_generator = null
 		circ1 = null
 
-	if(circ2)
+	if (circ2)
 		circ2.linked_generator = null
 		circ2 = null
 
-	if(!src.loc || !anchored)
+	if (!src.loc || !anchored)
 		return
 
-	if(src.dir & (EAST|WEST))
+	if (src.dir & (EAST|WEST))
 		circ1 = locate(/obj/machinery/atmospherics/binary/circulator) in get_step(src,EAST)
-		if(circ1 && !circ1.anchored)
+		if (circ1 && !circ1.anchored)
 			circ1 = null
 
 		circ2 = locate(/obj/machinery/atmospherics/binary/circulator) in get_step(src,WEST)
-		if(circ2 && !circ2.anchored)
+		if (circ2 && !circ2.anchored)
 			circ2 = null
 
-		if(circ1 && circ2)
-			if(circ1.dir != SOUTH || circ2.dir != NORTH)
+		if (circ1 && circ2)
+			if (circ1.dir != SOUTH || circ2.dir != NORTH)
 				circ1 = null
 				circ2 = null
 
-	else if(src.dir & (NORTH|SOUTH))
+	else if (src.dir & (NORTH|SOUTH))
 		circ1 = locate(/obj/machinery/atmospherics/binary/circulator) in get_step(src,NORTH)
 		circ2 = locate(/obj/machinery/atmospherics/binary/circulator) in get_step(src,SOUTH)
 
-		if(circ1 && circ2 && (circ1.dir != EAST || circ2.dir != WEST))
+		if (circ1 && circ2 && (circ1.dir != EAST || circ2.dir != WEST))
 			circ1 = null
 			circ2 = null
 
-	if(circ1)
+	if (circ1)
 		circ1.linked_generator = src
 
-	if(circ2)
+	if (circ2)
 		circ2.linked_generator = src
 
 	update_icon()
@@ -255,33 +255,33 @@
 /obj/machinery/power/generator/update_icon()
 	overlays = 0
 
-	if(!operable())
+	if (!operable())
 		return
 
 	overlays += image(icon = icon, icon_state = "teg_mid")
 
-	if(lastgenlev != 0)
+	if (lastgenlev != 0)
 		overlays += image(icon = icon, icon_state = "teg-op[lastgenlev]")
 
 // We actually tick power gen on the pipenet process to make sure we're synced with pipenet updates.
 /obj/machinery/power/generator/proc/pipenet_process(var/list/event_args, var/datum/controller/process/pipenet/owner)
-	if(!operable())
+	if (!operable())
 		return
 
 	var/datum/gas_mixture/air1 = circ1.return_transfer_air()
 	var/datum/gas_mixture/air2 = circ2.return_transfer_air()
 
-	if(air1 && air2)
+	if (air1 && air2)
 		var/air1_heat_capacity = air1.heat_capacity()
 		var/air2_heat_capacity = air2.heat_capacity()
 		var/delta_temperature = abs(air2.temperature - air1.temperature)
 
-		if(delta_temperature > 0 && air1_heat_capacity > 0 && air2_heat_capacity > 0)
+		if (delta_temperature > 0 && air1_heat_capacity > 0 && air2_heat_capacity > 0)
 			var/energy_transfer = delta_temperature * air2_heat_capacity * air1_heat_capacity / (air2_heat_capacity + air1_heat_capacity)
 			var/heat = energy_transfer * (1 - thermal_efficiency)
 			last_gen = energy_transfer * thermal_efficiency * 0.05
 
-			if(air2.temperature > air1.temperature)
+			if (air2.temperature > air1.temperature)
 				air2.temperature = air2.temperature - energy_transfer/air2_heat_capacity
 				air1.temperature = air1.temperature + heat/air1_heat_capacity
 			else
@@ -293,19 +293,19 @@
 	circ2.air2.merge(air2)
 
 	//Update the gas networks.
-	if(circ1.network2)
+	if (circ1.network2)
 		circ1.network2.update = TRUE
 
-	if(circ2.network2)
+	if (circ2.network2)
 		circ2.network2.update = TRUE
 
 	//Update icon overlays and power usage only if displayed level has changed.
 	var/genlev = Clamp(round(11 * last_gen / max_power), 0, 11)
 
-	if(last_gen > 100 && genlev == 0)
+	if (last_gen > 100 && genlev == 0)
 		genlev = 1
 
-	if(genlev != lastgenlev)
+	if (genlev != lastgenlev)
 		lastgenlev = genlev
 		update_icon()
 
@@ -320,20 +320,20 @@
 
 /obj/machinery/power/generator/attack_hand(mob/user)
 	. = ..()
-	if(.)
+	if (.)
 		return
 
 	interface.show(user)
 	updateUsrDialog()
 
 /obj/machinery/power/generator/updateUsrDialog()
-	if(operable())
+	if (operable())
 		interface.executeJavaScript("setEnabled()")
 	else
 		interface.executeJavaScript("setDisabled()")
 
 	var/vertical = 0
-	if(dir & (NORTH | SOUTH))
+	if (dir & (NORTH | SOUTH))
 		vertical = 1
 
 	interface.updateContent("circ1", "Primary circulator ([vertical ? "top"		: "right"])")
@@ -341,7 +341,7 @@
 
 	interface.updateContent("total_out", format_watts(last_gen))
 
-	if(!circ1 || !circ2)	//From this point on it's circulator data.
+	if (!circ1 || !circ2)	//From this point on it's circulator data.
 		return
 
 	// CIRCULATOR 1

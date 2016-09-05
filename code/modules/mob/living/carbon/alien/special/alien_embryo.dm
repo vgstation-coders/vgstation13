@@ -12,13 +12,13 @@
 	var/stage = 0
 
 /obj/item/alien_embryo/New()
-	if(istype(loc, /mob/living))
+	if (istype(loc, /mob/living))
 		affected_mob = loc
 		processing_objects.Add(src)
 
-		for(var/mob/dead/observer/O in get_active_candidates(ROLE_ALIEN,poll="[affected_mob] has been infected by \a [src]!"))
-			if(O.client && O.client.desires_role(ROLE_ALIEN))
-				if(check_observer(O))
+		for (var/mob/dead/observer/O in get_active_candidates(ROLE_ALIEN,poll="[affected_mob] has been infected by \a [src]!"))
+			if (O.client && O.client.desires_role(ROLE_ALIEN))
+				if (check_observer(O))
 					to_chat(O, "<span class=\"recruit\">You have automatically been signed up for \a [src]. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Retract</a>)</span>")
 					ghost_volunteers += O
 		spawn(0)
@@ -27,49 +27,49 @@
 		qdel(src)
 
 /obj/item/alien_embryo/Topic(href,href_list)
-	if("signup" in href_list)
+	if ("signup" in href_list)
 		var/mob/dead/observer/O = locate(href_list["signup"])
-		if(!O)
+		if (!O)
 			return
 		volunteer(O)
 
 
 /obj/item/alien_embryo/proc/volunteer(var/mob/dead/observer/O)
-	if(!istype(O))
+	if (!istype(O))
 		to_chat(O, "<span class='danger'>NO.</span>")
 		return
-	if(O in ghost_volunteers)
+	if (O in ghost_volunteers)
 		to_chat(O, "<span class='notice'>You will no longer be considered for this [src]. Click again to volunteer.</span>")
 		ghost_volunteers.Remove(O)
 		return
-	if(!check_observer(O))
+	if (!check_observer(O))
 		to_chat(O, "<span class='warning'>You cannot be \a [src] in your current condition.</span>")
 		return
 	to_chat(O, "<span class='notice'>You have been added to the list of ghosts that may become this [src].  Click again to unvolunteer.</span>")
 	ghost_volunteers.Add(O)
 
 /obj/item/alien_embryo/proc/check_observer(var/mob/dead/observer/O)
-	if(O.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
+	if (O.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
 		return 0
-	if(jobban_isbanned(O, "Syndicate")) // Antag-banned
+	if (jobban_isbanned(O, "Syndicate")) // Antag-banned
 		return 0
-	if(!O.client)
+	if (!O.client)
 		return 0
-	if(((O.client.inactivity/10)/60) <= ALIEN_SELECT_AFK_BUFFER) // Filter AFK
+	if (((O.client.inactivity/10)/60) <= ALIEN_SELECT_AFK_BUFFER) // Filter AFK
 		return 1
 	return 0
 
 /obj/item/alien_embryo/Destroy()
-	if(affected_mob)
+	if (affected_mob)
 		affected_mob.status_flags &= ~(XENO_HOST)
 		spawn(0)
 			RemoveInfectionImages(affected_mob)
 	..()
 
 /obj/item/alien_embryo/process()
-	if(!affected_mob)
+	if (!affected_mob)
 		return
-	if(loc != affected_mob)
+	if (loc != affected_mob)
 		affected_mob.status_flags &= ~(XENO_HOST)
 		processing_objects.Remove(src)
 		spawn(0)
@@ -77,40 +77,40 @@
 			affected_mob = null
 		return
 
-	if(stage < 5 && prob(3))
+	if (stage < 5 && prob(3))
 		stage++
 		spawn(0)
 			RefreshInfectionImage(affected_mob)
 
-	switch(stage)
-		if(2, 3)
-			if(prob(1))
+	switch (stage)
+		if (2, 3)
+			if (prob(1))
 				affected_mob.emote("sneeze")
-			if(prob(1))
+			if (prob(1))
 				affected_mob.audible_cough()
-			if(prob(1))
+			if (prob(1))
 				to_chat(affected_mob, "<span class='warning'>Your throat feels sore.</span>")
-			if(prob(1))
+			if (prob(1))
 				to_chat(affected_mob, "<span class='warning'>Mucous runs down the back of your throat.</span>")
-		if(4)
-			if(prob(1))
+		if (4)
+			if (prob(1))
 				affected_mob.emote("sneeze")
-			if(prob(1))
+			if (prob(1))
 				affected_mob.audible_cough()
-			if(prob(2))
+			if (prob(2))
 				to_chat(affected_mob, "<span class='warning'>Your muscles ache.</span>")
-				if(prob(20))
+				if (prob(20))
 					affected_mob.take_organ_damage(1)
-			if(prob(2))
+			if (prob(2))
 				to_chat(affected_mob, "<span class='warning'>Your stomach hurts.</span>")
-				if(prob(20))
+				if (prob(20))
 					affected_mob.AdjustPlasma(1)
 					affected_mob.updatehealth()
-		if(5)
+		if (5)
 			to_chat(affected_mob, "<span class='danger'>You feel something tearing its way out of your stomach...</span>")
 			affected_mob.AdjustPlasma(10)
 			affected_mob.updatehealth()
-			if(prob(50))
+			if (prob(50))
 				AttemptGrow()
 
 /obj/item/alien_embryo/proc/AttemptGrow(var/gib_on_success = 1)
@@ -119,29 +119,29 @@
 	// he will become the alien but if he doesn't then we will set the stage
 	// to 2, so we don't do a process heavy check everytime.
 	var/mob/dead/observer/ghostpicked
-	while(ghost_volunteers.len)
+	while (ghost_volunteers.len)
 		ghostpicked = pick_n_take(ghost_volunteers)
-		if(!istype(ghostpicked))
+		if (!istype(ghostpicked))
 			continue
 		break
-	if(!ghostpicked || !istype(ghostpicked))
+	if (!ghostpicked || !istype(ghostpicked))
 		var/list/candidates = get_active_candidates(ROLE_ALIEN, buffer=ALIEN_SELECT_AFK_BUFFER, poll=1)
-		if(!candidates.len)
+		if (!candidates.len)
 			picked = affected_mob.key //Pick the person who was infected
 		else
-			for(var/mob/dead/observer/O in candidates)
+			for (var/mob/dead/observer/O in candidates)
 				to_chat(O, "<span class=\"recruit\">\a [src] is about to burst out of \the [affected_mob]!(<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</span>")
 
 	else
 		picked = ghostpicked.key
-	if(!picked)
+	if (!picked)
 		stage = 4 // Let's try again later.
 		var/list/candidates = get_active_candidates(ROLE_ALIEN, buffer=ALIEN_SELECT_AFK_BUFFER, poll=1)
-		for(var/mob/dead/observer/O in candidates) //Shiggy
+		for (var/mob/dead/observer/O in candidates) //Shiggy
 			to_chat(O, "<span class=\"recruit\">\a [src] is about to burst out of \the [affected_mob]!(<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</span>")
 		return
 
-	if(affected_mob.lying)
+	if (affected_mob.lying)
 		affected_mob.overlays += image('icons/mob/alien.dmi', loc = affected_mob, icon_state = "burst_lie")
 	else
 		affected_mob.overlays += image('icons/mob/alien.dmi', loc = affected_mob, icon_state = "burst_stand")
@@ -150,7 +150,7 @@
 		new_xeno.key = picked
 		new_xeno << sound('sound/voice/hiss5.ogg', 0, 0, 0, 100)//To get the player's attention
 
-		if(gib_on_success)
+		if (gib_on_success)
 			affected_mob.gib()
 		qdel(src)
 
@@ -159,14 +159,14 @@ Proc: RefreshInfectionImage()
 Des: Removes all infection images from aliens and places an infection image on all infected mobs for aliens.
 ----------------------------------------*/
 /obj/item/alien_embryo/proc/RefreshInfectionImage()
-	for(var/mob/living/carbon/alien/alien in player_list)
-		if(alien.client)
-			for(var/image/I in alien.client.images)
-				if(dd_hasprefix_case(I.icon_state, "infected"))
+	for (var/mob/living/carbon/alien/alien in player_list)
+		if (alien.client)
+			for (var/image/I in alien.client.images)
+				if (dd_hasprefix_case(I.icon_state, "infected"))
 					alien.client.images -= I
-			for(var/mob/living/L in mob_list)
-				if(iscorgi(L) || iscarbon(L))
-					if(L.status_flags & XENO_HOST)
+			for (var/mob/living/L in mob_list)
+				if (iscorgi(L) || iscarbon(L))
+					if (L.status_flags & XENO_HOST)
 						var/I = image('icons/mob/alien.dmi', loc = L, icon_state = "infected[stage]")
 						alien.client.images += I
 
@@ -175,10 +175,10 @@ Proc: AddInfectionImages(C)
 Des: Checks if the passed mob (C) is infected with the alien egg, then gives each alien client an infected image at C.
 ----------------------------------------*/
 /obj/item/alien_embryo/proc/AddInfectionImages(var/mob/living/C)
-	if(C)
-		for(var/mob/living/carbon/alien/alien in player_list)
-			if(alien.client)
-				if(C.status_flags & XENO_HOST)
+	if (C)
+		for (var/mob/living/carbon/alien/alien in player_list)
+			if (alien.client)
+				if (C.status_flags & XENO_HOST)
 					var/I = image('icons/mob/alien.dmi', loc = C, icon_state = "infected[stage]")
 					alien.client.images += I
 
@@ -188,11 +188,11 @@ Des: Removes the alien infection image from all aliens in the world located in p
 ----------------------------------------*/
 
 /obj/item/alien_embryo/proc/RemoveInfectionImages(var/mob/living/C)
-	if(C)
-		for(var/mob/living/carbon/alien/alien in player_list)
-			if(alien.client)
-				for(var/image/I in alien.client.images)
-					if(I.loc == C)
-						if(dd_hasprefix_case(I.icon_state, "infected"))
+	if (C)
+		for (var/mob/living/carbon/alien/alien in player_list)
+			if (alien.client)
+				for (var/image/I in alien.client.images)
+					if (I.loc == C)
+						if (dd_hasprefix_case(I.icon_state, "infected"))
 							//del(I)
 							alien.client.images -= I

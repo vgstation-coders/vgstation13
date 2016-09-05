@@ -16,18 +16,18 @@
 
 /datum/lung_gas/proc/get_pp()
 	var/breath_pressure = (breath.total_moles()*R_IDEAL_GAS_EQUATION*breath.temperature)/lungs.inhale_volume
-	if(!is_trace)
+	if (!is_trace)
 		return (breath.vars[id]/breath.total_moles())*breath_pressure
 	else
-		if(gas)
+		if (gas)
 			return (gas.moles/breath.total_moles())*breath_pressure
 		return 0
 
 /datum/lung_gas/proc/get_moles()
-	if(!is_trace)
+	if (!is_trace)
 		return breath.vars[id]
 	else
-		if(gas)
+		if (gas)
 			return gas.moles
 		return 0
 
@@ -35,27 +35,27 @@
 	lungs.exhale_moles += moles
 
 /datum/lung_gas/proc/set_moles(var/moles)
-	if(!is_trace)
+	if (!is_trace)
 		breath.vars[id]=moles
 	else
-		if(gas)
+		if (gas)
 			gas.moles = moles
 
 /datum/lung_gas/proc/add_moles(var/moles)
-	if(!is_trace)
+	if (!is_trace)
 		breath.vars[id]+=moles
 	else
-		if(gas)
+		if (gas)
 			gas.moles += moles
 
 /datum/lung_gas/proc/set_context(var/datum/organ/internal/lungs/L, var/datum/gas_mixture/breath, var/mob/living/carbon/human/H)
 	src.lungs=L
 	src.breath=breath
-	if(is_trace)
+	if (is_trace)
 		// Find the trace gas we need to mess with
-		if(breath.trace_gases.len)	// If there's some other shit in the air lets deal with it here.
-			for(var/datum/gas/G in breath.trace_gases)
-				if("[G.type]" != id)
+		if (breath.trace_gases.len)	// If there's some other shit in the air lets deal with it here.
+			for (var/datum/gas/G in breath.trace_gases)
+				if ("[G.type]" != id)
 					continue
 				gas = G
 
@@ -86,19 +86,19 @@
 	var/moles = get_moles()
 
 	//testing("METAB: gasid=[id];pp=[pp];min_pp=[min_pp];moles=[moles]")
-	if(pp < min_pp)  // Too little oxygen
-		if(prob(20))
+	if (pp < min_pp)  // Too little oxygen
+		if (prob(20))
 			//testing("  Receiving too little [id], gasping.")
 			lungs.gasp()
 
 	var/mob/living/carbon/human/H = lungs.owner
 	var/used=0
-	if(pp > 0)
+	if (pp > 0)
 		used=H.species.receiveGas(id, min(1,pp/min_pp), moles, H)
 	else
 		used=H.species.receiveGas(id, 0, moles, H)
 
-	if(used)
+	if (used)
 		//testing("  Used [moles] moles.")
 		add_moles(-used)
 		add_exhaled(used)
@@ -123,16 +123,16 @@
 	//testing("WASTE: gasid=[id];pp=[pp]")
 	var/mob/living/carbon/human/H = lungs.owner
 	//CO2 does not affect failed_last_breath. So if there was enough oxygen in the air but too much co2, this will hurt you, but only once per 4 ticks, instead of once per tick.
-	if(max_pp && pp > max_pp)
+	if (max_pp && pp > max_pp)
 		//testing("  [pp] > [max_pp]: Adding paralyze and oxyloss")
-		if(!H.co2overloadtime) // If it's the first breath with too much CO2 in it, lets start a counter, then have them pass out after 12s or so.
+		if (!H.co2overloadtime) // If it's the first breath with too much CO2 in it, lets start a counter, then have them pass out after 12s or so.
 			H.co2overloadtime = world.time
-		else if(world.time - H.co2overloadtime > 120)
+		else if (world.time - H.co2overloadtime > 120)
 			H.Paralyse(3)
 			H.adjustOxyLoss(1) // Lets hurt em a little, let them know we mean business
-			if(world.time - H.co2overloadtime > 600) // They've been in here 60s now, lets start to kill them for their own good!
+			if (world.time - H.co2overloadtime > 600) // They've been in here 60s now, lets start to kill them for their own good!
 				H.adjustOxyLoss(3)
-		if(prob(20)) // Lets give them some chance to know somethings not right though I guess.
+		if (prob(20)) // Lets give them some chance to know somethings not right though I guess.
 			H.audible_cough()
 	else
 		H.co2overloadtime = 0
@@ -167,19 +167,19 @@
 	..()
 	var/pp = get_pp()
 	var/mob/living/carbon/human/H=lungs.owner
-	if(pp > max_pp) // Too much toxins
+	if (pp > max_pp) // Too much toxins
 		//testing("TOXIC: gasid=[id];pp=[pp]")
 		var/ratio = (pp/max_pp) * reagent_mult // WAS: (moles/max_moles) * 10
 		//adjustToxLoss(Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))	//Limit amount of damage toxin exposure can do per second
-		if(max_pp_mask)
-			if(H.wear_mask)
-				if(H.wear_mask.flags & BLOCK_GAS_SMOKE_EFFECT)
-					if(pp > max_pp_mask)
+		if (max_pp_mask)
+			if (H.wear_mask)
+				if (H.wear_mask.flags & BLOCK_GAS_SMOKE_EFFECT)
+					if (pp > max_pp_mask)
 						ratio = (pp/max_pp_mask) * reagent_mult
 					else
 						ratio = 0
-		if(ratio)
-			if(H.reagents)
+		if (ratio)
+			if (H.reagents)
 				// H.reagents.add_reagent(PLASMA, Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))
 				// no this is bad n3x pls no
 				H.adjustToxLoss(Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))
@@ -206,11 +206,11 @@
 /datum/lung_gas/sleep_agent/handle_inhale()
 	var/pp = get_pp()
 	var/mob/living/carbon/human/H=lungs.owner
-	if(pp > min_para_pp) // Enough to make us paralysed for a bit
+	if (pp > min_para_pp) // Enough to make us paralysed for a bit
 		H.Paralyse(3) // 3 gives them one second to wake up and run away a bit!
-	if(pp > min_sleep_pp) // Enough to make us sleep as well
+	if (pp > min_sleep_pp) // Enough to make us sleep as well
 		H.sleeping = min(H.sleeping+2, 10)
-	if(pp > min_giggle_pp)	// There is sleeping gas in their lungs, but only a little, so give them a bit of a warning
-		if(prob(20))
+	if (pp > min_giggle_pp)	// There is sleeping gas in their lungs, but only a little, so give them a bit of a warning
+		if (prob(20))
 			H.emote(pick("giggle", "laugh"))
 	set_moles(0)

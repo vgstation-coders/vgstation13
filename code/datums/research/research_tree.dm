@@ -15,12 +15,12 @@
 // CALL EXTERNALLY ONLY: Sets context.
 /datum/research_tree/proc/get(var/id, var/only_usable=0)
 	var/list/all_unlocks
-	if(only_usable)
+	if (only_usable)
 		all_unlocks = usable_unlocks
 	else
 		all_unlocks = avail_unlocks
 	var/datum/unlockable/U = locate(all_unlocks[id])
-	if(!U)
+	if (!U)
 		return null
 	U.set_context(src)
 	return U
@@ -28,11 +28,11 @@
 /datum/research_tree/proc/load_usable_unlocks()
 	usable_unlocks=list()
 	avail_unlocks=list()
-	for(var/datum/unlockable/U in get_avail_unlocks())
-		if(!U.id)
+	for (var/datum/unlockable/U in get_avail_unlocks())
+		if (!U.id)
 			continue
 		U.set_context(src)
-		if(!U.unlocked && U.can_buy(src) && U.check_prerequisites(src) && U.check_antirequisites(src))
+		if (!U.unlocked && U.can_buy(src) && U.check_prerequisites(src) && U.check_antirequisites(src))
 			usable_unlocks[U.id]="\ref[U]"
 		avail_unlocks[U.id]="\ref[U]"
 
@@ -47,7 +47,7 @@
 	var/html = "<h2>[title]</h2><p>[blurb]</p>"
 	html += start_table()
 	load_usable_unlocks()
-	for(var/id in usable_unlocks)
+	for (var/id in usable_unlocks)
 		var/datum/unlockable/U=locate(usable_unlocks[id])
 		U.set_context(src)
 		html += U.toTableRow(src,user)
@@ -61,10 +61,10 @@
 	user << browse(null,"window=\ref[src]_research")
 
 /datum/research_tree/Topic(href, href_list)
-	if("unlock" in href_list)
+	if ("unlock" in href_list)
 		var/mob/viewer = locate(href_list["user"])
 		var/datum/unlockable/unlock = locate(usable_unlocks[href_list["unlock"]])
-		if(!unlock)
+		if (!unlock)
 			return
 		unlock.set_context(src)
 		unlock.unlock(src)

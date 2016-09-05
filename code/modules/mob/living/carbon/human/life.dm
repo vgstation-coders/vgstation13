@@ -89,17 +89,17 @@ var/global/list/organ_damage_overlays = list(
 // Doing this during species init breaks shit.
 /mob/living/carbon/human/proc/DeferredSpeciesSetup()
 	var/mut_update=0
-	if(species.default_mutations.len>0)
-		for(var/mutation in species.default_mutations)
-			if(!(mutation in mutations))
+	if (species.default_mutations.len>0)
+		for (var/mutation in species.default_mutations)
+			if (!(mutation in mutations))
 				mutations.Add(mutation)
 				mut_update=1
-	if(species.default_blocks.len>0)
-		for(var/block in species.default_blocks)
-			if(!dna.GetSEState(block))
+	if (species.default_blocks.len>0)
+		for (var/block in species.default_blocks)
+			if (!dna.GetSEState(block))
 				dna.SetSEState(block,1)
 				mut_update=1
-	if(mut_update)
+	if (mut_update)
 		domutcheck(src,null,MUTCHK_FORCED)
 		update_mutations()
 
@@ -107,13 +107,13 @@ var/global/list/organ_damage_overlays = list(
 
 	set invisibility = 0
 	//set background = 1
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
-	if(monkeyizing)
+	if (monkeyizing)
 		return
-	if(!loc)
+	if (!loc)
 		return	//Fixing a null error that occurs when the mob isn't found in the world -- TLE
-	if(do_deferred_species_setup)
+	if (do_deferred_species_setup)
 		DeferredSpeciesSetup()
 		do_deferred_species_setup=0
 	//Apparently, the person who wrote this code designed it so that blinded
@@ -129,22 +129,22 @@ var/global/list/organ_damage_overlays = list(
 	var/datum/gas_mixture/environment = loc.return_air()
 	in_stasis = istype(loc, /obj/structure/closet/body_bag/cryobag) && loc:opened == 0 //Nice runtime operator
 
-	if(in_stasis)
+	if (in_stasis)
 		loc:used++ //Ditto above
 
 	//No need to update all of these procs if the guy is dead.
-	if(stat != DEAD && !in_stasis)
+	if (stat != DEAD && !in_stasis)
 
-		if(air_master.current_cycle % 4 == 2 || failed_last_breath) //First, resolve location and get a breath
+		if (air_master.current_cycle % 4 == 2 || failed_last_breath) //First, resolve location and get a breath
 			breathe() //Only try to take a breath every 4 ticks, unless suffocating
 			last_processed = "Breathe"
 
 		else //Still give containing object the chance to interact
-			if(istype(loc, /obj/))
+			if (istype(loc, /obj/))
 				var/obj/location_as_object = loc
 				location_as_object.handle_internal_lifeform(src, 0)
 				last_processed = "Interacted with our container"
-		if(check_mutations)
+		if (check_mutations)
 			testing("Updating [src.real_name]'s mutations: "+english_list(mutations))
 			domutcheck(src,null,MUTCHK_FORCED)
 			update_mutations()
@@ -168,7 +168,7 @@ var/global/list/organ_damage_overlays = list(
 		handle_medical_side_effects()
 		handle_equipment()
 	handle_stasis_bag()
-	if(life_tick > 5 && timeofdeath && (timeofdeath < 5 || world.time - timeofdeath > 6000)) //We are long dead, or we're junk mobs spawned like the clowns on the clown shuttle
+	if (life_tick > 5 && timeofdeath && (timeofdeath < 5 || world.time - timeofdeath > 6000)) //We are long dead, or we're junk mobs spawned like the clowns on the clown shuttle
 		cycle = "DEAD"
 		return //We go ahead and process them 5 times for HUD images and other stuff though.
 	handle_environment(environment)
@@ -179,12 +179,12 @@ var/global/list/organ_damage_overlays = list(
 	name = get_visible_name()
 	handle_regular_hud_updates()
 	pulse = handle_pulse()
-	for(var/obj/item/weapon/grab/G in src)
+	for (var/obj/item/weapon/grab/G in src)
 		G.process()
-	if(mind && mind.vampire)
+	if (mind && mind.vampire)
 		handle_vampire()
 	handle_alpha()
-	if(update_overlays)
+	if (update_overlays)
 		update_overlays = 0
 		UpdateDamageIcon()
 	cycle++

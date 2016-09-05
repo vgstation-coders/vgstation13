@@ -18,7 +18,7 @@ IDs can then be used to cause certain behaviour using the action() proc
 
 //Helper for using params
 /datum/context_click/proc/return_clicked_id_by_params(params)
-	if(!params)
+	if (!params)
 		return
 
 	var/list/params_list = params2list(params)

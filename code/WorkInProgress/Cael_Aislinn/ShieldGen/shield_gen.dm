@@ -39,15 +39,15 @@
 
 /obj/machinery/shield_gen/New()
 	spawn(10)
-		for(var/obj/machinery/shield_capacitor/possible_cap in range(1, src))
-			if(get_dir(possible_cap, src) == possible_cap.dir)
+		for (var/obj/machinery/shield_capacitor/possible_cap in range(1, src))
+			if (get_dir(possible_cap, src) == possible_cap.dir)
 				owned_capacitor = possible_cap
 				break
 	field = new/list()
 	..()
 
 /obj/machinery/shield_gen/emag(mob/user)
-	if(prob(75))
+	if (prob(75))
 		src.locked = !src.locked
 		to_chat(user, "Controls are now [src.locked ? "locked." : "unlocked."]")
 		updateDialog()
@@ -59,12 +59,12 @@
 	return
 
 /obj/machinery/shield_gen/wrenchAnchor(mob/user)
-	if(..())
-		for(var/obj/machinery/shield_capacitor/cap in range(1, src))
-			if(!src.anchored && owned_capacitor == cap)
+	if (..())
+		for (var/obj/machinery/shield_capacitor/cap in range(1, src))
+			if (!src.anchored && owned_capacitor == cap)
 				owned_capacitor = null
 				break
-			else if(src.anchored && !owned_capacitor)
+			else if (src.anchored && !owned_capacitor)
 				owned_capacitor = cap
 				break
 			cap.updateDialog()
@@ -73,11 +73,11 @@
 	return
 
 /obj/machinery/shield_gen/attackby(obj/item/W, mob/user)
-	if(..())
+	if (..())
 		return 1
-	else if(istype(W, /obj/item/weapon/card/id))
+	else if (istype(W, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/C = W
-		if(access_captain in C.access || access_security in C.access || access_engine in C.access)
+		if (access_captain in C.access || access_security in C.access || access_engine in C.access)
 			src.locked = !src.locked
 			to_chat(user, "Controls are now [src.locked ? "locked." : "unlocked."]")
 			updateDialog()
@@ -92,12 +92,12 @@
 	return src.attack_hand(user)
 
 /obj/machinery/shield_gen/attack_hand(mob/user)
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 	interact(user)
 
 /obj/machinery/shield_gen/attack_ghost(mob/user)
-	if(isAdminGhost(user))
+	if (isAdminGhost(user))
 		src.attack_hand(user)
 	return
 
@@ -108,7 +108,7 @@
 			user << browse(null, "window=shield_generator")
 			return
 	var/t = "<B>Shield Generator Control Console</B><BR><br>"
-	if(locked)
+	if (locked)
 		t += "<i>Swipe your ID card to begin.</i>"
 	else
 
@@ -147,10 +147,10 @@
 
 /obj/machinery/shield_gen/process()
 
-	if(active && field.len)
+	if (active && field.len)
 		var/stored_renwicks = 0
 		var/target_field_strength = min(strengthen_rate + max(average_field_strength, 0), max_field_strength)
-		if(owned_capacitor)
+		if (owned_capacitor)
 			var/required_energy = field.len * target_field_strength / energy_conversion_rate
 			var/assumed_charge = min(owned_capacitor.stored_charge, required_energy)
 			stored_renwicks = assumed_charge * energy_conversion_rate
@@ -161,12 +161,12 @@
 		average_field_strength = 0
 		target_field_strength = stored_renwicks / field.len
 
-		for(var/obj/effect/energy_field/E in field)
-			if(stored_renwicks)
+		for (var/obj/effect/energy_field/E in field)
+			if (stored_renwicks)
 				var/strength_change = target_field_strength - E.strength
-				if(strength_change > stored_renwicks)
+				if (strength_change > stored_renwicks)
 					strength_change = stored_renwicks
-				if(E.strength < 0)
+				if (E.strength < 0)
 					E.strength = 0
 				else
 					E.Strengthen(strength_change)
@@ -178,48 +178,48 @@
 				E.Strengthen(-E.strength)
 
 		average_field_strength /= field.len
-		if(average_field_strength < 0)
+		if (average_field_strength < 0)
 			time_since_fail = 0
 	else
 		average_field_strength = 0
 
 /obj/machinery/shield_gen/Topic(href, href_list[])
-	if(!isAI(usr) && usr.z != z)
+	if (!isAI(usr) && usr.z != z)
 		return 1
-	if(..())
+	if (..())
 		return 1
-	if( href_list["close"] )
+	if ( href_list["close"] )
 		usr << browse(null, "window=shield_generator")
 		usr.unset_machine()
 		return
-	else if( href_list["toggle"] )
+	else if ( href_list["toggle"] )
 		toggle()
-	else if( href_list["change_radius"] )
+	else if ( href_list["change_radius"] )
 		field_radius += text2num(href_list["change_radius"])
-		if(field_radius > 200)
+		if (field_radius > 200)
 			field_radius = 200
-		else if(field_radius < 0)
+		else if (field_radius < 0)
 			field_radius = 0
-	else if( href_list["strengthen_rate"] )
+	else if ( href_list["strengthen_rate"] )
 		strengthen_rate += text2num(href_list["strengthen_rate"])
-		if(strengthen_rate > 1)
+		if (strengthen_rate > 1)
 			strengthen_rate = 1
-		else if(strengthen_rate < 0)
+		else if (strengthen_rate < 0)
 			strengthen_rate = 0
-	else if( href_list["max_field_strength"] )
+	else if ( href_list["max_field_strength"] )
 		max_field_strength += text2num(href_list["max_field_strength"])
-		if(max_field_strength > 1000)
+		if (max_field_strength > 1000)
 			max_field_strength = 1000
-		else if(max_field_strength < 0)
+		else if (max_field_strength < 0)
 			max_field_strength = 0
 	//
 	updateDialog()
 
 /obj/machinery/shield_gen/power_change()
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		icon_state = "broke"
 	else
-		if( powered() )
+		if ( powered() )
 			if (src.active)
 				icon_state = "generator1"
 			else
@@ -234,14 +234,14 @@
 
 /obj/machinery/shield_gen/ex_act(var/severity)
 
-	if(active)
+	if (active)
 		toggle()
 	return ..()
 
 /*
 /obj/machinery/shield_gen/proc/check_powered()
 	check_powered = 1
-	if(!anchored)
+	if (!anchored)
 		powered = 0
 		return 0
 	var/turf/T = src.loc
@@ -250,22 +250,22 @@
 	if (C)
 		net = C.netnum		// find the powernet of the connected cable
 
-	if(!net)
+	if (!net)
 		powered = 0
 		return 0
 	var/datum/powernet/PN = powernets[net]			// find the powernet. Magic code, voodoo code.
 
-	if(!PN)
+	if (!PN)
 		powered = 0
 		return 0
 	var/surplus = max(PN.avail-PN.load, 0)
 	var/shieldload = min(rand(50,200), surplus)
-	if(shieldload==0 && !storedpower)		// no cable or no power, and no power stored
+	if (shieldload==0 && !storedpower)		// no cable or no power, and no power stored
 		powered = 0
 		return 0
 	else
 		powered = 1
-		if(PN)
+		if (PN)
 			storedpower += shieldload
 			PN.newload += shieldload //uses powernet power.
 			*/
@@ -273,31 +273,31 @@
 /obj/machinery/shield_gen/proc/toggle()
 	active = !active
 	power_change()
-	if(active)
+	if (active)
 		var/list/covered_turfs = get_shielded_turfs()
 		var/turf/T = get_turf(src)
-		if(T in covered_turfs)
+		if (T in covered_turfs)
 			covered_turfs.Remove(T)
-		for(var/turf/O in covered_turfs)
+		for (var/turf/O in covered_turfs)
 			var/obj/effect/energy_field/E = new(O)
 			field.Add(E)
 		del covered_turfs
 
-		for(var/mob/M in view(5,src))
+		for (var/mob/M in view(5,src))
 			to_chat(M, "[bicon(src)] You hear heavy droning start up.")
 	else
-		for(var/obj/effect/energy_field/D in field)
+		for (var/obj/effect/energy_field/D in field)
 			field.Remove(D)
 			qdel (D)
 			D = null
 
-		for(var/mob/M in view(5,src))
+		for (var/mob/M in view(5,src))
 			to_chat(M, "[bicon(src)] You hear heavy droning fade out.")
 
 //grab the border tiles in a circle around this machine
 /obj/machinery/shield_gen/proc/get_shielded_turfs()
 	var/list/out = list()
-	for(var/turf/T in range(field_radius, src))
-		if(get_dist(src,T) == field_radius)
+	for (var/turf/T in range(field_radius, src))
+		if (get_dist(src,T) == field_radius)
 			out.Add(T)
 	return out

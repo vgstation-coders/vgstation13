@@ -147,13 +147,13 @@
 		if (!M.incapacitated() && Adjacent(M))
 			var/obj/screen/inventory/SI = over_object
 
-			if(SI.hand_index && M.put_in_hand_check(src, SI.hand_index))
+			if (SI.hand_index && M.put_in_hand_check(src, SI.hand_index))
 				M.u_equip(src, 0)
 				M.put_in_hand(SI.hand_index, src)
 				src.add_fingerprint(usr)
 
 			return
-		if(over_object == usr && in_range(src, usr) || usr.contents.Find(src))
+		if (over_object == usr && in_range(src, usr) || usr.contents.Find(src))
 			if (usr.s_active)
 				usr.s_active.close(usr)
 			src.show_to(usr)
@@ -161,23 +161,23 @@
 	return
 
 /obj/item/weapon/storage/pill_bottle/AltClick()
-	if(!usr.isUnconscious() && Adjacent(usr))
+	if (!usr.isUnconscious() && Adjacent(usr))
 		change()
 		return
 	return ..()
 
 /obj/item/weapon/storage/pill_bottle/attackby(var/obj/item/I, var/mob/user)
-	if(!I)
+	if (!I)
 		return
-	if(!melted)
-		if(I.is_hot())
+	if (!melted)
+		if (I.is_hot())
 			to_chat(user, "You slightly melt the plastic on the side of \the [src] with \the [I].")
 			melted = 1
-	if(istype(I, /obj/item/weapon/storage/bag/chem))
+	if (istype(I, /obj/item/weapon/storage/bag/chem))
 		var/obj/item/weapon/storage/bag/chem/C = I
 		to_chat(user, "<span class='notice'>You transfer the contents of [C].<span>")
-		for(var/obj/item/O in C.contents)
-			if(can_be_inserted(O))
+		for (var/obj/item/O in C.contents)
+			if (can_be_inserted(O))
 				handle_item_insertion(O, 1)
 		return 1
 	. = ..()
@@ -186,13 +186,13 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	set name = "Add Coloured Label"
 	set category = "Object"
 	set src in usr
-	if(!colour_overlay)
+	if (!colour_overlay)
 		return
 	var/bottle_colour
 	bottle_colour = input("Select Colour to change it to", "Pill Bottle Colour", bottle_colour) as null|anything in bottle_colour_choices
-	if(!bottle_colour||(usr.stat))
+	if (!bottle_colour||(usr.stat))
 		return
-	if(bottle_colour == "Custom")
+	if (bottle_colour == "Custom")
 		bottle_colour = input("Select Colour to change it to", "Pill Bottle Colour", bottle_colour) as color
 	else
 		bottle_colour = bottle_colour_choices[bottle_colour]

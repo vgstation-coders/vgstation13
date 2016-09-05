@@ -59,13 +59,13 @@ proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override c
 	var/list/layers = list() // Associative list of [overlay = layer]
 	var/hash = "" // Hash of overlay combination
 
-	if(is_type_in_list(A, directional)&&!is_type_in_list(A, exception))
+	if (is_type_in_list(A, directional)&&!is_type_in_list(A, exception))
 		dir = A.dir
 	else
-		if(istype(A,/turf))
+		if (istype(A,/turf))
 			var/c = directional_turfs.len
 			directional_turfs -= A.icon_state
-			if(c != directional_turfs.len)
+			if (c != directional_turfs.len)
 				dir = A.dir
 				directional_turfs += A.icon_state
 			else
@@ -75,9 +75,9 @@ proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override c
 
 	var/list/initialimage = list()
 	// Add the atom's icon itself
-	if(A.icon)
+	if (A.icon)
 		// Make a copy without pixel_x/y settings
-		if(A.pixel_x || A.pixel_y) //Lets assume any pixel shifted icon is directional
+		if (A.pixel_x || A.pixel_y) //Lets assume any pixel shifted icon is directional
 			dir = A.dir
 		var/image/copy = image(icon=A.icon,icon_state=A.icon_state,layer=A.layer,dir=dir)
 		initialimage[copy] = A.layer
@@ -98,37 +98,37 @@ proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override c
 	var/list/overlaysort = list()
 	var/list/sorting = underlaysort
 
-	while(TRUE)
-		if(currentIndex<=process.len)
+	while (TRUE)
+		if (currentIndex<=process.len)
 			//All this does is find the appropriate layer and image
 			currentOverlay = process[currentIndex]
 			currentLayer = currentOverlay:layer
-			if(currentLayer<0) // Special case for FLY_LAYER
+			if (currentLayer<0) // Special case for FLY_LAYER
 				ASSERT(currentLayer > -1000)
-				if(processSubset == 0) // Underlay
+				if (processSubset == 0) // Underlay
 					currentLayer = A.layer+currentLayer/1000
 				else // Overlay
 					currentLayer = A.layer+(1000+currentLayer)/1000
 
 			//Next is a simple sort algorithm to place the overlay by layer
-			if(!sorting.len)
+			if (!sorting.len)
 				sorting[currentOverlay] = currentLayer
 				currentIndex++
 				continue
 
-			for(compareIndex=1,compareIndex<=sorting.len,compareIndex++)
+			for (compareIndex=1,compareIndex<=sorting.len,compareIndex++)
 				compareOverlay = sorting[compareIndex]
-				if(currentLayer < sorting[compareOverlay]) // Associated value is the calculated layer
+				if (currentLayer < sorting[compareOverlay]) // Associated value is the calculated layer
 					sorting.Insert(compareIndex,currentOverlay)
 					sorting[currentOverlay] = currentLayer
 					break
-			if(compareIndex>sorting.len) // Reached end of list without inserting
+			if (compareIndex>sorting.len) // Reached end of list without inserting
 				sorting[currentOverlay]=currentLayer // Place at end
 
 			currentIndex++
 
-		if(currentIndex>process.len)
-			if(processSubset == 0) // Switch to overlays
+		if (currentIndex>process.len)
+			if (processSubset == 0) // Switch to overlays
 				currentIndex = 1
 				processSubset = 1
 				process = A.overlays
@@ -142,15 +142,15 @@ proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override c
 	layers += initialimage
 	layers += overlaysort
 
-	if(cache!=0) // If cache is NOT disabled
+	if (cache!=0) // If cache is NOT disabled
 		// Create a hash value to represent this specific flattened icon
-		for(var/I in layers)
+		for (var/I in layers)
 			hash += "\ref[I:icon],[I:icon_state],[I:dir != SOUTH ? I:dir : dir],[I:pixel_x],[I:pixel_y];_;"
 		hash=md5(hash)
 
-		if(cache!=2) // If NOT overriding cache
+		if (cache!=2) // If NOT overriding cache
 			// Check if the icon has already been generated
-			if((hash in _flatIcons) && _flatIcons[hash])
+			if ((hash in _flatIcons) && _flatIcons[hash])
 				// Icon already exists, just return that one
 				return _flatIcons[hash]
 
@@ -169,9 +169,9 @@ proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override c
 	var/addY1
 	var/addY2
 
-	for(var/I in layers)
+	for (var/I in layers)
 		var/layerdir = I:dir //We want overlays/underlays to use their correct directional icon state
-		if(I == A || !layerdir)
+		if (I == A || !layerdir)
 			layerdir = dir
 
 		add = icon(I:icon || A.icon
@@ -180,27 +180,27 @@ proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override c
 		         , 1
 		         , 0)
 
-		if(I:name == "damage layer")
+		if (I:name == "damage layer")
 			var/mob/living/carbon/human/H = A
-			if(istype(H))
-				for(var/datum/organ/external/O in H.organs)
-					if(!(O.status & ORGAN_DESTROYED))
-						if(O.damage_state == "00")
+			if (istype(H))
+				for (var/datum/organ/external/O in H.organs)
+					if (!(O.status & ORGAN_DESTROYED))
+						if (O.damage_state == "00")
 							continue
 						var/icon/DI
 						DI = H.get_damage_icon_part(O.damage_state, O.icon_name, (H.species.blood_color == "#A10808" ? "" : H.species.blood_color))
 						add.Blend(DI,ICON_OVERLAY)
 
-		if(!exact && iscarbon(A))
+		if (!exact && iscarbon(A))
 			var/mob/living/carbon/C = A
-			if(C.lying && !isalienadult(C))//because adult aliens have their own resting sprite
+			if (C.lying && !isalienadult(C))//because adult aliens have their own resting sprite
 				add.Turn(90)
 
-		if(isobserver(A))
+		if (isobserver(A))
 			add.ChangeOpacity(0.5)
 
 		// Apply any color or alpha settings
-		if(I:color || I:alpha != 255)
+		if (I:color || I:alpha != 255)
 			var/rgba = (I:color || "#FFFFFF") + copytext(rgb(0,0,0,I:alpha), 8)
 			add.Blend(rgba, ICON_MULTIPLY)
 
@@ -210,7 +210,7 @@ proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override c
 		addY1 = min(flatY1, I:pixel_y+1)
 		addY2 = max(flatY2, I:pixel_y+add.Height())
 
-		if(addX1!=flatX1 || addX2!=flatX2 || addY1!=flatY1 || addY2!=flatY2)
+		if (addX1!=flatX1 || addX2!=flatX2 || addY1!=flatY1 || addY2!=flatY2)
 			// Resize the flattened icon so the new icon fits
 			flat.Crop(addX1-flatX1+1, addY1-flatY1+1, addX2-flatX1+1, addY2-flatY1+1)
 			flatX1=addX1;flatX2=addX2
@@ -219,10 +219,10 @@ proc/getFlatIcon(atom/A, dir, cache=1, exact=0) // 1 = use cache, 2 = override c
 		// Blend the overlay into the flattened icon
 		flat.Blend(add,ICON_OVERLAY,I:pixel_x+2-flatX1,I:pixel_y+2-flatY1)
 
-	if(A.color)
+	if (A.color)
 		flat.Blend(A.color,ICON_MULTIPLY)
 
-	if(cache!=0) // If cache is NOT disabled
+	if (cache!=0) // If cache is NOT disabled
 		// Cache the generated icon in our list so we don't have to regenerate it
 		_flatIcons[hash] = flat
 

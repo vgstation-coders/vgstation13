@@ -16,9 +16,9 @@
 //////////////////////////////Capturing////////////////////////////////////////////////////////
 
 /obj/item/device/soulstone/attack(var/mob/living/M, mob/user as mob)
-	if(!istype(M, /mob/living/carbon) && !istype(M, /mob/living/simple_animal))
+	if (!istype(M, /mob/living/carbon) && !istype(M, /mob/living/simple_animal))
 		return ..()
-	if(istype(M, /mob/living/carbon/human/manifested))
+	if (istype(M, /mob/living/carbon/human/manifested))
 		to_chat(user, "The soul stone shard seems unable to pull the soul out of that poor manifested ghost back onto our plane.")
 		return
 	add_logs(user, M, "captured [M.name]'s soul", object=src)
@@ -27,7 +27,7 @@
 	return
 
 /*attack(mob/living/simple_animal/shade/M as mob, mob/user as mob)//APPARENTLY THEY NEED THEIR OWN SPECIAL SNOWFLAKE CODE IN THE LIVING ANIMAL DEFINES
-	if(!istype(M, /mob/living/simple_animal/shade))//If target is not a shade
+	if (!istype(M, /mob/living/simple_animal/shade))//If target is not a shade
 		return ..()
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to capture the soul of [M.name] ([M.ckey])</font>")
 
@@ -40,7 +40,7 @@
 		return
 	user.set_machine(src)
 	var/dat = "<TT><B>Soul Stone</B><BR>"
-	for(var/mob/living/simple_animal/shade/A in src)
+	for (var/mob/living/simple_animal/shade/A in src)
 		dat += "Captured Soul: [A.name]<br>"
 		dat += {"<A href='byond://?src=\ref[src];choice=Summon'>Summon Shade</A>"}
 		dat += "<br>"
@@ -62,14 +62,14 @@
 	add_fingerprint(U)
 	U.set_machine(src)
 
-	switch(href_list["choice"])//Now we switch based on choice.
+	switch (href_list["choice"])//Now we switch based on choice.
 		if ("Close")
 			U << browse(null, "window=aicard")
 			U.unset_machine()
 			return
 
 		if ("Summon")
-			for(var/mob/living/simple_animal/shade/A in src)
+			for (var/mob/living/simple_animal/shade/A in src)
 				eject_shade(U)
 				src.icon_state = "soulstone"
 				src.item_state = "shard-soulstone"
@@ -97,37 +97,37 @@
 	desc = "This eerie contraption looks like it would come alive if supplied with a missing ingredient."
 
 /obj/structure/constructshell/attackby(obj/item/O as obj, mob/user as mob)
-	if(istype(O, /obj/item/device/soulstone))
+	if (istype(O, /obj/item/device/soulstone))
 		O.transfer_soul("CONSTRUCT",src,user)
 
 
 ////////////////////////////Proc for moving soul in and out off stone//////////////////////////////////////
 
 /obj/item/device/soulstone/proc/eject_shade(var/mob/user=null)
-	for(var/mob/living/L in src)
+	for (var/mob/living/L in src)
 		L.forceMove(get_turf(src))
 		L.status_flags &= ~GODMODE
-		if(user)
+		if (user)
 			to_chat(L, "<b>You have been released from your prison, but you are still bound to [user.name]'s will. Help them suceed in their goals at all costs.</b>")
 		L.canmove = 1
 		L.cancel_camera()
 
 /obj/item/proc/capture_soul(var/target, var/mob/user as mob)
-	if(istype(target, /mob/living/carbon))//humans, monkeys, aliens
+	if (istype(target, /mob/living/carbon))//humans, monkeys, aliens
 		var/mob/living/carbon/carbonMob = target
 		//first of all, let's check that our target has a soul, somewhere
 
-		if(!carbonMob.client)
+		if (!carbonMob.client)
 			//no client? the target could be either braindead, decapitated, or catatonic, let's check which
 			var/mob/living/carbon/human/humanTarget = null
 			var/datum/organ/internal/brain/humanBrain = null
-			if(ishuman(target))
+			if (ishuman(target))
 				humanTarget = target
 				humanBrain = humanTarget.internal_organs_by_name["brain"]
 
-			if(!humanTarget || (humanTarget && humanBrain))
+			if (!humanTarget || (humanTarget && humanBrain))
 				//our target either is a monkey or alien, or is a human with their head. Did they have a soul in the first place? if so, where is it right now
-				if(!carbonMob.mind)
+				if (!carbonMob.mind)
 					//if a mob doesn't have a mind, that means it never had a player controlling him
 					to_chat(user, "<span class='warning'>The soul stone isn't reacting, looks like this target doesn't have much of a soul.</span>")
 					return
@@ -135,13 +135,13 @@
 					//otherwise, that means the player either disconnected or ghosted. we can track their key from their mind,
 					//but first let's make sure that they are dead or in crit
 					var/mob/new_target = null
-					for(var/mob/M in player_list)
-						if(M.key == carbonMob.mind.key)
+					for (var/mob/M in player_list)
+						if (M.key == carbonMob.mind.key)
 							new_target = M
-					if(!new_target)
+					if (!new_target)
 						to_chat(user, "<span class='warning'>The soul stone isn't reacting, looks like this target's soul went far, far away.</span>")
 						return
-					else if(!istype(new_target,/mob/dead/observer))
+					else if (!istype(new_target,/mob/dead/observer))
 						to_chat(user, "<span class='warning'>The soul stone isn't reacting, looks like this target's soul already reincarnated.</span>")
 						return
 					else
@@ -149,17 +149,17 @@
 						to_chat(new_target, "<span class='danger'>You feel your soul getting sucked into the soul stone.</span>")
 						to_chat(user, "<span class='rose'>The soul stone reacts to the corpse and starts glowing.</span>")
 						capture_soul_process(user,new_target.client,carbonMob)
-			else if(humanTarget)
+			else if (humanTarget)
 				//aw shit, our target is a brain/headless human, let's try and locate the head.
-				if(!humanTarget.decapitated || (humanTarget.decapitated.loc == null))
+				if (!humanTarget.decapitated || (humanTarget.decapitated.loc == null))
 					to_chat(user, "<span class='warning'>The soul stone isn't reacting, looks like their brain has been removed or head has been destroyed.</span>")
 					return
-				else if(istype(humanTarget.decapitated.loc,/mob/living/carbon/human))
+				else if (istype(humanTarget.decapitated.loc,/mob/living/carbon/human))
 					to_chat(user, "<span class='warning'>The soul stone isn't reacting, looks like their head has been grafted on another body.</span>")
 					return
 				else
 					var/obj/item/weapon/organ/head/humanHead = humanTarget.decapitated
-					if((humanHead.z != humanTarget.z) || (get_dist(humanTarget,humanHead) > 5))//F I V E   T I L E S
+					if ((humanHead.z != humanTarget.z) || (get_dist(humanTarget,humanHead) > 5))//F I V E   T I L E S
 						to_chat(user, "<span class='warning'>The soul stone isn't reacting, the head needs to be closer from the body.</span>")
 						return
 					else
@@ -170,7 +170,7 @@
 			//if the body still has a client, then all we have to make sure of is that he's dead or in crit
 			if (carbonMob.stat == CONSCIOUS)
 				to_chat(user, "<span class='warning'>Kill or maim the victim first!</span>")
-			else if(!carbonMob.isInCrit() && carbonMob.stat != DEAD)
+			else if (!carbonMob.isInCrit() && carbonMob.stat != DEAD)
 				to_chat(user, "<span class='warning'>The victim is holding on, weaken them further!</span>")
 			else
 				to_chat(carbonMob, "<span class='danger'>You feel your soul getting sucked into the soul stone.</span>")
@@ -181,25 +181,25 @@
 		//TODO: add a few snowflake checks to specific simple_animals that could be soulstoned.
 
 /obj/item/proc/capture_soul_head(var/target, var/mob/user as mob)//called either when using a soulstone on a head, or on a decapitated body
-	if(istype(target, /obj/item/weapon/organ/head))
+	if (istype(target, /obj/item/weapon/organ/head))
 		var/obj/item/weapon/organ/head/humanHead = target
-		if(!humanHead.organ_data)
+		if (!humanHead.organ_data)
 			to_chat(user, "<span class='rose'>The soul stone isn't reacting, looks like their brain was separated from their head.</span>")
 			return
 		var/mob/living/carbon/brain/humanBrainMob = humanHead.brainmob
-		if(!humanBrainMob.client)
-			if(!humanBrainMob.mind)
+		if (!humanBrainMob.client)
+			if (!humanBrainMob.mind)
 				to_chat(user, "<span class='warning'>The soul stone isn't reacting, looks like this target doesn't have much of a soul.</span>")
 				return
 			else
 				var/mob/new_target = null
-				for(var/mob/M in player_list)
-					if(M.key == humanBrainMob.mind.key)
+				for (var/mob/M in player_list)
+					if (M.key == humanBrainMob.mind.key)
 						new_target = M
-				if(!new_target)
+				if (!new_target)
 					to_chat(user, "<span class='warning'>The soul stone isn't reacting, looks like this target's soul went far, far away.</span>")
 					return
-				else if(!istype(new_target,/mob/dead/observer))
+				else if (!istype(new_target,/mob/dead/observer))
 					to_chat(user, "<span class='warning'>The soul stone isn't reacting, looks like this target's soul already reincarnated.</span>")
 					return
 				else
@@ -218,22 +218,22 @@
 	//target is the source of the guy's soul (his body, or his head if decapitated)
 	//add_target is his body if he has been decapitated, for cosmetic purposes (and so it dusts)
 
-	if(!targetClient)
+	if (!targetClient)
 		return
 
 	var/mob/living/carbon/human/body = null
 
-	if(istype(target,/mob/living/carbon/human))
+	if (istype(target,/mob/living/carbon/human))
 		body = target
-	else if(istype(add_target,/mob/living/carbon/human))
+	else if (istype(add_target,/mob/living/carbon/human))
 		body = add_target
 
 	var/true_name = "Unknown"
 
-	if(body)
+	if (body)
 		true_name = body.real_name
 
-		for(var/obj/item/W in body)
+		for (var/obj/item/W in body)
 			body.drop_from_inventory(W)
 
 		body.dropBorers(1)
@@ -243,27 +243,27 @@
 		body.invisibility = 101
 
 		var/datum/organ/external/head_organ = body.get_organ(LIMB_HEAD)
-		if(head_organ.status & ORGAN_DESTROYED)
+		if (head_organ.status & ORGAN_DESTROYED)
 			new /obj/effect/decal/remains/human/noskull(T)
 			anim(target = T, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2-nohead", sleeptime = 26)
 		else
 			new /obj/effect/decal/remains/human(T)
-			if(body.lying)
+			if (body.lying)
 				anim(target = T, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h2", sleeptime = 26)
 			else
 				anim(target = T, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 26)
 
-		if(body.decapitated && (body.decapitated == target))//just making sure we're dealing with the right head
+		if (body.decapitated && (body.decapitated == target))//just making sure we're dealing with the right head
 			target.invisibility = 101
 			new /obj/item/weapon/skull(get_turf(target))
 	else
 		target.invisibility = 101
 
-		if(ismob(target))
+		if (ismob(target))
 			var/mob/M = target
 			true_name = M.real_name
 			new /obj/effect/decal/cleanable/ash(get_turf(target))
-		else if(istype(target,/obj/item/weapon/organ/head))
+		else if (istype(target,/obj/item/weapon/organ/head))
 			var/obj/item/weapon/organ/head/H = target
 			var/mob/living/carbon/brain/BM = H.brainmob
 			true_name = BM.real_name
@@ -292,7 +292,7 @@
 	//Necromancer stuff
 	var/ref = "\ref[user.mind]"
 	var/list/necromancers
-	if(!(user.mind in ticker.mode.necromancer))
+	if (!(user.mind in ticker.mode.necromancer))
 		ticker.mode:necromancer[ref] = list()
 	necromancers = ticker.mode:necromancer[ref]
 	necromancers.Add(shadeMob.mind)
@@ -305,44 +305,44 @@
 	var/turf/T1 = get_turf(target)
 	var/turf/T2 = null
 
-	if(add_target && add_target.loc)
+	if (add_target && add_target.loc)
 		T2 = get_turf(add_target)
 
 	make_tracker_effects(T1, user)
-	if(T2)
+	if (T2)
 		make_tracker_effects(T2, user)
 
 	//Cleaning up the corpse
 	qdel(target)
-	if(add_target)
+	if (add_target)
 		qdel(add_target)
 
 
 /obj/item/proc/transfer_soul(var/choice as text, var/target, var/mob/living/carbon/U as mob)
 	var/deleteafter = 0
-	switch(choice)
-		if("VICTIM")
-			if(src.contents.len)
+	switch (choice)
+		if ("VICTIM")
+			if (src.contents.len)
 				to_chat(U, "<span class='warning'>The soul stone is full! Use or free an existing soul to make room.</span>")
 				return
 
 			var/mob/living/T = target
 
-			if(istype(ticker.mode, /datum/game_mode/cult))
+			if (istype(ticker.mode, /datum/game_mode/cult))
 				var/datum/game_mode/cult/mode_ticker = ticker.mode
-				if(T.mind && (mode_ticker.sacrifice_target == T.mind))
+				if (T.mind && (mode_ticker.sacrifice_target == T.mind))
 					to_chat(U, "<span class='warning'>The soul stone is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
 					return
 
 			capture_soul(T,U)
 
-		if("SHADE")
+		if ("SHADE")
 			var/mob/living/simple_animal/shade/T = target
 			var/obj/item/device/soulstone/C = src
 			if (T.stat == DEAD)
 				to_chat(U, "<span class='danger'>Capture failed!: </span>The shade has already been banished!")
 			else
-				if(C.contents.len)
+				if (C.contents.len)
 					to_chat(U, "<span class='danger'>Capture failed!: </span>The soul stone is full! Use or free an existing soul to make room.")
 				else
 					T.forceMove(C) //put shade in stone
@@ -355,20 +355,20 @@
 					C.name = "Soul Stone: [T.real_name]"
 					to_chat(T, "Your soul has been recaptured by the soul stone, its arcane energies are reknitting your ethereal form")
 					to_chat(U, "<span class='notice'><b>Capture successful!</b>: </span>[T.name]'s has been recaptured and stored within the soul stone.")
-		if("CONSTRUCT")
+		if ("CONSTRUCT")
 			var/obj/structure/constructshell/T = target
 			var/obj/item/device/soulstone/C = src
 			var/mob/living/simple_animal/shade/A = locate() in C
 			var/mob/living/simple_animal/construct/Z
-			if(A)
+			if (A)
 				var/construct_class = alert(U, "Please choose which type of construct you wish to create.",,"Juggernaut","Wraith","Artificer")
 				ticker.mode.update_necro_icons_removed(A.mind)
-				switch(construct_class)
-					if("Juggernaut")
+				switch (construct_class)
+					if ("Juggernaut")
 						Z = new /mob/living/simple_animal/construct/armoured (get_turf(T.loc))
 						Z.key = A.key
-						if(iscultist(U))
-							if(ticker.mode.name == "cult")
+						if (iscultist(U))
+							if (ticker.mode.name == "cult")
 								ticker.mode:add_cultist(Z.mind)
 							else
 								ticker.mode.cult+=Z.mind
@@ -379,11 +379,11 @@
 						Z.cancel_camera()
 						deleteafter = 1
 
-					if("Wraith")
+					if ("Wraith")
 						Z = new /mob/living/simple_animal/construct/wraith (get_turf(T.loc))
 						Z.key = A.key
-						if(iscultist(U))
-							if(ticker.mode.name == "cult")
+						if (iscultist(U))
+							if (ticker.mode.name == "cult")
 								ticker.mode:add_cultist(Z.mind)
 							else
 								ticker.mode.cult+=Z.mind
@@ -394,11 +394,11 @@
 						Z.cancel_camera()
 						deleteafter = 1
 
-					if("Artificer")
+					if ("Artificer")
 						Z = new /mob/living/simple_animal/construct/builder (get_turf(T.loc))
 						Z.key = A.key
-						if(iscultist(U))
-							if(ticker.mode.name == "cult")
+						if (iscultist(U))
+							if (ticker.mode.name == "cult")
 								ticker.mode:add_cultist(Z.mind)
 							else
 								ticker.mode.cult+=Z.mind
@@ -408,10 +408,10 @@
 						to_chat(Z, "<B>You are still bound to serve your creator, follow their orders and help them complete their goals at all costs.</B>")
 						Z.cancel_camera()
 						deleteafter = 1
-				if(Z && Z.mind && !iscultist(Z))
+				if (Z && Z.mind && !iscultist(Z))
 					var/ref = "\ref[U.mind]"
 					var/list/necromancers
-					if(!(U.mind in ticker.mode.necromancer))
+					if (!(U.mind in ticker.mode.necromancer))
 						ticker.mode:necromancer[ref] = list()
 					necromancers = ticker.mode:necromancer[ref]
 					necromancers.Add(Z.mind)
@@ -423,8 +423,8 @@
 			else
 				to_chat(U, "<span class='warning'><b>Creation failed!</b>: The soul stone is empty! Go kill someone!</span>")
 	ticker.mode.update_all_necro_icons()
-	if(deleteafter)
-		for(var/atom/A in src)//we get rid of the empty shade once we've transferred its mind to the construct, so it isn't dropped on the floor when the soulstone is destroyed.
+	if (deleteafter)
+		for (var/atom/A in src)//we get rid of the empty shade once we've transferred its mind to the construct, so it isn't dropped on the floor when the soulstone is destroyed.
 			qdel(A)
 		qdel(src)
 	return

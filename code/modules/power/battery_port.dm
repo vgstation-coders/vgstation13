@@ -33,14 +33,14 @@
 	..()
 
 /obj/machinery/power/battery_port/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/stack/cable_coil) && !terminal)
+	if (istype(W, /obj/item/stack/cable_coil) && !terminal)
 		var/obj/item/stack/cable_coil/CC = W
 
 		if (CC.amount < 10)
 			to_chat(user, "<span class=\"warning\">You need 10 length cable coil to make a terminal.</span>")
 			return
 
-		if(make_terminal(user))
+		if (make_terminal(user))
 			CC.use(10)
 			terminal.connect_to_network()
 
@@ -53,43 +53,43 @@
 
 /obj/machinery/power/battery_port/update_icon()
 	overlays.len = 0
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		return
 
-	if(connected && connected.charging)
+	if (connected && connected.charging)
 		overlays += image('icons/obj/power.dmi', "bp-c")
 	else
-		if(connected)
-			if(connected.charge > 0)
+		if (connected)
+			if (connected.charge > 0)
 				overlays += image('icons/obj/power.dmi', "bp-o")
 			else
 				overlays += image('icons/obj/power.dmi', "bp-d")
 
 /obj/machinery/power/battery_port/add_load(var/amount)
-	if(terminal && terminal.get_powernet())
+	if (terminal && terminal.get_powernet())
 		terminal.powernet.load += amount
 		return 1
 	return 0
 
 /obj/machinery/power/battery_port/surplus()
-	if(terminal)
+	if (terminal)
 		return terminal.surplus()
 	return 0
 
 /obj/machinery/power/battery_port/crowbarDestroy(mob/user)
-	if(connected)
+	if (connected)
 		to_chat(user, "You can't disconnect \the [src] while it has \the [connected] attached.")
 		return -1
 	return ..()
 
 /obj/machinery/power/battery_port/proc/connect_battery(obj/machinery/power/battery/portable/portable)
-	if(portable)
+	if (portable)
 		connected = portable
 		portable.connected_to = src
 		connected.update_icon()
 
 /obj/machinery/power/battery_port/proc/disconnect_battery()
-	if(connected)
+	if (connected)
 		connected.connected_to = null
 		connected.update_icon()
 		connected = null

@@ -67,20 +67,20 @@
 	reagents.my_atom = src
 
 /obj/item/weapon/kitchen/utensil/fork/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	if(!istype(M) || !istype(user))
+	if (!istype(M) || !istype(user))
 		return ..()
 
-	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != LIMB_HEAD && M != user && !loaded_food)
+	if (user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != LIMB_HEAD && M != user && !loaded_food)
 		return ..()
 
 	if (src.loaded_food)
 		reagents.update_total()
-		if(M == user)
+		if (M == user)
 			user.visible_message("<span class='notice'>[user] eats a delicious forkful of [loaded_food_name]!</span>")
 		else
 			user.visible_message("<span class='notice'>[user] attempts to feed [M] a delicious forkful of [loaded_food_name].</span>")
-			if(do_mob(user, M))
-				if(!loaded_food)
+			if (do_mob(user, M))
+				if (!loaded_food)
 					return
 
 				user.visible_message("<span class='notice'>[user] feeds [M] a delicious forkful of [loaded_food_name]!</span>")
@@ -91,29 +91,29 @@
 		loaded_food_name = null
 		return
 	else
-		if((M_CLUMSY in user.mutations) && prob(50))
+		if ((M_CLUMSY in user.mutations) && prob(50))
 			return eyestab(user,user)
 		else
 			return eyestab(M, user)
 
 /obj/item/weapon/kitchen/utensil/fork/examine(mob/user)
 	..()
-	if(loaded_food)
+	if (loaded_food)
 		user.show_message("It has a forkful of [loaded_food_name] on it.")
 
 /obj/item/weapon/kitchen/utensil/fork/proc/load_food(obj/item/weapon/reagent_containers/food/snacks/snack, mob/user)
-	if(!snack || !user || !istype(snack) || !istype(user))
+	if (!snack || !user || !istype(snack) || !istype(user))
 		return
 
-	if(loaded_food)
+	if (loaded_food)
 		to_chat(user, "<span class='notice'>You already have food on \the [src].</span>")
 		return
 
-	if(snack.wrapped)
+	if (snack.wrapped)
 		to_chat(user, "<span class='notice'>You can't eat packaging!</span>")
 		return
 
-	if(snack.reagents.total_volume)
+	if (snack.reagents.total_volume)
 		loaded_food_name = snack.name
 		var/icon/food_to_load = getFlatIcon(snack)
 		food_to_load.Scale(16,16)
@@ -121,7 +121,7 @@
 		loaded_food.pixel_x = 8 * PIXEL_MULTIPLIER + src.pixel_x
 		loaded_food.pixel_y = 15 * PIXEL_MULTIPLIER + src.pixel_y
 		src.overlays += loaded_food
-		if(snack.reagents.total_volume > snack.bitesize)
+		if (snack.reagents.total_volume > snack.bitesize)
 			snack.reagents.trans_to(src, snack.bitesize)
 		else
 			snack.reagents.trans_to(src, snack.reagents.total_volume)
@@ -195,12 +195,12 @@
 
 /obj/item/weapon/kitchen/utensil/knife/large/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if(istype(W, /obj/item/weapon/weldingtool))
+	if (istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
-		if(WT.remove_fuel(0, user))
+		if (WT.remove_fuel(0, user))
 			to_chat(user, "You slice the handle off of \the [src].")
 			playsound(user, 'sound/items/Welder.ogg', 50, 1)
-			if(src.loc == user)
+			if (src.loc == user)
 				user.drop_item(src, force_drop = 1)
 				var/obj/item/weapon/metal_blade/I = new (get_turf(user))
 				user.put_in_hands(I)
@@ -253,7 +253,7 @@
 	throwforce = 15.0
 
 /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver/throw_impact(atom/hit_atom)
-	if(istype(hit_atom, /mob/living) && prob(85))
+	if (istype(hit_atom, /mob/living) && prob(85))
 		var/mob/living/L = hit_atom
 		L.Stun(5)
 		L.Weaken(5)
@@ -286,14 +286,14 @@
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
 
 	log_attack("<font color='red'>[user.name] ([user.ckey]) used the [src.name] to attack [M.name] ([M.ckey])</font>")
-	if(!iscarbon(user))
+	if (!iscarbon(user))
 		M.LAssailant = null
 	else
 		M.LAssailant = user
 
 	var/t = user:zone_sel.selecting
 	if (t == LIMB_HEAD)
-		if(ishuman(M))
+		if (ishuman(M))
 			var/mob/living/carbon/human/H = M
 			if (H.stat < 2 && H.health < 50 && prob(90))
 				// ******* Check
@@ -305,7 +305,7 @@
 					H.Paralyse(time)
 				else
 					H.Stun(time)
-				if(H.stat != 2)
+				if (H.stat != 2)
 					H.stat = 1
 				user.visible_message("<span class='danger'><B>[H] has been knocked unconscious!</B>", "<span class='warning'>You knock [H] unconscious!</span></span>")
 				return
@@ -339,7 +339,7 @@
 	var/cooldown = 0	//shield bash cooldown. based on world.time
 
 /obj/item/weapon/tray/Destroy()
-	for(var/atom/thing in carrying)
+	for (var/atom/thing in carrying)
 		qdel(thing)
 	carrying = null
 	..()
@@ -349,11 +349,11 @@
 	// Drop all the things. All of them.
 	send_items_flying()
 
-	if((M_CLUMSY in user.mutations) && prob(50))              //What if he's a clown?
+	if ((M_CLUMSY in user.mutations) && prob(50))              //What if he's a clown?
 		to_chat(M, "<span class='warning'>You accidentally slam yourself with the [src]!</span>")
 		M.Weaken(1)
 		user.take_organ_damage(2)
-		if(prob(50))
+		if (prob(50))
 			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
 			return
 		else
@@ -363,8 +363,8 @@
 	var/mob/living/carbon/human/H = M      ///////////////////////////////////// /Let's have this ready for later.
 
 
-	if(!(user.zone_sel.selecting == ("eyes" || LIMB_HEAD))) //////////////hitting anything else other than the eyes
-		if(prob(33))
+	if (!(user.zone_sel.selecting == ("eyes" || LIMB_HEAD))) //////////////hitting anything else other than the eyes
+		if (prob(33))
 			src.add_blood(H)
 			var/turf/location = H.loc
 			if (istype(location, /turf/simulated))
@@ -374,33 +374,33 @@
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
 
 		log_attack("<font color='red'>[user.name] ([user.ckey]) used the [src.name] to attack [M.name] ([M.ckey])</font>")
-		if(!iscarbon(user))
+		if (!iscarbon(user))
 			M.LAssailant = null
 		else
 			M.LAssailant = user
 
-		if(prob(15))
+		if (prob(15))
 			M.Weaken(3)
 			M.take_organ_damage(3)
 		else
 			M.take_organ_damage(5)
-		if(prob(50))
+		if (prob(50))
 			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
-			for(var/mob/O in viewers(M, null))
+			for (var/mob/O in viewers(M, null))
 				O.show_message(text("<span class='danger'>[] slams [] with the tray!</span>", user, M), 1)
 			return
 		else
 			playsound(M, 'sound/items/trayhit2.ogg', 50, 1)  //we applied the damage, we played the sound, we showed the appropriate messages. Time to return and stop the proc
-			for(var/mob/O in viewers(M, null))
+			for (var/mob/O in viewers(M, null))
 				O.show_message(text("<span class='danger'>[] slams [] with the tray!</span>", user, M), 1)
 			return
 
 
 
 
-	if(istype(M, /mob/living/carbon/human) && H.check_body_part_coverage(EYES))
+	if (istype(M, /mob/living/carbon/human) && H.check_body_part_coverage(EYES))
 		to_chat(H, "<span class='warning'>You get slammed in the face with the tray, against your mask!</span>")
-		if(prob(33))
+		if (prob(33))
 			src.add_blood(H)
 			if (H.wear_mask)
 				H.wear_mask.add_blood(H)
@@ -412,15 +412,15 @@
 			if (istype(location, /turf/simulated))     //Addin' blood! At least on the floor and item :v
 				location.add_blood(H)
 
-		if(prob(50))
+		if (prob(50))
 			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
-			for(var/mob/O in viewers(M, null))
+			for (var/mob/O in viewers(M, null))
 				O.show_message(text("<span class='danger'>[] slams [] with the tray!</span>", user, M), 1)
 		else
 			playsound(M, 'sound/items/trayhit2.ogg', 50, 1)  //sound playin'
-			for(var/mob/O in viewers(M, null))
+			for (var/mob/O in viewers(M, null))
 				O.show_message(text("<span class='danger'>[] slams [] with the tray!</span>", user, M), 1)
-		if(prob(10))
+		if (prob(10))
 			M.Stun(rand(1,3))
 			M.take_organ_damage(3)
 			return
@@ -430,27 +430,27 @@
 
 	else //No eye or head protection, tough luck!
 		to_chat(M, "<span class='warning'>You get slammed in the face with the tray!</span>")
-		if(prob(33))
+		if (prob(33))
 			src.add_blood(M)
 			var/turf/location = H.loc
 			if (istype(location, /turf/simulated))
 				location.add_blood(H)
 
-		if(prob(50))
+		if (prob(50))
 			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
-			for(var/mob/O in viewers(M, null))
+			for (var/mob/O in viewers(M, null))
 				O.show_message(text("<span class='danger'>[] slams [] in the face with the tray!</span>", user, M), 1)
 		else
 			playsound(M, 'sound/items/trayhit2.ogg', 50, 1)  //sound playin' again
-			for(var/mob/O in viewers(M, null))
+			for (var/mob/O in viewers(M, null))
 				O.show_message(text("<span class='danger'>[] slams [] in the face with the tray!</span>", user, M), 1)
-		if(prob(30))
+		if (prob(30))
 			M.Stun(rand(2,4))
 			M.take_organ_damage(4)
 			return
 		else
 			M.take_organ_damage(8)
-			if(prob(30))
+			if (prob(30))
 				M.Weaken(2)
 				return
 			return
@@ -462,41 +462,41 @@
 ===============~~~~~================================~~~~~====================
 */
 /obj/item/proc/get_trayweight() //calculates weight for the purpose of trays, 0 if too big
-	if(w_class > W_CLASS_MEDIUM)
+	if (w_class > W_CLASS_MEDIUM)
 		return 0
-	if(w_class == W_CLASS_TINY)
+	if (w_class == W_CLASS_TINY)
 		return 1
-	if(w_class == W_CLASS_SMALL)
+	if (w_class == W_CLASS_SMALL)
 		return 3
-	if(w_class == W_CLASS_MEDIUM)
+	if (w_class == W_CLASS_MEDIUM)
 		return 5
 
 /obj/item/weapon/tray/attackby(obj/item/W as obj, mob/user as mob, params)
-	if(isrobot(user) && !isMoMMI(user))
+	if (isrobot(user) && !isMoMMI(user))
 		return
-	if(istype(W, /obj/item/weapon/kitchen/rollingpin)) //shield bash
-		if(cooldown < world.time - 25)
+	if (istype(W, /obj/item/weapon/kitchen/rollingpin)) //shield bash
+		if (cooldown < world.time - 25)
 			user.visible_message("<span class='warning'>[user] bashes [src] with [W]!</span>")
 			playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
 			cooldown = world.time
 			return
-	if(!user.candrop)
+	if (!user.candrop)
 		return
 	var/weight = W.get_trayweight()
-	if(!weight)
+	if (!weight)
 		to_chat(user, "<span class='warning'>\The [W] is too heavy!</span>")
 		return
-	if(weight + calc_carry() > max_carry)
+	if (weight + calc_carry() > max_carry)
 		to_chat(user, "<span class='warning'>The tray is carrying too much!</span>")
 		return
-	if( W == src || W.anchored || is_type_in_list(W, list(/obj/item/clothing/under, /obj/item/clothing/suit, /obj/item/projectile, /obj/item/weapon/tray, /obj/item/weapon/holder/) ) )
+	if ( W == src || W.anchored || is_type_in_list(W, list(/obj/item/clothing/under, /obj/item/clothing/suit, /obj/item/projectile, /obj/item/weapon/tray, /obj/item/weapon/holder/) ) )
 		to_chat(user, "<span class='warning'>This doesn't seem like a good idea.</span>")
 		return
-	if(user.drop_item(W, user.loc))
+	if (user.drop_item(W, user.loc))
 		W.forceMove(src)
 		carrying.Add(W)
 		var/list/params_list = params2list(params)
-		if(params_list.len)
+		if (params_list.len)
 			var/icon/clicked = new/icon(icon, icon_state, dir)
 			var/clamp_x = clicked.Width() / 2
 			var/clamp_y = clicked.Height() / 2
@@ -514,27 +514,27 @@
 	// calculate the weight of the items on the tray
 	. = 0 // value to return
 
-	for(var/obj/item/I in carrying)
+	for (var/obj/item/I in carrying)
 		. += I.get_trayweight() || INFINITY
 /* previous functionality of trays,
 /obj/item/weapon/tray/prepickup(mob/user)
 	..()
 
-	if(!isturf(loc))
+	if (!isturf(loc))
 		return
 
-	for(var/obj/item/I in loc)
-		if( I != src && !I.anchored && !is_type_in_list(I, list(/obj/item/clothing/under, /obj/item/clothing/suit, /obj/item/projectile, /obj/item/weapon/tray)) )
+	for (var/obj/item/I in loc)
+		if ( I != src && !I.anchored && !is_type_in_list(I, list(/obj/item/clothing/under, /obj/item/clothing/suit, /obj/item/projectile, /obj/item/weapon/tray)) )
 			var/add = 0
-			if(I.w_class > W_CLASS_TINY)
+			if (I.w_class > W_CLASS_TINY)
 				add = 1
-			else if(I.w_class == W_CLASS_SMALL)
+			else if (I.w_class == W_CLASS_SMALL)
 				add = 3
-			else if(I.w_class > W_CLASS_MEDIUM)
+			else if (I.w_class > W_CLASS_MEDIUM)
 				add = 5
 			else
 				continue
-			if(calc_carry() + add >= max_carry)
+			if (calc_carry() + add >= max_carry)
 				break
 
 			I.forceMove(src)
@@ -550,14 +550,14 @@
 */
 /obj/item/weapon/tray/dropped(mob/user)
 	spawn() //because throwing drops items before setting their throwing var, and a lot of other zany bullshit
-		if(throwing)
+		if (throwing)
 			return ..()
 		//This is so monumentally bad that I have to leave it in as a comment
 		/*var/mob/living/M
-		for(M in src.loc) //to handle hand switching
+		for (M in src.loc) //to handle hand switching
 			return*/
-		if(isturf(loc))
-			for(var/obj/structure/table/T in loc)
+		if (isturf(loc))
+			for (var/obj/structure/table/T in loc)
 				remove_items()
 				return ..()
 			// if no table, presume that the person just shittily dropped the tray on the ground and made a mess everywhere!
@@ -565,27 +565,27 @@
 		..()
 
 /obj/item/weapon/tray/throw_impact(atom/hit_atom)
-	if(isturf(hit_atom))
+	if (isturf(hit_atom))
 		whoops()
 	..()
 
 /obj/item/weapon/tray/proc/remove_items()
 	overlays.len = 0
-	for(var/obj/item/I in carrying)
+	for (var/obj/item/I in carrying)
 		I.forceMove(get_turf(src))
 		carrying.Remove(I)
 
 /obj/item/weapon/tray/proc/send_items_flying()
 	overlays.len = 0
-	for(var/obj/item/I in carrying)
+	for (var/obj/item/I in carrying)
 		I.forceMove(get_turf(src))
 		carrying.Remove(I)
 		spawn(rand(1,3))
-			if(I && prob(75))
+			if (I && prob(75))
 				step(I, pick(alldirs))
 
 /obj/item/weapon/tray/proc/whoops()
-	if(prob(50))
+	if (prob(50))
 		playsound(src, 'sound/items/trayhit1.ogg', 35, 1)
 	else
 		playsound(src, 'sound/items/trayhit2.ogg', 35, 1)
@@ -601,7 +601,7 @@
 
 
 /*/obj/item/weapon/tray/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/kitchen/utensil/fork))
+	if (istype(W,/obj/item/weapon/kitchen/utensil/fork))
 		if (W.icon_state == "forkloaded")
 			to_chat(user, "<span class='warning'>You already have omelette on your fork.</span>")
 			return

@@ -32,14 +32,14 @@ var/explosion_shake_message_cooldown = 0
 	src = null	//so we don't abort once src is deleted
 
 	spawn()
-		if(config.use_recursive_explosions)
+		if (config.use_recursive_explosions)
 			var/power = devastation_range * 2 + heavy_impact_range + light_impact_range //The ranges add up, ie light 14 includes both heavy 7 and devestation 3. So this calculation means devestation counts for 4, heavy for 2 and light for 1 power, giving us a cap of 27 power.
 			explosion_rec(epicenter, power)
 			return
 
 		var/watch = start_watch()
 		epicenter = get_turf(epicenter)
-		if(!epicenter)
+		if (!epicenter)
 			return
 
 		score["explosions"]++ //For the scoreboard
@@ -60,13 +60,13 @@ var/explosion_shake_message_cooldown = 0
 
 		for (var/mob/M in player_list)
 			//Double check for client
-			if(M && M.client)
+			if (M && M.client)
 				var/turf/M_turf = get_turf(M)
-				if(M_turf && M_turf.z == epicenter.z)
+				if (M_turf && M_turf.z == epicenter.z)
 					var/dist = get_dist(M_turf, epicenter)
 					//If inside the blast radius + world.view - 2
-					if(dist <= round(max_range + world.view - 2, 1))
-						if(devastation_range > 0)
+					if (dist <= round(max_range + world.view - 2, 1))
+						if (devastation_range > 0)
 							M.playsound_local(epicenter, get_sfx("explosion"), 100, 1, frequency, falloff = 5) // get_sfx() is so that everyone gets the same sound
 							shake_camera(M, Clamp(devastation_range, 3, 10), 2)
 						else
@@ -75,17 +75,17 @@ var/explosion_shake_message_cooldown = 0
 
 						//You hear a far explosion if you're outside the blast radius. Small bombs shouldn't be heard all over the station.
 
-					else if(dist <= far_dist)
+					else if (dist <= far_dist)
 						var/far_volume = Clamp(far_dist, 30, 50) // Volume is based on explosion size and dist
 						far_volume += (dist <= far_dist * 0.5 ? 50 : 0) // add 50 volume if the mob is pretty close to the explosion
-						if(devastation_range > 0)
+						if (devastation_range > 0)
 							M.playsound_local(epicenter, 'sound/effects/explosionfar.ogg', far_volume, 1, frequency, falloff = 5)
 							shake_camera(M, 3, 1)
 						else
 							M.playsound_local(epicenter, 'sound/effects/explosionsmallfar.ogg', far_volume, 1, frequency, falloff = 5)
 							skip_shake = 1
 
-					if(!explosion_shake_message_cooldown && !skip_shake)
+					if (!explosion_shake_message_cooldown && !skip_shake)
 						to_chat(M, "<span class='danger'>You feel the station's structure shaking all around you.</span>")
 						explosion_shake_message_cooldown = 1
 						spawn(50)
@@ -93,12 +93,12 @@ var/explosion_shake_message_cooldown = 0
 
 		var/close = trange(world.view+round(devastation_range,1), epicenter)
 		//To all distanced mobs play a different sound
-		for(var/mob/M in mob_list) if(M.z == epicenter.z) if(!(M in close))
+		for (var/mob/M in mob_list) if (M.z == epicenter.z) if (!(M in close))
 			//Check if the mob can hear
-			if(M.ear_deaf <= 0 || !M.ear_deaf)
-				if(!istype(M.loc,/turf/space))
+			if (M.ear_deaf <= 0 || !M.ear_deaf)
+				if (!istype(M.loc,/turf/space))
 					M << 'sound/effects/explosionfar.ogg'
-		if(adminlog)
+		if (adminlog)
 			message_admins("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ([epicenter.x],[epicenter.y],[epicenter.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[epicenter.x];Y=[epicenter.y];Z=[epicenter.z]'>JMP</A>)")
 			log_game("Explosion with size ([devastation_range], [heavy_impact_range], [light_impact_range]) in area [epicenter.loc.name] ")
 
@@ -106,7 +106,7 @@ var/explosion_shake_message_cooldown = 0
 		var/datum/controller/process/lighting = processScheduler.getProcess("lighting")
 		lighting.disable()
 
-		if(heavy_impact_range > 1)
+		if (heavy_impact_range > 1)
 			var/datum/effect/system/explosion/E = new/datum/effect/system/explosion()
 			E.set_up(epicenter)
 			E.start()
@@ -117,43 +117,43 @@ var/explosion_shake_message_cooldown = 0
 		var/y0 = epicenter.y
 		var/z0 = epicenter.z
 
-		for(var/turf/T in spiral_block(epicenter,max_range,1))
+		for (var/turf/T in spiral_block(epicenter,max_range,1))
 			var/dist = cheap_pythag(T.x - x0, T.y - y0)
 
-			if(explosion_newmethod)	//Realistic explosions that take obstacles into account
+			if (explosion_newmethod)	//Realistic explosions that take obstacles into account
 				var/turf/Trajectory = T
-				while(Trajectory != epicenter)
+				while (Trajectory != epicenter)
 					Trajectory = get_step_towards(Trajectory,epicenter)
-					if(Trajectory.density && Trajectory.explosion_block)
+					if (Trajectory.density && Trajectory.explosion_block)
 						dist += Trajectory.explosion_block
 
 					for (var/obj/machinery/door/D in Trajectory.contents)
-						if(D.density && D.explosion_block)
+						if (D.density && D.explosion_block)
 							dist += D.explosion_block
 
-			if(dist < devastation_range)
+			if (dist < devastation_range)
 				dist = 1
-			else if(dist < heavy_impact_range)
+			else if (dist < heavy_impact_range)
 				dist = 2
-			else if(dist < light_impact_range)
+			else if (dist < light_impact_range)
 				dist = 3
 			else
 				continue
 
-			for(var/atom/movable/A in T.contents)
+			for (var/atom/movable/A in T.contents)
 				A.ex_act(dist)
 
 			T.ex_act(dist)
 
 		var/took = stop_watch(watch)
 		//You need to press the DebugGame verb to see these now....they were getting annoying and we've collected a fair bit of data. Just -test- changes  to explosion code using this please so we can compare
-		if(Debug2)
+		if (Debug2)
 			world.log << "## DEBUG: Explosion([x0],[y0],[z0])(d[devastation_range],h[heavy_impact_range],l[light_impact_range]): Took [took] seconds."
 
 		//Machines which report explosions.
-		if(!ignored)
-			for(var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
-				if(bhangmeter && !bhangmeter.stat)
+		if (!ignored)
+			for (var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
+				if (bhangmeter && !bhangmeter.stat)
 					bhangmeter.sense_explosion(x0, y0, z0, devastation_range, heavy_impact_range, light_impact_range, took, 0, verbose)
 
 		sleep(8)
@@ -165,5 +165,5 @@ var/explosion_shake_message_cooldown = 0
 
 
 proc/secondaryexplosion(turf/epicenter, range)
-	for(var/turf/tile in trange(range, epicenter))
+	for (var/turf/tile in trange(range, epicenter))
 		tile.ex_act(2)

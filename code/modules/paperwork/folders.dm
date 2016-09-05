@@ -27,27 +27,27 @@
 
 /obj/item/weapon/folder/update_icon()
 	overlays.len = 0
-	if(contents.len)
+	if (contents.len)
 		overlays += image(icon = icon, icon_state = "folder_paper")
 	return
 
 /obj/item/weapon/folder/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/weapon/photo))
-		if(user.drop_item(W, src))
+	if (istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/weapon/photo))
+		if (user.drop_item(W, src))
 			to_chat(user, "<span class='notice'>You put the [W] into \the [src].</span>")
 			update_icon()
-	else if(istype(W, /obj/item/weapon/pen))
+	else if (istype(W, /obj/item/weapon/pen))
 		var/n_name = copytext(sanitize(input(user, "What would you like to label the folder?", "Folder Labelling", null)  as text), 1, MAX_NAME_LEN)
-		if(in_range(src, user) && user.stat == CONSCIOUS)
+		if (in_range(src, user) && user.stat == CONSCIOUS)
 			name = "folder[(n_name ? text("- '[n_name]'") : null)]"
 	return
 
 /obj/item/weapon/folder/attack_self(mob/user as mob)
 	var/dat = "<title>[name]</title>"
 
-	for(var/obj/item/weapon/paper/P in src)
+	for (var/obj/item/weapon/paper/P in src)
 		dat += "<A href='?src=\ref[src];remove=\ref[P]'>Remove</A> - <A href='?src=\ref[src];read=\ref[P]'>[P.name]</A><BR>"
-	for(var/obj/item/weapon/photo/Ph in src)
+	for (var/obj/item/weapon/photo/Ph in src)
 		dat += "<A href='?src=\ref[src];remove=\ref[Ph]'>Remove</A> - <A href='?src=\ref[src];look=\ref[Ph]'>[Ph.name]</A><BR>"
 	user << browse(dat, "window=folder")
 	onclose(user, "folder")
@@ -56,43 +56,43 @@
 
 /obj/item/weapon/folder/Topic(href, href_list)
 	..()
-	if((usr.stat || usr.restrained()))
+	if ((usr.stat || usr.restrained()))
 		return
 
-	if(usr.contents.Find(src))
+	if (usr.contents.Find(src))
 
-		if(href_list["remove"])
+		if (href_list["remove"])
 			var/obj/item/P = locate(href_list["remove"])
-			if(!(istype(P, /obj/item/weapon/paper)) && !(istype(P, /obj/item/weapon/photo)))
+			if (!(istype(P, /obj/item/weapon/paper)) && !(istype(P, /obj/item/weapon/photo)))
 				var/message = "<span class='warning'>[usr]([usr.key]) has tried to remove something other than a paper/photo from a folder.<span>"
 				message_admins(message)
 				message += "[P]"
 				log_game(message)
 				admin_log.Add(message)
 				return
-			if(!(P in src.contents))
+			if (!(P in src.contents))
 				var/message = "<span class='warning'>[usr]([usr.key]) has tried to remove a paper/photo from a folder that didn't contain it.<span>"
 				message_admins(message)
 				message += "[P]"
 				log_game(message)
 				admin_log.Add(message)
 				return
-			if(P)
+			if (P)
 				P.forceMove(usr.loc)
 				usr.put_in_hands(P)
 
-		if(href_list["read"])
+		if (href_list["read"])
 			var/obj/item/weapon/paper/P = locate(href_list["read"])
-			if(P)
-				if(!(istype(usr, /mob/living/carbon/human) || istype(usr, /mob/dead/observer) || istype(usr, /mob/living/silicon)))
+			if (P)
+				if (!(istype(usr, /mob/living/carbon/human) || istype(usr, /mob/dead/observer) || istype(usr, /mob/living/silicon)))
 					usr << browse("<HTML><HEAD><TITLE>[P.name]</TITLE></HEAD><BODY[P.color ? " bgcolor=[P.color]":""]>[stars(P.info)][P.stamps]</BODY></HTML>", "window=[P.name]")
 					onclose(usr, "[P.name]")
 				else
 					usr << browse("<HTML><HEAD><TITLE>[P.name]</TITLE></HEAD><BODY[P.color ? " bgcolor=[P.color]":""]>[P.info][P.stamps]</BODY></HTML>", "window=[P.name]")
 					onclose(usr, "[P.name]")
-		if(href_list["look"])
+		if (href_list["look"])
 			var/obj/item/weapon/photo/P = locate(href_list["look"])
-			if(P)
+			if (P)
 				P.show(usr)
 
 		//Update everything

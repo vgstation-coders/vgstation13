@@ -38,37 +38,37 @@
 	overlays.len = 0
 
 	var/image/shotsack = null
-	if(shots_remaining)
-		if(shots_remaining >=2 && shots_remaining < 4)
+	if (shots_remaining)
+		if (shots_remaining >=2 && shots_remaining < 4)
 			shotsack = image('icons/obj/weaponsmithing.dmi', src, "hivehand_overlay_2")
-		else if(shots_remaining >=4 && shots_remaining < 6)
+		else if (shots_remaining >=4 && shots_remaining < 6)
 			shotsack = image('icons/obj/weaponsmithing.dmi', src, "hivehand_overlay_4")
-		else if(shots_remaining >=6 && shots_remaining < 8)
+		else if (shots_remaining >=6 && shots_remaining < 8)
 			shotsack = image('icons/obj/weaponsmithing.dmi', src, "hivehand_overlay_6")
-		else if(shots_remaining >=8 && shots_remaining < 10)
+		else if (shots_remaining >=8 && shots_remaining < 10)
 			shotsack = image('icons/obj/weaponsmithing.dmi', src, "hivehand_overlay_8")
-		else if(shots_remaining >=10)
+		else if (shots_remaining >=10)
 			shotsack = image('icons/obj/weaponsmithing.dmi', src, "hivehand_overlay_10")
-	if(shotsack)
+	if (shotsack)
 		overlays += shotsack
 
 /obj/item/weapon/gun/projectile/hivehand/attackby(obj/item/weapon/W, mob/user)
-	if(W.sharpness)
+	if (W.sharpness)
 		to_chat(user, "\The [W] fails to pierce the hard carapace of \the [src].")
 		return
 
 /obj/item/weapon/gun/projectile/hivehand/examine(mob/user)
 	..()
-	if(!shots_remaining)
+	if (!shots_remaining)
 		to_chat(user, "<span class='info'>\The [src] seems to be completely spent at the moment.</span>")
 	else
 		to_chat(user, "<span class='info'>\The [src]'s size suggests it has [shots_remaining] shots stored.</span>")
 
 /obj/item/weapon/gun/projectile/hivehand/process()
 	set waitfor = 0
-	if(shots_remaining >= 10)
+	if (shots_remaining >= 10)
 		return
-	if(has_shot)
+	if (has_shot)
 		has_shot = 0
 		sleep(10)
 		return
@@ -89,16 +89,16 @@
 	else if (locate (/obj/structure/table, src.loc))
 		return
 
-	if(!shots_remaining)
+	if (!shots_remaining)
 		click_empty(user)
 		return
 
-	if(flag)
+	if (flag)
 		return //we're placing gun on a table or in backpack
 
 	var/obj/item/projectile/bullet/stinger/S = new(null)
 	in_chamber = S
-	if(Fire(A,user,params, "struggle" = struggle))
+	if (Fire(A,user,params, "struggle" = struggle))
 		shots_remaining -= 1
 		has_shot = 1
 	else

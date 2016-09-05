@@ -9,11 +9,11 @@
 	var/beaker = null
 
 	ex_act(severity)
-		switch(severity)
-			if(1.0)
+		switch (severity)
+			if (1.0)
 				del(src)
 				return
-			if(2.0)
+			if (2.0)
 				if (prob(50))
 					del(src)
 					return
@@ -27,44 +27,44 @@
 		return
 
 	attackby(var/obj/item/weapon/reagent_containers/glass/B as obj, var/mob/user as mob)
-		if(!istype(B,/obj/item/weapon/reagent_containers/syringe))
+		if (!istype(B,/obj/item/weapon/reagent_containers/syringe))
 			return
 
-		if(src.beaker)
+		if (src.beaker)
 			to_chat(user, "A syringe is already loaded into the machine.")
 			return
 
 		src.beaker =  B
 		user.drop_item()
 		B.forceMove(src)
-		if(istype(B,/obj/item/weapon/reagent_containers/syringe))
+		if (istype(B,/obj/item/weapon/reagent_containers/syringe))
 			to_chat(user, "You add the syringe to the machine!")
 			src.updateUsrDialog()
 			icon_state = "isolator_in"
 
 	Topic(href, href_list)
-		if(..())
+		if (..())
 			return 1
-		if(stat & BROKEN)
+		if (stat & BROKEN)
 			return
-		if(usr.stat || usr.restrained())
+		if (usr.stat || usr.restrained())
 			return
-		if(!in_range(src, usr))
+		if (!in_range(src, usr))
 			return
 
 		usr.machine = src
-		if(!beaker)
+		if (!beaker)
 			return
 		var/datum/reagents/R = beaker:reagents
 
 		if (href_list["isolate"])
 			var/datum/reagent/blood/Blood
-			for(var/datum/reagent/blood/B in R.reagent_list)
-				if(B)
+			for (var/datum/reagent/blood/B in R.reagent_list)
+				if (B)
 					Blood = B
 					break
 
-			if(Blood.data["virus2"])
+			if (Blood.data["virus2"])
 				virus2 = Blood.data["virus2"]
 				isolating = 40
 				icon_state = "isolator_processing"
@@ -82,23 +82,23 @@
 			return
 
 	attack_hand(mob/user as mob)
-		if(stat & BROKEN)
+		if (stat & BROKEN)
 			return
 		user.machine = src
 		var/dat = ""
-		if(!beaker)
+		if (!beaker)
 			dat = "Please insert sample into the isolator.<BR>"
 			dat += "<A href='?src=\ref[src];close=1'>Close</A>"
-		else if(isolating)
+		else if (isolating)
 			dat = "Isolating"
 		else
 			var/datum/reagents/R = beaker:reagents
 			dat += "<A href='?src=\ref[src];eject=1'>Eject</A><BR><BR>"
-			if(!R.total_volume)
+			if (!R.total_volume)
 				dat += "[beaker] is empty."
 			else
 				dat += "Contained reagents:<BR>"
-				for(var/datum/reagent/blood/G in R.reagent_list)
+				for (var/datum/reagent/blood/G in R.reagent_list)
 					dat += "    [G.name]: <A href='?src=\ref[src];isolate=[G.id]'>Isolate</a>"
 		user << browse("<TITLE>Pathogenic Isolator</TITLE>Isolator menu:<BR><BR>[dat]", "window=isolator;size=575x400")
 		onclose(user, "isolator")
@@ -108,9 +108,9 @@
 
 
 	process()
-		if(isolating > 0)
+		if (isolating > 0)
 			isolating -= 1
-			if(isolating == 0)
+			if (isolating == 0)
 				var/obj/item/weapon/virusdish/d = new /obj/item/weapon/virusdish(src.loc)
 				d.virus2 = virus2.getcopy()
 				virus2 = null
@@ -129,17 +129,17 @@
 	var/analysed = 0
 
 /obj/item/weapon/virusdish/attackby(var/obj/item/weapon/W as obj,var/mob/living/carbon/user as mob)
-	if(istype(W,/obj/item/weapon/hand_labeler))
+	if (istype(W,/obj/item/weapon/hand_labeler))
 		return
 	..()
-	if(prob(50))
+	if (prob(50))
 		to_chat(user, "The dish shatters")
-		if(virus2.infectionchance > 0)
+		if (virus2.infectionchance > 0)
 			infect_virus2(user,virus2)
 		qdel (src)
 
 /obj/item/weapon/virusdish/examine(mob/user)
 	..()
-	if(src.info)
+	if (src.info)
 		to_chat(user, "<span class='info'>It has the following information about its contents</span>")
 		to_chat(user, src.info)

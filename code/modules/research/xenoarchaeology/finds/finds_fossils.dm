@@ -14,7 +14,7 @@
 	var/t = pickweight(l)
 	var/obj/item/weapon/W = new t(src.loc)
 	var/turf/T = get_turf(src)
-	if(istype(T, /turf/unsimulated/mineral))
+	if (istype(T, /turf/unsimulated/mineral))
 		T:last_find = W
 	qdel (src)
 
@@ -33,7 +33,7 @@
 	desc = "It's a fossilised, horned skull."
 
 /obj/item/weapon/fossil/skull/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/fossil/bone))
+	if (istype(W,/obj/item/weapon/fossil/bone))
 		var/obj/o = new /obj/skeleton(get_turf(src))
 		var/a = new /obj/item/weapon/fossil/bone
 		var/b = new src.type
@@ -58,19 +58,19 @@
 	src.desc = "An incomplete skeleton, looks like it could use [src.breq-src.bnum] more bones."
 
 /obj/skeleton/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/fossil/bone))
-		if(!bstate)
+	if (istype(W,/obj/item/weapon/fossil/bone))
+		if (!bstate)
 			bnum++
 			src.contents.Add(new/obj/item/weapon/fossil/bone)
 			qdel (W)
 			W = null
-			if(bnum==breq)
+			if (bnum==breq)
 				usr = user
 				icon_state = "skel"
 				src.bstate = 1
 				src.density = 1
 				src.name = "alien skeleton display"
-				if(src.contents.Find(/obj/item/weapon/fossil/skull/horned))
+				if (src.contents.Find(/obj/item/weapon/fossil/skull/horned))
 					src.desc = "A creature made of [src.contents.len-1] assorted bones and a horned skull. The plaque reads \'[plaque_contents]\'."
 				else
 					src.desc = "A creature made of [src.contents.len-1] assorted bones and a skull. The plaque reads \'[plaque_contents]\'."
@@ -79,12 +79,12 @@
 				to_chat(user, "Looks like it could use [src.breq-src.bnum] more bones.")
 		else
 			..()
-	else if(istype(W,/obj/item/weapon/pen))
+	else if (istype(W,/obj/item/weapon/pen))
 		plaque_contents = copytext(sanitize(input(user, "What would you like to write on the plaque?", "Skeleton plaque", null) as text|null), 1, 1648) //length of WGW in characters - niggly said i should
 		if (!plaque_contents || !Adjacent(user) || user.stat)
 			return
 		user.visible_message("[user] writes something on the base of [src].","You relabel the plaque on the base of [bicon(src)] [src].")
-		if(src.contents.Find(/obj/item/weapon/fossil/skull/horned))
+		if (src.contents.Find(/obj/item/weapon/fossil/skull/horned))
 			src.desc = "A creature made of [src.contents.len-1] assorted bones and a horned skull. The plaque reads \'[plaque_contents]\'."
 		else
 			src.desc = "A creature made of [src.contents.len-1] assorted bones and a skull. The plaque reads \'[plaque_contents]\'."

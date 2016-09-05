@@ -9,7 +9,7 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 //Add, comment out, or adjust weights to modify law selection
 //So long as the weights come to a sum of 100 total, they will be equal parts of 100%
 /proc/getLawset(var/mob/M)
-	if(!base_law_type)
+	if (!base_law_type)
 		base_law_type = pick(
 		40;/datum/ai_laws/asimov,
 		20;/datum/ai_laws/corporate,
@@ -41,7 +41,7 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 
 /datum/ai_laws/proc/set_zeroth_law(var/law, var/law_borg = null)
 	src.zeroth = law
-	if(law_borg) //Making it possible for slaved borgs to see a different law 0 than their AI. --NEO
+	if (law_borg) //Making it possible for slaved borgs to see a different law 0 than their AI. --NEO
 		src.zeroth_borg = law_borg
 
 /datum/ai_laws/proc/add_inherent_law(var/law)
@@ -122,9 +122,9 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 	return "<a href=\"?src=\ref[src];set_law=[law_type];index=[index];mob=\ref[S]\">[label]</a> (<a href=\"?src=\ref[src];rm_law=[law_type];index=[index];mob=\ref[S]\" style=\"color:red\">Remove</a>)"
 
 /datum/ai_laws/Topic(href,href_list)
-	if(!usr.client || !usr.client.holder)
+	if (!usr.client || !usr.client.holder)
 		return
-	if("rm_law" in href_list)
+	if ("rm_law" in href_list)
 		var/lawtype = text2num(href_list["rm_law"])
 		var/index=text2num(href_list["index"])
 		var/mob/living/silicon/S=locate(href_list["mob"])
@@ -135,12 +135,12 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 		rm_law(lawtype,index)
 
 		var/lawtype_str="law #[index]"
-		switch(lawtype)
-			if(LAW_ZERO)
+		switch (lawtype)
+			if (LAW_ZERO)
 				lawtype_str = "law zero"
-			if(LAW_IONIC)
+			if (LAW_IONIC)
 				lawtype_str = "ionic law #[index]"
-			if(LAW_INHERENT)
+			if (LAW_INHERENT)
 				lawtype_str = "core law #[index]"
 		log_admin("[key_name(usr)] has removed [lawtype_str] on [key_name(S)]: \"[oldlaw]\"")
 		message_admins("[usr.key] removed [lawtype_str] on [key_name(S)]: \"[oldlaw]\"")
@@ -149,23 +149,23 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 
 		return 1
 
-	if("set_law" in href_list)
+	if ("set_law" in href_list)
 		var/lawtype=text2num(href_list["set_law"])
 		var/index=text2num(href_list["index"])
 		var/mob/living/silicon/S=locate(href_list["mob"])
 		var/oldlaw = get_law(lawtype,index)
 		var/newlaw = copytext(sanitize(input(usr, "Please enter a new law.", "Freeform Law Entry", oldlaw)),1,MAX_MESSAGE_LEN)
-		if(newlaw == "" || newlaw==null)
+		if (newlaw == "" || newlaw==null)
 			return
 		set_law(lawtype,index,newlaw)
 
 		var/lawtype_str="law #[index]"
-		switch(lawtype)
-			if(LAW_ZERO)
+		switch (lawtype)
+			if (LAW_ZERO)
 				lawtype_str = "law zero"
-			if(LAW_IONIC)
+			if (LAW_IONIC)
 				lawtype_str = "ionic law #[index]"
-			if(LAW_INHERENT)
+			if (LAW_INHERENT)
 				lawtype_str = "core law #[index]"
 		log_admin("[key_name(usr)] has changed [lawtype_str] on [key_name(S)]: \"[newlaw]\"")
 		message_admins("[usr.key] changed [lawtype_str] on [key_name(S)]: \"[newlaw]\"")
@@ -202,48 +202,48 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 
 // /vg/: Used in the simplified law system. Takes LAW_ constants.
 /datum/ai_laws/proc/add_law(var/number,var/law)
-	switch(number)
-		if(LAW_IONIC)
+	switch (number)
+		if (LAW_IONIC)
 			add_ion_law(law)
-		if(LAW_ZERO)
+		if (LAW_ZERO)
 			set_zeroth_law(law)
-		if(LAW_INHERENT)
+		if (LAW_INHERENT)
 			add_inherent_law(law)
 		else
 			add_supplied_law(number,law)
 
 // /vg/: Used in the simplified law system. Takes LAW_ constants.
 /datum/ai_laws/proc/get_law(var/law_type,var/idx)
-	switch(law_type)
-		if(LAW_IONIC)
+	switch (law_type)
+		if (LAW_IONIC)
 			return ion[idx]
-		if(LAW_ZERO)
+		if (LAW_ZERO)
 			return zeroth
-		if(LAW_INHERENT)
+		if (LAW_INHERENT)
 			return inherent[idx]
 		else
 			return supplied[idx]
 
 // /vg/: Used in the simplified law system. Takes LAW_ constants.
 /datum/ai_laws/proc/set_law(var/law_type,var/idx,var/law)
-	switch(law_type)
-		if(LAW_IONIC)
+	switch (law_type)
+		if (LAW_IONIC)
 			ion[idx]=law
-		if(LAW_ZERO)
+		if (LAW_ZERO)
 			zeroth=law
-		if(LAW_INHERENT)
+		if (LAW_INHERENT)
 			inherent[idx]=law
 		else
 			supplied[idx]=law
 
 // /vg/: Used in the simplified law system. Takes LAW_ constants.
 /datum/ai_laws/proc/rm_law(var/law_type,var/idx)
-	switch(law_type)
-		if(LAW_IONIC)
+	switch (law_type)
+		if (LAW_IONIC)
 			ion.Cut(idx,idx+1)
-		if(LAW_ZERO)
+		if (LAW_ZERO)
 			zeroth=null
-		if(LAW_INHERENT)
+		if (LAW_INHERENT)
 			inherent.Cut(idx,idx+1)
 		else
 			supplied.Cut(idx,idx+1)

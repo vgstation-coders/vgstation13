@@ -69,7 +69,7 @@ display round(lastgen) and plasmatank amount
 	return
 
 /obj/machinery/power/port_gen/process()
-	if(active && HasFuel() && !crit_fail && anchored && powernet)
+	if (active && HasFuel() && !crit_fail && anchored && powernet)
 		add_avail(power_gen * power_output)
 		UseFuel()
 		src.updateDialog()
@@ -80,14 +80,14 @@ display round(lastgen) and plasmatank amount
 		handleInactive()
 
 /obj/machinery/power/port_gen/attack_hand(mob/user as mob)
-	if(..())
+	if (..())
 		return
-	if(!anchored)
+	if (!anchored)
 		return
 
 /obj/machinery/power/port_gen/examine(mob/user)
 	..()
-	if(active)
+	if (active)
 		to_chat(usr, "<span class='info'>The generator is on.</span>")
 	else
 		to_chat(usr, "<span class='info'>The generator is off.</span>")
@@ -105,7 +105,7 @@ display round(lastgen) and plasmatank amount
 
 /obj/machinery/power/port_gen/pacman/initialize()
 	..()
-	if(anchored)
+	if (anchored)
 		connect_to_network()
 
 /obj/machinery/power/port_gen/pacman/New()
@@ -131,32 +131,32 @@ display round(lastgen) and plasmatank amount
 /obj/machinery/power/port_gen/pacman/RefreshParts()
 	var/temp_rating = 0
 	var/temp_reliability = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/matter_bin))
+	for (var/obj/item/weapon/stock_parts/SP in component_parts)
+		if (istype(SP, /obj/item/weapon/stock_parts/matter_bin))
 			max_sheets = SP.rating * SP.rating * 50
-		else if(istype(SP, /obj/item/weapon/stock_parts/micro_laser) || istype(SP, /obj/item/weapon/stock_parts/capacitor))
+		else if (istype(SP, /obj/item/weapon/stock_parts/micro_laser) || istype(SP, /obj/item/weapon/stock_parts/capacitor))
 			temp_rating += SP.rating
-	for(var/obj/item/weapon/CP in component_parts)
+	for (var/obj/item/weapon/CP in component_parts)
 		temp_reliability += CP.reliability
 	reliability = min(round(temp_reliability / 4), 100)
 	power_gen = round(initial(power_gen) * (max(2, temp_rating) / 2))
 
 /obj/machinery/power/port_gen/pacman/examine(mob/user)
 	..()
-	if(crit_fail)
+	if (crit_fail)
 		to_chat(user, "<span class='warning'>The generator seems to have broken down.</span>")
 	else
 		to_chat(user, "<span class='info'>The generator has [sheets] units of [sheet_name] fuel left, producing [power_gen] per cycle.</span>")
 
 /obj/machinery/power/port_gen/pacman/HasFuel()
-	if(sheets >= 1 / (time_per_sheet / power_output) - sheet_left)
+	if (sheets >= 1 / (time_per_sheet / power_output) - sheet_left)
 		return 1
 	return 0
 
 /obj/machinery/power/port_gen/pacman/DropFuel()
-	if(sheets)
+	if (sheets)
 		var/fail_safe = 0
-		while(sheets > 0 && fail_safe < 100)
+		while (sheets > 0 && fail_safe < 100)
 			fail_safe += 1
 			var/obj/item/stack/sheet/S = new sheet_path(loc)
 			var/amount = min(sheets, S.max_amount)
@@ -209,7 +209,7 @@ display round(lastgen) and plasmatank amount
 	return 1
 
 /obj/machinery/power/port_gen/pacman/crowbarDestroy(mob/user) //don't like the copy/paste, but the proc has special handling in the middle so we need it
-	if(..())
+	if (..())
 		while ( sheets > 0 )
 			var/obj/item/stack/sheet/G = new sheet_path(src.loc)
 			if ( sheets > 50 )
@@ -221,8 +221,8 @@ display round(lastgen) and plasmatank amount
 	return -1
 
 /obj/machinery/power/port_gen/pacman/wrenchAnchor(mob/user)
-	if(..() == 1)
-		if(anchored)
+	if (..() == 1)
+		if (anchored)
 			connect_to_network()
 		else
 			disconnect_from_network()
@@ -230,10 +230,10 @@ display round(lastgen) and plasmatank amount
 	return -1
 
 /obj/machinery/power/port_gen/pacman/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(istype(O, sheet_path))
+	if (istype(O, sheet_path))
 		var/obj/item/stack/addstack = O
 		var/amount = min((max_sheets - sheets), addstack.amount)
-		if(amount < 1)
+		if (amount < 1)
 			to_chat(user, "<span class='notice'>The [src.name] is full!</span>")
 			return
 		to_chat(user, "<span class='notice'>You add [amount] sheets to the [src.name].</span>")
@@ -241,8 +241,8 @@ display round(lastgen) and plasmatank amount
 		addstack.use(amount)
 		updateUsrDialog()
 		return
-	else if(!active)
-		if( ..() )
+	else if (!active)
+		if ( ..() )
 			return 1
 
 /obj/machinery/power/port_gen/pacman/attack_hand(mob/user as mob)
@@ -284,26 +284,26 @@ display round(lastgen) and plasmatank amount
 	onclose(user, "port_gen")
 
 /obj/machinery/power/port_gen/pacman/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 
 	src.add_fingerprint(usr)
-	if(href_list["action"])
-		if(href_list["action"] == "enable")
-			if(!active && HasFuel() && !crit_fail)
+	if (href_list["action"])
+		if (href_list["action"] == "enable")
+			if (!active && HasFuel() && !crit_fail)
 				active = 1
 				icon_state = "portgen1"
 				src.updateUsrDialog()
-		if(href_list["action"] == "disable")
+		if (href_list["action"] == "disable")
 			if (active)
 				active = 0
 				icon_state = "portgen0"
 				src.updateUsrDialog()
-		if(href_list["action"] == "eject")
-			if(!active)
+		if (href_list["action"] == "eject")
+			if (!active)
 				DropFuel()
 				src.updateUsrDialog()
-		if(href_list["action"] == "lower_power")
+		if (href_list["action"] == "lower_power")
 			if (power_output > 1)
 				power_output--
 				src.updateUsrDialog()

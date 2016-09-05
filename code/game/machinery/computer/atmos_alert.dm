@@ -19,18 +19,18 @@
 	set_frequency(receive_frequency)
 
 /obj/machinery/computer/atmos_alert/receive_signal(datum/signal/signal)
-	if(!signal || signal.encryption)
+	if (!signal || signal.encryption)
 		return
 
 	var/zone = signal.data["zone"]
 	var/severity = signal.data["alert"]
 
-	if(!zone || !severity)
+	if (!zone || !severity)
 		return
 
 	minor_alarms -= zone
 	priority_alarms -= zone
-	if(severity=="severe")
+	if (severity=="severe")
 		priority_alarms += zone
 	else if (severity=="minor")
 		minor_alarms += zone
@@ -45,24 +45,24 @@
 
 
 /obj/machinery/computer/atmos_alert/attack_hand(mob/user)
-	if(..(user))
+	if (..(user))
 		return
 	user << browse(return_text(),"window=computer")
 	user.set_machine(src)
 	onclose(user, "computer")
 
 /obj/machinery/computer/atmos_alert/process()
-	if(..())
+	if (..())
 		src.updateDialog()
 
 /obj/machinery/computer/atmos_alert/update_icon()
 	..()
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
-	if(priority_alarms.len)
+	if (priority_alarms.len)
 		icon_state = "alert:2"
 
-	else if(minor_alarms.len)
+	else if (minor_alarms.len)
 		icon_state = "alert:1"
 
 	else
@@ -74,14 +74,14 @@
 	var/priority_text
 	var/minor_text
 
-	if(priority_alarms.len)
-		for(var/zone in priority_alarms)
+	if (priority_alarms.len)
+		for (var/zone in priority_alarms)
 			priority_text += "<FONT color='red'><B>[zone]</B></FONT>  <A href='?src=\ref[src];priority_clear=[ckey(zone)]'>X</A><BR>"
 	else
 		priority_text = "No priority alerts detected.<BR>"
 
-	if(minor_alarms.len)
-		for(var/zone in minor_alarms)
+	if (minor_alarms.len)
+		for (var/zone in minor_alarms)
 			minor_text += "<B>[zone]</B>  <A href='?src=\ref[src];minor_clear=[ckey(zone)]'>X</A><BR>"
 	else
 		minor_text = "No minor alerts detected.<BR>"
@@ -99,19 +99,19 @@
 
 
 /obj/machinery/computer/atmos_alert/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 
-	if(href_list["priority_clear"])
+	if (href_list["priority_clear"])
 		var/removing_zone = href_list["priority_clear"]
-		for(var/zone in priority_alarms)
-			if(ckey(zone) == removing_zone)
+		for (var/zone in priority_alarms)
+			if (ckey(zone) == removing_zone)
 				priority_alarms -= zone
 
-	if(href_list["minor_clear"])
+	if (href_list["minor_clear"])
 		var/removing_zone = href_list["minor_clear"]
-		for(var/zone in minor_alarms)
-			if(ckey(zone) == removing_zone)
+		for (var/zone in minor_alarms)
+			if (ckey(zone) == removing_zone)
 				minor_alarms -= zone
 	update_icon()
 	return

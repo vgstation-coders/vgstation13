@@ -80,34 +80,34 @@ var/list/obj/machinery/flasher/flashers = list()
 	playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1)
 	src.last_flash = world.time
 	use_power(1000)
-	if(harm_labeled >= min_harm_label)
+	if (harm_labeled >= min_harm_label)
 		return //Still "flashes," so power is used and the noise is made, etc., but it doesn't actually flash anyone.
 	flick("[base_state]_flash", src)
 
 	for (var/mob/O in viewers(src, null))
-		if(isobserver(O))
+		if (isobserver(O))
 			continue
 		if (get_dist(src, O) > src.range)
 			continue
 
 		if (istype(O, /mob/living/carbon/alien))//So aliens don't get flashed (they have no external eyes)/N
 			continue
-		if(istype(O, /mob/living))
+		if (istype(O, /mob/living))
 			var/mob/living/L = O
 			L.flash_eyes(affect_silicon = 1)
-		if(istype(O, /mob/living/carbon))
+		if (istype(O, /mob/living/carbon))
 			var/mob/living/carbon/C = O
-			if(C.eyecheck() <= 0) // Identical to handheld flash safety check
+			if (C.eyecheck() <= 0) // Identical to handheld flash safety check
 				C.Weaken(strength)
 		else
 			O.Weaken(strength)
 
 
 /obj/machinery/flasher/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		..(severity)
 		return
-	if(prob(75/severity))
+	if (prob(75/severity))
 		flash()
 	..(severity)
 
@@ -115,7 +115,7 @@ var/list/obj/machinery/flasher/flashers = list()
 	if ((src.disable) || (src.last_flash && world.time < src.last_flash + 150))
 		return
 
-	if(istype(AM, /mob/living/carbon))
+	if (istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
 		if ((M.m_intent != "walk") && (src.anchored))
 			src.flash()
@@ -145,9 +145,9 @@ var/list/obj/machinery/flasher/flashers = list()
 
 /obj/machinery/flasher_button/attack_hand(mob/user as mob)
 
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
-	if(active)
+	if (active)
 		return
 
 	use_power(5)
@@ -155,8 +155,8 @@ var/list/obj/machinery/flasher/flashers = list()
 	active = 1
 	icon_state = "launcheract"
 
-	for(var/obj/machinery/flasher/M in flashers)
-		if(M.id_tag == src.id_tag)
+	for (var/obj/machinery/flasher/M in flashers)
+		if (M.id_tag == src.id_tag)
 			spawn()
 				M.flash()
 

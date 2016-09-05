@@ -41,7 +41,7 @@
 
 /spell/targeted/flesh_to_coal/cast(var/list/targets, mob/user)
 	..()
-	for(var/mob/living/carbon/human/H in targets)
+	for (var/mob/living/carbon/human/H in targets)
 		H.drop_all()
 		H.dna.mutantrace = "coalgolem"
 		H.real_name = text("Coal Golem ([rand(1, 1000)])")
@@ -60,6 +60,6 @@
 		H.mind.special_role = "apprentice"
 		to_chat(H, "You are a coal golem. You move slowly, but are highly resistant to heat and cold as well as blunt trauma. You are unable to wear clothes, but can still use most tools. Serve [user], and assist them in completing their goals at any cost.")
 
-		if(ticker.mode.name == "sandbox")
+		if (ticker.mode.name == "sandbox")
 			H.CanBuild()
 			to_chat(H, "Sandbox tab enabled.")

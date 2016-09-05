@@ -15,21 +15,21 @@ var/global/vox_shuttle_location
 	light_color = LIGHT_COLOR_RED
 
 /obj/machinery/computer/vox_station/proc/vox_move_to(var/destination)
-	if(moving)
+	if (moving)
 		return
 
-	if(lastMove + VOX_SHUTTLE_COOLDOWN > world.time)
+	if (lastMove + VOX_SHUTTLE_COOLDOWN > world.time)
 		return
 
 	var/area/dest_location = locate(destination)
 
-	if(areaMaster == dest_location)
+	if (areaMaster == dest_location)
 		return
 
 	moving = TRUE
 	lastMove = world.time
 
-	if(areaMaster.z != dest_location.z)
+	if (areaMaster.z != dest_location.z)
 		var/area/transit_location = locate(/area/vox_station/transit)
 		areaMaster.move_contents_to(transit_location)
 		areaMaster = transit_location // let do this while move_contents_to proc is not using Move()
@@ -42,7 +42,7 @@ var/global/vox_shuttle_location
 	return 1
 
 /obj/machinery/computer/vox_station/attackby(obj/item/I as obj, mob/user as mob)
-	if(!..())
+	if (!..())
 		return attack_hand(user)
 
 /obj/machinery/computer/vox_station/attack_ai(mob/user as mob)
@@ -53,7 +53,7 @@ var/global/vox_shuttle_location
 	return attack_hand(user)
 
 /obj/machinery/computer/vox_station/attack_hand(mob/user as mob)
-	if(!allowed(user) || issilicon(user))
+	if (!allowed(user) || issilicon(user))
 		to_chat(user, "<span class=\"warning\">Access Denied.</span>")
 		return
 
@@ -78,7 +78,7 @@ var/global/vox_shuttle_location
 	return
 
 /obj/machinery/computer/vox_station/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 
 	var/mob/user = usr
@@ -87,28 +87,28 @@ var/global/vox_shuttle_location
 
 	vox_shuttle_location = "station"
 
-	switch(href_list["move"])
-		if("start")
-			if(ticker && istype(ticker.mode, /datum/game_mode/heist))
-				switch(alert("OOC INFO: Returning to dark space will end your raid and report your success or failure.", "Confirmation", "Yes", "No"))
-					if("Yes")
+	switch (href_list["move"])
+		if ("start")
+			if (ticker && istype(ticker.mode, /datum/game_mode/heist))
+				switch (alert("OOC INFO: Returning to dark space will end your raid and report your success or failure.", "Confirmation", "Yes", "No"))
+					if ("Yes")
 						var/location = get_turf(user)
 						message_admins("[key_name_admin(user)] attempts to end the raid - [formatJumpTo(location)]")
 						log_admin("[key_name(user)] attempts to end the raid - [formatLocation(location)]")
-					if("No")
+					if ("No")
 						return
 
-			if(vox_move_to(/area/shuttle/vox/station) == 1)
+			if (vox_move_to(/area/shuttle/vox/station) == 1)
 				vox_shuttle_location = "start"
-		if("solars_fore_starboard")
+		if ("solars_fore_starboard")
 			vox_move_to(/area/vox_station/northeast_solars)
-		if("solars_fore_port")
+		if ("solars_fore_port")
 			vox_move_to(/area/vox_station/northwest_solars)
-		if("solars_aft_starboard")
+		if ("solars_aft_starboard")
 			vox_move_to(/area/vox_station/southeast_solars)
-		if("solars_aft_port")
+		if ("solars_aft_port")
 			vox_move_to(/area/vox_station/southwest_solars)
-		if("mining")
+		if ("mining")
 			vox_move_to(/area/vox_station/mining)
 
 	add_fingerprint(user)

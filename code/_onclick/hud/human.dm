@@ -395,7 +395,7 @@
 	if (mymob.client)
 		if (mymob.client.gun_mode) // If in aim mode, correct the sprite
 			mymob.gun_setting_icon.dir = 2
-	for(var/obj/item/weapon/gun/G in mymob) // If targeting someone, display other buttons
+	for (var/obj/item/weapon/gun/G in mymob) // If targeting someone, display other buttons
 		if (G.target)
 			mymob.item_use_icon = getFromPool(/obj/screen/gun/item)
 			if (mymob.client.target_can_click)
@@ -434,7 +434,7 @@
 	set name = "Toggle hotkey buttons"
 	set desc = "This disables or enables the user interface buttons which can be used with hotkeys."
 
-	if(hud_used.hotkey_ui_hidden)
+	if (hud_used.hotkey_ui_hidden)
 		client.screen += hud_used.hotkeybuttons
 		hud_used.hotkey_ui_hidden = 0
 	else
@@ -444,29 +444,29 @@
 
 /mob/living/carbon/human/update_action_buttons()
 	var/num = 1
-	if(!hud_used)
+	if (!hud_used)
 		return
-	if(!client)
+	if (!client)
 		return
 	var/list/used = list()
 
-	if(hud_used.hud_shown != 1)	//Hud toggled to minimal
+	if (hud_used.hud_shown != 1)	//Hud toggled to minimal
 		return
 
-	for(var/obj/screen/item_action/actionitem in hud_used.item_action_list)
-		if(actionitem.owner && actionitem.owner.loc == src)
+	for (var/obj/screen/item_action/actionitem in hud_used.item_action_list)
+		if (actionitem.owner && actionitem.owner.loc == src)
 			actionitem.overlay.appearance = actionitem.owner.appearance
 			actionitem.overlay.dir = SOUTH
-			switch(num)
-				if(1)
+			switch (num)
+				if (1)
 					actionitem.screen_loc = ui_action_slot1
-				if(2)
+				if (2)
 					actionitem.screen_loc = ui_action_slot2
-				if(3)
+				if (3)
 					actionitem.screen_loc = ui_action_slot3
-				if(4)
+				if (4)
 					actionitem.screen_loc = ui_action_slot4
-				if(5)
+				if (5)
 					actionitem.screen_loc = ui_action_slot5
 			used += actionitem.owner
 			num++
@@ -476,22 +476,22 @@
 			hud_used.item_action_list -= actionitem
 			returnToPool(actionitem)
 
-	for(var/obj/item/I in (src.contents-used))
-		if(I.action_button_name && (num < 6))
+	for (var/obj/item/I in (src.contents-used))
+		if (I.action_button_name && (num < 6))
 			var/obj/screen/item_action/newactionitem = getFromPool(/obj/screen/item_action,null,I)
 			newactionitem.icon = ui_style2icon(client.prefs.UI_style)
 			hud_used.item_action_list += newactionitem
 			client.screen += newactionitem
 			client.images += newactionitem.overlay
-			switch(num)
-				if(1)
+			switch (num)
+				if (1)
 					newactionitem.screen_loc = ui_action_slot1
-				if(2)
+				if (2)
 					newactionitem.screen_loc = ui_action_slot2
-				if(3)
+				if (3)
 					newactionitem.screen_loc = ui_action_slot3
-				if(4)
+				if (4)
 					newactionitem.screen_loc = ui_action_slot4
-				if(5)
+				if (5)
 					newactionitem.screen_loc = ui_action_slot5
 			num++

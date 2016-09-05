@@ -66,13 +66,13 @@
 		sleep(2)
 		new /obj/item/clothing/monkeyclothes/doctor (src)
 		new /obj/item/clothing/monkeyclothes/doctor (src)
-		if(prob(50))
+		if (prob(50))
 			new /obj/item/weapon/storage/backpack/medic(src)
 		else
 			new /obj/item/weapon/storage/backpack/satchel_med(src)
 		new /obj/item/clothing/under/rank/nursesuit (src)
 		new /obj/item/clothing/head/nursehat (src)
-		switch(pick("blue", "green", "purple"))
+		switch (pick("blue", "green", "purple"))
 			if ("blue")
 				new /obj/item/clothing/under/rank/medical/blue(src)
 				new /obj/item/clothing/head/surgery/blue(src)
@@ -82,7 +82,7 @@
 			if ("purple")
 				new /obj/item/clothing/under/rank/medical/purple(src)
 				new /obj/item/clothing/head/surgery/purple(src)
-		switch(pick("blue", "green", "purple"))
+		switch (pick("blue", "green", "purple"))
 			if ("blue")
 				new /obj/item/clothing/under/rank/medical/blue(src)
 				new /obj/item/clothing/head/surgery/blue(src)
@@ -118,14 +118,14 @@
 	New()
 		..()
 		sleep(2)
-		if(prob(50))
+		if (prob(50))
 			new /obj/item/weapon/storage/backpack/medic(src)
 		else
 			new /obj/item/weapon/storage/backpack/satchel_med(src)
 		new /obj/item/clothing/suit/bio_suit/cmo(src)
 		new /obj/item/clothing/head/bio_hood/cmo(src)
 		new /obj/item/clothing/shoes/white(src)
-		switch(pick("blue", "green", "purple"))
+		switch (pick("blue", "green", "purple"))
 			if ("blue")
 				new /obj/item/clothing/under/rank/medical/blue(src)
 				new /obj/item/clothing/head/surgery/blue(src)
@@ -198,11 +198,11 @@
 	req_access = list(access_medical)
 
 /obj/structure/closet/secure_closet/medical_wall/update_icon()
-	if(broken)
+	if (broken)
 		icon_state = icon_broken
 	else
-		if(!opened)
-			if(locked)
+		if (!opened)
+			if (locked)
 				icon_state = icon_locked
 			else
 				icon_state = icon_closed

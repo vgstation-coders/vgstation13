@@ -26,12 +26,12 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 	playsound(get_turf(user), cast_sound, 50, 1)
 
 	var/placed_successfully = 0
-	for(var/i=1,i <= summon_amt,i++)
-		if(!targets.len)
+	for (var/i=1,i <= summon_amt,i++)
+		if (!targets.len)
 			break
 		var/summoned_object_type
-		if(summon_exclusive)
-			if(!summon_type.len)
+		if (summon_exclusive)
+			if (!summon_type.len)
 				break
 			summoned_object_type = summon_type[1]
 			summon_type -= summoned_object_type
@@ -39,24 +39,24 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 			summoned_object_type = pick(summon_type)
 		var/turf/spawn_place = pick(targets)
 
-		if(spell_flags & NODUPLICATE) //No spawning duplicates
+		if (spell_flags & NODUPLICATE) //No spawning duplicates
 			var/list/possible_targets = targets.Copy()
-			while((locate(summoned_object_type) in spawn_place) && possible_targets.len)
+			while ((locate(summoned_object_type) in spawn_place) && possible_targets.len)
 				possible_targets -= spawn_place
-				if(possible_targets.len)
+				if (possible_targets.len)
 					spawn_place = pick(possible_targets)
-			if(!possible_targets.len)
+			if (!possible_targets.len)
 				continue
 
-		if(spell_flags & IGNOREPREV)
+		if (spell_flags & IGNOREPREV)
 			targets -= spawn_place
 
 		var/atom/summoned_object
 
 		placed_successfully = 1
 
-		if(ispath(summoned_object_type,/turf))
-			if(istype(get_turf(user),/turf/simulated/shuttle) || istype(spawn_place, /turf/simulated/shuttle))
+		if (ispath(summoned_object_type,/turf))
+			if (istype(get_turf(user),/turf/simulated/shuttle) || istype(spawn_place, /turf/simulated/shuttle))
 				to_chat(user, "<span class='warning>You can't build things on shuttles!</span>")
 				continue
 			spawn_place.ChangeTurf(summoned_object_type)
@@ -72,13 +72,13 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 		animation.layer = OBJ_LAYER
 		animation.master = summoned_object
 
-		for(var/varName in newVars)
-			if(varName in summoned_object.vars)
+		for (var/varName in newVars)
+			if (varName in summoned_object.vars)
 				summoned_object.vars[varName] = newVars[varName]
 
-		if(duration)
+		if (duration)
 			spawn(duration)
-				if(summoned_object && !istype(summoned_object, /turf))
+				if (summoned_object && !istype(summoned_object, /turf))
 					qdel(summoned_object)
 		conjure_animation(animation, spawn_place)
 
@@ -97,7 +97,7 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 //We're going to pick which of the things we would like to try spawning and set it
 /spell/aoe_turf/conjure/choice/before_target(mob/user)
 	var/choice = input(user, input_message, input_title) as null|anything in full_list
-	if(!choice)
+	if (!choice)
 		return 1
 	summon_type = list(full_list[choice])
 	return ..()

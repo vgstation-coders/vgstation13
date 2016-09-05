@@ -16,7 +16,7 @@
 
 /obj/item/bluespace_crystal/attack_self(var/mob/user)
 	var/datum/zLevel/L = get_z_level(src)
-	if(L && !L.teleJammed)
+	if (L && !L.teleJammed)
 		user.visible_message("<span class='notice'>[user] crushes the [src]!</span>")
 		blink_mob(user)
 	else
@@ -32,7 +32,7 @@
 	. = ..()
 	var/datum/zLevel/L = get_z_level(src)
 
-	if(isliving(hit_atom) && L && !L.teleJammed)
+	if (isliving(hit_atom) && L && !L.teleJammed)
 		blink_mob(hit_atom)
 
 	qdel(src)

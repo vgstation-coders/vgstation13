@@ -20,7 +20,7 @@
 /obj/item/mecha_parts/mecha_equipment/proc/do_after_cooldown(target=1, delay_mult=1)
 	sleep(equip_cooldown * delay_mult)
 	set_ready_state(1)
-	if(target && chassis)
+	if (target && chassis)
 		return 1
 	return 0
 
@@ -30,28 +30,28 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/update_chassis_page()
-	if(chassis)
+	if (chassis)
 		send_byjax(chassis.occupant,"exosuit.browser","eq_list",chassis.get_equipment_list())
 		send_byjax(chassis.occupant,"exosuit.browser","equipment_menu",chassis.get_equipment_menu(),"dropdowns")
 		return 1
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/update_equip_info()
-	if(chassis)
+	if (chassis)
 		send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",get_equip_info())
 		return 1
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/destroy()//missiles detonating, teleporter creating singularity?
-	if(chassis)
+	if (chassis)
 		chassis.equipment -= src
 		listclearnulls(chassis.equipment)
-		if(chassis.selected == src)
+		if (chassis.selected == src)
 			chassis.selected = null
 		src.update_chassis_page()
 		chassis.occupant_message("<font color='red'>The [src] is destroyed!</font>")
 		chassis.log_append_to_last("[src] is destroyed.",1)
-		if(istype(src, /obj/item/mecha_parts/mecha_equipment/weapon))
+		if (istype(src, /obj/item/mecha_parts/mecha_equipment/weapon))
 			chassis.occupant << sound('sound/mecha/weapdestr.ogg',volume=50)
 		else
 			chassis.occupant << sound('sound/mecha/critdestr.ogg',volume=50)
@@ -60,12 +60,12 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/critfail()
-	if(chassis)
+	if (chassis)
 		log_message("Critical failure",1)
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/get_equip_info()
-	if(!chassis)
+	if (!chassis)
 		return
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[chassis.selected==src?"<b>":"<a href='?src=\ref[chassis];select_equip=\ref[src]'>"][src.name][chassis.selected==src?"</b>":"</a>"]"
 
@@ -77,15 +77,15 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/proc/action_checks(atom/target)
-	if(!target)
+	if (!target)
 		return 0
-	if(!chassis)
+	if (!chassis)
 		return 0
-	if(!equip_ready)
+	if (!equip_ready)
 		return 0
-	if(crit_fail)
+	if (crit_fail)
 		return 0
-	if(energy_drain && !chassis.has_charge(energy_drain))
+	if (energy_drain && !chassis.has_charge(energy_drain))
 		return 0
 	return 1
 
@@ -93,8 +93,8 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/can_attach(obj/mecha/M as obj)
-	if(istype(M))
-		if(M.equipment.len<M.max_equip)
+	if (istype(M))
+		if (M.equipment.len<M.max_equip)
 			return 1
 	return 0
 
@@ -103,17 +103,17 @@
 	chassis = M
 	src.forceMove(M)
 	M.log_message("[src] initialized.")
-	if(!M.selected)
+	if (!M.selected)
 		M.selected = src
 	src.update_chassis_page()
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/detach(atom/moveto=null)
-	if(!moveto)
+	if (!moveto)
 		moveto = get_turf(chassis)
 	src.forceMove(moveto)
 	chassis.equipment -= src
-	if(chassis.selected == src)
+	if (chassis.selected == src)
 		chassis.selected = null
 	update_chassis_page()
 	chassis.log_message("[src] removed from equipment.")
@@ -124,23 +124,23 @@
 
 /obj/item/mecha_parts/mecha_equipment/Topic(href,href_list)
 	testing("[src] topic")
-	if(href_list["detach"])
+	if (href_list["detach"])
 		detach()
 	return
 
 
 /obj/item/mecha_parts/mecha_equipment/proc/set_ready_state(state)
 	equip_ready = state
-	if(chassis)
+	if (chassis)
 		send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/occupant_message(message)
-	if(chassis)
+	if (chassis)
 		chassis.occupant_message("[bicon(src)] [message]")
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/log_message(message)
-	if(chassis)
+	if (chassis)
 		chassis.log_message("<i>[src]:</i> [message]")
 	return

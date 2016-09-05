@@ -7,14 +7,14 @@ var/const/WIRE_EXPLODE = 1
 	return
 
 /datum/wires/explosive/UpdatePulsed(var/index)
-	switch(index)
-		if(WIRE_EXPLODE)
+	switch (index)
+		if (WIRE_EXPLODE)
 			explode()
 
 /datum/wires/explosive/UpdateCut(var/index, var/mended)
-	switch(index)
-		if(WIRE_EXPLODE)
-			if(!mended)
+	switch (index)
+		if (WIRE_EXPLODE)
+			if (!mended)
 				explode()
 
 /datum/wires/explosive/plastic
@@ -22,7 +22,7 @@ var/const/WIRE_EXPLODE = 1
 
 /datum/wires/explosive/plastic/CanUse(var/mob/living/L)
 	var/obj/item/weapon/plastique/P = holder
-	if(P.open_panel)
+	if (P.open_panel)
 		return 1
 	return 0
 

@@ -16,11 +16,11 @@
 	var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread
 
 	//One loop for each crate
-	for(var/meteor_supplypaths in meteor_initial_drop)
+	for (var/meteor_supplypaths in meteor_initial_drop)
 		var/list/turf/simulated/floor/valid = list()
 		//Loop through each floor in the supply drop area
-		for(var/turf/simulated/floor/F in initial_supply_area)
-			if(!F.has_dense_content())
+		for (var/turf/simulated/floor/F in initial_supply_area)
+			if (!F.has_dense_content())
 				valid.Add(F)
 
 		var/picked = pick(valid)

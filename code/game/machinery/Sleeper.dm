@@ -13,12 +13,12 @@
 
 
 /obj/machinery/sleep_console/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			//SN src = null
 			qdel(src)
 			return
-		if(2.0)
+		if (2.0)
 			if (prob(50))
 				//SN src = null
 				qdel(src)
@@ -30,7 +30,7 @@
 	..()
 	spawn( 5 )
 		update_icon()
-		if(orient == "RIGHT")
+		if (orient == "RIGHT")
 			src.connected = locate(/obj/machinery/sleeper, get_step(src, EAST))
 		else
 			src.connected = locate(/obj/machinery/sleeper, get_step(src, WEST))
@@ -47,28 +47,28 @@
 	return src.attack_hand(user)
 
 /obj/machinery/sleep_console/attack_hand(mob/user as mob)
-	if(..())
+	if (..())
 		return
 	if (src.connected)
 		var/mob/living/occupant = src.connected.occupant
 		var/dat = list()
-		if(connected.on)
+		if (connected.on)
 			dat += "<font color='blue'><B>Performing anaesthesic emergence...</B></font>" //Best I could come up with
 			dat += "<HR><A href='?src=\ref[src];toggle_autoeject=1'>Auto-eject occupant: [connected.auto_eject_after ? "Yes" : "No"]</A><BR>"
 		else
 			dat += "<font color='blue'><B>Occupant Statistics:</B></FONT><BR>"
 			if (occupant)
 				var/t1
-				switch(occupant.stat)
-					if(0)
+				switch (occupant.stat)
+					if (0)
 						t1 = "Conscious"
-					if(1)
+					if (1)
 						t1 = "<font color='blue'>Unconscious</font>"
-					if(2)
+					if (2)
 						t1 = "<font color='red'>*dead*</font>"
 					else
 				dat += text("[]\tHealth %: [] ([])</FONT><BR>", (occupant.health > 50 ? "<font color='blue'>" : "<font color='red'>"), occupant.health, t1)
-				if(iscarbon(occupant))
+				if (iscarbon(occupant))
 					var/mob/living/carbon/C = occupant
 					dat += text("[]\t-Pulse, bpm: []</FONT><BR>", (C.pulse == PULSE_NONE || C.pulse == PULSE_THREADY ? "<font color='red'>" : "<font color='blue'>"), C.get_pulse(GETPULSE_TOOL))
 				dat += text("[]\t-Brute Damage %: []</FONT><BR>", (occupant.getBruteLoss() < 60 ? "<font color='blue'>" : "<font color='red'>"), occupant.getBruteLoss())
@@ -78,13 +78,13 @@
 				var/sleepytime = max(occupant.paralysis, occupant.sleeping)
 				dat += text("<HR>Paralysis Summary %: [] ([] seconds left!)<BR>", sleepytime, round(sleepytime*2))
 				dat += "<a href ='?src=\ref[src];wakeup=1'>Begin Wake-Up Cycle</a><br>"
-				if(occupant.reagents)
-					for(var/chemical in connected.available_options)
+				if (occupant.reagents)
+					for (var/chemical in connected.available_options)
 						dat += "[connected.available_options[chemical]]: [occupant.reagents.get_reagent_amount(chemical)] units<br>"
 				dat += "<HR><A href='?src=\ref[src];refresh=1'>Refresh meter readings each second</A><BR>"
-				for(var/chemical in connected.available_options)
+				for (var/chemical in connected.available_options)
 					dat += "Inject [connected.available_options[chemical]]: "
-					for(var/amount in connected.amounts)
+					for (var/amount in connected.amounts)
 						dat += "<a href ='?src=\ref[src];chemical=[chemical];amount=[amount]'>[amount] units</a> "
 					dat += "<br>"
 			else
@@ -96,7 +96,7 @@
 	return
 
 /obj/machinery/sleep_console/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 	else
 		usr.set_machine(src)
@@ -105,8 +105,8 @@
 				if (src.connected.occupant)
 					if (src.connected.occupant.stat == DEAD)
 						to_chat(usr, "<span class='danger'>This person has no life for to preserve anymore. Take them to a department capable of reanimating them.</span>")
-					else if(href_list["chemical"] == STOXIN && src.connected.sedativeblock)
-						if(src.connected.sedativeblock < 3)
+					else if (href_list["chemical"] == STOXIN && src.connected.sedativeblock)
+						if (src.connected.sedativeblock < 3)
 							to_chat(usr, "<span class='warning'>Sedative injections not yet ready. Please try again in a few seconds.</span>")
 						else //if this guy is seriously just mashing the soporific button...
 							to_chat(usr, "[pick( \
@@ -119,7 +119,7 @@
 							"<span class='warning'>Sorry pal, safety procedures.</span>", \
 							"<span class='warning'>But it's not bedtime yet!</span>")]")
 						src.connected.sedativeblock++
-					else if(src.connected.occupant.health < 0 && href_list["chemical"] != INAPROVALINE)
+					else if (src.connected.occupant.health < 0 && href_list["chemical"] != INAPROVALINE)
 						to_chat(usr, "<span class='danger'>This person is not in good enough condition for sleepers to be effective! Use another means of treatment, such as cryogenics!</span>")
 					else
 						src.connected.inject_chemical(usr,href_list["chemical"],text2num(href_list["amount"]))
@@ -133,13 +133,13 @@
 	return
 
 /obj/machinery/sleep_console/AltClick()
-	if(connected && !usr.incapacitated() && Adjacent(usr) && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
-		if(connected.wakeup(usr))
+	if (connected && !usr.incapacitated() && Adjacent(usr) && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
+		if (connected.wakeup(usr))
 			visible_message("<span class='notice'>\The [connected] pings softly: 'Initiating wake-up cycle...' </span>")
 
 
 /obj/machinery/sleep_console/process()
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 	src.updateUsrDialog()
 	return
@@ -183,7 +183,7 @@
 	light_power_on = 2
 	power_change()
 		..()
-		if(!(stat & (BROKEN|NOPOWER)) && occupant)
+		if (!(stat & (BROKEN|NOPOWER)) && occupant)
 			set_light(light_range_on, light_power_on)
 		else
 			set_light(0)
@@ -204,7 +204,7 @@
 
 	spawn( 5 )
 		var/turf/t
-		if(orient == "RIGHT")
+		if (orient == "RIGHT")
 			update_icon() // Only needs to update if it's orientation isn't default
 			t = get_step(get_turf(src), WEST)
 			// generate_console(get_step(get_turf(src), WEST))
@@ -212,12 +212,12 @@
 			t = get_step(get_turf(src), EAST)
 			// generate_console(get_step(get_turf(src), EAST))
 
-		if(no_console)
+		if (no_console)
 			return
 
 		ASSERT(t)
 		var/obj/machinery/sleep_console/c = locate() in t.contents
-		if(c && istype(c,connected_type))
+		if (c && istype(c,connected_type))
 			connected = c
 			c.connected = src
 		else if (!connected)
@@ -234,7 +234,7 @@
 
 	. = ..()
 
-	if(connected)
+	if (connected)
 		connected.connected = null
 		qdel(connected)
 		connected = null
@@ -243,11 +243,11 @@
 	icon_state = "[base_icon]_[occupant ? "1" : "0"][orient == "LEFT" ? null : "-r"]"
 
 /obj/machinery/sleeper/proc/generate_console(turf/T as turf)
-	if(connected)
+	if (connected)
 		connected.orient = src.orient
 		connected.update_icon()
 		return 1
-	if(!T.density)
+	if (!T.density)
 		connected = new connected_type(T)
 		connected.orient = src.orient
 		connected.update_icon()
@@ -257,52 +257,52 @@
 
 /obj/machinery/sleeper/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+	for (var/obj/item/weapon/stock_parts/SP in component_parts)
 		T += SP.rating
-	switch(T)
-		if(0 to 5)
+	switch (T)
+		if (0 to 5)
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
-		if(6 to 8)
+		if (6 to 8)
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", PHALANXIMINE = "Phalanximine")
 		else
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", PHALANXIMINE = "Phalanximine", SPACEACILLIN = "Spaceacillin")
 
 
 /obj/machinery/sleeper/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if(!ismob(O)) //mobs only
+	if (!ismob(O)) //mobs only
 		return
-	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
+	if (O.loc == user || !isturf(O.loc) || !isturf(user.loc)) //no you can't pull things out of your ass
 		return
-	if(user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
+	if (user.incapacitated() || user.lying) //are you cuffed, dying, lying, stunned or other
 		return
-	if(O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
+	if (O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src)) // is the mob anchored, too far away from you, or are you too far away from the source
 		return
-	if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
+	if (istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon)) //animals and robutts dont fit
 		return
-	if(!ishuman(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
+	if (!ishuman(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
 		return
-	if(user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
+	if (user.loc==null) // just in case someone manages to get a closet into the blue light dimension, as unlikely as that seems
 		return
-	if(occupant)
+	if (occupant)
 		to_chat(user, "<span class='notice'>\The [src] is already occupied!</span>")
 		return
-	if(isrobot(user))
+	if (isrobot(user))
 		var/mob/living/silicon/robot/robit = usr
-		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
+		if (istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
 			to_chat(user, "<span class='warning'>You do not have the means to do this!</span>")
 			return
 	var/mob/living/L = O
-	if(!istype(L) || L.locked_to)
+	if (!istype(L) || L.locked_to)
 		return
 	/*if(L.abiotic())
 		to_chat(user, "<span class='notice'><B>Subject cannot have abiotic items on.</B></span>")
 		return*/
-	for(var/mob/living/carbon/slime/M in range(1,L))
-		if(M.Victim == L)
+	for (var/mob/living/carbon/slime/M in range(1,L))
+		if (M.Victim == L)
 			to_chat(usr, "[L.name] will not fit into the sleeper because they have a slime latched onto their head.")
 			return
 
-	if(L == user)
+	if (L == user)
 		visible_message("[user] climbs into \the [src].")
 	else
 		visible_message("[user] places [L.name] into \the [src].")
@@ -312,12 +312,12 @@
 	src.occupant = L
 	to_chat(L, "<span class='notice'><b>You feel an anaesthetising air surround you. You go numb as your senses turn inward.</b></span>")
 	connected.process()
-	for(var/obj/OO in src)
+	for (var/obj/OO in src)
 		OO.forceMove(src.loc)
 	src.add_fingerprint(user)
-	if(user.pulling == L)
+	if (user.pulling == L)
 		user.stop_pulling()
-	if(!(stat & (BROKEN|NOPOWER)))
+	if (!(stat & (BROKEN|NOPOWER)))
 		set_light(light_range_on, light_power_on)
 	sedativeblock = 1
 	update_icon()
@@ -327,28 +327,28 @@
 
 
 /obj/machinery/sleeper/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
-	if(!ishuman(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
+	if (!ishuman(usr) && !isrobot(usr) || usr.incapacitated() || usr.lying)
 		return
-	if(!occupant)
+	if (!occupant)
 		to_chat(usr, "<span class='warning'>The sleeper is unoccupied!</span>")
 		return
-	if(isrobot(usr))
+	if (isrobot(usr))
 		var/mob/living/silicon/robot/robit = usr
-		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
+		if (istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
 			to_chat(usr, "<span class='warning'>You do not have the means to do this!</span>")
 			return
-	if(!istype(over_location) || over_location.density)
+	if (!istype(over_location) || over_location.density)
 		return
-	if(!Adjacent(over_location))
+	if (!Adjacent(over_location))
 		return
-	if(!(occupant == usr) && (!Adjacent(usr) || !usr.Adjacent(over_location)))
+	if (!(occupant == usr) && (!Adjacent(usr) || !usr.Adjacent(over_location)))
 		return
-	for(var/atom/movable/A in over_location.contents)
-		if(A.density)
-			if((A == src) || istype(A, /mob))
+	for (var/atom/movable/A in over_location.contents)
+		if (A.density)
+			if ((A == src) || istype(A, /mob))
 				continue
 			return
-	if(occupant == usr)
+	if (occupant == usr)
 		visible_message("[usr] climbs out of \the [src].")
 	else
 		visible_message("[usr] removes [occupant.name] from \the [src].")
@@ -358,7 +358,7 @@
 	return 0
 
 /obj/machinery/sleeper/AltClick()
-	if(connected)
+	if (connected)
 		return connected.AltClick()
 
 /obj/machinery/sleeper/process()
@@ -367,57 +367,57 @@
 
 
 /obj/machinery/sleeper/blob_act()
-	if(prob(75))
-		for(var/atom/movable/A as mob|obj in src)
+	if (prob(75))
+		for (var/atom/movable/A as mob|obj in src)
 			A.forceMove(src.loc)
 			A.blob_act()
 		qdel(src)
 	return
 
 /obj/machinery/sleeper/crowbarDestroy(mob/user)
-	if(occupant)
+	if (occupant)
 		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupied.</span>")
 		return
 	return ..()
 
 /obj/machinery/sleeper/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(..())
+	if (..())
 		return 1
-	if(iswrench(W)&&!occupant&& (machine_flags & WRENCHMOVE))
+	if (iswrench(W)&&!occupant&& (machine_flags & WRENCHMOVE))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		if(orient == "RIGHT")
+		if (orient == "RIGHT")
 			orient = "LEFT"
-			if(generate_console(get_step(get_turf(src), EAST)))
+			if (generate_console(get_step(get_turf(src), EAST)))
 				update_icon()
 			else
 				orient = "RIGHT"
 				to_chat(user, "<span class='warning'>There is no space!</span>")
 		else
 			orient = "RIGHT"
-			if(generate_console(get_step(get_turf(src), WEST)))
+			if (generate_console(get_step(get_turf(src), WEST)))
 				update_icon()
 			else
 				orient = "LEFT"
 				visible_message("<span class='warning'>There is no space!</span>","<span class='warning'>[user] wants to be hardcore, but his CMO won't let him.</span>")
 		return
-	if(!istype(W, /obj/item/weapon/grab))
+	if (!istype(W, /obj/item/weapon/grab))
 		return ..()
 	var/obj/item/weapon/grab/G = W
-	if(!(ismob(G.affecting)) || G.affecting.locked_to)
+	if (!(ismob(G.affecting)) || G.affecting.locked_to)
 		return
-	if(src.occupant)
+	if (src.occupant)
 		to_chat(user, "<span class='notice'><B>The sleeper is already occupied!</B></span>")
 		return
 
-	for(var/mob/living/carbon/slime/M in range(1,G.affecting))
-		if(M.Victim == G.affecting)
+	for (var/mob/living/carbon/slime/M in range(1,G.affecting))
+		if (M.Victim == G.affecting)
 			to_chat(usr, "[G.affecting.name] will not fit into \the [src] because they have a slime latched onto their head.")
 			return
 
 	visible_message("[user] places [G.affecting.name] into \the [src].")
 
 	var/mob/M = G.affecting
-	if(!isliving(M) || M.locked_to)
+	if (!isliving(M) || M.locked_to)
 		return
 	M.forceMove(src)
 	M.reset_view()
@@ -425,11 +425,11 @@
 
 	to_chat(M, "<span class='notice'><b>You feel an anaesthetising air surround you. You go numb as your senses turn inward.</b></span>")
 	connected.process()
-	for(var/obj/O in src)
+	for (var/obj/O in src)
 		O.forceMove(src.loc)
 	src.add_fingerprint(user)
 	qdel(G)
-	if(!(stat & (BROKEN|NOPOWER)))
+	if (!(stat & (BROKEN|NOPOWER)))
 		set_light(light_range_on, light_power_on)
 	update_icon()
 	sedativeblock = 1
@@ -438,23 +438,23 @@
 	return
 
 /obj/machinery/sleeper/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			for(var/atom/movable/A as mob|obj in src)
+	switch (severity)
+		if (1.0)
+			for (var/atom/movable/A as mob|obj in src)
 				A.forceMove(src.loc)
 				ex_act(severity)
 			qdel(src)
 			return
-		if(2.0)
-			if(prob(50))
-				for(var/atom/movable/A as mob|obj in src)
+		if (2.0)
+			if (prob(50))
+				for (var/atom/movable/A as mob|obj in src)
 					A.forceMove(src.loc)
 					ex_act(severity)
 				qdel(src)
 				return
-		if(3.0)
-			if(prob(25))
-				for(var/atom/movable/A as mob|obj in src)
+		if (3.0)
+			if (prob(25))
+				for (var/atom/movable/A as mob|obj in src)
 					A.forceMove(src.loc)
 					ex_act(severity)
 				qdel(src)
@@ -462,10 +462,10 @@
 	return
 
 /obj/machinery/sleeper/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		..(severity)
 		return
-	if(occupant)
+	if (occupant)
 		go_out()
 	..(severity)
 
@@ -497,16 +497,16 @@
 	update_icon()
 
 /obj/machinery/sleeper/proc/wakeup(mob/living/user)
-	if(src.on)
+	if (src.on)
 		to_chat(user, "<span class='warning'>\The [src] is busy.</span>")
 		return 0
-	if(!occupant)
+	if (!occupant)
 		to_chat(user, "<span class='warning'>There's no occupant in \the [src]!</span>")
 		return 0
-	if(occupant.stat == CONSCIOUS)
+	if (occupant.stat == CONSCIOUS)
 		to_chat(user, "<span class='warning'>The occupant is already awake.</span>")
 		return 0
-	if(occupant.stat == DEAD)
+	if (occupant.stat == DEAD)
 		to_chat(user, "<span class='warning'>Can't wake up.</span>")
 		return 0
 	. = 1 //Returning 1 means we successfully began the wake-up cycle. We will return immediately as the spawn() begins, not at the end.
@@ -514,21 +514,21 @@
 	connected.process()
 	var/sleeptime = min(5 SECONDS, 4*max(occupant.sleeping, occupant.paralysis))
 	spawn(sleeptime)
-		if(!src || !src.on) //the !src check is redundant from the nature of spawn() if I understand correctly, but better be safe than sorry
+		if (!src || !src.on) //the !src check is redundant from the nature of spawn() if I understand correctly, but better be safe than sorry
 			return 0
-		if(occupant)
+		if (occupant)
 			occupant.sleeping = 0
 			occupant.paralysis = 0
 		src.on = 0
-		if(auto_eject_after)
+		if (auto_eject_after)
 			src.go_out()
 		connected.process()
 
 /obj/machinery/sleeper/proc/go_out(var/exit = src.loc)
-	if(!occupant)
+	if (!occupant)
 		return 0
 	for (var/atom/movable/x in src.contents)
-		if(x in component_parts)
+		if (x in component_parts)
 			continue
 		x.forceMove(src.loc)
 	occupant.forceMove(exit)
@@ -538,13 +538,13 @@
 	return 1
 
 /obj/machinery/sleeper/proc/inject_chemical(mob/living/user as mob, chemical, amount)
-	if(!src.occupant)
+	if (!src.occupant)
 		to_chat(user, "<span class='warning'>There's no occupant in the sleeper!</span>")
 		return
-	if(isnull(src.occupant.reagents))
+	if (isnull(src.occupant.reagents))
 		to_chat(user, "<span class='warning'>The occupant appears to somehow lack a bloodstream. Please consult a shrink.</span>")
 		return
-	if(src.occupant.reagents.get_reagent_amount(chemical) + amount > 20)
+	if (src.occupant.reagents.get_reagent_amount(chemical) + amount > 20)
 		to_chat(user, "<span class='warning'>Overdose Prevention System: The occupant already has enough [available_options[chemical]] in their system.</span>")
 		return
 	src.occupant.reagents.add_reagent(chemical, amount)
@@ -555,7 +555,7 @@
 	set name = "Eject Sleeper"
 	set category = "Object"
 	set src in oview(1)
-	if(usr.isUnconscious())
+	if (usr.isUnconscious())
 		return
 	src.go_out()
 	add_fingerprint(usr)
@@ -566,36 +566,36 @@
 	set name = "Enter Sleeper"
 	set category = "Object"
 	set src in oview(1)
-	if(usr.isUnconscious() || !(ishuman(usr) || ismonkey(usr)))
+	if (usr.isUnconscious() || !(ishuman(usr) || ismonkey(usr)))
 		return
 
-	if(src.occupant)
+	if (src.occupant)
 		to_chat(usr, "<span class='notice'><B>\The [src] is already occupied!</B></span>")
 		return
-	if(usr.incapacitated() || usr.lying) //are you cuffed, dying, lying, stunned or other
+	if (usr.incapacitated() || usr.lying) //are you cuffed, dying, lying, stunned or other
 		return
-	for(var/mob/living/carbon/slime/M in range(1,usr))
-		if(M.Victim == usr)
+	for (var/mob/living/carbon/slime/M in range(1,usr))
+		if (M.Victim == usr)
 			to_chat(usr, "You're too busy getting your life sucked out of you.")
 			return
-	if(usr.locked_to)
+	if (usr.locked_to)
 		return
 	visible_message("[usr] starts climbing into \the [src].")
-	if(do_after(usr, src, drag_delay))
-		if(src.occupant)
+	if (do_after(usr, src, drag_delay))
+		if (src.occupant)
 			to_chat(usr, "<span class='notice'><B>The sleeper is already occupied!</B></span>")
 			return
-		if(usr.locked_to)
+		if (usr.locked_to)
 			return
 		usr.stop_pulling()
 		usr.forceMove(src)
 		usr.reset_view()
 		src.occupant = usr
 		connected.process()
-		for(var/obj/O in src)
+		for (var/obj/O in src)
 			qdel(O)
 		src.add_fingerprint(usr)
-		if(!(stat & (BROKEN|NOPOWER)))
+		if (!(stat & (BROKEN|NOPOWER)))
 			set_light(light_range_on, light_power_on)
 		update_icon()
 		return
@@ -627,35 +627,35 @@
 
 
 /obj/machinery/sleeper/mancrowave/go_out(var/exit = src.loc)
-	if(on && !emagged)
+	if (on && !emagged)
 		return 0
 	else
 		on = 0
 		..()
 
 /obj/machinery/sleeper/mancrowave/update_icon()
-	if(!occupant)
+	if (!occupant)
 		icon_state = "[base_icon]_open"
-	else if(setting != "Thermoregulate" && on)
+	else if (setting != "Thermoregulate" && on)
 		icon_state = "[base_icon]_2"
 	else
 		icon_state = "[base_icon]_[on]"
-	if(emagged)
+	if (emagged)
 		light_color = LIGHT_COLOR_RED
 		icon_state += "emag"
 	else
 		light_color = LIGHT_COLOR_ORANGE
-	if(on)
+	if (on)
 		set_light(light_range_on, light_power_on)
 	else
 		set_light(0)
-	if(connected)
+	if (connected)
 		connected.update_icon()
 	else
 		qdel(src)
 
 /obj/machinery/sleeper/mancrowave/emag(mob/user)
-	if(!emagged)
+	if (!emagged)
 		emagged = 1
 		connected.emagged = 1
 		to_chat(user, "<span class='warning'>You short out the safety features of \the [src], and feel like a MAN!	</span>")
@@ -669,20 +669,20 @@
 /obj/machinery/sleeper/mancrowave/RefreshParts()
 
 /obj/machinery/sleep_console/mancrowave_console/update_icon()
-	if(connected)
-		if(!connected.occupant)
+	if (connected)
+		if (!connected.occupant)
 			icon_state = "manconsole_open"
-		else if(connected.setting != "Thermoregulate" && connected.on)
+		else if (connected.setting != "Thermoregulate" && connected.on)
 			icon_state = "manconsole_2"
 		else
 			icon_state = "manconsole_[connected.on]"
-		if(connected.emagged)
+		if (connected.emagged)
 			icon_state += "emag"
 
 
 /obj/machinery/sleep_console/mancrowave_console/Destroy()
 	. = ..()
-	if(connected)
+	if (connected)
 		connected.connected = null
 		connected.go_out()
 		qdel(connected)
@@ -690,28 +690,28 @@
 
 
 /obj/machinery/sleep_console/mancrowave_console/attack_hand(mob/user as mob)
-	if(..())
+	if (..())
 		return 1
 	if (src.connected)
 		var/mob/living/occupant = src.connected.occupant
 		var/dat = "<font color='blue'><B>Occupant Statistics:</B></FONT><BR>"
 		if (occupant)
 			var/t1
-			switch(occupant.stat)
-				if(0)
+			switch (occupant.stat)
+				if (0)
 					t1 = "Conscious"
-				if(1)
+				if (1)
 					t1 = "<font color='blue'>Unconscious</font>"
-				if(2)
+				if (2)
 					t1 = "<font color='red'>*dead*</font>"
 				else
 			dat += text("[]\tHealth %: [] ([])</FONT><BR>", (occupant.health > 50 ? "<font color='blue'>" : "<font color='red'>"), occupant.health, t1)
-			if(iscarbon(occupant))
+			if (iscarbon(occupant))
 				var/mob/living/carbon/C = occupant
 				dat += text("[]\t-Pulse, bpm: []</FONT><BR>", (C.pulse == PULSE_NONE || C.pulse == PULSE_2SLOW || C.pulse == PULSE_THREADY ? "<font color='red'>" : "<font color='blue'>"), C.get_pulse(GETPULSE_TOOL))
 				dat +=  text("[]\t -Core Temperature: []&deg;C </FONT><BR></span>", (C.undergoing_hypothermia() ? "<font color='red'>" : "<font color='blue'>"), C.bodytemperature-T0C)
 			dat += "<HR><b>Cook settings:</b><BR>"
-			for(var/cook_setting in connected.available_options)
+			for (var/cook_setting in connected.available_options)
 				dat += "<a href ='?src=\ref[src];cook=[cook_setting]'>[cook_setting] - [connected.available_options[cook_setting]/10] seconds</a>"
 				dat += "<br>"
 		else
@@ -728,7 +728,7 @@
 
 
 /obj/machinery/sleep_console/mancrowave_console/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 	usr.set_machine(src)
 	if (href_list["cook"])
@@ -743,14 +743,14 @@
 						connected.cook(href_list["cook"])
 	if (href_list["refresh"])
 		src.updateUsrDialog()
-	if(href_list["auto"])
+	if (href_list["auto"])
 		connected.automatic = !connected.automatic
-	if(href_list["turnoff"])
+	if (href_list["turnoff"])
 		connected.on = 0
 		connected.go_out()
 		connected.update_icon()
-	if(href_list["security"])
-		if(src.connected && connected.on)
+	if (href_list["security"])
+		if (src.connected && connected.on)
 			to_chat(usr, "<span class='danger'>The security features of \the [src] cannot be re-enabled when it is on!</span>")
 			return
 		connected.emagged = 0
@@ -765,53 +765,53 @@
 
 /obj/machinery/sleep_console/mancrowave_console/process()
 	..()
-	if(!connected)
+	if (!connected)
 		return
-	if(connected.automatic && connected.occupant && !connected.on)
+	if (connected.automatic && connected.occupant && !connected.on)
 		connected.cook("Thermoregulate")
-	if(!connected.on)
-	else if(!src || !connected || !connected.occupant || connected.occupant.loc != connected) //Check if someone's released/replaced/bombed him already
+	if (!connected.on)
+	else if (!src || !connected || !connected.occupant || connected.occupant.loc != connected) //Check if someone's released/replaced/bombed him already
 		connected.occupant = null
 		connected.on = 0
 		connected.update_icon()
 		return
-	if(!istype(connected.occupant,/mob/living/carbon))
+	if (!istype(connected.occupant,/mob/living/carbon))
 		connected.go_out()
 		return
-	if(!(world.time >= connected.target_time && connected.on)) //If we're currently still cooking
+	if (!(world.time >= connected.target_time && connected.on)) //If we're currently still cooking
 		var/targettemperature = T0C+32+(connected.available_options["[connected.setting]"]/10)
 		var/emaggedbonus = (connected.emagged) ? 10 : 1
 		var/timefraction = (connected.available_options["[connected.setting]"])/250*emaggedbonus
 		var/tempdifference = abs(targettemperature - connected.occupant.bodytemperature)
-		if(connected.occupant.bodytemperature < targettemperature)
+		if (connected.occupant.bodytemperature < targettemperature)
 			connected.occupant.bodytemperature = min(connected.occupant.bodytemperature + tempdifference*(timefraction),targettemperature)
 		else
 			connected.occupant.bodytemperature = max(connected.occupant.bodytemperature - tempdifference*(timefraction),targettemperature)
 	else
-		switch(connected.setting)
-			if("Thermoregulate")
+		switch (connected.setting)
+			if ("Thermoregulate")
 				connected.occupant.bodytemperature = (T0C + 37)
 				connected.occupant.sleeping = 0
 				connected.occupant.paralysis = 0
 				connected.go_out()
-			if("Rare")
+			if ("Rare")
 				qdel(connected.occupant)
 				connected.occupant = null
-				for(var/i = 1;i < 5;i++)
+				for (var/i = 1;i < 5;i++)
 					new /obj/item/weapon/reagent_containers/food/snacks/soylentgreen(connected.loc)
-			if("Medium")
+			if ("Medium")
 				qdel(connected.occupant)
 				connected.occupant = null
-				for(var/i = 1;i < 5;i++)
+				for (var/i = 1;i < 5;i++)
 					new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(connected.loc)
-			if("Well Done")
+			if ("Well Done")
 				qdel(connected.occupant)
 				connected.occupant = null
 				var/obj/effect/decal/cleanable/ash/ashed = new /obj/effect/decal/cleanable/ash(connected.loc)
 				ashed.layer = src.layer + 0.01
 		playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
 		connected.on = 0
-		if(connected.occupant)
+		if (connected.occupant)
 			connected.go_out()
 		connected.update_icon()
 

@@ -35,13 +35,13 @@
 	if (src.speed)
 		if (src.speed <= 10)
 			var/t1 = 10 - src.speed
-			while(t1 > 0)
+			while (t1 > 0)
 				step(src, src.dir)
 				sleep(1)
 				t1--
 		else
 			var/t1 = round(src.speed / 5)
-			while(t1 > 0)
+			while (t1 > 0)
 				step(src, src.dir)
 				t1--
 	return
@@ -60,21 +60,21 @@
 /obj/machinery/vehicle/ex_act(severity)
 	switch (severity)
 		if (1.0)
-			for(var/atom/movable/A as mob|obj in src)
+			for (var/atom/movable/A as mob|obj in src)
 				A.forceMove(src.loc)
 				ex_act(severity)
 			//SN src = null
 			del(src)
-		if(2.0)
+		if (2.0)
 			if (prob(50))
-				for(var/atom/movable/A as mob|obj in src)
+				for (var/atom/movable/A as mob|obj in src)
 					A.forceMove(src.loc)
 					ex_act(severity)
 				//SN src = null
 				del(src)
 
 /obj/machinery/vehicle/blob_act()
-	for(var/atom/movable/A as mob|obj in src)
+	for (var/atom/movable/A as mob|obj in src)
 		A.forceMove(src.loc)
 	del(src)
 
@@ -141,7 +141,7 @@
 
 	if (istype(A, /atom/movable))
 		A.forceMove(src.loc)
-		for(var/mob/O in view(src, null))
+		for (var/mob/O in view(src, null))
 			if ((O.client && !(O.blinded)))
 				to_chat(O, text("<span class='notice'><B> [] unloads [] from []!</B></span>", usr, A, src))
 
@@ -171,7 +171,7 @@
 						M.client.perspective = EYE_PERSPECTIVE
 						M.client.eye = src
 
-				for(var/mob/O in viewers(src, null))
+				for (var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
 						to_chat(O, text("<span class='notice'><B> [] loads [] into []!</B></span>", H, H.pulling, src))
 
@@ -198,46 +198,46 @@
 		return
 
 	proc/inspace()
-		if(istype(src.loc, /turf/space))
+		if (istype(src.loc, /turf/space))
 			return 1
 		return 0
 
 	remove_air(amount)
-		if(src.internal_tank)
+		if (src.internal_tank)
 			return src.internal_tank.air_contents.remove(amount)
 		else
 			var/turf/T = get_turf(src)
 			return T.remove_air(amount)
 
 	return_air()
-		if(src.internal_tank)
+		if (src.internal_tank)
 			return src.internal_tank.return_air()
 		return
 
 	proc/return_pressure()
-		if(src.internal_tank)
+		if (src.internal_tank)
 			return src.internal_tank.return_pressure()
 		return 0
 
 	proc/return_temperature()
-		if(src.internal_tank)
+		if (src.internal_tank)
 			return src.internal_tank.return_temperature()
 		return 0
 
 	Bump(var/atom/movable/A)
-		if(istype(A))
+		if (istype(A))
 			step(A, src.dir)
 		else
-			if(pr_inertial_movement.cur_delay<2)
+			if (pr_inertial_movement.cur_delay<2)
 				take_damage(25)
 			pr_speed_increment.stop()
 			pr_inertial_movement.stop()
 		return
 
 	proc/take_damage(value)
-		if(isnum(value))
+		if (isnum(value))
 			src.health -= value
-			if(src.health>0)
+			if (src.health>0)
 				src.spark_system.start()
 //				to_chat(world, "[src] health is [health]")
 			else
@@ -259,7 +259,7 @@
 			return
 		last_relay = world.time
 		var/speed_change = 0
-		if(direction & NORTH)
+		if (direction & NORTH)
 			pr_inertial_movement.desired_delay = between(pr_inertial_movement.min_delay, pr_inertial_movement.desired_delay-1, pr_inertial_movement.max_delay)
 			speed_change = 1
 		else if (direction & SOUTH)
@@ -269,7 +269,7 @@
 			src.dir = turn(src.dir, -90.0)
 		else if (src.can_rotate && direction & 8)
 			src.dir = turn(src.dir, 90)
-		if(speed_change)
+		if (speed_change)
 //			to_chat(user, "Desired speed: [get_desired_speed()]%")
 			src.pr_speed_increment.start()
 			src.pr_inertial_movement.start()
@@ -295,16 +295,16 @@
 		return ..()
 
 	process(var/obj/machinery/vehicle/space_ship/SS as obj)
-		if(cur_delay >= max_delay)
+		if (cur_delay >= max_delay)
 			return src.stop()
-		if(world.time - last_move < cur_delay)
+		if (world.time - last_move < cur_delay)
 			return
 		last_move = world.time
 /*
-		if(src.delay>=SS.max_delay)
+		if (src.delay>=SS.max_delay)
 			return src.stop()
 */
-		if(!step(SS, SS.dir) || !SS.inspace())
+		if (!step(SS, SS.dir) || !SS.inspace())
 			src.stop()
 		return
 
@@ -316,11 +316,11 @@
 	delay = 5
 
 	process(var/obj/machinery/vehicle/space_ship/SS as obj)
-		if(SS.pr_inertial_movement.desired_delay!=SS.pr_inertial_movement.cur_delay)
+		if (SS.pr_inertial_movement.desired_delay!=SS.pr_inertial_movement.cur_delay)
 			var/delta = SS.pr_inertial_movement.desired_delay - SS.pr_inertial_movement.cur_delay
 			SS.pr_inertial_movement.cur_delay += delta>0?1:-1
 /*
-			for(var/mob/M in SS)
+			for (var/mob/M in SS)
 				to_chat(M, "Current speed: [SS.get_current_speed()]")
 */
 		else

@@ -30,8 +30,8 @@
 	mine_count = 0
 	holes = 0
 	tiles = list()
-	for(var/y=1;y<=rows;y++)
-		for(var/x=1;x<=columns;x++)
+	for (var/y=1;y<=rows;y++)
+		for (var/x=1;x<=columns;x++)
 			var/datum/mine_tile/T = new()
 			tiles += T
 			T.x = x
@@ -40,68 +40,68 @@
 /datum/minesweeper_game/proc/game_start(var/datum/mine_tile/first_T)
 	first_T.selected = 1
 	timer = world.time
-	while(mine_count < initial_mines)
+	while (mine_count < initial_mines)
 		var/datum/mine_tile/T = pick(tiles)
-		if(!T.mined && !T.selected)
+		if (!T.mined && !T.selected)
 			T.mined = 1
 			mine_count++
 
 	dig_tile(first_T)
 
 /datum/minesweeper_game/proc/dig_tile(var/datum/mine_tile/T,var/force=0)
-	if(T.dug)
+	if (T.dug)
 		return
-	if(!T.selected && !force)
-		for(var/datum/mine_tile/other_T in tiles)
+	if (!T.selected && !force)
+		for (var/datum/mine_tile/other_T in tiles)
 			other_T.selected = 0
 		T.selected = 1
 		face = "fear"
 		return
-	if(T.flagged == 1)
+	if (T.flagged == 1)
 		return
 	T.selected = 0
 	face = "normal"
 	T.dug = 1
-	if(T.mined)
+	if (T.mined)
 		face = "dead"
 		end_timer = min(999,round((world.time - timer)/10))
 		gameover = 1
 	else
 		holes++
-		if((mine_count+holes) == tiles.len)
-			for(var/datum/mine_tile/other_T in tiles)
-				if(other_T.mined)
+		if ((mine_count+holes) == tiles.len)
+			for (var/datum/mine_tile/other_T in tiles)
+				if (other_T.mined)
 					other_T.flagged = 1
 			face = "win"
 			end_timer = min(999,round((world.time - timer)/10))
 			gameover = 1
 	var/list/neighbors = list()
-	for(var/datum/mine_tile/near_T in tiles)
-		if(((near_T.x - T.x)*(near_T.x - T.x) + (near_T.y - T.y)*(near_T.y - T.y)) <= 2)
-			if(near_T.mined)
+	for (var/datum/mine_tile/near_T in tiles)
+		if (((near_T.x - T.x)*(near_T.x - T.x) + (near_T.y - T.y)*(near_T.y - T.y)) <= 2)
+			if (near_T.mined)
 				T.num++
 			else
 				neighbors += near_T
-	if(!T.num)
-		for(var/datum/mine_tile/near_T in neighbors)
+	if (!T.num)
+		for (var/datum/mine_tile/near_T in neighbors)
 			spawn()
 				dig_tile(near_T,1)
 
 /datum/minesweeper_game/proc/set_difficulty(var/choice)
-	switch(choice)
-		if("beginner")
+	switch (choice)
+		if ("beginner")
 			rows = 8
 			columns = 8
 			initial_mines = 10
-		if("intermediate")
+		if ("intermediate")
 			rows = 16
 			columns = 16
 			initial_mines = 40
-		if("expert")
+		if ("expert")
 			rows = 16
 			columns = 30
 			initial_mines = 99
-		if("custom")
+		if ("custom")
 			var/choiceX = input("How many columns?", "Minesweeper Settings") as num
 			var/choiceY = input("How many rows?", "Minesweeper Settings") as num
 			var/choiceM = input("How many mines?", "Minesweeper Settings") as num
@@ -122,8 +122,8 @@
 	mine_count = 0
 	holes = 0
 	tiles = list()
-	for(var/y=1;y<=rows;y++)
-		for(var/x=1;x<=columns;x++)
+	for (var/y=1;y<=rows;y++)
+		for (var/x=1;x<=columns;x++)
 			var/datum/mine_tile/T = new()
 			tiles += T
 			T.x = x

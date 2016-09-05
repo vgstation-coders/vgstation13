@@ -40,11 +40,11 @@
 	cant_hold = list("/obj/item/weapon/disk/nuclear")
 
 /obj/item/weapon/storage/bag/trash/update_icon()
-	if(contents.len == 0)
+	if (contents.len == 0)
 		icon_state = "trashbag0"
-	else if(contents.len < 12)
+	else if (contents.len < 12)
 		icon_state = "trashbag1"
-	else if(contents.len < 21)
+	else if (contents.len < 21)
 		icon_state = "trashbag2"
 	else icon_state = "trashbag3"
 
@@ -72,17 +72,17 @@
 /obj/item/weapon/storage/bag/plasticbag/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
 	//Forbid wearing bags with something inside!
 	.=..()
-	if(contents.len && (slot == slot_head))
+	if (contents.len && (slot == slot_head))
 		return CANNOT_EQUIP
 
 /obj/item/weapon/storage/bag/plasticbag/can_be_inserted()
-	if(ishuman(loc))
+	if (ishuman(loc))
 		var/mob/living/carbon/human/H = loc
-		if(H.head == src) //If worn
+		if (H.head == src) //If worn
 			return 0
-	else if(isMoMMI(loc))
+	else if (isMoMMI(loc))
 		var/mob/living/silicon/robot/mommi/MoM = loc
-		if(MoM.head_state == src) //If worn
+		if (MoM.head_state == src) //If worn
 			return 0
 	return ..()
 
@@ -137,7 +137,7 @@
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks")
 
 /obj/item/weapon/storage/bag/food/update_icon()
-	if(contents.len < 1)
+	if (contents.len < 1)
 		icon_state = "foodbag0"
 	else icon_state = "foodbag1"
 
@@ -201,15 +201,15 @@
 		//verbs += /obj/item/weapon/storage/bag/sheetsnatcher/quick_empty
 
 	can_be_inserted(obj/item/W as obj, stop_messages = 0)
-		if(!istype(W,/obj/item/stack/sheet) || istype(W,/obj/item/stack/sheet/mineral/sandstone) || istype(W,/obj/item/stack/sheet/wood))
-			if(!stop_messages)
+		if (!istype(W,/obj/item/stack/sheet) || istype(W,/obj/item/stack/sheet/mineral/sandstone) || istype(W,/obj/item/stack/sheet/wood))
+			if (!stop_messages)
 				to_chat(usr, "The snatcher does not accept [W].")
 			return 0 //I don't care, but the existing code rejects them for not being "sheets" *shrug* -Sayu
 		var/current = 0
-		for(var/obj/item/stack/sheet/S in contents)
+		for (var/obj/item/stack/sheet/S in contents)
 			current += S.amount
-		if(capacity == current)//If it's full, you're done
-			if(!stop_messages)
+		if (capacity == current)//If it's full, you're done
+			if (!stop_messages)
 				to_chat(usr, "<span class='warning'>The snatcher is full.</span>")
 			return 0
 		return 1
@@ -218,40 +218,40 @@
 // Modified handle_item_insertion.  Would prefer not to, but...
 	handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
 		var/obj/item/stack/sheet/S = W
-		if(!istype(S))
+		if (!istype(S))
 			return 0
 
 		var/amount
 		var/inserted = 0
 		var/current = 0
-		for(var/obj/item/stack/sheet/S2 in contents)
+		for (var/obj/item/stack/sheet/S2 in contents)
 			current += S2.amount
-		if(capacity < current + S.amount)//If the stack will fill it up
+		if (capacity < current + S.amount)//If the stack will fill it up
 			amount = capacity - current
 		else
 			amount = S.amount
 
-		for(var/obj/item/stack/sheet/sheet in contents)
-			if(S.type == sheet.type) // we are violating the amount limitation because these are not sane objects
+		for (var/obj/item/stack/sheet/sheet in contents)
+			if (S.type == sheet.type) // we are violating the amount limitation because these are not sane objects
 				sheet.amount += amount	// they should only be removed through procs in this file, which split them up.
 				S.amount -= amount
 				inserted = 1
 				break
 
-		if(!inserted || !S.amount)
+		if (!inserted || !S.amount)
 			usr.u_equip(S,1)
 			usr.update_icons()	//update our overlays
 			if (usr.client && usr.s_active != src)
 				usr.client.screen -= S
 			//S.dropped(usr)
-			if(!S.amount)
+			if (!S.amount)
 				qdel (S)
 				S = null
 			else
 				S.forceMove(src)
 
 		orient2hud(usr)
-		if(usr.s_active)
+		if (usr.s_active)
 			usr.s_active.show_to(usr)
 		update_icon()
 		return 1
@@ -264,10 +264,10 @@
 
 		//Numbered contents display
 		var/list/datum/numbered_display/numbered_contents
-		if(display_contents_with_number)
+		if (display_contents_with_number)
 			numbered_contents = list()
 			adjusted_contents = 0
-			for(var/obj/item/stack/sheet/I in contents)
+			for (var/obj/item/stack/sheet/I in contents)
 				adjusted_contents++
 				var/datum/numbered_display/D = new/datum/numbered_display(I)
 				D.number = I.amount
@@ -284,24 +284,24 @@
 // Modified quick_empty verb drops appropriate sized stacks
 	quick_empty()
 		var/location = get_turf(src)
-		for(var/obj/item/stack/sheet/S in contents)
-			while(S.amount)
+		for (var/obj/item/stack/sheet/S in contents)
+			while (S.amount)
 				var/obj/item/stack/sheet/N = new S.type(location)
 				var/stacksize = min(S.amount,N.max_amount)
 				N.amount = stacksize
 				S.amount -= stacksize
-			if(!S.amount)
+			if (!S.amount)
 				qdel (S) // todo: there's probably something missing here
 				S = null
 		orient2hud(usr)
-		if(usr.s_active)
+		if (usr.s_active)
 			usr.s_active.show_to(usr)
 		update_icon()
 
 // Instead of removing
 	remove_from_storage(obj/item/W as obj, atom/new_location)
 		var/obj/item/stack/sheet/S = W
-		if(!istype(S))
+		if (!istype(S))
 			return 0
 
 		//I would prefer to drop a new stack, but the item/attack_hand code
@@ -309,7 +309,7 @@
 		//Therefore, make a new stack internally that has the remainder.
 		// -Sayu
 
-		if(S.amount > S.max_amount)
+		if (S.amount > S.max_amount)
 			var/obj/item/stack/sheet/temp = new S.type(src)
 			temp.amount = S.amount - S.max_amount
 			S.amount = S.max_amount
@@ -342,12 +342,12 @@
 
 /obj/item/weapon/storage/bag/gadgets/mass_remove(atom/A)
 	var/lowest_rating = INFINITY //Get the lowest rating, so only mass drop the lowest parts.
-	for(var/obj/item/B in contents)
-		if(B.get_rating() < lowest_rating)
+	for (var/obj/item/B in contents)
+		if (B.get_rating() < lowest_rating)
 			lowest_rating = B.get_rating()
 
-	for(var/obj/item/B in contents) //Now that we have the lowest rating we can dump only parts at the lowest rating.
-		if(B.get_rating() > lowest_rating)
+	for (var/obj/item/B in contents) //Now that we have the lowest rating we can dump only parts at the lowest rating.
+		if (B.get_rating() > lowest_rating)
 			continue
 		remove_from_storage(B, A)
 

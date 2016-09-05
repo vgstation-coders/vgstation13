@@ -37,7 +37,7 @@ it creates. All the menus and other manipulation commands are in the R&D console
 
 /obj/machinery/r_n_d/fabricator/protolathe/power_change()
 	..()
-	if(!(stat & (BROKEN|NOPOWER)))
+	if (!(stat & (BROKEN|NOPOWER)))
 		set_light(2)
 	else
 		set_light(0)
@@ -58,14 +58,14 @@ it creates. All the menus and other manipulation commands are in the R&D console
 	RefreshParts()
 
 /obj/machinery/r_n_d/fabricator/protolathe/Destroy()
-	if(linked_console && linked_console.linked_lathe == src)
+	if (linked_console && linked_console.linked_lathe == src)
 		linked_console.linked_lathe = null
 
 	. = ..()
 
 /obj/machinery/r_n_d/fabricator/protolathe/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/reagent_containers/glass/G in component_parts)
+	for (var/obj/item/weapon/reagent_containers/glass/G in component_parts)
 		T += G.reagents.maximum_volume
 
 	create_reagents(T) // Holder for the reagents used as materials.

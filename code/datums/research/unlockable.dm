@@ -17,32 +17,32 @@
 	tree = T
 
 /datum/unlockable/proc/check_prerequisites()
-	if(prerequisites.len>0)
-		for(var/prereq in prerequisites)
-			if(!(prereq in tree.unlocked))
+	if (prerequisites.len>0)
+		for (var/prereq in prerequisites)
+			if (!(prereq in tree.unlocked))
 				return 0
 	return 1
 
 /datum/unlockable/proc/check_antirequisites()
-	if(antirequisites.len>0)
-		for(var/antireq in antirequisites)
-			if(antireq in tree.unlocked)
+	if (antirequisites.len>0)
+		for (var/antireq in antirequisites)
+			if (antireq in tree.unlocked)
 				return 0
 	return 1
 
 // INTERNAL: Begin unlocking process.
 /datum/unlockable/proc/unlock()
-	if(tree.unlocking)
+	if (tree.unlocking)
 		return 0
 
 	begin_unlock()
 
 	// Lock tree
 	tree.unlocking=1
-	if(unlock_check())
+	if (unlock_check())
 		sleep(time) // do_after has too many human-specific checks that don't work on a glorified datum.
 		            //  We don't have hands, and we can't control if the host moves.
-		if(unlock_check())
+		if (unlock_check())
 			unlock_action()
 			end_unlock()
 			unlocked=1

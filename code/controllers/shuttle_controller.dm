@@ -38,26 +38,26 @@ datum/shuttle_controller
 	// otherwise if outgoing, switch to incoming
 
 datum/shuttle_controller/proc/incall(coeff = 1)
-	if(shutdown)
+	if (shutdown)
 		return
-	if((!universe.OnShuttleCall(null) || deny_shuttle) && alert == 1) //crew transfer shuttle does not gets recalled by gamemode
+	if ((!universe.OnShuttleCall(null) || deny_shuttle) && alert == 1) //crew transfer shuttle does not gets recalled by gamemode
 		return
-	if(endtime)
-		if(direction == -1)
+	if (endtime)
+		if (direction == -1)
 			setdirection(1)
 	else
 		settimeleft(SHUTTLEARRIVETIME*coeff)
 		online = 1
-		if(always_fake_recall)
+		if (always_fake_recall)
 			fake_recall = rand(300,500)
 	//turning on the red lights in hallways
-	if(alert == 0)
-		for(var/area/A in areas)
-			if(istype(A, /area/hallway))
+	if (alert == 0)
+		for (var/area/A in areas)
+			if (istype(A, /area/hallway))
 				A.readyalert()
 
 datum/shuttle_controller/proc/shuttlealert(var/X)
-	if(shutdown)
+	if (shutdown)
 		return
 	alert = X
 
@@ -69,21 +69,21 @@ datum/shuttle_controller/proc/force_shutdown()
 
 
 datum/shuttle_controller/proc/recall()
-	if(shutdown)
+	if (shutdown)
 		return
-	if(!can_recall)
+	if (!can_recall)
 		return
-	if(direction == 1)
+	if (direction == 1)
 		var/timeleft = timeleft()
-		if(alert == 0)
-			if(timeleft >= 600)
+		if (alert == 0)
+			if (timeleft >= 600)
 				return
 			captain_announce("The emergency shuttle has been recalled.")
 			world << sound('sound/AI/shuttlerecalled.ogg')
 			setdirection(-1)
 			online = 1
-			for(var/area/A in areas)
-				if(istype(A, /area/hallway))
+			for (var/area/A in areas)
+				if (istype(A, /area/hallway))
 					A.readyreset()
 			return
 		else //makes it possible to send shuttle back.
@@ -97,9 +97,9 @@ datum/shuttle_controller/proc/recall()
 datum/shuttle_controller/proc/timeleft()
 
 
-	if(online)
+	if (online)
 		var/timeleft = round((endtime - world.timeofday)/10 ,1)
-		if(direction == 1 || direction == 2)
+		if (direction == 1 || direction == 2)
 			return timeleft
 		else
 			return SHUTTLEARRIVETIME-timeleft
@@ -114,7 +114,7 @@ datum/shuttle_controller/proc/settimeleft(var/delay)
 // sets the shuttle direction
 // 1 = towards SS13, -1 = back to centcom
 datum/shuttle_controller/proc/setdirection(var/dirn)
-	if(direction == dirn)
+	if (direction == dirn)
 		return
 	direction = dirn
 	// if changing direction, flip the timeleft by SHUTTLEARRIVETIME
@@ -130,23 +130,23 @@ datum/shuttle_controller/proc/move_pod(var/start_type,var/end_type,var/direction
 
 	start_location.move_contents_to(end_location, null, direction)
 
-	for(var/obj/machinery/door/D in all_doors)
-		if( get_area(D) == end_location )
+	for (var/obj/machinery/door/D in all_doors)
+		if ( get_area(D) == end_location )
 			spawn(0)
-				if(open_doors)
+				if (open_doors)
 					D.open()
 				else
 					D.close()
 
-	for(var/mob/M in end_location)
-		if(M.client)
+	for (var/mob/M in end_location)
+		if (M.client)
 			spawn()
-				if(M.locked_to)
+				if (M.locked_to)
 					shake_camera(M, 4, 1) // locked_to, not a lot of shaking
 				else
 					shake_camera(M, 10, 2) // unlocked_to, HOLY SHIT SHAKE THE ROOM
-		if(istype(M, /mob/living/carbon))
-			if(!M.locked_to)
+		if (istype(M, /mob/living/carbon))
+			if (!M.locked_to)
 				M.Weaken(5)
 
 
@@ -154,14 +154,14 @@ datum/shuttle_controller/emergency_shuttle
 
 datum/shuttle_controller/emergency_shuttle/force_shutdown()
 	..()
-	if(direction == 2)
+	if (direction == 2)
 		location = 1
 
 		//main shuttle
-		if(shuttle && istype(shuttle,/datum/shuttle/escape))
+		if (shuttle && istype(shuttle,/datum/shuttle/escape))
 			var/datum/shuttle/escape/E = shuttle
 			E.open_all_doors()
-			if(!E.move_to_dock(E.dock_station, 0, E.dir)) //Throw everything forward
+			if (!E.move_to_dock(E.dock_station, 0, E.dir)) //Throw everything forward
 				message_admins("WARNING: THE EMERGENCY SHUTTLE FAILED TO FIND THE STATION! PANIC PANIC PANIC")
 		else
 			message_admins("WARNING: THERE IS NO EMERGENCY SHUTTLE! PANIC")
@@ -176,37 +176,37 @@ datum/shuttle_controller/emergency_shuttle/force_shutdown()
 		online = 0
 
 datum/shuttle_controller/emergency_shuttle/process()
-	if(!online || shutdown)
+	if (!online || shutdown)
 		return
 
 	var/timeleft = timeleft()
-	if(timeleft > 1e5)		// midnight rollover protection
+	if (timeleft > 1e5)		// midnight rollover protection
 		timeleft = 0
-	if(timeleft < 0)		// Sanity
+	if (timeleft < 0)		// Sanity
 		timeleft = 0
-	switch(location)
-		if(0)
+	switch (location)
+		if (0)
 
 			/* --- Shuttle is in transit to Central Command from SS13 --- */
-			if(direction == 2)
-				if(timeleft>0)
+			if (direction == 2)
+				if (timeleft>0)
 					return 0
 
 				/* --- Shuttle has arrived at Centrcal Command --- */
 				else
 					// turn off the star spawners
 					/*
-					for(var/obj/effect/starspawner/S in world)
+					for (var/obj/effect/starspawner/S in world)
 						S.spawning = 0
 					*/
 
 					location = 2
 
 					//main shuttle
-					if(shuttle && istype(shuttle,/datum/shuttle/escape))
+					if (shuttle && istype(shuttle,/datum/shuttle/escape))
 						var/datum/shuttle/escape/E = shuttle
 						E.open_all_doors()
-						if(!E.move_to_dock(E.dock_centcom, 0, E.dir)) //Throw everything forward
+						if (!E.move_to_dock(E.dock_centcom, 0, E.dir)) //Throw everything forward
 							message_admins("WARNING: THE EMERGENCY SHUTTLE FAILED TO FIND CENTCOMM! PANIC PANIC PANIC")
 					else
 						message_admins("WARNING: THERE IS NO EMERGENCY SHUTTLE! PANIC")
@@ -223,26 +223,26 @@ datum/shuttle_controller/emergency_shuttle/process()
 					return 1
 
 			/* --- Shuttle has docked centcom after being recalled --- */
-			if(timeleft>timelimit)
+			if (timeleft>timelimit)
 				online = 0
 				direction = 1
 				endtime = null
 
 				return 0
 
-			else if((fake_recall != 0) && (timeleft <= fake_recall))
+			else if ((fake_recall != 0) && (timeleft <= fake_recall))
 				recall()
 				fake_recall = 0
 				return 0
 
 			/* --- Shuttle has docked with the station - begin countdown to transit --- */
-			else if(timeleft <= 0)
+			else if (timeleft <= 0)
 				location = 1
 
-				if(shuttle && istype(shuttle,/datum/shuttle/escape))
+				if (shuttle && istype(shuttle,/datum/shuttle/escape))
 					var/datum/shuttle/escape/E = shuttle
 					E.open_all_doors()
-					if(!E.move_to_dock(E.dock_station, 0, E.dir)) //Throw everything forward, on chance that there's anybody in the shuttle
+					if (!E.move_to_dock(E.dock_station, 0, E.dir)) //Throw everything forward, on chance that there's anybody in the shuttle
 						message_admins("WARNING: THE EMERGENCY SHUTTLE FAILED TO FIND THE STATION! PANIC PANIC PANIC")
 
 				settimeleft(SHUTTLELEAVETIME)
@@ -251,22 +251,22 @@ datum/shuttle_controller/emergency_shuttle/process()
 				captain_announce("The Emergency Shuttle has docked with the station. You have [round(timeleft()/60,1)] minutes to board the Emergency Shuttle.")
 				world << sound('sound/AI/shuttledock.ogg')
 
-				if(universe.name == "Hell Rising")
+				if (universe.name == "Hell Rising")
 					to_chat(world, "___________________________________________________________________")
 					to_chat(world, "<span class='sinister' style='font-size:3'> A vile force of darkness is making its way toward the escape shuttle.</span>")
 
 				return 1
 
-		if(1)
+		if (1)
 
 			// Just before it leaves, close the damn doors!
-			if(timeleft == 2 || timeleft == 1)
-				for(var/obj/machinery/door/unpowered/shuttle/D in shuttle.linked_area)
+			if (timeleft == 2 || timeleft == 1)
+				for (var/obj/machinery/door/unpowered/shuttle/D in shuttle.linked_area)
 					spawn(0)
 						D.close()
 						D.locked = 1
 
-			if(timeleft>0)
+			if (timeleft>0)
 				return 0
 
 			/* --- Shuttle leaves the station, enters transit --- */
@@ -275,8 +275,8 @@ datum/shuttle_controller/emergency_shuttle/process()
 				// Turn on the star effects
 
 				/* // kinda buggy atm, i'll fix this later
-				for(var/obj/effect/starspawner/S in world)
-					if(!S.spawning)
+				for (var/obj/effect/starspawner/S in world)
+					if (!S.spawning)
 						spawn() S.startspawn()
 				*/
 
@@ -290,10 +290,10 @@ datum/shuttle_controller/emergency_shuttle/process()
 				CallHook("EmergencyShuttleDeparture", list())
 
 				//main shuttle
-				if(shuttle && istype(shuttle,/datum/shuttle/escape))
+				if (shuttle && istype(shuttle,/datum/shuttle/escape))
 					var/datum/shuttle/escape/E = shuttle
 					E.close_all_doors()
-					if(!E.move_to_dock(E.transit_port, 0, turn(E.dir,180))) //Throw everything backwards
+					if (!E.move_to_dock(E.transit_port, 0, turn(E.dir,180))) //Throw everything backwards
 						message_admins("WARNING: THE EMERGENCY SHUTTLE FAILED TO FIND TRANSIT! PANIC PANIC PANIC")
 				else
 					message_admins("WARNING: THERE IS NO EMERGENCY SHUTTLE! PANIC")
@@ -309,8 +309,8 @@ datum/shuttle_controller/emergency_shuttle/process()
 				captain_announce("The Emergency Shuttle has left the station. Estimate [round(timeleft()/60,1)] minutes until the shuttle docks at Central Command.")
 
 				// "preload" the assets for when they're needed for the map vote.
-				if(config.map_voting && vote)
-					for(var/client/C in clients)
+				if (config.map_voting && vote)
+					for (var/client/C in clients)
 						spawn
 							vote.interface.sendAssets(C)
 
@@ -361,7 +361,7 @@ datum/shuttle_controller/emergency_shuttle/process()
 
 	proc/startspawn()
 		spawning = 1
-		while(spawning)
+		while (spawning)
 			sleep(rand(2, 30))
 			var/obj/effect/bgstar/S = new/obj/effect/bgstar(locate(x,y,z))
 			S.direction = spawndir

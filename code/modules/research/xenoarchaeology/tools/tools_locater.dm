@@ -21,37 +21,37 @@
 	..()
 
 /obj/item/device/beacon_locator/process()
-	if(target_radio)
+	if (target_radio)
 		dir = get_dir(src,target_radio)
-		switch(get_dist(src,target_radio))
-			if(0 to 3)
+		switch (get_dist(src,target_radio))
+			if (0 to 3)
 				icon_state = "pinondirect"
-			if(4 to 10)
+			if (4 to 10)
 				icon_state = "pinonclose"
-			if(11 to 30)
+			if (11 to 30)
 				icon_state = "pinonmedium"
-			if(31 to INFINITY)
+			if (31 to INFINITY)
 				icon_state = "pinonfar"
 	else
-		if(scan_ticks)
+		if (scan_ticks)
 			icon_state = "pinonnull"
 			scan_ticks++
-			if(prob(scan_ticks * 10))
+			if (prob(scan_ticks * 10))
 				spawn(0)
 					//set background = 1
-					if(processing_objects.Find(src))
+					if (processing_objects.Find(src))
 						//scan radios in the world to try and find one
 						var/cur_dist = 999
-						for(var/obj/item/beacon/R in beacons)
-							if(R.z == src.z && R.frequency == src.frequency)
+						for (var/obj/item/beacon/R in beacons)
+							if (R.z == src.z && R.frequency == src.frequency)
 								var/check_dist = get_dist(src,R)
-								if(check_dist < cur_dist)
+								if (check_dist < cur_dist)
 									cur_dist = check_dist
 									target_radio = R
 
 						scan_ticks = 0
 						var/turf/T = get_turf(src)
-						if(target_radio)
+						if (target_radio)
 							T.visible_message("[bicon(src)] [src] [pick("chirps","chirrups","cheeps")] happily.")
 						else
 							T.visible_message("[bicon(src)] [src] [pick("chirps","chirrups","cheeps")] sadly.")
@@ -81,16 +81,16 @@
 	..()
 	usr.set_machine(src)
 
-	if(href_list["reset_tracking"])
+	if (href_list["reset_tracking"])
 		scan_ticks = 1
 		target_radio = null
-	else if(href_list["freq"])
+	else if (href_list["freq"])
 		var/new_frequency = (frequency + text2num(href_list["freq"]))
 		if (frequency < 1200 || frequency > 1600)
 			new_frequency = sanitize_frequency(new_frequency, 1499)
 		frequency = new_frequency
 
-	else if(href_list["close"])
+	else if (href_list["close"])
 		usr.unset_machine()
 		usr << browse(null, "window=locater")
 

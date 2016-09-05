@@ -34,9 +34,9 @@
 	items_to_drop = list(/obj/item/weapon/crossbow, /obj/item/weapon/arrow/quill, /obj/item/weapon/arrow/quill, /obj/item/weapon/arrow/quill)
 
 /mob/living/simple_animal/hostile/humanoid/vox/crossbow/Shoot(var/target, var/start, var/user, var/bullet = 0)
-	if(target == start)
+	if (target == start)
 		return
-	if(!istype(target, /turf))
+	if (!istype(target, /turf))
 		return
 
 	var/obj/item/weapon/arrow/A = new /obj/item/weapon/arrow/quill(get_turf(src))

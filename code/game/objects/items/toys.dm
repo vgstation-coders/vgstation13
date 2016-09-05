@@ -48,12 +48,12 @@
 	return
 
 /obj/item/toy/balloon/attackby(obj/O as obj, mob/user as mob)
-	if(istype(O, /obj/item/weapon/reagent_containers/glass))
-		if(O.reagents)
-			if(O.reagents.total_volume < 1)
+	if (istype(O, /obj/item/weapon/reagent_containers/glass))
+		if (O.reagents)
+			if (O.reagents.total_volume < 1)
 				to_chat(user, "The [O] is empty.")
-			else if(O.reagents.total_volume >= 1)
-				if(O.reagents.has_reagent(PACID, 1))
+			else if (O.reagents.total_volume >= 1)
+				if (O.reagents.has_reagent(PACID, 1))
 					to_chat(user, "The acid chews through the balloon!")
 					O.reagents.reaction(user)
 					qdel(src)
@@ -66,19 +66,19 @@
 	return
 
 /obj/item/toy/balloon/throw_impact(atom/hit_atom)
-	if(src.reagents.total_volume >= 1)
+	if (src.reagents.total_volume >= 1)
 		src.visible_message("<span class = 'danger'>\The [src] bursts!</span>","You hear a pop and a splash.")
 		src.reagents.reaction(get_turf(hit_atom))
-		for(var/atom/A in get_turf(hit_atom))
+		for (var/atom/A in get_turf(hit_atom))
 			src.reagents.reaction(A)
 		src.icon_state = "burst"
 		spawn(5)
-			if(src)
+			if (src)
 				qdel(src)
 	return
 
 /obj/item/toy/balloon/update_icon()
-	if(src.reagents.total_volume >= 1)
+	if (src.reagents.total_volume >= 1)
 		icon_state = "waterballoon"
 		item_state = "balloon"
 	else
@@ -177,7 +177,7 @@
 		return
 	playsound(user, 'sound/weapons/Gunshot.ogg', 100, 1)
 	src.bullets--
-	for(var/mob/O in viewers(user, null))
+	for (var/mob/O in viewers(user, null))
 		O.show_message("<span class = 'danger'><B>[user] fires \the [src] at \the [target]!</B></span>", 1, "<span class = 'danger'>You hear a gunshot</span>", 2)
 
 /obj/item/toy/ammo/gun
@@ -224,9 +224,9 @@
 		to_chat(user, "<span class = 'info'>It is loaded with [bullets] foam dart\s!</span>")
 
 /obj/item/toy/crossbow/attackby(obj/item/I as obj, mob/user as mob)
-	if(istype(I, /obj/item/toy/ammo/crossbow))
-		if(bullets <= 4)
-			if(user.drop_item(I))
+	if (istype(I, /obj/item/toy/ammo/crossbow))
+		if (bullets <= 4)
+			if (user.drop_item(I))
 				qdel(I)
 				I = null
 				bullets++
@@ -236,9 +236,9 @@
 
 
 /obj/item/toy/crossbow/afterattack(atom/target as mob|obj|turf|area, mob/user as mob, flag)
-	if(!isturf(target.loc) || target == user)
+	if (!isturf(target.loc) || target == user)
 		return
-	if(flag)
+	if (flag)
 		return
 
 	if (locate (/obj/structure/table, src.loc))
@@ -251,28 +251,28 @@
 		D.name = "foam dart"
 		playsound(user.loc, 'sound/items/syringeproj.ogg', 50, 1)
 
-		for(var/i=0, i<6, i++)
+		for (var/i=0, i<6, i++)
 			if (D)
-				if(D.loc == trg)
+				if (D.loc == trg)
 					break
 				step_towards(D,trg)
 
-				for(var/mob/living/M in D.loc)
-					if(!istype(M,/mob/living))
+				for (var/mob/living/M in D.loc)
+					if (!istype(M,/mob/living))
 						continue
-					if(M == user)
+					if (M == user)
 						continue
-					for(var/mob/O in viewers(world.view, D))
+					for (var/mob/O in viewers(world.view, D))
 						O.show_message(text("<span class = 'danger'>[] was hit by the foam dart!</span>", M), 1)
 					new /obj/item/toy/ammo/crossbow(M.loc)
 					qdel(D)
 					D = null
 					return
 
-				for(var/atom/A in D.loc)
-					if(A == user)
+				for (var/atom/A in D.loc)
+					if (A == user)
 						continue
-					if(A.density)
+					if (A.density)
 						new /obj/item/toy/ammo/crossbow(A.loc)
 						qdel(D)
 						D = null
@@ -280,7 +280,7 @@
 			sleep(1)
 
 		spawn(10)
-			if(D)
+			if (D)
 				new /obj/item/toy/ammo/crossbow(D.loc)
 				qdel(D)
 				D = null
@@ -288,7 +288,7 @@
 		return
 	else if (bullets == 0)
 		user.Weaken(5)
-		for(var/mob/O in viewers(world.view, user))
+		for (var/mob/O in viewers(world.view, user))
 			O.show_message(text("<span class = 'danger'>[] realizes they are out of ammo and starts scrounging for some!<span>", user), 1)
 
 
@@ -299,8 +299,8 @@
 
 	if (src.bullets > 0 && M.lying)
 
-		for(var/mob/O in viewers(M, null))
-			if(O.client)
+		for (var/mob/O in viewers(M, null))
+			if (O.client)
 				O.show_message(text("<span class = 'danger'><B>[] casually lines up a shot with []'s head and pulls the trigger!</B></span>", user, M), 1, "<span class = 'danger'>You hear the sound of foam against skull.</span>", 2)
 				O.show_message(text("<span class = 'danger'>[] was hit in the head by the foam dart!</span>", M), 1)
 
@@ -308,7 +308,7 @@
 		new /obj/item/toy/ammo/crossbow(M.loc)
 		src.bullets--
 	else if (M.lying && src.bullets == 0)
-		for(var/mob/O in viewers(M, null))
+		for (var/mob/O in viewers(M, null))
 			if (O.client)
 				O.show_message(text("<span class = 'danger'><B>[] casually lines up a shot with []'s head, pulls the trigger, then realizes they are out of ammo and drops to the floor in search of some!</B></span>", user, M), 1, "<span class = 'danger'>You hear someone fall</span>", 2)
 		user.Weaken(5)
@@ -501,9 +501,9 @@
 	qdel(src)
 
 /obj/item/toy/snappop/Crossed(H as mob|obj)
-	if((ishuman(H))) //i guess carp and shit shouldn't set them off
+	if ((ishuman(H))) //i guess carp and shit shouldn't set them off
 		var/mob/living/carbon/M = H
-		if(M.m_intent == "run")
+		if (M.m_intent == "run")
 			to_chat(M, "<span class = 'warning'>You step on \the [src.name]!</span>")
 
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
@@ -565,12 +565,12 @@
 		playsound(get_turf(src), 'sound/effects/spray3.ogg', 50, 1, -6)
 
 		spawn(0)
-			for(var/i=0, i<1, i++)
+			for (var/i=0, i<1, i++)
 				step_towards(D,A)
 				D.reagents.reaction(get_turf(D))
-				for(var/atom/T in get_turf(D))
+				for (var/atom/T in get_turf(D))
 					D.reagents.reaction(T)
-					if(ismob(T) && T:client)
+					if (ismob(T) && T:client)
 						to_chat(T:client, "<span class = 'danger'>[user] has sprayed you with water!</span>")
 				sleep(4)
 			qdel(D)
@@ -593,14 +593,14 @@
 
 //all credit to skasi for toy mech fun ideas
 /obj/item/toy/prize/attack_self(mob/user as mob)
-	if(cooldown < world.time - 8)
+	if (cooldown < world.time - 8)
 		to_chat(user, "<span class='notice'>You play with \the [src].</span>")
 		playsound(user, 'sound/mecha/mechstep.ogg', 20, 1)
 		cooldown = world.time
 
 /obj/item/toy/prize/attack_hand(mob/user as mob)
-	if(loc == user)
-		if(cooldown < world.time - 8)
+	if (loc == user)
+		if (cooldown < world.time - 8)
 			to_chat(user, "<span class='notice'>You play with \the [src].</span>")
 			playsound(user, 'sound/mecha/mechturn.ogg', 20, 1)
 			cooldown = world.time
@@ -700,26 +700,26 @@
 
 /obj/item/device/whisperphone/attack_self(mob/living/user as mob)
 	if (user.client)
-		if(user.client.prefs.muted & MUTE_IC)
+		if (user.client.prefs.muted & MUTE_IC)
 			to_chat(src, "<span class = 'warning'>You cannot speak in IC (muted).</span>")
 			return
-	if(!ishuman(user))
+	if (!ishuman(user))
 		to_chat(user, "<span class = 'warning'>You don't know how to use this!</span>")
 		return
-	if(user:miming || user.silent)
+	if (user:miming || user.silent)
 		to_chat(user, "<span class = 'warning'>You find yourself unable to speak at all.</span>")
 		return
-	if(spamcheck)
+	if (spamcheck)
 		to_chat(user, "<span class = 'warning'>\The [src] needs to recharge!</span>")
 		return
 
 	var/message = copytext(sanitize(input(user, "'Shout' a message?", "Whisperphone", null)  as text),1,MAX_MESSAGE_LEN)
-	if(!message)
+	if (!message)
 		return
 	message = capitalize(message)
 	if ((src.loc == user && usr.stat == 0))
 
-		for(var/mob/O in (viewers(user)))
+		for (var/mob/O in (viewers(user)))
 			O.show_message("<B>[user]</B> broadcasts, <i>\"[message]\"</i>",2)
 		spamcheck = 1
 		spawn(20)
@@ -1010,13 +1010,13 @@
 	icon_state = "minislime"
 
 /obj/item/toy/gasha/AI/attack_self(mob/user as mob)
-	if(cooldown < world.time - 8)
+	if (cooldown < world.time - 8)
 		playsound(user, 'sound/vox/doop.wav', 20, 1)
 		cooldown = world.time
 
 /obj/item/toy/gasha/AI/attack_hand(mob/user as mob)
-	if(loc == user)
-		if(cooldown < world.time - 8)
+	if (loc == user)
+		if (cooldown < world.time - 8)
 			playsound(user, 'sound/vox/doop.wav', 20, 1)
 			cooldown = world.time
 			return
@@ -1033,13 +1033,13 @@
 	icon_state = "malfAI"
 
 /obj/item/toy/gasha/minibutt/attack_self(mob/user as mob)
-	if(cooldown < world.time - 8)
+	if (cooldown < world.time - 8)
 		playsound(user, 'sound/misc/fart.ogg', 20, 1)
 		cooldown = world.time
 
 /obj/item/toy/gasha/minibutt/attack_hand(mob/user as mob)
-	if(loc == user)
-		if(cooldown < world.time - 8)
+	if (loc == user)
+		if (cooldown < world.time - 8)
 			playsound(user, 'sound/misc/fart.ogg', 20, 1)
 			cooldown = world.time
 			return
@@ -1057,13 +1057,13 @@
 
 
 /obj/item/toy/gasha/fingerbox/attack_self(mob/user as mob)
-	if(cooldown < world.time - 8)
+	if (cooldown < world.time - 8)
 		playsound(user, 'sound/weapons/switchblade.ogg', 20, 1)
 		cooldown = world.time
 
 /obj/item/toy/gasha/fingerbox/attack_hand(mob/user as mob)
-	if(loc == user)
-		if(cooldown < world.time - 8)
+	if (loc == user)
+		if (cooldown < world.time - 8)
 			playsound(user, 'sound/weapons/switchblade.ogg', 20, 1)
 			cooldown = world.time
 			return

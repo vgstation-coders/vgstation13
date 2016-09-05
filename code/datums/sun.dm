@@ -21,7 +21,7 @@ var/global/datum/sun/sun
 	nextTime = updatePer
 
 	rotationRate = rand(850, 1150) / 1000 //Slight deviation, no more than 15 %, budget orbital stabilization system
-	if(prob(50))
+	if (prob(50))
 		rotationRate = -rotationRate
 
 /*
@@ -31,17 +31,17 @@ var/global/datum/sun/sun
 	var/time = world.time
 	angle = ((rotationRate * time / 100) % 360 + 360) % 360
 
-	if(angle != lastAngle)
+	if (angle != lastAngle)
 		var/obj/machinery/power/solar/panel/tracker/T
-		for(T in solars_list)
-			if(!T.powernet)
+		for (T in solars_list)
+			if (!T.powernet)
 				solars_list.Remove(T)
 				continue
 
 			T.set_angle(angle)
 		lastAngle = angle
 
-	if(world.time < nextTime)
+	if (world.time < nextTime)
 		return
 
 	nextTime += updatePer
@@ -50,7 +50,7 @@ var/global/datum/sun/sun
 	var/si = sin(angle)
 	var/co = cos(angle)
 
-	if(!co)
+	if (!co)
 		dx = 0
 		dy = si
 	else if (abs(si) < abs(co))
@@ -62,11 +62,11 @@ var/global/datum/sun/sun
 
 	var/obj/machinery/power/solar/panel/S
 
-	for(S in solars_list)
-		if(!S.powernet)
+	for (S in solars_list)
+		if (!S.powernet)
 			solars_list.Remove(S)
 
-		if(S.control)
+		if (S.control)
 			occlusion(S)
 
 //For a solar panel, trace towards sun to see if we're in shadow.
@@ -77,15 +77,15 @@ var/global/datum/sun/sun
 	var/i
 	var/turf/T
 
-	for(i = 1 to 256) //No tiles shall stay unchecked. Since the loop stops when it hit level boundaries or opaque blocks, this can't cause too much problems
+	for (i = 1 to 256) //No tiles shall stay unchecked. Since the loop stops when it hit level boundaries or opaque blocks, this can't cause too much problems
 		ax += dx //Do step
 		ay += dy
 
 		T = locate(round(ax, 0.5), round(ay, 0.5), S.z)
 
-		if(T.x == 1 || T.x == world.maxx || T.y == 1 || T.y == world.maxy) // Not obscured if we reach the edge.
+		if (T.x == 1 || T.x == world.maxx || T.y == 1 || T.y == world.maxy) // Not obscured if we reach the edge.
 			break
-		if(T.opacity) //Opaque objects block light.
+		if (T.opacity) //Opaque objects block light.
 			S.obscured = 1
 			return
 

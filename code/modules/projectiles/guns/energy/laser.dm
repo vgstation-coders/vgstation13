@@ -56,7 +56,7 @@
 
 /obj/item/weapon/gun/energy/laser/blaster/New()
 	..()
-	if(prob(50))
+	if (prob(50))
 		charge_cost = 0
 		projectile_type = /obj/item/projectile/beam/practice/stormtrooper
 		desc = "Don't expect to hit anything with this."
@@ -94,10 +94,10 @@ obj/item/weapon/gun/energy/laser/retro
 
 /obj/item/weapon/gun/energy/laser/captain/process()
 	charge_tick++
-	if(charge_tick < 4)
+	if (charge_tick < 4)
 		return 0
 	charge_tick = 0
-	if(!power_supply)
+	if (!power_supply)
 		return 0
 	power_supply.give(100)
 	update_icon()
@@ -106,11 +106,11 @@ obj/item/weapon/gun/energy/laser/retro
 
 
 /*/obj/item/weapon/gun/energy/laser/cyborg/load_into_chamber()
-	if(in_chamber)
+	if (in_chamber)
 		return 1
-	if(isrobot(src.loc))
+	if (isrobot(src.loc))
 		var/mob/living/silicon/robot/R = src.loc
-		if(R && R.cell)
+		if (R && R.cell)
 			R.cell.use(100)
 			in_chamber = new/obj/item/projectile/beam(src)
 			return 1
@@ -130,15 +130,15 @@ obj/item/weapon/gun/energy/laser/retro
 
 /obj/item/weapon/gun/energy/laser/cyborg/process() //Every [recharge_time] ticks, recharge a shot for the cyborg
 	charge_tick++
-	if(charge_tick < 3)
+	if (charge_tick < 3)
 		return 0
 	charge_tick = 0
 
-	if(!power_supply)
+	if (!power_supply)
 		return 0 //sanity
-	if(isrobot(src.loc))
+	if (isrobot(src.loc))
 		var/mob/living/silicon/robot/R = src.loc
-		if(R && R.cell)
+		if (R && R.cell)
 			R.cell.use(charge_cost) 		//Take power from the borg...
 			power_supply.give(charge_cost)	//... to recharge the shot
 
@@ -146,7 +146,7 @@ obj/item/weapon/gun/energy/laser/retro
 	return 1
 
 /obj/item/weapon/gun/energy/laser/cyborg/restock()
-	if(power_supply.charge < power_supply.maxcharge)
+	if (power_supply.charge < power_supply.maxcharge)
 		power_supply.give(charge_cost)
 		update_icon()
 	else
@@ -171,23 +171,23 @@ obj/item/weapon/gun/energy/laser/retro
 /obj/item/weapon/gun/energy/lasercannon/empty/New()
 	..()
 
-	if(power_supply)
+	if (power_supply)
 		power_supply.charge = 0
 		update_icon()
 
 /obj/item/weapon/gun/energy/lasercannon/cyborg/process_chambered()
-	if(in_chamber)
+	if (in_chamber)
 		return 1
-	if(isrobot(src.loc))
+	if (isrobot(src.loc))
 		var/mob/living/silicon/robot/R = src.loc
-		if(R && R.cell)
+		if (R && R.cell)
 			R.cell.use(250)
 			in_chamber = new/obj/item/projectile/beam/heavylaser(src)
 			return 1
 	return 0
 
 /obj/item/weapon/gun/energy/lasercannon/cyborg/restock()
-	if(power_supply.charge < power_supply.maxcharge)
+	if (power_supply.charge < power_supply.maxcharge)
 		power_supply.give(charge_cost)
 		update_icon()
 
@@ -273,8 +273,8 @@ obj/item/weapon/gun/energy/laser/retro
 	var/charge_tick = 0
 
 /obj/item/weapon/gun/energy/laser/bluetag/special_check(var/mob/living/carbon/human/M)
-	if(ishuman(M))
-		if(istype(M.wear_suit, /obj/item/clothing/suit/bluetag))
+	if (ishuman(M))
+		if (istype(M.wear_suit, /obj/item/clothing/suit/bluetag))
 			return 1
 		to_chat(M, "<span class='warning'>You need to be wearing your laser tag vest!</span>")
 	return 0
@@ -291,10 +291,10 @@ obj/item/weapon/gun/energy/laser/retro
 
 /obj/item/weapon/gun/energy/laser/bluetag/process()
 	charge_tick++
-	if(charge_tick < 4)
+	if (charge_tick < 4)
 		return 0
 	charge_tick = 0
-	if(!power_supply)
+	if (!power_supply)
 		return 0
 	power_supply.give(100)
 	update_icon()
@@ -315,8 +315,8 @@ obj/item/weapon/gun/energy/laser/retro
 	var/charge_tick = 0
 
 /obj/item/weapon/gun/energy/laser/redtag/special_check(var/mob/living/carbon/human/M)
-	if(ishuman(M))
-		if(istype(M.wear_suit, /obj/item/clothing/suit/redtag))
+	if (ishuman(M))
+		if (istype(M.wear_suit, /obj/item/clothing/suit/redtag))
 			return 1
 		to_chat(M, "<span class='warning'>You need to be wearing your laser tag vest!</span>")
 	return 0
@@ -333,10 +333,10 @@ obj/item/weapon/gun/energy/laser/retro
 
 /obj/item/weapon/gun/energy/laser/redtag/process()
 	charge_tick++
-	if(charge_tick < 4)
+	if (charge_tick < 4)
 		return 0
 	charge_tick = 0
-	if(!power_supply)
+	if (!power_supply)
 		return 0
 	power_supply.give(100)
 	update_icon()

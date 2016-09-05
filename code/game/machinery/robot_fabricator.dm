@@ -17,10 +17,10 @@
 			var/count = 0
 			src.overlays += image(icon = icon, icon_state = "fab-load-metal")
 			spawn(15)
-				if(O)
-					if(!O:amount)
+				if (O)
+					if (!O:amount)
 						return
-					while(metal_amount < 150000 && O:amount)
+					while (metal_amount < 150000 && O:amount)
 						src.metal_amount += O:m_amt /*O:height * O:width * O:length * 100000.0*/
 						O:amount--
 						count++

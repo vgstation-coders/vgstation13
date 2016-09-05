@@ -18,13 +18,13 @@
 					var filter_text = document.getElementById('filter');
 					var filter = filter_text.value.toLowerCase();
 
-					if(complete_list != null && complete_list != "")
+					if (complete_list != null && complete_list != "")
 						{
 						var mtbl = document.getElementById("maintable_data_archive");
 						mtbl.innerHTML = complete_list;
 					}
 
-					if(filter.value == "")
+					if (filter.value == "")
 						{
 						return;
 					}else{
@@ -35,7 +35,7 @@
 						{
 							try{
 								var tr = ltr\[i\];
-								if(tr.getAttribute("id").indexOf("data") != 0)
+								if (tr.getAttribute("id").indexOf("data") != 0)
 									{
 									continue;
 								}
@@ -85,7 +85,7 @@
 					body += "<a href='?src=\ref[usr];priv_msg=\ref"+ref+"'>PM</a> - "
 					body += "<a href='?src=\ref[src];subtlemessage="+ref+"'>SM</a> - "
 					body += "<a href='?src=\ref[src];adminplayerobservejump="+ref+"'>JMP</a><br>"
-					if(antagonist > 0)
+					if (antagonist > 0)
 						body += "<font size='2'><a href='?src=\ref[src];check_antagonist=1'><font color='red'><b>Antagonist</b></font></a></font>";
 
 					body += "</td></tr></table>";
@@ -96,25 +96,25 @@
 
 				function clearAll(){
 					var spans = document.getElementsByTagName('span');
-					for(var i = 0; i < spans.length; i++){
+					for (var i = 0; i < spans.length; i++){
 						var span = spans\[i\];
 
 						var id = span.getAttribute("id");
 
-						if(!(id.indexOf("item")==0))
+						if (!(id.indexOf("item")==0))
 							continue;
 
 						var pass = 1;
 
-						for(var j = 0; j < locked_tabs.length; j++){
-							if(locked_tabs\[j\]==id)
+						for (var j = 0; j < locked_tabs.length; j++){
+							if (locked_tabs\[j\]==id)
 								{
 								pass = 0;
 								break;
 							}
 						}
 
-						if(pass != 1)
+						if (pass != 1)
 							continue;
 
 
@@ -127,7 +127,7 @@
 				function addToLocked(id,link_id,notice_span_id){
 					var link = document.getElementById(link_id);
 					var decision = link.getAttribute("name");
-					if(decision == "1")
+					if (decision == "1")
 						{
 						link.setAttribute("name","2");
 					}else{
@@ -137,14 +137,14 @@
 					}
 
 					var pass = 1;
-					for(var j = 0; j < locked_tabs.length; j++){
-						if(locked_tabs\[j\]==id)
+					for (var j = 0; j < locked_tabs.length; j++){
+						if (locked_tabs\[j\]==id)
 							{
 							pass = 0;
 							break;
 						}
 					}
-					if(!pass)
+					if (!pass)
 						return;
 					locked_tabs.push(id);
 					var notice_span = document.getElementById(notice_span_id);
@@ -162,15 +162,15 @@
 					//document.write("a");
 					var index = 0;
 					var pass = 0;
-					for(var j = 0; j < locked_tabs.length; j++){
-						if(locked_tabs\[j\]==id)
+					for (var j = 0; j < locked_tabs.length; j++){
+						if (locked_tabs\[j\]==id)
 							{
 							pass = 1;
 							index = j;
 							break;
 						}
 					}
-					if(!pass)
+					if (!pass)
 						return;
 					locked_tabs\[index\] = "";
 					var notice_span = document.getElementById(notice_span_id);
@@ -221,49 +221,49 @@
 
 	var/list/mobs = sortmobs()
 	var/i = 1
-	for(var/mob/M in mobs)
-		if(M.ckey)
+	for (var/mob/M in mobs)
+		if (M.ckey)
 
 			var/color = "#e6e6e6"
-			if(i%2 == 0)
+			if (i%2 == 0)
 				color = "#f2f2f2"
 			var/is_antagonist = is_special_character(M)
 
 			var/M_job = ""
 
-			if(isliving(M))
+			if (isliving(M))
 
-				if(iscarbon(M)) //Carbon stuff
-					if(ishuman(M))
+				if (iscarbon(M)) //Carbon stuff
+					if (ishuman(M))
 						M_job = M.job
-					else if(isslime(M))
+					else if (isslime(M))
 						M_job = "slime"
-					else if(ismonkey(M))
+					else if (ismonkey(M))
 						M_job = "Monkey"
-					else if(isalien(M)) //aliens
-						if(islarva(M))
+					else if (isalien(M)) //aliens
+						if (islarva(M))
 							M_job = "Alien larva"
 						else
 							M_job = "Alien"
 					else
 						M_job = "Carbon-based"
 
-				else if(issilicon(M)) //silicon
-					if(isAI(M))
+				else if (issilicon(M)) //silicon
+					if (isAI(M))
 						M_job = "AI"
-					else if(ispAI(M))
+					else if (ispAI(M))
 						M_job = "pAI"
-					else if(isrobot(M))
+					else if (isrobot(M))
 						M_job = "Cyborg"
-					else if(isMoMMI(M))
+					else if (isMoMMI(M))
 						M_job = "Mobile-MMI"
 					else
 						M_job = "Silicon-based"
 
-				else if(isanimal(M)) //simple animals
-					if(iscorgi(M))
+				else if (isanimal(M)) //simple animals
+					if (iscorgi(M))
 						M_job = "Corgi"
-					else if(isborer(M))
+					else if (isborer(M))
 						M_job = "Borer"
 					else
 						M_job = "Animal"
@@ -271,10 +271,10 @@
 				else
 					M_job = "Living"
 
-			else if(istype(M,/mob/new_player))
+			else if (istype(M,/mob/new_player))
 				M_job = "New player"
 
-			else if(isobserver(M))
+			else if (isobserver(M))
 				M_job = "Ghost"
 
 			M_job = replacetext(M_job, "'", "")
@@ -340,36 +340,36 @@
 	//add <td>(IP: [M.lastKnownIP])</td> if you want to know their ip to the lists below
 	var/list/mobs = sortmobs()
 
-	for(var/mob/M in mobs)
-		if(!M.ckey)
+	for (var/mob/M in mobs)
+		if (!M.ckey)
 			continue
 
 		dat += "<tr><td>[M.name]</td>"
-		if(isAI(M))
+		if (isAI(M))
 			dat += "<td>AI</td>"
-		else if(isrobot(M))
+		else if (isrobot(M))
 			dat += "<td>Cyborg</td>"
-		else if(ishuman(M))
+		else if (ishuman(M))
 			dat += "<td>[M.real_name]</td>"
-		else if(istype(M, /mob/living/silicon/pai))
+		else if (istype(M, /mob/living/silicon/pai))
 			dat += "<td>pAI</td>"
-		else if(istype(M, /mob/new_player))
+		else if (istype(M, /mob/new_player))
 			dat += "<td>New Player</td>"
-		else if(isobserver(M))
+		else if (isobserver(M))
 			dat += "<td>Ghost</td>"
-		else if(ismonkey(M))
+		else if (ismonkey(M))
 			dat += "<td>Monkey</td>"
-		else if(isalien(M))
+		else if (isalien(M))
 			dat += "<td>Alien</td>"
-		else if(isborer(M))
+		else if (isborer(M))
 			dat += "<td>Borer</td>"
 		else
 			dat += "<td>Unknown</td>"
 
 
-		if(istype(M,/mob/living/carbon/human))
+		if (istype(M,/mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
-			if(H.mind && H.mind.assigned_role)
+			if (H.mind && H.mind.assigned_role)
 				dat += "<td>[H.mind.assigned_role]</td>"
 		else
 			dat += "<td>NA</td>"
@@ -379,12 +379,12 @@
 		<td align=center><A HREF='?src=\ref[src];adminplayeropts=\ref[M]'>X</A></td>
 		<td align=center><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>
 		"}
-		switch(is_special_character(M))
-			if(0)
+		switch (is_special_character(M))
+			if (0)
 				dat += {"<td align=center><A HREF='?src=\ref[src];traitor=\ref[M]'>Traitor?</A></td>"}
-			if(1)
+			if (1)
 				dat += {"<td align=center><A HREF='?src=\ref[src];traitor=\ref[M]'><font color=red>Traitor?</font></A></td>"}
-			if(2)
+			if (2)
 				dat += {"<td align=center><A HREF='?src=\ref[src];traitor=\ref[M]'><font color=red><b>Traitor?</b></font></A></td>"}
 
 	dat += "</table></body></html>"

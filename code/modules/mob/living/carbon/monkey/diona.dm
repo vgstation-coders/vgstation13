@@ -22,7 +22,7 @@
 /mob/living/carbon/monkey/diona/attack_hand(mob/living/carbon/human/M as mob)
 
 	//Let people pick the little buggers up.
-	if((M.a_intent == I_HELP) && !(locked_to) && (isturf(src.loc)) && (M.get_active_hand() == null)) //Unless their location isn't a turf!
+	if ((M.a_intent == I_HELP) && !(locked_to) && (isturf(src.loc)) && (M.get_active_hand() == null)) //Unless their location isn't a turf!
 		scoop_up(M)
 
 	..()
@@ -45,13 +45,13 @@
 	set desc = "Turn your food into nutrients for plants."
 
 	var/list/trays = list()
-	for(var/obj/machinery/portable_atmospherics/hydroponics/tray in range(1))
-		if(tray.nutrilevel < 10)
+	for (var/obj/machinery/portable_atmospherics/hydroponics/tray in range(1))
+		if (tray.nutrilevel < 10)
 			trays += tray
 
 	var/obj/machinery/portable_atmospherics/hydroponics/target = input("Select a tray:") as null|anything in trays
 
-	if(!src || !target || target.nutrilevel == 10)
+	if (!src || !target || target.nutrilevel == 10)
 		return //Sanity check.
 
 	src.nutrition -= ((10-target.nutrilevel)*5)
@@ -66,13 +66,13 @@
 	set desc = "Clean the weeds out of soil or a hydroponics tray."
 
 	var/list/trays = list()
-	for(var/obj/machinery/portable_atmospherics/hydroponics/tray in range(1))
-		if(tray.weedlevel > 0)
+	for (var/obj/machinery/portable_atmospherics/hydroponics/tray in range(1))
+		if (tray.weedlevel > 0)
 			trays += tray
 
 	var/obj/machinery/portable_atmospherics/hydroponics/target = input("Select a tray:") as null|anything in trays
 
-	if(!src || !target || target.weedlevel == 0)
+	if (!src || !target || target.weedlevel == 0)
 		return //Sanity check.
 
 	src.reagents.add_reagent(NUTRIMENT, target.weedlevel)
@@ -86,19 +86,19 @@
 	set name = "Evolve"
 	set desc = "Grow to a more complex form."
 
-	if(!is_alien_whitelisted(src, "Diona") && config.usealienwhitelist)
+	if (!is_alien_whitelisted(src, "Diona") && config.usealienwhitelist)
 		to_chat(src, alert("You are currently not whitelisted to play an adult Diona."))
 		return 0
 
-	if(stat == DEAD)
+	if (stat == DEAD)
 		to_chat(src, "You cannot evolve if you are dead!")
 		return
 
-	if(donors.len < 5)
+	if (donors.len < 5)
 		to_chat(src, "You are not yet ready for your growth...")
 		return
 
-	if(nutrition < 400)
+	if (nutrition < 400)
 		to_chat(src, "You have not yet consumed enough to grow...")
 		return
 
@@ -110,13 +110,13 @@
 	transferImplantsTo(adult)
 	transferBorers(adult)
 
-	if(istype(loc,/obj/item/weapon/holder/diona))
+	if (istype(loc,/obj/item/weapon/holder/diona))
 		var/obj/item/weapon/holder/diona/L = loc
 		src.forceMove(get_turf(L))
 		L = null
 		qdel(L)
 
-	for(var/datum/language/L in languages)
+	for (var/datum/language/L in languages)
 		adult.add_language(L.name)
 
 	adult.regenerate_icons()
@@ -127,11 +127,11 @@
 	qdel(src)
 
 /mob/living/carbon/monkey/diona/say_understands(var/mob/other,var/datum/language/speaking = null)
-	if(other)
+	if (other)
 		other = other.GetSource()
 	if (istype(other, /mob/living/carbon/human))
-		if(speaking && speaking.name == LANGUAGE_GALACTIC_COMMON)
-			if(donors.len >= 2) // They have sucked down some blood.
+		if (speaking && speaking.name == LANGUAGE_GALACTIC_COMMON)
+			if (donors.len >= 2) // They have sucked down some blood.
 				return 1
 	return ..()
 
@@ -141,16 +141,16 @@
 	set desc = "Take a blood sample from a suitable donor to help understand those around you and evolve."
 
 	var/list/choices = list()
-	for(var/mob/living/carbon/C in view(1,src))
-		if(C.real_name != real_name)
+	for (var/mob/living/carbon/C in view(1,src))
+		if (C.real_name != real_name)
 			choices += C
 
 	var/mob/living/M = input(src,"Who do you wish to take a sample from?") in null|choices
 
-	if(!M || !src)
+	if (!M || !src)
 		return
 
-	if(donors.Find(M.real_name))
+	if (donors.Find(M.real_name))
 		to_chat(src, "<span class='warning'>That donor offers you nothing new.</span>")
 		return
 
@@ -162,19 +162,19 @@
 /mob/living/carbon/monkey/diona/proc/update_progression()
 
 
-	if(!donors.len)
+	if (!donors.len)
 		return
 
-	if(donors.len == 5)
+	if (donors.len == 5)
 		ready_evolve = 1
 		to_chat(src, "<span class='good'>You feel ready to move on to your next stage of growth.</span>")
-	else if(donors.len == 4)
+	else if (donors.len == 4)
 		to_chat(src, "<span class='good'>You feel your vocal range expand, and realize you know how to speak with the creatures around you.</span>")
 		add_language(LANGUAGE_GALACTIC_COMMON)
 		default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
-	else if(donors.len == 3)
+	else if (donors.len == 3)
 		to_chat(src, "<span class='good'>More blood seeps into you, continuing to expand your growing collection of memories.</span>")
-	else if(donors.len == 2)
+	else if (donors.len == 2)
 		to_chat(src, "<span class='good'>You feel your awareness expand, and realize you know how to understand the creatures around you.</span>")
 		//say_understands() effectively lets us understand common language at this point
 	else

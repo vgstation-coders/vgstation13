@@ -16,29 +16,29 @@
 	id = "[rand(1000, 9999)]"
 
 /obj/machinery/computer/teleporter/attackby(I as obj, mob/living/user as mob)
-	if(..())
+	if (..())
 		return 1
-	else if(istype(I, /obj/item/weapon/card/data/))
+	else if (istype(I, /obj/item/weapon/card/data/))
 		var/obj/item/weapon/card/data/C = I
-		if(stat & (NOPOWER|BROKEN) & (C.function != "teleporter"))
+		if (stat & (NOPOWER|BROKEN) & (C.function != "teleporter"))
 			src.attack_hand()
 
 		var/obj/L = null
 
-		for(var/obj/effect/landmark/sloc in landmarks_list)
-			if(sloc.name != C.data)
+		for (var/obj/effect/landmark/sloc in landmarks_list)
+			if (sloc.name != C.data)
 				continue
-			if(locate(/mob/living) in sloc.loc)
+			if (locate(/mob/living) in sloc.loc)
 				continue
 			L = sloc
 			break
 
-		if(!L)
+		if (!L)
 			L = locate("landmark*[C.data]") // use old stype
 
 
-		if(istype(L, /obj/effect/landmark/) && istype(L.loc, /turf))
-			if(!user.drop_item(I))
+		if (istype(L, /obj/effect/landmark/) && istype(L.loc, /turf))
+			if (!user.drop_item(I))
 				user << "<span class='warning'>You can't let go of \the [I]!</span>"
 				return
 
@@ -55,7 +55,7 @@
 
 /obj/machinery/computer/teleporter/examine(var/mob/user)
 	..()
-	if(locked)
+	if (locked)
 		var/area/locked_area = get_area(locked)
 		to_chat(user, "The destination is set to \"[locked_area.name]\".")
 
@@ -67,7 +67,7 @@
 
 /obj/machinery/computer/teleporter/attack_hand(var/mob/user)
 	. = ..()
-	if(.)
+	if (.)
 		user.unset_machine()
 		return
 
@@ -75,14 +75,14 @@
 
 /obj/machinery/computer/teleporter/interact(var/mob/user)
 	var/area/locked_area
-	if(locked)
+	if (locked)
 		locked_area = get_area(locked)
-		if(!locked_area)
+		if (!locked_area)
 			locked = null
 
-		if(locked) //If there's still a locked thing (incase it got cleared above)
+		if (locked) //If there's still a locked thing (incase it got cleared above)
 			locked_area = get_area(locked)
-			if(!locked_area)
+			if (!locked_area)
 				locked = null
 			. = {"
 			<b>Destination:</b> [sanitize(locked_area.name)]<br>
@@ -100,7 +100,7 @@
 
 	var/list/dests = get_avail_dests()
 
-	for(var/name in dests)
+	for (var/name in dests)
 		. += {"
 			<li><a href='?src=\ref[src];dest=[dests.Find(name)]'[dests[name] == locked ? " class='linkOn'" : ""]>[sanitize(name)]</a></li>
 		"}
@@ -114,15 +114,15 @@
 
 /obj/machinery/computer/teleporter/Topic(var/href, var/list/href_list)
 	. = ..()
-	if(.)
+	if (.)
 		return
 
-	if(href_list["clear"])
+	if (href_list["clear"])
 		locked = null
 		updateUsrDialog()
 		return 1
 
-	if(href_list["dest"])
+	if (href_list["dest"])
 		var/list/dests = get_avail_dests()
 		var/idx = Clamp(text2num(href_list["dest"]), 1, dests.len)
 		locked = dests[dests[idx]]
@@ -134,14 +134,14 @@
 	var/list/L = list()
 	var/list/areaindex = list()
 
-	for(var/obj/item/beacon/R in beacons)
+	for (var/obj/item/beacon/R in beacons)
 		var/turf/T = get_turf(R)
 		if (!T)
 			continue
-		if(T.z == CENTCOMM_Z || T.z > map.zLevels.len)
+		if (T.z == CENTCOMM_Z || T.z > map.zLevels.len)
 			continue
 		var/tmpname = T.loc.name
-		if(areaindex[tmpname])
+		if (areaindex[tmpname])
 			tmpname = "[tmpname] ([++areaindex[tmpname]])"
 		else
 			areaindex[tmpname] = 1
@@ -156,12 +156,12 @@
 				if (M.timeofdeath + 6000 < world.time)
 					continue
 			var/turf/T = get_turf(M)
-			if(T)
+			if (T)
 				continue
-			if(T.z == map.zCentcomm)
+			if (T.z == map.zCentcomm)
 				continue
 			var/tmpname = M.real_name
-			if(areaindex[tmpname])
+			if (areaindex[tmpname])
 				tmpname = "[tmpname] ([++areaindex[tmpname]])"
 			else
 				areaindex[tmpname] = 1
@@ -175,7 +175,7 @@
 	set src in oview(1)
 	set desc = "ID Tag:"
 
-	if(stat & (NOPOWER|BROKEN) || !istype(usr,/mob/living))
+	if (stat & (NOPOWER|BROKEN) || !istype(usr,/mob/living))
 		return
 	if (t)
 		src.id = t
@@ -208,12 +208,12 @@
 
 /obj/machinery/teleport/hub/power_change()
 	..()
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		engaged = 0
 	update_icon()
 
 /obj/machinery/teleport/hub/update_icon()
-	if(stat & (BROKEN|NOPOWER) || !engaged)
+	if (stat & (BROKEN|NOPOWER) || !engaged)
 		icon_state = "tele0"
 	else
 		icon_state = "tele1"
@@ -250,12 +250,12 @@
 	RefreshParts()
 
 /obj/machinery/teleport/hub/Crossed(AM as mob|obj)
-	if(AM == src)
+	if (AM == src)
 		return//DUH
-	if(istype(AM,/obj/item/projectile/beam))
+	if (istype(AM,/obj/item/projectile/beam))
 		var/obj/item/projectile/beam/B = AM
 		B.wait = 1
-	if(istype(AM,/obj/effect/beam))
+	if (istype(AM,/obj/effect/beam))
 		src.Bump(AM)
 		return
 	spawn()
@@ -269,16 +269,16 @@
 	if (!com)
 		return
 	if (!com.locked)
-		for(var/mob/O in hearers(src, null))
+		for (var/mob/O in hearers(src, null))
 			O.show_message("<span class='warning'>Failure: Cannot authenticate locked on coordinates. Please reinstate coordinate matrix.</span>")
 		return
 	if (istype(M, /atom/movable))
-		if(prob(5) && !accurate) //oh dear a problem, put em in deep space
+		if (prob(5) && !accurate) //oh dear a problem, put em in deep space
 			do_teleport(M, locate(rand((2*TRANSITIONEDGE), world.maxx - (2*TRANSITIONEDGE)), rand((2*TRANSITIONEDGE), world.maxy - (2*TRANSITIONEDGE)), 3), 2)
 		else
 			do_teleport(M, com.locked) //dead-on precision
 
-		if(com.one_time_use) //Make one-time-use cards only usable one time!
+		if (com.one_time_use) //Make one-time-use cards only usable one time!
 			com.one_time_use = 0
 			com.locked = null
 	else
@@ -301,12 +301,12 @@
 
 /obj/machinery/teleport/station/power_change()
 	..()
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		disengage()
 	update_icon()
 
 /obj/machinery/teleport/station/update_icon()
-	if(stat & NOPOWER)
+	if (stat & NOPOWER)
 		icon_state = "controller-p"
 	else
 		icon_state = "controller"
@@ -346,13 +346,13 @@ obj/machinery/teleport/station/New()
 	src.attack_hand(user)
 
 /obj/machinery/teleport/station/attack_hand(var/mob/user)
-	if(engaged)
+	if (engaged)
 		src.disengage()
 	else
 		src.engage()
 
 /obj/machinery/teleport/station/proc/engage()
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
 
 	var/atom/l = src.loc
@@ -361,7 +361,7 @@ obj/machinery/teleport/station/New()
 		hub.engaged = 1
 		hub.update_icon()
 		use_power(5000)
-		for(var/mob/O in hearers(src, null))
+		for (var/mob/O in hearers(src, null))
 			O.show_message("<span class='notice'>Teleporter engaged!</span>", 2)
 	src.add_fingerprint(usr)
 	src.engaged = 1
@@ -373,7 +373,7 @@ obj/machinery/teleport/station/New()
 	if (hub)
 		hub.engaged = 0
 		hub.update_icon()
-		for(var/mob/O in hearers(src, null))
+		for (var/mob/O in hearers(src, null))
 			O.show_message("<span class='notice'>Teleporter disengaged!</span>", 2)
 	src.add_fingerprint(usr)
 	src.engaged = 0
@@ -384,7 +384,7 @@ obj/machinery/teleport/station/New()
 	set category = "Object"
 	set src in oview(1)
 
-	if(stat & (BROKEN|NOPOWER) || !istype(usr,/mob/living))
+	if (stat & (BROKEN|NOPOWER) || !istype(usr,/mob/living))
 		return
 
 	var/atom/l = src.loc
@@ -395,14 +395,14 @@ obj/machinery/teleport/station/New()
 		hub.accurate = 1
 		hub.engaged = 1
 		hub.update_icon()
-		for(var/mob/O in hearers(src, null))
+		for (var/mob/O in hearers(src, null))
 			O.show_message("<span class='notice'>Test firing! Teleporter temporarily calibrated to be more accurate.</span>", 2)
 		hub.teleport()
 		use_power(5000)
 
 		spawn(30)
 			hub.accurate = wasaccurate
-			for(var/mob/B in hearers(src, null))
+			for (var/mob/B in hearers(src, null))
 				B.show_message("<span class='notice'>Test fire completed.</span>", 2)
 
 	src.add_fingerprint(usr)

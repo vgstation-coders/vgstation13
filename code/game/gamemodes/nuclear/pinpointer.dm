@@ -21,7 +21,7 @@
 	processing_objects -= src
 
 /obj/item/weapon/pinpointer/attack_self()
-	if(!active)
+	if (!active)
 		active = 1
 		workdisk()
 		to_chat(usr,"<span class='notice'>You activate \the [src]</span>")
@@ -34,7 +34,7 @@
 		processing_objects -= src
 
 /obj/item/weapon/pinpointer/proc/workdisk()
-	if(!the_disk)
+	if (!the_disk)
 		the_disk = locate()
 		the_disk.watched_by += src
 	process()
@@ -43,9 +43,9 @@
 	point_at(the_disk)
 
 /obj/item/weapon/pinpointer/proc/point_at(atom/target)
-	if(!active)
+	if (!active)
 		return
-	if(!target)
+	if (!target)
 		icon_state = "pinonnull"
 		return
 
@@ -54,31 +54,31 @@
 	update_icon(L,T)
 
 /obj/item/weapon/pinpointer/update_icon(turf/location,turf/target)
-	if(!target || !location)
+	if (!target || !location)
 		icon_state = "pinonnull"
 		return
-	if(target.z != location.z)
+	if (target.z != location.z)
 		icon_state = "pinonnull"
 	else
 		dir = get_dir(location,target)
-		switch(get_dist(location,target))
-			if(-1)
+		switch (get_dist(location,target))
+			if (-1)
 				icon_state = "pinondirect"
-			if(1 to 8)
+			if (1 to 8)
 				icon_state = "pinonclose"
-			if(9 to 16)
+			if (9 to 16)
 				icon_state = "pinonmedium"
-			if(16 to INFINITY)
+			if (16 to INFINITY)
 				icon_state = "pinonfar"
 
 /obj/item/weapon/pinpointer/examine(mob/user)
 	..()
-	if(watches_nuke)
+	if (watches_nuke)
 		var/bomb_timeleft
-		for(var/obj/machinery/nuclearbomb/bomb in machines)
-			if(bomb.timing)
+		for (var/obj/machinery/nuclearbomb/bomb in machines)
+			if (bomb.timing)
 				bomb_timeleft = bomb.timeleft
-		if(bomb_timeleft)
+		if (bomb_timeleft)
 			to_chat(user,"<span class='danger'>Extreme danger. Arming signal detected. Time remaining: [bomb_timeleft]</span>")
 		else
 			to_chat(user,"<span class='info'>No active nuclear devices detected.</span>")
@@ -93,7 +93,7 @@
 	watches_nuke = 0
 
 /obj/item/weapon/pinpointer/advpinpointer/attack_self()
-	if(!active)
+	if (!active)
 		active = 1
 		processing_objects += src
 		process()
@@ -105,12 +105,12 @@
 		to_chat(usr,"<span class='notice'>You deactivate the pinpointer</span>")
 
 /obj/item/weapon/pinpointer/advpinpointer/process()
-	switch(mode)
-		if(0)
+	switch (mode)
+		if (0)
 			workdisk()
-		if(1)
+		if (1)
 			point_at(location)
-		if(2)
+		if (2)
 			point_at(target)
 
 /obj/item/weapon/pinpointer/advpinpointer/verb/toggle_mode()
@@ -123,15 +123,15 @@
 	target=null
 	location = null
 
-	switch(alert("Please select the mode you want to put the pinpointer in.", "Pinpointer Mode Select", "Location", "Disk Recovery", "Other Signature"))
-		if("Location")
+	switch (alert("Please select the mode you want to put the pinpointer in.", "Pinpointer Mode Select", "Location", "Disk Recovery", "Other Signature"))
+		if ("Location")
 			mode = 1
 
 			var/locationx = input(usr, "Please input the x coordinate to search for.", "Location?" , "") as num
-			if(!locationx || !Adjacent(usr))
+			if (!locationx || !Adjacent(usr))
 				return
 			var/locationy = input(usr, "Please input the y coordinate to search for.", "Location?" , "") as num
-			if(!locationy || !!Adjacent(usr))
+			if (!locationy || !!Adjacent(usr))
 				return
 
 			var/turf/Z = get_turf(src)
@@ -143,38 +143,38 @@
 
 			return attack_self()
 
-		if("Disk Recovery")
+		if ("Disk Recovery")
 			mode = 0
 			return attack_self()
 
-		if("Other Signature")
+		if ("Other Signature")
 			mode = 2
-			switch(alert("Search for item signature or DNA fragment?" , "Signature Mode Select" , "" , "Item" , "DNA"))
-				if("Item")
+			switch (alert("Search for item signature or DNA fragment?" , "Signature Mode Select" , "" , "Item" , "DNA"))
+				if ("Item")
 					var/list/item_names[0]
 					var/list/item_paths[0]
-					for(var/typepath in potential_theft_objectives)
+					for (var/typepath in potential_theft_objectives)
 						var/obj/item/tmp_object=new typepath
 						var/n="[tmp_object]"
 						item_names+=n
 						item_paths[n]=typepath
 						qdel(tmp_object)
 					var/targetitem = input("Select item to search for.", "Item Mode Select","") as null|anything in potential_theft_objectives
-					if(!targetitem)
+					if (!targetitem)
 						return
 					target=locate(item_paths[targetitem])
-					if(!target)
+					if (!target)
 						to_chat(usr,"Failed to locate [targetitem]!")
 						return
 					to_chat(usr,"You set the pinpointer to locate [targetitem]")
-				if("DNA")
+				if ("DNA")
 					var/DNAstring = input("Input DNA string to search for." , "Please Enter String." , "")
-					if(!DNAstring)
+					if (!DNAstring)
 						return
-					for(var/mob/living/carbon/M in mob_list)
-						if(!M.dna)
+					for (var/mob/living/carbon/M in mob_list)
+						if (!M.dna)
 							continue
-						if(M.dna.unique_enzymes == DNAstring)
+						if (M.dna.unique_enzymes == DNAstring)
 							target = M
 							break
 
@@ -192,9 +192,9 @@
 
 
 /obj/item/weapon/pinpointer/nukeop/attack_self(mob/user as mob)
-	if(!active)
+	if (!active)
 		active = 1
-		if(!mode)
+		if (!mode)
 			to_chat(user,"<span class='notice'>Authentication Disk Locator active.</span>")
 		else
 			to_chat(user,"<span class='notice'>Shuttle Locator active.</span>")
@@ -208,37 +208,37 @@
 
 
 /obj/item/weapon/pinpointer/nukeop/process()
-	if(mode)		//Check in case the mode changes while operating
+	if (mode)		//Check in case the mode changes while operating
 		worklocation()
 	else
 		workdisk()
 
 /obj/item/weapon/pinpointer/nukeop/workdisk()
-	if(bomb_set)	//If the bomb is set, lead to the shuttle
+	if (bomb_set)	//If the bomb is set, lead to the shuttle
 		mode = 1	//Ensures worklocation() continues to work
 		worklocation()
 		playsound(loc, 'sound/machines/twobeep.ogg', 50, 1)	//Plays a beep
 		visible_message("Shuttle Locator active.")			//Lets the mob holding it know that the mode has changed
 		return		//Get outta here
-	if(!the_disk)
+	if (!the_disk)
 		the_disk = locate()
 		the_disk.watched_by += src
-		if(!the_disk)
+		if (!the_disk)
 			icon_state = "pinonnull"
 			return
 	point_at(the_disk)
 
 
 /obj/item/weapon/pinpointer/nukeop/proc/worklocation()
-	if(!bomb_set)
+	if (!bomb_set)
 		mode = 0
 		workdisk()
 		playsound(loc, 'sound/machines/twobeep.ogg', 50, 1)
 		visible_message("<span class='notice'>Authentication Disk Locator active.</span>")
 		return
-	if(!home)
+	if (!home)
 		home = locate()
-		if(!home)
+		if (!home)
 			icon_state = "pinonnull"
 			return
 	point_at(home)
@@ -251,7 +251,7 @@
 	watches_nuke = 0
 
 /obj/item/weapon/pinpointer/pdapinpointer/attack_self()
-	if(!active)
+	if (!active)
 		active = 1
 		process()
 		processing_objects += src
@@ -270,7 +270,7 @@
 	set name = "Select pinpointer target"
 	set src in view(1)
 
-	if(used)
+	if (used)
 		to_chat(usr,"Target has already been set!")
 		return
 
@@ -278,15 +278,15 @@
 	L["Cancel"] = "Cancel"
 	var/length = 1
 	for (var/obj/item/device/pda/P in world)
-		if(P.name != "\improper PDA")
+		if (P.name != "\improper PDA")
 			L[text("([length]) [P.name]")] = P
 			length++
 
 	var/t = input("Select pinpointer target. WARNING: Can only set once.") as null|anything in L
-	if(t == "Cancel")
+	if (t == "Cancel")
 		return
 	target = L[t]
-	if(!target)
+	if (!target)
 		to_chat(usr,"Failed to locate [target]!")
 		return
 	active = 1

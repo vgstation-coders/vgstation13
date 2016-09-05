@@ -92,11 +92,11 @@
 	var/footstep = 1	//used for squeeks whilst walking
 
 /obj/item/clothing/suit/space/clown/step_action()
-	if(ishuman(loc))
+	if (ishuman(loc))
 		var/mob/living/carbon/human/H = loc
 
-		if(H.m_intent == "run")
-			if(footstep > 1)
+		if (H.m_intent == "run")
+			if (footstep > 1)
 				footstep = 0
 				playsound(H, step_sound, 50, 1) // this will get annoying very fast.
 			else

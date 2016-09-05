@@ -11,8 +11,8 @@
 
 	Destroy()
 		// if a target is deleted and associated with a stake, force stake to forget
-		for(var/obj/structure/target_stake/T in view(3,src))
-			if(T.pinned_target == src)
+		for (var/obj/structure/target_stake/T in view(3,src))
+			if (T.pinned_target == src)
 				T.pinned_target = null
 				T.density = 1
 				break
@@ -21,8 +21,8 @@
 	Move()
 		..()
 		// After target moves, check for nearby stakes. If associated, move to target
-		for(var/obj/structure/target_stake/M in view(3,src))
-			if(M.density == 0 && M.pinned_target == src)
+		for (var/obj/structure/target_stake/M in view(3,src))
+			if (M.density == 0 && M.pinned_target == src)
 				M.forceMove(loc)
 
 		// This may seem a little counter-intuitive but I assure you that's for a purpose.
@@ -35,7 +35,7 @@
 	attackby(obj/item/W as obj, mob/user as mob)
 		if (istype(W, /obj/item/weapon/weldingtool))
 			var/obj/item/weapon/weldingtool/WT = W
-			if(WT.remove_fuel(0, user))
+			if (WT.remove_fuel(0, user))
 				overlays.len = 0
 				to_chat(usr, "You slice off [src]'s uneven chunks of aluminum and scorch marks.")
 				return
@@ -44,21 +44,21 @@
 	attack_hand(mob/user as mob)
 		// taking pinned targets off!
 		var/obj/structure/target_stake/stake
-		for(var/obj/structure/target_stake/T in view(3,src))
-			if(T.pinned_target == src)
+		for (var/obj/structure/target_stake/T in view(3,src))
+			if (T.pinned_target == src)
 				stake = T
 				break
 
-		if(stake)
-			if(stake.pinned_target)
+		if (stake)
+			if (stake.pinned_target)
 				stake.density = 1
 				density = 0
 				layer = OBJ_LAYER
 				plane = OBJ_PLANE
 
 				loc = user.loc
-				if(ishuman(user))
-					if(!user.get_active_hand())
+				if (ishuman(user))
+					if (!user.get_active_hand())
 						user.put_in_hands(src)
 						to_chat(user, "You take the target out of the stake.")
 				else
@@ -85,17 +85,17 @@
 	var/p_y = Proj.p_y + pick(0,0,0,0,0,-1,1)
 	var/decaltype = 1 // 1 - scorch, 2 - bullet
 
-	if(istype(/obj/item/projectile/bullet, Proj))
+	if (istype(/obj/item/projectile/bullet, Proj))
 		decaltype = 2
 
 
 	virtualIcon = new(icon, icon_state)
 
-	if( virtualIcon.GetPixel(p_x, p_y) ) // if the located pixel isn't blank (null)
+	if ( virtualIcon.GetPixel(p_x, p_y) ) // if the located pixel isn't blank (null)
 
 		hp -= Proj.damage
-		if(hp <= 0)
-			for(var/mob/O in oviewers())
+		if (hp <= 0)
+			for (var/mob/O in oviewers())
 				if ((O.client && !( O.blinded )))
 					to_chat(O, "<span class='warning'>[src] breaks into tiny pieces and collapses!</span>")
 			qdel(src)
@@ -108,14 +108,14 @@
 		bmark.layer = ABOVE_OBJ_LAYER
 		bmark.icon_state = "scorch"
 
-		if(decaltype == 1)
+		if (decaltype == 1)
 			// Energy weapons are hot. they scorch!
 
 			// offset correction
 			bmark.pixel_x--
 			bmark.pixel_y--
 
-			if(Proj.damage >= 20 || istype(Proj, /obj/item/projectile/beam/practice))
+			if (Proj.damage >= 20 || istype(Proj, /obj/item/projectile/beam/practice))
 				bmark.icon_state = "scorch"
 				bmark.dir = pick(NORTH,SOUTH,EAST,WEST) // random scorch design
 
@@ -127,16 +127,16 @@
 			// Bullets are hard. They make dents!
 			bmark.icon_state = "dent"
 
-		if(Proj.damage >= 10 && bulletholes.len <= 35) // maximum of 35 bullet holes
-			if(decaltype == 2) // bullet
-				if(prob(Proj.damage+30)) // bullets make holes more commonly!
+		if (Proj.damage >= 10 && bulletholes.len <= 35) // maximum of 35 bullet holes
+			if (decaltype == 2) // bullet
+				if (prob(Proj.damage+30)) // bullets make holes more commonly!
 					new/datum/bullethole(src, bmark.pixel_x, bmark.pixel_y) // create new bullet hole
 			else // Lasers!
-				if(prob(Proj.damage-10)) // lasers make holes less commonly
+				if (prob(Proj.damage-10)) // lasers make holes less commonly
 					new/datum/bullethole(src, bmark.pixel_x, bmark.pixel_y) // create new bullet hole
 
 		// draw bullet holes
-		for(var/datum/bullethole/B in bulletholes)
+		for (var/datum/bullethole/B in bulletholes)
 
 			virtualIcon.DrawBox(null, B.b1x1, B.b1y,  B.b1x2, B.b1y) // horizontal line, left to right
 			virtualIcon.DrawBox(null, B.b2x, B.b2y1,  B.b2x, B.b2y2) // vertical line, top to bottom
@@ -163,19 +163,19 @@
 	var/b2y2 = 0
 
 	New(var/obj/item/target/Target, var/pixel_x = 0, var/pixel_y = 0)
-		if(!Target)
+		if (!Target)
 			return
 
 		// Randomize the first box
 		b1x1 = pixel_x - pick(1,1,1,1,2,2,3,3,4)
 		b1x2 = pixel_x + pick(1,1,1,1,2,2,3,3,4)
 		b1y = pixel_y
-		if(prob(35))
+		if (prob(35))
 			b1y += rand(-4,4)
 
 		// Randomize the second box
 		b2x = pixel_x
-		if(prob(35))
+		if (prob(35))
 			b2x += rand(-4,4)
 		b2y1 = pixel_y + pick(1,1,1,1,2,2,3,3,4)
 		b2y2 = pixel_y - pick(1,1,1,1,2,2,3,3,4)

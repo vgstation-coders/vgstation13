@@ -63,7 +63,7 @@ datum/updateQueueWorker/proc/finished()
 	 * the queue. This will also terminate the spawned function that was
 	 * created in the kill() proc.
 	 */
-	if(killed)
+	if (killed)
 		del(src)
 
 	finished = 1

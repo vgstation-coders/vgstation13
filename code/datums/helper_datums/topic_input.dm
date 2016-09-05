@@ -12,13 +12,13 @@
 
 	proc/getAndLocate(i)
 		var/t = get(i)
-		if(t)
+		if (t)
 			t = locate(t)
 		return t || null
 
 	proc/getNum(i)
 		var/t = get(i)
-		if(t)
+		if (t)
 			t = text2num(t)
 		return isnum(t) ? t : null
 
@@ -51,7 +51,7 @@
 
 	proc/getPath(i)
 		var/t = get(i)
-		if(t)
+		if (t)
 			t = text2path(t)
 		return ispath(t) ? t : null
 

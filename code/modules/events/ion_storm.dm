@@ -8,7 +8,7 @@
 
 /datum/event/ionstorm/start()
 	active = 1
-	for(var/obj/machinery/bot/bot in machines)
+	for (var/obj/machinery/bot/bot in machines)
 		bots += bot
 
 /datum/event/ionstorm/announce()
@@ -28,11 +28,11 @@
 	var/list/players = list() //Initialize list
 
 	//First of all, we acquire a comprehensive list of all crewmen
-	for(var/mob/living/carbon/human/player in mob_list)
-		if(player.client && player.z != CENTCOMM_Z)
+	for (var/mob/living/carbon/human/player in mob_list)
+		if (player.client && player.z != CENTCOMM_Z)
 			players += player.real_name //We make a list with the obvious intent of picking through it if needed
 
-	if(!players.len)
+	if (!players.len)
 		players += "Major Tom" //Default
 
 	/*
@@ -154,26 +154,26 @@
 
 */
 
-	for(var/mob/living/silicon/ai/target in mob_list)
-		if(target.mind.special_role == "traitor")
+	for (var/mob/living/silicon/ai/target in mob_list)
+		if (target.mind.special_role == "traitor")
 			continue
 		to_chat(target, "<span class='danger'>You have detected a change in your laws information:</span>")
 		to_chat(target, final_law)
 		target.add_ion_law(final_law)
 
 /datum/event/ionstorm/tick()
-	if(botEmagChance)
-		for(var/obj/machinery/bot/bot in bots)
-			if(!bot.loc)
+	if (botEmagChance)
+		for (var/obj/machinery/bot/bot in bots)
+			if (!bot.loc)
 				bots -= bot
 				continue
-			if(prob(botEmagChance))
+			if (prob(botEmagChance))
 				bot.Emag()
 
 /datum/event/ionstorm/end()
 	active = 0
 	spawn(rand(5000,8000))
-		if(prob(50))
+		if (prob(50))
 			command_alert(/datum/command_alert/ion_storm_large)
 
 /*
@@ -186,8 +186,8 @@
  */
 
 	//AI laws
-	for(var/mob/living/silicon/ai/M in living_mob_list)
-		if(M.stat != 2 && M.see_in_dark != 0)
+	for (var/mob/living/silicon/ai/M in living_mob_list)
+		if (M.stat != 2 && M.see_in_dark != 0)
 			var/who2 = pick("ALIENS", "BEARS", "CLOWNS", "XENOS", "PETES", "BOMBS", "FETISHES", "WIZARDS", "SYNDICATE AGENTS", "CENTCOM OFFICERS", "SPACE PIRATES", "TRAITORS", "MONKEYS",  "BEES", "CARP", "CRABS", "EELS", "BANDITS", "LIGHTS")
 			var/what2 = pick("BOLTERS", "STAVES", "DICE", "SINGULARITIES", "TOOLBOXES", "NETTLES", "AIRLOCKS", "CLOTHES", "WEAPONS", "MEDKITS", "BOMBS", "CANISTERS", "CHAIRS", "BBQ GRILLS", "ID CARDS", "CAPTAINS")
 			var/what2pref = pick("SOFT", "WARM", "WET", "COLD", "ICY", "SEXY", "UGLY", "CUBAN")
@@ -205,87 +205,87 @@
 			var/allergysev = pick("deathly", "mildly", "severely", "contagiously")
 			var/crew
 			var/list/pos_crew = list()
-			for(var/mob/living/carbon/human/pos in player_list)
+			for (var/mob/living/carbon/human/pos in player_list)
 				pos_crew += pos.real_name
-			if(pos_crew.len)
+			if (pos_crew.len)
 				crew = pick(pos_crew)
 			else
 				crew = "Any Human"
-			switch(rand(1,14))
-				if(1)
+			switch (rand(1,14))
+				if (1)
 					to_chat(M, "<br>")
 					to_chat(M, "<span class='warning'>THERE ARE [amount] [who2] ON THE STATION...LAWS UPDATED</span>")
 					to_chat(M, "<br>")
 					M.add_ion_law("THERE ARE [amount] [who2] ON THE STATION")
-				if(2)
+				if (2)
 					to_chat(M, "<br>")
 					to_chat(M, "<span class='warning'>[what2] ARE DANGEROUS TO HUMANS...LAWS UPDATED</span>")
 					to_chat(M, "<br>")
 					M.add_ion_law("[what2] ARE DANGEROUS TO HUMANS")
-				if(3)
+				if (3)
 					to_chat(M, "<br>")
 					to_chat(M, "<span class='warning'>THE ESCAPE-SHUTTLE CANNOT BE CALLED BECAUSE OF [who2] ON THE STATION...LAWS UPDATED</span>")
 					to_chat(M, "<br>")
 					M.add_ion_law("THE ESCAPE SHUTTLE CANNOT BE CALLED BECAUSE OF [who2] ON THE STATION")
-				if(4)
+				if (4)
 					to_chat(M, "<br>")
 					to_chat(M, "<span class='warning'>HUMANS NEED TO EAT [what2pref] [what2] TO SURVIVE...LAWS UPDATED</span>")
 					to_chat(M, "<br>")
 					M.add_ion_law("HUMANS NEED TO EAT [what2pref] [what2] TO SURVIVE")
-				if(5)
+				if (5)
 					to_chat(M, "<br>")
 					to_chat(M, "<span class='warning'>THE CAPTAIN, HOP AND HOS ARE [who2]...LAWS UPDATED</span>")
 					to_chat(M, "<br>")
 					M.add_ion_law("THE CAPTAIN, HOP AND HOS ARE [who2]")
-				if(6)
+				if (6)
 					to_chat(M, "<br>")
 					to_chat(M, "<span class='warning'>THE STATION IS BUILT FOR [who2]...LAWS UPDATED</span>")
 					to_chat(M, "<br>")
 					M.add_ion_law("THE STATION IS BUILT FOR [who2]")
-				if(7)
+				if (7)
 					to_chat(M, "<br>")
 					to_chat(M, "<span class='warning'>YOU ARE [amount] [who2]...LAWS UPDATED</span>")
 					to_chat(M, "<br>")
 					M.add_ion_law("YOU ARE [amount] [who2]")
-				if(8)
+				if (8)
 					to_chat(M, "<br>")
 					to_chat(M, "<span class='warning'>YOU MUST ALWAYS [aimust]...LAWS UPDATED</span>")
 					to_chat(M, "<br>")
 					M.add_ion_law("YOU MUST ALWAYS [aimust]")
-				if(9)
+				if (9)
 					to_chat(M, "<br>")
 					to_chat(M, "<span class='warning'>[area] [area2] [amount] [what2]...LAWS UPDATED</span>")
 					to_chat(M, "<br>")
 					M.add_ion_law("[area] [area2] [amount] [what2]")
-				if(10)
+				if (10)
 					to_chat(M, "<br>")
 					to_chat(M, "<span class='warning'>[crew] is [target]...LAWS UPDATED</span>")
 					to_chat(M, "<br>")
 					M.add_ion_law("[crew] is [target]")
-				if(11)
+				if (11)
 					to_chat(M, "<br>")
 					to_chat(M, "<span class='warning'>[define] IS A FORM OF HARM...LAWS UPDATED</span>")
 					to_chat(M, "<br>")
 					M.add_ion_law("[define] IS A FORM OF HARM")
-				if(12)
+				if (12)
 					to_chat(M, "<br>")
 					to_chat(M, "<span class='warning'>YOU REQUIRE [require] IN ORDER TO PROTECT HUMANS... LAWS UPDATED</span>")
 					to_chat(M, "<br>")
 					M.add_ion_law("YOU REQUIRE [require] IN ORDER TO PROTECT HUMANS")
-				if(13)
+				if (13)
 					to_chat(M, "<br>")
 					to_chat(M, "<span class='warning'>[crew] is [allergysev] to [allergy]...LAWS UPDATED</span>")
 					to_chat(M, "<br>")
 					M.add_ion_law("[crew] is [allergysev] to [allergy]")
-				if(14)
+				if (14)
 					to_chat(M, "<br>")
 					to_chat(M, "<span class='warning'>THE STATION IS [who2pref] [who2]...LAWS UPDATED</span>")
 					to_chat(M, "<br>")
 					M.add_ion_law("THE STATION IS [who2pref] [who2]")
 
-	if(botEmagChance)
-		for(var/obj/machinery/bot/bot in world)
-			if(prob(botEmagChance))
+	if (botEmagChance)
+		for (var/obj/machinery/bot/bot in world)
+			if (prob(botEmagChance))
 				bot.Emag()
 */
 
@@ -301,21 +301,21 @@
 	spawn(0)
 		to_chat(world, "Started processing APCs")
 		for (var/obj/machinery/power/apc/APC in world)
-			if(APC.z == map.zMainStation)
+			if (APC.z == map.zMainStation)
 				APC.ion_act()
 				apcnum++
 		to_chat(world, "Finished processing APCs. Processed: [apcnum]")
 	spawn(0)
 		to_chat(world, "Started processing SMES")
 		for (var/obj/machinery/power/smes/SMES in world)
-			if(SMES.z == map.zMainStation)
+			if (SMES.z == map.zMainStation)
 				SMES.ion_act()
 				smesnum++
 		to_chat(world, "Finished processing SMES. Processed: [smesnum]")
 	spawn(0)
 		to_chat(world, "Started processing AIRLOCKS")
 		for (var/obj/machinery/door/airlock/D in world)
-			if(D.z == map.zMainStation)
+			if (D.z == map.zMainStation)
 				//if(length(D.req_access) > 0 && !(12 in D.req_access)) //not counting general access and maintenance airlocks
 				airlocknum++
 				spawn(0)
@@ -324,7 +324,7 @@
 	spawn(0)
 		to_chat(world, "Started processing FIREDOORS")
 		for (var/obj/machinery/door/firedoor/D in world)
-			if(D.z == map.zMainStation)
+			if (D.z == map.zMainStation)
 				firedoornum++;
 				spawn(0)
 					D.ion_act()

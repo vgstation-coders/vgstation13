@@ -93,23 +93,23 @@ var/global/list/image/fluidtrack_cache=list()
 	for (var/b in cardinal)
 		// COMING BIT
 		// If setting
-		if(comingdir&b)
+		if (comingdir&b)
 			// If not wet or not set
-			if(dirs&b)
+			if (dirs&b)
 				var/sid=setdirs["[b]"]
 				track=stack[sid]
-				if(track.wet==t && track.basecolor==bloodcolor)
+				if (track.wet==t && track.basecolor==bloodcolor)
 					continue
 				// Remove existing stack entry
 				stack.Remove(track)
 			track=new /datum/fluidtrack(b,bloodcolor,t)
-			if(!istype(stack))
+			if (!istype(stack))
 				stack = list()
 			stack.Add(track)
-			if(!setdirs || !istype(setdirs, /list) || setdirs.len < 8 || isnull(setdirs["[b]"]))
+			if (!setdirs || !istype(setdirs, /list) || setdirs.len < 8 || isnull(setdirs["[b]"]))
 				warning("[src] had a bad directional [b] or bad list [setdirs.len]")
 				warning("Setdirs keys:")
-				for(var/key in setdirs)
+				for (var/key in setdirs)
 					warning(key)
 				setdirs=list (
 				"1"=0,
@@ -127,23 +127,23 @@ var/global/list/image/fluidtrack_cache=list()
 
 		// GOING BIT (shift up 4)
 		b=b<<4
-		if(realgoing&b)
+		if (realgoing&b)
 			// If not wet or not set
-			if(dirs&b)
+			if (dirs&b)
 				var/sid=setdirs["[b]"]
 				track=stack[sid]
-				if(track.wet==t && track.basecolor==bloodcolor)
+				if (track.wet==t && track.basecolor==bloodcolor)
 					continue
 				// Remove existing stack entry
 				stack.Remove(track)
 			track=new /datum/fluidtrack(b,bloodcolor,t)
-			if(!istype(stack))
+			if (!istype(stack))
 				stack = list()
 			stack.Add(track)
-			if(!setdirs || !istype(setdirs, /list) || setdirs.len < 8 || isnull(setdirs["[b]"]))
+			if (!setdirs || !istype(setdirs, /list) || setdirs.len < 8 || isnull(setdirs["[b]"]))
 				warning("[src] had a bad directional [b] or bad list [setdirs.len]")
 				warning("Setdirs keys:")
-				for(var/key in setdirs)
+				for (var/key in setdirs)
 					warning(key)
 				setdirs=list (
 								"1"=0,
@@ -160,9 +160,9 @@ var/global/list/image/fluidtrack_cache=list()
 			updated=1
 
 	dirs |= comingdir|realgoing
-	if(istype(DNA,/list))
+	if (istype(DNA,/list))
 		blood_DNA |= DNA.Copy()
-	if(updated)
+	if (updated)
 		update_icon()
 
 /obj/effect/decal/cleanable/blood/tracks/update_icon()
@@ -175,11 +175,11 @@ var/global/list/image/fluidtrack_cache=list()
 	/* FIXME: This shit doesn't work for some reason.
 	   The Remove line doesn't remove the overlay given, so this is defunct.
 	var/b=0
-	for(var/image/overlay in overlays)
+	for (var/image/overlay in overlays)
 		b=overlay.dir
-		if(overlay.icon_state==going_state)
+		if (overlay.icon_state==going_state)
 			b=b<<4
-		if(updatedtracks&b)
+		if (updatedtracks&b)
 			overlays.Remove(overlay)
 			//del(overlay)
 	*/
@@ -188,20 +188,20 @@ var/global/list/image/fluidtrack_cache=list()
 	var/icon/flat = icon('icons/effects/fluidtracks.dmi')
 
 	// Update ONLY the overlays that have changed.
-	for(var/datum/fluidtrack/track in stack)
+	for (var/datum/fluidtrack/track in stack)
 		// TODO: Uncomment when the block above is fixed.
 		//if(!(updatedtracks&track.direction) && !track.fresh)
 		//	continue
 		var/stack_idx=setdirs["[track.direction]"]
 		var/state=coming_state
 		truedir=track.direction
-		if(truedir&240) // Check if we're in the GOING block
+		if (truedir&240) // Check if we're in the GOING block
 			state=going_state
 			truedir=truedir>>4
 		var/icon/add = icon('icons/effects/fluidtracks.dmi', state, truedir)
 		add.SwapColor("#FFFFFF",track.basecolor)
 		overlays += add
-		if(track.basecolor == "#FF0000"||track.basecolor == "#A10808") // no dirty dumb vox scum allowed
+		if (track.basecolor == "#FF0000"||track.basecolor == "#A10808") // no dirty dumb vox scum allowed
 			plane = NOIR_BLOOD_PLANE
 		else
 			plane = ABOVE_TURF_PLANE

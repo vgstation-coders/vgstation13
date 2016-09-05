@@ -26,10 +26,10 @@ Bonus
 
 /datum/symptom/heal/Activate(var/datum/disease/advance/A)
 	..()
-	if(prob(SYMPTOM_ACTIVATION_PROB))
+	if (prob(SYMPTOM_ACTIVATION_PROB))
 		var/mob/living/M = A.affected_mob
-		switch(A.stage)
-			if(4, 5)
+		switch (A.stage)
+			if (4, 5)
 				Heal(M)
 	return
 

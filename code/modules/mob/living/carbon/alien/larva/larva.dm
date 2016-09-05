@@ -18,7 +18,7 @@
 	var/datum/reagents/R = new/datum/reagents(100)
 	reagents = R
 	R.my_atom = src
-	if(name == "alien larva")
+	if (name == "alien larva")
 		name = "alien larva ([rand(1, 1000)])"
 	real_name = name
 	regenerate_icons()
@@ -32,37 +32,37 @@
 //This needs to be fixed
 /mob/living/carbon/alien/larva/Stat()
 	..()
-	if(statpanel("Status"))
+	if (statpanel("Status"))
 		stat(null, "Progress: [growth]/[LARVA_GROW_TIME]")
 
 /mob/living/carbon/alien/larva/AdjustPlasma(amount)
-	if(stat != DEAD)
+	if (stat != DEAD)
 		growth = min(growth + 1, LARVA_GROW_TIME)
 	..(amount)
 
 
 /mob/living/carbon/alien/larva/ex_act(severity)
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
 
-	if(!blinded)
+	if (!blinded)
 		flash_eyes(visual = 1)
 
 	var/b_loss = null
 	var/f_loss = null
 	switch (severity)
-		if(1.0)
+		if (1.0)
 			b_loss += 500
 			gib()
 			return
-		if(2.0)
+		if (2.0)
 			b_loss += 60
 			f_loss += 60
 			ear_damage += 30
 			ear_deaf += 120
-		if(3.0)
+		if (3.0)
 			b_loss += 30
-			if(prob(50))
+			if (prob(50))
 				Paralyse(1)
 			ear_damage += 15
 			ear_deaf += 60
@@ -72,19 +72,19 @@
 	updatehealth()
 
 /mob/living/carbon/alien/larva/blob_act()
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
-	if(stat == DEAD)
+	if (stat == DEAD)
 		return
 	..()
 	playsound(loc, 'sound/effects/blobattack.ogg',50,1)
 	var/shielded = 0
 
 	var/damage = null
-	if(stat != 2)
+	if (stat != 2)
 		damage = rand(10,30)
 
-	if(shielded)
+	if (shielded)
 		damage /= 4
 
 		//paralysis += 1
@@ -102,29 +102,29 @@
 //using the default attack_animal() in carbon.dm
 
 /mob/living/carbon/alien/larva/attack_paw(mob/living/carbon/monkey/M as mob)
-	if(!(istype(M, /mob/living/carbon/monkey)))
+	if (!(istype(M, /mob/living/carbon/monkey)))
 		return //Fix for aliens receiving double messages when attacking other aliens.
 
-	if(!ticker)
+	if (!ticker)
 		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
 		return
 
 /*
 	//MUH SPAWN PROTECTION
-	if(istype(loc, /turf) && istype(loc.loc, /area/start))
+	if (istype(loc, /turf) && istype(loc.loc, /area/start))
 		to_chat(M, "<span class='warning'>No attacking people at spawn, you jackass.</span>")
 		return
 */
 	..()
 
-	switch(M.a_intent)
+	switch (M.a_intent)
 
-		if(I_HELP)
+		if (I_HELP)
 			help_shake_act(M)
 		else
-			if(istype(wear_mask, /obj/item/clothing/mask/muzzle))
+			if (istype(wear_mask, /obj/item/clothing/mask/muzzle))
 				return
-			if(health > 0)
+			if (health > 0)
 				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 				visible_message("<span class='danger'>\The [M] has bit \the [src] !</span>")
 				adjustBruteLoss(rand(1, 3))
@@ -133,23 +133,23 @@
 
 
 /mob/living/carbon/alien/larva/attack_slime(mob/living/carbon/slime/M as mob)
-	if(!ticker)
+	if (!ticker)
 		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
 		return
 
-	if(M.Victim)
+	if (M.Victim)
 		return // can't attack while eating!
 
-	if(health > -100)
+	if (health > -100)
 
-		for(var/mob/O in viewers(src, null))
+		for (var/mob/O in viewers(src, null))
 			visible_message("<span class='danger'>\The [M] glomps \the [src]!</span>")
 
 		add_logs(M, src, "glomped on", 0)
 
 		var/damage = rand(1, 3)
 
-		if(istype(src, /mob/living/carbon/slime/adult))
+		if (istype(src, /mob/living/carbon/slime/adult))
 			damage = rand(20, 40)
 		else
 			damage = rand(5, 35)
@@ -160,26 +160,26 @@
 	return
 
 /mob/living/carbon/alien/larva/attack_hand(mob/living/carbon/human/M as mob)
-	if(!ticker)
+	if (!ticker)
 		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
 		return
 
 	/*
-	if(istype(loc, /turf) && istype(loc.loc, /area/start))
+	if (istype(loc, /turf) && istype(loc.loc, /area/start))
 		to_chat(M, "<span class='warning'>No attacking people at spawn, you jackass.</span>")
 		return
 	*/
 	..()
 
-	if(M.gloves && istype(M.gloves,/obj/item/clothing/gloves))
+	if (M.gloves && istype(M.gloves,/obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = M.gloves
-		if(G.cell)
-			if(M.a_intent == I_HURT)//Stungloves. Any contact will stun the alien.
-				if(G.cell.charge >= 2500)
+		if (G.cell)
+			if (M.a_intent == I_HURT)//Stungloves. Any contact will stun the alien.
+				if (G.cell.charge >= 2500)
 					G.cell.use(2500)
 
 					Weaken(5)
-					if(stuttering < 5)
+					if (stuttering < 5)
 						stuttering = 5
 					Stun(5)
 
@@ -189,13 +189,13 @@
 					to_chat(M, "<span class='warning'>Not enough charge !</span>")
 					return
 
-	switch(M.a_intent)
+	switch (M.a_intent)
 
-		if(I_HELP)
+		if (I_HELP)
 			help_shake_act(M)
 
-		if(I_GRAB)
-			if(M == src)
+		if (I_GRAB)
+			if (M == src)
 				return
 			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
 
@@ -210,8 +210,8 @@
 
 		else
 			var/damage = rand(1, 9)
-			if(prob(90))
-				if(M_HULK in M.mutations)
+			if (prob(90))
+				if (M_HULK in M.mutations)
 					damage += 5
 					spawn(0)
 						Paralyse(1)
@@ -220,7 +220,7 @@
 						step_away(src,M,15)
 				playsound(loc, "punch", 25, 1, -1)
 				visible_message("<span class='danger'>[M] has punched \the [src] !</span>")
-				if(damage > 4.9)
+				if (damage > 4.9)
 					Weaken(rand(10,15))
 					visible_message("<span class='danger'>[M] has weakened \the [src] !</span>")
 				adjustBruteLoss(damage)
@@ -231,20 +231,20 @@
 	return
 
 /mob/living/carbon/alien/larva/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
-	if(!ticker)
+	if (!ticker)
 		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
 		return
 
 	/*
-	if(istype(loc, /turf) && istype(loc.loc, /area/start))
+	if (istype(loc, /turf) && istype(loc.loc, /area/start))
 		to_chat(M, "<span class='warning'>No attacking people at spawn, you jackass.</span>")
 		return
 	*/
 	..()
 
-	switch(M.a_intent)
+	switch (M.a_intent)
 
-		if(I_HELP)
+		if (I_HELP)
 			sleeping = max(0,sleeping-5)
 			resting = 0
 			AdjustParalysis(-3)
@@ -253,11 +253,11 @@
 			visible_message("<span class='notice'>[M.name] nuzzles [src] trying to wake it up !</span>")
 
 		else
-			if(health > 0)
+			if (health > 0)
 				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 				var/damage = rand(1, 3)
-				for(var/mob/O in viewers(src, null))
-					if((O.client && !( O.blinded )))
+				for (var/mob/O in viewers(src, null))
+					if ((O.client && !( O.blinded )))
 						O.show_message(text("<span class='danger'>[M.name] has bit []!</span>", src), 1)
 				adjustBruteLoss(damage)
 				updatehealth()
@@ -266,7 +266,7 @@
 	return
 
 /mob/living/carbon/alien/larva/restrained()
-	if(timestopped)
+	if (timestopped)
 		return 1 //under effects of time magick
 
 	return 0
@@ -292,11 +292,11 @@
 
 /* Why?
 /mob/living/carbon/alien/larva/say_understands(var/mob/other,var/datum/language/speaking = null)
-	if(speaking && speaking.name == LANGUAGE_GALACTIC_COMMON)
+	if (speaking && speaking.name == LANGUAGE_GALACTIC_COMMON)
 		return 1
 	return ..()
 */
 
 /mob/living/carbon/alien/larva/reset_layer()
-	if(stat == DEAD)
+	if (stat == DEAD)
 		plane = MOB_PLANE

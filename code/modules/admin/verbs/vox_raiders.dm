@@ -11,8 +11,8 @@ var/global/vox_tick = 1
 	equip_to_slot_or_del(new /obj/item/clothing/shoes/magboots/vox(src), slot_shoes) // REPLACE THESE WITH CODED VOX ALTERNATIVES.
 	equip_to_slot_or_del(new /obj/item/clothing/gloves/yellow/vox(src), slot_gloves) // AS ABOVE.
 
-	switch(vox_tick)
-		if(1) // Vox raider!
+	switch (vox_tick)
+		if (1) // Vox raider!
 			equip_to_slot_or_del(new /obj/item/clothing/suit/space/vox/carapace(src), slot_wear_suit)
 			equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/vox/carapace(src), slot_head)
 			equip_to_slot_or_del(new /obj/item/weapon/melee/telebaton(src), slot_belt)
@@ -28,7 +28,7 @@ var/global/vox_tick = 1
 			A.amount = 20
 			put_in_hands(A)
 
-		if(2) // Vox engineer!
+		if (2) // Vox engineer!
 			equip_to_slot_or_del(new /obj/item/clothing/suit/space/vox/pressure(src), slot_wear_suit)
 			equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/vox/pressure(src), slot_head)
 			equip_to_slot_or_del(new /obj/item/weapon/storage/belt/utility/full(src), slot_belt)
@@ -37,7 +37,7 @@ var/global/vox_tick = 1
 			put_in_hands(new /obj/item/device/multitool(src))
 
 
-		if(3) // Vox saboteur!
+		if (3) // Vox saboteur!
 			equip_to_slot_or_del(new /obj/item/clothing/suit/space/vox/carapace(src), slot_wear_suit)
 			equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/vox/carapace(src), slot_head)
 			equip_to_slot_or_del(new /obj/item/weapon/storage/belt/utility/full(src), slot_belt)
@@ -46,7 +46,7 @@ var/global/vox_tick = 1
 			put_in_hands(new /obj/item/weapon/gun/dartgun/vox/raider(src))
 			put_in_hands(new /obj/item/device/multitool(src))
 
-		if(4) // Vox medic!
+		if (4) // Vox medic!
 			equip_to_slot_or_del(new /obj/item/clothing/suit/space/vox/pressure(src), slot_wear_suit)
 			equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/vox/pressure(src), slot_head)
 			equip_to_slot_or_del(new /obj/item/weapon/storage/belt/utility/full(src), slot_belt) // Who needs actual surgical tools?

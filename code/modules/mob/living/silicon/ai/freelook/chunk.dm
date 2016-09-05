@@ -22,32 +22,32 @@
 // Add an AI eye to the chunk, then update if changed.
 
 /datum/camerachunk/proc/add(mob/camera/aiEye/ai)
-	if(!ai.ai)
+	if (!ai.ai)
 		return
 	ai.visibleCameraChunks += src
-	if(ai.ai.client)
+	if (ai.ai.client)
 		ai.ai.client.images += obscured
 	visible++
 	seenby += ai
-	if(changed && !updating)
+	if (changed && !updating)
 		update()
 
 // Remove an AI eye from the chunk, then update if changed.
 
 /datum/camerachunk/proc/remove(mob/camera/aiEye/ai)
-	if(!ai.ai)
+	if (!ai.ai)
 		return
 	ai.visibleCameraChunks -= src
-	if(ai.ai.client)
+	if (ai.ai.client)
 		ai.ai.client.images -= obscured
 	seenby -= ai
-	if(visible > 0)
+	if (visible > 0)
 		visible--
 
 // Called when a chunk has changed. I.E: A wall was deleted.
 
 /datum/camerachunk/proc/visibilityChanged(turf/loc)
-	if(!visibleTurfs[loc])
+	if (!visibleTurfs[loc])
 		return
 	hasChanged()
 
@@ -55,8 +55,8 @@
 // instead be flagged to update the next time an AI Eye moves near it.
 
 /datum/camerachunk/proc/hasChanged(var/update_now = 0)
-	if(visible || update_now)
-		if(!updating)
+	if (visible || update_now)
+		if (!updating)
 			updating = 1
 			spawn(UPDATE_BUFFER) // Batch large changes, such as many doors opening or closing at once
 				update()
@@ -71,21 +71,21 @@
 
 	var/list/newVisibleTurfs = list()
 
-	for(var/camera in cameras)
+	for (var/camera in cameras)
 		var/obj/machinery/camera/c = camera
 
-		if(!c)
+		if (!c)
 			continue
 
-		if(!c.can_use())
+		if (!c.can_use())
 			continue
 
 		var/turf/point = locate(src.x + (CHUNK_SIZE / 2), src.y + (CHUNK_SIZE / 2), src.z)
-		if(get_dist(point, c) > CHUNK_SIZE + (CHUNK_SIZE / 2))
+		if (get_dist(point, c) > CHUNK_SIZE + (CHUNK_SIZE / 2))
 			continue
 
-		for(var/turf/t in c.can_see())
-			// Possible optimization: if(turfs[t]) here, rather than &= turfs afterwards.
+		for (var/turf/t in c.can_see())
+			// Possible optimization: if (turfs[t]) here, rather than &= turfs afterwards.
 			// List associations use a tree or hashmap of some sort (alongside the list itself)
 			//  so are surprisingly fast. (significantly faster than var/thingy/x in list, in testing)
 			newVisibleTurfs[t] = t
@@ -99,31 +99,31 @@
 	visibleTurfs = newVisibleTurfs
 	obscuredTurfs = turfs - newVisibleTurfs
 
-	for(var/turf in visAdded)
+	for (var/turf in visAdded)
 		var/turf/t = turf
-		if(t.obscured)
+		if (t.obscured)
 			obscured -= t.obscured
-			for(var/eye in seenby)
+			for (var/eye in seenby)
 				var/mob/camera/aiEye/m = eye
-				if(!m || !m.ai)
+				if (!m || !m.ai)
 					continue
-				if(m.ai.client)
+				if (m.ai.client)
 					m.ai.client.images -= t.obscured
 
-	for(var/turf in visRemoved)
+	for (var/turf in visRemoved)
 		var/turf/t = turf
-		if(obscuredTurfs[t])
-			if(!t.obscured)
+		if (obscuredTurfs[t])
+			if (!t.obscured)
 				var/image/obscured_static = image('icons/effects/cameravis.dmi', t, "black", 15)
 				obscured_static.plane = STATIC_PLANE
 				t.obscured = obscured_static
 			obscured += t.obscured
-			for(var/eye in seenby)
+			for (var/eye in seenby)
 				var/mob/camera/aiEye/m = eye
-				if(!m || !m.ai)
+				if (!m || !m.ai)
 					seenby -= m
 					continue
-				if(m.ai.client)
+				if (m.ai.client)
 					m.ai.client.images += t.obscured
 
 	changed = 0
@@ -140,23 +140,23 @@
 	src.y = y
 	src.z = z
 
-	for(var/obj/machinery/camera/c in range(CHUNK_SIZE, locate(x + (CHUNK_SIZE / 2), y + (CHUNK_SIZE / 2), z)))
-		if(c.can_use())
+	for (var/obj/machinery/camera/c in range(CHUNK_SIZE, locate(x + (CHUNK_SIZE / 2), y + (CHUNK_SIZE / 2), z)))
+		if (c.can_use())
 			cameras += c
 
-	for(var/turf/t in block(locate(x, y, z), locate(min(x + CHUNK_SIZE - 1, world.maxx), min(y + CHUNK_SIZE - 1, world.maxy), z)))
+	for (var/turf/t in block(locate(x, y, z), locate(min(x + CHUNK_SIZE - 1, world.maxx), min(y + CHUNK_SIZE - 1, world.maxy), z)))
 		turfs[t] = t
 
-	for(var/camera in cameras)
+	for (var/camera in cameras)
 		var/obj/machinery/camera/c = camera
-		if(!c)
+		if (!c)
 			continue
 
-		if(!c.can_use())
+		if (!c.can_use())
 			continue
 
-		for(var/turf/t in c.can_see())
-			// Possible optimization: if(turfs[t]) here, rather than &= turfs afterwards.
+		for (var/turf/t in c.can_see())
+			// Possible optimization: if (turfs[t]) here, rather than &= turfs afterwards.
 			// List associations use a tree or hashmap of some sort (alongside the list itself)
 			//  so are surprisingly fast. (significantly faster than var/thingy/x in list, in testing)
 			visibleTurfs[t] = t
@@ -166,9 +166,9 @@
 
 	obscuredTurfs = turfs - visibleTurfs
 
-	for(var/turf in obscuredTurfs)
+	for (var/turf in obscuredTurfs)
 		var/turf/t = turf
-		if(!t.obscured)
+		if (!t.obscured)
 			var/image/obscured_static = image('icons/effects/cameravis.dmi', t, "black", 15)
 			obscured_static.plane = STATIC_PLANE
 			t.obscured = obscured_static

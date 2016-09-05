@@ -14,15 +14,15 @@
 
 
 	attack_self(mob/living/user as mob)
-		switch(mode)
-			if(0)
+		switch (mode)
+			if (0)
 				mode = 1
 				charge_cost = 100
 				fire_sound = 'sound/weapons/Laser.ogg'
 				to_chat(user, "<span class='warning'>[src.name] is now set to kill.</span>")
 				projectile_type = "/obj/item/projectile/beam"
 				modifystate = "energykill"
-			if(1)
+			if (1)
 				mode = 0
 				charge_cost = 100
 				fire_sound = 'sound/weapons/Taser.ogg'
@@ -53,13 +53,13 @@
 
 	process()
 		charge_tick++
-		if(charge_tick < 4)
+		if (charge_tick < 4)
 			return 0
 		charge_tick = 0
-		if(!power_supply)
+		if (!power_supply)
 			return 0
-		if((power_supply.charge / power_supply.maxcharge) != 1)
-			if(!failcheck())
+		if ((power_supply.charge / power_supply.maxcharge) != 1)
+			if (!failcheck())
 				return 0
 			power_supply.give(100)
 			update_icon()
@@ -101,10 +101,10 @@
 
 
 		update_reactor()
-			if(crit_fail)
+			if (crit_fail)
 				overlays += image(icon = icon, icon_state = "nucgun-crit")
 				return
-			if(lightfail)
+			if (lightfail)
 				overlays += image(icon = icon, icon_state = "nucgun-medium")
 			else if ((power_supply.charge/power_supply.maxcharge) <= 0.5)
 				overlays += image(icon = icon, icon_state = "nucgun-light")

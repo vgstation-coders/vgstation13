@@ -34,11 +34,11 @@
 	set desc = "Drops the bodytemperature of another person."
 	set category = "Mutant Abilities"
 
-	if(!iscarbon(C))
+	if (!iscarbon(C))
 		to_chat(usr, "<span class='warning'>This will only work on normal organic beings.</span>")
 		return
 
-	if(!can_act(usr))
+	if (!can_act(usr))
 		return
 
 	usr.verbs -= /proc/bioproc_cryokinesis
@@ -49,7 +49,7 @@
 		usr.verbs -= /proc/bioproc_cryokinesis_cd
 
 	C.bodytemperature = T0C + 30
-	if(C.burning)
+	if (C.burning)
 		C.burning = 0
 
 	C.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [C]!</span>")
@@ -112,7 +112,7 @@
 	set desc = "Eat just about anything!"
 	set category = "Mutant Abilities"
 
-	if(!can_act(usr))
+	if (!can_act(usr))
 		return
 
 	usr.verbs -= /proc/bioproc_mattereater
@@ -123,7 +123,7 @@
 		usr.verbs -= /proc/bioproc_mattereater_cd
 
 	var/list/edible_items = list()
-	for(var/obj/item/C in range(1,usr))
+	for (var/obj/item/C in range(1,usr))
 		edible_items += C
 	if (!edible_items.len)
 		to_chat(usr, "/red You can't find anything nearby that's small enough to eat.")
@@ -145,13 +145,13 @@
 
 	qdel(the_item)
 
-	if(ishuman(usr))
-		for(var/A in usr.organs)
+	if (ishuman(usr))
+		for (var/A in usr.organs)
 			var/datum/organ/external/affecting = null
-			if(!usr.organs[A])
+			if (!usr.organs[A])
 				continue
 			affecting = usr.organs[A]
-			if(!istype(affecting, /datum/organ/external))
+			if (!istype(affecting, /datum/organ/external))
 				continue
 			affecting.heal_damage(4, 0)
 		usr:UpdateDamageIcon()
@@ -197,7 +197,7 @@
 	set desc = "Leap great distances!"
 	set category = "Mutant Abilities"
 
-	if(!can_act(usr))
+	if (!can_act(usr))
 		return
 	if (istype(usr.loc,/mob/))
 		to_chat(usr, "<span class='warning'>You can't jump right now!</span>")
@@ -216,9 +216,9 @@
 		var/prevLayer = usr.layer
 		usr.layer = 15
 
-		for(var/i=0, i<10, i++)
+		for (var/i=0, i<10, i++)
 			step(usr, usr.dir)
-			if(i < 5)
+			if (i < 5)
 				usr.pixel_y += 8
 			else
 				usr.pixel_y -= 8
@@ -240,7 +240,7 @@
 		container.visible_message("<span class='warning'><b>[usr.loc]</b> emits a loud thump and rattles a bit.</span>")
 		playsound(usr.loc, 'bang.ogg', 50, 1)
 		var/wiggle = 6
-		while(wiggle > 0)
+		while (wiggle > 0)
 			wiggle--
 			container.pixel_x = rand(-3,3)
 			container.pixel_y = rand(-3,3)
@@ -289,14 +289,14 @@
 	set desc = "Mimic the appearance of others!"
 	set category = "Mutant Abilities"
 
-	if(!ishuman(M))
+	if (!ishuman(M))
 		to_chat(usr, "<span class='warning'>You can only change your appearance to that of another human.</span>")
 		return
 
-	if(!ishuman(usr))
+	if (!ishuman(usr))
 		return
 
-	if(!can_act(usr))
+	if (!can_act(usr))
 		return
 
 	usr.verbs -= /proc/bioproc_polymorphism
@@ -311,7 +311,7 @@
 	usr.visible_message("<span class='warning'>[usr]'s body shifts and contorts.</span>")
 
 	spawn(10)
-		if(M && usr)
+		if (M && usr)
 			playsound(usr.loc, 'gib.ogg', 50, 1)
 			usr:bioHolder.CopyOther(M:bioHolder, copyAppearance = 1, copyPool = 0, copyEffectBlocks = 0, copyActiveEffects = 0)
 			usr:real_name = M:real_name
@@ -348,18 +348,18 @@
 	set desc = "Project your thoughts into the minds of other organics!"
 	set category = "Mutant Abilities"
 
-	if(!iscarbon(M))
+	if (!iscarbon(M))
 		to_chat(usr, "<span class='warning'>You may only use this on other organic beings.</span>")
 		return
 
-	if(!can_act(usr))
+	if (!can_act(usr))
 		return
 
 	if (M:bioHolder.HasEffect("psy_resist"))
 		to_chat(usr, "<span class='warning'>You can't contact [M.name]'s mind at all!</span>")
 		return
 
-	if(!M.client || M.stat)
+	if (!M.client || M.stat)
 		to_chat(M, "<span class='warning'>You can't seem to get through to [M.name] mentally.</span>")
 		return
 
@@ -406,11 +406,11 @@
 	set desc = "Read the minds of others for information."
 	set category = "Mutant Abilities"
 
-	if(!iscarbon(M))
+	if (!iscarbon(M))
 		to_chat(usr, "<span class='warning'>You may only use this on other organic beings.</span>")
 		return
 
-	if(!can_act(usr))
+	if (!can_act(usr))
 		return
 
 	if (M:bioHolder.HasEffect("psy_resist"))
@@ -437,7 +437,7 @@
 	if (M.radiation)
 		pain_condition -= 25
 
-	switch(pain_condition)
+	switch (pain_condition)
 		if (81 to INFINITY)
 			to_chat(usr, "<span class='notice'><b>Condition</b>: [M.name] feels good.</span>")
 		if (61 to 80)
@@ -450,7 +450,7 @@
 			to_chat(usr, "<span class='notice'><b>Condition</b>: [M.name] is suffering excruciating pain.</span>")
 			thoughts = "haunted by their own mortality"
 
-	switch(M.a_intent)
+	switch (M.a_intent)
 		if ("help")
 			to_chat(usr, "<span class='notice'><b>Mood</b>: You sense benevolent thoughts from [M.name].</span>")
 		if ("disarm")
@@ -459,7 +459,7 @@
 			to_chat(usr, "<span class='notice'><b>Mood</b>: You sense hostile thoughts from [M.name].</span>")
 		if ("harm")
 			to_chat(usr, "<span class='notice'><b>Mood</b>: You sense cruel thoughts from [M.name].</span>")
-			for(var/mob/living/L in view(7,M))
+			for (var/mob/living/L in view(7,M))
 				if (L == M)
 					continue
 				thoughts = "thinking about punching [L.name]"
@@ -515,7 +515,7 @@
 	set desc = "Wreath yourself in burning flames."
 	set category = "Mutant Abilities"
 
-	if(!can_act(usr))
+	if (!can_act(usr))
 		return
 
 	if (istype(usr,/mob/living/))
@@ -563,7 +563,7 @@
 	set desc = "Transform yourself into a liquified state."
 	set category = "Mutant Abilities"
 
-	if(!can_act(usr))
+	if (!can_act(usr))
 		return
 
 	if (istype(usr,/mob/living/carbon/human/))
@@ -624,7 +624,7 @@
 	set desc = "Unleash a gigantic fart!"
 	set category = "Mutant Abilities"
 
-	if(!can_act(usr))
+	if (!can_act(usr))
 		return
 
 	if (istype(usr,/mob/living/))
@@ -641,7 +641,7 @@
 		if (can_act(L))
 			L.visible_message("<span class='warning'><b>[L.name]</b> unleashes a [pick("tremendous","gigantic","colossal")] fart!</span>")
 			playsound(L.loc, 'superfart.ogg', 50, 0)
-			for(var/mob/living/V in range(get_turf(L),6))
+			for (var/mob/living/V in range(get_turf(L),6))
 				shake_camera(V,10,5)
 				if (V == L)
 					continue
@@ -650,8 +650,8 @@
 				step_away(V,get_turf(L),15)
 				step_away(V,get_turf(L),15)
 				step_away(V,get_turf(L),15)
-			 if(L.bioHolder.HasEffect("toxic_farts"))
-			 	for(var/turf/T in view(get_turf(L),2))
+			 if (L.bioHolder.HasEffect("toxic_farts"))
+			 	for (var/turf/T in view(get_turf(L),2))
 			 		new /obj/effects/fart_cloud(T,L)
 		else
 			to_chat(L, "<span class='warning'>You were interrupted and couldn't fart! Rude!</span>")
@@ -704,12 +704,12 @@
 	set desc = "Shoot lasers from your eyes."
 	set category = "Mutant Abilities"
 
-	if(!can_act(usr))
+	if (!can_act(usr))
 		return
 
 	var/mob/living/L = usr
 	var/turf/T = null
-	switch(L.dir)
+	switch (L.dir)
 		if (NORTH)
 			T = locate(L.x,L.y+1,L.z)
 		if (SOUTH)
@@ -724,10 +724,10 @@
 	L.visible_message("<span class='warning'><b>[L.name]</b> shoots eye beams!</span>")
 	var/datum/projectile/laser/eyebeams/PJ = new /datum/projectile/laser/eyebeams
 	var/obj/projectile/P = unpool("projectile", /obj/projectile)
-	if(!P)
+	if (!P)
 		return
 	P.set_loc(usr.loc)
-	if(PJ.shot_sound)
+	if (PJ.shot_sound)
 		playsound(usr, PJ.shot_sound, 50)
 	P.projectile = new PJ.type
 	P.set_icon()

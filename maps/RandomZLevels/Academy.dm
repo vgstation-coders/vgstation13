@@ -32,7 +32,7 @@
 
 /obj/machinery/singularity/academy/process()
 	eat()
-	if(prob(1))
+	if (prob(1))
 		mezzer()
 
 

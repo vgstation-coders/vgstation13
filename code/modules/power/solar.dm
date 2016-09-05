@@ -11,7 +11,7 @@ var/list/solars_list = list()
 	..(loc)
 	solars_list += src
 
-	if(ticker)
+	if (ticker)
 		initialize()
 
 /obj/machinery/power/solar/Destroy()
@@ -40,14 +40,14 @@ var/list/solars_list = list()
 
 //Give back the glass type we were supplied with
 /obj/machinery/power/solar_assembly/proc/give_glass() //And the lord said unto him, 'Give that fucker glass'
-	if(glass_type)
+	if (glass_type)
 		var/obj/item/stack/sheet/S = new glass_type(get_turf(src))
 		S.amount = 2
 		glass_type = null //Memory vars ho !
 
 /obj/machinery/power/solar_assembly/attackby(var/obj/item/weapon/W, var/mob/user)
-	if(!anchored && isturf(loc))
-		if(iswrench(W))
+	if (!anchored && isturf(loc))
+		if (iswrench(W))
 			anchored = 1
 			density = 1
 			user.visible_message("<span class='notice'>[user] wrenches [src] down.</span>", \
@@ -55,7 +55,7 @@ var/list/solars_list = list()
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
 			return 1
 	else
-		if(iswrench(W))
+		if (iswrench(W))
 			anchored = 0
 			density = 0
 			user.visible_message("<span class='notice'>[user] unwrenches [src] from the ground.</span>", \
@@ -63,15 +63,15 @@ var/list/solars_list = list()
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
 			return 1
 
-		if(istype(W, /obj/item/stack/sheet/glass))
+		if (istype(W, /obj/item/stack/sheet/glass))
 			var/obj/item/stack/sheet/glass/S = W
-			if(S.amount >= 2)
+			if (S.amount >= 2)
 				glass_type = W.type
 				S.use(2)
 				playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
 				user.visible_message("<span class='notice'>[user] carefully adds glass to [src].</span>", \
 				"<span class='notice'>You carefully add glass to [src].</span>")
-				if(tracker)
+				if (tracker)
 					new /obj/machinery/power/solar/panel/tracker(get_turf(src), src)
 				else
 					new /obj/machinery/power/solar/panel(get_turf(src), src)
@@ -79,16 +79,16 @@ var/list/solars_list = list()
 				to_chat(user, "<span class='notice'>You lack enough [W.name] to finish the solar.</span>")
 			return 1
 
-	if(!tracker)
-		if(istype(W, /obj/item/weapon/tracker_electronics))
-			if(user.drop_item(W))
+	if (!tracker)
+		if (istype(W, /obj/item/weapon/tracker_electronics))
+			if (user.drop_item(W))
 				tracker = 1
 				qdel(W)
 				user.visible_message("<span class='notice'>[user] inserts the electronics into [src].</span>", \
 				"<span class='notice'>You insert the electronics into [src].</span>")
 				return 1
 	else
-		if(iscrowbar(W))
+		if (iscrowbar(W))
 			new /obj/item/weapon/tracker_electronics(src.loc)
 			tracker = 0
 			user.visible_message("<span class='notice'>[user] takes the electronics out of [src].</span>", \

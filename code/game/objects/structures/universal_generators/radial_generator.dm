@@ -39,30 +39,30 @@
 //We start by initializing shared behavior between all three generator sub-types, then we fire a spawn proc that they will modify
 /obj/structure/radial_gen/proc/deploy_generator()
 
-	for(var/turf/T in spiral_block(get_turf(src), gen_hard_radius, 0))
+	for (var/turf/T in spiral_block(get_turf(src), gen_hard_radius, 0))
 
-		if(expected_turfs.len && !is_type_in_list(T, expected_turfs)) //We are expecting a specific turf type, and it is not this one
+		if (expected_turfs.len && !is_type_in_list(T, expected_turfs)) //We are expecting a specific turf type, and it is not this one
 			continue
 
-		if(gen_empty_only && T.has_contents()) //We are looking for empty turfs, this turf isn't empty
+		if (gen_empty_only && T.has_contents()) //We are looking for empty turfs, this turf isn't empty
 			continue
 
-		if(gen_no_dense_only && T.has_dense_content()) //We are looking for turfs without dense contents, this turf has some
+		if (gen_no_dense_only && T.has_dense_content()) //We are looking for turfs without dense contents, this turf has some
 			continue
 
 		var/dist = cheap_pythag(T.x - x, T.y - y)
 
-		if(dist < gen_min_radius) //Distance is below the minimum radius, forget this one
+		if (dist < gen_min_radius) //Distance is below the minimum radius, forget this one
 
 			continue
 
-		if(dist < gen_hard_radius) //Inside the soft radius, minimum falloff
+		if (dist < gen_hard_radius) //Inside the soft radius, minimum falloff
 
 			var/soft_prob = max(0, gen_prob_base - gen_prob_soft_fall * (dist - gen_min_radius))
 
-			if(prob(soft_prob)) //If the prob roll happens, continue onto generation
+			if (prob(soft_prob)) //If the prob roll happens, continue onto generation
 
-				if(gen_clear_tiles) //We attempt to clear the tile's contents. Hopefully this does not fail, because we won't dabble on it
+				if (gen_clear_tiles) //We attempt to clear the tile's contents. Hopefully this does not fail, because we won't dabble on it
 					T.clear_contents(list(type))
 
 				var/picked = perform_pick("soft", T)
@@ -71,13 +71,13 @@
 
 			continue
 
-		if(dist > gen_hard_radius) //Inside the soft to hard radius, maximum falloff
+		if (dist > gen_hard_radius) //Inside the soft to hard radius, maximum falloff
 
 			var/hard_prob = max(0, gen_prob_base - gen_prob_soft_fall * (gen_soft_radius - gen_min_radius) - gen_prob_hard_fall * (dist - gen_soft_radius))
 
-			if(prob(hard_prob)) //If the prob roll happens, continue onto generation
+			if (prob(hard_prob)) //If the prob roll happens, continue onto generation
 
-				if(gen_clear_tiles) //We attempt to clear the tile's contents. Hopefully this does not fail, because we won't dabble on it
+				if (gen_clear_tiles) //We attempt to clear the tile's contents. Hopefully this does not fail, because we won't dabble on it
 					T.clear_contents(list(type))
 
 				var/picked = perform_pick("soft", T)
@@ -107,19 +107,19 @@
 
 /obj/structure/radial_gen/movable/perform_pick(var/gen_type = "soft", var/turf/T)
 
-	switch(gen_type)
+	switch (gen_type)
 
-		if("soft")
+		if ("soft")
 
-			if(gen_types_movable_soft.len)
+			if (gen_types_movable_soft.len)
 
 				var/picked_movable = pickweight(gen_types_movable_soft)
 
 				return picked_movable
 
-		if("hard")
+		if ("hard")
 
-			if(gen_types_movable_hard.len)
+			if (gen_types_movable_hard.len)
 
 				var/picked_movable = pickweight(gen_types_movable_hard)
 
@@ -140,19 +140,19 @@
 
 /obj/structure/radial_gen/turf/perform_pick(var/gen_type = "soft", var/turf/T, var/turf/picked)
 
-	switch(gen_type)
+	switch (gen_type)
 
-		if("soft")
+		if ("soft")
 
-			if(gen_types_turf_soft.len)
+			if (gen_types_turf_soft.len)
 
 				var/picked_turf = pickweight(gen_types_turf_soft)
 
 				return picked_turf
 
-		if("hard")
+		if ("hard")
 
-			if(gen_types_turf_hard.len)
+			if (gen_types_turf_hard.len)
 
 				var/picked_turf = pickweight(gen_types_turf_hard)
 

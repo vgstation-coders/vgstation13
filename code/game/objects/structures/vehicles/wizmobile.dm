@@ -9,7 +9,7 @@
 /obj/effect/effect/trails/firebird/Play()
 	dir=pick(cardinal)
 	spawn(rand(10,20))
-		if(src)
+		if (src)
 			returnToPool(src)
 
 /datum/effect/effect/system/trail/firebird
@@ -49,20 +49,20 @@
 */
 
 /obj/structure/bed/chair/vehicle/wizmobile/update_mob()
-	if(!occupant)
+	if (!occupant)
 		return
 
-	switch(dir)
-		if(SOUTH)
+	switch (dir)
+		if (SOUTH)
 			occupant.pixel_x = 0
 			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
-		if(WEST)
+		if (WEST)
 			occupant.pixel_x = 3 * PIXEL_MULTIPLIER// 13
 			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
-		if(NORTH)
+		if (NORTH)
 			occupant.pixel_x = 0
 			occupant.pixel_y = 4 * PIXEL_MULTIPLIER
-		if(EAST)
+		if (EAST)
 			occupant.pixel_x = -3 * PIXEL_MULTIPLIER// -13
 			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
 
@@ -70,19 +70,19 @@
 	return
 
 /obj/structure/bed/chair/vehicle/wizmobile/Bump(var/atom/obstacle)
-	if(throwing)
+	if (throwing)
 		return ..()
 	else
 		return obstacle.bumped_by_firebird(src) //Yep
 
 /* Server vote on 16-12-2014 to disable wallmoving (10-7 Y)
 /obj/structure/bed/chair/vehicle/wizmobile/Bump(var/atom/obstacle)
-	if(can_move)
+	if (can_move)
 		can_move = 0
 		alpha=128
 		forceMove(get_step(src,src.dir))
-		if(locked_to_mob)
-			if(locked_to_mob.loc != loc)
+		if (locked_to_mob)
+			if (locked_to_mob.loc != loc)
 				locked_to_mob.locked_to = null //Temporary, so Move() succeeds.
 				locked_to_mob.locked_to = src //Restoring
 		sleep(10) // 1s

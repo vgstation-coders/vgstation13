@@ -16,7 +16,7 @@ var/savefile/panicfile
 	plant_controller = new()
 
 	// Honk honk, fuck you science
-	for(var/i=1, i<=map.zLevels.len, i++)
+	for (var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
 		WORLD_Y_OFFSET += rand(-50,50)
 
@@ -62,10 +62,10 @@ var/savefile/panicfile
  * FOR MORE INFORMATION SEE: http://www.byond.com/forum/?post=1666940
  */
 #ifdef BORDER_USE_TURF_EXIT
-	if(byond_version < 510)
+	if (byond_version < 510)
 		warning("Your server's byond version does not meet the recommended requirements for this code. Please update BYOND to atleast 507.1248 or comment BORDER_USE_TURF_EXIT in global.dm")
 #elif
-	if(byond_version < RECOMMENDED_VERSION)
+	if (byond_version < RECOMMENDED_VERSION)
 		world.log << "Your server's byond version does not meet the recommended requirements for this code. Please update BYOND"
 #endif
 	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
@@ -76,9 +76,9 @@ var/savefile/panicfile
 	load_admins()
 	load_mods()
 	LoadBansjob()
-	if(config.usewhitelist)
+	if (config.usewhitelist)
 		load_whitelist()
-	if(config.usealienwhitelist)
+	if (config.usealienwhitelist)
 		load_alienwhitelist()
 	jobban_loadbanfile()
 	jobban_updatelegacybans()
@@ -89,9 +89,9 @@ var/savefile/panicfile
 	library_catalog.initialize()
 
 	spawn() copy_logs() // Just copy the logs.
-	if(config && config.log_runtimes)
+	if (config && config.log_runtimes)
 		log = file("data/logs/runtime/[time2text(world.realtime,"YYYY-MM-DD")]-runtime.log")
-	if(config && config.server_name != null && config.server_suffix && world.port > 0)
+	if (config && config.server_name != null && config.server_suffix && world.port > 0)
 		// dumb and hardcoded but I don't care~
 		config.server_name += " #[(world.port % 1000) / 100]"
 
@@ -106,14 +106,14 @@ var/savefile/panicfile
 	data_core = new /obj/effect/datacore()
 	paiController = new /datum/paiController()
 
-	if(!setup_database_connection())
+	if (!setup_database_connection())
 		world.log << "Your server failed to establish a connection with the feedback database."
 	else
 		world.log << "Feedback database connection established."
 	migration_controller_mysql = new
 	migration_controller_sqlite = new ("players2.sqlite", "players2_empty.sqlite")
 
-	if(!setup_old_database_connection())
+	if (!setup_old_database_connection())
 		world.log << "Your server failed to establish a connection with the tgstation database."
 	else
 		world.log << "Tgstation database connection established."
@@ -157,7 +157,7 @@ var/savefile/panicfile
 
 		stat_collection.artifacts_discovered = 0 // Because artifacts during generation get counted otherwise!
 
-	for(var/plugin_type in typesof(/plugin))
+	for (var/plugin_type in typesof(/plugin))
 		var/plugin/P = new plugin_type()
 		plugins[P.name] = P
 		P.on_world_loaded()
@@ -168,7 +168,7 @@ var/savefile/panicfile
 	SortAreas()							//Build the list of all existing areas and sort it alphabetically
 
 	spawn(2000)		//so we aren't adding to the round-start lag
-		if(config.ToRban)
+		if (config.ToRban)
 			ToRban_autoupdate()
 		/*if(config.kick_inactive)
 			KickInactiveClients()*/
@@ -180,9 +180,9 @@ var/savefile/panicfile
 //world/Topic(href, href_list[])
 //		to_chat(world, "Received a Topic() call!")
 //		to_chat(world, "[href]")
-//		for(var/a in href_list)
+//		for (var/a in href_list)
 //			to_chat(world, "[a]")
-//		if(href_list["hello"])
+//		if (href_list["hello"])
 //			to_chat(world, "Hello world!")
 //			return "Hello world!"
 //		to_chat(world, "End of Topic() call.")
@@ -197,10 +197,10 @@ var/savefile/panicfile
 			x++
 		return x
 
-	else if(T == "players")
+	else if (T == "players")
 		var/n = 0
-		for(var/mob/M in player_list)
-			if(M.client)
+		for (var/mob/M in player_list)
+			if (M.client)
 				n++
 		return n
 
@@ -216,23 +216,23 @@ var/savefile/panicfile
 		s["players"] = list()
 		s["map_name"] = map.nameLong
 		s["gamestate"] = 1
-		if(ticker)
+		if (ticker)
 			s["gamestate"] = ticker.current_state
 		s["active_players"] = get_active_player_count()
 		s["revision"] = return_revision()
 		var/n = 0
 		var/admins = 0
 
-		for(var/client/C in clients)
-			if(C.holder)
-				if(C.holder.fakekey)
+		for (var/client/C in clients)
+			if (C.holder)
+				if (C.holder.fakekey)
 					continue	//so stealthmins aren't revealed by the hub
 				admins++
 			s["player[n]"] = C.key
 			n++
 		s["players"] = n
 
-		if(revdata)
+		if (revdata)
 			s["revision"] = revdata.revision
 		s["admins"] = admins
 
@@ -243,19 +243,19 @@ var/savefile/panicfile
 
 
 /world/Reboot(reason)
-	if(reason == 1)
-		if(usr && usr.client)
-			if(!usr.client.holder)
+	if (reason == 1)
+		if (usr && usr.client)
+			if (!usr.client.holder)
 				return 0
-	if(config.map_voting)
+	if (config.map_voting)
 		//testing("we have done a map vote")
-		if(fexists(vote.chosen_map))
+		if (fexists(vote.chosen_map))
 			//testing("[vote.chosen_map] exists")
 			var/start = 1
 			var/pos = findtext(vote.chosen_map, "/", start)
 			var/lastpos = pos
 			//testing("First slash [lastpos]")
-			while(pos > 0)
+			while (pos > 0)
 				lastpos = pos
 				pos = findtext(vote.chosen_map, "/", start)
 				start = pos + 1
@@ -263,7 +263,7 @@ var/savefile/panicfile
 			var/filename = copytext(vote.chosen_map, lastpos + 1, 0)
 			//testing("Found [filename]")
 
-			if(!fcopy(vote.chosen_map, filename))
+			if (!fcopy(vote.chosen_map, filename))
 				//testing("Fcopy failed, deleting and copying")
 				fdel(filename)
 				fcopy(vote.chosen_map, filename)
@@ -293,8 +293,8 @@ var/savefile/panicfile
 
 	sleep(5)//should fix the issue of players not hearing the restart sound.
 
-	for(var/client/C in clients)
-		if(config.server)	//if you set a server location in config.txt, it sends you there instead of trying to reconnect to the same world address. -- NeoFite
+	for (var/client/C in clients)
+		if (config.server)	//if you set a server location in config.txt, it sends you there instead of trying to reconnect to the same world address. -- NeoFite
 			C << link("byond://[config.server]")
 
 		else
@@ -308,11 +308,11 @@ var/savefile/panicfile
 /world/proc/KickInactiveClients()
 	spawn(-1)
 		//set background = 1
-		while(1)
+		while (1)
 			sleep(INACTIVITY_KICK)
-			for(var/client/C in clients)
-				if(C.is_afk(INACTIVITY_KICK))
-					if(!istype(C.mob, /mob/dead))
+			for (var/client/C in clients)
+				if (C.is_afk(INACTIVITY_KICK))
+					if (!istype(C.mob, /mob/dead))
 						log_access("AFK: [key_name(C)]")
 						to_chat(C, "<span class='warning'>You have been inactive for more than 10 minutes and have been disconnected.</span>")
 						del(C)
@@ -321,8 +321,8 @@ var/savefile/panicfile
 
 /world/proc/load_mode()
 	var/list/Lines = file2list("data/mode.txt")
-	if(Lines.len)
-		if(Lines[1])
+	if (Lines.len)
+		if (Lines[1])
 			master_mode = Lines[1]
 			diary << "Saved mode is '[master_mode]'"
 
@@ -344,13 +344,13 @@ var/savefile/panicfile
 	abandon_allowed = config.respawn
 
 /world/proc/load_mods()
-	if(config.admin_legacy_system)
+	if (config.admin_legacy_system)
 		var/text = file2text("config/moderators.txt")
 		if (!text)
 			diary << "Failed to load config/mods.txt\n"
 		else
 			var/list/lines = splittext(text, "\n")
-			for(var/line in lines)
+			for (var/line in lines)
 				if (!line)
 					continue
 
@@ -377,8 +377,8 @@ var/savefile/panicfile
 		)"}
 	var/list/features = list()
 
-	if(ticker)
-		if(master_mode)
+	if (ticker)
+		if (master_mode)
 			features += master_mode
 	else
 		features += "<b>STARTING</b>"
@@ -427,10 +427,10 @@ var/failed_old_db_connections = 0
 proc/setup_database_connection()
 
 
-	if(failed_db_connections > FAILED_DB_CONNECTION_CUTOFF)	//If it failed to establish a connection more than 5 times in a row, don't bother attempting to conenct anymore.
+	if (failed_db_connections > FAILED_DB_CONNECTION_CUTOFF)	//If it failed to establish a connection more than 5 times in a row, don't bother attempting to conenct anymore.
 		return 0
 
-	if(!dbcon)
+	if (!dbcon)
 		dbcon = new()
 
 	var/user = sqlfdbklogin
@@ -451,16 +451,16 @@ proc/setup_database_connection()
 
 //This proc ensures that the connection to the feedback database (global variable dbcon) is established
 proc/establish_db_connection()
-	if(failed_db_connections > FAILED_DB_CONNECTION_CUTOFF)
+	if (failed_db_connections > FAILED_DB_CONNECTION_CUTOFF)
 		return 0
 
 	var/DBQuery/q
-	if(dbcon)
+	if (dbcon)
 		q = dbcon.NewQuery("show global variables like 'wait_timeout'")
 		q.Execute()
-		if(q && q.ErrorMsg())
+		if (q && q.ErrorMsg())
 			dbcon.Disconnect()
-	if(!dbcon || !dbcon.IsConnected())
+	if (!dbcon || !dbcon.IsConnected())
 		return setup_database_connection()
 	else
 		return 1
@@ -472,10 +472,10 @@ proc/establish_db_connection()
 proc/setup_old_database_connection()
 
 
-	if(failed_old_db_connections > FAILED_DB_CONNECTION_CUTOFF)	//If it failed to establish a connection more than 5 times in a row, don't bother attempting to conenct anymore.
+	if (failed_old_db_connections > FAILED_DB_CONNECTION_CUTOFF)	//If it failed to establish a connection more than 5 times in a row, don't bother attempting to conenct anymore.
 		return 0
 
-	if(!dbcon_old)
+	if (!dbcon_old)
 		dbcon_old = new()
 
 	var/user = sqllogin
@@ -496,10 +496,10 @@ proc/setup_old_database_connection()
 
 //This proc ensures that the connection to the feedback database (global variable dbcon) is established
 proc/establish_old_db_connection()
-	if(failed_old_db_connections > FAILED_DB_CONNECTION_CUTOFF)
+	if (failed_old_db_connections > FAILED_DB_CONNECTION_CUTOFF)
 		return 0
 
-	if(!dbcon_old || !dbcon_old.IsConnected())
+	if (!dbcon_old || !dbcon_old.IsConnected())
 		return setup_old_database_connection()
 	else
 		return 1
@@ -507,9 +507,9 @@ proc/establish_old_db_connection()
 #undef FAILED_DB_CONNECTION_CUTOFF
 /world/proc/build_turfs_list()
 	var/count = 0
-	for(var/Z = 1 to world.maxz)
-		for(var/turf/T in block(locate(1,1,Z), locate(world.maxx, world.maxy, Z)))
-			if(!(count % 50000))
+	for (var/Z = 1 to world.maxz)
+		for (var/turf/T in block(locate(1,1,Z), locate(world.maxx, world.maxy, Z)))
+			if (!(count % 50000))
 				sleep(world.tick_lag)
 			count++
 			T.initialize()

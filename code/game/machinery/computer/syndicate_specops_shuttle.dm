@@ -28,24 +28,24 @@ var/syndicate_elite_shuttle_timeleft = 0
 
 	var/message_tracker[] = list(0,1,2,3,5,10,30,45)//Create a a list with potential time values.
 	var/message = "THE SYNDICATE ELITE SHUTTLE IS PREPARING FOR LAUNCH"//Initial message shown.
-	if(announcer)
+	if (announcer)
 		announcer.say(message)
 		message = "ARMORED SQUAD TAKE YOUR POSITION ON GRAVITY LAUNCH PAD"
 		announcer.say(message)
 
-	while(syndicate_elite_shuttle_time - world.timeofday > 0)
+	while (syndicate_elite_shuttle_time - world.timeofday > 0)
 		var/ticksleft = syndicate_elite_shuttle_time - world.timeofday
 
-		if(ticksleft > 1e5)
+		if (ticksleft > 1e5)
 			syndicate_elite_shuttle_time = world.timeofday	// midnight rollover
 		syndicate_elite_shuttle_timeleft = (ticksleft / 10)
 
 		//All this does is announce the time before launch.
-		if(announcer)
+		if (announcer)
 			var/rounded_time_left = round(syndicate_elite_shuttle_timeleft)//Round time so that it will report only once, not in fractions.
-			if(rounded_time_left in message_tracker)//If that time is in the list for message announce.
+			if (rounded_time_left in message_tracker)//If that time is in the list for message announce.
 				message = "ALERT: [rounded_time_left] SECOND[(rounded_time_left!=1)?"S":""] REMAIN"
-				if(rounded_time_left==0)
+				if (rounded_time_left==0)
 					message = "ALERT: TAKEOFF"
 				announcer.say(message)
 				message_tracker -= rounded_time_left//Remove the number from the list so it won't be called again next cycle.
@@ -68,29 +68,29 @@ var/syndicate_elite_shuttle_timeleft = 0
 /*
 	//Begin Marauder launchpad.
 	spawn(0)//So it parallel processes it.
-		for(var/obj/machinery/door/poddoor/M in elite_squad)
-			switch(M.id)
-				if("ASSAULT0")
+		for (var/obj/machinery/door/poddoor/M in elite_squad)
+			switch (M.id)
+				if ("ASSAULT0")
 					spawn(10)//1 second delay between each.
 						M.open()
-				if("ASSAULT1")
+				if ("ASSAULT1")
 					spawn(20)
 						M.open()
-				if("ASSAULT2")
+				if ("ASSAULT2")
 					spawn(30)
 						M.open()
-				if("ASSAULT3")
+				if ("ASSAULT3")
 					spawn(40)
 						M.open()
 
 		sleep(10)
 
 		var/spawn_marauder[] = new()
-		for(var/obj/effect/landmark/L in landmarks_list)
-			if(L.name == "Marauder Entry")
+		for (var/obj/effect/landmark/L in landmarks_list)
+			if (L.name == "Marauder Entry")
 				spawn_marauder.Add(L)
-		for(var/obj/effect/landmark/L in landmarks_list)
-			if(L.name == "Marauder Exit")
+		for (var/obj/effect/landmark/L in landmarks_list)
+			if (L.name == "Marauder Exit")
 				var/obj/effect/portal/P = new(L.loc)
 				P.invisibility = 101//So it is not seen by anyone.
 				P.failchance = 0//So it has no fail chance when teleporting.
@@ -99,35 +99,35 @@ var/syndicate_elite_shuttle_timeleft = 0
 
 		sleep(10)
 
-		for(var/obj/machinery/mass_driver/M in elite_squad)
-			switch(M.id)
-				if("ASSAULT0")
+		for (var/obj/machinery/mass_driver/M in elite_squad)
+			switch (M.id)
+				if ("ASSAULT0")
 					spawn(10)
 						M.drive()
-				if("ASSAULT1")
+				if ("ASSAULT1")
 					spawn(20)
 						M.drive()
-				if("ASSAULT2")
+				if ("ASSAULT2")
 					spawn(30)
 						M.drive()
-				if("ASSAULT3")
+				if ("ASSAULT3")
 					spawn(40)
 						M.drive()
 
 		sleep(50)//Doors remain open for 5 seconds.
 
-		for(var/obj/machinery/door/poddoor/M in elite_squad)
-			switch(M.id)//Doors close at the same time.
-				if("ASSAULT0")
+		for (var/obj/machinery/door/poddoor/M in elite_squad)
+			switch (M.id)//Doors close at the same time.
+				if ("ASSAULT0")
 					spawn(0)
 						M.close()
-				if("ASSAULT1")
+				if ("ASSAULT1")
 					spawn(0)
 						M.close()
-				if("ASSAULT2")
+				if ("ASSAULT2")
 					spawn(0)
 						M.close()
-				if("ASSAULT3")
+				if ("ASSAULT3")
 					spawn(0)
 						M.close()
 						*/
@@ -135,9 +135,9 @@ var/syndicate_elite_shuttle_timeleft = 0
 	//End Marauder launchpad.
 /*
 	var/obj/explosionmarker = locate("Syndicate Breach Area")
-	if(explosionmarker)
+	if (explosionmarker)
 		var/turf/simulated/T = explosionmarker.loc
-		if(T)
+		if (T)
 			explosion(T,4,6,8,10,0)
 
 	sleep(40)
@@ -150,30 +150,30 @@ var/syndicate_elite_shuttle_timeleft = 0
 	var/list/dstturfs = list()
 	var/throwy = world.maxy
 
-	for(var/turf/T in end_location)
+	for (var/turf/T in end_location)
 		dstturfs  = T
-		if(T.y < throwy)
+		if (T.y < throwy)
 			throwy = T.y
 
 				// hey you, get out of the way!
-	for(var/turf/T in dstturfs)
+	for (var/turf/T in dstturfs)
 					// find the turf to move things to
 		var/turf/D = locate(T.x, throwy - 1, 1)
 					//var/turf/E = get_step(D, SOUTH)
-		for(var/atom/movable/AM as mob|obj in T)
+		for (var/atom/movable/AM as mob|obj in T)
 			AM.Move(D)
-		if(istype(T, /turf/simulated))
+		if (istype(T, /turf/simulated))
 			qdel(T)
 			T = null
 
 	start_location.move_contents_to(end_location)
 
-	for(var/turf/T in get_area_turfs(end_location) )
+	for (var/turf/T in get_area_turfs(end_location) )
 		var/mob/M = locate(/mob) in T
 		to_chat(M, "<span class='warning'>You have arrived to [station_name]. Commence operation!</span>")
 
 /proc/syndicate_elite_can_move()
-	if(syndicate_elite_shuttle_moving_to_station || syndicate_elite_shuttle_moving_to_mothership)
+	if (syndicate_elite_shuttle_moving_to_station || syndicate_elite_shuttle_moving_to_mothership)
 		return 0
 	else
 		return 1
@@ -190,7 +190,7 @@ var/syndicate_elite_shuttle_timeleft = 0
 	return
 
 /obj/machinery/computer/syndicate_elite_shuttle/attack_hand(var/mob/user as mob)
-	if(!allowed(user))
+	if (!allowed(user))
 		to_chat(user, "<span class='warning'>Access Denied.</span>")
 		return
 
@@ -198,7 +198,7 @@ var/syndicate_elite_shuttle_timeleft = 0
 //		to_chat(usr, "<span class='warning'>The strike team has not yet deployed.</span>")
 //		return
 
-	if(..())
+	if (..())
 		return
 
 	user.set_machine(src)
@@ -216,20 +216,20 @@ var/syndicate_elite_shuttle_timeleft = 0
 	return
 
 /obj/machinery/computer/syndicate_elite_shuttle/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 
 	usr.set_machine(src)
 
 	if (href_list["sendtodock"])
-		if(!syndicate_elite_shuttle_at_station|| syndicate_elite_shuttle_moving_to_station || syndicate_elite_shuttle_moving_to_mothership)
+		if (!syndicate_elite_shuttle_at_station|| syndicate_elite_shuttle_moving_to_station || syndicate_elite_shuttle_moving_to_mothership)
 			return
 
 		to_chat(usr, "<span class='notice'>The Syndicate will not allow the Elite Squad shuttle to return.</span>")
 		return
 
 	else if (href_list["sendtostation"])
-		if(syndicate_elite_shuttle_at_station || syndicate_elite_shuttle_moving_to_station || syndicate_elite_shuttle_moving_to_mothership)
+		if (syndicate_elite_shuttle_at_station || syndicate_elite_shuttle_moving_to_station || syndicate_elite_shuttle_moving_to_mothership)
 			return
 
 		if (!specops_can_move())
@@ -242,7 +242,7 @@ var/syndicate_elite_shuttle_timeleft = 0
 		updateUsrDialog()
 
 		var/area/syndicate_mothership/elite_squad/elite_squad = locate()
-		if(elite_squad)
+		if (elite_squad)
 			elite_squad.readyalert()//Trigger alarm for the spec ops area.
 		syndicate_elite_shuttle_moving_to_station = 1
 

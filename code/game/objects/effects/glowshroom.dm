@@ -25,15 +25,15 @@
 	..()
 	dir = CalcDir()
 
-	if(!floor)
-		switch(dir) //offset to make it be on the wall rather than on the floor
-			if(NORTH)
+	if (!floor)
+		switch (dir) //offset to make it be on the wall rather than on the floor
+			if (NORTH)
 				pixel_y = WORLD_ICON_SIZE
-			if(SOUTH)
+			if (SOUTH)
 				pixel_y = -WORLD_ICON_SIZE
-			if(EAST)
+			if (EAST)
 				pixel_x = WORLD_ICON_SIZE
-			if(WEST)
+			if (WEST)
 				pixel_x = -WORLD_ICON_SIZE
 		icon_state = "glowshroom[rand(1,3)]"
 	else //if on the floor, glowshroom on-floor sprite
@@ -47,35 +47,35 @@
 	//set background = 1
 	var/spreaded = 1
 
-	while(spreaded)
+	while (spreaded)
 		spreaded = 0
 
-		for(var/i=1,i<=yield,i++)
-			if(prob(spreadChance))
+		for (var/i=1,i<=yield,i++)
+			if (prob(spreadChance))
 				var/list/possibleLocs = list()
 				var/spreadsIntoAdjacent = 0
 
-				if(prob(spreadIntoAdjacentChance))
+				if (prob(spreadIntoAdjacentChance))
 					spreadsIntoAdjacent = 1
 
-				for(var/turf/unsimulated/floor/asteroid/earth in view(3,src))
-					if(spreadsIntoAdjacent || !locate(/obj/effect/glowshroom) in view(1,earth))
+				for (var/turf/unsimulated/floor/asteroid/earth in view(3,src))
+					if (spreadsIntoAdjacent || !locate(/obj/effect/glowshroom) in view(1,earth))
 						possibleLocs += earth
 
-				if(!possibleLocs.len)
+				if (!possibleLocs.len)
 					break
 
 				var/turf/newLoc = pick(possibleLocs)
 
 				var/shroomCount = 0 //hacky
 				var/placeCount = 1
-				for(var/obj/effect/glowshroom/shroom in newLoc)
+				for (var/obj/effect/glowshroom/shroom in newLoc)
 					shroomCount++
-				for(var/wallDir in cardinal)
+				for (var/wallDir in cardinal)
 					var/turf/isWall = get_step(newLoc,wallDir)
-					if(isWall.density)
+					if (isWall.density)
 						placeCount++
-				if(shroomCount >= placeCount)
+				if (shroomCount >= placeCount)
 					continue
 
 				var/obj/effect/glowshroom/child = new /obj/effect/glowshroom(newLoc)
@@ -86,7 +86,7 @@
 
 				spreaded++
 
-		if(prob(evolveChance)) //very low chance to evolve on its own
+		if (prob(evolveChance)) //very low chance to evolve on its own
 			potency += rand(4,6)
 
 		sleep(delay)
@@ -95,28 +95,28 @@
 	//set background = 1
 	var/direction = 16
 
-	for(var/wallDir in cardinal)
+	for (var/wallDir in cardinal)
 		var/turf/newTurf = get_step(location,wallDir)
-		if(newTurf.density)
+		if (newTurf.density)
 			direction |= wallDir
 
-	for(var/obj/effect/glowshroom/shroom in location)
-		if(shroom == src)
+	for (var/obj/effect/glowshroom/shroom in location)
+		if (shroom == src)
 			continue
-		if(shroom.floor) //special
+		if (shroom.floor) //special
 			direction &= ~16
 		else
 			direction &= ~shroom.dir
 
 	var/list/dirList = list()
 
-	for(var/i=1,i<=16,i <<= 1)
-		if(direction & i)
+	for (var/i=1,i<=16,i <<= 1)
+		if (direction & i)
 			dirList += i
 
-	if(dirList.len)
+	if (dirList.len)
 		var/newDir = pick(dirList)
-		if(newDir == 16)
+		if (newDir == 16)
 			floor = 1
 			newDir = 1
 		return newDir
@@ -132,15 +132,15 @@
 	CheckEndurance()
 
 /obj/effect/glowshroom/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			qdel(src)
 			return
-		if(2.0)
+		if (2.0)
 			if (prob(50))
 				qdel(src)
 				return
-		if(3.0)
+		if (3.0)
 			if (prob(5))
 				qdel(src)
 				return
@@ -148,10 +148,10 @@
 	return
 
 /obj/effect/glowshroom/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(exposed_temperature > 300)
+	if (exposed_temperature > 300)
 		endurance -= 5
 		CheckEndurance()
 
 /obj/effect/glowshroom/proc/CheckEndurance()
-	if(endurance <= 0)
+	if (endurance <= 0)
 		qdel(src)

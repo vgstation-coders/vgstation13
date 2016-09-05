@@ -3,14 +3,14 @@
 	set name = "Borer Speak"
 	set desc = "Communicate with your bretheren"
 
-	if(!message)
+	if (!message)
 		return
 
 	message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
 	message = capitalize(message)
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.borer_speak(message)
 
@@ -20,7 +20,7 @@
 	set desc = "Upgrade yourself or your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.evolve()
 
@@ -30,7 +30,7 @@
 	set desc = "Push some chemicals into your host's bloodstream."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.secrete_chemicals()
 
@@ -40,7 +40,7 @@
 	set desc = "Slither out of your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.abandon_host()
 
@@ -50,7 +50,7 @@
 	set desc = "Expend chemicals constantly in order to elevate the performance of the limb in which you reside."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.speed_increase()
 
@@ -61,17 +61,17 @@
 
 	var/speed_increase = 0.1
 
-	if(!check_can_do(0))
+	if (!check_can_do(0))
 		return
 
-	if(channeling && !channeling_speed_increase)
+	if (channeling && !channeling_speed_increase)
 		to_chat(src, "<span class='warning'>You can't do this while your focus is directed elsewhere.</span>")
 		return
-	else if(channeling)
+	else if (channeling)
 		to_chat(src, "You cease your efforts to elevate the performance of your host's [limb_to_name(hostlimb)].")
 		channeling = 0
 		channeling_speed_increase = 0
-	else if(chemicals < 5)
+	else if (chemicals < 5)
 		to_chat(src, "<span class='warning'>You don't have enough chemicals stored to do this.</span>")
 		return
 	else
@@ -82,7 +82,7 @@
 		host.movement_speed_modifier += speed_increase
 		spawn()
 			var/time_spent_channeling = 0
-			while(chemicals >=5 && channeling && channeling_speed_increase)
+			while (chemicals >=5 && channeling && channeling_speed_increase)
 				chemicals -= 5
 				time_spent_channeling++
 				sleep(10)
@@ -91,7 +91,7 @@
 			channeling = 0
 			channeling_speed_increase = 0
 			var/showmessage = 0
-			if(chemicals < 5)
+			if (chemicals < 5)
 				to_chat(src, "<span class='warning'>You lose consciousness as the last of your chemicals are expended.</span>")
 			else
 				showmessage = 1
@@ -103,7 +103,7 @@
 	set desc = "Expend chemicals constantly in order to support the growth of strong bony talons on your host's foot."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.bone_talons()
 
@@ -115,21 +115,21 @@
 	var/synergy = 0 //Bone talons decrease the host's speed unless two borers are channeling it simultaneously.
 	var/speed_penalty = 0.2
 
-	if(!istype(host, /mob/living/carbon))
+	if (!istype(host, /mob/living/carbon))
 		to_chat(src, "<span class='warning'>You can't seem to alter your host's strange biology.</span>")
 		return
 
-	if(!check_can_do(0))
+	if (!check_can_do(0))
 		return
 
-	if(channeling && !channeling_bone_talons)
+	if (channeling && !channeling_bone_talons)
 		to_chat(src, "<span class='warning'>You can't do this while your focus is directed elsewhere.</span>")
 		return
-	else if(channeling)
+	else if (channeling)
 		to_chat(src, "You cease your efforts to elevate the performance of your host's [limb_to_name(hostlimb)].")
 		channeling = 0
 		channeling_bone_talons = 0
-	else if(chemicals < 3)
+	else if (chemicals < 3)
 		to_chat(src, "<span class='warning'>You don't have enough chemicals stored to do this.</span>")
 		return
 	else
@@ -141,43 +141,43 @@
 		host.unslippable = 1
 		spawn()
 			var/time_spent_channeling = 0
-			while(chemicals >=3 && channeling && channeling_bone_talons)
-				if(hostlimb == LIMB_RIGHT_LEG)
-					if(host.has_brain_worms(LIMB_LEFT_LEG))
+			while (chemicals >=3 && channeling && channeling_bone_talons)
+				if (hostlimb == LIMB_RIGHT_LEG)
+					if (host.has_brain_worms(LIMB_LEFT_LEG))
 						B = host.has_brain_worms(LIMB_LEFT_LEG)
-						if(B.channeling && B.channeling_bone_talons)
+						if (B.channeling && B.channeling_bone_talons)
 							synergy = 1
 						else
 							synergy = 0
 				else
-					if(host.has_brain_worms(LIMB_RIGHT_LEG))
+					if (host.has_brain_worms(LIMB_RIGHT_LEG))
 						B = host.has_brain_worms(LIMB_RIGHT_LEG)
-						if(B.channeling && B.channeling_bone_talons)
+						if (B.channeling && B.channeling_bone_talons)
 							synergy = 1
 						else
 							synergy = 0
-				if(synergy)
-					if(host.has_penalized_speed)
+				if (synergy)
+					if (host.has_penalized_speed)
 						host.movement_speed_modifier += speed_penalty
 						host.has_penalized_speed = 0
 				else
-					if(!host.has_penalized_speed)
+					if (!host.has_penalized_speed)
 						host.movement_speed_modifier -= speed_penalty
 						host.has_penalized_speed = 1
 
 				chemicals -= 3
 				time_spent_channeling++
 				sleep(10)
-			if(host.has_penalized_speed)
-				if(!(B && B.channeling && B.channeling_bone_talons))
+			if (host.has_penalized_speed)
+				if (!(B && B.channeling && B.channeling_bone_talons))
 					host.movement_speed_modifier += speed_penalty
 			to_chat(host, "<span class='notice'>The bony talons on your [hostlimb == LIMB_RIGHT_LEG ? "right" : "left"] foot crumble into nothing.</span>")
-			if(!(B && B.channeling && B.channeling_bone_talons))
+			if (!(B && B.channeling && B.channeling_bone_talons))
 				host.unslippable = 0
 			channeling = 0
 			channeling_bone_talons = 0
 			var/showmessage = 0
-			if(chemicals < 5)
+			if (chemicals < 5)
 				to_chat(src, "<span class='warning'>You lose consciousness as the last of your chemicals are expended.</span>")
 			else
 				showmessage = 1

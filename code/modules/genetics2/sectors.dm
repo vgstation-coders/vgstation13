@@ -18,9 +18,9 @@ var/global/current_sector_id=0
 	uniqid = add_zero2("[current_sector_id++]",3)
 
 	// Set blocks
-	for(var/blockname in blocks_txt)
+	for (var/blockname in blocks_txt)
 		var/block = assigned_blocks[blockname]
-		if(block)
+		if (block)
 			blocks += block
 
 ///////////////////////////////////////

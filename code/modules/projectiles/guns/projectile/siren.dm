@@ -28,7 +28,7 @@
 	set category = "Object"
 	set src in usr
 
-	if(!reagents.total_volume)
+	if (!reagents.total_volume)
 		to_chat(usr, "<span class='warning'>\The [src] is already empty.</span>")
 		return
 
@@ -38,14 +38,14 @@
 /obj/item/weapon/gun/siren/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>It has [round(reagents.total_volume/10)] round\s remaining.</span>")
-	if(hard)
+	if (hard)
 		to_chat(user, "<span class='info'>It is set to \"hard liquid\".</span>")
 	else
 		to_chat(user, "<span class='info'>It is set to \"soft liquid\".</span>")
 
 /obj/item/weapon/gun/siren/attack_self(mob/user as mob)
 	hard = !hard
-	if(hard)
+	if (hard)
 		to_chat(user, "<span class='info'>You set \the [src] to fire hard liquid.</span>")
 		desc = initial(desc)
 		fire_sound = initial(fire_sound)
@@ -57,32 +57,32 @@
 		recoil = 0
 
 /obj/item/weapon/gun/siren/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
-	if(flag)
+	if (flag)
 		return //we're placing gun on a table or in backpack
-	if(harm_labeled >= min_harm_label)
+	if (harm_labeled >= min_harm_label)
 		to_chat(user, "<span class='warning'>A label sticks the trigger to the trigger guard!</span>")//Such a new feature, the player might not know what's wrong if it doesn't tell them.
 
 		return
-	if(reagents.total_volume < 10)
+	if (reagents.total_volume < 10)
 		return click_empty(user)
-	if(in_chamber)
-		if(in_chamber.reagents && in_chamber.reagents.total_volume)
-			if(istype(in_chamber, /obj/item/projectile/bullet/liquid_blob))
+	if (in_chamber)
+		if (in_chamber.reagents && in_chamber.reagents.total_volume)
+			if (istype(in_chamber, /obj/item/projectile/bullet/liquid_blob))
 				var/obj/item/projectile/bullet/liquid_blob/L = in_chamber
-				if(!L.hard)
-					for(var/datum/reagent/R in in_chamber.reagents.reagent_list)
+				if (!L.hard)
+					for (var/datum/reagent/R in in_chamber.reagents.reagent_list)
 						in_chamber.reagents.remove_reagent(R.id, reagents.get_reagent_amount(R.id)*4)
 			in_chamber.reagents.trans_to(src, in_chamber.reagents.total_volume)
 		qdel(in_chamber)
 		in_chamber = null
 	in_chamber = new/obj/item/projectile/bullet/liquid_blob(src, hard)
 	reagents.trans_to(in_chamber, 10)
-	if(!hard) //When set to no-damage mode, each shot has five times the reagents.
-		for(var/datum/reagent/R in in_chamber.reagents.reagent_list)
+	if (!hard) //When set to no-damage mode, each shot has five times the reagents.
+		for (var/datum/reagent/R in in_chamber.reagents.reagent_list)
 			in_chamber.reagents.add_reagent(R.id, reagents.get_reagent_amount(R.id)*4)
 	Fire(A,user,params, "struggle" = struggle)
 
 /obj/item/weapon/gun/siren/process_chambered()
-	if(in_chamber)
+	if (in_chamber)
 		return 1
 	return 0

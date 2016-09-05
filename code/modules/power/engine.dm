@@ -6,7 +6,7 @@
 	return
 
 /turf/simulated/floor/engine/blob_act()
-	if(prob(25))
+	if (prob(25))
 		ChangeTurf(get_underlying_turf())
 		return
 	return

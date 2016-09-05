@@ -59,34 +59,34 @@ Data storage vars:
 
 	New(list/arguments=null,autostart=1)
 		delay = delay>0?(delay):1
-		if(forbid_garbage) //prevents garbage collection with tag != null
+		if (forbid_garbage) //prevents garbage collection with tag != null
 			tag = "\ref[src]"
 		set_process_args(arguments)
-		if(autostart)
+		if (autostart)
 			start()
 		return
 
 	proc/main()
 		state = 1
-		while(src && control_switch)
+		while (src && control_switch)
 			last_exec = world.timeofday
-			if(check_for_null && has_null_args())
+			if (check_for_null && has_null_args())
 				stop()
 				return 0
 			result = process(arglist(arg_list))
-			for(var/sleep_time=delay;sleep_time>0;sleep_time--) //uhh, this is ugly. But I see no other way to terminate sleeping proc. Such disgrace.
-				if(!control_switch)
+			for (var/sleep_time=delay;sleep_time>0;sleep_time--) //uhh, this is ugly. But I see no other way to terminate sleeping proc. Such disgrace.
+				if (!control_switch)
 					return 0
 				sleep(1)
 		return 0
 
 	proc/start(list/arguments=null)
-		if(active())
+		if (active())
 			return
-		if(arguments)
-			if(!set_process_args(arguments))
+		if (arguments)
+			if (!set_process_args(arguments))
 				return 0
-		if(!state_check()) //the main loop is sleeping, wait for it to terminate.
+		if (!state_check()) //the main loop is sleeping, wait for it to terminate.
 			return
 		control_switch = 1
 		spawn()
@@ -94,7 +94,7 @@ Data storage vars:
 		return 1
 
 	proc/stop()
-		if(!active())
+		if (!active())
 			return
 		control_switch = 0
 		spawn(-1) //report termination error but don't wait for state_check().
@@ -103,9 +103,9 @@ Data storage vars:
 
 	proc/state_check()
 		var/lag = 0
-		while(state)
+		while (state)
 			sleep(1)
-			if(++lag>10)
+			if (++lag>10)
 				CRASH("The global_iterator loop \ref[src] failed to terminate in designated timeframe. This may be caused by server lagging.")
 		return 1
 
@@ -116,13 +116,13 @@ Data storage vars:
 		return control_switch
 
 	proc/has_null_args()
-		if(null in arg_list)
+		if (null in arg_list)
 			return 1
 		return 0
 
 
 	proc/set_delay(new_delay)
-		if(isnum(new_delay))
+		if (isnum(new_delay))
 			delay = max(1, round(new_delay))
 			return 1
 		else
@@ -135,7 +135,7 @@ Data storage vars:
 		return (time2text(last_exec)||"Wasn't executed yet")
 
 	proc/set_process_args(list/arguments)
-		if(arguments && istype(arguments, /list) && arguments.len)
+		if (arguments && istype(arguments, /list) && arguments.len)
 			arg_list = arguments
 			return 1
 		else
@@ -147,7 +147,7 @@ Data storage vars:
 		return check_for_null
 
 	proc/toggle()
-		if(!stop())
+		if (!stop())
 			start()
 		return active()
 

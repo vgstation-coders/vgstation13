@@ -24,12 +24,12 @@
 	var/obj/structure/cable/attached		// the attached cable
 
 	attackby(var/obj/item/I, var/mob/user)
-		if(isscrewdriver(I))
-			if(mode == 0)
+		if (isscrewdriver(I))
+			if (mode == 0)
 				var/turf/T = loc
-				if(isturf(T) && !T.intact)
+				if (isturf(T) && !T.intact)
 					attached = locate() in T
-					if(!attached)
+					if (!attached)
 						to_chat(user, "No exposed cable here to attach to.")
 						return
 					else
@@ -37,8 +37,8 @@
 						anchored = 1
 						mode = 1
 						to_chat(user, "You attach the device to the cable.")
-						for(var/mob/M in viewers(user))
-							if(M == user)
+						for (var/mob/M in viewers(user))
+							if (M == user)
 								continue
 							to_chat(M, "[user] attaches the power sink to the cable.")
 						return
@@ -53,8 +53,8 @@
 				to_chat(user, "You detach the device from the cable.")
 				attached.attached = null
 				attached = null
-				for(var/mob/M in viewers(user))
-					if(M == user)
+				for (var/mob/M in viewers(user))
+					if (M == user)
 						continue
 					to_chat(M, "[user] detaches the power sink from the cable.")
 				set_light(0)
@@ -78,14 +78,14 @@
 		return
 
 	attack_hand(var/mob/user)
-		switch(mode)
-			if(0)
+		switch (mode)
+			if (0)
 				..()
 
-			if(1)
+			if (1)
 				to_chat(user, "You activate the device!")
-				for(var/mob/M in viewers(user))
-					if(M == user)
+				for (var/mob/M in viewers(user))
+					if (M == user)
 						continue
 					to_chat(M, "[user] activates the power sink!")
 				mode = 2
@@ -93,10 +93,10 @@
 				playsound(get_turf(src), 'sound/effects/phasein.ogg', 30, 1)
 				processing_objects.Add(src)
 
-			if(2)  //This switch option wasn't originally included. It exists now. --NeoFite
+			if (2)  //This switch option wasn't originally included. It exists now. --NeoFite
 				to_chat(user, "You deactivate the device!")
-				for(var/mob/M in viewers(user))
-					if(M == user)
+				for (var/mob/M in viewers(user))
+					if (M == user)
 						continue
 					to_chat(M, "[user] deactivates the power sink!")
 				mode = 1
@@ -106,9 +106,9 @@
 				processing_objects.Remove(src)
 
 	process()
-		if(attached)
+		if (attached)
 			var/datum/powernet/PN = attached.get_powernet()
-			if(PN)
+			if (PN)
 				set_light(12)
 
 				// found a powernet, so drain up to max power from it
@@ -119,20 +119,20 @@
 
 				// if tried to drain more than available on powernet
 				// now look for APCs and drain their cells
-				if(drained < drain_rate)
-					for(var/obj/machinery/power/terminal/T in PN.nodes)
-						if(istype(T.master, /obj/machinery/power/apc))
+				if (drained < drain_rate)
+					for (var/obj/machinery/power/terminal/T in PN.nodes)
+						if (istype(T.master, /obj/machinery/power/apc))
 							var/obj/machinery/power/apc/A = T.master
-							if(A.operating && A.cell)
+							if (A.operating && A.cell)
 								A.cell.charge = max(0, A.cell.charge - 50)
 								power_drained += 50
-								if(A.charging == 2)
+								if (A.charging == 2)
 									A.charging = 1
 
 
-			if(power_drained > max_power * 0.95)
+			if (power_drained > max_power * 0.95)
 				playsound(src, 'sound/effects/screech.ogg', 100, 1, 1)
-			if(power_drained >= max_power)
+			if (power_drained >= max_power)
 				processing_objects.Remove(src)
 				explosion(src.loc, 3,6,9,12)
 				qdel(src)

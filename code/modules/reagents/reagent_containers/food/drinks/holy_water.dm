@@ -16,7 +16,7 @@
 	return
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/holywater/afterattack(var/atom/target, var/mob/user, var/adjacency_flag, var/click_params)
-	if(!adjacency_flag)
+	if (!adjacency_flag)
 		return
 
 	//Holy water flasks only splash 5u instead of the whole contents

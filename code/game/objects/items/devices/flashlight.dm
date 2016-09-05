@@ -21,7 +21,7 @@
 
 /obj/item/device/flashlight/initialize()
 	..()
-	if(on)
+	if (on)
 		icon_state = "[initial(icon_state)]-on"
 		set_light(brightness_on)
 	else
@@ -29,20 +29,20 @@
 		set_light(0)
 
 /obj/item/device/flashlight/proc/update_brightness(var/mob/user = null, var/playsound = 1)
-	if(on)
+	if (on)
 		icon_state = "[initial(icon_state)]-on"
 		set_light(brightness_on)
-		if(playsound && has_sound)
-			if(get_turf(src))
+		if (playsound && has_sound)
+			if (get_turf(src))
 				playsound(get_turf(src), sound_on, 50, 1)
 	else
 		icon_state = initial(icon_state)
 		set_light(0)
-		if(playsound && has_sound)
+		if (playsound && has_sound)
 			playsound(get_turf(src), sound_off, 50, 1)
 
 /obj/item/device/flashlight/attack_self(mob/user)
-	if(!isturf(user.loc))
+	if (!isturf(user.loc))
 		to_chat(user, "You cannot turn the light on while in this [user.loc].")//To prevent some lighting anomalities.
 
 		return 0
@@ -53,9 +53,9 @@
 
 /obj/item/device/flashlight/attack(mob/living/M as mob, mob/living/user as mob)
 	add_fingerprint(user)
-	if(on && user.zone_sel.selecting == "eyes")
+	if (on && user.zone_sel.selecting == "eyes")
 
-		if(((M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))	//too dumb to use flashlight properly
+		if (((M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))	//too dumb to use flashlight properly
 			return ..()	//just hit them in the head
 
 		if (!user.dexterity_check())
@@ -63,14 +63,14 @@
 			return
 
 		var/mob/living/carbon/human/H = M	//mob has protective eyewear
-		if(istype(M, /mob/living/carbon/human))
+		if (istype(M, /mob/living/carbon/human))
 			var/obj/item/eye_protection = H.get_body_part_coverage(EYES)
-			if(eye_protection)
+			if (eye_protection)
 				to_chat(user, "<span class='notice'>You're going to need to remove their [eye_protection] first.</span>")
 				return
 
-		if(M == user)	//they're using it on themselves
-			if(!M.blinded)
+		if (M == user)	//they're using it on themselves
+			if (!M.blinded)
 				M.flash_eyes(visual = 1)
 				M.visible_message("<span class='notice'>[M] directs [src] to \his eyes.</span>", \
 									 "<span class='notice'>You wave the light in front of your eyes! Trippy!</span>")
@@ -82,14 +82,14 @@
 		user.visible_message("<span class='notice'>[user] directs [src] to [M]'s eyes.</span>", \
 							 "<span class='notice'>You direct [src] to [M]'s eyes.</span>")
 
-		if(istype(M, /mob/living/carbon/human) || istype(M, /mob/living/carbon/monkey))	//robots and aliens are unaffected
-			if(M.stat == DEAD || M.sdisabilities & BLIND)	//mob is dead or fully blind
+		if (istype(M, /mob/living/carbon/human) || istype(M, /mob/living/carbon/monkey))	//robots and aliens are unaffected
+			if (M.stat == DEAD || M.sdisabilities & BLIND)	//mob is dead or fully blind
 				to_chat(user, "<span class='notice'>[M] pupils does not react to the light!</span>")
-			else if(M_XRAY in M.mutations)	//mob has X-RAY vision
+			else if (M_XRAY in M.mutations)	//mob has X-RAY vision
 				M.flash_eyes(visual = 1)
 				to_chat(user, "<span class='notice'>[M] pupils give an eerie glow!</span>")
 			else	//they're okay!
-				if(!M.blinded)
+				if (!M.blinded)
 					M.flash_eyes(visual = 1)
 					to_chat(user, "<span class='notice'>[M]'s pupils narrow.</span>")
 	else
@@ -141,7 +141,7 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(!usr.stat)
+	if (!usr.stat)
 		attack_self(usr)
 
 // FLARES
@@ -170,12 +170,12 @@
 
 /obj/item/device/flashlight/flare/process()
 	var/turf/pos = get_turf(src)
-	if(pos)
+	if (pos)
 		pos.hotspot_expose(produce_heat, 5,surfaces=istype(loc,/turf))
 	fuel = max(fuel - 1, 0)
-	if(!fuel || !on)
+	if (!fuel || !on)
 		turn_off()
-		if(!fuel)
+		if (!fuel)
 			src.icon_state = "[initial(icon_state)]-empty"
 		processing_objects -= src
 
@@ -183,7 +183,7 @@
 	on = 0
 	src.force = initial(src.force)
 	src.damtype = initial(src.damtype)
-	if(ismob(loc))
+	if (ismob(loc))
 		var/mob/U = loc
 		update_brightness(U)
 	else
@@ -192,18 +192,18 @@
 /obj/item/device/flashlight/flare/attack_self(mob/user)
 
 	// Usual checks
-	if(!fuel)
+	if (!fuel)
 		to_chat(user, "<span class='notice'>It's out of fuel.</span>")
 		return
-	if(on)
+	if (on)
 		return
 	// All good, turn it on.
 	user.visible_message("<span class='notice'>[user] activates the flare.</span>", "<span class='notice'>You pull the cord on the flare, activating it!</span>")
 	Light(user)
 
 /obj/item/device/flashlight/flare/proc/Light(var/mob/user as mob)
-	if(user)
-		if(!isturf(user.loc))
+	if (user)
+		if (!isturf(user.loc))
 			to_chat(user, "You cannot turn the light on while in this [user.loc].")//To prevent some lighting anomalities.
 
 			return 0
@@ -211,7 +211,7 @@
 	src.force = on_damage
 	src.damtype = "fire"
 	processing_objects += src
-	if(user)
+	if (user)
 		update_brightness(user)
 	else
 		update_brightness()
@@ -237,7 +237,7 @@
 
 /obj/item/device/flashlight/lamp/slime/initialize()
 	..()
-	if(on)
+	if (on)
 		icon_state = "[initial(icon_state)]-on"
 		set_light(brightness_max)
 	else
@@ -245,7 +245,7 @@
 		set_light(brightness_min)
 
 /obj/item/device/flashlight/lamp/slime/proc/slime_brightness(var/mob/user = null)
-	if(on)
+	if (on)
 		icon_state = "[initial(icon_state)]-on"
 		set_light(brightness_max)
 	else
@@ -253,7 +253,7 @@
 		set_light(brightness_min)
 
 /obj/item/device/flashlight/lamp/slime/attack_self(mob/user)
-	if(!isturf(user.loc))
+	if (!isturf(user.loc))
 		to_chat(user, "You cannot turn the light on while in this [user.loc].")
 		return 0
 	on = !on

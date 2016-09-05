@@ -1,35 +1,35 @@
 /obj/item/device/spacepod_equipment/weaponry/proc/fire_weapons()
 
 
-	if(my_atom.next_firetime > world.time)
+	if (my_atom.next_firetime > world.time)
 		to_chat(usr, "<span class='warning'>Your weapons are recharging.</span>")
 		return
 	var/turf/firstloc
 	var/turf/secondloc
-	if(!my_atom.equipment_system || !my_atom.equipment_system.weapon_system)
+	if (!my_atom.equipment_system || !my_atom.equipment_system.weapon_system)
 		to_chat(usr, "<span class='warning'>Missing equipment or weapons.</span>")
 		my_atom.verbs -= /obj/item/device/spacepod_equipment/weaponry/proc/fire_weapon_system
 		return
-	if(!my_atom.battery.use(shot_cost))
+	if (!my_atom.battery.use(shot_cost))
 		to_chat(usr, "<span class='warning'>\The [my_atom]'s cell is too low on charge!</span>")
 		return
 	var/olddir
 	dir = my_atom.dir
-	for(var/i = 0; i < shots_per; i++)
-		if(olddir != dir)
-			switch(dir)
-				if(NORTH)
+	for (var/i = 0; i < shots_per; i++)
+		if (olddir != dir)
+			switch (dir)
+				if (NORTH)
 					firstloc = get_turf(my_atom)
 					firstloc = get_step(firstloc, NORTH)
 					secondloc = get_step(firstloc,EAST)
-				if(SOUTH)
+				if (SOUTH)
 					firstloc = get_turf(my_atom)
 					secondloc = get_step(firstloc,EAST)
-				if(EAST)
+				if (EAST)
 					firstloc = get_turf(my_atom)
 					firstloc = get_step(firstloc, EAST)
 					secondloc = get_step(firstloc,NORTH)
-				if(WEST)
+				if (WEST)
 					firstloc = get_turf(my_atom)
 					secondloc = get_step(firstloc,NORTH)
 		olddir = dir
@@ -59,7 +59,7 @@
 
 /datum/spacepod/equipment/New(var/obj/spacepod/SP)
 	..()
-	if(istype(SP))
+	if (istype(SP))
 		my_atom = SP
 
 /obj/item/device/spacepod_equipment

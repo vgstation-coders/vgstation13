@@ -23,12 +23,12 @@
 	var/transfer_moles = 0.25 * environment_moles
 	var/datum/gas_mixture/external_removed = environment.remove(transfer_moles)
 
-	if(!external_removed)
+	if (!external_removed)
 		return radiate()
 
-	if(environment_moles < NO_GAS)
+	if (environment_moles < NO_GAS)
 		return radiate()
-	else if(environment_moles < SOME_GAS)
+	else if (environment_moles < SOME_GAS)
 		return 0
 
 	//Get same info from connected gas
@@ -43,7 +43,7 @@
 	var/combined_heat_capacity = internal_removed.heat_capacity() + external_removed.heat_capacity()
 	var/combined_energy = internal_removed.temperature * internal_removed.heat_capacity() + external_removed.heat_capacity() * external_removed.temperature
 
-	if(!combined_heat_capacity)
+	if (!combined_heat_capacity)
 		combined_heat_capacity = 1
 	var/final_temperature = combined_energy / combined_heat_capacity
 
@@ -60,13 +60,13 @@
 /obj/machinery/atmospherics/unary/thermal_plate/hide(var/i) //to make the little pipe section invisible, the icon changes.
 	var/prefix=""
 	//var/suffix="_idle" // Also available: _heat, _cool
-	if(i == 1 && istype(loc, /turf/simulated))
+	if (i == 1 && istype(loc, /turf/simulated))
 		prefix="h"
 	icon_state = "[prefix]off"
 	return
 
 /obj/machinery/atmospherics/unary/thermal_plate/proc/radiate()
-	if(network && network.radiate) //Since each member of a network has the same gases each tick
+	if (network && network.radiate) //Since each member of a network has the same gases each tick
 		air_contents.copy_from(network.radiate) //We can cut down on processing time by only calculating radiate() once and then applying the result
 		return
 

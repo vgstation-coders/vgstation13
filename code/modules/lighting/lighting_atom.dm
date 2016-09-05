@@ -30,7 +30,7 @@
 		sleep(20)
 
 	if (!light_power || !light_range) // We won't emit light anyways, destroy the light source.
-		if(light)
+		if (light)
 			light.destroy()
 			light = null
 	else

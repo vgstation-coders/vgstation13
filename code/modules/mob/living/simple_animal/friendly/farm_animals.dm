@@ -30,58 +30,58 @@
 	..()
 
 /mob/living/simple_animal/hostile/retaliate/goat/Life()
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
 	. = ..()
-	if(.)
+	if (.)
 		//chance to go crazy and start wacking stuff
-		if(!enemies.len && prob(1))
+		if (!enemies.len && prob(1))
 			Retaliate()
 
-		if(enemies.len && prob(10))
+		if (enemies.len && prob(10))
 			enemies = list()
 			LoseTarget()
 			src.visible_message("<span class='notice'>[src] calms down.</span>")
 
-		if(stat == CONSCIOUS)
-			if(udder && prob(5))
+		if (stat == CONSCIOUS)
+			if (udder && prob(5))
 				udder.add_reagent(MILK, rand(5, 10))
 
-		if(locate(/obj/effect/plantsegment) in loc)
+		if (locate(/obj/effect/plantsegment) in loc)
 			var/obj/effect/plantsegment/SV = locate(/obj/effect/plantsegment) in loc
 			SV.die_off()
-			if(prob(10))
+			if (prob(10))
 				say("Nom")
 
-		if(!pulledby)
-			for(var/direction in shuffle(alldirs))
+		if (!pulledby)
+			for (var/direction in shuffle(alldirs))
 				var/step = get_step(src, direction)
-				if(step)
-					if(locate(/obj/effect/plantsegment) in step)
+				if (step)
+					if (locate(/obj/effect/plantsegment) in step)
 						Move(step)
 
 /mob/living/simple_animal/hostile/retaliate/goat/Retaliate()
-	if(!stat)
+	if (!stat)
 		..()
 		src.visible_message("<span class='warning'>[src] gets an evil-looking gleam in \his eye.</span>")
 
 /mob/living/simple_animal/hostile/retaliate/goat/Move()
 	..()
-	if(!stat)
-		if(locate(/obj/effect/plantsegment) in loc)
+	if (!stat)
+		if (locate(/obj/effect/plantsegment) in loc)
 			var/obj/effect/plantsegment/SV = locate(/obj/effect/plantsegment) in loc
 			SV.die_off()
-			if(prob(10))
+			if (prob(10))
 				say("Nom")
 
 /mob/living/simple_animal/hostile/retaliate/goat/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(stat == CONSCIOUS && istype(O, /obj/item/weapon/reagent_containers/glass))
+	if (stat == CONSCIOUS && istype(O, /obj/item/weapon/reagent_containers/glass))
 		user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")
 		var/obj/item/weapon/reagent_containers/glass/G = O
 		var/transfered = udder.trans_id_to(G, MILK, rand(5,10))
-		if(G.reagents.total_volume >= G.volume)
+		if (G.reagents.total_volume >= G.volume)
 			to_chat(user, "<span class='warning'>[O] is full.</span>")
-		if(!transfered)
+		if (!transfered)
 			to_chat(user, "<span class='warning'>The udder is dry. Wait a bit longer...</span>")
 	else
 		..()
@@ -117,32 +117,32 @@
 	..()
 
 /mob/living/simple_animal/cow/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(stat == CONSCIOUS && istype(O, /obj/item/weapon/reagent_containers/glass))
+	if (stat == CONSCIOUS && istype(O, /obj/item/weapon/reagent_containers/glass))
 		user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")
 		var/obj/item/weapon/reagent_containers/glass/G = O
 		var/transfered = udder.trans_id_to(G, MILK, rand(5,10))
-		if(G.reagents.total_volume >= G.volume)
+		if (G.reagents.total_volume >= G.volume)
 			to_chat(user, "<span class='warning'>[O] is full.</span>")
-		if(!transfered)
+		if (!transfered)
 			to_chat(user, "<span class='warning'>The udder is dry. Wait a bit longer...</span>")
 	else
 		..()
 
 /mob/living/simple_animal/cow/Life()
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
 	. = ..()
-	if(stat == CONSCIOUS)
-		if(udder && prob(5))
+	if (stat == CONSCIOUS)
+		if (udder && prob(5))
 			udder.add_reagent(MILK, rand(5, 10))
 
 /mob/living/simple_animal/cow/attack_hand(mob/living/carbon/M as mob)
-	if(!stat && M.a_intent == I_DISARM && icon_state != icon_dead)
+	if (!stat && M.a_intent == I_DISARM && icon_state != icon_dead)
 		M.visible_message("<span class='warning'>[M] tips over [src].</span>","<span class='notice'>You tip over [src].</span>")
 		Weaken(30)
 		icon_state = icon_dead
 		spawn(rand(20,50))
-			if(!stat && M)
+			if (!stat && M)
 				icon_state = icon_living
 				var/list/responses = list(	"[src] looks at you imploringly.",
 											"[src] looks at you pleadingly",
@@ -182,14 +182,14 @@
 	pixel_y = rand(0, 10) * PIXEL_MULTIPLIER
 
 /mob/living/simple_animal/chick/Life()
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
 	. =..()
-	if(!.)
+	if (!.)
 		return
-	if(!stat && !ckey)
+	if (!stat && !ckey)
 		amount_grown += rand(1,2)
-		if(amount_grown >= 100)
+		if (amount_grown >= 100)
 			new /mob/living/simple_animal/chicken(src.loc)
 			qdel(src)
 
@@ -217,11 +217,11 @@
 	size = SIZE_SMALL
 
 /mob/living/simple_animal/chicken/New()
-	if(prob(5))
+	if (prob(5))
 		name = "Pomf chicken"
 		body_color = "white"
 
-	if(!body_color)
+	if (!body_color)
 		body_color = pick( list("brown","black","white") )
 	icon_state = "chicken_[body_color]"
 	icon_living = "chicken_[body_color]"
@@ -231,9 +231,9 @@
 	pixel_y = rand(0, 10) * PIXEL_MULTIPLIER
 
 /mob/living/simple_animal/chicken/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat)) //feedin' dem chickens
-		if(!stat && eggsleft < 8)
-			if(!user.drop_item(O))
+	if (istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat)) //feedin' dem chickens
+		if (!stat && eggsleft < 8)
+			if (!user.drop_item(O))
 				user << "<span class='notice'>You can't let go of \the [O]!</span>"
 				return
 
@@ -243,25 +243,25 @@
 //			to_chat(world, eggsleft)
 		else
 			to_chat(user, "<span class='notice'>[name] doesn't seem hungry!</span>")
-	else if(istype(O, /obj/item/weapon/dnainjector))
+	else if (istype(O, /obj/item/weapon/dnainjector))
 		var/obj/item/weapon/dnainjector/I = O
 		I.inject(src, user)
 	else
 		..()
 
 /mob/living/simple_animal/chicken/Life()
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
 	. =..()
-	if(!.)
+	if (!.)
 		return
-	if(!stat && prob(3) && eggsleft > 0)
+	if (!stat && prob(3) && eggsleft > 0)
 		visible_message("[src] [pick("lays an egg.","squats down and croons.","begins making a huge racket.","begins clucking raucously.")]")
 		eggsleft--
 		var/obj/item/weapon/reagent_containers/food/snacks/egg/E = new(get_turf(src))
 		E.pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
 		E.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
-		if(animal_count[src.type] < ANIMAL_CHILD_CAP && prob(10))
+		if (animal_count[src.type] < ANIMAL_CHILD_CAP && prob(10))
 			processing_objects.Add(E)
 
 #define BOX_GROWTH_BAR 200
@@ -293,7 +293,7 @@
 	var/fat = 0
 
 /mob/living/simple_animal/hostile/retaliate/box/proc/updatefat()
-	if(size<SIZE_BIG)
+	if (size<SIZE_BIG)
 		size++
 		fat = 0
 	update_icon()
@@ -305,27 +305,27 @@
 
 /mob/living/simple_animal/hostile/retaliate/box/examine(mob/user)
 	..()
-	switch(size)
-		if(SIZE_SMALL)
+	switch (size)
+		if (SIZE_SMALL)
 			to_chat(user, "<span class='info'>It's a box baby.</span>")
-		if(SIZE_NORMAL)
+		if (SIZE_NORMAL)
 			to_chat(user, "<span class='info'>It's a respectable size.</span>")
-		if(SIZE_BIG)
+		if (SIZE_BIG)
 			to_chat(user, "<span class='info'>It's huge - a prize winning porker!</span>")
 
 /mob/living/simple_animal/hostile/retaliate/box/CanAttack(atom/A)
-	if(ishuman(A))
+	if (ishuman(A))
 		var/mob/living/carbon/human/H = A
-		if(isvox(H))
+		if (isvox(H))
 			return 0 //Won't attack Vox
 	else
 		..()
 
 /mob/living/simple_animal/hostile/retaliate/box/Life()
 	. = ..()
-	if(size<SIZE_BIG)
+	if (size<SIZE_BIG)
 		fat += rand(2)
-	if(fat>BOX_GROWTH_BAR)
+	if (fat>BOX_GROWTH_BAR)
 		updatefat()
 
 /mob/living/simple_animal/hostile/retaliate/box/death()
@@ -333,9 +333,9 @@
 	playsound(src, 'sound/effects/box_scream.ogg', 100, 1)
 
 /mob/living/simple_animal/hostile/retaliate/box/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom)) //Pigs like mushrooms
-		if(!stat && size < SIZE_BIG)
-			if(!user.drop_item(O))
+	if (istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom)) //Pigs like mushrooms
+		if (!stat && size < SIZE_BIG)
+			if (!user.drop_item(O))
 				user << "<span class='notice'>You can't let go of \the [O]!</span>"
 				return
 

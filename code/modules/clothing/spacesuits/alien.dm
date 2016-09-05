@@ -133,9 +133,9 @@
 
 /obj/item/clothing/shoes/magboots/vox/toggle()
 	//set name = "Toggle Floor Grip"
-	if(usr.isUnconscious())
+	if (usr.isUnconscious())
 		return
-	if(src.magpulse)
+	if (src.magpulse)
 		src.flags &= ~NOSLIP
 		src.magpulse = 0
 		to_chat(usr, "You relax your deathgrip on the flooring.")

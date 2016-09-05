@@ -122,7 +122,7 @@
 
 // Override here to prevent things accidentally moving around overlays.
 /atom/movable/lighting_overlay/forceMove(atom/destination, var/harderforce = 0)
-	if(harderforce)
+	if (harderforce)
 		. = ..()
 
 /atom/movable/lighting_overlay/resetVariables(...)

@@ -2,7 +2,7 @@
 	..()
 	update_hud()
 	updatePlasmaHUD()
-	if(!isturf(loc))
+	if (!isturf(loc))
 		client.eye = loc
 		client.perspective = EYE_PERSPECTIVE
 	return

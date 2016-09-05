@@ -23,7 +23,7 @@
 	var/bomb_appearance = null
 
 /obj/item/weapon/gun/projectile/blastcannon/Destroy()
-	if(bomb)
+	if (bomb)
 		qdel(bomb)
 		bomb = null
 	bomb_appearance = null
@@ -32,7 +32,7 @@
 	..()
 
 /obj/item/weapon/gun/projectile/blastcannon/attack_self(mob/user as mob)
-	if(!bomb)
+	if (!bomb)
 		return
 	else
 		bomb.forceMove(user.loc)
@@ -54,7 +54,7 @@
 
 /obj/item/weapon/gun/projectile/blastcannon/update_icon()
 	overlays.len = 0
-	if(!bomb || !bomb_appearance)
+	if (!bomb || !bomb_appearance)
 		return
 
 	var/image/bomb_icon = image('icons/obj/weaponsmithing.dmi', src, "nothing")
@@ -66,13 +66,13 @@
 	overlays += bomb_icon
 
 /obj/item/weapon/gun/projectile/blastcannon/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/device/transfer_valve))
+	if (istype(W, /obj/item/device/transfer_valve))
 		var/obj/item/device/transfer_valve/T = W
-		if(!T.tank_one || !T.tank_two)
+		if (!T.tank_one || !T.tank_two)
 			to_chat(user, "<span class='warning'>Nothing's going to happen if there[!T.tank_one && !T.tank_two ? " aren't any tanks" : "'s only one tank"] attached to \the [W]!</span>")
 			return
 		bomb_appearance = W.appearance
-		if(!user.drop_item(W, src))
+		if (!user.drop_item(W, src))
 			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
 			bomb_appearance = null
 			return 1
@@ -95,14 +95,14 @@
 	else if (locate (/obj/structure/table, src.loc))
 		return
 
-	if(!bomb)
+	if (!bomb)
 		return
 
-	if(!can_Fire(user, 1))
+	if (!can_Fire(user, 1))
 		return
 
 	else
-		if(bomb.damaged)
+		if (bomb.damaged)
 			click_empty(user)
 			return
 
@@ -114,10 +114,10 @@
 		temp = bomb_air_contents_1.remove_ratio(1)
 		bomb_air_contents_2.merge(temp)
 
-		if(!bomb_air_contents_2)
+		if (!bomb_air_contents_2)
 			return
 
-		if(bomb_air_contents_2)
+		if (bomb_air_contents_2)
 			bomb_air_contents_2.react()
 
 		var/pressure = bomb_air_contents_2.return_pressure()
@@ -128,15 +128,15 @@
 		var/medium_damage_range = 0
 		var/light_damage_range = 0
 
-		if(pressure > TANK_FRAGMENT_PRESSURE)
+		if (pressure > TANK_FRAGMENT_PRESSURE)
 			bomb_air_contents_2.react()
 			bomb_air_contents_2.react()
 			bomb_air_contents_2.react()
 			pressure = bomb_air_contents_2.return_pressure()
 			var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
 			uncapped = range
-			if(!ignorecap)
-				if(range > MAX_EXPLOSION_RANGE)
+			if (!ignorecap)
+				if (range > MAX_EXPLOSION_RANGE)
 					cap = 1
 				range = min(range, MAX_EXPLOSION_RANGE)
 			var/turf/epicenter = get_turf(loc)
@@ -155,7 +155,7 @@
 			medium_damage_range = round(range*0.5)
 			light_damage_range = round(range)
 
-			if(ismob(src.loc))
+			if (ismob(src.loc))
 				var/mob/shooter = src.loc
 				var/turf/shooterturf = get_turf(shooter)
 				var/area/R = get_area(shooterturf)
@@ -168,8 +168,8 @@
 				message_admins(log_str, 0, 1)
 				log_game(log_str)
 
-			for(var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
-				if(bhangmeter)
+			for (var/obj/machinery/computer/bhangmeter/bhangmeter in doppler_arrays)
+				if (bhangmeter)
 					bhangmeter.sense_explosion(epicenter.x,epicenter.y,epicenter.z,round(uncapped*0.25), round(uncapped*0.5), round(uncapped),"???", cap)
 
 		else
@@ -185,24 +185,24 @@
 			bomb.tank_one.air_contents = bomb_air_contents_1
 			bomb.tank_two.air_contents = bomb_air_contents_2
 
-		if(heavy_damage_range && medium_damage_range && light_damage_range)
+		if (heavy_damage_range && medium_damage_range && light_damage_range)
 			var/obj/item/projectile/bullet/blastwave/B = new(null)
 			B.heavy_damage_range = heavy_damage_range
 			B.medium_damage_range = medium_damage_range
 			B.light_damage_range = light_damage_range
 			in_chamber = B
-			if(Fire(A,user,params, "struggle" = struggle))
-				if(ismob(src.loc) && !isanimal(src.loc))
+			if (Fire(A,user,params, "struggle" = struggle))
+				if (ismob(src.loc) && !isanimal(src.loc))
 					var/mob/living/M = src.loc
 					var/turf/Q = get_turf(M)
 					var/turf/target
 					var/throwdir = turn(M.dir, 180)
-					if(istype(Q, /turf/space)) // if ended in space, then range is unlimited
+					if (istype(Q, /turf/space)) // if ended in space, then range is unlimited
 						target = get_edge_target_turf(Q, throwdir)
 					else						// otherwise limit to 10 tiles
 						target = get_ranged_target_turf(Q, throwdir, 10)
 					M.throw_at(target,100,4)
-					if(!(M.flags & INVULNERABLE))
+					if (!(M.flags & INVULNERABLE))
 						M.apply_effects(0, 2)
 						to_chat(user, "<span class='warning'>You're thrown back by the force of the blast!</span>")
 

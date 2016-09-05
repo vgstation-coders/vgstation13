@@ -11,14 +11,14 @@
 	proc/scan_atom(atom/A as mob|obj|turf|area)
 
 
-		if( !A || (!src.holder) || (!src.master))
+		if ( !A || (!src.holder) || (!src.master))
 			return 1
 
-		if((!istype(holder)) || (!istype(master)))
+		if ((!istype(holder)) || (!istype(master)))
 			return 1
 
-		if(!(holder in src.master.contents))
-			if(master.scan_program == src)
+		if (!(holder in src.master.contents))
+			if (master.scan_program == src)
 				master.scan_program = null
 			return 1
 
@@ -30,11 +30,11 @@
 		size = 8.0
 
 		scan_atom(atom/A as mob|obj|turf|area)
-			if(..())
+			if (..())
 				return
 
 			var/mob/living/carbon/C = A
-			if(!istype(C))
+			if (!istype(C))
 				return
 
 			var/dat = "<span class='notice'>Analyzing Results for [C]:\n</span>"
@@ -42,7 +42,7 @@
 			dat += "<span class='notice'>\t Damage Specifics: [C.getOxyLoss() > 50 ? "<span class='bad'>" : "<span class='notice'>"][C.getOxyLoss()]-[C.getToxLoss() > 50 ? "<span class='bad'>" : "<span class='notice'>"][C.getToxLoss()]-[C.getFireLoss() > 50 ? "<span class='bad'>" : "<span class='notice'>"][C.getFireLoss()]-[C.getBruteLoss() > 50 ? "<span class='bad'>" : "<span class='notice'>"][C.getBruteLoss()]\n</span>"
 			dat += "<span class='notice'>\t Key: Suffocation</span>/Toxin</span>/Burns</span>/Brute\n</span>"
 			dat += "<span class='notice'>\t Body Temperature: [C.bodytemperature-T0C]&deg;C ([C.bodytemperature*1.8-459.67]&deg;F)</span>"
-			if(C.virus)
+			if (C.virus)
 				dat += "<span class='danger'>\nWarning Virus Detected.\nName: [C.virus.name].\nType: [C.virus.spread].\nStage: [C.virus.stage]/[C.virus.max_stages].\nPossible Cure: [C.virus.cure]</span>"
 
 			return dat
@@ -53,11 +53,11 @@
 		size = 8.0
 
 		scan_atom(atom/A as mob|obj|turf|area)
-			if(..())
+			if (..())
 				return
 			var/dat = null
 
-			if(istype(A,/mob/living/carbon/human))
+			if (istype(A,/mob/living/carbon/human))
 				var/mob/living/carbon/human/H = A
 				if (!istype(H.dna, /datum/dna) || !isnull(H.gloves))
 					dat += "<span class='notice'>Unable to scan [A]'s fingerprints.\n</span>"
@@ -66,7 +66,7 @@
 				if ( !(H.blood_DNA.len) )
 					dat += "<span class='notice'>No blood found on [H]\n</span>"
 				else
-					for(var/i = 1, i < H.blood_DNA.len, i++)
+					for (var/i = 1, i < H.blood_DNA.len, i++)
 						var/list/templist = H.blood_DNA[i]
 						to_chat(user, "<span class='notice'>Blood type: [templist[2]]\nDNA: [templist[1]]</span>")
 
@@ -75,7 +75,7 @@
 			else
 				var/list/L = params2list(A:fingerprints)
 				dat += "<span class='notice'>Isolated [L.len] fingerprints.\n</span>"
-				for(var/i in L)
+				for (var/i in L)
 					dat += "<span class='notice'>\t [i]\n</span>"
 
 			return dat
@@ -87,11 +87,11 @@
 		size = 6.0
 
 		scan_atom(atom/A as mob|obj|turf|area)
-			if(..())
+			if (..())
 				return
 			var/dat = null
-			if(!isnull(A.reagents))
-				if(A.reagents.reagent_list.len > 0)
+			if (!isnull(A.reagents))
+				if (A.reagents.reagent_list.len > 0)
 					var/reagents_length = A.reagents.reagent_list.len
 					dat += "<span class='notice'>[reagents_length] chemical agent[reagents_length > 1 ? "s" : ""] found.\n</span>"
 					for (var/datum/reagent/re in A.reagents.reagent_list)

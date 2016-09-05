@@ -4,19 +4,19 @@ var/list/datum/craftlathe_item/CRAFT_ITEMS = list()
 var/CRAFT_ITEMS_SETUP = 1        //this should probably be a pre-game thing, but i'll do it so the first lathe2 that's created will set-up the recipes.
 
 proc/check_craftlathe_recipe(var/list/param_recipe)
-	if(param_recipe.len != 9)
+	if (param_recipe.len != 9)
 		return
 	var/i
 	var/match = 0 //this one counts if there is at least one non-"" ingredient.
-	for(var/datum/craftlathe_item/CI in CRAFT_ITEMS)
+	for (var/datum/craftlathe_item/CI in CRAFT_ITEMS)
 		match = 0
-		for(i = 1; i <= 9; i++)
-			if(CI.recipe[i] != param_recipe[i])
+		for (i = 1; i <= 9; i++)
+			if (CI.recipe[i] != param_recipe[i])
 				match = 0 //use this so it passes by the match > 0 check below, otherwise i'd need a new variable to tell the return CI below that the check failed
 				break
-			if(CI.recipe[i] != "")
+			if (CI.recipe[i] != "")
 				match++
-		if(match > 0)
+		if (match > 0)
 			return CI
 	return 0
 
@@ -52,7 +52,7 @@ proc/check_craftlathe_recipe(var/list/param_recipe)
 
 /obj/machinery/autolathe2/New()
 	..()
-	if(CRAFT_ITEMS_SETUP)
+	if (CRAFT_ITEMS_SETUP)
 		CRAFT_ITEMS_SETUP = 0
 		build_recipes()
 	return
@@ -65,7 +65,7 @@ proc/check_craftlathe_recipe(var/list/param_recipe)
 	dat += text("<b>Materials</b><p>")
 	var/datum/craftlathe_item/CI
 	var/i
-	for(i = 1; i <= craft_contents.len; i++)
+	for (i = 1; i <= craft_contents.len; i++)
 		CI = craft_contents[i]
 		if (CI == selected)
 			dat += text("[CI.name] ([CI.amount])<br>")
@@ -102,37 +102,37 @@ proc/check_craftlathe_recipe(var/list/param_recipe)
 	user << browse("[dat]", "window=craft")
 
 /obj/machinery/autolathe2/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 	usr.machine = src
 	src.add_fingerprint(usr)
-	if(href_list["remove"])
+	if (href_list["remove"])
 		var/n = text2num(href_list["remove"])
-		if(!n || n < 1 || n > 9)
+		if (!n || n < 1 || n > 9)
 			return
 		current_recipe[n] = ""
-	if(href_list["select"])
+	if (href_list["select"])
 		var/n = text2num(href_list["select"])
-		if(!n || n < 1 || n > 9)
+		if (!n || n < 1 || n > 9)
 			return
 		selected = craft_contents[n]
-	if(href_list["add"])
+	if (href_list["add"])
 		var/n = text2num(href_list["add"])
-		if(!n || n < 1 || n > 9)
+		if (!n || n < 1 || n > 9)
 			return
-		if(selected)
+		if (selected)
 			current_recipe[n] = selected.id
-	if(href_list["make"])
+	if (href_list["make"])
 		var/datum/craftlathe_item/MAKE = check_craftlathe_recipe(src.current_recipe)
-		if(MAKE)
+		if (MAKE)
 			for (var/datum/craftlathe_item/CI2 in craft_contents)
-				if(CI2.id == MAKE.id)
+				if (CI2.id == MAKE.id)
 					CI2.amount += CI2.amount_attackby
 					src.updateUsrDialog()
 					return
 			craft_contents += new/datum/craftlathe_item(MAKE.id,MAKE.name,MAKE.amount,MAKE.amount_attackby,MAKE.recipe,MAKE.item_type)
 	var/datum/craftlathe_item/CI = check_craftlathe_recipe(src.current_recipe)
-	if(CI)
+	if (CI)
 		make = CI
 	else
 		make = null
@@ -144,9 +144,9 @@ proc/check_craftlathe_recipe(var/list/param_recipe)
 	usr.machine = src
 	src.add_fingerprint(usr)
 	for (var/datum/craftlathe_item/CI in CRAFT_ITEMS)
-		if(W.type == CI.item_type)
+		if (W.type == CI.item_type)
 			for (var/datum/craftlathe_item/CI2 in craft_contents)
-				if(CI2.item_type == W.type)
+				if (CI2.item_type == W.type)
 					CI2.amount += CI2.amount_attackby
 					rmv_item(W)
 					return
@@ -157,7 +157,7 @@ proc/check_craftlathe_recipe(var/list/param_recipe)
 	return
 
 /obj/machinery/autolathe2/proc/rmv_item(obj/item/W as obj)
-	if(istype(W,/obj/item/stack))
+	if (istype(W,/obj/item/stack))
 		var/obj/item/stack/S = W
 		S.amount--
 		if (S.amount <= 0)

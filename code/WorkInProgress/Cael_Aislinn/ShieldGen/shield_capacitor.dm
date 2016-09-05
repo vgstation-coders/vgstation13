@@ -31,14 +31,14 @@
 
 /obj/machinery/shield_capacitor/New()
 	spawn(10)
-		for(var/obj/machinery/shield_gen/possible_gen in range(1, src))
-			if(get_dir(src, possible_gen) == src.dir)
+		for (var/obj/machinery/shield_gen/possible_gen in range(1, src))
+			if (get_dir(src, possible_gen) == src.dir)
 				possible_gen.owned_capacitor = src
 				break
 	..()
 
 /obj/machinery/shield_capacitor/emag(mob/user)
-	if(prob(75))
+	if (prob(75))
 		src.locked = !src.locked
 		to_chat(user, "Controls are now [src.locked ? "locked." : "unlocked."]")
 		updateDialog()
@@ -50,12 +50,12 @@
 	return
 
 /obj/machinery/shield_capacitor/wrenchAnchor(mob/user)
-	if(..())
-		for(var/obj/machinery/shield_gen/gen in range(1, src))
-			if(!src.anchored && gen.owned_capacitor == src)
+	if (..())
+		for (var/obj/machinery/shield_gen/gen in range(1, src))
+			if (!src.anchored && gen.owned_capacitor == src)
 				gen.owned_capacitor = null
 				break
-			else if(src.anchored && !gen.owned_capacitor)
+			else if (src.anchored && !gen.owned_capacitor)
 				gen.owned_capacitor = src
 				break
 			gen.updateDialog()
@@ -64,11 +64,11 @@
 	return
 
 /obj/machinery/shield_capacitor/attackby(obj/item/W, mob/user)
-	if(..())
+	if (..())
 		return 1
-	else if(istype(W, /obj/item/weapon/card/id))
+	else if (istype(W, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/C = W
-		if(access_captain in C.access || access_security in C.access || access_engine in C.access)
+		if (access_captain in C.access || access_security in C.access || access_engine in C.access)
 			src.locked = !src.locked
 			to_chat(user, "Controls are now [src.locked ? "locked." : "unlocked."]")
 			updateDialog()
@@ -83,7 +83,7 @@
 	return src.attack_hand(user)
 
 /obj/machinery/shield_capacitor/attack_hand(mob/user)
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 	interact(user)
 
@@ -94,7 +94,7 @@
 			user << browse(null, "window=shield_capacitor")
 			return
 	var/t = "<B>Shield Capacitor Control Console</B><br><br>"
-	if(locked)
+	if (locked)
 		t += "<i>Swipe your ID card to begin.</i>"
 	else
 		t += {"This capacitor is: [active ? "<font color=green>Online</font>" : "<font color=red>Offline</font>" ] <a href='?src=\ref[src];toggle=1'>[active ? "\[Deactivate\]" : "\[Activate\]"]</a><br>
@@ -116,9 +116,9 @@
 
 /obj/machinery/shield_capacitor/process()
 	//
-	if(active)
+	if (active)
 		use_power = 2
-		if(stored_charge + charge_rate > max_charge)
+		if (stored_charge + charge_rate > max_charge)
 			active_power_usage = max_charge - stored_charge
 		else
 			active_power_usage = charge_rate
@@ -127,37 +127,37 @@
 		use_power = 1
 
 	time_since_fail++
-	if(stored_charge < active_power_usage * 1.5)
+	if (stored_charge < active_power_usage * 1.5)
 		time_since_fail = 0
 
 /obj/machinery/shield_capacitor/Topic(href, href_list[])
-	if(!isAI(usr) && usr.z != z)
+	if (!isAI(usr) && usr.z != z)
 		return 1
 	..()
-	if( href_list["close"] )
+	if ( href_list["close"] )
 		usr << browse(null, "window=shield_capacitor")
 		usr.unset_machine()
 		return
-	if( href_list["toggle"] )
+	if ( href_list["toggle"] )
 		active = !active
-		if(active)
+		if (active)
 			use_power = 2
 		else
 			use_power = 1
-	if( href_list["charge_rate"] )
+	if ( href_list["charge_rate"] )
 		charge_rate += text2num(href_list["charge_rate"])
-		if(charge_rate > max_charge_rate)
+		if (charge_rate > max_charge_rate)
 			charge_rate = max_charge_rate
-		else if(charge_rate < min_charge_rate)
+		else if (charge_rate < min_charge_rate)
 			charge_rate = min_charge_rate
 	//
 	updateDialog()
 
 /obj/machinery/shield_capacitor/power_change()
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		icon_state = "broke"
 	else
-		if( powered() )
+		if ( powered() )
 			if (src.active)
 				icon_state = "capacitor"
 			else

@@ -26,20 +26,20 @@
 #define duration_increase_per_level 10
 
 /spell/aoe_turf/fall/empower_spell()
-	if(!can_improve(Sp_POWER))
+	if (!can_improve(Sp_POWER))
 		return 0
 	spell_levels[Sp_POWER]++
 	var/temp = ""
 	range++
 	sleeptime += duration_increase_per_level
-	switch(level_max[Sp_POWER] - spell_levels[Sp_POWER])
-		if(2)
+	switch (level_max[Sp_POWER] - spell_levels[Sp_POWER])
+		if (2)
 			temp = "Your control over time strengthens, you can now stop time for [sleeptime/10] second\s and in a radius of [range*2] meter\s."
 
 	return temp
 
 /spell/aoe_turf/fall/get_upgrade_info(upgrade_type, level)
-	if(upgrade_type == Sp_POWER)
+	if (upgrade_type == Sp_POWER)
 		return "Increase the spell's duration by [duration_increase_per_level/10] second\s and radius by 2 meters."
 	return ..()
 
@@ -63,30 +63,30 @@
 	var/y
 	var/i
 
-	for(y = -r, y <= r, y++)
+	for (y = -r, y <= r, y++)
 		x = round(sqrt(r_sqr - y*y))
-		for(i = -x, i <= x, i++)
+		for (i = -x, i <= x, i++)
 			. += "[x],[y]"
 
 /spell/aoe_turf/fall/perform(mob/user = usr, skipcharge = 0) //if recharge is started is important for the trigger spells
-	if(!holder)
+	if (!holder)
 		holder = user //just in case
-	if(!cast_check(skipcharge, user))
+	if (!cast_check(skipcharge, user))
 		return
-	if(cast_delay && !spell_do_after(user, cast_delay))
+	if (cast_delay && !spell_do_after(user, cast_delay))
 		return
 	var/list/targets = choose_targets(user)
-	if(targets && targets.len)
-		if(prob(the_world_chance))
+	if (targets && targets.len)
+		if (prob(the_world_chance))
 			invocation = "ZA WARUDO"
 		invocation(user, targets)
 		take_charge(user, skipcharge)
 
 		targets = before_cast(targets, user)
-		if(!targets.len)
+		if (!targets.len)
 			return
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
-		if(prob(critfailchance))
+		if (prob(critfailchance))
 			critfail(targets, user)
 		else
 			cast(targets, user)
@@ -97,18 +97,18 @@
 	var/turf/ourturf = get_turf(usr)
 
 	var/list/potentials = circlerangeturfs(usr, range)
-	if(istype(potentials) && potentials.len)
+	if (istype(potentials) && potentials.len)
 		targets = potentials
 	/*spawn(120)
 		del(aoe_underlay)
 		buildimage()*/
 	spawn()
-		for(var/client/C in clients)
-			if(C.mob)
+		for (var/client/C in clients)
+			if (C.mob)
 				C.mob.see_fall(ourturf, range)
 		spawn(10)
-		for(var/client/C in clients)
-			if(C.mob)
+		for (var/client/C in clients)
+			if (C.mob)
 				C.mob.see_fall()
 
 		//animate(aoe_underlay, transform = null, time = 2)
@@ -116,15 +116,15 @@
 	playsound(usr, oursound, 100, 0, 0, 0, 0)
 
 	sleepfor = world.time + sleeptime
-	for(var/turf/T in targets)
+	for (var/turf/T in targets)
 //		to_chat(world, "Starting [T]")
 		oureffects += getFromPool(/obj/effect/stop/sleeping, T, sleepfor, usr:mind, src, invocation == "ZA WARUDO")
-		for(var/atom/movable/everything in T)
+		for (var/atom/movable/everything in T)
 //			to_chat(world, "[T] doing [everything]")
-			if(isliving(everything))
+			if (isliving(everything))
 //				to_chat(world, "[everything] is living")
 				var/mob/living/L = everything
-				if(L == holder)
+				if (L == holder)
 					continue
 //				to_chat(world, "[everything] is not holder")
 //				to_chat(world, "paralyzing [everything]")
@@ -138,7 +138,7 @@
 //			to_chat(world, "checking for color invertion")
 			else
 				spawn() recursive_timestop(everything)
-				if(everything.ignoreinvert)
+				if (everything.ignoreinvert)
 //					to_chat(world, "[everything] is ignoring inverts.")
 					continue
 //				to_chat(world, "Inverting [everything] [everything.type] [everything.forceinvertredraw ? "forcing redraw" : ""]")
@@ -152,7 +152,7 @@
 //		to_chat(world, "Done")
 		/*var/icon/I = T.tempoverlay
 
-		if(!istype(I))
+		if (!istype(I))
 			I = icon(T.icon, T.icon_state, T.dir)
 			I.MapColors(-1,0,0, 0,-1,0, 0,0,-1, 1,1,1)
 		//else
@@ -182,14 +182,14 @@
 		processed_list[A] = A
 
 /spell/aoe_turf/fall/after_cast(list/targets)
-	while(world.time < sleepfor)
+	while (world.time < sleepfor)
 		sleep(1)
 	//animate(aoe_underlay, transform = aoe_underlay.transform / 50, time = 2)
-	for(var/obj/effect/stop/sleeping/S in oureffects)
+	for (var/obj/effect/stop/sleeping/S in oureffects)
 		returnToPool(S)
 		oureffects -= S
-	for(var/atom/everything in affected)
-		if(!istype(everything))
+	for (var/atom/everything in affected)
+		if (!istype(everything))
 			continue
 		everything.appearance = everything.tempoverlay
 		everything.tempoverlay = null
@@ -203,14 +203,14 @@
 
 /mob/proc/see_fall(var/turf/T, range = 8)
 	var/turf/T_mob = get_turf(src)
-	if((!T || isnull(T)) && fallimage)
+	if ((!T || isnull(T)) && fallimage)
 		animate(fallimage, transform = fallimage.transform / 50, time = 2)
 		sleep(2)
 		del(fallimage)
 		return
-	else if(T && T_mob && (T.z == T_mob.z) && (get_dist(T,T_mob) <= 15))// &&!(T in view(T_mob)))
+	else if (T && T_mob && (T.z == T_mob.z) && (get_dist(T,T_mob) <= 15))// &&!(T in view(T_mob)))
 		var/matrix/original
-		if(!fallimage)
+		if (!fallimage)
 			fallimage = image(icon = 'icons/effects/640x640.dmi', icon_state = "fall", layer = DECAL_LAYER)
 			fallimage.plane = ABOVE_TURF_PLANE
 			original = fallimage.transform
@@ -227,7 +227,7 @@
 
 /proc/invertcolor(atom/A)
 //	to_chat(world, "invert color start")
-	if(A.ignoreinvert)
+	if (A.ignoreinvert)
 		return
 	A.tempoverlay = A.appearance
 	A.color=	  list(-1,0,0,

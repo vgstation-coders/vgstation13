@@ -5,19 +5,19 @@
  * IMPORTANT: Multiple animate() calls do not stack well, so try to do them all at once if you can.
  */
 /mob/living/carbon/update_transform()
-	if(lying != lying_prev)
+	if (lying != lying_prev)
 		var/matrix/final_transform = matrix()
 		var/final_pixel_y = pixel_y
 		var/final_dir = dir
 
-		if(lying == 0) // lying to standing
+		if (lying == 0) // lying to standing
 			final_pixel_y += 6 * PIXEL_MULTIPLIER
 		else //if(lying != 0)
-			if(lying_prev == 0) // standing to lying
+			if (lying_prev == 0) // standing to lying
 				final_pixel_y -= 6 * PIXEL_MULTIPLIER
 				final_transform.Turn(90)
 
-		if(dir & (EAST | WEST)) // facing east or west
+		if (dir & (EAST | WEST)) // facing east or west
 			final_dir = pick(NORTH, SOUTH) // so you fall on your side rather than your face or ass
 
 		lying_prev = lying // so we don't try to animate until there's been another change.

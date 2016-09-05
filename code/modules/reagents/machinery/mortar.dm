@@ -59,7 +59,7 @@
 
 /obj/item/weapon/reagent_containers/glass/mortar/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if (isscrewdriver(O))
-		if(crushable)
+		if (crushable)
 			crushable.forceMove(user.loc)
 		new /obj/item/stack/sheet/metal(user.loc)
 		new /obj/item/trash/bowl(user.loc)
@@ -72,14 +72,14 @@
 		to_chat(user, "<span class ='warning'>You can't grind that!</span>")
 		return ..()
 
-	if(istype(O, /obj/item/stack/))
+	if (istype(O, /obj/item/stack/))
 		var/obj/item/stack/N = new O.type(src, amount=1)
 		var/obj/item/stack/S = O
 		S.use(1)
 		crushable = N
 		to_chat(user, "<span class='notice'>You place \the [N] in \the [src].</span>")
 		return 0
-	else if(!user.drop_item(O, src))
+	else if (!user.drop_item(O, src))
 		to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
 		return
 
@@ -89,53 +89,53 @@
 
 /obj/item/weapon/reagent_containers/glass/mortar/attack_hand(mob/user as mob)
 	add_fingerprint(user)
-	if(user.get_inactive_hand() != src)
+	if (user.get_inactive_hand() != src)
 		return ..()
-	if(crushable)
+	if (crushable)
 		crushable.forceMove(user.loc)
 		user.put_in_active_hand(crushable)
 		crushable = null
 	return
 
 /obj/item/weapon/reagent_containers/glass/mortar/attack_self(mob/user as mob)
-	if(!crushable)
+	if (!crushable)
 		to_chat(user, "<span class='notice'>There is nothing to be crushed.</span>")
 		return
 	if (reagents.total_volume >= volume)
 		to_chat(user, "<span class='warning'>There is no more space inside!</span>")
 		return
-	if(is_type_in_list(crushable, juice_items))
+	if (is_type_in_list(crushable, juice_items))
 		to_chat(user, "<span class='notice'>You smash the contents into juice!</span>")
 		var/id = null
-		for(var/i in juice_items)
-			if(istype(crushable, i))
+		for (var/i in juice_items)
+			if (istype(crushable, i))
 				id = juice_items[i]
-		if(!id)
+		if (!id)
 			return
 		var/obj/item/weapon/reagent_containers/food/snacks/grown/juiceable = crushable
-		if(juiceable.potency == -1)
+		if (juiceable.potency == -1)
 			juiceable.potency = 0
 		reagents.add_reagent(id[1], min(round(5*sqrt(juiceable.potency)), volume - reagents.total_volume))
-	else if(is_type_in_list(crushable, blend_items))
+	else if (is_type_in_list(crushable, blend_items))
 		to_chat(user, "<span class='notice'>You grind the contents into dust!</span>")
 		var/id = null
 		var/space = volume - reagents.total_volume
-		for(var/i in blend_items)
-			if(istype(crushable, i))
+		for (var/i in blend_items)
+			if (istype(crushable, i))
 				id = blend_items[i]
 				break
-		if(!id)
+		if (!id)
 			return
-		if(istype(crushable, /obj/item/weapon/reagent_containers/food/snacks)) //Most growable food
-			if(id[1] == "generic")
+		if (istype(crushable, /obj/item/weapon/reagent_containers/food/snacks)) //Most growable food
+			if (id[1] == "generic")
 				crushable.reagents.trans_to(src,crushable.reagents.total_volume)
 			else
 				reagents.add_reagent(id[1],min(id[2], space))
-		else if(istype(crushable, /obj/item/stack/sheet) || istype(crushable, /obj/item/seeds) || /obj/item/device/flashlight/flare || /obj/item/stack/cable_coil || /obj/item/weapon/cell || /obj/item/clothing/head/butt) //Generic processes
+		else if (istype(crushable, /obj/item/stack/sheet) || istype(crushable, /obj/item/seeds) || /obj/item/device/flashlight/flare || /obj/item/stack/cable_coil || /obj/item/weapon/cell || /obj/item/clothing/head/butt) //Generic processes
 			reagents.add_reagent(id[1],min(id[2], space))
-		else if(istype(crushable, /obj/item/weapon/grown)) //Nettle and death nettle
+		else if (istype(crushable, /obj/item/weapon/grown)) //Nettle and death nettle
 			crushable.reagents.trans_to(src,crushable.reagents.total_volume)
-		else if(istype(crushable, /obj/item/weapon/rocksliver)) //Xenoarch
+		else if (istype(crushable, /obj/item/weapon/rocksliver)) //Xenoarch
 			var/obj/item/weapon/rocksliver/R = crushable
 			reagents.add_reagent(id[1],min(id[2], space), R.geological_data)
 		else

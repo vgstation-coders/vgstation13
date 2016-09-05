@@ -35,43 +35,43 @@
 	var/right_part = softwareMenu()
 	src.set_machine(src)
 
-	if(temp)
+	if (temp)
 		left_part = temp
-	else if(src.stat == 2)						// Show some flavor text if the pAI is dead
+	else if (src.stat == 2)						// Show some flavor text if the pAI is dead
 		left_part = "<b><font color=red>ÈRrÖR Ða†Ä ÇÖRrÚþ†Ìoñ</font></b>"
 		right_part = "<pre>Program index hash not found</pre>"
 
 	else
-		switch(src.screen)							// Determine which interface to show here
-			if("main")
+		switch (src.screen)							// Determine which interface to show here
+			if ("main")
 				left_part = ""
-			if("directives")
+			if ("directives")
 				left_part = src.directives()
-			if("pdamessage")
+			if ("pdamessage")
 				left_part = src.pdamessage()
-			if("buy")
+			if ("buy")
 				left_part = downloadSoftware()
-			if("manifest")
+			if ("manifest")
 				left_part = src.softwareManifest()
-			if("medicalsupplement")
+			if ("medicalsupplement")
 				left_part = src.softwareMedicalRecord()
-			if("securitysupplement")
+			if ("securitysupplement")
 				left_part = src.softwareSecurityRecord()
-			if("translator")
+			if ("translator")
 				left_part = src.softwareTranslator()
-			if("atmosensor")
+			if ("atmosensor")
 				left_part = src.softwareAtmo()
-			if("wirejack")
+			if ("wirejack")
 				left_part = src.softwareDoor()
-			if("chemsynth")
+			if ("chemsynth")
 				left_part = src.softwareChem()
-			if("foodsynth")
+			if ("foodsynth")
 				left_part = src.softwareFood()
-			if("signaller")
+			if ("signaller")
 				left_part = src.softwareSignal()
-			if("shielding")
+			if ("shielding")
 				left_part = src.softwareShield()
-			if("flashlight")
+			if ("flashlight")
 				left_part = src.softwareLight()
 
 	//usr << browse_rsc('windowbak.png')		// This has been moved to the mob's Login() proc
@@ -124,22 +124,22 @@
 /mob/living/silicon/pai/Topic(href, href_list)
 	..()
 
-	if(href_list["priv_msg"])	// Admin-PMs were triggering the interface popup. Hopefully this will stop it.
+	if (href_list["priv_msg"])	// Admin-PMs were triggering the interface popup. Hopefully this will stop it.
 		return
 	var/soft = href_list["software"]
 	var/sub = href_list["sub"]
-	if(soft)
+	if (soft)
 		src.screen = soft
-	if(sub)
+	if (sub)
 		src.subscreen = text2num(sub)
-	switch(soft)
+	switch (soft)
 		// Purchasing new software
-		if("buy")
-			if(src.subscreen == 1)
+		if ("buy")
+			if (src.subscreen == 1)
 				var/target = href_list["buy"]
-				if(available_software.Find(target))
+				if (available_software.Find(target))
 					var/cost = src.available_software[target]
-					if(src.ram >= cost)
+					if (src.ram >= cost)
 						src.ram -= cost
 						src.software.Add(target)
 					else
@@ -148,70 +148,70 @@
 					src.temp = "Trunk <TT> \"[target]\"</TT> not found."
 
 		// Configuring onboard radio
-		if("radio")
+		if ("radio")
 			radio.attack_self(src)
 
-		if("image")
+		if ("image")
 			var/newImage = input("Select your new display image.", "Display Image", "Happy") in list("Happy", "Cat", "Extremely Happy",
 								 "Face", "Laugh", "Off", "Sad", "Angry", "What", "longface", "sick", "high", "love", "electric", "pissed",
 								 "nose", "kawaii", "cry")
 			var/pID = 1
 
-			switch(newImage)
-				if("Happy")
+			switch (newImage)
+				if ("Happy")
 					pID = 1
-				if("Cat")
+				if ("Cat")
 					pID = 2
-				if("Extremely Happy")
+				if ("Extremely Happy")
 					pID = 3
-				if("Face")
+				if ("Face")
 					pID = 4
-				if("Laugh")
+				if ("Laugh")
 					pID = 5
-				if("Off")
+				if ("Off")
 					pID = 6
-				if("Sad")
+				if ("Sad")
 					pID = 7
-				if("Angry")
+				if ("Angry")
 					pID = 8
-				if("What")
+				if ("What")
 					pID = 9
-				if("longface")
+				if ("longface")
 					pID = 10
-				if("sick")
+				if ("sick")
 					pID = 11
-				if("high")
+				if ("high")
 					pID = 12
-				if("love")
+				if ("love")
 					pID = 13
-				if("electric")
+				if ("electric")
 					pID = 14
-				if("pissed")
+				if ("pissed")
 					pID = 15
-				if("nose")
+				if ("nose")
 					pID = 16
-				if("kawaii")
+				if ("kawaii")
 					pID = 17
-				if("cry")
+				if ("cry")
 					pID = 18
 			src.card.setEmotion(pID)
 
-		if("signaller")
+		if ("signaller")
 
-			if(href_list["send"])
+			if (href_list["send"])
 
 				sradio.send_signal("ACTIVATE")
-				for(var/mob/O in hearers(1, src.loc))
+				for (var/mob/O in hearers(1, src.loc))
 					O.show_message("[bicon(src)] *beep* *beep*", 1, "*beep* *beep*", 2)
 
-			if(href_list["freq"])
+			if (href_list["freq"])
 
 				var/new_frequency = (sradio.frequency + text2num(href_list["freq"]))
-				if(new_frequency < 1200 || new_frequency > 1600)
+				if (new_frequency < 1200 || new_frequency > 1600)
 					new_frequency = sanitize_frequency(new_frequency)
 				sradio.set_frequency(new_frequency)
 
-			if(href_list["code"])
+			if (href_list["code"])
 
 				sradio.code += text2num(href_list["code"])
 				sradio.code = round(sradio.code)
@@ -220,100 +220,100 @@
 
 
 
-		if("directive")
-			if(href_list["getdna"])
+		if ("directive")
+			if (href_list["getdna"])
 				var/mob/living/M = src.loc
 				var/count = 0
-				while(!istype(M, /mob/living))
-					if(!M || !M.loc)
+				while (!istype(M, /mob/living))
+					if (!M || !M.loc)
 						return 0 //For a runtime where M ends up in nullspace (similar to bluespace but less colourful)
 					M = M.loc
 					count++
-					if(count >= 6)
+					if (count >= 6)
 						to_chat(src, "You are not being carried by anyone!")
 						return 0
 				spawn CheckDNA(M, src)
 
-		if("pdamessage")
-			if(!isnull(pda))
-				if(href_list["toggler"])
+		if ("pdamessage")
+			if (!isnull(pda))
+				if (href_list["toggler"])
 					pda.toff = !pda.toff
-				else if(href_list["ringer"])
+				else if (href_list["ringer"])
 					pda.silent = !pda.silent
-				else if(href_list["target"])
-					if(silence_time)
+				else if (href_list["target"])
+					if (silence_time)
 						return alert("Communications circuits remain unitialized.")
 
 					var/target = locate(href_list["target"])
 					pda.create_message(src, target)
 
 		// Accessing medical records
-		if("medicalsupplement")
+		if ("medicalsupplement")
 			src.medHUD = 1
-			if(src.subscreen == 1)
+			if (src.subscreen == 1)
 				var/datum/data/record/record = locate(href_list["med_rec"])
-				if(record)
+				if (record)
 					var/datum/data/record/R = record
 					var/datum/data/record/M = record
 					if (!( data_core.general.Find(R) ))
 						src.temp = "Unable to locate requested medical record. Record may have been deleted, or never have existed."
 					else
-						for(var/datum/data/record/E in data_core.medical)
+						for (var/datum/data/record/E in data_core.medical)
 							if ((E.fields["name"] == R.fields["name"] || E.fields["id"] == R.fields["id"]))
 								M = E
 						src.medicalActive1 = R
 						src.medicalActive2 = M
-		if("securitysupplement")
+		if ("securitysupplement")
 			src.secHUD = 1
-			if(src.subscreen == 1)
+			if (src.subscreen == 1)
 				var/datum/data/record/record = locate(href_list["sec_rec"])
-				if(record)
+				if (record)
 					var/datum/data/record/R = record
 					var/datum/data/record/M = record
 					if (!( data_core.general.Find(R) ))
 						src.temp = "Unable to locate requested security record. Record may have been deleted, or never have existed."
 					else
-						for(var/datum/data/record/E in data_core.security)
+						for (var/datum/data/record/E in data_core.security)
 							if ((E.fields["name"] == R.fields["name"] || E.fields["id"] == R.fields["id"]))
 								M = E
 						src.securityActive1 = R
 						src.securityActive2 = M
-		if("translator")
-			if(href_list["toggle"])
+		if ("translator")
+			if (href_list["toggle"])
 				universal_speak = !universal_speak
 				universal_understand = !universal_understand
-		if("wirejack")
-			if(href_list["cancel"])
+		if ("wirejack")
+			if (href_list["cancel"])
 				src.hacktarget = null
-		if("chemsynth")
-			if(href_list["chem"])
-				if(!istype(src.loc.loc,/mob/living/carbon))
+		if ("chemsynth")
+			if (href_list["chem"])
+				if (!istype(src.loc.loc,/mob/living/carbon))
 					to_chat(src, "<span class='warning'>You must have a carrier to inject with chemicals!</span>")
-				else if(chargeloop("chemsynth"))
-					if(istype(src.loc.loc,/mob/living/carbon)) //Sanity
+				else if (chargeloop("chemsynth"))
+					if (istype(src.loc.loc,/mob/living/carbon)) //Sanity
 						var/mob/living/M = src.loc.loc
 						M.reagents.add_reagent(href_list["chem"], 15)
 						playsound(get_turf(src.loc), 'sound/effects/bubbles.ogg', 50, 1)
 				else
 					to_chat(src, "<span class='warning'>Charge interrupted.</span>")
-		if("foodsynth")
-			if(href_list["food"] && chargeloop("foodsynth"))
+		if ("foodsynth")
+			if (href_list["food"] && chargeloop("foodsynth"))
 				var/obj/item/weapon/reagent_containers/food/F
 				switch (href_list["food"])
-					if("donut")
+					if ("donut")
 						F = new /obj/item/weapon/reagent_containers/food/snacks/donut/normal(get_turf(src))
-					if("banana")
+					if ("banana")
 						F = new /obj/item/weapon/reagent_containers/food/snacks/grown/banana(get_turf(src))
 					else
 						F = new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(get_turf(src))
 				var/mob/M = get_holder_of_type(src, /mob)
-				if(M)
+				if (M)
 					M.put_in_hands(F)
 				playsound(get_turf(src.loc), 'sound/machines/foodsynth.ogg', 50, 1)
-		if("flashlight")
-			if(href_list["toggle"])
+		if ("flashlight")
+			if (href_list["toggle"])
 				lighted = !lighted
-				if(lighted)
+				if (lighted)
 					card.set_light(4) //Equal to flashlight
 				else
 					card.set_light(0)
@@ -336,41 +336,41 @@
 
 	// Basic
 	dat += "<b>Basic</b> <br>"
-	for(var/s in src.software)
-		if(s == SOFT_CM)
+	for (var/s in src.software)
+		if (s == SOFT_CM)
 			dat += "<a href='byond://?src=\ref[src];software=manifest;sub=0'>Crew Manifest</a> <br>"
-		if(s == SOFT_DM)
+		if (s == SOFT_DM)
 			dat += "<a href='byond://?src=\ref[src];software=pdamessage;sub=0'>Digital Messenger</a> <br>"
-		if(s == SOFT_RS)
+		if (s == SOFT_RS)
 			dat += "<a href='byond://?src=\ref[src];software=signaller;sub=0'>Remote Signaller</a> <br>"
-		if(s == SOFT_AS)
+		if (s == SOFT_AS)
 			dat += "<a href='byond://?src=\ref[src];software=atmosensor;sub=0'>Atmospheric Sensor</a> <br>"
-		if(s == SOFT_FL)
+		if (s == SOFT_FL)
 			dat += "<a href='byond://?src=\ref[src];software=flashlight;sub=0'>Brightness Enhancer</a> <br>"
-		if(s == SOFT_RT)
+		if (s == SOFT_RT)
 			dat += "<a href='byond://?src=\ref[src];software=shielding;sub=0'>Redundant Threading</a> <br>"
 	dat += "<br>"
 
 	//Standard
 	dat += "<b>Standard</b> <br>"
-	for(var/s in src.software)
-		if(s == SOFT_MS)
+	for (var/s in src.software)
+		if (s == SOFT_MS)
 			dat += "<a href='byond://?src=\ref[src];software=medicalsupplement;sub=0'>Medical Package</a> <br>"
-		if(s == SOFT_SS)
+		if (s == SOFT_SS)
 			dat += "<a href='byond://?src=\ref[src];software=securitysupplement;sub=0'>Security Package</a> <br>"
-		if(s == SOFT_WJ)
+		if (s == SOFT_WJ)
 			dat += "<a href='byond://?src=\ref[src];software=wirejack;sub=0'>Wire Jack</a> <br>"
-		if(s == SOFT_UT)
+		if (s == SOFT_UT)
 			dat += "<a href='byond://?src=\ref[src];software=translator;sub=0'>Universal Translator</a>[(universal_understand) ? "<font color=#55FF55>�</font>" : "<font color=#FF5555>�</font>"] <br>"
-		if(s == SOFT_CS)
+		if (s == SOFT_CS)
 			dat += "<a href='byond://?src=\ref[src];software=chemsynth;sub=0'>Chemical Synthesizer</a> <br>"
-		if(s == SOFT_FS)
+		if (s == SOFT_FS)
 			dat += "<a href='byond://?src=\ref[src];software=foodsynth;sub=0'>Nutrition Synthesizer</a> <br>"
 	dat += "<br>"
 
 	// Advanced
 	dat += "<b>Advanced</b> <br>"
-	for(var/s in src.software)
+	for (var/s in src.software)
 		//This is where the computer interface software will go
 
 	dat += {"<br>
@@ -386,8 +386,8 @@
 	dat += {"<h2>CentComm pAI Module CVS Network</h2><br>
 		<pre>Remaining Available Memory: [src.ram]</pre><br>
 		<p style=\"text-align:center\"><b>Trunks available for checkout</b><br>"}
-	for(var/s in available_software)
-		if(!software.Find(s))
+	for (var/s in available_software)
+		if (!software.Find(s))
 			var/cost = src.available_software[s]
 			var/displayName = uppertext(s)
 			dat += "<a href='byond://?src=\ref[src];software=buy;sub=1;buy=[s]'>[displayName]</a> ([cost]) <br>"
@@ -422,13 +422,13 @@
 
 /mob/living/silicon/pai/proc/CheckDNA(var/mob/M, var/mob/living/silicon/pai/P)
 	var/answer = input(M, "[P] is requesting a DNA sample from you. Will you allow it to confirm your identity?", "[P] Check DNA", "No") in list("Yes", "No")
-	if(answer == "Yes")
+	if (answer == "Yes")
 		var/turf/T = get_turf(P.loc)
 		for (var/mob/v in viewers(T))
 			v.show_message("<span class='notice'>[M] presses \his thumb against [P].</span>", 1, "<span class='notice'>[P] makes a sharp clicking sound as it extracts DNA material from [M].</span>", 2)
 		var/datum/dna/dna = M.dna
 		to_chat(P, "<font color = red><h3>[M]'s UE string : [dna.unique_enzymes]</h3></font>")
-		if(dna.unique_enzymes == P.master_dna)
+		if (dna.unique_enzymes == P.master_dna)
 			to_chat(P, "<b>DNA is a match to stored Master DNA.</b>")
 		else
 			to_chat(P, "<b>DNA does not match stored Master DNA.</b>")
@@ -463,7 +463,7 @@
 /mob/living/silicon/pai/proc/softwareManifest()
 	var/dat = ""
 	dat += "<h2>Crew Manifest</h2><br><br>"
-	if(data_core)
+	if (data_core)
 		dat += data_core.get_manifest(0) // make it monochrome
 	dat += "<br>"
 	return dat
@@ -471,14 +471,14 @@
 // Medical Records
 /mob/living/silicon/pai/proc/softwareMedicalRecord()
 	var/dat = ""
-	if(src.subscreen == 0)
+	if (src.subscreen == 0)
 		dat += "<a href='byond://?src=\ref[src];software=medicalsupplement;sub=2'>Host Bioscan</a><br>"
 		dat += "<h3>Medical Records</h3><HR>"
-		if(!isnull(data_core.general))
-			for(var/datum/data/record/R in sortRecord(data_core.general))
+		if (!isnull(data_core.general))
+			for (var/datum/data/record/R in sortRecord(data_core.general))
 				dat += text("<A href='?src=\ref[];med_rec=\ref[];software=medicalsupplement;sub=1'>[]: []<BR>", src, R, R.fields["id"], R.fields["name"])
 		//dat += text("<HR><A href='?src=\ref[];screen=0;softFunction=medical records'>Back</A>", src)
-	if(src.subscreen == 1)
+	if (src.subscreen == 1)
 		dat += "<CENTER><B>Medical Record</B></CENTER><BR>"
 		if ((istype(src.medicalActive1, /datum/data/record) && data_core.general.Find(src.medicalActive1)))
 			dat += text("Name: [] ID: []<BR>\nSex: []<BR>\nAge: []<BR>\nFingerprint: []<BR>\nPhysical Status: []<BR>\nMental Status: []<BR>",
@@ -490,15 +490,15 @@
 		else
 			dat += "<pre>Requested medical record not found.</pre><BR>"
 		dat += text("<BR>\n<A href='?src=\ref[];software=medicalsupplement;sub=0'>Back</A><BR>", src)
-	if(src.subscreen == 2)
+	if (src.subscreen == 2)
 		dat += {"<h3>Medical Analysis Suite</h3><br>
 				 <h4>Host Bioscan</h4><br>
 				"}
 		var/mob/living/M = src.loc
-		if(!istype(M, /mob/living))
+		if (!istype(M, /mob/living))
 			while (!istype(M, /mob/living))
 				M = M.loc
-				if(istype(M, /turf))
+				if (istype(M, /turf))
 					src.temp = "Error: No biological host found. <br>"
 					src.subscreen = 0
 					return dat
@@ -511,7 +511,7 @@
 		Structural Integrity: [M.getBruteLoss() > 50 ? "<font color=#FF5555>" : "<font color=#55FF55>"][M.getBruteLoss()]</font><br>
 		Body Temperature: [M.bodytemperature-T0C]&deg;C ([M.bodytemperature*1.8-459.67]&deg;F)<br>
 		"}
-		for(var/datum/disease/D in M.viruses)
+		for (var/datum/disease/D in M.viruses)
 			dat += {"<h4>Infection Detected.</h4><br>
 					 Name: [D.name]<br>
 					 Type: [D.spread]<br>
@@ -524,12 +524,12 @@
 // Security Records
 /mob/living/silicon/pai/proc/softwareSecurityRecord()
 	var/dat = ""
-	if(src.subscreen == 0)
+	if (src.subscreen == 0)
 		dat += "<h3>Security Records</h3><HR>"
-		if(!isnull(data_core.general))
-			for(var/datum/data/record/R in sortRecord(data_core.general))
+		if (!isnull(data_core.general))
+			for (var/datum/data/record/R in sortRecord(data_core.general))
 				dat += text("<A href='?src=\ref[];sec_rec=\ref[];software=securitysupplement;sub=1'>[]: []<BR>", src, R, R.fields["id"], R.fields["name"])
-	if(src.subscreen == 1)
+	if (src.subscreen == 1)
 		dat += "<h3>Security Record</h3>"
 		if ((istype(src.securityActive1, /datum/data/record) && data_core.general.Find(src.securityActive1)))
 			dat += text("Name: <A href='?src=\ref[];field=name'>[]</A> ID: <A href='?src=\ref[];field=id'>[]</A><BR>\nSex: <A href='?src=\ref[];field=sex'>[]</A><BR>\nAge: <A href='?src=\ref[];field=age'>[]</A><BR>\nRank: <A href='?src=\ref[];field=rank'>[]</A><BR>\nFingerprint: <A href='?src=\ref[];field=fingerprint'>[]</A><BR>\nPhysical Status: []<BR>\nMental Status: []<BR>", src, src.securityActive1.fields["name"], src, src.securityActive1.fields["id"], src, src.securityActive1.fields["sex"], src, src.securityActive1.fields["age"], src, src.securityActive1.fields["rank"], src, src.securityActive1.fields["fingerprint"], src.securityActive1.fields["p_stat"], src.securityActive1.fields["m_stat"])
@@ -586,7 +586,7 @@
 				Oxygen: [round(o2_level*100)]%<br>
 				Carbon Dioxide: [round(co2_level*100)]%<br>
 				Plasma: [round(plasma_level*100)]%<br>"}
-			if(unknown_level > 0.01)
+			if (unknown_level > 0.01)
 				dat += "OTHER: [round(unknown_level)]%<br>"
 		dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
 
@@ -598,7 +598,7 @@
 
 	var/dat = {"<h3>Wirejack</h3>
 Target Machine: "}
-	if(!hacktarget)
+	if (!hacktarget)
 		dat += "<font color=#FFFF55>None</font> <br>"
 		return dat
 	else
@@ -608,17 +608,17 @@ Target Machine: "}
 	return dat
 
 /mob/living/silicon/pai/proc/hackloop(var/obj/machinery/M)
-	if(M)
+	if (M)
 		hacktarget = M
 	var/turf/T = get_turf(src.loc)
-	if(prob(10))
-		for(var/mob/living/silicon/ai/AI in player_list)
-			if(T.loc)
+	if (prob(10))
+		for (var/mob/living/silicon/ai/AI in player_list)
+			if (T.loc)
 				to_chat(AI, "<font color = red><b>Network Alert: Brute-force encryption crack in progress in [T.loc].</b></font>")
 			else
 				to_chat(AI, "<font color = red><b>Network Alert: Brute-force encryption crack in progress. Unable to pinpoint location.</b></font>")
-	while(src.hackprogress < 100)
-		if(hacktarget && get_dist(src, src.hacktarget) <= 1)
+	while (src.hackprogress < 100)
+		if (hacktarget && get_dist(src, src.hacktarget) <= 1)
 			hackprogress += rand(10, 20)
 		else
 			src.temp = "Process aborted."
@@ -626,13 +626,13 @@ Target Machine: "}
 			src.hacktarget = null
 			return 0
 		hackprogress = min(100,hackprogress) //Never go above 100
-		if(src.screen == "wirejack") // Update our view, if appropriate
+		if (src.screen == "wirejack") // Update our view, if appropriate
 			src.paiInterface()
 		else
 			hackprogress = 0
 			src.hacktarget = null
 			return 0
-		if(hackprogress >= 100)
+		if (hackprogress >= 100)
 			hackprogress = 0
 			hacktarget = null
 			playsound(get_turf(src.loc), 'sound/machines/ding.ogg', 50, 1)
@@ -641,7 +641,7 @@ Target Machine: "}
 
 /mob/living/silicon/pai/proc/softwareChem()
 	var/dat = "<h3>Chemical Synthesizer</h3>"
-	if(!charge)
+	if (!charge)
 		dat += {"Available Chemicals:<br>
 		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=tricordrazine'>Tricordrazine</a> <br>
 		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=coffee'>Coffee</a> <br>
@@ -652,7 +652,7 @@ Target Machine: "}
 
 /mob/living/silicon/pai/proc/softwareFood()
 	var/dat = "<h3>Nutrition Synthesizer</h3>"
-	if(!charge)
+	if (!charge)
 		dat += {"Available Culinary Deployments:<br>
 		<a href='byond://?src=\ref[src];software=foodsynth;sub=0;food=donut'>Donut</a> <br>
 		<a href='byond://?src=\ref[src];software=foodsynth;sub=0;food=banana'>Banana</a> <br>
@@ -663,14 +663,14 @@ Target Machine: "}
 
 //Used for chem synth and food synth. Charge 15 seconds, then output.
 /mob/living/silicon/pai/proc/chargeloop(var/mode)
-	if(!mode)
+	if (!mode)
 		return
-	while(charge < 15)
+	while (charge < 15)
 		charge++
-		if(charge >= 15)
+		if (charge >= 15)
 			charge = 0
 			return 1
-		if(src.screen == mode) // Update our view or cancel charge
+		if (src.screen == mode) // Update our view or cancel charge
 			src.paiInterface()
 		else
 			charge = 0
@@ -702,7 +702,7 @@ Target Machine: "}
 	<b>Ringer Status:</b> <A href='byond://?src=\ref[src];software=pdamessage;ringer=1'>
 	[(pda.silent) ? "<font color='red'> \[Off\]</font>" : "<font color='green'> \[On\]</font>"]</a><br><br>"}
 	dat += "<ul>"
-	if(!pda.toff)
+	if (!pda.toff)
 		for (var/obj/item/device/pda/P in sortNames(PDAs))
 			if (!P.owner||P.toff||P == src.pda||P.hidden)
 				continue

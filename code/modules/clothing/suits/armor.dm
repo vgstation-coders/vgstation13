@@ -151,7 +151,7 @@
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/armor/reactive/IsShield()
-	if(active)
+	if (active)
 		return 1
 	return 0
 
@@ -169,31 +169,31 @@
 	return
 
 /obj/item/clothing/suit/armor/reactive/on_block(damage, attack_text)
-	if(!prob(35))
+	if (!prob(35))
 		return 0 //35% chance
 
 	var/mob/living/carbon/human/L = loc
-	if(!istype(L))
+	if (!istype(L))
 		return 0 //Not living mob
-	if(L.wear_suit != src) //Not worn
+	if (L.wear_suit != src) //Not worn
 		return 0 //Don't do anything
 
 	var/list/turfs = new/list()
 
-	for(var/turf/T in orange(6, loc))
-		if(istype(T,/turf/space))
+	for (var/turf/T in orange(6, loc))
+		if (istype(T,/turf/space))
 			continue
-		if(T.density)
+		if (T.density)
 			continue
-		if(T.x>world.maxx-6 || T.x<6)
+		if (T.x>world.maxx-6 || T.x<6)
 			continue
-		if(T.y>world.maxy-6 || T.y<6)
+		if (T.y>world.maxy-6 || T.y<6)
 			continue
 		turfs += T
-	if(!turfs.len)
+	if (!turfs.len)
 		turfs += pick(/turf in orange(6))
 	var/turf/picked = pick(turfs)
-	if(!isturf(picked))
+	if (!isturf(picked))
 		return
 
 	L.visible_message("<span class='danger'>The reactive teleport system flings [L] clear of [attack_text]!</span>", "<span class='notice'>The reactive teleport system flings you clear of [attack_text].</span>")

@@ -1,21 +1,21 @@
 /mob/living/carbon/get_item_by_slot(slot_id)
-	switch(slot_id)
-		if(slot_back)
+	switch (slot_id)
+		if (slot_back)
 			return back
-		if(slot_wear_mask)
+		if (slot_wear_mask)
 			return wear_mask
-		if(slot_handcuffed)
+		if (slot_handcuffed)
 			return handcuffed
-		if(slot_legcuffed)
+		if (slot_legcuffed)
 			return legcuffed
 	return null
 
 /mob/living/carbon/u_equip(obj/item/W as obj, dropped = 1)
 	var/success = 0
-	if(!W)
+	if (!W)
 		return 0
 	else if (W == handcuffed)
-		if(handcuffed.on_remove(src)) //If this returns 1, then the unquipping action was interrupted
+		if (handcuffed.on_remove(src)) //If this returns 1, then the unquipping action was interrupted
 			return 0
 		handcuffed = null
 		success = 1
@@ -26,15 +26,15 @@
 		update_inv_legcuffed()
 	else
 		..()
-	if(success)
+	if (success)
 		if (W)
 			if (client)
 				client.screen -= W
 			W.forceMove(loc)
 			W.unequipped()
-			if(dropped)
+			if (dropped)
 				W.dropped(src)
-			if(W)
+			if (W)
 				W.reset_plane_and_layer()
 
 	return

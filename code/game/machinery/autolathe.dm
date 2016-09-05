@@ -147,11 +147,11 @@
 	return min(..(), (AUTOLATHE_MAX_TIME * time_coeff)) //we have set designs, so we can make them quickly
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/is_contraband(var/datum/design/part)
-	if(part in part_sets["Hidden_Items"])
+	if (part in part_sets["Hidden_Items"])
 		return 1
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/update_hacked()
-	if(screen == 51)
+	if (screen == 51)
 		screen = 11 //take the autolathe away from the contraband menu, since otherwise it can still print contraband until another category is selected
 	/*if(hacked)
 		part_sets["Items"] |= part_sets["Hidden Items"]
@@ -159,27 +159,27 @@
 		part_sets["Items"] -= part_sets["Hidden Items"]*/
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/attackby(obj/item/I, mob/user)
-	if(..())
+	if (..())
 		return 1
 
-	else if(I.materials)
-		if(I.materials.getVolume() + src.materials.getVolume() > max_material_storage)
+	else if (I.materials)
+		if (I.materials.getVolume() + src.materials.getVolume() > max_material_storage)
 			to_chat(user, "\The [src]'s material bin is too full to recycle \the [I].")
 			return 1
-		else if(I.materials.getAmount(MAT_IRON) + I.materials.getAmount(MAT_GLASS) < I.materials.getVolume())
+		else if (I.materials.getAmount(MAT_IRON) + I.materials.getAmount(MAT_GLASS) < I.materials.getVolume())
 			to_chat(user, "\The [src] can only accept objects made out of metal and glass.")
 			return 1
-		else if(isrobot(user))
-			if(isMoMMI(user))
+		else if (isrobot(user))
+			if (isMoMMI(user))
 				var/mob/living/silicon/robot/mommi/M = user
-				if(M.is_in_modules(I))
+				if (M.is_in_modules(I))
 					to_chat(user, "You cannot recycle your built in tools.")
 					return 1
 			else
 				to_chat(user, "You cannot recycle your built in tools.")
 				return 1
 
-		if(user.drop_item(I, src))
+		if (user.drop_item(I, src))
 			materials.removeFrom(I.materials)
 			user.visible_message("[user] puts \the [I] into \the [src]'s recycling unit.",
 								"You put \the [I] in \the [src]'s reycling unit.")

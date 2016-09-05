@@ -25,17 +25,17 @@
 
 /spell/targeted/equip_item/frenchcurse/cast(list/targets, mob/user = usr)
 	..()
-	for(var/mob/living/carbon/human/target in targets)
+	for (var/mob/living/carbon/human/target in targets)
 		target.flash_eyes(visual = 1)
 		target.miming = 1
 		var/spell = /spell/aoe_turf/conjure/forcewall/mime
-		if(!(locate(spell) in target.spell_list))
+		if (!(locate(spell) in target.spell_list))
 			target.add_spell(new /spell/aoe_turf/conjure/forcewall/mime)//They can't even acid the mime mask off, if they're going to be permanently muted they may as well get the benefits of the mime. Also they can't oathbreak.
 
 /spell/targeted/equip_item/frenchcurse/summon_item(var/newtype)
 	var/obj/item/new_item = new newtype
 	new_item.canremove = 0
-	if(istype(new_item, /obj/item/clothing/mask/gas/mime))
+	if (istype(new_item, /obj/item/clothing/mask/gas/mime))
 		var/obj/item/clothing/mask/gas/mime/M = new_item
 		M.can_flip = 0
 		M.muted = 1

@@ -9,7 +9,7 @@
 	var/disabled		= 0
 
 /obj/item/device/rcd/matter/engineering/afterattack(var/atom/A, var/mob/user)
-	if(disabled)
+	if (disabled)
 		return
 
 	return ..()
@@ -45,5 +45,5 @@
 	w_type = RECYK_ELECTRONIC
 
 /obj/item/weapon/rcd_ammo/attackby(var/obj/O, mob/user)
-	if(is_type_in_list(O, list(/obj/item/device/rcd/matter/engineering,  /obj/item/device/rcd/matter/rsf)) || (istype(O, /obj/item/device/material_synth) && !istype(O, /obj/item/device/material_synth/robot)))
+	if (is_type_in_list(O, list(/obj/item/device/rcd/matter/engineering,  /obj/item/device/rcd/matter/rsf)) || (istype(O, /obj/item/device/material_synth) && !istype(O, /obj/item/device/material_synth/robot)))
 		return O.attackby(src, user)

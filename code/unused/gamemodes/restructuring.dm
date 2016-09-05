@@ -33,7 +33,7 @@
 
 	target.store_memory("Head office has ordered your downsizing. Ruh roh", 0)
 
-	for(var/mob/living/silicon/ai/M in world)
+	for (var/mob/living/silicon/ai/M in world)
 		to_chat(M, "These are your laws now:")
 		M.set_zeroth_law("[target_desc] is not human.")
 		M.show_laws()
@@ -48,7 +48,7 @@
 		to_chat(world, "<span class='warning'><B>HEAD OFFICE: Cost cutting measures have achieved 100% efficiency. Thank you for understanding our position during this volatile economic downturn.</span>")
 		return 1
 	else
-		if(ticker.target.stat != 2)
+		if (ticker.target.stat != 2)
 			return 0
 		to_chat(world, "<span class='warning'><B>HEAD OFFICE: It seems we have made a mistake in our paperwork. The previous target for termination was chosen based on race, sex, and/or religious beliefs, which is against company policy. Please cancel previous termination request.</span>")
 		pick_target()
@@ -56,22 +56,22 @@
 
 /datum/game_mode/restructuring/proc/get_mob_list()
 	var/list/mobs = list()
-	for(var/mob/M in world)
+	for (var/mob/M in world)
 		if (M.stat<2 && M.client && istype(M, /mob/living/carbon/human))
 			mobs += M
 	return mobs
 
 /datum/game_mode/restructuring/proc/the_winner()
-	for(var/mob/M in world)
+	for (var/mob/M in world)
 		if (M.stat<2 && M.client && istype(M, /mob/living/carbon/human))
 			return M.name
 
 /datum/game_mode/restructuring/proc/get_target_desc(mob/target) //return a useful string describing the target
 	var/targetrank = null
-	for(var/datum/data/record/R in data_core.general)
+	for (var/datum/data/record/R in data_core.general)
 		if (R.fields["name"] == target.real_name)
 			targetrank = R.fields["rank"]
-	if(!targetrank)
+	if (!targetrank)
 		return "[target.name]"
 	return "[target.name] the [targetrank]"
 */

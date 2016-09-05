@@ -8,9 +8,9 @@
 	var/vin = null
 
 /obj/item/key/New()
-	if(vin)
-		for(var/obj/structure/bed/chair/vehicle/V in world)
-			if(V.vin == vin)
+	if (vin)
+		for (var/obj/structure/bed/chair/vehicle/V in world)
+			if (V.vin == vin)
 				paired_to = V
 				V.mykey = src
 
@@ -57,26 +57,26 @@
 	..()
 	processing_objects |= src
 
-	if(!nick)
+	if (!nick)
 		nick=name
 	set_keys()
 		
 /obj/structure/bed/chair/vehicle/proc/set_keys()
-	if(keytype && !vin)
+	if (keytype && !vin)
 		mykey = new keytype(src.loc)
 		mykey.paired_to=src
 
 /obj/structure/bed/chair/vehicle/process()
-	if(empstun > 0)
+	if (empstun > 0)
 		empstun--
-	if(empstun < 0)
+	if (empstun < 0)
 		empstun = 0
 
 /obj/structure/bed/chair/vehicle/attackby(obj/item/W, mob/user)
 	if (istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0))
-			if(destroyed)
+			if (destroyed)
 				to_chat(user, "<span class='warning'>\The [src.name] is destroyed beyond repair.</span>")
 			add_fingerprint(user)
 			user.visible_message("<span class='notice'>[user] has fixed some of the dents on \the [src].</span>", "<span class='notice'>You fix some of the dents on \the [src]</span>")
@@ -85,42 +85,42 @@
 		else
 			to_chat(user, "Need more welding fuel!")
 			return
-	else if(istype(W, /obj/item/key))
-		if(keytype)
+	else if (istype(W, /obj/item/key))
+		if (keytype)
 			to_chat(user, "Hold \the [W] in one of your hands while you drive \the [src].")
 		else
 			to_chat(user, "You don't need a key.")
 
 /obj/structure/bed/chair/vehicle/proc/check_key(var/mob/user)
-	if(!keytype)
+	if (!keytype)
 		return 1
-	if(mykey)
+	if (mykey)
 		return user.is_holding_item(mykey)
 
 /obj/structure/bed/chair/vehicle/relaymove(var/mob/living/user, direction)
-	if(user.incapacitated()  || destroyed)
+	if (user.incapacitated()  || destroyed)
 		unlock_atom(user)
 		return
-	if(!check_key(user))
+	if (!check_key(user))
 		to_chat(user, "<span class='notice'>You'll need the keys in one of your hands to drive \the [src].</span>")
 		return 0
-	if(empstun > 0)
-		if(user)
+	if (empstun > 0)
+		if (user)
 			to_chat(user, "<span class='warning'>\The [src] is unresponsive.</span>")
 		return 0
-	if(move_delayer.blocked())
+	if (move_delayer.blocked())
 		return 0
 
 	//If we're in space or our area has no gravity...
 	var/turf/T = loc
-	if(!T.has_gravity())
+	if (!T.has_gravity())
 		// Block relaymove() if needed.
-		if(!Process_Spacemove(0))
+		if (!Process_Spacemove(0))
 			return 0
 
 	var/can_pull_tether = 0
-	if(user.tether)
-		if(user.tether.attempt_to_follow(user,get_step(src,direction)))
+	if (user.tether)
+		if (user.tether.attempt_to_follow(user,get_step(src,direction)))
 			can_pull_tether = 1
 		else
 			var/datum/chain/tether_datum = user.tether.chain_datum
@@ -130,35 +130,35 @@
 	step(src, direction)
 	delayNextMove(getMovementDelay())
 
-	if(T != loc)
+	if (T != loc)
 		user.handle_hookchain(direction)
 
-	if(user.tether && can_pull_tether)
+	if (user.tether && can_pull_tether)
 		user.tether.follow(user,T)
 		var/datum/chain/tether_datum = user.tether.chain_datum
-		if(!tether_datum.Check_Integrity())
+		if (!tether_datum.Check_Integrity())
 			tether_datum.snap = 1
 			tether_datum.Delete_Chain()
 
 	update_mob()
 	/*
-	if(istype(src.loc, /turf/space) && (!src.Process_Spacemove(0, user)))
+	if (istype(src.loc, /turf/space) && (!src.Process_Spacemove(0, user)))
 		var/turf/space/S = src.loc
 		S.Entered(src)*/
 
 /obj/structure/bed/chair/vehicle/proc/can_buckle(mob/M, mob/user)
-	if(M != user || !ishuman(user) || !Adjacent(user) || user.restrained() || user.lying || user.stat || user.locked_to || destroyed || occupant)
+	if (M != user || !ishuman(user) || !Adjacent(user) || user.restrained() || user.lying || user.stat || user.locked_to || destroyed || occupant)
 		return 0
-	if(ishuman(M))
+	if (ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(H.mind && H.mind.special_role == HIGHLANDER)
-			if(user == M)
+		if (H.mind && H.mind.special_role == HIGHLANDER)
+			if (user == M)
 				to_chat(user, "<span class='warning'>A true highlander has no need for a mount!</span>")
 			return 0
 	return 1
 
 /obj/structure/bed/chair/vehicle/buckle_mob(mob/M, mob/user)
-	if(!can_buckle(M,user))
+	if (!can_buckle(M,user))
 		return
 
 	M.visible_message(\
@@ -170,7 +170,7 @@
 	add_fingerprint(user)
 
 /obj/structure/bed/chair/vehicle/handle_layer()
-	if(dir == SOUTH)
+	if (dir == SOUTH)
 		plane = ABOVE_HUMAN_PLANE
 		layer = VEHICLE_LAYER
 	else
@@ -183,28 +183,28 @@
 	update_mob()
 
 /obj/structure/bed/chair/vehicle/proc/update_mob()
-	if(!occupant)
+	if (!occupant)
 		return
 
-	switch(dir)
-		if(SOUTH)
+	switch (dir)
+		if (SOUTH)
 			occupant.pixel_x = 0
 			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
-		if(WEST)
+		if (WEST)
 			occupant.pixel_x = 13 * PIXEL_MULTIPLIER
 			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
-		if(NORTH)
+		if (NORTH)
 			occupant.pixel_x = 0
 			occupant.pixel_y = 4 * PIXEL_MULTIPLIER
-		if(EAST)
+		if (EAST)
 			occupant.pixel_x = -13 * PIXEL_MULTIPLIER
 			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
 
 /obj/structure/bed/chair/vehicle/emp_act(severity)
-	switch(severity)
-		if(1)
+	switch (severity)
+		if (1)
 			src.empstun = (rand(5,10))
-		if(2)
+		if (2)
 			src.empstun = (rand(1,5))
 	src.visible_message("<span class='danger'>The [src.name]'s motor short circuits!</span>")
 	spark_system.attach(src)
@@ -213,48 +213,48 @@
 
 /obj/structure/bed/chair/vehicle/bullet_act(var/obj/item/projectile/Proj)
 	var/hitrider = 0
-	if(istype(Proj, /obj/item/projectile/ion))
+	if (istype(Proj, /obj/item/projectile/ion))
 		Proj.on_hit(src, 2)
 		return
 
-	if(occupant)
-		if(prob(75))
+	if (occupant)
+		if (prob(75))
 			hitrider = 1
 			var/act = occupant.bullet_act(Proj)
-			if(act >= 0)
+			if (act >= 0)
 				visible_message("<span class='warning'>[occupant] is hit by \the [Proj]!")
-				if(istype(Proj, /obj/item/projectile/energy))
+				if (istype(Proj, /obj/item/projectile/energy))
 					unlock_atom(occupant)
 			return
-		if(istype(Proj, /obj/item/projectile/energy/electrode))
-			if(prob(25))
+		if (istype(Proj, /obj/item/projectile/energy/electrode))
+			if (prob(25))
 				visible_message("<span class='warning'>\The [src.name] absorbs \the [Proj]")
-				if(!istype(occupant, /mob/living/carbon/human))
+				if (!istype(occupant, /mob/living/carbon/human))
 					occupant.bullet_act(Proj)
 				else
 					var/mob/living/carbon/human/H = occupant
 					H.electrocute_act(0, src, 1, 0)
 				unlock_atom(occupant)
 
-	if(!hitrider)
+	if (!hitrider)
 		visible_message("<span class='warning'>[Proj] hits \the [nick]!</span>")
-		if(!Proj.nodamage && Proj.damage_type == BRUTE || Proj.damage_type == BURN)
+		if (!Proj.nodamage && Proj.damage_type == BRUTE || Proj.damage_type == BURN)
 			health -= Proj.damage
 		HealthCheck()
 
 /obj/structure/bed/chair/vehicle/proc/HealthCheck()
-	if(health > max_health)
+	if (health > max_health)
 		health = max_health
-	if(health <= 0 && !destroyed)
+	if (health <= 0 && !destroyed)
 		die()
 
 /obj/structure/bed/chair/vehicle/ex_act(severity)
 	switch (severity)
-		if(1.0)
+		if (1.0)
 			health -= 100
-		if(2.0)
+		if (2.0)
 			health -= 75
-		if(3.0)
+		if (3.0)
 			health -= 45
 	HealthCheck()
 
@@ -267,28 +267,28 @@
 	unlock_atom(occupant)
 
 /obj/structure/bed/chair/vehicle/Bump(var/atom/movable/obstacle)
-	if(obstacle == src || (locked_atoms.len && obstacle == locked_atoms[1]))
+	if (obstacle == src || (locked_atoms.len && obstacle == locked_atoms[1]))
 		return
 
-	if(istype(obstacle, /obj/structure))// || istype(obstacle, /mob/living)
-		if(!obstacle.anchored)
+	if (istype(obstacle, /obj/structure))// || istype(obstacle, /mob/living)
+		if (!obstacle.anchored)
 			obstacle.Move(get_step(obstacle,src.dir))
 	..()
 
 /obj/structure/bed/chair/vehicle/unlock_atom(var/atom/movable/AM)
 	. = ..()
-	if(!.)
+	if (!.)
 		return
 
 	AM.pixel_x = 0
 	AM.pixel_y = 0
 
-	if(occupant == AM)
+	if (occupant == AM)
 		occupant = null
 
 /obj/structure/bed/chair/vehicle/lock_atom(var/atom/movable/AM)
 	. = ..()
-	if(!.)
+	if (!.)
 		return
 
 	occupant = AM

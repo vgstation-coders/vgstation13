@@ -11,21 +11,21 @@
 
 /datum/job_objective/maximize_research/check_for_completion()
 	var/obj/machinery/r_n_d/server/server = null
-	for(var/obj/machinery/r_n_d/server/serber in machines)
-		if(serber.name == "Core R&D Server")
+	for (var/obj/machinery/r_n_d/server/serber in machines)
+		if (serber.name == "Core R&D Server")
 			server=serber
 			break
-	if(!server)
+	if (!server)
 		// This was just used for testing.
 //		to_chat(world, "UNABLE TO FIND A GODDAMN RND SERVER. FUCK.")
 		return
-	for(var/datum/tech/T in tech_list)
-		if(T.goal_level==0) // Ignore illegal tech, etc
+	for (var/datum/tech/T in tech_list)
+		if (T.goal_level==0) // Ignore illegal tech, etc
 			continue
 		var/datum/tech/KT  = locate(T.type, server.files.known_tech)
-		if(!KT)
+		if (!KT)
 			return 0 // Obviously haven't maxed everything if we don't know a tech.
-		if(KT.level<T.goal_level)
+		if (KT.level<T.goal_level)
 			return 0
 	return 1
 

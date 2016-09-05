@@ -42,7 +42,7 @@ var/list/poddoors = list()
 
 /obj/machinery/door/poddoor/New()
 	. = ..()
-	if(density)
+	if (density)
 		layer = closed_layer
 	else
 		layer = open_layer
@@ -54,7 +54,7 @@ var/list/poddoors = list()
 	..()
 
 /obj/machinery/door/poddoor/Bumped(atom/AM)
-	if(!density)
+	if (!density)
 		return ..()
 	else
 		return 0
@@ -80,7 +80,7 @@ var/list/poddoors = list()
 		return
 	if (!ticker)
 		return 0
-	if(!src.operating) //in case of emag
+	if (!src.operating) //in case of emag
 		src.operating = 1
 	flick(openingicon, src)
 	src.icon_state = openicon
@@ -90,9 +90,9 @@ var/list/poddoors = list()
 	src.density = 0
 	update_nearby_tiles()
 
-	if(operating == 1) //emag again
+	if (operating == 1) //emag again
 		src.operating = 0
-	if(autoclose)
+	if (autoclose)
 		spawn(150)
 			autoclose()
 	return 1
@@ -113,23 +113,23 @@ var/list/poddoors = list()
 	return
 
 /obj/machinery/door/poddoor/ex_act(severity)//Wouldn't it make sense for "Blast Doors" to actually handle explosions better than other doors?
-	switch(severity)
-		if(1.0)
-			if(prob(80))
+	switch (severity)
+		if (1.0)
+			if (prob(80))
 				qdel(src)
 			else
 				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 				s.set_up(2, 1, src)
 				s.start()
-		if(2.0)
-			if(prob(20))
+		if (2.0)
+			if (prob(20))
 				qdel(src)
 			else
 				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 				s.set_up(2, 1, src)
 				s.start()
-		if(3.0)
-			if(prob(80))
+		if (3.0)
+			if (prob(80))
 				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 				s.set_up(2, 1, src)
 				s.start()
@@ -141,7 +141,7 @@ var/list/poddoors = list()
 		return
 	if (!ticker)
 		return 0
-	if(!src.operating) //in case of emag
+	if (!src.operating) //in case of emag
 		src.operating = 1
 	flick("pdoorc0", src)
 	src.icon_state = "pdoor0"
@@ -156,9 +156,9 @@ var/list/poddoors = list()
 
 	update_nearby_tiles()
 
-	if(operating == 1) //emag again
+	if (operating == 1) //emag again
 		src.operating = 0
-	if(autoclose)
+	if (autoclose)
 		spawn(150)
 			autoclose()
 	return 1
@@ -189,7 +189,7 @@ var/list/poddoors = list()
 		return
 	if (!ticker)
 		return 0
-	if(!src.operating) //in case of emag
+	if (!src.operating) //in case of emag
 		src.operating = 1
 	flick("pdoorc0", src)
 	src.icon_state = "pdoor0"
@@ -208,9 +208,9 @@ var/list/poddoors = list()
 
 	update_nearby_tiles()
 
-	if(operating == 1) //emag again
+	if (operating == 1) //emag again
 		src.operating = 0
-	if(autoclose)
+	if (autoclose)
 		spawn(150)
 			autoclose()
 	return 1
@@ -245,7 +245,7 @@ var/list/poddoors = list()
 		return
 	if (!ticker)
 		return 0
-	if(!src.operating) //in case of emag
+	if (!src.operating) //in case of emag
 		src.operating = 1
 	flick("pdoorc0", src)
 	src.icon_state = "pdoor0"
@@ -260,9 +260,9 @@ var/list/poddoors = list()
 
 	update_nearby_tiles()
 
-	if(operating == 1) //emag again
+	if (operating == 1) //emag again
 		src.operating = 0
-	if(autoclose)
+	if (autoclose)
 		spawn(150)
 			autoclose()
 	return 1
@@ -293,7 +293,7 @@ var/list/poddoors = list()
 		return
 	if (!ticker)
 		return 0
-	if(!src.operating) //in case of emag
+	if (!src.operating) //in case of emag
 		src.operating = 1
 	flick("pdoorc0", src)
 	src.icon_state = "pdoor0"
@@ -312,9 +312,9 @@ var/list/poddoors = list()
 
 	update_nearby_tiles()
 
-	if(operating == 1) //emag again
+	if (operating == 1) //emag again
 		src.operating = 0
-	if(autoclose)
+	if (autoclose)
 		spawn(150)
 			autoclose()
 	return 1

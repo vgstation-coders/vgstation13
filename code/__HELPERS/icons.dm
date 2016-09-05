@@ -1,8 +1,8 @@
 proc
 	getIconMask(atom/A)//By yours truly. Creates a dynamic mask for a mob/whatever. /N
 		var/icon/alpha_mask = new(A.icon,A.icon_state)//So we want the default icon and icon state of A.
-		for(var/I in A.overlays)//For every image in overlays. var/image/I will not work, don't try it.
-			if(I:layer>A.layer)
+		for (var/I in A.overlays)//For every image in overlays. var/image/I will not work, don't try it.
+			if (I:layer>A.layer)
 				continue//If layer is greater than what we need, skip it.
 			var/icon/image_overlay = new(I:icon,I:icon_state)//Blend only works with icon objects.
 			//Also, icons cannot directly set icon_state. Slower than changing variables but whatever.
@@ -16,16 +16,16 @@ proc
 	var/icon/alpha_mask = getIconMask(src)//Which is why I created that proc. Also a little slow since it's blending a bunch of icons together but good enough.
 	opacity_icon.AddAlphaMask(alpha_mask)//Likely the main source of lag for this proc. Probably not designed to run each tick.
 	opacity_icon.ChangeOpacity(0.4)//Front end for MapColors so it's fast. 0.5 means half opacity and looks the best in my opinion.
-	for(var/i=0,i<5,i++)//And now we add it as overlays. It's faster than creating an icon and then merging it.
+	for (var/i=0,i<5,i++)//And now we add it as overlays. It's faster than creating an icon and then merging it.
 		var/image/I = image("icon" = opacity_icon, "icon_state" = A.icon_state, "layer" = layer+0.8)//So it's above other stuff but below weapons and the like.
-		switch(i)//Now to determine offset so the result is somewhat blurred.
-			if(1)
+		switch (i)//Now to determine offset so the result is somewhat blurred.
+			if (1)
 				I.pixel_x--
-			if(2)
+			if (2)
 				I.pixel_x++
-			if(3)
+			if (3)
 				I.pixel_y--
-			if(4)
+			if (4)
 				I.pixel_y++
 		overlays += I//And finally add the overlay.
 
@@ -54,16 +54,16 @@ proc
 	return blank_icon
 
 /proc/getLetterImage(atom/A, letter = "", uppercase = 0)
-	if(!A)
+	if (!A)
 		return
 
 	var/icon/atom_icon = new(A.icon, A.icon_state)
 
-	if(!letter)
+	if (!letter)
 		letter = copytext(A.name, 1, 2)
-		if(uppercase == 1)
+		if (uppercase == 1)
 			letter = uppertext(letter)
-		else if(uppercase == -1)
+		else if (uppercase == -1)
 			letter = lowertext(letter)
 
 	var/image/text_image = new(loc = A)
@@ -77,7 +77,7 @@ proc
 //For photo camera.
 /proc/build_composite_icon(atom/A)
 	var/icon/composite = icon(A.icon, A.icon_state, A.dir, 1)
-	for(var/O in A.overlays)
+	for (var/O in A.overlays)
 		var/image/I = O
 		var/icon/C = icon(I.icon, I.icon_state, I.dir, 1)
 		C.Blend(I.color, ICON_MULTIPLY)
@@ -98,10 +98,10 @@ proc/adjust_brightness(var/color, var/value)
 
 /proc/ListColors(var/icon/I, var/ignoreGreyscale = 0)
 	var/list/colors = list()
-	for(var/x_pixel = 1 to I.Width())
-		for(var/y_pixel = 1 to I.Height())
+	for (var/x_pixel = 1 to I.Width())
+		for (var/y_pixel = 1 to I.Height())
 			var/this_color = I.GetPixel(x_pixel, y_pixel)
-			if(this_color)
+			if (this_color)
 				if (ignoreGreyscale && ReadHSV(RGBtoHSV(this_color))[2] == 0) //If saturation is 0, must be greyscale
 					continue
 				colors.Add(this_color)
@@ -111,7 +111,7 @@ proc/adjust_brightness(var/color, var/value)
 //Accurate: Use more accurate color averaging, usually has better results and prevents muddied or overly dark colors. Mad thanks to wwjnc.
 //ignoreGreyscale: Excempts greyscale colors from the color list, useful for filtering outlines or plate overlays.
 	var/list/colors = ListColors(I, ignoreGreyscale)
-	if(!colors.len)
+	if (!colors.len)
 		return null
 
 	var/list/colorsum = list(0, 0, 0) //Holds the sum of the RGB values to calculate the average
@@ -120,14 +120,14 @@ proc/adjust_brightness(var/color, var/value)
 
 	var/final_average
 	if (accurate) //keeping it legible
-		for(var/i = 1 to total)
+		for (var/i = 1 to total)
 			RGB = ReadRGB(colors[i])
 			colorsum[1] += RGB[1]*RGB[1]
 			colorsum[2] += RGB[2]*RGB[2]
 			colorsum[3] += RGB[3]*RGB[3]
 		final_average = rgb(sqrt(colorsum[1]/total), sqrt(colorsum[2]/total), sqrt(colorsum[3]/total))
 	else
-		for(var/i = 1 to total)
+		for (var/i = 1 to total)
 			RGB = ReadRGB(colors[i])
 			colorsum[1] += RGB[1]
 			colorsum[2] += RGB[2]
@@ -136,8 +136,8 @@ proc/adjust_brightness(var/color, var/value)
 	return final_average
 
 /proc/empty_Y_space(var/icon/I) //Returns the amount of lines containing only transparent pixels in an icon, starting from the bottom
-	for(var/y_pixel = 1 to I.Height())
-		for(var/x_pixel = 1 to I.Width())
+	for (var/y_pixel = 1 to I.Height())
+		for (var/x_pixel = 1 to I.Width())
 			if (I.GetPixel(x_pixel, y_pixel))
 				return y_pixel - 1
 	return null

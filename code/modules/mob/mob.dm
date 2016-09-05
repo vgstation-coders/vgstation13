@@ -12,7 +12,7 @@
 
 	Click()
 		var/mob/M = usr
-		if(!istype(M))
+		if (!istype(M))
 			return
 		M.stat_fucked = !M.stat_fucked
 
@@ -23,28 +23,28 @@ var/global/obj/screen/fuckstat/FUCK = new
 /mob/burnFireFuel(var/used_fuel_ratio,var/used_reactants_ratio)
 
 /mob/Destroy() // This makes sure that mobs with clients/keys are not just deleted from the game.
-	for(var/datum/mind/mind in heard_by)
-		for(var/M in mind.heard_before)
-			if(mind.heard_before[M] == src)
+	for (var/datum/mind/mind in heard_by)
+		for (var/M in mind.heard_before)
+			if (mind.heard_before[M] == src)
 				mind.heard_before[M] = null
-	if(on_uattack)
+	if (on_uattack)
 		on_uattack.holder = null
 	unset_machine()
-	if(mind && mind.current == src)
+	if (mind && mind.current == src)
 		mind.current = null
 	spellremove(src)
-	if(istype(src,/mob/living/carbon))//iscarbon is defined at the mob/living level
+	if (istype(src,/mob/living/carbon))//iscarbon is defined at the mob/living level
 		var/mob/living/carbon/Ca = src
 		Ca.dropBorers(1)//sanity checking for borers that haven't been qdel'd yet
-	if(client)
-		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
+	if (client)
+		for (var/obj/screen/movable/spell_master/spell_master in spell_masters)
 			returnToPool(spell_master)
 		spell_masters = null
 		remove_screen_objs()
-		for(var/atom/movable/AM in client.screen)
+		for (var/atom/movable/AM in client.screen)
 			var/obj/screen/screenobj = AM
-			if(istype(screenobj))
-				if(!screenobj.globalscreen) //Screens taken care of in other places or used by multiple people
+			if (istype(screenobj))
+				if (!screenobj.globalscreen) //Screens taken care of in other places or used by multiple people
 					returnToPool(AM)
 			else
 				qdel(AM)
@@ -60,7 +60,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 	gui_icons = null
 	qdel(hud_used)
 	hud_used = null
-	for(var/atom/movable/leftovers in src)
+	for (var/atom/movable/leftovers in src)
 		qdel(leftovers)
 	qdel(on_logout)
 	on_logout = null
@@ -75,149 +75,149 @@ var/global/obj/screen/fuckstat/FUCK = new
 	return PROJREACT_MOBS
 
 /mob/proc/remove_screen_objs()
-	if(hands)
+	if (hands)
 		returnToPool(hands)
-		if(client)
+		if (client)
 			client.screen -= hands
 		hands = null
-	if(pullin)
+	if (pullin)
 		returnToPool(pullin)
-		if(client)
+		if (client)
 			client.screen -= pullin
 		pullin = null
-	if(visible)
+	if (visible)
 		returnToPool(visible)
-		if(client)
+		if (client)
 			client.screen -= visible
 		visible = null
-	if(purged)
+	if (purged)
 		returnToPool(purged)
-		if(client)
+		if (client)
 			client.screen -= purged
 		purged = null
-	if(internals)
+	if (internals)
 		returnToPool(internals)
-		if(client)
+		if (client)
 			client.screen -= internals
 		internals = null
-	if(oxygen)
+	if (oxygen)
 		returnToPool(oxygen)
-		if(client)
+		if (client)
 			client.screen -= oxygen
 		oxygen = null
-	if(i_select)
+	if (i_select)
 		returnToPool(i_select)
-		if(client)
+		if (client)
 			client.screen -= i_select
 		i_select = null
-	if(m_select)
+	if (m_select)
 		returnToPool(m_select)
-		if(client)
+		if (client)
 			client.screen -= m_select
 		m_select = null
-	if(toxin)
+	if (toxin)
 		returnToPool(toxin)
-		if(client)
+		if (client)
 			client.screen -= toxin
 		toxin = null
-	if(fire)
+	if (fire)
 		returnToPool(fire)
-		if(client)
+		if (client)
 			client.screen -= fire
 		fire = null
-	if(bodytemp)
+	if (bodytemp)
 		returnToPool(bodytemp)
-		if(client)
+		if (client)
 			client.screen -= bodytemp
 		bodytemp = null
-	if(healths)
+	if (healths)
 		returnToPool(healths)
-		if(client)
+		if (client)
 			client.screen -= healths
 		healths = null
-	if(throw_icon)
+	if (throw_icon)
 		returnToPool(throw_icon)
-		if(client)
+		if (client)
 			client.screen -= throw_icon
 		throw_icon = null
-	if(nutrition_icon)
+	if (nutrition_icon)
 		returnToPool(nutrition_icon)
-		if(client)
+		if (client)
 			client.screen -= nutrition_icon
 		nutrition_icon = null
-	if(pressure)
+	if (pressure)
 		returnToPool(pressure)
-		if(client)
+		if (client)
 			client.screen -= pressure
 		pressure = null
-	if(damageoverlay)
+	if (damageoverlay)
 		returnToPool(damageoverlay)
-		if(client)
+		if (client)
 			client.screen -= damageoverlay
 		damageoverlay = null
-	if(pain)
+	if (pain)
 		returnToPool(pain)
-		if(client)
+		if (client)
 			client.screen -= pain
 		pain = null
-	if(item_use_icon)
+	if (item_use_icon)
 		returnToPool(item_use_icon)
-		if(client)
+		if (client)
 			client.screen -= item_use_icon
 		item_use_icon = null
-	if(gun_move_icon)
+	if (gun_move_icon)
 		returnToPool(gun_move_icon)
-		if(client)
+		if (client)
 			client.screen -= gun_move_icon
 		gun_move_icon = null
-	if(gun_run_icon)
+	if (gun_run_icon)
 		returnToPool(gun_run_icon)
-		if(client)
+		if (client)
 			client.screen -= gun_run_icon
 		gun_run_icon = null
-	if(gun_setting_icon)
+	if (gun_setting_icon)
 		returnToPool(gun_setting_icon)
-		if(client)
+		if (client)
 			client.screen -= gun_setting_icon
 		gun_setting_icon = null
-	if(m_suitclothes)
+	if (m_suitclothes)
 		returnToPool(m_suitclothes)
-		if(client)
+		if (client)
 			client.screen -= m_suitclothes
 		m_suitclothes = null
-	if(m_suitclothesbg)
+	if (m_suitclothesbg)
 		returnToPool(m_suitclothesbg)
-		if(client)
+		if (client)
 			client.screen -= m_suitclothesbg
 		m_suitclothesbg = null
-	if(m_hat)
+	if (m_hat)
 		returnToPool(m_hat)
-		if(client)
+		if (client)
 			client.screen -= m_hat
 		m_hat = null
-	if(m_hatbg)
+	if (m_hatbg)
 		returnToPool(m_hatbg)
-		if(client)
+		if (client)
 			client.screen -= m_hatbg
 		m_hatbg = null
-	if(m_glasses)
+	if (m_glasses)
 		returnToPool(m_glasses)
-		if(client)
+		if (client)
 			client.screen -= m_glasses
 		m_glasses = null
-	if(m_glassesbg)
+	if (m_glassesbg)
 		returnToPool(m_glassesbg)
-		if(client)
+		if (client)
 			client.screen -= m_glassesbg
 		m_glasses = null
-	if(zone_sel)
+	if (zone_sel)
 		returnToPool(zone_sel)
-		if(client)
+		if (client)
 			client.screen -= zone_sel
 		zone_sel = null
-	if(hud_used)
-		for(var/obj/screen/item_action/actionitem in hud_used.item_action_list)
-			if(client)
+	if (hud_used)
+		for (var/obj/screen/item_action/actionitem in hud_used.item_action_list)
+			if (client)
 				client.screen -= actionitem
 				client.images -= actionitem.overlay
 			returnToPool(actionitem)
@@ -230,7 +230,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 	. = ..()
 	mob_list += src
 
-	if(DEAD == stat)
+	if (DEAD == stat)
 		dead_mob_list += src
 	else
 		living_mob_list += src
@@ -241,13 +241,13 @@ var/global/obj/screen/fuckstat/FUCK = new
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
-	if(flags & HEAR_ALWAYS)
+	if (flags & HEAR_ALWAYS)
 		getFromPool(/mob/virtualhearer, src)
 
 /mob/Del()
-	if(flags & HEAR_ALWAYS)
-		for(var/mob/virtualhearer/VH in virtualhearers)
-			if(VH.attached == src)
+	if (flags & HEAR_ALWAYS)
+		for (var/mob/virtualhearer/VH in virtualhearers)
+			if (VH.attached == src)
 				returnToPool(VH)
 	..()
 
@@ -277,7 +277,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 	set category = "Admin"
 	set hidden = 1
 
-	if(!loc)
+	if (!loc)
 		return 0
 
 	var/datum/gas_mixture/environment = loc.return_air()
@@ -289,13 +289,13 @@ var/global/obj/screen/fuckstat/FUCK = new
 <span class='notice'> Oxygen: [environment.oxygen] \n</span>
 <span class='notice'> Plasma : [environment.toxins] \n</span>
 <span class='notice'> Carbon Dioxide: [environment.carbon_dioxide] \n</span>"}
-	for(var/datum/gas/trace_gas in environment.trace_gases)
+	for (var/datum/gas/trace_gas in environment.trace_gases)
 		to_chat(usr, "<span class='notice'> [trace_gas.type]: [trace_gas.moles] \n</span>")
 
 	usr.show_message(t, 1)
 
 /mob/proc/simple_message(var/msg, var/hallucination_msg) // Same as M << "message", but with additinal message for hallucinations.
-	if(hallucinating() && hallucination_msg)
+	if (hallucinating() && hallucination_msg)
 		to_chat(src, hallucination_msg)
 	else
 		to_chat(src, msg)
@@ -305,32 +305,32 @@ var/global/obj/screen/fuckstat/FUCK = new
 
 	//Because the person who made this is a fucking idiot, let's clarify. 1 is sight-related messages (aka emotes in general), 2 is hearing-related (aka HEY DUMBFUCK I'M TALKING TO YOU)
 
-	if(!client) //We dun goof
+	if (!client) //We dun goof
 		return
 
-	if(type)
-		if((type & MESSAGE_SEE) && is_blind()) //Vision related //We can't see all those emotes no-one ever does !
-			if(!(alt))
+	if (type)
+		if ((type & MESSAGE_SEE) && is_blind()) //Vision related //We can't see all those emotes no-one ever does !
+			if (!(alt))
 				return
 			else
 				msg = alt
 				type = alt_type
-		if((type & MESSAGE_HEAR) && is_deaf()) //Hearing related //We can't hear what the person is saying. Too bad
-			if(!(alt))
+		if ((type & MESSAGE_HEAR) && is_deaf()) //Hearing related //We can't hear what the person is saying. Too bad
+			if (!(alt))
 				to_chat(src, "<span class='notice'>You can almost hear someone talking.</span>")//Well, not THAT deaf
 
 				return //And that does it
 			else
 				msg = alt
 				type = alt_type
-				if((type & MESSAGE_SEE) && (sdisabilities & BLIND || blinded || paralysis)) //Since the alternative is sight-related, make sure we can see
+				if ((type & MESSAGE_SEE) && (sdisabilities & BLIND || blinded || paralysis)) //Since the alternative is sight-related, make sure we can see
 					return
 	//Added voice muffling for Issue 41.
 	//This has been changed to only work with audible messages, because you can't hear a frown
 	//This blocks "audible" emotes like gasping and screaming, but that's such a small loss. Who wants to hear themselves gasping to death ? I don't
-	if(stat == UNCONSCIOUS || sleeping > 0) //No-one's home
-		if((type & MESSAGE_SEE)) //This is an emote
-			if(!(alt)) //No alternative message
+	if (stat == UNCONSCIOUS || sleeping > 0) //No-one's home
+		if ((type & MESSAGE_SEE)) //This is an emote
+			if (!(alt)) //No alternative message
 				return //We can't see it, we're a bit too dying over here
 			else //Hey look someone passed an alternative message
 				to_chat(src, "<span class='notice'>You can almost hear someone talking.</span>")//Now we can totally not hear it!
@@ -359,12 +359,12 @@ var/global/obj/screen/fuckstat/FUCK = new
 	var/msg = message
 	var/msg2 = blind_message
 
-	if(self_message)
+	if (self_message)
 		msg = self_message
-	if(hallucination)
-		if(self_drugged_message)
+	if (hallucination)
+		if (self_drugged_message)
 			msg = self_drugged_message
-		if(blind_drugged_message)
+		if (blind_drugged_message)
 			msg2 = blind_drugged_message
 
 	show_message( msg, 1, msg2, 2)
@@ -372,15 +372,15 @@ var/global/obj/screen/fuckstat/FUCK = new
 	..(message, blind_message, drugged_message, blind_drugged_message)
 
 /mob/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A)
-	if(see_invisible < A.invisibility || src == A)
+	if (see_invisible < A.invisibility || src == A)
 		return
 	var/hallucination = hallucinating()
 	var/msg = message
 	var/msg2 = blind_message
-	if(hallucination)
-		if(drugged_message)
+	if (hallucination)
+		if (drugged_message)
 			msg = drugged_message
-		if(blind_drugged_message)
+		if (blind_drugged_message)
 			msg2 = blind_drugged_message
 	show_message( msg, 1, msg2, 2)
 
@@ -390,14 +390,14 @@ var/global/obj/screen/fuckstat/FUCK = new
 // blind_message (optional) is what blind people will hear e.g. "You hear something!"
 
 /atom/proc/visible_message(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message)
-	if(world.time>resethearers)
+	if (world.time>resethearers)
 		sethearing()
 	var/location = get_holder_at_turf_level(src) || get_turf(src)
-	for(var/mob/virtualhearer/hearer in viewers(location))
+	for (var/mob/virtualhearer/hearer in viewers(location))
 		hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
 
 /mob/proc/findname(msg)
-	for(var/mob/M in mob_list)
+	for (var/mob/M in mob_list)
 		if (M.real_name == text("[]", msg))
 			return M
 	return 0
@@ -406,32 +406,32 @@ var/global/obj/screen/fuckstat/FUCK = new
 	return 0
 
 /mob/proc/Life()
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
-	if(spell_masters && spell_masters.len)
-		for(var/obj/screen/movable/spell_master/spell_master in spell_masters)
+	if (spell_masters && spell_masters.len)
+		for (var/obj/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.update_spells(0, src)
 	return
 
 /mob/proc/see_narsie(var/obj/machinery/singularity/narsie/large/N, var/dir)
-	if(N.chained)
-		if(narsimage)
+	if (N.chained)
+		if (narsimage)
 			del(narsimage)
 			del(narglow)
 		return
 
 	//No need to make an exception for mechas, as they get deleted as soon as they get in view of narnar
 
-	if((N.z == src.z)&&(get_dist(N,src) <= (N.consume_range+10)) && !(N in view(src)))
-		if(!narsimage) //Create narsimage
+	if ((N.z == src.z)&&(get_dist(N,src) <= (N.consume_range+10)) && !(N in view(src)))
+		if (!narsimage) //Create narsimage
 			narsimage = image('icons/obj/narsie.dmi',src.loc,"narsie",9,1)
 			narsimage.mouse_opacity = 0
-		if(!narglow) //Create narglow
+		if (!narglow) //Create narglow
 			narglow = image('icons/obj/narsie.dmi',narsimage.loc,"glow-narsie", NARSIE_GLOW, 1)
 			narglow.plane = LIGHTING_PLANE
 			narglow.mouse_opacity = 0
 /* Animating narsie works like shit thanks to fucking byond
-		if(!N.old_x || !N.old_y)
+		if (!N.old_x || !N.old_y)
 			N.old_x = src.x
 			N.old_y = src.y
 		//Reset narsie's location to the mob
@@ -444,28 +444,28 @@ var/global/obj/screen/fuckstat/FUCK = new
 		narsimage.forceMove(src.loc)
 		narglow.forceMove(src.loc)
 		//Animate narsie based on dir
-		if(dir)
+		if (dir)
 			var/x_diff = 0
 			var/y_diff = 0
-			switch(dir) //I bet somewhere out there a proc does something like this already
-				if(1)
+			switch (dir) //I bet somewhere out there a proc does something like this already
+				if (1)
 					x_diff = 32
-				if(2)
+				if (2)
 					x_diff = -32
-				if(4)
+				if (4)
 					y_diff = 32
-				if(8)
+				if (8)
 					y_diff = -32
-				if(5)
+				if (5)
 					x_diff = 32
 					y_diff = 32
-				if(6)
+				if (6)
 					x_diff = 32
 					y_diff = -32
-				if(9)
+				if (9)
 					x_diff = -32
 					y_diff = 32
-				if(10)
+				if (10)
 					x_diff = -32
 					y_diff = -32
 			animate(narsimage, pixel_x = old_pixel_x+x_diff, pixel_y = old_pixel_y+y_diff, time = 8) //Animate the movement of narsie to narsie's new location
@@ -484,14 +484,14 @@ var/global/obj/screen/fuckstat/FUCK = new
 		src << narsimage
 		src << narglow
 	else
-		if(narsimage)
+		if (narsimage)
 			del(narsimage)
 			del(narglow)
 
 /mob/proc/see_rift(var/obj/machinery/singularity/narsie/large/exit/R)
 	var/turf/T_mob = get_turf(src)
-	if((R.z == T_mob.z) && (get_dist(R,T_mob) <= (R.consume_range+10)) && !(R in view(T_mob)))
-		if(!riftimage)
+	if ((R.z == T_mob.z) && (get_dist(R,T_mob) <= (R.consume_range+10)) && !(R in view(T_mob)))
+		if (!riftimage)
 			riftimage = image('icons/obj/rift.dmi',T_mob,"rift", SUPER_PORTAL_LAYER, 1)
 			riftimage.plane = LIGHTING_PLANE
 			riftimage.mouse_opacity = 0
@@ -504,7 +504,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 
 		to_chat(src, riftimage)
 	else
-		if(riftimage)
+		if (riftimage)
 			del(riftimage)
 
 /mob/proc/get_item_by_slot(slot_id)
@@ -512,29 +512,29 @@ var/global/obj/screen/fuckstat/FUCK = new
 
 
 /mob/proc/restrained()
-	if(timestopped)
+	if (timestopped)
 		return 1 //under effects of time magick
 	return
 
 //This proc is called whenever someone clicks an inventory ui slot.
 /mob/proc/attack_ui(slot, hand_index)
 	var/obj/item/W = get_active_hand()
-	if(istype(W))
-		if(slot)
+	if (istype(W))
+		if (slot)
 			equip_to_slot_if_possible(W, slot)
-		else if(hand_index)
+		else if (hand_index)
 			put_in_hand(hand_index, W)
 	else
 		W = get_item_by_slot(slot)
-		if(W)
+		if (W)
 			W.attack_hand(src)
 
 	/*if(ishuman(src) && W == src:head) //AAAAAUGH
 		src:update_hair()*/
 
 /mob/proc/put_in_any_hand_if_possible(obj/item/W as obj)
-	for(var/index = 1 to held_items.len)
-		if(put_in_hand(index, W))
+	for (var/index = 1 to held_items.len)
+		if (put_in_hand(index, W))
 			return 1
 	return 0
 
@@ -543,18 +543,18 @@ var/global/obj/screen/fuckstat/FUCK = new
 //set disable_warning to disable the 'you are unable to equip that' warning.
 //unset redraw_mob to prevent the mob from being redrawn at the end.
 /mob/proc/equip_to_slot_if_possible(obj/item/W as obj, slot, act_on_fail = 0, disable_warning = 0, redraw_mob = 1, automatic = 0)
-	if(!istype(W))
+	if (!istype(W))
 		return 0
 
-	if(!W.mob_can_equip(src, slot, disable_warning))
-		switch(act_on_fail)
-			if(EQUIP_FAILACTION_DELETE)
+	if (!W.mob_can_equip(src, slot, disable_warning))
+		switch (act_on_fail)
+			if (EQUIP_FAILACTION_DELETE)
 				qdel(W)
 				W = null
-			if(EQUIP_FAILACTION_DROP)
+			if (EQUIP_FAILACTION_DROP)
 				W.forceMove(get_turf(src)) //Should this be using drop_from_inventory instead?
 			else
-				if(!disable_warning)
+				if (!disable_warning)
 					to_chat(src, "<span class='warning'>You are unable to equip that.</span>")//Only print if act_on_fail is NOTHING
 
 		return 0
@@ -578,20 +578,20 @@ var/global/obj/screen/fuckstat/FUCK = new
 // Convenience proc.  Collects crap that fails to equip either onto the mob's back, or drops it.
 // Used in job equipping so shit doesn't pile up at the start loc.
 /mob/living/carbon/human/proc/equip_or_collect(var/obj/item/W, var/slot)
-	if(!equip_to_slot_or_drop(W, slot))
+	if (!equip_to_slot_or_drop(W, slot))
 		// Do I have a backpack?
 		var/obj/item/weapon/storage/B = back
 
 		// Do I have a plastic bag?
-		if(!B)
+		if (!B)
 			var/index = find_held_item_by_type(/obj/item/weapon/storage/bag/plasticbag)
-			if(index)
+			if (index)
 				B = held_items[index]
 
-		if(!B)
+		if (!B)
 			// Gimme one.
 			B=new /obj/item/weapon/storage/bag/plasticbag(null) // Null in case of failed equip.
-			if(!put_in_hands(B,slot_back))
+			if (!put_in_hands(B,slot_back))
 				return // Fuck it
 		B.handle_item_insertion(W,1)
 
@@ -616,220 +616,220 @@ var/list/slot_equipment_priority = list( \
 //puts the item "W" into an appropriate slot in a human's inventory
 //returns 0 if it cannot, 1 if successful
 /mob/proc/equip_to_appropriate_slot(obj/item/W)
-	if(!istype(W))
+	if (!istype(W))
 		return 0
 
-	for(var/slot in slot_equipment_priority)
+	for (var/slot in slot_equipment_priority)
 		var/obj/item/S = get_item_by_slot(slot)
-		if(S && S.can_quick_store(W))
+		if (S && S.can_quick_store(W))
 			return S.quick_store(W)
-		if(equip_to_slot_if_possible(W, slot, 0, 1, 1, 1)) //act_on_fail = 0; disable_warning = 0; redraw_mob = 1
+		if (equip_to_slot_if_possible(W, slot, 0, 1, 1, 1)) //act_on_fail = 0; disable_warning = 0; redraw_mob = 1
 			return 1
 
 	return 0
 
 /mob/proc/check_for_open_slot(obj/item/W)
-	if(!istype(W))
+	if (!istype(W))
 		return 0
 	var/openslot = 0
-	for(var/slot in slot_equipment_priority)
-		if(W.mob_check_equip(src, slot, 1) == 1)
+	for (var/slot in slot_equipment_priority)
+		if (W.mob_check_equip(src, slot, 1) == 1)
 			openslot = 1
 			break
 	return openslot
 
 /obj/item/proc/mob_check_equip(M as mob, slot, disable_warning = 0)
-	if(!M)
+	if (!M)
 		return 0
-	if(!slot)
+	if (!slot)
 		return 0
-	if(ishuman(M))
+	if (ishuman(M))
 		//START HUMAN
 		var/mob/living/carbon/human/H = M
 
-		switch(slot)
-			if(slot_wear_mask)
-				if( !(slot_flags & SLOT_MASK) )
+		switch (slot)
+			if (slot_wear_mask)
+				if ( !(slot_flags & SLOT_MASK) )
 					return 0
-//				if(H.species.flags & IS_BULKY)
+//				if (H.species.flags & IS_BULKY)
 //					to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your thick head!</span>")
 //					return 0
-				if(H.wear_mask)
+				if (H.wear_mask)
 					return 0
 				return 1
-			if(slot_back)
-				if( !(slot_flags & SLOT_BACK) )
+			if (slot_back)
+				if ( !(slot_flags & SLOT_BACK) )
 					return 0
-				if(H.back)
-					if(H.back.canremove)
+				if (H.back)
+					if (H.back.canremove)
 						return 2
 					else
 						return 0
 				return 1
-			if(slot_wear_suit)
-				if( !(slot_flags & SLOT_OCLOTHING) )
+			if (slot_wear_suit)
+				if ( !(slot_flags & SLOT_OCLOTHING) )
 					return 0
-//				if(H.species.flags & IS_BULKY)
+//				if (H.species.flags & IS_BULKY)
 //					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
 //					return 0
-				if(H.wear_suit)
-					if(H.wear_suit.canremove)
+				if (H.wear_suit)
+					if (H.wear_suit.canremove)
 						return 2
 					else
 						return 0
 				return 1
-			if(slot_gloves)
-				if( !(slot_flags & SLOT_GLOVES) )
+			if (slot_gloves)
+				if ( !(slot_flags & SLOT_GLOVES) )
 					return 0
-//				if(H.species.flags & IS_BULKY)
+//				if (H.species.flags & IS_BULKY)
 //					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky fingers!</span>")
 //					return 0
-				if(H.gloves)
-					if(H.gloves.canremove)
+				if (H.gloves)
+					if (H.gloves.canremove)
 						return 2
 					else
 						return 0
 				return 1
-			if(slot_shoes)
-				if( !(slot_flags & SLOT_FEET) )
+			if (slot_shoes)
+				if ( !(slot_flags & SLOT_FEET) )
 					return 0
-//				if(H.species.flags & IS_BULKY)
+//				if (H.species.flags & IS_BULKY)
 //					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky feet!</span>")
 //					return 0
-				if(H.shoes)
-					if(H.shoes.canremove)
+				if (H.shoes)
+					if (H.shoes.canremove)
 						return 2
 					else
 						return 0
 				return 1
-			if(slot_belt)
-				if(!H.w_uniform)
-					if(!disable_warning)
+			if (slot_belt)
+				if (!H.w_uniform)
+					if (!disable_warning)
 						to_chat(H, "<span class='warning'>You need a jumpsuit before you can attach this [name].</span>")
 					return 0
-				if( !(slot_flags & SLOT_BELT) )
+				if ( !(slot_flags & SLOT_BELT) )
 					return 0
-				if(H.belt)
-					if(H.belt.canremove)
+				if (H.belt)
+					if (H.belt.canremove)
 						return 2
 					else
 						return 0
 				return 1
-			if(slot_glasses)
-				if( !(slot_flags & SLOT_EYES) )
+			if (slot_glasses)
+				if ( !(slot_flags & SLOT_EYES) )
 					return 0
-				if(H.glasses)
-					if(H.glasses.canremove)
+				if (H.glasses)
+					if (H.glasses.canremove)
 						return 2
 					else
 						return 0
 				return 1
-			if(slot_head)
-				if( !(slot_flags & SLOT_HEAD) )
+			if (slot_head)
+				if ( !(slot_flags & SLOT_HEAD) )
 					return 0
-				if(H.head)
-					if(H.head.canremove)
+				if (H.head)
+					if (H.head.canremove)
 						return 2
 					else
 						return 0
 				return 1
-			if(slot_ears)
-				if( !(slot_flags & slot_ears) )
+			if (slot_ears)
+				if ( !(slot_flags & slot_ears) )
 					return 0
-				if(H.ears)
-					if(H.ears.canremove)
+				if (H.ears)
+					if (H.ears.canremove)
 						return 2
 					else
 						return 0
 				return 1
-			if(slot_w_uniform)
-				if( !(slot_flags & SLOT_ICLOTHING) )
+			if (slot_w_uniform)
+				if ( !(slot_flags & SLOT_ICLOTHING) )
 					return 0
-				if((M_FAT in H.mutations) && (H.species && H.species.flags & CAN_BE_FAT) && !(flags & ONESIZEFITSALL))
+				if ((M_FAT in H.mutations) && (H.species && H.species.flags & CAN_BE_FAT) && !(flags & ONESIZEFITSALL))
 					return 0
-//				if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+//				if (H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
 //					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
 //					return 0
-				if(H.w_uniform)
-					if(H.w_uniform.canremove)
+				if (H.w_uniform)
+					if (H.w_uniform.canremove)
 						return 2
 					else
 						return 0
 				return 1
-			if(slot_wear_id)
-				if(!H.w_uniform)
-					if(!disable_warning)
+			if (slot_wear_id)
+				if (!H.w_uniform)
+					if (!disable_warning)
 						to_chat(H, "<span class='warning'>You need a jumpsuit before you can attach this [name].</span>")
 					return 0
-				if( !(slot_flags & SLOT_ID) )
+				if ( !(slot_flags & SLOT_ID) )
 					return 0
-				if(H.wear_id)
-					if(H.wear_id.canremove)
+				if (H.wear_id)
+					if (H.wear_id.canremove)
 						return 2
 					else
 						return 0
 				return 1
-			if(slot_l_store)
-				if(H.l_store)
+			if (slot_l_store)
+				if (H.l_store)
 					return 0
-				if(!H.w_uniform)
-					if(!disable_warning)
+				if (!H.w_uniform)
+					if (!disable_warning)
 						to_chat(H, "<span class='warning'>You need a jumpsuit before you can attach this [name].</span>")
 					return 0
-				if(slot_flags & SLOT_DENYPOCKET)
+				if (slot_flags & SLOT_DENYPOCKET)
 					return
-				if( w_class <= W_CLASS_SMALL || (slot_flags & SLOT_POCKET) )
+				if ( w_class <= W_CLASS_SMALL || (slot_flags & SLOT_POCKET) )
 					return 1
-			if(slot_r_store)
-				if(H.r_store)
+			if (slot_r_store)
+				if (H.r_store)
 					return 0
-				if(!H.w_uniform)
-					if(!disable_warning)
+				if (!H.w_uniform)
+					if (!disable_warning)
 						to_chat(H, "<span class='warning'>You need a jumpsuit before you can attach this [name].</span>")
 					return 0
-				if(slot_flags & SLOT_DENYPOCKET)
+				if (slot_flags & SLOT_DENYPOCKET)
 					return 0
-				if( w_class <= W_CLASS_SMALL || (slot_flags & SLOT_POCKET) )
+				if ( w_class <= W_CLASS_SMALL || (slot_flags & SLOT_POCKET) )
 					return 1
 				return 0
-			if(slot_s_store)
-				if(!H.wear_suit)
-					if(!disable_warning)
+			if (slot_s_store)
+				if (!H.wear_suit)
+					if (!disable_warning)
 						to_chat(H, "<span class='warning'>You need a suit before you can attach this [name].</span>")
 					return 0
-				if(!H.wear_suit.allowed)
-					if(!disable_warning)
+				if (!H.wear_suit.allowed)
+					if (!disable_warning)
 						to_chat(usr, "You somehow have a suit with no defined allowed items for suit storage, stop that.")
 					return 0
-				if(src.w_class > W_CLASS_MEDIUM)
-					if(!disable_warning)
+				if (src.w_class > W_CLASS_MEDIUM)
+					if (!disable_warning)
 						to_chat(usr, "The [name] is too big to attach.")
 					return 0
-				if( istype(src, /obj/item/device/pda) || istype(src, /obj/item/weapon/pen) || is_type_in_list(src, H.wear_suit.allowed) )
-					if(H.s_store)
-						if(H.s_store.canremove)
+				if ( istype(src, /obj/item/device/pda) || istype(src, /obj/item/weapon/pen) || is_type_in_list(src, H.wear_suit.allowed) )
+					if (H.s_store)
+						if (H.s_store.canremove)
 							return 2
 						else
 							return 0
 					else
 						return 1
 				return 0
-			if(slot_handcuffed)
-				if(H.handcuffed)
+			if (slot_handcuffed)
+				if (H.handcuffed)
 					return 0
-				if(!istype(src, /obj/item/weapon/handcuffs))
-					return 0
-				return 1
-			if(slot_legcuffed)
-				if(H.legcuffed)
-					return 0
-				if(!istype(src, /obj/item/weapon/legcuffs))
+				if (!istype(src, /obj/item/weapon/handcuffs))
 					return 0
 				return 1
-			if(slot_in_backpack)
+			if (slot_legcuffed)
+				if (H.legcuffed)
+					return 0
+				if (!istype(src, /obj/item/weapon/legcuffs))
+					return 0
+				return 1
+			if (slot_in_backpack)
 				if (H.back && istype(H.back, /obj/item/weapon/storage/backpack))
 					var/obj/item/weapon/storage/backpack/B = H.back
-					if(B.contents.len < B.storage_slots && w_class <= B.fits_max_w_class)
+					if (B.contents.len < B.storage_slots && w_class <= B.fits_max_w_class)
 						return 1
 				return 0
 		return 0 //Unsupported slot
@@ -856,7 +856,7 @@ var/list/slot_equipment_priority = list( \
 	dat += "<BR><HR>"
 	dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[slot_wear_mask]'>[makeStrippingButton(wear_mask)]</A>"
 
-	for(var/i = 1 to held_items.len) //Hands
+	for (var/i = 1 to held_items.len) //Hands
 		var/obj/item/I = held_items[i]
 		dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=\ref[src];hands=[i]'>[makeStrippingButton(I)]</A><BR>"
 
@@ -885,7 +885,7 @@ var/list/slot_equipment_priority = list( \
 			L.master = src
 
 		var/grab_in_hands = find_held_item_by_type(/obj/item/weapon/grab)
-		if(grab_in_hands)
+		if (grab_in_hands)
 			var/obj/item/weapon/grab/G = held_items[grab_in_hands]
 			if (!( L.container.Find(G.affecting) ))
 				L.container += G.affecting
@@ -908,21 +908,21 @@ var/list/slot_equipment_priority = list( \
 	set name = "Point To"
 	set category = "Object"
 
-	if(!src || usr.isUnconscious() || !isturf(src.loc) || !(A in view(src.loc)))
+	if (!src || usr.isUnconscious() || !isturf(src.loc) || !(A in view(src.loc)))
 		return 0
 
-	if(istype(A, /obj/effect/decal/point))
+	if (istype(A, /obj/effect/decal/point))
 		return 0
 
 	var/tile = get_turf(A)
 
-	if(!tile)
+	if (!tile)
 		return 0
 
 	var/obj/point = new/obj/effect/decal/point(tile)
 	point.invisibility = invisibility
 	spawn(20)
-		if(point)
+		if (point)
 			qdel(point)
 
 	return 1
@@ -943,19 +943,19 @@ var/list/slot_equipment_priority = list( \
 		P.add_fingerprint(src)
 
 		// If we're pulling something then drop what we're currently pulling and pull this instead.
-		if(pulling)
+		if (pulling)
 			// Are we trying to pull something we are already pulling? Then just stop here, no need to continue
 			var/temp_P = pulling
 			stop_pulling()
-			if(P == temp_P)
+			if (P == temp_P)
 				return
 
 		src.pulling = P
 		P.pulledby = src
 		update_pull_icon()
-		if(ismob(P))
+		if (ismob(P))
 			var/mob/M = P
-			if(!iscarbon(src))
+			if (!iscarbon(src))
 				M.LAssailant = null
 			else
 				M.LAssailant = usr
@@ -964,15 +964,15 @@ var/list/slot_equipment_priority = list( \
 	set name = "Stop Pulling"
 	set category = "IC"
 
-	if(pulling)
+	if (pulling)
 		pulling.pulledby = null
 		pulling = null
 		update_pull_icon()
 
 //I don't want to update the whole HUD each time!
 /mob/proc/update_pull_icon()
-	if(pullin) //Yes, the pulling icon in HUDs is referenced by a mob-level variable called "pullin". It's awful I know
-		if(pulling)
+	if (pullin) //Yes, the pulling icon in HUDs is referenced by a mob-level variable called "pullin". It's awful I know
+		if (pulling)
 			pullin.icon_state = "pull1"
 		else
 			pullin.icon_state = "pull0"
@@ -983,18 +983,18 @@ var/list/slot_equipment_priority = list( \
 	set category = "IC"
 	set src = usr
 
-	if(attack_delayer.blocked())
+	if (attack_delayer.blocked())
 		return
 
-	if(istype(loc,/obj/mecha))
+	if (istype(loc,/obj/mecha))
 		return
 
-	if(isVentCrawling())
+	if (isVentCrawling())
 		to_chat(src, "<span class='danger'>Not while we're vent crawling!</span>")
 		return
 
 	var/obj/item/W = get_held_item_by_index(active_hand)
-	if(W)
+	if (W)
 		W.attack_self(src)
 		update_inv_hand(active_hand)
 
@@ -1003,7 +1003,7 @@ var/list/slot_equipment_priority = list( \
 
 
 	var/master = "<PRE>"
-	for(var/t in typesof(/area))
+	for (var/t in typesof(/area))
 		master += text("[]\n", t)
 		//Foreach goto(26)
 	src << browse(master)
@@ -1013,7 +1013,7 @@ var/list/slot_equipment_priority = list( \
 /mob/verb/memory()
 	set name = "Notes"
 	set category = "IC"
-	if(mind)
+	if (mind)
 		mind.show_memory(src)
 	else
 		to_chat(src, "The game appears to have misplaced your mind datum, so we can't show you your notes.")
@@ -1025,7 +1025,7 @@ var/list/slot_equipment_priority = list( \
 	msg = copytext(msg, 1, MAX_MESSAGE_LEN)
 	msg = sanitize(msg)
 
-	if(mind)
+	if (mind)
 		mind.store_memory(msg)
 	else
 		to_chat(src, "The game appears to have misplaced your mind datum, so we can't show you your notes.")
@@ -1049,8 +1049,8 @@ var/list/slot_equipment_priority = list( \
 	set name = "Examine"
 	set category = "IC"
 
-//	if( (sdisabilities & BLIND || blinded || stat) && !istype(src,/mob/dead/observer) )
-	if(is_blind(src))
+//	if ( (sdisabilities & BLIND || blinded || stat) && !istype(src,/mob/dead/observer) )
+	if (is_blind(src))
 		to_chat(src, "<span class='notice'>Something is there but you can't see it.</span>")
 		return
 
@@ -1068,28 +1068,28 @@ var/list/slot_equipment_priority = list( \
 /mob/proc/update_flavor_text()
 	set src in usr
 
-	if(usr != src)
+	if (usr != src)
 		to_chat(usr, "No.")
 		return
 
 	var/msg = input(usr,"Set the flavor text in your 'examine' verb. Can also be used for OOC notes about your character.","Flavor Text",html_decode(flavor_text)) as message|null
 
-	if(msg != null)
+	if (msg != null)
 		msg = copytext(msg, 1, MAX_MESSAGE_LEN)
 		msg = html_encode(msg)
 
 		flavor_text = msg
 
 /mob/proc/warn_flavor_changed()
-	if(flavor_text) // Don't spam people that don't use it!
+	if (flavor_text) // Don't spam people that don't use it!
 		to_chat(src, "<h2 class='alert'>OOC Warning:</h2>")
 		to_chat(src, "<span class='alert'>Your flavor text is likely out of date! <a href='?src=\ref[src];flavor_text=change'>Change</a></span>")
 
 /mob/proc/print_flavor_text()
-	if(flavor_text)
+	if (flavor_text)
 		var/msg = replacetext(flavor_text, "\n", "<br />")
 
-		if(length(msg) <= 32)
+		if (length(msg) <= 32)
 			return "<font color='#ffa000'><b>[msg]</b></font>"
 		else
 			return "<font color='#ffa000'><b>[copytext(msg, 1, 32)]...<a href='?src=\ref[src];flavor_text=more'>More</a></b></font>"
@@ -1116,18 +1116,18 @@ var/list/slot_equipment_priority = list( \
 		return
 	else
 		var/deathtime = world.time - src.timeofdeath
-		if(istype(src,/mob/dead/observer))
+		if (istype(src,/mob/dead/observer))
 			var/mob/dead/observer/G = src
-			if(G.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
+			if (G.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
 				to_chat(usr, "<span class='notice'> <B>Upon using the antagHUD you forfeighted the ability to join the round.</B></span>")
 				return
 		var/deathtimeminutes = round(deathtime / 600)
 		var/pluralcheck = "minute"
-		if(deathtimeminutes == 0)
+		if (deathtimeminutes == 0)
 			pluralcheck = ""
-		else if(deathtimeminutes == 1)
+		else if (deathtimeminutes == 1)
 			pluralcheck = " [deathtimeminutes] minute and"
-		else if(deathtimeminutes > 1)
+		else if (deathtimeminutes > 1)
 			pluralcheck = " [deathtimeminutes] minutes and"
 		var/deathtimeseconds = round((deathtime - deathtimeminutes * 600) / 10,1)
 		to_chat(usr, "You have been dead for[pluralcheck] [deathtimeseconds] seconds.")
@@ -1141,16 +1141,16 @@ var/list/slot_equipment_priority = list( \
 
 	to_chat(usr, "<span class='notice'> <B>Make sure to play a different character, and please roleplay correctly!</B></span>")
 
-	if(!client)
+	if (!client)
 		log_game("[usr.key] AM failed due to disconnect.")
 		return
 	client.screen.len = 0
-	if(!client)
+	if (!client)
 		log_game("[usr.key] AM failed due to disconnect.")
 		return
 
 	var/mob/new_player/M = new /mob/new_player()
-	if(!client)
+	if (!client)
 		log_game("[usr.key] AM failed due to disconnect.")
 		qdel(M)
 		M = null
@@ -1193,7 +1193,7 @@ var/list/slot_equipment_priority = list( \
 		'html/changelog.html'
 		)
 	src << browse('html/changelog.html', "window=changes;size=675x650")
-	if(prefs.lastchangelog != changelog_hash)
+	if (prefs.lastchangelog != changelog_hash)
 		prefs.lastchangelog = changelog_hash
 		prefs.save_preferences()
 		winset(src, "rpane.changelog", "background-color=none;font-style=;")
@@ -1203,23 +1203,23 @@ var/list/slot_equipment_priority = list( \
 	set category = "OOC"
 	var/is_admin = 0
 
-	if(client.holder && (client.holder.rights & R_ADMIN))
+	if (client.holder && (client.holder.rights & R_ADMIN))
 		is_admin = 1
-	else if(stat != DEAD || istype(src, /mob/new_player))
+	else if (stat != DEAD || istype(src, /mob/new_player))
 		to_chat(usr, "<span class='notice'>You must be observing to use this!</span>")
 		return
 
-	if(is_admin && stat == DEAD)
+	if (is_admin && stat == DEAD)
 		is_admin = 0
 
 	var/list/names = list()
 	var/list/namecounts = list()
 	var/list/creatures = list()
 
-	for(var/obj/O in world)				//EWWWWWWWWWWWWWWWWWWWWWWWW ~needs to be optimised
-		if(!O.loc)
+	for (var/obj/O in world)				//EWWWWWWWWWWWWWWWWWWWWWWWW ~needs to be optimised
+		if (!O.loc)
 			continue
-		if(istype(O, /obj/item/weapon/disk/nuclear))
+		if (istype(O, /obj/item/weapon/disk/nuclear))
 			var/name = "Nuclear Disk"
 			if (names.Find(name))
 				namecounts[name]++
@@ -1229,7 +1229,7 @@ var/list/slot_equipment_priority = list( \
 				namecounts[name] = 1
 			creatures[name] = O
 
-		if(istype(O, /obj/machinery/singularity))
+		if (istype(O, /obj/machinery/singularity))
 			var/name = "Singularity"
 			if (names.Find(name))
 				namecounts[name]++
@@ -1239,7 +1239,7 @@ var/list/slot_equipment_priority = list( \
 				namecounts[name] = 1
 			creatures[name] = O
 
-		if(istype(O, /obj/machinery/bot))
+		if (istype(O, /obj/machinery/bot))
 			var/name = "BOT: [O.name]"
 			if (names.Find(name))
 				namecounts[name]++
@@ -1250,7 +1250,7 @@ var/list/slot_equipment_priority = list( \
 			creatures[name] = O
 
 
-	for(var/mob/M in sortNames(mob_list))
+	for (var/mob/M in sortNames(mob_list))
 		var/name = M.name
 		if (names.Find(name))
 			namecounts[name]++
@@ -1274,11 +1274,11 @@ var/list/slot_equipment_priority = list( \
 
 	var/mob/mob_eye = creatures[eye_name]
 
-	if(client && mob_eye)
+	if (client && mob_eye)
 		client.eye = mob_eye
 		if (is_admin)
 			client.adminobs = 1
-			if(mob_eye == client.mob || client.eye == client.mob)
+			if (mob_eye == client.mob || client.eye == client.mob)
 				client.adminobs = 0
 
 /mob/verb/cancel_camera()
@@ -1286,48 +1286,48 @@ var/list/slot_equipment_priority = list( \
 	set category = "OOC" //Why the fuck?
 	unset_machine()
 	reset_view(null)
-	if(istype(src, /mob/living))
+	if (istype(src, /mob/living))
 		var/mob/living/M = src
-		if(M.cameraFollow)
+		if (M.cameraFollow)
 			M.cameraFollow = null
-		if(istype(src, /mob/living/carbon/human))
+		if (istype(src, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
 			H.handle_regular_hud_updates()
 
 /mob/Topic(href,href_list[])
-	if(href_list["mach_close"])
+	if (href_list["mach_close"])
 		var/t1 = text("window=[href_list["mach_close"]]")
 		unset_machine()
 		src << browse(null, t1)
 
-	switch(href_list["flavor_text"])
-		if("more")
+	switch (href_list["flavor_text"])
+		if ("more")
 			usr << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", name, replacetext(flavor_text, "\n", "<BR>")), text("window=[];size=500x200", name))
 			onclose(usr, "[name]")
-		if("change")
+		if ("change")
 			update_flavor_text()
 
 /mob/proc/pull_damage()
-	if(ishuman(src))
+	if (ishuman(src))
 		var/mob/living/carbon/human/H = src
-		if(H.health - H.halloss <= config.health_threshold_softcrit)
-			for(var/name in H.organs_by_name)
+		if (H.health - H.halloss <= config.health_threshold_softcrit)
+			for (var/name in H.organs_by_name)
 				var/datum/organ/external/e = H.organs_by_name[name]
-				if(H.lying)
-					if(((e.status & ORGAN_BROKEN && !(e.status & ORGAN_SPLINTED)) || e.status & ORGAN_BLEEDING) && (H.getBruteLoss() + H.getFireLoss() >= 100))
+				if (H.lying)
+					if (((e.status & ORGAN_BROKEN && !(e.status & ORGAN_SPLINTED)) || e.status & ORGAN_BLEEDING) && (H.getBruteLoss() + H.getFireLoss() >= 100))
 						return 1
 						break
 		return 0
 
 /mob/MouseDrop(mob/M as mob)
 	..()
-	if(M != usr)
+	if (M != usr)
 		return
-	if(usr == src)
+	if (usr == src)
 		return
-	if(!Adjacent(usr))
+	if (!Adjacent(usr))
 		return
-	if(istype(M,/mob/living/silicon/ai))
+	if (istype(M,/mob/living/silicon/ai))
 		return
 	show_inv(usr)
 
@@ -1339,26 +1339,26 @@ var/list/slot_equipment_priority = list( \
 	return (0 >= usr.stat)
 
 /mob/proc/see(message)
-	if(!is_active())
+	if (!is_active())
 		return 0
 	to_chat(src, message)
 	return 1
 
 /mob/proc/show_viewers(message)
-	for(var/mob/M in viewers())
+	for (var/mob/M in viewers())
 		M.see(message)
 
 /mob/Stat()
 	..()
 
-	if(client && client.holder && client.inactivity < (1200))
+	if (client && client.holder && client.inactivity < (1200))
 
 		if (statpanel("Status"))	//not looking at that panel
 			stat(null, "Location:\t([x], [y], [z])")
 			stat(null, "CPU:\t[world.cpu]")
 			stat(null, "Instances:\t[world.contents.len]")
 			stat(null, FUCK)
-			if(!src.stat_fucked)
+			if (!src.stat_fucked)
 				if (garbageCollector)
 					stat(null, "\tqdel - [garbageCollector.del_everything ? "off" : "on"]")
 					stat(null, "\ton queue - [garbageCollector.queue.len]")
@@ -1368,7 +1368,7 @@ var/list/slot_equipment_priority = list( \
 				else
 					stat(null, "Garbage Controller is not running.")
 
-				if(processScheduler && processScheduler.getIsRunning())
+				if (processScheduler && processScheduler.getIsRunning())
 					var/datum/controller/process/process
 
 					process = processScheduler.getProcess("vote")
@@ -1423,46 +1423,46 @@ var/list/slot_equipment_priority = list( \
 					stat(null, "EVE([events.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
 				else
 					stat(null, "processScheduler is not running.")
-	if(client && client.inactivity < (1200))
-		if(listed_turf)
-			if(get_dist(listed_turf,src) > 1)
+	if (client && client.inactivity < (1200))
+		if (listed_turf)
+			if (get_dist(listed_turf,src) > 1)
 				listed_turf = null
-			else if(statpanel(listed_turf.name))
+			else if (statpanel(listed_turf.name))
 				statpanel(listed_turf.name, null, listed_turf)
-				for(var/atom/A in listed_turf)
-					if(A.invisibility > see_invisible)
+				for (var/atom/A in listed_turf)
+					if (A.invisibility > see_invisible)
 						continue
 					statpanel(listed_turf.name, null, A)
 
-		if(spell_list && spell_list.len)
-			for(var/spell/S in spell_list)
-				if((!S.connected_button) || !statpanel(S.panel))
+		if (spell_list && spell_list.len)
+			for (var/spell/S in spell_list)
+				if ((!S.connected_button) || !statpanel(S.panel))
 					continue //Not showing the noclothes spell
 				var/charge_type = S.charge_type
-				if(charge_type & Sp_HOLDVAR)
+				if (charge_type & Sp_HOLDVAR)
 					statpanel(S.panel,"Required [S.holder_var_type]: [S.holder_var_amount]",S.connected_button)
-				else if(charge_type & Sp_CHARGES)
+				else if (charge_type & Sp_CHARGES)
 					statpanel(S.panel,"[S.charge_max? "[S.charge_counter]/[S.charge_max] charges" : "Free"]",S.connected_button)
-				else if(charge_type & Sp_RECHARGE)
+				else if (charge_type & Sp_RECHARGE)
 					statpanel(S.panel,"[S.charge_max? "[S.charge_counter/10.0]/[S.charge_max/10] seconds" : "Free"]",S.connected_button)
 	sleep(world.tick_lag * 2)
 
 
 // facing verbs
 /mob/proc/canface()
-	if(!canmove)
+	if (!canmove)
 		return 0
-	if(client.moving)
+	if (client.moving)
 		return 0
-	if(client.move_delayer.blocked())
+	if (client.move_delayer.blocked())
 		return 0
-	if(stat==2)
+	if (stat==2)
 		return 0
-	if(anchored)
+	if (anchored)
 		return 0
-	if(monkeyizing)
+	if (monkeyizing)
 		return 0
-	if(restrained())
+	if (restrained())
 		return 0
 	return 1
 
@@ -1475,14 +1475,14 @@ var/list/slot_equipment_priority = list( \
 			lying = (category.flags & LOCKED_SHOULD_LIE) ? TRUE : FALSE //A lying value that !=1 will break this
 
 
-	else if(isUnconscious() || weakened || paralysis || resting || !can_stand)
+	else if (isUnconscious() || weakened || paralysis || resting || !can_stand)
 		stop_pulling()
 		lying = 1
 		canmove = 0
-	else if(stunned)
+	else if (stunned)
 //		lying = 0
 		canmove = 0
-	else if(captured)
+	else if (captured)
 		anchored = 1
 		canmove = 0
 		lying = 0
@@ -1491,7 +1491,7 @@ var/list/slot_equipment_priority = list( \
 		canmove = has_limbs
 
 	reset_layer() //Handles layer setting in hiding
-	if(lying)
+	if (lying)
 		density = 0
 		drop_hands()
 	else
@@ -1500,10 +1500,10 @@ var/list/slot_equipment_priority = list( \
 	//Temporarily moved here from the various life() procs
 	//I'm fixing stuff incrementally so this will likely find a better home.
 	//It just makes sense for now. ~Carn
-	if( update_icon )	//forces a full overlay update
+	if ( update_icon )	//forces a full overlay update
 		update_icon = 0
 		regenerate_icons()
-	else if( lying != lying_prev )
+	else if ( lying != lying_prev )
 		update_icons()
 
 	return canmove
@@ -1513,7 +1513,7 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/eastface()
 	set hidden = 1
-	if(!canface())
+	if (!canface())
 		return 0
 	dir = EAST
 	Facing()
@@ -1523,7 +1523,7 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/westface()
 	set hidden = 1
-	if(!canface())
+	if (!canface())
 		return 0
 	dir = WEST
 	Facing()
@@ -1533,7 +1533,7 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/northface()
 	set hidden = 1
-	if(!canface())
+	if (!canface())
 		return 0
 	dir = NORTH
 	Facing()
@@ -1543,7 +1543,7 @@ var/list/slot_equipment_priority = list( \
 
 /mob/verb/southface()
 	set hidden = 1
-	if(!canface())
+	if (!canface())
 		return 0
 	dir = SOUTH
 	Facing()
@@ -1553,9 +1553,9 @@ var/list/slot_equipment_priority = list( \
 
 /mob/proc/Facing()
     var/datum/listener
-    for(. in src.callOnFace)
+    for (. in src.callOnFace)
         listener = locate(.)
-        if(listener)
+        if (listener)
             call(listener,src.callOnFace[.])(src)
         else
             src.callOnFace -= .
@@ -1568,34 +1568,34 @@ var/list/slot_equipment_priority = list( \
 	return 0
 
 /mob/proc/Stun(amount)
-	if(status_flags & CANSTUN)
+	if (status_flags & CANSTUN)
 		stunned = max(max(stunned,amount),0) //can't go below 0, getting a low amount of stun doesn't lower your current stun
 	return
 
 /mob/proc/SetStunned(amount) //if you REALLY need to set stun to a set amount without the whole "can't go below current stunned"
-	if(status_flags & CANSTUN)
+	if (status_flags & CANSTUN)
 		stunned = max(amount,0)
 	return
 
 /mob/proc/AdjustStunned(amount)
-	if(status_flags & CANSTUN)
+	if (status_flags & CANSTUN)
 		stunned = max(stunned + amount,0)
 	return
 
 /mob/proc/Weaken(amount)
-	if(status_flags & CANWEAKEN)
+	if (status_flags & CANWEAKEN)
 		weakened = max(max(weakened,amount),0)
 		update_canmove()	//updates lying, canmove and icons
 	return
 
 /mob/proc/SetWeakened(amount)
-	if(status_flags & CANWEAKEN)
+	if (status_flags & CANWEAKEN)
 		weakened = max(amount,0)
 		update_canmove()	//updates lying, canmove and icons
 	return
 
 /mob/proc/AdjustWeakened(amount)
-	if(status_flags & CANWEAKEN)
+	if (status_flags & CANWEAKEN)
 		weakened = max(weakened + amount,0)
 		update_canmove()	//updates lying, canmove and icons
 	return
@@ -1608,17 +1608,17 @@ var/list/slot_equipment_priority = list( \
 
 
 /mob/proc/Paralyse(amount)
-	if(status_flags & CANPARALYSE)
+	if (status_flags & CANPARALYSE)
 		paralysis = max(max(paralysis,amount),0)
 	return
 
 /mob/proc/SetParalysis(amount)
-	if(status_flags & CANPARALYSE)
+	if (status_flags & CANPARALYSE)
 		paralysis = max(amount,0)
 	return
 
 /mob/proc/AdjustParalysis(amount)
-	if(status_flags & CANPARALYSE)
+	if (status_flags & CANPARALYSE)
 		paralysis = max(paralysis + amount,0)
 	return
 
@@ -1658,17 +1658,17 @@ var/list/slot_equipment_priority = list( \
 	set desc = "Remove an embedded item at the cost of bleeding and pain."
 	set src in view(1)
 
-	if(!isliving(usr) || (usr.client && usr.client.move_delayer.blocked()))
+	if (!isliving(usr) || (usr.client && usr.client.move_delayer.blocked()))
 		return
 
 	delayNextMove(20)
 	delayNextAttack(20)
 
-	if(usr.stat == 1)
+	if (usr.stat == 1)
 		to_chat(usr, "You are unconcious and cannot do that!")
 		return
 
-	if(usr.restrained())
+	if (usr.restrained())
 		to_chat(usr, "You are restrained and cannot do that!")
 		return
 
@@ -1677,15 +1677,15 @@ var/list/slot_equipment_priority = list( \
 	var/list/valid_objects = list()
 	var/self = null
 
-	if(S == U)
+	if (S == U)
 		self = 1 // Removing object from yourself.
 
-	for(var/obj/item/weapon/W in embedded)
-		if(W.w_class <= W_CLASS_SMALL)
+	for (var/obj/item/weapon/W in embedded)
+		if (W.w_class <= W_CLASS_SMALL)
 			valid_objects += W
 
-	if(!valid_objects.len)
-		if(self)
+	if (!valid_objects.len)
+		if (self)
 			to_chat(src, "You have nothing stuck in your body that is large enough to remove.")
 		else
 			to_chat(U, "[src] has nothing stuck in their wounds that is large enough to remove.")
@@ -1693,27 +1693,27 @@ var/list/slot_equipment_priority = list( \
 
 	var/obj/item/weapon/selection = input("What do you want to yank out?", "Embedded objects") in valid_objects
 
-	if(self)
+	if (self)
 		to_chat(src, "<span class='warning'>You attempt to get a good grip on the [selection] in your body.</span></span>")
 	else
 		to_chat(U, "<span class='warning'>You attempt to get a good grip on the [selection] in [S]'s body.</span>")
 
-	if(!do_after(U, src, 80))
+	if (!do_after(U, src, 80))
 		return
-	if(!selection || !S || !U)
+	if (!selection || !S || !U)
 		return
 
-	if(self)
+	if (self)
 		visible_message("<span class='danger'><b>[src] rips [selection] out of their body.</b></span>","<span class='warning'>You rip [selection] out of your body.</span>")
 	else
 		visible_message("<span class='danger'><b>[usr] rips [selection] out of [src]'s body.</b></span>","<span class='warning'>[usr] rips [selection] out of your body.</span>")
 
 	selection.forceMove(get_turf(src))
 
-	for(var/obj/item/weapon/O in pinned)
-		if(O == selection)
+	for (var/obj/item/weapon/O in pinned)
+		if (O == selection)
 			pinned -= O
-		if(!pinned.len)
+		if (!pinned.len)
 			anchored = 0
 	return 1
 
@@ -1738,9 +1738,9 @@ mob/proc/on_foot()
 	return 0
 
 /mob/proc/isTeleViewing(var/client_eye)
-	if(istype(client_eye,/obj/machinery/camera))
+	if (istype(client_eye,/obj/machinery/camera))
 		return 1
-	if(istype(client_eye,/obj/item/projectile/nikita))
+	if (istype(client_eye,/obj/item/projectile/nikita))
 		return 1
 	return 0
 
@@ -1757,29 +1757,29 @@ mob/proc/on_foot()
 	return 1
 
 /mob/proc/is_blind()
-	if(sdisabilities & BLIND || blinded || paralysis)
+	if (sdisabilities & BLIND || blinded || paralysis)
 		return 1
 	return 0
 
 /mob/proc/is_deaf()
-	if(sdisabilities & DEAF || ear_deaf)
+	if (sdisabilities & DEAF || ear_deaf)
 		return 1
 	return 0
 
 /mob/proc/hallucinating() //Return 1 if hallucinating! This doesn't affect the scary stuff from mindbreaker toxin, but it does affect other stuff (like special messages for interacting with objects)
-	if(isliving(src))
+	if (isliving(src))
 		var/mob/living/M = src
-		if(M.hallucination >= MOB_MINDBREAKER_HALLUCINATING)
+		if (M.hallucination >= MOB_MINDBREAKER_HALLUCINATING)
 			return 1
-		if(M.druggy >= MOB_SPACEDRUGS_HALLUCINATING)
+		if (M.druggy >= MOB_SPACEDRUGS_HALLUCINATING)
 			return 1
 	return 0
 
 /mob/proc/get_subtle_message(var/msg, var/deity = null)
-	if(!deity)
+	if (!deity)
 		deity = "a voice" //sanity
 	var/pre_msg = "You hear [deity] in your head... "
-	if(src.hallucinating()) //If hallucinating, make subtle messages more fun
+	if (src.hallucinating()) //If hallucinating, make subtle messages more fun
 		var/adjective = pick("an angry","a funny","a squeaky","a disappointed","your mother's","your father's","[ticker.Bible_deity_name]'s","an annoyed","a brittle","a loud","a very loud","a quiet","an evil", "an angelic")
 		var/location = pick(" from above"," from below"," in your head"," from behind you"," from everywhere"," from nowhere in particular","")
 		pre_msg = pick("You hear [adjective] voice[location]...")
@@ -1790,11 +1790,11 @@ mob/proc/on_foot()
 	ShiftClick(user)
 
 /mob/proc/handle_alpha()
-	if(alphas.len < 1)
+	if (alphas.len < 1)
 		alpha = 255
 	else
 		var/lowest_alpha = 255
-		for(var/alpha_modification in alphas)
+		for (var/alpha_modification in alphas)
 			lowest_alpha = min(lowest_alpha,alphas[alpha_modification])
 		alpha = lowest_alpha
 
@@ -1805,13 +1805,13 @@ mob/proc/on_foot()
 	return
 
 /mob/proc/remove_jitter()
-	if(jitteriness)
+	if (jitteriness)
 		jitteriness = 0
 		animate(src)
 
 //High order proc to remove a mobs spell channeling, removes channeling fully
 /mob/proc/remove_spell_channeling()
-	if(spell_channeling)
+	if (spell_channeling)
 		var/spell/thespell = on_uattack.handlers[spell_channeling][EVENT_OBJECT_INDEX]
 		thespell.channel_spell(force_remove = 1)
 		return 1
@@ -1824,10 +1824,10 @@ mob/proc/on_foot()
 	return
 
 /mob/living/carbon/heard(var/mob/living/carbon/human/M)
-	if(M == src || !istype(M))
+	if (M == src || !istype(M))
 		return
-	if(!ear_deaf && !stat)
-		if(!(mind.heard_before[M.name]))
+	if (!ear_deaf && !stat)
+		if (!(mind.heard_before[M.name]))
 			mind.heard_before[M.name] = M
 			M.heard_by |= mind
 

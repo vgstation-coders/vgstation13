@@ -2,13 +2,13 @@ var/global/wages_enabled = 0
 var/global/roundstart_enable_wages = 0
 
 /proc/wageSetup()
-	if(roundstart_enable_wages)
+	if (roundstart_enable_wages)
 		wages_enabled = 1
 	WageLoop()
 
 /proc/wagePayout()
-	for(var/datum/money_account/Acc in all_money_accounts)
-		if(Acc.wage_gain)
+	for (var/datum/money_account/Acc in all_money_accounts)
+		if (Acc.wage_gain)
 			Acc.money += Acc.wage_gain
 
 			var/datum/transaction/T = new()
@@ -24,7 +24,7 @@ var/global/roundstart_enable_wages = 0
 	set waitfor = 0
 	usr = null
 	src = null
-	while(1) //looping
+	while (1) //looping
 		sleep(15 MINUTES)
-		if(wages_enabled)
+		if (wages_enabled)
 			wagePayout()

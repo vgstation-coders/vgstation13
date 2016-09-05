@@ -20,10 +20,10 @@
     . = ..()
 
 /datum/event/mob_swarm/setup()
-    while(possible_locations.len)
+    while (possible_locations.len)
         var/area/possible_spawn_area = pick(possible_locations)
         var/area/A = locate(possible_spawn_area)
-        if(A) // If we're on the map
+        if (A) // If we're on the map
             target_area = A
             break
         else
@@ -32,17 +32,17 @@
 
 /datum/event/mob_swarm/start()
     var/list/turfs = list()
-    for(var/turf/T in target_area)
-        if(T.density || T.has_dense_content())
+    for (var/turf/T in target_area)
+        if (T.density || T.has_dense_content())
             continue
         turfs.Add(T)
 
-    for(var/n = 0, n < spawn_amount, n++)
+    for (var/n = 0, n < spawn_amount, n++)
         var/turf/targetTurf = pick(turfs)
-        if(!targetTurf) // If all else goes wrong for SOME REASON
+        if (!targetTurf) // If all else goes wrong for SOME REASON
             targetTurf = get_turf(pick(target_area.contents)) // Areas contain more than turfs
         var/mob/M = new mob_to_spawn(targetTurf)
-        if(!mob_name)
+        if (!mob_name)
             mob_name = M.name
         var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
         sparks.set_up(3,0,targetTurf)

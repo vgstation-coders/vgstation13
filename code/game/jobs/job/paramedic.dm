@@ -15,12 +15,12 @@
 	pdatype=/obj/item/device/pda/medical
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)
+		if (!H)
 			return 0
 		H.equip_or_collect(new /obj/item/device/radio/headset/headset_med(H), slot_ears)
-		if(H.backbag == 2)
+		if (H.backbag == 2)
 			H.equip_or_collect(new /obj/item/weapon/storage/backpack/medic (H), slot_back)
-		if(H.backbag == 3)
+		if (H.backbag == 3)
 			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_med(H), slot_back)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/medical/paramedic(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
@@ -28,7 +28,7 @@
 		H.equip_or_collect(new /obj/item/clothing/mask/cigarette(H), slot_wear_mask)
 		H.equip_or_collect(new /obj/item/clothing/head/soft/paramedic(H), slot_head)
 		H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
-		if(H.backbag == 1)
+		if (H.backbag == 1)
 			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
 			H.put_in_hand(GRASP_LEFT_HAND, new /obj/item/device/healthanalyzer(H))
 		else

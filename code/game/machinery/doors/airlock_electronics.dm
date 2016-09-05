@@ -19,19 +19,19 @@
 
 	// Allow dicking with it while it's on the floor.
 /obj/item/weapon/circuitboard/airlock/attack_robot(mob/user as mob)
-	if(isMoMMI(user))
+	if (isMoMMI(user))
 		return ..()
 	attack_self(user)
 	return 1
 
 /obj/item/weapon/circuitboard/airlock/attackby(obj/item/W as obj, mob/user as mob)
-	if(issolder(W))
+	if (issolder(W))
 		var/obj/item/weapon/solder/S = W
-		if(icon_state == "door_electronics_smoked")
-			if(!S.remove_fuel(4,user))
+		if (icon_state == "door_electronics_smoked")
+			if (!S.remove_fuel(4,user))
 				return
 			playsound(loc, 'sound/items/Welder.ogg', 100, 1)
-			if(do_after(user, src,40))
+			if (do_after(user, src,40))
 				playsound(loc, 'sound/items/Welder.ogg', 100, 1)
 				icon_state = "door_electronics"
 				to_chat(user, "<span class='notice'>You repair the blown fuses on the circuitboard.</span>")
@@ -43,9 +43,9 @@
 	// Can't manipulate it when broken (e.g. emagged)
 	if (icon_state == "door_electronics_smoked")
 		return
-	if(ishuman(user))
+	if (ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if(H.getBrainLoss() >= 60)
+		if (H.getBrainLoss() >= 60)
 			return
 
 	interact(user)
@@ -57,7 +57,7 @@
 		t1 += "Operator: [last_configurator]<br>"
 
 	if (locked)
-		if(isrobot(user))
+		if (isrobot(user))
 			t1 += "<a href='?src=\ref[src];login=1'>Log In</a><hr>"
 		else
 			t1 += "<a href='?src=\ref[src];login=1'>Swipe ID</a><hr>"
@@ -77,7 +77,7 @@
 
 			if (!conf_access || !conf_access.len || !(acc in conf_access))
 				t1 += "<a href='?src=\ref[src];access=[acc]'>[aname]</a><br>"
-			else if(one_access)
+			else if (one_access)
 				t1 += "<a style='color: green' href='?src=\ref[src];access=[acc]'>[aname]</a><br>"
 			else
 				t1 += "<a style='color: red' href='?src=\ref[src];access=[acc]'>[aname]</a><br>"
@@ -88,34 +88,34 @@
 	onclose(user, "airlock")
 
 /obj/item/weapon/circuitboard/airlock/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1 //Its not as though this does ANYTHING
-	if(!Adjacent(usr) || usr.incapacitated() || (!ishuman(usr) && !isrobot(usr)) || icon_state == "door_electronics_smoked" || installed)
+	if (!Adjacent(usr) || usr.incapacitated() || (!ishuman(usr) && !isrobot(usr)) || icon_state == "door_electronics_smoked" || installed)
 		return
-	if(href_list["close"])
+	if (href_list["close"])
 		usr << browse(null, "window=airlock")
 		return
 
-	if(href_list["login"])
-		if(ishuman(usr))
+	if (href_list["login"])
+		if (ishuman(usr))
 			var/obj/item/weapon/card/id/I = usr.get_id_card()
-			if(istype(I) && src.check_access(I))
+			if (istype(I) && src.check_access(I))
 				src.locked = 0
 				src.last_configurator = I.registered_name
-		if(isrobot(usr))
+		if (isrobot(usr))
 			src.locked = 0
 			src.last_configurator = usr.name
 
-	if(locked)
+	if (locked)
 		return
 
-	if(href_list["logout"])
+	if (href_list["logout"])
 		locked = 1
 
-	if(href_list["one_access"])
+	if (href_list["one_access"])
 		one_access = !one_access
 
-	if(href_list["access"])
+	if (href_list["access"])
 		toggle_access(href_list["access"])
 
 	interact(usr)

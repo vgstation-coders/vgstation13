@@ -153,7 +153,7 @@
 		name = "<b>\[[time_stamp()]]</b> Uncaught exception: <b>[html_encode(e.name)]</b>"
 		return
 
-	if(skip_count)
+	if (skip_count)
 		name = "\[[time_stamp()]] Skipped [skip_count] runtimes in [e.file],[e.line]."
 		is_skip_count = TRUE
 		return

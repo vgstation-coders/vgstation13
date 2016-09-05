@@ -33,8 +33,8 @@
 
 /obj/machinery/processor/RefreshParts()
 	var/manipcount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
+	for (var/obj/item/weapon/stock_parts/SP in component_parts)
+		if (istype(SP, /obj/item/weapon/stock_parts/manipulator))
 			manipcount += SP.rating
 	time_coeff = 2/manipcount
 
@@ -55,9 +55,9 @@
 		input = null
 		output = null
 		process(loc, atom/movable/what)
-			if(loc && istype(what,/obj/item/weapon/reagent_containers/food/snacks/meat))
+			if (loc && istype(what,/obj/item/weapon/reagent_containers/food/snacks/meat))
 				var/obj/item/weapon/reagent_containers/food/snacks/meat/M = what
-				if(M.poisonsacs)
+				if (M.poisonsacs)
 					M.poisonsacs.forceMove(loc)
 					M.poisonsacs = null
 					M.desc = "An excellent [src]!"
@@ -102,11 +102,11 @@
 
 				var/mob/living/carbon/slime/S = what
 				var/C = S.cores
-				if(S.stat != DEAD)
+				if (S.stat != DEAD)
 					S.forceMove(loc)
 					S.visible_message("<span class='notice'>[C] crawls free of the processor!</span>")
 					return
-				for(var/i = 1, i <= C, i++)
+				for (var/i = 1, i <= C, i++)
 					new S.coretype(loc)
 					feedback_add_details("slime_core_harvested","[replacetext(S.colour," ","_")]")
 				..()
@@ -129,12 +129,12 @@
 				//set reagent data
 				B.data["donor"] = O
 
-				for(var/datum/disease/D in O.viruses)
-					if(D.spread_type != SPECIAL)
+				for (var/datum/disease/D in O.viruses)
+					if (D.spread_type != SPECIAL)
 						B.data["viruses"] += D.Copy()
 
 				B.data["blood_DNA"] = copytext(O.dna.unique_enzymes,1,0)
-				if(O.resistances&&O.resistances.len)
+				if (O.resistances&&O.resistances.len)
 					B.data["resistances"] = O.resistances.Copy()
 				bucket_of_blood.reagents.reagent_list += B
 				bucket_of_blood.reagents.update_total()
@@ -170,15 +170,15 @@
 					target.invisibility = 101
 					target.density = 0
 					var/throwzone = list()
-					for(var/turf/T in orange(loc,4))
+					for (var/turf/T in orange(loc,4))
 						throwzone += T
-					for(var/obj/I in target.contents)
+					for (var/obj/I in target.contents)
 						I.forceMove(loc)
 						I.throw_at(pick(throwzone),rand(2,5),0)
 					hgibs(loc, target.viruses, target.dna, target.species.flesh_color, target.species.blood_color)
 					qdel(target)
 					target = null
-					for(var/i = 1;i<=6;i++)
+					for (var/i = 1;i<=6;i++)
 						new /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets(loc)
 						sleep(2)
 					..()
@@ -197,19 +197,19 @@
 	return 0
 
 /obj/machinery/processor/crowbarDestroy(mob/user)
-	if(contents.len)
+	if (contents.len)
 		to_chat(user, "You can't do that while something is loaded in \the [src].")
 		return -1
 	return ..()
 
 /obj/machinery/processor/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(src.processing)
+	if (src.processing)
 		to_chat(user, "<span class='warning'>[src] is already processing!</span>")
 		return 1
 
-	if(..())
+	if (..())
 		return 1
-	if(src.contents.len > 0) //TODO: several items at once? several different items?
+	if (src.contents.len > 0) //TODO: several items at once? several different items?
 		to_chat(user, "<span class='warning'>Something is already in [src]</span>.")
 		return 1
 	var/atom/movable/what = O
@@ -223,10 +223,10 @@
 		return 1
 	user.visible_message("<span class='notice'>[user] puts [what] into [src].</span>", \
 		"You put [what] into the [src].")
-	if(what == user.get_active_hand())
+	if (what == user.get_active_hand())
 		user.drop_item(what, src)
 	else
-		if(O.loc == user)
+		if (O.loc == user)
 			user.drop_item(O)
 		what.forceMove(src)
 	return
@@ -234,16 +234,16 @@
 /obj/machinery/processor/attack_hand(var/mob/user as mob)
 	if (src.stat != 0) //NOPOWER etc
 		return
-	if(!anchored)
+	if (!anchored)
 		to_chat(user, "<span class='warning'>[src] must be anchored first!</span>")
 		return
-	if(src.processing)
+	if (src.processing)
 		to_chat(user, "<span class='warning'>[src] is already processing!</span>")
 		return 1
-	if(src.contents.len == 0)
+	if (src.contents.len == 0)
 		to_chat(user, "<span class='warning'>[src] is empty!</span>")
 		return 1
-	for(var/O in src.contents)
+	for (var/O in src.contents)
 		var/datum/food_processor_process/P = select_recipe(O)
 		if (!P)
 			log_admin("DEBUG: [O] in processor is not suitable. How did you put it in?") //-rastaf0

@@ -23,8 +23,8 @@
 
 /datum/disease/robotic_transformation/stage_act()
 	..()
-	switch(stage)
-		if(2)
+	switch (stage)
+		if (2)
 			if (prob(8))
 				to_chat(affected_mob, "Your joints feel stiff.")
 				affected_mob.take_organ_damage(1)
@@ -32,7 +32,7 @@
 				to_chat(affected_mob, "<span class='warning'>Beep... boop...</span>")
 			if (prob(9))
 				to_chat(affected_mob, "<span class='warning'>Boop... beeep...</span>")
-		if(3)
+		if (3)
 			if (prob(8))
 				to_chat(affected_mob, "<span class='warning'>Your joints feel very stiff.</span>")
 				affected_mob.take_organ_damage(1)
@@ -46,7 +46,7 @@
 				affected_mob.Paralyse(2)
 			if (prob(4))
 				to_chat(affected_mob, "<span class='warning'>You can feel something move...inside.</span>")
-		if(4)
+		if (4)
 			if (prob(10))
 				to_chat(affected_mob, "<span class='warning'>Your skin feels very loose.</span>")
 				affected_mob.take_organ_damage(8)
@@ -54,21 +54,21 @@
 				affected_mob.say(pick("beep, beep!", "Boop bop boop beep.", "kkkiiiill mmme", "I wwwaaannntt tttoo dddiiieeee..."))
 			if (prob(8))
 				to_chat(affected_mob, "<span class='warning'>You can feel... something...inside you.</span>")
-		if(5)
+		if (5)
 			to_chat(affected_mob, "<span class='warning'>Your skin feels as if it's about to burst off...</span>")
 			affected_mob.adjustToxLoss(10)
 			affected_mob.updatehealth()
-			if(prob(40)) //So everyone can feel like robot Seth Brundle
-				if(src.gibbed != 0)
+			if (prob(40)) //So everyone can feel like robot Seth Brundle
+				if (src.gibbed != 0)
 					return 0
 				gibs(affected_mob)
 				gibbed = 1
 				var/mob/living/carbon/human/H = affected_mob
-				if(istype(H) && !jobban_isbanned(affected_mob, robot_type))
-					switch(robot_type)
-						if("Cyborg")
+				if (istype(H) && !jobban_isbanned(affected_mob, robot_type))
+					switch (robot_type)
+						if ("Cyborg")
 							H.Robotize()
-						if("MoMMI")
+						if ("MoMMI")
 							H.MoMMIfy(1)
 				else
 					affected_mob.death(1)

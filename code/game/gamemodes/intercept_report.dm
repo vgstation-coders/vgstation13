@@ -56,32 +56,32 @@
 
 
 /datum/intercept_text/proc/build(var/mode_type, datum/mind/correct_person)
-	switch(mode_type)
-		if("revolution")
+	switch (mode_type)
+		if ("revolution")
 			src.text = ""
 			src.build_rev(correct_person)
 			return src.text
-		if("cult")
+		if ("cult")
 			src.text = ""
 			src.build_cult(correct_person)
 			return src.text
-		if("wizard")
+		if ("wizard")
 			src.text = ""
 			src.build_wizard(correct_person)
 			return src.text
-		if("nuke")
+		if ("nuke")
 			src.text = ""
 			src.build_nuke(correct_person)
 			return src.text
-		if("traitor")
+		if ("traitor")
 			src.text = ""
 			src.build_traitor(correct_person)
 			return src.text
-		if("malf")
+		if ("malf")
 			src.text = ""
 			src.build_malf(correct_person)
 			return src.text
-		if("changeling","traitorchan")
+		if ("changeling","traitorchan")
 			src.text = ""
 			src.build_changeling(correct_person)
 			return src.text
@@ -93,13 +93,13 @@
 /*
 /datum/intercept_text/proc/pick_mob()
 	var/list/dudes = list()
-	for(var/mob/living/carbon/human/man in player_list)
+	for (var/mob/living/carbon/human/man in player_list)
 		if (!man.mind)
 			continue
 		if (man.mind.assigned_role=="MODE")
 			continue
 		dudes += man
-	if(dudes.len==0)
+	if (dudes.len==0)
 		return null
 	return pick(dudes)
 
@@ -107,7 +107,7 @@
 /datum/intercept_text/proc/pick_fingerprints()
 	var/mob/living/carbon/human/dude = src.pick_mob()
 	//if (!dude) return pick_fingerprints() //who coded that is totally crasy or just a traitor. -- rastaf0
-	if(dude)
+	if (dude)
 		return num2text(md5(dude.dna.uni_identity))
 	else
 		return num2text(md5(num2text(rand(1,10000))))
@@ -115,9 +115,9 @@
 
 /datum/intercept_text/proc/get_suspect()
 	var/list/dudes = list()
-	for(var/mob/living/carbon/human/man in player_list) if(man.client && man.client.prefs.nanotrasen_relation == "Opposed")
+	for (var/mob/living/carbon/human/man in player_list) if (man.client && man.client.prefs.nanotrasen_relation == "Opposed")
 		dudes += man
-	for(var/i = 0, i < max(player_list.len/10,2), i++)
+	for (var/i = 0, i < max(player_list.len/10,2), i++)
 		dudes += pick(player_list)
 	return pick(dudes)
 
@@ -126,7 +126,7 @@
 	var/name_2 = pick(src.org_names_2)
 
 	var/mob/living/carbon/human/H = get_suspect()
-	if(!H)
+	if (!H)
 		return
 
 	var/fingerprints = num2text(md5(H.dna.uni_identity))
@@ -137,7 +137,7 @@
 	src.text += {"<BR><BR>The <B>[name_1] [name_2]</B> implied an undercover operative was acting on their behalf on the station currently.
 		It would be in your best interests to suspect everybody, as these undercover operatives could have implants which trigger them to have their memories removed until they are needed. He, or she, could even be a high ranking officer.
 		After some investigation, we "}
-	if(prob(50))
+	if (prob(50))
 
 		src.text += {"are [prob_right_dude]% sure that [traitor_name] may have been involved, and should be closely observed.
 			<BR>Note: This group are known to be untrustworthy, so do not act on this information without proper discourse."}
@@ -151,7 +151,7 @@
 
 	var/prob_right_dude = rand(1, 100)
 	var/mob/living/carbon/human/H = get_suspect()
-	if(!H)
+	if (!H)
 		return
 	var/traitor_job = H.mind.assigned_role
 
@@ -167,7 +167,7 @@
 
 	var/prob_right_dude = rand(1, 100)
 	var/mob/living/carbon/human/H = get_suspect()
-	if(!H)
+	if (!H)
 		return
 	var/traitor_job = H.mind.assigned_role
 
@@ -207,16 +207,16 @@
 	var/changeling_job
 	var/prob_right_dude = rand(prob_correct_person_lower, prob_correct_person_higher)
 	var/prob_right_job = rand(prob_correct_job_lower, prob_correct_job_higher)
-	if(prob(prob_right_job))
-		if(correct_person)
-			if(correct_person:assigned_role=="MODE")
+	if (prob(prob_right_job))
+		if (correct_person)
+			if (correct_person:assigned_role=="MODE")
 				changeling_job = pick(get_all_jobs())
 			else
 				changeling_job = correct_person:assigned_role
 	else
 		changeling_job = pick(get_all_jobs())
-	if(prob(prob_right_dude) && ticker.mode == "changeling")
-		if(correct_person:assigned_role=="MODE")
+	if (prob(prob_right_dude) && ticker.mode == "changeling")
+		if (correct_person:assigned_role=="MODE")
 			changeling_name = correct_person:current
 		else
 			changeling_name = src.pick_mob()

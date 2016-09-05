@@ -28,42 +28,42 @@
 
 /obj/machinery/r_n_d/blueprinter/RefreshParts()
 	var/list/bins = list()
-	if(!component_parts)
+	if (!component_parts)
 		return
-	for(var/obj/item/weapon/stock_parts/matter_bin/MB in component_parts)
-		if(istype(MB))
+	for (var/obj/item/weapon/stock_parts/matter_bin/MB in component_parts)
+		if (istype(MB))
 			bins  += MB.rating
 	max_paper = 10 * bins[1]
 	max_nano = 10 * bins[2]
 
 /obj/machinery/r_n_d/blueprinter/attackby(var/atom/A, mob/user)
-	if(..())
+	if (..())
 		return 1
 
-	if(istype(A, /obj/item/weapon/paper))
+	if (istype(A, /obj/item/weapon/paper))
 		var/obj/item/weapon/paper/P = A
-		if(istype(P, /obj/item/weapon/paper/nano))
-			if(max_nano > nano_loaded)
+		if (istype(P, /obj/item/weapon/paper/nano))
+			if (max_nano > nano_loaded)
 				nano_loaded++
 				qdel(P)
 			else
 				to_chat(user, "<span class='notice'>\The [src] is full.</span>")
 		else
-			if(max_paper > paper_loaded)
+			if (max_paper > paper_loaded)
 				paper_loaded++
 				qdel(P)
 			else
 				to_chat(user, "<span class='notice'>\The [src] is full.</span>")
 		return
 
-	if(istype(A, /obj/item/weapon/paper_pack))
+	if (istype(A, /obj/item/weapon/paper_pack))
 		var/obj/item/weapon/paper_pack/PP = A
 		var/usingamount = 0
-		if(!PP.amount)
+		if (!PP.amount)
 			to_chat(user, "<span class='notice'>You have to have paper to load the [src]!</span>")
 		else
 			var/load_overlay = "[base_state][PP.pptype ? "nano" : "regular"]"
-			if(PP.pptype == "nano")
+			if (PP.pptype == "nano")
 				usingamount = min(max_nano - nano_loaded, PP.amount)
 				nano_loaded += usingamount
 			else
@@ -80,9 +80,9 @@
 //use_nano controls if the design is printed using nanopaper or regular paper
 //nanopaper designs are better, see blueprint.dm for the code details
 /obj/machinery/r_n_d/blueprinter/proc/PrintDesign(var/datum/design/design, var/use_nano = 0)
-	if(!istype(design)) //sanity checks yay
+	if (!istype(design)) //sanity checks yay
 		return
-	if((use_nano && nano_loaded == 0) || (!use_nano && paper_loaded == 0)) //material checks
+	if ((use_nano && nano_loaded == 0) || (!use_nano && paper_loaded == 0)) //material checks
 		visible_message("[bicon(src)]<span class='notice'> \The [src] beeps: 'Out of [use_nano ? "nanopaper" : "paper"]!'</span>")
 		return
 
@@ -90,7 +90,7 @@
 	overlays += image(icon = icon, icon_state = "[base_state]_ani")
 	sleep(30)
 	busy = 0
-	if(use_nano)
+	if (use_nano)
 		new/obj/item/research_blueprint/nano(get_output(), design)
 		nano_loaded -= 1
 	else

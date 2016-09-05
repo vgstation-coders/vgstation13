@@ -11,7 +11,7 @@
 	New()
 		..()
 		sleep(2)
-		if(prob(50))
+		if (prob(50))
 			new /obj/item/weapon/storage/backpack/captain(src)
 		else
 			new /obj/item/weapon/storage/backpack/satchel_cap(src)
@@ -102,7 +102,7 @@
 	New()
 		..()
 		sleep(2)
-		if(prob(50))
+		if (prob(50))
 			new /obj/item/weapon/storage/backpack/security(src)
 		else
 			new /obj/item/weapon/storage/backpack/satchel_sec(src)
@@ -145,7 +145,7 @@
 	New()
 		..()
 		sleep(2)
-		if(prob(50))
+		if (prob(50))
 			new /obj/item/weapon/storage/backpack/security(src)
 		else
 			new /obj/item/weapon/storage/backpack/satchel_sec(src)
@@ -182,7 +182,7 @@
 	New()
 		..()
 		sleep(2)
-		if(prob(50))
+		if (prob(50))
 			new /obj/item/weapon/storage/backpack/security(src)
 		else
 			new /obj/item/weapon/storage/backpack/satchel_sec(src)
@@ -271,11 +271,11 @@
 		return
 
 /obj/structure/closet/secure_closet/detective/update_icon()
-	if(broken)
+	if (broken)
 		icon_state = icon_broken
 	else
-		if(!opened)
-			if(locked)
+		if (!opened)
+			if (locked)
 				icon_state = icon_locked
 			else
 				icon_state = icon_closed
@@ -342,11 +342,11 @@
 	large = 0
 
 /obj/structure/closet/secure_closet/wall/update_icon()
-	if(broken)
+	if (broken)
 		icon_state = icon_broken
 	else
-		if(!opened)
-			if(locked)
+		if (!opened)
+			if (locked)
 				icon_state = icon_locked
 			else
 				icon_state = icon_closed

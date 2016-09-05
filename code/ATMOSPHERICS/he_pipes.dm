@@ -23,11 +23,11 @@
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/update_icon(var/adjacent_procd)
 	var/node_list = list(node1,node2)
-	if(!node1 && !node2)
+	if (!node1 && !node2)
 		qdel(src)
-	if(!adjacent_procd)
-		for(var/obj/machinery/atmospherics/node in node_list)
-			if(node.update_icon_ready && !(istype(node,/obj/machinery/atmospherics/pipe/simple)))
+	if (!adjacent_procd)
+		for (var/obj/machinery/atmospherics/node in node_list)
+			if (node.update_icon_ready && !(istype(node,/obj/machinery/atmospherics/pipe/simple)))
 				node.update_icon(1)
 
 	// BubbleWrap
@@ -42,7 +42,7 @@
 	initialize_directions_he = pipe.get_pipe_dir()
 	//var/turf/T = loc
 	//level = T.intact ? 2 : 1
-	if(!initialize(1))
+	if (!initialize(1))
 		to_chat(usr, "Unable to build pipe here;  It must be connected to a machine, or another pipe that has a connection.")
 		return 0
 	build_network()
@@ -59,12 +59,12 @@
 
 	findAllConnections(initialize_directions_he)
 
-	if(!suppress_icon_check)
+	if (!suppress_icon_check)
 		update_icon()
 	return node1 || node2
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/process()
-	if(!parent)
+	if (!parent)
 		. = ..()
 
 	// Get gas from pipenet
@@ -79,23 +79,23 @@
 	var/datum/gas_mixture/external_removed = environment.remove(transfer_moles)
 
 	// No environmental gas?  We radiate it, then.
-	if(!external_removed)
-		if(internal_removed)
+	if (!external_removed)
+		if (internal_removed)
 			internal.merge(internal_removed)
 		return radiate()
 
 	// Not enough gas in the air around us to care about.  Radiate. Less gas than airless tiles start with.
-	if(environment_moles < NO_GAS)
-		if(internal_removed)
+	if (environment_moles < NO_GAS)
+		if (internal_removed)
 			internal.merge(internal_removed)
 		environment.merge(external_removed)
 		return radiate()
 	// A tiny bit of air so this isn't really space, but its not worth activating exchange procs
-	else if(environment_moles < SOME_GAS)
+	else if (environment_moles < SOME_GAS)
 		return 0
 
 	// No internal gas.  Screw this, we're out.
-	if(!internal_removed)
+	if (!internal_removed)
 		environment.merge(external_removed)
 		return
 
@@ -103,7 +103,7 @@
 	var/combined_heat_capacity = internal_removed.heat_capacity() + external_removed.heat_capacity()
 	var/combined_energy = internal_removed.temperature * internal_removed.heat_capacity() + external_removed.heat_capacity() * external_removed.temperature
 
-	if(!combined_heat_capacity)
+	if (!combined_heat_capacity)
 		combined_heat_capacity = 1
 	var/final_temperature = combined_energy / combined_heat_capacity
 
@@ -114,7 +114,7 @@
 	internal.merge(internal_removed)
 
 
-	if(parent && parent.network)
+	if (parent && parent.network)
 		parent.network.update = 1
 	return 1
 
@@ -134,7 +134,7 @@
 	internal_removed.temperature = final_temperature
 	internal.merge(internal_removed)
 
-	if(parent && parent.network)
+	if (parent && parent.network)
 		parent.network.update = 1
 
 	return 1
@@ -188,21 +188,21 @@
 	return 1
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction/update_icon()
-	if(node1&&node2)
+	if (node1&&node2)
 		icon_state = "intact[invisibility ? "-f" : "" ]"
 	else
 		var/have_node1 = node1?1:0
 		var/have_node2 = node2?1:0
 		icon_state = "exposed[have_node1][have_node2]"
 
-	if(!node1&&!node2)
+	if (!node1&&!node2)
 		qdel(src)
 
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction/initialize(var/suppress_icon_check=0)
 	node1 = findConnecting(initialize_directions)
 	node2 = findConnectingHE(initialize_directions_he)
 
-	if(!suppress_icon_check)
+	if (!suppress_icon_check)
 		update_icon()
 
 	return node1 || node2

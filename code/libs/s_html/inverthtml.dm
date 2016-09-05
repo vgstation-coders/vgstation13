@@ -5,10 +5,10 @@
 // form "#XXXXXX".  Nothing else will work!
 
 proc/invertHTML(HTMLstring)
-	if(!istext(HTMLstring))
+	if (!istext(HTMLstring))
 		CRASH("Given non-text argument!")
 		return
-	else if(length(HTMLstring) != 7)
+	else if (length(HTMLstring) != 7)
 		CRASH("Given non-HTML argument!")
 		return
 
@@ -23,11 +23,11 @@ proc/invertHTML(HTMLstring)
 	textr = num2hex(255-r)
 	textg = num2hex(255-g)
 	textb = num2hex(255-b)
-	if(lentext(textr) < 2)
+	if (lentext(textr) < 2)
 		textr = "0[textr]"
-	if(lentext(textg) < 2)
+	if (lentext(textg) < 2)
 		textr = "0[textg]"
-	if(lentext(textb) < 2)
+	if (lentext(textb) < 2)
 		textr = "0[textb]"
 
 	return("#[textr][textg][textb]")

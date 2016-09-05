@@ -6,23 +6,23 @@ proc/Intoxicated(phrase)
 	var/counter=length(phrase)
 	var/newphrase=""
 	var/newletter=""
-	while(counter>=1)
+	while (counter>=1)
 		newletter=copytext(phrase,(leng-counter)+1,(leng-counter)+2)
-		if(rand(1,3)==3)
-			if(lowertext(newletter)=="o")
+		if (rand(1,3)==3)
+			if (lowertext(newletter)=="o")
 				newletter="u"
-			if(lowertext(newletter)=="s")
+			if (lowertext(newletter)=="s")
 				newletter="ch"
-			if(lowertext(newletter)=="a")
+			if (lowertext(newletter)=="a")
 				newletter="ah"
-			if(lowertext(newletter)=="c")
+			if (lowertext(newletter)=="c")
 				newletter="k"
-		switch(rand(1,7))
-			if(1,3,5,8)
+		switch (rand(1,7))
+			if (1,3,5,8)
 				newletter="[lowertext(newletter)]"
-			if(2,4,6,15)
+			if (2,4,6,15)
 				newletter="[uppertext(newletter)]"
-			if(7)
+			if (7)
 				newletter+="'"
 			//if(9,10)	newletter="<b>[newletter]</b>"
 			//if(11,12)	newletter="<big>[newletter]</big>"
@@ -37,9 +37,9 @@ proc/NewStutter(phrase,stunned)
 
 	var/list/unstuttered_words = split_phrase.Copy()
 	var/i = rand(1,3)
-	if(stunned)
+	if (stunned)
 		i = split_phrase.len
-	for(,i > 0,i--) //Pick a few words to stutter on.
+	for (,i > 0,i--) //Pick a few words to stutter on.
 
 		if (!unstuttered_words.len)
 			break
@@ -50,17 +50,17 @@ proc/NewStutter(phrase,stunned)
 		//Search for dipthongs (two letters that make one sound.)
 		var/first_sound = copytext(word,1,3)
 		var/first_letter = copytext(word,1,2)
-		if(lowertext(first_sound) in list("ch","th","sh"))
+		if (lowertext(first_sound) in list("ch","th","sh"))
 			first_letter = first_sound
 
 		//Repeat the first letter to create a stutter.
 		var/rnum = rand(1,3)
-		switch(rnum)
-			if(1)
+		switch (rnum)
+			if (1)
 				word = "[first_letter]-[word]"
-			if(2)
+			if (2)
 				word = "[first_letter]-[first_letter]-[word]"
-			if(3)
+			if (3)
 				word = "[first_letter]-[word]"
 
 		split_phrase[index] = word
@@ -71,9 +71,9 @@ proc/Stagger(mob/M,d) //Technically not a filter, but it relates to drunkenness.
 	step(M, pick(d,turn(d,90),turn(d,-90)))
 
 proc/Ellipsis(original_msg, chance = 50)
-	if(chance <= 0)
+	if (chance <= 0)
 		return "..."
-	if(chance >= 100)
+	if (chance >= 100)
 		return original_msg
 
 	var/list
@@ -82,8 +82,8 @@ proc/Ellipsis(original_msg, chance = 50)
 
 	var/new_msg = ""
 
-	for(var/w in words)
-		if(prob(chance))
+	for (var/w in words)
+		if (prob(chance))
 			new_words += "..."
 		else
 			new_words += w

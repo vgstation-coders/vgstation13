@@ -6,17 +6,17 @@
 
 /proc/ToRban_isbanned(var/ip_address)
 	var/savefile/F = new(TORFILE)
-	if(F)
-		if( ip_address in F.dir )
+	if (F)
+		if ( ip_address in F.dir )
 			return 1
 	return 0
 
 /proc/ToRban_autoupdate()
 	var/savefile/F = new(TORFILE)
-	if(F)
+	if (F)
 		var/last_update
 		F["last_update"] >> last_update
-		if((last_update + TOR_UPDATE_INTERVAL) < world.realtime)	//we haven't updated for a while
+		if ((last_update + TOR_UPDATE_INTERVAL) < world.realtime)	//we haven't updated for a while
 			ToRban_update()
 	return
 
@@ -26,20 +26,20 @@
 		var/http[] = world.Export("http://exitlist.torproject.org/exit-addresses")
 
 		var/list/rawlist = file2list(http["CONTENT"])
-		if(rawlist.len)
+		if (rawlist.len)
 			fdel(TORFILE)
 			var/savefile/F = new(TORFILE)
-			for( var/line in rawlist )
-				if(!line)
+			for ( var/line in rawlist )
+				if (!line)
 					continue
-				if( copytext(line,1,12) == "ExitAddress" )
+				if ( copytext(line,1,12) == "ExitAddress" )
 					var/cleaned = copytext(line,13,length(line)-19)
-					if(!cleaned)
+					if (!cleaned)
 						continue
 					F[cleaned] << 1
 			F["last_update"] << world.realtime
 			diary << "ToR data updated!"
-			if(usr)
+			if (usr)
 				to_chat(usr, "ToRban updated.")
 			return 1
 		diary << "ToR data update aborted: no data."
@@ -48,41 +48,41 @@
 /client/proc/ToRban(task in list("update","toggle","show","remove","remove all","find"))
 	set name = "ToRban"
 	set category = "Server"
-	if(!holder)
+	if (!holder)
 		return
-	switch(task)
-		if("update")
+	switch (task)
+		if ("update")
 			ToRban_update()
-		if("toggle")
-			if(config)
-				if(config.ToRban)
+		if ("toggle")
+			if (config)
+				if (config.ToRban)
 					config.ToRban = 0
 					message_admins("<font color='red'>ToR banning disabled.</font>")
 				else
 					config.ToRban = 1
 					message_admins("<font colot='green'>ToR banning enabled.</font>")
-		if("show")
+		if ("show")
 			var/savefile/F = new(TORFILE)
 			var/dat
-			if( length(F.dir) )
-				for( var/i=1, i<=length(F.dir), i++ )
+			if ( length(F.dir) )
+				for ( var/i=1, i<=length(F.dir), i++ )
 					dat += "<tr><td>#[i]</td><td> [F.dir[i]]</td></tr>"
 				dat = "<table width='100%'>[dat]</table>"
 			else
 				dat = "No addresses in list."
 			src << browse(dat,"window=ToRban_show")
-		if("remove")
+		if ("remove")
 			var/savefile/F = new(TORFILE)
 			var/choice = input(src,"Please select an IP address to remove from the ToR banlist:","Remove ToR ban",null) as null|anything in F.dir
-			if(choice)
+			if (choice)
 				F.dir.Remove(choice)
 				to_chat(src, "<b>Address removed</b>")
-		if("remove all")
+		if ("remove all")
 			to_chat(src, "<b>[TORFILE] was [fdel(TORFILE)?"":"not "]removed.</b>")
-		if("find")
+		if ("find")
 			var/input = input(src,"Please input an IP address to search for:","Find ToR ban",null) as null|text
-			if(input)
-				if(ToRban_isbanned(input))
+			if (input)
+				if (ToRban_isbanned(input))
 					to_chat(src, "<font color='green'><b>Address is a known ToR address</b></font>")
 				else
 					to_chat(src, "<font color='red'><b>Address is not a known ToR address</b></font>")

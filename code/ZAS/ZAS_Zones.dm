@@ -20,24 +20,24 @@ var/list/CounterDoorDirections = list(SOUTH,EAST) //Which directions doors turfs
 /zone/New(turf/start)
 	. = ..()
 	//Get the turfs that are part of the zone using a floodfill method
-	if(istype(start,/list))
+	if (istype(start,/list))
 		contents = start
 	else
 		contents = FloodFill(start)
 
 	//Change all the zone vars of the turfs, check for space to be added to unsimulated_tiles.
-	for(var/turf/T in contents)
-		if(T.zone && T.zone != src)
+	for (var/turf/T in contents)
+		if (T.zone && T.zone != src)
 			T.zone.RemoveTurf(T)
 		T.zone = src
-		if(!istype(T,/turf/simulated) || iscatwalk(T))
+		if (!istype(T,/turf/simulated) || iscatwalk(T))
 			AddTurf(T)
 
 	//Generate the gas_mixture for use in txhis zone by using the average of the gases
 	//defined at startup.
 	air = new
 	air.group_multiplier = contents.len
-	for(var/turf/simulated/T in contents)
+	for (var/turf/simulated/T in contents)
 		air.oxygen += T.oxygen / air.group_multiplier
 		air.nitrogen += T.nitrogen / air.group_multiplier
 		air.carbon_dioxide += T.carbon_dioxide / air.group_multiplier
@@ -52,13 +52,13 @@ var/list/CounterDoorDirections = list(SOUTH,EAST) //Which directions doors turfs
 	//LEGACY, DO NOT USE.  Use the SoftDelete proc.
 /zone/Del()
 	//Ensuring the zone list doesn't get clogged with null values.
-	for(var/turf/simulated/T in contents)
+	for (var/turf/simulated/T in contents)
 		RemoveTurf(T)
 		air_master.tiles_to_reconsider_zones += T
-	for(var/zone/Z in connected_zones)
-		if(src in Z.connected_zones)
+	for (var/zone/Z in connected_zones)
+		if (src in Z.connected_zones)
 			Z.connected_zones.Remove(src)
-	for(var/connection/C in connections)
+	for (var/connection/C in connections)
 		air_master.connections_to_check += C
 	zones.Remove(src)
 	air = null
@@ -71,17 +71,17 @@ var/list/CounterDoorDirections = list(SOUTH,EAST) //Which directions doors turfs
 	air = null
 
 	//Ensuring the zone list doesn't get clogged with null values.
-	for(var/turf/simulated/T in contents)
+	for (var/turf/simulated/T in contents)
 		RemoveTurf(T)
 		air_master.tiles_to_reconsider_zones += T
 
 	//Removing zone connections and scheduling connection cleanup
-	for(var/zone/Z in connected_zones)
-		if(src in Z.connected_zones)
+	for (var/zone/Z in connected_zones)
+		if (src in Z.connected_zones)
 			Z.connected_zones.Remove(src)
 	connected_zones = null
 
-	for(var/connection/C in connections)
+	for (var/connection/C in connections)
 		air_master.connections_to_check += C
 	connections = null
 
@@ -91,36 +91,36 @@ var/list/CounterDoorDirections = list(SOUTH,EAST) //Which directions doors turfs
 //ZONE MANAGEMENT FUNCTIONS
 /zone/proc/AddTurf(turf/T)
 	//Adds the turf to contents, increases the size of the zone, and sets the zone var.
-	if(istype(T, /turf/simulated) && !iscatwalk(T))
-		if(T in contents)
+	if (istype(T, /turf/simulated) && !iscatwalk(T))
+		if (T in contents)
 			return
-		if(T.zone)
+		if (T.zone)
 			T.zone.RemoveTurf(T)
 		contents += T
-		if(air)
+		if (air)
 			air.group_multiplier++
 		T.zone = src
 	else
-		if(!unsimulated_tiles)
+		if (!unsimulated_tiles)
 			unsimulated_tiles = list()
-		else if(T in unsimulated_tiles)
+		else if (T in unsimulated_tiles)
 			return
 		unsimulated_tiles += T
 		contents -= T
 
 /zone/proc/RemoveTurf(turf/T)
 	//Same, but in reverse.
-	if(istype(T, /turf/simulated))
-		if(!(T in contents))
+	if (istype(T, /turf/simulated))
+		if (!(T in contents))
 			return
 		contents -= T
-		if(air)
+		if (air)
 			air.group_multiplier--
-		if(T.zone == src)
+		if (T.zone == src)
 			T.zone = null
-	if(unsimulated_tiles)
+	if (unsimulated_tiles)
 		unsimulated_tiles -= T
-		if(!unsimulated_tiles.len)
+		if (!unsimulated_tiles.len)
 			unsimulated_tiles = null
 
   //////////////
@@ -135,23 +135,23 @@ var/list/CounterDoorDirections = list(SOUTH,EAST) //Which directions doors turfs
 	progress = "problem with: SoftDelete()"
 
 	//Deletes zone if empty.
-	if(!contents.len)
+	if (!contents.len)
 		return SoftDelete()
 
 	progress = "problem with: Rebuild()"
 
 	//Does rebuilding stuff.
-	if(rebuild)
+	if (rebuild)
 		rebuild = 0
 		Rebuild() //Shoving this into a proc.
 
-	if(!contents.len) //If we got soft deleted.
+	if (!contents.len) //If we got soft deleted.
 		return
 
 	progress = "problem with: air regeneration"
 
 	//Sometimes explosions will cause the air to be deleted for some reason.
-	if(!air)
+	if (!air)
 		air = new()
 		air.oxygen = MOLES_O2STANDARD
 		air.nitrogen = MOLES_N2STANDARD
@@ -162,17 +162,17 @@ var/list/CounterDoorDirections = list(SOUTH,EAST) //Which directions doors turfs
 
 	progress = "problem with: ShareSpace()"
 
-	if(unsimulated_tiles)
-		if(locate(/turf/simulated) in unsimulated_tiles)
-			for(var/turf/simulated/T in unsimulated_tiles)
-				if(iscatwalk(T))
+	if (unsimulated_tiles)
+		if (locate(/turf/simulated) in unsimulated_tiles)
+			for (var/turf/simulated/T in unsimulated_tiles)
+				if (iscatwalk(T))
 					continue
 				unsimulated_tiles -= T
 
-		if(unsimulated_tiles.len)
+		if (unsimulated_tiles.len)
 			var/moved_air = ShareSpace(air,unsimulated_tiles)
 
-			if(moved_air > zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
+			if (moved_air > zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
 				AirflowSpace(src)
 		else
 			unsimulated_tiles = null
@@ -181,28 +181,28 @@ var/list/CounterDoorDirections = list(SOUTH,EAST) //Which directions doors turfs
 	progress = "problem with: modifying turf graphics"
 
 	air.graphics = 0
-	if(air.toxins > MOLES_PLASMA_VISIBLE)
+	if (air.toxins > MOLES_PLASMA_VISIBLE)
 		air.graphics |= GRAPHICS_PLASMA
-	if(air.trace_gases.len)
+	if (air.trace_gases.len)
 		var/datum/gas/sleeping_agent = locate(/datum/gas/sleeping_agent) in air.trace_gases
-		if(sleeping_agent && (sleeping_agent.moles > 1))
+		if (sleeping_agent && (sleeping_agent.moles > 1))
 			air.graphics |= GRAPHICS_N2O
 	// If configured and cold, maek ice
-	if(zas_settings.Get(/datum/ZAS_Setting/ice_formation))
-		if(air.temperature <= TEMPERATURE_ICE_FORMATION && air.return_pressure()>MIN_PRESSURE_ICE_FORMATION)
+	if (zas_settings.Get(/datum/ZAS_Setting/ice_formation))
+		if (air.temperature <= TEMPERATURE_ICE_FORMATION && air.return_pressure()>MIN_PRESSURE_ICE_FORMATION)
 			air.graphics |= GRAPHICS_COLD
 
 	progress = "problem with an inbuilt byond function: some conditional checks"
 
 	//Only run through the individual turfs if there's reason to.
-	if(air.graphics != air.graphics_archived || air.temperature > PLASMA_FLASHPOINT)
+	if (air.graphics != air.graphics_archived || air.temperature > PLASMA_FLASHPOINT)
 
 		progress = "problem with: turf/simulated/update_visuals()"
 
-		for(var/turf/simulated/S in contents)
+		for (var/turf/simulated/S in contents)
 			//Update overlays.
-			if(air.graphics != air.graphics_archived)
-				if(S.HasDoor(1))
+			if (air.graphics != air.graphics_archived)
+				if (S.HasDoor(1))
 					S.update_visuals()
 				else
 					S.update_visuals(air)
@@ -210,8 +210,8 @@ var/list/CounterDoorDirections = list(SOUTH,EAST) //Which directions doors turfs
 			progress = "problem with: item or turf temperature_expose()"
 
 			//Expose stuff to extreme heat.
-			if(air.temperature > PLASMA_FLASHPOINT)
-				for(var/atom/movable/item in S)
+			if (air.temperature > PLASMA_FLASHPOINT)
+				for (var/atom/movable/item in S)
 					item.temperature_expose(air, air.temperature, CELL_VOLUME)
 				S.hotspot_expose(air.temperature, CELL_VOLUME)
 
@@ -228,52 +228,52 @@ var/list/CounterDoorDirections = list(SOUTH,EAST) //Which directions doors turfs
 	progress = "problem with an inbuilt byond function: length(connections)"
 
 	//Handle connections to other zones.
-	if(length(connections))
+	if (length(connections))
 
 		progress = "problem with: ZMerge(), a couple of misc procs"
 
-		for(var/connection/C in connections)
+		for (var/connection/C in connections)
 			//Check if the connection is valid first.
-			if(!C.Cleanup())
+			if (!C.Cleanup())
 				continue
 
 			//Do merging if conditions are met. Specifically, if there's a non-door connection
 			//to somewhere with space, the zones are merged regardless of equilibrium, to speed
 			//up spacing in areas with double-plated windows.
-			if(C && C.A.zone && C.B.zone)
+			if (C && C.A.zone && C.B.zone)
 				//indirect = 2 is a direct connection.
-				if( C.indirect == 2 )
-					if(C.A.zone.air.compare(C.B.zone.air) || unsimulated_tiles)
+				if ( C.indirect == 2 )
+					if (C.A.zone.air.compare(C.B.zone.air) || unsimulated_tiles)
 						ZMerge(C.A.zone,C.B.zone)
 
 		progress = "problem with: ShareRatio(), Airflow(), a couple of misc procs"
 
 		//Share some
-		for(var/zone/Z in connected_zones)
+		for (var/zone/Z in connected_zones)
 			//If that zone has already processed, skip it.
-			if(Z.last_update > last_update)
+			if (Z.last_update > last_update)
 				continue
 
-			if(air && Z.air)
+			if (air && Z.air)
 				//Ensure we're not doing pointless calculations on equilibrium zones.
 				var/moles_delta = abs(air.total_moles() - Z.air.total_moles())
-				if(moles_delta > 0.1 || abs(air.temperature - Z.air.temperature) > 0.1)
-					if(abs(Z.air.return_pressure() - air.return_pressure()) > zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
+				if (moles_delta > 0.1 || abs(air.temperature - Z.air.temperature) > 0.1)
+					if (abs(Z.air.return_pressure() - air.return_pressure()) > zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
 						Airflow(src,Z)
 					var/unsimulated_boost = 0
-					if(unsimulated_tiles)
+					if (unsimulated_tiles)
 						unsimulated_boost += unsimulated_tiles.len
-					if(Z.unsimulated_tiles)
+					if (Z.unsimulated_tiles)
 						unsimulated_boost += Z.unsimulated_tiles.len
 					unsimulated_boost = max(0, min(3, unsimulated_boost))
 					ShareRatio( air , Z.air , connected_zones[Z] + unsimulated_boost)
 
-		for(var/zone/Z in closed_connection_zones)
+		for (var/zone/Z in closed_connection_zones)
 			//If that zone has already processed, skip it.
-			if(Z.last_update > last_update)
+			if (Z.last_update > last_update)
 				continue
-			if(air && Z.air)
-				if( abs(air.temperature - Z.air.temperature) > zas_settings.Get(/datum/ZAS_Setting/connection_temperature_delta) )
+			if (air && Z.air)
+				if ( abs(air.temperature - Z.air.temperature) > zas_settings.Get(/datum/ZAS_Setting/connection_temperature_delta) )
 					ShareHeat(air, Z.air, closed_connection_zones[Z])
 
 	progress = "all components completed successfully, the problem is not here"
@@ -316,7 +316,7 @@ proc/ShareRatio(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 		temp_avg = (A.temperature * full_heat_capacity + B.temperature * s_full_heat_capacity) / (full_heat_capacity + s_full_heat_capacity)
 
 	//WOOT WOOT TOUCH THIS AND YOU ARE A RETARD
-	if(sharing_lookup_table.len >= connecting_tiles) //6 or more interconnecting tiles will max at 42% of air moved per tick.
+	if (sharing_lookup_table.len >= connecting_tiles) //6 or more interconnecting tiles will max at 42% of air moved per tick.
 		ratio = sharing_lookup_table[connecting_tiles]
 	//WOOT WOOT TOUCH THIS AND YOU ARE A RETARD
 
@@ -334,9 +334,9 @@ proc/ShareRatio(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 
 	B.temperature = max(0, (B.temperature - temp_avg) * (1-ratio) + temp_avg )
 
-	for(var/datum/gas/G in A.trace_gases)
+	for (var/datum/gas/G in A.trace_gases)
 		var/datum/gas/H = locate(G.type) in B.trace_gases
-		if(H)
+		if (H)
 			var/G_avg = (G.moles*size + H.moles*share_size) / (size+share_size)
 			G.moles = (G.moles - G_avg) * (1-ratio) + G_avg
 			H.moles = (H.moles - G_avg) * (1-ratio) + G_avg
@@ -350,14 +350,14 @@ proc/ShareRatio(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 	A.update_values()
 	B.update_values()
 
-	if(A.compare(B))
+	if (A.compare(B))
 		return 1
 	else
 		return 0
 
 proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 	//A modified version of ShareRatio for spacing gas at the same rate as if it were going into a large airless room.
-	if(!unsimulated_tiles || !unsimulated_tiles.len)
+	if (!unsimulated_tiles || !unsimulated_tiles.len)
 		return 0
 
 	var
@@ -379,7 +379,7 @@ proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 		share_size = max(1, max(size + 3, 1) + unsimulated_tiles.len)
 		correction_ratio = share_size / unsimulated_tiles.len
 
-	for(var/turf/T in unsimulated_tiles)
+	for (var/turf/T in unsimulated_tiles)
 		unsim_oxygen += T.oxygen
 		unsim_co2 += T.carbon_dioxide
 		unsim_nitrogen += T.nitrogen
@@ -412,7 +412,7 @@ proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 
 		temp_avg = (A.temperature * full_heat_capacity + unsim_temperature * unsim_heat_capacity) / (full_heat_capacity + unsim_heat_capacity) / 2
 
-	if(sharing_lookup_table.len >= unsimulated_tiles.len) //6 or more interconnecting tiles will max at 42% of air moved per tick.
+	if (sharing_lookup_table.len >= unsimulated_tiles.len) //6 or more interconnecting tiles will max at 42% of air moved per tick.
 		ratio = sharing_lookup_table[unsimulated_tiles.len]
 
 	A.oxygen = max(0, (A.oxygen - oxy_avg) * (1 - ratio) + oxy_avg )
@@ -422,10 +422,10 @@ proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 
 	// EXPERIMENTAL: Disable space being cold
 	// N3X: Made this togglable for Pomf. Comment recovered from older code.
-	if(!zas_settings.Get(/datum/ZAS_Setting/space_isnt_cold))
+	if (!zas_settings.Get(/datum/ZAS_Setting/space_isnt_cold))
 		A.temperature = max(TCMB, (A.temperature - temp_avg) * (1 - ratio) + temp_avg )
 
-	for(var/datum/gas/G in A.trace_gases)
+	for (var/datum/gas/G in A.trace_gases)
 		var/G_avg = (G.moles * size) / (size + share_size)
 		G.moles = (G.moles - G_avg) * (1 - ratio) + G_avg
 
@@ -448,7 +448,7 @@ proc/ShareHeat(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 		temp_avg = (A.temperature * full_heat_capacity + B.temperature * s_full_heat_capacity) / (full_heat_capacity + s_full_heat_capacity)
 
 	//WOOT WOOT TOUCH THIS AND YOU ARE A RETARD
-	if(sharing_lookup_table.len >= connecting_tiles) //6 or more interconnecting tiles will max at 42% of air moved per tick.
+	if (sharing_lookup_table.len >= connecting_tiles) //6 or more interconnecting tiles will max at 42% of air moved per tick.
 		ratio = sharing_lookup_table[connecting_tiles]
 	//WOOT WOOT TOUCH THIS AND YOU ARE A RETARD
 
@@ -473,15 +473,15 @@ zone/proc/Rebuild()
 	//
 	var/list/turfs_to_consider = contents.Copy()
 
-	while(!sample || !sample.CanPass(null, sample, 1.5, 1))
-		if(sample)
+	while (!sample || !sample.CanPass(null, sample, 1.5, 1))
+		if (sample)
 			turfs_to_consider.Remove(sample)
 		sample = locate() in turfs_to_consider
-		if(!sample)
+		if (!sample)
 			break
 
-	if(!istype(sample) || !sample.CanPass(null, sample, 1.5, 1)) //Not a single valid turf.
-		for(var/turf/simulated/T in contents)
+	if (!istype(sample) || !sample.CanPass(null, sample, 1.5, 1)) //Not a single valid turf.
+		for (var/turf/simulated/T in contents)
 			air_master.tiles_to_update |= T
 		return SoftDelete()
 
@@ -489,54 +489,54 @@ zone/proc/Rebuild()
 
 	var/list/new_unsimulated = ( unsimulated_tiles ? unsimulated_tiles : list() )
 
-	for(var/turf/S in new_contents)
-		if(!istype(S, /turf/simulated) || iscatwalk(S))
+	for (var/turf/S in new_contents)
+		if (!istype(S, /turf/simulated) || iscatwalk(S))
 			new_unsimulated |= S
 			new_contents.Remove(S)
 
-	if(contents.len != new_contents.len)
+	if (contents.len != new_contents.len)
 		problem = 1
 
 	//If something isn't carried over, there was a complication.
-	for(var/turf/T in contents)
-		if(!(T in new_contents))
+	for (var/turf/T in contents)
+		if (!(T in new_contents))
 			T.zone = null
 			problem = 1
 
-	if(problem)
+	if (problem)
 		//Build some new zones for stuff that wasn't included.
 		var/list/turf/simulated/rebuild_turfs = contents - new_contents
 		var/list/turf/simulated/reconsider_turfs = list()
 		contents = new_contents
-		for(var/turf/simulated/T in rebuild_turfs)
-			if(!iscatwalk(T) && !T.zone && T.CanPass(null, T, 1.5, 1))
+		for (var/turf/simulated/T in rebuild_turfs)
+			if (!iscatwalk(T) && !T.zone && T.CanPass(null, T, 1.5, 1))
 				var/zone/Z = new /zone(T)
 				Z.air.copy_from(air)
 			else
 				reconsider_turfs |= T
-		for(var/turf/simulated/T in reconsider_turfs)
-			if(!iscatwalk(T) && !T.zone && T.CanPass(null, T, 1.5, 1))
+		for (var/turf/simulated/T in reconsider_turfs)
+			if (!iscatwalk(T) && !T.zone && T.CanPass(null, T, 1.5, 1))
 				var/zone/Z = new /zone(T)
 				Z.air.copy_from(air)
-			else if(!T in air_master.tiles_to_update)
+			else if (!T in air_master.tiles_to_update)
 				air_master.tiles_to_update.Add(T)
 
-	for(var/turf/simulated/T in contents)
-		if(T.zone && T.zone != src)
+	for (var/turf/simulated/T in contents)
+		if (T.zone && T.zone != src)
 			T.zone.RemoveTurf(T)
 			T.zone = src
-		else if(!T.zone)
+		else if (!T.zone)
 			T.zone = src
 	air.group_multiplier = contents.len
 	unsimulated_tiles = null
 
-	if(new_unsimulated.len)
-		for(var/turf/S in new_unsimulated)
-			if(istype(S, /turf/simulated) && !iscatwalk(S))
+	if (new_unsimulated.len)
+		for (var/turf/S in new_unsimulated)
+			if (istype(S, /turf/simulated) && !iscatwalk(S))
 				continue
-			for(var/direction in cardinal)
+			for (var/direction in cardinal)
 				var/turf/simulated/T = get_step(S,direction)
-				if(istype(T) && T.zone && S.CanPass(null, T, 0, 0))
+				if (istype(T) && T.zone && S.CanPass(null, T, 0, 0))
 					T.zone.AddTurf(S)
 
 //UNUSED
@@ -544,14 +544,14 @@ zone/proc/Rebuild()
 zone/proc/connected_zones()
 	//A legacy proc for getting connected zones.
 	. = list()
-	for(var/connection/C in connections)
+	for (var/connection/C in connections)
 		var/zone/Z
-		if(C.A.zone == src)
+		if (C.A.zone == src)
 			Z = C.B.zone
 		else
 			Z = C.A.zone
 
-		if(Z in .)
+		if (Z in .)
 			.[Z]++
 		else
 			. += Z

@@ -22,16 +22,16 @@
 	..()
 
 /obj/item/device/instrument/attack_self(mob/user as mob)
-	if(!user.dexterity_check())
+	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 1
 	interact(user)
 
 /obj/item/device/instrument/interact(mob/user as mob)
-	if(!user)
+	if (!user)
 		return
 
-	if(user.incapacitated() || user.lying)
+	if (user.incapacitated() || user.lying)
 		return
 
 	user.set_machine(src)
@@ -65,11 +65,11 @@
 /obj/item/device/instrument/guitar/update_wield(mob/user)
 	..()
 	item_state = "guitar[wielded ? 1 : 0]"
-	if(user)
+	if (user)
 		user.update_inv_hands()
 		
 /obj/item/device/instrument/guitar/attack_self(mob/user as mob)
-	if(wielded) //can only play if you're two handing it
+	if (wielded) //can only play if you're two handing it
 		return ..()
 	wield(user)
 

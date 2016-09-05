@@ -5,8 +5,8 @@
 	name = "nanoui"
 
 /datum/controller/process/nanoui/doWork()
-	for(var/p in nanomanager.processing_uis)
-		if(p)
+	for (var/p in nanomanager.processing_uis)
+		if (p)
 			p:process()
 			scheck()
 			continue

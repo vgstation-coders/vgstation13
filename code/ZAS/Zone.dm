@@ -77,7 +77,7 @@ Class Procs:
 	contents.Remove(T)
 	T.zone = null
 	T.set_graphic(0)
-	if(contents.len)
+	if (contents.len)
 		air.group_multiplier = contents.len
 	else
 		c_invalidate()
@@ -90,7 +90,7 @@ Class Procs:
 	ASSERT(!into.invalid)
 #endif
 	c_invalidate()
-	for(var/turf/simulated/T in contents)
+	for (var/turf/simulated/T in contents)
 		into.add(T)
 		#ifdef ZASDBG
 		T.dbg(merged)
@@ -100,15 +100,15 @@ Class Procs:
 	invalid = 1
 	air_master.remove_zone(src)
 	#ifdef ZASDBG
-	for(var/turf/simulated/T in contents)
+	for (var/turf/simulated/T in contents)
 		T.dbg(invalid_zone)
 	#endif
 
 /zone/proc/rebuild()
-	if(invalid)
+	if (invalid)
 		return //Short circuit for explosions where rebuild is called many times over.
 	c_invalidate()
-	for(var/turf/simulated/T in contents)
+	for (var/turf/simulated/T in contents)
 		//T.dbg(invalid_zone)
 		T.needs_air_update = 0 //Reset the marker so that it will be added to the list.
 		air_master.mark_for_update(T)
@@ -123,8 +123,8 @@ Class Procs:
 
 /zone/proc/tick()
 	air.archive()
-	if(air.check_tile_graphic())
-		for(var/turf/simulated/T in contents)
+	if (air.check_tile_graphic())
+		for (var/turf/simulated/T in contents)
 			T.set_graphic(air.graphics)
 
 /zone/proc/dbg_data(mob/M)
@@ -135,13 +135,13 @@ Class Procs:
 	to_chat(M, "Simulated: [contents.len] ([air.group_multiplier])")
 //	to_chat(M, "Unsimulated: [unsimulated_contents.len]")
 //	to_chat(M, "Edges: [edges.len]")
-	if(invalid)
+	if (invalid)
 		to_chat(M, "Invalid!")
 	var/zone_edges = 0
 	var/space_edges = 0
 	var/space_coefficient = 0
-	for(var/connection_edge/E in edges)
-		if(E.type == /connection_edge/zone)
+	for (var/connection_edge/E in edges)
+		if (E.type == /connection_edge/zone)
 			zone_edges++
 		else
 			space_edges++

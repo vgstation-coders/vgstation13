@@ -56,7 +56,7 @@
 	return
 
 /obj/machinery/computer/hologram_comp/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 	else
 		flick("holo_console1", src)
@@ -104,7 +104,7 @@
 							else
 								if (href_list["temp"])
 									src.temp = null
-		for(var/mob/M in viewers(1, src))
+		for (var/mob/M in viewers(1, src))
 			if ((M.client && M.machine == src))
 				src.show_console(M)
 	return

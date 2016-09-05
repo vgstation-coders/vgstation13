@@ -61,7 +61,7 @@
 			p3.air_contents.temperature = btemp + T0C
 			p2.secured = 1
 
-			if(src.active)
+			if (src.active)
 				R.part1.secured = 1
 				R.part1.icon_state = text("motion[]", 1)
 				R.c_state(1, src)
@@ -83,7 +83,7 @@
 			p3.air_contents.temperature = btemp + T0C
 			p2.secured = 1
 		//bombvest
-		if(3)
+		if (3)
 			var/obj/item/clothing/suit/armor/a_i_a_ptank/R = new /obj/item/clothing/suit/armor/a_i_a_ptank(src.loc)
 			var/obj/item/weapon/tank/plasma/p4 = new /obj/item/weapon/tank/plasma(R)
 			var/obj/item/device/healthanalyzer/p1 = new /obj/item/device/healthanalyzer(R)

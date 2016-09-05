@@ -41,7 +41,7 @@
 		VALUE_TIMING = "timing;"+VT_NUMBER)
 
 /obj/item/device/assembly/prox_sensor/activate()
-	if(!..())
+	if (!..())
 		return 0//Cooldown check
 	timing = !timing
 	update_icon()
@@ -49,7 +49,7 @@
 
 /obj/item/device/assembly/prox_sensor/toggle_secure()
 	secured = !secured
-	if(secured)
+	if (secured)
 		processing_objects.Add(src)
 	else
 		scanning = 0
@@ -59,23 +59,23 @@
 	return secured
 
 /obj/item/device/assembly/prox_sensor/HasProximity(var/atom/movable/AM)
-	if(timestopped || (loc && loc.timestopped))
+	if (timestopped || (loc && loc.timestopped))
 		return
 
-	if(is_type_in_list(AM, global.prox_sensor_ignored_types))
+	if (is_type_in_list(AM, global.prox_sensor_ignored_types))
 		return
 
-	if(AM.move_speed < 12)
+	if (AM.move_speed < 12)
 		sense()
 
 /obj/item/device/assembly/prox_sensor/proc/sense()
 	var/turf/mainloc = get_turf(src)
-//	if(scanning && cooldown <= 0)
+//	if (scanning && cooldown <= 0)
 //		mainloc.visible_message("[bicon(src)] *boop* *boop*", "*boop* *boop*")
-	if((!holder && !secured)||(!scanning)||(cooldown > 0))
+	if ((!holder && !secured)||(!scanning)||(cooldown > 0))
 		return 0
 	pulse(0)
-	if(!holder)
+	if (!holder)
 		mainloc.visible_message("[bicon(src)] *beep* *beep*", "*beep* *beep*")
 	cooldown = 2
 	spawn(10)
@@ -83,15 +83,15 @@
 	return
 
 /obj/item/device/assembly/prox_sensor/process()
-	if(scanning)
+	if (scanning)
 		var/turf/mainloc = get_turf(src)
-		for(var/mob/living/A in range(range,mainloc))
+		for (var/mob/living/A in range(range,mainloc))
 			if (A.move_speed < 12)
 				sense()
 
-	if(timing && (time >= 0))
+	if (timing && (time >= 0))
 		time--
-	if(timing && time <= 0)
+	if (timing && time <= 0)
 		timing = 0
 		toggle_scan()
 		time = default_time
@@ -104,7 +104,7 @@
 	return
 
 /obj/item/device/assembly/prox_sensor/proc/toggle_scan()
-	if(!secured)
+	if (!secured)
 		return 0
 	scanning = !scanning
 	update_icon()
@@ -113,15 +113,15 @@
 /obj/item/device/assembly/prox_sensor/update_icon()
 	overlays.len = 0
 	attached_overlays = list()
-	if(timing)
+	if (timing)
 		attached_overlays += "prox_timing"
 		overlays += image(icon = icon, icon_state = "prox_timing")
-	if(scanning)
+	if (scanning)
 		attached_overlays += "prox_scanning"
 		overlays += image(icon = icon, icon_state = "prox_scanning")
-	if(holder)
+	if (holder)
 		holder.update_icon()
-	if(holder && istype(holder.loc,/obj/item/weapon/grenade/chem_grenade))
+	if (holder && istype(holder.loc,/obj/item/weapon/grenade/chem_grenade))
 		var/obj/item/weapon/grenade/chem_grenade/grenade = holder.loc
 		grenade.primed(scanning)
 	return
@@ -132,7 +132,7 @@
 	return
 
 /obj/item/device/assembly/prox_sensor/interact(mob/user as mob)//TODO: Change this to the wires thingy
-	if(!secured)
+	if (!secured)
 		user.show_message("<span class='warning'>The [name] is unsecured!</span>")
 		return 0
 	var/second = time % 60
@@ -151,38 +151,38 @@
 
 /obj/item/device/assembly/prox_sensor/Topic(href, href_list)
 	..()
-	if(usr.stat || usr.restrained() || !in_range(loc, usr) || (!usr.canmove && !usr.locked_to))
+	if (usr.stat || usr.restrained() || !in_range(loc, usr) || (!usr.canmove && !usr.locked_to))
 		//If the user is handcuffed or out of range, or if they're unable to move,
 		//but NOT if they're unable to move as a result of being buckled into something, they're unable to use the device.
 		usr << browse(null, "window=prox")
 		onclose(usr, "prox")
 		return
 
-	if(href_list["scanning"])
+	if (href_list["scanning"])
 		toggle_scan()
 
-	if(href_list["time"])
+	if (href_list["time"])
 		timing = text2num(href_list["time"])
 		update_icon()
 
-	if(href_list["tp"])
+	if (href_list["tp"])
 		var/tp = text2num(href_list["tp"])
 		time += tp
 		time = min(max(round(time), 0), 600)
 
-	if(href_list["range"])
+	if (href_list["range"])
 		var/r = text2num(href_list["range"])
 		range += r
 		range = Clamp(range, 1, 5)
 
-	if(href_list["set_default_time"])
+	if (href_list["set_default_time"])
 		default_time = time
 
-	if(href_list["close"])
+	if (href_list["close"])
 		usr << browse(null, "window=prox")
 		return
 
-	if(usr)
+	if (usr)
 		attack_self(usr)
 
 	return

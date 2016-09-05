@@ -16,24 +16,24 @@ var/const/WIRE_TRANSMIT = 4
 
 /datum/wires/radio/CanUse(var/mob/living/L)
 	var/obj/item/device/radio/R = holder
-	if(R.b_stat)
+	if (R.b_stat)
 		return 1
 	return 0
 
 /datum/wires/radio/Interact(var/mob/living/user)
-	if(CanUse(user))
+	if (CanUse(user))
 		var/obj/item/device/radio/R = holder
 		R.interact(user)
 
 /datum/wires/radio/UpdatePulsed(var/index)
 	var/obj/item/device/radio/R = holder
-	switch(index)
-		if(WIRE_SIGNAL)
+	switch (index)
+		if (WIRE_SIGNAL)
 			R.listening = !R.listening
 			R.broadcasting = R.listening
 
-		if(WIRE_RECEIVE)
+		if (WIRE_RECEIVE)
 			R.listening = !R.listening
 
-		if(WIRE_TRANSMIT)
+		if (WIRE_TRANSMIT)
 			R.broadcasting = !R.broadcasting

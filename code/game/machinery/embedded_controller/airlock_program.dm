@@ -41,53 +41,53 @@
 
 /datum/computer/file/embedded_program/proc/receive_signal(datum/signal/signal, receive_method, receive_param)
 	var/receive_tag = signal.data["tag"]
-	if(!receive_tag)
+	if (!receive_tag)
 		return
 
-	if(receive_tag==tag_chamber_sensor)
-		if(signal.data["pressure"])
+	if (receive_tag==tag_chamber_sensor)
+		if (signal.data["pressure"])
 			memory["chamber_sensor_pressure"] = text2num(signal.data["pressure"])
 
-	else if(receive_tag==tag_exterior_sensor)
+	else if (receive_tag==tag_exterior_sensor)
 		memory["external_sensor_pressure"] = text2num(signal.data["pressure"])
 
-	else if(receive_tag==tag_interior_sensor)
+	else if (receive_tag==tag_interior_sensor)
 		memory["internal_sensor_pressure"] = text2num(signal.data["pressure"])
 
-	else if(receive_tag==tag_exterior_door)
+	else if (receive_tag==tag_exterior_door)
 		memory["exterior_status"]["state"] = signal.data["door_status"]
 		memory["exterior_status"]["lock"] = signal.data["lock_status"]
 
-	else if(receive_tag==tag_interior_door)
+	else if (receive_tag==tag_interior_door)
 		memory["interior_status"]["state"] = signal.data["door_status"]
 		memory["interior_status"]["lock"] = signal.data["lock_status"]
 
-	else if(receive_tag==tag_airpump)
-		if(signal.data["power"])
+	else if (receive_tag==tag_airpump)
+		if (signal.data["power"])
 			memory["pump_status"] = signal.data["direction"]
 		else
 			memory["pump_status"] = "off"
 
-	else if(receive_tag==id_tag)
-		if(istype(master, /obj/machinery/embedded_controller/radio/access_controller))
-			switch(signal.data["command"])
-				if("cycle_exterior")
+	else if (receive_tag==id_tag)
+		if (istype(master, /obj/machinery/embedded_controller/radio/access_controller))
+			switch (signal.data["command"])
+				if ("cycle_exterior")
 					receive_user_command("cycle_ext_door")
-				if("cycle_interior")
+				if ("cycle_interior")
 					receive_user_command("cycle_int_door")
-				if("cycle")
-					if(memory["interior_status"]["state"] == "open")		//handle backwards compatibility
+				if ("cycle")
+					if (memory["interior_status"]["state"] == "open")		//handle backwards compatibility
 						receive_user_command("cycle_ext")
 					else
 						receive_user_command("cycle_int")
 		else
-			switch(signal.data["command"])
-				if("cycle_exterior")
+			switch (signal.data["command"])
+				if ("cycle_exterior")
 					receive_user_command("cycle_ext")
-				if("cycle_interior")
+				if ("cycle_interior")
 					receive_user_command("cycle_int")
-				if("cycle")
-					if(memory["interior_status"]["state"] == "open")		//handle backwards compatibility
+				if ("cycle")
+					if (memory["interior_status"]["state"] == "open")		//handle backwards compatibility
 						receive_user_command("cycle_ext")
 					else
 						receive_user_command("cycle_int")
@@ -95,62 +95,62 @@
 
 /datum/computer/file/embedded_program/proc/receive_user_command(command)
 	var/shutdown_pump = 0
-	switch(command)
-		if("cycle_ext")
+	switch (command)
+		if ("cycle_ext")
 			state = STATE_WAIT
 			target_state = TARGET_OUTOPEN
 
-		if("cycle_int")
+		if ("cycle_int")
 			state = STATE_WAIT
 			target_state = TARGET_INOPEN
 
-		if("cycle_ext_door")
+		if ("cycle_ext_door")
 			cycleDoors(TARGET_OUTOPEN)
 
-		if("cycle_int_door")
+		if ("cycle_int_door")
 			cycleDoors(TARGET_INOPEN)
 
-		if("abort")
+		if ("abort")
 			state = STATE_PRESSURIZE
 			target_state = TARGET_NONE
 			memory["target_pressure"] = ONE_ATMOSPHERE
 			signalPump(tag_airpump, 1, 1, memory["target_pressure"])
 			process()
 
-		if("force_ext")
+		if ("force_ext")
 			toggleDoor(memory["exterior_status"], tag_exterior_door, memory["secure"], "toggle")
 
-		if("force_int")
+		if ("force_int")
 			toggleDoor(memory["interior_status"], tag_interior_door, memory["secure"], "toggle")
 
-		if("purge")
+		if ("purge")
 			memory["purge"] = !memory["purge"]
-			if(memory["purge"])
+			if (memory["purge"])
 				toggleDoor(memory["exterior_status"], tag_exterior_door, 1, "close")
 				toggleDoor(memory["interior_status"], tag_interior_door, 1, "close")
 				state = STATE_DEPRESSURIZE
 				target_state = TARGET_NONE
 				signalPump(tag_airpump, 1, 0, 0)
 
-		if("secure")
+		if ("secure")
 			memory["secure"] = !memory["secure"]
-			if(memory["secure"])
+			if (memory["secure"])
 				signalDoor(tag_interior_door, "lock")
 				signalDoor(tag_exterior_door, "lock")
 			else
 				signalDoor(tag_interior_door, "unlock")
 				signalDoor(tag_exterior_door, "unlock")
 
-	if(shutdown_pump)
+	if (shutdown_pump)
 		signalPump(tag_airpump, 0)		//send a signal to stop pressurizing
 
 
 /datum/computer/file/embedded_program/proc/process()
-	if(!state && target_state)
-		switch(target_state)
-			if(TARGET_INOPEN)
+	if (!state && target_state)
+		switch (target_state)
+			if (TARGET_INOPEN)
 				memory["target_pressure"] = memory["internal_sensor_pressure"]
-			if(TARGET_OUTOPEN)
+			if (TARGET_OUTOPEN)
 				memory["target_pressure"] = memory["external_sensor_pressure"]
 
 		//lock down the airlock before activating pumps
@@ -160,49 +160,49 @@
 		var/chamber_pressure = memory["chamber_sensor_pressure"]
 		var/target_pressure = memory["target_pressure"]
 
-		if(memory["purge"])
+		if (memory["purge"])
 			target_pressure = 0
 
-		if(chamber_pressure <= target_pressure)
+		if (chamber_pressure <= target_pressure)
 			state = STATE_PRESSURIZE
 			signalPump(tag_airpump, 1, 1, target_pressure)	//send a signal to start pressurizing
 
-		else if(chamber_pressure > target_pressure)
+		else if (chamber_pressure > target_pressure)
 			state = STATE_DEPRESSURIZE
 			signalPump(tag_airpump, 1, 0, target_pressure)	//send a signal to start depressurizing
 
 		//Check for vacuum - this is set after the pumps so the pumps are aiming for 0
-		if(!memory["target_pressure"])
+		if (!memory["target_pressure"])
 			memory["target_pressure"] = ONE_ATMOSPHERE * 0.05
 
 
-	switch(state)
-		if(STATE_PRESSURIZE)
-			if(memory["chamber_sensor_pressure"] >= memory["target_pressure"] * 0.95)
+	switch (state)
+		if (STATE_PRESSURIZE)
+			if (memory["chamber_sensor_pressure"] >= memory["target_pressure"] * 0.95)
 				cycleDoors(target_state)
 
 				state = STATE_WAIT
 				target_state = TARGET_NONE
 
-				if(memory["pump_status"] != "off")
+				if (memory["pump_status"] != "off")
 					signalPump(tag_airpump, 0)		//send a signal to stop pumping
 
 
-		if(STATE_DEPRESSURIZE)
-			if(memory["purge"])
-				if(memory["chamber_sensor_pressure"] <= ONE_ATMOSPHERE * 0.05)
+		if (STATE_DEPRESSURIZE)
+			if (memory["purge"])
+				if (memory["chamber_sensor_pressure"] <= ONE_ATMOSPHERE * 0.05)
 					state = STATE_PRESSURIZE
 					signalPump(tag_airpump, 1, 1, memory["target_pressure"])
 
 
-			else if(memory["chamber_sensor_pressure"] <= memory["target_pressure"] * 1.05)
+			else if (memory["chamber_sensor_pressure"] <= memory["target_pressure"] * 1.05)
 				cycleDoors(target_state)
 
 				state = STATE_WAIT
 				target_state = TARGET_NONE
 
 				//send a signal to stop pumping
-				if(memory["pump_status"] != "off")
+				if (memory["pump_status"] != "off")
 					signalPump(tag_airpump, 0)
 
 
@@ -212,7 +212,7 @@
 
 
 /datum/computer/file/embedded_program/proc/post_signal(datum/signal/signal, comm_line)
-	if(master)
+	if (master)
 		master.post_signal(signal, comm_line)
 	else
 		returnToPool(signal)
@@ -238,18 +238,18 @@
 
 
 /datum/computer/file/embedded_program/proc/cycleDoors(var/target)
-	switch(target)
-		if(TARGET_OUTOPEN)
+	switch (target)
+		if (TARGET_OUTOPEN)
 			toggleDoor(memory["interior_status"], tag_interior_door, memory["secure"], "close")
 			toggleDoor(memory["exterior_status"], tag_exterior_door, memory["secure"], "open")
 
-		if(TARGET_INOPEN)
+		if (TARGET_INOPEN)
 			toggleDoor(memory["exterior_status"], tag_exterior_door, memory["secure"], "close")
 			toggleDoor(memory["interior_status"], tag_interior_door, memory["secure"], "open")
 
-		if(TARGET_NONE)
+		if (TARGET_NONE)
 			var/command = "unlock"
-			if(memory["secure"])
+			if (memory["secure"])
 				command = "lock"
 			signalDoor(tag_exterior_door, command)
 			signalDoor(tag_interior_door, command)
@@ -270,42 +270,42 @@ send an additional command to open the door again.
 /datum/computer/file/embedded_program/proc/toggleDoor(var/list/doorStatus, var/doorTag, var/secure, var/command)
 	var/doorCommand = null
 
-	if(command == "toggle")
-		if(doorStatus["state"] == "open")
+	if (command == "toggle")
+		if (doorStatus["state"] == "open")
 			command = "close"
-		else if(doorStatus["state"] == "closed")
+		else if (doorStatus["state"] == "closed")
 			command = "open"
 
-	switch(command)
-		if("close")
-			if(secure)
-				if(doorStatus["state"] == "open")
+	switch (command)
+		if ("close")
+			if (secure)
+				if (doorStatus["state"] == "open")
 					doorCommand = "secure_close"
-				else if(doorStatus["lock"] == "unlocked")
+				else if (doorStatus["lock"] == "unlocked")
 					doorCommand = "lock"
 			else
-				if(doorStatus["state"] == "open")
-					if(doorStatus["lock"] == "locked")
+				if (doorStatus["state"] == "open")
+					if (doorStatus["lock"] == "locked")
 						signalDoor(doorTag, "unlock")
 					doorCommand = "close"
-				else if(doorStatus["lock"] == "locked")
+				else if (doorStatus["lock"] == "locked")
 					doorCommand = "unlock"
 
-		if("open")
-			if(secure)
-				if(doorStatus["state"] == "closed")
+		if ("open")
+			if (secure)
+				if (doorStatus["state"] == "closed")
 					doorCommand = "secure_open"
-				else if(doorStatus["lock"] == "unlocked")
+				else if (doorStatus["lock"] == "unlocked")
 					doorCommand = "lock"
 			else
-				if(doorStatus["state"] == "closed")
-					if(doorStatus["lock"] == "locked")
+				if (doorStatus["state"] == "closed")
+					if (doorStatus["lock"] == "locked")
 						signalDoor(doorTag,"unlock")
 					doorCommand = "open"
-				else if(doorStatus["lock"] == "locked")
+				else if (doorStatus["lock"] == "locked")
 					doorCommand = "unlock"
 
-	if(doorCommand)
+	if (doorCommand)
 		signalDoor(doorTag, doorCommand)
 
 

@@ -236,20 +236,20 @@ var/global/ZAS_Settings/zas_settings = new
 
 /ZAS_Settings/New()
 	.=..()
-	for(var/S in typesof(/datum/ZAS_Setting) - /datum/ZAS_Setting)
+	for (var/S in typesof(/datum/ZAS_Setting) - /datum/ZAS_Setting)
 		var/id= "[S]"// dfrompath("[S]")
 		//testing("Creating zas_settings\[[id]\] = new [S]")
 		src.settings[id]=new S
 
 
-	if(fexists("config/ZAS.txt") == 0)
+	if (fexists("config/ZAS.txt") == 0)
 		Save()
 	Load()
 
 /ZAS_Settings/proc/Save()
 	var/F = file("config/ZAS.txt")
 	fdel(F)
-	for(var/id in src.settings)
+	for (var/id in src.settings)
 		var/datum/ZAS_Setting/setting = src.settings[id]
 		F << "# [setting.name]"
 		F << "#   [setting.desc]"
@@ -257,8 +257,8 @@ var/global/ZAS_Settings/zas_settings = new
 		F << ""
 
 /ZAS_Settings/proc/Load()
-	for(var/t in file2list("config/ZAS.txt"))
-		if(!t)
+	for (var/t in file2list("config/ZAS.txt"))
+		if (!t)
 			continue
 
 		t = trim(t)
@@ -290,24 +290,24 @@ var/global/ZAS_Settings/zas_settings = new
 /ZAS_Settings/proc/ChangeSetting(var/user,var/id)
 	var/datum/ZAS_Setting/setting = src.settings["[id]"]
 	var/displayedValue=""
-	switch(setting.valtype)
-		if(ZAS_TYPE_NUMERIC)
+	switch (setting.valtype)
+		if (ZAS_TYPE_NUMERIC)
 			setting.value = input(user,"Enter a number:","Settings",setting.value) as num
 			displayedValue="\"[setting.value]\""
 		/*
-		if(ZAS_TYPE_BITFLAG)
+		if (ZAS_TYPE_BITFLAG)
 			var/flag = input(user,"Toggle which bit?","Settings") in bitflags
 			flag = text2num(flag)
-			if(newvar & flag)
+			if (newvar & flag)
 				newvar &= ~flag
 			else
 				newvar |= flag
 		*/
-		if(ZAS_TYPE_BOOLEAN)
+		if (ZAS_TYPE_BOOLEAN)
 			setting.value = !setting.value
 			displayedValue = (setting.value) ? "ON" : "OFF"
 		/*
-		if(ZAS_TYPE_STRING)
+		if (ZAS_TYPE_STRING)
 			setting.value = input(user,"Enter text:","Settings",newvar) as message
 		*/
 		else
@@ -333,22 +333,22 @@ var/global/ZAS_Settings/zas_settings = new
 // INTERNAL USE ONLY
 /ZAS_Settings/proc/SetFromConfig(var/id, var/value)
 	var/datum/ZAS_Setting/setting = src.settings["[id]"]
-	switch(setting.valtype)
-		if(ZAS_TYPE_NUMERIC)
+	switch (setting.valtype)
+		if (ZAS_TYPE_NUMERIC)
 			setting.value = text2num(value)
 		/*
-		if(ZAS_TYPE_BITFLAG)
+		if (ZAS_TYPE_BITFLAG)
 			var/flag = input(user,"Toggle which bit?","Settings") in bitflags
 			flag = text2num(flag)
-			if(newvar & flag)
+			if (newvar & flag)
 				newvar &= ~flag
 			else
 				newvar |= flag
 		*/
-		if(ZAS_TYPE_BOOLEAN)
+		if (ZAS_TYPE_BOOLEAN)
 			setting.value = (value == "1")
 		/*
-		if(ZAS_TYPE_STRING)
+		if (ZAS_TYPE_STRING)
 			setting.value = input(user,"Enter text:","Settings",newvar) as message
 		*/
 
@@ -362,10 +362,10 @@ var/global/ZAS_Settings/zas_settings = new
 * @returns Value of the desired setting
 */
 /ZAS_Settings/proc/Get(var/id)
-	if(ispath(id))
+	if (ispath(id))
 		id="[id]"
 	var/datum/ZAS_Setting/setting = src.settings[id]
-	if(!setting || !istype(setting))
+	if (!setting || !istype(setting))
 		world.log << "ZAS_SETTING DEBUG: [id] | [id]"
 	return setting.value
 
@@ -389,7 +389,7 @@ a { color: white; }
 		<p><a href="?src=\ref[src];save=1">Save Settings</a> | <a href="?src=\ref[src];load=1">Load Settings</a></p>
 		<p>Please note that changing these settings can and probably will result in death, destruction and mayhem. <b>Change at your own risk.</b></p>
 	<dl>"}
-	for(var/id in src.settings)
+	for (var/id in src.settings)
 		var/datum/ZAS_Setting/s = src.settings[id]
 
 		dat += {"<dt><b>[s.name]</b> = <i>[s.value]</i> <A href='?src=\ref[src];changevar=[id]'>\[Change\]</A></dt>
@@ -398,26 +398,26 @@ a { color: white; }
 	user << browse(dat,"window=settings")
 
 /ZAS_Settings/Topic(href,href_list)
-	if("changevar" in href_list)
+	if ("changevar" in href_list)
 		ChangeSetting(usr,href_list["changevar"])
-	if("save" in href_list)
+	if ("save" in href_list)
 		var/sure = input(usr,"Are you sure?  This will overwrite your ZAS configuration!","Overwrite ZAS.txt?", "No") in list("Yes","No")
-		if(sure=="Yes")
+		if (sure=="Yes")
 			Save()
 			message_admins("[key_name(usr)] saved ZAS settings to disk.")
-	if("load" in href_list)
+	if ("load" in href_list)
 		var/sure = input(usr,"Are you sure?","Reload ZAS.txt?", "No") in list("Yes","No")
-		if(sure=="Yes")
+		if (sure=="Yes")
 			Load()
 			message_admins("[key_name(usr)] reloaded ZAS settings from disk.")
 
 /ZAS_Settings/proc/SetDefault(var/mob/user)
 	var/list/setting_choices = list("Plasma - Standard", "Plasma - Low Hazard", "Plasma - High Hazard", "Plasma - Oh Shit!", "ZAS - Normal", "ZAS - Forgiving", "ZAS - Dangerous", "ZAS - Hellish")
 	var/def = input(user, "Which of these presets should be used?") as null|anything in setting_choices
-	if(!def)
+	if (!def)
 		return
-	switch(def)
-		if("Plasma - Standard")
+	switch (def)
+		if ("Plasma - Standard")
 			Set("/datum/ZAS_Setting/CLOTH_CONTAMINATION",  1)   //If this is on, plasma does damage by getting into cloth.
 			Set("/datum/ZAS_Setting/PLASMAGUARD_ONLY",     0)
 			Set("/datum/ZAS_Setting/GENETIC_CORRUPTION",   0)   //Chance of genetic corruption as well as toxic damage, X in 1000.
@@ -426,7 +426,7 @@ a { color: white; }
 			Set("/datum/ZAS_Setting/PLASMA_HALLUCINATION", 0)
 			Set("/datum/ZAS_Setting/CONTAMINATION_LOSS",   0.02)
 
-		if("Plasma - Low Hazard")
+		if ("Plasma - Low Hazard")
 			Set("/datum/ZAS_Setting/CLOTH_CONTAMINATION",  0) //If this is on, plasma does damage by getting into cloth.
 			Set("/datum/ZAS_Setting/PLASMAGUARD_ONLY",     0)
 			Set("/datum/ZAS_Setting/GENETIC_CORRUPTION",   0) //Chance of genetic corruption as well as toxic damage, X in 1000
@@ -435,7 +435,7 @@ a { color: white; }
 			Set("/datum/ZAS_Setting/PLASMA_HALLUCINATION", 0)
 			Set("/datum/ZAS_Setting/CONTAMINATION_LOSS",   0.01)
 
-		if("Plasma - High Hazard")
+		if ("Plasma - High Hazard")
 			Set("/datum/ZAS_Setting/CLOTH_CONTAMINATION",  1) //If this is on, plasma does damage by getting into cloth.
 			Set("/datum/ZAS_Setting/PLASMAGUARD_ONLY",     0)
 			Set("/datum/ZAS_Setting/GENETIC_CORRUPTION",   0) //Chance of genetic corruption as well as toxic damage, X in 1000.
@@ -444,7 +444,7 @@ a { color: white; }
 			Set("/datum/ZAS_Setting/PLASMA_HALLUCINATION", 1)
 			Set("/datum/ZAS_Setting/CONTAMINATION_LOSS",   0.05)
 
-		if("Plasma - Oh Shit!")
+		if ("Plasma - Oh Shit!")
 			Set("/datum/ZAS_Setting/CLOTH_CONTAMINATION",  1) //If this is on, plasma does damage by getting into cloth.
 			Set("/datum/ZAS_Setting/PLASMAGUARD_ONLY",     1)
 			Set("/datum/ZAS_Setting/GENETIC_CORRUPTION",   5) //Chance of genetic corruption as well as toxic damage, X in 1000.
@@ -453,7 +453,7 @@ a { color: white; }
 			Set("/datum/ZAS_Setting/PLASMA_HALLUCINATION", 1)
 			Set("/datum/ZAS_Setting/CONTAMINATION_LOSS",   0.075)
 
-		if("ZAS - Normal")
+		if ("ZAS - Normal")
 			Set("/datum/ZAS_Setting/airflow_push",              0)
 			Set("/datum/ZAS_Setting/airflow_lightest_pressure", 20)
 			Set("/datum/ZAS_Setting/airflow_light_pressure",    35)
@@ -468,7 +468,7 @@ a { color: white; }
 			Set("/datum/ZAS_Setting/airflow_delay",             30)
 			Set("/datum/ZAS_Setting/airflow_mob_slowdown",      1)
 
-		if("ZAS - Forgiving")
+		if ("ZAS - Forgiving")
 			Set("/datum/ZAS_Setting/airflow_push",              0)
 			Set("/datum/ZAS_Setting/airflow_lightest_pressure", 45)
 			Set("/datum/ZAS_Setting/airflow_light_pressure",    60)
@@ -483,7 +483,7 @@ a { color: white; }
 			Set("/datum/ZAS_Setting/airflow_delay",             50)
 			Set("/datum/ZAS_Setting/airflow_mob_slowdown",      0)
 
-		if("ZAS - Dangerous")
+		if ("ZAS - Dangerous")
 			Set("/datum/ZAS_Setting/airflow_push",              1)
 			Set("/datum/ZAS_Setting/airflow_lightest_pressure", 15)
 			Set("/datum/ZAS_Setting/airflow_light_pressure",    30)
@@ -498,7 +498,7 @@ a { color: white; }
 			Set("/datum/ZAS_Setting/airflow_delay",             25)
 			Set("/datum/ZAS_Setting/airflow_mob_slowdown",      2)
 
-		if("ZAS - Hellish")
+		if ("ZAS - Hellish")
 			Set("/datum/ZAS_Setting/airflow_push",              1)
 			Set("/datum/ZAS_Setting/airflow_lightest_pressure", 20)
 			Set("/datum/ZAS_Setting/airflow_light_pressure",    30)

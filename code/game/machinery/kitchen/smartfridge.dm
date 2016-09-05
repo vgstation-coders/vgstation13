@@ -30,7 +30,7 @@
 	light_color = LIGHT_COLOR_CYAN
 	power_change()
 		..()
-		if(!(stat & (BROKEN|NOPOWER)))
+		if (!(stat & (BROKEN|NOPOWER)))
 			set_light(2)
 		else
 			set_light(0)
@@ -58,8 +58,8 @@
 	RefreshParts()
 
 /obj/machinery/smartfridge/proc/accept_check(var/obj/item/O as obj, var/mob/user as mob)
-	for(var/ac_type in accepted_types)
-		if(istype(O, ac_type))
+	for (var/ac_type in accepted_types)
+		if (istype(O, ac_type))
 			return 1
 
 /obj/machinery/smartfridge/seeds
@@ -198,14 +198,14 @@
 
 
 /obj/machinery/smartfridge/power_change()
-	if( powered() )
+	if ( powered() )
 		stat &= ~NOPOWER
-		if(!(stat & BROKEN))
+		if (!(stat & BROKEN))
 			icon_state = icon_on
 	else
 		spawn(rand(0, 15))
 		stat |= NOPOWER
-		if(!(stat & BROKEN))
+		if (!(stat & BROKEN))
 			icon_state = icon_off
 
 
@@ -214,53 +214,53 @@
 ********************/
 
 /obj/machinery/smartfridge/attackby(var/obj/item/O as obj, var/mob/user as mob, params)
-	if(stat & NOPOWER)
+	if (stat & NOPOWER)
 		to_chat(user, "<span class='notice'>\The [src] is unpowered and useless.</span>")
 		return 1
 
-	if(..())
+	if (..())
 		return 1
 
-	if(accept_check(O))
-		if(contents.len >= MAX_N_OF_ITEMS)
+	if (accept_check(O))
+		if (contents.len >= MAX_N_OF_ITEMS)
 			to_chat(user, "<span class='notice'>\The [src] is full.</span>")
 			return 1
 		else
-			if(!user.drop_item(O, src))
+			if (!user.drop_item(O, src))
 				return 1
 
-			if(item_quants[O.name])
+			if (item_quants[O.name])
 				item_quants[O.name]++
 			else
 				item_quants[O.name] = 1
 			user.visible_message("<span class='notice'>[user] has added \the [O] to \the [src].", \
 								 "<span class='notice'>You add \the [O] to \the [src].")
 
-	else if(istype(O, /obj/item/weapon/storage/bag))
+	else if (istype(O, /obj/item/weapon/storage/bag))
 		var/obj/item/weapon/storage/bag/bag = O
 		var/objects_loaded = 0
-		for(var/obj/G in bag.contents)
-			if(accept_check(G))
-				if(contents.len >= MAX_N_OF_ITEMS)
+		for (var/obj/G in bag.contents)
+			if (accept_check(G))
+				if (contents.len >= MAX_N_OF_ITEMS)
 					to_chat(user, "<span class='notice'>\The [src] is full.</span>")
 					return 1
 				else
 					bag.remove_from_storage(G,src)
-					if(item_quants[G.name])
+					if (item_quants[G.name])
 						item_quants[G.name]++
 					else
 						item_quants[G.name] = 1
 					objects_loaded++
-		if(objects_loaded)
+		if (objects_loaded)
 
 			user.visible_message("<span class='notice'>[user] loads \the [src] with \the [bag].</span>", \
 								 "<span class='notice'>You load \the [src] with \the [bag].</span>")
-			if(bag.contents.len > 0)
+			if (bag.contents.len > 0)
 				to_chat(user, "<span class='notice'>Some items are refused.</span>")
 
-	else if(istype(O, /obj/item/weapon/paper) && user.drop_item(O, src.loc))
+	else if (istype(O, /obj/item/weapon/paper) && user.drop_item(O, src.loc))
 		var/list/params_list = params2list(params)
-		if(O.loc == src.loc && params_list.len)
+		if (O.loc == src.loc && params_list.len)
 			var/clamp_x = WORLD_ICON_SIZE/2
 			var/clamp_y = WORLD_ICON_SIZE/2
 			O.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
@@ -288,7 +288,7 @@
 ********************/
 
 /obj/machinery/smartfridge/interact(mob/user as mob)
-	if(stat & NOPOWER)
+	if (stat & NOPOWER)
 		return
 
 	var/dat = "<TT><b>Select an item:</b><br>"
@@ -297,20 +297,20 @@
 		dat += "<font color = 'red'>No product loaded!</font>"
 	else
 		for (var/O in item_quants)
-			if(item_quants[O] > 0)
+			if (item_quants[O] > 0)
 				var/N = item_quants[O]
 				var/escaped_name = url_encode(O) //This is necessary to contain special characters in Topic() links, otherwise, BYOND sees "Dex+" and drops the +.
 
 				dat += {"<FONT color = 'blue'><B>[capitalize(O)]</B>:
 					[N] </font>
 					<a href='byond://?src=\ref[src];vend=[escaped_name];amount=1'>Vend</A> "}
-				if(N > 5)
+				if (N > 5)
 					dat += "(<a href='byond://?src=\ref[src];vend=[escaped_name];amount=5'>x5</A>)"
-					if(N > 10)
+					if (N > 10)
 						dat += "(<a href='byond://?src=\ref[src];vend=[escaped_name];amount=10'>x10</A>)"
-						if(N > 25)
+						if (N > 25)
 							dat += "(<a href='byond://?src=\ref[src];vend=[escaped_name];amount=25'>x25</A>)"
-				if(N > 1)
+				if (N > 1)
 					dat += "(<a href='?src=\ref[src];vend=[escaped_name];amount=[N]'>All</A>)"
 				dat += "<br>"
 
@@ -320,24 +320,24 @@
 	return
 
 /obj/machinery/smartfridge/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 	usr.set_machine(src)
 
 	var/N = href_list["vend"]
 	var/amount = text2num(href_list["amount"])
 
-	if(item_quants[N] <= 0) // Sanity check, there are probably ways to press the button when it shouldn't be possible.
+	if (item_quants[N] <= 0) // Sanity check, there are probably ways to press the button when it shouldn't be possible.
 		return
 
 	item_quants[N] = max(item_quants[N] - amount, 0)
 
 	var/i = amount
-	for(var/obj/O in contents)
-		if(O.name == N)
+	for (var/obj/O in contents)
+		if (O.name == N)
 			O.forceMove(src.loc)
 			i--
-			if(i <= 0)
+			if (i <= 0)
 				break
 
 	src.updateUsrDialog()

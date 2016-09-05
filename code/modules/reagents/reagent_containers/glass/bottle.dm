@@ -22,9 +22,9 @@
 
 //JUST
 /obj/item/weapon/reagent_containers/glass/bottle/mop_act(obj/item/weapon/mop/M, mob/user)
-	if(..())
-		if(src.reagents.total_volume >= 1)
-			if(M.reagents.total_volume >= 1)
+	if (..())
+		if (src.reagents.total_volume >= 1)
+			if (M.reagents.total_volume >= 1)
 				to_chat(user, "<span class='notice'>You dip \the [M]'s tip into \the [src] but don't soak anything up.</span>")
 				return 1
 			else
@@ -39,7 +39,7 @@
  * Hard to have colored bottles work with dynamic reagent filling
 /obj/item/weapon/reagent_containers/glass/bottle/New()
 	..()
-	if(!icon_state)
+	if (!icon_state)
 		icon_state = "bottle[rand(1,20)]"
 */
 
@@ -62,28 +62,28 @@
 
 	overlays.len = 0
 
-	if(reagents.total_volume)
+	if (reagents.total_volume)
 		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "[icon_state]5")
 
 		var/percent = round((reagents.total_volume / volume) * 100)
-		switch(percent) //Percentages are pretty fucked so here comes the decimal rollercoaster with halfway rounding
-			if(0 to 24)
+		switch (percent) //Percentages are pretty fucked so here comes the decimal rollercoaster with halfway rounding
+			if (0 to 24)
 				filling.icon_state = "[icon_state]5"
-			if(25 to 41)
+			if (25 to 41)
 				filling.icon_state = "[icon_state]10"
-			if(42 to 58)
+			if (42 to 58)
 				filling.icon_state = "[icon_state]15"
-			if(59 to 74)
+			if (59 to 74)
 				filling.icon_state = "[icon_state]20"
-			if(75 to 91)
+			if (75 to 91)
 				filling.icon_state = "[icon_state]25"
-			if(92 to INFINITY)
+			if (92 to INFINITY)
 				filling.icon_state = "[icon_state]30"
 
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
 		overlays += filling
 
-	if(!is_open_container())
+	if (!is_open_container())
 		var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
 		overlays += lid
 

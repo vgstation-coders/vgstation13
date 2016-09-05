@@ -110,8 +110,8 @@
 /spell/aoe_turf/conjure/pylon/cast(list/targets)
 	..()
 	var/turf/spawn_place = pick(targets)
-	for(var/obj/structure/cult/pylon/P in spawn_place.contents)
-		if(P.isbroken)
+	for (var/obj/structure/cult/pylon/P in spawn_place.contents)
+		if (P.isbroken)
 			P.repair(usr)
 		continue
 	return

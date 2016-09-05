@@ -37,67 +37,67 @@
 	return
 
 /mob/living/silicon/proc/write_laws()
-	if(laws)
+	if (laws)
 		var/text = src.laws.write_laws()
 		return text
 
 /mob/living/silicon/proc/queueAlarm(var/message, var/type, var/incoming = 1)
 	var/in_cooldown = (alarms_to_show.len > 0 || alarms_to_clear.len > 0)
-	if(incoming)
+	if (incoming)
 		alarms_to_show += message
 		alarm_types_show[type] += 1
 	else
 		alarms_to_clear += message
 		alarm_types_clear[type] += 1
 
-	if(!in_cooldown)
+	if (!in_cooldown)
 		spawn(10 * 10) // 10 seconds
 
-			if(alarms_to_show.len < 5)
-				for(var/msg in alarms_to_show)
+			if (alarms_to_show.len < 5)
+				for (var/msg in alarms_to_show)
 					to_chat(src, msg)
-			else if(alarms_to_show.len)
+			else if (alarms_to_show.len)
 
 				var/msg = "--- "
 
-				if(alarm_types_show["Motion"])
+				if (alarm_types_show["Motion"])
 					msg += "MOTION: [alarm_types_show["Motion"]] alarms detected. - "
 
-				if(alarm_types_show["Fire"])
+				if (alarm_types_show["Fire"])
 					msg += "FIRE: [alarm_types_show["Fire"]] alarms detected. - "
 
-				if(alarm_types_show["Atmosphere"])
+				if (alarm_types_show["Atmosphere"])
 					msg += "ATMOSPHERE: [alarm_types_show["Atmosphere"]] alarms detected. - "
 
-				if(alarm_types_show["Power"])
+				if (alarm_types_show["Power"])
 					msg += "POWER: [alarm_types_show["Power"]] alarms detected. - "
 
-				if(alarm_types_show["Camera"])
+				if (alarm_types_show["Camera"])
 					msg += "CAMERA: [alarm_types_show["Power"]] alarms detected. - "
 
 				msg += "<A href=?src=\ref[src];showalerts=1'>\[Show Alerts\]</a>"
 				to_chat(src, msg)
 
-			if(alarms_to_clear.len < 3)
-				for(var/msg in alarms_to_clear)
+			if (alarms_to_clear.len < 3)
+				for (var/msg in alarms_to_clear)
 					to_chat(src, msg)
 
-			else if(alarms_to_clear.len)
+			else if (alarms_to_clear.len)
 				var/msg = "--- "
 
-				if(alarm_types_clear["Motion"])
+				if (alarm_types_clear["Motion"])
 					msg += "MOTION: [alarm_types_clear["Motion"]] alarms cleared. - "
 
-				if(alarm_types_clear["Fire"])
+				if (alarm_types_clear["Fire"])
 					msg += "FIRE: [alarm_types_clear["Fire"]] alarms cleared. - "
 
-				if(alarm_types_clear["Atmosphere"])
+				if (alarm_types_clear["Atmosphere"])
 					msg += "ATMOSPHERE: [alarm_types_clear["Atmosphere"]] alarms cleared. - "
 
-				if(alarm_types_clear["Power"])
+				if (alarm_types_clear["Power"])
 					msg += "POWER: [alarm_types_clear["Power"]] alarms cleared. - "
 
-				if(alarm_types_show["Camera"])
+				if (alarm_types_show["Camera"])
 					msg += "CAMERA: [alarm_types_show["Power"]] alarms detected. - "
 
 				msg += "<A href=?src=\ref[src];showalerts=1'>\[Show Alerts\]</a>"
@@ -106,9 +106,9 @@
 
 			alarms_to_show = list()
 			alarms_to_clear = list()
-			for(var/i = 1; i < alarm_types_show.len; i++)
+			for (var/i = 1; i < alarm_types_show.len; i++)
 				alarm_types_show[i] = 0
-			for(var/i = 1; i < alarm_types_clear.len; i++)
+			for (var/i = 1; i < alarm_types_clear.len; i++)
 				alarm_types_clear[i] = 0
 
 /mob/living/silicon/drop_item(var/obj/item/to_drop, var/atom/Target, force_drop = 0)
@@ -118,20 +118,20 @@
 	return
 
 /mob/living/silicon/emp_act(severity)
-	for(var/obj/item/stickybomb/B in src)
-		if(B.stuck_to)
+	for (var/obj/item/stickybomb/B in src)
+		if (B.stuck_to)
 			visible_message("<span class='warning'>\the [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
 			B.deactivate()
 			B.unstick()
 
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
 
-	switch(severity)
-		if(1)
+	switch (severity)
+		if (1)
 			src.take_organ_damage(20)
 			Stun(rand(5,10))
-		if(2)
+		if (2)
 			src.take_organ_damage(10)
 			Stun(rand(1,5))
 	flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
@@ -146,7 +146,7 @@
 	return 1
 
 /mob/living/silicon/bullet_act(var/obj/item/projectile/Proj)
-	if(!Proj.nodamage)
+	if (!Proj.nodamage)
 		adjustBruteLoss(Proj.damage)
 	Proj.on_hit(src,2)
 	return 2
@@ -154,28 +154,28 @@
 /mob/living/silicon/apply_effect(var/effect = 0,var/effecttype = STUN, var/blocked = 0)
 	return 0//The only effect that can hit them atm is flashes and they still directly edit so this works for now
 /*
-	if(!effect || (blocked >= 2))
+	if (!effect || (blocked >= 2))
 		return 0
-	switch(effecttype)
-		if(STUN)
+	switch (effecttype)
+		if (STUN)
 			stunned = max(stunned,(effect/(blocked+1)))
-		if(WEAKEN)
+		if (WEAKEN)
 			weakened = max(weakened,(effect/(blocked+1)))
-		if(PARALYZE)
+		if (PARALYZE)
 			paralysis = max(paralysis,(effect/(blocked+1)))
-		if(IRRADIATE)
+		if (IRRADIATE)
 			radiation += min((effect - (effect*getarmor(null, "rad"))), 0)//Rads auto check armor
-		if(STUTTER)
+		if (STUTTER)
 			stuttering = max(stuttering,(effect/(blocked+1)))
-		if(EYE_BLUR)
+		if (EYE_BLUR)
 			eye_blurry = max(eye_blurry,(effect/(blocked+1)))
-		if(DROWSY)
+		if (DROWSY)
 			drowsyness = max(drowsyness,(effect/(blocked+1)))
 	updatehealth()
 	return 1*/
 
 /proc/islinked(var/mob/living/silicon/robot/bot, var/mob/living/silicon/ai/ai)
-	if(!istype(bot) || !istype(ai))
+	if (!istype(bot) || !istype(ai))
 		return 0
 	if (bot.connected_ai == ai)
 		return 1
@@ -186,7 +186,7 @@
 
 // this function shows the health of a silicon in the Status panel
 /mob/living/silicon/proc/show_system_integrity()
-	if(stat == CONSCIOUS)
+	if (stat == CONSCIOUS)
 		stat(null, text("System integrity: [system_integrity()]%"))
 	else
 		stat(null, text("Systems nonfunctional"))
@@ -202,7 +202,7 @@
 
 // this function displays the shuttles ETA in the status panel if the shuttle has been called
 /mob/living/silicon/proc/show_emergency_shuttle_eta()
-	if(emergency_shuttle.online && emergency_shuttle.location < 2)
+	if (emergency_shuttle.online && emergency_shuttle.location < 2)
 		var/timeleft = emergency_shuttle.timeleft()
 		if (timeleft)
 			stat(null, "ETA-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
@@ -211,7 +211,7 @@
 // This adds the basic clock, shuttle recall timer, and malf_ai info to all silicon lifeforms
 /mob/living/silicon/Stat()
 	..()
-	if(statpanel("Status"))
+	if (statpanel("Status"))
 		show_station_time()
 		show_emergency_shuttle_eta()
 		show_system_integrity()
@@ -221,20 +221,20 @@
 /mob/living/silicon/proc/show_station_manifest()
 	var/dat
 	dat += "<h4>Crew Manifest</h4>"
-	if(data_core)
+	if (data_core)
 		dat += data_core.get_manifest(1) // make it monochrome
 	dat += "<br>"
 	src << browse(dat, "window=airoster")
 	onclose(src, "airoster")
 
 /mob/living/silicon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
-	if(istype(source, /obj/machinery/containment_field))
+	if (istype(source, /obj/machinery/containment_field))
 		var/damage = shock_damage * siemens_coeff * 0.75 // take reduced damage
 
-		if(damage <= 0)
+		if (damage <= 0)
 			damage = 0
 
-		if(take_overall_damage(0, damage, "[source]") == 0) // godmode
+		if (take_overall_damage(0, damage, "[source]") == 0) // godmode
 			return 0
 
 		visible_message( \
@@ -243,7 +243,7 @@
 			"<span class='warning'>You hear a heavy electrical crack.</span>" \
 		)
 
-		if(prob(20))
+		if (prob(20))
 			Stun(2)
 
 		var/datum/effect/effect/system/spark_spread/SparkSpread = new
@@ -282,12 +282,12 @@
 
 	var/dat = "<b><font size = 5>Known Languages</font></b><br/><br/>"
 
-	if(default_language)
+	if (default_language)
 		dat += "Current default language: [default_language] - <a href='byond://?src=\ref[src];default_lang=reset'>reset</a><br/><br/>"
 
-	for(var/datum/language/L in languages)
+	for (var/datum/language/L in languages)
 		var/default_str
-		if(L == default_language)
+		if (L == default_language)
 			default_str = " - default - <a href='byond://?src=\ref[src];default_lang=reset'>reset</a>"
 		else
 			default_str = " - <a href='byond://?src=\ref[src];default_lang=[L]'>set default</a>"
@@ -302,19 +302,19 @@
 	return 1
 
 /mob/living/silicon/html_mob_check(var/typepath)
-	for(var/atom/movable/AM in html_machines)
-		if(typepath == AM.type)
-			if(max(abs(AM.x-src.x),abs(AM.y-src.y)) <= client.view)
+	for (var/atom/movable/AM in html_machines)
+		if (typepath == AM.type)
+			if (max(abs(AM.x-src.x),abs(AM.y-src.y)) <= client.view)
 				return 1
 	return 0
 
 /mob/living/silicon/spook(mob/dead/observer/ghost)
-	if(!..(ghost, TRUE) || !client)
+	if (!..(ghost, TRUE) || !client)
 		return
 	to_chat(src, "<i>[pick(boo_phrases_silicon)]</i>")
 
 /mob/living/silicon/bite_act(mob/living/carbon/human/H)
-	if(H.hallucinating() || (M_BEAK in H.mutations)) //If we're hallucinating, bite the silicon and lose some of our teeth. Doesn't apply to vox who have beaks
+	if (H.hallucinating() || (M_BEAK in H.mutations)) //If we're hallucinating, bite the silicon and lose some of our teeth. Doesn't apply to vox who have beaks
 		..()
 
 		H.knock_out_teeth()
@@ -322,7 +322,7 @@
 		to_chat(H, "<span class='info'>Your self-preservation instinct prevents you from breaking your teeth on \the [src].</span>")
 
 /mob/living/silicon/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/screen/fullscreen/flash/noise)
-	if(affect_silicon)
+	if (affect_silicon)
 		return ..()
 
 /mob/living/silicon/earprot()

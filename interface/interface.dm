@@ -4,10 +4,10 @@
 	set desc = "Shows a high scale rendering of the current map in your browser."
 	set hidden = 1
 
-	if(!config.renders_url || config.renders_url == "")
+	if (!config.renders_url || config.renders_url == "")
 		to_chat(src, "<span class='danger'>The Map Renders url has not been set in the server configuration.</span>")
 		return
-	if(alert("This will open the map render(s) in your browser. Are you sure?",,"Yes","No")=="No")
+	if (alert("This will open the map render(s) in your browser. Are you sure?",,"Yes","No")=="No")
 		return
 	var/mapname = replacetext(map.nameLong, " ", "")
 	src << link("[config.renders_url]/images/maps/[mapname]")
@@ -16,8 +16,8 @@
 	set name = "wiki"
 	set desc = "Visit the wiki."
 	set hidden = 1
-	if( config.wikiurl )
-		if(alert("This will open the wiki in your browser. Are you sure?",,"Yes","No")=="No")
+	if ( config.wikiurl )
+		if (alert("This will open the wiki in your browser. Are you sure?",,"Yes","No")=="No")
 			return
 		src << link(config.wikiurl)
 	else
@@ -28,8 +28,8 @@
 	set name = "forum"
 	set desc = "Visit the forum."
 	set hidden = 1
-	if( config.forumurl )
-		if(alert("This will open the forum in your browser. Are you sure?",,"Yes","No")=="No")
+	if ( config.forumurl )
+		if (alert("This will open the forum in your browser. Are you sure?",,"Yes","No")=="No")
 			return
 		src << link(config.forumurl)
 	else
@@ -112,7 +112,7 @@ Admin:
 
 	to_chat(src, hotkey_mode)
 	to_chat(src, other)
-	if(holder)
+	if (holder)
 		to_chat(src, admin)
 
 // Needed to circumvent a bug where .winset does not work when used on the window.on-size event in skins.

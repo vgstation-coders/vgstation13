@@ -26,7 +26,7 @@
 #define GENRATE 800		// generator output coefficient from Q
 
 /obj/machinery/power/generator/type2/process()
-	if(!input1 || !input2 || !anchored || stat & (NOPOWER|BROKEN))
+	if (!input1 || !input2 || !anchored || stat & (NOPOWER|BROKEN))
 		return
 
 	var/datum/gas_mixture/air1 = input1.return_exchange_air()
@@ -34,10 +34,10 @@
 
 	lastgen = 0
 
-	if(air1 && air2)
+	if (air1 && air2)
 		var/datum/gas_mixture/hot_air = air1
 		var/datum/gas_mixture/cold_air = air2
-		if(hot_air.temperature < cold_air.temperature)
+		if (hot_air.temperature < cold_air.temperature)
 			hot_air = air2
 			cold_air = air1
 
@@ -46,7 +46,7 @@
 
 		var/delta_temperature = hot_air.temperature - cold_air.temperature
 
-		if(delta_temperature > 1 && cold_air_heat_capacity > 0.01 && hot_air_heat_capacity > 0.01)
+		if (delta_temperature > 1 && cold_air_heat_capacity > 0.01 && hot_air_heat_capacity > 0.01)
 			var/efficiency = (1 - cold_air.temperature/hot_air.temperature)*0.65 //65% of Carnot efficiency
 
 			var/energy_transfer = delta_temperature*hot_air_heat_capacity*cold_air_heat_capacity/(hot_air_heat_capacity+cold_air_heat_capacity)
@@ -59,17 +59,17 @@
 
 //			to_chat(world, "POWER: [lastgen] W generated at [efficiency*100]% efficiency and sinks sizes [cold_air_heat_capacity], [hot_air_heat_capacity]")
 
-			if(input1.network)
+			if (input1.network)
 				input1.network.update = 1
 
-			if(input2.network)
+			if (input2.network)
 				input2.network.update = 1
 
 			add_avail(lastgen)
 	// update icon overlays only if displayed level has changed
 
 	var/genlev = max(0, min( round(11*lastgen / 100000), 11))
-	if(genlev != lastgenlev)
+	if (genlev != lastgenlev)
 		lastgenlev = genlev
 		updateicon()
 
@@ -78,18 +78,18 @@
 
 /obj/machinery/power/generator/type2/attack_ai(mob/user)
 	src.add_hiddenprint(user)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
 	interact(user)
 
 /obj/machinery/power/generator/type2/attack_hand(mob/user)
 	add_fingerprint(user)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
 	interact(user)
 
 /obj/machinery/power/generator/type2/proc/get_loop_state(var/loop_name,var/loop_dir,var/obj/machinery/atmospherics/unary/generator_input/loop)
-	if(!loop)
+	if (!loop)
 		return "<b>[loop_name] Loop</b> ([dir2text(loop_dir)], <span style=\"color:red;font-weight:bold;\">UNCONNECTED</span>)<br />"
 	else
 		return {"<B>Cold Loop</B> ([dir2text(loop_dir)])

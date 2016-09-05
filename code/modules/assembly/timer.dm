@@ -25,7 +25,7 @@
 		VALUE_TIMING = "timing;"+VT_NUMBER)
 
 /obj/item/device/assembly/timer/activate()
-	if(!..())
+	if (!..())
 		return 0//Cooldown check
 
 	timing = !timing
@@ -35,7 +35,7 @@
 
 /obj/item/device/assembly/timer/toggle_secure()
 	secured = !secured
-	if(secured)
+	if (secured)
 		processing_objects.Add(src)
 	else
 		timing = 0
@@ -44,10 +44,10 @@
 	return secured
 
 /obj/item/device/assembly/timer/proc/timer_end()
-	if(!secured)
+	if (!secured)
 		return 0
 	pulse(0)
-	if(!holder)
+	if (!holder)
 		visible_message("[bicon(src)] *beep* *beep*", "*beep* *beep*")
 	cooldown = 2
 	spawn(10)
@@ -55,9 +55,9 @@
 	return
 
 /obj/item/device/assembly/timer/process()
-	if(timing && (time > 0))
+	if (timing && (time > 0))
 		time--
-	if(timing && time <= 0)
+	if (timing && time <= 0)
 		timing = 0
 		timer_end()
 		time = default_time
@@ -67,16 +67,16 @@
 /obj/item/device/assembly/timer/update_icon()
 	overlays.len = 0
 	attached_overlays = list()
-	if(timing)
+	if (timing)
 		attached_overlays += "timer_timing"
 		overlays += image(icon = icon, icon_state = "timer_timing")
-	if(holder)
+	if (holder)
 		holder.update_icon()
 	return
 
 
 /obj/item/device/assembly/timer/interact(mob/user as mob)//TODO: Have this use the wires
-	if(!secured)
+	if (!secured)
 		user.show_message("<span class='warning'>The [name] is unsecured!</span>")
 		return 0
 	var/second = time % 60
@@ -93,31 +93,31 @@
 
 /obj/item/device/assembly/timer/Topic(href, href_list)
 	..()
-	if(usr.stat || usr.restrained() || !in_range(loc, usr) || (!usr.canmove && !usr.locked_to))
+	if (usr.stat || usr.restrained() || !in_range(loc, usr) || (!usr.canmove && !usr.locked_to))
 		//If the user is handcuffed or out of range, or if they're unable to move,
 		//but NOT if they're unable to move as a result of being buckled into something, they're unable to use the device.
 		usr << browse(null, "window=timer")
 		onclose(usr, "timer")
 		return
 
-	if(href_list["time"])
+	if (href_list["time"])
 		timing = text2num(href_list["time"])
 		message_admins("[key_name_admin(usr)] [timing ? "started" : "stopped"] a timer at [formatJumpTo(src)]")
 		update_icon()
 
-	if(href_list["tp"])
+	if (href_list["tp"])
 		var/tp = text2num(href_list["tp"])
 		time += tp
 		time = min(max(round(time), 0), 600)
 
-	if(href_list["close"])
+	if (href_list["close"])
 		usr << browse(null, "window=timer")
 		return
 
-	if(href_list["set_default_time"])
+	if (href_list["set_default_time"])
 		default_time = time
 
-	if(usr)
+	if (usr)
 		attack_self(usr)
 
 	return

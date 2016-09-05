@@ -30,14 +30,14 @@
 
 	var/datum/reagents/R = src.reagents
 
-	if(!R || !R.total_volume)
+	if (!R || !R.total_volume)
 		to_chat(user, "<span class='warning'>\The [src] is empty.</span>")
 		return 0
 
-	if(M == user) //user drinking it
+	if (M == user) //user drinking it
 
 		to_chat(M, "<span class='notice'>You swallow some of the contents of \the [src].</span>")
-		if(reagents.total_volume) //Deal with the reagents in the food
+		if (reagents.total_volume) //Deal with the reagents in the food
 			reagents.reaction(M, INGEST)
 			spawn(5)
 				reagents.trans_to(M, amount_per_transfer_from_this)
@@ -45,12 +45,12 @@
 		playsound(M.loc,'sound/items/drink.ogg', rand(10, 50), 1)
 		return 1
 
-	else if(istype(M, /mob/living/carbon)) //user feeding M the condiment. M also being carbon
+	else if (istype(M, /mob/living/carbon)) //user feeding M the condiment. M also being carbon
 
 		M.visible_message("<span class='danger'>[user] attempts to feed [M] \the [src]</span>", \
 		"<span class='danger'>[user] attempts to feed you \the [src]</span>")
 
-		if(!do_mob(user, M))
+		if (!do_mob(user, M))
 			return
 
 		M.visible_message("<span class='danger'>[user] feeds [M] \the [src]</span>", \
@@ -61,12 +61,12 @@
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Fed [src.name] by [M.name] ([M.ckey]) Reagents: [reagentlist(src)]</font>")
 		log_attack("<font color='red'>[user.name] ([user.ckey]) fed [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
 
-		if(!iscarbon(user))
+		if (!iscarbon(user))
 			M.LAssailant = null
 		else
 			M.LAssailant = user
 
-		if(reagents.total_volume) //Deal with the reagents in the food
+		if (reagents.total_volume) //Deal with the reagents in the food
 			reagents.reaction(M, INGEST)
 			spawn(5)
 				reagents.trans_to(M, amount_per_transfer_from_this)
@@ -80,15 +80,15 @@
 	return
 
 /obj/item/weapon/reagent_containers/food/condiment/afterattack(obj/target, mob/user , flag)
-	if(!flag || ismob(target))
+	if (!flag || ismob(target))
 		return 0
-	if(istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
+	if (istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
 
-		if(!target.reagents.total_volume) //Nothing in the dispenser
+		if (!target.reagents.total_volume) //Nothing in the dispenser
 			to_chat(user, "<span class='warning'>\The [target] is empty.</span>")
 			return
 
-		if(reagents.total_volume >= reagents.maximum_volume) //Our condiment bottle is full
+		if (reagents.total_volume >= reagents.maximum_volume) //Our condiment bottle is full
 			to_chat(user, "<span class='warning'>\The [src] is full.</span>")
 			return
 
@@ -96,11 +96,11 @@
 		to_chat(user, "<span class='notice'>You fill [src] with [trans] units of the contents of [target].</span>")
 
 	//Something like a glass or a food item. Player probably wants to transfer TO it.
-	else if(target.is_open_container() || istype(target, /obj/item/weapon/reagent_containers/food/snacks))
-		if(!reagents.total_volume)
+	else if (target.is_open_container() || istype(target, /obj/item/weapon/reagent_containers/food/snacks))
+		if (!reagents.total_volume)
 			to_chat(user, "<span class='warning'>\The [src] is empty.</span>")
 			return
-		if(target.reagents.total_volume >= target.reagents.maximum_volume)
+		if (target.reagents.total_volume >= target.reagents.maximum_volume)
 			to_chat(user, "<span class='warning'>You can't add anymore to \the [target].</span>")
 			return
 		var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
@@ -108,80 +108,80 @@
 
 /obj/item/weapon/reagent_containers/food/condiment/on_reagent_change() //Due to the way condiment bottles work, we define "special types" here
 
-	if(reagents.reagent_list.len > 0)
+	if (reagents.reagent_list.len > 0)
 
 		item_state = null
-		switch(reagents.get_master_reagent_id())
+		switch (reagents.get_master_reagent_id())
 
-			if(KETCHUP)
+			if (KETCHUP)
 				name = KETCHUP
 				desc = "You feel more American already."
 				icon_state = KETCHUP
-			if(CAPSAICIN)
+			if (CAPSAICIN)
 				name = "hotsauce"
 				desc = "You can almost TASTE the stomach ulcers now!"
 				icon_state = "hotsauce"
-			if(ENZYME)
+			if (ENZYME)
 				name = "universal enzyme"
 				desc = "Used in cooking various dishes."
 				icon_state = ENZYME
-			if(FLOUR)
+			if (FLOUR)
 				name = "flour sack"
 				desc = "A big bag of flour. Good for baking!"
 				icon_state = FLOUR
-			if(MILK)
+			if (MILK)
 				name = "space milk"
 				desc = "It's milk. White and nutritious goodness!"
 				icon_state = MILK
-			if(SOYMILK)
+			if (SOYMILK)
 				name = "soy milk"
 				desc = "It's soy milk. White and nutritious goodness!"
 				icon_state = SOYMILK
-			if(RICE)
+			if (RICE)
 				name = "rice sack"
 				desc = "A taste of Asia in the kitchen."
 				icon_state = RICE
-			if(SOYSAUCE)
+			if (SOYSAUCE)
 				name = "soy sauce"
 				desc = "A salty soy-based flavoring."
 				icon_state = SOYSAUCE
-			if(FROSTOIL)
+			if (FROSTOIL)
 				name = "coldsauce"
 				desc = "Leaves the tongue numb in its passage."
 				icon_state = "coldsauce"
-			if(SODIUMCHLORIDE)
+			if (SODIUMCHLORIDE)
 				name = "salt shaker"
 				desc = "Salt. From space oceans, presumably."
 				icon_state = "saltshakersmall"
-			if(BLACKPEPPER)
+			if (BLACKPEPPER)
 				name = "pepper mill"
 				desc = "Often used to flavor food or make people sneeze."
 				icon_state = "peppermillsmall"
-			if(CORNOIL)
+			if (CORNOIL)
 				name = "corn oil"
 				desc = "A delicious oil used in cooking. Made from corn."
 				icon_state = CORNOIL
-			if(SUGAR)
+			if (SUGAR)
 				name = SUGAR
 				desc = "Tasty space sugar!"
 				icon_state = SUGAR
-			if(CHEFSPECIAL)
+			if (CHEFSPECIAL)
 				name = "\improper Chef Excellence's Special Sauce"
 				desc = "A potent sauce distilled from the toxin glands of 1000 Space Carp."
 				icon_state = "emptycondiment"
-			if(VINEGAR)
+			if (VINEGAR)
 				name = "malt vinegar bottle"
 				desc = "Perfect for fish and chips!"
 				icon_state = "vinegar_container"
-			if("honey")
+			if ("honey")
 				name = "honey pot"
 				desc = "Sweet and healthy!"
 				icon_state = "honey"
-			if(CINNAMON)
+			if (CINNAMON)
 				name = "cinnamon shaker"
 				desc = "A spice, obtained from the bark of cinnamomum trees."
 				icon_state = CINNAMON
-			if(GRAVY)
+			if (GRAVY)
 				name = "gravy boat"
 				desc = "Too small to set sail on."
 				icon_state = GRAVY
@@ -190,7 +190,7 @@
 				desc = "Just your average condiment container."
 				icon_state = "emptycondiment"
 
-				if(reagents.reagent_list.len == 1)
+				if (reagents.reagent_list.len == 1)
 					desc = "Looks like it is [reagents.get_master_reagent_name()], but you are not sure."
 				else
 					desc = "A mixture of various condiments. [reagents.get_master_reagent_name()] is one of them."
@@ -200,7 +200,7 @@
 		name = "condiment bottle"
 		desc = "An empty condiment bottle."
 
-	if(iscarbon(loc))
+	if (iscarbon(loc))
 		var/mob/living/carbon/M = loc
 		M.update_inv_hands()
 
@@ -216,8 +216,8 @@
 	reagents.add_reagent(ENZYME, 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/enzyme/restock()
-	if(istype(src,/obj/item/weapon/reagent_containers/food/condiment/enzyme))
-		if(reagents.get_reagent_amount(ENZYME) < 50)
+	if (istype(src,/obj/item/weapon/reagent_containers/food/condiment/enzyme))
+		if (reagents.get_reagent_amount(ENZYME) < 50)
 			reagents.add_reagent(ENZYME, 2)
 
 /obj/item/weapon/reagent_containers/food/condiment/sugar

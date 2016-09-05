@@ -35,16 +35,16 @@
 	qdel(src)
 
 /obj/structure/lattice/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			qdel(src)
-		if(2.0)
+		if (2.0)
 			qdel(src)
 
 /obj/structure/lattice/attackby(obj/item/C as obj, mob/user as mob)
-	if(iswelder(C))
+	if (iswelder(C))
 		var/obj/item/weapon/weldingtool/WeldingTool = C
-		if(WeldingTool.remove_fuel(0, user))
+		if (WeldingTool.remove_fuel(0, user))
 			to_chat(user, "<span class='notice'>Slicing [src] joints...</span>")
 		new/obj/item/stack/rods(loc)
 		qdel(src)
@@ -53,7 +53,7 @@
 		T.attackby(C, user) //Attacking to the lattice will attack to the space turf
 
 /obj/structure/lattice/wood/attackby(obj/item/C as obj, mob/user as mob)
-	if((C.is_sharp() >= 1.2) && (C.w_class <= W_CLASS_SMALL)) // If C is able to cut down a tree
+	if ((C.is_sharp() >= 1.2) && (C.w_class <= W_CLASS_SMALL)) // If C is able to cut down a tree
 		new/obj/item/stack/sheet/wood(loc)
 		to_chat(user, "<span class='notice'>You chop the [src] apart!</span>")
 		qdel(src)

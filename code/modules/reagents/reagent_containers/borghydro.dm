@@ -21,7 +21,7 @@
 	qdel(reagents)
 	reagents = null
 
-	for(var/reagent in reagent_ids)
+	for (var/reagent in reagent_ids)
 		var/datum/reagents/reagents = new(volume)
 		reagents.my_atom = src
 		reagents.add_reagent(reagent, volume)
@@ -30,7 +30,7 @@
 	processing_objects += src
 
 /obj/item/weapon/reagent_containers/borghypo/Destroy()
-	for(var/datum/reagents/reagents in reagent_list)
+	for (var/datum/reagents/reagents in reagent_list)
 		qdel(reagents)
 
 	reagent_list = null
@@ -39,18 +39,18 @@
 	..()
 
 /obj/item/weapon/reagent_containers/borghypo/process() //Every [recharge_time] seconds, recharge some reagents for the cyborg
-	if(++charge_tick < recharge_time)
+	if (++charge_tick < recharge_time)
 		return 0
 
 	charge_tick = 0
 
-	if(isrobot(loc))
+	if (isrobot(loc))
 		var/mob/living/silicon/robot/robot = loc
 
-		if(robot && robot.cell)
+		if (robot && robot.cell)
 			var/datum/reagents/reagents = reagent_list[mode]
 
-			if(reagents.total_volume < reagents.maximum_volume) // don't recharge reagents and drain power if the storage is full
+			if (reagents.total_volume < reagents.maximum_volume) // don't recharge reagents and drain power if the storage is full
 				robot.cell.use(charge_cost) // take power from borg
 				reagents.add_reagent(reagent_ids[mode], 5) // and fill hypo with reagent.
 
@@ -67,25 +67,25 @@
 /obj/item/weapon/reagent_containers/borghypo/attack(mob/M as mob, mob/user as mob)
 	var/datum/reagents/reagents = reagent_list[mode]
 
-	if(!reagents.total_volume)
+	if (!reagents.total_volume)
 		to_chat(user, "<span class='notice'>The injector is empty.</span>")
 		return
 
-	if(!ismob(M))
+	if (!ismob(M))
 		return
 
 	to_chat(user, "<span class='info'>You inject [M] with the injector.<span>")
 	to_chat(M, "<span class='warning'>You feel a tiny prick!</span>")
 	reagents.reaction(M, INGEST)
 
-	if(M.reagents)
+	if (M.reagents)
 		var/transferred = reagents.trans_to(M, amount_per_transfer_from_this)
 		to_chat(user, "<span class='notice'>[transferred] units injected. [reagents.total_volume] units remaining.</span>")
 
 /obj/item/weapon/reagent_containers/borghypo/attack_self(mob/user as mob)
 	playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0) // change the mode
 
-	if(++mode > reagent_list.len)
+	if (++mode > reagent_list.len)
 		mode = 1
 
 	charge_tick = 0 // prevents wasted chems/cell charge if you're cycling through modes.
@@ -95,7 +95,7 @@
 /obj/item/weapon/reagent_containers/borghypo/examine(mob/user)
 	..()
 	var/contents_count = 0
-	for(var/datum/reagents/reagents in reagent_list)
+	for (var/datum/reagents/reagents in reagent_list)
 		to_chat(user, "<span class='info'>It's currently has [reagents.total_volume] units of [reagent_ids[++contents_count]] stored.</span>")
 	to_chat(user, "<span class='info'>It's currently producing '[reagent_ids[mode]]'.</span>")
 

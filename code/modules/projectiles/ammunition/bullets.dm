@@ -84,7 +84,7 @@
 	update_icon()
 		desc = "[initial(desc)][BB ? "" : " This one is spent"]"
 		overlays = list()
-		if(!BB)
+		if (!BB)
 			overlays += icon('icons/obj/ammo.dmi', "emptyshell")
 
 /obj/item/ammo_casing/shotgun/blank
@@ -162,7 +162,7 @@
 
 	update_icon()
 		desc = "[initial(desc)][BB ? "" : " This one is spent"]"
-		if(!BB)
+		if (!BB)
 			icon_state = "762x55-casing"
 
 /obj/item/ammo_casing/invisible

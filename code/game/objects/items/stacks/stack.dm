@@ -37,7 +37,7 @@
 /obj/item/stack/examine(mob/user)
 	..()
 	var/be = "are"
-	if(amount == 1)
+	if (amount == 1)
 		be = "is"
 
 	to_chat(user, "<span class='info'>There [be] [src.amount] [CORRECT_STACK_NAME(src)][amount == 1 ? " in" : "s in"] the stack.</span>")
@@ -57,7 +57,7 @@
 		var/datum/stack_recipe_list/srl = recipe_list[recipes_sublist]
 		recipe_list = srl.recipes
 	var/t1 = text("<HTML><HEAD><title>Constructions from []</title></HEAD><body><TT>Amount Left: []<br>", src, src.amount)
-	for(var/i=1;i<=recipe_list.len,i++)
+	for (var/i=1;i<=recipe_list.len,i++)
 		var/E = recipe_list[i]
 		if (isnull(E))
 			t1 += "<hr>"
@@ -149,7 +149,7 @@
 			return
 
 		var/atom/O
-		if(ispath(R.result_type, /obj/item/stack))
+		if (ispath(R.result_type, /obj/item/stack))
 			O = drop_stack(R.result_type, usr.loc, (R.max_res_amount>1 ? R.res_amount*multiplier : 1), usr)
 			var/obj/item/stack/S = O
 			S.update_materials()
@@ -157,7 +157,7 @@
 			O = new R.result_type( usr.loc )
 
 		O.dir = usr.dir
-		if(R.start_unanchored)
+		if (R.start_unanchored)
 			var/obj/A = O
 			A.anchored = 0
 		R.finish_building(usr, src, O)
@@ -189,29 +189,29 @@
 /obj/item/stack/proc/use(var/amount)
 	ASSERT(isnum(src.amount))
 
-	if(src.amount>=amount)
+	if (src.amount>=amount)
 		src.amount-=amount
 		update_materials()
 	else
 		return 0
 	. = 1
 	if (src.amount<=0) //If the stack is empty after removing the required amount of items!
-		if(usr)
-			if(istype(usr,/mob/living/silicon/robot))
+		if (usr)
+			if (istype(usr,/mob/living/silicon/robot))
 				var/mob/living/silicon/robot/R=usr
-				if(R.module)
+				if (R.module)
 					R.module.modules -= src
-				if(R.module_active == src)
+				if (R.module_active == src)
 					R.module_active = null
-				if(R.module_state_1 == src)
+				if (R.module_state_1 == src)
 					R.uneq_module(R.module_state_1)
 					R.module_state_1 = null
 					R.inv1.icon_state = "inv1"
-				else if(R.module_state_2 == src)
+				else if (R.module_state_2 == src)
 					R.uneq_module(R.module_state_2)
 					R.module_state_2 = null
 					R.inv2.icon_state = "inv2"
-				else if(R.module_state_3 == src)
+				else if (R.module_state_3 == src)
 					R.uneq_module(R.module_state_3)
 					R.module_state_3 = null
 					R.inv3.icon_state = "inv3"
@@ -223,28 +223,28 @@
 	update_materials()
 
 /obj/item/stack/proc/merge(obj/item/stack/S) //Merge src into S, as much as possible
-	if(src == S) //We need to check this because items can cross themselves for some fucked up reason
+	if (src == S) //We need to check this because items can cross themselves for some fucked up reason
 		return
 	var/transfer = min(amount, S.max_amount - S.amount)
-	if(transfer <= 0)
+	if (transfer <= 0)
 		return
-	if(pulledby)
+	if (pulledby)
 		pulledby.start_pulling(S)
 	S.copy_evidences(src)
 	use(transfer)
 	S.add(transfer)
 
 /obj/item/stack/proc/update_materials()
-	if(amount && starting_materials)
-		for(var/matID in starting_materials)
+	if (amount && starting_materials)
+		for (var/matID in starting_materials)
 			materials.storage[matID] = max(0, starting_materials[matID]*amount)
-	if(amount < 2)
+	if (amount < 2)
 		gender = NEUTER
 	else
 		gender = PLURAL
 
 /obj/item/stack/proc/can_stack_with(obj/item/other_stack)
-	if(ispath(other_stack))
+	if (ispath(other_stack))
 		return (src.type == other_stack)
 
 	return (src.type == other_stack.type)
@@ -291,12 +291,12 @@
 
 //Ported from -tg-station/#10973, credit to MrPerson
 /obj/item/stack/Crossed(obj/o)
-	if(src != o && istype(o, src.type) && !o.throwing)
+	if (src != o && istype(o, src.type) && !o.throwing)
 		merge(o)
 	return ..()
 
 /obj/item/stack/hitby(atom/movable/AM) //Doesn't seem to ever be called since stacks are not dense but whatever
-	if(src != AM && istype(AM, src.type))
+	if (src != AM && istype(AM, src.type))
 		merge(AM)
 	return ..()
 
@@ -325,9 +325,9 @@
  */
 
 /proc/drop_stack(new_stack_type = /obj/item/stack, turf/loc, add_amount = 1, mob/user)
-	for(var/obj/item/stack/S in loc)
-		if(S.can_stack_with(new_stack_type))
-			if(S.max_amount >= S.amount + add_amount)
+	for (var/obj/item/stack/S in loc)
+		if (S.can_stack_with(new_stack_type))
+			if (S.max_amount >= S.amount + add_amount)
 				S.add(add_amount)
 
 				to_chat(user, "<span class='info'>You add [add_amount] item\s to the stack. It now contains [S.amount] [CORRECT_STACK_NAME(S)].</span>")
@@ -339,17 +339,17 @@
 
 /obj/item/stack/verb_pickup(mob/living/user)
 	var/obj/item/I = user.get_active_hand()
-	if(I && can_stack_with(I))
+	if (I && can_stack_with(I))
 		I.preattack(src, user, 1)
 		return
 	return ..()
 
 /obj/item/stack/restock()
-	if(!restock_amount)
+	if (!restock_amount)
 		return //Do not restock this stack type
-	if(amount < max_amount)
+	if (amount < max_amount)
 		amount += restock_amount
-	if(amount > max_amount)
+	if (amount > max_amount)
 		amount = max_amount
 
 #undef CORRECT_STACK_NAME

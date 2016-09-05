@@ -33,20 +33,20 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 	set_transit_dock(/obj/docking_port/destination/vox/transit)
 
 /datum/shuttle/vox/travel_to(var/obj/docking_port/D, var/obj/machinery/computer/shuttle_control/broadcast = null, var/mob/user)
-	if(D == dock_home)
-		if(ticker && istype(ticker.mode, /datum/game_mode/heist))
-			switch(alert(usr,"Returning to the deep space will end your raid and report your success or failure. Are you sure?","Vox Skipjack","Yes","No"))
-				if("Yes")
+	if (D == dock_home)
+		if (ticker && istype(ticker.mode, /datum/game_mode/heist))
+			switch (alert(usr,"Returning to the deep space will end your raid and report your success or failure. Are you sure?","Vox Skipjack","Yes","No"))
+				if ("Yes")
 					var/location = get_turf(user)
 					message_admins("[key_name_admin(user)] attempts to end the raid - [formatJumpTo(location)]")
 					log_admin("[key_name(user)] attempts to end the raid - [formatLocation(location)]")
-				if("No")
+				if ("No")
 					return
 	.=..()
 
 /datum/shuttle/vox/after_flight()
 	.=..()
-	if(current_port == dock_home)
+	if (current_port == dock_home)
 		returned_home = 1	//If the round type is heist, this will cause the round to end
 							//See code/game/gamemodes/heist/heist.dm, 294
 

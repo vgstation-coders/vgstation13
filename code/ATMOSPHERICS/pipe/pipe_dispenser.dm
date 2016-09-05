@@ -29,7 +29,7 @@
 	RefreshParts()
 
 /obj/machinery/pipedispenser/attack_hand(user as mob)
-	if(..())
+	if (..())
 		return
 	interact(user)
 
@@ -93,17 +93,17 @@
 	return
 
 /obj/machinery/pipedispenser/Topic(href, href_list)
-	if(..())
+	if (..())
 		usr << browse(null, "window=pipedispenser")
 		return 1
-	if(!anchored)
+	if (!anchored)
 		usr << browse(null, "window=pipedispenser")
 		return 1
 
 	usr.set_machine(src)
 	src.add_fingerprint(usr)
-	if(href_list["make"])
-		if(!wait)
+	if (href_list["make"])
+		if (!wait)
 			var/p_type = text2num(href_list["make"])
 			var/p_dir = text2num(href_list["dir"])
 			var/obj/item/pipe/P = getFromPool(/obj/item/pipe, get_turf(src)) //new (/*usr.loc*/ src.loc, pipe_type=p_type, dir=p_dir)
@@ -114,20 +114,20 @@
 			wait = 1
 			spawn(10)
 				wait = 0
-	if(href_list["makemeter"])
-		if(!wait)
+	if (href_list["makemeter"])
+		if (!wait)
 			new /obj/item/pipe_meter(/*usr.loc*/ src.loc)
 			wait = 1
 			spawn(15)
 				wait = 0
-	if(href_list["makegsensor"])
-		if(!wait)
+	if (href_list["makegsensor"])
+		if (!wait)
 			new /obj/item/pipe_gsensor(/*usr.loc*/ src.loc)
 			wait = 1
 			spawn(15)
 				wait = 0
-	if(href_list["editlayer"])
-		if(!wait)
+	if (href_list["editlayer"])
+		if (!wait)
 			var/num_input = input(usr, "Alignment", "Calibrate Dispenser", "") as num
 			num_input = Clamp(round(num_input, PIPING_LAYER_INCREMENT), PIPING_LAYER_MIN, PIPING_LAYER_MAX)
 			layer_to_make = num_input
@@ -137,9 +137,9 @@
 /obj/machinery/pipedispenser/attackby(var/obj/item/W as obj, var/mob/user as mob)
 	src.add_fingerprint(usr)
 	if (istype(W, /obj/item/pipe) || istype(W, /obj/item/pipe_meter) || istype(W, /obj/item/pipe_gsensor))
-		if(user.drop_item(W, src))
+		if (user.drop_item(W, src))
 			to_chat(usr, "<span class='notice'>You put [W] back to [src].</span>")
-			if(istype(W, /obj/item/pipe))
+			if (istype(W, /obj/item/pipe))
 				returnToPool(W)
 			else
 				qdel(W)
@@ -148,8 +148,8 @@
 		return ..()
 
 /obj/machinery/pipedispenser/wrenchAnchor(mob/user)
-	if(..() == 1)
-		if(anchored)
+	if (..() == 1)
+		if (anchored)
 			src.stat &= ~MAINT
 			power_change()
 		else
@@ -184,7 +184,7 @@
 /*
 //Allow you to push disposal pipes into it (for those with density 1)
 /obj/machinery/pipedispenser/disposal/Crossed(var/obj/structure/disposalconstruct/pipe as obj)
-	if(istype(pipe) && !pipe.anchored)
+	if (istype(pipe) && !pipe.anchored)
 		del(pipe)
 
 Nah
@@ -192,7 +192,7 @@ Nah
 
 //Allow you to drag-drop disposal pipes into it
 /obj/machinery/pipedispenser/disposal/MouseDrop_T(var/obj/structure/disposalconstruct/pipe, mob/usr)
-	if(!usr.canmove || usr.stat || usr.restrained())
+	if (!usr.canmove || usr.stat || usr.restrained())
 		return
 
 	if (!istype(pipe) || get_dist(usr, src) > 1 || get_dist(src,pipe) > 2 )
@@ -204,7 +204,7 @@ Nah
 	qdel(pipe)
 
 /obj/machinery/pipedispenser/disposal/attack_hand(user as mob)
-	if(..())
+	if (..())
 		return
 
 	var/dat = {"<b>Disposal Pipes</b><br><br>
@@ -225,35 +225,35 @@ Nah
 
 
 /obj/machinery/pipedispenser/disposal/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 	usr.set_machine(src)
 	src.add_fingerprint(usr)
-	if(href_list["dmake"])
-		if(!anchored || !usr.canmove || usr.stat || usr.restrained() || !in_range(loc, usr))
+	if (href_list["dmake"])
+		if (!anchored || !usr.canmove || usr.stat || usr.restrained() || !in_range(loc, usr))
 			usr << browse(null, "window=pipedispenser")
 			return
-		if(!wait)
+		if (!wait)
 			var/p_type = text2num(href_list["dmake"])
 			var/obj/structure/disposalconstruct/C = new (src.loc)
-			switch(p_type)
-				if(0)
+			switch (p_type)
+				if (0)
 					C.ptype = 0
-				if(1)
+				if (1)
 					C.ptype = 1
-				if(2)
+				if (2)
 					C.ptype = 2
-				if(3)
+				if (3)
 					C.ptype = 4
-				if(4)
+				if (4)
 					C.ptype = 5
-				if(5)
+				if (5)
 					C.ptype = 6
 					C.density = 1
-				if(6)
+				if (6)
 					C.ptype = 7
 					C.density = 1
-				if(7)
+				if (7)
 					C.ptype = 8
 					C.density = 1
 			C.add_fingerprint(usr)

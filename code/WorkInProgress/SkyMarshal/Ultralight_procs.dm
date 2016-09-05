@@ -14,13 +14,13 @@ atom/proc/ul_FalloffAmount(var/atom/ref)
 
 		#ifdef ul_LightingResolution
 		if (round((delta_x*delta_x + delta_y*delta_y)*ul_LightingResolutionSqrt,1) > ul_FastRoot.len)
-			for(var/i = ul_FastRoot.len, i <= round(delta_x*delta_x+delta_y*delta_y*ul_LightingResolutionSqrt,1), i++)
+			for (var/i = ul_FastRoot.len, i <= round(delta_x*delta_x+delta_y*delta_y*ul_LightingResolutionSqrt,1), i++)
 				ul_FastRoot += round(sqrt(i))
 		return ul_FastRoot[round((delta_x*delta_x + delta_y*delta_y)*ul_LightingResolutionSqrt, 1) + 1]/ul_LightingResolution
 
 		#else
 		if ((delta_x*delta_x + delta_y*delta_y) > ul_FastRoot.len)
-			for(var/i = ul_FastRoot.len, i <= delta_x*delta_x+delta_y*delta_y, i++)
+			for (var/i = ul_FastRoot.len, i <= delta_x*delta_x+delta_y*delta_y, i++)
 				ul_FastRoot += round(sqrt(i))
 		return ul_FastRoot[delta_x*delta_x + delta_y*delta_y + 1]
 

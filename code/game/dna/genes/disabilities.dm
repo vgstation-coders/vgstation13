@@ -29,30 +29,30 @@
 	return 1 // Always set!
 
 /datum/dna/gene/disability/activate(var/mob/M, var/connected, var/flags)
-	if(mutation && !(mutation in M.mutations))
+	if (mutation && !(mutation in M.mutations))
 		M.mutations.Add(mutation)
-	if(disability)
+	if (disability)
 		M.disabilities|=disability
-	if(sdisability)
+	if (sdisability)
 		M.sdisabilities|=sdisability
-	if(activation_message)
+	if (activation_message)
 		to_chat(M, "<span class='warning'>[activation_message]</span>")
 	else
 		testing("[name] has no activation message.")
 
 /datum/dna/gene/disability/deactivate(var/mob/M, var/connected, var/flags)
-	if(flags & GENE_NATURAL)
+	if (flags & GENE_NATURAL)
 		//testing("[name]([type]) has natural flag.")
 		return 0
 	M.mutations.Remove(mutation)
 	M.active_genes.Remove(src.type)
 
 		//testing("[M] [mut ? "" : "un"]successfully removed [src.name] from mutations")
-	if(disability)
+	if (disability)
 		M.disabilities &= ~disability
-	if(sdisability)
+	if (sdisability)
 		M.sdisabilities &= ~sdisability
-	if(deactivation_message)
+	if (deactivation_message)
 		to_chat(M, "<span class='warning'>[deactivation_message]</span>")
 	else
 		testing("[name] has no deactivation message.")
@@ -117,7 +117,7 @@
 /datum/dna/gene/disability/nervousness/OnMobLife(mob/living/carbon/carbon)
 	..()
 
-	if(prob(10))
+	if (prob(10))
 		carbon.stuttering = max(10, carbon.stuttering)
 
 /datum/dna/gene/disability/blindness

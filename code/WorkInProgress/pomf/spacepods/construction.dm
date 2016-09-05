@@ -20,7 +20,7 @@
 	dir = EAST
 
 /obj/structure/spacepod_frame/attackby(obj/item/W as obj, mob/user as mob)
-	if(!construct || !construct.action(W, user))
+	if (!construct || !construct.action(W, user))
 		return ..()
 	return 1
 
@@ -193,7 +193,7 @@
 	return
 
 /datum/construction/reversible/pod/custom_action(index, diff, atom/used_atom, mob/user)
-	if(!..())
+	if (!..())
 		return 0
 
 	holder.icon_state = "pod_[steps.len - index + 1 - diff]"

@@ -47,14 +47,14 @@
 /mob/living/simple_animal/hostile/frog/examine(mob/user)
 	..()
 
-	if(holding_spear)
+	if (holding_spear)
 		user.show_message("<span class='notice'>It's holding a spear.</span>", MESSAGE_SEE)
 
 /mob/living/simple_animal/hostile/frog/Shoot()
-	if(locked_to) //Don't leap/throw spear if already on top of a mob
+	if (locked_to) //Don't leap/throw spear if already on top of a mob
 		return 0
 
-	for(var/obj/item/weapon/spear/S in contents) //Look for a spear in inventory
+	for (var/obj/item/weapon/spear/S in contents) //Look for a spear in inventory
 		S.forceMove(get_turf(src))
 
 		S.throw_at(target, 10, 4)
@@ -68,13 +68,13 @@
 	return 1
 
 /mob/living/simple_animal/hostile/frog/Bump(atom/A)
-	if(throwing && isliving(A) && CanAttack(A)) //Hit somebody when flying
+	if (throwing && isliving(A) && CanAttack(A)) //Hit somebody when flying
 		attach(A)
 
 	.=..()
 
 /mob/living/simple_animal/hostile/frog/Die()
-	for(var/obj/item/I in contents)
+	for (var/obj/item/I in contents)
 		I.forceMove(get_turf(src))
 
 	update_spear()
@@ -83,7 +83,7 @@
 /mob/living/simple_animal/hostile/frog/Cross(obj/item/weapon/spear/S)
 	.=..()
 
-	if(!locked_to && !throwing && !isDead() && istype(S) && S.throwing && isturf(S.loc))
+	if (!locked_to && !throwing && !isDead() && istype(S) && S.throwing && isturf(S.loc))
 		visible_message("<span class='notice'>\The [src] catches \the [S]!</span>")
 		S.forceMove(src)
 		update_spear()
@@ -91,8 +91,8 @@
 /mob/living/simple_animal/hostile/frog/Move()
 	..()
 
-	if(!isDead() && isturf(loc) && !locked_to && !throwing)
-		for(var/obj/item/weapon/spear/S in loc)
+	if (!isDead() && isturf(loc) && !locked_to && !throwing)
+		for (var/obj/item/weapon/spear/S in loc)
 			S.forceMove(src)
 			update_spear()
 
@@ -108,17 +108,17 @@
 /mob/living/simple_animal/hostile/frog/proc/update_climb()
 	var/mob/living/L = locked_to
 
-	if(!istype(L))
+	if (!istype(L))
 		return
 
-	if(incapacitated())
+	if (incapacitated())
 		return detach()
 
-	if(!CanAttack(L))
+	if (!CanAttack(L))
 		return detach()
 
 /mob/living/simple_animal/hostile/frog/proc/update_spear()
-	if(locate(/obj/item/weapon/spear) in contents)
+	if (locate(/obj/item/weapon/spear) in contents)
 		icon_state = "frog_spear"
 		icon_living = "frog_spear"
 		melee_damage_lower = 10
@@ -152,17 +152,17 @@
 /mob/living/simple_animal/hostile/frog/AttackingTarget()
 	.=..()
 
-	if(locked_to == target && isliving(target))
+	if (locked_to == target && isliving(target))
 		var/mob/living/L = target
 
-		if(prob(10))
+		if (prob(10))
 			to_chat(L, "<span class='userdanger'>\The [src] throws you to the ground!</span>")
 			L.Weaken(rand(2,5))
 
 /mob/living/simple_animal/hostile/frog/adjustBruteLoss(amount)
 	.=..()
 
-	if(locked_to && prob(amount * 5))
+	if (locked_to && prob(amount * 5))
 		detach()
 
 
@@ -196,7 +196,7 @@
 /mob/living/simple_animal/hostile/frog/javelineer/New()
 	..()
 
-	for(var/i = 0 to 3)
+	for (var/i = 0 to 3)
 		new /obj/item/weapon/spear(src)
 
 	update_spear()

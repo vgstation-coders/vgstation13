@@ -15,7 +15,7 @@
 		msg_admin_attack("[user.name] ([user.ckey]) used the [src.name] to attack [M.name] ([M.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
 
-		if(!iscarbon(user))
+		if (!iscarbon(user))
 			M.LAssailant = null
 		else
 			M.LAssailant = user
@@ -27,7 +27,7 @@
 			M.stuttering = 5
 		M.Stun(5)
 
-		for(var/mob/O in viewers(M, null))
+		for (var/mob/O in viewers(M, null))
 			if (O.client)
 				O.show_message("<span class='danger'>[user] has prodded [M] with an electrically-charged arm!</span>", 1, "<span class='warning'>You hear someone fall</span>", 2)
 

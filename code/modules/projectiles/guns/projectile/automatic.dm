@@ -23,7 +23,7 @@
 	set name = "Toggle Burstfire"
 	set category = "Object"
 	burstfire = !burstfire
-	if(!burstfire)//fixing a bug where burst fire being toggled on then off would leave the gun unable to shoot at its normal speed.
+	if (!burstfire)//fixing a bug where burst fire being toggled on then off would leave the gun unable to shoot at its normal speed.
 		fire_delay = initial(fire_delay)
 	to_chat(usr, "You toggle \the [src]'s firing setting to [burstfire ? "burst fire" : "single fire"].")
 
@@ -33,15 +33,15 @@
 	return
 
 /obj/item/weapon/gun/projectile/automatic/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
-	if(burstfire == 1)
-		if(ready_to_fire())
+	if (burstfire == 1)
+		if (ready_to_fire())
 			fire_delay = 0
 		else
 			to_chat(usr, "<span class='warning'>\The [src] is still cooling down!</span>")
 			return
 		var/shots_fired = 0 //haha, I'm so clever
 		var/to_shoot = min(burst_count, getAmmo())
-		for(var/i = 1; i <= to_shoot; i++)
+		for (var/i = 1; i <= to_shoot; i++)
 			..()
 			shots_fired++
 		message_admins("[usr] just shot [shots_fired] burst fire bullets out of [getAmmo() + shots_fired] from their [src].")
@@ -89,7 +89,7 @@
 
 /obj/item/weapon/gun/projectile/automatic/c20r/update_icon()
 	..()
-	if(stored_magazine)
+	if (stored_magazine)
 		icon_state = "c20r-[round(getAmmo(),4)]"
 	else
 		icon_state = "c20r"
@@ -146,7 +146,7 @@
 
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw/afterattack(atom/target as mob|obj|turf, mob/living/user as mob|obj, flag, params) //what I tried to do here is just add a check to see if the cover is open or not and add an icon_state change because I can't figure out how c-20rs do it with overlays
-	if(cover_open)
+	if (cover_open)
 		to_chat(user, "<span class='notice'>[src]'s cover is open! Close it before firing!</span>")
 	else
 		..()
@@ -154,29 +154,29 @@
 
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw/attack_hand(mob/user as mob)
-	if(loc != user)
+	if (loc != user)
 		..()
 		return	//let them pick it up
-	if(!cover_open)
+	if (!cover_open)
 		..()
-	else if(cover_open && stored_magazine) //since attack_self toggles the cover and not the magazine, we use this instead
+	else if (cover_open && stored_magazine) //since attack_self toggles the cover and not the magazine, we use this instead
 		//drop the mag
 		RemoveMag(user)
 		to_chat(user, "<span class='notice'>You remove the magazine from [src].</span>")
 
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw/attackby(obj/item/ammo_storage/magazine/a762/A as obj, mob/user as mob)
-	if(!cover_open)
+	if (!cover_open)
 		to_chat(user, "<span class='notice'>[src]'s cover is closed! You can't insert a new mag!</span>")
 		return
-	else if(cover_open)
+	else if (cover_open)
 		..()
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw/force_removeMag() //special because of its cover
-	if(cover_open && stored_magazine)
+	if (cover_open && stored_magazine)
 		RemoveMag(usr)
 		to_chat(usr, "<span class='notice'>You remove the magazine from [src].</span>")
-	else if(stored_magazine)
+	else if (stored_magazine)
 		to_chat(usr, "<span class='rose'>The [src]'s cover has to be open to do that!</span>")
 	else
 		to_chat(usr, "<span class='rose'>There is no magazine to remove!</span>")

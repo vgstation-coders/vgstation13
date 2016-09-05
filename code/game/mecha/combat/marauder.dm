@@ -60,15 +60,15 @@
 
 /obj/mecha/combat/marauder/series/New()//Manually-built marauders have no equipments
 	..()
-	for(var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
+	for (var/obj/item/mecha_parts/mecha_equipment/ME in equipment)
 		equipment -= ME
 		qdel(ME)
 
 /obj/mecha/combat/marauder/seraph/New()
 	..()//Let it equip whatever is needed.
 	var/obj/item/mecha_parts/mecha_equipment/ME
-	if(equipment.len)//Now to remove it and equip anew.
-		for(ME in equipment)
+	if (equipment.len)//Now to remove it and equip anew.
+		for (ME in equipment)
 			equipment -= ME
 			qdel(ME)
 			ME = null
@@ -85,40 +85,40 @@
 	return
 
 /obj/mecha/combat/marauder/relaymove(mob/user,direction)
-	if(user != src.occupant) //While not "realistic", this piece is player friendly.
+	if (user != src.occupant) //While not "realistic", this piece is player friendly.
 		user.forceMove(get_turf(src))
 		to_chat(user, "You climb out from [src]")
 		return 0
-	if(!can_move)
+	if (!can_move)
 		return 0
-	if(zoom)
-		if(world.time - last_message > 20)
+	if (zoom)
+		if (world.time - last_message > 20)
 			src.occupant_message("Unable to move while in zoom mode.")
 			last_message = world.time
 		return 0
-	if(connected_port)
-		if(world.time - last_message > 20)
+	if (connected_port)
+		if (world.time - last_message > 20)
 			src.occupant_message("Unable to move while connected to the air system port")
 			last_message = world.time
 		return 0
-	if(!thrusters && src.pr_inertial_movement.active())
+	if (!thrusters && src.pr_inertial_movement.active())
 		return 0
-	if(state || !has_charge(step_energy_drain))
+	if (state || !has_charge(step_energy_drain))
 		return 0
 	var/tmp_step_in = step_in
 	var/tmp_step_energy_drain = step_energy_drain
 	var/move_result = 0
-	if(internal_damage&MECHA_INT_CONTROL_LOST)
+	if (internal_damage&MECHA_INT_CONTROL_LOST)
 		move_result = mechsteprand()
-	else if(src.dir!=direction)
+	else if (src.dir!=direction)
 		move_result = mechturn(direction)
 	else
 		move_result	= mechstep(direction)
-	if(move_result)
-		if(istype(src.loc, /turf/space))
-			if(!src.check_for_support())
+	if (move_result)
+		if (istype(src.loc, /turf/space))
+			if (!src.check_for_support())
 				src.pr_inertial_movement.start(list(src,direction))
-				if(thrusters)
+				if (thrusters)
 					src.pr_inertial_movement.set_process_args(list(src,direction))
 					tmp_step_energy_drain = step_energy_drain*2
 
@@ -134,10 +134,10 @@
 	set name = "Toggle thrusters"
 	set src = usr.loc
 	set popup_menu = 0
-	if(usr!=src.occupant)
+	if (usr!=src.occupant)
 		return
-	if(src.occupant)
-		if(get_charge() > 0)
+	if (src.occupant)
+		if (get_charge() > 0)
 			thrusters = !thrusters
 			src.log_message("Toggled thrusters.")
 			src.occupant_message("<font color='[src.thrusters?"blue":"red"]'>Thrusters [thrusters?"en":"dis"]abled.")
@@ -149,9 +149,9 @@
 	set name = "Smoke"
 	set src = usr.loc
 	set popup_menu = 0
-	if(usr!=src.occupant)
+	if (usr!=src.occupant)
 		return
-	if(smoke_ready && smoke>0)
+	if (smoke_ready && smoke>0)
 		src.smoke_system.start()
 		smoke--
 		smoke_ready = 0
@@ -164,13 +164,13 @@
 	set name = "Zoom"
 	set src = usr.loc
 	set popup_menu = 0
-	if(usr!=src.occupant)
+	if (usr!=src.occupant)
 		return
-	if(src.occupant.client)
+	if (src.occupant.client)
 		src.zoom = !src.zoom
 		src.log_message("Toggled zoom mode.")
 		src.occupant_message("<font color='[src.zoom?"blue":"red"]'>Zoom mode [zoom?"en":"dis"]abled.</font>")
-		if(zoom)
+		if (zoom)
 			src.occupant.client.changeView(12)
 			src.occupant << sound('sound/mecha/imag_enh.ogg',volume=50)
 		else
@@ -179,7 +179,7 @@
 
 
 /obj/mecha/combat/marauder/go_out()
-	if(src.occupant && src.occupant.client)
+	if (src.occupant && src.occupant.client)
 		src.occupant.client.changeView()
 		src.zoom = 0
 	..()

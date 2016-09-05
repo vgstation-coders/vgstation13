@@ -44,9 +44,9 @@
 
 /datum/organ/internal/New(mob/living/carbon/human/H)
 	..()
-	if(H)
+	if (H)
 		var/datum/organ/external/E = H.organs_by_name[src.parent_organ]
-		if(E.internal_organs == null)
+		if (E.internal_organs == null)
 			E.internal_organs = list()
 		E.internal_organs |= src
 		H.internal_organs |= src
@@ -63,7 +63,7 @@
 		germ_level = 0
 		return
 
-	if(owner.bodytemperature >= 170)	//cryo stops germs and cancer from moving and doing their bad stuffs
+	if (owner.bodytemperature >= 170)	//cryo stops germs and cancer from moving and doing their bad stuffs
 		//** Handle antibiotics and curing infections
 		handle_antibiotics()
 
@@ -75,7 +75,7 @@
 
 		if (germ_level >= INFECTION_LEVEL_ONE/2)
 			//aiming for germ level to go from ambient to INFECTION_LEVEL_TWO in an average of 15 minutes
-			if(antibiotics < 5 && prob(round(germ_level/6)))
+			if (antibiotics < 5 && prob(round(germ_level/6)))
 				germ_level++
 
 		if (germ_level >= INFECTION_LEVEL_TWO)
@@ -89,58 +89,58 @@
 
 		// Process unsuitable transplants. TODO: consider some kind of
 		// immunosuppressant that changes transplant data to make it match.
-		if(transplant_data)
-			if(!rejecting) //Should this transplant reject?
-				if(owner.species.name != transplant_data["species"]) //Nope.
+		if (transplant_data)
+			if (!rejecting) //Should this transplant reject?
+				if (owner.species.name != transplant_data["species"]) //Nope.
 					rejecting = 1
-				else if(prob(20) && owner.dna && blood_incompatible(transplant_data["blood_type"],owner.dna.b_type))
+				else if (prob(20) && owner.dna && blood_incompatible(transplant_data["blood_type"],owner.dna.b_type))
 					rejecting = 1
 			else
 				rejecting++ //Rejection severity increases over time.
-				if(rejecting % 10 == 0) //Only fire every ten rejection ticks.
-					switch(rejecting)
-						if(1 to 50)
+				if (rejecting % 10 == 0) //Only fire every ten rejection ticks.
+					switch (rejecting)
+						if (1 to 50)
 							take_damage(rand(1,2))
-						if(51 to 200)
+						if (51 to 200)
 							take_damage(rand(2,3))
-						if(201 to 500)
+						if (201 to 500)
 							take_damage(rand(3,4))
 							owner.reagents.add_reagent(TOXIN, 1)
-						if(501 to INFINITY)
+						if (501 to INFINITY)
 							take_damage(5)
 							owner.reagents.add_reagent(TOXIN, rand(3,5))
 
-		if(cancer_stage)
+		if (cancer_stage)
 			handle_cancer()
 
 /datum/organ/internal/handle_cancer()
 
-	if(robotic == 2) //This is a fully robotic limb, no cells for cancer to grow from
+	if (robotic == 2) //This is a fully robotic limb, no cells for cancer to grow from
 		return 0
 
 	var/datum/organ/external/parent = owner.get_organ(parent_organ)
 
-	switch(cancer_stage)
-		if(CANCER_STAGE_SMALL_TUMOR to CANCER_STAGE_LARGE_TUMOR) //Small tumors will not damage your organ, but might flash pain
-			if(prob(1))
+	switch (cancer_stage)
+		if (CANCER_STAGE_SMALL_TUMOR to CANCER_STAGE_LARGE_TUMOR) //Small tumors will not damage your organ, but might flash pain
+			if (prob(1))
 				owner.custom_pain("Something inside your [parent.display_name] hurts a lot.", 1)
-		if(CANCER_STAGE_LARGE_TUMOR to CANCER_STAGE_METASTASIS) //Large tumors will start damaging your organ and give the owner DNA damage (bodywide, can't go per limb)
-			if(prob(20))
+		if (CANCER_STAGE_LARGE_TUMOR to CANCER_STAGE_METASTASIS) //Large tumors will start damaging your organ and give the owner DNA damage (bodywide, can't go per limb)
+			if (prob(20))
 				take_damage(0.25)
-			if(prob(1))
+			if (prob(1))
 				owner.apply_damage(0.5, CLONE, parent)
-		if(CANCER_STAGE_METASTASIS to INFINITY) //Metastasis achieved, limb will start breaking down very rapidly, and cancer will spread to all other limbs in short order through bloodstream
-			if(prob(33))
+		if (CANCER_STAGE_METASTASIS to INFINITY) //Metastasis achieved, limb will start breaking down very rapidly, and cancer will spread to all other limbs in short order through bloodstream
+			if (prob(33))
 				take_damage(0.25)
-			if(prob(10))
+			if (prob(10))
 				owner.apply_damage(0.5, CLONE, parent)
-			if(prob(1))
+			if (prob(1))
 				owner.add_cancer() //Add a new cancerous growth
 
 /datum/organ/internal/proc/take_damage(amount, var/silent=0)
-	if(!owner)
+	if (!owner)
 		return
-	if(src.robotic == 2)
+	if (src.robotic == 2)
 		src.damage += (amount * 0.8)
 	else
 		src.damage += amount
@@ -151,10 +151,10 @@
 
 
 /datum/organ/internal/proc/emp_act(severity)
-	switch(robotic)
-		if(0)
+	switch (robotic)
+		if (0)
 			return
-		if(1)
+		if (1)
 			switch (severity)
 				if (1.0)
 					take_damage(20,0)
@@ -162,10 +162,10 @@
 				if (2.0)
 					take_damage(7,0)
 					return
-				if(3.0)
+				if (3.0)
 					take_damage(3,0)
 					return
-		if(2)
+		if (2)
 			switch (severity)
 				if (1.0)
 					take_damage(40,0)
@@ -173,7 +173,7 @@
 				if (2.0)
 					take_damage(15,0)
 					return
-				if(3.0)
+				if (3.0)
 					take_damage(10,0)
 					return
 
@@ -217,12 +217,12 @@
 /datum/organ/internal/proc/remove(var/mob/user, var/quiet=0)
 
 
-	if(!removed_type)
+	if (!removed_type)
 		return 0
 
 	var/obj/item/organ/removed_organ = new removed_type(get_turf(user))
 
-	if(istype(removed_organ))
+	if (istype(removed_organ))
 		removed_organ.organ_data = src
 		removed_organ.update()
 		organ_holder = removed_organ

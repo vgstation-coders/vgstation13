@@ -30,25 +30,25 @@
 /obj/machinery/disease2/diseaseanalyser/RefreshParts()
 	var/scancount = 0
 	var/lasercount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
+	for (var/obj/item/weapon/stock_parts/SP in component_parts)
+		if (istype(SP, /obj/item/weapon/stock_parts/scanning_module))
 			scancount += SP.rating-1
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+		if (istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating-1
 	minimum_growth = initial(minimum_growth) - (scancount * 3)
 	process_time = initial(process_time) - lasercount
 
 /obj/machinery/disease2/diseaseanalyser/attackby(var/obj/I as obj, var/mob/user as mob)
 	..()
-	if(istype(I,/obj/item/weapon/virusdish))
+	if (istype(I,/obj/item/weapon/virusdish))
 		var/mob/living/carbon/c = user
 		var/obj/item/weapon/virusdish/D = I
 
-		if(!c.drop_item(D, src))
+		if (!c.drop_item(D, src))
 			return 1
 
-		if(!D.analysed)
-			if(!dish)
+		if (!D.analysed)
+			if (!dish)
 				dish = D
 			else
 				toscan += D
@@ -74,19 +74,19 @@
 	src.updateUsrDialog()
 
 /obj/machinery/disease2/diseaseanalyser/process()
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 	use_power(500)
 
-	if(scanning)
+	if (scanning)
 		scanning -= 1
-		if(scanning == 0)
+		if (scanning == 0)
 			Analyse(dish)
-	else if((dish || toscan.len > 0) && !scanning && !pause)
-		if(!dish)
+	else if ((dish || toscan.len > 0) && !scanning && !pause)
+		if (!dish)
 			dish = toscan[1] //Load next dish to analyse
 			toscan -= dish //Remove from scanlist
-		if(dish.virus2 && dish.growth > minimum_growth)
+		if (dish.virus2 && dish.growth > minimum_growth)
 			dish.growth -= 10
 			scanning = process_time
 			icon_state = "analyser_processing"
@@ -99,20 +99,20 @@
 				pause = 0
 
 /obj/machinery/disease2/diseaseanalyser/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
-	if(usr)
+	if (usr)
 		usr.set_machine(src)
-	if(href_list["eject"])
-		for(var/obj/item/weapon/virusdish/O in src.contents)
-			if("[O.virus2.uniqueID]" == href_list["name"])
+	if (href_list["eject"])
+		for (var/obj/item/weapon/virusdish/O in src.contents)
+			if ("[O.virus2.uniqueID]" == href_list["name"])
 				O.forceMove(src.loc)
-				if(toscan["O"])
+				if (toscan["O"])
 					toscan -= O
 		src.updateUsrDialog()
-	else if(href_list["print"])
-		for(var/obj/item/weapon/virusdish/O in src.contents)
-			if("[O.virus2.uniqueID]" == href_list["name"])
+	else if (href_list["print"])
+		for (var/obj/item/weapon/virusdish/O in src.contents)
+			if ("[O.virus2.uniqueID]" == href_list["name"])
 				PrintPaper(O)
 
 /obj/machinery/disease2/diseaseanalyser/attack_hand(var/mob/user as mob)
@@ -121,23 +121,23 @@
 	dat += "Currently stored samples: [src.contents.len]<br><hr>"
 	if (src.contents.len > 0)
 		dat += "<table cellpadding='1' style='width: 100%;text-align:center;'><td>Name</td><td>Symptoms</td><td>Antibodies</td><td>Transmission</td><td>Options</td>"
-		for(var/obj/item/weapon/virusdish/B in src.contents)
+		for (var/obj/item/weapon/virusdish/B in src.contents)
 			var/ID = B.virus2.uniqueID
-			if("[ID]" in virusDB) //If it's in the DB they might have given it a name
+			if ("[ID]" in virusDB) //If it's in the DB they might have given it a name
 				var/datum/data/record/v = virusDB["[ID]"]
 				dat += "<tr><td>[v.fields["name"]]</td>"
 			else //Use ID instead
 				dat += "<tr><td>[B.virus2.name()]</td>"
 			dat+="<td>"
-			if(!B.analysed)
+			if (!B.analysed)
 				dat += "Awaiting analysis.</td><td></td><td></td>"
 			else
-				for(var/datum/disease2/effectholder/e in B.virus2.effects)
+				for (var/datum/disease2/effectholder/e in B.virus2.effects)
 					dat += "<br>[e.effect.name]"
 				dat +="</td>"
 				dat += "<td>[antigens2string(B.virus2.antigen)]</td>"
 				dat += "<td>[(B.virus2.spreadtype)]</td>"
-			if(B == dish)
+			if (B == dish)
 				dat += "<td></td>"
 			else
 				dat += "<td><A href='?src=\ref[src];eject=1;name=["[ID]"];'>Eject</a>"

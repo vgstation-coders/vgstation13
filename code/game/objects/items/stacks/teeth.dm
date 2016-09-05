@@ -18,26 +18,26 @@
 	pixel_y = rand(-24,24) * PIXEL_MULTIPLIER
 
 /obj/item/stack/teeth/can_stack_with(obj/item/other_stack)
-	if(!istype(other_stack))
+	if (!istype(other_stack))
 		return 0
 
-	if(src.type == other_stack.type)
+	if (src.type == other_stack.type)
 		var/obj/item/stack/teeth/T = other_stack
-		if(src.animal_type == T.animal_type)
+		if (src.animal_type == T.animal_type)
 			return 1
 	return 0
 
 /obj/item/stack/teeth/attackby(obj/item/W, mob/user)
 	.=..()
 
-	if(istype(W,/obj/item/stack/cable_coil))
+	if (istype(W,/obj/item/stack/cable_coil))
 		var/obj/item/stack/cable_coil/C = W
 
-		if(src.amount < 10)
+		if (src.amount < 10)
 			to_chat(user, "<span class='info'>You need at least 10 teeth to create a necklace.</span>")
 			return
 
-		if(C.use(5))
+		if (C.use(5))
 			user.drop_item(src, force_drop = 1)
 
 			var/obj/item/clothing/mask/necklace/teeth/X = new(get_turf(src))
@@ -54,24 +54,24 @@
 
 /obj/item/stack/teeth/copy_evidences(obj/item/stack/from as obj)
 	.=..()
-	if(istype(from, /obj/item/stack/teeth))
+	if (istype(from, /obj/item/stack/teeth))
 		var/obj/item/stack/teeth/original_teeth = from
 		src.animal_type = original_teeth.animal_type
 		src.name = original_teeth.name
 		src.singular_name = original_teeth.name
 
 /obj/item/stack/teeth/proc/update_name(mob/parent)
-	if(!parent)
+	if (!parent)
 		return
 
-	if(isliving(parent))
+	if (isliving(parent))
 		var/mob/living/L = parent
 		var/mob/parent_species = L.species_type
 		var/parent_species_name = initial(parent_species.name)
 
-		if(ishuman(parent))
+		if (ishuman(parent))
 			var/mob/living/carbon/human/H = parent
-			if(H.species)
+			if (H.species)
 				parent_species_name = lowertext(H.species.name)
 			else
 				parent_species_name = "human"

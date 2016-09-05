@@ -12,8 +12,8 @@
 // Various Snacks //////////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/snacks/breadslice/attackby(obj/item/I,mob/user,params)
-	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
-		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
+	if (istype(I,/obj/item/weapon/reagent_containers/food/snacks))
+		if (!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
 			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
 			return
 		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich(get_turf(src),I) //boy ain't this a mouthful
@@ -23,8 +23,8 @@
 		return ..()
 
 /obj/item/weapon/reagent_containers/food/snacks/bun/attackby(obj/item/I,mob/user,params)
-	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
-		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
+	if (istype(I,/obj/item/weapon/reagent_containers/food/snacks))
+		if (!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
 			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
 			return
 		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/burger(get_turf(src),I)
@@ -34,8 +34,8 @@
 		return ..()
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/flatdough/attackby(obj/item/I,mob/user,params)
-	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
-		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
+	if (istype(I,/obj/item/weapon/reagent_containers/food/snacks))
+		if (!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
 			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
 			return
 		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/pizza(get_turf(src),I)
@@ -45,8 +45,8 @@
 		return ..()
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledspaghetti/attackby(obj/item/I,mob/user,params)
-	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
-		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
+	if (istype(I,/obj/item/weapon/reagent_containers/food/snacks))
+		if (!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
 			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
 			return
 		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/pasta(get_turf(src),I)
@@ -58,8 +58,8 @@
 // Custom Meals ////////////////////////////////////////////////
 
 /obj/item/trash/plate/attackby(obj/item/I,mob/user,params)
-	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
-		if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom)) //no platestacking even with recursive food, for now
+	if (istype(I,/obj/item/weapon/reagent_containers/food/snacks))
+		if (istype(I,/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom)) //no platestacking even with recursive food, for now
 			to_chat(user, "<span class='warning'>That's already got a plate!</span>")
 			return
 		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/fullycustom(get_turf(src),I)
@@ -75,15 +75,15 @@
 	icon_state = "soup"
 
 /obj/item/trash/bowl/attackby(obj/item/I,mob/user,params)
-	if(istype(I,/obj/item/stack/sheet/metal))
+	if (istype(I,/obj/item/stack/sheet/metal))
 		var/obj/item/stack/sheet/metal/S = I
 		S.use(1)
 		var/obj/item/weapon/reagent_containers/glass/mortar/mortimer = new(get_turf(src))
 		to_chat(user, "<span class='notice'>You fashion a crude mortar out of the wooden bowl and a metal sheet.</span>")
 		qdel(src)
 		user.put_in_hands(mortimer)
-	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
-		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
+	if (istype(I,/obj/item/weapon/reagent_containers/food/snacks))
+		if (!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
 			to_chat(user, "<span class='warning'>Sorry, no recursive food.</span>")
 			return
 		var/obj/F = new/obj/item/weapon/reagent_containers/food/snacks/customizable/soup(get_turf(src),I)
@@ -115,37 +115,37 @@
 	return
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/attackby(obj/item/I, mob/user, params)
-	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
-		if((src.contents.len >= src.ingMax) || (src.contents.len >= ingredientLimit))
+	if (istype(I,/obj/item/weapon/reagent_containers/food/snacks))
+		if ((src.contents.len >= src.ingMax) || (src.contents.len >= ingredientLimit))
 			to_chat(user, "<span class='warning'>That's already looking pretty stuffed.</span>")
 			return
 
 		var/obj/item/weapon/reagent_containers/food/snacks/S = I
-		if(istype(S,/obj/item/weapon/reagent_containers/food/snacks/customizable))
+		if (istype(S,/obj/item/weapon/reagent_containers/food/snacks/customizable))
 			var/obj/item/weapon/reagent_containers/food/snacks/customizable/SC = S
-			if(src.fullyCustom && SC.fullyCustom)
+			if (src.fullyCustom && SC.fullyCustom)
 				to_chat(user, "<span class='warning'>You slap yourself on the back of the head for thinking that stacking plates is an interesting dish.</span>")
 				return
-		if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
+		if (!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
 			to_chat(user, "<span class='warning'>[pick("As uniquely original as that idea is, you can't figure out how to perform it.","That would be a straining topological exercise.","This world just isn't ready for your cooking genius.","It's possible that you may have a problem.","It won't fit.","You don't think that would taste very good.","Quit goofin' around.")]</span>")
 			return
-		if(!user.drop_item(I, src))
+		if (!user.drop_item(I, src))
 			user << "<span class='warning'>\The [I] is stuck to your hands!</span>"
 			return
 
 		S.reagents.trans_to(src,S.reagents.total_volume)
 		src.ingredients += S
 
-		if(src.addTop)
+		if (src.addTop)
 			src.overlays -= src.topping //thank you Comic
-		if(!src.fullyCustom && !src.stackIngredients && src.overlays.len)
+		if (!src.fullyCustom && !src.stackIngredients && src.overlays.len)
 			src.overlays -= src.filling //we can't directly modify the overlay, so we have to remove it and then add it again
 			var/newcolor = S.filling_color != "#FFFFFF" ? S.filling_color : AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
 			src.filling.color = BlendRGB(src.filling.color, newcolor, 1/src.ingredients.len)
 			src.overlays += src.filling
 		else
 			src.overlays += generateFilling(S, params)
-		if(src.addTop)
+		if (src.addTop)
 			src.drawTopping()
 
 		src.updateName()
@@ -156,21 +156,21 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/proc/generateFilling(var/obj/item/weapon/reagent_containers/food/snacks/S, params)
 	var/image/I
-	if(src.fullyCustom)
+	if (src.fullyCustom)
 		var/icon/C = getFlatIcon(S, S.dir, 0)
 		I = image(C)
 		I.pixel_y = 12 * PIXEL_MULTIPLIER-empty_Y_space(C)
 	else
 		I = src.filling
-		if(istype(S) && S.filling_color != "#FFFFFF")
+		if (istype(S) && S.filling_color != "#FFFFFF")
 			I.color = S.filling_color
 		else
 			I.color = AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
-		if(src.stackIngredients)
+		if (src.stackIngredients)
 			I.pixel_y = src.ingredients.len * 2 * PIXEL_MULTIPLIER
 		else
 			src.overlays.len = 0
-	if(src.fullyCustom || src.stackIngredients)
+	if (src.fullyCustom || src.stackIngredients)
 		var/clicked_x = text2num(params2list(params)["icon-x"])
 		if (isnull(clicked_x))
 			I.pixel_x = 0
@@ -189,23 +189,23 @@
 /obj/item/weapon/reagent_containers/food/snacks/customizable/proc/updateName()
 	var/i = 1
 	var/new_name
-	for(var/obj/item/S in src.ingredients)
-		if(i == 1)
+	for (var/obj/item/S in src.ingredients)
+		if (i == 1)
 			new_name += "[S.name]"
-		else if(i == src.ingredients.len)
+		else if (i == src.ingredients.len)
 			new_name += " and [S.name]"
 		else
 			new_name += ", [S.name]"
 		i++
 	new_name = "[new_name] [initial(src.name)]"
-	if(length(new_name) >= 150)
+	if (length(new_name) >= 150)
 		src.name = "something yummy"
 	else
 		src.name = new_name
 	return new_name
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/Destroy()
-	for(. in src.ingredients) qdel(.)
+	for (. in src.ingredients) qdel(.)
 	return ..()
 
 // Sandwiches //////////////////////////////////////////////////
@@ -218,7 +218,7 @@
 	addTop = 0
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable/sandwich/attackby(obj/item/I,mob/user)
-	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/breadslice) && !addTop)
+	if (istype(I,/obj/item/weapon/reagent_containers/food/snacks/breadslice) && !addTop)
 		I.reagents.trans_to(src,I.reagents.total_volume)
 		qdel(I)
 		addTop = 1
@@ -396,19 +396,19 @@
 	return
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/attackby(obj/item/I,mob/user)
-	if(istype(I,/obj/item/weapon/pen))
+	if (istype(I,/obj/item/weapon/pen))
 		var/n_name = copytext(sanitize(input(user, "What would you like to name this drink?", "Booze Renaming", null) as text|null), 1, MAX_NAME_LEN*3)
-		if(n_name && Adjacent(user) && !user.stat)
+		if (n_name && Adjacent(user) && !user.stat)
 			name = "[n_name]"
 		return
-	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks))
-		if(src.ingredients.len < src.ingMax)
+	else if (istype(I,/obj/item/weapon/reagent_containers/food/snacks))
+		if (src.ingredients.len < src.ingMax)
 			var/obj/item/weapon/reagent_containers/food/snacks/S = I
 
-			if(!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
+			if (!recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
 				to_chat(user, "<span class='warning'>[pick("Sorry, no recursive food.","That would be a straining topological exercise.","This world just isn't ready for your cooking genius.","It's possible that you may have a problem.","It won't fit.","You don't think that would taste very good.","Quit goofin' around.")]</span>")
 				return
-			if(user.drop_item(I, src))
+			if (user.drop_item(I, src))
 				to_chat(user, "<span class='notice'>You add the [S.name] to the [src.name].</span>")
 				S.reagents.trans_to(src,S.reagents.total_volume)
 				src.ingredients += S
@@ -426,16 +426,16 @@
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/proc/updateName() //copypaste of food's updateName()
 	var/i = 1
 	var/new_name
-	for(var/obj/item/weapon/reagent_containers/food/snacks/S in src.ingredients)
-		if(i == 1)
+	for (var/obj/item/weapon/reagent_containers/food/snacks/S in src.ingredients)
+		if (i == 1)
 			new_name += "[S.name]"
-		else if(i == src.ingredients.len)
+		else if (i == src.ingredients.len)
 			new_name += " and [S.name]"
 		else
 			new_name += ", [S.name]"
 		i++
 	new_name = "[new_name] [initial(src.name)]"
-	if(length(new_name) >= 150)
+	if (length(new_name) >= 150)
 		src.name = "something yummy"
 	else
 		src.name = new_name
@@ -444,14 +444,14 @@
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/proc/generateFilling(var/obj/item/weapon/reagent_containers/food/snacks/S)
 	src.overlays.len = 0
 	var/image/I = filling
-	if(S.filling_color != "#FFFFFF")
+	if (S.filling_color != "#FFFFFF")
 		I.color = S.filling_color
 	else
 		I.color = AverageColor(getFlatIcon(S, S.dir, 0), 1, 1)
 	return I
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/Destroy()
-	for(. in src.ingredients) qdel(.)
+	for (. in src.ingredients) qdel(.)
 	return ..()
 
 // Drink Subtypes //////////////////////////////////////////////

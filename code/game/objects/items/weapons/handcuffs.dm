@@ -22,24 +22,24 @@
 	var/breakouttime = 2 MINUTES
 
 /obj/item/weapon/handcuffs/attack(var/mob/living/carbon/M, var/mob/user, var/def_zone)
-	if(!istype(M))
+	if (!istype(M))
 		return
 
-	if(!user.dexterity_check())
+	if (!user.dexterity_check())
 		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	if((M_CLUMSY in user.mutations) && prob(50))
+	if ((M_CLUMSY in user.mutations) && prob(50))
 		to_chat(usr, "<span class='warning'>Uh... how do these things work?!</span>")
 		handcuffs_apply(M, user, TRUE)
 		return
 
-	if(M.handcuffed)
+	if (M.handcuffed)
 		return
 
 	M.attack_log += text("\[[time_stamp()]] <span style='color: orange'>Has been handcuffed (attempt) by [user.name] ([user.ckey])</span>")
 	user.attack_log += text("\[[time_stamp()]] <span style='color: red'>Attempted to handcuff [M.name] ([M.ckey])</span>")
-	if(!iscarbon(user))
+	if (!iscarbon(user))
 		M.LAssailant = null
 	else
 		M.LAssailant = user
@@ -50,10 +50,10 @@
 
 //Our inventory procs should be able to handle the following, but our inventory code is hot spaghetti bologni, so here we go //There's no real reason for this to be a separate proc now but whatever
 /obj/item/weapon/handcuffs/proc/handcuffs_apply(var/mob/living/carbon/C, var/mob/user, var/clumsy = FALSE)
-	if(!istype(C)) //Sanity doesn't hurt, right ?
+	if (!istype(C)) //Sanity doesn't hurt, right ?
 		return FALSE
 
-	if(ishuman(C))
+	if (ishuman(C))
 		var/mob/living/carbon/human/H = C
 		if (!H.has_organ_for_slot(slot_handcuffed))
 			to_chat(user, "<span class='danger'>\The [C] needs at least two wrists before you can cuff them together!</span>")
@@ -63,8 +63,8 @@
 	user.visible_message("<span class='danger'>[user] is trying to handcuff \the [C]!</span>",
 						 "<span class='danger'>You try to handcuff \the [C]!</span>")
 
-	if(do_after(user, C, 3 SECONDS))
-		if(istype(src, /obj/item/weapon/handcuffs/cable))
+	if (do_after(user, C, 3 SECONDS))
+		if (istype(src, /obj/item/weapon/handcuffs/cable))
 			feedback_add_details("handcuffs", "C")
 		else
 			feedback_add_details("handcuffs", "H")
@@ -75,7 +75,7 @@
 		log_attack("[user.name] ([user.ckey]) has cuffed [C.name] ([C.ckey]) with \the [src]")
 
 		var/obj/item/weapon/handcuffs/cuffs = src
-		if(istype(src, /obj/item/weapon/handcuffs/cyborg)) //There's GOT to be a better way to check for this.
+		if (istype(src, /obj/item/weapon/handcuffs/cyborg)) //There's GOT to be a better way to check for this.
 			cuffs = new(get_turf(user))
 		else
 			user.drop_from_inventory(cuffs)
@@ -95,50 +95,50 @@
 
 	mode = !mode
 
-	switch(mode)
-		if(SYNDICUFFS_ON_APPLY)
+	switch (mode)
+		if (SYNDICUFFS_ON_APPLY)
 			to_chat(user, "<span class='notice'>You pull the rotating arm back until you hear two clicks. \The [src] will detonate a few seconds after being applied.</span>")
-		if(SYNDICUFFS_ON_REMOVE)
+		if (SYNDICUFFS_ON_REMOVE)
 			to_chat(user, "<span class='notice'>You pull the rotating arm back until you hear one click. \The [src] will detonate when removed.</span>")
 
 /obj/item/weapon/handcuffs/syndicate/equipped(var/mob/user, var/slot)
 	..()
 
-	if(slot == slot_handcuffed && mode == SYNDICUFFS_ON_APPLY && !charge_detonated)
+	if (slot == slot_handcuffed && mode == SYNDICUFFS_ON_APPLY && !charge_detonated)
 		detonate(1)
 
 /obj/item/weapon/handcuffs/proc/on_remove(var/mob/living/carbon/C) //Needed for syndicuffs
 	return
 
 /obj/item/weapon/handcuffs/syndicate/on_remove(mob/living/carbon/C)
-	if(mode == SYNDICUFFS_ON_REMOVE && !charge_detonated)
+	if (mode == SYNDICUFFS_ON_REMOVE && !charge_detonated)
 		detonate(0) //This handles cleaning up the inventory already
 		return //Don't clean up twice, we don't want runtimes
 
 //C4 and EMPs don't mix, will always explode at severity 1, and likely to explode at severity 2
 /obj/item/weapon/handcuffs/syndicate/emp_act(severity)
 
-	switch(severity)
-		if(1)
-			if(prob(80))
+	switch (severity)
+		if (1)
+			if (prob(80))
 				detonate(1)
 			else
 				detonate(0)
-		if(2)
-			if(prob(50))
+		if (2)
+			if (prob(50))
 				detonate(1)
 
 /obj/item/weapon/handcuffs/syndicate/ex_act(severity)
 
-	switch(severity)
-		if(1)
-			if(!charge_detonated)
+	switch (severity)
+		if (1)
+			if (!charge_detonated)
 				detonate(0)
-		if(2)
-			if(!charge_detonated)
+		if (2)
+			if (!charge_detonated)
 				detonate(0)
-		if(3)
-			if(!charge_detonated && prob(50))
+		if (3)
+			if (!charge_detonated && prob(50))
 				detonate(1)
 		else
 			return
@@ -147,11 +147,11 @@
 
 /obj/item/weapon/handcuffs/syndicate/proc/detonate(countdown)
 	set waitfor = FALSE
-	if(charge_detonated)
+	if (charge_detonated)
 		return
 
 	charge_detonated = TRUE // Do it before countdown to prevent spam fuckery.
-	if(countdown)
+	if (countdown)
 		sleep(countdown_time)
 
 	explosion(get_turf(src), 0, 1, 3, 0)
@@ -197,12 +197,12 @@
 	_color = "white"
 
 /obj/item/weapon/handcuffs/cable/update_icon()
-	if(_color)
+	if (_color)
 		icon_state = "cuff_[_color]"
 
 /obj/item/weapon/handcuffs/cable/attackby(var/obj/item/I, mob/user as mob)
 	..()
-	if(istype(I, /obj/item/stack/rods))
+	if (istype(I, /obj/item/stack/rods))
 		var/obj/item/stack/rods/R = I
 		var/obj/item/weapon/wirerod/W = new /obj/item/weapon/wirerod
 		R.use(1)

@@ -20,7 +20,7 @@ var/global/list/pda_app_menus = list(
 	var/icon = null	//name of the icon that appears in front of the app name on the PDA, example: "pda_game.png"
 
 /datum/pda_app/proc/onInstall(var/obj/item/device/pda/device)
-	if(istype(device))
+	if (istype(device))
 		pda_device = device
 		pda_device.applications += src
 
@@ -43,7 +43,7 @@ var/global/list/pda_app_menus = list(
 /datum/pda_app/light_upgrade/onInstall()
 	..()
 	pda_device.f_lum = 3
-	if(pda_device.fon)
+	if (pda_device.fon)
 		pda_device.set_light(pda_device.f_lum)
 
 /datum/pda_app/spam_filter
@@ -67,10 +67,10 @@ var/global/list/pda_app_menus = list(
 	reconnect_database()
 
 /datum/pda_app/balance_check/proc/reconnect_database()
-	for(var/obj/machinery/account_database/DB in account_DBs)
+	for (var/obj/machinery/account_database/DB in account_DBs)
 		//Checks for a database on its Z-level, else it checks for a database at the main Station.
-		if((pda_device.loc && (DB.z == pda_device.loc.z)) || (DB.z == STATION_Z))
-			if((DB.stat == 0) && DB.activated )//If the database if damaged or not powered, people won't be able to use the app anymore.
+		if ((pda_device.loc && (DB.z == pda_device.loc.z)) || (DB.z == STATION_Z))
+			if ((DB.stat == 0) && DB.activated )//If the database if damaged or not powered, people won't be able to use the app anymore.
 				linked_db = DB
 				break
 
@@ -106,11 +106,11 @@ var/global/list/pda_app_menus = list(
 
 /datum/pda_app/snake/onInstall(var/obj/item/device/pda/device)
 	..()
-	for(var/x=1;x<=PDA_APP_SNAKEII_MAXSPEED;x++)
+	for (var/x=1;x<=PDA_APP_SNAKEII_MAXSPEED;x++)
 		highscores += x
 		highscores[x] = list()
 		var/list/templist = highscores[x]
-		for(var/y=1;y<=PDA_APP_SNAKEII_MAXLABYRINTH;y++)
+		for (var/y=1;y<=PDA_APP_SNAKEII_MAXLABYRINTH;y++)
 			templist += y
 			templist[y] = 0
 
@@ -121,11 +121,11 @@ var/global/list/pda_app_menus = list(
 
 	game_update(user)
 
-	if(snake_game.head.next_full)
+	if (snake_game.head.next_full)
 		playsound(get_turf(pda_device), 'sound/misc/pda_snake_eat.ogg', volume * 5, 1)
 
-	if(!paused)
-		if(!snake_game.gameover)
+	if (!paused)
+		if (!snake_game.gameover)
 			var/snakesleep = 10 - (snake_game.level)
 			spawn(snakesleep)
 				game_tick(user)
@@ -134,14 +134,14 @@ var/global/list/pda_app_menus = list(
 
 
 /datum/pda_app/snake/proc/game_update(var/mob/user)
-	if(istype(user,/mob/living/carbon))
+	if (istype(user,/mob/living/carbon))
 		var/mob/living/carbon/C = user
-		if(C.machine && istype(C.machine,/obj/item/device/pda))
+		if (C.machine && istype(C.machine,/obj/item/device/pda))
 			var/obj/item/device/pda/pda_device = C.machine
 			var/turf/user_loc = get_turf(user)
 			var/turf/pda_loc = get_turf(pda_device)
-			if(get_dist(user_loc,pda_loc) <= 1)
-				if(pda_device.mode == PDA_APP_SNAKEII)
+			if (get_dist(user_loc,pda_loc) <= 1)
+				if (pda_device.mode == PDA_APP_SNAKEII)
 					pda_device.attack_self(C)
 				else
 					pause(user)
@@ -156,13 +156,13 @@ var/global/list/pda_app_menus = list(
 
 /datum/pda_app/snake/proc/game_over(var/mob/user)
 	playsound(get_turf(pda_device), 'sound/misc/pda_snake_over.ogg', volume * 5, 0)
-	for(var/i=1;i <= 4;i++)
-		for(var/datum/snake/body/B in snake_game.snakeparts)
+	for (var/i=1;i <= 4;i++)
+		for (var/datum/snake/body/B in snake_game.snakeparts)
 			B.flicking = 1
 		snake_game.head.flicking = 1
 		game_update(user)
 		sleep(5)
-		for(var/datum/snake/body/B in snake_game.snakeparts)
+		for (var/datum/snake/body/B in snake_game.snakeparts)
 			B.flicking = 0
 		snake_game.head.flicking = 0
 		game_update(user)
@@ -178,8 +178,8 @@ var/global/list/pda_app_menus = list(
 	game_update(user)
 
 /datum/pda_app/snake/proc/pause(var/mob/user)
-	if(ingame)
-		if(!paused)
+	if (ingame)
+		if (!paused)
 			paused = 1
 		else
 			paused = 0
@@ -192,7 +192,7 @@ var/global/list/pda_app_menus = list(
 	var/list/leaderlist = snake_station_highscores[snake_game.level]
 	var/list/winnerlist = snake_best_players[snake_game.level]
 
-	if(templist[labyrinth+1] > leaderlist[labyrinth+1])
+	if (templist[labyrinth+1] > leaderlist[labyrinth+1])
 		leaderlist[labyrinth+1] = templist[labyrinth+1]
 		winnerlist[labyrinth+1] = pda_device.owner
 
@@ -214,28 +214,28 @@ var/global/list/pda_app_menus = list(
 
 /datum/pda_app/minesweeper/proc/game_tick(var/mob/user)
 	sleep(1)	//to give the game the time to process all tiles if many are dug at once.
-	if(minesweeper_game.gameover && (minesweeper_game.face == "win"))
+	if (minesweeper_game.gameover && (minesweeper_game.face == "win"))
 		save_score()
 	game_update(user)
 
 /datum/pda_app/minesweeper/proc/game_update(var/mob/user)
-	if(istype(user,/mob/living/carbon))
+	if (istype(user,/mob/living/carbon))
 		var/mob/living/carbon/C = user
-		if(C.machine && istype(C.machine,/obj/item/device/pda))
+		if (C.machine && istype(C.machine,/obj/item/device/pda))
 			var/obj/item/device/pda/pda_device = C.machine
 			var/turf/user_loc = get_turf(user)
 			var/turf/pda_loc = get_turf(pda_device)
-			if(get_dist(user_loc,pda_loc) <= 1)
-				if(pda_device.mode == PDA_APP_MINESWEEPER)
+			if (get_dist(user_loc,pda_loc) <= 1)
+				if (pda_device.mode == PDA_APP_MINESWEEPER)
 					pda_device.attack_self(C)
 			else
 				user.unset_machine()
 				user << browse(null, "window=pda")
 
 /datum/pda_app/minesweeper/proc/save_score()
-	if(minesweeper_game.current_difficulty == "custom")
+	if (minesweeper_game.current_difficulty == "custom")
 		return
-	if(minesweeper_game.end_timer < minesweeper_station_highscores[minesweeper_game.current_difficulty])
+	if (minesweeper_game.end_timer < minesweeper_station_highscores[minesweeper_game.current_difficulty])
 		minesweeper_station_highscores[minesweeper_game.current_difficulty] = minesweeper_game.end_timer
 		minesweeper_best_players[minesweeper_game.current_difficulty] = pda_device.owner
 
@@ -291,82 +291,82 @@ var/global/list/pda_app_menus = list(
 	reconnect_database()
 
 /datum/pda_app/spesspets/proc/reconnect_database()
-	for(var/obj/machinery/account_database/DB in account_DBs)
-		if((DB.z == pda_device.loc.z) || (DB.z == STATION_Z))
-			if((DB.stat == 0) && DB.activated )
+	for (var/obj/machinery/account_database/DB in account_DBs)
+		if ((DB.z == pda_device.loc.z) || (DB.z == STATION_Z))
+			if ((DB.stat == 0) && DB.activated )
 				linked_db = DB
 				break
 
 /datum/pda_app/spesspets/proc/game_tick(var/mob/user)
 	if (game_state == 1)
 		hatching++
-		if(hatching > 1200)
+		if (hatching > 1200)
 			last_spoken = "Help him hatch already you piece of fuck!"
-		else if(hatching > 600)
+		else if (hatching > 600)
 			last_spoken = "Looks like the pet is trying to hatch from the egg!"
-		else if(hatching > 300)
+		else if (hatching > 300)
 			last_spoken = "Did the egg just move?"
 		else
 			last_spoken = "The egg stands still."
 
 	if (game_state == 2)
-		if(isatwork)
+		if (isatwork)
 			isatwork--
 			next_coin--
-			if(next_coin <= 0)
+			if (next_coin <= 0)
 				total_coins++
 				next_coin = rand(10,15)
-				if(ishappy)
+				if (ishappy)
 					next_coin = rand(5,7)
-			if(!isatwork)
+			if (!isatwork)
 				issleeping = 600
 
-		if(issleeping)
+		if (issleeping)
 			issleeping--
-		if(ishappy)
+		if (ishappy)
 			ishappy--
 			total_happiness++
-		if(ishungry)
+		if (ishungry)
 			total_hunger++
-		if(isdirty)
+		if (isdirty)
 			total_dirty++
 
-		if(ishurt)
+		if (ishurt)
 			ishurt++
-			if(ishurt >= 600)
+			if (ishurt >= 600)
 				game_state = 3
 
 		var/new_exp = 0
-		if(!isdirty)
+		if (!isdirty)
 			new_exp = 1
-			if(ishappy)
+			if (ishappy)
 				new_exp = new_exp*2
-			if(ishurt)
+			if (ishurt)
 				new_exp = new_exp/2
 		exp += new_exp
 
-		if(exp > 900)
+		if (exp > 900)
 			level++
 			exp = 0
-			if(level >= 50)
+			if (level >= 50)
 				game_state = 3
 
 	game_update(user)
 
-	if(game_state < 3)
+	if (game_state < 3)
 		spawn(10)
 			game_tick(user)
 
 
 /datum/pda_app/spesspets/proc/game_update(var/mob/user)
-	if(istype(user,/mob/living/carbon))
+	if (istype(user,/mob/living/carbon))
 		var/mob/living/carbon/C = user
-		if(C.machine && istype(C.machine,/obj/item/device/pda))
+		if (C.machine && istype(C.machine,/obj/item/device/pda))
 			var/obj/item/device/pda/pda_device = C.machine
 			var/turf/user_loc = get_turf(user)
 			var/turf/pda_loc = get_turf(pda_device)
-			if(get_dist(user_loc,pda_loc) <= 1)
-				if(pda_device.mode == PDA_APP_SPESSPETS)
+			if (get_dist(user_loc,pda_loc) <= 1)
+				if (pda_device.mode == PDA_APP_SPESSPETS)
 					pda_device.attack_self(C)
 			else
 				user.unset_machine()

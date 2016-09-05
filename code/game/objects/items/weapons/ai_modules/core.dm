@@ -14,7 +14,7 @@
 /obj/item/weapon/aiModule/core/upload(var/datum/ai_laws/L, var/atom/target, var/mob/sender)
 	..()
 	L.clear_inherent_laws()
-	for(var/c_law in laws)
+	for (var/c_law in laws)
 		L.add_inherent_law(c_law)
 	//target.show_laws() // Redundant
 	return 1

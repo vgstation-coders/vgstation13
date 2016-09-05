@@ -23,7 +23,7 @@ var/list/modules = list(			// global associative list
 
 	var/mneed = mods.inmodlist(type)		// find if this type has modules defined
 
-	if(!mneed)		// not found in module list?
+	if (!mneed)		// not found in module list?
 		qdel(src)	// used to delete self, thus ending proc
 		return
 
@@ -40,16 +40,16 @@ var/list/modules = list(			// global associative list
 
 /datum/moduletypes/proc/getbitmask(var/type)
 	var/count = modcount["[type]"]
-	if(count)
+	if (count)
 		return 2**count-1
 
 	var/modtext = modules["[type]"]
 	var/num = 1
 	var/pos = 1
 
-	while(1)
+	while (1)
 		pos = findtext(modtext, ",", pos, 0)
-		if(!pos)
+		if (!pos)
 			break
 		else
 			pos++

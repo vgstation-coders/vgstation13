@@ -89,7 +89,7 @@
 	new /obj/item/weapon/crowbar(src)
 	new /obj/item/stack/cable_coil(src,30,color)
 	new /obj/item/stack/cable_coil(src,30,color)
-	if(prob(5))
+	if (prob(5))
 		new /obj/item/clothing/gloves/yellow(src)
 	else
 		new /obj/item/stack/cable_coil(src,30,color)

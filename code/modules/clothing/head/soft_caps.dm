@@ -9,9 +9,9 @@
 	siemens_coefficient = 0.9
 
 	proc/flip(var/mob/user as mob)
-		if(!user.incapacitated())
+		if (!user.incapacitated())
 			src.flipped = !src.flipped
-			if(src.flipped)
+			if (src.flipped)
 				icon_state = "[_color]soft_flipped"
 				to_chat(user, "You flip the hat backwards.")
 			else

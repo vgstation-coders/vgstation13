@@ -14,25 +14,25 @@
 	var/living_antags = 0 //Are antagonists, and currently alive
 	var/dead_antags = 0 //Are antagonists, and have finally met their match
 
-	if(holder)
-		for(var/client/C in clients)
+	if (holder)
+		for (var/client/C in clients)
 			var/entry = "\t[C.key]"
 
-			if(C.holder && C.holder.fakekey)
+			if (C.holder && C.holder.fakekey)
 				entry += " <i>(as [C.holder.fakekey])</i>"
 
-			if(C.mob.real_name)
+			if (C.mob.real_name)
 				entry += " - Playing as [C.mob.real_name]"
 
-			switch(C.mob.stat)
-				if(UNCONSCIOUS)
+			switch (C.mob.stat)
+				if (UNCONSCIOUS)
 					entry += " - <span style='color:darkgray'><b>Unconscious</b></span>"
 
-				if(DEAD)
-					if(isobserver(C.mob))
+				if (DEAD)
+					if (isobserver(C.mob))
 						var/mob/dead/observer/O = C.mob
 
-						if(O.started_as_observer)
+						if (O.started_as_observer)
 							entry += " - <span style='color:gray'>Observing</span>"
 							observers++
 						else
@@ -47,9 +47,9 @@
 				else
 					living++
 
-			if(is_special_character(C.mob))
+			if (is_special_character(C.mob))
 				entry += " - <b><span class='red'>Antagonist</span></b>"
-				if(!(C.mob.isDead()))
+				if (!(C.mob.isDead()))
 					living_antags++
 				else
 					dead_antags++
@@ -59,15 +59,15 @@
 
 		log_admin("[key_name(usr)] used who verb advanced (shows OOC key - IC name, status and if antagonist)")
 	else
-		for(var/client/C in clients)
-			if(C.holder && C.holder.fakekey)
+		for (var/client/C in clients)
+			if (C.holder && C.holder.fakekey)
 				Lines += C.holder.fakekey
 			else
 				Lines += C.key
 
-	for(var/line in sortList(Lines))
+	for (var/line in sortList(Lines))
 		msg += "[line]\n"
-	if(holder)
+	if (holder)
 		msg += "<b><span class='notice'>Total Living: [living]</span> | Total Dead: [dead] | <span style='color:gray'>Observing: [observers]</span> | <span style='color:gray'><i>In Lobby: [lobby]</i></span> | <span class='bad'>Living Antags: [living_antags]</span> | <span class='good'>Dead Antags: [dead_antags]</span></b>\n"
 	msg += "<b>Total Players: [length(Lines)]</b>\n"
 	to_chat(src, msg)

@@ -557,12 +557,12 @@
 /obj/item/clothing/under/contortionist/proc/check_clothing(mob/user as mob)
 	//Allowed to wear: glasses, shoes, gloves, pockets, mask, and jumpsuit (obviously)
 	var/list/slot_must_be_empty = list(slot_back,slot_handcuffed,slot_legcuffed,slot_belt,slot_head,slot_wear_suit)
-	for(var/slot_id in slot_must_be_empty)
-		if(user.get_item_by_slot(slot_id))
+	for (var/slot_id in slot_must_be_empty)
+		if (user.get_item_by_slot(slot_id))
 			to_chat(user, "<span class='warning'>You can't fit inside while wearing that \the [user.get_item_by_slot(slot_id)].</span>")
 			return 0
 
-	for(var/obj/item/I in user.held_items)
+	for (var/obj/item/I in user.held_items)
 		to_chat(user, "<span class='warning'>You can't fit inside while holding \the [I].</span>")
 		return 0
 
@@ -590,14 +590,14 @@
 
 /obj/item/clothing/under/greaser/New()
 	var/greaser_colour = "default"
-	switch(rand(1,4))
-		if(1)
+	switch (rand(1,4))
+		if (1)
 			greaser_colour = "default"
-		if(2)
+		if (2)
 			greaser_colour = "cult"
-		if(3)
+		if (3)
 			greaser_colour = "spider"
-		if(4)
+		if (4)
 			greaser_colour = "snakes"
 			desc = "Tunnel Snakes Rule!"
 	icon_state = "greaser_[greaser_colour]"

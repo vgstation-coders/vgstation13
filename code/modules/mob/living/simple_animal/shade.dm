@@ -45,14 +45,14 @@
 	return
 
 /mob/living/simple_animal/shade/Life()
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
 	..()
-	if(stat == 2)
-		for(var/i=0;i<3;i++)
+	if (stat == 2)
+		for (var/i=0;i<3;i++)
 			new /obj/item/weapon/ectoplasm (src.loc)
-		for(var/mob/M in viewers(src, null))
-			if((M.client && !( M.blinded )))
+		for (var/mob/M in viewers(src, null))
+			if ((M.client && !( M.blinded )))
 				M.show_message("<span class='warning'> [src] lets out a contented sigh as their form unwinds.</span>")
 				ghostize()
 		qdel (src)
@@ -61,36 +61,36 @@
 
 /mob/living/simple_animal/shade/attackby(var/obj/item/O as obj, var/mob/user as mob)  //Marker -Agouri
 	user.delayNextAttack(8)
-	if(istype(O, /obj/item/device/soulstone))
+	if (istype(O, /obj/item/device/soulstone))
 		O.transfer_soul("SHADE", src, user)
 	else
-		if(O.force)
+		if (O.force)
 			var/damage = O.force
 			if (O.damtype == HALLOSS)
 				damage = 0
-			if(istype(O,/obj/item/weapon/nullrod))
+			if (istype(O,/obj/item/weapon/nullrod))
 				damage *= 2
 				purge = 3
 			health -= damage
-			for(var/mob/M in viewers(src, null))
+			for (var/mob/M in viewers(src, null))
 				if ((M.client && !( M.blinded )))
 					M.show_message("<span class='warning'> <B>[src] has been attacked with [O] by [user].</span></B>")
 		else
 			to_chat(usr, "<span class='warning'> This weapon is ineffective, it does no damage.</span>")
-			for(var/mob/M in viewers(src, null))
+			for (var/mob/M in viewers(src, null))
 				if ((M.client && !( M.blinded )))
 					M.show_message("<span class='warning'> [user] gently taps [src] with [O].</span>")
 	return
 
 /mob/living/simple_animal/shade/shuttle_act()
-	if(!(src.flags & INVULNERABLE))
+	if (!(src.flags & INVULNERABLE))
 		health -= rand(5,45) //These guys are like ghosts, a collision with a shuttle wouldn't destroy one outright
 	return
 
 ////////////////HUD//////////////////////
 
 /mob/living/simple_animal/shade/Life()
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
 	. = ..()
 
@@ -99,27 +99,27 @@
 /mob/living/simple_animal/shade/regular_hud_updates()
 	update_pull_icon() //why is this here?
 
-	if(purged)
-		if(purge > 0)
+	if (purged)
+		if (purge > 0)
 			purged.icon_state = "purge1"
 		else
 			purged.icon_state = "purge0"
 
-	if(client)
-		switch(health)
-			if(50 to INFINITY)
+	if (client)
+		switch (health)
+			if (50 to INFINITY)
 				healths.icon_state = "shade_health0"
-			if(41 to 49)
+			if (41 to 49)
 				healths.icon_state = "shade_health1"
-			if(33 to 40)
+			if (33 to 40)
 				healths.icon_state = "shade_health2"
-			if(25 to 32)
+			if (25 to 32)
 				healths.icon_state = "shade_health3"
-			if(17 to 24)
+			if (17 to 24)
 				healths.icon_state = "shade_health4"
-			if(9 to 16)
+			if (9 to 16)
 				healths.icon_state = "shade_health5"
-			if(1 to 8)
+			if (1 to 8)
 				healths.icon_state = "shade_health6"
 			else
 				healths.icon_state = "shade_health7"

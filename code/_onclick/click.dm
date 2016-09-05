@@ -34,104 +34,104 @@
 #define MAX_ITEM_DEPTH	3 //how far we can recurse before we can't get an item
 
 /mob/proc/ClickOn( var/atom/A, var/params )
-	if(!click_delayer)
+	if (!click_delayer)
 		click_delayer = new
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
 
-	if(click_delayer.blocked())
+	if (click_delayer.blocked())
 		return
 	click_delayer.setDelay(1)
 
-	if(client.buildmode)
+	if (client.buildmode)
 		build_click(src, client.buildmode, params, A)
 		return
 
 	var/list/modifiers = params2list(params)
-	if(modifiers["middle"])
+	if (modifiers["middle"])
 		MiddleClickOn(A)
 		return
-	if(modifiers["shift"])
+	if (modifiers["shift"])
 		ShiftClickOn(A)
 		return
-	if(modifiers["alt"]) // alt and alt-gr (rightalt)
+	if (modifiers["alt"]) // alt and alt-gr (rightalt)
 		AltClickOn(A)
 		return
-	if(modifiers["ctrl"])
+	if (modifiers["ctrl"])
 		CtrlClickOn(A)
 		return
 
-	if(isStunned())
+	if (isStunned())
 		return
 
 	face_atom(A) // change direction to face what you clicked on
 
-	if(attack_delayer.blocked()) // This was next_move.  next_attack makes more sense.
+	if (attack_delayer.blocked()) // This was next_move.  next_attack makes more sense.
 		return
 //	to_chat(world, "next_attack is [next_attack] and world.time is [world.time]")
-	if(istype(loc,/obj/mecha))
-		if(!locate(/turf) in list(A,A.loc)) // Prevents inventory from being drilled
+	if (istype(loc,/obj/mecha))
+		if (!locate(/turf) in list(A,A.loc)) // Prevents inventory from being drilled
 			return
 		var/obj/mecha/M = loc
 		return M.click_action(A,src)
 
-	if(restrained())
+	if (restrained())
 		RestrainedClickOn(A)
 		return
 
-	if(in_throw_mode)
+	if (in_throw_mode)
 		throw_item(A)
 		return
 
 	var/obj/item/W = get_active_hand()
 	var/item_attack_delay = 0
 
-	if(W == A)
+	if (W == A)
 		/*next_move = world.time + 6
-		if(W.flags&USEDELAY)
+		if (W.flags&USEDELAY)
 			next_move += 5*/
 		W.attack_self(src, params)
 		update_inv_hand(active_hand)
 
 		return
 
-	if(!isturf(loc) && !is_holder_of(src, A))
-		if(loc == A) //Can attack_hand our holder (a locked closet, for example) from inside, but can't hit it with a tool
-			if(W)
+	if (!isturf(loc) && !is_holder_of(src, A))
+		if (loc == A) //Can attack_hand our holder (a locked closet, for example) from inside, but can't hit it with a tool
+			if (W)
 				return
 		else
 			return
 
 	// Allows you to click on a box's contents, if that box is on the ground, but no deeper than that
-	if(A.Adjacent(src, MAX_ITEM_DEPTH)) // see adjacent.dm
-		if(W)
+	if (A.Adjacent(src, MAX_ITEM_DEPTH)) // see adjacent.dm
+		if (W)
 			item_attack_delay = W.attack_delay
 			var/resolved = W.preattack(A, src, 1, params)
-			if(!resolved)
+			if (!resolved)
 				resolved = A.attackby(W,src, params)
-				if(ismob(A) || istype(A, /obj/mecha) || istype(W, /obj/item/weapon/grab))
+				if (ismob(A) || istype(A, /obj/mecha) || istype(W, /obj/item/weapon/grab))
 					delayNextAttack(item_attack_delay)
-				if(!resolved && A && W)
+				if (!resolved && A && W)
 					W.afterattack(A,src,1,params) // 1 indicates adjacency
 				else
 					delayNextAttack(item_attack_delay)
 		else
-			if(ismob(A) || istype(W, /obj/item/weapon/grab))
+			if (ismob(A) || istype(W, /obj/item/weapon/grab))
 				delayNextAttack(10)
-			if(INVOKE_EVENT(on_uattack,list("atom"=A))) //This returns 1 when doing an action intercept
+			if (INVOKE_EVENT(on_uattack,list("atom"=A))) //This returns 1 when doing an action intercept
 				return
 			UnarmedAttack(A, 1, params)
 		return
 	else // non-adjacent click
-		if(W)
-			if(ismob(A))
+		if (W)
+			if (ismob(A))
 				delayNextAttack(item_attack_delay)
-			if(!W.preattack(A, src, 0,  params))
+			if (!W.preattack(A, src, 0,  params))
 				W.afterattack(A,src,0,params) // 0: not Adjacent
 		else
-			if(ismob(A))
+			if (ismob(A))
 				delayNextAttack(10)
-			if(INVOKE_EVENT(on_uattack,list("atom"=A))) //This returns 1 when doing an action intercept
+			if (INVOKE_EVENT(on_uattack,list("atom"=A))) //This returns 1 when doing an action intercept
 				return
 			RangedAttack(A, params)
 	return
@@ -153,7 +153,7 @@
 	in human click code to allow glove touches only at melee range.
 */
 /mob/proc/UnarmedAttack(var/atom/A, var/proximity_flag, var/params)
-	if(ismob(A))
+	if (ismob(A))
 		delayNextAttack(10)
 	return
 
@@ -166,19 +166,19 @@
 	animals lunging, etc.
 */
 /mob/proc/RangedAttack(var/atom/A, var/params)
-	if(!mutations || !mutations.len)
+	if (!mutations || !mutations.len)
 		return
-	if((M_LASER in mutations) && a_intent == I_HURT)
+	if ((M_LASER in mutations) && a_intent == I_HURT)
 		LaserEyes(A) // moved into a proc below
-	else if(M_TK in mutations)
+	else if (M_TK in mutations)
 		/*switch(get_dist(src,A))
-			if(0)
+			if (0)
 				;
-			if(1 to 5) // not adjacent may mean blocked by window
+			if (1 to 5) // not adjacent may mean blocked by window
 				next_move += 2
-			if(5 to 7)
+			if (5 to 7)
 				next_move += 5
-			if(8 to tk_maxrange)
+			if (8 to tk_maxrange)
 				next_move += 10
 			else
 				return
@@ -217,7 +217,7 @@
 	A.ShiftClick(src)
 	return
 /atom/proc/ShiftClick(var/mob/user)
-	if(user.client && user.client.eye == user)
+	if (user.client && user.client.eye == user)
 		user.examination(src)
 	return
 
@@ -233,7 +233,7 @@
 	return
 
 /atom/movable/CtrlClick(var/mob/user)
-	if(Adjacent(user))
+	if (Adjacent(user))
 		user.start_pulling(src)
 
 
@@ -246,12 +246,12 @@
 	return
 
 /atom/proc/AltClick(var/mob/user)
-	if(!(user == src) && !(isrobot(user)) && ishuman(src) && user.Adjacent(src))
+	if (!(user == src) && !(isrobot(user)) && ishuman(src) && user.Adjacent(src))
 		src:give_item(user)
 		return
 	var/turf/T = get_turf(src)
-	if(T && T.Adjacent(user))
-		if(user.listed_turf == T)
+	if (T && T.Adjacent(user))
+		if (user.listed_turf == T)
 			user.listed_turf = null
 		else
 			user.listed_turf = T
@@ -293,7 +293,7 @@
 		LE.process()
 
 /mob/living/carbon/human/LaserEyes()
-	if(burn_calories(0.5))
+	if (burn_calories(0.5))
 		nutrition = max(0,nutrition-2)
 		..()
 		handle_regular_hud_updates()
@@ -302,31 +302,31 @@
 
 // Simple helper to face what you clicked on, in case it should be needed in more than one place
 /mob/proc/face_atom(var/atom/A)
-	if(stat != CONSCIOUS || locked_to || !A || !x || !y || !A.x || !A.y )
+	if (stat != CONSCIOUS || locked_to || !A || !x || !y || !A.x || !A.y )
 		return
 
 	var/dx = A.x - x
 	var/dy = A.y - y
 
-	if(!dx && !dy) // Wall items are graphically shifted but on the floor
-		if(A.pixel_y > 16)
+	if (!dx && !dy) // Wall items are graphically shifted but on the floor
+		if (A.pixel_y > 16)
 			change_dir(NORTH)
-		else if(A.pixel_y < -16)
+		else if (A.pixel_y < -16)
 			change_dir(SOUTH)
-		else if(A.pixel_x > 16)
+		else if (A.pixel_x > 16)
 			change_dir(EAST)
-		else if(A.pixel_x < -16)
+		else if (A.pixel_x < -16)
 			change_dir(WEST)
 
 		return
 
-	if(abs(dx) < abs(dy))
-		if(dy > 0)
+	if (abs(dx) < abs(dy))
+		if (dy > 0)
 			change_dir(NORTH)
 		else
 			change_dir(SOUTH)
 	else
-		if(dx > 0)
+		if (dx > 0)
 			change_dir(EAST)
 		else
 			change_dir(WEST)

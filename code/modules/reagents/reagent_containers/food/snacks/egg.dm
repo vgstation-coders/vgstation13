@@ -12,9 +12,9 @@
 	src.bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/process()
-	if(is_in_valid_nest(src)) //_macros.dm
+	if (is_in_valid_nest(src)) //_macros.dm
 		amount_grown += rand(1,2)
-		if(amount_grown >= 100)
+		if (amount_grown >= 100)
 			hatch()
 	else
 		processing_objects.Remove(src)
@@ -61,7 +61,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/reagent_containers))
-		if(W.reagents.amount_cache.len == 1 && W.reagents.has_reagent(FLOUR, 5))
+		if (W.reagents.amount_cache.len == 1 && W.reagents.has_reagent(FLOUR, 5))
 			W.reagents.remove_reagent(FLOUR,5)
 			new /obj/item/weapon/reagent_containers/food/snacks/dough(src)
 			to_chat(user, "You make some dough.")
@@ -72,7 +72,7 @@
 		var/obj/item/toy/crayon/C = W
 		var/clr = C.colourName
 
-		if(!(clr in list("blue", "green", "mime", "orange", "purple", "rainbow", "red", "yellow")))
+		if (!(clr in list("blue", "green", "mime", "orange", "purple", "rainbow", "red", "yellow")))
 			to_chat(user, "<span class='notice'>[src] refuses to take on this colour!</span>")
 			return
 

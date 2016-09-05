@@ -15,32 +15,32 @@ File: Options
 	Class: n_scriptOptions
 */
 /datum/n_scriptOptions/proc/CanStartID(char) //returns true if the character can start a variable, function, or keyword name (by default letters or an underscore)
-	if(!isnum(char))
+	if (!isnum(char))
 		char = text2ascii(char)
 
 	return (char in ascii_A to ascii_Z) || (char in ascii_a to ascii_z) || char == ascii_UNDERSCORE || char == ascii_DOLLAR
 
 /datum/n_scriptOptions/proc/IsValidIDChar(char) //returns true if the character can be in the body of a variable, function, or keyword name (by default letters, numbers, and underscore)
-	if(!isnum(char))
+	if (!isnum(char))
 		char = text2ascii(char)
 
 	return CanStartID(char) || IsDigit(char)
 
 /datum/n_scriptOptions/proc/IsDigit(char)
-	if(!isnum(char))
+	if (!isnum(char))
 		char = text2ascii(char)
 
 	return char in ascii_ZERO to ascii_NINE
 
 /datum/n_scriptOptions/proc/IsValidID(id)    //returns true if all the characters in the string are okay to be in an identifier name
-	if(!CanStartID(id)) //don't need to grab first char in id, since text2ascii does it automatically
+	if (!CanStartID(id)) //don't need to grab first char in id, since text2ascii does it automatically
 		return 0
 
-	if(length(id) == 1)
+	if (length(id) == 1)
 		return 1
 
-	for(var/i=2 to length(id))
-		if(!IsValidIDChar(copytext(id, i, i + 1)))
+	for (var/i=2 to length(id))
+		if (!IsValidIDChar(copytext(id, i, i + 1)))
 			return 0
 	return 1
 
@@ -116,6 +116,6 @@ associated values are <nS_Keyword> types of which the <n_Keyword.Parse()> proc w
 
 /datum/n_scriptOptions/nS_Options/New()
 	. = ..()
-	for(var/O in assign_operators + binary_operators + unary_operators)
-		if(!symbols.Find(O))
+	for (var/O in assign_operators + binary_operators + unary_operators)
+		if (!symbols.Find(O))
 			symbols += O

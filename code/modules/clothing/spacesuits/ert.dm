@@ -14,7 +14,7 @@
 	eyeprot = 3
 
 /obj/item/clothing/head/helmet/space/ert/attack_self(mob/user)
-	if(camera)
+	if (camera)
 		..(user)
 	else
 		camera = new /obj/machinery/camera(src)
@@ -25,7 +25,7 @@
 
 /obj/item/clothing/head/helmet/space/ert/examine(mob/user)
 	..()
-	if(get_dist(user,src) <= 1)
+	if (get_dist(user,src) <= 1)
 		to_chat(user, "This helmet has a built-in camera. It's [camera ? "" : "in"]active.")
 
 /obj/item/clothing/suit/space/ert

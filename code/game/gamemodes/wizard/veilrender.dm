@@ -30,7 +30,7 @@
 
 
 /obj/item/weapon/veilrender/attack_self(mob/user as mob)
-	if(charged == 1)
+	if (charged == 1)
 		new /obj/effect/rend(get_turf(usr))
 		charged = 0
 		visible_message("<span class='danger'>[src] hums with power as [usr] deals a blow to reality itself!</span>")

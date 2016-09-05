@@ -8,11 +8,11 @@
 	amount = 10
 
 /obj/item/stack/nanopaste/attack(mob/living/M as mob, mob/user as mob)
-	if(!istype(M) || !istype(user))
+	if (!istype(M) || !istype(user))
 		return 0
-	if(istype(M,/mob/living/silicon/robot))	//Repairing cyborgs
+	if (istype(M,/mob/living/silicon/robot))	//Repairing cyborgs
 		var/mob/living/silicon/robot/R = M
-		if(R.getBruteLoss() || R.getFireLoss())
+		if (R.getBruteLoss() || R.getFireLoss())
 			R.adjustBruteLoss(rand(-15, -20))
 			R.adjustFireLoss(rand(-15, -20))
 			R.updatehealth()
@@ -22,13 +22,13 @@
 		else
 			to_chat(user, "<span class='notice'>All [R]'s systems are nominal.</span>")
 
-	if(istype(M,/mob/living/carbon/human))	//Repairing robolimbs
+	if (istype(M,/mob/living/carbon/human))	//Repairing robolimbs
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/external/affecting = H.get_organ(user.zone_sel.selecting)
 
-		if(affecting.open == 1)
-			if(affecting && (affecting.status & ORGAN_ROBOT))
-				if(affecting.get_damage())
+		if (affecting.open == 1)
+			if (affecting && (affecting.status & ORGAN_ROBOT))
+				if (affecting.get_damage())
 					affecting.heal_damage(rand(15, 20), rand(15, 20), robo_repair = 1)
 					H.updatehealth()
 					use(1)
@@ -37,8 +37,8 @@
 				else
 					to_chat(user, "<span class='notice'>Nothing to fix here.</span>")
 		else
-			if(can_operate(H))
-				if(do_surgery(H,user,src))
+			if (can_operate(H))
+				if (do_surgery(H,user,src))
 					return
 			else
 				to_chat(user, "<span class='notice'>Nothing to fix in here.</span>")

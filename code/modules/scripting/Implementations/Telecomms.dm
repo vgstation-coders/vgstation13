@@ -23,7 +23,7 @@
 
 /datum/TCS_Compiler/proc/GC()
 	Holder = null
-	if(interpreter)
+	if (interpreter)
 		interpreter.GC()
 
 
@@ -41,7 +41,7 @@
 	returnerrors += scanner.errors
 	returnerrors += parser.errors
 
-	if(returnerrors.len)
+	if (returnerrors.len)
 		return returnerrors
 
 	interpreter 		= new(program)
@@ -53,10 +53,10 @@
 /* -- Execute the compiled code -- */
 
 /datum/TCS_Compiler/proc/Run(var/datum/signal/signal)
-	if(!ready)
+	if (!ready)
 		return
 
-	if(!interpreter)
+	if (!interpreter)
 		return
 
 	interpreter.container = src
@@ -242,14 +242,14 @@
 
 	var/setname = interpreter.GetCleanVar("$source", signal.data["name"])
 
-	if(signal.data["name"] != setname)
+	if (signal.data["name"] != setname)
 		signal.data["realname"] = setname
 	signal.data["name"]		= setname
 	signal.data["job"]		= interpreter.GetCleanVar("$job", signal.data["job"])
 	signal.data["reject"]	= !(interpreter.GetCleanVar("$pass")) // set reject to the opposite of $pass
 
 	// If the message is invalid, just don't broadcast it!
-	if(signal.data["message"] == "" || !signal.data["message"])
+	if (signal.data["message"] == "" || !signal.data["message"])
 		signal.data["reject"] = 1
 
 /*  -- Actual language proc code --  */
@@ -257,27 +257,27 @@
 /var/const/SIGNAL_COOLDOWN = 20 // 2 seconds
 
 /datum/signal/proc/mem(var/address, var/value)
-	if(istext(address))
+	if (istext(address))
 		var/obj/machinery/telecomms/server/S = data["server"]
 
-		if(!value && value != 0)
+		if (!value && value != 0)
 			return S.memory[address]
 
 		else
 			S.memory[address] = value
 
 /datum/signal/proc/signaler(var/freq = 1459, var/code = 30)
-	if(isnum(freq) && isnum(code))
+	if (isnum(freq) && isnum(code))
 
 		var/obj/machinery/telecomms/server/S = data["server"]
 
-		if(S.last_signal + SIGNAL_COOLDOWN > world.timeofday && S.last_signal < MIDNIGHT_ROLLOVER)
+		if (S.last_signal + SIGNAL_COOLDOWN > world.timeofday && S.last_signal < MIDNIGHT_ROLLOVER)
 			return
 		S.last_signal = world.timeofday
 
 		var/datum/radio_frequency/connection = radio_controller.return_frequency(freq)
 
-		if(findtext(num2text(freq), ".")) // if the frequency has been set as a decimal
+		if (findtext(num2text(freq), ".")) // if the frequency has been set as a decimal
 			freq *= 10 // shift the decimal one place
 
 		freq = sanitize_frequency(freq)
@@ -301,21 +301,21 @@
 	var/obj/machinery/telecomms/server/S = data["server"]
 	var/obj/item/device/radio/hradio = S.server_radio
 
-	if(!hradio)
+	if (!hradio)
 		error("[src] has no radio.")
 		return
 
-	if((!message || message == "") && message != 0)
+	if ((!message || message == "") && message != 0)
 		message = "*beep*"
-	if(!source)
+	if (!source)
 		source = "[html_encode(uppertext(S.id))]"
 		hradio = new // sets the hradio as a radio intercom
-	if(!freq || (!isnum(freq) && text2num(freq) == null))
+	if (!freq || (!isnum(freq) && text2num(freq) == null))
 		freq = 1459
-	if(findtext(num2text(freq), ".")) // if the frequency has been set as a decimal
+	if (findtext(num2text(freq), ".")) // if the frequency has been set as a decimal
 		freq *= 10 // shift the decimal one place
 
-	if(!job)
+	if (!job)
 		job = "Unknown"
 
 	//SAY REWRITE RELATED CODE.
@@ -335,7 +335,7 @@
 	newsign.data["compression"] = 0
 	newsign.data["message"] = message
 	newsign.data["type"] = 2 // artificial broadcast
-	if(!isnum(freq))
+	if (!isnum(freq))
 		freq = text2num(freq)
 	newsign.frequency = freq
 
@@ -352,7 +352,7 @@
 	newsign.sanitize_data()
 
 	var/pass = S.relay_information(newsign, "/obj/machinery/telecomms/hub")
-	if(!pass)
+	if (!pass)
 		S.relay_information(newsign, "/obj/machinery/telecomms/broadcaster") // send this simple message to broadcasters
 
 	spawn(50)

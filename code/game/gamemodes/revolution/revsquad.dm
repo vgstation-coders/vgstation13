@@ -36,19 +36,19 @@
 
 /datum/game_mode/revsquad/pre_setup()
 
-	if(config.protect_roles_from_antagonist)
+	if (config.protect_roles_from_antagonist)
 		restricted_jobs += protected_jobs
 
 	var/list/datum/mind/possible_revs = get_players_for_role(ROLE_REV)
 
 	var/head_check = 0
-	for(var/mob/new_player/player in player_list)
-		if(player.mind.assigned_role in command_positions)
+	for (var/mob/new_player/player in player_list)
+		if (player.mind.assigned_role in command_positions)
 			head_check++
 
-	for(var/datum/mind/player in possible_revs)
-		for(var/job in restricted_jobs)//Removing heads and such from the list
-			if(player.assigned_role == job)
+	for (var/datum/mind/player in possible_revs)
+		for (var/job in restricted_jobs)//Removing heads and such from the list
+			if (player.assigned_role == job)
 				possible_revs -= player
 	// Depending how this mode performs, might need to change this to have a minimum number of revs as required and a maximum as recommended.
 	for (var/i=1 to required_enemies)
@@ -59,8 +59,8 @@
 		head_revolutionaries += lenin
 
 	// If an admin forces this mode, we set the minimum head count to 1, otherwise check minimum heads
-	if(master_mode=="secret" && secret_force_mode=="secret")
-		if(head_revolutionaries.len==0 || head_check < minimum_heads)
+	if (master_mode=="secret" && secret_force_mode=="secret")
+		if (head_revolutionaries.len==0 || head_check < minimum_heads)
 			log_admin("Failed to set-up a round of revsquad. Couldn't find any heads of staffs or any volunteers to be revolutionaries.")
 			log_admin("Number of headrevs: [head_revolutionaries.len] Number of heads: [head_check]")
 			message_admins("Failed to set-up a round of revsquad. Couldn't find any heads of staffs or any volunteers to be revolutionaries.")
@@ -79,8 +79,8 @@
 /datum/game_mode/revsquad/post_setup()
 	var/list/heads = get_living_heads()
 
-	for(var/datum/mind/rev_mind in head_revolutionaries)
-		for(var/datum/mind/head_mind in heads)
+	for (var/datum/mind/rev_mind in head_revolutionaries)
+		for (var/datum/mind/head_mind in heads)
 			var/datum/objective/mutiny/rev_obj = new
 			rev_obj.owner = rev_mind
 			rev_obj.target = head_mind
@@ -90,23 +90,23 @@
 		equip_revsquad(rev_mind.current)
 		update_rev_icons_added(rev_mind)
 
-	for(var/datum/mind/rev_mind in head_revolutionaries)
+	for (var/datum/mind/rev_mind in head_revolutionaries)
 		greet_revsquad(rev_mind)
 
 	modePlayer += head_revolutionaries
 
-	if(emergency_shuttle)
+	if (emergency_shuttle)
 		emergency_shuttle.always_fake_recall = 1
 
 	spawn (rand(waittime_l, waittime_h))
-		if(!mixed)
+		if (!mixed)
 			send_intercept()
 	..()
 
 /datum/game_mode/revsquad/process()
 	checkwin_counter++
-	if(checkwin_counter >= 5)
-		if(!finished)
+	if (checkwin_counter >= 5)
+		if (!finished)
 			ticker.mode.check_win()
 		checkwin_counter = 0
 	return 0
@@ -115,15 +115,15 @@
 	var/obj_count = 1
 	if (you_are)
 		to_chat(rev_mind.current, "<span class='notice'>You are a member of the organized revolutionary organization that has infiltrated this station!</span>")
-	for(var/datum/objective/objective in rev_mind.objectives)
+	for (var/datum/objective/objective in rev_mind.objectives)
 		to_chat(rev_mind.current, "<b>Objective #[obj_count]</B>: [objective.explanation_text]")
 		rev_mind.special_role = "Revolutionary Squad Member"
 		obj_count++
 
 	to_chat(rev_mind.current, "<br/><b>Your fellow revolutionaries are:</b>")
 	rev_mind.store_memory("<br/><b>Your fellow revolutionaries are:</b>")
-	for(var/datum/mind/M in head_revolutionaries)
-		if(M.assigned_role)
+	for (var/datum/mind/M in head_revolutionaries)
+		if (M.assigned_role)
 			rev_mind.store_memory("[M.name] the [M.assigned_role]")
 			to_chat(rev_mind.current, "[M.name] the [M.assigned_role]")
 		else
@@ -133,7 +133,7 @@
 
 /datum/game_mode/revsquad/proc/get_revsquad_item(var/mob/living/carbon/human/M)
 	var/obj/item/requisitioned = pick(possible_items)
-	if(istype(requisitioned, /obj/item/device/flash/revsquad))
+	if (istype(requisitioned, /obj/item/device/flash/revsquad))
 		var/obj/item/device/flash/revsquad/FR = new(M)
 		requisitioned = FR
 	else
@@ -142,7 +142,7 @@
 
 // Since it's part of the revsquad type, this will not currently work with make antags. Which is fine because this is a variant on rev.
 /datum/game_mode/revsquad/proc/equip_revsquad(mob/living/carbon/human/mob)
-	if(!istype(mob))
+	if (!istype(mob))
 		return
 
 	if (mob.mind)
@@ -163,7 +163,7 @@
 		to_chat(mob, "The Syndicate were unfortunately unable to get you any special equipment.")
 	else
 		to_chat(mob, "The [T] in your [where] will help you to persuade the crew to join your cause.")
-		if(istype(T, /obj/item/device/flash/revsquad))
+		if (istype(T, /obj/item/device/flash/revsquad))
 			var/obj/item/device/flash/revsquad/FR = T
 			to_chat(mob, "<span class = 'warning'>Your [FR] has [FR.limited_conversions] uses for conversions, and not all of your comrades have one like it. Use it wisely.</span>")
 		mob.update_icons()
@@ -171,45 +171,45 @@
 		return 1
 
 /datum/game_mode/revsquad/proc/check_rev_victory()
-	for(var/datum/mind/rev_mind in head_revolutionaries)
-		for(var/datum/objective/objective in rev_mind.objectives)
-			if(!objective.check_completion())
+	for (var/datum/mind/rev_mind in head_revolutionaries)
+		for (var/datum/objective/objective in rev_mind.objectives)
+			if (!objective.check_completion())
 				return 0
 		return 1
 
 /datum/game_mode/revsquad/proc/check_heads_victory()
-	for(var/datum/mind/rev_mind in head_revolutionaries)
+	for (var/datum/mind/rev_mind in head_revolutionaries)
 		var/turf/T = get_turf(rev_mind.current)
-		if(rev_mind && rev_mind.current && !rev_mind.current.isDead() && T && T.z == map.zMainStation)
-			if(ishuman(rev_mind.current))
+		if (rev_mind && rev_mind.current && !rev_mind.current.isDead() && T && T.z == map.zMainStation)
+			if (ishuman(rev_mind.current))
 				return 0
 
 	return 1
 
 
 /datum/game_mode/revsquad/check_win()
-	if(check_rev_victory())
+	if (check_rev_victory())
 		finished = REVSQUAD_VICTORY_REVS
-	else if(check_heads_victory())
+	else if (check_heads_victory())
 		finished = REVSQUAD_VICTORY_HEADS
 
 ///////////////////////////////
 //Checks if the round is over//
 ///////////////////////////////
 /datum/game_mode/revsquad/check_finished()
-	if(config.continous_rounds)
-		if(finished != 0)
-			if(emergency_shuttle)
+	if (config.continous_rounds)
+		if (finished != 0)
+			if (emergency_shuttle)
 				emergency_shuttle.always_fake_recall = 0
 		return ..()
 	return finished != 0
 
 /datum/game_mode/revsquad/declare_completion()
-	if(finished == REVSQUAD_VICTORY_REVS)
+	if (finished == REVSQUAD_VICTORY_REVS)
 		feedback_set_details("round_end_result","win - heads killed")
 		completion_text = "<br><span class='danger'><FONT size = 3> The heads of staff were killed or abandoned the station! The revolutionaries win!</FONT></span>"
 		stat_collection.revsquad.revsquad_won = 1
-	else if(finished == REVSQUAD_VICTORY_HEADS)
+	else if (finished == REVSQUAD_VICTORY_HEADS)
 		feedback_set_details("round_end_result","loss - rev heads killed")
 		completion_text = "<br><span class='danger'>The heads of staff managed to stop the revolution!</FONT></span>"
 	..()
@@ -218,27 +218,27 @@
 /datum/game_mode/proc/auto_declare_completion_revsquad()
 	var/list/targets = list()
 	var/text = ""
-	if(head_revolutionaries.len || istype(ticker.mode,/datum/game_mode/revolution))
+	if (head_revolutionaries.len || istype(ticker.mode,/datum/game_mode/revolution))
 		var/icon/logo1 = icon('icons/mob/mob.dmi', "rev_head-logo")
 		end_icons += logo1
 		var/tempstate = end_icons.len
 		text += "<img src='logo_[tempstate].png'><span class = 'big bold'The revolutionary squad members were:</span> <img src='logo_[tempstate].png'>"
 
-		for(var/datum/mind/headrev in head_revolutionaries)
-			if(headrev.current)
+		for (var/datum/mind/headrev in head_revolutionaries)
+			if (headrev.current)
 				var/icon/flat = getFlatIcon(headrev.current, SOUTH, 1, 1)
 				end_icons += flat
 				tempstate = end_icons.len
 				text += "<br><img src='logo_[tempstate].png'> <b>[headrev.key]</b> was <b>[headrev.name]</b> ("
-				if(headrev.current.isDead())
+				if (headrev.current.isDead())
 					text += "died"
 					flat.Turn(90)
 					end_icons[tempstate] = flat
-				else if(headrev.current.z != map.zMainStation)
+				else if (headrev.current.z != map.zMainStation)
 					text += "fled the station"
 				else
 					text += "survived the revolution"
-				if(headrev.current.real_name != headrev.name)
+				if (headrev.current.real_name != headrev.name)
 					text += " as [headrev.current.real_name]"
 			else
 				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
@@ -248,31 +248,31 @@
 				text += "body destroyed"
 			text += ")"
 
-			for(var/datum/objective/mutiny/objective in headrev.objectives)
+			for (var/datum/objective/mutiny/objective in headrev.objectives)
 				targets |= objective.target
 
 
-	if(revolutionaries.len || istype(ticker.mode,/datum/game_mode/revolution))
+	if (revolutionaries.len || istype(ticker.mode,/datum/game_mode/revolution))
 		var/icon/logo2 = icon('icons/mob/mob.dmi', "rev-logo")
 		end_icons += logo2
 		var/tempstate = end_icons.len
 		text += "<br><img src='logo_[tempstate].png'> <FONT size = 2><b>The recruited revolutionaries were:</B></FONT> <img src='logo_[tempstate].png'>"
 
-		for(var/datum/mind/rev in revolutionaries)
-			if(rev.current)
+		for (var/datum/mind/rev in revolutionaries)
+			if (rev.current)
 				var/icon/flat = getFlatIcon(rev.current, SOUTH, 1, 1)
 				end_icons += flat
 				tempstate = end_icons.len
 				text += "<br><img src='logo_[tempstate].png'> <b>[rev.key]</b> was <b>[rev.name]</b> ("
-				if(rev.current.isDead())
+				if (rev.current.isDead())
 					text += "died"
 					flat.Turn(90)
 					end_icons[tempstate] = flat
-				else if(rev.current.z != map.zMainStation)
+				else if (rev.current.z != map.zMainStation)
 					text += "fled the station"
 				else
 					text += "survived the revolution"
-				if(rev.current.real_name != rev.name)
+				if (rev.current.real_name != rev.name)
 					text += " as [rev.current.real_name]"
 			else
 				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
@@ -284,31 +284,31 @@
 
 
 
-	if( head_revolutionaries.len || revolutionaries.len )
+	if ( head_revolutionaries.len || revolutionaries.len )
 		var/icon/logo3 = icon('icons/mob/mob.dmi', "nano-logo")
 		end_icons += logo3
 		var/tempstate = end_icons.len
 		text += "<br><img src='logo_[tempstate].png'> <span class = 'big bold'>The heads of staff were:</span> <img src='logo_[tempstate].png'>"
 
 		var/list/heads = get_all_heads()
-		for(var/datum/mind/head in heads)
+		for (var/datum/mind/head in heads)
 			var/target = (head in targets)
-			if(target)
+			if (target)
 				text += "<span class='red'>"
-			if(head.current)
+			if (head.current)
 				var/icon/flat = getFlatIcon(head.current, SOUTH, 1, 1)
 				end_icons += flat
 				tempstate = end_icons.len
 				text += "<br><img src='logo_[tempstate].png'> <b>[head.key]</b> was <b>[head.name]</b> ("
-				if(head.current.isDead())
+				if (head.current.isDead())
 					text += "died"
 					flat.Turn(90)
 					end_icons[tempstate] = flat
-				else if(head.current.z != map.zMainStation)
+				else if (head.current.z != map.zMainStation)
 					text += "fled the station"
 				else
 					text += "survived the revolution"
-				if(head.current.real_name != head.name)
+				if (head.current.real_name != head.name)
 					text += " as [head.current.real_name]"
 			else
 				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
@@ -317,7 +317,7 @@
 				text += "<br><img src='logo_[tempstate].png'> <b>[head.key]</b> was <b>[head.name]</b> ("
 				text += "body destroyed"
 			text += ")"
-			if(target)
+			if (target)
 				text += "</span>"
 
 		text += "<br /><hr>"

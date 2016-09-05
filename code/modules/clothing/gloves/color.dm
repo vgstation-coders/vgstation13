@@ -12,14 +12,14 @@
 	var/next_shock = 0
 
 /obj/item/clothing/gloves/yellow/power/Touch(var/atom/A, mob/living/user, prox)
-	if(prox == 0 && user.a_intent == I_HURT)
+	if (prox == 0 && user.a_intent == I_HURT)
 		var/time = 100
 		var/turf/T = get_turf(user)
 		var/turf/U = get_turf(A)
 		var/obj/structure/cable/cable = locate() in T
-		if(!cable || !istype(cable))
+		if (!cable || !istype(cable))
 			return
-		if(world.time < next_shock)
+		if (world.time < next_shock)
 			to_chat(user, "<span class='warning'>[src] aren't ready to shock again!</span>")
 			return
 		user.visible_message("<span class='warning'>[user.name] fires an arc of electricity!</span>", \
@@ -27,25 +27,25 @@
 			"You hear the loud crackle of electricity!")
 		var/datum/powernet/PN = cable.get_powernet()
 		var/obj/item/projectile/beam/lightning/L = getFromPool(/obj/item/projectile/beam/lightning, T)
-		if(PN)
+		if (PN)
 			L.damage = PN.get_electrocute_damage()
 			var/datum/organ/external/OE = user.get_active_hand_organ()
 
-			if(L.damage >= 200)
+			if (L.damage >= 200)
 				user.apply_damage(15, BURN, OE.name)
 				time = 200
 				to_chat(user, "<span class='warning'>[src] overload\s from the massive current, shocking you in the process!")
-			else if(L.damage >= 100)
+			else if (L.damage >= 100)
 				user.apply_damage(5, BURN, OE.name)
 				time = 150
 				to_chat(user, "<span class='warning'>[src] overload\s from the massive current, shocking you in the process!")
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 			s.set_up(5, 1, user)
 			s.start()
-		if(L.damage <= 0)
+		if (L.damage <= 0)
 			returnToPool(L)
 			//del(L)
-		if(L)
+		if (L)
 			playsound(get_turf(src), 'sound/effects/eleczap.ogg', 75, 1)
 			L.tang = adjustAngle(get_angle(U,T))
 			L.icon = midicon
@@ -173,9 +173,9 @@
 	
 /obj/item/clothing/gloves/white/advanced/attack_self(mob/user)
 	var/mob/living/carbon/human/M = user
-	if(!istype(M))
+	if (!istype(M))
 		return
-	if(current_gun)
+	if (current_gun)
 		to_chat(M, "<span class ='notice'>Your gun evaporates into thin air!</span>")
 		qdel(current_gun)
 		current_gun = null
@@ -183,11 +183,11 @@
 		spawn(50)
 			charging = FALSE
 		return
-	if(!charging)
-		if(!M.get_active_hand())
+	if (!charging)
+		if (!M.get_active_hand())
 			var/obj/item/weapon/gun/projectile/handgun/G = new
 			current_gun = G
-			if(!M.miming) //nonmimes get a loud version
+			if (!M.miming) //nonmimes get a loud version
 				G.silenced = FALSE
 				G.fire_sound = 'sound/weapons/Gunshot.ogg'
 			M.put_in_active_hand(G)

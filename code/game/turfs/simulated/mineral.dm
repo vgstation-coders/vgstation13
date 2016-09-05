@@ -4,7 +4,7 @@
 //PLASMA
 
 /turf/simulated/floor/mineral/New()
-	if(floor_tile)
+	if (floor_tile)
 		material = floor_tile.material
 	..()
 

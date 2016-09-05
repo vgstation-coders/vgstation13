@@ -8,9 +8,9 @@
  	var/space_overlay2 = null
 
 /datum/universal_state/christmas/OnTurfChange(var/turf/T)
-	if(istype(T,/turf/simulated/floor))
+	if (istype(T,/turf/simulated/floor))
 		new /obj/structure/snow(T)
-	if(istype(T,/turf/space) && !istype(T,/turf/space/transit))
+	if (istype(T,/turf/space) && !istype(T,/turf/space/transit))
 		var/turf/space/spess=T
 		spess.overlays += space_overlay1
 		spess.overlays += space_overlay2
@@ -23,15 +23,15 @@
 	to_chat(world, "<span class='sinister' style='font-size:22pt'>You feel a sudden chill in the air...</span>")
 
 	// Yes, this will lag.  No, there's nothing I can do about it.
-	for(var/turf/T in turfs)
+	for (var/turf/T in turfs)
 		OnTurfChange(T)
 
 /client/proc/smissmas()
 	set category = "Fun"
 	set name = "Execute Smissmas"
-	if(!holder)
+	if (!holder)
 		return
 	var/confirm = alert(src, "Are you sure? This will tamper with the universal state of all things!", "Confirm", "Yes", "No")
-	if(confirm != "Yes")
+	if (confirm != "Yes")
 		return
 	SetUniversalState(/datum/universal_state/christmas)

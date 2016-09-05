@@ -26,7 +26,7 @@ var/datum/cameranet/cameranet = new()
 	x &= ~(CHUNK_SIZE - 1)
 	y &= ~(CHUNK_SIZE - 1)
 	var/key = "[x],[y],[z]"
-	if(!chunks[key])
+	if (!chunks[key])
 		chunks[key] = new /datum/camerachunk(null, x, y, z)
 
 	return chunks[key]
@@ -42,18 +42,18 @@ var/datum/cameranet/cameranet = new()
 
 	var/list/visibleChunks = list()
 
-	for(var/x = x1; x <= x2; x += CHUNK_SIZE)
-		for(var/y = y1; y <= y2; y += CHUNK_SIZE)
+	for (var/x = x1; x <= x2; x += CHUNK_SIZE)
+		for (var/y = y1; y <= y2; y += CHUNK_SIZE)
 			visibleChunks |= getCameraChunk(x, y, ai.z)
 
 	var/list/remove = ai.visibleCameraChunks - visibleChunks
 	var/list/add = visibleChunks - ai.visibleCameraChunks
 
-	for(var/chunk in remove)
+	for (var/chunk in remove)
 		var/datum/camerachunk/c = chunk
 		c.remove(ai)
 
-	for(var/chunk in add)
+	for (var/chunk in add)
 		var/datum/camerachunk/c = chunk
 		c.add(ai)
 
@@ -62,13 +62,13 @@ var/datum/cameranet/cameranet = new()
 /datum/cameranet/proc/updateVisibility(atom/A, var/opacity_check = 1)
 
 
-	if(!ticker || (opacity_check && !A.opacity))
+	if (!ticker || (opacity_check && !A.opacity))
 		return
 	majorChunkChange(A, 2)
 
 /datum/cameranet/proc/updateChunk(x, y, z)
 	// 0xf = 15
-	if(!chunkGenerated(x, y, z))
+	if (!chunkGenerated(x, y, z))
 		return
 	var/datum/camerachunk/chunk = getCameraChunk(x, y, z)
 	chunk.hasChanged()
@@ -76,19 +76,19 @@ var/datum/cameranet/cameranet = new()
 // Removes a camera from a chunk.
 
 /datum/cameranet/proc/removeCamera(obj/machinery/camera/c)
-	if(c.can_use())
+	if (c.can_use())
 		majorChunkChange(c, 0)
 
 // Add a camera to a chunk.
 
 /datum/cameranet/proc/addCamera(obj/machinery/camera/c)
-	if(c.can_use())
+	if (c.can_use())
 		majorChunkChange(c, 1)
 
 // Used for Cyborg cameras. Since portable cameras can be in ANY chunk.
 
 /datum/cameranet/proc/updatePortableCamera(obj/machinery/camera/c)
-	if(c.can_use())
+	if (c.can_use())
 		majorChunkChange(c, 1)
 	//else
 	//	majorChunkChange(c, 0)
@@ -101,11 +101,11 @@ var/datum/cameranet/cameranet = new()
 
 /datum/cameranet/proc/majorChunkChange(atom/c, var/choice)
 	// 0xf = 15
-	if(!c)
+	if (!c)
 		return
 
 	var/turf/T = get_turf(c)
-	if(T)
+	if (T)
 		var/x1 = max(0, T.x - (CHUNK_SIZE / 2)) & ~(CHUNK_SIZE - 1)
 		var/y1 = max(0, T.y - (CHUNK_SIZE / 2)) & ~(CHUNK_SIZE - 1)
 		var/x2 = min(world.maxx, T.x + (CHUNK_SIZE / 2)) & ~(CHUNK_SIZE - 1)
@@ -113,14 +113,14 @@ var/datum/cameranet/cameranet = new()
 
 //		to_chat(world, "X1: [x1] - Y1: [y1] - X2: [x2] - Y2: [y2]")
 
-		for(var/x = x1; x <= x2; x += CHUNK_SIZE)
-			for(var/y = y1; y <= y2; y += CHUNK_SIZE)
-				if(chunkGenerated(x, y, T.z))
+		for (var/x = x1; x <= x2; x += CHUNK_SIZE)
+			for (var/y = y1; y <= y2; y += CHUNK_SIZE)
+				if (chunkGenerated(x, y, T.z))
 					var/datum/camerachunk/chunk = getCameraChunk(x, y, T.z)
-					if(choice == 0)
+					if (choice == 0)
 						// Remove the camera.
 						chunk.cameras -= c
-					else if(choice == 1)
+					else if (choice == 1)
 						// You can't have the same camera in the list twice.
 						chunk.cameras |= c
 					chunk.hasChanged()
@@ -137,10 +137,10 @@ var/datum/cameranet/cameranet = new()
 
 /datum/cameranet/proc/checkTurfVis(var/turf/position)
 	var/datum/camerachunk/chunk = getCameraChunk(position.x, position.y, position.z)
-	if(chunk)
-		if(chunk.changed)
+	if (chunk)
+		if (chunk.changed)
 			chunk.hasChanged(1) // Update now, no matter if it's visible or not.
-		if(chunk.visibleTurfs[position])
+		if (chunk.visibleTurfs[position])
 			return 1
 	return 0
 
@@ -150,7 +150,7 @@ var/datum/cameranet/cameranet = new()
 /turf/verb/view_chunk()
 	set src in world
 
-	if(cameranet.chunkGenerated(x, y, z))
+	if (cameranet.chunkGenerated(x, y, z))
 		var/datum/camerachunk/chunk = cameranet.getCameraChunk(x, y, z)
 		usr.client.debug_variables(chunk)
 */

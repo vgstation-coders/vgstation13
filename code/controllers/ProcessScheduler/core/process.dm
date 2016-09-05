@@ -159,7 +159,7 @@ datum/controller/process/proc/hung()
 datum/controller/process/proc/handleHung()
 	var/datum/lastObj = last_object
 	var/lastObjType = "null"
-	if(istype(lastObj))
+	if (istype(lastObj))
 		lastObjType = lastObj.type
 
 	var/msg = "[name] process hung at tick #[ticks]. Process was unresponsive for [(TimeOfHour - run_start) / 10] seconds and was restarted. Last task: [last_task]. Last Object Type: [lastObjType]"
@@ -206,7 +206,7 @@ datum/controller/process/proc/scheck(var/tickId = 0)
 
 datum/controller/process/proc/update()
 	// Clear delta
-	if(previousStatus != status)
+	if (previousStatus != status)
 		setStatus(status)
 
 	var/elapsedTime = getElapsedTime()
@@ -246,20 +246,20 @@ datum/controller/process/proc/getStatus()
 	return status
 
 datum/controller/process/proc/getStatusText(var/s = 0)
-	if(!s)
+	if (!s)
 		s = status
-	switch(s)
-		if(PROCESS_STATUS_IDLE)
+	switch (s)
+		if (PROCESS_STATUS_IDLE)
 			return "idle"
-		if(PROCESS_STATUS_QUEUED)
+		if (PROCESS_STATUS_QUEUED)
 			return "queued"
-		if(PROCESS_STATUS_RUNNING)
+		if (PROCESS_STATUS_RUNNING)
 			return "running"
-		if(PROCESS_STATUS_MAYBE_HUNG)
+		if (PROCESS_STATUS_MAYBE_HUNG)
 			return "maybe hung"
-		if(PROCESS_STATUS_PROBABLY_HUNG)
+		if (PROCESS_STATUS_PROBABLY_HUNG)
 			return "probably hung"
-		if(PROCESS_STATUS_HUNG)
+		if (PROCESS_STATUS_HUNG)
 			return "HUNG"
 		else
 			return "UNKNOWN"

@@ -33,28 +33,28 @@
 	update_icon()
 
 /obj/item/weapon/paper_pack/attack_self()
-	if(usr.loc)
+	if (usr.loc)
 		new papertype(usr.loc)
 		usepaper(1)
 
 /obj/item/weapon/paper_pack/proc/usepaper(var/sheetcount = 0)
 	var/usedpaper = 0 //tracks the actual paper removed
-	if(sheetcount && sheetcount <= amount)
+	if (sheetcount && sheetcount <= amount)
 		usedpaper = sheetcount
 		amount -= sheetcount
-	if(sheetcount && sheetcount > amount)
+	if (sheetcount && sheetcount > amount)
 		usedpaper = sheetcount - amount
 		amount = 0
 	update_icon()
 	return usedpaper
 
 /obj/item/weapon/paper_pack/update_icon()
-	if(amount)
-		if(amount>14)
+	if (amount)
+		if (amount>14)
 			icon_state = "[pptype]pp_large"
-		else if(amount>8)
+		else if (amount>8)
 			icon_state = "[pptype]pp_medium"
-		else if(amount>0)
+		else if (amount>0)
 			icon_state = "[pptype]pp_small"
 		name = "[pptype]paper pack"
 		desc = "A pack of [pptype]papers, secured by some red ribbon."
@@ -64,7 +64,7 @@
 
 /obj/item/weapon/paper_pack/examine(mob/user)
 	..()
-	if(amount)
+	if (amount)
 		to_chat(user, "<span class='info'>There are [amount] sheets in the pack.</span>")
 
 /obj/item/weapon/paper_pack/verb/ribbontie()
@@ -72,8 +72,8 @@
 	set category = "Object"
 	set src in usr
 
-	if(amount <= 5) //lag protection and general nonsense avoidance. Could be reduced, but for now just lets you empty it (why you would do this, I don't know)
-		for(var/i = 1; i <= amount; i++)
+	if (amount <= 5) //lag protection and general nonsense avoidance. Could be reduced, but for now just lets you empty it (why you would do this, I don't know)
+		for (var/i = 1; i <= amount; i++)
 			new papertype(usr.loc)
 		usepaper(amount)
 		to_chat(usr, "<span class='notice'>You pick the ribbon knot and drop all the papers.</span>")

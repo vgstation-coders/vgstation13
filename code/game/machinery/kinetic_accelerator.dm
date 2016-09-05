@@ -12,7 +12,7 @@
 	var/maxspeed = 2
 
 /obj/machinery/kinetic_accelerator/Crossed(var/atom/movable/A)
-	if(!istype(A))
+	if (!istype(A))
 		return
-	if(A.throwing)
+	if (A.throwing)
 		A.throw_speed=min(maxspeed,A.throw_speed+power)

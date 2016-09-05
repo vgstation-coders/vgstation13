@@ -30,7 +30,7 @@
 	update_icon()
 
 /obj/machinery/atmospherics/miner/wrenchAnchor(mob/user)
-	if(on)
+	if (on)
 		on = 0
 		update_icon()
 	..()
@@ -55,9 +55,9 @@
 
 /obj/machinery/atmospherics/miner/attack_hand(var/mob/user)
 	..()
-	if(!Adjacent(user))
+	if (!Adjacent(user))
 		to_chat(user, "<span class='warning'>You can't toggle \the [src] from that far away.</span>")
-	else if(anchored)
+	else if (anchored)
 		on=!on
 		power_change()
 		to_chat(user, "<span class='warning'>You toggle \the [src] [on ? "on" : "off"].</span>")
@@ -70,12 +70,12 @@
 
 /obj/machinery/atmospherics/miner/update_icon()
 	src.overlays = 0
-	if(stat & NOPOWER)
+	if (stat & NOPOWER)
 		return
-	if(on)
+	if (on)
 		var/new_icon_state="on"
 		var/new_color = overlay_color
-		if(stat & BROKEN)
+		if (stat & BROKEN)
 			new_icon_state="broken"
 			new_color="#FF0000"
 		var/image/I = image(icon, icon_state=new_icon_state, dir=src.dir)
@@ -83,19 +83,19 @@
 		overlays += I
 
 /obj/machinery/atmospherics/miner/process()
-	if(stat & NOPOWER)
+	if (stat & NOPOWER)
 		return
 	if (!on)
 		return
 
 	var/oldstat=stat
-	if(!istype(loc,/turf/simulated))
+	if (!istype(loc,/turf/simulated))
 		stat |= BROKEN
 	else
 		stat &= ~BROKEN
-	if(stat!=oldstat)
+	if (stat!=oldstat)
 		update_icon()
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		return
 
 	var/datum/gas_mixture/environment = loc.return_air()
@@ -111,7 +111,7 @@
 	// Internal pressure bound (screwed up calc, won't be used anyway)
 	//pressure_delta = min(pressure_delta, (internal_pressure - environment_pressure))
 
-	if(pressure_delta > 0.1)
+	if (pressure_delta > 0.1)
 		var/transfer_moles = pressure_delta*environment.volume/(pumping.temperature * R_IDEAL_GAS_EQUATION)
 
 		var/datum/gas_mixture/removed = pumping.remove(transfer_moles)

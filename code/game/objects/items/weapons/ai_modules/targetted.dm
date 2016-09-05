@@ -45,14 +45,14 @@
 	updateLaw()
 
 /obj/item/weapon/aiModule/targetted/updateLaw()
-	if(!targetName)
+	if (!targetName)
 		law = initial(law)
 	else
 		law = replacetext(initial(law),"<name>",targetName)
 	desc = "\A [name]: '[law]'"
 
 /obj/item/weapon/aiModule/targetted/validate(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
-	if(!targetName)
+	if (!targetName)
 		to_chat(usr, "No name detected on module, please enter one.")
 		return 0
 	return ..()

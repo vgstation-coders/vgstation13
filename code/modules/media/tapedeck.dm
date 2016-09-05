@@ -62,16 +62,16 @@
 
 /obj/machinery/media/tapedeck/update_icon()
 	overlays = 0
-	if(stat & (NOPOWER|BROKEN) || !anchored)
-		if(stat & BROKEN)
+	if (stat & (NOPOWER|BROKEN) || !anchored)
+		if (stat & BROKEN)
 			icon_state = "[state_base]-broken"
 		else
 			icon_state = "[state_base]-nopower"
 		stop_playing()
 		return
 	icon_state = state_base
-	if(playing)
-		if(emagged)
+	if (playing)
+		if (emagged)
 			overlays += image(icon = icon, icon_state = "[state_base]-emagged")
 		else
 			overlays += image(icon = icon, icon_state = "[state_base]-running")
@@ -80,10 +80,10 @@
 	return world.time > last_reload + JUKEBOX_RELOAD_COOLDOWN
 
 /obj/machinery/media/tapedeck/attack_hand(var/mob/user)
-	if(stat & NOPOWER)
+	if (stat & NOPOWER)
 		to_chat(usr, "<span class='warning'>You don't see anything to mess with.</span>")
 		return
-	if(stat & BROKEN && playlist!=null)
+	if (stat & BROKEN && playlist!=null)
 		user.visible_message("<span class='danger'>[user.name] smacks the side of \the [src.name].</span>","<span class='warning'>You hammer the side of \the [src.name].</span>")
 		stat &= ~BROKEN
 		playlist=null
@@ -96,8 +96,8 @@
 	//if(allowed(user))
 	//	t += " | <a href=\"?src=\ref[src];screen=[JUKEBOX_SCREEN_SETTINGS]\">Settings</a>"
 	t += "</div>"
-	switch(screen)
-		if(JUKEBOX_SCREEN_MAIN)
+	switch (screen)
+		if (JUKEBOX_SCREEN_MAIN)
 			t += ScreenMain(user)
 		//if(JUKEBOX_SCREEN_SETTINGS) t += ScreenSettings(user)
 
@@ -111,13 +111,13 @@
 	var/t = "<h1>[src] Interface</h1>"
 	t += "<b>Power:</b> <a href='?src=\ref[src];power=1'>[playing?"On":"Off"]</a><br />"
 	t += "<b>Play Mode:</b> <a href='?src=\ref[src];mode=1'>[loopModeNames[loop_mode]]</a><br />"
-	if(playlist == null)
+	if (playlist == null)
 		t += "\[DOWNLOADING PLAYLIST, PLEASE WAIT\]"
 	else
-		if(req_access.len == 0 || allowed(user))
-			if(check_reload())
+		if (req_access.len == 0 || allowed(user))
+			if (check_reload())
 				t += "<b>Playlist:</b> "
-				for(var/plid in playlists)
+				for (var/plid in playlists)
 					t += "<a href='?src=\ref[src];playlist=[plid]'>[playlists[plid]]</a>"
 			else
 				t += "<i>Please wait before changing playlists.</i>"
@@ -136,17 +136,17 @@
 		//
 		////////////////////////////
 
-		if(current_song)
+		if (current_song)
 			var/datum/song_info/song=playlist[current_song]
 			t += "<b>Current song:</b> [song.artist] - [song.title]<br />"
-		if(next_song)
+		if (next_song)
 			var/datum/song_info/song=playlist[next_song]
 			t += "<b>Up next:</b> [song.artist] - [song.title]<br />"
 		t += "<table class='prettytable'><tr><th colspan='2'>Artist - Title</th><th>Album</th><th>Controls</th></tr>"
 		var/i
 		var/can_change=1
 
-		for(i = 1,i <= playlist.len,i++)
+		for (i = 1,i <= playlist.len,i++)
 			var/datum/song_info/song=playlist[i]
 			t += {"
 			<tr>
@@ -191,11 +191,11 @@
 
 /obj/machinery/media/jukebox/attackby(obj/item/W, mob/user)
 	. = ..()
-	if(.)
+	if (.)
 		return .
-	if(istype(W, /obj/item/weapon/card/emag))
+	if (istype(W, /obj/item/weapon/card/emag))
 		current_song = 0
-		if(!emagged)
+		if (!emagged)
 			playlist_id = "emagged"
 			last_reload=world.time
 			playlist=null
@@ -206,10 +206,10 @@
 			update_icon()
 			update_music()
 			return 1
-	else if(istype(W,/obj/item/weapon/wrench))
+	else if (istype(W,/obj/item/weapon/wrench))
 		var/un = !anchored ? "" : "un"
 		user.visible_message("<span class='notice'>[user.name] begins [un]locking \the [src.name]'s casters.</span>","<span class='notice'>You begin [un]locking \the [src.name]'s casters.</span>")
-		if(do_after(user, src,30))
+		if (do_after(user, src,30))
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 			anchored = !anchored
 			user.visible_message("<span class='notice'>[user.name] [un]locks \the [src.name]'s casters.</span>","<span class='warning'>You [un]lock \the [src.name]'s casters.</span>")
@@ -218,11 +218,11 @@
 			update_icon()
 
 /obj/machinery/media/jukebox/Topic(href, href_list)
-	if(isobserver(usr) && !isAdminGhost(usr))
+	if (isobserver(usr) && !isAdminGhost(usr))
 		to_chat(usr, "<span class='warning'>You can't push buttons when your fingers go right through them, dummy.</span>")
 		return
 
-	if(..())
+	if (..())
 		return 1
 
 	if (href_list["power"])
@@ -230,20 +230,20 @@
 		update_music()
 		update_icon()
 
-	if("screen" in href_list)
+	if ("screen" in href_list)
 		screen=text2num(href_list["screen"])
 
-	if("act" in href_list)
-		switch(href_list["act"])
-			if("Save Settings")
+	if ("act" in href_list)
+		switch (href_list["act"])
+			if ("Save Settings")
 				var/datum/money_account/new_linked_account = get_money_account(text2num(href_list["payableto"]),z)
-				if(!new_linked_account)
+				if (!new_linked_account)
 					to_chat(usr, "<span class='warning'>Unable to link new account. Aborting.</span>")
 					return
 
 				change_cost = max(0,text2num(href_list["set_change_cost"]))
 				linked_account = new_linked_account
-				if("lock" in href_list && href_list["lock"] != "")
+				if ("lock" in href_list && href_list["lock"] != "")
 					change_access = list(text2num(href_list["lock"]))
 				else
 					change_access = list()
@@ -253,7 +253,7 @@
 		href_list["playlist"]=playlist_id // Hax
 
 	if (href_list["playlist"])
-		if(!check_reload())
+		if (!check_reload())
 			to_chat(usr, "<span class='warning'>You must wait 60 seconds between playlist reloads.</span>")
 			return
 		playlist_id=href_list["playlist"]
@@ -269,7 +269,7 @@
 		selected_song=Clamp(text2num(href_list["song"]),1,playlist.len)
 		next_song = selected_song
 		selected_song = 0
-		if(!current_song)
+		if (!current_song)
 			update_music()
 			update_icon()
 
@@ -282,14 +282,14 @@
 	return attack_hand(usr)
 
 /obj/machinery/media/jukebox/process()
-	if(!playlist && config.media_base_url)
+	if (!playlist && config.media_base_url)
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
 		testing("[src] - Updating playlist from [url]...")
 		var/response = world.Export(url)
 		playlist=list()
-		if(response)
+		if (response)
 			var/json = file2text(response["CONTENT"])
-			if("/>" in json)
+			if ("/>" in json)
 				visible_message("<span class='warning'>[bicon(src)] \The [src] buzzes, unable to update its playlist.</span>","<em>You hear a buzz.</em>")
 				stat &= BROKEN
 				update_icon()
@@ -298,15 +298,15 @@
 			reader.tokens = reader.ScanJson(json)
 			reader.i = 1
 			var/songdata = reader.read_value()
-			for(var/list/record in songdata)
+			for (var/list/record in songdata)
 				playlist += new /datum/song_info(record)
-			if(playlist.len==0)
+			if (playlist.len==0)
 				visible_message("<span class='warning'>[bicon(src)] \The [src] buzzes, unable to update its playlist.</span>","<em>You hear a buzz.</em>")
 				stat &= BROKEN
 				update_icon()
 				return
 			visible_message("<span class='notice'>[bicon(src)] \The [src] beeps, and the menu on its front fills with [playlist.len] items.</span>","<em>You hear a beep.</em>")
-			if(autoplay)
+			if (autoplay)
 				playing=1
 				autoplay=0
 		else
@@ -314,29 +314,29 @@
 			stat &= BROKEN
 			update_icon()
 			return
-	if(playing)
+	if (playing)
 		var/datum/song_info/song
-		if(current_song)
+		if (current_song)
 			song = playlist[current_song]
-		if(!current_song || (song && world.time >= media_start_time + song.length))
+		if (!current_song || (song && world.time >= media_start_time + song.length))
 			current_song=1
-			if(next_song)
+			if (next_song)
 				current_song = next_song
 				next_song = 0
 			else
-				switch(loop_mode)
-					if(JUKEMODE_SHUFFLE)
+				switch (loop_mode)
+					if (JUKEMODE_SHUFFLE)
 						current_song=rand(1,playlist.len)
-					if(JUKEMODE_REPEAT_SONG)
+					if (JUKEMODE_REPEAT_SONG)
 						current_song=current_song
-					if(JUKEMODE_PLAY_ONCE)
+					if (JUKEMODE_PLAY_ONCE)
 						playing=0
 						update_icon()
 						return
 			update_music()
 
 /obj/machinery/media/jukebox/update_music()
-	if(current_song && playing)
+	if (current_song && playing)
 		var/datum/song_info/song = playlist[current_song]
 		media_url = song.url
 		media_start_time = world.time
@@ -405,7 +405,7 @@
 
 /obj/machinery/media/jukebox/superjuke/attackby(obj/item/W, mob/user)
 	// NO FUN ALLOWED.  Emag list is included, anyway.
-	if(istype(W, /obj/item/weapon/card/emag))
+	if (istype(W, /obj/item/weapon/card/emag))
 		to_chat(user, "<span class='warning'>Your [W] refuses to touch \the [src]!</span>")
 		return
 	..()

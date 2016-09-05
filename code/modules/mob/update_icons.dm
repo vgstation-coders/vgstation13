@@ -29,7 +29,7 @@
 	return update_inv_hand(GRASP_RIGHT_HAND)
 
 /mob/proc/update_inv_hands(update_icons = 1)
-	for(var/i = 1 to held_items.len)
+	for (var/i = 1 to held_items.len)
 		update_inv_hand(i, update_icons)
 
 /mob/proc/update_inv_wear_mask()

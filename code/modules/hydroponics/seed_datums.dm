@@ -84,34 +84,34 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 	randomize_icon()
 
-	if(prob(40))
+	if (prob(40))
 		harvest_repeat = 1
 
-	if(prob(5))
+	if (prob(5))
 		consume_gasses = list()
 		var/gas = pick("oxygen","nitrogen","plasma","carbon_dioxide")
 		consume_gasses[gas] = rand(3,9)
 
-	if(prob(5))
+	if (prob(5))
 		exude_gasses = list()
 		var/gas = pick("oxygen","nitrogen","plasma","carbon_dioxide")
 		exude_gasses[gas] = rand(3,9)
 
 	chems = list()
-	if(prob(80))
+	if (prob(80))
 		chems[NUTRIMENT] = list(rand(1,5),rand(5,10))
 
 	var/additional_chems = rand(0,5)
-	for(var/x=1;x<=additional_chems;x++)
-		if(!add_random_chemical())
+	for (var/x=1;x<=additional_chems;x++)
+		if (!add_random_chemical())
 			break
 
-	if(prob(90))
+	if (prob(90))
 		nutrient_consumption = rand(30)/100
 	else
 		nutrient_consumption = 0
 
-	if(prob(90))
+	if (prob(90))
 		water_consumption = rand(10)
 	else
 		water_consumption = 0
@@ -126,47 +126,47 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	lowkpa_tolerance = rand(10,50)
 	highkpa_tolerance = rand(100,300)
 
-	if(prob(5))
+	if (prob(5))
 		alter_temp = 1
 
 	/*if(prob(1))
 		immutable = -1*/ //todo this
 
 	var/carnivore_prob = rand(100)
-	if(carnivore_prob < 5)
+	if (carnivore_prob < 5)
 		carnivorous = 2
-	else if(carnivore_prob < 10)
+	else if (carnivore_prob < 10)
 		carnivorous = 1
 
-	if(prob(5))
+	if (prob(5))
 		parasite = 1
 
 	var/vine_prob = rand(100)
-	if(vine_prob < 5)
+	if (vine_prob < 5)
 		spread = 2
-	else if(vine_prob < 10)
+	else if (vine_prob < 10)
 		spread = 1
 
-	if(prob(10))
+	if (prob(10))
 		biolum = 1
 		biolum_colour = "#[get_random_colour(1)]"
 
-	if(prob(5))
+	if (prob(5))
 		hematophage = 1
 
-	if(prob(5))
+	if (prob(5))
 		thorny = 1
 
-	if(prob(5))
+	if (prob(5))
 		stinging = 1
 
-	if(prob(5))
+	if (prob(5))
 		ligneous = 1
 
 	var/juicy_prob = rand(100)
-	if(juicy_prob < 5)
+	if (juicy_prob < 5)
 		juicy = 2
-	else if(juicy_prob < 10)
+	else if (juicy_prob < 10)
 		juicy = 1
 
 	endurance = rand(60,100)
@@ -227,9 +227,9 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		TRAMADOL = 100,
 	)
 
-	for(var/rid in chems)
+	for (var/rid in chems)
 		possible_chems -= rid
-	if(!possible_chems.len)
+	if (!possible_chems.len)
 		return 0
 	var/new_chem = pickweight(possible_chems)
 	chems[new_chem] = list(rand(1,severity/3),rand(10-Ceiling(severity/3),15))
@@ -310,78 +310,78 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 //Mutates a specific trait/set of traits. Used by the Bioballistic Delivery System.
 /datum/seed/proc/apply_gene(var/datum/plantgene/gene, var/mode)
 
-	if(!gene || !gene.values || immutable > 0)
+	if (!gene || !gene.values || immutable > 0)
 		return
 
-	switch(gene.genetype)
-		if(GENE_PHYTOCHEMISTRY)
-			if(!chems || mode == GENEGUN_MODE_PURGE)
+	switch (gene.genetype)
+		if (GENE_PHYTOCHEMISTRY)
+			if (!chems || mode == GENEGUN_MODE_PURGE)
 				chems = list()
 
 			var/list/gene_value = gene.values[1]
-			for(var/rid in gene_value)
+			for (var/rid in gene_value)
 				var/list/gene_chem = gene_value[rid]
 
-				if(!(rid in chems) || !chems[rid])
+				if (!(rid in chems) || !chems[rid])
 					chems[rid] = gene_chem.Copy()
 					continue
 
-				for(var/i=1 to gene_chem.len)
-					if(isnull(gene_chem[i]))
+				for (var/i=1 to gene_chem.len)
+					if (isnull(gene_chem[i]))
 						chems[rid][i] = 0
 						gene_chem[i] = 0
-					if(!chems[rid][i])
+					if (!chems[rid][i])
 						continue
 
-					if(chems[rid][i])
+					if (chems[rid][i])
 						chems[rid][i] = max(1,round((gene_chem[i] + chems[rid][i])/2))
 					else
 						chems[rid][i] = gene_chem[i]
 
-			switch(mode)
-				if(GENEGUN_MODE_PURGE)
+			switch (mode)
+				if (GENEGUN_MODE_PURGE)
 					potency 			= gene.values[2]
 					teleporting 		= gene.values[3]
-				if(GENEGUN_MODE_SPLICE)
+				if (GENEGUN_MODE_SPLICE)
 					potency 			= round(mix(gene.values[2], potency, rand(40, 60)/100), 0.1)
 					teleporting 		= max(gene.values[3], teleporting)
 
-		if(GENE_MORPHOLOGY)
-			if(gene.values[1])
-				if(!products || mode == GENEGUN_MODE_PURGE)
+		if (GENE_MORPHOLOGY)
+			if (gene.values[1])
+				if (!products || mode == GENEGUN_MODE_PURGE)
 					products = list()
 				products |= gene.values[1]
-			switch(mode)
-				if(GENEGUN_MODE_PURGE)
+			switch (mode)
+				if (GENEGUN_MODE_PURGE)
 					thorny 				= gene.values[2]
 					stinging 			= gene.values[3]
 					ligneous 			= gene.values[4]
 					juicy 				= gene.values[5]
-				if(GENEGUN_MODE_SPLICE)
+				if (GENEGUN_MODE_SPLICE)
 					thorny 				= max(gene.values[2], thorny)
 					stinging 			= max(gene.values[3], stinging)
 					ligneous 			= max(gene.values[4], ligneous)
 					juicy 				= max(gene.values[5], juicy)
 
-		if(GENE_BIOLUMINESCENCE)
-			switch(mode)
-				if(GENEGUN_MODE_PURGE)
+		if (GENE_BIOLUMINESCENCE)
+			switch (mode)
+				if (GENEGUN_MODE_PURGE)
 					biolum 				= gene.values[1]
 					biolum_colour 		= gene.values[2]
-				if(GENEGUN_MODE_SPLICE)
+				if (GENEGUN_MODE_SPLICE)
 					biolum 				= max(gene.values[1], biolum)
 					biolum_colour 		= BlendRGB(gene.values[2], biolum_colour, rand(40, 60)/100)
 
-		if(GENE_ECOLOGY)
-			switch(mode)
-				if(GENEGUN_MODE_PURGE)
+		if (GENE_ECOLOGY)
+			switch (mode)
+				if (GENEGUN_MODE_PURGE)
 					ideal_heat 			= gene.values[1]
 					heat_tolerance 		= gene.values[2]
 					ideal_light 		= gene.values[3]
 					light_tolerance 	= gene.values[4]
 					lowkpa_tolerance	= gene.values[5]
 					highkpa_tolerance	= gene.values[6]
-				if(GENEGUN_MODE_SPLICE)
+				if (GENEGUN_MODE_SPLICE)
 					ideal_heat 			= Ceiling(mix(gene.values[1], ideal_heat, 		rand(40, 60)/100))
 					heat_tolerance 		= Ceiling(mix(gene.values[2], heat_tolerance, 	rand(40, 60)/100))
 					ideal_light 		= Ceiling(mix(gene.values[3], ideal_light,		rand(40, 60)/100))
@@ -389,62 +389,62 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 					lowkpa_tolerance	= Ceiling(mix(gene.values[5], lowkpa_tolerance, rand(40, 60)/100))
 					highkpa_tolerance	= Ceiling(mix(gene.values[6], highkpa_tolerance,rand(40, 60)/100))
 
-		if(GENE_ECOPHYSIOLOGY)
-			switch(mode)
-				if(GENEGUN_MODE_PURGE)
+		if (GENE_ECOPHYSIOLOGY)
+			switch (mode)
+				if (GENEGUN_MODE_PURGE)
 					toxins_tolerance 	= gene.values[1]
 					pest_tolerance 		= gene.values[2]
 					weed_tolerance 		= gene.values[3]
 					lifespan 			= gene.values[4]
 					endurance			= gene.values[5]
-				if(GENEGUN_MODE_SPLICE)
+				if (GENEGUN_MODE_SPLICE)
 					toxins_tolerance 	= round(mix(gene.values[1], toxins_tolerance,	rand(40, 60)/100), 0.1)
 					pest_tolerance 		= round(mix(gene.values[2], pest_tolerance, 	rand(40, 60)/100), 0.1)
 					weed_tolerance 		= round(mix(gene.values[3], weed_tolerance, 	rand(40, 60)/100), 0.1)
 					lifespan 			= round(mix(gene.values[4], lifespan, 			rand(40, 60)/100), 0.1)
 					endurance			= round(mix(gene.values[5], endurance, 			rand(40, 60)/100), 0.1)
 
-		if(GENE_METABOLISM)
-			switch(mode)
-				if(GENEGUN_MODE_PURGE)
+		if (GENE_METABOLISM)
+			switch (mode)
+				if (GENEGUN_MODE_PURGE)
 					nutrient_consumption	= gene.values[1]
 					water_consumption 		= gene.values[2]
 					alter_temp 				= gene.values[3]
-				if(GENEGUN_MODE_SPLICE)
+				if (GENEGUN_MODE_SPLICE)
 					nutrient_consumption	= mix(gene.values[1], nutrient_consumption,	rand(40, 60)/100)
 					water_consumption 		= mix(gene.values[2], water_consumption,	rand(40, 60)/100)
 					alter_temp 				= max(gene.values[3], alter_temp)
 			var/list/new_gasses = gene.values[4]
-			if(islist(new_gasses))
-				if(!exude_gasses || mode == GENEGUN_MODE_PURGE)
+			if (islist(new_gasses))
+				if (!exude_gasses || mode == GENEGUN_MODE_PURGE)
 					exude_gasses = list()
 				exude_gasses |= new_gasses
 
-		if(GENE_NUTRITION)
-			switch(mode)
-				if(GENEGUN_MODE_PURGE)
+		if (GENE_NUTRITION)
+			switch (mode)
+				if (GENEGUN_MODE_PURGE)
 					carnivorous 		= gene.values[1]
 					parasite 			= gene.values[2]
 					hematophage 		= gene.values[3]
-				if(GENEGUN_MODE_SPLICE)
+				if (GENEGUN_MODE_SPLICE)
 					carnivorous 		= max(gene.values[1], carnivorous)
 					parasite 			= max(gene.values[2], parasite)
 					hematophage 		= max(gene.values[3], hematophage)
 			var/list/new_gasses = gene.values[4]
-			if(islist(new_gasses))
-				if(!consume_gasses || mode == GENEGUN_MODE_PURGE)
+			if (islist(new_gasses))
+				if (!consume_gasses || mode == GENEGUN_MODE_PURGE)
 					consume_gasses = list()
 				consume_gasses |= new_gasses
 
-		if(GENE_DEVELOPMENT)
-			switch(mode)
-				if(GENEGUN_MODE_PURGE)
+		if (GENE_DEVELOPMENT)
+			switch (mode)
+				if (GENEGUN_MODE_PURGE)
 					production 			= gene.values[1]
 					maturation 			= gene.values[2]
 					spread 				= gene.values[3]
 					harvest_repeat 		= gene.values[4]
 					yield				= gene.values[5]
-				if(GENEGUN_MODE_SPLICE)
+				if (GENEGUN_MODE_SPLICE)
 					production 			= round(mix(gene.values[1], production,	rand(40, 60)/100), 0.1)
 					maturation 			= round(mix(gene.values[2], maturation,	rand(40, 60)/100), 0.1)
 					spread 				= max(gene.values[3], spread)
@@ -453,20 +453,20 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 //Returns a list of the desired trait values.
 /datum/seed/proc/get_gene(var/genetype)
-	if(!genetype)
+	if (!genetype)
 		return 0
 
 	var/datum/plantgene/P = new()
 	P.genetype = genetype
 
-	switch(genetype)
-		if(GENE_PHYTOCHEMISTRY)
+	switch (genetype)
+		if (GENE_PHYTOCHEMISTRY)
 			P.values = list(
 				(chems                	? chems                	: 0),
 				(potency				? potency 				: 0),
 				(teleporting          	? teleporting          	: 0) // Yes, bluespace anomalies are caused by a mystery chemical, I don't have to explain shit
 			)
-		if(GENE_MORPHOLOGY)
+		if (GENE_MORPHOLOGY)
 			P.values = list(
 				(products           	? products            	: 0),
 				(thorny           	 	? thorny           		: 0),
@@ -474,12 +474,12 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				(ligneous             	? ligneous            	: 0),
 				(juicy             		? juicy             	: 0)
 			)
-		if(GENE_BIOLUMINESCENCE)
+		if (GENE_BIOLUMINESCENCE)
 			P.values = list(
 				(biolum               	? biolum              	: 0),
 				(biolum_colour        	? biolum_colour      	: 0)
 			)
-		if(GENE_ECOLOGY)
+		if (GENE_ECOLOGY)
 			P.values = list(
 				(ideal_heat           	? ideal_heat          	: 0),
 				(heat_tolerance      	? heat_tolerance     	: 0),
@@ -488,7 +488,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				(lowkpa_tolerance     	? lowkpa_tolerance    	: 0),
 				(highkpa_tolerance   	? highkpa_tolerance   	: 0)
 			)
-		if(GENE_ECOPHYSIOLOGY)
+		if (GENE_ECOPHYSIOLOGY)
 			P.values = list(
 				(toxins_tolerance     	? toxins_tolerance    	: 0),
 				(pest_tolerance       	? pest_tolerance      	: 0),
@@ -496,21 +496,21 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 				(lifespan      			? lifespan				: 0),
 				(endurance       		? endurance       		: 0)
 			)
-		if(GENE_METABOLISM)
+		if (GENE_METABOLISM)
 			P.values = list(
 				(nutrient_consumption 	? nutrient_consumption	: 0),
 				(water_consumption    	? water_consumption   	: 0),
 				(alter_temp    			? alter_temp    		: 0),
 				(exude_gasses    		? exude_gasses    		: 0)
 			)
-		if(GENE_NUTRITION)
+		if (GENE_NUTRITION)
 			P.values = list(
 				(carnivorous 			? carnivorous			: 0),
 				(parasite    			? parasite   			: 0),
 				(hematophage    		? hematophage    		: 0),
 				(consume_gasses    		? consume_gasses    	: 0)
 			)
-		if(GENE_DEVELOPMENT)
+		if (GENE_DEVELOPMENT)
 			P.values = list(
 				(production           	? production          	: 0),
 				(maturation           	? maturation          	: 0),
@@ -522,17 +522,17 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 //This may be a new line. Update the global if it is.
 /datum/seed/proc/add_newline_to_controller()
-	if(name == "new line" || !(name in plant_controller.seeds))
+	if (name == "new line" || !(name in plant_controller.seeds))
 		uid = plant_controller.seeds.len + 1
 		name = "[uid]"
 		plant_controller.seeds[name] = src
 
 //Place the plant products at the feet of the user.
 /datum/seed/proc/harvest(var/mob/user,var/yield_mod = 1)
-	if(!user)
+	if (!user)
 		return
 
-	if(isnull(products) || !products.len || yield <= 0)
+	if (isnull(products) || !products.len || yield <= 0)
 		to_chat(user, "<span class='warning'>You fail to harvest anything useful.</span>")
 	else
 		to_chat(user, "You harvest from the [display_name].")
@@ -540,8 +540,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		add_newline_to_controller()
 
 		var/total_yield = 0
-		if(yield > -1)
-			if(isnull(yield_mod) || yield_mod < 0)
+		if (yield > -1)
+			if (isnull(yield_mod) || yield_mod < 0)
 				yield_mod = 1
 				total_yield = yield
 			else
@@ -549,83 +549,83 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 			total_yield = round(max(1,total_yield))
 
 		currently_querying = list()
-		for(var/i = 0;i<total_yield;i++)
+		for (var/i = 0;i<total_yield;i++)
 			var/product_type = pick(products)
 
 			var/obj/item/product
 
-			if(ispath(product_type, /obj/item/stack))
+			if (ispath(product_type, /obj/item/stack))
 				product = drop_stack(product_type, get_turf(user), 1, user)
 			else
 				product = new product_type(get_turf(user))
 
 			score["stuffharvested"] += 1 //One point per product unit
 
-			if(mysterious)
+			if (mysterious)
 				product.name += "?"
 				product.desc += " On second thought, something about this one looks strange."
 
-			if(biolum)
-				if(biolum_colour)
+			if (biolum)
+				if (biolum_colour)
 					product.light_color = biolum_colour
 				//product.set_light(1+round(potency/50))
 				product.set_light(2)
 
 			//Handle spawning in living, mobile products (like dionaea).
-			if(istype(product,/mob/living))
+			if (istype(product,/mob/living))
 
 				product.visible_message("<span class='notice'>The pod disgorges [product]!</span>")
 				handle_living_product(product)
 
 			// Make sure the product is inheriting the correct seed type reference.
-			else if(istype(product,/obj/item/weapon/reagent_containers/food/snacks/grown))
+			else if (istype(product,/obj/item/weapon/reagent_containers/food/snacks/grown))
 				var/obj/item/weapon/reagent_containers/food/snacks/grown/current_product = product
 				current_product.plantname = name
-			else if(istype(product,/obj/item/weapon/grown))
+			else if (istype(product,/obj/item/weapon/grown))
 				var/obj/item/weapon/grown/current_product = product
 				current_product.plantname = name
 
 /datum/seed/proc/check_harvest(var/mob/user, var/obj/machinery/portable_atmospherics/hydroponics/tray)
 	var/success = 1
 	var/stung = 0
-	if(thorny || stinging)
+	if (thorny || stinging)
 		var/mob/living/carbon/human/H = user
-		if(istype(H))
-			if(!H.check_body_part_coverage(HANDS))
-				for(var/assblast in list(LIMB_RIGHT_HAND, LIMB_LEFT_HAND))
-					if(stung)
+		if (istype(H))
+			if (!H.check_body_part_coverage(HANDS))
+				for (var/assblast in list(LIMB_RIGHT_HAND, LIMB_LEFT_HAND))
+					if (stung)
 						continue
 					var/datum/organ/external/affecting = H.get_organ(assblast)
-					if(affecting && affecting.is_existing() && affecting.is_usable() && affecting.is_organic())
+					if (affecting && affecting.is_existing() && affecting.is_usable() && affecting.is_organic())
 						stung = 1
-						if(thorny)
-							if(affecting.take_damage(5+carnivorous*5, 0))
+						if (thorny)
+							if (affecting.take_damage(5+carnivorous*5, 0))
 								H.UpdateDamageIcon()
 								H.updatehealth()
 							else
 								H.adjustBruteLoss(5+carnivorous*5)
 							to_chat(H, "<span class='danger'>You are prickled by the sharp thorns on \the [seed_name]!</span>")
-							if(H.species && !(H.species.flags & NO_PAIN))
+							if (H.species && !(H.species.flags & NO_PAIN))
 								success = 0
-						if(stinging)
-							if(chems && chems.len)
-								for(var/rid in chems)
+						if (stinging)
+							if (chems && chems.len)
+								for (var/rid in chems)
 									H.reagents.add_reagent(rid, Clamp(1, 5, potency/10))
 								to_chat(H, "<span class='danger'>You are stung by \the [seed_name]!</span>")
-								if(hematophage)
-									if(tray && H.species && !(H.species.flags & NO_BLOOD)) //the indentation gap doesn't stop from getting wider
+								if (hematophage)
+									if (tray && H.species && !(H.species.flags & NO_BLOOD)) //the indentation gap doesn't stop from getting wider
 										var/drawing = min(15, H.vessel.get_reagent_amount(BLOOD))
 										H.vessel.remove_reagent(BLOOD, drawing)
 										tray.reagents.add_reagent(BLOOD, drawing)
-	if(ligneous && success)
-		if(istype(user, /mob/living/carbon))
+	if (ligneous && success)
+		if (istype(user, /mob/living/carbon))
 			var/mob/living/carbon/M = user
-			for(var/obj/item/I in M.held_items)
-				if(I.is_sharp())
+			for (var/obj/item/I in M.held_items)
+				if (I.is_sharp())
 					success = 1
 					break
 
-			if(!success)
+			if (!success)
 				to_chat(M, "<span class='warning'>The stems on this plant are too tough to cut by hand, you'll need something sharp in one of your hands to harvest it.</span>")
 
 	return success
@@ -642,7 +642,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 // is set to a new datum copied from the original. This datum won't actually
 // be put into the global datum list until the product is harvested, though.
 /datum/seed/proc/diverge(var/modified)
-	if(immutable > 0)
+	if (immutable > 0)
 		return
 
 	//Set up some basic information.
@@ -653,18 +653,18 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	new_seed.large = large
 
 	//Copy over everything else.
-	if(products)
+	if (products)
 		new_seed.products = products.Copy()
-	if(mutants)
+	if (mutants)
 		new_seed.mutants = mutants.Copy()
-	if(chems)
+	if (chems)
 		new_seed.chems = chems.Copy()
-	if(consume_gasses)
+	if (consume_gasses)
 		new_seed.consume_gasses = consume_gasses.Copy()
-	if(exude_gasses)
+	if (exude_gasses)
 		new_seed.exude_gasses = exude_gasses.Copy()
 
-	if(modified != -1)
+	if (modified != -1)
 		new_seed.seed_name = "[(roundstart ? "[(modified ? "modified" : "mutant")] " : "")][seed_name]"
 		new_seed.display_name = "[(roundstart ? "[(modified ? "modified" : "mutant")] " : "")][display_name]"
 	else

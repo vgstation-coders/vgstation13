@@ -15,7 +15,7 @@
 
 	New()
 		..()
-		if(!icon_state)
+		if (!icon_state)
 			icon_state = "pill[rand(1,20)]"
 
 /obj/item/weapon/reagent_containers/pill/attack_self(mob/user as mob)
@@ -40,7 +40,7 @@
 	user.drop_from_inventory(src) // Update icon
 	if (ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(H.species.chem_flags & NO_EAT)
+		if (H.species.chem_flags & NO_EAT)
 			src.forceMove(get_turf(H))
 			H.visible_message("<span class='warning'>\The [src] falls through and onto the ground.</span>", "<span class='notice'>You hear \the [src] plinking around for a second before it hits the ground below you.</span>")
 			return 0
@@ -68,9 +68,9 @@
 
 //OOP, HO!
 /obj/item/weapon/reagent_containers/pill/proc/injest(mob/M as mob)
-	if(!reagents)
+	if (!reagents)
 		return
-	if(!M)
+	if (!M)
 		return
 	if (!src.is_empty())
 		reagents.reaction(M, INGEST)
@@ -245,7 +245,7 @@
 
 /obj/item/weapon/storage/pill_bottle/time_release/New()
 	..()
-	for(var/i=1 to 7)
+	for (var/i=1 to 7)
 		new /obj/item/weapon/reagent_containers/pill/time_release(src)
 
 /obj/item/weapon/reagent_containers/pill/time_release
@@ -255,9 +255,9 @@
 	flags = FPRINT | NOREACT
 
 /obj/item/weapon/reagent_containers/pill/time_release/injest(mob/M as mob)
-	if(!reagents)
+	if (!reagents)
 		return
-	if(!M)
+	if (!M)
 		return
 	var/timer = round(reagents.get_reagent_amount(SUGAR),1)
 	forceMove(M)
@@ -273,7 +273,7 @@
 
 /obj/item/weapon/storage/pill_bottle/random/New()
 	..()
-	for(var/i=1 to 14)
+	for (var/i=1 to 14)
 		new /obj/item/weapon/reagent_containers/pill/random(src)
 
 /obj/item/weapon/reagent_containers/pill/random

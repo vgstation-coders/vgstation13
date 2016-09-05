@@ -40,23 +40,23 @@
 /mob/living/simple_animal/hostile/humanoid/New()
 	..()
 
-	for(var/I in visible_items)
+	for (var/I in visible_items)
 		var/image/new_img = image(I, icon_state = visible_items[I], layer = MOB_LAYER)
 		new_img.plane = MOB_PLANE
 		overlays.Add(new_img)
 
 /mob/living/simple_animal/hostile/humanoid/Die()
 	..()
-	if(corpse)
+	if (corpse)
 		new corpse(loc)
 
-	if(items_to_drop.len)
+	if (items_to_drop.len)
 
-		for(var/object in items_to_drop)
+		for (var/object in items_to_drop)
 
-			if(ispath(object))
+			if (ispath(object))
 				new object (get_turf(src))
-			else if(istype(object, /atom/movable))
+			else if (istype(object, /atom/movable))
 				var/atom/movable/A = object
 				A.forceMove(get_turf(src))
 

@@ -64,13 +64,13 @@
 
 	var/dat = {"<tbody id="StoreTable">"}
 
-	for(var/category_name in categories)
+	for (var/category_name in categories)
 		var/list/category_items = categories[category_name]
 		dat += {"
 			<table>
 			<th><h2>[category_name]</h2></th>
 			"}
-		for(var/store_item in category_items)
+		for (var/store_item in category_items)
 			var/datum/storeitem/SI = new store_item()
 			dat += {"
 				<tr><td><A href='?src=\ref[src];choice=buy;chosen_item=[store_item]'>[get_display_name(SI)]</A></td></tr>
@@ -108,30 +108,30 @@
 
 /obj/machinery/computer/merch/attack_hand(var/mob/user)
 	. = ..()
-	if(.)
+	if (.)
 		interface.hide(user)
 		return
 
 	interact(user)
 
 /obj/machinery/computer/merch/interact(mob/user)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
-	if(user.stat || user.restrained() || !allowed(user))
+	if (user.stat || user.restrained() || !allowed(user))
 		return
 
 	interface.show(user)
 
 /obj/machinery/computer/merch/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 
 	src.add_fingerprint(usr)
 
-	switch(href_list["choice"])
+	switch (href_list["choice"])
 		if ("buy")
 			var/itemID = href_list["chosen_item"]
-			if(!centcomm_store.PlaceOrder(usr,itemID,src))
+			if (!centcomm_store.PlaceOrder(usr,itemID,src))
 				to_chat(usr, "[bicon(src)]<span class='warning'>Unable to charge your account.</span>")
 			else
 				to_chat(usr, "[bicon(src)]<span class='notice'>Transaction complete! Enjoy your product.</span>")
@@ -141,9 +141,9 @@
 
 /obj/machinery/computer/merch/update_icon()
 
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		icon_state = "comm_logsb"
-	else if(stat & NOPOWER)
+	else if (stat & NOPOWER)
 		icon_state = "comm_logs0"
 	else
 		icon_state = initial(icon_state)

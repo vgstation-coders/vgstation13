@@ -23,7 +23,7 @@
 /datum/robot_component/proc/uninstall()
 
 /datum/robot_component/proc/destroy()
-	if(wrapped)
+	if (wrapped)
 		qdel (wrapped)
 		wrapped = null
 
@@ -35,17 +35,17 @@
 	uninstall()
 
 /datum/robot_component/proc/take_damage(brute, electronics, sharp)
-	if(installed != 1)
+	if (installed != 1)
 		return
 
 	brute_damage += brute
 	electronics_damage += electronics
 
-	if(brute_damage + electronics_damage >= max_damage)
+	if (brute_damage + electronics_damage >= max_damage)
 		destroy()
 
 /datum/robot_component/proc/heal_damage(brute, electronics)
-	if(installed != 1)
+	if (installed != 1)
 		// If it's not installed, can't repair it.
 		return 0
 
@@ -57,10 +57,10 @@
 
 
 /datum/robot_component/proc/consume_power()
-	if(toggled == 0)
+	if (toggled == 0)
 		powered = 0
 		return
-	if(owner.cell.charge >= energy_consumption)
+	if (owner.cell.charge >= energy_consumption)
 		owner.cell.use(energy_consumption)
 		powered = 1
 	else
@@ -180,9 +180,9 @@
 	var/mode = 1;
 
 /obj/item/device/robotanalyzer/attack(mob/living/M as mob, mob/living/user as mob)
-	if(( (M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
+	if (( (M_CLUMSY in user.mutations) || user.getBrainLoss() >= 60) && prob(50))
 		to_chat(user, text("<span class='warning'>You try to analyze the floor's vitals!</span>"))
-		for(var/mob/O in viewers(M, null))
+		for (var/mob/O in viewers(M, null))
 			O.show_message(text("<span class='warning'>[user] has analyzed the floor's vitals!</span>"), 1)
 		user.show_message(text("<span class='notice'>Analyzing Results for The floor:\n\t Overall Status: Healthy</span>"), 1)
 		user.show_message(text("<span class='notice'>\t Damage Specifics: [0]-[0]-[0]-[0]</span>"), 1)
@@ -192,7 +192,7 @@
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
-	if(!istype(M, /mob/living/silicon/robot))
+	if (!istype(M, /mob/living/silicon/robot))
 		to_chat(user, "<span class='warning'>You can't analyze non-robotic things!</span>")
 		return
 
@@ -202,14 +202,14 @@
 	user.show_message("<span class='notice'>Analyzing Results for [M]:\n\t Overall Status: [M.stat > 1 ? "fully disabled" : "[M.health - M.halloss]% functional"]</span>")
 	user.show_message("\t Key: <font color='#FFA500'>Electronics</font>/<font color='red'>Brute</font>", 1)
 	user.show_message("\t Damage Specifics: <font color='#FFA500'>[BU]</font> - <font color='red'>[BR]</font>")
-	if(M.tod && M.stat == DEAD)
+	if (M.tod && M.stat == DEAD)
 		user.show_message("<span class='notice'>Time of Disable: [M.tod]</span>")
 
 	var/mob/living/silicon/robot/H = M
 	var/list/damaged = H.get_damaged_components(1,1,1)
 	user.show_message("<span class='notice'>Localized Damage:</span>",1)
-	if(length(damaged)>0)
-		for(var/datum/robot_component/org in damaged)
+	if (length(damaged)>0)
+		for (var/datum/robot_component/org in damaged)
 			user.show_message(text("<span class='notice'>\t []: [][] - [] - [] - []</span>",	\
 			capitalize(org.name),					\
 			(org.installed == -1)	?	"<font color='red'><b>DESTROYED</b></font> "							:"",\
@@ -219,7 +219,7 @@
 			(org.powered)	?	"Power ON"		:	"<font color='red'>Power OFF</font>"),1)
 	else
 		user.show_message("<span class='notice'>\t Components are OK.</span>",1)
-	if(H.emagged && prob(5))
+	if (H.emagged && prob(5))
 		user.show_message("<span class='warning'>\t ERROR: INTERNAL SYSTEMS COMPROMISED</span>",1)
 	src.add_fingerprint(user)
 	return

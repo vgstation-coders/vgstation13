@@ -15,7 +15,7 @@
 	var/mob/living/carbon/human/supported_mob
 
 /obj/structure/support_rail/attackby(obj/item/weapon/W, mob/living/carbon/human/user as mob)
-	if(iswrench(W))
+	if (iswrench(W))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 		M.amount = 1
@@ -38,7 +38,7 @@
 	return
 
 /obj/structure/support_rail/attack_hand(mob/user as mob)
-	if(supported_mob) //Anyone can force you to let go
+	if (supported_mob) //Anyone can force you to let go
 		letgo()
 		add_fingerprint(user)
 	else

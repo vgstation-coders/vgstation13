@@ -106,7 +106,7 @@ mob
 			set name = "6. Add Overlay"
 			var/image/I
 
-			if(prob(50))
+			if (prob(50))
 				// Create an overlay with a defined direction
 				I = image(icon='_flat_demoIcons.dmi',icon_state="yellow",pixel_x = rand(-64,32), pixel_y = rand(-64,32), dir = pick(NORTH, SOUTH, EAST, WEST))
 			else
@@ -117,16 +117,16 @@ mob
 
 		Stress_Test()
 			set name = "7. Stress Test"
-			for(var/i = 0 to 1000)
+			for (var/i = 0 to 1000)
 				// Passing '2' to the third parameter forces it to generate a new icon, even if it's already cached
 				getFlatIcon(src,0,2)
-				if(prob(5))
+				if (prob(5))
 					Add_Overlay()
 			Browse_Icon()
 
 		Cache_Test()
 			set name = "8. Cache Test"
-			for(var/i = 0 to 1000)
+			for (var/i = 0 to 1000)
 				getFlatIcon(src)
 			Browse_Icon()
 

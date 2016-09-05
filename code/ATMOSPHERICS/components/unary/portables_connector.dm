@@ -20,7 +20,7 @@
 	..()
 	if (istype(loc, /turf/simulated/floor) && node)
 		var/turf/simulated/floor/floor = loc
-		if(floor.floor_tile && node.alpha == 128)
+		if (floor.floor_tile && node.alpha == 128)
 			underlays.Cut()
 	return
 
@@ -29,22 +29,22 @@
 
 /obj/machinery/atmospherics/unary/portables_connector/process()
 	. = ..()
-	if(!on)
+	if (!on)
 		return
-	if(!connected_device)
+	if (!connected_device)
 		on = 0
 		return
-	if(network)
+	if (network)
 		network.update = 1
 	return 1
 
 /obj/machinery/atmospherics/unary/portables_connector/Destroy()
-	if(connected_device)
+	if (connected_device)
 		connected_device.disconnect()
 
-	if(node)
+	if (node)
 		node.disconnect(src)
-		if(network)
+		if (network)
 			returnToPool(network)
 
 	node = null
@@ -54,10 +54,10 @@
 /obj/machinery/atmospherics/unary/portables_connector/return_network(obj/machinery/atmospherics/reference)
 	build_network()
 
-	if(reference==node)
+	if (reference==node)
 		return network
 
-	if(reference==connected_device)
+	if (reference==connected_device)
 		return network
 
 	return null
@@ -65,7 +65,7 @@
 /obj/machinery/atmospherics/unary/portables_connector/return_network_air(datum/pipe_network/reference)
 	var/list/results = list()
 
-	if(connected_device)
+	if (connected_device)
 		results += connected_device.air_contents
 
 	return results

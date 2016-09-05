@@ -43,10 +43,10 @@ minus the pound (#) symbol.
 
 proc/colour2html(colour)
 	var/T
-	for(T in html_colours)
-		if(ckey(T) == ckey(colour))
+	for (T in html_colours)
+		if (ckey(T) == ckey(colour))
 			break
-	if(!T)
+	if (!T)
 		world.log << "Warning!  Could not find matching colour entry for '[colour]'."
 		return "#FFFFFF"
 
@@ -57,7 +57,7 @@ proc/colour2html(colour)
 //HTMLASSOCIATE PROC
 
 proc/HTMLAssociate(colour, html)
-	if(html_colours.Find(colour))
+	if (html_colours.Find(colour))
 		world.log << "Changing [colour] from [html_colours[colour]] to [html]!"
 	html_colours[colour] = html
 
@@ -79,10 +79,10 @@ var/html_colours[0]
 proc/LoadHTMLAssociations()
 	var/savefile/F = new ("s_html.sav")
 	F["html_colours"] >> html_colours
-	if(!html_colours)
+	if (!html_colours)
 		html_colours = list()
 
-	if(!html_colours.len)
+	if (!html_colours.len)
 		HTMLAssociate("aliceblue",        "f0f8ff")
 		HTMLAssociate("antiquewhite",     "faebd7")
 		HTMLAssociate("aqua",             "00ffff")

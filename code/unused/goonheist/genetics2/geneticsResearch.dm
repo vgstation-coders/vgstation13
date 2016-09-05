@@ -22,13 +22,13 @@ var/datum/geneticsResearchManager/genResearch = new()
 	proc/setup()
 		researchTree = (typesof(/datum/geneticsResearchEntry) - /datum/geneticsResearchEntry) - /datum/geneticsResearchEntry/mutation
 
-		for(var/entry in researchTree)
+		for (var/entry in researchTree)
 			researchTree[entry] = new entry()
 			var/datum/geneticsResearchEntry/newEntry = researchTree[entry]
 
 			var/tier = newEntry.tier
 
-			if(researchTreeTiered["[tier]"] == null)
+			if (researchTreeTiered["[tier]"] == null)
 				researchTreeTiered["[tier]"] = new/list()
 
 			researchTreeTiered["[tier]"] += newEntry
@@ -37,9 +37,9 @@ var/datum/geneticsResearchManager/genResearch = new()
 		return
 
 	proc/isResearched(var/type)
-		if(researchTree.Find(type))
+		if (researchTree.Find(type))
 			var/datum/geneticsResearchEntry/E = researchTree[type]
-			if(E.isResearched == 1)
+			if (E.isResearched == 1)
 				return 1
 		return 0
 
@@ -49,27 +49,27 @@ var/datum/geneticsResearchManager/genResearch = new()
 		//tickDiff = (world.time - lastTick)
 		lastTick = world.time
 
-		if(researchMaterial < max_material)
+		if (researchMaterial < max_material)
 			researchMaterial++ //This is only temporary to regenerate points while this isnt finished yet.
 
-		for(var/datum/geneticsResearchEntry/entry in currentResearch)
+		for (var/datum/geneticsResearchEntry/entry in currentResearch)
 			entry.onTick()
-			if(entry.finishTime <= lastTick)
+			if (entry.finishTime <= lastTick)
 				entry.isResearched = 1
 				entry.onFinish()
 				currentResearch.Remove(entry)
 		return
 
 	proc/addResearch(var/datum/D)
-		if(istype(D, /datum/bioEffect))
+		if (istype(D, /datum/bioEffect))
 			var/datum/geneticsResearchEntry/mutation/M = new()
 
 			var/final_cost = src.mut_research_cost
 			if (genResearch.cost_discount)
 				final_cost -= round(final_cost * genResearch.cost_discount)
 
-			if(!src.debug_mode)
-				if(final_cost > researchMaterial)
+			if (!src.debug_mode)
+				if (final_cost > researchMaterial)
 					return 0
 				else
 					researchMaterial -= final_cost
@@ -96,14 +96,14 @@ var/datum/geneticsResearchManager/genResearch = new()
 			M.onBegin()
 			return 1
 
-		else if(istype(D, /datum/geneticsResearchEntry))
+		else if (istype(D, /datum/geneticsResearchEntry))
 
 			var/final_cost = D:researchCost
 			if (genResearch.cost_discount)
 				final_cost -= round(final_cost * genResearch.cost_discount)
 
-			if(!src.debug_mode)
-				if(final_cost > researchMaterial || D:isResearched)
+			if (!src.debug_mode)
+				if (final_cost > researchMaterial || D:isResearched)
 					return 0
 				else
 					researchMaterial -= final_cost
@@ -150,21 +150,21 @@ var/datum/geneticsResearchManager/genResearch = new()
 		return
 
 	proc/meetsRequirements()
-		if(src.isResearched == 1 || src.isResearched == -1)
+		if (src.isResearched == 1 || src.isResearched == -1)
 			return 0
 
-		if(genResearch.debug_mode)
+		if (genResearch.debug_mode)
 			return 1
 
-		if(src.hidden)
+		if (src.hidden)
 			return 0
 
-		for(var/X in src.requiredResearch) // Have we got the prerequisite researches?
-			if(!genResearch.isResearched(X))
+		for (var/X in src.requiredResearch) // Have we got the prerequisite researches?
+			if (!genResearch.isResearched(X))
 				return 0
 
-		for(var/X in src.requiredMutRes) // Do we have the required mutations researched?
-			if(!(X in genResearch.researchedMutations))
+		for (var/X in src.requiredMutRes) // Do we have the required mutations researched?
+			if (!(X in genResearch.researchedMutations))
 				return 0
 
 		if (genResearch.researchedMutations.len < src.requiredTotalMutRes) // Do we have the neccecary # of muts researched?
@@ -184,8 +184,8 @@ var/datum/geneticsResearchManager/genResearch = new()
 	onFinish()
 		..()
 		genResearch.researchedMutations[mutationId] = researchLevelPre
-		if(genResearch.researchedMutations[mutationId])
-			if(genResearch.researchedMutations[mutationId] < 3)
+		if (genResearch.researchedMutations[mutationId])
+			if (genResearch.researchedMutations[mutationId] < 3)
 				genResearch.researchedMutations[mutationId] += 1
 		else
 			genResearch.researchedMutations[mutationId] = 1

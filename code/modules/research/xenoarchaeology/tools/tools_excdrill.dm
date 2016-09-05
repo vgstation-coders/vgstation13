@@ -17,7 +17,7 @@
 
 /obj/item/weapon/pickaxe/excavationdrill/attack_self(mob/user as mob)
 	var/depth = input("Put the desired depth (1-30 centimeters).", "Set Depth", excavation_amount*2) as num
-	if(depth>30 || depth<1)
+	if (depth>30 || depth<1)
 		to_chat(user, "<span class='notice'>Invalid depth.</span>")
 		return
 	excavation_amount = depth/2

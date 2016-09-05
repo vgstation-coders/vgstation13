@@ -6,29 +6,29 @@
 
 /obj/item/weapon/paper/talisman/examine(mob/user)
 	..()
-	if(iscultist(user) || isobserver(user))
-		switch(imbue)
-			if("newtome")
+	if (iscultist(user) || isobserver(user))
+		switch (imbue)
+			if ("newtome")
 				to_chat(user, "This talisman has been imbued with the power of spawning a new Arcane Tome.")
-			if("armor")
+			if ("armor")
 				to_chat(user, "This talisman has been imbued with the power of clothing yourself in cult fighting gear.")
-			if("emp")
+			if ("emp")
 				to_chat(user, "This talisman has been imbued with the power of disabling technology in a small radius around you.")
-			if("conceal")
+			if ("conceal")
 				to_chat(user, "This talisman has been imbued with the power of concealing nearby runes.")
-			if("revealrunes")
+			if ("revealrunes")
 				to_chat(user, "This talisman has been imbued with the power of revealing hidden nearby runes.")
-			if("ire", "ego", "nahlizet", "certum", "veri", "jatkaa", "balaq", "mgar", "karazet", "geeri")
+			if ("ire", "ego", "nahlizet", "certum", "veri", "jatkaa", "balaq", "mgar", "karazet", "geeri")
 				to_chat(user, "This talisman has been imbued with the power of taking you to someplace else. You can read <i>[imbue]</i> on it.")
-			if("communicate")
+			if ("communicate")
 				to_chat(user, "This talisman has been imbued with the power of communicating your whispers to your allies.")
-			if("deafen")
+			if ("deafen")
 				to_chat(user, "This talisman has been imbued with the power of deafening visible enemies.")
-			if("blind")
+			if ("blind")
 				to_chat(user, "This talisman has been imbued with the power of blinding visible enemies.")
-			if("runestun")
+			if ("runestun")
 				to_chat(user, "This talisman has been imbued with the power of paralyzing the beings you touch with it. The effect works on silicons as well, but humans will also be muted for a short time.")
-			if("supply")
+			if ("supply")
 				to_chat(user, "This talisman has been imbued with the power of providing you and your allies with some supplies to start your cult.")
 			else
 				to_chat(user, "This talisman.....has no particular power. Is this some kind of joke?")
@@ -36,13 +36,13 @@
 		to_chat(user, "Something about the blood stains on this paper fills you with uneasiness.")
 
 /obj/item/weapon/paper/talisman/proc/findNullRod(var/atom/target)
-	if(istype(target,/obj/item/weapon/nullrod))
+	if (istype(target,/obj/item/weapon/nullrod))
 		var/turf/T = get_turf(target)
 		nullblock = 1
 		T.turf_animation('icons/effects/96x96.dmi',"nullding",-WORLD_ICON_SIZE,-WORLD_ICON_SIZE,MOB_LAYER+1,'sound/instruments/piano/Ab7.ogg',anim_plane = EFFECTS_PLANE)
 		return 1
-	else if(target.contents)
-		for(var/atom/A in target.contents)
+	else if (target.contents)
+		for (var/atom/A in target.contents)
 			findNullRod(A)
 	return 0
 
@@ -53,42 +53,42 @@
 
 
 /obj/item/weapon/paper/talisman/attack_self(mob/living/user as mob)
-	if(iscultist(user))
+	if (iscultist(user))
 		var/delete = 1
-		switch(imbue)
-			if("newtome")
+		switch (imbue)
+			if ("newtome")
 				call(/obj/effect/rune/proc/tomesummon)()
-			if("armor") //Fuck off with your shit /tg/. This isn't Edgy Rev+
+			if ("armor") //Fuck off with your shit /tg/. This isn't Edgy Rev+
 				call(/obj/effect/rune/proc/armor)()
-			if("emp")
+			if ("emp")
 				call(/obj/effect/rune/proc/emp)(usr.loc,3)
-			if("conceal")
+			if ("conceal")
 				call(/obj/effect/rune/proc/obscure)(2)
-			if("revealrunes")
+			if ("revealrunes")
 				call(/obj/effect/rune/proc/revealrunes)(src)
-			if("ire", "ego", "nahlizet", "certum", "veri", "jatkaa", "balaq", "mgar", "karazet", "geeri")
+			if ("ire", "ego", "nahlizet", "certum", "veri", "jatkaa", "balaq", "mgar", "karazet", "geeri")
 				var/turf/T1 = get_turf(user)
 				call(/obj/effect/rune/proc/teleport)(imbue)
 				var/turf/T2 = get_turf(user)
-				if(T1!=T2)
+				if (T1!=T2)
 					T1.turf_animation('icons/effects/effects.dmi',"rune_teleport")
-			if("communicate")
+			if ("communicate")
 				//If the user cancels the talisman this var will be set to 0
 				delete = call(/obj/effect/rune/proc/communicate)()
-			if("deafen")
+			if ("deafen")
 				deafen()
 				qdel(src)
-			if("blind")
+			if ("blind")
 				blind()
 				qdel(src)
-			if("runestun")
+			if ("runestun")
 				to_chat(user, "<span class='warning'>To use this talisman, attack your target directly.</span>")
 				return
-			if("supply")
+			if ("supply")
 				supply()
 		user.take_organ_damage(5, 0)
-		if(src && src.imbue!="supply" && src.imbue!="runestun")
-			if(delete)
+		if (src && src.imbue!="supply" && src.imbue!="runestun")
+			if (delete)
 				qdel(src)
 		return
 	else
@@ -97,8 +97,8 @@
 
 
 /obj/item/weapon/paper/talisman/attack(mob/living/carbon/T as mob, mob/living/user as mob)
-	if(iscultist(user))
-		if(imbue == "runestun")
+	if (iscultist(user))
+		if (imbue == "runestun")
 			user.take_organ_damage(5, 0)
 			runestun(T)
 			qdel(src)
@@ -108,7 +108,7 @@
 		..()
 
 /obj/item/weapon/paper/talisman/attack_animal(var/mob/living/simple_animal/M as mob)
-	if(istype(M, /mob/living/simple_animal/construct/harvester))
+	if (istype(M, /mob/living/simple_animal/construct/harvester))
 		attack_self(M)
 
 /obj/item/weapon/paper/talisman/proc/supply(var/key)
@@ -133,38 +133,38 @@
 
 
 /obj/item/weapon/paper/talisman/Topic(href, href_list)
-	if(!src)
+	if (!src)
 		return
 	if (usr.stat || usr.restrained() || !in_range(src, usr))
 		return
 
 	if (href_list["rune"])
-		switch(href_list["rune"])
-			if("newtome")
+		switch (href_list["rune"])
+			if ("newtome")
 				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
 				T.imbue = "newtome"
-			if("teleport")
+			if ("teleport")
 				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
 				var/list/words = list("ire" = "ire", "ego" = "ego", "nahlizet" = "nahlizet", "certum" = "certum", "veri" = "veri", "jatkaa" = "jatkaa", "balaq" = "balaq", "mgar" = "mgar", "karazet" = "karazet", "geeri" = "geeri")
 				T.imbue = input("Write your teleport destination rune:", "Rune Scribing") in words
-			if("emp")
+			if ("emp")
 				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
 				T.imbue = "emp"
-			if("conceal")
+			if ("conceal")
 				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
 				T.imbue = "conceal"
-			if("communicate")
+			if ("communicate")
 				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
 				T.imbue = "communicate"
-			if("runestun")
+			if ("runestun")
 				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
 				T.imbue = "runestun"
 			//if("armor")
 				//var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
 				//T.imbue = "armor"
-			if("soulstone")
+			if ("soulstone")
 				new /obj/item/device/soulstone(get_turf(usr))
-			if("construct")
+			if ("construct")
 				new /obj/structure/constructshell/cult(get_turf(usr))
 		src.uses--
 		supply()
@@ -180,17 +180,17 @@
 /obj/item/weapon/paper/talisman/proc/runestun(var/mob/living/T as mob)//When invoked as talisman, stun and mute the target mob.
 	usr.say("Dream sign ''Evil sealing talisman'[pick("'","`")]!")
 	nullblock = 0
-	for(var/turf/TU in range(T,1))
+	for (var/turf/TU in range(T,1))
 		findNullRod(TU)
-	if(nullblock)
+	if (nullblock)
 		usr.visible_message("<span class='danger'>[usr] invokes a talisman at [T], but they are unaffected!</span>")
 	else
 		usr.visible_message("<span class='danger'>[usr] invokes a talisman at [T]</span>")
 
-		if(issilicon(T))
+		if (issilicon(T))
 			T.Weaken(15)
 
-		else if(iscarbon(T))
+		else if (iscarbon(T))
 			var/mob/living/carbon/C = T
 			C.flash_eyes(visual = 1)
 			if (!(M_HULK in C.mutations))
@@ -201,41 +201,41 @@
 
 /obj/item/weapon/paper/talisman/proc/blind()
 	var/affected = 0
-	for(var/mob/living/carbon/C in view(2,usr))
+	for (var/mob/living/carbon/C in view(2,usr))
 		if (iscultist(C))
 			continue
 		nullblock = 0
-		for(var/turf/T in range(C,1))
+		for (var/turf/T in range(C,1))
 			findNullRod(T)
-		if(nullblock)
+		if (nullblock)
 			continue
 		C.eye_blurry += 30
 		C.eye_blind += 10
 		//talismans is weaker.
 		affected++
 		to_chat(C, "<span class='warning'>You feel a sharp pain in your eyes, and the world disappears into darkness..</span>")
-	if(affected)
+	if (affected)
 		usr.whisper("Sti[pick("'","`")] kaliesin!")
 		to_chat(usr, "<span class='warning'>Your talisman turns into gray dust, blinding those who not follow the Nar-Sie.</span>")
 
 
 /obj/item/weapon/paper/talisman/proc/deafen()
 	var/affected = 0
-	for(var/mob/living/carbon/C in range(7,usr))
+	for (var/mob/living/carbon/C in range(7,usr))
 		if (iscultist(C))
 			continue
 		nullblock = 0
-		for(var/turf/T in range(C,1))
+		for (var/turf/T in range(C,1))
 			findNullRod(T)
-		if(nullblock)
+		if (nullblock)
 			continue
 		C.ear_deaf += 30
 		//talismans is weaker.
 		C.show_message("\<span class='warning'>The world around you suddenly becomes quiet.</span>")
 		affected++
-	if(affected)
+	if (affected)
 		usr.whisper("Sti[pick("'","`")] kaliedir!")
 		to_chat(usr, "<span class='warning'>Your talisman turns into gray dust, deafening everyone around.</span>")
 		for (var/mob/V in orange(1,src))
-			if(!(iscultist(V)))
+			if (!(iscultist(V)))
 				V.show_message("<span class='warning'>Dust flows from [usr]'s hands for a moment, and the world suddenly becomes quiet..</span>")

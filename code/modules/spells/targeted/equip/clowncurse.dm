@@ -27,7 +27,7 @@
 
 /spell/targeted/equip_item/clowncurse/cast(list/targets, mob/user = usr)
 	..()
-	for(var/mob/living/carbon/human/target in targets)
+	for (var/mob/living/carbon/human/target in targets)
 		target.flash_eyes(visual = 1)
 		target.dna.SetSEState(CLUMSYBLOCK,1)
 		genemutcheck(target,CLUMSYBLOCK,null,MUTCHK_FORCED)
@@ -36,10 +36,10 @@
 /spell/targeted/equip_item/clowncurse/summon_item(var/newtype)
 	var/obj/item/new_item = new newtype
 	new_item.canremove = 0
-	if(istype(new_item, /obj/item/clothing/mask))
+	if (istype(new_item, /obj/item/clothing/mask))
 		var/obj/item/clothing/mask/M = new_item
 		M.can_flip = 0
-	if(istype(new_item, /obj/item/clothing/shoes/clown_shoes))
+	if (istype(new_item, /obj/item/clothing/shoes/clown_shoes))
 		var/obj/item/clothing/shoes/clown_shoes/M = new_item
 		M.wizard_garb = 1  // This means that wizards who are clown cursed can still cast robed spells.
 	return new_item

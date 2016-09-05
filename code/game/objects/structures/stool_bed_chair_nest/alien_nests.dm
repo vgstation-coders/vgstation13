@@ -17,9 +17,9 @@
 	..()
 
 /obj/structure/bed/nest/manual_unbuckle(mob/user as mob)
-	if(locked_atoms.len)
+	if (locked_atoms.len)
 		var/mob/M = locked_atoms[1]
-		if(M != user)
+		if (M != user)
 			M.visible_message(\
 				"<span class='notice'>[user.name] pulls [M.name] free from the sticky nest!</span>",\
 				"<span class='notice'>[user.name] pulls you free from the gelatinous resin.</span>",\
@@ -32,8 +32,8 @@
 				"<span class='warning'>You struggle to break free from the gelatinous resin...</span>",\
 				"<span class='notice'>You hear squelching...</span>")
 
-			if(do_after(user,src,1200,60,needhand = FALSE))
-				if(user && M && (user.locked_to == src))
+			if (do_after(user,src,1200,60,needhand = FALSE))
+				if (user && M && (user.locked_to == src))
 					unlock_atom(M)
 					overlays.len = 0
 		src.add_fingerprint(user)
@@ -42,17 +42,17 @@
 	if (locked_atoms.len || !ismob(M) || (get_dist(src, user) > 1) || (M.loc != src.loc) || user.restrained() || user.stat || M.locked_to || istype(user, /mob/living/silicon/pai) )
 		return
 
-	if(ishuman(M) && M.client && !M.lying)
+	if (ishuman(M) && M.client && !M.lying)
 		to_chat(user,"<span class='warning'>You must tackle them down before you can trap them on \the [src]</span>")
 		to_chat(M,"<span class='warning'>\The [user] is trying in vain to trap you on \the [src]</span>")
 		return
 
-	if(istype(M,/mob/living/carbon/alien))
+	if (istype(M,/mob/living/carbon/alien))
 		return
-	if(!istype(user,/mob/living/carbon/alien/humanoid) && !istype(user,/mob/living/simple_animal/hostile/alien))
+	if (!istype(user,/mob/living/carbon/alien/humanoid) && !istype(user,/mob/living/simple_animal/hostile/alien))
 		return
 
-	if(M == usr)
+	if (M == usr)
 		return
 	else
 		M.visible_message(\
@@ -81,27 +81,27 @@
 	healthcheck()
 
 /obj/structure/bed/nest/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(exposed_temperature > 300)
+	if (exposed_temperature > 300)
 		health -= 5
 		healthcheck()
 
 /obj/structure/bed/nest/proc/healthcheck()
-	if(health <= 0)
+	if (health <= 0)
 		qdel(src)
 
 /obj/structure/bed/nest/proc/stabilize()
-	if(!locked_atoms || !locked_atoms.len)
+	if (!locked_atoms || !locked_atoms.len)
 		return
 
 	var/mob/M = locked_atoms[1]
 
-	if(iscarbon(M) && (M.stat != DEAD) && (M.reagents.get_reagent_amount(STABILIZINE) < 1))
+	if (iscarbon(M) && (M.stat != DEAD) && (M.reagents.get_reagent_amount(STABILIZINE) < 1))
 		M.reagents.add_reagent(STABILIZINE, 2)
 	else
 		return
 
 	spawn(15)
-		if(!gcDestroyed && locked_atoms.len)
+		if (!gcDestroyed && locked_atoms.len)
 			stabilize()
 
 /obj/structure/bed/nest/acidable()

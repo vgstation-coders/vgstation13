@@ -45,7 +45,7 @@
 	pixel_x = rand(6,-6) * PIXEL_MULTIPLIER
 	pixel_y = rand(6,-6) * PIXEL_MULTIPLIER
 	//75% chance to grow up
-	if(prob(75))
+	if (prob(75))
 		amount_grown = 1
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/Die()
@@ -71,19 +71,19 @@
 	stance = HOSTILE_STANCE_IDLE
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/Life()
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
-	if(travelling_in_vent)
-		if(istype(src.loc, /turf))
+	if (travelling_in_vent)
+		if (istype(src.loc, /turf))
 			travelling_in_vent = 0
 			entry_vent = null
-	else if(entry_vent)
-		if(get_dist(src, entry_vent) <= 1)
-			if(entry_vent.network && entry_vent.network.normal_members.len)
+	else if (entry_vent)
+		if (get_dist(src, entry_vent) <= 1)
+			if (entry_vent.network && entry_vent.network.normal_members.len)
 				var/list/vents = list()
-				for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in entry_vent.network.normal_members)
+				for (var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in entry_vent.network.normal_members)
 					vents.Add(temp_vent)
-				if(!vents.len)
+				if (!vents.len)
 					entry_vent = null
 					return
 				var/obj/machinery/atmospherics/unary/vent_pump/exit_vent = pick(vents)
@@ -95,31 +95,31 @@
 					var/travel_time = round(get_dist(loc, exit_vent.loc) / 2)
 					spawn(travel_time)
 
-						if(!exit_vent || exit_vent.welded)
+						if (!exit_vent || exit_vent.welded)
 							loc = entry_vent
 							entry_vent = null
 							return
 
-						if(prob(50))
+						if (prob(50))
 							src.visible_message("<span class='notice'>You hear something squeezing through the ventilation ducts.</span>",2)
 						sleep(travel_time)
 
-						if(!exit_vent || exit_vent.welded)
+						if (!exit_vent || exit_vent.welded)
 							loc = entry_vent
 							entry_vent = null
 							return
 						loc = exit_vent.loc
 						entry_vent = null
 						var/area/new_area = get_area(loc)
-						if(new_area)
+						if (new_area)
 							new_area.Entered(src)
 			else
 				entry_vent = null
 	//=================
 
-	if(isturf(loc) && amount_grown > 0)
+	if (isturf(loc) && amount_grown > 0)
 		amount_grown += rand(0,2)
-		if(amount_grown >= 100)
+		if (amount_grown >= 100)
 			var/spawn_type = pick(spider_types)
 			new spawn_type(src.loc)
 			qdel(src)
@@ -128,18 +128,18 @@
 	..()
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/GiveTarget(var/new_target)
-	if(isliving(target) && (ishuman(target)||isrobot(target)) && !isMoMMI(target))
+	if (isliving(target) && (ishuman(target)||isrobot(target)) && !isMoMMI(target))
 		target = new_target
 		Aggro()
 		visible_message("<span class='danger'>The [src.name] tries to flee from [target.name]!</span>")
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/AttackingTarget()
-	if(istype(target, /obj/machinery/atmospherics/unary/vent_pump))
+	if (istype(target, /obj/machinery/atmospherics/unary/vent_pump))
 		ventcrawl(target)
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/proc/ventcrawl(var/obj/machinery/atmospherics/unary/vent_pump/v)
 	//ventcrawl!
-	if(!v.welded)
+	if (!v.welded)
 		entry_vent = v
 		Goto(get_turf(v),move_to_delay)
 

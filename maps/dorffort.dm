@@ -34,12 +34,12 @@
 
 	turfs = get_area_turfs(/area/mine/unexplored)
 
-	if(!turfs.len)
+	if (!turfs.len)
 		return 0
 
-	while(1)
+	while (1)
 		sanity++
-		if(sanity > 100)
+		if (sanity > 100)
 			testing("Tried to place complex too many times.  Aborting.")
 			return 0
 
@@ -48,7 +48,7 @@
 		var/complex_type=pick(mining_surprises)
 		var/mining_surprise/complex = new complex_type
 
-		if(complex.spawn_complex(T))
+		if (complex.spawn_complex(T))
 			spawned_surprises += complex
 			return 1
 
@@ -103,10 +103,10 @@
 
 	postProcessComplex()
 		..()
-		for(var/surprise_room/room in rooms)
+		for (var/surprise_room/room in rooms)
 			var/list/w_cand=room.GetTurfs(TURF_FLOOR)
-			for(var/turf/simulated/floor/airless/F in w_cand)
-				if(!istype(F))
+			for (var/turf/simulated/floor/airless/F in w_cand)
+				if (!istype(F))
 					continue
 				F.icon_state = "barber"
 

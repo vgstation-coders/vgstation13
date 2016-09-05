@@ -15,7 +15,7 @@
 	name = "UpdateQueue Process"
 	schedule_interval = 20 // every 2 seconds
 	updateQueueInstance = new
-	for(var/i = 1, i < 30, i++)
+	for (var/i = 1, i < 30, i++)
 		testDatums.Add(new /datum/fastTestDatum)
 	
 /datum/controller/process/testUpdateQueueProcess/doWork()

@@ -15,20 +15,20 @@
 
 /datum/preferences/proc/savefile_update()
 	// Preseed roles.
-	for(var/role_id in special_roles)
+	for (var/role_id in special_roles)
 		roles[role_id]=0
 
-	if(savefile_version < 8)	//lazily delete everything + additional files so they can be saved in the new format
-		for(var/ckey in preferences_datums)
+	if (savefile_version < 8)	//lazily delete everything + additional files so they can be saved in the new format
+		for (var/ckey in preferences_datums)
 			var/datum/preferences/D = preferences_datums[ckey]
-			if(D == src)
+			if (D == src)
 				var/delpath = "data/player_saves/[copytext(ckey,1,2)]/[ckey]/"
-				if(delpath && fexists(delpath))
+				if (delpath && fexists(delpath))
 					fdel(delpath)
 				break
 		return 0
 
-	if(savefile_version == SAVEFILE_VERSION_MAX)	//update successful.
+	if (savefile_version == SAVEFILE_VERSION_MAX)	//update successful.
 		save_preferences()
 		save_character()
 		return 1
@@ -36,7 +36,7 @@
 
 
 /datum/preferences/proc/load_path(ckey,filename="preferences.sav")
-	if(!ckey)
+	if (!ckey)
 		return
 	path = "data/player_saves/[copytext(ckey,1,2)]/[ckey]/[filename]"
 	savefile_version = SAVEFILE_VERSION_MAX
@@ -46,7 +46,7 @@
 	lastchangelog=hash
 	var/database/query/q = new
 	q.Add("UPDATE client SET lastchangelog=? WHERE ckey=?",lastchangelog,ckey)
-	if(!q.Execute(db))
+	if (!q.Execute(db))
 		message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 		WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
@@ -56,8 +56,8 @@
 	var/database/query/check = new
 	var/database/query/q = new
 	check.Add("SELECT ckey FROM client WHERE ckey = ?", ckey)
-	if(check.Execute(db))
-		if(!check.NextRow())
+	if (check.Execute(db))
+		if (!check.NextRow())
 			message_admins("Error #: [check.Error()] - [check.ErrorMsg()]")
 			WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 			return 0
@@ -66,10 +66,10 @@
 		WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 	q.Add("SELECT * FROM client WHERE ckey = ?", ckey)
-	if(q.Execute(db))
-		while(q.NextRow())
+	if (q.Execute(db))
+		while (q.NextRow())
 			var/list/row = q.GetRowData()
-			for(var/a in row)
+			for (var/a in row)
 				preference_list_client[a] = row[a]
 	else
 		message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
@@ -117,19 +117,19 @@
 
 
 /datum/preferences/proc/load_preferences()
-	if(!path)
+	if (!path)
 		return 0
-	if(!fexists(path))
+	if (!fexists(path))
 		return 0
 	var/savefile/S = new /savefile(path)
-	if(!S)
+	if (!S)
 		return 0
 	S.cd = "/"
 
 	S["version"] >> savefile_version
 	//Conversion
-	if(!savefile_version || !isnum(savefile_version) || savefile_version < SAVEFILE_VERSION_MIN || savefile_version > SAVEFILE_VERSION_MAX)
-		if(!savefile_update())  //handles updates
+	if (!savefile_version || !isnum(savefile_version) || savefile_version < SAVEFILE_VERSION_MIN || savefile_version > SAVEFILE_VERSION_MAX)
+		if (!savefile_update())  //handles updates
 			savefile_version = SAVEFILE_VERSION_MAX
 			save_preferences()
 			save_character()
@@ -166,7 +166,7 @@
 
 /datum/preferences/proc/save_preferences_sqlite(var/user, var/ckey)
 	/* FUCK YOU
-	if(!(world.timeofday >= (lastPolled + POLLED_LIMIT)))
+	if (!(world.timeofday >= (lastPolled + POLLED_LIMIT)))
 		to_chat(user, "You need to wait [round((((lastPolled + POLLED_LIMIT) - world.timeofday) / 10))] seconds before you can save again.")
 		return
 	*/
@@ -174,18 +174,18 @@
 	var/database/query/check = new
 	var/database/query/q = new
 	check.Add("SELECT ckey FROM client WHERE ckey = ?", ckey)
-	if(check.Execute(db))
-		if(!check.NextRow())
+	if (check.Execute(db))
+		if (!check.NextRow())
 			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",\
 			ckey, ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed)
-			if(!q.Execute(db))
+			if (!q.Execute(db))
 				message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 		else
 			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,usewmp=?,special=?,usenanoui=?,tooltips=?,progress_bars=?,space_parallax=?,space_dust=?,parallax_speed=? WHERE ckey = ?",\
 			ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, ckey)
-			if(!q.Execute(db))
+			if (!q.Execute(db))
 				message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
@@ -198,10 +198,10 @@
 	return 1
 
 /datum/preferences/proc/save_preferences()
-	if(!path)
+	if (!path)
 		return 0
 	var/savefile/S = new /savefile(path)
-	if(!S)
+	if (!S)
 		return 0
 	S.cd = "/"
 
@@ -227,10 +227,10 @@
 
 //saving volume changes
 /datum/preferences/proc/save_volume()
-	if(!path)
+	if (!path)
 		return 0
 	var/savefile/S = new /savefile(path)
-	if(!S)
+	if (!S)
 		return 0
 	S.cd = "/"
 
@@ -243,8 +243,8 @@
 	var/database/query/check = new
 
 	check.Add("SELECT player_ckey FROM players WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
-	if(check.Execute(db))
-		if(!check.NextRow())
+	if (check.Execute(db))
+		if (!check.NextRow())
 			to_chat(user, "You have no character file to load, please save one first.")
 			WARNING("[__LINE__]: datum/preferences/load_save_sqlite has returned")
 			return 0
@@ -341,10 +341,10 @@ AND (
 WHERE
     players.player_ckey = ?
 AND players.player_slot = ? ;"}, ckey, slot)
-	if(q.Execute(db))
-		while(q.NextRow())
+	if (q.Execute(db))
+		while (q.NextRow())
 			var/list/row = q.GetRowData()
-			for(var/a in row)
+			for (var/a in row)
 				preference_list[a] = row[a]
 	else
 		message_admins("load_save_sqlite Error #: [q.Error()] - [q.ErrorMsg()]")
@@ -354,8 +354,8 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	var/list/player_alt_list1 = new
 	var/list/player_alt_list2 = new()
 	player_alt_list1.Add(splittext(preference_list["player_alt_titles"], ";")) // we're getting the first part of the string for each job.
-	for(var/item in player_alt_list1) // iterating through the list
-		if(!findtext(item, ":"))
+	for (var/item in player_alt_list1) // iterating through the list
+		if (!findtext(item, ":"))
 			continue
 		var/delim_location = findtext(item, ":") // getting the second part of the string that will be handled for titles
 		var/job = copytext(item, 1, delim_location) // getting where the job is, it's in the first slot so we want to get that position.
@@ -425,13 +425,13 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	metadata			= sanitize_text(metadata, initial(metadata))
 	real_name			= reject_bad_name(real_name)
 
-	if(isnull(species))
+	if (isnull(species))
 		species = "Human"
-	if(isnull(language))
+	if (isnull(language))
 		language = "None"
-	if(isnull(nanotrasen_relation))
+	if (isnull(nanotrasen_relation))
 		nanotrasen_relation = initial(nanotrasen_relation)
-	if(!real_name)
+	if (!real_name)
 		real_name = random_name(gender,species)
 	be_random_name	= sanitize_integer(be_random_name, 0, 1, initial(be_random_name))
 	gender			= sanitize_gender(gender)
@@ -470,8 +470,8 @@ AND players.player_slot = ? ;"}, ckey, slot)
 
 	q = new
 	q.Add("SELECT role, preference FROM client_roles WHERE ckey=? AND slot=?", ckey, slot)
-	if(q.Execute(db))
-		while(q.NextRow())
+	if (q.Execute(db))
+		while (q.NextRow())
 			var/list/row = q.GetRowData()
 			roles[row["role"]] = text2num(row["preference"]) | ROLEPREF_PERSIST
 	else
@@ -479,18 +479,18 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		WARNING("[__LINE__]: datum/preferences/load_save_sqlite has returned")
 		return 0
 
-	if(!skills)
+	if (!skills)
 		skills = list()
-	if(!used_skillpoints)
+	if (!used_skillpoints)
 		used_skillpoints= 0
-	if(isnull(disabilities))
+	if (isnull(disabilities))
 		disabilities = 0
-	if(!player_alt_titles)
+	if (!player_alt_titles)
 		player_alt_titles = new()
-	if(!organ_data)
+	if (!organ_data)
 		src.organ_data = list()
 
-	if(user)
+	if (user)
 		to_chat(user, "Sucessfully loaded [real_name].")
 
 	return 1
@@ -498,7 +498,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 
 /datum/preferences/proc/load_save(dir)
 	var/savefile/S = new /savefile(path)
-	if(!S)
+	if (!S)
 		return 0
 	S.cd = dir
 
@@ -558,13 +558,13 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	//Sanitize
 	metadata		= sanitize_text(metadata, initial(metadata))
 	real_name		= reject_bad_name(real_name)
-	if(isnull(species))
+	if (isnull(species))
 		species = "Human"
-	if(isnull(language))
+	if (isnull(language))
 		language = "None"
-	if(isnull(nanotrasen_relation))
+	if (isnull(nanotrasen_relation))
 		nanotrasen_relation = initial(nanotrasen_relation)
-	if(!real_name)
+	if (!real_name)
 		real_name = random_name(gender,species)
 	be_random_name	= sanitize_integer(be_random_name, 0, 1, initial(be_random_name))
 	gender			= sanitize_gender(gender)
@@ -595,15 +595,15 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	job_engsec_med = sanitize_integer(job_engsec_med, 0, 65535, initial(job_engsec_med))
 	job_engsec_low = sanitize_integer(job_engsec_low, 0, 65535, initial(job_engsec_low))
 
-	if(!skills)
+	if (!skills)
 		skills = list()
-	if(!used_skillpoints)
+	if (!used_skillpoints)
 		used_skillpoints= 0
-	if(isnull(disabilities))
+	if (isnull(disabilities))
 		disabilities = 0
-	if(!player_alt_titles)
+	if (!player_alt_titles)
 		player_alt_titles = new()
-	if(!organ_data)
+	if (!organ_data)
 		src.organ_data = list()
 	//if(!skin_style) skin_style = "Default"
 
@@ -612,8 +612,8 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	var/database/query/q = new
 	var/list/slot_list = new
 	q.Add("SELECT player_slot FROM players WHERE player_ckey=?", ckey)
-	if(q.Execute(db))
-		while(q.NextRow())
+	if (q.Execute(db))
+		while (q.NextRow())
 			slot_list.Add(q.GetColumn(1))
 	else
 		message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
@@ -624,23 +624,23 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	return 1
 
 /datum/preferences/proc/random_character()
-	if(!path)
+	if (!path)
 		return 0
-	if(!fexists(path))
+	if (!fexists(path))
 		return 0
 	var/savefile/S = new /savefile(path)
-	if(!S)
+	if (!S)
 		return 0
 	var/list/saves = list()
 	var/name
-	for(var/i=1, i<=MAX_SAVE_SLOTS, i++)
+	for (var/i=1, i<=MAX_SAVE_SLOTS, i++)
 		S.cd = "/character[i]"
 		S["real_name"] >> name
-		if(!name)
+		if (!name)
 			continue
 		saves.Add(S.cd)
 
-	if(!saves.len)
+	if (!saves.len)
 		load_character()
 		return 0
 	S.cd = pick(saves)
@@ -648,18 +648,18 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	return 1
 
 /datum/preferences/proc/load_character(slot)
-	if(!path)
+	if (!path)
 		return 0
-	if(!fexists(path))
+	if (!fexists(path))
 		return 0
 	var/savefile/S = new /savefile(path)
-	if(!S)
+	if (!S)
 		return 0
 	S.cd = "/"
-	if(!slot)
+	if (!slot)
 		slot = default_slot
 	slot = sanitize_integer(slot, 1, MAX_SAVE_SLOTS, initial(default_slot))
-	if(slot != default_slot)
+	if (slot != default_slot)
 		default_slot = slot
 		S["default_slot"] << slot
 	S.cd = "/character[slot]"
@@ -669,7 +669,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 /datum/preferences/proc/save_character_sqlite(var/ckey, var/user, var/slot)
 
 
-	if(slot > MAX_SAVE_SLOTS)
+	if (slot > MAX_SAVE_SLOTS)
 		to_chat(user, "You are limited to 8 character slots.")
 		message_admins("[ckey] attempted to override character slot limit")
 		return 0
@@ -679,16 +679,16 @@ AND players.player_slot = ? ;"}, ckey, slot)
 
 	var/altTitles
 
-	for(var/a in player_alt_titles)
+	for (var/a in player_alt_titles)
 		altTitles += "[a]:[player_alt_titles[a]];"
 
 	check.Add("SELECT player_ckey FROM players WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
-	if(check.Execute(db))
-		if(!check.NextRow())          //1           2           3         4         5           6      7   8       9        10          11         12         13         14                15           16
+	if (check.Execute(db))
+		if (!check.NextRow())          //1           2           3         4         5           6      7   8       9        10          11         12         13         14                15           16
 			q.Add("INSERT INTO players (player_ckey,player_slot,ooc_notes,real_name,random_name,gender,age,species,language,flavor_text,med_record,sec_record,gen_record,player_alt_titles,disabilities,nanotrasen_relation) \
 				   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
 				                        ckey,       slot,       metadata, real_name, be_random_name, gender, age, species, language, flavor_text, med_record, sec_record, gen_record, altTitles, disabilities, nanotrasen_relation)
-			if(!q.Execute(db))
+			if (!q.Execute(db))
 				message_admins("Error #:[q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
@@ -696,7 +696,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		else
 			q.Add("UPDATE players SET ooc_notes=?,real_name=?,random_name=?,gender=?,age=?,species=?,language=?,flavor_text=?,med_record=?,sec_record=?,gen_record=?,player_alt_titles=?,disabilities=?,nanotrasen_relation=? WHERE player_ckey = ? AND player_slot = ?",\
 									  metadata, real_name, be_random_name, gender, age, species, language, flavor_text, med_record, sec_record, gen_record, altTitles, disabilities, nanotrasen_relation, ckey, slot)
-			if(!q.Execute(db))
+			if (!q.Execute(db))
 				message_admins("Error #:[q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
@@ -707,11 +707,11 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		return 0
 
 	check.Add("SELECT player_ckey FROM body WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
-	if(check.Execute(db))
-		if(!check.NextRow())
+	if (check.Execute(db))
+		if (!check.NextRow())
 			q.Add("INSERT INTO body (player_ckey,player_slot,hair_red,hair_green,hair_blue,facial_red,facial_green,facial_blue,skin_tone,hair_style_name,facial_style_name,eyes_red,eyes_green,eyes_blue,underwear,backbag) \
 					VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", ckey, slot, r_hair, g_hair, b_hair, r_facial, g_facial, b_facial, s_tone, h_style, f_style, r_eyes, g_eyes, b_eyes, underwear, backbag)
-			if(!q.Execute(db))
+			if (!q.Execute(db))
 				message_admins("Error #:[q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
@@ -719,7 +719,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		else
 			q.Add("UPDATE body SET hair_red=?,hair_green=?,hair_blue=?,facial_red=?,facial_green=?,facial_blue=?,skin_tone=?,hair_style_name=?,facial_style_name=?,eyes_red=?,eyes_green=?,eyes_blue=?,underwear=?,backbag=? WHERE player_ckey = ? AND player_slot = ?",\
 									r_hair, g_hair, b_hair, r_facial, g_facial, b_facial, s_tone, h_style, f_style, r_eyes, g_eyes, b_eyes, underwear, backbag, ckey, slot)
-			if(!q.Execute(db))
+			if (!q.Execute(db))
 				message_admins("Error #:[q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
@@ -730,11 +730,11 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		return 0
 
 	check.Add("SELECT player_ckey FROM jobs WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
-	if(check.Execute(db))
-		if(!check.NextRow())
+	if (check.Execute(db))
+		if (!check.NextRow())
 			q.Add("INSERT INTO jobs (player_ckey,player_slot,alternate_option,job_civilian_high,job_civilian_med,job_civilian_low,job_medsci_high,job_medsci_med,job_medsci_low,job_engsec_high,job_engsec_med,job_engsec_low) \
 					VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", ckey, slot, alternate_option, job_civilian_high, job_civilian_med, job_civilian_low, job_medsci_high, job_medsci_med, job_medsci_low, job_engsec_high, job_engsec_med, job_engsec_low)
-			if(!q.Execute(db))
+			if (!q.Execute(db))
 				message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
@@ -742,7 +742,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		else
 			q.Add("UPDATE jobs SET alternate_option=?,job_civilian_high=?,job_civilian_med=?,job_civilian_low=?,job_medsci_high=?,job_medsci_med=?,job_medsci_low=?,job_engsec_high=?,job_engsec_med=?,job_engsec_low=? WHERE player_ckey = ? AND player_slot = ?",\
 									alternate_option, job_civilian_high, job_civilian_med, job_civilian_low, job_medsci_high, job_medsci_med, job_medsci_low, job_engsec_high, job_engsec_med, job_engsec_low, ckey, slot)
-			if(!q.Execute(db))
+			if (!q.Execute(db))
 				message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
@@ -753,24 +753,24 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		return 0
 
 	check.Add("SELECT player_ckey FROM limbs WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
-	if(check.Execute(db))
-		if(!check.NextRow())
+	if (check.Execute(db))
+		if (!check.NextRow())
 			q.Add("INSERT INTO limbs (player_ckey, player_slot) VALUES (?,?)", ckey, slot)
-			if(!q.Execute(db))
+			if (!q.Execute(db))
 				message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
-			for(var/stuff in organ_data)
+			for (var/stuff in organ_data)
 				q.Add("UPDATE limbs SET [stuff]=? WHERE player_ckey = ? AND player_slot = ?", organ_data[stuff], ckey, slot)
-				if(!q.Execute(db))
+				if (!q.Execute(db))
 					message_admins("Error #; [q.Error()] - [q.ErrorMsg()]")
 					WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 					return 0
 			to_chat(user, "Created Limbs")
 		else
-			for(var/stuff in organ_data)
+			for (var/stuff in organ_data)
 				q.Add("UPDATE limbs SET [stuff] = ? WHERE player_ckey = ? AND player_slot = ?", organ_data[stuff], ckey, slot)
-				if(!q.Execute(db))
+				if (!q.Execute(db))
 					message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 					WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 					return 0
@@ -781,18 +781,18 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		return 0
 
 	check.Add("DELETE FROM client_roles WHERE ckey=? AND slot=?", ckey, slot)
-	if(!check.Execute(db))
+	if (!check.Execute(db))
 		message_admins("Error #: [check.Error()] - [check.ErrorMsg()]")
 		WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
 
-	for(var/role_id in roles)
-		if(!(roles[role_id] & ROLEPREF_PERSIST))
+	for (var/role_id in roles)
+		if (!(roles[role_id] & ROLEPREF_PERSIST))
 			continue
 		q = new
 		q.Add("INSERT INTO client_roles (ckey, slot, role, preference) VALUES (?,?,?,?)", ckey, slot, role_id, (roles[role_id] & ROLEPREF_SAVEMASK))
 		//testing("INSERT INTO client_roles (ckey, slot, role, preference) VALUES ('[ckey]',[slot],'[role_id]',[roles[role_id] & ROLEPREF_SAVEMASK])")
-		if(!q.Execute(db)) // This never triggers on error, for some reason.
+		if (!q.Execute(db)) // This never triggers on error, for some reason.
 			message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 			WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 			return 0
@@ -803,10 +803,10 @@ AND players.player_slot = ? ;"}, ckey, slot)
 /datum/preferences/proc/save_character()
 
 
-	if(!path)
+	if (!path)
 		return 0
 	var/savefile/S = new /savefile(path)
-	if(!S)
+	if (!S)
 		return 0
 	S.cd = "/character[default_slot]"
 

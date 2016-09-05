@@ -63,7 +63,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 /obj/item/device/assembly/New()
 	..()
 
-	if(!short_name)
+	if (!short_name)
 		short_name = name
 
 /obj/item/device/assembly/proc/activate()									//What the device does when turned on
@@ -94,26 +94,26 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 	return "The trigger assembly looks broken!"
 
 /obj/item/device/assembly/proc/send_pulses_to_list(var/list/L) //Send pulse to all assemblies in list.
-	if(!L || !L.len)
+	if (!L || !L.len)
 		return
 
-	for(var/obj/item/device/assembly/A in L)
+	for (var/obj/item/device/assembly/A in L)
 		A.pulsed()
 
 /obj/item/device/assembly/proc/get_value(var/value) //Get the assembly's value (to be used with various circuits). value = an element from the accessible_values list!
-	if(!accessible_values.Find(value))
+	if (!accessible_values.Find(value))
 		return
 
 	var/list/L = params2list(accessible_values[value])
 
 	var/var_to_grab = L[VALUE_VARIABLE_NAME]
 
-	if(VALUE_IS_POINTER(L))
+	if (VALUE_IS_POINTER(L))
 		//Pointers return the refered assembly's index
 		var/obj/item/device/assembly/AS = vars[var_to_grab]
-		if(istype(AS))
+		if (istype(AS))
 			var/obj/item/device/assembly_frame/AF = loc
-			if(!istype(AF))
+			if (!istype(AF))
 				return
 
 			return AF.assemblies.Find(AS)
@@ -123,23 +123,23 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 /obj/item/device/assembly/proc/write_to_value(var/value, var/new_value) //Attempt to write to assembly's value. This handles value's type (num/text), whether writing is possible, etc.
 	set waitfor = 0
 
-	if(!accessible_values.Find(value))
+	if (!accessible_values.Find(value))
 		return
 
 	var/list/L = params2list(accessible_values[value])
 
 	var/var_to_change = L[VALUE_VARIABLE_NAME]
-	if(var_to_change == "null")
+	if (var_to_change == "null")
 		return
 
-	if(L[VALUE_VARIABLE_TYPE] == VT_NUMBER)
-		if(!isnum(new_value)) //Attempted to write a non-number to a number var - abort!
+	if (L[VALUE_VARIABLE_TYPE] == VT_NUMBER)
+		if (!isnum(new_value)) //Attempted to write a non-number to a number var - abort!
 			return
 
-		if(L.len >= VALUE_VARIABLE_MAX)
+		if (L.len >= VALUE_VARIABLE_MAX)
 			new_value = Clamp(new_value, text2num(L[VALUE_VARIABLE_MIN]), text2num(L[VALUE_VARIABLE_MAX]))
 
-	else if(L[VALUE_VARIABLE_TYPE] == VT_POINTER)
+	else if (L[VALUE_VARIABLE_TYPE] == VT_POINTER)
 		//When importing assembly frames, assemblies can't connect to stuff with a higher index (because it's not loaded yet)
 		//The sleep below ensures that pointers are handled after everything is loaded
 		sleep()
@@ -150,33 +150,33 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 		//Writing another number to them causes the reference to update
 		//Writing 0 causes the currently connected assembly to disconnect
 
-		if(!isnum(new_value)) //Pointers are numbers
+		if (!isnum(new_value)) //Pointers are numbers
 			return
 
 		var/obj/item/device/assembly_frame/AF = loc
-		if(!istype(AF))
+		if (!istype(AF))
 			return
-		if(AF.assemblies.len < new_value)
+		if (AF.assemblies.len < new_value)
 			return
 
 		var/obj/item/device/assembly/AS = null //New assembly to connect. If it's null, disconnect the old assembly without connecting anything new
-		if(new_value != 0)
+		if (new_value != 0)
 			AS = AF.assemblies[new_value]
-			if(!istype(AS))
+			if (!istype(AS))
 				return
-			if(AS == src)
+			if (AS == src)
 				return
 
 		var/obj/item/device/assembly/current = vars[var_to_change]
-		if(current)
+		if (current)
 			AF.disconnect_assembly_from(src, current)
 
-			if(AS)
+			if (AS)
 				AF.start_new_connection(src, AS)
 
 		new_value = AS
 	else //Text
-		if(!istext(new_value))  //Attempted to write a non-string to a string var - convert the non-string into a string and continue
+		if (!istext(new_value))  //Attempted to write a non-string to a string var - convert the non-string into a string and continue
 			new_value = "[new_value]"
 
 		new_value = strip_html(new_value, MAX_TEXT_VALUE_LEN)
@@ -198,21 +198,21 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 
 /obj/item/device/assembly/process_cooldown()
 	cooldown--
-	if(cooldown <= 0)
+	if (cooldown <= 0)
 		return 0
 	spawn(10)
 		process_cooldown()
 	return 1
 
 /obj/item/device/assembly/Destroy()
-	if(istype(src.loc, /obj/item/device/assembly_holder) || istype(holder))
+	if (istype(src.loc, /obj/item/device/assembly_holder) || istype(holder))
 		var/obj/item/device/assembly_holder/A = src.loc
-		if(A.a_left == src)
+		if (A.a_left == src)
 			A.a_left = null
-		else if(A.a_right == src)
+		else if (A.a_right == src)
 			A.a_right = null
 		src.holder = null
-	else if(istype(src.loc, /obj/item/device/assembly_frame))
+	else if (istype(src.loc, /obj/item/device/assembly_frame))
 		var/obj/item/device/assembly_frame/AF = src.loc
 
 		AF.eject_assembly(src)
@@ -220,34 +220,34 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 	..()
 
 /obj/item/device/assembly/pulsed(var/radio = 0)
-	if(holder && (wires & WIRE_RECEIVE))
+	if (holder && (wires & WIRE_RECEIVE))
 		activate()
-	if(radio && (wires & WIRE_RADIO_RECEIVE))
+	if (radio && (wires & WIRE_RADIO_RECEIVE))
 		activate()
 	return 1
 
 
 /obj/item/device/assembly/pulse(var/radio = 0)
-	if(istype(holder, /obj/item/device/assembly_frame))
+	if (istype(holder, /obj/item/device/assembly_frame))
 		var/obj/item/device/assembly_frame/AB = holder
 
 		AB.receive_pulse(src)
 	else
-		if(holder && (wires & WIRE_PULSE))
+		if (holder && (wires & WIRE_PULSE))
 			holder.process_activation(src, 1, 0)
-		if(holder && (wires & WIRE_PULSE_SPECIAL))
+		if (holder && (wires & WIRE_PULSE_SPECIAL))
 			holder.process_activation(src, 0, 1)
 
-	if(istype(loc,/obj/item/weapon/grenade)) // This is a hack.  Todo: Manage this better -Sayu
+	if (istype(loc,/obj/item/weapon/grenade)) // This is a hack.  Todo: Manage this better -Sayu
 		var/obj/item/weapon/grenade/G = loc
 		G.prime() 							 // Adios, muchachos
-//		if(radio && (wires & WIRE_RADIO_PULSE))
+//		if (radio && (wires & WIRE_RADIO_PULSE))
 		//Not sure what goes here quite yet send signal?
 	return 1
 
 
 /obj/item/device/assembly/activate()
-	if(!secured || (cooldown > 0))
+	if (!secured || (cooldown > 0))
 		return 0
 	cooldown = 2
 	spawn(10)
@@ -263,20 +263,20 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 
 /obj/item/device/assembly/attach_assembly(var/obj/item/device/assembly/A, var/mob/user)
 	holder = new/obj/item/device/assembly_holder(get_turf(src))
-	if(holder.attach(A,src,user))
+	if (holder.attach(A,src,user))
 		to_chat(user, "<span class='notice'>You attach \the [A] to \the [src]!</span>")
 		return 1
 	return 0
 
 
 /obj/item/device/assembly/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(isassembly(W))
+	if (isassembly(W))
 		var/obj/item/device/assembly/A = W
-		if((!A.secured) && (!secured))
+		if ((!A.secured) && (!secured))
 			attach_assembly(A,user)
 			return
-	if(isscrewdriver(W))
-		if(toggle_secure())
+	if (isscrewdriver(W))
+		if (toggle_secure())
 			to_chat(user, "<span class='notice'>\The [src] is ready!</span>")
 		else
 			to_chat(user, "<span class='notice'>\The [src] can now be attached!</span>")
@@ -292,14 +292,14 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 
 /obj/item/device/assembly/examine(mob/user)
 	..()
-	if(show_status)
-		if(secured)
+	if (show_status)
+		if (secured)
 			to_chat(user, "<span class='info'>\The [src] is ready!</span>")
 		else
 			to_chat(user, "<span class='info'>\The [src] can be attached!</span>")
 
 /obj/item/device/assembly/attack_self(mob/user as mob)
-	if(!user)
+	if (!user)
 		return 0
 	user.set_machine(src)
 	interact(user)
@@ -322,7 +322,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 
 
 	Activate()
-		if(cooldown > 0)
+		if (cooldown > 0)
 			return 0
 		cooldown = 2
 		spawn(10)
@@ -333,7 +333,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 
 	Process_cooldown()
 		cooldown--
-		if(cooldown <= 0)
+		if (cooldown <= 0)
 			return 0
 		spawn(10)
 			Process_cooldown()
@@ -341,9 +341,9 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 
 
 	Attach_Holder(var/obj/H, var/mob/user)
-		if(!H)
+		if (!H)
 			return 0
-		if(!H.IsAssemblyHolder())
+		if (!H.IsAssemblyHolder())
 			return 0
 		//Remember to have it set its loc somewhere in here
 

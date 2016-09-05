@@ -109,7 +109,7 @@
 	using.layer = HUD_BASE_LAYER
 	src.adding += using
 
-	if(MO.canWearClothes)
+	if (MO.canWearClothes)
 		inv_box = getFromPool(/obj/screen/inventory)
 		inv_box.name = "i_clothing"
 		inv_box.dir = SOUTH
@@ -120,7 +120,7 @@
 		inv_box.layer = HUD_BASE_LAYER
 		src.adding += inv_box
 
-	if(MO.canWearHats)
+	if (MO.canWearHats)
 		inv_box = getFromPool(/obj/screen/inventory)
 		inv_box.name = "head"
 		inv_box.icon = ui_style
@@ -130,7 +130,7 @@
 		inv_box.layer = HUD_BASE_LAYER
 		src.adding += inv_box
 
-	if(MO.canWearGlasses)
+	if (MO.canWearGlasses)
 		inv_box = getFromPool(/obj/screen/inventory)
 		inv_box.name = "eyes"
 		inv_box.icon = ui_style
@@ -224,7 +224,7 @@
 	if (mymob.client)
 		if (mymob.client.gun_mode) // If in aim mode, correct the sprite
 			mymob.gun_setting_icon.dir = 2
-	for(var/obj/item/weapon/gun/G in mymob) // If targeting someone, display other buttons
+	for (var/obj/item/weapon/gun/G in mymob) // If targeting someone, display other buttons
 		if (G.target)
 			mymob.item_use_icon = getFromPool(/obj/screen/gun/item)
 			if (mymob.client.target_can_click)

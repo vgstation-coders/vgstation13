@@ -68,15 +68,15 @@ var/religion_name = null
 		station_name = name + " "
 
 	// Prefix
-	switch(Holiday)
+	switch (Holiday)
 		//get normal name
-		if(null,"",0)
+		if (null,"",0)
 			name = pick("", "Stanford", "Dorf", "Alium", "Prefix", "Clowning", "Aegis", "Ishimura", "Scaredy", "Death-World", "Mime", "Honk", "Rogue", "MacRagge", "Ultrameens", "Safety", "Paranoia", "Explosive", "Neckbear", "Donk", "Muppet", "North", "West", "East", "South", "Slant-ways", "Widdershins", "Rimward", "Expensive", "Procreatory", "Imperial", "Unidentified", "Immoral", "Carp", "Ork", "Pete", "Control", "Nettle", "Aspie", "Class", "Crab", "Fist","Corrogated","Skeleton","Race", "Fatguy", "Gentleman", "Capitalist", "Communist", "Bear", "Beard", "Derp", "Space", "Spess", "Star", "Moon", "System", "Mining", "Neckbeard", "Research", "Supply", "Military", "Orbital", "Battle", "Science", "Asteroid", "Home", "Production", "Transport", "Delivery", "Extraplanetary", "Orbital", "Correctional", "Robot", "Hats", "Pizza")
-			if(name)
+			if (name)
 				station_name += name + " "
 
 		//For special days like christmas, easter, new-years etc ~Carn
-		if("Friday the 13th")
+		if ("Friday the 13th")
 			name = pick("Mike","Friday","Evil","Myers","Murder","Deathly","Stabby")
 			station_name += name + " "
 			random = 13
@@ -91,18 +91,18 @@ var/religion_name = null
 	station_name += name + " "
 
 	// ID Number
-	switch(random)
-		if(1)
+	switch (random)
+		if (1)
 			station_name += "[rand(1, 99)]"
-		if(2)
+		if (2)
 			station_name += pick("Alpha", "Beta", "Gamma", "Delta", "Epsilon", "Zeta", "Eta", "Theta", "Iota", "Kappa", "Lambda", "Mu", "Nu", "Xi", "Omicron", "Pi", "Rho", "Sigma", "Tau", "Upsilon", "Phi", "Chi", "Psi", "Omega")
-		if(3)
+		if (3)
 			station_name += pick("II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX")
-		if(4)
+		if (4)
 			station_name += pick("Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot", "Golf", "Hotel", "India", "Juliet", "Kilo", "Lima", "Mike", "November", "Oscar", "Papa", "Quebec", "Romeo", "Sierra", "Tango", "Uniform", "Victor", "Whiskey", "X-ray", "Yankee", "Zulu")
-		if(5)
+		if (5)
 			station_name += pick("One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen")
-		if(13)
+		if (13)
 			station_name += pick("13","XIII","Thirteen")
 
 
@@ -114,7 +114,7 @@ var/religion_name = null
 	return station_name
 
 /proc/station_name()
-	if(!station_name)
+	if (!station_name)
 		station_name = new_station_name()
 	return station_name
 
@@ -193,47 +193,47 @@ var/syndicate_code_response//Code response for traitors.
 	var/locations[] = teleportlocs.len ? teleportlocs : drinks//if null, defaults to drinks instead.
 
 	var/names[] = list()
-	for(var/datum/data/record/t in data_core.general)//Picks from crew manifest.
+	for (var/datum/data/record/t in data_core.general)//Picks from crew manifest.
 		names += t.fields["name"]
 
 	var/maxwords = words//Extra var to check for duplicates.
 
-	for(words,words>0,words--)//Randomly picks from one of the choices below.
+	for (words,words>0,words--)//Randomly picks from one of the choices below.
 
-		if(words==1&&(1 in safety)&&(2 in safety))//If there is only one word remaining and choice 1 or 2 have not been selected.
+		if (words==1&&(1 in safety)&&(2 in safety))//If there is only one word remaining and choice 1 or 2 have not been selected.
 			safety = list(pick(1,2))//Select choice 1 or 2.
-		else if(words==1&&maxwords==2)//Else if there is only one word remaining (and there were two originally), and 1 or 2 were chosen,
+		else if (words==1&&maxwords==2)//Else if there is only one word remaining (and there were two originally), and 1 or 2 were chosen,
 			safety = list(3)//Default to list 3
 
-		switch(pick(safety))//Chance based on the safety list.
-			if(1)//1 and 2 can only be selected once each to prevent more than two specific names/places/etc.
-				switch(rand(1,2))//Mainly to add more options later.
-					if(1)
-						if(names.len&&prob(70))
+		switch (pick(safety))//Chance based on the safety list.
+			if (1)//1 and 2 can only be selected once each to prevent more than two specific names/places/etc.
+				switch (rand(1,2))//Mainly to add more options later.
+					if (1)
+						if (names.len&&prob(70))
 							code_phrase += pick(names)
 						else
 							code_phrase += pick(pick(first_names_male,first_names_female))
 							code_phrase += " "
 							code_phrase += pick(last_names)
-					if(2)
+					if (2)
 						code_phrase += pick(get_all_jobs())//Returns a job.
 				safety -= 1
-			if(2)
-				switch(rand(1,2))//Places or things.
-					if(1)
+			if (2)
+				switch (rand(1,2))//Places or things.
+					if (1)
 						code_phrase += pick(drinks)
-					if(2)
+					if (2)
 						code_phrase += pick(locations)
 				safety -= 2
-			if(3)
-				switch(rand(1,3))//Nouns, adjectives, verbs. Can be selected more than once.
-					if(1)
+			if (3)
+				switch (rand(1,3))//Nouns, adjectives, verbs. Can be selected more than once.
+					if (1)
 						code_phrase += pick(nouns)
-					if(2)
+					if (2)
 						code_phrase += pick(adjectives)
-					if(3)
+					if (3)
 						code_phrase += pick(verbs)
-		if(words==1)
+		if (words==1)
 			code_phrase += "."
 		else
 			code_phrase += ", "
@@ -256,21 +256,21 @@ var/syndicate_code_response//Code response for traitors.
 	I think the above-used method solves this issue by using words in a sequence, providing for much greater flexibility.
 	/N
 
-	switch(choice)
-		if(1)
+	switch (choice)
+		if (1)
 			syndicate_code_phrase += pick("I'm looking for","Have you seen","Maybe you've seen","I'm trying to find","I'm tracking")
 			syndicate_code_phrase += " "
 			syndicate_code_phrase += pick(pick(first_names_male,first_names_female))
 			syndicate_code_phrase += " "
 			syndicate_code_phrase += pick(last_names)
 			syndicate_code_phrase += "."
-		if(2)
+		if (2)
 			syndicate_code_phrase += pick("How do I get to","How do I find","Where is","Where do I find")
 			syndicate_code_phrase += " "
 			syndicate_code_phrase += pick("Escape","Engineering","Atmos","the bridge","the brig","Clown Planet","CentCom","the library","the chapel","a bathroom","Med Bay","Tool Storage","the escape shuttle","Robotics","a locker room","the living quarters","the gym","the autolathe","QM","the bar","the theater","the derelict")
 			syndicate_code_phrase += "?"
-		if(3)
-			if(prob(70))
+		if (3)
+			if (prob(70))
 				syndicate_code_phrase += pick("Get me","I want","I'd like","Make me")
 				syndicate_code_phrase += " a "
 			else
@@ -278,38 +278,38 @@ var/syndicate_code_response//Code response for traitors.
 				syndicate_code_phrase += " "
 			syndicate_code_phrase += pick("vodka and tonic","gin fizz","bahama mama","manhattan","black Russian","whiskey soda","long island tea","margarita","Irish coffee"," manly dwarf","Irish cream","doctor's delight","Beepksy Smash","tequila sunrise","brave bull","gargle blaster","bloody mary","whiskey cola","white Russian","vodka martini","martini","Cuba libre","kahlua","vodka","wine","moonshine")
 			syndicate_code_phrase += "."
-		if(4)
+		if (4)
 			syndicate_code_phrase += pick("I wish I was","My dad was","His mom was","Where do I find","The hero this station needs is","I'd fuck","I wouldn't trust","Someone caught","HoS caught","Someone found","I'd wrestle","I wanna kill")
 			syndicate_code_phrase += " [pick("a","the")] "
 			syndicate_code_phrase += pick("wizard","ninja","xeno","lizard","slime","monkey","syndicate","cyborg","clown","space carp","singularity","singulo","mime")
 			syndicate_code_phrase += "."
-		if(5)
+		if (5)
 			syndicate_code_phrase += pick("Do we have","Is there","Where is","Where's","Who's")
 			syndicate_code_phrase += " "
 			syndicate_code_phrase += "[pick(get_all_jobs())]"
 			syndicate_code_phrase += "?"
 
-	switch(choice)
-		if(1)
-			if(prob(80))
+	switch (choice)
+		if (1)
+			if (prob(80))
 				syndicate_code_response += pick("Try looking for them near","I they ran off to","Yes. I saw them near","Nope. I'm heading to","Try searching")
 				syndicate_code_response += " "
 				syndicate_code_response += pick("Escape","Engineering","Atmos","the bridge","the brig","Clown Planet","CentCom","the library","the chapel","a bathroom","Med Bay","Tool Storage","the escape shuttle","Robotics","a locker room","the living quarters","the gym","the autolathe","QM","the bar","the theater","the derelict")
 				syndicate_code_response += "."
-			else if(prob(60))
+			else if (prob(60))
 				syndicate_code_response += pick("No. I'm busy, sorry.","I don't have the time.","Not sure, maybe?","There is no time.")
 			else
 				syndicate_code_response += pick("*shrug*","*smile*","*blink*","*sigh*","*laugh*","*nod*","*giggle*")
-		if(2)
-			if(prob(80))
+		if (2)
+			if (prob(80))
 				syndicate_code_response += pick("Go to","Navigate to","Try","Sure, run to","Try searching","It's near","It's around")
 				syndicate_code_response += " the "
 				syndicate_code_response += pick("[pick("south","north","east","west")] maitenance door","nearby maitenance","teleporter","[pick("cold","dead")] space","morgue","vacuum","[pick("south","north","east","west")] hall ","[pick("south","north","east","west")] hallway","[pick("white","black","red","green","blue","pink","purple")] [pick("rabbit","frog","lion","tiger","panther","snake","facehugger")]")
 				syndicate_code_response += "."
-			else if(prob(60))
+			else if (prob(60))
 				syndicate_code_response += pick("Try asking","Ask","Talk to","Go see","Follow","Hunt down")
 				syndicate_code_response += " "
-				if(prob(50))
+				if (prob(50))
 					syndicate_code_response += pick(pick(first_names_male,first_names_female))
 					syndicate_code_response += " "
 					syndicate_code_response += pick(last_names)
@@ -319,9 +319,9 @@ var/syndicate_code_response//Code response for traitors.
 				syndicate_code_response += "."
 			else
 				syndicate_code_response += pick("*shrug*","*smile*","*blink*","*sigh*","*laugh*","*nod*","*giggle*")
-		if(3)
-		if(4)
-		if(5)
+		if (3)
+		if (4)
+		if (5)
 
 	return
 */

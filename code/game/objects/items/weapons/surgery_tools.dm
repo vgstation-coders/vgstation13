@@ -50,11 +50,11 @@ LOOK FOR SURGERY.DM*/
 
 /*
 /obj/item/weapon/retractor/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	if(!istype(M))
+	if (!istype(M))
 		return
 
 		var/mob/living/carbon/human/H = M
-		if(istype(H) && ( \
+		if (istype(H) && ( \
 				(H.head && H.head.flags & HEADCOVERSEYES) || \
 				(H.wear_mask && H.wear_mask.flags & MASKCOVERSEYES) || \
 				(H.glasses && H.glasses.flags & GLASSESCOVERSEYES) \
@@ -63,20 +63,20 @@ LOOK FOR SURGERY.DM*/
 			return
 
 		var/mob/living/carbon/monkey/Mo = M
-		if(istype(Mo) && ( \
+		if (istype(Mo) && ( \
 				(Mo.wear_mask && Mo.wear_mask.flags & MASKCOVERSEYES) \
 			))
 			to_chat(user, "<span class='warning'>You're going to need to remove that mask/helmet/glasses first.</span>")
 			return
 
-		if(istype(M, /mob/living/carbon/alien) || istype(M, /mob/living/carbon/slime))//Aliens don't have eyes./N
+		if (istype(M, /mob/living/carbon/alien) || istype(M, /mob/living/carbon/slime))//Aliens don't have eyes./N
 			to_chat(user, "<span class='warning'>You cannot locate any eyes on this creature!</span>")
 			return
 
-		switch(M.eye_op_stage)
-			if(1.0)
-				if(M != user)
-					for(var/mob/O in (viewers(M) - user - M))
+		switch (M.eye_op_stage)
+			if (1.0)
+				if (M != user)
+					for (var/mob/O in (viewers(M) - user - M))
 						O.show_message("<span class='warning'>[M] is having his eyes retracted by [user].</span>", 1)
 					to_chat(M, "<span class='warning'>[user] begins to seperate your eyes with [src]!</span>")
 					to_chat(user, "<span class='warning'>You seperate [M]'s eyes with [src]!</span>")
@@ -85,11 +85,11 @@ LOOK FOR SURGERY.DM*/
 						"<span class='warning'>[user] begins to have his eyes retracted.</span>", \
 						"<span class='warning'>You begin to pry open your eyes with [src]!</span>" \
 					)
-				if(M == user && prob(25))
+				if (M == user && prob(25))
 					to_chat(user, "<span class='warning'>You mess up!</span>")
-					if(istype(M, /mob/living/carbon/human))
+					if (istype(M, /mob/living/carbon/human))
 						var/datum/organ/external/affecting = M:get_organ(LIMB_HEAD)
-						if(affecting.take_damage(15))
+						if (affecting.take_damage(15))
 							M:UpdateDamageIcon()
 						M.updatehealth()
 					else
@@ -97,46 +97,46 @@ LOOK FOR SURGERY.DM*/
 
 				M:eye_op_stage = 2.0
 
-	else if(user.zone_sel.selecting == LIMB_CHEST)
-		switch(M:alien_op_stage)
-			if(3.0)
+	else if (user.zone_sel.selecting == LIMB_CHEST)
+		switch (M:alien_op_stage)
+			if (3.0)
 				var/mob/living/carbon/human/H = M
-				if(!istype(H))
+				if (!istype(H))
 					return ..()
 
-				if(H.wear_suit || H.w_uniform)
+				if (H.wear_suit || H.w_uniform)
 					to_chat(user, "<span class='warning'>You're going to need to remove that suit/jumpsuit first.</span>")
 					return
 
 				var/obj/item/alien_embryo/A = locate() in M.contents
-				if(!A)
+				if (!A)
 					return ..()
 				user.visible_message("<span class='warning'>[user] begins to pull something out of [M]'s chest.</span>", "<span class='warning'>You begin to pull the alien organism out of [M]'s chest.</span>")
 
 				spawn(20 + rand(0,50))
-					if(!A || A.loc != M)
+					if (!A || A.loc != M)
 						return
 
-					if(M == user && prob(25))
+					if (M == user && prob(25))
 						to_chat(user, "<span class='warning'>You mess up!</span>")
-						if(istype(M, /mob/living/carbon/human))
+						if (istype(M, /mob/living/carbon/human))
 							var/datum/organ/external/affecting = M:get_organ(LIMB_CHEST)
-							if(affecting.take_damage(30))
+							if (affecting.take_damage(30))
 								M:UpdateDamageIcon()
 						else
 							M.take_organ_damage(30)
 
-					if(A.stage > 3)
+					if (A.stage > 3)
 						var/chance = 15 + max(0, A.stage - 3) * 10
-						if(prob(chance))
+						if (prob(chance))
 							A.AttemptGrow(0)
 						M:alien_op_stage = 4.0
 
-					if(M)
+					if (M)
 						user.visible_message("<span class='warning'>[user] pulls an alien organism out of [M]'s chest.</span>", "<span class='warning'>You pull the alien organism out of [M]'s chest.</span>")
 						A.forceMove(M.loc)	//alien embryo handles cleanup
 
-	else if((!(user.zone_sel.selecting == LIMB_HEAD)) || (!(user.zone_sel.selecting == LIMB_GROIN)) || (!(istype(M, /mob/living/carbon/human))))
+	else if ((!(user.zone_sel.selecting == LIMB_HEAD)) || (!(user.zone_sel.selecting == LIMB_GROIN)) || (!(istype(M, /mob/living/carbon/human))))
 		return ..()
 
 	return
@@ -167,30 +167,30 @@ LOOK FOR SURGERY.DM*/
 
 /*
 /obj/item/weapon/hemostat/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	if(!istype(M))
+	if (!istype(M))
 		return
 
-	if(!((locate(/obj/machinery/optable, M.loc) && M.resting) || (locate(/obj/structure/table/, M.loc) && M.lying && prob(50))))
+	if (!((locate(/obj/machinery/optable, M.loc) && M.resting) || (locate(/obj/structure/table/, M.loc) && M.lying && prob(50))))
 		return ..()
 
-	if(user.zone_sel.selecting == LIMB_GROIN)
-		if(istype(M, /mob/living/carbon/human))
-			switch(M:appendix_op_stage)
-				if(1.0)
-					if(M != user)
-						for(var/mob/O in (viewers(M) - user - M))
+	if (user.zone_sel.selecting == LIMB_GROIN)
+		if (istype(M, /mob/living/carbon/human))
+			switch (M:appendix_op_stage)
+				if (1.0)
+					if (M != user)
+						for (var/mob/O in (viewers(M) - user - M))
 							O.show_message("<span class='warning'>[user] is beginning to clamp bleeders in [M]'s abdomen cut open with [src].</span>", 1)
 						to_chat(M, "<span class='warning'>[user] begins to clamp bleeders in your abdomen with [src]!</span>")
 						to_chat(user, "<span class='warning'>You clamp bleeders in [M]'s abdomen with [src]!</span>")
 						M:appendix_op_stage = 2.0
-				if(4.0)
-					if(M != user)
-						for(var/mob/O in (viewers(M) - user - M))
+				if (4.0)
+					if (M != user)
+						for (var/mob/O in (viewers(M) - user - M))
 							O.show_message("<span class='warning'>[user] is removing [M]'s appendix with [src].</span>", 1)
 						to_chat(M, "<span class='warning'>[user] begins to remove your appendix with [src]!</span>")
 						to_chat(user, "<span class='warning'>You remove [M]'s appendix with [src]!</span>")
-						for(var/datum/disease/D in M.viruses)
-							if(istype(D, /datum/disease/appendicitis))
+						for (var/datum/disease/D in M.viruses)
+							if (istype(D, /datum/disease/appendicitis))
 								new /obj/item/weapon/reagent_containers/food/snacks/appendix/inflamed(get_turf(M))
 								M:appendix_op_stage = 5.0
 								return
@@ -201,7 +201,7 @@ LOOK FOR SURGERY.DM*/
 	if (user.zone_sel.selecting == "eyes")
 
 		var/mob/living/carbon/human/H = M
-		if(istype(H) && ( \
+		if (istype(H) && ( \
 				(H.head && H.head.flags & HEADCOVERSEYES) || \
 				(H.wear_mask && H.wear_mask.flags & MASKCOVERSEYES) || \
 				(H.glasses && H.glasses.flags & GLASSESCOVERSEYES) \
@@ -210,20 +210,20 @@ LOOK FOR SURGERY.DM*/
 			return
 
 		var/mob/living/carbon/monkey/Mo = M
-		if(istype(Mo) && ( \
+		if (istype(Mo) && ( \
 				(Mo.wear_mask && Mo.wear_mask.flags & MASKCOVERSEYES) \
 			))
 			to_chat(user, "<span class='warning'>You're going to need to remove that mask/helmet/glasses first.</span>")
 			return
 
-		if(istype(M, /mob/living/carbon/alien))//Aliens don't have eyes./N
+		if (istype(M, /mob/living/carbon/alien))//Aliens don't have eyes./N
 			to_chat(user, "<span class='warning'>You cannot locate any eyes on this creature!</span>")
 			return
 
-		switch(M.eye_op_stage)
-			if(2.0)
-				if(M != user)
-					for(var/mob/O in (viewers(M) - user - M))
+		switch (M.eye_op_stage)
+			if (2.0)
+				if (M != user)
+					for (var/mob/O in (viewers(M) - user - M))
 						O.show_message("<span class='warning'>[M] is having his eyes mended by [user].</span>", 1)
 					to_chat(M, "<span class='warning'>[user] begins to mend your eyes with [src]!</span>")
 					to_chat(user, "<span class='warning'>You mend [M]'s eyes with [src]!</span>")
@@ -232,54 +232,54 @@ LOOK FOR SURGERY.DM*/
 						"<span class='warning'>[user] begins to have his eyes mended.</span>", \
 						"<span class='warning'>You begin to mend your eyes with [src]!</span>" \
 					)
-				if(M == user && prob(25))
+				if (M == user && prob(25))
 					to_chat(user, "<span class='warning'>You mess up!</span>")
-					if(istype(M, /mob/living/carbon/human))
+					if (istype(M, /mob/living/carbon/human))
 						var/datum/organ/external/affecting = M:get_organ(LIMB_HEAD)
-						if(affecting.take_damage(15))
+						if (affecting.take_damage(15))
 							M:UpdateDamageIcon()
 						M.updatehealth()
 					else
 						M.take_organ_damage(15)
 				M:eye_op_stage = 3.0
 
-	else if(user.zone_sel.selecting == LIMB_CHEST)
-		if(M:alien_op_stage == 2.0 || M:alien_op_stage == 3.0)
+	else if (user.zone_sel.selecting == LIMB_CHEST)
+		if (M:alien_op_stage == 2.0 || M:alien_op_stage == 3.0)
 			var/mob/living/carbon/human/H = M
-			if(!istype(H))
+			if (!istype(H))
 				return ..()
 
-			if(H.wear_suit || H.w_uniform)
+			if (H.wear_suit || H.w_uniform)
 				to_chat(user, "<span class='warning'>You're going to need to remove that suit/jumpsuit first.</span>")
 				return
 
 			user.visible_message("<span class='warning'>[user] begins to dig around in [M]'s chest.</span>", "<span class='warning'>You begin to dig around in [M]'s chest.</span>")
 
 			spawn(20 + (M:alien_op_stage == 3 ? 0 : rand(0,50)))
-				if(M == user && prob(25))
+				if (M == user && prob(25))
 					to_chat(user, "<span class='warning'>You mess up!</span>")
-					if(istype(M, /mob/living/carbon/human))
+					if (istype(M, /mob/living/carbon/human))
 						var/datum/organ/external/affecting = M:get_organ(LIMB_CHEST)
-						if(affecting.take_damage(30))
+						if (affecting.take_damage(30))
 							M:UpdateDamageIcon()
 					else
 						M.take_organ_damage(30)
 
 				var/obj/item/alien_embryo/A = locate() in M.contents
-				if(A)
+				if (A)
 					var/dat = "<span class='notice'>You found an unknown alien organism in [M]'s chest!</span>"
-					if(A.stage < 4)
+					if (A.stage < 4)
 						dat += " It's small and weak, barely the size of a foetus."
-					if(A.stage > 3)
+					if (A.stage > 3)
 						dat += " It's grown quite large, and writhes slightly as you look at it."
-						if(prob(10))
+						if (prob(10))
 							A.AttemptGrow()
 					to_chat(user, dat)
 					M:alien_op_stage = 3.0
 				else
 					to_chat(user, "<span class='notice'>You find nothing of interest.</span>")
 
-	else if((!(user.zone_sel.selecting == LIMB_HEAD)) || (!(user.zone_sel.selecting == LIMB_GROIN)) || (!(istype(M, /mob/living/carbon/human))))
+	else if ((!(user.zone_sel.selecting == LIMB_HEAD)) || (!(user.zone_sel.selecting == LIMB_GROIN)) || (!(istype(M, /mob/living/carbon/human))))
 		return ..()
 
 	return
@@ -311,30 +311,30 @@ LOOK FOR SURGERY.DM*/
 
 /*
 /obj/item/weapon/cautery/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	if(!istype(M))
+	if (!istype(M))
 		return
 
-	if(!((locate(/obj/machinery/optable, M.loc) && M.resting) || (locate(/obj/structure/table/, M.loc) && M.lying && prob(50))))
+	if (!((locate(/obj/machinery/optable, M.loc) && M.resting) || (locate(/obj/structure/table/, M.loc) && M.lying && prob(50))))
 		return ..()
 
-	if(user.zone_sel.selecting == LIMB_GROIN)
-		if(istype(M, /mob/living/carbon/human))
-			switch(M:appendix_op_stage)
-				if(5.0)
-					if(M != user)
-						for(var/mob/O in (viewers(M) - user - M))
+	if (user.zone_sel.selecting == LIMB_GROIN)
+		if (istype(M, /mob/living/carbon/human))
+			switch (M:appendix_op_stage)
+				if (5.0)
+					if (M != user)
+						for (var/mob/O in (viewers(M) - user - M))
 							O.show_message("<span class='warning'>[user] is beginning to cauterize the incision in [M]'s abdomen with [src].</span>", 1)
 						to_chat(M, "<span class='warning'>[user] begins to cauterize the incision in your abdomen with [src]!</span>")
 						to_chat(user, "<span class='warning'>You cauterize the incision in [M]'s abdomen with [src]!</span>")
 						M:appendix_op_stage = 6.0
-						for(var/datum/disease/appendicitis in M.viruses)
+						for (var/datum/disease/appendicitis in M.viruses)
 							appendicitis.cure()
 		return
 
 	if (user.zone_sel.selecting == "eyes")
 
 		var/mob/living/carbon/human/H = M
-		if(istype(H) && ( \
+		if (istype(H) && ( \
 				(H.head && H.head.flags & HEADCOVERSEYES) || \
 				(H.wear_mask && H.wear_mask.flags & MASKCOVERSEYES) || \
 				(H.glasses && H.glasses.flags & GLASSESCOVERSEYES) \
@@ -343,20 +343,20 @@ LOOK FOR SURGERY.DM*/
 			return
 
 		var/mob/living/carbon/monkey/Mo = M
-		if(istype(Mo) && ( \
+		if (istype(Mo) && ( \
 				(Mo.wear_mask && Mo.wear_mask.flags & MASKCOVERSEYES) \
 			))
 			to_chat(user, "<span class='warning'>You're going to need to remove that mask/helmet/glasses first.</span>")
 			return
 
-		if(istype(M, /mob/living/carbon/alien))//Aliens don't have eyes./N
+		if (istype(M, /mob/living/carbon/alien))//Aliens don't have eyes./N
 			to_chat(user, "<span class='warning'>You cannot locate any eyes on this creature!</span>")
 			return
 
-		switch(M.eye_op_stage)
-			if(3.0)
-				if(M != user)
-					for(var/mob/O in (viewers(M) - user - M))
+		switch (M.eye_op_stage)
+			if (3.0)
+				if (M != user)
+					for (var/mob/O in (viewers(M) - user - M))
 						O.show_message("<span class='warning'>[M] is having his eyes cauterized by [user].</span>", 1)
 					to_chat(M, "<span class='warning'>[user] begins to cauterize your eyes!</span>")
 					to_chat(user, "<span class='warning'>You cauterize [M]'s eyes with [src]!</span>")
@@ -365,11 +365,11 @@ LOOK FOR SURGERY.DM*/
 						"<span class='warning'>[user] begins to have his eyes cauterized.</span>", \
 						"<span class='warning'>You begin to cauterize your eyes!</span>" \
 					)
-				if(M == user && prob(25))
+				if (M == user && prob(25))
 					to_chat(user, "<span class='warning'>You mess up!</span>")
-					if(istype(M, /mob/living/carbon/human))
+					if (istype(M, /mob/living/carbon/human))
 						var/datum/organ/external/affecting = M:get_organ(LIMB_HEAD)
-						if(affecting.take_damage(15))
+						if (affecting.take_damage(15))
 							M:UpdateDamageIcon()
 						M.updatehealth()
 					else
@@ -378,7 +378,7 @@ LOOK FOR SURGERY.DM*/
 				M.eye_stat = 0
 				M:eye_op_stage = 0.0
 
-	else if((!(user.zone_sel.selecting == LIMB_HEAD)) || (!(user.zone_sel.selecting == LIMB_GROIN)) || (!(istype(M, /mob/living/carbon/human))))
+	else if ((!(user.zone_sel.selecting == LIMB_HEAD)) || (!(user.zone_sel.selecting == LIMB_GROIN)) || (!(istype(M, /mob/living/carbon/human))))
 		return ..()
 
 	return
@@ -442,43 +442,43 @@ LOOK FOR SURGERY.DM*/
 
 /*
 /obj/item/weapon/scalpel/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	if(!istype(M))
+	if (!istype(M))
 		return ..()
 
 	//if(M.mutations & M_HUSK)	return ..()
 
-	if((M_CLUMSY in user.mutations) && prob(50))
+	if ((M_CLUMSY in user.mutations) && prob(50))
 		M = user
 		return eyestab(M,user)
 
-	if(!((locate(/obj/machinery/optable, M.loc) && M.resting) || (locate(/obj/structure/table/, M.loc) && M.lying && prob(50))))
+	if (!((locate(/obj/machinery/optable, M.loc) && M.resting) || (locate(/obj/structure/table/, M.loc) && M.lying && prob(50))))
 		return ..()
 
 	src.add_fingerprint(user)
 
-	if(user.zone_sel.selecting == LIMB_GROIN)
-		if(istype(M, /mob/living/carbon/human))
-			switch(M:appendix_op_stage)
-				if(0.0)
-					if(M != user)
-						for(var/mob/O in (viewers(M) - user - M))
+	if (user.zone_sel.selecting == LIMB_GROIN)
+		if (istype(M, /mob/living/carbon/human))
+			switch (M:appendix_op_stage)
+				if (0.0)
+					if (M != user)
+						for (var/mob/O in (viewers(M) - user - M))
 							O.show_message("<span class='warning'>[M] is beginning to have his abdomen cut open with [src] by [user].</span>", 1)
 						to_chat(M, "<span class='warning'>[user] begins to cut open your abdomen with [src]!</span>")
 						to_chat(user, "<span class='warning'>You cut [M]'s abdomen open with [src]!</span>")
 						M:appendix_op_stage = 1.0
-				if(3.0)
-					if(M != user)
-						for(var/mob/O in (viewers(M) - user - M))
+				if (3.0)
+					if (M != user)
+						for (var/mob/O in (viewers(M) - user - M))
 							O.show_message("<span class='warning'>[M] is beginning to have his appendix seperated with [src] by [user].</span>", 1)
 						to_chat(M, "<span class='warning'>[user] begins to seperate your appendix with [src]!</span>")
 						to_chat(user, "<span class='warning'>You seperate [M]'s appendix with [src]!</span>")
 						M:appendix_op_stage = 4.0
 		return
 
-	if(user.zone_sel.selecting == LIMB_HEAD || istype(M, /mob/living/carbon/slime))
+	if (user.zone_sel.selecting == LIMB_HEAD || istype(M, /mob/living/carbon/slime))
 
 		var/mob/living/carbon/human/H = M
-		if(istype(H) && ( \
+		if (istype(H) && ( \
 				(H.head && H.head.flags & HEADCOVERSEYES) || \
 				(H.wear_mask && H.wear_mask.flags & MASKCOVERSEYES) || \
 				(H.glasses && H.glasses.flags & GLASSESCOVERSEYES) \
@@ -487,17 +487,17 @@ LOOK FOR SURGERY.DM*/
 			return
 
 		var/mob/living/carbon/monkey/Mo = M
-		if(istype(Mo) && ( \
+		if (istype(Mo) && ( \
 				(Mo.wear_mask && Mo.wear_mask.flags & MASKCOVERSEYES) \
 			))
 			to_chat(user, "<span class='warning'>You're going to need to remove that mask/helmet/glasses first.</span>")
 			return
 
-		switch(M:brain_op_stage)
-			if(0.0)
-				if(istype(M, /mob/living/carbon/slime))
-					if(M.stat == 2)
-						for(var/mob/O in (viewers(M) - user - M))
+		switch (M:brain_op_stage)
+			if (0.0)
+				if (istype(M, /mob/living/carbon/slime))
+					if (M.stat == 2)
+						for (var/mob/O in (viewers(M) - user - M))
 							O.show_message("<span class='warning'>[M.name] is beginning to have its flesh cut open with [src] by [user].</span>", 1)
 						to_chat(M, "<span class='warning'>[user] begins to cut open your flesh with [src]!</span>")
 						to_chat(user, "<span class='warning'>You cut [M]'s flesh open with [src]!</span>")
@@ -505,8 +505,8 @@ LOOK FOR SURGERY.DM*/
 
 					return
 
-				if(M != user)
-					for(var/mob/O in (viewers(M) - user - M))
+				if (M != user)
+					for (var/mob/O in (viewers(M) - user - M))
 						O.show_message("<span class='warning'>[M] is beginning to have his head cut open with [src] by [user].</span>", 1)
 					to_chat(M, "<span class='warning'>[user] begins to cut open your head with [src]!</span>")
 					to_chat(user, "<span class='warning'>You cut [M]'s head open with [src]!</span>")
@@ -516,16 +516,16 @@ LOOK FOR SURGERY.DM*/
 						"<span class='warning'>You begin to cut open your head with [src]!</span>" \
 					)
 
-				if(M == user && prob(25))
+				if (M == user && prob(25))
 					to_chat(user, "<span class='warning'>You mess up!</span>")
-					if(istype(M, /mob/living/carbon/human))
+					if (istype(M, /mob/living/carbon/human))
 						var/datum/organ/external/affecting = M:get_organ(LIMB_HEAD)
-						if(affecting.take_damage(15))
+						if (affecting.take_damage(15))
 							M:UpdateDamageIcon()
 					else
 						M.take_organ_damage(15)
 
-				if(istype(M, /mob/living/carbon/human))
+				if (istype(M, /mob/living/carbon/human))
 					var/datum/organ/external/affecting = M:get_organ(LIMB_HEAD)
 					affecting.take_damage(7)
 				else
@@ -534,26 +534,26 @@ LOOK FOR SURGERY.DM*/
 				M.updatehealth()
 				M:brain_op_stage = 1.0
 
-			if(1)
-				if(istype(M, /mob/living/carbon/slime))
-					if(M.stat == 2)
-						for(var/mob/O in (viewers(M) - user - M))
+			if (1)
+				if (istype(M, /mob/living/carbon/slime))
+					if (M.stat == 2)
+						for (var/mob/O in (viewers(M) - user - M))
 							O.show_message("<span class='warning'>[M.name] is having its silky innards cut apart with [src] by [user].</span>", 1)
 						to_chat(M, "<span class='warning'>[user] begins to cut apart your innards with [src]!</span>")
 						to_chat(user, "<span class='warning'>You cut [M]'s silky innards apart with [src]!</span>")
 						M:brain_op_stage = 2.0
 					return
-			if(2.0)
-				if(istype(M, /mob/living/carbon/slime))
-					if(M.stat == 2)
+			if (2.0)
+				if (istype(M, /mob/living/carbon/slime))
+					if (M.stat == 2)
 						var/mob/living/carbon/slime/slime = M
-						if(slime.cores > 0)
-							if(istype(M, /mob/living/carbon/slime))
+						if (slime.cores > 0)
+							if (istype(M, /mob/living/carbon/slime))
 								to_chat(user, "<span class='warning'>You attempt to remove [M]'s core, but [src] is ineffective!</span>")
 					return
 
-				if(M != user)
-					for(var/mob/O in (viewers(M) - user - M))
+				if (M != user)
+					for (var/mob/O in (viewers(M) - user - M))
 						O.show_message("<span class='warning'>[M] is having his connections to the brain delicately severed with [src] by [user].</span>", 1)
 					to_chat(M, "<span class='warning'>[user] begins to cut open your head with [src]!</span>")
 					to_chat(user, "<span class='warning'>You cut [M]'s head open with [src]!</span>")
@@ -562,16 +562,16 @@ LOOK FOR SURGERY.DM*/
 						"<span class='warning'>[user] begin to delicately remove the connections to his brain with [src]!</span>", \
 						"<span class='warning'>You begin to cut open your head with [src]!</span>" \
 					)
-				if(M == user && prob(25))
+				if (M == user && prob(25))
 					to_chat(user, "<span class='warning'>You nick an artery!</span>")
-					if(istype(M, /mob/living/carbon/human))
+					if (istype(M, /mob/living/carbon/human))
 						var/datum/organ/external/affecting = M:get_organ(LIMB_HEAD)
-						if(affecting.take_damage(75))
+						if (affecting.take_damage(75))
 							M:UpdateDamageIcon()
 					else
 						M.take_organ_damage(75)
 
-				if(istype(M, /mob/living/carbon/human))
+				if (istype(M, /mob/living/carbon/human))
 					var/datum/organ/external/affecting = M:get_organ(LIMB_HEAD)
 					affecting.take_damage(7)
 				else
@@ -583,11 +583,11 @@ LOOK FOR SURGERY.DM*/
 				..()
 		return
 
-	else if(user.zone_sel.selecting == "eyes")
+	else if (user.zone_sel.selecting == "eyes")
 		to_chat(user, "<span class='notice'>So far so good.</span>")
 
 		var/mob/living/carbon/human/H = M
-		if(istype(H) && ( \
+		if (istype(H) && ( \
 				(H.head && H.head.flags & HEADCOVERSEYES) || \
 				(H.wear_mask && H.wear_mask.flags & MASKCOVERSEYES) || \
 				(H.glasses && H.glasses.flags & GLASSESCOVERSEYES) \
@@ -596,20 +596,20 @@ LOOK FOR SURGERY.DM*/
 			return
 
 		var/mob/living/carbon/monkey/Mo = M
-		if(istype(Mo) && ( \
+		if (istype(Mo) && ( \
 				(Mo.wear_mask && Mo.wear_mask.flags & MASKCOVERSEYES) \
 			))
 			to_chat(user, "<span class='warning'>You're going to need to remove that mask/helmet/glasses first.</span>")
 			return
 
-		if(istype(M, /mob/living/carbon/alien) || istype(M, /mob/living/carbon/slime))//Aliens don't have eyes./N
+		if (istype(M, /mob/living/carbon/alien) || istype(M, /mob/living/carbon/slime))//Aliens don't have eyes./N
 			to_chat(user, "<span class='warning'>You cannot locate any eyes on this creature!</span>")
 			return
 
-		switch(M:eye_op_stage)
-			if(0.0)
-				if(M != user)
-					for(var/mob/O in (viewers(M) - user - M))
+		switch (M:eye_op_stage)
+			if (0.0)
+				if (M != user)
+					for (var/mob/O in (viewers(M) - user - M))
 						O.show_message("<span class='warning'>[M] is beginning to have his eyes incised with [src] by [user].</span>", 1)
 					to_chat(M, "<span class='warning'>[user] begins to cut open your eyes with [src]!</span>")
 					to_chat(user, "<span class='warning'>You make an incision around [M]'s eyes with [src]!</span>")
@@ -618,11 +618,11 @@ LOOK FOR SURGERY.DM*/
 						"<span class='warning'>[user] begins to cut around his eyes with [src]!</span>", \
 						"<span class='warning'>You begin to cut open your eyes with [src]!</span>" \
 					)
-				if(M == user && prob(25))
+				if (M == user && prob(25))
 					to_chat(user, "<span class='warning'>You mess up!</span>")
-					if(istype(M, /mob/living/carbon/human))
+					if (istype(M, /mob/living/carbon/human))
 						var/datum/organ/external/affecting = M:get_organ(LIMB_HEAD)
-						if(affecting.take_damage(15))
+						if (affecting.take_damage(15))
 							M:UpdateDamageIcon()
 					else
 						M.take_organ_damage(15)
@@ -632,25 +632,25 @@ LOOK FOR SURGERY.DM*/
 				M:eye_op_stage = 1.0
 				to_chat(user, "<span class='notice'>So far so good after.</span>")
 
-	else if(user.zone_sel.selecting == LIMB_CHEST)
-		switch(M:alien_op_stage)
-			if(0.0)
+	else if (user.zone_sel.selecting == LIMB_CHEST)
+		switch (M:alien_op_stage)
+			if (0.0)
 				var/mob/living/carbon/human/H = M
-				if(!istype(H))
+				if (!istype(H))
 					return ..()
 
-				if(H.wear_suit || H.w_uniform)
+				if (H.wear_suit || H.w_uniform)
 					to_chat(user, "<span class='warning'>You're going to need to remove that suit/jumpsuit first.</span>")
 					return
 
 				user.visible_message("<span class='warning'>[user] begins to slice open [M]'s chest.</span>", "<span class='warning'>You begin to slice open [M]'s chest.</span>")
 
 				spawn(rand(20,50))
-					if(M == user && prob(25))
+					if (M == user && prob(25))
 						to_chat(user, "<span class='warning'>You mess up!</span>")
-						if(istype(M, /mob/living/carbon/human))
+						if (istype(M, /mob/living/carbon/human))
 							var/datum/organ/external/affecting = M:get_organ(LIMB_CHEST)
-							if(affecting.take_damage(15))
+							if (affecting.take_damage(15))
 								M:UpdateDamageIcon()
 						else
 							M.take_organ_damage(15)
@@ -661,7 +661,7 @@ LOOK FOR SURGERY.DM*/
 	else
 		return ..()
 /* wat
-	else if((!(user.zone_sel.selecting == LIMB_HEAD)) || (!(user.zone_sel.selecting == LIMB_GROIN)) || (!(istype(M, /mob/living/carbon/human))))
+	else if ((!(user.zone_sel.selecting == LIMB_HEAD)) || (!(user.zone_sel.selecting == LIMB_GROIN)) || (!(istype(M, /mob/living/carbon/human))))
 		return ..()*/
 	return
 */
@@ -677,7 +677,7 @@ LOOK FOR SURGERY.DM*/
 	var/cauterymode = 0 //1 = cautery enabled
 
 /obj/item/weapon/scalpel/laser/attack_self(mob/user)
-	if(!cauterymode)
+	if (!cauterymode)
 		to_chat(user, "You disable the blade and switch to the scalpel's cautery tool.")
 		heat_production = 1600
 		sharpness = 0
@@ -740,22 +740,22 @@ LOOK FOR SURGERY.DM*/
 
 /*
 /obj/item/weapon/circular_saw/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	if(!istype(M))
+	if (!istype(M))
 		return ..()
 
-	if((M_CLUMSY in user.mutations) && prob(50))
+	if ((M_CLUMSY in user.mutations) && prob(50))
 		M = user
 		return eyestab(M,user)
 
-	if(!((locate(/obj/machinery/optable, M.loc) && M.resting) || (locate(/obj/structure/table/, M.loc) && M.lying && prob(50))))
+	if (!((locate(/obj/machinery/optable, M.loc) && M.resting) || (locate(/obj/structure/table/, M.loc) && M.lying && prob(50))))
 		return ..()
 
 	src.add_fingerprint(user)
 
-	if(user.zone_sel.selecting == LIMB_HEAD || istype(M, /mob/living/carbon/slime))
+	if (user.zone_sel.selecting == LIMB_HEAD || istype(M, /mob/living/carbon/slime))
 
 		var/mob/living/carbon/human/H = M
-		if(istype(H) && ( \
+		if (istype(H) && ( \
 				(H.head && H.head.flags & HEADCOVERSEYES) || \
 				(H.wear_mask && H.wear_mask.flags & MASKCOVERSEYES) || \
 				(H.glasses && H.glasses.flags & GLASSESCOVERSEYES) \
@@ -764,18 +764,18 @@ LOOK FOR SURGERY.DM*/
 			return
 
 		var/mob/living/carbon/monkey/Mo = M
-		if(istype(Mo) && ( \
+		if (istype(Mo) && ( \
 				(Mo.wear_mask && Mo.wear_mask.flags & MASKCOVERSEYES) \
 			))
 			to_chat(user, "<span class='warning'>You're going to need to remove that mask/helmet/glasses first.</span>")
 			return
 
-		switch(M:brain_op_stage)
-			if(1.0)
-				if(istype(M, /mob/living/carbon/slime))
+		switch (M:brain_op_stage)
+			if (1.0)
+				if (istype(M, /mob/living/carbon/slime))
 					return
-				if(M != user)
-					for(var/mob/O in (viewers(M) - user - M))
+				if (M != user)
+					for (var/mob/O in (viewers(M) - user - M))
 						O.show_message("<span class='warning'>[M] has his skull sawed open with [src] by [user].</span>", 1)
 					to_chat(M, "<span class='warning'>[user] begins to saw open your head with [src]!</span>")
 					to_chat(user, "<span class='warning'>You saw [M]'s head open with [src]!</span>")
@@ -784,17 +784,17 @@ LOOK FOR SURGERY.DM*/
 						"<span class='warning'>[user] saws open his skull with [src]!</span>", \
 						"<span class='warning'>You begin to saw open your head with [src]!</span>" \
 					)
-				if(M == user && prob(25))
+				if (M == user && prob(25))
 					to_chat(user, "<span class='warning'>You mess up!</span>")
-					if(istype(M, /mob/living/carbon/human))
+					if (istype(M, /mob/living/carbon/human))
 						var/datum/organ/external/affecting = M:get_organ(LIMB_HEAD)
-						if(affecting.take_damage(40))
+						if (affecting.take_damage(40))
 							M:UpdateDamageIcon()
 						M.updatehealth()
 					else
 						M.take_organ_damage(40)
 
-				if(istype(M, /mob/living/carbon/human))
+				if (istype(M, /mob/living/carbon/human))
 					var/datum/organ/external/affecting = M:get_organ(LIMB_HEAD)
 					affecting.take_damage(7)
 				else
@@ -803,12 +803,12 @@ LOOK FOR SURGERY.DM*/
 				M.updatehealth()
 				M:brain_op_stage = 2.0
 
-			if(2.0)
-				if(istype(M, /mob/living/carbon/slime))
-					if(M.stat == 2)
+			if (2.0)
+				if (istype(M, /mob/living/carbon/slime))
+					if (M.stat == 2)
 						var/mob/living/carbon/slime/slime = M
-						if(slime.cores > 0)
-							for(var/mob/O in (viewers(M) - user - M))
+						if (slime.cores > 0)
+							for (var/mob/O in (viewers(M) - user - M))
 								O.show_message("<span class='warning'>[M.name] is having one of its cores sawed out with [src] by [user].</span>", 1)
 
 							slime.cores--
@@ -817,18 +817,18 @@ LOOK FOR SURGERY.DM*/
 
 							new slime.coretype(M.loc)
 
-							if(slime.cores <= 0)
+							if (slime.cores <= 0)
 								M.icon_state = "[slime.colour] baby slime dead-nocore"
 
 					return
 
-			if(3.0)
+			if (3.0)
 				/*if(M.mind && M.mind.changeling)
 					to_chat(user, "<span class='warning'>The neural tissue regrows before your eyes as you cut it.</span>")
 					return*/
 
-				if(M != user)
-					for(var/mob/O in (viewers(M) - user - M))
+				if (M != user)
+					for (var/mob/O in (viewers(M) - user - M))
 						O.show_message("<span class='warning'>[M] has his spine's connection to the brain severed with [src] by [user].</span>", 1)
 					to_chat(M, "<span class='warning'>[user] severs your brain's connection to the spine with [src]!</span>")
 					to_chat(user, "<span class='warning'>You sever [M]'s brain's connection to the spine with [src]!</span>")
@@ -854,25 +854,25 @@ LOOK FOR SURGERY.DM*/
 				..()
 		return
 
-	else if(user.zone_sel.selecting == LIMB_CHEST)
-		switch(M:alien_op_stage)
-			if(1.0)
+	else if (user.zone_sel.selecting == LIMB_CHEST)
+		switch (M:alien_op_stage)
+			if (1.0)
 				var/mob/living/carbon/human/H = M
-				if(!istype(H))
+				if (!istype(H))
 					return ..()
 
-				if(H.wear_suit || H.w_uniform)
+				if (H.wear_suit || H.w_uniform)
 					to_chat(user, "<span class='warning'>You're going to need to remove that suit/jumpsuit first.</span>")
 					return
 
 				user.visible_message("<span class='warning'>[user] begins to slice through the bone of [M]'s chest.</span>", "<span class='warning'>You begin to slice through the bone of [M]'s chest.</span>")
 
 				spawn(20 + rand(0,50))
-					if(M == user && prob(25))
+					if (M == user && prob(25))
 						to_chat(user, "<span class='warning'>You mess up!</span>")
-						if(istype(M, /mob/living/carbon/human))
+						if (istype(M, /mob/living/carbon/human))
 							var/datum/organ/external/affecting = M:get_organ(LIMB_CHEST)
-							if(affecting.take_damage(15))
+							if (affecting.take_damage(15))
 								M:UpdateDamageIcon()
 						else
 							M.take_organ_damage(15)
@@ -883,7 +883,7 @@ LOOK FOR SURGERY.DM*/
 	else
 		return ..()
 /*
-	else if((!(user.zone_sel.selecting == LIMB_HEAD)) || (!(user.zone_sel.selecting == LIMB_GROIN)) || (!(istype(M, /mob/living/carbon/human))))
+	else if ((!(user.zone_sel.selecting == LIMB_HEAD)) || (!(user.zone_sel.selecting == LIMB_GROIN)) || (!(istype(M, /mob/living/carbon/human))))
 		return ..()
 */
 	return
@@ -940,9 +940,9 @@ LOOK FOR SURGERY.DM*/
 
 
 /obj/item/weapon/revivalprod/attack(mob/target,mob/user)
-	if(target.lying)
+	if (target.lying)
 		target.sleeping = max(0,target.sleeping-5)
-		if(target.sleeping == 0)
+		if (target.sleeping == 0)
 			target.resting = 0
 		target.AdjustParalysis(-3)
 		target.AdjustStunned(-3)

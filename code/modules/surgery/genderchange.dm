@@ -13,7 +13,7 @@
 
 /datum/surgery_step/prepare_genitals/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	if(target.species.flags & NO_SKIN)
+	if (target.species.flags & NO_SKIN)
 		to_chat(user, "<span class='warning'>[target] has no genitalia to prepare.</span>")
 		return 0
 	return target_zone == LIMB_GROIN && hasorgans(target) && affected.open >= 2 && affected.stage == 0
@@ -37,7 +37,7 @@
 //////RESHAPE GENITALS//////
 /datum/surgery_step/reshape_genitals/tool_quality(obj/item/tool)
 	. = ..()
-	if(!tool.is_sharp())
+	if (!tool.is_sharp())
 		return 0
 
 /datum/surgery_step/reshape_genitals
@@ -57,14 +57,14 @@
 	return target_zone == LIMB_GROIN && hasorgans(target) && target.op_stage.genitals == 1
 
 /datum/surgery_step/reshape_genitals/begin_step(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
-	if(target.gender == FEMALE)
+	if (target.gender == FEMALE)
 		user.visible_message("<span class='notice'>[user] begins to reshape [target]'s genitals to look more masculine.</span>")
 	else
 		user.visible_message("<span class='notice'>[user] begins to reshape [target]'s genitals to look more feminine.</span>")
 
 /datum/surgery_step/reshape_genitals/end_step(mob/user, mob/living/carbon/target, target_zone, obj/item/tool, datum/surgery/surgery)
 	//H.gender_ambiguous = 0
-	if(target.gender == FEMALE)
+	if (target.gender == FEMALE)
 		user.visible_message("<span class='notice'>[user] has made a man out of [target]!</span>")
 		target.setGender(MALE)
 	else

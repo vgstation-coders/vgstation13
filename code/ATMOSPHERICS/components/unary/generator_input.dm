@@ -9,7 +9,7 @@
 	var/update_cycle
 
 	update_icon()
-		if(node)
+		if (node)
 			icon_state = "intact"
 		else
 			icon_state = "exposed"

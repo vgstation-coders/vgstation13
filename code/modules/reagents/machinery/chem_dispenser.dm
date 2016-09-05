@@ -56,45 +56,45 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 /obj/machinery/chem_dispenser/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
+	for (var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
 		T += M.rating-1
 	max_energy = initial(max_energy)+(T * 50 / 4)
 
 	T = 0
-	for(var/obj/item/weapon/stock_parts/micro_laser/Ma in component_parts)
+	for (var/obj/item/weapon/stock_parts/micro_laser/Ma in component_parts)
 		T += Ma.rating-1
 	rechargerate = initial(rechargerate) + (T / 2)
 
 /*
-	for(var/obj/item/weapon/stock_parts/scanning_module/Ml in component_parts)
+	for (var/obj/item/weapon/stock_parts/scanning_module/Ml in component_parts)
 		T += Ml.rating
 	//Who even knows what to use the scanning module for
 */
 
 /obj/machinery/chem_dispenser/proc/user_moved(var/list/args)
 	var/event/E = args["event"]
-	if(!targetMoveKey)
+	if (!targetMoveKey)
 		E.handlers.Remove("\ref[src]:user_moved")
 		return
 
 	var/turf/T = args["loc"]
 
-	if(!Adjacent(T))
-		if(E.holder)
+	if (!Adjacent(T))
+		if (E.holder)
 			E.holder.on_moved.Remove(targetMoveKey)
 		detach()
 
 /obj/machinery/chem_dispenser/proc/recharge()
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
 	var/oldenergy = energy
 	energy = min(energy + rechargerate, max_energy)
-	if(energy != oldenergy)
+	if (energy != oldenergy)
 		use_power(3000) // This thing uses up alot of power (this is still low as shit for creating reagents from thin air)
 		nanomanager.update_uis(src) // update all UIs attached to src
 
 /obj/machinery/chem_dispenser/power_change()
-	if(powered())
+	if (powered())
 		stat &= ~NOPOWER
 	else
 		spawn(rand(0, 15))
@@ -102,26 +102,26 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	nanomanager.update_uis(src) // update all UIs attached to src
 
 /obj/machinery/chem_dispenser/proc/can_use(var/mob/living/silicon/robot/R)
-	if(!isMoMMI(R) && !istype(R.module,/obj/item/weapon/robot_module/medical)) //default chem dispenser can only be used by MoMMIs and Mediborgs
+	if (!isMoMMI(R) && !istype(R.module,/obj/item/weapon/robot_module/medical)) //default chem dispenser can only be used by MoMMIs and Mediborgs
 		return 0
 	else
-		if(!isMoMMI(R))
+		if (!isMoMMI(R))
 			targetMoveKey =  R.on_moved.Add(src, "user_moved")
 		return 1
 
 /obj/machinery/chem_dispenser/process()
-	if(recharged < 0)
+	if (recharged < 0)
 		recharge()
 		recharged = 15
 	else
 		recharged -= 1
 
 /obj/machinery/chem_dispenser/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			qdel(src)
 			return
-		if(2.0)
+		if (2.0)
 			if (prob(50))
 				qdel(src)
 				return
@@ -142,11 +142,11 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
   * @return nothing
   */
 /obj/machinery/chem_dispenser/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
-	if((user.stat && !isobserver(user)) || user.restrained())
+	if ((user.stat && !isobserver(user)) || user.restrained())
 		return
-	if(!chemical_reagents_list || !chemical_reagents_list.len)
+	if (!chemical_reagents_list || !chemical_reagents_list.len)
 		return
 	// this is the data which will be sent to the ui
 	var/data[0]
@@ -158,8 +158,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 	var containerContents[0]
 	var containerCurrentVolume = 0
-	if(container && container.reagents && container.reagents.reagent_list.len)
-		for(var/datum/reagent/R in container.reagents.reagent_list)
+	if (container && container.reagents && container.reagents.reagent_list.len)
+		for (var/datum/reagent/R in container.reagents.reagent_list)
 			containerContents.Add(list(list("name" = R.name, "volume" = R.volume))) // list in a list because Byond merges the first list...
 			containerCurrentVolume += R.volume
 	data["beakerContents"] = containerContents
@@ -174,7 +174,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	var chemicals[0]
 	for (var/re in dispensable_reagents)
 		var/datum/reagent/temp = chemical_reagents_list[re]
-		if(temp) //formats name because Space Mountain Wind and theoretically others in the future are too long
+		if (temp) //formats name because Space Mountain Wind and theoretically others in the future are too long
 			chemicals.Add(list(list("title" = copytext(temp.name,1,FORMAT_DISPENSER_NAME), "id" = temp.id, "commands" = list("dispense" = temp.id)))) // list in a list because Byond merges the first list...
 	data["chemicals"] = chemicals
 	// update the ui if it exists, returns null if no ui is passed/found
@@ -189,17 +189,17 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		ui.open()
 
 /obj/machinery/chem_dispenser/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
-	if(href_list["close"])
-		if(usr.machine == src)
+	if (href_list["close"])
+		if (usr.machine == src)
 			usr.unset_machine()
 		return 1
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return 0 // don't update UIs attached to this object
 
-	if(href_list["amount"])
-		if(href_list["amount"] == "0")
+	if (href_list["amount"])
+		if (href_list["amount"] == "0")
 			var/num = input("Enter desired output amount", "Amount", useramount) as num
 			if (num)
 				amount = round(text2num(num), 5)
@@ -211,12 +211,12 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		if (custom)
 			useramount = amount
 
-	if(href_list["dispense"])
+	if (href_list["dispense"])
 		if (dispensable_reagents.Find(href_list["dispense"]) && container != null)
 			var/obj/item/weapon/reagent_containers/B = src.container
 			var/datum/reagents/R = B.reagents
-			if(!R)
-				if(!B.gcDestroyed)
+			if (!R)
+				if (!B.gcDestroyed)
 					B.create_reagents(B.volume)
 				else
 					qdel(B)
@@ -227,8 +227,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			R.add_reagent(href_list["dispense"], min(amount, energy * 10, space))
 			energy = max(energy - min(amount, energy * 10, space) / 10, 0)
 
-	if(href_list["ejectBeaker"])
-		if(container)
+	if (href_list["ejectBeaker"])
+		if (container)
 			detach()
 
 	add_fingerprint(usr)
@@ -237,12 +237,12 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/proc/detach()
 	targetMoveKey=null
 
-	if(container)
+	if (container)
 		var/obj/item/weapon/reagent_containers/B = container
 		B.forceMove(loc)
-		if(istype(container, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
+		if (istype(container, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
 			var/mob/living/silicon/robot/R = container:holder:loc
-			if(R.module_state_1 == container || R.module_state_2 == container || R.module_state_3 == container)
+			if (R.module_state_1 == container || R.module_state_2 == container || R.module_state_3 == container)
 				container.forceMove(R)
 			else
 				container.forceMove(container:holder)
@@ -250,37 +250,37 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		return 1
 
 /obj/machinery/chem_dispenser/AltClick()
-	if(!usr.incapacitated() && Adjacent(usr) && container && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
+	if (!usr.incapacitated() && Adjacent(usr) && container && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()))
 		detach()
 		return
 	return ..()
 
 /obj/machinery/chem_dispenser/togglePanelOpen(var/obj/toggleitem, mob/user)
-	if(container)
+	if (container)
 		to_chat(user, "You can't reach the maintenance panel with \a [container] in the way!")
 		return
 	return ..()
 
 /obj/machinery/chem_dispenser/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob) //to be worked on
 
-	if(..())
+	if (..())
 		return 1
 
-	if(isrobot(user))
-		if(!can_use(user))
+	if (isrobot(user))
+		if (!can_use(user))
 			return
 
-	if(istype(D, /obj/item/weapon/reagent_containers/glass) || istype(D, /obj/item/weapon/reagent_containers/food/drinks))
-		if(src.container)
+	if (istype(D, /obj/item/weapon/reagent_containers/glass) || istype(D, /obj/item/weapon/reagent_containers/food/drinks))
+		if (src.container)
 			to_chat(user, "\A [src.container] is already loaded into the machine.")
 			return
-		else if(!panel_open)
-			if(!user.drop_item(D, src))
+		else if (!panel_open)
+			if (!user.drop_item(D, src))
 				to_chat(user, "<span class='warning'>You can't let go of \the [D]!</span>")
 				return
 
 			src.container =  D
-			if(user.type == /mob/living/silicon/robot)
+			if (user.type == /mob/living/silicon/robot)
 				var/mob/living/silicon/robot/R = user
 				R.uneq_active()
 
@@ -300,7 +300,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	return src.attack_hand(user)
 
 /obj/machinery/chem_dispenser/attack_hand(mob/user as mob)
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		return
 
 	ui_interact(user)
@@ -330,7 +330,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	energy = 100
 
 /obj/machinery/chem_dispenser/brewer/can_use(var/mob/living/silicon/robot/R)
-	if(!isMoMMI(R) && istype(R.module,/obj/item/weapon/robot_module/butler)) //bartending dispensers can be used only by service borgs
+	if (!isMoMMI(R) && istype(R.module,/obj/item/weapon/robot_module/butler)) //bartending dispensers can be used only by service borgs
 		targetMoveKey =  R.on_moved.Add(src, "user_moved")
 		return 1
 	else
@@ -362,7 +362,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	energy = 100
 
 /obj/machinery/chem_dispenser/soda_dispenser/can_use(var/mob/living/silicon/robot/R)
-	if(!isMoMMI(R) && istype(R.module,/obj/item/weapon/robot_module/butler)) //bartending dispensers can be used only by service borgs
+	if (!isMoMMI(R) && istype(R.module,/obj/item/weapon/robot_module/butler)) //bartending dispensers can be used only by service borgs
 		targetMoveKey =  R.on_moved.Add(src, "user_moved")
 		return 1
 	else
@@ -392,7 +392,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	energy = 100
 
 /obj/machinery/chem_dispenser/booze_dispenser/can_use(var/mob/living/silicon/robot/R)
-	if(!isMoMMI(R) && istype(R.module,/obj/item/weapon/robot_module/butler)) //bartending dispensers can be used only by service borgs
+	if (!isMoMMI(R) && istype(R.module,/obj/item/weapon/robot_module/butler)) //bartending dispensers can be used only by service borgs
 		targetMoveKey =  R.on_moved.Add(src, "user_moved")
 		return 1
 	else

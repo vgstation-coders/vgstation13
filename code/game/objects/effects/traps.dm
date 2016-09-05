@@ -14,14 +14,14 @@
 
 /obj/effect/trap/Crossed(atom/movable/AM)
 	..()
-	if(activated)
+	if (activated)
 		return
 
-	if(can_activate(AM))
+	if (can_activate(AM))
 		activated = 1
 		activate(AM)
 
-		if(delete_on_trigger)
+		if (delete_on_trigger)
 			qdel(src)
 
 /obj/effect/trap/New()

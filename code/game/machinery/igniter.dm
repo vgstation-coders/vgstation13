@@ -25,7 +25,7 @@ var/global/list/igniters = list()
 	return
 
 /obj/machinery/igniter/attack_hand(mob/user as mob)
-	if(..())
+	if (..())
 		return
 	add_fingerprint(user)
 
@@ -57,13 +57,13 @@ var/global/list/igniters = list()
 	..()
 
 /obj/machinery/igniter/power_change()
-	if(!( stat & NOPOWER) )
+	if (!( stat & NOPOWER) )
 		icon_state = "igniter[src.on]"
 	else
 		icon_state = "igniter0"
 
 /obj/machinery/igniter/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	if(istype(W, /obj/item/weapon/weldingtool) && src.assembly)
+	if (istype(W, /obj/item/weapon/weldingtool) && src.assembly)
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0,user))
 			playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
@@ -117,7 +117,7 @@ var/global/list/igniters = list()
 //		src.sd_SetLuminosity(0)
 
 /obj/machinery/sparker/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/device/detective_scanner))
+	if (istype(W, /obj/item/device/detective_scanner))
 		return
 	if (isscrewdriver(W))
 		add_fingerprint(user)
@@ -127,7 +127,7 @@ var/global/list/igniters = list()
 			icon_state = "[base_state]-d"
 		if (!src.disable)
 			user.visible_message("<span class='warning'>[user] has reconnected the [src]!</span>", "<span class='warning'>You fix the connection to the [src].</span>")
-			if(src.powered())
+			if (src.powered())
 				icon_state = "[base_state]"
 			else
 				icon_state = "[base_state]-p"
@@ -158,7 +158,7 @@ var/global/list/igniters = list()
 	return 1
 
 /obj/machinery/sparker/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		..(severity)
 		return
 	spark()
@@ -176,9 +176,9 @@ var/global/list/igniters = list()
 
 /obj/machinery/ignition_switch/attack_hand(mob/user as mob)
 
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
-	if(active)
+	if (active)
 		return
 
 	use_power(5)
@@ -186,13 +186,13 @@ var/global/list/igniters = list()
 	active = 1
 	icon_state = "launcheract"
 
-	for(var/obj/machinery/sparker/M in igniters)
+	for (var/obj/machinery/sparker/M in igniters)
 		if (M.id_tag == src.id_tag)
 			spawn( 0 )
 				M.spark()
 
-	for(var/obj/machinery/igniter/M in igniters)
-		if(M.id_tag == src.id_tag)
+	for (var/obj/machinery/igniter/M in igniters)
+		if (M.id_tag == src.id_tag)
 			use_power(50)
 			M.on = !( M.on )
 			M.icon_state = text("igniter[]", M.on)

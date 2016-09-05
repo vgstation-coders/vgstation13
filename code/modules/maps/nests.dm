@@ -14,21 +14,21 @@
 
 /obj/map/nest/perform_spawn()
 
-	for(var/i = 1, i <= pop, i++)
+	for (var/i = 1, i <= pop, i++)
 		new mob_type(loc)
 
 	spawn()
 		ticker()
 
 /obj/map/nest/proc/ticker()
-	while(src)
-		for(var/mob/M in get_area(src))
-			if(istype(M, mob_type))
+	while (src)
+		for (var/mob/M in get_area(src))
+			if (istype(M, mob_type))
 				pop++
 			else
 				pop-- //It's harder with an audience, you understand bb
-		if(pop in pop_min to pop_max) //When enough simple animals...
-			if(prob(breed_chance)) //Love each other very much...
+		if (pop in pop_min to pop_max) //When enough simple animals...
+			if (prob(breed_chance)) //Love each other very much...
 				new mob_type(loc) //Babby formed!!
 		sleep(breed_time)
 

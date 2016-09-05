@@ -25,7 +25,7 @@
 		M.sdisabilities |= MUTE
 
 	deactivate(var/mob/M, var/connected, var/flags)
-		if(..())
+		if (..())
 			M.sdisabilities &= ~MUTE
 ////////////////////////////////////////
 // Harmful to others as well as self
@@ -44,8 +44,8 @@
 
 	OnMobLife(var/mob/owner)
 		owner.radiation = max(owner.radiation, 20)
-		for(var/mob/living/L in range(1, owner))
-			if(L == owner)
+		for (var/mob/living/L in range(1, owner))
+			if (L == owner)
 				continue
 			to_chat(L, "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>")
 			L.radiation += 5
@@ -68,11 +68,11 @@
 	mutation = M_OBESITY
 
 	can_activate(var/mob/M, var/flags)
-		if(!ishuman(M))
+		if (!ishuman(M))
 			return 0
 
 		var/mob/living/carbon/human/H = M
-		if(H.species && !(H.species.flags & CAN_BE_FAT))
+		if (H.species && !(H.species.flags & CAN_BE_FAT))
 			return 0
 
 		return 1
@@ -142,7 +142,7 @@
 		speech.message = replacetext(speech.message,"dick","jerk")
 		speech.message = replacetext(speech.message,"vagina","privates")
 //		speech.message += "[pick(":)",":^)",":*)")]"             : ^ (
-		if(prob(30))
+		if (prob(30))
 			speech.message += " check your privilege."
 
 
@@ -158,7 +158,7 @@
 		block=ELVISBLOCK
 
 	OnSay(var/mob/M, var/datum/speech/speech)
-		if(prob(5))
+		if (prob(5))
 			M.visible_message("<b>[M]</b> [pick("rambles to themselves.","begins talking to themselves.")]")
 			return 1
 		speech.message = replacetext(speech.message,"im not","I ain't")
@@ -174,14 +174,14 @@
 		speech.message = replacetext(speech.message," vox "," bird ")
 
 	OnMobLife(var/mob/M)
-		switch(pick(1,2))
-			if(1)
-				if(prob(15))
+		switch (pick(1,2))
+			if (1)
+				if (prob(15))
 					var/list/dancetypes = list("swinging", "fancy", "stylish", "20'th century", "jivin'", "rock and roller", "cool", "salacious", "bashing", "smashing")
 					var/dancemoves = pick(dancetypes)
 					M.visible_message("<b>[M]</b> busts out some [dancemoves] moves!")
-			if(2)
-				if(prob(15))
+			if (2)
+				if (prob(15))
 					M.visible_message("<b>[M]</b> [pick("jiggles their hips", "rotates their hips", "gyrates their hips", "taps their foot", "dances to an imaginary song", "jiggles their legs", "snaps their fingers")]")
 
 
@@ -236,7 +236,7 @@
 	OnSay(var/mob/M, var/datum/speech/speech)
 		// svedish!
 		speech.message = replacetext(speech.message,"w","v")
-		if(prob(30))
+		if (prob(30))
 			speech.message += " Bork[pick("",", bork",", bork, bork")]!"
 
 // WAS: /datum/bioEffect/unintelligable
@@ -252,9 +252,9 @@
 
 	OnSay(var/mob/M, var/datum/speech/speech)
 		var/prefix=copytext(speech.message,1,2)
-		if(prefix == ";")
+		if (prefix == ";")
 			speech.message = copytext(speech.message,2)
-		else if(prefix in list(":","#"))
+		else if (prefix in list(":","#"))
 			prefix += copytext(speech.message,2,3)
 			speech.message = copytext(speech.message,3)
 		else
@@ -262,14 +262,14 @@
 
 		var/list/words = splittext(speech.message," ")
 		var/list/rearranged = list()
-		for(var/i=1;i<=words.len;i++)
+		for (var/i=1;i<=words.len;i++)
 			var/cword = pick(words)
 			words.Remove(cword)
 			var/suffix = copytext(cword,length(cword)-1,length(cword))
-			while(length(cword)>0 && suffix in list(".",",",";","!",":","?"))
+			while (length(cword)>0 && suffix in list(".",",",";","!",":","?"))
 				cword  = copytext(cword,1              ,length(cword)-1)
 				suffix = copytext(cword,length(cword)-1,length(cword)  )
-			if(length(cword))
+			if (length(cword))
 				rearranged += cword
 		speech.message = "[prefix][uppertext(jointext(rearranged," "))]!!"
 
@@ -326,7 +326,7 @@
 
 	OnLife()
 		if (prob(10))
-			for(var/mob/living/carbon/C in view(6,get_turf(owner)))
+			for (var/mob/living/carbon/C in view(6,get_turf(owner)))
 				if (C == owner)
 					continue
 				if (src.variant == 2)
@@ -372,7 +372,7 @@
 
 /spell/targeted/immolate/cast(list/targets)
 	..()
-	for(var/mob/living/target in targets)
+	for (var/mob/living/target in targets)
 		target.adjust_fire_stacks(0.5) // Same as walking into fire. Was 100 (goon fire)
 		target.visible_message("<span class='danger'><b>[target.name]</b> suddenly bursts into flames!</span>")
 		target.on_fire = 1
@@ -411,13 +411,13 @@
 	hud_state = "gen_dissolve"
 
 /spell/targeted/melt/cast(var/list/targets, mob/user)
-	for(var/mob/M in targets)
+	for (var/mob/M in targets)
 		if (istype(M,/mob/living/carbon/human/))
 			var/mob/living/carbon/human/H = M
-			if(isskellington(H))
+			if (isskellington(H))
 				to_chat(H, "<span class='warning'>You have no flesh left to melt!</span>")
 				return 0
-			if(isvox(H))
+			if (isvox(H))
 				H.set_species("Skeletal Vox")
 				H.regenerate_icons()
 				H.visible_message("<span class='danger'>[H.name]'s flesh melts right off! Holy shit!</span>")
@@ -425,7 +425,7 @@
 				gibs(H.loc, H.viruses, H.dna)
 				return
 
-			if(H.set_species("Skellington"))
+			if (H.set_species("Skellington"))
 				H.regenerate_icons()
 				H.visible_message("<span class='danger'>[H.name]'s flesh melts right off! Holy shit!</span>")
 				H.drop_all()

@@ -4,7 +4,7 @@
 
 
 /obj/machinery/door/unpowered/Bumped(atom/AM)
-	if(locked)
+	if (locked)
 		return
 
 	..(AM)
@@ -22,7 +22,7 @@
 	return
 
 /obj/machinery/door/unpowered/attack_hand(mob/user as mob)
-	if(istype(user,/mob/dead/observer))
+	if (istype(user,/mob/dead/observer))
 		return
 	..()
 

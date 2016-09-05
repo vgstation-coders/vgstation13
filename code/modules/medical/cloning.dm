@@ -58,11 +58,11 @@
 
 /obj/machinery/cloning/clonepod/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/scanning_module/SM in component_parts)
+	for (var/obj/item/weapon/stock_parts/scanning_module/SM in component_parts)
 		T += SM.rating //First rank is two times more efficient, second rank is two and a half times, third is three times. For reference, there's TWO scanning modules
 	time_coeff = T/2
 	T = 0
-	for(var/obj/item/weapon/stock_parts/manipulator/MA in component_parts)
+	for (var/obj/item/weapon/stock_parts/manipulator/MA in component_parts)
 		T += MA.rating //Ditto above
 	resource_efficiency = T/2
 	T = 0
@@ -80,7 +80,7 @@
 	var/read_only = 0 //Well,it's still a floppy disk
 
 /obj/item/weapon/disk/data/New()
-	for(var/i=1;i<=DNA_SE_LENGTH;i++)
+	for (var/i=1;i<=DNA_SE_LENGTH;i++)
 		labels[i] = new /datum/block_label
 
 /obj/item/weapon/disk/data/proc/Initialize()
@@ -112,7 +112,7 @@
 	Initialize()
 	buf.types=DNA2_BUF_SE
 	var/list/new_SE=list(0x098,0x3E8,0x403,0x44C,0x39F,0x4B0,0x59D,0x514,0x5FC,0x578,0x5DC,0x640,0x6A4)
-	for(var/i=new_SE.len;i<=DNA_SE_LENGTH;i++)
+	for (var/i=new_SE.len;i<=DNA_SE_LENGTH;i++)
 		new_SE += rand(1,1024)
 	buf.dna.SE=new_SE
 	buf.dna.SetSEValueRange(MONKEYBLOCK,0xDAC, 0xFFF)
@@ -124,7 +124,7 @@
 		return
 
 	var/mob/selected = null
-	for(var/mob/living/M in player_list)
+	for (var/mob/living/M in player_list)
 		//Dead people only thanks!
 		if ((M.stat != 2) || (!M.client))
 			continue
@@ -161,7 +161,7 @@
 	if (!src.implanted)
 		return "ERROR"
 	else
-		if(isliving(src.implanted))
+		if (isliving(src.implanted))
 			var/mob/living/L = src.implanted
 			src.healthstring = "[round(L.getOxyLoss())] - [round(L.getFireLoss())] - [round(L.getToxLoss())] - [round(L.getBruteLoss())]"
 		if (!src.healthstring)
@@ -185,26 +185,26 @@
 
 //Start growing a human clone in the pod!
 /obj/machinery/cloning/clonepod/proc/growclone(var/datum/dna2/record/R)
-	if(mess || attempting)
+	if (mess || attempting)
 		return 0
 	var/datum/mind/clonemind = locate(R.mind)
-	if(!istype(clonemind,/datum/mind))	//not a mind
+	if (!istype(clonemind,/datum/mind))	//not a mind
 		return 0
-	if( clonemind.current && clonemind.current.stat != DEAD )	//mind is associated with a non-dead body
+	if ( clonemind.current && clonemind.current.stat != DEAD )	//mind is associated with a non-dead body
 		return 0
-	if(clonemind.active)	//somebody is using that mind
-		if( ckey(clonemind.key)!=R.ckey )
+	if (clonemind.active)	//somebody is using that mind
+		if ( ckey(clonemind.key)!=R.ckey )
 			return 0
 	else
-		for(var/mob/G in player_list)
-			if(G.ckey == R.ckey)
-				if(isobserver(G))
-					if(G:can_reenter_corpse)
+		for (var/mob/G in player_list)
+			if (G.ckey == R.ckey)
+				if (isobserver(G))
+					if (G:can_reenter_corpse)
 						break
 					else
 						return 0
 				else
-					if((G.mind && (G.mind.current.stat != DEAD) ||  G.mind != clonemind))
+					if ((G.mind && (G.mind.current.stat != DEAD) ||  G.mind != clonemind))
 						return 0
 
 
@@ -219,7 +219,7 @@
 	var/mob/living/carbon/human/H = new /mob/living/carbon/human(src, R.dna.species, delay_ready_dna=1)
 	occupant = H
 
-	if(!connected.emagged)
+	if (!connected.emagged)
 		icon_state = "pod_1"
 	else
 		icon_state = "pod_e"
@@ -229,7 +229,7 @@
 	//Get the clone body ready
 	H.dna = R.dna.Clone()
 	H.dna.species = R.dna.species
-	if(H.dna.species != "Human")
+	if (H.dna.species != "Human")
 		H.set_species(H.dna.species, 1)
 
 	H.adjustCloneLoss(150) //new damage var so you can't eject a clone early then stab them to abuse the current damage system --NeoFite
@@ -247,23 +247,23 @@
 
 	// -- Mode/mind specific stuff goes here
 
-	if((H.mind in ticker.mode:revolutionaries) || (H.mind in ticker.mode:head_revolutionaries))
+	if ((H.mind in ticker.mode:revolutionaries) || (H.mind in ticker.mode:head_revolutionaries))
 		ticker.mode.update_all_rev_icons() //So the icon actually appears
-	if(H.mind in ticker.mode.syndicates)
+	if (H.mind in ticker.mode.syndicates)
 		ticker.mode.update_all_synd_icons()
 	if (H.mind in ticker.mode.cult)
 		ticker.mode.add_cultist(src.occupant.mind)
 		ticker.mode.update_all_cult_icons() //So the icon actually appears
-	if(H.mind in ticker.mode.wizards)
+	if (H.mind in ticker.mode.wizards)
 		ticker.mode.update_all_wizard_icons()
-	if(("\ref[H.mind]" in ticker.mode.necromancer) || (H.mind in ticker.mode.risen))
+	if (("\ref[H.mind]" in ticker.mode.necromancer) || (H.mind in ticker.mode.risen))
 		ticker.mode.update_all_necro_icons()
-	if(("\ref[H.mind]" in ticker.mode.implanter) || (H.mind in ticker.mode.implanted))
+	if (("\ref[H.mind]" in ticker.mode.implanter) || (H.mind in ticker.mode.implanted))
 		ticker.mode.update_traitor_icons_added(H.mind) //So the icon actually appears
-	if(("\ref[H.mind]" in ticker.mode.thralls) || (H.mind in ticker.mode.enthralled))
+	if (("\ref[H.mind]" in ticker.mode.thralls) || (H.mind in ticker.mode.enthralled))
 		ticker.mode.update_vampire_icons_added(H.mind)
-	if(H.mind && H.mind.wizard_spells)
-		for(var/spell/spell_to_add in H.mind.wizard_spells)
+	if (H.mind && H.mind.wizard_spells)
+		for (var/spell/spell_to_add in H.mind.wizard_spells)
 			H.add_spell(spell_to_add)
 
 	// -- End mode specific stuff
@@ -273,7 +273,7 @@
 	randmutb(H) // sometimes the clones come out wrong.
 	H.dna.mutantrace = R.dna.mutantrace
 	H.update_mutantrace()
-	for(var/datum/language/L in R.languages)
+	for (var/datum/language/L in R.languages)
 		H.add_language(L.name)
 	H.real_name = H.dna.real_name
 
@@ -284,20 +284,20 @@
 //Grow clones to maturity then kick them out.  FREELOADERS
 /obj/machinery/cloning/clonepod/process()
 
-	if(stat & NOPOWER) //Autoeject if power is lost
+	if (stat & NOPOWER) //Autoeject if power is lost
 		if (src.occupant)
 			src.locked = 0
 			src.go_out()
 		return
 
-	if((src.occupant) && (src.occupant.loc == src))
-		if((src.occupant.stat == DEAD) || (src.occupant.suiciding) || !occupant.key)  //Autoeject corpses and suiciding dudes.
+	if ((src.occupant) && (src.occupant.loc == src))
+		if ((src.occupant.stat == DEAD) || (src.occupant.suiciding) || !occupant.key)  //Autoeject corpses and suiciding dudes.
 			src.locked = 0
 			src.go_out()
 			src.connected_message("Clone Rejected: Deceased.")
 			return
 
-		else if(src.occupant.health < src.heal_level)
+		else if (src.occupant.health < src.heal_level)
 			src.occupant.Paralyse(4)
 
 			 //Slowly get that clone healed and finished.
@@ -312,7 +312,7 @@
 
 			var/mob/living/carbon/human/H = src.occupant
 
-			if(istype(H.species, /datum/species/vox))
+			if (istype(H.species, /datum/species/vox))
 				src.occupant.reagents.add_reagent(NITROGEN, 10)
 
 			//Also heal some oxyloss ourselves because inaprovaline is so bad at preventing it!!
@@ -321,7 +321,7 @@
 			use_power(7500) //This might need tweaking.
 			return
 
-		else if((src.occupant.health >= src.heal_level) && (!src.eject_wait))
+		else if ((src.occupant.health >= src.heal_level) && (!src.eject_wait))
 			src.connected_message("Cloning Process Complete.")
 			src.locked = 0
 			src.go_out()
@@ -347,10 +347,10 @@
 	return
 
 /obj/machinery/cloning/clonepod/crowbarDestroy(mob/user)
-	if(occupant)
+	if (occupant)
 		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupado.</span>")
 		return
-	for(biomass; biomass > 0;biomass -= 50)
+	for (biomass; biomass > 0;biomass -= 50)
 		new /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh(loc)
 	return..()
 
@@ -363,7 +363,7 @@
 //Let's unlock this early I guess.  Might be too early, needs tweaking.
 /obj/machinery/cloning/clonepod/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	. = ..()
-	if(.)
+	if (.)
 		return .
 	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if (!src.check_access(W))
@@ -375,7 +375,7 @@
 			src.locked = 0
 			to_chat(user, "System unlocked.")
 	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/meat))
-		if(user.drop_item(W))
+		if (user.drop_item(W))
 			to_chat(user, "<span class='notice'>\The [src] processes \the [W].</span>")
 			biomass += 50
 			qdel(W)
@@ -413,7 +413,7 @@
 		icon_state = "pod_0"
 
 		/*
-		for(var/obj/O in src)
+		for (var/obj/O in src)
 			O.forceMove(src.loc)
 		*/
 		return
@@ -422,7 +422,7 @@
 		return
 
 	/*
-	for(var/obj/O in src)
+	for (var/obj/O in src)
 		O.forceMove(src.loc)
 	*/
 
@@ -435,7 +435,7 @@
 	domutcheck(occupant) //Waiting until they're out before possible monkeyizing.
 	occupant.add_side_effect("Bad Stomach") // Give them an extra side-effect for free.
 	occupant = null
-	if(biomass > 0)
+	if (biomass > 0)
 		biomass -= CLONE_BIOMASS/resource_efficiency //Improve parts to use less biomass
 	else
 		biomass = 0
@@ -445,29 +445,29 @@
 	return 1
 
 /obj/machinery/cloning/clonepod/MouseDrop(over_object, src_location, var/turf/over_location, src_control, over_control, params)
-	if(!occupant || occupant == usr || (!ishuman(usr) && !isrobot(usr)) || usr.incapacitated() || usr.lying)
+	if (!occupant || occupant == usr || (!ishuman(usr) && !isrobot(usr)) || usr.incapacitated() || usr.lying)
 		return
-	if(!istype(over_location) || over_location.density)
+	if (!istype(over_location) || over_location.density)
 		return
-	if(!Adjacent(over_location) || !Adjacent(usr) || !usr.Adjacent(over_location))
+	if (!Adjacent(over_location) || !Adjacent(usr) || !usr.Adjacent(over_location))
 		return
-	for(var/atom/movable/A in over_location.contents)
-		if(A.density)
-			if((A == src) || istype(A, /mob))
+	for (var/atom/movable/A in over_location.contents)
+		if (A.density)
+			if ((A == src) || istype(A, /mob))
 				continue
 			return
-	if(isrobot(usr))
+	if (isrobot(usr))
 		var/mob/living/silicon/robot/robit = usr
-		if(istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
+		if (istype(robit) && !istype(robit.module, /obj/item/weapon/robot_module/medical))
 			to_chat(usr, "<span class='warning'>You do not have the means to do this!</span>")
 			return
 
-	if(go_out(over_location))
+	if (go_out(over_location))
 		visible_message("[usr] removes [occupant.name] from \the [src].")
 		add_fingerprint(usr)
 
 /obj/machinery/cloning/clonepod/proc/malfunction()
-	if(src.occupant)
+	if (src.occupant)
 		src.connected_message("Critical Error!")
 		src.mess = 1
 		icon_state = "pod_g"
@@ -483,28 +483,28 @@
 	return
 
 /obj/machinery/cloning/clonepod/emp_act(severity)
-	if(prob(100/severity))
+	if (prob(100/severity))
 		malfunction()
 	..()
 
 /obj/machinery/cloning/clonepod/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			for(var/atom/movable/A as mob|obj in src)
+	switch (severity)
+		if (1.0)
+			for (var/atom/movable/A as mob|obj in src)
 				A.forceMove(src.loc)
 				ex_act(severity)
 			qdel(src)
 			return
-		if(2.0)
+		if (2.0)
 			if (prob(50))
-				for(var/atom/movable/A as mob|obj in src)
+				for (var/atom/movable/A as mob|obj in src)
 					A.forceMove(src.loc)
 					ex_act(severity)
 				qdel(src)
 				return
-		if(3.0)
+		if (3.0)
 			if (prob(25))
-				for(var/atom/movable/A as mob|obj in src)
+				for (var/atom/movable/A as mob|obj in src)
 					A.forceMove(src.loc)
 					ex_act(severity)
 				qdel(src)
@@ -560,6 +560,6 @@
 
 //SOME SCRAPS I GUESS
 /* EMP grenade/spell effect
-		if(istype(A, /obj/machinery/clonepod))
+		if (istype(A, /obj/machinery/clonepod))
 			A:malfunction()
 */

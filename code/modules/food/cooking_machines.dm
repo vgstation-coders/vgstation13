@@ -22,29 +22,29 @@ var/global/ingredientLimit = 10
 	set category = "Debug"
 
 	. = (alert("Deep Fried Everything?",,"Yes","No")=="Yes")
-	if(.)
+	if (.)
 		deepFriedEverything = 1
 	else
 		deepFriedEverything = 0
 	. = (alert("Food Nesting?",,"Yes","No")=="Yes")
-	if(.)
+	if (.)
 		foodNesting = 1
 	else
 		foodNesting = 0
 	. = (alert("Enable recursive food? (WARNING: May cause server instability!)",,"Yes","No")=="Yes")
-	if(.)
+	if (.)
 		recursiveFood = 1
 	else
 		recursiveFood = 0
 	. = (input("Deep Fried Nutriment? (1 to 50)"))
 	. = text2num(.)
-	if(isnum(.) && (. in 1 to 50))
+	if (isnum(.) && (. in 1 to 50))
 		deepFriedNutriment = . //This is absolutely terrible
 	else
 		to_chat(usr, "That wasn't a valid number.")
 	. = (input("Ingredient Limit? (1 to 100)"))
 	. = text2num(.)
-	if(isnum(.) && (. in 1 to 100))
+	if (isnum(.) && (. in 1 to 100))
 		ingredientLimit = .
 	else
 		to_chat(usr, "That wasn't a valid number.")
@@ -112,28 +112,28 @@ var/global/ingredientLimit = 10
 	return (typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable/cook)-(/obj/item/weapon/reagent_containers/food/snacks/customizable/cook))
 
 /obj/machinery/cooking/is_open_container()
-	if(cooks_in_reagents)
+	if (cooks_in_reagents)
 		return 1
 
 // Interactions ////////////////////////////////////////////////
 
 /obj/machinery/cooking/examine(mob/user)
 	. = ..()
-	if(src.active)
+	if (src.active)
 		to_chat(user, "<span class='info'>It's currently processing [src.ingredient ? src.ingredient.name : ""].</span>")
-	if(src.cooks_in_reagents)
+	if (src.cooks_in_reagents)
 		to_chat(user, "<span class='info'>It seems to have [reagents.total_volume] units left.</span>")
 
 /obj/machinery/cooking/attack_hand(mob/user)
-	if(isobserver(user))
+	if (isobserver(user))
 		to_chat(user, "Your ghostly hand goes straight through.")
-	else if(issilicon(user))
+	else if (issilicon(user))
 		to_chat(user, "This is old analog equipment. You can't interface with it.")
 
-	else if(src.active)
-		if(alert(user,"Remove \the [src.ingredient.name]?",,"Yes","No") == "Yes")
-			if(src.ingredient && (get_turf(src.ingredient)==get_turf(src)))
-				if(Adjacent(user))
+	else if (src.active)
+		if (alert(user,"Remove \the [src.ingredient.name]?",,"Yes","No") == "Yes")
+			if (src.ingredient && (get_turf(src.ingredient)==get_turf(src)))
+				if (Adjacent(user))
 					src.active = 0
 					src.icon_state = initial(src.icon_state)
 					src.ingredient.mouse_opacity = 1
@@ -150,15 +150,15 @@ var/global/ingredientLimit = 10
 		. = ..()
 
 /obj/machinery/cooking/attackby(obj/item/I,mob/user)
-	if(src.active)
+	if (src.active)
 		to_chat(user, "<span class='warning'>[src.name] is currently busy.</span>")
 		return
-	else if(..())
+	else if (..())
 		return 1
-	else if(stat & (NOPOWER | BROKEN))
+	else if (stat & (NOPOWER | BROKEN))
 		to_chat(user, "<span class='warning'> The power's off, it's no good. </span>")
 		return
-	else if(istype(user,/mob/living/silicon))
+	else if (istype(user,/mob/living/silicon))
 		to_chat(user, "<span class='warning'>That's a terrible idea.</span>")
 		return
 	else
@@ -170,29 +170,29 @@ var/global/ingredientLimit = 10
 	set category = "Object"
 	set src in oview(1)
 
-	if(cooks_in_reagents)
-		if(do_after(usr, src, src.reagents.total_volume / 10))
+	if (cooks_in_reagents)
+		if (do_after(usr, src, src.reagents.total_volume / 10))
 			src.reagents.clear_reagents()
-			if(usr)
+			if (usr)
 				to_chat(usr, "You clean \the [src] of any ingredients.")
 
 // Food Processing /////////////////////////////////////////////
 
 //Returns "valid" or the reason for denial.
 /obj/machinery/cooking/proc/validateIngredient(var/obj/item/I)
-	if(istype(I,/obj/item/weapon/grab) || istype(I,/obj/item/tk_grab))
+	if (istype(I,/obj/item/weapon/grab) || istype(I,/obj/item/tk_grab))
 		. = "It won't fit."
-	else if(istype(I,/obj/item/weapon/disk/nuclear))
+	else if (istype(I,/obj/item/weapon/disk/nuclear))
 		. = "It's the fucking nuke disk!"
-	else if(!recursive_ingredients && !recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
+	else if (!recursive_ingredients && !recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
 		. = "It would be a straining topological exercise."
-	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks) || istype(I,/obj/item/weapon/holder) || deepFriedEverything)
+	else if (istype(I,/obj/item/weapon/reagent_containers/food/snacks) || istype(I,/obj/item/weapon/holder) || deepFriedEverything)
 		. = "valid"
-	else if(istype(I,/obj/item/weapon/reagent_containers))
+	else if (istype(I,/obj/item/weapon/reagent_containers))
 		. = "transto"
-	else if(istype(I,/obj/item/organ))
+	else if (istype(I,/obj/item/organ))
 		var/obj/item/organ/organ = I
-		if(organ.robotic)
+		if (organ.robotic)
 			. = "That's a prosthetic. It wouldn't taste very good."
 		else
 			. = "valid"
@@ -202,15 +202,15 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/proc/takeIngredient(var/obj/item/I,mob/user)
 	. = src.validateIngredient(I)
-	if(. == "transto")
+	if (. == "transto")
 		return
-	if(. == "valid")
-		if(src.foodChoices)
+	if (. == "valid")
+		if (src.foodChoices)
 			. = src.foodChoices[(input("Select production.") in src.foodChoices)]
 		if (!Adjacent(user) || user.stat || user.get_active_hand() != I)
 			return 0
 
-		if(user.drop_item(I, src))
+		if (user.drop_item(I, src))
 			src.ingredient = I
 			spawn() src.cook(.)
 			to_chat(user, "<span class='notice'>You add \the [I.name] to \the [src.name].</span>")
@@ -221,16 +221,16 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/proc/transfer_reagents_to_food(var/obj/item/I)
 	var/obj/item/target_food
-	if(I)
+	if (I)
 		target_food = I
 	else if (src.ingredient)
 		target_food = ingredient
 
-	if(!target_food || !src.reagents || !src.reagents.total_volume) //we have nothing to transfer to or nothing to transfer from
+	if (!target_food || !src.reagents || !src.reagents.total_volume) //we have nothing to transfer to or nothing to transfer from
 		return
 
-	if(istype(target_food,/obj/item/weapon/reagent_containers))
-		for(var/datum/reagent/reagent in reagents.reagent_list)
+	if (istype(target_food,/obj/item/weapon/reagent_containers))
+		for (var/datum/reagent/reagent in reagents.reagent_list)
 			src.reagents.trans_id_to(target_food, reagent.id, max(5, target_food.w_class * 5) / reagents.reagent_list.len)
 	return
 
@@ -253,9 +253,9 @@ var/global/ingredientLimit = 10
 	return
 
 /obj/machinery/cooking/proc/makeFood(var/foodType)
-	if(istype(src.ingredient, /obj/item/weapon/holder))
+	if (istype(src.ingredient, /obj/item/weapon/holder))
 		var/obj/item/weapon/holder/H = src.ingredient
-		if(H.stored_mob)
+		if (H.stored_mob)
 			H.stored_mob.ghostize()
 			H.stored_mob.death()
 			H.contents -= H.stored_mob
@@ -264,12 +264,12 @@ var/global/ingredientLimit = 10
 
 	var/obj/item/I = src.ingredient
 	var/obj/item/weapon/reagent_containers/food/new_food = new foodType(src.loc,I)
-	for(var/obj/item/embedded in I.contents)
+	for (var/obj/item/embedded in I.contents)
 		embedded.forceMove(src.loc)
-	if(cooks_in_reagents)
+	if (cooks_in_reagents)
 		transfer_reagents_to_food(new_food)
 
-	if(I.reagents)
+	if (I.reagents)
 		I.reagents.trans_to(new_food,I.reagents.total_volume)
 
 	if (istype(new_food, /obj/item/weapon/reagent_containers/food/snacks/customizable))
@@ -323,7 +323,7 @@ var/global/ingredientLimit = 10
 	cookSound = 'sound/machines/juicer.ogg'
 
 /obj/machinery/cooking/still/validateIngredient(var/obj/item/I)
-	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/grown))
+	if (istype(I,/obj/item/weapon/reagent_containers/food/snacks/grown))
 		. = "valid"
 	else
 		. = "It ain't grown food!"
@@ -343,27 +343,27 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/cerealmaker/validateIngredient(var/obj/item/I)
 	. = ..()
-	if((. == "valid") && (!foodNesting))
-		if(findtext(I.name,"cereal"))
+	if ((. == "valid") && (!foodNesting))
+		if (findtext(I.name,"cereal"))
 			. = "It's already cereal."
 	return
 
 /obj/machinery/cooking/cerealmaker/makeFood()
 	var/obj/item/weapon/reagent_containers/food/snacks/cereal/C = new(src.loc)
-	for(var/obj/item/embedded in src.ingredient.contents)
+	for (var/obj/item/embedded in src.ingredient.contents)
 		embedded.forceMove(src.loc)
-	if(src.ingredient.reagents)
+	if (src.ingredient.reagents)
 		src.ingredient.reagents.trans_to(C,src.ingredient.reagents.total_volume)
-	if(cooks_in_reagents)
+	if (cooks_in_reagents)
 		src.transfer_reagents_to_food(C) //add the stuff from the machine
 	C.name = "[src.ingredient.name] cereal"
 	var/image/I = image(getFlatIcon(src.ingredient, src.ingredient.dir, 0))
 	I.transform *= 0.7
 	C.overlays += I
 
-	if(istype(src.ingredient, /obj/item/weapon/holder))
+	if (istype(src.ingredient, /obj/item/weapon/holder))
 		var/obj/item/weapon/holder/H = src.ingredient
-		if(H.stored_mob)
+		if (H.stored_mob)
 			H.stored_mob.ghostize()
 			H.stored_mob.death()
 
@@ -395,10 +395,10 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/deepfryer/proc/empty_icon() //sees if the value is empty, and changes the icon if it is
 	reagents.update_total() //make the values refresh
-	if(ingredient)
+	if (ingredient)
 		icon_state = "fryer_on"
 		playsound(get_turf(src),'sound/machines/deep_fryer.ogg',100,1) // If cookSound is used, the sound starts when the cooking ends. We don't want that.
-	else if(reagents.total_volume < DEEPFRY_MINOIL)
+	else if (reagents.total_volume < DEEPFRY_MINOIL)
 		icon_state = "fryer_empty"
 	else
 		icon_state = initial(icon_state)
@@ -408,7 +408,7 @@ var/global/ingredientLimit = 10
 	empty_icon()
 
 /obj/machinery/cooking/deepfryer/takeIngredient(var/obj/item/I, mob/user)
-	if(reagents.total_volume < DEEPFRY_MINOIL)
+	if (reagents.total_volume < DEEPFRY_MINOIL)
 		to_chat(user, "\The [src] doesn't have enough oil to fry in.")
 		return
 	else
@@ -416,10 +416,10 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/deepfryer/validateIngredient(var/obj/item/I)
 	. = ..()
-	if((. == "valid") && (!foodNesting))
-		if(findtext(I.name,"fried"))
+	if ((. == "valid") && (!foodNesting))
+		if (findtext(I.name,"fried"))
 			. = "It's already deep-fried."
-		else if(findtext(I.name,"grilled"))
+		else if (findtext(I.name,"grilled"))
 			. = "It's already grilled."
 	return
 
@@ -428,17 +428,17 @@ var/global/ingredientLimit = 10
 	empty_icon()
 
 /obj/machinery/cooking/deepfryer/makeFood(var/item/I)
-	if(istype(src.ingredient,/obj/item/weapon/reagent_containers/food/snacks))
-		if(cooks_in_reagents)
+	if (istype(src.ingredient,/obj/item/weapon/reagent_containers/food/snacks))
+		if (cooks_in_reagents)
 			src.transfer_reagents_to_food(src.ingredient)
 		src.ingredient.name = "deep fried [src.ingredient.name]"
 		src.ingredient.color = "#FFAD33"
 		src.ingredient.forceMove(src.loc)
-		for(var/obj/item/embedded in src.ingredient.contents)
+		for (var/obj/item/embedded in src.ingredient.contents)
 			embedded.forceMove(ingredient)
 	else //some admin enabled funfood and we're frying the captain's ID or someshit
 		var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(src.loc)
-		if(cooks_in_reagents)
+		if (cooks_in_reagents)
 			src.transfer_reagents_to_food(D)
 		D.name = "deep fried [src.ingredient.name]"
 		D.color = "#FFAD33"
@@ -446,14 +446,14 @@ var/global/ingredientLimit = 10
 		D.icon_state = src.ingredient.icon_state
 		D.overlays = src.ingredient.overlays
 
-		if(istype(src.ingredient, /obj/item/weapon/holder))
+		if (istype(src.ingredient, /obj/item/weapon/holder))
 			var/obj/item/weapon/holder/H = src.ingredient
-			if(H.stored_mob)
+			if (H.stored_mob)
 				H.stored_mob.ghostize()
 				H.stored_mob.death()
 				qdel(H.stored_mob)
 
-		for(var/obj/item/embedded in src.ingredient.contents)
+		for (var/obj/item/embedded in src.ingredient.contents)
 			embedded.forceMove(D)
 
 		qdel(src.ingredient)
@@ -477,12 +477,12 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/grill/validateIngredient(var/obj/item/I)
 	. = ..()
-	if((. == "valid") && (!foodNesting))
-		if(findtext(I.name,"fried"))
+	if ((. == "valid") && (!foodNesting))
+		if (findtext(I.name,"fried"))
 			. = "It's already deep-fried."
-		else if(findtext(I.name,"rotisserie"))
+		else if (findtext(I.name,"rotisserie"))
 			. = "It's already rotisseried"
-		else if(findtext(I.name,"grilled"))
+		else if (findtext(I.name,"grilled"))
 			. = "It's already grilled."
 	return
 
@@ -499,7 +499,7 @@ var/global/ingredientLimit = 10
 			src.ingredient.color = "#A34719"
 			if (cook_after(src.cookTime/3, 14))
 				src.makeFood()
-				if(use_power)
+				if (use_power)
 					playsound(get_turf(src),src.cookSound,100,1)
 				else
 					src.visible_message("<span class='notice'>\the [foodname] looks ready to eat!</span>")
@@ -508,25 +508,25 @@ var/global/ingredientLimit = 10
 	return
 
 /obj/machinery/cooking/grill/makeFood()
-	if(cooks_in_reagents)
+	if (cooks_in_reagents)
 		src.transfer_reagents_to_food()
-	if(istype(src.ingredient,/obj/item/weapon/reagent_containers/food))
+	if (istype(src.ingredient,/obj/item/weapon/reagent_containers/food))
 		var/obj/item/weapon/reagent_containers/food/F = src.ingredient
 		F.reagents.add_reagent(NUTRIMENT,10)
 		F.reagents.trans_to(src.ingredient,src.ingredient.reagents.total_volume)
 	src.ingredient.mouse_opacity = 1
-	if(!(findtext(src.ingredient.name,"rotisserie")))
+	if (!(findtext(src.ingredient.name,"rotisserie")))
 		src.ingredient.name = "grilled [src.ingredient.name]"
 	src.ingredient.forceMove(src.loc)
 
-	if(istype(src.ingredient, /obj/item/weapon/holder))
+	if (istype(src.ingredient, /obj/item/weapon/holder))
 		var/obj/item/weapon/holder/H = src.ingredient
-		if(H.stored_mob)
+		if (H.stored_mob)
 			H.stored_mob.ghostize()
 			H.stored_mob.death()
 			qdel(H.stored_mob)
 
-	for(var/obj/item/embedded  in src.ingredient.contents)
+	for (var/obj/item/embedded  in src.ingredient.contents)
 		embedded.forceMove(src.loc)
 	src.ingredient = null
 	return
@@ -550,9 +550,9 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/grill/spit/attackby(obj/item/I, mob/user)
 	user.delayNextAttack(30)
-	if(istype(I,/obj/item/weapon/crowbar) && do_after(user,src,30))
+	if (istype(I,/obj/item/weapon/crowbar) && do_after(user,src,30))
 		user.visible_message("<span class='notice'>[user] dissassembles the [src].</span>", "<span class='notice'>You dissassemble \the [src].</span>")
-		if(src.ingredient)
+		if (src.ingredient)
 			ingredient.forceMove(src.loc)
 			src.ingredient = null
 		new /obj/item/stack/sheet/wood(user.loc)
@@ -562,14 +562,14 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/grill/spit/validateIngredient()
 	. = ..()
-	if(. == "valid")
+	if (. == "valid")
 		var/turf/turfunder = loc
 		var/campfirefound = 0
-		for(var/obj/machinery/M in turfunder.contents)
-			if(istype(M,/obj/machinery/space_heater/campfire))
+		for (var/obj/machinery/M in turfunder.contents)
+			if (istype(M,/obj/machinery/space_heater/campfire))
 				campfirefound = 1
 				var/obj/machinery/space_heater/campfire/campfire = M
-				if(!campfire.on)
+				if (!campfire.on)
 					. = "The campfire isn't lit."
-		if(!campfirefound)
+		if (!campfirefound)
 			. = "There's no campfire to cook on!"

@@ -23,7 +23,7 @@
 		if (affected.status & ORGAN_PEG)
 			return 0
 		// N3X:  Patient must be sleeping, dead, or unconscious.
-		if(!check_anesthesia(target) && painful)
+		if (!check_anesthesia(target) && painful)
 			return -1
 		return 1
 
@@ -43,8 +43,8 @@
 	max_duration = 110
 
 /datum/surgery_step/generic/cut_with_laser/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	if(..())
-		if(target.species && (target.species.flags & NO_SKIN))
+	if (..())
+		if (target.species && (target.species.flags & NO_SKIN))
 			to_chat(user, "<span class='info'>[target] has no skin!</span>")
 			return 0
 		var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -74,7 +74,7 @@
 	"<span class='warning'>Your hand slips as the blade sputters, searing a long gash in [target]'s [affected.display_name] with \the [tool]!</span>")
 	affected.createwound(CUT, 7.5)
 	affected.createwound(BURN, 12.5)
-	if(istype(tool,/obj/item/weapon/scalpel))
+	if (istype(tool,/obj/item/weapon/scalpel))
 		var/obj/item/weapon/scalpel/S = tool
 		S.icon_state = "[initial(S.icon_state)]_off"
 
@@ -92,8 +92,8 @@
 	max_duration = 120
 
 /datum/surgery_step/generic/incision_manager/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	if(..())
-		if(target.species && (target.species.flags & NO_SKIN))
+	if (..())
+		if (target.species && (target.species.flags & NO_SKIN))
 			to_chat(user, "<span class='info'>[target] has no skin!</span>")
 			return 0
 
@@ -134,7 +134,7 @@
 ////////CUT OPEN/////////
 /datum/surgery_step/generic/cut_open/tool_quality(obj/item/tool)
 	. = ..()
-	if(!tool.is_sharp())
+	if (!tool.is_sharp())
 		return 0
 
 /datum/surgery_step/generic/cut_open
@@ -151,12 +151,12 @@
 
 /datum/surgery_step/generic/cut_open/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	. = ..()
-	if(target.species && (target.species.flags & NO_SKIN))
+	if (target.species && (target.species.flags & NO_SKIN))
 		to_chat(user, "<span class='info'>[target] has no skin!</span>")
 		return 0
 
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	if(. && !affected.open && target_zone != "mouth")
+	if (. && !affected.open && target_zone != "mouth")
 		return .
 	return 0
 
@@ -195,8 +195,8 @@
 	max_duration = 60
 
 /datum/surgery_step/generic/clamp_bleeders/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	if(..())
-		if(target.species && (target.species.flags & NO_BLOOD))
+	if (..())
+		if (target.species && (target.species.flags & NO_BLOOD))
 			to_chat(user, "<span class='info'>[target] has no vessels to clamp!</span>")
 			return 0
 
@@ -237,8 +237,8 @@
 	max_duration = 40
 
 /datum/surgery_step/generic/retract_skin/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	if(..())
-		if(target.species && (target.species.flags & NO_SKIN))
+	if (..())
+		if (target.species && (target.species.flags & NO_SKIN))
 			to_chat(user, "<span class='info'>[target] has no skin!</span>")
 			return 0
 
@@ -289,7 +289,7 @@
 
 /////////CAUTERIZE///////
 /datum/surgery_step/generic/cauterize/tool_quality(obj/item/tool)
-	if(tool.is_hot())
+	if (tool.is_hot())
 		for (var/T in allowed_tools)
 			if (istype(tool,T))
 				return allowed_tools[T]
@@ -307,8 +307,8 @@
 	max_duration = 100
 
 /datum/surgery_step/generic/cauterize/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	if(..())
-		if(target.species && (target.species.flags & NO_SKIN))
+	if (..())
+		if (target.species && (target.species.flags & NO_SKIN))
 			to_chat(user, "<span class='info'>[target] has no skin!</span>")
 			return 0
 
@@ -352,21 +352,21 @@
 
 /datum/surgery_step/internal/fix_organ_cancer/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
-	if(..())
+	if (..())
 		var/datum/organ/external/affected = target.get_organ(target_zone)
 
 		var/cancer_found = 0
-		if(affected.cancer_stage >= 1)
+		if (affected.cancer_stage >= 1)
 			cancer_found = 1
 		return affected.open == 1 && cancer_found
 
 /datum/surgery_step/internal/fix_organ_cancer/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
-	if(!hasorgans(target))
+	if (!hasorgans(target))
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	if(affected && affected.cancer_stage >= 1)
+	if (affected && affected.cancer_stage >= 1)
 		user.visible_message("[user] starts carefully removing the cancerous growths in [target]'s [affected.name] with \the [tool].", \
 		"You start carefully removing the cancerous growths in [target]'s [affected.name] with \the [tool]." )
 
@@ -375,18 +375,18 @@
 
 /datum/surgery_step/internal/fix_organ_cancer/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
-	if(!hasorgans(target))
+	if (!hasorgans(target))
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	if(affected && affected.cancer_stage >= 1)
+	if (affected && affected.cancer_stage >= 1)
 		user.visible_message("[user] carefully removes and mends the area around the cancerous growths in [target]'s [affected.name] with \the [tool].", \
 		"You carefully remove and mends the area around the cancerous growths in [target]'s [affected.name] with \the [tool]." )
 		affected.cancer_stage = 0
 
 /datum/surgery_step/internal/fix_organ_cancer/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
-	if(!hasorgans(target))
+	if (!hasorgans(target))
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 

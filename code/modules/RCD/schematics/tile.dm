@@ -36,34 +36,34 @@
 
 /datum/rcd_schematic/tile/register_assets()
 	var/list/our_list = get_our_list()
-	if(!our_list)
+	if (!our_list)
 		return
 
-	for(var/datum/paint_info/P in our_list)
-		for(var/ndir in get_dir_list_by_dir_type(P.adirs))
+	for (var/datum/paint_info/P in our_list)
+		for (var/ndir in get_dir_list_by_dir_type(P.adirs))
 			register_asset("[P.file_name][P.icon_state]_[ndir].png", new/icon(P.icon, P.icon_state, ndir))
 
 /datum/rcd_schematic/tile/send_assets(var/client/client)
 	var/list/our_list = get_our_list()
-	if(!our_list)
+	if (!our_list)
 		return
 
 	var/list/to_send = list()
-	for(var/datum/paint_info/P in our_list)
-		for(var/ndir in get_dir_list_by_dir_type(P.adirs))
+	for (var/datum/paint_info/P in our_list)
+		for (var/ndir in get_dir_list_by_dir_type(P.adirs))
 			to_send += "[P.file_name][P.icon_state]_[ndir].png"
 
 	send_asset_list(client, to_send)
 
 /datum/rcd_schematic/tile/proc/get_dir_list_by_dir_type(var/adir)
-	switch(adir)
-		if(DIR_ONE)
+	switch (adir)
+		if (DIR_ONE)
 			return list(SOUTH)
 
-		if(DIR_ORTHO)
+		if (DIR_ORTHO)
 			return cardinal
 
-		if(DIR_ALL)
+		if (DIR_ALL)
 			return alldirs
 
 /datum/rcd_schematic/tile/get_HTML()
@@ -71,10 +71,10 @@
 	. += "<p>"
 
 	var/list/our_list = get_our_list()
-	for(var/datum/paint_info/P in our_list)
-		for(var/dir in get_dir_list_by_dir_type(P.adirs))
+	for (var/datum/paint_info/P in our_list)
+		for (var/dir in get_dir_list_by_dir_type(P.adirs))
 			var/selected = ""
-			if(selection == P && dir == selected_dir)
+			if (selection == P && dir == selected_dir)
 				selected = " class='selected'"
 
 			. += "<a href='?src=\ref[master.interface];select_paint=[our_list.Find(P)];set_dir=[dir]'[selected]><img src='[P.file_name][P.icon_state]_[dir].png'/></a>"
@@ -83,20 +83,20 @@
 	. = jointext(.,"")
 
 /datum/rcd_schematic/tile/Topic(var/href, var/href_list)
-	if(href_list["select_paint"])
+	if (href_list["select_paint"])
 		var/list/our_list = get_our_list()
 		var/idx = Clamp(round(text2num(href_list["select_paint"])), 1, our_list.len)
 
 		selection = our_list[idx]
-		if(!(selected_dir in get_dir_list_by_dir_type(selection.adirs)))
+		if (!(selected_dir in get_dir_list_by_dir_type(selection.adirs)))
 			selected_dir = 2
 
 		master.update_options_menu()
 		. = 1
 
-	if(href_list["set_dir"])
+	if (href_list["set_dir"])
 		var/dir = text2num(href_list["set_dir"])
-		if(!(dir in get_dir_list_by_dir_type(selection.adirs)))
+		if (!(dir in get_dir_list_by_dir_type(selection.adirs)))
 			return 1
 
 		selected_dir = dir
@@ -185,7 +185,7 @@
 	T.icon_regular_floor = icon_state	//required to 'save' the new floor type so if someone crowbars it and puts it back it won't revert to the original state
 	T.dir = dir
 	T.desc = pdesc						//so if you paint over a plaque with a floor the tile loses its description
-	if(pname)
+	if (pname)
 		T.name = pname
 
 	T.ClearDecals()
@@ -334,8 +334,8 @@
 //We get EVERY paint info datum.
 /datum/rcd_schematic/tile/all/get_our_list()
 	. = list()
-	for(var/key in paint_variants)
-		for(var/datum/paint_info/P in paint_variants[key])
+	for (var/key in paint_variants)
+		for (var/datum/paint_info/P in paint_variants[key])
 			. += P
 
 

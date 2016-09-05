@@ -32,16 +32,16 @@ var/global/list/wizard_cards_normal = list(
 #define CARD_FLIP		"flip"
 
 /datum/context_click/wizard_card/return_clicked_id(x_pos, y_pos)
-	if(28 <= x_pos && x_pos <= 38)
-		if(14 <= y_pos && y_pos <= 40)
+	if (28 <= x_pos && x_pos <= 38)
+		if (14 <= y_pos && y_pos <= 40)
 			return CARD_PORTRAIT
 	return CARD_FLIP
 
 /datum/context_click/wizard_card/action(obj/item/used_item, mob/user, params)
 	var/obj/item/toy/singlecard/wizard/card = holder
-	if(!used_item)
-		switch(return_clicked_id_by_params(params))
-			if(CARD_PORTRAIT)
+	if (!used_item)
+		switch (return_clicked_id_by_params(params))
+			if (CARD_PORTRAIT)
 				return card.special_effect()
 			else
 				return card.Flip()
@@ -66,7 +66,7 @@ var/global/list/wizard_cards_normal = list(
 	update_icon()
 
 /obj/item/toy/singlecard/wizard/update_icon()
-	if(flipped)
+	if (flipped)
 		overlays -= char_image
 		icon_state = "wizcard_down"
 		name = "card"
@@ -79,7 +79,7 @@ var/global/list/wizard_cards_normal = list(
 	return card_use.action(null, user, params)
 
 /obj/item/toy/singlecard/wizard/proc/special_effect(mob/user)
-	if(!ability_cd)
+	if (!ability_cd)
 		ability_cd = 1
 		spawn(50)
 			ability_cd = 0
@@ -96,14 +96,14 @@ var/global/list/wizard_cards_normal = list(
 	cardname = "honkmother"
 
 /obj/item/toy/singlecard/wizard/legendary/honkmother/special_effect(mob/user)
-	if(!..())
+	if (!..())
 		to_chat(user, "Honkmother is not ready yet!")
 		return
 
 	playsound(get_turf(src), 'sound/items/AirHorn.ogg', 50, 1)
 
 /obj/item/toy/singlecard/wizard/legendary/honkmother/pickup(mob/living/user as mob)
-	if(user.mind && user.mind.assigned_role == "Clown")
+	if (user.mind && user.mind.assigned_role == "Clown")
 		to_chat(user, "<span class ='notice'>You feel Honkmother's presence as you pick up the card.</span>")
 
 /obj/item/toy/singlecard/wizard/legendary/singularity
@@ -135,7 +135,7 @@ var/global/list/wizard_cards_normal = list(
 	cardname = "clown"
 
 /obj/item/toy/singlecard/wizard/clown/special_effect(mob/user)
-	if(!..())
+	if (!..())
 		to_chat(user, "The clown is not ready yet!")
 		return
 
@@ -232,7 +232,7 @@ var/global/list/wizard_cards_normal = list(
 	icon_state = "card_gray"
 
 /obj/item/toy/singlecard/wizard/borer/special_effect(mob/user)
-	if(!..())
+	if (!..())
 		to_chat(user, "The borer is not yet ready.")
 		return
 
@@ -270,20 +270,20 @@ var/global/list/wizard_cards_normal = list(
 	return
 
 /obj/item/toy/cards/wizard/update_icon()
-	if(cards.len > 15)
+	if (cards.len > 15)
 		src.icon_state = "wizdeck_full"
-	else if(cards.len > 8)
+	else if (cards.len > 8)
 		src.icon_state = "wizdeck_half"
-	else if(cards.len > 1)
+	else if (cards.len > 1)
 		src.icon_state = "wizdeck_low"
 	else
 		src.icon_state = "wizdeck_empty"
 
 /obj/item/toy/cards/wizard/full/generate_cards()
-	for(var/card in wizard_cards_normal)
+	for (var/card in wizard_cards_normal)
 		var/newcard = new card(src)
 		cards += newcard
-	for(var/card in wizard_cards_rare)
+	for (var/card in wizard_cards_rare)
 		var/newcard = new card(src)
 		cards += newcard
 
@@ -299,7 +299,7 @@ var/global/list/wizard_cards_normal = list(
 	..()
 	contents += new /obj/item/weapon/reagent_containers/food/snacks/chocofrog
 	var/card
-	if(prob(80)) //80% chance for a classic card, 20% for a legendary
+	if (prob(80)) //80% chance for a classic card, 20% for a legendary
 		card=pick(wizard_cards_normal)
 		new card(src)
 	else

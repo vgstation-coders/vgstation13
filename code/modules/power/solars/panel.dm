@@ -18,7 +18,7 @@
 	make(S)
 
 /obj/machinery/power/solar/panel/proc/make(var/obj/machinery/power/solar_assembly/S)
-	if(!S)
+	if (!S)
 		solar_assembly = new /obj/machinery/power/solar_assembly()
 		solar_assembly.glass_type = /obj/item/stack/sheet/glass/rglass
 		solar_assembly.anchored = 1
@@ -34,27 +34,27 @@
 	update_icon()
 
 /obj/machinery/power/solar/panel/attackby(obj/item/weapon/W, mob/user)
-	if(iscrowbar(W))
+	if (iscrowbar(W))
 		var/turf/T = get_turf(src)
 		var/obj/item/stack/sheet/glass/G = solar_assembly.glass_type
 		to_chat(user, "<span class='notice'>You begin taking the [initial(G.name)] off the [src].</span>")
 		playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
-		if(do_after(user, src, 50))
-			if(solar_assembly)
+		if (do_after(user, src, 50))
+			if (solar_assembly)
 				solar_assembly.forceMove(T)
 				solar_assembly.give_glass()
 			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 			user.visible_message("<span class='notice'>[user] takes the [initial(G.name)] off the [src].</span>",\
 			"<span class='notice'>You take the [initial(G.name)] off the [src].</span>")
 			qdel(src)
-	else if(W)
+	else if (W)
 		add_fingerprint(user)
 		health -= W.force
 		healthcheck()
 	..()
 
 /obj/machinery/power/solar/panel/blob_act()
-	if(prob(30))
+	if (prob(30))
 		broken() //Good hit
 	else
 		health--
@@ -62,8 +62,8 @@
 	healthcheck()
 
 /obj/machinery/power/solar/panel/proc/healthcheck()
-	if(health <= 0)
-		if(!(stat & BROKEN))
+	if (health <= 0)
+		if (!(stat & BROKEN))
 			broken()
 		else
 			var/obj/item/stack/sheet/glass/G = solar_assembly.glass_type
@@ -76,84 +76,84 @@
 
 /obj/machinery/power/solar/panel/update_icon()
 	..()
-	if(!tracker)
+	if (!tracker)
 		overlays.len = 0
 		var/obj/item/stack/sheet/glass/G = solar_assembly.glass_type
 		var/icon = "solar_panel_" + initial(G.sname)
-		if(stat & BROKEN)
+		if (stat & BROKEN)
 			icon += "-b"
 		overlays += image('icons/obj/power.dmi', icon_state = icon, layer = FLY_LAYER)
 		src.dir = angle2dir(adir)
 	return
 
 /obj/machinery/power/solar/panel/proc/update_solar_exposure()
-	if(!sun)
+	if (!sun)
 		return
 
-	if(obscured)
+	if (obscured)
 		sunfrac = 0
 		return
 
 	var/p_angle = abs((360 + adir) % 360 - (360 + sun.angle) % 360)
 
-	if(p_angle > 90)			//If facing more than 90deg from sun, zero output
+	if (p_angle > 90)			//If facing more than 90deg from sun, zero output
 		sunfrac = 0
 		return
 
 	sunfrac = cos(p_angle) ** 2
 
 /obj/machinery/power/solar/panel/process()//TODO: remove/add this from machines to save on processing as needed ~Carn PRIORITY
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		return
 
-	if(!control)
+	if (!control)
 		return
 
-	if(adir != ndir)
+	if (adir != ndir)
 		adir = (360 + adir + Clamp(ndir - adir, -10, 10)) % 360
 		update_icon()
 		update_solar_exposure()
 
-	if(obscured)
+	if (obscured)
 		return
 
 	var/sgen = SOLARGENRATE * sunfrac * glass_quality_factor * (health / maxhealth) //Raw generating power * Sun angle effect * Glass quality * Current panel health. Simple but thorough
 
 	add_avail(sgen)
 
-	if(powernet && control)
-		if(powernet.nodes.Find(control))
+	if (powernet && control)
+		if (powernet.nodes.Find(control))
 			control.gen += sgen
 
 /obj/machinery/power/solar/panel/proc/broken()
 	stat |= BROKEN
 	update_icon()
 
-	if(health > 1)
+	if (health > 1)
 		health = 1 //Only holding up on shards and scrap
 
 /obj/machinery/power/solar/panel/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			solar_assembly.glass_type = null //The glass you're looking for is below pal
-			if(prob(15))
+			if (prob(15))
 				getFromPool(/obj/item/weapon/shard, loc)
 			kill()
-		if(2.0)
-			if(prob(25))
+		if (2.0)
+			if (prob(25))
 				solar_assembly.glass_type = null //The glass you're looking for is below pal
 				getFromPool(/obj/item/weapon/shard, loc)
 				kill()
 			else
 				broken()
-		if(3.0)
-			if(prob(35))
+		if (3.0)
+			if (prob(35))
 				broken()
 			else
 				health-- //Let shrapnel have its effect
 
 /obj/machinery/power/solar/panel/proc/kill() //To make sure you eliminate the assembly as well
-	if(solar_assembly)
+	if (solar_assembly)
 		var/obj/machinery/power/solar_assembly/assembly = solar_assembly
 		solar_assembly = null
 		qdel(assembly)
@@ -162,5 +162,5 @@
 /obj/machinery/power/solar/panel/disconnect_from_network()
 	. = ..()
 
-	if(.)
+	if (.)
 		control = null

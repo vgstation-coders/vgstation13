@@ -10,20 +10,20 @@ var/global/datum/controller/process/ticker/tickerProcess
 
 	lastTickerTime = world.timeofday
 
-	if(!ticker)
+	if (!ticker)
 		ticker = new
 
 	tickerProcess = src
 
 	spawn(0)
-		if(ticker)
+		if (ticker)
 			ticker.pregame()
 
 /datum/controller/process/ticker/doWork()
 	scheck()
 	var/currentTime = world.timeofday
 
-	if(currentTime < lastTickerTime) // check for midnight rollover
+	if (currentTime < lastTickerTime) // check for midnight rollover
 		lastTickerTimeDuration = (currentTime - (lastTickerTime - TICKS_IN_DAY)) / TICKS_IN_SECOND
 	else
 		lastTickerTimeDuration = (currentTime - lastTickerTime) / TICKS_IN_SECOND

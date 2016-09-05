@@ -10,31 +10,31 @@
 	// THIS IS A BITMAP BECAUSE NORTH/SOUTH/ETC ARE ALL BITFLAGS BECAUSE BYOND IS DUMB AND
 	// DOESN'T FUCKING MAKE SENSE, BUT IT WORKS TO OUR ADVANTAGE
 	var/junction = 0
-	for(var/cdir in cardinal)
+	for (var/cdir in cardinal)
 		var/turf/T = get_step(src,cdir)
-		if(isSmoothableNeighbor(T))
+		if (isSmoothableNeighbor(T))
 			junction |= cdir
 			continue // NO NEED FOR FURTHER SEARCHING IN THIS TILE
-		for(var/atom/A in T)
-			if(isSmoothableNeighbor(A))
+		for (var/atom/A in T)
+			if (isSmoothableNeighbor(A))
 				junction |= cdir
 				break // NO NEED FOR FURTHER SEARCHING IN THIS TILE
 
 	return junction
 
 /atom/proc/isSmoothableNeighbor(atom/A)
-	if(!A)
+	if (!A)
 		WARNING("[__FILE__]L[__LINE__]: atom/isSmoothableNeighbor given bad atom")
 		return 0
 	return isInTypes(A, canSmoothWith)
 
 /turf/simulated/wall/isSmoothableNeighbor(atom/A)
-	if(!A)
+	if (!A)
 		WARNING("[__FILE__]L[__LINE__]: turf/isSmoothableNeighbor given bad atom")
 		return 0
-	if(isInTypes(A, canSmoothWith))
+	if (isInTypes(A, canSmoothWith))
 		// COLON OPERATORS ARE TERRIBLE BUT I HAVE NO CHOICE
-		if(src.mineral == A:mineral)
+		if (src.mineral == A:mineral)
 			return 1
 
 	return 0
@@ -65,16 +65,16 @@
 
 // AND NOW WE HAVE TO YELL AT THE NEIGHBORS FOR BEING LOUD AND NOT PAINTING WITH HOA-APPROVED COLORS
 /atom/proc/relativewall_neighbours(var/at=null)
-	if(!at)
+	if (!at)
 		at = get_turf(src)
 	// OPTIMIZE BY NOT CHECKING FOR NEIGHBORS IF WE DON'T FUCKING SMOOTH
-	if(canSmoothWith)
-		for(var/cdir in cardinal)
+	if (canSmoothWith)
+		for (var/cdir in cardinal)
 			var/turf/T = get_step(src,cdir)
-			if(isSmoothableNeighbor(T))
+			if (isSmoothableNeighbor(T))
 				T.relativewall()
-			for(var/atom/A in T)
-				if(isSmoothableNeighbor(A))
+			for (var/atom/A in T)
+				if (isSmoothableNeighbor(A))
 					A.relativewall()
 
 /turf/simulated/wall/New()
@@ -90,14 +90,14 @@
 
 	var/temploc = src.loc
 
-	if(!del_suppress_resmoothing)
+	if (!del_suppress_resmoothing)
 		spawn(10)
 			relativewall_neighbours(at=temploc)
 
 	// JESUS WHY
-	for(var/direction in cardinal)
-		for(var/obj/effect/glowshroom/shroom in get_step(src,direction))
-			if(!shroom.floor) //shrooms drop to the floor
+	for (var/direction in cardinal)
+		for (var/obj/effect/glowshroom/shroom in get_step(src,direction))
+			if (!shroom.floor) //shrooms drop to the floor
 				shroom.floor = 1
 				shroom.icon_state = "glowshroomf"
 				shroom.pixel_x = 0
@@ -115,7 +115,7 @@ var/list/smoothable_unsims = list(
 
 /turf/unsimulated/wall/New()
 	..()
-	if(icon_state in smoothable_unsims)
+	if (icon_state in smoothable_unsims)
 		relativewall()
 		relativewall_neighbours()
 

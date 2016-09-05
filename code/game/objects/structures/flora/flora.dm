@@ -25,7 +25,7 @@
 /obj/structure/flora/tree/New()
 	..()
 
-	if(randomize_on_creation)
+	if (randomize_on_creation)
 		health = rand(60, 200)
 		maxHealth = health
 
@@ -52,22 +52,22 @@
 
 	//Tell user about the height. Note that normally height ranges from 3 to 8 (with a 5% chance of having 6 to 15 instead)
 	to_chat(user, "<span class='info'>It appears to be about [height*3] feet tall.</span>")
-	switch(health / maxHealth)
-		if(1.0)
+	switch (health / maxHealth)
+		if (1.0)
 			//It's healthy
-		if(0.9 to 0.6)
+		if (0.9 to 0.6)
 			to_chat(user, "<span class='info'>It's been partially cut down.</span>")
-		if(0.6 to 0.2)
+		if (0.6 to 0.2)
 			to_chat(user, "<span class='notice'>It's almost cut down, [falling_dir ? "and it's leaning towards the [dir2text(falling_dir)]." : "but it still stands upright."]</span>")
-		if(0.2 to 0)
+		if (0.2 to 0)
 			to_chat(user, "<span class='danger'>It's going to fall down any minute now!</span>")
 
 /obj/structure/flora/tree/attackby(obj/item/W, mob/living/user)
 	..()
 
-	if(istype(W, /obj/item/weapon))
-		if(W.is_sharp() >= 1.2) //As sharp as a knife
-			if(W.w_class <= W_CLASS_SMALL) //Big enough to use to cut down trees
+	if (istype(W, /obj/item/weapon))
+		if (W.is_sharp() >= 1.2) //As sharp as a knife
+			if (W.w_class <= W_CLASS_SMALL) //Big enough to use to cut down trees
 				health -= (user.get_strength() * W.force)
 				playsound(loc, 'sound/effects/woodcuttingshort.ogg', 50, 1)
 			else
@@ -80,7 +80,7 @@
 	return 1
 
 /obj/structure/flora/tree/proc/fall_down()
-	if(!falling_dir)
+	if (!falling_dir)
 		falling_dir = pick(cardinal)
 
 	var/turf/our_turf = get_turf(src) //Turf at which this tree is located
@@ -91,8 +91,8 @@
 	qdel(src)
 
 	spawn()
-		while(height > 0)
-			if(!current_turf)
+		while (height > 0)
+			if (!current_turf)
 				break //If the turf in which to spawn a log doesn't exist, stop the thing
 
 			var/obj/item/I = new log_type(our_turf) //Spawn a log and throw it at the "current_turf"
@@ -105,22 +105,22 @@
 			sleep(1)
 
 /obj/structure/flora/tree/proc/update_health()
-	if(health < 40 && !falling_dir)
+	if (health < 40 && !falling_dir)
 		falling_dir = pick(cardinal)
 		visible_message("<span class='danger'>\The [src] starts leaning to the [dir2text(falling_dir)]!</span>",
 			drugged_message = "<span class='sinister'>\The [src] is coming to life, man.</span>")
 
-	if(health <= 0)
+	if (health <= 0)
 		fall_down()
 
 /obj/structure/flora/tree/ex_act(severity)
-	switch(severity)
-		if(1) //Epicentre
+	switch (severity)
+		if (1) //Epicentre
 			return qdel(src)
-		if(2) //Major devastation
+		if (2) //Major devastation
 			height -= rand(1,4) //Some logs are lost
 			fall_down()
-		if(3) //Minor devastation (IED)
+		if (3) //Minor devastation (IED)
 			health -= rand(10,30)
 			update_health()
 
@@ -211,25 +211,25 @@
 	plane = ABOVE_HUMAN_PLANE
 
 /obj/structure/flora/pottedplant/Destroy()
-	for(var/I in contents)
+	for (var/I in contents)
 		qdel(I)
 
 	return ..()
 
 /obj/structure/flora/pottedplant/attackby(var/obj/item/I, var/mob/user)
-	if(!I)
+	if (!I)
 		return
-	if(I.w_class > W_CLASS_SMALL)
+	if (I.w_class > W_CLASS_SMALL)
 		to_chat(user, "That item is too big.")
 		return
-	if(contents.len)
+	if (contents.len)
 		to_chat(user, "There is already something in the pot.")
 	else
-		if(user.drop_item(I, src))
+		if (user.drop_item(I, src))
 			user.visible_message("<span class='notice'>[user] stuffs something into the pot.</span>", "You stuff \the [I] into the [src].")
 
 /obj/structure/flora/pottedplant/attack_hand(mob/user)
-	if(contents.len)
+	if (contents.len)
 		var/obj/item/I = contents[1]
 		user.visible_message("<span class='notice'>[user] retrieves something from the pot.</span>", "You retrieve \the [I] from the [src].")
 		I.forceMove(loc)

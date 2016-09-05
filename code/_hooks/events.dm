@@ -7,7 +7,7 @@
 
 // Buggy bullshit requires shitty workarounds
 /proc/INVOKE_EVENT(event/event,args)
-	if(istype(event))
+	if (istype(event))
 		. = event.Invoke(args)
 
 /**
@@ -34,19 +34,19 @@
 	return handlers.Remove(key)
 
 /event/proc/Invoke(var/list/args)
-	if(handlers.len==0)
+	if (handlers.len==0)
 		return
-	for(var/key in handlers)
+	for (var/key in handlers)
 		var/list/handler=handlers[key]
-		if(!handler)
+		if (!handler)
 			continue
 
 		var/objRef = handler[EVENT_OBJECT_INDEX]
 		var/procName = handler[EVENT_PROC_INDEX]
 
-		if(objRef == null)
+		if (objRef == null)
 			handlers.Remove(handler)
 			continue
 		args["event"] = src
-		if(call(objRef,procName)(args, holder)) //An intercept value so whatever code section knows we mean business
+		if (call(objRef,procName)(args, holder)) //An intercept value so whatever code section knows we mean business
 			. = 1

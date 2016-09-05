@@ -92,28 +92,28 @@
 
 	//The spawn below is needed
 	spawn()
-		for(var/T in load_map_elements)
+		for (var/T in load_map_elements)
 			load_dungeon(T)
 
 /datum/map/proc/loadZLevels(list/levelPaths)
 
 
-	for(var/i = 1 to levelPaths.len)
+	for (var/i = 1 to levelPaths.len)
 		var/path = levelPaths[i]
 		addZLevel(new path, i)
 
 /datum/map/proc/addZLevel(datum/zLevel/level, z_to_use = 0)
 
 
-	if(!istype(level))
+	if (!istype(level))
 		warning("ERROR: addZLevel received [level ? "a bad level of type [ispath(level) ? "[level]" : "[level.type]" ]" : "no level at all!"]")
 		return
-	if(!level.base_turf)
+	if (!level.base_turf)
 		level.base_turf = /turf/space
-	if(z_to_use > zLevels.len)
+	if (z_to_use > zLevels.len)
 		zLevels.len = z_to_use
 	zLevels[z_to_use] = level
-	if(!level.movementJammed)
+	if (!level.movementJammed)
 		accessable_z_levels += list("[z_to_use]" = level.movementChance)
 
 	level.z = z_to_use
@@ -174,13 +174,13 @@ var/global/list/accessable_z_levels = list()
 	to_chat(src, "* Short name: [map.nameShort]")
 	to_chat(src, "* Long name: [map.nameLong]")
 	to_chat(src, "* [map.zLevels.len] Z-levels: [map.zLevels]")
-	for(var/datum/zLevel/level in map.zLevels)
+	for (var/datum/zLevel/level in map.zLevels)
 		to_chat(src, "  * [level.name], Telejammed : [level.teleJammed], Movejammed : [level.movementJammed]")
 	to_chat(src, "* Main station Z: [map.zMainStation]")
 	to_chat(src, "* Centcomm Z: [map.zCentcomm]")
 	to_chat(src, "* Thunderdome coords: ([map.tDomeX],[map.tDomeY],[map.tDomeZ])")
 	to_chat(src, "* Space movement chances: [accessable_z_levels]")
-	for(var/z in accessable_z_levels)
+	for (var/z in accessable_z_levels)
 		to_chat(src, "  * [z] has chance [accessable_z_levels[z]]")
 	return
 */
@@ -196,18 +196,18 @@ proc/get_base_turf(var/z)
 	return L.base_turf
 
 proc/change_base_turf(var/choice,var/new_base_path,var/update_old_base = 0)
-	if(update_old_base)
+	if (update_old_base)
 		var/count = 0
-		for(var/turf/T in turfs)
+		for (var/turf/T in turfs)
 			count++
-			if(!(count % 50000))
+			if (!(count % 50000))
 				sleep(world.tick_lag)
-			if(T.type == get_base_turf(choice) && T.z == choice)
+			if (T.type == get_base_turf(choice) && T.z == choice)
 				T.ChangeTurf(new_base_path)
 	var/datum/zLevel/L = map.zLevels[choice]
 	L.base_turf = new_base_path
-	for(var/obj/docking_port/destination/D in all_docking_ports)
-		if(D.z == choice)
+	for (var/obj/docking_port/destination/D in all_docking_ports)
+		if (D.z == choice)
 			D.base_turf_type = new_base_path
 
 /client/proc/set_base_turf()
@@ -217,18 +217,18 @@ proc/change_base_turf(var/choice,var/new_base_path,var/update_old_base = 0)
 	set name = "Set Base Turf"
 	set desc = "Set the base turf for a z-level. Defaults to space, does not replace existing tiles."
 
-	if(check_rights(R_DEBUG, 0))
-		if(!holder)
+	if (check_rights(R_DEBUG, 0))
+		if (!holder)
 			return
 		var/choice = input("Which Z-level do you wish to set the base turf for?") as null|num
-		if(!choice)
+		if (!choice)
 			return
 		var/new_base_path = input("Please select a turf path (cancel to reset to /turf/space).") as null|anything in typesof(/turf)
-		if(!new_base_path)
+		if (!new_base_path)
 			new_base_path = /turf/space //Only hardcode in the whole thing, feel free to change this if somewhere in the distant future spess is deprecated
 		var/update_old_base = alert(src, "Do you wish to update the old base? This will LAG.", "Update old turfs?", "Yes", "No")
 		update_old_base = update_old_base == "No" ? 0 : 1
-		if(update_old_base)
+		if (update_old_base)
 			message_admins("[key_name_admin(usr)] is replacing the old base turf on Z level [choice] with [get_base_turf(choice)]. This is likely to lag.")
 			log_admin("[key_name_admin(usr)] has replaced the old base turf on Z level [choice] with [get_base_turf(choice)].")
 		change_base_turf(choice,new_base_path,update_old_base)

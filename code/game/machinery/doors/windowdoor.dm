@@ -35,21 +35,21 @@
 
 /obj/machinery/door/window/examine(mob/user as mob)
 	..()
-	if(secure)
+	if (secure)
 		to_chat(user, "It is a secure windoor, it is stronger and closes more quickly.")
 
 /obj/machinery/door/window/Bumped(atom/movable/AM as mob|obj)
 	if (!ismob(AM))
 		var/obj/machinery/bot/bot = AM
-		if(istype(bot))
-			if(density && src.check_access(bot.botcard))
+		if (istype(bot))
+			if (density && src.check_access(bot.botcard))
 				open()
 				sleep(50)
 				close()
-		else if(istype(AM, /obj/mecha))
+		else if (istype(AM, /obj/mecha))
 			var/obj/mecha/mecha = AM
-			if(density)
-				if(mecha.occupant && src.allowed(mecha.occupant))
+			if (density)
+				if (mecha.occupant && src.allowed(mecha.occupant))
 					open()
 					sleep(50)
 					close()
@@ -61,7 +61,7 @@
 	if (src.density && src.allowed(AM))
 		open()
 		// What.
-		if(src.check_access(null))
+		if (src.check_access(null))
 			sleep(50)
 		else //secure doors close faster
 			sleep(20)
@@ -69,10 +69,10 @@
 	return
 
 /obj/machinery/door/window/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
+	if (istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return 1
-	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
-		if(air_group)
+	if (get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
+		if (air_group)
 			return 0
 		return !density
 	else
@@ -84,14 +84,14 @@
 
 
 /obj/machinery/door/window/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
-	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
+	if (istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return 1
-	if(flags & ON_BORDER) //but it will always be on border tho
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
+	if (flags & ON_BORDER) //but it will always be on border tho
+		if (target) //Are we doing a manual check to see
+			if (get_dir(loc, target) == dir)
 				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)
+		else if (mover.dir == dir) //Or are we using move code
+			if (density)
 				mover.Bump(src)
 			return !density
 	return 1
@@ -103,7 +103,7 @@
 		return 0
 	if (!ticker)
 		return 0
-	if(!src.operating) //in case of emag
+	if (!src.operating) //in case of emag
 		src.operating = 1
 	flick(text("[]opening", src.base_state), src)
 	playsound(get_turf(src), soundeffect, 100, 1)
@@ -115,7 +115,7 @@
 //	src.sd_SetOpacity(0)	//TODO: why is this here? Opaque windoors? ~Carn
 	update_nearby_tiles()
 
-	if(operating == 1) //emag again
+	if (operating == 1) //emag again
 		src.operating = 0
 	return 1
 
@@ -129,7 +129,7 @@
 
 	src.density = 1
 	explosion_resistance = initial(explosion_resistance)
-//	if(src.visible)
+//	if (src.visible)
 //		SetOpacity(1)	//TODO: why is this here? Opaque windoors? ~Carn
 	update_nearby_tiles()
 
@@ -148,7 +148,7 @@
 		return
 
 /obj/machinery/door/window/bullet_act(var/obj/item/projectile/Proj)
-	if(Proj.damage)
+	if (Proj.damage)
 		take_damage(round(Proj.damage / 2))
 	..()
 
@@ -158,7 +158,7 @@
 	..()
 	visible_message("<span class='warning'>The glass door was hit by [AM].</span>", 1)
 	var/tforce = 0
-	if(ismob(AM))
+	if (ismob(AM))
 		tforce = 40
 	else
 		tforce = AM:throwforce
@@ -172,8 +172,8 @@
 	return src.attack_hand(user)
 
 /obj/machinery/door/window/attack_paw(mob/user as mob)
-	if(istype(user, /mob/living/carbon/alien/humanoid) || istype(user, /mob/living/carbon/slime/adult))
-		if(src.operating)
+	if (istype(user, /mob/living/carbon/alien/humanoid) || istype(user, /mob/living/carbon/slime/adult))
+		if (src.operating)
 			return
 		user.delayNextAttack(8)
 		src.health = max(0, src.health - 25)
@@ -188,10 +188,10 @@
 
 
 /obj/machinery/door/window/attack_animal(mob/user as mob)
-	if(src.operating)
+	if (src.operating)
 		return
 	var/mob/living/simple_animal/M = user
-	if(M.melee_damage_upper <= 0)
+	if (M.melee_damage_upper <= 0)
 		return
 	user.delayNextAttack(8)
 	src.health = max(0, src.health - M.melee_damage_upper)
@@ -223,10 +223,10 @@
 		return
 
 	//If it's a weapon, smash windoor. Unless it's an id card, agent card, ect.. then ignore it (Cards really shouldnt damage a door anyway)
-	if(src.density && istype(I, /obj/item/weapon) && !istype(I, /obj/item/weapon/card))
+	if (src.density && istype(I, /obj/item/weapon) && !istype(I, /obj/item/weapon/card))
 		var/aforce = I.force
 		user.delayNextAttack(8)
-		if(I.damtype == BRUTE || I.damtype == BURN)
+		if (I.damtype == BRUTE || I.damtype == BURN)
 			src.health = max(0, src.health - aforce)
 		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
 		visible_message("<span class='danger'>[src] was hit by [I].</span>")
@@ -307,7 +307,7 @@
 		src.electronics = null
 		AE.installed = 0
 	else
-		if(operating == -1)
+		if (operating == -1)
 			AE.icon_state = "door_electronics_smoked"
 		// Straight from /obj/machinery/door/airlock/attackby()
 		if (src.req_access && src.req_access.len > 0)

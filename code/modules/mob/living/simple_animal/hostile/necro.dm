@@ -81,15 +81,15 @@
 
 /mob/living/simple_animal/hostile/necro/New(loc, mob/living/Owner, datum/mind/Controller)
 	..()
-	if(Owner && Controller)
+	if (Owner && Controller)
 		faction = "\ref[Owner]"
-		if(Controller)
+		if (Controller)
 			mind = Controller
 			ckey = ckey(mind.key)
 			to_chat(src, "<big><span class='warning'>You have been risen from the dead by your new master, [Owner]. Do his bidding so long as he lives, for when he falls so do you.</span></big>")
 		var/ref = "\ref[Owner.mind]"
 		var/list/necromancers
-		if(!(Owner.mind in ticker.mode.necromancer))
+		if (!(Owner.mind in ticker.mode.necromancer))
 			ticker.mode:necromancer[ref] = list()
 		necromancers = ticker.mode:necromancer[ref]
 		necromancers.Add(Controller)

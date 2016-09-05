@@ -31,18 +31,18 @@
 
 /obj/machinery/centrifuge/RefreshParts()
 	var/manipcount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
+	for (var/obj/item/weapon/stock_parts/SP in component_parts)
+		if (istype(SP, /obj/item/weapon/stock_parts/manipulator))
 			manipcount += SP.rating
 	general_process_time = initial(general_process_time) / manipcount
 
 /obj/machinery/centrifuge/attackby(var/obj/item/weapon/reagent_containers/glass/beaker/vial/I, var/mob/user as mob)
-	if(!istype(I))
+	if (!istype(I))
 		return ..()
 
 	var/mob/living/carbon/C = user
-	if(!sample)
-		if(!C.drop_item(I, src))
+	if (!sample)
+		if (!C.drop_item(I, src))
 			return 1
 
 		sample = I
@@ -51,13 +51,13 @@
 
 //Also handles luminosity
 /obj/machinery/centrifuge/update_icon()
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		icon_state = "[base_state]b"
 		set_light(0)
-	else if(stat & NOPOWER)
+	else if (stat & NOPOWER)
 		icon_state = "[base_state]0"
 		set_light(0)
-	else if(isolating || curing)
+	else if (isolating || curing)
 		set_light(l_range = 2, l_power = 2, l_color = LIGHT_COLOR_CYAN)
 		icon_state = "[base_state]_moving"
 	else
@@ -65,20 +65,20 @@
 		set_light(0)
 
 /obj/machinery/centrifuge/attack_hand(var/mob/user as mob)
-	if(..())
+	if (..())
 		return
 	user.set_machine(src)
 	var/dat = list()
-	if(curing)
+	if (curing)
 		dat += "Antibody isolation in progress"
-	else if(isolating)
+	else if (isolating)
 		dat += "Pathogen isolation in progress"
 	else
 		dat += "<BR>Blood sample:"
 		dat += "<br><table cellpadding='10'><tr><td>"
-		if(sample)
+		if (sample)
 			var/datum/reagent/blood/B = locate(/datum/reagent/blood) in sample.reagents.reagent_list
-			if(B)
+			if (B)
 				dat += "Sample inserted."
 				if (B.data["antibodies"])
 					dat += "</td></tr><tr><td>"
@@ -107,21 +107,21 @@
 
 	..()
 
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		update_icon()
 		return
 
-	if(curing)
+	if (curing)
 		use_power = 2
 		curing--
-		if(!curing)
-			if(sample)
+		if (!curing)
+			if (sample)
 				cure()
-	if(isolating)
+	if (isolating)
 		use_power = 2
 		isolating--
-		if(!isolating)
-			if(sample)
+		if (!isolating)
+			if (sample)
 				isolate()
 
 	else
@@ -133,20 +133,20 @@
 
 /obj/machinery/centrifuge/Topic(href, href_list)
 
-	if(..())
+	if (..())
 		return 1
 
-	if(usr)
+	if (usr)
 		usr.set_machine(src)
 
-	switch(href_list["action"])
-		if("antibody")
+	switch (href_list["action"])
+		if ("antibody")
 			var/delay = general_process_time
 			var/datum/reagent/blood/B = locate(/datum/reagent/blood) in sample.reagents.reagent_list
-			if(!B)
+			if (!B)
 				say("No antibody carrier detected.")
 
-			else if(sample.reagents.has_reagent("toxins"))
+			else if (sample.reagents.has_reagent("toxins"))
 				say("Pathogen purging speed above nominal.")
 				delay *= 0.5
 
@@ -155,7 +155,7 @@
 				playsound(get_turf(src), 'sound/machines/juicer.ogg', 50, 1)
 				update_icon()
 
-		if("isolate")
+		if ("isolate")
 			var/datum/reagent/blood/B = locate(/datum/reagent/blood) in sample.reagents.reagent_list
 			if (B)
 				var/list/virus = virus_copylist(B.data["virus2"])
@@ -167,8 +167,8 @@
 				else
 					say("No such pathogen detected.")
 
-		if("sample")
-			if(sample)
+		if ("sample")
+			if (sample)
 				sample.forceMove(src.loc)
 				sample = null
 

@@ -11,10 +11,10 @@
 	var/blocked = 0 //Player cannot attack/heal while set
 
 	New(obj/holding as obj)
-		if(holding)
+		if (holding)
 			src.holder = holding
 
-			if(istype(src.holder.loc,/obj/machinery/computer2))
+			if (istype(src.holder.loc,/obj/machinery/computer2))
 				src.master = src.holder.loc
 
 //		var/name_action = pick("Defeat ", "Annihilate ", "Save ", "Strike ", "Stop ", "Destroy ", "Robust ", "Romance ")
@@ -28,7 +28,7 @@
 
 
 /datum/computer/file/computer_program/arcade/return_text()
-	if(..())
+	if (..())
 		return
 
 	var/dat = "<a href='byond://?src=\ref[src];close=1'>Close</a> | "
@@ -51,7 +51,7 @@
 	return dat
 
 /datum/computer/file/computer_program/arcade/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 
 	if (!src.blocked)

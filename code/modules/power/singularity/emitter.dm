@@ -35,7 +35,7 @@
 
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
-	if(frequency)
+	if (frequency)
 		radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
 
 
@@ -44,7 +44,7 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(src.anchored || usr:stat)
+	if (src.anchored || usr:stat)
 		to_chat(usr, "<span class='warning'>It is fastened to the floor!</span>")
 		return 0
 	src.dir = turn(src.dir, -90)
@@ -55,7 +55,7 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(src.anchored || usr:stat)
+	if (src.anchored || usr:stat)
 		to_chat(usr, "<span class='warning'>It is fastened to the floor!</span>")
 		return 0
 	src.dir = turn(src.dir, 90)
@@ -64,12 +64,12 @@
 /obj/machinery/power/emitter/initialize()
 
 	..()
-	if(state == 2 && anchored)
+	if (state == 2 && anchored)
 		connect_to_network()
 		update_icon()
 		update_beam()
 
-	if(frequency)
+	if (frequency)
 		set_frequency(frequency)
 
 /obj/machinery/power/emitter/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
@@ -84,39 +84,39 @@
 /obj/machinery/power/emitter/proc/update_beam()
 
 
-	if(active && powered)
-		if(!beam)
+	if (active && powered)
+		if (!beam)
 			beam = new (loc)
 			beam.dir = dir
 			beam.emit(spawn_by=src)
 	else
-		if(beam)
+		if (beam)
 			beam._re_emit = 0
 			qdel(beam)
 			beam = null
 
 /obj/machinery/power/emitter/receive_signal(datum/signal/signal)
 
-	if(!signal.data["tag"] || (signal.data["tag"] != id_tag))
+	if (!signal.data["tag"] || (signal.data["tag"] != id_tag))
 		return 0
 
 	var/on
 //	to_chat(world, "\ref[src] received signal. tag [signal.data["tag"]], cmd [signal.data["command"]], state [signal.data["state"]], sigtype [signal.data["sigtype"]]")
-	if(signal.data["command"])
-		switch(signal.data["command"])
-			if("on")
+	if (signal.data["command"])
+		switch (signal.data["command"])
+			if ("on")
 				on = 1
 
-			if("off")
+			if ("off")
 				on = 0
 
-			if("set")
+			if ("set")
 				on = signal.data["state"] > 0
 
-			if("toggle")
+			if ("toggle")
 				on = !active
 
-		if(!isnull(on) && anchored && state == 2 && on != active)
+		if (!isnull(on) && anchored && state == 2 && on != active)
 			active = on
 			var/statestr = on ? "on":"off"
 			// Spammy message_admins("Emitter turned [statestr] by radio signal ([signal.data["command"]] @ [frequency]) in [formatJumpTo(src)]",0,1)
@@ -135,7 +135,7 @@
 
 /obj/machinery/power/emitter/update_icon()
 
-	if(powered && get_powernet() && avail(active_power_usage) && active)
+	if (powered && get_powernet() && avail(active_power_usage) && active)
 		icon_state = "emitter_+a"
 	else
 		icon_state = "emitter"
@@ -143,16 +143,16 @@
 /obj/machinery/power/emitter/attack_hand(mob/user as mob)
 
 	//Require consciousness
-	if(user.stat && !isAdminGhost(user))
+	if (user.stat && !isAdminGhost(user))
 		return
 
 	src.add_fingerprint(user)
-	if(state == 2)
-		if(!get_powernet())
+	if (state == 2)
+		if (!get_powernet())
 			to_chat(user, "<span class='warning'>\The [src] isn't connected to a wire.</span>")
 			return 1
-		if(!src.locked)
-			if(active)
+		if (!src.locked)
+			if (active)
 				turn_off()
 				user.visible_message("<span class='warning'>[user] turns \the [src] off.", \
 				"<span class='notice'>You turn \the [src] off.")
@@ -191,31 +191,31 @@
 
 /obj/machinery/power/emitter/process()
 
-	if(!anchored) //If it got unanchored "inexplicably"... fucking badmins
+	if (!anchored) //If it got unanchored "inexplicably"... fucking badmins
 		active = 0
 		update_icon()
 		update_beam()
 		return
 
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		return
 
-	if(state != 2 || (!powernet && active_power_usage)) //Not welded to the floor, or no more wire underneath and requires power
+	if (state != 2 || (!powernet && active_power_usage)) //Not welded to the floor, or no more wire underneath and requires power
 		active = 0
 		update_icon()
 		update_beam()
 		return
 
-	if(((last_shot + fire_delay) <= world.time) && (active == 1)) //It's currently activated and it hasn't processed in a bit
-		if(!active_power_usage || avail(active_power_usage)) //Doesn't require power or powernet has enough supply
+	if (((last_shot + fire_delay) <= world.time) && (active == 1)) //It's currently activated and it hasn't processed in a bit
+		if (!active_power_usage || avail(active_power_usage)) //Doesn't require power or powernet has enough supply
 			add_load(active_power_usage) //Drain it then bitch
-			if(!powered) //Yay its powered
+			if (!powered) //Yay its powered
 				powered = 1
 				update_icon()
 				update_beam()
 				investigation_log(I_SINGULO,"regained power and turned <font color='green'>on</font>")
 		else
-			if(powered) //Fuck its not anymore
+			if (powered) //Fuck its not anymore
 				powered = 0 //Whelp time to kill it then
 				update_beam() //Update its beam and icon
 				update_icon()
@@ -224,7 +224,7 @@
 
 		last_shot = world.time
 
-		if(shot_number < 3)
+		if (shot_number < 3)
 			fire_delay = 2
 			shot_number++
 		else
@@ -235,7 +235,7 @@
 		//beam.dir = dir
 		//playsound(get_turf(src), 'sound/weapons/emitter.ogg', 25, 1)
 
-		if(prob(35))
+		if (prob(35))
 			var/datum/effect/effect/system/spark_spread/Sparks = new
 			Sparks.set_up(5, 1, src)
 			Sparks.start()
@@ -244,7 +244,7 @@
 
 /obj/machinery/power/emitter/emag(mob/user)
 
-	if(!emagged)
+	if (!emagged)
 		locked = 0
 		emagged = 1
 		user.visible_message("<span class='danger'>[user] shorts out \the [src]'s lock.</span>", "<span class='warning'>You short out \the [src]'s lock.</span>")
@@ -252,18 +252,18 @@
 
 /obj/machinery/power/emitter/wrenchAnchor(mob/user)
 
-	if(active)
+	if (active)
 		to_chat(user, "<span class='warning'>Turn off \the [src] first.</span>")
 		return
 	return ..()
 
 /obj/machinery/power/emitter/weldToFloor()
 
-	if(..() == 1)
-		switch(state)
-			if(1)
+	if (..() == 1)
+		switch (state)
+			if (1)
 				disconnect_from_network()
-			if(2)
+			if (2)
 				connect_to_network()
 		return 1
 	return -1
@@ -271,15 +271,15 @@
 /obj/machinery/power/emitter/attackby(obj/item/W, mob/user)
 
 	. = ..() //Holy fucking shit
-	if(.)
+	if (.)
 		return .
 
-	if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
-		if(emagged)
+	if (istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
+		if (emagged)
 			to_chat(user, "<span class='warning'>The lock appears to be broken.</span>")
 			return
-		if(src.allowed(user))
-			if(active)
+		if (src.allowed(user))
+			if (active)
 				src.locked = !src.locked
 				to_chat(user, "<span class='notice'>The controls are now [src.locked ? "locked" : "unlocked"].</span>")
 			else
@@ -307,22 +307,22 @@
 
 /obj/effect/beam/emitter/proc/set_power(var/newpower = 1)
 	power = newpower
-	if(next)
+	if (next)
 		var/obj/effect/beam/emitter/next_beam=next
 		next_beam.set_power(power)
 	update_icon()
-	if(!master)
+	if (!master)
 		INVOKE_EVENT(power_change,list("beam" = src))
 
 /obj/effect/beam/emitter/spawn_child()
 	var/obj/effect/beam/emitter/beam = ..()
-	if(!beam)
+	if (!beam)
 		return null
 	beam.power = power
 	return beam
 
 /obj/effect/beam/emitter/update_icon()
-	if(!master)
+	if (!master)
 		invisibility = 101 //Make doubly sure
 		return
 	var/visible_power = Clamp(round(power/3) + 1, 1, 3)

@@ -29,23 +29,23 @@ var/global/current_centcomm_order_id=124901
 	id = current_centcomm_order_id++
 
 /datum/centcomm_order/proc/CheckShuttleObject(var/obj/O, var/in_crate)
-	if(must_be_in_crate && !in_crate)
+	if (must_be_in_crate && !in_crate)
 		return 0
-	if(!O)
+	if (!O)
 		return 0
-	if(O.type in requested)
-		if(!(O.type in fulfilled))
+	if (O.type in requested)
+		if (!(O.type in fulfilled))
 			fulfilled[O.type]=0
 		// Don't claim stuff that other orders may want.
-		if(fulfilled[O.type]==requested[O.type])
+		if (fulfilled[O.type]==requested[O.type])
 			return 0
 		fulfilled[O.type]=fulfilled[O.type]+1
 		qdel(O)
 		return 1
 
 /datum/centcomm_order/proc/CheckFulfilled(var/obj/O, var/in_crate)
-	for(var/typepath in requested)
-		if(!(typepath in fulfilled) || fulfilled[typepath] < requested[typepath])
+	for (var/typepath in requested)
+		if (!(typepath in fulfilled) || fulfilled[typepath] < requested[typepath])
 			return 0
 	return 1
 
@@ -62,12 +62,12 @@ var/global/current_centcomm_order_id=124901
 
 // Same as normal, but will take every last bit of what you provided.
 /datum/centcomm_order/per_unit/CheckShuttleObject(var/obj/O, var/in_crate)
-	if(must_be_in_crate && !in_crate)
+	if (must_be_in_crate && !in_crate)
 		return 0
-	if(!O)
+	if (!O)
 		return 0
-	if(O.type in requested)
-		if(!(O.type in fulfilled))
+	if (O.type in requested)
+		if (!(O.type in fulfilled))
 			fulfilled[O.type]=0
 		fulfilled[O.type]=fulfilled[O.type]+1
 
@@ -76,14 +76,14 @@ var/global/current_centcomm_order_id=124901
 
 /datum/centcomm_order/per_unit/CheckFulfilled()
 	var/toPay=0
-	for(var/typepath in fulfilled)
+	for (var/typepath in fulfilled)
 		var/worth_per_unit = unit_prices[typepath]
 		var/amount         = fulfilled[typepath]
 		toPay += amount * worth_per_unit
-		if(requested[typepath]!=INFINITY)
+		if (requested[typepath]!=INFINITY)
 			requested[typepath] = max(0,requested[typepath] - fulfilled[typepath])
 		fulfilled[typepath]=0
-	if(toPay)
+	if (toPay)
 		acct.charge(-toPay,null,"Payment for order #[id]",dest_name = name)
 	return
 

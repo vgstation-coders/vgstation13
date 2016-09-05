@@ -52,86 +52,86 @@
 
 //this should only need to be called once
 /datum/geosample/proc/UpdateTurf(var/turf/unsimulated/mineral/container)
-	if(!container || !istype(container))
+	if (!container || !istype(container))
 		return
 
 	age = rand(1,999)
 
-	if(container.mineral)
-		switch(container.mineral.name)
-			if("Uranium")
+	if (container.mineral)
+		switch (container.mineral.name)
+			if ("Uranium")
 				age_million = rand(1, 704)
 				age_thousand = rand(1,999)
 				find_presence["potassium"] = rand(1,1000) / 100
 				source_mineral = "potassium"
-			if("Iron")
+			if ("Iron")
 				age_thousand = rand(1, 999)
 				age_million = rand(1, 999)
 				find_presence["iron"] = rand(1,1000) / 100
 				source_mineral = "iron"
-			if("Diamond")
+			if ("Diamond")
 				age_thousand = rand(1,999)
 				age_million = rand(1,999)
 				find_presence["nitrogen"] = rand(1,1000) / 100
 				source_mineral = "nitrogen"
-			if("Gold")
+			if ("Gold")
 				age_thousand = rand(1,999)
 				age_million = rand(1,999)
 				age_billion = rand(3,4)
 				find_presence["iron"] = rand(1,1000) / 100
 				source_mineral = "iron"
-			if("Silver")
+			if ("Silver")
 				age_thousand = rand(1,999)
 				age_million = rand(1,999)
 				find_presence["iron"] = rand(1,1000) / 100
 				source_mineral = "iron"
-			if("Plasma")
+			if ("Plasma")
 				age_thousand = rand(1,999)
 				age_million = rand(1,999)
 				age_billion = rand(10, 13)
 				find_presence["plasma"] = rand(1,1000) / 100
 				source_mineral = "plasma"
-			if("Clown")
+			if ("Clown")
 				age = rand(-1,-999)				//thats the joke
 				age_thousand = rand(-1,-999)
 				find_presence["plasma"] = rand(1,1000) / 100
 				source_mineral = "plasma"
 
-	if(prob(75))
+	if (prob(75))
 		find_presence["phosphorus"] = rand(1,500) / 100
-	if(prob(25))
+	if (prob(25))
 		find_presence["mercury"] = rand(1,500) / 100
 	find_presence["chlorine"] = rand(500,2500) / 100
 
 	//loop over finds, grab any relevant stuff
-	for(var/datum/find/F in container.finds)
+	for (var/datum/find/F in container.finds)
 		var/responsive_reagent = get_responsive_reagent(F.find_type)
 		find_presence[responsive_reagent] = F.dissonance_spread
 
 	//loop over again to reset values to percentages
 	var/total_presence = 0
-	for(var/carrier in find_presence)
+	for (var/carrier in find_presence)
 		total_presence += find_presence[carrier]
-	for(var/carrier in find_presence)
+	for (var/carrier in find_presence)
 		find_presence[carrier] = find_presence[carrier] / total_presence
 
-	for(var/entry in find_presence)
+	for (var/entry in find_presence)
 		total_spread += find_presence[entry]
 
 //have this separate from UpdateTurf() so that we dont have a billion turfs being updated (redundantly) every time an artifact spawns
 /datum/geosample/proc/UpdateNearbyArtifactInfo(var/turf/unsimulated/mineral/container)
-	if(!container || !istype(container))
+	if (!container || !istype(container))
 		return
 
-	if(container.artifact_find)
+	if (container.artifact_find)
 		artifact_distance = rand()
 		artifact_id = container.artifact_find.artifact_id
 	else
-		if(master_controller) //Sanity check due to runtimes ~Z
-			for(var/turf/unsimulated/mineral/T in master_controller.artifact_spawning_turfs)
-				if(T.artifact_find)
+		if (master_controller) //Sanity check due to runtimes ~Z
+			for (var/turf/unsimulated/mineral/T in master_controller.artifact_spawning_turfs)
+				if (T.artifact_find)
 					var/cur_dist = get_dist(container, T) * 2
-					if( (artifact_distance < 0 || cur_dist < artifact_distance) && cur_dist <= T.artifact_find.artifact_detect_range )
+					if ( (artifact_distance < 0 || cur_dist < artifact_distance) && cur_dist <= T.artifact_find.artifact_detect_range )
 						artifact_distance = cur_dist + rand() * 2 - 1
 						artifact_id = T.artifact_find.artifact_id
 				else

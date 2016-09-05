@@ -29,31 +29,31 @@
 	to_chat(world, "A nuclear explosive was being transported by Nanotrasen to a military base. The transport ship mysteriously lost contact with Space Traffic Control (STC). About that time a strange disk was discovered around [station_name()]. It was identified by Nanotrasen as a nuclear auth. disk and now Syndicate Operatives have arrived to retake the disk and detonate SS13! Also, most likely Syndicate star ships are in the vicinity so take care not to lose the disk!\n<B>Syndicate</B>: Reclaim the disk and detonate the nuclear bomb anywhere on SS13.\n<B>Personnel</B>: Hold the disk and <B>escape with the disk</B> on the shuttle!")
 
 /datum/game_mode/nuclear/can_start()//This could be better, will likely have to recode it later
-	if(!..())
+	if (!..())
 		return 0
 
 	var/list/possible_syndicates = get_players_for_role(ROLE_OPERATIVE)
 	var/agent_number = 0
 
-	if(possible_syndicates.len < 1)
+	if (possible_syndicates.len < 1)
 		return 0
 
-	if(possible_syndicates.len > agents_possible)
+	if (possible_syndicates.len > agents_possible)
 		agent_number = agents_possible
 	else
 		agent_number = possible_syndicates.len
 
 	var/n_players = num_players()
-	if(agent_number > n_players)
+	if (agent_number > n_players)
 		agent_number = n_players/2
 
-	while(agent_number > 0)
+	while (agent_number > 0)
 		var/datum/mind/new_syndicate = pick(possible_syndicates)
 		syndicates += new_syndicate
 		possible_syndicates -= new_syndicate //So it doesn't pick the same guy each time.
 		agent_number--
 
-	for(var/datum/mind/synd_mind in syndicates)
+	for (var/datum/mind/synd_mind in syndicates)
 		synd_mind.assigned_role = "MODE" //So they aren't chosen for other jobs.
 		synd_mind.special_role = "Syndicate"//So they actually have a special role/N
 	return 1
@@ -67,42 +67,42 @@
 ////////////////////////////////////////////////////////////////////////////////////////
 /datum/game_mode/proc/update_all_synd_icons()
 	spawn(0)
-		for(var/datum/mind/synd_mind in syndicates)
-			if(synd_mind.current)
-				if(synd_mind.current.client)
-					for(var/image/I in synd_mind.current.client.images)
-						if(I.icon_state == "synd")
+		for (var/datum/mind/synd_mind in syndicates)
+			if (synd_mind.current)
+				if (synd_mind.current.client)
+					for (var/image/I in synd_mind.current.client.images)
+						if (I.icon_state == "synd")
 							synd_mind.current.client.images -= I
 
-		for(var/datum/mind/synd_mind in syndicates)
-			if(synd_mind.current)
-				if(synd_mind.current.client)
-					for(var/datum/mind/synd_mind_1 in syndicates)
-						if(synd_mind_1.current)
+		for (var/datum/mind/synd_mind in syndicates)
+			if (synd_mind.current)
+				if (synd_mind.current.client)
+					for (var/datum/mind/synd_mind_1 in syndicates)
+						if (synd_mind_1.current)
 							var/imageloc = synd_mind_1.current
-							if(istype(synd_mind_1.current.loc,/obj/mecha))
+							if (istype(synd_mind_1.current.loc,/obj/mecha))
 								imageloc = synd_mind_1.current.loc
 							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd")
 							I.plane = SYNDIE_ANTAG_HUD_PLANE
 							synd_mind.current.client.images += I
 
 /datum/game_mode/proc/update_synd_icons_added(datum/mind/synd_mind)
-	if(!synd_mind)
+	if (!synd_mind)
 		return 0
 	spawn(0)
-		for(var/datum/mind/synd in syndicates)
-			if(synd.current)
-				if(synd.current.client)
+		for (var/datum/mind/synd in syndicates)
+			if (synd.current)
+				if (synd.current.client)
 					var/imageloc = synd_mind.current
-					if(istype(synd_mind.current.loc,/obj/mecha))
+					if (istype(synd_mind.current.loc,/obj/mecha))
 						imageloc = synd_mind.current.loc
 					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd")
 					I.plane = SYNDIE_ANTAG_HUD_PLANE
 					synd.current.client.images += I
-			if(synd_mind.current)
-				if(synd_mind.current.client)
+			if (synd_mind.current)
+				if (synd_mind.current.client)
 					var/imageloc = synd_mind.current
-					if(istype(synd_mind.current.loc,/obj/mecha))
+					if (istype(synd_mind.current.loc,/obj/mecha))
 						imageloc = synd_mind.current.loc
 					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd")
 					I.plane = SYNDIE_ANTAG_HUD_PLANE
@@ -112,18 +112,18 @@
 
 /datum/game_mode/proc/update_synd_icons_removed(datum/mind/synd_mind)
 	spawn(0)
-		for(var/datum/mind/synd in syndicates)
-			if(synd.current)
-				if(synd.current.client)
-					for(var/image/I in synd.current.client.images)
-						if(I.icon_state == "synd" && ((I.loc == synd_mind.current) || (I.loc == synd_mind.current.loc)))
+		for (var/datum/mind/synd in syndicates)
+			if (synd.current)
+				if (synd.current.client)
+					for (var/image/I in synd.current.client.images)
+						if (I.icon_state == "synd" && ((I.loc == synd_mind.current) || (I.loc == synd_mind.current.loc)))
 							//del(I)
 							synd.current.client.images -= I
 
-		if(synd_mind.current)
-			if(synd_mind.current.client)
-				for(var/image/I in synd_mind.current.client.images)
-					if(I.icon_state == "synd")
+		if (synd_mind.current)
+			if (synd_mind.current.client)
+				for (var/image/I in synd_mind.current.client.images)
+					if (I.icon_state == "synd")
 						//del(I)
 						synd_mind.current.client.images -= I
 		update_all_synd_icons()
@@ -135,8 +135,8 @@
 
 	var/list/turf/synd_spawn = list()
 
-	for(var/obj/effect/landmark/A in landmarks_list)
-		if(A.name == "Syndicate-Spawn")
+	for (var/obj/effect/landmark/A in landmarks_list)
+		if (A.name == "Syndicate-Spawn")
 			synd_spawn += get_turf(A)
 			qdel(A)
 			A = null
@@ -150,8 +150,8 @@
 	var/agent_number = 1
 	var/spawnpos = 1
 
-	for(var/datum/mind/synd_mind in syndicates)
-		if(spawnpos > synd_spawn.len)
+	for (var/datum/mind/synd_mind in syndicates)
+		if (spawnpos > synd_spawn.len)
 			spawnpos = 1
 		synd_mind.current.forceMove(synd_spawn[spawnpos])
 
@@ -159,7 +159,7 @@
 		greet_syndicate(synd_mind)
 		equip_syndicate(synd_mind.current)
 
-		if(!leader_selected)
+		if (!leader_selected)
 			prepare_syndicate_leader(synd_mind, nuke_code)
 			leader_selected = 1
 		else
@@ -170,19 +170,19 @@
 
 	update_all_synd_icons()
 
-	if(uplinklocker)
+	if (uplinklocker)
 		var/obj/structure/closet/C = new /obj/structure/closet/syndicate/nuclear(uplinklocker.loc)
 		spawn(10) //gives time for the contents to spawn properly
-			for(var/obj/item/thing in C)
-				if(thing.hidden_uplink)
+			for (var/obj/item/thing in C)
+				if (thing.hidden_uplink)
 					nuclear_uplink = thing
 					break
-	if(nuke_spawn && synd_spawn.len > 0)
+	if (nuke_spawn && synd_spawn.len > 0)
 		var/obj/machinery/nuclearbomb/the_bomb = new /obj/machinery/nuclearbomb(nuke_spawn.loc)
 		the_bomb.r_code = nuke_code
 
 	spawn (rand(waittime_l, waittime_h))
-		if(!mixed)
+		if (!mixed)
 			send_intercept()
 
 	return ..()
@@ -222,7 +222,7 @@
 	if (you_are)
 		to_chat(syndicate.current, "<span class='notice'>You are a [syndicate_name()] agent!</span>")
 	var/obj_count = 1
-	for(var/datum/objective/objective in syndicate.objectives)
+	for (var/datum/objective/objective in syndicate.objectives)
 		to_chat(syndicate.current, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
 		obj_count++
 	syndicate.current << sound('sound/voice/syndicate_intro.ogg')
@@ -236,10 +236,10 @@
 /datum/game_mode/proc/equip_syndicate(mob/living/carbon/human/synd_mob)
 	var/radio_freq = SYND_FREQ
 
-	if(synd_mob.overeatduration) //We need to do this here and now, otherwise a lot of gear will fail to spawn
+	if (synd_mob.overeatduration) //We need to do this here and now, otherwise a lot of gear will fail to spawn
 		to_chat(synd_mob, "<span class='notice'>Your intensive physical training to become a Nuclear Operative has paid off and made you fit again!</span>")
 		synd_mob.overeatduration = 0 //Fat-B-Gone
-		if(synd_mob.nutrition > 400) //We are also overeating nutriment-wise
+		if (synd_mob.nutrition > 400) //We are also overeating nutriment-wise
 			synd_mob.nutrition = 400 //Fix that
 		//synd_mob.handle_chemicals_in_body() //Update now, don't wait for the next life.dm call
 		synd_mob.mutations.Remove(M_FAT)
@@ -254,7 +254,7 @@
 
 	synd_mob.equip_to_slot_or_del(new /obj/item/clothing/under/syndicate(synd_mob), slot_w_uniform)
 	synd_mob.equip_to_slot_or_del(new /obj/item/clothing/shoes/combat(synd_mob), slot_shoes)
-	if(!istype(synd_mob.species, /datum/species/plasmaman))
+	if (!istype(synd_mob.species, /datum/species/plasmaman))
 		synd_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/armor/bulletproof(synd_mob), slot_wear_suit)
 	else
 		synd_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/space/plasmaman/nuclear(synd_mob), slot_wear_suit)
@@ -264,12 +264,12 @@
 		if (synd_mob.internals)
 			synd_mob.internals.icon_state = "internal1"
 	synd_mob.equip_to_slot_or_del(new /obj/item/clothing/gloves/combat(synd_mob), slot_gloves)
-	if(!istype(synd_mob.species, /datum/species/plasmaman))
+	if (!istype(synd_mob.species, /datum/species/plasmaman))
 		synd_mob.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/tactical/swat(synd_mob), slot_head)
 	else
 		synd_mob.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/plasmaman/nuclear(synd_mob), slot_head)
 	synd_mob.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses/prescription(synd_mob), slot_glasses)//changed to prescription sunglasses so near-sighted players aren't screwed if there aren't any admins online
-	if(istype(synd_mob.species, /datum/species/vox))
+	if (istype(synd_mob.species, /datum/species/vox))
 		synd_mob.equip_or_collect(new /obj/item/clothing/mask/breath/vox(synd_mob), slot_wear_mask)
 
 		var/obj/item/weapon/tank/nitrogen/TN = new(synd_mob)
@@ -281,9 +281,9 @@
 			synd_mob.internals.icon_state = "internal1"
 
 	synd_mob.equip_to_slot_or_del(new /obj/item/weapon/card/id/syndicate(synd_mob), slot_wear_id)
-	if(synd_mob.backbag == 2)
+	if (synd_mob.backbag == 2)
 		synd_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/security(synd_mob), slot_back)
-	if(synd_mob.backbag == 3 || synd_mob.backbag == 4)
+	if (synd_mob.backbag == 3 || synd_mob.backbag == 4)
 		synd_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel_sec(synd_mob), slot_back)
 	//if(synd_mob.backbag == 4) synd_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(synd_mob), slot_back)
 	synd_mob.equip_to_slot_or_del(new /obj/item/ammo_storage/magazine/a12mm/ops(synd_mob), slot_in_backpack)
@@ -306,19 +306,19 @@
 
 
 /datum/game_mode/proc/is_operatives_are_dead()
-	for(var/datum/mind/operative_mind in syndicates)
+	for (var/datum/mind/operative_mind in syndicates)
 		if (!istype(operative_mind.current,/mob/living/carbon/human))
-			if(operative_mind.current)
-				if(operative_mind.current.stat!=2)
+			if (operative_mind.current)
+				if (operative_mind.current.stat!=2)
 					return 0
 	return 1
 
 
 /datum/game_mode/nuclear/declare_completion()
 	var/disk_rescued = 1
-	for(var/obj/item/weapon/disk/nuclear/D in world)
+	for (var/obj/item/weapon/disk/nuclear/D in world)
 		var/disk_area = get_area(D)
-		if(!is_type_in_list(disk_area, centcom_areas))
+		if (!is_type_in_list(disk_area, centcom_areas))
 			disk_rescued = 0
 			break
 	var/crew_evacuated = (emergency_shuttle.location==2)
@@ -381,26 +381,26 @@
 
 /datum/game_mode/proc/auto_declare_completion_nuclear()
 	var/text = ""
-	if( syndicates.len || (ticker && istype(ticker.mode,/datum/game_mode/nuclear)) )
+	if ( syndicates.len || (ticker && istype(ticker.mode,/datum/game_mode/nuclear)) )
 		var/icon/logo = icon('icons/mob/mob.dmi', "nuke-logo")
 		end_icons += logo
 		var/tempstate = end_icons.len
 		text += {"<br><img src="logo_[tempstate].png"> <FONT size = 2><B>The syndicate operatives were:</B></FONT> <img src="logo_[tempstate].png">"}
 
-		for(var/datum/mind/syndicate in syndicates)
+		for (var/datum/mind/syndicate in syndicates)
 
-			if(syndicate.current)
+			if (syndicate.current)
 				var/icon/flat = getFlatIcon(syndicate.current, SOUTH, 1, 1)
 				end_icons += flat
 				tempstate = end_icons.len
 				text += {"<br><img src="logo_[tempstate].png"> <b>[syndicate.key]</b> was <b>[syndicate.name]</b> ("}
-				if(syndicate.current.stat == DEAD)
+				if (syndicate.current.stat == DEAD)
 					text += "died"
 					flat.Turn(90)
 					end_icons[tempstate] = flat
 				else
 					text += "survived"
-				if(syndicate.current.real_name != syndicate.name)
+				if (syndicate.current.real_name != syndicate.name)
 					text += " as [syndicate.current.real_name]"
 			else
 				var/icon/sprotch = icon('icons/effects/blood.dmi', "floor1-old")
@@ -410,10 +410,10 @@
 				text += "body destroyed"
 			text += ")"
 		var/obj/item/nuclear_uplink = src:nuclear_uplink
-		if(nuclear_uplink && nuclear_uplink.hidden_uplink)
-			if(nuclear_uplink.hidden_uplink.purchase_log.len)
+		if (nuclear_uplink && nuclear_uplink.hidden_uplink)
+			if (nuclear_uplink.hidden_uplink.purchase_log.len)
 				text += "<br><span class='sinister'>The tools used by the syndicate operatives were: "
-				for(var/entry in nuclear_uplink.hidden_uplink.purchase_log)
+				for (var/entry in nuclear_uplink.hidden_uplink.purchase_log)
 					text += "<br>[entry]TC(s)"
 				text += "</span>"
 			else
@@ -437,11 +437,11 @@
 	return newname
 
 /proc/NukeNameAssign(var/lastname,var/list/syndicates)
-	for(var/datum/mind/synd_mind in syndicates)
-		switch(synd_mind.current.gender)
-			if(MALE)
+	for (var/datum/mind/synd_mind in syndicates)
+		switch (synd_mind.current.gender)
+			if (MALE)
 				synd_mind.name = "[pick(first_names_male)] [lastname]"
-			if(FEMALE)
+			if (FEMALE)
 				synd_mind.name = "[pick(first_names_female)] [lastname]"
 		synd_mind.current.real_name = synd_mind.name
 	return

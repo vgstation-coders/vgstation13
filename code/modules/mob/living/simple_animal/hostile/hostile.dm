@@ -35,42 +35,42 @@
 	friends = list()
 
 /mob/living/simple_animal/hostile/Life()
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
 	. = ..()
 	//Cooldowns
-	if(ranged)
+	if (ranged)
 		ranged_cooldown--
 
-	if(istype(loc, /obj/item/device/mobcapsule))
+	if (istype(loc, /obj/item/device/mobcapsule))
 		return 0
-	if(!.)
+	if (!.)
 		walk(src, 0)
 		return 0
-	if(client && !deny_client_move)
+	if (client && !deny_client_move)
 		return 0
-	if(!stat)
-		if(size > SIZE_TINY && istype(loc, /obj/item/weapon/holder)) //If somebody picked us up and we're big enough to fight!
+	if (!stat)
+		if (size > SIZE_TINY && istype(loc, /obj/item/weapon/holder)) //If somebody picked us up and we're big enough to fight!
 			var/mob/living/L = loc.loc
-			if(!istype(L) || (L.faction != src.faction) || !CanAttack(L)) //If we're not being held by a mob, OR we're being held by a mob who isn't from our faction OR we're being held by a mob whom we don't consider a valid target!
+			if (!istype(L) || (L.faction != src.faction) || !CanAttack(L)) //If we're not being held by a mob, OR we're being held by a mob who isn't from our faction OR we're being held by a mob whom we don't consider a valid target!
 				returnToPool(loc)
 			else
 				return 0
 
-		switch(stance)
-			if(HOSTILE_STANCE_IDLE)
-				if(environment_smash)
+		switch (stance)
+			if (HOSTILE_STANCE_IDLE)
+				if (environment_smash)
 					EscapeConfinement()
 				var/new_target = FindTarget()
 				GiveTarget(new_target)
 
-			if(HOSTILE_STANCE_ATTACK)
-				if(!(flags & INVULNERABLE))
+			if (HOSTILE_STANCE_ATTACK)
+				if (!(flags & INVULNERABLE))
 					MoveToTarget()
 					DestroySurroundings()
 
-			if(HOSTILE_STANCE_ATTACKING)
-				if(!(flags & INVULNERABLE))
+			if (HOSTILE_STANCE_ATTACKING)
+				if (!(flags & INVULNERABLE))
 					AttackTarget()
 					DestroySurroundings()
 
@@ -94,13 +94,13 @@
 /mob/living/simple_animal/hostile/proc/FindTarget()//Step 2, filter down possible targets to things we actually care about
 	var/list/Targets = list()
 	var/Target
-	for(var/atom/A in ListTargets())
-		if(Found(A))//Just in case people want to override targetting
+	for (var/atom/A in ListTargets())
+		if (Found(A))//Just in case people want to override targetting
 			var/list/FoundTarget = list()
 			FoundTarget += A
 			Targets = FoundTarget
 			break
-		if(CanAttack(A))//Can we attack it?
+		if (CanAttack(A))//Can we attack it?
 			Targets += A
 			continue
 	Target = PickTarget(Targets)
@@ -110,98 +110,98 @@
 	return
 
 /mob/living/simple_animal/hostile/proc/PickTarget(var/list/Targets)//Step 3, pick amongst the possible, attackable targets
-	if(target != null)//If we already have a target, but are told to pick again, calculate the lowest distance between all possible, and pick from the lowest distance targets
-		for(var/atom/A in Targets)
+	if (target != null)//If we already have a target, but are told to pick again, calculate the lowest distance between all possible, and pick from the lowest distance targets
+		for (var/atom/A in Targets)
 			var/target_dist = get_dist(src, target)
 			var/possible_target_distance = get_dist(src, A)
-			if(target_dist < possible_target_distance)
+			if (target_dist < possible_target_distance)
 				Targets -= A
-	if(!Targets.len)//We didnt find nothin!
+	if (!Targets.len)//We didnt find nothin!
 		return
 	var/chosen_target = pick(Targets)//Pick the remaining targets (if any) at random
 	return chosen_target
 
 /mob/living/simple_animal/hostile/CanAttack(var/atom/the_target)//Can we actually attack a possible target?
-	if(see_invisible < the_target.invisibility)//Target's invisible to us, forget it
+	if (see_invisible < the_target.invisibility)//Target's invisible to us, forget it
 		return 0
-	if(isliving(the_target) && search_objects < 2)
+	if (isliving(the_target) && search_objects < 2)
 		var/mob/living/L = the_target
 		//WE ONLY ATTACK LIVING MOBS UNLESS SPECIFIED OTHERWISE
-		if(L.stat > stat_attack || (L.stat != stat_attack && stat_exclusive == 1))
+		if (L.stat > stat_attack || (L.stat != stat_attack && stat_exclusive == 1))
 			return 0
 		//WE DON'T ATTACK INVULNERABLE MOBS (such as etheral jaunting mobs, or passengers of the adminbus)
-		if(L.flags & INVULNERABLE)
+		if (L.flags & INVULNERABLE)
 			return 0
 		//WE DON'T ATTACK MOMMI
-		if(isMoMMI(L))
+		if (isMoMMI(L))
 			return 0
 		//WE DON'T OUR OWN FACTION UNLESS SPECIFIED OTHERWISE
-		if((L.faction == src.faction && !attack_same) || (L.faction != src.faction && attack_same == 2) || (L.faction != attack_faction && attack_faction))
+		if ((L.faction == src.faction && !attack_same) || (L.faction != src.faction && attack_same == 2) || (L.faction != attack_faction && attack_faction))
 			return 0
 		//IF OUR FACTION IS A REFERENCE TO A SPECIFIC MOB THEN WE DON'T ATTACK HIM (examples include viscerator grenades, staff of animation mimics, asteroid monsters)
-		if((faction == "\ref[L]") && !attack_same)
+		if ((faction == "\ref[L]") && !attack_same)
 			return 0
 		//IF WE ARE GOLD SLIME+PLASMA MONSTERS THEN WE DON'T ATTACK SLIMES/SLIME PEOPLE/ADAMANTINE GOLEMS
-		if(faction == "slimesummon")
-			if(isslime(L))
+		if (faction == "slimesummon")
+			if (isslime(L))
 				return 0
-			if(ishuman(L))
+			if (ishuman(L))
 				var/mob/living/carbon/human/H = L
-				if(H.dna)
-					if((H.dna.mutantrace == "slime") || (isgolem(H)) || (H.dna.mutantrace == "adamantine") || (H.dna.mutantrace=="coalgolem"))
+				if (H.dna)
+					if ((H.dna.mutantrace == "slime") || (isgolem(H)) || (H.dna.mutantrace == "adamantine") || (H.dna.mutantrace=="coalgolem"))
 						return 0
 		//IF WE ARE MOBS SPAWNED BY THE ADMINBUS THEN WE DON'T ATTACK TEST DUMMIES OR IAN (wait what? man that's snowflaky as fuck)
-		if((istype(L,/mob/living/simple_animal/corgi/Ian) || istype(L,/mob/living/carbon/human/dummy)) && (faction == "adminbus mob"))
+		if ((istype(L,/mob/living/simple_animal/corgi/Ian) || istype(L,/mob/living/carbon/human/dummy)) && (faction == "adminbus mob"))
 			return 0
 		//WE DON'T ATTACK OUR FRIENDS (used by lazarus injectors, and rabid slimes)
-		if(friends.Find(L))
+		if (friends.Find(L))
 			return 0
 		return 1
-	if(isobj(the_target))
+	if (isobj(the_target))
 		//if(the_target.type in wanted_objects)
-		if(is_type_in_list(the_target,wanted_objects))
+		if (is_type_in_list(the_target,wanted_objects))
 			return 1
-		if(istype(the_target, /obj/mecha) && search_objects < 2)
+		if (istype(the_target, /obj/mecha) && search_objects < 2)
 			var/obj/mecha/M = the_target
-			if(M.occupant)//Just so we don't attack empty mechs
-				if(CanAttack(M.occupant))
+			if (M.occupant)//Just so we don't attack empty mechs
+				if (CanAttack(M.occupant))
 					return 1
 	return 0
 
 /mob/living/simple_animal/hostile/proc/GiveTarget(var/new_target)//Step 4, give us our selected target
 	target = new_target
-	if(target != null)
+	if (target != null)
 		Aggro()
 		stance = HOSTILE_STANCE_ATTACK
 	return
 
 /mob/living/simple_animal/hostile/proc/MoveToTarget()//Step 5, handle movement between us and our target
 	stop_automated_movement = 1
-	if(!target || !CanAttack(target))
+	if (!target || !CanAttack(target))
 		LoseTarget()
 		return
 
-	if(isturf(loc))
-		if(target in ListTargets())
+	if (isturf(loc))
+		if (target in ListTargets())
 			var/target_distance = get_dist(src,target)
-			if(ranged)//We ranged? Shoot at em
-				if(target_distance >= 2 && ranged_cooldown <= 0)//But make sure they're a tile away at least, and our range attack is off cooldown
+			if (ranged)//We ranged? Shoot at em
+				if (target_distance >= 2 && ranged_cooldown <= 0)//But make sure they're a tile away at least, and our range attack is off cooldown
 					OpenFire(target)
-			if(target.Adjacent(src))	//If they're next to us, attack
+			if (target.Adjacent(src))	//If they're next to us, attack
 				AttackingTarget()
-			if(canmove)
-				if(retreat_distance != null && target_distance <= retreat_distance) //If we have a retreat distance, check if we need to run from our target
+			if (canmove)
+				if (retreat_distance != null && target_distance <= retreat_distance) //If we have a retreat distance, check if we need to run from our target
 					walk_away(src,target,retreat_distance,move_to_delay)
 				else
 					Goto(target,move_to_delay,minimum_distance)//Otherwise, get to our minimum distance so we chase them
 			return
 
-	if(target.loc != null && get_dist(src, target.loc) <= vision_range)//We can't see our target, but he's in our vision range still
-		if(FindHidden(target) && environment_smash)//Check if he tried to hide in something to lose us
+	if (target.loc != null && get_dist(src, target.loc) <= vision_range)//We can't see our target, but he's in our vision range still
+		if (FindHidden(target) && environment_smash)//Check if he tried to hide in something to lose us
 			var/atom/A = target.loc
-			if(canmove)
+			if (canmove)
 				Goto(A,move_to_delay,minimum_distance)
-			if(A.Adjacent(src))
+			if (A.Adjacent(src))
 				A.attack_animal(src)
 			return
 		else
@@ -215,16 +215,16 @@
 
 /mob/living/simple_animal/hostile/adjustBruteLoss(var/damage)
 	..(damage)
-	if(!stat && search_objects < 3)//Not unconscious, and we don't ignore mobs
-		if(search_objects)//Turn off item searching and ignore whatever item we were looking at, we're more concerned with fight or flight
+	if (!stat && search_objects < 3)//Not unconscious, and we don't ignore mobs
+		if (search_objects)//Turn off item searching and ignore whatever item we were looking at, we're more concerned with fight or flight
 			search_objects = 0
 			target = null
-		if(stance == HOSTILE_STANCE_IDLE)//If we took damage while idle, immediately attempt to find the source of it so we find a living target
+		if (stance == HOSTILE_STANCE_IDLE)//If we took damage while idle, immediately attempt to find the source of it so we find a living target
 			Aggro()
 			var/new_target = FindTarget()
 			GiveTarget(new_target)
-		if(stance == HOSTILE_STANCE_ATTACK)//No more pulling a mob forever and having a second player attack it, it can switch targets now if it finds a more suitable one
-			if(target != null && prob(25))
+		if (stance == HOSTILE_STANCE_ATTACK)//No more pulling a mob forever and having a second player attack it, it can switch targets now if it finds a more suitable one
+			if (target != null && prob(25))
 				var/new_target = FindTarget()
 				GiveTarget(new_target)
 
@@ -232,13 +232,13 @@
 
 
 	stop_automated_movement = 1
-	if(!target || !CanAttack(target))
+	if (!target || !CanAttack(target))
 		LoseTarget()
 		return 0
-	if(!(target in ListTargets()))
+	if (!(target in ListTargets()))
 		LostTarget()
 		return 0
-	if(isturf(loc) && target.Adjacent(src))
+	if (isturf(loc) && target.Adjacent(src))
 		AttackingTarget()
 		return 1
 
@@ -274,14 +274,14 @@
 	..()
 
 	var/mob/living/simple_animal/hostile/H = from
-	if(istype(H))
+	if (istype(H))
 		src.friends |= H.friends
 
 /mob/living/simple_animal/hostile/proc/OpenFire(var/atom/ttarget)
 	set waitfor = 0
 
 	var/target_turf = get_turf(ttarget)
-	if(rapid)
+	if (rapid)
 		sleep(1)
 		TryToShoot(target_turf, ttarget)
 		sleep(3)
@@ -292,24 +292,24 @@
 		TryToShoot(target_turf, ttarget)
 
 /mob/living/simple_animal/hostile/proc/TryToShoot(var/atom/target_turf, atom/target)
-	if(!target)
+	if (!target)
 		target = src.target
 
-	if(Shoot(target_turf, src.loc, src))
+	if (Shoot(target_turf, src.loc, src))
 		ranged_cooldown = ranged_cooldown_cap
-		if(ranged_message)
+		if (ranged_message)
 			visible_message("<span class='warning'><b>[src]</b> [ranged_message] at [target]!</span>", 1)
-		if(casingtype)
+		if (casingtype)
 			new casingtype(get_turf(src))
 
 /mob/living/simple_animal/hostile/proc/Shoot(var/atom/target, var/atom/start, var/mob/user, var/bullet = 0)
-	if(target == start)
+	if (target == start)
 		return 0
-	if(!istype(target, /turf))
+	if (!istype(target, /turf))
 		return 0
 
 	//Friendly Fire check (don't bother if the mob is controlled by a player)
-	if(!friendly_fire && !ckey)
+	if (!friendly_fire && !ckey)
 		var/obj/item/projectile/friendlyCheck/fC = getFromPool(/obj/item/projectile/friendlyCheck,user.loc)
 		fC.current = target
 		var/turf/T = get_turf(user)
@@ -322,7 +322,7 @@
 		fC.xo = target.x - start.x
 
 		var/atom/potentialImpact = fC.process()
-		if(potentialImpact && !CanAttack(potentialImpact))
+		if (potentialImpact && !CanAttack(potentialImpact))
 			returnToPool(fC)
 			return 0
 		returnToPool(fC)
@@ -330,7 +330,7 @@
 
 	var/obj/item/projectile/A = new projectiletype(user.loc)
 
-	if(!A)
+	if (!A)
 		return 0
 
 	playsound(user, projectilesound, 100, 1)
@@ -352,27 +352,27 @@
 	return 1
 
 /mob/living/simple_animal/hostile/proc/DestroySurroundings()
-	if(environment_smash)
+	if (environment_smash)
 		EscapeConfinement()
-		for(var/dir in cardinal)
+		for (var/dir in cardinal)
 			var/turf/T = get_step(src, dir)
-			if(istype(T, /turf/simulated/wall))
+			if (istype(T, /turf/simulated/wall))
 				T.attack_animal(src)
-			for(var/atom/A in T)
-				if(istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack))
+			for (var/atom/A in T)
+				if (istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack))
 					A.attack_animal(src)
 	return
 
 /mob/living/simple_animal/hostile/proc/EscapeConfinement()
-	if(locked_to)
+	if (locked_to)
 		locked_to.attack_animal(src)
-	if(!isturf(src.loc) && src.loc != null)//Did someone put us in something?
+	if (!isturf(src.loc) && src.loc != null)//Did someone put us in something?
 		var/atom/A = src.loc
 		A.attack_animal(src)//Bang on it till we get out
 	return
 
 /mob/living/simple_animal/hostile/proc/FindHidden(var/atom/hidden_target)
-	if(istype(target.loc, /obj/structure/closet) || istype(target.loc, /obj/machinery/disposal) || istype(target.loc, /obj/machinery/sleeper))
+	if (istype(target.loc, /obj/structure/closet) || istype(target.loc, /obj/machinery/disposal) || istype(target.loc, /obj/machinery/sleeper))
 		return 1
 	else
 		return 0
@@ -381,11 +381,11 @@
 /mob/living/simple_animal/hostile/Stat()
 	..()
 
-	if(ranged && statpanel("Status"))
+	if (ranged && statpanel("Status"))
 		stat(null, "Ranged Attack: [ranged_cooldown <= 0 ? "READY" : "[100 - round((ranged_cooldown / ranged_cooldown_cap) * 100)]%"]")
 
 /mob/living/simple_animal/hostile/RangedAttack(atom/A, params)
-	if(ranged && ranged_cooldown <= 0)
+	if (ranged && ranged_cooldown <= 0)
 		OpenFire(A)
 
 	return ..()

@@ -8,7 +8,7 @@
 //Saving log to file datum
 
 	return_text()
-		if(..())
+		if (..())
 			return
 
 		var/dat = "<a href='byond://?src=\ref[src];close=1'>Close</a> | "
@@ -30,10 +30,10 @@
 		return dat
 
 	Topic(href, href_list)
-		if(..())
+		if (..())
 			return
 
-		if(href_list["send_msg"])
+		if (href_list["send_msg"])
 			var/t = input(usr, "Please enter messenger", src.id_tag, null) as text
 			t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
 			if (!t)
@@ -49,12 +49,12 @@
 
 			peripheral_command("send signal", signal)
 
-		if(href_list["func_msg"])
-			switch(href_list["func_msg"])
-				if("clear")
+		if (href_list["func_msg"])
+			switch (href_list["func_msg"])
+				if ("clear")
 					src.messages = null
 
-				if("print")
+				if ("print")
 					var/datum/signal/signal = new
 					signal.data["data"] = src.messages
 					signal.data["title"] = "Chatlog"
@@ -64,7 +64,7 @@
 					//TO-DO
 
 
-		if(href_list["set_name"])
+		if (href_list["set_name"])
 			var/t = input(usr, "Please enter screen name", src.id_tag, null) as text
 			t = copytext(sanitize(t), 1, 20)
 			if (!t)
@@ -79,18 +79,18 @@
 		return
 
 	receive_command(obj/source, command, datum/signal/signal)
-		if(..() || !signal)
+		if (..() || !signal)
 			return
 
-		if(command == "radio signal")
-			switch(signal.data["type"])
-				if("message")
+		if (command == "radio signal")
+			switch (signal.data["type"])
+				if ("message")
 					var/sender = signal.data["sender"]
-					if(!sender)
+					if (!sender)
 						sender = "Unknown"
 
 					src.messages += "<i><b>&larr; From [sender]:</b></i><br>[signal.data["data"]]<br>"
-					if(src.master.active_program == src)
+					if (src.master.active_program == src)
 						playsound(src.master.loc, 'sound/machines/twobeep.ogg', 50, 1)
 						src.master.updateUsrDialog()
 

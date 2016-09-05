@@ -19,22 +19,22 @@
 
 /obj/item/clothing/mask/gas/attackby(obj/item/W,mob/user)
 	..()
-	if(!canstage)
+	if (!canstage)
 		to_chat(user, "<span class = 'warning'>\The [W] won't fit on \the [src].</span>")
 		return
-	if(istype(W,/obj/item/clothing/suit/spaceblanket) && !stage)
+	if (istype(W,/obj/item/clothing/suit/spaceblanket) && !stage)
 		stage = 1
 		to_chat(user,"<span class='notice'>You add \the [W] to \the [src].</span>")
 		qdel(W)
 		icon_state = "gas_mask1"
-	if(istype(W,/obj/item/stack/cable_coil) && stage == 1)
+	if (istype(W,/obj/item/stack/cable_coil) && stage == 1)
 		var/obj/item/stack/cable_coil/C = W
-		if(C.amount <= 4)
+		if (C.amount <= 4)
 			return
 		icon_state = "gas_mask2"
 		to_chat(user,"<span class='notice'>You tie up \the [src] with \the [W].</span>")
 		stage = 2
-	if(istype(W,/obj/item/clothing/head/hardhat/red) && stage == 2)
+	if (istype(W,/obj/item/clothing/head/hardhat/red) && stage == 2)
 		to_chat(user,"<span class='notice'>You finish the ghetto helmet.</span>")
 		var/obj/ghetto = new /obj/item/clothing/head/helmet/space/rig/ghettorig (src.loc)
 		qdel(src)
@@ -43,11 +43,11 @@
 
 /obj/item/clothing/mask/gas/togglemask()
 	..()
-	if(is_flipped == 1 && stage > 0)
-		switch(stage)
-			if(1)
+	if (is_flipped == 1 && stage > 0)
+		switch (stage)
+			if (1)
 				icon_state = "gas_mask1"
-			if(2)
+			if (2)
 				icon_state = "gas_mask2"
 
 
@@ -94,17 +94,17 @@
 
 /obj/item/clothing/mask/gas/voice/New()
 	..()
-	for(var/Type in existing_typesof(/obj/item/clothing/mask) - list(/obj/item/clothing/mask, /obj/item/clothing/mask/gas/voice))
+	for (var/Type in existing_typesof(/obj/item/clothing/mask) - list(/obj/item/clothing/mask, /obj/item/clothing/mask/gas/voice))
 		clothing_choices += new Type
 	return
 
 /obj/item/clothing/mask/gas/voice/attackby(obj/item/I, mob/user)
 	..()
-	if(!istype(I, /obj/item/clothing/mask) || istype(I, src.type))
+	if (!istype(I, /obj/item/clothing/mask) || istype(I, src.type))
 		return 0
 	else
 		var/obj/item/clothing/mask/M = I
-		if(src.clothing_choices.Find(M))
+		if (src.clothing_choices.Find(M))
 			to_chat(user, "<span class='warning'>[M.name]'s pattern is already stored.</span>")
 			return
 		src.clothing_choices += M
@@ -119,7 +119,7 @@
 
 	var/obj/item/clothing/mask/A
 	A = input("Select Form to change it to", "BOOYEA", A) as null|anything in clothing_choices
-	if(!A ||(usr.stat))
+	if (!A ||(usr.stat))
 		return
 
 	desc = null
@@ -150,7 +150,7 @@
 
 /obj/item/clothing/mask/gas/clown_hat/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if(istype(W, /obj/item/clothing/shoes/clown_shoes))
+	if (istype(W, /obj/item/clothing/shoes/clown_shoes))
 		new /mob/living/simple_animal/hostile/retaliate/cluwne/goblin(get_turf(src))
 		qdel(W)
 		qdel(src)
@@ -199,7 +199,7 @@
 	var/muted = 0
 
 /obj/item/clothing/mask/gas/mime/treat_mask_speech(var/datum/speech/speech)
-	if(src.muted)
+	if (src.muted)
 		speech.message=""
 
 /obj/item/clothing/mask/gas/mime/stickymagic

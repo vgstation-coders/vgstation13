@@ -1,5 +1,5 @@
 /mob/living/silicon/ai/Life()
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
 
 	if (stat == DEAD)
@@ -25,16 +25,16 @@
 			death()
 			return
 
-		if(client)
+		if (client)
 			if (machine)
 				if (!( machine.check_eye(src) ))
 					reset_view(null)
 			else
-				if(!isTeleViewing(client.eye))
+				if (!isTeleViewing(client.eye))
 					reset_view(null)
 
 		// Handle power damage (oxy)
-		if(aiRestorePowerRoutine != 0)
+		if (aiRestorePowerRoutine != 0)
 			// Lost power
 			adjustOxyLoss(1)
 		else
@@ -50,13 +50,13 @@
 					unpowered_core = 1
 		if (!unpowered_core)
 			var/unblindme = 0
-			if(client && client.eye == eyeobj) // We are viewing the world through our "eye" mob.
+			if (client && client.eye == eyeobj) // We are viewing the world through our "eye" mob.
 				change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 				see_in_dark = 8
 				see_invisible = SEE_INVISIBLE_LEVEL_TWO
 
 			var/area/home = get_area(src)
-			if(home && home.powered(EQUIP))
+			if (home && home.powered(EQUIP))
 				home.use_power(1000, EQUIP)
 
 			if (aiRestorePowerRoutine==2)
@@ -71,7 +71,7 @@
 				to_chat(src, "Alert cancelled. External power source detected.")
 				aiRestorePowerRoutine = 0
 				unblindme = 1
-			if(unblindme)
+			if (unblindme)
 				clear_fullscreen("blind")
 			return
 
@@ -79,7 +79,7 @@
 			var/unblindme = 0
 
 			overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
-			if(client)
+			if (client)
 				change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 				see_in_dark = 0
 			see_invisible = SEE_INVISIBLE_LIVING
@@ -90,11 +90,11 @@
 
 					to_chat(src, "You've lost power!")
 					spawn(20)
-						if(!aiRestorePowerRoutine)
+						if (!aiRestorePowerRoutine)
 							return // Checking for premature changes.
 						to_chat(src, "Backup battery online. Scanners, camera, and radio interface offline. Beginning fault-detection.")
 						sleep(50)
-						if(!aiRestorePowerRoutine)
+						if (!aiRestorePowerRoutine)
 							return // Checking for premature changes.
 						if (loc.power_equip)
 							if (!istype(T, /turf/space))
@@ -104,11 +104,11 @@
 								return
 						to_chat(src, "Fault confirmed: missing external power. Shutting down main control system to save power.")
 						sleep(20)
-						if(!aiRestorePowerRoutine)
+						if (!aiRestorePowerRoutine)
 							return // Checking for premature changes.
 						to_chat(src, "Emergency control system online. Verifying connection to power network.")
 						sleep(50)
-						if(!aiRestorePowerRoutine)
+						if (!aiRestorePowerRoutine)
 							return // Checking for premature changes.
 						if (istype(T, /turf/space))
 							to_chat(src, "Unable to verify! No power connection detected!")
@@ -116,13 +116,13 @@
 							return
 						to_chat(src, "Connection verified. Searching for APC in power network.")
 						sleep(50)
-						if(!aiRestorePowerRoutine)
+						if (!aiRestorePowerRoutine)
 							return // Checking for premature changes.
 						var/obj/machinery/power/apc/theAPC = null
 
 						var/PRP //like ERP with the code, at least this stuff is no more 4x sametext
 						for (PRP=1, PRP<=4, PRP++)
-							if(!aiRestorePowerRoutine)
+							if (!aiRestorePowerRoutine)
 								return // Checking for premature changes.
 							var/area/AIarea = get_area(src)
 							for (var/obj/machinery/power/apc/APC in AIarea)
@@ -130,7 +130,7 @@
 									theAPC = APC
 									break
 							if (!theAPC)
-								switch(PRP)
+								switch (PRP)
 									if (1)
 										to_chat(src, "Unable to locate APC!")
 									else
@@ -143,7 +143,7 @@
 									aiRestorePowerRoutine = 0
 									unblindme = 1
 									return
-							switch(PRP)
+							switch (PRP)
 								if (1)
 									to_chat(src, "APC located. Optimizing route to APC to avoid needless power waste.")
 								if (2)
@@ -153,12 +153,12 @@
 								if (4)
 									to_chat(src, "Transfer complete. Forcing APC to execute program.")
 									sleep(50)
-									if(!aiRestorePowerRoutine)
+									if (!aiRestorePowerRoutine)
 										theAPC = null
 										return // Checking for premature changes.
 									to_chat(src, "Receiving control information from APC.")
 									sleep(2)
-									if(!aiRestorePowerRoutine)
+									if (!aiRestorePowerRoutine)
 										theAPC = null
 										return // Checking for premature changes.
 									//bring up APC dialog
@@ -168,15 +168,15 @@
 									show_laws()
 							sleep(50)
 							theAPC = null
-			if(unblindme)
+			if (unblindme)
 				clear_fullscreen("blind")
 
 /mob/living/silicon/ai/updatehealth()
-	if(status_flags & GODMODE)
+	if (status_flags & GODMODE)
 		health = maxHealth
 		stat = CONSCIOUS
 	else
-		if(ai_flags & COREFIRERESIST)
+		if (ai_flags & COREFIRERESIST)
 			health = maxHealth - getOxyLoss() - getToxLoss() - getBruteLoss()
 		else
 			health = maxHealth - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss()

@@ -4,14 +4,14 @@
 
 //Our own special process so that dead hosts still chestburst
 /datum/disease/alien_embryo/process()
-	if(!holder)
+	if (!holder)
 		return
-	if(holder == affected_mob)
+	if (holder == affected_mob)
 		stage_act()
-	if(affected_mob)
-		if(affected_mob.stat == DEAD)
-			if(prob(50))
-				if(--longevity<=0)
+	if (affected_mob)
+		if (affected_mob.stat == DEAD)
+			if (prob(50))
+				if (--longevity<=0)
 					cure(0)
 	else //the virus is in inanimate obj
 		cure(0)
@@ -47,36 +47,36 @@
 
 /datum/disease/alien_embryo/stage_act()
 	..()
-	switch(stage)
-		if(2, 3)
-			if(prob(1))
+	switch (stage)
+		if (2, 3)
+			if (prob(1))
 				affected_mob.emote("sneeze")
-			if(prob(1))
+			if (prob(1))
 				affected_mob.emote("cough")
-			if(prob(1))
+			if (prob(1))
 				to_chat(affected_mob, "<span class='warning'>Your throat feels sore.</span>")
-			if(prob(1))
+			if (prob(1))
 				to_chat(affected_mob, "<span class='warning'>Mucous runs down the back of your throat.</span>")
-		if(4)
-			if(prob(1))
+		if (4)
+			if (prob(1))
 				affected_mob.emote("sneeze")
-			if(prob(1))
+			if (prob(1))
 				affected_mob.emote("cough")
-			if(prob(2))
+			if (prob(2))
 				to_chat(affected_mob, "<span class='warning'>Your muscles ache.</span>")
-				if(prob(20))
+				if (prob(20))
 					affected_mob.take_organ_damage(1)
-			if(prob(2))
+			if (prob(2))
 				to_chat(affected_mob, "<span class='warning'>Your stomach hurts.</span>")
-				if(prob(20))
+				if (prob(20))
 					affected_mob.adjustToxLoss(1)
 					affected_mob.updatehealth()
-		if(5)
+		if (5)
 			to_chat(affected_mob, "<span class='warning'>You feel something tearing its way out of your stomach...</span>")
 			affected_mob.adjustToxLoss(10)
 			affected_mob.updatehealth()
-			if(prob(50))
-				if(gibbed != 0)
+			if (prob(50))
+				if (gibbed != 0)
 					return 0
 				var/list/candidates = get_alien_candidates()
 				var/picked = null
@@ -86,9 +86,9 @@
 				// he will become the alien but if he doesn't then we will set the stage
 				// to 2, so we don't do a process heavy check everytime.
 
-				if(candidates.len)
+				if (candidates.len)
 					picked = pick(candidates)
-				else if(affected_mob.client)
+				else if (affected_mob.client)
 					picked = affected_mob.key
 				else
 					stage = 2 // Let's try again later.
@@ -114,15 +114,15 @@ Des: Removes all infection images from aliens and places an infection image on a
 	spawn(0)
 		for (var/mob/living/carbon/alien/alien in player_list)
 			if (alien.client)
-				for(var/image/I in alien.client.images)
-					if(dd_hasprefix_case(I.icon_state, "infected"))
+				for (var/image/I in alien.client.images)
+					if (dd_hasprefix_case(I.icon_state, "infected"))
 						//del(I)
 						alien.client.images -= I
 
 		for (var/mob/living/carbon/alien/alien in player_list)
 			if (alien.client)
 				for (var/mob/living/carbon/C in mob_list)
-					if(C)
+					if (C)
 						if (C.status_flags & XENO_HOST)
 							var/I = image('icons/mob/alien.dmi', loc = C, icon_state = "infected[stage]")
 							alien.client.images += I
@@ -150,9 +150,9 @@ Des: Removes the alien infection image from all aliens in the world located in p
 	if (C)
 		for (var/mob/living/carbon/alien/alien in player_list)
 			if (alien.client)
-				for(var/image/I in alien.client.images)
-					if(I.loc == C)
-						if(dd_hasprefix_case(I.icon_state, "infected"))
+				for (var/image/I in alien.client.images)
+					if (I.loc == C)
+						if (dd_hasprefix_case(I.icon_state, "infected"))
 							//del(I)
 							alien.client.images -= I
 	return

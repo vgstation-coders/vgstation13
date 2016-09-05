@@ -2,7 +2,7 @@
 
 Overview:
 	The connection_manager class stores connections in each cardinal direction on a turf.
-	It isn't always present if a turf has no connections, check if(connections) before using.
+	It isn't always present if a turf has no connections, check if (connections) before using.
 	Contains procs for mass manipulation of connection data.
 
 Class Vars:
@@ -43,88 +43,88 @@ Class Procs:
 #endif
 
 /connection_manager/proc/get(d)
-	switch(d)
-		if(NORTH)
-			if(check(N))
+	switch (d)
+		if (NORTH)
+			if (check(N))
 				return N
 			else
 				return null
-		if(SOUTH)
-			if(check(S))
+		if (SOUTH)
+			if (check(S))
 				return S
 			else
 				return null
-		if(EAST)
-			if(check(E))
+		if (EAST)
+			if (check(E))
 				return E
 			else
 				return null
-		if(WEST)
-			if(check(W))
+		if (WEST)
+			if (check(W))
 				return W
 			else
 				return null
 
 		#ifdef ZLEVELS
-		if(UP)
-			if(check(U))
+		if (UP)
+			if (check(U))
 				return U
 			else
 				return null
-		if(DOWN)
-			if(check(D))
+		if (DOWN)
+			if (check(D))
 				return D
 			else
 				return null
 		#endif
 
 /connection_manager/proc/place(connection/c, d)
-	switch(d)
-		if(NORTH)
+	switch (d)
+		if (NORTH)
 			N = c
-		if(SOUTH)
+		if (SOUTH)
 			S = c
-		if(EAST)
+		if (EAST)
 			E = c
-		if(WEST)
+		if (WEST)
 			W = c
 
 		#ifdef ZLEVELS
-		if(UP)
+		if (UP)
 			U = c
-		if(DOWN)
+		if (DOWN)
 			D = c
 		#endif
 
 /connection_manager/proc/update_all()
-	if(check(N))
+	if (check(N))
 		N.update()
-	if(check(S))
+	if (check(S))
 		S.update()
-	if(check(E))
+	if (check(E))
 		E.update()
-	if(check(W))
+	if (check(W))
 		W.update()
 	#ifdef ZLEVELS
-	if(check(U))
+	if (check(U))
 		U.update()
-	if(check(D))
+	if (check(D))
 		D.update()
 	#endif
 
 /connection_manager/proc/erase_all()
-	if(check(N))
+	if (check(N))
 		N.erase()
-	if(check(S))
+	if (check(S))
 		S.erase()
-	if(check(E))
+	if (check(E))
 		E.erase()
-	if(check(W))
+	if (check(W))
 		W.erase()
 	#ifdef ZLEVELS
-	if(check(U))
+	if (check(U))
 		U.erase()
-	if(check(D))
+	if (check(D))
 		D.erase()
 	#endif
 

@@ -1,14 +1,14 @@
 /mob/living/carbon/human/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
 	//M.delayNextAttack(10)
-	if(check_shields(0, M.name))
+	if (check_shields(0, M.name))
 		visible_message("<span class='danger'>[M] attempted to touch [src]!</span>")
 		return 0
 
-	switch(M.a_intent)
+	switch (M.a_intent)
 		if (I_HELP)
 			visible_message(text("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>"))
 		if (I_GRAB)
-			if(M == src || anchored)
+			if (M == src || anchored)
 				return
 			if (w_uniform)
 				w_uniform.add_fingerprint(M)
@@ -23,11 +23,11 @@
 			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 			visible_message(text("<span class='warning'>[] has grabbed [] passively!</span>", M, src))
 
-		if(I_HURT)
+		if (I_HURT)
 			if (w_uniform)
 				w_uniform.add_fingerprint(M)
 			var/damage = rand(15, 30)
-			if(!damage)
+			if (!damage)
 				playsound(loc, 'sound/weapons/slashmiss.ogg', 50, 1, -1)
 				visible_message("<span class='danger'>[M] has lunged at [src]!</span>")
 				return 0
@@ -43,11 +43,11 @@
 				apply_effect(rand(0.5,3), WEAKEN, armor_block)
 			updatehealth()
 
-		if(I_DISARM)
+		if (I_DISARM)
 			if (prob(80))
 				playsound(loc, 'sound/weapons/pierce.ogg', 25, 1, -1)
 				Weaken(rand(3,4))
-				for(var/mob/O in viewers(src, null))
+				for (var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
 						O.show_message(text("<span class='danger'>[] has tackled down []!</span>", M, src), 1)
 				if (prob(25))

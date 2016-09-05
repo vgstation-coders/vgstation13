@@ -88,7 +88,7 @@
 	melt_temperature = MELTPOINT_SILICON //Not as high as steel
 
 /obj/item/trash/pietin/attackby(obj/item/W, mob/user)
-	if(istype(W,/obj/item/trash/pietin))
+	if (istype(W,/obj/item/trash/pietin))
 		var/obj/item/I = new /obj/item/clothing/head/tinfoil(get_turf(src))
 		qdel(W)
 		qdel(src)

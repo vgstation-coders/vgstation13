@@ -14,7 +14,7 @@
 //////CUT FLESH//////
 /datum/surgery_step/slime/cut_flesh/tool_quality(obj/item/tool)
 	. = ..()
-	if(!tool.is_sharp())
+	if (!tool.is_sharp())
 		return 0
 
 /datum/surgery_step/slime/cut_flesh
@@ -48,7 +48,7 @@
 //////CUT INNARDS///////
 /datum/surgery_step/slime/cut_innards/tool_quality(obj/item/tool)
 	. = ..()
-	if(!tool.is_sharp())
+	if (!tool.is_sharp())
 		return 0
 
 /datum/surgery_step/slime/cut_innards
@@ -102,9 +102,9 @@
 	user.visible_message("<span class='notice'>[user] cuts out one of [target]'s cores with \the [tool].</span>",,	\
 	"<span class='notice'>You cut out one of [target]'s cores with \the [tool]. [target.cores] cores left.</span>")
 
-	if(target.cores >= 0)
+	if (target.cores >= 0)
 		new target.coretype(target.loc)
-	if(target.cores <= 0)
+	if (target.cores <= 0)
 		target.icon_state = "[target.colour] baby slime dead-nocore"
 
 /datum/surgery_step/slime/saw_core/fail_step(mob/living/user, mob/living/carbon/slime/target, target_zone, obj/item/tool)

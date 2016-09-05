@@ -23,12 +23,12 @@
 /obj/item/weapon/storage/lockbox/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/ID = W
-		if(src.broken)
+		if (src.broken)
 			to_chat(user, "<span class='rose'>It appears to be broken.</span>")
 			return
-		if(src.allowed(user))
+		if (src.allowed(user))
 			src.locked = !( src.locked )
-			if(src.locked)
+			if (src.locked)
 				src.icon_state = src.icon_locked
 				to_chat(user, "<span class='rose'>You lock the [src.name]!</span>")
 				tracked_access = "The tracker reads: 'Last locked by [ID.registered_name].'"
@@ -40,15 +40,15 @@
 				return
 		else
 			to_chat(user, "<span class='warning'>Access Denied.</span>")
-	else if(istype(W, /obj/item/weapon/card/emag) && !src.broken)
+	else if (istype(W, /obj/item/weapon/card/emag) && !src.broken)
 		broken = 1
 		locked = 0
 		desc = "It appears to be broken."
 		icon_state = src.icon_broken
-		for(var/mob/O in viewers(user, 3))
+		for (var/mob/O in viewers(user, 3))
 			O.show_message(text("<span class='notice'>The locker has been broken by [] with an electromagnetic card!</span>", user), 1, text("You hear a faint electrical spark."), 2)
 
-	if(!locked)
+	if (!locked)
 		. = ..()
 	else
 		to_chat(user, "<span class='warning'>It's locked!</span>")
@@ -56,7 +56,7 @@
 
 
 /obj/item/weapon/storage/lockbox/show_to(mob/user as mob)
-	if(locked)
+	if (locked)
 		to_chat(user, "<span class='warning'>It's locked!</span>")
 	else
 		..()
@@ -65,39 +65,39 @@
 /obj/item/weapon/storage/lockbox/bullet_act(var/obj/item/projectile/Proj)
 	// WHY MUST WE DO THIS
 	// WHY
-	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet))
-		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) && !Proj.nodamage)
+	if (istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet))
+		if (!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) && !Proj.nodamage)
 			health -= Proj.damage
 	..()
-	if(health <= 0)
-		for(var/atom/movable/A as mob|obj in src)
+	if (health <= 0)
+		for (var/atom/movable/A as mob|obj in src)
 			remove_from_storage(A, loc)
 		qdel(src)
 	return
 
 /obj/item/weapon/storage/lockbox/ex_act(severity)
 	var/newsev = max(3,severity+1)
-	for(var/atom/movable/A as mob|obj in src)//pulls everything out of the locker and hits it with an explosion
+	for (var/atom/movable/A as mob|obj in src)//pulls everything out of the locker and hits it with an explosion
 		remove_from_storage(A, loc)
 		A.ex_act(newsev)
 	newsev=4-severity
-	if(prob(newsev*25)+25) // 1=100, 2=75, 3=50
+	if (prob(newsev*25)+25) // 1=100, 2=75, 3=50
 		qdel(src)
 
 /obj/item/weapon/storage/lockbox/emp_act(severity)
 	..()
-	if(!broken)
-		switch(severity)
-			if(1)
-				if(prob(80))
+	if (!broken)
+		switch (severity)
+			if (1)
+				if (prob(80))
 					locked = !locked
 					src.update_icon()
-			if(2)
-				if(prob(50))
+			if (2)
+				if (prob(50))
 					locked = !locked
 					src.update_icon()
-			if(3)
-				if(prob(25))
+			if (3)
+				if (prob(25))
 					locked = !locked
 					src.update_icon()
 
@@ -105,7 +105,7 @@
 	..()
 	if (broken)
 		icon_state = src.icon_broken
-	else if(locked)
+	else if (locked)
 		icon_state = src.icon_locked
 	else
 		icon_state = src.icon_closed
@@ -179,12 +179,12 @@
 /obj/item/weapon/storage/lockbox/unlockable/attackby(obj/O as obj, mob/user as mob)
 	if (istype(O, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/ID = O
-		if(src.broken)
+		if (src.broken)
 			to_chat(user, "<span class='rose'>It appears to be broken.</span>")
 			return
 		else
 			src.locked = !( src.locked )
-			if(src.locked)
+			if (src.locked)
 				src.icon_state = src.icon_locked
 				to_chat(user, "<span class='rose'>You lock the [src.name]!</span>")
 				tracked_access = "The tracker reads: 'Last locked by [ID.registered_name]'."

@@ -38,8 +38,8 @@
 
 /obj/effect/forcefield/bullet_act(var/obj/item/projectile/Proj, var/def_zone)
 	var/turf/T = get_turf(src.loc)
-	if(T)
-		for(var/mob/M in T)
+	if (T)
+		for (var/mob/M in T)
 			Proj.on_hit(M,M.bullet_act(Proj, def_zone))
 	return
 
@@ -53,7 +53,7 @@
 	invisibility = 0
 
 /obj/effect/forcefield/mime/Cross(atom/movable/mover, turf/target, height = 0)
-	if(istype(mover, /obj/item/projectile/bullet/invisible))
+	if (istype(mover, /obj/item/projectile/bullet/invisible))
 		return 1
 	..()
 	

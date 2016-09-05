@@ -18,9 +18,9 @@
 
 /obj/item/weapon/p_folded/New(loc, var/obj/item/weapon/paper/unfolds_into)
 	..()
-	if(istype(unfolds_into))
+	if (istype(unfolds_into))
 		unfolded = unfolds_into
-	if(!unfolded)
+	if (!unfolded)
 		unfolded = new(src)
 
 
@@ -37,15 +37,15 @@
 	return
 
 /obj/item/weapon/p_folded/attackby(obj/item/I, mob/user)
-	if(istype(I,/obj/item/weapon/pen))
+	if (istype(I,/obj/item/weapon/pen))
 		var/N = copytext(sanitize(input(user, "What would you like to name [src.name]?", "Paper Labelling", null) as text), 1, MAX_NAME_LEN)
-		if(N && Adjacent(user) && !user.incapacitated())
+		if (N && Adjacent(user) && !user.incapacitated())
 			src.name = N
-	else if(istype(I, /obj/item/toy/crayon))
+	else if (istype(I, /obj/item/toy/crayon))
 		var/obj/item/toy/crayon/C = I
 		src.color = C.colour //doesn't work with paper hats but I haven't found a way to fix it, who will even notice anyways
 		src.unfolded.color = C.colour
-	else if(I.is_hot())
+	else if (I.is_hot())
 		src.ashify_item(user)
 		return
 	return ..()
@@ -69,7 +69,7 @@
 
 	user.drop_item(src, force_drop = 1) //drop the item first to free our hand, but don't delete it yet because it contains the unfolding result.
 
-	if(unfolded)
+	if (unfolded)
 		user.put_in_hands(unfolded)
 		user.visible_message("<span class='notice'>[user] unfolds \the [src].</span>", \
 			"<span class='notice'>You unfold \the [src].</span>")
@@ -77,12 +77,12 @@
 	qdel(src) //goodbye cruel world
 
 /obj/item/weapon/p_folded/proc/canunfold(var/obj/item/weapon/p_folded/P, mob/user)
-	if(!user)
+	if (!user)
 		return 0
-	if(user.incapacitated())
+	if (user.incapacitated())
 		to_chat(user, "<span class='notice'>You can't do that while restrained.</span>")
 		return 0
-	if(!user.is_holding_item(P))
+	if (!user.is_holding_item(P))
 		to_chat(user, "<span class='notice'>You'll need \the [src] in your hands to do that.</span>")
 		return 0
 	return 1
@@ -93,7 +93,7 @@
 	icon_state = "crane_1"
 	var/frame = 0
 /obj/item/weapon/p_folded/crane/attack_self(mob/user)
-	if(user.stat || user.restrained())
+	if (user.stat || user.restrained())
 		to_chat(user, "<span class='notice'>You can't do that while restrained.</span>")
 		return 0
 	frame = !frame
@@ -109,8 +109,8 @@
 	throw_speed = 1
 /obj/item/weapon/p_folded/plane/throw_impact(var/atom/target, speed, mob/user)
 	..()
-	if(user) //runtimes not allowed
-		if(ishuman(target) && (user.zone_sel.selecting == "eyes" || prob(20)))
+	if (user) //runtimes not allowed
+		if (ishuman(target) && (user.zone_sel.selecting == "eyes" || prob(20)))
 			var/mob/living/carbon/human/H = target
 			if (H.check_body_part_coverage(EYES))
 				to_chat(H, "<span class='warning'>\The [src] flies right into your eyes! Luckily your eyewear protects you.</span>")

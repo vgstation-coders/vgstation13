@@ -11,7 +11,7 @@
 
 
 /datum/processSchedulerView/Topic(href, href_list)
-	if(!check_rights(R_DEBUG))
+	if (!check_rights(R_DEBUG))
 		return
 
 	if (!href_list["action"])

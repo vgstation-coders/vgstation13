@@ -13,15 +13,15 @@
 	return current_slowdown
 
 /obj/item/stack/tile/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			returnToPool(src)
 			return
-		if(2.0)
+		if (2.0)
 			if (prob(50))
 				returnToPool(src)
 				return
-		if(3.0)
+		if (3.0)
 			if (prob(5))
 				returnToPool(src)
 				return
@@ -75,32 +75,32 @@
 	material = "wood"
 
 /obj/item/stack/tile/wood/proc/build(turf/S as turf)
-	if(istype(S,/turf/unsimulated/floor/asteroid))
+	if (istype(S,/turf/unsimulated/floor/asteroid))
 		S.ChangeTurf(/turf/simulated/floor/plating/deck/airless)
 	else
 		S.ChangeTurf(/turf/simulated/floor/plating/deck)
 
 /obj/item/stack/tile/wood/afterattack(atom/target, mob/user, adjacent, params)
-	if(adjacent)
-		if(isturf(target) || istype(target, /obj/structure/lattice/wood))
+	if (adjacent)
+		if (isturf(target) || istype(target, /obj/structure/lattice/wood))
 			var/turf/T = get_turf(target)
 			var/obj/structure/lattice/L
 			L = locate(/obj/structure/lattice/wood) in T
-			if(!istype(L))
+			if (!istype(L))
 				return
 			var/obj/item/stack/tile/wood/S = src
-			if(!(T.canBuildPlating(S)))
+			if (!(T.canBuildPlating(S)))
 				to_chat(user, "<span class='warning'>You can't get that deck up without some support!</span>")
 				return
-			if(S.use(1))
+			if (S.use(1))
 				playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1)
 				S.build(T)
-				if(T.canBuildPlating(S) == BUILD_SUCCESS)
+				if (T.canBuildPlating(S) == BUILD_SUCCESS)
 					qdel(L)
 
 /obj/item/stack/tile/wood/attackby(var/obj/item/weapon/W, var/mob/user)
-	if(iswrench(W))
-		if(use(4))
+	if (iswrench(W))
+		if (use(4))
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 			drop_stack(/obj/item/stack/sheet/wood, get_turf(user), 1, user)
 		else

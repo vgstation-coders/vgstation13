@@ -18,10 +18,10 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 	code = rand(min,max)
 
 /obj/structure/closet/crate/secure/loot/attack_hand(mob/user as mob)
-	if(locked)
+	if (locked)
 		to_chat(user, "<span class='notice'>The crate is locked with a Deca-code lock.</span>")
 		var/input = input(usr, "Enter digit from [min] to [max].", "Deca-Code Lock", "") as num
-		if(in_range(src, user))
+		if (in_range(src, user))
 			input = Clamp(input, 0, 10)
 			if (input == code)
 				to_chat(user, "<span class='notice'>The crate unlocks!</span>")
@@ -36,7 +36,7 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 					to_chat(user, "<span class='danger'>The crate's anti-tamper system activates!</span>")
 					var/turf/T = get_turf(src.loc)
 					explosion(T, 0, 0, 0, 1)
-					for(var/item in contents)
+					for (var/item in contents)
 						qdel(item)
 					qdel(src)
 					return
@@ -47,7 +47,7 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 		return ..()
 
 /obj/structure/closet/crate/secure/loot/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(locked)
+	if (locked)
 		if (istype(W, /obj/item/weapon/card/emag))
 			to_chat(user, "<span class='notice'>The crate unlocks!</span>")
 			locked = 0

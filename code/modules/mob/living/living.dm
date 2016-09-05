@@ -1,33 +1,33 @@
 /mob/living/New()
 	. = ..()
 	generate_static_overlay()
-	if(istype(static_overlays,/list) && static_overlays.len)
-		for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
-			if(MoMMI.can_see_static())
-				if(MoMMI.static_choice in static_overlays)
+	if (istype(static_overlays,/list) && static_overlays.len)
+		for (var/mob/living/silicon/robot/mommi/MoMMI in player_list)
+			if (MoMMI.can_see_static())
+				if (MoMMI.static_choice in static_overlays)
 					MoMMI.static_overlays.Add(static_overlays[MoMMI.static_choice])
 					MoMMI.client.images.Add(static_overlays[MoMMI.static_choice])
 				else
 					MoMMI.static_overlays.Add(static_overlays["static"])
 					MoMMI.client.images.Add(static_overlays["static"])
 
-	if(!species_type)
+	if (!species_type)
 		species_type = src.type
-	if(can_butcher && !meat_amount)
+	if (can_butcher && !meat_amount)
 		meat_amount = size
 
 /mob/living/Destroy()
-	for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
-		for(var/image/I in static_overlays)
+	for (var/mob/living/silicon/robot/mommi/MoMMI in player_list)
+		for (var/image/I in static_overlays)
 			MoMMI.static_overlays.Remove(I) //no checks, since it's either there or its not
 			MoMMI.client.images.Remove(I)
 			qdel(I)
 			I = null
-	if(static_overlays)
+	if (static_overlays)
 		static_overlays = null
 
-	if(butchering_drops)
-		for(var/datum/butchering_product/B in butchering_drops)
+	if (butchering_drops)
+		for (var/datum/butchering_product/B in butchering_drops)
 			butchering_drops -= B
 			qdel(B)
 			B = null
@@ -36,40 +36,40 @@
 
 /mob/living/examine(mob/user) //Show the mob's size and whether it's been butchered
 	var/size
-	switch(src.size)
-		if(SIZE_TINY)
+	switch (src.size)
+		if (SIZE_TINY)
 			size = "tiny"
-		if(SIZE_SMALL)
+		if (SIZE_SMALL)
 			size = "small"
-		if(SIZE_NORMAL)
+		if (SIZE_NORMAL)
 			size = "average in size"
-		if(SIZE_BIG)
+		if (SIZE_BIG)
 			size = "big"
-		if(SIZE_HUGE)
+		if (SIZE_HUGE)
 			size = "huge"
 
 	var/pronoun = "it is"
-	if(src.gender == FEMALE)
+	if (src.gender == FEMALE)
 		pronoun = "she is"
-	else if(src.gender == MALE)
+	else if (src.gender == MALE)
 		pronoun = "he is"
-	else if(src.gender == PLURAL)
+	else if (src.gender == PLURAL)
 		pronoun = "they are"
 
 	..(user, " [capitalize(pronoun)] [size].")
-	if(meat_taken > 0)
+	if (meat_taken > 0)
 		to_chat(user, "<span class='info'>[capitalize(pronoun)] partially butchered.</span>")
 
 	var/butchery = "" //More information about butchering status, check out "code/datums/helper_datums/butchering.dm"
 
-	if(butchering_drops && butchering_drops.len)
-		for(var/datum/butchering_product/B in butchering_drops)
+	if (butchering_drops && butchering_drops.len)
+		for (var/datum/butchering_product/B in butchering_drops)
 			butchery = "[butchery][B.desc_modifier(src)]"
-	if(butchery)
+	if (butchery)
 		to_chat(user, "<span class='info'>[butchery]</span>")
 
 /mob/living/Life()
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
 
 	..()
@@ -77,40 +77,40 @@
 		bodytemperature = initial(bodytemperature)
 	if (monkeyizing)
 		return
-	if(!loc)
+	if (!loc)
 		return	// Fixing a null error that occurs when the mob isn't found in the world -- TLE
-	if(reagents && reagents.has_reagent(BUSTANUT))
-		if(!(M_HARDCORE in mutations))
+	if (reagents && reagents.has_reagent(BUSTANUT))
+		if (!(M_HARDCORE in mutations))
 			mutations.Add(M_HARDCORE)
 			to_chat(src, "<span class='notice'>You feel like you're the best around.  Nothing's going to get you down.</span>")
 	else
-		if(M_HARDCORE in mutations)
+		if (M_HARDCORE in mutations)
 			mutations.Remove(M_HARDCORE)
 			to_chat(src, "<span class='notice'>You feel like a pleb.</span>")
 	handle_beams()
 
 	//handles "call on life", allowing external life-related things to be processed
-	for(var/toCall in src.callOnLife)
-		if(locate(toCall) && callOnLife[toCall])
+	for (var/toCall in src.callOnLife)
+		if (locate(toCall) && callOnLife[toCall])
 			call(locate(toCall),callOnLife[toCall])()
 		else
 			callOnLife -= toCall
 
-	if(mind)
-		if(mind in ticker.mode.implanted)
-			if(implanting)
+	if (mind)
+		if (mind in ticker.mode.implanted)
+			if (implanting)
 				return
 //			to_chat(world, "[src.name]")
 			var/datum/mind/head = ticker.mode.implanted[mind]
 			//var/list/removal
-			if(!(locate(/obj/item/weapon/implant/traitor) in src.contents))
+			if (!(locate(/obj/item/weapon/implant/traitor) in src.contents))
 //				to_chat(world, "doesn't have an implant")
 				ticker.mode.remove_traitor_mind(mind, head)
 				/*
-				if((head in ticker.mode.implanters))
+				if ((head in ticker.mode.implanters))
 					ticker.mode.implanter[head] -= src.mind
 				ticker.mode.implanted -= src.mind
-				if(src.mind in ticker.mode.traitors)
+				if (src.mind in ticker.mode.traitors)
 					ticker.mode.traitors -= src.mind
 					special_role = null
 					to_chat(current, "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now..(You don't remember who enslaved you)</FONT></span>")
@@ -127,24 +127,24 @@
 	last_beamchecks.Remove("\ref[B]") // RIP
 
 /mob/living/handle_beams()
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
 	// New beam damage code (per-tick)
-	for(var/obj/effect/beam/B in beams)
+	for (var/obj/effect/beam/B in beams)
 		apply_beam_damage(B)
 
 /mob/living/cultify()
-	if(iscultist(src) && client)
+	if (iscultist(src) && client)
 		var/mob/living/simple_animal/construct/harvester/C = new /mob/living/simple_animal/construct/harvester(get_turf(src))
 		mind.transfer_to(C)
 		to_chat(C, "<span class='sinister'>The Geometer of Blood is overjoyed to be reunited with its followers, and accepts your body in sacrifice. As reward, you have been gifted with the shell of an Harvester.<br>Your tendrils can use and draw runes without need for a tome, your eyes can see beings through walls, and your mind can open any door. Use these assets to serve Nar-Sie and bring him any remaining living human in the world.<br>You can teleport yourself back to Nar-Sie along with any being under yourself at any time using your \"Harvest\" spell.</span>")
 		dust()
-	else if(client)
+	else if (client)
 		var/mob/dead/G = (ghostize())
 		G.icon = 'icons/mob/mob.dmi'
 		G.icon_state = "ghost-narsie"
 		G.overlays = 0
-		if(istype(G.mind.current, /mob/living/carbon/human/))
+		if (istype(G.mind.current, /mob/living/carbon/human/))
 			var/mob/living/carbon/human/H = G.mind.current
 			G.overlays += H.obj_overlays[ID_LAYER]
 			G.overlays += H.obj_overlays[EARS_LAYER]
@@ -158,7 +158,7 @@
 		G.invisibility = 0
 		to_chat(G, "<span class='sinister'>You feel relieved as what's left of your soul finally escapes its prison of flesh.</span>")
 
-		if(ticker.mode.name == "cult")
+		if (ticker.mode.name == "cult")
 			var/datum/game_mode/cult/mode_ticker = ticker.mode
 			mode_ticker.harvested++
 
@@ -188,10 +188,10 @@
 
 
 /mob/living/proc/updatehealth()
-	if(status_flags & GODMODE)
+	if (status_flags & GODMODE)
 		health = maxHealth
 		stat = CONSCIOUS
-	else if(!(flags & INVULNERABLE))
+	else if (!(flags & INVULNERABLE))
 		health = maxHealth - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss() - getCloneLoss() - halloss
 
 
@@ -203,30 +203,30 @@
 
 //sort of a legacy burn method for /electrocute, /shock, and the e_chair
 /mob/living/proc/burn_skin(burn_amount)
-	if(istype(src, /mob/living/carbon/human))
+	if (istype(src, /mob/living/carbon/human))
 //		to_chat(world, "DEBUG: burn_skin(), mutations=[mutations]")
-		if(M_NO_SHOCK in src.mutations) //shockproof
+		if (M_NO_SHOCK in src.mutations) //shockproof
 			return 0
 		if (M_RESIST_HEAT in src.mutations) //fireproof
 			return 0
 		var/mob/living/carbon/human/H = src	//make this damage method divide the damage to be done among all the body parts, then burn each body part for that much damage. will have better effect then just randomly picking a body part
 		var/divided_damage = (burn_amount)/(H.organs.len)
 		var/extradam = 0	//added to when organ is at max dam
-		for(var/datum/organ/external/affecting in H.organs)
-			if(!affecting)
+		for (var/datum/organ/external/affecting in H.organs)
+			if (!affecting)
 				continue
-			if(affecting.take_damage(0, divided_damage+extradam))	//TODO: fix the extradam stuff. Or, ebtter yet...rewrite this entire proc ~Carn
+			if (affecting.take_damage(0, divided_damage+extradam))	//TODO: fix the extradam stuff. Or, ebtter yet...rewrite this entire proc ~Carn
 				H.UpdateDamageIcon()
 		H.updatehealth()
 		return 1
-	else if(istype(src, /mob/living/carbon/monkey))
+	else if (istype(src, /mob/living/carbon/monkey))
 		if (M_RESIST_HEAT in src.mutations) //fireproof
 			return 0
 		var/mob/living/carbon/monkey/M = src
 		M.adjustFireLoss(burn_amount)
 		M.updatehealth()
 		return 1
-	else if(istype(src, /mob/living/silicon/ai))
+	else if (istype(src, /mob/living/silicon/ai))
 		return 0
 
 /mob/living/proc/adjustBodyTemp(actual, desired, incrementboost)
@@ -236,16 +236,16 @@
 	var/change = increments*incrementboost	// Get the amount to change by (x per increment)
 
 	// Too cold
-	if(actual < desired)
+	if (actual < desired)
 		temperature += change
-		if(actual > desired)
+		if (actual > desired)
 			temperature = desired
 	// Too hot
-	if(actual > desired)
+	if (actual > desired)
 		temperature -= change
-		if(actual < desired)
+		if (actual < desired)
 			temperature = desired
-//	if(istype(src, /mob/living/carbon/human))
+//	if (istype(src, /mob/living/carbon/human))
 //		to_chat(world, "[src] ~ [src.bodytemperature] ~ [temperature]")
 	return temperature
 
@@ -258,7 +258,7 @@
 	return bruteloss
 
 /mob/living/proc/adjustBruteLoss(var/amount)
-	if(status_flags & GODMODE)
+	if (status_flags & GODMODE)
 		return 0	//godmode
 	bruteloss = min(max(bruteloss + (amount * brute_damage_modifier), 0),(maxHealth*2))
 
@@ -266,12 +266,12 @@
 	return oxyloss
 
 /mob/living/proc/adjustOxyLoss(var/amount)
-	if(status_flags & GODMODE)
+	if (status_flags & GODMODE)
 		return 0	//godmode
 	oxyloss = min(max(oxyloss + (amount * oxy_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setOxyLoss(var/amount)
-	if(status_flags & GODMODE)
+	if (status_flags & GODMODE)
 		return 0	//godmode
 	oxyloss = amount
 
@@ -279,12 +279,12 @@
 	return toxloss
 
 /mob/living/proc/adjustToxLoss(var/amount)
-	if(status_flags & GODMODE)
+	if (status_flags & GODMODE)
 		return 0	//godmode
 	toxloss = min(max(toxloss + (amount * tox_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setToxLoss(var/amount)
-	if(status_flags & GODMODE)
+	if (status_flags & GODMODE)
 		return 0	//godmode
 	toxloss = amount
 
@@ -292,7 +292,7 @@
 	return fireloss
 
 /mob/living/proc/adjustFireLoss(var/amount)
-	if(status_flags & GODMODE)
+	if (status_flags & GODMODE)
 		return 0	//godmode
 	fireloss = min(max(fireloss + (amount * burn_damage_modifier), 0),(maxHealth*2))
 
@@ -300,12 +300,12 @@
 	return cloneloss
 
 /mob/living/proc/adjustCloneLoss(var/amount)
-	if(status_flags & GODMODE)
+	if (status_flags & GODMODE)
 		return 0	//godmode
 	cloneloss = min(max(cloneloss + (amount * clone_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setCloneLoss(var/amount)
-	if(status_flags & GODMODE)
+	if (status_flags & GODMODE)
 		return 0	//godmode
 	cloneloss = amount
 
@@ -313,12 +313,12 @@
 	return brainloss
 
 /mob/living/proc/adjustBrainLoss(var/amount)
-	if(status_flags & GODMODE)
+	if (status_flags & GODMODE)
 		return 0	//godmode
 	brainloss = min(max(brainloss + (amount * brain_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setBrainLoss(var/amount)
-	if(status_flags & GODMODE)
+	if (status_flags & GODMODE)
 		return 0	//godmode
 	brainloss = amount
 
@@ -326,12 +326,12 @@
 	return halloss
 
 /mob/living/proc/adjustHalLoss(var/amount)
-	if(status_flags & GODMODE)
+	if (status_flags & GODMODE)
 		return 0	//godmode
 	halloss = min(max(halloss + (amount * hal_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setHalLoss(var/amount)
-	if(status_flags & GODMODE)
+	if (status_flags & GODMODE)
 		return 0	//godmode
 	halloss = amount
 
@@ -352,41 +352,41 @@
 /mob/living/get_contents(var/obj/item/weapon/storage/Storage = null)
 	var/list/L = list()
 
-	if(Storage) //If it called itself
+	if (Storage) //If it called itself
 		L += Storage.return_inv()
 
 		//Leave this commented out, it will cause storage items to exponentially add duplicate to the list
 		//for(var/obj/item/weapon/storage/S in Storage.return_inv()) //Check for storage items
 		//	L += get_contents(S)
 
-		for(var/obj/item/weapon/gift/G in Storage.return_inv()) //Check for gift-wrapped items
+		for (var/obj/item/weapon/gift/G in Storage.return_inv()) //Check for gift-wrapped items
 			L += G.gift
-			if(istype(G.gift, /obj/item/weapon/storage))
+			if (istype(G.gift, /obj/item/weapon/storage))
 				L += get_contents(G.gift)
 
-		for(var/obj/item/delivery/D in Storage.return_inv()) //Check for package wrapped items
+		for (var/obj/item/delivery/D in Storage.return_inv()) //Check for package wrapped items
 			L += D.wrapped
-			if(istype(D.wrapped, /obj/item/weapon/storage)) //this should never happen
+			if (istype(D.wrapped, /obj/item/weapon/storage)) //this should never happen
 				L += get_contents(D.wrapped)
 		return L
 
 	else
 
 		L += src.contents
-		for(var/obj/item/weapon/storage/S in src.contents)	//Check for storage items
+		for (var/obj/item/weapon/storage/S in src.contents)	//Check for storage items
 			L += get_contents(S)
-		for(var/obj/item/clothing/suit/storage/S in src.contents)//Check for labcoats and jackets
+		for (var/obj/item/clothing/suit/storage/S in src.contents)//Check for labcoats and jackets
 			L += get_contents(S)
-		for(var/obj/item/clothing/accessory/storage/S in src.contents)//Check for holsters
+		for (var/obj/item/clothing/accessory/storage/S in src.contents)//Check for holsters
 			L += get_contents(S)
-		for(var/obj/item/weapon/gift/G in src.contents) //Check for gift-wrapped items
+		for (var/obj/item/weapon/gift/G in src.contents) //Check for gift-wrapped items
 			L += G.gift
-			if(istype(G.gift, /obj/item/weapon/storage))
+			if (istype(G.gift, /obj/item/weapon/storage))
 				L += get_contents(G.gift)
 
-		for(var/obj/item/delivery/D in src.contents) //Check for package wrapped items
+		for (var/obj/item/delivery/D in src.contents) //Check for package wrapped items
 			L += D.wrapped
-			if(istype(D.wrapped, /obj/item/weapon/storage)) //this should never happen
+			if (istype(D.wrapped, /obj/item/weapon/storage)) //this should never happen
 				L += get_contents(D.wrapped)
 		return L
 
@@ -398,17 +398,17 @@
 				// now with silicons
 
 /mob/living/emp_act(severity)
-	for(var/obj/item/stickybomb/B in src)
-		if(B.stuck_to)
+	for (var/obj/item/stickybomb/B in src)
+		if (B.stuck_to)
 			visible_message("<span class='warning'>\the [B] stuck on \the [src] suddenly deactivates itself and falls to the ground.</span>")
 			B.deactivate()
 			B.unstick()
 
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
 
 	var/list/L = src.get_contents()
-	for(var/obj/O in L)
+	for (var/obj/O in L)
 		O.emp_act(severity)
 	..()
 
@@ -428,9 +428,9 @@
 
 // damage ONE external organ, organ gets randomly selected from damaged ones.
 /mob/living/proc/take_organ_damage(var/brute, var/burn)
-	if(status_flags & GODMODE)
+	if (status_flags & GODMODE)
 		return 0	//godmode
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return 0
 	adjustBruteLoss(brute)
 	adjustFireLoss(burn)
@@ -444,9 +444,9 @@
 
 // damage MANY external organs, in random order
 /mob/living/proc/take_overall_damage(var/brute, var/burn, var/used_weapon = null)
-	if(status_flags & GODMODE)
+	if (status_flags & GODMODE)
 		return 0	//godmode
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return 0
 	adjustBruteLoss(brute)
 	adjustFireLoss(burn)
@@ -468,7 +468,7 @@ Thanks.
 	/*
 	locked_to = initial(src.locked_to)
 	*/
-	if(iscarbon(src))
+	if (iscarbon(src))
 		var/mob/living/carbon/C = src
 
 		if (C.handcuffed && !initial(C.handcuffed))
@@ -483,7 +483,7 @@ Thanks.
 
 /mob/living/proc/rejuvenate(animation = 0)
 	var/turf/T = get_turf(src)
-	if(animation)
+	if (animation)
 		T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = EFFECTS_PLANE)
 
 	// shut down various types of badness
@@ -511,7 +511,7 @@ Thanks.
 	eye_blurry = 0
 	ear_deaf = 0
 	ear_damage = 0
-	if(!reagents)
+	if (!reagents)
 		create_reagents(1000)
 	else
 		reagents.clear_reagents()
@@ -519,11 +519,11 @@ Thanks.
 	ExtinguishMob()
 	fire_stacks = 0
 	/*
-	if(locked_to)
+	if (locked_to)
 		locked_to.unbuckle()
 	locked_to = initial(src.locked_to)
 	*/
-	if(istype(src, /mob/living/carbon/human))
+	if (istype(src, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = src
 		H.timeofdeath = 0
 		H.vessel.reagent_list = list()
@@ -531,10 +531,10 @@ Thanks.
 		H.shock_stage = 0
 		spawn(1)
 			H.fixblood()
-		for(var/organ_name in H.organs_by_name)
+		for (var/organ_name in H.organs_by_name)
 			var/datum/organ/external/O = H.organs_by_name[organ_name]
-			for(var/obj/item/weapon/shard/shrapnel/s in O.implants)
-				if(istype(s))
+			for (var/obj/item/weapon/shard/shrapnel/s in O.implants)
+				if (istype(s))
 					O.implants -= s
 					H.contents -= s
 					qdel(s)
@@ -553,7 +553,7 @@ Thanks.
 			O.trace_chemicals = list()
 			O.wounds = list()
 			O.wound_update_accuracy = 1
-		for(var/organ_name in H.internal_organs_by_name)
+		for (var/organ_name in H.internal_organs_by_name)
 			var/datum/organ/internal/IO = H.internal_organs_by_name[organ_name]
 			IO.damage = 0
 			IO.trace_chemicals.len = 0
@@ -561,12 +561,12 @@ Thanks.
 			IO.status = 0
 			IO.robotic = 0
 		H.updatehealth()
-	if(iscarbon(src))
+	if (iscarbon(src))
 		var/mob/living/carbon/C = src
 		C.handcuffed = initial(C.handcuffed)
-	for(var/datum/disease/D in viruses)
+	for (var/datum/disease/D in viruses)
 		D.cure(0)
-	if(stat == DEAD)
+	if (stat == DEAD)
 		resurrect()
 		tod = null
 
@@ -594,8 +594,8 @@ Thanks.
 	set category = "OOC"
 	set src in view()
 
-	if(config.allow_Metadata)
-		if(client)
+	if (config.allow_Metadata)
+		if (client)
 			to_chat(usr, "[src]'s Metainfo:<br>[client.prefs.metadata]")
 		else
 			to_chat(usr, "[src] does not have any stored infomation!")
@@ -619,23 +619,23 @@ Thanks.
 
 	var/t7 = 1
 	if (restrained())
-		for(var/mob/living/M in range(src, 1))
+		for (var/mob/living/M in range(src, 1))
 			if ((M.pulling == src && M.stat == 0 && !( M.restrained() )))
 				t7 = null
 	if (t7 && pulling && (Adjacent(pulling) || pulling.loc == loc))
 		. = ..()
 
 		if (pulling && pulling.loc)
-			if(!isturf(pulling.loc))
+			if (!isturf(pulling.loc))
 				stop_pulling()
 				return
 			else
-				if(Debug)
+				if (Debug)
 					diary <<"pulling disappeared? at [__LINE__] in mob.dm - pulling = [pulling]"
 					diary <<"REPORT THIS"
 
 		/////
-		if(pulling && pulling.anchored)
+		if (pulling && pulling.anchored)
 			stop_pulling()
 			return
 
@@ -646,9 +646,9 @@ Thanks.
 			else
 				diag = null
 			if ((get_dist(src, pulling) > 1 || diag))
-				if(!istype(pulling) || !pulling)
+				if (!istype(pulling) || !pulling)
 					WARNING("Pulling disappeared! pulling = [pulling] old pulling = [M]")
-				else if(isturf(pulling.loc))
+				else if (isturf(pulling.loc))
 					if (isliving(pulling))
 						M = pulling
 						var/ok = 1
@@ -667,7 +667,7 @@ Thanks.
 							var/atom/movable/t = M.pulling
 							M.stop_pulling()
 							pulling.Move(T, get_dir(pulling, T))
-							if(M)
+							if (M)
 								M.start_pulling(t)
 					else
 						if (pulling)
@@ -681,49 +681,49 @@ Thanks.
 	if ((s_active && !is_holder_of(src, s_active)))
 		s_active.close(src)
 
-	if(update_slimes)
-		for(var/mob/living/carbon/slime/M in view(1,src))
+	if (update_slimes)
+		for (var/mob/living/carbon/slime/M in view(1,src))
 			M.UpdateFeed(src)
 
-	if(T != loc)
+	if (T != loc)
 		handle_hookchain(direct)
 
-	if(.)
-		for(var/obj/item/weapon/gun/G in targeted_by) //Handle moving out of the gunner's view.
+	if (.)
+		for (var/obj/item/weapon/gun/G in targeted_by) //Handle moving out of the gunner's view.
 			var/mob/living/M = G.loc
-			if(!(M in view(src)))
+			if (!(M in view(src)))
 				NotTargeted(G)
-		for(var/obj/item/weapon/gun/G in src) //Handle the gunner loosing sight of their target/s
-			if(G.target)
-				for(var/mob/living/M in G.target)
-					if(M && !(M in view(src)))
+		for (var/obj/item/weapon/gun/G in src) //Handle the gunner loosing sight of their target/s
+			if (G.target)
+				for (var/mob/living/M in G.target)
+					if (M && !(M in view(src)))
 						M.NotTargeted(G)
 	// Update on_moved listeners.
 	INVOKE_EVENT(on_moved,list("loc"=loc))
 
 /mob/living/proc/handle_hookchain(var/direct)
-	for(var/obj/item/weapon/gun/hookshot/hookshot in src)
-		if(hookshot.clockwerk)
+	for (var/obj/item/weapon/gun/hookshot/hookshot in src)
+		if (hookshot.clockwerk)
 			continue
 
-		for(var/i = 1;i<hookshot.maxlength;i++)
+		for (var/i = 1;i<hookshot.maxlength;i++)
 			var/obj/effect/overlay/hookchain/HC = hookshot.links["[i]"]
-			if(HC.loc != hookshot)
+			if (HC.loc != hookshot)
 				HC.Move(get_step(HC,direct),direct)
 
-		if(hookshot.hook)
+		if (hookshot.hook)
 			var/obj/item/projectile/hookshot/hook = hookshot.hook
 			hook.Move(get_step(hook,direct),direct)
-			if(direct & NORTH)
+			if (direct & NORTH)
 				hook.override_starting_Y++
 				hook.override_target_Y++
-			if(direct & SOUTH)
+			if (direct & SOUTH)
 				hook.override_starting_Y--
 				hook.override_target_Y--
-			if(direct & EAST)
+			if (direct & EAST)
 				hook.override_starting_X++
 				hook.override_target_X++
-			if(direct & WEST)
+			if (direct & WEST)
 				hook.override_starting_X--
 				hook.override_target_X--
 
@@ -743,7 +743,7 @@ Thanks.
 	set name = "Resist"
 	set category = "IC"
 
-	if(!isliving(usr) || usr.special_delayer.blocked())
+	if (!isliving(usr) || usr.special_delayer.blocked())
 		return
 
 	INVOKE_EVENT(on_resist, list())
@@ -753,25 +753,25 @@ Thanks.
 	var/mob/living/L = usr
 
 	//Getting out of someone's inventory.
-	if(istype(src.loc,/obj/item/weapon/holder))
+	if (istype(src.loc,/obj/item/weapon/holder))
 		var/obj/item/weapon/holder/H = src.loc
 		forceMove(get_turf(src))
-		if(istype(H.loc, /mob/living))
+		if (istype(H.loc, /mob/living))
 			var/mob/living/Location = H.loc
 			Location.drop_from_inventory(H)
 		qdel(H)
 		H = null
 		return
-	else if(istype(src.loc, /obj/structure/strange_present))
+	else if (istype(src.loc, /obj/structure/strange_present))
 		var/obj/structure/strange_present/present = src.loc
 		forceMove(get_turf(src))
 		qdel(present)
 		playsound(src.loc, 'sound/items/poster_ripped.ogg', 100, 1)
 		return
-	else if(istype(src.loc, /obj/item/delivery/large)) //Syndie item
+	else if (istype(src.loc, /obj/item/delivery/large)) //Syndie item
 		var/obj/item/delivery/large/package = src.loc
 		to_chat(L, "<span class='warning'>You attempt to unwrap yourself, this package is tight and will take some time.</span>")
-		if(do_after(src, src, 100))
+		if (do_after(src, src, 100))
 			L.visible_message("<span class='danger'>[L] successfully breaks out of [package]!</span>",\
 							  "<span class='notice'>You successfully break out!</span>")
 			forceMove(get_turf(src))
@@ -780,11 +780,11 @@ Thanks.
 		return
 
 	//Detaching yourself from a tether
-	if(L.tether)
+	if (L.tether)
 		var/mob/living/carbon/CM = L
-		if(!istype(CM) || !CM.handcuffed)
+		if (!istype(CM) || !CM.handcuffed)
 			var/datum/chain/tether_datum = L.tether.chain_datum
-			if(tether_datum.extremity_B == src)
+			if (tether_datum.extremity_B == src)
 				L.visible_message("<span class='danger'>\the [L] quickly grabs and removes \the [L.tether] tethered to his body!</span>",
 							  "<span class='warning'>You quickly grab and remove \the [L.tether] tethered to your body.</span>")
 				L.tether = null
@@ -792,11 +792,11 @@ Thanks.
 				tether_datum.rewind_chain()
 
 	//Trying to unstick a stickybomb
-	for(var/obj/item/stickybomb/B in L)
-		if(B.stuck_to)
+	for (var/obj/item/stickybomb/B in L)
+		if (B.stuck_to)
 			L.visible_message("<span class='danger'>\the [L] is trying to reach and pull off \the [B] stuck on his body!</span>",
 						  "<span class='warning'>You reach for \the [B] stuck on your body and start pulling.</span>")
-			if(do_after(L, src, 30, 10, FALSE))
+			if (do_after(L, src, 30, 10, FALSE))
 				L.visible_message("<span class='danger'>After struggling for an instant, \the [L] manages unstick \the [B] from his body!</span>",
 						  "<span class='warning'>It came off!</span>")
 				L.put_in_hands(B)
@@ -808,7 +808,7 @@ Thanks.
 			continue
 
 	//Resisting control by an alien mind.
-	if(istype(src.loc,/mob/living/simple_animal/borer))
+	if (istype(src.loc,/mob/living/simple_animal/borer))
 		var/mob/living/simple_animal/borer/B = src.loc
 		var/mob/living/captive_brain/H = src
 
@@ -818,7 +818,7 @@ Thanks.
 
 		spawn(rand(350,450)+B.host.brainloss)
 
-			if(!B || !B.controlling)
+			if (!B || !B.controlling)
 				return
 
 			B.host.adjustBrainLoss(rand(5,10))
@@ -833,12 +833,12 @@ Thanks.
 	//resisting grabs (as if it helps anyone...)
 	if ((!(L.stat) && L.canmove && !(L.restrained())))
 		var/resisting = 0
-		for(var/obj/O in L.requests)
+		for (var/obj/O in L.requests)
 			L.requests.Remove(O)
 			qdel(O)
 			O = null
 			resisting++
-		for(var/obj/item/weapon/grab/G in usr.grabbed_by)
+		for (var/obj/item/weapon/grab/G in usr.grabbed_by)
 			resisting++
 			if (G.state == GRAB_PASSIVE)
 				returnToPool(G)
@@ -854,25 +854,25 @@ Thanks.
 							L.visible_message("<span class='danger'>[L] has broken free of [G.assailant]'s headlock!</span>", \
 								drugged_message="<span class='danger'>[L] has broken free of [G.assailant]'s passionate hug!</span>")
 							returnToPool(G)
-		if(resisting)
+		if (resisting)
 			L.visible_message("<span class='danger'>[L] resists!</span>")
 
 
-	if(L.locked_to && L.special_delayer.blocked())
+	if (L.locked_to && L.special_delayer.blocked())
 		//unbuckling yourself
-		if(istype(L.locked_to, /obj/structure/bed))
+		if (istype(L.locked_to, /obj/structure/bed))
 			var/obj/structure/bed/B = L.locked_to
-			if(iscarbon(L))
+			if (iscarbon(L))
 				var/mob/living/carbon/C = L
-				if(C.handcuffed)
+				if (C.handcuffed)
 					C.delayNextAttack(100)
 					C.delayNextSpecial(100)
 					C.visible_message("<span class='warning'>[C] attempts to unbuckle themself!</span>",
 									  "<span class='warning'>You attempt to unbuckle yourself (this will take around two minutes, and you need to stay still).</span>",
 									  self_drugged_message="<span class='warning'>You attempt to regain control of your legs (this will take a while).</span>")
 					spawn(0)
-						if(do_after(usr, usr, 1200))
-							if(!C.locked_to)
+						if (do_after(usr, usr, 1200))
+							if (!C.locked_to)
 								return
 							C.visible_message("<span class='danger'>[C] manages to unbuckle themself!</span>",\
 								"<span class='notice'>You successfully unbuckle yourself.</span>",\
@@ -884,24 +884,24 @@ Thanks.
 			else
 				B.manual_unbuckle(L)
 		//release from kudzu
-		/*else if(istype(L.locked_to, /obj/effect/plantsegment))
+		/*else if (istype(L.locked_to, /obj/effect/plantsegment))
 			var/obj/effect/plantsegment/K = L.locked_to
 			K.manual_unbuckle(L)*/
 
 	//Breaking out of a locker?
-	if(src.loc && (istype(src.loc, /obj/structure/closet)))
+	if (src.loc && (istype(src.loc, /obj/structure/closet)))
 		var/breakout_time = 2 //2 minutes by default
 
 		var/obj/structure/closet/C = L.loc
-		if(C.opened)
+		if (C.opened)
 			return //Door's open... wait, why are you in it's contents then?
-		if(!istype(C.loc, /obj/item/delivery/large)) //Wouldn't want to interrupt escaping being wrapped over the next few trivial checks
-			if(istype(C, /obj/structure/closet/secure_closet))
+		if (!istype(C.loc, /obj/item/delivery/large)) //Wouldn't want to interrupt escaping being wrapped over the next few trivial checks
+			if (istype(C, /obj/structure/closet/secure_closet))
 				var/obj/structure/closet/secure_closet/SC = L.loc
-				if(!SC.locked && !SC.welded)
+				if (!SC.locked && !SC.welded)
 					return //It's a secure closet, but isn't locked. Easily escapable from, no need to 'resist'
 			else
-				if(!C.welded)
+				if (!C.welded)
 					return //closed but not welded...
 
 		//okay, so the closet is either welded or locked... resist!!!
@@ -909,22 +909,22 @@ Thanks.
 		L.visible_message("<span class='danger'>The [C] begins to shake violenty!</span>",
 						  "<span class='warning'>You lean on the back of [C] and start pushing the door open (this will take about [breakout_time] minutes).</span>")
 		spawn(0)
-			if(do_after(usr,src,breakout_time * 60 * 10)) //minutes * 60seconds * 10deciseconds
-				if(!C || !L || L.stat != CONSCIOUS || L.loc != C || C.opened) //closet/user destroyed OR user dead/unconcious OR user no longer in closet OR closet opened
+			if (do_after(usr,src,breakout_time * 60 * 10)) //minutes * 60seconds * 10deciseconds
+				if (!C || !L || L.stat != CONSCIOUS || L.loc != C || C.opened) //closet/user destroyed OR user dead/unconcious OR user no longer in closet OR closet opened
 					return
 
-				if(!istype(C.loc, /obj/item/delivery/large)) //Wouldn't want to interrupt escaping being wrapped over the next few trivial checks
+				if (!istype(C.loc, /obj/item/delivery/large)) //Wouldn't want to interrupt escaping being wrapped over the next few trivial checks
 					//Perform the same set of checks as above for weld and lock status to determine if there is even still a point in 'resisting'...
-					if(istype(L.loc, /obj/structure/closet/secure_closet))
+					if (istype(L.loc, /obj/structure/closet/secure_closet))
 						var/obj/structure/closet/secure_closet/SC = L.loc
-						if(!SC.locked && !SC.welded)
+						if (!SC.locked && !SC.welded)
 							return
 					else
-						if(!C.welded)
+						if (!C.welded)
 							return
 
 				//Well then break it!
-				if(istype(usr.loc, /obj/structure/closet/secure_closet))
+				if (istype(usr.loc, /obj/structure/closet/secure_closet))
 					var/obj/structure/closet/secure_closet/SC = L.loc
 					SC.desc = "It appears to be broken."
 					SC.icon_state = SC.icon_off
@@ -937,7 +937,7 @@ Thanks.
 					SC.welded = 0
 					L.visible_message("<span class='danger'>[L] successfully breaks out of [SC]!</span>",
 									  "<span class='notice'>You successfully break out!</span>")
-					if(istype(SC.loc, /obj/item/delivery/large)) //Do this to prevent contents from being opened into nullspace (read: bluespace)
+					if (istype(SC.loc, /obj/item/delivery/large)) //Do this to prevent contents from being opened into nullspace (read: bluespace)
 						var/obj/item/delivery/large/BD = SC.loc
 						BD.attack_hand(usr)
 					SC.open()
@@ -945,48 +945,48 @@ Thanks.
 					C.welded = 0
 					L.visible_message("<span class='danger'>[L] successful breaks out of [C]!</span>",
 									  "<span class='notice'>You successfully break out!</span>")
-					if(istype(C.loc, /obj/item/delivery/large)) //nullspace ect.. read the comment above
+					if (istype(C.loc, /obj/item/delivery/large)) //nullspace ect.. read the comment above
 						var/obj/item/delivery/large/BD = C.loc
 						BD.attack_hand(usr)
 					C.open()
 
 
-	else if(iscarbon(L))
+	else if (iscarbon(L))
 		var/mob/living/carbon/CM = L
 	//putting out a fire
-		if(CM.on_fire && CM.canmove)
+		if (CM.on_fire && CM.canmove)
 			CM.fire_stacks -= 5
 			CM.SetWeakened(3)
 			playsound(CM.loc, 'sound/effects/bodyfall.ogg', 50, 1)
 			CM.visible_message("<span class='danger'>[CM] rolls on the floor, trying to put themselves out!</span>",
 							   "<span class='warning'>You stop, drop, and roll!</span>")
 
-			for(var/i = 1 to rand(8,12))
+			for (var/i = 1 to rand(8,12))
 				CM.dir = turn(CM.dir, pick(-90, 90))
 				sleep(2)
 
-			if(fire_stacks <= 0)
+			if (fire_stacks <= 0)
 				CM.visible_message("<span class='danger'>[CM] has successfully extinguished themselves!</span>",
 								   "<span class='notice'>You extinguish yourself.</span>")
 				ExtinguishMob()
 			return
 
 	//breaking out of handcuffs
-		if(CM.handcuffed && CM.canmove && CM.special_delayer.blocked())
+		if (CM.handcuffed && CM.canmove && CM.special_delayer.blocked())
 			CM.delayNext(DELAY_ALL,100)
-			if(isalienadult(CM) || (M_HULK in usr.mutations))//Don't want to do a lot of logic gating here.
+			if (isalienadult(CM) || (M_HULK in usr.mutations))//Don't want to do a lot of logic gating here.
 				CM.visible_message("<span class='danger'>[CM] is trying to break the handcuffs!</span>",
 								   "<span class='warning'>You attempt to break your handcuffs. (This will take around five seconds and you will need to stand still).</span>")
 				spawn(0)
-					if(do_after(CM, CM, 50))
-						if(!CM.handcuffed || CM.locked_to)
+					if (do_after(CM, CM, 50))
+						if (!CM.handcuffed || CM.locked_to)
 							return
 						CM.visible_message("<span class='danger'>[CM] manages to break the handcuffs!</span>",
 										   "<span class='notice'>You successfuly break your handcuffs.</span>")
 						CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 						var/obj/item/weapon/handcuffs/cuffs = CM.handcuffed
 						CM.drop_from_inventory(cuffs)
-						if(!cuffs.gcDestroyed) //If these were not qdel'd already (exploding cuffs, anyone?)
+						if (!cuffs.gcDestroyed) //If these were not qdel'd already (exploding cuffs, anyone?)
 							qdel(cuffs)
 					else
 						to_chat(CM, "<span class='warning'>Your cuff breaking attempt was interrupted.</span>")
@@ -995,14 +995,14 @@ Thanks.
 			else
 				var/obj/item/weapon/handcuffs/HC = CM.handcuffed
 				var/breakouttime = HC.breakouttime
-				if(!(breakouttime))
+				if (!(breakouttime))
 					breakouttime = 1200 //Default
 				CM.visible_message("<span class='danger'>[CM] attempts to remove [HC]!</span>",
 								   "<span class='warning'>You attempt to remove [HC] (this will take around [(breakouttime)/600] minutes and you need to stand still).</span>",
 								   self_drugged_message="<span class='warning'>You attempt to regain control of your hands (this will take a while).</span>")
 				spawn(0)
-					if(do_after(CM,CM, breakouttime))
-						if(!CM.handcuffed || CM.locked_to)
+					if (do_after(CM,CM, breakouttime))
+						if (!CM.handcuffed || CM.locked_to)
 							return // time leniency for lag which also might make this whole thing pointless but the server
 						CM.visible_message("<span class='danger'>[CM] manages to remove [HC]!</span>",
 										   "<span class='notice'>You successfuly remove [HC].</span>",
@@ -1012,14 +1012,14 @@ Thanks.
 						CM.simple_message("<span class='warning'>Your uncuffing attempt was interrupted.</span>",
 							"<span class='warning'>Your attempt to regain control of your hands was interrupted. Damn it!</span>")
 
-		else if(CM.legcuffed && CM.canmove && CM.special_delayer.blocked())
+		else if (CM.legcuffed && CM.canmove && CM.special_delayer.blocked())
 			CM.delayNext(DELAY_ALL,100)
-			if(isalienadult(CM) || (M_HULK in usr.mutations))//Don't want to do a lot of logic gating here.
+			if (isalienadult(CM) || (M_HULK in usr.mutations))//Don't want to do a lot of logic gating here.
 				CM.visible_message("<span class='danger'>[CM] is trying to break the legcuffs!</span>",
 								   "<span class='warning'>You attempt to break your legcuffs. (This will take around five seconds and you need to stand still).</span>")
 				spawn(0)
-					if(do_after(CM, CM, 50))
-						if(!CM.legcuffed || CM.locked_to)
+					if (do_after(CM, CM, 50))
+						if (!CM.legcuffed || CM.locked_to)
 							return
 						CM.visible_message("<span class='danger'>[CM] manages to break the legcuffs!</span>",
 										   "<span class='notice'>You successfully break your legcuffs.</span>")
@@ -1032,13 +1032,13 @@ Thanks.
 			else
 				var/obj/item/weapon/legcuffs/HC = CM.legcuffed
 				var/breakouttime = HC.breakouttime
-				if(!(breakouttime))
+				if (!(breakouttime))
 					breakouttime = 1200 //Default
 				CM.visible_message("<span class='danger'>[CM] attempts to remove [HC]!</span>",
 								   "<span class='warning'>You attempt to remove [HC]. (This will take around [(breakouttime)/600] minutes and you need to stand still).</span>")
 				spawn(0)
-					if(do_after(CM, CM, breakouttime))
-						if(!CM.legcuffed || CM.locked_to)
+					if (do_after(CM, CM, breakouttime))
+						if (!CM.legcuffed || CM.locked_to)
 							return // time leniency for lag which also might make this whole thing pointless but the server
 						CM.visible_message("<span class='danger'>[CM] manages to remove [HC]!</span>",
 										   "<span class='notice'>You successfully remove [HC].</span>")
@@ -1052,7 +1052,7 @@ Thanks.
 	set name = "Rest"
 	set category = "IC"
 
-	if(client.move_delayer.blocked())
+	if (client.move_delayer.blocked())
 		return
 	delayNextMove(10)
 	resting = !resting
@@ -1066,19 +1066,19 @@ Thanks.
 	return 1
 
 /mob/living/singularity_act()
-	if(!(src.flags & INVULNERABLE))
+	if (!(src.flags & INVULNERABLE))
 		var/gain = 20
 		investigation_log(I_SINGULO,"has been consumed by a singularity")
 		gib()
 		return(gain)
 
 /mob/living/singularity_pull(S)
-	if(!(src.flags & INVULNERABLE))
+	if (!(src.flags & INVULNERABLE))
 		step_towards(src, S)
 
 //shuttle_act is called when a shuttle collides with the mob
 /mob/living/shuttle_act(datum/shuttle/S)
-	if(!(src.flags & INVULNERABLE))
+	if (!(src.flags & INVULNERABLE))
 		src.attack_log += "\[[time_stamp()]\] was gibbed by a shuttle ([S.name], [S.type])!"
 		gib()
 	return
@@ -1091,22 +1091,22 @@ Thanks.
 /mob/living/verb/pulled(atom/movable/AM as mob|obj in oview(1))
 	set name = "Pull"
 	set category = "Object"
-	if(AM.Adjacent(src))
+	if (AM.Adjacent(src))
 		src.start_pulling(AM)
 	return
 
 //same as above
 /mob/living/pointed(atom/A as mob|obj|turf in view())
-	if(src.incapacitated())
+	if (src.incapacitated())
 		return 0
-	if(!..())
+	if (!..())
 		return 0
 	usr.visible_message("<b>[src]</b> points to [A]")
 	return 1
 
 
 /mob/living/proc/generate_static_overlay()
-	if(!istype(static_overlays,/list))
+	if (!istype(static_overlays,/list))
 		static_overlays = list()
 	static_overlays.Add(list("static", "blank", "letter"))
 	var/image/static_overlay = image(getStaticIcon(new/icon(src.icon, src.icon_state)), loc = src)
@@ -1129,19 +1129,19 @@ default behaviour is:
  - if si, the proc returns
 */
 /mob/living/proc/can_move_mob(var/mob/living/swapped, swapping = 0, passive = 0)
-	if(!swapped)
+	if (!swapped)
 		return 1
-	if(!passive)
+	if (!passive)
 		return swapped.can_move_mob(src, swapping, 1)
 	else
 		var/context_flags = 0
-		if(swapping)
+		if (swapping)
 			context_flags = swapped.mob_swap_flags
 		else
 			context_flags = swapped.mob_push_flags
-		if(!mob_bump_flag) //nothing defined, go wild
+		if (!mob_bump_flag) //nothing defined, go wild
 			return 1
-		if(mob_bump_flag & context_flags)
+		if (mob_bump_flag & context_flags)
 			return 1
 		return 0
 
@@ -1152,73 +1152,73 @@ default behaviour is:
 		now_pushing = 1
 		if (istype(AM, /obj/structure/bed/roller)) //no pushing rollerbeds that have people on them
 			var/obj/structure/bed/roller/R = AM
-			for(var/mob/living/tmob in range(R, 1))
-				if(tmob.pulling == R && !(tmob.restrained()) && tmob.stat == 0 && R.density == 1)
+			for (var/mob/living/tmob in range(R, 1))
+				if (tmob.pulling == R && !(tmob.restrained()) && tmob.stat == 0 && R.density == 1)
 					to_chat(src, "<span class='warning'>[tmob] is pulling [R], you can't push past.</span>")
 					now_pushing = 0
 					return
 		if (istype(AM, /mob/living)) //no pushing people pushing rollerbeds that have people on them
 			var/mob/living/tmob = AM
-			for(var/obj/structure/bed/roller/R in range(tmob, 1))
-				if(tmob.pulling == R && !(tmob.restrained()) && tmob.stat == 0 && R.density == 1)
+			for (var/obj/structure/bed/roller/R in range(tmob, 1))
+				if (tmob.pulling == R && !(tmob.restrained()) && tmob.stat == 0 && R.density == 1)
 					to_chat(src, "<span class='warning'>[tmob] is pulling [R], you can't push past.</span>")
 					now_pushing = 0
 					return
-			for(var/mob/living/M in range(tmob, 1)) //no pushing prisoners or people pulling prisoners
-				if(tmob.pinned.len ||  ((M.pulling == tmob && (tmob.restrained() && !(M.restrained()) && M.stat == 0)) || locate(/obj/item/weapon/grab, tmob.grabbed_by.len)))
+			for (var/mob/living/M in range(tmob, 1)) //no pushing prisoners or people pulling prisoners
+				if (tmob.pinned.len ||  ((M.pulling == tmob && (tmob.restrained() && !(M.restrained()) && M.stat == 0)) || locate(/obj/item/weapon/grab, tmob.grabbed_by.len)))
 					to_chat(src, "<span class='warning'>[tmob] is restrained, you can't push past.</span>")
 					now_pushing = 0
 					return
-				if(tmob.pulling == M && (M.restrained() && !(tmob.restrained()) && tmob.stat == 0))
+				if (tmob.pulling == M && (M.restrained() && !(tmob.restrained()) && tmob.stat == 0))
 					to_chat(src, "<span class='warning'>[tmob] is restraining [M], you can't push past.</span>")
 					now_pushing = 0
 					return
 
 			//BubbleWrap: people in handcuffs are always switched around as if they were on 'help' intent to prevent a person being pulled from being seperated from their puller
 			var/dense = 0
-			if(loc.density)
+			if (loc.density)
 				dense = 1
-			for(var/atom/movable/A in loc)
-				if(A == src)
+			for (var/atom/movable/A in loc)
+				if (A == src)
 					continue
-				if(A.density)
-					if(A.flags&ON_BORDER)
+				if (A.density)
+					if (A.flags&ON_BORDER)
 						dense = !A.Cross(src, src.loc)
 					else
 						dense = 1
-				if(dense)
+				if (dense)
 					break
-			if((tmob.a_intent == I_HELP || tmob.restrained()) && (a_intent == I_HELP || src.restrained()) && tmob.canmove && canmove && !dense && can_move_mob(tmob, 1, 0)) // mutual brohugs all around!
+			if ((tmob.a_intent == I_HELP || tmob.restrained()) && (a_intent == I_HELP || src.restrained()) && tmob.canmove && canmove && !dense && can_move_mob(tmob, 1, 0)) // mutual brohugs all around!
 				var/turf/oldloc = loc
 				forceMove(tmob.loc)
 				tmob.forceMove(oldloc)
 				now_pushing = 0
-				for(var/mob/living/carbon/slime/slime in view(1,tmob))
-					if(slime.Victim == tmob)
+				for (var/mob/living/carbon/slime/slime in view(1,tmob))
+					if (slime.Victim == tmob)
 						slime.UpdateFeed()
 				return
 
-			if(!can_move_mob(tmob, 0, 0))
+			if (!can_move_mob(tmob, 0, 0))
 				now_pushing = 0
 				return
 			var/mob/living/carbon/human/H = null
-			if(ishuman(tmob))
+			if (ishuman(tmob))
 				H = tmob
-			if(H && ((M_FAT in H.mutations) || (H && H.species && H.species.flags & IS_BULKY)))
+			if (H && ((M_FAT in H.mutations) || (H && H.species && H.species.flags & IS_BULKY)))
 				var/mob/living/carbon/human/U = null
-				if(ishuman(src))
+				if (ishuman(src))
 					U = src
-				if(prob(40) && !(U && ((M_FAT in U.mutations) || (U && U.species && U.species.flags & IS_BULKY))))
+				if (prob(40) && !(U && ((M_FAT in U.mutations) || (U && U.species && U.species.flags & IS_BULKY))))
 					to_chat(src, "<span class='danger'>You fail to push [tmob]'s fat ass out of the way.</span>")
 					now_pushing = 0
 					return
 
-			for(var/obj/item/weapon/shield/riot/R in tmob.held_items)
-				if(prob(99))
+			for (var/obj/item/weapon/shield/riot/R in tmob.held_items)
+				if (prob(99))
 					now_pushing = 0
 					return
 
-			if(!(tmob.status_flags & CANPUSH))
+			if (!(tmob.status_flags & CANPUSH))
 				now_pushing = 0
 				return
 
@@ -1234,10 +1234,10 @@ default behaviour is:
 
 				if (!AM.anchored)
 					var/t = get_dir(src, AM)
-					if(AM.flags & ON_BORDER && !t)
+					if (AM.flags & ON_BORDER && !t)
 						t = AM.dir
 					if (istype(AM, /obj/structure/window/full))
-						for(var/obj/structure/window/win in get_step(AM,t))
+						for (var/obj/structure/window/win in get_step(AM,t))
 							now_pushing = 0
 							return
 					step(AM, t)
@@ -1249,15 +1249,15 @@ default behaviour is:
 	return 1
 
 /mob/living/proc/drop_meat(location)
-	if(!meat_type)
+	if (!meat_type)
 		return 0
 
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/M = new meat_type(location)
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/A = M
 
-	if(istype(A))
+	if (istype(A))
 		var/mob/living/simple_animal/source_animal = src
-		if(istype(source_animal) && source_animal.species_type)
+		if (istype(source_animal) && source_animal.species_type)
 			var/mob/living/specimen = source_animal.species_type
 			A.name = "[initial(specimen.name)] meat"
 			A.animal_name = initial(specimen.name)
@@ -1272,18 +1272,18 @@ default behaviour is:
 	set src in oview(1)
 
 	var/mob/living/user = usr
-	if(!istype(user))
+	if (!istype(user))
 		return
 
-	if(user.isUnconscious() || user.restrained())
+	if (user.isUnconscious() || user.restrained())
 		return
 
-	if(being_butchered)
+	if (being_butchered)
 		to_chat(user, "<span class='notice'>[src] is already being butchered.</span>")
 		return
 
-	if(!can_butcher)
-		if(meat_taken)
+	if (!can_butcher)
+		if (meat_taken)
 			to_chat(user, "<span class='notice'>[src] has already been butchered.</span>")
 			return
 		else
@@ -1295,39 +1295,39 @@ default behaviour is:
 	var/speed_mod = 1.0			//The higher it is, the faster you butcher
 	var/butchering_time = 20 * size //2 seconds for tiny animals, 4 for small ones, 6 for normal sized ones (+ humans), 8 for big guys and 10 for biggest guys
 
-	if(ishuman(user))
+	if (ishuman(user))
 		var/mob/living/carbon/human/H = user
 
 		tool = H.get_active_hand()
-		if(tool)
+		if (tool)
 			speed_mod = tool.is_sharp()
-			if(!speed_mod)
+			if (!speed_mod)
 				to_chat(user, "<span class='notice'>You can't butcher \the [src] with this!</span>")
 				return
 		else
 			speed_mod = 0.0
 
-		if(M_CLAWS in H.mutations)
-			if(!istype(H.gloves))
+		if (M_CLAWS in H.mutations)
+			if (!istype(H.gloves))
 				speed_mod += 0.25
-		if(M_BEAK in H.mutations)
-			if(istype(H.wear_mask))
+		if (M_BEAK in H.mutations)
+			if (istype(H.wear_mask))
 				var/obj/item/clothing/mask/M = H.wear_mask
-				if(!(M.body_parts_covered & MOUTH)) //If our mask doesn't cover mouth, we can use our beak to help us while butchering
+				if (!(M.body_parts_covered & MOUTH)) //If our mask doesn't cover mouth, we can use our beak to help us while butchering
 					speed_mod += 0.25
 			else
 				speed_mod += 0.25
 	else
 		speed_mod = 0.5
 
-	if(!speed_mod)
+	if (!speed_mod)
 		return
 
-	if(src.butchering_drops && src.butchering_drops.len)
+	if (src.butchering_drops && src.butchering_drops.len)
 		var/list/actions = list()
 		actions += "Butcher"
-		for(var/datum/butchering_product/B in src.butchering_drops)
-			if(B.amount <= 0)
+		for (var/datum/butchering_product/B in src.butchering_drops)
+			if (B.amount <= 0)
 				continue
 
 			actions |= capitalize(B.verb_name)
@@ -1335,20 +1335,20 @@ default behaviour is:
 		actions += "Cancel"
 
 		var/choice = input(user,"What would you like to do with \the [src]?","Butchering") in actions
-		if(!Adjacent(user) || !(usr.get_active_hand() == tool))
+		if (!Adjacent(user) || !(usr.get_active_hand() == tool))
 			return
 
-		if(choice == "Cancel")
+		if (choice == "Cancel")
 			return 0
-		else if(choice != "Butcher")
+		else if (choice != "Butcher")
 			var/datum/butchering_product/our_product = actions[choice]
-			if(!istype(our_product))
+			if (!istype(our_product))
 				return
 
 			user.visible_message("<span class='notice'>[user] starts [our_product.verb_gerund] \the [src][tool ? "with \the [tool]" : ""].</span>",\
 				"<span class='info'>You start [our_product.verb_gerund] \the [src].</span>")
 			src.being_butchered = 1
-			if(!do_after(user,src,butchering_time / speed_mod))
+			if (!do_after(user,src,butchering_time / speed_mod))
 				to_chat(user, "<span class='warning'>Your attempt to [our_product.verb_name] \the [src] has been interrupted.</span>")
 				src.being_butchered = 0
 			else
@@ -1362,7 +1362,7 @@ default behaviour is:
 		"<span class='info'>You start butchering \the [src].</span>")
 	src.being_butchered = 1
 
-	if(!do_after(user,src,butchering_time / speed_mod))
+	if (!do_after(user,src,butchering_time / speed_mod))
 		to_chat(user, "<span class='warning'>Your attempt to butcher \the [src] was interrupted.</span>")
 		src.being_butchered = 0
 		return
@@ -1371,15 +1371,15 @@ default behaviour is:
 	src.meat_taken++
 	src.being_butchered = 0
 
-	if(src.meat_taken < src.meat_amount)
+	if (src.meat_taken < src.meat_amount)
 		to_chat(user, "<span class='info'>You cut a chunk of meat out of \the [src].</span>")
 		return
 
 	to_chat(user, "<span class='info'>You butcher \the [src].</span>")
 	can_butcher = 0
 
-	if(istype(src, /mob/living/simple_animal)) //Animals can be butchered completely, humans - not so
-		if(src.size > SIZE_TINY) //Tiny animals don't produce gibs
+	if (istype(src, /mob/living/simple_animal)) //Animals can be butchered completely, humans - not so
+		if (src.size > SIZE_TINY) //Tiny animals don't produce gibs
 			gib(meat = 0) //"meat" argument only exists for mob/living/simple_animal/gib()
 		else
 			qdel(src)
@@ -1393,12 +1393,12 @@ default behaviour is:
 	. = strength
 
 /mob/living/proc/scoop_up(mob/M) //M = mob who scoops us up!
-	if(!holder_type)
+	if (!holder_type)
 		return
 
 	var/obj/item/weapon/holder/D = getFromPool(holder_type, loc, src)
 
-	if(M.put_in_active_hand(D))
+	if (M.put_in_active_hand(D))
 		to_chat(M, "You scoop up [src].")
 		to_chat(src, "[M] scoops you up.")
 		src.forceMove(D) //Only move the mob into the holder after we're sure he has been picked up!
@@ -1425,7 +1425,7 @@ default behaviour is:
 
 */
 /mob/living/proc/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/screen/fullscreen/flash)
-	if(override_blindness_check || !(disabilities & BLIND))
+	if (override_blindness_check || !(disabilities & BLIND))
 		// flick("e_flash", flash)
 		overlay_fullscreen("flash", type)
 		// addtimer(src, "clear_fullscreen", 25, FALSE, "flash", 25)

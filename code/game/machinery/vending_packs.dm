@@ -198,9 +198,9 @@
 	return
 
 /obj/structure/stackopacks/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/wirecutters) || istype(W,/obj/item/weapon/shard) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large) || istype(W,/obj/item/weapon/circular_saw) || istype(W, /obj/item/weapon/hatchet) || istype(W, /obj/item/weapon/kitchen/utensil/knife))
+	if (istype(W,/obj/item/weapon/wirecutters) || istype(W,/obj/item/weapon/shard) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large) || istype(W,/obj/item/weapon/circular_saw) || istype(W, /obj/item/weapon/hatchet) || istype(W, /obj/item/weapon/kitchen/utensil/knife))
 		var/turf/T = get_turf(src)
-		for(var/obj/O in contents)
+		for (var/obj/O in contents)
 			O.forceMove(T)
 		to_chat(user, "<span class='notice'>You remove the protective coil.</span>")
 		qdel(src)
@@ -209,21 +209,21 @@
 
 /obj/structure/stackopacks/attack_animal(mob/living/simple_animal/M as mob)
 	var/turf/T = get_turf(src)
-	for(var/obj/O in contents)
+	for (var/obj/O in contents)
 		O.forceMove(T)
 	to_chat(M, "<span class='notice'>You rip the protective coil apart.</span>")
 	qdel(src)
 
 /obj/structure/stackopacks/attack_paw(mob/M as mob)
 	var/turf/T = get_turf(src)
-	for(var/obj/O in contents)
+	for (var/obj/O in contents)
 		O.forceMove(T)
 	to_chat(M, "<span class='notice'>You rip the protective coil apart.</span>")
 	qdel(src)
 
 /obj/structure/stackopacks/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
 	var/turf/T = get_turf(src)
-	for(var/obj/O in contents)
+	for (var/obj/O in contents)
 		O.forceMove(T)
 	to_chat(M, "<span class='notice'>You rip the protective coil apart.</span>")
 	qdel(src)

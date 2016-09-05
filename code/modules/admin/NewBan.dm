@@ -3,17 +3,17 @@ var/savefile/Banlist
 
 
 /proc/CheckBan(var/ckey, var/id, var/address)
-	if(!Banlist)		// if Banlist cannot be located for some reason
+	if (!Banlist)		// if Banlist cannot be located for some reason
 		LoadBans()		// try to load the bans
-		if(!Banlist)	// uh oh, can't find bans!
+		if (!Banlist)	// uh oh, can't find bans!
 			return 0	// ABORT ABORT ABORT
 
 	. = list()
 	var/appeal
-	if(config && config.banappeals)
+	if (config && config.banappeals)
 		appeal = "\nFor more information on your ban, or to appeal, head to <a href='[config.banappeals]'>[config.banappeals]</a>"
 	Banlist.cd = "/base"
-	if( "[ckey][id]" in Banlist.dir )
+	if ( "[ckey][id]" in Banlist.dir )
 		Banlist.cd = "[ckey][id]"
 		if (Banlist["temp"])
 			if (!GetExp(Banlist["minutes"]))
@@ -30,19 +30,19 @@ var/savefile/Banlist
 		for (var/A in Banlist.dir)
 			Banlist.cd = "/base/[A]"
 			var/matches
-			if( ckey == Banlist["key"] )
+			if ( ckey == Banlist["key"] )
 				matches += "ckey"
-			if( id == Banlist["id"] )
-				if(matches)
+			if ( id == Banlist["id"] )
+				if (matches)
 					matches += "/"
 				matches += "id"
-			if( address == Banlist["ip"] )
-				if(matches)
+			if ( address == Banlist["ip"] )
+				if (matches)
 					matches += "/"
 				matches += "ip"
 
-			if(matches)
-				if(Banlist["temp"])
+			if (matches)
+				if (Banlist["temp"])
 					if (!GetExp(Banlist["minutes"]))
 						ClearTempbans()
 						return 0
@@ -135,7 +135,7 @@ var/savefile/Banlist
 	if (!Banlist.dir.Remove(foldername))
 		return 0
 
-	if(!usr)
+	if (!usr)
 		log_admin("Ban Expired: [key]")
 		message_admins("Ban Expired: [key]")
 	else
@@ -183,9 +183,9 @@ var/savefile/Banlist
 		var/reason	= Banlist["reason"]
 		var/by		= Banlist["bannedby"]
 		var/expiry
-		if(Banlist["temp"])
+		if (Banlist["temp"])
 			expiry = GetExp(Banlist["minutes"])
-			if(!expiry)
+			if (!expiry)
 				expiry = "Removal Pending"
 		else
 			expiry = "Permaban"
@@ -207,10 +207,10 @@ var/savefile/Banlist
 	var/i
 	var/last
 
-	for(i=0, i<1001, i++)
+	for (i=0, i<1001, i++)
 		var/a = pick(1,0)
 		var/b = pick(1,0)
-		if(b)
+		if (b)
 			Banlist.cd = "/base"
 			Banlist.dir.Add("trash[i]trashid[i]")
 			Banlist.cd = "/base/trash[i]trashid[i]"

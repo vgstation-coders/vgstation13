@@ -19,11 +19,11 @@
 	..()
 
 	//So that you can label your buttons in the map editor
-	if(reset_name)
+	if (reset_name)
 		name = initial(name)
 
 /obj/structure/button/attack_hand(mob/user)
-	if(one_time && used)
+	if (one_time && used)
 		to_chat(user, "<span class='info'>It won't budge!</span>")
 		return
 
@@ -34,14 +34,14 @@
 	return attack_hand(user)
 
 /obj/structure/button/proc/activate()
-	if(global_search)
-		for(var/obj/effect/hidden_door/hidden_door in hidden_doors)
-			if(is_valid_door(hidden_door))
+	if (global_search)
+		for (var/obj/effect/hidden_door/hidden_door in hidden_doors)
+			if (is_valid_door(hidden_door))
 				hidden_door.toggle()
 				used = 1
 	else
-		for(var/obj/effect/hidden_door/hidden_door in get_area(src))
-			if(is_valid_door(hidden_door))
+		for (var/obj/effect/hidden_door/hidden_door in get_area(src))
+			if (is_valid_door(hidden_door))
 				hidden_door.toggle()
 				used = 1
 
@@ -73,7 +73,7 @@ var/list/hidden_doors = list()
 	invisibility = 101
 	hidden_doors.Add(src)
 
-	if(inverted)
+	if (inverted)
 		toggle()
 
 /obj/effect/hidden_door/Destroy()
@@ -84,7 +84,7 @@ var/list/hidden_doors = list()
 /obj/effect/hidden_door/proc/steal_appearance()
 	var/turf/T = get_turf(src)
 
-	if(!T)
+	if (!T)
 		return
 	door_appearance["name"] = T.name
 	door_appearance["icon_state"] = T.icon_state
@@ -95,10 +95,10 @@ var/list/hidden_doors = list()
 	var/turf/T = get_turf(src)
 	playsound(T, 'sound/effects/stonedoor_openclose.ogg', 100, 1)
 
-	if(opened)
+	if (opened)
 		T.ChangeTurf(door_typepath)
 
-		for(var/V in door_appearance)
+		for (var/V in door_appearance)
 			T.vars[V] = door_appearance[V]
 
 		opened = 0
@@ -106,7 +106,7 @@ var/list/hidden_doors = list()
 		steal_appearance()
 		T.ChangeTurf(floor_typepath)
 
-		if(fade_animation)
+		if (fade_animation)
 			T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1)
 
 		opened = 1

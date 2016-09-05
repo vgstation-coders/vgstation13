@@ -17,9 +17,9 @@ var/list/genescanner_addresses = list()
 	New()
 		..()
 		spawn(8)
-			if(radio_controller)
+			if (radio_controller)
 				radio_connection = radio_controller.add_object(src, "[frequency]")
-			if(!src.net_id)
+			if (!src.net_id)
 				src.net_id = generate_net_id(src)
 				genescanner_addresses += src.net_id
 
@@ -33,14 +33,14 @@ var/list/genescanner_addresses = list()
 		..()
 
 	receive_signal(datum/signal/signal)
-		if(stat & NOPOWER)
+		if (stat & NOPOWER)
 			return
 
-		if(!signal || signal.encryption || !signal.data["sender"])
+		if (!signal || signal.encryption || !signal.data["sender"])
 			return
 
 		var/target = signal.data["sender"]
-		if((signal.data["address_1"] == "ping") && target)
+		if ((signal.data["address_1"] == "ping") && target)
 			spawn(5) //Send a reply for those curious jerks
 
 				var/datum/signal/newsignal = get_free_signal()
@@ -57,12 +57,12 @@ var/list/genescanner_addresses = list()
 
 			return
 
-		if(signal.data["address_1"] != src.net_id || !target || signal.data["command"] != "add" || !istype(signal.data_file, /datum/computer/file/genetics_scan))
+		if (signal.data["address_1"] != src.net_id || !target || signal.data["command"] != "add" || !istype(signal.data_file, /datum/computer/file/genetics_scan))
 			return
 
 		var/datum/computer/file/genetics_scan/scanFile = signal.data_file
-		for(var/datum/computer/file/genetics_scan/O in genResearch.dna_samples)
-			if(scanFile.subject_uID == O.subject_uID)
+		for (var/datum/computer/file/genetics_scan/O in genResearch.dna_samples)
+			if (scanFile.subject_uID == O.subject_uID)
 				spawn(5)
 
 					var/datum/signal/newsignal = get_free_signal()
@@ -111,7 +111,7 @@ var/list/genescanner_addresses = list()
 		set name = "Enter"
 		set src in oview(1)
 
-		if(!iscarbon(usr))
+		if (!iscarbon(usr))
 			to_chat(usr, "<span class='danger'>The scanner supports only carbon based lifeforms.</span>")
 			return
 
@@ -133,7 +133,7 @@ var/list/genescanner_addresses = list()
 		src.occupant = usr
 		src.icon_state = "scanner_1"
 
-		for(var/obj/O in src)
+		for (var/obj/O in src)
 			qdel(O)
 
 		src.add_fingerprint(usr)
@@ -151,7 +151,7 @@ var/list/genescanner_addresses = list()
 			to_chat(usr, "<span class='danger'>You need to unlock the scanner first.</span>")
 			return
 
-		if(!iscarbon(G.affecting))
+		if (!iscarbon(G.affecting))
 			to_chat(user, "<span class='notice'><B>The scanner supports only carbon based lifeforms.</B></span>")
 			return
 
@@ -163,7 +163,7 @@ var/list/genescanner_addresses = list()
 		src.occupant = M
 		src.icon_state = "scanner_1"
 
-		for(var/obj/O in src)
+		for (var/obj/O in src)
 			O.set_loc(src.loc)
 
 		src.add_fingerprint(user)
@@ -213,7 +213,7 @@ var/list/genescanner_addresses = list()
 		if (src.locked)
 			return
 
-		for(var/obj/O in src)
+		for (var/obj/O in src)
 			O.set_loc(src.loc)
 
 		if (src.occupant.client)
@@ -232,7 +232,7 @@ var/list/genescanner_addresses = list()
 
 		new_file.subject_name = source_file.subject_name
 		new_file.subject_uID = source_file.subject_uID
-		for(var/datum/bioEffect/BE in source_file.dna_pool)
+		for (var/datum/bioEffect/BE in source_file.dna_pool)
 			var/datum/bioEffect/MUT = new BE.type(new_file)
 			MUT.dnaBlocks = BE.dnaBlocks
 			new_file.dna_pool += MUT
@@ -271,7 +271,7 @@ var/list/genescanner_addresses = list()
 
 	New(var/client/newuser, var/mob/target)
 		..()
-		if(!newuser || !ishuman(target))
+		if (!newuser || !ishuman(target))
 			qdel(src)
 			return
 
@@ -283,14 +283,14 @@ var/list/genescanner_addresses = list()
 		return
 
 	disposing()
-		if(usercl && usercl.mob)
+		if (usercl && usercl.mob)
 			usercl.mob << browse(null, "window=geneticsappearance")
 			usercl = null
 		target_mob = null
 		..()
 
 	Topic(href, href_list)
-		if(href_list["close"])
+		if (href_list["close"])
 			qdel(src)
 			return
 
@@ -314,28 +314,28 @@ var/list/genescanner_addresses = list()
 
 		else if (href_list["hair"])
 			var/new_hair = input(usr, "Please select hair color.", "Appearance Menu") as color
-			if(new_hair)
+			if (new_hair)
 				src.r_hair = hex2num(copytext(new_hair, 2, 4))
 				src.g_hair = hex2num(copytext(new_hair, 4, 6))
 				src.b_hair = hex2num(copytext(new_hair, 6, 8))
 
 		else if (href_list["facial"])
 			var/new_facial = input(usr, "Please select facial hair color.", "Appearance Menu") as color
-			if(new_facial)
+			if (new_facial)
 				src.r_facial = hex2num(copytext(new_facial, 2, 4))
 				src.g_facial = hex2num(copytext(new_facial, 4, 6))
 				src.b_facial = hex2num(copytext(new_facial, 6, 8))
 
 		else if (href_list["detail"])
 			var/new_detail = input(usr, "Please select detail color.", "Appearance Menu") as color
-			if(new_detail)
+			if (new_detail)
 				src.r_detail = hex2num(copytext(new_detail, 2, 4))
 				src.g_detail = hex2num(copytext(new_detail, 4, 6))
 				src.b_detail = hex2num(copytext(new_detail, 6, 8))
 
 		else if (href_list["eyes"])
 			var/new_eyes = input(usr, "Please select eye color.", "Appearance Menu") as color
-			if(new_eyes)
+			if (new_eyes)
 				src.r_eyes = hex2num(copytext(new_eyes, 2, 4))
 				src.g_eyes = hex2num(copytext(new_eyes, 4, 6))
 				src.b_eyes = hex2num(copytext(new_eyes, 6, 8))
@@ -347,7 +347,7 @@ var/list/genescanner_addresses = list()
 				src.s_tone = max(min(round(text2num(new_tone)), 220), 1)
 				src.s_tone =  -src.s_tone + 35
 
-		else if(href_list["apply"])
+		else if (href_list["apply"])
 			src.copy_to_target()
 			qdel(src)
 
@@ -356,7 +356,7 @@ var/list/genescanner_addresses = list()
 
 	proc
 		load_mob_data(var/mob/living/carbon/human/H)
-			if(!ishuman(H))
+			if (!ishuman(H))
 				qdel(src)
 				return
 
@@ -377,13 +377,13 @@ var/list/genescanner_addresses = list()
 			src.g_detail = H.bioHolder.mobAppearance.g_detail
 			src.b_detail = H.bioHolder.mobAppearance.b_detail
 
-			if(!(hair_styles[src.h_style] || hair_styles_gimmick[src.h_style]))
+			if (!(hair_styles[src.h_style] || hair_styles_gimmick[src.h_style]))
 				src.h_style = "Bald"
 
-			if(!(fhair_styles[src.f_style] || fhair_styles_gimmick[src.f_style]))
+			if (!(fhair_styles[src.f_style] || fhair_styles_gimmick[src.f_style]))
 				src.f_style = "Shaved"
 
-			if(!(detail_styles[src.d_style] || detail_styles_gimmick[src.d_style]))
+			if (!(detail_styles[src.d_style] || detail_styles_gimmick[src.d_style]))
 				src.d_style = "None"
 
 			src.r_eyes = H.bioHolder.mobAppearance.r_eyes
@@ -394,7 +394,7 @@ var/list/genescanner_addresses = list()
 
 		update_menu()
 			set background = 1
-			if(!usercl)
+			if (!usercl)
 				qdel(src)
 				return
 			var/mob/user = usercl.mob
@@ -431,7 +431,7 @@ var/list/genescanner_addresses = list()
 			return
 
 		copy_to_target()
-			if(!target_mob)
+			if (!target_mob)
 				return
 
 			target_mob.bioHolder.mobAppearance.r_eyes = r_eyes
@@ -457,21 +457,21 @@ var/list/genescanner_addresses = list()
 			target_mob.bioHolder.mobAppearance.d_style = d_style
 
 			target_mob.hair_icon_state = hair_styles[h_style]
-			if(!target_mob.hair_icon_state)
+			if (!target_mob.hair_icon_state)
 				target_mob.hair_icon_state = hair_styles_gimmick[h_style]
-				if(!target_mob.hair_icon_state)
+				if (!target_mob.hair_icon_state)
 					target_mob.hair_icon_state = "Bald"
 
 			target_mob.face_icon_state = fhair_styles[f_style]
-			if(!target_mob.face_icon_state)
+			if (!target_mob.face_icon_state)
 				target_mob.face_icon_state = fhair_styles_gimmick[f_style]
-				if(!target_mob.face_icon_state)
+				if (!target_mob.face_icon_state)
 					target_mob.face_icon_state = "Shaved"
 
 			target_mob.detail_icon_state = detail_styles[d_style]
-			if(!target_mob.detail_icon_state)
+			if (!target_mob.detail_icon_state)
 				target_mob.detail_icon_state = detail_styles_gimmick[d_style]
-				if(!target_mob.detail_icon_state)
+				if (!target_mob.detail_icon_state)
 					target_mob.detail_icon_state = "None"
 
 			target_mob.set_face_icon_dirty()
@@ -481,7 +481,7 @@ var/list/genescanner_addresses = list()
 
 		process()
 			set background = 1
-			if(!usercl || !target_mob)
+			if (!usercl || !target_mob)
 				qdel(src)
 				return
 			spawn(20)
@@ -497,7 +497,7 @@ var/list/genescanner_addresses = list()
 			var/d_style_r = null
 
 			var/gender = ""
-			if(target_mob.gender == "male")
+			if (target_mob.gender == "male")
 				gender = "m"
 			else
 				gender = "f"
@@ -512,21 +512,21 @@ var/list/genescanner_addresses = list()
 			var/icon/eyes_s = new/icon("icon" = 'human_detail.dmi', "icon_state" = "eyes_s")
 
 			h_style_r = hair_styles[h_style]
-			if(!h_style_r)
+			if (!h_style_r)
 				h_style_r = hair_styles_gimmick[h_style]
-				if(!h_style_r)
+				if (!h_style_r)
 					h_style_r = "Bald"
 
 			f_style_r = fhair_styles[f_style]
-			if(!f_style_r)
+			if (!f_style_r)
 				f_style_r = fhair_styles_gimmick[f_style]
-				if(!f_style_r)
+				if (!f_style_r)
 					f_style_r = "Shaved"
 
 			d_style_r = detail_styles[d_style]
-			if(!d_style_r)
+			if (!d_style_r)
 				d_style_r = detail_styles_gimmick[d_style]
-				if(!d_style_r)
+				if (!d_style_r)
 					d_style_r = "None"
 
 			var/icon/hair_s = new/icon("icon" = 'human_hair.dmi', "icon_state" = "[h_style_r]_s")

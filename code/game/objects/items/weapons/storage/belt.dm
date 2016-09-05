@@ -10,10 +10,10 @@
 
 
 /obj/item/weapon/storage/belt/proc/can_use()
-	if(!ismob(loc))
+	if (!ismob(loc))
 		return 0
 	var/mob/M = loc
-	if(src in M.get_equipped_items())
+	if (src in M.get_equipped_items())
 		return 1
 	else
 		return 0
@@ -310,7 +310,7 @@
 /obj/item/weapon/storage/belt/lazarus/attackby(obj/item/W, mob/user)
 	var/amount = contents.len
 	. = ..()
-	if(amount != contents.len)
+	if (amount != contents.len)
 		update_icon()
 
 /obj/item/weapon/storage/belt/lazarus/remove_from_storage(obj/item/W as obj, atom/new_location)
@@ -326,7 +326,7 @@
 	)
 	var/list/critters = existing_typesof(/mob/living/simple_animal/hostile) - blocked // list of possible hostile mobs
 	critters = shuffle(critters)
-	while(contents.len < 6)
+	while (contents.len < 6)
 		var/obj/item/device/mobcapsule/MC = new /obj/item/device/mobcapsule(src)
 		var/chosen = pick(critters)
 		critters -= chosen

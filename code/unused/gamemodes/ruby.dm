@@ -23,12 +23,12 @@
 /datum/game_mode/ruby/post_setup()
 	var/list/possible_abominations = get_possible_abominations()
 
-	if(possible_abominations.len>0)
+	if (possible_abominations.len>0)
 		abomination = pick(possible_abominations)
 	/*
-	if(istype(ruby))
+	if (istype(ruby))
 		abomination.special_role = "abomination"
-		if(wizardstart.len == 0)
+		if (wizardstart.len == 0)
 			to_chat(wizard.current, "<span class='danger'>A starting location for you could not be found, please report this bug!</span>")
 		else
 			var/starting_loc = pick(wizardstart)
@@ -43,44 +43,44 @@
 	..()
 
 /datum/game_mode/ruby/check_finished()
-	if(!macguffin || abominationwins)
+	if (!macguffin || abominationwins)
 		return 1
 	else
 		return 0
 
 /datum/game_mode/ruby/declare_completion()
-	if(abominationwins)
+	if (abominationwins)
 		feedback_set_details("round_end_result","win - abomination win")
 		to_chat(world, "<B>The Abomination has murdered the station and sacrificed himself to Cjopaze!</B> (played by [winnerkey])")
 	else
 		feedback_set_details("round_end_result","loss - abomination killed")
 		to_chat(world, "<B>The Abomination has been stopped and Cjopaze's influence resisted! The station lives another day,</B>")
-		if(killed.len > 0)
+		if (killed.len > 0)
 			to_chat(world, "Those who were sacrificed shall be remembered: ")
-			for(var/mob/M in killed)
-				if(M)
+			for (var/mob/M in killed)
+				if (M)
 					to_chat(world, "[M.real_name]")
 	/*
-	for(var/datum/mind/traitor in traitors)
+	for (var/datum/mind/traitor in traitors)
 		var/traitorwin = 1
 		var/traitor_name
 
-		if(traitor.current)
+		if (traitor.current)
 			traitor_name = "[traitor.current.real_name] (played by [traitor.key])"
 		else
 			traitor_name = "[traitor.key] (character destroyed)"
 
 		to_chat(world, "<B>The syndicate traitor was [traitor_name]</B>")
 		var/count = 1
-		for(var/datum/objective/objective in traitor.objectives)
-			if(objective.check_completion())
+		for (var/datum/objective/objective in traitor.objectives)
+			if (objective.check_completion())
 				to_chat(world, "<B>Objective #[count]</B>: [objective.explanation_text] <span class='good'><B>Success</B></span>")
 			else
 				to_chat(world, "<B>Objective #[count]</B>: [objective.explanation_text] <span class='warning'>Failed</span>")
 				traitorwin = 0
 			count++
 
-		if(traitorwin)
+		if (traitorwin)
 			to_chat(world, "<B>The traitor was successful!<B>")
 		else
 			to_chat(world, "<B>The traitor has failed!<B>")
@@ -114,7 +114,7 @@
 	set category = "Abomination"
 	// This is a pretty shitty way to do this. Should use the spell_holder method from Wizard mode
 	/*
-	if(!usr.incorporeal_move)
+	if (!usr.incorporeal_move)
 		usr.sight |= SEE_MOBS
 		usr.sight |= SEE_OBJS
 		usr.sight |= SEE_TURFS
@@ -133,9 +133,9 @@
 /client/proc/vile_ressurection()
 	set name = "Vile Ressurection"
 	set category = "Abomination"
-	if(src.mob.stat != 2 || !src.mob)
+	if (src.mob.stat != 2 || !src.mob)
 		return
-	if(ticker.mode:respawns > 0)
+	if (ticker.mode:respawns > 0)
 		// spawn a new body
 		ticker.mode:respawns -= 1
 	else
@@ -144,7 +144,7 @@
 /client/proc/defile_corpse(var/mob/living/carbon/human/H in view())
 	set name = "Defile Corpse"
 	set category = "Abomination"
-	if(istype(H, /mob/living/carbon/human))
+	if (istype(H, /mob/living/carbon/human))
 		var/datum/game_mode/ruby/rmode = ticker.mode
 		rmode.killed.Add(H)
 		ticker.mode:respawns += 1
@@ -156,9 +156,9 @@
 	set name = "Summon Weapon"
 	set category = "Abomination"
 
-	for(var/obj/item/weapon/rubyweapon/w in world)
-		if(istype(w, /obj/item/weapon/rubyweapon))
-			if(istype(w.loc, /mob))
+	for (var/obj/item/weapon/rubyweapon/w in world)
+		if (istype(w, /obj/item/weapon/rubyweapon))
+			if (istype(w.loc, /mob))
 				var/mob/M = w.loc
 				M.drop_item()
 				w.forceMove(usr.loc)
@@ -173,8 +173,8 @@
 	set category = "Abomination"
 	set desc = "Everything must come to an end. After you have freed them, you must free yourself."
 
-	for(var/mob/living/carbon/human/H in player_list)
-		if(!H.client || H.client == src)
+	for (var/mob/living/carbon/human/H in player_list)
+		if (!H.client || H.client == src)
 			continue
 		to_chat(src, "Your work is not done. You will not find release until they are all free.")
 		return
@@ -188,8 +188,8 @@
 
 	var/list/candidates = list()
 
-	for(var/mob/living/carbon/human/H in player_list)
-		if(!H.client || H.client == src)
+	for (var/mob/living/carbon/human/H in player_list)
+		if (!H.client || H.client == src)
 			continue
 		//if(!H.client) continue
 		candidates.Add(H)
@@ -198,7 +198,7 @@
 
 	var/mob/living/carbon/human/H = pick(candidates)
 
-	if(!H)
+	if (!H)
 		return
 
 	var/filename="crmap[ckey].tmp"
@@ -218,7 +218,7 @@
 		html=""
 		sleep(-1)
 		//for (var/x=H.x-5,x<=H.x+5,x++)
-		for(var/x=H.x-3, x<=H.x+3, x++)
+		for (var/x=H.x-3, x<=H.x+3, x++)
 			//Turfs
 			var/turf/T=locate(x,y,H.z)
 			if (!T)
@@ -275,16 +275,16 @@
 	var/mob/owner
 
 	proc/check_owner()
-		if(!owner)
+		if (!owner)
 			sleep(300)
-			if(!owner)
+			if (!owner)
 				spawn() search_for_new_owner()
 		else
 			spawn(1800) check_owner()
 
 	proc/search_for_new_owner()
 		var/list/possible_owners = list()
-		for(var/mob/living/carbon/human/H in mob_list)
+		for (var/mob/living/carbon/human/H in mob_list)
 			possible_owners.Add(H)
 
 		var/mob/living/carbon/human/H = pick(possible_owners)

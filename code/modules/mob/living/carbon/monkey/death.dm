@@ -26,14 +26,14 @@
 
 
 /mob/living/carbon/monkey/death(gibbed)
-	if(stat == DEAD)
+	if (stat == DEAD)
 		return
-	if(healths)
+	if (healths)
 		healths.icon_state = "health5"
 	stat = DEAD
 
-	if(!gibbed)
-		for(var/mob/O in viewers(src, null))
+	if (!gibbed)
+		for (var/mob/O in viewers(src, null))
 			O.show_message("<b>The [name]</b> lets out a faint chimper as it collapses and stops moving...", 1) //ded -- Urist
 
 	update_canmove()

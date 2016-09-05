@@ -3,7 +3,7 @@
 
 	track.cameras.len = 0
 
-	if(src.stat == 2)
+	if (src.stat == 2)
 		return
 
 	var/list/L = list()
@@ -48,39 +48,39 @@
 	track.humans.len = 0
 	track.others.len = 0
 
-	if(usr.stat == 2)
+	if (usr.stat == 2)
 		return list()
 
-	for(var/mob/living/M in mob_list)
+	for (var/mob/living/M in mob_list)
 		// Easy checks first.
 		// Don't detect mobs on Centcom. Since the wizard den is on Centcomm, we only need this.
 		var/turf/T = get_turf(M)
-		if(!T)
+		if (!T)
 			continue
-		if(T.z == map.zCentcomm)
+		if (T.z == map.zCentcomm)
 			continue
-		if(T.z > 6)
+		if (T.z > 6)
 			continue
-		if(M == usr)
+		if (M == usr)
 			continue
-		if(M.invisibility)//cloaked
+		if (M.invisibility)//cloaked
 			continue
-		if(M.digitalcamo)
+		if (M.digitalcamo)
 			continue
 
 		// Human check
 		var/human = 0
-		if(istype(M, /mob/living/carbon/human))
+		if (istype(M, /mob/living/carbon/human))
 			human = 1
 			var/mob/living/carbon/human/H = M
 			//Cameras can't track people wearing an agent card or a ninja hood.
-			if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
+			if (H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
 				continue
 		//Skipping aliens because shit, that's OP
-		if(isalien(M))
+		if (isalien(M))
 			continue
 		 // Now, are they viewable by a camera? (This is last because it's the most intensive check)
-		if(!near_camera(M))
+		if (!near_camera(M))
 			continue
 
 		var/name = M.name
@@ -90,7 +90,7 @@
 		else
 			track.names.Add(name)
 			track.namecounts[name] = 1
-		if(human)
+		if (human)
 			track.humans[name] = M
 		else
 			track.others[name] = M
@@ -102,7 +102,7 @@
 	set name = "track"
 	set hidden = 1 //Don't display it on the verb lists. This verb exists purely so you can type "track Oldman Robustin" and follow his ass
 
-	if(!target_name)
+	if (!target_name)
 		return
 
 	var/mob/target = (isnull(track.humans[target_name]) ? track.others[target_name] : track.humans[target_name])
@@ -110,15 +110,15 @@
 	ai_actual_track(target)
 
 /mob/living/silicon/ai/proc/open_nearest_door(mob/living/target as mob)
-	if(!istype(target))
+	if (!istype(target))
 		return
 	spawn(0)
-		if(istype(target, /mob/living/carbon/human))
+		if (istype(target, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = target
-			if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
+			if (H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
 				to_chat(src, "Unable to locate an airlock")
 				return
-			if(H.digitalcamo)
+			if (H.digitalcamo)
 				to_chat(src, "Unable to locate an airlock")
 				return
 		if (!near_camera(target))
@@ -126,34 +126,34 @@
 			return
 		var/obj/machinery/door/airlock/tobeopened
 		var/dist = -1
-		for(var/obj/machinery/door/airlock/D in range(3,target))
-			if(!D.density)
+		for (var/obj/machinery/door/airlock/D in range(3,target))
+			if (!D.density)
 				continue
-			if(dist < 0)
+			if (dist < 0)
 				dist = get_dist(D, target)
 //				to_chat(world, dist)
 				tobeopened = D
 			else
-				if(dist > get_dist(D, target))
+				if (dist > get_dist(D, target))
 					dist = get_dist(D, target)
 //					to_chat(world, dist)
 					tobeopened = D
 //					to_chat(world, "found [tobeopened.name] closer")
 				else
 //					to_chat(world, "[D.name] not close enough | [get_dist(D, target)] | [dist]")
-		if(tobeopened)
-			switch(alert(src, "Do you want to open \the [tobeopened] for [target]?","Doorknob_v2a.exe","Yes","No"))
-				if("Yes")
+		if (tobeopened)
+			switch (alert(src, "Do you want to open \the [tobeopened] for [target]?","Doorknob_v2a.exe","Yes","No"))
+				if ("Yes")
 					var/nhref = "src=\ref[tobeopened];aiEnable=7"
 					tobeopened.Topic(nhref, params2list(nhref), tobeopened, 1)
 					to_chat(src, "<span class='notice'>You've opened \the [tobeopened] for [target].</span>")
-				if("No")
+				if ("No")
 					to_chat(src, "<span class='warning'>You deny the request.</span>")
 		else
 			to_chat(src, "<span class='warning'>You've failed to open an airlock for [target]</span>")
 		return
 /mob/living/silicon/ai/proc/ai_actual_track(mob/living/target as mob)
-	if(!istype(target))
+	if (!istype(target))
 		return
 	var/mob/living/silicon/ai/U = usr
 
@@ -169,16 +169,16 @@
 				return
 			if (istype(target, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = target
-				if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
+				if (H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
 					to_chat(U, "Follow camera mode terminated.")
 					U.cameraFollow = null
 					return
-				if(H.digitalcamo)
+				if (H.digitalcamo)
 					to_chat(U, "Follow camera mode terminated.")
 					U.cameraFollow = null
 					return
 
-			if(istype(target.loc,/obj/effect/dummy))
+			if (istype(target.loc,/obj/effect/dummy))
 				to_chat(U, "Follow camera mode ended.")
 				U.cameraFollow = null
 				return
@@ -188,7 +188,7 @@
 				sleep(100)
 				continue
 
-			if(U.eyeobj)
+			if (U.eyeobj)
 				U.eyeobj.forceMove(get_turf(target))
 			else
 				view_core()
@@ -198,11 +198,11 @@
 /proc/near_camera(var/mob/living/M)
 	if (!isturf(M.loc))
 		return 0
-	if(isrobot(M))
+	if (isrobot(M))
 		var/mob/living/silicon/robot/R = M
-		if(!(R.camera && R.camera.can_use()) && !cameranet.checkCameraVis(M))
+		if (!(R.camera && R.camera.can_use()) && !cameranet.checkCameraVis(M))
 			return 0
-	else if(!cameranet.checkCameraVis(M))
+	else if (!cameranet.checkCameraVis(M))
 		return 0
 	return 1
 

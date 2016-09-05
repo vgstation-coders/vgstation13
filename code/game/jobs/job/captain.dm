@@ -17,15 +17,15 @@
 	pdatype=/obj/item/device/pda/captain
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)
+		if (!H)
 			return 0
 		H.equip_or_collect(new /obj/item/device/radio/headset/heads/captain(H), slot_ears)
-		switch(H.backbag)
-			if(2)
+		switch (H.backbag)
+			if (2)
 				H.equip_or_collect(new /obj/item/weapon/storage/backpack/captain(H), slot_back)
-			if(3)
+			if (3)
 				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_cap(H), slot_back)
-			if(4)
+			if (4)
 				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		var/obj/item/clothing/under/U = new /obj/item/clothing/under/rank/captain(H)
@@ -35,7 +35,7 @@
 		H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
 		H.equip_or_collect(new /obj/item/clothing/head/caphat(H), slot_head)
 		H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
-		if(H.backbag == 1)
+		if (H.backbag == 1)
 			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/ids(H))
 			H.put_in_hand(GRASP_LEFT_HAND, new /obj/item/weapon/gun/energy/gun(H))
 		else
@@ -83,21 +83,21 @@
 	pdaslot=slot_l_store
 	pdatype=/obj/item/device/pda/heads/hop
 	equip(var/mob/living/carbon/human/H)
-		if(!H)
+		if (!H)
 			return 0
 		H.equip_or_collect(new /obj/item/device/radio/headset/heads/hop(H), slot_ears)
-		switch(H.backbag)
-			if(2)
+		switch (H.backbag)
+			if (2)
 				H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
-			if(3)
+			if (3)
 				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
-			if(4)
+			if (4)
 				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/head_of_personnel(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
 		//H.equip_or_collect(new /obj/item/device/pda/heads/hop(H), slot_belt)
-		if(H.backbag == 1)
+		if (H.backbag == 1)
 			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/ids(H))
 		else
 			H.equip_or_collect(new /obj/item/weapon/storage/box/ids(H.back), slot_in_backpack)

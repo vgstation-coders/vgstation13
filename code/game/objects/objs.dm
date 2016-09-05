@@ -34,10 +34,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		T.soft_add_holomap(src)
 
 /obj/Destroy()
-	for(var/mob/user in _using)
+	for (var/mob/user in _using)
 		user.unset_machine()
 
-	if(src in processing_objects)
+	if (src in processing_objects)
 		processing_objects -= src
 
 	..()
@@ -45,20 +45,20 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/item/proc/is_used_on(obj/O, mob/user)
 
 /obj/recycle(var/datum/materials/rec)
-	if(..())
+	if (..())
 		return 1
 	return w_type
 
 /*
 /obj/melt()
 	var/obj/effect/decal/slag/slag=locate(/obj/effect/decal/slag) in get_turf(src)
-	if(!slag)
+	if (!slag)
 		slag = new(get_turf(src))
 	slag.slaggify(src)
 */
 
 /obj/proc/is_conductor(var/siemens_min = 0.5)
-	if(src.siemens_coefficient >= siemens_min)
+	if (src.siemens_coefficient >= siemens_min)
 		return 1
 	return
 
@@ -81,19 +81,19 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	processing_objects.Remove(src)
 
 /obj/assume_air(datum/gas_mixture/giver)
-	if(loc)
+	if (loc)
 		return loc.assume_air(giver)
 	else
 		return null
 
 /obj/remove_air(amount)
-	if(loc)
+	if (loc)
 		return loc.remove_air(amount)
 	else
 		return null
 
 /obj/return_air()
-	if(loc)
+	if (loc)
 		return loc.return_air()
 	else
 		return null
@@ -103,7 +103,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	//		null if object handles breathing logic for lifeform
 	//		datum/air_group to tell lifeform to process using that breath return
 	//DEFAULT: Take air from turf to give to have mob process
-	if(breath_request>0)
+	if (breath_request>0)
 		return remove_air(breath_request)
 	else
 		return null
@@ -112,24 +112,24 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	return
 
 /obj/proc/updateUsrDialog()
-	if(in_use)
+	if (in_use)
 		var/is_in_use = 0
-		if(_using && _using.len)
+		if (_using && _using.len)
 			var/list/nearby = viewers(1, src) + loc //List of nearby things includes the location - allows you to call this proc on items and such
-			for(var/mob/M in _using) // Only check things actually messing with us.
+			for (var/mob/M in _using) // Only check things actually messing with us.
 				if (!M || !M.client || M.machine != src)
 					_using.Remove(M)
 					continue
 
-				if(!M in nearby) // NOT NEARBY
+				if (!M in nearby) // NOT NEARBY
 					// AIs/Robots can do shit from afar.
 					if (isAI(M) || isrobot(M))
 						is_in_use = 1
 						src.attack_ai(M)
 
 					// check for TK users
-					if(M.mutations && M.mutations.len)
-						if(M_TK in M.mutations)
+					if (M.mutations && M.mutations.len)
+						if (M_TK in M.mutations)
 							is_in_use = 1
 							src.attack_hand(M, TRUE) // The second param is to make sure brain damage on the user doesn't cause the UI to not update but the action to still happen.
 					else
@@ -143,16 +143,16 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/proc/updateDialog()
 	// Check that people are actually using the machine. If not, don't update anymore.
-	if(in_use)
+	if (in_use)
 		var/list/nearby = viewers(1, src)
 		var/is_in_use = 0
-		for(var/mob/M in _using) // Only check things actually messing with us.
+		for (var/mob/M in _using) // Only check things actually messing with us.
 			// Not actually using the fucking thing?
 			if (!M || !M.client || M.machine != src)
 				_using.Remove(M)
 				continue
 			// Not robot or AI, and not nearby?
-			if(!isAI(M) && !isrobot(M) && !(M in nearby))
+			if (!isAI(M) && !isrobot(M) && !(M in nearby))
 				_using.Remove(M)
 				continue
 			is_in_use = 1
@@ -163,10 +163,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	return
 
 /obj/singularity_act()
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
 	ex_act(1)
-	if(src)
+	if (src)
 		qdel(src)
 	return 2
 
@@ -174,8 +174,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	return qdel(src)
 
 /obj/singularity_pull(S, current_size)
-	if(anchored)
-		if(current_size >= STAGE_FIVE)
+	if (anchored)
+		if (current_size >= STAGE_FIVE)
 			anchored = 0
 			step_towards(src, S)
 	else
@@ -207,13 +207,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/proc/linkMenu(var/obj/O)
 	var/dat=""
-	if(canLink(O, list()))
+	if (canLink(O, list()))
 		dat += " <a href='?src=\ref[src];link=1'>\[Link\]</a> "
 	return dat
 
 /obj/proc/format_tag(var/label,var/varname, var/act="set_tag")
 	var/value = vars[varname]
-	if(!value || value=="")
+	if (!value || value=="")
 		value="-----"
 	return "<b>[label]:</b> <a href=\"?src=\ref[src];[act]=[varname]\">[value]</a>"
 
@@ -221,16 +221,16 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/update_multitool_menu(mob/user as mob)
 	var/obj/item/device/multitool/P = get_multitool(user)
 
-	if(!istype(P))
+	if (!istype(P))
 		return 0
 
 	// Cloning stuff goes here.
-	if(P.clone && P.buffer) // Cloning is on.
-		if(!canClone(P.buffer))
+	if (P.clone && P.buffer) // Cloning is on.
+		if (!canClone(P.buffer))
 			to_chat(user, "<span class='attack'>A red light flashes on \the [P]; you cannot clone to this device!</span>")
 			return
 
-		if(!clone(P.buffer))
+		if (!clone(P.buffer))
 			to_chat(user, "<span class='attack'>A red light flashes on \the [P]; something went wrong when cloning to this device!</span>")
 			return
 
@@ -258,20 +258,20 @@ a {
 		<h3>[name]</h3>
 "}
 	dat += multitool_menu(user,P)
-	if(P)
-		if(P.buffer)
+	if (P)
+		if (P.buffer)
 			var/id = null
-			if(istype(P.buffer, /obj/machinery/telecomms))
+			if (istype(P.buffer, /obj/machinery/telecomms))
 				var/obj/machinery/telecomms/buffer = P.buffer//Casting is better than using colons
 				id = buffer.id
-			else if(P.buffer.vars["id_tag"])//not doing in vars here incase the var is empty, it'd show ()
+			else if (P.buffer.vars["id_tag"])//not doing in vars here incase the var is empty, it'd show ()
 				id = P.buffer:id_tag//sadly, : is needed
 
 			dat += "<p><b>MULTITOOL BUFFER:</b> [P.buffer] [id ? "([id])" : ""]"//If you can't into the ? operator, that will make it not display () if there's no ID.
 
 			dat += linkMenu(P.buffer)
 
-			if(P.buffer)
+			if (P.buffer)
 				dat += "<a href='?src=\ref[src];flush=1'>\[Flush\]</a>"
 			dat += "</p>"
 		else
@@ -285,11 +285,11 @@ a {
 	return
 
 /mob/proc/unset_machine()
-	if(machine)
-		if(machine._using)
+	if (machine)
+		if (machine._using)
 			machine._using -= src
 
-			if(!machine._using.len)
+			if (!machine._using.len)
 				machine._using = null
 
 		machine = null
@@ -297,32 +297,32 @@ a {
 /mob/proc/set_machine(const/obj/O)
 	unset_machine()
 
-	if(istype(O))
+	if (istype(O))
 		machine = O
 
-		if(!machine._using)
+		if (!machine._using)
 			machine._using = new
 
 		machine._using += src
 		machine.in_use = 1
 
 /obj/proc/wrenchAnchor(var/mob/user) //proc to wrench an object that can be secured
-	for(var/obj/other in loc) //ensure multiple things aren't anchored in one place
-		if(other.anchored == 1 && other.density == 1 && density && !anchored && !(other.flags & ON_BORDER))
+	for (var/obj/other in loc) //ensure multiple things aren't anchored in one place
+		if (other.anchored == 1 && other.density == 1 && density && !anchored && !(other.flags & ON_BORDER))
 			to_chat(user, "\The [other] is already anchored in this location.")
 			return -1
-	if(!anchored)
-		if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
-			if(istype(src.loc, /turf/simulated/shuttle) && !can_wrench_shuttle()) //If on the shuttle and not wrenchable to shuttle
+	if (!anchored)
+		if (!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
+			if (istype(src.loc, /turf/simulated/shuttle) && !can_wrench_shuttle()) //If on the shuttle and not wrenchable to shuttle
 				to_chat(user, "<span class = 'notice'>You can't secure \the [src] to this!</span>")
 				return -1
-			if(istype(src.loc, /turf/space)) //if on a space tile
+			if (istype(src.loc, /turf/space)) //if on a space tile
 				to_chat(user, "<span class = 'notice'>You can't secure \the [src] to space!</span>")
 				return -1
 	user.visible_message(	"[user] begins to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.",
 							"You begin to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.")
 	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
-	if(do_after(user, src, 30))
+	if (do_after(user, src, 30))
 		anchored = !anchored
 		user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
 								"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
@@ -332,7 +332,7 @@ a {
 
 /obj/item/proc/updateSelfDialog()
 	var/mob/M = src.loc
-	if(istype(M) && M.client && M.machine == src)
+	if (istype(M) && M.client && M.machine == src)
 		src.attack_self(M)
 
 
@@ -361,7 +361,7 @@ a {
  * Called when a mob inside this obj's contents logs out.
  */
 /obj/proc/on_logout(var/mob/M)
-	if(isobj(loc))
+	if (isobj(loc))
 		var/obj/location = loc
 		location.on_logout(M)
 
@@ -369,7 +369,7 @@ a {
  * Called when a mob inside this obj's contents logs in.
  */
 /obj/proc/on_login(var/mob/M)
-	if(isobj(loc))
+	if (isobj(loc))
 		var/obj/location = loc
 		location.on_login(M)
 

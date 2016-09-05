@@ -19,16 +19,16 @@
 //	to_chat(world, "Post: [freq]: [key]=[value], [key2]=[value2]")
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
 
-	if(!frequency)
+	if (!frequency)
 		return
 
 	var/datum/signal/signal = getFromPool(/datum/signal)
 	signal.source = src
 	signal.transmission_method = 1
 	signal.data[key] = value
-	if(key2)
+	if (key2)
 		signal.data[key2] = value2
-	if(key3)
+	if (key3)
 		signal.data[key3] = value3
 
 	frequency.post_signal(src, signal, filter = s_filter)
@@ -57,10 +57,10 @@
 /obj/item/radio/integrated/beepsky/New()
 	..()
 	spawn(5)
-		if(radio_controller)
+		if (radio_controller)
 			radio_controller.add_object(src, control_freq, filter = RADIO_SECBOT)
 /obj/item/radio/integrated/beepsky/Destroy()
-	if(radio_controller)
+	if (radio_controller)
 		radio_controller.remove_object(src, control_freq)
 	..()
 // receive radio signals
@@ -72,17 +72,17 @@
 
 	/*
 	to_chat(world, "recvd:[P] : [signal.source]")
-	for(var/d in signal.data)
+	for (var/d in signal.data)
 		to_chat(world, "- [d] = [signal.data[d]]")
 	*/
 	if (signal.data["type"] == "secbot")
-		if(!botlist)
+		if (!botlist)
 			botlist = new()
 
-		if(!(signal.source in botlist))
+		if (!(signal.source in botlist))
 			botlist += signal.source
 
-		if(active == signal.source)
+		if (active == signal.source)
 			var/list/b = signal.data
 			botstatus = b.Copy()
 
@@ -92,24 +92,24 @@
 	..()
 	var/obj/item/device/pda/PDA = src.hostpda
 
-	switch(href_list["op"])
+	switch (href_list["op"])
 
-		if("control")
+		if ("control")
 			active = locate(href_list["bot"])
 			post_signal(control_freq, "command", "bot_status", "active", active, s_filter = RADIO_SECBOT)
 
-		if("scanbots")		// find all bots
+		if ("scanbots")		// find all bots
 			botlist = null
 			post_signal(control_freq, "command", "bot_status", s_filter = RADIO_SECBOT)
 
-		if("botlist")
+		if ("botlist")
 			active = null
 
-		if("stop", "go")
+		if ("stop", "go")
 			post_signal(control_freq, "command", href_list["op"], "active", active, s_filter = RADIO_SECBOT)
 			post_signal(control_freq, "command", "bot_status", "active", active, s_filter = RADIO_SECBOT)
 
-		if("summon")
+		if ("summon")
 			post_signal(control_freq, "command", "summon", "active", active, "target", get_turf(PDA) , s_filter = RADIO_SECBOT)
 			post_signal(control_freq, "command", "bot_status", "active", active, s_filter = RADIO_SECBOT)
 	PDA.cartridge.unlock()
@@ -127,14 +127,14 @@
 /obj/item/radio/integrated/mule/New()
 	..()
 	spawn(5)
-		if(radio_controller)
+		if (radio_controller)
 			radio_controller.add_object(src, control_freq, filter = RADIO_MULEBOT)
 			radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
 			spawn(10)
 				post_signal(beacon_freq, "findbeacon", "delivery", s_filter = RADIO_NAVBEACONS)
 
 /obj/item/radio/integrated/mule/Destroy()
-	if(radio_controller)
+	if (radio_controller)
 		radio_controller.remove_object(src, control_freq)
 		radio_controller.remove_object(src, beacon_freq)
 	..()
@@ -149,75 +149,75 @@
 
 	/*
 	to_chat(world, "recvd:[P] : [signal.source]")
-	for(var/d in signal.data)
+	for (var/d in signal.data)
 		to_chat(world, "- [d] = [signal.data[d]]")
 	*/
-	if(signal.data["type"] == "mulebot")
-		if(!botlist)
+	if (signal.data["type"] == "mulebot")
+		if (!botlist)
 			botlist = new()
 
-		if(!(signal.source in botlist))
+		if (!(signal.source in botlist))
 			botlist += signal.source
 
-		if(active == signal.source)
+		if (active == signal.source)
 			var/list/b = signal.data
 			botstatus = b.Copy()
 
-	else if(signal.data["beacon"])
-		if(!beacons)
+	else if (signal.data["beacon"])
+		if (!beacons)
 			beacons = new()
 
 		beacons[signal.data["beacon"] ] = signal.source
 
 
-//		if(istype(P)) P.updateSelfDialog()
+//		if (istype(P)) P.updateSelfDialog()
 
 /obj/item/radio/integrated/mule/Topic(href, href_list)
 	..()
 	var/obj/item/device/pda/PDA = src.hostpda
 	var/cmd = "command"
-	if(active)
+	if (active)
 		cmd = "command [active.suffix]"
 
-	switch(href_list["op"])
+	switch (href_list["op"])
 
-		if("control")
+		if ("control")
 			active = locate(href_list["bot"])
 			post_signal(control_freq, cmd, "bot_status", s_filter = RADIO_MULEBOT)
 
-		if("scanbots")		// find all bots
+		if ("scanbots")		// find all bots
 			botlist = null
 			post_signal(control_freq, "command", "bot_status", s_filter = RADIO_MULEBOT)
 
-		if("botlist")
+		if ("botlist")
 			active = null
 
 
-		if("unload")
+		if ("unload")
 			post_signal(control_freq, cmd, "unload", s_filter = RADIO_MULEBOT)
 			post_signal(control_freq, cmd, "bot_status", s_filter = RADIO_MULEBOT)
-		if("setdest")
-			if(beacons)
+		if ("setdest")
+			if (beacons)
 				var/dest = input("Select Bot Destination", "Mulebot [active.suffix] Interlink", active.destination) as null|anything in beacons
-				if(dest)
+				if (dest)
 					post_signal(control_freq, cmd, "target", "destination", dest, s_filter = RADIO_MULEBOT)
 					post_signal(control_freq, cmd, "bot_status", s_filter = RADIO_MULEBOT)
 
-		if("retoff")
+		if ("retoff")
 			post_signal(control_freq, cmd, "autoret", "value", 0, s_filter = RADIO_MULEBOT)
 			post_signal(control_freq, cmd, "bot_status", s_filter = RADIO_MULEBOT)
-		if("reton")
+		if ("reton")
 			post_signal(control_freq, cmd, "autoret", "value", 1, s_filter = RADIO_MULEBOT)
 			post_signal(control_freq, cmd, "bot_status", s_filter = RADIO_MULEBOT)
 
-		if("pickoff")
+		if ("pickoff")
 			post_signal(control_freq, cmd, "autopick", "value", 0, s_filter = RADIO_MULEBOT)
 			post_signal(control_freq, cmd, "bot_status", s_filter = RADIO_MULEBOT)
-		if("pickon")
+		if ("pickon")
 			post_signal(control_freq, cmd, "autopick", "value", 1, s_filter = RADIO_MULEBOT)
 			post_signal(control_freq, cmd, "bot_status", s_filter = RADIO_MULEBOT)
 
-		if("stop", "go", "home")
+		if ("stop", "go", "home")
 			post_signal(control_freq, cmd, href_list["op"], s_filter = RADIO_MULEBOT)
 			post_signal(control_freq, cmd, "bot_status", s_filter = RADIO_MULEBOT)
 	PDA.cartridge.unlock()
@@ -237,7 +237,7 @@
 
 /obj/item/radio/integrated/signal/New()
 	..()
-	if(radio_controller)
+	if (radio_controller)
 		initialize()
 
 /obj/item/radio/integrated/signal/initialize()
@@ -254,7 +254,7 @@
 /obj/item/radio/integrated/signal/proc/send_signal(message="ACTIVATE")
 
 
-	if(last_transmission && world.time < (last_transmission + 5))
+	if (last_transmission && world.time < (last_transmission + 5))
 		return
 	last_transmission = world.time
 

@@ -9,10 +9,10 @@
 	return priority | get_all_slots() | held_items //| operator ensures there are no duplicates
 
 /mob/living/carbon/proc/get_internals_tank()
-	for(var/obj/item/weapon/tank/T in internals_candidates())
+	for (var/obj/item/weapon/tank/T in internals_candidates())
 		//We found a tank!
-		if(istype(T, /obj/item/weapon/tank/jetpack)) //Oh... But it's a jetpack... We'll use it if we have to, but let's see if we find something better first
-			if(!.) //We already had another jetpack
+		if (istype(T, /obj/item/weapon/tank/jetpack)) //Oh... But it's a jetpack... We'll use it if we have to, but let's see if we find something better first
+			if (!.) //We already had another jetpack
 				. = T
 			continue
 		else //It's the real deal!
@@ -20,16 +20,16 @@
 
 // Set internals on or off.
 /mob/living/carbon/proc/toggle_internals(var/mob/living/user, var/obj/item/weapon/tank/T)
-	if(user.incapacitated())
+	if (user.incapacitated())
 		return
 	
-	if(internal)
+	if (internal)
 		internal.add_fingerprint(user)
 		internal = null
-		if(internals) //This is the HUD icon, these variables have WAY too similar names
+		if (internals) //This is the HUD icon, these variables have WAY too similar names
 			internals.icon_state = "internal0"
-		if(user != src)
-			if(!user.isGoodPickpocket())
+		if (user != src)
+			if (!user.isGoodPickpocket())
 				visible_message("<span class='warning'>\The [user] shuts off \the [src]'s internals!</span>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has disabled [src.name]'s ([src.ckey]) internals.</font>")
 			src.attack_log += text("\[[time_stamp()]\] <font color='red'>Internals disabled by [user.name] ([user.ckey]).</font>")
@@ -38,30 +38,30 @@
 			to_chat(user, "<span class='notice'>No longer running on internals.</span>")
 		return 1
 	else
-		if(!has_breathing_mask())
-			if(user != src)
+		if (!has_breathing_mask())
+			if (user != src)
 				to_chat(user, "<span class='warning'>\The [src] is not wearing a breathing mask.</span>")
 			else
 				to_chat(user, "<span class='warning'>You are not wearing a breathing mask.</span>")
 			return
-		if(!T || !T.Adjacent()) //We can be given a specific tank to connect to
+		if (!T || !T.Adjacent()) //We can be given a specific tank to connect to
 			T = get_internals_tank()
-			if(!T)
+			if (!T)
 				var/breathes = OXYGEN
-				if(ishuman(src))
+				if (ishuman(src))
 					var/mob/living/carbon/human/H = src
 					breathes = H.species.breath_type
-				if(user != src)
+				if (user != src)
 					to_chat(user, "<span class='warning'>\The [src] does not have \an [breathes] tank.</span>")
 				else
 					to_chat(user, "<span class='warning'>You don't have \an [breathes] tank.</span>")
 		internal = T
 		T.add_fingerprint(user)
-		if(internals)
+		if (internals)
 			internals.icon_state = "internal1"
-		if(user != src)
+		if (user != src)
 			var/gas_contents = T.air_contents.english_contents_list()
-			if(!user.isGoodPickpocket())
+			if (!user.isGoodPickpocket())
 				to_chat(user, "<span class='notice'>\The [user] has enabled [src]'s internals.</span>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has enabled [src.name]'s ([src.ckey]) internals (Gas contents: [gas_contents]).</font>")
 			src.attack_log += text("\[[time_stamp()]\] <font color='red'>Internals enabled by [user.name] ([user.ckey]) (Gas contents: [gas_contents]).</font>")

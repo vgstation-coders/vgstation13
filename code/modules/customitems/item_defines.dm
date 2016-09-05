@@ -103,7 +103,7 @@ hi
 	icon_state = "victor_kaminsky_1"
 
 /obj/item/fluff/victor_kaminsky_1/attack_self(mob/user as mob)
-	for(var/mob/O in viewers(user, null))
+	for (var/mob/O in viewers(user, null))
 		O.show_message("[user] shows you: [bicon(src)] [name].", 1)
 	src.add_fingerprint(user)
 
@@ -184,8 +184,8 @@ hi
 	item_state = "purplecomb"
 
 	attack_self(mob/user)
-		if(user.r_hand == src || user.l_hand == src)
-			for(var/mob/O in viewers(user, null))
+		if (user.r_hand == src || user.l_hand == src)
+			for (var/mob/O in viewers(user, null))
 				O.show_message(text("<span class='warning'>[] uses [] to comb their hair with incredible style and sophistication. What a guy.</span>", user, src), 1)
 		return
 
@@ -299,7 +299,7 @@ hi
 	if (user.ckey != "nerezza") //Because this can end up in the wrong hands, let's make it useless for them!
 		to_chat(user, "<span class='notice'>You click \the [src] but get no reaction. Must be dead.</span>")
 		return
-	if(!reagents.total_volume)
+	if (!reagents.total_volume)
 		to_chat(user, "<span class='warning'>\The [src] is empty.</span>")
 		return
 	if (!( istype(M, /mob) ))
@@ -314,17 +314,17 @@ hi
 			to_chat(user, "<span class='notice'>You don't want to contaminate the autoinjector.</span>")
 			return
 		src.reagents.reaction(M, INGEST)
-		if(M.reagents)
+		if (M.reagents)
 			var/trans = reagents.trans_to(M, amount_per_transfer_from_this)
 			to_chat(user, "<span class='notice'>[trans] units injected. [reagents.total_volume] units remaining in \the [src].</span>")
 	return
 
 /obj/item/weapon/reagent_containers/hypospray/fluff/asher_spock_1/examine(mob/user as mob)
 	..()
-	if(user.ckey != "nerezza")
+	if (user.ckey != "nerezza")
 		return //Only the owner knows how to examine the contents.
-	if(reagents && reagents.reagent_list.len)
-		for(var/datum/reagent/R in reagents.reagent_list)
+	if (reagents && reagents.reagent_list.len)
+		for (var/datum/reagent/R in reagents.reagent_list)
 			to_chat(usr, "<span class='notice'>You examine the penlight closely and see that it has [R.volume] units of [R.name] stored.</span>")
 	else
 		to_chat(usr, "<span class='notice'>You examine the penlight closely and see that it is currently empty.</span>")
@@ -599,10 +599,10 @@ hi
 	set category = "Object"
 	set src in usr
 
-	if(usr.incapacitated())
+	if (usr.incapacitated())
 		return 0
 
-	if(src.icon_state == "jane_sid_suit_down")
+	if (src.icon_state == "jane_sid_suit_down")
 		src.color = "jane_sid_suit"
 		to_chat(usr, "You zip up the [src].")
 	else

@@ -29,22 +29,22 @@
 	var/flammin_color = null
 
 /obj/item/weapon/reagent_containers/food/drinks/on_reagent_change()
-	if(gulp_size < 5)
+	if (gulp_size < 5)
 		gulp_size = 5
 	else
 		gulp_size = max(round(reagents.total_volume / 5), 5)
-	if(reagents.has_reagent(BLACKCOLOR))
+	if (reagents.has_reagent(BLACKCOLOR))
 		viewcontents = 0
 	else
 		viewcontents = 1
 
 /obj/item/weapon/reagent_containers/food/drinks/attack_self(mob/user as mob)
-	if(!is_open_container())
+	if (!is_open_container())
 		to_chat(user, "<span class='warning'>You can't, \the [src] is closed.</span>")//Added this here and elsewhere to prevent drinking, etc. from closed drink containers. - Hinaichigo
 
 		return 0
 
-	else if(!src.reagents.total_volume || !src)
+	else if (!src.reagents.total_volume || !src)
 		to_chat(user, "<span class='warning'>\The [src] is empty.<span>")
 		return 0
 
@@ -57,9 +57,9 @@
 	var/fillevel = gulp_size
 
 	//Smashing on someone
-	if(user.a_intent == I_HURT && isGlass && molotov != 1)  //To smash a bottle on someone, the user must be harm intent, the bottle must be out of glass, and we don't want a rag in here
+	if (user.a_intent == I_HURT && isGlass && molotov != 1)  //To smash a bottle on someone, the user must be harm intent, the bottle must be out of glass, and we don't want a rag in here
 
-		if(!M) //This really shouldn't be checked here, but sure
+		if (!M) //This really shouldn't be checked here, but sure
 			return
 
 		force = 15 //Smashing bottles over someoen's head hurts. //todo: check that this isn't overwriting anything it shouldn't be //It was
@@ -70,17 +70,17 @@
 		var/armor_duration = 0 //The more force the bottle has, the longer the duration.
 
 		//Calculating duration and calculating damage.
-		if(ishuman(M))
+		if (ishuman(M))
 
 			var/mob/living/carbon/human/H = M
 			var/headarmor = 0 // Target's head armour
 			armor_block = H.run_armor_check(affecting, "melee") // For normal attack damage
 
 			//If they have a hat/helmet and the user is targeting their head.
-			if(istype(H.head, /obj/item/clothing/head) && affecting == LIMB_HEAD)
+			if (istype(H.head, /obj/item/clothing/head) && affecting == LIMB_HEAD)
 
 				// If their head has an armour value, assign headarmor to it, else give it 0.
-				if(H.head.armor["melee"])
+				if (H.head.armor["melee"])
 					headarmor = H.head.armor["melee"]
 				else
 					headarmor = 0
@@ -93,7 +93,7 @@
 		else
 			//Only humans can have armour, right?
 			armor_block = M.run_armor_check(affecting, "melee")
-			if(affecting == LIMB_HEAD)
+			if (affecting == LIMB_HEAD)
 				armor_duration = duration + force
 		armor_duration /= 10
 
@@ -102,22 +102,22 @@
 
 		// You are going to knock someone out for longer if they are not wearing a helmet.
 		// For drinking glass
-		if(affecting == LIMB_HEAD && istype(M, /mob/living/carbon/))
+		if (affecting == LIMB_HEAD && istype(M, /mob/living/carbon/))
 
 			//Display an attack message.
-			for(var/mob/O in viewers(user, null))
-				if(M != user)
+			for (var/mob/O in viewers(user, null))
+				if (M != user)
 					O.show_message(text("<span class='danger'>[M] has been hit over the head with a [smashtext][src.name], by [user]!</span>"), 1)
 				else
 					O.show_message(text("<span class='danger'>[M] hits \himself with a [smashtext][src.name] on the head!</span>"), 1)
 			//Weaken the target for the duration that we calculated and divide it by 5.
-			if(armor_duration)
+			if (armor_duration)
 				M.apply_effect(min(armor_duration, 10) , WEAKEN) // Never weaken more than a flash!
 
 		else
 			//Default attack message and don't weaken the target.
-			for(var/mob/O in viewers(user, null))
-				if(M != user)
+			for (var/mob/O in viewers(user, null))
+				if (M != user)
 					O.show_message(text("<span class='danger'>[M] has been attacked with a [smashtext][src.name], by [user]!</span>"), 1)
 				else
 					O.show_message(text("<span class='danger'>[M] has attacked himself with a [smashtext][src.name]!</span>"), 1)
@@ -126,14 +126,14 @@
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has attacked [M.name] ([M.ckey]) with a bottle!</font>")
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been smashed with a bottle by [user.name] ([user.ckey])</font>")
 		log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] with a bottle. ([M.ckey])</font>")
-		if(!iscarbon(user))
+		if (!iscarbon(user))
 			M.LAssailant = null
 		else
 			M.LAssailant = user
 
 		//The reagents in the bottle splash all over the target, thanks for the idea Nodrak
-		if(src.reagents)
-			for(var/mob/O in viewers(user, null))
+		if (src.reagents)
+			for (var/mob/O in viewers(user, null))
 				O.show_message(text("<span class='bnotice'>The contents of \the [smashtext][src] splashes all over [M]!</span>"), 1)
 			src.reagents.reaction(M, TOUCH)
 
@@ -142,24 +142,24 @@
 
 		return
 
-	else if(!is_open_container())
+	else if (!is_open_container())
 		to_chat(user, "<span class='warning'>You can't, \the [src] is closed.</span>")//Added this here and elsewhere to prevent drinking, etc. from closed drink containers. - Hinaichigo
 
 		return 0
 
-	else if(!R.total_volume || !R)
+	else if (!R.total_volume || !R)
 		to_chat(user, "<span class='warning'>\The [src] is empty.<span>")
 		return 0
 
-	else if(M == user)
+	else if (M == user)
 		imbibe(user)
 		return 0
 
-	else if(istype(M, /mob/living/carbon/human))
+	else if (istype(M, /mob/living/carbon/human))
 
 		user.visible_message("<span class='danger'>[user] attempts to feed [M] \the [src].</span>", "<span class='danger'>You attempt to feed [M] \the [src].</span>")
 
-		if(!do_mob(user, M))
+		if (!do_mob(user, M))
 			return
 
 		user.visible_message("<span class='danger'>[user] feeds [M] \the [src].</span>", "<span class='danger'>You feed [M] \the [src].</span>")
@@ -168,15 +168,15 @@
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Fed [M.name] by [M.name] ([M.ckey]) Reagents: [reagentlist(src)]</font>")
 		log_attack("<font color='red'>[user.name] ([user.ckey]) fed [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
 
-		if(!iscarbon(user))
+		if (!iscarbon(user))
 			M.LAssailant = null
 		else
 			M.LAssailant = user
 
-		if(reagents.total_volume)
+		if (reagents.total_volume)
 			if (ishuman(M))
 				var/mob/living/carbon/human/H = M
-				if(H.species.chem_flags & NO_DRINK)
+				if (H.species.chem_flags & NO_DRINK)
 					reagents.reaction(get_turf(H), TOUCH)
 					H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
 					reagents.remove_any(gulp_size)
@@ -186,7 +186,7 @@
 			spawn(5)
 				reagents.trans_to(M, gulp_size)
 
-		if(isrobot(user)) //Cyborg modules that include drinks automatically refill themselves, but drain the borg's cell
+		if (isrobot(user)) //Cyborg modules that include drinks automatically refill themselves, but drain the borg's cell
 			var/mob/living/silicon/robot/bro = user
 			bro.cell.use(30)
 			var/refill = R.get_master_reagent_id()
@@ -202,7 +202,7 @@
 	if (!adjacency_flag)
 		return
 
-	if(!reagents)
+	if (!reagents)
 		return
 
 	// Attempt to transfer to our glass
@@ -232,14 +232,14 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/examine(mob/user)
 
-	if(viewcontents)
+	if (viewcontents)
 		..()
 	else
 		to_chat(user, "[bicon(src)] That's \a [src].")
 		to_chat(user, desc)
 		to_chat(user, "<span class='info'>You can't quite make out its content!</span>")
 
-	if(!reagents || reagents.total_volume == 0)
+	if (!reagents || reagents.total_volume == 0)
 		to_chat(user, "<span class='info'>\The [src] is empty!</span>")
 	else if (reagents.total_volume <= src.volume/4)
 		to_chat(user, "<span class='info'>\The [src] is almost empty!</span>")
@@ -256,17 +256,17 @@
 	to_chat(user, "<span  class='notice'>You swallow a gulp of \the [src].[lit ? " It's hot!" : ""]</span>")
 	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
 
-	if(lit)
+	if (lit)
 		user.bodytemperature += 3 * TEMPERATURE_DAMAGE_COEFFICIENT//only the first gulp will be hot.
 		lit = 0
 
-	if(isrobot(user))
+	if (isrobot(user))
 		reagents.remove_any(gulp_size)
 		return 1
-	if(reagents.total_volume)
+	if (reagents.total_volume)
 		if (ishuman(user))
 			var/mob/living/carbon/human/H = user
-			if(H.species.chem_flags & NO_DRINK)
+			if (H.species.chem_flags & NO_DRINK)
 				reagents.reaction(get_turf(H), TOUCH)
 				H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
 				reagents.remove_any(gulp_size)
@@ -358,16 +358,16 @@
 	item_state = "mug_empty"
 /obj/item/weapon/reagent_containers/food/drinks/tea/New()
 	..()
-	switch(pick(1,2,3))
-		if(1)
+	switch (pick(1,2,3))
+		if (1)
 			name = "Duke Purple Tea"
 			desc = "An insult to Duke Purple is an insult to the Space Queen! Any proper gentleman will fight you, if you sully this tea."
 			reagents.add_reagent(TEA, 30)
-		if(2)
+		if (2)
 			name = "Century Tea"
 			desc = "In most cultures, if you leave tea out for months it's considered spoiled. Although this tea is black, we still consider it good for cultural reasons. Taste the century."
 			reagents.add_reagent(REDTEA, 30)
-		if(3)
+		if (3)
 			name = "Hippie Farms Eco-Tea"
 			desc = "Remember when the station was powered by solar panels instead of raping space for its plasma, then creating an engine of destruction? Hippie Farms remembers, maaaan."
 			reagents.add_reagent(GREENTEA, 30)
@@ -411,31 +411,31 @@
 	icon_state = "groans"
 /obj/item/weapon/reagent_containers/food/drinks/groans/New()
 	..()
-	switch(pick(1,2,3,4,5))
-		if(1)
+	switch (pick(1,2,3,4,5))
+		if (1)
 			name = "Groans Soda: Cuban Spice Flavor"
 			desc = "Warning: Long exposure to liquid inside may cause you to follow the rumba beat."
 			icon_state += "_hot"
 			reagents.add_reagent(CONDENSEDCAPSAICIN, 10)
 			reagents.add_reagent(RUM, 10)
-		if(2)
+		if (2)
 			name = "Groans Soda: Icey Cold Flavor"
 			desc = "Cold in a can. Er, bottle."
 			icon_state += "_cold"
 			reagents.add_reagent(FROSTOIL, 10)
 			reagents.add_reagent(ICE, 10)
-		if(3)
+		if (3)
 			name = "Groans Soda: Zero Calories"
 			desc = "Zero Point Calories. That's right, we fit even MORE nutriment in this thing."
 			icon_state += "_nutriment"
 			reagents.add_reagent(NUTRIMENT, 20)
-		if(4)
+		if (4)
 			name = "Groans Soda: Energy Shot"
 			desc = "Warning: The Groans Energy Blend(tm), may be toxic to those without constant exposure to chemical waste. Drink responsibly."
 			icon_state += "_energy"
 			reagents.add_reagent(SUGAR, 10)
 			reagents.add_reagent(CHEMICAL_WASTE, 10)
-		if(5)
+		if (5)
 			name = "Groans Soda: Double Dan"
 			desc = "Just when you thought you've had enough Dan, The 'Double Dan' strikes back with this wonderful mixture of too many flavors. Bring a barf bag, Drink responsibly."
 			icon_state += "_doubledew"
@@ -450,22 +450,22 @@
 	icon_state = "filk"
 /obj/item/weapon/reagent_containers/food/drinks/filk/New()
 	..()
-	switch(pick(1,2,3,4,5))
-		if(1)
+	switch (pick(1,2,3,4,5))
+		if (1)
 			name = "Filk: Chocolate Edition"
 			reagents.add_reagent(HOT_COCO, 10)
-		if(2)
+		if (2)
 			name = "Filk: Scripture Edition"
 			reagents.add_reagent(HOLYWATER, 30)
-		if(3)
+		if (3)
 			name = "Filk: Carribean Edition"
 			reagents.add_reagent(RUM, 30)
-		if(4)
+		if (4)
 			name = "Filk: Sugar Blast Editon"
 			reagents.add_reagent(SUGAR, 30)
 			reagents.add_reagent(RADIUM, 10) // le epik fallout may mays
 			reagents.add_reagent(TOXICWASTE, 10)
-		if(5)
+		if (5)
 			name = "Filk: Pure Filk Edition"
 			reagents.add_reagent(DISCOUNT, 20)
 	reagents.add_reagent(DISCOUNT, 10)
@@ -478,23 +478,23 @@
 	icon_state = "griefo"
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/grifeo/New()
 	..()
-	switch(pick(1,2,3,4,5))
-		if(1)
+	switch (pick(1,2,3,4,5))
+		if (1)
 			name = "Grifeo: Spicy"
 			reagents.add_reagent(CONDENSEDCAPSAICIN, 30)
-		if(2)
+		if (2)
 			name = "Grifeo: Frozen"
 			reagents.add_reagent(FROSTOIL, 30)
-		if(3)
+		if (3)
 			name = "Grifeo: Crystallic"
 			reagents.add_reagent(SUGAR, 20)
 			reagents.add_reagent(ICE, 20)
 			reagents.add_reagent(SPACE_DRUGS, 20)
-		if(4)
+		if (4)
 			name = "Grifeo: Rich"
 			reagents.add_reagent(TEQUILA, 10)
 			reagents.add_reagent(CHEMICAL_WASTE, 10)
-		if(5)
+		if (5)
 			name = "Grifeo: Pure"
 			reagents.add_reagent(DISCOUNT, 20)
 	reagents.add_reagent(DISCOUNT, 10)
@@ -507,20 +507,20 @@
 	icon_state = "groansevil"
 /obj/item/weapon/reagent_containers/food/drinks/groansbanned/New()
 	..()
-	switch(pick(1,2,3,4,5))
-		if(1)
+	switch (pick(1,2,3,4,5))
+		if (1)
 			name = "Groans Banned Soda: Fish Suprise"
 			reagents.add_reagent(CARPOTOXIN, 10)
-		if(2)
+		if (2)
 			name = "Groans Banned Soda: Bitter Suprise"
 			reagents.add_reagent(TOXIN, 20)
-		if(3)
+		if (3)
 			name = "Groans Banned Soda: Sour Suprise"
 			reagents.add_reagent(PACID, 20)
-		if(4)
+		if (4)
 			name = "Groans Banned Soda: Sleepy Suprise"
 			reagents.add_reagent(STOXIN, 10)
-		if(5)
+		if (5)
 			name = "Groans Banned Soda: Quadruple Dan"
 			reagents.add_reagent(DISCOUNT, 40)
 	reagents.add_reagent(DISCOUNT, 10)
@@ -624,7 +624,7 @@
 	var/list/open_sounds = list('sound/effects/can_open1.ogg', 'sound/effects/can_open2.ogg', 'sound/effects/can_open3.ogg')
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attack_self(mob/user as mob)
-	if(!is_open_container())
+	if (!is_open_container())
 		to_chat(user, "You pull back the tab of \the [src] with a satisfying pop.")
 		flags |= OPENCONTAINER
 		src.verbs |= /obj/item/weapon/reagent_containers/verb/empty_contents
@@ -634,10 +634,10 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if(iswirecutter(W))
+	if (iswirecutter(W))
 		to_chat(user, "You cut out the top and bottom of \the [src] with \the [W].")
 		playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
-		if(src.loc == user)
+		if (src.loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/aluminum_cylinder/I = new (get_turf(user))
 			user.put_in_hands(I)
@@ -787,7 +787,7 @@
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/sillycup/on_reagent_change()
-	if(reagents.total_volume)
+	if (reagents.total_volume)
 		icon_state = "water_cup"
 	else
 		icon_state = "water_cup_e"
@@ -1084,8 +1084,8 @@
 /obj/item/weapon/reagent_containers/food/drinks/proc/smash(mob/living/M as mob, mob/living/user as mob)
 
 
-	if(molotov == 1) //for molotovs
-		if(lit)
+	if (molotov == 1) //for molotovs
+		if (lit)
 			new /obj/effect/decal/cleanable/ash(get_turf(src))
 		else
 			new /obj/item/weapon/reagent_containers/glass/rag(get_turf(src))
@@ -1096,10 +1096,10 @@
 	B.icon_state = src.icon_state
 	B.name = src.smashname
 
-	if(istype(src, /obj/item/weapon/reagent_containers/food/drinks/drinkingglass))  //for drinking glasses
+	if (istype(src, /obj/item/weapon/reagent_containers/food/drinks/drinkingglass))  //for drinking glasses
 		B.icon_state = "glass_empty"
 
-	if(prob(33))
+	if (prob(33))
 		getFromPool(/obj/item/weapon/shard, get_turf(M || src)) // Create a glass shard at the target's location! Or
 
 	var/icon/I = new('icons/obj/drinks.dmi', B.icon_state)
@@ -1116,20 +1116,20 @@
 //smashing when thrown
 /obj/item/weapon/reagent_containers/food/drinks/throw_impact(atom/hit_atom)
 	..()
-	if(isGlass)
+	if (isGlass)
 		isGlass = 0 //to avoid it from hitting the wall, then hitting the floor, which would cause two broken bottles to appear
 		src.visible_message("<span  class='warning'>The [smashtext][src.name] shatters!</span>","<span  class='warning'>You hear a shatter!</span>")
 		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
-		if(reagents.total_volume)
+		if (reagents.total_volume)
 			src.reagents.reaction(hit_atom, TOUCH)  //maybe this could be improved?
 			spawn(5) src.reagents.clear_reagents()  //maybe this could be improved?
 		invisibility = INVISIBILITY_MAXIMUM  //so it stays a while to ignite any fuel
 
-		if(molotov == 1) //for molotovs
-			if(lit)
+		if (molotov == 1) //for molotovs
+			if (lit)
 				new /obj/effect/decal/cleanable/ash(get_turf(src))
 				var/turf/loca = get_turf(src)
-				if(loca)
+				if (loca)
 //					to_chat(world, "<span  class='warning'>Burning...</span>")
 					loca.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
 			else
@@ -1141,10 +1141,10 @@
 		B.name = src.smashname
 		B.icon_state = src.icon_state
 
-		if(istype(src, /obj/item/weapon/reagent_containers/food/drinks/drinkingglass))  //for drinking glasses
+		if (istype(src, /obj/item/weapon/reagent_containers/food/drinks/drinkingglass))  //for drinking glasses
 			B.icon_state = "glass_empty"
 
-		if(prob(33))
+		if (prob(33))
 			getFromPool(/obj/item/weapon/shard, get_turf(src)) // Create a glass shard at the hit location!
 
 		var/icon/Q = new('icons/obj/drinks.dmi', B.icon_state)
@@ -1165,7 +1165,7 @@
 //////////////////////
 
 /obj/item/weapon/reagent_containers/food/drinks/attackby(var/obj/item/I, mob/user as mob)
-	if(istype(I, /obj/item/weapon/reagent_containers/glass/rag) && molotov == -1)  //check if it is a molotovable drink - just beer and ale for now - other bottles require different rag overlay positions - if you can figure this out then go for it
+	if (istype(I, /obj/item/weapon/reagent_containers/glass/rag) && molotov == -1)  //check if it is a molotovable drink - just beer and ale for now - other bottles require different rag overlay positions - if you can figure this out then go for it
 		to_chat(user, "<span  class='notice'>You stuff the [I] into the mouth of the [src].</span>")
 		qdel(I)
 		I = null
@@ -1176,10 +1176,10 @@
 		desc = "A rag stuffed into a bottle."
 		update_icon()
 		slot_flags = SLOT_BELT
-	else if(I.is_hot())
+	else if (I.is_hot())
 		light(user,I)
 		update_brightness(user)
-	else if(istype(I, /obj/item/device/assembly/igniter))
+	else if (istype(I, /obj/item/device/assembly/igniter))
 		var/obj/item/device/assembly/igniter/C = I
 		C.activate()
 		light(user,I)
@@ -1188,12 +1188,12 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/light(mob/user,obj/item/I)
 	var/flavor_text = "<span  class='rose'>[user] lights \the [name] with \the [I].</span>"
-	if(!lit && molotov == 1)
+	if (!lit && molotov == 1)
 		lit = 1
 		visible_message(flavor_text)
 		processing_objects.Add(src)
 		update_icon()
-	if(!lit && flammable)
+	if (!lit && flammable)
 		lit = 1
 		visible_message(flavor_text)
 		flammable = 0
@@ -1203,7 +1203,7 @@
 		update_icon()
 
 /obj/item/weapon/reagent_containers/food/drinks/proc/update_brightness(var/mob/user = null)
-	if(lit)
+	if (lit)
 		set_light(src.brightness_lit)
 	else
 		set_light(0)
@@ -1211,17 +1211,17 @@
 /obj/item/weapon/reagent_containers/food/drinks/update_icon()
 	src.overlays.len = 0
 	var/image/Im
-	if(molotov == 1)
+	if (molotov == 1)
 		Im = image('icons/obj/grenade.dmi', icon_state = "molotov_rag")
 		Im.pixel_y += src.bottleheight-23 * PIXEL_MULTIPLIER //since the molotov rag and fire are placed one pixel above the mouth of the bottle, and start out at a height of 23 (for beer and ale)
 		overlays += Im
-	if(molotov == 1 && lit)
+	if (molotov == 1 && lit)
 		Im = image('icons/obj/grenade.dmi', icon_state = "molotov_fire")
 		Im.pixel_y += src.bottleheight-23 * PIXEL_MULTIPLIER
 		overlays += Im
 	else
 		item_state = initial(item_state)
-	if(ishuman(src.loc))
+	if (ishuman(src.loc))
 		var/mob/living/carbon/human/H = src.loc
 		H.update_inv_belt()
 
@@ -1230,7 +1230,7 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/process()
 	var/turf/loca = get_turf(src)
-	if(lit && loca)
+	if (lit && loca)
 //		to_chat(world, "<span  class='warning'>Burning...</span>")
 		loca.hotspot_expose(700, 1000,surfaces=istype(loc,/turf))
 	return

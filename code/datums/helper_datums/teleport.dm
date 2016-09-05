@@ -16,16 +16,16 @@
 
 /datum/teleport/New(ateleatom, adestination, aprecision=0, afteleport=1, aeffectin=null, aeffectout=null, asoundin=null, asoundout=null)
 	..()
-	if(!Init(arglist(args)))
+	if (!Init(arglist(args)))
 		return 0
 	return 1
 
 /datum/teleport/proc/Init(ateleatom,adestination,aprecision,afteleport,aeffectin,aeffectout,asoundin,asoundout)
-	if(!setTeleatom(ateleatom))
+	if (!setTeleatom(ateleatom))
 		return 0
-	if(!setDestination(adestination))
+	if (!setDestination(adestination))
 		return 0
-	if(!setPrecision(aprecision))
+	if (!setPrecision(aprecision))
 		return 0
 	setEffects(aeffectin,aeffectout)
 	setForceTeleport(afteleport)
@@ -34,24 +34,24 @@
 
 	//must succeed
 /datum/teleport/proc/setPrecision(aprecision)
-	if(isnum(aprecision))
+	if (isnum(aprecision))
 		precision = aprecision
 		return 1
 	return 0
 
 	//must succeed
 /datum/teleport/proc/setDestination(atom/adestination)
-	if(istype(adestination))
+	if (istype(adestination))
 		destination = adestination
 		return 1
 	return 0
 
 	//must succeed in most cases
 /datum/teleport/proc/setTeleatom(atom/movable/ateleatom)
-	if(istype(ateleatom, /obj/effect) && !istype(ateleatom, /obj/effect/dummy/chameleon))
+	if (istype(ateleatom, /obj/effect) && !istype(ateleatom, /obj/effect/dummy/chameleon))
 		qdel(ateleatom)
 		return 0
-	if(istype(ateleatom))
+	if (istype(ateleatom))
 		teleatom = ateleatom
 		return 1
 	return 0
@@ -79,13 +79,13 @@
 	return 1
 
 /datum/teleport/proc/playSpecials(atom/location,datum/effect/effect/system/effect,sound)
-	if(location)
-		if(effect)
+	if (location)
+		if (effect)
 			spawn(-1)
 				src = null
 				effect.attach(location)
 				effect.start()
-		if(sound)
+		if (sound)
 			spawn(-1)
 				src = null
 				playsound(location,sound,60,1)
@@ -98,18 +98,18 @@
 	var/turf/destturf
 	var/turf/curturf = get_turf(teleatom)
 	var/area/destarea = get_area(destination)
-	if(precision)
+	if (precision)
 		var/list/posturfs = circlerangeturfs(destination,precision)
 		destturf = safepick(posturfs)
 	else
 		destturf = get_turf(destination)
 
-	if(!destturf || !curturf)
+	if (!destturf || !curturf)
 		return 0
 
 	playSpecials(curturf,effectin,soundin)
 
-	if(istype(teleatom,/obj/item/projectile))
+	if (istype(teleatom,/obj/item/projectile))
 		var/Xchange = destturf.x - curturf.x
 		var/Ychange = destturf.y - curturf.y
 		var/obj/item/projectile/P = teleatom
@@ -119,11 +119,11 @@
 		P.override_target_Y += Ychange
 		P.reflected = 1//you can now get hit by the projectile you just fired. Careful with portals!
 
-	if(force_teleport)
+	if (force_teleport)
 		teleatom.forceMove(destturf,1)
 		playSpecials(destturf,effectout,soundout)
 	else
-		if(teleatom.Move(destturf))
+		if (teleatom.Move(destturf))
 			playSpecials(destturf,effectout,soundout)
 
 	teleatom.reset_inertia() //Prevent things from drifting immediately after getting teleported to space
@@ -132,14 +132,14 @@
 	return 1
 
 /datum/teleport/proc/teleport()
-	if(teleportChecks())
+	if (teleportChecks())
 		return doTeleport()
 	return 0
 
 /datum/teleport/instant //teleports when datum is created
 
 /datum/teleport/instant/New(ateleatom, adestination, aprecision=0, afteleport=1, aeffectin=null, aeffectout=null, asoundin=null, asoundout=null)
-	if(..())
+	if (..())
 		teleport()
 	return
 
@@ -147,7 +147,7 @@
 /datum/teleport/instant/science
 
 /datum/teleport/instant/science/setEffects(datum/effect/effect/system/aeffectin,datum/effect/effect/system/aeffectout)
-	if(!aeffectin || !aeffectout)
+	if (!aeffectin || !aeffectout)
 		var/datum/effect/effect/system/spark_spread/aeffect = new
 		aeffect.set_up(5, 1, teleatom)
 		effectin = effectin || aeffect
@@ -158,57 +158,57 @@
 
 /datum/teleport/instant/science/setPrecision(aprecision)
 	..()
-	if(istype(teleatom, /obj/item/weapon/storage/backpack/holding))
+	if (istype(teleatom, /obj/item/weapon/storage/backpack/holding))
 		precision = rand(1,100)
 
 	var/list/bagholding = teleatom.search_contents_for(/obj/item/weapon/storage/backpack/holding)
-	if(bagholding.len)
+	if (bagholding.len)
 		precision = max(rand(1,100)*bagholding.len,100)
-		if(istype(teleatom, /mob/living))
+		if (istype(teleatom, /mob/living))
 			var/mob/living/MM = teleatom
 			to_chat(MM, "<span class='warning'>The Bluespace interface on your Bag of Holding interferes with the teleport!</span>")
 	return 1
 
 /datum/teleport/instant/science/teleportChecks()
-	if(istype(teleatom, /obj/item/weapon/disk/nuclear)) // Don't let nuke disks get teleported --NeoFite
+	if (istype(teleatom, /obj/item/weapon/disk/nuclear)) // Don't let nuke disks get teleported --NeoFite
 		teleatom.visible_message("<span class='danger'>The [teleatom] bounces off of the portal!</span>")
 		return 0
-	if(teleatom.locked_to)
+	if (teleatom.locked_to)
 		return 0
 
-	if(!isemptylist(teleatom.search_contents_for(/obj/item/weapon/disk/nuclear)))
-		if(istype(teleatom, /mob/living))
+	if (!isemptylist(teleatom.search_contents_for(/obj/item/weapon/disk/nuclear)))
+		if (istype(teleatom, /mob/living))
 			var/mob/living/MM = teleatom
 			MM.visible_message("<span class='danger'>The [MM] bounces off of the portal!</span>","<span class='warning'>Something you are carrying seems to be unable to pass through the portal. Better drop it if you want to go through.</span>")
 		else
 			teleatom.visible_message("<span class='danger'>The [teleatom] bounces off of the portal!</span>")
 		return 0
 
-	if(destination.z == map.zCentcomm) //centcomm z-level
-		if(istype(teleatom, /obj/mecha) && (universe.name != "Supermatter Cascade"))
+	if (destination.z == map.zCentcomm) //centcomm z-level
+		if (istype(teleatom, /obj/mecha) && (universe.name != "Supermatter Cascade"))
 			var/obj/mecha/MM = teleatom
 			to_chat(MM.occupant, "<span class='danger'>The mech would not survive the jump to a location so far away!</span>")//seriously though, why? who wrote that?
 
 			return 0
-		if(!isemptylist(teleatom.search_contents_for(/obj/item/weapon/storage/backpack/holding)))
+		if (!isemptylist(teleatom.search_contents_for(/obj/item/weapon/storage/backpack/holding)))
 			teleatom.visible_message("<span class='danger'>The Bag of Holding bounces off of the portal!</span>")
 			return 0
 
-	if(istype(teleatom,/obj/item/clothing/head/tinfoil))
+	if (istype(teleatom,/obj/item/clothing/head/tinfoil))
 		return 0
 
-	if(istype(teleatom,/mob/living/carbon/human)) //Tinfoil hats resist teleportation, but only when worn
+	if (istype(teleatom,/mob/living/carbon/human)) //Tinfoil hats resist teleportation, but only when worn
 		var/mob/living/carbon/human/H = teleatom
-		if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil))
+		if (H.head && istype(H.head,/obj/item/clothing/head/tinfoil))
 			to_chat(H, "<span class'info'>Your headgear has 'foiled' a teleport!</span>")
 			return 0
 
-	if(destination.z > 7) //Away mission z-levels
+	if (destination.z > 7) //Away mission z-levels
 		return 0
 
-	if(istype(teleatom, /mob/living))
+	if (istype(teleatom, /mob/living))
 		var/mob/living/MM = teleatom
-		if(MM.locked_to_z != 0 && destination.z != MM.locked_to_z)
+		if (MM.locked_to_z != 0 && destination.z != MM.locked_to_z)
 			MM.visible_message("<span class='danger'>[MM] bounces off the portal!</span>","<span class='warning'>You're unable to go to that destination!</span>")
 			return 0
 	return 1

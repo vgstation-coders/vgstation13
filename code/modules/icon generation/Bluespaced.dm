@@ -1,30 +1,30 @@
 /proc/bsi_cast_ray(icon/I, list/start, list/end)
 
 
-	if(abs(start[1] - end[1]) > abs(start[2] - end[2]))
+	if (abs(start[1] - end[1]) > abs(start[2] - end[2]))
 		var/dist = abs(start[1] - end[1]) * 2
 
-		for(var/i = 1, i <= dist, i++)
+		for (var/i = 1, i <= dist, i++)
 			var/x = round((start[1] * i / dist) + (end[1] * (1 - i / dist)))
 			var/y = round((start[2] * i / dist) + (end[2] * (1 - i / dist)))
 
-			if(I.GetPixel(x, y) != null)
+			if (I.GetPixel(x, y) != null)
 				return list(x, y)
 
 	else
 		var/dist = abs(start[2] - end[2]) * 2
 
-		for(var/i = 1, i <= dist, i++)
+		for (var/i = 1, i <= dist, i++)
 			var/x = round((start[1] * i / dist) + (end[1] * (1 - i / dist)))
 			var/y = round((start[2] * i / dist) + (end[2] * (1 - i / dist)))
 
-			if(I.GetPixel(x, y) != null)
+			if (I.GetPixel(x, y) != null)
 				return list(x, y)
 
 	return null
 
 /proc/bsi_split_colors(color)
-	if(color == null)
+	if (color == null)
 		return list(0, 0, 0, 0)
 
 	var/list/colors = list(0, 0, 0, 0)
@@ -41,12 +41,12 @@
 
 	var/i = 0
 
-	while(i++ < length(queue))
+	while (i++ < length(queue))
 		var/x = queue[i][1]
 		var/y = queue[i][2]
 
 		var/list/pixel = bsi_split_colors(I.GetPixel(x, y))
-		if(pixel[4] == 0)
+		if (pixel[4] == 0)
 			continue
 
 		var/list/n = (y < I.Height())? bsi_split_colors(I.GetPixel(x, y + 1)) : list(0, 0, 0, 0)
@@ -56,32 +56,32 @@
 
 		var/value = (i == 1)? 16 : max(n[1] - 1, e[1] - 1, s[1] - 1, w[1] - 1)
 
-		if(prob(50))
+		if (prob(50))
 			value = max(0, value - 1)
 
-		if(prob(50))
+		if (prob(50))
 			value = max(0, value - 1)
 
-		if(prob(50))
+		if (prob(50))
 			value = max(0, value - 1)
 
-		if(value <= pixel[1])
+		if (value <= pixel[1])
 			continue
 
 		var/v2 = 256 - ((16 - value) * (16 - value))
 
 		I.DrawBox(rgb(value, v2, pixel[4] - v2, pixel[4]), x, y)
 
-		if(n[4] != 0 && n[1] < value - 1)
+		if (n[4] != 0 && n[1] < value - 1)
 			queue[++queue.len] = list(x, y + 1)
 
-		if(s[4] != 0 && s[1] < value - 1)
+		if (s[4] != 0 && s[1] < value - 1)
 			queue[++queue.len] = list(x, y - 1)
 
-		if(e[4] != 0 && e[1] < value - 1)
+		if (e[4] != 0 && e[1] < value - 1)
 			queue[++queue.len] = list(x + 1, y)
 
-		if(w[4] != 0 && w[1] < value - 1)
+		if (w[4] != 0 && w[1] < value - 1)
 			queue[++queue.len] = list(x - 1, y)
 
 
@@ -100,12 +100,12 @@
 
 	var/hits = 0
 
-	for(var/i = 1, i <= 10, i++)
+	for (var/i = 1, i <= 10, i++)
 		var/point1
 		var/point2
 
-		if(prob(50))
-			if(prob(50))
+		if (prob(50))
+			if (prob(50))
 				point1 = list(rand(1, mask.Width()), mask.Height())
 				point2 = list(rand(1, mask.Width()), 1)
 
@@ -114,7 +114,7 @@
 				point1 = list(rand(1, mask.Width()), 1)
 
 		else
-			if(prob(50))
+			if (prob(50))
 				point1 = list(mask.Width(), rand(1, mask.Height()))
 				point2 = list(1,            rand(1, mask.Height()))
 
@@ -124,17 +124,17 @@
 
 		var/hit = bsi_cast_ray(mask, point1, point2)
 
-		if(hit == null)
+		if (hit == null)
 			continue
 
 		hits++
 
 		bsi_spread(mask, hit)
 
-		if(prob(20 + hits * 20))
+		if (prob(20 + hits * 20))
 			break
 
-	if(hits == 0)
+	if (hits == 0)
 		return null
 
 	else
@@ -145,7 +145,7 @@
 
 	var/icon/mask = bsi_generate_mask(source, state)
 
-	if(mask == null)
+	if (mask == null)
 		return source
 
 	var/icon/unaffected = icon(mask)
@@ -218,10 +218,10 @@
 			list(  0,   0,   0,   0),
 		)
 
-	for(var/i = 1, i <= rand(1, 5), i++)
+	for (var/i = 1, i <= rand(1, 5), i++)
 		var/f = rand(1, length(frames))
 
-		if(frames[f][2] > 1)
+		if (frames[f][2] > 1)
 			frames[f][2]--
 			frames.Insert(f, 0)
 
@@ -239,7 +239,7 @@
 	src.icon = generate_bluespace_icon(src.icon, src.icon_state)
 
 /mob/verb/bluespam()
-	for(var/turf/t in view(5))
+	for (var/turf/t in view(5))
 		var/obj/s = new /obj/square(t)
 		s.icon = generate_bluespace_icon(s.icon, s.icon_state)
 

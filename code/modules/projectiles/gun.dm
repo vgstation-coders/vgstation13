@@ -50,7 +50,7 @@
 	var/conventional_firearm = 1	//Used to determine whether, when examined, an /obj/item/weapon/gun/projectile will display the amount of rounds remaining.
 
 /obj/item/weapon/gun/proc/ready_to_fire()
-	if(world.time >= last_fired + fire_delay)
+	if (world.time >= last_fired + fire_delay)
 		last_fired = world.time
 		return 1
 	else
@@ -63,19 +63,19 @@
 	return 1
 
 /obj/item/weapon/gun/emp_act(severity)
-	for(var/obj/O in contents)
+	for (var/obj/O in contents)
 		O.emp_act(severity)
 
 /obj/item/weapon/gun/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
-	if(flag)
+	if (flag)
 		return //we're placing gun on a table or in backpack
-	if(harm_labeled >= min_harm_label)
+	if (harm_labeled >= min_harm_label)
 		to_chat(user, "<span class='warning'>A label sticks the trigger to the trigger guard!</span>")//Such a new feature, the player might not know what's wrong if it doesn't tell them.
 
 		return
-	if(istype(target, /obj/machinery/recharger) && istype(src, /obj/item/weapon/gun/energy))
+	if (istype(target, /obj/machinery/recharger) && istype(src, /obj/item/weapon/gun/energy))
 		return//Shouldnt flag take care of this?
-	if(user && user.client && user.client.gun_mode && !(A in target))
+	if (user && user.client && user.client.gun_mode && !(A in target))
 		PreFire(A,user,params, "struggle" = struggle) //They're using the new gun system, locate what they're aiming at.
 	else
 		Fire(A,user,params, "struggle" = struggle) //Otherwise, fire normally.
@@ -85,45 +85,45 @@
 
 /obj/item/weapon/gun/proc/can_Fire(mob/user, var/display_message = 0)
 	var/firing_dexterity = 1
-	if(advanced_tool_user_check)
+	if (advanced_tool_user_check)
 		if (!user.IsAdvancedToolUser())
 			firing_dexterity = 0
-	if(MoMMI_check)
-		if(isMoMMI(user))
+	if (MoMMI_check)
+		if (isMoMMI(user))
 			firing_dexterity = 0
-	if(nymph_check)
-		if(istype(user, /mob/living/carbon/monkey/diona))
+	if (nymph_check)
+		if (istype(user, /mob/living/carbon/monkey/diona))
 			firing_dexterity = 0
-	if(!firing_dexterity)
-		if(display_message)
+	if (!firing_dexterity)
+		if (display_message)
 			to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 0
 
-	if(istype(user, /mob/living))
-		if(hulk_check)
+	if (istype(user, /mob/living))
+		if (hulk_check)
 			var/mob/living/M = user
 			if (M_HULK in M.mutations)
-				if(display_message)
+				if (display_message)
 					to_chat(M, "<span class='warning'>Your meaty finger is much too large for the trigger guard!</span>")
 				return 0
-	if(ishuman(user))
+	if (ishuman(user))
 		var/mob/living/carbon/human/H=user
-		if(golem_check)
-			if(isgolem(H) || (H.dna && (H.dna.mutantrace == "adamantine" || H.dna.mutantrace=="coalgolem"))) //leaving the mutantrace checks in just in case
-				if(display_message)
+		if (golem_check)
+			if (isgolem(H) || (H.dna && (H.dna.mutantrace == "adamantine" || H.dna.mutantrace=="coalgolem"))) //leaving the mutantrace checks in just in case
+				if (display_message)
 					to_chat(user, "<span class='warning'>Your fat fingers don't fit in the trigger guard!</span>")
 				return 0
 		var/datum/organ/external/a_hand = H.get_active_hand_organ()
-		if(!a_hand.can_use_advanced_tools())
-			if(display_message)
+		if (!a_hand.can_use_advanced_tools())
+			if (display_message)
 				to_chat(user, "<span class='warning'>Your [a_hand] doesn't have the dexterity to do this!</span>")
 			return 0
 	return 1
 
 /obj/item/weapon/gun/proc/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)//TODO: go over this
 	//Exclude lasertag guns from the M_CLUMSY check.
-	if(clumsy_check)
-		if(istype(user, /mob/living))
+	if (clumsy_check)
+		if (istype(user, /mob/living))
 			var/mob/living/M = user
 			if ((M_CLUMSY in M.mutations) && prob(50))
 				to_chat(M, "<span class='danger'>[src] blows up in your face.</span>")
@@ -132,7 +132,7 @@
 				qdel(src)
 				return
 
-	if(!can_Fire(user, 1))
+	if (!can_Fire(user, 1))
 		return
 
 	add_fingerprint(user)
@@ -142,7 +142,7 @@
 	if (!istype(targloc) || !istype(curloc))
 		return
 
-	if(!special_check(user))
+	if (!special_check(user))
 		return
 
 	if (!ready_to_fire())
@@ -150,31 +150,31 @@
 			to_chat(user, "<span class='warning'>[src] is not ready to fire again!")
 		return
 
-	if(!process_chambered()) //CHECK
+	if (!process_chambered()) //CHECK
 		return click_empty(user)
 
-	if(!in_chamber)
+	if (!in_chamber)
 		return
-	if(!istype(src, /obj/item/weapon/gun/energy/laser/redtag) && !istype(src, /obj/item/weapon/gun/energy/laser/bluetag))
+	if (!istype(src, /obj/item/weapon/gun/energy/laser/redtag) && !istype(src, /obj/item/weapon/gun/energy/laser/bluetag))
 		log_attack("[user.name] ([user.ckey]) fired \the [src] (proj:[in_chamber.name]) at [target] [ismob(target) ? "([target:ckey])" : ""] ([target.x],[target.y],[target.z])[struggle ? " due to being disarmed." :""]" )
 	in_chamber.firer = user
 
-	if(user.zone_sel)
+	if (user.zone_sel)
 		in_chamber.def_zone = user.zone_sel.selecting
 	else
 		in_chamber.def_zone = LIMB_CHEST
 
-	if(targloc == curloc)
+	if (targloc == curloc)
 		user.bullet_act(in_chamber)
 		qdel(in_chamber)
 		in_chamber = null
 		update_icon()
 		return
 
-	if(recoil)
+	if (recoil)
 		spawn()
 			shake_camera(user, recoil + 1, recoil)
-		if(user.locked_to && isobj(user.locked_to) && !user.locked_to.anchored )
+		if (user.locked_to && isobj(user.locked_to) && !user.locked_to.anchored )
 			var/direction = get_dir(user,target)
 			spawn()
 				var/obj/B = user.locked_to
@@ -199,13 +199,13 @@
 
 		user.apply_inertia(get_dir(target, user))
 
-	if(silenced)
-		if(fire_sound)
+	if (silenced)
+		if (fire_sound)
 			playsound(user, fire_sound, fire_volume/5, 1)
 		else if (in_chamber.fire_sound)
 			playsound(user, in_chamber.fire_sound, fire_volume/5, 1)
 	else
-		if(fire_sound)
+		if (fire_sound)
 			playsound(user, fire_sound, fire_volume, 1)
 		else if (in_chamber.fire_sound)
 			playsound(user, in_chamber.fire_sound, fire_volume, 1)
@@ -225,15 +225,15 @@
 	in_chamber.xo = targloc.x - curloc.x
 	in_chamber.inaccurate = (istype(user.locked_to, /obj/structure/bed/chair/vehicle))
 
-	if(params)
+	if (params)
 		var/list/mouse_control = params2list(params)
-		if(mouse_control["icon-x"])
+		if (mouse_control["icon-x"])
 			in_chamber.p_x = text2num(mouse_control["icon-x"])
-		if(mouse_control["icon-y"])
+		if (mouse_control["icon-y"])
 			in_chamber.p_y = text2num(mouse_control["icon-y"])
 
 	spawn()
-		if(in_chamber)
+		if (in_chamber)
 			in_chamber.process()
 	sleep(1)
 	in_chamber = null
@@ -252,35 +252,35 @@
 
 /obj/item/weapon/gun/proc/click_empty(mob/user = null)
 	if (user)
-		if(empty_sound)
+		if (empty_sound)
 			user.visible_message("*click click*", "<span class='danger'>*click*</span>")
 			playsound(user, empty_sound, 100, 1)
 	else
-		if(empty_sound)
+		if (empty_sound)
 			src.visible_message("*click click*")
 			playsound(get_turf(src), empty_sound, 100, 1)
 
 /obj/item/weapon/gun/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
 	//Suicide handling.
 	if (M == user && user.zone_sel.selecting == "mouth" && !mouthshoot)
-		if(istype(M.wear_mask, /obj/item/clothing/mask/happy))
+		if (istype(M.wear_mask, /obj/item/clothing/mask/happy))
 			to_chat(M, "<span class='sinister'>BUT WHY? I'M SO HAPPY!</span>")
 			return
 		mouthshoot = 1
 		M.visible_message("<span class='warning'>[user] sticks their gun in their mouth, ready to pull the trigger...</span>")
-		if(!do_after(user,src, 40))
+		if (!do_after(user,src, 40))
 			M.visible_message("<span class='notice'>[user] decided life was worth living.</span>")
 			mouthshoot = 0
 			return
 		if (process_chambered())
 			user.visible_message("<span class = 'warning'>[user] pulls the trigger.</span>")
-			if(silenced)
-				if(fire_sound)
+			if (silenced)
+				if (fire_sound)
 					playsound(user, fire_sound, fire_volume/5, 1)
 				else if (in_chamber.fire_sound)
 					playsound(user, in_chamber.fire_sound, fire_volume/5, 1)
 			else
-				if(fire_sound)
+				if (fire_sound)
 					playsound(user, fire_sound, fire_volume, 1)
 				else if (in_chamber.fire_sound)
 					playsound(user, in_chamber.fire_sound, fire_volume, 1)
@@ -305,12 +305,12 @@
 
 	if (src.process_chambered())
 		//Point blank shooting if on harm intent or target we were targeting.
-		if(user.a_intent == I_HURT)
+		if (user.a_intent == I_HURT)
 			user.visible_message("<span class='danger'> \The [user] fires \the [src] point blank at [M]!</span>")
 			in_chamber.damage *= 1.3
 			src.Fire(M,user,0,0,1)
 			return
-		else if(target && M in target)
+		else if (target && M in target)
 			src.Fire(M,user,0,0,1) ///Otherwise, shoot!
 			return
 		else

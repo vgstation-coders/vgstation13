@@ -34,7 +34,7 @@
 
 /obj/machinery/atmospherics/binary/circulator/Destroy()
 	. = ..()
-	if(linked_generator)
+	if (linked_generator)
 		linked_generator.reconnect()
 
 /obj/machinery/atmospherics/binary/circulator/examine(var/mob/user)
@@ -42,7 +42,7 @@
 	to_chat(user, "Its outlet port is to the [dir2text(dir)].")
 
 /obj/machinery/atmospherics/binary/circulator/proc/return_transfer_air()
-	if(!anchored || stat & BROKEN || !network1)
+	if (!anchored || stat & BROKEN || !network1)
 		return
 
 	var/datum/gas_mixture/removed
@@ -51,7 +51,7 @@
 	last_pressure_delta = max(input_starting_pressure - output_starting_pressure - 5, 0)
 
 	//Only circulate air if there is a pressure difference (plus 5kPa kinetic, 10kPa static friction).
-	if(air1.temperature > 0 && last_pressure_delta > 5)
+	if (air1.temperature > 0 && last_pressure_delta > 5)
 
 		//Calculate necessary moles to transfer using PV = nRT.
 		recent_moles_transferred = (last_pressure_delta * air2.volume / (air1.temperature * R_IDEAL_GAS_EQUATION))		//Uses the volume of the whole network, not just itself.
@@ -63,7 +63,7 @@
 
 		//Actually transfer the gas.
 		removed = air1.remove(recent_moles_transferred)
-		if(removed)
+		if (removed)
 			last_heat_capacity = removed.heat_capacity()
 			last_temperature = removed.temperature
 
@@ -85,16 +85,16 @@
 /obj/machinery/atmospherics/binary/circulator/process()
 	. = ..()
 
-	if(last_worldtime_transfer < world.time - 50)
+	if (last_worldtime_transfer < world.time - 50)
 		recent_moles_transferred = 0
 		update_icon()
 
 /obj/machinery/atmospherics/binary/circulator/update_icon()
-	if(!linked_generator || linked_generator.stat & (NOPOWER | BROKEN))	//These get power from the TeG itself.
+	if (!linked_generator || linked_generator.stat & (NOPOWER | BROKEN))	//These get power from the TeG itself.
 		icon_state = "circ-p"
 
-	else if(last_pressure_delta > 0 && recent_moles_transferred > 0)
-		if(last_pressure_delta >  5* ONE_ATMOSPHERE)
+	else if (last_pressure_delta > 0 && recent_moles_transferred > 0)
+		if (last_pressure_delta >  5* ONE_ATMOSPHERE)
 			icon_state = "circ-run"
 		else
 			icon_state = "circ-slow"
@@ -105,10 +105,10 @@
 
 /obj/machinery/atmospherics/binary/circulator/wrenchAnchor(mob/user)
 	. = ..()
-	if(anchored)
-		if(dir & (NORTH|SOUTH))
+	if (anchored)
+		if (dir & (NORTH|SOUTH))
 			initialize_directions = NORTH|SOUTH
-		else if(dir & (EAST|WEST))
+		else if (dir & (EAST|WEST))
 			initialize_directions = EAST|WEST
 
 		initialize()
@@ -121,17 +121,17 @@
 			node2.build_network()
 
 		var/gendir = turn(dir, -90)
-		for(var/obj/machinery/power/generator/pot_gen in get_step(src, gendir))
+		for (var/obj/machinery/power/generator/pot_gen in get_step(src, gendir))
 			pot_gen.reconnect()
 
 	else
-		if(node1)
+		if (node1)
 			node1.disconnect(src)
-			if(network1)
+			if (network1)
 				returnToPool(network1)
-		if(node2)
+		if (node2)
 			node2.disconnect(src)
-			if(network2)
+			if (network2)
 				returnToPool(network2)
 
 		node1 = null
@@ -145,7 +145,7 @@
 	set name = "Rotate Circulator (Clockwise)"
 	set src in view(1)
 
-	if(usr.isUnconscious() || usr.restrained() || anchored)
+	if (usr.isUnconscious() || usr.restrained() || anchored)
 		return
 
 	src.dir = turn(src.dir, 90)
@@ -155,7 +155,7 @@
 	set name = "Rotate Circulator (Counterclockwise)"
 	set src in view(1)
 
-	if(usr.isUnconscious() || usr.restrained() || anchored)
+	if (usr.isUnconscious() || usr.restrained() || anchored)
 		return
 
 	src.dir = turn(src.dir, -90)

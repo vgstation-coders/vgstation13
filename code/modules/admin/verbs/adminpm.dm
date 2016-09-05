@@ -2,10 +2,10 @@
 /client/proc/cmd_admin_pm_context(mob/M as mob in mob_list)
 	set category = null
 	set name = "Admin PM Mob"
-	if(!holder)
+	if (!holder)
 		to_chat(src, "<font color='red'>Error: Admin-PM-Context: Only administrators may use this command.</font>")
 		return
-	if( !ismob(M) || !M.client )
+	if ( !ismob(M) || !M.client )
 		return
 	cmd_admin_pm(M.client,null)
 	feedback_add_details("admin_verb","APMM") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
@@ -14,15 +14,15 @@
 /client/proc/cmd_admin_pm_panel()
 	set category = "Admin"
 	set name = "Admin PM"
-	if(!holder)
+	if (!holder)
 		to_chat(src, "<font color='red'>Error: Admin-PM-Panel: Only administrators may use this command.</font>")
 		return
 	var/list/client/targets[0]
-	for(var/client/T)
-		if(T.mob)
-			if(istype(T.mob, /mob/new_player))
+	for (var/client/T)
+		if (T.mob)
+			if (istype(T.mob, /mob/new_player))
 				targets["(New Player) - [T]"] = T
-			else if(istype(T.mob, /mob/dead/observer))
+			else if (istype(T.mob, /mob/dead/observer))
 				targets["[T.mob.name](Ghost) - [T]"] = T
 			else
 				targets["[T.mob.real_name](as [T.mob.name]) - [T]"] = T
@@ -37,12 +37,12 @@
 //takes input from cmd_admin_pm_context, cmd_admin_pm_panel or /client/Topic and sends them a PM.
 //Fetching a message if needed. src is the sender and C is the target client
 /client/proc/cmd_admin_pm(var/client/C, var/msg)
-	if(prefs.muted & MUTE_ADMINHELP)
+	if (prefs.muted & MUTE_ADMINHELP)
 		to_chat(src, "<font color='red'>Error: Private-Message: You are unable to use PM-s (muted).</font>")
 		return
 
-	if(!istype(C,/client))
-		if(holder)
+	if (!istype(C,/client))
+		if (holder)
 			to_chat(src, "<font color='red'>Error: Private-Message: Client not found.</font>")
 		else
 			adminhelp(msg)	//admin we are replying to left. adminhelp instead
@@ -50,21 +50,21 @@
 
 	/*if(C && C.last_pm_recieved + config.simultaneous_pm_warning_timeout > world.time && holder)
 		//send a warning to admins, but have a delay popup for mods
-		if(holder.rights & R_ADMIN)
+		if (holder.rights & R_ADMIN)
 			to_chat(src, "<span class='warning'><b>Simultaneous PMs warning:</b> that player has been PM'd in the last [config.simultaneous_pm_warning_timeout / 10] seconds by: [C.ckey_last_pm]</span>")
 		else
-			if(alert("That player has been PM'd in the last [config.simultaneous_pm_warning_timeout / 10] seconds by: [C.ckey_last_pm]","Simultaneous PMs warning","Continue","Cancel") == "Cancel")
+			if (alert("That player has been PM'd in the last [config.simultaneous_pm_warning_timeout / 10] seconds by: [C.ckey_last_pm]","Simultaneous PMs warning","Continue","Cancel") == "Cancel")
 				return*/
 
 	//get message text, limit it's length.and clean/escape html
-	if(!msg)
+	if (!msg)
 		msg = input(src, "Message:", "Private message to [key_name(C, 0, 0)]", "") as text | null
 
-		if(!msg)
+		if (!msg)
 			return
 
-		if(!C)
-			if(holder)
+		if (!C)
+			if (holder)
 				to_chat(src, "<font color='red'>Error: Admin-PM: Client not found.</font>")
 			else
 				adminhelp(msg)	//admin we are replying to has vanished, adminhelp instead
@@ -74,9 +74,9 @@
 		return
 
 	//clean the message if it's not sent by a high-rank admin
-	if(!check_rights(R_SERVER|R_DEBUG,0))
+	if (!check_rights(R_SERVER|R_DEBUG,0))
 		msg = sanitize(copytext(msg,1,MAX_MESSAGE_LEN))
-		if(!msg)
+		if (!msg)
 			return
 
 	var/recieve_color = "purple"
@@ -84,48 +84,48 @@
 	var/recieve_pm_type = "Player"
 
 
-	if(holder)
+	if (holder)
 		//mod PMs are maroon
 		//PMs sent from admins and mods display their rank
-		if(holder)
-			if( holder.rights & R_MOD )
+		if (holder)
+			if ( holder.rights & R_MOD )
 				recieve_color = "maroon"
 			else
 				recieve_color = "red"
 			send_pm_type = holder.rank + " "
 			recieve_pm_type = holder.rank
 
-	else if(!C.holder)
+	else if (!C.holder)
 		to_chat(src, "<font color='red'>Error: Admin-PM: Non-admin to non-admin PM communication is forbidden.</font>")
 		return
 
 	var/recieve_message = ""
 
-	if(holder && !C.holder)
+	if (holder && !C.holder)
 		recieve_message = "<font color='[recieve_color]' size='4'><b>-- Administrator private message --</b></font>\n"
 
 		//AdminPM popup for ApocStation and anybody else who wants to use it. Set it with POPUP_ADMIN_PM in config.txt ~Carn
-		if(config.popup_admin_pm)
+		if (config.popup_admin_pm)
 			spawn(0)	//so we don't hold the caller proc up
 				var/sender = src
 				var/sendername = key
 				var/reply = input(C, msg,"[recieve_pm_type] PM from-[sendername]", "") as text|null		//show message and await a reply
-				if(C && reply)
-					if(sender)
+				if (C && reply)
+					if (sender)
 						C.cmd_admin_pm(sender,reply)										//sender is still about, let's reply to them
 					else
 						adminhelp(reply)													//sender has left, adminhelp instead
 				return
 
 	recieve_message = "\[[time_stamp()]] <font color='[recieve_color]'>[recieve_pm_type] PM from-<b>[key_name(src, C, C.holder ? 1 : 0)]</b>: [msg]</font>"
-	if(C.prefs.special_popup)
+	if (C.prefs.special_popup)
 		C << output(recieve_message, "window1.msay_output")
-		if(!C.holder) //Force normal players to see the admin message when it gets sent to them
+		if (!C.holder) //Force normal players to see the admin message when it gets sent to them
 			winset(C, "rpane.special_button", "is-checked=true")
 			winset(C, null, "rpanewindow.left=window1")
 	else
 		to_chat(C, recieve_message)
-	if(src.prefs.special_popup)
+	if (src.prefs.special_popup)
 		src << output("\[[time_stamp()]] <font color='blue'>[send_pm_type]PM to-<b>[key_name(C, src, holder ? 1 : 0)]</b>: [msg]</font>", "window1.msay_output")
 	else
 		to_chat(src, "<font color='blue'>[send_pm_type]PM to-<b>[key_name(C, src, holder ? 1 : 0)]</b>: [msg]</font>")
@@ -136,13 +136,13 @@
 
 	//play the recieving admin the adminhelp sound (if they have them enabled)
 	//non-admins shouldn't be able to disable this
-	if(C.prefs.toggles & SOUND_ADMINHELP)
+	if (C.prefs.toggles & SOUND_ADMINHELP)
 		C << 'sound/effects/adminhelp.ogg'
 
 	/*
-	if(C.holder)
-		if(holder)	//both are admins
-			if(holder.rank == "Moderator") //If moderator
+	if (C.holder)
+		if (holder)	//both are admins
+			if (holder.rank == "Moderator") //If moderator
 				to_chat(C, "<font color='maroon'>Mod PM from-<b>[key_name(src, C, 1)]</b>: [msg]</font>")
 				to_chat(src, "<font color='blue'>Mod PM to-<b>[key_name(C, src, 1)]</b>: [msg]</font>")
 			else
@@ -154,12 +154,12 @@
 			to_chat(src, "<font color='blue'>PM to-<b>Admins</b>: [msg]</font>")
 
 		//play the recieving admin the adminhelp sound (if they have them enabled)
-		if(C.prefs.toggles & SOUND_ADMINHELP)
+		if (C.prefs.toggles & SOUND_ADMINHELP)
 			C << 'sound/effects/adminhelp.ogg'
 
 	else
-		if(holder)	//sender is an admin but recipient is not. Do BIG RED TEXT
-			if(holder.rank == "Moderator")
+		if (holder)	//sender is an admin but recipient is not. Do BIG RED TEXT
+			if (holder.rank == "Moderator")
 				to_chat(C, "<font color='maroon'>Mod PM from-<b>[key_name(src, C, 0)]</b>: [msg]</font>")
 				to_chat(C, "<font color='maroon'><i>Click on the moderators's name to reply.</i></font>")
 				to_chat(src, "<font color='blue'>Mod PM to-<b>[key_name(C, src, 1)]</b>: [msg]</font>")
@@ -173,13 +173,13 @@
 			C << 'sound/effects/adminhelp.ogg'
 
 			//AdminPM popup for ApocStation and anybody else who wants to use it. Set it with POPUP_ADMIN_PM in config.txt ~Carn
-			if(config.popup_admin_pm)
+			if (config.popup_admin_pm)
 				spawn()	//so we don't hold the caller proc up
 					var/sender = src
 					var/sendername = key
 					var/reply = input(C, msg,"Admin PM from-[sendername]", "") as text|null		//show message and await a reply
-					if(C && reply)
-						if(sender)
+					if (C && reply)
+						if (sender)
 							C.cmd_admin_pm(sender,reply)										//sender is still about, let's reply to them
 						else
 							adminhelp(reply)													//sender has left, adminhelp instead
@@ -193,12 +193,12 @@
 	log_admin("PM: [key_name(src)]->[key_name(C)]: [msg]")
 
 	//we don't use message_admins here because the sender/receiver might get it too
-	for(var/client/X in admins)
+	for (var/client/X in admins)
 		//check client/X is an admin and isn't the sender or recipient
-		if(X == C || X == src)
+		if (X == C || X == src)
 			continue
-		if(X.key!=key && X.key!=C.key && (X.holder.rights & R_ADMIN) || (X.holder.rights & R_MOD) )
-			if(X.prefs.special_popup)
+		if (X.key!=key && X.key!=C.key && (X.holder.rights & R_ADMIN) || (X.holder.rights & R_MOD) )
+			if (X.prefs.special_popup)
 				X << output("\[[time_stamp()]] <B><font color='blue'>PM: [key_name(src, X, 0)]-&gt;[key_name(C, X, 0)]:</B> <span class='notice'>[msg]</font></span>", "window1.msay_output") //inform X
 			else
 				to_chat(X, "<B><font color='blue'>PM: [key_name(src, X, 0)]-&gt;[key_name(C, X, 0)]:</B> <span class='notice'>[msg]</font></span>")//inform X

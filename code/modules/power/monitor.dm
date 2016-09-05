@@ -31,7 +31,7 @@
 /obj/machinery/power/monitor/New()
 	..()
 
-	for(var/i = 1 to POWER_MONITOR_HIST_SIZE) //The chart doesn't like lists with null.
+	for (var/i = 1 to POWER_MONITOR_HIST_SIZE) //The chart doesn't like lists with null.
 		demand_hist.Add(list(0))
 		supply_hist.Add(list(0))
 		load_hist.Add(list(0))
@@ -56,9 +56,9 @@
 
 	var/obj/structure/cable/attached = null
 	var/turf/T = loc
-	if(isturf(T))
+	if (isturf(T))
 		attached = locate() in T
-	if(attached)
+	if (attached)
 		powernet = attached.get_powernet()
 	html_machines += src
 
@@ -105,7 +105,7 @@
 
 /obj/machinery/power/monitor/attack_hand(mob/user)
 	. = ..()
-	if(.)
+	if (.)
 		interface.hide(user)
 		return
 
@@ -125,12 +125,12 @@
 
 		interface.executeJavaScript("makeChart()", user) //Making the chart in something like $("document").ready() won't work so I do it here
 
-		for(var/i = 1 to POWER_MONITOR_HIST_SIZE)
+		for (var/i = 1 to POWER_MONITOR_HIST_SIZE)
 			interface.callJavaScript("pushPowerData", list(demand_hist[i], supply_hist[i], load_hist[i]), user)
 
 /obj/machinery/power/monitor/power_change()
 	..()
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		icon_state = "broken"
 	else
 		if (stat & NOPOWER)
@@ -141,9 +141,9 @@
 
 //copied from computer.dm
 /obj/machinery/power/monitor/attackby(I as obj, mob/user as mob)
-	if(isscrewdriver(I) && circuit)
+	if (isscrewdriver(I) && circuit)
 		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-		if(do_after(user,src,20))
+		if (do_after(user,src,20))
 			var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 			var/obj/item/weapon/circuitboard/M = new circuit( A )
 			A.circuit = M
@@ -166,7 +166,7 @@
 	return
 
 /obj/machinery/power/monitor/process()
-	if(stat & (BROKEN|NOPOWER) || !powernet)
+	if (stat & (BROKEN|NOPOWER) || !powernet)
 		interface.executeJavaScript("setDisabled()")
 		return
 
@@ -177,7 +177,7 @@
 	supply_hist += avail()
 	load_hist += powernet.viewload
 
-	if(demand_hist.len > POWER_MONITOR_HIST_SIZE) //Should always be true but eh.
+	if (demand_hist.len > POWER_MONITOR_HIST_SIZE) //Should always be true but eh.
 		demand_hist.Cut(1, 2)
 		supply_hist.Cut(1, 2)
 		load_hist.Cut(1,2)
@@ -197,8 +197,8 @@
 		var/list/S = list(" <span class='bad'>Off","<span class='bad'>AOff","  <span class='good'>On", " <span class='good'>AOn")
 		var/list/chg = list(" <span class='bad'>N","<span class='average'>C","<span class='good'>F")
 
-		for(var/obj/machinery/power/terminal/term in powernet.nodes)
-			if(istype(term.master, /obj/machinery/power/apc))
+		for (var/obj/machinery/power/terminal/term in powernet.nodes)
+			if (istype(term.master, /obj/machinery/power/apc))
 
 
 				var/obj/machinery/power/apc/A = term.master
@@ -206,13 +206,13 @@
 				tbl += "<td><span class=\"area\">["\The [A.areaMaster]"]</span></td>"
 				tbl += "<td>[S[A.equipment+1]]</span></td><td>[S[A.lighting+1]]</span></td><td>[S[A.environ+1]]</span></td>"
 				tbl += "<td align=\"right\">[A.lastused_total]</td>"
-				if(A.cell)
+				if (A.cell)
 					var/class = "good"
 
-					switch(A.cell.percent())
-						if(49 to 15)
+					switch (A.cell.percent())
+						if (49 to 15)
 							class = "average"
-						if(15 to -INFINITY)
+						if (15 to -INFINITY)
 							class = "bad"
 
 					tbl += "<td align='right' class='[class]'>[round(A.cell.percent())]%</td><td align='right'>[chg[A.charging+1]]</span>"

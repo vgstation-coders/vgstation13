@@ -68,7 +68,7 @@
 	if (istype(W, /obj/item/stack/tile/grass))
 		var/obj/item/stack/tile/grass/Grass = W
 
-		if(!Grass.use(1))
+		if (!Grass.use(1))
 			return
 
 		new /obj/item/weapon/table_parts/wood/poker( get_turf(src) )

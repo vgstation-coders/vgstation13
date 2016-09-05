@@ -23,9 +23,9 @@
 
 /spell/targeted/shoesnatch/cast(list/targets, mob/user = user)
 	..()
-	for(var/mob/living/carbon/human/target in targets)
+	for (var/mob/living/carbon/human/target in targets)
 		var /obj/old_shoes = target.shoes
-		if(old_shoes)
+		if (old_shoes)
 			sparks_spread = 1
 			sparks_amt = 4
 			target.drop_from_inventory(old_shoes)
@@ -33,13 +33,13 @@
 									"<span class='danger'>Your shoes suddenly vanish!</span>")
 			user.put_in_active_hand(old_shoes)
 
-		else if(spawn_shards) //Spawn shards if the target isn't wearing shoes
+		else if (spawn_shards) //Spawn shards if the target isn't wearing shoes
 			to_chat("<span class='danger'>You conjure several glass shards around \the [target].</span>")
 			target.show_message("<span class='danger'>You are surrounded by glass shards!</span>", MESSAGE_SEE)
 			summon_shards(get_turf(target), cardinal)
 
 /spell/targeted/shoesnatch/proc/summon_shards(turf/T, list/dirlist)
-	for(var/D in dirlist)
+	for (var/D in dirlist)
 		var/obj/item/weapon/shard/S = new(T)
 		step(S, D)
 		S.alpha = 0
@@ -56,6 +56,6 @@
 	return upgrade_desc
 
 /spell/targeted/shoesnatch/get_upgrade_info(upgrade_type, level)
-	if(upgrade_type == Sp_POWER)
+	if (upgrade_type == Sp_POWER)
 		return "Make the spell summon glass shards around targets who aren't wearing any shoes."
 	return ..()

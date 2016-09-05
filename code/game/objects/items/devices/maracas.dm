@@ -26,7 +26,7 @@
 	chickchicky()
 
 /obj/item/device/maracas/throw_impact(atom/hit_atom)
-	if(emagged)
+	if (emagged)
 		explosion(get_turf(src), -1 ,1, 3)
 		qdel(src)
 
@@ -37,11 +37,11 @@
 
 /obj/item/device/maracas/examine(mob/user)
 	..()
-	if(emagged)
+	if (emagged)
 		to_chat(user, "<span class='warning'>You're not sure why, but you swear that you can hear the maracas ticking.</span>")
 
 /obj/item/device/maracas/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/weapon/card/emag) && !emagged)
+	if (istype(I, /obj/item/weapon/card/emag) && !emagged)
 		to_chat(user, "<span class='warning'>You're not sure why, but you swear that you can hear the maracas ticking.</span>")
 		emagged = 1
 	return

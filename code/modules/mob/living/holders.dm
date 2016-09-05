@@ -13,46 +13,46 @@
 /obj/item/weapon/holder/New(loc, mob/M)
 	..()
 	processing_objects.Add(src)
-	if(M)
+	if (M)
 		M.forceMove(src)
 
 		src.stored_mob = M
 
 /obj/item/weapon/holder/Destroy()
 	//Hopefully this will stop the icon from remaining on human mobs.
-	if(istype(loc,/mob/living))
+	if (istype(loc,/mob/living))
 		var/mob/living/A = src.loc
 		A.drop_item(src, force_drop = 1)
 		A.update_icons()
 
-	for(var/mob/M in contents)
+	for (var/mob/M in contents)
 		M.forceMove(get_turf(src))
-		if(M.client)
+		if (M.client)
 			M.client.eye = M
 
 	processing_objects.Remove(src)
 	..()
 
 /obj/item/weapon/holder/process()
-	if(!loc)
+	if (!loc)
 		return returnToPool(src)
-	else if(istype(loc,/turf) || !(contents.len))
+	else if (istype(loc,/turf) || !(contents.len))
 		return returnToPool(src)
 
 /obj/item/weapon/holder/relaymove(mob/M, direction)
 	returnToPool(src) //This calls Destroy(), and frees the mob
 
 /obj/item/weapon/holder/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	for(var/mob/M in src.contents)
+	for (var/mob/M in src.contents)
 		M.attackby(W,user)
 
 /obj/item/weapon/holder/update_wield(mob/user)
 	..()
 
-	if(update_itemstate_on_twohand)
+	if (update_itemstate_on_twohand)
 		item_state = "[initial(item_state)][wielded ? itemstate_twohand_suffix : ""]"
 
-		if(user)
+		if (user)
 			user.update_inv_hands()
 
 //
@@ -67,7 +67,7 @@
 
 /obj/item/weapon/holder/diona/New(loc, mob/M)
 	..()
-	if(M)
+	if (M)
 		name = M.name
 
 /obj/item/weapon/holder/animal
@@ -76,7 +76,7 @@
 
 /obj/item/weapon/holder/animal/New(loc, mob/M)
 	..()
-	if(M)
+	if (M)
 		appearance = M.appearance
 		w_class = Clamp((M.size - 1) * 3, 1, 5)
 		//SIZE	| W_CLASS
@@ -88,7 +88,7 @@
 
 		throw_range = 6 - w_class
 
-		if(w_class > W_CLASS_TINY)
+		if (w_class > W_CLASS_TINY)
 			flags |= (TWOHANDABLE | MUSTTWOHAND)
 
 //MICE
@@ -100,11 +100,11 @@
 
 /obj/item/weapon/holder/animal/mouse/New(loc, mob/M)
 	..()
-	if(istype(M, /mob/living/simple_animal/mouse))
+	if (istype(M, /mob/living/simple_animal/mouse))
 		var/mob/living/simple_animal/mouse/mouse = M
 
 		item_state = initial(mouse.icon_state) //Initial icon states are "mouse_gray", "mouse_white", etc
-		if(!item_state in list("mouse_white", "mouse_brown", "mouse_gray"))
+		if (!item_state in list("mouse_white", "mouse_brown", "mouse_gray"))
 			item_state = "mouse_gray"
 
 //CORGI

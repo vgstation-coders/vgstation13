@@ -26,8 +26,8 @@ datum/chemical_reaction/coolant
 		reagents.add_reagent("coolant",1000)
 
 /obj/structure/reagent_dispensers/coolanttank/bullet_act(var/obj/item/projectile/Proj)
-	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet))
-		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
+	if (istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet))
+		if (!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
 			explode()
 
 /obj/structure/reagent_dispensers/coolanttank/blob_act()
@@ -46,7 +46,7 @@ datum/chemical_reaction/coolant
 		S.start()
 
 	var/datum/gas_mixture/env = src.loc.return_air()
-	if(env)
+	if (env)
 		if (reagents.total_volume > 750)
 			env.temperature = 0
 		else if (reagents.total_volume > 500)
@@ -55,5 +55,5 @@ datum/chemical_reaction/coolant
 			env.temperature -= 50
 
 	sleep(10)
-	if(src)
+	if (src)
 		qdel(src)

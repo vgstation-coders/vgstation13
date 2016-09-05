@@ -146,7 +146,7 @@
 	if (mymob.client)
 		if (mymob.client.gun_mode) // If in aim mode, correct the sprite
 			mymob.gun_setting_icon.dir = 2
-	for(var/obj/item/weapon/gun/G in mymob) // If targeting someone, display other buttons
+	for (var/obj/item/weapon/gun/G in mymob) // If targeting someone, display other buttons
 		if (G.target)
 			mymob.item_use_icon = getFromPool(/obj/screen/gun/item)
 			if (mymob.client.target_can_click)
@@ -169,7 +169,7 @@
 	return
 
 /datum/hud/proc/toggle_show_robot_modules()
-	if(!isrobot(mymob))
+	if (!isrobot(mymob))
 		return
 
 	var/mob/living/silicon/robot/r = mymob
@@ -178,23 +178,23 @@
 	update_robot_modules_display()
 
 /datum/hud/proc/update_robot_modules_display()
-	if(!isrobot(mymob) || !mymob.client)
+	if (!isrobot(mymob) || !mymob.client)
 		return
 
 	var/mob/living/silicon/robot/r = mymob
 
-	if(r.shown_robot_modules)
+	if (r.shown_robot_modules)
 		//Modules display is shown
 
-		if(!r.module)
+		if (!r.module)
 			to_chat(usr, "<span class='danger'>No module selected</span>")
 			return
 
-		if(!r.module.modules)
+		if (!r.module.modules)
 			to_chat(usr, "<span class='danger'>Selected module has no modules to select</span>")
 			return
 
-		if(!r.robot_modules_background)
+		if (!r.robot_modules_background)
 			return
 
 		var/display_rows = round((r.module.modules.len) / 8) +1 //+1 because round() returns floor of number
@@ -204,11 +204,11 @@
 		var/x = -4	//Start at CENTER-4,SOUTH+1
 		var/y = 1
 
-		for(var/atom/movable/A in r.module.modules)
-			if( (A != r.module_state_1) && (A != r.module_state_2) && (A != r.module_state_3) )
+		for (var/atom/movable/A in r.module.modules)
+			if ( (A != r.module_state_1) && (A != r.module_state_2) && (A != r.module_state_3) )
 				//Module is not currently active
 				r.client.screen += A
-				if(x < 0)
+				if (x < 0)
 					A.screen_loc = "CENTER[x]:[WORLD_ICON_SIZE/2],SOUTH+[y]:[7*PIXEL_MULTIPLIER]"
 				else
 					A.screen_loc = "CENTER+[x]:[WORLD_ICON_SIZE/2],SOUTH+[y]:[7*PIXEL_MULTIPLIER]"
@@ -216,15 +216,15 @@
 				A.plane = HUD_PLANE
 
 				x++
-				if(x == 4)
+				if (x == 4)
 					x = -4
 					y++
 
 	else
 		//Modules display is hidden
-		if(r.module)
-			for(var/atom/A in r.module.modules)
-				if( (A != r.module_state_1) && (A != r.module_state_2) && (A != r.module_state_3) )
+		if (r.module)
+			for (var/atom/A in r.module.modules)
+				if ( (A != r.module_state_1) && (A != r.module_state_2) && (A != r.module_state_3) )
 					//Module is not currently active
 					r.client.screen -= A
 			r.shown_robot_modules = 0

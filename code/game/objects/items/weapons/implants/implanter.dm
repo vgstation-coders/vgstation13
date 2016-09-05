@@ -29,7 +29,7 @@
 
 		var/turf/T1 = get_turf(M)
 		if (T1 && ((M == user) || do_after(user,M, 50)))
-			if(user && M && (get_turf(M) == T1) && src && src.imp)
+			if (user && M && (get_turf(M) == T1) && src && src.imp)
 				for (var/mob/O in viewers(M, null))
 					O.show_message("<span class='warning'>[M] has been implanted by [user].</span>", 1)
 
@@ -38,7 +38,7 @@
 				msg_admin_attack("[user.name] ([user.ckey]) implanted [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 
 				user.show_message("<span class='warning'>You implanted the implant into [M].</span>")
-				if(src.imp.implanted(M, user))
+				if (src.imp.implanted(M, user))
 					src.imp.forceMove(M)
 					src.imp.imp_in = M
 					src.imp.implanted = 1
@@ -109,7 +109,7 @@
 /obj/item/weapon/implanter/compressed/update()
 	if (imp)
 		var/obj/item/weapon/implant/compressed/c = imp
-		if(!c.scanned)
+		if (!c.scanned)
 			icon_state = "cimplanter1"
 		else
 			icon_state = "cimplanter2"
@@ -119,7 +119,7 @@
 
 /obj/item/weapon/implanter/compressed/attack(mob/M as mob, mob/user as mob)
 	// Attacking things in your hands tends to make this fuck up.
-	if(!istype(M))
+	if (!istype(M))
 		return
 	var/obj/item/weapon/implant/compressed/c = imp
 	if (!c)
@@ -130,18 +130,18 @@
 	..()
 
 /obj/item/weapon/implanter/compressed/afterattack(var/obj/item/I, mob/user as mob)
-	if(is_type_in_list(I,forbidden_types))
+	if (is_type_in_list(I,forbidden_types))
 		to_chat(user, "<span class='warning'>A red light flickers on the implanter.</span>")
 		return
-	if(istype(I) && imp)
+	if (istype(I) && imp)
 		var/obj/item/weapon/implant/compressed/c = imp
 		if (c.scanned)
-			if(istype(I,/obj/item/weapon/storage))
+			if (istype(I,/obj/item/weapon/storage))
 				..()
 				return
 			to_chat(user, "<span class='warning'>Something is already scanned inside the implant!</span>")
 			return
-		if(user)
+		if (user)
 			user.u_equip(I,0)
 			user.update_icons()	//update our overlays
 		c.scanned = I

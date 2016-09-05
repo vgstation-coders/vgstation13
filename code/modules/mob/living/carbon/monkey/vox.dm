@@ -18,7 +18,7 @@
 /mob/living/carbon/monkey/vox/attack_hand(mob/living/carbon/human/M as mob)
 
 
-	if((M.a_intent == I_HELP) && !(locked_to) && (isturf(src.loc)) && (M.get_active_hand() == null)) //Unless their location isn't a turf!
+	if ((M.a_intent == I_HELP) && !(locked_to) && (isturf(src.loc)) && (M.get_active_hand() == null)) //Unless their location isn't a turf!
 		scoop_up(M)
 
 	..()
@@ -39,14 +39,14 @@
 
 //Cant believe I'm doing this
 /mob/living/carbon/monkey/vox/proc/lay_egg()
-	if(!stat && nutrition > 250)
+	if (!stat && nutrition > 250)
 		visible_message("[src] [pick("lays an egg.","squats down and croons.","begins making a huge racket.","begins clucking raucously.")]")
 		nutrition -= eggcost
 		eggsleft--
 		var/obj/item/weapon/reagent_containers/food/snacks/egg/vox/E = new(get_turf(src))
 		E.pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
 		E.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
-		if(prob(25))
+		if (prob(25))
 			processing_objects.Add(E)
 
 /mob/living/carbon/monkey/vox/verb/layegg()
@@ -61,5 +61,5 @@
 
 /mob/living/carbon/monkey/vox/Stat()
 	..()
-	if(statpanel("Status"))
+	if (statpanel("Status"))
 		eggstats()

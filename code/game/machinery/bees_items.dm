@@ -17,21 +17,21 @@
 
 /obj/item/weapon/bee_net/examine(mob/user)
 	..()
-	if(caught_bees)
+	if (caught_bees)
 		to_chat(user, "<span class='info'>There's [caught_bees] caught bee\s in it!</span>")
 	else
 		to_chat(user, "<span class='info'>It has no bees in it.</span>")
 
 /obj/item/weapon/bee_net/afterattack(atom/A as mob|obj|turf|area, mob/living/user)
-	if(get_dist(A,user) > 1)
+	if (get_dist(A,user) > 1)
 		return
-	if(istype(A,/obj/machinery/apiary))
+	if (istype(A,/obj/machinery/apiary))
 		return
 	var/turf/T = get_turf(A)
 	var/caught = 0
-	for(var/mob/living/simple_animal/bee/B in T)
+	for (var/mob/living/simple_animal/bee/B in T)
 		caught = 1
-		if(B.feral < 0)
+		if (B.feral < 0)
 			caught_bees += B.strength
 			qdel(B)
 			B = null
@@ -40,15 +40,15 @@
 			user.visible_message("<span class='warning'>[user] swings at some bees, they don't seem to like it.</span>","<span class='warning'>You swing at some bees, they don't seem to like it.</span>")
 			B.feral = 5
 			B.target = user
-	if(!caught)
+	if (!caught)
 		to_chat(user, "<span class='warning'>There are no bees in front of you!</span>")
 
 /obj/item/weapon/bee_net/attack_self(mob/user as mob)
 	var/turf/T = get_step(get_turf(user), user.dir)
 	var/caught = 0
-	for(var/mob/living/simple_animal/bee/B in T)
+	for (var/mob/living/simple_animal/bee/B in T)
 		caught = 1
-		if(B.feral < 0)
+		if (B.feral < 0)
 			caught_bees += B.strength
 			qdel(B)
 			B = null
@@ -57,7 +57,7 @@
 			user.visible_message("<span class='warning'>[user] swings at some bees, they don't seem to like it.</span>","<span class='warning'>You swing at some bees, they don't seem to like it.</span>")
 			B.feral = 5
 			B.target = user
-	if(!caught)
+	if (!caught)
 		to_chat(user, "<span class='warning'>There are no bees in front of you!</span>")
 
 /obj/item/weapon/bee_net/verb/empty_bees()
@@ -65,12 +65,12 @@
 	set name = "Empty bee net"
 	set category = "Object"
 	var/mob/living/carbon/M
-	if(iscarbon(usr))
+	if (iscarbon(usr))
 		M = usr
 
-	while(caught_bees > 0)
+	while (caught_bees > 0)
 		//release a few super massive swarms
-		while(caught_bees > 5)
+		while (caught_bees > 5)
 			var/mob/living/simple_animal/bee/B = new(src.loc)
 			B.feral = 5
 			B.target = M
@@ -126,17 +126,17 @@
 	nutriment_factor = 15 * REAGENTS_METABOLISM
 
 /datum/reagent/honey/on_mob_life(var/mob/living/M as mob)
-	if(ishuman(M))
+	if (ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(!holder)
+		if (!holder)
 			return
 		H.nutrition += nutriment_factor
 		holder.remove_reagent(src.id, 0.4)
-		if(H.getBruteLoss() && prob(60))
+		if (H.getBruteLoss() && prob(60))
 			H.heal_organ_damage(2, 0)
-		if(H.getFireLoss() && prob(50))
+		if (H.getFireLoss() && prob(50))
 			H.heal_organ_damage(0, 2)
-		if(H.getToxLoss() && prob(50))
+		if (H.getToxLoss() && prob(50))
 			H.adjustToxLoss(-2)
 		..()
 		return

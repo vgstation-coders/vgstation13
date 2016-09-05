@@ -34,20 +34,20 @@
 	update_icon()
 
 /turf/unsimulated/floor/snow/relativewall_neighbours()
-	for(var/direction in alldirs)
+	for (var/direction in alldirs)
 		var/turf/adj_tile = get_step(src, direction)
-		if(istype(adj_tile, /turf/unsimulated/floor/snow))
+		if (istype(adj_tile, /turf/unsimulated/floor/snow))
 			adj_tile.update_icon()
 
 /turf/unsimulated/floor/snow/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 	..()
 
-	if(istype(W, /obj/item/weapon/pickaxe/shovel))
+	if (istype(W, /obj/item/weapon/pickaxe/shovel))
 		user.visible_message("<span class='notice'>[user] starts digging out some snow with \the [W].</span>", \
 		"<span class='notice'>You start digging out some snow with \the [W].</span>")
 		user.delayNextAttack(20)
-		if(do_after(user, src, 20))
+		if (do_after(user, src, 20))
 			user.visible_message("<span class='notice'>[user] digs out some snow with \the [W].</span>", \
 			"<span class='notice'>You dig out some snow with \the [W].</span>")
 			extract_snowballs(5, 0, user)
@@ -58,7 +58,7 @@
 	user.visible_message("<span class='notice'>[user] reaches down and starts forming a snowball.</span>", \
 	"<span class='notice'>You reach down and start forming a snowball.</span>")
 	user.delayNextAttack(10)
-	if(do_after(user, src, 5))
+	if (do_after(user, src, 5))
 		user.visible_message("<span class='notice'>[user] finishes forming a snowball.</span>", \
 		"<span class='notice'>You finish forming a snowball.</span>")
 		extract_snowballs(1, 1, user)
@@ -67,22 +67,22 @@
 
 /turf/unsimulated/floor/snow/proc/extract_snowballs(var/snowball_amount = 0, var/pick_up = 0, var/mob/user)
 
-	if(!snowball_amount)
+	if (!snowball_amount)
 		return
 
 	var/extract_amount = min(snowballs, snowball_amount)
 
-	for(var/i = 0; i < extract_amount, i++)
+	for (var/i = 0; i < extract_amount, i++)
 		var/obj/item/stack/sheet/snow/snowball = new /obj/item/stack/sheet/snow(user.loc)
 		snowball.pixel_x = rand(-16, 16) * PIXEL_MULTIPLIER //Would be wise to move this into snowball New() down the line
 		snowball.pixel_y = rand(-16, 16) * PIXEL_MULTIPLIER
 
-		if(pick_up)
+		if (pick_up)
 			user.put_in_hands(snowball)
 
 		snowballs--
 
-	if(!snowballs) //We're out of snow, turn into a permafrost tile
+	if (!snowballs) //We're out of snow, turn into a permafrost tile
 		ChangeTurf(/turf/unsimulated/floor/snow/permafrost)
 
 //In the future, catwalks should be the base to build in the arctic, not lattices
@@ -91,53 +91,53 @@
 	return BUILD_FAILURE
 
 /turf/unsimulated/floor/snow/permafrost/canBuildLattice()
-	if(x >= (world.maxx - TRANSITIONEDGE) || x <= TRANSITIONEDGE)
+	if (x >= (world.maxx - TRANSITIONEDGE) || x <= TRANSITIONEDGE)
 		return BUILD_FAILURE
 	else if (y >= (world.maxy - TRANSITIONEDGE || y <= TRANSITIONEDGE ))
 		return BUILD_FAILURE
-	else if(!(locate(/obj/structure/lattice) in contents))
+	else if (!(locate(/obj/structure/lattice) in contents))
 		return BUILD_SUCCESS
 	return BUILD_FAILURE
 
 /turf/unsimulated/floor/snow/permafrost/canBuildPlating()
-	if(x >= (world.maxx - TRANSITIONEDGE) || x <= TRANSITIONEDGE)
+	if (x >= (world.maxx - TRANSITIONEDGE) || x <= TRANSITIONEDGE)
 		return BUILD_FAILURE
 	else if (y >= (world.maxy - TRANSITIONEDGE || y <= TRANSITIONEDGE ))
 		return BUILD_FAILURE
-	else if(locate(/obj/structure/lattice) in contents)
+	else if (locate(/obj/structure/lattice) in contents)
 		return BUILD_SUCCESS
 	return BUILD_FAILURE
 
 /turf/unsimulated/floor/snow/Entered(mob/user)
 	..()
-	if(isliving(user) && !user.locked_to && !user.lying && !user.flying)
+	if (isliving(user) && !user.locked_to && !user.lying && !user.flying)
 		playsound(get_turf(src), pick(snowsound), 10, 1, -1, channel = 123)
 
 //This shit's fucked, should use relativewall. Problem is, relativewall is terrible and doesn't include diagonal directions
 //So in short relativewall needs to be reworked, along with all things relying on it. Fun times ahead
 /turf/unsimulated/floor/snow/update_icon()
-	if(overlays.len > 2) //?
+	if (overlays.len > 2) //?
 		overlays.Cut()
-	if(!snow_layers.len)
+	if (!snow_layers.len)
 		snow_layers["1"] = image('icons/turf/snowfx.dmi', "snowlayer1", 17)
 		snow_layers["2"] = image('icons/turf/snowfx.dmi', "snowlayer2", 17)
-	if(!dirt_layers.len)
-		for(var/dirtdir in alldirs)
+	if (!dirt_layers.len)
+		for (var/dirtdir in alldirs)
 			dirt_layers["side[dirtdir]"] = image('icons/turf/new_snow.dmi', "permafrost_side" ,dir = dirtdir)
-		for(var/diagdir in diagonal)
+		for (var/diagdir in diagonal)
 			dirt_layers["diag[diagdir]"] = image('icons/turf/new_snow.dmi', "permafrost_corner", dir = diagdir, layer = 2.1)
 			dirt_layers["snow[diagdir]"] = image('icons/turf/new_snow.dmi', "permafrost", dir = diagdir)
-		for(var/dirtdir in cardinal)
+		for (var/dirtdir in cardinal)
 			dirt_layers["snow[dirtdir]"] = image('icons/turf/new_snow.dmi', "permafrost_half", dir = dirtdir)
 			var/realdir = null
-			switch(dirtdir)
-				if(NORTH)
+			switch (dirtdir)
+				if (NORTH)
 					realdir = EAST|SOUTH|WEST
-				if(SOUTH)
+				if (SOUTH)
 					realdir = WEST|NORTH|EAST
-				if(EAST)
+				if (EAST)
 					realdir = SOUTH|WEST|NORTH
-				if(WEST)
+				if (WEST)
 					realdir = NORTH|EAST|SOUTH
 			dirt_layers["snow[realdir]"] = image('icons/turf/new_snow.dmi', "permafrost_tjunction", dir = dirtdir)
 		dirt_layers["snow15"] = image('icons/turf/new_snow.dmi', "permafrost_crossroads")
@@ -147,32 +147,32 @@
 
 	//Projecting snowfall on adjacent tiles, might remove this eventually
 	var/lights_on = 0
-	for(var/direction in alldirs)
-		if(!istype(get_step(src, direction), /turf/unsimulated/floor/snow))
-			if(istype(get_step(src, direction), /turf/simulated/floor)) //Luminosity on tiles adjacent to snow
+	for (var/direction in alldirs)
+		if (!istype(get_step(src, direction), /turf/unsimulated/floor/snow))
+			if (istype(get_step(src, direction), /turf/simulated/floor)) //Luminosity on tiles adjacent to snow
 				lights_on = 1
 			overlays += dirt_layers["side[direction]"]
 			var/image/snow1 = snow_layers["1"]
 			var/image/snow2 = snow_layers["2"]
 			snow1.alpha = 255
 			snow2.alpha = 255
-			switch(direction)
-				if(1)
+			switch (direction)
+				if (1)
 					snow1.pixel_y = WORLD_ICON_SIZE
 					overlays += snow1
 					snow2.pixel_y = WORLD_ICON_SIZE
 					overlays += snow2
-				if(2)
+				if (2)
 					snow1.pixel_y = -WORLD_ICON_SIZE
 					overlays += snow1
 					snow2.pixel_y = -WORLD_ICON_SIZE
 					overlays += snow2
-				if(4)
+				if (4)
 					snow1.pixel_x = WORLD_ICON_SIZE
 					overlays += snow1
 					snow2.pixel_x = WORLD_ICON_SIZE
 					overlays += snow2
-				if(8)
+				if (8)
 					snow1.pixel_x = -WORLD_ICON_SIZE
 					overlays += snow1
 					snow2.pixel_x = -WORLD_ICON_SIZE
@@ -183,7 +183,7 @@
 			snow2.pixel_x = 0
 			snow1.pixel_y = 0
 			snow2.pixel_y = 0
-	if(lights_on)
+	if (lights_on)
 		set_light(5, 0.5)
 	else
 		set_light(0, 0)
@@ -210,17 +210,17 @@
 
 	var/junction = findSmoothingNeighbors()
 	var/dircount = 0
-	for(var/direction in diagonal)
-		if(istype(get_step(src, direction), /turf/unsimulated/floor/snow/permafrost))
-			if((direction & junction) == direction)
+	for (var/direction in diagonal)
+		if (istype(get_step(src, direction), /turf/unsimulated/floor/snow/permafrost))
+			if ((direction & junction) == direction)
 				overlays += dirt_layers["diag[direction]"]
 				dircount++
-	if(dircount == 4)
+	if (dircount == 4)
 		overlays.Cut()
 		icon_state = "permafrost_full"
 		overlays += snow_layers["1"]
 		overlays += snow_layers["2"]
-	else if(junction)
+	else if (junction)
 		overlays += dirt_layers["snow[junction]"]
 	else
 		overlays += dirt_layers["snow0"]

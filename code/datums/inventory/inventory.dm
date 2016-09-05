@@ -11,27 +11,27 @@
 
 /datum/inventory/proc/addItem(var/obj/O)
 	var/datum/inventory_slot/found
-	for(var/datum/inventory_slot/S in slots)
-		if(S.canAccept(O))
+	for (var/datum/inventory_slot/S in slots)
+		if (S.canAccept(O))
 			found=S
 
-	if(!found && variableSlots)
+	if (!found && variableSlots)
 		found = addSlot(slot_type)
 
-	if(found)
+	if (found)
 		found.setContent(O)
 
 	return found.ID
 
 /datum/inventory/proc/findObjectSlot(var/obj/O)
-	for(var/datum/inventory_slot/S in slots)
-		if(S.content == O)
+	for (var/datum/inventory_slot/S in slots)
+		if (S.content == O)
 			return S
 	return null
 
 /datum/inventory/proc/removeItem(var/obj/O)
 	var/datum/inventory_slot/slot = findObjectSlot(O)
-	if(slot)
+	if (slot)
 		slot.clearContent()
 
 /datum/inventory/proc/addSlot(var/slot_type)

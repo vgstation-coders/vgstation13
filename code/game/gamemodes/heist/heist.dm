@@ -31,23 +31,23 @@
 	var/raider_num = 0
 
 	//Check that we have enough vox.
-	if(candidates.len < required_enemies)
+	if (candidates.len < required_enemies)
 		log_admin("Failed to set-up a round of heist. Couldn't find enough volunteers to be vox raiders.(only [candidates.len] volunteers out of at least [required_enemies])")
 		message_admins("Failed to set-up a round of heist. Couldn't find enough volunteers to be vox raiders.(only [candidates.len] volunteers out of at least [required_enemies])")
 		return 0
-	else if(candidates.len < recommended_enemies)
+	else if (candidates.len < recommended_enemies)
 		raider_num = candidates.len
 	else
 		raider_num = recommended_enemies
 
 	//Grab candidates randomly until we have enough.
-	while(raider_num > 0)
+	while (raider_num > 0)
 		var/datum/mind/new_raider = pick(candidates)
 		raiders += new_raider
 		candidates -= new_raider
 		raider_num--
 
-	for(var/datum/mind/raider in raiders)
+	for (var/datum/mind/raider in raiders)
 		raider.assigned_role = "MODE"
 		raider.special_role = "Vox Raider"
 
@@ -60,8 +60,8 @@
 	//Build a list of spawn points.
 	var/list/turf/raider_spawn = list()
 
-	for(var/obj/effect/landmark/start in landmarks_list)
-		if(start.name == "voxstart")
+	for (var/obj/effect/landmark/start in landmarks_list)
+		if (start.name == "voxstart")
 			raider_spawn += get_turf(start)
 			qdel(start)
 
@@ -71,9 +71,9 @@
 	var/index = 1
 
 	//Spawn the vox!
-	for(var/datum/mind/raider in raiders)
+	for (var/datum/mind/raider in raiders)
 
-		if(index > raider_spawn.len)
+		if (index > raider_spawn.len)
 			index = 1
 
 		raider.current.forceMove(raider_spawn[index])
@@ -83,9 +83,9 @@
 		var/mob/living/carbon/human/vox = raider.current
 		raider.name = vox.name
 		vox.age = rand(12,20)
-		if(vox.overeatduration) //We need to do this here and now, otherwise a lot of gear will fail to spawn
+		if (vox.overeatduration) //We need to do this here and now, otherwise a lot of gear will fail to spawn
 			vox.overeatduration = 0 //Fat-B-Gone
-			if(vox.nutrition > 400) //We are also overeating nutriment-wise
+			if (vox.nutrition > 400) //We are also overeating nutriment-wise
 				vox.nutrition = 400 //Fix that
 			vox.mutations.Remove(M_FAT)
 			vox.update_mutantrace(0)
@@ -104,7 +104,7 @@
 		vox.remove_language(LANGUAGE_GALACTIC_COMMON)
 		vox.h_style = "Short Vox Quills"
 		vox.f_style = "Shaved"
-		for(var/datum/organ/external/limb in vox.organs)
+		for (var/datum/organ/external/limb in vox.organs)
 			limb.status &= ~(ORGAN_DESTROYED | ORGAN_ROBOT | ORGAN_PEG)
 		vox.equip_vox_raider()
 		vox.regenerate_icons()
@@ -113,31 +113,31 @@
 		greet_vox(raider)
 
 	spawn (rand(waittime_l, waittime_h))
-		if(!mixed)
+		if (!mixed)
 			send_intercept()
 
 /datum/game_mode/heist/proc/is_raider_crew_alive()
 	var/raider_crew_count = raiders.len
 
-	for(var/datum/mind/raider in raiders)
-		if(raider && ishuman(raider.current) && raider.current.stat != DEAD)
+	for (var/datum/mind/raider in raiders)
+		if (raider && ishuman(raider.current) && raider.current.stat != DEAD)
 			continue
 
 		raider_crew_count--
 
-	if(raider_crew_count <= 0)
+	if (raider_crew_count <= 0)
 		return FALSE
 
 	return TRUE
 
 /datum/game_mode/heist/proc/is_raider_crew_safe()
-	if(!is_raider_crew_alive())
+	if (!is_raider_crew_alive())
 		return FALSE
 
 	var/end_area = get_area_master(locate(/area/shuttle/vox/station))
 
-	for(var/datum/mind/raider in raiders)
-		if(get_area_master(raider.current) != end_area)
+	for (var/datum/mind/raider in raiders)
+		if (get_area_master(raider.current) != end_area)
 			return FALSE
 
 	return TRUE
@@ -151,15 +151,15 @@
 	/* var/i = 1
 	var/max_objectives = pick(2,2,2,3,3)
 	var/list/objs = list()
-	while(i<= max_objectives)
+	while (i<= max_objectives)
 		var/list/goals = list("kidnap","loot","salvage")
 		var/goal = pick(goals)
 		var/datum/objective/heist/O
 
-		if(goal == "kidnap")
+		if (goal == "kidnap")
 			goals -= "kidnap"
 			O = new /datum/objective/heist/kidnap()
-		else if(goal == "loot")
+		else if (goal == "loot")
 			O = new /datum/objective/heist/loot()
 		else
 			O = new /datum/objective/heist/salvage()
@@ -172,7 +172,7 @@
 	objs += new /datum/objective/heist/inviolate_crew
 	objs += new /datum/objective/heist/inviolate_death */
 
-	if(prob(25))
+	if (prob(25))
 		raid_objectives += new/datum/objective/heist/kidnap
 
 	raid_objectives += new/datum/objective/steal/heist
@@ -180,10 +180,10 @@
 	raid_objectives += new/datum/objective/heist/inviolate_crew
 	raid_objectives += new/datum/objective/heist/inviolate_death
 
-	for(var/datum/objective/heist/O in raid_objectives)
+	for (var/datum/objective/heist/O in raid_objectives)
 		O.choose_target()
 
-	for(var/datum/objective/steal/O in raid_objectives)
+	for (var/datum/objective/steal/O in raid_objectives)
 		O.find_target()
 
 /datum/game_mode/heist/proc/greet_vox(const/datum/mind/raider)
@@ -194,12 +194,12 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 
 	var/obj_count = 0
 
-	for(var/datum/objective/objective in raider.objectives)
+	for (var/datum/objective/objective in raider.objectives)
 		to_chat(raider.current, "<B>Objective #[obj_count++]</B>: [objective.explanation_text]")
 
 /datum/game_mode/heist/declare_completion()
 	// no objectives, go straight to the feedback
-	if(isnull(raid_objectives) || raid_objectives.len <= 0)
+	if (isnull(raid_objectives) || raid_objectives.len <= 0)
 		return ..()
 
 	var/win_type = "Major"
@@ -209,15 +209,15 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 	var/success = raid_objectives.len
 
 	//Decrease success for failed objectives.
-	for(var/datum/objective/O in raid_objectives)
-		if(!(O.check_completion()))
+	for (var/datum/objective/O in raid_objectives)
+		if (!(O.check_completion()))
 			success--
 
 	//Set result by objectives.
-	if(success == raid_objectives.len)
+	if (success == raid_objectives.len)
 		win_type = "Major"
 		win_group = "Vox"
-	else if(success > 2)
+	else if (success > 2)
 		win_type = "Minor"
 		win_group = "Vox"
 	else
@@ -225,19 +225,19 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 		win_group = "Crew"
 
 	// now we modify that result by the state of the vox crew
-	if(!is_raider_crew_alive())
+	if (!is_raider_crew_alive())
 		win_type = "Major"
 		win_group = "Crew"
 		win_msg += "<B>The Vox Raiders have been wiped out!</B>"
-	else if(!is_raider_crew_safe())
-		if(win_group == "Crew" && win_type == "Minor")
+	else if (!is_raider_crew_safe())
+		if (win_group == "Crew" && win_type == "Minor")
 			win_type = "Major"
 
 		win_group = "Crew"
 		win_msg += "<B>The Vox Raiders have left someone behind!</B>"
 	else
-		if(win_group == "Vox")
-			if(win_type == "Minor")
+		if (win_group == "Vox")
+			if (win_type == "Minor")
 				win_type = "Major"
 
 			win_msg += "<B>The Vox Raiders escaped the station!</B>"
@@ -250,10 +250,10 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 
 	var/count = 0
 
-	for(var/datum/objective/objective in raid_objectives)
+	for (var/datum/objective/objective in raid_objectives)
 		count++
 
-		if(objective.check_completion())
+		if (objective.check_completion())
 			completion_text += "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='green'><B>Success!</B></font>"
 			feedback_add_details("traitor_objective","[objective.type]|SUCCESS")
 		else
@@ -266,24 +266,24 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 	var/text = {"<br><img src="logo_[tempstate].png"> <FONT size = 2><B>The vox raiders were:</B></FONT> <img src="logo_[tempstate].png">"}
 	var/end_area = get_area_master(locate(/area/shuttle/vox/station))
 
-	for(var/datum/mind/vox in raiders)
+	for (var/datum/mind/vox in raiders)
 
-		if(vox.current)
+		if (vox.current)
 			var/icon/flat = getFlatIcon(vox.current, SOUTH, 1, 1)
 			end_icons += flat
 			tempstate = end_icons.len
 			text += {"<br><img src="logo_[tempstate].png"> <b>[vox.key]</b> was <b>[vox.name]</b> ("}
-			if(get_area_master(vox.current) != end_area) // areaMaster var can be used on this if move_contents_to proc refactored to use Move()
+			if (get_area_master(vox.current) != end_area) // areaMaster var can be used on this if move_contents_to proc refactored to use Move()
 				text += "left behind, "
 
-			if(vox.current.stat != DEAD)
+			if (vox.current.stat != DEAD)
 				text += "survived"
 			else
 				text += "died"
 				flat.Turn(90)
 				end_icons[tempstate] = flat
 
-			if(vox.current.real_name != vox.name)
+			if (vox.current.real_name != vox.name)
 				text += " as [vox.current.real_name]"
 		else
 			var/icon/sprotch = icon('icons/effects/blood.dmi', "voxblood")
@@ -299,7 +299,7 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 	return 1
 
 /datum/game_mode/heist/check_finished()
-	if(!is_raider_crew_alive() || (vox_shuttle && vox_shuttle.returned_home))
+	if (!is_raider_crew_alive() || (vox_shuttle && vox_shuttle.returned_home))
 		return 1
 
 	return ..()

@@ -16,14 +16,14 @@
 /obj/machinery/driver_button/New(turf/loc, var/w_dir=null)
 	..()
 	machine_flags |= MULTITOOL_MENU
-	switch(w_dir)
-		if(NORTH)
+	switch (w_dir)
+		if (NORTH)
 			pixel_y = 25 * PIXEL_MULTIPLIER
-		if(SOUTH)
+		if (SOUTH)
 			pixel_y = -25 * PIXEL_MULTIPLIER
-		if(EAST)
+		if (EAST)
 			pixel_x = 25 * PIXEL_MULTIPLIER
-		if(WEST)
+		if (WEST)
 			pixel_x = -25 * PIXEL_MULTIPLIER
 
 /obj/machinery/ignition_switch

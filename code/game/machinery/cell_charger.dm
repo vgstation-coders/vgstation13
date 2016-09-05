@@ -34,11 +34,11 @@
 
 /obj/machinery/cell_charger/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/scanning_module/SM in component_parts)
+	for (var/obj/item/weapon/stock_parts/scanning_module/SM in component_parts)
 		T = (SM.rating - 1)*0.1 //There is one scanning module. Level 1 changes nothing (70 %), level 2 transfers 80 % of power, level 3 90 %
 	transfer_efficiency_bonus = T
 	T = 0
-	for(var/obj/item/weapon/stock_parts/capacitor/CA in component_parts)
+	for (var/obj/item/weapon/stock_parts/capacitor/CA in component_parts)
 		T += CA.rating //Two capacitors, every upgrade rank acts as a direct multiplier (up to 3 times base for two Level 3 Capacitors)
 	transfer_rate_coeff = T/2
 	T = 0
@@ -47,11 +47,11 @@
 /obj/machinery/cell_charger/proc/updateicon()
 	icon_state = "ccharger[charging ? 1 : 0]"
 
-	if(charging && !(stat & (BROKEN|NOPOWER)) )
+	if (charging && !(stat & (BROKEN|NOPOWER)) )
 		var/newlevel = 	round(charging.percent() * 4.0 / 99)
 //		to_chat(world, "nl: [newlevel]")
 
-		if(chargelevel != newlevel)
+		if (chargelevel != newlevel)
 			overlays.len = 0
 			overlays += image(icon = icon, icon_state = "ccharger-o[newlevel]")
 			chargelevel = newlevel
@@ -61,44 +61,44 @@
 /obj/machinery/cell_charger/examine(mob/user)
 	..()
 	to_chat(user, "There's [charging ? "a" : "no"] cell in the charger.")
-	if(charging)
+	if (charging)
 		to_chat(user, "Current charge: [charging.charge]")
 
 /obj/machinery/cell_charger/attackby(obj/item/weapon/W, mob/user)
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		return
 
-	if(..())
+	if (..())
 		return 1
-	if(istype(W, /obj/item/weapon/cell) && anchored)
-		if(charging)
+	if (istype(W, /obj/item/weapon/cell) && anchored)
+		if (charging)
 			to_chat(user, "<span class='warning'>There is already a cell in [src].</span>")
 			return
 		else
-			if(areaMaster.power_equip == 0) // There's no APC in this area, don't try to cheat power!
+			if (areaMaster.power_equip == 0) // There's no APC in this area, don't try to cheat power!
 				to_chat(user, "<span class='warning'>[src] blinks red as you try to insert the cell!</span>")
 				return
 
-			if(user.drop_item(W, src))
+			if (user.drop_item(W, src))
 				charging = W
 				user.visible_message("<span class='notice'>[user] inserts a cell into [src].</span>", "<span class='notice'>You insert a cell into [src].</span>")
 				chargelevel = -1
 		updateicon()
 
 /obj/machinery/cell_charger/emag(mob/user)
-	if(!emagged)
+	if (!emagged)
 		emagged = 1 //Congratulations, you've done it
 		user.visible_message("<span class='warning'>[user] swipes a card into \the [src]'s charging port.</span>", \
 		"<span class='warning'>You hear fizzling coming from \the [src] and a wire turns red hot as you swipe the electromagnetic card. Better not use it anymore.</span>")
 		return
 
 /obj/machinery/cell_charger/attack_robot(mob/user as mob)
-	if(isMoMMI(user) && Adjacent(user)) //To be able to remove cells from the charger
+	if (isMoMMI(user) && Adjacent(user)) //To be able to remove cells from the charger
 		return attack_hand(user)
 
 /obj/machinery/cell_charger/attack_hand(mob/user)
-	if(charging)
-		if(emagged) //Oh shit nigger what are you doing
+	if (charging)
+		if (emagged) //Oh shit nigger what are you doing
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 			s.set_up(5, 1, src)
 			s.start()
@@ -115,7 +115,7 @@
 		updateicon()
 
 /obj/machinery/cell_charger/wrenchAnchor(mob/user)
-	if(charging)
+	if (charging)
 		to_chat(user, "<span class='warning'>Remove the cell first!</span>")
 		return
 	..()
@@ -124,19 +124,19 @@
 	return
 
 /obj/machinery/cell_charger/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
-	if(charging)
+	if (charging)
 		charging.emp_act(severity)
 	..(severity)
 
 
 /obj/machinery/cell_charger/process()
 //	to_chat(world, "ccpt [charging] [stat]")
-	if(!charging || (stat & (BROKEN|NOPOWER)) || !anchored)
+	if (!charging || (stat & (BROKEN|NOPOWER)) || !anchored)
 		return
 
-	if(emagged) //Did someone fuck with the charger ?
+	if (emagged) //Did someone fuck with the charger ?
 		use_power(transfer_rate*transfer_rate_coeff*10) //Drain all the power
 		charging.give(transfer_rate*transfer_rate_coeff*(transfer_efficiency+transfer_efficiency_bonus)*0.25) //Lose most of it
 	else

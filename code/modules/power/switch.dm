@@ -24,7 +24,7 @@
 
 /obj/structure/powerswitch/examine(mob/user)
 	..()
-	if(on)
+	if (on)
 		to_chat(user, "The switch is in the on position")
 	else
 		to_chat(user, "The switch is in the off position")
@@ -35,34 +35,34 @@
 
 /obj/structure/powerswitch/attack_hand(mob/user)
 
-	if(busy)
+	if (busy)
 		to_chat(user, "<span class='warning'>This switch is already being toggled.</span>")
 		return
 
 	..()
 
 	busy = 1
-	for(var/mob/O in viewers(user))
+	for (var/mob/O in viewers(user))
 		O.show_message(text("<span class='warning'>[user] started pulling the [src].</span>"), 1)
 
-	if(do_after(user, src, 50))
+	if (do_after(user, src, 50))
 		set_state(!on)
-		for(var/mob/O in viewers(user))
+		for (var/mob/O in viewers(user))
 			O.show_message(text("<span class='warning'>[user] flipped the [src] into the [on ? "on": "off"] position.</span>"), 1)
 	busy = 0
 
 /obj/structure/powerswitch/proc/set_state(var/state)
 	on = state
-	if(on)
+	if (on)
 		icon_state = icon_state_on
 		var/list/connection_dirs = list()
-		for(var/direction in alldirs)
-			for(var/obj/structure/cable/C in get_step(src,direction))
-				if(C.d1 == turn(direction, 180) || C.d2 == turn(direction, 180))
+		for (var/direction in alldirs)
+			for (var/obj/structure/cable/C in get_step(src,direction))
+				if (C.d1 == turn(direction, 180) || C.d2 == turn(direction, 180))
 					connection_dirs += direction
 					break
 
-		for(var/direction in connection_dirs)
+		for (var/direction in connection_dirs)
 			var/obj/structure/cable/C = new/obj/structure/cable(src.loc)
 			C.d1 = 0
 			C.d2 = direction
@@ -79,6 +79,6 @@
 
 	else
 		icon_state = icon_state_off
-		for(var/obj/structure/cable/C in src.loc)
+		for (var/obj/structure/cable/C in src.loc)
 			del(C)
 */

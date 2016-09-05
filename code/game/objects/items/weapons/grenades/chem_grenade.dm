@@ -20,24 +20,24 @@
 	var/mob/primed_by = "N/A" //"name (ckey)". For logging purposes
 
 /obj/item/weapon/grenade/chem_grenade/attack_self(mob/user as mob)
-	if(!stage || stage==1)
-		if(detonator)
+	if (!stage || stage==1)
+		if (detonator)
 //				detonator.loc=src.loc
 			detonator.detached()
 			usr.put_in_hands(detonator)
 			detonator=null
 			stage=0
 			icon_state = initial(icon_state)
-		else if(beakers.len)
-			for(var/obj/B in beakers)
-				if(istype(B))
+		else if (beakers.len)
+			for (var/obj/B in beakers)
+				if (istype(B))
 					beakers -= B
 					user.put_in_hands(B)
 					firstExtract = null
 					secondExtract = null
 					inserted_cores = 0
 		name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
-	if(stage > 1 && !active && clown_check(user))
+	if (stage > 1 && !active && clown_check(user))
 		to_chat(user, "<span class='attack'>You prime \the [name]!</span>")
 
 		log_attack("<font color='red'>[user.name] ([user.ckey]) primed \a [src].</font>")
@@ -47,17 +47,17 @@
 
 		activate()
 		add_fingerprint(user)
-		if(iscarbon(user))
+		if (iscarbon(user))
 			var/mob/living/carbon/C = user
 			C.throw_mode_on()
 
 /obj/item/weapon/grenade/chem_grenade/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/device/assembly_holder) && (!stage || stage==1) && path != 2)
+	if (istype(W,/obj/item/device/assembly_holder) && (!stage || stage==1) && path != 2)
 		var/obj/item/device/assembly_holder/det = W
-		if(istype(det.a_left,det.a_right.type) || (!isigniter(det.a_left) && !isigniter(det.a_right)))
+		if (istype(det.a_left,det.a_right.type) || (!isigniter(det.a_left) && !isigniter(det.a_right)))
 			to_chat(user, "<span class='warning'> Assembly must contain one igniter.</span>")
 			return
-		if(!det.secured)
+		if (!det.secured)
 			to_chat(user, "<span class='warning'> Assembly must be secured with screwdriver.</span>")
 			return
 		path = 1
@@ -69,9 +69,9 @@
 		icon_state = initial(icon_state) +"_ass"
 		name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
 		stage = 1
-	else if(istype(W,/obj/item/stack/cable_coil/) && !beakers.len)
+	else if (istype(W,/obj/item/stack/cable_coil/) && !beakers.len)
 		var/obj/item/stack/cable_coil/coil = W
-		if(coil.amount < 2)
+		if (coil.amount < 2)
 			return
 		coil.use(2)
 		var/obj/item/weapon/electrolyzer/E = new /obj/item/weapon/electrolyzer
@@ -80,10 +80,10 @@
 		user.before_take_item(src)
 		user.put_in_hands(E)
 		qdel(src)
-	else if(istype(W,/obj/item/weapon/screwdriver) && path != 2)
-		if(stage == 1)
+	else if (istype(W,/obj/item/weapon/screwdriver) && path != 2)
+		if (stage == 1)
 			path = 1
-			if(beakers.len)
+			if (beakers.len)
 				to_chat(user, "<span class='notice'>You lock the assembly.</span>")
 				name = "grenade"
 			else
@@ -93,8 +93,8 @@
 			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 25, -3)
 			icon_state = initial(icon_state) +"_locked"
 			stage = 2
-		else if(stage == 2)
-			if(active && prob(95))
+		else if (stage == 2)
+			if (active && prob(95))
 				to_chat(user, "<span class='warning'>You trigger the assembly!</span>")
 				prime()
 				return
@@ -105,9 +105,9 @@
 				icon_state = initial(icon_state) + (detonator?"_ass":"")
 				stage = 1
 				active = 0
-	else if(is_type_in_list(W, allowed_containers) && (!stage || stage==1) && path != 2)
+	else if (is_type_in_list(W, allowed_containers) && (!stage || stage==1) && path != 2)
 		path = 1
-		if(beakers.len == 2)
+		if (beakers.len == 2)
 			to_chat(user, "<span class='warning'> The grenade can not hold more containers.</span>")
 			return
 		else
@@ -115,15 +115,15 @@
 				if (inserted_cores > 0)
 					to_chat(user, "<span class='warning'> This type of grenade cannot hold more than one slime core.</span>")
 				else
-					if(user.drop_item(W, src))
+					if (user.drop_item(W, src))
 						to_chat(user, "<span class='notice'>You add \the [W] to the assembly.</span>")
 						inserted_cores++
 						firstExtract = W
 						beakers += W
 						stage = 1
 						name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
-			else if(W.reagents.total_volume)
-				if(user.drop_item(W, src))
+			else if (W.reagents.total_volume)
+				if (user.drop_item(W, src))
 					to_chat(user, "<span class='notice'>You add \the [W] to the assembly.</span>")
 					beakers += W
 					stage = 1
@@ -132,11 +132,11 @@
 				to_chat(user, "<span class='warning'> \the [W] is empty.</span>")
 	else if (istype(W,/obj/item/slime_extract))
 		to_chat(user, "<span class='warning'> This grenade case is too small for a slime core to fit in it.</span>")
-	else if(iscrowbar(W))
+	else if (iscrowbar(W))
 		to_chat(user, "You begin pressing \the [W] into \the [src].")
-		if(do_after(user, src, 30))
+		if (do_after(user, src, 30))
 			to_chat(user, "You poke a hole in \the [src].")
-			if(src.loc == user)
+			if (src.loc == user)
 				user.drop_item(src, force_drop = 1)
 				var/obj/item/weapon/fuel_reservoir/I = new (get_turf(user))
 				user.put_in_hands(I)
@@ -147,34 +147,34 @@
 
 /obj/item/weapon/grenade/chem_grenade/examine(mob/user)
 	..()
-	if(detonator)
+	if (detonator)
 		to_chat(user, "<span class='info'>With an attached [detonator.name]</span>")
 
 /obj/item/weapon/grenade/chem_grenade/Crossed(AM as mob|obj)
-	if(detonator)
+	if (detonator)
 		detonator.Crossed(AM)
 	..()
 
 /obj/item/weapon/grenade/chem_grenade/on_found(AM as mob|obj)
-	if(detonator)
+	if (detonator)
 		detonator.on_found(AM)
 	..()
 
 /obj/item/weapon/grenade/chem_grenade/activate(mob/user as mob)
-	if(active)
+	if (active)
 		return
 
-	if(detonator)
-		if(!isigniter(detonator.a_left))
+	if (detonator)
+		if (!isigniter(detonator.a_left))
 			detonator.a_left.activate()
 			active = 1
-		if(!isigniter(detonator.a_right))
+		if (!isigniter(detonator.a_right))
 			detonator.a_right.activate()
 			active = 1
-	if(active)
+	if (active)
 		icon_state = initial(icon_state) + "_active"
 
-		if(user)
+		if (user)
 			log_attack("<font color='red'>[user.name] ([user.ckey]) primed \a [src]</font>")
 			log_admin("ATTACK: [user] ([user.ckey]) primed \a [src]")
 			message_admins("ATTACK: [user] ([user.ckey]) primed \a [src]")
@@ -183,21 +183,21 @@
 	return
 
 /obj/item/weapon/grenade/chem_grenade/proc/primed(var/primed = 1)
-	if(active)
+	if (active)
 		icon_state = initial(icon_state) + (primed?"_primed":"_active")
 
 /obj/item/weapon/grenade/chem_grenade/prime()
-	if(!stage || stage<2)
+	if (!stage || stage<2)
 		return
 
 	//if(prob(reliability))
 	var/has_reagents = 0
-	for(var/obj/item/weapon/reagent_containers/glass/G in beakers)
-		if(G.reagents.total_volume)
+	for (var/obj/item/weapon/reagent_containers/glass/G in beakers)
+		if (G.reagents.total_volume)
 			has_reagents = 1
 
 	active = 0
-	if(!has_reagents)
+	if (!has_reagents)
 		icon_state = initial(icon_state) +"_locked"
 		playsound(get_turf(src), 'sound/items/Screwdriver2.ogg', 50, 1)
 		return
@@ -208,13 +208,13 @@
 
 	reservoir = new /obj/item/weapon/reagent_containers/glass/beaker/noreactgrenade() //acts like a stasis beaker, so the chemical reactions don't occur before all the slime reactions have occured
 
-	for(var/obj/item/weapon/reagent_containers/glass/G in beakers)
+	for (var/obj/item/weapon/reagent_containers/glass/G in beakers)
 		G.reagents.trans_to(reservoir, G.reagents.total_volume)
-	for(var/obj/item/slime_extract/S in beakers)		//checking for reagents inside the slime extracts
+	for (var/obj/item/slime_extract/S in beakers)		//checking for reagents inside the slime extracts
 		S.reagents.trans_to(reservoir, S.reagents.total_volume)
 	if (firstExtract != null)
 		extract_uses = firstExtract.Uses
-		for(var/i=1,i<=extract_uses,i++)//<-------//exception for slime extracts injected with steroids. The grenade will repeat its checks untill all its remaining uses are gone
+		for (var/i=1,i<=extract_uses,i++)//<-------//exception for slime extracts injected with steroids. The grenade will repeat its checks untill all its remaining uses are gone
 			if (reservoir.reagents.has_reagent(PLASMA, 5))
 				reservoir.reagents.trans_id_to(firstExtract, PLASMA, 5)		//If the grenade contains a slime extract, the grenade will check in this order
 			else if (reservoir.reagents.has_reagent(BLOOD, 5))	//for any Plasma -> Blood ->or Water among the reagents of the other containers
@@ -223,11 +223,11 @@
 				reservoir.reagents.trans_id_to(firstExtract, WATER, 5)
 			else if (reservoir.reagents.has_reagent(SUGAR, 5))
 				reservoir.reagents.trans_id_to(firstExtract, SUGAR, 5)
-		if(firstExtract.reagents.total_volume)						  //<-------//exception for slime reactions that produce new reagents. The grenade checks if any
+		if (firstExtract.reagents.total_volume)						  //<-------//exception for slime reactions that produce new reagents. The grenade checks if any
 			firstExtract.reagents.trans_to(reservoir, firstExtract.reagents.total_volume)	//reagents are left in the slime extracts after the slime reactions occured
 		if (secondExtract != null)
 			extract_uses = secondExtract.Uses
-			for(var/j=1,j<=extract_uses,j++)	//why don't anyone ever uses "while" directives anyway?
+			for (var/j=1,j<=extract_uses,j++)	//why don't anyone ever uses "while" directives anyway?
 				if (reservoir.reagents.has_reagent(PLASMA, 5))
 					reservoir.reagents.trans_id_to(secondExtract, PLASMA, 5)	//since the order in which slime extracts are inserted matters (in the case of an Ex grenade)
 				else if (reservoir.reagents.has_reagent(BLOOD, 5))//this allow users to plannify which reagent will get into which extract.
@@ -236,7 +236,7 @@
 					reservoir.reagents.trans_id_to(secondExtract, WATER, 5)
 				else if (reservoir.reagents.has_reagent(SUGAR, 5))
 					reservoir.reagents.trans_id_to(secondExtract, SUGAR, 5)
-			if(secondExtract.reagents.total_volume)
+			if (secondExtract.reagents.total_volume)
 				secondExtract.reagents.trans_to(reservoir, secondExtract.reagents.total_volume)
 
 		reservoir.reagents.update_total()
@@ -245,14 +245,14 @@
 
 	reservoir.reagents.trans_to(src, reservoir.reagents.total_volume)
 
-	if(src.reagents.total_volume) //The possible reactions didnt use up all reagents.
+	if (src.reagents.total_volume) //The possible reactions didnt use up all reagents.
 		var/datum/effect/effect/system/steam_spread/steam = new /datum/effect/effect/system/steam_spread()
 		steam.set_up(10, 0, get_turf(src))
 		steam.attach(src)
 		steam.start()
 
-		for(var/atom/A in view(affected_area, get_turf(src)))
-			if( A == src )
+		for (var/atom/A in view(affected_area, get_turf(src)))
+			if ( A == src )
 				continue
 			src.reagents.reaction(A, 1, 10)
 
@@ -262,7 +262,7 @@
 	/*else
 		icon_state = initial(icon_state) + "_locked"
 		crit_fail = 1
-		for(var/obj/item/weapon/reagent_containers/glass/G in beakers)
+		for (var/obj/item/weapon/reagent_containers/glass/G in beakers)
 			G.forceMove(get_turf(src.loc))*/
 
 /obj/item/weapon/grenade/chem_grenade/New()
@@ -286,12 +286,12 @@ obj/item/weapon/grenade/chem_grenade/exgrenade
 	affected_area = 4
 
 obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/device/assembly_holder) && (!stage || stage==1) && path != 2)
+	if (istype(W,/obj/item/device/assembly_holder) && (!stage || stage==1) && path != 2)
 		var/obj/item/device/assembly_holder/det = W
-		if(istype(det.a_left,det.a_right.type) || (!isigniter(det.a_left) && !isigniter(det.a_right)))
+		if (istype(det.a_left,det.a_right.type) || (!isigniter(det.a_left) && !isigniter(det.a_right)))
 			to_chat(user, "<span class='warning'> Assembly must contain one igniter.</span>")
 			return
-		if(!det.secured)
+		if (!det.secured)
 			to_chat(user, "<span class='warning'> Assembly must be secured with screwdriver.</span>")
 			return
 		path = 1
@@ -303,10 +303,10 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 		icon_state = initial(icon_state) +"_ass"
 		name = "unsecured EX grenade with [beakers.len] containers[detonator?" and detonator":""]"
 		stage = 1
-	else if(istype(W,/obj/item/weapon/screwdriver) && path != 2)
-		if(stage == 1)
+	else if (istype(W,/obj/item/weapon/screwdriver) && path != 2)
+		if (stage == 1)
 			path = 1
-			if(beakers.len)
+			if (beakers.len)
 				to_chat(user, "<span class='notice'>You lock the assembly.</span>")
 				name = "EX Grenade"
 			else
@@ -315,8 +315,8 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 25, -3)
 			icon_state = initial(icon_state) +"_locked"
 			stage = 2
-		else if(stage == 2)
-			if(active && prob(95))
+		else if (stage == 2)
+			if (active && prob(95))
 				to_chat(user, "<span class='attack'>You trigger the assembly!</span>")
 				prime()
 				return
@@ -327,9 +327,9 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 				icon_state = initial(icon_state) + (detonator?"_ass":"")
 				stage = 1
 				active = 0
-	else if(is_type_in_list(W, allowed_containers) && (!stage || stage==1) && path != 2)
+	else if (is_type_in_list(W, allowed_containers) && (!stage || stage==1) && path != 2)
 		path = 1
-		if(beakers.len == 3)
+		if (beakers.len == 3)
 			to_chat(user, "<span class='warning'> The grenade can not hold more containers.</span>")
 			return
 		else
@@ -337,18 +337,18 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 				if (inserted_cores > 1)
 					to_chat(user, "<span class='warning'>You cannot fit more than two slime cores in this grenade.</span>")
 				else
-					if(user.drop_item(W, src))
+					if (user.drop_item(W, src))
 						to_chat(user, "<span class='notice'>You add \the [W] to the assembly.</span>")
 						beakers += W
-						if(!firstExtract)
+						if (!firstExtract)
 							firstExtract = W
 						else
 							secondExtract = W
 						inserted_cores++
 						stage = 1
 						name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
-			else if(W.reagents.total_volume)
-				if(user.drop_item(W, src))
+			else if (W.reagents.total_volume)
+				if (user.drop_item(W, src))
 					to_chat(user, "<span class='notice'>You add \the [W] to the assembly.</span>")
 					beakers += W
 					stage = 1

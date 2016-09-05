@@ -39,28 +39,28 @@
 	manual_unbuckle(user)
 
 /obj/structure/bed/attack_robot(mob/user as mob)
-	if(Adjacent(user))
+	if (Adjacent(user))
 		manual_unbuckle(user)
 
 /obj/structure/bed/MouseDrop(atom/over_object)
 	return
 
 /obj/structure/bed/MouseDrop_T(mob/M as mob, mob/user as mob)
-	if(!istype(M))
+	if (!istype(M))
 		return
 
 	buckle_mob(M, user)
 
 /obj/structure/bed/proc/manual_unbuckle(mob/user as mob)
-	if(!locked_atoms.len)
+	if (!locked_atoms.len)
 		return
 
-	if(user.size <= SIZE_TINY)
+	if (user.size <= SIZE_TINY)
 		to_chat(user, "<span class='warning'>You are too small to do that.</span>")
 		return
 
 	var/mob/M = locked_atoms[1]
-	if(M != user)
+	if (M != user)
 		M.visible_message(\
 			"<span class='notice'>[M] was unbuckled by [user]!</span>",\
 			"You were unbuckled from \the [src] by [user].",\
@@ -76,30 +76,30 @@
 	add_fingerprint(user)
 
 /obj/structure/bed/proc/buckle_mob(mob/M as mob, mob/user as mob)
-	if(!Adjacent(user) || user.incapacitated() || istype(user, /mob/living/silicon/pai))
+	if (!Adjacent(user) || user.incapacitated() || istype(user, /mob/living/silicon/pai))
 		return
 
-	if(!ismob(M) || (M.loc != src.loc)  || M.locked_to)
+	if (!ismob(M) || (M.loc != src.loc)  || M.locked_to)
 		return
 
-	for(var/mob/living/L in get_locked(lock_type))
+	for (var/mob/living/L in get_locked(lock_type))
 		to_chat(user, "<span class='warning'>Somebody else is already buckled into \the [src]!</span>")
 		return
 
-	if(user.size <= SIZE_TINY) //Fuck off mice
+	if (user.size <= SIZE_TINY) //Fuck off mice
 		to_chat(user, "<span class='warning'>You are too small to do that.</span>")
 		return
 
-	if(isanimal(M))
-		if(M.size <= SIZE_TINY) //Fuck off mice
+	if (isanimal(M))
+		if (M.size <= SIZE_TINY) //Fuck off mice
 			to_chat(user, "<span class='warning'>The [M] is too small to buckle in.</span>")
 			return
 
-	if(istype(M, /mob/living/carbon/slime))
+	if (istype(M, /mob/living/carbon/slime))
 		to_chat(user, "<span class='warning'>The [M] is too squishy to buckle in.</span>")
 		return
 
-	if(M == usr)
+	if (M == usr)
 		M.visible_message(\
 			"<span class='notice'>[M.name] buckles in!</span>",\
 			"You buckle yourself to [src].",\
@@ -144,25 +144,25 @@
 
 /obj/structure/bed/roller/lock_atom(var/atom/movable/AM)
 	. = ..()
-	if(!.)
+	if (!.)
 		return
 
 	icon_state = "up"
 
 /obj/structure/bed/roller/unlock_atom(var/atom/movable/AM)
 	. = ..()
-	if(!.)
+	if (!.)
 		return
 
 	icon_state = "down"
 
 /obj/structure/bed/roller/MouseDrop(over_object, src_location, over_location)
 	..()
-	if(over_object == usr && Adjacent(usr))
-		if(!ishuman(usr) || usr.incapacitated() || usr.lying)
+	if (over_object == usr && Adjacent(usr))
+		if (!ishuman(usr) || usr.incapacitated() || usr.lying)
 			return
 
-		if(locked_atoms.len)
+		if (locked_atoms.len)
 			return 0
 
 		visible_message("[usr] collapses \the [src.name]")
@@ -172,7 +172,7 @@
 		qdel(src)
 
 /obj/structure/bed/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iswrench(W))
+	if (iswrench(W))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		getFromPool(sheet_type, get_turf(src), 2)
 		qdel(src)

@@ -135,6 +135,6 @@ THAT STUPID GAME KIT
 										src.board_stat = text("[][][]", copytext(src.board_stat, 1, place), src.selected, copytext(src.board_stat, place + 2, 129))
 		src.add_fingerprint(usr)
 		update()
-		for(var/mob/M in viewers(1, src))
+		for (var/mob/M in viewers(1, src))
 			if ((M.client && M.machine == src))
 				src.attack_hand(M)

@@ -27,15 +27,15 @@
 	return ..("recipes", "pixel_x", "pixel_y")
 
 /obj/item/stack/sheet/metal/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			returnToPool(src)
 			return
-		if(2.0)
+		if (2.0)
 			if (prob(50))
 				returnToPool(src)
 				return
-		if(3.0)
+		if (3.0)
 			if (prob(5))
 				returnToPool(src)
 				return
@@ -94,11 +94,11 @@
 
 /obj/item/stack/sheet/wood/afterattack(atom/Target, mob/user, adjacent, params)
 	..()
-	if(adjacent)
-		if(isturf(Target) || istype(Target, /obj/structure/lattice))
+	if (adjacent)
+		if (isturf(Target) || istype(Target, /obj/structure/lattice))
 			var/turf/T = get_turf(Target)
-			if(T.canBuildLattice(src))
-				if(src.use(1))
+			if (T.canBuildLattice(src))
+				if (src.use(1))
 					to_chat(user, "<span class='notice'>Constructing some foundations ...</span>")
 					playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1)
 					new /obj/structure/lattice/wood(T)

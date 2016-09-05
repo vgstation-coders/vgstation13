@@ -19,14 +19,14 @@
 
 
 /obj/structure/sign/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			qdel(src)
 			return
-		if(2.0)
+		if (2.0)
 			qdel(src)
 			return
-		if(3.0)
+		if (3.0)
 			qdel(src)
 			return
 		else
@@ -37,7 +37,7 @@
 	return
 
 /obj/structure/sign/attackby(obj/item/tool as obj, mob/user as mob)	//deconstruction
-	if(isscrewdriver(tool) && !istype(src, /obj/structure/sign/double))
+	if (isscrewdriver(tool) && !istype(src, /obj/structure/sign/double))
 		to_chat(user, "You unfasten the sign with your [tool].")
 		var/obj/item/sign/S = new(src.loc)
 		S.name = name
@@ -59,19 +59,19 @@
 	var/sign_state = ""
 
 /obj/item/sign/attackby(obj/item/tool as obj, mob/user as mob)	//construction
-	if(isscrewdriver(tool) && isturf(user.loc))
+	if (isscrewdriver(tool) && isturf(user.loc))
 		var/direction = input("In which direction?", "Select direction.") in list("North", "East", "South", "West", "Cancel")
-		if(direction == "Cancel" || src.loc == null)
+		if (direction == "Cancel" || src.loc == null)
 			return // We can get qdel'd if someone spams screwdrivers on signs before responding to the prompt.
 		var/obj/structure/sign/S = new(user.loc)
-		switch(direction)
-			if("North")
+		switch (direction)
+			if ("North")
 				S.pixel_y = WORLD_ICON_SIZE
-			if("East")
+			if ("East")
 				S.pixel_x = WORLD_ICON_SIZE
-			if("South")
+			if ("South")
 				S.pixel_y = -WORLD_ICON_SIZE
-			if("West")
+			if ("West")
 				S.pixel_x = -WORLD_ICON_SIZE
 			else
 				return
@@ -87,7 +87,7 @@
 /obj/structure/sign/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>")
 
-	if(prob(70))
+	if (prob(70))
 		to_chat(H, "<span class='userdanger'>Ouch! That hurts!</span>")
 
 		H.apply_damage(rand(5,7), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))

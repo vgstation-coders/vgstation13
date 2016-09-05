@@ -54,29 +54,29 @@
 
 	Bumped(AM as mob|obj)
 	//	..()
-		if(istype(AM, /mob/living/carbon/human/zombie))
+		if (istype(AM, /mob/living/carbon/human/zombie))
 			return
-		if(ismob(AM) && (ishuman(AM) || ismonkey(AM)) )
+		if (ismob(AM) && (ishuman(AM) || ismonkey(AM)) )
 			src.target = AM
 			set_attack()
-		else if(ismob(AM))
+		else if (ismob(AM))
 			spawn(0)
 				var/turf/T = get_turf(src)
 				AM:forceMove(T)
 
 	Bump(atom/A)
-		if(istype(A, /mob/living/carbon/human/zombie))
+		if (istype(A, /mob/living/carbon/human/zombie))
 			return
-		if(ismob(A) && (ishuman(A) || ismonkey(A)))
+		if (ismob(A) && (ishuman(A) || ismonkey(A)))
 			src.target = A
 			set_attack()
-		else if(ismob(A))
+		else if (ismob(A))
 			src.forceMove(A:loc)
 
 
 	proc/set_attack()
 		state = 1
-		if(path_idle.len)
+		if (path_idle.len)
 			path_idle = new/list()
 		trg_idle = null
 
@@ -98,7 +98,7 @@
 		frustration = 0
 
 	proc/process()
-		if(timestopped)
+		if (timestopped)
 			sleep(1)
 			continue
 		//set background = 1
@@ -113,11 +113,11 @@
 				src.process()
 			return
 
-		if(istype(src.shoes, /obj/item/clothing/shoes/orange))
+		if (istype(src.shoes, /obj/item/clothing/shoes/orange))
 			var/obj/item/clothing/shoes/orange/Os = src.shoes
-			if(Os.chained)
+			if (Os.chained)
 				slow_move = 1
-		else if(istype(src.wear_suit, /obj/item/clothing/suit/straight_jacket))
+		else if (istype(src.wear_suit, /obj/item/clothing/suit/straight_jacket))
 			slow_move = 1
 
 
@@ -130,39 +130,39 @@
 			for (var/mob/living/carbon/C in range(viewrange-2,src.loc))
 				if (C.stat == 2 || !can_see(src,C,viewrange) || istype(C, /mob/living/carbon/human/zombie) || istype(C, /mob/living/carbon/monkey))
 					continue
-				if(C.incapacitated())
+				if (C.incapacitated())
 					target = C
 					break
-				if(C:health < last_health)
+				if (C:health < last_health)
 					last_health = C:health
 					target = C
 
-			if(target)
+			if (target)
 				set_attack()
-			else if(state != 2)
+			else if (state != 2)
 				set_idle()
 				idle()
 
-		else if(target)
+		else if (target)
 			var/turf/distance = get_dist(src, target)
 			set_attack()
 
-			if(can_see(src,target,viewrange))
-				if(distance <= 1 && !istype(src.wear_mask, /obj/item/clothing/mask))
-					if(prob(25))
-						for(var/mob/O in viewers(world.view,src))
+			if (can_see(src,target,viewrange))
+				if (distance <= 1 && !istype(src.wear_mask, /obj/item/clothing/mask))
+					if (prob(25))
+						for (var/mob/O in viewers(world.view,src))
 							O.show_message("<span class='danger'>[src] has attempted to bite [src.target]!</span>", 1, "<span class='warning'>You hear struggling.</span>", 2)
 					else
-						for(var/mob/O in viewers(world.view,src))
+						for (var/mob/O in viewers(world.view,src))
 							O.show_message("<span class='danger'>[src.target] has been bitten by [src]!</span>", 1, "<span class='warning'>You hear struggling.</span>", 2)
 						var/mob/living/carbon/human/T = target
 						T.bruteloss += rand(1,7)
 						var/datum/organ/external/affecting
-						if(T.organs["head"])
+						if (T.organs["head"])
 							affecting = T.organs["head"]
 						affecting.take_damage(rand(1,7), 0)
 						playsound(get_turf(src), 'sound/items/eatfood.ogg', 50, 1)
-						if(prob(25))
+						if (prob(25))
 							target.contract_disease(new/datum/disease/z_virus)
 						src.add_blood(src.target)
 						if (prob(33))
@@ -184,23 +184,23 @@
 								src.w_uniform.add_blood(src.target)
 					sleep(5)
 					//target:paralysis = max(target:paralysis, 10)
-				else if(distance <= 1 && !src.handcuffed && !istype(src.wear_suit, /obj/item/clothing/suit/straight_jacket))
-					if(prob(25) && src.equipped())
+				else if (distance <= 1 && !src.handcuffed && !istype(src.wear_suit, /obj/item/clothing/suit/straight_jacket))
+					if (prob(25) && src.equipped())
 						var/obj/item/weapon/A = src.equipped()
 						A.attack(src.target, src)
-					else if(prob(25))
-						for(var/mob/O in viewers(world.view,src))
+					else if (prob(25))
+						for (var/mob/O in viewers(world.view,src))
 							O.show_message("<span class='danger'>[src] has attempted to claw [src.target]!</span>", 1, "<span class='warning'>You hear struggling.</span>", 2)
 					else
-						for(var/mob/O in viewers(world.view,src))
+						for (var/mob/O in viewers(world.view,src))
 							O.show_message("<span class='danger'>[src.target] has been clawed by [src]!</span>", 1, "<span class='warning'>You hear struggling.</span>", 2)
 						var/mob/living/carbon/human/T = target
 						T.bruteloss += rand(1,7)
 						var/datum/organ/external/affecting
-						if(T.organs["head"])
+						if (T.organs["head"])
 							affecting = T.organs["head"]
 						affecting.take_damage(rand(1,7), 0)
-						if(prob(12.5))
+						if (prob(12.5))
 							target.contract_disease(new/datum/disease/z_virus)
 						src.add_blood(src.target)
 						if (prob(33))
@@ -224,19 +224,19 @@
 				else
 					step_towards(src,get_step_towards2(src , target))
 					set_null()
-					if(!slow_move)
+					if (!slow_move)
 						spawn(cycle_pause) src.process()
 					else
 						spawn(cycle_pause*2) src.process()
 					return
 
 			else
-				if( !path_target.len )
+				if ( !path_target.len )
 
 					path_attack(target)
-					if(!path_target.len)
+					if (!path_target.len)
 						set_null()
-						if(!slow_move)
+						if (!slow_move)
 							spawn(cycle_pause) src.process()
 						else
 							spawn(cycle_pause*2) src.process()
@@ -244,10 +244,10 @@
 				else
 					var/turf/next = path_target[1]
 
-					if(next in range(1,src))
+					if (next in range(1,src))
 						path_attack(target)
 
-					if(!path_target.len)
+					if (!path_target.len)
 						src.frustration += 5
 					else
 						next = path_target[1]
@@ -259,19 +259,19 @@
 				src.frustration++
 			else
 				src.frustration--
-			if(frustration >= 35)
+			if (frustration >= 35)
 				set_null()
 
-		if(prob(3) && !src.stat == 2)
-			if(prob(50))
+		if (prob(3) && !src.stat == 2)
+			if (prob(50))
 				src.say(pick(zsay))
 			else
 				src.emote("moan")
 
-		if(slow_move)
+		if (slow_move)
 			spawn(cycle_pause*2)
 				src.process()
-		else if(quick_move)
+		else if (quick_move)
 			spawn(cycle_pause/2)
 				src.process()
 		else
@@ -279,7 +279,7 @@
 				src.process()
 
 
-		for(var/obj/machinery/door/D in oview(1))
+		for (var/obj/machinery/door/D in oview(1))
 			D.Bumped(src)
 
 
@@ -289,18 +289,18 @@
 		//set background = 1
 		var/quick_move = 0
 
-		if(state != 2 || src.stat == 2 || target)
+		if (state != 2 || src.stat == 2 || target)
 			return
 
 		step_rand(src)
 
-		if(prob(3))
-			if(prob(10))
+		if (prob(3))
+			if (prob(10))
 				src.say(pick(zsay))
 			else
 				src.emote("moan")
 
-		if(quick_move)
+		if (quick_move)
 			spawn(cycle_pause/2)
 				idle()
 		else
@@ -334,14 +334,14 @@
 
 /datum/disease/z_virus/stage_act()
 	..()
-	if(istype(affected_mob, /mob/living/carbon/human/zombie) && !src.carrier)
+	if (istype(affected_mob, /mob/living/carbon/human/zombie) && !src.carrier)
 		src.carrier = 1
 		return
-	switch(stage)
-		if(1)
+	switch (stage)
+		if (1)
 			if (prob(8))
 				to_chat(affected_mob, pick("<span class='warning'>Something about you doesnt feel right.</span>","<span class='warning'>Your head starts to itch.</span>"))
-		if(2)
+		if (2)
 			if (prob(8))
 				to_chat(affected_mob, "<span class='warning'>Your limbs feel numb.</span>")
 				affected_mob.bruteloss += 1
@@ -350,7 +350,7 @@
 				to_chat(affected_mob, "<span class='warning'>You feel ill...</span>")
 			if (prob(9))
 				to_chat(affected_mob, "<span class='warning'>You feel a pain in your stomache...</span>")
-		if(3)
+		if (3)
 			if (prob(8))
 				to_chat(affected_mob, text("<span class='warning'>[]</span>", pick("owww...","I want...","Please...")))
 				affected_mob.bruteloss += 1
@@ -364,7 +364,7 @@
 				affected_mob.paralysis += 2
 			if (prob(4))
 				to_chat(affected_mob, "<span class='warning'>Whats going to happen to me?</span>")
-		if(4)
+		if (4)
 			if (prob(10))
 				to_chat(affected_mob, pick("<span class='warning'>You feel violently sick.</span>"))
 				affected_mob.bruteloss += 8
@@ -373,7 +373,7 @@
 				affected_mob.say(pick("Mmmmm.", "Hey... You look...", "Hsssshhhhh!"))
 			if (prob(8))
 				to_chat(affected_mob, "<span class='warning'>You cant... feel...</span>")
-		if(5)
+		if (5)
 			affected_mob.toxloss += 10
 			affected_mob.updatehealth()
 			to_chat(affected_mob, "You feel the life slowly slip away from you as you join the army of the undead..")
@@ -433,7 +433,7 @@
 
 	//O.body_standing = body_standing
 	//O.body_lying = body_lying
-	for(var/obj/Q in src)
+	for (var/obj/Q in src)
 		Q.forceMove(O)
 	O.update_icons()//update_clothing()
 	src.ghostize()
@@ -498,11 +498,11 @@ datum/reagent/zed
 	if (!( istype(M, /mob) ))
 		return
 	if (reagents.total_volume)
-		for(var/mob/O in viewers(M, null))
+		for (var/mob/O in viewers(M, null))
 			O.show_message(text("<span class='notice'>[] has been stabbed with [] by [].</span>", M, src, user), 1)
 //		to_chat(user, "<span class='warning'>You stab [M] with the pen.</span>")
 //		to_chat(M, "<span class='warning'>You feel a tiny prick!</span>")
-		if(M.reagents)
+		if (M.reagents)
 			reagents.trans_to(M, 10)
 		icon_state = "zed_0"
 	return
@@ -536,7 +536,7 @@ datum/reagent/zed
 /*
 /client/update_admins(var/rank)
 	..()
-	if(rank == "Game Master"/* || rank == "Coder" || rank == "Primary Administrator" || rank == "Administrator"*/)
+	if (rank == "Game Master"/* || rank == "Coder" || rank == "Primary Administrator" || rank == "Administrator"*/)
 		src.verbs += /client/proc/zombie_event
 */
 
@@ -544,18 +544,18 @@ datum/reagent/zed
 	set category = "Special Verbs"
 	set name = "Spawn Zombies"
 
-//	if(!istype(ticker.mode, /datum/game_mode/biohazard))
-//		if(src)
+//	if (!istype(ticker.mode, /datum/game_mode/biohazard))
+//		if (src)
 //			to_chat(src, "<span class='warning'>Wrong game mode!</span>")
 //			return
 
-	if(usr)
+	if (usr)
 		message_admins("[key_name_admin(usr)] has spawned a zombie", 1)
 	biohazard_alert(7)
 	var/list/t = list()
-	for(var/obj/landmark/zspawn/O in landmarks_list)
+	for (var/obj/landmark/zspawn/O in landmarks_list)
 		t += O
-	if(!t.len)
+	if (!t.len)
 		to_chat(usr, "No spawn points exist.")
 		return
 	var/obj/landmark/s = pick(t)
@@ -579,7 +579,7 @@ datum/reagent/zed
 	mlooks += "000000000000000000CD0000000000638074390"
 	mlooks += "066000033066000033CD00000000000D8D20B9B"
 
-	if(Z.gender == MALE)
+	if (Z.gender == MALE)
 		Z.dna.unique_enzymes = pick(mlooks)
 	else
 		Z.dna.unique_enzymes = pick(flooks)
@@ -587,7 +587,7 @@ datum/reagent/zed
 
 	Z.UpdateAppearance()
 
-	if(Z.gender == MALE)
+	if (Z.gender == MALE)
 		Z.real_name = text("[] []", pick(first_names_male), pick(last_names))
 	else
 		Z.real_name = text("[] []", pick(first_names_female), pick(last_names))

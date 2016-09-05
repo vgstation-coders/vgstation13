@@ -43,12 +43,12 @@
 	if (istype(user, /mob/living/silicon) && get_dist(src,user)>1)
 		return src.attack_hand(user)
 	if (iscrowbar(W))
-		if(opened)
-			if(has_electronics & 1)
+		if (opened)
+			if (has_electronics & 1)
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 				to_chat(user, "You begin removing the circuitboard")//lpeters - fixed grammar issues
 
-				if(do_after(user, src, 50))
+				if (do_after(user, src, 50))
 					user.visible_message(\
 						"<span class='warning'>[user.name] has removed the circuitboard from [src.name]!</span>",\
 						"<span class='notice'>You remove the circuitboard.</span>")
@@ -60,7 +60,7 @@
 				icon_state = "port0"
 				to_chat(user, "<span class='notice'>You close the maintenance cover.</span>")
 		else
-			if(cur_assembly)
+			if (cur_assembly)
 				to_chat(user, "<span class='warning'>You cannot open the cover while there is a fuel assembly inside.</span>")
 			else
 				opened = 1
@@ -70,12 +70,12 @@
 
 	else if (istype(W, /obj/item/stack/cable_coil) && opened && !(has_electronics & 2))
 		var/obj/item/stack/cable_coil/C = W
-		if(C.amount < 10)
+		if (C.amount < 10)
 			to_chat(user, "<span class='warning'>You need more wires.</span>")
 			return
 		to_chat(user, "You start adding cables to the frame...")
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-		if(do_after(user, src, 20) && C.amount >= 10)
+		if (do_after(user, src, 20) && C.amount >= 10)
 			C.use(10)
 			user.visible_message(\
 				"<span class='warning'>[user.name] has added cables to the port frame!</span>",\
@@ -86,7 +86,7 @@
 	else if (iswirecutter(W) && opened && (has_electronics & 2))
 		to_chat(user, "You begin to cut the cables...")
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-		if(do_after(user, src, 50))
+		if (do_after(user, src, 50))
 			new /obj/item/stack/cable_coil(loc,10)
 			user.visible_message(\
 				"<span class='warning'>[user.name] cut the cabling inside the port.</span>",\
@@ -97,7 +97,7 @@
 	else if (istype(W, /obj/item/weapon/module/rust_fuel_port) && opened && !(has_electronics & 1))
 		to_chat(user, "You try to insert the port control board into the frame...")
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-		if(do_after(user, src, 10))
+		if (do_after(user, src, 10))
 			has_electronics &= 1
 			to_chat(user, "You place the port control board inside the frame.")
 			del(W)
@@ -110,8 +110,8 @@
 			return
 		to_chat(user, "You start welding the port frame...")
 		playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
-		if(do_after(user, src, 50))
-			if(!src || !WT.remove_fuel(3, user))
+		if (do_after(user, src, 50))
+			if (!src || !WT.remove_fuel(3, user))
 				return
 			new /obj/item/mounted/frame/rust_fuel_assembly_port(loc)
 			user.visible_message(\

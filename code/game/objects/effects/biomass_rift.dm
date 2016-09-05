@@ -25,8 +25,8 @@
 
 	..()
 
-	for(var/turf/T in orange(1,src))
-		if(!IsValidBiomassLoc(T))
+	for (var/turf/T in orange(1,src))
+		if (!IsValidBiomassLoc(T))
 			continue
 		var/obj/effect/biomass/starting = new /obj/effect/biomass(T)
 		starting.dir = get_dir(src,starting)
@@ -36,7 +36,7 @@
 			starting.icon_state = "[newicon]"
 
 /obj/effect/rift/Del()
-	for(var/obj/effect/biomass/biomass in linkedBiomass)
+	for (var/obj/effect/biomass/biomass in linkedBiomass)
 		del(biomass)
 	..()
 
@@ -44,20 +44,20 @@
 	set background = 1
 
 	..()
-	if(!IsValidBiomassLoc(loc,src))
+	if (!IsValidBiomassLoc(loc,src))
 		del(src)
 		return
 	spawn(1) //so that the dir and stuff can be set by the source first
-		if(curDistance >= maxDistance)
+		if (curDistance >= maxDistance)
 			return
-		switch(dir)
-			if(NORTHWEST)
+		switch (dir)
+			if (NORTHWEST)
 				dir = NORTH
-			if(NORTHEAST)
+			if (NORTHEAST)
 				dir = EAST
-			if(SOUTHWEST)
+			if (SOUTHWEST)
 				dir = WEST
-			if(SOUTHEAST)
+			if (SOUTHEAST)
 				dir = SOUTH
 		sleep(spreadDelay)
 		Spread()
@@ -66,25 +66,25 @@
 	set background = 1
 	var/possibleDirsInt = 0
 
-	for(var/newDirection in cardinal)
-		if(newDirection == turn(direction,180)) //can't go backwards
+	for (var/newDirection in cardinal)
+		if (newDirection == turn(direction,180)) //can't go backwards
 			continue
 		var/turf/T = get_step(loc,newDirection)
-		if(!IsValidBiomassLoc(T,src))
+		if (!IsValidBiomassLoc(T,src))
 			continue
 		possibleDirsInt |= newDirection
 
 	var/list/possibleDirs = list()
 
-	if(possibleDirsInt & direction)
-		for(var/i=0 , i<continueChance , i++)
+	if (possibleDirsInt & direction)
+		for (var/i=0 , i<continueChance , i++)
 			possibleDirs += direction
-	if(possibleDirsInt & turn(direction,90))
+	if (possibleDirsInt & turn(direction,90))
 		possibleDirs += turn(direction,90)
-	if(possibleDirsInt & turn(direction,-90))
+	if (possibleDirsInt & turn(direction,-90))
 		possibleDirs += turn(direction,-90)
 
-	if(!possibleDirs.len)
+	if (!possibleDirs.len)
 		return
 
 	direction = pick(possibleDirs)
@@ -97,16 +97,16 @@
 	newBiomass.icon_state = "[originalRift.newicon]" //DEBUG
 	originalRift.linkedBiomass += newBiomass
 
-	if(!(curDistance%newSpreadDistance))
+	if (!(curDistance%newSpreadDistance))
 		var/obj/effect/rift/newrift = new /obj/effect/rift(loc)
-		if(originalRift.newicon <= 3)
+		if (originalRift.newicon <= 3)
 			newrift.newicon = originalRift.newicon + 1
 //		NewSpread()
 
 /obj/effect/biomass/proc/NewSpread(maxDistance = 15)
 	set background = 1
-	for(var/turf/T in orange(1,src))
-		if(!IsValidBiomassLoc(T,src))
+	for (var/turf/T in orange(1,src))
+		if (!IsValidBiomassLoc(T,src))
 			continue
 		var/obj/effect/biomass/starting = new /obj/effect/biomass(T)
 		starting.dir = get_dir(src,starting)
@@ -114,12 +114,12 @@
 
 /proc/IsValidBiomassLoc(turf/location,obj/effect/biomass/source = null)
 	set background = 1
-	for(var/obj/effect/biomass/biomass in location)
-		if(biomass != source)
+	for (var/obj/effect/biomass/biomass in location)
+		if (biomass != source)
 			return 0
-	if(istype(location,/turf/space))
+	if (istype(location,/turf/space))
 		return 0
-	if(location.density)
+	if (location.density)
 		return 0
 	return 1
 */

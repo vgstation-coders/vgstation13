@@ -209,8 +209,8 @@
 /datum/configuration/proc/load(filename, type = "config") //the type can also be game_options, in which case it uses a different switch. not making it separate to not copypaste code - Urist
 	var/list/Lines = file2list(filename)
 
-	for(var/t in Lines)
-		if(!t)
+	for (var/t in Lines)
+		if (!t)
 			continue
 
 		t = trim(t)
@@ -232,12 +232,12 @@
 		if (!name)
 			continue
 
-		if(type == "config")
+		if (type == "config")
 			switch (name)
 				if ("resource_urls")
 					config.resource_urls = splittext(value, " ")
 
-				if("tts_server")
+				if ("tts_server")
 					config.tts_server = value
 
 				if ("admin_legacy_system")
@@ -270,7 +270,7 @@
 				if ("log_admin")
 					config.log_admin = 1
 
-				if("log_admin_only")
+				if ("log_admin_only")
 					config.log_admin_only = TRUE
 
 				if ("log_debug")
@@ -309,7 +309,7 @@
 				if ("log_hrefs")
 					config.log_hrefs = 1
 
-				if("allow_admin_ooccolor")
+				if ("allow_admin_ooccolor")
 					config.allow_admin_ooccolor = 1
 
 				if ("allow_vote_restart")
@@ -321,7 +321,7 @@
 				if ("allow_admin_jump")
 					config.allow_admin_jump = 1
 
-				if("allow_admin_rev")
+				if ("allow_admin_rev")
 					config.allow_admin_rev = 1
 
 				if ("allow_admin_spawning")
@@ -396,7 +396,7 @@
 				if ("traitor_scaling")
 					config.traitor_scaling = 1
 
-				if("protect_roles_from_antagonist")
+				if ("protect_roles_from_antagonist")
 					config.protect_roles_from_antagonist = 1
 
 				if ("probability")
@@ -414,230 +414,230 @@
 					else
 						diary << "Incorrect probability configuration definition: [prob_name]  [prob_value]."
 
-				if("allow_random_events")
+				if ("allow_random_events")
 					config.allow_random_events = 1
 
-				if("kick_inactive")
+				if ("kick_inactive")
 					config.kick_inactive = 1
 
-				if("load_jobs_from_txt")
+				if ("load_jobs_from_txt")
 					load_jobs_from_txt = 1
 
-				if("alert_red_upto")
+				if ("alert_red_upto")
 					config.alert_desc_red_upto = value
 
-				if("alert_red_downto")
+				if ("alert_red_downto")
 					config.alert_desc_red_downto = value
 
-				if("alert_blue_downto")
+				if ("alert_blue_downto")
 					config.alert_desc_blue_downto = value
 
-				if("alert_blue_upto")
+				if ("alert_blue_upto")
 					config.alert_desc_blue_upto = value
 
-				if("alert_green")
+				if ("alert_green")
 					config.alert_desc_green = value
 
-				if("alert_delta")
+				if ("alert_delta")
 					config.alert_desc_delta = value
 
-				if("forbid_singulo_possession")
+				if ("forbid_singulo_possession")
 					forbid_singulo_possession = 1
 
-				if("popup_admin_pm")
+				if ("popup_admin_pm")
 					config.popup_admin_pm = 1
 
-				if("allow_holidays")
+				if ("allow_holidays")
 					Holiday = 1
 
-				if("use_irc_bot")
+				if ("use_irc_bot")
 					use_irc_bot = 1
 
-				if("ticklag")
+				if ("ticklag")
 					Ticklag = text2num(value)
 
-				if("allow_antag_hud")
+				if ("allow_antag_hud")
 					config.antag_hud_allowed = 1
-				if("antag_hud_restricted")
+				if ("antag_hud_restricted")
 					config.antag_hud_restricted = 1
 
-				if("socket_talk")
+				if ("socket_talk")
 					socket_talk = text2num(value)
 
-				if("humans_need_surnames")
+				if ("humans_need_surnames")
 					humans_need_surnames = 1
 
-				if("tor_ban")
+				if ("tor_ban")
 					ToRban = 1
 
-				if("automute_on")
+				if ("automute_on")
 					automute_on = 1
 
-				if("usealienwhitelist")
+				if ("usealienwhitelist")
 					usealienwhitelist = 1
 
-				if("alien_player_ratio")
+				if ("alien_player_ratio")
 					limitalienplayers = 1
 					alien_to_human_ratio = text2num(value)
 
-				if("assistant_maint")
+				if ("assistant_maint")
 					config.assistant_maint = 1
 
-				if("gateway_delay")
+				if ("gateway_delay")
 					config.gateway_delay = text2num(value)
 
-				if("continuous_rounds")
+				if ("continuous_rounds")
 					config.continous_rounds = 1
 
-				if("ghost_interaction")
+				if ("ghost_interaction")
 					config.ghost_interaction = 1
 
-				if("disable_player_mice")
+				if ("disable_player_mice")
 					config.disable_player_mice = 1
 
-				if("uneducated_mice")
+				if ("uneducated_mice")
 					config.uneducated_mice = 1
 
-				if("comms_password")
+				if ("comms_password")
 					config.comms_password = value
 
-				if("paperwork_library")
+				if ("paperwork_library")
 					config.paperwork_library = 1
 
-				if("irc_bot_host")
+				if ("irc_bot_host")
 					config.irc_bot_host = value
 
-				if("irc_bot_port")
+				if ("irc_bot_port")
 					config.irc_bot_port = text2num(value)
 
-				if("irc_bot_server_id")
+				if ("irc_bot_server_id")
 					config.irc_bot_server_id = value
 
-				if("python_path")
-					if(value)
+				if ("python_path")
+					if (value)
 						config.python_path = value
 					else
-						if(world.system_type == UNIX)
+						if (world.system_type == UNIX)
 							config.python_path = "/usr/bin/env python2"
 						else //probably windows, if not this should work anyway
 							config.python_path = "python"
 
-				if("allow_cult_ghostwriter")
+				if ("allow_cult_ghostwriter")
 					config.cult_ghostwriter = 1
 
-				if("req_cult_ghostwriter")
+				if ("req_cult_ghostwriter")
 					config.cult_ghostwriter_req_cultists = value
-				if("assistant_limit")
+				if ("assistant_limit")
 					config.assistantlimit = 1
-				if("assistant_ratio")
+				if ("assistant_ratio")
 					config.assistantratio = text2num(value)
-				if("copy_logs")
+				if ("copy_logs")
 					copy_logs=value
-				if("media_base_url")
+				if ("media_base_url")
 					media_base_url = value
-				if("media_secret_key")
+				if ("media_secret_key")
 					media_secret_key = value
-				if("vgws_base_url")
+				if ("vgws_base_url")
 					vgws_base_url = value
-				if("map_voting")
+				if ("map_voting")
 					map_voting = 1
-				if("renders_url")
+				if ("renders_url")
 					renders_url = value
-				if("mommi_static")
+				if ("mommi_static")
 					mommi_static = 1
-				if("skip_minimap_generation")
+				if ("skip_minimap_generation")
 					skip_minimap_generation = 1
-				if("skip_vault_generation")
+				if ("skip_vault_generation")
 					skip_vault_generation = 1
-				if("shut_up_automatic_diagnostic_and_announcement_system")
+				if ("shut_up_automatic_diagnostic_and_announcement_system")
 					shut_up_automatic_diagnostic_and_announcement_system = 1
-				if("enable_roundstart_away_missions")
+				if ("enable_roundstart_away_missions")
 					enable_roundstart_away_missions = 1
-				if("enable_wages")
+				if ("enable_wages")
 					roundstart_enable_wages = 1
-				if("error_cooldown")
+				if ("error_cooldown")
 					error_cooldown = value
-				if("error_limit")
+				if ("error_limit")
 					error_limit = value
-				if("error_silence_time")
+				if ("error_silence_time")
 					error_silence_time = value
-				if("error_msg_delay")
+				if ("error_msg_delay")
 					error_msg_delay = value
-				if("discord_url")
+				if ("discord_url")
 					discord_url = value
-				if("discord_password")
+				if ("discord_password")
 					discord_password = value
 
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 
-		else if(type == "game_options")
-			if(!value)
+		else if (type == "game_options")
+			if (!value)
 				diary << "Unknown value for setting [name] in [filename]."
 			value = text2num(value)
 
-			switch(name)
-				if("max_explosion_range")
+			switch (name)
+				if ("max_explosion_range")
 					MAX_EXPLOSION_RANGE = value
-				if("health_threshold_crit")
+				if ("health_threshold_crit")
 					config.health_threshold_crit = value
-				if("health_threshold_softcrit")
+				if ("health_threshold_softcrit")
 					config.health_threshold_softcrit = value
-				if("health_threshold_dead")
+				if ("health_threshold_dead")
 					config.health_threshold_dead = value
-				if("revival_pod_plants")
+				if ("revival_pod_plants")
 					config.revival_pod_plants = value
-				if("revival_cloning")
+				if ("revival_cloning")
 					config.revival_cloning = value
-				if("revival_brain_life")
+				if ("revival_brain_life")
 					config.revival_brain_life = value
-				if("run_speed")
+				if ("run_speed")
 					config.run_speed = value
-				if("walk_speed")
+				if ("walk_speed")
 					config.walk_speed = value
-				if("human_delay")
+				if ("human_delay")
 					config.human_delay = value
-				if("robot_delay")
+				if ("robot_delay")
 					config.robot_delay = value
-				if("monkey_delay")
+				if ("monkey_delay")
 					config.monkey_delay = value
-				if("alien_delay")
+				if ("alien_delay")
 					config.alien_delay = value
-				if("slime_delay")
+				if ("slime_delay")
 					config.slime_delay = value
-				if("animal_delay")
+				if ("animal_delay")
 					config.animal_delay = value
-				if("organ_health_multiplier")
+				if ("organ_health_multiplier")
 					config.organ_health_multiplier = value / 100
-				if("organ_regeneration_multiplier")
+				if ("organ_regeneration_multiplier")
 					config.organ_regeneration_multiplier = value / 100
-				if("bones_can_break")
+				if ("bones_can_break")
 					config.bones_can_break = value
-				if("limbs_can_break")
+				if ("limbs_can_break")
 					config.limbs_can_break = value
-				if("respawn_delay")
+				if ("respawn_delay")
 					config.respawn_delay = value
-				if("emag_energy")
+				if ("emag_energy")
 					config.emag_energy = value
-				if("emag_starts_charged")
+				if ("emag_starts_charged")
 					config.emag_starts_charged = value
-				if("emag_recharge_rate")
+				if ("emag_recharge_rate")
 					config.emag_recharge_rate = value
-				if("emag_recharge_ticks")
+				if ("emag_recharge_ticks")
 					config.emag_recharge_ticks = value
-				if("silent_ai")
+				if ("silent_ai")
 					config.silent_ai = 1
-				if("silent_borg")
+				if ("silent_borg")
 					config.silent_borg = 1
-				if("borer_takeover_immediately")
+				if ("borer_takeover_immediately")
 					config.borer_takeover_immediately = 1
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 
 /datum/configuration/proc/loadsql(filename)  // -- TLE
 	var/list/Lines = file2list(filename)
-	for(var/t in Lines)
-		if(!t)
+	for (var/t in Lines)
+		if (!t)
 			continue
 
 		t = trim(t)
@@ -683,8 +683,8 @@
 
 /datum/configuration/proc/loadforumsql(filename)  // -- TLE
 	var/list/Lines = file2list(filename)
-	for(var/t in Lines)
-		if(!t)
+	for (var/t in Lines)
+		if (!t)
 			continue
 
 		t = trim(t)

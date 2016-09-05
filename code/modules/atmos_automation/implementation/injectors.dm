@@ -19,7 +19,7 @@
 	state = text2num(json["state"])
 
 /datum/automation/set_injector_power/process()
-	if(injector)
+	if (injector)
 		parent.send_signal(list ("tag" = injector, "power" = state, "type" = "injector"))
 	return 0
 
@@ -28,18 +28,18 @@
 
 /datum/automation/set_injector_power/Topic(href, href_list)
 	. = ..()
-	if(.)
+	if (.)
 		return
 
-	if(href_list["toggle_state"])
+	if (href_list["toggle_state"])
 		state = !state
 		parent.updateUsrDialog()
 		return 1
 
-	if(href_list["set_injector"])
+	if (href_list["set_injector"])
 		var/list/injector_names = list()
-		for(var/obj/machinery/atmospherics/unary/outlet_injector/I in atmos_machines)
-			if(!isnull(I.id_tag) && I.frequency == parent.frequency)
+		for (var/obj/machinery/atmospherics/unary/outlet_injector/I in atmos_machines)
+			if (!isnull(I.id_tag) && I.frequency == parent.frequency)
 				injector_names |= I.id_tag
 
 		injector = input("Select an injector:", "Sensor Data", injector) as null | anything in injector_names
@@ -63,7 +63,7 @@
 	rate = text2num(json["rate"])
 
 /datum/automation/set_injector_rate/process()
-	if(injector)
+	if (injector)
 		parent.send_signal(list ("tag" = injector, "set_volume_rate"=rate))
 	return 0
 
@@ -72,18 +72,18 @@
 
 /datum/automation/set_injector_rate/Topic(href,href_list)
 	. = ..()
-	if(.)
+	if (.)
 		return
 
-	if(href_list["set_rate"])
+	if (href_list["set_rate"])
 		rate = input("Set rate in L/s.", "Rate", rate) as num
 		parent.updateUsrDialog()
 		return 1
 
-	if(href_list["set_injector"])
+	if (href_list["set_injector"])
 		var/list/injector_names = list()
-		for(var/obj/machinery/atmospherics/unary/outlet_injector/I in atmos_machines)
-			if(!isnull(I.id_tag) && I.frequency == parent.frequency)
+		for (var/obj/machinery/atmospherics/unary/outlet_injector/I in atmos_machines)
+			if (!isnull(I.id_tag) && I.frequency == parent.frequency)
 				injector_names |= I.id_tag
 
 		injector = input("Select an injector:", "Sensor Data", injector) as null | anything in injector_names

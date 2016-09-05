@@ -29,7 +29,7 @@
 
 /mob/living/simple_animal/hostile/viscerator/Life()
 	..()
-	if(stat == CONSCIOUS)
+	if (stat == CONSCIOUS)
 		animate(src, pixel_x = rand(-12,12) * PIXEL_MULTIPLIER, pixel_y = rand(-12,12) * PIXEL_MULTIPLIER, time = 15, easing = SINE_EASING)
 
 /mob/living/simple_animal/hostile/viscerator/Die()
@@ -39,11 +39,11 @@
 	return
 
 /mob/living/simple_animal/hostile/viscerator/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
-	if(air_group || (height == 0))
+	if (air_group || (height == 0))
 		return 1
-	if(istype(mover, /mob/living/simple_animal/hostile/viscerator))
+	if (istype(mover, /mob/living/simple_animal/hostile/viscerator))
 		return 1
-	if(istype(mover, /obj/item/projectile))
+	if (istype(mover, /obj/item/projectile))
 		return prob(66)
 	else
 		return !density

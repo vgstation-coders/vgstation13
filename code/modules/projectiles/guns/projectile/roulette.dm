@@ -46,56 +46,56 @@
 	..()
 
 /obj/item/weapon/gun/projectile/roulette_revolver/process()
-	if(time_since_last_recharge >= 8)
-		if(shots_left < 6)
+	if (time_since_last_recharge >= 8)
+		if (shots_left < 6)
 			shots_left++
 		time_since_last_recharge = 0
 	time_since_last_recharge++
 
 /obj/item/weapon/gun/projectile/roulette_revolver/examine(mob/user)
 	..()
-	if(!shots_left)
+	if (!shots_left)
 		to_chat(user, "<span class='info'>\The [src] is empty.</span>")
 	else
 		to_chat(user, "<span class='info'>\The [src] has [shots_left] shots left.</span>")
 
 /obj/item/weapon/gun/projectile/roulette_revolver/proc/choose_projectile()
 	var/chosen_projectile = pick(available_projectiles)
-	for(var/I in restricted_projectiles)
-		if(chosen_projectile == I)
+	for (var/I in restricted_projectiles)
+		if (chosen_projectile == I)
 			choose_projectile()
 			return
 	var/P = new chosen_projectile()
 	in_chamber = P
-	if(!in_chamber)
+	if (!in_chamber)
 		choose_projectile()
 		return
 
 /obj/item/weapon/gun/projectile/roulette_revolver/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
-	if(flag)
+	if (flag)
 		return //we're placing gun on a table or in backpack
-	if(harm_labeled >= min_harm_label)
+	if (harm_labeled >= min_harm_label)
 		to_chat(user, "<span class='warning'>A label sticks the trigger to the trigger guard!</span>")//Such a new feature, the player might not know what's wrong if it doesn't tell them.
 		return
 
 	choose_projectile()
 
-	if(!in_chamber || shots_left < 1)
+	if (!in_chamber || shots_left < 1)
 		click_empty(user)
 		return
 
-	if(istype(in_chamber, /obj/item/projectile/bullet))
+	if (istype(in_chamber, /obj/item/projectile/bullet))
 		recoil = 1
 	else
 		recoil = 0
 
-	if(user && user.client && user.client.gun_mode && !(A in target))
+	if (user && user.client && user.client.gun_mode && !(A in target))
 		PreFire(A,user,params, "struggle" = struggle) //They're using the new gun system, locate what they're aiming at.
 	else
 		var/obj/item/projectile/P = in_chamber
-		if(Fire(A,user,params, "struggle" = struggle)) //Otherwise, fire normally.
+		if (Fire(A,user,params, "struggle" = struggle)) //Otherwise, fire normally.
 			user.visible_message("<span class='danger'>[user] fires \a [P.name] from \his [src.name]!</span>","<span class='danger'>You fire \a [P.name] from your [src.name]!</span>")
-			if(!infinite)
+			if (!infinite)
 				shots_left -= 1
 		else
 			qdel(P)

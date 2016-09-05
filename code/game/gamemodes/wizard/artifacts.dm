@@ -9,7 +9,7 @@
 
 /datum/spellbook_artifact/proc/purchased(mob/living/user)
 	to_chat(user, "<span class='info'>You have purchased [name].</span>")
-	for(var/T in spawned_items)
+	for (var/T in spawned_items)
 		new T(get_turf(user))
 
 /datum/spellbook_artifact/proc/can_buy()
@@ -36,7 +36,7 @@
 /datum/spellbook_artifact/shards/purchased(mob/living/carbon/human/H)
 	..()
 
-	if(istype(H))
+	if (istype(H))
 		H.add_spell(new /spell/aoe_turf/conjure/construct)
 		H.add_language(LANGUAGE_CULT)
 
@@ -84,7 +84,7 @@
 /datum/spellbook_artifact/scrying/purchased(mob/living/carbon/human/H)
 	..()
 
-	if(istype(H) && !H.mutations.Find(M_XRAY))
+	if (istype(H) && !H.mutations.Find(M_XRAY))
 		H.mutations.Add(M_XRAY)
 		H.change_sight(adding = SEE_MOBS|SEE_OBJS|SEE_TURFS)
 		H.see_in_dark = 8
@@ -124,12 +124,12 @@
 	var/obj/item/weapon/storage/backpack/santabag = new /obj/item/weapon/storage/backpack/santabag
 	santabag.canremove = 0
 
-	if(H.head)
+	if (H.head)
 		H.drop_from_inventory(H.head)
 	H.equip_to_slot(santahat,slot_head)
-	if(H.back)
+	if (H.back)
 		H.drop_from_inventory(H.back)
-	if(H.wear_suit)
+	if (H.wear_suit)
 		H.drop_from_inventory(H.wear_suit)
 	H.equip_to_slot(santabag,slot_back)
 	H.equip_to_slot(santasuit,slot_wear_suit)

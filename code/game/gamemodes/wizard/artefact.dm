@@ -31,7 +31,7 @@
 	return
 
 /obj/item/weapon/veilrender/attack_self(mob/user as mob)
-	if(charged == 1)
+	if (charged == 1)
 		new /obj/effect/rend(get_turf(usr))
 		charged = 0
 		visible_message("<span class='danger'>[src] hums with power as [usr] deals a blow to reality itself!</span>")
@@ -45,7 +45,7 @@
 	desc = "A wicked curved blade of alien origin, recovered from the ruins of a vast farm."
 
 /obj/item/weapon/veilrender/vealrender/attack_self(mob/user as mob)
-	if(charged)
+	if (charged)
 		new /obj/effect/rend/cow(get_turf(usr))
 		charged = 0
 		visible_message("<span class='danger'>[src] hums with power as [usr] deals a blow to hunger itself!</span>")
@@ -61,15 +61,15 @@
 	return
 
 /obj/effect/rend/cow/process()
-	if(locate(/mob) in loc)
+	if (locate(/mob) in loc)
 		return
 	new /mob/living/simple_animal/cow(loc)
 	cowsleft--
-	if(cowsleft <= 0)
+	if (cowsleft <= 0)
 		qdel (src)
 
 /obj/effect/rend/cow/attackby(obj/item/I as obj, mob/user as mob)
-	if(istype(I, /obj/item/weapon/nullrod))
+	if (istype(I, /obj/item/weapon/nullrod))
 		visible_message("<span class='danger'>[I] strikes a blow against \the [src], banishing it!</span>")
 		spawn(1)
 			qdel (src)
@@ -124,14 +124,14 @@
 
 /obj/item/weapon/staff/necro/process()
 	charge_tick++
-	if(charge_tick < 4)
+	if (charge_tick < 4)
 		return 0
 	charge_tick = 0
 	charges++
 	return 1
 
 /obj/item/weapon/staff/necro/attack_self(mob/user)
-	if(next_change > world.timeofday)
+	if (next_change > world.timeofday)
 		to_chat(user, "<span class='warning'>You must wait longer to decide on a minion type.</span>")
 		return
 	/*if(raisetype < FAITHLESS)
@@ -144,15 +144,15 @@
 	next_change = world.timeofday + 30
 
 /obj/item/weapon/staff/necro/afterattack(atom/target, mob/user, proximity)
-	if(!ishuman(target) || !charges || get_dist(target, user) > 7)
+	if (!ishuman(target) || !charges || get_dist(target, user) > 7)
 		return 0
 	var/mob/living/carbon/human/H = target
-	if(!H.stat || H.health > config.health_threshold_crit)
+	if (!H.stat || H.health > config.health_threshold_crit)
 		return 0
-	switch(raisetype)
-		if(ZOMBIE)
+	switch (raisetype)
+		if (ZOMBIE)
 			new /mob/living/simple_animal/hostile/necro/zombie(get_turf(target), user, H.mind)
-		if(SKELETON)
+		if (SKELETON)
 			new /mob/living/simple_animal/hostile/necro/skeleton(get_turf(target), user, H.mind)
 
 	H.gib()

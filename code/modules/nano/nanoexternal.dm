@@ -16,16 +16,16 @@
 	if (istype(ui))
 		ui.close()
 
-		if(ui.ref)
+		if (ui.ref)
 			var/href = "close=1"
 			src.Topic(href, params2list(href), ui.ref)	// this will direct to the atom's Topic() proc via client.Topic()
-		else if(ui.src_object)
+		else if (ui.src_object)
 			var/href = "close=1"
 			src.Topic(href, params2list(href), ui.src_object)	// this will direct to the atom's Topic() proc via client.Topic()
 		else if (ui.on_close_logic)
 			// no atomref specified (or not found)
 			// so just reset the user mob's machine var
-			if(src && src.mob)
+			if (src && src.mob)
 				src.mob.unset_machine()
 
  /**

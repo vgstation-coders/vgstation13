@@ -42,7 +42,7 @@
 	mineral_turfs += src
 	. = ..()
 	MineralSpread()
-	if(ticker)
+	if (ticker)
 		initialize()
 
 turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
@@ -52,33 +52,33 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 /turf/unsimulated/mineral/initialize() 	// TODO: OPTIMISE THIS USING PLANES
 	spawn(1)
 		var/turf/T
-		if((istype(get_step(src, NORTH), /turf/simulated/floor)) || (istype(get_step(src, NORTH), /turf/space)) || (istype(get_step(src, NORTH), /turf/simulated/shuttle/floor)))
+		if ((istype(get_step(src, NORTH), /turf/simulated/floor)) || (istype(get_step(src, NORTH), /turf/space)) || (istype(get_step(src, NORTH), /turf/simulated/shuttle/floor)))
 			T = get_step(src, NORTH)
 			if (T)
 				T.overlays += image('icons/turf/walls.dmi', "rock_side_s")
-		if((istype(get_step(src, SOUTH), /turf/simulated/floor)) || (istype(get_step(src, SOUTH), /turf/space)) || (istype(get_step(src, SOUTH), /turf/simulated/shuttle/floor)))
+		if ((istype(get_step(src, SOUTH), /turf/simulated/floor)) || (istype(get_step(src, SOUTH), /turf/space)) || (istype(get_step(src, SOUTH), /turf/simulated/shuttle/floor)))
 			T = get_step(src, SOUTH)
 			if (T)
 				T.overlays += image('icons/turf/walls.dmi', "rock_side_n", layer=6)
-		if((istype(get_step(src, EAST), /turf/simulated/floor)) || (istype(get_step(src, EAST), /turf/space)) || (istype(get_step(src, EAST), /turf/simulated/shuttle/floor)))
+		if ((istype(get_step(src, EAST), /turf/simulated/floor)) || (istype(get_step(src, EAST), /turf/space)) || (istype(get_step(src, EAST), /turf/simulated/shuttle/floor)))
 			T = get_step(src, EAST)
 			if (T)
 				T.overlays += image('icons/turf/walls.dmi', "rock_side_w", layer=6)
-		if((istype(get_step(src, WEST), /turf/simulated/floor)) || (istype(get_step(src, WEST), /turf/space)) || (istype(get_step(src, WEST), /turf/simulated/shuttle/floor)))
+		if ((istype(get_step(src, WEST), /turf/simulated/floor)) || (istype(get_step(src, WEST), /turf/space)) || (istype(get_step(src, WEST), /turf/simulated/shuttle/floor)))
 			T = get_step(src, WEST)
 			if (T)
 				T.overlays += image('icons/turf/walls.dmi', "rock_side_e", layer=6)
 	/*
 	if (mineralName && mineralAmt && spread && spreadChance)
-		for(var/trydir in list(1,2,4,8))
-			if(prob(spreadChance))
-				if(istype(get_step(src, trydir), /turf/unsimulated/mineral/random))
+		for (var/trydir in list(1,2,4,8))
+			if (prob(spreadChance))
+				if (istype(get_step(src, trydir), /turf/unsimulated/mineral/random))
 					var/turf/unsimulated/mineral/T = get_step(src, trydir)
 					var/turf/unsimulated/mineral/M = new src.type(T)
 					//keep any digsite data as constant as possible
-					if(T.finds.len && !M.finds.len)
+					if (T.finds.len && !M.finds.len)
 						M.finds = T.finds
-						if(T.archaeo_overlay)
+						if (T.archaeo_overlay)
 							M.overlays += archaeo_overlay
 
 
@@ -86,33 +86,33 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 	//put into spawn so that digsite data can be preserved over the turf replacements via spreading mineral veins
 	spawn(0)
-		if(mineralAmt > 0 && !excavation_minerals.len)
-			for(var/i=0, i<mineralAmt, i++)
+		if (mineralAmt > 0 && !excavation_minerals.len)
+			for (var/i=0, i<mineralAmt, i++)
 				excavation_minerals.Add(rand(5,95))
 			excavation_minerals = insertion_sort_numeric_list_descending(excavation_minerals)
 
-		if(!finds.len && prob(XENOARCH_SPAWN_CHANCE))
+		if (!finds.len && prob(XENOARCH_SPAWN_CHANCE))
 			//create a new archaeological deposit
 			var/digsite = get_random_digsite_type()
 
 			var/list/turfs_to_process = list(src)
 			var/list/processed_turfs = list()
-			while(turfs_to_process.len)
+			while (turfs_to_process.len)
 				var/turf/unsimulated/mineral/M = turfs_to_process[1]
-				for(var/turf/unsimulated/mineral/T in orange(1, M))
-					if(T.finds.len)
+				for (var/turf/unsimulated/mineral/T in orange(1, M))
+					if (T.finds.len)
 						continue
-					if(T in processed_turfs)
+					if (T in processed_turfs)
 						continue
-					if(prob(XENOARCH_SPREAD_CHANCE))
+					if (prob(XENOARCH_SPREAD_CHANCE))
 						turfs_to_process.Add(T)
 
 				turfs_to_process.Remove(M)
 				processed_turfs.Add(M)
-				if(!M.finds.len)
-					if(prob(50))
+				if (!M.finds.len)
+					if (prob(50))
 						M.finds.Add(new/datum/find(digsite, rand(5,95)))
-					else if(prob(75))
+					else if (prob(75))
 						M.finds.Add(new/datum/find(digsite, rand(5,45)))
 						M.finds.Add(new/datum/find(digsite, rand(55,95)))
 					else
@@ -122,26 +122,26 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 					//sometimes a find will be close enough to the surface to show
 					var/datum/find/F = M.finds[1]
-					if(F.excavation_required <= F.view_range)
+					if (F.excavation_required <= F.view_range)
 						archaeo_overlay = "overlay_archaeo[rand(1,3)]"
 						M.overlays += archaeo_overlay
 
 			//dont create artifact machinery in animal or plant digsites, or if we already have one
-			if(!artifact_find && digsite != 1 && digsite != 2 && prob(ARTIFACT_SPAWN_CHANCE))
+			if (!artifact_find && digsite != 1 && digsite != 2 && prob(ARTIFACT_SPAWN_CHANCE))
 				artifact_find = new()
 				artifact_spawning_turfs.Add(src)
 
-		if(!src.geological_data)
+		if (!src.geological_data)
 			src.geological_data = new/datum/geosample(src)
 		src.geological_data.UpdateTurf(src)
 
 		//for excavated turfs placeable in the map editor
 		/*if(excavation_level > 0)
-			if(excavation_level < 25)
+			if (excavation_level < 25)
 				src.overlays += image('icons/obj/xenoarchaeology.dmi', "overlay_excv1_[rand(1,3)]")
-			else if(excavation_level < 50)
+			else if (excavation_level < 50)
 				src.overlays += image('icons/obj/xenoarchaeology.dmi', "overlay_excv2_[rand(1,3)]")
-			else if(excavation_level < 75)
+			else if (excavation_level < 75)
 				src.overlays += image('icons/obj/xenoarchaeology.dmi', "overlay_excv3_[rand(1,3)]")
 			else
 				src.overlays += image('icons/obj/xenoarchaeology.dmi', "overlay_excv4_[rand(1,3)]")
@@ -151,49 +151,49 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	*/
 
 /turf/unsimulated/mineral/ex_act(severity)
-	switch(severity)
-		if(3.0)
+	switch (severity)
+		if (3.0)
 			if (prob(75))
 				GetDrilled()
-		if(2.0)
+		if (2.0)
 			if (prob(90))
 				GetDrilled()
-		if(1.0)
+		if (1.0)
 			GetDrilled()
 
 
 /turf/unsimulated/mineral/Bumped(AM)
 	. = ..()
-	if(istype(AM,/mob/living/carbon/human))
+	if (istype(AM,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = AM
-		if(istype(H.get_active_hand(),/obj/item/weapon/pickaxe))
+		if (istype(H.get_active_hand(),/obj/item/weapon/pickaxe))
 			attackby(H.get_active_hand(), H)
-		else if(istype(H.get_inactive_hand(),/obj/item/weapon/pickaxe))
+		else if (istype(H.get_inactive_hand(),/obj/item/weapon/pickaxe))
 			attackby(H.get_inactive_hand(), H)
 
-	else if(istype(AM,/mob/living/silicon/robot))
+	else if (istype(AM,/mob/living/silicon/robot))
 		var/mob/living/silicon/robot/R = AM
-		if(istype(R.module_active,/obj/item/weapon/pickaxe))
+		if (istype(R.module_active,/obj/item/weapon/pickaxe))
 			attackby(R.module_active, R)
 
-	else if(istype(AM,/obj/mecha))
+	else if (istype(AM,/obj/mecha))
 		var/obj/mecha/M = AM
-		if(istype(M.selected,/obj/item/mecha_parts/mecha_equipment/tool/drill))
+		if (istype(M.selected,/obj/item/mecha_parts/mecha_equipment/tool/drill))
 			M.selected.action(src)
 
 /turf/unsimulated/mineral/proc/MineralSpread()
-	if(mineral && mineral.spread)
-		for(var/trydir in cardinal)
-			if(prob(mineral.spread_chance))
+	if (mineral && mineral.spread)
+		for (var/trydir in cardinal)
+			if (prob(mineral.spread_chance))
 				var/turf/unsimulated/mineral/random/target_turf = get_step(src, trydir)
-				if(istype(target_turf) && !target_turf.mineral)
+				if (istype(target_turf) && !target_turf.mineral)
 					target_turf.mineral = mineral
 					target_turf.UpdateMineral()
 					target_turf.MineralSpread()
 
 /turf/unsimulated/mineral/proc/UpdateMineral()
 	icon_state = "rock"
-	if(!mineral)
+	if (!mineral)
 		name = "\improper Rock"
 		return
 	name = "\improper [mineral.display_name] deposit"
@@ -205,7 +205,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 /turf/unsimulated/mineral/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
-	if(busy)
+	if (busy)
 		return
 
 	if (!usr.dexterity_check())
@@ -213,7 +213,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		return
 
 	if (istype(W, /obj/item/device/core_sampler))
-		if(!geologic_data)
+		if (!geologic_data)
 			geologic_data = new/datum/geosample(src)
 		geologic_data.UpdateNearbyArtifactInfo(src)
 		var/obj/item/device/core_sampler/C = W
@@ -229,7 +229,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		var/obj/item/device/measuring_tape/P = W
 		user.visible_message("<span class='notice'>[user] extends [P] towards [src].</span>","<span class='notice'>You extend [P] towards [src].</span>")
 		busy = 1
-		if(do_after(user, src,25))
+		if (do_after(user, src,25))
 			to_chat(user, "<span class='notice'>[bicon(P)] [src] has been excavated to a depth of [2*excavation_level]cm.</span>")
 			busy = 0
 		else
@@ -237,18 +237,18 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		return
 
 	if (istype(W, /obj/item/weapon/pickaxe))
-		if(user.loc != get_turf(user))
+		if (user.loc != get_turf(user))
 			return //if we aren't in the tile we are located in, return
 
 		var/obj/item/weapon/pickaxe/P = W
 
-		if(!istype(P))
+		if (!istype(P))
 			return
 
-		if(!(P.diggables & DIG_ROCKS))
+		if (!(P.diggables & DIG_ROCKS))
 			return
 
-		if(last_act + P.digspeed > world.time)//prevents message spam
+		if (last_act + P.digspeed > world.time)//prevents message spam
 			return
 
 		last_act = world.time
@@ -257,119 +257,119 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 		//handle any archaeological finds we might uncover
 		var/fail_message = ""
-		if(finds && finds.len)
+		if (finds && finds.len)
 			var/datum/find/F = finds[1]
-			if(excavation_level + P.excavation_amount > F.excavation_required)
+			if (excavation_level + P.excavation_amount > F.excavation_required)
 
 				fail_message = ", <b>[pick("there is a crunching noise","[W] collides with some different rock","part of the rock face crumbles away","something breaks under [W]")]</b>"
 
 		to_chat(user, "<span class='rose'>You start [P.drill_verb][fail_message].</span>")
 
-		if(fail_message && prob(90))
-			if(prob(25))
+		if (fail_message && prob(90))
+			if (prob(25))
 				excavate_find(5, finds[1])
-			else if(prob(50))
+			else if (prob(50))
 				finds.Remove(finds[1])
-				if(prob(50))
+				if (prob(50))
 					artifact_debris()
 
 		busy = 1
 
-		if(do_after(user, src, P.digspeed) && user)
+		if (do_after(user, src, P.digspeed) && user)
 			to_chat(user, "<span class='notice'>You finish [P.drill_verb] the rock.</span>")
 
 			busy = 0
 
-			if(finds && finds.len)
+			if (finds && finds.len)
 				var/datum/find/F = finds[1]
-				if(round(excavation_level + P.excavation_amount) == F.excavation_required)
+				if (round(excavation_level + P.excavation_amount) == F.excavation_required)
 
-					if(excavation_level + P.excavation_amount > F.excavation_required)
+					if (excavation_level + P.excavation_amount > F.excavation_required)
 
 						excavate_find(100, F)
 					else
 						excavate_find(80, F)
 
-				else if(excavation_level + P.excavation_amount > F.excavation_required - F.clearance_range)
+				else if (excavation_level + P.excavation_amount > F.excavation_required - F.clearance_range)
 
 					excavate_find(0, F)
 
-			if( excavation_level + P.excavation_amount >= 100 )
+			if ( excavation_level + P.excavation_amount >= 100 )
 
 				var/obj/structure/boulder/B
-				if(artifact_find)
-					if( excavation_level > 0 || prob(15) )
+				if (artifact_find)
+					if ( excavation_level > 0 || prob(15) )
 
 						B = getFromPool(/obj/structure/boulder, src)
-						if(artifact_find)
+						if (artifact_find)
 							B.artifact_find = artifact_find
 					else
 						artifact_debris(1)
 
-				else if(prob(15))
+				else if (prob(15))
 					B = getFromPool(/obj/structure/boulder, src)
 
 				var/mineral/has_minerals = mineral
-				if(B)
+				if (B)
 					GetDrilled(0)
 				else
 					GetDrilled(1)
 
-				if(!B && !has_minerals)
+				if (!B && !has_minerals)
 					var/I = rand(1,500)
-					if(I == 1)
-						switch(polarstar)
-							if(0)
+					if (I == 1)
+						switch (polarstar)
+							if (0)
 								new/obj/item/weapon/gun/energy/polarstar(src)
 								polarstar = 1
 								visible_message("<span class='notice'>A gun was buried within!</span>")
-							if(1)
+							if (1)
 								new/obj/item/device/modkit/spur_parts(src)
 								visible_message("<span class='notice'>Something came out of the wall! Looks like scrap metal.</span>")
 								polarstar = 2
 				return
 
-			if(finds && finds.len)
+			if (finds && finds.len)
 				var/I = rand(1,100)
-				if(I == 1)
-					switch(polarstar)
-						if(0)
+				if (I == 1)
+					switch (polarstar)
+						if (0)
 							new/obj/item/weapon/gun/energy/polarstar(src)
 							polarstar = 1
 							visible_message("<span class='notice'>A gun was buried within!</span>")
-						if(1)
+						if (1)
 							new/obj/item/device/modkit/spur_parts(src)
 							visible_message("<span class='notice'>Something came out of the wall! Looks like scrap metal.</span>")
 							polarstar = 2
 
 			excavation_level += P.excavation_amount
 
-			if(!archaeo_overlay && finds && finds.len)
+			if (!archaeo_overlay && finds && finds.len)
 				var/datum/find/F = finds[1]
-				if(F.excavation_required <= excavation_level + F.view_range)
+				if (F.excavation_required <= excavation_level + F.view_range)
 					archaeo_overlay = "overlay_archaeo[rand(1,3)]"
 					overlays += archaeo_overlay
 
 			var/update_excav_overlay = 0
 
 			var/subtractions = 0
-			while(excavation_level - 25*(subtractions + 1) >= 0 && subtractions < 3)
+			while (excavation_level - 25*(subtractions + 1) >= 0 && subtractions < 3)
 				subtractions++
-			if(excavation_level - P.excavation_amount < subtractions * 25)
+			if (excavation_level - P.excavation_amount < subtractions * 25)
 				update_excav_overlay = 1
 
 			//update overlays displaying excavation level
-			if( !(excav_overlay && excavation_level > 0) || update_excav_overlay )
+			if ( !(excav_overlay && excavation_level > 0) || update_excav_overlay )
 				var/excav_quadrant = round(excavation_level / 25) + 1
 				excav_overlay = "overlay_excv[excav_quadrant]_[rand(1,3)]"
 				overlays += excav_overlay
 /*
 			//drop some rocks
 			next_rock += P.excavation_amount * 10
-			while(next_rock > 100)
+			while (next_rock > 100)
 				next_rock -= 100
 				var/obj/item/weapon/ore/O = new(src)
-				if(!geologic_data)
+				if (!geologic_data)
 					geologic_data = new/datum/geosample(src)
 				geologic_data.UpdateNearbyArtifactInfo(src)
 				O.geologic_data = geologic_data
@@ -382,12 +382,12 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		return attack_hand(user)
 
 /turf/unsimulated/mineral/proc/DropMineral()
-	if(!mineral)
+	if (!mineral)
 		return
 
 	var/obj/item/weapon/ore/O = new mineral.ore (src)
-	if(istype(O))
-		if(!geologic_data)
+	if (istype(O))
+		if (!geologic_data)
 			geologic_data = new/datum/geosample(src)
 		geologic_data.UpdateNearbyArtifactInfo(src)
 		O.geologic_data = geologic_data
@@ -400,20 +400,20 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 	//destroyed artifacts have weird, unpleasant effects
 	//make sure to destroy them before changing the turf though
-	if(artifact_find && artifact_fail)
-		for(var/mob/living/M in range(src, 200))
+	if (artifact_find && artifact_fail)
+		for (var/mob/living/M in range(src, 200))
 			to_chat(M, "<font color='red'><b>[pick("A high pitched [pick("keening","wailing","whistle")]","A rumbling noise like [pick("thunder","heavy machinery")]")] somehow penetrates your mind before fading away!</b></font>")
-			if(prob(50)) //pain
+			if (prob(50)) //pain
 				flick("pain",M.pain)
-				if(prob(50))
+				if (prob(50))
 					M.adjustBruteLoss(5)
 			else
 				M.flash_eyes(visual = 1)
-				if(prob(50))
+				if (prob(50))
 					M.Stun(5)
 			M.apply_effect(25, IRRADIATE)
 
-	if(rand(1,500) == 1)
+	if (rand(1,500) == 1)
 		visible_message("<span class='notice'>An old dusty crate was buried within!</span>")
 		DropAbandonedCrate()
 
@@ -428,11 +428,11 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	//with skill and luck, players can cleanly extract finds
 	//otherwise, they come out inside a chunk of rock
 	var/obj/item/weapon/X
-	if(prob_clean)
+	if (prob_clean)
 		X = new /obj/item/weapon/archaeological_find(src, new_item_type = F.find_type)
 	else
 		X = new /obj/item/weapon/strangerock(src, inside_item_type = F.find_type)
-		if(!geologic_data)
+		if (!geologic_data)
 			geologic_data = new/datum/geosample(src)
 		geologic_data.UpdateNearbyArtifactInfo(src)
 		X:geologic_data = geologic_data
@@ -440,16 +440,16 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	//some find types delete the /obj/item/weapon/archaeological_find and replace it with something else, this handles when that happens
 	//yuck
 	var/display_name = "something"
-	if(!X)
+	if (!X)
 		X = last_find
-	if(X)
+	if (X)
 		display_name = X.name
 
 	//many finds are ancient and thus very delicate - luckily there is a specialised energy suspension field which protects them when they're being extracted
-	if(prob(F.prob_delicate))
+	if (prob(F.prob_delicate))
 		var/obj/effect/suspension_field/S = locate() in src
-		if(!S || S.field_type != get_responsive_reagent(F.find_type))
-			if(X)
+		if (!S || S.field_type != get_responsive_reagent(F.find_type))
+			if (X)
 				visible_message("<span class='danger'>[pick("[display_name] crumbles away into dust","[display_name] breaks apart")].</span>")
 				qdel(X)
 				X = null
@@ -457,35 +457,35 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	finds.Remove(F)
 
 /turf/unsimulated/mineral/proc/artifact_debris(var/severity = 0)
-	for(var/j in 1 to rand(1, 3 + max(min(severity, 1), 0) * 2))
-		switch(rand(1,7))
-			if(1)
+	for (var/j in 1 to rand(1, 3 + max(min(severity, 1), 0) * 2))
+		switch (rand(1,7))
+			if (1)
 				var/obj/item/stack/rods/R = new(src)
 				R.amount = rand(5,25)
 
-			if(2)
+			if (2)
 				var/obj/item/stack/tile/plasteel/R = new(src)
 				R.amount = rand(1,5)
 
-			if(3)
+			if (3)
 				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, (src))
 				M.amount = rand(5,25)
 
-			if(4)
+			if (4)
 				var/obj/item/stack/sheet/plasteel/R = new(src)
 				R.amount = rand(5,25)
 
-			if(5)
+			if (5)
 				var/quantity = rand(1,3)
-				for(var/i=0, i<quantity, i++)
+				for (var/i=0, i<quantity, i++)
 					getFromPool(/obj/item/weapon/shard, loc)
 
-			if(6)
+			if (6)
 				var/quantity = rand(1,3)
-				for(var/i=0, i<quantity, i++)
+				for (var/i=0, i<quantity, i++)
 					getFromPool(/obj/item/weapon/shard/plasma, loc)
 
-			if(7)
+			if (7)
 				var/obj/item/stack/sheet/mineral/uranium/R = new(src)
 				R.amount = rand(5,25)
 
@@ -518,28 +518,28 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 	name = proper_name
 
-	if(prob(20))
+	if (prob(20))
 		icon_state = "asteroid[rand(0,12)]"
-	if(ticker)
+	if (ticker)
 		initialize()
 
 /turf/unsimulated/floor/asteroid/initialize()
 	updateMineralOverlays()
 
 /turf/unsimulated/floor/asteroid/ex_act(severity)
-	switch(severity)
-		if(3.0)
+	switch (severity)
+		if (3.0)
 			return
-		if(2.0)
+		if (2.0)
 			if (prob(70))
 				gets_dug()
-		if(1.0)
+		if (1.0)
 			gets_dug()
 	return
 
 /turf/unsimulated/floor/asteroid/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
-	if(!W || !user)
+	if (!W || !user)
 		return 0
 
 	if (istype(W, /obj/item/weapon/pickaxe))
@@ -547,7 +547,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		if (get_turf(user) != user.loc) //if we aren't somehow on the turf we're in
 			return
 
-		if(!(used_digging.diggables & DIG_SOIL)) //if the pickaxe can't dig soil, we don't
+		if (!(used_digging.diggables & DIG_SOIL)) //if the pickaxe can't dig soil, we don't
 			to_chat(user, "<span class='rose'>You can't dig soft soil with \the [W].</span>")
 			return
 
@@ -558,7 +558,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		to_chat(user, "<span class='rose'>You start digging.<span>")
 		playsound(get_turf(src), 'sound/effects/rustle1.ogg', 50, 1) //russle sounds sounded better
 
-		if(do_after(user, src, used_digging.digspeed) && user) //the better the drill, the faster the digging
+		if (do_after(user, src, used_digging.digspeed) && user) //the better the drill, the faster the digging
 			playsound(src, 'sound/items/shovel.ogg', 50, 1)
 			to_chat(user, "<span class='notice'>You dug a hole.</span>")
 			gets_dug()
@@ -568,7 +568,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	return
 
 /turf/unsimulated/floor/asteroid/proc/gets_dug()
-	if(dug)
+	if (dug)
 		return
 	new/obj/item/weapon/ore/glass(src)
 	new/obj/item/weapon/ore/glass(src)
@@ -583,42 +583,42 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 /turf/unsimulated/floor/asteroid/proc/updateMineralOverlays()
 	src.overlays.len = 0
 	spawn(1)
-		for(var/dir in cardinal)
-			if(istype(get_step(src,dir), /turf/unsimulated/mineral))
-				switch(dir)
-					if(NORTH)
+		for (var/dir in cardinal)
+			if (istype(get_step(src,dir), /turf/unsimulated/mineral))
+				switch (dir)
+					if (NORTH)
 						src.overlays += image('icons/turf/walls.dmi', "rock_side_n")
-					if(SOUTH)
+					if (SOUTH)
 						src.overlays += image('icons/turf/walls.dmi', "rock_side_s", layer=6)
-					if(EAST)
+					if (EAST)
 						src.overlays += image('icons/turf/walls.dmi', "rock_side_e", layer=6)
-					if(WEST)
+					if (WEST)
 						src.overlays += image('icons/turf/walls.dmi', "rock_side_w", layer=6)
 
 /turf/unsimulated/floor/asteroid/proc/fullUpdateMineralOverlays()
 	var/turf/unsimulated/floor/asteroid/A
-	if(istype(get_step(src, WEST), /turf/unsimulated/floor/asteroid))
+	if (istype(get_step(src, WEST), /turf/unsimulated/floor/asteroid))
 		A = get_step(src, WEST)
 		A.updateMineralOverlays()
-	if(istype(get_step(src, EAST), /turf/unsimulated/floor/asteroid))
+	if (istype(get_step(src, EAST), /turf/unsimulated/floor/asteroid))
 		A = get_step(src, EAST)
 		A.updateMineralOverlays()
-	if(istype(get_step(src, NORTH), /turf/unsimulated/floor/asteroid))
+	if (istype(get_step(src, NORTH), /turf/unsimulated/floor/asteroid))
 		A = get_step(src, NORTH)
 		A.updateMineralOverlays()
-	if(istype(get_step(src, NORTHWEST), /turf/unsimulated/floor/asteroid))
+	if (istype(get_step(src, NORTHWEST), /turf/unsimulated/floor/asteroid))
 		A = get_step(src, NORTHWEST)
 		A.updateMineralOverlays()
-	if(istype(get_step(src, NORTHEAST), /turf/unsimulated/floor/asteroid))
+	if (istype(get_step(src, NORTHEAST), /turf/unsimulated/floor/asteroid))
 		A = get_step(src, NORTHEAST)
 		A.updateMineralOverlays()
-	if(istype(get_step(src, SOUTHWEST), /turf/unsimulated/floor/asteroid))
+	if (istype(get_step(src, SOUTHWEST), /turf/unsimulated/floor/asteroid))
 		A = get_step(src, SOUTHWEST)
 		A.updateMineralOverlays()
-	if(istype(get_step(src, SOUTHEAST), /turf/unsimulated/floor/asteroid))
+	if (istype(get_step(src, SOUTHEAST), /turf/unsimulated/floor/asteroid))
 		A = get_step(src, SOUTHEAST)
 		A.updateMineralOverlays()
-	if(istype(get_step(src, SOUTH), /turf/unsimulated/floor/asteroid))
+	if (istype(get_step(src, SOUTH), /turf/unsimulated/floor/asteroid))
 		A = get_step(src, SOUTH)
 		A.updateMineralOverlays()
 	src.updateMineralOverlays()
@@ -658,11 +658,11 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if (prob(mineralChance) && !mineral)
 		var/mineral_name = pickweight(mineralSpawnChanceList) //temp mineral name
 
-		if(!name_to_mineral)
+		if (!name_to_mineral)
 			SetupMinerals()
 
 		if (mineral_name)
-			if(mineral_name in name_to_mineral)
+			if (mineral_name in name_to_mineral)
 				mineral = name_to_mineral[mineral_name]
 				mineral.UpdateTurf(src)
 			else
@@ -866,40 +866,40 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 /turf/unsimulated/mineral/gibtonite/Bumped(AM)
 	var/bump_reject = 0
-	if(istype(AM,/mob/living/carbon/human))
+	if (istype(AM,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = AM
-		if((istype(H.get_active_hand(),/obj/item/weapon/pickaxe) || istype(H.get_inactive_hand(),/obj/item/weapon/pickaxe)) && src.stage == 1)
+		if ((istype(H.get_active_hand(),/obj/item/weapon/pickaxe) || istype(H.get_inactive_hand(),/obj/item/weapon/pickaxe)) && src.stage == 1)
 			to_chat(H, "<span class='warning'>You don't think that's a good idea...</span>")
 			bump_reject = 1
 
-	else if(istype(AM,/mob/living/silicon/robot))
+	else if (istype(AM,/mob/living/silicon/robot))
 		var/mob/living/silicon/robot/R = AM
-		if(istype(R.module_active, /obj/item/weapon/pickaxe))
+		if (istype(R.module_active, /obj/item/weapon/pickaxe))
 			to_chat(R, "<span class='warning'>You don't think that's a good idea...</span>")
 			bump_reject = 1
-		else if(istype(R.module_active, /obj/item/device/mining_scanner))
+		else if (istype(R.module_active, /obj/item/device/mining_scanner))
 			attackby(R.module_active, R) //let's bump to disable. This is kinder, because borgs need some love
 
-	else if(istype(AM,/obj/mecha))
+	else if (istype(AM,/obj/mecha))
 		var/obj/mecha/M = AM
-		if(istype(M.selected, /obj/item/mecha_parts/mecha_equipment/tool/drill))
+		if (istype(M.selected, /obj/item/mecha_parts/mecha_equipment/tool/drill))
 			M.occupant_message("<span class='warning'>Safety features prevent this action.</span>")
 			bump_reject = 1
 
-	if(!bump_reject) //if we haven't been pushed off, we do the drilling bit
+	if (!bump_reject) //if we haven't been pushed off, we do the drilling bit
 		return ..()
 
 /turf/unsimulated/mineral/gibtonite/attackby(obj/item/I, mob/user)
-	if(((istype(I, /obj/item/device/mining_scanner)) || (istype(I, /obj/item/device/depth_scanner))) && stage == 1)
+	if (((istype(I, /obj/item/device/mining_scanner)) || (istype(I, /obj/item/device/depth_scanner))) && stage == 1)
 		user.visible_message("<span class='notice'>You use [I] to locate where to cut off the chain reaction and attempt to stop it...</span>")
 		defuse()
-	if(istype(I, /obj/item/weapon/pickaxe))
+	if (istype(I, /obj/item/weapon/pickaxe))
 		src.activated_ckey = "[user.ckey]"
 		src.activated_name = "[user.name]"
 	..()
 
 /turf/unsimulated/mineral/gibtonite/proc/explosive_reaction()
-	if(stage == 0)
+	if (stage == 0)
 		icon_state = "rock_Gibtonite_active"
 		name = "Gibtonite deposit"
 		desc = "An active gibtonite reserve. Run!"
@@ -913,40 +913,40 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 /turf/unsimulated/mineral/gibtonite/proc/countdown()
 	spawn(0)
-		while(stage == 1 && det_time > 0 && mineral.result_amount >= 1)
+		while (stage == 1 && det_time > 0 && mineral.result_amount >= 1)
 			det_time--
 			sleep(5)
-		if(stage == 1 && det_time <= 0 && mineral.result_amount >= 1)
+		if (stage == 1 && det_time <= 0 && mineral.result_amount >= 1)
 			var/turf/bombturf = get_turf(src)
 			mineral.result_amount = 0
 			explosion(bombturf,1,3,5, adminlog = 0)
-		if(stage == 0 || stage == 2)
+		if (stage == 0 || stage == 2)
 			return
 
 /turf/unsimulated/mineral/gibtonite/proc/defuse()
-	if(stage == 1)
+	if (stage == 1)
 		icon_state = "rock_Gibtonite" //inactive does not exist. The other icon is active.
 		desc = "An inactive gibtonite reserve. The ore can be extracted."
 		stage = 2
-		if(det_time < 0)
+		if (det_time < 0)
 			det_time = 0
 		visible_message("<span class='notice'>The chain reaction was stopped! The gibtonite had [src.det_time] reactions left till the explosion!</span>")
 
 /turf/unsimulated/mineral/gibtonite/GetDrilled()
-	if(stage == 0 && mineral.result_amount >= 1) //Gibtonite deposit is activated
+	if (stage == 0 && mineral.result_amount >= 1) //Gibtonite deposit is activated
 		playsound(src,'sound/effects/hit_on_shattered_glass.ogg',50,1)
 		explosive_reaction()
 		return
-	if(stage == 1 && mineral.result_amount >= 1) //Gibtonite deposit goes kaboom
+	if (stage == 1 && mineral.result_amount >= 1) //Gibtonite deposit goes kaboom
 		var/turf/bombturf = get_turf(src)
 		mineral.result_amount = 0
 		explosion(bombturf,1,2,5, adminlog = 0)
-	if(stage == 2) //Gibtonite deposit is now benign and extractable. Depending on how close you were to it blowing up before defusing, you get better quality ore.
+	if (stage == 2) //Gibtonite deposit is now benign and extractable. Depending on how close you were to it blowing up before defusing, you get better quality ore.
 		var/obj/item/weapon/gibtonite/G = new /obj/item/weapon/gibtonite/(src)
-		if(det_time <= 0)
+		if (det_time <= 0)
 			G.quality = 3
 			G.icon_state = "Gibtonite ore 3"
-		if(det_time >= 1 && det_time <= 2)
+		if (det_time >= 1 && det_time <= 2)
 			G.quality = 2
 			G.icon_state = "Gibtonite ore 2"
 	var/turf/unsimulated/floor/asteroid/gibtonite_remains/G = ChangeTurf(/turf/unsimulated/floor/asteroid/gibtonite_remains)
@@ -971,7 +971,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 /turf/unsimulated/floor/asteroid/cave/New(loc, var/length, var/go_backwards = 1, var/exclude_dir = -1)
 
 	// If length (arg2) isn't defined, get a random length; otherwise assign our length to the length arg.
-	if(!length)
+	if (!length)
 		src.length = rand(25, 50)
 	else
 		src.length = length
@@ -983,7 +983,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 	// Make our tunnels
 	make_tunnel(forward_cave_dir)
-	if(go_backwards)
+	if (go_backwards)
 		make_tunnel(backward_cave_dir)
 	// Kill ourselves by replacing ourselves with a normal floor.
 	SpawnFloor(src)
@@ -995,26 +995,26 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	var/turf/unsimulated/mineral/tunnel = src
 	var/next_angle = pick(45, -45)
 
-	for(var/i = 0; i < length; i++)
-		if(!sanity)
+	for (var/i = 0; i < length; i++)
+		if (!sanity)
 			break
 
 		var/list/L = list(45)
-		if(IsOdd(dir2angle(dir))) // We're going at an angle and we want thick angled tunnels.
+		if (IsOdd(dir2angle(dir))) // We're going at an angle and we want thick angled tunnels.
 			L += -45
 
 		// Expand the edges of our tunnel
-		for(var/edge_angle in L)
+		for (var/edge_angle in L)
 			var/turf/unsimulated/mineral/edge = get_step(tunnel, angle2dir(dir2angle(dir) + edge_angle))
-			if(istype(edge))
+			if (istype(edge))
 				SpawnFloor(edge)
 
 		// Move our tunnel forward
 		tunnel = get_step(tunnel, dir)
 
-		if(istype(tunnel))
+		if (istype(tunnel))
 			// Small chance to have forks in our tunnel; otherwise dig our tunnel.
-			if(i > 3 && prob(20))
+			if (i > 3 && prob(20))
 				new src.type(tunnel, rand(10, 15), 0, dir)
 			else
 				SpawnFloor(tunnel)
@@ -1022,17 +1022,17 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			break
 
 		// Chance to change our direction left or right.
-		if(i > 2 && prob(33))
+		if (i > 2 && prob(33))
 			// We can't go a full loop though
 			next_angle = -next_angle
 			dir = angle2dir(dir2angle(dir) + next_angle)
 
 /turf/unsimulated/floor/asteroid/cave/proc/SpawnFloor(var/turf/T)
-	for(var/turf/S in range(2,T))
-		if(istype(S, /turf/space) || istype(S.loc, /area/mine/explored))
+	for (var/turf/S in range(2,T))
+		if (istype(S, /turf/space) || istype(S.loc, /area/mine/explored))
 			sanity = 0
 			break
-	if(!sanity)
+	if (!sanity)
 		return
 
 	SpawnMonster(T)
@@ -1040,11 +1040,11 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	new /turf/unsimulated/floor/asteroid(T)
 
 /turf/unsimulated/floor/asteroid/cave/proc/SpawnMonster(var/turf/T)
-	if(prob(2))
-		if(istype(loc, /area/mine/explored))
+	if (prob(2))
+		if (istype(loc, /area/mine/explored))
 			return
-		for(var/atom/A in range(7,T))//Lowers chance of mob clumps
-			if(istype(A, /mob/living/simple_animal/hostile/asteroid))
+		for (var/atom/A in range(7,T))//Lowers chance of mob clumps
+			if (istype(A, /mob/living/simple_animal/hostile/asteroid))
 				return
 		var/randumb = pickweight(mob_spawn_list)
 		new randumb(T)
@@ -1058,21 +1058,21 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	return BUILD_FAILURE
 
 /turf/unsimulated/floor/asteroid/canBuildLattice()
-	if(src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
+	if (src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
 		return BUILD_FAILURE
 	else if (src.y >= (world.maxy - TRANSITIONEDGE || src.y <= TRANSITIONEDGE ))
 		return BUILD_FAILURE
-	else if(!(locate(/obj/structure/lattice) in contents))
+	else if (!(locate(/obj/structure/lattice) in contents))
 		return BUILD_SUCCESS
 	return BUILD_FAILURE
 
 /turf/unsimulated/floor/asteroid/canBuildPlating()
-	if(src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
+	if (src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
 		return BUILD_FAILURE
 	else if (src.y >= (world.maxy - TRANSITIONEDGE || src.y <= TRANSITIONEDGE ))
 		return BUILD_FAILURE
-	else if(!dug)
+	else if (!dug)
 		return BUILD_IGNORE
-	if(locate(/obj/structure/lattice) in contents)
+	if (locate(/obj/structure/lattice) in contents)
 		return BUILD_SUCCESS
 	return BUILD_FAILURE

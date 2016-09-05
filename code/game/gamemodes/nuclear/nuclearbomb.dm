@@ -30,7 +30,7 @@ var/bomb_set
 		src.timeleft--
 		if (src.timeleft <= 0)
 			explode()
-		for(var/mob/M in viewers(1, src))
+		for (var/mob/M in viewers(1, src))
 			if ((M.client && M.machine == src))
 				src.attack_hand(M)
 	return
@@ -44,12 +44,12 @@ var/bomb_set
 			return
 
 	if (src.anchored)
-		switch(removal_stage)
-			if(0)
-				if(istype(O,/obj/item/weapon/weldingtool))
+		switch (removal_stage)
+			if (0)
+				if (istype(O,/obj/item/weapon/weldingtool))
 
 					var/obj/item/weapon/weldingtool/WT = O
-					if(!WT.isOn())
+					if (!WT.isOn())
 						return
 					if (WT.get_fuel() < 5) // uses up 5 fuel.
 						to_chat(user, "<span class='warning'>You need more fuel to complete this task.</span>")
@@ -57,29 +57,29 @@ var/bomb_set
 
 					user.visible_message("[user] starts cutting loose the anchoring bolt covers on [src].", "You start cutting loose the anchoring bolt covers with [O]...")
 
-					if(do_after(user, src, 40))
-						if(!src || !user || !WT.remove_fuel(5, user))
+					if (do_after(user, src, 40))
+						if (!src || !user || !WT.remove_fuel(5, user))
 							return
 						user.visible_message("[user] cuts through the bolt covers on [src].", "You cut through the bolt cover.")
 						removal_stage = 1
 				return
 
-			if(1)
-				if(istype(O,/obj/item/weapon/crowbar))
+			if (1)
+				if (istype(O,/obj/item/weapon/crowbar))
 					user.visible_message("[user] starts forcing open the bolt covers on [src].", "You start forcing open the anchoring bolt covers with [O]...")
 
-					if(do_after(user,  src, 15))
-						if(!src || !user)
+					if (do_after(user,  src, 15))
+						if (!src || !user)
 							return
 						user.visible_message("[user] forces open the bolt covers on [src].", "You force open the bolt covers.")
 						removal_stage = 2
 				return
 
-			if(2)
-				if(istype(O,/obj/item/weapon/weldingtool))
+			if (2)
+				if (istype(O,/obj/item/weapon/weldingtool))
 
 					var/obj/item/weapon/weldingtool/WT = O
-					if(!WT.isOn())
+					if (!WT.isOn())
 						return
 					if (WT.get_fuel() < 5) // uses up 5 fuel.
 						to_chat(user, "<span class='notice'>You need more fuel to complete this task.</span>")
@@ -87,32 +87,32 @@ var/bomb_set
 
 					user.visible_message("[user] starts cutting apart the anchoring system sealant on [src].", "You start cutting apart the anchoring system's sealant with [O]...")
 
-					if(do_after(user, src, 40))
-						if(!src || !user || !WT.remove_fuel(5, user))
+					if (do_after(user, src, 40))
+						if (!src || !user || !WT.remove_fuel(5, user))
 							return
 						user.visible_message("[user] cuts apart the anchoring system sealant on [src].", "You cut apart the anchoring system's sealant.")
 						removal_stage = 3
 				return
 
-			if(3)
-				if(istype(O,/obj/item/weapon/wrench))
+			if (3)
+				if (istype(O,/obj/item/weapon/wrench))
 
 					user.visible_message("[user] begins unwrenching the anchoring bolts on [src].", "You begin unwrenching the anchoring bolts...")
 
-					if(do_after(user, src, 50))
-						if(!src || !user)
+					if (do_after(user, src, 50))
+						if (!src || !user)
 							return
 						user.visible_message("[user] unwrenches the anchoring bolts on [src].", "You unwrench the anchoring bolts.")
 						removal_stage = 4
 				return
 
-			if(4)
-				if(istype(O,/obj/item/weapon/crowbar))
+			if (4)
+				if (istype(O,/obj/item/weapon/crowbar))
 
 					user.visible_message("[user] begins lifting [src] off of the anchors.", "You begin lifting the device off the anchors...")
 
-					if(do_after(user, src, 80))
-						if(!src || !user)
+					if (do_after(user, src, 80))
+						if (!src || !user)
 							return
 						user.visible_message("[user] crowbars [src] off of the anchors. It can now be moved.", "You jam the crowbar under the nuclear device and lift it off its anchors. You can now move it!")
 						anchored = 0
@@ -151,7 +151,7 @@ var/bomb_set
 		user << browse(dat, "window=nuclearbomb;size=300x400")
 		onclose(user, "nuclearbomb")
 	else if (src.deployable)
-		if(removal_stage < 5)
+		if (removal_stage < 5)
 			src.anchored = 1
 			visible_message("<span class='notice'>With a steely snap, bolts slide out of [src] and anchor it to the flooring!</span>")
 		else
@@ -180,7 +180,7 @@ var/bomb_set
 		src.deployable = 1
 
 /obj/machinery/nuclearbomb/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 	if (!usr.canmove || usr.stat || usr.restrained())
 		return
@@ -229,7 +229,7 @@ var/bomb_set
 					src.timing = !( src.timing )
 					if (src.timing)
 						src.icon_state = "nuclearbomb2"
-						if(!src.safety)
+						if (!src.safety)
 							bomb_set = 1//There can still be issues with this reseting when there are multiple bombs. Not a big deal tho for Nuke/N
 						else
 							bomb_set = 0
@@ -238,25 +238,25 @@ var/bomb_set
 						bomb_set = 0
 				if (href_list["safety"])
 					src.safety = !( src.safety )
-					if(safety)
+					if (safety)
 						src.timing = 0
 						bomb_set = 0
 				if (href_list["anchor"])
 
-					if(removal_stage == 5)
+					if (removal_stage == 5)
 						src.anchored = 0
 						visible_message("<span class='warning'>\The [src] makes a highly unpleasant crunching noise. It looks like the anchoring bolts have been cut.</span>")
 						return
 
 					src.anchored = !( src.anchored )
-					if(src.anchored)
+					if (src.anchored)
 						visible_message("<span class='warning'>With a steely snap, bolts slide out of [src] and anchor it to the flooring.</span>")
 						playsound(src,'sound/effects/bolt.ogg', 70, 1)
 					else
 						visible_message("<span class='warning'>The anchoring bolts slide back into the depths of [src].</span>")
 
 		src.add_fingerprint(usr)
-		for(var/mob/M in viewers(1, src))
+		for (var/mob/M in viewers(1, src))
 			if ((M.client && M.machine == src))
 				src.attack_hand(M)
 	else
@@ -294,23 +294,23 @@ var/bomb_set
 
 	var/off_station = 0
 	var/turf/bomb_location = get_turf(src)
-	if( bomb_location && (bomb_location.z == map.zMainStation) )
-		if( (bomb_location.x < (world.maxx/2-NUKERANGE)) || (bomb_location.x > (world.maxx/2+NUKERANGE)) || (bomb_location.y < (world.maxy-NUKERANGE)) || (bomb_location.y > (world.maxy+NUKERANGE)) )
+	if ( bomb_location && (bomb_location.z == map.zMainStation) )
+		if ( (bomb_location.x < (world.maxx/2-NUKERANGE)) || (bomb_location.x > (world.maxx/2+NUKERANGE)) || (bomb_location.y < (world.maxy-NUKERANGE)) || (bomb_location.y > (world.maxy+NUKERANGE)) )
 			off_station = 1
 	else
 		off_station = 2
 
-	if(ticker)
-		if(ticker.mode && ticker.mode.name == "nuclear emergency")
+	if (ticker)
+		if (ticker.mode && ticker.mode.name == "nuclear emergency")
 			var/datum/game_mode/nuclear/GM = ticker.mode
 			var/obj/machinery/computer/shuttle_control/syndicate/syndie_location = locate(/obj/machinery/computer/shuttle_control/syndicate)
-			if(syndie_location)
+			if (syndie_location)
 				GM.syndies_didnt_escape = (syndie_location.z > 1 ? 0 : 1)	//muskets will make me change this, but it will do for now
 			GM.nuke_off_station = off_station
 		ticker.station_explosion_cinematic(off_station,null)
-		if(ticker.mode)
+		if (ticker.mode)
 			ticker.mode.explosion_in_progress = 0
-			if(ticker.mode.name == "nuclear emergency")
+			if (ticker.mode.name == "nuclear emergency")
 				var/datum/game_mode/nuclear/GM = ticker.mode
 				GM.nukes_left --
 			else
@@ -320,12 +320,12 @@ var/bomb_set
 															//kinda shit but I couldn't  get permission to do what I wanted to do.
 			stat_collection.nuked++
 
-			if(!ticker.mode.check_finished())//If the mode does not deal with the nuke going off so just reboot because everyone is stuck as is
+			if (!ticker.mode.check_finished())//If the mode does not deal with the nuke going off so just reboot because everyone is stuck as is
 				to_chat(world, "<B>Resetting in 30 seconds!</B>")
 
 				feedback_set_details("end_error","nuke - unhandled ending")
 
-				if(blackbox)
+				if (blackbox)
 					blackbox.save_all_data_to_sql()
 
 				CallHook("Reboot",list())
@@ -352,8 +352,8 @@ var/bomb_set
 /obj/item/weapon/disk/nuclear/Destroy()
 	..()
 	replace_disk()
-	for(var/obj/item/weapon/pinpointer/pinpointers in watched_by)
-		if(pinpointers.the_disk == src)
+	for (var/obj/item/weapon/pinpointer/pinpointers in watched_by)
+		if (pinpointers.the_disk == src)
 			pinpointers.the_disk = null
 	watched_by = null
 
@@ -365,7 +365,7 @@ var/bomb_set
 	..()
 
 /obj/item/weapon/disk/nuclear/proc/replace_disk()
-	if(blobstart.len > 0 && !respawned)
+	if (blobstart.len > 0 && !respawned)
 		var/picked_turf = get_turf(pick(blobstart))
 		var/picked_area = formatLocation(picked_turf)
 		var/log_message = "[type] has been destroyed. Creating one at"

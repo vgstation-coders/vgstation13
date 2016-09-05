@@ -17,11 +17,11 @@
 /obj/map/spawner/perform_spawn()
 
 	var/obj/spawned
-	for(amount, amount, amount--)
-		if(prob(chance))
+	for (amount, amount, amount--)
+		if (prob(chance))
 			spawned = pick(to_spawn)
 			spawned = new spawned(loc)
-			if(jiggle)
+			if (jiggle)
 				spawned.pixel_x = rand(-jiggle, jiggle) * PIXEL_MULTIPLIER
 				spawned.pixel_y = rand(-jiggle, jiggle) * PIXEL_MULTIPLIER
 

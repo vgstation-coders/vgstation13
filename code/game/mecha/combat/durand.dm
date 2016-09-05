@@ -25,8 +25,8 @@
 */
 
 /obj/mecha/combat/durand/relaymove(mob/user,direction)
-	if(defence)
-		if(world.time - last_message > 20)
+	if (defence)
+		if (world.time - last_message > 20)
 			src.occupant_message("<font color='red'>Unable to move while in defence mode</font>")
 			last_message = world.time
 		return 0
@@ -38,12 +38,12 @@
 	set name = "Toggle defence mode"
 	set src = usr.loc
 	set popup_menu = 0
-	if(usr!=src.occupant)
+	if (usr!=src.occupant)
 		return
 	defence = !defence
-	if(defence)
+	if (defence)
 		icon_state = 0
-		if(!istype(src,/obj/mecha/combat/durand/old))
+		if (!istype(src,/obj/mecha/combat/durand/old))
 			flick("durand-lockdown-a",src)
 			icon_state = "durand-lockdown"
 		deflect_chance = defence_deflect
@@ -51,7 +51,7 @@
 		playsound(src, 'sound/mecha/mechlockdown.ogg', 60, 1)
 	else
 		deflect_chance = initial(deflect_chance)
-		if(!istype(src,/obj/mecha/combat/durand/old))
+		if (!istype(src,/obj/mecha/combat/durand/old))
 			icon_state = reset_icon()
 		src.occupant_message("<font color='red'>You disable [src] defence mode.</font>")
 	src.log_message("Toggled defence mode.")

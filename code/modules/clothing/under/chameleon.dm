@@ -11,11 +11,11 @@
 
 	New()
 		..()
-		for(var/U in typesof(/obj/item/clothing/under/color)-(/obj/item/clothing/under/color))
+		for (var/U in typesof(/obj/item/clothing/under/color)-(/obj/item/clothing/under/color))
 			var/obj/item/clothing/under/V = new U
 			src.clothing_choices += V
 
-		for(var/U in typesof(/obj/item/clothing/under/rank)-(/obj/item/clothing/under/rank))
+		for (var/U in typesof(/obj/item/clothing/under/rank)-(/obj/item/clothing/under/rank))
 			var/obj/item/clothing/under/V = new U
 			src.clothing_choices += V
 		return
@@ -23,11 +23,11 @@
 
 	attackby(obj/item/clothing/under/U as obj, mob/user as mob)
 		..()
-		if(istype(U, /obj/item/clothing/under/chameleon))
+		if (istype(U, /obj/item/clothing/under/chameleon))
 			to_chat(user, "<span class='warning'>Nothing happens.</span>")
 			return
-		if(istype(U, /obj/item/clothing/under))
-			if(src.clothing_choices.Find(U))
+		if (istype(U, /obj/item/clothing/under))
+			if (src.clothing_choices.Find(U))
 				to_chat(user, "<span class='warning'>Pattern is already recognised by the suit.</span>")
 				return
 			src.clothing_choices += U
@@ -52,13 +52,13 @@
 		set category = "Object"
 		set src in usr
 
-		if(icon_state == "psyche")
+		if (icon_state == "psyche")
 			to_chat(usr, "<span class='warning'>Your suit is malfunctioning</span>")
 			return
 
 		var/obj/item/clothing/under/A
 		A = input("Select Colour to change it to", "BOOYEA", A) in clothing_choices
-		if(!A)
+		if (!A)
 			return
 
 		desc = null
@@ -77,6 +77,6 @@
 	..()
 	var/blocked = list(/obj/item/clothing/under/chameleon, /obj/item/clothing/under/chameleon/all, /obj/item/clothing/under)
 	//to prevent an infinite loop
-	for(var/U in typesof(/obj/item/clothing/under)-blocked)
+	for (var/U in typesof(/obj/item/clothing/under)-blocked)
 		var/obj/item/clothing/under/V = new U
 		src.clothing_choices += V

@@ -71,7 +71,7 @@
 		target.op_stage.ribcage = 2
 
 		// Whoops!
-		if(prob(10))
+		if (prob(10))
 			var/datum/organ/external/affected = target.get_organ(target_zone)
 			affected.fracture()
 
@@ -164,7 +164,7 @@
 
 	can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/embryo = 0
-		for(var/obj/item/alien_embryo/A in target)
+		for (var/obj/item/alien_embryo/A in target)
 			embryo = 1
 			break
 		return ..() && embryo && target.op_stage.ribcage == 2
@@ -180,7 +180,7 @@
 		user.visible_message("<span class='warning'>[user] rips the larva out of [target]'s ribcage!</span>",
 							 "You rip the larva out of [target]'s ribcage!")
 
-		for(var/obj/item/alien_embryo/A in target)
+		for (var/obj/item/alien_embryo/A in target)
 			A.forceMove(A.loc.loc)
 
 
@@ -189,7 +189,7 @@
 //////////////////////////////////////////////////////////////////
 /datum/surgery_step/ribcage/fix_chest_internal/tool_quality(obj/item/tool)
 	. = ..()
-	if(!tool.is_sharp())
+	if (!tool.is_sharp())
 		return 0
 
 /datum/surgery_step/ribcage/fix_chest_internal
@@ -205,7 +205,7 @@
 	can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/is_chest_organ_damaged = 0
 		var/datum/organ/external/chest/chest = target.get_organ("chest")
-		for(var/datum/organ/internal/I in chest.internal_organs) if(I.damage > 0)
+		for (var/datum/organ/internal/I in chest.internal_organs) if (I.damage > 0)
 			is_chest_organ_damaged = 1
 			break
 		return ..() && is_chest_organ_damaged && target.op_stage.ribcage == 2
@@ -216,16 +216,16 @@
 		var/datum/organ/internal/liver/liver = target.internal_organs_by_name["liver"]
 		var/datum/organ/internal/liver/kidney = target.internal_organs_by_name["kidney"]
 
-		if(lungs.damage > 0)
+		if (lungs.damage > 0)
 			user.visible_message("[user] starts mending the rupture in [target]'s lungs with \the [tool].", \
 			"You start mending the rupture in [target]'s lungs with \the [tool]." )
-		if(heart.damage > 0)
+		if (heart.damage > 0)
 			user.visible_message("[user] starts mending the bruises on [target]'s heart with \the [tool].", \
 			"You start mending the bruises on [target]'s heart with \the [tool]." )
-		if(liver.damage > 0)
+		if (liver.damage > 0)
 			user.visible_message("[user] starts mending the bruises on [target]'s liver with \the [tool].", \
 			"You start mending the bruises on [target]'s liver with \the [tool]." )
-		if(kidney.damage > 0)
+		if (kidney.damage > 0)
 			user.visible_message("[user] starts mending the bruises on [target]'s kidney with \the [tool].", \
 			"You start mending the bruises on [target]'s kidney with \the [tool]." )
 		target.custom_pain("The pain in your chest is living hell!",1)
@@ -237,22 +237,22 @@
 		var/datum/organ/internal/liver/liver = target.internal_organs["liver"]
 		var/datum/organ/internal/liver/kidney = target.internal_organs["kidney"]
 
-		if(lungs.damage > 0)
+		if (lungs.damage > 0)
 			user.visible_message("<span class='notice'>[user] mends the rupture in [target]'s lungs with \the [tool].</span>", \
 			"<span class='notice'>You mend the rupture in [target]'s lungs with \the [tool].</span>" )
 			lungs.damage = 0
 
-		if(heart.damage > 0)
+		if (heart.damage > 0)
 			user.visible_message("<span class='notice'>[user] treats the bruises on [target]'s heart with \the [tool].</span>", \
 			"<span class='notice'>You treats the bruises on [target]'s heart with \the [tool].</span>" )
 			heart.damage = 0
 
-		if(liver.damage > 0)
+		if (liver.damage > 0)
 			user.visible_message("<span class='notice'>[user] treats the bruises on [target]'s liver with \the [tool].</span>", \
 			"<span class='notice'>You treats the bruises on [target]'s liver with \the [tool].</span>" )
 			liver.damage = 0
 
-		if(kidney.damage > 0)
+		if (kidney.damage > 0)
 			user.visible_message("<span class='notice'>[user] treats the bruises on [target]'s kidney with \the [tool].</span>", \
 			"<span class='notice'>You treats the bruises on [target]'s kidney with \the [tool].</span>" )
 			kidney.damage = 0

@@ -21,7 +21,7 @@ var/global/dmm_suite/preloader/_preloader = null
  *
  */
 /dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null)
-	if(!z_offset)//what z_level we are creating the map on
+	if (!z_offset)//what z_level we are creating the map on
 		z_offset = world.maxz+1
 
 	var/list/spawned_atoms = list()
@@ -36,13 +36,13 @@ var/global/dmm_suite/preloader/_preloader = null
 	///////////////////////////////////////////////////////////////////////////////////////
 	var/list/grid_models = list()
 	var/key_len = length(copytext(tfile,2,findtext(tfile,quote,2,0)))//the length of the model key (e.g "aa" or "aba")
-	if(!key_len)
+	if (!key_len)
 		key_len = 1
 
 	//proceed line by line
-	for(lpos=1; lpos<tfile_len; lpos=findtext(tfile,"\n",lpos,0)+1)
+	for (lpos=1; lpos<tfile_len; lpos=findtext(tfile,"\n",lpos,0)+1)
 		var/tline = copytext(tfile,lpos,findtext(tfile,"\n",lpos,0))
-		if(copytext(tline,1,2) != quote)//we reached the map "layout"
+		if (copytext(tline,1,2) != quote)//we reached the map "layout"
 			break
 		var/model_key = copytext(tline,2,2+key_len)
 		var/model_contents = copytext(tline,findtext(tfile,"=")+3,length(tline))
@@ -58,10 +58,10 @@ var/global/dmm_suite/preloader/_preloader = null
 	var/ycrd=x_offset
 	var/xcrd=y_offset
 
-	for(var/zpos=findtext(tfile,"\n(1,1,",lpos,0);zpos!=0;zpos=findtext(tfile,"\n(1,1,",zpos+1,0))	//in case there's several maps to load
+	for (var/zpos=findtext(tfile,"\n(1,1,",lpos,0);zpos!=0;zpos=findtext(tfile,"\n(1,1,",zpos+1,0))	//in case there's several maps to load
 
 		zcrd++
-		if(zcrd+z_offset > world.maxz)
+		if (zcrd+z_offset > world.maxz)
 			world.maxz = zcrd+z_offset
 			map.addZLevel(new /datum/zLevel/away, world.maxz) //create a new z_level if needed
 
@@ -72,42 +72,42 @@ var/global/dmm_suite/preloader/_preloader = null
 		var/x_depth = length(copytext(zgrid,1,findtext(zgrid,"\n",2,0))) //This is the length of an encoded line (like "aaaaaaaaBBBBaaaaccccaaa")
 		var/map_width = x_depth / key_len //To get the map's width, divide the length of the line by the length of the key
 
-		if(world.maxx < map_width + x_offset)
+		if (world.maxx < map_width + x_offset)
 			world.maxx = map_width + x_offset
 
 		var/y_depth = z_depth / (x_depth+1) //x_depth + 1 because we're counting the '\n' characters in z_depth
-		if(world.maxy < y_depth + y_offset)
+		if (world.maxy < y_depth + y_offset)
 			world.maxy = y_depth + y_offset
 
 		//then proceed it line by line, starting from top
 		ycrd = y_offset + y_depth
 
-		for(var/gpos=1;gpos!=0;gpos=findtext(zgrid,"\n",gpos,0)+1)
+		for (var/gpos=1;gpos!=0;gpos=findtext(zgrid,"\n",gpos,0)+1)
 			var/grid_line = copytext(zgrid,gpos,findtext(zgrid,"\n",gpos,0))
 
 			//fill the current square using the model map
 			xcrd=x_offset
-			for(var/mpos=1;mpos<=x_depth;mpos+=key_len)
+			for (var/mpos=1;mpos<=x_depth;mpos+=key_len)
 				xcrd++
 				var/model_key = copytext(grid_line,mpos,mpos+key_len)
 				spawned_atoms += parse_grid(grid_models[model_key],xcrd,ycrd,zcrd+z_offset)
-			if(map_element)
+			if (map_element)
 				map_element.width = xcrd - x_offset
 
 			//reached end of current map
-			if(gpos+x_depth+1>z_depth)
+			if (gpos+x_depth+1>z_depth)
 				break
 
 			ycrd--
 
 			sleep(-1)
 
-		if(map_element)
+		if (map_element)
 			map_element.height = y_depth
 			map_element.location = locate(x_offset + 1, y_offset + 1, z_offset) //Set location to the upper left corner
 
 		//reached End Of File
-		if(findtext(tfile,quote+"}",zpos,0)+2==tfile_len)
+		if (findtext(tfile,quote+"}",zpos,0)+2==tfile_len)
 			break
 		sleep(-1)
 
@@ -166,7 +166,7 @@ var/global/dmm_suite/preloader/_preloader = null
 		var/list/fields = list()
 
 		var/variables_start = findtext(full_def,"{")
-		if(variables_start)//if there's any variable
+		if (variables_start)//if there's any variable
 			full_def = copytext(full_def,variables_start+1,length(full_def))//removing the last '}'
 			fields = readlist(full_def,";")
 
@@ -175,7 +175,7 @@ var/global/dmm_suite/preloader/_preloader = null
 		members_attributes[index++] = fields
 
 		sleep(-1)
-	while(dpos != 0)
+	while (dpos != 0)
 
 
 	////////////////
@@ -192,18 +192,18 @@ var/global/dmm_suite/preloader/_preloader = null
 	//Locate the area object
 	instance = locate(members[index])
 
-	if(!isspace(instance)) //Space is the default area and contains every loaded turf by default
+	if (!isspace(instance)) //Space is the default area and contains every loaded turf by default
 		instance.contents.Add(locate(xcrd,ycrd,zcrd))
 
-	if(_preloader && instance)
+	if (_preloader && instance)
 		_preloader.load(instance)
 
 	//The areas list doesn't contain areas without objects by default
 	//We have to add it manually
-	if(!areas.Find(instance))
+	if (!areas.Find(instance))
 		var/area/A = instance
 
-		if(istype(A))
+		if (istype(A))
 			areas.Add(instance)
 			A.addSorted()
 
@@ -213,19 +213,19 @@ var/global/dmm_suite/preloader/_preloader = null
 	//then instance the /turf and, if multiple tiles are presents, simulates the DMM underlays piling effect (only the last turf is spawned, other ones are drawn as underlays)
 
 	var/first_turf_index = 1
-	while(!ispath(members[first_turf_index],/turf)) //find first /turf object in members
+	while (!ispath(members[first_turf_index],/turf)) //find first /turf object in members
 		first_turf_index++
 
 	var/last_turf_index = first_turf_index
-	while(last_turf_index+1 <= members.len && ispath(members[last_turf_index + 1], /turf))
+	while (last_turf_index+1 <= members.len && ispath(members[last_turf_index + 1], /turf))
 		last_turf_index++
 
 	//instanciate the last /turf
 	var/turf/T = instance_atom(members[last_turf_index],members_attributes[last_turf_index],xcrd,ycrd,zcrd)
 
-	if(first_turf_index != last_turf_index) //More than one turf is present - go from the lowest turf to the turf before the last one
+	if (first_turf_index != last_turf_index) //More than one turf is present - go from the lowest turf to the turf before the last one
 		var/turf_index = first_turf_index
-		while(turf_index < last_turf_index)
+		while (turf_index < last_turf_index)
 			var/turf/underlying_turf = members[turf_index]
 			var/image/new_underlay = image(icon = null) //Because just image() doesn't work, and neither does image(appearance=...)
 
@@ -236,7 +236,7 @@ var/global/dmm_suite/preloader/_preloader = null
 	spawned_atoms.Add(T)
 
 	//finally instance all remainings objects/mobs
-	for(index=1,index < first_turf_index,index++)
+	for (index=1,index < first_turf_index,index++)
 		spawned_atoms.Add(instance_atom(members[index],members_attributes[index],xcrd,ycrd,zcrd))
 
 	return spawned_atoms
@@ -247,19 +247,19 @@ var/global/dmm_suite/preloader/_preloader = null
 
 //Instance an atom at (x,y,z) and gives it the variables in attributes
 /dmm_suite/proc/instance_atom(var/path,var/list/attributes, var/x, var/y, var/z)
-	if(!path)
+	if (!path)
 		return
 	var/atom/instance
 	_preloader = new(attributes, path)
 
-	if(ispath(path, /turf)) //Turfs use ChangeTurf
+	if (ispath(path, /turf)) //Turfs use ChangeTurf
 		var/turf/oldTurf = locate(x,y,z)
-		if(path != oldTurf.type)
+		if (path != oldTurf.type)
 			instance = oldTurf.ChangeTurf(path, allow = 1)
 	else
 		instance = new path (locate(x,y,z))//first preloader pass
 
-	if(_preloader && instance)//second preloader pass, for those atoms that don't ..() in New()
+	if (_preloader && instance)//second preloader pass, for those atoms that don't ..() in New()
 		_preloader.load(instance)
 
 	return instance
@@ -267,14 +267,14 @@ var/global/dmm_suite/preloader/_preloader = null
 //text trimming (both directions) helper proc
 //optionally removes quotes before and after the text (for variable name)
 /dmm_suite/proc/trim_text(var/what as text,var/trim_quotes=0)
-	while(length(what) && (findtext(what," ",1,2)))
+	while (length(what) && (findtext(what," ",1,2)))
 		what=copytext(what,2,0)
-	while(length(what) && (findtext(what," ",length(what),0)))
+	while (length(what) && (findtext(what," ",length(what),0)))
 		what=copytext(what,1,length(what))
-	if(trim_quotes)
-		while(length(what) && (findtext(what,quote,1,2)))
+	if (trim_quotes)
+		while (length(what) && (findtext(what,quote,1,2)))
 			what=copytext(what,2,0)
-		while(length(what) && (findtext(what,quote,length(what),0)))
+		while (length(what) && (findtext(what,quote,length(what),0)))
 			what=copytext(what,1,length(what))
 	return what
 
@@ -285,7 +285,7 @@ var/global/dmm_suite/preloader/_preloader = null
 	var/next_delimiter = findtext(text,delimiter,position,0)
 	var/next_opening = findtext(text,opening_escape,position,0)
 
-	while((next_opening != 0) && (next_opening < next_delimiter))
+	while ((next_opening != 0) && (next_opening < next_delimiter))
 		position = findtext(text,closing_escape,next_opening + 1,0)+1
 		next_delimiter = findtext(text,delimiter,position,0)
 		next_opening = findtext(text,opening_escape,position,0)
@@ -313,27 +313,27 @@ var/global/dmm_suite/preloader/_preloader = null
 		var/trim_left = trim_text(copytext(text,old_position,(equal_position ? equal_position : position)),1)//the name of the variable, must trim quotes to build a BYOND compliant associatives list
 		old_position = position + 1
 
-		if(equal_position)//associative var, so do the association
+		if (equal_position)//associative var, so do the association
 			var/trim_right = trim_text(copytext(text,equal_position+1,position))//the content of the variable
 
 			//Check for string
-			if(findtext(trim_right,quote,1,2))
+			if (findtext(trim_right,quote,1,2))
 				trim_right = copytext(trim_right,2,findtext(trim_right,quote,3,0))
 
 			//Check for number
-			else if(isnum(text2num(trim_right)))
+			else if (isnum(text2num(trim_right)))
 				trim_right = text2num(trim_right)
 
 			//Check for null
-			else if(trim_right == "null")
+			else if (trim_right == "null")
 				trim_right = null
 
 			//Check for list
-			else if(copytext(trim_right,1,5) == "list")
+			else if (copytext(trim_right,1,5) == "list")
 				trim_right = readlist(copytext(trim_right,6,length(trim_right)))
 
 			//Check for file
-			else if(copytext(trim_right,1,2) == "'")
+			else if (copytext(trim_right,1,2) == "'")
 				trim_right = file(copytext(trim_right,2,length(trim_right)))
 
 			to_return[trim_left] = trim_right
@@ -341,21 +341,21 @@ var/global/dmm_suite/preloader/_preloader = null
 		else//simple var
 			to_return[trim_left] = null
 
-	while(position != 0)
+	while (position != 0)
 
 	return to_return
 
 //simulates the DM multiple turfs on one tile underlaying
 /dmm_suite/proc/add_underlying_turf(var/turf/placed,var/turf/underturf, var/list/turfs_underlays)
-	if(underturf.density)
+	if (underturf.density)
 		placed.density = 1
-	if(underturf.opacity)
+	if (underturf.opacity)
 		placed.opacity = 1
 	placed.underlays += turfs_underlays
 
 //atom creation method that preloads variables at creation
 /atom/New()
-	if(_preloader && (src.type == _preloader.target_path))//in case the instanciated atom is creating other atoms in New()
+	if (_preloader && (src.type == _preloader.target_path))//in case the instanciated atom is creating other atoms in New()
 		_preloader.load(src)
 
 	. = ..()
@@ -371,13 +371,13 @@ var/global/dmm_suite/preloader/_preloader = null
 
 /dmm_suite/preloader/New(var/list/the_attributes, var/path)
 	.=..()
-	if(!the_attributes.len)
+	if (!the_attributes.len)
 		Del()
 		return
 	attributes = the_attributes
 	target_path = path
 
 /dmm_suite/preloader/proc/load(atom/what)
-	for(var/attribute in attributes)
+	for (var/attribute in attributes)
 		what.vars[attribute] = attributes[attribute]
 	Del()

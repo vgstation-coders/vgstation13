@@ -57,22 +57,22 @@
 	prints_prosthetics = 1
 
 /obj/machinery/bioprinter/attack_hand(mob/user)
-	if(!ishuman(user))
+	if (!ishuman(user))
 		return
 
 	var/choice = input("What would you like to print?") as null|anything in products
-	if(!choice)
+	if (!choice)
 		return
 
-	if(stored_matter >= products[choice][2])
+	if (stored_matter >= products[choice][2])
 
 		stored_matter -= products[choice][2]
 		var/new_organ = products[choice][1]
 		var/obj/item/organ/O = new new_organ(get_turf(src))
 
-		if(prints_prosthetics)
+		if (prints_prosthetics)
 			O.robotic = 2
-		//else if(loaded_dna)
+		//else if (loaded_dna)
 			//visible_message("<span class='notice'>The printer would be using the DNA sample if it was coded.</span>")
 			//TODO: Copy DNA hash or donor reference over to new organ.
 
@@ -84,31 +84,31 @@
 /obj/machinery/bioprinter/attackby(obj/item/weapon/W, mob/user)
 
 	// DNA sample from syringe.
-	if(!prints_prosthetics && istype(W, /obj/item/weapon/reagent_containers/syringe))
+	if (!prints_prosthetics && istype(W, /obj/item/weapon/reagent_containers/syringe))
 		//Finish the feature first, muh immulsions
 //		to_chat(user, "<span class='notice'>You inject the blood sample into \the [src], but it simply drains away through a tube in the back.</span>.")
 		return
 	// Meat for biomass.
-	else if(!prints_prosthetics && istype(W, /obj/item/weapon/reagent_containers/food/snacks/meat))
-		if(user.drop_item(W))
+	else if (!prints_prosthetics && istype(W, /obj/item/weapon/reagent_containers/food/snacks/meat))
+		if (user.drop_item(W))
 			visible_message("<span class='notice'>\The [src] processes \the [W].</span>")
 			stored_matter += 50
 			qdel(W)
 			return
 	// Steel for matter.
-	else if(prints_prosthetics && istype(W, /obj/item/stack/sheet/metal))
+	else if (prints_prosthetics && istype(W, /obj/item/stack/sheet/metal))
 		var/obj/item/stack/sheet/metal/M = W
-		if(user.drop_item(M))
+		if (user.drop_item(M))
 			visible_message("<span class='notice'>\The [src] processes \the [W].</span>")
 			stored_matter += M.amount * 10
 			returnToPool(M)
 			return
-	else if(iswrench(W))
+	else if (iswrench(W))
 		user.visible_message("<span class='notice'>[user] begins to [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You begin to [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You hear a ratchet.</span>")
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		if(do_after(user, src, 30))
+		if (do_after(user, src, 30))
 			user.visible_message("<span class='notice'>[user] begins to [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You hear a ratchet.</span>")
-			if(anchored)
+			if (anchored)
 				src.anchored = 0
 			else
 				src.anchored = 1

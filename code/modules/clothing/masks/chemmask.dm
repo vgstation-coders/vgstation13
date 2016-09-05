@@ -70,7 +70,7 @@
 
 /obj/item/clothing/mask/chemmask/equipped(M as mob, wear_mask)
 	var/mob/living/carbon/human/H = M
-	if(H.wear_mask == src)
+	if (H.wear_mask == src)
 		update_verbs()
 
 /obj/item/clothing/mask/chemmask/update_verbs()
@@ -138,7 +138,7 @@
 			to_chat(user, "The mask is not drawing from the auxiliary beaker.")
 	else
 		var/mob/living/carbon/human/M = user
-		if(M.wear_mask == src)
+		if (M.wear_mask == src)
 			to_chat(user, "The mask is inactive.")
 			if (tankactive)
 				to_chat(user, "The mask is set to draw from the main tank.")
@@ -316,7 +316,7 @@
 		firstalert_tank = 0
 
 /obj/item/clothing/mask/chemmask/proc/has_beaker(mob/user) //Checks whether there is a beaker in the pack, in order to determine whether to show the beaker-specific verbs.
-	if(user.back && istype(user.back, /obj/item/weapon/reagent_containers/chempack))
+	if (user.back && istype(user.back, /obj/item/weapon/reagent_containers/chempack))
 		var/obj/item/weapon/reagent_containers/chempack/P = user.back
 		return !isnull(P.beaker)
 
@@ -338,7 +338,7 @@
 
 /obj/item/clothing/mask/chemmask/process()
 	var/mob/living/carbon/human/H = loc
-	if(power)
+	if (power)
 		if (!pack_check(H))
 			return
 		if (!mask_check(H))
@@ -366,7 +366,7 @@
 
 /obj/item/clothing/mask/chemmask/proc/inject(mob/user)
 	var/obj/item/weapon/reagent_containers/chempack/P = user.back
-	for(var/datum/reagent/R in P.reagents.reagent_list)
+	for (var/datum/reagent/R in P.reagents.reagent_list)
 		var/custom_injection_rate = (tank_injection_rate/(REAGENTS_METABOLISM/R.custom_metabolism))
 		if (R.custom_metabolism == 0.03)
 			custom_injection_rate += 0.1
@@ -385,11 +385,11 @@
 		var/beakerhasreagent = 0
 		var/userhasreagent = 0
 		var/shouldnotinject = 0
-		for(var/datum/reagent/R in B.reagents.reagent_list) //Cycle through each reagent in the beaker.
+		for (var/datum/reagent/R in B.reagents.reagent_list) //Cycle through each reagent in the beaker.
 			if (R.id == beaker_threshold_reagent)
 				R1 = R
 				beakerhasreagent = 1
-		for(var/datum/reagent/RU in user.reagents.reagent_list) //Cycle through each reagent in the user.
+		for (var/datum/reagent/RU in user.reagents.reagent_list) //Cycle through each reagent in the user.
 			if (RU.id == beaker_threshold_reagent)
 				userhasreagent = 1
 				if (RU.volume > beaker_threshold) //If the user has more of the threshold reagent than the threshold, don't inject at all.

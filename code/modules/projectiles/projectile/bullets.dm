@@ -33,17 +33,17 @@
 /obj/item/projectile/bullet/weakbullet/booze
 	name = "booze bullet"
 	on_hit(var/atom/target, var/blocked = 0)
-		if(..(target, blocked))
+		if (..(target, blocked))
 			var/mob/living/M = target
 			M.dizziness += 20
 			M:slurring += 20
 			M.confused += 20
 			M.eye_blurry += 20
 			M.drowsyness += 20
-			if(M.dizziness <= 150)
+			if (M.dizziness <= 150)
 				M.Dizzy(150)
 				M.dizziness = 150
-			for(var/datum/reagent/ethanol/A in M.reagents.reagent_list)
+			for (var/datum/reagent/ethanol/A in M.reagents.reagent_list)
 				M.paralysis += 2
 				M.dizziness += 10
 				M:slurring += 10
@@ -137,18 +137,18 @@
 /obj/item/projectile/spur/OnFired()
 	..()
 	var/obj/item/weapon/gun/energy/polarstar/spur/quote = shot_from
-	if(!quote || !istype(quote))
+	if (!quote || !istype(quote))
 		return
-	switch(quote.firelevel)
-		if(SPUR_FULL_POWER,SPUR_HIGH_POWER)
+	switch (quote.firelevel)
+		if (SPUR_FULL_POWER,SPUR_HIGH_POWER)
 			icon_state = "spur_high"
 			damage = 40
 			kill_count = 20
-		if(SPUR_MEDIUM_POWER)
+		if (SPUR_MEDIUM_POWER)
 			icon_state = "spur_medium"
 			damage = 30
 			kill_count = 13
-		if(SPUR_LOW_POWER,SPUR_NO_POWER)
+		if (SPUR_LOW_POWER,SPUR_NO_POWER)
 			icon_state = "spur_low"
 			damage = 20
 			kill_count = 7
@@ -160,41 +160,41 @@
 /obj/item/projectile/spur/polarstar/OnFired()
 	..()
 	var/obj/item/weapon/gun/energy/polarstar/quote = shot_from
-	if(!quote || !istype(quote))
+	if (!quote || !istype(quote))
 		return
-	switch(quote.firelevel)
-		if(SPUR_FULL_POWER,SPUR_HIGH_POWER)
+	switch (quote.firelevel)
+		if (SPUR_FULL_POWER,SPUR_HIGH_POWER)
 			icon_state = "spur_high"
 			damage = 20
 			kill_count = 20
-		if(SPUR_MEDIUM_POWER)
+		if (SPUR_MEDIUM_POWER)
 			icon_state = "spur_medium"
 			damage = 15
 			kill_count = 13
-		if(SPUR_LOW_POWER,SPUR_NO_POWER)
+		if (SPUR_LOW_POWER,SPUR_NO_POWER)
 			icon_state = "spur_low"
 			damage = 10
 			kill_count = 7
 
 /obj/item/projectile/spur/Bump(atom/A as mob|obj|turf|area)
 
-	if(loc)
+	if (loc)
 		var/turf/T = loc
 		var/impact_icon = null
 		var/impact_sound = null
 		var/PixelX = 0
 		var/PixelY = 0
 
-		switch(get_dir(src,A))
-			if(NORTH)
+		switch (get_dir(src,A))
+			if (NORTH)
 				PixelY = 16
-			if(SOUTH)
+			if (SOUTH)
 				PixelY = -16
-			if(EAST)
+			if (EAST)
 				PixelX = 16
-			if(WEST)
+			if (WEST)
 				PixelX = -16
-		if(ismob(A))
+		if (ismob(A))
 			impact_icon = "spur_3"
 			impact_sound = 'sound/weapons/spur_hitmob.ogg'
 		else
@@ -211,17 +211,17 @@
 		playsound(loc, impact_sound, 30, 1)
 
 
-	if(istype(A, /turf/unsimulated/mineral))
+	if (istype(A, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = A
 		M.GetDrilled()
-	if(istype(A, /obj/structure/boulder))
+	if (istype(A, /obj/structure/boulder))
 		returnToPool(A)
 
 	return ..()
 
 /obj/item/projectile/spur/process_step()
-	if(kill_count <= 0)
-		if(loc)
+	if (kill_count <= 0)
+		if (loc)
 			var/turf/T = loc
 			var/image/impact = image('icons/obj/projectiles_impacts.dmi',loc,"spur_2")
 			impact.layer = PROJECTILE_LAYER
@@ -273,12 +273,12 @@
 /obj/item/projectile/bullet/hecate/OnFired()
 	..()
 	for (var/mob/M in player_list)
-		if(M && M.client)
+		if (M && M.client)
 			var/turf/M_turf = get_turf(M)
-			if(M_turf && (M_turf.z == starting.z))
+			if (M_turf && (M_turf.z == starting.z))
 				M.playsound_local(starting, 'sound/weapons/hecate_fire_far.ogg', 25, 1)
 	for (var/mob/living/carbon/human/H in range(src,1))
-		if(!H.earprot())
+		if (!H.earprot())
 			H.Weaken(2)
 			H.Stun(2)
 			H.ear_damage += rand(3, 5)
@@ -308,10 +308,10 @@
 /obj/item/projectile/bullet/beegun/Bump(atom/A as mob|obj|turf|area)
 	if (!A)
 		return 0
-	if((A == firer) && !reflected)
+	if ((A == firer) && !reflected)
 		loc = A.loc
 		return 0
-	if(bumped)
+	if (bumped)
 		return 0
 	bumped = 1
 
@@ -323,7 +323,7 @@
 	BEE.feral = 25
 	BEE.icon_state = "bees1-feral"
 
-	if(istype(A,/mob/living))
+	if (istype(A,/mob/living))
 		var/mob/living/M = A
 		visible_message("<span class='warning'>\the [M.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
 		M.bullet_act(src, def_zone)
@@ -346,7 +346,7 @@
 	penetration = 0 //By default. Higher-power shots will have penetration.
 
 /obj/item/projectile/bullet/APS/on_hit(var/atom/atarget, var/blocked = 0)
-	if(istype(atarget, /mob/living) && damage == 200)
+	if (istype(atarget, /mob/living) && damage == 200)
 		var/mob/living/M = atarget
 		M.gib()
 	else
@@ -354,13 +354,13 @@
 
 /obj/item/projectile/bullet/APS/OnFired()
 	..()
-	if(damage >= 100)
+	if (damage >= 100)
 		superspeed = 1
 		super_speed = 1
 		for (var/mob/M in player_list)
-			if(M && M.client)
+			if (M && M.client)
 				var/turf/M_turf = get_turf(M)
-				if(M_turf && (M_turf.z == starting.z))
+				if (M_turf && (M_turf.z == starting.z))
 					M.playsound_local(starting, 'sound/weapons/hecate_fire_far.ogg', 25, 1)
 
 /obj/item/projectile/bullet/APS/OnDeath()
@@ -376,14 +376,14 @@
 
 /obj/item/projectile/bullet/stinger/OnFired()
 	var/choice = rand(1,4)
-	switch(choice)
-		if(1)
+	switch (choice)
+		if (1)
 			stutter = 2
-		if(2)
+		if (2)
 			eyeblur = 2
-		if(3)
+		if (3)
 			agony = 2
-		if(4)
+		if (4)
 			jittery = 2
 	..()
 
@@ -398,21 +398,21 @@
 	var/hit_mob = 0
 
 /obj/item/projectile/bullet/vial/Destroy()
-	if(vial)
+	if (vial)
 		qdel(vial)
 		vial = null
-	if(user)
+	if (user)
 		user = null
 	..()
 
 /obj/item/projectile/bullet/vial/Bump(atom/A as mob|obj|turf|area) //to allow vials to splash onto walls
-	if(!A)
+	if (!A)
 		return
-	if(vial)
+	if (vial)
 		var/obj/item/weapon/reagent_containers/glass/beaker/vial/V = vial
-		if(!V.is_open_container())
+		if (!V.is_open_container())
 			V.flags |= OPENCONTAINER
-		if(istype(A, /turf/simulated/wall))
+		if (istype(A, /turf/simulated/wall))
 			splash_sub(V.reagents, A, V.reagents.total_volume)
 			bullet_die()
 			return 1
@@ -420,11 +420,11 @@
 
 /obj/item/projectile/bullet/vial/on_hit(var/atom/atarget, var/blocked = 0)
 	..()
-	if(vial)
+	if (vial)
 		var/obj/item/weapon/reagent_containers/glass/beaker/vial/V = vial
-		if(!V.is_open_container())
+		if (!V.is_open_container())
 			V.flags |= OPENCONTAINER
-		if(!V.is_empty())
+		if (!V.is_empty())
 			hit_mob = 1
 			atarget.visible_message("<span class='warning'>\The [V] shatters, dousing [atarget] in its contents!</span>",
 								"<span class='warning'>\The [V] shatters, dousing you in its contents!</span>")
@@ -436,7 +436,7 @@
 		user = null
 
 /obj/item/projectile/bullet/vial/OnDeath()
-	if(!hit_mob)
+	if (!hit_mob)
 		src.visible_message("<span class='warning'>The vial shatters!</span>")
 	playsound(get_turf(src), "shatter", 20, 1)
 
@@ -456,44 +456,44 @@
 /obj/item/projectile/bullet/blastwave/New()
 	..()
 	var/sound = rand(1,6)
-	switch(sound)
-		if(1)
+	switch (sound)
+		if (1)
 			fire_sound = 'sound/effects/Explosion1.ogg'
-		if(2)
+		if (2)
 			fire_sound = 'sound/effects/Explosion2.ogg'
-		if(3)
+		if (3)
 			fire_sound = 'sound/effects/Explosion3.ogg'
-		if(4)
+		if (4)
 			fire_sound = 'sound/effects/Explosion4.ogg'
-		if(5)
+		if (5)
 			fire_sound = 'sound/effects/Explosion5.ogg'
-		if(6)
+		if (6)
 			fire_sound = 'sound/effects/Explosion6.ogg'
 
 /obj/item/projectile/bullet/blastwave/OnFired()
 	..()
-	if(!heavy_damage_range || !medium_damage_range || !light_damage_range)
+	if (!heavy_damage_range || !medium_damage_range || !light_damage_range)
 		bullet_die()
 		return
 
 /obj/item/projectile/bullet/blastwave/process_step()
 	..()
 	var/turf/T = get_turf(src)
-	if(light_damage_range)
-		if(medium_damage_range)
-			if(heavy_damage_range)
-				for(var/atom/movable/A in T.contents)
-					if(!istype(A, /obj/item/weapon/organ/head))
+	if (light_damage_range)
+		if (medium_damage_range)
+			if (heavy_damage_range)
+				for (var/atom/movable/A in T.contents)
+					if (!istype(A, /obj/item/weapon/organ/head))
 						A.ex_act(1)
 				T.ex_act(1)
 				heavy_damage_range -= 1
 			else
-				for(var/atom/movable/A in T.contents)
+				for (var/atom/movable/A in T.contents)
 					A.ex_act(2)
 				T.ex_act(2)
 				medium_damage_range -= 1
 		else
-			for(var/atom/movable/A in T.contents)
+			for (var/atom/movable/A in T.contents)
 				A.ex_act(3)
 			T.ex_act(3)
 			light_damage_range -= 1
@@ -525,14 +525,14 @@
 
 /obj/item/projectile/bullet/fire_plume/OnFired()
 	..()
-	if(!gas_jet)
+	if (!gas_jet)
 		bullet_die()
 	else
 		original_total_moles = gas_jet.total_moles()
 
 /obj/item/projectile/bullet/fire_plume/proc/create_puff()
-	if(gas_jet)
-		if(gas_jet.total_moles())
+	if (gas_jet)
+		if (gas_jet.total_moles())
 			var/total_moles = gas_jet.total_moles()
 			var/o2_concentration = gas_jet.oxygen/total_moles
 			var/n2_concentration = gas_jet.nitrogen/total_moles
@@ -542,46 +542,46 @@
 
 			var/datum/gas_mixture/gas_dispersal = gas_jet.remove(original_total_moles/10)
 
-			if(gas_jet.trace_gases.len)
-				for(var/datum/gas/G in gas_jet.trace_gases)
-					if(istype(G, /datum/gas/sleeping_agent))
+			if (gas_jet.trace_gases.len)
+				for (var/datum/gas/G in gas_jet.trace_gases)
+					if (istype(G, /datum/gas/sleeping_agent))
 						n2o_concentration = G.moles/total_moles
 
 			var/gas_type = null
 
-			if(o2_concentration > 0.5)
+			if (o2_concentration > 0.5)
 				gas_type = "oxygen"
-			if(n2_concentration > 0.5)
+			if (n2_concentration > 0.5)
 				gas_type = "nitrogen"
-			if(co2_concentration > 0.5)
+			if (co2_concentration > 0.5)
 				gas_type = "CO2"
-			if(plasma_concentration > 0.5)
+			if (plasma_concentration > 0.5)
 				gas_type = "plasma"
-			if(n2o_concentration && n2o_concentration > 0.5)
+			if (n2o_concentration && n2o_concentration > 0.5)
 				gas_type = "N2O"
 
 			new /obj/effect/gas_puff(get_turf(src.loc), gas_dispersal, gas_type)
 
 /obj/item/projectile/bullet/fire_plume/proc/calculate_burn_strength(var/turf/T = null)
-	if(!gas_jet)
+	if (!gas_jet)
 		return
 
-	if(gas_jet.total_moles())
+	if (gas_jet.total_moles())
 		var/jet_total_moles = gas_jet.total_moles()
 		var/toxin_concentration = gas_jet.toxins/jet_total_moles
-		if(!(toxin_concentration > 0.01))
+		if (!(toxin_concentration > 0.01))
 			create_puff()
 			return
 	else
 		return
 
-	if(!has_O2_in_mix && T)
+	if (!has_O2_in_mix && T)
 		var/turf/location = get_turf(src)
 		var/datum/gas_mixture/turf_gases = location.return_air()
 		var/turf_total_moles = turf_gases.total_moles()
-		if(turf_total_moles)
+		if (turf_total_moles)
 			var/o2_concentration = turf_gases.oxygen/turf_total_moles
-			if(!(o2_concentration > 0.01))
+			if (!(o2_concentration > 0.01))
 				create_puff()
 				return
 		else
@@ -590,19 +590,19 @@
 		var/datum/gas_mixture/temp_gas_jet = new()
 		temp_gas_jet.copy_from(gas_jet)
 		temp_gas_jet.merge(turf_gases)
-		if(temp_gas_jet.temperature < 373.15)
+		if (temp_gas_jet.temperature < 373.15)
 			temp_gas_jet.temperature = 383.15
 			temp_gas_jet.update_values()
-		for(var/i = 1; i <= 20; i++)
+		for (var/i = 1; i <= 20; i++)
 			temp_gas_jet.react()
 		burn_strength = temp_gas_jet.temperature
 
 	else
-		if(!has_reacted)
-			if(gas_jet.temperature < 373.15)
+		if (!has_reacted)
+			if (gas_jet.temperature < 373.15)
 				gas_jet.temperature = 383.15
 				gas_jet.update_values()
-			for(var/i = 1; i <= 20; i++)
+			for (var/i = 1; i <= 20; i++)
 				gas_jet.react()
 			has_reacted = 1
 		burn_strength = gas_jet.temperature
@@ -614,16 +614,16 @@
 
 /obj/item/projectile/bullet/fire_plume/process_step()
 	..()
-	if(stepped_range <= max_range)
+	if (stepped_range <= max_range)
 		stepped_range++
 	else
 		bullet_die()
 		return
 	var/turf/T = get_turf(src)
-	for(var/obj/effect/E in T)
-		if(istype(E, /obj/effect/blob))
+	for (var/obj/effect/E in T)
+		if (istype(E, /obj/effect/blob))
 			stepped_range += 3
-			if(istype(E, /obj/effect/blob/shield)) //The fire can't penetrate through dense blob shields
+			if (istype(E, /obj/effect/blob/shield)) //The fire can't penetrate through dense blob shields
 				calculate_burn_strength(get_turf(src))
 				bullet_die()
 				return
@@ -668,7 +668,7 @@
 /obj/item/projectile/bullet/liquid_blob/New(atom/T, var/hardness = null)
 	..(T)
 	hard = hardness
-	if(hard)
+	if (hard)
 		damage = 30
 		create_reagents(10)
 	else
@@ -680,14 +680,14 @@
 	..()
 
 /obj/item/projectile/bullet/liquid_blob/Bump(atom/A as mob|obj|turf|area)
-	if(!A)
+	if (!A)
 		return
 	..()
-	if(reagents.total_volume)
-		for(var/datum/reagent/R in reagents.reagent_list)
+	if (reagents.total_volume)
+		for (var/datum/reagent/R in reagents.reagent_list)
 			reagents.add_reagent(R.id, reagents.get_reagent_amount(R.id))
-		if(istype(A, /mob))
-			if(hard)
+		if (istype(A, /mob))
+			if (hard)
 				var/splash_verb = pick("dousing","completely soaking","drenching","splashing")
 				A.visible_message("<span class='warning'>\The [src] smashes into [A], [splash_verb] \him!</span>",
 										"<span class='warning'>\The [src] smashes into you, [splash_verb] you!</span>")
@@ -702,7 +702,7 @@
 		return 1
 
 /obj/item/projectile/bullet/liquid_blob/OnDeath()
-	if(get_turf(src))
+	if (get_turf(src))
 		playsound(get_turf(src), 'sound/effects/slosh.ogg', 20, 1)
 
 /obj/item/projectile/bullet/buckshot
@@ -718,11 +718,11 @@
 	is_child = C
 
 /obj/item/projectile/bullet/buckshot/OnFired()
-	if(!is_child)
+	if (!is_child)
 		var/list/turf/possible_turfs = list()
-		for(var/turf/T in orange(original,1))
+		for (var/turf/T in orange(original,1))
 			possible_turfs += T
-		for(var/I = 1; I <=8; I++)
+		for (var/I = 1; I <=8; I++)
 			var/obj/item/projectile/bullet/buckshot/B = new (src.loc, 1)
 			var/turf/targloc = pick(possible_turfs)
 			B.original = targloc
@@ -749,7 +749,7 @@
 /obj/item/projectile/bullet/invisible/on_hit(var/atom/target, var/blocked = 0) //silence the target for a few seconds on hit
 	if (..(target, blocked))
 		var/mob/living/L = target
-		if(!L.silent || (L.silent && L.silent < 5))
+		if (!L.silent || (L.silent && L.silent < 5))
 			L.silent = 5
 		return 1
 	return 0

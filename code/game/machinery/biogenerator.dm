@@ -10,11 +10,11 @@
 
 /datum/biogen_recipe/proc/Render(var/context)
 	var/html = "<li><a href='?src=\ref[context];action=create;item=[id];num=1'>[amount_per_unit==1?"":"[amount_per_unit] "][name]</a> <FONT COLOR=blue>([cost])</FONT>"
-	if(other_amounts.len)
+	if (other_amounts.len)
 		var/first=1
 		html += " ("
-		for(var/amount in other_amounts)
-			if(!first)
+		for (var/amount in other_amounts)
+			if (!first)
 				html +=" "
 			html +="<A href='?src=\ref[context];action=create;item=[id];num=[amount]'>x[amount*amount_per_unit]</A>"
 			first=0
@@ -273,9 +273,9 @@
 	update_icon()
 
 /obj/machinery/biogenerator/update_icon()
-	if(!src.beaker)
+	if (!src.beaker)
 		icon_state = "biogen-empty"
-	else if(!src.processing)
+	else if (!src.processing)
 		icon_state = "biogen-stand"
 	else
 		icon_state = "biogen-work"
@@ -303,11 +303,11 @@
 
 	RefreshParts()
 
-	for(var/biotype in typesof(/datum/biogen_recipe))
+	for (var/biotype in typesof(/datum/biogen_recipe))
 		var/datum/biogen_recipe/recipe = new biotype
-		if(recipe.id=="")
+		if (recipe.id=="")
 			continue
-		if(!(recipe.category in recipe_categories))
+		if (!(recipe.category in recipe_categories))
 			recipe_categories[recipe.category]=list()
 		recipe_categories[recipe.category] += recipe.id
 		recipes[recipe.id]=recipe
@@ -315,71 +315,71 @@
 /obj/machinery/biogenerator/RefreshParts()
 	var/manipcount = 0
 	var/lasercount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
+	for (var/obj/item/weapon/stock_parts/SP in component_parts)
+		if (istype(SP, /obj/item/weapon/stock_parts/manipulator))
 			manipcount += SP.rating
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+		if (istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating
 	speed_coefficient = 2/manipcount
 	biomass_coefficient = 3*lasercount
 
 /obj/machinery/biogenerator/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(..())
+	if (..())
 		return 1
-	else if(istype(O, /obj/item/weapon/reagent_containers/glass))
-		if(beaker)
+	else if (istype(O, /obj/item/weapon/reagent_containers/glass))
+		if (beaker)
 			to_chat(user, "<span class='warning'>The biogenerator already occuped.</span>")
-		else if(panel_open)
+		else if (panel_open)
 			to_chat(user, "<span class='rose'>The biogenerator's maintenance panel must be closed first.</span>")
 		else
-			if(user.drop_item(O, src))
+			if (user.drop_item(O, src))
 				beaker = O
 				updateUsrDialog()
-	else if(processing)
+	else if (processing)
 		to_chat(user, "<span class='warning'>The biogenerator is currently processing.</span>")
-	else if(istype(O, /obj/item/weapon/storage/bag/plants))
+	else if (istype(O, /obj/item/weapon/storage/bag/plants))
 		var/i = 0
-		for(var/obj/item/weapon/reagent_containers/food/snacks/grown/G in contents)
+		for (var/obj/item/weapon/reagent_containers/food/snacks/grown/G in contents)
 			i++
-		if(i >= 20)
+		if (i >= 20)
 			to_chat(user, "<span class='warning'>The biogenerator is already full! Activate it.</span>")
 		else
 			var/obj/item/weapon/storage/bag/B = O
-			for(var/obj/item/weapon/reagent_containers/food/snacks/grown/G in O.contents)
+			for (var/obj/item/weapon/reagent_containers/food/snacks/grown/G in O.contents)
 				B.remove_from_storage(G,src)
 				i++
-				if(i >= 20)
+				if (i >= 20)
 					to_chat(user, "<span class='notice'>You fill the biogenerator to its capacity.</span>")
 					break
-			if(i<20)
+			if (i<20)
 				to_chat(user, "<span class='notice'>You empty the plant bag into the biogenerator.</span>")
 
-	else if(!istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
+	else if (!istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
 		to_chat(user, "<span class='warning'>You cannot put this in [src.name]</span>")
 	else
 		var/i = 0
-		for(var/obj/item/weapon/reagent_containers/food/snacks/grown/G in contents)
+		for (var/obj/item/weapon/reagent_containers/food/snacks/grown/G in contents)
 			i++
-		if(i >= 20)
+		if (i >= 20)
 			to_chat(user, "<span class='warning'>The biogenerator is full! Activate it.</span>")
 		else
-			if(user.drop_item(O, src))
+			if (user.drop_item(O, src))
 				to_chat(user, "<span class='notice'>You put [O.name] in [src.name]</span>")
 	update_icon()
 	return
 
 /obj/machinery/biogenerator/crowbarDestroy(mob/user)
-	if(beaker)
+	if (beaker)
 		to_chat(user, "<span class='warning'>A beaker is loaded, you cannot deconstruct \the [src].</span>")
 		return
 	return ..()
 
 /obj/machinery/biogenerator/togglePanelOpen(var/obj/toggleitem, mob/user)
-	if(beaker)
+	if (beaker)
 		to_chat(user, "<span class='rose'>You can't open \the [src]'s maintenance panel while a beaker is loaded.</span>")
 		return
-	if(..())
-		if(panel_open)
+	if (..())
+		if (panel_open)
 			overlays += image(icon = icon, icon_state = "biogen-open")
 		else
 			overlays -= image(icon = icon, icon_state = "biogen-open")
@@ -388,7 +388,7 @@
 	return
 
 /obj/machinery/biogenerator/interact(mob/user as mob)
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		return
 	user.set_machine(src)
 	var/dat = "<TITLE>Biogenerator</TITLE>Biogenerator:<BR>"
@@ -396,31 +396,31 @@
 		dat += "<FONT COLOR=red>Biogenerator is processing! Please wait...</FONT>"
 	else
 		dat += "Biomass: [points] points.<HR>"
-		switch(menustat)
-			if("menu")
+		switch (menustat)
+			if ("menu")
 				if (beaker)
 
 					dat += {"<A href='?src=\ref[src];action=activate'>Activate Biogenerator!</A><BR>
 						<A href='?src=\ref[src];action=detach'>Detach Container</A><BR><BR>"}
 
-					for(var/cat in recipe_categories)
+					for (var/cat in recipe_categories)
 						dat += "<h2>[cat]</h2><ul>"
-						for(var/rid in recipe_categories[cat])
+						for (var/rid in recipe_categories[cat])
 							var/datum/biogen_recipe/recipe = recipes[rid]
 							dat += recipe.Render(src)
 						dat += "</ul>"
 
 				else
 					dat += "<BR><FONT COLOR=red>No beaker inside. Please insert a beaker.</FONT><BR>"
-			if("nopoints")
+			if ("nopoints")
 
 				dat += {"You do not have biomass to create products.<BR>Please, put growns into reactor and activate it.<BR>
 					<A href='?src=\ref[src];action=menu'>Return to menu</A>"}
-			if("complete")
+			if ("complete")
 
 				dat += {"Operation complete.<BR>
 					<A href='?src=\ref[src];action=menu'>Return to menu</A>"}
-			if("void")
+			if ("void")
 
 				dat += {"<FONT COLOR=red>Error: No growns inside.</FONT><BR>Please, put growns into reactor.<BR>
 					<A href='?src=\ref[src];action=menu'>Return to menu</A>"}
@@ -436,18 +436,18 @@
 		return
 	if (src.stat != 0) //NOPOWER etc
 		return
-	if(src.processing)
+	if (src.processing)
 		to_chat(usr, "<span class='warning'>The biogenerator is in the process of working.</span>")
 		return
 	var/S = 0
-	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/I in contents)
+	for (var/obj/item/weapon/reagent_containers/food/snacks/grown/I in contents)
 		S += 5
-		if(I.reagents.get_reagent_amount(NUTRIMENT) < 0.1)
+		if (I.reagents.get_reagent_amount(NUTRIMENT) < 0.1)
 			points += 1
 		else
 			points += I.reagents.get_reagent_amount(NUTRIMENT)*biomass_coefficient
 		qdel(I)
-	if(S)
+	if (S)
 		processing = 1
 		update_icon()
 		updateUsrDialog()
@@ -472,22 +472,22 @@
 
 /obj/machinery/biogenerator/proc/create_product(var/item, var/num)
 	var/datum/biogen_recipe/recipe=recipes[item]
-	if(!recipe)
+	if (!recipe)
 		return 0
 
-	if(!(num in (recipe.other_amounts + 1)))
+	if (!(num in (recipe.other_amounts + 1)))
 		return 0
 
-	if(check_cost(recipe.cost*num))
+	if (check_cost(recipe.cost*num))
 		return 0
 
-	if(recipe.reagent)
+	if (recipe.reagent)
 		beaker.reagents.add_reagent(recipe.reagent,recipe.amount_per_unit*num)
 	else
-		if(ispath(recipe.result,/obj/item/stack))
+		if (ispath(recipe.result,/obj/item/stack))
 			drop_stack(recipe.result, src.loc, num*recipe.amount_per_unit, 1, null)
 		else
-			for(var/i=0;i<num;i++)
+			for (var/i=0;i<num;i++)
 				new recipe.result(src.loc)
 	processing = 0
 	menustat = "complete"
@@ -496,23 +496,23 @@
 
 /obj/machinery/biogenerator/Topic(href, href_list)
 
-	if(..())
+	if (..())
 		return 1
 
 	usr.set_machine(src)
 
 	//testing(href)
 
-	switch(href_list["action"])
-		if("activate")
+	switch (href_list["action"])
+		if ("activate")
 			activate()
-		if("detach")
-			if(beaker)
+		if ("detach")
+			if (beaker)
 				beaker.forceMove(src.loc)
 				beaker = null
 				update_icon()
-		if("create")
+		if ("create")
 			create_product(href_list["item"],text2num(href_list["num"]))
-		if("menu")
+		if ("menu")
 			menustat = "menu"
 	updateUsrDialog()

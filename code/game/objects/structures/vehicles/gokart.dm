@@ -23,19 +23,19 @@
 	icon_state="gokart[!occupant]"
 
 /obj/structure/bed/chair/vehicle/gokart/update_mob()
-	if(!occupant)
+	if (!occupant)
 		return
 
-	switch(dir)
-		if(SOUTH)
+	switch (dir)
+		if (SOUTH)
 			occupant.pixel_x = 0
 			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
-		if(WEST)
+		if (WEST)
 			occupant.pixel_x = 4 * PIXEL_MULTIPLIER
 			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
-		if(NORTH)
+		if (NORTH)
 			occupant.pixel_x = 0
 			occupant.pixel_y = 4 * PIXEL_MULTIPLIER
-		if(EAST)
+		if (EAST)
 			occupant.pixel_x = -4 * PIXEL_MULTIPLIER
 			occupant.pixel_y = 7 * PIXEL_MULTIPLIER

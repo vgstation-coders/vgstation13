@@ -9,6 +9,6 @@
 
 /obj/structure/lspacewall/New()
 	..()
-	if(!book_type)
+	if (!book_type)
 		book_type = pick( list("1","2","3","4") )
 	icon_state = "lspacewall[book_type]"

@@ -11,24 +11,24 @@
 	var/card_distance = CARD_DISPLACE - hand.currenthand.len //how far apart each card is
 	var/starting_card_x = hand.currenthand.len * (CARD_DISPLACE - hand.currenthand.len) - CARD_DISPLACE
 
-	if(x_pos < starting_card_x + CARD_WIDTH)
+	if (x_pos < starting_card_x + CARD_WIDTH)
 		return 1
 	else
 		return round( ( x_pos - (starting_card_x + CARD_WIDTH) ) / card_distance ) + 2 //+2, because we floor, and because we skipped the first card
 
 /datum/context_click/cardhand/action(obj/item/used_item, mob/user, params)
 	var/obj/item/toy/cardhand/hand = holder
-	if(!used_item)
+	if (!used_item)
 		var/index = Clamp(return_clicked_id_by_params(params), 1, hand.currenthand.len)
 		var/obj/item/toy/singlecard/card = hand.currenthand[index]
 		hand.currenthand.Remove(card)
 		user.put_in_hands(card)
 		hand.update_icon()
-		if(hand.currenthand.len == 1)
+		if (hand.currenthand.len == 1)
 			var/obj/item/toy/singlecard/C = hand.currenthand[1]
 			qdel(hand)
 			user.put_in_inactive_hand(C)
-	else if(istype(used_item, /obj/item/toy/singlecard))
+	else if (istype(used_item, /obj/item/toy/singlecard))
 		var/index = Clamp(return_clicked_id_by_params(params), 1, hand.currenthand.len)
 		hand.currenthand.Insert(index, used_item) //we put it where we specified
 		hand.update_icon()
@@ -51,7 +51,7 @@
 	update_icon()
 
 /obj/item/toy/cards/proc/generate_cards()
-	for(var/i = 2; i <= 10; i++)
+	for (var/i = 2; i <= 10; i++)
 		cards += new/obj/item/toy/singlecard(src, src, "[i] of Hearts")
 		cards += new/obj/item/toy/singlecard(src, src, "[i] of Spades")
 		cards += new/obj/item/toy/singlecard(src, src, "[i] of Clubs")
@@ -80,7 +80,7 @@
 
 /obj/item/toy/cards/attack_hand(mob/user as mob)
 	var/choice = null
-	if(!cards.len)
+	if (!cards.len)
 		src.icon_state = "deck_empty"
 		to_chat(user, "<span class = 'notice'>There are no more cards to draw.</span>")
 		return
@@ -100,12 +100,12 @@
 
 /obj/item/toy/cards/attackby(obj/item/I, mob/living/user)
 	..()
-	if(istype(I, /obj/item/toy/singlecard))
+	if (istype(I, /obj/item/toy/singlecard))
 		var/obj/item/toy/singlecard/C = I
-		if((!C.parentdeck && !strict_deck) || C.parentdeck == src)
-			if(C.flipped == 0)
+		if ((!C.parentdeck && !strict_deck) || C.parentdeck == src)
+			if (C.flipped == 0)
 				C.Flip() //Flip the card back face down before it's put into the deck
-			if(user.drop_item(C, src))
+			if (user.drop_item(C, src))
 				src.cards += C
 				user.visible_message("<span class = 'notice'>[user] adds a card to the bottom of the deck.</span>",
 									 "You add the card to the bottom of the deck.</span>")
@@ -114,12 +114,12 @@
 			update_icon()
 
 
-	if(istype(I, /obj/item/toy/cardhand))
+	if (istype(I, /obj/item/toy/cardhand))
 		var/obj/item/toy/cardhand/C = I
-		if((!C.parentdeck && !strict_deck) || C.parentdeck == src)
-			if(user.drop_item(C))
-				for(var/obj/item/toy/singlecard/card in C.currenthand)
-					if(card.flipped == 0)
+		if ((!C.parentdeck && !strict_deck) || C.parentdeck == src)
+			if (user.drop_item(C))
+				for (var/obj/item/toy/singlecard/card in C.currenthand)
+					if (card.flipped == 0)
 						card.Flip()
 					card.forceMove(src)
 					cards += card
@@ -131,11 +131,11 @@
 		update_icon()
 
 /obj/item/toy/cards/update_icon()
-	if(cards.len > 26)
+	if (cards.len > 26)
 		src.icon_state = "deck_full"
-	else if(cards.len > 10)
+	else if (cards.len > 10)
 		src.icon_state = "deck_half"
-	else if(cards.len > 1)
+	else if (cards.len > 1)
 		src.icon_state = "deck_low"
 
 /obj/item/toy/cards/verb/draw_specific()
@@ -144,7 +144,7 @@
 	set src in usr
 
 	var/list/card_names = new /list(src.cards.len)
-	for(var/i = 1; i <= src.cards.len; i++)
+	for (var/i = 1; i <= src.cards.len; i++)
 		var/obj/item/toy/singlecard/T = src.cards[i]
 		card_names[i] = T.cardname
 
@@ -154,12 +154,12 @@
 	var/N = input("Draw a specific card from the deck.") as null|anything in card_names
 	if (N)
 		var/obj/item/toy/singlecard/C = null
-		for(var/i = 1; i <= src.cards.len; i++)
+		for (var/i = 1; i <= src.cards.len; i++)
 			var/obj/item/toy/singlecard/Q = src.cards[i]
-			if(N == Q.cardname)
+			if (N == Q.cardname)
 				C = Q
 		var/mob/living/M = usr
-		if(!M.find_empty_hand_index())
+		if (!M.find_empty_hand_index())
 			to_chat(usr, "<span class = 'warning'>Your other hand is full.</span>")
 			return
 
@@ -173,16 +173,16 @@
 
 /obj/item/toy/cards/MouseDrop(atom/over_object)
 	var/mob/M = usr
-	if(!ishuman(usr) || usr.incapacitated())
+	if (!ishuman(usr) || usr.incapacitated())
 		return
-	if(Adjacent(usr))
-		if(over_object == M)
+	if (Adjacent(usr))
+		if (over_object == M)
 			M.put_in_hands(src)
 			to_chat(usr, "<span class = 'notice'>You pick up the deck.</span>")
-		else if(istype(over_object, /obj/screen/inventory))
+		else if (istype(over_object, /obj/screen/inventory))
 			var/obj/screen/inventory/OI = over_object
 
-			if(OI.hand_index && M.put_in_hand_check(src, OI.hand_index))
+			if (OI.hand_index && M.put_in_hand_check(src, OI.hand_index))
 				M.u_equip(src, 0)
 				M.put_in_hand(OI.hand_index, src)
 				src.add_fingerprint(usr)
@@ -214,17 +214,17 @@
 /obj/item/toy/cardhand/examine(mob/user)
 	..()
 	var/name_list = list()
-	for(var/obj/item/toy/singlecard/card in currenthand)
+	for (var/obj/item/toy/singlecard/card in currenthand)
 		name_list += card.name //we don't use cardname because they might be flipped
 	user.show_message("It holds [english_list(name_list)]", 1)
 
 /obj/item/toy/cardhand/attackby(obj/item/toy/singlecard/C, mob/living/user, params)
-	if(istype(C))
-		if(!(C.parentdeck || src.parentdeck) || C.parentdeck == src.parentdeck)
-			if(currenthand.len >= max_hand_size)
+	if (istype(C))
+		if (!(C.parentdeck || src.parentdeck) || C.parentdeck == src.parentdeck)
+			if (currenthand.len >= max_hand_size)
 				to_chat(user, "<span class = 'warning'>You can't add any more cards to this hand.</span>")
 				return
-			if(user.drop_item(C, src))
+			if (user.drop_item(C, src))
 				hand_click.action(C, user, params)
 				user.visible_message("<span class = 'notice'>[user] adds a card to their hand.</span>",
 									 "<span class = 'notice'>You add the [C.cardname] to your hand.</span>")
@@ -232,49 +232,49 @@
 		else
 			to_chat(user, "<span class = 'warning'>You can't mix cards from other decks.</span>")
 		return 1
-	else if(istype(C, /obj/item/toy/cardhand))
+	else if (istype(C, /obj/item/toy/cardhand))
 		var/obj/item/toy/cardhand/H = C
 		var/compatible = 1
 		var/cardcount = H.currenthand.len + src.currenthand.len
-		if(cardcount > 5)
+		if (cardcount > 5)
 			compatible = 0
-		for(var/obj/item/toy/singlecard/card in H.currenthand)
-			for(var/obj/item/toy/singlecard/sourcecard in src.currenthand)
-				if(!(!(card.parentdeck || sourcecard.parentdeck) || card.parentdeck == sourcecard.parentdeck))
+		for (var/obj/item/toy/singlecard/card in H.currenthand)
+			for (var/obj/item/toy/singlecard/sourcecard in src.currenthand)
+				if (!(!(card.parentdeck || sourcecard.parentdeck) || card.parentdeck == sourcecard.parentdeck))
 					compatible = 0
-		if(compatible)
+		if (compatible)
 			user << "<span class = 'notice'>You add \the [src] to your hand.</span>"
-			for(var/obj/item/toy/singlecard/card in src.currenthand)
+			for (var/obj/item/toy/singlecard/card in src.currenthand)
 				src.currenthand -= card
 				H.currenthand += card
 			src.forceMove(H)
 			H.update_icon()
 
 			qdel(src)
-		else if(cardcount > 5)
+		else if (cardcount > 5)
 			user << "<span class = 'notice'>You can't make a hand that large.</span>"
 		else
 			user << "<span class = 'warning'> You can't mix cards from other decks.</span>"
-	if(istype(C, /obj/item/toy/cards)) //shuffle us in
+	if (istype(C, /obj/item/toy/cards)) //shuffle us in
 		return C.attackby(src, user)
 	return ..()
 
 /obj/item/toy/cardhand/attack_self(mob/user)
-	for(var/obj/item/toy/singlecard/card in currenthand)
+	for (var/obj/item/toy/singlecard/card in currenthand)
 		card.Flip()
 		update_icon()
 	return ..()
 
 /obj/item/toy/cardhand/attack_hand(mob/user, params)
-	if(user.get_inactive_hand() == src)
+	if (user.get_inactive_hand() == src)
 		return hand_click.action(null, user, params)
 	return ..()
 
 /obj/item/toy/cardhand/update_icon()
 	overlays.len = 0
-	for(var/i = currenthand.len; i >= 1; i--)
+	for (var/i = currenthand.len; i >= 1; i--)
 		var/obj/item/toy/singlecard/card = currenthand[i]
-		if(card)
+		if (card)
 			card.layer = FLOAT_LAYER
 			card.plane = FLOAT_PLANE
 			card.pixel_x = i * (CARD_DISPLACE - currenthand.len) - CARD_DISPLACE
@@ -304,20 +304,20 @@
 
 /obj/item/toy/singlecard/New(NewLoc, cardsource, newcardname)
 	..(NewLoc)
-	if(cardsource)
+	if (cardsource)
 		parentdeck = cardsource
-	if(newcardname)
+	if (newcardname)
 		cardname = newcardname
 		name = cardname
 	update_icon()
 
 /obj/item/toy/singlecard/update_icon()
-	if(flipped)
+	if (flipped)
 		icon_state = "singlecard_down"
 		pixel_x = -5
 		name = "card"
 	else
-		if(cardname)
+		if (cardname)
 			src.icon_state = "sc_[cardname]"
 			src.name = src.cardname
 		else
@@ -327,9 +327,9 @@
 
 /obj/item/toy/singlecard/examine(mob/user)
 	..()
-	if(ishuman(user))
+	if (ishuman(user))
 		var/mob/living/carbon/human/cardUser = user
-		if(cardUser.is_holding_item(src))
+		if (cardUser.is_holding_item(src))
 			cardUser.visible_message("<span class = 'notice'>[cardUser] checks \his card.",
 									 "<span class = 'notice'>The card reads: [src.name]</span>")
 		else
@@ -340,9 +340,9 @@
 	update_icon()
 
 /obj/item/toy/singlecard/attackby(obj/item/I, mob/living/user)
-	if(istype(I, /obj/item/toy/singlecard))
+	if (istype(I, /obj/item/toy/singlecard))
 		var/obj/item/toy/singlecard/C = I
-		if(!(C.parentdeck || src.parentdeck) || C.parentdeck == src.parentdeck)
+		if (!(C.parentdeck || src.parentdeck) || C.parentdeck == src.parentdeck)
 			var/obj/item/toy/cardhand/H = new/obj/item/toy/cardhand(user.loc)
 			H.parentdeck = C.parentdeck
 			user.drop_item(C, src, force_drop = 1)
@@ -356,16 +356,16 @@
 			H.update_icon()
 		else
 			to_chat(user, "<span class = 'notice'>You can't mix cards from other decks.</span>")
-	else if(istype(I, /obj/item/toy/cardhand))
+	else if (istype(I, /obj/item/toy/cardhand))
 		var/obj/item/toy/cardhand/H = I
 		var/compatible = 1
-		for(var/obj/item/toy/singlecard/card in H.currenthand)
-			if(!(!(card.parentdeck || src.parentdeck) || card.parentdeck == src.parentdeck))
+		for (var/obj/item/toy/singlecard/card in H.currenthand)
+			if (!(!(card.parentdeck || src.parentdeck) || card.parentdeck == src.parentdeck))
 				compatible = 0
-		if(H.currenthand.len >= H.max_hand_size)
+		if (H.currenthand.len >= H.max_hand_size)
 			to_chat(user, "<span class = 'warning'>You can't add any more cards to this hand.</span>")
 			return
-		if(compatible)
+		if (compatible)
 			user << "<span class = 'notice'>You add \the [src] to your hand.</span>"
 			user.drop_item(src)
 			user.remove_from_mob(src) //we could be anywhere!
@@ -374,7 +374,7 @@
 			H.update_icon()
 		else
 			user << "<span class = 'notice'>You can't mix cards from other decks.</span>"
-	if(istype(I, /obj/item/toy/cards)) //shuffle us in
+	if (istype(I, /obj/item/toy/cards)) //shuffle us in
 		return I.attackby(src, user)
 
 /obj/item/toy/singlecard/attack_self(mob/user)

@@ -17,35 +17,35 @@
 
 
 /obj/item/borg/upgrade/proc/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-	if(!R.module)
+	if (!R.module)
 		to_chat(user, "<span class='warning'>The borg must choose a module before he can be upgraded!</span>")
 		return FAILED_TO_ADD
 
-	if(required_module.len)
-		if(!(R.module.type in required_module))
+	if (required_module.len)
+		if (!(R.module.type in required_module))
 			to_chat(user, "<span class='warning'>\The [src] will not fit into \the [R.module.name]!</span>")
 			return FAILED_TO_ADD
 
-	if(R.stat == DEAD)
+	if (R.stat == DEAD)
 		to_chat(user, "<span class='warning'>\The [src] will not function on a deceased robot.</span>")
 		return FAILED_TO_ADD
 
-	if(!R.opened)
+	if (!R.opened)
 		to_chat(user, "<span class='warning'>You must first open \the [src]'s cover!</span>")
 		return FAILED_TO_ADD
 
-	if(isMoMMI(R) && !add_to_mommis)
+	if (isMoMMI(R) && !add_to_mommis)
 		to_chat(user, "<span class='warning'>\The [src] only functions on Nanotrasen Cyborgs.</span>")
 		return FAILED_TO_ADD
 
-	if(!multi_upgrades && (src.type in R.module.upgrades))
+	if (!multi_upgrades && (src.type in R.module.upgrades))
 		to_chat(user, "<span class='warning'>There is already \a [src] in [R].</span>")
 		return FAILED_TO_ADD
 
 	R.module.upgrades += src.type
 
-	if(modules_to_add.len)
-		for(var/module_to_add in modules_to_add)
+	if (modules_to_add.len)
+		for (var/module_to_add in modules_to_add)
 			R.module.modules += new module_to_add(R.module)
 
 	to_chat(user, "<span class='notice'>You successfully apply \the [src] to [R].</span>")
@@ -66,11 +66,11 @@
 	icon_state = "cyborg_upgrade1"
 
 /obj/item/borg/upgrade/reset/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-	if(..())
+	if (..())
 		return FAILED_TO_ADD
 
 	R.uneq_all()
-	if(R.hands)
+	if (R.hands)
 		R.hands.icon_state = "nomod"
 	R.icon_state = "robot"
 	R.base_icon = "robot"
@@ -94,7 +94,7 @@
 	heldname = stripped_input(user, "Enter new robot name", "Robot Reclassification", heldname, MAX_NAME_LEN)
 
 /obj/item/borg/upgrade/rename/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-	if(..())
+	if (..())
 		return FAILED_TO_ADD
 
 	R.name = ""
@@ -111,13 +111,13 @@
 
 
 /obj/item/borg/upgrade/restart/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-	if(R.health < 0)
+	if (R.health < 0)
 		to_chat(user, "You have to repair the robot before using this module!")
 		return 0
 
-	if(!R.key)
-		for(var/mob/dead/observer/ghost in player_list)
-			if(ghost.mind && ghost.mind.current == R)
+	if (!R.key)
+		for (var/mob/dead/observer/ghost in player_list)
+			if (ghost.mind && ghost.mind.current == R)
 				R.key = ghost.key
 
 	R.stat = CONSCIOUS
@@ -132,9 +132,9 @@
 
 /obj/item/borg/upgrade/vtec/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 
-	if(R.speed == -1)
+	if (R.speed == -1)
 		return FAILED_TO_ADD
-	if(..())
+	if (..())
 		return FAILED_TO_ADD
 
 	R.speed--
@@ -152,20 +152,20 @@
 
 
 	var/obj/item/weapon/gun/energy/taser/cyborg/T = locate() in R.module
-	if(!T)
+	if (!T)
 		T = locate() in R.module.contents
-	if(!T)
+	if (!T)
 		T = locate() in R.module.modules
-	if(!T)
+	if (!T)
 		to_chat(user, "This robot has had its taser removed!")
 		return FAILED_TO_ADD
 
-	if(T.recharge_time <= 2)
+	if (T.recharge_time <= 2)
 		to_chat(R, "Maximum cooling achieved for this hardpoint!")
 		to_chat(user, "There's no room for another cooling unit!")
 		return FAILED_TO_ADD
 
-	if(..())
+	if (..())
 		return FAILED_TO_ADD
 	else
 		T.recharge_time = max(2 , T.recharge_time - 4)
@@ -179,10 +179,10 @@
 	add_to_mommis = 1
 
 /obj/item/borg/upgrade/jetpack/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-	if(..())
+	if (..())
 		return FAILED_TO_ADD
 
-	for(var/obj/item/weapon/tank/jetpack/carbondioxide in R.module.modules)
+	for (var/obj/item/weapon/tank/jetpack/carbondioxide in R.module.modules)
 		R.internals = src
 
 /obj/item/borg/upgrade/syndicate/
@@ -192,10 +192,10 @@
 
 /obj/item/borg/upgrade/syndicate/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 
-	if(R.emagged == 1)
+	if (R.emagged == 1)
 		return FAILED_TO_ADD
 
-	if(..())
+	if (..())
 		return FAILED_TO_ADD
 
 	message_admins("[key_name_admin(user)] ([user.type]) used \a [name] on [R] (a [R.type]).")
@@ -210,11 +210,11 @@
 	modules_to_add = list(/obj/item/weapon/wrench/socket)
 
 /obj/item/borg/upgrade/engineering/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
-	if(..())
+	if (..())
 		return FAILED_TO_ADD
 
 	var/obj/item/device/material_synth/S = locate(/obj/item/device/material_synth) in R.module.modules
-	if(!S)
+	if (!S)
 		return FAILED_TO_ADD
 
 	S.materials_scanned |= list("plasma glass" = /obj/item/stack/sheet/glass/plasmaglass,

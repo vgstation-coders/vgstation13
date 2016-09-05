@@ -45,56 +45,56 @@ var/list/nest_locations = list()
 /mob/living/simple_animal/hostile/alien/Life()
 	..()
 	var/turf/T = get_turf(src)
-	if(weed < 50)
+	if (weed < 50)
 		weed++
-		if(locate(/obj/effect/alien/weeds) in T)
+		if (locate(/obj/effect/alien/weeds) in T)
 			weed += 4
-	else if(!stat && !client)
-		if(!(locate(/obj/effect/alien/weeds) in T) && !(locate(/obj/structure/bed/nest) in T) && !(locate(/obj/effect/alien/egg) in T) && isturf(src.loc) && !istype(T, /turf/space))
+	else if (!stat && !client)
+		if (!(locate(/obj/effect/alien/weeds) in T) && !(locate(/obj/structure/bed/nest) in T) && !(locate(/obj/effect/alien/egg) in T) && isturf(src.loc) && !istype(T, /turf/space))
 			weed = 0
 			visible_message("<span class='alien'>[src] has planted some alien weeds!</span>")
 			new /obj/effect/alien/weeds/node(T)
 
-	if(acid < 200)
+	if (acid < 200)
 		acid++
 
-	if(!client)
-		if(stance == HOSTILE_STANCE_IDLE)
+	if (!client)
+		if (stance == HOSTILE_STANCE_IDLE)
 			var/new_dest = FindNest()
-			if(new_dest)
-				if(FindPrey())
+			if (new_dest)
+				if (FindPrey())
 					MovetoPrey()
 					DragPrey(new_dest)
 			else
 				dragging = null
-				if(pulling)
+				if (pulling)
 					stop_pulling()
 				walk(src, 0)
 				stop_automated_movement = 0
 				vision_range = idle_vision_range
 		else
 			dragging = null
-			if(pulling)
+			if (pulling)
 				stop_pulling()
 
 /mob/living/simple_animal/hostile/alien/DestroySurroundings()
-	if(environment_smash)
+	if (environment_smash)
 		EscapeConfinement()
-		for(var/dir in cardinal)
+		for (var/dir in cardinal)
 			var/turf/T = get_step(src, dir)
-			if(istype(T, /turf/simulated/wall))
-				if(!locate(/obj/effect/alien/acid) in T)
-					if(acid >= 200)
+			if (istype(T, /turf/simulated/wall))
+				if (!locate(/obj/effect/alien/acid) in T)
+					if (acid >= 200)
 						new /obj/effect/alien/acid/hyper(T, T)
 						acid = 0
-			for(var/atom/A in T)
-				if(istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack))
+			for (var/atom/A in T)
+				if (istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack))
 					A.attack_animal(src)
-				else if(istype(A,/obj/machinery/door))
+				else if (istype(A,/obj/machinery/door))
 					var/obj/machinery/door/D = A
-					if(D.density && !D.operating)
+					if (D.density && !D.operating)
 						D.attack_hand(src)
-						if(D.density && !D.operating)
+						if (D.density && !D.operating)
 							var/obj/item/weapon/crowbar/CB = new(src)//kek, but it works. Allows aliens to force open doors in unpowered environement thanks to their super strength claws.
 							CB.name = "claws"
 							CB.force = melee_damage_upper//if it's a windoor, we'll eventually break it down
@@ -106,15 +106,15 @@ var/list/nest_locations = list()
 
 /mob/living/simple_animal/hostile/alien/wander_move(var/turf/dest)
 	..()
-	for(var/obj/machinery/light/L in range(src,1))
-		if(L.light_range > 0)
+	for (var/obj/machinery/light/L in range(src,1))
+		if (L.light_range > 0)
 			L.attack_animal(src)
 
-	for(var/obj/machinery/door/D in range(src,1))
+	for (var/obj/machinery/door/D in range(src,1))
 		spawn()
-			if(D.density && !D.operating)
+			if (D.density && !D.operating)
 				D.attack_hand(src)
-				if(D.density && !D.operating)
+				if (D.density && !D.operating)
 					var/obj/item/weapon/crowbar/CB = new(src)//kek, but it works. Allows aliens to force open doors in unpowered environement thanks to their super strength claws.
 					CB.name = "claws"
 					CB.force = melee_damage_upper//if it's a windoor, we'll eventually break it down
@@ -122,42 +122,42 @@ var/list/nest_locations = list()
 					qdel(CB)
 
 /mob/living/simple_animal/hostile/alien/CanAttack(var/atom/the_target)
-	if(isalien(the_target))
+	if (isalien(the_target))
 		return 0
 
 	//they don't harm mindless monkeys so they can drag them to nests with a higher chance of a successful impregnation.
-	if(istype(the_target,/mob/living/carbon/monkey))
+	if (istype(the_target,/mob/living/carbon/monkey))
 		var/mob/living/carbon/monkey/M = the_target
-		if(!M.client)
+		if (!M.client)
 			return 0
 
-	if(iscarbon(the_target))
+	if (iscarbon(the_target))
 		var/mob/living/carbon/C = the_target
-		if(C.locked_to && istype(C.locked_to,/obj/structure/bed/nest))
+		if (C.locked_to && istype(C.locked_to,/obj/structure/bed/nest))
 			return 0
 
 	return ..(the_target)
 
 /mob/living/simple_animal/hostile/alien/proc/FindNest()
-	if(!nest_locations.len)
+	if (!nest_locations.len)
 		return
 	var/smallest_distance = 555
 	var/best_nest
-	for(var/obj/structure/bed/nest/N in nest_locations)
-		if((N.z == src.z) && (N.locked_atoms.len == 0))
+	for (var/obj/structure/bed/nest/N in nest_locations)
+		if ((N.z == src.z) && (N.locked_atoms.len == 0))
 			var/dist = get_dist(src,N)
-			if(dist < smallest_distance)
+			if (dist < smallest_distance)
 				smallest_distance = dist
 				best_nest = N
 
-	if(smallest_distance > 30)
+	if (smallest_distance > 30)
 		return null
 	else
 		return best_nest
 
 /mob/living/simple_animal/hostile/alien/proc/FindPrey()
-	if(dragging)//if for whatever reason we are trying to drag a mob that another alien is dragging, or that is already placed on a bed, we cut that shit out
-		if((dragging.pulledby && istype(dragging.pulledby,/mob/living/simple_animal/hostile/alien) && (dragging.pulledby != src)) || (dragging.locked_to && istype(dragging.locked_to,/obj/structure/bed/nest)))
+	if (dragging)//if for whatever reason we are trying to drag a mob that another alien is dragging, or that is already placed on a bed, we cut that shit out
+		if ((dragging.pulledby && istype(dragging.pulledby,/mob/living/simple_animal/hostile/alien) && (dragging.pulledby != src)) || (dragging.locked_to && istype(dragging.locked_to,/obj/structure/bed/nest)))
 			dragging = null
 			walk(src, 0)
 			stop_automated_movement = 0
@@ -167,16 +167,16 @@ var/list/nest_locations = list()
 			return dragging
 	var/list/Preys = list()
 	var/Prey
-	for(var/atom/A in ListTargets())
-		if(istype(A,/mob/living/carbon/monkey))
+	for (var/atom/A in ListTargets())
+		if (istype(A,/mob/living/carbon/monkey))
 			var/mob/living/carbon/monkey/M = A
-			if(!M.client && !M.locked_to && !(M.flags & INVULNERABLE))
+			if (!M.client && !M.locked_to && !(M.flags & INVULNERABLE))
 				Preys += A
-		else if((faction != "neutral") && (istype(A,/mob/living/carbon/monkey) || istype(A,/mob/living/carbon/human)))
+		else if ((faction != "neutral") && (istype(A,/mob/living/carbon/monkey) || istype(A,/mob/living/carbon/human)))
 			var/mob/living/carbon/C = A
-			if(C.stat && !C.locked_to && !(C.flags & INVULNERABLE))
+			if (C.stat && !C.locked_to && !(C.flags & INVULNERABLE))
 				Preys += A
-	if(Preys.len)
+	if (Preys.len)
 		Prey = pick(Preys)
 	else
 		walk(src, 0)
@@ -187,19 +187,19 @@ var/list/nest_locations = list()
 
 /mob/living/simple_animal/hostile/alien/proc/MovetoPrey()
 	stop_automated_movement = 1
-	if(!dragging)
+	if (!dragging)
 		walk(src, 0)
 		stop_automated_movement = 0
 		vision_range = idle_vision_range
 		return
 
-	if(isturf(loc))
-		if(!(dragging.pulledby && istype(dragging.pulledby,/mob/living/simple_animal/hostile/alien) && (dragging.pulledby != src)))
-			if(dragging.Adjacent(src))
-				if(!pulling && !(dragging.pulledby && istype(dragging.pulledby,/mob/living/simple_animal/hostile/alien) && (dragging.pulledby != src)))
+	if (isturf(loc))
+		if (!(dragging.pulledby && istype(dragging.pulledby,/mob/living/simple_animal/hostile/alien) && (dragging.pulledby != src)))
+			if (dragging.Adjacent(src))
+				if (!pulling && !(dragging.pulledby && istype(dragging.pulledby,/mob/living/simple_animal/hostile/alien) && (dragging.pulledby != src)))
 					start_pulling(dragging)
-			else if(canmove)
-				if(last_loc && (last_loc == loc))
+			else if (canmove)
+				if (last_loc && (last_loc == loc))
 					DestroySurroundings()
 				last_loc = loc
 				Goto(dragging,move_to_delay,1)
@@ -216,8 +216,8 @@ var/list/nest_locations = list()
 	vision_range = idle_vision_range
 
 /mob/living/simple_animal/hostile/alien/proc/DragPrey(var/obj/structure/bed/nest/dest)
-	if(dragging && (pulling == dragging))
-		if(dest.loc == src.loc)
+	if (dragging && (pulling == dragging))
+		if (dest.loc == src.loc)
 			dragging.forceMove(dest.loc)
 			stop_pulling()
 			dest.buckle_mob(dragging,src)
@@ -225,29 +225,29 @@ var/list/nest_locations = list()
 			walk(src, 0)
 			stop_automated_movement = 0
 			vision_range = idle_vision_range
-		else if(canmove)
-			if(last_loc && (last_loc == loc))
+		else if (canmove)
+			if (last_loc && (last_loc == loc))
 				DestroySurroundings()
 			last_loc = loc
 			Goto(dest,move_to_delay,0)
 
 
 /mob/living/simple_animal/hostile/alien/proc/CanOpenDoor(var/obj/machinery/door/D)
-	if(istype(D,/obj/machinery/door/poddoor))
+	if (istype(D,/obj/machinery/door/poddoor))
 		return 0
 
 	// Don't fuck with doors that are doing something
-	if(D.operating>0)
+	if (D.operating>0)
 		return 0
 
 	// Don't open opened doors.
-	if(!D.density)
+	if (!D.density)
 		return 0
 
 	// Can't open bolted/welded doors
-	if(istype(D,/obj/machinery/door/airlock))
+	if (istype(D,/obj/machinery/door/airlock))
 		var/obj/machinery/door/airlock/A=D
-		if(A.locked || A.welded || A.jammed)
+		if (A.locked || A.welded || A.jammed)
 			return 0
 
 	return 1
@@ -295,38 +295,38 @@ var/list/nest_locations = list()
 /mob/living/simple_animal/hostile/alien/queen/Life()
 	..()
 	var/turf/T = get_turf(src)
-	if(nest < 75)
+	if (nest < 75)
 		nest++
-		if(locate(/obj/effect/alien/weeds) in T)
+		if (locate(/obj/effect/alien/weeds) in T)
 			nest += 4
-	else if(!stat && !client)
-		if(!(locate(/obj/effect/alien/weeds/node) in T) && !(locate(/obj/structure/bed/nest) in T) && !(locate(/obj/effect/alien/egg) in T) && isturf(src.loc) && !istype(T, /turf/space))
+	else if (!stat && !client)
+		if (!(locate(/obj/effect/alien/weeds/node) in T) && !(locate(/obj/structure/bed/nest) in T) && !(locate(/obj/effect/alien/egg) in T) && isturf(src.loc) && !istype(T, /turf/space))
 			var/nearby_nests = 0
-			for(var/obj/structure/bed/nest/N in range(5,src))
+			for (var/obj/structure/bed/nest/N in range(5,src))
 				nearby_nests++
-			if(nearby_nests < 2)
+			if (nearby_nests < 2)
 				nest = 0
 				visible_message("<span class='alien'>\The [src] vomits up a thick purple substance and shapes it into some form of resin structure!</span>")
 				new /obj/structure/bed/nest(T)
 
-	if(egg < 75)
+	if (egg < 75)
 		egg++
-		if(locate(/obj/effect/alien/weeds) in T)
+		if (locate(/obj/effect/alien/weeds) in T)
 			egg += 4
-	else if(!stat && !client)
-		if(!(locate(/obj/effect/alien/weeds/node) in T) && !(locate(/obj/structure/bed/nest) in T) && !(locate(/obj/effect/alien/egg) in T) && isturf(src.loc) && !istype(T, /turf/space))
+	else if (!stat && !client)
+		if (!(locate(/obj/effect/alien/weeds/node) in T) && !(locate(/obj/structure/bed/nest) in T) && !(locate(/obj/effect/alien/egg) in T) && isturf(src.loc) && !istype(T, /turf/space))
 			var/nearby_eggs = 0
-			for(var/obj/effect/alien/egg/E in range(3,src))
+			for (var/obj/effect/alien/egg/E in range(3,src))
 				nearby_eggs++
-			if(nearby_eggs < 3)
+			if (nearby_eggs < 3)
 				egg = 0
 				visible_message("<span class='alien'>[src] has laid an egg!</span>")
 				new /obj/effect/alien/egg(T)
 
 /mob/living/simple_animal/hostile/alien/queen/wander_move(var/turf/dest)
 	var/obj/effect/alien/weeds/W = locate() in range(src,3)
-	if(W)
-		if(locate(/obj/effect/alien/weeds) in range(dest,1))//we want the queen to remain relatively close to the weed-covered area
+	if (W)
+		if (locate(/obj/effect/alien/weeds) in range(dest,1))//we want the queen to remain relatively close to the weed-covered area
 			..()
 	else
 		..()
@@ -355,7 +355,7 @@ var/list/nest_locations = list()
 	xgibs(loc, viruses)
 
 /mob/living/simple_animal/hostile/alien/adjustBruteLoss(amount,var/damage_type) // Weak to Fire
-	if(damage_type == BURN)
+	if (damage_type == BURN)
 		..(amount * 2)
 	else
 		..(amount)

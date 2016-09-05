@@ -24,10 +24,10 @@
 		src.start_unanchored = start_unanchored
 
 /datum/stack_recipe/proc/can_build_here(var/mob/usr, var/turf/T)
-	if(one_per_turf && locate(result_type) in T)
+	if (one_per_turf && locate(result_type) in T)
 		to_chat(usr, "<span class='warning'>There is another [title] here!</span>")
 		return 0
-	if(on_floor && (istype(T, /turf/space)))
+	if (on_floor && (istype(T, /turf/space)))
 		to_chat(usr, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
 		return 0
 	return 1
@@ -49,25 +49,25 @@
 							METAL RECIPES
 ===================================================================== */
 /datum/stack_recipe/chair/can_build_here(var/mob/usr, var/turf/T)
-	if(one_per_turf)
-		for(var/atom/movable/AM in T)
-			if(istype(AM, /obj/structure/bed/chair/vehicle)) //Bandaid to allow people in vehicles (and wheelchairs) build chairs
+	if (one_per_turf)
+		for (var/atom/movable/AM in T)
+			if (istype(AM, /obj/structure/bed/chair/vehicle)) //Bandaid to allow people in vehicles (and wheelchairs) build chairs
 				continue
-			else if(istype(AM, /obj/structure/bed/chair))
+			else if (istype(AM, /obj/structure/bed/chair))
 				to_chat(usr, "<span class='warning'>There is already a chair here!</span>")
 				return 0
-	if(on_floor && (istype(T, /turf/space)))
+	if (on_floor && (istype(T, /turf/space)))
 		to_chat(usr, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
 		return 0
 	return 1
 
 /datum/stack_recipe/conveyor_frame/can_build_here(var/mob/usr, var/turf/T)
-	if(one_per_turf)
-		for(var/atom/movable/AM in T)
-			if(is_type_in_list(AM, list(/obj/machinery/conveyor_assembly, /obj/machinery/conveyor)))
+	if (one_per_turf)
+		for (var/atom/movable/AM in T)
+			if (is_type_in_list(AM, list(/obj/machinery/conveyor_assembly, /obj/machinery/conveyor)))
 				to_chat(usr, "<span class='warning'>There is already a conveyor belt here!</span>")
 				return 0
-	if(on_floor && (istype(T, /turf/space)))
+	if (on_floor && (istype(T, /turf/space)))
 		to_chat(usr, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
 		return 0
 	return 1

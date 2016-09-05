@@ -26,14 +26,14 @@
 
 // Actually decay the turf.
 /datum/universal_state/proc/DecayTurf(var/turf/T)
-	if(istype(T,/turf/simulated/wall))
+	if (istype(T,/turf/simulated/wall))
 		var/turf/simulated/wall/W=T
 		W.melt()
 		return
-	if(istype(T,/turf/simulated/floor))
+	if (istype(T,/turf/simulated/floor))
 		var/turf/simulated/floor/F=T
 		// Burnt?
-		if(!F.burnt)
+		if (!F.burnt)
 			F.burn_tile()
 		else
 			F.ReplaceWithLattice()
@@ -45,7 +45,7 @@
 
 // This gets called by lighting overlay updates, lighting_overlays.dm line #62.
 /datum/universal_state/proc/OnTurfTick(var/turf/T)
-	if(decay_rate && prob(decay_rate))
+	if (decay_rate && prob(decay_rate))
 		DecayTurf(T)
 
 // Apply changes when exiting state
@@ -64,8 +64,8 @@
 	return
 
 /proc/SetUniversalState(var/newstate, var/on_exit = 1, var/on_enter = 1)
-	if(on_exit)
+	if (on_exit)
 		universe.OnExit()
 	universe = new newstate
-	if(on_enter)
+	if (on_enter)
 		universe.OnEnter()

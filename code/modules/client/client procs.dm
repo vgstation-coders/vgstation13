@@ -27,62 +27,62 @@
 /client/Topic(href, href_list, hsrc)
 	//var/timestart = world.timeofday
 	//testing("topic call for [usr] [href]")
-	if(!usr || usr != mob)	//stops us calling Topic for somebody else's client. Also helps prevent usr=null
+	if (!usr || usr != mob)	//stops us calling Topic for somebody else's client. Also helps prevent usr=null
 		return
 
 	//Reduces spamming of links by dropping calls that happen during the delay period
-//	if(next_allowed_topic_time > world.time)
+//	if (next_allowed_topic_time > world.time)
 //		return
 	//next_allowed_topic_time = world.time + TOPIC_SPAM_DELAY
 
 	//search the href for script injection
-	if( findtext(href,"<script",1,0) )
+	if ( findtext(href,"<script",1,0) )
 		world.log << "Attempted use of scripts within a topic call, by [src]"
 		message_admins("Attempted use of scripts within a topic call, by [src]")
 		//del(usr)
 		return
 
 	//Admin PM
-	if(href_list["priv_msg"])
+	if (href_list["priv_msg"])
 		var/client/C = locate(href_list["priv_msg"])
-		if(ismob(C)) 		//Old stuff can feed-in mobs instead of clients
+		if (ismob(C)) 		//Old stuff can feed-in mobs instead of clients
 			var/mob/M = C
 			C = M.client
 		cmd_admin_pm(C,null)
 		return
 
 	//Wiki shortcuts
-	if(href_list["getwiki"])
+	if (href_list["getwiki"])
 		var/url = href_list["getwiki"]
 		usr << link(getVGWiki(url))
 		return
 
 	// Global Asset cache stuff.
-	if(href_list["asset_cache_confirm_arrival"])
+	if (href_list["asset_cache_confirm_arrival"])
 //		to_chat(src, "ASSET JOB [href_list["asset_cache_confirm_arrival"]] ARRIVED.")
 		var/job = text2num(href_list["asset_cache_confirm_arrival"])
 		completed_asset_jobs += job
 		return
 
-	if(href_list["_src_"] == "chat") // Oh god the ping hrefs.
+	if (href_list["_src_"] == "chat") // Oh god the ping hrefs.
 		return chatOutput.Topic(href, href_list)
 
 	//Logs all hrefs
-	if(config && config.log_hrefs && investigations[I_HREFS])
+	if (config && config.log_hrefs && investigations[I_HREFS])
 		var/datum/log_controller/I = investigations[I_HREFS]
 		I.write("<small>[time_stamp()] [src] (usr:[usr])</small> || [hsrc ? "[hsrc] " : ""][href]<br />")
 
-	switch(href_list["_src_"])
-		if("holder")
+	switch (href_list["_src_"])
+		if ("holder")
 			hsrc = holder
-		if("usr")
+		if ("usr")
 			hsrc = mob
-		if("prefs")
+		if ("prefs")
 			return prefs.process_link(usr,href_list)
-		if("vars")
+		if ("vars")
 			return view_var_Topic(href,href_list,hsrc)
 
-	switch(href_list["action"])
+	switch (href_list["action"])
 		if ("openLink")
 			src << link(href_list["link"])
 
@@ -90,13 +90,13 @@
 	//testing("[usr] topic call took [(world.timeofday - timestart)/10] seconds")
 
 /client/proc/handle_spam_prevention(var/message, var/mute_type)
-	if(config.automute_on && !holder && src.last_message == message)
+	if (config.automute_on && !holder && src.last_message == message)
 		src.last_message_count++
-		if(src.last_message_count >= SPAM_TRIGGER_AUTOMUTE)
+		if (src.last_message_count >= SPAM_TRIGGER_AUTOMUTE)
 			to_chat(src, "<span class='warning'>You have exceeded the spam filter limit for identical messages. An auto-mute was applied.</span>")
 			cmd_admin_mute(src.mob, mute_type, 1)
 			return 1
-		if(src.last_message_count >= SPAM_TRIGGER_WARNING)
+		if (src.last_message_count >= SPAM_TRIGGER_WARNING)
 			to_chat(src, "<span class='warning'>You are nearing the spam filter limit for identical messages.</span>")
 			return 0
 	else
@@ -106,13 +106,13 @@
 
 //This stops files larger than UPLOAD_LIMIT being sent from client to server via input(), client.Import() etc.
 /client/AllowUpload(filename, filelength)
-	if(filelength > UPLOAD_LIMIT)
+	if (filelength > UPLOAD_LIMIT)
 		to_chat(src, "<font color='red'>Error: AllowUpload(): File Upload too large. Upload Limit: [UPLOAD_LIMIT/1024]KiB.</font>")
 		return 0
 /*	//Don't need this at the moment. But it's here if it's needed later.
 	//Helps prevent multiple files being uploaded at once. Or right after eachother.
 	var/time_to_wait = fileaccess_timer - world.time
-	if(time_to_wait > 0)
+	if (time_to_wait > 0)
 		to_chat(src, "<font color='red'>Error: AllowUpload(): Spam prevention. Please wait [round(time_to_wait/10)] seconds.</font>")
 		return 0
 	fileaccess_timer = world.time + FTPDELAY	*/
@@ -126,7 +126,7 @@
 	// world.log << "creating chatOutput"
 	chatOutput = new /datum/chatOutput(src) // Right off the bat.
 	// world.log << "Done creating chatOutput"
-	if(config)
+	if (config)
 		winset(src, null, "outputwindow.output.style=[config.world_style_config];")
 		winset(src, null, "window1.msay_output.style=[config.world_style_config];") // it isn't possible to set two window elements in the same winset so we need to call it for each element we're assigning a stylesheet.
 	else
@@ -136,30 +136,30 @@
 
 	//Admin Authorisation
 	holder = admin_datums[ckey]
-	if(holder)
+	if (holder)
 		admins += src
 		holder.owner = src
 
-	if(connection != "seeker")			//Invalid connection type.
-		if(connection == "web")
-			if(!holder)
+	if (connection != "seeker")			//Invalid connection type.
+		if (connection == "web")
+			if (!holder)
 				return null
 		else
 			return null
 
-	if(byond_version < MIN_CLIENT_VERSION)		//Out of date client.
+	if (byond_version < MIN_CLIENT_VERSION)		//Out of date client.
 		message_admins("[key]/[ckey] has connected with an out of date client! Their version: [byond_version]. They will be kicked shortly.")
 		alert(src,"Your BYOND client is out of date. Please make sure you have have at least version [world.byond_version] installed. Check for a beta update if necessary.", "Update Yo'Self", "OK")
 		spawn(5 SECONDS)
 			del(src)
 
-	if(!guests_allowed && IsGuestKey(key))
+	if (!guests_allowed && IsGuestKey(key))
 		alert(src,"This server doesn't allow guest accounts to play. Please go to http://www.byond.com/ and register for a key.","Guest","OK")
 		del(src)
 		return
 
 	// Change the way they should download resources.
-	if(config.resource_urls)
+	if (config.resource_urls)
 		src.preload_rsc = pick(config.resource_urls)
 	else
 		src.preload_rsc = 1 // If config.resource_urls is not set, preload like normal.
@@ -172,7 +172,7 @@
 
 	//preferences datum - also holds some persistant data for the client (because we may as well keep these datums to a minimum)
 	prefs = preferences_datums[ckey]
-	if(!prefs)
+	if (!prefs)
 		prefs = new /datum/preferences(src)
 		preferences_datums[ckey] = prefs
 	prefs.last_ip = address				//these are gonna be used for banning
@@ -181,17 +181,17 @@
 	. = ..()	//calls mob.Login()
 	chatOutput.start()
 
-	if(custom_event_msg && custom_event_msg != "")
+	if (custom_event_msg && custom_event_msg != "")
 		to_chat(src, "<h1 class='alert'>Custom Event</h1>")
 		to_chat(src, "<h2 class='alert'>A custom event is taking place. OOC Info:</h2>")
 		to_chat(src, "<span class='alert'>[html_encode(custom_event_msg)]</span>")
 		to_chat(src, "<br>")
 
-	if( (world.address == address || !address) && !host )
+	if ( (world.address == address || !address) && !host )
 		host = key
 		world.update_status()
 
-	if(holder)
+	if (holder)
 		add_admin_verbs()
 		admin_memo_show()
 
@@ -199,7 +199,7 @@
 
 	send_resources()
 
-	if(prefs.lastchangelog != changelog_hash) //bolds the changelog button on the interface so we know there are updates.
+	if (prefs.lastchangelog != changelog_hash) //bolds the changelog button on the interface so we know there are updates.
 		winset(src, "rpane.changelog", "background-color=#eaeaea;font-style=bold")
 		prefs.SetChangelog(ckey,changelog_hash)
 		to_chat(src, "<span class='info'>Changelog has changed since your last visit.</span>")
@@ -213,17 +213,17 @@
 		"admin"=(holder!=null)
 	))
 
-	if(!winexists(src, "asset_cache_browser")) // The client is using a custom skin, tell them.
+	if (!winexists(src, "asset_cache_browser")) // The client is using a custom skin, tell them.
 		to_chat(src, "<span class='warning'>Unable to access asset cache browser, if you are using a custom skin file, please allow DS to download the updated version, if you are not, then make a bug report. This is not a critical issue but can cause issues with resource downloading, as it is impossible to know when extra resources arrived to you.</span>")
 	//This is down here because of the browse() calls in tooltip/New()
-	if(!tooltips)
+	if (!tooltips)
 		tooltips = new /datum/tooltip(src)
 		
 	//////////////
 	//DISCONNECT//
 	//////////////
 /client/Del()
-	if(holder)
+	if (holder)
 		holder.owner = null
 		admins -= src
 	directory -= ckey
@@ -232,16 +232,16 @@
 	return ..()
 
 /client/proc/log_client_to_db()
-	if(IsGuestKey(key))
+	if (IsGuestKey(key))
 		return
 
 	establish_db_connection()
 
-	if(!dbcon.IsConnected())
+	if (!dbcon.IsConnected())
 		return
 	var/list/http[] = world.Export("http://www.byond.com/members/[src.key]?format=text")  // Retrieve information from BYOND
 	var/Joined = 2550-01-01
-	if(http && http.len && ("CONTENT" in http))
+	if (http && http.len && ("CONTENT" in http))
 		var/String = file2text(http["CONTENT"])  //  Convert the HTML file to text
 		var/JoinPos = findtext(String, "joined")+10  //  Parse for the joined date
 		Joined = copytext(String, JoinPos, JoinPos+10)  //  Get the date in the YYYY-MM-DD format
@@ -265,10 +265,10 @@
 	Query3(sql_computerid)
 
 	//Just the standard check to see if it's actually a number
-	if(sql_id)
-		if(istext(sql_id))
+	if (sql_id)
+		if (istext(sql_id))
 			sql_id = text2num(sql_id)
-		if(!isnum(sql_id))
+		if (!isnum(sql_id))
 			return
 	//else
 		//var/url = pick("byond://ss13.nexisonline.net:1336", "byond://ss13.nexisonline.net:1336", "byond://ss13.nexisonline.net:1336", "byond://ss13.nexisonline.net:1336")
@@ -281,22 +281,22 @@
 
 	var/admin_rank = "Player"
 
-	if(istype(holder))
+	if (istype(holder))
 		admin_rank = holder.rank
 
 	var/sql_admin_rank = sanitizeSQL(admin_rank)
 
-	if(sql_id)
+	if (sql_id)
 		Query4(age, sql_address, sql_computerid, sql_admin_rank, sql_id, Joined)
 	else
 		Query5(sql_ckey, sql_address, sql_computerid, sql_admin_rank, Joined)
 
-	if(!isnum(age))
+	if (!isnum(age))
 		age = Query6(sql_ckey, age)
-	if(!isnum(player_age)) //If they've never logged in before
+	if (!isnum(player_age)) //If they've never logged in before
 		player_age = 0
 
-	if(age < 14)
+	if (age < 14)
 		message_admins("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age]  First seen = [player_age]")
 		log_admin(("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age] First seen = [player_age]"))
 	testing("[src]/[ckey(key)] logged in with age of [age]/[player_age]/[Joined]")
@@ -311,7 +311,7 @@
 	var/sql_id
 	var/player_age
 	var/age
-	while(query.NextRow())
+	while (query.NextRow())
 		sql_id = query.item[1]
 		player_age = text2num(query.item[2])
 		age = text2num(query.item[3])
@@ -322,20 +322,20 @@
 	var/DBQuery/query_ip = dbcon.NewQuery("SELECT ckey FROM erro_player WHERE ip = '[sql_address]'")
 	query_ip.Execute()
 	related_accounts_ip = ""
-	while(query_ip.NextRow())
+	while (query_ip.NextRow())
 		related_accounts_ip += "[query_ip.item[1]], "
 
 /client/proc/Query3(sql_computerid)
 	var/DBQuery/query_cid = dbcon.NewQuery("SELECT ckey FROM erro_player WHERE computerid = '[sql_computerid]'")
 	query_cid.Execute()
 	related_accounts_cid = ""
-	while(query_cid.NextRow())
+	while (query_cid.NextRow())
 		related_accounts_cid += "[query_cid.item[1]], "
 
 /client/proc/Query4(age, sql_address, sql_computerid, sql_admin_rank, sql_id, Joined)
 	//Player already identified previously, we need to just update the 'lastseen', 'ip' and 'computer_id' variables
 	var/DBQuery/query_update
-	if(isnum(age))
+	if (isnum(age))
 		query_update = dbcon.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_address]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]' WHERE id = [sql_id]")
 	else
 		query_update = dbcon.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_address]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]', accountjoined = '[Joined]' WHERE id = [sql_id]")
@@ -350,7 +350,7 @@
 	var/DBQuery/query_age = dbcon.NewQuery("SELECT datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = '[sql_ckey]'")
 	var/age
 	query_age.Execute()
-	while(query_age.NextRow())
+	while (query_age.NextRow())
 		age = text2num(query_age.item[1])
 	return age
 
@@ -367,7 +367,7 @@
 //checks if a client is afk
 //3000 frames = 5 minutes
 /client/proc/is_afk(duration=3000)
-	if(inactivity > duration)
+	if (inactivity > duration)
 		return inactivity
 	return 0
 
@@ -399,38 +399,38 @@
 
 
 /client/proc/send_html_resources()
-	if(crewmonitor && minimapinit)
+	if (crewmonitor && minimapinit)
 		crewmonitor.sendResources(src)
-	if(adv_camera && minimapinit)
+	if (adv_camera && minimapinit)
 		adv_camera.sendResources(src)
-	while(!vote || !vote.interface)
+	while (!vote || !vote.interface)
 		sleep(1)
 	vote.interface.sendAssets(src)
 
 /proc/get_role_desire_str(var/rolepref)
-	switch(rolepref & ROLEPREF_VALMASK)
-		if(ROLEPREF_NEVER)
+	switch (rolepref & ROLEPREF_VALMASK)
+		if (ROLEPREF_NEVER)
 			return "Never"
-		if(ROLEPREF_NO)
+		if (ROLEPREF_NO)
 			return "No"
-		if(ROLEPREF_YES)
+		if (ROLEPREF_YES)
 			return "Yes"
-		if(ROLEPREF_ALWAYS)
+		if (ROLEPREF_ALWAYS)
 			return "Always"
 	return "???"
 
 /client/proc/desires_role(var/role_id, var/display_to_user=0)
 	var/role_desired = prefs.roles[role_id]
-	if(display_to_user && !(role_desired & ROLEPREF_PERSIST))
-		if(!(role_desired & ROLEPREF_POLLED))
+	if (display_to_user && !(role_desired & ROLEPREF_PERSIST))
+		if (!(role_desired & ROLEPREF_POLLED))
 			spawn
 				var/answer = alert(src,"[role_id]\n\nNOTE:  You will only be polled about this role once per round. To change your choice, use Preferences > Setup Special Roles.  The change will take place AFTER this recruiting period.","Role Recruitment", "Yes","No","Never")
-				switch(answer)
-					if("Never")
+				switch (answer)
+					if ("Never")
 						prefs.roles[role_id] = ROLEPREF_NEVER
-					if("No")
+					if ("No")
 						prefs.roles[role_id] = ROLEPREF_NO
-					if("Yes")
+					if ("Yes")
 						prefs.roles[role_id] = ROLEPREF_YES
 					//if("Always")
 					//	prefs.roles[role_id] = ROLEPREF_ALWAYS
@@ -441,20 +441,20 @@
 	return role_desired & ROLEPREF_ENABLE
 
 /client/proc/colour_transition(var/list/colour_to = default_colour_matrix,var/time = 10)	// call this with no parametres to reset to default.
-	if(!color)
+	if (!color)
 		color = default_colour_matrix
-	if(!(colour_to.len))
+	if (!(colour_to.len))
 		colour_to = default_colour_matrix
 	animate(src, color=colour_to, time=time, easing=SINE_EASING)
 
 /client/proc/changeView(var/newView)
-	if(!newView)
+	if (!newView)
 		view = world.view
 	else
 		view = newView
 
-	if(mob && ishuman(mob))
+	if (mob && ishuman(mob))
 		var/mob/living/carbon/human/H = mob
 		var/obj/item/clothing/under/U = H.get_item_by_slot(slot_w_uniform)
-		if(istype(U))
+		if (istype(U))
 			U.update_holomap()

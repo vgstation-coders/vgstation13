@@ -33,40 +33,40 @@
 	y_off = rand(-10,10)
 	x_player_off = 0
 	y_player_off = 0
-	if(ticker)
+	if (ticker)
 		initialize()
 
 /obj/machinery/computer/telescience/initialize()
 	..()
-	if(!ticker)
+	if (!ticker)
 		cell=new/obj/item/weapon/cell(src)
 		cell.charge = 0
 	telepad = locate() in range(src, 7)
 
 /obj/machinery/computer/telescience/process()
-	if(!cell || (stat & (BROKEN|NOPOWER)) || !anchored)
+	if (!cell || (stat & (BROKEN|NOPOWER)) || !anchored)
 		return
-	if(cell.give(100))
+	if (cell.give(100))
 		use_power(200)		//this used to use CELLRATE, but CELLRATE is fucking awful. feel free to fix this properly!
 	src.updateUsrDialog()
 
 /obj/machinery/computer/telescience/attackby(obj/item/weapon/W, mob/user)
-	if(..())
+	if (..())
 		return 1
 
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		return
 
-	if(istype(W, /obj/item/weapon/cell) && anchored)
-		if(cell)
+	if (istype(W, /obj/item/weapon/cell) && anchored)
+		if (cell)
 			to_chat(user, "<span class='warning'>There is already a cell in \the [name].</span>")
 			return
 		else
-			if(areaMaster.power_equip == 0) // There's no APC in this area, don't try to cheat power!
+			if (areaMaster.power_equip == 0) // There's no APC in this area, don't try to cheat power!
 				to_chat(user, "<span class='warning'>\The [name] blinks red as you try to insert the cell!</span>")
 				return
 
-			if(user.drop_item(W, src))
+			if (user.drop_item(W, src))
 				cell = W
 				user.visible_message("[user] inserts a cell into the [src].", "You insert a cell into the [src].")
 			else
@@ -74,10 +74,10 @@
 		update_icon()
 
 /obj/machinery/computer/telescience/update_icon()
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		icon_state = "teleportb"
 	else
-		if(stat & NOPOWER)
+		if (stat & NOPOWER)
 			src.icon_state = "teleport0"
 			stat |= NOPOWER
 		else
@@ -95,14 +95,14 @@
   * @return nothing
   */
 /obj/machinery/computer/telescience/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
-	if(user.stat || user.restrained())
+	if (user.stat || user.restrained())
 		return
 
 	// this is the data which will be sent to the ui
 	var/list/cell_data=null
-	if(cell)
+	if (cell)
 		cell_data = list(
 			"charge" = cell.charge,
 			"maxcharge" = cell.maxcharge
@@ -136,14 +136,14 @@
 	return src.attack_hand(user)
 
 /obj/machinery/computer/telescience/attack_hand(mob/user as mob)
-	if(user.client && user.client.prefs.usenanoui)//Check if the player is using nanoUI or not.
+	if (user.client && user.client.prefs.usenanoui)//Check if the player is using nanoUI or not.
 		ui_interact(user)
 		return
 	else
 		interact(user)
 
 /obj/machinery/computer/telescience/interact(mob/user)
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		user.unset_machine(src)
 		return
 
@@ -179,7 +179,7 @@
 			</div>
 		</div>
 		"}
-	if(!cell)
+	if (!cell)
 		out += {"
 		<div class="notice">No power cell detected.</div>
 		"}
@@ -202,8 +202,8 @@
 	browserdatum.open()
 
 /obj/machinery/computer/telescience/proc/sparks(var/atom/target)
-	if(!target)
-		if(telepad && get_turf(telepad))
+	if (!target)
+		if (telepad && get_turf(telepad))
 			target = telepad
 		else
 			return
@@ -213,69 +213,69 @@
 	s.start()
 
 /obj/machinery/computer/telescience/proc/telefail()
-	if(prob(95))
+	if (prob(95))
 		sparks()
-		for(var/mob/O in hearers(src, null))
+		for (var/mob/O in hearers(src, null))
 			O.show_message("<span class='warning'>The telepad weakly fizzles.</span>", 2)
 		return
-	if(prob(5))
+	if (prob(5))
 		// Irradiate everyone in telescience!
-		for(var/obj/machinery/telepad/E in machines)
+		for (var/obj/machinery/telepad/E in machines)
 			var/L = get_turf(E)
 			sparks(target = L)
-			for(var/mob/living/carbon/human/M in viewers(L, null))
+			for (var/mob/living/carbon/human/M in viewers(L, null))
 				M.apply_effect((rand(10, 20)), IRRADIATE, 0)
 				to_chat(M, "<span class='warning'>You feel strange.</span>")
 		return
 	/* Lets not, for now.  - N3X
-	if(prob(1))
+	if (prob(1))
 		// AI CALL SHUTTLE I SAW RUNE, SUPER LOW CHANCE, CAN HARDLY HAPPEN
-		for(var/mob/living/carbon/O in viewers(src, null))
+		for (var/mob/living/carbon/O in viewers(src, null))
 			var/datum/game_mode/cult/temp = new
 			O.show_message("<span class='warning'>The telepad flashes with a strange light, and you have a sudden surge of allegiance toward the true dark one!</span>", 2)
 			O.mind.make_Cultist()
 			temp.grant_runeword(O)
 			sparks()
 		return
-	if(prob(1))
+	if (prob(1))
 		// VIVA LA FUCKING REVOLUTION BITCHES, SUPER LOW CHANCE, CAN HARDLY HAPPEN
-		for(var/mob/living/carbon/O in viewers(src, null))
+		for (var/mob/living/carbon/O in viewers(src, null))
 			O.show_message("<span class='warning'>The telepad flashes with a strange light, and you see all kind of images flash through your mind, of murderous things Nanotrasen has done, and you decide to rebel!</span>", 2)
 			O.mind.make_Rev()
 			sparks()
 		return
 	*/
-	if(prob(1))
+	if (prob(1))
 		// The OH SHIT FUCK GOD DAMN IT LYNCH THE SCIENTISTS event.
 		visible_message("<span class='warning'>The telepad changes colors rapidly, and opens a portal, and you see what your mind seems to think is the very threads that hold the pattern of the universe together, and a eerie sense of paranoia creeps into you.</span>")
-		for(var/mob/living/carbon/O in viewers(src, null)) //I-IT'S A FEEEEATUUUUUUUREEEEE
+		for (var/mob/living/carbon/O in viewers(src, null)) //I-IT'S A FEEEEATUUUUUUUREEEEE
 			spacevine_infestation()
 		sparks()
 		return
-	if(prob(5))
+	if (prob(5))
 		// HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONK
-		for(var/mob/living/carbon/M in hearers(src, null))
+		for (var/mob/living/carbon/M in hearers(src, null))
 			M << sound('sound/items/AirHorn.ogg')
-			if(istype(M, /mob/living/carbon/human))
+			if (istype(M, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = M
-				if(H.earprot())
+				if (H.earprot())
 					continue
 			to_chat(M, "<font color='red' size='7'>HONK</font>")
 			M.sleeping = 0
 			M.stuttering += 20
 			M.ear_deaf += 30
 			M.Weaken(3)
-			if(prob(30))
+			if (prob(30))
 				M.Stun(10)
 				M.Paralyse(4)
 			else
 				M.Jitter(500)
 			sparks(target = M)
 		return
-	if(prob(1))
+	if (prob(1))
 		// They did the mash! (They did the monster mash!) The monster mash! (It was a graveyard smash!)
 		sparks()
-		for(var/obj/machinery/telepad/E in machines)
+		for (var/obj/machinery/telepad/E in machines)
 			var/L = get_turf(E)
 			var/blocked = list(/mob/living/simple_animal/hostile,
 				/mob/living/simple_animal/hostile/alien/queen/large,
@@ -284,7 +284,7 @@
 				/mob/living/simple_animal/hostile/giant_spider/nurse)
 			var/list/hostiles = typesof(/mob/living/simple_animal/hostile) - blocked
 			playsound(L, 'sound/effects/phasein.ogg', 100, 1, extrarange = 3, falloff = 5)
-			for(var/mob/living/carbon/human/M in viewers(L, null))
+			for (var/mob/living/carbon/human/M in viewers(L, null))
 				M.flash_eyes(visual = 1)
 			var/chosen = pick(hostiles)
 			var/mob/living/simple_animal/hostile/H = new chosen
@@ -304,14 +304,14 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 	var/trueY = y_co + y_off - y_player_off + WORLD_Y_OFFSET[z_co]
 	trueX = Clamp(trueX, 1, world.maxx)
 	trueY = Clamp(trueY, 1, world.maxy)
-	if(telepad)
+	if (telepad)
 		var/turf/target = locate(trueX, trueY, z_co)
 		var/area/A=target.loc
-		if(A && A.jammed)
-			if(!telepad.amplifier || A.jammed==SUPER_JAMMED)
+		if (A && A.jammed)
+			if (!telepad.amplifier || A.jammed==SUPER_JAMMED)
 				src.visible_message("<span class='warning'>[bicon(src)] [src] turns on and the lights dim.  You can see a faint shape, but it loses focus and the telepad shuts off with a buzz.  Perhaps you need more signal strength?", "[bicon(src)]<span class='warning'>You hear something buzz.</span></span>")
 				return
-			if(prob(25))
+			if (prob(25))
 				qdel(telepad.amplifier)
 				telepad.amplifier = null
 				src.visible_message("[bicon(src)]<span class='notice'>You hear something shatter.</span>","[bicon(src)]<span class='notice'>You hear something shatter.</span>")
@@ -326,14 +326,14 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 		y.start()
 		var/turf/source = target
 		var/turf/dest = get_turf(telepad)
-		if(sending)
+		if (sending)
 			source = dest
 			dest = target
 		var/things=0
-		for(var/atom/movable/ROI in source)
-			if(ROI.anchored || things>=10)
+		for (var/atom/movable/ROI in source)
+			if (ROI.anchored || things>=10)
 				continue
-			if(is_type_in_list(ROI,telesci_warnings))
+			if (is_type_in_list(ROI,telesci_warnings))
 				message_admins("[user.real_name]/([formatPlayerPanel(user,user.ckey)]) teleported a [ROI] to [formatJumpTo(dest)] from [formatJumpTo(source)]")
 			log_admin("[user.real_name]/([formatPlayerPanel(user,user.ckey)]) teleported a [ROI] to [formatJumpTo(dest)] from [formatJumpTo(source)]")
 			do_teleport(ROI, dest, 0)
@@ -342,15 +342,15 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 	return
 
 /obj/machinery/computer/telescience/proc/teleport(mob/user)
-	if(x_co == null || y_co == null || z_co == null)
+	if (x_co == null || y_co == null || z_co == null)
 		to_chat(user, "<span class='caution'>Error: coordinates not set.</span>")
 		telefail()
 		return
-	if(cell && cell.charge<teleport_cell_usage)
+	if (cell && cell.charge<teleport_cell_usage)
 		to_chat(user, "<span class='caution'>Error: not enough energy.</span>")
 		return
 	cell.use(teleport_cell_usage)
-	if(teles_left > 0)
+	if (teles_left > 0)
 		teles_left -= 1
 		doteleport(user)
 	else
@@ -359,26 +359,26 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 	return
 
 /obj/machinery/computer/telescience/Topic(href, href_list)
-	if(href_list["close"])
-		if(usr.machine == src)
+	if (href_list["close"])
+		if (usr.machine == src)
 			usr.unset_machine()
 		return 1
 
-	if(..())
+	if (..())
 		return 1
 
-	if(href_list["setPOffsetX"])
+	if (href_list["setPOffsetX"])
 		var/new_x = input("Please input desired X offset.", name, x_player_off) as num
-		if(new_x < -10 || new_x > 10)
+		if (new_x < -10 || new_x > 10)
 			to_chat(usr, "<span class='caution'>Error: Invalid X offset (-10 to 10)</span>")
 		else
 			x_player_off = new_x
 		src.updateUsrDialog()
 		return 1
 
-	if(href_list["setPOffsetY"])
+	if (href_list["setPOffsetY"])
 		var/new_y = input("Please input desired X offset.", name, y_player_off) as num
-		if(new_y < -10 || new_y > 10)
+		if (new_y < -10 || new_y > 10)
 			to_chat(usr, "<span class='caution'>Error: Invalid Y offset (-10 to 10)</span>")
 		else
 			y_player_off = new_y
@@ -386,51 +386,51 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 		return 1
 
 
-	if(href_list["setx"])
+	if (href_list["setx"])
 		var/new_x = input("Please input desired X coordinate.", name, x_co) as num
 		var/x_validate=new_x+x_off
-		if(x_validate < -49 || x_validate > world.maxx+50)
+		if (x_validate < -49 || x_validate > world.maxx+50)
 			to_chat(usr, "<span class='caution'>Error: Invalid X coordinate.</span>")
 		else
 			x_co = new_x
 		src.updateUsrDialog()
 		return 1
 
-	if(href_list["sety"])
+	if (href_list["sety"])
 		var/new_y = input("Please input desired Y coordinate.", name, y_co) as num
 		var/y_validate=new_y+y_off
-		if(y_validate < -49 || y_validate > world.maxy+50)
+		if (y_validate < -49 || y_validate > world.maxy+50)
 			to_chat(usr, "<span class='caution'>Error: Invalid Y coordinate.</span>")
 		else
 			y_co = new_y
 		src.updateUsrDialog()
 		return 1
 
-	if(href_list["setz"])
+	if (href_list["setz"])
 		var/new_z = input("Please input desired Z coordinate.", name, z_co) as num
-		if(new_z == map.zCentcomm || new_z < 1 || new_z > map.zLevels.len)
+		if (new_z == map.zCentcomm || new_z < 1 || new_z > map.zLevels.len)
 			to_chat(usr, "<span class='caution'>Error: Invalid Z coordinate.</span>")
 		else
 			z_co = new_z
 		src.updateUsrDialog()
 		return 1
 
-	if(href_list["send"])
-		if(cell && cell.charge>=teleport_cell_usage)
+	if (href_list["send"])
+		if (cell && cell.charge>=teleport_cell_usage)
 			sending = 1
 			teleport(usr)
 		src.updateUsrDialog()
 		return 1
 
-	if(href_list["receive"])
-		if(cell && cell.charge>=teleport_cell_usage)
+	if (href_list["receive"])
+		if (cell && cell.charge>=teleport_cell_usage)
 			sending = 0
 			teleport(usr)
 		src.updateUsrDialog()
 		return 1
 
-	if(href_list["eject_cell"])
-		if(cell)
+	if (href_list["eject_cell"])
+		if (cell)
 			usr.put_in_hands(cell)
 			cell.add_fingerprint(usr)
 			cell.updateicon()
@@ -440,7 +440,7 @@ var/global/list/telesci_warnings = list(/obj/machinery/power/supermatter,
 		src.updateUsrDialog()
 		return 1
 
-	if(href_list["recal"])
+	if (href_list["recal"])
 		teles_left = rand(12,14)
 		x_off = rand(-10,10)
 		y_off = rand(-10,10)

@@ -135,9 +135,9 @@ var/list/misc_positions = list(
 	var/list/occupations = list()
 	var/list/all_jobs = typesof(/datum/job)
 
-	for(var/A in all_jobs)
+	for (var/A in all_jobs)
 		var/datum/job/job = new A()
-		if(!job)
+		if (!job)
 			continue
 		occupations += job
 
@@ -147,10 +147,10 @@ var/list/misc_positions = list(
 	var/list/jobs = get_job_datums()
 	var/list/titles = list()
 
-	for(var/datum/job/J in jobs)
-		if(!J)
+	for (var/datum/job/J in jobs)
+		if (!J)
 			continue
-		if(J.title == job)
+		if (J.title == job)
 			titles = J.alt_titles
 
 	return titles

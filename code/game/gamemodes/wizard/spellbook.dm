@@ -50,7 +50,7 @@
 
 	available_artifacts = typesof(/datum/spellbook_artifact) - /datum/spellbook_artifact
 
-	for(var/T in available_artifacts)
+	for (var/T in available_artifacts)
 		available_artifacts.Add(new T) //Create a new object with the path T
 		available_artifacts.Remove(T) //Remove the path from the list
 	//Result is a list full of /datum/spellbook_artifact objects
@@ -62,9 +62,9 @@
 	return available_artifacts
 
 /obj/item/weapon/spellbook/attackby(obj/item/O as obj, mob/user as mob)
-	if(istype(O, /obj/item/weapon/antag_spawner/contract))
+	if (istype(O, /obj/item/weapon/antag_spawner/contract))
 		var/obj/item/weapon/antag_spawner/contract/contract = O
-		if(contract.used)
+		if (contract.used)
 			to_chat(user, "The contract has been used, you can't get your points back now.")
 		else
 			to_chat(user, "You feed the contract back into the spellbook, refunding your points.")
@@ -78,10 +78,10 @@
 #define book_window_size "550x600"
 
 /obj/item/weapon/spellbook/attack_self(mob/user = usr)
-	if(!user)
+	if (!user)
 		return
 
-	if(user.is_blind())
+	if (user.is_blind())
 		to_chat(user, "<span class='info'>You open \the [src] and run your fingers across the parchment. Suddenly, the pages coalesce in your mind!</span>")
 
 	user.set_machine(src)
@@ -96,8 +96,8 @@
 	var/list/shown_spells = get_available_spells()
 
 	//Draw known spells first
-	for(var/spell/spell in user.spell_list)
-		if(shown_spells.Find(spell.type)) //User knows a spell from the book
+	for (var/spell/spell in user.spell_list)
+		if (shown_spells.Find(spell.type)) //User knows a spell from the book
 			shown_spells.Remove(spell.type)
 
 			//FORMATTING
@@ -114,32 +114,32 @@
 			//Get spell properties
 			var/list/properties = get_spell_properties(spell.spell_flags, user)
 			var/property_data
-			for(var/P in properties)
+			for (var/P in properties)
 				property_data += "[P] "
 
-			if(property_data)
+			if (property_data)
 				dat += "<span style=\"color:blue\">[property_data]</span><br>"
 
 			//Get the upgrades
 			var/upgrade_data = ""
 
-			for(var/upgrade in spell.spell_levels)
+			for (var/upgrade in spell.spell_levels)
 				var/lvl = spell.spell_levels[upgrade]
 				var/max = spell.level_max[upgrade]
 
 				//If maximum upgrade level is 0, skip
-				if(!max)
+				if (!max)
 					continue
 
 				upgrade_data += "<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade_info=1'>[upgrade]</a>: [lvl]/[max] (<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade=1'>upgrade</a>)  "
 
-			if(upgrade_data)
+			if (upgrade_data)
 				dat += "[upgrade_data]<br><br>"
 
 	dat += "<strong>UNKNOWN SPELLS:</strong><br><br>"
 
 	//Then draw the unknown spells
-	for(var/spell_path in shown_spells)
+	for (var/spell_path in shown_spells)
 		var/spell/abstract_spell = spell_path
 
 		//FORMATTING
@@ -158,17 +158,17 @@
 		var/list/properties = get_spell_properties(flags, user)
 		var/property_data
 
-		for(var/P in properties)
+		for (var/P in properties)
 			property_data += "[P] "
-		if(property_data)
+		if (property_data)
 			dat += "<span style=\"color:blue\">[property_data]</span><br>"
 
 		dat += "<br>"
 
 	dat += "<hr><strong>ARTIFACTS AND BUNDLES<sup>*</sup></strong><br><small>* Non-refundable</small><br><br>"
 
-	for(var/datum/spellbook_artifact/A in available_artifacts)
-		if(!A.can_buy())
+	for (var/datum/spellbook_artifact/A in available_artifacts)
+		if (!A.can_buy())
 			continue
 
 		var/artifact_name = A.name
@@ -190,51 +190,51 @@
 /obj/item/weapon/spellbook/proc/get_spell_properties(flags, mob/user)
 	var/list/properties = list()
 
-	if(flags & NEEDSCLOTHES)
+	if (flags & NEEDSCLOTHES)
 		var/new_prop = "Requires wizard robes to cast."
 
 		//If user has the robeless spell, strike the text out
-		if(user)
+		if (user)
 			var/is_robeless = locate(/spell/noclothes) in user.spell_list
-			if(is_robeless)
+			if (is_robeless)
 				new_prop = "<s>[new_prop]</s>"
 
 		properties.Add(new_prop)
 
-	if(flags & STATALLOWED)
+	if (flags & STATALLOWED)
 		properties.Add("Can be cast while unconscious.")
 
 	return properties
 
 /obj/item/weapon/spellbook/proc/get_spell_cooldown_string(charges, charge_type)
-	if(charges == 0)
+	if (charges == 0)
 		return
 
-	switch(charge_type)
-		if(Sp_CHARGES)
+	switch (charge_type)
+		if (Sp_CHARGES)
 			return " - [charges] charge\s"
-		if(Sp_RECHARGE)
+		if (Sp_RECHARGE)
 			return " - cooldown: [(charges/10)]s"
 
 /obj/item/weapon/spellbook/proc/get_spell_price(spell/spell_type)
-	if(ispath(spell_type, /spell))
+	if (ispath(spell_type, /spell))
 		return initial(spell_type.price)
-	else if(istype(spell_type))
+	else if (istype(spell_type))
 		return spell_type.price
 	else
 		return 0
 
 /obj/item/weapon/spellbook/proc/use(amount, no_refunds = 0)
-	if(uses >= amount)
+	if (uses >= amount)
 		uses -= amount
-		if(no_refunds)
+		if (no_refunds)
 			max_uses -= amount
 
 		return 1
 
 
 /obj/item/weapon/spellbook/proc/refund(mob/user)
-	if(!istype(get_area(user), /area/wizard_station))
+	if (!istype(get_area(user), /area/wizard_station))
 		to_chat(user, "<span class='notice'>No refunds once you leave your den.</span>")
 		return
 
@@ -243,32 +243,32 @@
 	to_chat(user, "All spells have been removed. You may now memorize a new set of spells.")
 
 /obj/item/weapon/spellbook/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 
 	var/mob/living/L = usr
-	if(!istype(L))
+	if (!istype(L))
 		return
 
-	if(L.mind.special_role == "apprentice")
+	if (L.mind.special_role == "apprentice")
 		to_chat(L, "If you got caught sneaking a peak from your teacher's spellbook, you'd likely be expelled from the Wizard Academy. Better not.")
 		return
 
-	if(href_list["refund"])
+	if (href_list["refund"])
 		refund(usr)
 
 		attack_self(usr)
 
-	if(href_list["buy"])
+	if (href_list["buy"])
 		var/buy_type = text2path(href_list["spell"])
 
-		if(ispath(buy_type, /spell)) //Passed a spell typepath
-			if(locate(buy_type) in usr.spell_list)
+		if (ispath(buy_type, /spell)) //Passed a spell typepath
+			if (locate(buy_type) in usr.spell_list)
 				to_chat(usr, "<span class='notice'>You already know that spell. Perhaps you'd like to upgrade it instead?</span>")
 
-			else if(buy_type in get_available_spells())
+			else if (buy_type in get_available_spells())
 				var/spell/S = buy_type
-				if(use(initial(S.price)))
+				if (use(initial(S.price)))
 					var/spell/added = new buy_type
 					add_spell(added, L)
 					to_chat(usr, "<span class='info'>You have learned [added.name].</span>")
@@ -277,33 +277,33 @@
 		else //Passed an artifact reference
 			var/datum/spellbook_artifact/SA = locate(href_list["spell"])
 
-			if(istype(SA) && (SA in get_available_artifacts()))
-				if(SA.can_buy() && use(SA.price, no_refunds = 1))
+			if (istype(SA) && (SA in get_available_artifacts()))
+				if (SA.can_buy() && use(SA.price, no_refunds = 1))
 					SA.purchased(usr)
 					feedback_add_details("wizard_spell_learned", SA.abbreviation)
 
 		attack_self(usr)
 
-	if(href_list["upgrade"])
+	if (href_list["upgrade"])
 		var/upgrade_type = href_list["upgrade_type"]
 		var/spell/spell = locate(href_list["spell"])
 
-		if(istype(spell) && spell.can_improve(upgrade_type))
-			if(use(Sp_UPGRADE_PRICE))
+		if (istype(spell) && spell.can_improve(upgrade_type))
+			if (use(Sp_UPGRADE_PRICE))
 				var/temp = spell.apply_upgrade(upgrade_type)
 
-				if(temp)
+				if (temp)
 					to_chat(usr, "<span class='info'>[temp]</span>")
 
 		attack_self(usr)
 
-	if(href_list["upgrade_info"])
+	if (href_list["upgrade_info"])
 		var/upgrade_type = href_list["upgrade_type"]
 		var/spell/spell = locate(href_list["spell"])
 
-		if(istype(spell))
+		if (istype(spell))
 			var/info = spell.get_upgrade_info(upgrade_type, spell.spell_levels[upgrade_type] + 1)
-			if(info)
+			if (info)
 				to_chat(usr, "<span class='info'>[info]</span>")
 			else
 				to_chat(usr, "<span class='notice'>\The [src] doesn't contain any information about this.</span>")
@@ -314,8 +314,8 @@
 
 //Single Use Spellbooks//
 /obj/item/weapon/spellbook/proc/add_spell(var/spell/spell_to_add,var/mob/user)
-	if(user.mind)
-		if(!user.mind.wizard_spells)
+	if (user.mind)
+		if (!user.mind.wizard_spells)
 			user.mind.wizard_spells = list()
 		user.mind.wizard_spells += spell_to_add
 	user.add_spell(spell_to_add)
@@ -335,15 +335,15 @@
 
 /obj/item/weapon/spellbook/oneuse/attack_self(mob/user as mob)
 	var/spell/S = new spell(user)
-	for(var/spell/knownspell in user.spell_list)
-		if(knownspell.type == S.type)
-			if(user.mind)
-				if(user.mind.special_role == "apprentice" || user.mind.special_role == "Wizard")
+	for (var/spell/knownspell in user.spell_list)
+		if (knownspell.type == S.type)
+			if (user.mind)
+				if (user.mind.special_role == "apprentice" || user.mind.special_role == "Wizard")
 					to_chat(user, "<span class='notice'>You're already far more versed in this spell than this flimsy how-to book can provide.</span>")
 				else
 					to_chat(user, "<span class='notice'>You've already read this one.</span>")
 			return
-	if(used)
+	if (used)
 		recoil(user)
 	else
 		user.add_spell(S)
@@ -381,7 +381,7 @@
 /obj/item/weapon/spellbook/oneuse/smoke/recoil(mob/living/user as mob)
 	..()
 	to_chat(user, "<span class='caution'>Your stomach rumbles...</span>")
-	if(user.nutrition)
+	if (user.nutrition)
 		user.nutrition = max(user.nutrition - 200,0)
 
 /obj/item/weapon/spellbook/oneuse/blind
@@ -410,22 +410,22 @@
 
 /obj/item/weapon/spellbook/oneuse/mindswap/recoil(mob/user as mob)
 	..()
-	if(stored_swap in dead_mob_list)
+	if (stored_swap in dead_mob_list)
 		stored_swap = null
-	if(!stored_swap)
+	if (!stored_swap)
 		stored_swap = user
 		to_chat(user, "<span class='warning'>For a moment you feel like you don't even know who you are anymore.</span>")
 		return
-	if(stored_swap == user)
+	if (stored_swap == user)
 		to_chat(user, "<span class='notice'>You stare at the book some more, but there doesn't seem to be anything else to learn...</span>")
 		return
 
-	if(user.mind.special_verbs.len)
-		for(var/V in user.mind.special_verbs)
+	if (user.mind.special_verbs.len)
+		for (var/V in user.mind.special_verbs)
 			user.verbs -= V
 
-	if(stored_swap.mind.special_verbs.len)
-		for(var/V in stored_swap.mind.special_verbs)
+	if (stored_swap.mind.special_verbs.len)
+		for (var/V in stored_swap.mind.special_verbs)
 			stored_swap.verbs -= V
 
 	var/mob/dead/observer/ghost = stored_swap.ghostize(0)
@@ -434,16 +434,16 @@
 	user.mind.transfer_to(stored_swap)
 	stored_swap.spell_list = user.spell_list
 
-	if(stored_swap.mind.special_verbs.len)
-		for(var/V in user.mind.special_verbs)
+	if (stored_swap.mind.special_verbs.len)
+		for (var/V in user.mind.special_verbs)
 			user.verbs += V
 
 	ghost.mind.transfer_to(user)
 	user.key = ghost.key
 	user.spell_list = ghost.spell_list
 
-	if(user.mind.special_verbs.len)
-		for(var/V in user.mind.special_verbs)
+	if (user.mind.special_verbs.len)
+		for (var/V in user.mind.special_verbs)
 			user.verbs += V
 
 	to_chat(stored_swap, "<span class='warning'>You're suddenly somewhere else... and someone else?!</span>")
@@ -482,7 +482,7 @@
 	desc = "This book is more horse than your mind has room for."
 
 /obj/item/weapon/spellbook/oneuse/horsemask/recoil(mob/living/carbon/user as mob)
-	if(istype(user, /mob/living/carbon/human))
+	if (istype(user, /mob/living/carbon/human))
 		to_chat(user, "<font size='15' color='red'><b>HOR-SIE HAS RISEN</b></font>")
 		var/obj/item/clothing/mask/horsehead/magichead = new /obj/item/clothing/mask/horsehead
 		magichead.canremove = 0		//curses!
@@ -511,7 +511,7 @@
 	desc = "This book is comedy gold!"
 
 /obj/item/weapon/spellbook/oneuse/clown/recoil(mob/living/carbon/user as mob)
-	if(istype(user, /mob/living/carbon/human))
+	if (istype(user, /mob/living/carbon/human))
 		to_chat(user, "<span class ='warning'>You suddenly feel funny!</span>")
 		var/obj/item/clothing/mask/gas/clown_hat/magicclown = new /obj/item/clothing/mask/gas/clown_hat/stickymagic
 		user.flash_eyes(visual = 1)
@@ -529,7 +529,7 @@
 	desc = "This book is entirely in french."
 
 /obj/item/weapon/spellbook/oneuse/mime/recoil(mob/living/carbon/user as mob)
-	if(istype(user, /mob/living/carbon/human))
+	if (istype(user, /mob/living/carbon/human))
 		to_chat(user, "<span class ='warning'>You suddenly feel very quiet.</span>")
 		var/obj/item/clothing/mask/gas/mime/magicmime = new /obj/item/clothing/mask/gas/mime/stickymagic
 		user.flash_eyes(visual = 1)
@@ -544,7 +544,7 @@
 	desc = "This book will knock you off your feet."
 
 /obj/item/weapon/spellbook/oneuse/shoesnatch/recoil(mob/living/carbon/user as mob)
-	if(istype(user, /mob/living/carbon/human))
+	if (istype(user, /mob/living/carbon/human))
 		var/mob/living/carbon/human/victim = user
 		to_chat(user, "<span class ='warning'>Your feet feel funny!</span>")
 		var/obj/item/clothing/shoes/clown_shoes/magicshoes = new /obj/item/clothing/shoes/clown_shoes/stickymagic
@@ -561,7 +561,7 @@
 	desc = "This book is full of helpful fashion tips for apprentice wizards."
 
 /obj/item/weapon/spellbook/oneuse/robesummon/recoil(mob/living/carbon/user as mob)
-	if(istype(user, /mob/living/carbon/human))
+	if (istype(user, /mob/living/carbon/human))
 		var/mob/living/carbon/human/victim = user
 		to_chat(user, "<span class ='warning'>You suddenly feel very restrained!</span>")
 		var/obj/item/clothing/suit/straight_jacket/magicjacket = new/obj/item/clothing/suit/straight_jacket
@@ -577,7 +577,7 @@
 	desc = "This book was written with luddites in mind."
 
 /obj/item/weapon/spellbook/oneuse/disabletech/recoil(mob/living/carbon/user as mob)
-	if(istype(user, /mob/living/carbon/human))
+	if (istype(user, /mob/living/carbon/human))
 		user.contract_disease(new /datum/disease/robotic_transformation(0), 1)
 		to_chat(user, "<span class ='warning'>You feel a closer connection to technology...</span>")
 		qdel(src)
@@ -589,7 +589,7 @@
 	desc = "This book is a perfect prop for LARPers."
 
 /obj/item/weapon/spellbook/oneuse/magicmissle/recoil(mob/living/carbon/user as mob)
-	if(istype(user, /mob/living/carbon/human))
+	if (istype(user, /mob/living/carbon/human))
 		user.adjustBrainLoss(100)
 		to_chat(user, "<span class = 'warning'>You can't cast this spell when it isn't your turn! 	You feel very stupid.</span>")
 		qdel(src)
@@ -602,7 +602,7 @@
 	desc = "All the pages in this book are ripped."
 
 /obj/item/weapon/spellbook/oneuse/mutate/recoil(mob/living/carbon/user as mob)
-	if(istype(user, /mob/living/carbon/human))
+	if (istype(user, /mob/living/carbon/human))
 		user.dna.SetSEState(HEADACHEBLOCK,1)
 		genemutcheck(user,HEADACHEBLOCK,null,MUTCHK_FORCED)
 		user.update_mutations()
@@ -616,7 +616,7 @@
 	desc = "This book makes you feel dizzy."
 
 /obj/item/weapon/spellbook/oneuse/subjugate/recoil(mob/living/carbon/user as mob)
-	if(istype(user, /mob/living/carbon/human))
+	if (istype(user, /mob/living/carbon/human))
 		user.reagents.add_reagent(RUM, 200)
 		to_chat(user, "<span class = 'warning'>You feel very drunk all of a sudden.</span>")
 		qdel(src)
@@ -628,12 +628,12 @@
 	desc = "This book will really take you places."
 
 /obj/item/weapon/spellbook/oneuse/teleport/recoil(mob/living/carbon/user as mob)
-	if(istype(user, /mob/living/carbon/human))
+	if (istype(user, /mob/living/carbon/human))
 		var/mob/living/carbon/human/h = user
 		user.flash_eyes(visual = 1)
-		for(var/datum/organ/external/l_leg/E in h.organs)
+		for (var/datum/organ/external/l_leg/E in h.organs)
 			E.droplimb(1)
-		for(var/datum/organ/external/r_leg/E in h.organs)
+		for (var/datum/organ/external/r_leg/E in h.organs)
 			E.droplimb(1)
 		to_chat(user, "<span class = 'warning'>Your legs fall off!</span>")
 		qdel(src)
@@ -652,9 +652,9 @@
 	icon_state = "bookbutt"
 
 /obj/item/weapon/spellbook/oneuse/buttbot/recoil(mob/living/carbon/user as mob)
-	if(istype(user, /mob/living/carbon/human))
+	if (istype(user, /mob/living/carbon/human))
 		var/mob/living/carbon/C = user
-		if(C.op_stage.butt != 4)
+		if (C.op_stage.butt != 4)
 			var/obj/item/clothing/head/butt/B = new(C.loc)
 			B.transfer_buttdentity(C)
 			C.op_stage.butt = 4
@@ -670,7 +670,7 @@
 	icon_state = "booklightning"
 
 /obj/item/weapon/spellbook/oneuse/lightning/recoil(mob/living/carbon/user as mob)
-	if(istype(user, /mob/living/carbon/human))
+	if (istype(user, /mob/living/carbon/human))
 		user.apply_damage(25, BURN, LIMB_LEFT_HAND)
 		user.apply_damage(25, BURN, LIMB_RIGHT_HAND)
 		to_chat(user, "<span class = 'warning'>The book heats up and burns your hands!</span>")
@@ -683,7 +683,7 @@
 	desc = "A rare, vintage copy of 'WizzWizz's Magical Adventures."
 
 /obj/item/weapon/spellbook/oneuse/timestop/recoil(mob/living/carbon/user as mob)
-	if(istype(user, /mob/living/carbon/human))
+	if (istype(user, /mob/living/carbon/human))
 		user.stunned = 5
 		user.flash_eyes(visual = 1)
 		to_chat(user, "<span class = 'warning'>You have been turned into a statue!</span>")
@@ -709,7 +709,7 @@
 	var/list/possible_books = typesof(/obj/item/weapon/spellbook/oneuse)
 	possible_books -= /obj/item/weapon/spellbook/oneuse
 	possible_books -= /obj/item/weapon/spellbook/oneuse/charge
-	for(var/i =1; i <= 7; i++)
+	for (var/i =1; i <= 7; i++)
 		var/randombook = pick(possible_books)
 		var/book = new randombook(src)
 		src.contents += book

@@ -97,7 +97,7 @@
 		return
 
 	OnLife()
-		if(!istype(owner:mutantrace, /datum/mutantrace/zombie))
+		if (!istype(owner:mutantrace, /datum/mutantrace/zombie))
 			holder.RemoveEffect(id)
 		return
 
@@ -124,7 +124,7 @@
 		return
 
 	OnLife()
-		if(!istype(owner:mutantrace, /datum/mutantrace/monkey))
+		if (!istype(owner:mutantrace, /datum/mutantrace/monkey))
 			holder.RemoveEffect(id)
 		return
 
@@ -153,7 +153,7 @@
 		return
 
 	OnLife()
-		if(!istype(owner:mutantrace, /datum/mutantrace/premature_clone))
+		if (!istype(owner:mutantrace, /datum/mutantrace/premature_clone))
 			holder.RemoveEffect(id)
 
 		if (outOfPod)

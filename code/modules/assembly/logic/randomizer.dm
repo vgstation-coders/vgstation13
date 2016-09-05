@@ -26,7 +26,7 @@
 		VALUE_UPPER_LIMIT = "output_number;"+VT_NUMBER)
 
 /obj/item/device/assembly/randomizer/activate() //Simple stuff - when pulsed, emit a pulse. The assembly frame will handle the next part
-	if(!..())
+	if (!..())
 		return 0
 
 	last_value = rand(0, output_number)
@@ -35,25 +35,25 @@
 /obj/item/device/assembly/randomizer/interact(mob/user)
 	var/new_output_num = input(user, "How many devices should \the [src] randomly select?", "[src]", output_number) as null|num
 
-	if(!Adjacent(user) || user.isUnconscious()) //sanity 101
+	if (!Adjacent(user) || user.isUnconscious()) //sanity 101
 		return
 
 	output_number = Clamp(new_output_num, 1, 512)
 	to_chat(user, "<span class='info'>Number of outputs set to [output_number].</span>")
 
 /obj/item/device/assembly/randomizer/send_pulses_to_list(var/list/L) //The assembly frame will give us a list of devices to forward a pulse to.
-	if(!L || !L.len)
+	if (!L || !L.len)
 		return
 
 	var/list/AS = L.Copy() //Copy the list, since we're going to remove stuff from it
 
-	for(var/i = 0 to output_number-1)
+	for (var/i = 0 to output_number-1)
 		var/obj/item/device/assembly/A = pick(AS) //Pick a random assembly, remove it from the list and pulse it
 
 		AS.Remove(A)
 		A.pulsed()
 
-		if(!AS.len)
+		if (!AS.len)
 			break
 
 #undef VALUE_GENERATED_NUMBER

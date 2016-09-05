@@ -14,7 +14,7 @@
 	var/det_time = 50
 
 /obj/item/weapon/grenade/proc/clown_check(var/mob/living/user)
-	if((M_CLUMSY in user.mutations) && prob(50))
+	if ((M_CLUMSY in user.mutations) && prob(50))
 		to_chat(user, "<span class='warning'>Huh? How does this thing work?</span>")
 
 		activate(user)
@@ -30,7 +30,7 @@
 		return ..() // Trying to put it in a full container
 	if (istype(target, /obj/item/weapon/gun/grenadelauncher))
 		return ..()
-	if((user.get_active_hand() == src) && (!active) && (clown_check(user)) && target.loc != src.loc)
+	if ((user.get_active_hand() == src) && (!active) && (clown_check(user)) && target.loc != src.loc)
 		to_chat(user, "<span class='warning'>You prime the [name]! [det_time/10] seconds!</span>")
 		active = 1
 		icon_state = initial(icon_state) + "_active"
@@ -47,30 +47,30 @@
 
 /obj/item/weapon/grenade/examine(mob/user)
 	..()
-	if(det_time > 1)
+	if (det_time > 1)
 		to_chat(user, "<span class='info'>The timer is set to [det_time/10] seconds.</span>")
 		return
 	to_chat(user, "<span class='warning'>\The [src] is set for instant detonation.</span>")
 
 
 /obj/item/weapon/grenade/attack_self(mob/user as mob)
-	if(!active)
-		if(clown_check(user))
+	if (!active)
+		if (clown_check(user))
 			to_chat(user, "<span class='attack'>You prime \the [name]! [det_time/10] seconds!</span>")
 
 			activate(user)
 			add_fingerprint(user)
-			if(iscarbon(user))
+			if (iscarbon(user))
 				var/mob/living/carbon/C = user
 				C.throw_mode_on()
 	return
 
 
 /obj/item/weapon/grenade/proc/activate(mob/user as mob)
-	if(active)
+	if (active)
 		return
 
-	if(user)
+	if (user)
 		log_attack("<font color='red'>[user.name] ([user.ckey]) primed \a [src]</font>")
 		log_admin("ATTACK: [user] ([user.ckey]) primed \a [src]")
 		message_admins("ATTACK: [user] ([user.ckey]) primed \a [src]")
@@ -87,18 +87,18 @@
 /obj/item/weapon/grenade/proc/prime()
 //	playsound(loc, 'sound/items/Welder2.ogg', 25, 1)
 	var/turf/T = get_turf(src)
-	if(T)
+	if (T)
 		T.hotspot_expose(700,125,surfaces=istype(loc,/turf))
 
 /obj/item/weapon/grenade/proc/update_mob()
-	if(ismob(loc))
+	if (ismob(loc))
 		var/mob/M = loc
 		M.drop_from_inventory(src)
 
 
 /obj/item/weapon/grenade/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(isscrewdriver(W))
-		switch(det_time)
+	if (isscrewdriver(W))
+		switch (det_time)
 			if ("1")
 				det_time = 10
 				to_chat(user, "<span class='notice'>You set the [name] for 1 second detonation time.</span>")

@@ -14,7 +14,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/Destroy()
 	..()
-	if(poisonsacs)
+	if (poisonsacs)
 		qdel(poisonsacs)
 		poisonsacs = null
 
@@ -146,14 +146,14 @@
 		shapeshift(/obj/item/weapon/storage/bible) //Turn into a bible
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic/spook(mob/dead/observer/ghost)
-	if(..(ghost, TRUE))
+	if (..(ghost, TRUE))
 		visible_message("<span class='info'>\The [src] transforms into a pile of bones!</span>")
 		shapeshift(/obj/effect/decal/remains/human) //Turn into human remains
 
 var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable)
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/mimic/proc/shapeshift(atom/atom_to_copy = null)
-	if(!atom_to_copy)
+	if (!atom_to_copy)
 		atom_to_copy = pick(valid_random_food_types)
 
 	src.appearance = initial(atom_to_copy.appearance) //This works!

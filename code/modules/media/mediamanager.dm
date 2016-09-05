@@ -68,8 +68,8 @@ function SetMusic(url, time, volume) {
 	</script>"}
 
 /proc/stop_all_media()
-	for(var/mob/M in mob_list)
-		if(M && M.client)
+	for (var/mob/M in mob_list)
+		if (M && M.client)
 			M.stop_all_music()
 
 // Hook into the events we desire.
@@ -95,13 +95,13 @@ function SetMusic(url, time, volume) {
 		var/mob/M = args["mob"]
 		//if(istype(M, /mob/living/carbon/human)||istype(M, /mob/dead/observer))
 		//	testing("Received OnMobAreaChange for [M.type] [M] (M.client=[M.client==null?"null":"/client"]).")
-		if(M.client && M.client.media && !M.client.media.forced)
+		if (M.client && M.client.media && !M.client.media.forced)
 			M.update_music()
 
 
 /hook_handler/shuttlejukes
 	proc/OnEmergencyShuttleDeparture(var/list/args)
-		for(var/obj/machinery/media/jukebox/superjuke/shuttle/SJ in machines)
+		for (var/obj/machinery/media/jukebox/superjuke/shuttle/SJ in machines)
 			SJ.playing=1
 			SJ.update_music()
 			SJ.update_icon()
@@ -117,7 +117,7 @@ function SetMusic(url, time, volume) {
 /mob/proc/force_music(var/url,var/start,var/volume=1)
 	if (client && client.media)
 		client.media.forced=(url!="")
-		if(client.media.forced)
+		if (client.media.forced)
 			client.media.push_music(url,start,volume)
 		else
 			client.media.update_music()
@@ -151,10 +151,10 @@ to_chat(#define MP_DEBUG(x) owner, x)
 	New(var/mob/holder)
 		src.mob=holder
 		owner=src.mob.client
-		if(owner.prefs)
-			if(!isnull(owner.prefs.volume))
+		if (owner.prefs)
+			if (!isnull(owner.prefs.volume))
 				volume = owner.prefs.volume
-			if(owner.prefs.usewmp)
+			if (owner.prefs.usewmp)
 				playerstyle = PLAYER_OLD_HTML
 			else
 				playerstyle = PLAYER_HTML
@@ -167,9 +167,9 @@ to_chat(#define MP_DEBUG(x) owner, x)
 
 	// Tell the player to play something via JS.
 	proc/send_update()
-		if(!(owner.prefs))
+		if (!(owner.prefs))
 			return
-		if(!(owner.prefs.toggles & SOUND_STREAMING) && url != "")
+		if (!(owner.prefs.toggles & SOUND_STREAMING) && url != "")
 			return // Nope.
 		MP_DEBUG("<span class='good'>Sending update to VLC ([url])...</span>")
 		owner << output(list2params(list(url, (world.time - start_time) / 10, volume*source_volume)), "[window]:SetMusic")
@@ -194,12 +194,12 @@ to_chat(#define MP_DEBUG(x) owner, x)
 			return
 
 		var/area/A = get_area_master(mob)
-		if(!A)
+		if (!A)
 			//testing("[owner] in [mob.loc].  Aborting.")
 			stop_music()
 			return
 		var/obj/machinery/media/M = A.media_source // TODO: turn into a list, then only play the first one that's playing.
-		if(M && M.playing)
+		if (M && M.playing)
 			targetURL = M.media_url
 			targetStartTime = M.media_start_time
 			targetVolume = M.volume
@@ -216,12 +216,12 @@ to_chat(#define MP_DEBUG(x) owner, x)
 	set name = "Set Volume"
 	set category = "Preferences"
 	set desc = "Set jukebox volume"
-	if(!media || !istype(media))
+	if (!media || !istype(media))
 		to_chat(usr, "You have no media datum to change, if you're not in the lobby tell an admin.")
 		return
 	var/value = input("Choose your Jukebox volume.", "Jukebox volume", media.volume)
 	value = round(max(0, min(100, value)))
 	media.update_volume(value)
-	if(prefs)
+	if (prefs)
 		prefs.volume = value
 		prefs.save_preferences_sqlite(src, ckey)

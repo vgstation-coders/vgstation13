@@ -20,11 +20,11 @@
 /obj/item/weapon/dnainjector/New()
 	. = ..()
 
-	if(ticker)
+	if (ticker)
 		initialize()
 
 /obj/item/weapon/dnainjector/initialize()
-	if(datatype && block)
+	if (datatype && block)
 		buf=new
 		buf.dna=new
 		buf.types = datatype
@@ -37,52 +37,52 @@
 	return attack_hand(user)
 
 /obj/item/weapon/dnainjector/proc/GetRealBlock(var/selblock)
-	if(selblock==0)
+	if (selblock==0)
 		return block
 	else
 		return selblock
 
 /obj/item/weapon/dnainjector/proc/GetState(var/selblock=0)
 	var/real_block=GetRealBlock(selblock)
-	if(buf.types&DNA2_BUF_SE)
+	if (buf.types&DNA2_BUF_SE)
 		return buf.dna.GetSEState(real_block)
 	else
 		return buf.dna.GetUIState(real_block)
 
 /obj/item/weapon/dnainjector/proc/SetState(var/on, var/selblock=0)
 	var/real_block=GetRealBlock(selblock)
-	if(buf.types&DNA2_BUF_SE)
+	if (buf.types&DNA2_BUF_SE)
 		return buf.dna.SetSEState(real_block,on)
 	else
 		return buf.dna.SetUIState(real_block,on)
 
 /obj/item/weapon/dnainjector/proc/GetValue(var/selblock=0)
 	var/real_block=GetRealBlock(selblock)
-	if(buf.types&DNA2_BUF_SE)
+	if (buf.types&DNA2_BUF_SE)
 		return buf.dna.GetSEValue(real_block)
 	else
 		return buf.dna.GetUIValue(real_block)
 
 /obj/item/weapon/dnainjector/proc/SetValue(var/val,var/selblock=0)
 	var/real_block=GetRealBlock(selblock)
-	if(buf.types&DNA2_BUF_SE)
+	if (buf.types&DNA2_BUF_SE)
 		return buf.dna.SetSEValue(real_block,val)
 	else
 		return buf.dna.SetUIValue(real_block,val)
 
 /obj/item/weapon/dnainjector/proc/inject(mob/M as mob, mob/user as mob)
-	if(istype(M,/mob/living/carbon/human/manifested))
+	if (istype(M,/mob/living/carbon/human/manifested))
 		to_chat(M, "<span class='warning'> Apparently it didn't work.</span>")
-		if(M != user)
+		if (M != user)
 			to_chat(user, "<span class='warning'> Apparently it didn't work.</span>")
 	else
-		if(istype(M,/mob/living))
+		if (istype(M,/mob/living))
 			M.radiation += rand(5,20)
 
-		if(!(M_NOCLONE in M.mutations)) // prevents drained people from having their DNA changed
+		if (!(M_NOCLONE in M.mutations)) // prevents drained people from having their DNA changed
 			// UI in syringe.
-			if(buf.types & DNA2_BUF_UI)
-				if(!block) //isolated block?
+			if (buf.types & DNA2_BUF_UI)
+				if (!block) //isolated block?
 					M.UpdateAppearance(buf.dna.UI.Copy())
 					if (buf.types & DNA2_BUF_UE) //unique enzymes? yes
 						M.real_name = buf.dna.real_name
@@ -92,8 +92,8 @@
 					M.dna.SetUIValue(block,src.GetValue())
 					M.UpdateAppearance()
 					uses--
-			if(buf.types & DNA2_BUF_SE)
-				if(!block) //isolated block?
+			if (buf.types & DNA2_BUF_SE)
+				if (!block) //isolated block?
 					M.dna.SE = buf.dna.SE.Copy()
 					M.dna.UpdateSE()
 				else
@@ -103,8 +103,8 @@
 				//if(prob(5))
 					//trigger_side_effect(M)
 
-		if(buf.types & DNA2_BUF_SE)
-			if(block)// Isolated injector
+		if (buf.types & DNA2_BUF_SE)
+			if (block)// Isolated injector
 				if (GetState() && block == MONKEYBLOCK && istype(M, /mob/living/carbon/human))
 					message_admins("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] <span class='warning'>(MONKEY)</span>")
 					log_attack("[key_name_admin(user)] injected [key_name_admin(M)] with the Isolated [name] (MONKEY)")
@@ -122,9 +122,9 @@
 					log_game("[key_name_admin(user)] injected [key_name_admin(M)] with the [name]")
 
 	spawn(0)//this prevents the collapse of space-time continuum
-		if(user)
+		if (user)
 			user.drop_from_inventory(src)
-		if(!uses)
+		if (!uses)
 			qdel(src)
 	return uses
 
@@ -139,18 +139,18 @@
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [name] to inject [M.name] ([M.ckey])</font>")
 	log_attack("[user.name] ([user.ckey]) used the [name] to inject [M.name] ([M.ckey])")
 
-	if(!iscarbon(user))
+	if (!iscarbon(user))
 		M.LAssailant = null
 	else
 		M.LAssailant = user
 
-	if(inuse)
+	if (inuse)
 		return 0
 
 	user.visible_message("<span class='danger'>\The [user] is trying to inject \the [M] with \the [src]!</span>")
 
 	inuse = 1
-	if(!do_after(user, M, 5 SECONDS))
+	if (!do_after(user, M, 5 SECONDS))
 		inuse = 0 //If you've got a better idea on how to not repeat this twice I'd like to hear it
 		return
 	inuse = 0

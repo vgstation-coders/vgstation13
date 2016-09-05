@@ -55,82 +55,82 @@
 #define DIGSITE_WAR 6
 
 /proc/get_responsive_reagent(var/find_type)
-	switch(find_type)
-		if(ARCHAEO_BOWL)
+	switch (find_type)
+		if (ARCHAEO_BOWL)
 			return "mercury"
-		if(ARCHAEO_URN)
+		if (ARCHAEO_URN)
 			return "mercury"
-		if(ARCHAEO_CUTLERY)
+		if (ARCHAEO_CUTLERY)
 			return "mercury"
-		if(ARCHAEO_STATUETTE)
+		if (ARCHAEO_STATUETTE)
 			return "mercury"
-		if(ARCHAEO_INSTRUMENT)
+		if (ARCHAEO_INSTRUMENT)
 			return "mercury"
-		if(ARCHAEO_COIN)
+		if (ARCHAEO_COIN)
 			return "iron"
-		if(ARCHAEO_KNIFE)
+		if (ARCHAEO_KNIFE)
 			return "iron"
-		if(ARCHAEO_HANDCUFFS)
+		if (ARCHAEO_HANDCUFFS)
 			return "mercury"
-		if(ARCHAEO_BEARTRAP)
+		if (ARCHAEO_BEARTRAP)
 			return "mercury"
-		if(ARCHAEO_LIGHTER)
+		if (ARCHAEO_LIGHTER)
 			return "mercury"
-		if(ARCHAEO_BOX)
+		if (ARCHAEO_BOX)
 			return "mercury"
-		if(ARCHAEO_GASTANK)
+		if (ARCHAEO_GASTANK)
 			return "mercury"
-		if(ARCHAEO_TOOL)
+		if (ARCHAEO_TOOL)
 			return "iron"
-		if(ARCHAEO_METAL)
+		if (ARCHAEO_METAL)
 			return "iron"
-		if(ARCHAEO_PEN)
+		if (ARCHAEO_PEN)
 			return "mercury"
-		if(ARCHAEO_CRYSTAL)
+		if (ARCHAEO_CRYSTAL)
 			return "nitrogen"
-		if(ARCHAEO_CULTBLADE)
+		if (ARCHAEO_CULTBLADE)
 			return "potassium"
-		if(ARCHAEO_TELEBEACON)
+		if (ARCHAEO_TELEBEACON)
 			return "potassium"
-		if(ARCHAEO_CLAYMORE)
+		if (ARCHAEO_CLAYMORE)
 			return "iron"
-		if(ARCHAEO_CULTROBES)
+		if (ARCHAEO_CULTROBES)
 			return "potassium"
-		if(ARCHAEO_SOULSTONE)
+		if (ARCHAEO_SOULSTONE)
 			return "nitrogen"
-		if(ARCHAEO_SHARD)
+		if (ARCHAEO_SHARD)
 			return "nitrogen"
-		if(ARCHAEO_RODS)
+		if (ARCHAEO_RODS)
 			return "iron"
-		if(ARCHAEO_STOCKPARTS)
+		if (ARCHAEO_STOCKPARTS)
 			return "potassium"
-		if(ARCHAEO_KATANA)
+		if (ARCHAEO_KATANA)
 			return "iron"
-		if(ARCHAEO_LASER)
+		if (ARCHAEO_LASER)
 			return "iron"
-		if(ARCHAEO_GUN)
+		if (ARCHAEO_GUN)
 			return "iron"
-		if(ARCHAEO_UNKNOWN)
+		if (ARCHAEO_UNKNOWN)
 			return "mercury"
-		if(ARCHAEO_FOSSIL)
+		if (ARCHAEO_FOSSIL)
 			return "carbon"
-		if(ARCHAEO_SHELL)
+		if (ARCHAEO_SHELL)
 			return "carbon"
-		if(ARCHAEO_PLANT)
+		if (ARCHAEO_PLANT)
 			return "carbon"
-		if(ARCHAEO_REMAINS_HUMANOID)
+		if (ARCHAEO_REMAINS_HUMANOID)
 			return "carbon"
-		if(ARCHAEO_REMAINS_ROBOT)
+		if (ARCHAEO_REMAINS_ROBOT)
 			return "carbon"
-		if(ARCHAEO_REMAINS_XENO)
+		if (ARCHAEO_REMAINS_XENO)
 			return "carbon"
-		if(ARCHAEO_MASK)
+		if (ARCHAEO_MASK)
 			return "mercury"
-		if(ARCHAEO_DICE)
+		if (ARCHAEO_DICE)
 			return "mercury"
-		if(ARCHAEO_SPACESUIT)
+		if (ARCHAEO_SPACESUIT)
 			return "potassium"
-		if(ARCHAEO_LANCE)
+		if (ARCHAEO_LANCE)
 			return "iron"
 	return "plasma"
 
@@ -142,22 +142,22 @@
 
 
 	var/find_type = 0
-	switch(digsite)
-		if(DIGSITE_GARDEN)
+	switch (digsite)
+		if (DIGSITE_GARDEN)
 			find_type = pick(\
 			100;ARCHAEO_PLANT,\
 			25;ARCHAEO_SHELL,\
 			25;ARCHAEO_FOSSIL,\
 			5;ARCHAEO_BEARTRAP\
 			)
-		if(DIGSITE_ANIMAL)
+		if (DIGSITE_ANIMAL)
 			find_type = pick(\
 			100;ARCHAEO_FOSSIL,\
 			50;ARCHAEO_SHELL,\
 			50;ARCHAEO_PLANT,\
 			25;ARCHAEO_BEARTRAP\
 			)
-		if(DIGSITE_HOUSE)
+		if (DIGSITE_HOUSE)
 			find_type = pick(\
 			100;ARCHAEO_BOWL,\
 			100;ARCHAEO_URN,\
@@ -174,7 +174,7 @@
 			50;ARCHAEO_RODS,\
 			25;ARCHAEO_METAL\
 			)
-		if(DIGSITE_TECHNICAL)
+		if (DIGSITE_TECHNICAL)
 			find_type = pick(\
 			100;ARCHAEO_METAL,\
 			100;ARCHAEO_GASTANK,\
@@ -188,7 +188,7 @@
 			50;ARCHAEO_BEARTRAP,\
 			25;ARCHAEO_SPACESUIT,\
 			)
-		if(DIGSITE_TEMPLE)
+		if (DIGSITE_TEMPLE)
 			find_type = pick(\
 			200;ARCHAEO_CULTROBES,\
 			100;ARCHAEO_URN,\
@@ -207,7 +207,7 @@
 			10;ARCHAEO_RODS,\
 			10;ARCHAEO_METAL\
 			)
-		if(DIGSITE_WAR)
+		if (DIGSITE_WAR)
 			find_type = pick(\
 			100;ARCHAEO_GUN,\
 			100;ARCHAEO_KNIFE,\

@@ -8,14 +8,14 @@
 	borer=B
 
 /datum/research_tree/borer/get_avail_unlocks()
-	switch(borer.limb_to_mode(borer.hostlimb))
-		if(BORER_MODE_ATTACHED_HEAD) // 2
+	switch (borer.limb_to_mode(borer.hostlimb))
+		if (BORER_MODE_ATTACHED_HEAD) // 2
 			return borer.borer_avail_unlocks_head
-		if(BORER_MODE_ATTACHED_CHEST) // 3
+		if (BORER_MODE_ATTACHED_CHEST) // 3
 			return borer.borer_avail_unlocks_chest
-		if(BORER_MODE_ATTACHED_ARM) // 4
+		if (BORER_MODE_ATTACHED_ARM) // 4
 			return borer.borer_avail_unlocks_arm
-		if(BORER_MODE_ATTACHED_LEG) // 5
+		if (BORER_MODE_ATTACHED_LEG) // 5
 			return borer.borer_avail_unlocks_leg
 
 /datum/unlockable/borer
@@ -257,11 +257,11 @@
 
 /datum/unlockable/borer/head/gene_unlock/unlock_action()
 	// This is inefficient, but OK because it doesn't happen often.
-	for(var/block=1;block<DNA_SE_LENGTH;block++)
-		if(assigned_blocks[block] == gene_name)
+	for (var/block=1;block<DNA_SE_LENGTH;block++)
+		if (assigned_blocks[block] == gene_name)
 			testing("  Found [assigned_blocks[block]] ([block])")
 			var/mob/living/carbon/host=borer.host
-			if(host && host.dna)
+			if (host && host.dna)
 				host.dna.SetSEState(block,activate)
 				domutcheck(host,null,MUTCHK_FORCED)
 				host.update_mutations()
@@ -271,11 +271,11 @@
 
 /datum/unlockable/borer/head/gene_unlock/relock_action()
 	// This is inefficient, but OK because it doesn't happen often.
-	for(var/block=1;block<DNA_SE_LENGTH;block++)
-		if(assigned_blocks[block] == gene_name)
+	for (var/block=1;block<DNA_SE_LENGTH;block++)
+		if (assigned_blocks[block] == gene_name)
 			testing("  Found [assigned_blocks[block]] ([block])")
 			var/mob/living/carbon/host=borer.host
-			if(host && host.dna)
+			if (host && host.dna)
 				host.dna.SetSEState(block,!activate)
 				domutcheck(host,null,MUTCHK_FORCED)
 				host.update_mutations()
@@ -317,11 +317,11 @@
 
 /datum/unlockable/borer/chest/gene_unlock/unlock_action()
 	// This is inefficient, but OK because it doesn't happen often.
-	for(var/block=1;block<DNA_SE_LENGTH;block++)
-		if(assigned_blocks[block] == gene_name)
+	for (var/block=1;block<DNA_SE_LENGTH;block++)
+		if (assigned_blocks[block] == gene_name)
 			testing("  Found [assigned_blocks[block]] ([block])")
 			var/mob/living/carbon/host=borer.host
-			if(host && host.dna)
+			if (host && host.dna)
 				host.dna.SetSEState(block,activate)
 				domutcheck(host,null,MUTCHK_FORCED)
 				host.update_mutations()
@@ -331,11 +331,11 @@
 
 /datum/unlockable/borer/chest/gene_unlock/relock_action()
 	// This is inefficient, but OK because it doesn't happen often.
-	for(var/block=1;block<DNA_SE_LENGTH;block++)
-		if(assigned_blocks[block] == gene_name)
+	for (var/block=1;block<DNA_SE_LENGTH;block++)
+		if (assigned_blocks[block] == gene_name)
 			testing("  Found [assigned_blocks[block]] ([block])")
 			var/mob/living/carbon/host=borer.host
-			if(host && host.dna)
+			if (host && host.dna)
 				host.dna.SetSEState(block,!activate)
 				domutcheck(host,null,MUTCHK_FORCED)
 				host.update_mutations()
@@ -368,11 +368,11 @@
 
 /datum/unlockable/borer/arm/gene_unlock/unlock_action()
 	// This is inefficient, but OK because it doesn't happen often.
-	for(var/block=1;block<DNA_SE_LENGTH;block++)
-		if(assigned_blocks[block] == gene_name)
+	for (var/block=1;block<DNA_SE_LENGTH;block++)
+		if (assigned_blocks[block] == gene_name)
 			testing("  Found [assigned_blocks[block]] ([block])")
 			var/mob/living/carbon/host=borer.host
-			if(host && host.dna)
+			if (host && host.dna)
 				host.dna.SetSEState(block,activate)
 				domutcheck(host,null,MUTCHK_FORCED)
 				host.update_mutations()
@@ -382,11 +382,11 @@
 
 /datum/unlockable/borer/arm/gene_unlock/relock_action()
 	// This is inefficient, but OK because it doesn't happen often.
-	for(var/block=1;block<DNA_SE_LENGTH;block++)
-		if(assigned_blocks[block] == gene_name)
+	for (var/block=1;block<DNA_SE_LENGTH;block++)
+		if (assigned_blocks[block] == gene_name)
 			testing("  Found [assigned_blocks[block]] ([block])")
 			var/mob/living/carbon/host=borer.host
-			if(host && host.dna)
+			if (host && host.dna)
 				host.dna.SetSEState(block,!activate)
 				domutcheck(host,null,MUTCHK_FORCED)
 				host.update_mutations()
@@ -428,11 +428,11 @@
 
 /datum/unlockable/borer/leg/gene_unlock/unlock_action()
 	// This is inefficient, but OK because it doesn't happen often.
-	for(var/block=1;block<DNA_SE_LENGTH;block++)
-		if(assigned_blocks[block] == gene_name)
+	for (var/block=1;block<DNA_SE_LENGTH;block++)
+		if (assigned_blocks[block] == gene_name)
 			testing("  Found [assigned_blocks[block]] ([block])")
 			var/mob/living/carbon/host=borer.host
-			if(host && host.dna)
+			if (host && host.dna)
 				host.dna.SetSEState(block,activate)
 				domutcheck(host,null,MUTCHK_FORCED)
 				host.update_mutations()
@@ -442,11 +442,11 @@
 
 /datum/unlockable/borer/leg/gene_unlock/relock_action()
 	// This is inefficient, but OK because it doesn't happen often.
-	for(var/block=1;block<DNA_SE_LENGTH;block++)
-		if(assigned_blocks[block] == gene_name)
+	for (var/block=1;block<DNA_SE_LENGTH;block++)
+		if (assigned_blocks[block] == gene_name)
 			testing("  Found [assigned_blocks[block]] ([block])")
 			var/mob/living/carbon/host=borer.host
-			if(host && host.dna)
+			if (host && host.dna)
 				host.dna.SetSEState(block,!activate)
 				domutcheck(host,null,MUTCHK_FORCED)
 				host.update_mutations()
@@ -478,17 +478,17 @@
 	remove_on_detach = 0 // Borer-side, so we don't lose it.
 
 /datum/unlockable/borer/head/verb_unlock/unlock_action()
-	if(give_when_attached)
+	if (give_when_attached)
 		borer.attached_verbs_head|=verb_type
-	if(give_when_detached)
+	if (give_when_detached)
 		borer.detached_verbs|=verb_type
 	to_chat(borer, "<span class='info'>You learned [name]!</span>")
 	borer.update_verbs(BORER_MODE_ATTACHED_HEAD)
 
 /datum/unlockable/borer/head/verb_unlock/relock_action()
-	if(give_when_attached)
+	if (give_when_attached)
 		borer.attached_verbs_head-=verb_type
-	if(give_when_detached)
+	if (give_when_detached)
 		borer.detached_verbs-=verb_type
 	to_chat(borer, "<span class='warning'>You forgot [name]!</span>")
 	//borer.update_verbs(borer.attached)
@@ -509,7 +509,7 @@
 	set category = "Alien"
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.taste_blood()
 
@@ -522,17 +522,17 @@
 	remove_on_detach = 0 // Borer-side, so we don't lose it.
 
 /datum/unlockable/borer/chest/verb_unlock/unlock_action()
-	if(give_when_attached)
+	if (give_when_attached)
 		borer.attached_verbs_chest|=verb_type
-	if(give_when_detached)
+	if (give_when_detached)
 		borer.detached_verbs|=verb_type
 	to_chat(borer, "<span class='info'>You learned [name]!</span>")
 	borer.update_verbs(BORER_MODE_ATTACHED_CHEST)
 
 /datum/unlockable/borer/chest/verb_unlock/relock_action()
-	if(give_when_attached)
+	if (give_when_attached)
 		borer.attached_verbs_chest-=verb_type
-	if(give_when_detached)
+	if (give_when_detached)
 		borer.detached_verbs-=verb_type
 	to_chat(borer, "<span class='warning'>You forgot [name]!</span>")
 	//borer.update_verbs(borer.attached)
@@ -573,17 +573,17 @@
 	remove_on_detach = 0 // Borer-side, so we don't lose it.
 
 /datum/unlockable/borer/arm/verb_unlock/unlock_action()
-	if(give_when_attached)
+	if (give_when_attached)
 		borer.attached_verbs_arm|=verb_type
-	if(give_when_detached)
+	if (give_when_detached)
 		borer.detached_verbs|=verb_type
 	to_chat(borer, "<span class='info'>You learned [name]!</span>")
 	borer.update_verbs(BORER_MODE_ATTACHED_ARM)
 
 /datum/unlockable/borer/arm/verb_unlock/relock_action()
-	if(give_when_attached)
+	if (give_when_attached)
 		borer.attached_verbs_arm-=verb_type
-	if(give_when_detached)
+	if (give_when_detached)
 		borer.detached_verbs-=verb_type
 	to_chat(borer, "<span class='warning'>You forgot [name]!</span>")
 	//borer.update_verbs(borer.attached)
@@ -681,17 +681,17 @@
 	remove_on_detach = 0 // Borer-side, so we don't lose it.
 
 /datum/unlockable/borer/leg/verb_unlock/unlock_action()
-	if(give_when_attached)
+	if (give_when_attached)
 		borer.attached_verbs_leg|=verb_type
-	if(give_when_detached)
+	if (give_when_detached)
 		borer.detached_verbs|=verb_type
 	to_chat(borer, "<span class='info'>You learned [name]!</span>")
 	borer.update_verbs(BORER_MODE_ATTACHED_LEG)
 
 /datum/unlockable/borer/leg/verb_unlock/relock_action()
-	if(give_when_attached)
+	if (give_when_attached)
 		borer.attached_verbs_leg-=verb_type
-	if(give_when_detached)
+	if (give_when_detached)
 		borer.detached_verbs-=verb_type
 	to_chat(borer, "<span class='warning'>You forgot [name]!</span>")
 	//borer.update_verbs(borer.attached)

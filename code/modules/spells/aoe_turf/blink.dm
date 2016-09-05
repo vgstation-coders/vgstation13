@@ -15,12 +15,12 @@
 	selection_type = "range"
 
 /spell/aoe_turf/blink/cast(var/list/targets, mob/user)
-	if(!targets.len)
+	if (!targets.len)
 		return
 
 	var/turf/T = pick(targets)
 	var/turf/starting = get_turf(user)
-	if(T)
+	if (T)
 		user.unlock_from()
 		user.forceMove(T)
 

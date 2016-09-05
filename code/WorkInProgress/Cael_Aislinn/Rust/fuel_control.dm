@@ -38,8 +38,8 @@
 	stage_status["SCRAM"] = 0
 
 	spawn(0)
-		for(var/obj/machinery/power/rust_fuel_injector/Injector in world)
-			if(Injector.stage in fuel_injectors)
+		for (var/obj/machinery/power/rust_fuel_injector/Injector in world)
+			if (Injector.stage in fuel_injectors)
 				var/list/targetlist = fuel_injectors[Injector.stage]
 				targetlist.Add(Injector)*/
 
@@ -51,7 +51,7 @@
 	interact(user)
 
 /obj/machinery/computer/rust_fuel_control/interact(mob/user)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		user.unset_machine()
 		user << browse(null, "window=fuel_control")
 		return
@@ -86,24 +86,24 @@
 		<td></td>
 		<td></td>
 		</tr>"}
-	for(var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
+	for (var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
 
 		dat += {"<tr>
 			<td>[I.id_tag]</td>"}
-		if(I.cur_assembly)
+		if (I.cur_assembly)
 			dat += "<td><a href='?src=\ref[I];toggle_injecting=1;update_extern=\ref[src]'>\[[I.injecting ? "Halt injecting" : "Begin injecting"]\]</a></td>"
 		else
 			dat += "<td>None</td>"
 		dat += "<td>[I.fuel_usage * 100]%</td>"
-		if(I.cur_assembly)
+		if (I.cur_assembly)
 			dat += "<td>[I.cur_assembly.percent_depleted * 100]%</td>"
 		else
 			dat += "<td>NA</td>"
-		if(stage_times.Find(I.id_tag))
+		if (stage_times.Find(I.id_tag))
 			dat += "<td>[ticks_this_stage]/[stage_times[I.id_tag]]s <a href='?src=\ref[src];stage_time=[I.id_tag]'>Modify</td>"
 		else
 			dat += "<td>[ticks_this_stage]s <a href='?src=\ref[src];stage_time=[I.id_tag]'>Set</td>"
-		if(proceeding_stages.Find(I.id_tag))
+		if (proceeding_stages.Find(I.id_tag))
 			dat += "<td><a href='?src=\ref[src];set_next_stage=[I.id_tag]'>[proceeding_stages[I.id_tag]]</a></td>"
 		else
 			dat += "<td>None <a href='?src=\ref[src];set_next_stage=[I.id_tag]'>\[modify\]</a></td>"
@@ -119,65 +119,65 @@
 	user.set_machine(src)
 
 /obj/machinery/computer/rust_fuel_control/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 
-	if( href_list["scan"] )
+	if ( href_list["scan"] )
 		connected_injectors = list()
-		for(var/obj/machinery/power/rust_fuel_injector/I in range(scan_range, src))
-			if(check_injector_status(I))
+		for (var/obj/machinery/power/rust_fuel_injector/I in range(scan_range, src))
+			if (check_injector_status(I))
 				connected_injectors.Add(I)
 
-	if( href_list["toggle_stage"] )
+	if ( href_list["toggle_stage"] )
 		var/cur_stage = href_list["toggle_stage"]
-		if(active_stages.Find(cur_stage))
+		if (active_stages.Find(cur_stage))
 			active_stages.Remove(cur_stage)
-			for(var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
-				if(I.id_tag == cur_stage && check_injector_status(I))
+			for (var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
+				if (I.id_tag == cur_stage && check_injector_status(I))
 					I.StopInjecting()
 		else
 			active_stages.Add(cur_stage)
-			for(var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
-				if(I.id_tag == cur_stage && check_injector_status(I))
+			for (var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
+				if (I.id_tag == cur_stage && check_injector_status(I))
 					I.BeginInjecting()
 
-	if( href_list["cooldown"] )
-		for(var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
-			if(check_injector_status(I))
+	if ( href_list["cooldown"] )
+		for (var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
+			if (check_injector_status(I))
 				I.StopInjecting()
 		active_stages = list()
 
-	if( href_list["warmup"] )
-		for(var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
-			if(check_injector_status(I))
+	if ( href_list["warmup"] )
+		for (var/obj/machinery/power/rust_fuel_injector/I in connected_injectors)
+			if (check_injector_status(I))
 				I.BeginInjecting()
-			if(!active_stages.Find(I.id_tag))
+			if (!active_stages.Find(I.id_tag))
 				active_stages.Add(I.id_tag)
 
-	if( href_list["stage_time"] )
+	if ( href_list["stage_time"] )
 		var/cur_stage = href_list["stage_time"]
 		var/new_duration = input("Enter new stage duration in seconds", "Stage duration") as num
-		if(new_duration)
+		if (new_duration)
 			stage_times[cur_stage] = new_duration
-		else if(stage_times.Find(cur_stage))
+		else if (stage_times.Find(cur_stage))
 			stage_times.Remove(cur_stage)
 
-	if( href_list["announce_fueldepletion"] )
+	if ( href_list["announce_fueldepletion"] )
 		announce_fueldepletion = text2num(href_list["announce_fueldepletion"])
 
-	if( href_list["announce_stageprogression"] )
+	if ( href_list["announce_stageprogression"] )
 		announce_stageprogression = text2num(href_list["announce_stageprogression"])
 
-	if( href_list["close"] )
+	if ( href_list["close"] )
 		usr << browse(null, "window=fuel_control")
 		usr.unset_machine()
 
-	if( href_list["set_next_stage"] )
+	if ( href_list["set_next_stage"] )
 		var/cur_stage = href_list["set_next_stage"]
-		if(!proceeding_stages.Find(cur_stage))
+		if (!proceeding_stages.Find(cur_stage))
 			proceeding_stages.Add(cur_stage)
 		var/next_stage = input("Enter next stage ID", "Automated stage procession") as text|null
-		if(next_stage)
+		if (next_stage)
 			proceeding_stages[cur_stage] = next_stage
 		else
 			proceeding_stages.Remove(cur_stage)
@@ -185,11 +185,11 @@
 	updateDialog()
 
 /obj/machinery/computer/rust_fuel_control/proc/check_injector_status(var/obj/machinery/power/rust_fuel_injector/I)
-	if(!I)
+	if (!I)
 		return 0
 
-	if(I.stat & (BROKEN|NOPOWER) || !I.remote_access_enabled || !I.id_tag)
-		if(connected_injectors.Find(I))
+	if (I.stat & (BROKEN|NOPOWER) || !I.remote_access_enabled || !I.id_tag)
+		if (connected_injectors.Find(I))
 			connected_injectors.Remove(I)
 		return 0
 

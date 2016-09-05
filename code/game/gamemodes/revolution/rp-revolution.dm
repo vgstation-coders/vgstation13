@@ -1,4 +1,4 @@
-// To add a rev to the list of revolutionaries, make sure it's rev (with if(ticker.mode.name == "revolution)),
+// To add a rev to the list of revolutionaries, make sure it's rev (with if (ticker.mode.name == "revolution)),
 // then call ticker.mode:add_revolutionary(_THE_PLAYERS_MIND_)
 // nothing else needs to be done, as that proc will check if they are a valid target.
 // Just make sure the converter is a head before you call it!
@@ -34,12 +34,12 @@
 	possible_modes.Add("revolution", "wizard", "traitor", "malf")
 	var/number = pick(2, 3)
 	var/i = 0
-	for(i = 0, i < number, i++)
+	for (i = 0, i < number, i++)
 		possible_modes.Remove(pick(possible_modes))
 	possible_modes.Insert(rand(possible_modes.len), "nuke")
 
 	var/datum/intercept_text/i_text = new /datum/intercept_text
-	for(var/A in possible_modes)
+	for (var/A in possible_modes)
 		intercepttext += i_text.build(A, pick(head_revolutionaries))
 
 	for (var/obj/machinery/computer/communications/comm in machines)
@@ -61,23 +61,23 @@
 	heads = get_living_heads()
 	var/rev_number = 0
 
-	if(!revs_possible || !heads)
+	if (!revs_possible || !heads)
 		to_chat(world, "<B> <span class='warning'>Not enough players for RP revolution game mode. Restarting world in 5 seconds.</span>")
 		sleep(50)
 		world.Reboot()
 		return
 
-	if(revs_possible.len >= 3)
+	if (revs_possible.len >= 3)
 		rev_number = 3
 	else
 		rev_number = revs_possible.len
 
-	while(rev_number > 0)
+	while (rev_number > 0)
 		head_revolutionaries += pick(revs_possible - head_revolutionaries)
 		rev_number--
 
-	for(var/datum/mind/rev_mind in head_revolutionaries)
-		for(var/datum/mind/head_mind in heads)
+	for (var/datum/mind/rev_mind in head_revolutionaries)
+		for (var/datum/mind/head_mind in heads)
 			var/datum/objective/capture/rev_obj = new
 			rev_obj.owner = rev_mind
 			rev_obj.find_target_by_role(head_mind.assigned_role)
@@ -86,15 +86,15 @@
 		rev_mind.current.verbs += /mob/living/carbon/human/proc/RevConvert
 		update_rev_icons_added(rev_mind)
 
-	for(var/datum/mind/rev_mind in head_revolutionaries)
+	for (var/datum/mind/rev_mind in head_revolutionaries)
 		var/obj_count = 1
 		to_chat(rev_mind.current, "<span class='notice'>You are a member of the revolutionaries' leadership!</span>")
-		for(var/datum/objective/objective in rev_mind.objectives)
+		for (var/datum/objective/objective in rev_mind.objectives)
 			to_chat(rev_mind.current, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
 			obj_count++
 
 	spawn (rand(waittime_l, waittime_h))
-		if(!mixed)
+		if (!mixed)
 			send_intercept()
 
 /datum/game_mode/rp_revolution/send_intercept()
@@ -106,12 +106,12 @@
 	possible_modes -= "[ticker.mode]"
 	var/number = pick(2, 3)
 	var/i = 0
-	for(i = 0, i < number, i++)
+	for (i = 0, i < number, i++)
 		possible_modes.Remove(pick(possible_modes))
 	possible_modes.Insert(rand(possible_modes.len), "[ticker.mode]")
 
 	var/datum/intercept_text/i_text = new /datum/intercept_text
-	for(var/A in possible_modes)
+	for (var/A in possible_modes)
 		intercepttext += i_text.build(A, pick(head_revolutionaries))
 
 	for (var/obj/machinery/computer/communications/comm in machines)
@@ -129,7 +129,7 @@
 		command_alert("Summary downloaded and printed out at all communications consoles.", "The revolution leaders have been determined.")
 		intercepttext = "<FONT size = 3><B>Cent. Com. Update</B> Requested status information:</FONT><HR>"
 		intercepttext += "We have determined the revolution leaders to be:"
-		for(var/datum/mind/revmind in head_revolutionaries)
+		for (var/datum/mind/revmind in head_revolutionaries)
 			intercepttext += "<br>[revmind.current.real_name]"
 		intercepttext += "<br>Please arrest them at once."
 		for (var/obj/machinery/computer/communications/comm in machines)
@@ -146,15 +146,15 @@
 
 /datum/game_mode/rp_revolution/proc/reveal_rev_heads()
 	. = ""
-	for(var/i = 1, i <= head_revolutionaries.len,i++)
+	for (var/i = 1, i <= head_revolutionaries.len,i++)
 		var/datum/mind/revmind = head_revolutionaries[i]
-		if(i < head_revolutionaries.len)
+		if (i < head_revolutionaries.len)
 			. += "[revmind.current.real_name],"
 		else
 			. += "and [revmind.current.real_name]"
 
 ///datum/game_mode/rp_revolution/proc/equip_revolutionary(mob/living/carbon/human/rev_mob)
-//	if(!istype(rev_mob))
+//	if (!istype(rev_mob))
 //		return
 
 //	spawn (100)
@@ -165,14 +165,14 @@
 
 
 /datum/game_mode/rp_revolution/check_win()
-	if(check_rev_victory())
+	if (check_rev_victory())
 		finished = 1
-	else if(check_heads_victory())
+	else if (check_heads_victory())
 		finished = 2
 	return
 
 /datum/game_mode/rp_revolution/check_finished()
-	if(finished != 0)
+	if (finished != 0)
 		return 1
 	else
 		return 0
@@ -180,67 +180,67 @@
 /datum/game_mode/rp_revolution/proc/get_possible_revolutionaries()
 	var/list/candidates = list()
 
-	for(var/mob/living/carbon/human/player in mob_list)
-		if(player.client)
-			if(player.client.be_syndicate & BE_REV)
+	for (var/mob/living/carbon/human/player in mob_list)
+		if (player.client)
+			if (player.client.be_syndicate & BE_REV)
 				candidates += player.mind
 
-	if(candidates.len < 1)
-		for(var/mob/living/carbon/human/player in mob_list)
-			if(player.client)
+	if (candidates.len < 1)
+		for (var/mob/living/carbon/human/player in mob_list)
+			if (player.client)
 				candidates += player.mind
 
 	var/list/uncons = get_unconvertables()
-	for(var/datum/mind/mind in uncons)
+	for (var/datum/mind/mind in uncons)
 		candidates -= mind
 
-	if(candidates.len < 1)
+	if (candidates.len < 1)
 		return null
 	else
 		return candidates
 
 /datum/game_mode/rp_revolution/proc/get_unconvertables()
 	var/list/ucs = list()
-	for(var/mob/living/carbon/human/player in mob_list)
-		if(player.mind)
+	for (var/mob/living/carbon/human/player in mob_list)
+		if (player.mind)
 			var/role = player.mind.assigned_role
-			if(role in list("Captain", "Head of Security", "Head of Personnel", "Chief Engineer", "Research Director", "Security Officer", "Forensic Technician", "AI"))
+			if (role in list("Captain", "Head of Security", "Head of Personnel", "Chief Engineer", "Research Director", "Security Officer", "Forensic Technician", "AI"))
 				ucs += player.mind
 
 	return ucs
 
 /datum/game_mode/rp_revolution/proc/check_rev_victory()
-	for(var/datum/mind/rev_mind in head_revolutionaries)
-		for(var/datum/objective/objective in rev_mind.objectives)
-			if(!(objective.check_completion()))
+	for (var/datum/mind/rev_mind in head_revolutionaries)
+		for (var/datum/objective/objective in rev_mind.objectives)
+			if (!(objective.check_completion()))
 				return 0
 
 		return 1
 
 /datum/game_mode/rp_revolution/proc/check_heads_victory()
-	for(var/datum/mind/rev_mind in head_revolutionaries)
-		if(rev_mind.current.stat != 2)
+	for (var/datum/mind/rev_mind in head_revolutionaries)
+		if (rev_mind.current.stat != 2)
 			var/turf/revloc = rev_mind.current.loc
-			if(!istype(revloc.loc,/area/security/brig) && !rev_mind.current.handcuffed)
+			if (!istype(revloc.loc,/area/security/brig) && !rev_mind.current.handcuffed)
 				return 0
-		else if(RPREV_REQUIRE_REVS_ALIVE)
+		else if (RPREV_REQUIRE_REVS_ALIVE)
 			return 0
 	return 1
 
 /datum/game_mode/rp_revolution/declare_completion()
 
 	var/text = ""
-	if(finished == 1)
+	if (finished == 1)
 		to_chat(world, "<span class='danger'><FONT size = 3> The heads of staff were relieved of their posts! The revolutionaries win!</FONT></span>")
-	else if(finished == 2)
+	else if (finished == 2)
 		to_chat(world, "<span class='danger'><FONT size = 3> The heads of staff managed to stop the revolution!</FONT></span>")
 
 	to_chat(world, "<FONT size = 2><B>The head revolutionaries were: </B></FONT>")
-	for(var/datum/mind/rev_mind in head_revolutionaries)
+	for (var/datum/mind/rev_mind in head_revolutionaries)
 		text = ""
-		if(rev_mind.current)
+		if (rev_mind.current)
 			text += "[rev_mind.current.real_name]"
-			if(rev_mind.current.stat == 2)
+			if (rev_mind.current.stat == 2)
 				text += " (Dead)"
 			else
 				text += " (Survived!)"
@@ -251,10 +251,10 @@
 
 	text = ""
 	to_chat(world, "<FONT size = 2><B>The converted revolutionaries were: </B></FONT>")
-	for(var/datum/mind/rev_nh_mind in revolutionaries)
-		if(rev_nh_mind.current)
+	for (var/datum/mind/rev_nh_mind in revolutionaries)
+		if (rev_nh_mind.current)
 			text += "[rev_nh_mind.current.real_name]"
-			if(rev_nh_mind.current.stat == 2)
+			if (rev_nh_mind.current.stat == 2)
 				text += " (Dead)"
 			else
 				text += " (Survived!)"
@@ -267,11 +267,11 @@
 	to_chat(world, "<FONT size = 2><B>The heads of staff were: </B></FONT>")
 	var/list/heads = list()
 	heads = get_all_heads()
-	for(var/datum/mind/head_mind in heads)
+	for (var/datum/mind/head_mind in heads)
 		text = ""
-		if(head_mind.current)
+		if (head_mind.current)
 			text += "[head_mind.current.real_name]"
-			if(head_mind.current.stat == 2)
+			if (head_mind.current.stat == 2)
 				text += " (Dead)"
 			else
 				text += " (Survived!)"
@@ -286,24 +286,24 @@
 mob/living/carbon/human/proc
 	RevConvert(mob/M as mob in oview(src))
 		set name = "Rev-Convert"
-		if(((src.mind in ticker.mode:head_revolutionaries) || (src.mind in ticker.mode:revolutionaries)))
-			if((M.mind in ticker.mode:head_revolutionaries) || (M.mind in ticker.mode:revolutionaries))
+		if (((src.mind in ticker.mode:head_revolutionaries) || (src.mind in ticker.mode:revolutionaries)))
+			if ((M.mind in ticker.mode:head_revolutionaries) || (M.mind in ticker.mode:revolutionaries))
 				to_chat(src, "<span class='danger'>[M] is already be a revolutionary!</span>")
-			else if(src.mind in ticker.mode:get_unconvertables())
+			else if (src.mind in ticker.mode:get_unconvertables())
 				to_chat(src, "<span class='danger'>[M] cannot be a revolutionary!</span>")
 			else
-				if(world.time < M.mind.rev_cooldown)
+				if (world.time < M.mind.rev_cooldown)
 					to_chat(src, "<span class='warning'>Wait five seconds before reconversion attempt.</span>")
 					return
 				to_chat(src, "<span class='warning'>Attempting to convert [M]...</span>")
 				log_admin("[src]([src.ckey]) attempted to convert [M].")
 				message_admins("<span class='warning'>[src]([src.ckey]) attempted to convert [M].</span>")
 				var/choice = alert(M,"Asked by [src]: Do you want to join the revolution?","Align Thyself with the Revolution!","No!","Yes!")
-				if(choice == "Yes!")
+				if (choice == "Yes!")
 					ticker.mode:add_revolutionary(M.mind)
 					to_chat(M, "<span class='notice'>You join the revolution!</span>")
 					to_chat(src, "<span class='notice'><b>[M] joins the revolution!</b></span>")
-				else if(choice == "No!")
+				else if (choice == "No!")
 					to_chat(M, "<span class='warning'>You reject this traitorous cause!</span>")
 					to_chat(src, "<span class='danger'>[M] does not support the revolution!</span>")
 				M.mind.rev_cooldown = world.time+50

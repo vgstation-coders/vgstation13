@@ -7,8 +7,8 @@ var/global/list/active_diseases = list()
 	name = "disease"
 
 /datum/controller/process/disease/doWork()
-	for(var/d in active_diseases)
-		if(d)
+	for (var/d in active_diseases)
+		if (d)
 			d:process()
 			scheck()
 			continue

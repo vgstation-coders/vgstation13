@@ -15,7 +15,7 @@
 	register_asset("RCD.css", 'RCD.css')
 
 	//Send the icons.
-	for(var/path in typesof(/datum/rcd_schematic) - /datum/rcd_schematic)
+	for (var/path in typesof(/datum/rcd_schematic) - /datum/rcd_schematic)
 		var/datum/rcd_schematic/C = new path()
 		C.register_assets()
 

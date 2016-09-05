@@ -30,69 +30,69 @@
 	//testing("Ticking lungs...")
 
 	// First, we consume air.
-	for(var/datum/lung_gas/G in gasses)
+	for (var/datum/lung_gas/G in gasses)
 		G.set_context(src,breath,H)
 		G.handle_inhale()
 
 	// Next, we exhale. At the moment, only /datum/lung_gas/waste uses this.
-	for(var/datum/lung_gas/G in gasses)
+	for (var/datum/lung_gas/G in gasses)
 		G.set_context(src,breath,H)
 		G.handle_exhale()
 
-	if( (abs(310.15 - breath.temperature) > 50) && !(M_RESIST_HEAT in H.mutations)) // Hot air hurts :(
-		if(H.status_flags & GODMODE)
+	if ( (abs(310.15 - breath.temperature) > 50) && !(M_RESIST_HEAT in H.mutations)) // Hot air hurts :(
+		if (H.status_flags & GODMODE)
 			return 1	//godmode
-		if(breath.temperature < H.species.cold_level_1)
-			if(prob(20))
+		if (breath.temperature < H.species.cold_level_1)
+			if (prob(20))
 				H << "<span class='warning'>You feel your face freezing and an icicle forming in your lungs!</span>"
-		else if(breath.temperature > H.species.heat_level_1)
-			if(prob(20))
-				if(H.dna.mutantrace == "slime")
+		else if (breath.temperature > H.species.heat_level_1)
+			if (prob(20))
+				if (H.dna.mutantrace == "slime")
 					H << "<span class='warning'>You feel supercharged by the extreme heat!</span>"
 				else
 					H << "<span class='warning'>You feel your face burning and a searing heat in your lungs!</span>"
 
-		if(H.dna.mutantrace == "slime")
-			if(breath.temperature < H.species.cold_level_1)
+		if (H.dna.mutantrace == "slime")
+			if (breath.temperature < H.species.cold_level_1)
 				H.adjustToxLoss(round(H.species.cold_level_1 - breath.temperature))
 				H.fire_alert = max(H.fire_alert, 1)
 		else
-			switch(breath.temperature)
-				if(-INFINITY to H.species.cold_level_3)
+			switch (breath.temperature)
+				if (-INFINITY to H.species.cold_level_3)
 					H.apply_damage(COLD_GAS_DAMAGE_LEVEL_3, BURN, LIMB_HEAD, used_weapon = "Excessive Cold")
 					H.fire_alert = max(H.fire_alert, 1)
 
-				if(H.species.cold_level_3 to H.species.cold_level_2)
+				if (H.species.cold_level_3 to H.species.cold_level_2)
 					H.apply_damage(COLD_GAS_DAMAGE_LEVEL_2, BURN, LIMB_HEAD, used_weapon = "Excessive Cold")
 					H.fire_alert = max(H.fire_alert, 1)
 
-				if(H.species.cold_level_2 to H.species.cold_level_1)
+				if (H.species.cold_level_2 to H.species.cold_level_1)
 					H.apply_damage(COLD_GAS_DAMAGE_LEVEL_1, BURN, LIMB_HEAD, used_weapon = "Excessive Cold")
 					H.fire_alert = max(H.fire_alert, 1)
 
-				if(H.species.heat_level_1 to H.species.heat_level_2)
+				if (H.species.heat_level_1 to H.species.heat_level_2)
 					H.apply_damage(HEAT_GAS_DAMAGE_LEVEL_1, BURN, LIMB_HEAD, used_weapon = "Excessive Heat")
 					H.fire_alert = max(H.fire_alert, 2)
 
-				if(H.species.heat_level_2 to H.species.heat_level_3)
+				if (H.species.heat_level_2 to H.species.heat_level_3)
 					H.apply_damage(HEAT_GAS_DAMAGE_LEVEL_2, BURN, LIMB_HEAD, used_weapon = "Excessive Heat")
 					H.fire_alert = max(H.fire_alert, 2)
 
-				if(H.species.heat_level_3 to INFINITY)
+				if (H.species.heat_level_3 to INFINITY)
 					H.apply_damage(HEAT_GAS_DAMAGE_LEVEL_3, BURN, LIMB_HEAD, used_weapon = "Excessive Heat")
 					H.fire_alert = max(H.fire_alert, 2)
 
 /datum/organ/internal/lungs/process()
 	..()
 	if (germ_level > INFECTION_LEVEL_ONE)
-		if(prob(5))
+		if (prob(5))
 			owner.audible_cough()		//respitory tract infection
 
-	if(is_bruised())
-		if(prob(2))
+	if (is_bruised())
+		if (prob(2))
 			spawn owner.emote("me", 1, "coughs up blood!")
 			owner.drip(10)
-		if(prob(4))
+		if (prob(4))
 			spawn owner.emote("me", 1, "gasps for air!")
 			owner.losebreath += 5
 

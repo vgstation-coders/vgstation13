@@ -197,12 +197,12 @@
 	return(OXYLOSS)
 
 /obj/item/weapon/legcuffs/bolas/throw_at(var/atom/A, throw_range, throw_speed)
-	if(!throw_range)
+	if (!throw_range)
 		return //divide by zero, also you throw like a girl
-	if(usr && !istype(thrown_from, /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas)) //if there is a user, but not a mech
-		if(istype(usr, /mob/living/carbon/human)) //if the user is human
+	if (usr && !istype(thrown_from, /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas)) //if there is a user, but not a mech
+		if (istype(usr, /mob/living/carbon/human)) //if the user is human
 			var/mob/living/carbon/human/H = usr
-			if((M_CLUMSY in H.mutations) && prob(50))
+			if ((M_CLUMSY in H.mutations) && prob(50))
 				to_chat(H, "<span class='warning'>You smack yourself in the face while swinging the [src]!</span>")
 				H.Stun(2)
 				H.drop_item(src)
@@ -232,12 +232,12 @@
 	thrown_from = null
 
 /obj/item/weapon/legcuffs/bolas/throw_impact(atom/hit_atom) //Pomf was right, I was wrong - Comic
-	if(isliving(hit_atom) && hit_atom != usr) //if the target is a live creature other than the thrower
+	if (isliving(hit_atom) && hit_atom != usr) //if the target is a live creature other than the thrower
 		var/mob/living/M = hit_atom
-		if(ishuman(M)) //if they're a human species
+		if (ishuman(M)) //if they're a human species
 			var/mob/living/carbon/human/H = M
-			if(H.m_intent == "run") //if they're set to run (though not necessarily running at that moment)
-				if(prob(trip_prob)) //this probability is up for change and mostly a placeholder - Comic
+			if (H.m_intent == "run") //if they're set to run (though not necessarily running at that moment)
+				if (prob(trip_prob)) //this probability is up for change and mostly a placeholder - Comic
 					step(H, H.dir)
 					H.visible_message("<span class='warning'>[H] was tripped by the bolas!</span>","<span class='warning'>Your legs have been tangled!</span>");
 					H.Stun(2) //used instead of setting damage in vars to avoid non-human targets being affected
@@ -245,9 +245,9 @@
 					H.legcuffed = src //applies legcuff properties inherited through legcuffs
 					src.forceMove(H)
 					H.update_inv_legcuffed()
-					if(!H.legcuffed) //in case it didn't happen, we need a safety net
+					if (!H.legcuffed) //in case it didn't happen, we need a safety net
 						throw_failed()
-			else if(H.legcuffed) //if the target is already legcuffed (has to be walking)
+			else if (H.legcuffed) //if the target is already legcuffed (has to be walking)
 				throw_failed()
 				return
 			else //walking, but uncuffed, or the running prob() failed
@@ -263,7 +263,7 @@
 
 /obj/item/weapon/legcuffs/bolas/proc/throw_failed() //called when the throw doesn't entangle
 	//log_admin("Logged as [thrown_from]")
-	if(!thrown_from || !istype(thrown_from, /mob/living)) //in essence, if we don't know whether a person threw it
+	if (!thrown_from || !istype(thrown_from, /mob/living)) //in essence, if we don't know whether a person threw it
 		qdel(src) //destroy it, to stop infinite bolases
 
 /obj/item/weapon/legcuffs/bolas/Bump()
@@ -312,25 +312,25 @@
 		desc = "A poorly made bolas, made out of \a [weight1] and [weight2 ? "\a [weight2]": "missing a second weight"], tied together with cable."
 
 /obj/item/weapon/legcuffs/bolas/cable/throw_failed()
-	if(prob(20))
+	if (prob(20))
 		src.visible_message("<span class='rose'>\The [src] falls to pieces on impact!</span>")
-		if(weight1)
+		if (weight1)
 			weight1.forceMove(src.loc)
 			weight1 = null
-		if(weight2)
+		if (weight2)
 			weight2.forceMove(src.loc)
 			weight2 = null
 		update_icon(src)
 
 /obj/item/weapon/legcuffs/bolas/cable/attackby(var/obj/O, mob/user)
-	if(istype(O, /obj/item))
-		if(istype(O, /obj/item/weapon/gift) || istype(O,/obj/item/delivery))
+	if (istype(O, /obj/item))
+		if (istype(O, /obj/item/weapon/gift) || istype(O,/obj/item/delivery))
 			return
 		var/obj/item/I = O
-		if(istype(O, /obj/item/weapon/legcuffs/bolas)) //don't stack into infinity
+		if (istype(O, /obj/item/weapon/legcuffs/bolas)) //don't stack into infinity
 			return
-		if(iswirecutter(I)) //allows you to convert the wire back to a cable coil
-			if(!weight1 && !weight2) //if there's nothing attached
+		if (iswirecutter(I)) //allows you to convert the wire back to a cable coil
+			if (!weight1 && !weight2) //if there's nothing attached
 				user.show_message("<span class='notice'>You cut the knot in the [src].</span>")
 				playsound(usr, 'sound/items/Wirecutter.ogg', 50, 1)
 				var /obj/item/stack/cable_coil/C = new /obj/item/stack/cable_coil(user.loc) //we get back the wire lengths we put in
@@ -347,26 +347,26 @@
 				return
 			else
 				user.show_message("<span class='notice'>You cut off [weight1] [weight2 ? "and [weight2]" : ""].</span>") //you remove the items currently attached
-				if(weight1)
+				if (weight1)
 					weight1.forceMove(get_turf(usr))
 					weight1 = null
-				if(weight2)
+				if (weight2)
 					weight2.forceMove(get_turf(usr))
 					weight2 = null
 				playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
 				update_icon()
 				return
-		if(I.w_class) //if it has a defined weight
-			if(I.w_class == W_CLASS_SMALL || I.w_class == W_CLASS_MEDIUM) //just one is too specific, so don't change this
-				if(!weight1)
-					if(user.drop_item(I, src))
+		if (I.w_class) //if it has a defined weight
+			if (I.w_class == W_CLASS_SMALL || I.w_class == W_CLASS_MEDIUM) //just one is too specific, so don't change this
+				if (!weight1)
+					if (user.drop_item(I, src))
 						weight1 = I
 						user.show_message("<span class='notice'>You tie [weight1] to the [src].</span>")
 						update_icon()
 						//del(I)
 						return
-				if(!weight2) //just in case
-					if(user.drop_item(I, src))
+				if (!weight2) //just in case
+					if (user.drop_item(I, src))
 						weight2 = I
 						user.show_message("<span class='notice'>You tie [weight2] to the [src].</span>")
 						update_icon()
@@ -400,7 +400,7 @@
 
 /obj/item/weapon/legcuffs/beartrap/attack_self(mob/user as mob)
 	..()
-	if(ishuman(user) && !user.stat && !user.restrained())
+	if (ishuman(user) && !user.stat && !user.restrained())
 		armed = !armed
 
 		update_icon()
@@ -408,23 +408,23 @@
 		to_chat(user, "<span class='notice'>[src] is now [armed ? "armed" : "disarmed"]</span>")
 		playsound(user.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
 
-		if(armed && IED)
+		if (armed && IED)
 			message_admins("[key_name(usr)] has armed a beartrap rigged with an IED at [formatJumpTo(get_turf(src))]!")
 			log_game("[key_name(usr)] has armed a beartrap rigged with an IED at [formatJumpTo(get_turf(src))]!")
 
 /obj/item/weapon/legcuffs/beartrap/attackby(var/obj/item/I, mob/user as mob) //Let's get explosive.
-	if(istype(I, /obj/item/weapon/grenade/iedcasing))
-		if(IED)
+	if (istype(I, /obj/item/weapon/grenade/iedcasing))
+		if (IED)
 			to_chat(user, "<span class='warning'>This beartrap already has an IED hooked up to it!</span>")
 			return
 		IED = I
-		switch(IED.assembled)
-			if(0,1) //if it's not fueled/hooked up
+		switch (IED.assembled)
+			if (0,1) //if it's not fueled/hooked up
 				to_chat(user, "<span class='warning'>You haven't prepared this IED yet!</span>")
 				IED = null
 				return
-			if(2,3)
-				if(user.drop_item(I, src))
+			if (2,3)
+				if (user.drop_item(I, src))
 					var/turf/bombturf = get_turf(src)
 					var/area/A = get_area(bombturf)
 					var/log_str = "[key_name(usr)]<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A> has rigged a beartrap with an IED at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name] (JMP)</a>."
@@ -436,8 +436,8 @@
 				to_chat(user, "<span class='danger'>You shouldn't be reading this message! Contact a coder or someone, something broke!</span>")
 				IED = null
 				return
-	if(isscrewdriver(I))
-		if(IED)
+	if (isscrewdriver(I))
+		if (IED)
 			IED.forceMove(get_turf(src.loc))
 			IED = null
 			to_chat(user, "<span class='notice'>You remove the IED from the [src].</span>")
@@ -445,11 +445,11 @@
 	..()
 
 /obj/item/weapon/legcuffs/beartrap/Crossed(AM as mob|obj)
-	if(armed && isliving(AM) && isturf(src.loc))
+	if (armed && isliving(AM) && isturf(src.loc))
 		var/mob/living/L = AM
 
-		if(L.on_foot()) //Flying mobs can't get caught in beartraps! Note that this also prevents lying mobs from triggering traps
-			if(IED && isturf(src.loc))
+		if (L.on_foot()) //Flying mobs can't get caught in beartraps! Note that this also prevents lying mobs from triggering traps
+			if (IED && isturf(src.loc))
 				IED.active = 1
 				IED.overlays -= image('icons/obj/grenade.dmi', icon_state = "improvised_grenade_filled")
 				IED.icon_state = initial(icon_state) + "_active"
@@ -464,9 +464,9 @@
 
 					src.desc = initial(src.desc)
 
-			if(ishuman(L))
+			if (ishuman(L))
 				var/mob/living/carbon/H = AM
-				if(H.m_intent == "run")
+				if (H.m_intent == "run")
 					armed = 0
 					H.legcuffed = src
 					src.forceMove(H)
@@ -480,7 +480,7 @@
 						//Hallucination messages
 						"<span class='danger'>A terrifying crocodile snaps at [H]!</span>",\
 						"<span class='danger'>A [(IED && IED.active) ? "crocodile" : "horrifying fiery dragon"] attempts to bite your leg off!</span>")
-			else if(isanimal(AM))
+			else if (isanimal(AM))
 				armed = 0
 				var/mob/living/simple_animal/SA = AM
 				SA.health -= 20
@@ -526,16 +526,16 @@
 	flags = FPRINT | PROXMOVE
 
 /obj/item/weapon/caution/proximity_sign/attack_self(mob/user as mob)
-	if(ishuman(user))
+	if (ishuman(user))
 		var/mob/living/carbon/human/H = user
-		if(H.mind.assigned_role != "Janitor")
+		if (H.mind.assigned_role != "Janitor")
 			return
-		if(armed)
+		if (armed)
 			armed = 0
 			to_chat(user, "<span class='notice'>You disarm \the [src].</span>")
 			return
 		timing = !timing
-		if(timing)
+		if (timing)
 			processing_objects.Add(src)
 		else
 			armed = 0
@@ -543,31 +543,31 @@
 		to_chat(H, "<span class='notice'>You [timing ? "activate \the [src]'s timer, you have 15 seconds." : "de-activate \the [src]'s timer."]</span>")
 
 /obj/item/weapon/caution/proximity_sign/process()
-	if(!timing)
+	if (!timing)
 		processing_objects.Remove(src)
 	timepassed++
-	if(timepassed >= 15 && !armed)
+	if (timepassed >= 15 && !armed)
 		armed = 1
 		timing = 0
 
 /obj/item/weapon/caution/proximity_sign/HasProximity(atom/movable/AM as mob|obj)
-	if(armed)
-		if(istype(AM, /mob/living/carbon) && !istype(AM, /mob/living/carbon/brain))
+	if (armed)
+		if (istype(AM, /mob/living/carbon) && !istype(AM, /mob/living/carbon/brain))
 			var/mob/living/carbon/C = AM
-			if(C.m_intent != "walk")
+			if (C.m_intent != "walk")
 				src.visible_message("The [src.name] beeps, \"Running on wet floors is hazardous to your health.\"")
 				explosion(src.loc,-1,2,0)
-				if(ishuman(C))
+				if (ishuman(C))
 					dead_legs(C)
-				if(src)
+				if (src)
 					qdel(src)
 
 /obj/item/weapon/caution/proximity_sign/proc/dead_legs(mob/living/carbon/human/H as mob)
 	var/datum/organ/external/l = H.organs_by_name[LIMB_LEFT_LEG]
 	var/datum/organ/external/r = H.organs_by_name[LIMB_RIGHT_LEG]
-	if(l && !(l.status & ORGAN_DESTROYED))
+	if (l && !(l.status & ORGAN_DESTROYED))
 		l.status |= ORGAN_DESTROYED
-	if(r && !(r.status & ORGAN_DESTROYED))
+	if (r && !(r.status & ORGAN_DESTROYED))
 		r.status |= ORGAN_DESTROYED
 
 /obj/item/weapon/caution/cone
@@ -588,14 +588,14 @@
 
 /obj/item/weapon/rack_parts/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if(istype(W, /obj/item/weapon/weldingtool))
+	if (istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
-		if(WT.remove_fuel(0, user))
+		if (WT.remove_fuel(0, user))
 			to_chat(user, "You begin slicing through \the [src].")
 			playsound(user, 'sound/items/Welder.ogg', 50, 1)
-			if(do_after(user, src, 60))
+			if (do_after(user, src, 60))
 				to_chat(user, "You cut \the [src] into a gun stock.")
-				if(src.loc == user)
+				if (src.loc == user)
 					user.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/metal_gun_stock/I = new (get_turf(user))
 					user.put_in_hands(I)
@@ -655,11 +655,11 @@
 	item_state = "broom[wielded ? 1 : 0]"
 	force = wielded ? 5 : 3
 	attack_verb = wielded ? list("rams into", "charges at") : list("bludgeons", "whacks", "cleans", "dusts")
-	if(user)
+	if (user)
 		user.update_inv_hands()
-		if(user.mind in ticker.mode.wizards)
+		if (user.mind in ticker.mode.wizards)
 			user.flying = wielded ? 1 : 0
-			if(wielded)
+			if (wielded)
 				to_chat(user, "<span class='notice'>You hold \the [src] between your legs.</span>")
 				user.say("QUID 'ITCH")
 				animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER , time = 10, loop = 1, easing = SINE_EASING)
@@ -667,14 +667,14 @@
 				animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER , time = 1, loop = 1)
 				animate(user, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
 				animate(user)
-				if(user.lying)//aka. if they have just been stunned
+				if (user.lying)//aka. if they have just been stunned
 					user.pixel_y -= 6 * PIXEL_MULTIPLIER
 		else
-			if(wielded)
+			if (wielded)
 				to_chat(user, "<span class='notice'>You hold \the [src] between your legs.</span>")
 
 /obj/item/weapon/staff/broom/attackby(var/obj/O, mob/user)
-	if(istype(O, /obj/item/clothing/mask/horsehead))
+	if (istype(O, /obj/item/clothing/mask/horsehead))
 		new/obj/item/weapon/staff/broom/horsebroom(get_turf(src))
 		user.u_equip(O)
 		qdel(O)
@@ -876,12 +876,12 @@
 	var/angle = get_angle(A, user)
 //	to_chat(world, angle)
 	angle = round(angle) + 45
-	if(angle > 180)
+	if (angle > 180)
 		angle -= 180
 	else
 		angle += 180
 
-	if(!angle)
+	if (!angle)
 		angle = 1
 //	to_chat(world, "adjusted [angle]")
 	icon_state = "[angle]"
@@ -894,7 +894,7 @@ proc
         var icon/base = icon(file, state)
 
         var w, h, w2, h2
-        if(aa)
+        if (aa)
             aa ++
             w = base.Width()
             w2 = w * aa
@@ -903,18 +903,18 @@ proc
 
         var icon{result = icon(base); temp}
 
-        for(var/angle in 0 to 360 step step)
-            if(angle == 0  )
+        for (var/angle in 0 to 360 step step)
+            if (angle == 0  )
             	continue
-            if(angle == 360)
+            if (angle == 360)
             	continue
 
             temp = icon(base)
 
-            if(aa)
+            if (aa)
             	temp.Scale(w2, h2)
             temp.Turn(angle)
-            if(aa)
+            if (aa)
             	temp.Scale(w,   h)
 
             result.Insert(temp, "[angle]")

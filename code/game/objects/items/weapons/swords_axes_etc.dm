@@ -36,7 +36,7 @@
 	if ((M_CLUMSY in user.mutations) && prob(50))
 		to_chat(user, "<span class='warning'>You club yourself over the head.</span>")
 		user.Weaken(3 * force)
-		if(ishuman(user))
+		if (ishuman(user))
 			var/mob/living/carbon/human/H = user
 			H.apply_damage(2*force, BRUTE, LIMB_HEAD)
 		else
@@ -50,14 +50,14 @@
 	log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
 */
 	if (user.a_intent == I_HURT)
-		if(!..())
+		if (!..())
 			return
 		playsound(get_turf(src), "swing_hit", 50, 1, -1)
 		if (M.stuttering < 8 && (!(M_HULK in M.mutations))  /*&& (!istype(H:wear_suit, /obj/item/clothing/suit/judgerobe))*/)
 			M.stuttering = 8
 		M.Stun(8)
 		M.Weaken(8)
-		for(var/mob/O in viewers(M))
+		for (var/mob/O in viewers(M))
 			if (O.client)
 				O.show_message("<span class='danger'>[M] has been beaten with \the [src] by [user]!</span>", 1, "<span class='warning'>You hear someone fall</span>", 2)
 	else
@@ -67,13 +67,13 @@
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
 		log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
-		if(!iscarbon(user))
+		if (!iscarbon(user))
 			M.LAssailant = null
 		else
 			M.LAssailant = user
 		src.add_fingerprint(user)
 
-		for(var/mob/O in viewers(M))
+		for (var/mob/O in viewers(M))
 			if (O.client)
 				O.show_message("<span class='danger'>[M] has been stunned with \the [src] by [user]!</span>", 1, "<span class='warning'>You hear someone fall</span>", 2)
 
@@ -94,7 +94,7 @@
 
 /obj/item/weapon/melee/telebaton/attack_self(mob/user as mob)
 	on = !on
-	if(on)
+	if (on)
 		user.visible_message("<span class='warning'>With a flick of their wrist, [user] extends their telescopic baton.</span>",\
 		"<span class='warning'>You extend the baton.</span>",\
 		"You hear an ominous click.",\
@@ -123,16 +123,16 @@
 	playsound(get_turf(src), 'sound/weapons/empty.ogg', 50, 1)
 	add_fingerprint(user)
 
-	if(!blood_overlays["[type][icon_state]"])
+	if (!blood_overlays["[type][icon_state]"])
 		generate_blood_overlay()
-	if(blood_overlay)
+	if (blood_overlay)
 		overlays -= blood_overlay
 	blood_overlay = blood_overlays["[type][icon_state]"]
 	blood_overlay.color = blood_color
 	overlays += blood_overlay
 
 /obj/item/weapon/melee/telebaton/generate_blood_overlay()
-	if(blood_overlays["[type][icon_state]"]) //Unless someone makes a wicked typepath this will never cause a problem
+	if (blood_overlays["[type][icon_state]"]) //Unless someone makes a wicked typepath this will never cause a problem
 		return
 	var/icon/I = new /icon(icon, icon_state)
 	I.Blend(new /icon('icons/effects/blood.dmi', rgb(255,255,255)),ICON_ADD) //fills the icon_state with white (except where it's transparent)
@@ -140,22 +140,22 @@
 	blood_overlays["[type][icon_state]"] = image(I)
 
 /obj/item/weapon/melee/telebaton/attack(mob/target as mob, mob/living/user as mob)
-	if(on)
+	if (on)
 		if ((M_CLUMSY in user.mutations) && prob(50))
 			user.simple_message("<span class='warning'>You club yourself over the head.</span>",
 				"<span class='danger'>The fishing rod goes mad!</span>")
 
 			user.Weaken(3 * force)
-			if(ishuman(user))
+			if (ishuman(user))
 				var/mob/living/carbon/human/H = user
 				H.apply_damage(2*force, BRUTE, LIMB_HEAD)
 			else
 				user.take_organ_damage(2*force)
 			return
 		if (user.a_intent == I_HURT)
-			if(!..())
+			if (!..())
 				return
-			if(!isrobot(target))
+			if (!isrobot(target))
 				playsound(get_turf(src), "swing_hit", 50, 1, -1)
 				//target.Stun(4)	//naaah
 				target.Weaken(4)
@@ -170,7 +170,7 @@
 			target.visible_message("<span class='danger'>[target] has been stunned with \the [src] by [user]!</span>",\
 				drugged_message="<span class='notice'>[user] smacks [target] with the fishing rod!</span>")
 
-			if(!iscarbon(user))
+			if (!iscarbon(user))
 				target.LAssailant = null
 			else
 				target.LAssailant = user
@@ -239,18 +239,18 @@
 
 /obj/item/weapon/melee/bone_sword/New(turf/T, var/p_borer = null)
 	..(T)
-	if(istype(p_borer, /mob/living/simple_animal/borer))
+	if (istype(p_borer, /mob/living/simple_animal/borer))
 		parent_borer = p_borer
-	if(!parent_borer)
+	if (!parent_borer)
 		qdel(src)
 	else
 		processing_objects.Add(src)
 
 /obj/item/weapon/melee/bone_sword/Destroy()
-	if(parent_borer)
-		if(parent_borer.channeling_bone_sword)
+	if (parent_borer)
+		if (parent_borer.channeling_bone_sword)
 			parent_borer.channeling_bone_sword = 0
-		if(parent_borer.channeling)
+		if (parent_borer.channeling)
 			parent_borer.channeling = 0
 		parent_borer = null
 	processing_objects.Remove(src)
@@ -258,12 +258,12 @@
 
 /obj/item/weapon/melee/bone_sword/process()
 	set waitfor = 0
-	if(!parent_borer)
+	if (!parent_borer)
 		return
-	if(!parent_borer.channeling_bone_sword) //the borer has stopped sustaining the sword
+	if (!parent_borer.channeling_bone_sword) //the borer has stopped sustaining the sword
 		qdel(src)
 		return
-	if(parent_borer.chemicals < 5) //the parent borer no longer has the chemicals required to sustain the sword
+	if (parent_borer.chemicals < 5) //the parent borer no longer has the chemicals required to sustain the sword
 		qdel(src)
 		return
 	else

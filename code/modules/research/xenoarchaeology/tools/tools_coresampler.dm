@@ -5,7 +5,7 @@
 	desc = "A box claiming to contain sample bags."
 
 /obj/item/weapon/storage/box/samplebags/New()
-	for(var/i=0, i<7, i++)
+	for (var/i=0, i<7, i++)
 		var/obj/item/weapon/evidencebag/S = new(src)
 		S.name = "sample bag"
 		S.desc = "a bag for holding research samples."
@@ -29,12 +29,12 @@
 
 /obj/item/device/core_sampler/examine(mob/user)
 	..()
-	if(get_dist(src, user) < 2)
+	if (get_dist(src, user) < 2)
 		to_chat(user, "<span class='info'>This one is [sampled_turf ? "full" : "empty"], and has [num_stored_bags] bag[num_stored_bags != 1 ? "s" : ""] remaining.</span>")
 
 /obj/item/device/core_sampler/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/evidencebag))
-		if(num_stored_bags < 10)
+	if (istype(W,/obj/item/weapon/evidencebag))
+		if (num_stored_bags < 10)
 			to_chat(user, "<span class='notice'>You insert the [W] into the core sampler.</span>")
 			qdel(W)
 			W = null
@@ -47,18 +47,18 @@
 
 /obj/item/device/core_sampler/proc/sample_item(var/item_to_sample, var/mob/user as mob)
 	var/datum/geosample/geo_data
-	if(istype(item_to_sample, /turf/unsimulated/mineral))
+	if (istype(item_to_sample, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/T = item_to_sample
 		T.geologic_data.UpdateNearbyArtifactInfo(T)
 		geo_data = T.geologic_data
-	else if(istype(item_to_sample, /obj/item/weapon/strangerock))
+	else if (istype(item_to_sample, /obj/item/weapon/strangerock))
 		var/obj/item/weapon/strangerock/O = item_to_sample
 		geo_data = O.geologic_data
 
-	if(geo_data)
-		if(filled_bag)
+	if (geo_data)
+		if (filled_bag)
 			to_chat(user, "<span class='warning'>The core sampler is full!</span>")
-		else if(num_stored_bags < 1)
+		else if (num_stored_bags < 1)
 			to_chat(user, "<span class='warning'>The core sampler is out of sample bags!</span>")
 		else
 			//create a new sample bag which we'll fill with rock samples
@@ -85,13 +85,13 @@
 		to_chat(user, "<span class='warning'>You are unable to take a sample of [item_to_sample].</span>")
 
 /obj/item/device/core_sampler/attack_self()
-	if(filled_bag)
+	if (filled_bag)
 		to_chat(usr, "<span class='notice'>You eject the full sample bag.</span>")
 		var/success = 0
-		if(istype(src.loc, /mob))
+		if (istype(src.loc, /mob))
 			var/mob/M = src.loc
 			success = M.put_in_inactive_hand(filled_bag)
-		if(!success)
+		if (!success)
 			filled_bag.forceMove(get_turf(src))
 		filled_bag = null
 		icon_state = "sampler0"

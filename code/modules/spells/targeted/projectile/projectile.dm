@@ -17,13 +17,13 @@ If the spell_projectile is seeking, it will update its target every process and 
 
 /spell/targeted/projectile/cast(list/targets, mob/user = usr)
 
-	if(istext(proj_type))
+	if (istext(proj_type))
 		proj_type = text2path(proj_type) // sanity filters
 
-	for(var/atom/target in targets)
+	for (var/atom/target in targets)
 		var/obj/item/projectile/projectile = new proj_type(user.loc, user.dir)
 
-		if(!projectile)
+		if (!projectile)
 			return
 
 		projectile.original = target
@@ -35,7 +35,7 @@ If the spell_projectile is seeking, it will update its target every process and 
 		projectile.xo = target.x - user.x
 		projectile.kill_count = src.duration
 		projectile.step_delay = proj_step_delay
-		if(istype(projectile, /obj/item/projectile/spell_projectile))
+		if (istype(projectile, /obj/item/projectile/spell_projectile))
 			var/obj/item/projectile/spell_projectile/SP = projectile
 			SP.carried = src //casting is magical
 		spawn()
@@ -45,10 +45,10 @@ If the spell_projectile is seeking, it will update its target every process and 
 
 /spell/targeted/projectile/proc/choose_prox_targets(mob/user = usr, var/atom/movable/spell_holder)
 	var/list/targets = list()
-	for(var/mob/living/M in range(spell_holder, cast_prox_range))
-		if(M == user && !(spell_flags & INCLUDEUSER))
+	for (var/mob/living/M in range(spell_holder, cast_prox_range))
+		if (M == user && !(spell_flags & INCLUDEUSER))
 			continue
-		if(spell_holder.Adjacent(M))
+		if (spell_holder.Adjacent(M))
 			targets += M
 	return targets
 

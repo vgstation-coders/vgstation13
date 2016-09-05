@@ -22,36 +22,36 @@
 	icon_state = "dropper[(reagents.total_volume ? 1 : 0)]"
 
 /obj/item/weapon/reagent_containers/dropper/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
-	if(!proximity_flag)
+	if (!proximity_flag)
 		return
 
-	if(!target.reagents)
-		if(reagents.total_volume)
-			if(istype(target, /obj/machinery/artifact))
+	if (!target.reagents)
+		if (reagents.total_volume)
+			if (istype(target, /obj/machinery/artifact))
 				reagents.clear_reagents()
 				to_chat(user, "<span class='notice'>You squirt the solution onto the [target]!</span>")
 				update_icon()
 		return
-	if(reagents.total_volume)
+	if (reagents.total_volume)
 
-		if(target.reagents.total_volume >= target.reagents.maximum_volume)
+		if (target.reagents.total_volume >= target.reagents.maximum_volume)
 			to_chat(user, "<span class='warning'>[target] is full.</span>")
 			return
 
-		if(!target.is_open_container() && !ismob(target) && !is_type_in_list(target, injectable_types)) //You can inject humans and food but you cant remove the shit.
+		if (!target.is_open_container() && !ismob(target) && !is_type_in_list(target, injectable_types)) //You can inject humans and food but you cant remove the shit.
 			to_chat(user, "<span class='warning'>You cannot directly fill this object.</span>")
 			return
 
 		var/trans = 0
 
-		if(ismob(target))
-			if(ishuman(target))
+		if (ismob(target))
+			if (ishuman(target))
 				var/mob/living/carbon/human/victim = target
 
 				var/obj/item/safe_thing = victim.get_body_part_coverage(EYES)
 
-				if(safe_thing)
-					if(!safe_thing.reagents)
+				if (safe_thing)
+					if (!safe_thing.reagents)
 						safe_thing.create_reagents(100)
 					trans = src.reagents.trans_to(safe_thing, amount_per_transfer_from_this)
 
@@ -69,7 +69,7 @@
 			M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been squirted with [src.name] by [user.name] ([user.ckey]). Reagents: [reagents.get_reagent_ids(1)]</font>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to squirt [M.name] ([M.key]). Reagents: [reagents.get_reagent_ids(1)]</font>")
 			msg_admin_attack("[user.name] ([user.ckey]) squirted [M.name] ([M.key]) with [src.name]. Reagents: [reagents.get_reagent_ids(1)] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-			if(!iscarbon(user))
+			if (!iscarbon(user))
 				M.LAssailant = null
 			else
 				M.LAssailant = user
@@ -80,11 +80,11 @@
 
 	else
 
-		if(!target.is_open_container() && !istype(target,/obj/structure/reagent_dispensers))
+		if (!target.is_open_container() && !istype(target,/obj/structure/reagent_dispensers))
 			to_chat(user, "<span class='warning'>You cannot directly remove reagents from [target].</span>")
 			return
 
-		if(!target.reagents.total_volume)
+		if (!target.reagents.total_volume)
 			to_chat(user, "<span class='warning'>[target] is empty.</span>")
 			return
 

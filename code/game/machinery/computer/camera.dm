@@ -42,10 +42,10 @@ var/global/list/tv_monitors = list()
 	if (src.z > 6)
 		to_chat(user, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 
-	if(!isAI(user))
+	if (!isAI(user))
 		user.set_machine(src)
 
 	var/list/L = list()
@@ -56,31 +56,31 @@ var/global/list/tv_monitors = list()
 
 	var/list/D = list()
 	D["Cancel"] = "Cancel"
-	for(var/obj/machinery/camera/C in L)
-		if(!istype(C.network, /list))
+	for (var/obj/machinery/camera/C in L)
+		if (!istype(C.network, /list))
 			var/turf/T = get_turf(C)
 			WARNING("[C] - Camera at ([T.x],[T.y],[T.z]) has a non list for network, [C.network]")
 			C.network = list(C.network)
 		var/list/tempnetwork = C.network & network
-		if(tempnetwork.len)
+		if (tempnetwork.len)
 			D[text("[][]", C.c_tag, (C.status ? null : " (Deactivated)"))] = C
 
 	var/t = input(user, "Which camera should you change to?") as null|anything in D
-	if(!t || t == "Cancel")
+	if (!t || t == "Cancel")
 		user.cancel_camera()
 		return 0
 	user.set_machine(src)
 
 	var/obj/machinery/camera/C = D[t]
 
-	if(C)
+	if (C)
 		if ((!Adjacent(user) || user.machine != src || user.blinded || user.isStunned() || !( C.can_use() )) && (!istype(user, /mob/living/silicon/ai)))
-			if(!C.can_use() && !isAI(user))
+			if (!C.can_use() && !isAI(user))
 				src.current = null
 			user.cancel_camera()
 			return 0
 		else
-			if(isAI(user))
+			if (isAI(user))
 				var/mob/living/silicon/ai/A = user
 				A.eyeobj.forceMove(get_turf(C))
 				A.client.eye = A.eyeobj
@@ -111,7 +111,7 @@ var/global/list/tv_monitors = list()
 
 /obj/machinery/computer/security/telescreen/update_icon()
 	icon_state = initial(icon_state)
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		icon_state += "b"
 	return
 

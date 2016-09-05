@@ -143,19 +143,19 @@
 
 /obj/item/ammo_storage/magazine/lawgiver/update_icon()
 	overlays.len = 0
-	if(stuncharge > 0)
+	if (stuncharge > 0)
 		var/image/stuncharge_overlay = image('icons/obj/ammo.dmi', src, "[initial(icon_state)]-stun-[stuncharge/20]")
 		overlays += stuncharge_overlay
-	if(lasercharge > 0)
+	if (lasercharge > 0)
 		var/image/lasercharge_overlay = image('icons/obj/ammo.dmi', src, "[initial(icon_state)]-laser-[lasercharge/20]")
 		overlays += lasercharge_overlay
-	if(rapid_ammo_count > 0)
+	if (rapid_ammo_count > 0)
 		var/image/rapid_ammo_overlay = image('icons/obj/ammo.dmi', src, "[initial(icon_state)]-rapid-[rapid_ammo_count]")
 		overlays += rapid_ammo_overlay
-	if(flare_ammo_count > 0)
+	if (flare_ammo_count > 0)
 		var/image/flare_ammo_overlay = image('icons/obj/ammo.dmi', src, "[initial(icon_state)]-flare-[flare_ammo_count]")
 		overlays += flare_ammo_overlay
-	if(ricochet_ammo_count > 0)
+	if (ricochet_ammo_count > 0)
 		var/image/ricochet_ammo_overlay = image('icons/obj/ammo.dmi', src, "[initial(icon_state)]-ricochet-[ricochet_ammo_count]")
 		overlays += ricochet_ammo_overlay
 

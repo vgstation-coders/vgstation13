@@ -64,25 +64,25 @@ var/global/list/facial_hair_styles_female_list	= list()
 	var/list/paths
 	var/datum/sprite_accessory/hair/H
 	paths = typesof(/datum/sprite_accessory/hair) - /datum/sprite_accessory/hair
-	for(. in paths)
+	for (. in paths)
 		H = new .
 		hair_styles_list[H.name] = H
-		switch(H.gender)
-			if(MALE)
+		switch (H.gender)
+			if (MALE)
 				hair_styles_male_list += H.name
-			if(FEMALE)
+			if (FEMALE)
 				hair_styles_female_list += H.name
 			else
 				hair_styles_male_list += H.name
 				hair_styles_female_list += H.name
 	paths = typesof(/datum/sprite_accessory/facial_hair) - /datum/sprite_accessory/facial_hair
-	for(. in paths)
+	for (. in paths)
 		H = new .
 		facial_hair_styles_list[H.name] = H
-		switch(H.gender)
-			if(MALE)
+		switch (H.gender)
+			if (MALE)
 				facial_hair_styles_male_list += H.name
-			if(FEMALE)
+			if (FEMALE)
 				facial_hair_styles_female_list += H.name
 			else
 				facial_hair_styles_male_list += H.name
@@ -139,9 +139,9 @@ var/global/list/facial_hair_styles_female_list	= list()
 	new_dna.mutantrace=mutantrace
 	new_dna.real_name=real_name
 	new_dna.species=species
-	for(var/b=1;b<=DNA_SE_LENGTH;b++)
+	for (var/b=1;b<=DNA_SE_LENGTH;b++)
 		new_dna.SE[b]=SE[b]
-		if(b<=DNA_UI_LENGTH)
+		if (b<=DNA_UI_LENGTH)
 			new_dna.UI[b]=UI[b]
 	new_dna.UpdateUI()
 	new_dna.UpdateSE()
@@ -156,13 +156,13 @@ var/global/list/facial_hair_styles_female_list	= list()
 
 // Create random UI.
 /datum/dna/proc/ResetUI(var/defer=0)
-	for(var/i=1,i<=DNA_UI_LENGTH,i++)
-		switch(i)
-			if(DNA_UI_SKIN_TONE)
+	for (var/i=1,i<=DNA_UI_LENGTH,i++)
+		switch (i)
+			if (DNA_UI_SKIN_TONE)
 				SetUIValueRange(DNA_UI_SKIN_TONE,rand(1,220),220,1) // Otherwise, it gets fucked
 			else
 				UI[i]=rand(0,4095)
-	if(!defer)
+	if (!defer)
 		UpdateUI()
 
 /datum/dna/proc/ResetUIFrom(var/mob/living/carbon/human/character)
@@ -170,12 +170,12 @@ var/global/list/facial_hair_styles_female_list	= list()
 	ResetUI(1)
 	// Hair
 	// FIXME:  Species-specific defaults pls
-	if(!character.h_style)
+	if (!character.h_style)
 		character.h_style = "Skinhead"
 	var/hair = hair_styles_list.Find(character.h_style)
 
 	// Facial Hair
-	if(!character.f_style)
+	if (!character.f_style)
 		character.f_style = "Shaved"
 	var/beard	= facial_hair_styles_list.Find(character.f_style)
 
@@ -208,7 +208,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 	ASSERT(value<=4095)
 	UI[block]=value
 	dirtyUI=1
-	if(!defer)
+	if (!defer)
 		UpdateUI()
 
 // Get a DNA UI block's raw value.
@@ -224,7 +224,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 		return
 	ASSERT(maxvalue<=4095)
 	var/range = (4095 / maxvalue)
-	if(value)
+	if (value)
 		SetUIValue(block,round(value * range),defer)
 
 // Getter version of above.
@@ -247,7 +247,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 	if (block<=0)
 		return
 	var/val
-	if(on)
+	if (on)
 		val=rand(2050,4095)
 	else
 		val=rand(1,2049)
@@ -277,8 +277,8 @@ var/global/list/facial_hair_styles_female_list	= list()
 		return
 	var/oldBlock=GetUIBlock(block)
 	var/newBlock=""
-	for(var/i=1, i<=length(oldBlock), i++)
-		if(i==subBlock)
+	for (var/i=1, i<=length(oldBlock), i++)
+		if (i==subBlock)
 			newBlock+=newSubBlock
 		else
 			newBlock+=copytext(oldBlock,i,i+1)
@@ -290,7 +290,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 
 // "Zeroes out" all of the blocks.
 /datum/dna/proc/ResetSE()
-	for(var/i = 1, i <= DNA_SE_LENGTH, i++)
+	for (var/i = 1, i <= DNA_SE_LENGTH, i++)
 		SetSEValue(i,rand(1,1024),1)
 	UpdateSE()
 
@@ -304,7 +304,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 	ASSERT(value<=4095)
 	SE[block]=value
 	dirtySE=1
-	if(!defer)
+	if (!defer)
 		UpdateSE()
 	//testing("SetSEBlock([block],[value],[defer]): [value] -> [GetSEValue(block)]")
 
@@ -321,7 +321,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 		return
 	ASSERT(maxvalue<=4095)
 	var/range = round(4095 / maxvalue)
-	if(value)
+	if (value)
 		SetSEValue(block, value * range - rand(1,range-1))
 
 // Getter version of above.
@@ -345,7 +345,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 		return
 	var/list/BOUNDS=GetDNABounds(block)
 	var/val
-	if(on)
+	if (on)
 		val=rand(BOUNDS[DNA_ON_LOWERBOUND],BOUNDS[DNA_ON_UPPERBOUND])
 	else
 		val=rand(1,BOUNDS[DNA_OFF_UPPERBOUND])
@@ -376,8 +376,8 @@ var/global/list/facial_hair_styles_female_list	= list()
 		return
 	var/oldBlock=GetSEBlock(block)
 	var/newBlock=""
-	for(var/i=1, i<=length(oldBlock), i++)
-		if(i==subBlock)
+	for (var/i=1, i<=length(oldBlock), i++)
+		if (i==subBlock)
 			newBlock+=newSubBlock
 		else
 			newBlock+=copytext(oldBlock,i,i+1)
@@ -386,14 +386,14 @@ var/global/list/facial_hair_styles_female_list	= list()
 
 
 /proc/EncodeDNABlock(var/value)
-	if(!isnum(value))
+	if (!isnum(value))
 		WARNING("Expected a number, got [value]")
 		return 0
 	return add_zero2(num2hex(value,1), 3)
 
 /datum/dna/proc/UpdateUI()
 	src.uni_identity=""
-	for(var/block in UI)
+	for (var/block in UI)
 		uni_identity += EncodeDNABlock(block)
 	//testing("New UI: [uni_identity]")
 	dirtyUI=0
@@ -401,7 +401,7 @@ var/global/list/facial_hair_styles_female_list	= list()
 /datum/dna/proc/UpdateSE()
 	//var/oldse=struc_enzymes
 	struc_enzymes=""
-	for(var/block in SE)
+	for (var/block in SE)
 		struc_enzymes += EncodeDNABlock(block)
 	//testing("Old SE: [oldse]")
 	//testing("New SE: [struc_enzymes]")
@@ -410,19 +410,19 @@ var/global/list/facial_hair_styles_female_list	= list()
 // BACK-COMPAT!
 //  Just checks our character has all the crap it needs.
 /datum/dna/proc/check_integrity(var/mob/living/carbon/human/character)
-	if(character)
-		if(UI.len != DNA_UI_LENGTH)
+	if (character)
+		if (UI.len != DNA_UI_LENGTH)
 			ResetUIFrom(character)
 
-		if(length(struc_enzymes)!= 3*DNA_SE_LENGTH)
+		if (length(struc_enzymes)!= 3*DNA_SE_LENGTH)
 			ResetSE()
 
-		if(length(unique_enzymes) != 32)
+		if (length(unique_enzymes) != 32)
 			unique_enzymes = md5(character.real_name)
 	else
-		if(length(uni_identity) != 3*DNA_UI_LENGTH)
+		if (length(uni_identity) != 3*DNA_UI_LENGTH)
 			uni_identity = "00600200A00E0110148FC01300B0095BD7FD3F4"
-		if(length(struc_enzymes)!= 3*DNA_SE_LENGTH)
+		if (length(struc_enzymes)!= 3*DNA_SE_LENGTH)
 			struc_enzymes = "43359156756131E13763334D1C369012032164D4FE4CD61544B6C03F251B6C60A42821D26BA3B0FD6"
 
 // BACK-COMPAT!
@@ -434,5 +434,5 @@ var/global/list/facial_hair_styles_female_list	= list()
 
 	unique_enzymes = md5(character.real_name)
 	reg_dna[unique_enzymes] = character.real_name
-	if(character.species)
+	if (character.species)
 		species = character.species.name

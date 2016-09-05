@@ -15,13 +15,13 @@
 	size = 12.0
 
 	return_text()
-		if(..())
+		if (..())
 			return
 
 		var/dat = src.return_text_header()
 
-		switch(src.mode)
-			if(0)
+		switch (src.mode)
+			if (0)
 				dat += "<h4>Security Record List</h4>"
 
 				for (var/datum/data/record/R in data_core.general)
@@ -29,7 +29,7 @@
 
 				dat += "<br>"
 
-			if(1)
+			if (1)
 
 				dat += "<h4>Security Record</h4>"
 
@@ -67,14 +67,14 @@
 		return dat
 
 	Topic(href, href_list)
-		if(..())
+		if (..())
 			return
 
-		if(href_list["mode"])
+		if (href_list["mode"])
 			var/newmode = text2num(href_list["mode"])
 			src.mode = max(newmode, 0)
 
-		else if(href_list["select_rec"])
+		else if (href_list["select_rec"])
 			var/datum/data/record/R = locate(href_list["select_rec"])
 			var/datum/data/record/S = locate(href_list["select_rec"])
 
@@ -98,20 +98,20 @@
 	size = 8.0
 
 	return_text()
-		if(..())
+		if (..())
 			return
 
 		var/dat = src.return_text_header()
 
-		switch(src.mode)
-			if(0)
+		switch (src.mode)
+			if (0)
 
 				dat += "<h4>Medical Record List</h4>"
 				for (var/datum/data/record/R in data_core.general)
 					dat += "<a href='byond://?src=\ref[src];select_rec=\ref[R]'>[R.fields["id"]]: [R.fields["name"]]<br>"
 				dat += "<br>"
 
-			if(1)
+			if (1)
 
 				dat += "<h4>Medical Record</h4>"
 
@@ -154,14 +154,14 @@
 		return dat
 
 	Topic(href, href_list)
-		if(..())
+		if (..())
 			return
 
-		if(href_list["mode"])
+		if (href_list["mode"])
 			var/newmode = text2num(href_list["mode"])
 			src.mode = max(newmode, 0)
 
-		else if(href_list["select_rec"])
+		else if (href_list["select_rec"])
 			var/datum/data/record/R = locate(href_list["select_rec"])
 			var/datum/data/record/M = locate(href_list["select_rec"])
 

@@ -42,35 +42,35 @@
 	var/list/list_of_vault_spawners = shuffle(typesof(/area/random_vault) - /area/random_vault)
 	var/list/list_of_vaults = typesof(/datum/map_element/vault) - /datum/map_element/vault
 
-	for(var/vault_path in list_of_vaults) //Turn a list of paths into a list of objects
+	for (var/vault_path in list_of_vaults) //Turn a list of paths into a list of objects
 		list_of_vaults.Add(new vault_path)
 		list_of_vaults.Remove(vault_path)
 
 	//Start processing the list of vaults
 
-	if(map.only_spawn_map_exclusive_vaults) //If the map spawns only map-exclusive vaults - remove all vaults that aren't exclusive to this map
-		for(var/datum/map_element/vault/V in list_of_vaults)
+	if (map.only_spawn_map_exclusive_vaults) //If the map spawns only map-exclusive vaults - remove all vaults that aren't exclusive to this map
+		for (var/datum/map_element/vault/V in list_of_vaults)
 
-			if(V.exclusive_to_maps.Find(map.nameShort) || V.exclusive_to_maps.Find(map.nameLong))
+			if (V.exclusive_to_maps.Find(map.nameShort) || V.exclusive_to_maps.Find(map.nameLong))
 				continue
 
 			list_of_vaults.Remove(V)
 	else //Map spawns all vaults - remove all vaults that are exclusive to other maps
-		for(var/datum/map_element/vault/V in list_of_vaults)
+		for (var/datum/map_element/vault/V in list_of_vaults)
 
-			if(V.exclusive_to_maps.len)
-				if(!V.exclusive_to_maps.Find(map.nameShort) && !V.exclusive_to_maps.Find(map.nameLong))
+			if (V.exclusive_to_maps.len)
+				if (!V.exclusive_to_maps.Find(map.nameShort) && !V.exclusive_to_maps.Find(map.nameLong))
 					list_of_vaults.Remove(V)
 
-	for(var/datum/map_element/vault/V in list_of_vaults) //Remove all vaults that can't spawn on this map
-		if(V.map_blacklist.len)
-			if(V.map_blacklist.Find(map.nameShort) || V.map_blacklist.Find(map.nameLong))
+	for (var/datum/map_element/vault/V in list_of_vaults) //Remove all vaults that can't spawn on this map
+		if (V.map_blacklist.len)
+			if (V.map_blacklist.Find(map.nameShort) || V.map_blacklist.Find(map.nameLong))
 				list_of_vaults.Remove(V)
 				continue
 
 		//See code/modules/randomMaps/dungeons.dm
-		if(V.require_dungeons)
-			if(!dungeon_area)
+		if (V.require_dungeons)
+			if (!dungeon_area)
 				list_of_vaults.Remove(V)
 				continue
 
@@ -85,13 +85,13 @@
 
 	message_admins("<span class='info'>Spawning [vault_number] vaults (in [list_of_vault_spawners.len] areas)...</span>")
 
-	for(var/T in list_of_vault_spawners) //Go through all subtypes of /area/random_vault
+	for (var/T in list_of_vault_spawners) //Go through all subtypes of /area/random_vault
 		var/area/A = locate(T) //Find the area
 
-		if(!A || !A.contents.len) //Area is empty and doesn't exist - skip
+		if (!A || !A.contents.len) //Area is empty and doesn't exist - skip
 			continue
 
-		if(list_of_vaults.len > 0 && vault_number>0)
+		if (list_of_vaults.len > 0 && vault_number>0)
 			vault_number--
 
 			var/vault_x
@@ -106,17 +106,17 @@
 
 			var/datum/map_element/vault/new_vault = pick(list_of_vaults) //Pick a random path from list_of_vaults (like /datum/vault/spacegym)
 
-			if(new_vault.only_spawn_once)
+			if (new_vault.only_spawn_once)
 				list_of_vaults.Remove(new_vault)
 
-			if(new_vault.load(vault_x, vault_y, vault_z))
+			if (new_vault.load(vault_x, vault_y, vault_z))
 				message_admins("<span class='info'>Loaded [new_vault.file_path]: [formatJumpTo(locate(vault_x, vault_y, vault_z))].")
 				successes++
 			else
 				message_admins("<span class='danger'>Can't find [new_vault.file_path]!</span>")
 				failures++
 
-		for(var/turf/TURF in A) //Replace all of the temporary areas with space
+		for (var/turf/TURF in A) //Replace all of the temporary areas with space
 			space.contents.Add(TURF)
 			TURF.change_area(A, space)
 

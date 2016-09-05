@@ -44,22 +44,22 @@ Example of the second method:
 
 	var/z = location ? location.z : world.maxz //z coordinate
 
-	for(var/turf/T in block(locate(1,1,z), locate(world.maxx, world.maxy, z)))
+	for (var/turf/T in block(locate(1,1,z), locate(world.maxx, world.maxy, z)))
 		turfs.Add(T)
 
-	if(accessable_z_levels.len >= z)
+	if (accessable_z_levels.len >= z)
 		zLevel = accessable_z_levels[z]
 
-	for(var/obj/effect/landmark/L in objects) //Add all landmarks to away destinations. Also set the away mission's location for admins to jump to
-		if(L.name != "awaystart")
+	for (var/obj/effect/landmark/L in objects) //Add all landmarks to away destinations. Also set the away mission's location for admins to jump to
+		if (L.name != "awaystart")
 			continue
 
 		awaydestinations.Add(L)
 
-		if(!location)
+		if (!location)
 			location = get_turf(L)
 
-	for(var/obj/machinery/gateway/G in objects)
+	for (var/obj/machinery/gateway/G in objects)
 		G.initialize()
 
 /datum/map_element/away_mission/empty_space
@@ -127,12 +127,12 @@ var/static/list/away_mission_subtypes = typesof(/datum/map_element/away_mission)
 //Returns a list containing /datum/map_element/away_mission objects.
 /proc/getRandomZlevels(include_unrandom = 0)
 	var/list/potentialRandomZlevels = away_mission_subtypes.Copy()
-	for(var/T in potentialRandomZlevels) //Fill the list with away mission datums (because currently it only contains paths)
+	for (var/T in potentialRandomZlevels) //Fill the list with away mission datums (because currently it only contains paths)
 		potentialRandomZlevels.Add(new T)
 		potentialRandomZlevels.Remove(T)
 
 	var/list/Lines = file2list("maps/RandomZLevels/fileList.txt")
-	if(!Lines.len)
+	if (!Lines.len)
 		return
 	for (var/t in Lines)
 		if (!t)
@@ -159,7 +159,7 @@ var/static/list/away_mission_subtypes = typesof(/datum/map_element/away_mission)
 		if (!name)
 			continue
 
-		if(!isfile(name))
+		if (!isfile(name))
 			warning("fileList.txt contains a map that does not exist: [name]")
 			continue
 
@@ -168,25 +168,25 @@ var/static/list/away_mission_subtypes = typesof(/datum/map_element/away_mission)
 
 		potentialRandomZlevels.Add(AM)
 
-	if(!include_unrandom)
-		for(var/datum/map_element/away_mission/AM in potentialRandomZlevels)
-			if(!AM.generate_randomly)
+	if (!include_unrandom)
+		for (var/datum/map_element/away_mission/AM in potentialRandomZlevels)
+			if (!AM.generate_randomly)
 				potentialRandomZlevels.Remove(AM)
 
 	return potentialRandomZlevels
 
 /proc/createRandomZlevel(override = 0, var/datum/map_element/away_mission/AM, var/messages = null)
-	if(!messages)
+	if (!messages)
 		messages = world
 
-	if(existing_away_missions.len && !override)	//crude, but it saves another var!
+	if (existing_away_missions.len && !override)	//crude, but it saves another var!
 		return
 
-	if(!AM) //If we were provided an away mission datum, don't generate the list of away missions
+	if (!AM) //If we were provided an away mission datum, don't generate the list of away missions
 		to_chat(messages, "<span class='danger'>Searching for away missions...</span>")
 		var/list/potentialRandomZlevels = getRandomZlevels()
 
-		if(!potentialRandomZlevels.len)
+		if (!potentialRandomZlevels.len)
 			return
 
 		AM = pick(potentialRandomZlevels)
@@ -196,7 +196,7 @@ var/static/list/away_mission_subtypes = typesof(/datum/map_element/away_mission)
 
 	log_game("Loading away mission [AM.file_path]")
 
-	if(AM.load())
+	if (AM.load())
 		to_chat(messages, "<span class='danger'>Away mission loaded.</span>")
 		return
 

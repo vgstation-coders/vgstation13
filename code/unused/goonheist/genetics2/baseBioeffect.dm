@@ -85,47 +85,47 @@ var/const/effectTypePower = 3
 		return ..()
 
 	proc/sequenceCorrect()
-		if(blockList.len != blockListCurr.len)
+		if (blockList.len != blockListCurr.len)
 			return 0 //Things went completely and entirely wrong and everything is broken HALP. Some dickwad probably messed with the global sequence.
-		for(var/i=0, i < blockList.len, i++)
+		for (var/i=0, i < blockList.len, i++)
 			var/datum/basepair/correct = blockList[i+1]
 			var/datum/basepair/current = blockListCurr[i+1]
-			if(correct.bpp1 != current.bpp1 || correct.bpp2 != current.bpp2) //NOPE
+			if (correct.bpp1 != current.bpp1 || correct.bpp2 != current.bpp2) //NOPE
 				return 0
 		return 1
 
 	proc/pairCorrect(var/pair_index)
-		if(blockList.len != blockListCurr.len || !pair_index)
+		if (blockList.len != blockListCurr.len || !pair_index)
 			return 0
 		var/datum/basepair/correct = blockList[pair_index]
 		var/datum/basepair/current = blockListCurr[pair_index]
-		if(correct.bpp1 != current.bpp1 || correct.bpp2 != current.bpp2) //NOPE
+		if (correct.bpp1 != current.bpp1 || correct.bpp2 != current.bpp2) //NOPE
 			return 0
 		return 1
 
 	proc/ModBlocks() //Gets the normal sequence for this mutation and then "corrupts" it locally.
-		for(var/datum/basepair/bp in blockList)
+		for (var/datum/basepair/bp in blockList)
 			var/datum/basepair/bpNew = new()
 			bpNew.bpp1 = bp.bpp1
 			bpNew.bpp2 = bp.bpp2
 			blockListCurr.Add(bpNew)
 
-		for(var/datum/basepair/bp in blockListCurr)
-			if(prob(33))
-				if(prob(50))
+		for (var/datum/basepair/bp in blockListCurr)
+			if (prob(33))
+				if (prob(50))
 					bp.bpp1 = "X"
 				else
 					bp.bpp2 = "X"
 
 		var/list/gapList = new/list() //Make sure you don't have more gaps than basepairs or youll get an error. But at that point the mutation would be unsolvable.
 
-		for(var/i=0, i<owner.blockGaps, i++)
+		for (var/i=0, i<owner.blockGaps, i++)
 			var/datum/basepair/bp = pick(blockListCurr - gapList)
 			gapList.Add(bp)
 			bp.bpp1 = "X"
 			bp.bpp2 = "X"
 
-		for(var/i=0, i<owner.lockedGaps, i++)
+		for (var/i=0, i<owner.lockedGaps, i++)
 			var/datum/basepair/bp = pick(blockListCurr - gapList)
 			gapList.Add(bp)
 
@@ -139,14 +139,14 @@ var/const/effectTypePower = 3
 				diff = 0
 			else
 				var/difficulty = round((owner.lockedDiff ** owner.lockedChars.len) / owner.lockedTries)
-				switch(difficulty)
-					if(11 to 20)
+				switch (difficulty)
+					if (11 to 20)
 						diff = 2
-					if(21 to 30)
+					if (21 to 30)
 						diff = 3
-					if(31 to 50)
+					if (31 to 50)
 						diff = 4
-					if(51 to INFINITY)
+					if (51 to INFINITY)
 						diff = 5
 
 			bp.bpp1 = "Unk[diff]"
@@ -156,19 +156,19 @@ var/const/effectTypePower = 3
 		return sequenceCorrect()
 
 	proc/GenerateBlocks() //Generate DNA blocks. This sequence will be used globally.
-		for(var/i=0, i < owner.blockCount, i++)
-			for(var/a=0, a < 4, a++) //4 pairs per block.
+		for (var/i=0, i < owner.blockCount, i++)
+			for (var/a=0, a < 4, a++) //4 pairs per block.
 				var/S = pick("G", "T", "C" , "A")
 				var/datum/basepair/B = new()
 				B.bpp1 = S
-				switch(S)
-					if("G")
+				switch (S)
+					if ("G")
 						B.bpp2 = "C"
-					if("C")
+					if ("C")
 						B.bpp2 = "G"
-					if("T")
+					if ("T")
 						B.bpp2 = "A"
-					if("A")
+					if ("A")
 						B.bpp2 = "T"
 				blockList.Add(B)
 		return

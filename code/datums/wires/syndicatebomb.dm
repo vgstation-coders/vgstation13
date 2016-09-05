@@ -11,20 +11,20 @@ var/const/WIRE_ACTIVATE = 16	// Will start a bombs timer if pulsed, will hint if
 
 /datum/wires/syndicatebomb/UpdatePulsed(var/index)
 	var/obj/machinery/syndicatebomb/P = holder
-	if(P.degutted)
+	if (P.degutted)
 		return
-	switch(index)
-		if(WIRE_BOOM)
+	switch (index)
+		if (WIRE_BOOM)
 			if (P.active)
 				P.loc.visible_message("<span class='warning'>[bicon(holder)] An alarm sounds! It's go-</span>")
 				P.timer = 0
-		if(WIRE_UNBOLT)
+		if (WIRE_UNBOLT)
 			P.loc.visible_message("<span class='notice'>[bicon(holder)] The bolts spin in place for a moment.</span>")
-		if(WIRE_DELAY)
+		if (WIRE_DELAY)
 			playsound(P.loc, 'sound/machines/chime.ogg', 30, 1)
 			P.loc.visible_message("<span class='notice'>[bicon(holder)] The bomb chirps.</span>")
 			P.timer += 10
-		if(WIRE_PROCEED)
+		if (WIRE_PROCEED)
 			playsound(P.loc, 'sound/machines/buzz-sigh.ogg', 30, 1)
 			P.loc.visible_message("<span class='warning'>[bicon(holder)] The bomb buzzes ominously!</span>")
 			if (P.timer >= 61) //Long fuse bombs can suddenly become more dangerous if you tinker with them
@@ -33,12 +33,12 @@ var/const/WIRE_ACTIVATE = 16	// Will start a bombs timer if pulsed, will hint if
 				P.timer -= 10
 			else if (P.timer >= 11) //both to prevent negative timers and to have a little mercy
 				P.timer = 10
-		if(WIRE_ACTIVATE)
-			if(!P.active && !P.defused)
+		if (WIRE_ACTIVATE)
+			if (!P.active && !P.defused)
 				playsound(P.loc, 'sound/machines/click.ogg', 30, 1)
 				P.loc.visible_message("<span class='warning'>[bicon(holder)] You hear the bomb start ticking!</span>")
 				P.active = 1
-				if(!P.open_panel) //Needs to exist in case the wire is pulsed with a signaler while the panel is closed
+				if (!P.open_panel) //Needs to exist in case the wire is pulsed with a signaler while the panel is closed
 					P.icon_state = "syndicate-bomb-active"
 				else
 					P.icon_state = "syndicate-bomb-active-wires"
@@ -49,28 +49,28 @@ var/const/WIRE_ACTIVATE = 16	// Will start a bombs timer if pulsed, will hint if
 
 /datum/wires/syndicatebomb/UpdateCut(var/index, var/mended)
 	var/obj/machinery/syndicatebomb/P = holder
-	if(P.degutted)
+	if (P.degutted)
 		return
-	switch(index)
-		if(WIRE_EXPLODE)
-			if(!mended)
-				if(P.active)
+	switch (index)
+		if (WIRE_EXPLODE)
+			if (!mended)
+				if (P.active)
 					P.loc.visible_message("<span class='warning'>[bicon(holder)] An alarm sounds! It's go-</span>")
 					P.timer = 0
 				else
 					P.defused = 1
-			if(mended)
+			if (mended)
 				P.defused = 0 //cutting and mending all the wires of an inactive bomb will thus cure any sabotage
-		if(WIRE_UNBOLT)
+		if (WIRE_UNBOLT)
 			if (!mended && P.anchored)
 				playsound(P.loc, 'sound/effects/stealthoff.ogg', 30, 1)
 				P.loc.visible_message("<span class='notice'>[bicon(holder)] The bolts lift out of the ground!</span>")
 				P.anchored = 0
-		if(WIRE_PROCEED)
-			if(!mended && P.active)
+		if (WIRE_PROCEED)
+			if (!mended && P.active)
 				P.loc.visible_message("<span class='warning'>[bicon(holder)] An alarm sounds! It's go-</span>")
 				P.timer = 0
-		if(WIRE_ACTIVATE)
+		if (WIRE_ACTIVATE)
 			if (!mended && P.active)
 				P.loc.visible_message("<span class='notice'>[bicon(holder)] The timer stops! The bomb has been defused!</span>")
 				P.icon_state = "syndicate-bomb-inactive-wires" //no cutting possible with the panel closed

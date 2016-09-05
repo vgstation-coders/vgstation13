@@ -20,15 +20,15 @@ var/list/datum/map_element/map_elements = list()
 /datum/map_element/proc/initialize(list/objects) //Called after loading the element. The "objects" list contains all spawned atoms
 	map_elements.Add(src)
 
-	if(!location && objects.len)
+	if (!location && objects.len)
 		location = locate(/turf) in objects
 
 /datum/map_element/proc/load(x, y, z)
 	pre_load()
 
-	if(file_path)
+	if (file_path)
 		var/file = file(file_path)
-		if(isfile(file))
+		if (isfile(file))
 			var/list/L = maploader.load_map(file, z, x, y, src)
 			initialize(L)
 			return 1

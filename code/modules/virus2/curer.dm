@@ -8,15 +8,15 @@
 	var/obj/item/weapon/reagent_containers/container = null
 
 /obj/machinery/computer/curer/attackby(var/obj/I as obj, var/mob/user as mob)
-	if(isscrewdriver(I))
+	if (isscrewdriver(I))
 		return ..(I,user)
-	if(istype(I,/obj/item/weapon/reagent_containers))
+	if (istype(I,/obj/item/weapon/reagent_containers))
 		var/mob/living/carbon/C = user
-		if(!container)
-			if(C.drop_item(I, src))
+		if (!container)
+			if (C.drop_item(I, src))
 				container = I
-	if(istype(I,/obj/item/weapon/virusdish))
-		if(virusing)
+	if (istype(I,/obj/item/weapon/virusdish))
+		if (virusing)
 			to_chat(user, "<b>The pathogen materializer is still recharging..")
 			return
 		var/obj/item/weapon/reagent_containers/glass/beaker/product = new(src.loc)
@@ -42,22 +42,22 @@
 	return
 
 /obj/machinery/computer/curer/attack_hand(var/mob/user as mob)
-	if(..())
+	if (..())
 		return
 	user.machine = src
 	var/dat
-	if(curing)
+	if (curing)
 		dat = "Antibody production in progress"
-	else if(virusing)
+	else if (virusing)
 		dat = "Virus production in progress"
-	else if(container)
+	else if (container)
 		// see if there's any blood in the container
 		var/datum/reagent/blood/B = locate(/datum/reagent/blood) in container.reagents.reagent_list
 
-		if(B)
+		if (B)
 			dat = "Blood sample inserted."
 			var/code = ""
-			for(var/V in ANTIGENS) if(text2num(V) & B.data["antibodies"]) code += ANTIGENS[V]
+			for (var/V in ANTIGENS) if (text2num(V) & B.data["antibodies"]) code += ANTIGENS[V]
 			dat += "<BR>Antibodies: [code]"
 			dat += "<BR><A href='?src=\ref[src];antibody=1'>Begin antibody production</a>"
 		else
@@ -73,25 +73,25 @@
 /obj/machinery/computer/curer/process()
 	..()
 
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 	use_power(500)
 
-	if(curing)
+	if (curing)
 		curing -= 1
-		if(curing == 0)
-			if(container)
+		if (curing == 0)
+			if (container)
 				createcure(container)
 	return
 
 /obj/machinery/computer/curer/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 	usr.machine = src
 
 	if (href_list["antibody"])
 		curing = 10
-	else if(href_list["eject"])
+	else if (href_list["eject"])
 		container.forceMove(src.loc)
 		container = null
 

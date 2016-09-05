@@ -24,43 +24,43 @@
 
 /obj/machinery/constructable_frame/proc/update_desc()
 	var/D
-	if(req_components)
+	if (req_components)
 		D = "Requires "
 		var/first = 1
-		for(var/I in req_components)
-			if(req_components[I] > 0)
+		for (var/I in req_components)
+			if (req_components[I] > 0)
 				D += "[first?"":", "][num2text(req_components[I])] [req_component_names[I]]"
 				first = 0
-		if(first) // nothing needs to be added, then
+		if (first) // nothing needs to be added, then
 			D += "nothing"
 		D += "."
 	desc = D
 
 /obj/machinery/constructable_frame/proc/get_req_components_amt()
 	var/amt = 0
-	for(var/path in req_components)
+	for (var/path in req_components)
 		amt += req_components[path]
 	return amt
 
 /obj/machinery/constructable_frame/machine_frame/attackby(obj/item/P as obj, mob/user as mob)
-	if(P.crit_fail)
+	if (P.crit_fail)
 		to_chat(user, "<span class='warning'>This part is faulty, you cannot add this to the machine!</span>")
 		return
-	switch(build_state)
-		if(1)
-			if(istype(P, /obj/item/stack/cable_coil))
+	switch (build_state)
+		if (1)
+			if (istype(P, /obj/item/stack/cable_coil))
 				var/obj/item/stack/cable_coil/C = P
-				if(C.amount >= 5)
+				if (C.amount >= 5)
 					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 					to_chat(user, "<span class='notice'>You start to add cables to the frame.</span>")
-					if(do_after(user, src, 20))
-						if(C && C.amount >= 5) // Check again
+					if (do_after(user, src, 20))
+						if (C && C.amount >= 5) // Check again
 							C.use(5)
 							to_chat(user, "<span class='notice'>You add cables to the frame.</span>")
 							set_build_state(2)
-			else if(istype(P, /obj/item/stack/sheet/glass/glass))
+			else if (istype(P, /obj/item/stack/sheet/glass/glass))
 				var/obj/item/stack/sheet/glass/glass/G=P
-				if(G.amount<1)
+				if (G.amount<1)
 					to_chat(user, "<span class='warning'>How...?</span>")
 					return
 				G.use(1)
@@ -70,19 +70,19 @@
 				qdel(src)
 				return
 			else
-				if(iswrench(P))
+				if (iswrench(P))
 					playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
 					to_chat(user, "<span class='notice'>You dismantle the frame.</span>")
 					//new /obj/item/stack/sheet/metal(src.loc, 5)
 					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, src.loc)
 					M.amount = 5
 					qdel(src)
-		if(2)
-			if(!..())
-				if(istype(P, /obj/item/weapon/circuitboard))
+		if (2)
+			if (!..())
+				if (istype(P, /obj/item/weapon/circuitboard))
 					var/obj/item/weapon/circuitboard/B = P
-					if(B.board_type == MACHINE)
-						if(!user.drop_item(B, src))
+					if (B.board_type == MACHINE)
+						if (!user.drop_item(B, src))
 							user << "<span class='warning'>You can't let go of \the [B]!</span>"
 							return
 
@@ -92,19 +92,19 @@
 						set_build_state(3)
 						components = list()
 						req_components = circuit.req_components.Copy()
-						for(var/A in circuit.req_components)
+						for (var/A in circuit.req_components)
 							req_components[A] = circuit.req_components[A]
 						req_component_names = circuit.req_components.Copy()
 						/* Are you fucking kidding me
-						for(var/A in req_components)
+						for (var/A in req_components)
 							var/cp = text2path(A)
 							var/obj/ct = new cp() // have to quickly instantiate it get name
 							req_component_names[A] = ct.name
 							del(ct)*/
-						for(var/A in req_components)
+						for (var/A in req_components)
 							var/atom/path = text2path(A)
 							req_component_names[A] = initial(path.name)
-						if(circuit.frame_desc)
+						if (circuit.frame_desc)
 							desc = circuit.frame_desc
 						else
 							update_desc()
@@ -112,49 +112,49 @@
 					else
 						to_chat(user, "<span class='warning'>This frame does not accept circuit boards of this type!</span>")
 				else
-					if(iswirecutter(P))
+					if (iswirecutter(P))
 						playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
 						to_chat(user, "<span class='notice'>You remove the cables.</span>")
 						set_build_state(1)
 						var/obj/item/stack/cable_coil/A = new /obj/item/stack/cable_coil( src.loc )
 						A.amount = 5
 
-		if(3)
-			if(!..())
-				if(iscrowbar(P))
+		if (3)
+			if (!..())
+				if (iscrowbar(P))
 					playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 					set_build_state(2)
 					circuit.forceMove(src.loc)
 					circuit = null
-					if(components.len == 0)
+					if (components.len == 0)
 						to_chat(user, "<span class='notice'>You remove the circuit board.</span>")
 					else
 						to_chat(user, "<span class='notice'>You remove the circuit board and other components.</span>")
-						for(var/obj/item/weapon/W in components)
+						for (var/obj/item/weapon/W in components)
 							W.forceMove(src.loc)
 					desc = initial(desc)
 					req_components = null
 					components = null
 				else
-					if(isscrewdriver(P))
+					if (isscrewdriver(P))
 						var/component_check = 1
-						for(var/R in req_components)
-							if(req_components[R] > 0)
+						for (var/R in req_components)
+							if (req_components[R] > 0)
 								component_check = 0
 								break
-						if(component_check)
+						if (component_check)
 							playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 							var/obj/machinery/new_machine = new src.circuit.build_path(src.loc)
-							for(var/obj/O in new_machine.component_parts)
+							for (var/obj/O in new_machine.component_parts)
 								returnToPool(O)
 							new_machine.component_parts = list()
-							for(var/obj/O in src)
-								if(circuit.contain_parts) // things like disposal don't want their parts in them
+							for (var/obj/O in src)
+								if (circuit.contain_parts) // things like disposal don't want their parts in them
 									O.forceMove(components_in_use)
 								else
 									O.forceMove(null)
 								new_machine.component_parts += O
-							if(circuit.contain_parts)
+							if (circuit.contain_parts)
 								circuit.forceMove(components_in_use)
 							else
 								circuit.forceMove(null)
@@ -163,7 +163,7 @@
 							components = null
 							qdel(src)
 					else
-						if(istype(P, /obj/item/weapon/storage/bag/gadgets/part_replacer) && P.contents.len && get_req_components_amt())
+						if (istype(P, /obj/item/weapon/storage/bag/gadgets/part_replacer) && P.contents.len && get_req_components_amt())
 							var/obj/item/weapon/storage/bag/gadgets/part_replacer/replacer = P
 							var/list/added_components = list()
 							var/list/part_list = replacer.contents.Copy()
@@ -171,16 +171,16 @@
 							//Sort the parts. This ensures that higher tier items are applied first.
 							part_list = sortTim(part_list, /proc/cmp_rped_sort)
 
-							for(var/path in req_components)
-								while(req_components[path] > 0 && (locate(text2path(path)) in part_list))
+							for (var/path in req_components)
+								while (req_components[path] > 0 && (locate(text2path(path)) in part_list))
 									var/obj/item/part = (locate(text2path(path)) in part_list)
-									if(!part.crit_fail)
+									if (!part.crit_fail)
 										added_components[part] = path
 										replacer.remove_from_storage(part, src)
 										req_components[path]--
 										part_list -= part
 
-							for(var/obj/item/weapon/stock_parts/part in added_components)
+							for (var/obj/item/weapon/stock_parts/part in added_components)
 								components += part
 								to_chat(user, "<span class='notice'>[part.name] applied.</span>")
 							replacer.play_rped_sound()
@@ -188,13 +188,13 @@
 							update_desc()
 
 						else
-							if(istype(P, /obj/item/weapon) || istype(P, /obj/item/stack))
-								for(var/I in req_components)
-									if(istype(P, text2path(I)) && (req_components[I] > 0))
+							if (istype(P, /obj/item/weapon) || istype(P, /obj/item/stack))
+								for (var/I in req_components)
+									if (istype(P, text2path(I)) && (req_components[I] > 0))
 										playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-										if(istype(P, /obj/item/stack))
+										if (istype(P, /obj/item/stack))
 											var/obj/item/stack/CP = P
-											if(CP.amount >= req_components[I])
+											if (CP.amount >= req_components[I])
 												var/camt = min(CP.amount, req_components[I]) // amount of the stack to take, idealy amount required, but limited by amount provided
 												var/obj/item/stack/CC = getFromPool(text2path(I), src)
 												CC.amount = camt
@@ -207,24 +207,24 @@
 											else
 												to_chat(user, "<span class='warning'>You do not have enough [P]!</span>")
 
-										if(user.drop_item(P, src))
+										if (user.drop_item(P, src))
 											components += P
 											req_components[I]--
 											update_desc()
 											break
 								to_chat(user, desc)
 
-								if(P && P.loc != src && !istype(P, /obj/item/stack/cable_coil))
+								if (P && P.loc != src && !istype(P, /obj/item/stack/cable_coil))
 									to_chat(user, "<span class='warning'>You cannot add that component to the machine!</span>")
 
 /obj/machinery/constructable_frame/machine_frame/proc/set_build_state(var/state)
 	build_state = state
-	switch(state)
-		if(1)
+	switch (state)
+		if (1)
 			icon_state = "box_0"
-		if(2)
+		if (2)
 			icon_state = "box_1"
-		if(3)
+		if (3)
 			icon_state = "box_2"
 
 /obj/item/weapon/circuitboard/proc/finish_building(var/obj/machinery/new_machine, var/mob/user) //Something that will get done after the last step of construction. Currently unused.
@@ -253,8 +253,8 @@ to destroy them and players will be able to make replacements.
 /obj/item/weapon/circuitboard/blank/attackby(obj/item/O as obj, mob/user as mob)
 	/*if(ismultitool(O))
 		var/boardType = local_fuses.assigned_boards["[local_fuses.localbit]"] //Localbit is an int, but this is an associative list organized by strings
-		if(boardType)
-			if(ispath(boardType))
+		if (boardType)
+			if (ispath(boardType))
 				to_chat(user, "<span class='notice'>The multitool pings softly.</span>")
 				new boardType(get_turf(src))
 				qdel(src)
@@ -267,23 +267,23 @@ to destroy them and players will be able to make replacements.
 		*/if(!soldering&&issolder(O))
 		//local_fuses.Interact(user)
 		var/t = input(user, "Which board should be designed?") as null|anything in allowed_boards
-		if(!t)
+		if (!t)
 			return
 		var/obj/item/weapon/solder/S = O
-		if(!S.remove_fuel(4,user))
+		if (!S.remove_fuel(4,user))
 			return
 		playsound(loc, 'sound/items/Welder.ogg', 50, 1)
 		soldering = 1
-		if(do_after(user, src,40))
+		if (do_after(user, src,40))
 			var/boardType = allowed_boards[t]
 			var/obj/item/I = new boardType(get_turf(user))
 			to_chat(user, "<span class='notice'>You fashion a crude [I] from the blank circuitboard.</span>")
 			qdel(src)
 			user.put_in_hands(I)
 		soldering = 0
-	else if(iswelder(O))
+	else if (iswelder(O))
 		var/obj/item/weapon/weldingtool/WT = O
-		if(WT.remove_fuel(1,user))
+		if (WT.remove_fuel(1,user))
 			var/obj/item/stack/sheet/glass/glass/new_item = new()
 			new_item.forceMove(src.loc) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
 			returnToPool(src)

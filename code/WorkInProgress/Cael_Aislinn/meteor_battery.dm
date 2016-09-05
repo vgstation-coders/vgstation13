@@ -16,8 +16,8 @@
 	dir = get_dir(src.loc, target)
 	//walk_towards(src, target, MISSILE_SPEED)
 	spawn()
-		while(loc)
-			if(timestopped)
+		while (loc)
+			if (timestopped)
 				sleep(world.tick_lag)
 				continue
 			step_towards(src,target)
@@ -25,7 +25,7 @@
 
 /obj/item/projectile/missile/Bump(atom/A)
 	spawn(0)
-		if(istype(A,/obj/effect/meteor))
+		if (istype(A,/obj/effect/meteor))
 			del(A)
 		explode()
 	return
@@ -83,10 +83,10 @@
 	return (popping!=0)
 
 /obj/machinery/meteor_battery/power_change()
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		icon_state = "broke"
 	else
-		if( powered() )
+		if ( powered() )
 			if (src.enabled)
 				icon_state = "turret1"
 			else
@@ -104,72 +104,72 @@
 /obj/machinery/meteor_battery/proc/get_new_target()
 	var/list/new_targets = new
 	var/new_target
-	for(var/obj/effect/meteor/M in view(protect_range, get_turf(src)))
+	for (var/obj/effect/meteor/M in view(protect_range, get_turf(src)))
 		new_targets += M
-	if(new_targets.len)
+	if (new_targets.len)
 		new_target = pick(new_targets)
 	return new_target
 
 /obj/machinery/meteor_battery/process()
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
-	if(src.cover==null)
+	if (src.cover==null)
 		src.cover = new /obj/machinery/turretcover(src.loc)
 		src.cover.host = src
-	if(!enabled)
-		if(!isDown() && !isPopping())
+	if (!enabled)
+		if (!isDown() && !isPopping())
 			popDown()
 		return
 
 	//update our missiles
-	for(var/obj/item/projectile/missile/M in fired_missiles)
-		if(!M)
+	for (var/obj/item/projectile/missile/M in fired_missiles)
+		if (!M)
 			fired_missiles.Remove(M)
 			continue
-		if(tracking_missiles && cur_target)
+		if (tracking_missiles && cur_target)
 			//update homing missile target
 			M.target = get_turf(cur_target)
 			walk_towards(M, M.target, MISSILE_SPEED)
 
-		if(get_turf(M) == M.target && M)
+		if (get_turf(M) == M.target && M)
 			//missile has arrived at destination
 			fired_missiles.Remove(M)
-			if( istype(get_turf(M), /turf/space) )
+			if ( istype(get_turf(M), /turf/space) )
 				//send the missile shooting off into the distance
 				walk(M, get_dir(src,M), MISSILE_SPEED)
 				spawn(rand(3,10) * 10)
-					if(M)
+					if (M)
 						M.explode()
-			else if(rand(3) == 3)
+			else if (rand(3) == 3)
 				//chance to blow up later (between 4 seconds and 2 minutes), or just sit there being ominous
 				spawn(rand(4,120) * 10)
 					M.explode()
-				for(var/mob/P in view(7))
+				for (var/mob/P in view(7))
 					P.visible_message("<span class='warning'>The missile skids to a halt, vibrating and sparking ominously!</span>")
 
-	if(!cur_target)
+	if (!cur_target)
 		cur_target = get_new_target() //get new target
 
-	if(cur_target) //if it's found, proceed
-		if(!isPopping())
-			if(isDown())
+	if (cur_target) //if it's found, proceed
+		if (!isPopping())
+			if (isDown())
 				popUp()
 				use_power = 2
 			else
 				spawn()
-					if(!targeting_active)
+					if (!targeting_active)
 						targeting_active = 1
 						target()
 						targeting_active = 0
-	else if(!isPopping())//else, pop down
-		if(!isDown())
+	else if (!isPopping())//else, pop down
+		if (!isDown())
 			popDown()
 			use_power = 1
 
 	return
 
 /obj/machinery/meteor_battery/proc/target()
-	while(src && enabled && !stat)
+	while (src && enabled && !stat)
 		src.dir = get_dir(src, cur_target)
 		shootAt(cur_target)
 		sleep(shot_delay)
@@ -217,7 +217,7 @@
 /obj/machinery/meteor_battery/bullet_act(var/obj/item/projectile/Proj)
 	src.health -= Proj.damage
 	..()
-	if(prob(45) && Proj.damage > 0)
+	if (prob(45) && Proj.damage > 0)
 		src.spark_system.start()
 	if (src.health <= 0)
 		src.die()
@@ -233,14 +233,14 @@
 	return
 
 /obj/machinery/meteor_battery/emp_act(severity)
-	switch(severity)
-		if(1)
+	switch (severity)
+		if (1)
 			enabled = 0
 			power_change()
 	..()
 
 /obj/machinery/meteor_battery/ex_act(severity)
-	if(severity < 3)
+	if (severity < 3)
 		src.die()
 
 /obj/machinery/meteor_battery/proc/die()
@@ -256,9 +256,9 @@
 		del(src)
 
 /obj/machinery/meteor_battery/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
-	if(!(stat & BROKEN))
+	if (!(stat & BROKEN))
 		playsound(src.loc, 'sound/weapons/slash.ogg', 25, 1, -1)
-		for(var/mob/O in viewers(src, null))
+		for (var/mob/O in viewers(src, null))
 			if ((O.client && !( O.blinded )))
 				O.show_message(text("<span class='danger'>[] has slashed at []!</span>", M, src), 1)
 		src.health -= 15

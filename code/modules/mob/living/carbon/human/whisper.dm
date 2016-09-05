@@ -1,17 +1,17 @@
 /mob/living/carbon/human/whisper(message as text)
-	if(!IsVocal())
+	if (!IsVocal())
 		return
 #ifdef SAY_DEBUG
 	var/oldmsg = message
 #endif
-	if(say_disabled)	//This is here to try to identify lag problems
+	if (say_disabled)	//This is here to try to identify lag problems
 		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
 		return
 
-	if(isDead())
+	if (isDead())
 		return
 
-	if(silent)
+	if (silent)
 		to_chat(src, "<span class='warning'>You can't speak while silenced.</span>")
 		return
 
@@ -20,10 +20,10 @@
 	speech.mode = SPEECH_MODE_WHISPER
 	speech.message_classes.Add("whisper")
 
-	if(istype(speech.language))
+	if (istype(speech.language))
 		speech.message = copytext(speech.message,2+length(speech.language.key))
 	else
-		if(!isnull(speech.language))
+		if (!isnull(speech.language))
 			//var/oldmsg = message
 			var/n = speech.language
 			speech.message = copytext(speech.message,1+length(n))
@@ -32,7 +32,7 @@
 		speech.language = get_default_language()
 
 	speech.message = trim(speech.message)
-	if(!can_speak(message))
+	if (!can_speak(message))
 		return
 
 	speech.message = "[message]"
@@ -48,13 +48,13 @@
 	var/critical = InCritical()
 
 	// We are unconscious but not in critical, so don't allow them to whisper.
-	if(stat == UNCONSCIOUS && (!critical || said_last_words))
+	if (stat == UNCONSCIOUS && (!critical || said_last_words))
 		return
 
 	log_whisper("[key_name(src)] ([formatLocation(src)]): [message]")
 
 	// If whispering your last words, limit the whisper based on how close you are to death.
-	if(critical && !said_last_words)
+	if (critical && !said_last_words)
 		var/health_diff = round(-config.health_threshold_dead + health)
 		// If we cut our message short, abruptly end it with a-..
 		var/message_len = length(speech.message)

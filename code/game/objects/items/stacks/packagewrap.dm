@@ -33,41 +33,41 @@
 
 /obj/item/stack/package_wrap/afterattack(var/attacked, mob/user as mob, var/proximity_flag)
 	var/obj/target = attacked
-	if(is_type_in_list(target, cannot_wrap))
+	if (is_type_in_list(target, cannot_wrap))
 		return
-	if(target.anchored)
+	if (target.anchored)
 		return
-	if(target in user)
+	if (target in user)
 		return
-	if(!proximity_flag)
+	if (!proximity_flag)
 		return
-	if(ishuman(attacked))
+	if (ishuman(attacked))
 		return try_wrap_human(attacked,user)
-	if(!istype(target))
+	if (!istype(target))
 		return
 
 	user.attack_log += "\[[time_stamp()]\] <font color='blue'>Has used [src.name] on \ref[target]</font>"
 	target.add_fingerprint(user)
 	src.add_fingerprint(user)
 
-	if(istype(target, /obj/item) && smallpath)
+	if (istype(target, /obj/item) && smallpath)
 		if (amount >= 1)
 			var/obj/item/I = target
 			var/obj/item/P = new smallpath(get_turf(target.loc),target,round(I.w_class))
-			if(!istype(target.loc, /turf))
-				if(user.client)
+			if (!istype(target.loc, /turf))
+				if (user.client)
 					user.client.screen -= target
 			target.forceMove(P)
 			P.add_fingerprint(user)
 			use(1)
 		else
 			to_chat(user, "<span class='warning'>You need more paper!</span>")
-	else if(is_type_in_list(target,wrappable_big_stuff) && bigpath)
-		if(istype(target,/obj/structure/closet))
+	else if (is_type_in_list(target,wrappable_big_stuff) && bigpath)
+		if (istype(target,/obj/structure/closet))
 			var/obj/structure/closet/C = target
-			if(C.opened)
+			if (C.opened)
 				return
-		if(amount >= 3)
+		if (amount >= 3)
 			var/obj/item/P = new bigpath(get_turf(target.loc),target)
 			target.forceMove(P)
 			P.add_fingerprint(user)
@@ -79,12 +79,12 @@
 	return 1
 
 /obj/item/stack/package_wrap/proc/try_wrap_human(var/mob/living/carbon/human/H, mob/user as mob)
-	if(!manpath)
+	if (!manpath)
 		to_chat(user, "<span class='notice'>This material is not strong enough to wrap humanoids, try something else.</span>")
 		return 0
-	if(amount >= 2)
+	if (amount >= 2)
 		H.visible_message("<span class='danger'>[user] is trying to wrap up [H]!</span>")
-		if(do_mob(user,H,human_wrap_speed))
+		if (do_mob(user,H,human_wrap_speed))
 			var/obj/present = new manpath(get_turf(H),H)
 			if (H.client)
 				H.client.perspective = EYE_PERSPECTIVE
@@ -93,7 +93,7 @@
 			H.forceMove(present)
 			H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been wrapped with [src.name]  by [user.name] ([user.ckey])</font>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to wrap [H.name] ([H.ckey])</font>")
-			if(!iscarbon(user))
+			if (!iscarbon(user))
 				H.LAssailant = null
 			else
 				H.LAssailant = user
@@ -135,22 +135,22 @@
 
 /obj/item/delivery/Destroy()
 	..()
-	if(wrapped)
+	if (wrapped)
 		wrapped.forceMove(get_turf(src.loc))
 
 /obj/item/delivery/attack_self(mob/user as mob)
-	if(wrapped)
-		if(ishuman(user))
+	if (wrapped)
+		if (ishuman(user))
 			user.put_in_hands(wrapped)
 		else
 			wrapped.forceMove(get_turf(src))
 		qdel(src)
 
 /obj/item/delivery/attackby(obj/item/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/device/destTagger))
+	if (istype(W, /obj/item/device/destTagger))
 		var/obj/item/device/destTagger/O = W
 
-		if(src.sortTag != O.currTag)
+		if (src.sortTag != O.currTag)
 			var/tag = uppertext(O.destinations[O.currTag])
 			to_chat(user, "<span class='notice'>*[tag]*</span>")
 			sortTag = tag
@@ -159,14 +159,14 @@
 			overlays += image(icon = icon, icon_state = "deliverytag")
 			src.desc = "A small wrapped package. It has a label reading [tag]"
 
-	else if(istype(W, /obj/item/weapon/pen))
+	else if (istype(W, /obj/item/weapon/pen))
 		var/str = copytext(sanitize(input(user,"Label text?","Set label","")),1,MAX_NAME_LEN)
 		if (!Adjacent(user) || user.stat)
 			return
-		if(!str || !length(str))
+		if (!str || !length(str))
 			to_chat(user, "<span class='warning'>Invalid text.</span>")
 			return
-		for(var/mob/M in viewers())
+		for (var/mob/M in viewers())
 			to_chat(M, "<span class='notice'>[user] labels [src] as [str].</span>")
 		src.name = "[src.name] ([str])" //also needs updating
 
@@ -182,24 +182,24 @@
 	..()
 	w_class = W_CLASS_GIANT
 	wrapped = target
-	if(istype(wrapped,/obj/structure/closet/crate) || ishuman(target))
+	if (istype(wrapped,/obj/structure/closet/crate) || ishuman(target))
 		icon_state = "deliverycrate"
-	else if(istype(wrapped,/obj/structure/vendomatpack))
+	else if (istype(wrapped,/obj/structure/vendomatpack))
 		icon_state = "deliverypack"
-	else if(istype(wrapped,/obj/structure/stackopacks))
+	else if (istype(wrapped,/obj/structure/stackopacks))
 		icon_state = "deliverystack"
-	else if(istype(wrapped,/obj/structure/closet))
+	else if (istype(wrapped,/obj/structure/closet))
 		icon_state = "deliverycloset" //Only IF it isn't a crate-type
 
 /obj/item/delivery/large/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
 /obj/item/delivery/large/attack_hand(mob/user as mob)
-	if(wrapped)
+	if (wrapped)
 		wrapped.forceMove(get_turf(src.loc))
 	qdel(src)
 
 /obj/item/delivery/large/attack_robot(mob/user)
-	if(!Adjacent(user))
+	if (!Adjacent(user))
 		return
 	attack_hand(user)

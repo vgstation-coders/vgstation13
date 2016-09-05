@@ -17,8 +17,8 @@
 	var/deconverted = 0
 
 /datum/stat_blob/cult/doPostRoundChecks()
-	for(var/datum/mind/M in ticker.minds)
-		if(M.active && istype(M.current, /mob/living/carbon) && M.special_role == "Cultist")
+	for (var/datum/mind/M in ticker.minds)
+		if (M.active && istype(M.current, /mob/living/carbon) && M.special_role == "Cultist")
 			surviving_cultists++
 
 /datum/stat_blob/cult/writeStats(file)
@@ -48,15 +48,15 @@
 	var/did_shunt = 0
 
 /datum/stat_blob/malf/doPostRoundChecks()
-	for(var/mob/living/silicon/robot/R in player_list)
-		if(!R.isUnconscious())
+	for (var/mob/living/silicon/robot/R in player_list)
+		if (!R.isUnconscious())
 			borgs_at_roundend++ //TODO check lawset
 
 /datum/stat_blob/malf/writeStats(file)
 	file << "MALFSTATS|[malf_wins]|[did_shunt]|[borgs_at_roundend]"
-	if(bought_modules.len)
+	if (bought_modules.len)
 		var/modulestring = "MALFMODULES"
-		for(var/module in bought_modules)
+		for (var/module in bought_modules)
 			modulestring += "|[module]"
 		file << modulestring
 
@@ -71,8 +71,8 @@
 
 /datum/stat_blob/revsquad/writeStats(file)
 	file << "REVSQUADSTATS|[revsquad_won]|[headcount]"
-	if(revsquad_items.len)
+	if (revsquad_items.len)
 		var/itemsline = "REVSQUADITEMS"
-		for(var/i in revsquad_items)
+		for (var/i in revsquad_items)
 			itemsline += "|[i]"
 		file << itemsline

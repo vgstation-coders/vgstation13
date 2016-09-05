@@ -64,7 +64,7 @@ rcd light flash thingy on matter drain
 	set name = "Upgrade Turrets"
 
 	src.verbs -= /mob/living/silicon/ai/proc/upgrade_turrets
-	for(var/obj/machinery/turret/turret in machines)
+	for (var/obj/machinery/turret/turret in machines)
 		turret.health += 30
 		turret.shot_delay = 20
 
@@ -80,12 +80,12 @@ rcd light flash thingy on matter drain
 	set category = "Malfunction"
 	set name = "Disable RCDs"
 
-	for(var/datum/AI_Module/large/disable_rcd/rcdmod in current_modules)
-		if(rcdmod.uses > 0)
+	for (var/datum/AI_Module/large/disable_rcd/rcdmod in current_modules)
+		if (rcdmod.uses > 0)
 			rcdmod.uses --
-			for(var/obj/item/device/rcd/matter/engineering/rcd in world)
+			for (var/obj/item/device/rcd/matter/engineering/rcd in world)
 				rcd.disabled = 1
-			for(var/obj/item/mecha_parts/mecha_equipment/tool/rcd/rcd in world)
+			for (var/obj/item/mecha_parts/mecha_equipment/tool/rcd/rcd in world)
 				rcd.disabled = 1
 			to_chat(src, "RCD-disabling pulse emitted.")
 		else
@@ -105,10 +105,10 @@ rcd light flash thingy on matter drain
 	set category = "Malfunction"
 
 	if (istype(M, /obj/machinery))
-		for(var/datum/AI_Module/small/overload_machine/overload in current_modules)
-			if(overload.uses > 0)
+		for (var/datum/AI_Module/small/overload_machine/overload in current_modules)
+			if (overload.uses > 0)
 				overload.uses --
-				for(var/mob/V in hearers(M, null))
+				for (var/mob/V in hearers(M, null))
 					V.show_message("<span class='notice'>You hear a loud electrical buzzing sound!</span>", 2)
 				spawn(50)
 					explosion(get_turf(M), -1, 1, 2, 3) //C4 Radius + 1 Dest for the machine
@@ -131,22 +131,22 @@ rcd light flash thingy on matter drain
 	set name = "Place Robotic Factory"
 	set category = "Malfunction"
 
-	if(!eyeobj)
+	if (!eyeobj)
 		return
 
-	if(!isturf(src.loc)) // AI must be in it's core.
+	if (!isturf(src.loc)) // AI must be in it's core.
 		return
 
 	var/datum/AI_Module/large/place_cyborg_transformer/PCT = locate() in src.current_modules
-	if(!PCT)
+	if (!PCT)
 		return
 
-	if(PCT.uses < 1)
+	if (PCT.uses < 1)
 		to_chat(src, "Out of uses.")
 		return
 
 	var/sure = alert(src, "Make sure the room it is in is big enough, there is camera vision and that there is a 1x3 area for the machine. Are you sure you want to place the machine here?", "Are you sure?", "Yes", "No")
-	if(sure != "Yes")
+	if (sure != "Yes")
 		return
 
 	// Make sure there is enough room.
@@ -156,20 +156,20 @@ rcd light flash thingy on matter drain
 	var/alert_msg = "There isn't enough room. Make sure you are placing the machine in a clear area and on a floor."
 
 	var/datum/camerachunk/C = cameranet.getCameraChunk(middle.x, middle.y, middle.z)
-	if(!C.visibleTurfs[middle])
+	if (!C.visibleTurfs[middle])
 		alert(src, "We cannot get camera vision of this location.")
 		return
 
-	for(var/T in turfs)
+	for (var/T in turfs)
 
 		// Make sure the turfs are clear and the correct type.
-		if(!istype(T, /turf/simulated/floor))
+		if (!istype(T, /turf/simulated/floor))
 			alert(src, alert_msg)
 			return
 
 		var/turf/simulated/floor/F = T
-		for(var/atom/movable/AM in F.contents)
-			if(AM.density)
+		for (var/atom/movable/AM in F.contents)
+			if (AM.density)
 				alert(src, alert_msg)
 				return
 
@@ -212,11 +212,11 @@ rcd light flash thingy on matter drain
 	set category = "Malfunction"
 	set name = "Blackout"
 
-	for(var/datum/AI_Module/small/blackout/blackout in current_modules)
-		if(blackout.uses > 0)
+	for (var/datum/AI_Module/small/blackout/blackout in current_modules)
+		if (blackout.uses > 0)
 			blackout.uses --
-			for(var/obj/machinery/power/apc/apc in power_machines)
-				if(prob(30*apc.overload))
+			for (var/obj/machinery/power/apc/apc in power_machines)
+				if (prob(30*apc.overload))
 					apc.overload_lighting()
 				else
 					apc.overload++
@@ -239,13 +239,13 @@ rcd light flash thingy on matter drain
 	var/allowed = 0
 	var/datum/AI_Module/small/interhack/module_to_charge
 
-	for(var/datum/AI_Module/small/interhack/interhack in current_modules)
-		if(interhack.uses > 0)
+	for (var/datum/AI_Module/small/interhack/interhack in current_modules)
+		if (interhack.uses > 0)
 			module_to_charge = interhack
 			allowed = 1
 			break
 
-	if(!allowed)
+	if (!allowed)
 		to_chat(src, "Out of uses.")
 		return
 
@@ -254,16 +254,16 @@ rcd light flash thingy on matter drain
 	//Then ask the AI to pick one announcement from the list
 
 	var/list/possible_announcements = typesof(/datum/command_alert)
-	for(var/A in possible_announcements)
+	for (var/A in possible_announcements)
 		var/datum/command_alert/CA = A
 		possible_announcements[initial(CA.name)] = A
 		possible_announcements.Remove(A)
 
 	var/chosen_announcement = input(usr, "Select a fake announcement to send out.", "Interhack") as null|anything in possible_announcements
-	if(!chosen_announcement)
+	if (!chosen_announcement)
 		to_chat(src, "Selection cancelled.")
 		return
-	if(module_to_charge.uses <= 0)
+	if (module_to_charge.uses <= 0)
 		to_chat(src, "ERROR: Out of uses.")
 		return
 
@@ -286,9 +286,9 @@ rcd light flash thingy on matter drain
 	set category = "Malfunction"
 
 	if (istype (C, /obj/machinery/camera))
-		for(var/datum/AI_Module/small/reactivate_camera/camera in current_modules)
-			if(camera.uses > 0)
-				if(!C.status)
+		for (var/datum/AI_Module/small/reactivate_camera/camera in current_modules)
+			if (camera.uses > 0)
+				if (!C.status)
 					C.deactivate(src)
 					camera.uses --
 				else
@@ -311,30 +311,30 @@ rcd light flash thingy on matter drain
 	set name = "Upgrade Camera"
 	set category = "Malfunction"
 
-	if(istype(C))
+	if (istype(C))
 		var/datum/AI_Module/small/upgrade_camera/UC = locate(/datum/AI_Module/small/upgrade_camera) in current_modules
-		if(UC)
-			if(UC.uses > 0)
-				if(C.assembly)
+		if (UC)
+			if (UC.uses > 0)
+				if (C.assembly)
 					var/upgraded = 0
 
-					if(!C.isXRay())
+					if (!C.isXRay())
 						C.upgradeXRay()
 						//Update what it can see.
 						cameranet.updateVisibility(C, 0)
 						upgraded = 1
 
-					if(!C.isEmpProof())
+					if (!C.isEmpProof())
 						C.upgradeEmpProof()
 						upgraded = 1
 
-					if(!C.isMotion())
+					if (!C.isMotion())
 						C.upgradeMotion()
 						upgraded = 1
 						// Add it to machines that process
 						machines |= C
 
-					if(upgraded)
+					if (upgraded)
 						UC.uses --
 						C.visible_message("<span class='notice'>[bicon(C)] *beep*</span>")
 						to_chat(src, "Camera successully upgraded!")
@@ -350,9 +350,9 @@ rcd light flash thingy on matter drain
 	var/list/possible_modules = list()
 
 /datum/module_picker/New()
-	for(var/type in typesof(/datum/AI_Module))
+	for (var/type in typesof(/datum/AI_Module))
 		var/datum/AI_Module/AM = new type
-		if(AM.power_type != null)
+		if (AM.power_type != null)
 			src.possible_modules += AM
 
 /datum/module_picker/proc/remove_verbs(var/mob/living/silicon/ai/A)
@@ -360,7 +360,7 @@ rcd light flash thingy on matter drain
 
 
 
-	for(var/datum/AI_Module/AM in possible_modules)
+	for (var/datum/AI_Module/AM in possible_modules)
 		A.verbs.Remove(AM.power_type)
 
 
@@ -370,9 +370,9 @@ rcd light flash thingy on matter drain
 			<HR>
 			<B>Install Module:</B><BR>
 			<I>The number afterwards is the amount of processing time it consumes.</I><BR>"}
-	for(var/datum/AI_Module/large/module in src.possible_modules)
+	for (var/datum/AI_Module/large/module in src.possible_modules)
 		dat += "<A href='byond://?src=\ref[src];[module.mod_pick_name]=1'>[module.module_name]</A> ([module.cost])<BR>"
-	for(var/datum/AI_Module/small/module in src.possible_modules)
+	for (var/datum/AI_Module/small/module in src.possible_modules)
 		dat += "<A href='byond://?src=\ref[src];[module.mod_pick_name]=1'>[module.module_name]</A> ([module.cost])<BR>"
 	dat += "<HR>"
 	if (src.temp)
@@ -385,22 +385,22 @@ rcd light flash thingy on matter drain
 /datum/module_picker/Topic(href, href_list)
 	..()
 
-	if(!isAI(usr))
+	if (!isAI(usr))
 		return
 	var/mob/living/silicon/ai/A = usr
 
-	for(var/datum/AI_Module/AM in possible_modules)
+	for (var/datum/AI_Module/AM in possible_modules)
 		if (href_list[AM.mod_pick_name])
 
 			// Cost check
-			if(AM.cost > src.processing_time)
+			if (AM.cost > src.processing_time)
 				temp = "You cannot afford this module."
 				break
 
 			// Add new uses if we can, and it is allowed.
 			var/datum/AI_Module/already_AM = locate(AM.type) in A.current_modules
-			if(already_AM)
-				if(!AM.one_time)
+			if (already_AM)
+				if (!AM.one_time)
 					already_AM.uses += AM.uses
 					src.processing_time -= AM.cost
 					temp = "Additional use added to [already_AM.module_name]"

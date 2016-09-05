@@ -20,7 +20,7 @@
 	// ourselves and leave nothing to the black box.
 	set background = 1
 	
-	for(var/i=1,i<30,i++)
+	for (var/i=1,i<30,i++)
 		// Just to pretend we're doing something here
 		sleep(rand(3, 5))
 	

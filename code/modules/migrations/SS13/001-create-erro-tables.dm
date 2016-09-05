@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `erro_admin` (
   `flags` int(16) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;"}
-	if(!execute(sql))
+	if (!execute(sql))
 		return FALSE
 
 	sql={"
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `erro_admin_log` (
   `log` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;"}
-	if(!execute(sql))
+	if (!execute(sql))
 		return FALSE
 
 	sql={"
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `erro_ban` (
   `unbanned_ip` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;"}
-	if(!execute(sql))
+	if (!execute(sql))
 		return FALSE
 
 	sql={"
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `erro_feedback` (
   `details` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;"}
-	if(!execute(sql))
+	if (!execute(sql))
 		return FALSE
 
 	sql={"
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `erro_player` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `ckey` (`ckey`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;"}
-	if(!execute(sql))
+	if (!execute(sql))
 		return FALSE
 
 	sql={"
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `erro_poll_option` (
   `descmax` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;"}
-	if(!execute(sql))
+	if (!execute(sql))
 		return FALSE
 
 	sql={"
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `erro_poll_question` (
   `adminonly` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;"}
-	if(!execute(sql))
+	if (!execute(sql))
 		return FALSE
 
 	sql={"
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `erro_poll_textreply` (
   `adminrank` varchar(32) NOT NULL DEFAULT 'Player',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;"}
-	if(!execute(sql))
+	if (!execute(sql))
 		return FALSE
 
 	sql={"
@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `erro_poll_vote` (
   `rating` int(2) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;"}
-	if(!execute(sql))
+	if (!execute(sql))
 		return FALSE
 
 	sql={"
@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS `erro_privacy` (
   `option` varchar(128) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;"}
-	if(!execute(sql))
+	if (!execute(sql))
 		return FALSE
 
 	sql={"
@@ -174,7 +174,7 @@ CREATE  TABLE IF NOT EXISTS `death` (
   PRIMARY KEY (`id`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = latin1;"}
-	if(!execute(sql))
+	if (!execute(sql))
 		return FALSE
 
 	sql={"
@@ -192,7 +192,7 @@ CREATE  TABLE IF NOT EXISTS `karma` (
   PRIMARY KEY (`id`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = latin1;"}
-	if(!execute(sql))
+	if (!execute(sql))
 		return FALSE
 
 	sql={"
@@ -203,7 +203,7 @@ CREATE  TABLE IF NOT EXISTS `karmatotals` (
   PRIMARY KEY (`id`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = latin1;"}
-	if(!execute(sql))
+	if (!execute(sql))
 		return FALSE
 
 	sql={"
@@ -216,7 +216,7 @@ CREATE  TABLE IF NOT EXISTS `library` (
   PRIMARY KEY (`id`) )
 ENGINE = MyISAM
 DEFAULT CHARACTER SET = latin1;"}
-	if(!execute(sql))
+	if (!execute(sql))
 		return FALSE
 
 	sql={"

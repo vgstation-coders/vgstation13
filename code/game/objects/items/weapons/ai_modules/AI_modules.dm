@@ -39,7 +39,7 @@ Refactored AI modules by N3X15
 
 /obj/item/weapon/aiModule/attack_ai(mob/user as mob)
 	// Keep MoMMIs from picking them up.
-	if(isMoMMI(user))
+	if (isMoMMI(user))
 		to_chat(user, "<span class='warning'>Your firmware prevents you from picking that up!</span>")
 	return
 
@@ -52,7 +52,7 @@ Refactored AI modules by N3X15
 	return new src.type(loc)
 
 /obj/item/weapon/aiModule/proc/fmtSubject(var/atom/target)
-	if(ismob(target))
+	if (ismob(target))
 		var/mob/M=target
 		return "[M.name]([M.key])"
 	else
@@ -67,13 +67,13 @@ Refactored AI modules by N3X15
 // Apply laws to ai_laws datum.
 /obj/item/weapon/aiModule/proc/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
 	var/senderName="Unknown"
-	if(sender)
+	if (sender)
 		senderName=sender.name
 	var/targetName="\a [target.name]"
-	if(ismob(target))
+	if (ismob(target))
 		var/mob/M=target
 		// This seems redundant.  Revisit. - N3X
-		if(src.modflags & HIDE_SENDER)
+		if (src.modflags & HIDE_SENDER)
 			to_chat(target, "<span class='danger'>\[REDACTED\] </span>has uploaded a change to the laws you must follow, using \a [name]. From now on: ")
 		else
 			to_chat(target, "[senderName] has uploaded a change to the laws you must follow, using \a [name]. From now on: ")
@@ -110,7 +110,7 @@ Refactored AI modules by N3X15
 		laws.set_zeroth_law("")
 	laws.clear_supplied_laws()
 	laws.clear_ion_laws()
-	if(ismob(target))
+	if (ismob(target))
 		to_chat(target, "[sender.real_name] attempted to reset your laws using a reset module.")
 	return 1
 
@@ -133,7 +133,7 @@ Refactored AI modules by N3X15
 	..()
 	if (!(ismob(target) && is_special_character(target)))
 		laws.set_zeroth_law("")
-	if(ismob(target))
+	if (ismob(target))
 		to_chat(target, "[sender.real_name] attempted to wipe your laws using a purge module.")
 	laws.clear_supplied_laws()
 	laws.clear_ion_laws()

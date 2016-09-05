@@ -44,10 +44,10 @@
 	RefreshParts()
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/flatpacker/build_part(var/datum/design/part)
-	if(!part)
+	if (!part)
 		return
 
-	if(!remove_materials(part))
+	if (!remove_materials(part))
 		stopped = 1
 		src.visible_message("<font color='blue'>The [src.name] beeps, \"Not enough materials to complete item.\"</font>")
 		return
@@ -62,7 +62,7 @@
 	sleep(get_construction_time_w_coeff(part))
 	src.use_power = 1
 	src.overlays -= image(icon = icon, icon_state = "[base_state]_ani")
-	if(being_built)
+	if (being_built)
 		var/obj/structure/closet/crate/flatpack/FP = new
 		being_built.forceMove(FP)
 		FP.name += " ([being_built.name])"
@@ -78,7 +78,7 @@
 	return 1
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/flatpacker/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(..())
+	if (..())
 		return 1
 	if (O.is_open_container())
 		return 1

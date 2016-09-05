@@ -38,10 +38,10 @@
 	notify_slaved()
 
 /mob/living/silicon/ai/proc/notify_slaved(var/force_sync=0)
-	for(var/mob/living/silicon/robot/R in mob_list)
-		if(force_sync)
+	for (var/mob/living/silicon/robot/R in mob_list)
+		if (force_sync)
 			R.lawsync()
-		if(R.lawupdate && (R.connected_ai == src))
+		if (R.lawupdate && (R.connected_ai == src))
 			to_chat(R, "<span class='danger'>...LAWS UPDATED</span>")
 
 /mob/living/silicon/ai/proc/clear_ion_laws()
@@ -89,7 +89,7 @@
 		var/law = src.laws.supplied[index]
 
 		if (length(law) > 0)
-			if(src.lawcheck.len >= number+1)
+			if (src.lawcheck.len >= number+1)
 				if (src.lawcheck[number+1] == "Yes")
 					src.say("[number]. [law]")
 					sleep(10)

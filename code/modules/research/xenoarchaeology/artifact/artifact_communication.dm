@@ -13,9 +13,9 @@
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/communication/attackby(obj/item/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/commstone))
-		if((W in allstones) && remaining < 6)
-			if(user.drop_item(W, src))
+	if (istype(W,/obj/item/commstone))
+		if ((W in allstones) && remaining < 6)
+			if (user.drop_item(W, src))
 				to_chat(user, "<span class='notice'>You place one of the strange stones back onto the ancient device, it snaps into place.</span>")
 	..()
 
@@ -26,14 +26,14 @@
 	return //Robots HA
 
 /obj/machinery/communication/attack_hand(mob/user as mob)
-	if(..())
+	if (..())
 		return 1
-	if(contents.len)
+	if (contents.len)
 		var/obj/item/commstone/stone = contents[1]
 		user.put_in_hands(stone)
 		to_chat(user, "<span class='notice'>You delicately remove one of the strange stones from the ancient device.</span>")
 		return
-	if(remaining)
+	if (remaining)
 		var/obj/item/commstone/stone = new(remaining)
 		user.put_in_hands(stone)
 		stone.commdevice = src
@@ -44,24 +44,24 @@
 
 /obj/machinery/communication/examine(mob/user as mob)
 	..()
-	if(remaining)
+	if (remaining)
 		to_chat(user, "<span class='info'>The device's slots still apears to hold [remaining] stone\s.")
 	else
 		to_chat(user, "<span class='info'>The device no longer has any stones in any of its holders.")
-	if(stat & NOPOWER)
+	if (stat & NOPOWER)
 		to_chat(user, "<span class='info'>It seems the machine is currently dark, perhaps it would activate when anchored into a powered area.")
 
 /obj/machinery/communication/Destroy()
-	for(var/stone in contents)
+	for (var/stone in contents)
 		qdel(stone)
 	..()
 
 /obj/machinery/communication/proc/get_active_stones()
-	if((stat & NOPOWER) && !anchored)
+	if ((stat & NOPOWER) && !anchored)
 		return list()
 	var/list/obj/item/commstone/thestones = allstones.Copy()
-	for(var/obj/item/commstone/check in thestones)
-		if(check.loc == src)
+	for (var/obj/item/commstone/check in thestones)
+		if (check.loc == src)
 			thestones -= check
 	return thestones
 
@@ -81,7 +81,7 @@
 
 /obj/item/commstone/examine(mob/user as mob)
 	..()
-	if(!commdevice || (commdevice.stat & NOPOWER))
+	if (!commdevice || (commdevice.stat & NOPOWER))
 		to_chat(user, "<span class='info'>It seems to have lost its luster, perhaps the device it is connected to isn't functional.")
 
 

@@ -21,15 +21,15 @@
 	var/top_x = world.maxx
 	var/top_y = world.maxy
 
-	for(var/turf/T in shuttle.linked_area)
-		if(T.x > low_x)
+	for (var/turf/T in shuttle.linked_area)
+		if (T.x > low_x)
 			low_x = T.x
-		if(T.x < top_x)
+		if (T.x < top_x)
 			top_x = T.x
 
-		if(T.y > low_y)
+		if (T.y > low_y)
 			low_y = T.y
-		if(T.y < top_y)
+		if (T.y < top_y)
 			top_y = T.y
 
 	var/shuttle_width = abs(top_x - low_x)
@@ -49,11 +49,11 @@
 	//Start filling out the area
 	var/turf/t_loc = new_transit.location
 
-	if(!istype(t_loc))
+	if (!istype(t_loc))
 		message_admins("<span class='warning'>ERROR: Unable to generate transit area (area placement failed).</span>")
 		return
 
-	for(var/turf/T in block(locate(t_loc.x, t_loc.y, t_loc.z), locate(t_loc.x+new_transit.width, t_loc.y+new_transit.height, t_loc.z)))
+	for (var/turf/T in block(locate(t_loc.x, t_loc.y, t_loc.z), locate(t_loc.x+new_transit.width, t_loc.y+new_transit.height, t_loc.z)))
 		T.ChangeTurf(/turf/space/transit)
 		var/turf/space/transit/t_turf = T
 		t_turf.pushdirection = direction
@@ -74,7 +74,7 @@
 	var/obj/docking_port/destination/transit/result = new(destination_turf)
 	result.dir = turn(shuttle.linked_port.dir, 180)
 
-	if(create_borders)
+	if (create_borders)
 		result.generate_borders = TRUE
 		//Border generation is done by the docking port
 

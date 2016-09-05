@@ -10,7 +10,7 @@
 	name = "Manifest"
 
 	return_text()
-		if(..())
+		if (..())
 			return
 
 		var/dat = src.return_text_header()
@@ -32,7 +32,7 @@
 	var/message2
 
 	return_text()
-		if(..())
+		if (..())
 			return
 
 		var/dat = src.return_text_header()
@@ -55,31 +55,31 @@
 
 
 	Topic(href, href_list)
-		if(..())
+		if (..())
 			return
 
-		if(href_list["statdisp"])
-			switch(href_list["statdisp"])
-				if("message")
+		if (href_list["statdisp"])
+			switch (href_list["statdisp"])
+				if ("message")
 					post_status("message", message1, message2)
-				if("alert")
+				if ("alert")
 					post_status("alert", href_list["alert"])
 
-				if("setmsg1")
+				if ("setmsg1")
 					message1 = input("Line 1", "Enter Message Text", message1) as text|null
 					if (!src.master || !in_range(src.master, usr) && src.master.loc != usr)
 						return
 
-					if(!(src.holder in src.master))
+					if (!(src.holder in src.master))
 						return
 					src.master.updateSelfDialog()
 
-				if("setmsg2")
+				if ("setmsg2")
 					message2 = input("Line 2", "Enter Message Text", message2) as text|null
 					if (!src.master || !in_range(src.master, usr) && src.master.loc != usr)
 						return
 
-					if(!(src.holder in src.master))
+					if (!(src.holder in src.master))
 						return
 
 					src.master.updateSelfDialog()
@@ -91,7 +91,7 @@
 		return
 
 	proc/post_status(var/command, var/data1, var/data2)
-		if(!src.master)
+		if (!src.master)
 			return
 
 		var/datum/signal/status_signal = new
@@ -99,11 +99,11 @@
 		status_signal.transmission_method = 1
 		status_signal.data["command"] = command
 
-		switch(command)
-			if("message")
+		switch (command)
+			if ("message")
 				status_signal.data["msg1"] = data1
 				status_signal.data["msg2"] = data2
-			if("alert")
+			if ("alert")
 				status_signal.data["picture_state"] = data1
 
 		src.post_signal(status_signal,"1435")
@@ -117,7 +117,7 @@
 	var/last_transmission = 0 //No signal spamming etc
 
 	return_text()
-		if(..())
+		if (..())
 			return
 
 		var/dat = src.return_text_header()
@@ -143,11 +143,11 @@ Code:
 		return dat
 
 	Topic(href, href_list)
-		if(..())
+		if (..())
 			return
 
 		if (href_list["send"])
-			if(last_transmission && world.time < (last_transmission + 5))
+			if (last_transmission && world.time < (last_transmission + 5))
 				return
 			last_transmission = world.time
 			spawn( 0 )
@@ -181,7 +181,7 @@ Code:
 	size = 8.0
 
 	return_text()
-		if(..())
+		if (..())
 			return
 
 		var/dat = src.return_text_header()
@@ -190,13 +190,13 @@ Code:
 		dat += "<BR><B>Supply shuttle</B><BR>"
 		dat += "Location: [supply_shuttle_moving ? "Moving to station ([supply_shuttle_timeleft] Mins.)":supply_shuttle_at_station ? "Station":"Dock"]<BR>"
 		dat += "Current approved orders: <BR><ol>"
-		for(var/S in supply_shuttle_shoppinglist)
+		for (var/S in supply_shuttle_shoppinglist)
 			var/datum/supply_order/SO = S
 			dat += "<li>[SO.object.name] approved by [SO.orderedby] [SO.comment ? "([SO.comment])":""]</li>"
 		dat += "</ol>"
 
 		dat += "Current requests: <BR><ol>"
-		for(var/S in supply_shuttle_requestlist)
+		for (var/S in supply_shuttle_requestlist)
 			var/datum/supply_order/SO = S
 			dat += "<li>[SO.object.name] requested by [SO.orderedby]</li>"
 		dat += "</ol><font size=\"-3\">Upgrade NOW to Space Parts & Space Vendors PLUS for full remote order control and inventory management."

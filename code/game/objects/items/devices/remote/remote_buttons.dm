@@ -21,10 +21,10 @@
 	button_icon = image(src.icon)
 
 /obj/item/device/remote_button/update_icon(button_id = 0)
-	if(holder)
+	if (holder)
 		holder.overlays -= button_icon
 
-	if(holder && loc == holder && button_id)
+	if (holder && loc == holder && button_id)
 		var/icon_type = controller.get_icon_type(button_id)
 		var/list/pixel_dis = controller.get_pixel_displacement(button_id)
 		button_icon.icon_state = "[base_state][icon_type]"

@@ -6,7 +6,7 @@
 	icon_opened = "coffin_open"
 
 /obj/structure/closet/coffin/update_icon()
-	if(!opened)
+	if (!opened)
 		icon_state = icon_closed
 	else
 		icon_state = icon_opened

@@ -26,11 +26,11 @@ var/global/list/cached_icons = list()
 	return 0
 
 /obj/item/weapon/reagent_containers/glass/paint/afterattack(turf/simulated/target, mob/user , flag)
-	if(!flag || user.stat)
+	if (!flag || user.stat)
 		return ..()
 
-	if(istype(target) && reagents.total_volume > 5)
-		for(var/mob/O in viewers(user))
+	if (istype(target) && reagents.total_volume > 5)
+		for (var/mob/O in viewers(user))
 			O.show_message("<span class='warning'>\The [target] has been splashed with something by [user]!</span>", 1)
 		spawn(5)
 			reagents.reaction(target, TOUCH)
@@ -39,9 +39,9 @@ var/global/list/cached_icons = list()
 		return ..()
 
 /obj/item/weapon/reagent_containers/glass/paint/New()
-	if(paint_type == "remover")
+	if (paint_type == "remover")
 		name = "paint remover bucket"
-	else if(paint_type && length(paint_type) > 0)
+	else if (paint_type && length(paint_type) > 0)
 		name = paint_type + " " + name
 	..()
 	reagents.add_reagent("paint_[paint_type]", volume)
@@ -130,20 +130,20 @@ var/global/list/cached_icons = list()
 		var/t1 = input(user, "Please select a color:", "Locking Computer", null) in list( "red", "blue", "green", "yellow", "black", "white")
 		if ((user.get_active_hand() != src || user.stat || user.restrained()))
 			return
-		switch(t1)
-			if("red")
+		switch (t1)
+			if ("red")
 				color = "FF0000"
-			if("blue")
+			if ("blue")
 				color = "0000FF"
-			if("green")
+			if ("green")
 				color = "00FF00"
-			if("yellow")
+			if ("yellow")
 				color = "FFFF00"
-			if("violet")
+			if ("violet")
 				color = "FF00FF"
-			if("white")
+			if ("white")
 				color = "FFFFFF"
-			if("black")
+			if ("black")
 				color = "333333"
 		icon_state = "paint_[t1]"
 		add_fingerprint(user)
@@ -151,10 +151,10 @@ var/global/list/cached_icons = list()
 
 
 /obj/item/weapon/paint/afterattack(turf/target, mob/user as mob)
-	if(!istype(target) || istype(target, /turf/space))
+	if (!istype(target) || istype(target, /turf/space))
 		return
 	var/ind = "[initial(target.icon)][color]"
-	if(!cached_icons[ind])
+	if (!cached_icons[ind])
 		var/icon/overlay = new/icon(initial(target.icon))
 		overlay.Blend("#[color]",ICON_MULTIPLY)
 		overlay.SetIntensity(1.4)
@@ -169,7 +169,7 @@ var/global/list/cached_icons = list()
 	icon_state = "paint_neutral"
 
 	afterattack(turf/target, mob/user as mob)
-		if(istype(target) && target.icon != initial(target.icon))
+		if (istype(target) && target.icon != initial(target.icon))
 			target.icon = initial(target.icon)
 		return
 */
@@ -182,10 +182,10 @@ datum/reagent/paint
 	color = "#808080"
 
 	reaction_turf(var/turf/T, var/volume)
-		if(!istype(T) || istype(T, /turf/space))
+		if (!istype(T) || istype(T, /turf/space))
 			return
 		var/ind = "[initial(T.icon)][color]"
-		if(!cached_icons[ind])
+		if (!cached_icons[ind])
 			var/icon/overlay = new/icon(initial(T.icon))
 			overlay.Blend(color,ICON_MULTIPLY)
 			overlay.SetIntensity(1.4)
@@ -238,6 +238,6 @@ datum/reagent/paint_remover
 	color = "#808080"
 
 	reaction_turf(var/turf/T, var/volume)
-		if(istype(T) && T.icon != initial(T.icon))
+		if (istype(T) && T.icon != initial(T.icon))
 			T.icon = initial(T.icon)
 		return

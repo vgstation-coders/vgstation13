@@ -54,56 +54,56 @@
 	return
 
 /mob/living/simple_animal/hostile/mimic/proc/environment_disguise(list/L = crate_mimic_disguises)
-	if(!L)
+	if (!L)
 		return
 	//First, determine the environment we're in
 
 	var/our_area_type = "default"
 
 	var/area/A = get_area(src)
-	if(A.fire)
+	if (A.fire)
 		our_area_type = "emergency"
 	else
-		if(isspace(A))
+		if (isspace(A))
 			our_area_type = "space"
-		else if(istype(A,/area/engine) || istype(A,/area/engineering) || istype(A,/area/construction))
+		else if (istype(A,/area/engine) || istype(A,/area/engineering) || istype(A,/area/construction))
 			our_area_type = "engineering"
-		else if(istype(A,/area/medical/medbay))
+		else if (istype(A,/area/medical/medbay))
 			our_area_type = "medbay"
-		else if(istype(A,/area/crew_quarters/bar))
+		else if (istype(A,/area/crew_quarters/bar))
 			our_area_type = "bar"
-		else if(istype(A,/area/security))
+		else if (istype(A,/area/security))
 			our_area_type = "security"
-		else if(istype(A,/area/chapel))
+		else if (istype(A,/area/chapel))
 			our_area_type = "chapel"
-		else if(istype(A,/area/library))
+		else if (istype(A,/area/library))
 			our_area_type = "library"
-		else if(istype(A,/area/hydroponics))
+		else if (istype(A,/area/hydroponics))
 			our_area_type = "botany"
-		else if(istype(A,/area/crew_quarters/kitchen))
+		else if (istype(A,/area/crew_quarters/kitchen))
 			our_area_type = "kitchen"
-		else if(istype(A,/area/storage/nuke_storage))
+		else if (istype(A,/area/storage/nuke_storage))
 			our_area_type = "vault"
 
-	if(health < (0.75*maxHealth)) //Health below 3/4
-		if(L["lowhealth"]) //If we have a special set of disguises for low health
+	if (health < (0.75*maxHealth)) //Health below 3/4
+		if (L["lowhealth"]) //If we have a special set of disguises for low health
 			our_area_type = "lowhealth" //Then use it!
 
 	//Found our area type - time to get a disguise!
 
 	var/list/possible_disguises = L[our_area_type]
 
-	if(!possible_disguises || !possible_disguises.len) //If can't find a disguise for that type of area
+	if (!possible_disguises || !possible_disguises.len) //If can't find a disguise for that type of area
 		possible_disguises = L["default"] //Use default disguise
-		if(!possible_disguises || !possible_disguises.len) //No default disguise - abort
+		if (!possible_disguises || !possible_disguises.len) //No default disguise - abort
 			return
 
 	copied_object = pick(possible_disguises) //We did it!
-	if(!initial(copied_object.icon_state) || !initial(copied_object.icon)) //No icon!
+	if (!initial(copied_object.icon_state) || !initial(copied_object.icon)) //No icon!
 		copied_object = initial(copied_object) //Revert to default
 
 /mob/living/simple_animal/hostile/mimic/proc/apply_disguise()
-	if(ispath(copied_object))
+	if (ispath(copied_object))
 		appearance = initial(copied_object.appearance)
 //
 // Crate mimic
@@ -126,9 +126,9 @@ var/global/list/crate_mimic_disguises = list(\
 	health = 100
 
 /mob/living/simple_animal/hostile/mimic/crate/New(loc, atom/new_disguise = null)
-	if(ispath(new_disguise))
+	if (ispath(new_disguise))
 		copied_object = new_disguise
-	else if(istype(new_disguise))
+	else if (istype(new_disguise))
 		copied_object = new_disguise.type
 	else
 		environment_disguise()
@@ -139,27 +139,27 @@ var/global/list/crate_mimic_disguises = list(\
 	initialize() //Collect all items from its turf!
 
 /mob/living/simple_animal/hostile/mimic/crate/Life()
-	if(!angry)
-		if(health < maxHealth)
+	if (!angry)
+		if (health < maxHealth)
 			health = min(health + 2, maxHealth) //Regenerate 2 health per tick
-			if(health == maxHealth) //Normally when mimics go to sleep with wounds, they take on a less noticeable disguise (like a cigarette butt). If we fully heal while in sleep, it's time to change our disguise to something more noticeable!
+			if (health == maxHealth) //Normally when mimics go to sleep with wounds, they take on a less noticeable disguise (like a cigarette butt). If we fully heal while in sleep, it's time to change our disguise to something more noticeable!
 
 				var/found_alive_mob = 0
 
-				for(var/mob/living/L in view(7,src))
-					if(L == src)
+				for (var/mob/living/L in view(7,src))
+					if (L == src)
 						continue
-					if(L.stat)
+					if (L.stat)
 						continue //Dead bodies don't bother us
 
 					found_alive_mob = 1
 					break
 
-				if(!found_alive_mob)
+				if (!found_alive_mob)
 					environment_disguise() //Disguise ourselves
 					apply_disguise()
 
-		if(pulledby && prob(25))
+		if (pulledby && prob(25))
 			anger()
 		else
 			return
@@ -167,10 +167,10 @@ var/global/list/crate_mimic_disguises = list(\
 	.=..()
 
 /mob/living/simple_animal/hostile/mimic/crate/Destroy()
-	if(copied_object)
+	if (copied_object)
 		var/obj/structure/C = new copied_object(get_turf(src))
 		//Drop all loot!
-		for(var/atom/movable/AM in src)
+		for (var/atom/movable/AM in src)
 			AM.forceMove(C)
 
 	..()
@@ -178,20 +178,20 @@ var/global/list/crate_mimic_disguises = list(\
 /mob/living/simple_animal/hostile/mimic/crate/initialize()
 	..()
 	//Put all loot inside us!
-	for(var/obj/item/I in loc)
-		if(I.anchored || I.density)
+	for (var/obj/item/I in loc)
+		if (I.anchored || I.density)
 			continue
 
 		I.forceMove(src)
 
 /mob/living/simple_animal/hostile/mimic/crate/attackby(obj/W, mob/user)
-	if(angry) //If we're angry - proceed as normal
+	if (angry) //If we're angry - proceed as normal
 		return ..()
 	else
 		return attack_hand(user) //If we're hidden - attempt to open (same as a normal crate)
 
 /mob/living/simple_animal/hostile/mimic/crate/attack_hand(mob/user)
-	if(angry)
+	if (angry)
 		return ..()
 
 	to_chat(user, "<span class='notice'>It won't budge.</span>")
@@ -210,12 +210,12 @@ var/global/list/crate_mimic_disguises = list(\
 
 /mob/living/simple_animal/hostile/mimic/crate/proc/anger(berserk = 0, change_icon = 1)
 	angry = 1
-	if(change_icon)
-		if(ispath(copied_object, /obj/structure/closet))
+	if (change_icon)
+		if (ispath(copied_object, /obj/structure/closet))
 			var/obj/structure/closet/C = copied_object
 			icon_state = initial(C.icon_opened)
 
-	if(berserk)
+	if (berserk)
 		angry = 2 //Can't calm down
 		melee_damage_lower = initial(melee_damage_lower) + 4
 		melee_damage_upper = initial(melee_damage_upper) + 4 //Increase damage
@@ -223,25 +223,25 @@ var/global/list/crate_mimic_disguises = list(\
 		name = "[initial(name)] mimic"
 
 /mob/living/simple_animal/hostile/mimic/crate/proc/calm_down(change_icon = 1)
-	if(angry > 1)
+	if (angry > 1)
 		return //If angry is 2, can't calm down!
 
 	angry = 0
-	if(change_icon)
+	if (change_icon)
 		icon_state = initial(icon_state)
 
 /mob/living/simple_animal/hostile/mimic/crate/hitby() //This is called when the mimic is hit by a thrown object
 	..()
 
-	if(!angry)
+	if (!angry)
 		anger(berserk = 1) //Go berserk because some asshole tried to snipe us
 		visible_message("<span class='danger'>\The [src] roars in rage!</span>")
 
 /mob/living/simple_animal/hostile/mimic/crate/bullet_act(obj/item/projectile/P, def_zone)
 	..()
 
-	if(P.damage > 0) //The projectile isn't a dummy
-		if(!angry)
+	if (P.damage > 0) //The projectile isn't a dummy
+		if (!angry)
 			anger(berserk = 1)
 			visible_message("<span class='danger'>\The [src] roars in rage!</span>")
 			playsound(get_turf(src), 'sound/hallucinations/growl1.ogg', 50, 1)
@@ -269,52 +269,52 @@ var/global/list/crate_mimic_disguises = list(\
 	var/can_grab = 1
 
 /mob/living/simple_animal/hostile/mimic/crate/chest/Die()
-	for(var/atom/movable/A in get_locked(/datum/locking_category/mimic))
+	for (var/atom/movable/A in get_locked(/datum/locking_category/mimic))
 		unlock_atom(A)
 		visible_message("<span class='notice'>\The [src] lets go of \the [A]!</span>")
 	..()
 
 /mob/living/simple_animal/hostile/mimic/crate/chest/AttackingTarget()
 	..()
-	if(can_grab && istype(target, /mob/living/carbon/human))
+	if (can_grab && istype(target, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = target
 		var/list/atom/movable/locked = get_locked(/datum/locking_category/mimic)
-		if(!locked.len) //Eating nobody
-			if(prob(60))
+		if (!locked.len) //Eating nobody
+			if (prob(60))
 				lock_atom(H, /datum/locking_category/mimic)
 				visible_message("<span class='danger'>\The [src] grabs \the [H] with its tongue!")
 			return
 
-		if(H in locked)
-			if(prob(20))
+		if (H in locked)
+			if (prob(20))
 				to_chat(H, "<span class='danger'>You feel very weak!</span>")
 				H.Weaken(3)
 
 /mob/living/simple_animal/hostile/mimic/crate/chest/LoseTarget()
-	if(target in get_locked(/datum/locking_category/mimic))
+	if (target in get_locked(/datum/locking_category/mimic))
 		unlock_atom(target)
 
 	var/mob/living/L = target
-	if(istype(L) && Adjacent(L)) //If we're near our ex-target!
-		if(L.stat == DEAD) //The target is dead (which what caused us to lose it in the first place)
+	if (istype(L) && Adjacent(L)) //If we're near our ex-target!
+		if (L.stat == DEAD) //The target is dead (which what caused us to lose it in the first place)
 			L.forceMove(src)
 			visible_message("<span class='danger'>\The [src] eats \the [L]'s corpse!</span>")
 
 	return ..()
 
 /mob/living/simple_animal/hostile/mimic/crate/chest/relaymove(mob/user)
-	if(user.incapacitated())
+	if (user.incapacitated())
 		return
 
-	if(user.loc == src) //We're inside the chest
+	if (user.loc == src) //We're inside the chest
 		to_chat(user, "<span class='info'>You try to escape from \the [src]. This will take a while!</span>")
-		if(do_after(user, src, 300)) //30 seconds
+		if (do_after(user, src, 300)) //30 seconds
 			to_chat(user, "<span class='info'>You successfully escape from \the [src].</span>")
 			user.forceMove(get_turf(src))
 	else //We're being held by the mimic
 		var/mob/living/carbon/human/H = user
-		if(istype(H))
-			if((M_HULK in H.mutations) || (M_STRONG in H.mutations)) //Finally a use for M_STRONG
+		if (istype(H))
+			if ((M_HULK in H.mutations) || (M_STRONG in H.mutations)) //Finally a use for M_STRONG
 				unlock_atom(H)
 				visible_message("<span class='notice'>[H] easily breaks free of \the [src]'s hold!</span>")
 				return
@@ -324,11 +324,11 @@ var/global/list/crate_mimic_disguises = list(\
 	if (angry && locked.len && W.is_sharp())
 		user.visible_message("<span class='danger'>[user] slashes at \the [src]'s tongue!</span>")
 
-		for(var/atom/M in locked)
+		for (var/atom/M in locked)
 			unlock_atom(M)
 			visible_message("<span class='notice'>\The [src] loses its hold on [M].</span>")
 
-		if(can_grab && (W.is_sharp() >= 1.2) && prob(20)) //Required sharpness same as the normal kitchen knife's
+		if (can_grab && (W.is_sharp() >= 1.2) && prob(20)) //Required sharpness same as the normal kitchen knife's
 			visible_message("<span class='notice'>\The [src]'s tongue has been damaged!</span>")
 			can_grab = 0
 	..()
@@ -408,18 +408,18 @@ var/global/list/item_mimic_disguises = list(
 
 /mob/living/simple_animal/hostile/mimic/crate/item/examine(mob/user) //Total override to make the mimics look EXACTLY like items!
 	var/s_size = "normal-sized"
-	if(ispath(copied_object, /obj/item))
+	if (ispath(copied_object, /obj/item))
 		var/obj/item/I = copied_object
-		switch(initial(I.w_class))
-			if(1.0)
+		switch (initial(I.w_class))
+			if (1.0)
 				s_size = "tiny"
-			if(2.0)
+			if (2.0)
 				s_size = "small"
-			if(3.0)
+			if (3.0)
 				s_size = "normal-sized"
-			if(4.0)
+			if (4.0)
 				s_size = "bulky"
-			if(5.0)
+			if (5.0)
 				s_size = "huge"
 
 	var/pronoun
@@ -429,7 +429,7 @@ var/global/list/item_mimic_disguises = list(
 		pronoun = "It is"
 
 	to_chat(user, "[bicon(src)] That's \a [src]. [pronoun] a [s_size] item.")
-	if(desc)
+	if (desc)
 		to_chat(user, desc)
 
 /mob/living/simple_animal/hostile/mimic/crate/item/Die()
@@ -437,7 +437,7 @@ var/global/list/item_mimic_disguises = list(
 	..()
 
 /mob/living/simple_animal/hostile/mimic/crate/item/attack_hand(mob/user)
-	if(angry)
+	if (angry)
 		return ..()
 
 	user.simple_message("<span class='warning'>Oh no! \The [src] is actually a mimic!</span>",\
@@ -459,10 +459,10 @@ var/global/list/item_mimic_disguises = list(
 
 	//Disguise as something else for bonus stealth points
 	environment_disguise()
-	if(copied_object)
+	if (copied_object)
 		appearance = initial(copied_object.appearance)
 
-		if(ispath(copied_object, /obj/item))
+		if (ispath(copied_object, /obj/item))
 			var/obj/item/I = copied_object
 			size = initial(I.w_class)
 		else
@@ -471,7 +471,7 @@ var/global/list/item_mimic_disguises = list(
 /mob/living/simple_animal/hostile/mimic/crate/item/environment_disguise(list/L = item_mimic_disguises)
 	..(item_mimic_disguises)
 
-	if(ispath(copied_object, /obj/item))
+	if (ispath(copied_object, /obj/item))
 		var/obj/item/I = copied_object
 		size = initial(I.w_class)
 	else
@@ -504,11 +504,11 @@ var/global/list/protected_objects = list(
 /mob/living/simple_animal/hostile/mimic/copy/New(loc, var/obj/copy, var/mob/living/creator, var/destroy_original = 0, var/duration=0)
 	..(loc)
 	CopyObject(copy, creator, destroy_original)
-	if(duration)
+	if (duration)
 		time_to_die=world.time+duration
 
 /mob/living/simple_animal/hostile/mimic/copy/Life()
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
 	..()
 
@@ -528,16 +528,16 @@ var/global/list/protected_objects = list(
 		animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
 
 	// Die after a specified time limit
-	if(time_to_die && world.time >= time_to_die)
+	if (time_to_die && world.time >= time_to_die)
 		Die()
 		return
-	for(var/mob/living/M in contents) //a fix for animated statues from the flesh to stone spell
+	for (var/mob/living/M in contents) //a fix for animated statues from the flesh to stone spell
 		Die()
 		return
 
 /mob/living/simple_animal/hostile/mimic/copy/Die()
 
-	for(var/atom/movable/M in src)
+	for (var/atom/movable/M in src)
 		M.forceMove(get_turf(src))
 	..()
 
@@ -547,20 +547,20 @@ var/global/list/protected_objects = list(
 	return . - creator
 
 /mob/living/simple_animal/hostile/mimic/copy/proc/ChangeOwner(var/mob/owner)
-	if(owner != creator)
+	if (owner != creator)
 		LoseTarget()
 		creator = owner
 		faction = "\ref[owner]"
 
 /mob/living/simple_animal/hostile/mimic/copy/proc/CheckObject(var/obj/O)
-	if((istype(O, /obj/item) || istype(O, /obj/structure)) && !is_type_in_list(O, protected_objects))
+	if ((istype(O, /obj/item) || istype(O, /obj/structure)) && !is_type_in_list(O, protected_objects))
 		return 1
 	return 0
 
 /mob/living/simple_animal/hostile/mimic/copy/proc/CopyObject(var/obj/O, var/mob/living/creator, var/destroy_original = 0)
 
 
-	if(destroy_original || CheckObject(O))
+	if (destroy_original || CheckObject(O))
 
 		O.forceMove(src)
 
@@ -590,14 +590,14 @@ var/global/list/protected_objects = list(
 			animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 			animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
 
-		if(istype(O, /obj/structure) || istype(O, /obj/machinery))
+		if (istype(O, /obj/structure) || istype(O, /obj/machinery))
 			health = (anchored * 50) + 50
 			destroy_objects = 1
-			if(O.density && O.anchored)
+			if (O.density && O.anchored)
 				knockdown_people = 1
 				melee_damage_lower *= 2
 				melee_damage_upper *= 2
-		else if(istype(O, /obj/item))
+		else if (istype(O, /obj/item))
 			var/obj/item/I = O
 			health = 15 * I.w_class
 			melee_damage_lower = 2 + I.force
@@ -606,28 +606,28 @@ var/global/list/protected_objects = list(
 
 		maxHealth = health
 
-		for(var/atom/movable/AM in O.get_locked(/datum/locking_category/mimic)) //What could go wrong
+		for (var/atom/movable/AM in O.get_locked(/datum/locking_category/mimic)) //What could go wrong
 			O.unlock_atom(AM)
 			src.lock_atom(AM, /datum/locking_category/mimic)
 
-		if(creator)
+		if (creator)
 			src.creator = creator
 			faction = "\ref[creator]" // very unique
-		if(destroy_original)
+		if (destroy_original)
 			qdel(O)
 		return 1
 	return
 
 /mob/living/simple_animal/hostile/mimic/copy/DestroySurroundings()
-	if(destroy_objects)
+	if (destroy_objects)
 		..()
 
 /mob/living/simple_animal/hostile/mimic/copy/AttackingTarget()
 	. =..()
-	if(knockdown_people)
+	if (knockdown_people)
 		var/mob/living/L = .
-		if(istype(L))
-			if(prob(15))
+		if (istype(L))
+			if (prob(15))
 				L.Weaken(1)
 				L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
 

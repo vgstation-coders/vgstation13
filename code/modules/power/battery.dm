@@ -24,18 +24,18 @@ var/global/list/battery_online =	list(
 
 /obj/machinery/power/battery/update_icon()
 	overlays.len = 0
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		return
 
 	overlays += battery_online[online + 1]
 
-	if(charging)
+	if (charging)
 		overlays += battery_charging[2]
-	else if(chargemode)
+	else if (chargemode)
 		overlays += battery_charging[1]
 
 	var/clevel = chargedisplay()
-	if(clevel>0)
+	if (clevel>0)
 		overlays += battery_charge[clevel]
 	return
 
@@ -76,10 +76,10 @@ var/global/list/battery_online =	list(
 /obj/machinery/power/battery/RefreshParts()
 	var/capcount = 0
 	var/lasercount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/capacitor))
+	for (var/obj/item/weapon/stock_parts/SP in component_parts)
+		if (istype(SP, /obj/item/weapon/stock_parts/capacitor))
 			capcount += SP.rating-1
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+		if (istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating-1
 	capacity = initial(capacity) + capcount*5e5
 	smes_input_max = initial(smes_input_max) + lasercount*25000
@@ -89,7 +89,7 @@ var/global/list/battery_online =	list(
 	if (stat & BROKEN)
 		return
 
-	if(infinite_power) //Only used for magical machines - BEWARE
+	if (infinite_power) //Only used for magical machines - BEWARE
 		capacity = INFINITY
 		charge = INFINITY
 
@@ -137,7 +137,7 @@ var/global/list/battery_online =	list(
 			lastout = 0
 
 	// Only update icon if state changed
-	if(_charging != charging || _online != online)
+	if (_charging != charging || _online != online)
 		update_icon()
 
 /obj/machinery/power/battery/proc/chargedisplay()
@@ -167,7 +167,7 @@ var/global/list/battery_online =	list(
 
 	loaddemand = lastout - excess
 
-	if(_chargedisplay != chargedisplay()) // If needed updates the icons overlay
+	if (_chargedisplay != chargedisplay()) // If needed updates the icons overlay
 		update_icon()
 
 /obj/machinery/power/battery/attack_ai(mob/user)
@@ -181,7 +181,7 @@ var/global/list/battery_online =	list(
 
 /obj/machinery/power/battery/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		return
 
 	// this is the data which will be sent to the ui
@@ -211,16 +211,16 @@ var/global/list/battery_online =	list(
 		ui.set_auto_update(1)
 
 /obj/machinery/power/battery/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
-	if(href_list["close"])
-		if(usr.machine == src)
+	if (href_list["close"])
+		if (usr.machine == src)
 			usr.unset_machine()
 		return 1
 	if (usr.stat || usr.restrained() )
 		return
 	if (!(istype(usr, /mob/living/carbon/human) || ticker) && ticker.mode.name != "monkey")
-		if(!istype(usr, /mob/living/silicon/ai))
+		if (!istype(usr, /mob/living/silicon/ai))
 			to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 			return
 
@@ -229,32 +229,32 @@ var/global/list/battery_online =	list(
 	if (!isturf(src.loc) && !istype(usr, /mob/living/silicon/))
 		return 0 // Do not update ui
 
-	if( href_list["cmode"] )
+	if ( href_list["cmode"] )
 		chargemode = !chargemode
-		if(!chargemode)
+		if (!chargemode)
 			charging = 0
 		update_icon()
 
-	else if( href_list["online"] )
+	else if ( href_list["online"] )
 		online = !online
 		update_icon()
-	else if( href_list["input"] )
-		switch( href_list["input"] )
-			if("min")
+	else if ( href_list["input"] )
+		switch ( href_list["input"] )
+			if ("min")
 				chargelevel = 0
-			if("max")
+			if ("max")
 				chargelevel = smes_input_max		//30000
-			if("set")
+			if ("set")
 				chargelevel = input(usr, "Enter new input level (0-[smes_input_max])", "SMES Input Power Control", chargelevel) as num
 		chargelevel = max(0, min(smes_input_max, chargelevel))	// clamp to range
 
-	else if( href_list["output"] )
-		switch( href_list["output"] )
-			if("min")
+	else if ( href_list["output"] )
+		switch ( href_list["output"] )
+			if ("min")
 				output = 0
-			if("max")
+			if ("max")
 				output = smes_output_max		//30000
-			if("set")
+			if ("set")
 				output = input(usr, "Enter new output level (0-[smes_output_max])", "SMES Output Power Control", output) as num
 		output = max(0, min(smes_output_max, output))	// clamp to range
 
@@ -263,8 +263,8 @@ var/global/list/battery_online =	list(
 	return 1
 
 /obj/machinery/power/battery/proc/ion_act()
-	if(src.z == map.zMainStation)
-		if(prob(1)) //explosion
+	if (src.z == map.zMainStation)
+		if (prob(1)) //explosion
 			message_admins("<span class='warning'>SMES explosion in [get_area(src)]</span>")
 			src.visible_message("<span class='warning'>\The [src] is making strange noises!</span>",
 								"<span class='warning'>You hear sizzling electronics.</span>")
@@ -278,16 +278,16 @@ var/global/list/battery_online =	list(
 			explosion(src.loc, -1, 0, 1, 3, 0)
 			qdel(src)
 			return
-		else if(prob(15)) //Power drain
+		else if (prob(15)) //Power drain
 			message_admins("<span class='warning'>SMES power drain in [get_area(src)]</span>")
 			var/datum/effect/effect/system/spark_spread/s = new
 			s.set_up(3, 1, src)
 			s.start()
-			if(prob(50))
+			if (prob(50))
 				emp_act(1)
 			else
 				emp_act(2)
-		else if(prob(5)) //smoke only
+		else if (prob(5)) //smoke only
 			message_admins("<span class='warning'>SMES smoke in [get_area(src)]</span>")
 			var/datum/effect/effect/system/smoke_spread/smoke = new()
 			smoke.set_up(3, 0, src.loc)
@@ -307,18 +307,18 @@ var/global/list/battery_online =	list(
 	charge = max(0, charge - 1e6/severity)
 
 	spawn(100)
-		if(output == 0)
+		if (output == 0)
 			output = old_output
-		if(online == 0)
+		if (online == 0)
 			online = old_online
-		if(charging == 0)
+		if (charging == 0)
 			charging = old_charging
 	..()
 
 /proc/rate_control(var/S, var/V, var/C, var/Min=1, var/Max=5, var/Limit=null)
 	var/href = "<A href='?src=\ref[S];rate control=1;[V]"
 	var/rate = "[href]=-[Max]'>-</A>[href]=-[Min]'>-</A> [(C?C : 0)] [href]=[Min]'>+</A>[href]=[Max]'>+</A>"
-	if(Limit)
+	if (Limit)
 		return "[href]=-[Limit]'>-</A>"+rate+"[href]=[Limit]'>+</A>"
 	return rate
 

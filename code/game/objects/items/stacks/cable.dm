@@ -46,7 +46,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 
 	recipes = cable_recipes
 	src.amount = amount
-	if(param_color)
+	if (param_color)
 		_color = param_color
 
 	pixel_x = rand(-2,2) * PIXEL_MULTIPLIER
@@ -59,17 +59,17 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 
 //You can use wires to heal robotics
 /obj/item/stack/cable_coil/attack(mob/M as mob, mob/user as mob)
-	if(ishuman(M))
+	if (ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/external/S = H.get_organ(user.zone_sel.selecting)
 
-		if(!(S.is_robotic()) || user.a_intent != I_HELP)
+		if (!(S.is_robotic()) || user.a_intent != I_HELP)
 			return ..()
 
-		if(S.burn_dam > 0 && use(1))
+		if (S.burn_dam > 0 && use(1))
 			S.heal_damage(0, 15, 0, 1)
 
-			if(user != H)
+			if (user != H)
 				user.visible_message("<span class='warning'>\The [user] repairs some burn damage on their [S.display_name] with \the [src].</span>",\
 				"<span class='warning'>You repair some burn damage on your [S.display_name].</span>",\
 				"<span class='warning'>You hear wires being cut.</span>")
@@ -94,13 +94,13 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	return istype(other_stack, /obj/item/stack/cable_coil) && !istype(other_stack, /obj/item/stack/cable_coil/heavyduty) //It can be any cable, except the fat stuff
 
 /obj/item/stack/cable_coil/update_icon()
-	if(!_color)
+	if (!_color)
 		_color = pick("red", "yellow", "blue", "green")
 
-	if(amount == 1)
+	if (amount == 1)
 		icon_state = "coil_[_color]1"
 		name = "cable piece"
-	else if(amount == 2)
+	else if (amount == 2)
 		icon_state = "coil_[_color]2"
 		name = "cable piece"
 	else
@@ -110,9 +110,9 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 /obj/item/stack/cable_coil/examine()
 	set src in view(1)
 
-	if(amount == 1)
+	if (amount == 1)
 		to_chat(usr, "A short piece of power cable.")
-	else if(amount == 2)
+	else if (amount == 2)
 		to_chat(usr, "A piece of power cable.")
 	else
 		to_chat(usr, "A coil of power cable. There are [amount] lengths of cable in the coil.")
@@ -121,7 +121,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 // - Wirecutters : Cut a piece off
 // - Cable coil : Merge the cables
 /obj/item/stack/cable_coil/attackby(obj/item/weapon/W, mob/user)
-	if((iswirecutter(W)) && (amount > 1))
+	if ((iswirecutter(W)) && (amount > 1))
 		use(1)
 		getFromPool(/obj/item/stack/cable_coil, user.loc, 1, _color)
 		to_chat(user, "<span class='notice'>You cut a piece off the cable coil.</span>")
@@ -135,26 +135,26 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 
 //Called when cable_coil is clicked on a turf/simulated/floor
 /obj/item/stack/cable_coil/proc/turf_place(turf/simulated/floor/F, mob/user, var/dirnew)
-	if(!isturf(user.loc))
+	if (!isturf(user.loc))
 		return
 
-	if(!user.Adjacent(F)) //Too far
+	if (!user.Adjacent(F)) //Too far
 		to_chat(user, "<span class='warning'>You can't lay cable that far away.</span>")
 		return
 
-	if(F.intact) //If floor is intact, complain
+	if (F.intact) //If floor is intact, complain
 		to_chat(user, "<span class='warning'>You can't lay cable there until the floor is removed.</span>")
 		return
 	var/dirn = null
-	if(!dirnew) //If we weren't given a direction, come up with one! (Called as null from catwalk.dm and floor.dm)
-		if(user.loc == F)
+	if (!dirnew) //If we weren't given a direction, come up with one! (Called as null from catwalk.dm and floor.dm)
+		if (user.loc == F)
 			dirn = user.dir //If laying on the tile we're on, lay in the direction we're facing
 		else
 			dirn = get_dir(F, user)
 	else
 		dirn = dirnew
-	for(var/obj/structure/cable/LC in F)
-		if(LC.d2 == dirn && LC.d1 == 0)
+	for (var/obj/structure/cable/LC in F)
+		if (LC.d2 == dirn && LC.d1 == 0)
 			to_chat(user, "<span class='warning'>There already is a cable at that position.</span>")
 			return
 
@@ -174,13 +174,13 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	C.mergeConnectedNetworks(C.d2)   //Merge the powernet with adjacents powernets
 	C.mergeConnectedNetworksOnTurf() //Merge the powernet with on turf powernets
 
-	if(C.d2 & (C.d2 - 1)) //If the cable is layed diagonally, check the others 2 possible directions
+	if (C.d2 & (C.d2 - 1)) //If the cable is layed diagonally, check the others 2 possible directions
 		C.mergeDiagonalsNetworks(C.d2)
 
 	use(1)
 
-	if(C.shock(user, 50))
-		if(prob(50)) //Fail
+	if (C.shock(user, 50))
+		if (prob(50)) //Fail
 			getFromPool(/obj/item/stack/cable_coil, C.loc, 1)
 			returnToPool(C)
 
@@ -191,27 +191,27 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 /obj/item/stack/cable_coil/proc/cable_join(obj/structure/cable/C, mob/user)
 	var/turf/U = user.loc
 
-	if(!isturf(U))
+	if (!isturf(U))
 		return
 
 	var/turf/T = C.loc
 
-	if(!isturf(T) || T.intact) //Sanity checks, also stop use interacting with T-scanner revealed cable
+	if (!isturf(T) || T.intact) //Sanity checks, also stop use interacting with T-scanner revealed cable
 		return
 
-	if(get_dist(C, user) > 1) //Make sure it's close enough
+	if (get_dist(C, user) > 1) //Make sure it's close enough
 		to_chat(user, "<span class='warning'>You can't lay cable that far away.</span>")
 		return
 
-	if(U == T) //If clicked on the turf we're standing on, try to put a cable in the direction we're facing
+	if (U == T) //If clicked on the turf we're standing on, try to put a cable in the direction we're facing
 		turf_place(T, user)
 		return
 
 	var/dirn = get_dir(C, user)
 
 	//One end of the clicked cable is pointing towards us
-	if(C.d1 == dirn || C.d2 == dirn)
-		if(U.intact) //Can't place a cable if the floor is complete
+	if (C.d1 == dirn || C.d2 == dirn)
+		if (U.intact) //Can't place a cable if the floor is complete
 			to_chat(user, "<span class='warning'>You can't lay cable there until the floor is removed.</span>")
 			return
 		else
@@ -221,20 +221,20 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 			turf_place(user.loc,user,turn(dirn, 180))
 
 	//Exisiting cable doesn't point at our position, so see if it's a stub
-	else if(C.d1 == 0)
+	else if (C.d1 == 0)
 		//If so, make it a full cable pointing from it's old direction to our dirn
 		var/nd1 = C.d2 //These will be the new directions
 		var/nd2 = dirn
 
-		if(nd1 > nd2) //Swap directions to match icons/states
+		if (nd1 > nd2) //Swap directions to match icons/states
 			nd1 = dirn
 			nd2 = C.d2
 
-		for(var/obj/structure/cable/LC in T) //Check to make sure there's no matching cable
-			if(LC == C)	//Skip the cable we're interacting with
+		for (var/obj/structure/cable/LC in T) //Check to make sure there's no matching cable
+			if (LC == C)	//Skip the cable we're interacting with
 				continue
 
-			if((LC.d1 == nd1 && LC.d2 == nd2) || (LC.d1 == nd2 && LC.d2 == nd1)) //Make sure no cable matches either direction
+			if ((LC.d1 == nd1 && LC.d2 == nd2) || (LC.d1 == nd2 && LC.d2 == nd1)) //Make sure no cable matches either direction
 				to_chat(user, "<span class='warning'>There's already a cable at that position.</span>")
 				return
 
@@ -250,16 +250,16 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 		C.mergeConnectedNetworks(C.d2) //In the two new cable directions
 		C.mergeConnectedNetworksOnTurf()
 
-		if(C.d1 & (C.d1 - 1)) //If the cable is layed diagonally, check the others 2 possible directions
+		if (C.d1 & (C.d1 - 1)) //If the cable is layed diagonally, check the others 2 possible directions
 			C.mergeDiagonalsNetworks(C.d1)
 
-		if(C.d2 & (C.d2 - 1)) //If the cable is layed diagonally, check the others 2 possible directions
+		if (C.d2 & (C.d2 - 1)) //If the cable is layed diagonally, check the others 2 possible directions
 			C.mergeDiagonalsNetworks(C.d2)
 
 		use(1)
 
-		if(C.shock(user, 50))
-			if(prob(50)) //Fail
+		if (C.shock(user, 50))
+			if (prob(50)) //Fail
 				getFromPool(/obj/item/stack/cable_coil, C.loc, 1, C.light_color)
 				returnToPool(C)
 				return
@@ -275,7 +275,7 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 
 /obj/item/stack/cable_coil/cut/New(loc, length = MAXCOIL, var/param_color = null, amount)
 	..(loc)
-	if(!amount)
+	if (!amount)
 		src.amount = rand(1, 2)
 	pixel_x = rand(-2, 2) * PIXEL_MULTIPLIER
 	pixel_y = rand(-2, 2) * PIXEL_MULTIPLIER

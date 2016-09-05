@@ -125,11 +125,11 @@
 
 /datum/construction/reversible/mecha/New()
 	..()
-	if(src)
+	if (src)
 		add_board_keys()
 
 /datum/construction/reversible/mecha/custom_action(index, diff, atom/used_atom, mob/user)
-	if(!..())
+	if (!..())
 		return 0
 
 	holder.icon_state = "[base_icon][steps.len - index - diff]"
@@ -447,7 +447,7 @@
 	board_step = get_forward_step(steps.len - TARGBOARD)
 	board_step[Co_KEY] = targeting
 
-	if(armor_plates)
+	if (armor_plates)
 		board_step = get_forward_step(steps.len - ARMOR_PLATES)
 		board_step[Co_KEY] = armor_plates
 
@@ -545,10 +545,10 @@
 	return
 
 /datum/construction/reversible/mecha/honker/custom_action(index, diff, atom/used_atom, mob/user)
-	if(!..())
+	if (!..())
 		return 0
 
-	if(istype(used_atom, /obj/item/weapon/bikehorn))
+	if (istype(used_atom, /obj/item/weapon/bikehorn))
 		playsound(holder, 'sound/items/bikehorn.ogg', 50, 1)
 		user.visible_message("HONK!")
 

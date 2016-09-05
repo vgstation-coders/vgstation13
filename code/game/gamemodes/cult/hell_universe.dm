@@ -18,22 +18,22 @@ In short:
 /datum/universal_state/hell/OnShuttleCall(var/mob/user)
 	return 1
 	/*
-	if(user)
+	if (user)
 		to_chat(user, "<span class='sinister'>All you hear on the frequency is static and panicked screaming. There will be no shuttle call today.</span>")
 	return 0
 	*/
 
 /datum/universal_state/hell/DecayTurf(var/turf/T)
-	if(!T.holy)
+	if (!T.holy)
 		T.cultify()
-		for(var/obj/machinery/light/L in T.contents)
+		for (var/obj/machinery/light/L in T.contents)
 			new /obj/structure/cult/pylon(L.loc)
 			qdel(L)
 	return
 
 
 /datum/universal_state/hell/OnTurfChange(var/turf/T)
-	if(T.name == "space")
+	if (T.name == "space")
 		T.overlays += image(icon = T.icon, icon_state = "hell01")
 		T.underlays -= "hell01"
 	else
@@ -43,7 +43,7 @@ In short:
 /datum/universal_state/hell/OnEnter()
 	set background = 1
 	/*
-	if(emergency_shuttle.direction==2)
+	if (emergency_shuttle.direction==2)
 		captain_announce("The emergency shuttle has returned due to bluespace distortion.")
 
 	emergency_shuttle.force_shutdown()
@@ -70,8 +70,8 @@ In short:
 
 
 /datum/universal_state/hell/proc/AreaSet()
-	for(var/area/A in areas)
-		if(!istype(A,/area) || isspace(A))
+	for (var/area/A in areas)
+		if (!istype(A,/area) || isspace(A))
 			continue
 
 		// No cheating~
@@ -87,15 +87,15 @@ In short:
 
 /*
 		// Slap random alerts on shit
-		if(prob(25))
-			switch(rand(1,4))
-				if(1)
+		if (prob(25))
+			switch (rand(1,4))
+				if (1)
 					A.fire=1
-				if(2)
+				if (2)
 					A.atmosalm=1
-				if(3)
+				if (3)
 					A.radalert=1
-				if(4)
+				if (4)
 					A.party=1
 */
 
@@ -105,23 +105,23 @@ In short:
 /datum/universal_state/hell/OverlayAndAmbientSet()
 	set waitfor = FALSE
 	var/count = 0
-	for(var/turf/T in turfs)
+	for (var/turf/T in turfs)
 		count++
-		if(!(count % 50000))
+		if (!(count % 50000))
 			sleep(world.tick_lag)
-		if(istype(T, /turf/space))
+		if (istype(T, /turf/space))
 			T.overlays += image(icon = T.icon, icon_state = "hell01")
 		else
-			if(!T.holy && prob(1))
+			if (!T.holy && prob(1))
 				new /obj/effect/gateway/active/cult(T)
 			T.underlays += "hell01"
 		tcheck(85,1)
 
-	for(var/datum/lighting_corner/C in global.all_lighting_corners)
+	for (var/datum/lighting_corner/C in global.all_lighting_corners)
 		if (!C.active)
 			continue
 		count++
-		if(!(count % 200000))
+		if (!(count % 200000))
 			sleep(world.tick_lag)
 
 		C.update_lumcount(0.5, 0, 0)
@@ -137,14 +137,14 @@ In short:
 	for (var/obj/machinery/power/apc/APC in power_machines)
 		if (!(APC.stat & BROKEN) && !istype(APC.areaMaster,/area/turret_protected/ai))
 			APC.chargemode = 0
-			if(APC.cell)
+			if (APC.cell)
 				APC.cell.charge = 0
 			APC.emagged = 1
 			APC.queue_icon_update()
 		tcheck(85,1)
 
 /datum/universal_state/hell/proc/KillMobs()
-	for(var/mob/living/simple_animal/M in mob_list)
-		if(M && !M.client)
+	for (var/mob/living/simple_animal/M in mob_list)
+		if (M && !M.client)
 			M.stat = DEAD
 		tcheck(80,1)

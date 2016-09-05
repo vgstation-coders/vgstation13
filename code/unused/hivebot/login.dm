@@ -8,7 +8,7 @@
 		src.client.perspective = EYE_PERSPECTIVE
 	if (src.stat == 2)
 		src.verbs += /client/proc/ghost
-	if(src.real_name == "Hiveborg")
+	if (src.real_name == "Hiveborg")
 		src.real_name += " "
 		src.real_name += "-[rand(1, 999)]"
 		src.name = src.real_name

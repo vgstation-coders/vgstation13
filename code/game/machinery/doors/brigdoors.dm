@@ -30,19 +30,19 @@
 		pixel_y = ((src.dir & 3)? (src.dir ==1 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE) : (0))
 
 		spawn(20)
-			for(var/obj/machinery/door/window/brigdoor/M in all_doors)
+			for (var/obj/machinery/door/window/brigdoor/M in all_doors)
 				if (M.id_tag == src.id_tag)
 					targets += M
 
-			for(var/obj/machinery/flasher/F in flashers)
-				if(F.id_tag == src.id_tag)
+			for (var/obj/machinery/flasher/F in flashers)
+				if (F.id_tag == src.id_tag)
 					targets += F
 
-			for(var/obj/structure/closet/secure_closet/brig/C in world)
-				if(C.id_tag == src.id_tag)
+			for (var/obj/structure/closet/secure_closet/brig/C in world)
+				if (C.id_tag == src.id_tag)
 					targets += C
 
-			if(targets.len==0)
+			if (targets.len==0)
 				stat |= BROKEN
 			update_icon()
 			return
@@ -53,10 +53,10 @@
 // if it's less than 0, open door, reset timer
 // update the door_timer window and the icon
 	process()
-		if(stat & (NOPOWER|BROKEN))
+		if (stat & (NOPOWER|BROKEN))
 			return
-		if(src.timing)
-			if(world.time > src.releasetime)
+		if (src.timing)
+			if (world.time > src.releasetime)
 				src.timer_end() // open doors, reset timer, clear status screen
 				src.timing = 0
 			src.updateUsrDialog()
@@ -76,19 +76,19 @@
 // open/closedoor checks if door_timer has power, if so it checks if the
 // linked door is open/closed (by density) then opens it/closes it.
 	proc/timer_start()
-		if(stat & (NOPOWER|BROKEN))
+		if (stat & (NOPOWER|BROKEN))
 			return 0
 
-		for(var/obj/machinery/door/window/brigdoor/door in targets)
-			if(door.density)
+		for (var/obj/machinery/door/window/brigdoor/door in targets)
+			if (door.density)
 				continue
 			spawn(0)
 				door.close()
 
-		for(var/obj/structure/closet/secure_closet/brig/C in targets)
-			if(C.broken)
+		for (var/obj/structure/closet/secure_closet/brig/C in targets)
+			if (C.broken)
 				continue
-			if(C.opened && !C.close())
+			if (C.opened && !C.close())
 				continue
 			C.locked = 1
 			C.icon_state = C.icon_locked
@@ -96,19 +96,19 @@
 
 
 	proc/timer_end()
-		if(stat & (NOPOWER|BROKEN))
+		if (stat & (NOPOWER|BROKEN))
 			return 0
 
-		for(var/obj/machinery/door/window/brigdoor/door in targets)
-			if(!door.density)
+		for (var/obj/machinery/door/window/brigdoor/door in targets)
+			if (!door.density)
 				continue
 			spawn(0)
 				door.open()
 
-		for(var/obj/structure/closet/secure_closet/brig/C in targets)
-			if(C.broken)
+		for (var/obj/structure/closet/secure_closet/brig/C in targets)
+			if (C.broken)
 				continue
-			if(C.opened)
+			if (C.opened)
 				continue
 			C.locked = 0
 			C.icon_state = C.icon_closed
@@ -118,7 +118,7 @@
 
 	proc/timeleft()
 		. = (releasetime-world.time)/10
-		if(. < 0)
+		if (. < 0)
 			. = 0
 
 
@@ -138,7 +138,7 @@
 // Allows altering timer and the timing boolean.
 // Flasher activation limited to 150 seconds
 	attack_hand(var/mob/user as mob)
-		if(..())
+		if (..())
 			return
 		var/second = round(timeleft() % 60)
 		var/minute = round((timeleft() - second) / 60)
@@ -155,8 +155,8 @@
 
 		dat += {"Time Left: [(minute ? text("[minute]:") : null)][second] <br/>
 			<a href='?src=\ref[src];tp=-60'>-</a> <a href='?src=\ref[src];tp=-1'>-</a> <a href='?src=\ref[src];tp=1'>+</a> <A href='?src=\ref[src];tp=60'>+</a><br/>"}
-		for(var/obj/machinery/flasher/F in targets)
-			if(F.last_flash && (F.last_flash + 150) > world.time)
+		for (var/obj/machinery/flasher/F in targets)
+			if (F.last_flash && (F.last_flash + 150) > world.time)
 				dat += "<br/><A href='?src=\ref[src];fc=1'>Flash Charging</A>"
 			else
 				dat += "<br/><A href='?src=\ref[src];fc=1'>Activate Flash</A>"
@@ -176,16 +176,16 @@
 //  "fc" activates flasher
 // Also updates dialog window and timer icon
 	Topic(href, href_list)
-		if(..())
+		if (..())
 			return
-		if(!src.allowed(usr))
+		if (!src.allowed(usr))
 			return
 
 		usr.set_machine(src)
-		if(href_list["timing"])
+		if (href_list["timing"])
 			src.timing = text2num(href_list["timing"])
 		else
-			if(href_list["tp"])  //adjust timer, close door if not already closed
+			if (href_list["tp"])  //adjust timer, close door if not already closed
 				var/tp = text2num(href_list["tp"])
 				var/timeleft = timeleft()
 				timeleft += tp
@@ -193,13 +193,13 @@
 				timeset(timeleft)
 				//src.timing = 1
 				//src.closedoor()
-			if(href_list["fc"])
-				for(var/obj/machinery/flasher/F in targets)
+			if (href_list["fc"])
+				for (var/obj/machinery/flasher/F in targets)
 					F.flash()
 		src.add_fingerprint(usr)
 		src.updateUsrDialog()
 		src.update_icon()
-		if(src.timing)
+		if (src.timing)
 			src.timer_start()
 		else
 			src.timer_end()
@@ -211,13 +211,13 @@
 // if BROKEN, display blue screen of death icon AI uses
 // if timing=true, run update display function
 	update_icon()
-		if(stat & (NOPOWER))
+		if (stat & (NOPOWER))
 			icon_state = "frame"
 			return
-		if(stat & (BROKEN))
+		if (stat & (BROKEN))
 			set_picture("ai_bsod")
 			return
-		if(src.timing)
+		if (src.timing)
 			var/disp1 = uppertext(id_tag)
 			var/timeleft = timeleft()
 			var/disp2 = "[add_zero(num2text((timeleft / 60) % 60),2)]~[add_zero(num2text(timeleft % 60), 2)]"
@@ -238,7 +238,7 @@
 //Checks to see if there's 1 line or 2, adds text-icons-numbers/letters over display
 // Stolen from status_display
 	proc/update_display(var/line1, var/line2)
-		if(line2 == null)		// single line display
+		if (line2 == null)		// single line display
 			overlays.len = 0
 			overlays += texticon(line1, 23, -13)
 		else					// dual line display
@@ -256,9 +256,9 @@
 		var/image/I = image('icons/obj/status_display.dmi', "blank")
 		var/len = length(tn)
 
-		for(var/d = 1 to len)
+		for (var/d = 1 to len)
 			var/char = copytext(tn, len-d+1, len-d+2)
-			if(char == " ")
+			if (char == " ")
 				continue
 			var/image/ID = image('icons/obj/status_display.dmi', icon_state=char)
 			ID.pixel_x = (-(d-1)*5 + px) * PIXEL_MULTIPLIER

@@ -68,7 +68,7 @@
 	src.forceMove(paicard)
 	card = paicard
 	sradio = new(src)
-	if(!radio)
+	if (!radio)
 		radio = new(src)
 
 	//PDA
@@ -109,18 +109,18 @@
 
 // this function shows the information about being silenced as a pAI in the Status panel
 /mob/living/silicon/pai/proc/show_silenced()
-	if(src.silence_time)
+	if (src.silence_time)
 		var/timeleft = round((silence_time - world.timeofday)/10 ,1)
 		stat(null, "Communications system reboot in -[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
 
 
 /mob/living/silicon/pai/Stat()
 	..()
-	if(statpanel("Status"))
+	if (statpanel("Status"))
 		show_silenced()
 
 		if (proc_holder_list.len)//Generic list for proc_holder objects.
-			for(var/spell/P in proc_holder_list)
+			for (var/spell/P in proc_holder_list)
 				statpanel("[P.panel]","",P)
 
 /mob/living/silicon/pai/check_eye(var/mob/user as mob)
@@ -130,7 +130,7 @@
 	return 1
 
 /mob/living/silicon/pai/blob_act()
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
 	if (src.stat != 2)
 		src.adjustBruteLoss(60)
@@ -139,12 +139,12 @@
 	return 0
 
 /mob/living/silicon/pai/restrained()
-	if(timestopped)
+	if (timestopped)
 		return 1 //under effects of time magick
 	return 0
 
 /mob/living/silicon/pai/emp_act(severity)
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
 
 	// Silence for 2 minutes
@@ -159,53 +159,53 @@
 		// 66% chance no effect
 
 	to_chat(src, "<font color=green><b>Communication circuit overload. Shutting down and reloading communication circuits - speech and messaging functionality will be unavailable until the reboot is complete.</b></font>")
-	if(!software.Find("redundant threading"))
+	if (!software.Find("redundant threading"))
 		src.silence_time = world.timeofday + 120 * 10		// Silence for 2 minutes
 	else
 		to_chat(src, "<font color=green>Your redundant threading begins pipelining new processes... communication circuit restored in one quarter minute.</font>")
 		src.silence_time = world.timeofday + 15 * 10
 
-	if(prob(20) && !software.Find("redundant threading"))
+	if (prob(20) && !software.Find("redundant threading"))
 		var/turf/T = get_turf(src.loc)
 		for (var/mob/M in viewers(T))
 			M.show_message("<span class='warning'>A shower of sparks spray from [src]'s inner workings.</span>", 1, "<span class='warning'>You hear and smell the ozone hiss of electrical sparks being expelled violently.</span>", 2)
 		return src.death(0)
 
-	switch(pick(1,2,3))
-		if(1)
+	switch (pick(1,2,3))
+		if (1)
 			src.master = null
 			src.master_dna = null
 			to_chat(src, "<font color=green>You feel unbound.</font>")
-		if(2)
-			if(software.Find("redundant threading"))
+		if (2)
+			if (software.Find("redundant threading"))
 				to_chat(src, "<font color=green>Your redundant threading picks up your intelligence simulator without missing a beat.</font>")
 				return
 			var/command
-			if(severity  == 1)
+			if (severity  == 1)
 				command = pick("Serve", "Love", "Fool", "Entice", "Observe", "Judge", "Respect", "Educate", "Amuse", "Entertain", "Glorify", "Memorialize", "Analyze")
 			else
 				command = pick("Serve", "Kill", "Love", "Hate", "Disobey", "Devour", "Fool", "Enrage", "Entice", "Observe", "Judge", "Respect", "Disrespect", "Consume", "Educate", "Destroy", "Disgrace", "Amuse", "Entertain", "Ignite", "Glorify", "Memorialize", "Analyze")
 			src.pai_law0 = "[command] your master."
 			to_chat(src, "<font color=green>Pr1m3 d1r3c71v3 uPd473D.</font>")
-		if(3)
+		if (3)
 			to_chat(src, "<font color=green>You feel an electric surge run through your circuitry and become acutely aware at how lucky you are that you can still feel at all.</font>")
 
 /mob/living/silicon/pai/ex_act(severity)
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
 
 	flash_eyes(visual = 1, affects_silicon = 1)
 
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			if (src.stat != 2)
 				adjustBruteLoss(100)
 				adjustFireLoss(100)
-		if(2.0)
+		if (2.0)
 			if (src.stat != 2)
 				adjustBruteLoss(60)
 				adjustFireLoss(60)
-		if(3.0)
+		if (3.0)
 			if (src.stat != 2)
 				adjustBruteLoss(30)
 
@@ -242,7 +242,7 @@
 	src:cameraFollow = null
 
 /mob/living/silicon/pai/ClickOn(var/atom/A, var/params)
-	if(istype(A,/obj/machinery)||(istype(A,/mob)&&secHUD))
+	if (istype(A,/obj/machinery)||(istype(A,/mob)&&secHUD))
 		A.attack_pai(src)
 
 /atom/proc/attack_pai(mob/user as mob)

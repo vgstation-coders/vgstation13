@@ -42,26 +42,26 @@
 
 
 /obj/structure/closet/body_bag/attackby(W as obj, mob/user as mob)
-	if(istype(W,/obj/item/stack/sheet/metal))
+	if (istype(W,/obj/item/stack/sheet/metal))
 		var/obj/item/stack/sheet/metal/S = W
-		if(S.amount<5)
+		if (S.amount<5)
 			return
 		S.use(5)
 		new /obj/structure/morgue(src.loc)
 		qdel(src)
-	if(istype(W, /obj/item/weapon/pen))
+	if (istype(W, /obj/item/weapon/pen))
 		var/t = copytext(sanitize(input(user, "What would you like the label to be?", text("[]", src.name), null)  as text|null), 1, MAX_NAME_LEN)
-		if(user.get_active_hand() != W)
+		if (user.get_active_hand() != W)
 			return
 		if (!Adjacent(user) || user.stat)
 			return
 		t = copytext(sanitize(t),1,MAX_MESSAGE_LEN)
 		src.name = "body bag"
-		if(t)
+		if (t)
 			src.name += " ([t])"
 			src.overlays += image(src.icon, "bodybag_label")
 		return
-	else if(iswirecutter(W))
+	else if (iswirecutter(W))
 		to_chat(user, "You cut the tag off the bodybag")
 		src.name = "body bag"
 		src.overlays.len = 0
@@ -69,7 +69,7 @@
 
 
 /obj/structure/closet/body_bag/close()
-	if(..())
+	if (..())
 		density = 0
 		return 1
 	return 0
@@ -77,12 +77,12 @@
 
 /obj/structure/closet/body_bag/MouseDrop(over_object, src_location, over_location)
 	..()
-	if((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
-		if(!ishuman(usr) || usr.incapacitated() || usr.lying)
+	if ((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
+		if (!ishuman(usr) || usr.incapacitated() || usr.lying)
 			return
-		if(opened)
+		if (opened)
 			return 0
-		if(contents.len)
+		if (contents.len)
 			return 0
 		visible_message("[usr] folds up the [src.name]")
 		new/obj/item/bodybag(get_turf(src))
@@ -91,7 +91,7 @@
 		return
 
 /obj/structure/closet/body_bag/update_icon()
-	if(!opened)
+	if (!opened)
 		icon_state = icon_closed
 	else
 		icon_state = icon_opened
@@ -122,7 +122,7 @@
 
 /obj/structure/closet/body_bag/cryobag/open()
 	. = ..()
-	if(used)
+	if (used)
 		var/obj/item/O = new/obj/item(src.loc)
 		O.name = "used stasis bag"
 		O.icon = src.icon
@@ -131,8 +131,8 @@
 		qdel(src)
 
 /obj/structure/closet/body_bag/cryobag/MouseDrop(over_object, src_location, over_location)
-	if((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
-		if(!ishuman(usr) || usr.incapacitated() || usr.lying)
+	if ((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
+		if (!ishuman(usr) || usr.incapacitated() || usr.lying)
 			return
 		to_chat(usr, "<span class='warning'>You can't fold that up anymore.</span>")
 	..()

@@ -57,58 +57,58 @@ var/list/diseases = typesof(/datum/disease) - /datum/disease
 	var/cure_present = has_cure()
 //	to_chat(world, "[cure_present]")
 
-	if(carrier&&!cure_present)
+	if (carrier&&!cure_present)
 //		to_chat(world, "[affected_mob] is carrier")
 		return
 
 	spread = (cure_present?"Remissive":initial_spread)
-	if(stage > max_stages)
+	if (stage > max_stages)
 		stage = max_stages
 
-	if(!cure_present && prob(stage_prob) && age > stage_minimum_age) //now the disease shouldn't get back up to stage 4 in no time
+	if (!cure_present && prob(stage_prob) && age > stage_minimum_age) //now the disease shouldn't get back up to stage 4 in no time
 		stage = min(stage + 1, max_stages)
 		age = 0
 
-	else if(cure_present && prob(cure_chance))
+	else if (cure_present && prob(cure_chance))
 		stage = max(stage - 1, 1)
 
-	if(stage <= 1 && ((prob(1) && curable) || (cure_present && prob(cure_chance))))
+	if (stage <= 1 && ((prob(1) && curable) || (cure_present && prob(cure_chance))))
 		cure()
 		return
 	return
 
 /datum/disease/proc/has_cure()//check if affected_mob has required reagents.
-	if((!cure_id && !cure_list) || !curable)
+	if ((!cure_id && !cure_list) || !curable)
 		return 0
 	var/result = 1
-	if(!cure_list || cure_list == cure_id) //if no cure_list or cure list is the same as cure_id, just check _id
-		if(istype(cure_id, /list)) //if cure_id is a list, check inside of it
-			for(var/C_id in cure_id)
-				if(affected_mob.reagents.has_reagent(C_id))
+	if (!cure_list || cure_list == cure_id) //if no cure_list or cure list is the same as cure_id, just check _id
+		if (istype(cure_id, /list)) //if cure_id is a list, check inside of it
+			for (var/C_id in cure_id)
+				if (affected_mob.reagents.has_reagent(C_id))
 					result = 1
 					break //you only need one of the ones in cure_id
 				else
 					result = 0
-		else if(!affected_mob.reagents.has_reagent(cure_id)) //if cure id is just text, just check it against the reagents
+		else if (!affected_mob.reagents.has_reagent(cure_id)) //if cure id is just text, just check it against the reagents
 			result = 0
 	else
-		for(var/C_list in cure_list) //if cure_list isn't the same as cure_id, check its contents. You must have ALL of the contents of cure_list to cure if it doesn't match cure_id
-			if(istype(C_list, /list)) //if cure_list's contents is a list
-				for(var/C_id in C_list)	 //check inside of C_list
-					if(affected_mob.reagents == null) //null reagants
+		for (var/C_list in cure_list) //if cure_list isn't the same as cure_id, check its contents. You must have ALL of the contents of cure_list to cure if it doesn't match cure_id
+			if (istype(C_list, /list)) //if cure_list's contents is a list
+				for (var/C_id in C_list)	 //check inside of C_list
+					if (affected_mob.reagents == null) //null reagants
 						result = 0
-					else if(!affected_mob.reagents.has_reagent(C_id)) //doesn't have one of the reagents in C_list
+					else if (!affected_mob.reagents.has_reagent(C_id)) //doesn't have one of the reagents in C_list
 						result = 0
-			else if(affected_mob.reagents != null)
-				if(!affected_mob.reagents.has_reagent(C_list)) //if cure list contents is text, just check it against the reagents
+			else if (affected_mob.reagents != null)
+				if (!affected_mob.reagents.has_reagent(C_list)) //if cure list contents is text, just check it against the reagents
 					result = 0
 			else //null reagents
 				result = 0
 	return result
 
 /datum/disease/proc/spread_by_touch()
-	switch(spread_type)
-		if(CONTACT_FEET, CONTACT_HANDS, CONTACT_GENERAL)
+	switch (spread_type)
+		if (CONTACT_FEET, CONTACT_HANDS, CONTACT_GENERAL)
 			return 1
 	return 0
 
@@ -117,73 +117,73 @@ var/list/diseases = typesof(/datum/disease) - /datum/disease
 
 	// If we're overriding how we spread, say so here
 	var/how_spread = spread_type
-	if(!istype(affected_mob))
+	if (!istype(affected_mob))
 		return 0
-	if(force_spread)
+	if (force_spread)
 		how_spread = force_spread
 
-	if(how_spread == SPECIAL || how_spread == NON_CONTAGIOUS || how_spread == BLOODBORNE)//does not spread
+	if (how_spread == SPECIAL || how_spread == NON_CONTAGIOUS || how_spread == BLOODBORNE)//does not spread
 		return
 
-	if(stage < contagious_period) //the disease is not contagious at this stage
+	if (stage < contagious_period) //the disease is not contagious at this stage
 		return
 
-	if(!source)//no holder specified
-		if(affected_mob)//no mob affected holder
+	if (!source)//no holder specified
+		if (affected_mob)//no mob affected holder
 			source = affected_mob
 		else //no source and no mob affected. Rogue disease. Break
 			return
-	if(affected_mob.reagents != null)
-		if(affected_mob)
-			if(affected_mob.reagents.has_reagent(SPACEACILLIN))
+	if (affected_mob.reagents != null)
+		if (affected_mob)
+			if (affected_mob.reagents.has_reagent(SPACEACILLIN))
 				return // Don't spread if we have spaceacillin in our system.
 
 	var/check_range = airborne_range//defaults to airborne - range 2
 
-	if(how_spread != AIRBORNE && how_spread != SPECIAL)
+	if (how_spread != AIRBORNE && how_spread != SPECIAL)
 		check_range = 1 // everything else, like infect-on-contact things, only infect things on top of it
 
-	if(isturf(source.loc))
-		for(var/mob/living/carbon/M in oview(check_range, source))
-			if(isturf(M.loc))
-				if(AStar(source.loc, M.loc, /turf/proc/AdjacentTurfs, /turf/proc/Distance, check_range))
+	if (isturf(source.loc))
+		for (var/mob/living/carbon/M in oview(check_range, source))
+			if (isturf(M.loc))
+				if (AStar(source.loc, M.loc, /turf/proc/AdjacentTurfs, /turf/proc/Distance, check_range))
 					M.contract_disease(src, 0, 1, force_spread)
 
 	return
 
 
 /datum/disease/proc/process()
-	if(!holder)
+	if (!holder)
 		active_diseases -= src
 		return
-	if(prob(65))
+	if (prob(65))
 		spread(holder)
 
-	if(affected_mob)
-		for(var/datum/disease/D in affected_mob.viruses)
-			if(D != src)
-				if(IsSame(D))
+	if (affected_mob)
+		for (var/datum/disease/D in affected_mob.viruses)
+			if (D != src)
+				if (IsSame(D))
 					//error("Deleting [D.name] because it's the same as [src.name].")
 					del(D) // if there are somehow two viruses of the same kind in the system, delete the other one
 
-	if(holder == affected_mob)
-		if(affected_mob.stat != DEAD) //he's alive
+	if (holder == affected_mob)
+		if (affected_mob.stat != DEAD) //he's alive
 			stage_act()
 		else //he's dead.
-			if(spread_type!=SPECIAL)
+			if (spread_type!=SPECIAL)
 				spread_type = CONTACT_GENERAL
 			affected_mob = null
-	if(!affected_mob) //the virus is in inanimate obj
+	if (!affected_mob) //the virus is in inanimate obj
 //		to_chat(world, "[src] longevity = [longevity]")
 
-		if(prob(70))
-			if(--longevity<=0)
+		if (prob(70))
+			if (--longevity<=0)
 				cure(0)
 	return
 
 /datum/disease/proc/cure(var/resistance=1)//if resistance = 0, the mob won't develop resistance to disease
-	if(affected_mob)
-		if(resistance && !(type in affected_mob.resistances))
+	if (affected_mob)
+		if (resistance && !(type in affected_mob.resistances))
 			var/saved_type = "[type]"
 			affected_mob.resistances += text2path(saved_type)
 		/*if(istype(src, /datum/disease/alien_embryo))	//Get rid of the infection flag if it's a xeno embryo.
@@ -194,18 +194,18 @@ var/list/diseases = typesof(/datum/disease) - /datum/disease
 
 /datum/disease/Del()
 	active_diseases -= src
-	if(affected_mob)
+	if (affected_mob)
 		affected_mob.viruses -= src
 	..()
 
 /datum/disease/New(var/process=1, var/datum/disease/D)//process = 1 - adding the object to global list. List is processed by master controller.
 	cure_list = list(cure_id) // to add more cures, add more vars to this list in the actual disease's New()
-	if(process)				 // Viruses in list are considered active.
+	if (process)				 // Viruses in list are considered active.
 		active_diseases += src
 	initial_spread = spread
 
 /datum/disease/proc/IsSame(var/datum/disease/D)
-	if(istype(src, D.type))
+	if (istype(src, D.type))
 		return 1
 	return 0
 

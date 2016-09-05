@@ -13,7 +13,7 @@
 
 
 	update_icon()
-		if(open)
+		if (open)
 			icon_state="[base_icon_state]_open"
 		else
 			icon_state="[base_icon_state]"
@@ -23,10 +23,10 @@
 		set category = "Object"
 		set src in usr
 
-		if(usr.incapacitated())
+		if (usr.incapacitated())
 			return 0
 
-		if(open)
+		if (open)
 			to_chat(usr, "You button up the labcoat.")
 			src.body_parts_covered |= IGNORE_INV
 		else

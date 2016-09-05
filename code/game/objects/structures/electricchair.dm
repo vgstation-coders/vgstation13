@@ -22,7 +22,7 @@
 	return ..()
 
 /obj/structure/bed/chair/e_chair/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iswrench(W))
+	if (iswrench(W))
 		var/obj/structure/bed/chair/C = new /obj/structure/bed/chair(loc)
 		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 		C.dir = dir
@@ -36,7 +36,7 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(usr.incapacitated())
+	if (usr.incapacitated())
 		return
 
 	on = !on
@@ -51,19 +51,19 @@
 	overlays += electric_chair_overlay
 
 /obj/structure/bed/chair/e_chair/proc/shock()
-	if(!on)
+	if (!on)
 		return
-	if(last_time + 50 > world.time)
+	if (last_time + 50 > world.time)
 		return
 	last_time = world.time
 
 	// special power handling
 	var/area/A = get_area(src)
-	if(!isarea(A))
+	if (!isarea(A))
 		return
-	if(!A.powered(EQUIP))
+	if (!A.powered(EQUIP))
 		return
-	if(locked_atoms.len)
+	if (locked_atoms.len)
 		A.use_power(EQUIP, 5000)
 		var/light = A.power_light
 		A.updateicon()
@@ -74,8 +74,8 @@
 		M.Stun(60)
 		M.Jitter(60)
 		visible_message("<span class='danger'>The electric chair went off!</span>", "<span class='danger'>You hear a deep sharp shock!</span>")
-		for(var/i=1;i<=5;i++)
-			if(M && M.locked_to == src)
+		for (var/i=1;i<=5;i++)
+			if (M && M.locked_to == src)
 				M.burn_skin(34)
 				to_chat(M, "<span class='danger'>You feel a deep shock course through your body!</span>")
 			spark_system.start()

@@ -26,7 +26,7 @@
 /spell/area_teleport/choose_targets()
 	var/A = null
 
-	if(!randomise_selection)
+	if (!randomise_selection)
 		A = input("Area to teleport to", "Teleport", A) in teleportlocs
 	else
 		A = pick(teleportlocs)
@@ -36,21 +36,21 @@
 	return list(thearea)
 
 /spell/area_teleport/cast(area/thearea, mob/user)
-	if(!istype(thearea))
-		if(istype(thearea, /list))
+	if (!istype(thearea))
+		if (istype(thearea, /list))
 			thearea = thearea[1]
 	var/list/L = list()
-	for(var/turf/T in get_area_turfs(thearea.type))
-		if(!T.density)
+	for (var/turf/T in get_area_turfs(thearea.type))
+		if (!T.density)
 			var/clear = 1
-			for(var/obj/O in T)
-				if(O.density)
+			for (var/obj/O in T)
+				if (O.density)
 					clear = 0
 					break
-			if(clear)
+			if (clear)
 				L+=T
 
-	if(!L.len)
+	if (!L.len)
 		to_chat(user, "The spell matrix was unable to locate a suitable teleport destination for an unknown reason. Sorry.")
 		return
 
@@ -58,24 +58,24 @@
 
 	var/attempt = null
 	var/success = 0
-	while(L.len)
+	while (L.len)
 		attempt = pick(L)
 		success = user.Move(attempt)
-		if(!success)
+		if (!success)
 			L.Remove(attempt)
 		else
 			break
 
-	if(!success)
+	if (!success)
 		user.forceMove(pick(L))
 
 /spell/area_teleport/after_cast()
 	return
 
 /spell/area_teleport/invocation(mob/user, area/chosenarea)
-	if(!istype(chosenarea))
+	if (!istype(chosenarea))
 		return //can't have that, can we
-	if(!invocation_area || !chosenarea)
+	if (!invocation_area || !chosenarea)
 		..()
 	else
 		invocation += "[uppertext(chosenarea.name)]"

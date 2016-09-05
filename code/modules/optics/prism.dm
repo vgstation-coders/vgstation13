@@ -31,9 +31,9 @@ var/list/obj/machinery/prism/prism_list = list()
 	..()
 
 /obj/machinery/prism/proc/check_rotation()
-	for(var/obj/effect/beam/emitter/B in beams)
+	for (var/obj/effect/beam/emitter/B in beams)
 		to_chat(world, "[src] \ref[src] found [get_dir(src, B)] its dir is [dir]")
-		if(get_dir(src, B) != dir)
+		if (get_dir(src, B) != dir)
 			return 1
 /obj/machinery/prism/verb/rotate_cw()
 	set name = "Rotate (Clockwise)"
@@ -65,22 +65,22 @@ var/list/obj/machinery/prism/prism_list = list()
 
 /obj/machinery/prism/wrenchAnchor(var/mob/user)
 	. = ..()
-	if(. == 1)
-		if(beams && beams.len)
+	if (. == 1)
+		if (beams && beams.len)
 			update_beams()
 	return .
 
 /obj/machinery/prism/beam_connect(var/obj/effect/beam/emitter/B)
-	if(istype(B))
-		if(B.HasSource(src))
+	if (istype(B))
+		if (B.HasSource(src))
 			return // Prevent infinite loops.
 		..()
 		powerchange_hooks[B]=B.power_change.Add(src,"on_power_change")
 		update_beams(B)
 
 /obj/machinery/prism/beam_disconnect(var/obj/effect/beam/emitter/B)
-	if(istype(B))
-		if(B.HasSource(src))
+	if (istype(B))
+		if (B.HasSource(src))
 			return // Prevent infinite loops.
 		..()
 		B.power_change.Remove(powerchange_hooks[B])
@@ -95,25 +95,25 @@ var/list/obj/machinery/prism/prism_list = list()
 /obj/machinery/prism/proc/update_beams(var/obj/effect/beam/emitter/touching_beam)
 	overlays.len = 0
 	//testing("Beam count: [beams.len]")
-	if(get_dir(src, touching_beam) == dir)
+	if (get_dir(src, touching_beam) == dir)
 		return 0 //Make no change for beams touching us on our emission side.
-	if(!beams)
-		if(loc || !gcDestroyed)
+	if (!beams)
+		if (loc || !gcDestroyed)
 			beams = list()
 		else
 			return
-	if(beams.len>0 && anchored)
+	if (beams.len>0 && anchored)
 		var/newbeam=0
-		if(!beam)
+		if (!beam)
 			beam = new (loc)
 			beam.dir=dir
 			newbeam=1
 		beam.power=0
 		var/list/spawners = list(src)
-		for(var/obj/effect/beam/emitter/B in beams)
-			if(get_dir(src, B) == dir)
+		for (var/obj/effect/beam/emitter/B in beams)
+			if (get_dir(src, B) == dir)
 				continue
-			if(B.HasSource(src))
+			if (B.HasSource(src))
 				warning("Ignoring beam [B] due to recursion.")
 				continue // Prevent infinite loops.
 			// Don't process beams firing into our emission side.
@@ -122,12 +122,12 @@ var/list/obj/machinery/prism/prism_list = list()
 			beam.power += B.power
 
 			/// Propogate anti-recursion info
-			if(beam.steps<B.steps+1)
+			if (beam.steps<B.steps+1)
 				beam.steps=B.steps+1
 
 			var/beamdir=get_dir(B.loc,src)
 			overlays += image(icon=icon,icon_state="beam_arrow",dir=beamdir)
-		if(newbeam)
+		if (newbeam)
 			beam.emit(spawn_by=spawners)
 		else
 			beam.set_power(beam.power)

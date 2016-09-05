@@ -27,7 +27,7 @@
 /obj/effect/overlay/beam/New(turf/loc, var/lifetime = 10, var/fade = 0, var/src_icon = 'icons/effects/beam.dmi')
 	..()
 	icon = src_icon
-	spawn if(fade)
+	spawn if (fade)
 		animate(src, alpha=0, time=lifetime)
 	spawn(lifetime)
 		returnToPool(src)

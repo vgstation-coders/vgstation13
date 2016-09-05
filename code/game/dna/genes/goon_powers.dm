@@ -30,13 +30,13 @@
 /datum/dna/gene/basic/stealth
 	can_activate(var/mob/M, var/flags)
 		// Can only activate one of these at a time.
-		if(is_type_in_list(/datum/dna/gene/basic/stealth,M.active_genes))
+		if (is_type_in_list(/datum/dna/gene/basic/stealth,M.active_genes))
 			testing("Cannot activate [type]: /datum/dna/gene/basic/stealth in M.active_genes.")
 			return 0
 		return ..(M,flags)
 
 	deactivate(var/mob/M, var/connected, var/flags)
-		if(..(M,connected,flags))
+		if (..(M,connected,flags))
 			M.alphas -= "chameleon_stealth"
 			M.handle_alpha()
 
@@ -52,9 +52,9 @@
 
 	OnMobLife(var/mob/M)
 		var/turf/simulated/T = get_turf(M)
-		if(!istype(T))
+		if (!istype(T))
 			return
-		if(T.lighting_lumcount <= 2)
+		if (T.lighting_lumcount <= 2)
 			M.alpha -= 25
 		else
 			M.alpha = round(255 * 0.80)
@@ -70,7 +70,7 @@
 		block=CHAMELEONBLOCK
 
 	OnMobLife(var/mob/M)
-		if((world.time - M.last_movement) >= 30 && !M.isUnconscious() && M.canmove && !M.restrained())
+		if ((world.time - M.last_movement) >= 30 && !M.isUnconscious() && M.canmove && !M.restrained())
 			M.alphas["chameleon_stealth"] = max(M.alphas["chameleon_stealth"] - 25, 0)
 		else
 			M.alphas["chameleon_stealth"] = round(255 * 0.80)
@@ -85,16 +85,16 @@
 		..(M,connected,flags)
 		var/spell/granted = new spelltype
 		M.add_spell(granted, "genetic_spell_ready", /obj/screen/movable/spell_master/genetic)
-		if(!granted_spells)
+		if (!granted_spells)
 			granted_spells = list()
 		granted_spells += granted
 		//testing("[M] added [granted.name] from [name]")
 		return 1
 
 	deactivate(var/mob/M, var/connected, var/flags)
-		if(..(M,connected,flags))
-			for(var/spell/S in M.spell_list)
-				if(S in granted_spells)
+		if (..(M,connected,flags))
+			for (var/spell/S in M.spell_list)
+				if (S in granted_spells)
 					M.remove_spell(S)
 					granted_spells -= S
 					//testing("[M] removed [S.name] from [name]")
@@ -112,7 +112,7 @@
 		return 1
 
 	deactivate(var/mob/M, var/connected, var/flags)
-		if(..(M,connected,flags))
+		if (..(M,connected,flags))
 			M.verbs -= verbtype
 			//testing("[M] removed [verbtype] from [name]")
 			return 1
@@ -154,17 +154,17 @@
 
 /spell/targeted/cryokinesis/cast(list/targets)
 	..()
-	for(var/mob/living/carbon/target in targets)
+	for (var/mob/living/carbon/target in targets)
 		if (M_RESIST_COLD in target.mutations)
 			target.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [target.name], but disappears almost instantly!</span>")
 			return
 		var/handle_suit = 0
-		if(ishuman(target))
+		if (ishuman(target))
 			var/mob/living/carbon/human/H = target
-			if(istype(H.head, /obj/item/clothing/head/helmet/space))
-				if(istype(H.wear_suit, /obj/item/clothing/suit/space))
+			if (istype(H.head, /obj/item/clothing/head/helmet/space))
+				if (istype(H.wear_suit, /obj/item/clothing/suit/space))
 					handle_suit = 1
-					if(H.internal)
+					if (H.internal)
 						H.visible_message("<span class='warning'>A cloud of fine ice crystals engulfs [H]!</span>",
 											"<span class='notice'>A cloud of fine ice crystals cover your [H.head]'s visor.</span>")
 					else
@@ -172,7 +172,7 @@
 											"<span class='warning'>A cloud of fine ice crystals cover your [H.head]'s visor and make it into your air vents!.</span>")
 						H.bodytemperature = max(T0C + 31, H.bodytemperature - 3)
 						H.adjustFireLoss(5)
-		if(!handle_suit)
+		if (!handle_suit)
 			target.bodytemperature = max(T0C + 29, target.bodytemperature - 5)
 			target.adjustFireLoss(10)
 			target.ExtinguishMob()
@@ -239,59 +239,59 @@
 		)
 
 /spell/targeted/eat/proc/doHeal(var/mob/user)
-	if(ishuman(user))
+	if (ishuman(user))
 		var/mob/living/carbon/human/H=user
-		for(var/name in H.organs_by_name)
+		for (var/name in H.organs_by_name)
 			var/datum/organ/external/affecting = null
-			if(!H.organs[name])
+			if (!H.organs[name])
 				continue
 			affecting = H.organs[name]
-			if(!istype(affecting, /datum/organ/external))
+			if (!istype(affecting, /datum/organ/external))
 				continue
 			affecting.heal_damage(4, 0)
 		H.UpdateDamageIcon()
 		H.updatehealth()
 
 /spell/targeted/eat/is_valid_target(var/target)
-	if(!(spell_flags & INCLUDEUSER) && target == usr)
+	if (!(spell_flags & INCLUDEUSER) && target == usr)
 		return 0
-	if(get_dist(usr, target) > range)
+	if (get_dist(usr, target) > range)
 		return 0
 	return is_type_in_list(target, compatible_mobs)
 
 /spell/targeted/eat/choose_targets(mob/user = usr)
 	var/list/targets = list()
 
-	if(max_targets == 0) //unlimited
-		for(var/atom/movable/target in view_or_range(range, user, selection_type))
-			if(!is_type_in_list(target, compatible_mobs) && !istype(target, /obj/item))
+	if (max_targets == 0) //unlimited
+		for (var/atom/movable/target in view_or_range(range, user, selection_type))
+			if (!is_type_in_list(target, compatible_mobs) && !istype(target, /obj/item))
 				continue
-			if(istype(target, /obj/item/weapon/implant))
+			if (istype(target, /obj/item/weapon/implant))
 				var/obj/item/weapon/implant/implant = target
-				if(implant.imp_in) //Implanted implant, don't eat that
+				if (implant.imp_in) //Implanted implant, don't eat that
 					continue
 			targets += target
-	else if(max_targets == 1) //single target can be picked
-		if(range <= 0 && spell_flags & INCLUDEUSER)
+	else if (max_targets == 1) //single target can be picked
+		if (range <= 0 && spell_flags & INCLUDEUSER)
 			targets += user
 		else
 			var/list/possible_targets = list()
 
-			for(var/atom/movable/M in view_or_range(range, user, selection_type))
-				if(!(spell_flags & INCLUDEUSER) && M == user)
+			for (var/atom/movable/M in view_or_range(range, user, selection_type))
+				if (!(spell_flags & INCLUDEUSER) && M == user)
 					continue
-				if(!is_type_in_list(M, compatible_mobs) && !istype(M, /obj/item))
+				if (!is_type_in_list(M, compatible_mobs) && !istype(M, /obj/item))
 					continue
-				if(istype(M, /obj/item/weapon/implant))
+				if (istype(M, /obj/item/weapon/implant))
 					var/obj/item/weapon/implant/implant = M
-					if(implant.imp_in) //Implanted implant, don't eat that
+					if (implant.imp_in) //Implanted implant, don't eat that
 						continue
 				possible_targets += M
 
-			if(possible_targets.len)
-				if(spell_flags & SELECTABLE) //if we are allowed to choose. see setup.dm for details
+			if (possible_targets.len)
+				if (spell_flags & SELECTABLE) //if we are allowed to choose. see setup.dm for details
 					var/atom/movable/M = input("Choose something to eat.", "Targeting") as null|anything in possible_targets
-					if(M)
+					if (M)
 						targets += M
 				else
 					targets += pick(possible_targets)
@@ -301,87 +301,87 @@
 	else
 		var/list/possible_targets = list()
 
-		for(var/atom/movable/target in view_or_range(range, user, selection_type))
-			if(istype(target, /obj/item/weapon/implant))
+		for (var/atom/movable/target in view_or_range(range, user, selection_type))
+			if (istype(target, /obj/item/weapon/implant))
 				var/obj/item/weapon/implant/implant = target
-				if(implant.imp_in) //Implanted implant, don't eat that
+				if (implant.imp_in) //Implanted implant, don't eat that
 					continue
 			possible_targets += target
 
-		if(spell_flags & SELECTABLE)
-			for(var/i = 1; i<=max_targets, i++)
+		if (spell_flags & SELECTABLE)
+			for (var/i = 1; i<=max_targets, i++)
 				var/atom/movable/M = input("Choose something to eat.", "Targeting") as null|anything in possible_targets
-				if(!M)
+				if (!M)
 					break
-				if(M in view_or_range(range, user, selection_type))
+				if (M in view_or_range(range, user, selection_type))
 					targets += M
 					possible_targets -= M
 		else
-			for(var/i=1,i<=max_targets,i++)
-				if(!possible_targets.len)
+			for (var/i=1,i<=max_targets,i++)
+				if (!possible_targets.len)
 					break
-				if(target_ignore_prev)
+				if (target_ignore_prev)
 					var/target = pick(possible_targets)
 					possible_targets -= target
 					targets += target
 				else
 					targets += pick(possible_targets)
 
-	if(!(spell_flags & INCLUDEUSER) && (user in targets))
+	if (!(spell_flags & INCLUDEUSER) && (user in targets))
 		targets -= user
 
-	if(compatible_mobs && compatible_mobs.len)
-		for(var/mob/living/target in targets) //filters out all the non-compatible mobs
+	if (compatible_mobs && compatible_mobs.len)
+		for (var/mob/living/target in targets) //filters out all the non-compatible mobs
 			var/found = 0
-			for(var/mob_type in compatible_mobs)
-				if(istype(target, mob_type))
+			for (var/mob_type in compatible_mobs)
+				if (istype(target, mob_type))
 					found = 1
-			if(!found)
+			if (!found)
 				targets -= target
-	for(var/obj/item/I in targets)
-		if(!istype(I) || !holder.Adjacent(I))
+	for (var/obj/item/I in targets)
+		if (!istype(I) || !holder.Adjacent(I))
 			targets -= I
 
 	return targets
 
 /spell/targeted/eat/cast(list/targets, mob/user)
-	if(!targets || !targets.len)
+	if (!targets || !targets.len)
 		return 0
 	var/atom/movable/the_item = targets[1]
-	if(!the_item || !the_item.Adjacent(user))
+	if (!the_item || !the_item.Adjacent(user))
 		return
-	// if(istype(the_item, /obj/item/weapon/organ/head))
+	// if (istype(the_item, /obj/item/weapon/organ/head))
 	// 	to_chat(user, "<span class='warning'>You try to put the [the_item] in your mouth, but the ears tickle your throat!</span>")
 	// 	return 0
-	// else if(isbrain(the_item))
+	// else if (isbrain(the_item))
 	// 	to_chat(user, "<span class='warning'>You try to put [the_item] in your mouth, but the texture makes you gag!</span>")
 	// 	return 0
-	else if(ishuman(the_item))
+	else if (ishuman(the_item))
 		//My gender
 		var/m_his = "its"
-		if(user.gender == MALE)
+		if (user.gender == MALE)
 			m_his = "his"
-		if(user.gender == FEMALE)
+		if (user.gender == FEMALE)
 			m_his = "her"
 		var/mob/living/carbon/human/H = the_item
 		var/datum/organ/external/limb = H.get_organ(usr.zone_sel.selecting)
-		if(!istype(limb))
+		if (!istype(limb))
 			to_chat(user, "<span class='warning'>You can't eat this part of them!</span>")
 			return 0
-		if(istype(limb, /datum/organ/external/head))
+		if (istype(limb, /datum/organ/external/head))
 			//Bullshit, but prevents being unable to clone someone.
 			to_chat(user, "<span class='warning'>You try to put [the_item]'s [limb.display_name] in your mouth, but \his ears tickle your throat!</span>")
 			return 0
-		if(istype(limb, /datum/organ/external/chest))
+		if (istype(limb, /datum/organ/external/chest))
 			//Bullshit, but you cannot break it anyways
 			to_chat(user, "<span class='warning'>You try to put [the_item]'s [limb.display_name] in your mouth, but it's too big to fit!</span>")
 			return 0
-		if(istype(limb, /datum/organ/external/groin))
+		if (istype(limb, /datum/organ/external/groin))
 			//Bullshit, but you cannot break it anyways
 			to_chat(user, "<span class='warning'>You try to put [the_item]'s [limb.display_name] in your mouth, but it feels far too inappropriate!</span>")
 			return 0
 		user.visible_message("<span class='danger'>[user] begins stuffing [the_item]'s [limb.display_name] into [m_his] gaping maw!</span>")
-		if(!do_mob(user, the_item,EAT_MOB_DELAY))
+		if (!do_mob(user, the_item,EAT_MOB_DELAY))
 			to_chat(user, "<span class='warning'>You were interrupted before you could eat [the_item]'s [limb.display_name]!</span>")
 		else
 			user.visible_message("<span class='danger'>[user] eats [the_item]'s [limb.display_name].</span>", \
@@ -439,7 +439,7 @@
 	override_base = "genetic"
 
 /spell/targeted/leap/cast(list/targets, mob/user)
-	for(var/mob/living/target in targets)
+	for (var/mob/living/target in targets)
 		if (istype(target.loc,/mob/) || target.lying || target.stunned || target.locked_to)
 			to_chat(target, "<span class='warning'>You can't jump right now!</span>")
 			continue
@@ -447,20 +447,20 @@
 		var/failed_leap = 0
 		if (istype(target.loc,/turf/))
 
-			if(target.restrained())//Why being pulled while cuffed prevents you from moving
-				for(var/mob/M in range(target, 1))
-					if(M.pulling == target)
-						if(!M.restrained() && !usr.isUnconscious() && M.canmove && usr.Adjacent(M))
+			if (target.restrained())//Why being pulled while cuffed prevents you from moving
+				for (var/mob/M in range(target, 1))
+					if (M.pulling == target)
+						if (!M.restrained() && !usr.isUnconscious() && M.canmove && usr.Adjacent(M))
 							failed_leap = 1
 						else
 							M.stop_pulling()
 
-			if(target.pinned.len)
+			if (target.pinned.len)
 				failed_leap = 1
 
 			target.visible_message("<span class='warning'><b>[target.name]</b> takes a huge leap!</span>")
 			playsound(target.loc, 'sound/weapons/thudswoosh.ogg', 50, 1)
-			if(failed_leap)
+			if (failed_leap)
 				target.Weaken(5)
 				target.Stun(5)
 				target.visible_message("<span class='warning'> \the [usr] attempts to leap away but is slammed back down to the ground!</span>",
@@ -471,9 +471,9 @@
 			var/prevLayer = target.layer
 			target.plane = EFFECTS_PLANE
 
-			for(var/i=0, i<duration, i++)
+			for (var/i=0, i<duration, i++)
 				step(target, target.dir)
-				if(i < 5)
+				if (i < 5)
 					target.pixel_y += 8 * PIXEL_MULTIPLIER
 				else
 					target.pixel_y -= 8 * PIXEL_MULTIPLIER
@@ -496,7 +496,7 @@
 			container.visible_message("<span class='warning'><b>[container]</b> emits a loud thump and rattles a bit.</span>")
 			playsound(target.loc, 'sound/effects/bang.ogg', 50, 1)
 			var/wiggle = 6
-			while(wiggle > 0)
+			while (wiggle > 0)
 				wiggle--
 				container.pixel_x = rand(-3,3) * PIXEL_MULTIPLIER
 				container.pixel_y = rand(-3,3) * PIXEL_MULTIPLIER
@@ -544,14 +544,14 @@
 
 /spell/targeted/polymorph/cast(list/targets, mob/living/carbon/human/user)
 	..()
-	if(!istype(user))
+	if (!istype(user))
 		return
 
-	for(var/mob/living/carbon/human/target in targets)
+	for (var/mob/living/carbon/human/target in targets)
 		user.visible_message("<span class='sinister'>[user.name]'s body shifts and contorts.</span>")
 
 		spawn(10)
-			if(target && user)
+			if (target && user)
 				//playsound(usr.loc, 'gib.ogg', 50, 1)
 				user.UpdateAppearance(target.dna.UI)
 				user.real_name = target.real_name
@@ -594,15 +594,15 @@
 	mind_affecting = 1
 
 /spell/targeted/empath/cast(var/list/targets, mob/user)
-	if(!targets || !targets.len)
+	if (!targets || !targets.len)
 		return
 
 	var/mob/living/carbon/M = targets[1] //only one mob in the list, so we want that one
 
-	if(!M || !M.loc) //Either chose to not read a mind or the mob was caught by qdel
+	if (!M || !M.loc) //Either chose to not read a mind or the mob was caught by qdel
 		return 1
 
-	if(!istype(M))
+	if (!istype(M))
 		to_chat(user, "<span class='warning'>This can only be used on carbon beings.</span>")
 		return 1
 
@@ -633,7 +633,7 @@
 	if (M.radiation)
 		pain_condition -= 25
 
-	switch(pain_condition)
+	switch (pain_condition)
 		if (81 to INFINITY)
 			to_chat(user, "<span class='notice'> <b>Condition</b>: [M.name] feels good.</span>")
 		if (61 to 80)
@@ -646,7 +646,7 @@
 			to_chat(user, "<span class='notice'> <b>Condition</b>: [M.name] is suffering excruciating pain.</span>")
 			thoughts = "haunted by their own mortality"
 
-	switch(M.a_intent)
+	switch (M.a_intent)
 		if (I_HELP)
 			to_chat(user, "<span class='notice'> <b>Mood</b>: You sense benevolent thoughts from [M.name].</span>")
 		if (I_DISARM)
@@ -655,7 +655,7 @@
 			to_chat(user, "<span class='notice'> <b>Mood</b>: You sense hostile thoughts from [M.name].</span>")
 		if (I_HURT)
 			to_chat(user, "<span class='notice'> <b>Mood</b>: You sense cruel thoughts from [M.name].</span>")
-			for(var/mob/living/L in view(7,M))
+			for (var/mob/living/L in view(7,M))
 				if (L == M)
 					continue
 				thoughts = "thinking about punching [L.name]"
@@ -666,10 +666,10 @@
 	if (istype(M,/mob/living/carbon/human))
 		var/numbers[0]
 		var/mob/living/carbon/human/H = M
-		if(H.mind && H.mind.initial_account)
+		if (H.mind && H.mind.initial_account)
 			numbers += H.mind.initial_account.account_number
 			numbers += H.mind.initial_account.remote_access_pin
-		if(numbers.len>0)
+		if (numbers.len>0)
 			to_chat(user, "<span class='notice'> <b>Numbers</b>: You sense the number[numbers.len>1?"s":""] [english_list(numbers)] [numbers.len>1?"are":"is"] important to [M.name].</span>")
 	to_chat(user, "<span class='notice'> <b>Thoughts</b>: [M.name] is currently [thoughts].</span>")
 

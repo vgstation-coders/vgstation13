@@ -37,9 +37,9 @@ var/global/list/taxi_computers = list()
 /obj/machinery/computer/taxi_shuttle/proc/taxi_move_to(var/obj/docking_port/destination/destination, var/wait_time)
 	/*if(shuttle.moving)
 		return
-	if(!shuttle.can_move())
+	if (!shuttle.can_move())
 		return
-	if(shuttle.current_port == destination)
+	if (shuttle.current_port == destination)
 		return
 
 	broadcast("[capitalize(shuttle.name)] will move in [wait_time / 10] second\s.")
@@ -48,13 +48,13 @@ var/global/list/taxi_computers = list()
 
 	shuttle.move_to_dock(destination)
 
-	if(shuttle.current_port == destination)
+	if (shuttle.current_port == destination)
 		return 1*/
-	if(shuttle.moving)
+	if (shuttle.moving)
 		return
-	if(!shuttle.can_move())
+	if (!shuttle.can_move())
 		return
-	if(shuttle.current_port == destination)
+	if (shuttle.current_port == destination)
 		return
 
 	shuttle.pre_flight_delay = wait_time
@@ -65,15 +65,15 @@ var/global/list/taxi_computers = list()
 
 
 /obj/machinery/computer/taxi_shuttle/proc/broadcast(var/message = "")
-	if(message)
+	if (message)
 		src.visible_message("[bicon(src)]" + message)
 	else
 		return
-	for(var/obj/machinery/door_control/taxi/TB in connected_buttons)
+	for (var/obj/machinery/door_control/taxi/TB in connected_buttons)
 		TB.visible_message("[bicon(TB)]" + message)
 
 /obj/machinery/computer/taxi_shuttle/attackby(obj/item/I as obj, mob/user as mob)
-	if(..())
+	if (..())
 		return 1
 	return attack_hand(user)
 
@@ -90,17 +90,17 @@ var/global/list/taxi_computers = list()
 
 	var/dat
 
-	if(shuttle.lockdown)
+	if (shuttle.lockdown)
 		dat += "<h2><font color='red'>THIS TAXI IS LOCKED DOWN</font></h2><br>"
-		if(istext(shuttle.lockdown))
+		if (istext(shuttle.lockdown))
 			dat += shuttle.lockdown
 		else
 			dat += "Additional information has not been provided."
-	else if(!shuttle.linked_area)
+	else if (!shuttle.linked_area)
 		dat = "<h2><font color='red'>UNABLE TO FIND [uppertext(shuttle.name)]</font></h2>"
-	else if(!shuttle.linked_port)	//User friendly interface
+	else if (!shuttle.linked_port)	//User friendly interface
 		dat += "<h2><font color='red'>ERROR: Unable to find the docking port. Please contact tech support.</font></h2><br>"
-	else if(shuttle.moving)
+	else if (shuttle.moving)
 		dat += "<center><h3>Currently moving [shuttle.destination_port.areaname ? "to [shuttle.destination_port.areaname]" : ""]</h3></center>"
 	else
 		dat = {"[shuttle.current_port ? "Location: [shuttle.current_port.areaname]" : "Location: UNKNOWN"]<br>
@@ -115,7 +115,7 @@ var/global/list/taxi_computers = list()
 	return
 
 /obj/machinery/computer/taxi_shuttle/emag(mob/user)
-	if(!emagged)
+	if (!emagged)
 		emagged = 1
 		req_access = list()
 		return 1
@@ -125,15 +125,15 @@ var/global/list/taxi_computers = list()
 	return
 
 /obj/machinery/computer/taxi_shuttle/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 	var/mob/user = usr
 
 	user.set_machine(src)
 
-	for(var/place in href_list)
-		if(href_list[place])
-			if(!allowed(user))
+	for (var/place in href_list)
+		if (href_list[place])
+			if (!allowed(user))
 				callTo(place, shuttle.move_time_no_access)
 			else
 				callTo(place, shuttle.move_time_access) //otherwise, double quick time
@@ -143,17 +143,17 @@ var/global/list/taxi_computers = list()
 	return
 
 /obj/machinery/computer/taxi_shuttle/proc/callTo(var/place = "", var/wait_time)
-	switch(place)
-		if("med_sili")
+	switch (place)
+		if ("med_sili")
 			if (taxi_move_to(shuttle.dock_medical_silicon, wait_time))
 				return 1
-		if("engi_cargo")
+		if ("engi_cargo")
 			if (taxi_move_to(shuttle.dock_engineering_cargo, wait_time))
 				return 1
-		if("sec_sci")
+		if ("sec_sci")
 			if (taxi_move_to(shuttle.dock_security_science, wait_time))
 				return 1
-		if("abandoned")
+		if ("abandoned")
 			if (taxi_move_to(shuttle.dock_abandoned, wait_time))
 				return 1
 	return

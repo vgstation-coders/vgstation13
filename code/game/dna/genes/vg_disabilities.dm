@@ -29,7 +29,7 @@
 
 	can_activate(var/mob/M,var/flags)
 		// No loud whispering.
-		if(M_LOUD in M.mutations)
+		if (M_LOUD in M.mutations)
 			return 0
 		return ..(M,flags)
 
@@ -51,9 +51,9 @@
 
 
 	OnMobLife(var/mob/living/carbon/human/M)
-		if(!istype(M))
+		if (!istype(M))
 			return
-		if(M_DIZZY in M.mutations)
+		if (M_DIZZY in M.mutations)
 			M.Dizzy(300)
 
 

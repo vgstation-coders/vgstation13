@@ -24,10 +24,10 @@
 		VALUE_LIMIT = "limit;"+VT_NUMBER)
 
 /obj/item/device/assembly/addition/activate()
-	if(!..())
+	if (!..())
 		return 0
 
-	if(++pulse_counter >= limit)
+	if (++pulse_counter >= limit)
 		pulse_counter = 0
 		pulse()
 
@@ -55,20 +55,20 @@
 	return
 
 /obj/item/device/assembly/addition/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 
-	if(href_list["sub_counter"])
+	if (href_list["sub_counter"])
 		pulse_counter = max(pulse_counter - text2num(href_list["sub_counter"]), 0)
-	if(href_list["add_counter"])
+	if (href_list["add_counter"])
 		pulse_counter+= text2num(href_list["add_counter"])
 
-	if(href_list["sub_limit"])
+	if (href_list["sub_limit"])
 		limit = max(limit - text2num(href_list["sub_limit"]), 0)
-	if(href_list["add_limit"])
+	if (href_list["add_limit"])
 		limit+= text2num(href_list["add_limit"])
 
-	if(usr)
+	if (usr)
 		attack_self(usr)
 
 #undef add_counter_href

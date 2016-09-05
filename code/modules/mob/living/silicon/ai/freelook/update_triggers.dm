@@ -8,7 +8,7 @@
 	var/image/obscured
 
 /turf/proc/visibilityChanged()
-	if(ticker)
+	if (ticker)
 		cameranet.updateVisibility(src)
 
 /turf/simulated/Destroy()
@@ -24,25 +24,25 @@
 // STRUCTURES
 
 /obj/structure/Destroy()
-	if(ticker)
+	if (ticker)
 		cameranet.updateVisibility(src)
 	..()
 
 /obj/structure/New()
 	..()
-	if(ticker)
+	if (ticker)
 		cameranet.updateVisibility(src)
 
 // EFFECTS
 
 /obj/effect/Destroy()
-	if(ticker)
+	if (ticker)
 		cameranet.updateVisibility(src)
 	..()
 
 /obj/effect/New()
 	..()
-	if(ticker)
+	if (ticker)
 		cameranet.updateVisibility(src)
 
 
@@ -52,7 +52,7 @@
 /obj/machinery/door/proc/update_freelok_sight()
 	// Glass door glass = 1
 	// don't check then?
-	if(!glass && cameranet)
+	if (!glass && cameranet)
 		cameranet.updateVisibility(src, 0)
 
 
@@ -65,12 +65,12 @@
 /mob/living/silicon/robot/Move()
 	var/oldLoc = src.loc
 	. = ..()
-	if(.)
-		if(src.camera)
-			if(!updating)
+	if (.)
+		if (src.camera)
+			if (!updating)
 				updating = 1
 				spawn(BORG_CAMERA_BUFFER)
-					if(oldLoc != src.loc)
+					if (oldLoc != src.loc)
 						cameranet.updatePortableCamera(src.camera)
 					updating = 0
 
@@ -80,7 +80,7 @@
 
 /obj/machinery/camera/deactivate(user as mob, var/choice = 1)
 	..(user, choice)
-	if(src.can_use())
+	if (src.can_use())
 		cameranet.addCamera(src)
 	else
 		src.set_light(0)

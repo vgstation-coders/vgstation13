@@ -25,7 +25,7 @@
 	var/obj/machinery/optable/optablef = null
 
 	// Loop through every direction
-	for(dir in list(NORTH,EAST,SOUTH,WEST))
+	for (dir in list(NORTH,EAST,SOUTH,WEST))
 
 		// Try to find a scanner in that direction
 		optablef = locate(/obj/machinery/optable, get_step(src, dir))
@@ -45,17 +45,17 @@
 	return src.attack_hand(user)
 
 /obj/machinery/computer/operating/attack_hand(mob/user as mob)
-	if(..())
+	if (..())
 		return
 	add_fingerprint(user)
 
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
 
 	updatemodules()
 
 	var/dat = {"<HEAD><TITLE>Operating Computer</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>"}
-	if(!isnull(src.optable) && (src.optable.check_victim()))
+	if (!isnull(src.optable) && (src.optable.check_victim()))
 		src.victim = src.optable.victim
 		dat += {"
 <B>Patient Information:</B><BR>
@@ -85,24 +85,24 @@
 	onclose(user, "op")
 
 /obj/machinery/computer/operating/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 	else
 		usr.set_machine(src)
 	return
 
 /obj/machinery/computer/operating/process()
-	if(..())
+	if (..())
 		src.updateDialog()
 	update_icon()
 
 /obj/machinery/computer/operating/update_icon()
 	..()
-	if(!(stat & (BROKEN | NOPOWER)))
+	if (!(stat & (BROKEN | NOPOWER)))
 		updatemodules()
-		if(!isnull(src.optable) && (src.optable.check_victim()))
+		if (!isnull(src.optable) && (src.optable.check_victim()))
 			src.victim = src.optable.victim
-			if(victim.stat == DEAD)
+			if (victim.stat == DEAD)
 				icon_state = "operating-dead"
 			else
 				icon_state = "operating-living"

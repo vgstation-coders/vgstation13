@@ -3,19 +3,19 @@
 	set category = "IC"
 	set name = "Pray"
 
-	if(say_disabled) //This is here to try to identify lag problems
+	if (say_disabled) //This is here to try to identify lag problems
 		to_chat(usr, "<span class='warning'>Speech is currently admin-disabled.</span>")
 		return
 
 	msg = copytext(sanitize(msg), 1, MAX_MESSAGE_LEN)
-	if(!msg)
+	if (!msg)
 		return
 
-	if(usr.client)
-		if(usr.client.prefs.muted & MUTE_PRAY)
+	if (usr.client)
+		if (usr.client.prefs.muted & MUTE_PRAY)
 			to_chat(usr, "<span class='warning'>You cannot pray (muted).</span>")
 			return
-		if(src.client.handle_spam_prevention(msg, MUTE_PRAY))
+		if (src.client.handle_spam_prevention(msg, MUTE_PRAY))
 			return
 
 	var/orig_message = msg
@@ -24,7 +24,7 @@
 
 	send_prayer_to_admins(msg, 'sound/effects/prayer.ogg')
 
-	if(!stat)
+	if (!stat)
 		usr.whisper(orig_message)
 	to_chat(usr, "Your prayers have been received by the gods.")
 
@@ -41,9 +41,9 @@
 	send_prayer_to_admins(msg, 'sound/effects/inception.ogg')
 
 /proc/send_prayer_to_admins(var/msg,var/sound)
-	for(var/client/C in admins)
-		if(C.prefs.toggles & CHAT_PRAYER)
-			if(C.prefs.special_popup)
+	for (var/client/C in admins)
+		if (C.prefs.toggles & CHAT_PRAYER)
+			if (C.prefs.special_popup)
 				C << output(msg, "window1.msay_output") //If i get told to make this a proc imma be fuckin mad
 			else
 				to_chat(C, msg)

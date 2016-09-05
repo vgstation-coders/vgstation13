@@ -34,8 +34,8 @@
 			gib()
 
 	Stat()
-		if(statpanel("Status"))
-			if(src.client && src.client.holder)
+		if (statpanel("Status"))
+			if (src.client && src.client.holder)
 				stat(null, "([x], [y], [z])")
 
 			stat(null, "Intent: [src.a_intent]")
@@ -52,10 +52,10 @@
 		return
 
 	alien_talk()
-		if(istype(src, /mob/living/carbon/alien/humanoid/special/etheral))
+		if (istype(src, /mob/living/carbon/alien/humanoid/special/etheral))
 			..()
 			return
-		if(istype(src, /mob/living/carbon/alien/humanoid/special/sectoid))
+		if (istype(src, /mob/living/carbon/alien/humanoid/special/sectoid))
 			..()
 			return
 		return

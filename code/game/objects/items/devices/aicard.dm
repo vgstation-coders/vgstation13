@@ -11,9 +11,9 @@
 
 
 /obj/item/device/aicard/attack(mob/living/silicon/ai/M as mob, mob/user as mob)
-	if(!istype(M, /mob/living/silicon/ai))//If target is not an AI.
+	if (!istype(M, /mob/living/silicon/ai))//If target is not an AI.
 		return ..()
-	if(M.mind && M.mind.current != M)
+	if (M.mind && M.mind.current != M)
 		return ..()
 
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been carded with [src.name] by [user.name] ([user.ckey])</font>")
@@ -32,7 +32,7 @@
 	user.set_machine(src)
 	var/dat = "<TT><B>Intelicard</B><BR>"
 	var/laws
-	for(var/mob/living/silicon/ai/A in src)
+	for (var/mob/living/silicon/ai/A in src)
 		dat += "Stored AI: [A.name]<br>System integrity: [A.system_integrity()]%<br>"
 
 		//AI DIDN'T KILL SOMEONE FOR ME, CARD HER TO CHECK HER LAWS
@@ -86,7 +86,7 @@
 	add_fingerprint(U)
 	U.set_machine(src)
 
-	switch(href_list["choice"])//Now we switch based on choice.
+	switch (href_list["choice"])//Now we switch based on choice.
 		if ("Close")
 			U << browse(null, "window=aicard")
 			U.unset_machine()
@@ -94,14 +94,14 @@
 
 		if ("Wipe")
 			var/confirm = alert("Are you sure you want to wipe this card's memory? This cannot be undone once started.", "Confirm Wipe", "Yes", "No")
-			if(confirm == "Yes")
-				if(isnull(src)||!in_range(src, U)||U.machine!=src)
+			if (confirm == "Yes")
+				if (isnull(src)||!in_range(src, U)||U.machine!=src)
 					U << browse(null, "window=aicard")
 					U.unset_machine()
 					return
 				else
 					flush = 1
-					for(var/mob/living/silicon/ai/A in src)
+					for (var/mob/living/silicon/ai/A in src)
 						A.suiciding = 1
 						to_chat(A, "Your core files are being wiped!")
 						A.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been wiped with an [src.name] by [U.name] ([U.ckey])</font>")
@@ -115,7 +115,7 @@
 						flush = 0
 
 		if ("Wireless")
-			for(var/mob/living/silicon/ai/A in src)
+			for (var/mob/living/silicon/ai/A in src)
 				A.control_disabled = !A.control_disabled
 				to_chat(A, "The intelicard's wireless port has been [A.control_disabled ? "disabled" : "enabled"]!")
 				if (A.control_disabled)
@@ -125,12 +125,12 @@
 	attack_self(U)
 
 /obj/item/device/aicard/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			qdel(src)
-		if(2.0)
-			if(prob(50))
+		if (2.0)
+			if (prob(50))
 				qdel(src)
-		if(3.0)
-			if(prob(25))
+		if (3.0)
+			if (prob(25))
 				qdel(src)

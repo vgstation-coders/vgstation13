@@ -19,16 +19,16 @@
 /datum/objective/heist/kidnap/choose_target()
 	var/list/roles = list("Chief Engineer", "Research Director", "Roboticist", "Chemist", "Station Engineer")
 
-	for(var/role in shuffle(roles))
+	for (var/role in shuffle(roles))
 		find_target_by_role(role)
 
-		if(target)
+		if (target)
 			break
 
-	if(isnull(target)) // if we cannot find some target at certain roles
+	if (isnull(target)) // if we cannot find some target at certain roles
 		find_target()
 
-	if(target)
+	if (target)
 		explanation_text = "The Shoal has a need for [target.current.real_name], the [target.assigned_role]. Take them alive."
 	else
 		explanation_text = "Free Objective"
@@ -36,13 +36,13 @@
 	return target
 
 /datum/objective/heist/kidnap/check_completion()
-	if(target)
-		if(isnull(target.current) || target.current.stat == DEAD)
+	if (target)
+		if (isnull(target.current) || target.current.stat == DEAD)
 			return FALSE // they're destroyed or dead. fail.
 
 		var/end_area = get_area_master(locate(/area/shuttle/vox/station))
 
-		if(get_area_master(target.current) != end_area)
+		if (get_area_master(target.current) != end_area)
 			return FALSE
 
 		//if(!target.current.restrained())
@@ -65,7 +65,7 @@
 	explanation_text = "Follow the Inviolate. Minimise death and loss of resources."
 
 /datum/objective/heist/inviolate_death/check_completion()
-	if(vox_kills > MAX_VOX_KILLS)
+	if (vox_kills > MAX_VOX_KILLS)
 		return FALSE
 
 	return TRUE
@@ -92,10 +92,10 @@
 /datum/theft_objective/number/heist/check_completion()
 	var/list/search = list()
 	var/found = 0
-	for(var/A in areas)
+	for (var/A in areas)
 		var/area/B = locate(A)
 		search += recursive_type_check(B, typepath)
-	for(var/C in search)
+	for (var/C in search)
 		found++
 	return (found >= required_amount)
 
@@ -113,12 +113,12 @@
 							/obj/structure/particle_accelerator/particle_emitter/right, \
 							/obj/structure/particle_accelerator/power_box,)
 	var/list/search = list()
-	for(var/A in areas)
+	for (var/A in areas)
 		var/area/B = locate(A)
 		search += recursive_type_check(B, /obj/structure/particle_accelerator)
-	for(var/C in contents)
-		for(var/atom/A in search)
-			if(istype(A,C)) //Does search contain this part type
+	for (var/C in contents)
+		for (var/atom/A in search)
+			if (istype(A,C)) //Does search contain this part type
 				continue
 			return FALSE //It didn't, fail the object
 	return TRUE
@@ -169,11 +169,11 @@
 /datum/theft_objective/number/salvage/check_completion()
 	var/found_amount = 0
 	var/list/search = list()
-	for(var/A in areas)
+	for (var/A in areas)
 		var/area/B = locate(A)
 		search += recursive_type_check(B,typepath)
-	if(istype(typepath,/obj/item/stack))
-		for(var/obj/item/stack/A in search)
+	if (istype(typepath,/obj/item/stack))
+		for (var/obj/item/stack/A in search)
 			found_amount += A.amount
 	else
 		found_amount = search.len

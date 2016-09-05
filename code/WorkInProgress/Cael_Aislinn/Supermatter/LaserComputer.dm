@@ -10,8 +10,8 @@
 /obj/machinery/computer/lasercon
 	New()
 		spawn(1)
-			for(var/obj/machinery/zero_point_emitter/las in machines)
-				if(las.id == src.id)
+			for (var/obj/machinery/zero_point_emitter/las in machines)
+				if (las.id == src.id)
 					lasers += las
 
 	process()
@@ -25,7 +25,7 @@
 				user << browse(null, "window=laser_control")
 				return
 		var/t = "<TT><B>Laser status monitor</B><HR>"
-		for(var/obj/machinery/zero_point_emitter/laser in lasers)
+		for (var/obj/machinery/zero_point_emitter/laser in lasers)
 			t += "Zero Point Laser<br>"
 			t += "Power level: <A href = '?src=\ref[laser];input=-0.005'>-</A> <A href = '?src=\ref[laser];input=-0.001'>-</A> <A href = '?src=\ref[laser];input=-0.0005'>-</A> <A href = '?src=\ref[laser];input=-0.0001'>-</A> [laser.energy]MeV <A href = '?src=\ref[laser];input=0.0001'>+</A> <A href = '?src=\ref[laser];input=0.0005'>+</A> <A href = '?src=\ref[laser];input=0.001'>+</A> <A href = '?src=\ref[laser];input=0.005'>+</A><BR>"
 			t += "Frequency: <A href = '?src=\ref[laser];freq=-10000'>-</A> <A href = '?src=\ref[laser];freq=-1000'>-</A> [laser.freq] <A href = '?src=\ref[laser];freq=1000'>+</A> <A href = '?src=\ref[laser];freq=10000'>+</A><BR>"
@@ -51,13 +51,13 @@
 
 	var/obj/machinery/engine/laser/laser = src.laser[1]
 
-	if(!laser)
+	if (!laser)
 		t += "<span class='warning'>No laser found</span>"
 	else
 
 
 		t += "Power level:  <A href = '?src=\ref[src];input=-4'>-</A> <A href = '?src=\ref[src];input=-3'>-</A> <A href = '?src=\ref[src];input=-2'>-</A> <A href = '?src=\ref[src];input=-1'>-</A> [add_lspace(laser.power,5)] <A href = '?src=\ref[src];input=1'>+</A> <A href = '?src=\ref[src];input=2'>+</A> <A href = '?src=\ref[src];input=3'>+</A> <A href = '?src=\ref[src];input=4'>+</A><BR>"
-		if(advanced)
+		if (advanced)
 			t += "Frequency:  <A href = '?src=\ref[src];freq=-10000'>-</A> <A href = '?src=\ref[src];freq=-1000'>-</A> [add_lspace(laser.freq,5)] <A href = '?src=\ref[src];freq=1000'>+</A> <A href = '?src=\ref[src];freq=10000'>+</A><BR>"
 
 		t += "Output: [laser.on ? "<B>Online</B> <A href = '?src=\ref[src];online=1'>Offline</A>" : "<A href = '?src=\ref[src];online=1'>Online</A> <B>Offline</B> "]<BR>"
@@ -69,30 +69,30 @@
 */
 
 /obj/machinery/computer/lasercon/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
-	if( href_list["close"] )
+	if ( href_list["close"] )
 		usr << browse(null, "window=laser_control")
 		usr.machine = null
 		return
 
-	else if( href_list["input"] )
+	else if ( href_list["input"] )
 		var/i = text2num(href_list["input"])
 		var/d = i
-		for(var/obj/machinery/zero_point_emitter/laser in lasers)
+		for (var/obj/machinery/zero_point_emitter/laser in lasers)
 			var/new_power = laser.energy + d
 			new_power = max(new_power,0.0001)	//lowest possible value
 			new_power = min(new_power,0.01)		//highest possible value
 			laser.energy = new_power
 			//
 			src.updateDialog()
-	else if( href_list["online"] )
+	else if ( href_list["online"] )
 		var/obj/machinery/zero_point_emitter/laser = href_list["online"]
 		laser.active = !laser.active
 		src.updateDialog()
-	else if( href_list["freq"] )
+	else if ( href_list["freq"] )
 		var/amt = text2num(href_list["freq"])
-		for(var/obj/machinery/zero_point_emitter/laser in lasers)
+		for (var/obj/machinery/zero_point_emitter/laser in lasers)
 			var/new_freq = laser.frequency + amt
 			new_freq = max(new_freq,1)		//lowest possible value
 			new_freq = min(new_freq,20000)	//highest possible value
@@ -102,7 +102,7 @@
 
 /*
 /obj/machinery/computer/lasercon/process()
-	if(!(stat & (NOPOWER|BROKEN)) )
+	if (!(stat & (NOPOWER|BROKEN)) )
 		use_power(250)
 
 	//src.updateDialog()
@@ -111,10 +111,10 @@
 /*
 /obj/machinery/computer/lasercon/power_change()
 
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		icon_state = "broken"
 	else
-		if( powered() )
+		if ( powered() )
 			icon_state = initial(icon_state)
 			stat &= ~NOPOWER
 		else

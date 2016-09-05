@@ -10,12 +10,12 @@
 
 //Human to monkey
 /datum/dna/gene/monkey/activate(var/mob/living/M, var/connected, var/flags)
-	if(!istype(M,/mob/living/carbon/human))
+	if (!istype(M,/mob/living/carbon/human))
 		//testing("Cannot monkey-ify [M], type is [M.type].")
 		return
 	var/mob/living/carbon/human/H = M
 	H.monkeyizing = 1
-	if(!connected)
+	if (!connected)
 		M.monkeyizing = 1
 		M.canmove = 0
 		M.icon = null
@@ -32,17 +32,17 @@
 
 
 	var/mob/living/carbon/monkey/O = null
-	if(H.species.primitive)
+	if (H.species.primitive)
 		O = new H.species.primitive(src)
 		H.transferImplantsTo(O)
 	else
-		for(var/obj/item/W in (H.contents))
+		for (var/obj/item/W in (H.contents))
 			H.drop_from_inventory(W)
 		H.dropBorers(1)
 		H.gib() //Trying to change the species of a creature with no primitive var set is messy.
 		return
 
-	if(M)
+	if (M)
 		if (M.dna)
 			O.dna = M.dna.Clone()
 			M.dna = null
@@ -52,17 +52,17 @@
 			M.suiciding = null
 
 
-	for(var/datum/disease/D in M.viruses)
+	for (var/datum/disease/D in M.viruses)
 		O.viruses += D
 		D.affected_mob = O
 		M.viruses -= D
 
 	O.forceMove(M.loc)
 
-	if(M.mind)
+	if (M.mind)
 		M.mind.transfer_to(O)	//transfer our mind to the cute little monkey
 
-	for(var/obj/item/W in (H.contents))
+	for (var/obj/item/W in (H.contents))
 		H.drop_from_inventory(W)
 	H.transferBorers(O)
 
@@ -72,7 +72,7 @@
 		C.occupant = O
 		connected = null
 
-	if(istype(O))//so chicken don't instantly die, or get named as "monkey"
+	if (istype(O))//so chicken don't instantly die, or get named as "monkey"
 		O.real_name = text("monkey ([])",copytext(md5(M.real_name), 2, 6))
 		O.take_overall_damage(M.getBruteLoss() + 40, M.getFireLoss())
 		O.adjustToxLoss(M.getToxLoss() + 20)
@@ -90,12 +90,12 @@
 
 //Monkey to human
 /datum/dna/gene/monkey/deactivate(var/mob/living/M, var/connected, var/flags)
-	if(!istype(M,/mob/living/carbon/monkey))
+	if (!istype(M,/mob/living/carbon/monkey))
 		testing("Cannot humanize [M], type is [M.type].")
 		return
 	var/mob/living/carbon/monkey/Mo = M
 	Mo.monkeyizing = 1
-	if(!connected)
+	if (!connected)
 		M.monkeyizing = 1
 		M.canmove = 0
 		M.icon = null
@@ -111,7 +111,7 @@
 		qdel(animation)
 
 	var/mob/living/carbon/human/O = new( src )
-	if(Mo.greaterform)
+	if (Mo.greaterform)
 		O.set_species(Mo.greaterform)
 	Mo.transferImplantsTo(O)
 
@@ -129,7 +129,7 @@
 			O.suiciding = M.suiciding
 			M.suiciding = null
 
-	for(var/datum/disease/D in M.viruses)
+	for (var/datum/disease/D in M.viruses)
 		O.viruses += D
 		D.affected_mob = O
 		M.viruses -= D
@@ -139,11 +139,11 @@
 
 	O.forceMove(M.loc)
 
-	if(M.mind)
+	if (M.mind)
 		M.mind.transfer_to(O)	//transfer our mind to the human
 
 
-	for(var/obj/item/W in (Mo.contents))
+	for (var/obj/item/W in (Mo.contents))
 		Mo.drop_from_inventory(W)
 	Mo.transferBorers(O)
 	if (connected) //inside dna thing

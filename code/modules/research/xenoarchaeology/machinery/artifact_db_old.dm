@@ -16,9 +16,9 @@
 	catalogued_artifacts = new/list
 
 /obj/machinery/computer/artifact_database/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
-	if( href_list["close"] )
+	if ( href_list["close"] )
 		usr << browse(null, "window=artifact_db")
 		usr.machine = null
 	updateDialog()
@@ -40,7 +40,7 @@
 
 	var/t = "<B>Artifact Database</B><BR>"
 	t += "<hr>"
-	for(var/datum/catalogued_artifact/CA in catalogued_artifacts)
+	for (var/datum/catalogued_artifact/CA in catalogued_artifacts)
 		t += "<B>Artifact ID:</B> [CA.display_id] (determined from unique energy emission signatures)<BR>"
 		t += "<B>Artifact Origin:</B> [CA.origin]<BR>"
 		t += "<B>Activation Trigger:</B> [CA.trigger]<BR>"

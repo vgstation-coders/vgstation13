@@ -34,24 +34,24 @@
 /obj/item/weapon/lipstick/attack_self(mob/user as mob)
 	to_chat(user, "<span class='notice'>You twist \the [src] [open ? "closed" : "open"].</span>")
 	open = !open
-	if(open)
+	if (open)
 		icon_state = "[initial(icon_state)]_[colour]"
 	else
 		icon_state = initial(icon_state)
 
 /obj/item/weapon/lipstick/attack(mob/M as mob, mob/user as mob)
-	if(!open)
+	if (!open)
 		return
 
-	if(!istype(M, /mob))
+	if (!istype(M, /mob))
 		return
 
-	if(ishuman(M))
+	if (ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(H.lip_style)	//if they already have lipstick on
+		if (H.lip_style)	//if they already have lipstick on
 			to_chat(user, "<span class='notice'>You need to wipe off the old lipstick first!</span>")
 			return
-		if(H == user)
+		if (H == user)
 			user.visible_message("<span class='notice'>[user] does their lips with \the [src].</span>", \
 								 "<span class='notice'>You take a moment to apply \the [src]. Perfect!</span>")
 			H.lip_style = colour
@@ -59,7 +59,7 @@
 		else
 			user.visible_message("<span class='warning'>[user] begins to do [H]'s lips with \the [src].</span>", \
 								 "<span class='notice'>You begin to apply \the [src].</span>")
-			if(do_after(user,H, 20) && do_after(H,null, 20, 5, 0))	//user needs to keep their active hand, H does not.
+			if (do_after(user,H, 20) && do_after(H,null, 20, 5, 0))	//user needs to keep their active hand, H does not.
 				user.visible_message("<span class='notice'>[user] does [H]'s lips with \the [src].</span>", \
 									 "<span class='notice'>You apply \the [src].</span>")
 				H.lip_style = colour
@@ -69,20 +69,20 @@
 
 //you can wipe off lipstick with paper!
 /obj/item/weapon/paper/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	if(user.zone_sel.selecting == "mouth")
-		if(!istype(M, /mob))
+	if (user.zone_sel.selecting == "mouth")
+		if (!istype(M, /mob))
 			return
 
-		if(ishuman(M))
+		if (ishuman(M))
 			var/mob/living/carbon/human/H = M
-			if(H == user)
+			if (H == user)
 				to_chat(user, "<span class='notice'>You wipe off the lipstick with [src].</span>")
 				H.lip_style = null
 				H.update_body()
 			else
 				user.visible_message("<span class='warning'>[user] begins to wipe [H]'s lipstick off with \the [src].</span>", \
 								 	 "<span class='notice'>You begin to wipe off [H]'s lipstick.</span>")
-				if(do_after(user, H, 10) && do_after(H, null, 10, 5, 0))	//user needs to keep their active hand, H does not.
+				if (do_after(user, H, 10) && do_after(H, null, 10, 5, 0))	//user needs to keep their active hand, H does not.
 					user.visible_message("<span class='notice'>[user] wipes [H]'s lipstick off with \the [src].</span>", \
 										 "<span class='notice'>You wipe off [H]'s lipstick.</span>")
 					H.lip_style = null

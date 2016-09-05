@@ -16,19 +16,19 @@
 	..()
 	blob_resources += src
 
-	if(blob_looks[looks] == 64)
+	if (blob_looks[looks] == 64)
 		flick("morph_resource",src)
 
 /obj/effect/blob/resource/Destroy()
 	blob_resources -= src
-	if(!manual_remove && overmind)
+	if (!manual_remove && overmind)
 		to_chat(overmind,"<span class='warning'>You lost a resource blob.</span> <b><a href='?src=\ref[overmind];blobjump=\ref[loc]'>(JUMP)</a></b>")
 		overmind.special_blobs -= src
 		overmind.update_specialblobs()
 	..()
 
 /obj/effect/blob/resource/update_health()
-	if(health <= 0)
+	if (health <= 0)
 		dying = 1
 		playsound(get_turf(src), 'sound/effects/blobsplatspecial.ogg', 50, 1)
 		qdel(src)
@@ -36,9 +36,9 @@
 	return
 
 /obj/effect/blob/resource/Pulse(var/pulse = 0, var/origin_dir = 0)
-	if(!overmind)
+	if (!overmind)
 		var/mob/camera/blob/B = (locate() in range(src,1))
-		if(B)
+		if (B)
 			to_chat(B,"<span class='notice'>You take control of the resource blob.</span>")
 			overmind = B
 			B.special_blobs += src
@@ -47,13 +47,13 @@
 	..()
 
 /obj/effect/blob/resource/run_action()
-	if(resource_delay > world.time)
+	if (resource_delay > world.time)
 		return 0
 
 	resource_delay = world.time + (4 SECONDS)
 
-	if(overmind)
-		if(blob_looks[looks] == 64)
+	if (overmind)
+		if (blob_looks[looks] == 64)
 			anim(target = loc, a_icon = icon, flick_anim = "resourcepulse", sleeptime = 15, lay = 7.2, offX = -16, offY = -16, alph = 220)
 		overmind.add_points(1)
 
@@ -61,21 +61,21 @@
 
 /obj/effect/blob/resource/update_icon(var/spawnend = 0)
 	spawn(1)
-		if(overmind)
+		if (overmind)
 			color = null
 		else
 			color = "#888888"
 
-	if(blob_looks[looks] == 64)
+	if (blob_looks[looks] == 64)
 		spawn(1)
 			overlays.len = 0
 			underlays.len = 0
 			underlays += image(icon,"roots")
 
-			if(!spawning)
-				for(var/obj/effect/blob/B in orange(src,1))
+			if (!spawning)
+				for (var/obj/effect/blob/B in orange(src,1))
 					overlays += image(icon,"resourceconnect",dir = get_dir(src,B))
-			if(spawnend)
+			if (spawnend)
 				spawn(10)
 					update_icon()
 

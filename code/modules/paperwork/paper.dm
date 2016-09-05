@@ -43,16 +43,16 @@
 
 /obj/item/weapon/paper/update_icon()
 	icon_state=initial(icon_state)
-	if(info)
+	if (info)
 		icon_state += "_words"
 
 /obj/item/weapon/paper/examine(mob/user)
-	if(in_range(user, src))
+	if (in_range(user, src))
 		var/info_2 = ""
-		if(img)
+		if (img)
 			user << browse_rsc(img.img, "tmp_photo.png")
 			info_2 = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br><a href='?src=\ref[src];picture=1'>Remove</a><br>"
-		if(!(istype(user, /mob/living/carbon/human) || istype(user, /mob/dead/observer) || istype(user, /mob/living/silicon)))
+		if (!(istype(user, /mob/living/carbon/human) || istype(user, /mob/dead/observer) || istype(user, /mob/living/silicon)))
 			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_2][stars(info)][stamps]</BODY></HTML>", "window=[name]")
 			onclose(user, "[name]")
 		else
@@ -67,19 +67,19 @@
 	set category = "Object"
 	set src in usr
 
-	if((M_CLUMSY in usr.mutations) && prob(50))
+	if ((M_CLUMSY in usr.mutations) && prob(50))
 		to_chat(usr, "<span class='warning'>You cut yourself on [src].</span>")
 		return
 	var/n_name = copytext(sanitize(input(usr, "What would you like to label [src]?", "Paper Labelling", null)  as text), 1, MAX_NAME_LEN)
-	if((loc == usr && !usr.isUnconscious()))
+	if ((loc == usr && !usr.isUnconscious()))
 		name = "paper[(n_name ? text("- '[n_name]'") : null)]"
 	add_fingerprint(usr)
 	return
 
 /obj/item/weapon/paper/attack_self(mob/living/user as mob)
 	user.examination(src)
-	if(rigged && (Holiday == "April Fool's Day"))
-		if(spam_flag == 0)
+	if (rigged && (Holiday == "April Fool's Day"))
+		if (spam_flag == 0)
 			spam_flag = 1
 			playsound(loc, 'sound/items/bikehorn.ogg', 50, 1)
 			spawn(20)
@@ -87,18 +87,18 @@
 	return
 
 /obj/item/weapon/paper/attack_robot(var/mob/user as mob)
-	if(isMoMMI(user) && Adjacent(user))
+	if (isMoMMI(user) && Adjacent(user))
 		return attack_hand(user)
 	else
 		return attack_ai(user)
 
 /obj/item/weapon/paper/attack_ai(var/mob/living/silicon/ai/user as mob)
 	var/dist
-	if(istype(user) && user.current) //is AI
+	if (istype(user) && user.current) //is AI
 		dist = get_dist(src, user.current)
 	else //cyborg or AI not seeing through a camera
 		dist = get_dist(src, user)
-	if(dist < 2 || (istype(user) && (user.ai_flags & HIGHRESCAMS)))
+	if (dist < 2 || (istype(user) && (user.ai_flags & HIGHRESCAMS)))
 		usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info][stamps]</BODY></HTML>", "window=[name]")
 		onclose(usr, "[name]")
 	else
@@ -111,26 +111,26 @@
 	var/laststart = 1
 	var/textindex = 1
 	var/softcount = 0
-	while(1) // I know this can cause infinite loops and fuck up the whole server, but the if(istart==0) should be safe as fuck
-		if(softcount>50)
+	while (1) // I know this can cause infinite loops and fuck up the whole server, but the if (istart==0) should be safe as fuck
+		if (softcount>50)
 			break
-		if(softcount%25 == 0)
+		if (softcount%25 == 0)
 			sleep(1)
 		var/istart = 0
-		if(links)
+		if (links)
 			istart = findtext(info_links, "<span class=\"paper_field\">", laststart)
 		else
 			istart = findtext(info, "<span class=\"paper_field\">", laststart)
 
-		if(istart==0)
+		if (istart==0)
 			return // No field found with matching id
 
 		softcount++
 		laststart = istart+1
 		locid++
-		if(locid == id)
+		if (locid == id)
 			var/iend = 1
-			if(links)
+			if (links)
 				iend = findtext(info_links, "</span>", istart)
 			else
 				iend = findtext(info, "</span>", istart)
@@ -139,7 +139,7 @@
 			textindex = iend
 			break
 
-	if(links)
+	if (links)
 		var/before = copytext(info_links, 1, textindex)
 		var/after = copytext(info_links, textindex)
 		info_links = before + text + after
@@ -152,10 +152,10 @@
 /obj/item/weapon/paper/proc/updateinfolinks()
 	info_links = info
 	var/i = 0
-	for(i=1,i<=fields,i++)
-		if(i>=50)
+	for (i=1,i<=fields,i++)
+		if (i>=50)
 			break //abandon ship
-		if(i%25 == 0)
+		if (i%25 == 0)
 			sleep(1)
 		addtofield(i, "<A href='?src=\ref[src];write=[i]'>write</A> ", 1)
 		addtofield(i, "<A href='?src=\ref[src];help=[i]'>help</A> ", 1)
@@ -172,12 +172,12 @@
 
 
 /obj/item/weapon/paper/proc/parsepencode(var/mob/user,var/obj/item/i, var/t)
-	if(istype(i,/obj/item/weapon/pen))
+	if (istype(i,/obj/item/weapon/pen))
 		//t = parsepencode(t, i, usr, iscrayon) // Encode everything from pencode to html
 		var/obj/item/weapon/pen/P=i
 		t=P.Format(user,t,src)
 
-	else if(istype(i,/obj/item/toy/crayon))
+	else if (istype(i,/obj/item/toy/crayon))
 		var/obj/item/toy/crayon/C=i
 		t=C.Format(user,t,src)
 
@@ -222,27 +222,27 @@
 
 /obj/item/weapon/paper/Topic(href, href_list)
 	..()
-	if(!usr || (usr.stat || usr.restrained()))
+	if (!usr || (usr.stat || usr.restrained()))
 		return
 
-	if(href_list["picture"])
-		if(!ishuman(usr))
+	if (href_list["picture"])
+		if (!ishuman(usr))
 			return
 		var/mob/living/carbon/human/H = usr
 		H.put_in_hands(img)
 		img = null
 
-	if(href_list["write"])
+	if (href_list["write"])
 		var/id = href_list["write"]
 		//var/t = strip_html_simple(input(usr, "What text do you wish to add to " + (id=="end" ? "the end of the paper" : "field "+id) + "?", "[name]", null),8192) as message
 		//var/t =  strip_html_simple(input("Enter what you want to write:", "Write", null, null)  as message, MAX_MESSAGE_LEN)
 		var/t = sanitize(input("Enter what you want to write:", "Write", null, null) as message, MAX_MESSAGE_LEN)
 		var/obj/item/i = usr.get_active_hand() // Check to see if he still got that darn pen, also check if he's using a crayon or pen.
-		if(!istype(i,/obj/item/weapon/pen) && !istype(i,/obj/item/toy/crayon))
+		if (!istype(i,/obj/item/weapon/pen) && !istype(i,/obj/item/toy/crayon))
 			to_chat(usr, "<span class='warning'>Please ensure your pen is in your active hand and that you're holding the paper.</span>")
 			return
 
-		if(!Adjacent(usr, 1)) //the 1 means that the paper can be in one other item and be written on
+		if (!Adjacent(usr, 1)) //the 1 means that the paper can be in one other item and be written on
 			return
 
 		log += "<br />\[[time_stamp()]] [key_name(usr)] added: [t]"
@@ -254,14 +254,14 @@
 
 			//Count the fields
 			var/laststart = 1
-			while(1)
+			while (1)
 				var/j = findtext(t, "<span class=\"paper_field\">", laststart)
-				if(j==0)
+				if (j==0)
 					break
 				laststart = j+1
 				fields++
 
-			if(id!="end")
+			if (id!="end")
 				addtofield(text2num(id), t) // He wants to edit a field, let him.
 			else
 				info += t // Oh, he wants to edit to the end of the file, let him.
@@ -271,17 +271,17 @@
 
 			update_icon()
 
-	if(href_list["help"])
+	if (href_list["help"])
 		openhelp(usr)
 
 
 /obj/item/weapon/paper/attackby(obj/item/weapon/P as obj, mob/user as mob)
 	..()
 	var/clown = 0
-	if(user.mind && (user.mind.assigned_role == "Clown"))
+	if (user.mind && (user.mind.assigned_role == "Clown"))
 		clown = 1
 
-	if(istype(P, /obj/item/weapon/pen) || istype(P, /obj/item/toy/crayon))
+	if (istype(P, /obj/item/weapon/pen) || istype(P, /obj/item/toy/crayon))
 		if ( istype(P, /obj/item/weapon/pen/robopen) && P:mode == 2 )
 			P:RenamePaper(user,src)
 		else
@@ -289,10 +289,10 @@
 		//openhelp(user)
 		return
 
-	else if(istype(P, /obj/item/weapon/stamp))
+	else if (istype(P, /obj/item/weapon/stamp))
 		//if((!in_range(src, user) && loc != user && !( istype(loc, /obj/item/weapon/clipboard) ) && loc.loc != user && user.get_active_hand() != P)) return //What the actual FUCK
 
-		if(istype(P, /obj/item/weapon/stamp/clown) && !clown)
+		if (istype(P, /obj/item/weapon/stamp/clown) && !clown)
 			to_chat(user, "<span class='notice'>You are totally unable to use the stamp. HONK!</span>")
 			return
 
@@ -303,21 +303,21 @@
 		stampoverlay.pixel_y = rand(-3, 2) * PIXEL_MULTIPLIER
 		stampoverlay.icon_state = "paper_[P.icon_state]"
 
-		if(!stamped)
+		if (!stamped)
 			stamped = new
 		stamped += P.type
 		overlays += stampoverlay
 
 		to_chat(user, "<span class='notice'>You stamp [src] with your rubber stamp.</span>")
 
-	else if(istype(P, /obj/item/weapon/photo))
-		if(user.drop_item(P, src))
-			if(img)
+	else if (istype(P, /obj/item/weapon/photo))
+		if (user.drop_item(P, src))
+			if (img)
 				to_chat(user, "<span class='notice'>This paper already has a photo attached.</span>")
 				return
 			img = P
 			to_chat(user, "<span class='notice'>You attach the photo to the piece of paper.</span>")
-	else if(P.is_hot())
+	else if (P.is_hot())
 		src.ashify_item(user)
 		return //no fingerprints, paper is gone
 	add_fingerprint(user)
@@ -325,22 +325,22 @@
 
 /obj/item/proc/ashify_item(mob/user)
 	var/prot = 0
-	if(ishuman(user))
+	if (ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if (M_RESIST_HEAT in H.mutations)
 			prot = 1
-		else if(H.gloves)
+		else if (H.gloves)
 			var/obj/item/clothing/gloves/G = H.gloves
-			if(G.max_heat_protection_temperature)
+			if (G.max_heat_protection_temperature)
 				prot = (G.max_heat_protection_temperature > src.autoignition_temperature)
-		if(!prot && (M_CLUMSY in H.mutations) && prob(50)) //only fail if human
+		if (!prot && (M_CLUMSY in H.mutations) && prob(50)) //only fail if human
 			H.apply_damage(10,BURN,(pick(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)))
 			user.drop_hands()
 			user.visible_message( \
 				"<span class='notice'>[user] tries to burn the [src.name], but burns \his hand trying!</span>", \
 				"<span class='warning'>You try to burn the [src.name], but burn your hand trying!</span>")
 			return //you fail before even managing to burn it!
-	if(prot) //user is human and is protected from fire, let's make them a badass
+	if (prot) //user is human and is protected from fire, let's make them a badass
 		user.visible_message( \
 			"<span class='warning'>[user] holds up the [src.name] and sets it on fire, holding it in \his hand as it burns down to ashes. Damn, \he's cold.</span>", \
 			"<span class='warning'>You hold up the [src.name] and set it on fire, holding it in your hand as it burns down to ashes. Damn, you're cold.</span>")
@@ -389,12 +389,12 @@ var/global/list/paper_folding_results = list ( \
 	return
 
 /obj/item/weapon/paper/proc/canfold(mob/user)
-	if(!user)
+	if (!user)
 		return 0
-	if(user.stat || user.restrained())
+	if (user.stat || user.restrained())
 		to_chat(user, "<span class='notice'>You can't do that while restrained.</span>")
 		return 0
-	if(!user.is_holding_item(src))
+	if (!user.is_holding_item(src))
 		to_chat(user, "<span class='notice'>You'll need [src] in your hands to do that.</span>")
 		return 0
 	return 1

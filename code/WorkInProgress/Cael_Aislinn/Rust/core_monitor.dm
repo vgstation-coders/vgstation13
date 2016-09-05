@@ -8,7 +8,7 @@
 
 /obj/machinery/computer/rust_core_monitor/attack_hand(var/mob/user)
 	. =..()
-	if(.)
+	if (.)
 		user.unset_machine()
 		return
 
@@ -18,11 +18,11 @@
 	attack_hand(user)
 
 /obj/machinery/computer/rust_core_monitor/interact(var/mob/user)
-	if(linked_core)
+	if (linked_core)
 		. = {"
 			<b>Device ID tag:</b> [linked_core.id_tag]<br>
 		"}
-		if(!check_core_status())
+		if (!check_core_status())
 			. += {"
 			<b><span style='color: red'>ERROR: Device unresponsive</b><span>
 			"}
@@ -34,7 +34,7 @@
 			<b>Field power density (W.m<sup>-3</sup>):</b> [linked_core.field_strength]<br>
 			<b>Field frequency (MHz):</b> [linked_core.field_frequency]<br>
 			"}
-			if(linked_core.owned_field)
+			if (linked_core.owned_field)
 				. += {"
 			<b>Approximate field diameter (m):</b> [linked_core.owned_field.size]<br>
 			<b>Field mega energy:</b> [linked_core.owned_field.mega_energy]<br>
@@ -46,7 +46,7 @@
 					<th><b>Amount</b></th>
 				</tr>
 				"}
-				for(var/reagent in linked_core.owned_field.dormant_reactant_quantities)
+				for (var/reagent in linked_core.owned_field.dormant_reactant_quantities)
 					. += {"
 				<tr>
 					<td>[reagent]</td>
@@ -68,20 +68,20 @@
 
 //Returns 1 if the linked core is accesible.
 /obj/machinery/computer/rust_core_monitor/proc/check_core_status()
-	if(!istype(linked_core))
+	if (!istype(linked_core))
 		return
 
-	if(linked_core.stat & BROKEN)
+	if (linked_core.stat & BROKEN)
 		return
 
-	if(linked_core.avail() < linked_core.idle_power_usage)
+	if (linked_core.avail() < linked_core.idle_power_usage)
 		return
 
 	. = 1
 
 //Multitool menu shit.
 /obj/machinery/computer/rust_core_monitor/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
-	if(linked_core)
+	if (linked_core)
 		. = {"
 			<b>Linked R-UST Mk. 7 pattern Electromagnetic Field Generator:<br>
 			[linked_core.id_tag] <a href='?src=\ref[src];unlink=1'>\[X\]</a></b>
@@ -92,11 +92,11 @@
 		"}
 
 /obj/machinery/computer/rust_core_monitor/linkMenu(var/obj/machinery/power/rust_core/O)
-	if(istype(O))
+	if (istype(O))
 		. = "<a href='?src=\ref[src];link=1'>\[LINK\]</a> "
 
 /obj/machinery/computer/rust_core_monitor/canLink(var/obj/machinery/power/rust_core/O, var/list/context)
-	if(istype(O) && !linked_core)
+	if (istype(O) && !linked_core)
 		. = 1
 
 /obj/machinery/computer/rust_core_monitor/isLinkedWith(var/obj/machinery/power/rust_core/O)

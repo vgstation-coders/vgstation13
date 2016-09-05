@@ -13,8 +13,8 @@
 	update_icon()
 
 /obj/machinery/computer/aifixer/attackby(I as obj, user as mob)
-	if(istype(I, /obj/item/device/aicard))
-		if(stat & (NOPOWER|BROKEN))
+	if (istype(I, /obj/item/device/aicard))
+		if (stat & (NOPOWER|BROKEN))
 			to_chat(user, "This terminal isn't functioning right now, get it working!")
 			return
 		I:transfer_ai("AIFIXER","AICARD",src,user)
@@ -29,7 +29,7 @@
 	return attack_hand(user)
 
 /obj/machinery/computer/aifixer/attack_hand(var/mob/user as mob)
-	if(..())
+	if (..())
 		return
 
 	var/dat = "<h3>AI System Integrity Restorer</h3><br><br>"
@@ -74,12 +74,12 @@
 	return
 
 /obj/machinery/computer/aifixer/process()
-	if(..())
+	if (..())
 		src.updateUsrDialog()
 		return
 
 /obj/machinery/computer/aifixer/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 	if (href_list["fix"])
 		src.active = 1
@@ -111,7 +111,7 @@
 	..()
 	overlays = 0
 	// Broken / Unpowered
-	if(stat & (BROKEN | NOPOWER))
+	if (stat & (BROKEN | NOPOWER))
 		return
 
 	if (occupant)

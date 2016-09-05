@@ -34,10 +34,10 @@
 		)
 
 /obj/item/weapon/gun/stickybomb/Destroy()
-	for(var/obj/item/stickybomb/S in loaded)
+	for (var/obj/item/stickybomb/S in loaded)
 		qdel(S)
 	loaded = null
-	for(var/obj/item/stickybomb/B in fired)
+	for (var/obj/item/stickybomb/B in fired)
 		B.deactivate()
 		B.unstick()
 	..()
@@ -50,39 +50,39 @@
 	return
 
 /obj/item/weapon/gun/stickybomb/attack_self(mob/user)
-	if(fired.len)
+	if (fired.len)
 		playsound(get_turf(src), 'sound/weapons/stickybomb_det.ogg', 30, 1)
-		for(var/obj/item/stickybomb/B in fired)
+		for (var/obj/item/stickybomb/B in fired)
 			spawn()
-				if(B.live)
+				if (B.live)
 					B.detonate()
 
 /obj/item/weapon/gun/stickybomb/attackby(var/obj/item/A as obj, mob/user as mob)
-	if(istype(A, /obj/item/stickybomb))
+	if (istype(A, /obj/item/stickybomb))
 		var/obj/item/stickybomb/B = A
-		if(B.live)
+		if (B.live)
 			to_chat(user, "<span class='warning'>You cannot load a live stickybomb!</span>")
 		else
-			if(loaded.len >= 6)
+			if (loaded.len >= 6)
 				to_chat(user, "<span class='warning'>You cannot fit any more stickybombs in there!</span>")
 			else
-				if(user.drop_item(A, src))
+				if (user.drop_item(A, src))
 					to_chat(user, "<span class='notice'>You load \the [A] into \the [src].</span>")
 					loaded += A
 	else
 		..()
 
 /obj/item/weapon/gun/stickybomb/process_chambered()
-	if(in_chamber)
+	if (in_chamber)
 		return 1
-	if(loaded.len)
+	if (loaded.len)
 		var/obj/item/stickybomb/B = pick(loaded)
 		loaded -= B
-		if(fired.len >= MAX_STICKYBOMBS)
+		if (fired.len >= MAX_STICKYBOMBS)
 			var/obj/item/stickybomb/SB = pick(fired)
 			spawn()
 				SB.detonate()
-			if(ismob(loc))
+			if (ismob(loc))
 				to_chat(loc, "<span class='warning'>One of the stickybombs detonates to leave room for the next one.</span>")
 		fired += B
 		var/obj/item/projectile/stickybomb/SB = new()
@@ -115,7 +115,7 @@
 	pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/stickybomb/Destroy()
-	if(fired_from)
+	if (fired_from)
 		fired_from.fired -= src
 		fired_from = null
 	stuck_to = null
@@ -124,15 +124,15 @@
 
 /obj/item/stickybomb/update_icon()
 	icon_state = "[initial(icon_state)][live ? "-live" : ""]"
-	if(live)
+	if (live)
 		desc = "It appears to be live."
 	else
 		desc = "Ammo for a stickybomb launcher."
 
 /obj/item/stickybomb/pickup(mob/user)
-	if(stuck_to)
+	if (stuck_to)
 		to_chat(user, "<span class='warning'>You reach for \the [src] stuck on \the [stuck_to] and start pulling.</span>")
-		if(do_after(user, src, 30))
+		if (do_after(user, src, 30))
 			to_chat(user, "<span class='warning'>It came off!</span>")
 			unstick()
 			..()
@@ -146,25 +146,25 @@
 	pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 	playsound(A, 'sound/items/metal_impact.ogg', 30, 1)
 
-	if(isturf(A))
+	if (isturf(A))
 		anchored = 1
-		switch(side)
-			if(NORTH)
+		switch (side)
+			if (NORTH)
 				pixel_y = WORLD_ICON_SIZE/2
-			if(SOUTH)
+			if (SOUTH)
 				pixel_y = -WORLD_ICON_SIZE/2
-			if(EAST)
+			if (EAST)
 				pixel_x = WORLD_ICON_SIZE/2
-			if(WEST)
+			if (WEST)
 				pixel_x = -WORLD_ICON_SIZE/2
 		sleep(50)
-		if(stuck_to == A)
+		if (stuck_to == A)
 			flick("stickybomb_flick",src)
 			live = 1
 			update_icon()
 			animate(src, alpha=50, time=300)
 
-	else if(isliving(A))
+	else if (isliving(A))
 		visible_message("<span class='warning'>\the [src] sticks itself on \the [A].</span>")
 		src.forceMove(A)
 		self_overlay = new(icon,src,icon_state,10,dir)
@@ -172,17 +172,17 @@
 		self_overlay.pixel_y = pixel_y
 		A.overlays += self_overlay
 		sleep(50)
-		if(stuck_to == A)
+		if (stuck_to == A)
 			live = 1
 			A.overlays -= self_overlay
 			self_overlay.icon_state = "stickybomb-live"
 			A.overlays += self_overlay
 
 /obj/item/stickybomb/proc/unstick(var/fall_to_floor = 1)
-	if(ismob(stuck_to))
+	if (ismob(stuck_to))
 		stuck_to.overlays -= self_overlay
 		icon_state = self_overlay.icon_state
-		if(fall_to_floor)
+		if (fall_to_floor)
 			src.forceMove(get_turf(src))
 	stuck_to = null
 	anchored = 0
@@ -192,16 +192,16 @@
 
 /obj/item/stickybomb/proc/detonate()
 	icon_state = "stickybomb_flick"
-	if(!self_overlay)
+	if (!self_overlay)
 		self_overlay = new(icon,src,icon_state,13,dir)
 		overlays += self_overlay//a bit awkward but the sprite wouldn't properly animate otherwise
-	if(signal)
+	if (signal)
 		return
 	signal = 1
 	mouse_opacity = 0
 	var/turf/T = get_turf(src)
 	playsound(T, 'sound/machines/twobeep.ogg', 30, 1)
-	if(ismob(stuck_to))
+	if (ismob(stuck_to))
 		stuck_to.overlays -= self_overlay
 		self_overlay.icon_state = "stickybomb_flick"
 		self_overlay.layer = PROJECTILE_LAYER
@@ -209,35 +209,35 @@
 		stuck_to.overlays += self_overlay
 	alpha = 255
 	spawn(3)
-		if(ismob(stuck_to))
+		if (ismob(stuck_to))
 			stuck_to.overlays -= self_overlay
 
 		T.turf_animation('icons/effects/96x96.dmi',"explosion_sticky",pixel_x-WORLD_ICON_SIZE, pixel_y-WORLD_ICON_SIZE, 13)
 		playsound(T, "explosion_small", 75, 1)
 
-		for(var/mob/living/L in range(T,3))
+		for (var/mob/living/L in range(T,3))
 			var/turf/TL = get_turf(L)
 			var/dist = get_dist(T,L)
 			var/atom/throw_target = T
-			if(T!=TL)
+			if (T!=TL)
 				throw_target = get_edge_target_turf(T, get_dir(T,TL))
-			switch(dist)
-				if(0 to 1)
+			switch (dist)
+				if (0 to 1)
 					L.ex_act(3)//ex_act(2) would deal too much damage
 					L.ex_act(3)
 					spawn(1)//to give time for the other bombs to calculate their damage.
 						L.throw_at(throw_target, 2, 3)
-				if(1 to 2)
+				if (1 to 2)
 					L.ex_act(3,TRUE)
 					spawn(1)
 						L.throw_at(throw_target, 1, 1)
-				if(2 to 3)
+				if (2 to 3)
 					L.ex_act(3,TRUE)
 		qdel(src)
 
 /obj/item/stickybomb/proc/deactivate()
 	live = 0
-	if(fired_from)
+	if (fired_from)
 		fired_from.fired -= src
 		fired_from = null
 	update_icon()
@@ -249,8 +249,8 @@
 	unstick()
 
 /obj/item/stickybomb/bullet_act(var/obj/item/projectile/Proj)
-	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
-		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
+	if (istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
+		if (!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
 			detonate()
 
 #undef MAX_STICKYBOMBS

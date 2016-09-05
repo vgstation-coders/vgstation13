@@ -1,19 +1,19 @@
 /mob/living/carbon/brain/emote(var/act,var/m_type=1,var/message = null, var/auto)
-	if(!(container && istype(container, /obj/item/device/mmi)))//No MMI, no emotes
+	if (!(container && istype(container, /obj/item/device/mmi)))//No MMI, no emotes
 		return
 
 	if (findtext(act, "-", 1, null))
 		var/t1 = findtext(act, "-", 1, null)
 		act = copytext(act, 1, t1)
 
-	if(findtext(act,"s",-1) && !findtext(act,"_",-2))//Removes ending s's unless they are prefixed with a '_'
+	if (findtext(act,"s",-1) && !findtext(act,"_",-2))//Removes ending s's unless they are prefixed with a '_'
 		act = copytext(act,1,length(act))
 
-	if(src.stat == DEAD)
+	if (src.stat == DEAD)
 		return
-	switch(act)
+	switch (act)
 		if ("me")
-			if(silent)
+			if (silent)
 				return
 			if (src.client)
 				if (client.prefs.muted & MUTE_IC)
@@ -23,7 +23,7 @@
 					return
 			if (stat)
 				return
-			if(!(message))
+			if (!(message))
 				return
 			return custom_emote(m_type, message)
 
@@ -67,10 +67,10 @@
 	if (message)
 		log_emote("[name]/[key] (@[x],[y],[z]): [message]")
 
-		for(var/mob/M in dead_mob_list)
+		for (var/mob/M in dead_mob_list)
 			if (!M.client || istype(M, /mob/new_player))
 				continue //skip monkeys, leavers, and new_players
-			if(M.stat == DEAD && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(src,null)))
+			if (M.stat == DEAD && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(src,null)))
 				M.show_message(message)
 
 

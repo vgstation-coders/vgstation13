@@ -25,19 +25,19 @@
 	//var/emagged = 0 //Urist: Moving that var to the general /bot tree as it's used by most bots
 
 /obj/machinery/bot/New()
-	for(var/datum/event/ionstorm/I in events)
-		if(istype(I) && I.active)
+	for (var/datum/event/ionstorm/I in events)
+		if (istype(I) && I.active)
 			I.bots += src
 	..()
 
 /obj/machinery/bot/Destroy()
 	. = ..()
-	if(botcard)
+	if (botcard)
 		qdel(botcard)
 		botcard = null
 
 /obj/machinery/bot/proc/turn_on()
-	if(stat)
+	if (stat)
 		return 0
 	on = 1
 	set_light(initial(luminosity))
@@ -55,11 +55,11 @@
 		src.explode()
 
 /obj/machinery/bot/proc/Emag(mob/user as mob)
-	if(locked)
+	if (locked)
 		locked = 0
 		emagged = 1
 		to_chat(user, "<span class='warning'>You remove [src]'s control restrictions. Opening up its maintenance panel and swiping again will cause [src] to malfunction.</span>")
-	if(!locked && open)
+	if (!locked && open)
 		emagged = 2
 		to_chat(user, "<span class='warning'>You cause a malfunction in [src]'s behavioral matrix.</span>")
 
@@ -72,12 +72,12 @@
 			to_chat(user, "<span class='danger'>[src]'s parts look very loose!</span>")
 
 /obj/machinery/bot/attack_alien(var/mob/living/carbon/alien/user as mob)
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
 	src.health -= rand(15,30)*brute_dam_coeff
 	src.visible_message("<span class='danger'>[user] has slashed [src]!</span>")
 	playsound(get_turf(src), 'sound/weapons/slice.ogg', 25, 1, -1)
-	if(prob(10))
+	if (prob(10))
 		//new /obj/effect/decal/cleanable/blood/oil(src.loc)
 		var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
 		O.New(O.loc)
@@ -85,14 +85,14 @@
 
 
 /obj/machinery/bot/attack_animal(var/mob/living/simple_animal/M as mob)
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
-	if(M.melee_damage_upper == 0)
+	if (M.melee_damage_upper == 0)
 		return
 	src.health -= M.melee_damage_upper
 	src.visible_message("<span class='danger'>[M] has [M.attacktext] [src]!</span>")
 	add_logs(M, src, "attacked", admin=0)
-	if(prob(10))
+	if (prob(10))
 		//new /obj/effect/decal/cleanable/blood/oil(src.loc)
 		var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
 		O.New(O.loc)
@@ -100,30 +100,30 @@
 
 /obj/machinery/bot/proc/declare() //Signals a medical or security HUD user to a relevant bot's activity.
 	var/hud_user_list = list() //Determines which userlist to use.
-	switch(bot_type) //Made into a switch so more HUDs can be added easily.
-		if(SEC_BOT) //Securitrons and ED-209
+	switch (bot_type) //Made into a switch so more HUDs can be added easily.
+		if (SEC_BOT) //Securitrons and ED-209
 			hud_user_list = sec_hud_users
-		if(MED_BOT) //Medibots
+		if (MED_BOT) //Medibots
 			hud_user_list = med_hud_users
 	var/area/myturf = get_turf(src)
-	for(var/mob/huduser in hud_user_list)
-		if(!huduser.loc)
+	for (var/mob/huduser in hud_user_list)
+		if (!huduser.loc)
 			continue
 
 		var/turf/mobturf = get_turf(huduser)
-		if(mobturf.z == myturf.z)
+		if (mobturf.z == myturf.z)
 			huduser.show_message(declare_message,1)
 
 
 /obj/machinery/bot/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
-	if(!locked && (isscrewdriver(W) || iscrowbar(W)))
+	if (!locked && (isscrewdriver(W) || iscrowbar(W)))
 		open = !open
 		to_chat(user, "<span class='notice'>Maintenance panel is now [src.open ? "opened" : "closed"].</span>")
-	else if(istype(W, /obj/item/weapon/weldingtool))
-		if(health < maxhealth)
-			if(open)
+	else if (istype(W, /obj/item/weapon/weldingtool))
+		if (health < maxhealth)
+			if (open)
 				health = min(maxhealth, health+10)
 				user.visible_message("<span class='danger'>[user] repairs [src]!</span>","<span class='notice'>You repair [src]!</span>")
 			else
@@ -133,11 +133,11 @@
 	else if (istype(W, /obj/item/weapon/card/emag) && emagged < 2)
 		Emag(user)
 	else
-		if(hasvar(W,"force") && hasvar(W,"damtype"))
-			switch(W.damtype)
-				if("fire")
+		if (hasvar(W,"force") && hasvar(W,"damtype"))
+			switch (W.damtype)
+				if ("fire")
 					src.health -= W.force * fire_dam_coeff
-				if("brute")
+				if ("brute")
 					src.health -= W.force * brute_dam_coeff
 			..()
 			healthcheck()
@@ -147,39 +147,39 @@
 /obj/machinery/bot/kick_act(mob/living/H)
 	..()
 
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
 
 	health -= rand(1,8) * brute_dam_coeff
 	healthcheck()
 
 /obj/machinery/bot/bullet_act(var/obj/item/projectile/Proj)
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
 	health -= Proj.damage
 	..()
 	healthcheck()
 
 /obj/machinery/bot/blob_act()
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
 	src.health -= rand(20,40)*fire_dam_coeff
 	healthcheck()
 	return
 
 /obj/machinery/bot/ex_act(severity)
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			src.explode()
 			return
-		if(2.0)
+		if (2.0)
 			src.health -= rand(5,10)*fire_dam_coeff
 			src.health -= rand(10,20)*brute_dam_coeff
 			healthcheck()
 			return
-		if(3.0)
+		if (3.0)
 			if (prob(50))
 				src.health -= rand(1,5)*fire_dam_coeff
 				src.health -= rand(1,5)*brute_dam_coeff
@@ -188,7 +188,7 @@
 	return
 
 /obj/machinery/bot/emp_act(severity)
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
 	var/was_on = on
 	stat |= EMPED
@@ -215,7 +215,7 @@
 
 
 /obj/machinery/bot/cultify()
-	if(src.flags & INVULNERABLE)
+	if (src.flags & INVULNERABLE)
 		return
 	else
 		qdel(src)

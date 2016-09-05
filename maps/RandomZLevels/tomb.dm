@@ -56,7 +56,7 @@
 
 	sleep(20)
 
-	for(var/obj/effect/ddr_loot/DL in get_area(src))
+	for (var/obj/effect/ddr_loot/DL in get_area(src))
 		var/turf/T = get_turf(DL)
 		T.ChangeTurf(/turf/unsimulated/floor)
 
@@ -66,7 +66,7 @@
 /obj/effect/trap/frog_trap/activate(atom/movable/AM)
 	to_chat(AM, "<span class='userdanger'>An ambush! Curse them!</span>")
 
-	for(var/dir in cardinal)
+	for (var/dir in cardinal)
 		var/turf/T = get_step(AM, dir)
 		new /mob/living/simple_animal/hostile/frog(T)
 
@@ -82,26 +82,26 @@
 	return (D.icon_state == activate_id && (D.z == z) && !(only_open && D.opened))
 
 /obj/effect/trap/door_trap/activate()
-	if(global_search)
-		for(var/obj/effect/hidden_door/hidden_door in hidden_doors)
-			if(is_valid_door(hidden_door))
+	if (global_search)
+		for (var/obj/effect/hidden_door/hidden_door in hidden_doors)
+			if (is_valid_door(hidden_door))
 				hidden_door.toggle()
 	else
-		for(var/obj/effect/hidden_door/hidden_door in get_area(src))
-			if(is_valid_door(hidden_door))
+		for (var/obj/effect/hidden_door/hidden_door in get_area(src))
+			if (is_valid_door(hidden_door))
 				hidden_door.toggle()
 
 /obj/item/weapon/skull/rigged/Crossed(atom/movable/L)
 	..()
 
-	if(istype(L, /mob/living/carbon) || istype(L, /mob/living/silicon) || istype(L, /obj/item/weapon/skull/rigged)) //Another rigged skull or a mob entered our turf
+	if (istype(L, /mob/living/carbon) || istype(L, /mob/living/silicon) || istype(L, /obj/item/weapon/skull/rigged)) //Another rigged skull or a mob entered our turf
 		activate()
 
 /obj/item/weapon/skull/rigged/pickup(mob/living/user)
 	..()
 
-	if(istype(user))
-		if(user.drop_item(src))
+	if (istype(user))
+		if (user.drop_item(src))
 			activate()
 
 /obj/item/weapon/skull/rigged/proc/activate()
@@ -131,14 +131,14 @@
 	opacity = 0
 
 /obj/structure/sacrificial_altar/proc/can_sacrifice(mob/victim, rejection_message)
-	if(istype(victim, /mob/living/simple_animal/corgi/Ian))
+	if (istype(victim, /mob/living/simple_animal/corgi/Ian))
 		return 1
 
-	if(ishuman(victim))
-		if(victim.isDead())
+	if (ishuman(victim))
+		if (victim.isDead())
 			to_chat(rejection_message, "<span class='danger'>\The [victim] is dead. Only living beings can be offered to Riniel.</span>")
 			return 0
-		if(!victim.key || !victim.client)
+		if (!victim.key || !victim.client)
 			to_chat(rejection_message, "<span class='danger'>\The [victim] is catatonic. Riniel only accepts able-minded sacrifices.</span>")
 			return 0
 
@@ -148,13 +148,13 @@
 	var/client/C = victim.client
 
 	victim.dust()
-	for(var/obj/effect/ddr_loot/D in get_area(src)) //Open locked doors
+	for (var/obj/effect/ddr_loot/D in get_area(src)) //Open locked doors
 		var/turf/T = get_turf(D)
 
 		T.ChangeTurf(/turf/unsimulated/floor)
 		playsound(T, 'sound/effects/stonedoor_openclose.ogg', 100, 1)
 
-	if(!C)
+	if (!C)
 		return
 	to_chat(C, "<span class='danger'>You were sacrificed to Riniel, ruler of the Underworld.</span>")
 
@@ -162,26 +162,26 @@
 	var/mob_amount = 0
 	var/mob/living/victim
 
-	for(var/mob/living/L in get_turf(src))
-		if(ishuman(L) && !L.lying)
+	for (var/mob/living/L in get_turf(src))
+		if (ishuman(L) && !L.lying)
 			continue
-		if(L == user)
+		if (L == user)
 			continue
 
 		victim = L
 		mob_amount++
 
-		if(mob_amount >= 2)
+		if (mob_amount >= 2)
 			to_chat(user, "<span class='danger'>There are too many living beings lying on top of the altar.</span>")
 			return 1
 
-	if(!victim)
+	if (!victim)
 		to_chat(user, "<span class='info'>The sacrifice must be lying on top of the altar, and the ritualist must stand beside it. The sacrifice must be a human, however sacred animals are sometimes accepted by Riniel too.</span>")
 		return 1
 
 	user.visible_message("<span class='userdanger'>[user] starts sacrificing [victim] to Riniel, the ruler of the underworld.</span>")
-	if(do_after(user, victim, 6 SECONDS))
-		if(!can_sacrifice(victim, user))
+	if (do_after(user, victim, 6 SECONDS))
+		if (!can_sacrifice(victim, user))
 			return 1
 
 		victim.visible_message("<span class='sinister'>[victim]'s body crumbles to dust.</span>")
@@ -201,13 +201,13 @@
 	name = "Chamber of Madness"
 
 /obj/machinery/door/mineral/sandstone/tomb/open()
-	if(!unlocked)
+	if (!unlocked)
 		return
 
 	..()
 
 /obj/machinery/door/mineral/sandstone/tomb/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/weapon/coin/adamantine))
+	if (istype(W, /obj/item/weapon/coin/adamantine))
 		to_chat(user, "<span class='info'>You unseal \the [src].</span>")
 		unlocked = 1
 
@@ -251,13 +251,13 @@
 
 /obj/structure/fire_trap/process()
 	//Process movement
-	if(movement_dir)
-		if(!Move(get_step(src, movement_dir)))
+	if (movement_dir)
+		if (!Move(get_step(src, movement_dir)))
 			movement_dir = turn(movement_dir, 180)
 
 	//Process firing
 	dir = default_dir
-	if(world.time > last_fired + fire_cooldown)
+	if (world.time > last_fired + fire_cooldown)
 		last_fired = world.time
 
 		shoot()
@@ -265,7 +265,7 @@
 /obj/structure/fire_trap/proc/shoot()
 	var/obj/item/projectile/A = new fire_projectile(get_step(src, turn(dir, 180)))
 
-	if(!A)
+	if (!A)
 		return 0
 
 	playsound(get_turf(src), fire_sound, 50, 1)
@@ -307,7 +307,7 @@
 	var/turf/T = get_turf(src)
 
 	T.ChangeTurf(/turf/unsimulated/wall/rock)
-	for(var/atom/movable/AM in T)
+	for (var/atom/movable/AM in T)
 		AM.ex_act(1)
 
 	explosion(T, -1, -1, 1)
@@ -324,7 +324,7 @@
 
 /obj/structure/button/door_switch/Destroy()
 	var/list/L = last_pressed[get_area(src)]
-	if(L)
+	if (L)
 		L.Remove(src)
 
 	..()
@@ -332,22 +332,22 @@
 /obj/structure/button/door_switch/activate(force = 0)
 	//Get my area's list of button presses. If no such list exists, create one
 	var/list/L = last_pressed[get_area(src)]
-	if(!L)
+	if (!L)
 		L = list()
 		last_pressed[get_area(src)] = L
 
 	//This button can't be deactivated by pushing it. Deactivate it by calling this proc with the force argument set to 1
-	if(state == 1)
-		if(!force)
+	if (state == 1)
+		if (!force)
 			return
 
 		return ..()
 
 	//Attempting to activate the button - check how many buttons in this area have already been activated. Deactivate the oldest pressed button
-	else if(L.len == maximum_activated_at_once)
+	else if (L.len == maximum_activated_at_once)
 		var/obj/structure/button/door_switch/button_to_toggle_off = L[1]
 
-		if(button_to_toggle_off.state == 1)
+		if (button_to_toggle_off.state == 1)
 			button_to_toggle_off.activate(1)
 			L.Remove(button_to_toggle_off)
 
@@ -374,13 +374,13 @@
 /turf/unsimulated/beach/water/deep/teleport/Entered(atom/movable/AM)
 	..()
 
-	if(!teleport_destination)
+	if (!teleport_destination)
 		var/obj/effect/landmark/water_puzzle/WP = locate(/obj/effect/landmark/water_puzzle) in get_area(src)
-		if(WP)
+		if (WP)
 			teleport_destination = get_turf(WP)
 		else
 			teleport_destination = src
 
-	if(istype(AM, /obj/item) || istype(AM, /obj/machinery) || istype(AM, /obj/structure) || istype(AM, /obj/mecha) || istype(AM, /obj/spacepod) || isliving(AM))
+	if (istype(AM, /obj/item) || istype(AM, /obj/machinery) || istype(AM, /obj/structure) || istype(AM, /obj/mecha) || istype(AM, /obj/spacepod) || isliving(AM))
 		AM.visible_message("<span class='danger'>\The [AM] falls into \the [src]!</span>")
 		AM.forceMove(teleport_destination)

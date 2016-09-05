@@ -98,15 +98,15 @@
 
 /obj/item/device/lightreplacer/examine(mob/user)
 	..()
-	if(supply)
-		if(supply.contents.len)
+	if (supply)
+		if (supply.contents.len)
 			to_chat(user, "<span class='info'>It has [supply.contents.len] light[supply.contents.len == 1 ? "" : "s"] remaining. Check its interface to see what type[supply.contents.len == 1 ? "" : "s"].</span>")
 		else
 			to_chat(user, "<span class='info'>Its supply container is empty.</span>")
 	else
 		to_chat(user, "<span class='info'>It has no supply container.</span>")
 
-	if(waste)
+	if (waste)
 		to_chat(user, "<span class='info'>Its waste container has [waste.contents.len] slot[waste.contents.len == 1 ? "" : "s"] full.</span>")
 	else
 		to_chat(user, "<span class='info'>It has no waste container.</span>")
@@ -115,12 +115,12 @@
 
 
 /obj/item/device/lightreplacer/attackby(obj/item/W, mob/user)
-	if(istype(W,  /obj/item/weapon/card/emag) && emagged == 0)
+	if (istype(W,  /obj/item/weapon/card/emag) && emagged == 0)
 		Emag()
 		return
 
-	if(istype(W, /obj/item/stack/sheet/glass/glass))
-		if(!add_glass(CC_PER_SHEET_GLASS, force_fill = 1))
+	if (istype(W, /obj/item/stack/sheet/glass/glass))
+		if (!add_glass(CC_PER_SHEET_GLASS, force_fill = 1))
 			to_chat(user, "<span class='warning'>\The [src] can't hold any more glass!</span>")
 			return
 		var/obj/item/stack/sheet/glass/glass/G = W
@@ -128,48 +128,48 @@
 		to_chat(user, "<span class='notice'>You insert \the [G] into \the [src].</span>")
 		return
 
-	if(istype(W, /obj/item/weapon/light))
+	if (istype(W, /obj/item/weapon/light))
 		var/obj/item/weapon/light/L = W
-		switch(insert_if_possible(L))
-			if(0)
-				if(L.status ? istype(waste) : istype(supply)) //The expression returns true if the correct box for the light is valid, which implies that it is full because the insertion failed.
+		switch (insert_if_possible(L))
+			if (0)
+				if (L.status ? istype(waste) : istype(supply)) //The expression returns true if the correct box for the light is valid, which implies that it is full because the insertion failed.
 					to_chat(user, "<span class='warning'>\The [src]'s [L.status ? "waste" : "supply"] container is full!</span>")
 				else
 					to_chat(user, "<span class='warning'>\The [src] has no [L.status ? "waste" : "supply"] container!</span>")
-			if(1)
+			if (1)
 				user.visible_message("[user] inserts \a [L] into \the [src]", "You insert \the [L] into \the [src]'s [L.status ? "waste" : "supply"] container.")
 			else
 				to_chat(user, "<span class='bnotice'>Something very strange has happened. Please adminhelp and ask someone to view the variables of that light, especially status.</span>")
 		return
 
-	if(istype(W, /obj/item/weapon/storage/box/lights))
-		if(!supply)
-			if(user.drop_item(W, src))
+	if (istype(W, /obj/item/weapon/storage/box/lights))
+		if (!supply)
+			if (user.drop_item(W, src))
 				user.visible_message("[user] inserts \a [W] into \the [src]", "You insert \the [W] into \the [src] to be used as the supply container.")
 				supply = W
 				return
-		else if(!waste)
-			if(user.drop_item(W, src))
+		else if (!waste)
+			if (user.drop_item(W, src))
 				user.visible_message("[user] inserts \a [W] into \the [src]", "You insert \the [W] into \the [src] to be used as the waste container.")
 				waste = W
 				return
 		else
 			var/obj/item/weapon/storage/box/lights/lsource = W
-			if(!lsource.contents.len)
+			if (!lsource.contents.len)
 				to_chat(user, "<span class='notice'>\The [src] has both a supply box and a waste box and this box is empty. Remove one first if you want to insert a new one or use a light box with lights in it to insert them.</span>")
 				return
 			var/hasinserted = 0
-			for(var/obj/item/weapon/light/L in lsource)
-				if(insert_if_possible(L))
+			for (var/obj/item/weapon/light/L in lsource)
+				if (insert_if_possible(L))
 					hasinserted = 1
-			if(hasinserted)
+			if (hasinserted)
 				to_chat(user, "<span class='notice'>\The [src] accepts the lights in \the [lsource].</span>")
 			else
 				to_chat(user, "<span class='warning'>\The [src] cannot accept any of the lights in \the [lsource]!</span>")
 			return
 
-	if(istype(W, /obj/item/stack/sheet/cardboard))
-		if(cardboard_stor >= cardboard_stor_max)
+	if (istype(W, /obj/item/stack/sheet/cardboard))
+		if (cardboard_stor >= cardboard_stor_max)
 			to_chat(user, "<span class='warning'>\The [src] cannot hold any more cardboard!</span>")
 			return
 		var/obj/item/stack/sheet/cardboard/C = W
@@ -183,7 +183,7 @@
 
 	Glass storage: [glass_stor]/[glass_stor_max]<br>Cardboard Sheets: [cardboard_stor]/[cardboard_stor_max]<br>"}
 
-	if(supply)
+	if (supply)
 		dat += {"<a href='?src=\ref[src];build=tube'>Fabricate Tube</a>
 		<a href='?src=\ref[src];build=bulb'>Fabricate Bulb</a>
 
@@ -192,14 +192,14 @@
 		<h3>Supply Container:</h3>"} //It's not clear here, but the argument to build is the part of the typepath after /obj/item/weapon/light/
 		var/list/light_types = new()
 		var/lightname
-		for(var/obj/item/weapon/light/L in supply)
+		for (var/obj/item/weapon/light/L in supply)
 			lightname = ""
-			if(L.status == LIGHT_BROKEN)
+			if (L.status == LIGHT_BROKEN)
 				lightname += "broken "
-			else if(L.status == LIGHT_BURNED)
+			else if (L.status == LIGHT_BURNED)
 				lightname += "burned-out "
 			lightname += L.name
-			if(!light_types[lightname])
+			if (!light_types[lightname])
 				light_types[lightname] = list()
 			light_types[lightname] += L
 
@@ -207,11 +207,11 @@
 		var/list/to_dump_5  //I guess I could do this without this variable, but it would involve more string concatenation, and nobody wants that.
 		var/list/to_dump_all//This too
 
-		for(var/T in light_types)
+		for (var/T in light_types)
 			light_type_cur = light_types[T] //The way you'd expect to be the good way to do this doesn't work. This is dumb, but necessary.
 			to_dump_5 = list()
 			to_dump_all = list()
-			for(var/light_to_ref in light_type_cur)
+			for (var/light_to_ref in light_type_cur)
 				to_dump_all += "\ref[light_to_ref]"
 			to_dump_5 = to_dump_all.Copy(1, min(6, to_dump_all.len + 1))
 			dat += "<br><b>[T]: </b>[light_type_cur.len] | Dump to Waste: <a href='?src=\ref[src];dump=\ref[light_type_cur[1]]'>1</a><a href='?src=\ref[src];dump=[jointext(to_dump_5, ", ")]'>5</a><a href='?src=\ref[src];dump=[jointext(to_dump_all, ", ")]'>All</a>"
@@ -221,10 +221,10 @@
 	else
 		dat += "<h3>No supply container inserted</h3><br><a href='?src=\ref[src];fold=supply'>Construct Supply Box</a>"
 
-	if(supply || waste)
+	if (supply || waste)
 		dat += "<br><br><a href='?src=\ref[src];swap=1'>Swap Supply and Waste Containers</a>"
 
-	if(waste)
+	if (waste)
 		dat += {"<br><br><br><h3>Waste Container:</h3>
 
 		<b>Filled: </b>[waste.contents.len]/[waste.storage_slots]<br>
@@ -239,9 +239,9 @@
 
 /obj/item/device/lightreplacer/borg/attack_self(mob/user) //The menu must be different to accomodate the differences necessary for the borg version.
 	/* // This would probably be a bit OP. If you want it though, uncomment the code.
-	if(isrobot(user))
+	if (isrobot(user))
 		var/mob/living/silicon/robot/R = user
-		if(R.emagged)
+		if (R.emagged)
 			src.Emag()
 			to_chat(usr, "You shortcircuit the [src].")
 			return
@@ -251,7 +251,7 @@
 
 	Glass storage: [glass_stor]/[glass_stor_max]<br>"}
 
-	if(supply)
+	if (supply)
 		dat += {"<a href='?src=\ref[src];build=tube'>Fabricate Tube</a>
 		<a href='?src=\ref[src];build=bulb'>Fabricate Bulb</a>
 		<a href='?src=\ref[src];build=tube/he'>Fabricate High Efficiency Tube</a>
@@ -262,14 +262,14 @@
 		<h3>Supply Container:</h3>"}
 		var/list/light_types = new()
 		var/lightname
-		for(var/obj/item/weapon/light/L in supply)
+		for (var/obj/item/weapon/light/L in supply)
 			lightname = ""
-			if(L.status == LIGHT_BROKEN)
+			if (L.status == LIGHT_BROKEN)
 				lightname += "broken "
-			else if(L.status == LIGHT_BURNED)
+			else if (L.status == LIGHT_BURNED)
 				lightname += "burned-out "
 			lightname += L.name
-			if(!light_types[lightname])
+			if (!light_types[lightname])
 				light_types[lightname] = list()
 			light_types[lightname] += L
 
@@ -277,11 +277,11 @@
 		var/list/to_dump_5//I guess I could do this without this variable, but it would include more string concatenation, and nobody wants that.
 		var/list/to_dump_all //This too
 
-		for(var/T in light_types)
+		for (var/T in light_types)
 			to_dump_5 = list()
 			to_dump_all = list()
 			light_type_cur = light_types[T] //The way you'd expect to be the good way to do this doesn't work. This is dumb, but necessary.
-			for(var/light_to_ref in light_type_cur)
+			for (var/light_to_ref in light_type_cur)
 				to_dump_all += "\ref[light_to_ref]"
 			to_dump_5 = to_dump_all.Copy(1, min(6, to_dump_all.len + 1))
 			dat += "<br><b>[T]: </b>[light_type_cur.len] | Dump to Waste: <a href='?src=\ref[src];dump=\ref[light_type_cur[1]]'>1</a><a href='?src=\ref[src];dump=[jointext(to_dump_5, ", ")]'>5</a><a href='?src=\ref[src];dump=[jointext(to_dump_all, ", ")]'>All</a>"
@@ -289,10 +289,10 @@
 	else
 		dat += "<h3>No supply container inserted. This should be impossible. Please ahelp this.</h3>"
 
-	if(supply || waste)
+	if (supply || waste)
 		dat += "<br><br><a href='?src=\ref[src];swap=1'>Swap Supply and Waste Containers</a>"
 
-	if(waste)
+	if (waste)
 		dat += {"<br><br><br><h3>Waste Container:</h3>
 
 		<b>Filled: </b>[waste.contents.len]/[waste.storage_slots]<br>
@@ -311,13 +311,13 @@
 
 /obj/item/device/lightreplacer/proc/ReplaceLight(var/obj/machinery/light/target, var/mob/living/user)
 	var/obj/item/weapon/light/best_light = get_best_light(target)
-	if(best_light == 0)
+	if (best_light == 0)
 		to_chat(user, "<span class='warning'>\The [src] has no supply container!</span>")
 		return
-	else if(!best_light)
+	else if (!best_light)
 		to_chat(user, "<span class='warning'>\The [src] has no compatible light!</span>")
 		return
-	if(!is_light_better(best_light, target))
+	if (!is_light_better(best_light, target))
 		to_chat(user, "<span class='notice'>\The [src] has no light better than the one already in \the [target].</span>")
 		return
 
@@ -327,7 +327,7 @@
 
 	supply.remove_from_storage(best_light)
 
-	if(target.status != LIGHT_EMPTY)
+	if (target.status != LIGHT_EMPTY)
 		var/obj/item/weapon/light/L1 = new target.light_type(target.loc)
 		L1.status = target.status
 		L1.rigged = target.rigged
@@ -341,8 +341,8 @@
 		L1.update()
 		target.status = LIGHT_EMPTY
 		target.update()
-		if(!insert_if_possible(L1))
-			if(istype(waste))
+		if (!insert_if_possible(L1))
+			if (istype(waste))
 				to_chat(user, "<span class='warning'>\The [src]'s waste container is full and it drops the removed light on the floor!</span>")
 			else
 				to_chat(user, "<span class='warning'>\The [src] has no waste container and it drops the removed light on the floor!</span>")
@@ -360,14 +360,14 @@
 	target.update()
 	qdel(best_light)
 	best_light = null
-	if(target.on && target.rigged)
+	if (target.on && target.rigged)
 		target.explode()
 
 
 /obj/item/device/lightreplacer/proc/Emag()
 	emagged = !emagged
 	playsound(get_turf(src), "sparks", 100, 1)
-	if(emagged)
+	if (emagged)
 		name = "Shortcircuited [initial(name)]"
 	else
 		name = initial(name)
@@ -379,11 +379,11 @@
 //Fails if the light cannot be placed into the correct box for any reason.
 //Returns 1 if the light is successfully inserted into the correct box, 0 if the insertion fails, and null if the item to be inserted is not a light or something very strange happens.
 /obj/item/device/lightreplacer/proc/insert_if_possible(var/obj/item/weapon/light/L)
-	if(!istype(L))
+	if (!istype(L))
 		return
-	if(L.status == LIGHT_OK)
-		if(supply && supply.can_be_inserted(L, TRUE))
-			if(istype(L.loc, /obj/item/weapon/storage))
+	if (L.status == LIGHT_OK)
+		if (supply && supply.can_be_inserted(L, TRUE))
+			if (istype(L.loc, /obj/item/weapon/storage))
 				var/obj/item/weapon/storage/lsource = L.loc
 				lsource.remove_from_storage(L, supply)
 			else
@@ -391,9 +391,9 @@
 			return 1
 		else
 			return 0
-	else if(L.status == LIGHT_BROKEN || L.status == LIGHT_BURNED)
-		if(waste && waste.can_be_inserted(L, TRUE))
-			if(istype(L.loc, /obj/item/weapon/storage))
+	else if (L.status == LIGHT_BROKEN || L.status == LIGHT_BURNED)
+		if (waste && waste.can_be_inserted(L, TRUE))
+			if (istype(L.loc, /obj/item/weapon/storage))
 				var/obj/item/weapon/storage/lsource = L.loc
 				lsource.remove_from_storage(L, waste)
 			else
@@ -406,15 +406,15 @@
 //For the standard light replacer, it just prioritizes HE lights over standard lights. I may add an advanced replacer with better light selection later.
 //Returns null if no compatible bulb is found and 0 if the light replacer has no (valid) supply box.
 /obj/item/device/lightreplacer/proc/get_best_light(var/obj/machinery/light/target)
-	if(!istype(supply))
+	if (!istype(supply))
 		return 0
 	var/best_light
-	switch(target.fitting)
-		if("bulb")
+	switch (target.fitting)
+		if ("bulb")
 			best_light = (locate(/obj/item/weapon/light/bulb/he) in supply) || (locate(/obj/item/weapon/light/bulb) in supply)
-		if("tube")
+		if ("tube")
 			best_light = (locate(/obj/item/weapon/light/tube/he) in supply) || (locate(/obj/item/weapon/light/tube) in supply)
-		if("large tube")
+		if ("large tube")
 			best_light = locate(/obj/item/weapon/light/tube/large) in supply
 	return best_light
 
@@ -424,17 +424,17 @@
 //HE light < standard light < no light < broken light = burned-out light
 //In normal operation, tested should never be no light and very rarely be a broken light.
 /obj/item/device/lightreplacer/proc/is_light_better(var/obj/tested, var/obj/comparison)
-	if(!(istype(tested, /obj/item/weapon/light) || istype(tested, /obj/machinery/light)) || !(istype(comparison, /obj/item/weapon/light) || istype(comparison, /obj/machinery/light)))
+	if (!(istype(tested, /obj/item/weapon/light) || istype(tested, /obj/machinery/light)) || !(istype(comparison, /obj/item/weapon/light) || istype(comparison, /obj/machinery/light)))
 		return
-	if(tested:status >= LIGHT_BROKEN) //Is tested broken or burnt out? If so, it cannot win.
+	if (tested:status >= LIGHT_BROKEN) //Is tested broken or burnt out? If so, it cannot win.
 		return 0
-	if(tested:status < comparison:status) //Is tested closer to functional than comparison? If so, it wins.
+	if (tested:status < comparison:status) //Is tested closer to functional than comparison? If so, it wins.
 		return 1
-	if(tested:status) //Is tested empty? If so, either it must be a tie or comparison wins, so tested cannot win.
+	if (tested:status) //Is tested empty? If so, either it must be a tie or comparison wins, so tested cannot win.
 		return 0
 
 	//Now we know both work, so all that is left is to test if tested wins by being HE.
-	if(findtextEx(tested:base_state, "he", 1, 3) && !findtextEx(comparison:base_state, "he", 1, 3))
+	if (findtextEx(tested:base_state, "he", 1, 3) && !findtextEx(comparison:base_state, "he", 1, 3))
 		return 1
 	else
 		return 0
@@ -456,147 +456,147 @@
 //If force_fill is 2, never fails.
 //Returns 1 on success and 0 on fail.
 /obj/item/device/lightreplacer/proc/add_glass(var/amt, var/force_fill = 0)
-	if(!force_fill)
-		if(glass_stor + amt > glass_stor_max)
+	if (!force_fill)
+		if (glass_stor + amt > glass_stor_max)
 			return 0
-	else if(force_fill == 1)
-		if(glass_stor >= glass_stor_max)
+	else if (force_fill == 1)
+		if (glass_stor >= glass_stor_max)
 			return 0
 	glass_stor = min(glass_stor_max, glass_stor + amt)
 	return 1
 
 //Attempts to use amt glass from storage. Returns 1 on success and 0 on failure.
 /obj/item/device/lightreplacer/proc/use_glass(var/amt)
-	if(amt > glass_stor)
+	if (amt > glass_stor)
 		return 0
 	glass_stor -= amt
 	return 1
 
 /obj/item/device/lightreplacer/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 
-	if(href_list["eject"])
-		switch(href_list["eject"])
+	if (href_list["eject"])
+		switch (href_list["eject"])
 
-			if("supply")
-				if(usr)
+			if ("supply")
+				if (usr)
 					usr.put_in_hands(supply)
 					usr.visible_message("[usr] removes \the [supply] from \the [src].", "You remove \the [src]'s supply container, \the [supply].")
 				else
 					supply.forceMove(get_turf(src))
 				supply = null
-				if(usr)
+				if (usr)
 					attack_self(usr)
 				return 1
 
-			if("waste")
-				if(usr)
+			if ("waste")
+				if (usr)
 					usr.put_in_hands(waste)
 					usr.visible_message("[usr] removes \the [waste] from \the [src].", "You remove \the [src]'s waste container, \the [waste].")
 				else
 					waste.forceMove(get_turf(src))
 				waste = null
-				if(usr)
+				if (usr)
 					attack_self(usr)
 				return 1
 
-	if(href_list["build"])
+	if (href_list["build"])
 		var/light_type = href_list["build"]
 		var/light_path = text2path("/obj/item/weapon/light/[light_type]")
 		var/obj/item/weapon/light/L
-		if(!light_types_glass[light_type])
+		if (!light_types_glass[light_type])
 			L = new light_path
 			light_types_glass[light_type] = L.starting_materials[MAT_GLASS]
-		if(!use_glass(light_types_glass[light_type] * prod_eff))
-			if(usr)
+		if (!use_glass(light_types_glass[light_type] * prod_eff))
+			if (usr)
 				to_chat(usr, "<span class='warning'>\The [src] doesn't have enough glass to make that!</span>")
-			if(L)
+			if (L)
 				qdel(L)
 				L = null
 			return 1
-		if(!L)
+		if (!L)
 			L = new light_path
 		L.switchcount = prod_quality
-		if(!insert_if_possible(L))
+		if (!insert_if_possible(L))
 			L.forceMove(get_turf(src))
-			if(usr)
+			if (usr)
 				to_chat(usr, "<span class='notice'>\The [src] successfully fabricates \a [L], but it drops it on the floor.</span>")
-		else if(usr)
+		else if (usr)
 			to_chat(usr, "<span class='notice'>\The [src] successfully fabricates \a [L].</span>")
-		if(usr)
+		if (usr)
 			attack_self(usr)
 		return 1
 
-	if(href_list["dump"])
-		if(!supply)
-			if(usr)
+	if (href_list["dump"])
+		if (!supply)
+			if (usr)
 				to_chat(usr, "<span class='warning'>\The [src] doesn't have a supply container!</span>")
 			return 1
-		if(!waste)
-			if(usr)
+		if (!waste)
+			if (usr)
 				to_chat(usr, "<span class='warning'>\The [src] doesn't have a waste container!</span>")
 			return 1
 		var/list/dumplist = splittext(href_list["dump"], ", ")
-		for(var/lightref in dumplist)
+		for (var/lightref in dumplist)
 			var/obj/item/weapon/light/L = locate(lightref)
-			if(L.loc == supply)
+			if (L.loc == supply)
 				supply.remove_from_storage(L, waste)
-		if(usr)
+		if (usr)
 			attack_self(usr)
 		return 1
 
-	if(href_list["swap"])
+	if (href_list["swap"])
 		var/swapholder = waste
 		waste = supply
 		supply = swapholder
-		if(usr)
+		if (usr)
 			attack_self(usr)
 		return 1
 
-	if(href_list["fold"])
-		if(cardboard_stor <= 0)
-			if(usr)
+	if (href_list["fold"])
+		if (cardboard_stor <= 0)
+			if (usr)
 				to_chat(usr, "<span class='warning'>\The [src] is out of cardboard!</span>")
 			return 1
-		switch(href_list["fold"])
-			if("supply")
-				if(!supply) //Topic is technically asynchronous, I believe, so this sanity is a good idea
+		switch (href_list["fold"])
+			if ("supply")
+				if (!supply) //Topic is technically asynchronous, I believe, so this sanity is a good idea
 					supply = new(src)
 					cardboard_stor--
-					if(usr)
+					if (usr)
 						to_chat(usr, "<span class='notice'>\The [src] constructs a new supply container.</span>")
 						attack_self(usr)
 					return 1
-			if("waste")
-				if(!waste) //Topic is technically asynchronous, I believe, so this sanity is a good idea
+			if ("waste")
+				if (!waste) //Topic is technically asynchronous, I believe, so this sanity is a good idea
 					waste = new(src)
 					cardboard_stor--
-					if(usr)
+					if (usr)
 						to_chat(usr, "<span class='notice'>\The [src] constructs a new waste container.</span>")
 						attack_self(usr)
 					return 1
 
 /obj/item/device/lightreplacer/borg/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 
-	if(href_list["recycle"])
-		if(waste)
+	if (href_list["recycle"])
+		if (waste)
 			var/recycledglass = 0 //How much glass is successfully recycled
-			for(var/obj/item/weapon/light/L in waste)
-				if(istype(L))
-					switch(L.status)
-						if(LIGHT_OK)
+			for (var/obj/item/weapon/light/L in waste)
+				if (istype(L))
+					switch (L.status)
+						if (LIGHT_OK)
 							recycledglass += (L.materials.storage[MAT_GLASS] * recycle_eff_ok)
-						if(LIGHT_BROKEN)
+						if (LIGHT_BROKEN)
 							recycledglass += (L.materials.storage[MAT_GLASS] * recycle_eff_broken)
-						if(LIGHT_BURNED)
+						if (LIGHT_BURNED)
 							recycledglass += (L.materials.storage[MAT_GLASS] * recycle_eff_burned)
 					qdel(L)
 					L = null
 			add_glass(recycledglass, force_fill = 2)
-			if(usr)
+			if (usr)
 				attack_self(usr)
 			return 1
 

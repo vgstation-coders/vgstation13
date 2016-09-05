@@ -22,22 +22,22 @@
 	var/obj/item/stack/cable_coil/loaded = null
 
 /obj/item/weapon/rcl/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W,/obj/item/stack/cable_coil))
-		if(!loaded)
-			if(user.drop_item(W,src))
+	if (istype(W,/obj/item/stack/cable_coil))
+		if (!loaded)
+			if (user.drop_item(W,src))
 				loaded = W
 				loaded.max_amount = max_amount //We store a lot.
 		else
 			loaded.preattack(W,user,1)
 		update_icon()
 		to_chat(user, "<span class='notice'>You add the cables to the [src]. It now contains [loaded.amount].</span>")
-	else if(isscrewdriver(W))
-		if(!loaded)
+	else if (isscrewdriver(W))
+		if (!loaded)
 			return
 		to_chat(user, "<span class='notice'>You loosen the securing screws on the side, allowing you to lower the guiding edge and retrieve the wires.</span>")
-		while(loaded.amount>30) //There are only two kinds of situations: "nodiff" (60,90), or "diff" (31-59, 61-89)
+		while (loaded.amount>30) //There are only two kinds of situations: "nodiff" (60,90), or "diff" (31-59, 61-89)
 			var/diff = loaded.amount % 30
-			if(diff)
+			if (diff)
 				loaded.use(diff)
 				getFromPool(/obj/item/stack/cable_coil,user.loc,diff)
 			else
@@ -53,7 +53,7 @@
 
 /obj/item/weapon/rcl/examine(mob/user)
 	..()
-	if(loaded)
+	if (loaded)
 		to_chat(user, "<span class='info'>It contains [loaded.amount]/90 cables.</span>")
 
 /obj/item/weapon/rcl/Destroy()
@@ -63,18 +63,18 @@
 	..()
 
 /obj/item/weapon/rcl/update_icon()
-	if(!loaded)
+	if (!loaded)
 		icon_state = "rcl-0"
 		item_state = "rcl-0"
 		return
-	switch(loaded.amount)
-		if(61 to INFINITY)
+	switch (loaded.amount)
+		if (61 to INFINITY)
 			icon_state = "rcl-30"
 			item_state = "rcl"
-		if(31 to 60)
+		if (31 to 60)
 			icon_state = "rcl-20"
 			item_state = "rcl"
-		if(1 to 30)
+		if (1 to 30)
 			icon_state = "rcl-10"
 			item_state = "rcl"
 		else
@@ -83,7 +83,7 @@
 
 /obj/item/weapon/rcl/proc/is_empty(mob/user)
 	update_icon()
-	if(!loaded.amount)
+	if (!loaded.amount)
 		to_chat(user, "<span class='notice'>The last of the cables unreel from \the [src].</span>")
 		returnToPool(loaded)
 		loaded = null
@@ -97,23 +97,23 @@
 /obj/item/weapon/rcl/attack_self(mob/user as mob)
 	active = !active
 	to_chat(user, "<span class='notice'>You turn the [src] [active ? "on" : "off"].<span>")
-	if(active)
+	if (active)
 		trigger(user)
 
 /obj/item/weapon/rcl/proc/trigger(mob/user as mob)
-	if(!loaded)
+	if (!loaded)
 		to_chat(user, "<span class='warning'>\The [src] is empty!</span>")
 		return
-	if(last)
-		if(get_dist(last, user) == 0) //hacky, but it works
+	if (last)
+		if (get_dist(last, user) == 0) //hacky, but it works
 			last = null
-		else if(get_dist(last, user) == 1)
-			if(get_dir(last, user)==last.d2)
+		else if (get_dist(last, user) == 1)
+			if (get_dir(last, user)==last.d2)
 				//Did we just walk backwards? Well, that's the one direction we CAN'T complete a stub.
 				last = null
 				return
 			loaded.cable_join(last,user)
-			if(is_empty(user))
+			if (is_empty(user))
 				return //If we've run out, display message and exit
 		else
 			last = null

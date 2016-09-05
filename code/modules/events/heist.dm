@@ -31,36 +31,36 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 
 /datum/event/heist/start()
 
-	if(!..())
+	if (!..())
 		return 0
 
 	var/list/candidates = get_candidates(ROLE_VOXRAIDER)
 	var/raider_num = 0
 
 	//Check that we have enough vox.
-	if(candidates.len < required_candidates)
+	if (candidates.len < required_candidates)
 		return 0
-	else if(candidates.len < max_candidates)
+	else if (candidates.len < max_candidates)
 		raider_num = candidates.len
 	else
 		raider_num = max_candidates
 
 	//Grab candidates randomly until we have enough.
-	while(raider_num > 0)
+	while (raider_num > 0)
 		var/datum/mind/new_raider = pick(candidates)
 		raiders += new_raider
 		candidates -= new_raider
 		raider_num--
 
-	for(var/datum/mind/raider in raiders)
+	for (var/datum/mind/raider in raiders)
 		raider.assigned_role = "MODE"
 		raider.special_role = "Vox Raider"
 
 	//Build a list of spawn points.
 	var/list/turf/raider_spawn = list()
 
-	for(var/obj/effect/landmark/L in landmarks_list)
-		if(L.name == "voxstart")
+	for (var/obj/effect/landmark/L in landmarks_list)
+		if (L.name == "voxstart")
 			raider_spawn += get_turf(L)
 			qdel(L)
 			L = null
@@ -72,9 +72,9 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 	var/index = 1
 
 	//Spawn the vox!
-	for(var/datum/mind/raider in raiders)
+	for (var/datum/mind/raider in raiders)
 
-		if(index > raider_spawn.len)
+		if (index > raider_spawn.len)
 			index = 1
 
 		raider.current.forceMove(raider_spawn[index])
@@ -92,7 +92,7 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 		vox.remove_language(LANGUAGE_GALACTIC_COMMON)
 		vox.h_style = "Short Vox Quills"
 		vox.f_style = "Shaved"
-		for(var/datum/organ/external/limb in vox.organs)
+		for (var/datum/organ/external/limb in vox.organs)
 			limb.status &= ~(ORGAN_DESTROYED | ORGAN_ROBOT)
 		vox.equip_vox_raider()
 		vox.regenerate_icons()
@@ -105,24 +105,24 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 /datum/event/heist/proc/is_raider_crew_safe()
 
 
-	if(raiders.len == 0)
+	if (raiders.len == 0)
 		return 0
 
-	for(var/datum/mind/M in raiders)
-		if(!M || !M.current)
+	for (var/datum/mind/M in raiders)
+		if (!M || !M.current)
 			continue
 		if (get_area(M.current) != locate(/area/shuttle/vox/station))
 			return 0
 	return 1
 
 /datum/event/heist/proc/is_raider_crew_alive()
-	if(raiders.len == 0)
+	if (raiders.len == 0)
 		return 0
-	for(var/datum/mind/raider in raiders)
-		if(!raider || !raider.current)
+	for (var/datum/mind/raider in raiders)
+		if (!raider || !raider.current)
 			continue
-		if(raider.current)
-			if(istype(raider.current,/mob/living/carbon/human) && raider.current.stat != 2)
+		if (raider.current)
+			if (istype(raider.current,/mob/living/carbon/human) && raider.current.stat != 2)
 				return 1
 	return 0
 
@@ -135,15 +135,15 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 	/* var/i = 1
 	var/max_objectives = pick(2,2,2,3,3)
 	var/list/objs = list()
-	while(i<= max_objectives)
+	while (i<= max_objectives)
 		var/list/goals = list("kidnap","loot","salvage")
 		var/goal = pick(goals)
 		var/datum/objective/heist/O
 
-		if(goal == "kidnap")
+		if (goal == "kidnap")
 			goals -= "kidnap"
 			O = new /datum/objective/heist/kidnap()
-		else if(goal == "loot")
+		else if (goal == "loot")
 			O = new /datum/objective/heist/loot()
 		else
 			O = new /datum/objective/heist/salvage()
@@ -156,17 +156,17 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 	objs += new /datum/objective/heist/inviolate_crew
 	objs += new /datum/objective/heist/inviolate_death */
 
-	if(prob(25)) // This is an asspain.
+	if (prob(25)) // This is an asspain.
 		raid_objectives += new /datum/objective/heist/kidnap
 	raid_objectives += new /datum/objective/steal/heist
 	raid_objectives += new /datum/objective/steal/salvage
 	raid_objectives += new /datum/objective/heist/inviolate_crew
 	raid_objectives += new /datum/objective/heist/inviolate_death
 
-	for(var/datum/objective/heist/O in raid_objectives)
+	for (var/datum/objective/heist/O in raid_objectives)
 		O.choose_target()
 
-	for(var/datum/objective/steal/O in raid_objectives)
+	for (var/datum/objective/steal/O in raid_objectives)
 		O.find_target()
 
 	return raid_objectives
@@ -177,7 +177,7 @@ The Vox are a race of cunning, sharp-eyed nomadic raiders and traders endemic to
 Vox are cowardly and will flee from larger groups, but corner one or find them en masse and they are vicious.
 Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to turn on your nitrogen internals!</b></span>"})
 	var/obj_count = 1
-	for(var/datum/objective/objective in raider.objectives)
+	for (var/datum/objective/objective in raider.objectives)
 		to_chat(raider.current, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
 		obj_count++
 
@@ -186,7 +186,7 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 
 
 	//No objectives, go straight to the feedback.
-	if(!(raid_objectives.len))
+	if (!(raid_objectives.len))
 		return ..()
 
 	var/win_type = "Major"
@@ -196,15 +196,15 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 	var/success = raid_objectives.len
 
 	//Decrease success for failed objectives.
-	for(var/datum/objective/O in raid_objectives)
-		if(!(O.check_completion()))
+	for (var/datum/objective/O in raid_objectives)
+		if (!(O.check_completion()))
 			success--
 
 	//Set result by objectives.
-	if(success == raid_objectives.len)
+	if (success == raid_objectives.len)
 		win_type = "Major"
 		win_group = "Vox"
-	else if(success > 2)
+	else if (success > 2)
 		win_type = "Minor"
 		win_group = "Vox"
 	else
@@ -212,15 +212,15 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 		win_group = "Crew"
 
 	//Now we modify that result by the state of the vox crew.
-	if(!is_raider_crew_alive())
+	if (!is_raider_crew_alive())
 
 		win_type = "Major"
 		win_group = "Crew"
 		win_msg += "<B>The Vox Raiders have been wiped out!</B>"
 
-	else if(!is_raider_crew_safe())
+	else if (!is_raider_crew_safe())
 
-		if(win_group == "Crew" && win_type == "Minor")
+		if (win_group == "Crew" && win_type == "Minor")
 			win_type = "Major"
 
 		win_group = "Crew"
@@ -228,8 +228,8 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 
 	else
 
-		if(win_group == "Vox")
-			if(win_type == "Minor")
+		if (win_group == "Vox")
+			if (win_type == "Minor")
 
 				win_type = "Major"
 			win_msg += "<B>The Vox Raiders escaped the station!</B>"
@@ -241,8 +241,8 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 	feedback_set_details("round_end_result","heist - [win_type] [win_group]")
 
 	var/count = 1
-	for(var/datum/objective/objective in raid_objectives)
-		if(objective.check_completion())
+	for (var/datum/objective/objective in raid_objectives)
+		if (objective.check_completion())
 			to_chat(world, "<br><B>Objective #[count]</B>: [objective.explanation_text] <font color='green'><B>Success!</B></font>")
 			feedback_add_details("traitor_objective","[objective.type]|SUCCESS")
 		else

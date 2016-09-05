@@ -34,7 +34,7 @@
 	melt_temperature = MELTPOINT_PLASTIC
 
 /obj/item/weapon/boomerang/throw_at(atom/target, range, speed, override = 1)
-	if(!usr)
+	if (!usr)
 		return ..()
 
 	spawn()
@@ -42,7 +42,7 @@
 		animate(transform = turn(matrix(), 240), time = 5)
 		animate(transform = null, time = 5)
 
-		while(throwing) //Wait until the boomerang is no longer flying. Check on 0.5-second intervals
+		while (throwing) //Wait until the boomerang is no longer flying. Check on 0.5-second intervals
 			sleep(5)
 
 		animate(src) //Stop the animation
@@ -59,29 +59,29 @@
 	var/list/points = list()
 
 	var/c_dir = get_dir(usr, target)
-	for(var/i = -1 to 1)
+	for (var/i = -1 to 1)
 		var/m_dir = turn(c_dir, i*90)
 		var/T = get_turf(target)
 
-		for(var/step_n = 1 to circle_radius)
+		for (var/step_n = 1 to circle_radius)
 			T = get_step(T, m_dir)
 
 		points.Add(T)
 
-	for(var/turf/T in points)
-		if(!..(T, range, speed, override, fly_speed = 1))
+	for (var/turf/T in points)
+		if (!..(T, range, speed, override, fly_speed = 1))
 			return
-		if(istype(loc, /turf/space)) //Boomerangs don't work in space
+		if (istype(loc, /turf/space)) //Boomerangs don't work in space
 			return
 
 	..(original, range, speed, override, fly_speed = 1)
 
 /obj/item/weapon/boomerang/throw_impact(atom/hit_atom, var/speed, user)
-	if(iscarbon(hit_atom) && !isslime(hit_atom))
-		if(user == hit_atom)
+	if (iscarbon(hit_atom) && !isslime(hit_atom))
+		if (user == hit_atom)
 			var/mob/living/carbon/L = hit_atom
 
-			if(L.get_active_hand() == null)
+			if (L.get_active_hand() == null)
 				to_chat(hit_atom, "<span class='info'>You catch \the [src]!</span>")
 				L.put_in_active_hand(src)
 				throwing = 0

@@ -42,7 +42,7 @@ var/global/list/moneytypes = list(
 		src.add_fingerprint(user)
 		C.add_fingerprint(user)
 		amount--
-		if(amount<=0)
+		if (amount<=0)
 			qdel(src)
 		else
 			update_icon()
@@ -73,7 +73,7 @@ var/global/list/moneytypes = list(
 		amount+=to_transfer
 		to_chat(user, "You add [to_transfer] chip\s to the stack. It now contains [amount] chips, worth [amount*worth] credits.")
 		S.amount-=to_transfer
-		if(S.amount<=0)
+		if (S.amount<=0)
 			qdel(S)
 		else
 			S.update_icon()
@@ -82,7 +82,7 @@ var/global/list/moneytypes = list(
 	return ..()
 
 /obj/item/weapon/spacecash/examine(mob/user)
-	if(amount > 1)
+	if (amount > 1)
 		setGender(PLURAL)
 		..()
 		to_chat(user, "It's a stack holding [amount] chips.")
@@ -98,7 +98,7 @@ var/global/list/moneytypes = list(
 	var/stacksize=round(amount/2.5)
 	pixel_x = rand(-7, 7) * PIXEL_MULTIPLIER
 	pixel_y = rand(-14, 14) * PIXEL_MULTIPLIER
-	if(stacksize)
+	if (stacksize)
 		// 0 = single
 		// 1 = 1/4 stack
 		// 2 = 1/2 stack
@@ -109,20 +109,20 @@ var/global/list/moneytypes = list(
 		overlays += stack
 
 /obj/item/weapon/spacecash/proc/collect_from(var/obj/item/weapon/spacecash/cash)
-	if(cash.worth == src.worth)
+	if (cash.worth == src.worth)
 		var/taking = min(10-src.amount,cash.amount)
 		cash.amount -= taking
 		src.amount += taking
-		if(cash.amount <= 0)
+		if (cash.amount <= 0)
 			qdel(cash)
 		return taking
 	return 0
 
 /obj/item/weapon/spacecash/afterattack(atom/A as mob|obj, mob/user as mob)
-	if(istype(A, /obj/item/weapon/spacecash))
+	if (istype(A, /obj/item/weapon/spacecash))
 		var/obj/item/weapon/spacecash/cash = A
 		var/collected = src.collect_from(cash)
-		if(collected)
+		if (collected)
 			update_icon()
 			to_chat(user, "<span class='notice'>You add [collected] [src.name][amount > 1 ? "s":""] to your stack of cash.</span>")
 
@@ -143,22 +143,22 @@ var/global/list/moneytypes = list(
 
 /obj/structure/closet/cash_closet/New()
 	var/list/types = typesof(/obj/item/weapon/spacecash)
-	for(var/i = 1 to rand(3,10))
+	for (var/i = 1 to rand(3,10))
 		var/typepath = pick(types)
 		new typepath(src)
 
 /proc/dispense_cash(var/amount, var/loc)
-	for(var/cashtype in moneytypes)
+	for (var/cashtype in moneytypes)
 		var/slice = moneytypes[cashtype]
 		var/dispense_count = Floor(amount/slice)
 		amount = amount % slice
-		while(dispense_count>0)
+		while (dispense_count>0)
 			var/dispense_this_time = min(dispense_count,10)
-			if(dispense_this_time > 0)
+			if (dispense_this_time > 0)
 				new cashtype(loc,dispense_this_time)
 				dispense_count -= dispense_this_time
 
 /proc/count_cash(var/list/cash)
 	. = 0
-	for(var/obj/item/weapon/spacecash/C in cash)
+	for (var/obj/item/weapon/spacecash/C in cash)
 		. += C.amount * C.worth

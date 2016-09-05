@@ -51,16 +51,16 @@ proc/arctan(x)
 	return a ? a : b
 
 /proc/Floor(x = 0, y = 0)
-	if(x == 0)
+	if (x == 0)
 		return 0
-	if(y == 0)
+	if (y == 0)
 		return round(x)
 
-	if(x < y)
+	if (x < y)
 		return 0
 
 	var/diff = round(x, y) //finds x to the nearest value of y
-	if(diff > x)
+	if (diff > x)
 		return x - (y - (diff - x)) //diff minus x is the inverse of what we want to remove, so we subtract from y - the base unit - and subtract the result
 	else
 		return diff //this is good enough
@@ -137,14 +137,14 @@ proc/arctan(x)
  * http://i.imgur.com/8Pu0x7M.png
  */
 /proc/unmix(x, a, b, min = 0, max = 1)
-	if(a==b)
+	if (a==b)
 		return 1
 	return Clamp( (b - x)/(b - a), min, max )
 
 /proc/Mean(...)
 	var/values 	= 0
 	var/sum		= 0
-	for(var/val in args)
+	for (var/val in args)
 		values++
 		sum += val
 	return sum / values
@@ -169,11 +169,11 @@ proc/arctan(x)
 	. = list()
 	var/d		= b*b - 4 * a * c
 	var/bottom  = 2 * a
-	if(d < 0)
+	if (d < 0)
 		return
 	var/root = sqrt(d)
 	. += (-b + root) / bottom
-	if(!d)
+	if (!d)
 		return
 	. += (-b - root) / bottom
 
@@ -236,7 +236,7 @@ proc/arctan(x)
  * Taken from http://lostsouls.org/grimoire_diminishing_returns
  */
 /proc/triangular_seq(input, scale)
-	if(input < 0)
+	if (input < 0)
 		return -triangular_seq(-input, scale)
 	var/mult = input/scale
 	var/trinum = (sqrt(8 * mult + 1) - 1 ) / 2

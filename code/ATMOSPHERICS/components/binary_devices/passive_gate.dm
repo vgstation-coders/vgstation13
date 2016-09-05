@@ -15,28 +15,28 @@
 	var/datum/radio_frequency/radio_connection
 
 /obj/machinery/atmospherics/binary/passive_gate/update_icon()
-	if(stat & NOPOWER)
+	if (stat & NOPOWER)
 		icon_state = "intact_off"
-	else if(node1 && node2)
+	else if (node1 && node2)
 		icon_state = "intact_[on?("on"):("off")]"
 	..()
 	return
 
 /obj/machinery/atmospherics/binary/passive_gate/process()
 	. = ..()
-	if(!on)
+	if (!on)
 		return
 
 	var/output_starting_pressure = air2.return_pressure()
 	var/input_starting_pressure = air1.return_pressure()
 
-	if(output_starting_pressure >= min(target_pressure,input_starting_pressure-10))
+	if (output_starting_pressure >= min(target_pressure,input_starting_pressure-10))
 		//No need to pump gas if target is already reached or input pressure is too low
 		//Need at least 10 KPa difference to overcome friction in the mechanism
 		return
 
 	//Calculate necessary moles to transfer using PV = nRT
-	if((air1.total_moles() > 0) && (air1.temperature>0))
+	if ((air1.total_moles() > 0) && (air1.temperature>0))
 		var/pressure_delta = min(target_pressure - output_starting_pressure, (input_starting_pressure - output_starting_pressure)/2)
 		//Can not have a pressure delta that would cause output_pressure > input_pressure
 
@@ -46,10 +46,10 @@
 		var/datum/gas_mixture/removed = air1.remove(transfer_moles)
 		air2.merge(removed)
 
-		if(network1)
+		if (network1)
 			network1.update = 1
 
-		if(network2)
+		if (network2)
 			network2.update = 1
 
 	return 1
@@ -61,11 +61,11 @@
 /obj/machinery/atmospherics/binary/passive_gate/proc/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
-	if(frequency)
+	if (frequency)
 		radio_connection = radio_controller.add_object(src, frequency, filter = RADIO_ATMOSIA)
 
 /obj/machinery/atmospherics/binary/passive_gate/proc/broadcast_status()
-	if(!radio_connection)
+	if (!radio_connection)
 		return 0
 
 	var/datum/signal/signal = getFromPool(/datum/signal)
@@ -95,24 +95,24 @@
 
 /obj/machinery/atmospherics/binary/passive_gate/initialize()
 	..()
-	if(frequency)
+	if (frequency)
 		set_frequency(frequency)
 
 /obj/machinery/atmospherics/binary/passive_gate/receive_signal(datum/signal/signal)
-	if(!signal.data["tag"] || (signal.data["tag"] != id_tag) || (signal.data["sigtype"]!="command"))
+	if (!signal.data["tag"] || (signal.data["tag"] != id_tag) || (signal.data["sigtype"]!="command"))
 		return 0
 
 	var/old_on=on
-	if("power" in signal.data)
+	if ("power" in signal.data)
 		on = text2num(signal.data["power"])
 
-	if("power_toggle" in signal.data)
+	if ("power_toggle" in signal.data)
 		on = !on
 
-	if("set_output_pressure" in signal.data)
+	if ("set_output_pressure" in signal.data)
 		target_pressure = Clamp(text2num(signal.data["set_output_pressure"]), 0, ONE_ATMOSPHERE * 50)
 
-	if("status" in signal.data)
+	if ("status" in signal.data)
 		spawn(2)
 			broadcast_status()
 		return //do not update_icon
@@ -120,17 +120,17 @@
 	spawn(2)
 		broadcast_status()
 	update_icon()
-	if(old_on!=on)
+	if (old_on!=on)
 		investigation_log(I_ATMOS,"was powered [on ? "on" : "off"] by a remote signal")
 	return
 
 
 
 /obj/machinery/atmospherics/binary/passive_gate/attack_hand(user as mob)
-	if(..())
+	if (..())
 		return
 	src.add_fingerprint(usr)
-	if(!src.allowed(user))
+	if (!src.allowed(user))
 		to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
 	usr.set_machine(src)
@@ -138,12 +138,12 @@
 	return
 
 /obj/machinery/atmospherics/binary/passive_gate/Topic(href,href_list)
-	if(..())
+	if (..())
 		return
-	if(href_list["power"])
+	if (href_list["power"])
 		on = !on
 		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(usr)]")
-	if(href_list["set_press"])
+	if (href_list["set_press"])
 		var/new_pressure = input(usr,"Enter new output pressure (0-4500kPa)","Pressure control",src.target_pressure) as num
 		src.target_pressure = max(0, min(4500, new_pressure))
 		investigation_log(I_ATMOS,"was set to [target_pressure] kPa by [key_name(usr)]")

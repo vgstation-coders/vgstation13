@@ -14,17 +14,17 @@
 
 /obj/item/clothing/shoes/syndigaloshes/New()
 	..()
-	for(var/Type in typesof(/obj/item/clothing/shoes) - list(/obj/item/clothing/shoes, /obj/item/clothing/shoes/syndigaloshes))
+	for (var/Type in typesof(/obj/item/clothing/shoes) - list(/obj/item/clothing/shoes, /obj/item/clothing/shoes/syndigaloshes))
 		clothing_choices += new Type
 	return
 
 /obj/item/clothing/shoes/syndigaloshes/attackby(obj/item/I, mob/user)
 	..()
-	if(!istype(I, /obj/item/clothing/shoes) || istype(I, src.type))
+	if (!istype(I, /obj/item/clothing/shoes) || istype(I, src.type))
 		return 0
 	else
 		var/obj/item/clothing/shoes/S = I
-		if(src.clothing_choices.Find(S))
+		if (src.clothing_choices.Find(S))
 			to_chat(user, "<span class='warning'>[S.name]'s pattern is already stored.</span>")
 			return
 		src.clothing_choices += S
@@ -39,7 +39,7 @@
 
 	var/obj/item/clothing/shoes/A
 	A = input("Select Colour to change it to", "BOOYEA", A) as null|anything in clothing_choices
-	if(!A ||(usr.stat))
+	if (!A ||(usr.stat))
 		return
 
 	desc = null
@@ -129,17 +129,17 @@
 
 /obj/item/clothing/shoes/clown_shoes/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if(istype(W, /obj/item/clothing/mask/gas/clown_hat))
+	if (istype(W, /obj/item/clothing/mask/gas/clown_hat))
 		new /mob/living/simple_animal/hostile/retaliate/cluwne/goblin(get_turf(src))
 		qdel(W)
 		qdel(src)
 
 /obj/item/clothing/shoes/clown_shoes/step_action()
-	if(ishuman(loc))
+	if (ishuman(loc))
 		var/mob/living/carbon/human/H = loc
 
-		if(H.m_intent == "run")
-			if(footstep > 1)
+		if (H.m_intent == "run")
+			if (footstep > 1)
 				footstep = 0
 				playsound(H, step_sound, 50, 1) // this will get annoying very fast.
 			else
@@ -188,10 +188,10 @@
 	var/random_sound = 0
 
 /obj/item/clothing/shoes/clown_shoes/advanced/attack_self(mob/user)
-	if(user.mind && user.mind.assigned_role != "Clown")
+	if (user.mind && user.mind.assigned_role != "Clown")
 		to_chat(user, "<span class='danger'>These shoes are too powerful for you to handle!</span>")
-		if(prob(25))
-			if(ishuman(user))
+		if (prob(25))
+			if (ishuman(user))
 				var/mob/living/carbon/human/H = user
 				H << sound('sound/items/AirHorn.ogg')
 				to_chat(H, "<font color='red' size='7'>HONK</font>")
@@ -199,7 +199,7 @@
 				H.stuttering += 20
 				H.ear_deaf += 30
 				H.Weaken(3) //Copied from honkerblast 5000
-				if(prob(30))
+				if (prob(30))
 					H.Stun(10)
 					H.Paralyse(4)
 				else
@@ -208,8 +208,8 @@
 
 	var/new_sound = input(user,"Select the new step sound!","Advanced clown shoes") in sound_list
 
-	if(Adjacent(user))
-		if(step_sound == CLOWNSHOES_RANDOM_SOUND)
+	if (Adjacent(user))
+		if (step_sound == CLOWNSHOES_RANDOM_SOUND)
 			step_sound = "clownstep"
 			to_chat(user, "<span class='sinister'>You set [src]'s step sound to always be random!</span>")
 			random_sound = 1
@@ -225,16 +225,16 @@
 	return src.attack_self(usr)
 
 /obj/item/clothing/shoes/clown_shoes/advanced/step_action()
-	if(ishuman(loc))
+	if (ishuman(loc))
 		var/mob/living/carbon/human/H = loc
 
-		if(H.mind && H.mind.assigned_role != "Clown")
-			if( ( H.mind.assigned_role == "Mime" ) )
+		if (H.mind && H.mind.assigned_role != "Clown")
+			if ( ( H.mind.assigned_role == "Mime" ) )
 				H.Slip(3, 2, 1)
 
 			return
 
-		if(random_sound)
+		if (random_sound)
 			step_sound = sound_list[pick(sound_list)]
 	..()
 

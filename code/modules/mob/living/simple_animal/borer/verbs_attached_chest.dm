@@ -3,14 +3,14 @@
 	set name = "Borer Speak"
 	set desc = "Communicate with your bretheren"
 
-	if(!message)
+	if (!message)
 		return
 
 	message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
 	message = capitalize(message)
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.borer_speak(message)
 
@@ -20,7 +20,7 @@
 	set desc = "Upgrade yourself or your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.evolve()
 
@@ -30,7 +30,7 @@
 	set desc = "Push some chemicals into your host's bloodstream."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.secrete_chemicals()
 
@@ -40,7 +40,7 @@
 	set desc = "Slither out of your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.abandon_host()
 
@@ -50,7 +50,7 @@
 	set desc = "An in-depth check of the host's physical status."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.advanced_analyze_host()
 
@@ -59,7 +59,7 @@
 	set desc = "An in-depth check of the host's physical status."
 	set category = "Alien"
 
-	if(!check_can_do())
+	if (!check_can_do())
 		return
 
 	to_chat(src, "<span class='info'>You listen to the song of your host's nervous system, hunting for dischordant notes...</span>")
@@ -72,7 +72,7 @@
 /mob/living/simple_animal/borer/proc/get_host_data()
 	if (!host)
 		return
-	if(!istype(host, /mob/living/carbon/human))
+	if (!istype(host, /mob/living/carbon/human))
 		to_chat(src, "<span class='warning'>You can't seem to interpret your host's strange biology.</span>")
 		return
 	var/mob/living/carbon/human/H = host
@@ -112,14 +112,14 @@
 	var/dat = "<font color='blue'><b>Host Statistics:</b></font><br>"
 	var/aux
 	switch (occ["stat"])
-		if(0)
+		if (0)
 			aux = "Conscious"
-		if(1)
+		if (1)
 			aux = "Unconscious"
 		else
 			aux = "Dead"
 	dat += text("[]\tHealth %: [] ([])</font><br>", (occ["health"] > 50 ? "<font color='blue'>" : "<font color='red'>"), occ["health"], aux)
-	if(occ["virus_present"])
+	if (occ["virus_present"])
 		dat += "<font color='red'>Viral pathogen detected in blood stream.</font><br>"
 	dat += text("[]\tRadiation Level %: []</font><br>", (occ["rads"] < 10 ?"<font color='blue'>" : "<font color='red'>"), occ["rads"])
 	dat += text("[]\tGenetic Tissue Damage %: []</font><br>", (occ["cloneloss"] < 1 ?"<font color='blue'>" : "<font color='red'>"), occ["cloneloss"])
@@ -127,22 +127,22 @@
 	dat += text("Paralysis Summary %: [] ([] seconds left!)<br>", occ["paralysis"], round(occ["paralysis"] / 4))
 	dat += text("Body Temperature: [occ["bodytemp"]-T0C]&deg;C ([occ["bodytemp"]*1.8-459.67]&deg;F)<br><HR>")
 
-	if(occ["borer_present_head"])
+	if (occ["borer_present_head"])
 		var/mob/living/simple_animal/borer/B = occ["borer_present_head"]
 		dat += "Borer known as [B.truename] present in frontal lobe.<br>"
-	if(occ["borer_present_chest"])
+	if (occ["borer_present_chest"])
 		var/mob/living/simple_animal/borer/B = occ["borer_present_chest"]
 		dat += "Borer known as [B.truename] present in chest cavity.<br>"
-	if(occ["borer_present_r_arm"])
+	if (occ["borer_present_r_arm"])
 		var/mob/living/simple_animal/borer/B = occ["borer_present_r_arm"]
 		dat += "Borer known as [B.truename] present in right arm.<br>"
-	if(occ["borer_present_l_arm"])
+	if (occ["borer_present_l_arm"])
 		var/mob/living/simple_animal/borer/B = occ["borer_present_l_arm"]
 		dat += "Borer known as [B.truename] present in left arm.<br>"
-	if(occ["borer_present_r_leg"])
+	if (occ["borer_present_r_leg"])
 		var/mob/living/simple_animal/borer/B = occ["borer_present_r_leg"]
 		dat += "Borer known as [B.truename] present in right leg.<br>"
-	if(occ["borer_present_l_leg"])
+	if (occ["borer_present_l_leg"])
 		var/mob/living/simple_animal/borer/B = occ["borer_present_l_leg"]
 		dat += "Borer known as [B.truename] present in left leg.<br>"
 
@@ -156,13 +156,13 @@
 	dat += text("[]\tBicaridine: [] units<BR>", (occ["bicaridine_amount"] < 30 ? "<font color='black'>" : "<font color='red'>"), occ["bicaridine_amount"])
 	dat += text("[]\tDexalin: [] units<BR>", (occ["dexalin_amount"] < 30 ? "<font color='black'>" : "<font color='red'>"), occ["dexalin_amount"])
 
-	for(var/datum/reagent/R in occ["all_chems"])
-		if(R.id == BLOOD || R.id == INAPROVALINE || R.id == STOXIN || R.id == DERMALINE || R.id == BICARIDINE || R.id == DEXALIN)
+	for (var/datum/reagent/R in occ["all_chems"])
+		if (R.id == BLOOD || R.id == INAPROVALINE || R.id == STOXIN || R.id == DERMALINE || R.id == BICARIDINE || R.id == DEXALIN)
 			continue //no repeats
 		else
 			dat += text("<font color='black'>Detected</font> <font color='blue'>[R.volume]</font> <font color='black'>units of</font> <font color='blue'>[R.name]</font><BR>")
-	for(var/datum/disease/D in occ["tg_diseases_list"])
-		if(!D.hidden[SCANNER])
+	for (var/datum/disease/D in occ["tg_diseases_list"])
+		if (!D.hidden[SCANNER])
 			dat += text("<BR><font color='red'><B>Warning: [D.form] Detected</B>\nName: [D.name].\nType: [D.spread].\nStage: [D.stage]/[D.max_stages].\nPossible Cure: [D.cure]</FONT><BR>")
 
 	dat += "<HR><table border='1'>"
@@ -173,7 +173,7 @@
 	dat += "<th>Other Wounds</th>"
 	dat += "</tr>"
 
-	for(var/datum/organ/external/e in occ["external_organs"])
+	for (var/datum/organ/external/e in occ["external_organs"])
 		var/AN = ""
 		var/open = ""
 		var/infected = ""
@@ -186,21 +186,21 @@
 
 		dat += "<tr>"
 
-		for(var/datum/wound/W in e.wounds)
-			if(W.internal)
+		for (var/datum/wound/W in e.wounds)
+			if (W.internal)
 				internal_bleeding = "<br>Internal bleeding"
 				break
-		if(istype(e, /datum/organ/external/chest) && occ["lung_ruptured"])
+		if (istype(e, /datum/organ/external/chest) && occ["lung_ruptured"])
 			lung_ruptured = "Lung ruptured:"
-		if(e.status & ORGAN_SPLINTED)
+		if (e.status & ORGAN_SPLINTED)
 			splint = "Splinted:"
-		if(e.status & ORGAN_BLEEDING)
+		if (e.status & ORGAN_BLEEDING)
 			bled = "Bleeding:"
-		if(e.status & ORGAN_BROKEN)
+		if (e.status & ORGAN_BROKEN)
 			AN = "[e.broken_description]:"
-		if(e.status & ORGAN_ROBOT)
+		if (e.status & ORGAN_ROBOT)
 			robot = "Prosthetic:"
-		if(e.open)
+		if (e.open)
 			open = "Open:"
 
 		switch (e.germ_level)
@@ -220,29 +220,29 @@
 				infected = "Septic:"
 
 		var/known_implants = list(/obj/item/weapon/implant/chem, /obj/item/weapon/implant/death_alarm, /obj/item/weapon/implant/loyalty, /obj/item/weapon/implant/tracking)
-		if(e.implants.len)
+		if (e.implants.len)
 			var/unknown_body = 0
-			for(var/I in e.implants)
-				if(is_type_in_list(I,known_implants))
+			for (var/I in e.implants)
+				if (is_type_in_list(I,known_implants))
 					imp += "[I] implanted:"
-				else if(!istype(I, /mob/living/simple_animal/borer))
+				else if (!istype(I, /mob/living/simple_animal/borer))
 					unknown_body++
-			if(unknown_body || e.hidden)
+			if (unknown_body || e.hidden)
 				imp += "Unknown body present:"
 
-		if(!AN && !open && !infected & !imp)
+		if (!AN && !open && !infected & !imp)
 			AN = "None:"
-		if(!(e.status & ORGAN_DESTROYED))
+		if (!(e.status & ORGAN_DESTROYED))
 			dat += "<td>[e.display_name]</td><td>[e.burn_dam]</td><td>[e.brute_dam]</td><td>[robot][bled][AN][splint][open][infected][imp][internal_bleeding][lung_ruptured]</td>"
 		else
 			dat += "<td>[e.display_name]</td><td>-</td><td>-</td><td>Not Found</td>"
 		dat += "</tr>"
 
-	for(var/datum/organ/internal/i in occ["internal_organs"])
+	for (var/datum/organ/internal/i in occ["internal_organs"])
 		var/mech = ""
-		if(i.robotic == 1)
+		if (i.robotic == 1)
 			mech = "Assisted:"
-		if(i.robotic == 2)
+		if (i.robotic == 2)
 			mech = "Mechanical:"
 
 		var/infection = "None"
@@ -265,9 +265,9 @@
 		dat += "</tr>"
 	dat += "</table>"
 
-	if(occ["sdisabilities"] & BLIND)
+	if (occ["sdisabilities"] & BLIND)
 		dat += text("<font color='red'>Cataracts detected.</font><BR>")
-	if(occ["sdisabilities"] & NEARSIGHTED)
+	if (occ["sdisabilities"] & NEARSIGHTED)
 		dat += text("<font color='red'>Retinal misalignment detected.</font><BR>")
 	return dat
 
@@ -277,7 +277,7 @@
 	set desc = "Expend chemicals constantly in order to mitigate brute damage done to your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.brute_resist()
 
@@ -288,17 +288,17 @@
 
 	var/damage_reduction = 0.25
 
-	if(!check_can_do(0))
+	if (!check_can_do(0))
 		return
 
-	if(channeling && !channeling_brute_resist)
+	if (channeling && !channeling_brute_resist)
 		to_chat(src, "<span class='warning'>You can't do this while your focus is directed elsewhere.</span>")
 		return
-	else if(channeling)
+	else if (channeling)
 		to_chat(src, "You cease your efforts to elevate your host's physical damage resistance.")
 		channeling = 0
 		channeling_brute_resist = 0
-	else if(chemicals < 5)
+	else if (chemicals < 5)
 		to_chat(src, "<span class='warning'>You don't have enough chemicals stored to do this.</span>")
 		return
 	else
@@ -308,7 +308,7 @@
 		host.brute_damage_modifier -= damage_reduction
 		spawn()
 			var/time_spent_channeling = 0
-			while(chemicals >=5 && channeling && channeling_brute_resist)
+			while (chemicals >=5 && channeling && channeling_brute_resist)
 				chemicals -= 5
 				time_spent_channeling++
 				sleep(10)
@@ -316,7 +316,7 @@
 			channeling = 0
 			channeling_brute_resist = 0
 			var/showmessage = 0
-			if(chemicals < 5)
+			if (chemicals < 5)
 				to_chat(src, "<span class='warning'>You lose consciousness as the last of your chemicals are expended.</span>")
 			else
 				showmessage = 1
@@ -328,7 +328,7 @@
 	set desc = "Expend chemicals constantly in order to mitigate burn damage done to your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.burn_resist()
 
@@ -339,17 +339,17 @@
 
 	var/damage_reduction = 0.25
 
-	if(!check_can_do(0))
+	if (!check_can_do(0))
 		return
 
-	if(channeling && !channeling_burn_resist)
+	if (channeling && !channeling_burn_resist)
 		to_chat(src, "<span class='warning'>You can't do this while your focus is directed elsewhere.</span>")
 		return
-	else if(channeling)
+	else if (channeling)
 		to_chat(src, "You cease your efforts to elevate your host's physical damage resistance.")
 		channeling = 0
 		channeling_burn_resist = 0
-	else if(chemicals < 5)
+	else if (chemicals < 5)
 		to_chat(src, "<span class='warning'>You don't have enough chemicals stored to do this.</span>")
 		return
 	else
@@ -359,7 +359,7 @@
 		host.burn_damage_modifier -= damage_reduction
 		spawn()
 			var/time_spent_channeling = 0
-			while(chemicals >=5 && channeling && channeling_burn_resist)
+			while (chemicals >=5 && channeling && channeling_burn_resist)
 				chemicals -= 5
 				time_spent_channeling++
 				sleep(10)
@@ -367,7 +367,7 @@
 			channeling = 0
 			channeling_burn_resist = 0
 			var/showmessage = 0
-			if(chemicals < 5)
+			if (chemicals < 5)
 				to_chat(src, "<span class='warning'>You lose consciousness as the last of your chemicals are expended.</span>")
 			else
 				showmessage = 1

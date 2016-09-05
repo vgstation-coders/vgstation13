@@ -73,8 +73,8 @@ The required techs are the following:
 //Input: A list of /datum/tech; Output: The new reliabilty.
 /datum/design/proc/CalcReliability(var/list/temp_techs)
 	var/new_reliability = reliability_mod + reliability_base
-	for(var/datum/tech/T in temp_techs)
-		if(T.id in req_tech)
+	for (var/datum/tech/T in temp_techs)
+		if (T.id in req_tech)
 			new_reliability += T.level
 	new_reliability = Clamp(new_reliability, reliability_base, 100)
 	reliability = new_reliability
@@ -86,40 +86,40 @@ The required techs are the following:
 //material_strict will check the atom's materials against the design's materials if set to 1, but won't for machines
 //If you want to check machine materials strictly as well, set material_strict to 2
 proc/FindDesign(var/atom/part, material_strict = 0)
-	if(ispath(part))
+	if (ispath(part))
 		return FindTypeDesign(part)
 
-	if(!istype(part))
+	if (!istype(part))
 		return
 
-	for(var/datum/design/D in design_list)
-		if(D.build_path == part.type)
-			if(material_strict && ((istype(part, /obj/machinery) && material_strict == 2) || (!istype(part, /obj/machinery) && material_strict)) && istype(part.materials, /list)) //if we care about materials, we have to check candidates
+	for (var/datum/design/D in design_list)
+		if (D.build_path == part.type)
+			if (material_strict && ((istype(part, /obj/machinery) && material_strict == 2) || (!istype(part, /obj/machinery) && material_strict)) && istype(part.materials, /list)) //if we care about materials, we have to check candidates
 				var/all_correct = 1
 
-				for(var/matID in D.materials)
-					if(copytext(matID, 1, 2) == "$" && (part.materials.storage[matID] != D.materials[matID])) //if it's a materal, but it doesn't match the atom's values
+				for (var/matID in D.materials)
+					if (copytext(matID, 1, 2) == "$" && (part.materials.storage[matID] != D.materials[matID])) //if it's a materal, but it doesn't match the atom's values
 						all_correct = 0
 						break
-				if(all_correct)
+				if (all_correct)
 					return D
 			else
 				return D
 
 proc/FindTypeDesign(var/part_path)
-	for(var/datum/design/D in design_list)
-		if(D.build_path == part_path)
+	for (var/datum/design/D in design_list)
+		if (D.build_path == part_path)
 			return D
 
 //Acts as FindDesign, but makes a new design if it doesn't find one
 //Doesn't take types for the design creation, so don't rely on it for that
 proc/getScanDesign(var/obj/O)
 	var/datum/design/D
-	if(O.materials)
+	if (O.materials)
 		D = FindDesign(O, 1) //The 1 means we check strict materials - if we don't have materials, we just check the type
 	else
 		D = FindDesign(O)
-	if(D)
+	if (D)
 		return D
 
 	else
@@ -128,7 +128,7 @@ proc/getScanDesign(var/obj/O)
 //sum of the required tech of a design
 /datum/design/proc/TechTotal()
 	var/total = 0
-	for(var/tech in src.req_tech)
+	for (var/tech in src.req_tech)
 		total += src.req_tech[tech]
 	return total
 
@@ -136,7 +136,7 @@ proc/getScanDesign(var/obj/O)
 //do not confuse this with Total_Materials. That gets the machine's materials, this gets design materials
 /datum/design/proc/MatTotal()
 	var/total = 0
-	for(var/matID in src.materials)
+	for (var/matID in src.materials)
 		total += src.materials[matID]
 	//log_admin("[total] for [part.name]")
 	return total

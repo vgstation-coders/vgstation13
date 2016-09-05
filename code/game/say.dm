@@ -2,14 +2,14 @@ var/global/nextDecTalkDelay = 5 //seconds
 var/global/lastDecTalkUse = 0
 
 /proc/dectalk(msg)
-	if(!msg)
+	if (!msg)
 		return 0
 	if (world.timeofday > (lastDecTalkUse + (nextDecTalkDelay * 10)))
 		lastDecTalkUse = world.timeofday
 		msg = copytext(msg, 1, 2000)
 		var/res[] = world.Export("[config.tts_server]?tts=[url_encode(msg)]")
 		//var/res[] = world.Export("http://localhost:1203/?tts=[url_encode(msg)]") //change server
-		if(!res || !res["CONTENT"])
+		if (!res || !res["CONTENT"])
 			return 0
 
 		var/audio = file2text(res["CONTENT"])
@@ -51,9 +51,9 @@ var/list/freqtoname = list(
 )
 
 /atom/movable/proc/say(message, var/datum/language/speaking, var/atom/movable/radio=src) //so we can force nonmobs to speak a certain language
-	if(!can_speak())
+	if (!can_speak())
 		return
-	if(message == "" || !message)
+	if (message == "" || !message)
 		return
 	var/datum/speech/speech = create_speech(message, null, radio)
 	speech.language=speaking
@@ -68,14 +68,14 @@ var/list/freqtoname = list(
 
 /atom/movable/proc/send_speech(var/datum/speech/speech, var/range=7)
 	say_testing(src, "/atom/movable/proc/send_speech() start, msg = [speech.message]; message_range = [range]; language = [speech.language ? speech.language.name : "None"];")
-	if(isnull(range))
+	if (isnull(range))
 		range = 7
 	var/rendered = render_speech(speech)
-	for(var/atom/movable/AM in get_hearers_in_view(range, src))
+	for (var/atom/movable/AM in get_hearers_in_view(range, src))
 		AM.Hear(speech, rendered)
 
 /atom/movable/proc/create_speech(var/message, var/frequency=0, var/atom/movable/transmitter=null)
-	if(!transmitter)
+	if (!transmitter)
 		transmitter=GetDefaultRadio()
 	var/datum/speech/speech = getFromPool(/datum/speech)
 	speech.message = message
@@ -97,21 +97,21 @@ var/list/freqtoname = list(
 	say_testing(src, "render_speech() - Freq: [speech.frequency], radio=\ref[speech.radio]")
 	var/freqpart = ""
 	var/radioicon = ""
-	if(speech.frequency)
-		if(speech.radio)
+	if (speech.frequency)
+		if (speech.radio)
 			radioicon = "[bicon(speech.radio)]"
 		freqpart = " [radioicon]\[[get_radio_name(speech.frequency)]\]"
 		speech.wrapper_classes.Add(get_radio_span(speech.frequency))
 	var/pooled=0
 	var/datum/speech/filtered_speech
-	if(speech.language)
+	if (speech.language)
 		filtered_speech = speech.language.filter_speech(speech.clone())
 	else
 		filtered_speech = speech
 
 	var/atom/movable/source = speech.speaker.GetSource()
 	say_testing(speech.speaker, "Checking if [src]([type]) understands [source]([source.type])")
-	if(!say_understands(source, speech.language))
+	if (!say_understands(source, speech.language))
 		say_testing(speech.speaker," We don't understand this fuck, adding stars().")
 		filtered_speech=filtered_speech.scramble()
 		pooled=1
@@ -136,7 +136,7 @@ var/list/freqtoname = list(
 	*/
 	. = "<span class='[filtered_speech.render_wrapper_classes()]'><span class='name'>[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]</span> [filtered_speech.render_message()]</span>"
 	say_testing(src, html_encode(.))
-	if(pooled)
+	if (pooled)
 		returnToPool(filtered_speech)
 
 
@@ -150,12 +150,12 @@ var/list/freqtoname = list(
 	return ""
 
 /atom/movable/proc/render_job(var/datum/speech/speech)
-	if(speech.job)
+	if (speech.job)
 		return " ([speech.job])"
 	return ""
 
 /atom/movable/proc/say_quote(var/text)
-	if(!text)
+	if (!text)
 		return "says, \"...\""	//not the best solution, but it will stop a large number of runtimes. The cause is somewhere in the Tcomms code
 	var/ending = copytext(text, length(text))
 	if (ending == "?")
@@ -169,10 +169,10 @@ var/list/freqtoname = list(
 var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost")
 /atom/movable/proc/render_lang(var/datum/speech/speech)
 	var/raw_message=speech.message
-	if(speech.language)
+	if (speech.language)
 		//var/overRadio = (istype(speech.speaker, /obj/item/device/radio) || istype(speech.speaker.GetSource(), /obj/item/device/radio))
 		var/atom/movable/AM = speech.speaker.GetSource()
-		if(say_understands((istype(AM) ? AM : speech.speaker),speech.language))
+		if (say_understands((istype(AM) ? AM : speech.speaker),speech.language))
 			return render_speech(speech)
 			//if(overRadio)
 			//	return speech.language.format_message_radio(speech.speaker, raw_message)
@@ -190,7 +190,7 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 		var/rendered = raw_message
 
 		say_testing(speech.speaker, "Checking if [src]([type]) understands [source]([source.type])")
-		if(!say_understands(source))
+		if (!say_understands(source))
 			say_testing(speech.speaker," We don't understand this fuck, adding stars().")
 			rendered = stars(rendered)
 		else
@@ -198,23 +198,23 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 
 		rendered="[speech.lquote][html_encode(rendered)][speech.rquote]"
 
-		if(AM)
+		if (AM)
 			return AM.say_quote(rendered)
 		else
 			return speech.speaker.say_quote(rendered)
-	/*else if(message_langs & SPOOKY)
+	/*else if (message_langs & SPOOKY)
 		return "[bicon(ghostimg)] <span class='sinister'>Too spooky...</span> [bicon(ghostimg)]"
-	else if(message_langs & MONKEY)
+	else if (message_langs & MONKEY)
 		return "chimpers."
-	else if(message_langs & ALIEN)
+	else if (message_langs & ALIEN)
 		return "hisses."
-	else if(message_langs & ROBOT)
+	else if (message_langs & ROBOT)
 		return "beeps rapidly."
-	else if(message_langs & SIMPLE_ANIMAL)
+	else if (message_langs & SIMPLE_ANIMAL)
 		var/mob/living/simple_animal/SA = speaker.GetSource()
-		if(!SA || !istype(SA))
+		if (!SA || !istype(SA))
 			SA = speaker
-		if(istype(SA))
+		if (istype(SA))
 			return "[pick(SA.speak_emote)]."
 		else
 			return "makes a strange sound."
@@ -224,13 +224,13 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 
 /proc/get_radio_span(freq)
 	var/returntext = freqtospan["[freq]"]
-	if(returntext)
+	if (returntext)
 		return returntext
 	return "radio"
 
 /proc/get_radio_name(freq)
 	var/returntext = radiochannelsreverse["[freq]"]
-	if(returntext)
+	if (returntext)
 		return returntext
 	return "[copytext("[freq]", 1, 4)].[copytext("[freq]", 4, 5)]"
 
@@ -241,7 +241,7 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 /proc/message_spans(list/spans)
 	var/output = "<SPAN CLASS='"
 
-	for(var/span in spans)
+	for (var/span in spans)
 		output = "[output][span] "
 
 	output = "[output]'>"
@@ -313,9 +313,9 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 	..("job", "faketrack", "source", "radio")
 
 proc/handle_render(var/mob,var/message,var/speaker)
-	if(istype(mob, /mob/new_player))
+	if (istype(mob, /mob/new_player))
 		return //One extra layer of sanity
-	if(istype(mob,/mob/dead/observer))
+	if (istype(mob,/mob/dead/observer))
 		var/reference = "<a href='?src=\ref[mob];follow=\ref[speaker]'>(Follow)</a> "
 		message = reference+message
 		to_chat(mob, message)
@@ -325,48 +325,48 @@ proc/handle_render(var/mob,var/message,var/speaker)
 var/global/resethearers = 0
 
 /proc/sethearing()
-	for(var/mob/virtualhearer/VH in virtualhearers)
+	for (var/mob/virtualhearer/VH in virtualhearers)
 		VH.loc = get_turf(VH.attached)
 	resethearers = world.time + 2
 
 // Returns a list of hearers in range of R from source. Used in saycode.
 /proc/get_hearers_in_view(var/R, var/atom/source)
-	if(world.time>resethearers)
+	if (world.time>resethearers)
 		sethearing()
 
 	var/turf/T = get_turf(source)
 	. = new/list()
 
-	if(!T)
+	if (!T)
 		return
 
-	for(var/mob/virtualhearer/VH in hearers(R, T))
+	for (var/mob/virtualhearer/VH in hearers(R, T))
 		. += VH.attached
 
 /**
  * Returns a list of mobs who can hear any of the radios given in @radios.
  */
 /proc/get_mobs_in_radio_ranges(list/obj/item/device/radio/radios)
-	if(world.time>resethearers)
+	if (world.time>resethearers)
 		sethearing()
 
 	. = new/list()
 
-	for(var/obj/item/device/radio/radio in radios)
-		if(radio)
+	for (var/obj/item/device/radio/radio in radios)
+		if (radio)
 			var/turf/turf = get_turf(radio)
 
-			if(turf)
-				for(var/mob/virtualhearer/VH in hearers(radio.canhear_range, turf))
+			if (turf)
+				for (var/mob/virtualhearer/VH in hearers(radio.canhear_range, turf))
 					. |= VH.attached
 
 /* Unused
 /proc/get_movables_in_radio_ranges(var/list/obj/item/device/radio/radios)
 	. = new/list()
 	// Returns a list of mobs who can hear any of the radios given in @radios
-	for(var/i = 1; i <= radios.len; i++)
+	for (var/i = 1; i <= radios.len; i++)
 		var/obj/item/device/radio/R = radios[i]
-		if(R)
+		if (R)
 			. |= get_hearers_in_view(R)
 	. |= get_mobs_in_radio_ranges(radios)
 
@@ -405,32 +405,32 @@ Even further legacy saycode
 	var/list/processed_list = list()
 	var/list/found_mobs = list()
 
-	while(processing_list.len)
+	while (processing_list.len)
 
 		var/atom/A = processing_list[1]
 		var/passed = 0
 
-		if(ismob(A))
+		if (ismob(A))
 			var/mob/A_tmp = A
 			passed=1
 
-			if(client_check && !A_tmp.client)
+			if (client_check && !A_tmp.client)
 				passed=0
 
-			if(sight_check && !isInSight(A_tmp, O))
+			if (sight_check && !isInSight(A_tmp, O))
 				passed=0
 
-		else if(include_radio && istype(A, /obj/item/device/radio))
+		else if (include_radio && istype(A, /obj/item/device/radio))
 			passed=1
 
-			if(sight_check && !isInSight(A, O))
+			if (sight_check && !isInSight(A, O))
 				passed=0
 
-		if(passed)
+		if (passed)
 			found_mobs |= A
 
-		for(var/atom/B in A)
-			if(!processed_list[B])
+		for (var/atom/B in A)
+			if (!processed_list[B])
 				processing_list |= B
 
 		processing_list.Cut(1, 2)

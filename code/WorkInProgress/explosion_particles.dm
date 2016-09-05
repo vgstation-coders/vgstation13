@@ -23,18 +23,18 @@
 
 /datum/effect/system/expl_particles/proc/set_up(n = 10, loca)
 	number = n
-	if(istype(loca, /turf/))
+	if (istype(loca, /turf/))
 		location = loca
 	else
 		location = get_turf(loca)
 
 /datum/effect/system/expl_particles/proc/start()
 	var/i = 0
-	for(i=0, i<src.number, i++)
+	for (i=0, i<src.number, i++)
 		spawn(0)
 			var/obj/effect/expl_particles/expl = new /obj/effect/expl_particles(src.location)
 			var/direct = pick(alldirs)
-			for(i=0, i<pick(1;25,2;50,3,4;200), i++)
+			for (i=0, i<pick(1;25,2;50,3,4;200), i++)
 				sleep(1)
 				step(expl,direct)
 
@@ -58,7 +58,7 @@
 	var/turf/location
 
 /datum/effect/system/explosion/proc/set_up(loca)
-	if(istype(loca, /turf/))
+	if (istype(loca, /turf/))
 		location = loca
 	else
 		location = get_turf(loca)
@@ -99,7 +99,7 @@
 	var/pixel_y = 0
 
 /datum/effect/system/small_explosion/proc/set_up(loca,var/ex_iconstate = "explosion_small", var/pX = 0, var/pY = 0)
-	if(istype(loca, /turf/))
+	if (istype(loca, /turf/))
 		location = loca
 	else
 		location = get_turf(loca)

@@ -23,14 +23,14 @@
 /obj/item/weapon/shard/New()
 
 	src.icon_state = pick("large", "medium", "small")
-	switch(src.icon_state)
-		if("small")
+	switch (src.icon_state)
+		if ("small")
 			src.pixel_x = rand(-12, 12) * PIXEL_MULTIPLIER
 			src.pixel_y = rand(-12, 12) * PIXEL_MULTIPLIER
-		if("medium")
+		if ("medium")
 			src.pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
 			src.pixel_y = rand(-8, 8) * PIXEL_MULTIPLIER
-		if("large")
+		if ("large")
 			src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
 			src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 		else
@@ -91,7 +91,7 @@
 /obj/item/weapon/shard/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
-		if(WT.remove_fuel(0, user))
+		if (WT.remove_fuel(0, user))
 			var/obj/item/stack/sheet/glass/new_item = new glass()
 			new_item.forceMove(user.loc) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
 			returnToPool(src)
@@ -99,27 +99,27 @@
 	return ..()
 
 /obj/item/weapon/shard/Crossed(AM as mob|obj)
-	if(isliving(AM))
+	if (isliving(AM))
 		var/mob/living/M = AM
-		if(M.locked_to) //Mob is locked to something, so it's not actually stepping on the glass
+		if (M.locked_to) //Mob is locked to something, so it's not actually stepping on the glass
 			playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1) //Make noise
 			return //Stop here
-		if(M.flying) //We don't check for lying because it's intended to hurt
+		if (M.flying) //We don't check for lying because it's intended to hurt
 			return
 		else //Stepping on the glass
 			to_chat(M, "<span class='danger'>You step in the broken glass!</span>")
 			playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
-			if(ishuman(M))
+			if (ishuman(M))
 				var/mob/living/carbon/human/H = M
-				if(!isgolem(H))
-					if(!H.check_body_part_coverage(FEET))
+				if (!isgolem(H))
+					if (!H.check_body_part_coverage(FEET))
 						var/datum/organ/external/affecting = H.get_organ(pick(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT))
-						if(affecting.status & (ORGAN_ROBOT|ORGAN_PEG))
+						if (affecting.status & (ORGAN_ROBOT|ORGAN_PEG))
 							return
 
-						if(!(H.species && (H.species.flags & NO_PAIN)))
+						if (!(H.species && (H.species.flags & NO_PAIN)))
 							H.Weaken(3)
-						if(affecting.take_damage(5, 0))
+						if (affecting.take_damage(5, 0))
 							H.UpdateDamageIcon()
 						H.updatehealth()
 	..()

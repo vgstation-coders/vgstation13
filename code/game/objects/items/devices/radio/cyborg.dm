@@ -17,18 +17,18 @@
 	if (!( isscrewdriver(W) || (istype(W, /obj/item/device/encryptionkey/ ))))
 		return
 
-	if(isscrewdriver(W))
-		if(keyslot)
+	if (isscrewdriver(W))
+		if (keyslot)
 
 
-			for(var/ch_name in channels)
+			for (var/ch_name in channels)
 				radio_controller.remove_object(src, radiochannels[ch_name])
 				secure_radio_connections[ch_name] = null
 
 
-			if(keyslot)
+			if (keyslot)
 				var/turf/T = get_turf(user)
-				if(T)
+				if (T)
 					keyslot.forceMove(T)
 					keyslot = null
 
@@ -42,7 +42,7 @@
 		if (!isnull(keyslot))
 			to_chat(user, "<SPAN CLASS='notice'>The radio can't hold another key!</SPAN>")
 		else
-			if(user.drop_item(W, src))
+			if (user.drop_item(W, src))
 				insert_key(W)
 
 	return
@@ -51,21 +51,21 @@
 	src.channels = list()
 	src.syndie = 0
 
-	if(keyslot)
-		for(var/ch_name in keyslot.channels)
-			if(ch_name in src.channels)
+	if (keyslot)
+		for (var/ch_name in keyslot.channels)
+			if (ch_name in src.channels)
 				continue
 			src.channels += ch_name
 			src.channels[ch_name] = keyslot.channels[ch_name]
 
-		if(keyslot.syndie)
+		if (keyslot.syndie)
 			src.syndie = 1
 
 
 	for (var/ch_name in channels)
-		if(!radio_controller)
+		if (!radio_controller)
 			sleep(30) // Waiting for the radio_controller to be created.
-		if(!radio_controller)
+		if (!radio_controller)
 			src.name = "broken radio"
 			return
 
@@ -74,11 +74,11 @@
 	return
 
 /obj/item/device/radio/borg/Topic(href, href_list)
-	if(usr.stat || !on)
+	if (usr.stat || !on)
 		return
 	if (href_list["mode"])
 		subspace_transmission = !subspace_transmission
-		if(!subspace_transmission)//Simple as fuck, clears the channel list to prevent talking/listening over them if subspace transmission is disabled
+		if (!subspace_transmission)//Simple as fuck, clears the channel list to prevent talking/listening over them if subspace transmission is disabled
 			channels = list()
 		else
 			recalculateChannels()
@@ -86,7 +86,7 @@
 	..()
 
 /obj/item/device/radio/borg/interact(mob/user as mob)
-	if(!on)
+	if (!on)
 		return
 
 	var/dat = "<html><head><title>[src]</title></head><body><TT>"
@@ -101,7 +101,7 @@
 				<A href='byond://?src=\ref[src];mode=1'>Toggle Broadcast Mode</A><BR>
 				"}
 
-	if(subspace_transmission)//Don't even bother if subspace isn't turned on
+	if (subspace_transmission)//Don't even bother if subspace isn't turned on
 		for (var/ch_name in channels)
 			dat+=text_sec_channel(ch_name, channels[ch_name])
 	dat+={"[text_wires()]</TT></body></html>"}

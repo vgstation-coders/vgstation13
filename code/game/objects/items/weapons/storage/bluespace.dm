@@ -30,13 +30,13 @@
 	qdel(user)
 
 /obj/item/weapon/storage/backpack/holding/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(W == src)
+	if (W == src)
 		return // HOLY FUCKING SHIT WHY STORAGE CODE, WHY - pomf
 	var/obj/item/weapon/storage/backpack/holding/H = locate(/obj/item/weapon/storage/backpack/holding) in W
-	if(H)
+	if (H)
 		singulocreate(H, user)
 		return
-	if(istype(W, /obj/item/weapon/storage/backpack/holding))
+	if (istype(W, /obj/item/weapon/storage/backpack/holding))
 		singulocreate(W, user)
 		return
 	. = ..()
@@ -57,7 +57,7 @@
 /obj/item/weapon/storage/backpack/holding/singularity_act(var/current_size,var/obj/machinery/singularity/S)
 	var/dist = max(current_size, 1)
 	empulse(S.loc,(dist*2),(dist*4))
-	if(S.current_size <= 3)
+	if (S.current_size <= 3)
 		investigation_log(I_SINGULO, "has been destroyed by [src].")
 		qdel(S)
 	else

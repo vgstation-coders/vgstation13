@@ -24,10 +24,10 @@
 	icon_state=subtype
 
 	// Add a panel image if the MoMMI is open
-	if(opened) // TODO:  Open the front "head" panel
-		if(wiresexposed)
+	if (opened) // TODO:  Open the front "head" panel
+		if (wiresexposed)
 			overlays += image(icon = icon, icon_state = "ov-openpanel +w")
-		else if(cell)
+		else if (cell)
 			overlays += image(icon = icon, icon_state = "ov-openpanel +c")
 		else
 			overlays += image(icon = icon, icon_state = "ov-openpanel -c")
@@ -36,7 +36,7 @@
 	// Put our eyes just on top of the lighting, so it looks emissive in maint tunnels.
 	var/overlay_layer = ABOVE_LIGHTING_LAYER
 	var/overlay_plane = LIGHTING_PLANE
-	if(plane == HIDING_MOB_PLANE)	// ie it's hiding
+	if (plane == HIDING_MOB_PLANE)	// ie it's hiding
 		overlay_plane = FLOAT_PLANE
 		overlay_layer = FLOAT_LAYER
 
@@ -44,29 +44,29 @@
 	eyes.plane = overlay_plane
 	overlays += eyes
 
-	if(anchored)
+	if (anchored)
 		overlays += image(icon,"[subtype]-park",overlay_layer)
 
 	// Add any hats to the icon. Bloodspatter can also be in overlays_hats
-	for(var/image/I in overlays_hats)
+	for (var/image/I in overlays_hats)
 		// Adjust the position of the hat based on what subtype we are
 		// These numbers can be tweaked to move where the hats appear on the MoMMIs' bodies
-		switch(subtype)
+		switch (subtype)
 			// Sad note: only the hat's overall position can be modified, and we cannot change the hat's position per each direction separately
 			// The hats are currently centered on the MoMMIs
-			if("mommi")
+			if ("mommi")
 				I.pixel_y = -8 * PIXEL_MULTIPLIER
-			if("hovermommi")
+			if ("hovermommi")
 				I.pixel_y = -5 * PIXEL_MULTIPLIER
-			if("keeper")
+			if ("keeper")
 				I.pixel_y = -7 * PIXEL_MULTIPLIER
-			if("repairbot")
+			if ("repairbot")
 				I.pixel_y = -14 * PIXEL_MULTIPLIER
-			if("replicator")
+			if ("replicator")
 				I.pixel_y = -10 * PIXEL_MULTIPLIER
-			if("mommiprime")
+			if ("mommiprime")
 				I.pixel_y = -7 * PIXEL_MULTIPLIER
-			if("scout")
+			if ("scout")
 				I.pixel_y = -15 * PIXEL_MULTIPLIER
 		// Add the adjusted hat to our overlays
 		overlays += I
@@ -74,14 +74,14 @@
 // Update the MoMMI's hat inventory icons by adding all icons to overlays_hats
 /mob/living/silicon/robot/mommi/update_inv_head(var/update_icons=1)
 	// If the MoMMI is wearing a hat
-	if(head_state)
+	if (head_state)
 		var/obj/item/clothing/head = head_state
 		var/image/overhats
 		// Create the hat icon
 		overhats = image("icon" = ((head.icon_override) ? head.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[head.icon_state]")
 
 		// If the hat has blood on it
-		if(head.blood_DNA && head.blood_DNA.len)
+		if (head.blood_DNA && head.blood_DNA.len)
 			// Add a blood image to the hat
 			var/image/bloodsies = image("icon" = 'icons/effects/blood.dmi', "icon_state" = "helmetblood")
 			bloodsies.color = head.blood_color
@@ -92,5 +92,5 @@
 	else // Clear the hat array
 		overlays_hats[MOMMI_HEAD_LAYER]	= null
 	// Update the MoMMI's icons
-	if(update_icons)
+	if (update_icons)
 		updateicon()

@@ -22,7 +22,7 @@ var/const/AALARM_WIRE_AALARM = 16
 
 /datum/wires/alarm/CanUse(var/mob/living/L)
 	var/obj/machinery/alarm/A = holder
-	if(A.wiresexposed)
+	if (A.wiresexposed)
 		return 1
 	return 0
 
@@ -33,13 +33,13 @@ var/const/AALARM_WIRE_AALARM = 16
 
 /datum/wires/alarm/UpdateCut(var/index, var/mended)
 	var/obj/machinery/alarm/A = holder
-	switch(index)
-		if(AALARM_WIRE_IDSCAN)
-			if(!mended)
+	switch (index)
+		if (AALARM_WIRE_IDSCAN)
+			if (!mended)
 				A.locked = 1
 //				to_chat(world, "Idscan wire cut")
 
-		if(AALARM_WIRE_POWER)
+		if (AALARM_WIRE_POWER)
 			A.shock(usr, 50)
 			A.shorted = !mended
 			A.update_icon()
@@ -50,27 +50,27 @@ var/const/AALARM_WIRE_AALARM = 16
 				A.aidisabled = mended
 //				to_chat(world, "AI Control Wire Cut")
 
-		if(AALARM_WIRE_SYPHON)
-			if(!mended)
+		if (AALARM_WIRE_SYPHON)
+			if (!mended)
 				A.mode = 3 // AALARM_MODE_PANIC
 				A.apply_mode()
 //				to_chat(world, "Syphon Wire Cut")
 
-		if(AALARM_WIRE_AALARM)
+		if (AALARM_WIRE_AALARM)
 			//if (A.alarm_area.atmosalert(2))
 			//	A.post_alert(2)
 			A.update_icon()
 
 /datum/wires/alarm/UpdatePulsed(var/index)
 	var/obj/machinery/alarm/A = holder
-	switch(index)
-		if(AALARM_WIRE_IDSCAN)
+	switch (index)
+		if (AALARM_WIRE_IDSCAN)
 			A.locked = !A.locked
 //			to_chat(world, "Idscan wire pulsed")
 
 		if (AALARM_WIRE_POWER)
 //			to_chat(world, "Power wire pulsed")
-			if(A.shorted == 0)
+			if (A.shorted == 0)
 				A.shorted = 1
 				A.update_icon()
 
@@ -89,15 +89,15 @@ var/const/AALARM_WIRE_AALARM = 16
 				if (A.aidisabled == 1)
 					A.aidisabled = 0
 
-		if(AALARM_WIRE_SYPHON)
+		if (AALARM_WIRE_SYPHON)
 //			to_chat(world, "Syphon wire pulsed")
-			if(A.mode == 1) // AALARM_MODE_SCRUB
+			if (A.mode == 1) // AALARM_MODE_SCRUB
 				A.mode = 3 // AALARM_MODE_PANIC
 			else
 				A.mode = 1 // AALARM_MODE_SCRUB
 			A.apply_mode()
 
-		if(AALARM_WIRE_AALARM)
+		if (AALARM_WIRE_AALARM)
 //			to_chat(world, "Aalarm wire pulsed")
 			//if (A.alarm_area.atmosalert(0))
 			//	A.post_alert(0)

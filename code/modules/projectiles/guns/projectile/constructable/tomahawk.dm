@@ -10,21 +10,21 @@
 
 /obj/item/weapon/hatchet/tomahawk/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if(istype(W, /obj/item/weapon/surgicaldrill))
+	if (istype(W, /obj/item/weapon/surgicaldrill))
 		to_chat(user, "You begin drilling a hole through the handle of \the [src].")
 		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
-		if(do_after(user, src, 30))
+		if (do_after(user, src, 30))
 			to_chat(user, "You drill a hole through the handle of \the [src].")
-			if(src.loc == user)
+			if (src.loc == user)
 				user.drop_item(src, force_drop = 1)
-				if(ismetal)
+				if (ismetal)
 					var/obj/item/weapon/hatchet/tomahawk/metal/drilled/I = new (get_turf(user))
 					user.put_in_hands(I)
 				else
 					var/obj/item/weapon/hatchet/tomahawk/drilled/I = new (get_turf(user))
 					user.put_in_hands(I)
 			else
-				if(ismetal)
+				if (ismetal)
 					new /obj/item/weapon/hatchet/tomahawk/metal/drilled(get_turf(src.loc))
 				else
 					new /obj/item/weapon/hatchet/tomahawk/drilled(get_turf(src.loc))
@@ -36,43 +36,43 @@
 	return parent_return //Originally returned ..() itself, but I couldn't do that if I wanted the attack to appear before the break in the chat logs.
 
 /obj/item/weapon/hatchet/tomahawk/proc/degrade(mob/user)
-	if(ismetal)
+	if (ismetal)
 		return
 	var/deg_chance = 0
-	switch(w_condition)
-		if(1)
-			if(rand(1,100) <=20)
+	switch (w_condition)
+		if (1)
+			if (rand(1,100) <=20)
 				deg_chance = 1
-		if(2)
-			if(rand(1,100) <=30)
+		if (2)
+			if (rand(1,100) <=30)
 				deg_chance = 1
-		if(3)
-			if(rand(1,100) <=40)
+		if (3)
+			if (rand(1,100) <=40)
 				deg_chance = 1
-		if(4)
-			if(rand(1,100) <=50)
+		if (4)
+			if (rand(1,100) <=50)
 				deg_chance = 1
-		if(5)
-			if(rand(1,100) <=60)
+		if (5)
+			if (rand(1,100) <=60)
 				deg_chance = 1
 
-	if(deg_chance)
-		if(w_condition == 5)
+	if (deg_chance)
+		if (w_condition == 5)
 			shatter(user)
 		else
 			w_condition++
 	return
 
 /obj/item/weapon/hatchet/tomahawk/proc/shatter(mob/user)
-	if(ismetal)
+	if (ismetal)
 		return
 	to_chat(user, "<span class='warning'>\The [src]'s blade shatters!</span>")
 	playsound(get_turf(user), "shatter", 50, 1)
-	if(src.loc == user)
+	if (src.loc == user)
 		user.drop_item(src, force_drop = 1)
-		if(istype(src, /obj/item/weapon/hatchet/tomahawk/pipe))
+		if (istype(src, /obj/item/weapon/hatchet/tomahawk/pipe))
 			var/obj/item/weapon/hatchet/tomahawk/pipe/P = src
-			if(P.current_blunt)
+			if (P.current_blunt)
 				to_chat(user, "The crushed [P.blunt_name] falls out of \the [src].")
 			var/obj/item/weapon/broken_pipe_tomahawk/I = new (get_turf(user))
 			user.put_in_hands(I)
@@ -80,7 +80,7 @@
 			var/obj/item/weapon/wrench/I = new (get_turf(user))
 			user.put_in_hands(I)
 	else
-		if(istype(src, /obj/item/weapon/hatchet/tomahawk/pipe))
+		if (istype(src, /obj/item/weapon/hatchet/tomahawk/pipe))
 			new /obj/item/weapon/broken_pipe_tomahawk(get_turf(src.loc))
 		else
 			new /obj/item/weapon/wrench(get_turf(src.loc))
@@ -88,18 +88,18 @@
 
 /obj/item/weapon/hatchet/tomahawk/examine(mob/user)
 	..()
-	if(ismetal)
+	if (ismetal)
 		return
-	switch(w_condition)
-		if(1)
+	switch (w_condition)
+		if (1)
 			to_chat(user, "<span class='info'>\The [src] is in good condition.</span>")
-		if(2)
+		if (2)
 			to_chat(user, "<span class='info'>\The [src] is in okay condition.</span>")
-		if(3)
+		if (3)
 			to_chat(user, "<span class='info'>\The [src] is in poor condition.</span>")
-		if(4)
+		if (4)
 			to_chat(user, "<span class='info'>\The [src] is in terrible condition.</span>")
-		if(5)
+		if (5)
 			to_chat(user, "<span class='warning'>\The [src] looks like it could fall apart at any moment!</span>")
 
 /obj/item/weapon/hatchet/tomahawk/drilled
@@ -110,9 +110,9 @@
 
 /obj/item/weapon/hatchet/tomahawk/drilled/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if(istype(W, /obj/item/ashtray))
+	if (istype(W, /obj/item/ashtray))
 		to_chat(user, "You affix \the [W] to the end of \the [src].")
-		if(src.loc == user)
+		if (src.loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/hatchet/tomahawk/pipe/I = new (get_turf(user))
 			user.put_in_hands(I)
@@ -134,9 +134,9 @@
 
 /obj/item/weapon/hatchet/tomahawk/metal/drilled/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if(istype(W, /obj/item/ashtray))
+	if (istype(W, /obj/item/ashtray))
 		to_chat(user, "You affix \the [W] to the end of \the [src].")
-		if(src.loc == user)
+		if (src.loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/hatchet/tomahawk/pipe/metal/I = new (get_turf(user))
 			user.put_in_hands(I)
@@ -160,24 +160,24 @@
 	slot_flags = SLOT_MASK
 
 /obj/item/weapon/hatchet/tomahawk/pipe/Destroy()
-	if(blunt_hook && current_blunt)
+	if (blunt_hook && current_blunt)
 		var/obj/item/clothing/mask/cigarette/blunt/rolled/B = current_blunt
 		B.on_destroyed.Remove()
-	if(current_blunt)
+	if (current_blunt)
 		qdel(current_blunt)
 		current_blunt = null
 	..()
 
 /obj/item/weapon/hatchet/tomahawk/pipe/examine(mob/user)
 	..()
-	if(current_blunt)
+	if (current_blunt)
 		to_chat(user, "<span class='info'>There is crushed [blunt_name] in the bowl.</span>")
-	if(is_lit)
+	if (is_lit)
 		to_chat(user, "<span class='info'>\The [src] is lit.</span>")
 
 /obj/item/weapon/hatchet/tomahawk/pipe/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown))
-		if(current_blunt)
+	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown))
+		if (current_blunt)
 			to_chat(user, "<span class='notice'>There is already crushed [blunt_name] in the bowl.</span>")
 			return
 		to_chat(user, "<span class='notice'>You crush \the [W] into \the [src].</span>")
@@ -193,9 +193,9 @@
 		qdel(W)
 		verbs += /obj/item/weapon/hatchet/tomahawk/pipe/verb/empty_pipe
 		return
-	if(W.is_hot())
-		if(current_blunt)
-			if(is_lit)
+	if (W.is_hot())
+		if (current_blunt)
+			if (is_lit)
 				to_chat(user, "<span class='notice'>\The [src] is already lit.</span>")
 				return
 			var/obj/item/clothing/mask/cigarette/blunt/rolled/C = current_blunt
@@ -203,7 +203,7 @@
 			C.attackby(W,user)
 			C.update_brightness()
 			set_light(C.brightness_on)
-			if(ismetal)
+			if (ismetal)
 				icon_state = "pipe_tomahawk_metal_on"
 				item_state = "pipe_tomahawk_metal_on"
 			else
@@ -217,16 +217,16 @@
 			to_chat(user, "<span class='notice'>There's nothing in the bowl to light.</span>")
 
 /obj/item/weapon/hatchet/tomahawk/pipe/attack_self(mob/user as mob)
-	if(!is_lit)
+	if (!is_lit)
 		return
-	if(current_blunt)
+	if (current_blunt)
 		var/obj/item/clothing/mask/cigarette/blunt/rolled/C = current_blunt
 		C.lit = 0
 		C.update_brightness()
 		set_light(0)
 		user.visible_message("<span class='notice'>[user] snuffs out \his [src].</span>","<span class='notice'>You snuff out \the [src].</span>")
 		is_lit = 0
-		if(ismetal)
+		if (ismetal)
 			icon_state = "pipe_tomahawk_metal"
 			item_state = "pipe_tomahawk_metal"
 		else
@@ -238,11 +238,11 @@
 	set category = "Object"
 	set src in range(0)
 
-	if(usr.isUnconscious())
+	if (usr.isUnconscious())
 		to_chat(usr, "You can't do that while unconscious.")
 		return
 
-	if(current_blunt)
+	if (current_blunt)
 		to_chat(usr, "<span class='notice'>You empty the crushed [blunt_name] out of \the [src].</span>")
 		not_burned_out = 1
 		qdel(current_blunt)
@@ -253,11 +253,11 @@
 	current_blunt = null
 	set_light(0)
 	is_lit = 0
-	if(ismob(loc) && !not_burned_out)
+	if (ismob(loc) && !not_burned_out)
 		var/mob/living/M = loc
 		to_chat(M, "<span class='notice'>Your [name] goes out.</span>")
 	not_burned_out = 0
-	if(ismetal)
+	if (ismetal)
 		icon_state = "pipe_tomahawk_metal"
 		item_state = "pipe_tomahawk_metal"
 	else
@@ -301,17 +301,17 @@
 
 /obj/item/weapon/broken_pipe_tomahawk/examine(mob/user)
 	..()
-	if(current_blunt)
+	if (current_blunt)
 		to_chat(user, "<span class='info'>There is crushed [blunt_name] in the bowl.</span>")
-	if(is_lit)
+	if (is_lit)
 		to_chat(user, "<span class='info'>\The [src] is lit.</span>")
 
 /obj/item/weapon/broken_pipe_tomahawk/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/shard))
+	if (istype(W, /obj/item/weapon/shard))
 		to_chat(user, "You fasten \the [W] to \the [src].")
-		if(current_blunt)
+		if (current_blunt)
 			to_chat(user, "The crushed [blunt_name] falls out in the process.")
-		if(src.loc == user)
+		if (src.loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/hatchet/tomahawk/pipe/I = new (get_turf(user))
 			user.put_in_hands(I)
@@ -319,8 +319,8 @@
 			new /obj/item/weapon/hatchet/tomahawk/pipe(get_turf(src.loc))
 		qdel(src)
 		qdel(W)
-	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown))
-		if(current_blunt)
+	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown))
+		if (current_blunt)
 			to_chat(user, "<span class='notice'>There is already crushed [blunt_name] in the bowl.</span>")
 			return
 		to_chat(user, "<span class='notice'>You crush \the [W] into \the [src].</span>")
@@ -336,9 +336,9 @@
 		qdel(W)
 		verbs += /obj/item/weapon/broken_pipe_tomahawk/verb/empty_pipe
 		return
-	if(W.is_hot())
-		if(current_blunt)
-			if(is_lit)
+	if (W.is_hot())
+		if (current_blunt)
+			if (is_lit)
 				to_chat(user, "<span class='notice'>\The [src] is already lit.</span>")
 				return
 			var/obj/item/clothing/mask/cigarette/blunt/rolled/C = current_blunt
@@ -356,9 +356,9 @@
 			to_chat(user, "<span class='notice'>There's nothing in the bowl to light.</span>")
 
 /obj/item/weapon/broken_pipe_tomahawk/attack_self(mob/user as mob)
-	if(!is_lit)
+	if (!is_lit)
 		return
-	if(current_blunt)
+	if (current_blunt)
 		var/obj/item/clothing/mask/cigarette/blunt/rolled/C = current_blunt
 		C.lit = 0
 		C.update_brightness()
@@ -373,11 +373,11 @@
 	set category = "Object"
 	set src in range(0)
 
-	if(usr.isUnconscious())
+	if (usr.isUnconscious())
 		to_chat(usr, "You can't do that while unconscious.")
 		return
 
-	if(current_blunt)
+	if (current_blunt)
 		to_chat(usr, "<span class='notice'>You empty the crushed [blunt_name] out of \the [src].</span>")
 		not_burned_out = 1
 		qdel(current_blunt)
@@ -388,7 +388,7 @@
 	current_blunt = null
 	set_light(0)
 	is_lit = 0
-	if(ismob(loc) && !not_burned_out)
+	if (ismob(loc) && !not_burned_out)
 		var/mob/living/M = loc
 		to_chat(M, "<span class='notice'>Your [name] goes out.</span>")
 	not_burned_out = 0

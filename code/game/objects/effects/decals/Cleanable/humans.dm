@@ -32,10 +32,10 @@ var/global/list/blood_list = list()
 	return
 
 /obj/effect/decal/cleanable/blood/update_icon()
-	if(basecolor == "rainbow")
+	if (basecolor == "rainbow")
 		basecolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
 	color = basecolor
-	if(basecolor == "#FF0000"||basecolor == "#A10808") // no dirty dumb vox scum allowed
+	if (basecolor == "#FF0000"||basecolor == "#A10808") // no dirty dumb vox scum allowed
 		plane = NOIR_BLOOD_PLANE
 	else
 		plane = ABOVE_TURF_PLANE
@@ -69,8 +69,8 @@ var/global/list/blood_list = list()
 
 /obj/effect/decal/cleanable/blood/writing/New()
 	..()
-	if(random_icon_states.len)
-		for(var/obj/effect/decal/cleanable/blood/writing/W in loc)
+	if (random_icon_states.len)
+		for (var/obj/effect/decal/cleanable/blood/writing/W in loc)
 			random_icon_states.Remove(W.icon_state)
 		icon_state = pick(random_icon_states)
 	else
@@ -92,17 +92,17 @@ var/global/list/blood_list = list()
 	var/fleshcolor = "#FFFFFF"
 
 /obj/effect/decal/cleanable/blood/gibs/update_icon()
-	if(basecolor == "#FF0000"||basecolor == "#A10808") // no dirty dumb vox scum allowed
+	if (basecolor == "#FF0000"||basecolor == "#A10808") // no dirty dumb vox scum allowed
 		plane = NOIR_BLOOD_PLANE
 	else
 		plane = ABOVE_TURF_PLANE
 	var/image/giblets = new(base_icon, "[icon_state]_flesh", dir)
-	if(!fleshcolor || fleshcolor == "rainbow")
+	if (!fleshcolor || fleshcolor == "rainbow")
 		fleshcolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
 	giblets.color = fleshcolor
 
 	var/icon/blood = new(base_icon,"[icon_state]",dir)
-	if(basecolor == "rainbow")
+	if (basecolor == "rainbow")
 		basecolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
 	blood.Blend(basecolor,ICON_MULTIPLY)
 
@@ -141,7 +141,7 @@ var/global/list/blood_list = list()
 	random_icon_states = list("floor1", "floor2", "floor3", "floor4", "floor5", "floor6", "floor7")
 
 /obj/effect/decal/cleanable/blood/viralsputum/Destroy()
-	for(var/datum/disease/D in viruses)
+	for (var/datum/disease/D in viruses)
 		D.cure(0)
 	..()
 
@@ -159,7 +159,7 @@ var/global/list/blood_list = list()
 				b.New(src.loc)
 				b.basecolor = src.basecolor
 				b.update_icon()
-				for(var/datum/disease/D in src.viruses)
+				for (var/datum/disease/D in src.viruses)
 					var/datum/disease/ND = D.Copy(1)
 					b.viruses += ND
 					ND.holder = b

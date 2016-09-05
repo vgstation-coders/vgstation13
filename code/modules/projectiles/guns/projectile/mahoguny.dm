@@ -23,42 +23,42 @@
 	to_chat(user, "<span class='info'>It has [current_ammo] round\s remaining.</span>")
 
 /obj/item/weapon/gun/mahoguny/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
-	if(flag)
+	if (flag)
 		return //we're placing gun on a table or in backpack
-	if(harm_labeled >= min_harm_label)
+	if (harm_labeled >= min_harm_label)
 		to_chat(user, "<span class='warning'>A label sticks the trigger to the trigger guard!</span>")//Such a new feature, the player might not know what's wrong if it doesn't tell them.
 
 		return
-	if(!current_ammo)
+	if (!current_ammo)
 		return click_empty(user)
-	if(in_chamber)
+	if (in_chamber)
 		qdel(in_chamber)
 		in_chamber = null
 	in_chamber = new/obj/item/projectile/bullet/mahoganut(src)
-	if(Fire(A,user,params, "struggle" = struggle))
+	if (Fire(A,user,params, "struggle" = struggle))
 		current_ammo--
 
 /obj/item/weapon/gun/mahoguny/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
 	. = ..()
-	if(.)
+	if (.)
 		var/list/turf/possible_turfs = list()
-		for(var/turf/T in orange(target,1))
+		for (var/turf/T in orange(target,1))
 			possible_turfs += T
 		spawn()
-			for(var/i = 1; i <= 3; i++)
+			for (var/i = 1; i <= 3; i++)
 				var/newturf = pick(possible_turfs)
 				in_chamber = new/obj/item/projectile/bullet/leaf(src)
 				..(newturf,user,params,reflex,struggle)
 
 /obj/item/weapon/gun/mahoguny/process_chambered()
-	if(in_chamber)
+	if (in_chamber)
 		return 1
 	return 0
 
 /obj/item/weapon/gun/mahoguny/attackby(obj/item/W, mob/user)
 	..()
-	if(istype(W, /obj/item/stack/sheet/wood))
-		if(current_ammo >= max_ammo)
+	if (istype(W, /obj/item/stack/sheet/wood))
+		if (current_ammo >= max_ammo)
 			return
 		var/obj/item/stack/sheet/wood/S = W
 		current_ammo++

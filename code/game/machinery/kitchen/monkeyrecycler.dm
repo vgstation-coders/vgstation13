@@ -31,13 +31,13 @@
 /obj/machinery/monkey_recycler/RefreshParts()
 	var/manipcount = 0
 	var/lasercount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
+	for (var/obj/item/weapon/stock_parts/SP in component_parts)
+		if (istype(SP, /obj/item/weapon/stock_parts/manipulator))
 			manipcount += SP.rating
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+		if (istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating
 	minimum_monkeys = 4 - (manipcount/2) //Tier 1 = 3, Tier 2 = 2, Tier 3 = 1
-	if(lasercount == 3)
+	if (lasercount == 3)
 		can_recycle_live = 1
 
 /obj/machinery/monkey_recycler/attackby(var/obj/item/O as obj, var/mob/user as mob)
@@ -46,11 +46,11 @@
 	if (istype(O, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = O
 		var/grabbed = G.affecting
-		if(istype(grabbed, /mob/living/carbon/monkey))
+		if (istype(grabbed, /mob/living/carbon/monkey))
 			var/mob/living/carbon/monkey/target = grabbed
-			if(target.stat == 0 || can_recycle_live)
+			if (target.stat == 0 || can_recycle_live)
 				to_chat(user, "<span class='warning'>The monkey is struggling far too much to put it in the recycler.</span>")
-			if(target.abiotic())
+			if (target.abiotic())
 				to_chat(user, "<span class='warning'>The monkey may not have abiotic items on.</span>")
 			else
 				user.drop_item(G, force_drop = 1)
@@ -63,11 +63,11 @@
 				to_chat(user, "<span class='notice'>The machine now has [grinded] monkeys worth of material stored.</span>")
 		else
 			to_chat(user, "<span class='warning'>The machine only accepts monkeys!</span>")
-	else if(istype(O, /mob/living/carbon/monkey))
+	else if (istype(O, /mob/living/carbon/monkey))
 		var/mob/living/carbon/monkey/target = O
-		if(target.stat == 0)
+		if (target.stat == 0)
 			to_chat(user, "<span class='warning'>The monkey is struggling far too much to put it in the recycler.</span>")
-		if(target.abiotic())
+		if (target.abiotic())
 			to_chat(user, "<span class='warning'>The monkey may not have abiotic items on.</span>")
 		else
 			qdel(target)
@@ -79,9 +79,9 @@
 	return
 
 /obj/machinery/monkey_recycler/attack_hand(var/mob/user as mob)
-	if(..())
+	if (..())
 		return 1
-	if(grinded >= minimum_monkeys)
+	if (grinded >= minimum_monkeys)
 		to_chat(user, "<span class='notice'>The machine hisses loudly as it condenses the grinded monkey meat. After a moment, it dispenses a brand new monkey cube.</span>")
 		playsound(get_turf(src), 'sound/machines/hiss.ogg', 50, 1)
 		grinded -= minimum_monkeys
@@ -92,14 +92,14 @@
 	return
 
 /obj/machinery/monkey_recycler/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob) //copypasted from sleepers
-	if(!ismob(O))
+	if (!ismob(O))
 		return
-	if(O.loc == user || !isturf(O.loc) || !isturf(user.loc))
+	if (O.loc == user || !isturf(O.loc) || !isturf(user.loc))
 		return
-	if(user.incapacitated() || user.lying)
+	if (user.incapacitated() || user.lying)
 		return
-	if(O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src))
+	if (O.anchored || !Adjacent(user) || !user.Adjacent(src) || user.contents.Find(src))
 		return
-	if(!ishuman(user) && !isrobot(user))
+	if (!ishuman(user) && !isrobot(user))
 		return
 	attackby(O,user)

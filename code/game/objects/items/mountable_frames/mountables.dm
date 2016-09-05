@@ -4,19 +4,19 @@
 
 /obj/item/mounted/afterattack(var/atom/A, mob/user, proximity_flag)
 	var/found_type = 0
-	for(var/turf_type in src.buildon_types)
-		if(istype(A, turf_type))
+	for (var/turf_type in src.buildon_types)
+		if (istype(A, turf_type))
 			found_type = 1
 			break
 
-	if(found_type)
-		if(try_build(A, user, proximity_flag))
+	if (found_type)
+		if (try_build(A, user, proximity_flag))
 			return do_build(A, user)
 	else
 		..()
 
 /obj/item/mounted/proc/try_build(turf/on_wall, mob/user, proximity_flag) //checks
-	if(!on_wall || !user)
+	if (!on_wall || !user)
 		return
 	if (proximity_flag != 1) //if we aren't next to the wall
 		return
@@ -24,7 +24,7 @@
 		to_chat(user, "<span class='rose'>You need to be standing next to a wall to place \the [src].</span>")
 		return
 
-	if(gotwallitem(get_turf(user), get_dir(user,on_wall)))
+	if (gotwallitem(get_turf(user), get_dir(user,on_wall)))
 		to_chat(user, "<span class='rose'>There's already an item on this wall!</span>")
 		return
 

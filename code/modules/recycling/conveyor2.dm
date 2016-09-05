@@ -39,20 +39,20 @@
 	setmove()
 
 /obj/machinery/conveyor/auto/update()
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		icon_state = "conveyor-broken"
 		operating = 0
 		return
-	else if(!operable)
+	else if (!operable)
 		operating = 0
-	else if(stat & NOPOWER)
+	else if (stat & NOPOWER)
 		operating = 0
 	else
 		operating = 1
 	icon_state = "conveyor[operating]"
 
 /obj/machinery/conveyor/initialize()
-	if(frequency)
+	if (frequency)
 		set_frequency(frequency)
 	update()
 
@@ -62,21 +62,21 @@
 	radio_connection = radio_controller.add_object(src, frequency, RADIO_CONVEYORS)
 
 /obj/machinery/conveyor/receive_signal(datum/signal/signal)
-	if(!signal || signal.encryption)
+	if (!signal || signal.encryption)
 		return
 
-	if(id_tag != signal.data["tag"] || !signal.data["command"])
+	if (id_tag != signal.data["tag"] || !signal.data["command"])
 		return
-	switch(signal.data["command"])
-		if("forward")
+	switch (signal.data["command"])
+		if ("forward")
 			operating = 1
 			setmove()
 			return 1
-		if("reverse")
+		if ("reverse")
 			operating = -1
 			setmove()
 			return 1
-		if("stop")
+		if ("stop")
 			operating = 0
 			update()
 			return 1
@@ -94,28 +94,28 @@
 	machines -= src
 	fast_machines += src
 
-	if(newdir)
+	if (newdir)
 		dir = newdir
 
 	component_parts = newlist(/obj/item/weapon/circuitboard/conveyor)
 
 	updateConfig(!building)
 
-	if(!id_tag) //Without an ID tag we'll never work, so let's try to copy it from one of our neighbors.
+	if (!id_tag) //Without an ID tag we'll never work, so let's try to copy it from one of our neighbors.
 		copy_radio_from_neighbors()
 
 /obj/machinery/conveyor/proc/copy_radio_from_neighbors()
 	var/obj/machinery/conveyor_switch/lever = locate() in orange(src,1)
-	if(lever && lever.id_tag)
+	if (lever && lever.id_tag)
 		id_tag = lever.id_tag
 		frequency = lever.frequency
 		spawn(5) // Need to wait for the radio_controller to wake up.
 			updateConfig()
 		return
 	//We didn't find any levers close so let's just try to copy any conveyors nearby
-	for(var/direction in cardinal)
+	for (var/direction in cardinal)
 		var/obj/machinery/conveyor/domino = locate() in get_step(src, direction)
-		if(domino && domino.id_tag)
+		if (domino && domino.id_tag)
 			id_tag = domino.id_tag
 			frequency = domino.frequency
 			spawn(5) // Yeah I copied this twice so what
@@ -124,24 +124,24 @@
 
 /proc/conveyor_directions(var/dir, var/reverse = 0)
 	var/list/dirs = list()
-	switch(dir)
-		if(NORTH)
+	switch (dir)
+		if (NORTH)
 			dirs = list(NORTH, SOUTH)
-		if(SOUTH)
+		if (SOUTH)
 			dirs = list(SOUTH, NORTH)
-		if(EAST)
+		if (EAST)
 			dirs = list(EAST, WEST)
-		if(WEST)
+		if (WEST)
 			dirs = list(WEST, EAST)
-		if(NORTHEAST)
+		if (NORTHEAST)
 			dirs = list(EAST, SOUTH)
-		if(NORTHWEST)
+		if (NORTHWEST)
 			dirs = list(SOUTH, WEST)
-		if(SOUTHEAST)
+		if (SOUTHEAST)
 			dirs = list(NORTH, EAST)
-		if(SOUTHWEST)
+		if (SOUTHWEST)
 			dirs = list(WEST, NORTH)
-	if(reverse)
+	if (reverse)
 		dirs.Swap(1,2)
 	return dirs
 
@@ -150,58 +150,58 @@
 	forwards = dirs[1]
 	backwards = dirs[2]
 
-	if(!startup) // Need to wait for the radio_controller to wake up.
+	if (!startup) // Need to wait for the radio_controller to wake up.
 		initialize()
 
 /obj/machinery/conveyor/proc/setmove()
-	if(operating == 1)
+	if (operating == 1)
 		movedir = forwards
 	else
 		movedir = backwards
 	update()
 
 /obj/machinery/conveyor/proc/update()
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		icon_state = "conveyor-broken"
 		operating = 0
 		return
-	if(!operable)
+	if (!operable)
 		operating = 0
-	if(stat & NOPOWER)
+	if (stat & NOPOWER)
 		operating = 0
 	var/disp_op = operating
-	if(in_reverse && disp_op!=0)
+	if (in_reverse && disp_op!=0)
 		disp_op = -operating
 	icon_state = "conveyor[disp_op]"
 
 	// machine process
 	// move items to the target location
 /obj/machinery/conveyor/process()
-	if(stat & (BROKEN | NOPOWER))
+	if (stat & (BROKEN | NOPOWER))
 		return
-	if(!operating)
+	if (!operating)
 		return
 	use_power(100)
 
 	affecting = loc.contents - src		// moved items will be all in loc
 	spawn(1)	// slight delay to prevent infinite propagation due to map order	//TODO: please no spawn() in process(). It's a very bad idea
 		var/items_moved = 0
-		for(var/atom/movable/A in affecting)
-			if(!A.anchored)
-				if(A.loc == src.loc) // prevents the object from being affected if it's not currently here.
+		for (var/atom/movable/A in affecting)
+			if (!A.anchored)
+				if (A.loc == src.loc) // prevents the object from being affected if it's not currently here.
 					step(A,movedir)
 					items_moved++
-			if(items_moved >= max_moved)
+			if (items_moved >= max_moved)
 				break
 
 /obj/machinery/conveyor/togglePanelOpen(var/obj/item/toggle_item, mob/user)
-	if(operating)
+	if (operating)
 		to_chat(user, "You can't reach \the [src]'s panel through the moving machinery.")
 		return -1
 	return ..()
 
 /obj/machinery/conveyor/crowbarDestroy(mob/user)
-	if(operating)
+	if (operating)
 		to_chat(user, "You can't reach \the [src]'s panel through the moving machinery.")
 		return -1
 	return ..()
@@ -209,7 +209,7 @@
 // attack with item, place item on conveyor
 /obj/machinery/conveyor/attackby(var/obj/item/W, mob/user)
 	. = ..()
-	if(.)
+	if (.)
 		return .
 	user.drop_item(W, src.loc)
 	return 0
@@ -217,7 +217,7 @@
 /obj/machinery/conveyor/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	//var/obj/item/device/multitool/P = get_multitool(user)
 	var/dis_id_tag="-----"
-	if(id_tag!=null && id_tag!="")
+	if (id_tag!=null && id_tag!="")
 		dis_id_tag=id_tag
 	return {"
 	<ul>
@@ -243,14 +243,14 @@
 
 /obj/machinery/conveyor/multitool_topic(var/mob/user,var/list/href_list,var/obj/O)
 	. = ..()
-	if(.)
+	if (.)
 		return .
-	if("setdir" in href_list)
+	if ("setdir" in href_list)
 		operating=0
 		dir=text2num(href_list["setdir"])
 		updateConfig()
 		return MT_UPDATE
-	if("reverse" in href_list)
+	if ("reverse" in href_list)
 		operating=0
 		in_reverse=!in_reverse
 		updateConfig()
@@ -260,14 +260,14 @@
 	return is_type_in_list(O, list(/obj/machinery/conveyor_switch, /obj/machinery/conveyor))
 
 /obj/machinery/conveyor/clone(var/obj/machinery/O)
-	if(istype(O, /obj/machinery/conveyor))
+	if (istype(O, /obj/machinery/conveyor))
 		var/obj/machinery/conveyor/it = O
 		dir = it.dir
 		in_reverse = it.in_reverse
 		operating = 0
 		id_tag = it.id_tag
 		frequency = it.frequency
-	else if(istype(O, /obj/machinery/conveyor_switch))
+	else if (istype(O, /obj/machinery/conveyor_switch))
 		var/obj/machinery/conveyor_switch/it = O
 		id_tag = it.id_tag
 		frequency = it.frequency
@@ -286,11 +286,11 @@
 
 	/*
 	var/obj/machinery/conveyor/C = locate() in get_step(src, dir)
-	if(C)
+	if (C)
 		C.set_operable(dir, id, 0)
 
 	C = locate() in get_step(src, turn(dir,180))
-	if(C)
+	if (C)
 		C.set_operable(turn(dir,180), id, 0)
 	*/
 
@@ -298,13 +298,13 @@
 //set the operable var if ID matches, propagating in the given direction
 
 /obj/machinery/conveyor/proc/set_operable(stepdir, match_id, op)
-	if(id_tag != match_id)
+	if (id_tag != match_id)
 		return
 	operable = op
 
 	update()
 	var/obj/machinery/conveyor/C = locate() in get_step(src, stepdir)
-	if(C)
+	if (C)
 		C.set_operable(stepdir, id_tag, op)
 
 /*
@@ -349,36 +349,36 @@
 	convdir = -1
 
 /obj/machinery/conveyor_switch/receive_signal(datum/signal/signal)
-	if(!signal || signal.encryption)
+	if (!signal || signal.encryption)
 		return
-	if(src == signal.source)
+	if (src == signal.source)
 		return
 
-	if(id_tag != signal.data["tag"] || !signal.data["command"])
+	if (id_tag != signal.data["tag"] || !signal.data["command"])
 		return
-	if(!convdir)
-		switch(signal.data["command"])
-			if("forward")
+	if (!convdir)
+		switch (signal.data["command"])
+			if ("forward")
 				position = 1
 				last_pos = 0
-			if("reverse")
+			if ("reverse")
 				position = -1
 				last_pos = 0
-			if("stop")
+			if ("stop")
 				last_pos = position
 				position = 0
 			else
 				testing("Got unknown command \"[signal.data["command"]]\" from [src]!")
 				return
 	else
-		switch(signal.data["command"])
-			if("forward")
-				if(convdir==1)
+		switch (signal.data["command"])
+			if ("forward")
+				if (convdir==1)
 					position = 1
-			if("reverse")
-				if(convdir==-1)
+			if ("reverse")
+				if (convdir==-1)
 					position = -1
-			if("stop")
+			if ("stop")
 				position = 0
 			else
 				testing("Got unknown command \"[signal.data["command"]]\" from [src]!")
@@ -387,7 +387,7 @@
 
 /obj/machinery/conveyor_switch/New()
 	..()
-	if(!id_tag)
+	if (!id_tag)
 		id_tag = "[rand(9999)]"
 		set_frequency(frequency) //I tried just assigning the ID tag during initialize(), but that didn't work somehow, probably because it makes TOO MUCH SENSE
 	update()
@@ -400,15 +400,15 @@
 // update the icon depending on the position
 
 /obj/machinery/conveyor_switch/proc/update()
-	if(position<0)
+	if (position<0)
 		icon_state = "switch-rev"
-	else if(position>0)
+	else if (position>0)
 		icon_state = "switch-fwd"
 	else
 		icon_state = "switch-off"
 
 /obj/machinery/conveyor_switch/initialize()
-	if(frequency)
+	if (frequency)
 		set_frequency(frequency)
 	update()
 
@@ -419,12 +419,12 @@
 
 // attack with hand, switch position
 /obj/machinery/conveyor_switch/attack_hand(mob/user)
-	if(isobserver(usr) && !canGhostWrite(user,src,"toggled"))
+	if (isobserver(usr) && !canGhostWrite(user,src,"toggled"))
 		to_chat(usr, "<span class='warning'>Nope.</span>")
 		return 0
-	if(!convdir)
-		if(position == 0)
-			if(last_pos < 0)
+	if (!convdir)
+		if (position == 0)
+			if (last_pos < 0)
 				position = 1
 				last_pos = 0
 				send_command("forward")
@@ -437,7 +437,7 @@
 			position = 0
 			send_command("stop")
 	else
-		if(position == 0)
+		if (position == 0)
 			position = convdir
 			send_command(convdir==1?"forward":"reverse")
 		else
@@ -447,7 +447,7 @@
 	update()
 
 /obj/machinery/conveyor_switch/proc/send_command(var/command)
-	if(radio_connection)
+	if (radio_connection)
 		var/datum/signal/signal = getFromPool(/datum/signal)
 		signal.source=src
 		signal.transmission_method = 1 //radio signal
@@ -460,12 +460,12 @@
 
 /obj/machinery/conveyor_switch/attackby(var/obj/item/W, mob/user)
 	. = ..()
-	if(.)
+	if (.)
 		return .
-	if(iswrench(W))
+	if (iswrench(W))
 		to_chat(user, "<span class='notice'>Deconstructing \the [src]...</span>")
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
-		if(do_after(user, src,50))
+		if (do_after(user, src,50))
 			to_chat(user, "<span class='notice'>You disassemble \the [src].</span>")
 			var/turf/T=get_turf(src)
 			new /obj/item/device/assembly/signaler(T)
@@ -475,7 +475,7 @@
 
 /obj/machinery/conveyor_switch/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	var/dis_id_tag="-----"
-	if(id_tag!=null && id_tag!="")
+	if (id_tag!=null && id_tag!="")
 		dis_id_tag=id_tag
 	return {"
 		<ul>
@@ -492,9 +492,9 @@
 
 /obj/machinery/conveyor_switch/multitool_topic(var/mob/user,var/list/href_list,var/obj/O)
 	. = ..()
-	if(.)
+	if (.)
 		return
-	if("setconvdir" in href_list)
+	if ("setconvdir" in href_list)
 		convdir = text2num(href_list["setconvdir"])
 		updateConfig()
 		return MT_UPDATE

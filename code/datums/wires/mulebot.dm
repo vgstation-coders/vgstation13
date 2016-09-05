@@ -29,13 +29,13 @@ var/const/WIRE_BEACON_RX = 256	// beacon ping recv
 
 /datum/wires/mulebot/CanUse(var/mob/living/L)
 	var/obj/machinery/bot/mulebot/M = holder
-	if(M.open)
+	if (M.open)
 		return 1
 	return 0
 
 // So the wires do not open a new window, handle the interaction ourselves.
 /datum/wires/mulebot/Interact(var/mob/living/user)
-	if(CanUse(user))
+	if (CanUse(user))
 		var/obj/machinery/bot/mulebot/M = holder
 		M.interact(user)
 
@@ -47,16 +47,16 @@ var/const/WIRE_BEACON_RX = 256	// beacon ping recv
 	The regulator light is [getRegulatorColor()].<BR>"}
 
 /datum/wires/mulebot/UpdatePulsed(var/index)
-	switch(index)
-		if(WIRE_REMOTE_RX,WIRE_REMOTE_TX,WIRE_BEACON_RX)
+	switch (index)
+		if (WIRE_REMOTE_RX,WIRE_REMOTE_TX,WIRE_BEACON_RX)
 			holder.visible_message("<span class='notice'>[bicon(holder)] You hear a radio crackle.</span>")
 
 // HELPER PROCS
 
 /datum/wires/mulebot/proc/getRegulatorColor()
-	if(IsIndexCut(WIRE_MOTOR1) && IsIndexCut(WIRE_MOTOR2))
+	if (IsIndexCut(WIRE_MOTOR1) && IsIndexCut(WIRE_MOTOR2))
 		return "red"
-	else if(IsIndexCut(WIRE_MOTOR1)||IsIndexCut(WIRE_MOTOR2))
+	else if (IsIndexCut(WIRE_MOTOR1)||IsIndexCut(WIRE_MOTOR2))
 		return "yellow"
 	else
 		return "green"

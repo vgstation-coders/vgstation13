@@ -46,10 +46,10 @@
 	malfunction = MALFUNCTION_PERMANENT
 
 /obj/item/weapon/implant/Destroy()
-	if(part)
+	if (part)
 		part.implants.Remove(src)
 	imp_in = null
-	if(reagents)
+	if (reagents)
 		qdel(reagents)
 	..()
 
@@ -91,11 +91,11 @@ Implant Specifics:<BR>"}
 	malfunction = MALFUNCTION_TEMPORARY
 
 	var/delay = 20
-	switch(severity)
-		if(1)
-			if(prob(60))
+	switch (severity)
+		if (1)
+			if (prob(60))
 				meltdown()
-		if(2)
+		if (2)
 			delay = rand(5 MINUTES, 15 MINUTES)
 
 	spawn(delay)
@@ -128,17 +128,17 @@ Implant Specifics:<BR>"}
 /obj/item/weapon/implant/explosive/hear(var/msg)
 	var/list/replacechars = list("'" = "", "\"" = "", ">" = "", "<" = "", "(" = "", ")" = "")
 	msg = sanitize_simple(msg, replacechars)
-	if(findtext(msg, phrase))
+	if (findtext(msg, phrase))
 		activate()
 
 /obj/item/weapon/implant/explosive/trigger(emote, source as mob)
-	if(emote == "deathgasp")
+	if (emote == "deathgasp")
 		activate()
 
 /obj/item/weapon/implant/explosive/activate()
-	if(malfunction == MALFUNCTION_PERMANENT)
+	if (malfunction == MALFUNCTION_PERMANENT)
 		return
-	if(iscarbon(imp_in))
+	if (iscarbon(imp_in))
 		var/mob/M = imp_in
 
 		message_admins("Explosive implant triggered in [M] ([M.key]). (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>JMP</a>) ")
@@ -162,19 +162,19 @@ Implant Specifics:<BR>"}
 	return 1
 
 /obj/item/weapon/implant/explosive/emp_act(severity)
-	if(malfunction)
+	if (malfunction)
 		return
 	malfunction = MALFUNCTION_TEMPORARY
 	switch (severity)
-		if(2.0)	//Weak EMP will make implant tear limbs off.
-			if(prob(50))
+		if (2.0)	//Weak EMP will make implant tear limbs off.
+			if (prob(50))
 				small_boom()
-		if(1.0)	//Strong EMP will melt implant either making it go off, or disarming it
-			if(prob(70))
-				if(prob(50))
+		if (1.0)	//Strong EMP will melt implant either making it go off, or disarming it
+			if (prob(70))
+				if (prob(50))
 					small_boom()
 				else
-					if(prob(50))
+					if (prob(50))
 						activate()		//50% chance of bye bye
 					else
 						meltdown()		//50% chance of implant disarming
@@ -185,14 +185,14 @@ Implant Specifics:<BR>"}
 	return 0
 
 /obj/item/weapon/implant/explosive/proc/small_boom()
-	if(iscarbon(imp_in))
+	if (iscarbon(imp_in))
 		imp_in.visible_message("<span class='warning'>Something beeps inside [imp_in][part ? "'s [part.display_name]" : ""]!</span>")
 		playsound(loc, 'sound/items/countdown.ogg', 75, 1, -3)
 		spawn(25)
-			if(ishuman(imp_in) && part)
+			if (ishuman(imp_in) && part)
 				//No tearing off these parts since it's pretty much killing
 				//and you can't replace groins
-				if(istype(part, /datum/organ/external/chest) || istype(part, /datum/organ/external/groin) || istype(part, /datum/organ/external/head))
+				if (istype(part, /datum/organ/external/chest) || istype(part, /datum/organ/external/groin) || istype(part, /datum/organ/external/head))
 					part.createwound(BRUISE, 60) //Mangle them instead
 				else
 					part.droplimb(1)
@@ -226,18 +226,18 @@ the implant may become unstable and either pre-maturely inject the subject or si
 		return dat
 
 /obj/item/weapon/implant/chem/trigger(emote, source as mob)
-	if(emote == "deathgasp")
+	if (emote == "deathgasp")
 		src.activate(src.reagents.total_volume)
 	return
 
 
 /obj/item/weapon/implant/chem/activate(var/cause)
-	if((!cause) || (!src.imp_in))
+	if ((!cause) || (!src.imp_in))
 		return 0
 	var/mob/living/carbon/R = src.imp_in
 	src.reagents.trans_to(R, cause)
 	to_chat(R, "You hear a faint *beep*.")
-	if(!src.reagents.total_volume)
+	if (!src.reagents.total_volume)
 		to_chat(R, "You hear a faint click from your chest.")
 		spawn(0)
 			qdel(src)
@@ -248,12 +248,12 @@ the implant may become unstable and either pre-maturely inject the subject or si
 		return
 	malfunction = MALFUNCTION_TEMPORARY
 
-	switch(severity)
-		if(1)
-			if(prob(60))
+	switch (severity)
+		if (1)
+			if (prob(60))
 				activate(20)
-		if(2)
-			if(prob(30))
+		if (2)
+			if (prob(30))
 				activate(5)
 
 	spawn(20)
@@ -282,13 +282,13 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 
 /obj/item/weapon/implant/loyalty/implanted(mob/M)
-	if(!iscarbon(M))
+	if (!iscarbon(M))
 		return 0
 	var/mob/living/carbon/H = M
-	if(H.mind in ticker.mode.head_revolutionaries)
+	if (H.mind in ticker.mode.head_revolutionaries)
 		H.visible_message("[H] seems to resist the implant!", "You feel the corporate tendrils of Nanotrasen try to invade your mind!")
 		return 0
-	else if(H.mind in ticker.mode:revolutionaries)
+	else if (H.mind in ticker.mode:revolutionaries)
 		ticker.mode:remove_revolutionary(H.mind)
 	to_chat(H, "<span class = 'notice'>You feel a surge of loyalty towards Nanotrasen.</span>")
 	return 1
@@ -314,25 +314,25 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/traitor/implanted(mob/M, mob/user)
 	var/list/implanters
 	var/ref = "\ref[user.mind]"
-	if(!iscarbon(M))
+	if (!iscarbon(M))
 		return 0
-	if(!M.mind)
+	if (!M.mind)
 		return 0
 	var/mob/living/carbon/H = M
-	if(M == user)
+	if (M == user)
 		to_chat(user, "<span class='notice'>You feel quite stupid for doing that.</span>")
-		if(isliving(user))
+		if (isliving(user))
 			user:brainloss += 10
 		return
-	if(locate(/obj/item/weapon/implant/traitor) in H.contents || locate(/obj/item/weapon/implant/loyalty) in H.contents)
+	if (locate(/obj/item/weapon/implant/traitor) in H.contents || locate(/obj/item/weapon/implant/loyalty) in H.contents)
 		H.visible_message("[H] seems to resist the implant!", "You feel a strange sensation in your head that quickly dissipates.")
 		return 0
-	else if(H.mind in ticker.mode.traitors)
+	else if (H.mind in ticker.mode.traitors)
 		H.visible_message("[H] seems to resist the implant!", "You feel a familiar sensation in your head that quickly dissipates.")
 		return 0
 	H.implanting = 1
 	to_chat(H, "<span class = 'notice'>You feel a surge of loyalty towards [user.name].</span>")
-	if(!(user.mind in ticker.mode:implanter))
+	if (!(user.mind in ticker.mode:implanter))
 		ticker.mode:implanter[ref] = list()
 	implanters = ticker.mode:implanter[ref]
 	implanters.Add(H.mind)
@@ -348,7 +348,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	p.target = user:mind
 	p.explanation_text = "Protect [user:real_name], the [user:mind:assigned_role=="MODE" ? (user:mind:special_role) : (user:mind:assigned_role)]."
 	H.mind.objectives += p
-	for(var/datum/objective/objective in H.mind.objectives)
+	for (var/datum/objective/objective in H.mind.objectives)
 		to_chat(H, "<B>Objective #1</B>: [objective.explanation_text]")
 	ticker.mode.update_traitor_icons_added(H.mind)
 	ticker.mode.update_traitor_icons_added(user.mind)
@@ -415,13 +415,13 @@ the implant may become unstable and either pre-maturely inject the subject or si
 		return
 	var/mob/M = imp_in
 
-	if(isnull(M)) // If the mob got gibbed
-		if(loc)
-			if(loc:timestopped)
+	if (isnull(M)) // If the mob got gibbed
+		if (loc)
+			if (loc:timestopped)
 				return
 		activate()
-	else if(M.stat == 2)
-		if(M.timestopped)
+	else if (M.stat == 2)
+		if (M.timestopped)
 			return
 		activate("death")
 
@@ -434,11 +434,11 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	speech.job="Death Alarm"
 	speech.set_language(LANGUAGE_GALACTIC_COMMON)
 	switch (cause)
-		if("death")
-			if(!announcement_intercom || !istype(announcement_intercom))
+		if ("death")
+			if (!announcement_intercom || !istype(announcement_intercom))
 				announcement_intercom = new(null)
 
-			if(istype(t, /area/syndicate_station) || istype(t, /area/syndicate_mothership) || istype(t, /area/shuttle/syndicate_elite) )
+			if (istype(t, /area/syndicate_station) || istype(t, /area/syndicate_mothership) || istype(t, /area/shuttle/syndicate_elite) )
 				//give the syndies a bit of stealth
 				speech.message="[mobname] has died in Space!"
 			else
@@ -459,8 +459,8 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	malfunction = MALFUNCTION_TEMPORARY
 
 	activate("emp")	//let's shout that this dude is dead
-	if(severity == 1)
-		if(prob(40))	//small chance of obvious meltdown
+	if (severity == 1)
+		if (prob(40))	//small chance of obvious meltdown
 			meltdown()
 		else if (prob(60))	//but more likely it will just quietly die
 			malfunction = MALFUNCTION_PERMANENT

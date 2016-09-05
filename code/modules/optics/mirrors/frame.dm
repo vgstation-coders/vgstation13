@@ -11,19 +11,19 @@
 	opacity = 0 // Think table-height.
 
 /obj/structure/mirror_frame/attackby(var/obj/item/W,var/mob/user)
-	if(iswrench(W))
+	if (iswrench(W))
 		to_chat(user, "<span class='info'>You begin to unfasten \the [src]'s bolts.</span>")
-		if(do_after(user, src,20))
+		if (do_after(user, src,20))
 			anchored=!anchored
 			user.visible_message("<span class='info'>You unfasten \the [src]'s bolts.</span>", "[user] unfastens the [src]'s bolts.","You hear a ratchet.")
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 
-	if(istype(W, /obj/item/weapon/weldingtool))
+	if (istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0,user))
 			to_chat(user, "Now welding the [src]...")
-			if(do_after(user, src, 20))
-				if(!src || !WT.isOn())
+			if (do_after(user, src, 20))
+				if (!src || !WT.isOn())
 					return
 				playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
 				user.visible_message("<span class='warning'>[user] cuts the [src] apart.</span>", "<span class='warning'>You cut the [src] apart.</span>", "You hear welding.")
@@ -36,13 +36,13 @@
 		else
 			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
 
-	if(istype(W, /obj/item/stack/sheet/glass/plasmarglass))
+	if (istype(W, /obj/item/stack/sheet/glass/plasmarglass))
 		var/obj/item/stack/sheet/glass/plasmarglass/stack = W
-		if(stack.amount < 5)
+		if (stack.amount < 5)
 			to_chat(user, "<span class='warning'>You need at least 5 [stack] to build a beamsplitter.</span>")
 			return
-		if(do_after(user, src,10))
-			if(stack.amount < 5)
+		if (do_after(user, src,10))
+			if (stack.amount < 5)
 				to_chat(user, "<span class='warning'>You need at least 5 [stack] to build a beamsplitter.</span>")
 				return
 			stack.use(5)
@@ -51,13 +51,13 @@
 			qdel(src)
 		return
 
-	if(istype(W, /obj/item/stack/sheet/glass/rglass))
+	if (istype(W, /obj/item/stack/sheet/glass/rglass))
 		var/obj/item/stack/sheet/glass/rglass/stack = W
-		if(stack.amount < 5)
+		if (stack.amount < 5)
 			to_chat(user, "<span class='warning'>You need at least 5 [stack] to build a beamsplitter.</span>")
 			return
-		if(do_after(user, src,10))
-			if(stack.amount < 5)
+		if (do_after(user, src,10))
+			if (stack.amount < 5)
 				to_chat(user, "<span class='warning'>You need at least 5 [stack] to build a beamsplitter.</span>")
 				return
 			stack.use(5)

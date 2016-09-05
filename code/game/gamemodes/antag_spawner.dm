@@ -19,7 +19,7 @@
 /obj/item/weapon/antag_spawner/contract/attack_self(mob/user as mob)
 	user.set_machine(src)
 	var/dat
-	if(used)
+	if (used)
 		dat = "<B>You have already summoned your apprentice.</B><BR>"
 	else
 		dat = "<B>Contract of Apprenticeship:</B><BR>"
@@ -51,19 +51,19 @@
 	..()
 	var/mob/living/carbon/human/H = usr
 
-	if(H.isUnconscious() || H.restrained())
+	if (H.isUnconscious() || H.restrained())
 		return
-	if(!istype(H, /mob/living/carbon/human))
+	if (!istype(H, /mob/living/carbon/human))
 		return 1
 
-	if(loc == H || (in_range(src, H) && istype(loc, /turf)))
+	if (loc == H || (in_range(src, H) && istype(loc, /turf)))
 		H.set_machine(src)
-		if(href_list["school"])
+		if (href_list["school"])
 			if (used)
 				to_chat(H, "You already used this contract!")
 				return
 			var/list/candidates = get_candidates(ROLE_WIZARD)
-			if(candidates.len)
+			if (candidates.len)
 				src.used = 1
 				var/client/C = pick(candidates)
 				spawn_antag(C, get_turf(H.loc), href_list["school"])
@@ -75,39 +75,39 @@
 	var/mob/living/carbon/human/M = new/mob/living/carbon/human(T)
 	M.key = C.key
 	to_chat(M, "<B>You are the [usr.real_name]'s apprentice! You are bound by magic contract to follow their orders and help them in accomplishing their goals.")
-	switch(type)
-		if("destruction")
+	switch (type)
+		if ("destruction")
 			M.add_spell(new /spell/targeted/projectile/magic_missile)
 			M.add_spell(new /spell/targeted/projectile/dumbfire/fireball)
 			to_chat(M, "<B>Your service has not gone unrewarded, however. Studying under [usr.real_name], you have learned powerful, destructive spells. You are able to cast magic missile and fireball.")
-		if("bluespace")
+		if ("bluespace")
 			M.add_spell(new /spell/area_teleport)
 			M.add_spell(new /spell/targeted/ethereal_jaunt)
 			to_chat(M, "<B>Your service has not gone unrewarded, however. Studying under [usr.real_name], you have learned reality bending mobility spells. You are able to cast teleport and ethereal jaunt.")
 		/*
-		if("healing")
+		if ("healing")
 			M.spell_list += new /obj/effect/proc_holder/spell/targeted/charge(M)
 			M.spell_list += new /spell/aoe_turf/conjure/forcewall(M)
 			// TODO M.equip_to_slot_or_del(new /obj/item/weapon/gun/magic/staff/healing(M), slot_r_hand)
 			to_chat(M, "<B>Your service has not gone unrewarded, however. Studying under [usr.real_name], you have learned livesaving survival spells. You are able to cast charge and forcewall.")
 		*/
-		if("robeless")
+		if ("robeless")
 			M.add_spell(new /spell/aoe_turf/knock)
 			M.add_spell(new /spell/targeted/mind_transfer)
 			to_chat(M, "<B>Your service has not gone unrewarded, however. Studying under [usr.real_name], you have learned stealthy, robeless spells. You are able to cast knock and mindswap.")
-		if("clown")
+		if ("clown")
 			M.add_spell(new /spell/targeted/equip_item/clowncurse)
 			M.add_spell(new /spell/targeted/shoesnatch)
 			to_chat(M, "<B>Your service has not gone unrewarded, however. Studying under [usr.real_name], you have learned the venerable and ancient art of Clown Magic. You are able to cast the clown curse and shoe snatch.")
-		if("misdirection")
+		if ("misdirection")
 			M.add_spell(new /spell/targeted/subjugation)
 			M.add_spell(new /spell/targeted/genetic/blind)
 			to_chat(M, "<B>Your service has not gone unrewarded, however. Studying under [usr.real_name], you have learned spells for misdirection and trickery. You are able to cast subjugate and blind.")
-		if("muscle")
+		if ("muscle")
 			M.add_spell(new /spell/targeted/genetic/mutate)
 			M.add_spell(new /spell/aoe_turf/blink)
 			to_chat(M, "<B>Your service has not gone unrewarded, however. Studying under [usr.real_name], you have gained great strength and a natty physique. You are able to cast mutate and blink.")
-		if("technology")
+		if ("technology")
 			M.add_spell(new /spell/aoe_turf/disable_tech)
 			M.add_spell(new /spell/lightning)
 			to_chat(M, "<B>Your service has not gone unrewarded, however. Studying under [usr.real_name], you have futuristic, technological spells. You are able to cast disable tech and lightning.")
@@ -150,11 +150,11 @@
 	var/TC_cost = 0
 
 /obj/item/weapon/antag_spawner/borg_tele/attack_self(mob/user as mob)
-	if(used)
+	if (used)
 		to_chat(user, "The teleporter is out of power.")
 		return
 	var/list/borg_candicates = get_candidates(BE_OPERATIVE)
-	if(borg_candicates.len > 0)
+	if (borg_candicates.len > 0)
 		used = 1
 		var/client/C = pick(borg_candicates)
 		spawn_antag(C, get_turf(src.loc), "syndieborg")

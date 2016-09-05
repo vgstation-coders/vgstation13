@@ -25,20 +25,20 @@
 /proc/get_area_master(const/O)
 	var/area/A = get_area(O)
 
-	if(isarea(A))
+	if (isarea(A))
 		return A
 
 /proc/get_area_name(N) //get area by its name
-	for(var/area/A in areas)
-		if(A.name == N)
+	for (var/area/A in areas)
+		if (A.name == N)
 			return A
 	return 0
 
 /proc/in_range(atom/source, mob/user)
-	if(source.Adjacent(user))
+	if (source.Adjacent(user))
 		return 1
-	else if(istype(user) && user.mutations && user.mutations.len)
-		if((M_TK in user.mutations) && (get_dist(user,source) < tk_maxrange))
+	else if (istype(user) && user.mutations && user.mutations.len)
+		if ((M_TK in user.mutations) && (get_dist(user,source) < tk_maxrange))
 			return 1
 
 	return 0 //not in range and not telekinetic
@@ -58,12 +58,12 @@
 
 /proc/alone_in_area(var/area/the_area, var/mob/must_be_alone, var/check_type = /mob/living/carbon)
 	var/area/our_area = get_area_master(the_area)
-	for(var/C in living_mob_list)
-		if(!istype(C, check_type))
+	for (var/C in living_mob_list)
+		if (!istype(C, check_type))
 			continue
-		if(C == must_be_alone)
+		if (C == must_be_alone)
 			continue
-		if(our_area == get_area_master(C))
+		if (our_area == get_area_master(C))
 			return 0
 	return 1
 
@@ -74,10 +74,10 @@
 	var/list/turfs = new/list()
 	var/rsq = radius * (radius+0.5)
 
-	for(var/atom/T in range(radius, centerturf))
+	for (var/atom/T in range(radius, centerturf))
 		var/dx = T.x - centerturf.x
 		var/dy = T.y - centerturf.y
-		if(dx*dx + dy*dy <= rsq)
+		if (dx*dx + dy*dy <= rsq)
 			turfs += T
 
 	//turfs += centerturf
@@ -90,10 +90,10 @@
 	var/list/atoms = new/list()
 	var/rsq = radius * (radius+0.5)
 
-	for(var/atom/A in view(radius, centerturf))
+	for (var/atom/A in view(radius, centerturf))
 		var/dx = A.x - centerturf.x
 		var/dy = A.y - centerturf.y
-		if(dx*dx + dy*dy <= rsq)
+		if (dx*dx + dy*dy <= rsq)
 			atoms += A
 
 	//turfs += centerturf
@@ -111,18 +111,18 @@
 
 
 	var/turf/centerturf = get_turf(center)
-	if(!centerturf)
+	if (!centerturf)
 		to_chat(usr, "cant get a center turf?")
 		return
 	var/list/turfs = new/list()
 	var/rsq = radius * (radius+0.5)
 
-	for(var/turf/T in range(radius, centerturf))
-		if(!T)
+	for (var/turf/T in range(radius, centerturf))
+		if (!T)
 			continue
 		var/dx = T.x - centerturf.x
 		var/dy = T.y - centerturf.y
-		if(dx*dx + dy*dy <= rsq)
+		if (dx*dx + dy*dy <= rsq)
 			turfs += T
 	return turfs
 
@@ -133,10 +133,10 @@
 	var/list/turfs = new/list()
 	var/rsq = radius * (radius+0.5)
 
-	for(var/turf/T in view(radius, centerturf))
+	for (var/turf/T in view(radius, centerturf))
 		var/dx = T.x - centerturf.x
 		var/dy = T.y - centerturf.y
-		if(dx*dx + dy*dy <= rsq)
+		if (dx*dx + dy*dy <= rsq)
 			turfs += T
 	return turfs
 
@@ -173,15 +173,15 @@
 proc
 	inLineOfSight(X1,Y1,X2,Y2,Z=1,PX1=16.5,PY1=16.5,PX2=16.5,PY2=16.5)
 		var/turf/T
-		if(X1==X2)
-			if(Y1==Y2)
+		if (X1==X2)
+			if (Y1==Y2)
 				return 1 //Light cannot be blocked on same tile
 			else
 				var/s = SIGN(Y2-Y1)
 				Y1+=s
-				while(Y1!=Y2)
+				while (Y1!=Y2)
 					T=locate(X1,Y1,Z)
-					if(T.opacity)
+					if (T.opacity)
 						return 0
 					Y1+=s
 		else
@@ -189,15 +189,15 @@ proc
 			var/b=(Y1+PY1/32-0.015625)-m*(X1+PX1/32-0.015625) //In tiles
 			var/signX = SIGN(X2-X1)
 			var/signY = SIGN(Y2-Y1)
-			if(X1<X2)
+			if (X1<X2)
 				b+=m
-			while(X1!=X2 || Y1!=Y2)
-				if(round(m*X1+b-Y1))
+			while (X1!=X2 || Y1!=Y2)
+				if (round(m*X1+b-Y1))
 					Y1+=signY //Line exits tile vertically
 				else
 					X1+=signX //Line exits tile horizontally
 				T=locate(X1,Y1,Z)
-				if(T.opacity)
+				if (T.opacity)
 					return 0
 		return 1
 #undef SIGN
@@ -206,10 +206,10 @@ proc/isInSight(var/atom/A, var/atom/B)
 	var/turf/Aturf = get_turf(A)
 	var/turf/Bturf = get_turf(B)
 
-	if(!Aturf || !Bturf)
+	if (!Aturf || !Bturf)
 		return 0
 
-	if(inLineOfSight(Aturf.x,Aturf.y, Bturf.x,Bturf.y,Aturf.z))
+	if (inLineOfSight(Aturf.x,Aturf.y, Bturf.x,Bturf.y,Aturf.z))
 		return 1
 
 	else
@@ -219,32 +219,32 @@ proc/isInSight(var/atom/A, var/atom/B)
 	//returns only NORTH, SOUTH, EAST, or WEST
 	var/dx = finish.x - start.x
 	var/dy = finish.y - start.y
-	if(abs(dy) > abs (dx)) //slope is above 1:1 (move horizontally in a tie)
-		if(dy > 0)
+	if (abs(dy) > abs (dx)) //slope is above 1:1 (move horizontally in a tie)
+		if (dy > 0)
 			return get_step(start, SOUTH)
 		else
 			return get_step(start, NORTH)
 	else
-		if(dx > 0)
+		if (dx > 0)
 			return get_step(start, WEST)
 		else
 			return get_step(start, EAST)
 
 /proc/try_move_adjacent(atom/movable/AM)
 	var/turf/T = get_turf(AM)
-	for(var/direction in cardinal)
-		if(AM.Move(get_step(T, direction)))
+	for (var/direction in cardinal)
+		if (AM.Move(get_step(T, direction)))
 			break
 
 /proc/get_mob_by_key(var/key)
-	for(var/mob/M in mob_list)
-		if(M.ckey == lowertext(key))
+	for (var/mob/M in mob_list)
+		if (M.ckey == lowertext(key))
 			return M
 	return null
 
 //i think this is used soley by verb/give(), cael
 proc/check_can_reach(atom/user, atom/target)
-	if(!in_range(target,user))
+	if (!in_range(target,user))
 		return 0
 	return CanReachThrough(get_turf(user), get_turf(target), target)
 
@@ -255,7 +255,7 @@ var/list/DummyCache = list()
 
 
 	var/obj/item/weapon/dummy/D = locate() in DummyCache
-	if(!D)
+	if (!D)
 		D = new /obj/item/weapon/dummy( srcturf )
 	else
 		DummyCache.Remove(D)
@@ -263,24 +263,24 @@ var/list/DummyCache = list()
 
 	D.flags=initial(D.flags)
 	D.pass_flags=initial(D.pass_flags)
-	if(pass_flags&PASSTABLE)
+	if (pass_flags&PASSTABLE)
 		D.pass_flags |= PASSTABLE
 
-	if(targetturf.density && targetturf != get_turf(target))
+	if (targetturf.density && targetturf != get_turf(target))
 		return 0
 
 	//Now, check objects to block exit that are on the border
-	for(var/obj/border_obstacle in srcturf)
-		if(border_obstacle.flags & ON_BORDER)
-			if(!border_obstacle.Uncross(D, targetturf))
+	for (var/obj/border_obstacle in srcturf)
+		if (border_obstacle.flags & ON_BORDER)
+			if (!border_obstacle.Uncross(D, targetturf))
 				D.forceMove(null)
 				DummyCache.Add(D)
 				return 0
 
 	//Next, check objects to block entry that are on the border
-	for(var/obj/border_obstacle in targetturf)
-		if((border_obstacle.flags & ON_BORDER) && (target != border_obstacle))
-			if(!border_obstacle.Cross(D, srcturf, 1, 0))
+	for (var/obj/border_obstacle in targetturf)
+		if ((border_obstacle.flags & ON_BORDER) && (target != border_obstacle))
+			if (!border_obstacle.Cross(D, srcturf, 1, 0))
 				D.forceMove(null)
 				DummyCache.Add(D)
 				return 0
@@ -303,18 +303,18 @@ var/list/DummyCache = list()
 /proc/get_active_candidates(var/role_id=null, var/buffer=ROLE_SELECT_AFK_BUFFER, var/poll=0)
 	var/list/candidates = list() //List of candidate mobs to assume control of the new larva ~fuck you
 	var/i = 0
-	while(candidates.len <= 0 && i < 5)
+	while (candidates.len <= 0 && i < 5)
 		roleselect_debug("get_active_candidates(role_id=[role_id], buffer=[buffer], poll=[poll]): Player list is [player_list.len] items long.")
-		for(var/mob/dead/observer/G in player_list)
-			if(G.mind && G.mind.current && G.mind.current.stat != DEAD)
+		for (var/mob/dead/observer/G in player_list)
+			if (G.mind && G.mind.current && G.mind.current.stat != DEAD)
 				roleselect_debug("get_active_candidates(role_id=[role_id], buffer=[buffer], poll=[poll]): Skipping [G]  - Shitty candidate.")
 				continue
 
-			if(!G.client.desires_role(role_id,display_to_user=(poll!=0 && i==0) ? poll : 0)) // Only ask once.
+			if (!G.client.desires_role(role_id,display_to_user=(poll!=0 && i==0) ? poll : 0)) // Only ask once.
 				roleselect_debug("get_active_candidates(role_id=[role_id], buffer=[buffer], poll=[poll]): Skipping [G]  - Doesn't want role.")
 				continue
 
-			if(((G.client.inactivity/10)/60) > buffer + i) // the most active players are more likely to become an alien
+			if (((G.client.inactivity/10)/60) > buffer + i) // the most active players are more likely to become an alien
 				roleselect_debug("get_active_candidates(role_id=[role_id], buffer=[buffer], poll=[poll]): Skipping [G]  - Inactive.")
 				continue
 
@@ -325,13 +325,13 @@ var/list/DummyCache = list()
 
 /proc/get_candidates(var/role_id=null)
 	. = list()
-	for(var/mob/dead/observer/G in player_list)
-		if(!(G.mind && G.mind.current && G.mind.current.stat != DEAD))
-			if(!G.client.is_afk() && (role_id==null || G.client.desires_role(role_id)))
+	for (var/mob/dead/observer/G in player_list)
+		if (!(G.mind && G.mind.current && G.mind.current.stat != DEAD))
+			if (!G.client.is_afk() && (role_id==null || G.client.desires_role(role_id)))
 				. += G.client
 
 /proc/ScreenText(obj/O, maptext="", screen_loc="CENTER-7,CENTER-7", maptext_height=480, maptext_width=480)
-	if(!isobj(O))
+	if (!isobj(O))
 		O = new /obj/screen/text()
 	O.maptext = maptext
 	O.maptext_height = maptext_height
@@ -340,36 +340,36 @@ var/list/DummyCache = list()
 	return O
 
 /proc/Show2Group4Delay(obj/O, list/group, delay=0)
-	if(!isobj(O))
+	if (!isobj(O))
 		return
-	if(!group)
+	if (!group)
 		group = clients
-	for(var/client/C in group)
+	for (var/client/C in group)
 		C.screen += O
-	if(delay)
+	if (delay)
 		spawn(delay)
-			for(var/client/C in group)
+			for (var/client/C in group)
 				C.screen -= O
 
 /proc/flick_overlay(image/I, list/show_to, duration)
 	set waitfor = FALSE
-	for(var/client/C in show_to)
+	for (var/client/C in show_to)
 		C.images += I
 	sleep(duration)
-	for(var/client/C in show_to)
+	for (var/client/C in show_to)
 		C.images -= I
 
 /proc/get_active_player_count()
 	// Get active players who are playing in the round
 	var/active_players = 0
-	for(var/i = 1; i <= player_list.len; i++)
+	for (var/i = 1; i <= player_list.len; i++)
 		var/mob/M = player_list[i]
-		if(M && M.client)
-			if(istype(M, /mob/new_player)) // exclude people in the lobby
+		if (M && M.client)
+			if (istype(M, /mob/new_player)) // exclude people in the lobby
 				continue
-			else if(isobserver(M)) // Ghosts are fine if they were playing once (didn't start as observers)
+			else if (isobserver(M)) // Ghosts are fine if they were playing once (didn't start as observers)
 				var/mob/dead/observer/O = M
-				if(O.started_as_observer) // Exclude people who started as observers
+				if (O.started_as_observer) // Exclude people who started as observers
 					continue
 			active_players++
 	return active_players
@@ -417,10 +417,10 @@ var/list/DummyCache = list()
 /proc/mobs_in_area(var/area/the_area, var/client_needed=0, var/moblist=mob_list)
 	var/list/mobs_found[0]
 	var/area/our_area = get_area_master(the_area)
-	for(var/mob/M in moblist)
-		if(client_needed && !M.client)
+	for (var/mob/M in moblist)
+		if (client_needed && !M.client)
 			continue
-		if(our_area != get_area_master(M))
+		if (our_area != get_area_master(M))
 			continue
 		mobs_found += M
 	return mobs_found
@@ -453,18 +453,18 @@ var/list/DummyCache = list()
 	var/sat = 0
 	var/lgh = (lo + hi)/2
 
-	if(lo != hi)
-		if(lgh < 0.5)
+	if (lo != hi)
+		if (lgh < 0.5)
 			sat = (hi - lo) / (hi + lo)
 		else
 			sat = (hi - lo) / (2 - hi - lo)
-		if(red == hi)
+		if (red == hi)
 			hue = (grn - blu) / (hi - lo)
-		else if(grn == hi)
+		else if (grn == hi)
 			hue = 2 + (blu - red) / (hi - lo)
 		else
 			hue = 4 + (red - grn) / (hi - lo)
-		if(hue<0)
+		if (hue<0)
 			hue += 6
 
 	lgh = round(lgh * 255, 1)
@@ -488,7 +488,7 @@ var/list/DummyCache = list()
 	var/grn = 0
 	var/blu = 0
 
-	if(!sat)
+	if (!sat)
 		red = lgh
 		grn = lgh
 		blu = lgh
@@ -496,42 +496,42 @@ var/list/DummyCache = list()
 		var/temp1 = 0
 		var/temp2 = 0
 		var/temp3 = 0
-		if(lgh < 0.5)
+		if (lgh < 0.5)
 			temp2 = lgh * (1 + sat)
 		else
 			temp2 = lgh + sat - lgh * sat
 		temp1 = 2 * lgh - temp2
 
 		temp3 = hue + 1/3
-		if(temp3 > 1)
+		if (temp3 > 1)
 			temp3--
-		if(6*temp3<1)
+		if (6*temp3<1)
 			red = temp1 + (temp2 - temp1) * 6 * temp3
-		else if(2*temp3<1)
+		else if (2*temp3<1)
 			red = temp2
-		else if(3*temp3<2)
+		else if (3*temp3<2)
 			red = temp1 + (temp2 - temp1) * ((2/3) - temp3) * 6
 		else
 			red = temp1
 
 		temp3 = hue
-		if(6*temp3<1)
+		if (6*temp3<1)
 			grn = temp1 + (temp2 - temp1) * 6 * temp3
-		else if(2*temp3<1)
+		else if (2*temp3<1)
 			grn = temp2
-		else if(3*temp3<2)
+		else if (3*temp3<2)
 			grn = temp1 + (temp2 - temp1) * ((2/3) - temp3) * 6
 		else
 			grn = temp1
 
 		temp3 = hue - 1/3
-		if(temp3 < 0)
+		if (temp3 < 0)
 			temp3++
-		if(6*temp3<1)
+		if (6*temp3<1)
 			blu = temp1 + (temp2 - temp1) * 6 * temp3
-		else if(2*temp3<1)
+		else if (2*temp3<1)
 			blu = temp2
-		else if(3*temp3<2)
+		else if (3*temp3<2)
 			blu = temp1 + (temp2 - temp1) * ((2/3) - temp3) * 6
 		else
 			blu = temp1
@@ -564,7 +564,7 @@ var/list/DummyCache = list()
 	return rgb(r,g,b)
 
 /proc/mixOneColor(var/list/weight, var/list/color)
-	if(!weight || !color || length(weight) != length(color))
+	if (!weight || !color || length(weight) != length(color))
 		return 0
 
 	var/contents = length(weight)
@@ -572,16 +572,16 @@ var/list/DummyCache = list()
 	// normalize weights
 	var/listsum = 0
 
-	for(var/i = 1, i <= contents, i++)
+	for (var/i = 1, i <= contents, i++)
 		listsum += weight[i]
 
-	for(var/i = 1, i <= contents, i++)
+	for (var/i = 1, i <= contents, i++)
 		weight[i] /= listsum
 
 	// mix them
 	var/mixedcolor = 0
 
-	for(var/i = 1, i <= contents, i++)
+	for (var/i = 1, i <= contents, i++)
 		mixedcolor += weight[i] * color[i]
 
 	// until someone writes a formal proof for this algorithm, let's keep this in

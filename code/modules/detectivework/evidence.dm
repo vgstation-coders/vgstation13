@@ -9,29 +9,29 @@
 	w_class = W_CLASS_TINY
 
 /obj/item/weapon/evidencebag/afterattack(obj/item/I, mob/user, proximity_flag, click_parameters)
-	if(proximity_flag == 0) // not adjacent
+	if (proximity_flag == 0) // not adjacent
 		return
 
-	if(!istype(I) || I.anchored == 1)
+	if (!istype(I) || I.anchored == 1)
 		return ..()
 
-	if(istype(I, /obj/item/weapon/storage))
+	if (istype(I, /obj/item/weapon/storage))
 		return ..()
 
-	if(istype(I, /obj/item/weapon/evidencebag))
+	if (istype(I, /obj/item/weapon/evidencebag))
 		to_chat(user, "<span class='notice'>You find putting an evidence bag in another evidence bag to be slightly absurd.</span>")
 		return
 
-	if(I.w_class > W_CLASS_MEDIUM)
+	if (I.w_class > W_CLASS_MEDIUM)
 		to_chat(user, "<span class='notice'>[I] won't fit in [src].</span>")
 		return
 
-	if(contents.len)
+	if (contents.len)
 		to_chat(user, "<span class='notice'>[src] already has something inside it.</span>")
 		return ..()
 
-	if(!isturf(I.loc)) //If it isn't on the floor. Do some checks to see if it's in our hands or a box. Otherwise give up.
-		if(istype(I.loc,/obj/item/weapon/storage))	//in a container.
+	if (!isturf(I.loc)) //If it isn't on the floor. Do some checks to see if it's in our hands or a box. Otherwise give up.
+		if (istype(I.loc,/obj/item/weapon/storage))	//in a container.
 			var/obj/item/weapon/storage/U = I.loc
 			user.client.screen -= I
 			U.contents.Remove(I)
@@ -60,7 +60,7 @@
 
 
 /obj/item/weapon/evidencebag/attack_self(mob/user as mob)
-	if(contents.len)
+	if (contents.len)
 		var/obj/item/I = contents[1]
 		user.visible_message("[user] takes [I] out of [src]", "You take [I] out of [src].",\
 		"You hear someone rustle around in a plastic bag, and remove something.")
@@ -76,9 +76,9 @@
 	return
 
 obj/item/weapon/evidencebag/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
-	if(istype(W, /obj/item/weapon/pen))
+	if (istype(W, /obj/item/weapon/pen))
 		var/new_label = sanitize(trim(input("What should the new label be", "") as null|text))
-		if(new_label)
+		if (new_label)
 			name = "bag ([new_label])"
 			to_chat(user, "<span class='notice'>You write on the label of the bag.</span>")
 	else

@@ -9,26 +9,26 @@ obj/machinery/scanner
 	var/lastuser = null
 
 obj/machinery/scanner/New()
-	if(!outputdir)
-		switch(dir)
-			if(1)
+	if (!outputdir)
+		switch (dir)
+			if (1)
 				outputdir = 2
-			if(2)
+			if (2)
 				outputdir = 1
-			if(4)
+			if (4)
 				outputdir = 8
-			if(8)
+			if (8)
 				outputdir = 4
-		if(!outputdir)
+		if (!outputdir)
 			outputdir = 8
 
 /obj/machinery/scanner/process()
-	if(stat & NOPOWER)
+	if (stat & NOPOWER)
 		return
 	use_power(50)
 
 /obj/machinery/scanner/power_change()
-	if(!powered())
+	if (!powered())
 		spawn(rand(0, 15))
 			icon_state = "scanner_off"
 			stat |= NOPOWER
@@ -37,9 +37,9 @@ obj/machinery/scanner/New()
 		stat &= ~NOPOWER
 
 obj/machinery/scanner/attack_hand(mob/living/carbon/human/user)
-	if(stat & NOPOWER)
+	if (stat & NOPOWER)
 		return
-	if(!ishuman(user) || lastuser == user.real_name)
+	if (!ishuman(user) || lastuser == user.real_name)
 		return
 	use_power(500)
 	flick("scanner_on",src)
@@ -53,10 +53,10 @@ obj/machinery/scanner/attack_hand(mob/living/carbon/human/user)
 	var/gender = user.gender
 	/* no dbstuff yet
 	var/DBQuery/cquery = dbcon.NewQuery("SELECT * from jobban WHERE ckey='[user.ckey]'")
-	if(!cquery.Execute())
+	if (!cquery.Execute())
 		return
 	else
-		while(cquery.NextRow())
+		while (cquery.NextRow())
 			var/list/row = cquery.GetRowData()
 			marks += row["rank"]
 	*/
@@ -70,7 +70,7 @@ obj/machinery/scanner/attack_hand(mob/living/carbon/human/user)
 	<b><u>Fingerprint</u></b>: [fingerprint]
 
 	<b><u>Black Marks</u></b>:<br> "}
-	for(var/A in marks)
+	for (var/A in marks)
 		text += "<span class='warning'>[A]<br></span>"
 	to_chat(user, "<span class='notice'>You feel a sting as the scanner extracts some of your blood.</span>")
 	var/turf/T = get_step(src,outputdir)
@@ -79,7 +79,7 @@ obj/machinery/scanner/attack_hand(mob/living/carbon/human/user)
 	print.info = text
 	print.stamped = 1
 
-	for(var/datum/data/record/test in data_core.general)
+	for (var/datum/data/record/test in data_core.general)
 		if (test.fields["name"] == mname)
 			return
 
@@ -95,7 +95,7 @@ obj/machinery/scanner/attack_hand(mob/living/carbon/human/user)
 	M.fields["id"] = G.fields["id"]
 	S.fields["name"] = G.fields["name"]
 	S.fields["id"] = G.fields["id"]
-	if(gender == FEMALE)
+	if (gender == FEMALE)
 		G.fields["sex"] = "Female"
 	else
 		G.fields["sex"] = "Male"

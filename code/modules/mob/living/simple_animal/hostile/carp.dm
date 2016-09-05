@@ -52,24 +52,24 @@
 /mob/living/simple_animal/hostile/carp/New()
 	.=..()
 	gender = pick(MALE, FEMALE)
-	if(gender==FEMALE)
+	if (gender==FEMALE)
 		child_amount = rand(4,6) //Mother explodes on death, so letting it leave 5 child carps (that can't breed) behind is fair
 
 /mob/living/simple_animal/hostile/carp/examine(mob/user)
 	..()
-	if(Adjacent(user))
+	if (Adjacent(user))
 		to_chat(user, "It appears to be [(gender==MALE) ? "male" : "female"].")
 
 /mob/living/simple_animal/hostile/carp/give_birth()
 	spawn(rand(100,200))
-		if(!src)
+		if (!src)
 			return
 
 		src.death(0)
 
 		sleep(30)
 
-		if(..())
+		if (..())
 			src.gib(meat=0)
 			src.visible_message("<span class='danger'>[src]'s body explodes in a shower of gore as its offspring burst out!</span>")
 
@@ -77,28 +77,28 @@
 	return 1	//No drifting in space for space carp!	//original comments do not steal
 
 /mob/living/simple_animal/hostile/carp/CanAttack(var/atom/the_target)
-	if(ismob(the_target) && the_target.reagents)
-		if(pheromones_act == PHEROMONES_NEUTRAL && the_target.reagents.has_reagent(CARPPHEROMONES))
+	if (ismob(the_target) && the_target.reagents)
+		if (pheromones_act == PHEROMONES_NEUTRAL && the_target.reagents.has_reagent(CARPPHEROMONES))
 			return 0 //Carps who avoid pheromones don't target mobs with pheromones in their system. They just ignore them!
 	return ..(the_target)
 
 /mob/living/simple_animal/hostile/carp/FindTarget()
 	. = ..()
-	if(.)
+	if (.)
 		emote("nashes at [.]")
 
 /mob/living/simple_animal/hostile/carp/AttackingTarget()
-	if(!target)
+	if (!target)
 		return
 
-	if(pheromones_act == PHEROMONES_FOLLOW && target.reagents && target.reagents.has_reagent(CARPPHEROMONES))
+	if (pheromones_act == PHEROMONES_FOLLOW && target.reagents && target.reagents.has_reagent(CARPPHEROMONES))
 		return	//This might be a bit hacky. The purpose of this is to prevent carps who are attracted to pheromones from attacking
 				//the source. Instead, it simply follows it.
 
 	. =..()
 	var/mob/living/carbon/L = .
-	if(istype(L))
-		if(prob(15))
+	if (istype(L))
+		if (prob(15))
 			L.Weaken(3)
 			L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
 
@@ -129,10 +129,10 @@
 	..()
 
 	//Handle eating
-	if(isliving(target))
+	if (isliving(target))
 		var/mob/living/L = target
 
-		if(!L.meat_type)
+		if (!L.meat_type)
 			return
 
 		increase_growth_stage(1)
@@ -140,24 +140,24 @@
 /mob/living/simple_animal/hostile/carp/baby/attackby(obj/W, mob/user)
 	..()
 
-	if(!isDead() && istype(W, /obj/item/weapon/reagent_containers/food/snacks))
+	if (!isDead() && istype(W, /obj/item/weapon/reagent_containers/food/snacks))
 		var/obj/item/weapon/reagent_containers/food/snacks/F = W
 
-		if((F.food_flags & FOOD_MEAT) && (growth_stage < req_growth_to_grow_up)) //Any meaty dish goes!
+		if ((F.food_flags & FOOD_MEAT) && (growth_stage < req_growth_to_grow_up)) //Any meaty dish goes!
 			playsound(get_turf(src),'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='info'>\The [src] gobbles up \the [W]!")
 			user.drop_item(F, force_drop = 1)
 
-			if(prob(25))
-				if(!friends.Find(user))
+			if (prob(25))
+				if (!friends.Find(user))
 					friends.Add(user)
 					to_chat(user, "<span class='info'>You have gained \the [src]'s trust.</span>")
 					var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
 					heart.plane = ABOVE_HUMAN_PLANE
 					flick_overlay(heart, list(user.client), 20)
 
-			if(F.reagents)
-				for(var/datum/reagent/N in F.reagents.reagent_list)
+			if (F.reagents)
+				for (var/datum/reagent/N in F.reagents.reagent_list)
 					reagent_act(N.id, INGEST, N.volume)
 
 			qdel(F)
@@ -169,12 +169,12 @@
 	return 1
 
 /mob/living/simple_animal/hostile/carp/baby/proc/increase_growth_stage(by = 1)
-	if(growth_stage >= req_growth_to_grow_up)
+	if (growth_stage >= req_growth_to_grow_up)
 		return
 
 	growth_stage += by
 
-	if(growth_stage >= req_growth_to_grow_up)
+	if (growth_stage >= req_growth_to_grow_up)
 		//Start growing up
 		desc = "[initial(desc)] <span class='notice'>It ate a lot recently, and it appears to be ready to grow up.</span>"
 		spawn(rand(5 SECONDS, 30 SECONDS))
@@ -183,7 +183,7 @@
 /mob/living/simple_animal/hostile/carp/baby/reagent_act(id, method, volume)
 	..()
 
-	if(id == NUTRIMENT && method == INGEST)
+	if (id == NUTRIMENT && method == INGEST)
 		increase_growth_stage(volume)
 
 /mob/living/simple_animal/hostile/carp/holocarp

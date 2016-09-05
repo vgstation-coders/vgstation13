@@ -17,8 +17,8 @@
 
 /datum/rcd_schematic/Destroy()
 	master = null
-	if(ourobj)
-		for(var/client/C in clients)
+	if (ourobj)
+		for (var/client/C in clients)
 			C.screen.Remove(ourobj)
 		returnToPool(ourobj)
 		ourobj = null
@@ -72,7 +72,7 @@ return value:
 */
 
 /datum/rcd_schematic/proc/select(var/mob/user, var/datum/rcd_schematic/old_schematic)
-	if(old_schematic)
+	if (old_schematic)
 		old_schematic.deselect(user, src)
 
 	master.spark()

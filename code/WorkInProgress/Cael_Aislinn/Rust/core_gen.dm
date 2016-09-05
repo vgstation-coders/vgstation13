@@ -70,50 +70,50 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 
 /obj/machinery/power/rust_core/New()
 	. = ..()
-	if(ticker)
+	if (ticker)
 		initialize()
 
 /obj/machinery/power/rust_core/initialize()
-	if(!id_tag)
+	if (!id_tag)
 		assign_uid()
 		id_tag = uid
 
 /obj/machinery/power/rust_core/process()
-	if(stat & BROKEN || !powernet)
+	if (stat & BROKEN || !powernet)
 		Shutdown()
 
 /obj/machinery/power/rust_core/weldToFloor(var/obj/item/weapon/weldingtool/WT, mob/user)
-	if(owned_field)
+	if (owned_field)
 		to_chat(user, user << "<span class='warning'>Turn \the [src] off first!</span>")
 		return -1
 
-	if(..() == 1)
-		switch(state)
-			if(1)
+	if (..() == 1)
+		switch (state)
+			if (1)
 				disconnect_from_network()
-			if(2)
+			if (2)
 				connect_to_network()
 		return 1
 	return -1
 
 /obj/machinery/power/rust_core/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
-	if(href_list["str"])
+	if (href_list["str"])
 		var/dif = text2num(href_list["str"])
 		field_strength = min(max(field_strength + dif, MIN_FIELD_STR), MAX_FIELD_STR)
 		active_power_usage = 5 * field_strength	//change to 500 later
-		if(owned_field)
+		if (owned_field)
 			owned_field.ChangeFieldStrength(field_strength)
 
-	if(href_list["freq"])
+	if (href_list["freq"])
 		var/dif = text2num(href_list["freq"])
 		field_frequency = min(max(field_frequency + dif, MIN_FIELD_FREQ), MAX_FIELD_FREQ)
-		if(owned_field)
+		if (owned_field)
 			owned_field.ChangeFieldFrequency(field_frequency)
 
 /obj/machinery/power/rust_core/proc/Startup()
-	if(owned_field)
+	if (owned_field)
 		return
 
 	owned_field = new(loc, src)
@@ -126,19 +126,19 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 
 /obj/machinery/power/rust_core/proc/Shutdown()
 	//todo: safety checks for field status
-	if(owned_field)
+	if (owned_field)
 		icon_state = "core0"
 		qdel(owned_field)
 		use_power = 1
 		set_light(0)
 
 /obj/machinery/power/rust_core/proc/AddParticles(var/name, var/quantity = 1)
-	if(owned_field)
+	if (owned_field)
 		owned_field.AddParticles(name, quantity)
 		. = 1
 
 /obj/machinery/power/rust_core/bullet_act(var/obj/item/projectile/Proj)
-	if(owned_field)
+	if (owned_field)
 		. = owned_field.bullet_act(Proj)
 
 /obj/machinery/power/rust_core/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
@@ -152,11 +152,11 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	value = Clamp(value, MIN_FIELD_STR, MAX_FIELD_STR)
 	field_strength = value
 	active_power_usage = RUST_CORE_STR_COST * value
-	if(owned_field)
+	if (owned_field)
 		owned_field.ChangeFieldStrength(value)
 
 /obj/machinery/power/rust_core/proc/set_frequency(var/value)
 	value = Clamp(value, MIN_FIELD_FREQ, MAX_FIELD_FREQ)
 	field_frequency = value
-	if(owned_field)
+	if (owned_field)
 		owned_field.ChangeFieldFrequency(value)

@@ -42,20 +42,20 @@
 /obj/item/stack/tile/plasteel/proc/build(turf/S as turf)
 
 
-	if(istype(S,/turf/space) || istype(S,/turf/unsimulated))
+	if (istype(S,/turf/space) || istype(S,/turf/unsimulated))
 		S.ChangeTurf(/turf/simulated/floor/plating/airless)
 	else
 		S.ChangeTurf(/turf/simulated/floor/plating)
 	return
 
 /obj/item/stack/tile/plasteel/attackby(obj/item/W as obj, mob/user as mob)
-	if(iswelder(W))
+	if (iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
-		if(amount < 4)
+		if (amount < 4)
 			to_chat(user, "<span class='warning'>You need at least four tiles to do this.</span>")
 			return
 
-		if(WT.remove_fuel(0,user))
+		if (WT.remove_fuel(0,user))
 			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal)
 			M.amount = 1
 			M.forceMove(get_turf(usr)) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
@@ -72,25 +72,25 @@
 	return ..()
 
 /obj/item/stack/tile/plasteel/afterattack(atom/target, mob/user, adjacent, params)
-	if(adjacent)
-		if(isturf(target) || istype(target, /obj/structure/lattice))
+	if (adjacent)
+		if (isturf(target) || istype(target, /obj/structure/lattice))
 			var/turf/T = get_turf(target)
 			var/obj/structure/lattice/L
 			var/obj/item/stack/tile/plasteel/S = src
-			switch(T.canBuildPlating())
-				if(BUILD_SUCCESS)
+			switch (T.canBuildPlating())
+				if (BUILD_SUCCESS)
 					L = locate(/obj/structure/lattice) in T
-					if(!istype(L))
+					if (!istype(L))
 						return
 					qdel(L)
 					playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1)
 					S.build(T)
 					S.use(1)
 					return
-				if(BUILD_IGNORE)
+				if (BUILD_IGNORE)
 					playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1)
 					S.build(T)
 					S.use(1)
-				if(BUILD_FAILURE)
+				if (BUILD_FAILURE)
 					to_chat(user, "<span class='warning'>The plating is going to need some support.</span>")
 					return

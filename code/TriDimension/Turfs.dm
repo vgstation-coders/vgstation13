@@ -3,23 +3,23 @@ atom/movable/var/archived_z_level
 
 atom/movable/Move() //Hackish
 
-	if(adjacent_z_levels && adjacent_z_levels["up"])
+	if (adjacent_z_levels && adjacent_z_levels["up"])
 		var/turf/above_me = locate(x,y,adjacent_z_levels["up"])
-		if(istype(above_me, /turf/simulated/floor/open))
+		if (istype(above_me, /turf/simulated/floor/open))
 			above_me:RemoveImage(src)
 
 	. = ..()
 
-	if(archived_z_level != z)
+	if (archived_z_level != z)
 		archived_z_level = z
-		if(z in levels_3d)
+		if (z in levels_3d)
 			adjacent_z_levels = global_adjacent_z_levels["[z]"]
 		else
 			adjacent_z_levels = null
 
-	if(adjacent_z_levels && adjacent_z_levels["up"])
+	if (adjacent_z_levels && adjacent_z_levels["up"])
 		var/turf/above_me = locate(x,y,adjacent_z_levels["up"])
-		if(istype(above_me, /turf/simulated/floor/open))
+		if (istype(above_me, /turf/simulated/floor/open))
 			above_me:AddImage(src)
 
 /turf/simulated/floor/open
@@ -36,17 +36,17 @@ atom/movable/Move() //Hackish
 	New()
 		..()
 		spawn(1)
-			if(!(z in levels_3d))
+			if (!(z in levels_3d))
 				ReplaceWithSpace()
 			var/list/adjacent_to_me = global_adjacent_z_levels["[z]"]
-			if(!("down" in adjacent_to_me))
+			if (!("down" in adjacent_to_me))
 				ReplaceWithSpace()
 
 			floorbelow = locate(x, y, adjacent_to_me["down"])
-			if(floorbelow)
-				if(!istype(floorbelow,/turf))
+			if (floorbelow)
+				if (!istype(floorbelow,/turf))
 					del src
-				else if(floorbelow.density)
+				else if (floorbelow.density)
 					ReplaceWithPlating()
 				else
 					set_up()
@@ -57,7 +57,7 @@ atom/movable/Move() //Hackish
 	Enter(var/atom/movable/AM)
 		if (..()) //TODO make this check if gravity is active (future use) - Sukasa
 			spawn(1)
-				if(AM)
+				if (AM)
 					AM.Move(floorbelow)
 					if (istype(AM, /mob/living/carbon/human))
 						var/mob/living/carbon/human/H = AM
@@ -76,12 +76,12 @@ atom/movable/Move() //Hackish
 		return //nothing
 
 	proc/set_up() //Update the overlays to make the openspace turf show what's down a level
-		if(!overlay_references)
+		if (!overlay_references)
 			overlay_references = list()
-		if(!floorbelow)
+		if (!floorbelow)
 			return
 		overlays += floorbelow
-		for(var/obj/o in floorbelow)
+		for (var/obj/o in floorbelow)
 			var/image/o_img = image(o, dir=o.dir, layer = TURF_LAYER+0.05*o.layer)
 			overlays += o_img
 			overlay_references[o] = o_img

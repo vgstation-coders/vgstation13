@@ -22,7 +22,7 @@
 
 /*/datum/surgery_step/glue_bone/can_operate(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	if(affected.brute_dam >= affected.min_broken_damage * config.organ_health_multiplier)
+	if (affected.brute_dam >= affected.min_broken_damage * config.organ_health_multiplier)
 		to_chat(user, "<span class='warning'>The [affected.display_name] is far too damaged to operate on the fracture. Fix some of the damage first.</span>")
 		return 0
 	return ..()*/
@@ -64,7 +64,7 @@
 
 /*/datum/surgery_step/set_bone/can_operate(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	if(affected.brute_dam >= affected.min_broken_damage * config.organ_health_multiplier)
+	if (affected.brute_dam >= affected.min_broken_damage * config.organ_health_multiplier)
 		to_chat(user, "<span class='warning'>The [affected.display_name] is far too damaged to operate on the fracture. Fix some of the damage first.</span>")
 		return 0
 	return ..()*/
@@ -111,7 +111,7 @@
 
 /*/datum/surgery_step/mend_skull/can_operate(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	if(affected.brute_dam >= affected.min_broken_damage * config.organ_health_multiplier)
+	if (affected.brute_dam >= affected.min_broken_damage * config.organ_health_multiplier)
 		to_chat(user, "<span class='warning'>The [affected.display_name] is far too damaged to operate on the fracture. Fix some of the damage first.</span>")
 		return 0
 	return ..()*/
@@ -156,7 +156,7 @@
 
 /*/datum/surgery_step/finish_bone/can_operate(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	if(affected.brute_dam >= affected.min_broken_damage * config.organ_health_multiplier)
+	if (affected.brute_dam >= affected.min_broken_damage * config.organ_health_multiplier)
 		to_chat(user, "<span class='warning'>The [affected.display_name] is far too damaged to operate on the fracture. Fix some of the damage first.</span>")
 		return 0
 	return ..()*/
@@ -175,7 +175,7 @@
 	affected.status &= ~ORGAN_SPLINTED
 	affected.stage = 0
 	affected.perma_injury = 0
-	if(affected.brute_dam >= affected.min_broken_damage * config.organ_health_multiplier)
+	if (affected.brute_dam >= affected.min_broken_damage * config.organ_health_multiplier)
 		affected.heal_damage(affected.brute_dam - (affected.min_broken_damage - rand(3,5)) * config.organ_health_multiplier) //Put the limb's brute damage just under the bone breaking threshold, to prevent it from instabreaking again.
 
 /datum/surgery_step/finish_bone/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

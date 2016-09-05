@@ -45,12 +45,12 @@
 /obj/item/device/radio/New()
 	wires = new(src)
 
-	if(prison_radio)
+	if (prison_radio)
 		wires.CutWireIndex(WIRE_TRANSMIT)
 
 	secure_radio_connections = new
 	..(loc)
-	if(radio_controller)
+	if (radio_controller)
 		initialize()
 
 /obj/item/device/radio/Destroy()
@@ -61,8 +61,8 @@
 
 /obj/item/device/radio/initialize()
 
-	if(freerange)
-		if(frequency < 1200 || frequency > 1600)
+	if (freerange)
+		if (frequency < 1200 || frequency > 1600)
 			frequency = sanitize_frequency(frequency, maxf)
 	// The max freq is higher than a regular headset to decrease the chance of people listening in, if you use the higher channels.
 	else if (frequency < 1441 || frequency > maxf)
@@ -75,7 +75,7 @@
 		secure_radio_connections[channel_name] = add_radio(src, radiochannels[channel_name])
 
 /obj/item/device/radio/AltClick()
-	if(!usr.incapacitated() && is_holder_of(usr, src))
+	if (!usr.incapacitated() && is_holder_of(usr, src))
 		attack_self(usr)
 
 /obj/item/device/radio/attack_self(mob/user as mob)
@@ -83,15 +83,15 @@
 	interact(user)
 
 /obj/item/device/radio/interact(mob/user as mob)
-	if(!on)
+	if (!on)
 		return
 
-	if(active_uplink_check(user))
+	if (active_uplink_check(user))
 		return
 
 	var/dat = "<html><head><title>[src]</title></head><body><TT>"
 
-	if(!istype(src, /obj/item/device/radio/headset)) //Headsets dont get a mic button
+	if (!istype(src, /obj/item/device/radio/headset)) //Headsets dont get a mic button
 		dat += "Microphone: [broadcasting ? "<A href='byond://?src=\ref[src];talk=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];talk=1'>Disengaged</A>"]<BR>"
 
 	dat += {"
@@ -135,21 +135,21 @@
 	if (href_list["open"])
 		var/mob/target = locate(href_list["open"])
 		var/mob/living/silicon/ai/A = locate(href_list["open2"])
-		if(A && target)
+		if (A && target)
 			A.open_nearest_door(target)
 		return
 
 	if (href_list["track"])
 		var/mob/target = locate(href_list["track"])
 		var/mob/living/silicon/ai/A = locate(href_list["track2"])
-		if(A && target)
+		if (A && target)
 			A.ai_actual_track(target)
 		return
 
 	else if (href_list["faketrack"])
 		var/mob/target = locate(href_list["track"])
 		var/mob/living/silicon/ai/A = locate(href_list["track2"])
-		if(A && target)
+		if (A && target)
 
 			A:cameraFollow = target
 			to_chat(A, text("Now tracking [] on camera.", target.name))
@@ -168,8 +168,8 @@
 		if (!freerange || (frequency < 1200 || frequency > 1600))
 			new_frequency = sanitize_frequency(new_frequency, maxf)
 		set_frequency(new_frequency)
-		if(hidden_uplink)
-			if(hidden_uplink.check_trigger(usr, frequency, traitor_frequency))
+		if (hidden_uplink)
+			if (hidden_uplink.check_trigger(usr, frequency, traitor_frequency))
 				usr << browse(null, "window=radio")
 				return
 
@@ -201,7 +201,7 @@
 /*
 /obj/item/device/radio/proc/autosay(var/message, var/from, var/channel) //BS12 EDIT
 	var/datum/radio_frequency/connection = null
-	if(channel && channels && channels.len > 0)
+	if (channel && channels && channels.len > 0)
 		if (channel == "department")
 //			to_chat(world, "DEBUG: channel=\"[channel]\" switching to \"[channels[1]]\"")
 			channel = channels[1]
@@ -226,21 +226,21 @@
 
 /obj/item/device/radio/talk_into(var/datum/speech/speech_orig, var/channel=null)
 	say_testing(loc, "\[Radio\] - Got radio/talk_into([html_encode(speech_orig.message)], [channel!=null ? channel : "null"]).")
-	if(!on)
+	if (!on)
 		say_testing(loc, "\[Radio\] - Not on.")
 		return // the device has to be on
 	//  Fix for permacell radios, but kinda eh about actually fixing them.
-	if(!speech_orig.speaker || !speech_orig.message)
+	if (!speech_orig.speaker || !speech_orig.message)
 		say_testing(loc, "\[Radio\] - speech.speaker or speech.message are null. [speech_orig.speaker], [html_encode(speech_orig.message)]")
 		return
 
 	//  Uncommenting this. To the above comment:
 	// 	The permacell radios aren't suppose to be able to transmit, this isn't a bug and this "fix" is just making radio wires useless. -Giacom
-	if(isWireCut(WIRE_TRANSMIT)) // The device has to have all its wires and shit intact
+	if (isWireCut(WIRE_TRANSMIT)) // The device has to have all its wires and shit intact
 		say_testing(loc, "\[Radio\] - TRANSMIT wire cut.")
 		return
 
-	if(!speech_orig.speaker.IsVocal())
+	if (!speech_orig.speaker.IsVocal())
 		say_testing(loc, "\[Radio\] - Speaker not vocal.")
 		return
 
@@ -266,22 +266,22 @@
 	#endif
 
 	var/skip_freq_search=0
-	switch(channel)
-		if(MODE_HEADSET,null) // Used for ";" prefix, which always sends to src.frequency.
+	switch (channel)
+		if (MODE_HEADSET,null) // Used for ";" prefix, which always sends to src.frequency.
 			say_testing(loc, "\[Radio\] - channel=[channel]; Forcing frequency to be [frequency].")
 			speech.frequency = src.frequency
 			channel = null
 			skip_freq_search=1
-		if(MODE_SECURE_HEADSET) // Secure headset (?)
+		if (MODE_SECURE_HEADSET) // Secure headset (?)
 			channel = 1 // Always pick the first channel...?
 
 
-	if(!skip_freq_search)
-		if(channel && channels && channels.len > 0)
-			if(channel == "department")
+	if (!skip_freq_search)
+		if (channel && channels && channels.len > 0)
+			if (channel == "department")
 				channel = channels[1]
 			speech.frequency = secure_radio_connections[channel]
-			if(!channels[channel])
+			if (!channels[channel])
 				say_testing(loc, "\[Radio\] - Unable to find channel \"[channel]\".")
 				returnToPool(speech)
 				return
@@ -300,15 +300,15 @@
 	var/mobkey = "none" // player key associated with mob
 	var/voicemask = 0 // the speaker is wearing a voice mask
 	var/voice = speech.speaker.GetVoice() // Why reinvent the wheel when there is a proc that does nice things already
-	if(ismob(speech.speaker))
+	if (ismob(speech.speaker))
 		var/mob/speaker = speech.speaker
 		real_name = speaker.real_name
-		if(speaker.client)
+		if (speaker.client)
 			mobkey = speaker.key // assign the mob's key
 
 	// --- Human: use their actual job ---
 	if (ishuman(speech.speaker))
-		if(voice != real_name)
+		if (voice != real_name)
 			voicemask = 1
 		speech.job = speech.speaker:get_assignment()
 
@@ -329,7 +329,7 @@
 		speech.job = "Personal AI"
 
 	// --- Cold, emotionless machines. ---
-	else if(isobj(speech.speaker))
+	else if (isobj(speech.speaker))
 		speech.job = "Machine"
 
 	// --- Unidentifiable mob ---
@@ -349,7 +349,7 @@
 
   /* ###### Radio headsets can only broadcast through subspace ###### */
 
-	if(subspace_transmission)
+	if (subspace_transmission)
 		// First, we want to generate a new radio signal
 		var/datum/signal/signal = getFromPool(/datum/signal)
 		signal.transmission_method = 2 // 2 would be a subspace transmission.
@@ -393,11 +393,11 @@
 
 	  //#### Sending the signal to all subspace receivers ####//
 
-		for(var/obj/machinery/telecomms/receiver/R in telecomms_list)
+		for (var/obj/machinery/telecomms/receiver/R in telecomms_list)
 			R.receive_signal(signal)
 
 		// Allinone can act as receivers.
-		for(var/obj/machinery/telecomms/allinone/R in telecomms_list)
+		for (var/obj/machinery/telecomms/allinone/R in telecomms_list)
 			R.receive_signal(signal)
 
 		// Receiving code can be located in Telecommunications.dm
@@ -410,7 +410,7 @@
 	var/filter_type = 2
 
 	/* --- Intercoms can only broadcast to other intercoms, but bounced radios can broadcast to bounced radios and intercoms --- */
-	if(istype(src, /obj/item/device/radio/intercom))
+	if (istype(src, /obj/item/device/radio/intercom))
 		filter_type = 1
 
 
@@ -451,12 +451,12 @@
 
 	say_testing(loc, "talk_into(): subspace signal frequency set to [signal.frequency]")
 
-	for(var/obj/machinery/telecomms/receiver/R in telecomms_list)
+	for (var/obj/machinery/telecomms/receiver/R in telecomms_list)
 		R.receive_signal(signal)
 
 	spawn(rand(10,25)) // wait a little...
 
-		if(signal.data["done"] && position.z in signal.data["level"])
+		if (signal.data["done"] && position.z in signal.data["level"])
 			// we're done here.
 			returnToPool(speech)
 			return
@@ -467,10 +467,10 @@
 		returnToPool(speech)
 
 /obj/item/device/radio/Hear(var/datum/speech/speech, var/rendered_speech="")
-	if(!speech.speaker || speech.frequency)
+	if (!speech.speaker || speech.frequency)
 		return
 	if (broadcasting)
-		if(get_dist(src, speech.speaker) <= canhear_range)
+		if (get_dist(src, speech.speaker) <= canhear_range)
 			talk_into(speech)
 /*
 /obj/item/device/radio/proc/accept_rad(obj/item/device/radio/R as obj, message)
@@ -493,14 +493,14 @@
 
 	if (isWireCut(WIRE_RECEIVE))
 		return -1
-	if(!listening)
+	if (!listening)
 		return -1
-	if(!(0 in level))
+	if (!(0 in level))
 		var/turf/position = get_turf(src)
-		if(!position || !(position.z in level))
+		if (!position || !(position.z in level))
 			return -1
-	if(freq == SYND_FREQ)
-		if(!(src.syndie))//Checks to see if it's allowed on that frequency, based on the encryption keys
+	if (freq == SYND_FREQ)
+		if (!(src.syndie))//Checks to see if it's allowed on that frequency, based on the encryption keys
 			return -1
 	if (!on)
 		return -1
@@ -511,8 +511,8 @@
 		var/accept = (freq==frequency && listening)
 		if (!accept)
 			for (var/ch_name in channels)
-				if(channels[ch_name] & FREQ_LISTENING)
-					if(radiochannels[ch_name] == text2num(freq) || syndie)
+				if (channels[ch_name] & FREQ_LISTENING)
+					if (radiochannels[ch_name] == text2num(freq) || syndie)
 						accept = 1
 						break
 		if (!accept)
@@ -523,7 +523,7 @@
 
 
 	var/range = receive_range(freq, level)
-	if(range > -1)
+	if (range > -1)
 		return get_hearers_in_view(canhear_range, src)
 
 

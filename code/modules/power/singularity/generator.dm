@@ -19,7 +19,7 @@
 
 	if (fingerprintshidden)
 		prints=", all touchers: "
-		for(var/line in fingerprintshidden)
+		for (var/line in fingerprintshidden)
 			prints += ",[line] "
 
 	log_admin("New singularity made[prints]. Last touched by [fingerprintslast].")

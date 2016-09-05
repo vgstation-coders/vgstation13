@@ -37,9 +37,9 @@
 	processing_objects.Add(src)
 
 /obj/item/weapon/anodevice/attackby(var/obj/I as obj, var/mob/user as mob)
-	if(istype(I, /obj/item/weapon/anobattery))
-		if(!inserted_battery)
-			if(user.drop_item(I, src))
+	if (istype(I, /obj/item/weapon/anobattery))
+		if (!inserted_battery)
+			if (user.drop_item(I, src))
 				to_chat(user, "<span class='notice'>You insert the battery.</span>")
 				inserted_battery = I
 				UpdateSprite()
@@ -47,18 +47,18 @@
 		return ..()
 
 /obj/item/weapon/anodevice/attack_self(var/mob/user as mob)
-	if(in_range(src, user))
+	if (in_range(src, user))
 		return src.interact(user)
 
 /obj/item/weapon/anodevice/interact(var/mob/user)
 
 	user.set_machine(src)
 	var/dat = "<b>Anomalous Materials Energy Utilizer</b><br>"
-	if(inserted_battery)
-		if(cooldown)
+	if (inserted_battery)
+		if (cooldown)
 			dat += "Cooldown in progress, please wait.<br>"
-		else if(activated)
-			if(timing)
+		else if (activated)
+			if (timing)
 				dat += "Device active.<br>"
 			else
 				dat += "Device active in timed mode.<br>"
@@ -66,10 +66,10 @@
 		dat += "[inserted_battery] inserted, anomaly ID: [inserted_battery.battery_effect.artifact_id ? inserted_battery.battery_effect.artifact_id : "NA"]<BR>"
 		dat += "<b>Total Power:</b> [inserted_battery.stored_charge]/[inserted_battery.capacity]<BR><BR>"
 		dat += "<b>Timed activation:</b> <A href='?src=\ref[src];neg_changetime_max=-100'>--</a> <A href='?src=\ref[src];neg_changetime=-10'>-</a> [time >= 1000 ? "[time/10]" : time >= 100 ? " [time/10]" : "  [time/10]" ] <A href='?src=\ref[src];changetime=10'>+</a> <A href='?src=\ref[src];changetime_max=100'>++</a><BR>"
-		if(cooldown)
+		if (cooldown)
 			dat += "<font color=red>Cooldown in progress.</font><BR>"
 			dat += "<br>"
-		else if(!activated)
+		else if (!activated)
 			dat += "<A href='?src=\ref[src];startup=1'>Start</a><BR>"
 			dat += "<A href='?src=\ref[src];startup=1;starttimer=1'>Start in timed mode</a><BR>"
 		else
@@ -94,51 +94,51 @@
 	onclose(user, "anodevice")
 
 /obj/item/weapon/anodevice/process()
-	if(cooldown > 0)
+	if (cooldown > 0)
 		cooldown -= 1
-		if(cooldown <= 0)
+		if (cooldown <= 0)
 			cooldown = 0
 			src.visible_message("<span class='notice'>[bicon(src)] [src] chimes.</span>", "<span class='notice'>[bicon(src)] You hear something chime.</span>")
-	else if(activated)
-		if(inserted_battery && inserted_battery.battery_effect)
+	else if (activated)
+		if (inserted_battery && inserted_battery.battery_effect)
 			//make sure the effect is active
-			if(!inserted_battery.battery_effect.activated)
+			if (!inserted_battery.battery_effect.activated)
 				inserted_battery.battery_effect.ToggleActivate(1)
 
 			//update the effect loc
 			var/turf/T = get_turf(src)
-			if(T != archived_loc)
+			if (T != archived_loc)
 				archived_loc = T
 				inserted_battery.battery_effect.UpdateMove()
 
 			//process the effect
 			inserted_battery.battery_effect.process()
 			//if someone is holding the device, do the effect on them
-			if(inserted_battery.battery_effect.effect == EFFECT_TOUCH && ismob(src.loc))
+			if (inserted_battery.battery_effect.effect == EFFECT_TOUCH && ismob(src.loc))
 				inserted_battery.battery_effect.DoEffectTouch(src.loc)
 
 			//handle charge
 			inserted_battery.stored_charge -= 1
-			if(inserted_battery.stored_charge <= 0)
+			if (inserted_battery.stored_charge <= 0)
 				shutdown_emission()
 
 			//handle timed mode
-			if(timing)
+			if (timing)
 				time -= 1
-				if(time <= 0)
+				if (time <= 0)
 					shutdown_emission()
 		else
 			shutdown()
 
 /obj/item/weapon/anodevice/proc/shutdown_emission()
-	if(activated)
+	if (activated)
 		activated = 0
 		timing = 0
 		src.visible_message("<span class='notice'>[bicon(src)] [src] buzzes.</span>", "[bicon(src)]<span class='notice'>You hear something buzz.</span>")
 
 		cooldown = archived_time / 2
 
-		if(inserted_battery.battery_effect.activated)
+		if (inserted_battery.battery_effect.activated)
 			inserted_battery.battery_effect.ToggleActivate(1)
 
 /obj/item/weapon/anodevice/Topic(href, href_list)
@@ -146,46 +146,46 @@
 	if ((get_dist(src, usr) > 1))
 		return
 	usr.set_machine(src)
-	if(href_list["neg_changetime_max"])
+	if (href_list["neg_changetime_max"])
 		time += -100
-		if(time > inserted_battery.capacity)
+		if (time > inserted_battery.capacity)
 			time = inserted_battery.capacity
 		else if (time < 0)
 			time = 0
-	if(href_list["neg_changetime"])
+	if (href_list["neg_changetime"])
 		time += -10
-		if(time > inserted_battery.capacity)
+		if (time > inserted_battery.capacity)
 			time = inserted_battery.capacity
 		else if (time < 0)
 			time = 0
-	if(href_list["changetime"])
+	if (href_list["changetime"])
 		time += 10
-		if(time > inserted_battery.capacity)
+		if (time > inserted_battery.capacity)
 			time = inserted_battery.capacity
 		else if (time < 0)
 			time = 0
-	if(href_list["changetime_max"])
+	if (href_list["changetime_max"])
 		time += 100
-		if(time > inserted_battery.capacity)
+		if (time > inserted_battery.capacity)
 			time = inserted_battery.capacity
 		else if (time < 0)
 			time = 0
-	if(href_list["startup"])
+	if (href_list["startup"])
 		activated = 1
 		timing = 0
-		if(!inserted_battery.battery_effect.activated)
+		if (!inserted_battery.battery_effect.activated)
 			inserted_battery.battery_effect.ToggleActivate(1)
-	if(href_list["shutdown"])
+	if (href_list["shutdown"])
 		activated = 0
-	if(href_list["starttimer"])
+	if (href_list["starttimer"])
 		timing = 1
 		archived_time = time
-	if(href_list["ejectbattery"])
+	if (href_list["ejectbattery"])
 		shutdown_emission()
 		inserted_battery.forceMove(get_turf(src))
 		inserted_battery = null
 		UpdateSprite()
-	if(href_list["close"])
+	if (href_list["close"])
 		usr << browse(null, "window=anodevice")
 		usr.unset_machine(src)
 		return
@@ -194,7 +194,7 @@
 	updateDialog()
 
 /obj/item/weapon/anodevice/proc/UpdateSprite()
-	if(!inserted_battery)
+	if (!inserted_battery)
 		icon_state = "anodev"
 		return
 	var/p = (inserted_battery.stored_charge/inserted_battery.capacity)*100

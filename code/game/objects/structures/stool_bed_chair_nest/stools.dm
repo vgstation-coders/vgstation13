@@ -34,7 +34,7 @@
 	return
 
 /obj/item/weapon/stool/attackby(var/obj/item/weapon/W, var/mob/user)
-	if(iswrench(W) && sheet_path)
+	if (iswrench(W) && sheet_path)
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		getFromPool(sheet_path, get_turf(src), 1)
 		qdel(src)
@@ -47,7 +47,7 @@
 	. = ..()
 
 /obj/item/weapon/stool/attack(mob/M as mob, mob/user as mob)
-	if(prob(5) && istype(M, /mob/living) && sheet_path)
+	if (prob(5) && istype(M, /mob/living) && sheet_path)
 		user.visible_message("<span class='warning'>[user] breaks \the [src] over [M]'s back!.</span>")
 		user.u_equip(src, 0)
 
@@ -67,7 +67,7 @@
 	handle_layer()
 
 /obj/item/weapon/stool/piano/proc/handle_layer()
-	if(dir == NORTH)
+	if (dir == NORTH)
 		plane = ABOVE_HUMAN_PLANE
 	else
 		plane = OBJ_PLANE

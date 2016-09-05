@@ -74,10 +74,10 @@
 	</div>
 	<h2>Available schematics</h2>
 	"}
-	for(var/cat in schematics)
+	for (var/cat in schematics)
 		dat += "<b>[cat]:</b><ul style='list-style-type:disc'>"
 		var/list/L = schematics[cat]
-		for(var/i = 1 to L.len)	//So we have the indexes.
+		for (var/i = 1 to L.len)	//So we have the indexes.
 			var/datum/rcd_schematic/C = L[i]
 			dat += "<li><a href='?src=\ref[interface];cat=[cat];index=[i]'>[C.name]</a></li>"
 
@@ -85,6 +85,6 @@
 
 	interface.updateLayout(dat)
 
-	if(selected)
+	if (selected)
 		update_options_menu()
 		interface.updateContent("selectedname",			selected.name)

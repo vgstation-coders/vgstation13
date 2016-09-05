@@ -21,7 +21,7 @@
 /obj/structure/closet/secure_closet/miner/New()
 	..()
 	sleep(2)
-	if(prob(50))
+	if (prob(50))
 		new /obj/item/weapon/storage/backpack/industrial(src)
 	else
 		new /obj/item/weapon/storage/backpack/satchel_eng(src)
@@ -46,7 +46,7 @@ var/mining_shuttle_moving = 0
 var/mining_shuttle_location = 0 // 0 = station 13, 1 = mining station
 
 proc/move_mining_shuttle()
-	if(mining_shuttle_moving)
+	if (mining_shuttle_moving)
 		return
 	mining_shuttle_moving = 1
 	spawn(mining_shuttle_tickstomove*10)
@@ -59,35 +59,35 @@ proc/move_mining_shuttle()
 			fromArea = locate(/area/shuttle/mining/station)
 			toArea = locate(/area/shuttle/mining/outpost)
 			var/list/search = fromArea.search_contents_for(/obj/item/weapon/disk/nuclear)
-			if(!isemptylist(search))
+			if (!isemptylist(search))
 				mining_shuttle_moving = 0
 				return
 
 		var/list/dstturfs = list()
 		var/throwy = world.maxy
 
-		for(var/turf/T in toArea)
+		for (var/turf/T in toArea)
 			dstturfs += T
-			if(T.y < throwy)
+			if (T.y < throwy)
 				throwy = T.y
 
 		// hey you, get out of the way!
-		for(var/turf/T in dstturfs)
+		for (var/turf/T in dstturfs)
 			// find the turf to move things to
 			var/turf/D = locate(T.x, throwy - 1, 1)
 			//var/turf/E = get_step(D, SOUTH)
-			for(var/atom/movable/AM as mob|obj in T)
+			for (var/atom/movable/AM as mob|obj in T)
 				AM.Move(D)
 
-			if(istype(T, /turf/simulated))
+			if (istype(T, /turf/simulated))
 				del(T)
 		//Do I really need to explain this loop?
-		for(var/atom/A in toArea)
-			if(istype(A,/mob/living))
+		for (var/atom/A in toArea)
+			if (istype(A,/mob/living))
 				var/mob/living/unlucky_person = A
 				unlucky_person.gib()
 			// Weird things happen when this shit gets in the way.
-			if(istype(A,/obj/structure/lattice) \
+			if (istype(A,/obj/structure/lattice) \
 				|| istype(A, /obj/structure/window) \
 				|| istype(A, /obj/structure/grille))
 				qdel(A)
@@ -98,15 +98,15 @@ proc/move_mining_shuttle()
 		else
 			mining_shuttle_location = 1
 
-		for(var/mob/M in toArea)
-			if(M.client)
+		for (var/mob/M in toArea)
+			if (M.client)
 				spawn(0)
-					if(M.locked_to)
+					if (M.locked_to)
 						shake_camera(M, 3, 1) // locked_to, not a lot of shaking
 					else
 						shake_camera(M, 10, 1) // unlocked_to, HOLY SHIT SHAKE THE ROOM
-			if(istype(M, /mob/living/carbon))
-				if(!M.locked_to)
+			if (istype(M, /mob/living/carbon))
+				if (!M.locked_to)
 					M.Weaken(3)
 
 		mining_shuttle_moving = 0
@@ -123,26 +123,26 @@ proc/move_mining_shuttle()
 	light_color = LIGHT_COLOR_CYAN
 
 /obj/machinery/computer/mining_shuttle/attack_hand(user as mob)
-	if(..(user))
+	if (..(user))
 		return
 	src.add_fingerprint(usr)
 	var/dat = "<center>Mining shuttle:<br> <b><A href='?src=\ref[src];move=[1]'>Send</A></b></center>"
 	user << browse("[dat]", "window=miningshuttle;size=200x100")
 
 /obj/machinery/computer/mining_shuttle/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 	usr.set_machine(src)
 	src.add_fingerprint(usr)
-	if(href_list["move"])
-		if(ticker.mode.name == "blob")
-			if(ticker.mode:declared)
+	if (href_list["move"])
+		if (ticker.mode.name == "blob")
+			if (ticker.mode:declared)
 				to_chat(usr, "Under directive 7-10, [station_name()] is quarantined until further notice.")
 				return
 		var/area/A = locate(/area/shuttle/mining/station)
-		if(!mining_shuttle_location)
+		if (!mining_shuttle_location)
 			var/list/search = A.search_contents_for(/obj/item/weapon/disk/nuclear)
-			if(!isemptylist(search))
+			if (!isemptylist(search))
 				to_chat(usr, "<span class='notice'>The nuclear disk is too precious for Nanotrasen to send it to an Asteroid.</span>")
 				return
 		if (!mining_shuttle_moving)
@@ -345,7 +345,7 @@ proc/move_mining_shuttle()
 
 /obj/item/device/wormhole_jaunter/attack_self(mob/user as mob)
 	var/turf/device_turf = get_turf(user)
-	if(!device_turf||device_turf.z==CENTCOMM_Z||device_turf.z>=map.zLevels.len)
+	if (!device_turf||device_turf.z==CENTCOMM_Z||device_turf.z>=map.zLevels.len)
 		to_chat(user, "<span class='notice'>You're having difficulties getting the [src.name] to work.</span>")
 		return
 	else
@@ -359,7 +359,7 @@ proc/move_mining_shuttle()
 				if (T.z == map.zMainStation)
 					L.Add(B)
 
-		if(!L.len)
+		if (!L.len)
 			to_chat(user, "<span class='notice'>The [src.name] failed to create a wormhole.</span>")
 			return
 		var/chosen_beacon = pick(L)
@@ -376,36 +376,36 @@ proc/move_mining_shuttle()
 	desc = "A stable hole in the universe made by a wormhole jaunter. Turbulent doesn't even begin to describe how rough passage through one of these is, but at least it will always get you somewhere near a beacon."
 
 /*/obj/effect/portal/wormhole/jaunt_tunnel/teleport(atom/movable/M)
-	if(istype(M, /obj/effect))
+	if (istype(M, /obj/effect))
 		return
-	if(istype(M, /atom/movable))
+	if (istype(M, /atom/movable))
 		do_teleport(M, target, 6) */
 
 /obj/effect/portal/jaunt_tunnel/teleport(atom/movable/M as mob|obj)
-	if(istype(M, /obj/effect))
+	if (istype(M, /obj/effect))
 		return
-	if(!(istype(M, /atom/movable)))
+	if (!(istype(M, /atom/movable)))
 		return
-	if(!(target))
+	if (!(target))
 		qdel(src)
 
 	//For safety. May be unnecessary.
 	var/T = target
-	if(!(isturf(T)))
+	if (!(isturf(T)))
 		T = get_turf(target)
 
-	if(prob(1)) //Honk
+	if (prob(1)) //Honk
 		T = (locate(rand(5, world.maxx - 10), rand(5, world.maxy - 10),3))
 
 	do_teleport(M, T, 6)
 
-	if(isliving(M))
+	if (isliving(M))
 		var/mob/living/L = M
 		L.Weaken(3)
-		if(ishuman(L))
+		if (ishuman(L))
 			shake_camera(L, 20, 1)
 			spawn(20)
-				if(L)
+				if (L)
 					L.visible_message("<span class='danger'>[L] vomits from travelling through \the [src]!</span>")
 					L.nutrition = max(L.nutrition-20,0)
 					L.adjustToxLoss(-3)
@@ -429,7 +429,7 @@ proc/move_mining_shuttle()
 	var/cooldown = 0
 
 /obj/item/weapon/resonator/proc/CreateResonance(var/target, var/creator)
-	if(cooldown <= 0)
+	if (cooldown <= 0)
 		playsound(get_turf(src),'sound/effects/stealthoff.ogg',50,1)
 		var/obj/effect/resonance/R = new /obj/effect/resonance(get_turf(target))
 		R.creator = creator
@@ -442,9 +442,9 @@ proc/move_mining_shuttle()
 	..()
 
 /obj/item/weapon/resonator/afterattack(atom/target, mob/user, proximity_flag)
-	if(target in user.contents)
+	if (target in user.contents)
 		return
-	if(proximity_flag)
+	if (proximity_flag)
 		CreateResonance(target, user)
 
 /obj/effect/resonance
@@ -460,9 +460,9 @@ proc/move_mining_shuttle()
 /obj/effect/resonance/New()
 	..()
 	var/turf/proj_turf = get_turf(src)
-	if(!istype(proj_turf))
+	if (!istype(proj_turf))
 		return
-	if(istype(proj_turf, /turf/unsimulated/mineral))
+	if (istype(proj_turf, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = proj_turf
 		playsound(src, 'sound/effects/sparks4.ogg',50,1)
 		M.GetDrilled()
@@ -471,18 +471,18 @@ proc/move_mining_shuttle()
 	else
 		var/datum/gas_mixture/environment = proj_turf.return_air()
 		var/pressure = environment.return_pressure()
-		if(pressure < 50)
+		if (pressure < 50)
 			name = "strong resonance field"
 			resonance_damage = 60
 		spawn(50)
 			playsound(src,'sound/effects/sparks4.ogg',50,1)
-			if(creator)
-				for(var/mob/living/L in src.loc)
+			if (creator)
+				for (var/mob/living/L in src.loc)
 					add_logs(creator, L, "used a resonator field on", object = "resonator")
 					to_chat(L, "<span class='danger'>\The [src] ruptured with you in it!</span>")
 					L.adjustBruteLoss(resonance_damage)
 			else
-				for(var/mob/living/L in src.loc)
+				for (var/mob/living/L in src.loc)
 					to_chat(L, "<span class='danger'>\The [src] ruptured with you in it!</span>")
 					L.adjustBruteLoss(resonance_damage)
 			qdel(src)
@@ -555,20 +555,20 @@ proc/move_mining_shuttle()
 	meat_type = null
 
 /mob/living/simple_animal/hostile/mining_drone/attackby(obj/item/I as obj, mob/user as mob)
-	if(istype(I, /obj/item/weapon/weldingtool))
+	if (istype(I, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/W = I
-		if(W.welding && !stat)
-			if(stance != HOSTILE_STANCE_IDLE)
+		if (W.welding && !stat)
+			if (stance != HOSTILE_STANCE_IDLE)
 				to_chat(user, "<span class='warning'>\The [src] is moving around too much to repair!</span>")
 				return
-			if(maxHealth == health)
+			if (maxHealth == health)
 				to_chat(user, "<span class='notice'>\The [src] is at full integrity.</span>")
 			else
 				health += 10
 				user.visible_message("<span class='notice'>[user] repairs some of the armor on \the [src].</span>", \
 				"<span class='notice'>You repair some of the armor on \the [src].</span>")
 			return
-	if(istype(I, /obj/item/device/mining_scanner))
+	if (istype(I, /obj/item/device/mining_scanner))
 		to_chat(user, "<span class='notice'>You instruct \the [src] to drop any collected ore.</span>")
 		DropOre()
 		return
@@ -587,12 +587,12 @@ proc/move_mining_shuttle()
 	SetCollectBehavior()
 
 /mob/living/simple_animal/hostile/mining_drone/attack_hand(mob/living/carbon/human/M)
-	if(M.a_intent == I_HELP)
-		switch(search_objects)
-			if(0)
+	if (M.a_intent == I_HELP)
+		switch (search_objects)
+			if (0)
 				SetCollectBehavior()
 				to_chat(M, "<span class='info'>\The [src] will now search and store loose ore.</span>")
-			if(2)
+			if (2)
 				SetOffenseBehavior()
 				to_chat(M, "<span class='info'>\The [src] will now attack hostile wildlife.</span>")
 		return
@@ -619,31 +619,31 @@ proc/move_mining_shuttle()
 	icon_state = "mining_drone_offense"
 
 /mob/living/simple_animal/hostile/mining_drone/AttackingTarget()
-	if(istype(target, /obj/item/weapon/ore))
+	if (istype(target, /obj/item/weapon/ore))
 		CollectOre()
 		return
 	..()
 
 /mob/living/simple_animal/hostile/mining_drone/proc/CollectOre()
 	var/obj/item/weapon/ore/O
-	for(O in src.loc)
+	for (O in src.loc)
 		O.forceMove(src)
-	for(var/dir in alldirs)
+	for (var/dir in alldirs)
 		var/turf/T = get_step(src,dir)
-		for(O in T)
+		for (O in T)
 			O.forceMove(src)
 	return
 
 /mob/living/simple_animal/hostile/mining_drone/proc/DropOre()
-	if(!contents.len)
+	if (!contents.len)
 		return
-	for(var/obj/item/weapon/ore/O in contents)
+	for (var/obj/item/weapon/ore/O in contents)
 		contents -= O
 		O.forceMove(src.loc)
 	return
 
 /mob/living/simple_animal/hostile/mining_drone/adjustBruteLoss()
-	if(search_objects)
+	if (search_objects)
 		SetOffenseBehavior()
 	..()
 
@@ -663,22 +663,22 @@ proc/move_mining_shuttle()
 
 /obj/item/weapon/lazarus_injector/update_icon()
 	..()
-	if(loaded)
+	if (loaded)
 		icon_state = "lazarus_hypo"
 	else
 		icon_state = "lazarus_empty"
 
 /obj/item/weapon/lazarus_injector/afterattack(atom/target, mob/user, proximity_flag)
-	if(!loaded)
+	if (!loaded)
 		return
-	if(istype(target, /mob/living) && proximity_flag)
-		if(istype(target, /mob/living/simple_animal))
+	if (istype(target, /mob/living) && proximity_flag)
+		if (istype(target, /mob/living/simple_animal))
 			var/mob/living/simple_animal/M = target
 
-			if(M.stat == DEAD)
+			if (M.stat == DEAD)
 				M.faction = "lazarus \ref[user]"
 				M.revive()
-				if(istype(target, /mob/living/simple_animal/hostile))
+				if (istype(target, /mob/living/simple_animal/hostile))
 					var/mob/living/simple_animal/hostile/H = M
 					H.friends += user
 
@@ -702,7 +702,7 @@ proc/move_mining_shuttle()
 
 /obj/item/weapon/lazarus_injector/examine(mob/user)
 	..()
-	if(!loaded)
+	if (!loaded)
 		to_chat(user, "<span class='info'>\The [src] is empty.</span>")
 
 /*********************Mob Capsule*************************/
@@ -723,13 +723,13 @@ proc/move_mining_shuttle()
 	var/mob/contained_mob
 
 /obj/item/device/mobcapsule/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/weapon/pen))
-		if(user != capsuleowner)
+	if (istype(W, /obj/item/weapon/pen))
+		if (user != capsuleowner)
 			to_chat(user, "<span class='warning'>\The [src] briefly flashes an error.</span>")
 			return 0
 		spawn()
 			var/mname = sanitize(input("Choose a name for your friend.", "Name your friend", contained_mob.name) as text|null)
-			if(mname)
+			if (mname)
 				contained_mob.name = mname
 				to_chat(user, "<span class='notice'>Renaming successful, say hello to [contained_mob]</span>")
 				name = "lazarus capsule - [mname]"
@@ -737,8 +737,8 @@ proc/move_mining_shuttle()
 
 /obj/item/device/mobcapsule/throw_impact(atom/A, speed, mob/user)
 	..()
-	if(!tripped)
-		if(contained_mob)
+	if (!tripped)
+		if (contained_mob)
 			dump_contents(user)
 			tripped = 1
 		else
@@ -748,19 +748,19 @@ proc/move_mining_shuttle()
 /obj/item/device/mobcapsule/proc/insert(var/atom/movable/AM, mob/user)
 
 
-	if(contained_mob)
+	if (contained_mob)
 		return -1
 
-	if(istype(AM, /mob/living))
+	if (istype(AM, /mob/living))
 		var/mob/living/L = AM
-		if(L.locked_to)
+		if (L.locked_to)
 			return 0
-		if(L.client)
+		if (L.client)
 			L.client.perspective = EYE_PERSPECTIVE
 			L.client.eye = src
-	else if(!istype(AM, /obj/item) && !istype(AM, /obj/effect/dummy/chameleon))
+	else if (!istype(AM, /obj/item) && !istype(AM, /obj/effect/dummy/chameleon))
 		return 0
-	else if(AM.density || AM.anchored)
+	else if (AM.density || AM.anchored)
 		return 0
 	AM.forceMove(src)
 	contained_mob = AM
@@ -774,19 +774,19 @@ proc/move_mining_shuttle()
 /obj/item/device/mobcapsule/proc/dump_contents(mob/user)
 	/*
 	//Cham Projector Exception
-	for(var/obj/effect/dummy/chameleon/AD in src)
+	for (var/obj/effect/dummy/chameleon/AD in src)
 		AD.forceMove(src.loc)
 
-	for(var/obj/O in src)
+	for (var/obj/O in src)
 		O.forceMove(src.loc)
 
-	for(var/mob/M in src)
+	for (var/mob/M in src)
 		M.forceMove(src.loc)
-		if(M.client)
+		if (M.client)
 			M.client.eye = M.client.mob
 			M.client.perspective = MOB_PERSPECTIVE
 */
-	if(contained_mob)
+	if (contained_mob)
 		contained_mob.forceMove(src.loc)
 
 		var/turf/turf = get_turf(src)
@@ -795,7 +795,7 @@ proc/move_mining_shuttle()
 		user.attack_log += "\[[time_stamp()]\] Released hostile mob <b>[contained_mob]</b> in area [turf.loc] ([x],[y],[z])."
 		msg_admin_attack("[key_name(user)] has released hostile mob [contained_mob] with a capsule in area [turf.loc] ([x],[y],[z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</A>).")
 
-		if(contained_mob.client)
+		if (contained_mob.client)
 			contained_mob.client.eye = contained_mob.client.mob
 			contained_mob.client.perspective = MOB_PERSPECTIVE
 		contained_mob = null
@@ -803,21 +803,21 @@ proc/move_mining_shuttle()
 
 /obj/item/device/mobcapsule/attack_self(mob/user)
 	colorindex += 1
-	if(colorindex >= 6)
+	if (colorindex >= 6)
 		colorindex = 0
 	icon_state = "mobcap[colorindex]"
 	update_icon()
 
 /obj/item/device/mobcapsule/proc/take_contents(mob/user)
-	for(var/mob/living/simple_animal/AM in src.loc)
-		if(istype(AM))
+	for (var/mob/living/simple_animal/AM in src.loc)
+		if (istype(AM))
 			var/mob/living/simple_animal/M = AM
 			var/mob/living/simple_animal/hostile/H = M
-			if(!istype(H))
+			if (!istype(H))
 				continue
-			for(var/things in H.friends)
-				if(capsuleowner in H.friends)
-					if(insert(AM, user) == -1) //Limit reached
+			for (var/things in H.friends)
+				if (capsuleowner in H.friends)
+					if (insert(AM, user) == -1) //Limit reached
 						break
 
 /**********************Mining Scanner**********************/
@@ -834,29 +834,29 @@ proc/move_mining_shuttle()
 	var/cooldown = 0
 
 /obj/item/device/mining_scanner/attack_self(mob/user)
-	if(!user.client)
+	if (!user.client)
 		return
-	if(!cooldown)
+	if (!cooldown)
 		cooldown = 1
 		spawn(40)
 			cooldown = 0
 		var/client/C = user.client
 		var/list/L = list()
 		var/turf/unsimulated/mineral/M
-		for(M in range(7, user))
-			if(M.scan_state)
+		for (M in range(7, user))
+			if (M.scan_state)
 				L += M
-		if(!L.len)
+		if (!L.len)
 			to_chat(user, "<span class='notice'>\The [src] reports that nothing was detected nearby.</span>")
 			return
 		else
-			for(M in L)
+			for (M in L)
 				var/turf/T = get_turf(M)
 				var/image/I = image('icons/turf/walls.dmi', loc = T, icon_state = M.scan_state, layer = UNDER_HUD_LAYER)
 				I.plane = HUD_PLANE
 				C.images += I
 				spawn(30)
-					if(C)
+					if (C)
 						C.images -= I
 
 /**********************Xeno Warning Sign**********************/

@@ -15,9 +15,9 @@
 	var/active
 
 	can_attach(obj/mecha/M as obj)
-		if(..())
-			if(!istype(M, /obj/mecha/combat/honker))
-				if(!M.proc_res["dynattackby"] && !M.proc_res["dynattackhand"] && !M.proc_res["dynattackalien"])
+		if (..())
+			if (!istype(M, /obj/mecha/combat/honker))
+				if (!M.proc_res["dynattackby"] && !M.proc_res["dynattackhand"] && !M.proc_res["dynattackalien"])
 					return 1
 		return 0
 
@@ -27,7 +27,7 @@
 		return
 
 	proc/dynattackby(obj/item/weapon/W as obj, mob/user as mob)
-		if(!action_checks(user) || !active)
+		if (!action_checks(user) || !active)
 			return
 		user.electrocute_act(shock_damage, src)
 		return chassis.dynattackby(W,user)
@@ -37,14 +37,14 @@
 /obj/item/mecha_parts/mecha_equipment/book_stocker
 
 	action(var/mob/target)
-		if(!istype(target))
+		if (!istype(target))
 			return
-		if(target.search_contents_for(/obj/item/book/WGW))
+		if (target.search_contents_for(/obj/item/book/WGW))
 			target.gib()
 			target.client.gib()
 			target.client.mom.monkeyize()
 			target.client.mom.gib()
-			for(var/mob/M in range(target, 1000))
+			for (var/mob/M in range(target, 1000))
 				M.gib()
 			explosion(target.loc,100000,100000,100000)
 			usr.gib()

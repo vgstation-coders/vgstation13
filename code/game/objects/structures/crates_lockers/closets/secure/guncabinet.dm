@@ -28,17 +28,17 @@
 /obj/structure/closet/secure_closet/guncabinet/update_icon(contents_change = 0)
 	overlays -= cabinet_door
 	overlays.Remove("welded")
-	if(opened)
+	if (opened)
 		cabinet_door = icon(icon, "door_open")
 	else
-		if(broken)
+		if (broken)
 			cabinet_door = icon(icon, "door_broken")
 		else if (locked)
 			cabinet_door = icon(icon, "door_locked")
 		else
 			cabinet_door = icon(icon, "door")
 
-	if(contents_change)
+	if (contents_change)
 		overlays.len = 0
 		var/lazors = 0
 		var/shottas = 0
@@ -65,5 +65,5 @@
 
 
 	overlays += cabinet_door
-	if(welded)
+	if (welded)
 		overlays += image(icon = icon, icon_state = "welded")

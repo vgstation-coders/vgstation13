@@ -40,9 +40,9 @@
 
 	attackby(obj/item/weapon/implantcase/C as obj, mob/user as mob)
 		..()
-		if(istype(C, /obj/item/weapon/implantcase))
-			if(!( src.case ))
-				if(user.drop_item(C, src))
+		if (istype(C, /obj/item/weapon/implantcase))
+			if (!( src.case ))
+				if (user.drop_item(C, src))
 					src.case = C
 		else
 			return
@@ -54,10 +54,10 @@
 		user.set_machine(src)
 		var/dat = "<B>Implant Mini-Computer:</B><HR>"
 		if (src.case)
-			if(src.case.imp)
-				if(istype(src.case.imp, /obj/item/weapon/implant))
+			if (src.case.imp)
+				if (istype(src.case.imp, /obj/item/weapon/implant))
 					dat += src.case.imp.get_data()
-					if(istype(src.case.imp, /obj/item/weapon/implant/tracking))
+					if (istype(src.case.imp, /obj/item/weapon/implant/tracking))
 						dat += {"ID (1-100):
 						<A href='byond://?src=\ref[src];tracking_id=-10'>-</A>
 						<A href='byond://?src=\ref[src];tracking_id=-1'>-</A> [case.imp:id]
@@ -87,7 +87,7 @@
 			if (istype(src.loc, /mob))
 				attack_self(src.loc)
 			else
-				for(var/mob/M in viewers(1, src))
+				for (var/mob/M in viewers(1, src))
 					if (M.client)
 						src.attack_self(M)
 			src.add_fingerprint(usr)

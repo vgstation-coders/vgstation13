@@ -9,39 +9,39 @@
 	var/beaker = null
 
 /obj/machinery/disease2/isolator/attackby(var/W as obj, var/mob/user)
-	if(!istype(W,/obj/item/weapon/reagent_containers/syringe))
+	if (!istype(W,/obj/item/weapon/reagent_containers/syringe))
 		return
 
 	var/obj/item/weapon/reagent_containers/syringe/B = W
 
-	if(src.beaker)
+	if (src.beaker)
 		to_chat(user, "A syringe is already loaded into the machine.")
 		return
 
-	if(user.drop_item(B, src))
+	if (user.drop_item(B, src))
 		src.beaker =  B
-		if(istype(B,/obj/item/weapon/reagent_containers/syringe))
+		if (istype(B,/obj/item/weapon/reagent_containers/syringe))
 			to_chat(user, "You add the syringe to the machine!")
 			src.updateUsrDialog()
 			icon_state = "isolator_in"
 
 /obj/machinery/disease2/isolator/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 
 	usr.machine = src
-	if(!beaker)
+	if (!beaker)
 		return
 	var/datum/reagents/R = beaker:reagents
 
 	if (href_list["isolate"])
 		var/datum/reagent/blood/Blood
-		for(var/datum/reagent/blood/B in R.reagent_list)
-			if(B && B.data["virus2"])
+		for (var/datum/reagent/blood/B in R.reagent_list)
+			if (B && B.data["virus2"])
 				Blood = B
 				break
 		// /vg/: Try to fix isolators
-		if(!Blood)
+		if (!Blood)
 			to_chat(usr, "<span class='warning'>ERROR: Unable to locate blood within the beaker.  Bug?</span>")
 			testing("Unable to locate blood in [beaker]!")
 			return
@@ -66,25 +66,25 @@
 		return
 
 /obj/machinery/disease2/isolator/attack_hand(mob/user as mob)
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		return
 	user.machine = src
 	var/dat = ""
-	if(!beaker)
+	if (!beaker)
 
 		dat = {"Please insert sample into the isolator.<BR>
 <A href='?src=\ref[src];close=1'>Close</A>"}
-	else if(isolating)
+	else if (isolating)
 		dat = "Isolating"
 	else
 		var/datum/reagents/R = beaker:reagents
 		dat += "<A href='?src=\ref[src];eject=1'>Eject</A><BR><BR>"
-		if(!R.total_volume)
+		if (!R.total_volume)
 			dat += "[beaker] is empty."
 		else
 			dat += "Contained reagents:<ul>"
-			for(var/datum/reagent/blood/G in R.reagent_list)
-				if(G.data["virus2"])
+			for (var/datum/reagent/blood/G in R.reagent_list)
+				if (G.data["virus2"])
 					var/list/virus = G.data["virus2"]
 					for (var/datum/disease2/disease/V in virus)
 						dat += "<li>[G.name]: <A href='?src=\ref[src];isolate=[V.uniqueID]'>Isolate pathogen #[V.uniqueID]</a></li>"
@@ -95,9 +95,9 @@
 	return
 
 /obj/machinery/disease2/isolator/process()
-	if(isolating > 0)
+	if (isolating > 0)
 		isolating -= 1
-		if(isolating == 0)
+		if (isolating == 0)
 			var/obj/item/weapon/virusdish/d = new /obj/item/weapon/virusdish(src.loc)
 			d.virus2 = virus2.getcopy()
 			virus2 = null

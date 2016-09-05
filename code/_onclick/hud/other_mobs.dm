@@ -124,16 +124,16 @@
 /datum/hud/proc/construct_hud()
 	var/constructtype
 
-	if(istype(mymob,/mob/living/simple_animal/construct/armoured) || istype(mymob,/mob/living/simple_animal/construct/behemoth))
+	if (istype(mymob,/mob/living/simple_animal/construct/armoured) || istype(mymob,/mob/living/simple_animal/construct/behemoth))
 		constructtype = "juggernaut"
-	else if(istype(mymob,/mob/living/simple_animal/construct/builder))
+	else if (istype(mymob,/mob/living/simple_animal/construct/builder))
 		constructtype = "artificer"
-	else if(istype(mymob,/mob/living/simple_animal/construct/wraith))
+	else if (istype(mymob,/mob/living/simple_animal/construct/wraith))
 		constructtype = "wraith"
-	else if(istype(mymob,/mob/living/simple_animal/construct/harvester))
+	else if (istype(mymob,/mob/living/simple_animal/construct/harvester))
 		constructtype = "harvester"
 
-	if(constructtype)
+	if (constructtype)
 		mymob.fire = getFromPool(/obj/screen)
 		mymob.fire.icon = 'icons/mob/screen1_construct.dmi'
 		mymob.fire.icon_state = "fire0"

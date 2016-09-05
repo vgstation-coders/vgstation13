@@ -13,7 +13,7 @@
 	var/datum/seed/seed
 	icon = 'icons/obj/harvest.dmi'
 	New(newloc, newpotency)
-		if(!isnull(newpotency))
+		if (!isnull(newpotency))
 			potency = newpotency
 		..()
 		src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
@@ -25,66 +25,66 @@
 	//Handle some post-spawn var stuff.
 	spawn(1)
 		//Fill the object up with the appropriate reagents.
-		if(!isnull(plantname))
+		if (!isnull(plantname))
 			seed = plant_controller.seeds[plantname]
-			if(!seed || !seed.chems)
+			if (!seed || !seed.chems)
 				return
 
 			potency = round(seed.potency)
 			force = seed.thorny ? 5+seed.carnivorous*3 : 0
 
 			var/totalreagents = 0
-			for(var/rid in seed.chems)
+			for (var/rid in seed.chems)
 				var/list/reagent_data = seed.chems[rid]
 				var/rtotal = reagent_data[1]
-				if(reagent_data.len > 1 && potency > 0)
+				if (reagent_data.len > 1 && potency > 0)
 					rtotal += round(potency/reagent_data[2])
 				totalreagents += rtotal
 
-			if(totalreagents)
+			if (totalreagents)
 				var/coeff = min(reagents.maximum_volume / totalreagents, 1)
 
-				for(var/rid in seed.chems)
+				for (var/rid in seed.chems)
 					var/list/reagent_data = seed.chems[rid]
 					var/rtotal = reagent_data[1]
-					if(reagent_data.len > 1 && potency > 0)
+					if (reagent_data.len > 1 && potency > 0)
 						rtotal += round(potency/reagent_data[2])
 					reagents.add_reagent(rid, max(1, round(rtotal*coeff, 0.1)))
 
-			if(seed.teleporting)
+			if (seed.teleporting)
 				name = "blue-space [name]"
-			if(seed.stinging)
+			if (seed.stinging)
 				name = "stinging [name]"
-			if(seed.juicy == 2)
+			if (seed.juicy == 2)
 				name = "slippery [name]"
 
-		if(reagents.total_volume > 0)
+		if (reagents.total_volume > 0)
 			bitesize = 1 + round(reagents.total_volume/2, 1)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/throw_impact(atom/hit_atom)
 	..()
-	if(!seed || !src)
+	if (!seed || !src)
 		return
 	//if(seed.stinging)   			//we do NOT want to transfer reagents on throw, as it would mean plantbags full of throwable chloral injectors
 	//	stinging_apply_reagents(M)  //plus all sorts of nasty stuff like throw_impact not targeting a specific bodypart to check for protection.
 
 	// We ONLY want to apply special effects if we're hitting a turf! That's because throw_impact will always be
 	// called on a turf AFTER it's called on the things ON the turf, and will runtime if the item doesn't exist anymore.
-	if(isturf(hit_atom))
+	if (isturf(hit_atom))
 		do_splat_effects(hit_atom)
 	return
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/do_splat_effects(atom/hit_atom)
-	if(seed.teleporting)
+	if (seed.teleporting)
 		splat_reagent_reaction(get_turf(hit_atom))
-		if(do_fruit_teleport(hit_atom, usr, potency))
+		if (do_fruit_teleport(hit_atom, usr, potency))
 			visible_message("<span class='danger'>The [src] splatters, causing a distortion in space-time!</span>")
-		else if(splat_decal(get_turf(hit_atom)))
+		else if (splat_decal(get_turf(hit_atom)))
 			visible_message("<span class='notice'>The [src.name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
 		qdel(src)
 		return
 
-	if(seed.juicy)
+	if (seed.juicy)
 		splat_decal(get_turf(hit_atom))
 		splat_reagent_reaction(get_turf(hit_atom))
 		visible_message("<span class='notice'>The [src.name] has been squashed.</span>","<span class='moderate'>You hear a smack.</span>")
@@ -92,12 +92,12 @@
 		return
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/attack(mob/living/M, mob/user, def_zone)
-	if(user.a_intent == I_HURT)
+	if (user.a_intent == I_HURT)
 		. = handle_attack(src,M,user,def_zone)
-		if(seed.stinging)
-			if(M.getarmor(def_zone, "melee") < 5)
+		if (seed.stinging)
+			if (M.getarmor(def_zone, "melee") < 5)
 				var/reagentlist = stinging_apply_reagents(M)
-				if(reagentlist)
+				if (reagentlist)
 					to_chat(M, "<span class='danger'>You are stung by \the [src]!</span>")
 					add_attacklogs(user, M, "stung", object = src, addition = "Reagents: [english_list(seed.get_reagent_names())]", admin_warn = 1)
 			to_chat(user, "<span class='alert'>Some of \the [src]'s stingers break off in the hit!</span>")
@@ -108,100 +108,100 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/Crossed(var/mob/living/carbon/M)
 	..()
-	if(!seed)
+	if (!seed)
 		return
-	if(!istype(M))
+	if (!istype(M))
 		return
-	if(!M.on_foot())
+	if (!M.on_foot())
 		return
-	if(seed.thorny || seed.stinging)
-		if(istype(M, /mob/living/carbon/human))
+	if (seed.thorny || seed.stinging)
+		if (istype(M, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
-			if(!H.check_body_part_coverage(FEET))
+			if (!H.check_body_part_coverage(FEET))
 				var/datum/organ/external/affecting = H.get_organ(pick(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT))
-				if(affecting && affecting.is_organic())
-					if(thorns_apply_damage(M, affecting))
+				if (affecting && affecting.is_organic())
+					if (thorns_apply_damage(M, affecting))
 						to_chat(H, "<span class='danger'>You step on \the [src]'s sharp thorns!</span>")
-						if(H.species && !(H.species.flags & NO_PAIN))
+						if (H.species && !(H.species.flags & NO_PAIN))
 							H.Weaken(3)
-					if(stinging_apply_reagents(M))
+					if (stinging_apply_reagents(M))
 						to_chat(H, "<span class='danger'>You step on \the [src]'s stingers!</span>")
 						potency -= rand(1,(potency/3)+1)
-	if(seed.juicy == 2)
-		if(M.Slip(3, 2))
+	if (seed.juicy == 2)
+		if (M.Slip(3, 2))
 			to_chat(M, "<span class='notice'>You slipped on the [name]!</span>")
 			do_splat_effects(M)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pickup(mob/user)
 	..()
-	if(!seed)
+	if (!seed)
 		return
-	if(seed.thorny || seed.stinging)
+	if (seed.thorny || seed.stinging)
 		var/mob/living/carbon/human/H = user
-		if(!istype(H))
+		if (!istype(H))
 			return
-		if(H.check_body_part_coverage(HANDS))
+		if (H.check_body_part_coverage(HANDS))
 			return
 		var/datum/organ/external/affecting = H.get_organ(pick(LIMB_RIGHT_HAND,LIMB_LEFT_HAND))
-		if(!affecting || !affecting.is_organic())
+		if (!affecting || !affecting.is_organic())
 			return
-		if(stinging_apply_reagents(H))
+		if (stinging_apply_reagents(H))
 			to_chat(H, "<span class='danger'>You are stung by \the [src]!</span>")
 			potency -= rand(1,(potency/3)+1)
-		if(thorns_apply_damage(H, affecting))
+		if (thorns_apply_damage(H, affecting))
 			to_chat(H, "<span class='danger'>You are prickled by the sharp thorns on \the [src]!</span>")
 			spawn(3)
-				if(H.species && !(H.species.flags & NO_PAIN))
+				if (H.species && !(H.species.flags & NO_PAIN))
 					H.drop_item(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/after_consume(var/mob/living/carbon/human/H)
-	if(seed.thorny && istype(H))
+	if (seed.thorny && istype(H))
 		var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
-		if(affecting)
-			if(thorns_apply_damage(H, affecting))
+		if (affecting)
+			if (thorns_apply_damage(H, affecting))
 				to_chat(H, "<span class='danger'>Your mouth is cut by \the [src]'s sharp thorns!</span>")
 				//H.stunned++ //just a 1 second pause to prevent people from spamming pagedown on this, since it's important
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/examine(mob/user)
 	..()
-	if(!seed)
+	if (!seed)
 		return
 	var/traits = ""
-	if(seed.stinging)
+	if (seed.stinging)
 		traits += "<span class='alert'>It's covered in tiny stingers.</span> "
-	if(seed.thorny)
+	if (seed.thorny)
 		traits += "<span class='alert'>It's covered in sharp thorns.</span> "
-	if(seed.juicy == 2)
+	if (seed.juicy == 2)
 		traits += "It looks ripe and excessively juicy. "
-	if(seed.teleporting)
+	if (seed.teleporting)
 		traits += "It seems to be spatially unstable. "
-	if(traits)
+	if (traits)
 		to_chat(user, traits)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/splat_decal(turf/T)
 	var/obj/effect/decal/cleanable/S = getFromPool(seed.splat_type,T)
 	S.New(S.loc)
-	if(seed.splat_type == /obj/effect/decal/cleanable/fruit_smudge/)
-		if(filling_color != "#FFFFFF")
+	if (seed.splat_type == /obj/effect/decal/cleanable/fruit_smudge/)
+		if (filling_color != "#FFFFFF")
 			S.color = filling_color
 		else
 			S.color = AverageColor(getFlatIcon(src, src.dir, 0), 1, 1)
 		S.name = "[seed.seed_name] smudge"
-	if(seed.biolum && seed.biolum_colour)
+	if (seed.biolum && seed.biolum_colour)
 		S.set_light(1, l_color = seed.biolum_colour)
 	return 1
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/splat_reagent_reaction(turf/T)
-	if(src.reagents.total_volume > 0)
+	if (src.reagents.total_volume > 0)
 		src.reagents.reaction(T)
-		for(var/atom/A in T)
+		for (var/atom/A in T)
 			src.reagents.reaction(A)
 		return 1
 	return 0
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/thorns_apply_damage(mob/living/carbon/human/H, datum/organ/external/affecting)
-	if(!seed.thorny || !affecting)
+	if (!seed.thorny || !affecting)
 		return 0
 	//if(affecting.take_damage(5+seed.carnivorous*3, 0, 0, "plant thorns")) //For some fucked up reason, it's not returning 1
 	affecting.take_damage(5+seed.carnivorous*3, 0, 0, "plant thorns")
@@ -209,59 +209,59 @@
 	return 1
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/stinging_apply_reagents(mob/living/carbon/human/H)
-	if(!seed.stinging)
+	if (!seed.stinging)
 		return 0
-	if(!reagents || reagents.total_volume <= 0)
+	if (!reagents || reagents.total_volume <= 0)
 		return 0
-	if(!seed.chems || !seed.chems.len)
+	if (!seed.chems || !seed.chems.len)
 		return 0
 
 	var/list/thingsweinjected = list()
 	var/injecting = Clamp(1, 3, potency/10)
 
-	for(var/rid in seed.chems) //Only transfer reagents that the plant naturally produces, no injecting chloral into your nettles.
+	for (var/rid in seed.chems) //Only transfer reagents that the plant naturally produces, no injecting chloral into your nettles.
 		reagents.trans_id_to(H,rid,injecting)
 		thingsweinjected += "[injecting]u of [rid]"
 		. = 1
 
-	if(. && fingerprintshidden && fingerprintshidden.len)
+	if (. && fingerprintshidden && fingerprintshidden.len)
 		H.investigation_log(I_CHEMS, "was stung by \a [src], transfering [english_list(thingsweinjected)] - all touchers: [english_list(src.fingerprintshidden)]")
 
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/do_fruit_teleport(atom/hit_atom, mob/M, var/potency)	//Does this need logging?
 	var/datum/zLevel/L = get_z_level(src)
-	if(!L || L.teleJammed)
+	if (!L || L.teleJammed)
 		return 0
 
 	var/outer_teleport_radius = potency/10 //Plant potency determines radius of teleport.
 	var/inner_teleport_radius = potency/15 //At base potency, nothing will happen, since the radius is 0.
-	if(inner_teleport_radius < 1)
+	if (inner_teleport_radius < 1)
 		return 0
 	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 
 	var/list/turfs = new/list()
 	//This could likely use some standardization but I have no idea how to not break it.
-	for(var/turf/T in trange(outer_teleport_radius, get_turf(hit_atom)))
-		if(get_dist(T, hit_atom) <= inner_teleport_radius)
+	for (var/turf/T in trange(outer_teleport_radius, get_turf(hit_atom)))
+		if (get_dist(T, hit_atom) <= inner_teleport_radius)
 			continue
-		if(is_blocked_turf(T) || istype(T, /turf/space))
+		if (is_blocked_turf(T) || istype(T, /turf/space))
 			continue
-		if(T.x > world.maxx-outer_teleport_radius || T.x < outer_teleport_radius)
+		if (T.x > world.maxx-outer_teleport_radius || T.x < outer_teleport_radius)
 			continue
-		if(T.y > world.maxy-outer_teleport_radius || T.y < outer_teleport_radius)
+		if (T.y > world.maxy-outer_teleport_radius || T.y < outer_teleport_radius)
 			continue
 		turfs += T
-	if(!turfs.len)
+	if (!turfs.len)
 		var/list/turfs_to_pick_from = list()
-		for(var/turf/T in trange(outer_teleport_radius, get_turf(hit_atom)))
-			if(get_dist(T, hit_atom) > inner_teleport_radius)
+		for (var/turf/T in trange(outer_teleport_radius, get_turf(hit_atom)))
+			if (get_dist(T, hit_atom) > inner_teleport_radius)
 				turfs_to_pick_from += T
 		turfs += pick(/turf in turfs_to_pick_from)
 	var/turf/picked = pick(turfs)
-	if(!isturf(picked))
+	if (!isturf(picked))
 		return 0
-	switch(rand(1, 2)) //50-50 % chance to teleport the thrower or the target.
-		if(1) //Teleports the person who threw the fruit
+	switch (rand(1, 2)) //50-50 % chance to teleport the thrower or the target.
+		if (1) //Teleports the person who threw the fruit
 			s.set_up(3, 1, M)
 			s.start()
 			new/obj/effect/decal/cleanable/molten_item(M.loc) //Leaves a pile of goo behind for dramatic effect.
@@ -269,11 +269,11 @@
 			spawn()
 				s.set_up(3, 1, M)
 				s.start() //Two set of sparks, one before the teleport and one after. //Sure then ?
-		if(2) //Teleports the target instead.
+		if (2) //Teleports the target instead.
 			s.set_up(3, 1, hit_atom)
 			s.start()
 			new/obj/effect/decal/cleanable/molten_item(get_turf(hit_atom)) //Leave a pile of goo behind for dramatic effect...
-			for(var/mob/A in get_turf(hit_atom)) //For the mobs in the tile that was hit...
+			for (var/mob/A in get_turf(hit_atom)) //For the mobs in the tile that was hit...
 				A.forceMove(picked) //And teleport them to the chosen location.
 				spawn()
 					s.set_up(3, 1, A)
@@ -341,10 +341,10 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/potato/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
-	if(istype(W, /obj/item/stack/cable_coil))
-		if(W:amount >= 5)
+	if (istype(W, /obj/item/stack/cable_coil))
+		if (W:amount >= 5)
 			W:amount -= 5
-			if(!W:amount)
+			if (!W:amount)
 				qdel(W)
 			to_chat(user, "<span class='notice'>You add some cable to \the [src] and slide it inside the battery encasing.</span>")
 			var/obj/item/weapon/cell/potato/pocell = new /obj/item/weapon/cell/potato(user.loc)
@@ -455,7 +455,7 @@
 	potency = 10
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/paper))
+	if (istype(O, /obj/item/weapon/paper))
 		qdel(O)
 		to_chat(user, "<span class='notice'>You roll a blunt out of \the [src].</span>")
 		var/obj/item/clothing/mask/cigarette/blunt/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/rolled(src.loc)
@@ -477,7 +477,7 @@
 	plantname = "ambrosiadeus"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris/deus/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/paper))
+	if (istype(O, /obj/item/weapon/paper))
 		qdel(O)
 		to_chat(user, "<span class='notice'>You roll a godly blunt.</span>")
 		var/obj/item/clothing/mask/cigarette/blunt/deus/rolled/B = new/obj/item/clothing/mask/cigarette/blunt/deus/rolled(src.loc)
@@ -529,7 +529,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
-	if(W.is_sharp() >= 1)
+	if (W.is_sharp() >= 1)
 		user.visible_message("<span class='notice'>[user] carves a face into \the [src] with \the [W]!</span>", "<span class='notice'>You carve a face into \the [src] with \the [W]!</span>")
 		new /obj/item/clothing/head/pumpkinhead(get_turf(src)) //Don't move it
 		qdel(src)
@@ -633,7 +633,7 @@
 	plantname = "killertomato"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/killertomato/attack_self(mob/user as mob)
-	if(istype(user.loc, /turf/space))
+	if (istype(user.loc, /turf/space))
 		return
 	new /mob/living/simple_animal/tomato(user.loc)
 	qdel(src)
@@ -743,7 +743,7 @@
 	plantname = "walkingmushroom"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/walkingmushroom/attack_self(mob/user as mob)
-	if(istype(user.loc, /turf/space))
+	if (istype(user.loc, /turf/space))
 		return
 	new /mob/living/simple_animal/hostile/mushroom(user.loc)
 	qdel(src)
@@ -766,7 +766,7 @@
 	plantname = "glowshroom"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/glowshroom/attack_self(mob/user as mob)
-	if(istype(user.loc, /turf/space))
+	if (istype(user.loc, /turf/space))
 		return
 	var/obj/effect/glowshroom/planted = new /obj/effect/glowshroom(user.loc)
 
@@ -840,15 +840,15 @@
 	pop(M)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/vaporsac/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/device/analyzer/plant_analyzer))
+	if (istype(W, /obj/item/device/analyzer/plant_analyzer))
 		return
 	pop(user)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/vaporsac/proc/pop(mob/popper)
-	if(popper)
+	if (popper)
 		popper.visible_message("<span class='warning'>[popper] pops the \the [src]!</span>","<span class='warning'>You pop \the [src]!</span>")
-	for(var/mob/living/carbon/C in view(1))
-		if(C.CheckSlip() < 1)
+	for (var/mob/living/carbon/C in view(1))
+		if (C.CheckSlip() < 1)
 			continue
 		C.Weaken(5)
 	playsound(get_turf(src), 'sound/effects/bang.ogg', 10, 1)
@@ -875,7 +875,7 @@
 	set category = "Object"
 	set src in range(1)
 
-	if(usr.isUnconscious())
+	if (usr.isUnconscious())
 		to_chat(usr, "You can't do that while unconscious.")
 		return
 
@@ -884,21 +884,21 @@
 	randomize()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/attackby(obj/item/weapon/W, mob/user)
-	if(switching)
-		if(!current_path)
+	if (switching)
+		if (!current_path)
 			return
 		switching = 0
 		var/N = rand(1,3)
-		if(get_turf(user))
-			switch(N)
-				if(1)
+		if (get_turf(user))
+			switch (N)
+				if (1)
 					playsound(get_turf(user), 'sound/weapons/genhit1.ogg', 50, 1)
-				if(2)
+				if (2)
 					playsound(get_turf(user), 'sound/weapons/genhit2.ogg', 50, 1)
-				if(3)
+				if (3)
 					playsound(get_turf(user), 'sound/weapons/genhit3.ogg', 50, 1)
 		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
-		if(src.loc == user)
+		if (src.loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/I = new current_path(get_turf(user))
 			user.put_in_hands(I)
@@ -910,13 +910,13 @@
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/proc/randomize()
 	switching = 1
 	spawn()
-		while(switching)
+		while (switching)
 			current_path = available_fruits[counter]
 			var/obj/item/weapon/reagent_containers/food/snacks/grown/G = current_path
 			icon_state = initial(G.icon_state)
-			if(get_turf(src))
+			if (get_turf(src))
 				playsound(get_turf(src), 'sound/misc/click.ogg', 50, 1)
 			sleep(1)
-			if(counter == available_fruits.len)
+			if (counter == available_fruits.len)
 				counter = 0
 			counter++

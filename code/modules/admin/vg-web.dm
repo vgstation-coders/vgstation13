@@ -15,7 +15,7 @@
 /datum/admins/proc/getVGPanel(var/route,var/list/query=list(),var/admin=0)
 	checkSessionKey()
 	var/url="[config.vgws_base_url]/index.php/[route]"
-	if(admin)
+	if (admin)
 		query["s"]=sessKey
 	url += buildurlquery(query)
 	return url

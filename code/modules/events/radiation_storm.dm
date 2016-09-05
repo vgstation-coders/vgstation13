@@ -17,8 +17,8 @@
 	// Don't do anything, we want to pack the announcement with the actual event
 
 /datum/event/radiation_storm/proc/is_safe_zone(var/area/A)
-	for(var/szt in safe_zones)
-		if(istype(A, szt))
+	for (var/szt in safe_zones)
+		if (istype(A, szt))
 			return 1
 	return 0
 
@@ -26,8 +26,8 @@
 	spawn()
 		command_alert(/datum/command_alert/radiation_storm)
 
-		for(var/area/A in areas)
-			if(A.z != map.zMainStation || is_safe_zone(A))
+		for (var/area/A in areas)
+			if (A.z != map.zMainStation || is_safe_zone(A))
 				continue
 			var/area/ma = get_area_master(A)
 			ma.radiation_alert()
@@ -40,21 +40,21 @@
 
 		command_alert(/datum/command_alert/radiation_storm/start)
 
-		for(var/i = 0, i < 15, i++)
+		for (var/i = 0, i < 15, i++)
 			var/irradiationThisBurst = rand(15,25) //everybody gets the same rads this radiation burst
 			var/randomMutation = prob(50)
 			var/badMutation = prob(50)
-			for(var/mob/living/carbon/human/H in living_mob_list)
-				if(istype(H.loc, /obj/spacepod))
+			for (var/mob/living/carbon/human/H in living_mob_list)
+				if (istype(H.loc, /obj/spacepod))
 					continue
 				var/turf/T = get_turf(H)
-				if(!T)
+				if (!T)
 					continue
-				if(T.z != map.zMainStation || is_safe_zone(T.loc))
+				if (T.z != map.zMainStation || is_safe_zone(T.loc))
 					continue
 
 				var/applied_rads = (H.apply_effect(irradiationThisBurst,IRRADIATE,0) > (irradiationThisBurst/4))
-				if(randomMutation && applied_rads)
+				if (randomMutation && applied_rads)
 					if (badMutation)
 						//H.apply_effect((rand(25,50)),IRRADIATE,0)
 						randmutb(H) // Applies bad mutation
@@ -68,8 +68,8 @@
 
 		command_alert(/datum/command_alert/radiation_storm/end)
 
-		for(var/area/A in areas)
-			if(A.z != map.zMainStation || is_safe_zone(A))
+		for (var/area/A in areas)
+			if (A.z != map.zMainStation || is_safe_zone(A))
 				continue
 			var/area/ma = get_area_master(A)
 			ma.reset_radiation_alert()

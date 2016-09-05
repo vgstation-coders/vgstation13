@@ -17,9 +17,9 @@
 
 /mob/living/simple_animal/hostile/humanoid/syndicate/CanAttack(var/atom/the_target)
 	//IF WE ARE Tc_SYNDICATE MOBS WE DON'T ATTACK NUKE OPS (we still attack regular traitors, as to not blow up their cover)
-	if(ismob(the_target))
+	if (ismob(the_target))
 		var/mob/M = the_target
-		if(isnukeop(M))
+		if (isnukeop(M))
 			return 0
 	return ..(the_target)
 
@@ -38,8 +38,8 @@
 
 /mob/living/simple_animal/hostile/humanoid/syndicate/melee/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	user.delayNextAttack(8)
-	if(O.force)
-		if(prob(80))
+	if (O.force)
+		if (prob(80))
 			var/damage = O.force
 			if (O.damtype == HALLOSS)
 				damage = 0
@@ -53,9 +53,9 @@
 
 
 /mob/living/simple_animal/hostile/humanoid/syndicate/melee/bullet_act(var/obj/item/projectile/Proj)
-	if(!Proj)
+	if (!Proj)
 		return
-	if(prob(65))
+	if (prob(65))
 		src.health -= Proj.damage
 	else
 		visible_message("<span class='danger'>[src] blocks [Proj] with its shield!</span>")

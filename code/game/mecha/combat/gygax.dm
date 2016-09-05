@@ -43,7 +43,7 @@
 	return
 
 /obj/mecha/combat/gygax/dark/add_cell(var/obj/item/weapon/cell/C=null)
-	if(C)
+	if (C)
 		C.forceMove(src)
 		cell = C
 		return
@@ -57,14 +57,14 @@
 	set name = "Toggle leg actuators overload"
 	set src = usr.loc
 	set popup_menu = 0
-	if(usr!=src.occupant)
+	if (usr!=src.occupant)
 		return
-	if(overload)
+	if (overload)
 		overload = 0
 		step_in = initial(step_in)
 		step_energy_drain = initial(step_energy_drain)
 		src.occupant_message("<font color='blue'>You disable leg actuators overload.</font>")
-		if(!istype(src,/obj/mecha/combat/gygax/dark))
+		if (!istype(src,/obj/mecha/combat/gygax/dark))
 			flick("gygax-gofast-aoff",src)
 			reset_icon()
 	else
@@ -72,7 +72,7 @@
 		step_in = min(1, round(step_in/2))
 		step_energy_drain = step_energy_drain*overload_coeff
 		src.occupant_message("<font color='red'>You enable leg actuators overload.</font>")
-		if(!istype(src,/obj/mecha/combat/gygax/dark))
+		if (!istype(src,/obj/mecha/combat/gygax/dark))
 			flick("gygax-gofast-aon",src)
 			icon_state = "gygax-gofast"
 	src.log_message("Toggled leg actuators overload.")
@@ -80,24 +80,24 @@
 
 /*
 /obj/mecha/combat/gygax/startMechWalking()
-	if(overload)
+	if (overload)
 		icon_state = initial_icon + "-gofast-move"
 	else
 		icon_state = initial_icon + "-move"
 */
 
 /obj/mecha/combat/gygax/stopMechWalking()
-	if(overload)
+	if (overload)
 		icon_state = initial_icon + "-gofast"
 	else
 		icon_state = initial_icon
 
 /obj/mecha/combat/gygax/dyndomove(direction)
-	if(!..())
+	if (!..())
 		return
-	if(overload)
+	if (overload)
 		health--
-		if(health < initial(health) - initial(health)/3)
+		if (health < initial(health) - initial(health)/3)
 			overload = 0
 			step_in = initial(step_in)
 			step_energy_drain = initial(step_energy_drain)

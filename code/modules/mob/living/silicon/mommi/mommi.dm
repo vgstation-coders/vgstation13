@@ -40,12 +40,12 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	return 1
 
 /mob/living/silicon/robot/mommi/generate_static_overlay()
-	if(!istype(static_overlays,/list))
+	if (!istype(static_overlays,/list))
 		static_overlays = list()
 	return
 
 /mob/living/silicon/robot/mommi/examination(atom/A as mob|obj|turf in view()) //It used to be oview(12), but I can't really say why
-	if(ismob(A) && src.can_see_static()) //can't examine what you can't catch!
+	if (ismob(A) && src.can_see_static()) //can't examine what you can't catch!
 		to_chat(usr, "Your vision module can't determine any of [A]'s features.")
 		return
 
@@ -61,7 +61,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	updatename()
 	updateicon()
 
-	if(!cell)
+	if (!cell)
 		cell = new /obj/item/weapon/cell(src)
 		cell.maxcharge = 7500
 		cell.charge = 7500
@@ -70,7 +70,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	laws = new mommi_base_law_type
 
 	// Don't sync if we're a KEEPER.
-	if(!istype(laws,/datum/ai_laws/keeper))
+	if (!istype(laws,/datum/ai_laws/keeper))
 		connected_ai = select_active_ai_with_fewest_borgs()
 	else
 		// Enforce silence.
@@ -78,72 +78,72 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		connected_ai = null // Enforce no AI parent
 		scrambledcodes = 1 // Hide from console because people are fucking idiots
 
-	if(connected_ai)
+	if (connected_ai)
 		connected_ai.connected_robots += src
 		lawsync()
 		lawupdate = 1
 	else
 		lawupdate = 0
 
-	if(!scrambledcodes && !camera)
+	if (!scrambledcodes && !camera)
 		camera = new /obj/machinery/camera(src)
 		camera.c_tag = real_name
 		camera.network = list("SS13")
-		if(wires.IsCameraCut()) // 5 = BORG CAMERA
+		if (wires.IsCameraCut()) // 5 = BORG CAMERA
 			camera.status = 0
 
 	// Sanity check
-	if(connected_ai && keeper)
+	if (connected_ai && keeper)
 		to_chat(world, "<span class='warning'>ASSERT FAILURE: connected_ai && keeper in mommi.dm</span>")
 
 
 /mob/living/silicon/robot/mommi/choose_icon()
 	var/icontype = input("Select an icon!", "Mobile MMI", null) as null|anything in list("Basic", "Hover", "Keeper", "RepairBot", "Replicator", "Prime", "Scout")
-	if(!icontype)
+	if (!icontype)
 		return
-	switch(icontype)
-		if("Replicator")
+	switch (icontype)
+		if ("Replicator")
 			subtype = "replicator"
-		if("Keeper")
+		if ("Keeper")
 			subtype = "keeper"
-		if("RepairBot")
+		if ("RepairBot")
 			subtype = "repairbot"
-		if("Hover")
+		if ("Hover")
 			subtype = "hovermommi"
-		if("Prime")
+		if ("Prime")
 			subtype = "mommiprime"
-		if("Scout")
+		if ("Scout")
 			subtype = "scout"
 		else
 			subtype = "mommi"
 	updateicon()
 	var/answer = input("Is this what you want?", "Mobile MMI", null) in list("Yes", "No")
-	switch(answer)
-		if("No")
+	switch (answer)
+		if ("No")
 			choose_icon()
 			return
 	picked = 1
 
 /mob/living/silicon/robot/mommi/pick_module()
 
-	if(module)
+	if (module)
 		return
 	var/list/modules = list("MoMMI")
-	if(modules.len)
+	if (modules.len)
 		modtype = input("Please, select a module!", "Robot", null, null) as null|anything in modules
 	else
 		modtype=modules[0]
 
-	if(!modtype)
+	if (!modtype)
 		return
 
 	var/module_sprites[0] //Used to store the associations between sprite names and sprite index.
 
-	if(module)
+	if (module)
 		return
 
-	switch(modtype)
-		if("MoMMI")
+	switch (modtype)
+		if ("MoMMI")
 			module = new /obj/item/weapon/robot_module/standard(src)
 			module_sprites["Basic"] = "mommi"
 			module_sprites["Keeper"] = "keeper"
@@ -167,12 +167,12 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 //Improved /N
 /mob/living/silicon/robot/mommi/Destroy()
 	remove_static_overlays()
-	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
+	if (mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
 		var/obj/item/device/mmi/nmmi = mmi
 		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
-		if(T)
+		if (T)
 			nmmi.forceMove(T)
-		if(mind)
+		if (mind)
 			mind.transfer_to(nmmi.brainmob)
 		mmi = null
 		nmmi.icon = 'icons/obj/assemblies.dmi'
@@ -181,16 +181,16 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 /mob/living/silicon/robot/mommi/remove_screen_objs()
 	..()
-	if(inv_tool)
+	if (inv_tool)
 		returnToPool(inv_tool)
-		if(client)
+		if (client)
 			client.screen -= inv_tool
 		inv_tool = null
 
 /mob/living/silicon/robot/mommi/updatename(var/oldprefix as text)
 
 	var/changed_name = ""
-	if(custom_name)
+	if (custom_name)
 		changed_name = custom_name
 	else
 		changed_name = "[prefix] [num2text(ident)]"
@@ -198,10 +198,10 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	name = real_name
 
 /mob/living/silicon/robot/mommi/emag_act(mob/user as mob)
-	if(user == src && emagged != 1)//Dont shitpost inside the game, thats just going too far
+	if (user == src && emagged != 1)//Dont shitpost inside the game, thats just going too far
 		to_chat(user, "<span class='warning'>Nanotrasen Patented Anti-Emancipation Override initiated.</span>")
 		return 1
-	if(..())
+	if (..())
 		return 1
 	remove_static_overlays()
 	updateicon()
@@ -210,28 +210,28 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	keeper = 0
 
 /mob/living/silicon/robot/mommi/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/stack/cable_coil) && wiresexposed)
+	if (istype(W, /obj/item/stack/cable_coil) && wiresexposed)
 		var/obj/item/stack/cable_coil/coil = W
 		adjustFireLoss(-30)
 		updatehealth()
 		coil.use(1)
-		for(var/mob/O in viewers(user, null))
+		for (var/mob/O in viewers(user, null))
 			O.show_message(text("<span class='warning'>[user] has fixed some of the burnt wires on [src]!</span>"), 1)
 
 	else if (iscrowbar(W))	// crowbar means open or close the cover
-		if(stat == DEAD)
+		if (stat == DEAD)
 			to_chat(user, "You pop the MMI off the base.")
 			spawn(0)
 				qdel(src)
 			return
-		if(opened)
-			if(mmi && wiresexposed && wires.IsAllCut())
+		if (opened)
+			if (mmi && wiresexposed && wires.IsAllCut())
 				//Cell is out, wires are exposed, remove MMI, produce damaged chassis, baleet original mob.
 				to_chat(user, "You jam the crowbar into \the [src] and begin levering [mmi].")
 				if (do_after(user, src,3))
 					to_chat(user, "You damage some parts of the casing, but eventually manage to rip out [mmi]!")
 					var/limbs = list(/obj/item/robot_parts/l_leg, /obj/item/robot_parts/r_leg, /obj/item/robot_parts/l_arm, /obj/item/robot_parts/r_arm)
-					for(var/newlimb = 1 to rand(2, 4))
+					for (var/newlimb = 1 to rand(2, 4))
 						var/limb_to_spawn = pick(limbs)
 						limbs -= limb_to_spawn
 
@@ -246,7 +246,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 				opened = 0
 				updateicon()
 		else
-			if(locked)
+			if (locked)
 				to_chat(user, "The cover is locked and cannot be opened.")
 			else
 				to_chat(user, "You open the cover.")
@@ -254,9 +254,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 				updateicon()
 
 	else if (istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
-		if(wiresexposed)
+		if (wiresexposed)
 			to_chat(user, "Close the panel first.")
-		else if(cell)
+		else if (cell)
 			to_chat(user, "There is a power cell already installed.")
 		else
 			user.drop_item(W, src)
@@ -271,31 +271,31 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		else
 			to_chat(user, "You can't reach the wiring.")
 
-	else if(isscrewdriver(W) && opened && !cell)	// haxing
+	else if (isscrewdriver(W) && opened && !cell)	// haxing
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
 		updateicon()
 
-	else if(isscrewdriver(W) && opened && cell)	// radio
-		if(radio)
+	else if (isscrewdriver(W) && opened && cell)	// radio
+		if (radio)
 			radio.attackby(W,user)//Push it to the radio to let it handle everything
 		else
 			to_chat(user, "Unable to locate a radio.")
 		updateicon()
 
-	else if(istype(W, /obj/item/device/encryptionkey/) && opened)
-		if(radio)//sanityyyyyy
+	else if (istype(W, /obj/item/device/encryptionkey/) && opened)
+		if (radio)//sanityyyyyy
 			radio.attackby(W,user)//GTFO, you have your own procs
 		else
 			to_chat(user, "Unable to locate a radio.")
 /*
 	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))			// trying to unlock the interface with an ID card
-		if(emagged)//still allow them to open the cover
+		if (emagged)//still allow them to open the cover
 			to_chat(user, "The interface seems slightly damaged")
-		if(opened)
+		if (opened)
 			to_chat(user, "You must close the cover to swipe an ID card.")
 		else
-			if(allowed(usr))
+			if (allowed(usr))
 				locked = !locked
 				to_chat(user, "You [ locked ? "lock" : "unlock"] [src]'s interface.")
 				updateicon()
@@ -303,11 +303,11 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 */
 
-	else if(istype(W, /obj/item/borg/upgrade/))
+	else if (istype(W, /obj/item/borg/upgrade/))
 		var/obj/item/borg/upgrade/U = W
 		U.attempt_action(src,user)
 
-	else if(istype(W, /obj/item/device/camera_bug))
+	else if (istype(W, /obj/item/device/camera_bug))
 		help_shake_act(user)
 		return 0
 
@@ -318,8 +318,8 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 /mob/living/silicon/robot/mommi/attack_hand(mob/user)
 	add_fingerprint(user)
 
-	if(opened && !wiresexposed && (!istype(user, /mob/living/silicon)))
-		if(cell)
+	if (opened && !wiresexposed && (!istype(user, /mob/living/silicon)))
+		if (cell)
 			cell.updateicon()
 			cell.add_fingerprint(user)
 			user.put_in_active_hand(cell)
@@ -328,9 +328,9 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 			updateicon()
 			return
 
-	if(!istype(user, /mob/living/silicon))
-		switch(user.a_intent)
-			if(I_DISARM)
+	if (!istype(user, /mob/living/silicon))
+		switch (user.a_intent)
+			if (I_DISARM)
 				user.attack_log += text("\[[time_stamp()]\] <font color='red'>Disarmed [src.name] ([src.ckey])</font>")
 				src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been disarmed by [user.name] ([user.ckey])</font>")
 				log_admin("ATTACK: [user.name] ([user.ckey]) disarmed [src.name] ([src.ckey])")
@@ -342,15 +342,15 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 					visible_message("<span class='danger'>[user] has pushed [src]!</span>")
 					var/obj/item/found = locate(tool_state) in src.module.modules
-					if(!found)
+					if (!found)
 						var/obj/item/TS = tool_state
 						drop_item(TS)
-						if(TS && TS.loc)
+						if (TS && TS.loc)
 							visible_message("<span class='warning'><B>[src]'s robotic arm loses grip on what it was holding</span>")
 					return
-				if(randn <= 50)//MoMMI's robot arm is stronger than a human's, but not by much
+				if (randn <= 50)//MoMMI's robot arm is stronger than a human's, but not by much
 					var/obj/item/found = locate(tool_state) in src.module.modules
-					if(!found)
+					if (!found)
 						var/obj/item/TS = tool_state
 						drop_item(TS)
 						playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
@@ -364,14 +364,14 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 				return
 
 /mob/living/silicon/robot/mommi/installed_modules()
-	if(weapon_lock)
+	if (weapon_lock)
 		to_chat(src, "<span class='warning'>Weapon lock active, unable to use modules! Count:[weaponlock_time]</span>")
 		return
 
-	if(!module)
+	if (!module)
 		pick_module()
 		return
-	if(!picked)
+	if (!picked)
 		choose_icon()
 		return
 	var/dat = "<HEAD><TITLE>Modules</TITLE><META HTTP-EQUIV='Refresh' CONTENT='10'></HEAD><BODY>\n"
@@ -388,12 +388,12 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	for (var/obj in module.modules)
 		if (!obj)
 			dat += text("<B>Resource depleted</B><BR>")
-		else if(activated(obj))
+		else if (activated(obj))
 			dat += text("[obj]: <B>Activated</B><BR>")
 		else
 			dat += text("[obj]: <A HREF=?src=\ref[src];act=\ref[obj]>Activate</A><BR>")
 	if (emagged)
-		if(activated(module.emag))
+		if (activated(module.emag))
 			dat += text("[module.emag]: <B>Activated</B><BR>")
 		else
 			dat += text("[module.emag]: <A HREF=?src=\ref[src];act=\ref[module.emag]>Activate</A><BR>")
@@ -403,7 +403,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 
 /mob/living/silicon/robot/mommi/Topic(href, href_list)
 	..()
-	if(usr && (src != usr))
+	if (usr && (src != usr))
 		return
 
 	if (href_list["mach_close"])
@@ -424,10 +424,10 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	if (href_list["act"])
 		var/obj/item/O = locate(href_list["act"])
 		var/obj/item/TS
-		if(!(locate(O) in src.module.modules) && O != src.module.emag)
+		if (!(locate(O) in src.module.modules) && O != src.module.emag)
 			return
 		TS = tool_state
-		if(tool_state)
+		if (tool_state)
 			contents -= tool_state
 			if (client)
 				client.screen -= tool_state
@@ -436,8 +436,8 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		contents += O
 		inv_tool.icon_state = "inv1 +a"
 		module_active=tool_state
-		if(TS && istype(TS))
-			if(src.is_in_modules(TS))
+		if (TS && istype(TS))
+			if (src.is_in_modules(TS))
 				TS.forceMove(src.module)
 			else
 				TS.layer=initial(TS.layer)
@@ -462,12 +462,12 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	set name = "Activate KEEPER"
 	set desc = "Performs a full purge of your laws and disconnects you from AIs and cyborg consoles.  However, you lose the ability to speak and must remain neutral, only being permitted to perform station upkeep.  You can still be emagged in this state."
 
-	if(keeper)
+	if (keeper)
 		return
 
 	var/mob/living/silicon/robot/R = src
 
-	if(R)
+	if (R)
 		R.UnlinkSelf()
 		var/obj/item/weapon/aiModule/keeper/mdl = new
 

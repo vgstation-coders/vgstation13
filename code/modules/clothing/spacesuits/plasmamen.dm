@@ -21,7 +21,7 @@
 
 /obj/item/clothing/suit/space/plasmaman/proc/Extinguish(var/mob/user)
 	var/mob/living/carbon/human/H=user
-	if(next_extinguish > world.time)
+	if (next_extinguish > world.time)
 		return
 
 	next_extinguish = world.time + extinguish_cooldown
@@ -45,11 +45,11 @@
 	action_button_name = "Toggle Helmet Light"
 
 /obj/item/clothing/head/helmet/space/plasmaman/attack_self(mob/user)
-	if(no_light)
+	if (no_light)
 		return
 	on = !on
 	icon_state = "[base_state][on]"
-	if(on)
+	if (on)
 		set_light(brightness_on)
 	else
 		set_light(0)
@@ -320,7 +320,7 @@
 	var/obj/machinery/camera/camera
 
 /obj/item/clothing/head/helmet/space/plasmaman/nuclear/attack_self(mob/user)
-	if(camera)
+	if (camera)
 		..(user)
 	else
 		camera = new /obj/machinery/camera(src)
@@ -331,7 +331,7 @@
 
 /obj/item/clothing/head/helmet/space/plasmaman/nuclear/examine(mob/user)
 	..()
-	if(get_dist(user,src) <= 1)
+	if (get_dist(user,src) <= 1)
 		to_chat(user, "<span class='info'>This helmet has a built-in camera. It's [camera ? "" : "in"]active.</span>")
 
 

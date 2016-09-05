@@ -34,15 +34,15 @@ For the main html chat area
 
 /datum/chatOutput/proc/start()
 	//Check for existing chat
-	if(!owner)
+	if (!owner)
 		return 0
 
-	if(!winexists(owner, "browseroutput")) // Oh goddamnit.
+	if (!winexists(owner, "browseroutput")) // Oh goddamnit.
 		alert(owner.mob, "Updated chat window does not exist. If you are using a custom skin file please allow the game to update.")
 		broken = TRUE
 		return 0
 
-	if(winget(owner, "browseroutput", "is-disabled") == "false") //Already setup
+	if (winget(owner, "browseroutput", "is-disabled") == "false") //Already setup
 		doneLoading()
 
 	else //Not setup
@@ -52,62 +52,62 @@ For the main html chat area
 
 /datum/chatOutput/proc/load()
 	set waitfor = FALSE
-	if(!owner)
+	if (!owner)
 		return
 
 	// world.log << "chatOutput: load()"
 
-	for(var/attempts = 1 to 5)
-		for(var/asset in global.chatResources) // No asset cache, just get this fucking shit SENT.
+	for (var/attempts = 1 to 5)
+		for (var/asset in global.chatResources) // No asset cache, just get this fucking shit SENT.
 			owner << browse_rsc(file(asset))
 
 		// world.log << "Sending main chat window to client [owner.ckey]"
 		owner << browse(file("goon/browserassets/html/browserOutput.html"), "window=browseroutput")
 		sleep(20 SECONDS)
-		if(!owner || loaded)
+		if (!owner || loaded)
 			break
 
 	// world.log << "chatOutput: load() completed"
 
 /datum/chatOutput/Topic(var/href, var/list/href_list)
-	if(usr.client != owner)
+	if (usr.client != owner)
 		return 1
 
 	// Build arguments.
 	// Arguments are in the form "param[paramname]=thing"
 	var/list/params = list()
-	for(var/key in href_list)
-		if(length(key) > 7 && findtext(key, "param")) // 7 is the amount of characters in the basic param key template.
+	for (var/key in href_list)
+		if (length(key) > 7 && findtext(key, "param")) // 7 is the amount of characters in the basic param key template.
 			var/param_name = copytext(key, 7, -1)
 			var/item       = href_list[key]
 
 			params[param_name] = item
 
 	var/data // Data to be sent back to the chat.
-	switch(href_list["proc"])
-		if("doneLoading")
+	switch (href_list["proc"])
+		if ("doneLoading")
 			data = doneLoading(arglist(params))
 
-		if("debug")
+		if ("debug")
 			data = debug(arglist(params))
 
-		if("ping")
+		if ("ping")
 			data = ping(arglist(params))
 
-		if("analyzeClientData")
+		if ("analyzeClientData")
 			data = analyzeClientData(arglist(params))
 
-	if(data)
+	if (data)
 		ehjax_send(data = data)
 
 //Called on chat output done-loading by JS.
 /datum/chatOutput/proc/doneLoading()
-	if(loaded)
+	if (loaded)
 		return
 
 	loaded = TRUE
 	winset(owner, "browseroutput", "is-disabled=false")
-	for(var/message in messageQueue)
+	for (var/message in messageQueue)
 		to_chat(owner, message)
 
 	messageQueue = null
@@ -123,7 +123,7 @@ For the main html chat area
 		sleep(30 SECONDS)
 
 /datum/chatOutput/proc/ehjax_send(var/client/C = owner, var/window = "browseroutput", var/data)
-	if(islist(data))
+	if (islist(data))
 		data = json_encode(data)
 	C << output("[data]", "[window]:ehjaxCallback")
 
@@ -139,10 +139,10 @@ For the main html chat area
 
 //Called by client, sent data to investigate (cookie history so far)
 /datum/chatOutput/proc/analyzeClientData(cookie = "")
-	if(!cookie)
+	if (!cookie)
 		return
 
-	if(cookie != "none")
+	if (cookie != "none")
 		var/list/connData = json2list(cookie)
 		if (connData && islist(connData) && connData.len > 0 && connData["connData"])
 			src.connectionHistory = connData["connData"] //lol fuck
@@ -248,11 +248,11 @@ For the main html chat area
 			C = target:current:client
 
 		if (C && C.chatOutput)
-			if(C.chatOutput.broken) // Either a secret repo fuck up or a player who hasn't updated his skin file.
+			if (C.chatOutput.broken) // Either a secret repo fuck up or a player who hasn't updated his skin file.
 				C << message
 				return
 
-			if(!C.chatOutput.loaded && C.chatOutput.messageQueue && islist(C.chatOutput.messageQueue))
+			if (!C.chatOutput.loaded && C.chatOutput.messageQueue && islist(C.chatOutput.messageQueue))
 				//Client sucks at loading things, put their messages in a queue
 				C.chatOutput.messageQueue.Add(message)
 				return

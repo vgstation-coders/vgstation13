@@ -1,22 +1,22 @@
 /obj/item/robot_parts/attack(mob/living/carbon/human/M as mob, mob/living/carbon/user as mob)
 	var/limbloc = null
 
-	if(!istype(M))
+	if (!istype(M))
 		return ..()
 
-	if(!((locate(/obj/machinery/optable, M.loc) && M.resting) || (locate(/obj/structure/bed/roller, M.loc) && (M.incapacitated()) && prob(75) || (locate(/obj/structure/table/, M.loc) && (M.lying || M.weakened || M.stunned || M.paralysis || M.sleeping || M.stat) && prob(66))))
+	if (!((locate(/obj/machinery/optable, M.loc) && M.resting) || (locate(/obj/structure/bed/roller, M.loc) && (M.incapacitated()) && prob(75) || (locate(/obj/structure/table/, M.loc) && (M.lying || M.weakened || M.stunned || M.paralysis || M.sleeping || M.stat) && prob(66))))
 		return ..()
 
-	if(!istype(M, /mob/living/carbon/human))
+	if (!istype(M, /mob/living/carbon/human))
 		return ..()
 
-	if((user.zone_sel.selecting == "l_arm") && (istype(src, /obj/item/robot_parts/l_arm)))
+	if ((user.zone_sel.selecting == "l_arm") && (istype(src, /obj/item/robot_parts/l_arm)))
 		limbloc = "l_hand"
-	else if((user.zone_sel.selecting == "r_arm") && (istype(src, /obj/item/robot_parts/r_arm)))
+	else if ((user.zone_sel.selecting == "r_arm") && (istype(src, /obj/item/robot_parts/r_arm)))
 		limbloc = "r_hand"
-	else if((user.zone_sel.selecting == "r_leg") && (istype(src, /obj/item/robot_parts/r_leg)))
+	else if ((user.zone_sel.selecting == "r_leg") && (istype(src, /obj/item/robot_parts/r_leg)))
 		limbloc = "r_foot"
-	else if((user.zone_sel.selecting == "l_leg") && (istype(src, /obj/item/robot_parts/l_leg)))
+	else if ((user.zone_sel.selecting == "l_leg") && (istype(src, /obj/item/robot_parts/l_leg)))
 		limbloc = "l_foot"
 	else
 		to_chat(user, "<span class='warning'>That doesn't fit there!</span>")
@@ -24,11 +24,11 @@
 
 	var/mob/living/carbon/human/H = M
 	var/datum/organ/external/S = H.organs[user.zone_sel.selecting]
-	if(S.status & ORGAN_DESTROYED)
-		if(!(S.status & ORGAN_ATTACHABLE))
+	if (S.status & ORGAN_DESTROYED)
+		if (!(S.status & ORGAN_ATTACHABLE))
 			to_chat(user, "<span class='warning'>The wound is not ready for a replacement!</span>")
 			return 0
-		if(M != user)
+		if (M != user)
 			M.visible_message( \
 				"<span class='warning'>[user] is beginning to attach \the [src] where [H]'s [S.display_name] used to be.</span>", \
 				"<span class='warning'>[user] begins to attach \the [src] where your [S.display_name] used to be.</span>")
@@ -37,8 +37,8 @@
 				"<span class='warning'>[user] begins to attach a robotic limb where \his [S.display_name] used to be with [src].</span>", \
 				"<span class='warning'>You begin to attach \the [src] where your [S.display_name] used to be.</span>")
 
-		if(do_mob(user, H, 100))
-			if(M != user)
+		if (do_mob(user, H, 100))
+			if (M != user)
 				M.visible_message( \
 					"<span class='warning'>[user] finishes attaching [H]'s new [S.display_name].</span>", \
 					"<span class='warning'>[user] finishes attaching your new [S.display_name].</span>")
@@ -47,7 +47,7 @@
 					"<span class='warning'>[user] finishes attaching \his new [S.display_name].</span>", \
 					"<span class='warning'>You finish attaching your new [S.display_name].</span>")
 
-			if(H == user && prob(25))
+			if (H == user && prob(25))
 				to_chat(user, "<span class='warning'>You mess up!</span>")
 				S.take_damage(15)
 

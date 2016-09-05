@@ -10,12 +10,12 @@
 	unloading = 1
 	flick("icon_free-push",bususer.gui_icons.adminbus_free)
 
-	for(var/i=passengers.len;i>0;i--)
+	for (var/i=passengers.len;i>0;i--)
 		var/atom/A = passengers[i]
-		if(isliving(A))
+		if (isliving(A))
 			var/mob/living/L = A
 			freed(L)
-		else if(isbot(A))
+		else if (isbot(A))
 			var/obj/machinery/bot/B = A
 			B.forceMove(get_step(src,turn(src.dir,-90)))
 			B.turn_on()
@@ -43,43 +43,43 @@
 
 //MOB SPAWNING
 /obj/structure/bed/chair/vehicle/adminbus/proc/spawn_mob(mob/bususer,var/mob_type,var/count)
-	switch(mob_type)
-		if(1)
+	switch (mob_type)
+		if (1)
 			flick("icon_spclown-push",bususer.gui_icons.adminbus_spclowns)
-		if(2)
+		if (2)
 			flick("icon_spcarp-push",bususer.gui_icons.adminbus_spcarps)
-		if(3)
+		if (3)
 			flick("icon_spbear-push",bususer.gui_icons.adminbus_spbears)
-		if(4)
+		if (4)
 			flick("icon_sptree-push",bususer.gui_icons.adminbus_sptrees)
-		if(5)
+		if (5)
 			flick("icon_spspider-push",bususer.gui_icons.adminbus_spspiders)
-		if(6)
+		if (6)
 			flick("icon_spalien-push",bususer.gui_icons.adminbus_spalien)
 
 	var/turflist[] = list()
-	for(var/turf/T in orange(src,1))
-		if((T.density == 0) && (T!=src.loc))
+	for (var/turf/T in orange(src,1))
+		if ((T.density == 0) && (T!=src.loc))
 			turflist += T
 
 	var/invocnum = min(count, turflist.len)
 
-	for(var/i=0;i<invocnum;i++)
+	for (var/i=0;i<invocnum;i++)
 		var/turf/T = pick(turflist)
 		turflist -= T
-		switch(mob_type)
-			if(1)
+		switch (mob_type)
+			if (1)
 				var/mob/living/simple_animal/hostile/retaliate/clown/M = new /mob/living/simple_animal/hostile/retaliate/clown(T)
 				M.faction = "adminbus mob"
 				spawned_mobs += M
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',"#FFC0FF", anim_plane = EFFECTS_PLANE)
-			if(2)
+			if (2)
 				var/mob/living/simple_animal/hostile/carp/M = new /mob/living/simple_animal/hostile/carp(T)
 				M.faction = "adminbus mob"
 				spawned_mobs += M
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',"#C70AF5", anim_plane = EFFECTS_PLANE)
-			if(3)
-				if(prob(10))
+			if (3)
+				if (prob(10))
 					var/mob/living/simple_animal/hostile/humanoid/russian/M = new /mob/living/simple_animal/hostile/humanoid/russian(T)
 					M.faction = "adminbus mob"
 					spawned_mobs += M
@@ -88,17 +88,17 @@
 					M.faction = "adminbus mob"
 					spawned_mobs += M
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',"#454545", anim_plane = EFFECTS_PLANE)
-			if(4)
+			if (4)
 				var/mob/living/simple_animal/hostile/tree/M = new /mob/living/simple_animal/hostile/tree(T)
 				M.faction = "adminbus mob"
 				spawned_mobs += M
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',"#232B2C", anim_plane = EFFECTS_PLANE)
-			if(5)
+			if (5)
 				var/mob/living/simple_animal/hostile/giant_spider/M = new /mob/living/simple_animal/hostile/giant_spider(T)
 				M.faction = "adminbus mob"
 				spawned_mobs += M
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',"#3B2D1C", anim_plane = EFFECTS_PLANE)
-			if(6)
+			if (6)
 				var/mob/living/simple_animal/hostile/alien/queen/large/M = new /mob/living/simple_animal/hostile/alien/queen/large(T)
 				M.faction = "adminbus mob"
 				spawned_mobs += M
@@ -110,12 +110,12 @@
 
 	flick("icon_delmobs-push",bususer.gui_icons.adminbus_delmobs)
 
-	for(var/mob/M in spawned_mobs)
+	for (var/mob/M in spawned_mobs)
 		var/xoffset = -WORLD_ICON_SIZE
-		if(istype(M,/mob/living/simple_animal/hostile/alien/queen/large))
+		if (istype(M,/mob/living/simple_animal/hostile/alien/queen/large))
 			xoffset = -WORLD_ICON_SIZE/2
 		var/turf/T = get_turf(M)
-		if(T)
+		if (T)
 			T.turf_animation('icons/effects/96x96.dmi',"beamin",xoffset,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = EFFECTS_PLANE)
 		qdel(M)
 	spawned_mobs.len = 0
@@ -123,7 +123,7 @@
 //SINGULARITY/NARSIE HOOK&CHAIN
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/capture_singulo(var/obj/machinery/singularity/S)
-	for(var/atom/A in hookshot)																//first we remove the hookshot and its chain
+	for (var/atom/A in hookshot)																//first we remove the hookshot and its chain
 		qdel(A)
 	hookshot.len = 0
 
@@ -131,17 +131,17 @@
 	S.on_capture()
 	var/obj/structure/singulo_chain/parentchain = null
 	var/obj/structure/singulo_chain/anchor/A = new /obj/structure/singulo_chain/anchor(loc)	//then we spawn the invisible anchor on top of the bus,
-	while(get_dist(A,S) > 0)																//it then travels toward the singulo while creating chains on its path,
+	while (get_dist(A,S) > 0)																//it then travels toward the singulo while creating chains on its path,
 		A.forceMove(get_step_towards(A,S))													//and parenting them together
 		var/obj/structure/singulo_chain/C = new /obj/structure/singulo_chain(A.loc)
 		chain += C
 		C.dir = get_dir(src,S)
-		if(!parentchain)
+		if (!parentchain)
 			chain_base = C
 		else
 			parentchain.child = C
 		parentchain = C
-	if(!parentchain)
+	if (!parentchain)
 		chain_base = A
 	else
 		parentchain.child = A
@@ -151,31 +151,31 @@
 /obj/structure/bed/chair/vehicle/adminbus/proc/throw_hookshot(mob/bususer)
 
 
-	if(!hook && !singulo)
+	if (!hook && !singulo)
 		return
 
-	if(singulo)
+	if (singulo)
 		bususer.gui_icons.adminbus_hook.icon_state = "icon_hook-push"
 		var/obj/structure/singulo_chain/anchor/A = locate(/obj/structure/singulo_chain/anchor) in chain
-		if(A)
+		if (A)
 			qdel(A)//so we don't drag the singulo back to us along with the rest of the chain.
 		singulo.on_release()
 		singulo = null
-		while(chain_base)
+		while (chain_base)
 			var/obj/structure/singulo_chain/C = chain_base
 			C.move_child(get_turf(src))
 			chain_base = C.child
 			qdel(C)
 			sleep(2)
 
-		for(var/obj/structure/singulo_chain/N in chain)//Just in case some bits of the chain were detached from the bus for whatever reason
+		for (var/obj/structure/singulo_chain/N in chain)//Just in case some bits of the chain were detached from the bus for whatever reason
 			qdel(N)
 		chain.len = 0
 
-		if(!singulo)
+		if (!singulo)
 			bususer.gui_icons.adminbus_hook.icon_state = "icon_hook"
 			hook = 1
-	else if(hook)
+	else if (hook)
 		bususer.gui_icons.adminbus_hook.icon_state = "icon_hook-push"
 		hook = 0
 
@@ -184,11 +184,11 @@
 		C.abus = src
 
 		var/obj/machinery/singularity/S = C.hook_throw(src.dir)							//The claw moves forward, spawning hookshot-chains on its path
-		if(S)
+		if (S)
 			bususer.gui_icons.adminbus_hook.icon_state = "icon_singulo"
 			capture_singulo(S)															//If the claw hits a singulo, we remove the hookshot-chains and replace them with singulo-chains
 		else
-			for(var/obj/structure/hookshot/A in hookshot)								//If it doesn't hit anything, all the elements of the chain come back toward the bus,
+			for (var/obj/structure/hookshot/A in hookshot)								//If it doesn't hit anything, all the elements of the chain come back toward the bus,
 				spawn()//so they all return at once										//deleting themselves when they reach it.
 					A.hook_back()
 
@@ -199,7 +199,7 @@
 
 	flick("icon_massrejuv-push",bususer.gui_icons.adminbus_massrejuv)
 
-	for(var/mob/living/M in orange(src,3))
+	for (var/mob/living/M in orange(src,3))
 		M.revive(1)
 		M.suiciding = 0
 		to_chat(M, "<span class='notice'>THE ADMINBUS IS LOVE. THE ADMINBUS IS LIFE.</span>")
@@ -209,33 +209,33 @@
 /obj/structure/bed/chair/vehicle/adminbus/proc/toggle_lights(mob/bususer,var/lightpower=0)
 
 
-	if(lightpower == roadlights)
+	if (lightpower == roadlights)
 		return
 	var/image/roadlights_image = image(icon,"roadlights", ABOVE_LIGHTING_LAYER)
 	roadlights_image.plane = LIGHTING_PLANE
-	switch(lightpower)
-		if(0)
+	switch (lightpower)
+		if (0)
 			bususer.gui_icons.adminbus_roadlights_0.icon_state = "icon_lights_0-on"
 			bususer.gui_icons.adminbus_roadlights_1.icon_state = "icon_lights_1-off"
 			bususer.gui_icons.adminbus_roadlights_2.icon_state = "icon_lights_2-off"
 			lightsource.set_light(0)
-			if(roadlights == 1 || roadlights == 2)
+			if (roadlights == 1 || roadlights == 2)
 				overlays["roadlights"] = null
 			roadlights = 0
-		if(1)
+		if (1)
 			bususer.gui_icons.adminbus_roadlights_0.icon_state = "icon_lights_0-off"
 			bususer.gui_icons.adminbus_roadlights_1.icon_state = "icon_lights_1-on"
 			bususer.gui_icons.adminbus_roadlights_2.icon_state = "icon_lights_2-off"
 			lightsource.set_light(2)
-			if(roadlights == 0)
+			if (roadlights == 0)
 				overlays["roadlights"] = roadlights_image
 			roadlights = 1
-		if(2)
+		if (2)
 			bususer.gui_icons.adminbus_roadlights_0.icon_state = "icon_lights_0-off"
 			bususer.gui_icons.adminbus_roadlights_1.icon_state = "icon_lights_1-off"
 			bususer.gui_icons.adminbus_roadlights_2.icon_state = "icon_lights_2-on"
 			lightsource.set_light(3)
-			if(roadlights == 0)
+			if (roadlights == 0)
 				overlays["roadlights"] = roadlights_image
 			roadlights = 2
 
@@ -244,21 +244,21 @@
 /obj/structure/bed/chair/vehicle/adminbus/proc/toggle_bumpers(mob/bususer,var/bumperpower=1)
 
 
-	if(bumperpower == bumpers)
+	if (bumperpower == bumpers)
 		return
 
-	switch(bumperpower)
-		if(1)
+	switch (bumperpower)
+		if (1)
 			bususer.gui_icons.adminbus_bumpers_1.icon_state = "icon_bumpers_1-on"
 			bususer.gui_icons.adminbus_bumpers_2.icon_state = "icon_bumpers_2-off"
 			bususer.gui_icons.adminbus_bumpers_3.icon_state = "icon_bumpers_3-off"
 			bumpers = 1
-		if(2)
+		if (2)
 			bususer.gui_icons.adminbus_bumpers_1.icon_state = "icon_bumpers_1-off"
 			bususer.gui_icons.adminbus_bumpers_2.icon_state = "icon_bumpers_2-on"
 			bususer.gui_icons.adminbus_bumpers_3.icon_state = "icon_bumpers_3-off"
 			bumpers = 2
-		if(3)
+		if (3)
 			bususer.gui_icons.adminbus_bumpers_1.icon_state = "icon_bumpers_1-off"
 			bususer.gui_icons.adminbus_bumpers_2.icon_state = "icon_bumpers_2-off"
 			bususer.gui_icons.adminbus_bumpers_3.icon_state = "icon_bumpers_3-on"
@@ -268,42 +268,42 @@
 /obj/structure/bed/chair/vehicle/adminbus/proc/toggle_door(mob/bususer,var/doorstate=0)
 
 
-	if(doorstate == door_mode)
+	if (doorstate == door_mode)
 		return
 
-	switch(doorstate)
-		if(0)
+	switch (doorstate)
+		if (0)
 			bususer.gui_icons.adminbus_door_0.icon_state = "icon_door_0-on"
 			bususer.gui_icons.adminbus_door_1.icon_state = "icon_door_1-off"
 			door_mode = 0
 			overlays -= image(icon,"opendoor")
-		if(1)
+		if (1)
 			bususer.gui_icons.adminbus_door_0.icon_state = "icon_door_0-off"
 			bususer.gui_icons.adminbus_door_1.icon_state = "icon_door_1-on"
 			door_mode = 1
 			overlays += image(icon,"opendoor")
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/loadsa_goodies(mob/bususer,var/goodie_type)
-	switch(goodie_type)
-		if(1)
+	switch (goodie_type)
+		if (1)
 			flick("icon_loadsids-push",bususer.gui_icons.adminbus_loadsids)
 			visible_message("<span class='notice'>All Access for Everyone!</span>")
-		if(2)
+		if (2)
 			flick("icon_loadsmone-push",bususer.gui_icons.adminbus_loadsmoney)
 			visible_message("<span class='notice'>Loads of Money!</span>")
 
 	var/joy_sound = list('sound/voice/SC4Mayor1.ogg','sound/voice/SC4Mayor2.ogg','sound/voice/SC4Mayor3.ogg')
 	playsound(src, pick(joy_sound), 50, 0, 0)
 	var/throwzone = list()
-	for(var/i=1;i<=5;i++)
+	for (var/i=1;i<=5;i++)
 		throwzone = list()
-		for(var/turf/T in range(src,5))
+		for (var/turf/T in range(src,5))
 			throwzone += T
-		switch(goodie_type)
-			if(1)
+		switch (goodie_type)
+			if (1)
 				var/obj/item/weapon/card/id/captains_spare/S = new/obj/item/weapon/card/id/captains_spare(src.loc)
 				S.throw_at(pick(throwzone),rand(2,5),0)
-			if(2)
+			if (2)
 				var/obj/item/fuckingmoney = null
 				fuckingmoney = pick(
 				50;/obj/item/weapon/coin/gold,
@@ -331,25 +331,25 @@
 
 	var/distributed = 0
 
-	if(locked_atoms.len)
+	if (locked_atoms.len)
 		var/mob/living/M = locked_atoms[1]
-		if(iscarbon(M))
-			for(var/i = 1 to M.held_items.len)
-				if(M.held_items[i] == null)
+		if (iscarbon(M))
+			for (var/i = 1 to M.held_items.len)
+				if (M.held_items[i] == null)
 					var/obj/item/device/fuse_bomb/admin/B = new /obj/item/device/fuse_bomb/admin(M)
 					spawnedbombs += B
-					if(!M.put_in_hands(B))
+					if (!M.put_in_hands(B))
 						qdel(B)
 
 					to_chat(M, "<span class='warning'>Lit and throw!</span>")
 					break
 
-	for(var/mob/living/carbon/C in passengers)
-		for(var/i = 1 to C.held_items.len)
-			if(C.held_items[i] == null)
+	for (var/mob/living/carbon/C in passengers)
+		for (var/i = 1 to C.held_items.len)
+			if (C.held_items[i] == null)
 				var/obj/item/device/fuse_bomb/admin/B = new /obj/item/device/fuse_bomb/admin(C)
 				spawnedbombs += B
-				if(!C.put_in_hands(B))
+				if (!C.put_in_hands(B))
 					qdel(B)
 
 				to_chat(C, "<span class='warning'>Our benefactors have provided you with a bomb. Lit and throw!</span>")
@@ -364,16 +364,16 @@
 
 	flick("icon_delgiven-push",bususer.gui_icons.adminbus_delbombs)
 
-	if(spawnedbombs.len == 0)
+	if (spawnedbombs.len == 0)
 		to_chat(bususer, "No bombs to delete.</span>")
 		return
 
 	var/distributed = 0
 
-	for(var/i=spawnedbombs.len;i>0;i--)
+	for (var/i=spawnedbombs.len;i>0;i--)
 		var/obj/item/device/fuse_bomb/B = spawnedbombs[i]
-		if(B)
-			if(istype(B.loc,/mob/living/carbon))
+		if (B)
+			if (istype(B.loc,/mob/living/carbon))
 				var/mob/living/carbon/C = B.loc
 				qdel(B)
 				C.regenerate_icons()
@@ -393,21 +393,21 @@
 
 	var/distributed = 0
 
-	if(locked_atoms.len)
+	if (locked_atoms.len)
 		var/mob/living/M = locked_atoms[1]
-		if(iscarbon(M))
+		if (iscarbon(M))
 			var/obj/item/weapon/gun/energy/laser/admin/L = new /obj/item/weapon/gun/energy/laser/admin(M)
 
-			if(M.put_in_hands(L))
+			if (M.put_in_hands(L))
 				spawnedlasers += L
 				to_chat(M, "<span class='warning'>Spray and /pray!</span>")
 			else
 				qdel(L)
 
-	for(var/mob/living/carbon/C in passengers)
+	for (var/mob/living/carbon/C in passengers)
 		var/obj/item/weapon/gun/energy/laser/admin/L = new /obj/item/weapon/gun/energy/laser/admin(C)
 
-		if(C.put_in_hands(L))
+		if (C.put_in_hands(L))
 			spawnedlasers += L
 			to_chat(C, "<span class='warning'>Our benefactors have provided you with an infinite laser gun. Spray and /pray!</span>")
 			distributed++
@@ -422,16 +422,16 @@
 
 	flick("icon_delgiven-push",bususer.gui_icons.adminbus_dellasers)
 
-	if(spawnedlasers.len == 0)
+	if (spawnedlasers.len == 0)
 		to_chat(bususer, "No laser guns to delete.</span>")
 		return
 
 	var/distributed = 0
 
-	for(var/i=spawnedlasers.len;i>0;i--)
+	for (var/i=spawnedlasers.len;i>0;i--)
 		var/obj/item/weapon/gun/energy/laser/admin/L = spawnedlasers[i]
-		if(L)
-			if(istype(L.loc,/mob/living/carbon))
+		if (L)
+			if (istype(L.loc,/mob/living/carbon))
 				var/mob/living/carbon/C = L.loc
 				qdel(L)
 				C.regenerate_icons()
@@ -446,55 +446,55 @@
 /obj/structure/bed/chair/vehicle/adminbus/proc/Mass_Repair(mob/bususer,var/turf/centerloc=null,var/repair_range=3)//the proc can be called by others, doing (null, <center of the area you want to repair>, <radius of the area you want to repair>)
 
 
-	if(bususer)
+	if (bususer)
 		flick("icon_massrepair-push",bususer.gui_icons.adminbus_massrepair)
 
 	visible_message("<span class='notice'>WE BUILD!</span>")
 
-	if(!centerloc)
+	if (!centerloc)
 		centerloc = src.loc
 
-	for(var/obj/machinery/M in range(centerloc,repair_range))
-		if(istype(M,/obj/machinery/door/window))//for some reason it makes the windoors' sprite disapear (until you bump into it)
+	for (var/obj/machinery/M in range(centerloc,repair_range))
+		if (istype(M,/obj/machinery/door/window))//for some reason it makes the windoors' sprite disapear (until you bump into it)
 			continue
-		if(istype(M,/obj/machinery/light))
+		if (istype(M,/obj/machinery/light))
 			var/obj/machinery/light/L = M
 			L.fix()
 			continue
 		M.stat = 0
 		M.update_icon()
 
-	for(var/turf/T in range(centerloc,repair_range))
-		if(istype(T, /turf/space/))
-			if(isspace(T.loc))
+	for (var/turf/T in range(centerloc,repair_range))
+		if (istype(T, /turf/space/))
+			if (isspace(T.loc))
 				continue
 			var/obj/item/stack/tile/plasteel/P = new /obj/item/stack/tile/plasteel
 			P.build(T)
-		else if(istype(T,/turf/simulated/floor))
+		else if (istype(T,/turf/simulated/floor))
 			var/turf/simulated/floor/F = T
-			if(F.broken || F.burnt)
-				if(F.is_plating())
+			if (F.broken || F.burnt)
+				if (F.is_plating())
 					F.icon_state = "plating"
 					F.burnt = 0
 					F.broken = 0
 				else
 					F.make_plating()
 
-	for(var/obj/structure/cultgirder/G in range(centerloc,repair_range))
+	for (var/obj/structure/cultgirder/G in range(centerloc,repair_range))
 		var/turf/T = get_turf(G)
 		T.ChangeTurf(/turf/simulated/wall/cult)
 		qdel(G)
 
-	for(var/obj/structure/girder/G in range(centerloc,repair_range))
+	for (var/obj/structure/girder/G in range(centerloc,repair_range))
 		var/turf/T = get_turf(G)
-		if(istype(G,/obj/structure/girder/reinforced))
+		if (istype(G,/obj/structure/girder/reinforced))
 			T.ChangeTurf(/turf/simulated/wall/r_wall)
 		else
 			T.ChangeTurf(/turf/simulated/wall)
 		qdel(G)
 
-	for(var/obj/item/weapon/shard/S in range(centerloc,repair_range))
-		if(istype(S,/obj/item/weapon/shard/plasma))
+	for (var/obj/item/weapon/shard/S in range(centerloc,repair_range))
+		if (istype(S,/obj/item/weapon/shard/plasma))
 			new/obj/item/stack/sheet/glass/plasmaglass(S.loc)
 		else
 			new/obj/item/stack/sheet/glass/glass(S.loc)
@@ -503,7 +503,7 @@
 /obj/structure/bed/chair/vehicle/adminbus/proc/Teleportation(mob/bususer)
 
 
-	if(warp.icon_state == "warp_activated")
+	if (warp.icon_state == "warp_activated")
 		return
 
 	bususer.gui_icons.adminbus_tele.icon_state = "icon_teleport-push"
@@ -512,17 +512,17 @@
 	var/A
 	A = input(bususer, "Area to jump to", "Teleportation Warp", A) as null|anything in adminbusteleportlocs
 	var/area/thearea = adminbusteleportlocs[A]
-	if(!thearea)
+	if (!thearea)
 		bususer.gui_icons.adminbus_tele.icon_state = "icon_teleport"
 		warp.icon_state = ""
 		return
 
 	var/list/L = list()
 
-	for(var/turf/T in get_area_turfs(thearea.type))
+	for (var/turf/T in get_area_turfs(thearea.type))
 		L+=T
 
-	if(!L || !L.len)
+	if (!L || !L.len)
 		to_chat(bususer, "No area available.")
 		bususer.gui_icons.adminbus_tele.icon_state = "icon_teleport"
 		warp.icon_state = ""
@@ -539,31 +539,31 @@
 /obj/structure/bed/chair/vehicle/adminbus/proc/Sendto_Thunderdome_Obs(mob/bususer)
 
 
-	if(passengers.len == 0)
+	if (passengers.len == 0)
 		flick("icon_tdobs-flick",bususer.gui_icons.adminbus_tdobs)
 		to_chat(bususer, "<span class='warning'>There are no passengers to send.</span>")
 		return
 
 	bususer.gui_icons.adminbus_tdobs.icon_state = "icon_tdobs-push"
-	if(alert(bususer, "Send all passengers to the thunderdome's spectating area?", "Adminbus", "Yes", "No") != "Yes")
+	if (alert(bususer, "Send all passengers to the thunderdome's spectating area?", "Adminbus", "Yes", "No") != "Yes")
 		bususer.gui_icons.adminbus_tdobs.icon_state = "icon_tdobs"
 		return
 	bususer.gui_icons.adminbus_tdobs.icon_state = "icon_tdobs"
 
 	var/turf/T = get_turf(src)
-	if(T)
+	if (T)
 		T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = EFFECTS_PLANE)
 
-	for(var/i=passengers.len;i>0;i--)
+	for (var/i=passengers.len;i>0;i--)
 		var/atom/A = passengers[i]
-		if(isliving(A))
+		if (isliving(A))
 			var/mob/living/M = A
 			freed(M)
 
 /*									//We let the observers keep their belongings
-			for(var/obj/item/I in M)
+			for (var/obj/item/I in M)
 				M.u_equip(I)
-				if(I)
+				if (I)
 					I.forceMove(M.loc)
 					I.reset_plane_and_layer()
 					I.dropped(M)
@@ -576,7 +576,7 @@
 			M.forceMove(pick(tdomeobserve))
 			to_chat(M, "<span class='notice'>You have been sent to the Thunderdome. Thank you for riding with us and enjoy your games.</span>")
 
-		else if(isbot(A))
+		else if (isbot(A))
 			var/obj/machinery/bot/B = A
 			B.forceMove(get_step(src,turn(src.dir,-90)))
 			B.turn_on()
@@ -586,7 +586,7 @@
 			B.forceMove(pick(tdomeobserve))
 
 		var/turf/TD = get_turf(A)
-		if(TD)
+		if (TD)
 			TD.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = EFFECTS_PLANE)
 
 		sleep(1)
@@ -594,26 +594,26 @@
 /obj/structure/bed/chair/vehicle/adminbus/proc/Sendto_Thunderdome_Arena(mob/bususer)//this one sends an equal number of fighter to each side.
 
 
-	if(passengers.len == 0)
+	if (passengers.len == 0)
 		flick("icon_tdarena-flick",bususer.gui_icons.adminbus_tdarena)
 		to_chat(bususer, "<span class='warning'>There are no passengers to send.</span>")
 		return
 
 	bususer.gui_icons.adminbus_tdarena.icon_state = "icon_tdarena-push"
-	if(alert(bususer, "Split passengers between the two thunderdome teams?", "Adminbus", "Yes", "No") != "Yes")
+	if (alert(bususer, "Split passengers between the two thunderdome teams?", "Adminbus", "Yes", "No") != "Yes")
 		bususer.gui_icons.adminbus_tdarena.icon_state = "icon_tdarena"
 		return
 	bususer.gui_icons.adminbus_tdarena.icon_state = "icon_tdarena"
 
 	var/turf/T = get_turf(src)
-	if(T)
+	if (T)
 		T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = EFFECTS_PLANE)
 
 	var/alternate = 1
 
-	for(var/i=passengers.len;i>0;i--)
+	for (var/i=passengers.len;i>0;i--)
 		var/atom/A = passengers[i]
-		if(alternate)
+		if (alternate)
 			join_team(A,"Red")
 			alternate = 0
 		else
@@ -625,22 +625,22 @@
 /obj/structure/bed/chair/vehicle/adminbus/proc/Sendto_Thunderdome_Arena_Green(mob/bususer)
 
 
-	if(passengers.len == 0)
+	if (passengers.len == 0)
 		flick("icon_tdgreen-flick",bususer.gui_icons.adminbus_tdgreen)
 		to_chat(bususer, "<span class='warning'>There are no passengers to send.</span>")
 		return
 
 	bususer.gui_icons.adminbus_tdgreen.icon_state = "icon_tdgreen-push"
-	if(alert(bususer, "Send all passengers to the thunderdome's Green Team?", "Adminbus", "Yes", "No") != "Yes")
+	if (alert(bususer, "Send all passengers to the thunderdome's Green Team?", "Adminbus", "Yes", "No") != "Yes")
 		bususer.gui_icons.adminbus_tdgreen.icon_state = "icon_tdgreen"
 		return
 	bususer.gui_icons.adminbus_tdgreen.icon_state = "icon_tdgreen"
 
 	var/turf/T = get_turf(src)
-	if(T)
+	if (T)
 		T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = EFFECTS_PLANE)
 
-	for(var/i=passengers.len;i>0;i--)
+	for (var/i=passengers.len;i>0;i--)
 		var/atom/A = passengers[i]
 		join_team(A,"Green")
 
@@ -649,39 +649,39 @@
 /obj/structure/bed/chair/vehicle/adminbus/proc/Sendto_Thunderdome_Arena_Red(mob/bususer)
 
 
-	if(passengers.len == 0)
+	if (passengers.len == 0)
 		flick("icon_tdred-flick",bususer.gui_icons.adminbus_tdred)
 		to_chat(bususer, "<span class='warning'>There are no passengers to send.</span>")
 		return
 
 	bususer.gui_icons.adminbus_tdred.icon_state = "icon_tdred-push"
-	if(alert(bususer, "Send all passengers to the thunderdome's Red Team?", "Adminbus", "Yes", "No") != "Yes")
+	if (alert(bususer, "Send all passengers to the thunderdome's Red Team?", "Adminbus", "Yes", "No") != "Yes")
 		bususer.gui_icons.adminbus_tdred.icon_state = "icon_tdred"
 		return
 	bususer.gui_icons.adminbus_tdred.icon_state = "icon_tdred"
 
 	var/turf/T = get_turf(src)
-	if(T)
+	if (T)
 		T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = EFFECTS_PLANE)
 
-	for(var/i=passengers.len;i>0;i--)
+	for (var/i=passengers.len;i>0;i--)
 		var/atom/A = passengers[i]
 		join_team(A,"Red")
 
 	to_chat(bususer, "The passengers' belongings were stored inside the Thunderdome's admin lodge.")
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/join_team(var/atom/A, var/team)
-	if(isliving(A))
+	if (isliving(A))
 		var/mob/living/M = A
 		freed(M)
 
 		var/obj/item/packobelongings/pack = null
 
-		switch(team)
-			if("Green")
+		switch (team)
+			if ("Green")
 				pack = new /obj/item/packobelongings/green(src.loc)
 				pack.x = map.tDomeX+2
-			if("Red")
+			if ("Red")
 				pack = new /obj/item/packobelongings/red(src.loc)
 				pack.x = map.tDomeX-2
 
@@ -690,13 +690,13 @@
 
 		pack.name = "[M.real_name]'s belongings"
 
-		for(var/obj/item/I in M)
-			if(istype(I,/obj/item/clothing/glasses))
+		for (var/obj/item/I in M)
+			if (istype(I,/obj/item/clothing/glasses))
 				var/obj/item/clothing/glasses/G = I
-				if(G.prescription)
+				if (G.prescription)
 					continue
 			M.u_equip(I)
-			if(I)
+			if (I)
 				I.forceMove(M.loc)
 				I.reset_plane_and_layer()
 				I.dropped(M)
@@ -704,38 +704,38 @@
 
 		var/obj/item/weapon/card/id/thunderdome/ident = null
 
-		switch(team)
-			if("Green")
+		switch (team)
+			if ("Green")
 				ident = new /obj/item/weapon/card/id/thunderdome/green(M)
 				ident.name = "[M.real_name]'s Thunderdome Green ID"
-			if("Red")
+			if ("Red")
 				ident = new /obj/item/weapon/card/id/thunderdome/red(M)
 				ident.name = "[M.real_name]'s Thunderdome Red ID"
 
-		if(!iscarbon(M))
+		if (!iscarbon(M))
 			qdel(ident)
 
-		switch(team)
-			if("Green")
-				if(ishuman(M))
+		switch (team)
+			if ("Green")
+				if (ishuman(M))
 					var/mob/living/carbon/human/H = M
 					H.equip_to_slot_or_del(new /obj/item/clothing/under/color/green(H), slot_w_uniform)
 					H.equip_to_slot_or_del(new /obj/item/clothing/shoes/brown(H), slot_shoes)
 					H.equip_to_slot_or_del(ident, slot_wear_id)
 					H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/thunderdome/green(H), slot_belt)
 					H.regenerate_icons()
-				else if(ismonkey(M))
+				else if (ismonkey(M))
 					var/mob/living/carbon/monkey/K = M
 					var/obj/item/clothing/monkeyclothes/jumpsuit_green/JS = new /obj/item/clothing/monkeyclothes/jumpsuit_green(K)
 					var/obj/item/clothing/monkeyclothes/olduniform = null
 					var/obj/item/clothing/monkeyclothes/oldhat = null
-					if(K.uniform)
+					if (K.uniform)
 						olduniform = K.uniform
 						K.uniform = null
 						olduniform.forceMove(pack)
 					K.uniform = JS
 					K.uniform.forceMove(K)
-					if(K.hat)
+					if (K.hat)
 						oldhat = K.hat
 						K.hat = null
 						oldhat.forceMove(pack)
@@ -743,26 +743,26 @@
 					K.put_in_hands(new /obj/item/weapon/storage/belt/thunderdome/green(K))
 					K.regenerate_icons()
 
-			if("Red")
-				if(ishuman(M))
+			if ("Red")
+				if (ishuman(M))
 					var/mob/living/carbon/human/H = M
 					H.equip_to_slot_or_del(new /obj/item/clothing/under/color/red(H), slot_w_uniform)
 					H.equip_to_slot_or_del(new /obj/item/clothing/shoes/brown(H), slot_shoes)
 					H.equip_to_slot_or_del(ident, slot_wear_id)
 					H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/thunderdome/red(H), slot_belt)
 					H.regenerate_icons()
-				else if(ismonkey(M))
+				else if (ismonkey(M))
 					var/mob/living/carbon/monkey/K = M
 					var/obj/item/clothing/monkeyclothes/jumpsuit_red/JS = new /obj/item/clothing/monkeyclothes/jumpsuit_red(K)
 					var/obj/item/clothing/monkeyclothes/olduniform = null
 					var/obj/item/clothing/monkeyclothes/oldhat = null
-					if(K.uniform)
+					if (K.uniform)
 						olduniform = K.uniform
 						K.uniform = null
 						olduniform.forceMove(pack)
 					K.uniform = JS
 					K.uniform.forceMove(K)
-					if(K.hat)
+					if (K.hat)
 						oldhat = K.hat
 						K.hat = null
 						oldhat.forceMove(pack)
@@ -770,13 +770,13 @@
 					K.put_in_hands(new /obj/item/weapon/storage/belt/thunderdome/red(K))
 					K.regenerate_icons()
 
-		if(pack.contents.len == 0)
+		if (pack.contents.len == 0)
 			qdel(pack)
 
-		switch(team)
-			if("Green")
+		switch (team)
+			if ("Green")
 				M.forceMove(pick(tdome1))
-			if("Red")
+			if ("Red")
 				M.forceMove(pick(tdome2))
 
 		to_chat(M, "<span class='danger'>You have been chosen to fight for the [team] Team. [pick(\
@@ -788,7 +788,7 @@
 		"Fight for your life!",\
 		)]</span>")
 
-	else if(isbot(A))
+	else if (isbot(A))
 		var/obj/machinery/bot/B = A
 		B.forceMove(get_step(src,turn(src.dir,-90)))
 		B.turn_on()
@@ -796,14 +796,14 @@
 		B.anchored = 0
 		passengers -= B
 
-		switch(team)
-			if("Green")
+		switch (team)
+			if ("Green")
 				B.forceMove(pick(tdome1))
-			if("Red")
+			if ("Red")
 				B.forceMove(pick(tdome2))
 
 	var/turf/T = get_turf(A)
-	if(T)
+	if (T)
 		T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', "#00FF00", anim_plane = EFFECTS_PLANE)
 
 	sleep(1)
@@ -822,7 +822,7 @@
 
 /obj/item/packobelongings/attack_self(mob/user as mob)
 	var/turf/T = get_turf(user)
-	for(var/obj/O in src)
+	for (var/obj/O in src)
 		O.forceMove(T)
 	qdel(src)
 
@@ -837,33 +837,33 @@
 /obj/structure/bed/chair/vehicle/adminbus/proc/Send_Home(mob/bususer)
 
 
-	if(passengers.len == 0)
+	if (passengers.len == 0)
 		flick("icon_home-flick",bususer.gui_icons.adminbus_home)
 		to_chat(bususer, "<span class='warning'>There are no passengers to send.</span>")
 		return
 
 	bususer.gui_icons.adminbus_home.icon_state = "icon_home-push"
-	if(alert(bususer, "Send all mobs among the passengers back where they first appeared? (Risky: This sends them back where their \"object\" was created. If they were cloned they will teleport back at genetics, If they had their species changed they'll spawn back where it happenned, etc...)", "Adminbus", "Yes", "No") != "Yes")
+	if (alert(bususer, "Send all mobs among the passengers back where they first appeared? (Risky: This sends them back where their \"object\" was created. If they were cloned they will teleport back at genetics, If they had their species changed they'll spawn back where it happenned, etc...)", "Adminbus", "Yes", "No") != "Yes")
 		bususer.gui_icons.adminbus_home.icon_state = "icon_home"
 		return
 	bususer.gui_icons.adminbus_home.icon_state = "icon_home"
 
 	var/turf/T1 = get_turf(src)
-	if(T1)
+	if (T1)
 		T1.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = EFFECTS_PLANE)
 
-	for(var/mob/M in passengers)
+	for (var/mob/M in passengers)
 		freed(M)
 		M.send_back()
 
 		var/turf/T2 = get_turf(M)
-		if(T2)
+		if (T2)
 			T2.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = EFFECTS_PLANE)
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/Make_Antag(mob/bususer)
 
 
-	if(passengers.len == 0)
+	if (passengers.len == 0)
 		flick("icon_antag-flick",bususer.gui_icons.adminbus_antag)
 		to_chat(bususer, "<span class='warning'>There are no passengers to make antag.</span>")
 		return
@@ -872,39 +872,39 @@
 	var/list/delays = list("CANCEL", "No Delay", "10 seconds", "30 seconds", "1 minute", "5 minutes", "15 minutes")
 	var/delay = input("How much delay before the transformation occurs?", "Antag Madness") in delays
 
-	switch(delay)
-		if("CANCEL")
+	switch (delay)
+		if ("CANCEL")
 			bususer.gui_icons.adminbus_antag.icon_state = "icon_antag"
 			return
-		if("No Delay")
+		if ("No Delay")
 			bususer.gui_icons.adminbus_antag.icon_state = "icon_antag"
-			for(var/mob/M in passengers)
+			for (var/mob/M in passengers)
 				spawn()
 					to_chat(M, "<span class='danger'>YOU JUST REMEMBERED SOMETHING IMPORTANT!</span>")
 					sleep(20)
 					antag_madness_adminbus(M)
-		if("10 seconds")
+		if ("10 seconds")
 			antagify_passengers(100)
-		if("30 seconds")
+		if ("30 seconds")
 			antagify_passengers(300)
-		if("1 minute")
+		if ("1 minute")
 			antagify_passengers(600)
-		if("5 minutes")
+		if ("5 minutes")
 			antagify_passengers(3000)
-		if("15 minutes")
+		if ("15 minutes")
 			antagify_passengers(9000)
 
 	bususer.gui_icons.adminbus_antag.icon_state = "icon_antag"
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/antagify_passengers(var/delay)
-	for(var/mob/M in passengers)
+	for (var/mob/M in passengers)
 		spawn()
 			Delay_Antag(M, delay)
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/Delay_Antag(var/mob/M,var/delay=100)
-	if(!M.mind)
+	if (!M.mind)
 		return
-	if(!ishuman(M) && !ismonkey(M))
+	if (!ishuman(M) && !ismonkey(M))
 		return
 
 	to_chat(M, "<span class='rose'>You feel like you forgot something important!</span>")
@@ -931,27 +931,27 @@
 /obj/structure/bed/chair/vehicle/adminbus/proc/Adminbus_Deletion(mob/bususer)//make sure to always use this proc when deleting an adminbus
 
 
-	if(bususer)
+	if (bususer)
 		bususer.gui_icons.adminbus_delete.icon_state = "icon_delete-push"
-		if(alert(bususer, "This will free all passengers, remove any spawned mobs/laserguns/bombs, [singulo ? "free the captured singularity" : ""], and remove all the entities associated with the bus(chains, roadlights, jukebox,...) Are you sure?", "Adminbus Deletion", "Yes", "No") != "Yes")
+		if (alert(bususer, "This will free all passengers, remove any spawned mobs/laserguns/bombs, [singulo ? "free the captured singularity" : ""], and remove all the entities associated with the bus(chains, roadlights, jukebox,...) Are you sure?", "Adminbus Deletion", "Yes", "No") != "Yes")
 			bususer.gui_icons.adminbus_delete.icon_state = "icon_delete"
 			return
 
-	for(var/i=passengers.len;i>0;i--)
+	for (var/i=passengers.len;i>0;i--)
 		var/atom/A = passengers[i]
-		if(isliving(A))
+		if (isliving(A))
 			var/mob/living/L = A
 			freed(L)
-		else if(isbot(A))
+		else if (isbot(A))
 			var/obj/machinery/bot/B = A
-			switch(dir)
-				if(SOUTH)
+			switch (dir)
+				if (SOUTH)
 					B.x = x-1
-				if(WEST)
+				if (WEST)
 					B.y = y+1
-				if(NORTH)
+				if (NORTH)
 					B.x = x+1
-				if(EAST)
+				if (EAST)
 					B.y = y-1
 			B.turn_on()
 			B.flags &= ~INVULNERABLE
@@ -962,13 +962,13 @@
 	delete_lasers()
 	remove_mobs()
 
-	if(singulo)
+	if (singulo)
 		singulo.on_release()
 
-	for(var/obj/structure/singulo_chain/N in chain)
+	for (var/obj/structure/singulo_chain/N in chain)
 		qdel(N)
 
-	for(var/obj/structure/hookshot/H in hookshot)
+	for (var/obj/structure/hookshot/H in hookshot)
 		qdel(H)
 
 	busjuke.disconnect_media_source()
@@ -979,7 +979,7 @@
 	var/turf/T = get_turf(src)
 	T.turf_animation('icons/effects/160x160.dmi',"busteleport",-WORLD_ICON_SIZE*2,-WORLD_ICON_SIZE,MOB_LAYER+1,'sound/effects/busteleport.ogg', anim_plane = EFFECTS_PLANE)
 
-	if(locked_atoms.len)
+	if (locked_atoms.len)
 		var/mob/living/M = locked_atoms[1]
 		M.hud_used.remove_adminbus_hud()
 

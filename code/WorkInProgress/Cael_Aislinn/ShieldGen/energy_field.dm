@@ -22,10 +22,10 @@
 	strength -= severity
 
 	//if we take too much damage, drop out - the generator will bring us back up if we have enough power
-	if(strength < 1)
+	if (strength < 1)
 		invisibility = 101
 		density = 0
-	else if(strength >= 1)
+	else if (strength >= 1)
 		invisibility = 0
 		density = 1
 
@@ -33,10 +33,10 @@
 	strength += severity
 
 	//if we take too much damage, drop out - the generator will bring us back up if we have enough power
-	if(strength >= 1)
+	if (strength >= 1)
 		invisibility = 0
 		density = 1
-	else if(strength < 1)
+	else if (strength < 1)
 		invisibility = 101
 		density = 0
 

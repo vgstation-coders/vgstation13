@@ -23,13 +23,13 @@
 
 	..()
 	//Switch most likely can't take inequalities, so here's that if block
-	if(health >= initial(health)) //Sanity
+	if (health >= initial(health)) //Sanity
 		to_chat(user, "It's in perfect shape, not even a scratch.")
-	else if(health >= 0.8*initial(health))
+	else if (health >= 0.8*initial(health))
 		to_chat(user, "It has a few splinters and a plank is broken.")
-	else if(health >= 0.5*initial(health))
+	else if (health >= 0.5*initial(health))
 		to_chat(user, "It has a fair amount of splinters and broken planks.")
-	else if(health >= 0.2*initial(health))
+	else if (health >= 0.2*initial(health))
 		to_chat(user, "It has most of its planks broken, you can barely tell how much weight the support beams are bearing.")
 	else
 		to_chat(user, "It has only one or two planks still in shape, it's a miracle it's even standing.")
@@ -38,14 +38,14 @@
 //Sound is technically deprecated, but barricades should really have a build sound
 /obj/structure/window/barricade/healthcheck(var/mob/M, var/sound = 1)
 
-	if(health <= 0)
+	if (health <= 0)
 		Destroy()
 
 //Note : We don't want glass knocking sounds to play
 /obj/structure/window/barricade/attack_hand(mob/user as mob)
 
 	//Bang against the barricade
-	if(usr.a_intent == I_HURT)
+	if (usr.a_intent == I_HURT)
 		user.delayNextAttack(10)
 		health -= 2
 		healthcheck()
@@ -68,13 +68,13 @@
 
 /obj/structure/window/barricade/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
-	if(iscrowbar(W) && user.a_intent == I_HURT && !busy) //Only way to deconstruct, needs harm intent
+	if (iscrowbar(W) && user.a_intent == I_HURT && !busy) //Only way to deconstruct, needs harm intent
 		playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
 		user.visible_message("<span class='warning'>[user] starts struggling to pry \the [src] back into planks.</span>", \
 		"<span class='notice'>You start struggling to pry \the [src] back into planks.</span>")
 		busy = 1
 
-		if(do_after(user, src, 50)) //Takes a while because it is a barricade instant kill
+		if (do_after(user, src, 50)) //Takes a while because it is a barricade instant kill
 			playsound(loc, 'sound/items/Deconstruct.ogg', 75, 1)
 			user.visible_message("<span class='warning'>[user] finishes turning \the [src] back into planks.</span>", \
 			"<span class='notice'>You finish turning \the [src] back into planks.</span>")
@@ -84,7 +84,7 @@
 		else
 			busy = 0
 
-	if(W.damtype == BRUTE || W.damtype == BURN)
+	if (W.damtype == BRUTE || W.damtype == BURN)
 		user.delayNextAttack(10)
 		health -= W.force
 		user.visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>", \
@@ -96,11 +96,11 @@
 
 /obj/structure/window/barricade/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 
-	if(air_group || !height) //The mover is an airgroup
+	if (air_group || !height) //The mover is an airgroup
 		return 1 //We aren't airtight, only exception to PASSGLASS
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if (istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
+	if (get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 		return !density
 	return 1
 
@@ -144,9 +144,9 @@
 
 /obj/structure/window/barricade/full/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 
-	if(air_group || !height) //The mover is an airgroup
+	if (air_group || !height) //The mover is an airgroup
 		return 1 //We aren't airtight, only exception to PASSGLASS
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if (istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
 	return 0
 

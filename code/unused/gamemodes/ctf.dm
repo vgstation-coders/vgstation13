@@ -13,7 +13,7 @@
 	config.allow_ai = 0
 	var/list/mobs = list()
 	var/total_mobs
-	for(var/mob/living/carbon/human/M in world)
+	for (var/mob/living/carbon/human/M in world)
 		if (M.client)
 			mobs += M
 			total_mobs++
@@ -22,13 +22,13 @@
 	var/obj/G = locate("landmark*Green-Spawn")
 
 	var/mob_check
-	for(var/mob/living/carbon/human/M in mobs)
-		if(!M)
+	for (var/mob/living/carbon/human/M in mobs)
+		if (!M)
 			continue
 		mob_check++
-		if(mob_check <= total_mobs/2) //add to red team else to green
+		if (mob_check <= total_mobs/2) //add to red team else to green
 			spawn()
-				if(M.client)
+				if (M.client)
 					to_chat(M, "You are in the Red Team!")
 					del(M.wear_suit)
 					M.w_uniform = new /obj/item/clothing/under/color/red(M)
@@ -61,14 +61,14 @@
 					W.registered_name = M.real_name
 					M.wear_id = W
 					M.wear_id.layer = 20
-					if(R)
+					if (R)
 						M.forceMove(R.loc)
 					else
 						to_chat(world, "No red team spawn point detected")
 					M.client.team = "Red"
 		else
 			spawn()
-				if(M.client)
+				if (M.client)
 					to_chat(M, "You are in the Green Team!")
 					del(M.wear_suit)
 					M.w_uniform = new /obj/item/clothing/under/color/green(M)
@@ -101,7 +101,7 @@
 					W.registered_name = M.real_name
 					M.wear_id = W
 					M.wear_id.layer = 20
-					if(G)
+					if (G)
 						M.forceMove(G.loc)
 					else
 						to_chat(world, "No green team spawn point detected")

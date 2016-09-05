@@ -24,8 +24,8 @@
 /datum/game_mode/wizard/raginmages/post_setup()
 	var/playercount = 0
 	..()
-	if(!max_mages)
-		for(var/mob/living/player in mob_list)
+	if (!max_mages)
+		for (var/mob/living/player in mob_list)
 			if (player.client && player.stat != 2)
 				playercount += 1
 			max_mages = round(playercount / 5)
@@ -37,35 +37,35 @@
 
 	var/obj_count = 1
 	to_chat(wizard.current, "<b>Objective Alpha</b>: Make sure the station pays for its actions against our diplomats")
-	for(var/datum/objective/objective in wizard.objectives)
+	for (var/datum/objective/objective in wizard.objectives)
 		to_chat(wizard.current, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
 		obj_count++
 	return
 
 /datum/game_mode/wizard/raginmages/check_finished()
 	var/wizards_alive = 0
-	for(var/datum/mind/wizard in wizards)
-		if(!istype(wizard.current,/mob/living/carbon))
+	for (var/datum/mind/wizard in wizards)
+		if (!istype(wizard.current,/mob/living/carbon))
 			continue
-		if(istype(wizard.current,/mob/living/carbon/brain))
+		if (istype(wizard.current,/mob/living/carbon/brain))
 			continue
-		if(wizard.current.stat == DEAD)
+		if (wizard.current.stat == DEAD)
 			continue
-		if(wizard.current.stat == UNCONSCIOUS)
-			if(wizard.current.health < 0)
+		if (wizard.current.stat == UNCONSCIOUS)
+			if (wizard.current.health < 0)
 				to_chat(wizard.current, "<span class='warning'><font size='4'>The Space Wizard Federation is upset with your performance and have terminated your employment.</font></span>")
 				wizard.current.stat = DEAD
 				continue
 		wizards_alive++
 
 	if (wizards_alive)
-		if(!time_checked)
+		if (!time_checked)
 			time_checked = world.time
-		if(world.time > time_checked + 12000 && (mages_made < max_mages))
+		if (world.time > time_checked + 12000 && (mages_made < max_mages))
 			time_checked = world.time
 			make_more_mages()
 	else
-		if(!making_mage && (wizards.len >= max_mages || exhausted_pool >= 5))
+		if (!making_mage && (wizards.len >= max_mages || exhausted_pool >= 5))
 			finished = 1
 			return 1
 		else
@@ -76,9 +76,9 @@
 /datum/game_mode/wizard/raginmages/proc/make_more_mages()
 
 
-	if(making_mage || emergency_shuttle.departed)
+	if (making_mage || emergency_shuttle.departed)
 		return 0
-	if(mages_made >= max_mages)
+	if (mages_made >= max_mages)
 		return 0
 	making_mage = 1
 	mages_made++
@@ -86,13 +86,13 @@
 	var/mob/dead/observer/theghost = null
 	spawn(rand(200, 600))
 		message_admins("SWF is still pissed, sending another wizard - [max_mages - mages_made] left.")
-		for(var/mob/dead/observer/G in get_active_candidates(ROLE_WIZARD, poll="Do you wish to be considered for the position of Space Wizard Foundation 'diplomat'?"))
-			if(G.client && !G.client.holder && !jobban_isbanned(G, "wizard") && !jobban_isbanned(G, "Syndicate"))
-				if(G.mind && G.mind.isScrying)
-					if(G.mind.current.stat < DEAD || !iscarbon(G.mind.current) || isbrain(G.mind.current))
+		for (var/mob/dead/observer/G in get_active_candidates(ROLE_WIZARD, poll="Do you wish to be considered for the position of Space Wizard Foundation 'diplomat'?"))
+			if (G.client && !G.client.holder && !jobban_isbanned(G, "wizard") && !jobban_isbanned(G, "Syndicate"))
+				if (G.mind && G.mind.isScrying)
+					if (G.mind.current.stat < DEAD || !iscarbon(G.mind.current) || isbrain(G.mind.current))
 						continue
 				candidates += G
-		if(!candidates.len)
+		if (!candidates.len)
 			message_admins("No candidates found, sleeping until another mage check...")
 			exhausted_pool++
 			making_mage = 0
@@ -101,14 +101,14 @@
 		else
 			exhausted_pool = 0
 			shuffle(candidates)
-			for(var/mob/i in candidates)
-				if(!i || !i.client)
+			for (var/mob/i in candidates)
+				if (!i || !i.client)
 					continue //Dont bother removing them from the list since we only grab one wizard
 
 				theghost = i
 				break
 
-		if(theghost)
+		if (theghost)
 			var/mob/living/carbon/human/new_character= makeBody(theghost)
 			new_character.mind.make_Wizard()
 			new_character.dna.ResetSE() //Manually cleaning this antag as he isn't caught by the gameticker
@@ -116,7 +116,7 @@
 			return 1
 
 /datum/game_mode/wizard/raginmages/declare_completion()
-	if(finished)
+	if (finished)
 		feedback_set_details("round_end_result","loss - wizard killed")
 		to_chat(world, "<span class='danger'><FONT size = 3> The crew has managed to hold off the wizard attack! The Space Wizards Federation has been taught a lesson they will not soon forget!</FONT></span>")
 	..(1)

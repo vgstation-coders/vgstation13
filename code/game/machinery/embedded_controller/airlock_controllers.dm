@@ -22,7 +22,7 @@
 		</ul>"}
 
 /obj/machinery/embedded_controller/radio/advanced_airlock_controller/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
-	if(!program)//we need to initialize the controller to get a program
+	if (!program)//we need to initialize the controller to get a program
 		initialize()
 	var/data[0]
 
@@ -47,84 +47,84 @@
 		ui.set_auto_update(1)
 
 /obj/machinery/embedded_controller/radio/advanced_airlock_controller/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 	var/clean = 0
-	switch(href_list["command"])	//anti-HTML-hacking checks
-		if("cycle_ext")
+	switch (href_list["command"])	//anti-HTML-hacking checks
+		if ("cycle_ext")
 			clean = 1
-		if("cycle_int")
+		if ("cycle_int")
 			clean = 1
-		if("force_ext")
+		if ("force_ext")
 			clean = 1
-		if("force_int")
+		if ("force_int")
 			clean = 1
-		if("abort")
+		if ("abort")
 			clean = 1
-		if("purge")
+		if ("purge")
 			clean = 1
-		if("secure")
+		if ("secure")
 			clean = 1
 
-	if(clean)
+	if (clean)
 		program.receive_user_command(href_list["command"])
 
 	return 1
 
 /obj/machinery/embedded_controller/radio/advanced_airlock_controller/linkMenu(var/obj/O)
 	var/dat = ""
-	if(istype(O, /obj/machinery/airlock_sensor))
+	if (istype(O, /obj/machinery/airlock_sensor))
 		dat += "<a href='?src=\ref[src];link=1;slot=ext'>\[Link @ exterior\]</a><br>"
 		dat += "<a href='?src=\ref[src];link=1;slot=chamber'>\[Link @ chamber\]</a><br>"
 		dat += "<a href='?src=\ref[src];link=1;slot=int'>\[Link @ interior\]</a>"
-	else if(istype(O, /obj/machinery/atmospherics/unary/vent_pump))
+	else if (istype(O, /obj/machinery/atmospherics/unary/vent_pump))
 		dat += "<a href='?src=\ref[src];link=1'>\[Link @ pump\]</a>"
-	else if(istype(O, /obj/machinery/door/airlock))
+	else if (istype(O, /obj/machinery/door/airlock))
 		dat += "<a href='?src=\ref[src];link=1;slot=ext'>\[Link @ exterior\]</a><br>"
 		dat += "<a href='?src=\ref[src];link=1;slot=int'>\[Link @ interior\]</a>"
 	return dat
 
 /obj/machinery/embedded_controller/radio/advanced_airlock_controller/canLink(var/obj/O, var/list/context)
-	if(istype(O, /obj/machinery/door))
-		if(context["slot"] in list("int", "ext"))
+	if (istype(O, /obj/machinery/door))
+		if (context["slot"] in list("int", "ext"))
 			return 1
 
-	if(istype(O, /obj/machinery/atmospherics))
+	if (istype(O, /obj/machinery/atmospherics))
 		return 1
 
-	if(istype(O, /obj/machinery/airlock_sensor))
-		if(context["slot"] in list("int", "ext", "chamber"))
+	if (istype(O, /obj/machinery/airlock_sensor))
+		if (context["slot"] in list("int", "ext", "chamber"))
 			return 1
 
 	return 0
 
 /obj/machinery/embedded_controller/radio/advanced_airlock_controller/unlinkFrom(var/mob/user, var/obj/O)
 	var/obj/machinery/door/airlock/D = O
-	if(istype(D))
-		if(tag_exterior_door == D.id_tag)
+	if (istype(D))
+		if (tag_exterior_door == D.id_tag)
 			tag_exterior_door = null
 			return 1
-		else if(tag_interior_door == D.id_tag)
+		else if (tag_interior_door == D.id_tag)
 			tag_interior_door = null
 			return 1
 	var/obj/machinery/airlock_sensor/S = O
-	if(istype(S))
-		if(tag_chamber_sensor == S.id_tag)
+	if (istype(S))
+		if (tag_chamber_sensor == S.id_tag)
 			tag_chamber_sensor = null
 			return 1
-		else if(tag_interior_sensor == S.id_tag)
+		else if (tag_interior_sensor == S.id_tag)
 			tag_interior_sensor = null
 			return 1
-		else if(tag_exterior_sensor == S.id_tag)
+		else if (tag_exterior_sensor == S.id_tag)
 			tag_exterior_sensor = null
 			return 1
 	var/obj/machinery/atmospherics/unary/vent_pump/UV
-	if(istype(UV) && UV.id_tag == tag_airpump)
+	if (istype(UV) && UV.id_tag == tag_airpump)
 		tag_airpump = null
 		return 1
 	var/obj/machinery/atmospherics/binary/dp_vent_pump/DPV
-	if(istype(DPV))
-		if(DPV.id_tag == tag_airpump)
+	if (istype(DPV))
+		if (DPV.id_tag == tag_airpump)
 			tag_airpump = null
 			return 1
 		
@@ -132,57 +132,57 @@
 /obj/machinery/embedded_controller/radio/advanced_airlock_controller/isLinkedWith(var/obj/O)
 	
 	var/obj/machinery/door/airlock/D = O
-	if(istype(D))
-		if(tag_interior_door  == D.id_tag)
+	if (istype(D))
+		if (tag_interior_door  == D.id_tag)
 			return 1
-		if(tag_exterior_door  == D.id_tag)
+		if (tag_exterior_door  == D.id_tag)
 			return 1
 	var/obj/machinery/airlock_sensor/S = O
-	if(istype(S))
-		if(tag_interior_sensor  == S.id_tag)
+	if (istype(S))
+		if (tag_interior_sensor  == S.id_tag)
 			return 1
-		if(tag_exterior_sensor  == S.id_tag)
+		if (tag_exterior_sensor  == S.id_tag)
 			return 1
-		if(tag_chamber_sensor  == S.id_tag)
+		if (tag_chamber_sensor  == S.id_tag)
 			return 1
 	var/obj/machinery/atmospherics/binary/dp_vent_pump/DP
-	if(istype(DP) && DP.id_tag == tag_airpump)
+	if (istype(DP) && DP.id_tag == tag_airpump)
 		return 1
 	var/obj/machinery/atmospherics/unary/vent_pump/UV
-	if(istype(UV) && UV.id_tag == tag_airpump)
+	if (istype(UV) && UV.id_tag == tag_airpump)
 		return 1
 
 /obj/machinery/embedded_controller/radio/advanced_airlock_controller/linkWith(var/mob/user, var/obj/O, var/list/context)
 	
 	var/obj/machinery/atmospherics/binary/dp_vent_pump/DP
-	if(istype(DP) && DP.id_tag == tag_airpump)
+	if (istype(DP) && DP.id_tag == tag_airpump)
 		tag_airpump = DP.id_tag
 		return 1
 	var/obj/machinery/atmospherics/unary/vent_pump/UV
-	if(istype(UV) && UV.id_tag == tag_airpump)
+	if (istype(UV) && UV.id_tag == tag_airpump)
 		tag_airpump = UV.id_tag
 		return 1
 	
 	var/obj/machinery/door/airlock/D = O
-	if(istype(D))
-		if(context["slot"] == "int")
+	if (istype(D))
+		if (context["slot"] == "int")
 			tag_interior_door = D.id_tag
 			return 1
-		if(context["slot"] == "ext")
+		if (context["slot"] == "ext")
 			tag_exterior_door = D.id_tag
 			return 1
 	
 	var/obj/machinery/airlock_sensor/S = O
-	if(istype(S))
-		if(context["slot"] == "int")
+	if (istype(S))
+		if (context["slot"] == "int")
 			tag_interior_sensor = S.id_tag
 			O:master_tag = id_tag
 			return 1
-		if(context["slot"] == "ext")
+		if (context["slot"] == "ext")
 			tag_exterior_sensor = S.id_tag
 			O:master_tag = id_tag
 			return 1
-		if(context["slot"] == "chamber")
+		if (context["slot"] == "chamber")
 			tag_chamber_sensor = S.id_tag
 			O:master_tag = id_tag
 			return 1
@@ -210,7 +210,7 @@
 		</ul>"}
 
 /obj/machinery/embedded_controller/radio/airlock_controller/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
-	if(!program)//we need to initialize the controller to get a program
+	if (!program)//we need to initialize the controller to get a program
 		initialize()
 	var/data[0]
 
@@ -233,115 +233,115 @@
 		ui.set_auto_update(1)
 
 /obj/machinery/embedded_controller/radio/airlock_controller/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 	var/clean = 0
-	switch(href_list["command"])	//anti-HTML-hacking checks
-		if("cycle_ext")
+	switch (href_list["command"])	//anti-HTML-hacking checks
+		if ("cycle_ext")
 			clean = 1
-		if("cycle_int")
+		if ("cycle_int")
 			clean = 1
-		if("force_ext")
+		if ("force_ext")
 			clean = 1
-		if("force_int")
+		if ("force_int")
 			clean = 1
-		if("abort")
+		if ("abort")
 			clean = 1
 
-	if(clean)
+	if (clean)
 		program.receive_user_command(href_list["command"])
 
 	return 1
 
 /obj/machinery/embedded_controller/radio/airlock_controller/linkMenu(var/obj/O)
 	var/dat = ""
-	if(istype(O, /obj/machinery/airlock_sensor))
+	if (istype(O, /obj/machinery/airlock_sensor))
 		dat += "<a href='?src=\ref[src];link=1;slot=chamber'>\[Link @ chamber\]</a><br>"
-	else if(istype(O, /obj/machinery/atmospherics/unary/vent_pump))
+	else if (istype(O, /obj/machinery/atmospherics/unary/vent_pump))
 		dat += "<a href='?src=\ref[src];link=1'>\[Link @ pump\]</a>"
-	else if(istype(O, /obj/machinery/door/airlock))
+	else if (istype(O, /obj/machinery/door/airlock))
 		dat += "<a href='?src=\ref[src];link=1;slot=ext'>\[Link @ exterior\]</a><br>"
 		dat += "<a href='?src=\ref[src];link=1;slot=int'>\[Link @ interior\]</a>"
 	return dat
 
 /obj/machinery/embedded_controller/radio/airlock_controller/canLink(var/obj/O, var/list/context)
-	if(istype(O, /obj/machinery/door))
-		if(context["slot"] in list("int", "ext"))
+	if (istype(O, /obj/machinery/door))
+		if (context["slot"] in list("int", "ext"))
 			return 1
 
-	if(istype(O, /obj/machinery/atmospherics))
+	if (istype(O, /obj/machinery/atmospherics))
 		return 1
 
-	if(istype(O, /obj/machinery/airlock_sensor))
-		if(context["slot"] == "chamber")//don't need the slot here, but it's because I'm using the code from the other controllers
+	if (istype(O, /obj/machinery/airlock_sensor))
+		if (context["slot"] == "chamber")//don't need the slot here, but it's because I'm using the code from the other controllers
 			return 1
 
 	return 0
 
 /obj/machinery/embedded_controller/radio/airlock_controller/unlinkFrom(var/mob/user, var/obj/O)
 	var/obj/machinery/door/airlock/D = O
-	if(istype(D))
-		if(tag_exterior_door == D.id_tag)
+	if (istype(D))
+		if (tag_exterior_door == D.id_tag)
 			tag_exterior_door = null
 			return 1
-		else if(tag_interior_door == D.id_tag)
+		else if (tag_interior_door == D.id_tag)
 			tag_interior_door = null
 			return 1
 	var/obj/machinery/airlock_sensor/S = O
-	if(istype(S))
-		if(tag_chamber_sensor == S.id_tag)
+	if (istype(S))
+		if (tag_chamber_sensor == S.id_tag)
 			tag_chamber_sensor = null
 			return 1
 	var/obj/machinery/atmospherics/unary/vent_pump/UV
-	if(istype(UV) && UV.id_tag == tag_airpump)
+	if (istype(UV) && UV.id_tag == tag_airpump)
 		tag_airpump = null
 		return 1
 	var/obj/machinery/atmospherics/binary/dp_vent_pump/DPV
-	if(istype(DPV))
-		if(DPV.id_tag == tag_airpump)
+	if (istype(DPV))
+		if (DPV.id_tag == tag_airpump)
 			tag_airpump = null
 			return 1
 /obj/machinery/embedded_controller/radio/airlock_controller/isLinkedWith(var/obj/O)
 	var/obj/machinery/door/airlock/D = O
-	if(istype(D))
-		if(tag_interior_door  == D.id_tag)
+	if (istype(D))
+		if (tag_interior_door  == D.id_tag)
 			return 1
-		if(tag_exterior_door  == D.id_tag)
+		if (tag_exterior_door  == D.id_tag)
 			return 1
 	var/obj/machinery/airlock_sensor/S = O
-	if(istype(S))
-		if(tag_chamber_sensor  == S.id_tag)
+	if (istype(S))
+		if (tag_chamber_sensor  == S.id_tag)
 			return 1
 	var/obj/machinery/atmospherics/binary/dp_vent_pump/DP
-	if(istype(DP) && DP.id_tag == tag_airpump)
+	if (istype(DP) && DP.id_tag == tag_airpump)
 		return 1
 	var/obj/machinery/atmospherics/unary/vent_pump/UV
-	if(istype(UV) && UV.id_tag == tag_airpump)
+	if (istype(UV) && UV.id_tag == tag_airpump)
 		return 1
 
 /obj/machinery/embedded_controller/radio/airlock_controller/linkWith(var/mob/user, var/obj/O, var/list/context)
 	
 	var/obj/machinery/atmospherics/binary/dp_vent_pump/DP
-	if(istype(DP) && DP.id_tag == tag_airpump)
+	if (istype(DP) && DP.id_tag == tag_airpump)
 		tag_airpump = DP.id_tag
 		return 1
 	var/obj/machinery/atmospherics/unary/vent_pump/UV
-	if(istype(UV) && UV.id_tag == tag_airpump)
+	if (istype(UV) && UV.id_tag == tag_airpump)
 		tag_airpump = UV.id_tag
 		return 1
 	
 	var/obj/machinery/door/airlock/D = O
-	if(istype(D))
-		if(context["slot"] == "int")
+	if (istype(D))
+		if (context["slot"] == "int")
 			tag_interior_door = D.id_tag
 			return 1
-		if(context["slot"] == "ext")
+		if (context["slot"] == "ext")
 			tag_exterior_door = D.id_tag
 			return 1
 	
 	var/obj/machinery/airlock_sensor/S = O
-	if(istype(S))
-		if(context["slot"] == "chamber")
+	if (istype(S))
+		if (context["slot"] == "chamber")
 			tag_chamber_sensor = S.id_tag
 			O:master_tag = id_tag
 			return 1
@@ -369,8 +369,8 @@
 
 
 /obj/machinery/embedded_controller/radio/access_controller/update_icon()
-	if(on && program)
-		if(program.memory["processing"])
+	if (on && program)
+		if (program.memory["processing"])
 			icon_state = "access_control_process"
 		else
 			icon_state = "access_control_standby"
@@ -378,7 +378,7 @@
 		icon_state = "access_control_off"
 
 /obj/machinery/embedded_controller/radio/access_controller/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
-	if(!program)//we need to initialize the controller to get a program
+	if (!program)//we need to initialize the controller to get a program
 		initialize()
 	var/data[0]
 
@@ -400,72 +400,72 @@
 		ui.set_auto_update(1)
 
 /obj/machinery/embedded_controller/radio/access_controller/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 	var/clean = 0
-	switch(href_list["command"])	//anti-HTML-hacking checks
-		if("cycle_ext_door")
+	switch (href_list["command"])	//anti-HTML-hacking checks
+		if ("cycle_ext_door")
 			clean = 1
-		if("cycle_int_door")
+		if ("cycle_int_door")
 			clean = 1
-		if("force_ext")
-			if(program.memory["interior_status"]["state"] == "closed")
+		if ("force_ext")
+			if (program.memory["interior_status"]["state"] == "closed")
 				clean = 1
-		if("force_int")
-			if(program.memory["exterior_status"]["state"] == "closed")
+		if ("force_int")
+			if (program.memory["exterior_status"]["state"] == "closed")
 				clean = 1
 
-	if(clean)
+	if (clean)
 		program.receive_user_command(href_list["command"])
 
 	return 1
 
 /obj/machinery/embedded_controller/radio/access_controller/linkMenu(var/obj/O)
 	var/dat = ""
-	if(istype(O, /obj/machinery/door/airlock))
+	if (istype(O, /obj/machinery/door/airlock))
 		dat += "<a href='?src=\ref[src];link=1;slot=ext'>\[Link @ exterior\]</a><br>"
 		dat += "<a href='?src=\ref[src];link=1;slot=int'>\[Link @ interior\]</a>"
 	return dat
 
 /obj/machinery/embedded_controller/radio/access_controller/canLink(var/obj/O, var/list/context)
-	if(istype(O, /obj/machinery/door))
-		if(context["slot"] in list("int", "ext"))
+	if (istype(O, /obj/machinery/door))
+		if (context["slot"] in list("int", "ext"))
 			return 1
 
 	return 0
 
 /obj/machinery/embedded_controller/radio/access_controller/unlinkFrom(var/mob/user, var/obj/O)
-	if(!("id_tag" in O.vars))//erm, stop HTML Injecting you! (can you even HTML inject this?) ((this can't happen, atleast not on this UI without cheating)), and tbh why would you even do this.
+	if (!("id_tag" in O.vars))//erm, stop HTML Injecting you! (can you even HTML inject this?) ((this can't happen, atleast not on this UI without cheating)), and tbh why would you even do this.
 		return 0
 
 	var/obj/machinery/door/airlock/D = O
-	if(istype(D))
-		if(tag_exterior_door == D.id_tag)
+	if (istype(D))
+		if (tag_exterior_door == D.id_tag)
 			tag_exterior_door = null
 			return 1
-		else if(tag_interior_door == D.id_tag)
+		else if (tag_interior_door == D.id_tag)
 			tag_interior_door = null
 			return 1
 
 /obj/machinery/embedded_controller/radio/access_controller/isLinkedWith(var/obj/O)
-	if(!("id_tag" in O.vars))//erm, stop HTML Injecting you! (can you even HTML inject this?) ((this can't happen, atleast not on this UI without cheating)), and tbh why would you even do this.
+	if (!("id_tag" in O.vars))//erm, stop HTML Injecting you! (can you even HTML inject this?) ((this can't happen, atleast not on this UI without cheating)), and tbh why would you even do this.
 		return 0
 
 	var/obj/machinery/door/airlock/D = O
-	if(istype(D))
-		if(tag_interior_door  == D.id_tag)
+	if (istype(D))
+		if (tag_interior_door  == D.id_tag)
 			return 1
-		if(tag_exterior_door  == D.id_tag)
+		if (tag_exterior_door  == D.id_tag)
 			return 1
 
 /obj/machinery/embedded_controller/radio/access_controller/linkWith(var/mob/user, var/obj/O, var/list/context)
-	if(!("id_tag" in O.vars))
+	if (!("id_tag" in O.vars))
 		return 0
 	var/obj/machinery/door/airlock/D = O
-	if(istype(D))
-		if(context["slot"] == "int")
+	if (istype(D))
+		if (context["slot"] == "int")
 			tag_interior_door = D.id_tag
 			return 1
-		if(context["slot"] == "ext")
+		if (context["slot"] == "ext")
 			tag_exterior_door = D.id_tag
 			return 1

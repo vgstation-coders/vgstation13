@@ -7,15 +7,15 @@ var/const/WIRE_RECORD = 2
 
 
 /datum/wires/taperecorder/UpdatePulsed(var/index)
-	switch(index)
-		if(WIRE_PLAY)
+	switch (index)
+		if (WIRE_PLAY)
 			play()
-		if(WIRE_RECORD)
+		if (WIRE_RECORD)
 			record()
 
 /datum/wires/taperecorder/CanUse(var/mob/living/L)
 	var/obj/item/device/taperecorder/T = holder
-	if(T.open_panel)
+	if (T.open_panel)
 		return 1
 	return 0
 
@@ -27,7 +27,7 @@ var/const/WIRE_RECORD = 2
 
 /datum/wires/taperecorder/proc/record()
 	var/obj/item/device/taperecorder/T = holder
-	if(T.recording)
+	if (T.recording)
 		T.stop()
 	else
 		T.record()

@@ -9,15 +9,15 @@
 	var/active_groups = 0
 	var/inactive_groups = 0
 	var/active_tiles = 0
-	for(var/datum/air_group/group in air_master.air_groups)
-		if(group.group_processing)
+	for (var/datum/air_group/group in air_master.air_groups)
+		if (group.group_processing)
 			active_groups++
 		else
 			inactive_groups++
 			active_tiles += group.members.len
 
 	var/hotspots = 0
-	for(var/obj/effect/hotspot/hotspot in world)
+	for (var/obj/effect/hotspot/hotspot in world)
 		hotspots++
 
 	var/output = {"<B>AIR SYSTEMS REPORT</B><HR>
@@ -50,13 +50,13 @@
 
 	var/datum/gas_mixture/GM = target.return_air()
 	var/burning = 0
-	if(istype(target, /turf/simulated))
+	if (istype(target, /turf/simulated))
 		var/turf/simulated/T = target
-		if(T.active_hotspot)
+		if (T.active_hotspot)
 			burning = 1
 
 	to_chat(usr, "<span class='notice'>@[target.x],[target.y] ([GM.group_multiplier]): O:[GM.oxygen] T:[GM.toxins] N:[GM.nitrogen] C:[GM.carbon_dioxide] w [GM.temperature] Kelvin, [GM.return_pressure()] kPa [(burning)?("<span class='warning'>BURNING</span>"):(null)]</span>")
-	for(var/datum/gas/trace_gas in GM.trace_gases)
+	for (var/datum/gas/trace_gas in GM.trace_gases)
 		to_chat(usr, "[trace_gas.type]: [trace_gas.moles]")
 	feedback_add_details("admin_verb","DAST") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	*/
@@ -65,14 +65,14 @@
 	var/largest_delay = 0
 	var/mob/most_delayed_mob = null
 	var/delay=0
-	for(var/mob/M in mob_list)
-		if(!M.client)
+	for (var/mob/M in mob_list)
+		if (!M.client)
 			continue
 		// Get stats
 		var/datum/delay_controller/delayer = M.vars["[dtype]_delayer"]
-		if(delayer.blocked())
+		if (delayer.blocked())
 			delay = delayer.next_allowed - world.time
-			if(delay > largest_delay)
+			if (delay > largest_delay)
 				most_delayed_mob=M
 				largest_delay=delay
 
@@ -83,7 +83,7 @@
 /client/proc/fix_next_move()
 	set category = "Debug"
 	set name = "Unfreeze Everyone"
-	if(!usr.client.holder)
+	if (!usr.client.holder)
 		return
 
 	_fix_delayers("move")
@@ -138,7 +138,7 @@
 	set name = "Reload Admins"
 	set category = "Debug"
 
-	if(!check_rights(R_SERVER))
+	if (!check_rights(R_SERVER))
 		return
 
 	message_admins("[usr] manually reloaded admins")
@@ -151,15 +151,15 @@
 	set category = "Debug"
 
 		/*
-	if(!holder)
+	if (!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
 
-	if(!air_master)
+	if (!air_master)
 		to_chat(usr, "Cannot find air_system")
 		return
 	var/datum/air_group/dead_groups = list()
-	for(var/datum/air_group/group in air_master.air_groups)
+	for (var/datum/air_group/group in air_master.air_groups)
 		if (!group.group_processing)
 			dead_groups += group
 	var/datum/air_group/dest_group = pick(dead_groups)
@@ -174,16 +174,16 @@
 	set category = "Debug"
 
 	/*
-	if(!holder)
+	if (!holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
 
-	if(!air_master)
+	if (!air_master)
 		to_chat(usr, "Cannot find air_system")
 		return
 
 	var/turf/T = get_turf(usr)
-	if(istype(T, /turf/simulated))
+	if (istype(T, /turf/simulated))
 		var/datum/air_group/AG = T:parent
 		AG.next_check = 30
 		AG.group_processing = 0
@@ -198,7 +198,7 @@
 	set category = "Debug"
 
 	to_chat(usr, "<b>Jobbans active in this round.</b>")
-	for(var/t in jobban_keylist)
+	for (var/t in jobban_keylist)
 		to_chat(usr, "[t]")
 
 /client/proc/print_jobban_old_filter()
@@ -207,12 +207,12 @@
 	set category = "Debug"
 
 	var/filter = input("Contains what?","Filter") as text|null
-	if(!filter)
+	if (!filter)
 		return
 
 	to_chat(usr, "<b>Jobbans active in this round.</b>")
-	for(var/t in jobban_keylist)
-		if(findtext(t, filter))
+	for (var/t in jobban_keylist)
+		if (findtext(t, filter))
 			to_chat(usr, "[t]")
 
 // For /vg/ Wiki docs
@@ -228,21 +228,21 @@
 ! Name
 ! Reactants
 ! Result"}
-	for(var/path in paths)
+	for (var/path in paths)
 		var/datum/chemical_reaction/R = new path()
 		str += {"
 |-
 ! [R.name]"}
-		if(R.required_reagents)
+		if (R.required_reagents)
 			str += "\n|<ul>"
-			for(var/r_id in R.required_reagents)
+			for (var/r_id in R.required_reagents)
 				str += "<li>{{reagent|[R.required_reagents[r_id]]|[r_id]}}</li>"
-			for(var/r_id in R.required_catalysts)
+			for (var/r_id in R.required_catalysts)
 				str += "<li>{{reagent|[R.required_catalysts[r_id]]|[r_id]}}</li>"
 			str += "</ul>"
 		else
 			str += "\n|''None!''"
-		if(R.result)
+		if (R.result)
 			str += "\n|{{reagent|[R.result_amount]|[R.result]}}"
 		else
 			str += "\n|''(Check [R.type]/on_reaction()!)''"

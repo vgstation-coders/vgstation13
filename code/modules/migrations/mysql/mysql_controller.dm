@@ -5,11 +5,11 @@ var/global/datum/migration_controller/mysql/migration_controller_mysql = null
 	var/DBConnection/db
 
 /datum/migration_controller/mysql/setup()
-	if(!dbcon || !istype(dbcon) || !dbcon.IsConnected())
+	if (!dbcon || !istype(dbcon) || !dbcon.IsConnected())
 		testing("Something wrong with dbcon.")
 		return FALSE
 	var/DBQuery/Q = dbcon.NewQuery()
-	if(!Q)
+	if (!Q)
 		testing("Something wrong with dbcon.NewQuery()")
 		return FALSE
 	Q.Close()
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS [TABLE_NAME] (
 	var/DBQuery/query = execute(sql)
 
 	var/list/rows=list()
-	while(query.NextRow())
+	while (query.NextRow())
 		rows += list(query.item)
 	return rows
 

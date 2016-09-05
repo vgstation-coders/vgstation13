@@ -44,12 +44,12 @@
 	if (istype(user, /mob/living/silicon) && get_dist(src,user)>1)
 		return src.attack_hand(user)
 	if (iscrowbar(W))
-		if(opened)
-			if(has_electronics & 1)
+		if (opened)
+			if (has_electronics & 1)
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 				to_chat(user, "You begin removing the circuitboard")//lpeters - fixed grammar issues
 
-				if(do_after(user, src, 50))
+				if (do_after(user, src, 50))
 					user.visible_message(\
 						"<span class='warning'>[user.name] has removed the circuitboard from [src.name]!</span>",\
 						"<span class='notice'>You remove the circuitboard board.</span>")
@@ -61,7 +61,7 @@
 				icon_state = "fuel_compressor0"
 				to_chat(user, "<span class='notice'>You close the maintenance cover.</span>")
 		else
-			if(compressed_matter > 0)
+			if (compressed_matter > 0)
 				to_chat(user, "<span class='warning'>You cannot open the cover while there is compressed matter inside.</span>")
 			else
 				opened = 1
@@ -70,10 +70,10 @@
 		return
 
 	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))			// trying to unlock the interface with an ID card
-		if(opened)
+		if (opened)
 			to_chat(user, "You must close the cover to swipe an ID card.")
 		else
-			if(src.allowed(usr))
+			if (src.allowed(usr))
 				locked = !locked
 				to_chat(user, "You [ locked ? "lock" : "unlock"] the compressor interface.")
 				update_icon()
@@ -82,12 +82,12 @@
 		return
 
 	else if (istype(W, /obj/item/weapon/card/emag) && !emagged)		// trying to unlock with an emag card
-		if(opened)
+		if (opened)
 			to_chat(user, "You must close the cover to swipe an ID card.")
 		else
 			flick("apc-spark", src)
 			if (do_after(user, src,6))
-				if(prob(50))
+				if (prob(50))
 					emagged = 1
 					locked = 0
 					to_chat(user, "You emag the port interface.")
@@ -97,12 +97,12 @@
 
 	else if (istype(W, /obj/item/stack/cable_coil) && opened && !(has_electronics & 2))
 		var/obj/item/stack/cable_coil/C = W
-		if(C.amount < 10)
+		if (C.amount < 10)
 			to_chat(user, "<span class='warning'>You need more wires.</span>")
 			return
 		to_chat(user, "You start adding cables to the compressor frame...")
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-		if(do_after(user, src, 20) && C.amount >= 10)
+		if (do_after(user, src, 20) && C.amount >= 10)
 			C.use(10)
 			user.visible_message(\
 				"<span class='warning'>[user.name] has added cables to the compressor frame!</span>",\
@@ -113,7 +113,7 @@
 	else if (iswirecutter(W) && opened && (has_electronics & 2))
 		to_chat(user, "You begin to cut the cables...")
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-		if(do_after(user, src, 50))
+		if (do_after(user, src, 50))
 			new /obj/item/stack/cable_coil(loc,10)
 			user.visible_message(\
 				"<span class='warning'>[user.name] cuts the cabling inside the compressor.</span>",\
@@ -124,7 +124,7 @@
 	else if (istype(W, /obj/item/weapon/module/rust_fuel_compressor) && opened && !(has_electronics & 1))
 		to_chat(user, "You try to insert the circuitboard into the frame...")
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-		if(do_after(user, src, 10))
+		if (do_after(user, src, 10))
 			has_electronics &= 1
 			to_chat(user, "You place the circuitboard inside the frame.")
 			qdel(W)
@@ -137,8 +137,8 @@
 			return
 		to_chat(user, "You start welding the compressor frame...")
 		playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
-		if(do_after(user, src, 50))
-			if(!src || !WT.remove_fuel(3, user))
+		if (do_after(user, src, 50))
+			if (!src || !WT.remove_fuel(3, user))
 				return
 			new /obj/item/mounted/frame/rust_fuel_assembly_port(loc)
 			user.visible_message(\

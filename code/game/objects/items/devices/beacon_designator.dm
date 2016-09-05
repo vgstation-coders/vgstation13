@@ -19,23 +19,23 @@
 
 /obj/item/weapon/beacon_dispenser/attack_self(mob/user)
 	id++
-	if(id>4)
+	if (id>4)
 		id=1
 	to_chat(user, "Spawning beacons with ID: [id]")
 
 /obj/item/weapon/beacon_dispenser/afterattack(atom/A, mob/user as mob)
 	var/turf/T = get_turf(A)
 
-	if(istype(A,/obj/item/bluespace_beacon))
+	if (istype(A,/obj/item/bluespace_beacon))
 		beacons -= A
 		qdel(A)
 		return
 
 	var/area/AR = get_area(T)
-	if(!AR)
+	if (!AR)
 		return
 
-	if(AR.name == "Space")
+	if (AR.name == "Space")
 		var/obj/item/bluespace_beacon/B = new(T)
 		B.id = src.id
 		B.icon_state = "[src.id]"
@@ -49,17 +49,17 @@
 
 	var/list/turfs = list()
 	var/conflict = 0
-	for(var/obj/item/bluespace_beacon/B in beacons)
-		if(B.id == src.id)
+	for (var/obj/item/bluespace_beacon/B in beacons)
+		if (B.id == src.id)
 			var/area/AR = get_area(B)
-			if(!isspace(AR))
-				if(!conflict)
+			if (!isspace(AR))
+				if (!conflict)
 					to_chat(usr, "One or more beacons are conflicting with another area. The area will not be created, and conflicting beacons will be marked as such.")
 					conflict = 1
 				B.overlays += image('icons/obj/bluespace_beacon.dmi', icon_state = "bad")
 			turfs |= get_turf(B)
 
-	if(conflict)
+	if (conflict)
 		return
 
 	var/area/shuttle/newarea = new
@@ -71,8 +71,8 @@
 	newarea.tag = "[newarea.type]/[md5(newarea.name)]"
 	newarea.set_dynamic_lighting(FALSE)
 	newarea.contents.Add(turfs)
-	for(var/turf/T in turfs)
+	for (var/turf/T in turfs)
 		T.change_area(oldarea,newarea)
-		for(var/atom/allthings in T.contents)
+		for (var/atom/allthings in T.contents)
 			allthings.change_area(oldarea,newarea)
 	newarea.addSorted()

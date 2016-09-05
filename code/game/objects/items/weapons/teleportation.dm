@@ -50,7 +50,7 @@ Frequency:
 	if (usr.stat || usr.restrained())
 		return
 	var/turf/current_location = get_turf(usr)//What turf is the user on?
-	if(!current_location||current_location.z==2)//If turf was not found or they're on z level 2.
+	if (!current_location||current_location.z==2)//If turf was not found or they're on z level 2.
 		to_chat(usr, "The [src] is malfunctioning.")
 		return
 	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))))
@@ -62,7 +62,7 @@ Frequency:
 			if (sr)
 				src.temp += "<B>Located Beacons:</B><BR>"
 
-				for(var/obj/item/beacon/W in beacons)
+				for (var/obj/item/beacon/W in beacons)
 					if (W.frequency == src.frequency)
 						var/turf/tr = get_turf(W)
 						if (tr.z == sr.z && tr)
@@ -115,7 +115,7 @@ Frequency:
 		if (istype(src.loc, /mob))
 			attack_self(src.loc)
 		else
-			for(var/mob/M in viewers(1, src))
+			for (var/mob/M in viewers(1, src))
 				if (M.client)
 					src.attack_self(M)
 	return
@@ -145,14 +145,14 @@ Frequency:
 
 /obj/item/weapon/hand_tele/attack_self(mob/user as mob)
 	var/turf/current_location = get_turf(user)//What turf is the user on?
-	if(!current_location||current_location.z==2||current_location.z>=7)//If turf was not found or they're on z level 2 or >7 which does not currently exist.
+	if (!current_location||current_location.z==2||current_location.z>=7)//If turf was not found or they're on z level 2 or >7 which does not currently exist.
 		to_chat(user, "<span class='notice'>\The [src] is malfunctioning.</span>")
 		return
 	var/list/L = list(  )
-	for(var/obj/machinery/computer/teleporter/R in machines)
-		for(var/obj/machinery/teleport/hub/com in locate(R.x + 2, R.y, R.z))
-			if(R.locked && !R.one_time_use)
-				if(com.engaged)
+	for (var/obj/machinery/computer/teleporter/R in machines)
+		for (var/obj/machinery/teleport/hub/com in locate(R.x + 2, R.y, R.z))
+			if (R.locked && !R.one_time_use)
+				if (com.engaged)
 					L["[R.id] (Active)"] = R.locked
 				else
 					L["[R.id] (Inactive)"] = R.locked
@@ -176,14 +176,14 @@ Frequency:
 
 	var/t1 = input(user, "Please select a teleporter to lock in on.", "Hand Teleporter") in L
 
-	if((user.get_active_hand() != src || user.stat || user.restrained()))
+	if ((user.get_active_hand() != src || user.stat || user.restrained()))
 		return
-	if(charge < HANDTELE_PORTAL_COST)
+	if (charge < HANDTELE_PORTAL_COST)
 		user.show_message("<span class='notice'>\The [src] is recharging!</span>")
 		return
 	var/T = L[t1]
 
-	if((t1 == "None (Dangerous)") && prob(5))
+	if ((t1 == "None (Dangerous)") && prob(5))
 		T = locate(rand(7, world.maxx - 7), rand(7, world.maxy -7), map.zTCommSat)
 
 	var/turf/U = get_turf(src)
@@ -204,13 +204,13 @@ Frequency:
 	src.add_fingerprint(user)
 
 	charge = max(charge - HANDTELE_PORTAL_COST,0)
-	if(!recharging)
+	if (!recharging)
 		recharging = 1
 		processing_objects.Add(src)
 
 /obj/item/weapon/hand_tele/process()
 	charge = min(HANDTELE_MAX_CHARGE,charge+1)
-	if(charge >= HANDTELE_MAX_CHARGE)
+	if (charge >= HANDTELE_MAX_CHARGE)
 		processing_objects.Remove(src)
 		recharging = 0
 	return 1

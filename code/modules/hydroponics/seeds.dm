@@ -11,7 +11,7 @@
 	var/modified = 0
 
 /obj/item/seeds/New()
-	while(!plant_controller)
+	while (!plant_controller)
 		sleep(30)
 	update_seed()
 	..()
@@ -20,13 +20,13 @@
 
 //Grabs the appropriate seed datum from the global list.
 /obj/item/seeds/proc/update_seed()
-	if(!seed && seed_type && !isnull(plant_controller.seeds) && plant_controller.seeds[seed_type])
+	if (!seed && seed_type && !isnull(plant_controller.seeds) && plant_controller.seeds[seed_type])
 		seed = plant_controller.seeds[seed_type]
 	update_appearance()
 
 //Updates strings and icon appropriately based on seed datum.
 /obj/item/seeds/proc/update_appearance()
-	if(!seed)
+	if (!seed)
 		return
 	icon_state = seed.packet_icon
 	src.name = "packet of [seed.seed_name] [seed.seed_noun]"
@@ -34,7 +34,7 @@
 
 /obj/item/seeds/examine(mob/user)
 	..()
-	if(seed && !seed.roundstart)
+	if (seed && !seed.roundstart)
 		to_chat(user, "It's tagged as variety <span class='info'>#[seed.uid].</span>")
 	else
 		to_chat(user, "Plant Yield: <span class='info'>[(seed.yield != -1) ? seed.yield : "<span class='warning'> ERROR</span>"]</span>")

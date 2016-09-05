@@ -25,7 +25,7 @@
 	set name = "Toggle Jetpack"
 	set category = "Object"
 	on = !on
-	if(on)
+	if (on)
 		icon_state = "[icon_state]-on"
 //			item_state = "[item_state]-on"
 		ion_trail.start()
@@ -37,16 +37,16 @@
 
 
 /obj/item/weapon/tank/jetpack/proc/allow_thrust(num, mob/living/user as mob)
-	if(!(src.on))
+	if (!(src.on))
 		return 0
-	if((num < 0.005 || src.air_contents.total_moles() < num))
+	if ((num < 0.005 || src.air_contents.total_moles() < num))
 		src.toggle()
 		return 0
 
 	var/datum/gas_mixture/G = src.air_contents.remove(num)
 	var/allgases = G.total_moles()
 
-	if(allgases >= 0.005)
+	if (allgases >= 0.005)
 		return 1
 
 	qdel(G)

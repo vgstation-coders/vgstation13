@@ -12,10 +12,10 @@
 
 //This proc sends the asset to the client, but only if it needs it.
 /proc/send_asset(var/client/client, var/asset_name, var/verify = TRUE)
-	if(!istype(client))
-		if(ismob(client))
+	if (!istype(client))
+		if (ismob(client))
 			var/mob/M = client
-			if(M.client)
+			if (M.client)
 				client = M.client
 
 			else
@@ -24,24 +24,24 @@
 		else
 			return 0
 
-	while(!global.asset_cache_populated)
+	while (!global.asset_cache_populated)
 		sleep(5)
 
-	if(!asset_cache.Find(asset_name))
+	if (!asset_cache.Find(asset_name))
 		CRASH("Attempted to send nonexistant asset [asset_name] to [client.key]!")
 
-	if(client.cache.Find(asset_name) || client.sending.Find(asset_name))
+	if (client.cache.Find(asset_name) || client.sending.Find(asset_name))
 		return 0
 
 	client << browse_rsc(asset_cache[asset_name], asset_name)
-	if(!verify || !winexists(client, "asset_cache_browser")) // Can't access the asset cache browser, rip.
-		if(!client) // winexist() waits for a response from the client, so we need to make sure the client still exists.
+	if (!verify || !winexists(client, "asset_cache_browser")) // Can't access the asset cache browser, rip.
+		if (!client) // winexist() waits for a response from the client, so we need to make sure the client still exists.
 			return 0
 
 		client.cache += asset_name
 		return 1
 
-	if(!client) // winexist() waits for a response from the client, so we need to make sure the client still exists.
+	if (!client) // winexist() waits for a response from the client, so we need to make sure the client still exists.
 		return 0
 
 	client.sending |= asset_name
@@ -55,11 +55,11 @@
 
 	var/t = 0
 	var/timeout_time = ASSET_CACHE_SEND_TIMEOUT * client.sending.len
-	while(client && !client.completed_asset_jobs.Find(job) && t < timeout_time) // Reception is handled in Topic()
+	while (client && !client.completed_asset_jobs.Find(job) && t < timeout_time) // Reception is handled in Topic()
 		sleep(1) // Lock up the caller until this is received.
 		t++
 
-	if(client)
+	if (client)
 		client.sending -= asset_name
 		client.cache |= asset_name
 		client.completed_asset_jobs -= job
@@ -67,10 +67,10 @@
 	return 1
 
 /proc/send_asset_list(var/client/client, var/list/asset_list, var/verify = TRUE)
-	if(!istype(client))
-		if(ismob(client))
+	if (!istype(client))
+		if (ismob(client))
 			var/mob/M = client
-			if(M.client)
+			if (M.client)
 				client = M.client
 
 			else
@@ -80,20 +80,20 @@
 			return 0
 
 	var/list/unreceived = asset_list - (client.cache + client.sending)
-	if(!unreceived || !unreceived.len)
+	if (!unreceived || !unreceived.len)
 		return 0
 
-	for(var/asset in unreceived)
+	for (var/asset in unreceived)
 		client << browse_rsc(asset_cache[asset], asset)
 
-	if(!verify || !winexists(client, "asset_cache_browser")) // Can't access the asset cache browser, rip.
-		if(!client) // winexist() waits for a response from the client, so we need to make sure the client still exists.
+	if (!verify || !winexists(client, "asset_cache_browser")) // Can't access the asset cache browser, rip.
+		if (!client) // winexist() waits for a response from the client, so we need to make sure the client still exists.
 			return 0
 
 		client.cache += unreceived
 		return 1
 
-	if(!client) // winexist() waits for a response from the client, so we need to make sure the client still exists.
+	if (!client) // winexist() waits for a response from the client, so we need to make sure the client still exists.
 		return 0
 
 	client.sending |= unreceived
@@ -107,11 +107,11 @@
 
 	var/t = 0
 	var/timeout_time = ASSET_CACHE_SEND_TIMEOUT * client.sending.len
-	while(client && !client.completed_asset_jobs.Find(job) && t < timeout_time) // Reception is handled in Topic()
+	while (client && !client.completed_asset_jobs.Find(job) && t < timeout_time) // Reception is handled in Topic()
 		sleep(1) // Lock up the caller until this is received.
 		t++
 
-	if(client)
+	if (client)
 		client.sending -= unreceived
 		client.cache |= unreceived
 		client.completed_asset_jobs -= job
@@ -128,7 +128,7 @@
 //From here on out it's populating the asset cache.
 
 /proc/populate_asset_cache()
-	for(var/type in typesof(/datum/asset) - list(/datum/asset, /datum/asset/simple))
+	for (var/type in typesof(/datum/asset) - list(/datum/asset, /datum/asset/simple))
 		var/datum/asset/A = new type()
 
 		A.register()
@@ -144,7 +144,7 @@
 	var/assets = list()
 
 /datum/asset/simple/register()
-	for(var/asset_name in assets)
+	for (var/asset_name in assets)
 		register_asset(asset_name, assets[asset_name])
 
 //DEFINITIONS FOR ASSET DATUMS START HERE.
@@ -365,7 +365,7 @@
 
 //Registers HTML I assets.
 /datum/asset/HTML_interface/register()
-	for(var/path in typesof(/datum/html_interface))
+	for (var/path in typesof(/datum/html_interface))
 		var/datum/html_interface/hi = new path()
 		hi.registerResources()
 

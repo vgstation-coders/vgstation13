@@ -99,7 +99,7 @@
 	. = ..()
 
 /obj/machinery/power/supermatter/proc/explode()
-	if(!istype(universe,/datum/universal_state/supermatter_cascade))
+	if (!istype(universe,/datum/universal_state/supermatter_cascade))
 		var/turf/turff = get_turf(src)
 		new /turf/unsimulated/wall/supermatter(turff)
 		SetUniversalState(/datum/universal_state/supermatter_cascade)
@@ -113,17 +113,17 @@
 	qdel(src)
 
 /obj/machinery/power/supermatter/ex_act(severity)
-	switch(severity)
-		if(3.0)
+	switch (severity)
+		if (3.0)
 			return //Should be improved
 		else
 			return explode()
 
 /obj/machinery/power/supermatter/shard/singularity_act(current_size, obj/machinery/singularity/S)
 	var/prints = ""
-	if(src.fingerprintshidden)
+	if (src.fingerprintshidden)
 		prints = ", all touchers : [list2params(src.fingerprintshidden)]"
-	if(current_size == STAGE_FIVE)
+	if (current_size == STAGE_FIVE)
 		S.expand(STAGE_SUPER, 1)
 		log_admin("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
 		message_admins("New super singularity made by eating a SM crystal [prints]. Last touched by [src.fingerprintslast].")
@@ -132,7 +132,7 @@
 
 /obj/machinery/power/supermatter/singularity_act(current_size, obj/machinery/singularity/S)
 	var/prints = ""
-	if(src.fingerprintshidden)
+	if (src.fingerprintshidden)
 		prints = ", all touchers : " + src.fingerprintshidden
 	SetUniversalState(/datum/universal_state/supermatter_cascade)
 	S.expand(STAGE_SUPER, 1)
@@ -142,34 +142,34 @@
 	return 20000
 
 /obj/machinery/power/supermatter/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover,/obj/structure/closet/crate/secure/large/reinforced))
+	if (istype(mover,/obj/structure/closet/crate/secure/large/reinforced))
 		return 1
 	. = ..()
 
 /obj/machinery/power/supermatter/process()
 
 	var/turf/L = loc
-	if(isnull(L))		// We have a null turf...something is wrong, stop processing this entity.
+	if (isnull(L))		// We have a null turf...something is wrong, stop processing this entity.
 		return PROCESS_KILL
 
-	if(!istype(L)) 	//We are in a crate or somewhere that isn't turf, if we return to turf resume processing but for now.
+	if (!istype(L)) 	//We are in a crate or somewhere that isn't turf, if we return to turf resume processing but for now.
 		return  //Yeah just stop.
 
-	if(istype(L, /turf/space))	// Stop processing this stuff if we've been ejected.
+	if (istype(L, /turf/space))	// Stop processing this stuff if we've been ejected.
 		return
 
 	// Let's add beam energy first.
-	for(var/obj/effect/beam/emitter/B in beams)
+	for (var/obj/effect/beam/emitter/B in beams)
 		power += B.get_damage() * config_bullet_energy
 
 	var/stability = round((damage / explosion_point) * 100)
-	if(damage > warning_point) // while the core is still damaged and it's still worth noting its status
+	if (damage > warning_point) // while the core is still damaged and it's still worth noting its status
 
 		var/list/audio_sounds = list('sound/AI/supermatter_integrity_before.ogg')
 		var/play_alert = 0
 		var/audio_offset = 0
 		var/current_zlevel = L.z
-		if((world.timeofday - lastwarning) / 10 >= WARNING_DELAY)
+		if ((world.timeofday - lastwarning) / 10 >= WARNING_DELAY)
 			var/warning=""
 			var/offset = 0
 
@@ -177,11 +177,11 @@
 			audio_sounds += list('sound/AI/supermatter_integrity_after.ogg')
 
 			// Damage still low.
-			if(damage >= damage_archived) // The damage is still going up
+			if (damage >= damage_archived) // The damage is still going up
 				warning = "Danger! [short_name] hyperstructure instability detected, now at [stability]%."
 				offset=150
 
-				if(damage > emergency_point)
+				if (damage > emergency_point)
 					warning = "[uppertext(short_name)] INSTABILITY AT [stability]%. DELAMINATION IMMINENT - EVACUATE IMMEDIATELY."
 					offset=0
 					audio_sounds += list('sound/AI/supermatter_delam.ogg')
@@ -199,16 +199,16 @@
 
 			lastwarning = world.timeofday - offset
 
-		if(play_alert && (world.timeofday - lastaudiowarning) / 10 >= AUDIO_WARNING_DELAY)
-			for(var/sf in audio_sounds)
+		if (play_alert && (world.timeofday - lastaudiowarning) / 10 >= AUDIO_WARNING_DELAY)
+			for (var/sf in audio_sounds)
 				play_vox_sound(sf,current_zlevel,null)
 			lastaudiowarning = world.timeofday - audio_offset
 
-		if(damage > explosion_point)
-			for(var/mob/living/mob in living_mob_list)
-				if(mob.z != src.z)//only make it effect mobs on the current Z level.
+		if (damage > explosion_point)
+			for (var/mob/living/mob in living_mob_list)
+				if (mob.z != src.z)//only make it effect mobs on the current Z level.
 					continue
-				if(istype(mob, /mob/living/carbon/human))
+				if (istype(mob, /mob/living/carbon/human))
 					//Hilariously enough, running into a closet should make you get hit the hardest.
 					mob:hallucination += max(50, min(300, DETONATION_HALLUCINATION * sqrt(1 / (get_dist(mob, src) + 1)) ) )
 				var/rads = DETONATION_RADS * sqrt( 1 / (get_dist(mob, src) + 1) )
@@ -216,10 +216,10 @@
 
 			explode()
 
-	if(frequency)
+	if (frequency)
 		var/datum/radio_frequency/radio_connection = radio_controller.return_frequency(frequency)
 
-		if(!radio_connection)
+		if (!radio_connection)
 			return
 
 		var/datum/signal/signal = getFromPool(/datum/signal)
@@ -241,7 +241,7 @@
 	//Remove gas from surrounding area
 	var/datum/gas_mixture/removed = env.remove(gasefficency * env.total_moles)
 
-	if(!removed || !removed.total_moles)
+	if (!removed || !removed.total_moles)
 		damage += max((power-1600)/10, 0)
 		power = min(power, 1600)
 		return 1
@@ -257,7 +257,7 @@
 
 	var/temp_factor = 100
 
-	if(oxygen > 0.8)
+	if (oxygen > 0.8)
 		// with a perfect gas mix, make the power less based on heat
 		icon_state = "[base_icon_state]_glow"
 	else
@@ -292,11 +292,11 @@
 
 	env.merge(removed)
 
-	for(var/mob/living/carbon/human/l in view(src, min(7, round(power ** 0.25)))) // If they can see it without mesons on.  Bad on them.
-		if(!istype(l.glasses, /obj/item/clothing/glasses/scanner/meson))
+	for (var/mob/living/carbon/human/l in view(src, min(7, round(power ** 0.25)))) // If they can see it without mesons on.  Bad on them.
+		if (!istype(l.glasses, /obj/item/clothing/glasses/scanner/meson))
 			l.hallucination = max(0, min(200, l.hallucination + power * config_hallucination_power * sqrt( 1 / max(1,get_dist(l, src)) ) ) )
 
-	for(var/mob/living/l in range(src, round((power / 100) ** 0.25)))
+	for (var/mob/living/l in range(src, round((power / 100) ** 0.25)))
 		var/rads = (power / 10) * sqrt(1/(max(get_dist(l, src), 1)))
 		l.apply_effect(rads, IRRADIATE)
 
@@ -320,12 +320,12 @@
 
 /obj/machinery/power/supermatter/bullet_act(var/obj/item/projectile/Proj)
 	var/turf/L = loc
-	if(!istype(L))		// We don't run process() when we are in space
+	if (!istype(L))		// We don't run process() when we are in space
 		return 0	// This stops people from being able to really power up the supermatter
 				// Then bring it inside to explode instantly upon landing on a valid turf.
 
 
-	if(Proj.flag != "bullet")
+	if (Proj.flag != "bullet")
 		power += Proj.damage * config_bullet_energy
 	else
 		damage += Proj.damage * config_bullet_energy
@@ -336,7 +336,7 @@
 
 
 /obj/machinery/power/supermatter/attack_robot(mob/user as mob)
-	if(Adjacent(user))
+	if (Adjacent(user))
 		return attack_hand(user)
 	else
 		attack_ai(user)
@@ -372,16 +372,16 @@
 	Consume(user)
 
 /obj/machinery/power/supermatter/proc/transfer_energy()
-	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
-		if(get_dist(R, src) <= 15) // Better than using orange() every process
+	for (var/obj/machinery/power/rad_collector/R in rad_collectors)
+		if (get_dist(R, src) <= 15) // Better than using orange() every process
 			R.receive_pulse(power)
 
 /obj/machinery/power/supermatter/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	. = ..()
-	if(.)
+	if (.)
 		return .
 
-	if(issilicon(user))
+	if (issilicon(user))
 		return attack_hand(user)
 
 	user.visible_message("<span class='warning'>\The [user] touches \a [W] to \the [src] as a silence fills the room...</span>",\
@@ -397,17 +397,17 @@
 
 
 /obj/machinery/power/supermatter/Bumped(atom/AM as mob|obj)
-	if(istype(AM, /obj/machinery/power/supermatter))
+	if (istype(AM, /obj/machinery/power/supermatter))
 		AM.visible_message("<span class='sinister'>As \the [src] bumps into \the [AM] an otherworldly resonance ringing begins to shake the room, you ponder for a moment all the incorrect choices in your life that led you here, to this very moment, to witness this. You take one final sigh before it all ends.</span>")
 		sleep(10) //Adds to the hilarity
 		playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
 		explode()
 		return
-	if(istype(AM, /mob/living))
+	if (istype(AM, /mob/living))
 		AM.visible_message("<span class=\"warning\">\The [AM] slams into \the [src] inducing a resonance... \his body starts to glow and catch flame before flashing into ash.</span>",\
 		"<span class=\"danger\">You slam into \the [src] as your ears are filled with unearthly ringing. Your last thought is \"Oh, fuck.\"</span>",\
 		"<span class=\"warning\">You hear an unearthly noise as a wave of heat washes over you.</span>")
-	else if(!is_type_in_list(AM, message_exclusions))
+	else if (!is_type_in_list(AM, message_exclusions))
 		AM.visible_message("<span class=\"warning\">\The [AM] smacks into \the [src] and rapidly flashes to ash.</span>",\
 		"<span class=\"warning\">You hear a loud crack as you are washed with a wave of heat.</span>")
 	else
@@ -419,9 +419,9 @@
 
 
 /obj/machinery/power/supermatter/proc/Consume(var/mob/living/user)
-	if(istype(user))
+	if (istype(user))
 		user.dust()
-		if(istype(user,/mob/living/simple_animal/mouse)) //>implying mice are going to follow the rules
+		if (istype(user,/mob/living/simple_animal/mouse)) //>implying mice are going to follow the rules
 			return
 		power += 200
 	else
@@ -430,8 +430,8 @@
 	power += 200
 
 		//Some poor sod got eaten, go ahead and irradiate people nearby.
-	for(var/mob/living/l in range(10))
-		if(l in view())
+	for (var/mob/living/l in range(10))
+		if (l in view())
 			l.show_message("<span class=\"warning\">As \the [src] slowly stops resonating, you find your skin covered in new radiation burns.</span>", 1,\
 				"<span class=\"warning\">The unearthly ringing subsides and you notice you have new radiation burns.</span>", 2)
 		else

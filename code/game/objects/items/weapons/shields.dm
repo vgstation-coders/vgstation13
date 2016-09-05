@@ -28,8 +28,8 @@
 	return 1
 
 /obj/item/weapon/shield/riot/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/melee/baton))
-		if(cooldown < world.time - 25)
+	if (istype(W, /obj/item/weapon/melee/baton))
+		if (cooldown < world.time - 25)
 			user.visible_message("<span class='warning'>[user] bashes [src] with [W]!</span>")
 			playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
 			cooldown = world.time
@@ -48,13 +48,13 @@
 	return prob(33) //Only attempt to block 1/3 of attacks
 
 /obj/item/weapon/shield/riot/buckler/on_block(damage, attack_text = "the_attack")
-	if(damage > 10)
-		if(prob(min(10*(damage-10), 75))) //Bucklers are prone to breaking apart
+	if (damage > 10)
+		if (prob(min(10*(damage-10), 75))) //Bucklers are prone to breaking apart
 			var/turf/T = get_turf(src)
 			T.visible_message("<span class='danger'>\The [src] breaks apart!</span>")
 			var/mob/living/L = loc
 
-			if(istype(L))
+			if (istype(L))
 				L.drop_item(src, force_drop = 1)
 
 			qdel(src)
@@ -71,8 +71,8 @@
 	return 1
 
 /obj/item/weapon/shield/riot/roman/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/spear))
-		if(cooldown < world.time - 25)
+	if (istype(W, /obj/item/weapon/spear))
+		if (cooldown < world.time - 25)
 			user.visible_message("<span class='warning'>[user] bashes [src] with [W]!</span>")
 			playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
 			cooldown = world.time
@@ -103,7 +103,7 @@
 	return (BRUTELOSS)
 
 /obj/item/weapon/shield/energy/IsShield()
-	if(active)
+	if (active)
 		return 1
 	else
 		return 0
@@ -160,7 +160,7 @@
 /obj/item/weapon/cloaking_device/emp_act(severity)
 	active = 0
 	icon_state = "shield0"
-	if(ismob(loc))
+	if (ismob(loc))
 		loc:update_icons()
 	..()
 
@@ -174,8 +174,8 @@
 	return 1
 
 /obj/item/weapon/shield/riot/proto/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/spear))
-		if(cooldown < world.time - 25)
+	if (istype(W, /obj/item/weapon/spear))
+		if (cooldown < world.time - 25)
 			user.visible_message("<span class='warning'>[user] bashes [src] with [W]!</span>")
 			playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
 			cooldown = world.time
@@ -193,8 +193,8 @@
 	return 1
 
 /obj/item/weapon/shield/riot/joe/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/spear))
-		if(cooldown < world.time - 25)
+	if (istype(W, /obj/item/weapon/spear))
+		if (cooldown < world.time - 25)
 			user.visible_message("<span class='warning'>[user] bashes [src] with [W]!</span>")
 			playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
 			cooldown = world.time
@@ -220,18 +220,18 @@
 
 /obj/item/weapon/shield/riot/bone/New(turf/T, var/p_borer = null)
 	..(T)
-	if(istype(p_borer, /mob/living/simple_animal/borer))
+	if (istype(p_borer, /mob/living/simple_animal/borer))
 		parent_borer = p_borer
-	if(!parent_borer)
+	if (!parent_borer)
 		qdel(src)
 	else
 		processing_objects.Add(src)
 
 /obj/item/weapon/shield/riot/bone/Destroy()
-	if(parent_borer)
-		if(parent_borer.channeling_bone_shield)
+	if (parent_borer)
+		if (parent_borer.channeling_bone_shield)
 			parent_borer.channeling_bone_shield = 0
-		if(parent_borer.channeling)
+		if (parent_borer.channeling)
 			parent_borer.channeling = 0
 		parent_borer = null
 	processing_objects.Remove(src)
@@ -239,11 +239,11 @@
 
 /obj/item/weapon/shield/riot/bone/process()
 	set waitfor = 0
-	if(!parent_borer)
+	if (!parent_borer)
 		return
-	if(!parent_borer.channeling_bone_shield) //the borer has stopped sustaining the sword
+	if (!parent_borer.channeling_bone_shield) //the borer has stopped sustaining the sword
 		qdel(src)
-	if(parent_borer.chemicals < 3) //the parent borer no longer has the chemicals required to sustain the shield
+	if (parent_borer.chemicals < 3) //the parent borer no longer has the chemicals required to sustain the shield
 		qdel(src)
 	else
 		parent_borer.chemicals -= 3

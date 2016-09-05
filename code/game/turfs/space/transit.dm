@@ -3,7 +3,7 @@
 	plane = TURF_PLANE
 
 /turf/space/transit/New()
-	if(loc)
+	if (loc)
 		var/area/A = loc
 		A.area_turfs += src
 
@@ -14,37 +14,37 @@
 
 	var/dira=""
 	var/i=0
-	switch(pushdirection)
-		if(SOUTH) // North to south
+	switch (pushdirection)
+		if (SOUTH) // North to south
 			dira="ns"
 			i=1+(abs((x^2)-y)%15) // Vary widely across X, but just decrement across Y
 
-		if(NORTH) // South to north  I HAVE NO IDEA HOW THIS WORKS I'M SORRY.  -Probe
+		if (NORTH) // South to north  I HAVE NO IDEA HOW THIS WORKS I'M SORRY.  -Probe
 			dira="ns"
 			i=1+(abs((x^2)-y)%15) // Vary widely across X, but just decrement across Y
 
-		if(WEST) // East to west
+		if (WEST) // East to west
 			dira="ew"
 			i=1+(((y^2)+x)%15) // Vary widely across Y, but just increment across X
 
-		if(EAST) // West to east
+		if (EAST) // West to east
 			dira="ew"
 			i=1+(((y^2)-x)%15) // Vary widely across Y, but just increment across X
 
 
 		/*
-		if(NORTH) // South to north (SPRITES DO NOT EXIST!)
+		if (NORTH) // South to north (SPRITES DO NOT EXIST!)
 			dira="sn"
 			i=1+(((x^2)+y)%15) // Vary widely across X, but just increment across Y
 
-		if(EAST) // West to east (SPRITES DO NOT EXIST!)
+		if (EAST) // West to east (SPRITES DO NOT EXIST!)
 			dira="we"
 			i=1+(abs((y^2)-x)%15) // Vary widely across X, but just increment across Y
 		*/
 
 		else
 			icon_state="black"
-	if(icon_state != "black")
+	if (icon_state != "black")
 		icon_state = "speedspace_[dira]_[i]"
 
 /turf/space/transit/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 0)

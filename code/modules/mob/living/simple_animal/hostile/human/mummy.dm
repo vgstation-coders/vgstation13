@@ -42,7 +42,7 @@
 	corpsehelmet = /obj/item/clothing/head/mummy_rags
 
 /mob/living/simple_animal/hostile/humanoid/mummy/Die()
-	if(!isturf(loc))
+	if (!isturf(loc))
 		return
 
 	visible_message("<span class='danger'>\The [src] emits a cloud of miasma before being laid to rest.</span>")
@@ -55,7 +55,7 @@
 	..()
 
 /datum/effect/effect/system/smoke_spread/chem/rot/set_up(var/mob/M, n = 5, c = 0, loca, direct)
-	if(n > 20)
+	if (n > 20)
 		n = 20
 	number = n
 	cardinals = c
@@ -64,11 +64,11 @@
 	chemholder.reagents.add_reagent(CYANIDE, 16)
 	chemholder.reagents.add_reagent(BLACKCOLOR, 120) //For the color
 
-	if(istype(loca, /turf/))
+	if (istype(loca, /turf/))
 		location = loca
 	else
 		location = get_turf(loca)
-	if(direct)
+	if (direct)
 		direction = direct
 
 //Mummy priests
@@ -99,39 +99,39 @@
 
 /mob/living/simple_animal/hostile/humanoid/mummy/priest/Shoot()
 	var/mob/living/L = target
-	if(L.isUnconscious())
+	if (L.isUnconscious())
 		return
 
-	switch(rand(0,3))
-		if(0) //damage
+	switch (rand(0,3))
+		if (0) //damage
 			var/dmg = rand(10,20)
 			to_chat(L, "<span class='userdanger'>Pain surges through your body!</span>")
 			L.emote("scream", , , 1)
 			L.adjustBruteLoss(dmg)
-		if(1) //deaf
+		if (1) //deaf
 			var/mob/living/carbon/human/H = L
-			if(!istype(H))
+			if (!istype(H))
 				return
 
 			H.ear_damage += rand(1, 3)
 
-			if(H.ear_deaf <= 0)
+			if (H.ear_deaf <= 0)
 				to_chat(L, "<span class='userdanger'>A horrifying scream deafens you!</span>")
 				H.ear_deaf += rand(15,30)
 				H << 'sound/effects/creepyshriek.ogg'
-		if(2) //blindness
+		if (2) //blindness
 			L.flash_eyes(visual = 1)
 			to_chat(L, "<span class='userdanger'>A flash blinds you for a moment!</span>")
 
 			var/mob/living/carbon/human/H = L
-			if(!istype(H))
+			if (!istype(H))
 				return
 
 			var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 			E.damage += rand(5,15)
-		if(3) //hallucinations + brain damage
+		if (3) //hallucinations + brain damage
 			var/mob/living/carbon/human/H = L
-			if(!istype(H))
+			if (!istype(H))
 				return
 
 			to_chat(L, "<span class='userdanger'>Your mind feels weak.</span>")
@@ -190,43 +190,43 @@
 	items_to_drop = list(/obj/item/weapon/hatchet/unathiknife, /obj/item/weapon/coin/adamantine)
 
 /mob/living/simple_animal/hostile/humanoid/mummy/high_priest/Shoot()
-	if(prob(50)) //50% chance to shoot a normal projectile
+	if (prob(50)) //50% chance to shoot a normal projectile
 		return ..()
 
 	var/mob/living/L = target
-	if(L.isUnconscious())
+	if (L.isUnconscious())
 		return
 
-	switch(rand(0,3))
-		if(0) //damage
+	switch (rand(0,3))
+		if (0) //damage
 			var/dmg = rand(10,20)
 			to_chat(L, "<span class='userdanger'>You writhe in agony!</span>")
 			L.emote("scream", , , 1)
 			L.adjustBruteLoss(dmg)
-		if(1) //deaf
+		if (1) //deaf
 			var/mob/living/carbon/human/H = L
-			if(!istype(H))
+			if (!istype(H))
 				return
 
 			H.ear_damage += rand(3, 6)
 
-			if(H.ear_deaf <= 0)
+			if (H.ear_deaf <= 0)
 				to_chat(L, "<span class='userdanger'>A horrifying scream deafens you!</span>")
 				H.ear_deaf += rand(30,45)
 				H << 'sound/effects/creepyshriek.ogg'
-		if(2) //blindness
+		if (2) //blindness
 			L.flash_eyes(visual = 1)
 			to_chat(L, "<span class='userdanger'>A flash blinds you!</span>")
 
 			var/mob/living/carbon/human/H = L
-			if(!istype(H))
+			if (!istype(H))
 				return
 
 			var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 			E.damage += rand(15,30)
-		if(3) //hallucinations + brain damage
+		if (3) //hallucinations + brain damage
 			var/mob/living/carbon/human/H = L
-			if(!istype(H))
+			if (!istype(H))
 				return
 
 			to_chat(L, "<span class='userdanger'>Your mind is crumbling.</span>")

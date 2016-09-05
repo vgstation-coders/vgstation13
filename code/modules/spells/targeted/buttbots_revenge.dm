@@ -21,10 +21,10 @@
 
 /spell/targeted/buttbots_revenge/cast(var/list/targets)
 	..()
-	for(var/mob/living/target in targets)
-		if(ishuman(target) || ismonkey(target))
+	for (var/mob/living/target in targets)
+		if (ishuman(target) || ismonkey(target))
 			var/mob/living/carbon/C = target
-			if(C.op_stage.butt != 4) // does the target have an ass
+			if (C.op_stage.butt != 4) // does the target have an ass
 				var/obj/item/clothing/head/butt/B = new(C.loc)
 				B.transfer_buttdentity(C)
 				C.op_stage.butt = 4 //No having two butts.

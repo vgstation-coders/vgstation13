@@ -38,16 +38,16 @@ var/list/alldepartments = list("Central Command")
 	RefreshParts()
 	allfaxes += src
 
-	if(department == "Unknown")
+	if (department == "Unknown")
 		department = "Fax #[allfaxes.len]"
 
-	if( !("[department]" in alldepartments) )
+	if ( !("[department]" in alldepartments) )
 		alldepartments += department
 
 /obj/machinery/faxmachine/RefreshParts()
 	var/scancount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
+	for (var/obj/item/weapon/stock_parts/SP in component_parts)
+		if (istype(SP, /obj/item/weapon/stock_parts/scanning_module))
 			scancount += SP.rating-1
 	cooldown_time = initial(cooldown_time) - 300*scancount
 
@@ -67,39 +67,39 @@ var/list/alldepartments = list("Central Command")
 	var/dat = "Fax Machine<BR>"
 
 	var/scan_name
-	if(scan)
+	if (scan)
 		scan_name = scan.name
 	else
 		scan_name = "--------"
 
 	dat += "Confirm Identity: <a href='byond://?src=\ref[src];scan=1'>[scan_name]</a><br>"
 
-	if(authenticated)
+	if (authenticated)
 		dat += "<a href='byond://?src=\ref[src];logout=1'>{Log Out}</a>"
 	else
 		dat += "<a href='byond://?src=\ref[src];auth=1'>{Log In}</a>"
 
 	dat += "<hr>"
 
-	if(authenticated)
+	if (authenticated)
 		dat += "<b>Logged in to:</b> Central Command Quantum Entanglement Network<br><br>"
 
-		if(tofax)
+		if (tofax)
 			dat += "<a href='byond://?src=\ref[src];remove=1'>Remove Paper</a><br><br>"
 
-			if(faxtime>world.timeofday)
+			if (faxtime>world.timeofday)
 				dat += "<b>Transmitter arrays realigning. Please stand by for [(faxtime - world.timeofday) / 10] second\s.</b><br>"
 
 			else
 				dat += "<a href='byond://?src=\ref[src];send=1'>Send</a><br>"
 				dat += "<b>Currently sending:</b> [tofax.name]<br>"
-				if(dpt == null)
+				if (dpt == null)
 					//Old bug fix. Not selecting a dpt and/or my new lawyer access feature broke the dpt select.
 					dpt = "Central Command"
 				dat += "<b>Sending to:</b> <a href='byond://?src=\ref[src];dept=1'>[dpt]</a><br>"
 
 		else
-			if(faxtime>world.timeofday)
+			if (faxtime>world.timeofday)
 				dat += "Please insert paper to send via secure connection.<br><br>"
 				dat += "<b>Transmitter arrays realigning. Please stand by for [(faxtime - world.timeofday) / 10] second\s.</b><br>"
 			else
@@ -108,7 +108,7 @@ var/list/alldepartments = list("Central Command")
 	else
 		dat += "\proper authentication is required to use this device.<br><br>"
 
-		if(tofax)
+		if (tofax)
 			dat += "<a href ='byond://?src=\ref[src];remove=1'>Remove Paper</a><br>"
 
 	user << browse(dat, "window=copier")
@@ -116,19 +116,19 @@ var/list/alldepartments = list("Central Command")
 	return
 
 /obj/machinery/faxmachine/Topic(href, href_list)
-	if(href_list["send"])
-		if(tofax)
-			if((dpt == "Central Command") | (dpt == "Nanotrasen HR"))
-				if(!map.linked_to_centcomm)
+	if (href_list["send"])
+		if (tofax)
+			if ((dpt == "Central Command") | (dpt == "Nanotrasen HR"))
+				if (!map.linked_to_centcomm)
 					to_chat(usr, "<span class='danger'>\The [src] displays a 404 error: Central Command not found</span>")
 					return
-				if(dpt == "Central Command")
+				if (dpt == "Central Command")
 					Centcomm_fax(tofax, tofax.name, usr)
-				if(dpt == "Nanotrasen HR")
-					if(findtext(tofax.stamps, "magnetic"))
-						if(findtext(tofax.name,"Demotion"))
+				if (dpt == "Nanotrasen HR")
+					if (findtext(tofax.stamps, "magnetic"))
+						if (findtext(tofax.name,"Demotion"))
 							new /obj/item/demote_chip(src.loc)
-						if(findtext(tofax.name,"Commendation"))
+						if (findtext(tofax.name,"Commendation"))
 							new /obj/item/mounted/poster(src.loc,-1)
 
 			else
@@ -137,19 +137,19 @@ var/list/alldepartments = list("Central Command")
 			to_chat(usr, "Message transmitted successfully.")
 			faxtime = world.timeofday + cooldown_time
 
-	if(href_list["remove"])
-		if(tofax)
+	if (href_list["remove"])
+		if (tofax)
 			tofax.forceMove(loc)
-			if(Adjacent(usr))
+			if (Adjacent(usr))
 				usr.put_in_hands(tofax)
 			to_chat(usr, "<span class='notice'>You take the paper out of \the [src].</span>")
 			tofax = null
 
-	if(href_list["scan"])
+	if (href_list["scan"])
 		if (scan)
-			if(ishuman(usr))
+			if (ishuman(usr))
 				scan.forceMove(usr.loc)
-				if(!usr.get_active_hand())
+				if (!usr.get_active_hand())
 					usr.put_in_hands(scan)
 				scan = null
 			else
@@ -158,32 +158,32 @@ var/list/alldepartments = list("Central Command")
 		else
 			var/obj/item/I = usr.get_active_hand()
 			if (istype(I, /obj/item/weapon/card/id))
-				if(usr.drop_item(I, src))
+				if (usr.drop_item(I, src))
 					scan = I
 		authenticated = 0
 
-	if(href_list["dept"])
+	if (href_list["dept"])
 		dpt = input(usr, "Which department?", "Choose a department", "") as null|anything in alldepartments
 
-	if(href_list["auth"])
+	if (href_list["auth"])
 		if ( (!( authenticated ) && (scan)) )
 			if (check_access(scan))
 				authenticated = 1
-				if(access_lawyer in scan.access)
+				if (access_lawyer in scan.access)
 					alldepartments += "Nanotrasen HR"
 
-	if(href_list["logout"])
+	if (href_list["logout"])
 		authenticated = 0
-		if(access_lawyer in scan.access)
+		if (access_lawyer in scan.access)
 			alldepartments -= "Nanotrasen HR"
 
 	updateUsrDialog()
 
 /obj/machinery/faxmachine/attackby(obj/item/O as obj, mob/user as mob)
 
-	if(istype(O, /obj/item/weapon/paper))
-		if(!tofax)
-			if(user.drop_item(O, src))
+	if (istype(O, /obj/item/weapon/paper))
+		if (!tofax)
+			if (user.drop_item(O, src))
 				tofax = O
 				to_chat(user, "<span class='notice'>You insert the paper into \the [src].</span>")
 				flick("faxsend", src)
@@ -191,14 +191,14 @@ var/list/alldepartments = list("Central Command")
 		else
 			to_chat(user, "<span class='notice'>There is already something in \the [src].</span>")
 
-	else if(istype(O, /obj/item/weapon/card/id))
+	else if (istype(O, /obj/item/weapon/card/id))
 
 		var/obj/item/weapon/card/id/idcard = O
-		if(!scan)
-			if(usr.drop_item(idcard, src))
+		if (!scan)
+			if (usr.drop_item(idcard, src))
 				scan = idcard
 
-	else if(iswrench(O))
+	else if (iswrench(O))
 		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 		anchored = !anchored
 		to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] \the [src].</span>")
@@ -209,7 +209,7 @@ var/list/alldepartments = list("Central Command")
 //why the fuck doesnt the thing show as orange
 	var/msg = "<span class='notice'><b><font color='orange'>CENTCOMM FAX: </font>[key_name(Sender, 1)] (<A HREF='?_src_=holder;adminplayeropts=\ref[Sender]'>PP</A>) (<A HREF='?_src_=vars;Vars=\ref[Sender]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=\ref[Sender]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=\ref[Sender]'>JMP</A>) (<A HREF='?_src_=holder;secretsadmin=check_antagonist'>CA</A>) (<a href='?_src_=holder;CentcommFaxReply=\ref[Sender]'>RPLY</a>)</b>: Receiving '[sentname]' via secure connection ... <a href='?_src_=holder;CentcommFaxView=\ref[sent]'>view message</a></span>"
 	for (var/client/C in admins)
-		if(C.prefs.special_popup)
+		if (C.prefs.special_popup)
 			C << output(msg, "window1.msay_output")//if i get told to make this a proc imma be fuckin mad
 		else
 			to_chat(C, msg)
@@ -220,10 +220,10 @@ proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm)
 
 
 
-	for(var/obj/machinery/faxmachine/F in allfaxes)
+	for (var/obj/machinery/faxmachine/F in allfaxes)
 
-		if(centcomm || F.department == dpt )
-			if(! (F.stat & (BROKEN|NOPOWER) ) )
+		if (centcomm || F.department == dpt )
+			if (! (F.stat & (BROKEN|NOPOWER) ) )
 
 				flick("faxreceive", F)
 
@@ -239,10 +239,10 @@ proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm)
 
 					playsound(F.loc, "sound/effects/fax.ogg", 50, 1)
 
-					if(centcomm)
+					if (centcomm)
 						var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
 						stampoverlay.icon_state = "paper_stamp-cent"
-						if(!P.stamped)
+						if (!P.stamped)
 							P.stamped = new
 						P.stamped += /obj/item/weapon/stamp
 						P.overlays += stampoverlay

@@ -64,7 +64,7 @@
 /obj/structure/closet/crate/chest/potential_mimic/New()
 	..()
 
-	if(prob(33))
+	if (prob(33))
 		var/mob/living/simple_animal/hostile/mimic/crate/chest/C = new(src.loc)
 		forceMove(C)
 
@@ -119,7 +119,7 @@
 
 	return_air()
 		var/datum/gas_mixture/gas = (..())
-		if(!gas)
+		if (!gas)
 			return null
 		var/datum/gas_mixture/newgas = new/datum/gas_mixture()
 		newgas.oxygen = gas.oxygen
@@ -128,10 +128,10 @@
 		newgas.toxins = gas.toxins
 		newgas.volume = gas.volume
 		newgas.temperature = gas.temperature
-		if(newgas.temperature <= target_temp)
+		if (newgas.temperature <= target_temp)
 			return
 
-		if((newgas.temperature - cooling_power) > target_temp)
+		if ((newgas.temperature - cooling_power) > target_temp)
 			newgas.temperature -= cooling_power
 		else
 			newgas.temperature = target_temp
@@ -216,16 +216,16 @@
 /obj/structure/closet/crate/secure/large/close()
 	//we can hold up to one large item
 	var/found = 0
-	for(var/obj/structure/S in src.loc)
-		if(S == src)
+	for (var/obj/structure/S in src.loc)
+		if (S == src)
 			continue
-		if(!S.anchored)
+		if (!S.anchored)
 			found = 1
 			S.forceMove(src)
 			break
-	if(!found)
-		for(var/obj/machinery/M in src.loc)
-			if(!M.anchored)
+	if (!found)
+		for (var/obj/machinery/M in src.loc)
+			if (!M.anchored)
 				M.forceMove(src)
 				break
 	..()
@@ -262,16 +262,16 @@
 /obj/structure/closet/crate/large/close()
 	//we can hold up to one large item
 	var/found = 0
-	for(var/obj/structure/S in src.loc)
-		if(S == src)
+	for (var/obj/structure/S in src.loc)
+		if (S == src)
 			continue
-		if(!S.anchored)
+		if (!S.anchored)
 			found = 1
 			S.forceMove(src)
 			break
-	if(!found)
-		for(var/obj/machinery/M in src.loc)
-			if(!M.anchored)
+	if (!found)
+		for (var/obj/machinery/M in src.loc)
+			if (!M.anchored)
 				M.forceMove(src)
 				break
 	..()
@@ -324,7 +324,7 @@
 /obj/structure/closet/crate/secure/plasma/prefilled
 	var/count=10
 /obj/structure/closet/crate/secure/plasma/prefilled/New()
-	for(var/i=0;i<count;i++)
+	for (var/i=0;i<count;i++)
 		new /obj/item/weapon/tank/plasma(src)
 
 /obj/structure/closet/crate/hydroponics/prespawned
@@ -338,7 +338,7 @@
 
 /obj/structure/closet/crate/secure/New()
 	..()
-	if(locked)
+	if (locked)
 		overlays.len = 0
 		overlays += redlight
 	else
@@ -364,16 +364,16 @@
 	new /obj/item/clothing/head/radiation(src)
 
 /obj/structure/closet/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0 || wall_mounted))
+	if (air_group || (height==0 || wall_mounted))
 		return 1
-	if(istype(mover, /obj/structure/closet/crate))
+	if (istype(mover, /obj/structure/closet/crate))
 		return 0
 	return (!density)
 
 /obj/structure/closet/crate/open()
-	if(src.opened)
+	if (src.opened)
 		return 0
-	if(!src.can_open())
+	if (!src.can_open())
 		return 0
 	playsound(get_turf(src), sound_effect_open, 15, 1, -3)
 
@@ -385,9 +385,9 @@
 	return 1
 
 /obj/structure/closet/crate/close()
-	if(!src.opened)
+	if (!src.opened)
 		return 0
-	if(!src.can_close())
+	if (!src.can_close())
 		return 0
 	playsound(get_turf(src), sound_effect_close, 15, 1, -3)
 
@@ -400,37 +400,37 @@
 
 /obj/structure/closet/crate/insert(var/atom/movable/AM, var/include_mobs = 0)
 
-	if(contents.len >= storage_capacity)
+	if (contents.len >= storage_capacity)
 		return -1
 
-	if(include_mobs && isliving(AM))
+	if (include_mobs && isliving(AM))
 		var/mob/living/L = AM
-		if(L.locked_to)
+		if (L.locked_to)
 			return 0
-	else if(isobj(AM))
-		if(AM.density || AM.anchored || istype(AM,/obj/structure/closet))
+	else if (isobj(AM))
+		if (AM.density || AM.anchored || istype(AM,/obj/structure/closet))
 			return 0
 	else
 		return 0
 
-	if(istype(AM, /obj/structure/bed)) //This is only necessary because of rollerbeds and swivel chairs.
+	if (istype(AM, /obj/structure/bed)) //This is only necessary because of rollerbeds and swivel chairs.
 		var/obj/structure/bed/B = AM
-		if(B.locked_atoms.len)
+		if (B.locked_atoms.len)
 			return 0
 
 	AM.forceMove(src)
 	return 1
 
 /obj/structure/closet/crate/attack_hand(mob/user as mob)
-	if(!Adjacent(user))
+	if (!Adjacent(user))
 		return
-	if(opened)
+	if (opened)
 		close()
 	else
-		if(rigged && locate(/obj/item/device/radio/electropack) in src)
-			if(isliving(user))
+		if (rigged && locate(/obj/item/device/radio/electropack) in src)
+			if (isliving(user))
 				var/mob/living/L = user
-				if(L.electrocute_act(17, src))
+				if (L.electrocute_act(17, src))
 					//var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 					//s.set_up(5, 1, src)
 					//s.start()
@@ -439,9 +439,9 @@
 	return
 
 /obj/structure/closet/crate/secure/attack_hand(mob/user as mob)
-	if(!Adjacent(user))
+	if (!Adjacent(user))
 		return
-	if(locked && !broken)
+	if (locked && !broken)
 		if (allowed(user))
 			to_chat(user, "<span class='notice'>You unlock [src].</span>")
 			src.locked = 0
@@ -455,7 +455,7 @@
 		..()
 
 /obj/structure/closet/crate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/card) && src.allowed(user) && !locked && !opened && !broken)
+	if (istype(W, /obj/item/weapon/card) && src.allowed(user) && !locked && !opened && !broken)
 		to_chat(user, "<span class='notice'>You lock \the [src].</span>")
 		src.locked = 1
 		overlays.len = 0
@@ -477,40 +477,40 @@
 	return attack_hand(user)
 
 /obj/structure/closet/crate/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(opened)
+	if (opened)
 		return ..()
-	else if(istype(W, /obj/item/stack/package_wrap))
+	else if (istype(W, /obj/item/stack/package_wrap))
 		return
-	else if(istype(W, /obj/item/stack/cable_coil))
-		if(rigged)
+	else if (istype(W, /obj/item/stack/cable_coil))
+		if (rigged)
 			to_chat(user, "<span class='notice'>[src] is already rigged!</span>")
 			return
 
-		if(user.drop_item(W))
+		if (user.drop_item(W))
 			to_chat(user, "<span class='notice'>You rig [src].</span>")
 			qdel(W)
 			W = null
 			rigged = 1
 		return
-	else if(istype(W, /obj/item/device/radio/electropack))
-		if(rigged)
-			if(user.drop_item(W, src.loc))
+	else if (istype(W, /obj/item/device/radio/electropack))
+		if (rigged)
+			if (user.drop_item(W, src.loc))
 				to_chat(user, "<span class='notice'>You attach [W] to [src].</span>")
 			return
-	else if(iswirecutter(W))
-		if(rigged)
+	else if (iswirecutter(W))
+		if (rigged)
 			to_chat(user, "<span class='notice'>You cut away the wiring.</span>")
 			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
 			rigged = 0
 			return
-	else if(!place(user, W))
+	else if (!place(user, W))
 		return attack_hand(user)
 
 /obj/structure/closet/crate/secure/emp_act(severity)
-	for(var/obj/O in src)
+	for (var/obj/O in src)
 		O.emp_act(severity)
-	if(!broken && !opened  && prob(50/severity))
-		if(!locked)
+	if (!broken && !opened  && prob(50/severity))
+		if (!locked)
 			src.locked = 1
 			overlays.len = 0
 			overlays += redlight
@@ -521,8 +521,8 @@
 			spawn(6) overlays -= sparks //Tried lots of stuff but nothing works right. so i have to use this *sadface*
 			playsound(get_turf(src), 'sound/effects/sparks4.ogg', 75, 1)
 			src.locked = 0
-	if(!opened && prob(20/severity))
-		if(!locked)
+	if (!opened && prob(20/severity))
+		if (!locked)
 			open()
 		else
 			src.req_access = list()
@@ -531,19 +531,19 @@
 
 
 /obj/structure/closet/crate/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			for(var/obj/O in src.contents)
+	switch (severity)
+		if (1.0)
+			for (var/obj/O in src.contents)
 				qdel(O)
 			qdel(src)
 			return
-		if(2.0)
-			for(var/obj/O in src.contents)
-				if(prob(50))
+		if (2.0)
+			for (var/obj/O in src.contents)
+				if (prob(50))
 					qdel(O)
 			qdel(src)
 			return
-		if(3.0)
+		if (3.0)
 			if (prob(50))
 				qdel(src)
 			return
@@ -556,50 +556,50 @@
 
 /obj/structure/closet/crate/secure/weapon/experimental/New()
 	..()
-	if(!chosen_set)
+	if (!chosen_set)
 		chosen_set = pick("ricochet","bison","spur","gatling","stickybomb","nikita","osipr","hecate","gravitywell")
 
-	switch(chosen_set)
-		if("ricochet")
+	switch (chosen_set)
+		if ("ricochet")
 			new/obj/item/clothing/suit/armor/laserproof(src)
 			new/obj/item/weapon/gun/energy/ricochet(src)
 			new/obj/item/weapon/gun/energy/ricochet(src)
-		if("bison")
+		if ("bison")
 			new/obj/item/clothing/shoes/jackboots(src)
 			new/obj/item/clothing/suit/hgpirate(src)
 			new/obj/item/clothing/head/hgpiratecap(src)
 			new/obj/item/clothing/glasses/eyepatch(src)
 			new/obj/item/weapon/gun/energy/bison(src)
-		if("spur")
+		if ("spur")
 			new/obj/item/clothing/suit/cardborg(src)
 			new/obj/item/clothing/head/cardborg(src)
 			new/obj/item/device/modkit/spur_parts(src)
 			new/obj/item/weapon/gun/energy/polarstar(src)
-		if("gatling")
+		if ("gatling")
 			new/obj/item/clothing/suit/armor/riot(src)
 			new/obj/item/clothing/head/helmet/tactical/riot(src)
 			new/obj/item/clothing/shoes/swat(src)
 			new/obj/item/clothing/gloves/swat(src)
 			new/obj/item/weapon/gun/gatling(src)
-		if("stickybomb")
+		if ("stickybomb")
 			new/obj/item/clothing/suit/bomb_suit/security(src)
 			new/obj/item/clothing/head/bomb_hood/security(src)
 			new/obj/item/weapon/gun/stickybomb(src)
 			new/obj/item/weapon/storage/box/stickybombs(src)
-		if("nikita")
-			for(var/i=1;i<=5;i++)
+		if ("nikita")
+			for (var/i=1;i<=5;i++)
 				new/obj/item/ammo_casing/rocket_rpg/nikita(src)
 			new/obj/item/weapon/gun/projectile/rocketlauncher/nikita(src)
-		if("osipr")
+		if ("osipr")
 			new/obj/item/clothing/suit/space/syndicate/black(src)
 			new/obj/item/clothing/head/helmet/space/syndicate/black(src)
 			new/obj/item/weapon/gun/osipr(src)
-		if("hecate")
+		if ("hecate")
 			new/obj/item/weapon/gun/projectile/hecate(src)
 			new/obj/item/ammo_storage/box/BMG50(src)
 			new/obj/item/device/radio/headset/headset_earmuffs(src)
 			new/obj/item/clothing/glasses/thermal(src)
-		if("gravitywell")
+		if ("gravitywell")
 			new/obj/item/clothing/suit/radiation(src)
 			new/obj/item/clothing/head/radiation(src)
 			new/obj/item/clothing/shoes/magboots(src)

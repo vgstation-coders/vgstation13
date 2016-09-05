@@ -22,7 +22,7 @@
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/head/helmet/siren/attack_self(mob/user)
-	if(spamcheck)
+	if (spamcheck)
 		return
 	playsound(get_turf(src), 'sound/voice/woopwoop.ogg', 100, 1, vary = 0)
 	user.visible_message("<span class='warning'>[user]'s [name] rasps, \"WOOP WOOP!\"</span>", \

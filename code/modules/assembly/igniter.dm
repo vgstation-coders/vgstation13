@@ -10,15 +10,15 @@
 	wires = WIRE_RECEIVE
 
 /obj/item/device/assembly/igniter/activate()
-	if(!..())
+	if (!..())
 		return 0//Cooldown check
 
-	if(holder && istype(holder.loc,/obj/item/weapon/grenade/chem_grenade))
+	if (holder && istype(holder.loc,/obj/item/weapon/grenade/chem_grenade))
 		var/obj/item/weapon/grenade/chem_grenade/grenade = holder.loc
 		grenade.prime()
 	else
 		var/turf/location = get_turf(loc)
-		if(location)
+		if (location)
 			location.hotspot_expose(1000,1000,surfaces=istype(loc,/turf))
 
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread

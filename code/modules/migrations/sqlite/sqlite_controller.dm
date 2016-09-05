@@ -20,7 +20,7 @@ var/global/datum/migration_controller/sqlite/migration_controller_sqlite = null
 	..()
 
 /datum/migration_controller/sqlite/setup()
-	if(!fexists("players2.sqlite") && fexists("players2_empty.sqlite"))
+	if (!fexists("players2.sqlite") && fexists("players2_empty.sqlite"))
 		fcopy("players2_empty.sqlite", "players2.sqlite")
 	return TRUE
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS [TABLE_NAME] (
 	_DEBUG("execute",sql)
 	var/database/query/Q = new()
 	Q.Add(sql)
-	if(!Q.Execute(dbfilename))
+	if (!Q.Execute(dbfilename))
 		warning("Error in migration controller ([id]): [Q.ErrorMsg()]")
 		return FALSE
 	return TRUE
@@ -47,11 +47,11 @@ CREATE TABLE IF NOT EXISTS [TABLE_NAME] (
 	_DEBUG("query",sql)
 	var/database/query/Q = new()
 	Q.Add(sql)
-	if(!Q.Execute(dbfilename))
+	if (!Q.Execute(dbfilename))
 		warning("Error in migration controller ([id]): [Q.ErrorMsg()]")
 		return null
 	var/list/O=list()
-	while(Q.NextRow())
+	while (Q.NextRow())
 		O += list(Q.GetRowData())
 	return O
 
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS [TABLE_NAME] (
 	_DEBUG("hasResult",sql)
 	var/database/query/Q = new()
 	Q.Add(sql)
-	if(!Q.Execute(dbfilename))
+	if (!Q.Execute(dbfilename))
 		warning("Error in migration controller ([id]): [Q.ErrorMsg()]")
 		return FALSE
 	if (Q.NextRow())

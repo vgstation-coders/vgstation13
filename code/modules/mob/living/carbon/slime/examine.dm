@@ -11,18 +11,18 @@
 				msg += "<B>It has severe punctures and tears in its flesh!</B>"
 			msg += "</span>\n"
 
-		switch(powerlevel)
+		switch (powerlevel)
 
-			if(2 to 3)
+			if (2 to 3)
 				msg += "It is flickering gently with a little electrical activity.\n"
 
-			if(4 to 5)
+			if (4 to 5)
 				msg += "It is glowing gently with moderate levels of electrical activity.\n"
 
-			if(6 to 9)
+			if (6 to 9)
 				msg += "<span class='warning'>It is glowing brightly with high levels of electrical activity.</span>\n"
 
-			if(10)
+			if (10)
 				msg += "<span class='danger'>It is radiating with massive levels of electrical activity!</span>\n"
 
 	msg += "*---------*</span>"

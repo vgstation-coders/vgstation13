@@ -21,7 +21,7 @@ var/const/TRANS_SETTINGS = 16 //Pulse shows percentage given by environment temp
 
 /datum/wires/transmitter/CanUse(var/mob/living/L)
 	var/obj/machinery/media/transmitter/broadcast/T = holder
-	if(T.panel_open)
+	if (T.panel_open)
 		return 1
 	return 0
 
@@ -34,21 +34,21 @@ var/const/TRANS_SETTINGS = 16 //Pulse shows percentage given by environment temp
 
 /datum/wires/transmitter/UpdatePulsed(var/index)
 	var/obj/machinery/media/transmitter/broadcast/T = holder
-	switch(index)
-		if(TRANS_POWER)
+	switch (index)
+		if (TRANS_POWER)
 			T.on = !T.on
 			T.update_on()
-		if(TRANS_LINK)
+		if (TRANS_LINK)
 			T.unhook_media_sources()
-		if(TRANS_SETTINGS)
+		if (TRANS_SETTINGS)
 			var/datum/gas_mixture/env = T.loc.return_air()
 			counter = 100*(env.temperature / (T20C + 20))
 
 /datum/wires/transmitter/UpdateCut(var/index, var/mended)
 	var/obj/machinery/media/transmitter/broadcast/T = holder
-	switch(index)
-		if(TRANS_POWER)
+	switch (index)
+		if (TRANS_POWER)
 			T.power_change()
 			T.shock(usr, 50)
-		if(TRANS_LINK)
+		if (TRANS_LINK)
 			T.shock(usr, 50)

@@ -4,58 +4,58 @@ the HUD updates properly! */
 
 //Deletes the current HUD images so they can be refreshed with new ones.
 mob/proc/regular_hud_updates() //Used in the life.dm of mobs that can use HUDs.
-	if(client)
-		for(var/image/hud in client.images)
-			if(findtext(hud.icon_state, "hud", 1, 4))
+	if (client)
+		for (var/image/hud in client.images)
+			if (findtext(hud.icon_state, "hud", 1, 4))
 				client.images -= hud
-	if(src in med_hud_users)
+	if (src in med_hud_users)
 		med_hud_users -= src
-	if(src in sec_hud_users)
+	if (src in sec_hud_users)
 		sec_hud_users -= src
 
 
 //Medical HUD outputs. Called by the Life() proc of the mob using it, usually.
 proc/process_med_hud(var/mob/M, var/mob/eye)
-	if(!M)
+	if (!M)
 		return
-	if(!M.client)
+	if (!M.client)
 		return
-	if(!(M in med_hud_users))
+	if (!(M in med_hud_users))
 		med_hud_users += M
 	var/client/C = M.client
 	var/image/holder
 	var/turf/T
-	if(eye)
+	if (eye)
 		T = get_turf(eye)
 	else
 		T = get_turf(M)
-	for(var/mob/living/carbon/human/patient in range(T))
-		if(patient.head && istype(patient.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
+	for (var/mob/living/carbon/human/patient in range(T))
+		if (patient.head && istype(patient.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
 			continue
-		if(M.see_invisible < patient.invisibility)
+		if (M.see_invisible < patient.invisibility)
 			continue
 		var/foundVirus = 0
-		for(var/datum/disease/D in patient.viruses)
-			if(!D.hidden[SCANNER])
+		for (var/datum/disease/D in patient.viruses)
+			if (!D.hidden[SCANNER])
 				foundVirus++
-		if(!C)
+		if (!C)
 			continue
 
 		holder = patient.hud_list[HEALTH_HUD]
-		if(holder)
-			if(patient.stat == 2)
+		if (holder)
+			if (patient.stat == 2)
 				holder.icon_state = "hudhealth-100"
 			else
 				holder.icon_state = "hud[RoundHealth(patient.health)]"
 			C.images += holder
 
 		holder = patient.hud_list[STATUS_HUD]
-		if(holder)
-			if(patient.stat == 2)
+		if (holder)
+			if (patient.stat == 2)
 				holder.icon_state = "huddead"
-			else if(patient.status_flags & XENO_HOST)
+			else if (patient.status_flags & XENO_HOST)
 				holder.icon_state = "hudxeno"
-			else if(foundVirus)
+			else if (foundVirus)
 				holder.icon_state = "hudill"
 			else
 				holder.icon_state = "hudhealthy"
@@ -64,44 +64,44 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 
 //Security HUDs. Pass a value for the second argument to enable implant viewing or other special features.
 proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
-	if(!M)
+	if (!M)
 		return
-	if(!M.client)
+	if (!M.client)
 		return
-	if(!(M in sec_hud_users))
+	if (!(M in sec_hud_users))
 		sec_hud_users += M
 	var/client/C = M.client
 	var/image/holder
 	var/turf/T
-	if(eye)
+	if (eye)
 		T = get_turf(eye)
 	else
 		T = get_turf(M)
-	for(var/mob/living/carbon/human/perp in range(T))
-		if(M.see_invisible < perp.invisibility)
+	for (var/mob/living/carbon/human/perp in range(T))
+		if (M.see_invisible < perp.invisibility)
 			continue
 		holder = perp.hud_list[ID_HUD]
-		if(!holder)
+		if (!holder)
 			continue
 		holder.icon_state = "hudno_id"
-		if(perp.head && istype(perp.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
+		if (perp.head && istype(perp.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
 			C.images += holder
 			continue
 		var/obj/item/weapon/card/id/card = perp.get_id_card()
-		if(card)
+		if (card)
 			holder.icon_state = "hud[ckey(card.GetJobName())]"
 		C.images += holder
 
-		if(advanced_mode) //If set, the SecHUD will display the implants a person has.
-			for(var/obj/item/weapon/implant/I in perp)
-				if(I.implanted)
-					if(istype(I,/obj/item/weapon/implant/tracking))
+		if (advanced_mode) //If set, the SecHUD will display the implants a person has.
+			for (var/obj/item/weapon/implant/I in perp)
+				if (I.implanted)
+					if (istype(I,/obj/item/weapon/implant/tracking))
 						holder = perp.hud_list[IMPTRACK_HUD]
 						holder.icon_state = "hud_imp_tracking"
-					else if(istype(I,/obj/item/weapon/implant/loyalty))
+					else if (istype(I,/obj/item/weapon/implant/loyalty))
 						holder = perp.hud_list[IMPLOYAL_HUD]
 						holder.icon_state = "hud_imp_loyal"
-					else if(istype(I,/obj/item/weapon/implant/chem))
+					else if (istype(I,/obj/item/weapon/implant/chem))
 						holder = perp.hud_list[IMPCHEM_HUD]
 						holder.icon_state = "hud_imp_chem"
 					else
@@ -110,20 +110,20 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 					break
 
 		var/perpname = perp.get_face_name()
-		if(lowertext(perpname) == "unknown" || !perpname)
+		if (lowertext(perpname) == "unknown" || !perpname)
 			perpname = perp.get_id_name("Unknown")
-		if(perpname)
+		if (perpname)
 			var/datum/data/record/R = find_record("name", perpname, data_core.security)
-			if(R)
+			if (R)
 				holder = perp.hud_list[WANTED_HUD]
-				switch(R.fields["criminal"])
-					if("*Arrest*")
+				switch (R.fields["criminal"])
+					if ("*Arrest*")
 						holder.icon_state = "hudwanted"
-					if("Incarcerated")
+					if ("Incarcerated")
 						holder.icon_state = "hudprisoner"
-					if("Parolled")
+					if ("Parolled")
 						holder.icon_state = "hudparolled"
-					if("Released")
+					if ("Released")
 						holder.icon_state = "hudreleased"
 					else
 						continue

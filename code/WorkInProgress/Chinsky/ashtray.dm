@@ -19,13 +19,13 @@
 	if (health < 1)
 		return
 	if (istype(W,/obj/item/clothing/mask/cigarette) || istype(W, /obj/item/weapon/match) || istype(W,  /obj/item/weapon/cigbutt))
-		if(user)
+		if (user)
 			if (contents.len >= max_butts)
 				to_chat(user, "This ashtray is full.")
 				return
 			user.drop_item(W, src, force_drop = 1)
 			var/obj/item/clothing/mask/cigarette/cig = W
-			if(istype(cig, /obj/item/weapon/cigbutt))
+			if (istype(cig, /obj/item/weapon/cigbutt))
 				to_chat(user, "You drop the [cig] into [src].")
 			if (istype(W,/obj/item/clothing/mask/cigarette) || istype(W, /obj/item/weapon/match))
 				if (cig.lit == 1)

@@ -8,7 +8,7 @@
 	anchored = 1
 
 /obj/machinery/artillerycontrol/process()
-	if(src.reload<180)
+	if (src.reload<180)
 		src.reload++
 
 /obj/structure/artilleryplaceholder
@@ -33,7 +33,7 @@
 	return
 
 /obj/machinery/artillerycontrol/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 	else
 		var/A
@@ -41,13 +41,13 @@
 		var/area/thearea = teleportlocs[A]
 		if (usr.stat || usr.restrained())
 			return
-		if(src.reload < 180)
+		if (src.reload < 180)
 			return
 		if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))) || (istype(usr, /mob/living/silicon)))
 			command_alert(/datum/command_alert/bluespace_artillery)
 			message_admins("[key_name_admin(usr)] has launched an artillery strike.", 1)
 			var/list/L = list()
-			for(var/turf/T in get_area_turfs(thearea.type))
+			for (var/turf/T in get_area_turfs(thearea.type))
 				L+=T
 			var/loc = pick(L)
 			explosion(loc,2,5,11)
@@ -61,7 +61,7 @@
 	spawn(30)
 	var/list/L = list()
 
-	for(var/turf/T in get_area_turfs(thearea.type))
+	for (var/turf/T in get_area_turfs(thearea.type))
 		L+=T
 	var/loc = pick(L)
 	explosion(loc,2,5,11)*/

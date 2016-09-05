@@ -17,20 +17,20 @@
 /datum/theft_objective/proc/get_contents(var/obj/O)
 	var/list/L = list()
 
-	if(istype(O,/obj/item/weapon/storage))
+	if (istype(O,/obj/item/weapon/storage))
 		var/obj/item/weapon/storage/S=O
 		L += S.return_inv()
 
-	else if(istype(O,/obj/item/weapon/gift))
+	else if (istype(O,/obj/item/weapon/gift))
 		var/obj/item/weapon/gift/G = O
 		L += G.gift
-		if(istype(G.gift, /obj/item/weapon/storage))
+		if (istype(G.gift, /obj/item/weapon/storage))
 			L += get_contents(G.gift)
 
-	else if(istype(O,/obj/item/delivery))
+	else if (istype(O,/obj/item/delivery))
 		var/obj/item/delivery/D = O
 		L += D.wrapped
-		if(istype(D.wrapped, /obj/item/weapon/storage)) //this should never happen
+		if (istype(D.wrapped, /obj/item/weapon/storage)) //this should never happen
 			L += get_contents(D.wrapped)
 	return L
 
@@ -164,7 +164,7 @@
 	var/required_amount=0
 
 /datum/theft_objective/number/New()
-	if(min==max)
+	if (min==max)
 		required_amount=min
 	else
 		var/lower=min/step
@@ -173,36 +173,36 @@
 	name = "[required_amount] [name]"
 
 /datum/theft_objective/number/check_completion(var/datum/mind/owner)
-	if(!owner.current)
+	if (!owner.current)
 		return 0
 	var/list/all_items = list()
-	if(isliving(owner.current))
+	if (isliving(owner.current))
 		all_items = owner.current.get_contents()
-	if(areas.len)
-		for(var/areatype in areas)
+	if (areas.len)
+		for (var/areatype in areas)
 			var/area/area = locate(areatype)
-			for(var/obj/O in area)
+			for (var/obj/O in area)
 				all_items += O
 				all_items += get_contents(O)
-	if(all_items.len)
+	if (all_items.len)
 		var/found_amount = 0
-		for(var/obj/I in all_items) //Check for items
-			if(istype(I, typepath))
+		for (var/obj/I in all_items) //Check for items
+			if (istype(I, typepath))
 				//Stealing the cheap autoinjector doesn't count
-				if(istype(I, /obj/item/weapon/reagent_containers/hypospray/autoinjector))
+				if (istype(I, /obj/item/weapon/reagent_containers/hypospray/autoinjector))
 					continue
-				if(istype(I,/obj/item/device/aicard))
+				if (istype(I,/obj/item/device/aicard))
 					var/obj/item/device/aicard/C = I
-					if(!C.contents.len)
+					if (!C.contents.len)
 						continue //Stealing a card with no contents doesn't count
 					var/is_at_least_one_alive = 0
-					for(var/mob/living/silicon/ai/A in C)
-						if(A.stat != DEAD)
+					for (var/mob/living/silicon/ai/A in C)
+						if (A.stat != DEAD)
 							is_at_least_one_alive++
-					if(!is_at_least_one_alive)
+					if (!is_at_least_one_alive)
 						continue
-				if(areas.len)
-					if(!is_type_in_list(get_area_master(I),areas))
+				if (areas.len)
+					if (!is_type_in_list(get_area_master(I),areas))
 						continue
 				found_amount += getAmountStolen(I)
 		return found_amount >= required_amount
@@ -228,15 +228,15 @@
 	step=500
 
 /datum/theft_objective/number/traitor/coins/check_completion(var/datum/mind/owner)
-	if(!owner.current)
+	if (!owner.current)
 		return 0
-	if(!isliving(owner.current))
+	if (!isliving(owner.current))
 		return 0
 	var/list/all_items = owner.current.get_contents()
 	var/found_amount=0.0
-	for(var/obj/item/weapon/storage/bag/money/B in all_items)
-		if(B)
-			for(var/obj/item/weapon/coin/C in B)
+	for (var/obj/item/weapon/storage/bag/money/B in all_items)
+		if (B)
+			for (var/obj/item/weapon/coin/C in B)
 				found_amount += C.credits
 	return found_amount >= required_amount
 

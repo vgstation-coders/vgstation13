@@ -30,10 +30,10 @@
 /obj/machinery/light_construct/examine(mob/user)
 	..()
 	var/mode
-	switch(src.stage)
-		if(1)
+	switch (src.stage)
+		if (1)
 			mode = "It's empty and lacks wiring."
-		if(2)
+		if (2)
 			mode = "It's wired."
 	to_chat(user, "<span class='info'>[mode]</span>")
 
@@ -55,21 +55,21 @@
 			to_chat(usr, "You have to remove the wires first.")
 			return
 
-	if(istype(W, /obj/item/stack/cable_coil))
+	if (istype(W, /obj/item/stack/cable_coil))
 		if (src.stage == 1)
 			var/obj/item/stack/cable_coil/coil = W
 			coil.use(1)
-			switch(fixture_type)
+			switch (fixture_type)
 				if ("tube")
 					src.icon_state = "tube-empty"
-				if("bulb")
+				if ("bulb")
 					src.icon_state = "bulb-empty"
 			src.stage = 2
 			user.visible_message("[user.name] adds wires to \the [src].", \
 				"You add wires to \the [src]")
 
-			switch(fixture_type)
-				if("tube")
+			switch (fixture_type)
+				if ("tube")
 					newlight = new /obj/machinery/light/built(src.loc)
 				if ("bulb")
 					newlight = new /obj/machinery/light/small/built(src.loc)
@@ -142,7 +142,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	auto_holomap = TRUE
 
 /obj/machinery/light/spook(mob/dead/observer/ghost)
-	if(..(ghost, TRUE))
+	if (..(ghost, TRUE))
 		flicker()
 
 // the smaller bulb light fixture
@@ -152,8 +152,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	qdel(src)
 
 /obj/machinery/light/bullet_act(var/obj/item/projectile/Proj)
-	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
-		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
+	if (istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
+		if (!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
 			broken()
 
 /obj/machinery/light/kick_act(mob/living/carbon/human/H)
@@ -200,15 +200,15 @@ var/global/list/obj/machinery/light/alllights = list()
 
 	spawn(2)
 		var/area/A = get_area(src)
-		if(A && !A.requires_power)
+		if (A && !A.requires_power)
 			on = 1
 
-		switch(fitting)
-			if("tube")
-				if(prob(2))
+		switch (fitting)
+			if ("tube")
+				if (prob(2))
 					broken(1)
-			if("bulb")
-				if(prob(5))
+			if ("bulb")
+				if (prob(5))
 					broken(1)
 		spawn(1)
 			update(0)
@@ -220,16 +220,16 @@ var/global/list/obj/machinery/light/alllights = list()
 
 /obj/machinery/light/update_icon()
 
-	switch(status)		// set icon_states
-		if(LIGHT_OK)
+	switch (status)		// set icon_states
+		if (LIGHT_OK)
 			icon_state = "l[base_state][on]"
-		if(LIGHT_EMPTY)
+		if (LIGHT_EMPTY)
 			icon_state = "l[base_state]-empty"
 			on = 0
-		if(LIGHT_BURNED)
+		if (LIGHT_BURNED)
 			icon_state = "l[base_state]-burned"
 			on = 0
-		if(LIGHT_BROKEN)
+		if (LIGHT_BROKEN)
 			icon_state = "l[base_state]-broken"
 			on = 0
 	return
@@ -239,18 +239,18 @@ var/global/list/obj/machinery/light/alllights = list()
 
 
 	update_icon()
-	if(on)
-		if(light_range != brightness_range || light_power != brightness_power || light_color != brightness_color)
+	if (on)
+		if (light_range != brightness_range || light_power != brightness_power || light_color != brightness_color)
 			switchcount++
-			if(rigged)
-				if(status == LIGHT_OK && trigger)
+			if (rigged)
+				if (status == LIGHT_OK && trigger)
 
 					log_admin("LOG: Rigged light explosion, last touched by [fingerprintslast]")
 					message_admins("LOG: Rigged light explosion, last touched by [fingerprintslast]")
 
 					explode()
-			else if( prob( min(60, switchcount*switchcount*0.01) ) )
-				if(status == LIGHT_OK && trigger)
+			else if ( prob( min(60, switchcount*switchcount*0.01) ) )
+				if (status == LIGHT_OK && trigger)
 					status = LIGHT_BURNED
 					icon_state = "l[base_state]-burned"
 					on = 0
@@ -263,9 +263,9 @@ var/global/list/obj/machinery/light/alllights = list()
 		set_light(0)
 
 	active_power_usage = (cost * 10)
-	if(on != on_gs)
+	if (on != on_gs)
 		on_gs = on
-		if(on)
+		if (on)
 			static_power_used = cost * 20 //20W per unit luminosity
 			addStaticPower(static_power_used, STATIC_LIGHT)
 		else
@@ -283,14 +283,14 @@ var/global/list/obj/machinery/light/alllights = list()
 // examine verb
 /obj/machinery/light/examine(mob/user)
 	..()
-	switch(status)
-		if(LIGHT_OK)
+	switch (status)
+		if (LIGHT_OK)
 			to_chat(user, "<span class='info'>[desc] It is turned [on? "on" : "off"].</span>")
-		if(LIGHT_EMPTY)
+		if (LIGHT_EMPTY)
 			to_chat(user, "<span class='info'>[desc] The [fitting] has been removed.</span>")
-		if(LIGHT_BURNED)
+		if (LIGHT_BURNED)
 			to_chat(user, "<span class='info'>[desc] The [fitting] is burnt out.</span>")
-		if(LIGHT_BROKEN)
+		if (LIGHT_BROKEN)
 			to_chat(user, "<span class='info'>[desc] The [fitting] has been smashed.</span>")
 
 
@@ -299,23 +299,23 @@ var/global/list/obj/machinery/light/alllights = list()
 /obj/machinery/light/attackby(obj/item/W, mob/user)
 	user.delayNextAttack(8)
 	//Light replacer code
-	if(istype(W, /obj/item/device/lightreplacer))
+	if (istype(W, /obj/item/device/lightreplacer))
 		var/obj/item/device/lightreplacer/LR = W
-		if(isliving(user))
+		if (isliving(user))
 			var/mob/living/U = user
 			LR.ReplaceLight(src, U)
 			return
 
 	// attempt to insert light
-	if(istype(W, /obj/item/weapon/light))
-		if(status != LIGHT_EMPTY)
+	if (istype(W, /obj/item/weapon/light))
+		if (status != LIGHT_EMPTY)
 			to_chat(user, "There is a [fitting] already inserted.")
 			return
 		else
 			src.add_fingerprint(user)
 			var/obj/item/weapon/light/L = W
-			if(L.fitting == fitting)
-				if(!user.drop_item(L))
+			if (L.fitting == fitting)
+				if (!user.drop_item(L))
 					user << "<span class='warning'>You can't let go of \the [L]!</span>"
 					return
 
@@ -334,7 +334,7 @@ var/global/list/obj/machinery/light/alllights = list()
 
 				qdel(L)
 
-				if(on && rigged)
+				if (on && rigged)
 
 					log_admin("LOG: Rigged light explosion, last touched by [fingerprintslast]")
 					message_admins("LOG: Rigged light explosion, last touched by [fingerprintslast]")
@@ -347,17 +347,17 @@ var/global/list/obj/machinery/light/alllights = list()
 		// attempt to break the light
 		//If xenos decide they want to smash a light bulb with a toolbox, who am I to stop them? /N
 
-	else if(status != LIGHT_BROKEN && status != LIGHT_EMPTY)
+	else if (status != LIGHT_BROKEN && status != LIGHT_EMPTY)
 
 
-		if(prob(1+W.force * 5))
+		if (prob(1+W.force * 5))
 
 			to_chat(user, "You hit the light, and it smashes!")
-			for(var/mob/M in viewers(src))
-				if(M == user)
+			for (var/mob/M in viewers(src))
+				if (M == user)
 					continue
 				M.show_message("[user.name] smashed the light!", 1, "You hear a tinkle of breaking glass", 2)
-			if(on && (W.is_conductor()))
+			if (on && (W.is_conductor()))
 				//if(!user.mutations & M_RESIST_COLD)
 				if (prob(12))
 					electrocute_mob(user, get_area(src), src, 0.3)
@@ -366,18 +366,18 @@ var/global/list/obj/machinery/light/alllights = list()
 		else
 			to_chat(user, "You hit the light!")
 	// attempt to deconstruct / stick weapon into light socket
-	else if(status == LIGHT_EMPTY)
-		if(iswirecutter(W)) //If it's a wirecutter take out the wires
+	else if (status == LIGHT_EMPTY)
+		if (iswirecutter(W)) //If it's a wirecutter take out the wires
 			playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 75, 1)
 			user.visible_message("[user.name] removes \the [src]'s wires.", \
 				"You remove \the [src]'s wires.", "You hear a noise.")
 			var/obj/machinery/light_construct/newlight = null
-			switch(fitting)
-				if("tube")
+			switch (fitting)
+				if ("tube")
 					newlight = new /obj/machinery/light_construct(src.loc)
 					newlight.icon_state = "tube-construct-stage1"
 
-				if("bulb")
+				if ("bulb")
 					newlight = new /obj/machinery/light_construct/small(src.loc)
 					newlight.icon_state = "bulb-construct-stage1"
 			new /obj/item/stack/cable_coil(get_turf(src.loc), 1, "red")
@@ -391,7 +391,7 @@ var/global/list/obj/machinery/light/alllights = list()
 
 		to_chat(user, "You stick \the [W] into the light socket!")//If not stick it in the socket.
 
-		if(has_power() && (W.is_conductor()))
+		if (has_power() && (W.is_conductor()))
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 			s.set_up(3, 1, src)
 			s.start()
@@ -407,13 +407,13 @@ var/global/list/obj/machinery/light/alllights = list()
 	return areaMaster.lightswitch && areaMaster.power_light
 
 /obj/machinery/light/proc/flicker(var/amount = rand(10, 20))
-	if(flickering)
+	if (flickering)
 		return
 	flickering = 1
 	spawn(0)
-		if(on && status == LIGHT_OK)
-			for(var/i = 0; i < amount; i++)
-				if(status != LIGHT_OK)
+		if (on && status == LIGHT_OK)
+			for (var/i = 0; i < amount; i++)
+				if (status != LIGHT_OK)
 					break
 				on = !on
 				update(0)
@@ -425,7 +425,7 @@ var/global/list/obj/machinery/light/alllights = list()
 		update(0)
 
 /obj/machinery/light/attack_ghost(mob/user)
-	if(blessed)
+	if (blessed)
 		return
 	src.add_hiddenprint(user)
 	src.flicker(1)
@@ -435,14 +435,14 @@ var/global/list/obj/machinery/light/alllights = list()
 // ai attack - make lights flicker, because why not
 /obj/machinery/light/attack_ai(mob/user)
 	// attack_robot is flaky.
-	if(isMoMMI(user))
+	if (isMoMMI(user))
 		return attack_hand(user)
 	src.add_hiddenprint(user)
 	src.flicker(1)
 	return
 
 /obj/machinery/light/attack_robot(mob/user)
-	if(isMoMMI(user))
+	if (isMoMMI(user))
 		return attack_hand(user)
 	else
 		return attack_ai(user)
@@ -450,23 +450,23 @@ var/global/list/obj/machinery/light/alllights = list()
 
 // Aliens smash the bulb but do not get electrocuted./N
 /obj/machinery/light/attack_alien(mob/living/carbon/alien/humanoid/user)//So larva don't go breaking light bulbs.
-	if(status == LIGHT_EMPTY||status == LIGHT_BROKEN)
+	if (status == LIGHT_EMPTY||status == LIGHT_BROKEN)
 		to_chat(user, "<span class='good'>That object is useless to you.</span>")
 		return
 	else if (status == LIGHT_OK||status == LIGHT_BURNED)
-		for(var/mob/M in viewers(src))
+		for (var/mob/M in viewers(src))
 			M.show_message("<span class='attack'>[user.name] smashed the light!</span>", 1, "You hear a tinkle of breaking glass", 2)
 		broken()
 	return
 
 /obj/machinery/light/attack_animal(mob/living/simple_animal/M)
-	if(M.melee_damage_upper == 0)
+	if (M.melee_damage_upper == 0)
 		return
-	if(status == LIGHT_EMPTY||status == LIGHT_BROKEN)
+	if (status == LIGHT_EMPTY||status == LIGHT_BROKEN)
 		to_chat(M, "<span class='warning'>That object is useless to you.</span>")
 		return
 	else if (status == LIGHT_OK||status == LIGHT_BURNED)
-		for(var/mob/O in viewers(src))
+		for (var/mob/O in viewers(src))
 			O.show_message("<span class='attack'>[M.name] smashed the light!</span>", 1, "You hear a tinkle of breaking glass", 2)
 		broken()
 	return
@@ -474,32 +474,32 @@ var/global/list/obj/machinery/light/alllights = list()
 // if hands aren't protected and the light is on, burn the player
 
 /obj/machinery/light/attack_hand(mob/user)
-	if(isobserver(user))
+	if (isobserver(user))
 		return
 
-	if(!Adjacent(user))
+	if (!Adjacent(user))
 		return
 
 	add_fingerprint(user)
 
-	if(status == LIGHT_EMPTY)
+	if (status == LIGHT_EMPTY)
 		to_chat(user, "There is no [fitting] in this light.")
 		return
 
 	// make it burn hands if not wearing fire-insulated gloves
-	if(on)
+	if (on)
 		var/prot = 0
 
-		if(ishuman(user))
+		if (ishuman(user))
 			var/mob/living/carbon/human/H = user
-			if(H.gloves)
+			if (H.gloves)
 				var/obj/item/clothing/gloves/G = H.gloves
-				if(G.max_heat_protection_temperature)
+				if (G.max_heat_protection_temperature)
 					prot = (G.max_heat_protection_temperature > 360)
 		else
 			prot = 1
 
-		if(prot > 0 || (M_RESIST_HEAT in user.mutations))
+		if (prot > 0 || (M_RESIST_HEAT in user.mutations))
 			to_chat(user, "You remove the light [fitting]")
 		else
 			to_chat(user, "You try to remove the light [fitting], but it's too hot and you don't want to burn your hand.")
@@ -528,13 +528,13 @@ var/global/list/obj/machinery/light/alllights = list()
 // break the light and make sparks if was on
 
 /obj/machinery/light/proc/broken(var/skip_sound_and_sparks = 0)
-	if(status == LIGHT_EMPTY)
+	if (status == LIGHT_EMPTY)
 		return
 
-	if(!skip_sound_and_sparks)
-		if(status == LIGHT_OK || status == LIGHT_BURNED)
+	if (!skip_sound_and_sparks)
+		if (status == LIGHT_OK || status == LIGHT_BURNED)
 			playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
-		if(on)
+		if (on)
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 			s.set_up(3, 1, src)
 			s.start()
@@ -542,7 +542,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	update()
 
 /obj/machinery/light/proc/fix()
-	if(status == LIGHT_OK)
+	if (status == LIGHT_OK)
 		return
 	status = LIGHT_OK
 	on = 1
@@ -552,14 +552,14 @@ var/global/list/obj/machinery/light/alllights = list()
 // destroy the whole light fixture or just shatter it
 
 /obj/machinery/light/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			qdel(src)
 			return
-		if(2.0)
+		if (2.0)
 			if (prob(75))
 				broken()
-		if(3.0)
+		if (3.0)
 			if (prob(50))
 				broken()
 	return
@@ -567,7 +567,7 @@ var/global/list/obj/machinery/light/alllights = list()
 //blob effect
 
 /obj/machinery/light/blob_act()
-	if(prob(75))
+	if (prob(75))
 		broken()
 /*
  * Called when area power state changes.
@@ -579,7 +579,7 @@ var/global/list/obj/machinery/light/alllights = list()
 // called when on fire
 
 /obj/machinery/light/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(prob(max(0, exposed_temperature - 673)))   //0% at <400C, 100% at >500C
+	if (prob(max(0, exposed_temperature - 673)))   //0% at <400C, 100% at >500C
 		broken()
 
 /*
@@ -680,24 +680,24 @@ var/global/list/obj/machinery/light/alllights = list()
 // update the icon state and description of the light
 
 /obj/item/weapon/light/proc/update()
-	switch(status)
-		if(LIGHT_OK)
+	switch (status)
+		if (LIGHT_OK)
 			icon_state = base_state
 			desc = "A replacement [name]."
-		if(LIGHT_BURNED)
+		if (LIGHT_BURNED)
 			icon_state = "[base_state]-burned"
 			desc = "A burnt-out [name]."
-		if(LIGHT_BROKEN)
+		if (LIGHT_BROKEN)
 			icon_state = "[base_state]-broken"
 			desc = "A broken [name]."
 
 
 /obj/item/weapon/light/New()
 	..()
-	switch(name)
-		if("light tube")
+	switch (name)
+		if ("light tube")
 			brightness_range = rand(6,9)
-		if("light bulb")
+		if ("light bulb")
 			brightness_range = rand(4,6)
 	update()
 
@@ -706,12 +706,12 @@ var/global/list/obj/machinery/light/alllights = list()
 // if a syringe, can inject plasma to make it explode
 /obj/item/weapon/light/attackby(var/obj/item/I, var/mob/user)
 	..()
-	if(istype(I, /obj/item/weapon/reagent_containers/syringe))
+	if (istype(I, /obj/item/weapon/reagent_containers/syringe))
 		var/obj/item/weapon/reagent_containers/syringe/S = I
 
 		to_chat(user, "You inject the solution into the [src].")
 
-		if(S.reagents.has_reagent(PLASMA, 5))
+		if (S.reagents.has_reagent(PLASMA, 5))
 
 			log_admin("LOG: [user.name] ([user.ckey]) injected a light with plasma, rigging it to explode.")
 			message_admins("LOG: [user.name] ([user.ckey]) injected a light with plasma, rigging it to explode.")
@@ -728,15 +728,15 @@ var/global/list/obj/machinery/light/alllights = list()
 // now only shatter if the intent was harm
 
 /obj/item/weapon/light/afterattack(atom/target, mob/user)
-	if(istype(target, /obj/machinery/light))
+	if (istype(target, /obj/machinery/light))
 		return
-	if(user.a_intent != I_HURT)
+	if (user.a_intent != I_HURT)
 		return
 
 	shatter()
 
 /obj/item/weapon/light/proc/shatter()
-	if(status == LIGHT_OK || status == LIGHT_BURNED)
+	if (status == LIGHT_OK || status == LIGHT_BURNED)
 		src.visible_message("<span class='warning'>[name] shatters.</span>","<span class='warning'>You hear a small glass object shatter.</span>")
 		status = LIGHT_BROKEN
 		force = 5

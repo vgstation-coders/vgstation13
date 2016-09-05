@@ -17,7 +17,7 @@
 	stored_flare = new(src)
 
 /obj/item/ammo_casing/shotgun/flare/attack_self()
-	if(stored_flare)
+	if (stored_flare)
 		to_chat(usr, "You disassemble the flare shell.")
 		stored_flare.forceMove(usr.loc)
 		stored_flare = null

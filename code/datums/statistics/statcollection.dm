@@ -74,13 +74,13 @@
 
 /datum/stat_collector/proc/uplink_purchase(var/datum/uplink_item/bundle, var/obj/resulting_item, var/mob/user )
 	var/was_traitor = 1
-	if(user.mind && user.mind.special_role != "traitor")
+	if (user.mind && user.mind.special_role != "traitor")
 		was_traitor = 0
 
-	if(istype(bundle, /datum/uplink_item/badass/bundle))
+	if (istype(bundle, /datum/uplink_item/badass/bundle))
 		var/datum/stat/uplink_badass_bundle_stat/BAD = new
 		var/obj/item/weapon/storage/box/B = resulting_item
-		for(var/obj/O in B.contents)
+		for (var/obj/O in B.contents)
 			BAD.contains += O.type
 		BAD.purchaser_key = ckey(user.mind.key)
 		BAD.purchaser_name = user.mind.name
@@ -88,7 +88,7 @@
 		badass_bundles += BAD
 	else
 		var/datum/stat/uplink_purchase_stat/UP = new
-		if(istype(bundle, /datum/uplink_item/badass/random))
+		if (istype(bundle, /datum/uplink_item/badass/random))
 			UP.itemtype = resulting_item.type
 		else
 			UP.itemtype = bundle.item
@@ -106,17 +106,17 @@
 // 	d.death_y = M.y
 // 	d.death_z = M.z
 // 	d.mob_typepath = M.type
-// 	if(B)
+// 	if (B)
 // 		d.special_role = B.special_role
-// 		if(B.key)
+// 		if (B.key)
 // 			d.key = B.key
-// 		if(B.name)
+// 		if (B.name)
 // 			d.realname = B.name
 // 	stat_collection.human_death_stats += d
 
 /datum/stat_collector/proc/add_death_stat(var/mob/M)
 	//if(istype(M, /mob/living/carbon/human)) return 0
-	if(ticker.current_state != 3)
+	if (ticker.current_state != 3)
 		return 0 // We don't care about pre-round or post-round deaths. 3 is GAME_STATE_PLAYING which is undefined I guess
 	var/datum/stat/death_stat/d = new
 	d.time_of_death = M.timeofdeath
@@ -126,12 +126,12 @@
 	d.death_z = M.z
 	d.mob_typepath = M.type
 	d.realname = M.name
-	if(M.mind)
-		if(M.mind.special_role && M.mind.special_role != "")
+	if (M.mind)
+		if (M.mind.special_role && M.mind.special_role != "")
 			d.special_role = M.mind.special_role
-		if(M.mind.key)
+		if (M.mind.key)
 			d.key = ckey(M.mind.key) // To prevent newlines in keys
-		if(M.mind.name)
+		if (M.mind.name)
 			d.realname = M.mind.name
 	stat_collection.death_stats += d
 
@@ -162,23 +162,23 @@
 /datum/stat_collector/proc/get_research_score()
 	var/obj/machinery/r_n_d/server/server = null
 	var/tech_level_total
-	for(var/obj/machinery/r_n_d/server/serber in machines)
-		if(serber.name == "Core R&D Server")
+	for (var/obj/machinery/r_n_d/server/serber in machines)
+		if (serber.name == "Core R&D Server")
 			server=serber
 			break
-	if(!server)
+	if (!server)
 		return
-	for(var/datum/tech/T in tech_list)
-		if(T.goal_level==0) // Ignore illegal tech, etc
+	for (var/datum/tech/T in tech_list)
+		if (T.goal_level==0) // Ignore illegal tech, etc
 			continue
 		var/datum/tech/KT  = locate(T.type, server.files.known_tech)
 		tech_level_total += KT.level
 	return tech_level_total
 
 /datum/stat_collector/proc/antagCheck(statfile)
-	for(var/datum/mind/Mind in ticker.minds)
-		for(var/datum/objective/objective in Mind.objectives)
-			if(objective.explanation_text == "Free Objective")
+	for (var/datum/mind/Mind in ticker.minds)
+		for (var/datum/objective/objective in Mind.objectives)
+			if (objective.explanation_text == "Free Objective")
 				statfile << "ANTAG_OBJ|[Mind.name]|[Mind.key]|[Mind.special_role]|FREE_OBJ"
 			else if (objective.target)
 				statfile << "ANTAG_OBJ|[Mind.name]|[Mind.key]|[Mind.special_role]|[objective.type]|[objective.target]|[objective.target.assigned_role]|[objective.target.name]|[objective.check_completion()]|[objective.explanation_text]"
@@ -192,10 +192,10 @@
 	var/end_timestamp = time2text(world.realtime, "YYYY.MM.DD.hh.mm.ss")
 	statfile << "STATLOG_START|[STAT_OUTPUT_VERSION]|[map.nameLong]|[start_timestamp]|[end_timestamp]"
 	statfile << "MASTERMODE|[master_mode]" // sekrit, or whatever else was decided as the 'actual' mode on round start.
-	if(istype(ticker.mode, /datum/game_mode/mixed))
+	if (istype(ticker.mode, /datum/game_mode/mixed))
 		var/datum/game_mode/mixed/mixy = ticker.mode
 		var/T = "GAMEMODE"
-		for(var/datum/game_mode/GM in mixy.modes)
+		for (var/datum/game_mode/GM in mixy.modes)
 			T += "|[GM.name]"
 		statfile << T
 	else
@@ -208,7 +208,7 @@
 	var/filename_date = time2text(round_start_time, "YYYY.DD.MM")
 	var/roundnum = 1
 	// Iterate until we have an unused file.
-	while(fexists(file(("[STAT_OUTPUT_DIR]statistics_[filename_date].[roundnum].txt"))))
+	while (fexists(file(("[STAT_OUTPUT_DIR]statistics_[filename_date].[roundnum].txt"))))
 		roundnum++
 	var/statfile = file("[STAT_OUTPUT_DIR]statistics_[filename_date].[roundnum].txt")
 
@@ -224,15 +224,15 @@
 	statfile << "ESCAPEES|[escapees]"
 	statfile << "NUKED|[nuked]"
 
-	for(var/datum/stat/death_stat/D in death_stats)
+	for (var/datum/stat/death_stat/D in death_stats)
 		statfile << "MOB_DEATH|[D.mob_typepath]|[D.special_role]|[num2text(D.time_of_death, 30)]|[D.last_attacked_by]|[D.death_x]|[D.death_y]|[D.death_z]|[D.key]|[D.realname]"
-	for(var/datum/stat/explosion_stat/E in explosion_stats)
+	for (var/datum/stat/explosion_stat/E in explosion_stats)
 		statfile << "EXPLOSION|[E.epicenter_x]|[E.epicenter_y]|[E.epicenter_z]|[E.devastation_range]|[E.heavy_impact_range]|[E.light_impact_range]|[E.max_range]"
-	for(var/datum/stat/uplink_purchase_stat/U in uplink_purchases)
+	for (var/datum/stat/uplink_purchase_stat/U in uplink_purchases)
 		statfile << "UPLINK_ITEM|[U.purchaser_key]|[U.purchaser_name]|[U.purchaser_is_traitor]|[U.bundle]|[U.itemtype]"
-	for(var/datum/stat/uplink_badass_bundle_stat/B in badass_bundles)
+	for (var/datum/stat/uplink_badass_bundle_stat/B in badass_bundles)
 		var/o 	= 	"BADASS_BUNDLE|[B.purchaser_key]|[B.purchaser_name]|[B.purchaser_is_traitor]"
-		for(var/S in B.contains)
+		for (var/S in B.contains)
 			o += "|[S]"
 		statfile << "[o]"
 

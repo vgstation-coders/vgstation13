@@ -9,22 +9,22 @@
 	fire_sound = 'sound/weapons/wave.ogg'
 
 /obj/item/projectile/gravitywell/bresenham_step(var/distA, var/distB, var/dA, var/dB)
-	if(..())
+	if (..())
 		return 2
 	else
 		return 0
 
 /obj/item/projectile/gravitywell/Bump(atom/A as mob|obj|turf|area)
-	if(loc == target)
+	if (loc == target)
 		spawnGravityWell()
 
-	if(isliving(A))
+	if (isliving(A))
 		var/mob/living/M = A
 		M.Weaken(5)
 
 	forceMove(get_step(loc,dir))
 
-	if(loc == target)
+	if (loc == target)
 		spawnGravityWell()
 
 
@@ -38,9 +38,9 @@
 
 
 /obj/item/projectile/gravitywell/bump_original_check()//so players can aim at floors
-	if(!bumped)
-		if(loc == get_turf(original))
-			if(!(original in permutated))
+	if (!bumped)
+		if (loc == get_turf(original))
+			if (!(original in permutated))
 				Bump(original)
 
 /obj/item/projectile/gravitywell/cultify()
@@ -77,45 +77,45 @@
 	overlays += image(icon,"gravitywell_shadow",2.1)
 
 /obj/effect/overlay/gravitywell/Destroy()
-	if(GG)
+	if (GG)
 		qdel(GG)
 	..()
 
 /obj/effect/overlay/gravitywell/proc/Pulse()
 	xp--
-	if(xp <= 0)
+	if (xp <= 0)
 		xp = 6
 		xlevel--
-		if(xlevel <= -4)
+		if (xlevel <= -4)
 			empulse(loc,size,size+2)
-			if(locate(/obj/machinery/the_singularitygen/) in loc)
+			if (locate(/obj/machinery/the_singularitygen/) in loc)
 				new/obj/machinery/singularity(loc)//How evil can one man be?
 			qdel(src)
 			return
-		else if(xlevel > 0)
+		else if (xlevel > 0)
 			size++
-			if(GG)
+			if (GG)
 				GG.LevelUp()
 				src.transform *= (size*2+1)/((size-1)*2+1)
 
 	var/outter_size = round(size+1)
-	for(var/atom/A in range(src,outter_size))
+	for (var/atom/A in range(src,outter_size))
 		var/dist = get_dist_euclidian(src,A)
 		var/pull_force = size/max(1,round(dist))
-		if(istype(A,/atom/movable) && (size >= 4) && (get_dist(src,A) == 1))
+		if (istype(A,/atom/movable) && (size >= 4) && (get_dist(src,A) == 1))
 			A.singularity_pull(src, (pull_force * 3), 1)
 			var/atom/movable/AM = A
 			AM.forceMove(loc)//KATAMARI DAMACYYyyYYyyYY
-		else if(get_dist(src,A) >= 1)
-			if(dist <= size)
+		else if (get_dist(src,A) >= 1)
+			if (dist <= size)
 				A.singularity_pull(src, (pull_force * 3), 1)
-				if(istype(A,/mob/living))
+				if (istype(A,/mob/living))
 					var/mob/living/M = A
 					M.take_overall_damage(5,0)
 					to_chat(M, "<span class='warning'>The [src]'s tidal force rips your skin!</span>")
 
-	for(var/mob/living/L in loc)//standing right in the center of the gravity well means double damage
-		if((L.stat == DEAD) && prob(5))
+	for (var/mob/living/L in loc)//standing right in the center of the gravity well means double damage
+		if ((L.stat == DEAD) && prob(5))
 			L.gib()
 		L.take_overall_damage(3,0)//less brute damage in the center, but the radiations caused by singularity_pull make up for it.
 		to_chat(L, "<span class='danger'>The [src]'s tidal force is crushing you!</span>")
@@ -140,12 +140,12 @@
 	var/size = 5
 
 /obj/effect/overlay/gravitygrid/Destroy()
-	if(GG)
+	if (GG)
 		qdel(GG)//NO RE
 	..()
 
 /obj/effect/overlay/gravitygrid/proc/LevelUp()
-	if(!GG)
+	if (!GG)
 		GG = new(loc)
 		GG.layer = layer-0.0001
 		GG.size = size+2
@@ -159,10 +159,10 @@
 		GG.LevelUp()
 
 	var/newcolor = null
-	switch(color)
-		if("#00c000")
+	switch (color)
+		if ("#00c000")
 			newcolor = "#ffa500"
-		if("#ffa500")
+		if ("#ffa500")
 			newcolor = "#ff0000"
 		else
 			newcolor = "#800080"

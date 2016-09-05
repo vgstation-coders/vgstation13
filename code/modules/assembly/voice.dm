@@ -21,24 +21,24 @@
 		VALUE_MUTED = "muted;"+VT_NUMBER)
 
 /obj/item/device/assembly/voice/Hear(var/datum/speech/speech, var/rendered_speech="")
-	if(!speech.speaker || speech.speaker == src)
+	if (!speech.speaker || speech.speaker == src)
 		return
-	if(listening && !speech.frequency)
+	if (listening && !speech.frequency)
 		recorded = speech.message
 		listening = 0
 		say("Activation message is '[html_encode(speech.message)]'.")
 	else
-		if(!recorded || findtext(speech.message, recorded))
-			if(istype(speech.speaker, /obj/item/device/assembly) || istype(speech.speaker, /obj/item/device/assembly_frame))
+		if (!recorded || findtext(speech.message, recorded))
+			if (istype(speech.speaker, /obj/item/device/assembly) || istype(speech.speaker, /obj/item/device/assembly_frame))
 				playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 25, 1)
 			else
 				pulse(0)
 
 /obj/item/device/assembly/voice/attackby(obj/item/W, mob/user)
-	if(ismultitool(W))
+	if (ismultitool(W))
 		muted = !muted
 
-		if(muted)
+		if (muted)
 			to_chat(user, "<span class='info'>You mute \the [src]'s speaker. This should keep it quiet.</span>")
 		else
 			to_chat(user, "<span class='info'>You unmute \the [src]'s speaker. It will now talk again.</span>")
@@ -46,13 +46,13 @@
 	return ..()
 
 /obj/item/device/assembly/voice/activate()
-	if(secured)
-		if(!holder)
+	if (secured)
+		if (!holder)
 			listening = !listening
 			say("[listening ? "Now" : "No longer"] recording input.")
 
 /obj/item/device/assembly/voice/attack_self(mob/user)
-	if(!user)
+	if (!user)
 		return 0
 	activate()
 	return 1
@@ -65,7 +65,7 @@
 	listening = 0
 
 /obj/item/device/assembly/voice/say()
-	if(muted)
+	if (muted)
 		return //Don't say anything if muted
 
 	. = ..()

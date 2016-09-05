@@ -17,13 +17,13 @@
 /obj/item/research_blueprint/New(var/new_loc, var/datum/design/printed_design)
 	..(new_loc)
 
-	if(!istype(printed_design))
+	if (!istype(printed_design))
 		return
 
 	stored_design = printed_design
 	build_type = stored_design.build_type
 
-	if(stored_design) //if it doesn't have a source (like a printer), a blueprint can have no design
+	if (stored_design) //if it doesn't have a source (like a printer), a blueprint can have no design
 		name = "[build_type == FLATPACKER ? "machine" : "item"] " + name + " ([printed_design.name])"
 
 	pixel_x = rand(-3, 3) * PIXEL_MULTIPLIER

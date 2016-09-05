@@ -29,18 +29,18 @@
 	var/wrenching = 0
 
 /obj/item/device/deskbell/attackby(obj/item/W, mob/user)
-	if(iswrench(W) && isturf(src.loc))
+	if (iswrench(W) && isturf(src.loc))
 		user.visible_message(
 			"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
 			"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts..."
 			)
 		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 
-		if(wrenching)
+		if (wrenching)
 			return
 		wrenching = 1
-		if(do_after(user, src, 30))
-			if(src)
+		if (do_after(user, src, 30))
+			if (src)
 				anchored = !anchored
 				user.visible_message(
 					"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
@@ -52,8 +52,8 @@
 
 		return
 
-	if(istype(W,/obj/item/weapon/screwdriver))
-		if(anchored)
+	if (istype(W,/obj/item/weapon/screwdriver))
+		if (anchored)
 			to_chat(user, "You need to unwrench \the [src] first.")
 			return
 		var/obj/item/device/deskbell_assembly/A = new /obj/item/device/deskbell_assembly(get_turf(src))
@@ -78,13 +78,13 @@
 	return
 
 /obj/item/device/deskbell/attack_hand(var/mob/user)
-	if(anchored)
+	if (anchored)
 		ring()
 	add_fingerprint(user)
 	return
 
 /obj/item/device/deskbell/proc/ring()
-	if(world.time - last_ring_time >= ring_delay)
+	if (world.time - last_ring_time >= ring_delay)
 		last_ring_time = world.time
 		flick("[icon_state]-push", src)
 		playsound(src, 'sound/machines/ding2.ogg', 50, 1)
@@ -92,12 +92,12 @@
 	return 0
 
 /obj/item/device/deskbell/MouseDrop(mob/user as mob)
-	if(user == usr && !usr.incapacitated() && (usr.contents.Find(src) || in_range(src, usr)))
-		if(istype(user, /mob/living/carbon/human) || istype(user, /mob/living/carbon/monkey))
-			if(anchored)
+	if (user == usr && !usr.incapacitated() && (usr.contents.Find(src) || in_range(src, usr)))
+		if (istype(user, /mob/living/carbon/human) || istype(user, /mob/living/carbon/monkey))
+			if (anchored)
 				to_chat(user, "You must undo the securing bolts before you can pick it up.")
 				return
-			if( !user.get_active_hand() )		//if active hand is empty
+			if ( !user.get_active_hand() )		//if active hand is empty
 				src.forceMove(user)
 				user.put_in_hands(src)
 				user.visible_message("<span class='notice'>[user] picks up the [src].</span>", "<span class='notice'>You grab [src] from the floor!</span>")
@@ -116,9 +116,9 @@
 /obj/item/device/deskbell/signaler/New()
 	..()
 	spawn(40)//giving time for the radio_controller to initialize
-		if(!radio_controller)
+		if (!radio_controller)
 			spawn(20)
-				if(!radio_controller)
+				if (!radio_controller)
 					visible_message("Cannot initialize the radio_controller, this is a bug, tell a coder")
 					return
 				else
@@ -129,18 +129,18 @@
 			radio_connection = radio_controller.add_object(src, frequency, RADIO_CHAT)
 
 /obj/item/device/deskbell/signaler/attackby(obj/item/W, mob/user)
-	if(iswrench(W))
+	if (iswrench(W))
 		user.visible_message(
 			"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
 			"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts..."
 			)
 		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 
-		if(wrenching)
+		if (wrenching)
 			return
 		wrenching = 1
-		if(do_after(user, src, 30))
-			if(src)
+		if (do_after(user, src, 30))
+			if (src)
 				anchored = !anchored
 				user.visible_message(
 					"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
@@ -151,8 +151,8 @@
 
 		return
 
-	if(istype(W,/obj/item/weapon/screwdriver))
-		if(anchored)
+	if (istype(W,/obj/item/weapon/screwdriver))
+		if (anchored)
 			to_chat(user, "You need to unwrench \the [src] first.")
 			return
 		var/obj/item/device/deskbell_assembly/A = new /obj/item/device/deskbell_assembly(get_turf(src))
@@ -169,20 +169,20 @@
 	..()
 
 /obj/item/device/deskbell/signaler/ring()
-	if(..())
-		for(var/obj/item/device/pda/ring_pda in PDAs)
-			if(!ring_pda.owner || (ring_pda == src) || ring_pda.hidden)
+	if (..())
+		for (var/obj/item/device/pda/ring_pda in PDAs)
+			if (!ring_pda.owner || (ring_pda == src) || ring_pda.hidden)
 				continue
 			var/datum/pda_app/ringer/ringerdatum = locate(/datum/pda_app/ringer) in ring_pda.applications
-			if(!ringerdatum || !(ringerdatum.status))
+			if (!ringerdatum || !(ringerdatum.status))
 				continue
-			if(frequency == ringerdatum.frequency)
+			if (frequency == ringerdatum.frequency)
 				var/turf/T = get_turf(ring_pda)
 				playsound(T, 'sound/machines/notify.ogg', 50, 1)
 				T.visible_message("[bicon(ring_pda)] *[src.name]*")
 
 
-		if(!radio_connection)
+		if (!radio_connection)
 			return	//the desk bell also works like a simple send-only signaler.
 
 		var/datum/signal/signal = getFromPool(/datum/signal)
@@ -193,9 +193,9 @@
 
 		var/time = time2text(world.realtime,"hh:mm:ss")
 		var/turf/T = get_turf(src)
-		if(usr)
+		if (usr)
 			var/mob/user = usr
-			if(user)
+			if (user)
 				lastsignalers.Add("[time] <B>:</B> [user.key] used [src] @ location ([T.x],[T.y],[T.z]) <B>:</B> [format_frequency(frequency)]/[code]")
 			else
 				lastsignalers.Add("[time] <B>:</B> (<span class='danger'>NO USER FOUND</span>) used [src] @ location ([T.x],[T.y],[T.z]) <B>:</B> [format_frequency(frequency)]/[code]")
@@ -264,11 +264,11 @@
 
 /obj/item/device/deskbell_assembly/update_icon()
 	icon_state = "deskbell_[build_step][has_signaler ? "alt" : ""]"
-	if(final_name)
+	if (final_name)
 		name = "[initial(name)] labelled as \"[final_name]\""
 
 /obj/item/device/deskbell_assembly/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/weapon/pen))
+	if (istype(W, /obj/item/weapon/pen))
 		var/t = copytext(stripped_input(user, "Enter new desk bell name", src.name, final_name),1,MAX_NAME_LEN)
 		if (!t)
 			return
@@ -276,9 +276,9 @@
 			return
 		final_name = t
 	else
-		switch(build_step)
-			if(0)
-				if(iswrench(W))
+		switch (build_step)
+			if (0)
+				if (iswrench(W))
 					to_chat(user, "<span class='notice'>You deconstruct \the [src].</span>")
 					playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 					//new /obj/item/stack/sheet/metal( get_turf(src.loc), 2)
@@ -286,7 +286,7 @@
 					M.amount = 2
 					qdel(src)
 					return
-				if(istype(W,/obj/item/stack/cable_coil))
+				if (istype(W,/obj/item/stack/cable_coil))
 					var/obj/item/stack/cable_coil/C=W
 					user.visible_message(
 						"<span class='warning'>[user.name] has added cables to \the [src]!</span>",
@@ -296,12 +296,12 @@
 					build_step++
 					update_icon()
 					return
-				if(istype(W,/obj/item/device/assembly/signaler))
+				if (istype(W,/obj/item/device/assembly/signaler))
 					to_chat(user, "<span class='warning'>You must add wires first.</span>")
 					return
-			if(1)
-				if(istype(W,/obj/item/weapon/wirecutters))
-					if(has_signaler)
+			if (1)
+				if (istype(W,/obj/item/weapon/wirecutters))
+					if (has_signaler)
 						to_chat(user, "<span class='warning'>You must remove the signaler first.</span>")
 						return
 					new /obj/item/stack/cable_coil(get_turf(src),1)
@@ -311,27 +311,27 @@
 					build_step--
 					update_icon()
 					return
-				if(istype(W,/obj/item/weapon/screwdriver))
+				if (istype(W,/obj/item/weapon/screwdriver))
 					var/obj/item/device/deskbell/D = null
-					if(has_signaler)
+					if (has_signaler)
 						D = new /obj/item/device/deskbell/signaler(get_turf(src))
 					else
 						D = new /obj/item/device/deskbell(get_turf(src))
 					D.anchored = 0
 					D.frequency = frequency
 					D.code = code
-					if(final_name)
+					if (final_name)
 						D.name = final_name
 					to_chat(user, "<span class='notice'>You finish \the [D].</span>")
 					qdel(src)
 					return
-				if(istype(W,/obj/item/device/assembly/signaler) && !has_signaler)
+				if (istype(W,/obj/item/device/assembly/signaler) && !has_signaler)
 
-					if(user.drop_item(W))
+					if (user.drop_item(W))
 
 						var/obj/item/device/assembly/signaler/S = W
 						frequency = S.frequency
-						if(S.code == NOSIGNAL_CODE)	//setting a code of "30" guarantees that you'll never be triggering any remote signaling devices.
+						if (S.code == NOSIGNAL_CODE)	//setting a code of "30" guarantees that you'll never be triggering any remote signaling devices.
 							code = 0
 						else
 							code = S.code
@@ -343,11 +343,11 @@
 						return
 
 /obj/item/device/deskbell_assembly/attack_self(mob/living/carbon/user)
-	if(has_signaler)
+	if (has_signaler)
 		to_chat(user, "<span class='notice'>You remove the signaling device.</span>")
 		var/obj/item/device/assembly/signaler/S = new /obj/item/device/assembly/signaler(get_turf(src))
 		S.frequency = frequency
-		if(code != 0)
+		if (code != 0)
 			S.code = code
 		else
 			S.code = NOSIGNAL_CODE
@@ -371,7 +371,7 @@ var/global/deskbell_freq_rnd = call(/obj/item/device/deskbell/signaler/proc/get_
 	var/i = rand(MINIMUM_FREQUENCY,MAXIMUM_FREQUENCY)
 	if ((i % 2) == 0) //Ensure the last digit is an odd number
 		i += 1
-	while(locate(i) in deskbell_default_frequencies)//To make sure that the round start desk bells don't ever share their frequencies
+	while (locate(i) in deskbell_default_frequencies)//To make sure that the round start desk bells don't ever share their frequencies
 		i = rand(MINIMUM_FREQUENCY,MAXIMUM_FREQUENCY)
 		if ((i % 2) == 0)
 			i += 1

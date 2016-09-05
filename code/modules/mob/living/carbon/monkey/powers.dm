@@ -3,5 +3,5 @@
 	set desc = "Enter an air vent and crawl through the pipe system."
 	set category = "Object"
 	var/pipe = start_ventcrawl()
-	if(pipe)
+	if (pipe)
 		handle_ventcrawl(pipe)

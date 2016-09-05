@@ -15,7 +15,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	set name = "Set transfer amount"
 	set category = "Object"
 	set src in range(0)
-	if(usr.incapacitated())
+	if (usr.incapacitated())
 		return
 	var/N = input("Amount per transfer from this:","[src]") as null|anything in possible_transfer_amounts
 	if (N)
@@ -26,17 +26,17 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	set category = "Object"
 	set src in usr
 
-	if(usr.incapacitated())
+	if (usr.incapacitated())
 		to_chat(usr, "<span class='warning'>You can't do that while incapacitated.</span>")
 		return
-	if(!is_open_container(src))
+	if (!is_open_container(src))
 		to_chat(usr, "<span class='warning'>You can't, \the [src] is closed.</span>")
 		return
-	if(src.is_empty())
+	if (src.is_empty())
 		to_chat(usr, "<span class='warning'>\The [src] is empty.</span>")
 		return
-	if(isturf(usr.loc))
-		if(reagents.total_volume > 10) //Beakersplashing only likes to do this sound when over 10 units
+	if (isturf(usr.loc))
+		if (reagents.total_volume > 10) //Beakersplashing only likes to do this sound when over 10 units
 			playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
 		usr.investigation_log(I_CHEMS, "has emptied \a [src] \ref[src] containing [reagents.get_reagent_ids(1)] onto \the [usr.loc].")
 		reagents.reaction(usr.loc)
@@ -45,13 +45,13 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 						 "<span class='notice'>You empty \the [src] onto the floor.</span>")
 
 /obj/item/weapon/reagent_containers/proc/drain_into(mob/user, var/atom/where) //We're flushing our contents down the drain!
-	if(usr.incapacitated())
+	if (usr.incapacitated())
 		to_chat(usr, "<span class='warning'>You can't do that while incapacitated.</span>")
 		return
-	if(!is_open_container(src))
+	if (!is_open_container(src))
 		to_chat(usr, "<span class='warning'>You can't, \the [src] is closed.</span>")
 		return
-	if(src.is_empty())
+	if (src.is_empty())
 		to_chat(usr, "<span class='warning'>\The [src] is empty.</span>")
 		return
 	playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
@@ -61,7 +61,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 
 /obj/item/weapon/reagent_containers/AltClick()
-	if(is_holder_of(usr, src) && possible_transfer_amounts)
+	if (is_holder_of(usr, src) && possible_transfer_amounts)
 		set_APTFT()
 		return
 	return ..()
@@ -70,9 +70,9 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	..()
 	create_reagents(volume)
 
-	if(!is_open_container(src))
+	if (!is_open_container(src))
 		src.verbs -= /obj/item/weapon/reagent_containers/verb/empty_contents
-	if(!possible_transfer_amounts)
+	if (!possible_transfer_amounts)
 		src.verbs -= /obj/item/weapon/reagent_containers/verb/set_APTFT
 
 /obj/item/weapon/reagent_containers/attack_self(mob/user as mob)
@@ -132,10 +132,10 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		var/obj/structure/reagent_dispensers/T = target
 		target_full = T.is_full()*/
 	else
-		if(ismob(target))
+		if (ismob(target))
 			return null
 		//ASSERT(istype(target.reagents))
-		if(!istype(target.reagents))
+		if (!istype(target.reagents))
 			return
 		target_full = target.reagents.is_full()
 		//warning("Called transfer_sub() with a non-compatible target type ([target.type], [target], \ref[target])")
@@ -157,26 +157,26 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
  */
 /proc/splash_sub(var/datum/reagents/reagents, var/atom/target, var/amount, var/mob/user = null)
 	if (amount == 0 || reagents.is_empty())
-		if(user)
+		if (user)
 			to_chat(user, "<span class='warning'>There's nothing to splash with!</span>")
 		return -1
 
 	reagents.reaction(target, TOUCH)
 
 	if (amount > 0)
-		if(user)
+		if (user)
 			user.investigation_log(I_CHEMS, "has splashed [amount]u of [reagents.get_reagent_ids()] from \a [reagents.my_atom] \ref[reagents.my_atom] onto \the [target].")
 		reagents.remove_any(amount)
-		if(user)
-			if(user.Adjacent(target))
+		if (user)
+			if (user.Adjacent(target))
 				user.visible_message("<span class='warning'>\The [target] has been splashed with something by [user]!</span>",
 			                     "<span class='notice'>You splash some of the solution onto \the [target].</span>")
 	else
-		if(user)
+		if (user)
 			user.investigation_log(I_CHEMS, "has splashed [reagents.get_reagent_ids(1)] from \a [reagents.my_atom] \ref[reagents.my_atom] onto \the [target].")
 		reagents.clear_reagents()
-		if(user)
-			if(user.Adjacent(target))
+		if (user)
+			if (user.Adjacent(target))
 				user.visible_message("<span class='warning'>\The [target] has been splashed with something by [user]!</span>",
 			                     "<span class='notice'>You splash the solution onto \the [target].</span>")
 
@@ -214,17 +214,17 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 		success = transfer_sub(src, target, amount_per_transfer_from_this, user, log_transfer = TRUE)
 
-		if(success)
+		if (success)
 			if (success > 0)
 				to_chat(user, "<span class='notice'>You transfer [success] units of the solution to \the [target].</span>")
 
 			return (success)
 
-	if(!success)
+	if (!success)
 		// Mob splashing
-		if(splashable_units != 0)
+		if (splashable_units != 0)
 			var/to_splash = reagents.total_volume
-			if(ismob(target))
+			if (ismob(target))
 				if (src.is_empty() || !target.reagents)
 					return -1
 
@@ -239,7 +239,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 				return (to_splash)
 			// Non-mob splashing
 			else
-				if(!src.is_empty())
+				if (!src.is_empty())
 					for (var/reagent_id in LOGGED_SPLASH_REAGENTS)
 						if (reagents.has_reagent(reagent_id))
 							add_gamelogs(user, "poured '[reagent_id]' onto \the [target]", admin = TRUE, tp_link = TRUE, span_class = "danger")
@@ -274,7 +274,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 /obj/item/weapon/reagent_containers/proc/reagentlist(var/obj/item/weapon/reagent_containers/snack) //Attack logs for regents in pills
 	var/data
-	if(snack.reagents.reagent_list && snack.reagents.reagent_list.len) //find a reagent list if there is and check if it has entries
+	if (snack.reagents.reagent_list && snack.reagents.reagent_list.len) //find a reagent list if there is and check if it has entries
 		for (var/datum/reagent/R in snack.reagents.reagent_list) //no reagents will be left behind
 			data += "[R.id]([R.volume] unit\s); " //Using IDs because SOME chemicals(I'm looking at you, chlorhydrate-beer) have the same names as other chemicals.
 		return data

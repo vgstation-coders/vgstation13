@@ -33,7 +33,7 @@
 		message_admins("Meteor storm confirmed by Space Weather Incorporated. Announcement arrives in approximately [round((meteor_announce_delay-200)/600)] minutes, further information will be given then.")
 
 	spawn(rand(waittime_l, waittime_h))
-		if(!mixed)
+		if (!mixed)
 			send_intercept()
 
 	spawn(meteor_announce_delay)
@@ -62,7 +62,7 @@
 	var/meteor_wave_size_h = 200 //Higher interval to meteor wave size
 
 /datum/universal_state/meteor_storm/OnShuttleCall(var/mob/user)
-	if(user)
+	if (user)
 		to_chat(user, "<span class='sinister'>You hear an automatic dispatch from Nanotrasen. It states that Centcomm is being shielded due to an incoming meteor storm and that regular shuttle service has been interrupted.</span>")
 	return 0
 
@@ -72,7 +72,7 @@
 
 	world << sound('sound/machines/warning.ogg') //The same chime as the Delta countdown, just twice
 
-	if(!meteor_delay)
+	if (!meteor_delay)
 		meteor_delay = rand((meteor_delay_l/600), (meteor_delay_h/600))*600 //Let's set up the meteor delay in here
 
 	sleep(20) //Two seconds for warning to play
@@ -103,11 +103,11 @@
 //This proc needs to be called every time meteors_allowed is set to 1, aka when starting the mayhem. Obviously, do not call it in repeating procs
 /datum/universal_state/meteor_storm/proc/check_meteor_storm()
 
-	if(!meteors_allowed)
+	if (!meteors_allowed)
 		return
 
 	spawn()
-		while(meteors_allowed && src == global.universe)
+		while (meteors_allowed && src == global.universe)
 			var/meteors_in_wave = rand(meteor_wave_size_l, meteor_wave_size_h)
 			meteor_wave(meteors_in_wave, 3)
 			sleep(10)
@@ -117,17 +117,17 @@
 	var/text
 	var/escapees = 0
 	var/survivors = 0
-	for(var/mob/living/player in player_list)
-		if(player.stat != DEAD)
+	for (var/mob/living/player in player_list)
+		if (player.stat != DEAD)
 			var/turf/location = get_turf(player.loc)
-			if(!location)
+			if (!location)
 				continue
-			switch(location.loc.type)
-				if(/area/shuttle/escape/centcom)
+			switch (location.loc.type)
+				if (/area/shuttle/escape/centcom)
 					text += "<br><b><font size=2>[player.real_name] escaped on the emergency shuttle</font></b>"
 					escapees++
 					survivors++
-				if(/area/shuttle/escape_pod1/centcom, /area/shuttle/escape_pod2/centcom, /area/shuttle/escape_pod3/centcom, /area/shuttle/escape_pod5/centcom)
+				if (/area/shuttle/escape_pod1/centcom, /area/shuttle/escape_pod2/centcom, /area/shuttle/escape_pod3/centcom, /area/shuttle/escape_pod5/centcom)
 					text += "<br><font size=2>[player.real_name] escaped in a life pod.</font>"
 					escapees++
 					survivors++
@@ -135,9 +135,9 @@
 					text += "<br><font size=1>[player.real_name] is stranded in outer space without any hope of rescue.</font>"
 					survivors++
 
-	if(escapees)
+	if (escapees)
 		to_chat(world, "<span class='info'><B>The following escaped from the meteor storm</B>:[text]</span>")
-	else if(survivors)
+	else if (survivors)
 		to_chat(world, "<span class='info'><B>No-one escaped the meteor storm. The following are still alive for now</B>:[text]</span>")
 	else
 		to_chat(world, "<span class='info'><B>The meteor storm crashed this station with no survivors!</B></span>")

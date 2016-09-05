@@ -11,7 +11,7 @@
 	command_alert(/datum/command_alert/power_disabled)
 
 /datum/event/grid_check/end()
-	if(universe.name != "Normal")
+	if (universe.name != "Normal")
 		message_admins("Universe isn't normal, aborting power_restore().")//we don't want the power to come back up during Nar-Sie or a Supermatter Cascade, do we?
 		return
 	power_restore()

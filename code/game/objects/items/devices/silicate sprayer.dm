@@ -30,7 +30,7 @@
 	. = ..()
 	create_reagents(max_silicate)
 
-	if(start_filled)
+	if (start_filled)
 		reagents.add_reagent(SILICATE, max_silicate)
 
 	update_icon()
@@ -52,13 +52,13 @@
 
 	var/amount = get_amount()
 
-	if(!amount)
+	if (!amount)
 		return
 
 	var/i = 0
 
 	// Floor if above 50%, else we Ceil.
-	if(amount >= max_silicate / 2)
+	if (amount >= max_silicate / 2)
 		i = Floor(amount / silicate_per_state, 1)
 
 	else
@@ -70,20 +70,20 @@
 	update_icon()
 
 /obj/item/device/silicate_sprayer/preattack(var/atom/A, var/mob/user)
-	if(get_dist(A, user) > 1) // I purposely don't use proximity_flag so you can get to windows without needing adjacency. (window behind another window for example.)
+	if (get_dist(A, user) > 1) // I purposely don't use proximity_flag so you can get to windows without needing adjacency. (window behind another window for example.)
 		return
 
-	if(!iswindow(A)) // We can only fix windows.
+	if (!iswindow(A)) // We can only fix windows.
 		return
 
-	if(!get_amount())
+	if (!get_amount())
 		to_chat(user, "<span class='notice'>\The [src] is out of silicate!</span>")
 		return 1
 
 	var/obj/structure/window/W = A
 
 	var/diff = initial(W.health) - W.health
-	if(!diff) // Not damaged.
+	if (!diff) // Not damaged.
 		to_chat(user, "<span class='notice'>\The [W] is already in perfect condition!</span>")
 		return 1
 
@@ -125,7 +125,7 @@
 
 /obj/item/device/silicate_sprayer/advanced/update_icon()
 	. = ..()
-	if(mode == MODE_REINFORCE)
+	if (mode == MODE_REINFORCE)
 		overlays += image(icon = icon, icon_state = "silicate sprayer reinforce")
 
 /obj/item/device/silicate_sprayer/advanced/examine(var/mob/user)
@@ -133,25 +133,25 @@
 	to_chat(user, "<span class='notice'>It is set to [mode == MODE_REINFORCE ? "reinforce" : "repair"] windows.</span>")
 
 /obj/item/device/silicate_sprayer/advanced/preattack(var/atom/A, var/mob/user)
-	if(get_dist(A, user) > 1) // I purposely don't use proximity_flag so you can get to windows without needing adjacency. (window behind another window for example.)
+	if (get_dist(A, user) > 1) // I purposely don't use proximity_flag so you can get to windows without needing adjacency. (window behind another window for example.)
 		return
 
-	if(!iswindow(A))
+	if (!iswindow(A))
 		return
 
-	if(!get_amount())
+	if (!get_amount())
 		to_chat(user, "<span class='notice'>\The [src] is out of silicate!</span>")
 		return 1
 
 	var/obj/structure/window/W = A
 	var/initial_health = initial(W.health)
 
-	if(mode == MODE_REPAIR || W.health < initial_health) // Call the parent to repair, always repair if it's damaged.
+	if (mode == MODE_REPAIR || W.health < initial_health) // Call the parent to repair, always repair if it's damaged.
 		return ..()
 
 	var/extra_health = W.health - initial_health
 
-	if(W.health >= initial_health * MAX_WINDOW_HEALTH_MULTIPLIER)
+	if (W.health >= initial_health * MAX_WINDOW_HEALTH_MULTIPLIER)
 		to_chat(user, "<span class='notice'>You can't reinforce \the [W] any further!</span>")
 		return 1
 

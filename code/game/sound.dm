@@ -38,15 +38,15 @@ var/list/soulstone_sound = list('sound/hallucinations/far_noise.ogg', 'sound/hal
 	- If the proc has NO extrarange, the fraction of the 7 range is used, so a sound only trasmits to those in the screen at regular pressure
 	- This means that at low or 0 pressure, sound doesn't trasmit from the tile at all! How cool is that?
 */
-	if(!extrarange)
+	if (!extrarange)
 		extrarange = 0
-	if(!vol) //don't do that
+	if (!vol) //don't do that
 		return
 
-	if(gas_modified && turf_source && !turf_source.c_airblock(turf_source)) //if the sound is modified by air, and we are on an airflowing tile
+	if (gas_modified && turf_source && !turf_source.c_airblock(turf_source)) //if the sound is modified by air, and we are on an airflowing tile
 		var/atmosphere = 0
 		var/datum/gas_mixture/current_air = turf_source.return_air()
-		if(current_air)
+		if (current_air)
 			atmosphere = current_air.return_pressure()
 		else
 			atmosphere = 0 //no air
@@ -63,16 +63,16 @@ var/list/soulstone_sound = list('sound/hallucinations/far_noise.ogg', 'sound/hal
 
 	// Looping through the player list has the added bonus of working for mobs inside containers
 	for (var/mob/player in player_list)
-		if(!player || !player.client)
+		if (!player || !player.client)
 			continue
 
-		if(player.is_deaf() && !(channel == CHANNEL_ADMINMUSIC || channel == CHANNEL_AMBIENCE)) //check their hearing for obvious reasons
+		if (player.is_deaf() && !(channel == CHANNEL_ADMINMUSIC || channel == CHANNEL_AMBIENCE)) //check their hearing for obvious reasons
 			continue
 
 		var/turf/player_turf = get_turf(player)
 
 		if (player_turf && turf_source && player_turf.z == turf_source.z)
-			if(get_dist(player_turf, turf_source) <= Dist)
+			if (get_dist(player_turf, turf_source) <= Dist)
 				player.playsound_local(turf_source, soundin, vol, vary, frequency, falloff, gas_modified, channel)
 
 var/const/FALLOFF_SOUNDS = 1
@@ -80,24 +80,24 @@ var/const/SURROUND_CAP = 7
 
 #define MIN_SOUND_PRESSURE	2 //2 kPa of pressure required to at least hear sound
 /mob/proc/playsound_local(var/turf/turf_source, soundin, vol as num, vary, frequency, falloff, gas_modified, var/channel = 0)
-	if(!src.client)
+	if (!src.client)
 		return
 
-	if(ear_deaf > 0)
+	if (ear_deaf > 0)
 		vol = vol / (1 + ear_deaf)
 
-	if(gas_modified)
+	if (gas_modified)
 		var/turf/current_turf = get_turf(src)
-		if(!current_turf)
+		if (!current_turf)
 			return
 
 		var/datum/gas_mixture/environment = current_turf.return_air()
 		var/atmosphere = 0
-		if(environment)
+		if (environment)
 			atmosphere = environment.return_pressure()
 
 		/// Local sound modifications ///
-		if(atmosphere < MIN_SOUND_PRESSURE) //no sound reception in space, boyos
+		if (atmosphere < MIN_SOUND_PRESSURE) //no sound reception in space, boyos
 			vol = 0
 		else
 			vol = min( vol * atmosphere / ONE_ATMOSPHERE, vol) //sound can't be amplified from low to high pressure, but can be reduced
@@ -108,12 +108,12 @@ var/const/SURROUND_CAP = 7
 	var/sound/S = sound(soundin, 0, 0, channel, vol)
 
 	if (vary)
-		if(frequency)
+		if (frequency)
 			S.frequency = frequency
 		else
 			S.frequency = get_rand_frequency()
 
-	if(isturf(turf_source))
+	if (isturf(turf_source))
 		// 3D sounds, the technology is here!
 		var/turf/T = get_turf(src)
 
@@ -131,10 +131,10 @@ var/const/SURROUND_CAP = 7
 	src << S
 
 /client/proc/playtitlemusic()
-	if(!ticker || !ticker.login_music)
+	if (!ticker || !ticker.login_music)
 		return
-	if(prefs.toggles & SOUND_LOBBY)
-		if(istype(src))
+	if (prefs.toggles & SOUND_LOBBY)
+		if (istype(src))
 			src << sound(ticker.login_music, repeat = 0, wait = 0, volume = 85, channel = 1) // MAD JAMS
 
 
@@ -142,8 +142,8 @@ var/const/SURROUND_CAP = 7
 	return rand(32000, 55000) //Frequency stuff only works with 45kbps oggs.
 
 /proc/get_sfx(soundin)
-	if(istext(soundin))
-		switch(soundin)
+	if (istext(soundin))
+		switch (soundin)
 			if ("shatter")
 				soundin = pick(shatter_sound)
 			if ("explosion")

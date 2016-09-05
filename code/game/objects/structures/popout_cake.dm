@@ -43,7 +43,7 @@
 	var/string_pulled = 0
 
 /obj/structure/popout_cake/Destroy()
-	for(var/mob/living/L in locked_atoms + contents) //Release all mobs inside
+	for (var/mob/living/L in locked_atoms + contents) //Release all mobs inside
 		relaymove(L, NORTH)
 
 	..()
@@ -54,16 +54,16 @@
 	user.show_message("<span class='info'>There are [slices_amount] slices remaining.</span>", MESSAGE_SEE)
 
 /obj/structure/popout_cake/attack_hand(mob/living/user)
-	if(user.loc == src) //Clicked from inside the cake
+	if (user.loc == src) //Clicked from inside the cake
 		pull_string()
 		return
-	else if(locate(/mob/living) in contents)
+	else if (locate(/mob/living) in contents)
 		to_chat(user, "<span class='info'>There appears to be something inside of \the [src]!</span>")
 		return
 
 	user.visible_message("<span class='notice'>[user] starts climbing into \the [src]!</span>")
-	if(do_after(user, src, 60))
-		if(locate(/mob/living) in contents)
+	if (do_after(user, src, 60))
+		if (locate(/mob/living) in contents)
 			to_chat(user, "<span class='info'>There appears to be something inside of \the [src]!</span>")
 			return
 		user.forceMove(src)
@@ -76,11 +76,11 @@
 	return attack_hand(user)
 
 /obj/structure/popout_cake/attackby(obj/item/W, mob/user)
-	if(W.is_sharp())
+	if (W.is_sharp())
 		user.visible_message("<span class='notice'>[user] starts cutting a slice from \the [src].</span>")
 
 		spawn() //So that the proc can return 1, delaying the next attack
-			if(do_after(user, src, 10))
+			if (do_after(user, src, 10))
 				drop_slice()
 				check_slices()
 
@@ -92,7 +92,7 @@
 	return new /obj/item/weapon/reagent_containers/food/snacks/plaincakeslice/full(get_turf(src))
 
 /obj/structure/popout_cake/proc/check_slices()
-	if(slices_amount <= 0)
+	if (slices_amount <= 0)
 		new /obj/item/weapon/storage/box/large(get_turf(src))
 
 		qdel(src)
@@ -103,17 +103,17 @@
 	set category = "Object"
 	set src = usr.loc
 
-	if(!isturf(loc))
+	if (!isturf(loc))
 		return
 
 	var/mob/living/L = usr
-	if(!istype(L))
+	if (!istype(L))
 		return
 
-	if(L.incapacitated())
+	if (L.incapacitated())
 		return
 
-	if(string_pulled)
+	if (string_pulled)
 		to_chat(L, "<span class='info'>The string has already been pulled!</span>")
 		return
 
@@ -135,12 +135,12 @@
 	string_pulled = 1
 
 /obj/structure/popout_cake/relaymove(mob/living/L, direction)
-	if(!istype(L))
+	if (!istype(L))
 		return
 
-	if(locked_atoms.Find(L))
+	if (locked_atoms.Find(L))
 		unlock_atom(L)
-	else if(contents.Find(L))
+	else if (contents.Find(L))
 		L.forceMove(get_turf(src))
 
 /obj/structure/popout_cake/kick_act(mob/user)

@@ -33,10 +33,10 @@
 //Defines the region the map represents, sets map
 //Returns the map
 /datum/mapGenerator/proc/defineRegion(var/turf/Start, var/turf/End, var/replace = 0)
-	if(!checkRegion(Start, End))
+	if (!checkRegion(Start, End))
 		return 0
 
-	if(replace)
+	if (replace)
 		undefineRegion()
 
 	map |= block(Start,End)
@@ -46,7 +46,7 @@
 //Defines the region the map represents, as a CIRCLE!, sets map
 //Returns the map
 /datum/mapGenerator/proc/defineCircularRegion(var/turf/Start, var/turf/End, var/replace = 0)
-	if(!checkRegion(Start, End))
+	if (!checkRegion(Start, End))
 		return 0
 
 	var/centerX = max(abs((End.x+Start.x)/2),1)
@@ -59,17 +59,17 @@
 
 	var/radius = abs(max(centerX,centerY)) //take the biggest displacement as the radius
 
-	if(replace)
+	if (replace)
 		undefineRegion()
 
 	//Even sphere correction engage
 	var/offByOneOffset = 1
-	if(bigZ % 2 == 0)
+	if (bigZ % 2 == 0)
 		offByOneOffset = 0
 
-	for(var/i = lilZ, i <= bigZ+offByOneOffset, i++)
+	for (var/i = lilZ, i <= bigZ+offByOneOffset, i++)
 		var/theRadius = radius
-		if(i != sphereMagic)
+		if (i != sphereMagic)
 			theRadius = max(radius/max((2*abs(sphereMagic-i)),1),1)
 
 
@@ -89,14 +89,14 @@
 /datum/mapGenerator/proc/checkRegion(var/turf/Start, var/turf/End)
 	. = 1
 
-	if(!Start || !End)
+	if (!Start || !End)
 		return 0 //Just bail
 
-	if(Start.x > world.maxx || End.x > world.maxx)
+	if (Start.x > world.maxx || End.x > world.maxx)
 		. = 0
-	if(Start.y > world.maxy || End.y > world.maxy)
+	if (Start.y > world.maxy || End.y > world.maxy)
 		. = 0
-	if(Start.z > world.maxz || End.z > world.maxz)
+	if (Start.z > world.maxz || End.z > world.maxz)
 		. = 0
 
 
@@ -105,29 +105,29 @@
 	set background = 1 //this can get beefy
 
 	syncModules()
-	if(!modules || !modules.len)
+	if (!modules || !modules.len)
 		return
-	for(var/datum/mapGeneratorModule/mod in modules)
+	for (var/datum/mapGeneratorModule/mod in modules)
 		spawn(0)
 			mod.generate()
 
 
 //Requests the mapGeneratorModule(s) to (re)generate this one turf
 /datum/mapGenerator/proc/generateOneTurf(var/turf/T)
-	if(!T)
+	if (!T)
 		return
 	syncModules()
-	if(!modules || !modules.len)
+	if (!modules || !modules.len)
 		return
-	for(var/datum/mapGeneratorModule/mod in modules)
+	for (var/datum/mapGeneratorModule/mod in modules)
 		spawn(0)
 			mod.place(T)
 
 
 //Replaces all paths in the module list with actual module datums
 /datum/mapGenerator/proc/initialiseModules()
-	for(var/path in modules)
-		if(ispath(path))
+	for (var/path in modules)
+		if (ispath(path))
 			modules.Remove(path)
 			modules |= new path
 	syncModules()
@@ -135,7 +135,7 @@
 
 //Sync mapGeneratorModule(s) to mapGenerator
 /datum/mapGenerator/proc/syncModules()
-	for(var/datum/mapGeneratorModule/mod in modules)
+	for (var/datum/mapGeneratorModule/mod in modules)
 		mod.sync(src)
 
 
@@ -152,13 +152,13 @@
 	var/startInput = input(usr,"Start turf of Map, (X;Y;Z)", "Map Gen Settings", "1;1;1") as text
 	var/endInput = input(usr,"End turf of Map (X;Y;Z)", "Map Gen Settings", "[world.maxx];[world.maxy];[mob ? mob.z : 1]") as text
 	//maxx maxy and current z so that if you fuck up, you only fuck up one entire z level instead of the entire universe
-	if(!startInput || !endInput)
+	if (!startInput || !endInput)
 		to_chat(src, "Missing Input")
 		return
 
 	var/list/startCoords = splittext(startInput, ";")
 	var/list/endCoords = splittext(endInput, ";")
-	if(!startCoords || !endCoords)
+	if (!startCoords || !endCoords)
 		to_chat(src, "Invalid Coords")
 		to_chat(src, "Start Input: [startInput]")
 		to_chat(src, "End Input: [endInput]")
@@ -166,7 +166,7 @@
 
 	var/turf/Start = locate(text2num(startCoords[1]),text2num(startCoords[2]),text2num(startCoords[3]))
 	var/turf/End = locate(text2num(endCoords[1]),text2num(endCoords[2]),text2num(endCoords[3]))
-	if(!Start || !End)
+	if (!Start || !End)
 		to_chat(src, "Invalid Turfs")
 		to_chat(src, "Start Coords: [startCoords[1]] - [startCoords[2]] - [startCoords[3]]")
 		to_chat(src, "End Coords: [endCoords[1]] - [endCoords[2]] - [endCoords[3]]")
@@ -180,16 +180,16 @@
 	//null for default
 
 	var/theCluster = 0
-	if(moduleClusters != "None")
-		if(!clusters[moduleClusters])
+	if (moduleClusters != "None")
+		if (!clusters[moduleClusters])
 			to_chat(src, "Invalid Cluster Flags")
 			return
 		theCluster = clusters[moduleClusters]
 	else
 		theCluster =  CLUSTER_CHECK_NONE
 
-	if(theCluster)
-		for(var/datum/mapGeneratorModule/M in N.modules)
+	if (theCluster)
+		for (var/datum/mapGeneratorModule/M in N.modules)
 			M.clusterCheckFlags = theCluster
 
 

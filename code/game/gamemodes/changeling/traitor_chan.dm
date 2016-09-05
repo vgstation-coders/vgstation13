@@ -14,33 +14,33 @@
 
 
 /datum/game_mode/traitor/changeling/pre_setup()
-	if(istype(ticker.mode, /datum/game_mode/mixed))
+	if (istype(ticker.mode, /datum/game_mode/mixed))
 		mixed = 1
-	if(config.protect_roles_from_antagonist)
+	if (config.protect_roles_from_antagonist)
 		restricted_jobs += protected_jobs
 
 	var/list/datum/mind/possible_changelings = get_players_for_role(ROLE_CHANGELING)
 
-	for(var/datum/mind/player in possible_changelings)
-		if(mixed && (player in ticker.mode.modePlayer))
+	for (var/datum/mind/player in possible_changelings)
+		if (mixed && (player in ticker.mode.modePlayer))
 			possible_changelings -= player
 			continue
-		for(var/job in restricted_jobs)//Removing robots from the list
-			if(player.assigned_role == job)
+		for (var/job in restricted_jobs)//Removing robots from the list
+			if (player.assigned_role == job)
 				possible_changelings -= player
 
-	if(possible_changelings.len>0)
+	if (possible_changelings.len>0)
 		var/datum/mind/changeling = pick(possible_changelings)
 		possible_changelings -= changeling
 		changeling.special_role = "Changeling"
 		changelings += changeling
 		modePlayer += changelings
-		if(mixed)
+		if (mixed)
 			ticker.mode.modePlayer += changelings
 			ticker.mode.changelings += changelings
 		. = ..()
-		if(!. && mixed)
-			for(var/datum/mind/P in modePlayer)
+		if (!. && mixed)
+			for (var/datum/mind/P in modePlayer)
 				ticker.mode.modePlayer -= P
 				ticker.mode.changelings -= P
 		return .
@@ -48,7 +48,7 @@
 		return 0
 
 /datum/game_mode/traitor/changeling/post_setup()
-	for(var/datum/mind/changeling in changelings)
+	for (var/datum/mind/changeling in changelings)
 		grant_changeling_powers(changeling.current)
 		forge_changeling_objectives(changeling)
 		greet_changeling(changeling)

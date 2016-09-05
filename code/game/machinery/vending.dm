@@ -115,7 +115,7 @@ var/global/num_vending_terminals = 1
 
 	coinbox = new(src)
 
-	if(ticker)
+	if (ticker)
 		initialize()
 
 	return
@@ -129,17 +129,17 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/RefreshParts()
 	var/manipcount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
+	for (var/obj/item/weapon/stock_parts/SP in component_parts)
+		if (istype(SP, /obj/item/weapon/stock_parts/manipulator))
 			manipcount += SP.rating
 	shoot_chance = manipcount * 3
 
 /obj/machinery/vending/Destroy()
-	if(wires)
+	if (wires)
 		qdel(wires)
 		wires = null
 
-	if(product_records.len&&cardboard) //Only spit out if we have slotted cardboard
+	if (product_records.len&&cardboard) //Only spit out if we have slotted cardboard
 		var/obj/structure/vendomatpack/partial/newpack = new(src.loc)
 		newpack.stock = products
 		newpack.secretstock = contraband
@@ -149,31 +149,31 @@ var/global/num_vending_terminals = 1
 		newpack.hidden_records = hidden_records
 		newpack.coin_records = coin_records
 
-	if(coinbox)
+	if (coinbox)
 		coinbox.forceMove(get_turf(src))
 	..()
 
 /obj/machinery/vending/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && mover.checkpass(PASSMACHINE))
+	if (istype(mover) && mover.checkpass(PASSMACHINE))
 		return 1
 	return ..()
 
 /obj/machinery/vending/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
 
-	if(istype(O,/obj/structure/vendomatpack))
+	if (istype(O,/obj/structure/vendomatpack))
 		var/obj/structure/vendomatpack/P = O
-		if(!anchored)
+		if (!anchored)
 			to_chat(user, "<span class='warning'>You need to anchor the vending machine before you can refill it.</span>")
 			return
-		if(!pack)
+		if (!pack)
 			to_chat(user, "<span class='notice'>You start filling the vending machine with the recharge pack's materials.</span>")
 			var/user_loc = user.loc
 			var/pack_loc = P.loc
 			var/self_loc = src.loc
 			sleep(30)
-			if(!user || !P || !src)
+			if (!user || !P || !src)
 				return
 			if (user.loc == user_loc && P.loc == pack_loc && anchored && self_loc == src.loc && !(user.incapacitated()))
 				var/obj/machinery/vending/newmachine = new P.targetvendomat(loc)
@@ -183,7 +183,7 @@ var/global/num_vending_terminals = 1
 				var/obj/item/emptyvendomatpack/emptypack = new /obj/item/emptyvendomatpack(P.loc)
 				emptypack.icon_state = P.icon_state
 				emptypack.overlays += image('icons/obj/vending_pack.dmi',"emptypack")
-				if(P.stock.len)
+				if (P.stock.len)
 					newmachine.products = P.stock
 					newmachine.contraband = P.secretstock
 					newmachine.premium = P.preciousstock
@@ -191,19 +191,19 @@ var/global/num_vending_terminals = 1
 					newmachine.hidden_records = P.hidden_records
 					newmachine.coin_records = P.coin_records
 				qdel(P)
-				if(user.machine==src)
+				if (user.machine==src)
 					newmachine.attack_hand(user)
 				component_parts = 0
 				qdel(coinbox)
 				qdel(src)
 		else
-			if(istype(P,pack))
+			if (istype(P,pack))
 				to_chat(user, "<span class='notice'>You start refilling the vending machine with the recharge pack's materials.</span>")
 				var/user_loc = user.loc
 				var/pack_loc = P.loc
 				var/self_loc = src.loc
 				sleep(30)
-				if(!user || !P || !src)
+				if (!user || !P || !src)
 					return
 				if (user.loc == user_loc && P.loc == pack_loc && anchored && self_loc == src.loc && !(user.incapacitated()))
 					to_chat(user, "<span class='notice'>[bicon(src)] You finish refilling the vending machine.</span>")
@@ -216,46 +216,46 @@ var/global/num_vending_terminals = 1
 					emptypack.icon_state = P.icon_state
 					emptypack.overlays += image('icons/obj/vending_pack.dmi',"emptypack")
 					qdel(P)
-					if(user.machine==src)
+					if (user.machine==src)
 						src.attack_hand(user)
 			else
 				to_chat(user, "<span class='warning'>This recharge pack isn't meant for this kind of vending machines.</span>")
 
 /obj/machinery/vending/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			qdel(src)
 			return
-		if(2.0)
+		if (2.0)
 			if (prob(50))
 				qdel(src)
 				return
-		if(3.0)
-			if(prob(25))
+		if (3.0)
+			if (prob(25))
 				malfunction()
 
 
 /obj/machinery/vending/blob_act()
-	if(prob(75))
+	if (prob(75))
 		malfunction()
 	else
 		qdel(src)
 
 /obj/machinery/vending/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			malfunction()
-		if(2.0)
-			if(prob(50))
+		if (2.0)
+			if (prob(50))
 				malfunction()
-		if(3.0)
-			if(prob(25))
+		if (3.0)
+			if (prob(25))
 				malfunction()
 
 /obj/machinery/vending/proc/build_inventory(var/list/productlist,hidden=0,req_coin=0)
-	for(var/typepath in productlist)
+	for (var/typepath in productlist)
 		var/amount = productlist[typepath]
 		var/price = prices[typepath]
 
@@ -288,56 +288,56 @@ var/global/num_vending_terminals = 1
 	datum_products |= hidden_records
 	datum_products |= coin_records
 	datum_products |= product_records
-	for(var/datum/data/vending_product/product in datum_products)
-		if(product.product_path == this_type)
+	for (var/datum/data/vending_product/product in datum_products)
+		if (product.product_path == this_type)
 			return product
 	return null
 
 //		to_chat(world, "Added: [R.product_name]] - [R.amount] - [R.product_path]")
 
 /obj/machinery/vending/emag(mob/user)
-	if(!emagged)
+	if (!emagged)
 		emagged = 1
 		to_chat(user, "You short out the product lock on \the [src]")
 		return 1
 	return -1
 
 /obj/machinery/vending/proc/can_accept_voucher(var/obj/item/voucher/voucher, mob/user)
-	if(istype(voucher, /obj/item/voucher/free_item))
+	if (istype(voucher, /obj/item/voucher/free_item))
 		var/obj/item/voucher/free_item/free_vouch = voucher
-		for(var/vend_item in free_vouch.freebies)
+		for (var/vend_item in free_vouch.freebies)
 			var/datum/data/vending_product/product = get_item_by_type(vend_item)
-			if(product && product.amount)
+			if (product && product.amount)
 				return 1
 	return 0
 
 //this should ideally be called last as a parent method, since it can delete the voucher
 /obj/machinery/vending/proc/voucher_act(var/obj/item/voucher/voucher, mob/user)
-	if(istype(voucher, /obj/item/voucher/free_item))
+	if (istype(voucher, /obj/item/voucher/free_item))
 		var/obj/item/voucher/free_item/free_vouch = voucher
-		for(var/i = 1; i <= free_vouch.vend_amount; i++)
-			if(!free_vouch.freebies || !free_vouch.freebies.len)
+		for (var/i = 1; i <= free_vouch.vend_amount; i++)
+			if (!free_vouch.freebies || !free_vouch.freebies.len)
 				break
 			var/to_vend = pick(free_vouch.freebies)
-			if(free_vouch.single_items)
+			if (free_vouch.single_items)
 				free_vouch.freebies.Remove(to_vend)
 			var/datum/data/vending_product/product = get_item_by_type(to_vend)
-			if(product && product.amount)
+			if (product && product.amount)
 				src.vend(product, user, by_voucher = 1)
 
-	if(voucher.shred_on_use)
+	if (voucher.shred_on_use)
 		qdel(voucher)
 	else
-		if(!vouchers)
+		if (!vouchers)
 			vouchers = list()
 		vouchers.Add(voucher)
-		if(coinbox)
+		if (coinbox)
 			voucher.forceMove(coinbox)
 	return 1
 
 /obj/machinery/vending/attackby(obj/item/W, mob/user)
-	if(stat & (BROKEN))
-		if(istype(W, /obj/item/stack/sheet/glass/rglass))
+	if (stat & (BROKEN))
+		if (istype(W, /obj/item/stack/sheet/glass/rglass))
 			var/obj/item/stack/sheet/glass/rglass/G = W
 			to_chat(user, "<span class='notice'>You replace the broken glass.</span>")
 			G.use(1)
@@ -349,65 +349,65 @@ var/global/num_vending_terminals = 1
 			to_chat(user, "<span class='notice'>[src] is broken! Fix it first.</span>")
 			return
 	. = ..()
-	if(.)
+	if (.)
 		return .
-	if(!cardboard && istype(W, /obj/item/stack/sheet/cardboard))
+	if (!cardboard && istype(W, /obj/item/stack/sheet/cardboard))
 		var/obj/item/stack/sheet/cardboard/C = W
-		if(C.amount>=4)
+		if (C.amount>=4)
 			C.use(4)
 			to_chat(user, "<span class='notice'>You slot some cardboard into \the [src].</span>")
 			cardboard = 1
 			src.updateUsrDialog()
-	if(iswiretool(W))
-		if(panel_open)
+	if (iswiretool(W))
+		if (panel_open)
 			attack_hand(user)
 		return
-	else if(premium.len > 0 && is_type_in_list(W, list(/obj/item/weapon/coin/, /obj/item/weapon/reagent_containers/food/snacks/chococoin)))
+	else if (premium.len > 0 && is_type_in_list(W, list(/obj/item/weapon/coin/, /obj/item/weapon/reagent_containers/food/snacks/chococoin)))
 		if (isnull(coin))
-			if(user.drop_item(W, src))
+			if (user.drop_item(W, src))
 				coin = W
 				to_chat(user, "<span class='notice'>You insert a coin into [src].</span>")
 				src.updateUsrDialog()
 		else
 			to_chat(user, "<SPAN CLASS='notice'>There's already a coin in [src].</SPAN>")
 		return
-	else if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin))
+	else if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin))
 		to_chat(user, "<span class='rose'>That coin is smudgy and oddly soft, you don't think that would work.</span>")
 		return
-	else if(istype(W, /obj/item/voucher))
-		if(can_accept_voucher(W, user))
-			if(user.drop_item(W, src))
+	else if (istype(W, /obj/item/voucher))
+		if (can_accept_voucher(W, user))
+			if (user.drop_item(W, src))
 				to_chat(user, "<span class='notice'>You insert [W] into [src].</span>")
 				return voucher_act(W, user)
 				src.updateUsrDialog()
 		else
 			to_chat(user, "<span class='notice'>\The [src] refuses to take [W].</span>")
 			return 1
-	else if(istype(W, /obj/item/weapon/storage/bag))
+	else if (istype(W, /obj/item/weapon/storage/bag))
 		var/obj/item/weapon/storage/bag/bag = W
 		var/objects_loaded = 0
-		for(var/obj/G in bag.contents)
-			if(is_type_in_list(G, allowed_inputs))
+		for (var/obj/G in bag.contents)
+			if (is_type_in_list(G, allowed_inputs))
 				bag.remove_from_storage(G,src)
 				add_item(G)
 				objects_loaded++
-		if(objects_loaded)
+		if (objects_loaded)
 			user.visible_message("<span class='notice'>[user] loads \the [src] with \the [bag].</span>", \
 								 "<span class='notice'>You load \the [src] with \the [bag].</span>")
-			if(bag.contents.len > 0)
+			if (bag.contents.len > 0)
 				to_chat(user, "<span class='notice'>Some items are refused.</span>")
 			src.updateUsrDialog()
 	else
-		if(is_type_in_list(W, allowed_inputs))
-			if(user.drop_item(W, src))
+		if (is_type_in_list(W, allowed_inputs))
+			if (user.drop_item(W, src))
 				add_item(W)
 				src.updateUsrDialog()
-	/*else if(istype(W, /obj/item/weapon/card) && currently_vending)
+	/*else if (istype(W, /obj/item/weapon/card) && currently_vending)
 		//attempt to connect to a new db, and if that doesn't work then fail
-		if(!linked_db)
+		if (!linked_db)
 			reconnect_database()
-		if(linked_db)
-			if(linked_account)
+		if (linked_db)
+			if (linked_account)
 				var/obj/item/weapon/card/I = W
 				scan_card(I)
 			else
@@ -418,36 +418,36 @@ var/global/num_vending_terminals = 1
 //H.wear_id
 
 /obj/machinery/vending/scan_card(var/obj/item/weapon/card/I)
-	if(!currently_vending)
+	if (!currently_vending)
 		return
 	if (istype(I, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/C = I
 		visible_message("<span class='info'>[usr] swipes a card through [src].</span>")
-		if(linked_account)
+		if (linked_account)
 			//we start by checking the ID card's virtual wallet
 			var/datum/money_account/D = C.virtual_wallet
 			var/using_account = "Virtual Wallet"
 
 			//if there isn't one for some reason we create it, that should never happen but oh well.
-			if(!D)
+			if (!D)
 				C.update_virtual_wallet()
 				D = C.virtual_wallet
 
 			var/transaction_amount = currently_vending.price
 
 			//if there isn't enough money in the virtual wallet, then we check the bank account connected to the ID
-			if(D.money < transaction_amount)
+			if (D.money < transaction_amount)
 				D = linked_db.attempt_account_access(C.associated_account_number, 0, 2, 0)
 				using_account = "Bank Account"
-				if(!D)								//first we check if there IS a bank account in the first place
+				if (!D)								//first we check if there IS a bank account in the first place
 					to_chat(usr, "[bicon(src)]<span class='warning'>You don't have that much money on your virtual wallet!</span>")
 					to_chat(usr, "[bicon(src)]<span class='warning'>Unable to access your bank account.</span>")
 					return 0
-				else if(D.security_level > 0)		//next we check if the security is low enough to pay directly from it
+				else if (D.security_level > 0)		//next we check if the security is low enough to pay directly from it
 					to_chat(usr, "[bicon(src)]<span class='warning'>You don't have that much money on your virtual wallet!</span>")
 					to_chat(usr, "[bicon(src)]<span class='warning'>Lower your bank account's security settings if you wish to pay directly from it.</span>")
 					return 0
-				else if(D.money < transaction_amount)//and lastly we check if there's enough money on it, duh
+				else if (D.money < transaction_amount)//and lastly we check if there's enough money on it, duh
 					to_chat(usr, "[bicon(src)]<span class='warning'>You don't have that much money on your bank account!</span>")
 					return 0
 
@@ -493,7 +493,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/proc/GetProductLine(var/datum/data/vending_product/P)
 	var/dat = {"<FONT color = '[P.display_color]'><B>[P.product_name]</B>:
 		<b>[P.amount]</b> </font>"}
-	if(P.price)
+	if (P.price)
 		dat += " <b>($[P.price])</b>"
 	if (P.amount > 0)
 		var/idx=GetProductIndex(P)
@@ -506,31 +506,31 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/proc/GetProductIndex(var/datum/data/vending_product/P)
 	var/list/plist
-	switch(P.category)
-		if(CAT_NORMAL)
+	switch (P.category)
+		if (CAT_NORMAL)
 			plist=product_records
-		if(CAT_HIDDEN)
+		if (CAT_HIDDEN)
 			plist=hidden_records
-		if(CAT_COIN)
+		if (CAT_COIN)
 			plist=coin_records
 		else
 			warning("UNKNOWN CATEGORY [P.category] IN TYPE [P.product_path] INSIDE [type]!")
 	return plist.Find(P)
 
 /obj/machinery/vending/proc/GetProductByID(var/pid, var/category)
-	switch(category)
-		if(CAT_NORMAL)
+	switch (category)
+		if (CAT_NORMAL)
 			return product_records[pid]
-		if(CAT_HIDDEN)
+		if (CAT_HIDDEN)
 			return hidden_records[pid]
-		if(CAT_COIN)
+		if (CAT_COIN)
 			return coin_records[pid]
 		else
 			warning("UNKNOWN PRODUCT: PID: [pid], CAT: [category] INSIDE [type]!")
 			return null
 
 /obj/machinery/vending/proc/TurnOff(var/ticks) //Turn off for a while. 10 ticks = 1 second
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
 
 	stat |= NOPOWER
@@ -539,12 +539,12 @@ var/global/num_vending_terminals = 1
 
 	spawn(ticks)
 
-	if(stat & (NOPOWER)) //Make another check just in case something goes weird
+	if (stat & (NOPOWER)) //Make another check just in case something goes weird
 		stat &= ~NOPOWER
 		src.update_vicon()
 
 /obj/machinery/vending/proc/update_vicon()
-	if(stat & (BROKEN))
+	if (stat & (BROKEN))
 		src.icon_state = "[initial(icon_state)]-broken"
 		return
 	else if (stat & (NOPOWER))
@@ -554,13 +554,13 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/proc/damaged()
 	src.health -= 4
-	if(src.health <= 0)
+	if (src.health <= 0)
 		stat |= BROKEN
 		src.update_vicon()
 		return
-	if(prob(2)) //Jackpot!
+	if (prob(2)) //Jackpot!
 		malfunction()
-	if(prob(2))
+	if (prob(2))
 		src.TurnOff(600) //A whole minute
 	/*if(prob(1))
 		to_chat(usr, "<span class='warning'>You fall down and break your leg!</span>")
@@ -573,20 +573,20 @@ var/global/num_vending_terminals = 1
 	damaged()
 
 /obj/machinery/vending/attack_hand(mob/living/user as mob)
-	if(user.lying || user.incapacitated())
+	if (user.lying || user.incapacitated())
 		return 0
 
-	if(M_TK in user.mutations && user.a_intent == "hurt" && iscarbon(user))
-		if(!Adjacent(user))
+	if (M_TK in user.mutations && user.a_intent == "hurt" && iscarbon(user))
+		if (!Adjacent(user))
 			to_chat(user, "<span class='danger'>You slam the [src] with your mind!</span>")
 			visible_message("<span class='danger'>[src] dents slightly, as if it was struck!</span>")
 			damaged()
 
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
 
-	if(seconds_electrified > 0)
-		if(shock(user, 100))
+	if (seconds_electrified > 0)
+		if (shock(user, 100))
 			return
 	else if (seconds_electrified)
 		seconds_electrified = 0
@@ -597,7 +597,7 @@ var/global/num_vending_terminals = 1
 
 	var/vertical = 400
 
-	if(src.currently_vending)
+	if (src.currently_vending)
 		var/dat = "<TT><center><b>[vendorname]</b></center><hr /><br>" //display the name, and added a horizontal rule
 
 		dat += {"<b>You have selected [currently_vending.product_name].<br>Please ensure your ID is in your ID holder or hand.</b><br>
@@ -618,19 +618,19 @@ var/global/num_vending_terminals = 1
 	else
 		var/list/display_records = src.product_records.Copy()
 
-		if(src.extended_inventory)
+		if (src.extended_inventory)
 			display_records += src.hidden_records
-		if(src.coin)
+		if (src.coin)
 			display_records += src.coin_records
 
-		if(display_records.len > 12)
+		if (display_records.len > 12)
 			vertical = min(400 + (16 * (display_records.len - 12)),840)
 
 		categories["default"] = list()
 		var/list/category_names = list()
 		for (var/datum/data/vending_product/R in product_records)
-			if(R.subcategory)
-				if(!(R.subcategory in category_names))
+			if (R.subcategory)
+				if (!(R.subcategory in category_names))
 					category_names += R.subcategory
 					categories[R.subcategory] = list()
 				categories[R.subcategory] += R
@@ -641,19 +641,19 @@ var/global/num_vending_terminals = 1
 			dat += GetProductLine(R)
 		dat += "<br>"
 
-		for(var/cat_name in category_names)
+		for (var/cat_name in category_names)
 			dat += {"<B>&nbsp;&nbsp;[cat_name]</B>:<br>"}
 			for (var/datum/data/vending_product/R in categories[cat_name])
 				dat += GetProductLine(R)
 			dat += "<br>"
 
-		if(src.extended_inventory)
+		if (src.extended_inventory)
 			dat += {"<B>&nbsp;&nbsp;contraband</B>:<br>"}
 			for (var/datum/data/vending_product/R in hidden_records)
 				dat += GetProductLine(R)
 			dat += "<br>"
 
-		if(src.coin)
+		if (src.coin)
 			dat += {"<B>&nbsp;&nbsp;premium</B>:<br>"}
 			for (var/datum/data/vending_product/R in coin_records)
 				dat += GetProductLine(R)
@@ -661,10 +661,10 @@ var/global/num_vending_terminals = 1
 
 		dat += "</TT>"
 
-	if(panel_open)
+	if (panel_open)
 		dat += wires()
 
-		if(product_slogans != "")
+		if (product_slogans != "")
 			dat += "The speaker switch is [shut_up ? "off" : "on"]. <a href='?src=\ref[src];togglevoice=[1]'>Toggle</a>"
 
 	user << browse(dat, "window=vending;size=400x[vertical]")
@@ -676,38 +676,38 @@ var/global/num_vending_terminals = 1
 	return wires.GetInteractWindow()
 
 /obj/machinery/vending/Topic(href, href_list)
-	if(..())
+	if (..())
 		usr << browse(null, "window=vending")
 		return 1
 
 	//testing("..(): [href]")
 
 	var/free_vend = 0
-	if(istype(usr,/mob/living/silicon))
+	if (istype(usr,/mob/living/silicon))
 		var/can_vend = 1
 		if (href_list["vend"] && src.vend_ready && !currently_vending)
 			var/idx=text2num(href_list["vend"])
 			var/cat=text2num(href_list["cat"])
 			var/datum/data/vending_product/R = GetProductByID(idx,cat)
-			if(R.price)
+			if (R.price)
 				can_vend = 0//all borgs can buy free items from vending machines
-		if(istype(usr,/mob/living/silicon/robot))
+		if (istype(usr,/mob/living/silicon/robot))
 			var/mob/living/silicon/robot/R = usr
-			if((R.module && istype(R.module,/obj/item/weapon/robot_module/butler) ) || isMoMMI(R))
+			if ((R.module && istype(R.module,/obj/item/weapon/robot_module/butler) ) || isMoMMI(R))
 				can_vend = 1//only service borgs and MoMMI can buy costly items
-		if(!can_vend)
+		if (!can_vend)
 			to_chat(usr, "<span class='warning'>The vending machine refuses to interface with you, as you are not in its target demographic!</span>")
 			return
 		else
 			free_vend = 1//so that don't have to swipe their non-existant IDs
 
-	if(href_list["remove_coin"])
-		if(!coin)
+	if (href_list["remove_coin"])
+		if (!coin)
 			to_chat(usr, "There is no coin in this machine.")
 			return
 
 		coin.forceMove(get_turf(src))
-		if(!usr.get_active_hand())
+		if (!usr.get_active_hand())
 			usr.put_in_hands(coin)
 		to_chat(usr, "<span class='notice'>You remove the [coin] from the [src]</span>")
 		coin = null
@@ -731,9 +731,9 @@ var/global/num_vending_terminals = 1
 			message_admins("Invalid vend request by [formatJumpTo(src.loc)]: [href]")
 			return
 
-		if(R.price == null || !R.price)
+		if (R.price == null || !R.price)
 			src.vend(R, usr)
-		else if(free_vend)//for MoMMI and Service Borgs
+		else if (free_vend)//for MoMMI and Service Borgs
 			src.vend(R, usr)
 		else
 			src.currently_vending = R
@@ -748,7 +748,7 @@ var/global/num_vending_terminals = 1
 
 	else if (href_list["buy"])
 		var/obj/item/weapon/card/card = usr.get_id_card()
-		if(card)
+		if (card)
 			connect_account(usr, card)
 		src.updateUsrDialog()
 		return
@@ -799,16 +799,16 @@ var/global/num_vending_terminals = 1
 			return
 
 		var/return_coin = 0
-		if(istype(coin, /obj/item/weapon/coin/))
+		if (istype(coin, /obj/item/weapon/coin/))
 			var/obj/item/weapon/coin/real_coin = coin
-			if(real_coin.string_attached)
-				if(prob(50))
+			if (real_coin.string_attached)
+				if (prob(50))
 					to_chat(user, "<SPAN CLASS='notice'>You successfully pulled the coin out before the [src] could swallow it.</SPAN>")
 					return_coin = 1
 				else
 					to_chat(user, "<SPAN CLASS='notice'>You weren't able to pull the coin out fast enough, the machine ate it, string and all.</SPAN>")
 
-		if(return_coin)
+		if (return_coin)
 			user.put_in_hands(coin)
 		else
 			if (!isnull(coinbox))
@@ -819,7 +819,7 @@ var/global/num_vending_terminals = 1
 
 	R.amount--
 
-	if(((src.last_reply + (src.vend_delay + 200)) <= world.time) && src.vend_reply)
+	if (((src.last_reply + (src.vend_delay + 200)) <= world.time) && src.vend_reply)
 		spawn(0)
 			src.speak(src.vend_reply)
 			src.last_reply = world.time
@@ -835,28 +835,28 @@ var/global/num_vending_terminals = 1
 	src.updateUsrDialog()
 
 /obj/machinery/vending/process()
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
 
-	if(!src.active)
+	if (!src.active)
 		return
 
-	if(src.seconds_electrified > 0)
+	if (src.seconds_electrified > 0)
 		src.seconds_electrified--
 
 	//Pitch to the people!  Really sell it!
-	if(((src.last_slogan + src.slogan_delay) <= world.time) && (src.slogan_list.len > 0) && (!src.shut_up) && prob(5))
+	if (((src.last_slogan + src.slogan_delay) <= world.time) && (src.slogan_list.len > 0) && (!src.shut_up) && prob(5))
 		var/slogan = pick(src.slogan_list)
 		src.speak(slogan)
 		src.last_slogan = world.time
 
-	if(src.shoot_inventory && prob(shoot_chance))
+	if (src.shoot_inventory && prob(shoot_chance))
 		src.throw_item()
 
 	return
 
 /obj/machinery/vending/proc/speak(var/message)
-	if(stat & NOPOWER)
+	if (stat & NOPOWER)
 		return
 
 	if (!message)
@@ -867,10 +867,10 @@ var/global/num_vending_terminals = 1
 	return "beeps, [text]"
 
 /obj/machinery/vending/power_change()
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		icon_state = "[initial(icon_state)]-broken"
 	else
-		if( powered() )
+		if ( powered() )
 			icon_state = initial(icon_state)
 			stat &= ~NOPOWER
 		else
@@ -881,7 +881,7 @@ var/global/num_vending_terminals = 1
 //Oh no we're malfunctioning!  Dump out some product and break.
 /obj/machinery/vending/proc/malfunction()
 	var/lost_inventory = rand(1,12)
-	while(lost_inventory>0)
+	while (lost_inventory>0)
 		throw_item()
 		lost_inventory--
 	stat |= BROKEN
@@ -928,17 +928,17 @@ var/global/num_vending_terminals = 1
 	return 0
 
 /obj/machinery/vending/update_icon()
-	if(panel_open)
+	if (panel_open)
 		overlays += overlays_vending[1]
 	else
 		overlays -= overlays_vending[1]
 
 	overlays -= overlays_vending[2]
-	if(emagged)
+	if (emagged)
 		overlays += overlays_vending[2]
 
 /obj/machinery/vending/wirejack(var/mob/living/silicon/pai/P)
-	if(..())
+	if (..())
 		extended_inventory = !extended_inventory
 		scan_id = !scan_id
 		return 1
@@ -1284,13 +1284,13 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/wallmed1/crowbarDestroy(mob/user)
 	user.visible_message(	"[user] begins to pry out the NanoMed from the wall.",
 							"You begin to pry out the NanoMed from the wall...")
-	if(do_after(user, src, 40))
+	if (do_after(user, src, 40))
 		user.visible_message(	"[user] detaches the NanoMed from the wall.",
 								"You detach the NanoMed from the wall.")
 		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 		new /obj/item/mounted/frame/wallmed(src.loc)
 
-		for(var/obj/I in src)
+		for (var/obj/I in src)
 			qdel(I)
 
 		new /obj/item/weapon/circuitboard/vendomat(src.loc)
@@ -1302,13 +1302,13 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/wallmed2/crowbarDestroy(mob/user)
 	user.visible_message(	"[user] begins to pry out the NanoMed from the wall.",
 							"You begin to pry out the NanoMed from the wall...")
-	if(do_after(user, src, 40))
+	if (do_after(user, src, 40))
 		user.visible_message(	"[user] detaches the NanoMed from the wall.",
 								"You detach the NanoMed from the wall.")
 		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 		new /obj/item/mounted/frame/wallmed(src.loc)
 
-		for(var/obj/I in src)
+		for (var/obj/I in src)
 			qdel(I)
 
 		new /obj/item/weapon/circuitboard/vendomat(src.loc)
@@ -1342,39 +1342,39 @@ var/global/num_vending_terminals = 1
 	icon_state = "wallmed_frame[build]"
 
 /obj/machinery/wallmed_frame/attackby(var/obj/item/W as obj, var/mob/user as mob)
-	switch(build)
-		if(0) // Empty hull
-			if(isscrewdriver(W))
+	switch (build)
+		if (0) // Empty hull
+			if (isscrewdriver(W))
 				to_chat(usr, "You begin removing screws from \the [src] backplate...")
-				if(do_after(user, src, 50))
+				if (do_after(user, src, 50))
 					to_chat(usr, "<span class='notice'>You unscrew \the [src] from the wall.</span>")
 					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 					new /obj/item/mounted/frame/wallmed(get_turf(src))
 					qdel(src)
 				return 1
-			if(istype(W, /obj/item/weapon/circuitboard))
+			if (istype(W, /obj/item/weapon/circuitboard))
 				var/obj/item/weapon/circuitboard/C=W
-				if(!(istype(C,/obj/item/weapon/circuitboard/vendomat)))
+				if (!(istype(C,/obj/item/weapon/circuitboard/vendomat)))
 					to_chat(user, "<span class='warning'>You cannot install this type of board into a NanoMed frame.</span>")
 					return
 				to_chat(usr, "You begin to insert \the [C] into \the [src].")
-				if(do_after(user, src, 10))
-					if(user.drop_item(C, src))
+				if (do_after(user, src, 10))
+					if (user.drop_item(C, src))
 						to_chat(usr, "<span class='notice'>You secure \the [C]!</span>")
 						_circuitboard=C
 						playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
 						build++
 						update_icon()
 				return 1
-		if(1) // Circuitboard installed
-			if(iscrowbar(W))
+		if (1) // Circuitboard installed
+			if (iscrowbar(W))
 				to_chat(usr, "You begin to pry out \the [W] into \the [src].")
-				if(do_after(user, src, 10))
+				if (do_after(user, src, 10))
 					playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
 					build--
 					update_icon()
 					var/obj/item/weapon/circuitboard/C
-					if(_circuitboard)
+					if (_circuitboard)
 						_circuitboard.forceMove(get_turf(src))
 						C=_circuitboard
 						_circuitboard=null
@@ -1384,21 +1384,21 @@ var/global/num_vending_terminals = 1
 						"<span class='warning'>[user.name] has removed \the [C]!</span>",\
 						"You remove \the [C].")
 				return 1
-			if(istype(W, /obj/item/stack/cable_coil))
+			if (istype(W, /obj/item/stack/cable_coil))
 				var/obj/item/stack/cable_coil/C=W
 				to_chat(user, "You start adding cables to \the [src]...")
 				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-				if(do_after(user, src, 20) && C.amount >= 5)
+				if (do_after(user, src, 20) && C.amount >= 5)
 					C.use(5)
 					build++
 					update_icon()
 					user.visible_message(\
 						"<span class='warning'>[user.name] has added cables to \the [src]!</span>",\
 						"You add cables to \the [src].")
-		if(2) // Circuitboard installed, wired.
-			if(iswirecutter(W))
+		if (2) // Circuitboard installed, wired.
+			if (iswirecutter(W))
 				to_chat(usr, "You begin to remove the wiring from \the [src].")
-				if(do_after(user, src, 50))
+				if (do_after(user, src, 50))
 					new /obj/item/stack/cable_coil(loc,5)
 					user.visible_message(\
 						"<span class='warning'>[user.name] cut the cables.</span>",\
@@ -1406,11 +1406,11 @@ var/global/num_vending_terminals = 1
 					build--
 					update_icon()
 				return 1
-			if(isscrewdriver(W))
+			if (isscrewdriver(W))
 				to_chat(user, "You begin to complete \the [src]...")
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-				if(do_after(user, src, 20))
-					if(!_circuitboard)
+				if (do_after(user, src, 20))
+					if (!_circuitboard)
 						_circuitboard=new boardtype(src)
 					build++
 					update_icon()
@@ -1418,26 +1418,26 @@ var/global/num_vending_terminals = 1
 						"<span class='warning'>[user.name] has finished \the [src]!</span>",\
 						"You finish \the [src].")
 				return 1
-		if(3) // Waiting for a recharge pack
-			if(isscrewdriver(W))
+		if (3) // Waiting for a recharge pack
+			if (isscrewdriver(W))
 				to_chat(user, "You begin to unscrew \the [src]...")
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-				if(do_after(user, src, 30))
+				if (do_after(user, src, 30))
 					build--
 					update_icon()
 				return 1
 	..()
 
 /obj/machinery/wallmed_frame/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if(build==3)
-		if(istype(O,/obj/structure/vendomatpack))
-			if(istype(O,/obj/structure/vendomatpack/medical))
+	if (build==3)
+		if (istype(O,/obj/structure/vendomatpack))
+			if (istype(O,/obj/structure/vendomatpack/medical))
 				to_chat(user, "<span class='notice'>You start refilling the vending machine with the recharge pack's materials.</span>")
 				var/user_loc = user.loc
 				var/pack_loc = O.loc
 				var/self_loc = src.loc
 				sleep(30)
-				if(!user || !O || !src)
+				if (!user || !O || !src)
 					return
 				if (user.loc == user_loc && O.loc == pack_loc && anchored && self_loc == src.loc && !(user.incapacitated()))
 					to_chat(user, "<span class='notice'>[bicon(src)] You finish refilling the vending machine.</span>")
@@ -2105,7 +2105,7 @@ var/global/num_vending_terminals = 1
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | EMAGGABLE
 
 /obj/machinery/vending/nazivend/emag(mob/user)
-	if(!emagged)
+	if (!emagged)
 		to_chat(user, "<span class='warning'>As you slide the emag on the machine, you can hear something unlocking inside, and the machine starts emitting an evil glow.</span>")
 		message_admins("[key_name_admin(user)] unlocked a Nazivend's DANGERMODE")
 		contraband[/obj/item/clothing/head/helmet/space/rig/nazi] = 3
@@ -2179,7 +2179,7 @@ var/global/num_vending_terminals = 1
 
 
 /obj/machinery/vending/sovietvend/emag(mob/user)
-	if(!emagged)
+	if (!emagged)
 		to_chat(user, "<span class='warning'>As you slide the emag on the machine, you can hear something unlocking inside, and the machine starts emitting an evil glow.</span>")
 		message_admins("[key_name_admin(user)] unlocked a Sovietvend's DANGERMODE")
 		contraband[/obj/item/clothing/head/helmet/space/rig/soviet] = 3

@@ -16,24 +16,24 @@
 
 		// TODO: DEFERRED Make this massively cleaner. It should hook before spawning, not after.
 		var/list/mobs = list()
-		for(var/mob/living/carbon/human/M in world)
+		for (var/mob/living/carbon/human/M in world)
 			if (M.client)
 				mobs += M
-		for(var/mob/living/carbon/human/M in mobs)
+		for (var/mob/living/carbon/human/M in mobs)
 			spawn()
-				if(M.client)
-					for(var/obj/item/weapon/W in list(M.wear_suit, M.w_uniform, M.r_store, M.l_store, M.wear_id, M.belt,
+				if (M.client)
+					for (var/obj/item/weapon/W in list(M.wear_suit, M.w_uniform, M.r_store, M.l_store, M.wear_id, M.belt,
 					                              M.gloves, M.glasses, M.head, M.ears, M.shoes, M.wear_mask, M.back,
 					                              M.handcuffed, M.r_hand, M.l_hand))
 						M.u_equip(W)
 						del(W)
 
 					var/randomname = "Killiam Shakespeare"
-					if(commando_names.len)
+					if (commando_names.len)
 						randomname = pick(commando_names)
 						commando_names -= randomname
 					var/newname = input(M,"You are a death commando. Would you like to change your name?", "Character Creation", randomname)
-					if(!length(newname))
+					if (!length(newname))
 						newname = randomname
 					newname = strip_html(newname,40)
 

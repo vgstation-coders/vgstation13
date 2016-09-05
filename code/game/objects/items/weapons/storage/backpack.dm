@@ -35,12 +35,12 @@
 	max_combined_w_class = 400 // can store a ton of shit!
 
 /obj/item/weapon/storage/backpack/santabag/attack_hand(user)
-	if(contents.len < storage_slots)
+	if (contents.len < storage_slots)
 		var/empty_slots = Clamp((storage_slots - contents.len),0,storage_slots)
 		to_chat(user,"<span class='notice'>You look into the bag, and find it filled with [empty_slots] new presents!</span>")
-		for(var/i = 1,i <= empty_slots,i++)
+		for (var/i = 1,i <= empty_slots,i++)
 			var/gift = pick(/obj/item/weapon/winter_gift/cloth,/obj/item/weapon/winter_gift/regular,/obj/item/weapon/winter_gift/food)
-			if(prob(1))
+			if (prob(1))
 				gift = /obj/item/weapon/winter_gift/special
 			new gift(src)
 	. = ..()
@@ -54,15 +54,15 @@
 
 /obj/item/weapon/storage/backpack/cultpack/attack_self(mob/user as mob)
 	..()
-	if(skulls)
-		for(,skulls > 0,skulls--)
+	if (skulls)
+		for (,skulls > 0,skulls--)
 			new/obj/item/weapon/skull(get_turf(src))
 		update_icon(user)
 
 /obj/item/weapon/storage/backpack/cultpack/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(W == src)
+	if (W == src)
 		return
-	if(istype(W, /obj/item/weapon/skull) && (skulls < 3))
+	if (istype(W, /obj/item/weapon/skull) && (skulls < 3))
 		user.u_equip(W,1)
 		qdel(W)
 		skulls++
@@ -74,7 +74,7 @@
 /obj/item/weapon/storage/backpack/cultpack/update_icon(var/mob/living/carbon/user)
 	icon_state = "cultpack_[skulls]skull"
 	item_state = "cultpack_[skulls]skull"
-	if(istype(user))
+	if (istype(user))
 		user.update_inv_back()
 		user.update_inv_hands()
 

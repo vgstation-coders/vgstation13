@@ -13,10 +13,10 @@
 	req_access = list(access_ai_upload)
 
 /obj/machinery/ai_slipper/power_change()
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		return
 	else
-		if(powered())
+		if (powered())
 			stat &= ~NOPOWER
 		else
 			icon_state = "motion0"
@@ -28,13 +28,13 @@
 	src.power_change()
 
 /obj/machinery/ai_slipper/attackby(obj/item/weapon/W, mob/user)
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
-	if(istype(user, /mob/living/silicon))
+	if (istype(user, /mob/living/silicon))
 		src.add_hiddenprint(user)
 		return src.attack_hand(user)
 	else // trying to unlock the interface
-		if(src.allowed(user))
+		if (src.allowed(user))
 			locked = !locked
 			to_chat(user, "<span class='notice'>You [locked ? "lock" : "unlock"] the device.</span>")
 			if (locked)
@@ -51,13 +51,13 @@
 
 /obj/machinery/ai_slipper/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 
 	user.set_machine(src)
 	var/t = "<TT><B>Foam Dispenser</B> ([areaMaster.name])<HR>"
 
-	if(src.locked && (!istype(user, /mob/living/silicon)))
+	if (src.locked && (!istype(user, /mob/living/silicon)))
 		t += "<I>(Swipe ID card to unlock control panel.)</I><BR>"
 	else
 		t += text("Dispenser [src.disabled ? "unactive":"active"] - <A href='?src=\ref[src];toggleOn=1'>[src.disabled?"Enable":"Disable"]?</a><br>\n")
@@ -68,17 +68,17 @@
 	return
 
 /obj/machinery/ai_slipper/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
-	if(src.locked)
-		if(!istype(usr, /mob/living/silicon))
+	if (src.locked)
+		if (!istype(usr, /mob/living/silicon))
 			to_chat(usr, "<span class='warning'>Control panel is locked!</span>")
 			return
-	if(href_list["toggleOn"])
+	if (href_list["toggleOn"])
 		src.disabled = !src.disabled
 		icon_state = src.disabled? "motion0":"motion3"
-	if(href_list["toggleUse"])
-		if(cooldown_on || disabled)
+	if (href_list["toggleUse"])
+		if (cooldown_on || disabled)
 			return
 		else
 			new /obj/effect/effect/foam(src.loc)
@@ -92,18 +92,18 @@
 	return
 
 /obj/machinery/ai_slipper/proc/slip_process()
-	while(cooldown_time - world.timeofday > 0)
+	while (cooldown_time - world.timeofday > 0)
 		var/ticksleft = cooldown_time - world.timeofday
 
-		if(ticksleft > 1e5)
+		if (ticksleft > 1e5)
 			cooldown_time = world.timeofday + 10	// midnight rollover
 
 
 		cooldown_timeleft = (ticksleft / 10)
 		sleep(5)
-	if(uses <= 0)
+	if (uses <= 0)
 		return
-	if(uses >= 0)
+	if (uses >= 0)
 		cooldown_on = 0
 	src.power_change()
 	return

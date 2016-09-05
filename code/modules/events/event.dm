@@ -36,7 +36,7 @@
 //You can include code related to the event ending.
 //Do not place spawn() in here, instead use tick() to check for
 //the activeFor variable.
-//For example: if(activeFor == myOwnVariable + 30) doStuff()
+//For example: if (activeFor == myOwnVariable + 30) doStuff()
 //Only called once.
 /datum/event/proc/end()
 	return
@@ -48,20 +48,20 @@
 /datum/event/proc/process()
 
 
-	if(activeFor > startWhen && activeFor < endWhen)
+	if (activeFor > startWhen && activeFor < endWhen)
 		tick()
 
-	if(activeFor == startWhen)
+	if (activeFor == startWhen)
 		start()
 
-	if(activeFor == announceWhen)
+	if (activeFor == announceWhen)
 		announce()
 
-	if(activeFor == endWhen)
+	if (activeFor == endWhen)
 		end()
 
 	// Everything is done, let's clean up.
-	if(activeFor >= endWhen && activeFor >= announceWhen && activeFor >= startWhen)
+	if (activeFor >= endWhen && activeFor >= announceWhen && activeFor >= startWhen)
 		kill()
 
 	activeFor++

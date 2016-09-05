@@ -5,7 +5,7 @@
 
 
 	return_text()
-		if(..())
+		if (..())
 			return
 
 		var/dat = "<a href='byond://?src=\ref[src];close=1'>Close</a> | "
@@ -32,10 +32,10 @@
 		return dat
 
 	Topic(href, href_list)
-		if(..())
+		if (..())
 			return
 
-		if(href_list["set_tag"])
+		if (href_list["set_tag"])
 			var/t = input(usr, "Please enter new tag", src.id_tag, null) as text
 			t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
 			if (!t)
@@ -45,11 +45,11 @@
 
 			src.id_tag = t
 
-//		if(href_list["adj_freq"])
+//		if (href_list["adj_freq"])
 //			var/new_frequency = (src.master.frequency + text2num(href_list["adj_freq"]))
 //			src.master.set_frequency(new_frequency)
 
-		if(href_list["send_command"])
+		if (href_list["send_command"])
 			var/datum/signal/signal = new
 			signal.data["tag"] = id_tag
 			signal.data["command"] = href_list["send_command"]

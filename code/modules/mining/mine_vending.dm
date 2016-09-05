@@ -49,7 +49,7 @@
 
 	..()
 
-	if(ticker)
+	if (ticker)
 		initialize()
 
 /obj/machinery/vending/mining/initialize()

@@ -37,17 +37,17 @@
 
 //Returns the thing in our active hand
 /mob/proc/get_held_item_by_index(index)
-	if(!is_valid_hand_index(index))
+	if (!is_valid_hand_index(index))
 		return null
 
 	return held_items[index]
 
 /mob/proc/find_held_item_by_type(type) //Returns the list index
-	if(!held_items.len)
+	if (!held_items.len)
 		return 0
 
-	for(var/i = 1 to held_items.len)
-		if(istype(held_items[i], type))
+	for (var/i = 1 to held_items.len)
+		if (istype(held_items[i], type))
 			return i
 
 	return 0
@@ -56,8 +56,8 @@
 	return held_items.Find(item)
 
 /mob/proc/find_empty_hand_index()
-	for(var/i = 1 to held_items.len)
-		if(!held_items[i])
+	for (var/i = 1 to held_items.len)
+		if (!held_items[i])
 			return i
 
 	return 0
@@ -65,15 +65,15 @@
 /mob/proc/empty_hand_indexes_amount()
 	. = 0
 
-	for(var/i = 1 to held_items.len) //Go through all hand slots, increase return value by 1 for each empty slot
-		if(!held_items[i])
+	for (var/i = 1 to held_items.len) //Go through all hand slots, increase return value by 1 for each empty slot
+		if (!held_items[i])
 			.++
 
 /mob/proc/get_active_hand()
 	return get_held_item_by_index(active_hand)
 
 /mob/proc/get_held_item_ui_location(index)
-	if(!is_valid_hand_index(index))
+	if (!is_valid_hand_index(index))
 		return
 
 	var/x_offset = -(index % 2) //Index is 1 -> one unit to the left
@@ -82,31 +82,31 @@
 	return "CENTER[x_offset ? x_offset : ""]:[WORLD_ICON_SIZE/2],SOUTH[y_offset ? "+[y_offset]" : ""]:[5*PIXEL_MULTIPLIER]"
 
 	/*
-	switch(index)
-		if(1)
+	switch (index)
+		if (1)
 			return "CENTER-1:16,SOUTH:5"
-		if(2)
+		if (2)
 			return "CENTER:16,SOUTH:5"
-		if(3)
+		if (3)
 			return "CENTER-1:16,SOUTH+1:5"
-		if(4)
+		if (4)
 			return "CENTER:16,SOUTH+1:5"
 	*/
 
 /mob/proc/get_direction_by_index(index)
-	if(index % 2 == GRASP_RIGHT_HAND)
+	if (index % 2 == GRASP_RIGHT_HAND)
 		return "right_hand"
 	else
 		return "left_hand"
 
 /mob/proc/get_index_limb_name(var/index)
-	if(!index)
+	if (!index)
 		index = active_hand
 
-	switch(index)
-		if(GRASP_LEFT_HAND)
+	switch (index)
+		if (GRASP_LEFT_HAND)
 			return "left hand"
-		if(GRASP_RIGHT_HAND)
+		if (GRASP_RIGHT_HAND)
 			return "right hand"
 		else
 			return "hand"
@@ -116,7 +116,7 @@
 
 // Get the organ of the active hand
 /mob/proc/get_active_hand_organ()
-	if(!istype(src, /mob/living/carbon))
+	if (!istype(src, /mob/living/carbon))
 		return
 	if (hasorgans(src))
 		var/datum/organ/external/temp = find_organ_by_grasp_index(active_hand)
@@ -136,20 +136,20 @@
 /mob/proc/get_inactive_hand_index()
 	var/new_index = active_hand - 1
 
-	if(new_index < 1)
+	if (new_index < 1)
 		new_index = held_items.len
 
 	return new_index
 
 /mob/proc/swap_hand()
-	if(++active_hand > held_items.len)
+	if (++active_hand > held_items.len)
 		active_hand = 1
 
-	if(!hud_used)
+	if (!hud_used)
 		return
 
-	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
-		if(active_hand == hand_hud_object.hand_index)
+	for (var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+		if (active_hand == hand_hud_object.hand_index)
 			hand_hud_object.icon_state = "hand_active"
 		else
 			hand_hud_object.icon_state = "hand_inactive"
@@ -159,24 +159,24 @@
 /mob/proc/activate_hand(var/selhand)
 	active_hand = selhand
 
-	if(!hud_used)
+	if (!hud_used)
 		return
 
-	for(var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
-		if(active_hand == hand_hud_object.hand_index)
+	for (var/obj/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
+		if (active_hand == hand_hud_object.hand_index)
 			hand_hud_object.icon_state = "hand_active"
 		else
 			hand_hud_object.icon_state = "hand_inactive"
 
 /mob/proc/put_in_hand(index, obj/item/W)
-	if(!is_valid_hand_index(index) || !is_valid_hand_index(active_hand))
+	if (!is_valid_hand_index(index) || !is_valid_hand_index(active_hand))
 		return 0
 
-	if(!put_in_hand_check(W, index))
+	if (!put_in_hand_check(W, index))
 		return 0
 
 
-	if(W.prepickup(src))
+	if (W.prepickup(src))
 		return 0
 
 	W.forceMove(src)
@@ -186,9 +186,9 @@
 	W.pixel_y = initial(W.pixel_y)
 	W.equipped(src, null, index)
 
-	if(client)
+	if (client)
 		client.screen |= W
-	if(pulling == W)
+	if (pulling == W)
 		stop_pulling()
 
 	update_inv_hand(index)
@@ -204,17 +204,17 @@
 	return put_in_hand(GRASP_RIGHT_HAND, W)
 
 /mob/proc/put_in_hand_check(var/obj/item/W, index)
-	if(lying) //&& !(W.flags & ABSTRACT))
+	if (lying) //&& !(W.flags & ABSTRACT))
 		return 0
 
-	if(!isitem(W))
+	if (!isitem(W))
 		return 0
 
-	if(held_items[index])
+	if (held_items[index])
 		return 0
 
-	if(W.flags & MUSTTWOHAND)
-		if(!W.wield(src, 1))
+	if (W.flags & MUSTTWOHAND)
+		if (!W.wield(src, 1))
 			to_chat(src, "You need both hands to pick up \the [W].")
 			return 0
 
@@ -232,11 +232,11 @@
 //If both fail it drops it on the floor and returns 0.
 //This is probably the main one you need to know :)
 /mob/proc/put_in_hands(var/obj/item/W)
-	if(!W)
+	if (!W)
 		return 0
-	if(put_in_active_hand(W))
+	if (put_in_active_hand(W))
 		return 1
-	else if(put_in_inactive_hand(W))
+	else if (put_in_inactive_hand(W))
 		return 1
 	else
 		W.forceMove(get_turf(src))
@@ -245,32 +245,32 @@
 		return 0
 
 /mob/proc/set_hand_amount(new_amount)
-	if(new_amount < held_items.len) //Decrease hand amount - drop items held in hands which will no longer exist!
-		for(var/i = (new_amount+1) to held_items.len)
+	if (new_amount < held_items.len) //Decrease hand amount - drop items held in hands which will no longer exist!
+		for (var/i = (new_amount+1) to held_items.len)
 			var/obj/item/I = held_items[i]
 
-			if(I)
+			if (I)
 				drop_item(I, force_drop = 1)
-	if(new_amount < active_hand)
+	if (new_amount < active_hand)
 		active_hand = new_amount //Don't update the HUD - it'll be redrawn anyways
 
 	held_items.len = new_amount
 
-	if(hud_used)
+	if (hud_used)
 		hud_used.update_hand_icons()
 
 /mob/proc/drop_item_v()		//this is dumb.
-	if(stat == CONSCIOUS && isturf(loc))
+	if (stat == CONSCIOUS && isturf(loc))
 		return drop_item()
 	return 0
 
 
 /mob/proc/drop_from_inventory(var/obj/item/W) //I'm fairly sure the entirety of this proc is redundant and can be replaced by just u_equip(W,1)
-	if(W)
-		if(client)
+	if (W)
+		if (client)
 			client.screen -= W
 		u_equip(W,1)
-		if(!W)
+		if (!W)
 			return 1 // self destroying objects (tk, grabs)
 		W.reset_plane_and_layer()
 		W.forceMove(loc)
@@ -289,41 +289,41 @@
 
 /mob/proc/drop_item(var/obj/item/to_drop, var/atom/Target, force_drop = 0) //Set force_drop to 1 to force the item to drop (even if it can't be dropped normally)
 
-	if(!candrop) //can't drop items while etheral
+	if (!candrop) //can't drop items while etheral
 		return 0
 
-	if(!to_drop) //if we're not told to drop something specific
+	if (!to_drop) //if we're not told to drop something specific
 		to_drop = get_active_hand() //drop what we're currently holding
 
-	if(!istype(to_drop)) //still nothing to drop?
+	if (!istype(to_drop)) //still nothing to drop?
 		return 0 //bail
 
-	if((to_drop.cant_drop > 0) && !force_drop)
+	if ((to_drop.cant_drop > 0) && !force_drop)
 		return 0
 
-	if(!Target)
+	if (!Target)
 		Target = src.loc
 
 	remove_from_mob(to_drop) //clean out any refs
 
-	if(!to_drop)
+	if (!to_drop)
 		return 0
 
 	to_drop.forceMove(Target) //calls the Entered procs
-	if(ismob(Target))
+	if (ismob(Target))
 		var/mob/M = Target
-		if(iscarbon(M))
+		if (iscarbon(M))
 			var/mob/living/carbon/C = M
 			C.stomach_contents.Add(to_drop)
 
 	to_drop.dropped(src)
 
-	if(to_drop && to_drop.loc)
+	if (to_drop && to_drop.loc)
 		return 1
 	return 0
 
 /mob/proc/drop_hands(var/atom/Target, force_drop = 0) //drops both items
-	for(var/obj/item/I in held_items)
+	for (var/obj/item/I in held_items)
 		drop_item(I, Target, force_drop = force_drop)
 
 //TODO: phase out this proc
@@ -335,12 +335,12 @@
 
 
 /mob/proc/u_equip(var/obj/item/W as obj, dropped = 1)
-	if(!W)
+	if (!W)
 		return 0
 	var/success = 0
 
 	var/index = is_holding_item(W)
-	if(index)
+	if (index)
 		held_items[index] = null
 		success = 1
 		update_inv_hand(index)
@@ -355,13 +355,13 @@
 	else
 		return 0
 
-	if(success)
-		if(client)
+	if (success)
+		if (client)
 			client.screen -= W
-		if(dropped)
+		if (dropped)
 			W.forceMove(loc)
 			W.dropped(src)
-		if(W)
+		if (W)
 			W.reset_plane_and_layer()
 	return 1
 
@@ -371,7 +371,7 @@
 	src.u_equip(O,1)
 	if (src.client)
 		src.client.screen -= O
-	if(!O)
+	if (!O)
 		return
 	O.reset_plane_and_layer()
 	O.screen_loc = null
@@ -407,91 +407,91 @@
 /mob/living/carbon/human/proc/equip_if_possible(obj/item/W, slot, act_on_fail = EQUIP_FAILACTION_DELETE) // since byond doesn't seem to have pointers, this seems like the best way to do this :/
 	//warning: icky code
 	var/equipped = 0
-	switch(slot)
-		if(slot_back)
-			if(!src.back)
+	switch (slot)
+		if (slot_back)
+			if (!src.back)
 				src.back = W
 				equipped = 1
-		if(slot_wear_mask)
-			if(!src.wear_mask)
+		if (slot_wear_mask)
+			if (!src.wear_mask)
 				src.wear_mask = W
 				equipped = 1
-		if(slot_handcuffed)
-			if(!src.handcuffed)
+		if (slot_handcuffed)
+			if (!src.handcuffed)
 				src.handcuffed = W
 				equipped = 1
-		if(slot_belt)
-			if(!src.belt && src.w_uniform)
+		if (slot_belt)
+			if (!src.belt && src.w_uniform)
 				src.belt = W
 				equipped = 1
-		if(slot_wear_id)
-			if(!src.wear_id && src.w_uniform)
+		if (slot_wear_id)
+			if (!src.wear_id && src.w_uniform)
 				src.wear_id = W
 				equipped = 1
-		if(slot_ears)
-			if(!src.ears)
+		if (slot_ears)
+			if (!src.ears)
 				src.ears = W
 				equipped = 1
-		if(slot_glasses)
-			if(!src.glasses)
+		if (slot_glasses)
+			if (!src.glasses)
 				src.glasses = W
 				equipped = 1
-		if(slot_gloves)
-			if(!src.gloves)
+		if (slot_gloves)
+			if (!src.gloves)
 				src.gloves = W
 				equipped = 1
-		if(slot_head)
-			if(!src.head)
+		if (slot_head)
+			if (!src.head)
 				src.head = W
 				equipped = 1
-		if(slot_shoes)
-			if(!src.shoes)
+		if (slot_shoes)
+			if (!src.shoes)
 				src.shoes = W
 				equipped = 1
-		if(slot_wear_suit)
-			if(!src.wear_suit)
+		if (slot_wear_suit)
+			if (!src.wear_suit)
 				src.wear_suit = W
 				equipped = 1
-		if(slot_w_uniform)
-			if(!src.w_uniform)
+		if (slot_w_uniform)
+			if (!src.w_uniform)
 				src.w_uniform = W
 				equipped = 1
-		if(slot_l_store)
-			if(!src.l_store && src.w_uniform)
+		if (slot_l_store)
+			if (!src.l_store && src.w_uniform)
 				src.l_store = W
 				equipped = 1
-		if(slot_r_store)
-			if(!src.r_store && src.w_uniform)
+		if (slot_r_store)
+			if (!src.r_store && src.w_uniform)
 				src.r_store = W
 				equipped = 1
-		if(slot_s_store)
-			if(!src.s_store && src.wear_suit)
+		if (slot_s_store)
+			if (!src.s_store && src.wear_suit)
 				src.s_store = W
 				equipped = 1
-		if(slot_in_backpack)
+		if (slot_in_backpack)
 			if (src.back && istype(src.back, /obj/item/weapon/storage/backpack))
 				var/obj/item/weapon/storage/backpack/B = src.back
-				if(B.contents.len < B.storage_slots && W.w_class <= B.fits_max_w_class)
+				if (B.contents.len < B.storage_slots && W.w_class <= B.fits_max_w_class)
 					W.forceMove(B)
 					equipped = 1
 
-	if(equipped)
+	if (equipped)
 		W.hud_layerise()
-		if(src.back && W.loc != src.back)
+		if (src.back && W.loc != src.back)
 			W.forceMove(src)
 	else
-		switch(act_on_fail)
-			if(EQUIP_FAILACTION_DELETE)
+		switch (act_on_fail)
+			if (EQUIP_FAILACTION_DELETE)
 				qdel(W)
 				W = null
-			if(EQUIP_FAILACTION_DROP)
+			if (EQUIP_FAILACTION_DROP)
 				W.forceMove(get_turf(src)) // I think.
 	return equipped
 
 /mob/proc/get_id_card()
-	for(var/obj/item/I in src.get_all_slots())
+	for (var/obj/item/I in src.get_all_slots())
 		. = I.GetID()
-		if(.)
+		if (.)
 			break
 
 /mob/proc/slotID2slotname(slot_id)

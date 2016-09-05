@@ -248,13 +248,13 @@
 	make_food(var/obj/container as obj)
 		var/human_name
 		var/human_job
-		for(var/obj/item/weapon/reagent_containers/food/snacks/meat/human/HM in container)
-			if(HM.subjectname)
+		for (var/obj/item/weapon/reagent_containers/food/snacks/meat/human/HM in container)
+			if (HM.subjectname)
 				human_name = HM.subjectname
 				human_job = HM.subjectjob
 				break
 		var/lastname_index = findtext(human_name, " ")
-		if(lastname_index)
+		if (lastname_index)
 			human_name = copytext(human_name,lastname_index+1)
 		var/obj/item/weapon/reagent_containers/food/snacks/human/HB = ..(container)
 		HB.name = human_name+HB.name
@@ -358,8 +358,8 @@
 
 /datum/recipe/donkpocket/warm/make_food(var/obj/container)
 	var/obj/item/weapon/reagent_containers/food/snacks/donkpocket/being_cooked = locate() in container
-	if(istype(being_cooked))
-		if(being_cooked.warm <= 0)
+	if (istype(being_cooked))
+		if (being_cooked.warm <= 0)
 			being_cooked.warm_up()
 		else
 			being_cooked.warm = 80
@@ -497,9 +497,9 @@
 
 /datum/recipe/fortunecookie/check_items(var/obj/container)
 	. = ..()
-	if(.)
+	if (.)
 		var/obj/item/weapon/paper/paper = locate() in container
-		if(!paper.info)
+		if (!paper.info)
 			. = 0
 	return
 
@@ -1423,7 +1423,7 @@
 
 /datum/recipe/sliders/carp/make_food(var/obj/container)
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/C = locate() in container
-	if(C.poisonsacs)
+	if (C.poisonsacs)
 		result = /obj/item/weapon/storage/fancy/food_box/slider_box/toxiccarp
 	..()
 
@@ -1692,7 +1692,7 @@
 	desc = "You should never see this text."
 
 /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy/New()
-	for(var/i = 1 to 6)
+	for (var/i = 1 to 6)
 		new /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje(get_turf(src))
 	qdel(src)
 
@@ -1789,7 +1789,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan
 
 /datum/recipe/zhulongcaofan/make_food(var/obj/container as obj)
-	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher/P in container)
+	for (var/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher/P in container)
 		P.reagents.del_reagent(SACID) //This cleanses the plant.
 	return ..()
 
@@ -1820,7 +1820,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/hoboburger
 
 /datum/recipe/hoboburger/make_food(var/obj/container as obj)
-	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher/P in container)
+	for (var/obj/item/weapon/reagent_containers/food/snacks/grown/pitcher/P in container)
 		P.reagents.del_reagent(SACID) //This cleanses the plant.
 	return ..()
 

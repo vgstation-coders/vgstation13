@@ -29,7 +29,7 @@
 
 
 /obj/item/device/rcd/matter/rsf/attack_self(var/mob/living/user)
-	if(!selected || user.shown_schematics_background || !selected.show(user))
+	if (!selected || user.shown_schematics_background || !selected.show(user))
 		user.hud_used.toggle_show_schematics_display(schematics["Service"], 0, src)
 
 /obj/item/device/rcd/borg/rsf
@@ -59,7 +59,7 @@
 	)
 	//datum/rcd_schematic/rsf/dosh,
 /obj/item/device/rcd/borg/rsf/attack_self(var/mob/living/user)
-	if(!selected || user.shown_schematics_background || !selected.show(user))
+	if (!selected || user.shown_schematics_background || !selected.show(user))
 		user.hud_used.toggle_show_schematics_display(schematics["Service"], 0, src)
 
 //Override of preattack to perform a check on what is being attacked

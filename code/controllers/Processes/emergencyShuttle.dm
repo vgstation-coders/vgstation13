@@ -4,7 +4,7 @@
 /datum/controller/process/emergencyShuttle/setup()
 	name = "emergency shuttle"
 
-	if(!emergency_shuttle)
+	if (!emergency_shuttle)
 		emergency_shuttle = new
 
 /datum/controller/process/emergencyShuttle/doWork()

@@ -25,13 +25,13 @@ var/turf/dungeon_area = null
 #define MAXIMUM_DUNGEON_WIDTH 80
 
 proc/load_dungeon(dungeon_type)
-	if(!dungeon_area)
+	if (!dungeon_area)
 		return 0
 
 	var/datum/map_element/ME
-	if(ispath(dungeon_type, /datum/map_element))
+	if (ispath(dungeon_type, /datum/map_element))
 		ME = new dungeon_type
-	else if(istype(dungeon_type, /datum/map_element))
+	else if (istype(dungeon_type, /datum/map_element))
 		ME = dungeon_type
 	else
 		return 0
@@ -43,22 +43,22 @@ proc/load_dungeon(dungeon_type)
 	var/tallest_dungeon_height = 0
 	//Highest dungeon in the current row
 
-	for(var/datum/map_element/dungeon in existing_dungeons) //Go through all dungeons in the order they were created
-		if(!dungeon.location)
+	for (var/datum/map_element/dungeon in existing_dungeons) //Go through all dungeons in the order they were created
+		if (!dungeon.location)
 			continue
 
-		if(dungeon.height > tallest_dungeon_height)
+		if (dungeon.height > tallest_dungeon_height)
 			tallest_dungeon_height = dungeon.height
 
-		if(dungeon.location.y > spawn_y) //Start of the new row
+		if (dungeon.location.y > spawn_y) //Start of the new row
 			spawn_y = dungeon.location.y
 			spawn_x = dungeon_area.x //Go to the beginning of the row
 			tallest_dungeon_height = 0
 		else //Still in our row
-			if(dungeon.location.x + dungeon.width > spawn_x)
+			if (dungeon.location.x + dungeon.width > spawn_x)
 				spawn_x = dungeon.location.x + dungeon.width + 1
 
-			if(spawn_x > world.maxx - MAXIMUM_DUNGEON_WIDTH) //No space for a new dungeon here!
+			if (spawn_x > world.maxx - MAXIMUM_DUNGEON_WIDTH) //No space for a new dungeon here!
 				//Go to the next row
 				spawn_y = spawn_y + tallest_dungeon_height + 1 //So that nothing in the new row overlaps with the previous one
 				spawn_x = dungeon_area.x

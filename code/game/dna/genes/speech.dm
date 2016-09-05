@@ -29,11 +29,11 @@
 	expressions[key]=null
 
 /datum/speech_filter/proc/FilterSpeech(var/msg)
-	if(expressions.len)
-		for(var/key in expressions)
+	if (expressions.len)
+		for (var/key in expressions)
 			var/datum/speech_filter_action/SFA = expressions[key]
 //			to_chat(world, "speech filter run on <br>[msg], name is [SFA.expr.name], flags are [SFA.expr.flags]")
-			if(SFA && !SFA.broken)
+			if (SFA && !SFA.broken)
 				msg = SFA.Run(msg)
 	return msg
 
@@ -60,7 +60,7 @@
 
 /datum/speech_filter_action/replace/Run(var/text)
 	var/ret = expr.Replace(text, replacements)
-	if(ret)
+	if (ret)
 		return ret
 	return text
 
@@ -71,7 +71,7 @@
 
 /datum/speech_filter_action/pick_replace/Run(var/text)
 	expr.index = 1
-	while(expr.Find(text, expr.index))
+	while (expr.Find(text, expr.index))
 		var/repl   = pick(replacements)
 		text       = copytext(text, 1, expr.index) + repl + copytext(text, expr.index + length(expr.match))
 		expr.index = expr.index + length(repl)

@@ -17,22 +17,22 @@ var/jobban_keylist[0]		//to store the keys & ranks
 
 //returns a reason if M is banned from rank, returns 0 otherwise
 /proc/jobban_isbanned(mob/M, rank)
-	if(M && rank)
+	if (M && rank)
 		/*
-		if(_jobban_isbanned(M, rank))
+		if (_jobban_isbanned(M, rank))
 			return "Reason Unspecified"	//for old jobban
 		if (guest_jobbans(rank))
-			if(config.guest_jobban && IsGuestKey(M.key))
+			if (config.guest_jobban && IsGuestKey(M.key))
 				return "Guest Job-ban"
-			if(config.usewhitelist && !check_whitelist(M))
+			if (config.usewhitelist && !check_whitelist(M))
 				return "Whitelisted Job"
 		*/
 		for (var/s in jobban_keylist)
-			if( findtext(s,"[M.ckey] - [rank]") == 1 )
+			if ( findtext(s,"[M.ckey] - [rank]") == 1 )
 				var/startpos = findtext(s, "## ")+3
-				if(startpos && startpos<length(s))
+				if (startpos && startpos<length(s))
 					var/text = copytext(s, startpos, 0)
-					if(text)
+					if (text)
 						return text
 				return "Reason Unspecified"
 	return 0
@@ -42,7 +42,7 @@ DEBUG
 /mob/verb/list_all_jobbans()
 	set name = "list all jobbans"
 
-	for(var/s in jobban_keylist)
+	for (var/s in jobban_keylist)
 		to_chat(world, s)
 
 /mob/verb/reload_jobbans()
@@ -52,7 +52,7 @@ DEBUG
 */
 
 /proc/jobban_loadbanfile()
-	if(config.ban_legacy_system)
+	if (config.ban_legacy_system)
 		var/savefile/S=new("data/job_full.ban")
 		S["keys[0]"] >> jobban_keylist
 		log_admin("Loading jobban_rank")
@@ -62,7 +62,7 @@ DEBUG
 			jobban_keylist=list()
 			log_admin("jobban_keylist was empty")
 	else
-		if(!establish_db_connection())
+		if (!establish_db_connection())
 			world.log << "Database connection failed. Reverting to the legacy ban system."
 			diary << "Database connection failed. Reverting to the legacy ban system."
 			config.ban_legacy_system = 1
@@ -73,7 +73,7 @@ DEBUG
 		var/DBQuery/query = dbcon.NewQuery("SELECT ckey, job FROM erro_ban WHERE bantype = 'JOB_PERMABAN' AND isnull(unbanned)")
 		query.Execute()
 
-		while(query.NextRow())
+		while (query.NextRow())
 			var/ckey = query.item[1]
 			var/job = query.item[2]
 
@@ -83,7 +83,7 @@ DEBUG
 		var/DBQuery/query1 = dbcon.NewQuery("SELECT ckey, job FROM erro_ban WHERE bantype = 'JOB_TEMPBAN' AND isnull(unbanned) AND expiration_time > Now()")
 		query1.Execute()
 
-		while(query1.NextRow())
+		while (query1.NextRow())
 			var/ckey = query1.item[1]
 			var/job = query1.item[2]
 
@@ -103,18 +103,18 @@ DEBUG
 
 
 /proc/jobban_updatelegacybans()
-	if(!jobban_runonce)
+	if (!jobban_runonce)
 		log_admin("Updating jobbanfile!")
 		// Updates bans.. Or fixes them. Either way.
-		for(var/T in jobban_keylist)
-			if(!T)
+		for (var/T in jobban_keylist)
+			if (!T)
 				continue
 		jobban_runonce++	//don't run this update again
 
 
 /proc/jobban_remove(X)
 	for (var/i = 1; i <= length(jobban_keylist); i++)
-		if( findtext(jobban_keylist[i], "[X]") )
+		if ( findtext(jobban_keylist[i], "[X]") )
 			jobban_keylist.Remove(jobban_keylist[i])
 			jobban_savebanfile()
 			return 1

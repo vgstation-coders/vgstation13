@@ -30,10 +30,10 @@
 
 
 /datum/game_mode/malfunction/pre_setup()
-	for(var/mob/new_player/player in player_list)
-		if(player.mind && player.mind.assigned_role == "AI" && player.client.desires_role(ROLE_MALF))
+	for (var/mob/new_player/player in player_list)
+		if (player.mind && player.mind.assigned_role == "AI" && player.client.desires_role(ROLE_MALF))
 			malf_ai+=player.mind
-	if(malf_ai.len)
+	if (malf_ai.len)
 		log_admin("Starting a round of AI malfunction.")
 		message_admins("Starting a round of AI malfunction.")
 		return 1
@@ -43,14 +43,14 @@
 
 
 /datum/game_mode/malfunction/post_setup()
-	for(var/datum/mind/AI_mind in malf_ai)
-		if(malf_ai.len < 1)
+	for (var/datum/mind/AI_mind in malf_ai)
+		if (malf_ai.len < 1)
 			to_chat(world, {"Uh oh, its malfunction and there is no AI! Please report this.<br>
 Rebooting world in 5 seconds."})
 
 			feedback_set_details("end_error","malf - no AI")
 
-			if(blackbox)
+			if (blackbox)
 				blackbox.save_all_data_to_sql()
 			CallHook("Reboot",list())
 			if (watchdog.waiting)
@@ -77,13 +77,13 @@ Rebooting world in 5 seconds."})
 
 /*		AI_mind.current.icon_state = "ai-malf"
 		spawn(10)
-			if(alert(AI_mind.current,"Do you want to use an alternative sprite for your real core?",,"Yes","No")=="Yes")
+			if (alert(AI_mind.current,"Do you want to use an alternative sprite for your real core?",,"Yes","No")=="Yes")
 				AI_mind.current.icon_state = "ai-malf2"
 */
-	if(emergency_shuttle)
+	if (emergency_shuttle)
 		emergency_shuttle.always_fake_recall = 1
 	spawn (rand(waittime_l, waittime_h))
-		if(!mixed)
+		if (!mixed)
 			send_intercept()
 	..()
 
@@ -104,12 +104,12 @@ Once done, you will be able to interface with all systems, notably the onboard n
 
 
 /datum/game_mode/malfunction/process()
-	if(apcs >= 3 && malf_mode_declared)
+	if (apcs >= 3 && malf_mode_declared)
 		AI_win_timeleft -= ((apcs / 6) * tickerProcess.getLastTickerTimeDuration()) //Victory timer now de-increments based on how many APCs are hacked. --NeoFite
 
 	..()
 
-	if(AI_win_timeleft <= 0)
+	if (AI_win_timeleft <= 0)
 		check_win()
 
 /datum/game_mode/malfunction/check_win()
@@ -128,7 +128,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	stat_collection.malf.malf_wins = 1
 
 	to_nuke_or_not_to_nuke = 1
-	for(var/datum/mind/AI_mind in malf_ai)
+	for (var/datum/mind/AI_mind in malf_ai)
 		to_chat(AI_mind.current, {"<span class='notice'>Congratulations! The station is now under your exclusive control.<br>
 You may decide to blow up the station. You have 60 seconds to choose.<br>
 You should now be able to use your Explode verb to interface with the nuclear fission device.</span>"})
@@ -140,7 +140,7 @@ You should now be able to use your Explode verb to interface with the nuclear fi
 
 /datum/game_mode/proc/is_malf_ai_dead()
 	var/all_dead = 1
-	for(var/datum/mind/AI_mind in malf_ai)
+	for (var/datum/mind/AI_mind in malf_ai)
 		if (istype(AI_mind.current,/mob/living/silicon/ai) && AI_mind.current.stat!=2)
 			all_dead = 0
 	return all_dead
@@ -150,8 +150,8 @@ You should now be able to use your Explode verb to interface with the nuclear fi
 	if (station_captured && !to_nuke_or_not_to_nuke)
 		return 1
 	if (is_malf_ai_dead())
-		if(config.continous_rounds)
-			if(emergency_shuttle)
+		if (config.continous_rounds)
+			if (emergency_shuttle)
 				emergency_shuttle.always_fake_recall = 0
 			malf_mode_declared = 0
 		else
@@ -188,7 +188,7 @@ You should now be able to use your Explode verb to interface with the nuclear fi
 	set_security_level("delta")
 
 	ticker.mode:malf_mode_declared = 1
-	for(var/datum/mind/AI_mind in ticker.mode:malf_ai)
+	for (var/datum/mind/AI_mind in ticker.mode:malf_ai)
 		AI_mind.current.verbs -= /datum/game_mode/malfunction/proc/takeover
 
 
@@ -197,25 +197,25 @@ You should now be able to use your Explode verb to interface with the nuclear fi
 	set name = "Explode"
 	set desc = "Station goes boom"
 
-	if(!ticker.mode:station_captured)
+	if (!ticker.mode:station_captured)
 		to_chat(usr, "<span class='warning'>You are unable to access the self-destruct system as you don't control the station yet.</span>")
 		return
 
-	if(ticker.mode:explosion_in_progress || ticker.mode:station_was_nuked)
+	if (ticker.mode:explosion_in_progress || ticker.mode:station_was_nuked)
 		to_chat(usr, "<span class='notice'>The self-destruct countdown was already triggered!</span>")
 		return
 
-	if(!ticker.mode:to_nuke_or_not_to_nuke) //Takeover IS completed, but 60s timer passed.
+	if (!ticker.mode:to_nuke_or_not_to_nuke) //Takeover IS completed, but 60s timer passed.
 		to_chat(usr, "<span class='warning'>Cannot interface, it seems a neutralization signal was sent!</span>")
 		return
 
 	to_chat(usr, "<span class='danger'>Detonation signal sent!</span>")
 	ticker.mode:to_nuke_or_not_to_nuke = 0
-	for(var/datum/mind/AI_mind in ticker.mode:malf_ai)
+	for (var/datum/mind/AI_mind in ticker.mode:malf_ai)
 		AI_mind.current.verbs -= /datum/game_mode/malfunction/proc/ai_win
 	ticker.mode:explosion_in_progress = 1
-	for(var/mob/M in player_list)
-		if(M.client)
+	for (var/mob/M in player_list)
+		if (M.client)
 			M << 'sound/machines/Alarm.ogg'
 	to_chat(world, "<span class='danger'>Self-destruction signal received. Self-destructing in 10...</span>")
 	for (var/i=9 to 1 step -1)
@@ -223,9 +223,9 @@ You should now be able to use your Explode verb to interface with the nuclear fi
 		to_chat(world, "<span class='danger'>[i]...</span>")
 	sleep(10)
 	enter_allowed = 0
-	if(ticker)
+	if (ticker)
 		ticker.station_explosion_cinematic(0,null)
-		if(ticker.mode)
+		if (ticker.mode)
 			ticker.mode:station_was_nuked = 1
 			ticker.mode:explosion_in_progress = 0
 	return
@@ -275,21 +275,21 @@ You should now be able to use your Explode verb to interface with the nuclear fi
 
 /datum/game_mode/proc/auto_declare_completion_malfunction()
 	var/text = ""
-	if( malf_ai.len || istype(ticker.mode,/datum/game_mode/malfunction) )
+	if ( malf_ai.len || istype(ticker.mode,/datum/game_mode/malfunction) )
 		text += "<FONT size = 2><B>The malfunctioning AI were:</B></FONT>"
 
-		for(var/datum/mind/malf in malf_ai)
+		for (var/datum/mind/malf in malf_ai)
 
-			if(malf.current)
+			if (malf.current)
 				var/icon/flat = getFlatIcon(malf.current)
 				end_icons += flat
 				var/tempstate = end_icons.len
 				text += {"<br><img src="logo_[tempstate].png"> <b>[malf.key]</b> was <b>[malf.name]</b> ("}
-				if(malf.current.stat == DEAD)
+				if (malf.current.stat == DEAD)
 					text += "deactivated"
 				else
 					text += "operational"
-				if(malf.current.real_name != malf.name)
+				if (malf.current.real_name != malf.name)
 					text += " as [malf.current.real_name]"
 			else
 				var/icon/sprotch = icon('icons/mob/robots.dmi', "gib7")

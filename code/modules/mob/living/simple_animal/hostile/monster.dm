@@ -90,13 +90,13 @@
 /mob/living/simple_animal/hostile/monster/cyber_horror/Life(var/mob/living/simple_animal/hostile/monster/cyber_horror/M)
 	..()
 
-	if(prob(90) && health+emp_damage<maxHealth)
+	if (prob(90) && health+emp_damage<maxHealth)
 		health+=4                                                                        //Created by misuse of medical nanobots, so it heals
-		if(prob(15))
+		if (prob(15))
 			visible_message("<span class='warning'>[src]'s wounds heal slightly!</span>")
 
 /mob/living/simple_animal/hostile/monster/cyber_horror/emp_act(severity)
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
 
 	switch (severity)
@@ -111,8 +111,8 @@
 /mob/living/simple_animal/hostile/monster/cyber_horror/AttackingTarget()
 	..()
 	var/mob/living/L = target
-	if(L.reagents)
-		if(prob(nanobot_chance))
+	if (L.reagents)
+		if (prob(nanobot_chance))
 			visible_message("<b><span class='warning'>[src] injects something from its flailing arm!</span>")
 			L.reagents.add_reagent(MEDNANOBOTS, 2)
 

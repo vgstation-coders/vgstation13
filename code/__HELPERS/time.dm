@@ -14,7 +14,7 @@
 	var/wtime = world.time
 	var/wusage = world.tick_usage * 0.01
 
-	if(last_time < wtime && last_usage > 1)
+	if (last_time < wtime && last_usage > 1)
 		time_offset += last_usage - 1
 
 	last_time = wtime
@@ -32,9 +32,9 @@
 	var/s = (deciseconds % 600)/10
 	var/h = round(m / 60)
 	m = m % 60
-	if(h>0)
+	if (h>0)
 		. += "[h]:"
-	if(h>0 || m > 0)
+	if (h>0 || m > 0)
 		. += "[(m<10)?"0":""][m]:"
 	. += "[(s<10)?"0":""][s]"
 
@@ -43,9 +43,9 @@
 	var/s = (deciseconds % 600)/10
 	var/h = round(m / 60)
 	m = m % 60
-	if(h > 0)
+	if (h > 0)
 		. += "[h]h "
-	if(m > 0)
+	if (m > 0)
 		. += "[m]m "
 	. += "[s]s"
 
@@ -60,21 +60,21 @@
 	var/ph
 	var/pm
 	var/ps
-	if(hh < 10)
+	if (hh < 10)
 		ph = "0"
-	if(mm < 10)
+	if (mm < 10)
 		pm = "0"
-	if(ss < 10)
+	if (ss < 10)
 		ps = "0"
 	return"[ph][hh]:[pm][mm]:[ps][ss]"
 */
 
 /* Returns 1 if it is the selected month and day */
 /proc/isDay(var/month, var/day)
-	if(isnum(month) && isnum(day))
+	if (isnum(month) && isnum(day))
 		var/MM = text2num(time2text(world.timeofday, "MM")) // get the current month
 		var/DD = text2num(time2text(world.timeofday, "DD")) // get the current day
-		if(month == MM && day == DD)
+		if (month == MM && day == DD)
 			return 1
 
 		// Uncomment this out when debugging!

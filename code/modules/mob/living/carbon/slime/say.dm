@@ -12,11 +12,11 @@
 	return "telepathically chirps, [text]";
 
 /mob/living/carbon/slime/Hear(var/datum/speech/speech, var/rendered_speech="")
-	if(speech.speaker && speech.speaker != src && !speech.frequency)
+	if (speech.speaker && speech.speaker != src && !speech.frequency)
 		var/atom/movable/speaker=speech.speaker
-		if(speaker)
+		if (speaker)
 			speaker = speaker.GetSource()
-		if(speaker in Friends)
+		if (speaker in Friends)
 			speech_buffer = list()
 			speech_buffer += speech.name
 			speech_buffer += lowertext(html_encode(rendered_speech))

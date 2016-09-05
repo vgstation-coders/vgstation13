@@ -30,24 +30,24 @@ Obviously, requires DNA2.
 
 /datum/dna/gene/basic/grant_spell/hulk/can_activate(var/mob/M,var/flags)
 	// Can't be big AND small.
-	if(M_DWARF in M.mutations)
+	if (M_DWARF in M.mutations)
 		return 0
 	return ..(M,flags)
 
 /datum/dna/gene/basic/grant_spell/hulk/OnDrawUnderlays(var/mob/M,var/g,var/fat)
-	if(M_HULK in M.mutations)
-		if(fat)
+	if (M_HULK in M.mutations)
+		if (fat)
 			return "hulk_[fat]_s"
 		else
 			return "hulk_[g]_s"
 	return 0
 
 /datum/dna/gene/basic/grant_spell/hulk/OnMobLife(var/mob/living/carbon/human/M)
-	if(!istype(M))
+	if (!istype(M))
 		return
-	if(M_HULK in M.mutations)
+	if (M_HULK in M.mutations)
 		var/timeleft=M.hulk_time - world.time
-		if(M.health <= 25 || timeleft <= 0)
+		if (M.health <= 25 || timeleft <= 0)
 			M.hulk_time=0 // Just to be sure.
 			M.mutations.Remove(M_HULK)
 			//M.dna.SetSEState(HULKBLOCK,0)
@@ -82,7 +82,7 @@ Obviously, requires DNA2.
 	if (istype(user.loc,/mob))
 		to_chat(usr, "<span class='warning'>You can't hulk out right now!</span>")
 		return 1
-	for(var/mob/living/carbon/human/M in targets)
+	for (var/mob/living/carbon/human/M in targets)
 		M.hulk_time = world.time + src.duration
 		M.mutations.Add(M_HULK)
 		M.update_mutations()		//update our mutation overlays
@@ -108,17 +108,17 @@ Obviously, requires DNA2.
 	..()
 /datum/dna/gene/basic/farsight/activate(var/mob/M)
 	..()
-	if(M.client)
+	if (M.client)
 		M.client.changeView(max(M.client.view, world.view+1))
 
 /datum/dna/gene/basic/farsight/deactivate(var/mob/M,var/connected,var/flags)
-	if(..())
-		if(M.client && M.client.view == world.view + 1)
+	if (..())
+		if (M.client && M.client.view == world.view + 1)
 			M.client.changeView()
 
 /datum/dna/gene/basic/farsight/can_activate(var/mob/M,var/flags)
 	// Can't be big AND small.
-	if((M.sdisabilities & BLIND) || (M.disabilities & NEARSIGHTED))
+	if ((M.sdisabilities & BLIND) || (M.disabilities & NEARSIGHTED))
 		return 0
 	return ..(M,flags)
 
@@ -157,6 +157,6 @@ var/noir_master = list(new /obj/screen/plane_master/noir_master(),new /obj/scree
 	M.client.screen += noir_master
 
 /datum/dna/gene/basic/noir/deactivate(var/mob/M,var/connected,var/flags)
-	if(..())
+	if (..())
 		M.update_colour()
 		M.client.screen -= noir_master

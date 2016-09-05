@@ -14,28 +14,28 @@
 
 /obj/machinery/computer/station_alert/New()
 	..()
-	if(src.z != map.zMainStation)
+	if (src.z != map.zMainStation)
 		var/area/A = src.areaMaster
-		if(!A)
+		if (!A)
 			A = get_area(src)
-		if(!A)
+		if (!A)
 			return
 		name = "[A.general_area_name] Alert Computer"
 		general_area_name = A.general_area_name
 
-		for(var/areatype in typesof(A.general_area))
+		for (var/areatype in typesof(A.general_area))
 			var/area/B = locate(areatype)
 
 			covered_areas += B
 
 	else//very ugly fix until all the main station's areas inherit from /area/station/
 		var/blockedtypes = typesof(/area/research_outpost,/area/mine,/area/derelict,/area/djstation,/area/vox_trading_post,/area/tcommsat)
-		for(var/atype in (typesof(/area) - blockedtypes))
+		for (var/atype in (typesof(/area) - blockedtypes))
 			var/area/B = locate(atype)
 
 			covered_areas += B
 
-	for(var/area/A in covered_areas)
+	for (var/area/A in covered_areas)
 		A.sendDangerLevel(src)
 		A.send_firealert(src)
 		A.send_poweralert(src)
@@ -43,7 +43,7 @@
 /obj/machinery/computer/station_alert/attack_ai(mob/user)
 	src.add_hiddenprint(user)
 	add_fingerprint(user)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
 	interact(user)
 	return
@@ -51,7 +51,7 @@
 
 /obj/machinery/computer/station_alert/attack_hand(mob/user)
 	add_fingerprint(user)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
 	interact(user)
 	return
@@ -85,13 +85,13 @@
 
 
 /obj/machinery/computer/station_alert/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 	return
 
 
 /obj/machinery/computer/station_alert/proc/triggerAlarm(var/class, area/A, var/O, var/alarmsource)
-	if(stat & (BROKEN))
+	if (stat & (BROKEN))
 		return
 	var/list/L = src.alarms[class]
 	for (var/I in L)
@@ -114,7 +114,7 @@
 
 
 /obj/machinery/computer/station_alert/proc/cancelAlarm(var/class, area/A as area, obj/origin)
-	if(stat & (BROKEN))
+	if (stat & (BROKEN))
 		return
 	var/list/L = src.alarms[class]
 	var/cleared = 0
@@ -131,18 +131,18 @@
 
 
 /obj/machinery/computer/station_alert/process()
-	if(stat & NOPOWER)
+	if (stat & NOPOWER)
 		icon_state = "atmos0"
 		return
-	else if(stat & BROKEN)
+	else if (stat & BROKEN)
 		icon_state = "atmosb"
 		return
 	var/active_alarms = 0
 	for (var/cat in src.alarms)
 		var/list/L = src.alarms[cat]
-		if(L.len)
+		if (L.len)
 			active_alarms = 1
-	if(active_alarms)
+	if (active_alarms)
 		icon_state = "alert:2"
 	else
 		icon_state = "alert:0"

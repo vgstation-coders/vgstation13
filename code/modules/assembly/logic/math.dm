@@ -49,56 +49,56 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 
 	var/last_written_value = values.len //Index of the value that is written last in the interface. Default of values.len means that ALL values are written. Setting it to 1 will cause only the first value to be shown
 
-	switch(operation)
-		if("AVERAGE")
+	switch (operation)
+		if ("AVERAGE")
 			dat += "AVERAGE of "
-		if("MIN")
+		if ("MIN")
 			dat += "SMALLEST VALUE from "
-		if("MAX")
+		if ("MAX")
 			dat += "LARGEST VALUE from "
 
-		if("SIN")
+		if ("SIN")
 			dat += "SIN of "
-		if("COS")
+		if ("COS")
 			dat += "COS of "
-		if("ASIN")
+		if ("ASIN")
 			dat += "ARCSIN of "
-		if("ACOS")
+		if ("ACOS")
 			dat += "ARCCOS of "
-		if("TG")
+		if ("TG")
 			dat += "TANGENT of "
-		if("COTG")
+		if ("COTG")
 			dat += "COTANGENT of "
 
-		if("ADD")
+		if ("ADD")
 			operation_sign = "+"
-		if("SUBTRACT")
+		if ("SUBTRACT")
 			operation_sign = "-"
-		if("MULTIPLY")
+		if ("MULTIPLY")
 			operation_sign = "*"
-		if("DIVIDE")
+		if ("DIVIDE")
 			operation_sign = "/"
-		if("POWER")
+		if ("POWER")
 			operation_sign = "^"
 
-		if("MOD")
+		if ("MOD")
 			operation_sign = "MOD"
 
-	if(operation in list("SIN","COS","ASIN","ACOS","TG","COTG"))
+	if (operation in list("SIN","COS","ASIN","ACOS","TG","COTG"))
 		last_written_value = 1 //Only the first value is processed when using the functions above
 
-	if(values.len)
-		for(var/i = 1 to last_written_value)
+	if (values.len)
+		for (var/i = 1 to last_written_value)
 			var/A = values[i]
 
 			dat += "<a href='?src=\ref[src];change_value=[i]'><b>[A]"
 
-			if(!isnum(A)) //Variable (assembly) - write which of the assembly's value is used in the calculation (its time, frequency or whatever)
+			if (!isnum(A)) //Variable (assembly) - write which of the assembly's value is used in the calculation (its time, frequency or whatever)
 				dat += " ([values[A]])"
 
 			dat += "</b></a>"
 
-			if(i < last_written_value)
+			if (i < last_written_value)
 				dat += operation_sign //If we're writing the last value, skip the sign (to avoid the extra sign at the end, like VALUE == 6 + 12 + 51 +)
 
 	dat += "<BR>"
@@ -116,20 +116,20 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 	return
 
 /obj/item/device/assembly/math/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 
-	if(href_list["output_value"])
+	if (href_list["output_value"])
 		to_chat(usr, "<span class='info'>Result: [get_value(VALUE_RESULT)]</span>")
 		return
 
-	if(href_list["add_const"])
+	if (href_list["add_const"])
 		spawn()
 			var/choice = input(usr, "Please enter the constant's value:", "\The [src]") as null|num
 
-			if(isnull(choice))
+			if (isnull(choice))
 				return
-			if(..())
+			if (..())
 				return
 
 			values += choice
@@ -138,13 +138,13 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 			attack_self(usr)
 		return
 
-	if(href_list["change_operation"])
+	if (href_list["change_operation"])
 		spawn()
 			var/choice = input(usr, "Current operation is [operation]. Please select a new operation:", "\The [src]") as null|anything in math_circuit_operations_list
 
-			if(isnull(choice))
+			if (isnull(choice))
 				return
-			if(..())
+			if (..())
 				return
 
 			to_chat(usr, "<span class='info'>Changed operation from [operation] to [choice].</span>")
@@ -153,27 +153,27 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 			attack_self(usr)
 		return
 
-	if(href_list["change_value"])
+	if (href_list["change_value"])
 		var/id = text2num(href_list["change_value"])
 
-		if(id > values.len)
+		if (id > values.len)
 			return
 
 		var/changed_value = values[id]
 
-		if(isnum(changed_value)) //Constant
+		if (isnum(changed_value)) //Constant
 
 			spawn()
 				var/choice = input(usr, "Please enter the constant ([changed_value])'s new value. Leave blank to delete the constant from \the [src]'s memory.", "\The [src]", changed_value) as null|num
 
-				if(id > values.len)
+				if (id > values.len)
 					return
-				if(values[id] != changed_value)
+				if (values[id] != changed_value)
 					return
-				if(..())
+				if (..())
 					return
 
-				if(isnull(choice)) //Not number
+				if (isnull(choice)) //Not number
 					to_chat(usr, "<span class='info'>Removed the constant [values[id]].")
 					values.Remove(changed_value)
 				else //Wrote a number - change it
@@ -189,11 +189,11 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 
 				var/choice = input(usr, "Please select which of \the [changed_value]'s values is used in calculations (current: [values[changed_value]]).", "\The [src]") as null|anything in AS.accessible_values
 
-				if(isnull(choice))
+				if (isnull(choice))
 					return
-				if(!values.Find(changed_value))
+				if (!values.Find(changed_value))
 					return
-				if(..())
+				if (..())
 					return
 
 				to_chat(usr, "<span class='info'>Changed \the [changed_value]'s used value to [choice].</span>")
@@ -202,60 +202,60 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 				attack_self(usr)
 
 /obj/item/device/assembly/math/get_value(value)
-	if(!values.len)
+	if (!values.len)
 		return 0
 
-	if(value == VALUE_RESULT)
-		if(values.len == 1)
+	if (value == VALUE_RESULT)
+		if (values.len == 1)
 			var/obj/item/device/assembly/a = values[1]
 			return VALUE(a)
 
-		switch(operation)
-			if("AVERAGE")
+		switch (operation)
+			if ("AVERAGE")
 				. = 0
 
-				for(var/number in values) //Add all values in the list together
+				for (var/number in values) //Add all values in the list together
 					var/obj/item/device/assembly/a = number
 					. += VALUE(a)
 
 				. = . / values.len //Divide the resulting value by the length of the list
-			if("MIN") //Return minimum value
+			if ("MIN") //Return minimum value
 				var/list/L = list()
-				for(var/number in values)
+				for (var/number in values)
 					var/obj/item/device/assembly/a = number
 					L += VALUE(a)
 
 				. = min(L)
-			if("MAX") //Return maximum value
+			if ("MAX") //Return maximum value
 				var/list/L = list()
-				for(var/number in values)
+				for (var/number in values)
 					var/obj/item/device/assembly/a = number
 					L += VALUE(a)
 
 				. = max(L)
 
-			if("COS")
+			if ("COS")
 				var/obj/item/device/assembly/a = values[1]
 				. = cos(VALUE(a))
-			if("SIN")
+			if ("SIN")
 				var/obj/item/device/assembly/a = values[1]
 				. = sin(VALUE(a))
-			if("TG")
+			if ("TG")
 				var/obj/item/device/assembly/a = values[1]
 
-				if(cos(VALUE(a)) == 0) return 0 //Avoid division by 0
+				if (cos(VALUE(a)) == 0) return 0 //Avoid division by 0
 
 				. = sin(VALUE(a)) / cos(VALUE(a))
-			if("COTG")
+			if ("COTG")
 				var/obj/item/device/assembly/a = values[1]
 
-				if(sin(VALUE(a)) == 0) return 0 //Avoid division by 0
+				if (sin(VALUE(a)) == 0) return 0 //Avoid division by 0
 
 				. = cos(VALUE(a)) / sin(VALUE(a))
-			if("ACOS")
+			if ("ACOS")
 				var/obj/item/device/assembly/a = values[1]
 				. = arccos(VALUE(a))
-			if("ASIN")
+			if ("ASIN")
 				var/obj/item/device/assembly/a = values[1]
 				. = arcsin(VALUE(a))
 
@@ -264,37 +264,37 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 				var/obj/item/device/assembly/a = values[1]
 				. = VALUE(a)
 
-				for(var/i = 2 to values.len)
+				for (var/i = 2 to values.len)
 					var/number = values[i]
 
-					if(istype(number, /obj/item/device/assembly))
+					if (istype(number, /obj/item/device/assembly))
 						var/obj/item/device/assembly/A = number
 
 						number = A.get_value(values[A])
 
-					switch(operation)
-						if("ADD")
+					switch (operation)
+						if ("ADD")
 							. += number
-						if("SUBTRACT")
+						if ("SUBTRACT")
 							. -= number
-						if("MULTIPLY")
+						if ("MULTIPLY")
 							. *= number
-						if("DIVIDE")
-							if(number == 0) return 0
+						if ("DIVIDE")
+							if (number == 0) return 0
 
 							. /= number
-						if("POWER")
-							if(. < 0)
-								if(number != round(number)) //No fractions in the exponent if value is negative
+						if ("POWER")
+							if (. < 0)
+								if (number != round(number)) //No fractions in the exponent if value is negative
 									return 0
 
 							. = . ** number
-						if("MOD")
+						if ("MOD")
 							. %= number
 
 		. = round(. , 0.00001) //Round to 5 decimal places (prevent shit like cos(90) = 6.12323e-017)
 
-	else if(value == VALUE_VARIABLES)
+	else if (value == VALUE_VARIABLES)
 		//EXPORT all nomials in a single string
 		//Example: list(1, 4, [TIMER WITH INDEX 5], [ADDITION CIRCUIT WITH INDEX 99], 15) turns into "1&4&a5&a99&15"
 		//All nomials are separated by &
@@ -303,11 +303,11 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 
 		var/exported_string = ""
 		var/obj/item/device/assembly_frame/AF = loc
-		if(!istype(AF))
+		if (!istype(AF))
 			return 0
 
-		for(var/A in values)
-			if(isnum(A))
+		for (var/A in values)
+			if (isnum(A))
 				exported_string += "[A]&"
 			else
 				exported_string += "a[AF.assemblies.Find(A)]+[values[A]]&"
@@ -320,29 +320,29 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 		return ..()
 
 /obj/item/device/assembly/math/write_to_value(value, new_value)
-	if(value == VALUE_RESULT) //Can't write to result
+	if (value == VALUE_RESULT) //Can't write to result
 		return
-	else if(value == VALUE_VARIABLES) //Importing variables
+	else if (value == VALUE_VARIABLES) //Importing variables
 		var/obj/item/device/assembly_frame/AF = loc
-		if(!istype(AF))
+		if (!istype(AF))
 			return 0
 
 		var/list/raw_data = params2list(new_value)
 		var/list/new_value_list = list()
-		if(!raw_data.len)
+		if (!raw_data.len)
 			return
 
-		for(var/A in raw_data)
-			if(copytext(A, 1, 2) == "a") //First letter is a - this indicates a pointer
+		for (var/A in raw_data)
+			if (copytext(A, 1, 2) == "a") //First letter is a - this indicates a pointer
 				var/read_value = copytext(A, findtext(A, "+") + 1) //Everything after the + sign is the read value
 				var/index_data = replacetext(A, "+[read_value]", "") //Cut the read value and the plus sign off, leaving just "a[i]"
 
 				var/assembly_index = text2num(replacetext(index_data, "a", ""))
-				if(!assembly_index || (AF.assemblies.len < assembly_index))
+				if (!assembly_index || (AF.assemblies.len < assembly_index))
 					continue
 
 				var/obj/item/device/assembly/found = AF.assemblies[assembly_index]
-				if(istype(found))
+				if (istype(found))
 					new_value_list[found] = read_value
 			else
 				new_value_list.Add(text2num(A))
@@ -351,10 +351,10 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 
 		return
 
-	else if(value == VALUE_OPERATION) //Modifying operation
+	else if (value == VALUE_OPERATION) //Modifying operation
 		new_value = uppertext(new_value)
 
-		if(!math_circuit_operations_list.Find(new_value)) //Not a valid operation
+		if (!math_circuit_operations_list.Find(new_value)) //Not a valid operation
 			new_value = "ADD"
 
 	return ..(value, new_value)
@@ -362,19 +362,19 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 /obj/item/device/assembly/math/connected(var/obj/item/device/assembly/A, in_frame)
 	..()
 
-	if(istype(A, /obj/item/device/assembly/math))
+	if (istype(A, /obj/item/device/assembly/math))
 		var/obj/item/device/assembly/math/M = A
 
-		if(src in M.values)
+		if (src in M.values)
 			return //No infinite loops
 
-	for(var/test_value in A.accessible_values) //Check all accessible values
+	for (var/test_value in A.accessible_values) //Check all accessible values
 		var/parameters = A.accessible_values[test_value] //First, grab their parameters
 
-		if(parameters)
+		if (parameters)
 			var/list/L = params2list(parameters)
 
-			if(VALUE_IS_NUMBER(L))
+			if (VALUE_IS_NUMBER(L))
 				values[A] = test_value //Finally, if the added assembly HAS a numeric (number/pointer) value that we can use, add the assembly to the list (and use the found numeric value)
 				return
 

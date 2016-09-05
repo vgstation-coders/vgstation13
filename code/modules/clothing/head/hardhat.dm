@@ -17,7 +17,7 @@
 	icon_state = "hardhat[on]_[_color]"
 	item_state = "hardhat[on]_[_color]"
 
-	if(on)
+	if (on)
 		set_light(brightness_on)
 	else
 		set_light(0)

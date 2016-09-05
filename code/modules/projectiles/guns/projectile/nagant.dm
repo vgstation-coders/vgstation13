@@ -25,7 +25,7 @@
 		return 0
 
 /obj/item/weapon/gun/projectile/nagant/attack_self(mob/living/user as mob)
-	if(recentpump)
+	if (recentpump)
 		return
 	pump(user)
 	recentpump = 1
@@ -34,9 +34,9 @@
 	return
 
 /obj/item/weapon/gun/projectile/nagant/process_chambered()
-	if(in_chamber)
+	if (in_chamber)
 		return 1
-	else if(current_shell && current_shell.BB)
+	else if (current_shell && current_shell.BB)
 		in_chamber = current_shell.BB //Load projectile into chamber.
 		current_shell.BB.forceMove(src) //Set projectile loc to gun.
 		current_shell.BB = null
@@ -47,12 +47,12 @@
 /obj/item/weapon/gun/projectile/nagant/proc/pump(mob/M as mob)
 	playsound(M, 'sound/weapons/nagantreload.ogg', 100, 1)
 	pumped = 0
-	if(current_shell)//We have a shell in the chamber
+	if (current_shell)//We have a shell in the chamber
 		current_shell.forceMove(get_turf(src))//Eject casing
 		current_shell = null
-		if(in_chamber)
+		if (in_chamber)
 			in_chamber = null
-	if(!getAmmo())
+	if (!getAmmo())
 		return 0
 	var/obj/item/ammo_casing/AC = loaded[1] //load next casing.
 	loaded -= AC //Remove casing from loaded list.
@@ -62,16 +62,16 @@
 
 /obj/item/weapon/gun/projectile/nagant/attackby(var/obj/item/A as obj, mob/living/user as mob)
 	..()
-	if(istype(src, /obj/item/weapon/gun/projectile/nagant/obrez))
+	if (istype(src, /obj/item/weapon/gun/projectile/nagant/obrez))
 		return
-	if(istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
+	if (istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
 		to_chat(user, "<span class='notice'>You begin to shorten the barrel of \the [src].</span>")
-		if(getAmmo())
+		if (getAmmo())
 			user.visible_message("<span class='danger'>Take the ammo out first.</span>", "<span class='danger'>You need to take the ammo out first.</span>")
 			return
-		if(do_after(user, src, 30))
+		if (do_after(user, src, 30))
 			var/obj/item/weapon/gun/projectile/nagant/obrez/newObrez = new /obj/item/weapon/gun/projectile/nagant/obrez(get_turf(src))
-			for(var/obj/item/ammo_casing/AC in newObrez.loaded)
+			for (var/obj/item/ammo_casing/AC in newObrez.loaded)
 				newObrez.loaded -= AC
 			qdel(src)
 			to_chat(user, "<span class='warning'>You shorten the barrel of \the [src]!</span>")
@@ -88,21 +88,21 @@
 	slot_flags = SLOT_BELT
 
 /obj/item/weapon/gun/projectile/nagant/obrez/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
-	if(flag)
+	if (flag)
 		return //we're placing gun on a table or in backpack
-	if(current_shell && current_shell.BB)
+	if (current_shell && current_shell.BB)
 		//explosion(src.loc,-1,1,2)
 		var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
 		sparks.set_up(3, 0, get_turf(user)) //no idea what the 0 is
 		sparks.start()
 
 		var/turf/target_turf = get_turf(A)
-		if(target_turf)
+		if (target_turf)
 			var/turflist = getline(user, A)
 			flame_turf(turflist)
 
-		if(prob(15))
-			if(user.drop_item(src))
+		if (prob(15))
+			if (user.drop_item(src))
 				to_chat(user, "<span class='danger'>\The [src] flies out of your hands.</span>")
 				user.take_organ_damage(0,10)
 			else
@@ -115,17 +115,17 @@
 	var/turf/T = turflist[2]
 	var/turf/previousturf
 
-	if(length(turflist)>1)
+	if (length(turflist)>1)
 		previousturf = get_turf(src)
-	if(previousturf && LinkBlocked(previousturf, T))
+	if (previousturf && LinkBlocked(previousturf, T))
 		return
-	if(!T.density && !istype(T, /turf/space))
+	if (!T.density && !istype(T, /turf/space))
 		new /obj/fire(T) //add some fire as an effect because low intensity liquid fuel looks weak
 		getFromPool(/obj/effect/decal/cleanable/liquid_fuel, T, 0.1, get_dir(T.loc, T)) //spawn some fuel at the turf
 		T.hotspot_expose(500,500) //light it on fire
 		previousturf = null
 
-	for(var/mob/M in viewers(1, loc))
-		if((M.client && M.machine == src))
+	for (var/mob/M in viewers(1, loc))
+		if ((M.client && M.machine == src))
 			attack_self(M)
 	return

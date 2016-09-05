@@ -16,9 +16,9 @@
 /obj/structure/grille/examine(mob/user)
 
 	..()
-	if(!anchored)
+	if (!anchored)
 		to_chat(user, "Its screws are loose.")
-	if(broken) //We're not going to bother with the damage
+	if (broken) //We're not going to bother with the damage
 		to_chat(user, "It has been completely smashed apart, only a few rods are still holding together")
 
 /obj/structure/grille/cultify()
@@ -27,28 +27,28 @@
 	..()
 
 /obj/structure/grille/proc/healthcheck(var/hitsound = 0) //Note : Doubles as the destruction proc()
-	if(hitsound)
+	if (hitsound)
 		playsound(loc, 'sound/effects/grillehit.ogg', 80, 1)
-	if(health <= (0.25*initial(health)) && !broken) //Modular, 1/4th of original health. Do make sure the grille isn't broken !
+	if (health <= (0.25*initial(health)) && !broken) //Modular, 1/4th of original health. Do make sure the grille isn't broken !
 		broken = 1
 		icon_state = "[initial(icon_state)]-b"
 		density = 0 //Not blocking anything anymore
 		getFromPool(/obj/item/stack/rods, get_turf(src)) //One rod set
-	else if(health >= (0.25*initial(health)) && broken) //Repair the damage to this bitch
+	else if (health >= (0.25*initial(health)) && broken) //Repair the damage to this bitch
 		broken = 0
 		icon_state = initial(icon_state)
 		density = 1
-	if(health <= 0) //Dead
+	if (health <= 0) //Dead
 		getFromPool(/obj/item/stack/rods, get_turf(src)) //Drop the second set of rods
 		returnToPool(src)
 
 /obj/structure/grille/ex_act(severity)
-	switch(severity)
-		if(1)
+	switch (severity)
+		if (1)
 			health -= rand(30, 50)
-		if(2)
+		if (2)
 			health -= rand(15, 30)
-		if(3)
+		if (3)
 			health -= rand(5, 15)
 	healthcheck(hitsound = 1)
 	return
@@ -59,7 +59,7 @@
 	healthcheck(hitsound = 1)
 
 /obj/structure/grille/Bumped(atom/user)
-	if(ismob(user))
+	if (ismob(user))
 		shock(user, 60) //Give the user the benifit of the doubt
 
 /obj/structure/grille/attack_paw(mob/user as mob)
@@ -71,7 +71,7 @@
 	user.visible_message("<span class='warning'>[user] [humanverb]s \the [src].</span>", \
 	"<span class='warning'>You [humanverb] \the [src].</span>", \
 	"<span class='warning'>You hear twisting metal.</span>")
-	if(M_HULK in user.mutations)
+	if (M_HULK in user.mutations)
 		health -= 5 //Fair hit
 	else
 		health -= 3 //Do decent damage, still not as good as using a real tool
@@ -79,7 +79,7 @@
 	shock(user, 100) //If there's power running in the grille, allow the attack but grill the user
 
 /obj/structure/grille/attack_alien(mob/user as mob)
-	if(istype(user, /mob/living/carbon/alien/larva))
+	if (istype(user, /mob/living/carbon/alien/larva))
 		return
 	var/alienverb = pick(list("slam", "rip", "claw")) //See above
 	user.delayNextAttack(8)
@@ -91,7 +91,7 @@
 	shock(user, 75) //Ditto above
 
 /obj/structure/grille/attack_slime(mob/user as mob)
-	if(!istype(user, /mob/living/carbon/slime/adult))
+	if (!istype(user, /mob/living/carbon/slime/adult))
 		return
 	user.delayNextAttack(8)
 	user.visible_message("<span class='warning'>[user] smashes against \the [src].</span>", \
@@ -104,7 +104,7 @@
 
 /obj/structure/grille/attack_animal(var/mob/living/simple_animal/M as mob)
 	M.delayNextAttack(8)
-	if(M.melee_damage_upper == 0)
+	if (M.melee_damage_upper == 0)
 		return
 	M.visible_message("<span class='warning'>[M] smashes against \the [src].</span>", \
 					  "<span class='warning'>You smash against \the [src].</span>", \
@@ -116,19 +116,19 @@
 
 
 /obj/structure/grille/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
-	if(air_group || (height == 0))
+	if (air_group || (height == 0))
 		return 1
-	if(istype(mover) && mover.checkpass(PASSGRILLE))
+	if (istype(mover) && mover.checkpass(PASSGRILLE))
 		return 1
 	else
-		if(istype(mover, /obj/item/projectile))
+		if (istype(mover, /obj/item/projectile))
 			var/obj/item/projectile/projectile = mover
 			return prob(projectile.grillepasschance) //Fairly hit chance
 		else
 			return !density
 
 /obj/structure/grille/bullet_act(var/obj/item/projectile/Proj)
-	if(!Proj)
+	if (!Proj)
 		return
 	health -= Proj.damage //Just use the projectile damage, it already has high odds of "missing"
 	healthcheck(hitsound = 1)
@@ -136,15 +136,15 @@
 
 /obj/structure/grille/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
-	if(iswirecutter(W))
-		if(!shock(user, 100)) //Prevent user from doing it if he gets shocked
+	if (iswirecutter(W))
+		if (!shock(user, 100)) //Prevent user from doing it if he gets shocked
 			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
 			getFromPool(/obj/item/stack/rods, get_turf(src), broken ? 1 : 2) //Drop the rods, taking account on whenever the grille is broken or not !
 			returnToPool(src)
 			return
 		return //Return in case the user starts cutting and gets shocked, so that it doesn't continue downwards !
-	else if((isscrewdriver(W)) && (istype(loc, /turf/simulated) || anchored))
-		if(!shock(user, 90))
+	else if ((isscrewdriver(W)) && (istype(loc, /turf/simulated) || anchored))
+		if (!shock(user, 90))
 			playsound(loc, 'sound/items/Screwdriver.ogg', 100, 1)
 			anchored = !anchored
 			user.visible_message("<span class='notice'>[user] [anchored ? "fastens" : "unfastens"] the grille [anchored ? "to" : "from"] the floor.</span>", \
@@ -152,18 +152,18 @@
 			return
 
 //Window placement
-	else if(istype(W, /obj/item/stack/sheet/glass))
+	else if (istype(W, /obj/item/stack/sheet/glass))
 		var/dir_to_set
-		if(loc == user.loc)
+		if (loc == user.loc)
 			dir_to_set = user.dir //Whatever the user is doing, return the "normal" window placement output
 		else
-			if((x == user.x) || (y == user.y)) //Only supposed to work for cardinal directions, aka can't lay windows in diagonal directions
-				if(x == user.x) //User is on the same vertical plane
-					if(y > user.y)
+			if ((x == user.x) || (y == user.y)) //Only supposed to work for cardinal directions, aka can't lay windows in diagonal directions
+				if (x == user.x) //User is on the same vertical plane
+					if (y > user.y)
 						dir_to_set = 2 //User is laying from the bottom
 					else
 						dir_to_set = 1 //User is laying from the top
-				else if(y == user.y) //User is on the same horizontal plane
+				else if (y == user.y) //User is on the same horizontal plane
 					if (x > user.x)
 						dir_to_set = 8 //User is laying from the left
 					else
@@ -171,16 +171,16 @@
 			else
 				to_chat(user, "<span class='warning'>You can't reach far enough.</span>")
 				return
-		for(var/obj/structure/window/P in loc)
-			if(P.dir == dir_to_set)
+		for (var/obj/structure/window/P in loc)
+			if (P.dir == dir_to_set)
 				to_chat(user, "<span class='warning'>There's already a window here.</span>")//You idiot
 
 				return
 		user.visible_message("<span class='notice'>[user] starts placing a window on \the [src].</span>", \
 		"<span class='notice'>You start placing a window on \the [src].</span>")
-		if(do_after(user, src, 20))
-			for(var/obj/structure/window/P in loc)
-				if(P.dir == dir_to_set)//checking this for a 2nd time to check if a window was made while we were waiting.
+		if (do_after(user, src, 20))
+			for (var/obj/structure/window/P in loc)
+				if (P.dir == dir_to_set)//checking this for a 2nd time to check if a window was made while we were waiting.
 					to_chat(user, "<span class='warning'>There's already a window here.</span>")
 					return
 			var/obj/item/stack/sheet/glass/glass/G = W //This fucking stacks code holy shit
@@ -195,14 +195,14 @@
 			"<span class='notice'>You place \a [WD] on \the [src].</span>")
 		return
 
-	if(istype(W, /obj/item/weapon/fireaxe)) //Fireaxes instantly kill grilles
+	if (istype(W, /obj/item/weapon/fireaxe)) //Fireaxes instantly kill grilles
 		health = 0
 		healthcheck()
 
-	switch(W.damtype)
-		if("fire")
+	switch (W.damtype)
+		if ("fire")
 			health -= W.force //Fire-based tools like welding tools are ideal to work through small metal rods !
-		if("brute")
+		if ("brute")
 			health -= W.force * 0.5 //Rod matrices have an innate resistance to brute damage
 	shock(user, 100 * W.siemens_coefficient) //Chance of getting shocked is proportional to conductivity
 	healthcheck(hitsound = 1)
@@ -213,17 +213,17 @@
 //Returns 1 if shocked, 0 otherwise
 
 /obj/structure/grille/proc/shock(mob/user as mob, prb)
-	if(!anchored || broken)	//De-anchored and destroyed grilles are never connected to the powernet !
+	if (!anchored || broken)	//De-anchored and destroyed grilles are never connected to the powernet !
 		return 0
-	if(!prob(prb)) //If the probability roll failed, don't go further
+	if (!prob(prb)) //If the probability roll failed, don't go further
 		return 0
-	if(!in_range(src, user)) //To prevent TK and mech users from getting shocked
+	if (!in_range(src, user)) //To prevent TK and mech users from getting shocked
 		return 0
 	//Process the shocking via powernet, our job is done here
 	var/turf/T = get_turf(src)
 	var/obj/structure/cable/C = T.get_cable_node()
-	if(C)
-		if(electrocute_mob(user, C, src))
+	if (C)
+		if (electrocute_mob(user, C, src))
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 			s.set_up(3, 1, src)
 			s.start()
@@ -233,7 +233,7 @@
 	return 0
 
 /obj/structure/grille/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(exposed_temperature > T0C + 1500)
+	if (exposed_temperature > T0C + 1500)
 		health -= 1
 		healthcheck() //Note : This healthcheck is silent, and it's going to stay that way
 	..()
@@ -253,7 +253,7 @@
 
 /obj/structure/grille/broken/healthcheck(var/hitsound = 0) //needed because initial icon_state for broken is grille-b for mapping
 	..()
-	if(broken)
+	if (broken)
 		icon_state = "grille-b"
 	else
 		icon_state = "grille"
@@ -266,7 +266,7 @@
 	health = 40 //Make it strong enough to avoid people breaking in too easily
 
 /obj/structure/grille/cult/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
-	if(air_group || !broken)
+	if (air_group || !broken)
 		return 0 //Make sure air doesn't drain
 	..()
 

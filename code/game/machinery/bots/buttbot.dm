@@ -26,7 +26,7 @@ Here it is: Buttbot.
 	. = ..()
 	if (.)
 		return
-	if(sincelastfart + 5 < world.timeofday)
+	if (sincelastfart + 5 < world.timeofday)
 		speak("butt")
 		playsound(get_turf(src), 'sound/misc/fart.ogg', 50, 1)
 		sincelastfart = world.timeofday
@@ -35,22 +35,22 @@ Here it is: Buttbot.
 
 
 /obj/machinery/bot/buttbot/proc/speak(var/message)
-	if((!src.on) || (!message))
+	if ((!src.on) || (!message))
 		return
-	for(var/mob/O in hearers(src, null))
+	for (var/mob/O in hearers(src, null))
 		O.show_message("<b>[src]</b> beeps, '[message]'")
 	return
 
 
 /obj/machinery/bot/buttbot/Hear(var/datum/speech/speech, var/rendered_speech="")
 	set waitfor = 0 //Buttbots speaking should be queued after the original speech completes
-	if(prob(buttchance) && !findtext(speech.message,"butt"))
+	if (prob(buttchance) && !findtext(speech.message,"butt"))
 		sleep(rand(1,3))
 		var/list/split_phrase = splittext(speech.message," ") // Split it up into words.
 
 		var/list/prepared_words = split_phrase.Copy()
 		var/i = rand(1,3)
-		for(,i > 0,i--) //Pick a few words to change.
+		for (,i > 0,i--) //Pick a few words to change.
 
 			if (!prepared_words.len)
 				break
@@ -84,7 +84,7 @@ Here it is: Buttbot.
 
 /obj/item/clothing/head/butt/attackby(var/obj/item/W, mob/user as mob)
 	..()
-	if(istype(W, /obj/item/robot_parts/l_arm) || istype(W, /obj/item/robot_parts/r_arm))
+	if (istype(W, /obj/item/robot_parts/l_arm) || istype(W, /obj/item/robot_parts/r_arm))
 		qdel(W)
 		var/turf/T = get_turf(user.loc)
 		var/obj/machinery/bot/buttbot/A = new /obj/machinery/bot/buttbot(T)

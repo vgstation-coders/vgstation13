@@ -18,18 +18,18 @@
 	spawn( 5 )
 		for (var/dir in cardinal)
 			src.input = locate(/obj/machinery/mineral/input, get_step(src, dir))
-			if(src.input)
+			if (src.input)
 				break
 		for (var/dir in cardinal)
 			src.output = locate(/obj/machinery/mineral/output, get_step(src, dir))
-			if(src.output)
+			if (src.output)
 				break
 		return
 	return
 
 /obj/machinery/mineral/gasextractor/attack_hand(user as mob)
 
-	if(processing == 1)
+	if (processing == 1)
 		to_chat(user, "The machine is processing")
 		return
 
@@ -52,18 +52,18 @@
 	user << browse("[dat]", "window=purifier")
 
 /obj/machinery/mineral/gasextractor/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 
 	usr.machine = src
 	src.add_fingerprint(usr)
-	if(href_list["extract"])
+	if (href_list["extract"])
 		if (src.output)
 			if (locate(/obj/machinery/portable_atmospherics/canister,output.loc))
 				newtoxins = 0
 				processing = 1
 				var/obj/item/weapon/ore/O
-				while(locate(/obj/item/weapon/ore/plasma, input.loc) && locate(/obj/machinery/portable_atmospherics/canister,output.loc))
+				while (locate(/obj/item/weapon/ore/plasma, input.loc) && locate(/obj/machinery/portable_atmospherics/canister,output.loc))
 					O = locate(/obj/item/weapon/ore/plasma, input.loc)
 					if (istype(O,/obj/item/weapon/ore/plasma))
 						var/obj/machinery/portable_atmospherics/canister/C

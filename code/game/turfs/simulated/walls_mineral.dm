@@ -79,12 +79,12 @@
 	explosion_block = 2
 
 /turf/simulated/wall/mineral/uranium/proc/radiate()
-	if(!active)
-		if(world.time > last_event+15)
+	if (!active)
+		if (world.time > last_event+15)
 			active = 1
-			for(var/mob/living/L in range(3,src))
+			for (var/mob/living/L in range(3,src))
 				L.apply_effect(12,IRRADIATE,0)
-			for(var/turf/simulated/wall/mineral/uranium/T in range(3,src))
+			for (var/turf/simulated/wall/mineral/uranium/T in range(3,src))
 				T.radiate()
 			last_event = world.time
 			active = null
@@ -111,20 +111,20 @@
 	mineral = "plasma"
 
 /turf/simulated/wall/mineral/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(W.is_hot() > 300)//If the temperature of the object is over 300, then ignite
+	if (W.is_hot() > 300)//If the temperature of the object is over 300, then ignite
 		ignite(W.is_hot())
 		return
 	..()
 
 /turf/simulated/wall/mineral/plasma/proc/PlasmaBurn(temperature)
 	var/pdiff = performWallPressureCheck(src.loc)
-	if(pdiff > 0)
+	if (pdiff > 0)
 		investigation_log(I_ATMOS, "with a pdiff of [pdiff] has caught on fire at [formatJumpTo(get_turf(src))]!")
 		message_admins("\The [src] with a pdiff of [pdiff] has caught of fire at [formatJumpTo(get_turf(src))]!")
 	spawn(2)
 	new /obj/structure/girder(src)
 	src.ChangeTurf(/turf/simulated/floor)
-	for(var/turf/simulated/floor/target_tile in range(0,src))
+	for (var/turf/simulated/floor/target_tile in range(0,src))
 		/*if(target_tile.parent && target_tile.parent.group_processing)
 			target_tile.parent.suspend_group_processing()*/
 		var/datum/gas_mixture/napalm = new
@@ -133,28 +133,28 @@
 		napalm.temperature = 400+T0C
 		target_tile.assume_air(napalm)
 		spawn (0) target_tile.hotspot_expose(temperature, 400,surfaces=1)
-	for(var/obj/structure/falsewall/plasma/F in range(3,src))//Hackish as fuck, but until fire_act works, there is nothing I can do -Sieve
+	for (var/obj/structure/falsewall/plasma/F in range(3,src))//Hackish as fuck, but until fire_act works, there is nothing I can do -Sieve
 		var/turf/T = get_turf(F)
 		T.ChangeTurf(/turf/simulated/wall/mineral/plasma/)
 		qdel (F)
 		F = null
-	for(var/turf/simulated/wall/mineral/plasma/W in range(3,src))
+	for (var/turf/simulated/wall/mineral/plasma/W in range(3,src))
 		W.ignite((temperature/4))//Added so that you can't set off a massive chain reaction with a small flame
-	for(var/obj/machinery/door/airlock/plasma/D in range(3,src))
+	for (var/obj/machinery/door/airlock/plasma/D in range(3,src))
 		D.ignite(temperature/4)
 
 /turf/simulated/wall/mineral/plasma/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)//Doesn't fucking work because walls don't interact with air :(
-	if(exposed_temperature > 300)
+	if (exposed_temperature > 300)
 		PlasmaBurn(exposed_temperature)
 
 /turf/simulated/wall/mineral/plasma/ignite(exposed_temperature)
-	if(exposed_temperature > 300)
+	if (exposed_temperature > 300)
 		PlasmaBurn(exposed_temperature)
 
 /turf/simulated/wall/mineral/plasma/bullet_act(var/obj/item/projectile/Proj)
-	if(istype(Proj,/obj/item/projectile/beam))
+	if (istype(Proj,/obj/item/projectile/beam))
 		PlasmaBurn(2500)
-	else if(istype(Proj,/obj/item/projectile/ion))
+	else if (istype(Proj,/obj/item/projectile/ion))
 		PlasmaBurn(500)
 	..()
 
@@ -169,7 +169,7 @@
 		return 0
 
 /turf/simulated/wall/mineral/proc/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if((mineral == "gold") || (mineral == "silver"))
-		if(shocked)
+	if ((mineral == "gold") || (mineral == "silver"))
+		if (shocked)
 			shock()
 */

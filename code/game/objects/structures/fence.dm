@@ -34,12 +34,12 @@
 /obj/structure/fence/examine(mob/user)
 	.=..()
 
-	switch(hole_size)
-		if(SMALL_HOLE)
+	switch (hole_size)
+		if (SMALL_HOLE)
 			user.show_message("There is a small hole in \the [src].", MESSAGE_SEE)
-		if(MEDIUM_HOLE)
+		if (MEDIUM_HOLE)
 			user.show_message("There is a large hole in \the [src].", MESSAGE_SEE)
-		if(LARGE_HOLE)
+		if (LARGE_HOLE)
 			user.show_message("\The [src] has been completely cut through.", MESSAGE_SEE)
 
 /obj/structure/fence/end
@@ -67,50 +67,50 @@
 	hole_size = LARGE_HOLE
 
 /obj/structure/fence/attackby(obj/item/W, mob/user)
-	if(iswirecutter(W) && !shock(user, 100))
-		if(!cuttable)
+	if (iswirecutter(W) && !shock(user, 100))
+		if (!cuttable)
 			to_chat(user, "<span class='notice'>This section of the fence can't be cut.</span>")
 			return
 
-		if(invulnerable)
+		if (invulnerable)
 			to_chat(user, "<span class='notice'>This fence is too strong to cut through.</span>")
 			return
 
 		var/current_stage = hole_size
-		if(current_stage >= MAX_HOLE_SIZE)
+		if (current_stage >= MAX_HOLE_SIZE)
 			return
 
 		user.visible_message("<span class='danger'>\The [user] starts cutting through \the [src] with \the [W].</span>",\
 		"<span class='danger'>You start cutting through \the [src] with \the [W].</span>")
 
-		if(do_after(user, src, CUT_TIME))
-			if(current_stage == hole_size)
+		if (do_after(user, src, CUT_TIME))
+			if (current_stage == hole_size)
 
-				switch(++hole_size)
-					if(SMALL_HOLE)
+				switch (++hole_size)
+					if (SMALL_HOLE)
 						visible_message("<span class='notice'>\The [user] creates a small opening in \the [src] with \the [W].</span>")
 						to_chat(user, "<span class='info'>This hole seems to be [user.is_fat() ? "way " : ""]too small to climb though, but you probably could throw something through it.</span>")
-					if(MEDIUM_HOLE)
+					if (MEDIUM_HOLE)
 						visible_message("<span class='notice'>\The [user] cuts into \the [src] some more.</span>")
-						if(user.is_fat())
+						if (user.is_fat())
 							to_chat(user, "<span class='info'>While a thinner person could climb through this hole, it's still too small for you.</span>")
 						else
 							to_chat(user, "<span class='info'>You could probably fit yourself through that hole now. Although climbing through would be much faster if you made it even bigger.</span>")
-					if(LARGE_HOLE)
+					if (LARGE_HOLE)
 						visible_message("<span class='notice'>\The [user] completely cuts through \the [src].</span>")
 						to_chat(user, "<span class='info'>The hole in \the [src] is now big enough to walk through.</span>")
 
 				update_cut_status()
 		return
 
-	if(hole_size >= SMALL_HOLE)
+	if (hole_size >= SMALL_HOLE)
 		user.drop_item(W, get_turf(src))
 
 /obj/structure/fence/attack_hand(mob/user)
-	if(user.a_intent == I_HURT)
+	if (user.a_intent == I_HURT)
 		var/strength = 1
 		var/mob/living/carbon/human/H = user
-		if(istype(H))
+		if (istype(H))
 			strength = H.get_strength()
 
 		user.visible_message("<span class='danger'>\The [user] hits \the [src]!</span>")
@@ -118,49 +118,49 @@
 		shock(user, 100)
 		return 1
 
-	if(hole_size == MEDIUM_HOLE)
-		if(user.is_fat())
+	if (hole_size == MEDIUM_HOLE)
+		if (user.is_fat())
 			to_chat(user, "<span class='info'>You're too fat to fit through that hole.</span>")
 			return
 
 		user.visible_message("<span class='danger'>\The [user] starts climbing through \the [src]!</span>",\
 		"<span class='info'>You start climbing through \the [src]. This will take about [CLIMB_TIME / 10] seconds.</span>")
 
-		if(do_after(user, src, CLIMB_TIME) && !shock(user, 70)) //70% chance to get shocked
+		if (do_after(user, src, CLIMB_TIME) && !shock(user, 70)) //70% chance to get shocked
 			user.forceMove(get_turf(src)) //Could be exploitable as it doesn't check for any other dense objects on the turf. Fix when fences are buildable!
 			user.visible_message("<span class='danger'>\The [user] climbs through \the [src]!</span>")
 
 	return 1
 
 /obj/structure/fence/proc/update_cut_status()
-	if(!cuttable)
+	if (!cuttable)
 		return
 
 	density = 1
 
-	switch(hole_size)
-		if(NO_HOLE)
+	switch (hole_size)
+		if (NO_HOLE)
 			icon_state = initial(icon_state)
-		if(SMALL_HOLE)
+		if (SMALL_HOLE)
 			icon_state = "straight_cut1"
-		if(MEDIUM_HOLE)
+		if (MEDIUM_HOLE)
 			icon_state = "straight_cut2"
-		if(LARGE_HOLE)
+		if (LARGE_HOLE)
 			icon_state = "straight_cut3"
 			density = 0
 
 /obj/structure/fence/Bumped(atom/user)
-	if(ismob(user))
+	if (ismob(user))
 		shock(user, 60)
 
 //Mostly copied from grille.dm
 /obj/structure/fence/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
-	if(air_group || (height == 0))
+	if (air_group || (height == 0))
 		return 1
-	if(istype(mover) && mover.checkpass(PASSGRILLE))
+	if (istype(mover) && mover.checkpass(PASSGRILLE))
 		return 1
 	else
-		if(istype(mover, /obj/item/projectile))
+		if (istype(mover, /obj/item/projectile))
 			var/obj/item/projectile/projectile = mover
 			return prob(projectile.grillepasschance) //Fairly hit chance
 		else
@@ -168,15 +168,15 @@
 
 //Mostly copied from grille.dm
 /obj/structure/fence/proc/shock(mob/user, prb = 100)
-	if(!prob(prb)) //If the probability roll failed, don't go further
+	if (!prob(prb)) //If the probability roll failed, don't go further
 		return 0
-	if(!in_range(src, user)) //To prevent TK and mech users from getting shocked
+	if (!in_range(src, user)) //To prevent TK and mech users from getting shocked
 		return 0
 	//Process the shocking via powernet, our job is done here
 	var/turf/T = get_turf(src)
 	var/obj/structure/cable/C = T.get_cable_node()
-	if(C)
-		if(electrocute_mob(user, C, src))
+	if (C)
+		if (electrocute_mob(user, C, src))
 			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 			s.set_up(3, 1, src)
 			s.start()
@@ -204,17 +204,17 @@
 	open = TRUE
 
 /obj/structure/fence/door/attack_hand(mob/user)
-	if(can_open(user))
+	if (can_open(user))
 		toggle(user)
 
 	return 1
 
 /obj/structure/fence/door/proc/toggle(mob/user)
-	switch(open)
-		if(FALSE)
+	switch (open)
+		if (FALSE)
 			visible_message("<span class='notice'>\The [user] opens \the [src].</span>")
 			open = TRUE
-		if(TRUE)
+		if (TRUE)
 			visible_message("<span class='notice'>\The [user] closes \the [src].</span>")
 			open = FALSE
 
@@ -222,11 +222,11 @@
 	playsound(get_turf(src), 'sound/machines/click.ogg', 100, 1)
 
 /obj/structure/fence/door/proc/update_door_status()
-	switch(open)
-		if(FALSE)
+	switch (open)
+		if (FALSE)
 			density = 1
 			icon_state = "door_closed"
-		if(TRUE)
+		if (TRUE)
 			density = 0
 			icon_state = "door_opened"
 
@@ -255,7 +255,7 @@
 
 /obj/structure/fence/door/secure/can_open(mob/user)
 	//User must be standing in the permitted direction from the door, or must have telekinesis
-	if((M_TK in usr.mutations) || (get_dir(src, user) == permitted_direction))
+	if ((M_TK in usr.mutations) || (get_dir(src, user) == permitted_direction))
 		return TRUE
 	else
 		to_chat(user, "<span class='warning'>You can't reach the door latch from here!</span>")

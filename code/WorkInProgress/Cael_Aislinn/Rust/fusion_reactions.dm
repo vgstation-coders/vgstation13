@@ -9,22 +9,22 @@ datum/fusion_reaction
 /datum/controller/game_controller/var/list/fusion_reactions
 
 proc/get_fusion_reaction(var/primary_reactant, var/secondary_reactant)
-	if(!master_controller.fusion_reactions)
+	if (!master_controller.fusion_reactions)
 		populate_fusion_reactions()
-	if(master_controller.fusion_reactions.Find(primary_reactant))
+	if (master_controller.fusion_reactions.Find(primary_reactant))
 		var/list/secondary_reactions = master_controller.fusion_reactions[primary_reactant]
-		if(secondary_reactions.Find(secondary_reactant))
+		if (secondary_reactions.Find(secondary_reactant))
 			return master_controller.fusion_reactions[primary_reactant][secondary_reactant]
 
 proc/populate_fusion_reactions()
-	if(!master_controller.fusion_reactions)
+	if (!master_controller.fusion_reactions)
 		master_controller.fusion_reactions = list()
-		for(var/cur_reaction_type in typesof(/datum/fusion_reaction) - /datum/fusion_reaction)
+		for (var/cur_reaction_type in typesof(/datum/fusion_reaction) - /datum/fusion_reaction)
 			var/datum/fusion_reaction/cur_reaction = new cur_reaction_type()
-			if(!master_controller.fusion_reactions[cur_reaction.primary_reactant])
+			if (!master_controller.fusion_reactions[cur_reaction.primary_reactant])
 				master_controller.fusion_reactions[cur_reaction.primary_reactant] = list()
 			master_controller.fusion_reactions[cur_reaction.primary_reactant][cur_reaction.secondary_reactant] = cur_reaction
-			if(!master_controller.fusion_reactions[cur_reaction.secondary_reactant])
+			if (!master_controller.fusion_reactions[cur_reaction.secondary_reactant])
 				master_controller.fusion_reactions[cur_reaction.secondary_reactant] = list()
 			master_controller.fusion_reactions[cur_reaction.secondary_reactant][cur_reaction.primary_reactant] = cur_reaction
 

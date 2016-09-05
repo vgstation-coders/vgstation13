@@ -15,34 +15,34 @@ encompasses a larger field.
 proc/hex2num(hex)
 	//Converts a hexadecimal string (eg. "9F") into a numeral (eg. 159).
 
-	if(!istext(hex))
+	if (!istext(hex))
 		CRASH("hex2num not given a hexadecimal string argument (user error)")
 		return
 
 	var/num = 0
 	var/power = 0
 
-	for(var/i = lentext(hex), i > 0, i--)
+	for (var/i = lentext(hex), i > 0, i--)
 		var/char = copytext(hex, i, i+1) //extract hexadecimal character from string
-		switch(char)
-			if("0")
+		switch (char)
+			if ("0")
 				power++  //We don't do anything with a zero, so we'll just increase the power,
 				continue // then go onto the next iteration.
 
-			if("1","2","3","4","5","6","7","8","9")
+			if ("1","2","3","4","5","6","7","8","9")
 				num += text2num(char) * (16 ** power)
 
-			if("A","a")
+			if ("A","a")
 				num += 10 * (16 ** power)
-			if("B","b")
+			if ("B","b")
 				num += 11 * (16 ** power)
-			if("C","c")
+			if ("C","c")
 				num += 12 * (16 ** power)
-			if("D","d")
+			if ("D","d")
 				num += 13 * (16 ** power)
-			if("E","e")
+			if ("E","e")
 				num += 14 * (16 ** power)
-			if("F","f")
+			if ("F","f")
 				num += 15 * (16 ** power)
 
 			else
@@ -60,38 +60,38 @@ proc/num2hex(num, placeholder=2)
 	// until the string is that length -- eg. 15 in hexadecimal is "F",
 	// but the placeholder of 2 would make it "0F".
 
-	if(!isnum(num))
+	if (!isnum(num))
 		CRASH("num2hex not given a numeric argument (user error)")
 		return
 
-	if(!num)
+	if (!num)
 		return("0") //no computation necessary
 
 	var/hex = ""
 
 	var/i = 0
-	while(16**i < num) i++
+	while (16**i < num) i++
 
-	for(var/power = i-1, power >= 0, power--)
+	for (var/power = i-1, power >= 0, power--)
 		var/val = round( num / (16 ** power) )
 		num -= val * (16 ** power)
-		switch(val)
-			if(0,1,2,3,4,5,6,7,8,9)
+		switch (val)
+			if (0,1,2,3,4,5,6,7,8,9)
 				hex += "[val]"
 
-			if(10)
+			if (10)
 				hex += "A"
-			if(11)
+			if (11)
 				hex += "B"
-			if(12)
+			if (12)
 				hex += "C"
-			if(13)
+			if (13)
 				hex += "D"
-			if(14)
+			if (14)
 				hex += "E"
-			if(15)
+			if (15)
 				hex += "F"
 
-	while(lentext(hex) < placeholder) hex = "0[hex]"
+	while (lentext(hex) < placeholder) hex = "0[hex]"
 
 	return(hex)

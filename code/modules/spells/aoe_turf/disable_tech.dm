@@ -20,6 +20,6 @@
 
 /spell/aoe_turf/disable_tech/cast(list/targets)
 
-	for(var/turf/target in targets)
+	for (var/turf/target in targets)
 		empulse(get_turf(target), emp_heavy, emp_light)
 	return

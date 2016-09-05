@@ -19,7 +19,7 @@
 	var/limited_conversions = 0 // for revsquad
 
 /obj/item/device/flash/proc/clown_check(var/mob/user)
-	if(user && (M_CLUMSY in user.mutations) && prob(50))
+	if (user && (M_CLUMSY in user.mutations) && prob(50))
 		to_chat(user, "<span class='warning'>\The [src] slips out of your hand.</span>")
 		user.drop_item()
 		return 0
@@ -27,8 +27,8 @@
 
 /obj/item/device/flash/proc/flash_recharge()
 	//capacitor recharges over time
-	for(var/i=0, i<3, i++)
-		if(last_used+600 > world.time)
+	for (var/i=0, i<3, i++)
+		if (last_used+600 > world.time)
 			break
 		last_used += 600
 		times_used -= 2
@@ -37,7 +37,7 @@
 
 
 /obj/item/device/flash/attack(mob/living/M as mob, mob/user as mob)
-	if(!user || !M) //sanity
+	if (!user || !M) //sanity
 		return
 
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been flashed (attempt) with [src.name] by [key_name(user)]</font>")
@@ -45,15 +45,15 @@
 
 	log_attack("<font color='red'>[key_name(user)] Used the [src.name] to flash [key_name(M)]</font>")
 
-	if(!iscarbon(user))
+	if (!iscarbon(user))
 		M.LAssailant = null
 	else
 		M.LAssailant = user
 
-	if(!clown_check(user))
+	if (!clown_check(user))
 		return
 
-	if(broken)
+	if (broken)
 		to_chat(user, "<span class='warning'>\The [src] is broken.</span>")
 		return
 
@@ -61,10 +61,10 @@
 
 	//spamming the flash before it's fully charged (60seconds) increases the chance of it  breaking
 	//It will never break on the first use.
-	switch(times_used)
-		if(0 to 5)
+	switch (times_used)
+		if (0 to 5)
 			last_used = world.time
-			if(prob(times_used))	//if you use it 5 times in a minute it has a 10% chance to break!
+			if (prob(times_used))	//if you use it 5 times in a minute it has a 10% chance to break!
 				broken = 1
 				to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 				icon_state = "flashburnt"
@@ -78,48 +78,48 @@
 
 	var/flashfail = (harm_labeled >= min_harm_label) //Flashfail is always true if the device has been successfully harm-labeled.
 
-	if(iscarbon(M))
+	if (iscarbon(M))
 		var/mob/living/carbon/Subject = M
 		var/safe = Subject.eyecheck()
 
-		if(safe <= 0)
+		if (safe <= 0)
 			Subject.Weaken(10)
 			Subject.flash_eyes(visual = 1, affect_silicon = 1)
 
-			if(user.mind && isrevhead(user)) // alien revhead when?
-				if(ishuman(Subject))
-					if(Subject.stat != DEAD)
+			if (user.mind && isrevhead(user)) // alien revhead when?
+				if (ishuman(Subject))
+					if (Subject.stat != DEAD)
 						Subject.mind_initialize() // give them a mind datum if they don't have one
 
 						var/is_revsquad = istype(ticker.mode, /datum/game_mode/revsquad)
-						if(!is_revsquad || (is_revsquad && limited_conversions))
+						if (!is_revsquad || (is_revsquad && limited_conversions))
 							var/result = ticker.mode.add_revolutionary(Subject.mind)
 
-							if(result == 1)
+							if (result == 1)
 								log_admin("[key_name(user)] has converted [key_name(Subject)] to the revolution at [formatLocation(Subject.loc)]")
 								Subject.mind.has_been_rev = TRUE
-								if(is_revsquad)
+								if (is_revsquad)
 									limited_conversions--
-									if(limited_conversions <= 0)
+									if (limited_conversions <= 0)
 										to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 										broken = 1
 										icon_state = "flashburnt"
-							else if(result == ADD_REVOLUTIONARY_FAIL_IS_COMMAND || Subject.mind.has_been_rev) // command positions or has been rev before (according to old code you cannot attempt to rev people that has been deconverted, can be remove)
+							else if (result == ADD_REVOLUTIONARY_FAIL_IS_COMMAND || Subject.mind.has_been_rev) // command positions or has been rev before (according to old code you cannot attempt to rev people that has been deconverted, can be remove)
 								to_chat(user, "<span class='warning'>This mind seems resistant to the flash!</span>")
-							else if(result == ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED) // rev jobbanned
+							else if (result == ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED) // rev jobbanned
 								to_chat(user, "<span class='warning'>This mind seems resistant to the flash! (OOC INFO: REVOLUTIONARY JOBBANNED)</span>")
-							else if(result == ADD_REVOLUTIONARY_FAIL_IS_IMPLANTED) // loyalty implanted
+							else if (result == ADD_REVOLUTIONARY_FAIL_IS_IMPLANTED) // loyalty implanted
 								to_chat(user, "<span class='warning'>Something seems to be blocking the flash!</span>")
 					else
 						to_chat(user, "<span class='warning'>This mind is so vacant that it is not susceptible to influence!</span>")
 		else
 			flashfail = TRUE
-	else if(issilicon(M))
+	else if (issilicon(M))
 		M.Weaken(rand(5, 10))
 	else
 		flashfail = TRUE
 
-	if(isrobot(user))
+	if (isrobot(user))
 		spawn(0)
 			var/atom/movable/overlay/animation = new(get_turf(user))
 			animation.layer = user.layer + 1
@@ -130,10 +130,10 @@
 			sleep(5)
 			qdel(animation)
 
-	if(!flashfail)
+	if (!flashfail)
 		M.flash_eyes(affect_silicon = 1)
 
-		if(!issilicon(M))
+		if (!issilicon(M))
 			user.visible_message("<span class='disarm'>[user] blinds [M] with the flash!</span>")
 		else
 			user.visible_message("<span class='warning'>[user] overloads [M]'s sensors with the flash!</span>")
@@ -141,9 +141,9 @@
 		user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
 
 /obj/item/device/flash/attack_self(mob/living/carbon/user as mob, flag = 0, emp = 0)
-	if(!user || !clown_check(user))
+	if (!user || !clown_check(user))
 		return
-	if(broken)
+	if (broken)
 		user.show_message("<span class='warning'>The [src.name] is broken</span>", 2)
 		return
 
@@ -151,9 +151,9 @@
 
 	//spamming the flash before it's fully charged (60seconds) increases the chance of it  breaking
 	//It will never break on the first use.
-	switch(times_used)
-		if(0 to 5)
-			if(prob(2*times_used))	//if you use it 5 times in a minute it has a 10% chance to break!
+	switch (times_used)
+		if (0 to 5)
+			if (prob(2*times_used))	//if you use it 5 times in a minute it has a 10% chance to break!
 				broken = 1
 				to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 				icon_state = "flashburnt"
@@ -163,10 +163,10 @@
 			user.show_message("<span class='warning'>*click* *click*</span>", 2)
 			return
 	playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1)
-	if(harm_labeled >= min_harm_label)
+	if (harm_labeled >= min_harm_label)
 		return //Act as if the flash was activated except the useful part.
 	flick("flash2", src)
-	if(user && isrobot(user))
+	if (user && isrobot(user))
 		spawn(0)
 			var/atom/movable/overlay/animation = new(user.loc)
 			animation.layer = user.layer + 1
@@ -178,49 +178,49 @@
 			qdel(animation)
 			animation = null
 
-	for(var/mob/living/carbon/M in oviewers(3, null))
-		if(prob(50))
+	for (var/mob/living/carbon/M in oviewers(3, null))
+		if (prob(50))
 			if (locate(/obj/item/weapon/cloaking_device, M))
-				for(var/obj/item/weapon/cloaking_device/S in M)
+				for (var/obj/item/weapon/cloaking_device/S in M)
 					S.active = 0
 					S.icon_state = "shield0"
-		if(M.alpha < 255)
+		if (M.alpha < 255)
 			var/oldalpha = M.alpha
-			if(prob(80))
+			if (prob(80))
 				M.alpha = 255
 				M.visible_message("<span class='warning'>[M] suddenly becomes fully visible!</span>",\
 								"<span class='warning'>You see a bright flash of light and are suddenly fully visible again.</span>")
 				spawn(50)
 					M.alpha = oldalpha
 		var/safety = M:eyecheck()
-		if(!safety)
+		if (!safety)
 			M.flash_eyes(affect_silicon = 1)
 
 	return
 
 /obj/item/device/flash/emp_act(severity)
-	if(broken)
+	if (broken)
 		return
 	flash_recharge()
-	switch(times_used)
-		if(0 to 5)
-			if(prob(2*times_used))
+	switch (times_used)
+		if (0 to 5)
+			if (prob(2*times_used))
 				broken = 1
 				icon_state = "flashburnt"
 				return
 			times_used++
-			if(istype(loc, /mob/living/carbon) && harm_labeled < min_harm_label)
+			if (istype(loc, /mob/living/carbon) && harm_labeled < min_harm_label)
 				var/mob/living/carbon/M = loc
 				var/safety = M.eyecheck()
-				if(safety <= 0)
+				if (safety <= 0)
 					M.Weaken(10)
 					M.flash_eyes(visual = 1)
-					for(var/mob/O in viewers(M, null))
+					for (var/mob/O in viewers(M, null))
 						O.show_message("<span class='disarm'>[M] is blinded by the flash!</span>")
 	..()
 
 /obj/item/device/flash/restock()
-	if(broken)
+	if (broken)
 		broken = 0
 		times_used = 0
 		icon_state = "flash"
@@ -233,14 +233,14 @@
 
 /obj/item/device/flash/synthetic/attack(mob/living/M as mob, mob/user as mob)
 	..()
-	if(!broken)
+	if (!broken)
 		broken = 1
 		to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 		icon_state = "flashburnt"
 
 /obj/item/device/flash/synthetic/attack_self(mob/living/carbon/user as mob, flag = 0, emp = 0)
 	..()
-	if(!broken)
+	if (!broken)
 		broken = 1
 		to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 		icon_state = "flashburnt"

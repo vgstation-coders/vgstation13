@@ -10,7 +10,7 @@
 
 	update_inv_head(0)
 
-	for(var/i = 1 to held_items.len)
+	for (var/i = 1 to held_items.len)
 		update_inv_hand(i)
 
 	update_fire()
@@ -22,10 +22,10 @@
 
 	lying_prev = lying	//so we don't update overlays for lying/standing unless our stance changes again
 	overlays.len = 0
-	for(var/image/I in item_overlays)
+	for (var/image/I in item_overlays)
 		overlays += I
 
-	if(lying)
+	if (lying)
 		var/matrix/M = matrix()
 		M.Turn(90)
 		M.Translate(1,-6)
@@ -39,15 +39,15 @@
 	var/list/offsets = get_item_offset_by_index(index)
 	var/pixelx = 0
 	var/pixely = 0
-	if(offsets["x"])
+	if (offsets["x"])
 		pixelx = offsets["x"]
-	if(offsets["y"])
+	if (offsets["y"])
 		pixely = offsets["y"]
 
-	if(I)
+	if (I)
 		var/t_state = I.item_state
 		var/t_inhand_states = I.inhand_states[get_direction_by_index(index)]
-		if(!t_state)
+		if (!t_state)
 			t_state = I.icon_state
 
 		var/image/hand_image = image("icon" = src.icon, "icon_state" = "hand_[index]")
@@ -61,24 +61,24 @@
 	else
 		item_overlays[HAT_LAYER + index]	= null
 
-	if(update_icons)
+	if (update_icons)
 		update_icons()
 
 
 /mob/living/carbon/martian/update_inv_head(var/update_icons=1)
-	if(!head)
+	if (!head)
 		item_overlays[HAT_LAYER] = null
 
-		if(update_icons)
+		if (update_icons)
 			update_icons()
 		return
 	else
 		item_overlays[HAT_LAYER] = image("icon" = ((head.icon_override) ? head.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[head.icon_state]", "pixel_y" = 5)
 
-		if(update_icons)
+		if (update_icons)
 			update_icons()
 
-		if(client)
+		if (client)
 			client.screen |= head
 			head.screen_loc = ui_monkey_hat
 

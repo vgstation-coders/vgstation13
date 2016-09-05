@@ -7,7 +7,7 @@
 	var/reagent = ""
 
 /obj/item/weapon/reagent_containers/glass/bottle/robot/restock()
-	if(reagent && (reagents.get_reagent_amount(reagent) < volume))
+	if (reagent && (reagents.get_reagent_amount(reagent) < volume))
 		reagents.add_reagent(reagent, 2)
 
 /obj/item/weapon/reagent_containers/glass/bottle/robot/inaprovaline

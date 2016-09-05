@@ -20,13 +20,13 @@
 
 /obj/machinery/recharger/New()
 	..()
-	if(self_powered)
+	if (self_powered)
 		use_power = 0
 		idle_power_usage = 0
 		active_power_usage = 0
 
 /obj/machinery/recharger/Destroy()
-	if(charging)
+	if (charging)
 		charging.appearance = appearance_backup
 		charging.update_icon()
 		charging.forceMove(loc)
@@ -35,28 +35,28 @@
 	..()
 
 /obj/machinery/recharger/attackby(obj/item/weapon/G, mob/user)
-	if(issilicon(user))
+	if (issilicon(user))
 		return 1
 	. = ..()
-	if(.)
+	if (.)
 		return
-	if(stat & (NOPOWER | BROKEN))
+	if (stat & (NOPOWER | BROKEN))
 		to_chat(user, "<span class='notice'>[src] isn't connected to a power source.</span>")
 		return 1
-	if(charging)
+	if (charging)
 		to_chat(user, "<span class='warning'>There's \a [charging] already charging inside!</span>")
 		return 1
-	if(!anchored)
+	if (!anchored)
 		to_chat(user, "<span class='warning'>You must secure \the [src] before you can make use of it!</span>")
 		return 1
-	if(istype(G, /obj/item/weapon/gun/energy) || istype(G, /obj/item/weapon/melee/baton) || istype(G, /obj/item/energy_magazine) || istype(G, /obj/item/ammo_storage/magazine/lawgiver) || istype(G, /obj/item/weapon/rcs))
+	if (istype(G, /obj/item/weapon/gun/energy) || istype(G, /obj/item/weapon/melee/baton) || istype(G, /obj/item/energy_magazine) || istype(G, /obj/item/ammo_storage/magazine/lawgiver) || istype(G, /obj/item/weapon/rcs))
 		if (istype(G, /obj/item/weapon/gun/energy/gun/nuclear) || istype(G, /obj/item/weapon/gun/energy/crossbow))
 			to_chat(user, "<span class='notice'>Your gun's recharge port was removed to make room for a miniaturized reactor.</span>")
 			return 1
 		if (istype(G, /obj/item/weapon/gun/energy/staff))
 			to_chat(user, "<span class='notice'>The recharger rejects the magical apparatus.</span>")
 			return 1
-		if(!user.drop_item(G, src))
+		if (!user.drop_item(G, src))
 			user << "<span class='warning'>You can't let go of \the [G]!</span>"
 			return 1
 		appearance_backup = G.appearance
@@ -65,33 +65,33 @@
 		M.Translate(0,6)
 		G.transform = M
 		charging = G
-		if(!self_powered)
+		if (!self_powered)
 			use_power = 2
 		update_icon()
 		return 1
 
 /obj/machinery/recharger/wrenchAnchor(mob/user)
-	if(charging)
+	if (charging)
 		to_chat(user, "<span class='notice'>Remove the charging item first!</span>")
 		return
-	if(..() == 1)
+	if (..() == 1)
 		pixel_x = 0
 		pixel_y = 0
 		update_icon()
 
 /obj/machinery/recharger/attack_hand(mob/user)
-	if(issilicon(user) || ..())
+	if (issilicon(user) || ..())
 		return 1
 
 	add_fingerprint(user)
 
-	if(charging && Adjacent(user))
+	if (charging && Adjacent(user))
 		charging.appearance = appearance_backup
 		charging.update_icon()
 		charging.forceMove(loc)
 		user.put_in_hands(charging)
 		charging = null
-		if(!self_powered)
+		if (!self_powered)
 			use_power = 1
 		appearance_backup=null
 		update_icon()
@@ -100,12 +100,12 @@
 	return attack_hand(user)
 
 /obj/machinery/recharger/process()
-	if(!anchored)
+	if (!anchored)
 		icon_state = "recharger4"
 		return
 
-	if(!self_powered && (stat & (NOPOWER|BROKEN)))
-		if(charging)//Spit out anything being charged if it loses power or breaks
+	if (!self_powered && (stat & (NOPOWER|BROKEN)))
+		if (charging)//Spit out anything being charged if it loses power or breaks
 			charging.appearance = appearance_backup
 			charging.update_icon()
 			charging.forceMove(loc)
@@ -116,13 +116,13 @@
 			update_icon()
 		return
 
-	if(charging)
-		if(istype(charging, /obj/item/weapon/gun/energy))
+	if (charging)
+		if (istype(charging, /obj/item/weapon/gun/energy))
 			var/obj/item/weapon/gun/energy/E = charging
-			if((E.power_supply.charge + 100) < E.power_supply.maxcharge)
+			if ((E.power_supply.charge + 100) < E.power_supply.maxcharge)
 				E.power_supply.give(100)
 				icon_state = "recharger1"
-				if(!self_powered)
+				if (!self_powered)
 					use_power(250)
 				update_icon()
 			else
@@ -130,12 +130,12 @@
 				update_icon()
 				icon_state = "recharger2"
 			return
-		else if(istype(charging, /obj/item/energy_magazine))//pulse bullet casings
+		else if (istype(charging, /obj/item/energy_magazine))//pulse bullet casings
 			var/obj/item/energy_magazine/M = charging
-			if((M.bullets + 3) < M.max_bullets)
+			if ((M.bullets + 3) < M.max_bullets)
 				M.bullets = min(M.max_bullets,M.bullets+3)
 				icon_state = "recharger1"
-				if(!self_powered)
+				if (!self_powered)
 					use_power(250)
 				update_icon()
 			else
@@ -143,45 +143,45 @@
 				update_icon()
 				icon_state = "recharger2"
 			return
-		else if(istype(charging, /obj/item/ammo_storage/magazine/lawgiver))
+		else if (istype(charging, /obj/item/ammo_storage/magazine/lawgiver))
 			var/obj/item/ammo_storage/magazine/lawgiver/L = charging
-			if(!L.isFull())
-				if(L.stuncharge != 100)
+			if (!L.isFull())
+				if (L.stuncharge != 100)
 					L.stuncharge += 20
-				else if(L.lasercharge != 100)
+				else if (L.lasercharge != 100)
 					L.lasercharge += 20
-				else if(L.rapid_ammo_count != 5)
+				else if (L.rapid_ammo_count != 5)
 					L.rapid_ammo_count++
-				else if(L.flare_ammo_count != 5)
+				else if (L.flare_ammo_count != 5)
 					L.flare_ammo_count++
-				else if(L.ricochet_ammo_count != 5)
+				else if (L.ricochet_ammo_count != 5)
 					L.ricochet_ammo_count++
 				icon_state = "recharger1"
-				if(!self_powered)
+				if (!self_powered)
 					use_power(200)
 				update_icon()
 			else
 				update_icon()
 				icon_state = "recharger2"
 			return
-		else if(istype(charging, /obj/item/weapon/melee/baton))
+		else if (istype(charging, /obj/item/weapon/melee/baton))
 			var/obj/item/weapon/melee/baton/B = charging
-			if(B.bcell)
-				if(B.bcell.give(175))
+			if (B.bcell)
+				if (B.bcell.give(175))
 					icon_state = "recharger1"
-					if(!self_powered)
+					if (!self_powered)
 						use_power(200)
 				else
 					icon_state = "recharger2"
 			else
 				icon_state = "recharger0"
 
-		else if(istype(charging, /obj/item/weapon/rcs))
+		else if (istype(charging, /obj/item/weapon/rcs))
 			var/obj/item/weapon/rcs/rcs = charging
-			if(rcs.cell)
-				if(rcs.cell.give(175))
+			if (rcs.cell)
+				if (rcs.cell.give(175))
 					icon_state = "recharger1"
-					if(!self_powered)
+					if (!self_powered)
 						use_power(200)
 				else
 					icon_state = "recharger2"
@@ -189,23 +189,23 @@
 				icon_state = "recharger0"
 
 /obj/machinery/recharger/emp_act(severity)
-	if(stat & (NOPOWER|BROKEN) || !anchored)
+	if (stat & (NOPOWER|BROKEN) || !anchored)
 		..(severity)
 		return
 
-	if(istype(charging,  /obj/item/weapon/gun/energy))
+	if (istype(charging,  /obj/item/weapon/gun/energy))
 		var/obj/item/weapon/gun/energy/E = charging
-		if(E.power_supply)
+		if (E.power_supply)
 			E.power_supply.emp_act(severity)
 
-	else if(istype(charging, /obj/item/weapon/melee/baton))
+	else if (istype(charging, /obj/item/weapon/melee/baton))
 		var/obj/item/weapon/melee/baton/B = charging
-		if(B.bcell)
+		if (B.bcell)
 			B.bcell.charge = 0
 	..(severity)
 
 /obj/machinery/recharger/update_icon()	//we have an update_icon() in addition to the stuff in process to make it feel a tiny bit snappier.
-	if(charging)
+	if (charging)
 		overlays.len = 0
 		charging.update_icon()
 		overlays += charging.appearance
@@ -223,26 +223,26 @@
 	icon_state = "wrecharger0"
 
 /obj/machinery/recharger/wallcharger/process()
-	if(stat & (NOPOWER|BROKEN) || !anchored)
+	if (stat & (NOPOWER|BROKEN) || !anchored)
 		return
 
-	if(charging)
-		if(istype(charging, /obj/item/weapon/gun/energy))
+	if (charging)
+		if (istype(charging, /obj/item/weapon/gun/energy))
 			var/obj/item/weapon/gun/energy/E = charging
-			if(E.power_supply.charge < E.power_supply.maxcharge)
+			if (E.power_supply.charge < E.power_supply.maxcharge)
 				E.power_supply.give(100)
 				icon_state = "wrecharger1"
-				if(!self_powered)
+				if (!self_powered)
 					use_power(250)
 			else
 				icon_state = "wrecharger2"
 			return
-		if(istype(charging, /obj/item/weapon/melee/baton))
+		if (istype(charging, /obj/item/weapon/melee/baton))
 			var/obj/item/weapon/melee/baton/B = charging
-			if(B.bcell)
-				if(B.bcell.give(175))
+			if (B.bcell)
+				if (B.bcell.give(175))
 					icon_state = "wrecharger1"
-					if(!self_powered)
+					if (!self_powered)
 						use_power(200)
 				else
 					icon_state = "wrecharger2"

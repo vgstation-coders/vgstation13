@@ -16,22 +16,22 @@
 // It will also stream the chunk that the new loc is in.
 
 /mob/camera/aiEye/forceMove(var/atom/destination)
-	if(ai)
-		if(!isturf(ai.loc))
+	if (ai)
+		if (!isturf(ai.loc))
 			return
-		if(!isturf(destination))
-			for(destination = destination.loc; !isturf(destination); destination = destination.loc);
+		if (!isturf(destination))
+			for (destination = destination.loc; !isturf(destination); destination = destination.loc);
 		forceEnter(destination)
 
 		cameranet.visibility(src)
-		if(ai.client && ai.client.eye != src) // Set the eye to us and give the AI the sight & visibility flags it needs.
+		if (ai.client && ai.client.eye != src) // Set the eye to us and give the AI the sight & visibility flags it needs.
 			ai.client.eye = src
 			ai.change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			ai.see_in_dark = 8
 			ai.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 
 		//Holopad
-		if(istype(ai.current, /obj/machinery/hologram/holopad))
+		if (istype(ai.current, /obj/machinery/hologram/holopad))
 			var/obj/machinery/hologram/holopad/H = ai.current
 			H.move_hologram()
 
@@ -39,23 +39,23 @@
 	return 0
 
 /mob/camera/aiEye/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A) //proc for eye seeing visible messages from atom A, only possible with the high_res camera module
-	if(!high_res)
+	if (!high_res)
 		return
-	if(ai && cameranet.checkCameraVis(A)) //check it's actually in view of a camera
+	if (ai && cameranet.checkCameraVis(A)) //check it's actually in view of a camera
 		ai.show_message( message, 1, blind_message, 2)
 
 //An AI eyeobj mob cant hear unless it updates high_res with a Malf Module
 /mob/camera/aiEye/Hear(var/datum/speech/speech, var/rendered_speech="")
-	if(!high_res)
+	if (!high_res)
 		return
-	if(speech.frequency) //HOW CAN IT POSSIBLY READ LIPS THROUGH RADIOS
+	if (speech.frequency) //HOW CAN IT POSSIBLY READ LIPS THROUGH RADIOS
 		return
 
 	var/mob/M = speech.speaker
-	if(istype(M))
-		if(ishuman(M))
+	if (istype(M))
+		if (ishuman(M))
 			var/mob/living/carbon/human/H = speech.speaker
-			if(H.check_body_part_coverage(MOUTH)) //OR MASKS
+			if (H.check_body_part_coverage(MOUTH)) //OR MASKS
 				return
 		ai.Hear(speech, rendered_speech) //He can only read the lips of mobs, I cant think of objects using lips
 
@@ -86,23 +86,23 @@
 	..()
 
 /atom/proc/move_camera_by_click()
-	if(istype(usr, /mob/living/silicon/ai))
+	if (istype(usr, /mob/living/silicon/ai))
 		var/mob/living/silicon/ai/AI = usr
-		if(AI.eyeobj && AI.client.eye == AI.eyeobj)
+		if (AI.eyeobj && AI.client.eye == AI.eyeobj)
 			AI.cameraFollow = null
 			//AI.eyeobj.forceMove(src)
 			if (isturf(src.loc) || isturf(src))
 				AI.eyeobj.forceMove(src)
 
 /mob/living/Click()
-	if(isAI(usr)) //IDK why this is needed
+	if (isAI(usr)) //IDK why this is needed
 		var/mob/living/silicon/ai/A = usr
-		if(!A.aicamera.in_camera_mode) //Fix for taking photos of mobs
+		if (!A.aicamera.in_camera_mode) //Fix for taking photos of mobs
 			return
 	..()
 
 /mob/living/DblClick()
-	if(isAI(usr) && usr != src)
+	if (isAI(usr) && usr != src)
 		var/mob/living/silicon/ai/A = usr
 		A.ai_actual_track(src)
 		return
@@ -117,16 +117,16 @@
 	var/initial = initial(user.sprint)
 	var/max_sprint = 50
 
-	if(user.cooldown && user.cooldown < world.timeofday) // 3 seconds
+	if (user.cooldown && user.cooldown < world.timeofday) // 3 seconds
 		user.sprint = initial
 
-	for(var/i = 0; i < max(user.sprint, initial); i += 20)
+	for (var/i = 0; i < max(user.sprint, initial); i += 20)
 		var/turf/step = get_turf(get_step(user.eyeobj, direct))
-		if(step)
+		if (step)
 			user.eyeobj.forceMove(step)
 
 	user.cooldown = world.timeofday + 5
-	if(user.acceleration)
+	if (user.acceleration)
 		user.sprint = min(user.sprint + 0.5, max_sprint)
 	else
 		user.sprint = initial
@@ -145,7 +145,7 @@
 	cameraFollow = null
 	unset_machine()
 
-	if(src.eyeobj && src.loc)
+	if (src.eyeobj && src.loc)
 		//src.eyeobj.loc = src.loc
 		src.eyeobj.forceMove(src.loc)
 	else
@@ -155,13 +155,13 @@
 		src.eyeobj.name = "[src.name] (AI Eye)" // Give it a name
 		src.eyeobj.forceMove(src.loc)
 
-	if(client && client.eye) // Reset these things so the AI can't view through walls and stuff.
+	if (client && client.eye) // Reset these things so the AI can't view through walls and stuff.
 		client.eye = src
 		change_sight(removing = SEE_TURFS | SEE_MOBS | SEE_OBJS)
 		see_in_dark = 0
 		see_invisible = SEE_INVISIBLE_LIVING
 
-	for(var/datum/camerachunk/c in eyeobj.visibleCameraChunks)
+	for (var/datum/camerachunk/c in eyeobj.visibleCameraChunks)
 		c.remove(eyeobj)
 
 /mob/living/silicon/ai/verb/toggle_acceleration()

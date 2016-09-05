@@ -82,7 +82,7 @@
 	user.visible_message("\The [user] shuffles [src].")
 
 /obj/item/weapon/deck/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params)
-	if(flag)
+	if (flag)
 		return //It's adjacent, is the user, or is on the user's person
 
 	if (istype(A, /mob/living))
@@ -143,10 +143,10 @@
 	return ..()
 
 /obj/item/weapon/hand/attackby(obj/O as obj, mob/user as mob)
-	if(istype(O,/obj/item/weapon/hand))
+	if (istype(O,/obj/item/weapon/hand))
 		var/obj/item/weapon/hand/H = O
 
-		for(var/datum/playingcard/P in src.cards) H.cards.Add(P)
+		for (var/datum/playingcard/P in src.cards) H.cards.Add(P)
 
 		H.update_icon()
 
@@ -199,7 +199,7 @@
 /obj/item/weapon/hand/examine()
 	. = ..()
 
-	if((!concealed || src.loc == usr) && cards.len)
+	if ((!concealed || src.loc == usr) && cards.len)
 		usr.show_message("It contains: ")
 
 		for (var/datum/playingcard/card in cards)
@@ -214,7 +214,7 @@
 /obj/item/weapon/hand/update_icon()
 	if (!cards.len)
 		qdel (src)
-	else if(cards.len > 1)
+	else if (cards.len > 1)
 		name = "hand of cards"
 		desc = "Some playing cards."
 	else
@@ -238,7 +238,7 @@
 		var/i                   = 0
 		var/image/I
 
-		for(var/datum/playingcard/P in cards)
+		for (var/datum/playingcard/P in cards)
 			I                   = new(src.icon, (concealed ? "card_back" : "[P.card_icon]") )
 			I.pixel_x           = origin + (offset * i)
 
@@ -248,7 +248,7 @@
 
 	var/html                    = ""
 
-	for(var/datum/playingcard/card in cards)
+	for (var/datum/playingcard/card in cards)
 		html                    = html + "<a href=\"byond://?src=\ref[src.hi]&action=play_card&card=\ref[card]\" class=\"card [card.suit] [card.number]\"></a>"
 
 	src.hi.updateContent("hand", html)

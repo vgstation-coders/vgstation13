@@ -10,14 +10,14 @@
 	set name = "Show Plant Genes"
 	set desc = "Prints the round's plant gene masks."
 
-	if(!holder)
+	if (!holder)
 		return
 
-	if(!plant_controller || !plant_controller.gene_tag_masks)
+	if (!plant_controller || !plant_controller.gene_tag_masks)
 		to_chat(usr, "Gene masks not set.")
 		return
 
-	for(var/mask in plant_controller.gene_tag_masks)
+	for (var/mask in plant_controller.gene_tag_masks)
 		to_chat(usr, "[mask]: [plant_controller.gene_tag_masks[mask]]")
 
 var/global/datum/controller/plants/plant_controller // Set in New().
@@ -31,7 +31,7 @@ var/global/datum/controller/plants/plant_controller // Set in New().
 	var/list/gene_tag_masks = list()        // Gene obfuscation for delicious trial and error goodness.
 
 /datum/controller/plants/New()
-	if(plant_controller && plant_controller != src)
+	if (plant_controller && plant_controller != src)
 		log_debug("Rebuilding plant controller.")
 		qdel(plant_controller)
 	plant_controller = src
@@ -44,7 +44,7 @@ var/global/datum/controller/plants/plant_controller // Set in New().
 // Looks like shit but it's sort of necessary.
 /datum/controller/plants/proc/setup()
 	// Populate the global seed datum list.
-	for(var/type in typesof(/datum/seed)-/datum/seed)
+	for (var/type in typesof(/datum/seed)-/datum/seed)
 		var/datum/seed/S = new type
 		seeds[S.name] = S
 		S.uid = "[seeds.len]"
@@ -52,18 +52,18 @@ var/global/datum/controller/plants/plant_controller // Set in New().
 
 	// Make sure any seed packets that were mapped in are updated
 	// correctly (since the seed datums did not exist a tick ago).
-	for(var/obj/item/seeds/S in world)
+	for (var/obj/item/seeds/S in world)
 		S.update_seed()
 
 	//Might as well mask the gene types while we're at it.
 	var/list/gene_tags = list(GENE_PHYTOCHEMISTRY, GENE_MORPHOLOGY, GENE_BIOLUMINESCENCE, GENE_ECOLOGY, GENE_ECOPHYSIOLOGY, GENE_METABOLISM, GENE_NUTRITION, GENE_DEVELOPMENT)
 	var/list/used_masks = list()
 
-	while(gene_tags && gene_tags.len)
+	while (gene_tags && gene_tags.len)
 		var/gene_tag = pick(gene_tags)
 		var/gene_mask = "[num2hex(rand(0,255))]"
 
-		while(gene_mask in used_masks)
+		while (gene_mask in used_masks)
 			gene_mask = "[num2hex(rand(0,255))]"
 
 		used_masks += gene_mask
@@ -78,11 +78,11 @@ var/global/datum/controller/plants/plant_controller // Set in New().
 	seed.name = "[seed.uid]"
 	seeds[seed.name] = seed
 
-	if(survive_on_station)
-		if(seed.consume_gasses)
+	if (survive_on_station)
+		if (seed.consume_gasses)
 			seed.consume_gasses["plasma"] = null //PHORON DOES NOT EXIST
 			seed.consume_gasses["carbon_dioxide"] = null
-		if(seed.chems && !isnull(seed.chems[PACID]))
+		if (seed.chems && !isnull(seed.chems[PACID]))
 			seed.chems[PACID] = null // Eating through the hull will make these plants completely inviable, albeit very dangerous.
 			seed.chems -= null // Setting to null does not actually remove the entry, which is weird.
 		seed.ideal_heat = initial(seed.ideal_heat)
@@ -98,19 +98,19 @@ var/global/datum/controller/plants/plant_controller // Set in New().
 	spawn(0)
 		set background = 1
 		var/processed = 0
-		while(1)
-			if(!processing)
+		while (1)
+			if (!processing)
 				sleep(plant_tick_time)
 			else
 				processed = 0
-				if(plant_queue.len)
+				if (plant_queue.len)
 					var/target_to_process = min(plant_queue.len,plants_per_tick)
-					for(var/x=0;x<target_to_process;x++)
-						if(!plant_queue.len)
+					for (var/x=0;x<target_to_process;x++)
+						if (!plant_queue.len)
 							break
 						var/obj/effect/plantsegment/plant = pick(plant_queue)
 						plant_queue -= plant
-						if(!istype(plant))
+						if (!istype(plant))
 							continue
 						plant.process()
 						processed++

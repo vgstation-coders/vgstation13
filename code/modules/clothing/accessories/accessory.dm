@@ -24,12 +24,12 @@
 	update_icon()
 
 /obj/item/clothing/accessory/update_icon()
-	if(attached_to)
+	if (attached_to)
 		attached_to.overlays -= inv_overlay
 	inv_overlay = image("icon" = 'icons/obj/clothing/accessory_overlays.dmi', "icon_state" = "[_color || icon_state]")
-	if(attached_to)
+	if (attached_to)
 		attached_to.overlays += inv_overlay
-		if(ishuman(attached_to.loc))
+		if (ishuman(attached_to.loc))
 			var/mob/living/carbon/human/H = attached_to.loc
 			H.update_inv_by_slot(attached_to.slot_flags)
 
@@ -37,25 +37,25 @@
 	return istype(C, /obj/item/clothing/under) //By default, accessories can only be attached to jumpsuits
 
 /obj/item/clothing/accessory/proc/on_attached(obj/item/clothing/C)
-	if(!istype(C))
+	if (!istype(C))
 		return
 	attached_to = C
 	attached_to.overlays += inv_overlay
 
 /obj/item/clothing/accessory/proc/on_removed(mob/user as mob)
-	if(!attached_to)
+	if (!attached_to)
 		return
 	attached_to.overlays -= inv_overlay
 	attached_to = null
 	forceMove(get_turf(user || src))
-	if(user)
+	if (user)
 		user.put_in_hands(src)
 		add_fingerprint(user)
 
 /obj/item/clothing/accessory/proc/on_accessory_interact(mob/user, delayed = 0)
-	if(!attached_to)
+	if (!attached_to)
 		return
-	if(delayed)
+	if (delayed)
 		attached_to.remove_accessory(user, src)
 		attack_hand(user)
 		return 1
@@ -71,8 +71,8 @@
 	return
 
 /obj/item/clothing/generate_accessory_overlays(var/obj/Overlays/O)
-	if(accessories.len)
-		for(var/obj/item/clothing/accessory/accessory in accessories)
+	if (accessories.len)
+		for (var/obj/item/clothing/accessory/accessory in accessories)
 			O.overlays += image("icon" = 'icons/mob/clothing_accessories.dmi', "icon_state" = "[accessory._color || accessory.icon_state]")
 
 //Defining this at item level to prevent CASTING HELL
@@ -80,9 +80,9 @@
 	return
 
 /obj/item/clothing/description_accessories()
-	if(accessories.len)
+	if (accessories.len)
 		. = list()
-		for(var/obj/item/clothing/accessory/accessory in accessories)
+		for (var/obj/item/clothing/accessory/accessory in accessories)
 			. += "[bicon(accessory)] \a [accessory]"
 		return " It has [english_list(.)]."
 
@@ -95,7 +95,7 @@
 	return 1
 
 /obj/item/clothing/accessory/tie/can_attach_to(obj/item/clothing/C)
-	if(istype(C))
+	if (istype(C))
 		return (C.body_parts_covered & UPPER_TORSO) //Sure why not
 
 /obj/item/clothing/accessory/tie/blue
@@ -125,31 +125,31 @@
 	origin_tech = Tc_BIOTECH + "=1"
 
 /obj/item/clothing/accessory/stethoscope/attack(mob/living/carbon/human/M, mob/living/user)
-	if(ishuman(M) && isliving(user))
-		if(user.a_intent == I_HELP)
+	if (ishuman(M) && isliving(user))
+		if (user.a_intent == I_HELP)
 			var/body_part = parse_zone(user.zone_sel.selecting)
-			if(body_part)
+			if (body_part)
 				var/their = "their"
-				switch(M.gender)
-					if(MALE)
+				switch (M.gender)
+					if (MALE)
 						their = "his"
-					if(FEMALE)
+					if (FEMALE)
 						their = "her"
 
 				var/sound = "pulse"
 				var/sound_strength
 
-				if(M.isDead())
+				if (M.isDead())
 					sound_strength = "cannot hear"
 					sound = "anything"
 				else
 					sound_strength = "hear a weak"
-					switch(body_part)
-						if(LIMB_CHEST)
-							if(M.oxyloss < 50)
+					switch (body_part)
+						if (LIMB_CHEST)
+							if (M.oxyloss < 50)
 								sound_strength = "hear a healthy"
 							sound = "pulse and respiration"
-						if("eyes","mouth")
+						if ("eyes","mouth")
 							sound_strength = "cannot hear"
 							sound = "anything"
 						else
@@ -168,7 +168,7 @@
 	_color = "bronze"
 
 /obj/item/clothing/accessory/medal/can_attach_to(obj/item/clothing/C)
-	if(istype(C))
+	if (istype(C))
 		return (C.body_parts_covered & UPPER_TORSO) //Sure why not
 
 /obj/item/clothing/accessory/medal/conduct
@@ -235,10 +235,10 @@
 	slot_flags = SLOT_MASK
 
 /obj/item/clothing/accessory/holobadge/attack_self(mob/user as mob)
-	if(!stored_name)
+	if (!stored_name)
 		to_chat(user, "Waving around a badge before swiping an ID would be pretty pointless.")
 		return
-	if(isliving(user))
+	if (isliving(user))
 		user.visible_message("<span class='warning'>[user] displays their Nanotrasen Internal Security Legal Authorization Badge.\nIt reads: [stored_name], NT Security.</span>","<span class='warning'>You display your Nanotrasen Internal Security Legal Authorization Badge.\nIt reads: [stored_name], NT Security.</span>")
 
 /obj/item/clothing/accessory/holobadge/attackby(var/obj/item/O as obj, var/mob/user as mob)
@@ -252,17 +252,17 @@
 			to_chat(user, "<span class='warning'>You swipe [O] and crack the holobadge security checks.</span>")
 			return
 
-	else if(istype(O, /obj/item/weapon/card/id) || istype(O, /obj/item/device/pda))
+	else if (istype(O, /obj/item/weapon/card/id) || istype(O, /obj/item/device/pda))
 
 		var/obj/item/weapon/card/id/id_card = null
 
-		if(istype(O, /obj/item/weapon/card/id))
+		if (istype(O, /obj/item/weapon/card/id))
 			id_card = O
 		else
 			var/obj/item/device/pda/pda = O
 			id_card = pda.id
 
-		if(access_security in id_card.access || emagged)
+		if (access_security in id_card.access || emagged)
 			to_chat(user, "You imprint your ID details onto the badge.")
 			stored_name = id_card.registered_name
 			name = "holobadge ([stored_name])"
@@ -273,7 +273,7 @@
 	..()
 
 /obj/item/clothing/accessory/holobadge/attack(mob/living/carbon/human/M, mob/living/user)
-	if(isliving(user))
+	if (isliving(user))
 		user.visible_message("<span class='warning'>[user] invades [M]'s personal space, thrusting [src] into their face insistently.</span>","<span class='warning'>You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.</span>")
 
 /obj/item/weapon/storage/box/holobadge

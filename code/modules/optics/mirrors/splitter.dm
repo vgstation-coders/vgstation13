@@ -22,23 +22,23 @@
 	//     |
 	// Can probably do this mathematically, but I'm too goddamn tired.
 
-	if(dir in list(EAST, WEST)) // \\ orientation
-		switch(in_dir)
-			if(NORTH)
+	if (dir in list(EAST, WEST)) // \\ orientation
+		switch (in_dir)
+			if (NORTH)
 				return list(SOUTH, EAST)
-			if(SOUTH)
+			if (SOUTH)
 				return list(NORTH, WEST)
-			if(EAST)
+			if (EAST)
 				return list(NORTH, WEST)
-			if(WEST)
+			if (WEST)
 				return list(SOUTH, EAST)
 	else
-		switch(in_dir) // / orientation
-			if(NORTH)
+		switch (in_dir) // / orientation
+			if (NORTH)
 				return list(SOUTH, WEST)
-			if(SOUTH)
+			if (SOUTH)
 				return list(NORTH, EAST)
-			if(EAST)
+			if (EAST)
 				return list(SOUTH, WEST)
-			if(WEST)
+			if (WEST)
 				return list(NORTH, EAST)

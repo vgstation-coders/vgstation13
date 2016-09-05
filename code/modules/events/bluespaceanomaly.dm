@@ -39,17 +39,17 @@
 
 /datum/event/bluespace_anomaly/start()
 	var/turf/T = pick(get_area_turfs(impact_area))
-	if(T)
+	if (T)
 			// Calculate new position (searches through beacons in world)
 		var/obj/item/beacon/chosen
 		var/list/possible = list()
-		for(var/obj/item/beacon/W in beacons)
+		for (var/obj/item/beacon/W in beacons)
 			possible += W
 
-		if(possible.len > 0)
+		if (possible.len > 0)
 			chosen = pick(possible)
 
-		if(chosen)
+		if (chosen)
 				// Calculate previous position for transition
 
 			var/turf/FROM = T // the turf of origin we're travelling FROM
@@ -58,32 +58,32 @@
 			playsound(TO, 'sound/effects/phasein.ogg', 100, 1)
 
 			var/list/flashers = list()
-			for(var/mob/living/carbon/human/M in viewers(TO, null))
-				// if(M:eyecheck() <= 0) (this is now handled in flash_eyes)
-				if(M.flash_eyes(affect_silicon = 1))
+			for (var/mob/living/carbon/human/M in viewers(TO, null))
+				// if (M:eyecheck() <= 0) (this is now handled in flash_eyes)
+				if (M.flash_eyes(affect_silicon = 1))
 					flashers += M
 
 			var/y_distance = TO.y - FROM.y
 			var/x_distance = TO.x - FROM.x
 			for (var/atom/movable/A in range(12, FROM )) // iterate thru list of mobs in the area
-				if(istype(A, /obj/item/beacon))
+				if (istype(A, /obj/item/beacon))
 					continue // don't teleport beacons because that's just insanely stupid
-				if(A.anchored && (istype(A, /obj/machinery) || istype(A,/obj/structure)))
+				if (A.anchored && (istype(A, /obj/machinery) || istype(A,/obj/structure)))
 					continue
-				if(istype(A, /obj/structure/disposalpipe ))
+				if (istype(A, /obj/structure/disposalpipe ))
 					continue
-				if(istype(A, /obj/structure/cable ))
+				if (istype(A, /obj/structure/cable ))
 					continue
-				if(istype(A, /atom/movable/lighting_overlay))
+				if (istype(A, /atom/movable/lighting_overlay))
 					continue
 
 				var/turf/newloc = locate(A.x + x_distance, A.y + y_distance, TO.z) // calculate the new place
 				A.forceMove(newloc)
 
 				spawn()
-					if(ismob(A) && !(A in flashers)) // don't flash if we're already doing an effect
+					if (ismob(A) && !(A in flashers)) // don't flash if we're already doing an effect
 						var/mob/M = A
-						if(M.client)
+						if (M.client)
 							var/obj/blueeffect = new /obj(src)
 							blueeffect.screen_loc = "WEST,SOUTH to EAST,NORTH"
 							blueeffect.icon = 'icons/effects/effects.dmi'

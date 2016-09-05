@@ -14,9 +14,9 @@
 	pixel_y = rand(-5,5) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/disk/botany/attack_self(var/mob/user as mob)
-	if(genes.len)
+	if (genes.len)
 		var/choice = alert(user, "Are you sure you want to wipe the disk?", "Xenobotany Data", "No", "Yes")
-		if(src && user && genes && choice && choice == "Yes" && user.get_active_hand() == src)
+		if (src && user && genes && choice && choice == "Yes" && user.get_active_hand() == src)
 			to_chat(user, "You wipe the disk data.")
 			name = initial(name)
 			desc = initial(name)
@@ -29,7 +29,7 @@
 
 /obj/item/weapon/storage/box/botanydisk/New()
 	..()
-	for(var/i = 1 to 7)
+	for (var/i = 1 to 7)
 		new /obj/item/weapon/disk/botany(src)
 
 /obj/machinery/botany
@@ -55,10 +55,10 @@
 /obj/machinery/botany/process()
 
 	..()
-	if(!active)
+	if (!active)
 		return
 
-	if(world.time > last_action + action_time)
+	if (world.time > last_action + action_time)
 		finished_task()
 
 /obj/machinery/botany/attack_paw(mob/user as mob)
@@ -72,15 +72,15 @@
 
 /obj/machinery/botany/proc/finished_task()
 	active = 0
-	if(failed_task)
+	if (failed_task)
 		failed_task = 0
 		visible_message("[bicon(src)] [src] pings unhappily, flashing a red warning light.")
 	else
 		visible_message("[bicon(src)] [src] pings happily.")
 
-	if(eject_disk)
+	if (eject_disk)
 		eject_disk = 0
-		if(loaded_disk)
+		if (loaded_disk)
 			loaded_disk.forceMove(get_turf(src))
 			visible_message("[bicon(src)] [src] beeps and spits out [loaded_disk].")
 			loaded_disk = null
@@ -88,12 +88,12 @@
 	nanomanager.update_uis(src)
 
 /obj/machinery/botany/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/seeds))
-		if(loaded_seed)
+	if (istype(W,/obj/item/seeds))
+		if (loaded_seed)
 			to_chat(user, "There is already a seed loaded.")
 			return
 		var/obj/item/seeds/S = W
-		if(S.seed && S.seed.immutable > 0)
+		if (S.seed && S.seed.immutable > 0)
 			to_chat(user, "That seed is not compatible with our genetics technology.")
 		else
 			user.drop_item(S, src, force_drop = 1)
@@ -102,23 +102,23 @@
 			nanomanager.update_uis(src)
 		return
 
-	if(istype(W,/obj/item/weapon/disk/botany))
-		if(loaded_disk)
+	if (istype(W,/obj/item/weapon/disk/botany))
+		if (loaded_disk)
 			to_chat(user, "There is already a data disk loaded.")
 			return
 		else
 			var/obj/item/weapon/disk/botany/B = W
 
-			if(B.genes && B.genes.len)
-				if(!disk_needs_genes)
+			if (B.genes && B.genes.len)
+				if (!disk_needs_genes)
 					to_chat(user, "That disk already has gene data loaded.")
 					return
 			else
-				if(disk_needs_genes)
+				if (disk_needs_genes)
 					to_chat(user, "That disk does not have any gene data loaded.")
 					return
 
-			if(!user.drop_item(W, src))
+			if (!user.drop_item(W, src))
 				return
 
 			loaded_disk = W
@@ -152,33 +152,33 @@
 
 /obj/machinery/botany/extractor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
 
-	if(!user)
+	if (!user)
 		return
 
 	var/list/data = list()
 
 	var/list/geneMasks[0]
-	for(var/gene_tag in plant_controller.gene_tag_masks)
+	for (var/gene_tag in plant_controller.gene_tag_masks)
 		geneMasks.Add(list(list("tag" = gene_tag, "mask" = plant_controller.gene_tag_masks[gene_tag])))
 	data["geneMasks"] = geneMasks
 
 	data["activity"] = active
 	data["degradation"] = degradation
 
-	if(loaded_disk)
+	if (loaded_disk)
 		data["disk"] = 1
 	else
 		data["disk"] = 0
 
-	if(loaded_seed)
+	if (loaded_seed)
 		data["loaded"] = "[loaded_seed.name]"
 	else
 		data["loaded"] = 0
 
-	if(genetics)
+	if (genetics)
 		data["hasGenetics"] = 1
 		data["sourceName"] = genetics.display_name
-		if(!genetics.roundstart)
+		if (!genetics.roundstart)
 			data["sourceName"] += " (variety #[genetics.uid])"
 	else
 		data["hasGenetics"] = 0
@@ -193,18 +193,18 @@
 
 /obj/machinery/botany/Topic(href, href_list)
 
-	if(..())
+	if (..())
 		return 1
-	if(href_list["close"])
-		if(usr.machine == src)
+	if (href_list["close"])
+		if (usr.machine == src)
 			usr.unset_machine()
 
-	if(href_list["eject_packet"])
-		if(!loaded_seed)
+	if (href_list["eject_packet"])
+		if (!loaded_seed)
 			return
 		loaded_seed.forceMove(get_turf(src))
 
-		if(loaded_seed.seed.name == "new line" || isnull(plant_controller.seeds[loaded_seed.seed.name]))
+		if (loaded_seed.seed.name == "new line" || isnull(plant_controller.seeds[loaded_seed.seed.name]))
 			loaded_seed.seed.uid = plant_controller.seeds.len + 1
 			loaded_seed.seed.name = "[loaded_seed.seed.uid]"
 			plant_controller.seeds[loaded_seed.seed.name] = loaded_seed.seed
@@ -214,8 +214,8 @@
 
 		loaded_seed = null
 
-	if(href_list["eject_disk"])
-		if(!loaded_disk)
+	if (href_list["eject_disk"])
+		if (!loaded_disk)
 			return
 		loaded_disk.forceMove(get_turf(src))
 		visible_message("[bicon(src)] [src] beeps and spits out [loaded_disk].")
@@ -227,42 +227,42 @@
 
 /obj/machinery/botany/extractor/Topic(href, href_list)
 
-	if(..())
+	if (..())
 		return 1
 
 	usr.set_machine(src)
 	src.add_fingerprint(usr)
 
-	if(href_list["scan_genome"])
+	if (href_list["scan_genome"])
 
-		if(!loaded_seed)
+		if (!loaded_seed)
 			return
 
 		last_action = world.time
 		active = 1
 
-		if(loaded_seed && loaded_seed.seed)
+		if (loaded_seed && loaded_seed.seed)
 			genetics = loaded_seed.seed
 			degradation = 0
 
 		qdel(loaded_seed)
 		loaded_seed = null
 
-	if(href_list["get_gene"])
+	if (href_list["get_gene"])
 
-		if(!genetics || !loaded_disk)
+		if (!genetics || !loaded_disk)
 			return
 
 		last_action = world.time
 		active = 1
 
 		var/datum/plantgene/P = genetics.get_gene(href_list["get_gene"])
-		if(!P)
+		if (!P)
 			return
 		loaded_disk.genes += P
 
 		loaded_disk.genesource = "[genetics.display_name]"
-		if(!genetics.roundstart)
+		if (!genetics.roundstart)
 			loaded_disk.genesource += " (variety #[genetics.uid])"
 
 		loaded_disk.name += " ([plant_controller.gene_tag_masks[href_list["get_gene"]]], #[genetics.uid])"
@@ -270,13 +270,13 @@
 		eject_disk = 1
 
 		degradation += rand(20,60)
-		if(degradation >= 100)
+		if (degradation >= 100)
 			failed_task = 1
 			genetics = null
 			degradation = 0
 
-	if(href_list["clear_buffer"])
-		if(!genetics)
+	if (href_list["clear_buffer"])
+		if (!genetics)
 			return
 		genetics = null
 		degradation = 0
@@ -304,7 +304,7 @@
 
 /obj/machinery/botany/editor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
 
-	if(!user)
+	if (!user)
 		return
 
 	var/list/data = list()
@@ -312,18 +312,18 @@
 	data["activity"] = active
 	data["mode"] = mode
 
-	if(loaded_seed)
+	if (loaded_seed)
 		data["degradation"] = loaded_seed.modified
 	else
 		data["degradation"] = 0
 
-	if(loaded_disk && loaded_disk.genes.len)
+	if (loaded_disk && loaded_disk.genes.len)
 		data["disk"] = 1
 		data["sourceName"] = loaded_disk.genesource
 		data["locus"] = ""
 
-		for(var/datum/plantgene/P in loaded_disk.genes)
-			if(data["locus"] != "")
+		for (var/datum/plantgene/P in loaded_disk.genes)
+			if (data["locus"] != "")
 				data["locus"] += ", "
 			data["locus"] += "[plant_controller.gene_tag_masks[P.genetype]]"
 
@@ -332,7 +332,7 @@
 		data["sourceName"] = 0
 		data["locus"] = 0
 
-	if(loaded_seed)
+	if (loaded_seed)
 		data["loaded"] = "[loaded_seed.name]"
 	else
 		data["loaded"] = 0
@@ -346,34 +346,34 @@
 
 /obj/machinery/botany/editor/Topic(href, href_list)
 
-	if(..())
+	if (..())
 		return 1
 
-	if(href_list["apply_gene"])
-		if(!loaded_disk || !loaded_seed)
+	if (href_list["apply_gene"])
+		if (!loaded_disk || !loaded_seed)
 			return
 
 		last_action = world.time
 		active = 1
 
-		if(!isnull(plant_controller.seeds[loaded_seed.seed.name]))
+		if (!isnull(plant_controller.seeds[loaded_seed.seed.name]))
 			loaded_seed.seed = loaded_seed.seed.diverge(1)
 			loaded_seed.seed_type = loaded_seed.seed.name
 			loaded_seed.update_seed()
 
-		if(prob(loaded_seed.modified))
+		if (prob(loaded_seed.modified))
 			failed_task = 1
 			loaded_seed.modified = 101
 
-		for(var/datum/plantgene/gene in loaded_disk.genes)
+		for (var/datum/plantgene/gene in loaded_disk.genes)
 			loaded_seed.seed.apply_gene(gene, mode)
 			loaded_seed.modified += rand(5,10)
 
-	else if(href_list["toggle_mode"])
-		switch(mode)
-			if(GENEGUN_MODE_SPLICE)
+	else if (href_list["toggle_mode"])
+		switch (mode)
+			if (GENEGUN_MODE_SPLICE)
 				mode = GENEGUN_MODE_PURGE
-			if(GENEGUN_MODE_PURGE)
+			if (GENEGUN_MODE_PURGE)
 				mode = GENEGUN_MODE_SPLICE
 
 	usr.set_machine(src)

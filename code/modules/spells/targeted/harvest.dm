@@ -21,15 +21,15 @@
 	..()
 
 	var/destination = null
-	for(var/obj/machinery/singularity/narsie/large/N in narsie_list)
+	for (var/obj/machinery/singularity/narsie/large/N in narsie_list)
 		destination = N.loc
 		break
-	if(destination)
+	if (destination)
 		var/prey = 0
-		for(var/mob/living/M in targets)
-			if(!findNullRod(M))
+		for (var/mob/living/M in targets)
+			if (!findNullRod(M))
 				M.forceMove(destination)
-				if(M != user)
+				if (M != user)
 					prey = 1
 		to_chat(user, "<span class='sinister'>You warp back to Nar-Sie[prey ? " along with your prey":""].</span>")
 	else

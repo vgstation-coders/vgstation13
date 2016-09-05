@@ -17,12 +17,12 @@
 
 /datum/event/spider_infestation/start()
 	var/list/vents = list()
-	for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in atmos_machines)
-		if(temp_vent.loc.z == map.zMainStation && !temp_vent.welded && temp_vent.network)
-			if(temp_vent.network.normal_members.len > 50)
+	for (var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in atmos_machines)
+		if (temp_vent.loc.z == map.zMainStation && !temp_vent.welded && temp_vent.network)
+			if (temp_vent.network.normal_members.len > 50)
 				vents += temp_vent
 
-	while((spawncount >= 1) && vents.len)
+	while ((spawncount >= 1) && vents.len)
 		var/obj/vent = pick(vents)
 		new /mob/living/simple_animal/hostile/giant_spider/spiderling(vent.loc)
 		vents -= vent

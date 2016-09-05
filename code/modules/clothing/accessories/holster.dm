@@ -11,7 +11,7 @@
 	return
 
 /obj/item/clothing/accessory/holster/proc/holster(obj/item/I, mob/user as mob)
-	if(holstered)
+	if (holstered)
 		to_chat(user, "<span class='warning'>There is already \a [holstered] holstered here!</span>")
 		return
 
@@ -19,10 +19,10 @@
 		to_chat(user, "<span class='warning'>\The [I] won't fit in the [src]!</span>")
 		return
 
-	if(user.attack_delayer.blocked())
+	if (user.attack_delayer.blocked())
 		return
 
-	if(user.drop_item(I, src))
+	if (user.drop_item(I, src))
 		holstered = I
 		holstered.add_fingerprint(user)
 		user.visible_message("<span class='notice'>[user] holsters \the [holstered].</span>", "<span class='notice'>You holster \the [holstered].</span>")
@@ -32,10 +32,10 @@
 		to_chat(user, "<span class='warning'>You can't let go of \the [I]!</span>")
 
 /obj/item/clothing/accessory/holster/proc/unholster(mob/user as mob)
-	if(!holstered)
+	if (!holstered)
 		return
 
-	if(user.put_in_hands(holstered))
+	if (user.put_in_hands(holstered))
 		unholster_message(user)
 		holstered.add_fingerprint(user)
 		holstered = null
@@ -51,30 +51,30 @@
 	set category = "Object"
 	set src in usr
 
-	if(usr.incapacitated())
+	if (usr.incapacitated())
 		return
 
 	var/obj/item/clothing/accessory/holster/H = null
-	if(istype(src, /obj/item/clothing/accessory/holster))
+	if (istype(src, /obj/item/clothing/accessory/holster))
 		H = src
-	else if(istype(src, /obj/item/clothing/))
+	else if (istype(src, /obj/item/clothing/))
 		var/obj/item/clothing/S = src
 		if (S.accessories.len)
 			H = locate() in S.accessories
 
-	if(!H)
+	if (!H)
 		to_chat(usr, "<span class='warning'>Something is very wrong.</span>")
 		return
 
-	if(!H.holstered)
+	if (!H.holstered)
 		var/obj/item/W = usr.get_active_hand()
-		if(istype(W))
+		if (istype(W))
 			H.holster(W, usr)
 	else
 		H.unholster(usr)
 
 /obj/item/clothing/accessory/holster/attack_hand(mob/user as mob)
-	if(holstered && src.loc == user)
+	if (holstered && src.loc == user)
 		return unholster(user)
 	..(user)
 
@@ -118,12 +118,12 @@
 	holster_verb_name = "Holster (Handgun)"
 
 /obj/item/clothing/accessory/holster/handgun/can_holster(obj/item/weapon/gun/W)
-	if(!istype(W))
+	if (!istype(W))
 		return
 	return W.isHandgun()
 
 /obj/item/clothing/accessory/holster/handgun/unholster_message(mob/user)
-	if(user.a_intent == I_HURT)
+	if (user.a_intent == I_HURT)
 		user.visible_message("<span class='warning'>[user] draws \the [holstered], ready to shoot!</span></span>", \
 		"<span class='warning'>You draw \the [holstered], ready to shoot!</span>")
 	else
@@ -150,9 +150,9 @@
 	holster_verb_name = "Holster (Knife)"
 
 /obj/item/clothing/accessory/holster/knife/can_holster(obj/item/weapon/W)
-	if(!istype(W))
+	if (!istype(W))
 		return
-	if(istype(W, /obj/item/weapon/kitchen/utensil/knife/large/butch))
+	if (istype(W, /obj/item/weapon/kitchen/utensil/knife/large/butch))
 		return
 	return is_type_in_list(W, list(\
 		/obj/item/weapon/kitchen/utensil, \
@@ -174,7 +174,7 @@
 	return istype(C, /obj/item/clothing/shoes)
 
 /obj/item/clothing/accessory/holster/knife/update_icon()
-	if(holstered)
+	if (holstered)
 		icon_state = "[initial(icon_state)]_1"
 		_color = "[initial(_color)]_1"
 	else
@@ -184,6 +184,6 @@
 
 /obj/item/clothing/accessory/holster/knife/boot/preloaded/New()
 	..()
-	if(!holstered)
+	if (!holstered)
 		holstered = new /obj/item/weapon/kitchen/utensil/knife/tactical(src)
 		update_icon()

@@ -23,16 +23,16 @@
 /spell/targeted/mind_transfer/cast(list/targets, mob/user)
 	..()
 
-	for(var/mob/living/target in targets)
-		if(target.stat == DEAD)
+	for (var/mob/living/target in targets)
+		if (target.stat == DEAD)
 			to_chat(user, "You didn't study necromancy back at the Space Wizard Federation academy.")
 			continue
 
-		else if(!target.key || !target.mind)
+		else if (!target.key || !target.mind)
 			to_chat(user, "They appear to be catatonic. Not even magic can affect their vacant mind.")
 			continue
 
-		else if(target.mind.special_role in protected_roles)
+		else if (target.mind.special_role in protected_roles)
 			to_chat(user, "Their mind is resisting your spell.")
 			continue
 		else
@@ -40,18 +40,18 @@
 			var/mob/living/caster = user//The wizard/whomever doing the body transferring.
 
 			//MIND TRANSFER BEGIN
-			if(caster.mind.special_verbs.len)//If the caster had any special verbs, remove them from the mob verb list.
-				for(var/V in caster.mind.special_verbs)//Since the caster is using an object spell system, this is mostly moot.
+			if (caster.mind.special_verbs.len)//If the caster had any special verbs, remove them from the mob verb list.
+				for (var/V in caster.mind.special_verbs)//Since the caster is using an object spell system, this is mostly moot.
 					caster.verbs -= V//But a safety nontheless.
-			if(victim.mind.special_verbs.len)//Now remove all of the victim's verbs.
-				for(var/V in victim.mind.special_verbs)
+			if (victim.mind.special_verbs.len)//Now remove all of the victim's verbs.
+				for (var/V in victim.mind.special_verbs)
 					victim.verbs -= V
 
 			var/list/victim_spells = victim.spell_list.Copy()
 			var/list/caster_spells = caster.spell_list.Copy()
-			for(var/spell/S in caster_spells)
+			for (var/spell/S in caster_spells)
 				caster.remove_spell(S)
-			for(var/spell/S in victim_spells)
+			for (var/spell/S in victim_spells)
 				victim.remove_spell(S)
 
 			var/mob/living/dummy = new(caster.loc)
@@ -60,16 +60,16 @@
 			dummy.mind.transfer_to(victim)
 			qdel(dummy)
 
-			for(var/spell/S in caster_spells)
+			for (var/spell/S in caster_spells)
 				victim.add_spell(S)
-			for(var/spell/S in victim_spells)
+			for (var/spell/S in victim_spells)
 				caster.add_spell(S)
 
-			if(victim.mind.special_verbs.len)//To add all the special verbs for the original caster.
-				for(var/V in caster.mind.special_verbs)//Not too important but could come into play.
+			if (victim.mind.special_verbs.len)//To add all the special verbs for the original caster.
+				for (var/V in caster.mind.special_verbs)//Not too important but could come into play.
 					caster.verbs += V
-			if(caster.mind.special_verbs.len)//If they had any special verbs, we add them here.
-				for(var/V in caster.mind.special_verbs)
+			if (caster.mind.special_verbs.len)//If they had any special verbs, we add them here.
+				for (var/V in caster.mind.special_verbs)
 					victim.verbs += V
 			//MIND TRANSFER END
 

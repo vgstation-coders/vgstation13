@@ -40,7 +40,7 @@
 	// Unequip existing suits and hats.
 	H.u_equip(H.wear_suit,1)
 	H.u_equip(H.head,1)
-	if(H.mind.assigned_role!="Clown")
+	if (H.mind.assigned_role!="Clown")
 		H.u_equip(H.wear_mask,1)
 
 	H.equip_or_collect(new /obj/item/clothing/mask/breath(H), slot_wear_mask)
@@ -49,71 +49,71 @@
 	var/tank_slot = slot_s_store
 	var/tank_slot_name = "suit storage"
 
-	switch(H.mind.assigned_role)
-		if("Scientist","Geneticist","Roboticist")
+	switch (H.mind.assigned_role)
+		if ("Scientist","Geneticist","Roboticist")
 			suit=/obj/item/clothing/suit/space/plasmaman/science
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/science
-		if("Research Director")
+		if ("Research Director")
 			suit=/obj/item/clothing/suit/space/plasmaman/science/rd
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/science/rd
-		if("Station Engineer", "Mechanic")
+		if ("Station Engineer", "Mechanic")
 			suit=/obj/item/clothing/suit/space/plasmaman/engineer/
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/engineer/
-		if("Chief Engineer")
+		if ("Chief Engineer")
 			suit=/obj/item/clothing/suit/space/plasmaman/engineer/ce
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/engineer/ce
-		if("Atmospheric Technician")
+		if ("Atmospheric Technician")
 			suit=/obj/item/clothing/suit/space/plasmaman/atmostech
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/atmostech
-		if("Warden","Detective","Security Officer")
+		if ("Warden","Detective","Security Officer")
 			suit=/obj/item/clothing/suit/space/plasmaman/security/
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/
-		if("Head of Security")
+		if ("Head of Security")
 			suit=/obj/item/clothing/suit/space/plasmaman/security/hos
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/hos
-		if("Captain")
+		if ("Captain")
 			suit=/obj/item/clothing/suit/space/plasmaman/security/captain
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/captain
-		if("Head of Personnel")
+		if ("Head of Personnel")
 			suit=/obj/item/clothing/suit/space/plasmaman/security/hop
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/security/hop
-		if("Medical Doctor")
+		if ("Medical Doctor")
 			suit=/obj/item/clothing/suit/space/plasmaman/medical
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/medical
-		if("Paramedic")
+		if ("Paramedic")
 			suit=/obj/item/clothing/suit/space/plasmaman/medical/paramedic
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/medical/paramedic
-		if("Chemist")
+		if ("Chemist")
 			suit=/obj/item/clothing/suit/space/plasmaman/medical/chemist
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/medical/chemist
-		if("Chief Medical Officer")
+		if ("Chief Medical Officer")
 			suit=/obj/item/clothing/suit/space/plasmaman/medical/cmo
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/medical/cmo
-		if("Bartender", "Chef")
+		if ("Bartender", "Chef")
 			suit=/obj/item/clothing/suit/space/plasmaman/service
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/service
-		if("Cargo Technician", "Quartermaster")
+		if ("Cargo Technician", "Quartermaster")
 			suit=/obj/item/clothing/suit/space/plasmaman/cargo
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/cargo
-		if("Shaft Miner")
+		if ("Shaft Miner")
 			suit=/obj/item/clothing/suit/space/plasmaman/miner
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/miner
-		if("Botanist")
+		if ("Botanist")
 			suit=/obj/item/clothing/suit/space/plasmaman/botanist
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/botanist
-		if("Chaplain")
+		if ("Chaplain")
 			suit=/obj/item/clothing/suit/space/plasmaman/chaplain
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/chaplain
-		if("Janitor")
+		if ("Janitor")
 			suit=/obj/item/clothing/suit/space/plasmaman/janitor
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/janitor
-		if("Assistant")
+		if ("Assistant")
 			suit=/obj/item/clothing/suit/space/plasmaman/assistant
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/assistant
-		if("Clown")
+		if ("Clown")
 			suit=/obj/item/clothing/suit/space/plasmaman/clown
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/clown
-		if("Mime")
+		if ("Mime")
 			suit=/obj/item/clothing/suit/space/plasmaman/mime
 			helm=/obj/item/clothing/head/helmet/space/plasmaman/mime
 	H.equip_or_collect(new suit(H), slot_wear_suit)

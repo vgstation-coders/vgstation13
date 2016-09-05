@@ -16,7 +16,7 @@
 
 /obj/item/device/transfer_valve/examine(mob/user)
 	..()
-	if(damaged)
+	if (damaged)
 		to_chat(user, "<span class='info'>\The [src] appears to be damaged.</span>")
 
 /obj/item/device/transfer_valve/proc/process_activation(var/obj/item/device/D)
@@ -25,42 +25,42 @@
 	return 1
 
 /obj/item/device/transfer_valve/Crossed(AM as mob|obj)
-	if(attached_device)
+	if (attached_device)
 		attached_device.Crossed(AM)
 	..()
 
 /obj/item/device/transfer_valve/on_found(AM as mob|obj)
-	if(attached_device)
+	if (attached_device)
 		attached_device.on_found(AM)
 	..()
 
 /obj/item/device/transfer_valve/attackby(obj/item/item, mob/user)
-	if(istype(item, /obj/item/weapon/tank))
-		if(tank_one && tank_two)
+	if (istype(item, /obj/item/weapon/tank))
+		if (tank_one && tank_two)
 			to_chat(user, "<span class='warning'>There are already two tanks attached, remove one first.</span>")
 			return
 
-		if(damaged)
+		if (damaged)
 			to_chat(user, "<span class='warning'>\The [src] has sustained too much damage. \The [item] won't fit onto its warped valves.</span>")
 			return
 
-		if(!tank_one)
-			if(user.drop_item(item, src))
+		if (!tank_one)
+			if (user.drop_item(item, src))
 				tank_one = item
 				to_chat(user, "<span class='notice'>You attach the tank to the transfer valve.</span>")
-		else if(!tank_two)
-			if(user.drop_item(item, src))
+		else if (!tank_two)
+			if (user.drop_item(item, src))
 				tank_two = item
 				to_chat(user, "<span class='notice'>You attach the tank to the transfer valve.</span>")
 
 		update_icon()
 	//TODO: Have this take an assemblyholder
-	else if(isassembly(item))
+	else if (isassembly(item))
 		var/obj/item/device/assembly/A = item
-		if(A.secured)
+		if (A.secured)
 			to_chat(user, "<span class='notice'>The device is secured.</span>")
 			return
-		if(attached_device)
+		if (attached_device)
 			to_chat(user, "<span class='warning'>There is already a device attached to the valve, remove it first.</span>")
 			return
 		user.remove_from_mob(item)
@@ -78,7 +78,7 @@
 
 
 /obj/item/device/transfer_valve/HasProximity(atom/movable/AM as mob|obj)
-	if(!attached_device)
+	if (!attached_device)
 		return
 	attached_device.HasProximity(AM)
 	return
@@ -101,27 +101,27 @@
 	if ( usr.stat || usr.restrained() )
 		return
 	if (src.loc == usr)
-		if(tank_one && href_list["tankone"])
+		if (tank_one && href_list["tankone"])
 			split_gases()
 			valve_open = 0
 			tank_one.forceMove(get_turf(src))
 			tank_one = null
 			update_icon()
-		else if(tank_two && href_list["tanktwo"])
+		else if (tank_two && href_list["tanktwo"])
 			split_gases()
 			valve_open = 0
 			tank_two.forceMove(get_turf(src))
 			tank_two = null
 			update_icon()
-		else if(href_list["open"])
+		else if (href_list["open"])
 			toggle_valve()
-		else if(attached_device)
-			if(href_list["rem_device"])
+		else if (attached_device)
+			if (href_list["rem_device"])
 				attached_device.forceMove(get_turf(src))
 				attached_device:holder = null
 				attached_device = null
 				update_icon()
-			if(href_list["device"])
+			if (href_list["device"])
 				attached_device.attack_self(usr)
 
 		src.attack_self(usr)
@@ -130,7 +130,7 @@
 	return
 
 /obj/item/device/transfer_valve/process_activation(var/obj/item/device/D)
-	if(toggle)
+	if (toggle)
 		toggle = 0
 		toggle_valve()
 		spawn(50) // To stop a signal being spammed from a proxy sensor constantly going off or whatever
@@ -140,18 +140,18 @@
 	overlays.len = 0
 	underlays = null
 
-	if(!tank_one && !tank_two && !attached_device)
+	if (!tank_one && !tank_two && !attached_device)
 		icon_state = "valve_1"
 		return
 	icon_state = "valve"
 
-	if(tank_one)
+	if (tank_one)
 		overlays += image(icon = icon, icon_state = "[tank_one.icon_state]")
-	if(tank_two)
+	if (tank_two)
 		var/icon/J = new(icon, icon_state = "[tank_two.icon_state]")
 		J.Shift(WEST, 13)
 		underlays += J
-	if(attached_device)
+	if (attached_device)
 		overlays += image(icon = icon, icon_state = "device")
 
 /obj/item/device/transfer_valve/proc/merge_gases()
@@ -175,13 +175,13 @@
 	*/
 
 /obj/item/device/transfer_valve/proc/toggle_valve()
-	if(valve_open==0 && (tank_one && tank_two))
+	if (valve_open==0 && (tank_one && tank_two))
 		valve_open = 1
 		var/turf/bombturf = get_turf(src)
 		var/area/A = get_area(bombturf)
 
 		var/attacher_name = ""
-		if(!attacher)
+		if (!attacher)
 			attacher_name = "Unknown"
 		else
 			attacher_name = "[attacher.name]([attacher.ckey])"
@@ -189,12 +189,12 @@
 		var/log_str = "Bomb valve opened in <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name]</a> "
 		log_str += "with [attached_device ? attached_device : "no device"] attacher: [attacher_name]"
 
-		if(attacher)
+		if (attacher)
 			log_str += "(<A HREF='?_src_=holder;adminmoreinfo=\ref[attacher]'>?</A>)"
 
 		var/mob/mob = get_mob_by_key(src.fingerprintslast)
 		var/last_touch_info = ""
-		if(mob)
+		if (mob)
 			last_touch_info = "(<A HREF='?_src_=holder;adminmoreinfo=\ref[mob]'>?</A>)"
 
 		log_str += " Last touched by: [src.fingerprintslast][last_touch_info]"
@@ -202,7 +202,7 @@
 		message_admins(log_str, 0, 1)
 		log_game(log_str)
 		merge_gases()
-	else if(valve_open==1 && (tank_one && tank_two))
+	else if (valve_open==1 && (tank_one && tank_two))
 		split_gases()
 		valve_open = 0
 		src.update_icon()
@@ -216,16 +216,16 @@
  */
 /obj/item/device/transfer_valve/proc/child_ruptured(var/obj/item/weapon/tank/tank, var/range)
 	// Old behavior.
-	if(tank_one == tank)
+	if (tank_one == tank)
 		tank_one=null
-	if(tank_two == tank)
+	if (tank_two == tank)
 		tank_two=null
 	update_icon()
 
 	// New behavior: Ensure deletion of valve assembly, send damage info up the chain.
-	if(range > 4) // Extreme damage is range/4, so any extreme damage will trip this.
+	if (range > 4) // Extreme damage is range/4, so any extreme damage will trip this.
 		// Send explosion up chain of custody.
-		if(src.loc && istype(src.loc,/obj))
+		if (src.loc && istype(src.loc,/obj))
 			src.loc.ex_act(1,src)
 
 		// Delete ourselves.

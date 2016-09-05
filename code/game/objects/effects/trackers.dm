@@ -33,10 +33,10 @@
 	color = "red"
 
 /obj/effect/tracker/proc/process_step()
-	if(!target)
+	if (!target)
 		target = pick(player_list)
 		return
-	if(target.z != z)
+	if (target.z != z)
 		returnToPool(src)
 		return
 
@@ -47,17 +47,17 @@
 	var/dy = target_absolute_Y - absolute_Y
 
 	var/dist = sqrt(abs(dx)**2 + abs(dy)**2)
-	if(dist > maxdist)
+	if (dist > maxdist)
 		returnToPool(src)
 		return
-	else if(dist < 16)
+	else if (dist < 16)
 		returnToPool(src)
 		return
 
-	if(abs(dx) > abs(dy))
+	if (abs(dx) > abs(dy))
 		absolute_X += (dx/abs(dx)) * speed
 		absolute_Y += round((speed * dy)/abs(dx))
-	else if(abs(dx) < abs(dy))
+	else if (abs(dx) < abs(dy))
 		absolute_X += round((speed * dx)/abs(dy))
 		absolute_Y += (dy/abs(dy)) * speed
 	else
@@ -94,12 +94,12 @@
 /proc/make_tracker_effects(tr_source, tr_destination, var/tr_number = 10, var/custom_icon_state = "soul", var/number_of_icons = 3, var/tr_type = /obj/effect/tracker/soul)
 	spawn()
 		var/list/possible_icons = list()
-		if(custom_icon_state)
-			for(var/i = 1;i <= number_of_icons;i++)
+		if (custom_icon_state)
+			for (var/i = 1;i <= number_of_icons;i++)
 				possible_icons.Add("[custom_icon_state][i]")
-		for(var/i = 0;i < tr_number;i++)
+		for (var/i = 0;i < tr_number;i++)
 			var/obj/effect/tracker/Tr = getFromPool(tr_type, tr_source)
 			Tr.target = tr_destination
-			if(custom_icon_state)
+			if (custom_icon_state)
 				Tr.icon_state = pick(possible_icons)
 			sleep(1)

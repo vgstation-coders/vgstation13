@@ -40,7 +40,7 @@
 	set category = "Object"
 	set name = "Select Sound Playback"
 	var/thesoundthatwewant = input("Pick a sound:", null) as null|anything in sound_list
-	if(!thesoundthatwewant)
+	if (!thesoundthatwewant)
 		return
 	to_chat(usr, "Sound playback set to: [thesoundthatwewant]!")
 	var/list/assblast = params2list(sound_list[thesoundthatwewant])
@@ -49,14 +49,14 @@
 	volume = text2num(assblast["volume"])
 
 /obj/item/device/soundsynth/attack_self(mob/user as mob)
-	if(spam_flag + 2 SECONDS < world.timeofday)
+	if (spam_flag + 2 SECONDS < world.timeofday)
 		playsound(get_turf(src), selected_sound, volume, shiftpitch)
 		spam_flag = world.timeofday
 
 /obj/item/device/soundsynth/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
-	if(M == user)
+	if (M == user)
 		pick_sound()
-	else if(spam_flag + 2 SECONDS < world.timeofday)
+	else if (spam_flag + 2 SECONDS < world.timeofday)
 		M.playsound_local(get_turf(src), selected_sound, volume, shiftpitch)
 		spam_flag = world.timeofday
 		//to_chat(M, selected_sound) //this doesn't actually go to their chat very much at all.

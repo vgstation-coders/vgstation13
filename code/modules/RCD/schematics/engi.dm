@@ -7,38 +7,38 @@
 	var/can_r_wall	= 0
 
 /datum/rcd_schematic/decon/attack(var/atom/A, var/mob/user)
-	if(istype(A, /turf/simulated/wall))
+	if (istype(A, /turf/simulated/wall))
 		var/turf/simulated/wall/T = A
-		if(istype(T, /turf/simulated/wall/r_wall) && !can_r_wall)
+		if (istype(T, /turf/simulated/wall/r_wall) && !can_r_wall)
 			return "it cannot deconstruct reinforced walls!"
 
 		to_chat(user, "Deconstructing \the [T]...")
 		playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
 
-		if(do_after(user, T, 40))
-			if(master.get_energy(user) < energy_cost)
+		if (do_after(user, T, 40))
+			if (master.get_energy(user) < energy_cost)
 				return 1
 
 			playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
 			T.ChangeTurf(/turf/simulated/floor/plating)
 			return 0
 
-	else if(istype(A, /turf/simulated/floor))
+	else if (istype(A, /turf/simulated/floor))
 		var/turf/simulated/floor/T = A
 		to_chat(user, "Deconstructing \the [T]...")
-		if(do_after(user, T, 50))
-			if(master.get_energy(user) < energy_cost)
+		if (do_after(user, T, 50))
+			if (master.get_energy(user) < energy_cost)
 				return 1
 
 			playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
 			T.ChangeTurf(T.get_underlying_turf())
 			return 0
 
-	else if(istype(A, /obj/machinery/door/airlock))
+	else if (istype(A, /obj/machinery/door/airlock))
 		var/obj/machinery/door/airlock/D = A
 		to_chat(user, "Deconstructing \the [D]...")
-		if(do_after(user, D, 50))
-			if(master.get_energy(user) < energy_cost)
+		if (do_after(user, D, 50))
+			if (master.get_energy(user) < energy_cost)
 				return 1
 
 			playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
@@ -57,7 +57,7 @@
 	flags		= RCD_GET_TURF
 
 /datum/rcd_schematic/con_floors/attack(var/atom/A, var/mob/user)
-	if(!(istype(A, /turf/space) && !istype(A, /turf/space/transit)))
+	if (!(istype(A, /turf/space) && !istype(A, /turf/space/transit)))
 		return "it can only create floors on space!"
 
 	var/turf/space/S = A
@@ -75,14 +75,14 @@
 	energy_cost	= 3
 
 /datum/rcd_schematic/con_walls/attack(var/atom/A, var/mob/user)
-	if(!istype(A, /turf/simulated/floor))
+	if (!istype(A, /turf/simulated/floor))
 		return 1
 
 	var/turf/simulated/floor/T = A
 	to_chat(user, "Building wall")
 	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
-	if(do_after(user, A, 20))
-		if(master.get_energy(user) < energy_cost)
+	if (do_after(user, A, 20))
+		if (master.get_energy(user) < energy_cost)
 			return 1
 
 		playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
@@ -107,7 +107,7 @@
 	var/ready
 
 /datum/rcd_schematic/con_airlock/show(var/mob/living/user, close = 0)
-	if(!close)
+	if (!close)
 		user.shown_schematics_background = 1
 		user.hud_used.toggle_show_schematics_display(schematics,1, master)
 	else
@@ -122,7 +122,7 @@
 /datum/rcd_schematic/con_airlock/New()
 	. = ..()
 
-	for(var/path in typesof(/datum/selection_schematic/airlock_schematic))
+	for (var/path in typesof(/datum/selection_schematic/airlock_schematic))
 		schematics += new path(src)
 	schematics += new /datum/selection_schematic/access_schematic(src)
 	selected = schematics[1]
@@ -135,11 +135,11 @@
 	selected = schematics[1]	//Reset the selection.
 
 /*/datum/rcd_schematic/con_airlock/register_assets()
-	for(var/datum/selection_schematic/airlock_schematic/C in schematics)
+	for (var/datum/selection_schematic/airlock_schematic/C in schematics)
 		C.register_icon()
 
 /datum/rcd_schematic/con_airlock/send_assets(var/client/client)
-	for(var/datum/selection_schematic/airlock_schematic/C in schematics)
+	for (var/datum/selection_schematic/airlock_schematic/C in schematics)
 		C.send_icon(client)
 */
 
@@ -154,13 +154,13 @@
 			<input type="submit" name="act" value="Save Name"/>
 		</form><br/>
 		"}
-	if(allow_access)
+	if (allow_access)
 		. += {"
 		<script>
 		$("#accessListShowButton").click(
 			function toggleAccessList()
 			{
-				if($("#accessList").is(":hidden"))
+				if ($("#accessList").is(":hidden"))
 				{
 					$("#accessList").slideDown("fast");
 					$("#accessListShowButton").html("Hide access controls");
@@ -186,7 +186,7 @@
 		<table style='width:100%'>
 		<tr>
 		"}
-		if((istype(D) && D.req_one_access && D.req_one_access.len) || (!istype(D) && one_access))	//So we check the correct button by default
+		if ((istype(D) && D.req_one_access && D.req_one_access.len) || (!istype(D) && one_access))	//So we check the correct button by default
 			. += {"
 			<input type="radio" name="oneAccess" value="0"/>ALL
 			<br/>
@@ -199,21 +199,21 @@
 			<input type="radio" name="oneAccess" value="1"/>ONE
 			"}
 
-		for(var/i = 1; i <= 7; i++)
+		for (var/i = 1; i <= 7; i++)
 			. += "<td style='width:14%'><b>[get_region_accesses_name(i)]:</b></td>"
 		. += "</tr><tr>"
-		for(var/i = 1; i <= 7; i++)
+		for (var/i = 1; i <= 7; i++)
 			. += "<td style='width:14%' valign='top'>"
-			for(var/A in get_region_accesses(i))
+			for (var/A in get_region_accesses(i))
 				var/access_name = get_access_desc(A)
-				if(!access_name)
+				if (!access_name)
 					continue
 				var/checked = ""//((D && (D.req_access.Find(A)) || (D.req_one_access.Find(A)))) || (!D && (selected_access.Find(A))) ? " checked" : ""
-				if(istype(D))
-					if(D.req_access.Find(A) || D.req_one_access.Find(A))
+				if (istype(D))
+					if (D.req_access.Find(A) || D.req_one_access.Find(A))
 						checked = " checked"
 				else
-					if(selected_access.Find(A))
+					if (selected_access.Find(A))
 						checked = " checked"
 				/*if((D && (A in D.req_access) || (A in D.req_one_access)) || (!D && (A in selected_access)))
 					. += {"<input type="checkbox" name="[A]" checked/> [access_name] <br/>"}
@@ -233,17 +233,17 @@
 		"}
 
 		//Access level selection comes here.
-		for(var/access in get_all_accesses())
+		for (var/access in get_all_accesses())
 			var/access_name	= get_access_desc(access)
-			if(!access_name)	//I noticed in testing there's a broken access level that shows up, this should filter it out.
+			if (!access_name)	//I noticed in testing there's a broken access level that shows up, this should filter it out.
 				continue
 
 			var/checked		= ""
 
-			if(D)
-				if((access in D.req_access) || (access in D.req_one_access))
+			if (D)
+				if ((access in D.req_access) || (access in D.req_one_access))
 					checked		= " checked"
-			else if((access in selected_access))
+			else if ((access in selected_access))
 				checked		= " checked"
 			. += {"
 				<input type="checkbox" name="[access]"[checked]/> [access_name] <br/>
@@ -259,7 +259,7 @@
 	master.update_options_menu()
 
 /datum/rcd_schematic/con_airlock/Topic(var/href, var/href_list)
-	if(href_list["set_selected"])
+	if (href_list["set_selected"])
 		var/idx = Clamp(text2num(href_list["set_selected"]), 1, schematics.len)
 		var/datum/selection_schematic/airlock_schematic/C = schematics[idx]
 
@@ -269,13 +269,13 @@
 		master.update_options_menu()
 		return 1
 
-	if(href_list["new_name"])
+	if (href_list["new_name"])
 		var/obj/machinery/door/airlock/D
-		if(href_list["target"])
+		if (href_list["target"])
 			D = locate(href_list["target"])
-			if(!istype(D))
+			if (!istype(D))
 				return
-			if(!D.Adjacent(usr))
+			if (!D.Adjacent(usr))
 				return
 			D.name = copytext(sanitize(href_list["new_name"]), 1, MAX_NAME_LEN)
 			master.update_options_menu(list2params(list(D)))
@@ -285,32 +285,32 @@
 		master.update_options_menu()
 		return 1
 
-	if(!isnull(href_list["oneAccess"]) && allow_access)
+	if (!isnull(href_list["oneAccess"]) && allow_access)
 		var/OA = text2num(href_list["oneAccess"])
 		var/obj/machinery/door/airlock/D
-		if(href_list["target"])
+		if (href_list["target"])
 			D = locate(href_list["target"])
-			if(!istype(D))
+			if (!istype(D))
 				return
-			if(!D.Adjacent(usr))
+			if (!D.Adjacent(usr))
 				return
 		var/list/new_access = new
 		//Along with oneAccess, the hrefs for access levels get called, as such we process them here before we return 1
 
 		var/list/access_levels = get_all_accesses()
 
-		for(var/href_key in href_list - list("oneAccess", "src"))	//This should loop through all the access levels that are on.
+		for (var/href_key in href_list - list("oneAccess", "src"))	//This should loop through all the access levels that are on.
 			var/access = text2num(href_key)
-			if(!(access in access_levels))	//Only check valid access levels.
+			if (!(access in access_levels))	//Only check valid access levels.
 				continue
 
 			new_access |= access
-		if(!D)
+		if (!D)
 			selected_access.Cut()
 			selected_access = new_access.Copy()
 			one_access = OA
 		else
-			if(OA)
+			if (OA)
 				D.req_one_access = new_access.Copy()
 				D.req_access.Cut()
 			else
@@ -321,41 +321,41 @@
 		return 1
 
 /datum/rcd_schematic/con_airlock/attack(var/atom/A, var/mob/user)
-	if(istype(A, /obj/machinery/door/airlock))
-		if(!ready)
+	if (istype(A, /obj/machinery/door/airlock))
+		if (!ready)
 			build_ui()
 			ready = 1
 		master.interface.show(user)
 		master.interface.updateContent("schematic_options", get_HTML(A))
 		return 1
 
-	if(!istype(A, /turf))
+	if (!istype(A, /turf))
 		return 1
 
-	for(var/obj/machinery/door/airlock/D in A)
+	for (var/obj/machinery/door/airlock/D in A)
 		return "there is already an airlock on this spot!"
 
 	to_chat(user, "Building airlock...")
 
-	if(!do_after(user, A, 50))
+	if (!do_after(user, A, 50))
 		return 1
 
-	if(master.get_energy(user) < energy_cost)
+	if (master.get_energy(user) < energy_cost)
 		return 1
 
-	for(var/obj/machinery/door/airlock/D in A)
+	for (var/obj/machinery/door/airlock/D in A)
 		return "there is already an airlock on this spot!"
 
 	playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
 
 	var/obj/machinery/door/airlock/D = new selected.build_type(A)
-	if(capitalize(selected_name) == selected_name)	//The name inputted is capitalized, so we add \improper.
+	if (capitalize(selected_name) == selected_name)	//The name inputted is capitalized, so we add \improper.
 		D.name	= "\improper [selected_name]"
 	else
 		D.name		= selected_name
 
-	if(allow_access)
-		if(one_access)
+	if (allow_access)
+		if (one_access)
 			D.req_one_access = selected_access.Copy()
 		else
 			D.req_access = selected_access.Copy()
@@ -378,7 +378,7 @@
 	ourobj = getFromPool(/obj/screen/schematics, null, src)
 
 /datum/selection_schematic/Destroy()
-	for(var/client/C in clients)
+	for (var/client/C in clients)
 		C.screen.Remove(ourobj)
 	returnToPool(ourobj)
 	ourobj = null
@@ -391,16 +391,16 @@
 	icon = 'icons/obj/card.dmi'
 
 /datum/selection_schematic/access_schematic/clicked(var/mob/user)
-	if(!master:ready)
+	if (!master:ready)
 		master.build_ui()
 		master:ready = 1
 	master.master.interface.show(user)
 	return
 
 /datum/selection_schematic/airlock_schematic/clicked(var/mob/user)
-	if(master:selected == src)
+	if (master:selected == src)
 		master:selected_name = copytext(sanitize(input(usr,"What would you like to name this airlock?","Input a name",name) as text|null),1,MAX_NAME_LEN)
-		if(capitalize(master:selected_name) == master:selected_name)
+		if (capitalize(master:selected_name) == master:selected_name)
 			master:selected_name = "\improper[master:selected_name]"
 	else
 		master.selected = src

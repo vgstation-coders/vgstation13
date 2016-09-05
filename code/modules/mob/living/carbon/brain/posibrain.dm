@@ -21,7 +21,7 @@
 #endif
 
 /obj/item/device/mmi/posibrain/attack_self(mob/user as mob)
-	if(brainmob && !brainmob.key && searching == 0)
+	if (brainmob && !brainmob.key && searching == 0)
 		//Start the process of searching for a new user.
 		to_chat(user, "<span class='notice'>You carefully locate the manual activation switch and start \the [src]'s boot process.</span>")
 		search_for_candidates()
@@ -32,36 +32,36 @@
 	src.searching = 1
 	src.request_player()
 	spawn(600)
-		if(ghost_volunteers.len)
+		if (ghost_volunteers.len)
 			var/mob/dead/observer/O = pick(ghost_volunteers)
-			if(istype(O) && O.client && O.key)
+			if (istype(O) && O.client && O.key)
 				transfer_personality(O)
 		reset_search()
 
 /obj/item/device/mmi/posibrain/proc/request_player()
-	for(var/mob/dead/observer/O in get_active_candidates(ROLE_POSIBRAIN))
-		if(O.client)
-			if(check_observer(O))
+	for (var/mob/dead/observer/O in get_active_candidates(ROLE_POSIBRAIN))
+		if (O.client)
+			if (check_observer(O))
 				to_chat(O, "<span class=\"recruit\">You are a possible candidate for \a [src]. Get ready. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Retract</a>)</span>")
 				ghost_volunteers += O
 
 /obj/item/device/mmi/posibrain/proc/check_observer(var/mob/dead/observer/O)
-	if(O.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
+	if (O.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
 		return 0
-	if(jobban_isbanned(O, ROLE_POSIBRAIN)) // Was pAI
+	if (jobban_isbanned(O, ROLE_POSIBRAIN)) // Was pAI
 		return 0
-	if(O.client)
+	if (O.client)
 		return 1
 	return 0
 
 /obj/item/device/mmi/posibrain/proc/question(var/client/C)
 	spawn(0)
-		if(!C)
+		if (!C)
 			return
 		var/response = alert(C, "Someone is requesting a personality for \a [src]. Would you like to play as one?", "[src] request", "Yes", "No", "Never for this round")
-		if(!C || brainmob.key || 0 == searching)
+		if (!C || brainmob.key || 0 == searching)
 			return		//handle logouts that happen whilst the alert is waiting for a response, and responses issued after a brain has been located.
-		if(response == "Yes")
+		if (response == "Yes")
 			transfer_personality(C.mob)
 
 /obj/item/device/mmi/posibrain/proc/transfer_personality(var/mob/candidate)
@@ -87,7 +87,7 @@
 /obj/item/device/mmi/posibrain/proc/reset_search() //We give the players sixty seconds to decide, then reset the timer.
 
 
-	if(src.brainmob && src.brainmob.key)
+	if (src.brainmob && src.brainmob.key)
 		return
 
 	src.searching = 0
@@ -98,24 +98,24 @@
 		M.show_message("<span class='notice'>The [src] buzzes quietly, and the golden lights fade away. Perhaps you could try again?</span>")
 
 /obj/item/device/mmi/posibrain/Topic(href,href_list)
-	if("signup" in href_list)
+	if ("signup" in href_list)
 		var/mob/dead/observer/O = locate(href_list["signup"])
-		if(!O)
+		if (!O)
 			return
 		volunteer(O)
 
 /obj/item/device/mmi/posibrain/proc/volunteer(var/mob/dead/observer/O)
-	if(!searching)
+	if (!searching)
 		to_chat(O, "Not looking for a ghost, yet.")
 		return
-	if(!istype(O))
+	if (!istype(O))
 		to_chat(O, "<span class='warning'>NO.</span>")
 		return
-	if(O in ghost_volunteers)
+	if (O in ghost_volunteers)
 		to_chat(O, "<span class='notice'>Removed from registration list.</span>")
 		ghost_volunteers.Remove(O)
 		return
-	if(!check_observer(O))
+	if (!check_observer(O))
 		to_chat(O, "<span class='warning'>You cannot be \a [src].</span>")
 		return
 	to_chat(O., "<span class='notice'>You've been added to the list of ghosts that may become this [src].  Click again to unvolunteer.</span>")
@@ -124,28 +124,28 @@
 /obj/item/device/mmi/posibrain/examine(mob/user)
 //	to_chat(user, "<span class='info'>*---------</span>*")
 	..()
-	if(src.brainmob)
-		if(src.brainmob.stat == DEAD)
+	if (src.brainmob)
+		if (src.brainmob.stat == DEAD)
 			to_chat(user, "<span class='deadsay'>It appears to be completely inactive.</span>")//suicided
 
-		else if(!src.brainmob.client)
+		else if (!src.brainmob.client)
 			to_chat(user, "<span class='notice'>It appears to be in stand-by mode.</span>")//closed game window
 
-		else if(!src.brainmob.key)
+		else if (!src.brainmob.key)
 			to_chat(user, "<span class='warning'>It doesn't seem to be responsive.</span>")//ghosted
 
 //	to_chat(user, "<span class='info'>*---------*</span>")
 
 /obj/item/device/mmi/posibrain/emp_act(severity)
-	if(!src.brainmob)
+	if (!src.brainmob)
 		return
 	else
-		switch(severity)
-			if(1)
+		switch (severity)
+			if (1)
 				src.brainmob.emp_damage += rand(20,30)
-			if(2)
+			if (2)
 				src.brainmob.emp_damage += rand(10,20)
-			if(3)
+			if (3)
 				src.brainmob.emp_damage += rand(0,10)
 	..()
 
@@ -163,15 +163,15 @@
 	..()
 
 /obj/item/device/mmi/posibrain/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(try_handling_mommi_construction(O,user))
+	if (try_handling_mommi_construction(O,user))
 		return
 	..()
 
 /obj/item/device/mmi/posibrain/attack_ghost(var/mob/dead/observer/O)
-	if(searching)
+	if (searching)
 		volunteer(O)
 	else
-		if(!brainmob.ckey)
+		if (!brainmob.ckey)
 			visible_message(message = "<span class='notice'>\The [src] pings softly.</span>", blind_message = "<span class='danger'>You hear what you think is a microwave finishing.</span>")
 
 /obj/item/device/mmi/posibrain/OnMobDeath(var/mob/living/carbon/brain/B)

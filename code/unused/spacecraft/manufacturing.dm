@@ -15,8 +15,8 @@
 	var/payload
 
 /obj/deploycrate/attack_hand(mob/user as mob)
-	switch(payload)
-		if(null)
+	switch (payload)
+		if (null)
 			return
 		//if("cloner")
 		//	make a cloner
@@ -47,14 +47,14 @@
 
 obj/machinery/nanosprayer/proc/update_temp()
 	// 1 second : 1 degree
-	if(src.state == 0)
+	if (src.state == 0)
 		var/diff = (world.time - usr_lastupdate) * 10
 		temp -= diff
-		if(temp < 100)
+		if (temp < 100)
 			temp = 100
 		usr_lastupdate = world.time
 		return temp
-	else if(src.state == 1)
+	else if (src.state == 1)
 		var/diff = (world.time - usr_lastupdate) * 10
 		diff = diff * usr_density
 		temp += diff
@@ -64,28 +64,28 @@ obj/machinery/nanosprayer/proc/update_temp()
 obj/machinery/nanosprayer/process()
 	src.time_started = world.time
 	totalpoints = lentext(payload) * rand(5,10)
-	if(!totalpoints)
+	if (!totalpoints)
 		totalpoints = 1
-	while(src.state == 1)
+	while (src.state == 1)
 		// Each unit of cost is 20 seconds - density
 		temp += density * rand(1,4)
 		sleep(200 - (usr_density * 10))
-		if(src.temp > 350)
+		if (src.temp > 350)
 			src.state = 3
 			src.overheat()
 			return 0
 		points += usr_density
-		if(points >= totalpoints)
+		if (points >= totalpoints)
 			src.state = 2
 			src.complete()
 			return 1
 
 
 obj/machinery/nanosprayer/proc/cooldown()
-	while(state != 1)
+	while (state != 1)
 		sleep(200)
 		temp -= rand(5,20)
-		if(temp < 100)
+		if (temp < 100)
 			temp = 100
 			return
 
@@ -100,32 +100,32 @@ obj/machinery/nanosprayer/proc/complete()
 
 obj/machinery/nanosprayer/attack_hand(user as mob)
 	var/dat
-	if(..())
+	if (..())
 		return
 	dat += text("Core Temp: [temp]�C<BR>")
 	dat += text("Nanocloud Density: [usr_density] million<BR>")
 	dat += text("\[<A href='?src=\ref[src];minus=1'>-</A> / <A href='?src=\ref[src];plus=1'>+</A>\]<BR>")
-	if(payload)
+	if (payload)
 		dat += text("<BR>Task: [payload]<BR>")
-	switch(state)
-		if(0)
+	switch (state)
+		if (0)
 			dat += text("Status: Idling<BR>")
-		if(1)
+		if (1)
 			dat += text("Status: Spraying<BR>")
-		if(2)
+		if (2)
 			dat += text("Status: Spray Task Complete<BR>")
-		if(3)
+		if (3)
 			dat += text("Status: <B><FONT COLOR=RED>OVERHEATED</FONT><BR>")
-	if(state == 1)
-		if(points <= 0)
+	if (state == 1)
+		if (points <= 0)
 			points = 1
 		var/complete = (points * 100)/totalpoints
-		if(complete < 0)
+		if (complete < 0)
 			complete = 0
-		if(complete > 100)
+		if (complete > 100)
 			complete = 100
 		dat += text("Progress: <B>[complete]%</B><BR>")
-	if(state == 2)
+	if (state == 2)
 		dat += text("Progress: <B>100%</B><BR>")
 		dat += text("\[<A href='?src=\ref[src];release=1'>Release Payload</A>\]<BR>")
 	dat += text("<HR><BR><A href='?src=\ref[src];settask=1'>Set Task</A><BR>")
@@ -136,33 +136,33 @@ obj/machinery/nanosprayer/attack_hand(user as mob)
 	onclose(user, "nanosprayer")
 
 obj/machinery/nanosprayer/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 	usr.machine = src
 	src.add_fingerprint(usr)
-	if(href_list["plus"])
+	if (href_list["plus"])
 		usr_density += 1
-	if(href_list["minus"])
+	if (href_list["minus"])
 		usr_density -= 1
-		if(usr_density < 1)
+		if (usr_density < 1)
 			usr_density = 1
-	if(href_list["start"])
-		if(state == 0)
+	if (href_list["start"])
+		if (state == 0)
 			state = 1
 			spawn() src.process()
-	if(href_list["stop"])
-		if(state == 1)
+	if (href_list["stop"])
+		if (state == 1)
 			state = 0
 			points = 0
 			totalpoints = 0
 			spawn() cooldown()
-	if(href_list["settask"])
-		if(state == 0)
+	if (href_list["settask"])
+		if (state == 0)
 			var/temppayload = input("Set a Task:", "Job Assignment") as text|null
-			if(temppayload)
+			if (temppayload)
 				payload = temppayload
 	//if(href_list["release"])
-	//	if(state == 2)
+	//	if (state == 2)
 			// Create the crate somewhere
 	src.updateUsrDialog()
 
@@ -179,28 +179,28 @@ obj/machinery/nanosprayer/Topic(href, href_list)
 
 obj/machinery/smelter/attack_hand(user as mob)
 	var/dat
-	if(..())
+	if (..())
 		return
 	dat += text("<h2>Smelt-o-Matic Control Interface</h2>")
 	dat += text("The red light is [src.closed ? "off" : "on"].<BR>")
 	dat += text("The green light is [src.locked ? "on" : "off"].<BR>")
-	switch(slag)
-		if(0)
+	switch (slag)
+		if (0)
 			dat += text("The meter is resting at zero.<BR>")
-		if(1 to 2)
+		if (1 to 2)
 			dat += text("The meter is wobbling at the mid-point marker.<BR>")
-		if(3)
+		if (3)
 			dat += text("The meter strains, displaying its maximum value.<BR>")
 		else
 			dat += text("The meter has broken.<BR>")
-	switch(state)
-		if(0)
+	switch (state)
+		if (0)
 			dat += text("<b>Status</b>:<i>Idle</i><BR>")
-		if(1)
+		if (1)
 			dat += text("<b>Status</b>:<i>Smelting</i><BR>")
-		if(2)
+		if (2)
 			dat += text("<b>Status</b>:<i>Cooling</i><BR>")
-		if(3)
+		if (3)
 			dat += text("<b>Status</b>:<i>Cleaning</i><BR>")
 	dat += text("<HR /><BR>Turn key <A href='?src=\ref[src];key=1'>[src.locked ? "to upper-left position" : "to upper-right position"]</A><BR>")
 	dat += text("Flip switch <A href='?src=\ref[src];switch=1'>[src.closed ? "up" : "down"]</A><BR>")
@@ -210,15 +210,15 @@ obj/machinery/smelter/attack_hand(user as mob)
 
 
 obj/machinery/smelter/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 	usr.machine = src
 	src.add_fingerprint(usr)
-	if(href_list["key"])
+	if (href_list["key"])
 		src.locked = !src.locked
-	if(href_list["switch"])
+	if (href_list["switch"])
 		src.closed = !src.closed
-	if(href_list["button"])
+	if (href_list["button"])
 		//Do stuff to actually smelt shit or something I don't know
 		return
 	src.updateUsrDialog()

@@ -94,7 +94,7 @@
 /obj/item/weapon/firbang/proc/prime()
 	playsound(src.loc, 'sound/effects/bang.ogg', 25, 1)
 	var/turf/T = get_turf(src)
-	if(T)
+	if (T)
 		var/datum/effect/effect/system/harmless_smoke_spread/smoke = new
 		smoke.set_up(3, 0, src.loc)
 		smoke.attach(src)

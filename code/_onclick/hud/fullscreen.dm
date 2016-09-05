@@ -3,12 +3,12 @@
 
 /mob/proc/overlay_fullscreen(category, type, severity)
 	var/obj/screen/fullscreen/screen
-	if(screens[category])
+	if (screens[category])
 		screen = screens[category]
-		if(screen.type != type)
+		if (screen.type != type)
 			clear_fullscreen(category, FALSE)
 			return .()
-		else if(!severity || severity == screen.severity)
+		else if (!severity || severity == screen.severity)
 			return null
 	else
 		screen = getFromPool(type)
@@ -17,41 +17,41 @@
 	screen.severity = severity
 
 	screens[category] = screen
-	if(client)
+	if (client)
 		client.screen += screen
 	return screen
 
 /mob/proc/clear_fullscreen(category, animate = 10)
 	set waitfor = 0
 	var/obj/screen/fullscreen/screen = screens[category]
-	if(!screen)
+	if (!screen)
 		screens -= category
 		return
 
-	if(animate)
+	if (animate)
 		animate(screen, alpha = 0, time = animate)
 		sleep(animate)
 
 	screens[category] = null
 	screens -= category
-	if(client)
+	if (client)
 		client.screen -= screen
 	qdel(screen)
 
 /mob/proc/clear_fullscreens()
-	for(var/category in screens)
+	for (var/category in screens)
 		clear_fullscreen(category)
 
 /datum/hud/proc/reload_fullscreen()
-	if(mymob && mymob.client && mymob.stat != DEAD)
+	if (mymob && mymob.client && mymob.stat != DEAD)
 		var/list/screens = mymob.screens
-		for(var/category in screens)
+		for (var/category in screens)
 			var/obj/A = screens[category]
-			if(!A)
+			if (!A)
 				log_debug("screens\[[category]\] is null on [mymob]")
 				continue
-			if(istype(A, /atom))
-				if(!istype(A, /obj/screen))
+			if (istype(A, /atom))
+				if (!istype(A, /obj/screen))
 					log_debug("Wrong type of object in screens, type [A.type] [mymob]")
 					continue
 			else // not even an atom, shouldnt go in list anyway

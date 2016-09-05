@@ -62,10 +62,10 @@
 /obj/item/xenos_claw/attackby(obj/item/W, mob/user)
 	.=..()
 
-	if(istype(W,/obj/item/stack/cable_coil))
+	if (istype(W,/obj/item/stack/cable_coil))
 		var/obj/item/stack/cable_coil/C = W
 
-		if(C.use(5))
+		if (C.use(5))
 			user.drop_item(src, force_drop = 1)
 
 			var/obj/item/clothing/mask/necklace/xeno_claw/X = new(get_turf(src))
@@ -114,16 +114,16 @@
 //Step one - dehairing.
 
 /obj/item/stack/sheet/animalhide/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(	W.is_sharp() >= 1.2 )
+	if (	W.is_sharp() >= 1.2 )
 
 		//visible message on mobs is defined as visible_message(var/message, var/self_message, var/blind_message)
 		user.visible_message("<span class='notice'>\the [usr] starts cutting hair off \the [src]</span>", "<span class='notice'>You start cutting the hair off \the [src]</span>", "You hear the sound of a knife rubbing against flesh")
 
 		spawn()
-			if(do_after(user, src, 50))
+			if (do_after(user, src, 50))
 				to_chat(user, "<span class='notice'>You cut the hair from this [src.singular_name]</span>")
 
-				if(src.use(1))
+				if (src.use(1))
 					drop_stack(/obj/item/stack/sheet/hairlesshide, user.loc, 1, user)
 		return 1
 	else
@@ -135,10 +135,10 @@
 //Step three - drying
 /obj/item/stack/sheet/wetleather/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	..()
-	if(exposed_temperature >= drying_threshold_temperature)
+	if (exposed_temperature >= drying_threshold_temperature)
 		wetness--
-		if(wetness == 0)
+		if (wetness == 0)
 
-			if(src.use(1))
+			if (src.use(1))
 				drop_stack(/obj/item/stack/sheet/leather, src.loc, 1)
 				wetness = initial(wetness)

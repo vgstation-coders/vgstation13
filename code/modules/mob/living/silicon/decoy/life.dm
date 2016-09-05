@@ -1,5 +1,5 @@
 /mob/living/silicon/decoy/Life()
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
 
 	if (src.stat == 2)
@@ -11,7 +11,7 @@
 
 
 /mob/living/silicon/decoy/updatehealth()
-	if(status_flags & GODMODE)
+	if (status_flags & GODMODE)
 		health = maxHealth
 		stat = CONSCIOUS
 	else

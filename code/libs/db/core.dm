@@ -24,10 +24,10 @@ DBConnection
 	proc
 		Connect(dbi_handler=src.dbi,user_handler=src.user,password_handler=src.password,cursor_handler)
 			//if(!src) return 0
-			if(!sqllogging || !src)
+			if (!sqllogging || !src)
 				return 0
 			cursor_handler = src.default_cursor
-			if(!cursor_handler)
+			if (!cursor_handler)
 				cursor_handler = Default_Cursor
 			return _dm_db_connect(_db_con,dbi_handler,user_handler,password_handler,cursor_handler,null)
 
@@ -41,7 +41,7 @@ DBConnection
 		ErrorMsg() return _dm_db_error_msg(_db_con)
 
 		SelectDB(database_name,dbi)
-			if(IsConnected())
+			if (IsConnected())
 				Disconnect()
 			//return Connect("[dbi?"[dbi]":"dbi:mysql:[database_name]:[DB_SERVER]:[DB_PORT]"]",user,password)
 			return Connect("[dbi?"[dbi]":"dbi:mysql:[database_name]:[sqladdress]:[sqlport]"]",user,password)
@@ -62,11 +62,11 @@ DBQuery
 		_db_query
 
 	New(sql_query,DBConnection/connection_handler,cursor_handler)
-		if(sql_query)
+		if (sql_query)
 			src.sql = sql_query
-		if(connection_handler)
+		if (connection_handler)
 			src.db_connection = connection_handler
-		if(cursor_handler)
+		if (cursor_handler)
 			src.default_cursor = cursor_handler
 		_db_query = _dm_db_new_query()
 		return ..()
@@ -93,23 +93,23 @@ DBQuery
 		ErrorMsg() return _dm_db_error_msg(_db_query)
 
 		Columns()
-			if(!columns)
+			if (!columns)
 				columns = _dm_db_columns(_db_query,/DBColumn)
 			return columns
 
 		GetRowData()
 			var/list/columns = Columns()
 			var/list/results
-			if(columns.len)
+			if (columns.len)
 				results = list()
-				for(var/C in columns)
+				for (var/C in columns)
 					results+=C
 					var/DBColumn/cur_col = columns[C]
 					results[C] = src.item[(cur_col.position+1)]
 			return results
 
 		Close()
-			if(closed)
+			if (closed)
 				return // Don't do this twice.
 			closed=1
 			item.len = 0
@@ -122,11 +122,11 @@ DBQuery
 
 	/*	SetConversion(column,conversion)
 			// This doesn't seem to be doing anything internally...
-			if(istext(column))
+			if (istext(column))
 				column = columns.Find(column)
-			if(!conversions)
+			if (!conversions)
 				conversions = new/list(column)
-			else if(conversions.len < column)
+			else if (conversions.len < column)
 				conversions.len = column
 			conversions[column] = conversion*/
 
@@ -152,30 +152,30 @@ DBColumn
 
 	proc
 		SqlTypeName(type_handler=src.sql_type)
-			switch(type_handler)
-				if(TINYINT)
+			switch (type_handler)
+				if (TINYINT)
 					return "TINYINT"
-				if(SMALLINT)
+				if (SMALLINT)
 					return "SMALLINT"
-				if(MEDIUMINT)
+				if (MEDIUMINT)
 					return "MEDIUMINT"
-				if(INTEGER)
+				if (INTEGER)
 					return "INTEGER"
-				if(BIGINT)
+				if (BIGINT)
 					return "BIGINT"
-				if(FLOAT)
+				if (FLOAT)
 					return "FLOAT"
-				if(DOUBLE)
+				if (DOUBLE)
 					return "DOUBLE"
-				if(DATE)
+				if (DATE)
 					return "DATE"
-				if(DATETIME)
+				if (DATETIME)
 					return "DATETIME"
-				if(TIMESTAMP)
+				if (TIMESTAMP)
 					return "TIMESTAMP"
-				if(TIME)
+				if (TIME)
 					return "TIME"
-				if(STRING)
+				if (STRING)
 					return "STRING"
-				if(BLOB)
+				if (BLOB)
 					return "BLOB"

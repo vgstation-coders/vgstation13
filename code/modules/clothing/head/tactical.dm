@@ -6,17 +6,17 @@
 
 /obj/item/clothing/head/helmet/tactical/New()
 	..()
-	if(preattached)
+	if (preattached)
 		flashlight = new /obj/item/device/flashlight/tactical(src)
 	update_brightness()
 
 /obj/item/clothing/head/helmet/tactical/examine(mob/user)
 	..()
-	if(src.flashlight)
+	if (src.flashlight)
 		to_chat(user, "The helmet is mounted with a flashlight attachment, it is [flashlight.on ? "":"un"]lit.")
 
 /obj/item/clothing/head/helmet/tactical/attackby(var/obj/item/I, mob/user, params)
-	if(!src.flashlight && (I.type == /obj/item/device/flashlight || istype(I,/obj/item/device/flashlight/tactical))) //have to directly check for type because flashlights are the base type and not a child
+	if (!src.flashlight && (I.type == /obj/item/device/flashlight || istype(I,/obj/item/device/flashlight/tactical))) //have to directly check for type because flashlights are the base type and not a child
 		user.drop_item(I, src)
 		flashlight = I
 
@@ -24,7 +24,7 @@
 		user.update_action_buttons()
 		user.update_inv_head()
 		return
-	if(isscrewdriver(I) && src.flashlight)
+	if (isscrewdriver(I) && src.flashlight)
 		flashlight.forceMove(get_turf(src))
 		flashlight.update_brightness(user, playsound = FALSE)
 		flashlight = null
@@ -36,10 +36,10 @@
 	return ..()
 
 obj/item/clothing/head/helmet/tactical/attack_self(mob/user)
-	if(src.flashlight)
+	if (src.flashlight)
 		flashlight.on = !flashlight.on
-		if(get_turf(src))
-			if(flashlight.on)
+		if (get_turf(src))
+			if (flashlight.on)
 				playsound(get_turf(src), flashlight.sound_on, 50, 1)
 			else
 				playsound(get_turf(src), flashlight.sound_off, 50, 1)
@@ -47,14 +47,14 @@ obj/item/clothing/head/helmet/tactical/attack_self(mob/user)
 	user.update_inv_head()
 
 /obj/item/clothing/head/helmet/tactical/proc/update_brightness()
-	if(flashlight && flashlight.on)
+	if (flashlight && flashlight.on)
 		set_light(flashlight.brightness_on)
 	else
 		set_light(0)
 	update_icon()
 
 /obj/item/clothing/head/helmet/tactical/update_icon()
-	if(flashlight)
+	if (flashlight)
 		icon_state = "[initial(icon_state)]_[flashlight.on]"
 		action_button_name = "Toggle Helmet Light"
 	else

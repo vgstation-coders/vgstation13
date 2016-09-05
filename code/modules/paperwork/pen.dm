@@ -25,7 +25,7 @@
 
 /datum/speech_filter_action/bbcode/img/Run(var/text, var/mob/user, var/atom/movable/P)
 	expr.index = 1
-	while(expr.Find(text, expr.index))
+	while (expr.Find(text, expr.index))
 		message_admins("[key_name_admin(user)] added an image ([html_encode(expr.group[1])]) to [P] at [formatJumpTo(get_turf(P))]")
 		var/rtxt   = "<img src=\"[html_encode(expr.group[1])]\" />"
 		text       = copytext(text, 1, expr.index) + rtxt + copytext(text, expr.index + length(expr.match))
@@ -34,7 +34,7 @@
 
 /datum/speech_filter_action/bbcode/video/Run(var/text, var/mob/user, var/atom/movable/P)
 	expr.index = 1
-	while(expr.Find(text, expr.index))
+	while (expr.Find(text, expr.index))
 		message_admins("[key_name_admin(user)] added a video ([html_encode(expr.group[1])]) to [P] at [formatJumpTo(get_turf(P))]")
 		var/rtxt   = "<embed src=\"[html_encode(expr.group[1])]\" width=\"420\" height=\"344\" type=\"x-ms-wmv\" volume=\"85\" autoStart=\"0\" autoplay=\"true\" />"
 		text       = copytext(text, 1, expr.index) + rtxt + copytext(text, expr.index + length(expr.match))
@@ -43,7 +43,7 @@
 
 /datum/speech_filter_action/bbcode/youtube/Run(var/text, var/mob/user, var/atom/movable/P)
 	expr.index = 1
-	while(expr.Find(text,expr.index))
+	while (expr.Find(text,expr.index))
 		var/regex/youtubeid = regex("(youtu\\.be\\/|youtube\\.com\\/(watch\\?(.*&)?v=|(embed|v)\\/))(\[\\w\]+)", "gi")
 		youtubeid.Find(expr.group[1])
 		var/link = "http://www.youtube.com/embed/[youtubeid.group[5]]?autoplay=1&loop=1&controls=0&showinfo=0&rel=0"
@@ -90,23 +90,23 @@ var/paperwork_library
 	set category = "Debug"
 	set name = "Modify Paperwork Mode"
 
-	if(!check_rights(R_DEBUG))
+	if (!check_rights(R_DEBUG))
 		return
 
-	if(!paperwork)
+	if (!paperwork)
 		paperwork_setup()
 	else
 		paperwork_stop()
 		paperwork = 0
 
 /proc/paperwork_setup()
-	if(config.paperwork_library)
-		if(world.system_type == MS_WINDOWS)
+	if (config.paperwork_library)
+		if (world.system_type == MS_WINDOWS)
 			paperwork_library = "markdown_byond.dll"
 		else
 			paperwork_library = "markdown_byond.so"
 		world.log << "Setting up paperwork..."
-		if(!fexists(paperwork_library))
+		if (!fexists(paperwork_library))
 			world.log << "Paperwork was not properly setup, please notify a coder/host about this issue."
 			return
 		world.log << call(paperwork_library, "init_renderer")()
@@ -117,34 +117,34 @@ var/paperwork_library
 	return 0
 
 /proc/paperwork_stop()
-	if(!fexists(paperwork_library))
+	if (!fexists(paperwork_library))
 		world.log << "Paperwork file may be missing or something terrible has happened, don't panic and notify a coder/host about this issue."
 		return
-	if(paperwork)
+	if (paperwork)
 		call(paperwork_library, "free_memory")()
 		return
 	else
 		return
 
 /datum/writing_style/proc/parse_markdown(command_args)
-//	if(!fexists("byond_markdown.dll")){fcopy(stdshellout_dllFile,"[stdshellout_dllFile]")}
+//	if (!fexists("byond_markdown.dll")){fcopy(stdshellout_dllFile,"[stdshellout_dllFile]")}
 	return call(paperwork_library,"render_html")(command_args)
 
 
 /datum/writing_style/proc/Format(var/t, var/obj/item/weapon/pen/P, var/mob/user, var/obj/item/weapon/paper/paper)
-	if(paperwork)
+	if (paperwork)
 		t = parse_markdown(t)
 	else
 		var/count = 0
-		if(expressions.len)
-			for(var/key in expressions)
-				if(count >= 500)
+		if (expressions.len)
+			for (var/key in expressions)
+				if (count >= 500)
 					break
 				count++
 				var/datum/speech_filter_action/SFA = expressions[key]
-				if(SFA && !SFA.broken)
+				if (SFA && !SFA.broken)
 					t = SFA.Run(t,user,paper)
-				if(count%100 == 0)
+				if (count%100 == 0)
 					sleep(1) //too much for us.
 		t = replacetext(t, "\[sign\]", "<font face=\"Times New Roman\"><i>[user.real_name]</i></font>")
 		t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
@@ -229,7 +229,7 @@ var/paperwork_library
 
 // checks if its used on nano paper, if it is, use the nano paper formatting
 /obj/item/weapon/pen/proc/Format(var/mob/user, var/text, var/obj/item/weapon/paper/P)
-	if(istype(P,/obj/item/weapon/paper/nano))
+	if (istype(P,/obj/item/weapon/paper/nano))
 		return nano_style.Format(text,src,user,P)
 	else
 		return style.Format(text,src,user,P)
@@ -255,14 +255,14 @@ var/paperwork_library
 
 
 /obj/item/weapon/pen/attack(mob/M as mob, mob/user as mob)
-	if(!ismob(M))
+	if (!ismob(M))
 		return
 	to_chat(user, "<span class='warning'>You stab [M] with the pen.</span>")
 	to_chat(M, "<span class='warning'>You feel a tiny prick!</span>")
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been stabbed with [type]  by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [type] to stab [M.name] ([M.ckey])</font>")
 	msg_admin_attack("[user.name] ([user.ckey]) Used the [type] to stab [M.name] ([M.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-	if(!iscarbon(user))
+	if (!iscarbon(user))
 		M.LAssailant = null
 	else
 		M.LAssailant = user
@@ -285,11 +285,11 @@ var/paperwork_library
 	reagents.add_reagent(CHLORALHYDRATE, 22) // Used to be 100 sleep toxin // 30 Chloral seems to be fatal, reducing it to 22. /N
 
 /obj/item/weapon/pen/sleepypen/attack(mob/M as mob, mob/user as mob)
-	if(!(istype(M,/mob)))
+	if (!(istype(M,/mob)))
 		return
 	..()
-	if(reagents.total_volume)
-		if(M.reagents)
+	if (reagents.total_volume)
+		if (M.reagents)
 			reagents.trans_to(M, 50) //used to be 150
 	return
 
@@ -304,11 +304,11 @@ var/paperwork_library
 
 
 /obj/item/weapon/pen/paralysis/attack(mob/M as mob, mob/user as mob)
-	if(!(istype(M,/mob)))
+	if (!(istype(M,/mob)))
 		return
 	..()
-	if(reagents.total_volume)
-		if(M.reagents)
+	if (reagents.total_volume)
+		if (M.reagents)
 			reagents.trans_to(M, 50)
 	return
 

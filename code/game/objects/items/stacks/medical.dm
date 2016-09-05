@@ -13,7 +13,7 @@
 
 /obj/item/stack/medical/attack(mob/living/carbon/M as mob, mob/user as mob)
 
-	if(!istype(M))
+	if (!istype(M))
 		to_chat(user, "<span class='warning'>\The [src] cannot be applied to [M]!</span>")
 		return 1
 
@@ -21,24 +21,24 @@
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 1
 
-	if(istype(M, /mob/living/carbon/human))
+	if (istype(M, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/external/affecting = H.get_organ(user.zone_sel.selecting)
 
-		if(affecting.display_name == LIMB_HEAD)
-			if(H.head && istype(H.head,/obj/item/clothing/head/helmet/space))
+		if (affecting.display_name == LIMB_HEAD)
+			if (H.head && istype(H.head,/obj/item/clothing/head/helmet/space))
 				to_chat(user, "<span class='warning'>You can't apply \the [src] through \the [H.head]!</span>")
 				return 1
 		else
-			if(H.wear_suit && istype(H.wear_suit,/obj/item/clothing/suit/space))
+			if (H.wear_suit && istype(H.wear_suit,/obj/item/clothing/suit/space))
 				to_chat(user, "<span class='warning'>You can't apply \the [src] through \the [H.wear_suit]!</span>")
 				return 1
 
-		if(affecting.status & ORGAN_ROBOT)
+		if (affecting.status & ORGAN_ROBOT)
 			to_chat(user, "<span class='warning'>This isn't useful at all on a robotic limb.</span>")
 			return 1
 
-		if(affecting.status & ORGAN_PEG)
+		if (affecting.status & ORGAN_PEG)
 			to_chat(user, "<span class='warning'>This isn't useful at all on a peg limb.</span>")
 			return 1
 
@@ -69,26 +69,26 @@
 	max_amount = 1
 
 /obj/item/stack/medical/bruise_pack/attack(mob/living/carbon/M as mob, mob/user as mob)
-	if(..())
+	if (..())
 		return 1
 
-	if(istype(M, /mob/living/carbon/human))
+	if (istype(M, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/external/affecting = H.get_organ(user.zone_sel.selecting)
 
-		if(affecting.open == 0)
-			if(!affecting.bandage())
+		if (affecting.open == 0)
+			if (!affecting.bandage())
 				to_chat(user, "<span class='warning'>The wounds on [M]'s [affecting.display_name] have already been bandaged.</span>")
 				return 1
 			else
-				for(var/datum/wound/W in affecting.wounds)
-					if(W.internal)
+				for (var/datum/wound/W in affecting.wounds)
+					if (W.internal)
 						continue
-					if(W.current_stage <= W.max_bleeding_stage)
+					if (W.current_stage <= W.max_bleeding_stage)
 						user.visible_message("<span class='notice'>[user] bandages \the [W.desc] on [M]'s [affecting.display_name].</span>", \
 										"<span class='notice'>You bandage \the [W.desc] on [M]'s [affecting.display_name].</span>")
 						//H.add_side_effect("Itch")
-					else if(istype(W,/datum/wound/bruise))
+					else if (istype(W,/datum/wound/bruise))
 						user.visible_message("<span class='notice'>[user] places a bruise patch over \the [W.desc] on [M]'s [affecting.display_name].</span>", \
 										"<span class='notice'>You place a bruise patch over \the [W.desc] on [M]'s [affecting.display_name].</span>")
 					else
@@ -96,8 +96,8 @@
 										"<span class='notice'>You place a bandaid over \the [W.desc] on [M]'s [affecting.display_name].</span>")
 				use(1)
 		else
-			if(can_operate(H))        //Checks if mob is lying down on table for surgery
-				if(do_surgery(H,user,src))
+			if (can_operate(H))        //Checks if mob is lying down on table for surgery
+				if (do_surgery(H,user,src))
 					return
 			else
 				to_chat(user, "<span class='notice'>[H]'s [affecting.display_name] is cut wide open, you'll need more than a bandage!</span>")
@@ -111,15 +111,15 @@
 	origin_tech = Tc_BIOTECH + "=1"
 
 /obj/item/stack/medical/ointment/attack(mob/living/carbon/M as mob, mob/user as mob)
-	if(..())
+	if (..())
 		return 1
 
-	if(istype(M, /mob/living/carbon/human))
+	if (istype(M, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/external/affecting = H.get_organ(user.zone_sel.selecting)
 
-		if(affecting.open == 0)
-			if(!affecting.salve())
+		if (affecting.open == 0)
+			if (!affecting.salve())
 				to_chat(user, "<span class='warning'>The wounds on [M]'s [affecting.display_name] have already been salved.</span>")
 				return 1
 			else
@@ -127,8 +127,8 @@
 										"<span class='notice'>You salve the wounds on [M]'s [affecting.display_name].</span>" )
 				use(1)
 		else
-			if(can_operate(H))        //Checks if mob is lying down on table for surgery
-				if(do_surgery(H,user,src))
+			if (can_operate(H))        //Checks if mob is lying down on table for surgery
+				if (do_surgery(H,user,src))
 					return
 			else
 				to_chat(user, "<span class='notice'>[H]'s [affecting.display_name] is cut wide open, you'll need more than some ointment!</span>")
@@ -159,26 +159,26 @@
 	origin_tech = Tc_BIOTECH + "=2"
 
 /obj/item/stack/medical/advanced/bruise_pack/attack(mob/living/carbon/M as mob, mob/user as mob)
-	if(..())
+	if (..())
 		return 1
 
-	if(istype(M, /mob/living/carbon/human))
+	if (istype(M, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/external/affecting = H.get_organ(user.zone_sel.selecting)
 
-		if(affecting.open == 0)
-			if(!affecting.bandage())
+		if (affecting.open == 0)
+			if (!affecting.bandage())
 				to_chat(user, "<span class='warning'>The wounds on [M]'s [affecting.display_name] have already been treated.</span>")
 				return 1
 			else
-				for(var/datum/wound/W in affecting.wounds)
-					if(W.internal)
+				for (var/datum/wound/W in affecting.wounds)
+					if (W.internal)
 						continue
-					if(W.current_stage <= W.max_bleeding_stage)
+					if (W.current_stage <= W.max_bleeding_stage)
 						user.visible_message("<span class='notice'>[user] cleans \the [W.desc] on [M]'s [affecting.display_name] and seals the edges with bioglue.</span>", \
 										"<span class='notice'>You clean \the [W.desc] on [M]'s [affecting.display_name] and seal the edges with bioglue .</span>")
 						//H.add_side_effect("Itch")
-					else if(istype(W,/datum/wound/bruise))
+					else if (istype(W,/datum/wound/bruise))
 						user.visible_message("<span class='notice'>[user] disinfects and places a medicine patch over \the [W.desc] on [M]'s [affecting.display_name].</span>", \
 										"<span class='notice'>You disinfect and place a medicine patch over \the [W.desc] on [M]'s [affecting.display_name].</span>")
 					else
@@ -187,8 +187,8 @@
 				affecting.heal_damage(rand(heal_brute, heal_brute + 5), 0)
 				use(1)
 		else
-			if(can_operate(H))        //Checks if mob is lying down on table for surgery
-				if(do_surgery(H,user,src))
+			if (can_operate(H))        //Checks if mob is lying down on table for surgery
+				if (do_surgery(H,user,src))
 					return
 			else
 				to_chat(user, "<span class='notice'>[H]'s [affecting.display_name] is cut wide open, even bioglue won't do!</span>")
@@ -203,15 +203,15 @@
 
 
 /obj/item/stack/medical/advanced/ointment/attack(mob/living/carbon/M as mob, mob/user as mob)
-	if(..())
+	if (..())
 		return 1
 
-	if(istype(M, /mob/living/carbon/human))
+	if (istype(M, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/external/affecting = H.get_organ(user.zone_sel.selecting)
 
-		if(affecting.open == 0)
-			if(!affecting.salve())
+		if (affecting.open == 0)
+			if (!affecting.salve())
 				to_chat(user, "<span class='warning'>The wounds on [M]'s [affecting.display_name] have already been salved.</span>")
 				return 1
 			else
@@ -220,8 +220,8 @@
 				affecting.heal_damage(0, rand(heal_burn, heal_burn + 5))
 				use(1)
 		else
-			if(can_operate(H))        //Checks if mob is lying down on table for surgery
-				if(do_surgery(H,user,src))
+			if (can_operate(H))        //Checks if mob is lying down on table for surgery
+				if (do_surgery(H,user,src))
 					return
 			else
 				to_chat(user, "<span class='notice'>[H]'s [affecting.display_name] is cut wide open, even a regenerative membrane won't do!</span>")
@@ -234,17 +234,17 @@
 	max_amount = 5
 
 /obj/item/stack/medical/splint/attack(mob/living/carbon/M as mob, mob/user as mob)
-	if(..())
+	if (..())
 		return 1
 
 	if (istype(M, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/external/affecting = H.get_organ(user.zone_sel.selecting)
 		var/limb = affecting.display_name
-		if(!((affecting.name == LIMB_LEFT_ARM) || (affecting.name == LIMB_RIGHT_ARM) || (affecting.name == LIMB_LEFT_LEG) || (affecting.name == LIMB_RIGHT_LEG)))
+		if (!((affecting.name == LIMB_LEFT_ARM) || (affecting.name == LIMB_RIGHT_ARM) || (affecting.name == LIMB_LEFT_LEG) || (affecting.name == LIMB_RIGHT_LEG)))
 			to_chat(user, "<span class='warning'>You can only apply splints on limbs!</span>")
 			return
-		if(affecting.status & ORGAN_SPLINTED)
+		if (affecting.status & ORGAN_SPLINTED)
 			to_chat(user, "<span class='warning'>[M]'s [limb] is already splinted!</span>")
 			return
 		if (M != user)
@@ -254,20 +254,20 @@
 		else
 			var/datum/organ/external/OE = user.get_active_hand_organ()
 
-			if(affecting.grasp_id == OE.grasp_id)
+			if (affecting.grasp_id == OE.grasp_id)
 				to_chat(user, "<span class='warning'>You can't apply a splint to the arm you're using!</span>")
 				return
 
 			user.visible_message("<span class='warning'>[user] starts to apply \the [src] to their [limb].</span>", \
 								"<span class='warning'>You start to apply \the [src] to your [limb].</span>", \
 								"<span class='warning'>You hear something being wrapped.</span>")
-		if(do_mob(user, M, 50))
+		if (do_mob(user, M, 50))
 			if (M != user)
 				user.visible_message("<span class='warning'>[user] finishes applying \the [src] to [M]'s [limb].</span>", \
 									"<span class='warning'>You finish applying \the [src] to [M]'s [limb].</span>", \
 									"<span class='warning'>You hear something being wrapped.</span>")
 			else
-				if(prob(25))
+				if (prob(25))
 					user.visible_message("<span class='warning'>[user] successfully applies \the [src] to their [limb].</span>", \
 										"<span class='warning'>You successfully apply \the [src] to your [limb].</span>", \
 										"<span class='warning'>You hear something being wrapped.</span>")

@@ -72,5 +72,5 @@
 	var/shown_schematics_background = 0
 
 /mob/living/proc/unsubLife(datum/sub)
-	while("\ref[sub]" in callOnLife)
+	while ("\ref[sub]" in callOnLife)
 		callOnLife -= "\ref[sub]"

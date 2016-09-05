@@ -46,7 +46,7 @@
 		if (!(locate(T) in src.modules))
 			src.modules -= null
 			var/O = new T(src)
-			if(istype(O,/obj/item/stack/cable_coil))
+			if (istype(O,/obj/item/stack/cable_coil))
 				O:max_amount = 50
 			src.modules += O
 			O:amount = 1

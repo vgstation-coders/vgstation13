@@ -45,8 +45,8 @@
 
 /obj/item/weapon/reagent_containers/chempack/equipped(M as mob, back)
 	var/mob/living/carbon/human/H = M
-	if(H.back == src)
-		if(H.wear_mask && istype(H.wear_mask, /obj/item/clothing/mask/chemmask))
+	if (H.back == src)
+		if (H.wear_mask && istype(H.wear_mask, /obj/item/clothing/mask/chemmask))
 			var/obj/item/clothing/mask/chemmask/C = H.wear_mask
 			C.update_verbs()
 
@@ -66,12 +66,12 @@
 
 /obj/item/weapon/reagent_containers/chempack/examine(mob/user)
 	..()
-	if(beaker)
+	if (beaker)
 		to_chat(user, "[bicon(beaker)] There is \a [beaker] in \the [src]'s auxiliary chamber.")
 		to_chat(user, "It contains:")
 		var/obj/item/weapon/reagent_containers/glass/B = beaker
-		if(B.reagents.reagent_list.len)
-			for(var/datum/reagent/R in B.reagents.reagent_list)
+		if (B.reagents.reagent_list.len)
+			for (var/datum/reagent/R in B.reagents.reagent_list)
 				to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
 		else
 			to_chat(user, "<span class='info'>Nothing.</span>")
@@ -83,27 +83,27 @@
 	var/mob/living/carbon/human/H = loc
 	overlays.len = 0
 
-	if(reagents.total_volume)
+	if (reagents.total_volume)
 		var/image/filling = image('icons/obj/chempackfillings.dmi', src, "[initial(icon_state)]10")
 		var/image/fillingback = image('icons/obj/chempackfillings.dmi', src, "[initial(icon_state)]10b")
 		var/image/fillinghandr = image('icons/obj/chempackfillings.dmi', src, "[initial(icon_state)]10rh")
 		var/image/fillinghandl = image('icons/obj/chempackfillings.dmi', src, "[initial(icon_state)]10lh")
 
 		var/percent = round((reagents.total_volume / volume) * 100)
-		switch(percent)
-			if(0 to 9)
+		switch (percent)
+			if (0 to 9)
 				filling.icon_state = "[initial(icon_state)]-10"
-			if(10 to 24)
+			if (10 to 24)
 				filling.icon_state = "[initial(icon_state)]10"
-			if(25 to 49)
+			if (25 to 49)
 				filling.icon_state = "[initial(icon_state)]25"
-			if(50 to 74)
+			if (50 to 74)
 				filling.icon_state = "[initial(icon_state)]50"
-			if(75 to 79)
+			if (75 to 79)
 				filling.icon_state = "[initial(icon_state)]75"
-			if(80 to 90)
+			if (80 to 90)
 				filling.icon_state = "[initial(icon_state)]80"
-			if(91 to INFINITY)
+			if (91 to INFINITY)
 				filling.icon_state = "[initial(icon_state)]100"
 
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
@@ -169,28 +169,28 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 			return
 
 /obj/item/weapon/reagent_containers/chempack/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/weapon/reagent_containers/glass))
-		if(src.safety && auxiliary)
+	if (istype(W, /obj/item/weapon/reagent_containers/glass))
+		if (src.safety && auxiliary)
 			if (stage)
 				to_chat(user, "<span class='warning'>You need to secure the maintenance panel before you can insert a beaker!</span>")
 				return
-			if(user.type == /mob/living/silicon/robot) //Can't have silicons putting their beakers inside this.
+			if (user.type == /mob/living/silicon/robot) //Can't have silicons putting their beakers inside this.
 				return
-			if(src.beaker)
+			if (src.beaker)
 				to_chat(user, "There is already a beaker loaded into \the [src].")
 				return
 			else
-				if(user.drop_item(W, src))
+				if (user.drop_item(W, src))
 					src.beaker = W
 					to_chat(user, "You add the beaker to \the [src]'s auxiliary chamber!")
-					if(user.wear_mask && istype(user.wear_mask, /obj/item/clothing/mask/chemmask))
+					if (user.wear_mask && istype(user.wear_mask, /obj/item/clothing/mask/chemmask))
 						var/obj/item/clothing/mask/chemmask/C = user.wear_mask
 						C.update_verbs()
 					return 1
 		else
 			return
 
-	if(iswrench(W))
+	if (iswrench(W))
 		if (stage)
 			to_chat(user, "<span class='warning'>You need to secure the maintenance panel before you can access the auxiliary chamber bolts!</span>")
 			return
@@ -211,9 +211,9 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 			to_chat(user, "You tighten the bolts of \the [src]'s auxiliary chamber.")
 			return
 
-	switch(stage) //Handles the different stages of overriding the chemical pack's safeties. This can be done completely with a standard set of tools.
-		if(0)
-			if(isscrewdriver(W) && user.back == src)
+	switch (stage) //Handles the different stages of overriding the chemical pack's safeties. This can be done completely with a standard set of tools.
+		if (0)
+			if (isscrewdriver(W) && user.back == src)
 				to_chat(user, "<span class='warning'>You can't perform maintenance on \the [src] while you're wearing it!</span>")
 				return
 			else
@@ -225,7 +225,7 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 						B.forceMove(loc)
 					beaker = null
 					to_chat(user, "You pry the beaker out of \the [src].")
-					if(user.wear_mask && istype(user.wear_mask, /obj/item/clothing/mask/chemmask))
+					if (user.wear_mask && istype(user.wear_mask, /obj/item/clothing/mask/chemmask))
 						var/obj/item/clothing/mask/chemmask/C = user.wear_mask
 						C.update_verbs()
 					return
@@ -242,7 +242,7 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 					icon_state = "[initial(icon_state)]3"
 					user.update_inv_hands() //These procs are to force the item's in_hand mob overlay to update to reflect the different stages of building. It was the only way I could find to accomplish this.
 					return
-		if(1)
+		if (1)
 			if (iscrowbar(W))
 				if (primed == 0)
 					stage = 2
@@ -263,7 +263,7 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 					icon_state = "[initial(icon_state)]1"
 					user.update_inv_hands()
 				return
-		if(2)
+		if (2)
 			if (iswirecutter(W))
 				stage = 3
 				primed = 1
@@ -275,7 +275,7 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 				icon_state = "[initial(icon_state)]3"
 				user.update_inv_hands()
 				return
-		if(3)
+		if (3)
 			if (ismultitool(W))
 				if (safety == 0)
 					to_chat(user, "<span class='warning'>You activate the manual safety override of \the [src]!</span>")

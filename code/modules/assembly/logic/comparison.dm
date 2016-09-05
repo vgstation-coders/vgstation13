@@ -50,43 +50,43 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 		VALUE_PULSE_IF_FALSE = "pulse_if_false;"+VT_POINTER)
 
 /obj/item/device/assembly/comparison/activate()
-	if(!..())
+	if (!..())
 		return 0
 
 	var/value_1 = 0
-	if(isnum(check_this) || istext(check_this))
+	if (isnum(check_this) || istext(check_this))
 		value_1 = check_this
-	else if(check_this)
+	else if (check_this)
 		value_1 = check_this.get_value(checked_value_1)
 
 	var/value_2 = 0
-	if(isnum(check_against) || istext(check_against))
+	if (isnum(check_against) || istext(check_against))
 		value_2 = check_against
-	else if(check_against)
+	else if (check_against)
 		value_2 = check_against.get_value(checked_value_2)
 
 	var/result = 0
 
-	switch(check_type)
-		if("EQUAL TO")
+	switch (check_type)
+		if ("EQUAL TO")
 			result = (value_1 == value_2)
-		if("LESS THAN")
+		if ("LESS THAN")
 			result = (value_1 < value_2)
-		if("MORE THAN")
+		if ("MORE THAN")
 			result = (value_1 > value_2)
-		if("LESS THAN OR EQUAL TO")
+		if ("LESS THAN OR EQUAL TO")
 			result = (value_1 <= value_2)
-		if("MORE THAN OR EQUAL TO")
+		if ("MORE THAN OR EQUAL TO")
 			result = (value_1 >= value_2)
-		if("NOT EQUAL TO")
+		if ("NOT EQUAL TO")
 			result = (value_1 != value_2)
 
-	switch(result)
-		if(0)
-			if(pulse_if_false)
+	switch (result)
+		if (0)
+			if (pulse_if_false)
 				pulse_if_false.pulsed()
 		else
-			if(pulse_if_true)
+			if (pulse_if_true)
 				pulse_if_true.pulsed()
 
 
@@ -98,14 +98,14 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 
 	dat += "<a href='?src=\ref[src];change_check_this=1'>[check_this]</a>"
 
-	if(istype(check_this))
+	if (istype(check_this))
 		dat += " ([checked_value_1])"
 
 	dat += " is <a href='?src=\ref[src];change_check_type=1'>[check_type]</a> "
 
 	dat += "<a href='?src=\ref[src];change_check_against=1'>[check_against]</a>"
 
-	if(istype(check_against))
+	if (istype(check_against))
 		dat += " ([checked_value_2])"
 
 	dat += "<BR>"
@@ -115,11 +115,11 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 
 	dat += "Connected devices: "
 
-	if(device_pool.len)
+	if (device_pool.len)
 
-		for(var/i = 1 to device_pool.len)
+		for (var/i = 1 to device_pool.len)
 			dat += "[device_pool[i]]"
-			if(i != device_pool.len)
+			if (i != device_pool.len)
 				dat += ", " //If not last item in the list, add a comma
 
 	var/datum/browser/popup = new(user, "circuit2", "[src]", 500, 300, src)
@@ -133,15 +133,15 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 
 
 /obj/item/device/assembly/comparison/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 
-	if(href_list["change_check_type"])
+	if (href_list["change_check_type"])
 		var/choice = input(usr, "Select a new check type for \the [src].", "\The [src]") as null|anything in comparison_circuit_operations
 
-		if(isnull(choice))
+		if (isnull(choice))
 			return
-		if(..())
+		if (..())
 			return
 
 		to_chat(usr, "<span class='info'>You change the check from [check_type] to [choice].</span>")
@@ -150,31 +150,31 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 
 	//Trigger warning: horrible code below
 
-	if(href_list["change_check_this"])
+	if (href_list["change_check_this"])
 		var/choice = input(usr, "Select a new checked value #1 for \the [src].", "\The [src]") as null|anything in (device_pool + "Constant number" + "Constant string") //Select an assembly, or "Constant number"
 
-		if(isnull(choice))
+		if (isnull(choice))
 			return
-		if(..())
+		if (..())
 			return
 
-		if(choice == "Constant number") //Selected "Constant number" - ask the user to specify a number
+		if (choice == "Constant number") //Selected "Constant number" - ask the user to specify a number
 			var/new_num = input(usr, "Please type in a number that will be used as value #1.", "\The [src]") as null|num
 
-			if(isnull(new_num))
+			if (isnull(new_num))
 				return
-			if(..())
+			if (..())
 				return
 
 			check_this = new_num
 			checked_value_1 = null
 
 			to_chat(usr, "<span class='info'>Value #1 set to be [check_this]</span>")
-		else if(choice == "Constant string")
+		else if (choice == "Constant string")
 			var/new_txt = stripped_input(usr, "Please type in a string that will be used as value #1.", "\The [src]", max_length = MAX_TEXT_VALUE_LEN) as null|text
 
-			if(isnull(new_txt)) return
-			if(..()) return
+			if (isnull(new_txt)) return
+			if (..()) return
 
 			check_this = new_txt
 			checked_value_1 = null
@@ -182,31 +182,31 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 			to_chat(usr, "<span class='info'>Value #1 set to be \"[check_this]\"</span>")
 		else //Selected an assembly - ask the user to select a value
 			var/obj/item/device/assembly/A = choice
-			if(!istype(A))
+			if (!istype(A))
 				return
 
-			if(!A.accessible_values || !A.accessible_values.len) //No accessible values
+			if (!A.accessible_values || !A.accessible_values.len) //No accessible values
 				to_chat(usr, "<span class='info'>\The [A] has no accessible values.")
 				return
 
 			var/new_value = input(usr, "Select which of \the [A]'s values is used as \the [src]'s value #1.", "\The [src]") as null|anything in A.accessible_values
 
-			if(isnull(new_value))
+			if (isnull(new_value))
 				return
-			if(..())
+			if (..())
 				return
 
 			/*//Check if the selected value is a number
 
 			var/new_values_params = A.accessible_values[new_value]
 			var/list/L = params2list(new_values_params)
-			if(L[VALUE_VARIABLE_TYPE] != "number")
+			if (L[VALUE_VARIABLE_TYPE] != "number")
 				to_chat(usr, "<span class='info'>Only numbers may be used in \the [src].</span>")
 				return
 			*/ //Let's try permitting strings to be used
 
 			//Just some more sanity
-			if(!device_pool.Find(choice))
+			if (!device_pool.Find(choice))
 				return
 
 			//Finally we're here
@@ -216,31 +216,31 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 
 			to_chat(usr, "<span class='info'>Value #1 set to be [check_this] - [checked_value_1]</span>")
 
-	if(href_list["change_check_against"]) //Copy of the above, with some slight tweaks
+	if (href_list["change_check_against"]) //Copy of the above, with some slight tweaks
 		var/choice = input(usr, "Select a new checked value #2 for \the [src].", "\The [src]") as null|anything in (device_pool + "Constant number" + "Constant string") //Select an assembly, or "Constant number"
 
-		if(isnull(choice))
+		if (isnull(choice))
 			return
-		if(..())
+		if (..())
 			return
 
-		if(choice == "Constant number") //Selected "Constant number" - ask the user to specify a number
+		if (choice == "Constant number") //Selected "Constant number" - ask the user to specify a number
 			var/new_num = input(usr, "Please type in a number that will be used as value #2.", "\The [src]") as null|num
 
-			if(isnull(new_num))
+			if (isnull(new_num))
 				return
-			if(..())
+			if (..())
 				return
 
 			check_against = new_num
 			checked_value_2 = null
 
 			to_chat(usr, "<span class='info'>Value #2 set to be [check_against]</span>")
-		else if(choice == "Constant string")
+		else if (choice == "Constant string")
 			var/new_txt = stripped_input(usr, "Please type in a string that will be used as value #2.", "\The [src]", max_length = MAX_TEXT_VALUE_LEN) as null|text
 
-			if(isnull(new_txt)) return
-			if(..()) return
+			if (isnull(new_txt)) return
+			if (..()) return
 
 			check_against = new_txt
 			checked_value_2 = null
@@ -248,30 +248,30 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 			to_chat(usr, "<span class='info'>Value #2 set to be \"[check_against]\"</span>")
 		else //Selected an assembly - ask the user to select a value
 			var/obj/item/device/assembly/A = choice
-			if(!istype(A))
+			if (!istype(A))
 				return
 
-			if(!A.accessible_values || !A.accessible_values.len) //No accessible values
+			if (!A.accessible_values || !A.accessible_values.len) //No accessible values
 				to_chat(usr, "<span class='info'>\The [A] has no accessible values.")
 				return
 
 			var/new_value = input(usr, "Select which of \the [A]'s values is used as \the [src]'s value #2.", "\The [src]") as null|anything in A.accessible_values
 
-			if(isnull(new_value))
+			if (isnull(new_value))
 				return
-			if(..())
+			if (..())
 				return
 
 			//Check if the selected value is a number
 
 			var/new_values_params = A.accessible_values[new_value]
 			var/list/L = params2list(new_values_params)
-			if(L[VALUE_VARIABLE_TYPE] != "number")
+			if (L[VALUE_VARIABLE_TYPE] != "number")
 				to_chat(usr, "<span class='info'>Only numbers may be used in \the [src].</span>")
 				return
 
 			//Just some more sanity
-			if(!device_pool.Find(choice))
+			if (!device_pool.Find(choice))
 				return
 
 			//Finally we're here
@@ -281,36 +281,36 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 
 			to_chat(usr, "<span class='info'>Value #2 set to be [check_against] - [checked_value_2]</span>")
 
-	if(href_list["change_pulse_if_true"])
+	if (href_list["change_pulse_if_true"])
 		var/choice = input(usr, "Select an assembly that will be pulsed if the condition is true.", "\The [src]") as null|anything in (device_pool + "Nothing")
 
-		if(!choice)
+		if (!choice)
 			return
-		if(..())
+		if (..())
 			return
 
-		if(choice == "Nothing")
+		if (choice == "Nothing")
 			pulse_if_true = null
 		else
-			if(!device_pool.Find(choice))
+			if (!device_pool.Find(choice))
 				return
 
 			pulse_if_true = choice
 
 		to_chat(usr, "<span class='info'>If the condition is true, [pulse_if_true ? pulse_if_true : "nothing"] will be pulsed.</span>")
 
-	if(href_list["change_pulse_if_false"])
+	if (href_list["change_pulse_if_false"])
 		var/choice = input(usr, "Select an assembly that will be pulsed if the condition is false.", "\The [src]") as null|anything in (device_pool + "Nothing")
 
-		if(!choice)
+		if (!choice)
 			return
-		if(..())
+		if (..())
 			return
 
-		if(choice == "Nothing")
+		if (choice == "Nothing")
 			pulse_if_false = null
 		else
-			if(!device_pool.Find(choice))
+			if (!device_pool.Find(choice))
 				return
 
 			pulse_if_false = choice
@@ -318,28 +318,28 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 		to_chat(usr, "<span class='info'>If the condition is false, [pulse_if_false ? pulse_if_false : "nothing"] will be pulsed.</span>")
 
 
-	if(usr)
+	if (usr)
 		attack_self(usr)
 
 /obj/item/device/assembly/comparison/write_to_value(value, new_value)
-	switch(value)
+	switch (value)
 		//Shitcode warning
 		//Special cases for Device 1 and Device 2 variables - they can work both as numbers and as pointers. Turn them into numbers if there's no accessed value data for them
-		if(VALUE_DEVICE_1)
-			if(!checked_value_1 && isnum(new_value))
+		if (VALUE_DEVICE_1)
+			if (!checked_value_1 && isnum(new_value))
 				set_value("check_this", new_value)
 				return
 
-		if(VALUE_DEVICE_2)
-			if(!checked_value_2 && isnum(new_value))
+		if (VALUE_DEVICE_2)
+			if (!checked_value_2 && isnum(new_value))
 				set_value("check_against", new_value)
 				return
 
 	return ..()
 
 /obj/item/device/assembly/comparison/set_value(var_name, new_value)
-	if(var_name == "check_type")
-		if(!comparison_circuit_operations.Find(new_value)) //Not a valid operation
+	if (var_name == "check_type")
+		if (!comparison_circuit_operations.Find(new_value)) //Not a valid operation
 			return
 
 	return ..(var_name, new_value)
@@ -354,13 +354,13 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 
 	//Remove all references and make the disconnected assembly unavailable
 	device_pool.Remove(A)
-	if(check_this == A)
+	if (check_this == A)
 		check_this = 1
-	if(check_against == A)
+	if (check_against == A)
 		check_against = 1
-	if(pulse_if_true == A)
+	if (pulse_if_true == A)
 		pulse_if_true = null
-	if(pulse_if_false == A)
+	if (pulse_if_false == A)
 		pulse_if_false = null
 
 #undef VALUE_OPERATION

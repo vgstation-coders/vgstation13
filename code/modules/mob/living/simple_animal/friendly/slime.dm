@@ -23,7 +23,7 @@
 	mob_push_flags = MONKEY|SLIME|SIMPLE_ANIMAL
 
 /mob/living/simple_animal/slime/attackby(var/obj/item/weapon/slimeparapotion/O as obj, var/mob/user as mob)
-	if(istype(O))
+	if (istype(O))
 		canmove = 0
 		icon_state = "[colour] baby slime dead"
 		to_chat(user, "<span class='info'>\The [src] stops moving and coalesces.</span>")
@@ -60,9 +60,9 @@
 
 
 /mob/living/simple_animal/slime/proc/rabid()
-	if(stat)
+	if (stat)
 		return
-	if(client)
+	if (client)
 		return
 	var/mob/living/simple_animal/hostile/slime/pet = new /mob/living/simple_animal/hostile/slime(loc)
 	pet.icon_state = "[colour] baby slime eat"
@@ -74,7 +74,7 @@
 /mob/living/simple_animal/slime/attack_hand(mob/living/carbon/human/M as mob)
 
 	//Shamelessly stolen from Dionacode
-	if(!canmove && !locked_to && isturf(loc) && !M.get_active_hand())
+	if (!canmove && !locked_to && isturf(loc) && !M.get_active_hand())
 		scoop_up(M)
 	return ..()
 
@@ -85,46 +85,46 @@
 	icon_state = "bottle9"
 
 /mob/living/simple_animal/slime/Life()
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
 	..()
 
 	regular_hud_updates()
 
 /mob/living/simple_animal/slime/regular_hud_updates()
-	if(client)
+	if (client)
 		update_pull_icon()
 
 		var/severity = 0
 
 		var/healthpercent = (health/maxHealth) * 100
 
-		switch(healthpercent)
-			if(100 to INFINITY)
+		switch (healthpercent)
+			if (100 to INFINITY)
 				healths.icon_state = "slime_health0"
-			if(80 to 100)
+			if (80 to 100)
 				healths.icon_state = "slime_health1"
 				severity = 1
-			if(60 to 80)
+			if (60 to 80)
 				healths.icon_state = "slime_health2"
 				severity = 2
-			if(40 to 60)
+			if (40 to 60)
 				healths.icon_state = "slime_health3"
 				severity = 3
-			if(20 to 40)
+			if (20 to 40)
 				healths.icon_state = "slime_health4"
 				severity = 4
-			if(0 to 20)
+			if (0 to 20)
 				healths.icon_state = "slime_health5"
 				severity = 5
-			if(-99 to 0)
+			if (-99 to 0)
 				healths.icon_state = "slime_health6"
 				severity = 6
 			else
 				healths.icon_state = "slime_health7"
 				severity = 6
 
-		if(severity > 0)
+		if (severity > 0)
 			overlay_fullscreen("brute", /obj/screen/fullscreen/brute, severity)
 		else
 			clear_fullscreen("brute")

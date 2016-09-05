@@ -28,8 +28,8 @@
 	. = ..()
 
 	// Make sure to not copy any null ones, null is for map overrides to remove.
-	for(var/dest in map.default_tagger_locations)
-		if(dest)
+	for (var/dest in map.default_tagger_locations)
+		if (dest)
 			destinations += dest
 
 /obj/item/device/destTagger/interact(mob/user as mob)
@@ -44,7 +44,7 @@
 
 	dat += "</tr></table><br>Current Selection: [currTag ? destinations[currTag] : "None"].<hr><br>"
 
-	if(mode)
+	if (mode)
 		dat += "<a href='?src=\ref[src];new_dest=1'>Add destination</a>"
 
 	var/datum/browser/popup = new(user, "destTagger", name, 380, 350, src)
@@ -56,14 +56,14 @@
 	interact(user)
 
 /obj/item/device/destTagger/attackby(obj/item/W, mob/user)
-	if(isscrewdriver(W))
+	if (isscrewdriver(W))
 		panel = !panel
 		to_chat(user, "<span class='notify'>You [panel ? "open" : "close"] the panel on \the [src].</span>")
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 		update_icon()
 		return 1
 
-	if(ismultitool(W) && panel)
+	if (ismultitool(W) && panel)
 		mode = !mode
 		to_chat(user, "<span class='notify'>You [mode ? "disable" : "enable"] the lock on \the [src].</span>")
 		return 1
@@ -71,7 +71,7 @@
 	. = ..()
 
 /obj/item/device/destTagger/update_icon()
-	if(panel)
+	if (panel)
 		icon_state = "dest_tagger_p"
 		desc += "\nThe panel appears to be open."
 	else
@@ -80,23 +80,23 @@
 
 /obj/item/device/destTagger/Topic(href, href_list)
 	. = ..()
-	if(.)
+	if (.)
 		return
 
 	add_fingerprint(usr)
 
-	if(href_list["nextTag"])
+	if (href_list["nextTag"])
 		currTag = Clamp(text2num(href_list["nextTag"]), 0, destinations.len)
 		interact(usr)
 		return 1
 
-	if(href_list["remove_dest"] && mode)
+	if (href_list["remove_dest"] && mode)
 		var/idx = Clamp(text2num(href_list["remove_dest"]), 1, destinations.len)
 		destinations -= destinations[idx]
 		interact(usr)
 		return 1
 
-	if(href_list["new_dest"] && mode)
+	if (href_list["new_dest"] && mode)
 		var/newtag = uppertext(copytext(sanitize(input(usr, "Destination ID?","Add Destination") as text), 1, MAX_NAME_LEN))
 		destinations |= newtag
 		interact(usr)
@@ -116,7 +116,7 @@
 	processing_objects.Remove(src)
 	spawn(5)
 		trunk = locate() in src.loc
-		if(trunk)
+		if (trunk)
 			trunk.linked = src	// link the pipe trunk to self
 
 /obj/machinery/disposal/deliveryChute/interact()
@@ -126,18 +126,18 @@
 	return
 
 /obj/machinery/disposal/deliveryChute/Bumped(var/atom/movable/AM) //Go straight into the chute
-	if(istype(AM, /obj/item/projectile) || istype(AM, /obj/item/weapon/dummy))
+	if (istype(AM, /obj/item/projectile) || istype(AM, /obj/item/weapon/dummy))
 		return
 
-	if(dir != get_dir(src, AM))
+	if (dir != get_dir(src, AM))
 		return
 
 	//testing("[src] FUCKING BUMPED BY \a [AM]")
 
-	if(istype(AM, /obj))
+	if (istype(AM, /obj))
 		var/obj/O = AM
 		O.forceMove(src)
-	else if(istype(AM, /mob))
+	else if (istype(AM, /mob))
 		var/mob/M = AM
 		M.forceMove(src)
 	//src.flush() This spams audio like fucking crazy.
@@ -151,15 +151,15 @@
 	var/deliveryCheck = 0
 	var/obj/structure/disposalholder/H = new()	// virtual holder object which actually
 												// travels through the pipes.
-	for(var/obj/item/delivery/large/O in src)
-		deliveryCheck = 1
-		if(O.sortTag == 0)
-			O.sortTag = "DISPOSALS"
-	for(var/obj/item/delivery/O in src)
+	for (var/obj/item/delivery/large/O in src)
 		deliveryCheck = 1
 		if (O.sortTag == 0)
 			O.sortTag = "DISPOSALS"
-	if(deliveryCheck == 0)
+	for (var/obj/item/delivery/O in src)
+		deliveryCheck = 1
+		if (O.sortTag == 0)
+			O.sortTag = "DISPOSALS"
+	if (deliveryCheck == 0)
 		H.destinationTag = "DISPOSALS"
 
 	air_contents = new()		// new empty gas resv.
@@ -176,33 +176,33 @@
 	flushing = 0
 	// now reset disposal state
 	flush = 0
-	if(mode == 2)	// if was ready,
+	if (mode == 2)	// if was ready,
 		mode = 1	// switch to charging
 	update_icon()
 	return
 
 /obj/machinery/disposal/deliveryChute/attackby(var/obj/item/I, var/mob/user)
-	if(!I || !user)
+	if (!I || !user)
 		return
 
-	if(isscrewdriver(I))
-		if(c_mode==0)
+	if (isscrewdriver(I))
+		if (c_mode==0)
 			c_mode=1
 			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "You remove the screws around the power connection.")
 			return
-		else if(c_mode==1)
+		else if (c_mode==1)
 			c_mode=0
 			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "You attach the screws around the power connection.")
 			return
-	else if(istype(I,/obj/item/weapon/weldingtool) && c_mode==1)
+	else if (istype(I,/obj/item/weapon/weldingtool) && c_mode==1)
 		var/obj/item/weapon/weldingtool/W = I
-		if(W.remove_fuel(0,user))
+		if (W.remove_fuel(0,user))
 			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
 			to_chat(user, "You start slicing the floorweld off the delivery chute.")
-			if(do_after(user, src,20))
-				if(!src || !W.isOn())
+			if (do_after(user, src,20))
+				if (!src || !W.isOn())
 					return
 				to_chat(user, "You sliced the floorweld off the delivery chute.")
 				var/obj/structure/disposalconstruct/C = new (src.loc)
@@ -217,8 +217,8 @@
 			return
 
 /obj/machinery/disposal/deliveryChute/process()
-	if(doFlushIn>0)
-		if(doFlushIn==1 || num_contents>=50)
+	if (doFlushIn>0)
+		if (doFlushIn==1 || num_contents>=50)
 			//testing("[src] FLUSHING")
 			spawn(0)
 				src.flush()
@@ -258,40 +258,40 @@
 
 /obj/machinery/sorting_machine/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/matter_bin/bin in component_parts)
+	for (var/obj/item/weapon/stock_parts/matter_bin/bin in component_parts)
 		T += bin.rating//intentionally not doing '- 1' here, for the math below
 	max_items_moved = initial(max_items_moved) * (T / 3) //Usefull upgrade/10, that's an increase from 10 (base matter bins) to 30 (super matter bins)
 
 	T = 0//reusing T here because muh RAM
-	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+	for (var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
 		T += C.rating - 1
 	idle_power_usage = initial(idle_power_usage) - (T * (initial(idle_power_usage) / 4))//25% power usage reduction for an advanced capacitor, 50% for a super one.
 
 /obj/machinery/sorting_machine/process()
-	if(stat & (BROKEN | NOPOWER))
+	if (stat & (BROKEN | NOPOWER))
 		return
 
 	var/turf/in_T = get_step(src, input_dir)
 	var/turf/out_T = get_step(src, output_dir)
 	var/turf/filter_T = get_step(src, filter_dir)
 
-	if(!out_T.Cross(mover, out_T) || !out_T.Enter(mover) || !filter_T.Cross(mover, filter_T) || !filter_T.Enter(mover))
+	if (!out_T.Cross(mover, out_T) || !out_T.Enter(mover) || !filter_T.Cross(mover, filter_T) || !filter_T.Enter(mover))
 		return
 
 	var/affecting = in_T.contents
 	var/items_moved = 0
 
-	for(var/atom/movable/A in affecting)
-		if(A.anchored)
+	for (var/atom/movable/A in affecting)
+		if (A.anchored)
 			continue
 
-		if(sort(A))
+		if (sort(A))
 			A.forceMove(filter_T)
 		else
 			A.forceMove(out_T)
 
 		items_moved++
-		if(items_moved >= max_items_moved)
+		if (items_moved >= max_items_moved)
 			break
 
 /obj/machinery/sorting_machine/attack_ai(mob/user)
@@ -302,11 +302,11 @@
 
 /obj/machinery/sorting_machine/Topic(href, href_list)
 	. = ..()
-	if(.)
+	if (.)
 		return
 
-	if(href_list["close"])
-		if(usr.machine == src)
+	if (href_list["close"])
+		if (usr.machine == src)
 			usr.unset_machine()
 		return 1
 
@@ -326,15 +326,15 @@
 
 /obj/machinery/sorting_machine/multitool_topic(var/mob/user, var/list/href_list, var/obj/item/device/multitool/P)
 	. = ..()
-	if(.)
+	if (.)
 		return .
 
-	if("changedir" in href_list)
+	if ("changedir" in href_list)
 		var/changingdir = text2num(href_list["changedir"])
 		changingdir = Clamp(changingdir, 1, 3)//No runtimes from HREF exploits.
 
 		var/newdir = input("Select the new direction", "MinerX SortMaster 5000", "North") as null|anything in list("North", "South", "East", "West")
-		if(!newdir)
+		if (!newdir)
 			return 1
 		newdir = text2dir(newdir)
 
@@ -343,7 +343,7 @@
 		dirlist[changingdir] = -1//Make the dir that's being changed -1 so it doesn't see itself.
 
 		var/conflictingdir = dirlist.Find(newdir)//Check if the dir is conflicting with another one
-		if(conflictingdir)//Welp, it is.
+		if (conflictingdir)//Welp, it is.
 			dirlist[conflictingdir] = olddir//Set it to the olddir of the dir we're changing
 
 		dirlist[changingdir] = newdir//Set the changindir to the selected dir
@@ -389,15 +389,15 @@
 
 /obj/machinery/sorting_machine/recycling/Topic(href, href_list)
 	. = ..()
-	if(.)
+	if (.)
 		return
 
-	if(href_list["toggle_types"])
+	if (href_list["toggle_types"])
 		var/typeID = text2num(href_list["toggle_types"])
 
 		typeID = Clamp(typeID, 1, types.len)//No HREF exploits causing runtimes.
 
-		if(types[typeID] in selected_types)//Toggle these
+		if (types[typeID] in selected_types)//Toggle these
 			selected_types -= types[typeID]
 		else
 			selected_types += types[typeID]
@@ -409,8 +409,8 @@
 	return A.w_type && (types[A.w_type] in selected_types)
 
 /obj/machinery/sorting_machine/recycling/interact(mob/user)
-	if(stat & (BROKEN | NOPOWER))
-		if(user.machine == src)
+	if (stat & (BROKEN | NOPOWER))
+		if (user.machine == src)
 			usr.unset_machine()
 		return
 
@@ -443,7 +443,7 @@
 
 	destinations = map.default_tagger_locations.Copy() //Here because BYOND.
 
-	for(var/i = 1, i <= destinations.len, i++)
+	for (var/i = 1, i <= destinations.len, i++)
 		destinations[i] = uppertext(destinations[i])
 
 	component_parts = newlist(
@@ -456,8 +456,8 @@
 	RefreshParts()
 
 /obj/machinery/sorting_machine/destination/interact(mob/user)
-	if(stat & (BROKEN | NOPOWER))
-		if(user.machine == src)
+	if (stat & (BROKEN | NOPOWER))
+		if (user.machine == src)
 			usr.unset_machine()
 		return
 
@@ -481,11 +481,11 @@
 	popup.open()
 
 /obj/machinery/sorting_machine/destination/sort(atom/movable/A)
-	if(istype(A, /obj/item/delivery/large))
+	if (istype(A, /obj/item/delivery/large))
 		var/obj/item/delivery/large/B = A
 		return B.sortTag in sorting
 
-	if(istype(A, /obj/item/delivery))
+	if (istype(A, /obj/item/delivery))
 		var/obj/item/delivery/B = A
 		return B.sortTag in sorting
 
@@ -493,32 +493,32 @@
 
 /obj/machinery/sorting_machine/destination/Topic(href, href_list)
 	. = ..()
-	if(.)
+	if (.)
 		return
 
-	if(href_list["toggle_dest"])
+	if (href_list["toggle_dest"])
 		var/idx = Clamp(text2num(href_list["toggle_dest"]), 0, destinations.len)
-		if(destinations[idx] in sorting)
+		if (destinations[idx] in sorting)
 			sorting -= destinations[idx]
 		else
 			sorting += destinations[idx]
 		updateUsrDialog()
 		return 1
 
-	if(href_list["remove_dest"])
+	if (href_list["remove_dest"])
 		var/idx = Clamp(text2num(href_list["remove_dest"]), 0, destinations.len)
 		sorting -= destinations[idx]
 		destinations -= destinations[idx]
 		updateUsrDialog()
 		return 1
 
-	if(href_list["add_dest"])
+	if (href_list["add_dest"])
 		var/newtag = uppertext(copytext(sanitize(input(usr, "Destination ID?","Add Destination") as text), 1, MAX_NAME_LEN))
 		destinations |= newtag
 		updateUsrDialog()
 		return 1
 
-	if(href_list["toggle_wrapped"])
+	if (href_list["toggle_wrapped"])
 		unwrapped = !unwrapped
 		updateUsrDialog()
 		return 1

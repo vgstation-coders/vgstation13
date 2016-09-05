@@ -10,56 +10,56 @@
 	Note that AI have no need for the adjacency proc, and so this proc is a lot cleaner.
 */
 /mob/living/silicon/ai/DblClickOn(var/atom/A, params)
-	if(client.buildmode) // comes after object.Click to allow buildmode gui objects to be clicked
+	if (client.buildmode) // comes after object.Click to allow buildmode gui objects to be clicked
 		build_click(src, client.buildmode, params, A)
 		return
 
-	if(control_disabled || stat)
+	if (control_disabled || stat)
 		return
 
-	if(ismob(A))
+	if (ismob(A))
 		ai_actual_track(A)
 	else
 		A.move_camera_by_click()
 
 
 /mob/living/silicon/ai/ClickOn(var/atom/A, params)
-	if(click_delayer.blocked())
+	if (click_delayer.blocked())
 		return
 	click_delayer.setDelay(1)
 
-	if(client.buildmode) // comes after object.Click to allow buildmode gui objects to be clicked
+	if (client.buildmode) // comes after object.Click to allow buildmode gui objects to be clicked
 		build_click(src, client.buildmode, params, A)
 		return
 
-	if(control_disabled || stat)
+	if (control_disabled || stat)
 		return
 
 	var/list/modifiers = params2list(params)
-	if(modifiers["middle"])
+	if (modifiers["middle"])
 		MiddleClickOn(A)
 		return
-	if(modifiers["shift"])
+	if (modifiers["shift"])
 		ShiftClickOn(A)
 		return
-	if(modifiers["alt"]) // alt and alt-gr (rightalt)
+	if (modifiers["alt"]) // alt and alt-gr (rightalt)
 		AltClickOn(A)
 		return
-	if(modifiers["ctrl"])
+	if (modifiers["ctrl"])
 		CtrlClickOn(A)
 		return
 
-	if(attack_delayer.blocked())
+	if (attack_delayer.blocked())
 		return
 
-	if(aicamera.in_camera_mode)
+	if (aicamera.in_camera_mode)
 		aicamera.camera_mode_off()
 		aicamera.captureimage(A, usr)
 		return
 
 	/*
 		AI restrained() currently does nothing
-	if(restrained())
+	if (restrained())
 		RestrainedClickOn(A)
 	else
 	*/
@@ -101,7 +101,7 @@
 	return
 
 /obj/machinery/door/airlock/AIShiftClick()  // Opens and closes doors!
-	if(density)
+	if (density)
 		Topic("aiEnable=7", list("aiEnable"="7"), 1) // 1 meaning no window (consistency!)
 	else
 		Topic("aiDisable=7", list("aiDisable"="7"), 1)
@@ -112,7 +112,7 @@
 	return
 
 /obj/machinery/door/airlock/AICtrlClick() // Bolts doors
-	if(locked)
+	if (locked)
 		Topic("aiEnable=4", list("aiEnable"="4"), 1)// 1 meaning no window (consistency!)
 	else
 		Topic("aiDisable=4", list("aiDisable"="4"), 1)
@@ -126,7 +126,7 @@
 	return
 
 /obj/machinery/door/airlock/AIAltClick() // Eletrifies doors.
-	if(!secondsElectrified)
+	if (!secondsElectrified)
 		// permenant shock
 		Topic("aiEnable=6", list("aiEnable"="6"), 1) // 1 meaning no window (consistency!)
 	else

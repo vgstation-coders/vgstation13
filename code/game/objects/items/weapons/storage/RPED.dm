@@ -20,12 +20,12 @@
 	return B.get_rating() - A.get_rating()
 
 /obj/item/weapon/storage/bag/gadgets/part_replacer/attackby(var/obj/item/weapon/W, var/mob/user)
-	if(istype(W, /obj/item/weapon/storage/bag/gadgets)) //I guess this allows for moving stuff between RPEDs, honk.
+	if (istype(W, /obj/item/weapon/storage/bag/gadgets)) //I guess this allows for moving stuff between RPEDs, honk.
 		var/obj/item/weapon/storage/bag/gadgets/A = W
-		if(A.contents.len <= 0)
+		if (A.contents.len <= 0)
 			to_chat(user, "<span class='notify'>\the [A] is empty!</span>")
 			return 1
-		if(src.contents.len >= storage_slots)
+		if (src.contents.len >= storage_slots)
 			to_chat(user, "<span class='notify'>\the [src] is full!</span>")
 			return 1
 		A.mass_remove(src)

@@ -15,20 +15,20 @@ datum/directive/ipc_virus
 
 	proc/get_ipcs()
 		var/list/machines[0]
-		for(var/mob/M in player_list)
+		for (var/mob/M in player_list)
 			if (M.is_ready() && M.get_species() == "Machine")
 				machines.Add(M)
 		return machines
 
 	proc/get_roboticists()
 		var/list/roboticists[0]
-		for(var/mob/M in player_list)
+		for (var/mob/M in player_list)
 			if (M.is_ready() && roboticist_roles.Find(M.mind.assigned_role))
 				roboticists.Add(M)
 		return roboticists
 
 datum/directive/ipc_virus/initialize()
-	for(var/mob/living/carbon/human/H in get_ipcs())
+	for (var/mob/living/carbon/human/H in get_ipcs())
 		brains_to_enslave.Add(H.mind)
 		cyborgs_to_make.Add(H.mind)
 		ids_to_terminate.Add(H.wear_id)
@@ -51,13 +51,13 @@ datum/directive/ipc_virus/directives_complete()
 
 datum/directive/ipc_virus/get_remaining_orders()
 	var/text = ""
-	for(var/brain in brains_to_enslave)
+	for (var/brain in brains_to_enslave)
 		text += "<li>Debrain [brain]</li>"
 
-	for(var/brain in cyborgs_to_make)
+	for (var/brain in cyborgs_to_make)
 		text += "<li>Enslave [brain] as a Cyborg</li>"
 
-	for(var/id in ids_to_terminate)
+	for (var/id in ids_to_terminate)
 		text += "<li>Terminate [id]</li>"
 
 	return text
@@ -67,7 +67,7 @@ datum/directive/ipc_virus/get_remaining_orders()
 	if (!D)
 		return 1
 
-	if(B && B.brainmob && B.brainmob.mind && D.brains_to_enslave.Find(B.brainmob.mind))
+	if (B && B.brainmob && B.brainmob.mind && D.brains_to_enslave.Find(B.brainmob.mind))
 		D.brains_to_enslave.Remove(B.brainmob.mind)
 
 	return 1
@@ -77,13 +77,13 @@ datum/directive/ipc_virus/get_remaining_orders()
 	if (!D)
 		return 1
 
-	if(D.cyborgs_to_make.Find(cyborg.mind))
+	if (D.cyborgs_to_make.Find(cyborg.mind))
 		D.cyborgs_to_make.Remove(cyborg.mind)
 
 	// In case something glitchy happened and the victim got
 	// borged without us tracking the brain removal, go ahead
 	// and update that list too.
-	if(D.brains_to_enslave.Find(cyborg.mind))
+	if (D.brains_to_enslave.Find(cyborg.mind))
 		D.brains_to_enslave.Remove(cyborg.mind)
 
 	return 1
@@ -93,7 +93,7 @@ datum/directive/ipc_virus/get_remaining_orders()
 	if (!D)
 		return 1
 
-	if(D.ids_to_terminate && D.ids_to_terminate.Find(id))
+	if (D.ids_to_terminate && D.ids_to_terminate.Find(id))
 		D.ids_to_terminate.Remove(id)
 
 	return 1

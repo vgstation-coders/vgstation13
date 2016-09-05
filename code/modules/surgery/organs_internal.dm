@@ -28,7 +28,7 @@
 
 /datum/surgery_step/internal/remove_embryo/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/embryo = 0
-	for(var/obj/item/alien_embryo/A in target)
+	for (var/obj/item/alien_embryo/A in target)
 		embryo = 1
 		break
 
@@ -48,7 +48,7 @@
 	user.visible_message("<span class='warning'>[user] rips the larva out of [target]'s ribcage!</span>",
 						 "You rip the larva out of [target]'s ribcage!")
 
-	for(var/obj/item/alien_embryo/A in target)
+	for (var/obj/item/alien_embryo/A in target)
 		A.forceMove(A.loc.loc)
 
 
@@ -72,8 +72,8 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
 	var/is_organ_damaged = 0
-	for(var/datum/organ/internal/I in affected.internal_organs)
-		if(I.damage > 0)
+	for (var/datum/organ/internal/I in affected.internal_organs)
+		if (I.damage > 0)
 			is_organ_damaged = 1
 			break
 	return ..() && is_organ_damaged
@@ -92,9 +92,9 @@
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	for(var/datum/organ/internal/I in affected.internal_organs)
-		if(I && I.damage > 0)
-			if(I.robotic < 2)
+	for (var/datum/organ/internal/I in affected.internal_organs)
+		if (I && I.damage > 0)
+			if (I.robotic < 2)
 				user.visible_message("[user] starts treating damage to [target]'s [I.name] with [tool_name].", \
 				"You start treating damage to [target]'s [I.name] with [tool_name]." )
 
@@ -115,13 +115,13 @@
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	for(var/datum/organ/internal/I in affected.internal_organs)
-		if(I && I.damage > 0)
-			if(I.robotic < 2)
+	for (var/datum/organ/internal/I in affected.internal_organs)
+		if (I && I.damage > 0)
+			if (I.robotic < 2)
 				user.visible_message("<span class='notice'>[user] treats damage to [target]'s [I.name] with [tool_name].</span>", \
 				"<span class='notice'>You treat damage to [target]'s [I.name] with [tool_name].</span>" )
 				I.damage = 0
-		if(I)
+		if (I)
 			I.status &= ~ORGAN_BROKEN
 			I.status &= ~ORGAN_SPLINTED
 
@@ -146,8 +146,8 @@
 			target.adjustToxLoss(10)
 			affected.createwound(CUT, 5)
 
-	for(var/datum/organ/internal/I in affected.internal_organs)
-		if(I && I.damage > 0)
+	for (var/datum/organ/internal/I in affected.internal_organs)
+		if (I && I.damage > 0)
 			I.take_damage(dam_amt,0)
 
 /*
@@ -165,25 +165,25 @@
 
 /datum/surgery_step/internal/fix_organ_cancer/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
-	if(!hasorgans(target))
+	if (!hasorgans(target))
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
 	var/cancer_found = 0
-	for(var/datum/organ/internal/I in affected.internal_organs)
-		if(I.cancer_stage >= 1)
+	for (var/datum/organ/internal/I in affected.internal_organs)
+		if (I.cancer_stage >= 1)
 			cancer_found = 1
 			break
 	return ..() && cancer_found
 
 /datum/surgery_step/internal/fix_organ_cancer/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
-	if(!hasorgans(target))
+	if (!hasorgans(target))
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	for(var/datum/organ/internal/I in affected.internal_organs)
-		if(I && I.cancer_stage >= 1)
+	for (var/datum/organ/internal/I in affected.internal_organs)
+		if (I && I.cancer_stage >= 1)
 			user.visible_message("[user] starts carefully removing the cancerous growths in [target]'s [I.name] with \the [tool].", \
 			"You start carefully removing the cancerous growths in [target]'s [I.name] with \the [tool]." )
 
@@ -192,19 +192,19 @@
 
 /datum/surgery_step/internal/fix_organ_cancer/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
-	if(!hasorgans(target))
+	if (!hasorgans(target))
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	for(var/datum/organ/internal/I in affected.internal_organs)
-		if(I && I.cancer_stage >= 1)
+	for (var/datum/organ/internal/I in affected.internal_organs)
+		if (I && I.cancer_stage >= 1)
 			user.visible_message("[user] carefully removes and mends the area around the cancerous growths in [target]'s [I.name] with \the [tool].", \
 			"You carefully remove and mends the area around the cancerous growths in [target]'s [I.name] with \the [tool]." )
 			I.cancer_stage = 0
 
 /datum/surgery_step/internal/fix_organ_cancer/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
-	if(!hasorgans(target))
+	if (!hasorgans(target))
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
@@ -231,8 +231,8 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
 	var/is_organ_damaged = 0
-	for(var/datum/organ/internal/I in affected.internal_organs)
-		if(I.damage > 0 && I.robotic >= 2)
+	for (var/datum/organ/internal/I in affected.internal_organs)
+		if (I.damage > 0 && I.robotic >= 2)
 			is_organ_damaged = 1
 			break
 	return ..() && is_organ_damaged
@@ -243,9 +243,9 @@
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	for(var/datum/organ/internal/I in affected.internal_organs)
-		if(I && I.damage > 0)
-			if(I.robotic >= 2)
+	for (var/datum/organ/internal/I in affected.internal_organs)
+		if (I && I.damage > 0)
+			if (I.robotic >= 2)
 				user.visible_message("[user] starts mending the damage to [target]'s [I.name]'s mechanisms.", \
 				"You start mending the damage to [target]'s [I.name]'s mechanisms." )
 
@@ -258,14 +258,14 @@
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	for(var/datum/organ/internal/I in affected.internal_organs)
+	for (var/datum/organ/internal/I in affected.internal_organs)
 
-		if(I && I.damage > 0)
-			if(I.robotic >= 2)
+		if (I && I.damage > 0)
+			if (I.robotic >= 2)
 				user.visible_message("<span class='notice'>[user] repairs [target]'s [I.name] with [tool].</span>", \
 				"<span class='notice'>You repair [target]'s [I.name] with [tool].</span>" )
 				I.damage = 0
-		if(I)
+		if (I)
 			I.status &= ~ORGAN_BROKEN
 			I.status &= ~ORGAN_SPLINTED
 
@@ -281,8 +281,8 @@
 	target.adjustToxLoss(5)
 	affected.createwound(CUT, 5)
 
-	for(var/datum/organ/internal/I in affected.internal_organs)
-		if(I)
+	for (var/datum/organ/internal/I in affected.internal_organs)
+		if (I)
 			I.take_damage(rand(3,5),0)
 
 
@@ -290,7 +290,7 @@
 //////DETACH ORGAN////
 /datum/surgery_step/internal/detatch_organ/tool_quality(obj/item/tool)
 	. = ..()
-	if(!tool.is_sharp())
+	if (!tool.is_sharp())
 		return 0
 
 /datum/surgery_step/internal/detatch_organ
@@ -311,13 +311,13 @@
 	target.op_stage.current_organ = null
 
 	var/list/attached_organs = list()
-	for(var/organ in target.internal_organs_by_name)
+	for (var/organ in target.internal_organs_by_name)
 		var/datum/organ/internal/I = target.internal_organs_by_name[organ]
-		if(!I.status && I.parent_organ == target_zone)
+		if (!I.status && I.parent_organ == target_zone)
 			attached_organs |= organ
 
 	var/organ_to_remove = input(user, "Which organ do you want to prepare for removal?") as null|anything in attached_organs
-	if(!organ_to_remove)
+	if (!organ_to_remove)
 		return 0
 
 	target.op_stage.current_organ = organ_to_remove
@@ -339,7 +339,7 @@
 	"<span class='notice'>You have separated [target]'s [target.op_stage.current_organ] with \the [tool].</span>")
 
 	var/datum/organ/internal/I = target.internal_organs_by_name[target.op_stage.current_organ]
-	if(I && istype(I) && I.CanRemove(target, user, quiet=1))
+	if (I && istype(I) && I.CanRemove(target, user, quiet=1))
 		I.Remove(target, user)
 		I.status |= ORGAN_CUT_AWAY
 
@@ -371,13 +371,13 @@
 	target.op_stage.current_organ = null
 
 	var/list/removable_organs = list()
-	for(var/organ in target.internal_organs_by_name)
+	for (var/organ in target.internal_organs_by_name)
 		var/datum/organ/internal/I = target.internal_organs_by_name[organ]
-		if(I.status & ORGAN_CUT_AWAY && I.parent_organ == target_zone)
+		if (I.status & ORGAN_CUT_AWAY && I.parent_organ == target_zone)
 			removable_organs |= organ
 
 	var/organ_to_remove = input(user, "Which organ do you want to remove?") as null|anything in removable_organs
-	if(!organ_to_remove)
+	if (!organ_to_remove)
 		return 0
 
 	target.op_stage.current_organ = organ_to_remove
@@ -394,22 +394,22 @@
 	"<span class='notice'>You have removed [target]'s [target.op_stage.current_organ] with \the [tool].</span>")
 
 	// Extract the organ!
-	if(target.op_stage.current_organ)
+	if (target.op_stage.current_organ)
 
 		var/datum/organ/external/affected = target.get_organ(target_zone)
 		var/datum/organ/internal/I = target.internal_organs_by_name[target.op_stage.current_organ]
 
 		var/obj/item/organ/O
-		if(I && istype(I))
+		if (I && istype(I))
 			O = I.remove(user)
-			if(O && istype(O))
+			if (O && istype(O))
 
 				// Stop the organ from continuing to reject.
 				O.organ_data.rejecting = null
 
 				// Transfer over some blood data, if the organ doesn't have data.
 				var/datum/reagent/blood/organ_blood = O.reagents.reagent_list[BLOOD]
-				if(!organ_blood || !organ_blood.data["blood_DNA"])
+				if (!organ_blood || !organ_blood.data["blood_DNA"])
 					target.vessel.trans_to(O, 5, 1, 1)
 
 				// Kinda redundant, but I'm getting some buggy behavior.
@@ -446,10 +446,10 @@
 	var/organ_compatible
 	var/organ_missing
 
-	if(!istype(O))
+	if (!istype(O))
 		return 0
 
-	if(!target.species)
+	if (!target.species)
 		to_chat(user, "<span class='warning'>You have no idea what species this person is. Report this on the bug tracker.</span>")
 		return 0
 
@@ -457,19 +457,19 @@
 	var/o_a =  (O.gender == PLURAL) ? "" : " a"
 	var/o_do = (O.gender == PLURAL) ? "don't" : "doesn't"
 
-	if(target.species.has_organ[O.organ_tag])
+	if (target.species.has_organ[O.organ_tag])
 
-		if(!O.health)
+		if (!O.health)
 			to_chat(user, "<span class='warning'>\The [O.organ_tag] [o_is] in no state to be transplanted.</span>")
 			return 0
 
-		if(!target.internal_organs_by_name[O.organ_tag])
+		if (!target.internal_organs_by_name[O.organ_tag])
 			organ_missing = 1
 		else
 			to_chat(user, "<span class='warning'>\The [target] already has [o_a][O.organ_tag].</span>")
 			return 0
 
-		if(O.organ_data && affected.name == O.organ_data.parent_organ)
+		if (O.organ_data && affected.name == O.organ_data.parent_organ)
 			organ_compatible = 1
 		else
 			to_chat(user, "<span class='warning'>\The [O.organ_tag] [o_do] normally go in \the [affected.display_name].</span>")
@@ -494,10 +494,10 @@
 	user.drop_item()
 	var/obj/item/organ/O = tool
 
-	if(istype(O))
+	if (istype(O))
 
 		var/datum/reagent/blood/transplant_blood = O.reagents.reagent_list[BLOOD]
-		if(!transplant_blood)
+		if (!transplant_blood)
 			O.organ_data.transplant_data = list()
 			O.organ_data.transplant_data["species"] =    target.species.name
 			O.organ_data.transplant_data["blood_type"] = target.dna.b_type
@@ -523,7 +523,7 @@
 	user.visible_message("<span class='warning'>[user]'s hand slips, damaging \the [tool]!</span>", \
 	"<span class='warning'>Your hand slips, damaging \the [tool]!</span>")
 	var/obj/item/organ/I = tool
-	if(istype(I))
+	if (istype(I))
 		I.organ_data.take_damage(rand(3,5),0)
 
 
@@ -547,13 +547,13 @@
 	target.op_stage.current_organ = null
 
 	var/list/removable_organs = list()
-	for(var/organ in target.internal_organs_by_name)
+	for (var/organ in target.internal_organs_by_name)
 		var/datum/organ/internal/I = target.internal_organs_by_name[organ]
-		if(I.status & ORGAN_CUT_AWAY && I.parent_organ == target_zone)
+		if (I.status & ORGAN_CUT_AWAY && I.parent_organ == target_zone)
 			removable_organs |= organ
 
 	var/organ_to_replace = input(user, "Which organ do you want to reattach?") as null|anything in removable_organs
-	if(!organ_to_replace)
+	if (!organ_to_replace)
 		return 0
 
 	target.op_stage.current_organ = organ_to_replace
@@ -570,7 +570,7 @@
 	"<span class='notice'>You have reattached [target]'s [target.op_stage.current_organ] with \the [tool].</span>")
 
 	var/datum/organ/internal/I = target.internal_organs_by_name[target.op_stage.current_organ]
-	if(I && istype(I))
+	if (I && istype(I))
 		I.status &= ~ORGAN_CUT_AWAY
 
 /datum/surgery_step/internal/attach_organ/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

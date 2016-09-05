@@ -1,18 +1,18 @@
 //this file left in for legacy support
 /*
 /proc/start_events()
-	//changed to a while(1) loop since they are more efficient.
+	//changed to a while (1) loop since they are more efficient.
 	//Moved the spawn in here to allow it to be called with advance proc call if it crashes.
 	//and also to stop spawn copying variables from the game ticker
 	spawn(3000)
-		while(1)
-			if(prob(50))//Every 120 seconds and prob 50 2-4 weak spacedusts will hit the station
+		while (1)
+			if (prob(50))//Every 120 seconds and prob 50 2-4 weak spacedusts will hit the station
 				spawn(1)
 					dust_swarm("weak")
-			if(!event)
+			if (!event)
 				//CARN: checks to see if random events are enabled.
-				if(config.allow_random_events)
-					if(prob(eventchance))
+				if (config.allow_random_events)
+					if (prob(eventchance))
 						event()
 						hadevent = 1
 					else
@@ -26,13 +26,13 @@
 
 	var/eventNumbersToPickFrom = list(1,2,4,5,6,7,8,9,10,11,12,13,14, 15) //so ninjas don't cause "empty" events.
 
-	if((world.time/10)>=3600 && toggle_space_ninja && !sent_ninja_to_station)//If an hour has passed, relatively speaking. Also, if ninjas are allowed to spawn and if there is not already a ninja for the round.
+	if ((world.time/10)>=3600 && toggle_space_ninja && !sent_ninja_to_station)//If an hour has passed, relatively speaking. Also, if ninjas are allowed to spawn and if there is not already a ninja for the round.
 		eventNumbersToPickFrom += 3
-	switch(pick(eventNumbersToPickFrom))
-		if(1)
+	switch (pick(eventNumbersToPickFrom))
+		if (1)
 			command_alert("Meteors have been detected on collision course with the station.", "Meteor Alert")
-			for(var/mob/M in player_list)
-				if(!istype(M,/mob/new_player) && M.client)
+			for (var/mob/M in player_list)
+				if (!istype(M,/mob/new_player) && M.client)
 					M << sound('sound/AI/meteors.ogg')
 			spawn(100)
 				meteor_wave()
@@ -41,26 +41,26 @@
 				meteor_wave()
 				spawn_meteors()
 
-		if(2)
+		if (2)
 			command_alert("Gravitational anomalies detected on the station. There is no additional data.", "Anomaly Alert")
-			for(var/mob/M in player_list)
-				if(!istype(M,/mob/new_player) && M.client)
+			for (var/mob/M in player_list)
+				if (!istype(M,/mob/new_player) && M.client)
 					M << sound('sound/AI/granomalies.ogg')
 			var/turf/T = pick(blobstart)
 			var/obj/effect/bhole/bh = new /obj/effect/bhole( T.loc, 30 )
 			spawn(rand(50, 300))
 				del(bh)
 		/*
-		if(3) //Leaving the code in so someone can try and delag it, but this event can no longer occur randomly, per SoS's request. --NEO
+		if (3) //Leaving the code in so someone can try and delag it, but this event can no longer occur randomly, per SoS's request. --NEO
 			command_alert("Space-time anomalies detected on the station. There is no additional data.", "Anomaly Alert")
 			world << sound('sound/AI/spanomalies.ogg')
 			var/list/turfs = new
 			var/turf/picked
-			for(var/turf/simulated/floor/T in world)
-				if(T.z == map.zMainStation)
+			for (var/turf/simulated/floor/T in world)
+				if (T.z == map.zMainStation)
 					turfs += T
-			for(var/turf/simulated/floor/T in turfs)
-				if(prob(20))
+			for (var/turf/simulated/floor/T in turfs)
+				if (prob(20))
 					spawn(50+rand(0,3000))
 						picked = pick(turfs)
 						var/obj/effect/portal/P = new /obj/effect/portal( T )
@@ -73,42 +73,42 @@
 						spawn(rand(300,600))
 							del(P)
 		*/
-		if(3)
-			if((world.time/10)>=3600 && toggle_space_ninja && !sent_ninja_to_station)//If an hour has passed, relatively speaking. Also, if ninjas are allowed to spawn and if there is not already a ninja for the round.
+		if (3)
+			if ((world.time/10)>=3600 && toggle_space_ninja && !sent_ninja_to_station)//If an hour has passed, relatively speaking. Also, if ninjas are allowed to spawn and if there is not already a ninja for the round.
 				space_ninja_arrival()//Handled in space_ninja.dm. Doesn't announce arrival, all sneaky-like.
-		if(4)
+		if (4)
 			mini_blob_event()
 
-		if(5)
+		if (5)
 			high_radiation_event()
-		if(6)
+		if (6)
 			viral_outbreak()
-		if(7)
+		if (7)
 			alien_infestation()
-		if(8)
+		if (8)
 			prison_break()
-		if(9)
+		if (9)
 			carp_migration()
-		if(10)
+		if (10)
 			immovablerod()
-		if(11)
+		if (11)
 			lightsout(1,2)
-		if(12)
+		if (12)
 			appendicitis()
-		if(13)
+		if (13)
 			IonStorm()
-		if(14)
+		if (14)
 			spacevine_infestation()
-		if(15)
+		if (15)
 			communications_blackout()
 */
 
 /proc/appendicitis()
-	for(var/mob/living/carbon/human/H in living_mob_list)
+	for (var/mob/living/carbon/human/H in living_mob_list)
 		var/foundAlready = 0 // don't infect someone that already has the virus
-		for(var/datum/disease/D in H.viruses)
+		for (var/datum/disease/D in H.viruses)
 			foundAlready = 1
-		if(H.stat == 2 || foundAlready)
+		if (H.stat == 2 || foundAlready)
 			continue
 
 		var/datum/disease/D = new /datum/disease/appendicitis
@@ -121,45 +121,45 @@
 //	command_alert("Confirmed outbreak of level 7 viral biohazard aboard [station_name()]. All personnel must contain the outbreak.", "Biohazard Alert")
 //	world << sound('sound/AI/outbreak7.ogg')
 	var/virus_type
-	if(!virus)
+	if (!virus)
 		virus_type = pick(/datum/disease/dnaspread,/datum/disease/advance/flu,/datum/disease/advance/cold,/datum/disease/brainrot,/datum/disease/magnitis,/datum/disease/pierrot_throat)
 	else
-		switch(virus)
-			if("fake gbs")
+		switch (virus)
+			if ("fake gbs")
 				virus_type = /datum/disease/fake_gbs
-			if("gbs")
+			if ("gbs")
 				virus_type = /datum/disease/gbs
-			if("magnitis")
+			if ("magnitis")
 				virus_type = /datum/disease/magnitis
-			if("rhumba beat")
+			if ("rhumba beat")
 				virus_type = /datum/disease/rhumba_beat
-			if("brain rot")
+			if ("brain rot")
 				virus_type = /datum/disease/brainrot
-			if("cold")
+			if ("cold")
 				virus_type = /datum/disease/advance/cold
-			if("retrovirus")
+			if ("retrovirus")
 				virus_type = /datum/disease/dnaspread
-			if("flu")
+			if ("flu")
 				virus_type = /datum/disease/advance/flu
-//			if("t-virus")
+//			if ("t-virus")
 //				virus_type = /datum/disease/t_virus
-			if("pierrot's throat")
+			if ("pierrot's throat")
 				virus_type = /datum/disease/pierrot_throat
-	for(var/mob/living/carbon/human/H in shuffle(living_mob_list))
+	for (var/mob/living/carbon/human/H in shuffle(living_mob_list))
 
 		var/foundAlready = 0 // don't infect someone that already has the virus
 		var/turf/T = get_turf(H)
-		if(!T)
+		if (!T)
 			continue
-		if(T.z != map.zMainStation)
+		if (T.z != map.zMainStation)
 			continue
-		for(var/datum/disease/D in H.viruses)
+		for (var/datum/disease/D in H.viruses)
 			foundAlready = 1
-		if(H.stat == 2 || foundAlready)
+		if (H.stat == 2 || foundAlready)
 			continue
 
-		if(virus_type == /datum/disease/dnaspread) //Dnaspread needs strain_data set to work.
-			if((!H.dna) || (H.sdisabilities & BLIND)) //A blindness disease would be the worst.
+		if (virus_type == /datum/disease/dnaspread) //Dnaspread needs strain_data set to work.
+			if ((!H.dna) || (H.sdisabilities & BLIND)) //A blindness disease would be the worst.
 				continue
 			var/datum/disease/dnaspread/D = new
 			D.strain_data["name"] = H.real_name
@@ -184,16 +184,16 @@
 	//command_alert("Unidentified lifesigns detected coming aboard [station_name()]. Secure any exterior access, including ducting and ventilation.", "Lifesign Alert")
 //	world << sound('sound/AI/aliens.ogg')
 	var/list/vents = list()
-	for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in atmos_machines)
-		if(temp_vent.loc.z == map.zMainStation && !temp_vent.welded && temp_vent.network && temp_vent.canSpawnMice)
-			if(temp_vent.network.normal_members.len > 50) // Stops Aliens getting stuck in small networks. See: Security, Virology
+	for (var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in atmos_machines)
+		if (temp_vent.loc.z == map.zMainStation && !temp_vent.welded && temp_vent.network && temp_vent.canSpawnMice)
+			if (temp_vent.network.normal_members.len > 50) // Stops Aliens getting stuck in small networks. See: Security, Virology
 				vents += temp_vent
 
 	var/list/candidates = get_active_candidates(ROLE_ALIEN,buffer=ALIEN_SELECT_AFK_BUFFER, poll=1)
 
-	if(prob(40))
+	if (prob(40))
 		spawncount++ //sometimes, have two larvae spawn instead of one
-	while((spawncount >= 1) && vents.len && candidates.len)
+	while ((spawncount >= 1) && vents.len && candidates.len)
 
 		var/obj/vent = pick(vents)
 		var/candidate = pick(candidates)
@@ -212,20 +212,20 @@
 /proc/high_radiation_event()
 
 /* // Haha, this is way too laggy. I'll keep the prison break though.
-	for(var/obj/machinery/light/L in world)
-		if(L.z != map.zMainStation)
+	for (var/obj/machinery/light/L in world)
+		if (L.z != map.zMainStation)
 			continue
 		L.flicker(50)
 
 	sleep(100)
 */
-	for(var/mob/living/carbon/human/H in living_mob_list)
+	for (var/mob/living/carbon/human/H in living_mob_list)
 		var/turf/T = get_turf(H)
-		if(!T)
+		if (!T)
 			continue
-		if(T.z != map.zMainStation)
+		if (T.z != map.zMainStation)
 			continue
-		if(istype(H,/mob/living/carbon/human))
+		if (istype(H,/mob/living/carbon/human))
 			H.apply_effect((rand(15,75)),IRRADIATE,0)
 			if (prob(5))
 				H.apply_effect((rand(90,150)),IRRADIATE,0)
@@ -236,11 +236,11 @@
 				else
 					randmutg(H)
 					domutcheck(H,null,MUTCHK_FORCED)
-	for(var/mob/living/carbon/monkey/M in living_mob_list)
+	for (var/mob/living/carbon/monkey/M in living_mob_list)
 		var/turf/T = get_turf(M)
-		if(!T)
+		if (!T)
 			continue
-		if(T.z != map.zMainStation)
+		if (T.z != map.zMainStation)
 			continue
 		M.apply_effect((rand(15,75)),IRRADIATE,0)
 	sleep(100)
@@ -254,19 +254,19 @@
 
 
 	var/list/area/theareas = list()
-	for(var/area/A in areas)
-		if(istype(A, /area/security/prison) || istype(A, /area/security/brig))
+	for (var/area/A in areas)
+		if (istype(A, /area/security/prison) || istype(A, /area/security/brig))
 			theareas += A
 
-	if(theareas && theareas.len > 0)
+	if (theareas && theareas.len > 0)
 
-		for(var/area/A in theareas)
-			for(var/obj/machinery/light/L in A)
+		for (var/area/A in theareas)
+			for (var/obj/machinery/light/L in A)
 				L.flicker(10)
 
 		sleep(100)
 
-		for(var/area/A in theareas)
+		for (var/area/A in theareas)
 			for (var/obj/machinery/power/apc/temp_apc in A)
 				temp_apc.overload_lighting()
 
@@ -289,39 +289,39 @@
 		world.log << "ERROR: Could not initate grey-tide. Unable find prison or brig area."
 
 /proc/carp_migration() // -- Darem
-	for(var/obj/effect/landmark/C in landmarks_list)
-		if(C.name == "carpspawn")
+	for (var/obj/effect/landmark/C in landmarks_list)
+		if (C.name == "carpspawn")
 			new /mob/living/simple_animal/hostile/carp(C.loc)
 	//sleep(100)
 	spawn(rand(300, 600)) //Delayed announcements to keep the crew on their toes.
 		command_alert(/datum/command_alert/carp)
 
 /proc/lightsout(isEvent = 0, lightsoutAmount = 1,lightsoutRange = 25) //leave lightsoutAmount as 0 to break ALL lights
-	if(isEvent)
+	if (isEvent)
 		command_alert(/datum/command_alert/electrical_storm)
 
-	if(lightsoutAmount)
+	if (lightsoutAmount)
 		var/list/epicentreList = list()
 
-		for(var/i=1,i<=lightsoutAmount,i++)
+		for (var/i=1,i<=lightsoutAmount,i++)
 			var/list/possibleEpicentres = list()
-			for(var/obj/effect/landmark/newEpicentre in landmarks_list)
-				if(newEpicentre.name == "lightsout" && !(newEpicentre in epicentreList))
+			for (var/obj/effect/landmark/newEpicentre in landmarks_list)
+				if (newEpicentre.name == "lightsout" && !(newEpicentre in epicentreList))
 					possibleEpicentres += newEpicentre
-			if(possibleEpicentres.len)
+			if (possibleEpicentres.len)
 				epicentreList += pick(possibleEpicentres)
 			else
 				break
 
-		if(!epicentreList.len)
+		if (!epicentreList.len)
 			return
 
-		for(var/obj/effect/landmark/epicentre in epicentreList)
-			for(var/obj/machinery/power/apc/apc in range(epicentre,lightsoutRange))
+		for (var/obj/effect/landmark/epicentre in epicentreList)
+			for (var/obj/machinery/power/apc/apc in range(epicentre,lightsoutRange))
 				apc.overload_lighting()
 
 	else
-		for(var/obj/machinery/power/apc/apc in power_machines)
+		for (var/obj/machinery/power/apc/apc in power_machines)
 			apc.overload_lighting()
 
 	return

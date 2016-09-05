@@ -78,16 +78,16 @@
 	..()
 
 	spawn(4)
-		if(setup_has_radio)
+		if (setup_has_radio)
 			var/obj/item/weapon/peripheral/radio/radio = new /obj/item/weapon/peripheral/radio(src)
 			radio.frequency = setup_frequency
 			radio.code = setup_radio_tag
 
-		if(!hd && (setup_drive_size > 0))
+		if (!hd && (setup_drive_size > 0))
 			src.hd = new /obj/item/weapon/disk/data/fixed_disk(src)
 			src.hd.file_amount = src.setup_drive_size
 
-		if(ispath(src.setup_starting_program))
+		if (ispath(src.setup_starting_program))
 			src.active_program = new src.setup_starting_program
 			src.active_program.id_tag = setup_id_tag
 
@@ -95,7 +95,7 @@
 
 			src.active_program.transfer_holder(src.hd)
 
-		if(ispath(src.setup_starting_peripheral))
+		if (ispath(src.setup_starting_peripheral))
 			new src.setup_starting_peripheral(src)
 
 		src.base_icon_state = src.icon_state
@@ -103,13 +103,13 @@
 	return
 
 /obj/machinery/computer2/attack_hand(mob/user as mob)
-	if(..())
+	if (..())
 		return
 
 	user.machine = src
 
 	var/dat
-	if((src.active_program) && (src.active_program.master == src) && (src.active_program.holder in src))
+	if ((src.active_program) && (src.active_program.master == src) && (src.active_program.holder in src))
 		dat = src.active_program.return_text()
 	else
 		dat = "<TT><b>Thinktronic BIOS V1.4</b><br><br>"
@@ -118,13 +118,13 @@
 		dat += "Auxiliary ID: <a href='?src=\ref[src];id=aux'>[src.auxid ? "[src.auxid.name]" : "----------"]</a><br><br>"
 
 		var/progdat
-		if((src.hd) && (src.hd.root))
-			for(var/datum/computer/file/computer_program/P in src.hd.root.contents)
+		if ((src.hd) && (src.hd.root))
+			for (var/datum/computer/file/computer_program/P in src.hd.root.contents)
 				progdat += "<tr><td>[P.name]</td><td>Size: [P.size]</td>"
 
 				progdat += "<td><a href='byond://?src=\ref[src];prog=\ref[P];function=run'>Run</a></td>"
 
-				if(P in src.processing_programs)
+				if (P in src.processing_programs)
 					progdat += "<td><a href='byond://?src=\ref[src];prog=\ref[P];function=unload'>Halt</a></td>"
 				else
 					progdat += "<td><a href='byond://?src=\ref[src];prog=\ref[P];function=load'>Load</a></td>"
@@ -136,7 +136,7 @@
 			dat += "Disk Space: \[[src.hd.file_used]/[src.hd.file_amount]\]<br>"
 			dat += "<b>Programs on Fixed Disk:</b><br>"
 
-			if(!progdat)
+			if (!progdat)
 				progdat = "No programs found.<br>"
 			dat += "<center><table cellspacing=4>[progdat]</table></center>"
 
@@ -148,15 +148,15 @@
 		dat += "<br>"
 
 		progdat = null
-		if((src.diskette) && (src.diskette.root))
+		if ((src.diskette) && (src.diskette.root))
 
 			dat += "<font size=1><a href='byond://?src=\ref[src];disk=1'>Eject</a></font><br>"
 
-			for(var/datum/computer/file/computer_program/P in src.diskette.root.contents)
+			for (var/datum/computer/file/computer_program/P in src.diskette.root.contents)
 				progdat += "<tr><td>[P.name]</td><td>Size: [P.size]</td>"
 				progdat += "<td><a href='byond://?src=\ref[src];prog=\ref[P];function=run'>Run</a></td>"
 
-				if(P in src.processing_programs)
+				if (P in src.processing_programs)
 					progdat += "<td><a href='byond://?src=\ref[src];prog=\ref[P];function=unload'>Halt</a></td>"
 				else
 					progdat += "<td><a href='byond://?src=\ref[src];prog=\ref[P];function=load'>Load</a></td>"
@@ -168,7 +168,7 @@
 			dat += "Disk Space: \[[src.diskette.file_used]/[src.diskette.file_amount]\]<br>"
 			dat += "<b>Programs on Disk:</b><br>"
 
-			if(!progdat)
+			if (!progdat)
 				progdat = "No data found.<br>"
 			dat += "<center><table cellspacing=4>[progdat]</table></center>"
 
@@ -184,38 +184,38 @@
 	return
 
 /obj/machinery/computer2/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 
-	if(!src.active_program)
-		if((href_list["prog"]) && (href_list["function"]))
+	if (!src.active_program)
+		if ((href_list["prog"]) && (href_list["function"]))
 			var/datum/computer/file/computer_program/newprog = locate(href_list["prog"])
-			if(newprog && istype(newprog))
-				switch(href_list["function"])
-					if("run")
+			if (newprog && istype(newprog))
+				switch (href_list["function"])
+					if ("run")
 						src.run_program(newprog)
-					if("load")
+					if ("load")
 						src.load_program(newprog)
-					if("unload")
+					if ("unload")
 						src.unload_program(newprog)
-		if((href_list["file"]) && (href_list["function"]))
+		if ((href_list["file"]) && (href_list["function"]))
 			var/datum/computer/file/newfile = locate(href_list["file"])
-			if(!newfile)
+			if (!newfile)
 				return
-			switch(href_list["function"])
-				if("install")
-					if((src.hd) && (src.hd.root) && (src.allowed(usr)))
+			switch (href_list["function"])
+				if ("install")
+					if ((src.hd) && (src.hd.root) && (src.allowed(usr)))
 						newfile.copy_file_to_folder(src.hd.root)
 
-				if("delete")
-					if(src.allowed(usr))
+				if ("delete")
+					if (src.allowed(usr))
 						src.delete_file(newfile)
 
 	//If there is already one loaded eject, or if not and they have one insert it.
 	if (href_list["id"])
-		switch(href_list["id"])
-			if("auth")
-				if(!isnull(src.authid))
+		switch (href_list["id"])
+			if ("auth")
+				if (!isnull(src.authid))
 					src.authid.forceMove(get_turf(src))
 					src.authid = null
 				else
@@ -224,8 +224,8 @@
 						usr.drop_item()
 						I.forceMove(src)
 						src.authid = I
-			if("aux")
-				if(!isnull(src.auxid))
+			if ("aux")
+				if (!isnull(src.auxid))
 					src.auxid.forceMove(get_turf(src))
 					src.auxid = null
 				else
@@ -237,7 +237,7 @@
 
 	//Same but for a data disk
 	else if (href_list["disk"])
-		if(!isnull(src.diskette))
+		if (!isnull(src.diskette))
 			src.diskette.forceMove(get_turf(src))
 			src.diskette = null
 /*		else
@@ -252,21 +252,21 @@
 	return
 
 /obj/machinery/computer2/process()
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 	use_power(250)
 
-	for(var/datum/computer/file/computer_program/P in src.processing_programs)
+	for (var/datum/computer/file/computer_program/P in src.processing_programs)
 		P.process()
 
 	return
 
 /obj/machinery/computer2/power_change()
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		icon_state = src.base_icon_state
 		src.icon_state += "b"
 
-	else if(powered())
+	else if (powered())
 		icon_state = src.base_icon_state
 		stat &= ~NOPOWER
 	else
@@ -289,7 +289,7 @@
 
 	else if (istype(W, /obj/item/weapon/screwdriver))
 		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-		if(do_after(user, src, 20))
+		if (do_after(user, src, 20))
 			var/obj/computer2frame/A = new /obj/computer2frame( src.loc )
 			A.created_icon_state = src.base_icon_state
 			if (src.stat & BROKEN)
@@ -306,17 +306,17 @@
 				C.forceMove(A)
 				A.peripherals.Add(C)
 
-			if(src.diskette)
+			if (src.diskette)
 				src.diskette.forceMove(src.loc)
 
 			//TO-DO: move card reading to peripheral cards instead
-			if(src.authid)
+			if (src.authid)
 				src.authid.forceMove(src.loc)
 
-			if(src.auxid)
+			if (src.auxid)
 				src.auxid.forceMove(src.loc)
 
-			if(src.hd)
+			if (src.hd)
 				src.hd.forceMove(A)
 				A.hd = src.hd
 
@@ -332,15 +332,15 @@
 	return
 
 /obj/machinery/computer2/proc/send_command(command, datum/signal/signal)
-	for(var/obj/item/weapon/peripheral/P in src.peripherals)
+	for (var/obj/item/weapon/peripheral/P in src.peripherals)
 		P.receive_command(src, command, signal)
 
 	del(signal)
 
 /obj/machinery/computer2/proc/receive_command(obj/source, command, datum/signal/signal)
-	if(source in src.contents)
+	if (source in src.contents)
 
-		for(var/datum/computer/file/computer_program/P in src.processing_programs)
+		for (var/datum/computer/file/computer_program/P in src.processing_programs)
 			P.receive_command(src, command, signal)
 
 		del(signal)
@@ -349,13 +349,13 @@
 
 
 /obj/machinery/computer2/proc/run_program(datum/computer/file/computer_program/program,datum/computer/file/computer_program/host)
-	if(!program)
+	if (!program)
 		return 0
 
 //	src.unload_program(src.active_program)
 
-	if(src.load_program(program))
-		if(host && istype(host))
+	if (src.load_program(program))
+		if (host && istype(host))
 			src.host_program = host
 		else
 			src.host_program = null
@@ -366,18 +366,18 @@
 	return 0
 
 /obj/machinery/computer2/proc/load_program(datum/computer/file/computer_program/program)
-	if((!program) || (!program.holder))
+	if ((!program) || (!program.holder))
 		return 0
 
-	if(!(program.holder in src))
+	if (!(program.holder in src))
 //		to_chat(world, "Not in src")
 		program = new program.type
 		program.transfer_holder(src.hd)
 
-	if(program.master != src)
+	if (program.master != src)
 		program.master = src
 
-	if(program in src.processing_programs)
+	if (program in src.processing_programs)
 		return 1
 	else
 		src.processing_programs.Add(program)
@@ -386,10 +386,10 @@
 	return 0
 
 /obj/machinery/computer2/proc/unload_program(datum/computer/file/computer_program/program)
-	if((!program) || (!src.hd))
+	if ((!program) || (!src.hd))
 		return 0
 
-	if(program in src.processing_programs)
+	if (program in src.processing_programs)
 		src.processing_programs.Remove(program)
 		return 1
 
@@ -397,14 +397,14 @@
 
 /obj/machinery/computer2/proc/delete_file(datum/computer/file/file)
 //	to_chat(world, "Deleting [file]...")
-	if((!file) || (!file.holder) || (file.holder.read_only))
+	if ((!file) || (!file.holder) || (file.holder.read_only))
 //		to_chat(world, "Cannot delete :(")
 		return 0
 
-	if(file in src.processing_programs)
+	if (file in src.processing_programs)
 		src.processing_programs.Remove(file)
 
-	if(src.active_program == file)
+	if (src.active_program == file)
 		src.active_program = null
 
 //	file.holder.root.remove_file(file)

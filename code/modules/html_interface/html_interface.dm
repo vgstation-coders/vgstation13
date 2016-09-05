@@ -186,7 +186,7 @@ mob/verb/test()
 			if (hclient.is_loaded)
 				hclient.client << output(list2params(list(jscript)), "browser_\ref[src].browser:eval")
 	else
-		for (var/client in src.clients) if(src.clients[client]) src.executeJavaScript(jscript, src.clients[client])
+		for (var/client in src.clients) if (src.clients[client]) src.executeJavaScript(jscript, src.clients[client])
 
 /datum/html_interface/proc/callJavaScript(func, list/arguments, datum/html_interface_client/hclient = null)
 	if (!arguments)
@@ -230,14 +230,14 @@ mob/verb/test()
 		// /client/proc/send_resources() executes this per client to avoid the bug, but by using it here files may be deleted just as the HTML is loaded,
 		// causing file not found errors.
 //		src.sendResources(hclient.client)
-		if(oldwindow && winexists(hclient.client, "browser_\ref[oldwindow]"))
+		if (oldwindow && winexists(hclient.client, "browser_\ref[oldwindow]"))
 			//winshow(hclient.client, "browser_\ref[oldwindow]", FALSE)
 			oldwindow.hide(hclient)
 
 		if (winexists(hclient.client, "browser_\ref[src]"))
 			src._renderTitle(hclient, TRUE)
 			src._renderLayout(hclient)
-			if(winget(hclient.client, "browser_\ref[src]", "is-visible") == "false")
+			if (winget(hclient.client, "browser_\ref[src]", "is-visible") == "false")
 				winshow(hclient.client, "browser_\ref[src]", TRUE)
 		else
 			src.createWindow(hclient)

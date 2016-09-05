@@ -1,10 +1,10 @@
 /proc/getAssignedBlock(var/name,var/list/blocksLeft, var/activity_bounds=DNA_DEFAULT_BOUNDS, var/good=0)
-	if(blocksLeft.len==0)
+	if (blocksLeft.len==0)
 		warning("[name]: No more blocks left to assign!")
 		return 0
 	var/assigned = pick(blocksLeft)
 	blocksLeft.Remove(assigned)
-	if(good)
+	if (good)
 		good_blocks += assigned
 	else
 		bad_blocks += assigned
@@ -26,7 +26,7 @@
 
 	// SE blocks to assign.
 	var/list/numsToAssign=new()
-	for(var/i=1;i<DNA_SE_LENGTH;i++)
+	for (var/i=1;i<DNA_SE_LENGTH;i++)
 		numsToAssign += i
 
 	//testing("Assigning DNA blocks:")
@@ -113,25 +113,25 @@
 
 	// And the genes that actually do the work. (domutcheck improvements)
 	var/list/blocks_assigned[DNA_SE_LENGTH]
-	for(var/gene_type in typesof(/datum/dna/gene))
+	for (var/gene_type in typesof(/datum/dna/gene))
 		var/datum/dna/gene/G = new gene_type
-		if(G.block)
-			if(G.block in blocks_assigned)
+		if (G.block)
+			if (G.block in blocks_assigned)
 				warning("DNA2: Gene [G.name] trying to use already-assigned block [G.block] (used by [english_list(blocks_assigned[G.block])])")
 			dna_genes[G.type] = G
 			var/list/assignedToBlock[0]
-			if(blocks_assigned[G.block])
+			if (blocks_assigned[G.block])
 				assignedToBlock=blocks_assigned[G.block]
 			assignedToBlock.Add(G.name)
 			blocks_assigned[G.block]=assignedToBlock
 
 	// I WILL HAVE A LIST OF GENES THAT MATCHES THE RANDOMIZED BLOCKS GODDAMNIT!
-	for(var/block=1;block<=DNA_SE_LENGTH;block++)
+	for (var/block=1;block<=DNA_SE_LENGTH;block++)
 		var/name = assigned_blocks[block]
-		for(var/gene_type in dna_genes)
+		for (var/gene_type in dna_genes)
 			var/datum/dna/gene/gene = dna_genes[gene_type]
-			if(gene.name == name || gene.block == block)
-				if(gene.block in assigned_gene_blocks)
+			if (gene.name == name || gene.block == block)
+				if (gene.block in assigned_gene_blocks)
 					warning("DNA2: Gene [gene.name] trying to add to already assigned gene block list (used by [english_list(assigned_gene_blocks[block])])")
 				assigned_gene_blocks[block] = gene
 
@@ -140,19 +140,19 @@
 // Run AFTER genetics setup and AFTER species setup.
 /proc/setup_species()
 	// SPECIES GENETICS FUN
-	for(var/name in all_species)
+	for (var/name in all_species)
 		// I hate BYOND.  Can't just call while it's in the list.
 		var/datum/species/species = all_species[name]
-		if(species.default_block_names.len>0)
+		if (species.default_block_names.len>0)
 			testing("Setting up genetics for [species.name] (needs [english_list(species.default_block_names)])")
 			species.default_blocks.len = 0
 
-			for(var/block=1;block<DNA_SE_LENGTH;block++)
-				if(assigned_blocks[block] in species.default_block_names)
+			for (var/block=1;block<DNA_SE_LENGTH;block++)
+				if (assigned_blocks[block] in species.default_block_names)
 					testing("  Found [assigned_blocks[block]] ([block])")
 					species.default_blocks.Add(block)
 
-			if(species.default_blocks.len)
+			if (species.default_blocks.len)
 				all_species[name]=species
 
 	speciesinit = 1
@@ -162,9 +162,9 @@
 
 
 	// Populate the factions list:
-	for(var/x in typesof(/datum/faction))
+	for (var/x in typesof(/datum/faction))
 		var/datum/faction/F = new x
-		if(!F.name)
+		if (!F.name)
 			del(F)
 			continue
 		else
@@ -172,5 +172,5 @@
 			ticker.availablefactions.Add(F)
 
 	// Populate the syndicate coalition:
-	for(var/datum/faction/syndicate/S in ticker.factions)
+	for (var/datum/faction/syndicate/S in ticker.factions)
 		ticker.syndicate_coalition.Add(S)

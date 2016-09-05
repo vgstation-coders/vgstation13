@@ -19,7 +19,7 @@
 	hold.cant_hold = cant_hold
 
 /obj/item/clothing/accessory/storage/attack_hand(mob/user)
-	if(user.get_inactive_hand() == src)
+	if (user.get_inactive_hand() == src)
 		hold.attack_hand(user)
 		return
 	return ..()
@@ -32,7 +32,7 @@
 	to_chat(user, "<span class='notice'>You empty [src].</span>")
 	var/turf/T = get_turf(src)
 	hold.hide_from(user)
-	for(var/obj/item/I in hold.contents)
+	for (var/obj/item/I in hold.contents)
 		hold.remove_from_storage(I, T)
 	src.add_fingerprint(user)
 
@@ -44,7 +44,7 @@
 	hold.emp_act(severity)
 
 /obj/item/clothing/accessory/storage/Destroy()
-	if(hold)
+	if (hold)
 		qdel(hold)
 		hold = null
 	return ..()
@@ -110,18 +110,18 @@
 
 /obj/item/clothing/accessory/storage/knifeharness/proc/update()
 	var/count = 0
-	for(var/obj/item/I in hold)
-		if(istype(I,/obj/item/weapon/hatchet/unathiknife))
+	for (var/obj/item/I in hold)
+		if (istype(I,/obj/item/weapon/hatchet/unathiknife))
 			count++
-	if(count>2)
+	if (count>2)
 		count = 2
 	item_state = "unathiharness[count]"
 	icon_state = item_state
 	_color = item_state
 
-	if(istype(loc, /obj/item/clothing))
+	if (istype(loc, /obj/item/clothing))
 		var/obj/item/clothing/U = loc
-		if(istype(U.loc, /mob/living/carbon/human))
+		if (istype(U.loc, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = U.loc
 			H.update_inv_w_uniform()
 

@@ -23,7 +23,7 @@
 
 // Proxy for delayNext*(), to reduce duplicated code.
 /datum/delay_controller/proc/delayNext(var/delay, var/additive)
-	if(additive)
+	if (additive)
 		addDelay(delay)
 	else
 		setDelay(delay)
@@ -42,7 +42,7 @@
 
 // Convenience procs.
 /mob/proc/delayNextMove(var/delay, var/additive=0)
-	if(client)
+	if (client)
 		client.move_delayer.delayNext(delay,additive)
 
 /mob/proc/delayNextAttack(var/delay, var/additive=0)
@@ -52,9 +52,9 @@
 	special_delayer.delayNext(delay,additive)
 
 /mob/proc/delayNext(var/types, var/delay, var/additive=0)
-	if(types & DELAY_MOVE)
+	if (types & DELAY_MOVE)
 		delayNextMove(delay,additive)
-	if(types & DELAY_ATTACK)
+	if (types & DELAY_ATTACK)
 		delayNextAttack(delay,additive)
-	if(types & DELAY_SPECIAL)
+	if (types & DELAY_SPECIAL)
 		delayNextSpecial(delay,additive)

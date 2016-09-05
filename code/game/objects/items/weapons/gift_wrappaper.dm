@@ -25,20 +25,20 @@
 	update_icon()
 
 /obj/item/weapon/gift/update_icon()
-	switch(w_class)
-		if(W_CLASS_TINY,W_CLASS_SMALL)
+	switch (w_class)
+		if (W_CLASS_TINY,W_CLASS_SMALL)
 			icon_state = "gift-small"
 			item_state = "gift-small"
-		if(W_CLASS_MEDIUM)
+		if (W_CLASS_MEDIUM)
 			icon_state = "gift"
 			item_state = "gift"
-		if(W_CLASS_LARGE)
+		if (W_CLASS_LARGE)
 			icon_state = "gift-large"
 			item_state = "gift-large"
 
 /obj/item/weapon/gift/attack_self(mob/user as mob)
 	user.drop_item(src, force_drop = 1)
-	if(gift)
+	if (gift)
 		user.put_in_active_hand(gift)
 		gift.add_fingerprint(user)
 		to_chat(user, "<span class='notice'>You unwrapped \a [gift]!</span>")
@@ -48,7 +48,7 @@
 	return
 
 /obj/item/weapon/gift/ashify()//so the content of player-made gifts can be recovered.
-	if(gift)
+	if (gift)
 		gift.forceMove(get_turf(src))
 	..()
 
@@ -180,7 +180,7 @@
 
 //warm clothes
 /obj/item/weapon/winter_gift/cloth/attack_self(mob/M as mob)
-	if(prob(30))
+	if (prob(30))
 		cloth_bundle()
 		to_chat(M, "<span class='notice'>You unwrapped a bundle of clothes! Looks comfy!</span>")
 		qdel(src)
@@ -209,26 +209,26 @@
 		2;"cuban pete"
 		)
 
-	switch(bundle)
-		if("batman")
+	switch (bundle)
+		if ("batman")
 			new /obj/item/weapon/storage/belt/security/batmanbelt(get_turf(loc))
 			new /obj/item/clothing/head/batman(get_turf(loc))
 			new /obj/item/clothing/gloves/batmangloves(get_turf(loc))
 			new /obj/item/clothing/shoes/jackboots/batmanboots(get_turf(loc))
 			new /obj/item/clothing/under/batmansuit(get_turf(loc))
-		if("russian fur")
+		if ("russian fur")
 			new /obj/item/clothing/suit/russofurcoat(get_turf(loc))
 			new /obj/item/clothing/head/russofurhat(get_turf(loc))
-		if("chicken")
+		if ("chicken")
 			new /obj/item/clothing/head/chicken(get_turf(loc))
 			new /obj/item/clothing/suit/chickensuit(get_turf(loc))
-		if("pirate captain")
+		if ("pirate captain")
 			new /obj/item/clothing/glasses/eyepatch(get_turf(loc))
 			new /obj/item/clothing/head/hgpiratecap(get_turf(loc))
 			new /obj/item/clothing/suit/hgpirate(get_turf(loc))
 			new /obj/item/clothing/under/captain_fly(get_turf(loc))
 			new /obj/item/clothing/shoes/jackboots(get_turf(loc))
-		if("cuban pete")
+		if ("cuban pete")
 			new /obj/item/clothing/head/collectable/petehat(get_turf(loc))
 			new /obj/item/device/maracas(get_turf(loc))
 			new /obj/item/device/maracas(get_turf(loc))
@@ -248,7 +248,7 @@
 	I.add_fingerprint(M)
 
 	var/additional_info = ""
-	if(istype(I,/obj/item/device/fuse_bomb))
+	if (istype(I,/obj/item/device/fuse_bomb))
 		var/obj/item/device/fuse_bomb/B = I
 		B.fuse_lit = 1
 		B.update_icon()
@@ -257,7 +257,7 @@
 
 	var/log_str = "[M.name]([M.ckey]) openned <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[I.x];Y=[I.y];Z=[I.z]'>a black gift</a> and found [I.name] inside[additional_info]."
 
-	if(M)
+	if (M)
 		log_str += "(<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
 
 	message_admins(log_str, 0, 1)
@@ -298,7 +298,7 @@
 	if (iswirecutter(W))
 		to_chat(user, "<span class='notice'>You cut open the present.</span>")
 
-		for(var/mob/M in src) //Should only be one but whatever.
+		for (var/mob/M in src) //Should only be one but whatever.
 			M.forceMove(get_turf(src))
 			if (M.client)
 				M.client.eye = M.client.mob

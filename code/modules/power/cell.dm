@@ -5,7 +5,7 @@
 /obj/item/weapon/cell/New()
 	..()
 	charge = maxcharge
-	if(maxcharge <= 2500)
+	if (maxcharge <= 2500)
 		desc = "The manufacturer's label states this cell has a power rating of [maxcharge], and that you should not swallow it."
 	else
 		desc = "This power cell has an exciting chrome finish, as it is an uber-capacity cell type! It has a power rating of [maxcharge]!"
@@ -15,9 +15,9 @@
 /obj/item/weapon/cell/proc/updateicon()
 	overlays.len = 0
 
-	if(charge < 0.01)
+	if (charge < 0.01)
 		return
-	else if(charge/maxcharge >=0.995)
+	else if (charge/maxcharge >=0.995)
 		overlays += image('icons/obj/power.dmi', "cell-o2")
 	else
 		overlays += image('icons/obj/power.dmi', "cell-o1")
@@ -27,29 +27,29 @@
 
 // use power from a cell
 /obj/item/weapon/cell/proc/use(var/amount)
-	if(rigged && amount > 0)
+	if (rigged && amount > 0)
 		explode()
 		return 0
 
-	if(charge < amount)
+	if (charge < amount)
 		return 0
 	charge = max(0,charge - amount)
 	return 1
 
 // recharge the cell
 /obj/item/weapon/cell/proc/give(var/amount)
-	if(rigged && amount > 0)
+	if (rigged && amount > 0)
 		explode()
 		return 0
 
-	if(maxcharge < amount)
+	if (maxcharge < amount)
 		return 0
 	var/power_used = min(maxcharge-charge,amount)
-	if(crit_fail)
+	if (crit_fail)
 		return 0
-	if(!prob(reliability))
+	if (!prob(reliability))
 		minor_fault++
-		if(prob(minor_fault))
+		if (prob(minor_fault))
 			crit_fail = 1
 			return 0
 	charge += power_used
@@ -58,7 +58,7 @@
 
 /obj/item/weapon/cell/examine(mob/user)
 	..()
-	if(crit_fail)
+	if (crit_fail)
 		to_chat(user, "<span class='warning'>This power cell seems to be faulty.</span>")
 	else
 		to_chat(user, "<span class='info'>The charge meter reads [round(src.percent() )]%.</span>")
@@ -68,12 +68,12 @@
 
 /obj/item/weapon/cell/attackby(obj/item/W, mob/user)
 	..()
-	if(istype(W, /obj/item/weapon/reagent_containers/syringe))
+	if (istype(W, /obj/item/weapon/reagent_containers/syringe))
 		var/obj/item/weapon/reagent_containers/syringe/S = W
 
 		to_chat(user, "You inject the solution into the power cell.")
 
-		if(S.reagents.has_reagent(PLASMA, 5))
+		if (S.reagents.has_reagent(PLASMA, 5))
 
 			rigged = 1
 
@@ -120,23 +120,23 @@
 /obj/item/weapon/cell/emp_act(severity)
 	var/powerloss = round(16 * sqrt(maxcharge) / severity, 50) //at severity 1, ~500 for 1000 power cells, ~2750 for 30,000 power cells
 	charge = max(charge - powerloss, 0)
-	if(reliability != 100 && prob(50/severity))
+	if (reliability != 100 && prob(50/severity))
 		reliability -= 10 / severity
 	..()
 
 /obj/item/weapon/cell/ex_act(severity)
 
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			qdel(src)
 			return
-		if(2.0)
+		if (2.0)
 			if (prob(50))
 				qdel(src)
 				return
 			if (prob(50))
 				corrupt()
-		if(3.0)
+		if (3.0)
 			if (prob(25))
 				qdel(src)
 				return
@@ -145,7 +145,7 @@
 	return
 
 /obj/item/weapon/cell/blob_act()
-	if(prob(75))
+	if (prob(75))
 		explode()
 
 /obj/item/weapon/cell/proc/get_electrocute_damage()

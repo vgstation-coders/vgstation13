@@ -23,58 +23,58 @@
 	..()
 
 /mob/living/carbon/martian/get_item_offset_by_index(index)
-	switch(index)
-		if(1,6)
+	switch (index)
+		if (1,6)
 			return list("x"=0, "y"=0)
-		if(2,5)
+		if (2,5)
 			return list("x"=0, "y"=10)
-		if(3,4)
+		if (3,4)
 			return list("x"=0, "y"=18)
 
 	return list()
 
 /mob/living/carbon/martian/get_held_item_ui_location(index)
-	if(!is_valid_hand_index(index))
+	if (!is_valid_hand_index(index))
 		return
 
-	switch(index)
-		if(1)
+	switch (index)
+		if (1)
 			return "CENTER-3:16,SOUTH:5"
-		if(2)
+		if (2)
 			return "CENTER-2:16,SOUTH:5:4"
-		if(3)
+		if (3)
 			return "CENTER-1:16,SOUTH:5:10"
-		if(4)
+		if (4)
 			return "CENTER+1:16,SOUTH:5:10"
-		if(5)
+		if (5)
 			return "CENTER+2:16,SOUTH:5:4"
-		if(6)
+		if (6)
 			return "CENTER+3:16,SOUTH:5"
 		else
 			return ..()
 
 /mob/living/carbon/martian/get_index_limb_name(index)
-	if(!index)
+	if (!index)
 		index = active_hand
 
-	switch(index)
-		if(1)
+	switch (index)
+		if (1)
 			return "right lower tentacle"
-		if(2)
+		if (2)
 			return "right middle tentacle"
-		if(3)
+		if (3)
 			return "right upper tentacle"
-		if(4)
+		if (4)
 			return "left upper tentacle"
-		if(5)
+		if (5)
 			return "left middle tentacle"
-		if(6)
+		if (6)
 			return "left lower tentacle"
 		else
 			return "tentacle"
 
 /mob/living/carbon/martian/get_direction_by_index(index)
-	if(index <= 3)
+	if (index <= 3)
 		return "right_hand"
 	else
 		return "left_hand"
@@ -86,16 +86,16 @@
 /mob/living/carbon/martian/GetAccess()
 	var/list/ACL=list()
 
-	for(var/obj/item/I in held_items)
+	for (var/obj/item/I in held_items)
 		ACL |= I.GetAccess()
 
 	return ACL
 
 /mob/living/carbon/martian/get_visible_id()
 	var/id = null
-	for(var/obj/item/I in held_items)
+	for (var/obj/item/I in held_items)
 		id = I.GetID()
-		if(id)
+		if (id)
 			break
 	return id
 	
@@ -105,7 +105,7 @@
 /mob/living/carbon/martian/u_equip(obj/item/W as obj, dropped = 1)
 	var/success = 0
 
-	if(!W)
+	if (!W)
 		return 0
 
 	if (W == head)
@@ -115,32 +115,32 @@
 	else
 		..()
 
-	if(success)
+	if (success)
 		if (W)
-			if(client)
+			if (client)
 				client.screen -= W
 			W.forceMove(loc)
 			W.unequipped()
-			if(dropped)
+			if (dropped)
 				W.dropped(src)
-			if(W)
+			if (W)
 				W.reset_plane_and_layer()
 
 	return
 
 /mob/living/carbon/martian/equip_to_slot(obj/item/W as obj, slot, redraw_mob = 1)
-	if(!istype(W))
+	if (!istype(W))
 		return
 
-	if(src.is_holding_item(W))
+	if (src.is_holding_item(W))
 		src.u_equip(W)
 
-	if(slot == slot_head)
+	if (slot == slot_head)
 		head = W
 		update_inv_head(redraw_mob)
 
 	W.hud_layerise()
 	W.equipped(src, slot)
 	W.forceMove(src)
-	if(client)
+	if (client)
 		client.screen |= W

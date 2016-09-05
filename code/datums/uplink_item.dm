@@ -2,30 +2,30 @@ var/list/uplink_items = list()
 
 /proc/get_uplink_items(var/job = null)
 	// If not already initialized..
-	if(!uplink_items.len)
+	if (!uplink_items.len)
 
 		// Fill in the list	and order it like this:
 		// A keyed list, acting as categories, which are lists to the datum.
 
 		var/list/last = list()
-		for(var/item in typesof(/datum/uplink_item))
+		for (var/item in typesof(/datum/uplink_item))
 
 			var/datum/uplink_item/I = new item()
-			if(!I.item)
+			if (!I.item)
 				continue
-			if(I.gamemodes.len && ticker && !(ticker.mode.name in I.gamemodes))
+			if (I.gamemodes.len && ticker && !(ticker.mode.name in I.gamemodes))
 				continue
-			if(I.last)
+			if (I.last)
 				last += I
 				continue
 
-			if(!uplink_items[I.category])
+			if (!uplink_items[I.category])
 				uplink_items[I.category] = list()
 
 			uplink_items[I.category] += I
 
-		for(var/datum/uplink_item/I in last)
-			if(!uplink_items[I.category])
+		for (var/datum/uplink_item/I in last)
+			if (!uplink_items[I.category])
 				uplink_items[I.category] = list()
 
 			uplink_items[I.category] += I
@@ -55,7 +55,7 @@ var/list/uplink_items = list()
 
 
 	..()
-	if(!istype(U))
+	if (!istype(U))
 		return 0
 
 	if (user.stat || user.restrained())
@@ -67,11 +67,11 @@ var/list/uplink_items = list()
 	// If the uplink's holder is in the user's contents
 	if ((U.loc in user.contents || (in_range(U.loc, user) && istype(U.loc.loc, /turf))))
 		user.set_machine(U)
-		if(cost > U.uses)
+		if (cost > U.uses)
 			return 0
 
 		var/obj/I = spawn_item(get_turf(user), U, user)
-		if(!I)
+		if (!I)
 			return 0
 		on_item_spawned(I,user)
 		var/icon/tempimage = icon(I.icon, I.icon_state)
@@ -79,20 +79,20 @@ var/list/uplink_items = list()
 		var/tempstate = end_icons.len
 
 		var/bundlename = name
-		if(name == "Random Item" || name == "For showing that you are The Boss")
+		if (name == "Random Item" || name == "For showing that you are The Boss")
 			bundlename = I.name
-		if(I.tag)
+		if (I.tag)
 			bundlename = "[I.tag] bundle"
 			I.tag = null
-		if(ishuman(user))
+		if (ishuman(user))
 			var/mob/living/carbon/human/A = user
 
-			if(istype(I, /obj/item))
+			if (istype(I, /obj/item))
 				A.put_in_any_hand_if_possible(I)
 
 			U.purchase_log += {"[user] ([user.ckey]) bought <img src="logo_[tempstate].png"> [name] for [cost]."}
 			stat_collection.uplink_purchase(src, I, user)
-			if(user.mind)
+			if (user.mind)
 				user.mind.uplink_items_bought += {"<img src="logo_[tempstate].png"> [bundlename]"}
 				user.mind.spent_TC += cost
 		U.interact(user)
@@ -613,15 +613,15 @@ var/list/uplink_items = list()
 	var/list/buyable_items = get_uplink_items()
 	var/list/possible_items = list()
 
-	for(var/category in buyable_items)
-		for(var/datum/uplink_item/I in buyable_items[category])
-			if(I == src)
+	for (var/category in buyable_items)
+		for (var/datum/uplink_item/I in buyable_items[category])
+			if (I == src)
 				continue
-			if(I.cost > U.uses)
+			if (I.cost > U.uses)
 				continue
 			possible_items += I
 
-	if(possible_items.len)
+	if (possible_items.len)
 		var/datum/uplink_item/I = pick(possible_items)
 		U.uses -= max(0, I.cost)
 		feedback_add_details("traitor_uplink_items_bought","RN")

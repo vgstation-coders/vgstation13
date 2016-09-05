@@ -1,5 +1,5 @@
 /mob/living/silicon/robot/emote(var/act,var/m_type=1,var/message = null, var/auto)
-	if(timestopped)
+	if (timestopped)
 		return //under effects of time magick
 	var/param = null
 	if (findtext(act, "-", 1, null))
@@ -7,20 +7,20 @@
 		param = copytext(act, t1 + 1, length(act) + 1)
 		act = copytext(act, 1, t1)
 
-	if(findtext(act,"s",-1) && !findtext(act,"_",-2))//Removes ending s's unless they are prefixed with a '_'
+	if (findtext(act,"s",-1) && !findtext(act,"_",-2))//Removes ending s's unless they are prefixed with a '_'
 		act = copytext(act,1,length(act))
 
-	switch(act)
+	switch (act)
 		if ("me")
 			if (src.client)
-				if(client.prefs.muted & MUTE_IC)
+				if (client.prefs.muted & MUTE_IC)
 					to_chat(src, "You cannot send IC messages (muted).")
 					return
 				if (src.client.handle_spam_prevention(message,MUTE_IC))
 					return
 			if (stat)
 				return
-			if(!(message))
+			if (!(message))
 				return
 			else
 				return custom_emote(m_type, message)
@@ -138,14 +138,14 @@
 				message = "<B>[src]</B> looks."
 			m_type = VISIBLE
 
-		if("beep")
+		if ("beep")
 			var/M = null
-			if(param)
+			if (param)
 				for (var/mob/A in view(null, null))
 					if (param == A.name)
 						M = A
 						break
-			if(!M)
+			if (!M)
 				param = null
 
 			if (param)
@@ -155,14 +155,14 @@
 			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 50, 0)
 			m_type = VISIBLE
 
-		if("ping")
+		if ("ping")
 			var/M = null
-			if(param)
+			if (param)
 				for (var/mob/A in view(null, null))
 					if (param == A.name)
 						M = A
 						break
-			if(!M)
+			if (!M)
 				param = null
 
 			if (param)
@@ -172,14 +172,14 @@
 			playsound(get_turf(src), 'sound/machines/ping.ogg', 50, 0)
 			m_type = VISIBLE
 
-		if("buzz")
+		if ("buzz")
 			var/M = null
-			if(param)
+			if (param)
 				for (var/mob/A in view(null, null))
 					if (param == A.name)
 						M = A
 						break
-			if(!M)
+			if (!M)
 				param = null
 
 			if (param)
@@ -189,7 +189,7 @@
 			playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 50, 0)
 			m_type = VISIBLE
 
-		if("law")
+		if ("law")
 			if (istype(module,/obj/item/weapon/robot_module/security))
 				message = "<B>[src]</B> shows its legal authorization barcode."
 
@@ -198,7 +198,7 @@
 			else
 				to_chat(src, "You are not THE LAW, pal.")
 
-		if("halt")
+		if ("halt")
 			if (istype(module,/obj/item/weapon/robot_module/security))
 				message = "<B>[src]</B>'s speakers skreech, \"Halt! Security!\"."
 
@@ -223,9 +223,9 @@
 
 	if ((message && src.stat == 0))
 		if (m_type & 1)
-			for(var/mob/O in viewers(src, null))
+			for (var/mob/O in viewers(src, null))
 				O.show_message(message, m_type)
 		else
-			for(var/mob/O in hearers(src, null))
+			for (var/mob/O in hearers(src, null))
 				O.show_message(message, m_type)
 	return

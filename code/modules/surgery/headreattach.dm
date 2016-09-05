@@ -126,7 +126,7 @@
 
 //////PREPARE///////
 /datum/surgery_step/head/prepare/tool_quality(obj/item/tool)
-	if(tool.is_hot())
+	if (tool.is_hot())
 		for (var/T in allowed_tools)
 			if (istype(tool,T))
 				return allowed_tools[T]
@@ -199,7 +199,7 @@
 	affected.destspawn = 0
 
 	var/obj/item/weapon/organ/O = tool
-	if(istype(O))
+	if (istype(O))
 		affected.species = O.species
 
 	target.update_body()
@@ -212,10 +212,10 @@
 	target.default_language = B.brainmob.default_language
 
 	if (B.butchering_drops.len) //Transferring teeth and other stuff
-		for(var/datum/butchering_product/BP in B.butchering_drops) //First, search for all "stuff" inside the head
+		for (var/datum/butchering_product/BP in B.butchering_drops) //First, search for all "stuff" inside the head
 
 			var/datum/butchering_product/match = locate(BP.type) in target.butchering_drops //See if our guy already has the same thing in him (shouldn't happen, but who knows)
-			if(istype(match)) //If he does have a duplicate
+			if (istype(match)) //If he does have a duplicate
 				target.butchering_drops -= match //Remove it!
 				qdel(match)
 
@@ -225,7 +225,7 @@
 	affected.cancer_stage = B.cancer_stage
 
 	var/datum/organ/internal/brain/copied
-	if(B.organ_data)
+	if (B.organ_data)
 		var/datum/organ/internal/I = B.organ_data
 		copied = I.Copy()
 	else

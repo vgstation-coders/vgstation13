@@ -107,30 +107,30 @@ for reference:
 	else
 		visible_message("<span class='danger'>[src] has been hit by [user] with [W]</span>") //I have to put this because atom/proc/attackby is not triggering. No idea why
 		user.delayNextAttack(10)
-		switch(W.damtype)
-			if("fire")
+		switch (W.damtype)
+			if ("fire")
 				src.health -= W.force * 1
-			if("brute")
+			if ("brute")
 				src.health -= W.force * 0.75
 		if (src.health <= 0)
 			src.explode()
 		..()
 
 /obj/machinery/deployable/barrier/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			src.explode()
 			return
-		if(2.0)
+		if (2.0)
 			src.health -= 25
 			if (src.health <= 0)
 				src.explode()
 			return
 
 /obj/machinery/deployable/barrier/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
-	if(prob(50/severity))
+	if (prob(50/severity))
 		locked = !locked
 		anchored = !anchored
 		icon_state = "barrier[src.locked]"
@@ -142,9 +142,9 @@ for reference:
 	return
 
 /obj/machinery/deployable/barrier/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)//So bullets will fly over and stuff.
-	if(air_group || (height==0))
+	if (air_group || (height==0))
 		return 1
-	if(istype(mover) && mover.checkpass(PASSTABLE))
+	if (istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
 	else
 		return 0
@@ -157,5 +157,5 @@ for reference:
 	s.start()
 
 	explosion(src.loc,-1,-1,0)
-	if(src)
+	if (src)
 		qdel(src)

@@ -47,51 +47,51 @@
 /obj/structure/window/examine(mob/user)
 
 	..()
-	if(!anchored)
+	if (!anchored)
 		to_chat(user, "It appears to be completely loose and movable.")
 	//switch most likely can't take inequalities, so here's that if block
-	if(health >= initial(health)) //Sanity
+	if (health >= initial(health)) //Sanity
 		to_chat(user, "It's in perfect shape, not even a scratch.")
-	else if(health >= 0.8*initial(health))
+	else if (health >= 0.8*initial(health))
 		to_chat(user, "It has a few scratches and a small impact.")
-	else if(health >= 0.5*initial(health))
+	else if (health >= 0.5*initial(health))
 		to_chat(user, "It has a few impacts and some cracks running from them.")
-	else if(health >= 0.2*initial(health))
+	else if (health >= 0.2*initial(health))
 		to_chat(user, "It's covered in impact marks and most of the outer sheet is crackled.")
 	else
 		to_chat(user, "It's completely crackled over multiple layers, it's a miracle it's even standing.")
-	if(reinforced) //Normal windows can be loose or not, reinforced windows are more complex
-		switch(d_state)
-			if(WINDOWSECURE)
+	if (reinforced) //Normal windows can be loose or not, reinforced windows are more complex
+		switch (d_state)
+			if (WINDOWSECURE)
 				to_chat(user, "It is firmly secured.")
-			if(WINDOWUNSECUREFRAME)
+			if (WINDOWUNSECUREFRAME)
 				to_chat(user, "It appears it was unfastened from its frame.")
-			if(WINDOWLOOSEFRAME)
+			if (WINDOWLOOSEFRAME)
 				to_chat(user, "It appears to be loose from its frame.")
 
 //Allows us to quickly check if we should break the window, can handle not having an user
 /obj/structure/window/proc/healthcheck(var/mob/M, var/sound = 1)
 
 
-	if(health <= 0)
-		if(M) //Did someone pass a mob ? If so, perform a pressure check
+	if (health <= 0)
+		if (M) //Did someone pass a mob ? If so, perform a pressure check
 			var/pdiff = performWallPressureCheck(src.loc)
-			if(pdiff > 0)
+			if (pdiff > 0)
 				investigation_log(I_ATMOS, "with a pdiff of [pdiff] has been destroyed by [M.real_name] ([formatPlayerPanel(M, M.ckey)]) at [formatJumpTo(get_turf(src))]!")
-				if(M.ckey) //Only send an admin message if it's an actual players, admins don't need to know what the carps are doing
+				if (M.ckey) //Only send an admin message if it's an actual players, admins don't need to know what the carps are doing
 					message_admins("\The [src] with a pdiff of [pdiff] has been destroyed by [M.real_name] ([formatPlayerPanel(M, M.ckey)]) at [formatJumpTo(get_turf(src))]!")
 		Destroy(brokenup = 1)
 	else
-		if(sound)
+		if (sound)
 			playsound(loc, 'sound/effects/Glasshit.ogg', 100, 1)
-		if(!damage_overlay)
+		if (!damage_overlay)
 			damage_overlay = new(src)
 			damage_overlay.icon = icon('icons/obj/structures.dmi')
 			damage_overlay.dir = src.dir
 
 		overlays.Cut()
 
-		if(health < initial(health))
+		if (health < initial(health))
 			var/damage_fraction = Clamp(round((initial(health) - health) / initial(health) * 5) + 1, 1, 5) //gives a number, 1-5, based on damagedness
 			damage_overlay.icon_state = "[cracked_base][damage_fraction]"
 			overlays += damage_overlay
@@ -111,16 +111,16 @@
 //This ex_act just removes health to be fully modular with "bomb-proof" windows
 /obj/structure/window/ex_act(severity)
 
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			health -= rand(100, 150)
 			healthcheck()
 			return
-		if(2.0)
+		if (2.0)
 			health -= rand(20, 50)
 			healthcheck()
 			return
-		if(3.0)
+		if (3.0)
 			health -= rand(5, 15)
 			healthcheck()
 			return
@@ -138,30 +138,30 @@
 
 	var/damage = rand(1,7) * (H.get_strength() - reinforced) //By default, humanoids can't damage windows with kicks. Being strong or a hulk changes that
 	var/obj/item/clothing/shoes/S = H.shoes
-	if(istype(S))
+	if (istype(S))
 		damage += S.bonus_kick_damage //Unless they're wearing heavy boots
 
-	if(damage > 0)
+	if (damage > 0)
 		health -= damage
 		healthcheck()
 
 /obj/structure/window/Uncross(var/atom/movable/mover, var/turf/target)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if (istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(flags & ON_BORDER)
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
+	if (flags & ON_BORDER)
+		if (target) //Are we doing a manual check to see
+			if (get_dir(loc, target) == dir)
 				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)
+		else if (mover.dir == dir) //Or are we using move code
+			if (density)
 				mover.Bump(src)
 			return !density
 	return 1
 
 /obj/structure/window/Cross(atom/movable/mover, turf/target, height = 0)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if (istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
-	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
+	if (get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 		return !density
 	return 1
 
@@ -169,13 +169,13 @@
 /obj/structure/window/hitby(AM as mob|obj)
 
 	..()
-	if(ismob(AM))
+	if (ismob(AM))
 		var/mob/M = AM //Duh
 		health -= 10 //We estimate just above a slam but under a crush, since mobs can't carry a throwforce variable
 		healthcheck(M)
 		visible_message("<span class='danger'>\The [M] slams into \the [src].</span>", \
 		"<span class='danger'>You slam into \the [src].</span>")
-	else if(isobj(AM))
+	else if (isobj(AM))
 		var/obj/item/I = AM
 		health -= I.throwforce
 		healthcheck()
@@ -183,7 +183,7 @@
 
 /obj/structure/window/attack_hand(mob/user as mob)
 
-	if(M_HULK in user.mutations)
+	if (M_HULK in user.mutations)
 		user.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!"))
 		user.visible_message("<span class='danger'>[user] smashes \the [src]!</span>")
 		health -= 25
@@ -191,7 +191,7 @@
 		user.delayNextAttack(8)
 
 	//Bang against the window
-	else if(usr.a_intent == I_HURT)
+	else if (usr.a_intent == I_HURT)
 		user.delayNextAttack(10)
 		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
 		user.visible_message("<span class='warning'>[user] bangs against \the [src]!</span>", \
@@ -222,42 +222,42 @@
 
 /obj/structure/window/attack_alien(mob/user as mob)
 
-	if(islarva(user))
+	if (islarva(user))
 		return
 	attack_generic(user, 15)
 
 /obj/structure/window/attack_animal(mob/user as mob)
 
 	var/mob/living/simple_animal/M = user
-	if(M.melee_damage_upper <= 0)
+	if (M.melee_damage_upper <= 0)
 		return
 	attack_generic(M, M.melee_damage_upper)
 
 /obj/structure/window/attack_slime(mob/user as mob)
 
-	if(!isslimeadult(user))
+	if (!isslimeadult(user))
 		return
 	attack_generic(user, rand(10, 15))
 
 /obj/structure/window/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
-	if(istype(W, /obj/item/weapon/grab) && Adjacent(user))
+	if (istype(W, /obj/item/weapon/grab) && Adjacent(user))
 		var/obj/item/weapon/grab/G = W
-		if(istype(G.affecting, /mob/living))
+		if (istype(G.affecting, /mob/living))
 			var/mob/living/M = G.affecting
 			var/gstate = G.state
 			returnToPool(W)	//Gotta delete it here because if window breaks, it won't get deleted
-			switch(gstate)
-				if(GRAB_PASSIVE)
+			switch (gstate)
+				if (GRAB_PASSIVE)
 					M.apply_damage(5) //Meh, bit of pain, window is fine, just a shove
 					visible_message("<span class='warning'>\The [user] shoves \the [M] into \the [src]!</span>", \
 					"<span class='warning'>You shove \the [M] into \the [src]!</span>")
-				if(GRAB_AGGRESSIVE)
+				if (GRAB_AGGRESSIVE)
 					M.apply_damage(10) //Nasty, but dazed and concussed at worst
 					health -= 5
 					visible_message("<span class='danger'>\The [user] slams \the [M] into \the [src]!</span>", \
 					"<span class='danger'>You slam \the [M] into \the [src]!</span>")
-				if(GRAB_NECK to GRAB_KILL)
+				if (GRAB_NECK to GRAB_KILL)
 					M.Weaken(3) //Almost certainly shoved head or face-first, you're going to need a bit for the lights to come back on
 					M.apply_damage(20) //That got to fucking hurt, you were basically flung into a window, most likely a shattered one at that
 					health -= 20 //Window won't like that
@@ -272,45 +272,45 @@
 
 	//Start construction and deconstruction, absolute priority over the other object interactions to avoid hitting the window
 
-	if(reinforced) //Steps for all reinforced window types
+	if (reinforced) //Steps for all reinforced window types
 
-		switch(d_state)
+		switch (d_state)
 
-			if(WINDOWSECURE) //Reinforced, fully secured
+			if (WINDOWSECURE) //Reinforced, fully secured
 
-				if(isscrewdriver(W))
+				if (isscrewdriver(W))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='warning'>[user] unfastens \the [src] from its frame.</span>", \
 					"<span class='notice'>You unfasten \the [src] from its frame.</span>")
 					d_state = WINDOWUNSECUREFRAME
 					return
 
-			if(WINDOWUNSECUREFRAME)
+			if (WINDOWUNSECUREFRAME)
 
-				if(isscrewdriver(W))
+				if (isscrewdriver(W))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='notice'>[user] fastens \the [src] to its frame.</span>", \
 					"<span class='notice'>You fasten \the [src] to its frame.</span>")
 					d_state = WINDOWSECURE
 					return
 
-				if(iscrowbar(W))
+				if (iscrowbar(W))
 					playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
 					user.visible_message("<span class='warning'>[user] pries \the [src] from its frame.</span>", \
 					"<span class='notice'>You pry \the [src] from its frame.</span>")
 					d_state = WINDOWLOOSEFRAME
 					return
 
-			if(WINDOWLOOSEFRAME)
+			if (WINDOWLOOSEFRAME)
 
-				if(iscrowbar(W))
+				if (iscrowbar(W))
 					playsound(loc, 'sound/items/Crowbar.ogg', 75, 1)
 					user.visible_message("<span class='notice'>[user] pries \the [src] into its frame.</span>", \
 					"<span class='notice'>You pry \the [src] into its frame.</span>")
 					d_state = WINDOWUNSECUREFRAME
 					return
 
-				if(isscrewdriver(W))
+				if (isscrewdriver(W))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='warning'>[user] unfastens \the [src]'s frame from the floor.</span>", \
 					"<span class='notice'>You unfasten \the [src]'s frame from the floor.</span>")
@@ -321,14 +321,14 @@
 					update_icon()
 					//Perform pressure check since window no longer blocks air
 					var/pdiff = performWallPressureCheck(src.loc)
-					if(pdiff > 0)
+					if (pdiff > 0)
 						message_admins("Window with pdiff [pdiff] deanchored by [user.real_name] ([formatPlayerPanel(user,user.ckey)]) at [formatJumpTo(loc)]!")
 						log_admin("Window with pdiff [pdiff] deanchored by [user.real_name] ([user.ckey]) at [loc]!")
 					return
 
-			if(WINDOWLOOSE)
+			if (WINDOWLOOSE)
 
-				if(isscrewdriver(W))
+				if (isscrewdriver(W))
 					playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 					user.visible_message("<span class='notice'>[user] fastens \the [src]'s frame to the floor.</span>", \
 					"<span class='notice'>You fasten \the [src]'s frame to the floor.</span>")
@@ -339,13 +339,13 @@
 					update_icon()
 					return
 
-				if(istype(W, /obj/item/weapon/weldingtool))
+				if (istype(W, /obj/item/weapon/weldingtool))
 					var/obj/item/weapon/weldingtool/WT = W
-					if(WT.remove_fuel(0))
+					if (WT.remove_fuel(0))
 						playsound(src, 'sound/items/Welder.ogg', 100, 1)
 						user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 						"<span class='notice'>You start disassembling \the [src].</span>")
-						if(do_after(user, src, 40) && d_state == WINDOWLOOSE) //Extra condition needed to avoid cheesing
+						if (do_after(user, src, 40) && d_state == WINDOWLOOSE) //Extra condition needed to avoid cheesing
 							playsound(src, 'sound/items/Welder.ogg', 100, 1)
 							user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
 							"<span class='notice'>You disassemble \the [src].</span>")
@@ -356,9 +356,9 @@
 						to_chat(user, "<span class='warning'>You need more welding fuel to complete this task.</span>")
 						return
 
-	else if(!reinforced) //Normal window steps
+	else if (!reinforced) //Normal window steps
 
-		if(isscrewdriver(W))
+		if (isscrewdriver(W))
 			playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
 			user.visible_message("<span class='[d_state ? "warning":"notice"]'>[user] [d_state ? "un":""]fastens \the [src].</span>", \
 			"<span class='notice'>You [d_state ? "un":""]fasten \the [src].</span>")
@@ -369,13 +369,13 @@
 			update_icon()
 			return
 
-		if(istype(W, /obj/item/weapon/weldingtool) && !d_state)
+		if (istype(W, /obj/item/weapon/weldingtool) && !d_state)
 			var/obj/item/weapon/weldingtool/WT = W
-			if(WT.remove_fuel(0))
+			if (WT.remove_fuel(0))
 				playsound(src, 'sound/items/Welder.ogg', 100, 1)
 				user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 				"<span class='notice'>You start disassembling \the [src].</span>")
-				if(do_after(user, src, 40) && d_state == WINDOWLOOSE) //Ditto above
+				if (do_after(user, src, 40) && d_state == WINDOWLOOSE) //Ditto above
 					playsound(src, 'sound/items/Welder.ogg', 100, 1)
 					user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
 					"<span class='notice'>You disassemble \the [src].</span>")
@@ -386,7 +386,7 @@
 				to_chat(user, "<span class='warning'>You need more welding fuel to complete this task.</span>")
 				return
 
-	if(W.damtype == BRUTE || W.damtype == BURN)
+	if (W.damtype == BRUTE || W.damtype == BURN)
 		user.delayNextAttack(10)
 		health -= W.force
 		user.visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>", \
@@ -402,10 +402,10 @@
 /obj/structure/window/proc/can_be_reached(mob/user)
 
 
-	if(!is_fulltile())
-		if(get_dir(user, src) & dir)
-			for(var/obj/O in loc)
-				if(!O.Cross(user, user.loc, 1, 0))
+	if (!is_fulltile())
+		if (get_dir(user, src) & dir)
+			for (var/obj/O in loc)
+				if (!O.Cross(user, user.loc, 1, 0))
 					return 0
 	return 1
 
@@ -414,7 +414,7 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(anchored)
+	if (anchored)
 		to_chat(usr, "<span class='warning'>\The [src] is fastened to the floor, therefore you can't rotate it!</span>")
 		return 0
 
@@ -429,7 +429,7 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(anchored)
+	if (anchored)
 		to_chat(usr, "<span class='warning'>\The [src] is fastened to the floor, therefore you can't rotate it!</span>")
 		return 0
 
@@ -444,11 +444,11 @@
 	density = 0 //Sanity while we do the rest
 	update_nearby_tiles()
 	update_nearby_icons()
-	if(brokenup) //If the instruction we were sent clearly states we're breaking the window, not deleting it !
-		if(loc)
+	if (brokenup) //If the instruction we were sent clearly states we're breaking the window, not deleting it !
+		if (loc)
 			playsound(get_turf(src), "shatter", 70, 1)
 		getFromPool(shardtype, loc, sheetamount)
-		if(reinforced)
+		if (reinforced)
 			getFromPool(/obj/item/stack/rods, loc, sheetamount)
 	..()
 
@@ -463,13 +463,13 @@
 /obj/structure/window/proc/update_nearby_tiles(var/turf/T)
 
 
-	if(isnull(air_master))
+	if (isnull(air_master))
 		return 0
 
-	if(!T)
+	if (!T)
 		T = get_turf(src)
 
-	if(isturf(T))
+	if (isturf(T))
 		air_master.mark_for_update(T)
 
 	return 1
@@ -478,15 +478,15 @@
 /obj/structure/window/proc/update_nearby_icons(var/turf/T)
 
 
-	if(!loc)
+	if (!loc)
 		return 0
-	if(!T)
+	if (!T)
 		T = get_turf(src)
 
 	update_icon()
 
-	for(var/direction in cardinal)
-		for(var/obj/structure/window/W in get_step(T,direction))
+	for (var/direction in cardinal)
+		for (var/obj/structure/window/W in get_step(T,direction))
 			W.update_icon()
 
 /obj/structure/window/forceMove(var/atom/A)
@@ -503,7 +503,7 @@
 
 /obj/structure/window/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 
-	if(exposed_temperature > T0C + fire_temp_threshold)
+	if (exposed_temperature > T0C + fire_temp_threshold)
 		health -= round(exposed_volume/fire_volume_mod)
 		healthcheck(sound = 0)
 	..()

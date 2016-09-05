@@ -8,13 +8,13 @@
 	mount_reqs = list("simfloor", "nospace")
 
 /obj/item/mounted/frame/apc_frame/try_build(turf/on_wall, mob/user)
-	if(..())
+	if (..())
 		var/turf/turf_loc = get_turf(user)
 
 		if (areaMaster.areaapc)
 			to_chat(user, "<span class='rose'>This area already has an APC.</span>")
 			return //only one APC per area
-		for(var/obj/machinery/power/terminal/T in turf_loc)
+		for (var/obj/machinery/power/terminal/T in turf_loc)
 			if (T.master)
 				to_chat(user, "<span class='rose'>There is another network terminal here.</span>")
 				return

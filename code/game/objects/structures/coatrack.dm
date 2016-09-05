@@ -13,21 +13,21 @@
 	var/obj/item/clothing/head/det_hat/hat = null
 
 /obj/structure/coatrack/attack_hand(mob/user)
-	if(suit)
+	if (suit)
 		to_chat(user, "<span class='notice'>You pick up \the [suit] from \the [src]</span>")
 		playsound(get_turf(src), "rustle", 50, 1, -5)
 		suit.forceMove(get_turf(src))
-		if(!user.get_active_hand())
+		if (!user.get_active_hand())
 			user.put_in_hands(suit)
 		suit = null
 		update_icon()
 		return
 
-	if(hat)
+	if (hat)
 		to_chat(user, "<span class='notice'>You pick up \the [hat] from \the [src]</span>")
 		playsound(get_turf(src), "rustle", 50, 1, -5)
 		hat.forceMove(get_turf(src))
-		if(!user.get_active_hand())
+		if (!user.get_active_hand())
 			user.put_in_hands(hat)
 		hat = null
 		update_icon()
@@ -35,13 +35,13 @@
 
 /obj/structure/coatrack/attackby(obj/item/clothing/C, mob/user)
 	if (istype(C, /obj/item/clothing/suit/storage/det_suit) && !suit)
-		if(user.drop_item(C, src))
+		if (user.drop_item(C, src))
 			to_chat(user, "<span class='notice'>You place your [C] on \the [src]</span>")
 			playsound(get_turf(src), "rustle", 50, 1, -5)
 			suit = C
 			update_icon()
 	else if (istype(C, /obj/item/clothing/head/det_hat) && !hat)
-		if(user.drop_item(C, src))
+		if (user.drop_item(C, src))
 			to_chat(user, "<span class='notice'>You place your [C] on \the [src]</span>")
 			playsound(get_turf(src), "rustle", 50, 1, -5)
 			hat = C
@@ -51,33 +51,33 @@
 		return ..()
 
 /obj/structure/coatrack/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			qdel(src)
 			return
-		if(2.0)
+		if (2.0)
 			if (prob(50))
 				qdel(src)
 				return
-		if(3.0)
+		if (3.0)
 			if (prob(5))
 				qdel(src)
 				return
 
 /obj/structure/coatrack/Destroy()
-	if(loc)
-		if(suit)
+	if (loc)
+		if (suit)
 			suit.forceMove(loc)
-		if(hat)
+		if (hat)
 			hat.forceMove(loc)
 	..()
 
 /obj/structure/coatrack/update_icon()
 	overlays.Cut()
-	if(suit && istype(suit,/obj/item/clothing/suit/storage/det_suit))
+	if (suit && istype(suit,/obj/item/clothing/suit/storage/det_suit))
 		var/obj/item/clothing/suit/storage/det_suit/detective_suit = suit
 		overlays += image(icon,"coat[(detective_suit.noir) ? "_noir" : ""]")
-	if(hat && istype(hat,/obj/item/clothing/head/det_hat))
+	if (hat && istype(hat,/obj/item/clothing/head/det_hat))
 		var/obj/item/clothing/head/det_hat/detective_hat = hat
 		overlays += image(icon,"hat[(detective_hat.noir) ? "_noir" : ""]")
 

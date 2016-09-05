@@ -19,8 +19,8 @@
 /datum/game_mode/monkey/can_start()
 	if (num_players()<2)
 		return 0
-	for(var/mob/new_player/P in player_list)
-		if(P.client && P.ready && !jobban_isbanned(P, "Syndicate"))
+	for (var/mob/new_player/P in player_list)
+		if (P.client && P.ready && !jobban_isbanned(P, "Syndicate"))
 			return 1
 	return 0
 
@@ -28,7 +28,7 @@
 	var/list/possible_monkeys = get_players_for_role(BE_MONKEY)
 
 	// stop setup if no possible monkeys
-	if(!possible_monkeys.len)
+	if (!possible_monkeys.len)
 		return 0
 
 	var/num_monkeys = MONKEY_MODE_MONKEYS
@@ -37,7 +37,7 @@
 	if (num_players<=num_monkeys)
 		num_monkeys = round(num_players/2)
 
-	for(var/j = 1 to num_monkeys)
+	for (var/j = 1 to num_monkeys)
 		if (!possible_monkeys.len)
 			break
 		var/datum/mind/monkey = pick(possible_monkeys)
@@ -45,7 +45,7 @@
 		initial_monkeys += monkey
 		monkey.special_role = "monkey"
 
-	if(!initial_monkeys.len)
+	if (!initial_monkeys.len)
 		return 0
 	return 1
 
@@ -66,10 +66,10 @@
 /datum/game_mode/monkey/proc/is_important_monkey(var/mob/living/carbon/monkey/M as mob)
 	var/turf/T = get_turf(M)
 	var/area/A = get_area(M)
-	if(M.stat!=2)
+	if (M.stat!=2)
 
-		for(var/datum/disease/D in M.viruses)
-			if(istype(D, /datum/disease/jungle_fever) && ( T.z==1 || is_type_in_list(A, centcom_areas)))
+		for (var/datum/disease/D in M.viruses)
+			if (istype(D, /datum/disease/jungle_fever) && ( T.z==1 || is_type_in_list(A, centcom_areas)))
 				return 1
 
 
@@ -89,15 +89,15 @@
 /datum/game_mode/monkey/declare_completion()
 	var/monkeywin = 0
 	if (state != MONKEY_MODE_NO_RABID_LEFT)
-		for(var/mob/living/carbon/monkey/monkey_player in mob_list)
+		for (var/mob/living/carbon/monkey/monkey_player in mob_list)
 			if (is_important_monkey(monkey_player))
 				var/area/A = get_area(monkey_player)
 				if ( is_type_in_list(A, centcom_areas))
 					monkeywin = 1
 					break
 
-		if(monkeywin)
-			for(var/mob/living/carbon/human/human_player in mob_list)
+		if (monkeywin)
+			for (var/mob/living/carbon/human/human_player in mob_list)
 				if (human_player.stat != 2)
 					var/area/A = get_area(human_player)
 					if (istype(A, /area/shuttle/escape/centcom))
@@ -119,8 +119,8 @@
 
 
 /datum/game_mode/proc/auto_declare_completion_monkey()
-	for(var/mob/living/carbon/monkey/monkey_player in mob_list)
-		for(var/datum/disease/D in monkey_player.viruses)
+	for (var/mob/living/carbon/monkey/monkey_player in mob_list)
+		for (var/datum/disease/D in monkey_player.viruses)
 			if (istype(D, /datum/disease/jungle_fever) && monkey_player.ckey)
 				to_chat(world, "<B>[monkey_player.ckey] was played infested [monkey_player]. [monkey_player.stat == 2 ? "(DEAD)" : ""]</B>")
 	return 1

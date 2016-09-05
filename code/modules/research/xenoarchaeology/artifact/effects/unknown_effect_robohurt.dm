@@ -7,7 +7,7 @@
 	effect_type = pick(3,4)
 
 /datum/artifact_effect/robohurt/DoEffectTouch(var/mob/user)
-	if(user)
+	if (user)
 		if (istype(user, /mob/living/silicon/robot))
 			var/mob/living/silicon/robot/R = user
 			to_chat(R, "<span class='warning'>Your systems report severe damage has been inflicted!</span>")
@@ -16,9 +16,9 @@
 			return 1
 
 /datum/artifact_effect/robohurt/DoEffectAura()
-	if(holder)
+	if (holder)
 		for (var/mob/living/silicon/robot/M in range(src.effectrange,holder))
-			if(prob(10))
+			if (prob(10))
 				to_chat(M, "<span class='warning'>SYSTEM ALERT: Harmful energy field detected!</span>")
 			M.adjustBruteLoss(1)
 			M.adjustFireLoss(1)
@@ -26,7 +26,7 @@
 		return 1
 
 /datum/artifact_effect/robohurt/DoEffectPulse()
-	if(holder)
+	if (holder)
 		for (var/mob/living/silicon/robot/M in range(src.effectrange,holder))
 			to_chat(M, "<span class='warning'>SYSTEM ALERT: Structural damage inflicted by energy pulse!</span>")
 			M.adjustBruteLoss(10)

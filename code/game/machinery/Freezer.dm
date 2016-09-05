@@ -29,21 +29,21 @@
 
 	RefreshParts()
 
-	if(anchored)
+	if (anchored)
 		verbs -= rotate_verbs
 
 	initialize_directions = dir
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/RefreshParts()
 	var/lasercount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+	for (var/obj/item/weapon/stock_parts/SP in component_parts)
+		if (istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating-1
 	temp_offset = initial(temp_offset) - 5*lasercount
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/update_icon()
-	if(src.node)
-		if(src.on)
+	if (src.node)
+		if (src.on)
 			icon_state = "freezer_1"
 		else
 			icon_state = "freezer"
@@ -58,32 +58,32 @@
 	return src.attack_hand(user)
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/crowbarDestroy(mob/user)
-	if(src.on || anchored)
+	if (src.on || anchored)
 		return
 	return ..()
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/togglePanelOpen(var/obj/toggleitem, mob/user)
-	if(anchored)
+	if (anchored)
 		to_chat(user, "You have to unanchor the [src] first!")
 		return
-	if(src.on)
+	if (src.on)
 		to_chat(user, "You have to turn off the [src]!")
 		return
 	return ..()
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/wrenchAnchor(mob/user)
-	if(src.on)
+	if (src.on)
 		to_chat(user, "You have to turn off the [src] first!")
 		return
 	..()
-	if(!anchored)
+	if (!anchored)
 		verbs += rotate_verbs
-		if(node)
+		if (node)
 			node.disconnect(src)
 			qdel(network)
 			network = null
 			node = null
-	else if(anchored)
+	else if (anchored)
 		verbs -= rotate_verbs
 		initialize_directions = dir
 		initialize()
@@ -100,9 +100,9 @@
 /obj/machinery/atmospherics/unary/cold_sink/freezer/attack_hand(mob/user as mob)
 	user.set_machine(src)
 	var/temp_text = ""
-	if(air_contents.temperature > (T0C - 20))
+	if (air_contents.temperature > (T0C - 20))
 		temp_text = "<FONT color=red>[air_contents.temperature]</FONT>"
-	else if(air_contents.temperature < (T0C - 20) && air_contents.temperature > (T0C - 100))
+	else if (air_contents.temperature < (T0C - 20) && air_contents.temperature > (T0C - 100))
 		temp_text = "<FONT color=black>[air_contents.temperature]</FONT>"
 	else
 		temp_text = "<FONT color=blue>[air_contents.temperature]</FONT>"
@@ -118,20 +118,20 @@
 	onclose(user, "freezer")
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 	else
 		usr.set_machine(src)
 		if (href_list["start"])
-			if(isobserver(usr) && !canGhostWrite(usr,src,"turned [on?"off":"on"]"))
+			if (isobserver(usr) && !canGhostWrite(usr,src,"turned [on?"off":"on"]"))
 				return
 			src.on = !src.on
 			update_icon()
-		if(href_list["temp"])
-			if(isobserver(usr) && !canGhostWrite(usr,src,"set temperature of"))
+		if (href_list["temp"])
+			if (isobserver(usr) && !canGhostWrite(usr,src,"set temperature of"))
 				return
 			var/amount = text2num(href_list["temp"])
-			if(amount > 0)
+			if (amount > 0)
 				src.current_temperature = min(T20C, src.current_temperature+amount)
 			else
 				src.current_temperature = max((T0C - 200 + temp_offset), src.current_temperature+amount)
@@ -197,21 +197,21 @@
 
 	RefreshParts()
 
-	if(anchored)
+	if (anchored)
 		verbs -= rotate_verbs
 
 	initialize_directions = dir
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/RefreshParts()
 	var/lasercount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+	for (var/obj/item/weapon/stock_parts/SP in component_parts)
+		if (istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating-1
 	temp_offset = initial(temp_offset) + 5*lasercount
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/update_icon()
-	if(src.node)
-		if(src.on)
+	if (src.node)
+		if (src.on)
 			icon_state = "heater_1"
 		else
 			icon_state = "heater"
@@ -228,32 +228,32 @@
 	return src.attack_hand(user)
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/crowbarDestroy(mob/user)
-	if(src.on || anchored)
+	if (src.on || anchored)
 		return
 	return ..()
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/togglePanelOpen(var/obj/toggleitem, mob/user)
-	if(anchored)
+	if (anchored)
 		to_chat(user, "You have to unanchor the [src] first!")
 		return
-	if(src.on)
+	if (src.on)
 		to_chat(user, "You have to turn off the [src]!")
 		return
 	return ..()
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/wrenchAnchor(mob/user)
-	if(src.on)
+	if (src.on)
 		to_chat(user, "You have to turn off the [src] first!")
 		return
 	..()
-	if(!anchored)
+	if (!anchored)
 		verbs += rotate_verbs
-		if(node)
+		if (node)
 			node.disconnect(src)
 			qdel(network)
 			network = null
 			node = null
-	else if(anchored)
+	else if (anchored)
 		verbs -= rotate_verbs
 		initialize_directions = dir
 		initialize()
@@ -269,7 +269,7 @@
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/attack_hand(mob/user as mob)
 	user.set_machine(src)
 	var/temp_text = ""
-	if(air_contents.temperature > (T20C+40))
+	if (air_contents.temperature > (T20C+40))
 		temp_text = "<FONT color=red>[air_contents.temperature]</FONT>"
 	else
 		temp_text = "<FONT color=black>[air_contents.temperature]</FONT>"
@@ -285,20 +285,20 @@
 	onclose(user, "heater")
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 	else
 		usr.set_machine(src)
 		if (href_list["start"])
-			if(isobserver(usr) && !canGhostWrite(usr,src,"turned [on?"off":"on"]"))
+			if (isobserver(usr) && !canGhostWrite(usr,src,"turned [on?"off":"on"]"))
 				return
 			src.on = !src.on
 			update_icon()
-		if(href_list["temp"])
-			if(isobserver(usr) && !canGhostWrite(usr,src,"set temperature of"))
+		if (href_list["temp"])
+			if (isobserver(usr) && !canGhostWrite(usr,src,"set temperature of"))
 				return
 			var/amount = text2num(href_list["temp"])
-			if(amount > 0)
+			if (amount > 0)
 				src.current_temperature = min((T20C+280+temp_offset), src.current_temperature+amount)
 			else
 				src.current_temperature = max(T20C, src.current_temperature+amount)

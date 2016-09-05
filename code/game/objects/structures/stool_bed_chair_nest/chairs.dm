@@ -11,7 +11,7 @@
 
 /obj/structure/bed/chair/New()
 	..()
-	if(ticker)
+	if (ticker)
 		initialize()
 
 /obj/structure/bed/chair/initialize()
@@ -20,13 +20,13 @@
 
 /obj/structure/bed/chair/can_spook()
 	. = ..()
-	if(.)
+	if (.)
 		return !noghostspin
 
 /obj/structure/bed/chair/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/assembly/shock_kit))
+	if (istype(W, /obj/item/assembly/shock_kit))
 		var/obj/item/assembly/shock_kit/SK = W
-		if(user.drop_item(W))
+		if (user.drop_item(W))
 			var/obj/structure/bed/chair/e_chair/E = new /obj/structure/bed/chair/e_chair(src.loc)
 			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 			E.dir = dir
@@ -36,7 +36,7 @@
 			qdel(src)
 			return
 
-	if(iswrench(W))
+	if (iswrench(W))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 		getFromPool(sheet_type, get_turf(src), sheet_amt)
 		qdel(src)
@@ -50,7 +50,7 @@
 	handle_layer()
 
 /obj/structure/bed/chair/proc/handle_layer()
-	if(dir == NORTH)
+	if (dir == NORTH)
 		plane = ABOVE_HUMAN_PLANE
 	else
 		plane = OBJ_PLANE
@@ -63,30 +63,30 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(!usr || !isturf(usr.loc))
+	if (!usr || !isturf(usr.loc))
 		return
 
-	if(!config.ghost_interaction || !can_spook())
-		if(usr.isUnconscious() || usr.restrained())
+	if (!config.ghost_interaction || !can_spook())
+		if (usr.isUnconscious() || usr.restrained())
 			return
 
-	if(isobserver(usr))
+	if (isobserver(usr))
 		var/mob/dead/observer/ghost = usr
-		if(ghost.lastchairspin <= world.time - 5) //do not spam this
+		if (ghost.lastchairspin <= world.time - 5) //do not spam this
 			investigation_log(I_GHOST, "|| was rotated by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 		ghost.lastchairspin = world.time
 
 	spin()
 
 /obj/structure/bed/chair/MouseDrop_T(mob/M as mob, mob/user as mob)
-	if(!istype(M))
+	if (!istype(M))
 		return
 	var/mob/living/carbon/human/target = null
-	if(ishuman(M))
+	if (ishuman(M))
 		target = M
-	if((target) && (target.op_stage.butt == 4)) //Butt surgery is at stage 4
-		if(!M.weakened)	//Spam prevention
-			if(M == usr)
+	if ((target) && (target.op_stage.butt == 4)) //Butt surgery is at stage 4
+		if (!M.weakened)	//Spam prevention
+			if (M == usr)
 				M.visible_message(\
 					"<span class='notice'>[M.name] has no butt, and slides right out of [src]!</span>",\
 					"Having no butt, you slide right out of the [src]",\
@@ -166,13 +166,13 @@
 
 /obj/structure/bed/chair/comfy/update_icon()
 	..()
-	if(locked_atoms.len)
+	if (locked_atoms.len)
 		overlays += buckle_overlay
-		if(secondary_buckle_overlay)
+		if (secondary_buckle_overlay)
 			overlays += secondary_buckle_overlay
 	else
 		overlays -= buckle_overlay
-		if(secondary_buckle_overlay)
+		if (secondary_buckle_overlay)
 			overlays -= secondary_buckle_overlay
 
 /obj/structure/bed/chair/comfy/attackby(var/obj/item/W, var/mob/user)
@@ -237,7 +237,7 @@
 
 /obj/structure/bed/chair/office/update_icon()
 	..()
-	if(locked_atoms.len)
+	if (locked_atoms.len)
 		overlays += buckle_overlay
 	else
 		overlays -= buckle_overlay
@@ -246,7 +246,7 @@
 
 
 /obj/structure/bed/chair/office/handle_layer() // Fixes layer problem when and office chair is buckled and facing north
-	if(dir == NORTH && !locked_atoms.len)
+	if (dir == NORTH && !locked_atoms.len)
 		layer = CHAIR_ARMREST_LAYER
 		plane = ABOVE_HUMAN_PLANE
 	else

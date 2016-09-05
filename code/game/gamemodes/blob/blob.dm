@@ -38,7 +38,7 @@ var/list/blob_overminds = list()
 	var/list/possible_blobs = get_players_for_role(ROLE_BLOB)
 
 	// stop setup if no possible traitors
-	if(!possible_blobs.len)
+	if (!possible_blobs.len)
 		log_admin("Failed to set-up a round of blob. Couldn't find any volunteers to be blob.")
 		message_admins("Failed to set-up a round of blob. Couldn't find any volunteers to be blob.")
 		return 0
@@ -48,7 +48,7 @@ var/list/blob_overminds = list()
 	blobwincount = initial(blobwincount) * cores_to_spawn
 
 
-	for(var/j = 0, j < cores_to_spawn, j++)
+	for (var/j = 0, j < cores_to_spawn, j++)
 		if (!possible_blobs.len)
 			break
 		var/datum/mind/blob = pick(possible_blobs)
@@ -57,7 +57,7 @@ var/list/blob_overminds = list()
 		log_game("[blob.key] (ckey) has been selected as a Blob")
 		possible_blobs -= blob
 
-	if(!infected_crew.len)
+	if (!infected_crew.len)
 		log_admin("Failed to set-up a round of blob. Couldn't select any crew members to infect.")
 		message_admins("Failed to set-up a round of blob. Couldn't select any crew members to infect.")
 		return 0
@@ -82,32 +82,32 @@ You must kill it all while minimizing the damage to the station."})
 	return
 
 /datum/game_mode/blob/proc/show_message(var/message)
-	for(var/datum/mind/blob in infected_crew)
+	for (var/datum/mind/blob in infected_crew)
 		to_chat(blob.current, message)
 
 /datum/game_mode/blob/proc/burst_blobs()
-	for(var/datum/mind/blob in infected_crew)
+	for (var/datum/mind/blob in infected_crew)
 
 		var/client/blob_client = null
 		var/turf/location = null
 
-		if(iscarbon(blob.current))
+		if (iscarbon(blob.current))
 			var/mob/living/carbon/C = blob.current
 
-			for(var/obj/item/W in C)
+			for (var/obj/item/W in C)
 				C.drop_from_inventory(W)
 
-			if(directory[ckey(blob.key)])
+			if (directory[ckey(blob.key)])
 				blob_client = directory[ckey(blob.key)]
 				location = get_turf(C)
-				if(location.z != map.zMainStation || istype(location, /turf/space))
+				if (location.z != map.zMainStation || istype(location, /turf/space))
 					location = null
 				qdel(C)
 
 
-		if(blob_client && location)
+		if (blob_client && location)
 			var/obj/effect/blob/core/core = new(location, 200, blob_client, blob_point_rate)
-			if(core.overmind && core.overmind.mind)
+			if (core.overmind && core.overmind.mind)
 				core.overmind.mind.name = blob.name
 				infected_crew -= blob
 				infected_crew += core.overmind.mind
@@ -115,16 +115,16 @@ You must kill it all while minimizing the damage to the station."})
 
 /datum/game_mode/blob/post_setup()
 
-	for(var/datum/mind/blob in infected_crew)
+	for (var/datum/mind/blob in infected_crew)
 		greet_blob(blob)
 
-	if(emergency_shuttle)
+	if (emergency_shuttle)
 		emergency_shuttle.always_fake_recall = 1
 
 	/*// Disable the blob event for this round.
-	if(events)
+	if (events)
 		var/datum/round_event_control/blob/B = locate() in events.control
-		if(B)
+		if (B)
 			B.max_occurrences = 0 // disable the event
 	else
 		error("Events variable is null in blob gamemode post setup.")*/
@@ -139,7 +139,7 @@ You must kill it all while minimizing the damage to the station."})
 
 		sleep(wait_time)
 
-		if(!mixed)
+		if (!mixed)
 			send_intercept(0)
 
 		sleep(100)
@@ -166,7 +166,7 @@ You must kill it all while minimizing the damage to the station."})
 /datum/game_mode/blob/proc/stage(var/stage)
 
 
-	switch(stage)
+	switch (stage)
 		if (0)
 			biohazard_alert()
 			declared = 1
@@ -174,11 +174,11 @@ You must kill it all while minimizing the damage to the station."})
 
 		if (1)
 			command_alert(/datum/command_alert/biohazard_station_lockdown)
-			for(var/mob/M in player_list)
+			for (var/mob/M in player_list)
 				var/T = M.loc
-				if((istype(T, /turf/space)) || ((istype(T, /turf)) && (M.z!=1)))
+				if ((istype(T, /turf/space)) || ((istype(T, /turf)) && (M.z!=1)))
 					pre_escapees += M
-			if(!mixed)
+			if (!mixed)
 				send_intercept(1)
 			outbreak = 1
 
@@ -186,7 +186,7 @@ You must kill it all while minimizing the damage to the station."})
 			mining_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice."
 		if (2)
 			command_alert(/datum/command_alert/biohazard_station_nuke)
-			for(var/mob/camera/blob/B in player_list)
+			for (var/mob/camera/blob/B in player_list)
 				to_chat(B, "<span class='blob'>The beings intend to eliminate you with a final suicidal attack, you must stop them quickly or consume the station before this occurs!</span>")
-			if(!mixed)
+			if (!mixed)
 				send_intercept(2)

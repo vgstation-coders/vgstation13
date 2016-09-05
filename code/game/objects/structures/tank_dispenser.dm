@@ -29,20 +29,20 @@
 
 /obj/structure/dispenser/update_icon()
 	overlays.len = 0
-	switch(oxygentanks)
-		if(1 to 3)
+	switch (oxygentanks)
+		if (1 to 3)
 			overlays += image(icon = icon, icon_state = "oxygen-[oxygentanks]")
-		if(4 to INFINITY)
+		if (4 to INFINITY)
 			overlays += image(icon = icon, icon_state = "oxygen-4")
-	switch(plasmatanks)
-		if(1 to 4)
+	switch (plasmatanks)
+		if (1 to 4)
 			overlays += image(icon = icon, icon_state = "plasma-[plasmatanks]")
-		if(5 to INFINITY)
+		if (5 to INFINITY)
 			overlays += image(icon = icon, icon_state = "plasma-5")
 
 
 /obj/structure/dispenser/attack_robot(mob/user as mob)
-	if(isMoMMI(user))
+	if (isMoMMI(user))
 		return attack_hand(user)
 	return ..()
 
@@ -58,9 +58,9 @@
 
 
 /obj/structure/dispenser/attackby(obj/item/I as obj, mob/user as mob)
-	if(istype(I, /obj/item/weapon/tank/oxygen) || istype(I, /obj/item/weapon/tank/air) || istype(I, /obj/item/weapon/tank/anesthetic))
-		if(oxygentanks < 10)
-			if(user.drop_item(I, src))
+	if (istype(I, /obj/item/weapon/tank/oxygen) || istype(I, /obj/item/weapon/tank/air) || istype(I, /obj/item/weapon/tank/anesthetic))
+		if (oxygentanks < 10)
+			if (user.drop_item(I, src))
 				oxytanks.Add(I)
 				oxygentanks++
 				to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
@@ -68,9 +68,9 @@
 			to_chat(user, "<span class='notice'>[src] is full.</span>")
 		updateUsrDialog()
 		return
-	if(istype(I, /obj/item/weapon/tank/plasma))
-		if(plasmatanks < 10)
-			if(user.drop_item(I, src))
+	if (istype(I, /obj/item/weapon/tank/plasma))
+		if (plasmatanks < 10)
+			if (user.drop_item(I, src))
 				platanks.Add(I)
 				plasmatanks++
 				to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
@@ -78,8 +78,8 @@
 			to_chat(user, "<span class='notice'>[src] is full.</span>")
 		updateUsrDialog()
 		return
-	if(iswrench(I))
-		if(anchored)
+	if (iswrench(I))
+		if (anchored)
 			to_chat(user, "<span class='notice'>You lean down and unwrench [src].</span>")
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
 			anchored = 0
@@ -90,14 +90,14 @@
 		return
 
 /obj/structure/dispenser/Topic(href, href_list)
-	if(usr.stat || usr.restrained())
+	if (usr.stat || usr.restrained())
 		return
-	if(Adjacent(usr))
+	if (Adjacent(usr))
 		usr.set_machine(src)
-		if(href_list["oxygen"])
-			if(oxygentanks > 0)
+		if (href_list["oxygen"])
+			if (oxygentanks > 0)
 				var/obj/item/weapon/tank/oxygen/O
-				if(oxytanks.len == oxygentanks)
+				if (oxytanks.len == oxygentanks)
 					O = oxytanks[1]
 					oxytanks.Remove(O)
 				else
@@ -106,10 +106,10 @@
 				to_chat(usr, "<span class='notice'>You take [O] out of [src].</span>")
 				oxygentanks--
 				update_icon()
-		if(href_list["plasma"])
-			if(plasmatanks > 0)
+		if (href_list["plasma"])
+			if (plasmatanks > 0)
 				var/obj/item/weapon/tank/plasma/P
-				if(platanks.len == plasmatanks)
+				if (platanks.len == plasmatanks)
 					P = platanks[1]
 					platanks.Remove(P)
 				else

@@ -21,25 +21,25 @@
 	return ..()
 
 /obj/machinery/telepad_cargo/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iswrench(W))
+	if (iswrench(W))
 		anchored = 0
 		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
-		if(anchored)
+		if (anchored)
 			anchored = 0
 			to_chat(user, "<span class = 'caution'> The [src] can now be moved.</span>")
-		else if(!anchored)
+		else if (!anchored)
 			anchored = 1
 			to_chat(user, "<span class = 'caution'> The [src] is now secured.</span>")
-	if(isscrewdriver(W))
-		if(stage == 0)
+	if (isscrewdriver(W))
+		if (stage == 0)
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "<span class = 'caution'>You unscrew the telepad's tracking beacon.</span>")
 			stage = 1
-		else if(stage == 1)
+		else if (stage == 1)
 			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 			to_chat(user, "<span class = 'caution'>You screw in the telepad's tracking beacon.</span>")
 			stage = 0
-	if(istype(W, /obj/item/weapon/weldingtool) && stage == 1)
+	if (istype(W, /obj/item/weapon/weldingtool) && stage == 1)
 		playsound(src, 'sound/items/Welder.ogg', 50, 1)
 		to_chat(user, "<span class = 'caution'>You disassemble the telepad.</span>")
 		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
@@ -57,7 +57,7 @@
 	origin_tech = Tc_BLUESPACE + "=3"
 
 /obj/item/device/telepad_beacon/attack_self(mob/user as mob)
-	if(user)
+	if (user)
 		to_chat(user, "<span class = 'caution'> Locked In</span>")
 		new /obj/machinery/telepad_cargo(user.loc)
 		playsound(src, 'sound/effects/pop.ogg', 100, 1, 1)
@@ -100,17 +100,17 @@
 	..()
 
 /obj/item/weapon/rcs/attack_self(mob/user)
-	if(emagged)
+	if (emagged)
 		mode = !mode
 		playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
-		if(mode == MODE_NORMAL)
+		if (mode == MODE_NORMAL)
 			to_chat(user, "<span class = 'caution'>You calibrate the telepad locator.</span>")
 		else
 			to_chat(user, "<span class = 'caution'> The telepad locator has become uncalibrated.</span>")
 
 
 /obj/item/weapon/rcs/attackby(var/obj/item/W, var/mob/user)
-	if(isEmag(W) && !emagged)
+	if (isEmag(W) && !emagged)
 		emagged = 1
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(5, 1, src)

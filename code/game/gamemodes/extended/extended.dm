@@ -20,6 +20,6 @@
 
 /datum/game_mode/extended/post_setup()
 	spawn (rand(waittime_l, waittime_h)) // To reduce extended meta.
-		if(!mixed)
+		if (!mixed)
 			send_intercept()
 	..()

@@ -12,7 +12,7 @@
 	minimal_player_age = 30
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)
+		if (!H)
 			return 0
 		return 1
 
@@ -29,7 +29,7 @@
 	no_id = 1
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)
+		if (!H)
 			return 0
 		return 1
 
@@ -46,6 +46,6 @@
 	no_id = 1
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)
+		if (!H)
 			return 0
 		return 1

@@ -64,14 +64,14 @@
 
 /obj/item/weapon/extinguisher/examine(mob/user)
 	..()
-	if(!is_open_container())
+	if (!is_open_container())
 		to_chat(user, "It contains:")
-		if(reagents && reagents.reagent_list.len)
-			for(var/datum/reagent/R in reagents.reagent_list)
+		if (reagents && reagents.reagent_list.len)
+			for (var/datum/reagent/R in reagents.reagent_list)
 				to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
 		else
 			to_chat(user, "<span class='info'>Nothing</span>")
-	for(var/thing in src)
+	for (var/thing in src)
 		to_chat(user, "<span class='warning'>\A [thing] is jammed into the nozzle!</span>")
 
 /obj/item/weapon/extinguisher/attack_self(mob/user as mob)
@@ -82,51 +82,51 @@
 	return
 
 /obj/item/weapon/extinguisher/attackby(obj/item/W, mob/user)
-	if(user.stat || user.restrained() || user.lying)
+	if (user.stat || user.restrained() || user.lying)
 		return
 	if (iswrench(W))
-		if(!is_open_container())
+		if (!is_open_container())
 			user.visible_message("[user] begins to unwrench the fill cap on \the [src].","<span class='notice'>You begin to unwrench the fill cap on \the [src].</span>")
-			if(do_after(user, src, 25))
+			if (do_after(user, src, 25))
 				user.visible_message("[user] removes the fill cap on \the [src].","<span class='notice'>You remove the fill cap on \the [src].</span>")
 				playsound(get_turf(src),'sound/items/Ratchet.ogg', 100, 1)
 				flags |= OPENCONTAINER
 		else
 			user.visible_message("[user] begins to seal the fill cap on \the [src].","<span class='notice'>You begin to seal the fill cap on \the [src].</span>")
-			if(do_after(user, src, 25))
+			if (do_after(user, src, 25))
 				user.visible_message("[user] fastens the fill cap on \the [src].","<span class='notice'>You fasten the fill cap on \the [src].</span>")
 				playsound(get_turf(src),'sound/items/Ratchet.ogg', 100, 1)
 				flags &= ~OPENCONTAINER
 		return
 
 	if (istype(W, /obj/item) && !is_open_container() && !istype(src, /obj/item/weapon/extinguisher/foam) && !istype(W, /obj/item/weapon/evidencebag))
-		if(W.is_open_container())
+		if (W.is_open_container())
 			return //We're probably trying to fill it
-		if(W.w_class > W_CLASS_TINY)
+		if (W.w_class > W_CLASS_TINY)
 			to_chat(user, "\The [W] won't fit into the nozzle!")
 			return
-		if(locate(/obj) in src)
+		if (locate(/obj) in src)
 			to_chat(user, "There's already something crammed into the nozzle.")
 			return
-		if(isrobot(user) && !isMoMMI(user)) // MoMMI's can but borgs can't
+		if (isrobot(user) && !isMoMMI(user)) // MoMMI's can but borgs can't
 			to_chat(user, "You're a robot. No.")
 			return
-		if(user.drop_item(W, src))
+		if (user.drop_item(W, src))
 			to_chat(user, "You cram \the [W] into the nozzle of \the [src].")
 			message_admins("[user]/[user.ckey] has crammed \a [W] into a [src].")
 
 /obj/item/weapon/extinguisher/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
-	if(proximity_flag)
-		if((istype(target, /obj/structure/reagent_dispensers)))
+	if (proximity_flag)
+		if ((istype(target, /obj/structure/reagent_dispensers)))
 			target.reagents.trans_to(src, 50, log_transfer = TRUE, whodunnit = user)
 			to_chat(user, "<span class='notice'>\The [src] is now refilled</span>")
 			playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
 			return
 
-		if(is_open_container() && reagents.total_volume)
+		if (is_open_container() && reagents.total_volume)
 			to_chat(user, "<span class='notice'>You empty \the [src] onto [target].</span>")
 			user.investigation_log(I_CHEMS, "has splashed [reagents.get_reagent_ids(1)] from \a [src] \ref[src] onto \the [target].")
-			if(reagents.has_reagent(FUEL))
+			if (reagents.has_reagent(FUEL))
 				message_admins("[user.name] ([user.ckey]) poured Welder Fuel onto [target]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 				log_game("[user.name] ([user.ckey]) poured Welder Fuel onto [target]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 			src.reagents.reaction(target, TOUCH)
@@ -145,7 +145,7 @@
 			return
 		user.delayNextAttack(5, 1)
 		var/badshit = reagents.write_logged_reagents()
-		if(badshit)
+		if (badshit)
 			message_admins("[user.name] ([user.ckey]) used \a [src] that contained (<span class='warning'>[badshit]</span>). (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 			log_game("[user.name] ([user.ckey]) used \a [src] that contained [badshit] at [user.x], [user.y], [user.z]")
 
@@ -155,7 +155,7 @@
 
 		var/direction = get_dir(src,target)
 
-		if(user.locked_to && isobj(user.locked_to) && !user.locked_to.anchored )
+		if (user.locked_to && isobj(user.locked_to) && !user.locked_to.anchored )
 			spawn()
 				var/obj/B = user.locked_to
 				var/movementdirection = turn(direction,180)
@@ -177,7 +177,7 @@
 				sleep(3)
 				B.Move(get_step(user,movementdirection), movementdirection)
 
-		for(var/obj/thing in src)
+		for (var/obj/thing in src)
 			thing.forceMove(get_turf(src))
 			thing.throw_at(target,10,thing.throw_speed*3)
 			user.visible_message(
@@ -191,45 +191,45 @@
 
 		var/list/the_targets = list(T,T1,T2)
 
-		for(var/a=0, a<5, a++)
+		for (var/a=0, a<5, a++)
 			spawn(0)
 				var/datum/reagents/R = new/datum/reagents(5)
 				R.my_atom = src
 				reagents.trans_to_holder(R,1)
 				var/obj/effect/effect/water/spray/W = new /obj/effect/effect/water/spray/( get_turf(src))
 				var/ccolor = mix_color_from_reagents(R.reagent_list)
-				if(ccolor)
+				if (ccolor)
 					W.color = ccolor
 				var/turf/my_target = pick(the_targets)
-				if(!W)
+				if (!W)
 					return
 				W.reagents = R
 				R.my_atom = W
-				if(!W || !src)
+				if (!W || !src)
 					return
-				for(var/b=0, b<5, b++)
+				for (var/b=0, b<5, b++)
 					step_towards(W,my_target)
-					if(!W || !W.reagents)
+					if (!W || !W.reagents)
 						return
 					W.reagents.reaction(get_turf(W), TOUCH)
-					for(var/atom/atm in get_turf(W))
-						if(!W)
+					for (var/atom/atm in get_turf(W))
+						if (!W)
 							return
 						W.reagents.reaction(atm, TOUCH)                      // Touch, since we sprayed it.
-						if(W.reagents.has_reagent(WATER))
-							if(istype(atm,/obj/machinery/space_heater/campfire))
+						if (W.reagents.has_reagent(WATER))
+							if (istype(atm,/obj/machinery/space_heater/campfire))
 								var/obj/machinery/space_heater/campfire/campfire = atm
 								campfire.cell.charge = 0
 								campfire.process()
-							if(isliving(atm)) // For extinguishing mobs on fire
+							if (isliving(atm)) // For extinguishing mobs on fire
 								var/mob/living/M = atm                           // Why isn't this handled by the reagent? - N3X
 								M.ExtinguishMob()
-							if(atm.on_fire) // For extinguishing objects on fire
+							if (atm.on_fire) // For extinguishing objects on fire
 								atm.extinguish()
-							if(atm.molten) // Molten shit.
+							if (atm.molten) // Molten shit.
 								atm.molten=0
 								atm.solidify()
-					if(W.loc == my_target)
+					if (W.loc == my_target)
 						break
 					sleep(2)
 
@@ -242,8 +242,8 @@
 
 
 /obj/item/weapon/extinguisher/foam/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
-	if(proximity_flag)
-		if((istype(target, /obj/structure/reagent_dispensers/watertank)))
+	if (proximity_flag)
+		if ((istype(target, /obj/structure/reagent_dispensers/watertank)))
 			var/obj/o = target
 			o.reagents.trans_to(src, 50)
 			to_chat(user, "<span class='notice'>\The [src] is now refilled</span>")
@@ -268,7 +268,7 @@
 
 		var/direction = get_dir(src,target)
 
-		if(usr.locked_to && isobj(usr.locked_to) && !usr.locked_to.anchored )
+		if (usr.locked_to && isobj(usr.locked_to) && !usr.locked_to.anchored )
 			spawn(0)
 				var/obj/B = usr.locked_to
 				var/movementdirection = turn(direction,180)
@@ -296,39 +296,39 @@
 
 		var/list/the_targets = list(T,T1,T2)
 
-		for(var/a=0, a<5, a++)
+		for (var/a=0, a<5, a++)
 			spawn(0)
 				var/datum/reagents/R = new/datum/reagents(5)
 				R.my_atom = src
 				reagents.trans_to_holder(R,1)
 				var/obj/effect/effect/foam/fire/W = new /obj/effect/effect/foam/fire( get_turf(src) , R)
 				var/turf/my_target = pick(the_targets)
-				if(!W || !src)
+				if (!W || !src)
 					return
-				for(var/b=0, b<5, b++)
+				for (var/b=0, b<5, b++)
 					var/turf/oldturf = get_turf(W)
 					step_towards(W,my_target)
-					if(!W || !W.reagents)
+					if (!W || !W.reagents)
 						return
 					W.reagents.reaction(get_turf(W), TOUCH)
-					for(var/atom/atm in get_turf(W))
-						if(!W)
+					for (var/atom/atm in get_turf(W))
+						if (!W)
 							return
 						W.reagents.reaction(atm, TOUCH)                      // Touch, since we sprayed it.
-						if(W.reagents.has_reagent(WATER))
-							if(isliving(atm)) // For extinguishing mobs on fire
+						if (W.reagents.has_reagent(WATER))
+							if (isliving(atm)) // For extinguishing mobs on fire
 								var/mob/living/M = atm                           // Why isn't this handled by the reagent? - N3X
 								M.ExtinguishMob()
-							if(atm.on_fire) // For extinguishing objects on fire
+							if (atm.on_fire) // For extinguishing objects on fire
 								atm.extinguish()
-							if(atm.molten) // Molten shit.
+							if (atm.molten) // Molten shit.
 								atm.molten=0
 								atm.solidify()
 
 					var/obj/effect/effect/foam/fire/F = locate() in oldturf
-					if(!istype(F) && oldturf != get_turf(src))
+					if (!istype(F) && oldturf != get_turf(src))
 						F = new /obj/effect/effect/foam/fire( get_turf(oldturf) , W.reagents)
-					if(W.loc == my_target)
+					if (W.loc == my_target)
 						break
 					sleep(2)
 

@@ -1,5 +1,5 @@
 /mob/living/silicon/hivebot/emote(var/act)
-	if(timestopped)
+	if (timestopped)
 		return //under effects of time magick
 	var/param = null
 	if (findtext(act, "-", 1, null))
@@ -9,7 +9,7 @@
 	var/m_type = 1
 	var/message
 
-	switch(act)
+	switch (act)
 		if ("salute")
 			if (!src.buckled)
 				var/M = null
@@ -134,9 +134,9 @@
 //			to_chat(custom_emote(VISIBLE, act)src, text("Invalid Emote: []", act))
 	if ((message && src.stat == 0))
 		if (m_type & 1)
-			for(var/mob/O in viewers(src, null))
+			for (var/mob/O in viewers(src, null))
 				O.show_message(message, m_type)
 		else
-			for(var/mob/O in hearers(src, null))
+			for (var/mob/O in hearers(src, null))
 				O.show_message(message, m_type)
 	return

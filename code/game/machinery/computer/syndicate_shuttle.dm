@@ -20,18 +20,18 @@
 	icon_state = "syndishuttle"
 
 /obj/machinery/computer/syndicate_station/proc/syndicate_move_to(area/destination as area)
-	if(moving)
+	if (moving)
 		return
-	if(lastMove + SYNDICATE_SHUTTLE_COOLDOWN > world.time)
+	if (lastMove + SYNDICATE_SHUTTLE_COOLDOWN > world.time)
 		return
 	var/area/dest_location = locate(destination)
-	if(curr_location == dest_location)
+	if (curr_location == dest_location)
 		return
 
 	moving = 1
 	lastMove = world.time
 
-	if(curr_location.z != dest_location.z)
+	if (curr_location.z != dest_location.z)
 		var/area/transit_location = locate(/area/syndicate_station/transit)
 		curr_location.move_contents_to(transit_location)
 		curr_location = transit_location
@@ -44,7 +44,7 @@
 
 
 /obj/machinery/computer/syndicate_station/attackby(obj/item/I as obj, mob/user as mob)
-	if(!..())
+	if (!..())
 		return attack_hand(user)
 
 /obj/machinery/computer/syndicate_station/attack_ai(mob/user as mob)
@@ -55,7 +55,7 @@
 	return attack_hand(user)
 
 /obj/machinery/computer/syndicate_station/attack_hand(mob/user as mob)
-	if(!allowed(user))
+	if (!allowed(user))
 		to_chat(user, "<span class='warning'>Access Denied.</span>")
 		return
 
@@ -82,29 +82,29 @@
 	return
 
 /obj/machinery/computer/syndicate_station/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 	var/mob/user = usr
 
 	user.set_machine(src)
 
-	if(href_list["syndicate"])
+	if (href_list["syndicate"])
 		syndicate_move_to(/area/syndicate_station/start)
-	else if(href_list["station_nw"])
+	else if (href_list["station_nw"])
 		syndicate_move_to(/area/syndicate_station/northwest)
-	else if(href_list["station_n"])
+	else if (href_list["station_n"])
 		syndicate_move_to(/area/syndicate_station/north)
-	else if(href_list["station_ne"])
+	else if (href_list["station_ne"])
 		syndicate_move_to(/area/syndicate_station/northeast)
-	else if(href_list["station_sw"])
+	else if (href_list["station_sw"])
 		syndicate_move_to(/area/syndicate_station/southwest)
-	else if(href_list["station_s"])
+	else if (href_list["station_s"])
 		syndicate_move_to(/area/syndicate_station/south)
-	else if(href_list["station_se"])
+	else if (href_list["station_se"])
 		syndicate_move_to(/area/syndicate_station/southeast)
-	else if(href_list["commssat"])
+	else if (href_list["commssat"])
 		syndicate_move_to(/area/syndicate_station/commssat)
-	else if(href_list["mining"])
+	else if (href_list["mining"])
 		syndicate_move_to(/area/syndicate_station/mining)
 
 	add_fingerprint(usr)

@@ -12,8 +12,8 @@
 	var/heat = 0
 /*
 /obj/machinery/power/port_gen/pacman2/process()
-	if(P)
-		if(P.air_contents.toxins <= 0)
+	if (P)
+		if (P.air_contents.toxins <= 0)
 			P.air_contents.toxins = 0
 			eject()
 		else
@@ -22,7 +22,7 @@
 */
 
 /obj/machinery/power/port_gen/pacman2/HasFuel()
-	if(P.air_contents.toxins >= 0.1)
+	if (P.air_contents.toxins >= 0.1)
 		return 1
 	return 0
 
@@ -44,19 +44,19 @@
 /obj/machinery/power/port_gen/pacman2/RefreshParts()
 	var/temp_rating = 0
 	var/temp_reliability = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/matter_bin))
+	for (var/obj/item/weapon/stock_parts/SP in component_parts)
+		if (istype(SP, /obj/item/weapon/stock_parts/matter_bin))
 			//max_coins = SP.rating * SP.rating * 1000
-		else if(istype(SP, /obj/item/weapon/stock_parts/micro_laser) || istype(SP, /obj/item/weapon/stock_parts/capacitor))
+		else if (istype(SP, /obj/item/weapon/stock_parts/micro_laser) || istype(SP, /obj/item/weapon/stock_parts/capacitor))
 			temp_rating += SP.rating
-	for(var/obj/item/weapon/CP in component_parts)
+	for (var/obj/item/weapon/CP in component_parts)
 		temp_reliability += CP.reliability
 	reliability = min(round(temp_reliability / 4), 100)
 	power_gen = round(initial(power_gen) * (max(2, temp_rating) / 2))
 
 /obj/machinery/power/port_gen/pacman2/examine(mob/user)
 	..()
-	if(crit_fail)
+	if (crit_fail)
 		to_chat(user, "<span class='warning'>The generator seems to have broken down.</span>")
 	else
 		to_chat(user, "<span class='info'>The generator has [P.air_contents.toxins] units of fuel left, producing [power_gen] per cycle.</span>")
@@ -66,7 +66,7 @@
 	if (heat < 0)
 		heat = 0
 	else
-		for(var/mob/M in viewers(1, src))
+		for (var/mob/M in viewers(1, src))
 			if (M.client && M.machine == src)
 				src.updateUsrDialog()
 
@@ -74,8 +74,8 @@
 	explosion(get_turf(src), 2, 5, 2, -1)
 
 /obj/machinery/power/port_gen/pacman2/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/tank/plasma))
-		if(P)
+	if (istype(O, /obj/item/weapon/tank/plasma))
+		if (P)
 			to_chat(user, "<span class='warning'>The generator already has a plasma tank loaded!</span>")
 			return
 		P = O
@@ -84,32 +84,32 @@
 		to_chat(user, "<span class='notice'>You add the plasma tank to the generator.</span>")
 	else if (istype(O, /obj/item/weapon/card/emag))
 		var/obj/item/weapon/card/emag/E = O
-		if(E.uses)
+		if (E.uses)
 			E.uses--
 		else
 			return
 		emagged = 1
 		emp_act(1)
-	else if(!active)
-		if(istype(O, /obj/item/weapon/wrench))
+	else if (!active)
+		if (istype(O, /obj/item/weapon/wrench))
 			anchored = !anchored
 			playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
-			if(anchored)
+			if (anchored)
 				to_chat(user, "<span class='notice'>You secure the generator to the floor.</span>")
 			else
 				to_chat(user, "<span class='notice'>You unsecure the generator from the floor.</span>")
 			makepowernets()
-		else if(istype(O, /obj/item/weapon/screwdriver))
+		else if (istype(O, /obj/item/weapon/screwdriver))
 			open = !open
 			playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
-			if(open)
+			if (open)
 				to_chat(user, "<span class='notice'>You open the access panel.</span>")
 			else
 				to_chat(user, "<span class='notice'>You close the access panel.</span>")
-		else if(istype(O, /obj/item/weapon/crowbar) && !open)
+		else if (istype(O, /obj/item/weapon/crowbar) && !open)
 			var/obj/machinery/constructable_frame/machine_frame/new_frame = new /obj/machinery/constructable_frame/machine_frame(src.loc)
-			for(var/obj/item/I in component_parts)
-				if(I.reliability < 100)
+			for (var/obj/item/I in component_parts)
+				if (I.reliability < 100)
 					I.crit_fail = 1
 				I.forceMove(src.loc)
 			new_frame.state = 1
@@ -144,7 +144,7 @@
 		dat += text("Generator: <A href='?src=\ref[src];action=disable'>On</A><br>")
 	else
 		dat += text("Generator: <A href='?src=\ref[src];action=enable'>Off</A><br>")
-	if(P)
+	if (P)
 		dat += text("Currently loaded plasma tank: [P.air_contents.toxins]<br>")
 	else
 		dat += text("No plasma tank currently loaded.<br>")
@@ -154,22 +154,22 @@
 	user << browse("[dat]", "window=port_gen")
 
 /obj/machinery/power/port_gen/pacman2/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 
 	src.add_fingerprint(usr)
-	if(href_list["action"])
-		if(href_list["action"] == "enable")
-			if(!active && HasFuel() && !crit_fail)
+	if (href_list["action"])
+		if (href_list["action"] == "enable")
+			if (!active && HasFuel() && !crit_fail)
 				active = 1
 				icon_state = "portgen1"
 				src.updateUsrDialog()
-		if(href_list["action"] == "disable")
+		if (href_list["action"] == "disable")
 			if (active)
 				active = 0
 				icon_state = "portgen0"
 				src.updateUsrDialog()
-		if(href_list["action"] == "lower_power")
+		if (href_list["action"] == "lower_power")
 			if (power_output > 1)
 				power_output--
 				src.updateUsrDialog()

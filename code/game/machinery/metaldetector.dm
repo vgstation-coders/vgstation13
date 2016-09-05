@@ -37,65 +37,65 @@
 //THIS CODE IS COPYPASTED IN ed209bot.dm AND secbot.dm, with slight variations
 /obj/machinery/detector/proc/assess_perp(mob/living/carbon/human/perp as mob)
 	var/threatcount = 0 //If threat >= 4 at the end, they get arrested
-	if(!(istype(perp, /mob/living/carbon)) || isalien(perp) || isbrain(perp))
+	if (!(istype(perp, /mob/living/carbon)) || isalien(perp) || isbrain(perp))
 		return -1
 
-	if(!src.allowed(perp)) //cops can do no wrong, unless set to arrest
+	if (!src.allowed(perp)) //cops can do no wrong, unless set to arrest
 
-		if(!wpermit(perp))
-			for(var/obj/item/I in perp.held_items)
-				if(check_for_weapons(I))
+		if (!wpermit(perp))
+			for (var/obj/item/I in perp.held_items)
+				if (check_for_weapons(I))
 					threatcount += 4
 
-			for(var/obj/item/I in list(perp.back, perp.belt, perp.s_store) + (scanmode ? list(perp.l_store, perp.r_store) : null))
-				if(check_for_weapons(I))
+			for (var/obj/item/I in list(perp.back, perp.belt, perp.s_store) + (scanmode ? list(perp.l_store, perp.r_store) : null))
+				if (check_for_weapons(I))
 					threatcount += 2
 
 				if (perp.back && istype(perp.back, /obj/item/weapon/storage/backpack))
 					var/obj/item/weapon/storage/backpack/B = perp.back
-					for(var/obj/item/weapon/thing in B.contents)
-						if(check_for_weapons(I))
+					for (var/obj/item/weapon/thing in B.contents)
+						if (check_for_weapons(I))
 							threatcount += 2
 
-		if(idmode)
-			if(!perp.wear_id)
+		if (idmode)
+			if (!perp.wear_id)
 				threatcount += 4
 
 		else
-			if(!perp.wear_id)
+			if (!perp.wear_id)
 				threatcount += 2
 
-		if(ishuman(perp))
-			if(istype(perp.wear_suit, /obj/item/clothing/suit/wizrobe))
+		if (ishuman(perp))
+			if (istype(perp.wear_suit, /obj/item/clothing/suit/wizrobe))
 				threatcount += 2
 
-		if(perp.dna && perp.dna.mutantrace && perp.dna.mutantrace != "none")
+		if (perp.dna && perp.dna.mutantrace && perp.dna.mutantrace != "none")
 			threatcount += 2
 
 		//Agent cards lower threatlevel.
-		if(perp.wear_id && istype(perp.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
+		if (perp.wear_id && istype(perp.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
 			threatcount -= 2
 
 	var/passperpname = ""
 	for (var/datum/data/record/E in data_core.general)
 		var/perpname = perp.name
 
-		if(perp.wear_id)
+		if (perp.wear_id)
 			var/obj/item/weapon/card/id/id = perp.wear_id.GetID()
 
-			if(id)
+			if (id)
 				perpname = id.registered_name
 		else
 			perpname = "Unknown"
 		passperpname = perpname
-		if(E.fields["name"] == perpname)
+		if (E.fields["name"] == perpname)
 			for (var/datum/data/record/R in data_core.security)
-				if((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*Arrest*"))
+				if ((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*Arrest*"))
 					threatcount = 4
 					break
 
 	var/list/retlist = list(threatcount, passperpname)
-	if(emagged)
+	if (emagged)
 		retlist[1] = 10
 	return retlist
 
@@ -112,7 +112,7 @@
 //		icon_state = "[base_state]1"
 
 /obj/machinery/detector/attackby(obj/item/W, mob/user)
-	if(..(W, user) == 1)
+	if (..(W, user) == 1)
 		return 1 // resolved for click code!
 
 	/*if (iswirecutter(W))
@@ -125,18 +125,18 @@
 	*/
 
 /obj/machinery/detector/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
 
-	if(usr)
+	if (usr)
 		usr.set_machine(src)
 
-	switch(href_list["action"])
-		if("idmode")
+	switch (href_list["action"])
+		if ("idmode")
 			idmode = !idmode
-		if("scanmode")
+		if ("scanmode")
 			scanmode = !scanmode
-		if("senmode")
+		if ("senmode")
 			senset = !senset
 		else
 			return
@@ -148,12 +148,12 @@
 
 /obj/machinery/detector/attack_hand(mob/user as mob)
 
-	if(src.allowed(user))
+	if (src.allowed(user))
 
 
 		user.set_machine(src)
 
-		if(!src.anchored)
+		if (!src.anchored)
 			return
 
 		var/dat = {"
@@ -187,12 +187,12 @@
 	var/maxthreat = 0
 	var/sndstr = ""
 	for (var/mob/O in viewers(src, null))
-		if(isobserver(O))
+		if (isobserver(O))
 			continue
 		if (get_dist(src, O) > src.range)
 			continue
 		var/list/ourretlist = src.assess_perp(O)
-		if(!istype(ourretlist) || !ourretlist.len)
+		if (!istype(ourretlist) || !ourretlist.len)
 			return
 		var/dudesthreat = ourretlist[1]
 		var/dudesname = ourretlist[2]
@@ -201,7 +201,7 @@
 
 		if (dudesthreat >= 4)
 
-			if(maxthreat < 2)
+			if (maxthreat < 2)
 				sndstr = "sound/machines/alert.ogg"
 				maxthreat = 2
 
@@ -212,9 +212,9 @@
 			src.visible_message("<span class = 'warning'>Threat Detected! Subject: [dudesname]</span>")////
 
 
-		else if(dudesthreat <= 3 && dudesthreat != 0 && senset)
+		else if (dudesthreat <= 3 && dudesthreat != 0 && senset)
 
-			if(maxthreat < 1)
+			if (maxthreat < 1)
 				sndstr = "sound/machines/domore.ogg"
 				maxthreat = 1
 
@@ -226,7 +226,7 @@
 
 		else
 
-			if(maxthreat == 0)
+			if (maxthreat == 0)
 				sndstr = "sound/machines/info.ogg"
 
 
@@ -241,17 +241,17 @@
 
 
 /obj/machinery/detector/proc/check_for_weapons(var/obj/item/slot_item) //Unused anywhere, copypasted in secbot.dm
-	if(istype(slot_item, /obj/item/weapon/gun) || istype(slot_item, /obj/item/weapon/melee))
-		if(!(slot_item.type in safe_weapons))
+	if (istype(slot_item, /obj/item/weapon/gun) || istype(slot_item, /obj/item/weapon/melee))
+		if (!(slot_item.type in safe_weapons))
 			return 1
 	return 0
 
 
 /obj/machinery/detector/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		..(severity)
 		return
-	if(prob(75/severity))
+	if (prob(75/severity))
 		flash()
 	..(severity)
 
@@ -259,15 +259,15 @@
 	if ((src.disable) || (src.last_read && world.time < src.last_read + 30))
 		return
 
-	if(istype(AM, /mob/living/carbon))
+	if (istype(AM, /mob/living/carbon))
 
 		if ((src.anchored))
 			src.flash()
 
 /obj/machinery/detector/wrenchAnchor(mob/user)
-	if(..() == 1)
+	if (..() == 1)
 		overlays.len = 0
-		if(anchored)
+		if (anchored)
 			src.overlays += image(icon = icon, icon_state = "[base_state]-s")
 
 

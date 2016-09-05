@@ -35,49 +35,49 @@
 
 	//set the angle from icon_state and dir
 	proc/set_angle()
-		switch(dir)
-			if(1)
+		switch (dir)
+			if (1)
 				angle = 0
-			if(5)
+			if (5)
 				angle = 2
-			if(4)
+			if (4)
 				angle = 4
-			if(6)
+			if (6)
 				angle = 6
-			if(2)
+			if (2)
 				angle = 8
-			if(10)
+			if (10)
 				angle = 10
-			if(8)
+			if (8)
 				angle = 12
-			if(9)
+			if (9)
 				angle = 14
 
-		if(icon_state == "mirrorB")	// 22.5deg turned states
+		if (icon_state == "mirrorB")	// 22.5deg turned states
 			angle++
 		return
 
 	// set the dir and icon_state from the angle
 	proc/set_dir()
-		if(angle%2 == 1)
+		if (angle%2 == 1)
 			icon_state = "mirrorB"
 		else
 			icon_state = "mirrorA"
-		switch(round(angle/2)*2)
-			if(0)
+		switch (round(angle/2)*2)
+			if (0)
 				dir = 1
-			if(2)
+			if (2)
 				dir = 5
-			if(4)
+			if (4)
 				dir = 4
-			if(6)
+			if (6)
 				dir = 6
-			if(8)
+			if (8)
 				dir = 2
-			if(10)
+			if (10)
 				dir = 10
-			if(12)
+			if (12)
 				dir = 8
-			if(14)
+			if (14)
 				dir = 9
 		return

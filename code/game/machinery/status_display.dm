@@ -56,7 +56,7 @@ var/global/list/status_displays = list() //This list contains both normal status
 	..()
 	status_displays |= src
 	spawn(5)	// must wait for map loading to finish
-		if(radio_controller)
+		if (radio_controller)
 			radio_controller.add_object(src, frequency)
 
 /obj/machinery/status_display/Destroy()
@@ -65,27 +65,27 @@ var/global/list/status_displays = list() //This list contains both normal status
 
 // timed process
 /obj/machinery/status_display/process()
-	if(stat & NOPOWER)
+	if (stat & NOPOWER)
 		remove_display()
 		return
-	if(spookymode)
+	if (spookymode)
 		spookymode = 0
 		remove_display()
 		return
 	update()
 
 /obj/machinery/status_display/attack_ai(mob/user)
-	if(spookymode)
+	if (spookymode)
 		return
-	if(user.stat)
+	if (user.stat)
 		return
 
-	if(isAI(user)) //This allows AIs to load any image into the status displays
+	if (isAI(user)) //This allows AIs to load any image into the status displays
 		//Some fluff
-		if(user.stat)
+		if (user.stat)
 			to_chat(user, "<span class='warning'>Unable to connect to [src] (error #408)</span>")
 			return
-		if(stat & (BROKEN|NOPOWER))
+		if (stat & (BROKEN|NOPOWER))
 			to_chat(user, "<span class='warning'>Unable to connect to [src] (error #[(stat & BROKEN) ? "120" : "408"])</span>")
 			return
 
@@ -93,28 +93,28 @@ var/global/list/status_displays = list() //This list contains both normal status
 
 		var/choice = input(A, "Select a mode for [src].", "Status display") in list("Blank", "Emergency shuttle timer", "Text message", "Picture", "Supply shuttle timer")
 
-		switch(choice)
-			if("Blank")
+		switch (choice)
+			if ("Blank")
 				mode = MODE_BLANK
-			if("Emergency shuttle timer")
+			if ("Emergency shuttle timer")
 				mode = MODE_SHUTTLE_TIMER
-			if("Text message")
+			if ("Text message")
 				var/msg1 = input(A, "Write the first line: ", "Status display", message1) //First line
 				var/msg2 = input(A, "Write the second line: ", "Status display", message2) //Second line
 				mode = MODE_MESSAGE
 
 				set_message(msg1, msg2)
-			if("Picture")
+			if ("Picture")
 				var/new_icon = input(A, "Load an image to be desplayed on [src].", "Status display") in status_display_images
 
-				if(new_icon)
+				if (new_icon)
 					src.mode = MODE_IMAGE
 					src.set_picture(status_display_images[new_icon])
-			if("Supply shuttle timer")
+			if ("Supply shuttle timer")
 				mode = MODE_CARGO_TIMER
 
 /obj/machinery/status_display/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		..(severity)
 		return
 	set_picture("ai_bsod")
@@ -123,59 +123,59 @@ var/global/list/status_displays = list() //This list contains both normal status
 	// set what is displayed
 
 /obj/machinery/status_display/proc/update()
-	if(friendc && mode!=4) //Makes all status displays except supply shuttle timer display the eye -- Urist
+	if (friendc && mode!=4) //Makes all status displays except supply shuttle timer display the eye -- Urist
 		set_picture("ai_friend")
 		return
 
-	switch(mode)
-		if(MODE_BLANK)				//blank
+	switch (mode)
+		if (MODE_BLANK)				//blank
 			remove_display()
-		if(MODE_SHUTTLE_TIMER)				//emergency shuttle timer
-			if(emergency_shuttle.online)
+		if (MODE_SHUTTLE_TIMER)				//emergency shuttle timer
+			if (emergency_shuttle.online)
 				var/line1
 				var/line2 = get_shuttle_timer()
-				if(emergency_shuttle.location == 1)
+				if (emergency_shuttle.location == 1)
 					line1 = "-ETD-"
 				else
 					line1 = "-ETA-"
-				if(length(line2) > CHARS_PER_LINE)
+				if (length(line2) > CHARS_PER_LINE)
 					line2 = "Error!"
 				update_display(line1, line2)
 			else
 				remove_display()
-		if(MODE_MESSAGE)				//custom messages
+		if (MODE_MESSAGE)				//custom messages
 			remove_display()
 
 			var/line1
 			var/line2
 
-			if(!index1)
+			if (!index1)
 				line1 = message1
 			else
 				line1 = copytext(message1+"|"+message1, index1, index1+CHARS_PER_LINE)
 				var/message1_len = length(message1)
 				index1 += SCROLL_SPEED
-				if(index1 > message1_len)
+				if (index1 > message1_len)
 					index1 -= message1_len
 
-			if(!index2)
+			if (!index2)
 				line2 = message2
 			else
 				line2 = copytext(message2+"|"+message2, index2, index2+CHARS_PER_LINE)
 				var/message2_len = length(message2)
 				index2 += SCROLL_SPEED
-				if(index2 > message2_len)
+				if (index2 > message2_len)
 					index2 -= message2_len
 			update_display(line1, line2)
-		if(MODE_CARGO_TIMER)				// supply shuttle timer
+		if (MODE_CARGO_TIMER)				// supply shuttle timer
 			var/line1 = "SUPPLY"
 			var/line2
-			if(supply_shuttle.moving)
+			if (supply_shuttle.moving)
 				line2 = get_supply_shuttle_timer()
-				if(length(line2) > CHARS_PER_LINE)
+				if (length(line2) > CHARS_PER_LINE)
 					line2 = "Error"
 			else
-				if(supply_shuttle.at_station)
+				if (supply_shuttle.at_station)
 					line2 = "Docked"
 				else
 					line1 = ""
@@ -183,29 +183,29 @@ var/global/list/status_displays = list() //This list contains both normal status
 
 /obj/machinery/status_display/examine(mob/user)
 	. = ..()
-	switch(mode)
-		if(MODE_CARGO_TIMER)
+	switch (mode)
+		if (MODE_CARGO_TIMER)
 			to_chat(user, "<span class='info'>The display reads:<br>\t<xmp>-ETA-</xmp><br>\t<xmp>[get_supply_shuttle_timer()]</xmp></span>")
-		if(MODE_SHUTTLE_TIMER)
+		if (MODE_SHUTTLE_TIMER)
 			var/ETwut
-			if(emergency_shuttle.location == 1)
+			if (emergency_shuttle.location == 1)
 				ETwut = "-ETD-"
 			else
 				ETwut = "-ETA-"
 			to_chat(user, "<span class='info'>The display says:<br>\t<xmp>[ETwut]</xmp><br>\t<xmp>[get_shuttle_timer()]</xmp></span>")
-		if(MODE_MESSAGE)
+		if (MODE_MESSAGE)
 			to_chat(user, "<span class='info'>The display says:<br>\t<xmp>[message1]</xmp><br>\t<xmp>[message2]</xmp></span>")
 
 
 /obj/machinery/status_display/proc/set_message(m1, m2)
-	if(m1)
+	if (m1)
 		index1 = (length(m1) > CHARS_PER_LINE)
 		message1 = m1
 	else
 		message1 = ""
 		index1 = 0
 
-	if(m2)
+	if (m2)
 		index2 = (length(m2) > CHARS_PER_LINE)
 		message2 = m2
 	else
@@ -219,51 +219,51 @@ var/global/list/status_displays = list() //This list contains both normal status
 
 /obj/machinery/status_display/proc/update_display(line1, line2)
 	var/new_text = {"<div style="font-size:[FONT_SIZE];color:[FONT_COLOR];font:'[FONT_STYLE]';text-align:center;" valign="top">[line1]<br>[line2]</div>"}
-	if(maptext != new_text)
+	if (maptext != new_text)
 		maptext = new_text
 
 /obj/machinery/status_display/proc/get_shuttle_timer()
 	var/timeleft = emergency_shuttle.timeleft()
-	if(timeleft)
+	if (timeleft)
 		return "[add_zero(num2text((timeleft / 60) % 60),2)]:[add_zero(num2text(timeleft % 60), 2)]"
 	return ""
 
 /obj/machinery/status_display/proc/get_supply_shuttle_timer()
-	if(supply_shuttle.moving)
+	if (supply_shuttle.moving)
 		var/timeleft = round((supply_shuttle.eta_timeofday - world.timeofday) / 10,1)
-		if(timeleft < 0)
+		if (timeleft < 0)
 			return "Late"
 		return "[add_zero(num2text((timeleft / 60) % 60),2)]:[add_zero(num2text(timeleft % 60), 2)]"
 	return ""
 
 /obj/machinery/status_display/proc/remove_display()
-	if(overlays.len)
+	if (overlays.len)
 		overlays.len = 0
-	if(maptext)
+	if (maptext)
 		maptext = ""
 
 /obj/machinery/status_display/receive_signal(datum/signal/signal)
-	switch(signal.data["command"])
-		if("blank")
+	switch (signal.data["command"])
+		if ("blank")
 			mode = 0
 
-		if("shuttle")
+		if ("shuttle")
 			mode = 1
 
-		if("message")
+		if ("message")
 			mode = 2
 			set_message(signal.data["msg1"], signal.data["msg2"])
 
-		if("alert")
+		if ("alert")
 			mode = 3
 			set_picture(signal.data["picture_state"])
 
-		if("supply")
-			if(supply_display)
+		if ("supply")
+			if (supply_display)
 				mode = 4
 
 /obj/machinery/status_display/spook(mob/dead/observer/ghost)
-	if(..(ghost, TRUE))
+	if (..(ghost, TRUE))
 		spookymode = 1
 
 #undef MODE_BLANK
@@ -358,34 +358,34 @@ var/global/list/status_display_images = list(
 	status_displays -= src
 
 /obj/machinery/ai_status_display/attack_ai(mob/user)
-	if(spookymode)
+	if (spookymode)
 		return
-	if(user.stat)
+	if (user.stat)
 		return
 
-	if(isAI(user)) //This allows AIs to load any image into the status displays
+	if (isAI(user)) //This allows AIs to load any image into the status displays
 		var/mob/living/silicon/ai/A = user
 
 		//Some fluff
-		if(user.stat)
+		if (user.stat)
 			to_chat(user, "<span class='warning'>Unable to connect to [src] (error #408)</span>")
 			return
-		if(stat & (BROKEN|NOPOWER))
+		if (stat & (BROKEN|NOPOWER))
 			to_chat(user, "<span class='warning'>Unable to connect to [src] (error #[(stat & BROKEN) ? "120" : "408"])</span>")
 			return
 
 		var/new_icon = input(A, "Load an image to be desplayed on [src].", "AI status display") in status_display_images
 
-		if(new_icon)
+		if (new_icon)
 			src.mode = MODE_EMOTION
 			src.emotion = new_icon
 			src.set_picture(status_display_images[new_icon])
 
 /obj/machinery/ai_status_display/process()
-	if(stat & NOPOWER)
+	if (stat & NOPOWER)
 		overlays.len = 0
 		return
-	if(spookymode)
+	if (spookymode)
 		spookymode = 0
 		overlays.len = 0
 		return
@@ -393,34 +393,34 @@ var/global/list/status_display_images = list(
 	update()
 
 /obj/machinery/ai_status_display/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		..(severity)
 		return
 	set_picture("ai_bsod")
 	..(severity)
 
 /obj/machinery/ai_status_display/proc/update()
-	switch(mode)
-		if(MODE_BLANK)
+	switch (mode)
+		if (MODE_BLANK)
 			overlays = list()
 
-		if(MODE_EMOTION)
-			if(emotion in status_display_images)
+		if (MODE_EMOTION)
+			if (emotion in status_display_images)
 				set_picture(status_display_images[emotion])
 			else
 				set_picture("ai_bsod") //Can't find icon state for our emotion - throw a BSOD
 
-		if(MODE_BSOD)
+		if (MODE_BSOD)
 			set_picture("ai_bsod")
 
 /obj/machinery/ai_status_display/proc/set_picture(var/state)
 	picture_state = state
-	if(overlays.len)
+	if (overlays.len)
 		overlays.len = 0
 	overlays += image('icons/obj/status_display.dmi', icon_state=picture_state)
 
 /obj/machinery/ai_status_display/spook(mob/dead/observer/ghost)
-	if(..(ghost, TRUE))
+	if (..(ghost, TRUE))
 		spookymode = 1
 
 #undef MODE_BLANK

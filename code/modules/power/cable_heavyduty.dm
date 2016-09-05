@@ -12,13 +12,13 @@
 /obj/structure/cable/heavyduty/attackby(obj/item/W, mob/user)
 
 	var/turf/T = src.loc
-	if(T.intact)
+	if (T.intact)
 		return
 
-	if(iswirecutter(W))
+	if (iswirecutter(W))
 		to_chat(user, "<span class='notice'>These cables are too tough to be cut with those [W.name].</span>")
 		return
-	else if(W.type == /obj/item/stack/cable_coil)
+	else if (W.type == /obj/item/stack/cable_coil)
 		to_chat(user, "<span class='notice'>You will need heavier cables to connect to these.</span>")
 		return
 	else

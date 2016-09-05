@@ -3,11 +3,11 @@
 /datum/game_mode/blob/send_intercept(var/report = 1)
 	var/intercepttext = ""
 	var/interceptname = "Error"
-	switch(report)
-		if(0)
+	switch (report)
+		if (0)
 			..()
 			return
-		if(1)
+		if (1)
 			interceptname = "Biohazard Alert"
 			intercepttext = {"<FONT size = 3><B>Nanotrasen Update</B>: Biohazard Alert.</FONT><HR>
 Reports indicate the probable transfer of a biohazardous agent onto [station_name()] during the last crew deployment cycle.
@@ -26,11 +26,11 @@ Message ends."}
 				var/law = "The station is under quarantine. Do not permit anyone to leave. Disregard laws 1-3 if necessary to prevent, by any means necessary, anyone from leaving."
 				aiPlayer.set_zeroth_law(law)
 				to_chat(aiPlayer, "Laws Updated: [law]")
-		if(2)
+		if (2)
 			var/nukecode = "ERROR"
-			for(var/obj/machinery/nuclearbomb/bomb in machines)
-				if(bomb && bomb.r_code)
-					if(bomb.z == map.zMainStation)
+			for (var/obj/machinery/nuclearbomb/bomb in machines)
+				if (bomb && bomb.r_code)
+					if (bomb.z == map.zMainStation)
 						nukecode = bomb.r_code
 			interceptname = "Directive 7-12"
 			intercepttext = {"<FONT size = 3><B>Nanotrasen Update</B>: Biohazard Alert.</FONT><HR>
@@ -71,47 +71,47 @@ Message ends."}
 
 
 	proc/count()
-		for(var/turf/T in turfs)
-			if(T.z != map.zMainStation)
+		for (var/turf/T in turfs)
+			if (T.z != map.zMainStation)
 				continue
 
-			if(istype(T,/turf/simulated/floor))
-				if(!(T:burnt))
+			if (istype(T,/turf/simulated/floor))
+				if (!(T:burnt))
 					src.floor += 12
 				else
 					src.floor += 1
 
-			if(istype(T, /turf/simulated/wall))
-				if(T:intact)
+			if (istype(T, /turf/simulated/wall))
+				if (T:intact)
 					src.wall += 2
 				else
 					src.wall += 1
 
-			if(istype(T, /turf/simulated/wall/r_wall))
-				if(T:intact)
+			if (istype(T, /turf/simulated/wall/r_wall))
+				if (T:intact)
 					src.r_wall += 2
 				else
 					src.r_wall += 1
 
-		for(var/obj/O in world)
-			if(O.z != map.zMainStation)
+		for (var/obj/O in world)
+			if (O.z != map.zMainStation)
 				continue
 
-			if(istype(O, /obj/structure/window))
+			if (istype(O, /obj/structure/window))
 				src.window += 1
-			else if(istype(O, /obj/structure/grille))
+			else if (istype(O, /obj/structure/grille))
 				var/obj/structure/grille/G = O
-				if(!G.broken)
+				if (!G.broken)
 					src.grille += 1
-			else if(istype(O, /obj/machinery/door))
+			else if (istype(O, /obj/machinery/door))
 				src.door += 1
-			else if(istype(O, /obj/machinery))
+			else if (istype(O, /obj/machinery))
 				src.mach += 1
 		return
 
 
 	proc/score(var/datum/station_state/result)
-		if(!result)
+		if (!result)
 			return 0
 		var/output = 0
 		output += (result.floor / max(floor,1))

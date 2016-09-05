@@ -58,31 +58,31 @@ var/global/list/genders=list(
 	_complex=complex
 
 /datum/gender/proc/getHim()
-	if(_complex)
+	if (_complex)
 		warning("getHim() unsupported for gender [name]}")
 		return ""
 	return objective
 
 /datum/gender/proc/getHis()
-	if(_complex)
+	if (_complex)
 		warning("getHis() unsupported for gender [name]}")
 		return ""
 	return possessive
 
 /datum/gender/proc/getHimself()
-	if(_complex)
+	if (_complex)
 		warning("getHimself() unsupported for gender [name]}")
 		return ""
 	return reflexive
 
 /datum/gender/proc/getHers()
-	if(_complex)
+	if (_complex)
 		warning("getHers() unsupported for gender [name]}")
 		return ""
 	return possessivePronoun
 
 /datum/gender/proc/getHe()
-	if(_complex)
+	if (_complex)
 		warning("getHe() unsupported for gender [name]}")
 		return ""
 	return subject
@@ -104,31 +104,31 @@ var/global/list/genders=list(
 */
 /datum/gender/proc/replace(var/s)
 	// I
-	if(findtext(s,"$sub"))
+	if (findtext(s,"$sub"))
 		s=replacetextEx(s,"$sub",subject)
 		s=replacetextEx(s,"$Sub",capitalize(subject))
 		s=replacetextEx(s,"$SUB",uppertext(subject))
 
 	// Me
-	if(findtext(s,"$obj"))
+	if (findtext(s,"$obj"))
 		s=replacetextEx(s,"$obj",objective)
 		s=replacetextEx(s,"$Obj",capitalize(objective))
 		s=replacetextEx(s,"$OBJ",uppertext(objective))
 
 	// Myself
-	if(findtext(s,"$ref"))
+	if (findtext(s,"$ref"))
 		s=replacetextEx(s,"$ref",reflexive)
 		s=replacetextEx(s,"$Ref",capitalize(reflexive))
 		s=replacetextEx(s,"$REF",uppertext(reflexive))
 
 	// Mine
-	if(findtext(s,"$posp"))
+	if (findtext(s,"$posp"))
 		s=replacetextEx(s,"$posp",possessivePronoun)
 		s=replacetextEx(s,"$Posp",capitalize(possessivePronoun))
 		s=replacetextEx(s,"$POSP",uppertext(possessivePronoun))
 
 	// My
-	if(findtext(s,"$pos"))
+	if (findtext(s,"$pos"))
 		s=replacetextEx(s,"$pos",possessive)
 		s=replacetextEx(s,"$Pos",capitalize(possessive))
 		s=replacetextEx(s,"$POS",uppertext(possessive))
@@ -140,33 +140,33 @@ var/global/list/genders=list(
 	// Avoid using these if you're using anything other
 	// than MALE, FEMALE, or NEUTRAL..
 	/////////////////////////////////////////////////////
-	if(!_complex)
+	if (!_complex)
 		// Himself (must come before $him)
-		if(findtext(s,"$himself"))
+		if (findtext(s,"$himself"))
 			s=replacetextEx(s,"$himself",getHimself())
 			s=replacetextEx(s,"$Himself",capitalize(getHimself()))
 			s=replacetextEx(s,"$HIMSELF",uppertext(getHimself()))
 
 		// Him
-		if(findtext(s,"$him"))
+		if (findtext(s,"$him"))
 			s=replacetextEx(s,"$him",getHim())
 			s=replacetextEx(s,"$Him",capitalize(getHim()))
 			s=replacetextEx(s,"$HIM",uppertext(getHim()))
 
 		// His
-		if(findtext(s,"$his"))
+		if (findtext(s,"$his"))
 			s=replacetextEx(s,"$his",getHis())
 			s=replacetextEx(s,"$His",capitalize(getHis()))
 			s=replacetextEx(s,"$HIS",uppertext(getHis()))
 
 		// He
-		if(findtext(s,"$he"))
+		if (findtext(s,"$he"))
 			s=replacetextEx(s,"$he",getHe())
 			s=replacetextEx(s,"$He",capitalize(getHe()))
 			s=replacetextEx(s,"$HE",uppertext(getHe()))
 
 		// Special case for "hers"
-		if(findtext(s,"$hers"))
+		if (findtext(s,"$hers"))
 			s=replacetextEx(s,"$hers",getHers())
 			s=replacetextEx(s,"$Hers",capitalize(getHers()))
 			s=replacetextEx(s,"$HERS",uppertext(getHers()))
@@ -175,7 +175,7 @@ var/global/list/genders=list(
 
 /proc/gender_replace(var/gender,var/text)
 	var/datum/gender/G = genders[gender]
-	if(!G)
+	if (!G)
 		warning("Invalid gender \"[gender]\" given to gender_replace().")
 		return text // FUCK YOU
 	return G.replace(text)

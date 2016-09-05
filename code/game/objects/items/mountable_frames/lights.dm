@@ -15,10 +15,10 @@
 	if (!do_after(user, on_wall, 30))
 		return
 	var/obj/machinery/light_construct/newlight
-	switch(fixture_type)
-		if("bulb")
+	switch (fixture_type)
+		if ("bulb")
 			newlight = new /obj/machinery/light_construct/small(constrloc)
-		if("tube")
+		if ("tube")
 			newlight = new /obj/machinery/light_construct(constrloc)
 		else
 			newlight = new /obj/machinery/light_construct/small(constrloc)

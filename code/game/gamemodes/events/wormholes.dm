@@ -1,11 +1,11 @@
 /proc/wormhole_event()
 	spawn()
 		var/list/pick_turfs = list()
-		for(var/turf/simulated/floor/T in turfs)
-			if(T.z == map.zMainStation)
+		for (var/turf/simulated/floor/T in turfs)
+			if (T.z == map.zMainStation)
 				pick_turfs += T
 
-		if(pick_turfs.len)
+		if (pick_turfs.len)
 			//All ready. Announce that bad juju is afoot.
 			command_alert(/datum/command_alert/wormholes)
 			//prob(20) can be approximated to 1 wormhole every 5 turfs!
@@ -19,13 +19,13 @@
 //			to_chat(world, "DEBUG: number_of_selections: [number_of_selections] | sleep_duration: [sleep_duration]")
 
 			var/i = 1
-			while( 1 )
+			while ( 1 )
 
 				//we've run into overtime. End the event
-				if( end_time < world.time )
+				if ( end_time < world.time )
 //					to_chat(world, "DEBUG: we've run into overtime. End the event")
 					return
-				if( !pick_turfs.len )
+				if ( !pick_turfs.len )
 //					to_chat(world, "DEBUG: we've run out of turfs to pick. End the event")
 					return
 
@@ -37,12 +37,12 @@
 				//get our enter and exit locations
 				var/turf/simulated/floor/enter = pick_turfs[i]
 				pick_turfs -= enter							//remove it from pickable turfs list
-				if( !enter || !istype(enter) )
+				if ( !enter || !istype(enter) )
 					continue	//sanity
 
 				var/turf/simulated/floor/exit = pick(pick_turfs)
 				pick_turfs -= exit
-				if( !exit || !istype(exit) )
+				if ( !exit || !istype(exit) )
 					continue	//sanity
 
 				create_wormhole(enter,exit)

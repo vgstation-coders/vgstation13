@@ -26,9 +26,9 @@
 
 /obj/item/device/depth_scanner/proc/scan_atom(var/mob/user, var/atom/A)
 	user.visible_message("<span class='notice'>[user] scans [A], the air around them humming gently.</span>")
-	if(istype(A,/turf/unsimulated/mineral))
+	if (istype(A,/turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = A
-		if(M.finds.len || M.artifact_find)
+		if (M.finds.len || M.artifact_find)
 
 			//create a new scanlog entry
 			var/datum/depth_scan/D = new()
@@ -38,14 +38,14 @@
 			D.material = M.mineral ? M.mineral.display_name : "Rock"
 
 			//find the first artifact and store it
-			if(M.finds.len)
+			if (M.finds.len)
 				var/datum/find/F = M.finds[1]
 				D.depth = F.excavation_required * 2		//0-100% and 0-200cm
 				D.clearance = F.clearance_range * 2
 				D.material = get_responsive_reagent(F.find_type)
 			/*
-			if(M.excavation_minerals.len)
-				if(M.excavation_minerals[1] < D.depth)
+			if (M.excavation_minerals.len)
+				if (M.excavation_minerals[1] < D.depth)
 					D.depth = M.excavation_minerals[1]
 					D.clearance = rand(2,6)
 					D.dissonance_spread = rand(1,1000) / 100
@@ -53,12 +53,12 @@
 
 			positive_locations.Add(D)
 
-			for(var/mob/L in range(src, 1))
+			for (var/mob/L in range(src, 1))
 				to_chat(L, "<span class='notice'>[bicon(src)] [src] pings.</span>")
 
-	else if(istype(A,/obj/structure/boulder))
+	else if (istype(A,/obj/structure/boulder))
 		var/obj/structure/boulder/B = A
-		if(B.artifact_find)
+		if (B.artifact_find)
 			//create a new scanlog entry
 			var/datum/depth_scan/D = new()
 			D.coords = "[10 * (B.x-WORLD_X_OFFSET[B.z])].[rand(0,9)]:[10 * (B.y-WORLD_Y_OFFSET[B.z])].[rand(0,9)]:[10 * B.z].[rand(0,9)]"
@@ -72,7 +72,7 @@
 
 			positive_locations.Add(D)
 
-			for(var/mob/L in range(src, 1))
+			for (var/mob/L in range(src, 1))
 				to_chat(L, "<span class='notice'>[bicon(src)] [src] pings [pick("madly","wildly","excitedly","crazily")]!.</span>")
 
 /obj/item/device/depth_scanner/attack_self(var/mob/user as mob)
@@ -81,14 +81,14 @@
 /obj/item/device/depth_scanner/interact(var/mob/user as mob)
 	var/dat = "<b>Co-ordinates with positive matches</b><br>"
 	dat += "<A href='?src=\ref[src];clear=0'>== Clear all ==</a><br>"
-	if(current)
+	if (current)
 		dat += "Time: [current.time]<br>"
 		dat += "Coords: [current.coords]<br>"
 		dat += "Anomaly depth: [current.depth] cm<br>"
 		dat += "Clearance above anomaly depth: [current.clearance] cm<br>"
 		dat += "Dissonance spread: [current.dissonance_spread]<br>"
 		var/index = responsive_carriers.Find(current.material)
-		if(index > 0 && index <= finds_as_strings.len)
+		if (index > 0 && index <= finds_as_strings.len)
 			dat += "Anomaly material: [finds_as_strings[index]]<br>"
 		else
 			dat += "Anomaly material: Unknown<br>"
@@ -100,8 +100,8 @@
 		dat += "<br>"
 		dat += "<br>"
 	dat += "<hr>"
-	if(positive_locations.len)
-		for(var/index=1, index<=positive_locations.len, index++)
+	if (positive_locations.len)
+		for (var/index=1, index<=positive_locations.len, index++)
 			var/datum/depth_scan/D = positive_locations[index]
 			dat += "<A href='?src=\ref[src];select=[index]'>[D.time], coords: [D.coords]</a><br>"
 	else
@@ -116,14 +116,14 @@
 	..()
 	usr.set_machine(src)
 
-	if(href_list["select"])
+	if (href_list["select"])
 		var/index = text2num(href_list["select"])
-		if(index && index <= positive_locations.len)
+		if (index && index <= positive_locations.len)
 			current = positive_locations[index]
-	else if(href_list["clear"])
+	else if (href_list["clear"])
 		var/index = text2num(href_list["clear"])
-		if(index)
-			if(index <= positive_locations.len)
+		if (index)
+			if (index <= positive_locations.len)
 				var/datum/depth_scan/D = positive_locations[index]
 				positive_locations.Remove(D)
 				qdel(D)
@@ -133,7 +133,7 @@
 			positive_locations = list()
 			qdel(current)
 			current = null
-	else if(href_list["close"])
+	else if (href_list["close"])
 		usr.unset_machine()
 		usr << browse(null, "window=depth_scanner")
 

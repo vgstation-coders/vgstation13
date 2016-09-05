@@ -16,7 +16,7 @@
 
 /obj/item/projectile/flare/Bump()
 	..()
-	if(src)
+	if (src)
 		var/newloc = get_step(src.loc, get_dir(src.loc, shotloc)) //basically puts it back one tile in its movement
 		var/obj/item/device/flashlight/flare/newflare = new(newloc)
 		newflare.Light() //to get the thing lit

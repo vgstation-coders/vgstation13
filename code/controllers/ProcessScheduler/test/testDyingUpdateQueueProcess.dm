@@ -18,7 +18,7 @@
 	name = "Dying UpdateQueue Process"
 	schedule_interval = 30 // every 3 seconds
 	updateQueueInstance = new
-	for(var/i = 1, i < 30, i++)
+	for (var/i = 1, i < 30, i++)
 		testDatums.Add(new /datum/slowTestDatum)
 	
 /datum/controller/process/testDyingUpdateQueueProcess/doWork()

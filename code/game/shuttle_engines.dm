@@ -14,7 +14,7 @@
 	src.transform = turn(src.transform, angle)
 
 /obj/structure/shuttle/window/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(!height || air_group)
+	if (!height || air_group)
 		return 0
 	else
 		return ..()
@@ -44,7 +44,7 @@
 
 /obj/structure/shuttle/engine/propulsion/cultify()
 	var/turf/T = get_turf(src)
-	if(T)
+	if (T)
 		T.ChangeTurf(/turf/simulated/wall/cult)
 	..()
 

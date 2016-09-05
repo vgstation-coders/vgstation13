@@ -23,17 +23,17 @@
 	machine_flags = EMAGGABLE
 
 /obj/machinery/computer/library/checkout/attack_hand(var/mob/user as mob)
-	if(..())
+	if (..())
 		return
 	interact(user)
 
 /obj/machinery/computer/library/checkout/interact(var/mob/user)
-	if(interact_check(user))
+	if (interact_check(user))
 		return
 
 	var/dat=""
-	switch(screenstate)
-		if(0)
+	switch (screenstate)
+		if (0)
 			// Main Menu
 
 			dat += {"<ol>
@@ -44,25 +44,25 @@
 				<li><A href='?src=\ref[src];switchscreen=5'>Upload New Title to Archive</A></li>
 				<li><A href='?src=\ref[src];switchscreen=6'>Print a Bible</A></li>
 				<li><A href='?src=\ref[src];switchscreen=7'>Print a Manual</A></li>"}
-			if(src.emagged)
+			if (src.emagged)
 				dat += "<li><A href='?src=\ref[src];switchscreen=8'>Access the Forbidden Lore Vault</A></li>"
 			dat += "</ol>"
 
-			if(src.arcanecheckout)
+			if (src.arcanecheckout)
 				new /obj/item/weapon/tome(src.loc)
 				to_chat(user, "<span class='warning'>Your sanity barely endures the seconds spent in the vault's browsing window. The only thing to remind you of this when you stop browsing is a dusty old tome sitting on the desk. You don't really remember printing it.</span>")
 				user.visible_message("[user] stares at the blank screen for a few moments, his expression frozen in fear. When he finally awakens from it, he looks a lot older.", 2)
 				src.arcanecheckout = 0
-		if(1)
+		if (1)
 			// Inventory
 			dat += "<h3>Inventory</h3>"
-			for(var/obj/item/weapon/book/b in inventory)
+			for (var/obj/item/weapon/book/b in inventory)
 				dat += "[b.name] <A href='?src=\ref[src];delbook=\ref[b]'>(Delete)</A><BR>"
 			dat += "<A href='?src=\ref[src];switchscreen=0'>(Return to main menu)</A><BR>"
-		if(2)
+		if (2)
 			// Checked Out
 			dat += "<h3>Checked Out Books</h3><BR>"
-			for(var/datum/borrowbook/b in checkouts)
+			for (var/datum/borrowbook/b in checkouts)
 				var/timetaken = world.time - b.getdate
 				//timetaken *= 10
 				timetaken /= 600
@@ -70,7 +70,7 @@
 				var/timedue = b.duedate - world.time
 				//timedue *= 10
 				timedue /= 600
-				if(timedue <= 0)
+				if (timedue <= 0)
 					timedue = "<font color=red><b>(OVERDUE)</b> [timedue]</font>"
 				else
 					timedue = round(timedue)
@@ -78,7 +78,7 @@
 				dat += {"\"[b.bookname]\", Checked out to: [b.mobname]<BR>--- Taken: [timetaken] minutes ago, Due: in [timedue] minutes<BR>
 					<A href='?src=\ref[src];checkin=\ref[b]'>(Check In)</A><BR><BR>"}
 			dat += "<A href='?src=\ref[src];switchscreen=0'>(Return to main menu)</A><BR>"
-		if(3)
+		if (3)
 			// Check Out a Book
 
 			dat += {"<h3>Check Out a Book</h3><BR>
@@ -91,9 +91,9 @@
 				(Checkout Period: [checkoutperiod] minutes) (<A href='?src=\ref[src];increasetime=1'>+</A>/<A href='?src=\ref[src];decreasetime=1'>-</A>)
 				<A href='?src=\ref[src];checkout=1'>(Commit Entry)</A><BR>
 				<A href='?src=\ref[src];switchscreen=0'>(Return to main menu)</A><BR>"}
-		if(4)
+		if (4)
 			dat += "<h3>External Archive</h3>"
-			if(!dbcon_old.IsConnected())
+			if (!dbcon_old.IsConnected())
 				dat += "<font color=red><b>ERROR</b>: Unable to contact External Archive. Please contact your system administrator for assistance.</font>"
 			else
 				num_results = src.get_num_results()
@@ -124,10 +124,10 @@
 						<td>Controls</td>
 					</tr>"}
 
-				for(var/datum/cachedbook/CB in get_page(page_num))
+				for (var/datum/cachedbook/CB in get_page(page_num))
 					var/author = CB.author
 					var/controls =  "<A href='?src=\ref[src];id=[CB.id]'>\[Order\]</A>"
-					if(user.check_rights(R_ADMIN))
+					if (user.check_rights(R_ADMIN))
 						controls +=  " <A style='color:red' href='?src=\ref[src];del=[CB.id]'>\[Delete\]</A>"
 						author += " (<A style='color:red' href='?src=\ref[src];delbyckey=[ckey(CB.ckey)]'>[ckey(CB.ckey)])</A>)"
 					dat += {"<tr>
@@ -142,28 +142,28 @@
 				dat += "</table><br />[pagelist]"
 
 			dat += "<br /><A href='?src=\ref[src];switchscreen=0'>(Return to main menu)</A><BR>"
-		if(5)
+		if (5)
 			dat += "<h3>Upload a New Title</h3>"
-			if(!scanner)
-				for(var/obj/machinery/libraryscanner/S in range(9))
+			if (!scanner)
+				for (var/obj/machinery/libraryscanner/S in range(9))
 					scanner = S
 					break
-			if(!scanner)
+			if (!scanner)
 				dat += "<FONT color=red>No scanner found within wireless network range.</FONT><BR>"
-			else if(!scanner.cache)
+			else if (!scanner.cache)
 				dat += "<FONT color=red>No data found in scanner memory.</FONT><BR>"
 			else
 
 				dat += {"<TT>Data marked for upload...</TT><BR>
 					<TT>Title: </TT>[scanner.cache.name]<BR>"}
-				if(!scanner.cache.author)
+				if (!scanner.cache.author)
 					scanner.cache.author = "Anonymous"
 
 				dat += {"<TT>Author: </TT><A href='?src=\ref[src];uploadauthor=1'>[scanner.cache.author]</A><BR>
 					<TT>Category: </TT><A href='?src=\ref[src];uploadcategory=1'>[upload_category]</A><BR>
 					<A href='?src=\ref[src];upload=1'>\[Upload\]</A><BR>"}
 			dat += "<A href='?src=\ref[src];switchscreen=0'>(Return to main menu)</A><BR>"
-		if(7)
+		if (7)
 			dat += "<H3>Print a Manual</H3>"
 			dat += "<table>"
 
@@ -171,13 +171,13 @@
 				/obj/item/weapon/book/manual
 			)
 
-			if(!emagged)
+			if (!emagged)
 				forbidden |= /obj/item/weapon/book/manual/nuclear
 
 			var/manualcount = 1
 			var/obj/item/weapon/book/manual/M = null
 
-			for(var/manual_type in (typesof(/obj/item/weapon/book/manual) - forbidden))
+			for (var/manual_type in (typesof(/obj/item/weapon/book/manual) - forbidden))
 				M = new manual_type()
 				dat += "<tr><td><A href='?src=\ref[src];manual=[manualcount]'>[M.title]</A></td></tr>"
 				manualcount++
@@ -186,7 +186,7 @@
 			dat += "</table>"
 			dat += "<BR><A href='?src=\ref[src];switchscreen=0'>(Return to main menu)</A><BR>"
 
-		if(8)
+		if (8)
 
 			dat += {"<h3>Accessing Forbidden Lore Vault v 1.3</h3>
 				Are you absolutely sure you want to proceed? EldritchTomes Inc. takes no responsibilities for loss of sanity resulting from this action.<p>
@@ -198,14 +198,14 @@
 	B.open()
 
 /obj/machinery/computer/library/checkout/emag(mob/user)
-	if(!emagged)
+	if (!emagged)
 		src.emagged = 1
 		to_chat(user, "<span class='notice'>You override the library computer's printing restrictions.</span>")
 		return 1
 	return
 
 /obj/machinery/computer/library/checkout/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/barcodescanner))
+	if (istype(W, /obj/item/weapon/barcodescanner))
 		var/obj/item/weapon/barcodescanner/scanner = W
 		scanner.computer = src
 		to_chat(user, "[scanner]'s associated machine has been set to [src].")
@@ -215,59 +215,59 @@
 		return ..()
 
 /obj/machinery/computer/library/checkout/Topic(href, href_list)
-	if(..())
+	if (..())
 		usr << browse(null, "window=library")
 		onclose(usr, "library")
 		return 1
 
-	if(href_list["pagenum"])
-		if(!num_pages)
+	if (href_list["pagenum"])
+		if (!num_pages)
 			page_num = 0
 		else
 			var/pn = text2num(href_list["pagenum"])
-			if(!isnull(pn))
+			if (!isnull(pn))
 				page_num = Clamp(pn, 0, num_pages)
 
-	if(href_list["page"])
-		if(num_pages == 0)
+	if (href_list["page"])
+		if (num_pages == 0)
 			page_num = 0
 		else
 			page_num = Clamp(text2num(href_list["page"]), 0, num_pages)
-	if(href_list["settitle"])
+	if (href_list["settitle"])
 		var/newtitle = input("Enter a title to search for:") as text|null
-		if(newtitle)
+		if (newtitle)
 			query.title = sanitize(newtitle)
 		else
 			query.title = null
-	if(href_list["setcategory"])
+	if (href_list["setcategory"])
 		var/newcategory = input("Choose a category to search for:") in (list("Any") + library_section_names)
-		if(newcategory == "Any")
+		if (newcategory == "Any")
 			query.category = null
 		else
 			query.category = sanitize(newcategory)
-	if(href_list["setauthor"])
+	if (href_list["setauthor"])
 		var/newauthor = input("Enter an author to search for:") as text|null
-		if(newauthor)
+		if (newauthor)
 			query.author = sanitize(newauthor)
 		else
 			query.author = null
 
-	if(href_list["search"])
+	if (href_list["search"])
 		num_results = src.get_num_results()
 		num_pages = Ceiling(num_results/LIBRARY_BOOKS_PER_PAGE)
 		page_num = 0
 
 		screenstate = 4
-	if(href_list["del"])
-		if(!usr.check_rights(R_ADMIN))
+	if (href_list["del"])
+		if (!usr.check_rights(R_ADMIN))
 			to_chat(usr, "You aren't an admin, piss off.")
 			return
 		var/datum/cachedbook/target = getBookByID(href_list["del"]) // Sanitized in getBookByID
 		var/ans = alert(usr, "Are you sure you wish to delete \"[target.title]\", by [target.author]? This cannot be undone.", "Library System", "Yes", "No")
-		if(ans=="Yes")
+		if (ans=="Yes")
 			var/DBQuery/query = dbcon_old.NewQuery("DELETE FROM library WHERE id=[target.id]")
 			var/response = query.Execute()
-			if(!response)
+			if (!response)
 				to_chat(usr, query.ErrorMsg())
 				return
 			log_admin("LIBRARY: [usr.name]/[usr.key] has deleted \"[target.title]\", by [target.author] ([target.ckey])!")
@@ -275,20 +275,20 @@
 			src.updateUsrDialog()
 			return
 
-	if(href_list["delbyckey"])
-		if(!usr.check_rights(R_ADMIN))
+	if (href_list["delbyckey"])
+		if (!usr.check_rights(R_ADMIN))
 			to_chat(usr, "You aren't an admin, piss off.")
 			return
 		var/tckey = ckey(href_list["delbyckey"])
 		var/ans = alert(usr,"Are you sure you wish to delete all books by [tckey]? This cannot be undone.", "Library System", "Yes", "No")
-		if(ans=="Yes")
+		if (ans=="Yes")
 			var/DBQuery/query = dbcon_old.NewQuery("DELETE FROM library WHERE ckey='[sanitizeSQL(tckey)]'")
 			var/response = query.Execute()
-			if(!response)
+			if (!response)
 				to_chat(usr, query.ErrorMsg())
 				return
 			var/affected=query.RowsAffected()
-			if(affected==0)
+			if (affected==0)
 				to_chat(usr, "<span class='danger'>Unable to find any matching rows.</span>")
 				return
 			log_admin("LIBRARY: [usr.name]/[usr.key] has deleted [affected] books written by [tckey]!")
@@ -296,25 +296,25 @@
 			src.updateUsrDialog()
 			return
 
-	if(href_list["switchscreen"])
-		switch(href_list["switchscreen"])
-			if("0")
+	if (href_list["switchscreen"])
+		switch (href_list["switchscreen"])
+			if ("0")
 				screenstate = 0
-			if("1")
+			if ("1")
 				screenstate = 1
-			if("2")
+			if ("2")
 				screenstate = 2
-			if("3")
+			if ("3")
 				screenstate = 3
-			if("4")
+			if ("4")
 				screenstate = 4
-			if("5")
+			if ("5")
 				screenstate = 5
-			if("6")
-				if(!bibledelay)
+			if ("6")
+				if (!bibledelay)
 
 					var/obj/item/weapon/storage/bible/B = new /obj/item/weapon/storage/bible(src.loc)
-					if(ticker && ( ticker.Bible_icon_state && ticker.Bible_item_state) )
+					if (ticker && ( ticker.Bible_icon_state && ticker.Bible_item_state) )
 						B.icon_state = ticker.Bible_icon_state
 						B.item_state = ticker.Bible_item_state
 						B.name = ticker.Bible_name
@@ -327,52 +327,52 @@
 				else
 					visible_message("<b>[src]</b>'s monitor flashes, \"Bible printer currently unavailable, please wait a moment.\"")
 
-			if("7")
+			if ("7")
 				screenstate = 7
-			if("8")
+			if ("8")
 				screenstate = 8
-	if(href_list["arccheckout"])
-		if(src.emagged)
+	if (href_list["arccheckout"])
+		if (src.emagged)
 			src.arcanecheckout = 1
 		src.screenstate = 0
-	if(href_list["increasetime"])
+	if (href_list["increasetime"])
 		checkoutperiod += 1
-	if(href_list["decreasetime"])
+	if (href_list["decreasetime"])
 		checkoutperiod -= 1
-		if(checkoutperiod < 1)
+		if (checkoutperiod < 1)
 			checkoutperiod = 1
-	if(href_list["editbook"])
+	if (href_list["editbook"])
 		buffer_book = copytext(sanitize(input("Enter the book's title:") as text|null),1,MAX_MESSAGE_LEN)
-	if(href_list["editmob"])
+	if (href_list["editmob"])
 		buffer_mob = copytext(sanitize(input("Enter the recipient's name:") as text|null),1,MAX_NAME_LEN)
-	if(href_list["checkout"])
+	if (href_list["checkout"])
 		var/datum/borrowbook/b = new /datum/borrowbook
 		b.bookname = sanitize(buffer_book)
 		b.mobname = sanitize(buffer_mob)
 		b.getdate = world.time
 		b.duedate = world.time + (checkoutperiod * 600)
 		checkouts.Add(b)
-	if(href_list["checkin"])
+	if (href_list["checkin"])
 		var/datum/borrowbook/b = locate(href_list["checkin"])
 		checkouts.Remove(b)
-	if(href_list["delbook"])
+	if (href_list["delbook"])
 		var/obj/item/weapon/book/b = locate(href_list["delbook"])
 		inventory.Remove(b)
-	if(href_list["uploadauthor"])
+	if (href_list["uploadauthor"])
 		var/newauthor = copytext(sanitize(input("Enter the author's name: ") as text|null),1,MAX_MESSAGE_LEN)
-		if(newauthor && scanner)
+		if (newauthor && scanner)
 			scanner.cache.author = newauthor
-	if(href_list["uploadcategory"])
+	if (href_list["uploadcategory"])
 		var/newcategory = input("Choose a category: ") in library_section_names
-		if(newcategory)
+		if (newcategory)
 			upload_category = newcategory
-	if(href_list["upload"])
-		if(scanner)
-			if(scanner.cache)
+	if (href_list["upload"])
+		if (scanner)
+			if (scanner.cache)
 				var/choice = input("Are you certain you wish to upload this title to the Archive?") in list("Confirm", "Abort")
-				if(choice == "Confirm")
+				if (choice == "Confirm")
 					establish_old_db_connection()
-					if(!dbcon_old.IsConnected())
+					if (!dbcon_old.IsConnected())
 						alert("Connection to Archive has been severed. Aborting.")
 					else
 						var/sqltitle = sanitizeSQL(scanner.cache.name)
@@ -381,32 +381,32 @@
 						var/sqlcategory = sanitizeSQL(upload_category)
 						var/DBQuery/query = dbcon_old.NewQuery("INSERT INTO library (author, title, content, category, ckey) VALUES ('[sqlauthor]', '[sqltitle]', '[sqlcontent]', '[sqlcategory]', '[ckey(usr.key)]')")
 						var/response = query.Execute()
-						if(!response)
+						if (!response)
 							to_chat(usr, query.ErrorMsg())
 						else
 							world.log << response
 							log_admin("[usr.name]/[usr.key] has uploaded the book titled [scanner.cache.name], [length(scanner.cache.dat)] characters in length")
 							message_admins("[key_name_admin(usr)] has uploaded the book titled [scanner.cache.name], [length(scanner.cache.dat)] characters in length")
 
-	if(href_list["id"])
-		if(href_list["id"]=="-1")
+	if (href_list["id"])
+		if (href_list["id"]=="-1")
 			href_list["id"] = input("Enter your order:") as null|num
-			if(!href_list["id"])
+			if (!href_list["id"])
 				return
 
-		if(!dbcon_old.IsConnected())
+		if (!dbcon_old.IsConnected())
 			alert("Connection to Archive has been severed. Aborting.")
 			return
 
 		var/datum/cachedbook/newbook = getBookByID(href_list["id"]) // Sanitized in getBookByID
-		if(!newbook)
+		if (!newbook)
 			alert("No book found")
 			return
-		if((newbook.forbidden == 2 && !emagged) || newbook.forbidden == 1)
+		if ((newbook.forbidden == 2 && !emagged) || newbook.forbidden == 1)
 			alert("This book is forbidden and cannot be printed.")
 			return
 
-		if(bibledelay)
+		if (bibledelay)
 			for (var/mob/V in hearers(src))
 				V.show_message("<b>[src]</b>'s monitor flashes, \"Printer unavailable. Please allow a short time before attempting to print.\"")
 		else
@@ -414,24 +414,24 @@
 			spawn(60)
 				bibledelay = 0
 			make_external_book(newbook)
-	if(href_list["manual"])
-		if(!href_list["manual"])
+	if (href_list["manual"])
+		if (!href_list["manual"])
 			return
 		var/bookid = href_list["manual"]
 
-		if(!dbcon_old.IsConnected())
+		if (!dbcon_old.IsConnected())
 			alert("Connection to Archive has been severed. Aborting.")
 			return
 
 		var/datum/cachedbook/newbook = getBookByID("M[bookid]")
-		if(!newbook)
+		if (!newbook)
 			alert("No book found")
 			return
-		if((newbook.forbidden == 2 && !emagged) || newbook.forbidden == 1)
+		if ((newbook.forbidden == 2 && !emagged) || newbook.forbidden == 1)
 			alert("This book is forbidden and cannot be printed.")
 			return
 
-		if(bibledelay)
+		if (bibledelay)
 			for (var/mob/V in hearers(src))
 				V.show_message("<b>[src]</b>'s monitor flashes, \"Printer unavailable. Please allow a short time before attempting to print.\"")
 		else
@@ -449,16 +449,16 @@
  */
 
 /obj/machinery/computer/library/checkout/proc/make_external_book(var/datum/cachedbook/newbook)
-	if(!newbook || !newbook.id)
+	if (!newbook || !newbook.id)
 		return
 	var/obj/item/weapon/book/B = new newbook.path(src.loc)
 
 	if (!newbook.programmatic)
 		var/list/_http = world.Export("http://ss13.moe/index.php/book?id=[newbook.id]")
-		if(!_http || !_http["CONTENT"])
+		if (!_http || !_http["CONTENT"])
 			return
 		var/http = file2text(_http["CONTENT"])
-		if(!http)
+		if (!http)
 			return
 		B.name = "Book: [newbook.title]"
 		B.title = newbook.title

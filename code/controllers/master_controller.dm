@@ -62,13 +62,13 @@ datum/controller/game_controller/New()
 //		to_chat(world, "<span class='danger'>Job setup complete in </span>")
 		log_startup_progress("Job setup complete in [stop_watch(watch)]s.")
 
-	if(!syndicate_code_phrase)
+	if (!syndicate_code_phrase)
 		syndicate_code_phrase	= generate_code_phrase()
-	if(!syndicate_code_response)
+	if (!syndicate_code_response)
 		syndicate_code_response	= generate_code_phrase()
 	/*if(!emergency_shuttle)			emergency_shuttle = new /datum/shuttle_controller/emergency_shuttle()*/
 /*
-	if(global.garbageCollector)
+	if (global.garbageCollector)
 		garbageCollector = global.garbageCollector
 */
 datum/controller/game_controller/proc/setup()
@@ -78,18 +78,18 @@ datum/controller/game_controller/proc/setup()
 	socket_talk = new /datum/socket_talk()
 	socket_talk.send_raw("type=startup")
 
-	if(config.enable_roundstart_away_missions)
+	if (config.enable_roundstart_away_missions)
 		log_startup_progress("Attempting to generate an away mission...")
 		createRandomZlevel()
 /*
-	if(!air_master)
+	if (!air_master)
 		air_master = new /datum/controller/air_system()
 		air_master.Setup()
 
-	if(!ticker)
+	if (!ticker)
 		ticker = new /datum/controller/gameticker()
 
-	if(!global.garbageCollector)
+	if (!global.garbageCollector)
 		global.garbageCollector = new
 		garbageCollector = global.garbageCollector
 */
@@ -116,7 +116,7 @@ datum/controller/game_controller/proc/setup()
 
 	buildcamlist()
 
-	if(config.media_base_url)
+	if (config.media_base_url)
 		watch = start_watch()
 		log_startup_progress("Caching jukebox playlists...")
 		load_juke_playlists()
@@ -125,7 +125,7 @@ datum/controller/game_controller/proc/setup()
 	//if(map && map.dorf)
 		//mining_surprises = typesof(/mining_surprise/dorf) - /mining_surprise/dorf
 		//max_secret_rooms += 2
-	for(var/i=0, i<max_secret_rooms, i++)
+	for (var/i=0, i<max_secret_rooms, i++)
 		//if(map && map.dorf)
 			//make_dorf_secret()
 		//else
@@ -135,7 +135,7 @@ datum/controller/game_controller/proc/setup()
 	//	keepalive()
 /*
 	spawn(0)
-		if(ticker)
+		if (ticker)
 			ticker.pregame()
 
 	lighting_controller.Initialize()
@@ -144,21 +144,21 @@ datum/controller/game_controller/proc/setup()
 
 datum/controller/game_controller/proc/buildcamlist()
 	adv_camera.camerasbyzlevel = list()
-	for(var/key in adv_camera.zlevels)
+	for (var/key in adv_camera.zlevels)
 		adv_camera.camerasbyzlevel["[key]"] = list()
 	//camerasbyzlevel = list("1" = list(), "5" = list())
-	if(!istype(cameranet) || !istype(cameranet.cameras) || !cameranet.cameras.len)
+	if (!istype(cameranet) || !istype(cameranet.cameras) || !cameranet.cameras.len)
 		world.log << "cameranet has not been initialized before us, finding cameras manually."
-		for(var/obj/machinery/camera/C in world) //can't use machines list because cameras are removed from it.
-			if(C.z == map.zMainStation || C.z == map.zAsteroid)
+		for (var/obj/machinery/camera/C in world) //can't use machines list because cameras are removed from it.
+			if (C.z == map.zMainStation || C.z == map.zAsteroid)
 				var/list/ourlist = adv_camera.camerasbyzlevel["[C.z]"]
 				ourlist += C
 	else
-		for(var/obj/machinery/camera/C in cameranet.cameras) //can't use machines list because cameras are removed from it.
-			if(C.z == map.zMainStation || C.z == map.zAsteroid)
+		for (var/obj/machinery/camera/C in cameranet.cameras) //can't use machines list because cameras are removed from it.
+			if (C.z == map.zMainStation || C.z == map.zAsteroid)
 				var/list/ourlist = adv_camera.camerasbyzlevel["[C.z]"]
 				ourlist += C
-	for(var/key in adv_camera.camerasbyzlevel)
+	for (var/key in adv_camera.camerasbyzlevel)
 		var/list/keylist = adv_camera.camerasbyzlevel[key]
 		world.log << "[key] has [keylist.len] entries"
 
@@ -169,17 +169,17 @@ datum/controller/game_controller/proc/cachedamageicons()
 	var/datum/species/list/slist = list(new /datum/species/human, new /datum/species/vox, new /datum/species/diona)
 	var/icon/DI
 	var/species_blood
-	for(var/datum/species/S in slist)
+	for (var/datum/species/S in slist)
 		species_blood = (S.blood_color == "#A10808" ? "" : S.blood_color)
 		testing("Generating [S], Blood([species_blood])")
-		for(var/datum/organ/external/O in H.organs)
+		for (var/datum/organ/external/O in H.organs)
 			//testing("[O] part")
-			for(var/brute = 1 to 3)
-				for(var/burn = 1 to 3)
+			for (var/brute = 1 to 3)
+				for (var/burn = 1 to 3)
 					var/damage_state = "[brute][burn]"
 					DI = icon('icons/mob/dam_human.dmi', "[damage_state]")			// the damage icon for whole human
 					DI.Blend(icon('icons/mob/dam_mask.dmi', O.icon_name), ICON_MULTIPLY)
-					if(species_blood)
+					if (species_blood)
 						DI.Blend(S.blood_color, ICON_MULTIPLY)
 					//testing("Completed [damage_state]/[O.icon_name]/[species_blood]")
 					damage_icon_parts["[damage_state]/[O.icon_name]/[species_blood]"] = DI
@@ -193,7 +193,7 @@ datum/controller/game_controller/proc/cachedamageicons()
 	populate_asset_cache()
 	log_startup_progress("  Populated [asset_cache.len] assets in [stop_watch(watch)]s.")
 
-	if(!config.skip_vault_generation)
+	if (!config.skip_vault_generation)
 		watch = start_watch()
 		log_startup_progress("Placing random space structures...")
 		generate_vaults()
@@ -211,7 +211,7 @@ datum/controller/game_controller/proc/cachedamageicons()
 	//sleep(-1) // Why
 	//var/last_init_type = null
 	var/count=0
-	for(var/atom/movable/object in world)
+	for (var/atom/movable/object in world)
 		//if(last_init_type != object.type)
 		//	testing("Initializing [object.type]")
 		//	last_init_type = object.type
@@ -223,7 +223,7 @@ datum/controller/game_controller/proc/cachedamageicons()
 	count=0
 	log_startup_progress("Initializing pipe networks...")
 	//sleep(-1)
-	for(var/obj/machinery/atmospherics/machine in atmos_machines)
+	for (var/obj/machinery/atmospherics/machine in atmos_machines)
 		machine.build_network()
 		count++
 	log_startup_progress("  Initialized [count] pipe networks in [stop_watch(watch)]s.")
@@ -232,18 +232,18 @@ datum/controller/game_controller/proc/cachedamageicons()
 	count=0
 	log_startup_progress("Initializing atmos machinery...")
 	//sleep(-1)
-	for(var/obj/machinery/atmospherics/unary/U in atmos_machines)
-		if(istype(U, /obj/machinery/atmospherics/unary/vent_pump))
+	for (var/obj/machinery/atmospherics/unary/U in atmos_machines)
+		if (istype(U, /obj/machinery/atmospherics/unary/vent_pump))
 			var/obj/machinery/atmospherics/unary/vent_pump/T = U
 			T.broadcast_status()
 			count++
-		else if(istype(U, /obj/machinery/atmospherics/unary/vent_scrubber))
+		else if (istype(U, /obj/machinery/atmospherics/unary/vent_scrubber))
 			var/obj/machinery/atmospherics/unary/vent_scrubber/T = U
 			T.broadcast_status()
 			count++
 	log_startup_progress("  Initialized [count] atmos devices in [stop_watch(watch)]s.")
 
-	if(!config.skip_minimap_generation)
+	if (!config.skip_minimap_generation)
 		spawn()
 			watch = start_watch()
 			log_startup_progress("Generating in-game minimaps...")
@@ -276,13 +276,13 @@ datum/controller/game_controller/proc/cachedamageicons()
 
 				//AIR
 
-				if(!air_processing_killed)
+				if (!air_processing_killed)
 					timer = world.timeofday
 					last_thing_processed = air_master.type
 
-					if(!air_master.Tick()) //Runtimed.
+					if (!air_master.Tick()) //Runtimed.
 						air_master.failed_ticks++
-						if(air_master.failed_ticks > 5)
+						if (air_master.failed_ticks > 5)
 							to_chat(world, "<font color='red'><b>RUNTIMES IN ATMOS TICKER.  Killing air simulation!</font></b>")
 							world.log << "### ZAS SHUTDOWN"
 							message_admins("ZASALERT: unable to run [air_master.tick_progress], shutting down!")
@@ -331,7 +331,7 @@ datum/controller/game_controller/proc/cachedamageicons()
 				sleep(breather_ticks)
 
 				//PIPENETS
-				if(!pipe_processing_killed)
+				if (!pipe_processing_killed)
 					timer = world.timeofday
 					processPipenets()
 					networks_cost = (world.timeofday - timer) / 10
@@ -372,7 +372,7 @@ datum/controller/game_controller/proc/cachedamageicons()
 				total_cost = air_cost + sun_cost + mobs_cost + diseases_cost + machines_cost + objects_cost + networks_cost + powernets_cost + nano_cost + events_cost + ticker_cost + garbageCollectorCost
 
 				var/end_time = world.timeofday
-				if(end_time < start_time)
+				if (end_time < start_time)
 					start_time -= 864000    //deciseconds in a day
 				sleep( round(minimum_ticks - (end_time - start_time),1) )
 			else
@@ -381,22 +381,22 @@ datum/controller/game_controller/proc/cachedamageicons()
 datum/controller/game_controller/proc/processMobs()
 	var/i = 1
 	expensive_mobs.len = 0
-	while(i<=mob_list.len)
+	while (i<=mob_list.len)
 		var/mob/M = mob_list[i]
-		if(M)
+		if (M)
 			var/clock = world.timeofday
 			last_thing_processed = M.type
 			M.Life()
-			if((world.timeofday - clock) > 1)
+			if ((world.timeofday - clock) > 1)
 				expensive_mobs += M
 			i++
 			continue
-		if(!mob_list.Remove(null))
+		if (!mob_list.Remove(null))
 			mob_list.Cut(i,i+1)
 
 /datum/controller/game_controller/proc/processDiseases()
 	for (var/datum/disease/Disease in active_diseases)
-		if(Disease)
+		if (Disease)
 			last_thing_processed = Disease.type
 			Disease.process()
 			continue
@@ -416,7 +416,7 @@ datum/controller/game_controller/proc/processMobs()
 			var/start = world.timeofday
 			#endif
 
-			if(PROCESS_KILL == Machinery.process())
+			if (PROCESS_KILL == Machinery.process())
 				Machinery.inMachineList = 0
 				machines.Remove(Machinery)
 				continue
@@ -456,7 +456,7 @@ datum/controller/game_controller/proc/processMobs()
 	last_thing_processed = /datum/pipe_network
 
 	for (var/datum/pipe_network/Pipe_Network in pipe_networks)
-		if(Pipe_Network)
+		if (Pipe_Network)
 			Pipe_Network.process()
 			continue
 
@@ -495,13 +495,13 @@ datum/controller/game_controller/proc/processMobs()
 datum/controller/game_controller/recover()		//Mostly a placeholder for now.
 	. = ..()
 	var/msg = "## DEBUG: [time2text(world.timeofday)] MC restarted. Reports:\n"
-	for(var/varname in master_controller.vars)
-		switch(varname)
-			if("tag","type","parent_type","vars")
+	for (var/varname in master_controller.vars)
+		switch (varname)
+			if ("tag","type","parent_type","vars")
 				continue
 			else
 				var/varval = master_controller.vars[varname]
-				if(istype(varval,/datum))
+				if (istype(varval,/datum))
 					var/datum/D = varval
 					msg += "\t [varname] = [D.type]\n"
 				else

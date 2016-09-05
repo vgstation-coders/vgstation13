@@ -121,9 +121,9 @@ proc/process_newscaster()
 
 var/global/tmp/announced_news_types = list()
 proc/check_for_newscaster_updates(type)
-	for(var/subtype in typesof(type)-type)
+	for (var/subtype in typesof(type)-type)
 		var/datum/news_announcement/news = new subtype()
-		if(news.round_time * 10 <= world.time && !(subtype in announced_news_types))
+		if (news.round_time * 10 <= world.time && !(subtype in announced_news_types))
 			announced_news_types += subtype
 			announce_newscaster_news(news)
 
@@ -137,12 +137,12 @@ proc/announce_newscaster_news(datum/news_announcement/news)
 	newMsg.body = news.message
 
 	var/datum/feed_channel/sendto
-	for(var/datum/feed_channel/FC in news_network.network_channels)
-		if(FC.channel_name == news.channel_name)
+	for (var/datum/feed_channel/FC in news_network.network_channels)
+		if (FC.channel_name == news.channel_name)
 			sendto = FC
 			break
 
-	if(!sendto)
+	if (!sendto)
 		sendto = new /datum/feed_channel
 		sendto.channel_name = news.channel_name
 		sendto.author = news.author
@@ -152,5 +152,5 @@ proc/announce_newscaster_news(datum/news_announcement/news)
 
 	sendto.messages += newMsg
 
-	for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
+	for (var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 		NEWSCASTER.newsAlert(news.channel_name)

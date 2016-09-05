@@ -70,18 +70,18 @@
 	)
 
 	RefreshParts()
-	if(closed_system)
+	if (closed_system)
 		flags &= ~OPENCONTAINER
 
 /obj/machinery/portable_atmospherics/hydroponics/RefreshParts()
 	var/capcount = 0
 	//var/scancount = 0
 	var/mattercount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/capacitor))
+	for (var/obj/item/weapon/stock_parts/SP in component_parts)
+		if (istype(SP, /obj/item/weapon/stock_parts/capacitor))
 			capcount += SP.rating
 		//if(istype(SP, /obj/item/weapon/stock_parts/scanning_module)) scancount += SP.rating-1
-		if(istype(SP, /obj/item/weapon/stock_parts/matter_bin))
+		if (istype(SP, /obj/item/weapon/stock_parts/matter_bin))
 			mattercount += SP.rating
 	//decay_reduction = scancount
 	weed_coefficient = 2/mattercount
@@ -123,14 +123,14 @@
 
 
 	//Harvest the product of the plant,
-	if(!seed || !harvest || !user)
+	if (!seed || !harvest || !user)
 		return
 
-	if(closed_system)
+	if (closed_system)
 		to_chat(user, "You can't harvest from the plant while the lid is shut.")
 		return
 
-	if(!seed.check_harvest(user))
+	if (!seed.check_harvest(user))
 		return
 
 	seed.harvest(user,yield_mod)
@@ -139,7 +139,7 @@
 	harvest = 0
 	lastproduce = age
 
-	if(!seed.harvest_repeat)
+	if (!seed.harvest_repeat)
 		remove_plant()
 
 	check_level_sanity()
@@ -148,10 +148,10 @@
 
 //Clears out a dead plant.
 /obj/machinery/portable_atmospherics/hydroponics/proc/remove_dead(var/mob/user)
-	if(!user || !dead)
+	if (!user || !dead)
 		return
 
-	if(closed_system)
+	if (closed_system)
 		to_chat(user, "You can't remove the dead plant while the lid is shut.")
 		return
 
@@ -167,10 +167,10 @@
 
 
 	//Remove the seed if something is already planted.
-	if(seed)
+	if (seed)
 		remove_plant()
 	seed = plant_controller.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds"))]
-	if(!seed)
+	if (!seed)
 		return //Weed does not exist, someone fucked up.
 
 	health = seed.endurance
@@ -183,34 +183,34 @@
 
 /obj/machinery/portable_atmospherics/hydroponics/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
-	if(O.is_open_container())
+	if (O.is_open_container())
 		return 0
 
 	if (istype(O, /obj/item/seeds))
 
-		if(!seed)
+		if (!seed)
 
 			var/obj/item/seeds/S = O
 			user.drop_item(S)
 
-			if(!S.seed)
+			if (!S.seed)
 				to_chat(user, "The packet seems to be empty. You throw it away.")
 				qdel(O)
 				return
 
 			to_chat(user, "You plant the [S.seed.seed_name] [S.seed.seed_noun].")
-			switch(S.seed.spread)
-				if(1)
+			switch (S.seed.spread)
+				if (1)
 					var/turf/T = get_turf(src)
 					msg_admin_attack("[key_name(user)] has planted a creeper packet. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
-				if(2)
+				if (2)
 					var/turf/T = get_turf(src)
 					msg_admin_attack("[key_name(user)] has planted a spreading vine packet. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
 
 			seed = S.seed //Grab the seed datum.
 			dead = 0
 			age = 1
-			if(seed.hematophage)
+			if (seed.hematophage)
 				nutrilevel = 1
 
 			//Snowflakey, maybe move this to the seed datum
@@ -226,24 +226,24 @@
 		else
 			to_chat(user, "<span class='alert'>\The [src] already has seeds in it!</span>")
 
-	else if(O.force && seed && user.a_intent == I_HURT)
+	else if (O.force && seed && user.a_intent == I_HURT)
 		visible_message("<span class='danger'>\The [seed.display_name] has been attacked by [user] with \the [O]!</span>")
-		if(!dead)
+		if (!dead)
 			health -= O.force
 			check_health()
 		user.delayNextAttack(5)
 
-	else if(istype(O, /obj/item/claypot))
+	else if (istype(O, /obj/item/claypot))
 		to_chat(user, "<span class='warning'>You must place the pot on the ground and use a spade on \the [src] to make a transplant.</span>")
 		return
 
-	else if(seed && istype(O, /obj/item/weapon/pickaxe/shovel))
+	else if (seed && istype(O, /obj/item/weapon/pickaxe/shovel))
 		var/obj/item/claypot/C = locate() in range(user,1)
-		if(!C)
+		if (!C)
 			to_chat(user, "<span class='warning'>You need an empty clay pot next to you.</span>")
 			return
 		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
-		if(do_after(user, src, 50))
+		if (do_after(user, src, 50))
 			user.visible_message(	"<span class='notice'>[user] transplants \the [seed.display_name] into \the [C].</span>",
 									"<span class='notice'>[bicon(src)] You transplant \the [seed.display_name] into \the [C].</span>",
 									"<span class='notice'>You hear a ratchet.</span>")
@@ -252,14 +252,14 @@
 			transfer_fingerprints(C, S)
 			qdel(C)
 
-			if(seed.large)
+			if (seed.large)
 				S.icon_state += "-large"
 
-			if(dead)
+			if (dead)
 				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-dead")
-			else if(harvest)
+			else if (harvest)
 				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-harvest")
-			else if(age < seed.maturation)
+			else if (age < seed.maturation)
 				var/t_growthstate = max(1,round((age * seed.growth_stages) / seed.maturation))
 				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-grow[t_growthstate]")
 			else
@@ -267,9 +267,9 @@
 
 			S.plant_name = seed.display_name
 
-			if(seed.biolum)
+			if (seed.biolum)
 				S.set_light(round(seed.potency/10))
-				if(seed.biolum_colour)
+				if (seed.biolum_colour)
 					S.light_color = seed.biolum_colour
 
 			remove_plant()
@@ -279,17 +279,17 @@
 
 		return
 
-	else if(is_type_in_list(O, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))
+	else if (is_type_in_list(O, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))
 
-		if(!seed)
+		if (!seed)
 			to_chat(user, "There is nothing to take a sample from in \the [src].")
 			return
 
-		if(sampled)
+		if (sampled)
 			to_chat(user, "You have already sampled from this plant.")
 			return
 
-		if(dead)
+		if (dead)
 			to_chat(user, "The plant is dead.")
 			return
 
@@ -298,7 +298,7 @@
 		to_chat(user, "You take a sample from the [seed.display_name].")
 		health -= (rand(3,5)*10)
 
-		if(prob(30))
+		if (prob(30))
 			sampled = 1
 
 		// Bookkeeping.
@@ -310,7 +310,7 @@
 
 	else if (istype(O, /obj/item/weapon/minihoe))
 
-		if(weedlevel > 0)
+		if (weedlevel > 0)
 			user.visible_message("<span class='alert'>[user] starts uprooting the weeds.</span>", "<span class='alert'>You remove the weeds from the [src].</span>")
 			weedlevel = 0
 			update_icon()
@@ -323,7 +323,7 @@
 
 		var/obj/item/weapon/storage/bag/plants/S = O
 		for (var/obj/item/weapon/reagent_containers/food/snacks/grown/G in locate(user.x,user.y,user.z))
-			if(!S.can_be_inserted(G))
+			if (!S.can_be_inserted(G))
 				return
 			S.handle_item_insertion(G, 1)
 
@@ -341,15 +341,15 @@
 		check_level_sanity()
 		update_icon()
 
-	else if(istype(O, /obj/item/weapon/tank))
+	else if (istype(O, /obj/item/weapon/tank))
 		return // Maybe someday make it draw atmos from it so you don't need a whoopin canister, but for now, nothing.
 
-	else if(iswrench(O) && istype(src, /obj/machinery/portable_atmospherics/hydroponics/soil)) //Soil isn't a portable atmospherics machine by any means
+	else if (iswrench(O) && istype(src, /obj/machinery/portable_atmospherics/hydroponics/soil)) //Soil isn't a portable atmospherics machine by any means
 		return //Don't call parent. I mean, soil shouldn't be a child of portable_atmospherics at all, but that's not very feasible.
 
-	else if(istype(O, /obj/item/apiary))
+	else if (istype(O, /obj/item/apiary))
 
-		if(seed)
+		if (seed)
 			to_chat(user, "<span class='alert'>[src] is already occupied!</span>")
 		else
 			user.drop_item(O, force_drop = 1)
@@ -365,7 +365,7 @@
 			component_parts.len = 0
 			qdel(src)
 
-	else if(O.is_sharp() && harvest)
+	else if (O.is_sharp() && harvest)
 		attack_hand(user)
 
 	else
@@ -373,10 +373,10 @@
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_tk(mob/user as mob)
 
-	if(harvest)
+	if (harvest)
 		harvest(user)
 
-	else if(dead)
+	else if (dead)
 		remove_dead(user)
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_ai(mob/user as mob)
@@ -385,17 +385,17 @@
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_robot(mob/user as mob)
 
-	if(isMoMMI(user) && Adjacent(user)) //Are we a beep ping ?
+	if (isMoMMI(user) && Adjacent(user)) //Are we a beep ping ?
 		return attack_hand(user) //Let them use the tray
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_hand(mob/user as mob)
 
-	if(isobserver(user))
-		if(!(..()))
+	if (isobserver(user))
+		if (!(..()))
 			return 0
-	if(harvest)
+	if (harvest)
 		harvest(user)
-	else if(dead)
+	else if (dead)
 		remove_dead(user)
 
 	else
@@ -406,56 +406,56 @@
 	view_contents(user)
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/view_contents(mob/user)
-	if(src.seed && !src.dead)
+	if (src.seed && !src.dead)
 		to_chat(user, "<span class='info'>[src.seed.display_name]</span> is growing here.")
-		if(src.health <= (src.seed.endurance / 2))
+		if (src.health <= (src.seed.endurance / 2))
 			to_chat(user, "The plant looks <span class='alert'>[age > seed.lifespan ? "old and wilting" : "unhealthy"].</span>")
-	else if(src.seed && src.dead)
+	else if (src.seed && src.dead)
 		to_chat(user, "[src] is full of dead plant matter.")
 	else
 		to_chat(user, "[src] has nothing planted.")
 	if (Adjacent(user) || isobserver(user) || issilicon(user))
 		to_chat(user, "Water: [round(src.waterlevel,0.1)]/100")
-		if(seed && seed.hematophage)
+		if (seed && seed.hematophage)
 			to_chat(user, "<span class='danger'>Blood:</span> [round(src.nutrilevel,0.1)]/10") //so edgy!!
 		else
 			to_chat(user, "Nutrient: [round(src.nutrilevel,0.1)]/10")
-		if(src.weedlevel >= 5)
+		if (src.weedlevel >= 5)
 			to_chat(user, "[src] is <span class='alert'>filled with weeds!</span>")
-		if(src.pestlevel >= 5)
+		if (src.pestlevel >= 5)
 			to_chat(user, "[src] is <span class='alert'>filled with tiny worms!</span>")
-		if(draw_warnings)
-			if(src.toxins >= 40)
+		if (draw_warnings)
+			if (src.toxins >= 40)
 				to_chat(user, "The tray's <span class='alert'>toxicity level alert</span> is flashing red.")
-			if(improper_light)
+			if (improper_light)
 				to_chat(user, "The tray's <span class='alert'>improper light level alert</span> is blinking.")
-			if(improper_heat)
+			if (improper_heat)
 				to_chat(user, "The tray's <span class='alert'>improper temperature alert</span> is blinking.")
-			if(improper_kpa)
+			if (improper_kpa)
 				to_chat(user, "The tray's <span class='alert'>improper environment pressure alert</span> is blinking.")
-			if(missing_gas)
+			if (missing_gas)
 				to_chat(user, "The tray's <span class='alert'>improper gas environment alert</span> is blinking.")
 
-		if(!istype(src,/obj/machinery/portable_atmospherics/hydroponics/soil))
+		if (!istype(src,/obj/machinery/portable_atmospherics/hydroponics/soil))
 
 			var/turf/T = loc
 			var/datum/gas_mixture/environment
 
-			if(closed_system && (connected_port || holding))
+			if (closed_system && (connected_port || holding))
 				environment = air_contents
 
-			if(!environment)
-				if(istype(T))
+			if (!environment)
+				if (istype(T))
 					environment = T.return_air()
 
-			if(!environment)
-				if(istype(T, /turf/space))
+			if (!environment)
+				if (istype(T, /turf/space))
 					environment = space_gas
 				else //Somewhere we shouldn't be, panic
 					return
 
 			var/light_available = 5
-			if(T.dynamic_lighting)
+			if (T.dynamic_lighting)
 				light_available = T.get_lumcount() * 10
 
 			to_chat(user, "The tray's sensor suite is reporting a light level of [round(light_available, 0.1)] lumens and a temperature of [environment.temperature]K.")
@@ -465,12 +465,12 @@
 	set category = "Object"
 	set src in view(1)
 
-	if(!usr || usr.isUnconscious() || usr.restrained())
+	if (!usr || usr.isUnconscious() || usr.restrained())
 		return
 
 	closed_system = !closed_system
 	to_chat(usr, "You [closed_system ? "close" : "open"] the tray's lid.")
-	if(closed_system)
+	if (closed_system)
 		flags &= ~OPENCONTAINER
 	else
 		flags |= OPENCONTAINER
@@ -481,7 +481,7 @@
 	set name = "Toggle Light"
 	set category = "Object"
 	set src in view(1)
-	if(!usr || usr.isUnconscious() || usr.restrained())
+	if (!usr || usr.isUnconscious() || usr.restrained())
 		return
 	light_on = !light_on
 	calculate_light()
@@ -491,11 +491,11 @@
 	set category = "Object"
 	set src in view(1)
 
-	if(!usr || usr.isUnconscious() || usr.restrained())
+	if (!usr || usr.isUnconscious() || usr.restrained())
 		return
 
 	var/n_label = copytext(reject_bad_text(input(usr, "What would you like to set the tray's label display to?", "Hydroponics Tray Labeling", null) as text), 1, MAX_NAME_LEN)
-	if(!usr || !n_label || !Adjacent(usr) || usr.isUnconscious() || usr.restrained())
+	if (!usr || !n_label || !Adjacent(usr) || usr.isUnconscious() || usr.restrained())
 		return
 
 	labeled = copytext(n_label, 1, 32) //technically replaces any traditional hand labeler labels, but will anyone really complain?
@@ -507,17 +507,17 @@
 	update_name()
 
 /obj/machinery/portable_atmospherics/hydroponics/HasProximity(mob/living/simple_animal/M)
-	if(seed && !dead && seed.carnivorous == 2 && age > seed.maturation)
-		if(istype(M, /mob/living/simple_animal/mouse) || istype(M, /mob/living/simple_animal/lizard) && !M.locked_to && !M.anchored)
+	if (seed && !dead && seed.carnivorous == 2 && age > seed.maturation)
+		if (istype(M, /mob/living/simple_animal/mouse) || istype(M, /mob/living/simple_animal/lizard) && !M.locked_to && !M.anchored)
 			spawn(10)
-				if(!M || !Adjacent(M) || M.locked_to || M.anchored)
+				if (!M || !Adjacent(M) || M.locked_to || M.anchored)
 					return // HasProximity() will likely fire a few times almost simultaneously, so spawn() is tricky with it's sanity
 				visible_message("<span class='warning'>\The [seed.display_name] hungrily lashes a vine at \the [M]!</span>")
-				if(M.health > 0)
+				if (M.health > 0)
 					M.Die()
 				lock_atom(M, /datum/locking_category/hydro_tray)
 				spawn(30)
-					if(M && M.loc == get_turf(src))
+					if (M && M.loc == get_turf(src))
 						unlock_atom(M)
 						M.gib(meat = 0) //"meat" argument only exists for mob/living/simple_animal/gib()
 						nutrilevel += 6
@@ -527,25 +527,25 @@
 /obj/machinery/portable_atmospherics/hydroponics/bullet_act(var/obj/item/projectile/Proj)
 
 	//Don't act on seeds like dionaea that shouldn't change.
-	if(seed && seed.immutable > 0)
+	if (seed && seed.immutable > 0)
 		return
 
 	//Override for somatoray projectiles.
-	if(!is_somatoraying && istype(Proj ,/obj/item/projectile/energy/floramut))
+	if (!is_somatoraying && istype(Proj ,/obj/item/projectile/energy/floramut))
 		var/obj/item/projectile/energy/floramut/P = Proj
 		var/sev = P.mutstrength
 		is_somatoraying = 1
 		spawn(4*sev)
 			is_somatoraying = 0
-			if(src && seed && !seed.immutable && !dead) //spawn() is tricky with sanity
+			if (src && seed && !seed.immutable && !dead) //spawn() is tricky with sanity
 				mutate(sev)
-				if(prob(30) && seed.yield != -1)
+				if (prob(30) && seed.yield != -1)
 					apply_mut("plusstat_yield", sev)
 				return
-	else if(istype(Proj ,/obj/item/projectile/energy/florayield))
-		if(seed && !dead)
+	else if (istype(Proj ,/obj/item/projectile/energy/florayield))
+		if (seed && !dead)
 			yield_mod = Clamp(yield_mod + (rand(3,5)/10), 1, 2)
-			if(yield_mod >= 2)
+			if (yield_mod >= 2)
 				visible_message("<span class='notice'>\The [seed.display_name] looks lush and healthy.</span>")
 			return
 

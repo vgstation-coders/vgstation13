@@ -270,17 +270,17 @@
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
 
 /obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
-	if(issolder(I))
+	if (issolder(I))
 		var/obj/item/weapon/solder/S = I
-		if(S.remove_fuel(2,user))
+		if (S.remove_fuel(2,user))
 			solder_improve(user)
-	else if(iswelder(I))
+	else if (iswelder(I))
 		var/obj/item/weapon/weldingtool/WT = I
-		if(WT.remove_fuel(1,user))
+		if (WT.remove_fuel(1,user))
 			var/obj/item/weapon/circuitboard/blank/B = new /obj/item/weapon/circuitboard/blank(src.loc)
 			to_chat(user, "<span class='notice'>You melt away the circuitry, leaving behind a blank.</span>")
 			playsound(B.loc, 'sound/items/Welder.ogg', 30, 1)
-			if(user.get_inactive_hand() == src)
+			if (user.get_inactive_hand() == src)
 				user.before_take_item(src)
 				user.put_in_hands(B)
 			qdel(src)
@@ -297,9 +297,9 @@
 	return
 
 /obj/item/weapon/circuitboard/security/solder_improve(mob/user as mob)
-	if(istype(src,/obj/item/weapon/circuitboard/security/advanced))
+	if (istype(src,/obj/item/weapon/circuitboard/security/advanced))
 		return ..()
-	if(istype(src,/obj/item/weapon/circuitboard/security/engineering))
+	if (istype(src,/obj/item/weapon/circuitboard/security/engineering))
 		return ..()
 	else
 		to_chat(user, "<span class='notice'>You locate a short that makes the feed circuitry more elegant.</span>")
@@ -309,23 +309,23 @@
 		return
 
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
-	switch(state)
-		if(0)
-			if(iswrench(P))
+	switch (state)
+		if (0)
+			if (iswrench(P))
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-				if(do_after(user, src, 5) && state == 0)
+				if (do_after(user, src, 5) && state == 0)
 					to_chat(user, "<span class='notice'>You wrench the frame into place.</span>")
 					src.anchored = 1
 					src.state = 1
 				return 1
-			if(iswelder(P))
+			if (iswelder(P))
 				var/obj/item/weapon/weldingtool/WT = P
-				if(!WT.remove_fuel(0, user))
+				if (!WT.remove_fuel(0, user))
 					to_chat(user, "The welding tool must be on to complete this task.")
 					return 1
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
-				if(do_after(user, src, 10) && state == 0)
-					if(!src || !WT.isOn())
+				if (do_after(user, src, 10) && state == 0)
+					if (!src || !WT.isOn())
 						return
 					to_chat(user, "<span class='notice'>You deconstruct the frame.</span>")
 					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, src.loc)
@@ -333,18 +333,18 @@
 					state = -1
 					qdel(src)
 				return 1
-		if(1)
-			if(iswrench(P))
+		if (1)
+			if (iswrench(P))
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-				if(do_after(user, src, 20) && state == 1)
+				if (do_after(user, src, 20) && state == 1)
 					to_chat(user, "<span class='notice'>You unfasten the frame.</span>")
 					src.anchored = 0
 					src.state = 0
 				return 1
-			if(istype(P, /obj/item/weapon/circuitboard) && !circuit)
+			if (istype(P, /obj/item/weapon/circuitboard) && !circuit)
 				var/obj/item/weapon/circuitboard/B = P
-				if(B.board_type == COMPUTER)
-					if(!user.drop_item(B, src))
+				if (B.board_type == COMPUTER)
+					if (!user.drop_item(B, src))
 						return
 
 					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
@@ -354,13 +354,13 @@
 				else
 					to_chat(user, "<span class='warning'>This frame does not accept circuit boards of this type!</span>")
 				return 1
-			if(isscrewdriver(P) && circuit)
+			if (isscrewdriver(P) && circuit)
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You screw the circuit board into place.</span>")
 				src.state = 2
 				src.icon_state = "2"
 				return 1
-			if(iscrowbar(P) && circuit)
+			if (iscrowbar(P) && circuit)
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You remove the circuit board.</span>")
 				src.state = 1
@@ -368,14 +368,14 @@
 				circuit.forceMove(src.loc)
 				src.circuit = null
 				return 1
-		if(2)
-			if(isscrewdriver(P) && circuit)
+		if (2)
+			if (isscrewdriver(P) && circuit)
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You unfasten the circuit board.</span>")
 				src.state = 1
 				src.icon_state = "1"
 				return 1
-			if(istype(P, /obj/item/stack/cable_coil))
+			if (istype(P, /obj/item/stack/cable_coil))
 				var/obj/item/stack/cable_coil/C = P
 				if (C.amount < 5)
 					to_chat(user, "<span class='warning'>You need at least 5 lengths of cable coil for this!</span>")
@@ -389,8 +389,8 @@
 					src.icon_state = "3"
 
 				return 1
-		if(3)
-			if(iswirecutter(P))
+		if (3)
+			if (iswirecutter(P))
 				playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You remove the cables.</span>")
 				src.state = 2
@@ -398,45 +398,45 @@
 				getFromPool(/obj/item/stack/cable_coil, get_turf(src), 5)
 				return 1
 
-			if(istype(P, /obj/item/stack/sheet/glass/glass))
+			if (istype(P, /obj/item/stack/sheet/glass/glass))
 				var/obj/item/stack/sheet/glass/glass/G = P
 				if (G.amount < 2)
 					to_chat(user, "<span class='warning'>You need at least 2 sheets of glass for this!</span>")
 					return 1
 
 				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-				if(do_after(user, src, 20) && state == 3 && G.amount >= 2)
+				if (do_after(user, src, 20) && state == 3 && G.amount >= 2)
 					G.use(2)
 					to_chat(user, "<span class='notice'>You put in the glass panel.</span>")
 					src.state = 4
 					src.icon_state = "4"
 
 				return 1
-		if(4)
-			if(iscrowbar(P))
+		if (4)
+			if (iscrowbar(P))
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You remove the glass panel.</span>")
 				src.state = 3
 				src.icon_state = "3"
 				new /obj/item/stack/sheet/glass/glass( src.loc, 2 )
 				return 1
-			if(isscrewdriver(P))
+			if (isscrewdriver(P))
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You connect the monitor.</span>")
 				var/B = new src.circuit.build_path ( src.loc )
-				if(circuit.powernet)
+				if (circuit.powernet)
 					B:powernet = circuit.powernet
-				if(circuit.id_tag)
+				if (circuit.id_tag)
 					B:id_tag = circuit.id_tag
-				if(circuit.records)
+				if (circuit.records)
 					B:records = circuit.records
-				if(circuit.frequency)
+				if (circuit.frequency)
 					B:frequency = circuit.frequency
-				if(istype(circuit,/obj/item/weapon/circuitboard/supplycomp))
+				if (istype(circuit,/obj/item/weapon/circuitboard/supplycomp))
 					var/obj/machinery/computer/supplycomp/SC = B
 					var/obj/item/weapon/circuitboard/supplycomp/C = circuit
 					SC.can_order_contraband = C.contraband_enabled
-				else if(istype(circuit,/obj/item/weapon/circuitboard/arcade))
+				else if (istype(circuit,/obj/item/weapon/circuitboard/arcade))
 					var/obj/machinery/computer/arcade/arcade = B
 					var/obj/item/weapon/circuitboard/arcade/C = circuit
 					arcade.import_game_data(C)

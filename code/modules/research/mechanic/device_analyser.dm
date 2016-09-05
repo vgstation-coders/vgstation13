@@ -30,29 +30,29 @@
 /obj/item/device/device_analyser/preattack(var/atom/A, mob/user, proximity_flag) //Hurrah for after-attack
 	/*if(get_turf(src) != get_turf(user)) //we aren't in the same place as our holder, so we have been moved and can ignore scanning
 		return*/
-	if(proximity_flag != 1)
+	if (proximity_flag != 1)
 		return
-	if(istype(A, /obj)) //don't want to scan mobs or anything like that
+	if (istype(A, /obj)) //don't want to scan mobs or anything like that
 		var/obj/O = A
-		if(istype(O, /obj/machinery/r_n_d/reverse_engine) && loaded_designs.len)
+		if (istype(O, /obj/machinery/r_n_d/reverse_engine) && loaded_designs.len)
 			return //don't try to scan the reverse engine if we have any designs to upload! let the reverse engine's attackby handle it instead
-		for(var/datum/design/current_design in loaded_designs)
-			if(current_design.build_path == O.type)
+		for (var/datum/design/current_design in loaded_designs)
+			if (current_design.build_path == O.type)
 				to_chat(user, "<span class='rose'>You've already got a schematic of \the [O]!</span>")
 				return
 
-		if(O.origin_tech || istype(O, /obj/machinery)) //two requirements: items have origin_tech, machines are checked in...
-			switch(CanCreateDesign(O, user)) //this proc. Checks to see if there's anything illegal or bad in the thing before scanning it
-				if(1)
-					if(max_designs && !(max_designs <= loaded_designs.len))
+		if (O.origin_tech || istype(O, /obj/machinery)) //two requirements: items have origin_tech, machines are checked in...
+			switch (CanCreateDesign(O, user)) //this proc. Checks to see if there's anything illegal or bad in the thing before scanning it
+				if (1)
+					if (max_designs && !(max_designs <= loaded_designs.len))
 						loaded_designs += getScanDesign(O)
 						user.visible_message("[user] scans \the [O].", "<span class='notice'>You successfully scan \the [O].</span>")
 						return 1
 					else
 						to_chat(user, "[bicon(src)] \The [src] flashes a message on-screen: \"Too many designs loaded.\"")
-				if(-1)
+				if (-1)
 					to_chat(user, "<span class='rose'>[bicon(src)] \The [src]'s safety features prevent you from scanning that object.</span>")
-				if(-2)
+				if (-2)
 					to_chat(user, "<span class='rose'>[bicon(src)] \The [src]'s access requirements prevent you from scanning that object.</span>")
 				else //no origin_tech, no scans.
 					to_chat(user, "<span class='rose'>\The [src] can't seem to scan \the [O]!</span>")
@@ -74,45 +74,45 @@
 	max_designs = 20
 
 /obj/item/device/device_analyser/proc/CanCreateDesign(var/obj/O, mob/user)
-	if(!istype(O))
+	if (!istype(O))
 		return 0
 
 	// Objects that cannot be scanned
-	if((O.mech_flags & MECH_SCAN_FAIL)==MECH_SCAN_FAIL)
+	if ((O.mech_flags & MECH_SCAN_FAIL)==MECH_SCAN_FAIL)
 		return 0
 
 	var/list/techlist = O.give_tech_list() //Some items may have a specific techlist. Currently only used for solar assemblies, since they don't hold a circuitboard.
-	if(techlist)
+	if (techlist)
 		return 1
 
-	if(istype(O, /obj/machinery))
+	if (istype(O, /obj/machinery))
 		var/obj/machinery/M = O
 
-		if(user && (!M.allowed(user) && M.mech_flags & MECH_SCAN_ACCESS) && !src.access_avoidance) //if we require access, and don't have it, and the scanner can't bypass it
+		if (user && (!M.allowed(user) && M.mech_flags & MECH_SCAN_ACCESS) && !src.access_avoidance) //if we require access, and don't have it, and the scanner can't bypass it
 			return -2
 
-		if(M.component_parts)
-			for(var/obj/item/weapon/circuitboard/CB in M.component_parts) //fetching the circuit by looking in the parts
-				if(istype(CB))
+		if (M.component_parts)
+			for (var/obj/item/weapon/circuitboard/CB in M.component_parts) //fetching the circuit by looking in the parts
+				if (istype(CB))
 					techlist = ConvertReqString2List(CB.origin_tech)
 					break
 
-		else if(istype(M, /obj/machinery/computer))
+		else if (istype(M, /obj/machinery/computer))
 			var/obj/machinery/computer/C = M
-			if(C.circuit)
+			if (C.circuit)
 				var/obj/item/weapon/circuitboard/comp_circuit = text2path(C.circuit)
 				techlist = ConvertReqString2List(initial(comp_circuit.origin_tech))
 
-	else if(istype(O, /obj/item))
+	else if (istype(O, /obj/item))
 		var/obj/item/I = O
-		if(!I.origin_tech)
+		if (!I.origin_tech)
 			return 0
 		techlist = ConvertReqString2List(I.origin_tech)
 
-	if(!techlist) //this don't fly
+	if (!techlist) //this don't fly
 		return 0
 
-	if(src.syndi_filter)
-		if((techlist && techlist[Tc_SYNDICATE]) || (O.mech_flags & MECH_SCAN_ILLEGAL))
+	if (src.syndi_filter)
+		if ((techlist && techlist[Tc_SYNDICATE]) || (O.mech_flags & MECH_SCAN_ILLEGAL))
 			return -1 //special negative return case
 	return 1

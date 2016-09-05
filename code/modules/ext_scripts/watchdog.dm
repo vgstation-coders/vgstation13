@@ -7,9 +7,9 @@ var/global/datum/watchdog/watchdog = new
 	var/chosen_map
 
 /datum/watchdog/proc/check_for_update()
-	if(waiting)
+	if (waiting)
 		return
-	if(fexists(update_signal_file) == 1)
+	if (fexists(update_signal_file) == 1)
 		waiting=1
 		to_chat(world, "<span class='notice'>\[AUTOMATIC ANNOUNCEMENT\] Update received.  Server will restart automatically after the round ends.</span>")
 

@@ -25,7 +25,7 @@
 		return 0
 
 /obj/item/weapon/gun/projectile/shotgun/pump/attack_self(mob/living/user as mob)
-	if(recentpump)
+	if (recentpump)
 		return
 	pump(user)
 	recentpump = 1
@@ -34,9 +34,9 @@
 	return
 
 /obj/item/weapon/gun/projectile/shotgun/pump/process_chambered()
-	if(in_chamber)
+	if (in_chamber)
 		return 1
-	else if(current_shell && current_shell.BB)
+	else if (current_shell && current_shell.BB)
 		in_chamber = current_shell.BB //Load projectile into chamber.
 		current_shell.BB.forceMove(src) //Set projectile loc to gun.
 		current_shell.BB = null
@@ -47,12 +47,12 @@
 /obj/item/weapon/gun/projectile/shotgun/pump/proc/pump(mob/M as mob)
 	playsound(M, 'sound/weapons/shotgunpump.ogg', 60, 1)
 	pumped = 0
-	if(current_shell)//We have a shell in the chamber
+	if (current_shell)//We have a shell in the chamber
 		current_shell.forceMove(get_turf(src))//Eject casing
 		current_shell = null
-		if(in_chamber)
+		if (in_chamber)
 			in_chamber = null
-	if(!getAmmo())
+	if (!getAmmo())
 		return 0
 	var/obj/item/ammo_casing/AC = loaded[1] //load next casing.
 	loaded -= AC //Remove casing from loaded list.
@@ -87,14 +87,14 @@
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/process_chambered()
-	if(in_chamber)
+	if (in_chamber)
 		return 1
-	if(!getAmmo())
+	if (!getAmmo())
 		return 0
 	var/obj/item/ammo_casing/AC = loaded[1] //load next casing.
 	loaded -= AC //Remove casing from loaded list.
 	loaded += AC //Put it in at the end - because it hasn't been ejected yet
-	if(AC.BB)
+	if (AC.BB)
 		in_chamber = AC.BB //Load projectile into chamber.
 		AC.BB.forceMove(src) //Set projectile loc to gun.
 		AC.BB = null
@@ -103,13 +103,13 @@
 	return 0
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/attack_self(mob/living/user as mob)
-	if(!(locate(/obj/item/ammo_casing/shotgun) in src) && !getAmmo())
+	if (!(locate(/obj/item/ammo_casing/shotgun) in src) && !getAmmo())
 		to_chat(user, "<span class='notice'>\The [src] is empty.</span>")
 		return
 
-	for(var/obj/item/ammo_casing/shotgun/loaded_shell in src) //This feels like a hack. don't code at 3:30am kids!!
+	for (var/obj/item/ammo_casing/shotgun/loaded_shell in src) //This feels like a hack. don't code at 3:30am kids!!
 		loaded_shell.forceMove(get_turf(src))
-		if(loaded_shell in loaded)
+		if (loaded_shell in loaded)
 			loaded -= loaded_shell
 
 	to_chat(user, "<span class='notice'>You break \the [src].</span>")
@@ -119,15 +119,15 @@
 	..()
 	A.update_icon()
 	update_icon()
-	if(istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
+	if (istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
 		to_chat(user, "<span class='notice'>You begin to shorten the barrel of \the [src].</span>")
-		if(getAmmo())
+		if (getAmmo())
 			afterattack(user, user)	//will this work?
 			afterattack(user, user)	//it will. we call it twice, for twice the FUN
 			playsound(user, fire_sound, 50, 1)
 			user.visible_message("<span class='danger'>The shotgun goes off!</span>", "<span class='danger'>The shotgun goes off in your face!</span>")
 			return
-		if(do_after(user, src, 30))	//SHIT IS STEALTHY EYYYYY
+		if (do_after(user, src, 30))	//SHIT IS STEALTHY EYYYYY
 			icon_state = "sawnshotgun"
 			w_class = W_CLASS_MEDIUM
 			item_state = "sawnshotgun"
@@ -136,7 +136,7 @@
 			name = "sawn-off shotgun"
 			desc = "Omar's coming!"
 			to_chat(user, "<span class='warning'>You shorten the barrel of \the [src]!</span>")
-			if(istype(user, /mob/living/carbon/human) && src.loc == user)
+			if (istype(user, /mob/living/carbon/human) && src.loc == user)
 				var/mob/living/carbon/human/H = user
 				H.update_inv_hands()
 

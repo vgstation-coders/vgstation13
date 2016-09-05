@@ -17,12 +17,12 @@ var/list/existing_vaults = list()
 	existing_vaults.Add(src)
 
 	var/zlevel_base_turf_type = get_base_turf(location.z)
-	if(!zlevel_base_turf_type)
+	if (!zlevel_base_turf_type)
 		zlevel_base_turf_type = /turf/space
 
-	for(var/turf/new_turf in objects)
-		if(new_turf.type == base_turf_type) //New turf is vault's base turf
-			if(new_turf.type != zlevel_base_turf_type) //And vault's base turf differs from zlevel's base turf
+	for (var/turf/new_turf in objects)
+		if (new_turf.type == base_turf_type) //New turf is vault's base turf
+			if (new_turf.type != zlevel_base_turf_type) //And vault's base turf differs from zlevel's base turf
 				new_turf.ChangeTurf(zlevel_base_turf_type)
 
 		new_turf.flags |= NO_MINIMAP //Makes the spawned turfs invisible on minimaps

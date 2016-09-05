@@ -6,55 +6,55 @@
 	var/virus2 = 0
 
 	Announce()
-		if(!virus)
-			for(var/mob/living/carbon/human/H in mob_list)
-				if((H.virus2.len) || (H.stat == 2) || prob(30))
+		if (!virus)
+			for (var/mob/living/carbon/human/H in mob_list)
+				if ((H.virus2.len) || (H.stat == 2) || prob(30))
 					continue
-				if(prob(100))	// no lethal diseases outside virus mode!
+				if (prob(100))	// no lethal diseases outside virus mode!
 					infect_mob_random_lesser(H)
-					if(prob(20))//don't want people to know that the virus alert = greater virus
+					if (prob(20))//don't want people to know that the virus alert = greater virus
 						command_alert("Probable outbreak of level [rand(1,6)] viral biohazard aboard [station_name()]. All personnel must contain the outbreak.", "Virus Alert")
 				else
 					infect_mob_random_greater(H)
-					if(prob(80))
+					if (prob(80))
 						command_alert("Probable outbreak of level [rand(2,9)] viral biohazard aboard [station_name()]. All personnel must contain the outbreak.", "Virus Alert")
 				break
 			//overall virus alert happens 26% of the time, might need to be higher
 		else
-			if(!virus)
+			if (!virus)
 				virus_type = pick(/datum/disease/dnaspread,/datum/disease/flu,/datum/disease/cold,/datum/disease/brainrot,/datum/disease/magnitis,/datum/disease/pierrot_throat)
 			else
-				switch(virus)
-					if("fake gbs")
+				switch (virus)
+					if ("fake gbs")
 						virus_type = /datum/disease/fake_gbs
-					if("gbs")
+					if ("gbs")
 						virus_type = /datum/disease/gbs
-					if("magnitis")
+					if ("magnitis")
 						virus_type = /datum/disease/magnitis
-					if("rhumba beat")
+					if ("rhumba beat")
 						virus_type = /datum/disease/rhumba_beat
-					if("brain rot")
+					if ("brain rot")
 						virus_type = /datum/disease/brainrot
-					if("cold")
+					if ("cold")
 						virus_type = /datum/disease/cold
-					if("retrovirus")
+					if ("retrovirus")
 						virus_type = /datum/disease/dnaspread
-					if("flu")
+					if ("flu")
 						virus_type = /datum/disease/flu
-//					if("t-virus")
+//					if ("t-virus")
 //						virus_type = /datum/disease/t_virus
-					if("pierrot's throat")
+					if ("pierrot's throat")
 						virus_type = /datum/disease/pierrot_throat
-			for(var/mob/living/carbon/human/H in mob_list)
+			for (var/mob/living/carbon/human/H in mob_list)
 
 				var/foundAlready = 0 // don't infect someone that already has the virus
-				for(var/datum/disease/D in H.viruses)
+				for (var/datum/disease/D in H.viruses)
 					foundAlready = 1
-				if(H.stat == 2 || foundAlready)
+				if (H.stat == 2 || foundAlready)
 					continue
 
-				if(virus_type == /datum/disease/dnaspread) //Dnaspread needs strain_data set to work.
-					if((!H.dna) || (H.disabilities & 128)) //A blindness disease would be the worst.
+				if (virus_type == /datum/disease/dnaspread) //Dnaspread needs strain_data set to work.
+					if ((!H.dna) || (H.disabilities & 128)) //A blindness disease would be the worst.
 						continue
 					var/datum/disease/dnaspread/D = new
 					D.strain_data["name"] = H.real_name

@@ -50,7 +50,7 @@
 */
 /datum/n_Interpreter/New(datum/node/BlockDefinition/GlobalBlock/program = null)
 	. = ..()
-	if(program)
+	if (program)
 		Load(program)
 
 /*
@@ -86,8 +86,8 @@ Proc: AlertAdmins
 Alerts the admins of a script that is bad.
 */
 /datum/n_Interpreter/proc/AlertAdmins()
-	if(container && !alertadmins)
-		if(istype(container, /datum/TCS_Compiler))
+	if (container && !alertadmins)
+		if (istype(container, /datum/TCS_Compiler))
 			var/datum/TCS_Compiler/Compiler = container
 			var/obj/machinery/telecomms/server/Holder = Compiler.Holder
 			var/message = "Potential crash-inducing NTSL script detected at telecommunications server [Compiler.Holder] ([Holder.x], [Holder.y], [Holder.z])."
@@ -100,72 +100,72 @@ Runs each statement in a block of code.
 */
 /datum/n_Interpreter/proc/RunBlock(var/datum/node/BlockDefinition/Block, var/datum/scope/scope = null)
 	var/is_global = istype(Block, /datum/node/BlockDefinition/GlobalBlock)
-	if(!is_global)
-		if(scope)
+	if (!is_global)
+		if (scope)
 			curScope = scope
 		else
 			CreateScope(Block)
 	else
-		if(!persist)
+		if (!persist)
 			CreateGlobalScope()
 
 		curScope = globalScope
 
-	if(cur_statements < max_statements)
-		for(var/datum/node/statement/S in Block.statements)
-			while(paused) sleep(10)
+	if (cur_statements < max_statements)
+		for (var/datum/node/statement/S in Block.statements)
+			while (paused) sleep(10)
 
 			cur_statements++
-			if(cur_statements >= max_statements)
+			if (cur_statements >= max_statements)
 				RaiseError(new/datum/runtimeError/MaxCPU())
 				AlertAdmins()
 				break
 
-			if(istype(S, /datum/node/statement/VariableAssignment))
+			if (istype(S, /datum/node/statement/VariableAssignment))
 				var/datum/node/statement/VariableAssignment/stmt = S
 				var/name = stmt.var_name.id_name
 
-				if(!stmt.object)
+				if (!stmt.object)
 					// Below we assign the variable first to null if it doesn't already exist.
 					// This is necessary for assignments like +=, and when the variable is used in a function
 					// If the variable already exists in a different block, then AssignVariable will automatically use that one.
-					if(!IsVariableAccessible(name))
+					if (!IsVariableAccessible(name))
 						AssignVariable(name, null)
 
 					AssignVariable(name, Eval(stmt.value))
 				else
 					var/datum/D = Eval(GetVariable(stmt.object.id_name))
-					if(!D)
+					if (!D)
 						return
 
 					D.vars[stmt.var_name.id_name] = Eval(stmt.value)
 
-			else if(istype(S, /datum/node/statement/VariableDeclaration))
+			else if (istype(S, /datum/node/statement/VariableDeclaration))
 				//VariableDeclaration nodes are used to forcibly declare a local variable so that one in a higher scope isn't used by default.
 				var/datum/node/statement/VariableDeclaration/dec=S
-				if(!dec.object)
+				if (!dec.object)
 					AssignVariable(dec.var_name.id_name, null, curScope)
 				else
 					var/datum/D = Eval(GetVariable(dec.object.id_name))
-					if(!D)
+					if (!D)
 						return
 
 					D.vars[dec.var_name.id_name] = null
 
-			else if(istype(S, /datum/node/statement/FunctionCall))
+			else if (istype(S, /datum/node/statement/FunctionCall))
 				RunFunction(S)
 
-			else if(istype(S, /datum/node/statement/FunctionDefinition))
+			else if (istype(S, /datum/node/statement/FunctionDefinition))
 				//do nothing
 
-			else if(istype(S, /datum/node/statement/WhileLoop))
+			else if (istype(S, /datum/node/statement/WhileLoop))
 				RunWhile(S)
 
-			else if(istype(S, /datum/node/statement/IfStatement))
+			else if (istype(S, /datum/node/statement/IfStatement))
 				RunIf(S)
 
-			else if(istype(S, /datum/node/statement/ReturnStatement))
-				if(!curFunction)
+			else if (istype(S, /datum/node/statement/ReturnStatement))
+				if (!curFunction)
 					RaiseError(new/datum/runtimeError/UnexpectedReturn())
 					continue
 
@@ -173,18 +173,18 @@ Runs each statement in a block of code.
 				returnVal = Eval(S:value)
 				break
 
-			else if(istype(S, /datum/node/statement/BreakStatement))
+			else if (istype(S, /datum/node/statement/BreakStatement))
 				status |= BREAKING
 				break
 
-			else if(istype(S, /datum/node/statement/ContinueStatement))
+			else if (istype(S, /datum/node/statement/ContinueStatement))
 				status |= CONTINUING
 				break
 
 			else
 				RaiseError(new/datum/runtimeError/UnknownInstruction())
 
-			if(status)
+			if (status)
 				break
 
 	curScope = scopes.Pop()
@@ -197,33 +197,33 @@ Runs a function block or a proc with the arguments specified in the script.
 	//Note that anywhere /datum/node/statement/FunctionCall/stmt is used so may /datum/node/expression/FunctionCall
 
 	// If recursion gets too high (max 50 nested functions) throw an error
-	if(cur_recursion >= max_recursion)
+	if (cur_recursion >= max_recursion)
 		AlertAdmins()
 		RaiseError(new/datum/runtimeError/RecursionLimitReached())
 		return 0
 
 	var/datum/node/statement/FunctionDefinition/def
-	if(!stmt.object)							//A scope's function is being called, stmt.object is null
+	if (!stmt.object)							//A scope's function is being called, stmt.object is null
 		def = GetFunction(stmt.func_name)
 
-	else if(istype(stmt.object))				//A method of an object exposed as a variable is being called, stmt.object is a /node/identifier
+	else if (istype(stmt.object))				//A method of an object exposed as a variable is being called, stmt.object is a /node/identifier
 		var/O = GetVariable(stmt.object.id_name)	//Gets a reference to the object which is the target of the function call.
-		if(!O)
+		if (!O)
 			return							//Error already thrown in GetVariable()
 		def = Eval(O)
 
-	if(!def)
+	if (!def)
 		return
 
 	cur_recursion++ // add recursion
-	if(istype(def))
-		if(curFunction)
+	if (istype(def))
+		if (curFunction)
 			functions.Push(curFunction)
 		var/datum/scope/S = CreateScope(def.block)
 
-		for(var/i = 1 to def.parameters.len)
+		for (var/i = 1 to def.parameters.len)
 			var/val
-			if(stmt.parameters.len >= i)
+			if (stmt.parameters.len >= i)
 				val = stmt.parameters[i]
 			//else
 			//	unspecified param
@@ -242,11 +242,11 @@ Runs a function block or a proc with the arguments specified in the script.
 	else
 		cur_recursion--
 		var/list/params = new
-		for(var/datum/node/expression/P in stmt.parameters)
+		for (var/datum/node/expression/P in stmt.parameters)
 			params += list(Eval(P))
 
-		if(isobject(def))	//def is an object which is the target of a function call
-			if(!hascall(def, stmt.func_name))
+		if (isobject(def))	//def is an object which is the target of a function call
+			if (!hascall(def, stmt.func_name))
 				RaiseError(new/datum/runtimeError/UndefinedFunction("[stmt.object.id_name].[stmt.func_name]"))
 				return
 
@@ -262,19 +262,19 @@ Proc: RunIf
 Checks a condition and runs either the if block or else block.
 */
 /datum/n_Interpreter/proc/RunIf(var/datum/node/statement/IfStatement/stmt)
-	if(!stmt.skip)
-		if(Eval(stmt.cond))
+	if (!stmt.skip)
+		if (Eval(stmt.cond))
 			RunBlock(stmt.block)
 			// Loop through the if else chain and tell them to be skipped.
 			var/datum/node/statement/IfStatement/i = stmt.else_if
 			var/fail_safe = 800
 
-			while(i && fail_safe)
+			while (i && fail_safe)
 				fail_safe -= 1
 				i.skip = 1
 				i = i.else_if
 
-		else if(stmt.else_block)
+		else if (stmt.else_block)
 			RunBlock(stmt.else_block)
 
 	// We don't need to skip you anymore.
@@ -287,7 +287,7 @@ Runs a while loop.
 
 /datum/n_Interpreter/proc/RunWhile(var/datum/node/statement/WhileLoop/stmt)
 	var/i = 1
-	while(Eval(stmt.cond) && Iterate(stmt.block, i++))
+	while (Eval(stmt.cond) && Iterate(stmt.block, i++))
 		continue
 
 	status &= ~BREAKING
@@ -299,11 +299,11 @@ Runs a single iteration of a loop. Returns a value indicating whether or not to 
 
 /datum/n_Interpreter/proc/Iterate(var/datum/node/BlockDefinition/block, count)
 	RunBlock(block)
-	if(max_iterations > 0 && count >= max_iterations)
+	if (max_iterations > 0 && count >= max_iterations)
 		RaiseError(new/datum/runtimeError/IterationLimitReached())
 		return 0
 
-	if(status & (BREAKING|RETURNING))
+	if (status & (BREAKING|RETURNING))
 		return 0
 
 	status &= ~CONTINUING
@@ -316,8 +316,8 @@ Finds a function in an accessible scope with the given name. Returns a <Function
 
 /datum/n_Interpreter/proc/GetFunction(name)
 	var/datum/scope/S = curScope
-	while(S)
-		if(S.functions.Find(name))
+	while (S)
+		if (S.functions.Find(name))
 			return S.functions[name]
 		S = S.parent
 
@@ -330,8 +330,8 @@ Finds a variable in an accessible scope and returns its value.
 
 /datum/n_Interpreter/proc/GetVariable(name)
 	var/datum/scope/S = curScope
-	while(S)
-		if(S.variables.Find(name))
+	while (S)
+		if (S.variables.Find(name))
 			return S.variables[name]
 		S = S.parent
 
@@ -339,8 +339,8 @@ Finds a variable in an accessible scope and returns its value.
 
 /datum/n_Interpreter/proc/GetVariableScope(name) //needed for when you reassign a variable in a higher scope
 	var/datum/scope/S = curScope
-	while(S)
-		if(S.variables.Find(name))
+	while (S)
+		if (S.variables.Find(name))
 			return S
 
 		S = S.parent
@@ -348,8 +348,8 @@ Finds a variable in an accessible scope and returns its value.
 
 /datum/n_Interpreter/proc/IsVariableAccessible(name)
 	var/datum/scope/S = curScope
-	while(S)
-		if(S.variables.Find(name))
+	while (S)
+		if (S.variables.Find(name))
 			return TRUE
 		S = S.parent
 
@@ -367,17 +367,17 @@ S     - The scope the variable resides in. If it is null, a scope with the varia
 */
 
 /datum/n_Interpreter/proc/AssignVariable(name, datum/node/expression/value, var/datum/scope/S = null)
-	if(!S)
+	if (!S)
 		S = GetVariableScope(name)
-	if(!S)
+	if (!S)
 		S = curScope
-	if(!S)
+	if (!S)
 		S = globalScope
 
 	ASSERT(istype(S))
-	if(istext(value) || isnum(value) || isnull(value))
+	if (istext(value) || isnum(value) || isnull(value))
 		value = new/datum/node/expression/value/literal(value)
-	else if(!istype(value) && isobject(value))
+	else if (!istype(value) && isobject(value))
 		value = new/datum/node/expression/value/reference(value)
 	//TODO: check for invalid name
 	S.variables["[name]"] = value

@@ -11,13 +11,13 @@
 
 
 /datum/artifact_effect/gasoxy/DoEffectTouch(var/mob/user)
-	if(holder)
+	if (holder)
 		var/datum/gas_mixture/env = holder.loc.return_air()
-		if(env)
+		if (env)
 			env.oxygen += rand(2,15)
 
 /datum/artifact_effect/gasoxy/DoEffectAura()
-	if(holder)
+	if (holder)
 		var/datum/gas_mixture/env = holder.loc.return_air()
-		if(env && env.total_moles < max_pressure)
+		if (env && env.total_moles < max_pressure)
 			env.oxygen += pick(0, 0, 0.1, rand())

@@ -17,14 +17,14 @@
 	var/possible_transfer_amounts = list(10,25,50,100)
 
 /obj/structure/reagent_dispensers/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iswrench(W) && wrenchable())
+	if (iswrench(W) && wrenchable())
 		return wrenchAnchor(user)
 
 /obj/structure/reagent_dispensers/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>It contains:</span>")
-	if(reagents && reagents.reagent_list.len)
-		for(var/datum/reagent/R in reagents.reagent_list)
+	if (reagents && reagents.reagent_list.len)
+		for (var/datum/reagent/R in reagents.reagent_list)
 			to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
 	else
 		to_chat(user, "<span class='info'>Nothing.</span>")
@@ -42,16 +42,16 @@
 		amount_per_transfer_from_this = N
 
 /obj/structure/reagent_dispensers/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			qdel(src)
 			return
-		if(2.0)
+		if (2.0)
 			if (prob(50))
 				new /obj/effect/effect/water(src.loc)
 				qdel(src)
 				return
-		if(3.0)
+		if (3.0)
 			if (prob(5))
 				new /obj/effect/effect/water(src.loc)
 				qdel(src)
@@ -60,7 +60,7 @@
 	return
 
 /obj/structure/reagent_dispensers/blob_act()
-	if(prob(50))
+	if (prob(50))
 		new /obj/effect/effect/water(src.loc)
 		qdel(src)
 
@@ -96,7 +96,7 @@
 	var/obj/item/device/assembly_holder/rig = null
 
 /*/obj/structure/reagent_dispensers/fueltank/hear_talk(mob/living/M, text)
-	if(rig)
+	if (rig)
 		rig.hear_talk(M,text)
 */
 
@@ -104,15 +104,15 @@
 	..()
 	if (modded)
 		to_chat(user, "<span class='warning'>Fuel faucet is wrenched open, leaking the fuel!</span>")
-	if(rig)
+	if (rig)
 		to_chat(user, "<span class='notice'>There is some kind of device rigged to the tank.</span>")
 
 /obj/structure/reagent_dispensers/fueltank/attack_hand()
 	if (rig)
 		usr.visible_message("[usr] begins to detach [rig] from \the [src].", "You begin to detach [rig] from \the [src]")
-		if(do_after(usr, src, 20))
+		if (do_after(usr, src, 20))
 			usr.visible_message("<span class='notice'>[usr] detaches [rig] from \the [src].", "<span class='notice'>You detach [rig] from \the [src]</span>")
-			if(rig)
+			if (rig)
 				rig.forceMove(get_turf(usr))
 				rig = null
 			overlays = new/list()
@@ -127,8 +127,8 @@
 			to_chat(user, "<span class='warning'>There is another device in the way.</span>")
 			return ..()
 		user.visible_message("[user] begins rigging [W] to \the [src].", "You begin rigging [W] to \the [src]")
-		if(do_after(user, src, 20))
-			if(!user.drop_item(W, src))
+		if (do_after(user, src, 20))
+			if (!user.drop_item(W, src))
 				user << "<span class='warning'>Oops! You can't let go of \the [W]!</span>"
 				return
 
@@ -158,14 +158,14 @@
 	apply_beam_damage(B)
 
 /obj/structure/reagent_dispensers/fueltank/apply_beam_damage(var/obj/effect/beam/B)
-	if(isturf(get_turf(src)) && B.get_damage() >= 15)
+	if (isturf(get_turf(src)) && B.get_damage() >= 15)
 		explode()
 
 /obj/structure/reagent_dispensers/fueltank/bullet_act(var/obj/item/projectile/Proj)
-	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
-		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
+	if (istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
+		if (!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
 			log_attack("<font color='red'>[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type]</font>")
-			if(Proj.firer)//turrets don't have "firers"
+			if (Proj.firer)//turrets don't have "firers"
 				Proj.firer.attack_log += "\[[time_stamp()]\] <b>[key_name(Proj.firer)]</b> shot <b>[src]([x],[y],[z])</b> with a <b>[Proj.type]</b>"
 				msg_admin_attack("[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)") //BS12 EDIT ALG
 			else
@@ -179,7 +179,7 @@
 	explode()
 
 /obj/structure/reagent_dispensers/fueltank/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(exposed_temperature >= AUTOIGNITION_WELDERFUEL)
+	if (exposed_temperature >= AUTOIGNITION_WELDERFUEL)
 		explode()
 
 /obj/structure/reagent_dispensers/fueltank/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/wizmobile/W)
@@ -193,7 +193,7 @@
 		explosion(src.loc,0,1,3)
 	else
 		explosion(src.loc,-1,1,2)
-	if(src)
+	if (src)
 		qdel(src)
 
 /obj/structure/reagent_dispensers/fueltank/New()
@@ -234,7 +234,7 @@
 	return 1
 
 /obj/structure/reagent_dispensers/water_cooler/attack_hand(mob/user as mob)
-	if(paper_cups > 0)
+	if (paper_cups > 0)
 		user.put_in_hands(new/obj/item/weapon/reagent_containers/food/drinks/sillycup())
 		to_chat(user, "You pick up an empty paper cup from \the [src]")
 		paper_cups--
@@ -246,7 +246,7 @@
 /obj/structure/reagent_dispensers/water_cooler/attackby(obj/item/I as obj, mob/user as mob)
 	if (iswelder(I))
 		var/obj/item/weapon/weldingtool/WT = I
-		if(WT.remove_fuel(0, user))
+		if (WT.remove_fuel(0, user))
 			new /obj/item/stack/sheet/mineral/plastic (src.loc,4)
 			qdel(src)
 			return
@@ -324,12 +324,12 @@
 
 /obj/structure/reagent_dispensers/silicate/attackby(var/obj/item/W, var/mob/user)
 	. = ..()
-	if(.)
+	if (.)
 		return
 
-	if(issilicatesprayer(W))
+	if (issilicatesprayer(W))
 		var/obj/item/device/silicate_sprayer/S = W
-		if(S.get_amount() >= S.max_silicate) // Already filled.
+		if (S.get_amount() >= S.max_silicate) // Already filled.
 			to_chat(user, "<span class='notice'>\The [S] is already full!</span>")
 			return
 

@@ -26,11 +26,11 @@
 	return
 
 /obj/structure/closet/secure_closet/bar/update_icon()
-	if(broken)
+	if (broken)
 		icon_state = icon_broken
 	else
-		if(!opened)
-			if(locked)
+		if (!opened)
+			if (locked)
 				icon_state = icon_locked
 			else
 				icon_state = icon_closed

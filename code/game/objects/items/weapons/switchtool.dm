@@ -26,21 +26,21 @@
 	var/removing_item = /obj/item/weapon/screwdriver //the type of item that lets you take tools out
 
 /obj/item/weapon/switchtool/preattack(atom/target, mob/user, proximity_flag, click_parameters)
-	if(istype(target, /obj/item/weapon/storage)) //we place automatically
+	if (istype(target, /obj/item/weapon/storage)) //we place automatically
 		return
-	if(deployed && proximity_flag)
+	if (deployed && proximity_flag)
 		target.attackby(deployed, user)
 		deployed.afterattack(target, user, proximity_flag, click_parameters)
-		if(deployed.loc != src)
-			for(var/module in stored_modules)
-				if(stored_modules[module] == deployed)
+		if (deployed.loc != src)
+			for (var/module in stored_modules)
+				if (stored_modules[module] == deployed)
 					stored_modules[module] = null
 			undeploy()
 		return 1
 
 /obj/item/weapon/switchtool/New()
 	..()
-	for(var/module in stored_modules) //making the modules
+	for (var/module in stored_modules) //making the modules
 		var/new_type = text2path(get_module_type(module))
 		stored_modules[module] = new new_type(src)
 
@@ -49,19 +49,19 @@
 	to_chat(usr, "This one is capable of holding [get_formatted_modules()].")
 
 /obj/item/weapon/switchtool/attack_self(mob/user)
-	if(!user)
+	if (!user)
 		return
 
-	if(deployed)
+	if (deployed)
 		to_chat(user, "You store \the [deployed].")
 		undeploy()
 	else
 		choose_deploy(user)
 
 /obj/item/weapon/switchtool/attackby(var/obj/item/used_item, mob/user)
-	if(istype(used_item, removing_item) && deployed) //if it's the thing that lets us remove tools and we have something to remove
+	if (istype(used_item, removing_item) && deployed) //if it's the thing that lets us remove tools and we have something to remove
 		return remove_module(user)
-	if(add_module(used_item, user))
+	if (add_module(used_item, user))
 		return 1
 	else
 		return ..()
@@ -77,26 +77,26 @@
 /obj/item/weapon/switchtool/proc/get_formatted_modules()
 	var/counter = 0
 	var/module_string = ""
-	for(var/module in stored_modules)
+	for (var/module in stored_modules)
 		counter++
-		if(counter == stored_modules.len)
+		if (counter == stored_modules.len)
 			module_string += "and \a [get_module_name(module)]"
 		else
 			module_string += "\a [get_module_name(module)], "
 	return module_string
 
 /obj/item/weapon/switchtool/proc/add_module(var/obj/item/used_item, mob/user)
-	if(!used_item || !user)
+	if (!used_item || !user)
 		return
 
-	for(var/module in stored_modules)
+	for (var/module in stored_modules)
 		var/type_path = text2path(get_module_type(module))
-		if(istype(used_item, type_path))
-			if(stored_modules[module])
+		if (istype(used_item, type_path))
+			if (stored_modules[module])
 				to_chat(user, "\The [src] already has a [get_module_name(module)].")
 				return
 			else
-				if(user.drop_item(used_item, src))
+				if (user.drop_item(used_item, src))
 					stored_modules[module] = used_item
 					to_chat(user, "You successfully load \the [used_item] into \the [src]'s [get_module_name(module)] slot.")
 					return 1
@@ -104,8 +104,8 @@
 /obj/item/weapon/switchtool/proc/remove_module(mob/user)
 	deployed.cant_drop = 0
 	deployed.forceMove(get_turf(user))
-	for(var/module in stored_modules)
-		if(stored_modules[module] == deployed)
+	for (var/module in stored_modules)
+		if (stored_modules[module] == deployed)
 			stored_modules[module] = null
 			break
 	to_chat(user, "You successfully remove \the [deployed] from \the [src].")
@@ -121,10 +121,10 @@
 	w_class = initial(w_class)
 
 /obj/item/weapon/switchtool/proc/deploy(var/module)
-	if(!(module in stored_modules))
+	if (!(module in stored_modules))
 		return
 
-	if(!stored_modules[module])
+	if (!stored_modules[module])
 		return
 
 	playsound(get_turf(src), "sound/weapons/switchblade.ogg", 10, 1)
@@ -135,25 +135,25 @@
 
 /obj/item/weapon/switchtool/proc/choose_deploy(mob/user)
 	var/list/potential_modules = list()
-	for(var/module in stored_modules)
-		if(stored_modules[module])
+	for (var/module in stored_modules)
+		if (stored_modules[module])
 			potential_modules += get_module_name(module)
 
-	if(!potential_modules.len)
+	if (!potential_modules.len)
 		to_chat(user, "No modules to deploy.")
 		return
 
-	else if(potential_modules.len == 1)
+	else if (potential_modules.len == 1)
 		deploy(potential_modules[1])
 		to_chat(user, "You deploy \the [potential_modules[1]]")
 		return 1
 
 	else
 		var/chosen_module = input(user,"What do you want to deploy?", "[src]", "Cancel") as anything in potential_modules
-		if(chosen_module != "Cancel")
+		if (chosen_module != "Cancel")
 			var/true_module = ""
-			for(var/checkmodule in stored_modules)
-				if(get_module_name(checkmodule) == chosen_module)
+			for (var/checkmodule in stored_modules)
+				if (get_module_name(checkmodule) == chosen_module)
 					true_module = checkmodule
 					break
 			deploy(true_module)
@@ -194,13 +194,13 @@
 						"/obj/item/weapon/pen:pen" = null)
 
 /obj/item/weapon/switchtool/swiss_army_knife/undeploy()
-	if(istype(deployed, /obj/item/weapon/lighter))
+	if (istype(deployed, /obj/item/weapon/lighter))
 		var/obj/item/weapon/lighter/lighter = deployed
 		lighter.lit = 0
 	..()
 
 /obj/item/weapon/switchtool/swiss_army_knife/deploy(var/module)
 	..()
-	if(istype(deployed, /obj/item/weapon/lighter))
+	if (istype(deployed, /obj/item/weapon/lighter))
 		var/obj/item/weapon/lighter/lighter = deployed
 		lighter.lit = 1

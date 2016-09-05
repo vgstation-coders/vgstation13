@@ -10,37 +10,37 @@
 
 /obj/item/device/assembly/mousetrap/examine(mob/user)
 	..()
-	if(armed)
+	if (armed)
 		to_chat(user, "<span class='warning'>It looks like it's armed.</span>")
 
 /obj/item/device/assembly/mousetrap/update_icon()
-	if(armed)
+	if (armed)
 		icon_state = "mousetraparmed"
 	else
 		icon_state = "mousetrap"
-	if(holder)
+	if (holder)
 		holder.update_icon()
 
 /obj/item/device/assembly/mousetrap/proc/triggered(mob/target as mob, var/type = "feet")
-	if(!armed)
+	if (!armed)
 		return
 	var/datum/organ/external/affecting = null
-	if(ishuman(target))
+	if (ishuman(target))
 		var/mob/living/carbon/human/H = target
-		switch(type)
-			if("feet")
-				if(!H.shoes)
+		switch (type)
+			if ("feet")
+				if (!H.shoes)
 					affecting = H.get_organ(pick(LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
 					H.Weaken(3)
-			if(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)
-				if(!H.gloves)
+			if (LIMB_LEFT_HAND, LIMB_RIGHT_HAND)
+				if (!H.gloves)
 					affecting = H.get_organ(type)
 					H.Stun(3)
-		if(affecting)
-			if(affecting.take_damage(1, 0))
+		if (affecting)
+			if (affecting.take_damage(1, 0))
 				H.UpdateDamageIcon()
 			H.updatehealth()
-	else if(ismouse(target))
+	else if (ismouse(target))
 		var/mob/living/simple_animal/mouse/M = target
 		visible_message("<span class='danger'>SPLAT!</span>")
 		M.splat()
@@ -51,10 +51,10 @@
 
 
 /obj/item/device/assembly/mousetrap/attack_self(mob/living/user as mob)
-	if(!armed)
+	if (!armed)
 		to_chat(user, "<span class='notice'>You arm [src].</span>")
 	else
-		if(((user.getBrainLoss() >= 60 || (M_CLUMSY in user.mutations)) && prob(50)))
+		if (((user.getBrainLoss() >= 60 || (M_CLUMSY in user.mutations)) && prob(50)))
 
 			var/datum/organ/external/OE = user.get_active_hand_organ()
 
@@ -69,8 +69,8 @@
 
 
 /obj/item/device/assembly/mousetrap/attack_hand(mob/living/user as mob)
-	if(armed)
-		if(((user.getBrainLoss() >= 60 || M_CLUMSY in user.mutations)) && prob(50))
+	if (armed)
+		if (((user.getBrainLoss() >= 60 || M_CLUMSY in user.mutations)) && prob(50))
 			var/datum/organ/external/OE = user.get_active_hand_organ()
 			triggered(user, OE.name)
 			user.visible_message("<span class='warning'>[user] accidentally sets off [src], breaking their fingers.</span>", \
@@ -80,20 +80,20 @@
 
 
 /obj/item/device/assembly/mousetrap/Crossed(AM as mob|obj)
-	if(armed)
-		if(ishuman(AM))
+	if (armed)
+		if (ishuman(AM))
 			var/mob/living/carbon/H = AM
-			if(H.m_intent == "run")
+			if (H.m_intent == "run")
 				triggered(H)
 				H.visible_message("<span class='warning'>[H] accidentally steps on [src].</span>", \
 								  "<span class='warning'>You accidentally step on [src]</span>")
-		if(ismouse(AM))
+		if (ismouse(AM))
 			triggered(AM)
 	..()
 
 
 /obj/item/device/assembly/mousetrap/on_found(mob/finder as mob)
-	if(armed)
+	if (armed)
 		finder.visible_message("<span class='warning'>[finder] accidentally sets off [src], breaking their fingers.</span>", \
 							   "<span class='warning'>You accidentally trigger [src]!</span>")
 
@@ -104,7 +104,7 @@
 
 
 /obj/item/device/assembly/mousetrap/hitby(A as mob|obj)
-	if(!armed)
+	if (!armed)
 		return ..()
 	visible_message("<span class='warning'>[src] is triggered by [A].</span>")
 	triggered(null)
@@ -120,7 +120,7 @@
 	set name = "Hide"
 	set category = "Object"
 
-	if(usr.isUnconscious())
+	if (usr.isUnconscious())
 		return
 
 	plane = ABOVE_TURF_PLANE

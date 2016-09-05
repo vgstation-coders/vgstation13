@@ -14,11 +14,11 @@
 	var/maxrate = 10 * ONE_ATMOSPHERE
 
 /obj/machinery/portable_atmospherics/scrubber/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		..(severity)
 		return
 
-	if(prob(50/severity))
+	if (prob(50/severity))
 		on = !on
 		update_icon()
 
@@ -47,14 +47,14 @@
 	update_icon()
 		src.overlays = 0
 
-		if(on)
+		if (on)
 			icon_state = "scrubber:1"
 		else
 			icon_state = "scrubber:0"
 
 	attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-		if(iswrench(W))
-			if(on)
+		if (iswrench(W))
+			if (on)
 				to_chat(user, "<span class='notice'>Turn it off first!</span>")
 				return
 
@@ -70,7 +70,7 @@
 	name = "Stationary Air Scrubber"
 
 	attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-		if(iswrench(W))
+		if (iswrench(W))
 			to_chat(user, "<span class='notice'>The bolts are too tight for you to unscrew!</span>")
 			return
 
@@ -80,15 +80,15 @@
 /obj/machinery/portable_atmospherics/scrubber/update_icon()
 	src.overlays = 0
 
-	if(on)
+	if (on)
 		icon_state = "pscrubber:1"
 	else
 		icon_state = "pscrubber:0"
 
-	if(holding)
+	if (holding)
 		overlays += image(icon = icon, icon_state = "scrubber-open")
 
-	if(connected_port)
+	if (connected_port)
 		overlays += image(icon = icon, icon_state = "scrubber-connector")
 
 	return
@@ -96,9 +96,9 @@
 /obj/machinery/portable_atmospherics/scrubber/process()
 	..()
 
-	if(on)
+	if (on)
 		var/datum/gas_mixture/environment
-		if(holding)
+		if (holding)
 			environment = holding.air_contents
 		else
 			environment = loc.return_air()
@@ -106,7 +106,7 @@
 
 		//Take a gas sample
 		var/datum/gas_mixture/removed
-		if(holding)
+		if (holding)
 			removed = environment.remove(transfer_moles)
 		else
 			removed = loc.remove_air(transfer_moles)
@@ -124,22 +124,22 @@
 			filtered_out.carbon_dioxide = removed.carbon_dioxide
 			removed.carbon_dioxide = 0
 
-			if(removed.trace_gases.len>0)
-				for(var/datum/gas/trace_gas in removed.trace_gases)
-					if(istype(trace_gas, /datum/gas/sleeping_agent))
+			if (removed.trace_gases.len>0)
+				for (var/datum/gas/trace_gas in removed.trace_gases)
+					if (istype(trace_gas, /datum/gas/sleeping_agent))
 						removed.trace_gases -= trace_gas
 						filtered_out.trace_gases += trace_gas
 
-			if(removed.trace_gases.len>0)
-				for(var/datum/gas/trace_gas in removed.trace_gases)
-					if(istype(trace_gas, /datum/gas/oxygen_agent_b))
+			if (removed.trace_gases.len>0)
+				for (var/datum/gas/trace_gas in removed.trace_gases)
+					if (istype(trace_gas, /datum/gas/oxygen_agent_b))
 						removed.trace_gases -= trace_gas
 						filtered_out.trace_gases += trace_gas
 
 		//Remix the resulting gases
 			air_contents.merge(filtered_out)
 
-			if(holding)
+			if (holding)
 				environment.merge(removed)
 			else
 				loc.assume_air(removed)
@@ -190,18 +190,18 @@
 
 /obj/machinery/portable_atmospherics/scrubber/Topic(href, href_list)
 	. = ..()
-	if(.)
+	if (.)
 		return .
 
-	if(href_list["power"])
+	if (href_list["power"])
 		on = !on
 		update_icon()
 
-	if(href_list["remove_tank"])
-		if(holding)
+	if (href_list["remove_tank"])
+		if (holding)
 			eject_holding()
 
-	if(href_list["volume_adj"])
+	if (href_list["volume_adj"])
 		var/diff = text2num(href_list["volume_adj"])
 		volume_rate = Clamp(volume_rate+diff, minrate, maxrate)
 
@@ -209,7 +209,7 @@
 	return 1
 
 /obj/machinery/portable_atmospherics/scrubber/AltClick()
-	if(!usr.incapacitated() && Adjacent(usr) && usr.dexterity_check())
+	if (!usr.incapacitated() && Adjacent(usr) && usr.dexterity_check())
 		eject_holding()
 		return
 	return ..()

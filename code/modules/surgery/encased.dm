@@ -110,7 +110,7 @@
 	affected.open = 3
 
 	// Whoops!
-	if(prob(10))
+	if (prob(10))
 		affected.fracture()
 
 /datum/surgery_step/open_encased/retract/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

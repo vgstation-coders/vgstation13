@@ -17,18 +17,18 @@
 	user.examination(bombtank)
 
 /obj/item/device/onetankbomb/update_icon()
-	if(bombtank)
+	if (bombtank)
 		icon_state = bombtank.icon_state
-	if(bombassembly)
+	if (bombassembly)
 		overlays += bombassembly.icon_state
 		overlays += bombassembly.overlays
 		overlays += image(icon = icon, icon_state = "bomb_assembly")
 
 /obj/item/device/onetankbomb/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/device/analyzer))
+	if (istype(W, /obj/item/device/analyzer))
 		bombtank.attackby(W, user)
 		return
-	if(iswrench(W) && !status)	//This is basically bomb assembly code inverted. apparently it works.
+	if (iswrench(W) && !status)	//This is basically bomb assembly code inverted. apparently it works.
 
 		to_chat(user, "<span class='notice'>You disassemble [src].</span>")
 
@@ -42,8 +42,8 @@
 
 		del(src)
 		return
-	if((istype(W, /obj/item/weapon/weldingtool) && W:welding))
-		if(!status)
+	if ((istype(W, /obj/item/weapon/weldingtool) && W:welding))
+		if (!status)
 			status = 1
 			bombers += "[key_name(user)] welded a single tank bomb. Temp: [bombtank.air_contents.temperature-T0C]"
 			message_admins("[key_name_admin(user)] welded a single tank bomb. Temp: [bombtank.air_contents.temperature-T0C]")
@@ -63,23 +63,23 @@
 /obj/item/device/onetankbomb/receive_signal()	//This is mainly called by the sensor through sense() to the holder, and from the holder to here.
 	visible_message("[bicon(src)] *beep* *beep*", "*beep* *beep*")
 	sleep(10)
-	if(!src)
+	if (!src)
 		return
-	if(status)
+	if (status)
 		bombtank.detonate()	//if its not a dud, boom (or not boom if you made shitty mix) the ignite proc is below, in this file
 	else
 		bombtank.release()
 
 /obj/item/device/onetankbomb/HasProximity(atom/movable/AM as mob|obj)
-	if(bombassembly)
+	if (bombassembly)
 		bombassembly.HasProximity(AM)
 
 /obj/item/device/onetankbomb/Crossed(AM as mob|obj)
-	if(bombassembly)
+	if (bombassembly)
 		bombassembly.Crossed(AM)
 
 /obj/item/device/onetankbomb/on_found(mob/finder as mob)
-	if(bombassembly)
+	if (bombassembly)
 		bombassembly.on_found(finder)
 
 // ---------- Procs below are for tanks that are used exclusively in 1-tank bombs ----------
@@ -87,12 +87,12 @@
 /obj/item/weapon/tank/proc/bomb_assemble(W,user)	//Bomb assembly proc. This turns assembly+tank into a bomb
 	var/obj/item/device/assembly_holder/S = W
 	var/mob/M = user
-	if(!S.secured)										//Check if the assembly is secured
+	if (!S.secured)										//Check if the assembly is secured
 		return
-	if(isigniter(S.a_left) == isigniter(S.a_right))		//Check if either part of the assembly has an igniter, but if both parts are igniters, then fuck it
+	if (isigniter(S.a_left) == isigniter(S.a_right))		//Check if either part of the assembly has an igniter, but if both parts are igniters, then fuck it
 		return
 
-	if(!M.drop_item(S))
+	if (!M.drop_item(S))
 		return		//Remove the assembly from your hands
 
 	var/obj/item/device/onetankbomb/R = new /obj/item/device/onetankbomb(loc)
@@ -117,23 +117,23 @@
 	var/turf/ground_zero = get_turf(loc)
 	loc = null
 
-	if(air_contents.temperature > (T0C + 400))
+	if (air_contents.temperature > (T0C + 400))
 		strength = (fuel_moles/15)
 
-		if(strength >=1)
+		if (strength >=1)
 			explosion(ground_zero, round(strength,1), round(strength*2,1), round(strength*3,1), round(strength*4,1))
-		else if(strength >=0.5)
+		else if (strength >=0.5)
 			explosion(ground_zero, 0, 1, 2, 4)
-		else if(strength >=0.2)
+		else if (strength >=0.2)
 			explosion(ground_zero, -1, 0, 1, 2)
 		else
 			ground_zero.assume_air(air_contents)
 			ground_zero.hotspot_expose(1000, 125,surfaces=1)
 
-	else if(air_contents.temperature > (T0C + 250))
+	else if (air_contents.temperature > (T0C + 250))
 		strength = (fuel_moles/20)
 
-		if(strength >=1)
+		if (strength >=1)
 			explosion(ground_zero, 0, round(strength,1), round(strength*2,1), round(strength*3,1))
 		else if (strength >=0.5)
 			explosion(ground_zero, -1, 0, 1, 2)
@@ -141,7 +141,7 @@
 			ground_zero.assume_air(air_contents)
 			ground_zero.hotspot_expose(1000, 125,surfaces=1)
 
-	else if(air_contents.temperature > (T0C + 100))
+	else if (air_contents.temperature > (T0C + 100))
 		strength = (fuel_moles/25)
 
 		if (strength >=1)
@@ -154,13 +154,13 @@
 		ground_zero.assume_air(air_contents)
 		ground_zero.hotspot_expose(1000, 125,surfaces=1)
 
-	if(master)
+	if (master)
 		del(master)
 	del(src)
 
 /obj/item/weapon/tank/proc/release()	//This happens when the bomb is not welded. Tank contents are just spat out.
 	var/datum/gas_mixture/removed = air_contents.remove(air_contents.total_moles())
 	var/turf/simulated/T = get_turf(src)
-	if(!T)
+	if (!T)
 		return
 	T.assume_air(removed)

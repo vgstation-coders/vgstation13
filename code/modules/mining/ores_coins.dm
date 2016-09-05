@@ -9,7 +9,7 @@
 	var/datum/geosample/geologic_data
 
 /obj/item/weapon/ore/recycle(var/datum/materials/rec)
-	if(material==null)
+	if (material==null)
 		return NOT_RECYCLABLE
 	rec.addAmount(material, 1)
 	return w_type
@@ -39,10 +39,10 @@
 
 /obj/item/weapon/ore/glass/throw_impact(atom/hit_atom)
 	//Intentionally not calling ..()
-	if(isturf(hit_atom))
+	if (isturf(hit_atom))
 		new/obj/effect/decal/cleanable/scattered_sand(hit_atom)
 		qdel(src)
-	else if(ishuman(hit_atom))
+	else if (ishuman(hit_atom))
 		var/mob/living/carbon/human/H = hit_atom
 		if (H.check_body_part_coverage(EYES))
 			to_chat(H, "<span class='warning'>Your eyewear protects you from \the [src]!</span>")
@@ -56,7 +56,7 @@
 
 /obj/item/weapon/ore/glass/attack_self(mob/living/user as mob) //It's magic I ain't gonna explain how instant conversion with no tool works. -- Urist
 	var/location = get_turf(user)
-	for(var/obj/item/weapon/ore/glass/sandToConvert in location)
+	for (var/obj/item/weapon/ore/glass/sandToConvert in location)
 		drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, 1, user)
 		qdel(sandToConvert)
 
@@ -116,7 +116,7 @@
 	var/datum/materials/mats=new
 
 /obj/item/weapon/ore/slag/recycle(var/datum/materials/rec)
-	if(mats.getVolume() == 1)
+	if (mats.getVolume() == 1)
 		return NOT_RECYCLABLE
 
 	rec.addFrom(mats) // NOT removeFrom.  Some things just check for the return value.
@@ -188,17 +188,17 @@
 	material="cerenkite"
 /obj/item/weapon/ore/cerenkite/ex_act()
 	var/L = get_turf(src)
-	for(var/mob/living/carbon/human/M in viewers(L, null))
+	for (var/mob/living/carbon/human/M in viewers(L, null))
 		M.apply_effect((rand(10, 50)), IRRADIATE, 0)
 	qdel(src)
 /obj/item/weapon/ore/cerenkite/attack_hand(mob/user as mob)
 	var/L = get_turf(user)
-	for(var/mob/living/carbon/human/M in viewers(L, null))
+	for (var/mob/living/carbon/human/M in viewers(L, null))
 		M.apply_effect((rand(10, 50)), IRRADIATE, 0)
 	qdel(src)
 /obj/item/weapon/ore/cerenkite/bullet_act(var/obj/item/projectile/P)
 	var/L = get_turf(src)
-	for(var/mob/living/carbon/human/M in viewers(L, null))
+	for (var/mob/living/carbon/human/M in viewers(L, null))
 		M.apply_effect((rand(10, 50)), IRRADIATE, 0)
 	qdel(src)
 /obj/item/weapon/ore/cytine
@@ -241,10 +241,10 @@
 	var/quality = 1 //How pure this gibtonite is, determines the explosion produced by it and is derived from the det_time of the rock wall it was taken from, higher shipping_value = better
 
 /obj/item/weapon/gibtonite/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/weapon/pickaxe) || istype(I, /obj/item/weapon/resonator))
+	if (istype(I, /obj/item/weapon/pickaxe) || istype(I, /obj/item/weapon/resonator))
 		GibtoniteReaction(user)
 		return
-	if(istype(I, /obj/item/device/mining_scanner) && primed)
+	if (istype(I, /obj/item/device/mining_scanner) && primed)
 		primed = 0
 		user.visible_message("<span class='notice'>The chain reaction was stopped! ...The ore's quality went down.</span>")
 		icon_state = "Gibtonite ore"
@@ -253,7 +253,7 @@
 	..()
 
 /obj/item/weapon/gibtonite/bullet_act(var/obj/item/projectile/P)
-	if(istype(P, /obj/item/projectile/bullet))
+	if (istype(P, /obj/item/projectile/bullet))
 		GibtoniteReaction(P.firer)
 	..()
 
@@ -261,33 +261,33 @@
 	GibtoniteReaction(triggered_by_explosive = 1)
 
 /obj/item/weapon/gibtonite/proc/GibtoniteReaction(mob/user, triggered_by_explosive = 0)
-	if(!primed)
+	if (!primed)
 		playsound(src,'sound/effects/hit_on_shattered_glass.ogg',50,1)
 		primed = 1
 		icon_state = "Gibtonite active"
 		var/turf/bombturf = get_turf(src)
 		var/area/A = get_area(bombturf)
 		var/notify_admins = 0
-		if(z != map.zAsteroid)//Only annoy the admins ingame if we're triggered off the mining zlevel
+		if (z != map.zAsteroid)//Only annoy the admins ingame if we're triggered off the mining zlevel
 			notify_admins = 1
-		if(notify_admins)
-			if(triggered_by_explosive)
+		if (notify_admins)
+			if (triggered_by_explosive)
 				message_admins("An explosion has triggered a [name] to detonate at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name] (JMP)</a>.")
 			else
 				message_admins("[key_name(usr)]<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A> has triggered a [name] to detonate at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name] (JMP)</a>.")
-		if(triggered_by_explosive)
+		if (triggered_by_explosive)
 			log_game("An explosion has primed a [name] for detonation at [A.name]([bombturf.x],[bombturf.y],[bombturf.z])")
 		else
 			user.visible_message("<span class='warning'>[user] strikes the [src], causing a chain reaction!</span>")
 			log_game("[key_name(usr)] has primed a [name] for detonation at [A.name]([bombturf.x],[bombturf.y],[bombturf.z])")
 		spawn(det_time)
-			if(primed)
-				switch(quality)
-					if(1)
+			if (primed)
+				switch (quality)
+					if (1)
 						explosion(src.loc,-1,1,3,adminlog = notify_admins)
-					if(2)
+					if (2)
 						explosion(src.loc,1,2,5,adminlog = notify_admins)
-					if(3)
+					if (3)
 						explosion(src.loc,2,4,9,adminlog = notify_admins)
 				qdel(src)
 
@@ -300,7 +300,7 @@
 	return
 
 /obj/item/weapon/ore/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/device/core_sampler))
+	if (istype(W,/obj/item/device/core_sampler))
 		var/obj/item/device/core_sampler/C = W
 		C.sample_item(src, user)
 	else
@@ -327,7 +327,7 @@
 	pixel_y = rand(-8, 0) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/coin/recycle(var/datum/materials/rec)
-	if(material==null)
+	if (material==null)
 		return NOT_RECYCLABLE
 	rec.addAmount(material, 0.2) // 5 coins per sheet.
 	return w_type
@@ -398,13 +398,13 @@
 	icon_state = "coin_mythril"
 
 /obj/item/weapon/coin/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/stack/cable_coil) )
+	if (istype(W,/obj/item/stack/cable_coil) )
 		var/obj/item/stack/cable_coil/CC = W
-		if(string_attached)
+		if (string_attached)
 			to_chat(user, "<span class='notice'>There already is a string attached to this coin.</span>")
 			return
 
-		if(CC.amount <= 0)
+		if (CC.amount <= 0)
 			to_chat(user, "<span class='notice'>This cable coil appears to be empty.</span>")
 			qdel(CC)
 			CC = null
@@ -414,8 +414,8 @@
 		string_attached = 1
 		to_chat(user, "<span class='notice'>You attach a string to the coin.</span>")
 		CC.use(1)
-	else if(istype(W,/obj/item/weapon/wirecutters) )
-		if(!string_attached)
+	else if (istype(W,/obj/item/weapon/wirecutters) )
+		if (!string_attached)
 			..()
 			return
 

@@ -2,7 +2,7 @@
 
 /mob/living/carbon/human/proc/handle_stasis_bag()
 	// Handle side effects from stasis bag
-	if(in_stasis)
+	if (in_stasis)
 		// First off, there's no oxygen supply, so the mob will slowly take brain damage
 		adjustBrainLoss(0.1)
 

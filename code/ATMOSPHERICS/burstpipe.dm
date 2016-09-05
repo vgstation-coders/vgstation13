@@ -14,13 +14,13 @@
 	..(_loc)
 
 /obj/machinery/atmospherics/unary/vent/burstpipe/hide(var/i)
-	if(level == 1 && istype(loc, /turf/simulated))
+	if (level == 1 && istype(loc, /turf/simulated))
 		invisibility = i ? 101 : 0
 	update_icon()
 
 /obj/machinery/atmospherics/unary/vent/burstpipe/update_icon()
 	alpha = invisibility ? 128 : 255
-	if(!node || istype(node,type)) // No connection, or the connection is another burst pipe
+	if (!node || istype(node,type)) // No connection, or the connection is another burst pipe
 		qdel(src) //TODO: silent deleting looks weird
 
 /obj/machinery/atmospherics/unary/vent/burstpipe/ex_act(var/severity)

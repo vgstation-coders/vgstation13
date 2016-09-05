@@ -17,16 +17,16 @@
 	var/list/space_chance = 55       // Likelihood of getting a space in the random scramble string.
 
 /datum/language/proc/get_spoken_verb(var/msg, var/silicon, var/mode)
-	switch(mode)
-		if(SPEECH_MODE_WHISPER)
+	switch (mode)
+		if (SPEECH_MODE_WHISPER)
 			return "[whisper_verb]"
-		if(SPEECH_MODE_FINAL)
+		if (SPEECH_MODE_FINAL)
 			return "[whisper_verb] with their final breath"
 	var/msg_end = copytext(msg,length(msg))
-	switch(msg_end)
-		if("!")
+	switch (msg_end)
+		if ("!")
 			return (silicon ? "declares" : exclaim_verb)
-		if("?")
+		if ("?")
 			return (silicon ? "queries" : ask_verb)
 	return (silicon ? "states" : speech_verb)
 
@@ -182,8 +182,8 @@
 /datum/language/grey/say_misunderstood(mob/M, message)
 	message="ACK"
 	var/len = max(1,Ceiling(length(message)/3))
-	if(len > 1)
-		for(var/i=0,i<len,i++)
+	if (len > 1)
+		for (var/i=0,i<len,i++)
 			message += " ACK"
 	return message+"!"
 
@@ -216,8 +216,8 @@
 /datum/language/skellington/say_misunderstood(mob/M, message)
 	message="CLICK"
 	var/len = max(1,Ceiling(length(message)/5))
-	if(len > 1)
-		for(var/i=0,i<len,i++)
+	if (len > 1)
+		for (var/i=0,i<len,i++)
 			message += " CL[pick("A","I")]CK"
 	return message+"!"
 
@@ -269,7 +269,7 @@
 
 	var/datum/language/new_language = all_languages[language]
 
-	if(!istype(new_language) || new_language in languages)
+	if (!istype(new_language) || new_language in languages)
 		return 0
 
 	languages.Add(new_language)
@@ -282,8 +282,8 @@
 
 /mob/living/remove_language(rem_language)
 	var/datum/language/L = all_languages[rem_language]
-	if(default_language == L)
-		if(all_languages.len)
+	if (default_language == L)
+		if (all_languages.len)
 			default_language = all_languages[1]
 		else
 			default_language = null
@@ -303,7 +303,7 @@
 
 	var/dat = "<b><font size = 5>Known Languages</font></b><br/><br/>"
 
-	for(var/datum/language/L in languages)
+	for (var/datum/language/L in languages)
 		dat += "<b>[L.name] (:[L.key])</b><br/>[L.desc]<br/><br/>"
 
 	src << browse(dat, "window=checklanguage")
@@ -312,11 +312,11 @@
 /mob/living/check_languages()
 	var/dat = "<b><font size = 5>Known Languages</font></b><br/><br/>"
 
-	if(default_language)
+	if (default_language)
 		dat += "Current default language: [default_language] - <a href='byond://?src=\ref[src];default_lang=reset'>reset</a><br/><br/>"
 
-	for(var/datum/language/L in languages)
-		if(L == default_language)
+	for (var/datum/language/L in languages)
+		if (L == default_language)
 			dat += "<b>[L.name] (:[L.key])</b> - default - <a href='byond://?src=\ref[src];default_lang=reset'>reset</a><br/>[L.desc]<br/><br/>"
 		else
 			dat += "<b>[L.name] (:[L.key])</b> - <a href='byond://?src=\ref[src];default_lang=[L]'>set default</a><br/>[L.desc]<br/><br/>"
@@ -324,12 +324,12 @@
 	src << browse(dat, "window=checklanguage")
 
 /mob/living/Topic(href, href_list)
-	if(href_list["default_lang"])
-		if(href_list["default_lang"] == "reset")
+	if (href_list["default_lang"])
+		if (href_list["default_lang"] == "reset")
 			set_default_language(null)
 		else
 			var/datum/language/L = all_languages[href_list["default_lang"]]
-			if(L)
+			if (L)
 				set_default_language(L)
 		check_languages()
 		return 1
@@ -394,11 +394,11 @@
 /datum/language/proc/scramble(var/input)
 
 
-	if(!syllables || !syllables.len)
+	if (!syllables || !syllables.len)
 		return stars(input)
 
 	// If the input is cached already, move it to the end of the cache and return it
-	if(input in scramble_cache)
+	if (input in scramble_cache)
 		var/n = scramble_cache[input]
 		scramble_cache -= input
 		scramble_cache[input] = n
@@ -408,30 +408,30 @@
 	var/scrambled_text = ""
 	var/capitalize = 1
 
-	while(length(scrambled_text) < input_size)
+	while (length(scrambled_text) < input_size)
 		var/next = pick(syllables)
-		if(capitalize)
+		if (capitalize)
 			next = capitalize(next)
 			capitalize = 0
 		scrambled_text += next
 		var/chance = rand(100)
-		if(chance <= 5)
+		if (chance <= 5)
 			scrambled_text += ". "
 			capitalize = 1
-		else if(chance > 5 && chance <= space_chance)
+		else if (chance > 5 && chance <= space_chance)
 			scrambled_text += " "
 
 	scrambled_text = trim(scrambled_text)
 	var/ending = copytext(scrambled_text, length(scrambled_text))
-	if(ending == ".")
+	if (ending == ".")
 		scrambled_text = copytext(scrambled_text,1,length(scrambled_text)-1)
 	var/input_ending = copytext(input, input_size)
-	if(input_ending in list("!","?","."))
+	if (input_ending in list("!","?","."))
 		scrambled_text += input_ending
 
 	// Add it to cache, cutting old entries if the list is too long
 	scramble_cache[input] = scrambled_text
-	if(scramble_cache.len > SCRAMBLE_CACHE_LEN)
+	if (scramble_cache.len > SCRAMBLE_CACHE_LEN)
 		scramble_cache.Cut(1, scramble_cache.len-SCRAMBLE_CACHE_LEN-1)
 
 	return scrambled_text

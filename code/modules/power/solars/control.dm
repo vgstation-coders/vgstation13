@@ -23,12 +23,12 @@
 /obj/machinery/power/solar/control/initialize()
 	..()
 
-	if(get_powernet())
+	if (get_powernet())
 		set_panels(cdir)
 
 /obj/machinery/power/solar/control/Destroy()
-	for(var/obj/machinery/power/solar/panel/P in getPowernetNodes())
-		if(P.control == src)
+	for (var/obj/machinery/power/solar/panel/P in getPowernetNodes())
+		if (P.control == src)
 			P.control = null
 
 	..()
@@ -36,17 +36,17 @@
 /obj/machinery/power/solar/control/update_icon()
 	overlays.len = 0
 
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		icon_state = "solarb"
 		return
 
-	if(stat & NOPOWER)
+	if (stat & NOPOWER)
 		icon_state = "solar0"
 		return
 
 	icon_state = "solar"
 
-	if(cdir > 0)
+	if (cdir > 0)
 		overlays += image('icons/obj/computer.dmi', "solcon-o", FLY_LAYER, angle2dir(cdir))
 
 /obj/machinery/power/solar/control/attack_ai(mob/user)
@@ -61,10 +61,10 @@
 	lastgen = gen
 	gen = 0
 
-	if(stat & (NOPOWER | BROKEN))
+	if (stat & (NOPOWER | BROKEN))
 		return
 
-	if(track == 1 && nexttime < world.time && trackdir * trackrate)
+	if (track == 1 && nexttime < world.time && trackdir * trackrate)
 		// Increments nexttime using itself and not world.time to prevent drift
 		nexttime = nexttime + 6000 / trackrate
 		// Nudges array 1 degree in desired direction
@@ -75,10 +75,10 @@
 	updateDialog()
 
 /obj/machinery/power/solar/control/attackby(I as obj, user as mob)
-	if(isscrewdriver(I))
+	if (isscrewdriver(I))
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-		if(do_after(user, src, 20))
-			if(src.stat & BROKEN)
+		if (do_after(user, src, 20))
+			if (src.stat & BROKEN)
 				visible_message("<span class='notice'>[user] clears the broken monitor off of [src].</span>", \
 				"You clear the broken monitor off of [src]")
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe(src.loc)
@@ -108,7 +108,7 @@
 
 // called by solar tracker when sun position changes (somehow, that's not supposed to be in process)
 /obj/machinery/power/solar/control/proc/tracker_update(angle)
-	if(track != 2 || stat & (NOPOWER | BROKEN))
+	if (track != 2 || stat & (NOPOWER | BROKEN))
 		return
 
 	cdir = angle
@@ -117,7 +117,7 @@
 	updateDialog()
 
 /obj/machinery/power/solar/control/interact(mob/user)
-	if(stat & (BROKEN | NOPOWER))
+	if (stat & (BROKEN | NOPOWER))
 		return
 
 	if (!src.Adjacent(user))
@@ -137,21 +137,21 @@ Star Orientation : [sun.angle]&deg ([angle2text(sun.angle)])<BR>
 Array Orientation : [rate_control(src,"cdir","[cdir]&deg",1,10,60)] ([angle2text(cdir)])<BR>
 <BR><HR><BR>
 Tracking :"}
-	switch(track)
-		if(0)
+	switch (track)
+		if (0)
 			t += "<B>Off</B> <A href='?src=\ref[src];track=1'>Manual</A> <A href='?src=\ref[src];track=2'>Automatic</A><BR>"
-		if(1)
+		if (1)
 			t += "<A href='?src=\ref[src];track=0'>Off</A> <B>Manual</B> <A href='?src=\ref[src];track=2'>Automatic</A><BR>"
-		if(2)
+		if (2)
 			t += "<A href='?src=\ref[src];track=0'>Off</A> <A href='?src=\ref[src];track=1'>Manual</A> <B>Automatic</B><BR>"
 
 
 	t += {"Manual Tracking Rate: [rate_control(src,"tdir","[trackrate/10]&deg/min ([trackdir<0 ? "CCW" : "CW"])",1,10)]<BR>
 Manual Tracking Direction:"}
-	switch(trackdir)
-		if(-1)
+	switch (trackdir)
+		if (-1)
 			t += "<A href='?src=\ref[src];trackdir=1'>CW</A> <B>CCW</B><BR>"
-		if(1)
+		if (1)
 			t += "<B>CW</B> <A href='?src=\ref[src];trackdir=-1'>CCW</A><BR>"
 	t += "<A href='?src=\ref[src];close=1'>Close</A></TT>"
 	user << browse(t, "window=solcon")
@@ -159,44 +159,44 @@ Manual Tracking Direction:"}
 	return
 
 /obj/machinery/power/solar/control/Topic(href, href_list)
-	if(..())
+	if (..())
 		usr << browse(null, "window=solcon")
 		usr.unset_machine()
 		return
 
-	if(href_list["close"] )
+	if (href_list["close"] )
 		usr << browse(null, "window=solcon")
 		usr.unset_machine()
 		return
 
-	if(href_list["dir"])
+	if (href_list["dir"])
 		cdir = text2num(href_list["dir"])
 		set_panels(cdir)
 		update_icon()
 
-	if(href_list["rate control"])
-		if(href_list["cdir"])
+	if (href_list["rate control"])
+		if (href_list["cdir"])
 			cdir = Clamp((360 + cdir + text2num(href_list["cdir"])) % 360, 0, 359)
 			spawn(1)
 				set_panels(cdir)
 				update_icon()
-		if(href_list["tdir"])
+		if (href_list["tdir"])
 			trackrate = Clamp(trackrate + text2num(href_list["tdir"]), 0, 360)
-			if(trackrate)
+			if (trackrate)
 				nexttime = world.time + 6000 / trackrate
 
-	if(href_list["track"])
-		if(trackrate)
+	if (href_list["track"])
+		if (trackrate)
 			nexttime = world.time + 6000 / trackrate
 
 		track = text2num(href_list["track"])
 
-		if(track == 2)
-			for(var/obj/machinery/power/solar/panel/tracker/T in getPowernetNodes())
+		if (track == 2)
+			for (var/obj/machinery/power/solar/panel/tracker/T in getPowernetNodes())
 				cdir = T.sun_angle
 				break
 
-	if(href_list["trackdir"])
+	if (href_list["trackdir"])
 		trackdir = text2num(href_list["trackdir"])
 
 	set_panels(cdir)
@@ -204,9 +204,9 @@ Manual Tracking Direction:"}
 	updateUsrDialog()
 
 /obj/machinery/power/solar/control/proc/set_panels(var/cdir)
-	for(var/obj/machinery/power/solar/panel/P in getPowernetNodes())
-		if(get_dist(P, src) < SOLAR_MAX_DIST)
-			if(!P.control)
+	for (var/obj/machinery/power/solar/panel/P in getPowernetNodes())
+		if (get_dist(P, src) < SOLAR_MAX_DIST)
+			if (!P.control)
 				P.control = src
 
 			P.ndir = cdir
@@ -220,17 +220,17 @@ Manual Tracking Direction:"}
 	update_icon()
 
 /obj/machinery/power/solar/control/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			qdel(src)
-		if(2.0)
+		if (2.0)
 			if (prob(50))
 				broken()
-		if(3.0)
+		if (3.0)
 			if (prob(25))
 				broken()
 
 /obj/machinery/power/solar/control/blob_act()
-	if(prob(75))
+	if (prob(75))
 		broken()
 		density = 0

@@ -36,13 +36,13 @@
 	icon_state = "c-4[size]_1"
 	spawn(50)
 		explosion(get_turf(src), power, power*2, power*3, power*4, power*4)
-		for(var/dirn in cardinal)		//This is to guarantee that C4 at least breaks down all immediately adjacent walls and doors.
+		for (var/dirn in cardinal)		//This is to guarantee that C4 at least breaks down all immediately adjacent walls and doors.
 			var/turf/simulated/wall/T = get_step(src,dirn)
-			if(locate(/obj/machinery/door/airlock) in T)
+			if (locate(/obj/machinery/door/airlock) in T)
 				var/obj/machinery/door/airlock/D = locate() in T
-				if(D.density)
+				if (D.density)
 					D.open()
-			if(istype(T,/turf/simulated/wall))
+			if (istype(T,/turf/simulated/wall))
 				T.dismantle_wall(1)
 		qdel(src)
 
@@ -61,24 +61,24 @@
 	var/pr_open = 0  /*Is the "What do you want to do?" prompt open?*/
 
 /obj/item/weapon/syndie/c4detonator/attack_self(mob/user as mob)
-	switch(src.icon_state)
-		if("c-4detonator_0")
+	switch (src.icon_state)
+		if ("c-4detonator_0")
 			src.icon_state = "c-4detonator_1"
 			to_chat(user, "You flick open the lighter.")
 
-		if("c-4detonator_1")
-			if(!pr_open)
+		if ("c-4detonator_1")
+			if (!pr_open)
 				pr_open = 1
-				switch(alert(user, "What would you like to do?", "Lighter", "Press the button.", "Close the lighter."))
-					if("Press the button.")
+				switch (alert(user, "What would you like to do?", "Lighter", "Press the button.", "Close the lighter."))
+					if ("Press the button.")
 						to_chat(user, "<span class='warning'>You press the button.</span>")
 						flick("c-4detonator_click", src)
-						if(src.bomb)
+						if (src.bomb)
 							src.bomb.detonate()
 							log_admin("[user.real_name]([user.ckey]) has triggered [src.bomb] with [src].")
 							message_admins("<span class='warning'>[user.real_name]([user.ckey]) has triggered [src.bomb] with [src].</span>")
 
-					if("Close the lighter.")
+					if ("Close the lighter.")
 						src.icon_state = "c-4detonator_0"
 						to_chat(user, "You close the lighter.")
 				pr_open = 0

@@ -26,18 +26,18 @@
 
 /obj/machinery/computer/crew/attack_hand(mob/user)
 	. = ..()
-	if(.)
+	if (.)
 		return
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
 	crewmonitor.show(user)
 
 /obj/machinery/computer/crew/update_icon()
 
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		icon_state = "crewb"
 	else
-		if(stat & NOPOWER)
+		if (stat & NOPOWER)
 			src.icon_state = "c_unpowered"
 			stat |= NOPOWER
 		else
@@ -154,8 +154,8 @@ var/global/datum/interactive_map/crewmonitor/crewmonitor = new
 			var/see_pos_y
 			var/life_status
 
-			for(var/mob/living/carbon/human/H in mob_list)
-				if(H.iscorpse)
+			for (var/mob/living/carbon/human/H in mob_list)
+				if (H.iscorpse)
 					continue
 				// Check if their z-level is correct and if they are wearing a uniform.
 				// Accept H.z==0 as well in case the mob is inside an object.
@@ -214,10 +214,10 @@ var/global/datum/interactive_map/crewmonitor/crewmonitor = new
 							see_pos_x = null
 							see_pos_y = null
 						results[++results.len] = list(name, assignment, ijob, life_status, dam1, dam2, dam3, dam4, area, pos_x, pos_y, H.monitor_check(), see_pos_x, see_pos_y)
-			for(var/mob/living/carbon/brain/B in mob_list)
+			for (var/mob/living/carbon/brain/B in mob_list)
 				var/obj/item/device/mmi/M = B.loc
 				pos = get_turf(B)
-				if(pos && pos.z != CENTCOMM_Z && (pos.z == z) && istype(M) && M.brainmob == B && !isrobot(M.loc) )
+				if (pos && pos.z != CENTCOMM_Z && (pos.z == z) && istype(M) && M.brainmob == B && !isrobot(M.loc) )
 
 					var/area/parea = get_area(B)
 					area = format_text(parea.name)
@@ -231,11 +231,11 @@ var/global/datum/interactive_map/crewmonitor/crewmonitor = new
 
 /mob/living/carbon/human/proc/monitor_check()
 	var/turf/T = get_turf(src)
-	if(!T)
+	if (!T)
 		return 0
-	if(T.z == CENTCOMM_Z) //dont detect mobs on centcomm
+	if (T.z == CENTCOMM_Z) //dont detect mobs on centcomm
 		return 0
-	if(T.z >= map.zLevels.len)
+	if (T.z >= map.zLevels.len)
 		return 0
 	. = 1
 
@@ -250,7 +250,7 @@ var/global/datum/interactive_map/crewmonitor/crewmonitor = new
 	return ( ..() /*&& hclient.client.mob.z == text2num(z)*/ && hclient.client.mob.html_mob_check(/obj/machinery/computer/crew))
 
 /datum/interactive_map/crewmonitor/Topic(href, href_list[], datum/html_interface_client/hclient)
-	if(..())
+	if (..())
 		return // Our parent handled it the topic call
 	if (istype(hclient))
 		if (hclient && hclient.client && hclient.client.mob && isAI(hclient.client.mob))
@@ -282,7 +282,7 @@ var/global/datum/interactive_map/crewmonitor/crewmonitor = new
 					var/x = text2num(href_list["x"])
 					var/y = text2num(href_list["y"])
 					var/turf/tile = locate(x, y, AI.z)
-					if(tile)
+					if (tile)
 						AI.eyeobj.forceMove(tile)
 
 /datum/interactive_map/crewmonitor/queueUpdate(z)

@@ -13,13 +13,13 @@
 
 	set src = view(0)
 
-	if(stat)
+	if (stat)
 		return
 
-	if(!M)
+	if (!M)
 		return
 
-	if(!M.client)
+	if (!M.client)
 		to_chat(src, "This being is missing a brain.")
 		return
 
@@ -29,7 +29,7 @@
 		to_chat(usr, "<span class='warning'>The injection of the egg has been interrupted!</span>")
 		return
 
-	if(M.client)
+	if (M.client)
 		M.client.mob = new/mob/living/carbon/alien/humanoid/special/snakeman(new/obj/effect/snake_egg(src.loc))
 		visible_message("[src] injects [M] with an egg.")
 		visible_message("The egg absorbs [M]")
@@ -52,7 +52,7 @@
 		..()
 
 		spawn(300)
-			for(var/mob/M in src)
+			for (var/mob/M in src)
 				M.forceMove(src.loc)
 				icon_state = "egg_hatched"
 				density = 0

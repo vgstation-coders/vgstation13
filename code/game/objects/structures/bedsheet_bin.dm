@@ -22,22 +22,22 @@ LINEN BINS
 //cutting the bedsheet into rags
 /obj/item/weapon/bedsheet/attackby(var/obj/item/I, mob/user as mob)
 	var/cut_time=0
-	if(istype(I, /obj/item/weapon/scalpel))
+	if (istype(I, /obj/item/weapon/scalpel))
 		cut_time=20
-	else if(istype(I, /obj/item/weapon/kitchen/utensil/knife/large) || istype(I, /obj/item/weapon/kitchen/utensil/knife/large/butch))
+	else if (istype(I, /obj/item/weapon/kitchen/utensil/knife/large) || istype(I, /obj/item/weapon/kitchen/utensil/knife/large/butch))
 		cut_time=40
-	else if(istype(I, /obj/item/weapon/shard))
+	else if (istype(I, /obj/item/weapon/shard))
 		cut_time=80
-	else if(istype(I, /obj/item/weapon/kitchen/utensil/knife/plastic))
+	else if (istype(I, /obj/item/weapon/kitchen/utensil/knife/plastic))
 		cut_time=160
-	if(cut_time)
+	if (cut_time)
 		to_chat(user, "<span  class='notice'>You begin cutting the [src].</span>")
-		if(do_after(user, src, cut_time))
-			if(!src)
+		if (do_after(user, src, cut_time))
+			if (!src)
 				return
 			to_chat(user, "<span  class='notice'>You have cut the [src] into rags.</span>")
 			var/turf/location = get_turf(src)
-			for(var/x=0; x<=8; x++)
+			for (var/x=0; x<=8; x++)
 				var/obj/item/weapon/reagent_containers/glass/rag/S = new/obj/item/weapon/reagent_containers/glass/rag/(location)
 				S.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
 				S.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
@@ -134,31 +134,31 @@ LINEN BINS
 
 /obj/structure/bedsheetbin/examine(mob/user)
 	..()
-	if(amount == 0)
+	if (amount == 0)
 		to_chat(user, "<span class='info'>There are no bed sheets in the bin.</span>")
-	else if(amount == 1)
+	else if (amount == 1)
 		to_chat(user, "<span class='info'>There is one bed sheet in the bin.</span>")
 	else
 		to_chat(user, "<span class='info'>There are [amount] bed sheets in the bin.</span>")
 
 
 /obj/structure/bedsheetbin/update_icon()
-	switch(amount)
-		if(0)
+	switch (amount)
+		if (0)
 			icon_state = "linenbin-empty"
-		if(1 to amount / 2)
+		if (1 to amount / 2)
 			icon_state = "linenbin-half"
 		else				icon_state = "linenbin-full"
 
 
 /obj/structure/bedsheetbin/attackby(obj/item/I as obj, mob/user as mob)
-	if(istype(I, /obj/item/weapon/bedsheet))
-		if(user.drop_item(I, src))
+	if (istype(I, /obj/item/weapon/bedsheet))
+		if (user.drop_item(I, src))
 			sheets.Add(I)
 			amount++
 			to_chat(user, "<span class='notice'>You put \the [I] in \the [src].</span>")
-	else if(amount && !hidden && I.w_class < W_CLASS_LARGE)	//make sure there's sheets to hide it among, make sure nothing else is hidden in there.
-		if(user.drop_item(I, src))
+	else if (amount && !hidden && I.w_class < W_CLASS_LARGE)	//make sure there's sheets to hide it among, make sure nothing else is hidden in there.
+		if (user.drop_item(I, src))
 			hidden = I
 			to_chat(user, "<span class='notice'>You hide [I] among the sheets.</span>")
 
@@ -168,11 +168,11 @@ LINEN BINS
 
 
 /obj/structure/bedsheetbin/attack_hand(mob/user as mob)
-	if(amount >= 1)
+	if (amount >= 1)
 		amount--
 
 		var/obj/item/weapon/bedsheet/B
-		if(sheets.len > 0)
+		if (sheets.len > 0)
 			B = sheets[sheets.len]
 			sheets.Remove(B)
 
@@ -183,7 +183,7 @@ LINEN BINS
 		user.put_in_hands(B)
 		to_chat(user, "<span class='notice'>You take [B] out of [src].</span>")
 
-		if(hidden)
+		if (hidden)
 			hidden.forceMove(user.loc)
 			to_chat(user, "<span class='notice'>[hidden] falls out of [B]!</span>")
 			hidden = null
@@ -192,11 +192,11 @@ LINEN BINS
 	add_fingerprint(user)
 
 /obj/structure/bedsheetbin/attack_tk(mob/user as mob)
-	if(amount >= 1)
+	if (amount >= 1)
 		amount--
 
 		var/obj/item/weapon/bedsheet/B
-		if(sheets.len > 0)
+		if (sheets.len > 0)
 			B = sheets[sheets.len]
 			sheets.Remove(B)
 
@@ -207,7 +207,7 @@ LINEN BINS
 		to_chat(user, "<span class='notice'>You telekinetically remove [B] from [src].</span>")
 		update_icon()
 
-		if(hidden)
+		if (hidden)
 			hidden.forceMove(loc)
 			hidden = null
 

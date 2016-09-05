@@ -15,7 +15,7 @@ var/list/admin_datums = list()
 	var/sessKey		= 0
 
 /datum/admins/New(initial_rank = "Temporary Admin", initial_rights = 0, ckey)
-	if(!ckey)
+	if (!ckey)
 		error("Admin datum created without a ckey argument. Datum has been deleted")
 		del(src)
 		return
@@ -25,7 +25,7 @@ var/list/admin_datums = list()
 	admin_datums[ckey] = src
 
 /datum/admins/proc/associate(client/C)
-	if(istype(C))
+	if (istype(C))
 		owner = C
 		owner.holder = src
 		owner.add_admin_verbs()	//TODO
@@ -33,7 +33,7 @@ var/list/admin_datums = list()
 		owner.verbs -= /client/proc/readmin
 
 /datum/admins/proc/disassociate()
-	if(owner)
+	if (owner)
 		admins -= owner
 		owner.remove_admin_verbs()
 		owner.holder = null
@@ -46,50 +46,50 @@ if it doesn't return 1 and show_msg=1 it will prints a message explaining why th
 generally it would be used like so:
 
 proc/admin_proc()
-	if(!check_rights(R_ADMIN))
+	if (!check_rights(R_ADMIN))
 		return
 	to_chat(world, "you have enough rights!")
 
 NOTE: it checks usr! not src! So if you're checking somebody's rank in a proc which they did not call
-you will have to do something like if(client.rights & R_ADMIN) yourself.
+you will have to do something like if (client.rights & R_ADMIN) yourself.
 */
 /proc/check_rights(rights_required, show_msg=1)
-	if(usr && usr.client)
-		if(rights_required)
-			if(usr.client.holder)
-				if(rights_required & usr.client.holder.rights)
+	if (usr && usr.client)
+		if (rights_required)
+			if (usr.client.holder)
+				if (rights_required & usr.client.holder.rights)
 					return 1
 				else
-					if(show_msg)
+					if (show_msg)
 						to_chat(usr, "<font color='red'>Error: You do not have sufficient rights to do that. You require one of the following flags:[rights2text(rights_required," ")].</font>")
 		else
-			if(usr.client.holder)
+			if (usr.client.holder)
 				return 1
 			else
-				if(show_msg)
+				if (show_msg)
 					to_chat(usr, "<font color='red'>Error: You are not an admin.</font>")
 	return 0
 
 // Making this a bit less of a roaring asspain. - N3X
 /mob/proc/check_rights(rights_required)
-	if(src && src.client)
-		if(rights_required)
-			if(src.client.holder)
-				if(rights_required & src.client.holder.rights)
+	if (src && src.client)
+		if (rights_required)
+			if (src.client.holder)
+				if (rights_required & src.client.holder.rights)
 					return 1
 		else
-			if(src.client.holder)
+			if (src.client.holder)
 				return 1
 	return 0
 
 //probably a bit iffy - will hopefully figure out a better solution
 /proc/check_if_greater_rights_than(client/other)
-	if(usr && usr.client)
-		if(usr.client.holder)
-			if(!other || !other.holder)
+	if (usr && usr.client)
+		if (usr.client.holder)
+			if (!other || !other.holder)
 				return 1
-			if(usr.client.holder.rights != other.holder.rights)
-				if( (usr.client.holder.rights & other.holder.rights) == other.holder.rights )
+			if (usr.client.holder.rights != other.holder.rights)
+				if ( (usr.client.holder.rights & other.holder.rights) == other.holder.rights )
 					return 1	//we have all the rights they have and more
 		to_chat(usr, "<font color='red'>Error: Cannot proceed. They have more or equal rights to us.</font>")
 	return 0
@@ -98,13 +98,13 @@ you will have to do something like if(client.rights & R_ADMIN) yourself.
 
 /client/proc/deadmin()
 	admin_datums -= ckey
-	if(holder)
+	if (holder)
 		holder.disassociate()
 		del(holder)
 	return 1
 
 /datum/admins/proc/checkSessionKey(var/recurse=0)
-	if(recurse==5)
+	if (recurse==5)
 		return "\[BROKEN\]";
 	recurse++
 	var/DBQuery/query = dbcon.NewQuery("DELETE FROM admin_sessions WHERE expires < Now()")
@@ -114,7 +114,7 @@ you will have to do something like if(client.rights & R_ADMIN) yourself.
 	query.Execute()
 
 	sessKey=0
-	while(query.NextRow())
+	while (query.NextRow())
 		sessKey = query.item[1]
 		query=dbcon.NewQuery("UPDATE admin_sessions SET expires=DATE_ADD(NOW(), INTERVAL 24 HOUR), IP='[owner.address]' WHERE ckey = '[owner.ckey]")
 		query.Execute()

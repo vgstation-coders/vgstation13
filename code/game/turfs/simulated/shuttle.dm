@@ -25,9 +25,9 @@
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
-	if(istype(W,/obj/item/weapon/solder) && bullet_marks)
+	if (istype(W,/obj/item/weapon/solder) && bullet_marks)
 		var/obj/item/weapon/solder/S = W
-		if(!S.remove_fuel(bullet_marks*2,user))
+		if (!S.remove_fuel(bullet_marks*2,user))
 			return
 		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
 		to_chat(user, "<span class='notice'>You remove the bullet marks with \the [W].</span>")
@@ -49,21 +49,21 @@
 	nitrogen = 0.01
 
 /turf/simulated/shuttle/floor/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			if(!(locate(/obj/effect/decal/cleanable/soot) in src))
+	switch (severity)
+		if (1.0)
+			if (!(locate(/obj/effect/decal/cleanable/soot) in src))
 				new /obj/effect/decal/cleanable/soot(src)
-		if(2.0)
-			if(prob(65))
-				if(!(locate(/obj/effect/decal/cleanable/soot) in src))
+		if (2.0)
+			if (prob(65))
+				if (!(locate(/obj/effect/decal/cleanable/soot) in src))
 					new /obj/effect/decal/cleanable/soot(src)
-		if(3.0)
-			if(prob(20))
-				if(!(locate(/obj/effect/decal/cleanable/soot) in src))
+		if (3.0)
+			if (prob(20))
+				if (!(locate(/obj/effect/decal/cleanable/soot) in src))
 					new /obj/effect/decal/cleanable/soot(src)
 
 /turf/simulated/shuttle/floor/cultify()
-	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
+	if ((icon_state != "cult")&&(icon_state != "cult-narsie"))
 		name = "engraved floor"
 		icon_state = "cult"
 		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1, anim_plane = OBJ_PLANE)
@@ -83,20 +83,20 @@
 	icon_state = "floor4"
 
 /turf/simulated/shuttle/floor4/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			new/obj/effect/decal/cleanable/soot(src)
-		if(2.0)
-			if(prob(65))
+		if (2.0)
+			if (prob(65))
 				new/obj/effect/decal/cleanable/soot(src)
-		if(3.0)
-			if(prob(20))
+		if (3.0)
+			if (prob(20))
 				new/obj/effect/decal/cleanable/soot(src)
 			return
 	return
 
 /turf/simulated/shuttle/floor4/cultify()
-	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
+	if ((icon_state != "cult")&&(icon_state != "cult-narsie"))
 		name = "engraved floor"
 		icon_state = "cult"
 		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1, anim_plane = OBJ_PLANE)

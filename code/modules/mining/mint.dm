@@ -22,11 +22,11 @@
 	spawn( 5 )
 		for (var/dir in cardinal)
 			src.input = locate(/obj/machinery/mineral/input, get_step(src, dir))
-			if(src.input)
+			if (src.input)
 				break
 		for (var/dir in cardinal)
 			src.output = locate(/obj/machinery/mineral/output, get_step(src, dir))
-			if(src.output)
+			if (src.output)
 				break
 
 		return
@@ -37,8 +37,8 @@
 	if ( src.input)
 		var/obj/item/stack/sheet/O
 		O = locate(/obj/item/stack/sheet, input.loc)
-		if(O)
-			for(var/ore_id in materials.storage)
+		if (O)
+			for (var/ore_id in materials.storage)
 				var/datum/material/po = materials.getMaterial(ore_id)
 				if (po.cointype && istype(O,po.sheettype))
 					materials.addAmount(ore_id, 5 * O.amount) // 100/20 = 5 coins per sheet.
@@ -107,9 +107,9 @@ a.notsmelting {
 			</tr>"}
 
 	var/nloaded=0
-	for(var/ore_id in materials.storage)
+	for (var/ore_id in materials.storage)
 		var/datum/material/ore_info = materials.getMaterial(ore_id)
-		if(materials.storage[ore_id] && ore_info.cointype)
+		if (materials.storage[ore_id] && ore_info.cointype)
 			html += {"
 			<tr>
 				<td class="clmName">[ore_info.processed_name]</td>
@@ -123,9 +123,9 @@ a.notsmelting {
 			html += "</a></td></tr>"
 			nloaded++
 		else
-			if(chosen==ore_id)
+			if (chosen==ore_id)
 				chosen=null
-	if(nloaded)
+	if (nloaded)
 		html += {"
 			</table>"}
 	else
@@ -152,32 +152,32 @@ a.notsmelting {
 	onclose(user, "mint")
 
 /obj/machinery/mineral/mint/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 	usr.set_machine(src)
 	src.add_fingerprint(usr)
-	if(processing==1)
+	if (processing==1)
 		to_chat(usr, "<span class='notice'>The machine is processing.</span>")
 		return
-	if(href_list["choose"])
+	if (href_list["choose"])
 		chosen = href_list["choose"]
-	if(href_list["chooseAmt"])
+	if (href_list["chooseAmt"])
 		coinsToProduce = Clamp(coinsToProduce + text2num(href_list["chooseAmt"]), 0, 1000)
-	if(href_list["makeCoins"])
+	if (href_list["makeCoins"])
 		var/temp_coins = coinsToProduce
 		if (src.output)
 			processing = 1
 			icon_state = "coinpress1"
 			//var/obj/item/weapon/storage/bag/money/M
 			var/datum/material/po=materials.getMaterial(chosen)
-			if(!po)
+			if (!po)
 				chosen=null
 				processing=0
 				return
-			while(materials.storage[chosen] > 0 && coinsToProduce > 0)
+			while (materials.storage[chosen] > 0 && coinsToProduce > 0)
 			/*	if (locate(/obj/item/weapon/storage/bag/money,output.loc))
 					M = locate(/obj/item/weapon/storage/bag/money,output.loc)
-					if(M.can_be_inserted(po.cointype, 1))
+					if (M.can_be_inserted(po.cointype, 1))
 						new po.cointype(M)
 					else
 						new po.cointype(output.loc)

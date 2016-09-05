@@ -31,12 +31,12 @@ var/list/doppler_arrays = list()
 	ui_interact(user)
 
 /obj/machinery/computer/bhangmeter/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
-	if(stat & (BROKEN|NOPOWER))
+	if (stat & (BROKEN|NOPOWER))
 		return
 
 	var/list/data[0]
 	var/list/explosions = list()
-	for(var/list/bangarangs in bangs) //Removing sortAtom because nano updates it just enough for the lag to happen
+	for (var/list/bangarangs in bangs) //Removing sortAtom because nano updates it just enough for the lag to happen
 		var/list/bang_data = list()
 		bang_data["x"] = bangarangs["x"]
 		bang_data["y"] = bangarangs["y"]
@@ -54,10 +54,10 @@ var/list/doppler_arrays = list()
 	data["explosions"] = explosions
 	data["explosion_cap"] = MAX_EXPLOSION_RANGE
 
-	if(!ui) //No ui has been passed, so we'll search for one
+	if (!ui) //No ui has been passed, so we'll search for one
 		ui = nanomanager.get_open_ui(user, src, ui_key)
 
-	if(!ui)
+	if (!ui)
 		//The ui does not exist, so we'll create a new one
 		ui = new(user, src, ui_key, "bhangmeter.tmpl", name, 900, 800)
 		//Adding a template with the key "mapContent" enables the map ui functionality
@@ -93,7 +93,7 @@ var/list/doppler_arrays = list()
 				<th>Temporal Displacement</th>
 			</tr>
 "}
-	for(var/item in bangs)
+	for (var/item in bangs)
 		listing += item
 	listing += {"
 		</table>
@@ -103,9 +103,9 @@ var/list/doppler_arrays = list()
 	onclose(user, "bhangmeter")
 	return
 /obj/machinery/computer/bhangmeter/proc/sense_explosion(var/x0, var/y0, var/z0, var/devastation_range, var/heavy_impact_range, var/light_impact_range, var/took, cap = 0, var/verbose = 1)
-	if(stat & NOPOWER)
+	if (stat & NOPOWER)
 		return
-	if(z != z0)
+	if (z != z0)
 		return
 
 	/*
@@ -114,27 +114,27 @@ var/list/doppler_arrays = list()
 	var/distance
 	var/direct
 
-	if(dx > dy)
+	if (dx > dy)
 		distance = dx
-		if(x0 > x)
+		if (x0 > x)
 			direct = EAST
 		else
 			direct = WEST
 	else
 		distance = dy
-		if(y0 > y)
+		if (y0 > y)
 			direct = NORTH
 		else
 			direct = SOUTH
 
-	if(distance > 100)
+	if (distance > 100)
 		return
-	if(!(direct & dir))
+	if (!(direct & dir))
 		return
 	*/
 
 	var/message = "Explosive disturbance detected - Epicenter at: grid ([x0-WORLD_X_OFFSET[z0]],[y0-WORLD_Y_OFFSET[z0]], [z0]). [cap ? "\[Theoretical Results\] " : ""]Epicenter radius: [devastation_range]. Outer radius: [heavy_impact_range]. Shockwave radius: [light_impact_range]. Temporal displacement of tachyons: [took] second\s.  Data logged."
-	if(verbose)
+	if (verbose)
 		say(message)
 	//var/list/bang = params2list("x=[x0]&y=[y0]&z=[z0]&text=<tr><td>([worldtime2text()]) - ([x0-WORLD_X_OFFSET(z0)],[y0-WORLD_Y_OFFSET(z0)], [z0])</td><td>([cap ? "\[Theoretical Results\] " : ""][devastation_range],[heavy_impact_range],[light_impact_range])</td><td>[took]s</td></tr>")
 	var/list/bang = list()

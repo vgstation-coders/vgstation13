@@ -59,8 +59,8 @@
 	if (..(target, blocked))
 		var/mob/living/L = target
 		L.contaminate()
-		if(prob(knockdown_chance))
-			if(istype(target, /mob/living/carbon/))
+		if (prob(knockdown_chance))
+			if (istype(target, /mob/living/carbon/))
 				shake_camera(L, 3, 2)
 				L.apply_effect(2, WEAKEN)
 				to_chat(L, "<span class = 'alert'> The force of the bolt knocks you off your feet!")
@@ -109,7 +109,7 @@
 	fire_sound = 'sound/weapons/radgun.ogg'
 
 	on_hit(var/atom/hit)
-		if(ishuman(hit))
+		if (ishuman(hit))
 
 			var/mob/living/carbon/human/H = hit
 

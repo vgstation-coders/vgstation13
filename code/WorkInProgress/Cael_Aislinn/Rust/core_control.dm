@@ -15,8 +15,8 @@
 
 /obj/machinery/computer/rust_core_control/attack_hand(mob/user)
 	. = ..()
-	if(.)
-		if(user.machine == src)
+	if (.)
+		if (user.machine == src)
 			user.unset_machine(src)
 		return
 
@@ -25,10 +25,10 @@
 /obj/machinery/computer/rust_core_control/interact(mob/user)
 	var/dat = ""
 
-	if(!cur_viewed_device || !check_core_status(cur_viewed_device))
+	if (!cur_viewed_device || !check_core_status(cur_viewed_device))
 		cur_viewed_device = null
 
-	if(cur_viewed_device)
+	if (cur_viewed_device)
 		dat += {"
 			<a href='?src=\ref[src];goto_scanlist=1'>Back to overview</a><hr>
 			<b>Device tag:</b> [cur_viewed_device.id_tag]<br>
@@ -64,7 +64,7 @@
 		"}
 
 	else
-		if(connected_devices.len)
+		if (connected_devices.len)
 			dat += {"
 				<b>Connected R-UST Mk. 7 Tokamak pattern Electromagnetic Field Generators:</b><hr>
 				<table>
@@ -75,13 +75,13 @@
 					</tr>
 			"}
 
-			for(var/obj/machinery/power/rust_core/C in connected_devices)
+			for (var/obj/machinery/power/rust_core/C in connected_devices)
 				var/status
 				var/can_access = 1
-				if(!check_core_status(C))
+				if (!check_core_status(C))
 					status = "<span style='color: red'>Unresponsive</span>"
 					can_access = 0
-				else if(C.avail() < C.active_power_usage)
+				else if (C.avail() < C.active_power_usage)
 					status = "<span style='color: orange'>Underpowered</span>"
 				else
 					status = "<span style='color: green'>Good</span>"
@@ -92,7 +92,7 @@
 						<td>[status]</td>
 				"}
 
-				if(!can_access)
+				if (!can_access)
 					dat += {"
 						<td><span style='color: red'>ERROR</span></td>
 					"}
@@ -114,41 +114,41 @@
 
 /obj/machinery/computer/rust_core_control/Topic(href, href_list)
 	. = ..()
-	if(.)
+	if (.)
 		return
 
-	if(href_list["access_device"])
+	if (href_list["access_device"])
 		var/idx = Clamp(text2num(href_list["toggle_active"]), 1, connected_devices.len)
 		cur_viewed_device = connected_devices[idx]
 		updateUsrDialog()
 		return 1
 
-	if(!cur_viewed_device || !check_core_status(cur_viewed_device)) //All HREFs from this point on require a device anyways.
+	if (!cur_viewed_device || !check_core_status(cur_viewed_device)) //All HREFs from this point on require a device anyways.
 		return
 
-	if(href_list["goto_scanlist"])
+	if (href_list["goto_scanlist"])
 		cur_viewed_device = null
 		updateUsrDialog()
 		return 1
 
-	if(href_list["toggle_active"])
-		if(!cur_viewed_device.Startup()) //Startup() whilst the device is active will return null.
+	if (href_list["toggle_active"])
+		if (!cur_viewed_device.Startup()) //Startup() whilst the device is active will return null.
 			cur_viewed_device.Shutdown()
 		updateUsrDialog()
 		return 1
 
-	if(href_list["str"])
+	if (href_list["str"])
 		var/val = text2num(href_list["str"])
-		if(!val) //Value is 0, which is manual entering.
+		if (!val) //Value is 0, which is manual entering.
 			cur_viewed_device.set_strength(input("Enter the new field power density (W.m^-3)", "R-UST Mk. 7 Tokamak Controls", cur_viewed_device.field_strength) as num)
 		else
 			cur_viewed_device.set_strength(cur_viewed_device.field_strength + val)
 		updateUsrDialog()
 		return 1
 
-	if(href_list["freq"])
+	if (href_list["freq"])
 		var/val = text2num(href_list["freq"])
-		if(!val) //Value is 0, which is manual entering.
+		if (!val) //Value is 0, which is manual entering.
 			cur_viewed_device.set_frequency(input("Enter the new field frequency (MHz)", "R-UST Mk. 7 Tokamak Controls", cur_viewed_device.field_frequency) as num)
 		else
 			cur_viewed_device.set_frequency(cur_viewed_device.field_frequency + val)
@@ -158,16 +158,16 @@
 
 //Returns 1 if the machine can be interacted with via this console.
 /obj/machinery/computer/rust_core_control/proc/check_core_status(var/obj/machinery/power/rust_core/C)
-	if(isnull(C))
+	if (isnull(C))
 		return
 
-	if(C.stat & BROKEN)
+	if (C.stat & BROKEN)
 		return
 
-	if(C.state != 2)
+	if (C.state != 2)
 		return
 
-	if(C.idle_power_usage > C.avail())
+	if (C.idle_power_usage > C.avail())
 		return
 
 	. = 1
@@ -177,12 +177,12 @@
 /obj/machinery/computer/rust_core_control/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	. = "Linked R-UST Tokamak cores:<br><lu>"
 
-	for(var/obj/machinery/power/rust_core/C in connected_devices)
+	for (var/obj/machinery/power/rust_core/C in connected_devices)
 		. += "<li><b>[C.id_tag]</b> <a href='?src=\ref[src];unlink=[connected_devices.Find(C)]'>\[X\]</a></li>"
 	. += "</ul>"
 
 /obj/machinery/computer/rust_core_control/linkMenu(var/obj/machinery/power/rust_core/O)
-	if(istype(O))
+	if (istype(O))
 		. = "<a href='?src=\ref[src];link=1'>\[LINK\]</a> "
 
 /obj/machinery/computer/rust_core_control/canLink(var/obj/machinery/power/rust_core/O, var/list/context)
@@ -196,7 +196,7 @@
 	. = 1
 
 /obj/machinery/computer/rust_core_control/getLink(var/idx)
-	if(idx <= connected_devices.len)
+	if (idx <= connected_devices.len)
 		. = connected_devices[idx]
 
 /obj/machinery/computer/rust_core_control/unlinkFrom(var/mob/user, var/obj/buffer)

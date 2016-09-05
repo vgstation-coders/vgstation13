@@ -19,18 +19,18 @@
 /proc/getFromPool(var/type, ...)
 	var/list/B = (args - type)
 
-	if(length(masterdatumPool[type]) <= 0)
+	if (length(masterdatumPool[type]) <= 0)
 
 		#ifdef DEBUG_DATUM_POOL
-		if(ticker)
+		if (ticker)
 			to_chat(world, text("DEBUG_DATUM_POOL: new proc has been called ([] | []).", type, list2params(B)))
 		#endif
 
 		//so the GC knows we're pooling this type.
-		if(isnull(masterdatumPool[type]))
+		if (isnull(masterdatumPool[type]))
 			masterdatumPool[type] = list()
 
-		if(B && B.len)
+		if (B && B.len)
 			return new type(arglist(B))
 		else
 			return new type()
@@ -42,14 +42,14 @@
 	to_chat(world, text("DEBUG_DATUM_POOL: getFromPool([]) [] left arglist([]).", type, length(masterdatumPool[type]), list2params(B)))
 	#endif
 
-	if(!O || !istype(O))
+	if (!O || !istype(O))
 		O = new type(arglist(B))
 	else
-		if(istype(O, /atom/movable) && B.len) // B.len check so we don't OoB.
+		if (istype(O, /atom/movable) && B.len) // B.len check so we don't OoB.
 			var/atom/movable/AM = O
 			AM.forceMove(B[1])
 
-		if(B && B.len)
+		if (B && B.len)
 			O.New(arglist(B))
 		else
 			O.New()
@@ -67,7 +67,7 @@
 /proc/returnToPool(const/datum/D)
 	ASSERT(D)
 
-	if(istype(D, /atom/movable) && length(masterdatumPool[D.type]) > MAINTAINING_OBJECT_POOL_COUNT)
+	if (istype(D, /atom/movable) && length(masterdatumPool[D.type]) > MAINTAINING_OBJECT_POOL_COUNT)
 		#ifdef DEBUG_DATUM_POOL
 		to_chat(world, text("DEBUG_DATUM_POOL: returnToPool([]) exceeds [] discarding...", D.type, MAINTAINING_OBJECT_POOL_COUNT))
 		#endif
@@ -75,7 +75,7 @@
 		qdel(D)
 		return
 
-	if(isnull(masterdatumPool[D.type]))
+	if (isnull(masterdatumPool[D.type]))
 		masterdatumPool[D.type] = list()
 
 	D.Destroy()
@@ -83,7 +83,7 @@
 	D.disposed = 1 //Set to stop processing while pooled
 
 	#ifdef DEBUG_DATUM_POOL
-	if(D in masterdatumPool[D.type])
+	if (D in masterdatumPool[D.type])
 		to_chat(world, text("returnToPool has been called twice for the same datum of type [] time to panic.", D.type))
 	#endif
 
@@ -103,8 +103,8 @@
 	pooledvariables[type] = new/list()
 	var/list/exclude = global.exclude + args
 
-	for(var/key in vars)
-		if(key in exclude)
+	for (var/key in vars)
+		if (key in exclude)
 			continue
 		pooledvariables[type][key] = initial(vars[key])
 
@@ -113,14 +113,14 @@
 //SEE http://www.byond.com/forum/?post=76850 AS A REFERENCE ON THIS
 
 /datum/proc/resetVariables()
-	if(!pooledvariables[type])
+	if (!pooledvariables[type])
 		createVariables(args)
 
-	for(var/key in pooledvariables[type])
+	for (var/key in pooledvariables[type])
 		vars[key] = pooledvariables[type][key]
 
 /proc/isInTypes(atom/Object, types)
-	if(!Object)
+	if (!Object)
 		return 0
 	var/prototype = Object.type
 	Object = null
@@ -137,13 +137,13 @@
 
 	var/type = input("What is the typepath for the pooled object variables you wish to view?", "Pooled Variables") in pooledvariables|null
 
-	if(!type)
+	if (!type)
 		return
 
 	var/list/L = list()
 	L += "<b>Stored Variables for Pooling for this type</b><br>"
-	for(var/key in pooledvariables[type])
-		if(pooledvariables[type][key])
+	for (var/key in pooledvariables[type])
+		if (pooledvariables[type][key])
 			L += "<br>[key] = [pooledvariables[type][key]]"
 		else
 			L += "<br>[key] = null"

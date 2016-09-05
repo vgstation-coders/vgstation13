@@ -39,7 +39,7 @@
 /obj/item/clothing/head/helmet/space/rig/examine(mob/user)
 
 	..()
-	if(!no_light) //There is a light attached or integrated
+	if (!no_light) //There is a light attached or integrated
 		to_chat(user, "The helmet is mounted with an Internal Lighting System, it is [on ? "":"un"]lit.")
 
 //We check no_light and update everything accordingly
@@ -48,8 +48,8 @@
 /obj/item/clothing/head/helmet/space/rig/proc/check_light()
 
 
-	if(no_light) //There's no light on the helmet
-		if(on) //The helmet light is currently on
+	if (no_light) //There's no light on the helmet
+		if (on) //The helmet light is currently on
 			on = 0 //Force it off
 			update_brightness() //Update as neccesary
 		action_button_name = null //Disable the action button (which is only used to toggle the light, in theory)
@@ -59,7 +59,7 @@
 /obj/item/clothing/head/helmet/space/rig/proc/update_brightness()
 
 
-	if(on)
+	if (on)
 		set_light(brightness_on)
 	else
 		set_light(0)
@@ -70,14 +70,14 @@
 	icon_state = "rig[on]-[_color]" //No need for complicated if trees
 
 /obj/item/clothing/head/helmet/space/rig/attack_self(mob/user)
-	if(no_light)
+	if (no_light)
 		return
 
 	on = !on
 	update_icon()
 	user.update_inv_head()
 
-	if(on)
+	if (on)
 		set_light(brightness_on)
 	else
 		set_light(0)
@@ -165,7 +165,7 @@
 	species_restricted = null
 
 /obj/item/clothing/head/helmet/space/rig/syndi/attack_self(mob/user)
-	if(camera)
+	if (camera)
 		..(user)
 	else
 		camera = new /obj/machinery/camera(src)
@@ -176,7 +176,7 @@
 
 /obj/item/clothing/head/helmet/space/rig/syndi/examine(mob/user)
 	..()
-	if(get_dist(user,src) <= 1)
+	if (get_dist(user,src) <= 1)
 		to_chat(user, "<span class='info'>This helmet has a built-in camera. It's [camera ? "" : "in"]active.</span>")
 
 /obj/item/clothing/suit/space/rig/syndi

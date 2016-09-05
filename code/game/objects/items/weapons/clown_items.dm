@@ -29,39 +29,39 @@
 	//I couldn't feasibly fix the overlay bugs caused by cleaning items we are wearing.
 	//So this is a workaround. This also makes more sense from an IC standpoint. ~Carn
 	//Overlay bugs can probably be fixed by updating the user's icon, see watercloset.dm
-	if(!user.Adjacent(target))
+	if (!user.Adjacent(target))
 		return
 
-	if(user.client && (target in user.client.screen) && !(user.is_holding_item(target)))
+	if (user.client && (target in user.client.screen) && !(user.is_holding_item(target)))
 		user.simple_message("<span class='notice'>You need to take that [target.name] off before cleaning it.</span>",
 			"<span class='notice'>You need to take that [target.name] off before destroying it.</span>")
 
-	else if(istype(target,/obj/effect/decal/cleanable))
+	else if (istype(target,/obj/effect/decal/cleanable))
 		user.simple_message("<span class='notice'>You scrub \the [target.name] out.</span>",
 			"<span class='warning'>You destroy [pick("an artwork","a valuable artwork","a rare piece of art","a rare piece of modern art")].</span>")
 		returnToPool(target)
 
-	else if(istype(target,/turf/simulated))
+	else if (istype(target,/turf/simulated))
 		var/turf/simulated/T = target
 		var/list/cleanables = list()
 
-		for(var/obj/effect/decal/cleanable/CC in T)
-			if(!istype(CC) || !CC)
+		for (var/obj/effect/decal/cleanable/CC in T)
+			if (!istype(CC) || !CC)
 				continue
 			cleanables += CC
 
-		for(var/obj/effect/decal/cleanable/CC in get_turf(user)) //Get all nearby decals drawn on this wall and erase them
-			if(CC.on_wall == target)
+		for (var/obj/effect/decal/cleanable/CC in get_turf(user)) //Get all nearby decals drawn on this wall and erase them
+			if (CC.on_wall == target)
 				cleanables += CC
 
-		if(!cleanables.len)
+		if (!cleanables.len)
 			user.simple_message("<span class='notice'>You fail to clean anything.</span>",
 				"<span class='notice'>There is nothing for you to vandalize.</span>")
 			return
 		cleanables = shuffle(cleanables)
 		var/obj/effect/decal/cleanable/C
-		for(var/obj/effect/decal/cleanable/d in cleanables)
-			if(d && istype(d))
+		for (var/obj/effect/decal/cleanable/d in cleanables)
+			if (d && istype(d))
 				C = d
 				break
 		user.simple_message("<span class='notice'>You scrub \the [C.name] out.</span>",
@@ -74,7 +74,7 @@
 	return
 
 /obj/item/weapon/soap/attack(mob/target as mob, mob/user as mob)
-	if(target && user && ishuman(target) && !target.stat && !user.stat && user.zone_sel &&user.zone_sel.selecting == "mouth" )
+	if (target && user && ishuman(target) && !target.stat && !user.stat && user.zone_sel &&user.zone_sel.selecting == "mouth" )
 		user.visible_message("<span class='warning'>\the [user] washes \the [target]'s mouth out with soap!</span>")
 		return
 	..()
@@ -103,7 +103,7 @@
 	user.gib()
 
 /obj/item/weapon/bikehorn/attack_self(mob/user as mob)
-	if(honk())
+	if (honk())
 		add_fingerprint(user)
 
 /obj/item/weapon/bikehorn/afterattack(atom/target, mob/user as mob, proximity_flag)
@@ -112,13 +112,13 @@
 		//honk()
 		//return
 
-	if(!proximity_flag && istype(target, /mob) && honk()) //for skilled honking at a range
+	if (!proximity_flag && istype(target, /mob) && honk()) //for skilled honking at a range
 		target.visible_message(\
 			"<span class='notice'>[user] honks \the [src] at \the [target].</span>",\
 			"[user] honks \the [src] at you.")
 
 /obj/item/weapon/bikehorn/kick_act(mob/living/H)
-	if(..())
+	if (..())
 		return 1
 
 	honk()
@@ -129,7 +129,7 @@
 	honk()
 
 /obj/item/weapon/bikehorn/proc/honk()
-	if(world.time - last_honk_time >= honk_delay)
+	if (world.time - last_honk_time >= honk_delay)
 		last_honk_time = world.time
 		playsound(get_turf(src), hitsound, 50, 1)
 		return 1
@@ -160,7 +160,7 @@
 
 /obj/item/weapon/glue/examine(mob/user)
 	..()
-	if(Adjacent(user))
+	if (Adjacent(user))
 		user.show_message("<span class='info'>The label reads:</span><br><span class='notice'>1) Apply glue to the surface of an object<br>2) Apply object to human flesh</span>", MESSAGE_SEE)
 
 /obj/item/weapon/glue/update_icon()
@@ -168,22 +168,22 @@
 	icon_state = "glue[spent]"
 
 /obj/item/weapon/glue/afterattack(obj/item/target, mob/user, proximity_flag, click_parameters)
-	if(!proximity_flag)
+	if (!proximity_flag)
 		return
 
-	if(spent)
+	if (spent)
 		user << "<span class='warning'>There's no glue left in the bottle.</span>"
 		return
 
-	if(!istype(target)) //Can only apply to items!
+	if (!istype(target)) //Can only apply to items!
 		user << "<span class='warning'>That would be such a waste of glue.</span>"
 		return
 	else
-		if(istype(target, /obj/item/stack)) //The whole cant_drop thing is EXTREMELY fucky with stacks and can be bypassed easily
+		if (istype(target, /obj/item/stack)) //The whole cant_drop thing is EXTREMELY fucky with stacks and can be bypassed easily
 			user << "<span class='warning'>There's not enough glue in \the [src] to cover the whole [target]!</span>"
 			return
 
-		if(target.abstract) //Can't glue TK grabs, grabs, offhands!
+		if (target.abstract) //Can't glue TK grabs, grabs, offhands!
 			return
 
 	user << "<span class='info'>You gently apply the whole [src] to \the [target].</span>"
@@ -196,7 +196,7 @@
 
 	target.cant_drop++
 
-	if(GLUE_WEAROFF_TIME > 0)
+	if (GLUE_WEAROFF_TIME > 0)
 		spawn(GLUE_WEAROFF_TIME)
 			target.cant_drop--
 

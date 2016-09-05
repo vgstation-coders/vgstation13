@@ -56,7 +56,7 @@
 
 	proc/format_jobs(list/jobs)
 		var/list/formatted = list()
-		for(var/job in jobs)
+		for (var/job in jobs)
 			formatted.Add(list(list(
 				"display_name" = replacetext(job, " ", "&nbsp;"),
 				"target_rank" = get_target_rank(),
@@ -66,7 +66,7 @@
 
 	proc/format_card_skins(list/card_skins)
 		var/list/formatted = list()
-		for(var/skin in card_skins)
+		for (var/skin in card_skins)
 			formatted.Add(list(list(
 				"display_name" = replacetext(skin, " ", "&nbsp;"),
 				"skin" = skin)))
@@ -78,23 +78,23 @@
 	set name = "Eject ID Card"
 	set src in oview(1)
 
-	if(!usr || usr.isUnconscious() || usr.lying)
+	if (!usr || usr.isUnconscious() || usr.lying)
 		return
 
-	if(!usr.dexterity_check())
+	if (!usr.dexterity_check())
 		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	if(scan)
+	if (scan)
 		to_chat(usr, "You remove \the [scan] from \the [src].")
 		scan.forceMove(get_turf(src))
-		if(!usr.get_active_hand())
+		if (!usr.get_active_hand())
 			usr.put_in_hands(scan)
 		scan = null
-	else if(modify)
+	else if (modify)
 		to_chat(usr, "You remove \the [modify] from \the [src].")
 		modify.forceMove(get_turf(src))
-		if(!usr.get_active_hand())
+		if (!usr.get_active_hand())
 			usr.put_in_hands(modify)
 		modify = null
 	else
@@ -102,17 +102,17 @@
 	return
 
 /obj/machinery/computer/card/attackby(obj/item/weapon/card/id/id_card, mob/user)
-	if(!istype(id_card))
+	if (!istype(id_card))
 		return ..()
 
-	if(!is_centcom() && !scan && (access_change_ids in id_card.access))
-		if(user.drop_item(id_card, src))
+	if (!is_centcom() && !scan && (access_change_ids in id_card.access))
+		if (user.drop_item(id_card, src))
 			scan = id_card
-	else if(is_centcom() && !scan && ((access_cent_creed in id_card.access) || (access_cent_captain in id_card.access)))
-		if(user.drop_item(id_card, src))
+	else if (is_centcom() && !scan && ((access_cent_creed in id_card.access) || (access_cent_captain in id_card.access)))
+		if (user.drop_item(id_card, src))
 			scan = id_card
-	else if(!modify)
-		if(user.drop_item(id_card, src))
+	else if (!modify)
+		if (user.drop_item(id_card, src))
 			modify = id_card
 
 	nanomanager.update_uis(src)
@@ -125,9 +125,9 @@
 	return attack_hand(user)
 
 /obj/machinery/computer/card/attack_hand(mob/user as mob)
-	if(..())
+	if (..())
 		return
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 	ui_interact(user)
 
@@ -162,12 +162,12 @@
 	data["card_skins"] = format_card_skins(card_skins)
 	data["cent_card_skins"] = format_card_skins(cent_card_skins)
 
-	if(modify)
+	if (modify)
 		data["current_skin"] = modify.icon_state
 
 	if (modify && is_centcom())
 		var/list/all_centcom_access = list()
-		for(var/access in get_all_centcom_access())
+		for (var/access in get_all_centcom_access())
 			if (get_centcom_access_desc(access))
 				all_centcom_access.Add(list(list(
 					"desc" = replacetext(get_centcom_access_desc(access), " ", "&nbsp"),
@@ -177,9 +177,9 @@
 		data["all_centcom_access"] = all_centcom_access
 	else if (modify)
 		var/list/regions = list()
-		for(var/i = 1; i <= 7; i++)
+		for (var/i = 1; i <= 7; i++)
 			var/list/accesses = list()
-			for(var/access in get_region_accesses(i))
+			for (var/access in get_region_accesses(i))
 				if (get_access_desc(access))
 					accesses.Add(list(list(
 						"desc" = replacetext(get_access_desc(access), " ", "&nbsp"),
@@ -199,20 +199,20 @@
 		ui.open()
 
 /obj/machinery/computer/card/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
-	if(href_list["close"])
-		if(usr.machine == src)
+	if (href_list["close"])
+		if (usr.machine == src)
 			usr.unset_machine()
 		return 1
-	switch(href_list["choice"])
+	switch (href_list["choice"])
 		if ("modify")
 			if (modify)
 				data_core.manifest_modify(modify.registered_name, modify.assignment)
 				modify.name = text("[modify.registered_name]'s ID Card ([modify.assignment])")
-				if(ishuman(usr))
+				if (ishuman(usr))
 					modify.forceMove(usr.loc)
-					if(!usr.get_active_hand())
+					if (!usr.get_active_hand())
 						usr.put_in_hands(modify)
 					modify = null
 				else
@@ -221,14 +221,14 @@
 			else
 				var/obj/item/I = usr.get_active_hand()
 				if (istype(I, /obj/item/weapon/card/id))
-					if(usr.drop_item(I, src))
+					if (usr.drop_item(I, src))
 						modify = I
 
 		if ("scan")
 			if (scan)
-				if(ishuman(usr))
+				if (ishuman(usr))
 					scan.forceMove(usr.loc)
-					if(!usr.get_active_hand())
+					if (!usr.get_active_hand())
 						usr.put_in_hands(scan)
 					scan = null
 				else
@@ -237,44 +237,44 @@
 			else
 				var/obj/item/I = usr.get_active_hand()
 				if (istype(I, /obj/item/weapon/card/id))
-					if(usr.drop_item(I, src))
+					if (usr.drop_item(I, src))
 						scan = I
 
-		if("access")
-			if(href_list["allowed"])
-				if(is_authenticated())
+		if ("access")
+			if (href_list["allowed"])
+				if (is_authenticated())
 					var/access_type = text2num(href_list["access_target"])
 					var/access_allowed = text2num(href_list["allowed"])
-					if(access_type in (is_centcom() ? get_all_centcom_access() : get_all_accesses()))
+					if (access_type in (is_centcom() ? get_all_centcom_access() : get_all_accesses()))
 						modify.access -= access_type
-						if(!access_allowed)
+						if (!access_allowed)
 							modify.access += access_type
-		if("skin")
+		if ("skin")
 			modify.icon_state = href_list["skin_target"]
 
 
 		if ("assign")
 			if (is_authenticated() && modify)
 				var/t1 = href_list["assign_target"]
-				if(t1 == "Custom")
+				if (t1 == "Custom")
 					var/temp_t = input("Enter a custom job assignment.","Assignment") as null|text
-					if(temp_t)
+					if (temp_t)
 						temp_t = copytext(sanitize(temp_t),1,45)
 						//let custom jobs function as an impromptu alt title, mainly for sechuds
-						if(temp_t && modify)
+						if (temp_t && modify)
 							modify.assignment = temp_t
 				else
 					var/list/access = list()
-					if(is_centcom())
+					if (is_centcom())
 						access = get_centcom_access(t1)
 					else
 						var/datum/job/jobdatum
-						for(var/jobtype in typesof(/datum/job))
+						for (var/jobtype in typesof(/datum/job))
 							var/datum/job/J = new jobtype
-							if(ckey(J.title) == ckey(t1))
+							if (ckey(J.title) == ckey(t1))
 								jobdatum = J
 								break
-						if(!jobdatum)
+						if (!jobdatum)
 							to_chat(usr, "<span class='warning'>No log exists for this job: [t1]</span>")
 							return
 
@@ -289,7 +289,7 @@
 				var/t2 = modify
 				if ((modify == t2 && (in_range(src, usr) || (istype(usr, /mob/living/silicon))) && istype(loc, /turf)))
 					var/temp_name = reject_bad_name(href_list["reg"])
-					if(temp_name)
+					if (temp_name)
 						modify.registered_name = temp_name
 					else
 						src.visible_message("<span class='notice'>[src] buzzes rudely.</span>")
@@ -333,7 +333,7 @@
 							<u>Access:</u><br>
 						"}
 
-						for(var/A in modify.access)
+						for (var/A in modify.access)
 							P.info += "  [get_access_desc(A)]"
 
 	if (modify)

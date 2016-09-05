@@ -55,14 +55,14 @@ var/const/ALLOW_CENTCOMM = FALSE
 /datum/interactive_map/Topic(href, href_list[], datum/html_interface_client/hclient, datum/html_interface/currui)
 	..()
 	if (istype(hclient))
-		if(hclient && hclient.client && hclient.client.mob)
+		if (hclient && hclient.client && hclient.client.mob)
 			var/mob/living/L = hclient.client.mob
-			if(!istype(L))
+			if (!istype(L))
 				return
 			switch (href_list["action"])
-				if("changez")
+				if ("changez")
 					var/newz = text2num(href_list["value"])
-					if(newz)
+					if (newz)
 						show(L,newz,currui)
 						return 1 //Tell children we handled the topic
 
@@ -72,7 +72,7 @@ var/const/ALLOW_CENTCOMM = FALSE
 /proc/generateMiniMaps()
 	//spawn // NO
 	for (var/z = 1 to world.maxz)
-		if(z == CENTCOMM_Z && !ALLOW_CENTCOMM)
+		if (z == CENTCOMM_Z && !ALLOW_CENTCOMM)
 			continue
 		generateMiniMap(z)
 
@@ -89,7 +89,7 @@ var/const/ALLOW_CENTCOMM = FALSE
 	C << browse_rsc('map_shared.js')
 	C << browse_rsc('map_shared.css')
 	for (var/z = 1 to world.maxz)
-		if(z == CENTCOMM_Z)
+		if (z == CENTCOMM_Z)
 			continue
 		C << browse_rsc(file("[getMinimapFile(z)].png"), "[map.nameShort][z].png")
 
@@ -117,8 +117,8 @@ var/const/ALLOW_CENTCOMM = FALSE
 	// Note for future developer: If you have tiles on the map with random or dynamic icons this hash check will fail
 	// every time. You'll have to modify this code to generate a unique hash for your object.
 	// Don't forget to modify the minimap generation code to use a default icon (or skip generation altogether).
-	for(var/i = x1 to x2)
-		for(var/r = y1 to y2)
+	for (var/i = x1 to x2)
+		for (var/r = y1 to y2)
 			var/turf/tile = locate(i, r, z)
 			if      (istype(tile.loc, /area/asteroid) || istype(tile.loc, /area/mine/unexplored) || istype(tile, /turf/unsimulated/mineral) || (isspace(tile.loc) && istype(tile, /turf/unsimulated/floor/asteroid)))
 				temp = "/area/asteroid"
@@ -182,8 +182,8 @@ var/const/ALLOW_CENTCOMM = FALSE
 		var/new_icon_state
 		var/new_dir
 
-		for(var/s = x1 to x2)
-			for(var/r = y1 to y2)
+		for (var/s = x1 to x2)
+			for (var/r = y1 to y2)
 				var/turf/tile = locate(s, r, z)
 				if (tile.flags & NO_MINIMAP)
 					continue

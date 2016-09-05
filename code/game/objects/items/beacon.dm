@@ -22,7 +22,7 @@ var/global/list/obj/item/beacon/beacons = list()
 /obj/item/beacon/attack_self(mob/user as mob)
 	..()
 	var/newfreq = input(user, "Input a new frequency for the beacon", "Frequency", null) as num
-	if(!newfreq)
+	if (!newfreq)
 		return
 	frequency = format_frequency(sanitize_frequency(newfreq))
 
@@ -46,7 +46,7 @@ var/global/list/obj/item/beacon/beacons = list()
 	origin_tech = Tc_BLUESPACE + "=1;" + Tc_SYNDICATE + "=7"
 
 /obj/item/beacon/syndicate/attack_self(mob/user as mob)
-	if(user)
+	if (user)
 		to_chat(user, "<span class='notice'>Locked In</span>")
 		new /obj/machinery/singularity_beacon/syndicate( user.loc )
 		playsound(src, 'sound/effects/pop.ogg', 100, 1, 1)

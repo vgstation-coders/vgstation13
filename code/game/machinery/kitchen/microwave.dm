@@ -71,12 +71,12 @@
 ********************/
 /obj/machinery/microwave/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/micro_laser/M in component_parts)
+	for (var/obj/item/weapon/stock_parts/micro_laser/M in component_parts)
 		T += M.rating-1
 	speed_multiplier = initial(speed_multiplier)+(T * 0.5)
 
 	T = 0
-	for(var/obj/item/weapon/stock_parts/scanning_module/M in component_parts)
+	for (var/obj/item/weapon/stock_parts/scanning_module/M in component_parts)
 		T += M.rating-1
 	scanning_power = initial(scanning_power)+(T)
 
@@ -84,8 +84,8 @@
 *   Item Adding
 ********************/
 /obj/machinery/microwave/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(src.broken > 0)
-		if(src.broken == 2 && isscrewdriver(O)) // If it's broken and they're using a screwdriver
+	if (src.broken > 0)
+		if (src.broken == 2 && isscrewdriver(O)) // If it's broken and they're using a screwdriver
 			user.visible_message( \
 				"<span class='notice'>[user] starts to fix part of the microwave.</span>", \
 				"<span class='notice'>You start to fix part of the microwave.</span>" \
@@ -96,7 +96,7 @@
 					"<span class='notice'>You have fixed part of the microwave.</span>" \
 				)
 				src.broken = 1 // Fix it a bit
-		else if(src.broken == 1 && iswrench(O)) // If it's broken and they're doing the wrench
+		else if (src.broken == 1 && iswrench(O)) // If it's broken and they're doing the wrench
 			user.visible_message( \
 				"<span class='notice'>[user] starts to fix part of the microwave.</span>", \
 				"<span class='notice'>You start to fix part of the microwave.</span>" \
@@ -113,10 +113,10 @@
 		else
 			to_chat(user, "<span class='warning'>It's broken!</span>")
 			return 1
-	else if(src.dirty==100) // The microwave is all dirty so can't be used!
+	else if (src.dirty==100) // The microwave is all dirty so can't be used!
 		var/obj/item/weapon/reagent_containers/R = O
-		if(istype(R)) // If they're trying to clean it then let them
-			if(R.reagents.amount_cache.len == 1 && R.reagents.has_reagent(CLEANER, 5))
+		if (istype(R)) // If they're trying to clean it then let them
+			if (R.reagents.amount_cache.len == 1 && R.reagents.has_reagent(CLEANER, 5))
 				user.visible_message( \
 					"<span class='notice'>[user] starts to clean the microwave.</span>", \
 					"<span class='notice'>You start to clean the microwave.</span>" \
@@ -136,21 +136,21 @@
 			to_chat(user, "<span class='warning'>It's too dirty!</span>")
 			return 1
 
-	if(..())
+	if (..())
 		return 1
 
-	if(holdingitems && holdingitems.len >= limit)
+	if (holdingitems && holdingitems.len >= limit)
 		to_chat(usr, "The machine cannot hold anymore items.")
 		return 1
-	else if(istype(O, /obj/item/weapon/storage/bag/plants) || istype(O, /obj/item/weapon/storage/bag/food/borg))
+	else if (istype(O, /obj/item/weapon/storage/bag/plants) || istype(O, /obj/item/weapon/storage/bag/food/borg))
 		var/obj/item/weapon/storage/bag/B = O
 		for (var/obj/item/weapon/reagent_containers/food/snacks/G in O.contents)
 			B.remove_from_storage(G,src)
-			if(contents && contents.len >= limit) //Sanity checking so the microwave doesn't overfill
+			if (contents && contents.len >= limit) //Sanity checking so the microwave doesn't overfill
 				to_chat(user, "You fill the Microwave to the brim.")
 				break
 
-		if(!O.contents.len)
+		if (!O.contents.len)
 			to_chat(user, "You empty \the [O] into the Microwave.")
 			src.updateUsrDialog()
 			return 0
@@ -158,11 +158,11 @@
 				to_chat(user, "<span class='warning'>Your [O] contains components unsuitable for cookery.</span>")
 				return 1
 
-		if(user.drop_item(O, src))
+		if (user.drop_item(O, src))
 			holdingitems += O
 			src.updateUsrDialog()
 		return 1
-	else if(is_type_in_list(O,acceptable_items))
+	else if (is_type_in_list(O,acceptable_items))
 		if (istype(O,/obj/item/stack) && O:amount>1)
 			new O.type (src)
 			O:use(1)
@@ -171,11 +171,11 @@
 				"<span class='notice'>You add one of [O] to \the [src].</span>")
 		else
 		//	user.before_take_item(O)	//This just causes problems so far as I can tell. -Pete
-			if(user.drop_item(O, src))
+			if (user.drop_item(O, src))
 				user.visible_message( \
 					"<span class='notice'>[user] has added \the [O] to \the [src].</span>", \
 					"<span class='notice'>You add \the [O] to \the [src].</span>")
-	else if(is_type_in_list(O,accepts_reagents_from))
+	else if (is_type_in_list(O,accepts_reagents_from))
 		if (!O.reagents)
 			return 1
 		for (var/datum/reagent/R in O.reagents.reagent_list)
@@ -183,7 +183,7 @@
 				to_chat(user, "<span class='warning'>Your [O] contains components unsuitable for cookery.</span>")
 				return 1
 		//G.reagents.trans_to(src,G.amount_per_transfer_from_this)
-	else if(istype(O,/obj/item/weapon/grab))
+	else if (istype(O,/obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = O
 		to_chat(user, "<span class='warning'>This is ridiculous. You can not fit \the [G.affecting] in this [src].</span>")
 		return 1
@@ -196,9 +196,9 @@
 	return src.attack_hand(user)
 
 /obj/machinery/microwave/attack_ai(mob/user as mob)
-	if(istype(user,/mob/living/silicon/robot))
+	if (istype(user,/mob/living/silicon/robot))
 		var/mob/living/silicon/robot/R = user
-		if(istype(R.module, /obj/item/weapon/robot_module/butler))
+		if (istype(R.module, /obj/item/weapon/robot_module/butler))
 			user.set_machine(src)
 			interact(user)
 			return 1
@@ -215,11 +215,11 @@
 
 /obj/machinery/microwave/interact(mob/user as mob) // The microwave Menu
 	var/dat = ""
-	if(src.broken > 0)
+	if (src.broken > 0)
 		dat = {"<TT>Bzzzzttttt</TT>"}
-	else if(src.operating)
+	else if (src.operating)
 		dat = {"<TT>Microwaving in progress!<BR>Please wait...!</TT>"}
-	else if(src.dirty==100)
+	else if (src.dirty==100)
 		dat = {"<TT>This microwave is dirty!<BR>Please clean it before use!</TT>"}
 	else
 		var/list/items_counts = new
@@ -290,7 +290,7 @@
 ************************************/
 
 /obj/machinery/microwave/proc/cook()
-	if(stat & (NOPOWER|BROKEN))
+	if (stat & (NOPOWER|BROKEN))
 		return
 	start()
 	if (reagents.total_volume==0 && !(locate(/obj) in contents)) //dry run
@@ -342,7 +342,7 @@
 			return
 		cooked = recipe.make_food(src)
 		stop()
-		if(cooked)
+		if (cooked)
 			cooked.forceMove(src.loc)
 		return
 
@@ -430,21 +430,21 @@
 	return ffuu
 
 /obj/machinery/microwave/AltClick(mob/user)
-    if(!user.incapacitated() && Adjacent(user) && user.dexterity_check())
+    if (!user.incapacitated() && Adjacent(user) && user.dexterity_check())
         cook() //Cook checks for power, brokenness, and contents internally
         return
     return ..()
 
 /obj/machinery/microwave/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 
 	usr.set_machine(src)
-	if(src.operating)
+	if (src.operating)
 		src.updateUsrDialog()
 		return
 
-	switch(href_list["action"])
+	switch (href_list["action"])
 		if ("cook")
 			cook()
 

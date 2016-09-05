@@ -40,7 +40,7 @@
 	onclose(user, "tempgun")
 
 /obj/item/weapon/gun/energy/temperature/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/card/emag) && !emagged)
+	if (istype(W, /obj/item/weapon/card/emag) && !emagged)
 		emagged = 1
 		to_chat(user, "<span class='caution'>You double the gun's temperature cap ! Targets hit by searing beams will burst into flames !</span>")
 		desc = "A gun that changes the body temperature of its targets. Its temperature cap has been hacked"
@@ -51,9 +51,9 @@
 	usr.set_machine(src)
 	src.add_fingerprint(usr)
 
-	if(href_list["temp"])
+	if (href_list["temp"])
 		var/amount = text2num(href_list["temp"])
-		if(amount > 0)
+		if (amount > 0)
 			src.target_temperature = min((500 + 500*emagged), src.target_temperature+amount)
 		else
 			src.target_temperature = max(0, src.target_temperature+amount)
@@ -64,33 +64,33 @@
 
 
 /obj/item/weapon/gun/energy/temperature/process()
-	switch(temperature)
-		if(0 to 100)
+	switch (temperature)
+		if (0 to 100)
 			charge_cost = 300
 			powercost = "High"
-		if(100 to 250)
+		if (100 to 250)
 			charge_cost = 180
 			powercost = "Medium"
-		if(251 to 300)
+		if (251 to 300)
 			charge_cost = 90
 			powercost = "Low"
-		if(301 to 400)
+		if (301 to 400)
 			charge_cost = 180
 			powercost = "Medium"
-		if(401 to 1000)
+		if (401 to 1000)
 			charge_cost = 300
 			powercost = "High"
-	switch(powercost)
-		if("High")
+	switch (powercost)
+		if ("High")
 			powercostcolor = "orange"
-		if("Medium")
+		if ("Medium")
 			powercostcolor = "green"
 		else
 			powercostcolor = "blue"
-	if(target_temperature != temperature)
+	if (target_temperature != temperature)
 		var/difference = abs(target_temperature - temperature)
-		if(difference >= (10 + 40*emagged)) //so emagged temp guns adjust their temperature much more quickly
-			if(target_temperature < temperature)
+		if (difference >= (10 + 40*emagged)) //so emagged temp guns adjust their temperature much more quickly
+			if (target_temperature < temperature)
 				temperature -= (10 + 40*emagged)
 			else
 				temperature += (10 + 40*emagged)
@@ -105,7 +105,7 @@
 				M << browse("<TITLE>Temperature Gun Configuration</TITLE><HR>[dat]", "window=tempgun;size=510x102")
 
 
-	if(power_supply)
+	if (power_supply)
 		power_supply.give(50)
 		update_icon()
 	return
@@ -113,12 +113,12 @@
 /obj/item/weapon/gun/energy/temperature/proc/update_dat()
 	dat = ""
 	dat += "Current output temperature: "
-	if(temperature > 500)
+	if (temperature > 500)
 		dat += "<FONT color=red><B>[temperature]</B> ([round(temperature-T0C)]&deg;C) ([round(temperature*1.8-459.67)]&deg;F) </FONT>"
 		dat += "<FONT color=red><B>SEARING!!</B></FONT>"
-	else if(temperature > (T0C + 50))
+	else if (temperature > (T0C + 50))
 		dat += "<FONT color=red><B>[temperature]</B> ([round(temperature-T0C)]&deg;C) ([round(temperature*1.8-459.67)]&deg;F)</FONT>"
-	else if(temperature > (T0C - 50))
+	else if (temperature > (T0C - 50))
 		dat += "<FONT color=black><B>[temperature]</B> ([round(temperature-T0C)]&deg;C) ([round(temperature*1.8-459.67)]&deg;F)</FONT>"
 	else
 		dat += "<FONT color=blue><B>[temperature]</B> ([round(temperature-T0C)]&deg;C) ([round(temperature*1.8-459.67)]&deg;F)</FONT>"
@@ -136,49 +136,49 @@
 	dat += "<FONT color=[powercostcolor]><B>[powercost]</B></FONT>"
 
 /obj/item/weapon/gun/energy/temperature/proc/update_temperature()
-	switch(temperature)
-		if(501 to INFINITY)
+	switch (temperature)
+		if (501 to INFINITY)
 			item_state = "tempgun_8"
-		if(400 to 500)
+		if (400 to 500)
 			item_state = "tempgun_7"
-		if(360 to 400)
+		if (360 to 400)
 			item_state = "tempgun_6"
-		if(335 to 360)
+		if (335 to 360)
 			item_state = "tempgun_5"
-		if(295 to 335)
+		if (295 to 335)
 			item_state = "tempgun_4"
-		if(260 to 295)
+		if (260 to 295)
 			item_state = "tempgun_3"
-		if(200 to 260)
+		if (200 to 260)
 			item_state = "tempgun_2"
-		if(120 to 260)
+		if (120 to 260)
 			item_state = "tempgun_1"
-		if(-INFINITY to 120)
+		if (-INFINITY to 120)
 			item_state = "tempgun_0"
 	icon_state = item_state
 
 /obj/item/weapon/gun/energy/temperature/proc/update_charge()
 	var/charge = power_supply.charge
-	switch(charge)
-		if(900 to INFINITY)
+	switch (charge)
+		if (900 to INFINITY)
 			overlays += image(icon = icon, icon_state = "900")
-		if(800 to 900)
+		if (800 to 900)
 			overlays += image(icon = icon, icon_state = "800")
-		if(700 to 800)
+		if (700 to 800)
 			overlays += image(icon = icon, icon_state = "700")
-		if(600 to 700)
+		if (600 to 700)
 			overlays += image(icon = icon, icon_state = "600")
-		if(500 to 600)
+		if (500 to 600)
 			overlays += image(icon = icon, icon_state = "500")
-		if(400 to 500)
+		if (400 to 500)
 			overlays += image(icon = icon, icon_state = "400")
-		if(300 to 400)
+		if (300 to 400)
 			overlays += image(icon = icon, icon_state = "300")
-		if(200 to 300)
+		if (200 to 300)
 			overlays += image(icon = icon, icon_state = "200")
-		if(100 to 200)
+		if (100 to 200)
 			overlays += image(icon = icon, icon_state = "100")
-		if(-INFINITY to 100)
+		if (-INFINITY to 100)
 			overlays += image(icon = icon, icon_state = "0")
 
 /obj/item/weapon/gun/energy/temperature/proc/update_user()

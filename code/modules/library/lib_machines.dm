@@ -40,7 +40,7 @@
 	title = row["title"]
 	category = row["category"]
 	ckey = row["ckey"]
-	if("content" in row)
+	if ("content" in row)
 		content = row["content"]
 	programmatic=0
 
@@ -52,12 +52,12 @@
 
 /datum/library_query/proc/toSQL()
 	var/list/where = list()
-	if(author || title || category)
-		if(author)
+	if (author || title || category)
+		if (author)
 			where.Add("author LIKE '%[sanitizeSQL(author)]%'")
-		if(category)
+		if (category)
 			where.Add("category = '[sanitizeSQL(category)]'")
-		if(title)
+		if (title)
 			where.Add("title LIKE '%[sanitizeSQL(title)]%'")
 		return " WHERE "+jointext(where," AND ")
 	return ""
@@ -68,7 +68,7 @@
 
 /datum/library_catalog/proc/initialize()
 	var/newid=1
-	for(var/typepath in typesof(/obj/item/weapon/book/manual)-/obj/item/weapon/book/manual)
+	for (var/typepath in typesof(/obj/item/weapon/book/manual)-/obj/item/weapon/book/manual)
 		var/obj/item/weapon/book/B = new typepath(null)
 		var/datum/cachedbook/CB = new()
 		CB.forbidden=B.forbidden
@@ -82,30 +82,30 @@
 
 
 /datum/library_catalog/proc/rmBookByID(var/mob/user, var/id as text)
-	if("[id]" in cached_books)
+	if ("[id]" in cached_books)
 		var/datum/cachedbook/CB = cached_books["[id]"]
-		if(CB.programmatic)
+		if (CB.programmatic)
 			to_chat(user, "<span class='danger'>That book cannot be removed from the system, as it does not actually exist in the database.</span>")
 			return
 
 	var/sqlid = text2num(id)
-	if(!sqlid)
+	if (!sqlid)
 		return
 	var/DBQuery/query = dbcon_old.NewQuery("DELETE FROM library WHERE id=[sqlid]")
 	query.Execute()
 
 /datum/library_catalog/proc/getBookByID(var/id as text)
-	if("[id]" in cached_books)
+	if ("[id]" in cached_books)
 		return cached_books["[id]"]
 
 	var/sqlid = text2num(id)
-	if(!sqlid)
+	if (!sqlid)
 		return
 	var/DBQuery/query = dbcon_old.NewQuery("SELECT  id, author, title, category, ckey  FROM library WHERE id=[sqlid]")
 	query.Execute()
 
 	var/list/results=list()
-	while(query.NextRow())
+	while (query.NextRow())
 		var/datum/cachedbook/CB = new()
 		CB.LoadFromRow(list(
 			"id"      =query.item[1],
@@ -135,23 +135,23 @@ var/global/list/library_section_names = list("Fiction", "Non-Fiction", "Adult", 
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/libraryscanner/attackby(var/obj/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/book))
+	if (istype(O, /obj/item/weapon/book))
 		user.drop_item(O, src)
 	else
 		return ..()
 
 /obj/machinery/libraryscanner/attack_hand(var/mob/user as mob)
-	if(istype(user,/mob/dead))
+	if (istype(user,/mob/dead))
 		to_chat(user, "<span class='danger'>Nope.</span>")
 		return
 	usr.set_machine(src)
 	var/dat = "<HEAD><TITLE>Scanner Control Interface</TITLE></HEAD><BODY>\n" // <META HTTP-EQUIV='Refresh' CONTENT='10'>
-	if(cache)
+	if (cache)
 		dat += "<FONT color=#005500>Data stored in memory.</FONT><BR>"
 	else
 		dat += "No data stored in memory.<BR>"
 	dat += "<A href='?src=\ref[src];scan=1'>\[Scan\]</A>"
-	if(cache)
+	if (cache)
 		dat += "       <A href='?src=\ref[src];clear=1'>\[Clear Memory\]</A><BR><BR><A href='?src=\ref[src];eject=1'>\[Remove Book\]</A>"
 	else
 		dat += "<BR>"
@@ -159,19 +159,19 @@ var/global/list/library_section_names = list("Fiction", "Non-Fiction", "Adult", 
 	onclose(user, "scanner")
 
 /obj/machinery/libraryscanner/Topic(href, href_list)
-	if(..())
+	if (..())
 		usr << browse(null, "window=scanner")
 		onclose(usr, "scanner")
 		return
 
-	if(href_list["scan"])
-		for(var/obj/item/weapon/book/B in contents)
+	if (href_list["scan"])
+		for (var/obj/item/weapon/book/B in contents)
 			cache = B
 			break
-	if(href_list["clear"])
+	if (href_list["clear"])
 		cache = null
-	if(href_list["eject"])
-		for(var/obj/item/weapon/book/B in contents)
+	if (href_list["eject"])
+		for (var/obj/item/weapon/book/B in contents)
 			B.forceMove(src.loc)
 	src.add_fingerprint(usr)
 	src.updateUsrDialog()
@@ -190,8 +190,8 @@ var/global/list/library_section_names = list("Fiction", "Non-Fiction", "Adult", 
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/bookbinder/attackby(var/obj/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/paper) || istype(O, /obj/item/weapon/paper/nano))
-		if(user.drop_item(O, src))
+	if (istype(O, /obj/item/weapon/paper) || istype(O, /obj/item/weapon/paper/nano))
+		if (user.drop_item(O, src))
 			user.visible_message("[user] loads some paper into [src].", "You load some paper into [src].")
 			src.visible_message("[src] begins to hum as it warms up its printing drums.")
 			sleep(rand(200,400))

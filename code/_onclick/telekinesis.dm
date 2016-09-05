@@ -11,7 +11,7 @@ var/const/tk_maxrange = 15
 	By default, emulate the user's unarmed attack
 */
 /atom/proc/attack_tk(mob/user)
-	if(user.stat)
+	if (user.stat)
 		return
 	user.UnarmedAttack(src,0) // attack_hand, attack_paw, etc
 
@@ -25,14 +25,14 @@ var/const/tk_maxrange = 15
 /atom/proc/attack_self_tk(mob/user)
 
 /obj/attack_tk(mob/user)
-	if(user.stat)
+	if (user.stat)
 		return
-	if(anchored)
+	if (anchored)
 		..()
 		return
 
 	var/obj/item/tk_grab/O = new(src)
-	if(user.put_in_hands(O))
+	if (user.put_in_hands(O))
 		O.host = user
 		O.focus_object(src)
 	else
@@ -40,11 +40,11 @@ var/const/tk_maxrange = 15
 	return
 
 /obj/item/attack_tk(mob/user)
-	if(user.stat || !isturf(loc))
+	if (user.stat || !isturf(loc))
 		return
-	if((M_TK in user.mutations) && !user.get_active_hand()) // both should already be true to get here
+	if ((M_TK in user.mutations) && !user.get_active_hand()) // both should already be true to get here
 		var/obj/item/tk_grab/O = new(src)
-		if(user.put_in_hands(O))
+		if (user.put_in_hands(O))
 			O.host = user
 			O.focus_object(src)
 		else
@@ -80,75 +80,75 @@ var/const/tk_maxrange = 15
 
 
 /obj/item/tk_grab/dropped(mob/user as mob)
-	if(focus && user && loc != user && loc != user.loc) // drop_item(null, ) gets called when you tk-attack a table/closet with an item
-		if(focus.Adjacent(loc))
+	if (focus && user && loc != user && loc != user.loc) // drop_item(null, ) gets called when you tk-attack a table/closet with an item
+		if (focus.Adjacent(loc))
 			focus.forceMove(loc)
 	qdel(src)
 
 
 	//stops TK grabs being equipped anywhere but into hands
 /obj/item/tk_grab/equipped(var/mob/user, var/slot, hand_index)
-	if(hand_index)
+	if (hand_index)
 		return
 	qdel(src)
 
 /obj/item/tk_grab/attack_self(mob/user as mob)
-	if(focus)
+	if (focus)
 		focus.attack_self_tk(user)
 
 /obj/item/tk_grab/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, proximity, params)//TODO: go over this
-	if(user)
+	if (user)
 		user.delayNextAttack(8)
-	if(!target || !user)
+	if (!target || !user)
 		return
-	if(last_throw+3 > world.time)
+	if (last_throw+3 > world.time)
 		return
-	if(!host || host != user)
+	if (!host || host != user)
 		qdel(src)
 		return
-	if(!(M_TK in host.mutations))
+	if (!(M_TK in host.mutations))
 		qdel(src)
 		return
-	if(isobj(target) && !isturf(target.loc))
+	if (isobj(target) && !isturf(target.loc))
 		return
 	var/d = get_dist(user, target)
-	if(focus)
+	if (focus)
 		d = max(d,get_dist(user,focus)) // whichever is further
 
 	/*switch(d)
-		if(0)
+		if (0)
 			;
-		if(1 to 5) // not adjacent may mean blocked by window
-			if(!proximity)
+		if (1 to 5) // not adjacent may mean blocked by window
+			if (!proximity)
 				user.next_move += 2
-		if(5 to 7)
+		if (5 to 7)
 			user.next_move += 5
-		if(8 to tk_maxrange)
+		if (8 to tk_maxrange)
 			user.next_move += 10
 		else
 			to_chat(user, "<span class='notice'>Your mind won't reach that far.</span>")
 			return*/
 
-	if(d > tk_maxrange)
+	if (d > tk_maxrange)
 		to_chat(user, "<span class='warning'>Your mind won't reach that far.</span>")
 		return
 
-	if(!focus)
+	if (!focus)
 		focus_object(target, user)
 		return
 
-	if(target == focus)
+	if (target == focus)
 		target.attack_self_tk(user)
 		return // todo: something like attack_self not laden with assumptions inherent to attack_self
 
-	if(!istype(target, /turf) && istype(focus,/obj/item) && target.Adjacent(focus))
+	if (!istype(target, /turf) && istype(focus,/obj/item) && target.Adjacent(focus))
 		var/obj/item/I = focus
 		var/isb = I.siemens_coefficient
 		var/ipb = I.permeability_coefficient
 		I.siemens_coefficient = 0
 		I.permeability_coefficient = 0.05
 		var/resolved = target.attackby(I, user, params)
-		if(!resolved && target && I)
+		if (!resolved && target && I)
 			I.afterattack(target,user,1,params) // for splashing with beakers
 		I.siemens_coefficient = isb
 		I.permeability_coefficient =ipb
@@ -162,9 +162,9 @@ var/const/tk_maxrange = 15
 /obj/item/tk_grab/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
 
 /obj/item/tk_grab/proc/focus_object(var/obj/target, var/mob/living/user)
-	if(!istype(target,/obj))
+	if (!istype(target,/obj))
 		return//Cant throw non objects atm might let it do mobs later
-	if(target.anchored || !isturf(target.loc))
+	if (target.anchored || !isturf(target.loc))
 		qdel(src)
 		return
 	focus = target
@@ -172,7 +172,7 @@ var/const/tk_maxrange = 15
 	apply_focus_overlay()
 
 /obj/item/tk_grab/proc/apply_focus_overlay()
-	if(!focus)
+	if (!focus)
 		return
 	var/obj/effect/overlay/O = new /obj/effect/overlay(locate(focus.x,focus.y,focus.z))
 	O.name = "sparkles"
@@ -190,30 +190,30 @@ var/const/tk_maxrange = 15
 
 /obj/item/tk_grab/update_icon()
 	overlays.len = 0
-	if(focus && focus.icon && focus.icon_state)
+	if (focus && focus.icon && focus.icon_state)
 		overlays += icon(focus.icon,focus.icon_state)
 
 /*Not quite done likely needs to use something thats not get_step_to
 /obj/item/tk_grab/proc/check_path()
 	var/turf/ref = get_turf(src.loc)
 	var/turf/target = get_turf(focus.loc)
-	if(!ref || !target)
+	if (!ref || !target)
 		return 0
 	var/distance = get_dist(ref, target)
-	if(distance >= 10)
+	if (distance >= 10)
 		return 0
-	for(var/i = 1 to distance)
+	for (var/i = 1 to distance)
 		ref = get_step_to(ref, target, 0)
-	if(ref != target)
+	if (ref != target)
 		return 0
 	return 1
 */
 
 ///obj/item/tk_grab/equip_to_slot_or_del(obj/item/W, slot, del_on_fail = 1)
 /*
-	if(istype(user, /mob/living/carbon))
-		if((user:mutations & M_TK) && get_dist(source, user) <= 7)
-			if(user:get_active_hand())
+	if (istype(user, /mob/living/carbon))
+		if ((user:mutations & M_TK) && get_dist(source, user) <= 7)
+			if (user:get_active_hand())
 				return 0
 			var/X = source:x
 			var/Y = source:y

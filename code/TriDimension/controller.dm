@@ -55,28 +55,28 @@
 		normal -= T
 		fast -= T
 
-		if(!T || !istype(T, /turf))
+		if (!T || !istype(T, /turf))
 			continue
 
 		switch (I)
-			if(1)
+			if (1)
 				slow += T
-			if(2)
+			if (2)
 				normal += T
-			if(3)
+			if (3)
 				fast += T
 
-		if(transfer > 0)
-			if(up)
+		if (transfer > 0)
+			if (up)
 				var/turf/controller_up = locate(1, 1, up_target)
-				for(var/obj/effect/landmark/zcontroller/c_up in controller_up)
+				for (var/obj/effect/landmark/zcontroller/c_up in controller_up)
 					var/list/temp = list()
 					temp += locate(T.x, T.y, up_target)
 					c_up.add(temp, I, transfer-1)
 
-			if(down)
+			if (down)
 				var/turf/controller_down = locate(1, 1, down_target)
-				for(var/obj/effect/landmark/zcontroller/c_down in controller_down)
+				for (var/obj/effect/landmark/zcontroller/c_down in controller_down)
 					var/list/temp = list()
 					temp += locate(T.x, T.y, down_target)
 					c_down.add(temp, I, transfer-1)
@@ -89,8 +89,8 @@
 	..()
 
 	var/turf/controller = locate(1, 1, z)
-	for(var/obj/effect/landmark/zcontroller/c in controller)
-		if(c.initialized)
+	for (var/obj/effect/landmark/zcontroller/c in controller)
+		if (c.initialized)
 			var/list/turf = list()
 			turf += src
 			c.add(turf,3,1)
@@ -99,8 +99,8 @@
 	..()
 
 	var/turf/controller = locate(1, 1, z)
-	for(var/obj/effect/landmark/zcontroller/c in controller)
-		if(c.initialized)
+	for (var/obj/effect/landmark/zcontroller/c in controller)
+		if (c.initialized)
 			var/list/turf = list()
 			turf += src
 			c.add(turf,3,1)
@@ -109,8 +109,8 @@ atom/movable/Move() //Hackish
 	. = ..()
 
 	var/turf/controllerlocation = locate(1, 1, src.z)
-	for(var/obj/effect/landmark/zcontroller/controller in controllerlocation)
-		if(controller.up || controller.down)
+	for (var/obj/effect/landmark/zcontroller/controller in controllerlocation)
+		if (controller.up || controller.down)
 			var/list/temp = list()
 			temp += locate(src.x, src.y, src.z)
 			controller.add(temp,3,1)
@@ -121,21 +121,21 @@ atom/movable/Move() //Hackish
 	var/list/fastholder = list()
 	var/new_list
 
-	while(L.len)
+	while (L.len)
 		var/turf/T = pick(L)
 		new_list = 0
 
-		if(!T || !istype(T, /turf))
+		if (!T || !istype(T, /turf))
 			L -= T
 			continue
 
 		T.overlays -= T.z_overlays
 		T.z_overlays -= T.z_overlays
 
-		if(down && (istype(T, /turf/space) || istype(T, /turf/simulated/floor/open)))
+		if (down && (istype(T, /turf/space) || istype(T, /turf/simulated/floor/open)))
 			var/turf/below = locate(T.x, T.y, down_target)
-			if(below)
-				if(!(istype(below, /turf/space) || istype(below, /turf/simulated/floor/open)))
+			if (below)
+				if (!(istype(below, /turf/space) || istype(below, /turf/simulated/floor/open)))
 					var/image/t_img = list()
 					new_list = 1
 
@@ -150,9 +150,9 @@ atom/movable/Move() //Hackish
 
 				// get objects
 				var/image/o_img = list()
-				for(var/obj/o in below)
+				for (var/obj/o in below)
 					// ingore objects that have any form of invisibility
-					if(o.invisibility)
+					if (o.invisibility)
 						continue
 					new_list = 2
 					var/image/temp2 = image(o, dir=o.dir, layer = TURF_LAYER+0.05*o.layer)
@@ -166,12 +166,12 @@ atom/movable/Move() //Hackish
 
 				// get mobs
 				var/image/m_img = list()
-				for(var/mob/m in below)
+				for (var/mob/m in below)
 					// ingore mobs that have any form of invisibility
-					if(m.invisibility)
+					if (m.invisibility)
 						continue
 					// only add this tile to fastprocessing if there is a living mob, not a dead one
-					if(istype(m, /mob/living))
+					if (istype(m, /mob/living))
 						new_list = 3
 					var/image/temp2 = image(m, dir=m.dir, layer = TURF_LAYER+0.05*m.layer)
 					temp2.color = rgb(127,127,127)
@@ -189,23 +189,23 @@ atom/movable/Move() //Hackish
 		// the overlay is always opaque to mouseclicks and thus prevents interactions with everything except the turf
 		/*if(up)
 			var/turf/above = locate(T.x, T.y, up_target)
-			if(above)
+			if (above)
 				var/eligeable = 0
-				for(var/d in cardinal)
+				for (var/d in cardinal)
 					var/turf/mT = get_step(above,d)
-					if(istype(mT, /turf/space) || istype(mT, /turf/simulated/floor/open))
+					if (istype(mT, /turf/space) || istype(mT, /turf/simulated/floor/open))
 						eligeable = 1
 					/*if(mT.opacity == 0)
-						for(var/f in cardinal)
+						for (var/f in cardinal)
 							var/turf/nT = get_step(mT,f)
-							if(istype(nT, /turf/space) || istype(nT, /turf/simulated/floor/open))
+							if (istype(nT, /turf/space) || istype(nT, /turf/simulated/floor/open))
 								eligeable = 1*/
-				if(istype(above, /turf/space) || istype(above, /turf/simulated/floor/open))
+				if (istype(above, /turf/space) || istype(above, /turf/simulated/floor/open))
 					eligeable = 1
-				if(eligeable == 1)
-					if(!(istype(above, /turf/space) || istype(above, /turf/simulated/floor/open)))
+				if (eligeable == 1)
+					if (!(istype(above, /turf/space) || istype(above, /turf/simulated/floor/open)))
 						var/image/t_img = list()
-						if(new_list < 1)
+						if (new_list < 1)
 							new_list = 1
 
 						above.overlays -= above.z_overlays
@@ -221,11 +221,11 @@ atom/movable/Move() //Hackish
 
 					// get objects
 					var/image/o_img = list()
-					for(var/obj/o in above)
+					for (var/obj/o in above)
 						// ingore objects that have any form of invisibility
-						if(o.invisibility)
+						if (o.invisibility)
 							continue
-						if(new_list < 2)
+						if (new_list < 2)
 							new_list = 2
 						var/image/temp2 = image(o, dir=o.dir, layer = 5+0.05*o.layer)
 						temp2.alpha = 100
@@ -237,12 +237,12 @@ atom/movable/Move() //Hackish
 
 					// get mobs
 					var/image/m_img = list()
-					for(var/mob/m in above)
+					for (var/mob/m in above)
 						// ingore mobs that have any form of invisibility
-						if(m.invisibility)
+						if (m.invisibility)
 							continue
 						// only add this tile to fastprocessing if there is a living mob, not a dead one
-						if(istype(m, /mob/living) && new_list < 3)
+						if (istype(m, /mob/living) && new_list < 3)
 							new_list = 3
 						var/image/temp2 = image(m, dir=m.dir, layer = 5+0.05*m.layer)
 						temp2.alpha = 100
@@ -257,19 +257,19 @@ atom/movable/Move() //Hackish
 
 		L -= T
 
-		if(new_list == 1)
+		if (new_list == 1)
 			slowholder += T
-		if(new_list == 2)
+		if (new_list == 2)
 			normalholder += T
-		if(new_list == 3)
+		if (new_list == 3)
 			fastholder += T
-			for(var/d in cardinal)
+			for (var/d in cardinal)
 				var/turf/mT = get_step(T,d)
-				if(!(mT in fastholder))
+				if (!(mT in fastholder))
 					fastholder += mT
-				for(var/f in cardinal)
+				for (var/f in cardinal)
 					var/turf/nT = get_step(mT,f)
-					if(!(nT in fastholder))
+					if (!(nT in fastholder))
 						fastholder += nT
 
 	add(slowholder,1, 0)

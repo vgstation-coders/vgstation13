@@ -10,12 +10,12 @@
 	density = 1
 	default_colour = "#b77900"
 /obj/machinery/atmospherics/unary/tank/process()
-	if(!network)
+	if (!network)
 		. = ..()
 	atmos_machines.Remove(src)
-	/*			if(!node1)
+	/*			if (!node1)
 		parent.mingle_with_turf(loc, 200)
-		if(!nodealert)
+		if (!nodealert)
 //			to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
 			nodealert = 1
 	else if (nodealert)
@@ -93,7 +93,7 @@
 
 
 /obj/machinery/atmospherics/unary/tank/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	if(istype(W, /obj/item/device/rcd/rpd) || istype(W, /obj/item/device/pipe_painter))
+	if (istype(W, /obj/item/device/rcd/rpd) || istype(W, /obj/item/device/pipe_painter))
 		return // Coloring pipes.
 	if (istype(W, /obj/item/device/analyzer) && get_dist(user, src) <= 1)
 		user.visible_message("<span class='attack'>[user] has used [W] on [bicon(icon)] [src]</span>", "<span class='attack'>You use \the [W] on [bicon(icon)] [src]</span>")

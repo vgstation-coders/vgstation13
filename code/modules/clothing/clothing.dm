@@ -14,50 +14,50 @@
 
 /obj/item/clothing/examine(mob/user)
 	..()
-	for(var/obj/item/clothing/accessory/A in accessories)
+	for (var/obj/item/clothing/accessory/A in accessories)
 		to_chat(user, "<span class='info'>\A [A] is clipped to it.</span>")
 
 /obj/item/clothing/emp_act(severity)
-	for(var/obj/item/clothing/accessory/accessory in accessories)
+	for (var/obj/item/clothing/accessory/accessory in accessories)
 		accessory.emp_act(severity)
 	..()
 
 /obj/item/clothing/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/clothing/accessory))
+	if (istype(I, /obj/item/clothing/accessory))
 		var/obj/item/clothing/accessory/A = I
-		if(check_accessory_overlap(A))
+		if (check_accessory_overlap(A))
 			to_chat(user, "<span class='notice'>You cannot attach more accessories of this type to [src].</span>")
 			return
-		if(!A.can_attach_to(src))
+		if (!A.can_attach_to(src))
 			to_chat(user, "<span class='notice'>\The [A] cannot be attached to [src].</span>")
 			return
-		if(user.drop_item(I, src))
+		if (user.drop_item(I, src))
 			to_chat(user, "<span class='notice'>You attach [A] to [src].</span>")
 			attach_accessory(A)
 			A.add_fingerprint(user)
-		if(ishuman(loc))
+		if (ishuman(loc))
 			var/mob/living/carbon/human/H = loc
 			H.update_inv_by_slot(slot_flags)
 		return 1
-	for(var/obj/item/clothing/accessory/accessory in priority_accessories())
-		if(accessory.attackby(I, user))
+	for (var/obj/item/clothing/accessory/accessory in priority_accessories())
+		if (accessory.attackby(I, user))
 			return 1
 
 	..()
 
 /obj/item/clothing/attack_hand(mob/user)
-	if(accessories.len && src.loc == user)
+	if (accessories.len && src.loc == user)
 		var/list/delayed = list()
-		for(var/obj/item/clothing/accessory/A in priority_accessories())
-			switch(A.on_accessory_interact(user, 0))
-				if(1)
+		for (var/obj/item/clothing/accessory/A in priority_accessories())
+			switch (A.on_accessory_interact(user, 0))
+				if (1)
 					return 1
-				if(-1)
+				if (-1)
 					delayed.Add(A)
 				else
 					continue
-		for(var/obj/item/clothing/accessory/A in delayed)
-			if(A.on_accessory_interact(user, 1))
+		for (var/obj/item/clothing/accessory/A in delayed)
+			if (A.on_accessory_interact(user, 1))
 				return 1
 		return
 	return ..()
@@ -69,34 +69,34 @@
 	update_verbs()
 
 /obj/item/clothing/proc/priority_accessories()
-	if(!accessories.len)
+	if (!accessories.len)
 		return list()
 	var/list/unorg = accessories
 	var/list/prioritized = list()
-	for(var/obj/item/clothing/accessory/holster/H in accessories)
+	for (var/obj/item/clothing/accessory/holster/H in accessories)
 		prioritized.Add(H)
-	for(var/obj/item/clothing/accessory/storage/S in accessories)
+	for (var/obj/item/clothing/accessory/storage/S in accessories)
 		prioritized.Add(S)
-	for(var/obj/item/clothing/accessory/armband/A in accessories)
+	for (var/obj/item/clothing/accessory/armband/A in accessories)
 		prioritized.Add(A)
 	prioritized |= unorg
 	return prioritized
 
 /obj/item/clothing/proc/check_accessory_overlap(var/obj/item/clothing/accessory/accessory)
-	if(!accessory)
+	if (!accessory)
 		return
 
-	for(var/obj/item/clothing/accessory/A in accessories)
-		if(A.accessory_exclusion & accessory.accessory_exclusion)
+	for (var/obj/item/clothing/accessory/A in accessories)
+		if (A.accessory_exclusion & accessory.accessory_exclusion)
 			return 1
 
 /obj/item/clothing/proc/remove_accessory(mob/user, var/obj/item/clothing/accessory/accessory)
-	if(!accessory || !(accessory in accessories))
+	if (!accessory || !(accessory in accessories))
 		return
 
 	accessory.on_removed(user)
 	accessories.Remove(accessory)
-	if(ishuman(user))
+	if (ishuman(user))
 		var/mob/living/carbon/human/H = user
 		H.update_inv_by_slot(slot_flags)
 	update_verbs()
@@ -105,20 +105,20 @@
 	set name = "Remove Accessory"
 	set category = "Object"
 	set src in usr
-	if(usr.incapacitated())
+	if (usr.incapacitated())
 		return
 
-	if(!accessories.len)
+	if (!accessories.len)
 		return
 	var/obj/item/clothing/accessory/A
-	if(accessories.len > 1)
+	if (accessories.len > 1)
 		A = input("Select an accessory to remove from [src]") as anything in accessories
 	else
 		A = accessories[1]
 	src.remove_accessory(usr,A)
 
 /obj/item/clothing/proc/update_verbs()
-	if(accessories.len)
+	if (accessories.len)
 		verbs |= /obj/item/clothing/verb/removeaccessory
 	else
 		verbs -= /obj/item/clothing/verb/removeaccessory
@@ -131,58 +131,58 @@
 /obj/item/clothing/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
 
 	. = ..() //Default return value. If 1, item can be equipped. If 0, it can't be.
-	if(!.)
+	if (!.)
 		return //Default return value is 0 - don't check for species
 
-	if(species_restricted && istype(M,/mob/living/carbon/human) && (slot != slot_l_store && slot != slot_r_store))
+	if (species_restricted && istype(M,/mob/living/carbon/human) && (slot != slot_l_store && slot != slot_r_store))
 
 		var/wearable = null
 		var/exclusive = null
 		var/mob/living/carbon/human/H = M
 
-		if("exclude" in species_restricted)
+		if ("exclude" in species_restricted)
 			exclusive = 1
 
 		var/datum/species/base_species = H.species
-		if(!base_species)
+		if (!base_species)
 			return
 
 		var/base_species_can_wear = 1 //If the body's main species can wear this
 
-		if(exclusive)
-			if(!species_restricted.Find(base_species.name))
+		if (exclusive)
+			if (!species_restricted.Find(base_species.name))
 				wearable = 1
 			else
 				base_species_can_wear = 0
 		else
-			if(species_restricted.Find(base_species.name))
+			if (species_restricted.Find(base_species.name))
 				wearable = 1
 			else
 				base_species_can_wear = 0
 
 		//Check ALL organs covered by the slot. If any of the organ's species can't wear this, return 0
 
-		for(var/datum/organ/external/OE in get_organs_by_slot(slot, H)) //Go through all organs covered by the item
-			if(!OE.species) //Species same as of the body
-				if(!base_species_can_wear) //And the body's species can't wear
+		for (var/datum/organ/external/OE in get_organs_by_slot(slot, H)) //Go through all organs covered by the item
+			if (!OE.species) //Species same as of the body
+				if (!base_species_can_wear) //And the body's species can't wear
 					wearable = 0
 					break
 				continue
 
-			if(exclusive)
-				if(!species_restricted.Find(OE.species.name))
+			if (exclusive)
+				if (!species_restricted.Find(OE.species.name))
 					wearable = 1
 				else
 					to_chat(M, "<span class='warning'>Your misshapen [OE.display_name] prevents you from wearing \the [src].</span>")
 					return CANNOT_EQUIP
 			else
-				if(species_restricted.Find(OE.species.name))
+				if (species_restricted.Find(OE.species.name))
 					wearable = 1
 				else
 					to_chat(M, "<span class='warning'>Your misshapen [OE.display_name] prevents you from wearing \the [src].</span>")
 					return CANNOT_EQUIP
 
-		if(!wearable) //But we are a species that CAN'T wear it (sidenote: slots 15 and 16 are pockets)
+		if (!wearable) //But we are a species that CAN'T wear it (sidenote: slots 15 and 16 are pockets)
 			to_chat(M, "<span class='warning'>Your species cannot wear [src].</span>")//Let us know
 			return CANNOT_EQUIP
 
@@ -190,18 +190,18 @@
 
 /obj/item/clothing/before_stripped(mob/wearer as mob, mob/stripper as mob, slot)
 	..()
-	if(slot == slot_w_uniform) //this will cause us to drop our belt, ID, and pockets!
-		for(var/slotID in list(slot_wear_id, slot_belt, slot_l_store, slot_r_store))
+	if (slot == slot_w_uniform) //this will cause us to drop our belt, ID, and pockets!
+		for (var/slotID in list(slot_wear_id, slot_belt, slot_l_store, slot_r_store))
 			var/obj/item/I = wearer.get_item_by_slot(slotID)
-			if(I)
+			if (I)
 				I.on_found(stripper)
 
 /obj/item/clothing/stripped(mob/wearer as mob, mob/stripper as mob, slot)
 	..()
-	if(slot == slot_w_uniform) //this will cause us to drop our belt, ID, and pockets!
-		for(var/slotID in list(slot_wear_id, slot_belt, slot_l_store, slot_r_store))
+	if (slot == slot_w_uniform) //this will cause us to drop our belt, ID, and pockets!
+		for (var/slotID in list(slot_wear_id, slot_belt, slot_l_store, slot_r_store))
 			var/obj/item/I = wearer.get_item_by_slot(slotID)
-			if(I)
+			if (I)
 				I.stripped(stripper)
 
 //Ears: headsets, earmuffs and tiny objects
@@ -220,11 +220,11 @@
 		return
 
 	var/mob/living/carbon/human/H = user
-	if(H.ears != src)
+	if (H.ears != src)
 		..()
 		return
 
-	if(!canremove)
+	if (!canremove)
 		return
 
 	var/obj/item/clothing/ears/O = src
@@ -269,7 +269,7 @@ SEE_PIXELS// if an object is located on an unlit area, but some of its pixels ar
 BLIND     // can't see anything
 */
 /obj/item/clothing/glasses/harm_label_update()
-	if(harm_labeled >= min_harm_label)
+	if (harm_labeled >= min_harm_label)
 		vision_flags |= BLIND
 	else
 		vision_flags &= ~BLIND
@@ -295,11 +295,11 @@ BLIND     // can't see anything
 	var/damage_added = 0 //Added to unarmed damage, doesn't affect knockout chance
 
 /obj/item/clothing/gloves/emp_act(severity)
-	if(cell)
+	if (cell)
 		cell.charge -= 1000 / severity
 		if (cell.charge < 0)
 			cell.charge = 0
-		if(cell.reliability != 100 && prob(50/severity))
+		if (cell.reliability != 100 && prob(50/severity))
 			cell.reliability -= 10 / severity
 	..()
 
@@ -335,15 +335,15 @@ BLIND     // can't see anything
 	set name = "Toggle Mask"
 	set category = "Object"
 	set src in usr
-	if(ignore_flip)
+	if (ignore_flip)
 		return
 	else
-		if(usr.incapacitated())
+		if (usr.incapacitated())
 			return
-		if(!can_flip)
+		if (!can_flip)
 			to_chat(usr, "You try pushing \the [src] out of the way, but it is very uncomfortable and you look like a fool. You push it back into place.")
 			return
-		if(src.is_flipped == 2)
+		if (src.is_flipped == 2)
 			src.icon_state = initial(icon_state)
 			gas_transfer_coefficient = initial(gas_transfer_coefficient)
 			permeability_coefficient = initial(permeability_coefficient)
@@ -363,7 +363,7 @@ BLIND     // can't see anything
 
 /obj/item/clothing/mask/New()
 	..()
-	if(!can_flip /*&& !istype(/obj/item/clothing/mask/gas/voice)*/) //the voice changer has can_flip = 1 anyways but it's worth noting that it exists if anybody changes this in the future
+	if (!can_flip /*&& !istype(/obj/item/clothing/mask/gas/voice)*/) //the voice changer has can_flip = 1 anyways but it's worth noting that it exists if anybody changes this in the future
 		action_button_name = null
 		verbs -= /obj/item/clothing/mask/verb/togglemask
 
@@ -479,61 +479,61 @@ BLIND     // can't see anything
 	var/list/holomap_images = list()
 
 /obj/item/clothing/under/Destroy()
-	for(var/obj/machinery/computer/crew/C in machines)
-		if(C && src in C.tracked)
+	for (var/obj/machinery/computer/crew/C in machines)
+		if (C && src in C.tracked)
 			C.tracked -= src
 	..()
 
 /obj/item/clothing/under/examine(mob/user)
 	..()
 	var/mode
-	switch(src.sensor_mode)
-		if(0)
+	switch (src.sensor_mode)
+		if (0)
 			mode = "Its sensors appear to be disabled."
-		if(1)
+		if (1)
 			mode = "Its binary life sensors appear to be enabled."
-		if(2)
+		if (2)
 			mode = "Its vital tracker appears to be enabled."
-		if(3)
+		if (3)
 			mode = "Its vital tracker and tracking beacon appear to be enabled."
 	to_chat(user, "<span class='info'>" + mode + "</span>")
 
 /obj/item/clothing/under/proc/set_sensors(mob/user as mob)
-	if(user.incapacitated())
+	if (user.incapacitated())
 		return
-	if(has_sensor >= 2)
+	if (has_sensor >= 2)
 		to_chat(user, "<span class='warning'>The controls are locked.</span>")
 		return 0
-	if(has_sensor <= 0)
+	if (has_sensor <= 0)
 		to_chat(user, "<span class='warning'>This suit does not have any sensors.</span>")
 		return 0
 
 	var/list/modes = list("Off", "Binary sensors", "Vitals tracker", "Tracking beacon")
 	var/switchMode = input("Select a sensor mode:", "Suit Sensor Mode", modes[sensor_mode + 1]) in modes
-	if(get_dist(user, src) > 1)
+	if (get_dist(user, src) > 1)
 		to_chat(user, "<span class='warning'>You have moved too far away.</span>")
 		return
 	sensor_mode = modes.Find(switchMode) - 1
 
-	if(is_holder_of(user, src))
-		switch(sensor_mode) //i'm sure there's a more compact way to write this but c'mon
-			if(0)
+	if (is_holder_of(user, src))
+		switch (sensor_mode) //i'm sure there's a more compact way to write this but c'mon
+			if (0)
 				to_chat(user, "<span class='notice'>You disable your suit's remote sensing equipment.</span>")
-			if(1)
+			if (1)
 				to_chat(user, "<span class='notice'>Your suit will now report whether you are live or dead.</span>")
-			if(2)
+			if (2)
 				to_chat(user, "<span class='notice'>Your suit will now report your vital lifesigns.</span>")
-			if(3)
+			if (3)
 				to_chat(user, "<span class='notice'>Your suit will now report your vital lifesigns as well as your coordinate position.</span>")
 	else
-		switch(sensor_mode)
-			if(0)
+		switch (sensor_mode)
+			if (0)
 				to_chat(user, "<span class='notice'>You disable the suit's remote sensing equipment.</span>")
-			if(1)
+			if (1)
 				to_chat(user, "<span class='notice'>The suit sensors will now report whether the wearer is live or dead.</span>")
-			if(2)
+			if (2)
 				to_chat(user, "<span class='notice'>The suit sensors will now report the wearer's vital lifesigns.</span>")
-			if(3)
+			if (3)
 				to_chat(user, "<span class='notice'>The suit sensors will now report the wearer's vital lifesigns as well as their coordinate position.</span>")
 	return switchMode
 
@@ -545,7 +545,7 @@ BLIND     // can't see anything
 	..()
 
 /obj/item/clothing/under/AltClick()
-	if(is_holder_of(usr, src))
+	if (is_holder_of(usr, src))
 		set_sensors(usr)
 
 /obj/item/clothing/under/rank/New()

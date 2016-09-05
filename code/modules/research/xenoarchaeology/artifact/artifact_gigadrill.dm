@@ -11,7 +11,7 @@
 	layer = ABOVE_OBJ_LAYER
 
 /obj/machinery/giga_drill/attack_hand(mob/user as mob)
-	if(active)
+	if (active)
 		active = 0
 		icon_state = "gigadrill"
 		to_chat(user, "<span class='notice'>You press a button and [src] slowly spins down.</span>")
@@ -21,14 +21,14 @@
 		to_chat(user, "<span class='notice'>You press a button and [src] shudders to life.</span>")
 
 /obj/machinery/giga_drill/Bump(atom/A)
-	if(active && !drilling_turf)
-		if(istype(A,/turf/unsimulated/mineral))
+	if (active && !drilling_turf)
+		if (istype(A,/turf/unsimulated/mineral))
 			var/turf/unsimulated/mineral/M = A
 			drilling_turf = get_turf(src)
 			src.visible_message("<span class='danger'>[src] begins to drill into [M]!</span>")
 			anchored = 1
 			spawn(drill_time)
-				if(get_turf(src) == drilling_turf && active)
+				if (get_turf(src) == drilling_turf && active)
 					M.GetDrilled()
 					src.forceMove(M)
 				drilling_turf = null

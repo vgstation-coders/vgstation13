@@ -8,14 +8,14 @@
 var/global/datum/book_manager/book_mgr = new()
 
 datum/book_manager/proc/path(id)
-	if(isnum(id)) // kill any path exploits
+	if (isnum(id)) // kill any path exploits
 		return "[BOOK_PATH][id].sav"
 
 datum/book_manager/proc/getall()
 	var/list/paths = flist(BOOK_PATH)
 	var/list/books = new()
 
-	for(var/path in paths)
+	for (var/path in paths)
 		var/datum/archived_book/B = new(BOOK_PATH + path)
 		books += B
 
@@ -27,7 +27,7 @@ datum/book_manager/proc/freeid()
 
 	// start at 101+number of books, which will be correct id if none have been deleted, etc
 	// otherwise, keep moving forward until we find an open id
-	while(fexists(path(id)))
+	while (fexists(path(id)))
 		id++
 
 	return id
@@ -36,22 +36,22 @@ datum/book_manager/proc/freeid()
 	set name = "Delete Book"
 	set desc = "Permamently deletes a book from the database."
 	set category = "Admin"
-	if(!src.holder)
+	if (!src.holder)
 		to_chat(src, "Only administrators may use this command.")
 		return
 
 	var/isbn = input("ISBN number?", "Delete Book") as num | null
-	if(!isbn)
+	if (!isbn)
 		return
 
-	if(BOOKS_USE_SQL && config.sql_enabled)
+	if (BOOKS_USE_SQL && config.sql_enabled)
 		var/DBConnection/dbcon = new()
 		dbcon.Connect("dbi:mysql:[sqldb]:[sqladdress]:[sqlport]","[sqllogin]","[sqlpass]")
-		if(!dbcon.IsConnected())
+		if (!dbcon.IsConnected())
 			alert("Connection to Archive has been severed. Aborting.")
 		else
 			var/DBQuery/query = dbcon.NewQuery("DELETE FROM library WHERE id=[isbn]")
-			if(!query.Execute())
+			if (!query.Execute())
 				to_chat(usr, query.ErrorMsg())
 			dbcon.Disconnect()
 	else
@@ -75,7 +75,7 @@ datum/archived_book
 
 // loads the book corresponding by the specified id
 datum/archived_book/New(var/path)
-	if(isnull(path))
+	if (isnull(path))
 		return
 
 	var/savefile/F = new(path)
@@ -97,12 +97,12 @@ datum/archived_book/New(var/path)
 	F["author_real"] >> author_real
 	F["author_key"] >> author_key
 	F["photos"] >> photos
-	if(!photos)
+	if (!photos)
 		photos = new()
 
 	// let's sanitize it here too!
-	for(var/tag in paper_blacklist)
-		if(findtext(dat,"<"+tag))
+	for (var/tag in paper_blacklist)
+		if (findtext(dat,"<"+tag))
 			dat = ""
 			return
 

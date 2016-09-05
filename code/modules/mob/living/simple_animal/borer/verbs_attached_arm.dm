@@ -3,14 +3,14 @@
 	set name = "Borer Speak"
 	set desc = "Communicate with your bretheren"
 
-	if(!message)
+	if (!message)
 		return
 
 	message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
 	message = capitalize(message)
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.borer_speak(message)
 
@@ -20,7 +20,7 @@
 	set desc = "Upgrade yourself or your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.evolve()
 
@@ -30,7 +30,7 @@
 	set desc = "Push some chemicals into your host's bloodstream."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.secrete_chemicals()
 
@@ -40,7 +40,7 @@
 	set desc = "Slither out of your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.abandon_host()
 
@@ -51,7 +51,7 @@
 	set desc = "Expend chemicals constantly to form a large blade of bone for your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.bone_sword()
 
@@ -60,32 +60,32 @@
 	set name = "Bone Sword"
 	set desc = "Expend chemicals constantly to form a large blade of bone for your host."
 
-	if(!check_can_do(0))
+	if (!check_can_do(0))
 		return
 
-	if(channeling && !channeling_bone_sword)
+	if (channeling && !channeling_bone_sword)
 		to_chat(src, "<span class='warning'>You can't do this while your focus is directed elsewhere.</span>")
 		return
-	else if(channeling)
+	else if (channeling)
 		to_chat(src, "You cease your efforts to sustain a blade of bone for your host.")
 		channeling = 0
 		channeling_bone_sword = 0
-	else if(chemicals < 5)
+	else if (chemicals < 5)
 		to_chat(src, "<span class='warning'>You don't have enough chemicals stored to do this.</span>")
 		return
 	else
 		var/obj/item/weapon/melee/bone_sword/S = new(get_turf(host), src)
-		if(hostlimb == LIMB_RIGHT_ARM)
-			if(host.get_held_item_by_index(GRASP_RIGHT_HAND))
-				if(istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/melee/bone_sword))
+		if (hostlimb == LIMB_RIGHT_ARM)
+			if (host.get_held_item_by_index(GRASP_RIGHT_HAND))
+				if (istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/melee/bone_sword))
 					to_chat(src, "<span class='warning'>Your host already has a bone sword on this arm.</span>")
 					qdel(S)
 					return
 				host.drop_item(host.get_held_item_by_index(GRASP_RIGHT_HAND), force_drop = 1)
 			host.put_in_r_hand(S)
 		else
-			if(host.get_held_item_by_index(GRASP_LEFT_HAND))
-				if(istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/weapon/melee/bone_sword))
+			if (host.get_held_item_by_index(GRASP_LEFT_HAND))
+				if (istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/weapon/melee/bone_sword))
 					to_chat(src, "<span class='warning'>Your host already has a bone sword on this arm.</span>")
 					qdel(S)
 					return
@@ -97,14 +97,14 @@
 		host.visible_message("<span class='warning'>A blade of bone erupts from \the [host.name]'s [hostlimb == LIMB_RIGHT_ARM ? "right" : "left"] arm!</span>","<span class='warning'>A blade of bone erupts from your [hostlimb == LIMB_RIGHT_ARM ? "right" : "left"] arm!</span>")
 		spawn()
 			var/time_spent_channeling = 0
-			while(channeling && channeling_bone_sword)
+			while (channeling && channeling_bone_sword)
 				time_spent_channeling++
 				sleep(10)
 			channeling = 0
 			channeling_bone_sword = 0
 			host.visible_message("<span class='notice'>\The [host]'s bone sword crumbles into nothing.</span>","<span class='notice'>Your bone sword crumbles into nothing.</span>")
 			var/showmessage = 0
-			if(chemicals < 5)
+			if (chemicals < 5)
 				to_chat(src, "<span class='warning'>You lose consciousness as the last of your chemicals are expended.</span>")
 			else
 				showmessage = 1
@@ -116,7 +116,7 @@
 	set desc = "Expend chemicals constantly to form a large, heavy mass of bone on your host's arm."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.bone_hammer()
 
@@ -125,32 +125,32 @@
 	set name = "Bone Hammer"
 	set desc = "Expend chemicals constantly to form a large, heavy mass of bone on your host's arm."
 
-	if(!check_can_do(0))
+	if (!check_can_do(0))
 		return
 
-	if(channeling && !channeling_bone_hammer)
+	if (channeling && !channeling_bone_hammer)
 		to_chat(src, "<span class='warning'>You can't do this while your focus is directed elsewhere.</span>")
 		return
-	else if(channeling)
+	else if (channeling)
 		to_chat(src, "You cease your efforts to sustain a mass of bone for your host.")
 		channeling = 0
 		channeling_bone_hammer = 0
-	else if(chemicals < 10)
+	else if (chemicals < 10)
 		to_chat(src, "<span class='warning'>You don't have enough chemicals stored to do this.</span>")
 		return
 	else
 		var/obj/item/weapon/melee/bone_hammer/S = new(get_turf(host), src)
-		if(hostlimb == LIMB_RIGHT_ARM)
-			if(host.get_held_item_by_index(GRASP_RIGHT_HAND))
-				if(istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/melee/bone_hammer))
+		if (hostlimb == LIMB_RIGHT_ARM)
+			if (host.get_held_item_by_index(GRASP_RIGHT_HAND))
+				if (istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/melee/bone_hammer))
 					to_chat(src, "<span class='warning'>Your host already has a bone hammer on this arm.</span>")
 					qdel(S)
 					return
 				host.drop_item(host.get_held_item_by_index(GRASP_RIGHT_HAND), force_drop = 1)
 			host.put_in_r_hand(S)
 		else
-			if(host.get_held_item_by_index(GRASP_LEFT_HAND))
-				if(istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/weapon/melee/bone_hammer))
+			if (host.get_held_item_by_index(GRASP_LEFT_HAND))
+				if (istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/weapon/melee/bone_hammer))
 					to_chat(src, "<span class='warning'>Your host already has a bone hammer on this arm.</span>")
 					qdel(S)
 					return
@@ -162,14 +162,14 @@
 		host.visible_message("<span class='warning'>A mass of bone erupts from \the [host.name]'s [hostlimb == LIMB_RIGHT_ARM ? "right" : "left"] arm!</span>","<span class='warning'>A mass of bone erupts from your [hostlimb == LIMB_RIGHT_ARM ? "right" : "left"] arm!</span>")
 		spawn()
 			var/time_spent_channeling = 0
-			while(channeling && channeling_bone_hammer)
+			while (channeling && channeling_bone_hammer)
 				time_spent_channeling++
 				sleep(10)
 			channeling = 0
 			channeling_bone_hammer = 0
 			host.visible_message("<span class='notice'>\The [host]'s bone hammer crumbles into nothing.</span>","<span class='notice'>Your bone hammer crumbles into nothing.</span>")
 			var/showmessage = 0
-			if(chemicals < 10)
+			if (chemicals < 10)
 				to_chat(src, "<span class='warning'>You lose consciousness as the last of your chemicals are expended.</span>")
 			else
 				showmessage = 1
@@ -182,7 +182,7 @@
 	set desc = "Expend chemicals constantly to form a large shield of bone for your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.bone_shield()
 
@@ -191,32 +191,32 @@
 	set name = "Bone Shield"
 	set desc = "Expend chemicals constantly to form a large shield of bone for your host."
 
-	if(!check_can_do(0))
+	if (!check_can_do(0))
 		return
 
-	if(channeling && !channeling_bone_shield)
+	if (channeling && !channeling_bone_shield)
 		to_chat(src, "<span class='warning'>You can't do this while your focus is directed elsewhere.</span>")
 		return
-	else if(channeling)
+	else if (channeling)
 		to_chat(src, "You cease your efforts to sustain a shield of bone for your host.")
 		channeling = 0
 		channeling_bone_shield = 0
-	else if(chemicals < 3)
+	else if (chemicals < 3)
 		to_chat(src, "<span class='warning'>You don't have enough chemicals stored to do this.</span>")
 		return
 	else
 		var/obj/item/weapon/shield/riot/bone/S = new(get_turf(host), src)
-		if(hostlimb == LIMB_RIGHT_ARM)
-			if(host.get_held_item_by_index(GRASP_RIGHT_HAND))
-				if(istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/shield/riot/bone))
+		if (hostlimb == LIMB_RIGHT_ARM)
+			if (host.get_held_item_by_index(GRASP_RIGHT_HAND))
+				if (istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/shield/riot/bone))
 					to_chat(src, "<span class='warning'>Your host already has a bone shield on this arm.</span>")
 					qdel(S)
 					return
 				host.drop_item(host.get_held_item_by_index(GRASP_RIGHT_HAND), force_drop = 1)
 			host.put_in_r_hand(S)
 		else
-			if(host.get_held_item_by_index(GRASP_LEFT_HAND))
-				if(istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/weapon/shield/riot/bone))
+			if (host.get_held_item_by_index(GRASP_LEFT_HAND))
+				if (istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/weapon/shield/riot/bone))
 					to_chat(src, "<span class='warning'>Your host already has a bone shield on this arm.</span>")
 					qdel(S)
 					return
@@ -228,14 +228,14 @@
 		host.visible_message("<span class='warning'>A shield of bone erupts from \the [host.name]'s [hostlimb == LIMB_RIGHT_ARM ? "right" : "left"] arm!</span>","<span class='warning'>A shield of bone erupts from your [hostlimb == LIMB_RIGHT_ARM ? "right" : "left"] arm!</span>")
 		spawn()
 			var/time_spent_channeling = 0
-			while(channeling && channeling_bone_shield)
+			while (channeling && channeling_bone_shield)
 				time_spent_channeling++
 				sleep(10)
 			channeling = 0
 			channeling_bone_shield = 0
 			host.visible_message("<span class='notice'>\The [host]'s bone shield crumbles into nothing.</span>","<span class='notice'>Your bone shield crumbles into nothing.</span>")
 			var/showmessage = 0
-			if(chemicals < 3)
+			if (chemicals < 3)
 				to_chat(src, "<span class='warning'>You lose consciousness as the last of your chemicals are expended.</span>")
 			else
 				showmessage = 1
@@ -247,7 +247,7 @@
 	set desc = "Expend chemicals constantly to form a large protective cocoon of bone around your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.bone_cocoon()
 
@@ -256,17 +256,17 @@
 	set name = "Bone Cocoon"
 	set desc = "Expend chemicals constantly to form a large protective cocoon of bone around your host."
 
-	if(!check_can_do(0))
+	if (!check_can_do(0))
 		return
 
-	if(channeling && !channeling_bone_cocoon)
+	if (channeling && !channeling_bone_cocoon)
 		to_chat(src, "<span class='warning'>You can't do this while your focus is directed elsewhere.</span>")
 		return
-	else if(channeling)
+	else if (channeling)
 		to_chat(src, "You cease your efforts to sustain a shield of bone for your host.")
 		channeling = 0
 		channeling_bone_cocoon = 0
-	else if(chemicals < 10)
+	else if (chemicals < 10)
 		to_chat(src, "<span class='warning'>You don't have enough chemicals stored to do this.</span>")
 		return
 	else
@@ -278,13 +278,13 @@
 		host.forceMove(S)
 		spawn()
 			var/time_spent_channeling = 0
-			while(channeling && channeling_bone_cocoon)
+			while (channeling && channeling_bone_cocoon)
 				time_spent_channeling++
 				sleep(10)
 			channeling = 0
 			channeling_bone_cocoon = 0
 			var/showmessage = 0
-			if(chemicals < 10)
+			if (chemicals < 10)
 				to_chat(src, "<span class='warning'>You lose consciousness as the last of your chemicals are expended.</span>")
 			else
 				showmessage = 1
@@ -296,7 +296,7 @@
 	set desc = "Expend a great deal of chemicals to produce a small electromagnetic pulse."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.em_pulse()
 
@@ -305,10 +305,10 @@
 	set name = "Electromagnetic Pulse"
 	set desc = "Expend a great deal of chemicals to produce a small electromagnetic pulse."
 
-	if(!check_can_do())
+	if (!check_can_do())
 		return
 
-	if(chemicals < 100)
+	if (chemicals < 100)
 		to_chat(src, "<span class='warning'>You need at least 100 chemicals to do this.</span>")
 		return
 	else
@@ -322,7 +322,7 @@
 	set desc = "Expend chemicals to repair bones in your host's arm."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B))
+	if (!istype(B))
 		return
 	B.repair_bone()
 
@@ -331,15 +331,15 @@
 	set name = "Repair Bone"
 	set desc = "Expend chemicals to repair bones in your host's arm."
 
-	if(!check_can_do())
+	if (!check_can_do())
 		return
 
 	if (!host)
 		return
-	if(!istype(host, /mob/living/carbon/human))
+	if (!istype(host, /mob/living/carbon/human))
 		to_chat(src, "<span class='warning'>You can't seem to repair your host's strange biology.</span>")
 		return
-	if(chemicals < 30)
+	if (chemicals < 30)
 		to_chat(src, "<span class='warning'>You don't have enough chemicals stored to do this.</span>")
 		return
 	var/has_healed_hand = 0
@@ -347,8 +347,8 @@
 	var/datum/organ/external/current_limb = null
 	current_limb = H.get_organ(hostlimb)
 
-	for(var/datum/organ/external/O in current_limb.children)
-		if(O.is_broken())
+	for (var/datum/organ/external/O in current_limb.children)
+		if (O.is_broken())
 			O.status &= ~ORGAN_BROKEN
 			O.perma_injury = 0
 			var/minimum_broken_damage_hand = O.min_broken_damage
@@ -357,9 +357,9 @@
 			to_chat(host, "<span class='notice'>You feel the bones in your [hostlimb == LIMB_RIGHT_ARM ? "right" : "left"] hand mend together.</span>")
 			chemicals -= 30
 			has_healed_hand = 1
-	if(current_limb.is_broken())
-		if(chemicals < 50)
-			if(has_healed_hand)
+	if (current_limb.is_broken())
+		if (chemicals < 50)
+			if (has_healed_hand)
 				to_chat(src, "<span class='warning'>You don't have enough chemicals left to heal your host's [hostlimb == LIMB_RIGHT_ARM ? "right" : "left"] arm.</span>")
 				return
 			else
@@ -373,5 +373,5 @@
 		to_chat(host, "<span class='notice'>You feel the bones in your [hostlimb == LIMB_RIGHT_ARM ? "right" : "left"] arm mend together.</span>")
 		chemicals -= 50
 	else
-		if(!has_healed_hand)
+		if (!has_healed_hand)
 			to_chat(src, "<span class='notice'>None of the bones in your host's [hostlimb == LIMB_RIGHT_ARM ? "right" : "left"] arm or hand are broken.</span>")

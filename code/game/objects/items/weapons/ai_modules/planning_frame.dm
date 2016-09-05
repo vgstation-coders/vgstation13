@@ -40,11 +40,11 @@
 	laws = new base_law_type
 
 /obj/item/weapon/planning_frame/attackby(var/obj/item/W,var/mob/user)
-	if(istype(W, /obj/item/weapon/aiModule))
+	if (istype(W, /obj/item/weapon/aiModule))
 		var/obj/item/weapon/aiModule/module=W
-		if(!module.validate(src.laws,src,user))
+		if (!module.validate(src.laws,src,user))
 			return
-		if(!module.upload(src.laws,src,user))
+		if (!module.upload(src.laws,src,user))
 			return
 		//user.drop_item(null, )
 		//module.loc=src
@@ -54,7 +54,7 @@
 		return ..()
 
 /obj/item/weapon/planning_frame/attack_self(var/mob/user)
-	for(var/obj/item/weapon/aiModule/mod in modules)
+	for (var/obj/item/weapon/aiModule/mod in modules)
 		qdel(mod)
 	modules.len = 0
 	to_chat(user, "<span class='notice'>You clear \the [src]'s memory buffers!</span>")
@@ -64,13 +64,13 @@
 /obj/item/weapon/planning_frame/examine(mob/user)
 	..()
 	laws_sanity_check()
-	if(modules.len && istype(modules[1],/obj/item/weapon/aiModule/purge))
+	if (modules.len && istype(modules[1],/obj/item/weapon/aiModule/purge))
 		to_chat(user, "<b>Purge module inserted!</b> - All laws will be cleared prior to adding the ones below.")
-	if(!laws.inherent_cleared)
+	if (!laws.inherent_cleared)
 		to_chat(user, "<b><u>Assuming that default laws are unchanged</u>, the laws currently inserted would read as:</b>")
 	else
 		to_chat(user, "<b>The laws currently inserted would read as:</b>")
-	if(src.modules.len == 0)
+	if (src.modules.len == 0)
 		to_chat(user, "<i>No modules have been inserted!</i>")
 		return
 	src.laws.show_laws(user)
@@ -78,14 +78,14 @@
 /obj/item/weapon/planning_frame/verb/dry_run()
 	set name = "Dry Run"
 	to_chat(usr, "You read through the list of modules to emulate, in their run order:")
-	for(var/i=1;i<=modules.len;i++)
+	for (var/i=1;i<=modules.len;i++)
 		var/obj/item/weapon/aiModule/module = modules[i]
 		var/notes="<span class='notice'>Looks OK!</span>"
-		if(i>1 && istype(modules[i],/obj/item/weapon/aiModule/purge))
+		if (i>1 && istype(modules[i],/obj/item/weapon/aiModule/purge))
 			notes="<span class='danger'>This should be the first module!</span>"
-		if(!module.validate(src.laws,src,usr))
+		if (!module.validate(src.laws,src,usr))
 			notes="<span class='danger'>A red light is blinking!</span>"
-		if(module.modflags & DANGEROUS_MODULE)
+		if (module.modflags & DANGEROUS_MODULE)
 			notes="<span class='danger'>Your heart skips a beat!</span>"
 		to_chat(usr, " [i-1]. [module.name] - [notes]")
 

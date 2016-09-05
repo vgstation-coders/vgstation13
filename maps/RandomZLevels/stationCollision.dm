@@ -73,8 +73,8 @@ obj/item/weapon/gun/energy/laser/retro/sc_retro
 //Make it so that these guns only spawn with a couple bullets... if any
 /obj/item/weapon/gun/projectile/silenced/sc_silenced/New()
 	..()
-	for(var/ammo in loaded)
-		if(prob(95)) //95% chance
+	for (var/ammo in loaded)
+		if (prob(95)) //95% chance
 			loaded -= ammo
 
 //Syndicate sub-machine guns.
@@ -82,8 +82,8 @@ obj/item/weapon/gun/energy/laser/retro/sc_retro
 
 /obj/item/weapon/gun/projectile/automatic/c20r/sc_c20r/New()
 	..()
-	for(var/ammo in loaded)
-		if(prob(95)) //95% chance
+	for (var/ammo in loaded)
+		if (prob(95)) //95% chance
 			loaded -= ammo
 
 //Barman's shotgun
@@ -91,8 +91,8 @@ obj/item/weapon/gun/energy/laser/retro/sc_retro
 
 /obj/item/weapon/gun/projectile/shotgun/pump/sc_pump/New()
 	..()
-	for(var/ammo in loaded)
-		if(prob(95)) //95% chance
+	for (var/ammo in loaded)
+		if (prob(95)) //95% chance
 			loaded -= ammo
 
 //Lasers

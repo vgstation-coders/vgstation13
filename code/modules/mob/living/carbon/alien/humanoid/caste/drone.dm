@@ -10,7 +10,7 @@
 	var/tally = 2 + move_delay_add + config.alien_delay //Drones are slow
 
 	var/turf/T = loc
-	if(istype(T))
+	if (istype(T))
 		tally = T.adjust_slowdown(src, tally)
 
 	return tally
@@ -19,7 +19,7 @@
 	var/datum/reagents/R = new/datum/reagents(100)
 	reagents = R
 	R.my_atom = src
-	if(src.name == "alien drone")
+	if (src.name == "alien drone")
 		src.name = text("alien drone ([rand(1, 1000)])")
 	src.real_name = src.name
 	..()

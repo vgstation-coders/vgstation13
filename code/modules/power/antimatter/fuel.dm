@@ -22,22 +22,22 @@
 
 /obj/item/weapon/fuel/attackby(obj/item/weapon/fuel/F, mob/user)
 	..()
-	if(istype(src, /obj/item/weapon/fuel/antiH))
-		if(istype(F, /obj/item/weapon/fuel/antiH))
+	if (istype(src, /obj/item/weapon/fuel/antiH))
+		if (istype(F, /obj/item/weapon/fuel/antiH))
 			src.fuel += F.fuel
 			F.fuel = 0
 			to_chat(user, "You have added the anti-Hydrogen to the storage ring, it now contains [src.fuel]kg")
-		if(istype(F, /obj/item/weapon/fuel/H))
+		if (istype(F, /obj/item/weapon/fuel/H))
 			src.fuel += F.fuel
 			qdel(F)
 			F = null
 			src:annihilation(src.fuel)
-	if(istype(src, /obj/item/weapon/fuel/H))
-		if(istype(F, /obj/item/weapon/fuel/H))
+	if (istype(src, /obj/item/weapon/fuel/H))
+		if (istype(F, /obj/item/weapon/fuel/H))
 			src.fuel += F.fuel
 			F.fuel = 0
 			to_chat(user, "You have added the Hydrogen to the storage ring, it now contains [src.fuel]kg")
-		if(istype(F, /obj/item/weapon/fuel/antiH))
+		if (istype(F, /obj/item/weapon/fuel/antiH))
 			src.fuel += F.fuel
 			qdel(src)
 			F:annihilation(F.fuel)
@@ -74,10 +74,10 @@
 	to_chat(user, "<span class='info'>A magnetic storage ring, it contains [fuel]kg of [content ? content : "nothing"].</span>")
 
 /obj/item/weapon/fuel/proc/injest(mob/M as mob)
-	switch(content)
-		if("Anti-Hydrogen")
+	switch (content)
+		if ("Anti-Hydrogen")
 			M.gib()
-		if("Hydrogen")
+		if ("Hydrogen")
 			to_chat(M, "<span class='notice'>You feel very light, as if you might just float away...</span>")
 	qdel(src)
 	return
@@ -97,6 +97,6 @@
 			O.process()
 			return
 	else
-		for(var/mob/O in viewers(M, null))
+		for (var/mob/O in viewers(M, null))
 			O.show_message(text("<span class='warning'>[M] ate the [content ? content : "empty canister"]!</span>"), 1)
 		src.injest(M)

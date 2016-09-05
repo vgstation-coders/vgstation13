@@ -37,23 +37,23 @@ var/global/list/rnd_machines = list()
 	base_state = icon_state
 	icon_state_open = "[base_state]_t"
 
-	if(research_flags & TAKESMATIN && !materials)
+	if (research_flags & TAKESMATIN && !materials)
 		materials = getFromPool(/datum/materials, src)
 
-	if(ticker)
+	if (ticker)
 		initialize()
 
 // Define initial output.
 /obj/machinery/r_n_d/initialize()
 	..()
-	if(research_flags &HASOUTPUT)
-		for(var/direction in cardinal)
-			if(locate(/obj/machinery/mineral/output, get_step(get_turf(src), direction)))
+	if (research_flags &HASOUTPUT)
+		for (var/direction in cardinal)
+			if (locate(/obj/machinery/mineral/output, get_step(get_turf(src), direction)))
 				output_dir = direction
 				break
 
 /obj/machinery/r_n_d/Destroy()
-	if(linked_console)
+	if (linked_console)
 		linked_console.linked_machines -= src
 		linked_console = null
 
@@ -63,17 +63,17 @@ var/global/list/rnd_machines = list()
 
 /obj/machinery/r_n_d/process()
 	..()
-	if(shocked>0)
+	if (shocked>0)
 		shocked--
 
 /obj/machinery/r_n_d/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && mover.checkpass(PASSMACHINE))
+	if (istype(mover) && mover.checkpass(PASSMACHINE))
 		return 1
 	return ..()
 
 /obj/machinery/r_n_d/update_icon()
 	overlays.len = 0
-	if(linked_console)
+	if (linked_console)
 		overlays += image(icon = icon, icon_state = "[base_state]_link")
 
 /obj/machinery/r_n_d/blob_act()
@@ -83,7 +83,7 @@ var/global/list/rnd_machines = list()
 /obj/machinery/r_n_d/attack_hand(mob/user as mob)
 	if (shocked)
 		shock(user,50)
-	if(panel_open)
+	if (panel_open)
 		wires.Interact(user)
 	else if (research_flags & NANOTOUCH)
 		ui_interact(user)
@@ -91,10 +91,10 @@ var/global/list/rnd_machines = list()
 
 
 /obj/machinery/r_n_d/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
-	if(href_list["close"])
-		if(usr.machine == src)
+	if (href_list["close"])
+		if (usr.machine == src)
 			usr.unset_machine()
 		return 1
 	usr.set_machine(src)
@@ -106,29 +106,29 @@ var/global/list/rnd_machines = list()
 	return
 
 /obj/machinery/r_n_d/togglePanelOpen(var/item/toggleitem, mob/user)
-	if(..())
+	if (..())
 		if (panel_open && linked_console)
 			linked_console.linked_machines -= src
-			switch(src.type)
-				if(/obj/machinery/r_n_d/fabricator/protolathe)
+			switch (src.type)
+				if (/obj/machinery/r_n_d/fabricator/protolathe)
 					linked_console.linked_lathe = null
-				if(/obj/machinery/r_n_d/destructive_analyzer)
+				if (/obj/machinery/r_n_d/destructive_analyzer)
 					linked_console.linked_destroy = null
-				if(/obj/machinery/r_n_d/fabricator/circuit_imprinter)
+				if (/obj/machinery/r_n_d/fabricator/circuit_imprinter)
 					linked_console.linked_imprinter = null
 			linked_console = null
 			overlays -= image(icon = icon, icon_state = "[base_state]_link")
 		return 1
 
 /obj/machinery/r_n_d/crowbarDestroy(mob/user)
-	if(..() == 1)
+	if (..() == 1)
 		if (materials)
-			for(var/matID in materials.storage)
+			for (var/matID in materials.storage)
 				var/datum/material/M = materials.getMaterial(matID)
 				var/obj/item/stack/sheet/sheet = new M.sheettype(src.loc)
-				if(sheet)
+				if (sheet)
 					var/available_num_sheets = round(materials.storage[matID]/sheet.perunit)
-					if(available_num_sheets>0)
+					if (available_num_sheets>0)
 						sheet.amount = available_num_sheets
 						materials.removeAmount(matID, sheet.amount * sheet.perunit)
 					else
@@ -142,9 +142,9 @@ var/global/list/rnd_machines = list()
 	if (busy)
 		to_chat(user, "<span class='warning'>The [src.name] is busy. Please wait for completion of previous operation.</span>")
 		return 1
-	if( ..() )
+	if ( ..() )
 		return 1
-	if(panel_open)
+	if (panel_open)
 		wires.Interact(user)
 		return 1
 	if (stat)
@@ -152,17 +152,17 @@ var/global/list/rnd_machines = list()
 	if (disabled)
 		return 1
 	if (istype(O, /obj/item/device/multitool))
-		if(!panel_open && research_flags &HASOUTPUT)
+		if (!panel_open && research_flags &HASOUTPUT)
 			var/result = input("Set your location as output?") in list("Yes","No","Machine Location")
-			switch(result)
-				if("Yes")
-					if(!Adjacent(user))
+			switch (result)
+				if ("Yes")
+					if (!Adjacent(user))
 						to_chat(user, "<span class='warning'>Cannot set this as the output location; You're not adjacent to it!</span>")
 						return 1
 
 					output_dir = get_dir(src, user)
 					to_chat(user, "<span class='notice'>Output set.</span>")
-				if("Machine Location")
+				if ("Machine Location")
 					output_dir = 0
 					to_chat(user, "<span class='notice'>Output set.</span>")
 			return 1
@@ -170,24 +170,24 @@ var/global/list/rnd_machines = list()
 	if (!linked_console && !(istype(src, /obj/machinery/r_n_d/fabricator))) //fabricators get a free pass because they aren't tied to a console
 		to_chat(user, "\The [src] must be linked to an R&D console first!")
 		return 1
-	if(istype(O,/obj/item/stack/sheet) && research_flags &TAKESMATIN)
+	if (istype(O,/obj/item/stack/sheet) && research_flags &TAKESMATIN)
 		busy = 1
 
 		var/found = "" //the matID we're compatible with
-		for(var/matID in materials.storage)
+		for (var/matID in materials.storage)
 			var/datum/material/M = materials.getMaterial(matID)
-			if(M.sheettype==O.type)
+			if (M.sheettype==O.type)
 				found = matID
-		if(!found)
-			if(O.materials && research_flags &FAB_RECYCLER)
+		if (!found)
+			if (O.materials && research_flags &FAB_RECYCLER)
 				busy = 0
 				return 0 //let the autolathe try to do it's thing
 			to_chat(user, "<span class='warning'>\The [src] rejects \the [O.name].</span>")
 			busy = 0
 			return 1
-		if(allowed_materials && allowed_materials.len)
-			if(!(found in allowed_materials))
-				if(O.materials && research_flags &FAB_RECYCLER)
+		if (allowed_materials && allowed_materials.len)
+			if (!(found in allowed_materials))
+				if (O.materials && research_flags &FAB_RECYCLER)
 					busy = 0
 					return 0 //let the autolathe try to do it's thing
 				to_chat(user, "<span class='warning'>\The [src] rejects \the [O.name].</span>")
@@ -202,20 +202,20 @@ var/global/list/rnd_machines = list()
 
 		var/obj/item/stack/sheet/stack = O
 		var/amount = round(input("How many sheets do you want to add? (0 - [stack.amount])") as num)//No decimals
-		if(!O || !O.loc || O.loc != user)
+		if (!O || !O.loc || O.loc != user)
 			busy = 0
 			return
-		if(amount < 0)//No negative numbers
+		if (amount < 0)//No negative numbers
 			amount = 0
-		if(amount == 0)
+		if (amount == 0)
 			busy = 0
 			return 1	//1 So the autolathe doesn't recycle the stack.
-		if(amount > stack.amount)
+		if (amount > stack.amount)
 			amount = stack.amount
-		if(max_material_storage - TotalMaterials() < (amount*stack.perunit))//Can't overfill
+		if (max_material_storage - TotalMaterials() < (amount*stack.perunit))//Can't overfill
 			amount = min(stack.amount, round((max_material_storage-TotalMaterials())/stack.perunit))
 
-		if(research_flags & HASMAT_OVER)
+		if (research_flags & HASMAT_OVER)
 			update_icon()
 			overlays |= image(icon = icon, icon_state = "[base_state]_[stack.name]")
 			spawn(10)
@@ -235,16 +235,16 @@ var/global/list/rnd_machines = list()
 	return 0
 
 /obj/machinery/r_n_d/proc/TotalMaterials() //returns the total of all the stored materials. Makes code neater.
-	if(materials)
+	if (materials)
 		return materials.getVolume()
 	return 0
 
 // Returns the atom to output to.
 // Yes this can potentially return null, however that shouldn't be an issue for the code that uses it.
 /obj/machinery/r_n_d/proc/get_output()
-	if(!output_dir)
+	if (!output_dir)
 		return get_turf(loc)
 
 	. = get_step(get_turf(src), output_dir)
-	if(!.)
+	if (!.)
 		return loc // Map edge I guess.

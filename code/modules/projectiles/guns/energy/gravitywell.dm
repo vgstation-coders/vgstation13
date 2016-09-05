@@ -20,14 +20,14 @@
 	to_chat(user, "<span class='info'>Charge = [charge]%</span>")
 
 /obj/item/weapon/gun/gravitywell/Destroy()
-	if(charge < maxcharge)
+	if (charge < maxcharge)
 		processing_objects.Remove(src)
 	..()
 
 /obj/item/weapon/gun/gravitywell/process_chambered()
-	if(in_chamber)
+	if (in_chamber)
 		return 1
-	if(charge >= maxcharge)
+	if (charge >= maxcharge)
 		charge = 0
 		update_icon()
 		in_chamber = new/obj/item/projectile/gravitywell()
@@ -37,16 +37,16 @@
 
 /obj/item/weapon/gun/gravitywell/process()//it takes 100 seconds to recharge and be able to fire again
 	charge = min(maxcharge,charge+1)
-	if(charge >= maxcharge)
+	if (charge >= maxcharge)
 		update_icon()
-		if(istype(loc,/mob))
+		if (istype(loc,/mob))
 			var/mob/M = loc
 			M.regenerate_icons()
 		processing_objects.Remove(src)
 	return 1
 
 /obj/item/weapon/gun/gravitywell/update_icon()
-	if(charge == maxcharge)
+	if (charge == maxcharge)
 		icon_state = "gravitywell"
 		item_state = "gravitywell"
 	else

@@ -22,62 +22,62 @@
 /obj/effect/gibspawner/New(location, var/list/viruses, var/datum/dna/MobDNA, var/fleshcolor, var/bloodcolor, spread_radius)
 	..()
 
-	if(fleshcolor)
+	if (fleshcolor)
 		src.fleshcolor = fleshcolor
-	if(bloodcolor)
+	if (bloodcolor)
 		src.bloodcolor = bloodcolor
 
-	if(istype(loc,/turf)) //basically if a badmin spawns it
+	if (istype(loc,/turf)) //basically if a badmin spawns it
 		Gib(loc,viruses,MobDNA,spread_radius)
 
 /obj/effect/gibspawner/proc/Gib(atom/location, var/list/viruses = list(), var/datum/dna/MobDNA = null, spread_radius)
-	if(gibtypes.len != gibamounts.len || gibamounts.len != gibdirections.len)
+	if (gibtypes.len != gibamounts.len || gibamounts.len != gibdirections.len)
 		to_chat(world, "<span class='warning'>Gib list length mismatch!</span>")
 		return
 
 	var/obj/effect/decal/cleanable/blood/gibs/gib = null
-	for(var/datum/disease/D in viruses)
-		if(D.spread_type == SPECIAL)
+	for (var/datum/disease/D in viruses)
+		if (D.spread_type == SPECIAL)
 			D.cure(1)
 			qdel(D)
 			D = null
 
-	if(sparks)
+	if (sparks)
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(2, 1, location)
 		s.start()
 
-	for(var/i = 1, i<= gibtypes.len, i++)
-		if(gibamounts[i])
-			for(var/j = 1, j<= gibamounts[i], j++)
+	for (var/i = 1, i<= gibtypes.len, i++)
+		if (gibamounts[i])
+			for (var/j = 1, j<= gibamounts[i], j++)
 				var/gibType = gibtypes[i]
 				gib = getFromPool(gibType,location)//new gibType(location)
 				gib.New(location)
 
 				// Apply human species colouration to masks.
-				if(fleshcolor)
+				if (fleshcolor)
 					gib.fleshcolor = fleshcolor
-				if(bloodcolor)
+				if (bloodcolor)
 					gib.basecolor = bloodcolor
 
 				gib.update_icon()
 
-				if(viruses.len > 0)
-					for(var/datum/disease/D in viruses)
-						if(prob(virusProb))
+				if (viruses.len > 0)
+					for (var/datum/disease/D in viruses)
+						if (prob(virusProb))
 							var/datum/disease/viruus = D.Copy(1)
 							gib.viruses += viruus
 							viruus.holder = gib
 
 				gib.blood_DNA = list()
-				if(MobDNA)
+				if (MobDNA)
 					gib.blood_DNA[MobDNA.unique_enzymes] = MobDNA.b_type
-				else if(istype(src, /obj/effect/gibspawner/xeno))
+				else if (istype(src, /obj/effect/gibspawner/xeno))
 					gib.blood_DNA["UNKNOWN DNA"] = "X*"
-				else if(istype(src, /obj/effect/gibspawner/human)) // Probably a monkey
+				else if (istype(src, /obj/effect/gibspawner/human)) // Probably a monkey
 					gib.blood_DNA["Non-human DNA"] = "A+"
 				var/list/directions = gibdirections[i]
-				if(directions.len)
+				if (directions.len)
 					gib.streak(directions, spread_radius)
 
 	qdel(src)

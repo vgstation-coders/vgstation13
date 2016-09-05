@@ -34,25 +34,25 @@
 	stop_automated_movement = 1
 
 /mob/living/simple_animal/head/Life()
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
-	if(stat == DEAD)
-		if(health > 0)
+	if (stat == DEAD)
+		if (health > 0)
 			icon_state = icon_living
 			stat = CONSCIOUS
 			density = 1
 		return
-	else if(health < 1)
+	else if (health < 1)
 		Die()
-	else if(health > maxHealth)
+	else if (health > maxHealth)
 		health = maxHealth
-	for(var/mob/A in viewers(world.view,src))
-		if(A.ckey)
+	for (var/mob/A in viewers(world.view,src))
+		if (A.ckey)
 			say_something(A)
 /mob/living/simple_animal/head/proc/say_something(mob/A)
-	if(prob(85))
+	if (prob(85))
 		return
-	if(prob(30))
+	if (prob(30))
 		var/msg = pick(insults)
 		msg = "Hey, [A.name].. [msg]"
 		src.say(msg)

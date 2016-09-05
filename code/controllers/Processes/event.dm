@@ -7,8 +7,8 @@ var/global/list/events = list()
 	name = "event"
 
 /datum/controller/process/event/doWork()
-	for(var/e in events)
-		if(e)
+	for (var/e in events)
+		if (e)
 			e:process()
 			scheck()
 			continue

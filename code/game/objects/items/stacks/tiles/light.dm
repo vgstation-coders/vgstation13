@@ -52,26 +52,26 @@ var/global/list/lightfloor_colors = list(
 	overlays += color_overlay
 
 /obj/item/stack/tile/light/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(istype(O,/obj/item/weapon/crowbar))
+	if (istype(O,/obj/item/weapon/crowbar))
 		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
 		M.amount = 1
 		amount--
 		new/obj/item/stack/light_w(user.loc)
-		if(amount <= 0)
+		if (amount <= 0)
 			user.drop_from_inventory(src)
 			qdel(src)
 		return 1
-	else if(istype(O,/obj/item/device/multitool))
+	else if (istype(O,/obj/item/device/multitool))
 		var/list/choice_list = list(LIGHTFLOOR_OPTION_CUSTOM) + lightfloor_colors
 
 		var/choice = input(user,"Select a colour to set [src] to.","[src]") in choice_list
-		if(!Adjacent(user))
+		if (!Adjacent(user))
 			return
 
 		var/new_color
-		if(choice == LIGHTFLOOR_OPTION_CUSTOM)
+		if (choice == LIGHTFLOOR_OPTION_CUSTOM)
 			new_color = input("Please select a color for the tile.", "[src]",rgb(color_r,color_g,color_b)) as color
-			if(new_color)
+			if (new_color)
 				color_r = hex2num(copytext(new_color, 2, 4))
 				color_g = hex2num(copytext(new_color, 4, 6))
 				color_b = hex2num(copytext(new_color, 6, 8))

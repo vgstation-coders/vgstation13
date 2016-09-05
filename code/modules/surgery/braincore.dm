@@ -39,7 +39,7 @@
 
 /datum/surgery_step/brain/cut_brain/tool_quality(obj/item/tool)
 	. = ..()
-	if(!tool.is_sharp())
+	if (!tool.is_sharp())
 		return 0
 
 /datum/surgery_step/brain/cut_brain
@@ -95,7 +95,7 @@
 		user.attack_log += "\[[time_stamp()]\]<font color='red'> Debrained [target.name] ([target.ckey]) with [tool.name] (INTENT: [uppertext(user.a_intent)])</font>"
 		target.attack_log += "\[[time_stamp()]\]<font color='orange'> Debrained by [user.name] ([user.ckey]) with [tool.name] (INTENT: [uppertext(user.a_intent)])</font>"
 		msg_admin_attack("[user.name] ([user.ckey]) debrained [target.name] ([target.ckey]) with [tool.name] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-		if(!iscarbon(user))
+		if (!iscarbon(user))
 			target.LAssailant = null
 		else
 			target.LAssailant = user
@@ -188,7 +188,7 @@
 
 /datum/surgery_step/slime/cut_flesh/tool_quality(obj/item/tool)
 	. = ..()
-	if(!tool.is_sharp())
+	if (!tool.is_sharp())
 		return 0
 
 /datum/surgery_step/slime/cut_flesh
@@ -219,7 +219,7 @@
 
 /datum/surgery_step/slime/cut_innards/tool_quality(obj/item/tool)
 	. = ..()
-	if(!tool.is_sharp())
+	if (!tool.is_sharp())
 		return 0
 
 /datum/surgery_step/slime/cut_innards
@@ -270,9 +270,9 @@
 		user.visible_message("<span class='notice'>[user] cuts out one of [target]'s cores with \the [tool].</span>",,	\
 		"<span class='notice'>You cut out one of [target]'s cores with \the [tool]. [target.cores] cores left.</span>")
 
-		if(target.cores >= 0)
+		if (target.cores >= 0)
 			new target.coretype(target.loc)
-		if(target.cores <= 0)
+		if (target.cores <= 0)
 			var/origstate = initial(target.icon_state)
 			target.icon_state = "[origstate] dead-nocore"
 

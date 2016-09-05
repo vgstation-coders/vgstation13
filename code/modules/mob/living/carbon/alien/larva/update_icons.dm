@@ -5,18 +5,18 @@
 
 /mob/living/carbon/alien/larva/update_icons()
 	var/state = 0
-	if(growth > 150)
+	if (growth > 150)
 		state = 2
-	else if(growth > 50)
+	else if (growth > 50)
 		state = 1
 
-	if(stat == DEAD)
+	if (stat == DEAD)
 		icon_state = "larva[state]_dead"
 	else if (handcuffed || legcuffed)
 		icon_state = "larva[state]_cuff"
 	else if (stunned)
 		icon_state = "larva[state]_stun"
-	else if(lying || resting)
+	else if (lying || resting)
 		icon_state = "larva[state]_sleep"
 	else
 		icon_state = "larva[state]"

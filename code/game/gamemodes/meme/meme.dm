@@ -41,7 +41,7 @@
 	to_chat(world, "<B>An unknown creature has infested the mind of a crew member. Find and destroy it by any means necessary.</B>")
 
 /datum/game_mode/meme/can_start()
-	if(!..())
+	if (!..())
 		return 0
 
 	// for every 10 players, get 1 meme, and for each meme, get a host
@@ -50,12 +50,12 @@
 
 	var/list/datum/mind/possible_memes = get_players_for_role(BE_MEME)
 
-	if(possible_memes.len < 2)
+	if (possible_memes.len < 2)
 		log_admin("MODE FAILURE: MEME. NOT ENOUGH MEME CANDIDATES.")
 		return 0 // not enough candidates for meme
 
 	// for each 2 possible memes, add one meme and one host
-	while(possible_memes.len >= 2)
+	while (possible_memes.len >= 2)
 		var/datum/mind/meme = pick(possible_memes)
 		possible_memes.Remove(meme)
 
@@ -81,7 +81,7 @@
 
 /datum/game_mode/meme/post_setup()
 	// create a meme and enter it
-	for(var/datum/mind/meme in memes)
+	for (var/datum/mind/meme in memes)
 		var/mob/living/parasite/meme/M = new
 		var/mob/original = meme.current
 		meme.transfer_to(M)
@@ -91,7 +91,7 @@
 		var/datum/mind/first_host = assigned_hosts[meme.key]
 		// this is a redundant check, but I don't think the above works..
 		// if picking hosts works with this method, remove the method above
-		if(!first_host)
+		if (!first_host)
 			first_host = pick(first_hosts)
 			first_hosts.Remove(first_host)
 		M.enter_host(first_host.current)
@@ -103,7 +103,7 @@
 	log_admin("Created [memes.len] memes.")
 
 	spawn (rand(waittime_l, waittime_h))
-		if(!mixed)
+		if (!mixed)
 			send_intercept()
 			..()
 	return
@@ -119,7 +119,7 @@
 	// generate some random objectives, use standard traitor objectives
 	var/job = first_host.assigned_role
 
-	for(var/datum/objective/o in SelectObjectives(job, meme))
+	for (var/datum/objective/o in SelectObjectives(job, meme))
 		o.owner = meme
 		meme.objectives += o
 
@@ -132,17 +132,17 @@
 		to_chat(meme.current, "<span class='danger'>You are a meme!</span>")
 
 	var/obj_count = 1
-	for(var/datum/objective/objective in meme.objectives)
+	for (var/datum/objective/objective in meme.objectives)
 		to_chat(meme.current, "<B>Objective #[obj_count]</B>: [objective.explanation_text]")
 		obj_count++
 	return
 
 /datum/game_mode/meme/check_finished()
 	var/memes_alive = 0
-	for(var/datum/mind/meme in memes)
-		if(!istype(meme.current,/mob/living))
+	for (var/datum/mind/meme in memes)
+		if (!istype(meme.current,/mob/living))
 			continue
-		if(meme.current.stat==2)
+		if (meme.current.stat==2)
 			continue
 		memes_alive++
 
@@ -152,17 +152,17 @@
 		return 1
 
 /datum/game_mode/proc/auto_declare_completion_meme()
-	for(var/datum/mind/meme in memes)
+	for (var/datum/mind/meme in memes)
 		var/memewin = 1
 		var/attuned = 0
-		if((meme.current) && istype(meme.current,/mob/living/parasite/meme))
+		if ((meme.current) && istype(meme.current,/mob/living/parasite/meme))
 			to_chat(world, "<B>The meme was [meme.current.key].</B>")
 			to_chat(world, "<B>The last host was [meme.current:host.key].</B>")
 			to_chat(world, "<B>Hosts attuned: [attuned]</B>")
 
 			var/count = 1
-			for(var/datum/objective/objective in meme.objectives)
-				if(objective.check_completion())
+			for (var/datum/objective/objective in meme.objectives)
+				if (objective.check_completion())
 					to_chat(world, "<B>Objective #[count]</B>: [objective.explanation_text] <span class='good'><B>Success</B></span>")
 					feedback_add_details("meme_objective","[objective.type]|SUCCESS")
 				else
@@ -174,7 +174,7 @@
 		else
 			memewin = 0
 
-		if(memewin)
+		if (memewin)
 			to_chat(world, "<B>The meme was successful!<B>")
 			feedback_add_details("meme_success","SUCCESS")
 		else

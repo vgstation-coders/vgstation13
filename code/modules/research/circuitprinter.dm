@@ -53,7 +53,7 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 	RefreshParts()
 
 /obj/machinery/r_n_d/fabricator/circuit_imprinter/Destroy()
-	if(linked_console && linked_console.linked_imprinter == src)
+	if (linked_console && linked_console.linked_imprinter == src)
 		linked_console.linked_imprinter = null	//Clearing of the rest is handled in the parent.
 
 	. = ..()
@@ -61,12 +61,12 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 
 /obj/machinery/r_n_d/fabricator/circuit_imprinter/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/reagent_containers/glass/G in component_parts)
+	for (var/obj/item/weapon/reagent_containers/glass/G in component_parts)
 		T += G.reagents.maximum_volume
 
 	create_reagents(T) // Holder for the reagents used as materials.
 	T = 0
-	for(var/obj/item/weapon/stock_parts/matter_bin/M in component_parts)
+	for (var/obj/item/weapon/stock_parts/matter_bin/M in component_parts)
 		T += M.rating
 	max_material_storage = T * 75000
 

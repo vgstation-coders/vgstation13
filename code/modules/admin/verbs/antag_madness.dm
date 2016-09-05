@@ -8,14 +8,14 @@ client/proc/antag_madness(var/mob/M in mob_list)
 	set category = "Fun"
 
 
-	if(!holder)
+	if (!holder)
 		return
 
-	if(!M.mind)
+	if (!M.mind)
 		to_chat(usr, "<span class='warning'>That mob has no mind.</span>")
 		return
 
-	if(!ishuman(M) && !ismonkey(M))
+	if (!ishuman(M) && !ismonkey(M))
 		to_chat(usr, "<span class='warning'>Only humans and monkeys can become overpowered antags.</span>")
 		return
 
@@ -32,7 +32,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 		)
 	var/got_a_job = 0
 
-	if(ismonkey(M))
+	if (ismonkey(M))
 		role_list = list("cult", "monkey")
 
 	var/list/input_list = list("RANDOM")
@@ -40,13 +40,13 @@ client/proc/antag_madness(var/mob/M in mob_list)
 	input_list += "CANCEL"
 	var/procedure = input("Choose antag type.", "Antag Madness") in input_list
 
-	if(procedure == "CANCEL")
+	if (procedure == "CANCEL")
 		return
 
-	else if(procedure == "RANDOM")
-		while(role_list.len > 0)
+	else if (procedure == "RANDOM")
+		while (role_list.len > 0)
 			var/choice = pick(role_list)
-			if(create_madness(M,choice))
+			if (create_madness(M,choice))
 				log_admin("[key_name(usr)] turned [key_name(M)] into an overpowered [choice]")
 				message_admins("[key_name_admin(usr)] turned [key_name_admin(M)]into an overpowered [choice]", 1)
 				got_a_job = 1
@@ -54,12 +54,12 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			else
 				role_list -= choice
 
-		if(!got_a_job)//aka: the mob failed all the antag creation checks
+		if (!got_a_job)//aka: the mob failed all the antag creation checks
 			to_chat(usr, "<span class='danger'>The mob is already every type of antag at once holy shit stop that.</span>")
 			return
 
 	else
-		if(create_madness(M,procedure))
+		if (create_madness(M,procedure))
 			log_admin("[key_name(usr)] turned [key_name(M)] into an overpowered [procedure]")
 			message_admins("[key_name_admin(usr)] turned [key_name_admin(M)]into an overpowered [procedure]", 1)
 		else
@@ -72,10 +72,10 @@ client/proc/antag_madness(var/mob/M in mob_list)
 	feedback_add_details("admin_verb","AM") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/antag_madness_adminbus(var/mob/M)
-	if(!M.mind)
+	if (!M.mind)
 		return
 
-	if(!ishuman(M) && !ismonkey(M))
+	if (!ishuman(M) && !ismonkey(M))
 		return
 
 	var/list/role_list = list(
@@ -90,18 +90,18 @@ client/proc/antag_madness(var/mob/M in mob_list)
 		"monkey",
 		)
 	var/got_a_job = 0
-	if(ismonkey(M))//OOK
+	if (ismonkey(M))//OOK
 		role_list = list("cult", "monkey")//monkeys in cult robes ftw
 
-	while(role_list.len > 0)
+	while (role_list.len > 0)
 		var/choice = pick(role_list)
-		if(create_madness(M,choice))
+		if (create_madness(M,choice))
 			got_a_job = 1
 			break
 		else
 			role_list -= choice
 
-	if(!got_a_job)//aka: if the mob already is every single type of antag.
+	if (!got_a_job)//aka: if the mob already is every single type of antag.
 		to_chat(M, "<span class='notice'>\"Hm, I guess it was nothing. I did remember everything after all.\"</span>")
 		return
 
@@ -115,9 +115,9 @@ client/proc/antag_madness(var/mob/M in mob_list)
 		to_chat(M, "The adminbus has allowed you to overcome your clownish nature, allowing you to wield weapons without harming yourself.")
 		M.mutations.Remove(M_CLUMSY)
 
-	switch(choice)
-		if("traitor")
-			if(istraitor(M))
+	switch (choice)
+		if ("traitor")
+			if (istraitor(M))
 				return 0
 			ticker.mode.traitors += M.mind
 			M.mind.special_role = "traitor"
@@ -127,9 +127,9 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			var/obj/item/packobelongings/pack = new /obj/item/packobelongings(M)
 			pack.name = "[M.real_name]'s belongings"
 
-			for(var/obj/item/I in M)
+			for (var/obj/item/I in M)
 				M.u_equip(I,1)
-				if(I)
+				if (I)
 					I.forceMove(M.loc)
 					I.reset_plane_and_layer()
 					//I.dropped(M)
@@ -158,8 +158,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 
-		if("changeling")
-			if(ischangeling(M))
+		if ("changeling")
+			if (ischangeling(M))
 				return 0
 			ticker.mode.changelings += M.mind
 			ticker.mode.grant_changeling_powers(M)
@@ -172,8 +172,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 
-		if("vampire")
-			if(isvampire(M))
+		if ("vampire")
+			if (isvampire(M))
 				return 0
 			ticker.mode.vampires += M.mind
 			ticker.mode.grant_vampire_powers(M)
@@ -187,9 +187,9 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			var/obj/item/packobelongings/pack = new /obj/item/packobelongings(M)
 			pack.name = "[M.real_name]'s belongings"
 
-			for(var/obj/item/I in M)
+			for (var/obj/item/I in M)
 				M.u_equip(I,1)
-				if(I)
+				if (I)
 					I.forceMove(M.loc)
 					I.reset_plane_and_layer()
 					//I.dropped(M)
@@ -214,8 +214,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 
-		if("cult")
-			if(iscult(M))
+		if ("cult")
+			if (iscult(M))
 				return 0
 			ticker.mode.cult += M.mind
 			ticker.mode.update_cult_icons_added(M.mind)
@@ -246,9 +246,9 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			var/obj/item/packobelongings/pack = new /obj/item/packobelongings(M)
 			pack.name = "[M.real_name]'s belongings"
 
-			for(var/obj/item/I in M)
+			for (var/obj/item/I in M)
 				M.u_equip(I,1)
-				if(I)
+				if (I)
 					I.forceMove(M.loc)
 					I.reset_plane_and_layer()
 					//I.dropped(M)
@@ -271,9 +271,9 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.equip_to_slot_or_del(A, slot_in_backpack)
 
 				var/obj/item/weapon/melee/cultblade/cultblade = new
-				if(!M.put_in_hands(cultblade))
+				if (!M.put_in_hands(cultblade))
 					qdel(cultblade)
-			else if(istype(M, /mob/living/carbon/monkey))
+			else if (istype(M, /mob/living/carbon/monkey))
 				var/mob/living/carbon/monkey/K = M
 				var/obj/item/weapon/storage/backpack/cultpack/P = new/obj/item/weapon/storage/backpack/cultpack(K)
 				K.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/death_commando(K), slot_wear_mask)
@@ -286,13 +286,13 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				var/obj/item/clothing/head/culthood/alt/CH = new /obj/item/clothing/head/culthood/alt(K)
 				var/obj/item/clothing/monkeyclothes/olduniform = null
 				var/obj/item/clothing/monkeyclothes/oldhat = null
-				if(K.uniform)
+				if (K.uniform)
 					olduniform = K.uniform
 					K.uniform = null
 					olduniform.forceMove(pack)
 				K.uniform = JS
 				K.uniform.forceMove(K)
-				if(K.hat)
+				if (K.hat)
 					oldhat = K.hat
 					K.hat = null
 					oldhat.forceMove(pack)
@@ -303,7 +303,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 			to_chat(M, "Your previous belongings have been stored in your backpack.")
 
-			if(!cultwords["travel"])
+			if (!cultwords["travel"])
 				runerandom()
 			for (var/word in engwords)
 				M.mind.store_memory("[cultwords[word]] is [word]<BR>")
@@ -318,8 +318,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 
-		if("rev")
-			if(isrevhead(M))
+		if ("rev")
+			if (isrevhead(M))
 				return 0
 			ticker.mode.head_revolutionaries += M.mind
 			ticker.mode.update_rev_icons_added(M.mind)
@@ -330,9 +330,9 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			var/obj/item/packobelongings/pack = new /obj/item/packobelongings(M)
 			pack.name = "[M.real_name]'s belongings"
 
-			for(var/obj/item/I in M)
+			for (var/obj/item/I in M)
 				M.u_equip(I,1)
-				if(I)
+				if (I)
 					I.forceMove(M.loc)
 					I.reset_plane_and_layer()
 					//I.dropped(M)
@@ -363,8 +363,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 
-		if("nuke")
-			if(isnukeop(M))
+		if ("nuke")
+			if (isnukeop(M))
 				return 0
 			ticker.mode.syndicates += M.mind
 			ticker.mode.update_synd_icons_added(M.mind)
@@ -378,9 +378,9 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			var/obj/item/packobelongings/pack = new /obj/item/packobelongings(M)
 			pack.name = "[M.real_name]'s belongings"
 
-			for(var/obj/item/I in M)
+			for (var/obj/item/I in M)
 				M.u_equip(I,1)
-				if(I)
+				if (I)
 					I.forceMove(M.loc)
 					I.reset_plane_and_layer()
 					//I.dropped(M)
@@ -409,8 +409,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 
-		if("deathsquad")
-			if(isdeathsquad(M))
+		if ("deathsquad")
+			if (isdeathsquad(M))
 				return 0
 			ticker.mode.deathsquad += M.mind
 			M.mind.assigned_role = "MODE"
@@ -436,9 +436,9 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			var/obj/item/packobelongings/pack = new /obj/item/packobelongings(M)
 			pack.name = "[M.real_name]'s belongings"
 
-			for(var/obj/item/I in M)
+			for (var/obj/item/I in M)
 				M.u_equip(I,1)
-				if(I)
+				if (I)
 					I.forceMove(M.loc)
 					I.reset_plane_and_layer()
 					//I.dropped(M)
@@ -474,8 +474,8 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 
-		if("wizard")
-			if(iswizard(M))
+		if ("wizard")
+			if (iswizard(M))
 				return 0
 			ticker.mode.wizards += M.mind
 			M.mind.special_role = "Wizard"
@@ -487,15 +487,15 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			var/obj/item/packobelongings/pack = new /obj/item/packobelongings(M)
 			pack.name = "[M.real_name]'s belongings"
 
-			for(var/obj/item/I in M)
+			for (var/obj/item/I in M)
 				M.u_equip(I,1)
-				if(I)
+				if (I)
 					I.forceMove(M.loc)
 					I.reset_plane_and_layer()
 					//I.dropped(M)
 					I.forceMove(pack)
 
-			if(M.gender == "male")
+			if (M.gender == "male")
 				M.equip_to_slot_or_del(new/obj/item/clothing/shoes/sandal, slot_shoes)
 				M.equip_to_slot_or_del(new/obj/item/clothing/head/wizard, slot_head)
 				M.equip_to_slot_or_del(new/obj/item/clothing/suit/wizrobe, slot_wear_suit)
@@ -516,7 +516,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 				M.f_style = "Dwarf Beard"
 				M.h_style = "Shoulder-length Hair Alt"
 
-			if(M.gender == "female")
+			if (M.gender == "female")
 				M.equip_to_slot_or_del(new/obj/item/clothing/shoes/sandal/marisa, slot_shoes)
 				M.equip_to_slot_or_del(new/obj/item/clothing/head/wizard/marisa, slot_head)
 				M.equip_to_slot_or_del(new/obj/item/clothing/suit/wizrobe/marisa, slot_wear_suit)
@@ -565,10 +565,10 @@ client/proc/antag_madness(var/mob/M in mob_list)
 
 
 
-		if("monkey")
-			if(M.monkeyizing)
+		if ("monkey")
+			if (M.monkeyizing)
 				return 0
-			if(isbadmonkey(M))
+			if (isbadmonkey(M))
 				return 0
 			ticker.mode.infected_monkeys += M.mind
 			var/mob/living/carbon/human/H = M

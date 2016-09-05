@@ -23,12 +23,12 @@
 	set desc = "Give somebody access to any session logfiles saved to the /log/runtime/ folder."
 	set category = null
 
-	if(!src.holder)
+	if (!src.holder)
 		to_chat(src, "<font color='red'>Only Admins may use this command.</font>")
 		return
 
 	var/client/target = input(src,"Choose somebody to grant access to the server's runtime logs (permissions expire at the end of each round):","Grant Permissions",null) as null|anything in clients
-	if(!istype(target,/client))
+	if (!istype(target,/client))
 		to_chat(src, "<font color='red'>Error: giveruntimelog(): Client not found.</font>")
 		return
 
@@ -45,10 +45,10 @@
 	set category = null
 
 	var/path = browse_files("data/logs/runtime/")
-	if(!path)
+	if (!path)
 		return
 
-	if(file_spam_check())
+	if (file_spam_check())
 		return
 
 	message_admins("[key_name_admin(src)] accessed file: [path]")
@@ -72,10 +72,10 @@
 	set category = null
 
 	var/path = browse_files("data/logs/")
-	if(!path)
+	if (!path)
 		return
 
-	if(file_spam_check())
+	if (file_spam_check())
 		return
 
 	message_admins("[key_name_admin(src)] accessed file: [path]")
@@ -102,7 +102,7 @@
 	set desc = "Shows today's server log."
 
 	var/path = "data/logs/[time2text(world.realtime,"YYYY/MM-Month/DD-Day")].log"
-	if( fexists(path) )
+	if ( fexists(path) )
 	#ifdef RUNWARNING
 		#if DM_VERSION > 506 && DM_VERSION < 508
 			#warn Run is deprecated and disabled for some fucking reason in 507.1275/6, if you have a version that doesn't have run() disabled then comment out #define RUNWARNING in setup.dm
@@ -126,7 +126,7 @@
 	set desc = "Shows today's server attack log."
 
 	var/path = "data/logs/[time2text(world.realtime,"YYYY/MM-Month/DD-Day")] Attack.log"
-	if( fexists(path) )
+	if ( fexists(path) )
 		#ifdef RUNWARNING
 		#if DM_VERSION > 506 && DM_VERSION < 508
 			#warn Run is deprecated and disabled for some fucking reason in 507.1275/6, if you have a version that doesn't have run() disabled then comment out #define RUNWARNING in setup.dm
@@ -148,7 +148,7 @@
 	set name		= "Show mob's attack logs"
 	set desc			= "Shows the (formatted) attack log of a mob in a HTML window."
 
-	if(!istype(M))
+	if (!istype(M))
 		to_chat(usr, "That's not a valid mob!")
 		return
 

@@ -40,18 +40,18 @@
 
 	admin_log.Add(text_to_log)
 
-	if(config.log_admin)
+	if (config.log_admin)
 		diary << html_decode(text_to_log)
 
-	if(config.log_admin_only)
+	if (config.log_admin_only)
 		admin_diary << html_decode(text_to_log)
 
 /proc/log_debug(text)
 	if (config.log_debug)
 		diary << html_decode("\[[time_stamp()]]DEBUG: [text]")
 
-	for(var/client/C in admins)
-		if(C.prefs.toggles & CHAT_DEBUGLOGS)
+	for (var/client/C in admins)
+		if (C.prefs.toggles & CHAT_DEBUGLOGS)
 			to_chat(C, "DEBUG: [text]")
 
 

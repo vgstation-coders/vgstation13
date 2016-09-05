@@ -80,12 +80,12 @@
 	can_label = 0
 
 /obj/machinery/portable_atmospherics/canister/update_icon()
-	if(destroyed)
+	if (destroyed)
 		icon_state = "[canister_color]-1"
 		overlays.len = 0
 		return
 
-	if(!status_overlays)
+	if (!status_overlays)
 		status_overlays = 1
 
 		status_overlays_pressure = new
@@ -107,8 +107,8 @@
 		old_color = canister_color
 
 	var/tank_pressure = air_contents.return_pressure()
-	if(check_updates(tank_pressure))
-		if(overlays.len)
+	if (check_updates(tank_pressure))
+		if (overlays.len)
 			overlays = 0
 
 		overlay_status = 0
@@ -121,14 +121,14 @@
 			overlays += status_overlays_other[2]
 			overlay_status |= OVERLAY_CONNECTED
 
-		switch(tank_pressure)
-			if(15 * ONE_ATMOSPHERE to INFINITY)
+		switch (tank_pressure)
+			if (15 * ONE_ATMOSPHERE to INFINITY)
 				overlays += status_overlays_pressure[4]
 				overlay_status |= OVERLAY_HIGH_PRESSURE
-			if(ONE_ATMOSPHERE to 15 * ONE_ATMOSPHERE)
+			if (ONE_ATMOSPHERE to 15 * ONE_ATMOSPHERE)
 				overlays += status_overlays_pressure[3]
 				overlay_status |= OVERLAY_MEDIUM_PRESSURE
-			if(10 to ONE_ATMOSPHERE)
+			if (10 to ONE_ATMOSPHERE)
 				overlays += status_overlays_pressure[2]
 				overlay_status |= OVERLAY_LOW_PRESSURE
 			else
@@ -137,28 +137,28 @@
 	return
 
 /obj/machinery/portable_atmospherics/canister/proc/check_updates(tank_pressure = 0)
-	if((overlay_status & OVERLAY_HOLDING) != holding)
+	if ((overlay_status & OVERLAY_HOLDING) != holding)
 		return 1
-	if((overlay_status & OVERLAY_CONNECTED) != connected_port)
+	if ((overlay_status & OVERLAY_CONNECTED) != connected_port)
 		return 1
-	if((overlay_status & OVERLAY_HIGH_PRESSURE) && tank_pressure < 15*ONE_ATMOSPHERE)
+	if ((overlay_status & OVERLAY_HIGH_PRESSURE) && tank_pressure < 15*ONE_ATMOSPHERE)
 		return 1
-	if((overlay_status & OVERLAY_MEDIUM_PRESSURE) && (tank_pressure < ONE_ATMOSPHERE || tank_pressure > 15*ONE_ATMOSPHERE))
+	if ((overlay_status & OVERLAY_MEDIUM_PRESSURE) && (tank_pressure < ONE_ATMOSPHERE || tank_pressure > 15*ONE_ATMOSPHERE))
 		return 1
-	if((overlay_status & OVERLAY_LOW_PRESSURE) && (tank_pressure < 10 || tank_pressure > ONE_ATMOSPHERE))
+	if ((overlay_status & OVERLAY_LOW_PRESSURE) && (tank_pressure < 10 || tank_pressure > ONE_ATMOSPHERE))
 		return 1
-	if((overlay_status & OVERLAY_NO_PRESSURE) && tank_pressure > 10)
+	if ((overlay_status & OVERLAY_NO_PRESSURE) && tank_pressure > 10)
 		return 1
 	return 0
 
 
 /obj/machinery/portable_atmospherics/canister/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(exposed_temperature > temperature_resistance)
+	if (exposed_temperature > temperature_resistance)
 		health -= 5
 		healthcheck()
 
 /obj/machinery/portable_atmospherics/canister/proc/healthcheck()
-	if(destroyed)
+	if (destroyed)
 		return 1
 
 	if (src.health <= 10)
@@ -188,9 +188,9 @@
 
 	handle_beams() //emitter beams
 
-	if(valve_open)
+	if (valve_open)
 		var/datum/gas_mixture/environment
-		if(holding)
+		if (holding)
 			environment = holding.air_contents
 		else
 			environment = loc.return_air()
@@ -200,25 +200,25 @@
 		//Can not have a pressure delta that would cause environment pressure > tank pressure
 
 		var/transfer_moles = 0
-		if((air_contents.temperature > 0) && (pressure_delta > 0))
+		if ((air_contents.temperature > 0) && (pressure_delta > 0))
 			transfer_moles = pressure_delta*environment.volume/(air_contents.temperature * R_IDEAL_GAS_EQUATION)
 
 			//Actually transfer the gas
 			var/datum/gas_mixture/removed = air_contents.remove(transfer_moles)
 
-			if(holding)
+			if (holding)
 				environment.merge(removed)
 			else
 				loc.assume_air(removed)
 			src.update_icon()
 		nanomanager.update_uis(src)
 
-	if(air_contents.return_pressure() < 1)
+	if (air_contents.return_pressure() < 1)
 		can_label = 1
 	else
 		can_label = 0
 
-	if(air_contents.temperature > PLASMA_FLASHPOINT)
+	if (air_contents.temperature > PLASMA_FLASHPOINT)
 		air_contents.zburn()
 		nanomanager.update_uis(src)
 
@@ -229,13 +229,13 @@
 
 /obj/machinery/portable_atmospherics/canister/proc/return_temperature()
 	var/datum/gas_mixture/GM = src.return_air()
-	if(GM && GM.volume>0)
+	if (GM && GM.volume>0)
 		return GM.temperature
 	return 0
 
 /obj/machinery/portable_atmospherics/canister/proc/return_pressure()
 	var/datum/gas_mixture/GM = src.return_air()
-	if(GM && GM.volume>0)
+	if (GM && GM.volume>0)
 		return GM.return_pressure()
 	return 0
 
@@ -245,34 +245,34 @@
 	return
 
 /obj/machinery/portable_atmospherics/canister/bullet_act(var/obj/item/projectile/Proj)
-	if(Proj.damage)
+	if (Proj.damage)
 		src.health -= round(Proj.damage / 2)
 		healthcheck()
 	..()
 
 /obj/machinery/portable_atmospherics/canister/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	if(iswelder(W) && src.destroyed)
-		if(weld(W, user))
+	if (iswelder(W) && src.destroyed)
+		if (weld(W, user))
 			to_chat(user, "<span class='notice'>You salvage what's left of \the [src].</span>")
 			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))//new /obj/item/stack/sheet/metal(src.loc)
 			M.amount = 3
 			qdel (src)
 		return
 
-	if(!iswrench(W) && !istype(W, /obj/item/weapon/tank) && !istype(W, /obj/item/device/analyzer) && !istype(W, /obj/item/device/pda))
+	if (!iswrench(W) && !istype(W, /obj/item/weapon/tank) && !istype(W, /obj/item/device/analyzer) && !istype(W, /obj/item/device/pda))
 		visible_message("<span class='warning'>[user] hits the [src] with a [W]!</span>")
 		investigation_log(I_ATMOS, "<span style='danger'>was smacked with \a [W] by [key_name(user)]</span>")
 		src.health -= W.force
 		src.add_fingerprint(user)
 		healthcheck()
 
-	if(istype(user, /mob/living/silicon/robot) && istype(W, /obj/item/weapon/tank/jetpack))
+	if (istype(user, /mob/living/silicon/robot) && istype(W, /obj/item/weapon/tank/jetpack))
 		var/datum/gas_mixture/thejetpack = W:air_contents
 		var/env_pressure = thejetpack.return_pressure()
 		var/pressure_delta = min(10*ONE_ATMOSPHERE - env_pressure, (air_contents.return_pressure() - env_pressure)/2)
 		//Can not have a pressure delta that would cause environment pressure > tank pressure
 		var/transfer_moles = 0
-		if((air_contents.temperature > 0) && (pressure_delta > 0))
+		if ((air_contents.temperature > 0) && (pressure_delta > 0))
 			transfer_moles = pressure_delta*thejetpack.volume/(air_contents.temperature * R_IDEAL_GAS_EQUATION)//Actually transfer the gas
 			var/datum/gas_mixture/removed = air_contents.remove(transfer_moles)
 			thejetpack.merge(removed)
@@ -307,9 +307,9 @@
 
 /obj/machinery/portable_atmospherics/canister/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	if (src.destroyed || gcDestroyed || !get_turf(src))
-		if(!ui)
+		if (!ui)
 			ui = nanomanager.get_open_ui(user, src, ui_key)
-		if(ui)
+		if (ui)
 			ui.close()
 		return
 
@@ -343,10 +343,10 @@
 
 /obj/machinery/portable_atmospherics/canister/Topic(href, href_list)
 	. = ..()//Sanity
-	if(.)
+	if (.)
 		return .
 
-	if(href_list["toggle"])
+	if (href_list["toggle"])
 		if (valve_open)
 			if (holding)
 				investigation_log(I_ATMOS, "had its valve <b>closed</b> by [key_name(usr)], stopping transfer into \the [holding].")
@@ -358,28 +358,28 @@
 			else
 				var/naughty_stuff = air_contents.loggable_contents()
 				investigation_log(I_ATMOS, "had its valve <b>OPENED</b> by [key_name(usr)], starting transfer into the <font color='red'><b>air</b></font> ([naughty_stuff])")
-				if(naughty_stuff)
+				if (naughty_stuff)
 					message_admins("[usr.real_name] ([formatPlayerPanel(usr,usr.ckey)]) opened a canister that contains [naughty_stuff] at [formatJumpTo(loc)]!")
 					log_admin("[usr]([ckey(usr.key)]) opened a canister that contains [naughty_stuff] at [loc.x], [loc.y], [loc.z]")
 
 		valve_open = !valve_open
 
 	if (href_list["remove_tank"])
-		if(holding)
-			if(valve_open)
+		if (holding)
+			if (valve_open)
 				var/naughty_stuff = air_contents.loggable_contents()
-				if(naughty_stuff)
+				if (naughty_stuff)
 					message_admins("[usr.real_name] ([formatPlayerPanel(usr,usr.ckey)]) opened a canister that contains [naughty_stuff] at [formatJumpTo(loc)]!")
 					log_admin("[usr]([ckey(usr.key)]) opened a canister that contains [naughty_stuff] at [loc.x], [loc.y], [loc.z]")
 
-			if(istype(holding, /obj/item/weapon/tank))
+			if (istype(holding, /obj/item/weapon/tank))
 				holding.manipulated_by = usr.real_name
 			holding.forceMove(loc)
 			holding = null
 
 	if (href_list["pressure_adj"])
 		var/diff = text2num(href_list["pressure_adj"])
-		if(diff > 0)
+		if (diff > 0)
 			release_pressure = min(10*ONE_ATMOSPHERE, release_pressure+diff)
 		else
 			release_pressure = max(ONE_ATMOSPHERE/10, release_pressure+diff)
@@ -463,9 +463,9 @@
 /obj/machinery/portable_atmospherics/canister/proc/weld(var/obj/item/weapon/weldingtool/WT, var/mob/user)
 
 
-	if(busy)
+	if (busy)
 		return 0
-	if(!WT.isOn())
+	if (!WT.isOn())
 		return 0
 
 	// Do after stuff here
@@ -473,9 +473,9 @@
 	playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 	WT.eyecheck(user)
 	busy = 1
-	if(do_after(user, src, 50))
+	if (do_after(user, src, 50))
 		busy = 0
-		if(!WT.isOn())
+		if (!WT.isOn())
 			return 0
 		return 1
 	busy = 0
@@ -504,7 +504,7 @@
 
 /obj/machinery/portable_atmospherics/canister/handle_beams()
 	// New beam damage code (per-tick)
-	for(var/obj/effect/beam/B in beams)
+	for (var/obj/effect/beam/B in beams)
 		apply_beam_damage(B)
 	healthcheck()
 

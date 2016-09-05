@@ -9,10 +9,10 @@
 	var/category = "misc"
 
 /datum/storeitem/proc/deliver(var/mob/user,var/obj/machinery/computer/merch/merchcomp)
-	if(istype(typepath,/obj/item/weapon/storage))
+	if (istype(typepath,/obj/item/weapon/storage))
 		var/thing = new typepath(merchcomp.loc)
 		user.put_in_hands(thing)
-	//else if(istype(typepath,/obj/item))
+	//else if (istype(typepath,/obj/item))
 	//	var/obj/item/weapon/storage/box/box=new(loc)
 	//	new typepath(box)
 	//	box.name="[name] package"

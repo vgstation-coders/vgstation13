@@ -16,15 +16,15 @@
 
 /obj/item/device/radio/electropack/New()
 	..()
-	if(radio_controller)
+	if (radio_controller)
 		initialize()
 	else
 		spawn(50)
-			if(radio_controller)
+			if (radio_controller)
 				initialize()
 
 /obj/item/device/radio/electropack/initialize()
-	if(frequency < MINIMUM_FREQUENCY || frequency > MAXIMUM_FREQUENCY)
+	if (frequency < MINIMUM_FREQUENCY || frequency > MAXIMUM_FREQUENCY)
 		src.frequency = sanitize_frequency(src.frequency)
 
 	set_frequency(frequency)
@@ -35,27 +35,27 @@
 	radio_connection = radio_controller.add_object(src, frequency)
 
 /obj/item/device/radio/electropack/attack_hand(mob/user as mob)
-	if(src == user.back)
+	if (src == user.back)
 		to_chat(user, "<span class='notice'>You need help taking this off!</span>")
 		return
 	..()
 
 /obj/item/device/radio/electropack/Destroy()
-	if(istype(src.loc, /obj/item/assembly/shock_kit))
+	if (istype(src.loc, /obj/item/assembly/shock_kit))
 		var/obj/item/assembly/shock_kit/S = src.loc
-		if(S.part1 == src)
+		if (S.part1 == src)
 			S.part1 = null
-		else if(S.part2 == src)
+		else if (S.part2 == src)
 			S.part2 = null
 		master = null
-	if(radio_controller)
+	if (radio_controller)
 		radio_controller.remove_object(src, frequency)
 	..()
 
 /obj/item/device/radio/electropack/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
-	if(istype(W, /obj/item/clothing/head/helmet))
-		if(!b_stat)
+	if (istype(W, /obj/item/clothing/head/helmet))
+		if (!b_stat)
 			to_chat(user, "<span class='notice'>[src] is not ready to be attached!</span>")
 			return
 		var/obj/item/assembly/shock_kit/A = new /obj/item/assembly/shock_kit( user )
@@ -76,36 +76,36 @@
 
 /obj/item/device/radio/electropack/Topic(href, href_list)
 	//..()
-	if(usr.stat || usr.restrained())
+	if (usr.stat || usr.restrained())
 		return
-	if(((istype(usr, /mob/living/carbon/human) && ((!( ticker ) || (ticker && ticker.mode != "monkey")) && usr.contents.Find(src))) || (usr.contents.Find(master) || (in_range(src, usr) && istype(loc, /turf)))))
+	if (((istype(usr, /mob/living/carbon/human) && ((!( ticker ) || (ticker && ticker.mode != "monkey")) && usr.contents.Find(src))) || (usr.contents.Find(master) || (in_range(src, usr) && istype(loc, /turf)))))
 		usr.set_machine(src)
-		if(href_list["freq"])
+		if (href_list["freq"])
 			var/new_frequency = sanitize_frequency(frequency + text2num(href_list["freq"]))
 			set_frequency(new_frequency)
 		else
-			if(href_list["code"])
+			if (href_list["code"])
 				code += text2num(href_list["code"])
 				code = round(code)
 				code = min(100, code)
 				code = max(1, code)
 			else
-				if(href_list["power"])
+				if (href_list["power"])
 					on = !( on )
 					icon_state = "electropack[on]"
-		if(!( master ))
-			if(istype(loc, /mob))
+		if (!( master ))
+			if (istype(loc, /mob))
 				attack_self(loc)
 			else
-				for(var/mob/M in viewers(1, src))
-					if(M.client)
+				for (var/mob/M in viewers(1, src))
+					if (M.client)
 						attack_self(M)
 		else
-			if(istype(master.loc, /mob))
+			if (istype(master.loc, /mob))
 				attack_self(master.loc)
 			else
-				for(var/mob/M in viewers(1, master))
-					if(M.client)
+				for (var/mob/M in viewers(1, master))
+					if (M.client)
 						attack_self(M)
 	else
 		usr << browse(null, "window=radio")
@@ -113,26 +113,26 @@
 	return
 
 /obj/item/device/radio/electropack/receive_signal(datum/signal/signal)
-	if(!signal || signal.encryption != code)
+	if (!signal || signal.encryption != code)
 		return
 
-	if(istype(src.loc, /obj/mecha) && on)
+	if (istype(src.loc, /obj/mecha) && on)
 		var/obj/mecha/R = src.loc //R is for GIANT ROBOT
 		R.shock_n_boot()
 
-	else if(istype(src.loc, /obj/item/assembly/shock_kit) && on)
+	else if (istype(src.loc, /obj/item/assembly/shock_kit) && on)
 		var/obj/item/assembly/shock_kit/SK = src.loc
 		SK.receive_signal()
 
-	else if(ismob(loc) && on)
+	else if (ismob(loc) && on)
 		var/mob/M = loc
 		var/turf/T = M.loc
-		if(istype(T, /turf))
-			if(!M.moved_recently && M.last_move)
+		if (istype(T, /turf))
+			if (!M.moved_recently && M.last_move)
 				M.moved_recently = 1
 				step(M, M.last_move)
 				spawn(50)
-					if(M)
+					if (M)
 						M.moved_recently = 0
 		to_chat(M, "<span class='danger'>You feel a sharp shock!</span>")
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
@@ -141,13 +141,13 @@
 
 		M.Weaken(10)
 
-	if(master && isWireCut(1))
+	if (master && isWireCut(1))
 		master.receive_signal()
 	return
 
 /obj/item/device/radio/electropack/attack_self(mob/user as mob, flag1)
 
-	if(!istype(user, /mob/living/carbon/human))
+	if (!istype(user, /mob/living/carbon/human))
 		return
 	user.set_machine(src)
 	var/dat = {"<TT>

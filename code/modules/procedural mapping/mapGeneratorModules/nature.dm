@@ -17,7 +17,7 @@
 /datum/mapGeneratorModule/randBushes/New()
 	..()
 	spawnableAtoms = typesof(/obj/structure/flora/ausbushes)
-	for(var/i in spawnableAtoms)
+	for (var/i in spawnableAtoms)
 		spawnableAtoms[i] = 20
 
 

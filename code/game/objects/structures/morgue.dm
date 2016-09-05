@@ -39,32 +39,32 @@
 
 /obj/structure/morgue/examine(mob/user)
 	..()
-	switch(icon_state)
-		if("morgue2")
+	switch (icon_state)
+		if ("morgue2")
 			to_chat(user, "<span class='info'>\The [src]'s light display indicates there is an unrecoverable corpse inside.</span>")
-		if("morgue3")
+		if ("morgue3")
 			to_chat(user, "<span class='info'>\The [src]'s light display indicates there are items inside.</span>")
-		if("morgue4")
+		if ("morgue4")
 			to_chat(user, "<span class='info'>\The [src]'s light display indicates there is a potential clone candidate inside.</span>")
 
 /obj/structure/morgue/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			for(var/atom/movable/A in src)
+	switch (severity)
+		if (1.0)
+			for (var/atom/movable/A in src)
 				A.forceMove(src.loc)
 				A.ex_act(severity)
 			qdel(src)
 			return
-		if(2.0)
-			if(prob(50))
-				for(var/atom/movable/A in src)
+		if (2.0)
+			if (prob(50))
+				for (var/atom/movable/A in src)
 					A.forceMove(src.loc)
 					A.ex_act(severity)
 				qdel(src)
 				return
-		if(3.0)
-			if(prob(5))
-				for(var/atom/movable/A in src)
+		if (3.0)
+			if (prob(5))
+				for (var/atom/movable/A in src)
 					A.forceMove(src.loc)
 					A.ex_act(severity)
 				qdel(src)
@@ -91,10 +91,10 @@
 	connected.layer = OBJ_LAYER
 	step(connected, src.dir)
 	var/turf/T = get_step(src, src.dir)
-	if(T.contents.Find(connected))
+	if (T.contents.Find(connected))
 		src.connected.connected = src //like a dog chasing it's own tail
 		src.icon_state = "morgue0"
-		for(var/atom/movable/A as mob|obj in src)
+		for (var/atom/movable/A as mob|obj in src)
 			A.forceMove(src.connected.loc)
 		connected.icon_state = "morguet"
 		connected.dir = src.dir
@@ -103,32 +103,32 @@
 		connected = null
 
 /obj/structure/morgue/proc/close_up()
-	if(!connected)
+	if (!connected)
 		return
-	for(var/atom/movable/A as mob|obj in connected.loc)
-		if(istype(A, /mob/living/simple_animal/sculpture)) //I have no shame. Until someone rewrites this shitcode extroadinaire, I'll just snowflake over it
+	for (var/atom/movable/A as mob|obj in connected.loc)
+		if (istype(A, /mob/living/simple_animal/sculpture)) //I have no shame. Until someone rewrites this shitcode extroadinaire, I'll just snowflake over it
 			continue
-		if(!A.anchored)
+		if (!A.anchored)
 			A.forceMove(src)
-			if(ismob(A))
+			if (ismob(A))
 				var/mob/M = A
-				if(M.mind && !M.client) //!M.client = mob has ghosted out of their body
+				if (M.mind && !M.client) //!M.client = mob has ghosted out of their body
 					var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
-					if(ghost && ghost.client)
+					if (ghost && ghost.client)
 						to_chat(ghost, "<span class='interface'><span class='big bold'>Your corpse has been placed into a morgue tray.</span> \
 							Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
 	qdel(connected)
 
 /obj/structure/morgue/attackby(P as obj, mob/user as mob)
-	if(iscrowbar(P)&&!contents.len)
-		if(do_after(user, src,50))
+	if (iscrowbar(P)&&!contents.len)
+		if (do_after(user, src,50))
 			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 			new /obj/structure/closet/body_bag(src.loc)
 			new /obj/item/stack/sheet/metal(src.loc,5)
 			qdel(src)
-	if(iswrench(P))
+	if (iswrench(P))
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		if(dir==4)
+		if (dir==4)
 			dir=8
 		else
 			dir=4
@@ -152,9 +152,9 @@
 
 /obj/structure/morgue/on_login(var/mob/M)
 	update()
-	if(M.mind && !M.client) //!M.client = mob has ghosted out of their body
+	if (M.mind && !M.client) //!M.client = mob has ghosted out of their body
 		var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
-		if(ghost && ghost.client)
+		if (ghost && ghost.client)
 			to_chat(ghost, "<span class='interface'><span class='big bold'>Your corpse has been placed into a morgue tray.</span> \
 				Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
 
@@ -163,7 +163,7 @@
 
 /obj/structure/morgue/Destroy()
 	. = ..()
-	if(connected)
+	if (connected)
 		qdel(connected) //references get cleared in the tray's Destroy()
 
 /*
@@ -188,7 +188,7 @@
 	return src.attack_hand(user)
 
 /obj/structure/m_tray/attack_hand(mob/user as mob)
-	if(connected)
+	if (connected)
 		connected.close_up()
 	else
 		qdel(src) //this should not happen but if it does happen we should not be here
@@ -204,7 +204,7 @@
 
 /obj/structure/m_tray/Destroy()
 	. = ..()
-	if(connected)
+	if (connected)
 		connected.connected = null
 		connected.update()
 		connected = null
@@ -236,21 +236,21 @@
 		icon_state = "crema1"
 
 /obj/structure/crematorium/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			for(var/atom/movable/A as mob|obj in src)
+	switch (severity)
+		if (1.0)
+			for (var/atom/movable/A as mob|obj in src)
 				A.forceMove(src.loc)
 				ex_act(severity)
 			qdel(src)
-		if(2.0)
+		if (2.0)
 			if (prob(50))
-				for(var/atom/movable/A as mob|obj in src)
+				for (var/atom/movable/A as mob|obj in src)
 					A.forceMove(src.loc)
 					ex_act(severity)
 				qdel(src)
-		if(3.0)
+		if (3.0)
 			if (prob(5))
-				for(var/atom/movable/A as mob|obj in src)
+				for (var/atom/movable/A as mob|obj in src)
 					A.forceMove(src.loc)
 					ex_act(severity)
 				qdel(src)
@@ -272,7 +272,7 @@
 		to_chat(usr, "<span class='warning'>It's locked.</span>")
 		return
 	if ((src.connected) && (src.locked == 0))
-		for(var/atom/movable/A as mob|obj in src.connected.loc)
+		for (var/atom/movable/A as mob|obj in src.connected.loc)
 			if (!( A.anchored ))
 				A.forceMove(src)
 		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
@@ -287,7 +287,7 @@
 		if (T.contents.Find(src.connected))
 			src.connected.connected = src
 			src.icon_state = "crema0"
-			for(var/atom/movable/A as mob|obj in src)
+			for (var/atom/movable/A as mob|obj in src)
 				A.forceMove(src.connected.loc)
 			src.connected.icon_state = "cremat"
 		else
@@ -320,7 +320,7 @@
 	if (T.contents.Find(src.connected))
 		src.connected.connected = src
 		src.icon_state = "crema0"
-		for(var/atom/movable/A as mob|obj in src)
+		for (var/atom/movable/A as mob|obj in src)
 			A.forceMove(src.connected.loc)
 			//Foreach goto(106)
 		src.connected.icon_state = "cremat"
@@ -329,13 +329,13 @@
 		src.connected = null
 
 /obj/structure/crematorium/proc/cremate(mob/user)
-//	for(var/obj/machinery/crema_switch/O in src) //trying to figure a way to call the switch, too drunk to sort it out atm
-//		if(var/on == 1)
+//	for (var/obj/machinery/crema_switch/O in src) //trying to figure a way to call the switch, too drunk to sort it out atm
+//		if (var/on == 1)
 //		return
-	if(cremating)
+	if (cremating)
 		return //don't let you cremate something twice or w/e
 
-	if(contents.len <= 0)
+	if (contents.len <= 0)
 		for (var/mob/M in viewers(src))
 			M.show_message("<span class='warning'>You hear a hollow crackle.</span>", 1)
 			return
@@ -346,11 +346,11 @@
 		if (locate(/obj/item/weapon/disk/nuclear) in inside)
 			to_chat(user, "<SPAN CLASS='warning'>You get the feeling that you shouldn't cremate one of the items in the cremator.</SPAN>")
 			return
-		if(locate(/mob/living/simple_animal/sculpture) in inside)
+		if (locate(/mob/living/simple_animal/sculpture) in inside)
 			to_chat(user, "<span class='warning'>You try to toggle the crematorium on, but all you hear is scrapping stone.</span>")
 			return
 		for (var/mob/M in viewers(src))
-			if(!M.hallucinating())
+			if (!M.hallucinating())
 				M.show_message("<span class='warning'>You hear a roar as the crematorium activates.</span>", 1)
 			else
 				M.show_message("<span class='notice'>You hear chewing as the crematorium consumes its meal.</span>", 1)
@@ -408,7 +408,7 @@
 
 /obj/structure/c_tray/attack_hand(mob/user as mob)
 	if (src.connected)
-		for(var/atom/movable/A as mob|obj in src.loc)
+		for (var/atom/movable/A as mob|obj in src.loc)
 			if (!( A.anchored ))
 				A.forceMove(src.connected)
 		src.connected.connected = null
@@ -424,7 +424,7 @@
 		return
 	O.forceMove(src.loc)
 	if (user != O)
-		for(var/mob/B in viewers(user, 3))
+		for (var/mob/B in viewers(user, 3))
 			if ((B.client && !( B.blinded )))
 				to_chat(B, text("<span class='warning'>[] stuffs [] into []!</span>", user, O, src))
 

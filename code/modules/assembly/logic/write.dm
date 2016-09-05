@@ -53,29 +53,29 @@
 	var/list/device_pool = list() //List of all connected assemblies, to make life easier
 
 /obj/item/device/assembly/read_write/activate()
-	if(!..())
+	if (!..())
 		return 0
 
 	//First read values
-	if(READ && READ_value)
+	if (READ && READ_value)
 		var/value = READ.get_value(READ_value)
 
-		if(istext(value))
+		if (istext(value))
 			stored_num = text2num(value)
 			stored_txt = value
-		else if(isnum(value))
+		else if (isnum(value))
 			stored_num = value
 			stored_txt = num2text(value)
 
 	//Then write values
-	if(WRITE && WRITE_value)
+	if (WRITE && WRITE_value)
 		var/list/W_params = params2list(WRITE.accessible_values[WRITE_value])
 
 		//See the type of the value we're writing to (if it's text, write stored text. Otherwise write stored number)
-		switch(W_params[VALUE_VARIABLE_TYPE])
-			if(VT_TEXT) //text
+		switch (W_params[VALUE_VARIABLE_TYPE])
+			if (VT_TEXT) //text
 				WRITE.write_to_value(WRITE_value, stored_txt)
-			if(VT_NUMBER, VT_POINTER) //numbers, pointers
+			if (VT_NUMBER, VT_POINTER) //numbers, pointers
 				WRITE.write_to_value(WRITE_value, stored_num)
 
 /obj/item/device/assembly/read_write/interact(mob/user)
@@ -93,48 +93,48 @@
 	onclose(user, "circuit4")
 
 /obj/item/device/assembly/read_write/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 
-	if(href_list["set_num_value"])
+	if (href_list["set_num_value"])
 		var/choice = input(usr, "Select a new numeric value to be stored in \the [src].", "\The [src]") as null|num
 
-		if(isnull(choice))
+		if (isnull(choice))
 			return
-		if(..())
+		if (..())
 			return
 
 		stored_num = choice
-	if(href_list["set_txt_value"])
+	if (href_list["set_txt_value"])
 		var/choice = stripped_input(usr, "Select a new string value to be stored in \the [src].", "\The [src]", max_length = MAX_TEXT_VALUE_LEN) as null|text
 
-		if(isnull(choice))
+		if (isnull(choice))
 			return
-		if(..())
+		if (..())
 			return
 
 		stored_txt = choice
 
-	if(href_list["set_read"])
+	if (href_list["set_read"])
 		var/choice = input(usr, "Select a new READ assembly for \the [src].", "\The [src]") as null|anything in (device_pool + "Nothing")
 
-		if(isnull(choice))
+		if (isnull(choice))
 			return
-		if(..())
+		if (..())
 			return
 
 		var/obj/item/device/assembly/A = choice
 		var/new_value = input(usr, "Select which of \the [A]'s values will be read.", "\The [src]") as null|anything in A.accessible_values
 
-		if(isnull(new_value))
+		if (isnull(new_value))
 			return
-		if(..())
+		if (..())
 			return
-		if(choice == "Nothing")
+		if (choice == "Nothing")
 			READ = null
 			to_chat(usr, "<span class='info'>\The [src] will no longer read anything.</span>")
 		else
-			if(!device_pool.Find(choice))
+			if (!device_pool.Find(choice))
 				return
 
 			READ = choice
@@ -142,26 +142,26 @@
 
 			to_chat(usr, "<span class='info'>\The [src] will now read [A]'s [new_value].</span>")
 
-	if(href_list["set_write"])
+	if (href_list["set_write"])
 		var/choice = input(usr, "Select a new WRITE assembly for \the [src].", "\The [src]") as null|anything in (device_pool + "Nothing")
 
-		if(isnull(choice))
+		if (isnull(choice))
 			return
-		if(..())
+		if (..())
 			return
-		if(choice == "Nothing")
+		if (choice == "Nothing")
 			WRITE = null
 			to_chat(usr, "<span class='info'>\The [src] will no longer write to anything.</span>")
 		else
 			var/obj/item/device/assembly/A = choice
 			var/new_value = input(usr, "Select which of \the [A]'s values will be written to.", "\The [src]") as null|anything in A.accessible_values
 
-			if(isnull(new_value))
+			if (isnull(new_value))
 				return
-			if(..())
+			if (..())
 				return
 
-			if(!device_pool.Find(choice))
+			if (!device_pool.Find(choice))
 				return
 
 			WRITE = choice
@@ -169,7 +169,7 @@
 
 			to_chat(usr, "<span class='info'>\The [src] will now write to [A]'s [new_value].</span>")
 
-	if(usr)
+	if (usr)
 		attack_self(usr)
 
 /obj/item/device/assembly/read_write/connected(var/obj/item/device/assembly/A, in_frame)
@@ -182,18 +182,18 @@
 
 	//Remove all references and make the disconnected assembly unavailable
 	device_pool.Remove(A)
-	if(READ == A)
+	if (READ == A)
 		READ = null
 		//READ_value = ""
 
-	if(WRITE == A)
+	if (WRITE == A)
 		WRITE = null
 		//WRITE_value = ""
 
 //Helper proc for finding a device's index
 /obj/item/device/assembly/read_write/proc/get_device_index(obj/item/device/assembly/A)
 	var/obj/item/device/assembly_frame/AF = loc
-	if(!istype(AF))
+	if (!istype(AF))
 		return 0
 
 	return AF.assemblies.Find(A)
@@ -201,10 +201,10 @@
 //Helper proc for finding a device at a certain index
 /obj/item/device/assembly/read_write/proc/get_device_by_index(index)
 	var/obj/item/device/assembly_frame/AF = loc
-	if(!istype(AF))
+	if (!istype(AF))
 		return "not in assembly frame"
 
-	if(AF.assemblies.len < index)
+	if (AF.assemblies.len < index)
 		return null
 
 	return AF.assemblies[index]

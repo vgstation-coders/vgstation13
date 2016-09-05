@@ -26,7 +26,7 @@
 	..()
 
 /obj/machinery/shield/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(!height || air_group)
+	if (!height || air_group)
 		return 0
 	else
 		return ..()
@@ -44,12 +44,12 @@
 	return 1
 
 /obj/machinery/shield/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(!istype(W))
+	if (!istype(W))
 		return
 
 	//Calculate damage
 	var/aforce = W.force
-	if(W.damtype == BRUTE || W.damtype == BURN)
+	if (W.damtype == BRUTE || W.damtype == BURN)
 		src.health -= aforce
 
 	//Play a fitting sound
@@ -62,44 +62,44 @@
 		return
 
 	opacity = 1
-	spawn(20) if(src) opacity = 0
+	spawn(20) if (src) opacity = 0
 
-	if(src.health <= 0)
+	if (src.health <= 0)
 		visible_message("<span class='notice'>The [src] dissapates</span>")
 		qdel(src)
 		return
 
 	opacity = 1
-	spawn(20) if(src) opacity = 0
+	spawn(20) if (src) opacity = 0
 
 /obj/machinery/shield/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
 	..()
-	if(health <=0)
+	if (health <=0)
 		visible_message("<span class='notice'>The [src] dissapates</span>")
 		qdel(src)
 		return
 	opacity = 1
-	spawn(20) if(src) opacity = 0
+	spawn(20) if (src) opacity = 0
 
 /obj/machinery/shield/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			if (prob(75))
 				qdel(src)
-		if(2.0)
+		if (2.0)
 			if (prob(50))
 				qdel(src)
-		if(3.0)
+		if (3.0)
 			if (prob(25))
 				qdel(src)
 
 /obj/machinery/shield/emp_act(severity)
-	switch(severity)
-		if(1)
+	switch (severity)
+		if (1)
 			qdel(src)
-		if(2)
-			if(prob(50))
+		if (2)
+			if (prob(50))
 				qdel(src)
 
 /obj/machinery/shield/blob_act()
@@ -112,7 +112,7 @@
 
 	//Super realistic, resource-intensive, real-time damage calculations.
 	var/tforce = 0
-	if(ismob(AM))
+	if (ismob(AM))
 		tforce = 40
 	else
 		tforce = AM:throwforce
@@ -130,7 +130,7 @@
 
 	//The shield becomes dense to absorb the blow.. purely asthetic.
 	opacity = 1
-	spawn(20) if(src) opacity = 0
+	spawn(20) if (src) opacity = 0
 
 	return ..()
 
@@ -158,82 +158,82 @@
 		machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK | SCREWTOGGLE
 
 /obj/machinery/shieldgen/Destroy()
-	for(var/obj/machinery/shield/shield_tile in deployed_shields)
+	for (var/obj/machinery/shield/shield_tile in deployed_shields)
 		deployed_shields -= shield_tile
 		qdel(shield_tile)
 	..()
 
 
 /obj/machinery/shieldgen/proc/shields_up()
-	if(active)
+	if (active)
 		return 0 //If it's already turned on, how did this get called?
 
 	src.active = 1
 	update_icon()
 
-	for(var/turf/target_tile in range(2, src))
+	for (var/turf/target_tile in range(2, src))
 		if (istype(target_tile,/turf/space) && !(locate(/obj/machinery/shield) in target_tile))
 			if (malfunction && prob(33) || !malfunction)
 				deployed_shields += new /obj/machinery/shield(target_tile)
 
 /obj/machinery/shieldgen/proc/shields_down()
-	if(!active)
+	if (!active)
 		return 0 //If it's already off, how did this get called?
 
 	src.active = 0
 	update_icon()
 
-	for(var/obj/machinery/shield/shield_tile in deployed_shields)
+	for (var/obj/machinery/shield/shield_tile in deployed_shields)
 		deployed_shields -= shield_tile
 		qdel(shield_tile)
 
 /obj/machinery/shieldgen/process()
-	if(malfunction && active)
-		if(deployed_shields.len && prob(5))
+	if (malfunction && active)
+		if (deployed_shields.len && prob(5))
 			qdel(pick(deployed_shields))
 
 /obj/machinery/shieldgen/proc/checkhp()
-	if(health <= 30)
+	if (health <= 30)
 		src.malfunction = 1
-	if(health <= 0)
+	if (health <= 0)
 		qdel(src)
 	update_icon()
 
 /obj/machinery/shieldgen/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			src.health -= 75
 			src.checkhp()
-		if(2.0)
+		if (2.0)
 			src.health -= 30
 			if (prob(15))
 				src.malfunction = 1
 			src.checkhp()
-		if(3.0)
+		if (3.0)
 			src.health -= 10
 			src.checkhp()
 
 /obj/machinery/shieldgen/emp_act(severity)
-	switch(severity)
-		if(1)
+	switch (severity)
+		if (1)
 			src.health /= 2 //cut health in half
 			malfunction = 1
 			locked = pick(0,1)
-		if(2)
-			if(prob(50))
+		if (2)
+			if (prob(50))
 				src.health *= 0.3 //chop off a third of the health
 				malfunction = 1
 	checkhp()
 
 /obj/machinery/shieldgen/attack_ghost(mob/user)
-	if(isAdminGhost(user))
+	if (isAdminGhost(user))
 		src.attack_hand(user)
 
 /obj/machinery/shieldgen/attack_hand(mob/user as mob)
-	if(locked)
+	if (locked)
 		to_chat(user, "The machine is locked, you are unable to use it.")
 		return
-	if(panel_open)
+	if (panel_open)
 		to_chat(user, "The panel must be closed before operating this machine.")
 		return
 
@@ -243,7 +243,7 @@
 			"You hear heavy droning fade out.")
 		src.shields_down()
 	else
-		if(anchored)
+		if (anchored)
 			user.visible_message("<span class='notice'>[bicon(src)] [user] activated the shield generator.</span>", \
 				"<span class='notice'>[bicon(src)] You activate the shield generator.</span>", \
 				"You hear heavy droning.")
@@ -252,32 +252,32 @@
 			to_chat(user, "The [src] must first be secured to the floor.")
 
 /obj/machinery/shieldgen/emag(mob/user)
-	if(!emagged)
+	if (!emagged)
 		malfunction = 1
 		update_icon()
 		return 1
 
 /obj/machinery/shieldgen/wrenchAnchor(mob/user)
-	if(locked)
+	if (locked)
 		to_chat(user, "The bolts are covered, unlocking this would retract the covers.")
 		return
-	if(active)
+	if (active)
 		to_chat(user, "Turn \the [src] off first!")
-	if(panel_open)
+	if (panel_open)
 		to_chat(user, "You have to close \the [src]'s maintenance panel before you can do that.")
 		return
 	return ..()
 
 /obj/machinery/shieldgen/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(..())
+	if (..())
 		return 1
 
-	if(istype(W, /obj/item/stack/cable_coil) && malfunction && panel_open)
+	if (istype(W, /obj/item/stack/cable_coil) && malfunction && panel_open)
 		var/obj/item/stack/cable_coil/coil = W
 		to_chat(user, "<span class='notice'>You begin to replace the wires.</span>")
 		//if(do_after(user, src, min(60, round( ((maxhealth/health)*10)+(malfunction*10) ))) //Take longer to repair heavier damage
-		if(do_after(user, src, 30))
-			if(!src || !coil)
+		if (do_after(user, src, 30))
+			if (!src || !coil)
 				return
 			coil.use(1)
 			health = max_health
@@ -286,8 +286,8 @@
 			update_icon()
 		return
 
-	if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
-		if(src.allowed(user))
+	if (istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
+		if (src.allowed(user))
 			src.locked = !src.locked
 			to_chat(user, "The controls are now [src.locked ? "locked." : "unlocked."]")
 		else
@@ -296,7 +296,7 @@
 
 
 /obj/machinery/shieldgen/update_icon()
-	if(active)
+	if (active)
 		src.icon_state = malfunction ? "shieldonbr":"shieldon"
 	else
 		src.icon_state = malfunction ? "shieldoffbr":"shieldoff"
@@ -332,47 +332,47 @@
 	req_access = null
 
 /obj/machinery/shieldwallgen/proc/power()
-	if(!anchored)
+	if (!anchored)
 		power = 0
 		return 0
 	var/turf/T = src.loc
 
-	if(!T)
+	if (!T)
 		return
 	var/obj/structure/cable/C = T.get_cable_node()
 	var/datum/powernet/PN
-	if(C)
+	if (C)
 		PN = C.powernet		// find the powernet of the connected cable
 
-	if(!PN)
+	if (!PN)
 		power = 0
 		return 0
 
 	var/surplus = max(PN.avail-PN.load, 0)
 	var/shieldload = min(rand(50,200), surplus)
-	if(shieldload==0 && storedpower <= 0)		// no cable or no power, and no power stored
+	if (shieldload==0 && storedpower <= 0)		// no cable or no power, and no power stored
 		power = 0
 		return 0
 	else
 		power = 1	// IVE GOT THE POWER!
-		if(PN) //runtime errors fixer. They were caused by PN.newload trying to access missing network in case of working on stored power.
+		if (PN) //runtime errors fixer. They were caused by PN.newload trying to access missing network in case of working on stored power.
 			storedpower += shieldload
 			PN.load += shieldload //uses powernet power.
 //		message_admins("[PN.load]", 1)
 //		use_power(250) //uses APC power
 
 /obj/machinery/shieldwallgen/attack_hand(mob/user as mob)
-	if(!anchored)
+	if (!anchored)
 		to_chat(user, "<span class='warning'>The shield generator needs to be firmly secured to the floor first.</span>")
 		return 1
-	if(src.locked && !istype(user, /mob/living/silicon))
+	if (src.locked && !istype(user, /mob/living/silicon))
 		to_chat(user, "<span class='warning'>The controls are locked!</span>")
 		return 1
-	if(power != 1)
+	if (power != 1)
 		to_chat(user, "<span class='warning'>The shield generator needs to be powered by wire underneath.</span>")
 		return 1
 
-	if(src.active)
+	if (src.active)
 		src.active = 0
 		icon_state = "Shield_Gen"
 
@@ -391,17 +391,17 @@
 /obj/machinery/shieldwallgen/process()
 	spawn(100)
 		power()
-		if(power)
+		if (power)
 			storedpower -= 50 //this way it can survive longer and survive at all
-	if(storedpower >= maxstoredpower)
+	if (storedpower >= maxstoredpower)
 		storedpower = maxstoredpower
-	if(storedpower <= 0)
+	if (storedpower <= 0)
 		storedpower = 0
-//	if(shieldload >= maxshieldload) //there was a loop caused by specifics of process(), so this was needed.
+//	if (shieldload >= maxshieldload) //there was a loop caused by specifics of process(), so this was needed.
 //		shieldload = maxshieldload
 
-	if(src.active == 1)
-		if(!anchored)
+	if (src.active == 1)
+		if (!anchored)
 			src.active = 0
 			return
 		spawn(1)
@@ -413,8 +413,8 @@
 		spawn(4)
 			setup_field(8)
 		src.active = 2
-	if(src.active == 1)
-		if(src.power == 0)
+	if (src.active == 1)
+		if (src.power == 0)
 			src.visible_message("<span class='warning'>The [src.name] shuts down due to lack of power!</span>", \
 				"You hear heavy droning fade out")
 			icon_state = "Shield_Gen"
@@ -435,36 +435,36 @@
 	var/steps = 0
 	var/oNSEW = 0
 
-	if(!NSEW)//Make sure its ran right
+	if (!NSEW)//Make sure its ran right
 		return
 
-	if(NSEW == 1)
+	if (NSEW == 1)
 		oNSEW = 2
-	else if(NSEW == 2)
+	else if (NSEW == 2)
 		oNSEW = 1
-	else if(NSEW == 4)
+	else if (NSEW == 4)
 		oNSEW = 8
-	else if(NSEW == 8)
+	else if (NSEW == 8)
 		oNSEW = 4
 
-	for(var/dist = 0, dist <= 9, dist += 1) // checks out to 8 tiles away for another generator
+	for (var/dist = 0, dist <= 9, dist += 1) // checks out to 8 tiles away for another generator
 		T = get_step(T2, NSEW)
 		T2 = T
 		steps += 1
-		if(locate(/obj/machinery/shieldwallgen) in T)
+		if (locate(/obj/machinery/shieldwallgen) in T)
 			G = (locate(/obj/machinery/shieldwallgen) in T)
 			steps -= 1
-			if(!G.active)
+			if (!G.active)
 				return
 			G.cleanup(oNSEW)
 			break
 
-	if(isnull(G))
+	if (isnull(G))
 		return
 
 	T2 = src.loc
 
-	for(var/dist = 0, dist < steps, dist += 1) // creates each field tile
+	for (var/dist = 0, dist < steps, dist += 1) // creates each field tile
 		var/field_dir = get_dir(T2,get_step(T2, NSEW))
 		T = get_step(T2, NSEW)
 		T2 = T
@@ -473,23 +473,23 @@
 		CF.dir = field_dir
 
 /obj/machinery/shieldwallgen/wrenchAnchor(mob/user)
-	if(active)
+	if (active)
 		to_chat(user, "Turn off the field generator first.")
 		return
-	if(..())
+	if (..())
 		power()
 		return 1
 
 
 /obj/machinery/shieldwallgen/attack_ghost(mob/user)
-	if(isAdminGhost(user))
+	if (isAdminGhost(user))
 		src.attack_hand(user)
 
 /obj/machinery/shieldwallgen/attackby(obj/item/W, mob/user)
-	if(..())
+	if (..())
 		return 1
 
-	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
+	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if (src.allowed(user))
 			src.locked = !src.locked
 			to_chat(user, "Controls are now [src.locked ? "locked." : "unlocked."]")
@@ -503,13 +503,13 @@
 /obj/machinery/shieldwallgen/proc/cleanup(var/NSEW)
 	var/turf/T = src.loc
 
-	for(var/dist = 0 to 8) // checks out to 8 tiles away for fields
+	for (var/dist = 0 to 8) // checks out to 8 tiles away for fields
 		T = get_step(T, NSEW)
-		for(var/obj/machinery/shieldwall/F in T)
+		for (var/obj/machinery/shieldwall/F in T)
 			qdel(F)
 
-		for(var/obj/machinery/shieldwallgen/G in T)
-			if(!G.active)
+		for (var/obj/machinery/shieldwallgen/G in T)
+			if (!G.active)
 				return
 
 /obj/machinery/shieldwallgen/Destroy()
@@ -545,7 +545,7 @@
 	..()
 	src.gen_primary = A
 	src.gen_secondary = B
-	if(A && B)
+	if (A && B)
 		needs_power = 1
 
 /obj/machinery/shieldwall/Destroy()
@@ -558,24 +558,24 @@
 
 
 /obj/machinery/shieldwall/process()
-	if(needs_power)
-		if(isnull(gen_primary)||isnull(gen_secondary))
+	if (needs_power)
+		if (isnull(gen_primary)||isnull(gen_secondary))
 			qdel(src)
 			return
 
-		if(!(gen_primary.active)||!(gen_secondary.active))
+		if (!(gen_primary.active)||!(gen_secondary.active))
 			qdel(src)
 			return
 
-		if(prob(50))
+		if (prob(50))
 			gen_primary.storedpower -= 10
 		else
 			gen_secondary.storedpower -=10
 
 /obj/machinery/shieldwall/bullet_act(var/obj/item/projectile/Proj)
-	if(needs_power)
+	if (needs_power)
 		var/obj/machinery/shieldwallgen/G
-		if(prob(50))
+		if (prob(50))
 			G = gen_primary
 		else
 			G = gen_secondary
@@ -584,38 +584,38 @@
 
 
 /obj/machinery/shieldwall/ex_act(severity)
-	if(needs_power)
+	if (needs_power)
 		var/obj/machinery/shieldwallgen/G
-		switch(severity)
-			if(1.0) //big boom
-				if(prob(50))
+		switch (severity)
+			if (1.0) //big boom
+				if (prob(50))
 					G = gen_primary
 				else
 					G = gen_secondary
 				G.storedpower -= 200
 
-			if(2.0) //medium boom
-				if(prob(50))
+			if (2.0) //medium boom
+				if (prob(50))
 					G = gen_primary
 				else
 					G = gen_secondary
 				G.storedpower -= 50
 
-			if(3.0) //lil boom
-				if(prob(50))
+			if (3.0) //lil boom
+				if (prob(50))
 					G = gen_primary
 				else
 					G = gen_secondary
 				G.storedpower -= 20
 
 /obj/machinery/shieldwall/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0))
+	if (air_group || (height==0))
 		return 1
 
-	if(!mover)
+	if (!mover)
 		return
 
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if (istype(mover) && mover.checkpass(PASSGLASS))
 		return prob(20)
 	else
 		if (istype(mover, /obj/item/projectile))

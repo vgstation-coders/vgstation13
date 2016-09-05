@@ -28,7 +28,7 @@
 
 /obj/structure/window/full/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if (istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
 	return 0
 
@@ -47,13 +47,13 @@
 	//This way it will only update full-tile ones
 	//This spawn is here so windows get properly updated when one gets deleted.
 	spawn()
-		if(!src)
+		if (!src)
 			return
 		var/junction = 0 //Will be used to determine from which side the window is connected to other windows
-		if(anchored)
-			for(var/obj/structure/window/full/W in orange(src, 1))
-				if(W.anchored && W.density) //Only counts anchored, not-destroyed full-tile windows.
-					if(abs(x-W.x)-abs(y-W.y)) 	//Doesn't count windows, placed diagonally to src
+		if (anchored)
+			for (var/obj/structure/window/full/W in orange(src, 1))
+				if (W.anchored && W.density) //Only counts anchored, not-destroyed full-tile windows.
+					if (abs(x-W.x)-abs(y-W.y)) 	//Doesn't count windows, placed diagonally to src
 						junction |= get_dir(src,W)
 		icon_state = "[base_state][junction]"
 		return

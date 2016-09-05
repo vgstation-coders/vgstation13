@@ -34,7 +34,7 @@ mob/Login()
 
 	var/list/weights = list()
 	var/list/servers = list()
-	for(var/x in global.servers)
+	for (var/x in global.servers)
 
 		to_chat(world, "[x] [servernames[ global.servers.Find(x) ]]")
 
@@ -54,8 +54,8 @@ mob/Login()
 
 	var/lowest = min(weights)
 	var/serverlink
-	for(var/datum/server/S in servers)
-		if(S.weight == lowest)
+	for (var/datum/server/S in servers)
+		if (S.weight == lowest)
 			serverlink = S.link
 
 	to_chat(src, link(serverlink))
@@ -65,7 +65,7 @@ proc/extract(var/data, var/type = PLAYERS)
 
 	var/nextpos = 0
 
-	if(type == PLAYERS)
+	if (type == PLAYERS)
 
 		nextpos = findtextEx(data, player_substr)
 		nextpos += length(player_substr)
@@ -77,10 +77,10 @@ proc/extract(var/data, var/type = PLAYERS)
 
 	var/returnval = ""
 
-	for(var/i = 1, i <= 10, i++)
+	for (var/i = 1, i <= 10, i++)
 
 		var/interval = copytext(data, nextpos + (i-1), nextpos + i)
-		if(interval == "&")
+		if (interval == "&")
 			break
 		else
 			returnval += interval

@@ -30,19 +30,19 @@
 	icon_state = icon_living
 
 /mob/living/simple_animal/hostile/asteroid/bullet_act(var/obj/item/projectile/P)//Reduces damage from most projectiles to curb off-screen kills
-	if(!stat)
+	if (!stat)
 		Aggro()
-	if(P.damage < 30)
+	if (P.damage < 30)
 		P.damage = (P.damage / 2)
 		visible_message("<span class='danger'>The [P] has a reduced effect on [src]!</span>")
 	..()
 
 /mob/living/simple_animal/hostile/asteroid/hitby(atom/movable/AM, speed)//No floor tiling them to death, wiseguy
-	if(istype(AM, /obj/item))
+	if (istype(AM, /obj/item))
 		var/obj/item/T = AM
-		if(!stat)
+		if (!stat)
 			Aggro()
-		if(T.throwforce <= 15 && speed < 10)
+		if (T.throwforce <= 15 && speed < 10)
 			visible_message("<span class='notice'>The [T.name] [src.throw_message] [src.name]!</span>")
 			return
 	..()
@@ -88,10 +88,10 @@
 
 /mob/living/simple_animal/hostile/asteroid/basilisk/GiveTarget(var/new_target)
 	target = new_target
-	if(target != null)
+	if (target != null)
 		Aggro()
 		stance = HOSTILE_STANCE_ATTACK
-		if(isliving(target))
+		if (isliving(target))
 			var/mob/living/L = target
 			L.bodytemperature = max(L.bodytemperature-1,T0C+25)
 			L.apply_damage(5, BURN, null, used_weapon = "Excessive Cold")
@@ -99,20 +99,20 @@
 	return
 
 /mob/living/simple_animal/hostile/asteroid/basilisk/ex_act(severity)
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
 
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			gib()
-		if(2.0)
+		if (2.0)
 			adjustBruteLoss(140)
-		if(3.0)
+		if (3.0)
 			adjustBruteLoss(110)
 
 /mob/living/simple_animal/hostile/asteroid/basilisk/Die()
 	var/counter
-	for(counter=0, counter<2, counter++)
+	for (counter=0, counter<2, counter++)
 		var/obj/item/weapon/ore/diamond/D = new /obj/item/weapon/ore/diamond(src.loc)
 		D.plane = plane
 		D.layer = layer + 0.001
@@ -152,12 +152,12 @@
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/GiveTarget(var/new_target)
 	target = new_target
-	if(target != null)
-		if(istype(target, /obj/item/weapon/ore))
+	if (target != null)
+		if (istype(target, /obj/item/weapon/ore))
 			visible_message("<span class='notice'>The [src.name] looks at [target.name] with hungry eyes.</span>")
 			stance = HOSTILE_STANCE_ATTACK
 			return
-		if(isliving(target))
+		if (isliving(target))
 			Aggro()
 			stance = HOSTILE_STANCE_ATTACK
 			visible_message("<span class='danger'>The [src.name] tries to flee from [target.name]!</span>")
@@ -168,37 +168,37 @@
 	return
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/AttackingTarget()
-	if(istype(target, /obj/item/weapon/ore))
+	if (istype(target, /obj/item/weapon/ore))
 		EatOre(target)
 		return
 	..()
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/proc/EatOre(var/atom/targeted_ore)
-	for(var/obj/item/weapon/ore/O in targeted_ore.loc)
+	for (var/obj/item/weapon/ore/O in targeted_ore.loc)
 		ore_eaten++
-		if(!(O.type in ore_types_eaten))
+		if (!(O.type in ore_types_eaten))
 			ore_types_eaten += O.type
 		qdel(O)
 		O = null
-	if(ore_eaten > 5)//Limit the scope of the reward you can get, or else things might get silly
+	if (ore_eaten > 5)//Limit the scope of the reward you can get, or else things might get silly
 		ore_eaten = 5
 	visible_message("<span class='notice'>The ore was swallowed whole!</span>")
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/proc/Burrow()//Begin the chase to kill the goldgrub in time
-	if(!alerted)
+	if (!alerted)
 		alerted = 1
 		spawn(chase_time)
-		if(alerted)
+		if (alerted)
 			visible_message("<span class='danger'>The [src.name] buries into the ground, vanishing from sight!</span>")
 			qdel(src)
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/proc/Reward()
-	if(!ore_eaten || ore_types_eaten.len == 0)
+	if (!ore_eaten || ore_types_eaten.len == 0)
 		return
 	visible_message("<span class='danger'>[src] spits up the contents of its stomach before dying!</span>")
 	var/counter
-	for(var/R in ore_types_eaten)
-		for(counter=0, counter < ore_eaten, counter++)
+	for (var/R in ore_types_eaten)
+		for (counter=0, counter < ore_eaten, counter++)
 			new R(src.loc)
 	ore_types_eaten.len = 0
 	ore_eaten = 0
@@ -378,7 +378,7 @@
 	size = SIZE_BIG
 
 /mob/living/simple_animal/hostile/asteroid/goliath/OpenFire(atom/ttarget)
-	if(istype(ttarget))
+	if (istype(ttarget))
 		visible_message("<span class='warning'>\The [src] digs its tentacles under \the [ttarget]!</span>")
 
 	playsound(loc, 'sound/weapons/whip.ogg', 50, 1, -1)
@@ -399,7 +399,7 @@
 /obj/effect/goliath_tentacle/New()
 	..()
 	var/turftype = get_turf(src)
-	if(istype(turftype, /turf/unsimulated/mineral))
+	if (istype(turftype, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = turftype
 		M.GetDrilled()
 	spawn(20)
@@ -410,7 +410,7 @@
 /obj/effect/goliath_tentacle/original/New()
 	var/list/directions = cardinal.Copy()
 	var/counter
-	for(counter = 1, counter <= 3, counter++)
+	for (counter = 1, counter <= 3, counter++)
 		var/spawndir = pick(directions)
 		directions -= spawndir
 		var/turf/T = get_step(src,spawndir)
@@ -418,7 +418,7 @@
 	..()
 
 /obj/effect/goliath_tentacle/proc/Trip()
-	for(var/mob/living/M in src.loc)
+	for (var/mob/living/M in src.loc)
 		M.Weaken(5)
 		visible_message("<span class='warning'>The [src.name] knocks [M.name] down!</span>")
 
@@ -427,7 +427,7 @@
 /obj/effect/goliath_tentacle/Crossed(atom/movable/O)
 	..(O)
 
-	if(isliving(O))
+	if (isliving(O))
 		Trip()
 
 /obj/item/asteroid/goliath_hide
@@ -438,11 +438,11 @@
 	w_class = W_CLASS_MEDIUM
 
 /obj/item/asteroid/goliath_hide/afterattack(atom/target, mob/user, proximity_flag)
-	if(proximity_flag)
-		if(istype(target, /obj/item/clothing/suit/space/rig/mining) || istype(target, /obj/item/clothing/head/helmet/space/rig/mining) || istype(target, /obj/item/clothing/suit/space/plasmaman/miner) || istype(target, /obj/item/clothing/head/helmet/space/plasmaman/miner))
+	if (proximity_flag)
+		if (istype(target, /obj/item/clothing/suit/space/rig/mining) || istype(target, /obj/item/clothing/head/helmet/space/rig/mining) || istype(target, /obj/item/clothing/suit/space/plasmaman/miner) || istype(target, /obj/item/clothing/head/helmet/space/plasmaman/miner))
 			var/obj/item/clothing/C = target
 			var/current_armor = C.armor
-			if(current_armor.["melee"] < 90)
+			if (current_armor.["melee"] < 90)
 				current_armor.["melee"] = min(current_armor.["melee"] + 10, 90)
 				to_chat(user, "<span class='info'>You strengthen [target], improving its resistance against melee attacks.</span>")
 				qdel(src)

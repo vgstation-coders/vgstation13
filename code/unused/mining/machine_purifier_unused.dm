@@ -14,7 +14,7 @@
 
 /obj/machinery/mineral/purifier/attack_hand(user as mob)
 
-	if(processing == 1)
+	if (processing == 1)
 		to_chat(user, "The machine is processing")
 		return
 
@@ -36,16 +36,16 @@
 	user << browse("[dat]", "window=purifier")
 
 /obj/machinery/mineral/purifier/Topic(href, href_list)
-	if(..())
+	if (..())
 		return
 	usr.machine = src
 	src.add_fingerprint(usr)
-	if(href_list["purify"])
+	if (href_list["purify"])
 		if (src.output)
 			processing = 1;
 			var/obj/item/weapon/ore/O
 			processed = 0;
-			while(locate(/obj/item/weapon/ore, input.loc))
+			while (locate(/obj/item/weapon/ore, input.loc))
 				O = locate(/obj/item/weapon/ore, input.loc)
 				if (istype(O,/obj/item/weapon/ore/iron))
 					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(output))
@@ -81,11 +81,11 @@
 	spawn( 5 )
 		for (var/dir in cardinal)
 			src.input = locate(/obj/machinery/mineral/input, get_step(src, dir))
-			if(src.input)
+			if (src.input)
 				break
 		for (var/dir in cardinal)
 			src.output = locate(/obj/machinery/mineral/output, get_step(src, dir))
-			if(src.output)
+			if (src.output)
 				break
 		return
 	return

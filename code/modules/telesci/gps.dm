@@ -24,7 +24,7 @@ var/list/SPS_list = list()
 	name = "global positioning system ([gpstag])"
 
 /obj/item/device/gps/Destroy()
-	if(istype(src,/obj/item/device/gps/secure))
+	if (istype(src,/obj/item/device/gps/secure))
 		SPS_list.Remove(src)
 	else
 		GPS_list.Remove(src)
@@ -42,25 +42,25 @@ var/list/SPS_list = list()
 /obj/item/device/gps/attack_self(mob/user as mob)
 	var/obj/item/device/gps/t = ""
 	var/list/locallist = null
-	if(istype(src,/obj/item/device/gps/secure))
+	if (istype(src,/obj/item/device/gps/secure))
 		locallist = SPS_list.Copy()
 	else
 		locallist = GPS_list.Copy()
-	if(emped)
+	if (emped)
 		t += "ERROR"
 	else
 		t += "<BR><A href='?src=\ref[src];tag=1'>Set Tag</A> "
 		t += "<BR>Tag: [gpstag]"
 
-		for(var/obj/item/device/gps/G in locallist)
+		for (var/obj/item/device/gps/G in locallist)
 			var/turf/pos = get_turf(G)
 			var/area/gps_area = get_area(G)
 			var/tracked_gpstag = G.gpstag
-			if(G.emped == 1)
+			if (G.emped == 1)
 				t += "<BR>[tracked_gpstag]: ERROR"
-			else if(!pos || !gps_area)
+			else if (!pos || !gps_area)
 				t += "<BR>[tracked_gpstag]: UNKNOWN"
-			else if(pos.z > WORLD_X_OFFSET.len)
+			else if (pos.z > WORLD_X_OFFSET.len)
 				t += "<BR>[tracked_gpstag]: [format_text(gps_area.name)] (UNKNOWN, UNKNOWN, UNKNOWN)"
 			else
 				t += "<BR>[tracked_gpstag]: [format_text(gps_area.name)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z])"
@@ -78,7 +78,7 @@ var/list/SPS_list = list()
 
 /obj/item/device/gps/Topic(href, href_list)
 	..()
-	if(href_list["tag"])
+	if (href_list["tag"])
 		if (isobserver(usr))
 			to_chat(usr, "No way.")
 			return
@@ -94,7 +94,7 @@ var/list/SPS_list = list()
 			to_chat(usr, "<span class = 'caution'>The GPS needs to be kept in your active hand!</span>")
 			return
 		a = copytext(sanitize(a), 1, 20)
-		if(length(a) != 4)
+		if (length(a) != 4)
 			to_chat(usr, "<span class = 'caution'>The tag must be four letters long!</span>")
 			return
 
@@ -136,26 +136,26 @@ var/global/secure_GPS_count = 0
 
 
 /obj/item/device/gps/secure/OnMobDeath(mob/wearer as mob)
-	if(emped)
+	if (emped)
 		return
 
-	for(var/E in SPS_list)
+	for (var/E in SPS_list)
 		var/obj/item/device/gps/secure/S  = E //No idea why casting it like this makes it work better instead of just defining it in the for each
 		S.announce(wearer, src, "has detected the death of their wearer")
 
 /obj/item/device/gps/secure/stripped(mob/wearer as mob)
-	if(emped)
+	if (emped)
 		return
 	.=..()
 
-	for(var/E in SPS_list)
+	for (var/E in SPS_list)
 		var/obj/item/device/gps/secure/S  = E
 		S.announce(wearer, src, "has been stripped from their wearer")
 
 /obj/item/device/gps/secure/proc/announce(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/reason)
 	var/turf/pos = get_turf(SPS)
 	var/mob/living/L = get_holder_of_type(src, /mob/living/)
-	if(L)
+	if (L)
 		L.show_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! SPS '[SPS.gpstag]' [reason] at [get_area(SPS)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z]).</span>", MESSAGE_HEAR)
-	else if(isturf(src.loc))
+	else if (isturf(src.loc))
 		src.visible_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! SPS '[SPS.gpstag]' [reason] at [get_area(SPS)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z]).</span>")

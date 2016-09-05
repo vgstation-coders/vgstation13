@@ -21,7 +21,7 @@
 //////CUT OPEN///////
 /datum/surgery_step/eye/cut_open/tool_quality(obj/item/tool)
 	. = ..()
-	if(!tool.is_sharp())
+	if (!tool.is_sharp())
 		return 0
 
 /datum/surgery_step/eye/cut_open
@@ -125,7 +125,7 @@
 
 //////CAUTERIZE///////
 /datum/surgery_step/eye/cauterize/tool_quality(obj/item/tool)
-	if(tool.is_hot())
+	if (tool.is_hot())
 		for (var/T in allowed_tools)
 			if (istype(tool,T))
 				return allowed_tools[T]

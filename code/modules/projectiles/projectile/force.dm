@@ -13,8 +13,8 @@
 
 	var/obj/T = target
 	var/throwdir = get_dir(firer,target)
-	if(prob(50))
-		if(istype(target, /mob/living/carbon/))
+	if (prob(50))
+		if (istype(target, /mob/living/carbon/))
 			var/mob/living/carbon/MM = target
 			MM.apply_effect(1, WEAKEN)
 			to_chat(MM, "<span class='warning'>The force knocks you off your feet!</span>")
@@ -27,13 +27,13 @@
 	// NONE OF THIS WORKS. DO NOT USE.
 	var/throwdir = null
 
-	for(var/mob/M in hearers(1, src))
-		if(M == firer)
+	for (var/mob/M in hearers(1, src))
+		if (M == firer)
 			continue
-		if(M.loc != src.loc)
+		if (M.loc != src.loc)
 			throwdir = get_dir(src,target)
-			if(prob(75))
-				if(istype(M, /mob/living/carbon/))
+			if (prob(75))
+				if (istype(M, /mob/living/carbon/))
 					var/mob/living/carbon/MM = M
 					MM.apply_effect(2, WEAKEN)
 					to_chat(MM, "<span class='warning'>The force knocks you off your feet!</span>")

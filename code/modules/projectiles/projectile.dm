@@ -111,38 +111,38 @@ var/list/impact_master = list()
 	..()
 	initial_pixel_x = pixel_x
 	initial_pixel_y = pixel_y
-	if(superspeed)
+	if (superspeed)
 		super_speed = 1
 
 /obj/item/projectile/New()
 	..()
-	if(superspeed)
+	if (superspeed)
 		super_speed = 1
 
 /obj/item/projectile/proc/on_hit(var/atom/atarget, var/blocked = 0)
-	if(blocked >= 2)
+	if (blocked >= 2)
 		return 0//Full block
-	if(!isliving(atarget))
+	if (!isliving(atarget))
 		return 0
 	// FUCK mice. - N3X
-	if(ismouse(atarget) && (stun+weaken+paralyze+agony)>5)
+	if (ismouse(atarget) && (stun+weaken+paralyze+agony)>5)
 		var/mob/living/simple_animal/mouse/M=atarget
 		to_chat(M, "<span class='warning'>What would probably not kill a human completely overwhelms your tiny body.</span>")
 		M.splat()
 		return 1
-	if(isanimal(atarget))
+	if (isanimal(atarget))
 		return 0
 	var/mob/living/L = atarget
-	if(L.flags & INVULNERABLE)
+	if (L.flags & INVULNERABLE)
 		return 0
 	L.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked) // add in AGONY!
-	if(jittery)
+	if (jittery)
 		L.Jitter(jittery)
 	playsound(loc, hitsound, 35, 1)
 	return 1
 
 /obj/item/projectile/proc/check_fire(var/mob/living/target as mob, var/mob/living/user as mob)  //Checks if you can hit them or not.
-	if(!istype(target) || !istype(user))
+	if (!istype(target) || !istype(user))
 		return 0
 	var/obj/item/projectile/test/in_chamber = getFromPool(/obj/item/projectile/test, get_step_to(user, target)) //Making the test....
 	in_chamber.target = target
@@ -156,20 +156,20 @@ var/list/impact_master = list()
 	return output //Send it back to the gun!
 
 /obj/item/projectile/resetVariables()
-	if(!istype(permutated,/list))
+	if (!istype(permutated,/list))
 		permutated = list()
 	else
 		permutated.len = 0
 	..("permutated")
 
 /obj/item/projectile/proc/admin_warn(mob/living/M)
-	if(istype(firer, /mob))
-		if(firer == M)
+	if (istype(firer, /mob))
+		if (firer == M)
 			log_attack("<font color='red'>[key_name(firer)] shot himself with a [type].</font>")
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot himself with a <b>[type]</b>"
 			firer.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot himself with a <b>[type]</b>"
 			msg_admin_attack("[key_name(firer)] shot himself with a [type], [pick("top kek!","for shame.","he definitely meant to do that","probably not the last time either.")] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)")
-			if(!iscarbon(firer))
+			if (!iscarbon(firer))
 				M.LAssailant = null
 			else
 				M.LAssailant = firer
@@ -178,7 +178,7 @@ var/list/impact_master = list()
 			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			firer.attack_log += "\[[time_stamp()]\] <b>[key_name(firer)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
 			msg_admin_attack("[key_name(firer)] shot [key_name(M)] with a [type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)")
-			if(!iscarbon(firer))
+			if (!iscarbon(firer))
 				M.LAssailant = null
 			else
 				M.LAssailant = firer
@@ -190,18 +190,18 @@ var/list/impact_master = list()
 /obj/item/projectile/Bump(atom/A as mob|obj|turf|area)
 	if (!A)	//This was runtiming if by chance A was null.
 		return 0
-	if((A == firer) && !reflected)
+	if ((A == firer) && !reflected)
 		loc = A.loc
 		return 0 //cannot shoot yourself, unless an ablative armor sent back the projectile
 
-	if(bumped)
+	if (bumped)
 		return 0
 	var/forcedodge = 0 // force the projectile to pass
 
 	bumped = 1
-	if(firer && istype(A, /mob))
+	if (firer && istype(A, /mob))
 		var/mob/M = A
-		if(!istype(A, /mob/living))
+		if (!istype(A, /mob/living))
 			loc = A.loc
 			return 0// nope.avi
 
@@ -213,71 +213,71 @@ var/list/impact_master = list()
 			var/obj/item/weapon/gun/daddy = shot_from //Kinda balanced by fact you need like 2 seconds to aim
 			if (daddy.target && original in daddy.target) //As opposed to no-delay pew pew
 				miss_modifier += -30
-		if(istype(src, /obj/item/projectile/beam/lightning)) //Lightning is quite accurate
+		if (istype(src, /obj/item/projectile/beam/lightning)) //Lightning is quite accurate
 			miss_modifier += -200
-			if(inaccurate)
+			if (inaccurate)
 				miss_modifier += (abs(miss_modifier))
 			def_zone = get_zone_with_miss_chance(def_zone, M, miss_modifier)
 			var/turf/simulated/floor/f = get_turf(A.loc)
-			if(f && istype(f))
+			if (f && istype(f))
 				f.break_tile()
 				f.hotspot_expose(1000,CELL_VOLUME,surfaces=1)
 		else
-			if(inaccurate)
+			if (inaccurate)
 				miss_modifier += 8*distance
 				miss_modifier += (abs(miss_modifier))
 
 			def_zone = get_zone_with_miss_chance(def_zone, M, miss_modifier)
 
-		if(!def_zone)
+		if (!def_zone)
 			visible_message("<span class='notice'>\The [src] misses [M] narrowly!</span>")
 			forcedodge = -1
 		else
-			if(!custom_impact)
-				if(silenced)
+			if (!custom_impact)
+				if (silenced)
 					to_chat(M, "<span class='warning'>You've been shot in the [parse_zone(def_zone)] by the [src.name]!</span>")
 				else
 					visible_message("<span class='warning'>[A.name] is hit by the [src.name] in the [parse_zone(def_zone)]!</span>")//X has fired Y is now given by the guns so you cant tell who shot you if you could not see the shooter
 			admin_warn(M)
-			if(istype(firer, /mob))
-				if(!iscarbon(firer))
+			if (istype(firer, /mob))
+				if (!iscarbon(firer))
 					M.LAssailant = null
 				else
 					M.LAssailant = firer
 
-	if(!A)
+	if (!A)
 		return 1
 
-	if(A)
-		if(firer && istype(A, /obj/structure/bed/chair/vehicle))//This is very sloppy but there's no way to get the firer after its passed to bullet_act, we'll just have to assume the admins will use their judgement
+	if (A)
+		if (firer && istype(A, /obj/structure/bed/chair/vehicle))//This is very sloppy but there's no way to get the firer after its passed to bullet_act, we'll just have to assume the admins will use their judgement
 			var/obj/structure/bed/chair/vehicle/JC = A
-			if(JC.occupant)
+			if (JC.occupant)
 				var/mob/BM = JC.occupant
-				if(istype(firer, /mob))
+				if (istype(firer, /mob))
 					admin_warn(BM)
-					if(!iscarbon(firer))
+					if (!iscarbon(firer))
 						BM.LAssailant = null
 				else
 					BM.LAssailant = firer
 	if (!forcedodge)
 		forcedodge = A.bullet_act(src, def_zone) // searches for return value
-	if(forcedodge == -1) // the bullet passes through a dense object!
+	if (forcedodge == -1) // the bullet passes through a dense object!
 		bumped = 0 // reset bumped variable!
 
-		if(istype(A, /turf))
+		if (istype(A, /turf))
 			loc = A
 		else
 			loc = A.loc
 
-		if(permutated)
+		if (permutated)
 			permutated.Add(A)
 
 		return 0
-	else if(!custom_impact)
+	else if (!custom_impact)
 		var/impact_icon = null
 		var/impact_sound = null
-		if(ismob(A))
-			if(issilicon(A))
+		if (ismob(A))
+			if (issilicon(A))
 				impact_icon = "default_solid"
 				impact_sound = 'sound/items/metal_impact.ogg'
 			else
@@ -288,14 +288,14 @@ var/list/impact_master = list()
 			impact_sound = 'sound/items/metal_impact.ogg'
 		var/PixelX = 0
 		var/PixelY = 0
-		switch(get_dir(src,A))
-			if(NORTH)
+		switch (get_dir(src,A))
+			if (NORTH)
 				PixelY = WORLD_ICON_SIZE/2
-			if(SOUTH)
+			if (SOUTH)
 				PixelY = -WORLD_ICON_SIZE/2
-			if(EAST)
+			if (EAST)
 				PixelX = WORLD_ICON_SIZE/2
-			if(WEST)
+			if (WEST)
 				PixelX = -WORLD_ICON_SIZE/2
 
 		var/image/impact = image('icons/obj/projectiles_impacts.dmi',loc,impact_icon)
@@ -303,7 +303,7 @@ var/list/impact_master = list()
 		impact.pixel_y = PixelY
 
 		var/turf/T = src.loc
-		if(T) //Trying to fix a runtime that happens when a flare hits a window, T somehow becomes null.
+		if (T) //Trying to fix a runtime that happens when a flare hits a window, T somehow becomes null.
 			T.overlays += impact
 
 			spawn(3)
@@ -311,38 +311,38 @@ var/list/impact_master = list()
 
 			playsound(T, impact_sound, 30, 1)
 
-	if(istype(A,/turf))
-		for(var/obj/O in A)
+	if (istype(A,/turf))
+		for (var/obj/O in A)
 			O.bullet_act(src)
-		for(var/mob/M in A)
+		for (var/mob/M in A)
 			M.bullet_act(src, def_zone)
 
-	if(!A)
+	if (!A)
 		return 1
 
 	//the bullets first checks if it can bounce off the obstacle, and if it cannot it then checks if it can phase through it, if it cannot either then it dies.
 	var/reaction_type = A.projectile_check()
-	if(bounces && (bounce_type & reaction_type))
+	if (bounces && (bounce_type & reaction_type))
 		rebound(A)
 		bounces--
 		return 1
-	else if(penetration && (phase_type & reaction_type))
-		if((penetration > 0) && (penetration < A.penetration_dampening))	//if the obstacle is too resistant, we don't go through it.
+	else if (penetration && (phase_type & reaction_type))
+		if ((penetration > 0) && (penetration < A.penetration_dampening))	//if the obstacle is too resistant, we don't go through it.
 			penetration = 0
 			bullet_die()
 			return 1
-		if(penetration_message)
+		if (penetration_message)
 			A.visible_message("<span class='warning'>\The [src] goes right through \the [A]!</span>")
 		src.forceMove(get_step(src.loc,dir))
-		if(linear_movement)
+		if (linear_movement)
 			update_pixel()
 			pixel_x = PixelX
 			pixel_y = PixelY
-		if(penetration > 0)//a negative penetration value means that the projectile can keep moving through obstacles
+		if (penetration > 0)//a negative penetration value means that the projectile can keep moving through obstacles
 			penetration = max(0, penetration - A.penetration_dampening)
-		if(isturf(A))				//if the bullet goes through a wall, we leave a nice mark on it
+		if (isturf(A))				//if the bullet goes through a wall, we leave a nice mark on it
 			damage -= (damage/4)	//and diminish the bullet's damage a bit
-			if(!destroy)//destroying projectiles don't leave marks, as they would then appear on the resulting plating.
+			if (!destroy)//destroying projectiles don't leave marks, as they would then appear on the resulting plating.
 				var/turf/T = A
 				T.bullet_marks++
 				var/icon/I = icon(T.icon, T.icon_state)
@@ -357,10 +357,10 @@ var/list/impact_master = list()
 	return 1
 
 /obj/item/projectile/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0))
+	if (air_group || (height==0))
 		return 1
 
-	if(istype(mover, /obj/item/projectile))
+	if (istype(mover, /obj/item/projectile))
 		return prob(95)
 	else
 		return 1
@@ -388,19 +388,19 @@ var/list/impact_master = list()
 	else
 		dy = SOUTH
 
-	if(dist_x > dist_y)
+	if (dist_x > dist_y)
 		error = dist_x/2 - dist_y
 	else
 		error = dist_y/2 - dist_x
 
-	if(!rotate)
+	if (!rotate)
 		return 1
 
 	target_angle = round(Get_Angle(starting,target))
 
-	if(linear_movement)
+	if (linear_movement)
 		//If the icon has not been added yet
-		if( !("[icon_state]_angle[target_angle]" in bullet_master) )
+		if ( !("[icon_state]_angle[target_angle]" in bullet_master) )
 			var/icon/I = new(icon,"[icon_state]_pixel") //Generate it.
 			I.Turn(target_angle+45)
 			bullet_master["[icon_state]_angle[target_angle]"] = I //And cache it!
@@ -410,12 +410,12 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/process_step()
 	var/sleeptime = 1
-	if(src.loc)
-		if(dist_x > dist_y)
+	if (src.loc)
+		if (dist_x > dist_y)
 			sleeptime = bresenham_step(dist_x,dist_y,dx,dy)
 		else
 			sleeptime = bresenham_step(dist_y,dist_x,dy,dx)
-		if(linear_movement)
+		if (linear_movement)
 			update_pixel()
 			pixel_x = PixelX
 			pixel_y = PixelY
@@ -428,11 +428,11 @@ var/list/impact_master = list()
 
 
 /obj/item/projectile/proc/bresenham_step(var/distA, var/distB, var/dA, var/dB)
-	if(!superspeed)
+	if (!superspeed)
 		return make_bresenham_step(distA, distB, dA, dB)
 	else
-		if(make_bresenham_step(distA, distB, dA, dB))
-			if(super_speed)
+		if (make_bresenham_step(distA, distB, dA, dB))
+			if (super_speed)
 				super_speed = 0
 				return 1
 			else
@@ -442,16 +442,16 @@ var/list/impact_master = list()
 			return 0
 
 /obj/item/projectile/proc/make_bresenham_step(var/distA, var/distB, var/dA, var/dB)
-	if(step_delay)
+	if (step_delay)
 		sleep(step_delay)
-	if(kill_count < 1)
+	if (kill_count < 1)
 		bullet_die()
 		return 1
 	kill_count--
 	total_steps++
-	if(error < 0)
+	if (error < 0)
 		var/atom/step = get_step(src, dB)
-		if(!step)
+		if (!step)
 			bullet_die()
 		src.Move(step)
 		error += distA
@@ -459,37 +459,37 @@ var/list/impact_master = list()
 		return 0//so that bullets going in diagonals don't move twice slower
 	else
 		var/atom/step = get_step(src, dA)
-		if(!step)
+		if (!step)
 			bullet_die()
 		src.Move(step)
 		error -= distB
 		dir = dA
-		if(error < 0)
+		if (error < 0)
 			dir = dA + dB
 		bump_original_check()
 		return 1
 
 /obj/item/projectile/proc/update_pixel()
-	if(src && starting && target)
+	if (src && starting && target)
 		var/AX = (override_starting_X - src.x)*WORLD_ICON_SIZE
 		var/AY = (override_starting_Y - src.y)*WORLD_ICON_SIZE
 		var/BX = (override_target_X - src.x)*WORLD_ICON_SIZE
 		var/BY = (override_target_Y - src.y)*WORLD_ICON_SIZE
 		var/XXcheck = ((BX-AX)*(BX-AX))+((BY-AY)*(BY-AY))
-		if(!XXcheck)
+		if (!XXcheck)
 			return
 		var/XX = (((BX-AX)*(-BX))+((BY-AY)*(-BY)))/XXcheck
 
 		PixelX = round(BX+((BX-AX)*XX))
 		PixelY = round(BY+((BY-AY)*XX))
-		switch(last_bump)
-			if(NORTH)
+		switch (last_bump)
+			if (NORTH)
 				PixelY -= 16
-			if(SOUTH)
+			if (SOUTH)
 				PixelY += 16
-			if(EAST)
+			if (EAST)
 				PixelX -= 16
-			if(WEST)
+			if (WEST)
 				PixelX += 16
 
 		PixelX += initial_pixel_x
@@ -502,9 +502,9 @@ var/list/impact_master = list()
 		returnToPool(src)
 
 /obj/item/projectile/proc/bump_original_check()
-	if(!bumped && !isturf(original))
-		if(loc == get_turf(original))
-			if(!(original in permutated))
+	if (!bumped && !isturf(original))
+		if (loc == get_turf(original))
+			if (!(original in permutated))
 				Bump(original)
 				return 1//so laser beams visually stop when they hit their target
 	return 0
@@ -512,46 +512,46 @@ var/list/impact_master = list()
 /obj/item/projectile/process()
 	var/first = 1
 	var/tS = 0
-	spawn while(loc)
-		if(first && timestopped)
+	spawn while (loc)
+		if (first && timestopped)
 			tS = 1
 			timestopped = 0
-		while((loc.timestopped || timestopped) && !first)
+		while ((loc.timestopped || timestopped) && !first)
 			sleep(3)
 		first = 0
 		src.process_step()
-		if(tS)
+		if (tS)
 			timestopped = loc.timestopped
 			tS = 0
 	return
 
 /obj/item/projectile/proc/dumbfire(var/dir) // for spacepods, go snowflake go
-	if(!dir)
+	if (!dir)
 		//del(src)
 		OnDeath()
 		returnToPool(src)
-	if(kill_count < 1)
+	if (kill_count < 1)
 		//del(src)
 		OnDeath()
 		returnToPool(src)
 	kill_count--
 	var/first = 1
 	var/tS = 0
-	spawn while(loc)
-		if(first && timestopped)
+	spawn while (loc)
+		if (first && timestopped)
 			tS = 1
 			timestopped = 0
 		var/turf/T = get_step(src, dir)
 		step_towards(src, T)
-		if(!bumped && !isturf(original))
-			if(loc == get_turf(original))
-				if(!(original in permutated))
+		if (!bumped && !isturf(original))
+			if (loc == get_turf(original))
+				if (!(original in permutated))
 					Bump(original)
 					sleep(1)
-		while((loc.timestopped || timestopped) && !first)
+		while ((loc.timestopped || timestopped) && !first)
 			sleep(3)
 		first = 0
-		if(tS)
+		if (tS)
 			timestopped = loc.timestopped
 			tS = 0
 		sleep(1)
@@ -565,32 +565,32 @@ var/list/impact_master = list()
 	var/turf/W = get_turf(A)
 	playsound(T, bounce_sound, 30, 1)
 	var/orientation = SOUTH
-	if(T == W)
+	if (T == W)
 		orientation = dir
 	else
 		orientation = get_dir(T,W)
 	last_bump = orientation
-	switch(orientation)
-		if(NORTH)
+	switch (orientation)
+		if (NORTH)
 			dy = SOUTH
 			override_starting_Y = (W.y * 2) - override_starting_Y
 			override_target_Y = (W.y * 2) - override_target_Y
-		if(SOUTH)
+		if (SOUTH)
 			dy = NORTH
 			override_starting_Y = (W.y * 2) - override_starting_Y
 			override_target_Y = (W.y * 2) - override_target_Y
-		if(EAST)
+		if (EAST)
 			dx = WEST
 			override_starting_X = (W.x * 2) - override_starting_X
 			override_target_X = (W.x * 2) - override_target_X
-		if(WEST)
+		if (WEST)
 			dx = EAST
 			override_starting_X = (W.x * 2) - override_starting_X
 			override_target_X = (W.x * 2) - override_target_X
 	var/newdiffX = override_target_X - override_starting_X
 	var/newdiffY = override_target_Y - override_starting_Y
 
-	if(!W)
+	if (!W)
 		W = T
 	override_starting_X = W.x
 	override_starting_Y = W.y
@@ -602,25 +602,25 @@ var/list/impact_master = list()
 	var/newangle
 	disty = (WORLD_ICON_SIZE * override_target_Y)-(WORLD_ICON_SIZE * override_starting_Y)
 	distx = (WORLD_ICON_SIZE * override_target_X)-(WORLD_ICON_SIZE * override_starting_X)
-	if(!disty)
-		if(distx >= 0)
+	if (!disty)
+		if (distx >= 0)
 			newangle = 90
 		else
 			newangle = 270
 	else
 		newangle = arctan(distx/disty)
-		if(disty < 0)
+		if (disty < 0)
 			newangle += 180
-		else if(distx < 0)
+		else if (distx < 0)
 			newangle += 360
 
-	if(!rotate)
+	if (!rotate)
 		return
 
 	target_angle = round(newangle)
 
-	if(linear_movement)
-		if( !("[icon_state][target_angle]" in bullet_master) )
+	if (linear_movement)
+		if ( !("[icon_state][target_angle]" in bullet_master) )
 			var/icon/I = new(initial(icon),"[icon_state]_pixel")
 			I.Turn(target_angle+45)
 			bullet_master["[icon_state]_angle[target_angle]"] = I
@@ -634,12 +634,12 @@ var/list/impact_master = list()
 	var/result = 0 //To pass the message back to the gun.
 
 /obj/item/projectile/test/Bump(atom/A as mob|obj|turf|area)
-	if(A == firer)
+	if (A == firer)
 		loc = A.loc
 		return //cannot shoot yourself
-	if(istype(A, /obj/item/projectile))
+	if (istype(A, /obj/item/projectile))
 		return
-	if(istype(A, /mob/living))
+	if (istype(A, /mob/living))
 		result = 2 //We hit someone, return 1!
 		return
 	result = 1
@@ -648,24 +648,24 @@ var/list/impact_master = list()
 /obj/item/projectile/test/process()
 	var/turf/curloc = get_turf(src)
 	var/turf/targloc = get_turf(ttarget)
-	if(!curloc || !targloc)
+	if (!curloc || !targloc)
 		return 0
 	yo = targloc.y - curloc.y
 	xo = targloc.x - curloc.x
 	target = targloc
-	while(loc) //Loop on through!
-		if(result)
+	while (loc) //Loop on through!
+		if (result)
 			return (result - 1)
 
 		var/mob/living/M = locate() in get_turf(src)
-		if(istype(M)) //If there is someting living...
+		if (istype(M)) //If there is someting living...
 			return 1 //Return 1
 		else
 			M = locate() in get_step(src,ttarget)
-			if(istype(M))
+			if (istype(M))
 				return 1
 
-		if((!( ttarget ) || loc == ttarget))
+		if ((!( ttarget ) || loc == ttarget))
 			ttarget = locate(min(max(x + xo, 1), world.maxx), min(max(y + yo, 1), world.maxy), z) //Finding the target turf at map edge
 		step_towards(src, ttarget)
 
@@ -673,7 +673,7 @@ var/list/impact_master = list()
 	return
 
 /obj/item/projectile/attack_hand(mob/user)
-	if(timestopped)
+	if (timestopped)
 		..()
 
 /obj/item/projectile/friendlyCheck
@@ -685,26 +685,26 @@ var/list/impact_master = list()
 
 /obj/item/projectile/friendlyCheck/process()
 	OnFired()
-	while(!impact && loc && (kill_count > 0))
-		if(dist_x > dist_y)
+	while (!impact && loc && (kill_count > 0))
+		if (dist_x > dist_y)
 			bresenham_step(dist_x,dist_y,dx,dy)
 		else
 			bresenham_step(dist_y,dist_x,dy,dx)
 	return impact
 
 /obj/item/projectile/proc/get_hit_atom(var/atom/A)
-	if(istype(A, /obj/structure/bed/chair/vehicle))
+	if (istype(A, /obj/structure/bed/chair/vehicle))
 		var/obj/structure/bed/chair/vehicle/JC = A
-		if(JC.occupant)
+		if (JC.occupant)
 			return JC.occupant
 	return A
 
 /obj/item/projectile/friendlyCheck/Bump(var/atom/A)
-	if(bumped)
+	if (bumped)
 		return 0
 	bumped = 1
 
-	if(ismob(A) || isturf(A) || isobj(A))
+	if (ismob(A) || isturf(A) || isobj(A))
 		impact = get_hit_atom(A)
 
 /obj/item/projectile/acidable()

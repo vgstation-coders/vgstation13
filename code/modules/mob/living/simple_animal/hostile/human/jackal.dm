@@ -53,19 +53,19 @@
 	melee_damage_upper = 50
 
 /mob/living/simple_animal/hostile/humanoid/jackal/embalmer/AttackingTarget()
-	if(!ismob(target))
+	if (!ismob(target))
 		return
 
 	visible_message("<span class='danger'>\The [src] performs a ritual over \the [target]'s body.</span>")
 
-	if(prob(15))
+	if (prob(15))
 		var/mob/living/L = target
 
 		var/mob/living/simple_animal/hostile/humanoid/mummy/M = new(get_turf(L))
 
 		M.ckey = ckey(L.key)
 		M.mind = L.mind
-		if(M.mind)
+		if (M.mind)
 			M.mind.current = M
 
 		to_chat(M, "<span class='danger'>You are a mummy under the service of \the [src]. Protect your master and destroy any invaders that dare step foot into this place.</span>")

@@ -29,20 +29,20 @@
 /datum/circuits/New(var/atom/homeboard)
 	..()
 	holder = homeboard
-	if(!(assigned_boards.len))
+	if (!(assigned_boards.len))
 		generate_schema()
 
 /datum/circuits/proc/generate_schema()
-	for(var/C in possible_boards)
+	for (var/C in possible_boards)
 		var/newbit = newhash(CHOOSE_FUSES)
-		while(!check_config(newbit))
+		while (!check_config(newbit))
 			newbit = newhash(CHOOSE_FUSES)
 		assigned_boards["[newbit]"] = C
 	return
 
 /datum/circuits/proc/check_config(var/proposed)
-	for(var/bitflag in assigned_boards)
-		if(text2num(proposed) == text2num(bitflag))
+	for (var/bitflag in assigned_boards)
+		if (text2num(proposed) == text2num(bitflag))
 			return 0
 	return 1
 
@@ -50,7 +50,7 @@
 	var/list/fuse_point_list = list(ALPHA,BETA,GAMMA,DELTA,ETA,THETA,IOTA)
 	var/build = 0
 	var/choice = null
-	while(choose>0)
+	while (choose>0)
 		choice = pick_n_take(fuse_point_list)
 		build |= choice
 		choose--
@@ -69,12 +69,12 @@
 	return
 
 /datum/circuits/proc/Interact(var/mob/living/user)
-	if(!istype(user))
+	if (!istype(user))
 		return 0
 	var/html = null
-	if(holder)
+	if (holder)
 		html = GetInteractWindow()
-	if(html)
+	if (html)
 		user.set_machine(holder)
 	var/datum/browser/popup = new(user, "circuits", holder.name, window_x, window_y)
 	popup.set_content(html)
@@ -86,7 +86,7 @@
 	html += "<h3>Protoboard</h3>"
 	html += "<table[table_options]>"
 
-	for(var/fusepoint in fuse_point_names)
+	for (var/fusepoint in fuse_point_names)
 		html += {"<tr>
 		<td[row_options1]><font color='blue'>[fusepoint]</font>
 		</td>
@@ -98,18 +98,18 @@
 	return html
 
 /datum/circuits/Topic(href, href_list)
-	if(..())
+	if (..())
 		return 1
-	if(in_range(holder, usr) && isliving(usr))
+	if (in_range(holder, usr) && isliving(usr))
 
 		var/mob/living/L = usr
-		if(href_list["action"])
+		if (href_list["action"])
 			var/obj/item/I = L.get_active_hand()
 			holder.add_hiddenprint(L)
-			if(href_list["fuse"]) // Toggles the fuse/unfuse status
-				if(issolder(I))
+			if (href_list["fuse"]) // Toggles the fuse/unfuse status
+				if (issolder(I))
 					var/obj/item/weapon/solder/S = I
-					if(S.remove_fuel(1,L))
+					if (S.remove_fuel(1,L))
 						playsound(L.loc, 'sound/items/Welder.ogg', 25, 1)
 						var/greek = href_list["fuse"]
 						togglefuse(text2num(greek))
@@ -118,6 +118,6 @@
 
 			Interact(usr) //Update
 
-	if(href_list["close"])
+	if (href_list["close"])
 		usr << browse(null, "window=wires")
 		usr.unset_machine(holder)

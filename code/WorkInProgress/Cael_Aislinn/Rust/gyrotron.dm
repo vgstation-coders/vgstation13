@@ -21,7 +21,7 @@
 	active_power_usage = 100000 //Yes that is a shitton. No you're not running this engine on an SE/AME you SE/AME scrubs.
 
 /obj/machinery/rust/gyrotron/initialize()
-	if(!id_tag)
+	if (!id_tag)
 		assign_uid()
 		id_tag = uid
 
@@ -30,7 +30,7 @@
 /obj/machinery/rust/gyrotron/New()
 	. = ..()
 
-	if(ticker)
+	if (ticker)
 		initialize()
 
 /obj/machinery/rust/gyrotron/proc/stop_emitting()
@@ -39,7 +39,7 @@
 	update_icon()
 
 /obj/machinery/rust/gyrotron/proc/start_emitting()
-	if(stat & (NOPOWER | BROKEN) || emitting && state == 2) //Sanity.
+	if (stat & (NOPOWER | BROKEN) || emitting && state == 2) //Sanity.
 		return
 
 	emitting = 1
@@ -48,7 +48,7 @@
 	update_icon()
 
 	spawn()
-		while(emitting)
+		while (emitting)
 			emit()
 			sleep(rate)
 
@@ -74,19 +74,19 @@
 
 /obj/machinery/rust/gyrotron/power_change()
 	. =..()
-	if(stat & (NOPOWER | BROKEN))
+	if (stat & (NOPOWER | BROKEN))
 		stop_emitting()
 
 	update_icon()
 
 /obj/machinery/rust/gyrotron/update_icon()
-	if(!(stat & (NOPOWER | BROKEN)) && emitting)
+	if (!(stat & (NOPOWER | BROKEN)) && emitting)
 		icon_state = "emitter-on"
 	else
 		icon_state = "emitter-off"
 
 /obj/machinery/rust/gyrotron/weldToFloor(var/obj/item/weapon/weldingtool/WT, var/mob/user)
-	if(emitting)
+	if (emitting)
 		to_chat(user, "<span class='warning'>Turn \the [src] off first!</span>")
 		return -1
 	. = ..()
@@ -96,10 +96,10 @@
 	set src in oview(1)
 	set category = "Object"
 
-	if(usr.incapacitated() || !Adjacent(usr))
+	if (usr.incapacitated() || !Adjacent(usr))
 		return
 
-	if(anchored)
+	if (anchored)
 		to_chat(usr, "<span class='notify'>\the [src] is anchored to the floor!</span>")
 		return
 
@@ -110,10 +110,10 @@
 	set src in oview(1)
 	set category = "Object"
 
-	if(usr.incapacitated() || !Adjacent(usr))
+	if (usr.incapacitated() || !Adjacent(usr))
 		return
 
-	if(anchored)
+	if (anchored)
 		to_chat(usr, "<span class='notify'>\the [src] is anchored to the floor!</span>")
 		return
 

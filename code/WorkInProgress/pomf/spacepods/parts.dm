@@ -36,22 +36,22 @@
 	neededparts -= src
 	//log_admin("Starting with [src]")
 	linked = src
-	for(var/i = 1; i <= 4; i++)
+	for (var/i = 1; i <= 4; i++)
 		T = get_turf(get_step(linked, turn(linked.dir, -linked.link_angle))) //get the next place that we want to look at
-		if(locate(linked.link_to) in T)
+		if (locate(linked.link_to) in T)
 			pointer = locate(linked.link_to) in T
 			//log_admin("Looking at [pointer.type]")
-		if(istype(pointer, linked.link_to) && pointer.dir == linked.dir && pointer.anchored)
-			if(!(pointer in connectedparts))
+		if (istype(pointer, linked.link_to) && pointer.dir == linked.dir && pointer.anchored)
+			if (!(pointer in connectedparts))
 				connectedparts += pointer
 			linked = pointer
 			pointer = null
 	//log_admin("Parts left: [neededparts.len]") //len not working
-	for(var/i = 1; i <=4; i++)
-		if(i > connectedparts.len)
+	for (var/i = 1; i <=4; i++)
+		if (i > connectedparts.len)
 			return 0
 		var/obj/item/pod_parts/pod_frame/F = connectedparts[i]
-		if(F.type in neededparts) //if one of the items can be founded in neededparts
+		if (F.type in neededparts) //if one of the items can be founded in neededparts
 			neededparts -= F.type
 			log_admin("Found [F.type]")
 		else //because neededparts has 4 distinct items, this must be called if theyre not all in place and wrenched
@@ -59,10 +59,10 @@
 	return connectedparts
 
 /obj/item/pod_parts/pod_frame/attackby(var/obj/O, mob/user)
-	if(istype(O, /obj/item/stack/rods))
+	if (istype(O, /obj/item/stack/rods))
 		var/obj/item/stack/rods/R = O
 		var/list/linkedparts = find_square()
-		if(!linkedparts)
+		if (!linkedparts)
 			to_chat(user, "<span class='rose'>You cannot assemble a pod frame because you do not have the necessary assembly.</span>")
 			return
 		var/obj/structure/spacepod_frame/pod = new /obj/structure/spacepod_frame(src.loc)
@@ -70,12 +70,12 @@
 		to_chat(user, "<span class='notice'>You strut the pod frame together.</span>")
 		R.use(10)
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		for(var/obj/item/pod_parts/pod_frame/F in linkedparts)
-			if(1 == turn(F.dir, -F.link_angle)) //if the part links north during construction, as the bottom left part always does
+		for (var/obj/item/pod_parts/pod_frame/F in linkedparts)
+			if (1 == turn(F.dir, -F.link_angle)) //if the part links north during construction, as the bottom left part always does
 				//log_admin("Repositioning")
 				pod.forceMove(F.loc)
 			qdel(F)
-	if(iswrench(O))
+	if (iswrench(O))
 		to_chat(user, "<span class='notice'>You [!anchored ? "secure \the [src] in place."  : "remove the securing bolts."]</span>")
 		anchored = !anchored
 		density = anchored
@@ -85,7 +85,7 @@
 	set name = "Rotate Frame"
 	set category = "Object"
 	set src in oview(1)
-	if(anchored)
+	if (anchored)
 		to_chat(usr, "\The [src] is securely bolted!")
 		return 0
 	src.dir = turn(src.dir, -90)

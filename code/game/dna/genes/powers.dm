@@ -43,28 +43,28 @@
 	mind_affecting = 1
 
 /spell/targeted/remoteobserve/cast(var/list/targets, mob/living/carbon/human/user)
-	if(!targets || !targets.len || !user || !istype(user))
+	if (!targets || !targets.len || !user || !istype(user))
 		return
 
-	if(user.isUnconscious())
+	if (user.isUnconscious())
 		user.remoteview_target = null
 		user.reset_view(0)
 		return
 
-	if(user.find_held_item_by_type(/obj/item/tk_grab))
+	if (user.find_held_item_by_type(/obj/item/tk_grab))
 		to_chat(user, "<span class='warning'>Your mind is too busy with that telekinetic grab.</span>")
 		user.remoteview_target = null
 		user.reset_view(0)
 		return
 
-	if(user.client.eye != user.client.mob)
+	if (user.client.eye != user.client.mob)
 		user.remoteview_target = null
 		user.reset_view(0)
 		return
 
-	for(var/mob/living/target in targets)
+	for (var/mob/living/target in targets)
 		if (target)
-			if(target == user)
+			if (target == user)
 				user.remoteview_target = null
 				user.reset_view(0)
 			else
@@ -127,27 +127,27 @@
 	mind_affecting = 1
 
 /spell/targeted/remotesay/cast(var/list/targets, mob/living/carbon/human/user)
-	if(!user || !istype(user))
+	if (!user || !istype(user))
 		return
 
 	var/say = stripped_input(user, "What do you wish to say?", "Project Mind")
 
-	if(!say)
+	if (!say)
 		return 1
 
-	for(var/T in targets)
+	for (var/T in targets)
 		var/mob/living/carbon/human/target = T
 
-		if(!T || !istype(target) || tinfoil_check(target))
+		if (!T || !istype(target) || tinfoil_check(target))
 			user.show_message("<span class='notice'>You project your mind towards [believed_name]: [say]</span>")
 			return
 
-		if(M_REMOTE_TALK in target.mutations)
+		if (M_REMOTE_TALK in target.mutations)
 			target.show_message("<span class='notice'>You hear [user.real_name]'s voice: [say]</span>")
 		else
 			target.show_message("<span class='notice'>You hear a voice that seems to echo around the room: [say]</span>")
 		user.show_message("<span class='notice'>You project your mind towards [believed_name]: [say]</span>")
-		for(var/mob/dead/observer/G in dead_mob_list)
+		for (var/mob/dead/observer/G in dead_mob_list)
 			G.show_message("<i>Telepathic message from <b>[user]</b> to <b>[target]</b>: [say]</i>")
 
 /datum/dna/gene/basic/morph
@@ -181,13 +181,13 @@
 		block=COLDBLOCK
 
 	can_activate(var/mob/M,var/flags)
-		if(flags & MUTCHK_FORCED)
+		if (flags & MUTCHK_FORCED)
 			return !(/datum/dna/gene/basic/cold_resist in M.active_genes)
 		// Probability check
 		var/_prob = 15
-		if(M_RESIST_COLD in M.mutations)
+		if (M_RESIST_COLD in M.mutations)
 			_prob=5
-		if(probinj(_prob,(flags&MUTCHK_FORCED)))
+		if (probinj(_prob,(flags&MUTCHK_FORCED)))
 			return 1
 
 	OnDrawUnderlays(var/mob/M,var/g,var/fat)
@@ -207,13 +207,13 @@
 		block=FIREBLOCK
 
 	can_activate(var/mob/M,var/flags)
-		if(flags & MUTCHK_FORCED)
+		if (flags & MUTCHK_FORCED)
 			return !(/datum/dna/gene/basic/heat_resist in M.active_genes)
 		// Probability check
 		var/_prob=30
-		if(M_RESIST_HEAT in M.mutations)
+		if (M_RESIST_HEAT in M.mutations)
 			_prob=5
-		if(probinj(_prob,(flags&MUTCHK_FORCED)))
+		if (probinj(_prob,(flags&MUTCHK_FORCED)))
 			return 1
 
 	OnDrawUnderlays(var/mob/M,var/g,var/fat)
@@ -248,7 +248,7 @@
 
 	can_activate(var/mob/M,var/flags)
 		// Can't be big and small.
-		if(M_HULK in M.mutations)
+		if (M_HULK in M.mutations)
 			return 0
 		return ..(M,flags)
 
@@ -257,7 +257,7 @@
 		M.pass_flags |= PASSTABLE
 
 	deactivate(var/mob/M, var/connected, var/flags)
-		if(..(M,connected,flags))
+		if (..(M,connected,flags))
 			M.pass_flags &= ~PASSTABLE
 
 /* OLD HULK BEHAVIOR
@@ -271,22 +271,22 @@
 
 	can_activate(var/mob/M,var/flags)
 		// Can't be big AND small.
-		if(M_DWARF in M.mutations)
+		if (M_DWARF in M.mutations)
 			return 0
 		return ..(M,flags)
 
 	OnDrawUnderlays(var/mob/M,var/g,var/fat)
-		if(M_HULK in M.mutations)
-			if(fat)
+		if (M_HULK in M.mutations)
+			if (fat)
 				return "hulk_[fat]_s"
 			else
 				return "hulk_[g]_s"
 		return 0
 
 	OnMobLife(var/mob/living/carbon/human/M)
-		if(!istype(M))
+		if (!istype(M))
 			return
-		if(M.health <= 25 && M_HULK in M.mutations)
+		if (M.health <= 25 && M_HULK in M.mutations)
 			M.mutations.Remove(M_HULK)
 			M.dna.SetSEState(HULKBLOCK,0)
 			M.update_mutations()		//update our mutation overlays

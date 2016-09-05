@@ -55,7 +55,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	.=..()
 
 /obj/effect/effect/water/Bump(atom/A)
-	if(reagents)
+	if (reagents)
 		reagents.reaction(A)
 	return ..()
 
@@ -67,7 +67,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	var/setup = 0
 
 	proc/set_up(n = 3, c = 0, turf/loc)
-		if(n > 10)
+		if (n > 10)
 			n = 10
 		number = n
 		cardinals = c
@@ -108,7 +108,7 @@ steam.start() -- spawns the effect
 /datum/effect/effect/system/steam_spread
 
 	set_up(n = 3, c = 0, turf/loc)
-		if(n > 10)
+		if (n > 10)
 			n = 10
 		number = n
 		cardinals = c
@@ -116,21 +116,21 @@ steam.start() -- spawns the effect
 
 	start()
 		var/i = 0
-		for(i=0, i<src.number, i++)
+		for (i=0, i<src.number, i++)
 			spawn(0)
-				if(holder)
+				if (holder)
 					src.location = get_turf(holder)
 				var/obj/effect/effect/steam/steam = new /obj/effect/effect/steam(src.location)
 				var/direction
-				if(src.cardinals)
+				if (src.cardinals)
 					direction = pick(cardinal)
 				else
 					direction = pick(alldirs)
-				for(i=0, i<pick(1,2,3), i++)
+				for (i=0, i<pick(1,2,3), i++)
 					sleep(5)
 					step(steam,direction)
 				spawn(20)
-					if(steam)
+					if (steam)
 						qdel(steam)
 
 /////////////////////////////////////////////
@@ -152,7 +152,7 @@ steam.start() -- spawns the effect
 /obj/effect/effect/sparks/New(var/travel_dir)
 	..()
 	var/turf/T = loc
-	if(istype(T))
+	if (istype(T))
 		T.hotspot_expose(1000, 100, surfaces = 1)
 
 /obj/effect/effect/sparks/proc/start(var/travel_dir, var/max_energy=3)
@@ -180,7 +180,7 @@ steam.start() -- spawns the effect
 	return
 
 /obj/effect/effect/sparks/process()
-	if(energy==0)
+	if (energy==0)
 		processing_objects.Remove(src)
 		returnToPool(src)
 		return
@@ -210,7 +210,7 @@ steam.start() -- spawns the effect
 	playsound(location, "sparks", 100, 1)
 	for (var/i = 1 to number)
 		var/nextdir=pick_n_take(directions)
-		if(nextdir)
+		if (nextdir)
 			var/obj/effect/effect/sparks/sparks = getFromPool(/obj/effect/effect/sparks, location)
 			sparks.start(nextdir)
 
@@ -241,7 +241,7 @@ steam.start() -- spawns the effect
 
 /obj/effect/effect/smoke/Crossed(mob/living/carbon/M as mob )
 	..()
-	if(istype(M))
+	if (istype(M))
 		affect(M)
 
 /obj/effect/effect/smoke/proc/affect(var/mob/living/carbon/M)
@@ -252,7 +252,7 @@ steam.start() -- spawns the effect
 	return 1
 
 /obj/effect/effect/smoke/Destroy()
-	if(reagents)
+	if (reagents)
 		reagents.my_atom = null
 		reagents = null
 	..()
@@ -266,7 +266,7 @@ steam.start() -- spawns the effect
 
 /obj/effect/effect/smoke/bad/Move()
 	..()
-	for(var/mob/living/carbon/M in get_turf(src))
+	for (var/mob/living/carbon/M in get_turf(src))
 		affect(M)
 
 /obj/effect/effect/smoke/bad/affect(var/mob/living/carbon/M)
@@ -281,9 +281,9 @@ steam.start() -- spawns the effect
 			M.coughedtime = 0
 
 /obj/effect/effect/smoke/bad/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0))
+	if (air_group || (height==0))
 		return 1
-	if(istype(mover, /obj/item/projectile/beam))
+	if (istype(mover, /obj/item/projectile/beam))
 		var/obj/item/projectile/beam/B = mover
 		B.damage = (B.damage/2)
 	return 1
@@ -295,7 +295,7 @@ steam.start() -- spawns the effect
 
 /obj/effect/effect/smoke/sleepy/Move()
 	..()
-	for(var/mob/living/carbon/M in get_turf(src))
+	for (var/mob/living/carbon/M in get_turf(src))
 		affect(M)
 
 /obj/effect/effect/smoke/sleepy/affect(mob/living/carbon/M as mob )
@@ -320,7 +320,7 @@ steam.start() -- spawns the effect
 
 /obj/effect/effect/smoke/mustard/Move()
 	..()
-	for(var/mob/living/carbon/human/R in get_turf(src))
+	for (var/mob/living/carbon/human/R in get_turf(src))
 		affect(R)
 
 /obj/effect/effect/smoke/mustard/affect(var/mob/living/carbon/human/R)
@@ -348,34 +348,34 @@ steam.start() -- spawns the effect
 	var/smoke_type = /obj/effect/effect/smoke
 
 /datum/effect/effect/system/smoke_spread/set_up(n = 5, c = 0, loca, direct)
-	if(n > 10)
+	if (n > 10)
 		n = 10
 	number = n
 	cardinals = c
-	if(istype(loca, /turf/))
+	if (istype(loca, /turf/))
 		location = loca
 	else
 		location = get_turf(loca)
-	if(direct)
+	if (direct)
 		direction = direct
 
 /datum/effect/effect/system/smoke_spread/start()
 	var/i = 0
-	for(i=0, i<src.number, i++)
-		if(src.total_smoke > 20)
+	for (i=0, i<src.number, i++)
+		if (src.total_smoke > 20)
 			return
 		spawn(0)
-			if(holder)
+			if (holder)
 				src.location = get_turf(holder)
 			var/obj/effect/effect/smoke/smoke = new smoke_type(src.location)
 			src.total_smoke++
 			var/direction = src.direction
-			if(!direction)
-				if(src.cardinals)
+			if (!direction)
+				if (src.cardinals)
 					direction = pick(cardinal)
 				else
 					direction = pick(alldirs)
-			for(i=0, i<pick(0,1,1,1,2,2,2,3), i++)
+			for (i=0, i<pick(0,1,1,1,2,2,2,3), i++)
 				sleep(10)
 				step(smoke,direction)
 			spawn(smoke.time_to_live*0.75+rand(10,30))
@@ -400,7 +400,7 @@ steam.start() -- spawns the effect
 	icon = 'icons/effects/chemsmoke.dmi'
 
 /obj/effect/effect/smoke/Destroy()
-	if(reagents)
+	if (reagents)
 		qdel(reagents)
 		reagents = null
 	..()
@@ -410,9 +410,9 @@ steam.start() -- spawns the effect
 
 /obj/effect/effect/smoke/chem/Move()
 	..()
-	for(var/atom/A in view(2, src))
-		if(reagents.has_reagent(RADIUM)||reagents.has_reagent(URANIUM)||reagents.has_reagent(CARBON)||reagents.has_reagent(THERMITE))//Prevents unholy radium spam by reducing the number of 'greenglows' down to something reasonable -Sieve
-			if(prob(5))
+	for (var/atom/A in view(2, src))
+		if (reagents.has_reagent(RADIUM)||reagents.has_reagent(URANIUM)||reagents.has_reagent(CARBON)||reagents.has_reagent(THERMITE))//Prevents unholy radium spam by reducing the number of 'greenglows' down to something reasonable -Sieve
+			if (prob(5))
 				reagents.reaction(A)
 		else
 			reagents.reaction(A)
@@ -434,18 +434,18 @@ steam.start() -- spawns the effect
 		R.my_atom = chemholder
 
 	set_up(var/datum/reagents/carry = null, n = 5, c = 0, loca, direct)
-		if(n > 20)
+		if (n > 20)
 			n = 20
 		number = n
 		cardinals = c
 		carry.copy_to(chemholder, carry.total_volume)
 
 
-		if(istype(loca, /turf/))
+		if (istype(loca, /turf/))
 			location = loca
 		else
 			location = get_turf(loca)
-		if(direct)
+		if (direct)
 			direction = direct
 
 	start()
@@ -453,36 +453,36 @@ steam.start() -- spawns the effect
 
 		var/color = mix_color_from_reagents(chemholder.reagents.reagent_list)
 
-		for(i=0, i<src.number, i++)
-			if(src.total_smoke > 20)
+		for (i=0, i<src.number, i++)
+			if (src.total_smoke > 20)
 				return
 			spawn(0)
-				if(holder)
+				if (holder)
 					src.location = get_turf(holder)
 				var/obj/effect/effect/smoke/chem/smoke = new /obj/effect/effect/smoke/chem(src.location)
 				src.total_smoke++
 				var/direction = src.direction
-				if(!direction)
-					if(src.cardinals)
+				if (!direction)
+					if (src.cardinals)
 						direction = pick(cardinal)
 					else
 						direction = pick(alldirs)
 
-				if(chemholder.reagents.total_volume != 1) // can't split 1 very well
+				if (chemholder.reagents.total_volume != 1) // can't split 1 very well
 					chemholder.reagents.copy_to(smoke, chemholder.reagents.total_volume / number) // copy reagents to each smoke, divide evenly
 
-				if(color)
+				if (color)
 					smoke.icon += color // give the smoke color, if it has any to begin with
 				else
 					// if no color, just use the old smoke icon
 					smoke.icon = 'icons/effects/96x96.dmi'
 					smoke.icon_state = "smoke"
 
-				for(i=0, i<pick(0,1,1,1,2,2,2,3), i++)
+				for (i=0, i<pick(0,1,1,1,2,2,2,3), i++)
 					sleep(10)
 					step(smoke,direction)
 				spawn(150+rand(10,30))
-					if(smoke)
+					if (smoke)
 						qdel(smoke)
 						smoke = null
 					src.total_smoke--
@@ -490,18 +490,18 @@ steam.start() -- spawns the effect
 // Goon compat.
 /datum/effect/effect/system/smoke_spread/chem/fart
 	set_up(var/mob/M, n = 5, c = 0, loca, direct)
-		if(n > 20)
+		if (n > 20)
 			n = 20
 		number = n
 		cardinals = c
 
 		chemholder.reagents.add_reagent(SPACE_DRUGS, rand(1,10))
 
-		if(istype(loca, /turf/))
+		if (istype(loca, /turf/))
 			location = loca
 		else
 			location = get_turf(loca)
-		if(direct)
+		if (direct)
 			direction = direct
 
 		var/contained = "\[[chemholder.reagents.get_reagent_ids()]\]"
@@ -538,7 +538,7 @@ steam.start() -- spawns the effect
 	flick("[base_name]_fade", src)
 	icon_state = "blank"
 	spawn( 20 )
-		if(src)
+		if (src)
 			returnToPool(src)
 
 /obj/effect/effect/trails/ion
@@ -556,21 +556,21 @@ steam.start() -- spawns the effect
 		oldposition = get_turf(atom)
 
 	start()
-		if(!src.on)
+		if (!src.on)
 			src.on = 1
 			src.processing = 1
-		if(src.processing)
+		if (src.processing)
 			src.processing = 0
 			spawn(0)
 				var/turf/T = get_turf(src.holder)
-				if(T != src.oldposition)
-					if(istype(T, /turf/space))
+				if (T != src.oldposition)
+					if (istype(T, /turf/space))
 						var/obj/effect/effect/trails/I = getFromPool(trail_type,src.oldposition)
 						src.oldposition = T
 						I.dir = src.holder.dir
 						I.Play()
 				spawn(2)
-					if(src.on)
+					if (src.on)
 						src.processing = 1
 						src.start()
 
@@ -583,36 +583,36 @@ steam.start() -- spawns the effect
 	var/turf/currloc
 
 /datum/effect/effect/system/trail/space_trail/start()
-	if(!src.on)
+	if (!src.on)
 		src.on = 1
 		src.processing = 1
-	if(src.processing)
+	if (src.processing)
 		src.processing = 0
 		spawn(0)
 			var/turf/T = get_turf(src.holder)
-			if(currloc != T)
-				switch(holder.dir)
-					if(NORTH)
+			if (currloc != T)
+				switch (holder.dir)
+					if (NORTH)
 						src.oldposition = T
 						src.oldposition = get_step(oldposition, SOUTH)
 						src.oldloc = get_step(oldposition,EAST)
 						//src.oldloc = get_step(oldloc, SOUTH)
-					if(SOUTH) // More difficult, offset to the north!
+					if (SOUTH) // More difficult, offset to the north!
 						src.oldposition = get_step(holder,NORTH)
 						src.oldposition = get_step(oldposition,NORTH)
 						src.oldloc = get_step(oldposition,EAST)
 						//src.oldloc = get_step(oldloc,NORTH)
-					if(EAST) // Just one to the north should suffice
+					if (EAST) // Just one to the north should suffice
 						src.oldposition = T
 						src.oldposition = get_step(oldposition, WEST)
 						src.oldloc = get_step(oldposition,NORTH)
 						//src.oldloc = get_step(oldloc,WEST)
-					if(WEST) // One to the east and north from there
+					if (WEST) // One to the east and north from there
 						src.oldposition = get_step(holder,EAST)
 						src.oldposition = get_step(oldposition,EAST)
 						src.oldloc = get_step(oldposition,NORTH)
 						//src.oldloc = get_step(oldloc,EAST)
-				if(istype(T, /turf/space))
+				if (istype(T, /turf/space))
 					var/obj/effect/effect/trails/ion/I = getFromPool(/obj/effect/effect/trails/ion,src.oldposition)
 					var/obj/effect/effect/trails/ion/II = getFromPool(/obj/effect/effect/trails/ion,src.oldloc)
 					//src.oldposition = T
@@ -623,13 +623,13 @@ steam.start() -- spawns the effect
 					I.icon_state = "blank"
 					II.icon_state = "blank"
 					spawn( 20 )
-						if(I)
+						if (I)
 							returnToPool(I)
-						if(II)
+						if (II)
 							returnToPool(II)
 
 			spawn(2)
-				if(src.on)
+				if (src.on)
 					src.processing = 1
 					src.start()
 			currloc = T
@@ -650,28 +650,28 @@ steam.start() -- spawns the effect
 		oldposition = get_turf(atom)
 
 	start()
-		if(!src.on)
+		if (!src.on)
 			src.on = 1
 			src.processing = 1
-		if(src.processing)
+		if (src.processing)
 			src.processing = 0
 			spawn(0)
-				if(src.number < 3)
+				if (src.number < 3)
 					var/obj/effect/effect/steam/I = new /obj/effect/effect/steam(src.oldposition)
 					src.number++
 					src.oldposition = get_turf(holder)
 					I.dir = src.holder.dir
 					spawn(10)
-						if(I)
+						if (I)
 							qdel(I)
 						src.number--
 					spawn(2)
-						if(src.on)
+						if (src.on)
 							src.processing = 1
 							src.start()
 				else
 					spawn(2)
-						if(src.on)
+						if (src.on)
 							src.processing = 1
 							src.start()
 
@@ -713,11 +713,11 @@ steam.start() -- spawns the effect
 		processing_objects.Remove(src)
 		sleep(30)
 
-		if(metal)
+		if (metal)
 			var/turf/T = get_turf(src)
-			if(istype(T, /turf/space))
+			if (istype(T, /turf/space))
 				T.ChangeTurf(/turf/simulated/floor/foamedmetal)
-			if(metal == 2)
+			if (metal == 2)
 				var/obj/structure/foamedmetal/M = new(src.loc)
 				M.metal = metal
 				M.updateicon()
@@ -730,15 +730,15 @@ steam.start() -- spawns the effect
 	reagents = R
 	reagents.my_atom = src
 	var/ccolor = mix_color_from_reagents(reagents.reagent_list)
-	if(ccolor)
+	if (ccolor)
 		icon += ccolor
 	var/savedtemp
 	//playsound(src, 'sound/effects/bubbles2.ogg', 80, 1, -3)
-	if(reagents.has_reagent(WATER))
+	if (reagents.has_reagent(WATER))
 		var/turf/simulated/T = get_turf(src)
 		var/datum/gas_mixture/old_air = T.return_air()
 		savedtemp = old_air.temperature
-		if(istype(T) && savedtemp > lowest_temperature)
+		if (istype(T) && savedtemp > lowest_temperature)
 			var/datum/gas_mixture/lowertemp = T.remove_air( T:air:total_moles() )
 			lowertemp.temperature = max( min(lowertemp.temperature-500,lowertemp.temperature / 2) ,0)
 			lowertemp.react()
@@ -751,7 +751,7 @@ steam.start() -- spawns the effect
 		var/turf/simulated/T = get_turf(src)
 		var/datum/gas_mixture/local_air = T.return_air()
 		flick("[icon_state]-disolve", src)
-		if((local_air.temperature  < lowest_temperature)&&(savedtemp > lowest_temperature)) //ie, we have over-chilled
+		if ((local_air.temperature  < lowest_temperature)&&(savedtemp > lowest_temperature)) //ie, we have over-chilled
 			local_air.temperature = lowest_temperature
 		else if ((local_air.temperature  < lowest_temperature)&&(savedtemp < lowest_temperature) && savedtemp) //ie it chilled when it shouldn't have
 			local_air.temperature = savedtemp
@@ -760,50 +760,50 @@ steam.start() -- spawns the effect
 	AddToProfiler()
 
 /obj/effect/effect/foam/fire/process()
-	if(--amount < 0)
+	if (--amount < 0)
 		return
 
 // on delete, transfer any reagents to the floor
 /obj/effect/effect/foam/Destroy()
-	if(!metal && reagents && !istype(src, /obj/effect/effect/foam/fire))
-		for(var/atom/A in oview(0,src))
-			if(A == src)
+	if (!metal && reagents && !istype(src, /obj/effect/effect/foam/fire))
+		for (var/atom/A in oview(0,src))
+			if (A == src)
 				continue
 			reagents.reaction(A, 1, 1)
 	..()
 
 
 /obj/effect/effect/foam/process()
-	if(--amount < 0)
+	if (--amount < 0)
 		return
 
 
-	for(var/direction in cardinal)
+	for (var/direction in cardinal)
 
 
 		var/turf/T = get_step(src,direction)
-		if(!T)
+		if (!T)
 			continue
 
-		if(!T.Enter(src))
+		if (!T.Enter(src))
 			continue
 
 		var/obj/effect/effect/foam/F = locate() in T
-		if(F)
+		if (F)
 			continue
 
 		F = new(T, metal)
 		F.amount = amount
-		if(!metal)
+		if (!metal)
 			F.create_reagents(10)
 			if (reagents)
-				for(var/datum/reagent/R in reagents.reagent_list)
+				for (var/datum/reagent/R in reagents.reagent_list)
 					F.reagents.add_reagent(R.id,1)
 
 // foam disolves when heated
 // except metal foams
 /obj/effect/effect/foam/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	if(!metal && prob(max(0, exposed_temperature - 475)))
+	if (!metal && prob(max(0, exposed_temperature - 475)))
 		flick("[icon_state]-disolve", src)
 
 		spawn(5)
@@ -811,10 +811,10 @@ steam.start() -- spawns the effect
 
 
 /obj/effect/effect/foam/Crossed(var/atom/movable/AM)
-	if(metal)
+	if (metal)
 		return
-	if(istype(src, /obj/effect/effect/foam/fire))
-		if(isliving(AM))
+	if (istype(src, /obj/effect/effect/foam/fire))
+		if (isliving(AM))
 			var/mob/living/M = AM
 			reagents.reaction(M)
 		return
@@ -835,7 +835,7 @@ steam.start() -- spawns the effect
 
 	set_up(amt=5, loca, var/datum/reagents/carry = null, var/metalfoam = 0)
 		amount = round(sqrt(amt / 3), 1)
-		if(istype(loca, /turf/))
+		if (istype(loca, /turf/))
 			location = loca
 		else
 			location = get_turf(loca)
@@ -849,25 +849,25 @@ steam.start() -- spawns the effect
 		// this makes a list of the reagent ids and spawns 1 unit of that reagent when the foam disolves.
 
 
-		if(carry && !metal)
-			for(var/datum/reagent/R in carry.reagent_list)
+		if (carry && !metal)
+			for (var/datum/reagent/R in carry.reagent_list)
 				carried_reagents += R.id
 
 	start()
 		spawn(0)
 			var/obj/effect/effect/foam/F = locate() in location
-			if(F)
+			if (F)
 				F.amount += amount
 				return
 
 			F = new(src.location, metal)
 			F.amount = amount
 
-			if(!metal)			// don't carry other chemicals if a metal foam
+			if (!metal)			// don't carry other chemicals if a metal foam
 				F.create_reagents(10)
 
-				if(carried_reagents)
-					for(var/id in carried_reagents)
+				if (carried_reagents)
+					for (var/id in carried_reagents)
 						F.reagents.add_reagent(id,1)
 				else
 					F.reagents.add_reagent(WATER, 1)
@@ -887,7 +887,7 @@ steam.start() -- spawns the effect
 
 /obj/structure/foamedmetal/proc/updateicon()
 
-	if(metal == 1)
+	if (metal == 1)
 		icon_state = "metalfoam"
 	else
 		icon_state = "ironfoam"
@@ -899,7 +899,7 @@ steam.start() -- spawns the effect
 	qdel(src)
 
 /obj/structure/foamedmetal/bullet_act()
-	if(metal==1 || prob(50))
+	if (metal==1 || prob(50))
 		qdel(src)
 
 /obj/structure/foamedmetal/attack_paw(var/mob/user)
@@ -918,7 +918,7 @@ steam.start() -- spawns the effect
 /obj/structure/foamedmetal/kick_act()
 	..()
 
-	if(prob(75 - metal*25))
+	if (prob(75 - metal*25))
 		qdel(src)
 
 /obj/structure/foamedmetal/attackby(var/obj/item/I, var/mob/user)
@@ -931,14 +931,14 @@ steam.start() -- spawns the effect
 		qdel(src)
 		return
 
-	if(prob(I.force*20 - metal*25))
+	if (prob(I.force*20 - metal*25))
 		user.visible_message("<span class='warning'>[user] smashes through \the [src].</span>","<span class='notice'>You smash through \the [src] with \the [I].</span>")
 		qdel(src)
 	else
 		to_chat(user, "<span class='notice'>You hit \the [src] to no effect.</span>")
 
 /obj/structure/foamedmetal/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group)
+	if (air_group)
 		return 0
 	return !density
 
@@ -980,10 +980,10 @@ steam.start() -- spawns the effect
 		to_chat(user, "<span class='notice'>You hit \the [src] but bounce off it.</span>")
 
 /turf/simulated/floor/foamedmetal/attackby(obj/item/C as obj, mob/user as mob)
-	if(!(locate(/obj/structure/lattice) in contents))
-		if(istype(C, /obj/item/stack/rods))
+	if (!(locate(/obj/structure/lattice) in contents))
+		if (istype(C, /obj/item/stack/rods))
 			return
-	else if(istype(C, /obj/item/stack/tile))
+	else if (istype(C, /obj/item/stack/tile))
 		return
 	user.delayNextAttack(10)
 	if (istype(C, /obj/item/weapon/grab))
@@ -994,32 +994,32 @@ steam.start() -- spawns the effect
 		src.ChangeTurf(get_base_turf(src.z))
 		return
 
-	if(prob(C.force*20 - 25))
+	if (prob(C.force*20 - 25))
 		user.visible_message("<span class='warning'>[user] smashes through \the [src].</span>","<span class='notice'>You smash through \the [src] with \the [C].</span>")
 		src.ChangeTurf(get_base_turf(src.z))
 	else
 		to_chat(user, "<span class='notice'>You hit \the [src] to no effect.</span>")
 
 /turf/simulated/floor/foamedmetal/canBuildCatwalk()
-	if(locate(/obj/structure/catwalk) in contents)
+	if (locate(/obj/structure/catwalk) in contents)
 		return BUILD_FAILURE
 	return locate(/obj/structure/lattice) in contents
 
 /turf/simulated/floor/foamedmetal/canBuildLattice(var/material)
-	if(src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
+	if (src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
 		return BUILD_FAILURE
 	else if (src.y >= (world.maxy - TRANSITIONEDGE || src.y <= TRANSITIONEDGE ))
 		return BUILD_FAILURE
-	else if(!(locate(/obj/structure/lattice) in contents) && !(istype(material,/obj/item/stack/sheet/wood)))
+	else if (!(locate(/obj/structure/lattice) in contents) && !(istype(material,/obj/item/stack/sheet/wood)))
 		return 1
 	return BUILD_FAILURE
 
 /turf/simulated/floor/foamedmetal/canBuildPlating(var/material)
-	if(src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
+	if (src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
 		return BUILD_FAILURE
 	else if (src.y >= (world.maxy - TRANSITIONEDGE || src.y <= TRANSITIONEDGE ))
 		return BUILD_FAILURE
-	else if((locate(/obj/structure/lattice) in contents) && !(istype(material,/obj/item/stack/tile/wood)))
+	else if ((locate(/obj/structure/lattice) in contents) && !(istype(material,/obj/item/stack/tile/wood)))
 		return 1
 	return BUILD_FAILURE
 
@@ -1030,7 +1030,7 @@ steam.start() -- spawns the effect
 
 	set_up (amt, loc, flash = 0, flash_fact = 0)
 		amount = amt
-		if(istype(loc, /turf/))
+		if (istype(loc, /turf/))
 			location = loc
 		else
 			location = get_turf(loc)
@@ -1046,9 +1046,9 @@ steam.start() -- spawns the effect
 			s.set_up(2, 1, location)
 			s.start()
 
-			for(var/mob/M in viewers(5, location))
+			for (var/mob/M in viewers(5, location))
 				to_chat(M, "<span class='warning'>The solution violently explodes.</span>")
-			for(var/mob/M in viewers(1, location))
+			for (var/mob/M in viewers(1, location))
 				if (prob (50 * amount))
 					to_chat(M, "<span class='warning'>The explosion knocks you down.</span>")
 					M.Weaken(rand(1,5))
@@ -1079,13 +1079,13 @@ steam.start() -- spawns the effect
 				flash += (round(amount/4) * flashing_factor)
 			*/
 
-			for(var/mob/M in viewers(8, location))
+			for (var/mob/M in viewers(8, location))
 				to_chat(M, "<span class='warning'>The solution violently explodes.</span>")
 
 			explosion(location, devastation, heavy, light, flash)
 
 	proc/holder_damage(var/atom/holder)
-		if(holder)
+		if (holder)
 			var/dmglevel = 4
 
 			if (round(amount/8) > 0)
@@ -1095,5 +1095,5 @@ steam.start() -- spawns the effect
 			else if (round(amount/2) > 0)
 				dmglevel = 3
 
-			if(dmglevel<4)
+			if (dmglevel<4)
 				holder.ex_act(dmglevel)

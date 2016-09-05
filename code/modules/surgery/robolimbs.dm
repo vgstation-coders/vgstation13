@@ -22,7 +22,7 @@
 //////CUT///////
 /datum/surgery_step/limb/cut/tool_quality(obj/item/tool)
 	. = ..()
-	if(!tool.is_sharp())
+	if (!tool.is_sharp())
 		return 0
 
 /datum/surgery_step/limb/cut
@@ -96,7 +96,7 @@
 
 //////PREPARE///////
 /datum/surgery_step/limb/prepare/tool_quality(obj/item/tool)
-	if(tool.is_hot())
+	if (tool.is_hot())
 		for (var/T in allowed_tools)
 			if (istype(tool,T))
 				return allowed_tools[T]
@@ -157,7 +157,7 @@
 
 	var/obj/item/robot_parts/p = tool
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	if(!(affected.status & ORGAN_ATTACHABLE) || !istype(p))
+	if (!(affected.status & ORGAN_ATTACHABLE) || !istype(p))
 		return 0 //not even ready for this and we're assuming they're using a fucking robot part!
 	if (p.part)
 		if (!(target_zone in p.part))
@@ -175,7 +175,7 @@
 	user.visible_message("<span class='notice'>[user] has attached [tool] where [target]'s [affected.display_name] used to be.</span>",	\
 	"<span class='notice'>You have attached [tool] where [target]'s [affected.display_name] used to be.</span>")
 	affected.robotize()
-	if(L.sabotaged)
+	if (L.sabotaged)
 		affected.sabotaged = 1
 	else
 		affected.sabotaged = 0
@@ -247,7 +247,7 @@
 
 	var/obj/item/weapon/organ/o = tool
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	if(!(affected.status & ORGAN_ATTACHABLE) || !istype(o))
+	if (!(affected.status & ORGAN_ATTACHABLE) || !istype(o))
 		return 0
 	if (o.part)
 		if (!(target_zone == o.part))
@@ -265,7 +265,7 @@
 	"<span class='notice'>You have attached [tool] where [target]'s [affected.display_name] used to be.</span>")
 
 	var/obj/item/weapon/organ/O = tool
-	if(istype(O))
+	if (istype(O))
 		affected.species = O.species
 
 	affected.fleshify()

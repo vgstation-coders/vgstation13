@@ -10,35 +10,35 @@ obj/machinery/door/airlock
 
 
 obj/machinery/door/airlock/receive_signal(datum/signal/signal)
-	if(!signal || signal.encryption)
+	if (!signal || signal.encryption)
 		return
 
-	if(id_tag != signal.data["tag"] || !signal.data["command"])
+	if (id_tag != signal.data["tag"] || !signal.data["command"])
 		return
 
-	switch(signal.data["command"])
-		if("open")
+	switch (signal.data["command"])
+		if ("open")
 			open(1)
 
-		if("close")
+		if ("close")
 			close(1)
 
-		if("unlock")
+		if ("unlock")
 			locked = 0
 			update_icon()
 
-		if("lock")
+		if ("lock")
 			locked = 1
 			update_icon()
 
-		if("toggle_lock")
-			if(!density)
+		if ("toggle_lock")
+			if (!density)
 				close(1)
 				sleep(2)
 			locked = !locked
 			update_icon()
 
-		if("secure_open")
+		if ("secure_open")
 			locked = 0
 			update_icon()
 
@@ -48,7 +48,7 @@ obj/machinery/door/airlock/receive_signal(datum/signal/signal)
 			locked = 1
 			update_icon()
 
-		if("secure_close")
+		if ("secure_close")
 			locked = 0
 			close(1)
 
@@ -60,7 +60,7 @@ obj/machinery/door/airlock/receive_signal(datum/signal/signal)
 
 
 obj/machinery/door/airlock/proc/send_status()
-	if(radio_connection)
+	if (radio_connection)
 		var/datum/signal/signal = getFromPool(/datum/signal)
 		signal.transmission_method = 1 //radio signal
 		signal.data["tag"] = id_tag
@@ -74,21 +74,21 @@ obj/machinery/door/airlock/proc/send_status()
 
 obj/machinery/door/airlock/open(surpress_send)
 	. = ..()
-	if(!surpress_send)
+	if (!surpress_send)
 		send_status()
 
 
 obj/machinery/door/airlock/close(surpress_send)
 	. = ..()
-	if(!surpress_send)
+	if (!surpress_send)
 		send_status()
 
 
 obj/machinery/door/airlock/Bumped(atom/AM)
 	..(AM)
-	if(istype(AM, /obj/mecha))
+	if (istype(AM, /obj/mecha))
 		var/obj/mecha/mecha = AM
-		if(density && radio_connection && mecha.occupant && (src.allowed(mecha.occupant) || src.check_access_list(mecha.operation_req_access)))
+		if (density && radio_connection && mecha.occupant && (src.allowed(mecha.occupant) || src.check_access_list(mecha.operation_req_access)))
 			var/datum/signal/signal = getFromPool(/datum/signal)
 			signal.transmission_method = 1 //radio signal
 			signal.data["tag"] = id_tag
@@ -104,13 +104,13 @@ obj/machinery/door/airlock/Bumped(atom/AM)
 
 obj/machinery/door/airlock/proc/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
-	if(new_frequency)
+	if (new_frequency)
 		frequency = new_frequency
 		radio_connection = radio_controller.add_object(src, frequency, RADIO_AIRLOCK)
 
 
 obj/machinery/door/airlock/initialize()
-	if(frequency)
+	if (frequency)
 		set_frequency(frequency)
 
 	update_icon()
@@ -119,7 +119,7 @@ obj/machinery/door/airlock/initialize()
 obj/machinery/door/airlock/New()
 	..()
 
-	if(radio_controller)
+	if (radio_controller)
 		set_frequency(frequency)
 
 obj/machinery/airlock_sensor
@@ -147,8 +147,8 @@ obj/machinery/airlock_sensor
 
 
 obj/machinery/airlock_sensor/update_icon()
-	if(on)
-		if(alert)
+	if (on)
+		if (alert)
 			icon_state = "airlock_sensor_alert"
 		else
 			icon_state = "airlock_sensor_standby"
@@ -156,7 +156,7 @@ obj/machinery/airlock_sensor/update_icon()
 		icon_state = "airlock_sensor_off"
 
 obj/machinery/airlock_sensor/attack_hand(mob/user)
-	if(..())
+	if (..())
 		return
 	var/datum/signal/signal = getFromPool(/datum/signal)
 	signal.transmission_method = 1 //radio signal
@@ -167,7 +167,7 @@ obj/machinery/airlock_sensor/attack_hand(mob/user)
 	flick("airlock_sensor_cycle", src)
 
 obj/machinery/airlock_sensor/process()
-	if(on)
+	if (on)
 		var/datum/signal/signal = getFromPool(/datum/signal)
 		signal.transmission_method = 1 //radio signal
 		signal.data["tag"] = id_tag
@@ -195,7 +195,7 @@ obj/machinery/airlock_sensor/initialize()
 obj/machinery/airlock_sensor/New()
 	..()
 
-	if(radio_controller)
+	if (radio_controller)
 		set_frequency(frequency)
 
 obj/machinery/airlock_sensor/airlock_interior
@@ -231,23 +231,23 @@ obj/machinery/airlock_sensor/multitool_menu(var/mob/user,var/obj/item/device/mul
 		</ul>"}
 
 obj/machinery/airlock_sensor/Topic(href,href_list)
-	if(..())
+	if (..())
 		return 0
 
-	if(!issilicon(usr))
-		if(!istype(usr.get_active_hand(), /obj/item/device/multitool))
+	if (!issilicon(usr))
+		if (!istype(usr.get_active_hand(), /obj/item/device/multitool))
 			testing("Not silicon, not using a multitool.")
 			return
-	if("set_freq" in href_list)
+	if ("set_freq" in href_list)
 		var/newfreq=frequency
-		if(href_list["set_freq"]!="-1")
+		if (href_list["set_freq"]!="-1")
 			newfreq=text2num(href_list["set_freq"])
 		else
 			newfreq = input(usr, "Specify a new frequency (GHz). Decimals assigned automatically.", src, frequency) as null|num
-		if(newfreq)
-			if(findtext(num2text(newfreq), "."))
+		if (newfreq)
+			if (findtext(num2text(newfreq), "."))
 				newfreq *= 10 // shift the decimal one place
-			if(newfreq < 10000)
+			if (newfreq < 10000)
 				frequency = newfreq
 				initialize()
 	update_multitool_menu(usr)
@@ -255,11 +255,11 @@ obj/machinery/airlock_sensor/Topic(href,href_list)
 
 obj/machinery/airlock_sensor/attackby(var/obj/item/W, var/mob/user)
 	. = ..()
-	if(.)
+	if (.)
 		return .
-	if(istype(W,/obj/item/weapon/screwdriver))
+	if (istype(W,/obj/item/weapon/screwdriver))
 		to_chat(user, "You begin to pry \the [src] off the wall...")
-		if(do_after(user, src, 50))
+		if (do_after(user, src, 50))
 			to_chat(user, "You successfully pry \the [src] off the wall.")
 			new /obj/item/mounted/frame/airlock_sensor(get_turf(src))
 			qdel(src)
@@ -304,7 +304,7 @@ obj/machinery/access_button
 
 
 obj/machinery/access_button/update_icon()
-	if(on)
+	if (on)
 		icon_state = "access_button_standby"
 	else
 		icon_state = "access_button_off"
@@ -312,10 +312,10 @@ obj/machinery/access_button/update_icon()
 
 obj/machinery/access_button/attack_hand(mob/user)
 	add_fingerprint(usr)
-	if(!allowed(user))
+	if (!allowed(user))
 		to_chat(user, "<span class='warning'>Access Denied.</span>")
 
-	else if(radio_connection)
+	else if (radio_connection)
 		var/datum/signal/signal = getFromPool(/datum/signal)
 		signal.transmission_method = 1 //radio signal
 		signal.data["tag"] = master_tag
@@ -327,11 +327,11 @@ obj/machinery/access_button/attack_hand(mob/user)
 
 obj/machinery/access_button/attackby(var/obj/item/W, var/mob/user)
 	. = ..()
-	if(.)
+	if (.)
 		return .
-	if(istype(W,/obj/item/weapon/screwdriver))
+	if (istype(W,/obj/item/weapon/screwdriver))
 		to_chat(user, "You begin to pry \the [src] off the wall...")
-		if(do_after(user, src, 50))
+		if (do_after(user, src, 50))
 			to_chat(user, "You successfully pry \the [src] off the wall.")
 			new /obj/item/mounted/frame/access_button(get_turf(src))
 			qdel(src)
@@ -349,7 +349,7 @@ obj/machinery/access_button/initialize()
 obj/machinery/access_button/New()
 	..()
 
-	if(radio_controller)
+	if (radio_controller)
 		set_frequency(frequency)
 
 obj/machinery/access_button/airlock_interior
@@ -371,26 +371,26 @@ obj/machinery/access_button/multitool_menu(var/mob/user,var/obj/item/device/mult
 		</ul>"}
 
 obj/machinery/access_button/Topic(href,href_list)
-	if(..())
+	if (..())
 		return 1
 
-	if(!issilicon(usr))
-		if(!istype(usr.get_active_hand(), /obj/item/device/multitool))
+	if (!issilicon(usr))
+		if (!istype(usr.get_active_hand(), /obj/item/device/multitool))
 			testing("Not silicon, not using a multitool.")
 			return
 
 	var/obj/item/device/multitool/P = get_multitool(usr)
-	if(P)
-		if("set_freq" in href_list)
+	if (P)
+		if ("set_freq" in href_list)
 			var/newfreq=frequency
-			if(href_list["set_freq"]!="-1")
+			if (href_list["set_freq"]!="-1")
 				newfreq=text2num(href_list["set_freq"])
 			else
 				newfreq = input(usr, "Specify a new frequency (GHz). Decimals assigned automatically.", src, frequency) as null|num
-			if(newfreq)
-				if(findtext(num2text(newfreq), "."))
+			if (newfreq)
+				if (findtext(num2text(newfreq), "."))
 					newfreq *= 10 // shift the decimal one place
-				if(newfreq < 10000)
+				if (newfreq < 10000)
 					frequency = newfreq
 					initialize()
 

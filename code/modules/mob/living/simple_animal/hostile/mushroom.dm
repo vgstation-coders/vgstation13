@@ -33,16 +33,16 @@
 
 /mob/living/simple_animal/hostile/mushroom/examine(mob/user)
 	..()
-	if(health >= maxHealth)
+	if (health >= maxHealth)
 		to_chat(user, "<span class='info'>It looks healthy.</span>")
 	else
 		to_chat(user, "<span class='info'>It looks like it's been roughed up.</span>")
 
 /mob/living/simple_animal/hostile/mushroom/Life()
-	if(timestopped)
+	if (timestopped)
 		return 0 //under effects of time magick
 	..()
-	if(!stat)//Mushrooms slowly regenerate if conscious, for people who want to save them from being eaten
+	if (!stat)//Mushrooms slowly regenerate if conscious, for people who want to save them from being eaten
 		health = min(health+2, maxHealth)
 
 /mob/living/simple_animal/hostile/mushroom/New()//Makes every shroom a little unique
@@ -60,23 +60,23 @@
 	..()
 
 /mob/living/simple_animal/hostile/mushroom/adjustBruteLoss(var/damage)//Possibility to flee from a fight just to make it more visually interesting
-	if(!retreat_distance && prob(33))
+	if (!retreat_distance && prob(33))
 		retreat_distance = 5
 		spawn(30)
 			retreat_distance = null
 	..()
 
 /mob/living/simple_animal/hostile/mushroom/attack_animal(var/mob/living/L)
-	if(istype(L, /mob/living/simple_animal/hostile/mushroom) && stat == DEAD)
+	if (istype(L, /mob/living/simple_animal/hostile/mushroom) && stat == DEAD)
 		var/mob/living/simple_animal/hostile/mushroom/M = L
-		if(faint_ticker < 2)
+		if (faint_ticker < 2)
 			M.visible_message("<span class='notice'>[M] chews a bit on [src].</span>")
 			faint_ticker++
 			return
 		M.visible_message("<span class='notice'>[M] devours [src]!</span>")
 		var/level_gain = (powerlevel - M.powerlevel)
-		if(level_gain >= -1 && !bruised && !M.ckey)//Player shrooms can't level up to become robust gods.
-			if(level_gain < 1)//So we still gain a level if two mushrooms were the same level
+		if (level_gain >= -1 && !bruised && !M.ckey)//Player shrooms can't level up to become robust gods.
+			if (level_gain < 1)//So we still gain a level if two mushrooms were the same level
 				level_gain = 1
 			M.LevelUp(level_gain)
 		M.health = M.maxHealth
@@ -96,7 +96,7 @@
 
 /mob/living/simple_animal/hostile/mushroom/proc/UpdateMushroomCap()
 	overlays.len = 0
-	if(health == 0)
+	if (health == 0)
 		overlays += cap_dead
 	else
 		overlays += cap_living
@@ -112,9 +112,9 @@
 		recovery_cooldown = 0
 
 /mob/living/simple_animal/hostile/mushroom/proc/LevelUp(var/level_gain)
-	if(powerlevel <= 9)
+	if (powerlevel <= 9)
 		powerlevel += level_gain
-		if(prob(25))
+		if (prob(25))
 			melee_damage_lower += (level_gain * rand(1,5))
 		else
 			melee_damage_upper += (level_gain * rand(1,5))
@@ -122,33 +122,33 @@
 	health = maxHealth //They'll always heal, even if they don't gain a level, in case you want to keep this shroom around instead of harvesting it
 
 /mob/living/simple_animal/hostile/mushroom/proc/Bruise()
-	if(!bruised && !stat)
+	if (!bruised && !stat)
 		src.visible_message("<span class='notice'>The [src.name] was bruised!</span>")
 		bruised = 1
 
 /mob/living/simple_animal/hostile/mushroom/attackby(obj/item/I as obj, mob/user as mob)
-	if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom))
-		if(stat == DEAD && !recovery_cooldown)
+	if (istype(I, /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom))
+		if (stat == DEAD && !recovery_cooldown)
 			Recover()
 			qdel(I)
 			I = null
 		else
 			to_chat(user, "<span class='notice'>[src] won't eat it!</span>")
 		return
-	if(I.force)
+	if (I.force)
 		Bruise()
 	..()
 
 /mob/living/simple_animal/hostile/mushroom/attack_hand(mob/living/carbon/human/M as mob)
 	..()
-	if(M.a_intent == I_HURT)
+	if (M.a_intent == I_HURT)
 		Bruise()
 
 /mob/living/simple_animal/hostile/mushroom/hitby(atom/movable/AM)
 	..()
-	if(istype(AM, /obj/item))
+	if (istype(AM, /obj/item))
 		var/obj/item/T = AM
-		if(T.throwforce)
+		if (T.throwforce)
 			Bruise()
 
 /mob/living/simple_animal/hostile/mushroom/bullet_act()

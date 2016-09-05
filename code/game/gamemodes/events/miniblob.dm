@@ -17,13 +17,13 @@
 
 /proc/dotheblobbaby()
 	if (blobevent)
-		if(blob_cores.len)
-			for(var/i = 1 to 5)
+		if (blob_cores.len)
+			for (var/i = 1 to 5)
 				sleep(-1)
-				if(!blob_cores.len)
+				if (!blob_cores.len)
 					break
 				var/obj/effect/blob/B = pick(blob_cores)
-				if(B.z != map.zMainStation)
+				if (B.z != map.zMainStation)
 					continue
 				B.Life()
 		spawn(30)

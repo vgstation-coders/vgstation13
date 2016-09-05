@@ -126,15 +126,15 @@ obj/item/weapon/wirerod
 
 obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	..()
-	if(istype(I, /obj/item/weapon/shard))
+	if (istype(I, /obj/item/weapon/shard))
 		user.visible_message("<span class='notice'>[user] starts securing \the [I] to the top of \the [src].</span>",\
 		"<span class='info'>You attempt to create a spear by securing \the [I] to \the [src].</span>")
 
-		if(do_after(user, get_turf(src), 5 SECONDS))
-			if(!I || !src)
+		if (do_after(user, get_turf(src), 5 SECONDS))
+			if (!I || !src)
 				return
 
-			if(!user.drop_item(I))
+			if (!user.drop_item(I))
 				to_chat(user, "<span class='warning'>You can't let go of \the [I]! You quickly unsecure it from \the [src].</span>")
 				return
 
@@ -146,19 +146,19 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 			S.force = S.base_force
 
 			var/prefix = ""
-			switch(S.force)
-				if(-INFINITY to 5)
+			switch (S.force)
+				if (-INFINITY to 5)
 					prefix = "useless"
-				if(5 to 9)
+				if (5 to 9)
 					prefix = "dull"
-				if(11 to 19)
+				if (11 to 19)
 					prefix = "sharp"
-				if(20 to 27)
+				if (20 to 27)
 					prefix = "exceptional"
-				if(29 to INFINITY)
+				if (29 to INFINITY)
 					prefix = "legendary"
 
-			if(prefix)
+			if (prefix)
 				S.name = "[prefix] [S.name]"
 
 			user.put_in_hands(S)
@@ -169,7 +169,7 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 			I = null
 			qdel(src)
 
-	else if(iswirecutter(I))
+	else if (iswirecutter(I))
 		var/obj/item/weapon/melee/baton/cattleprod/P = new /obj/item/weapon/melee/baton/cattleprod
 
 		user.before_take_item(I)
@@ -181,10 +181,10 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 		I =  null
 		qdel(src)
 
-	else if(istype(I, /obj/item/stack/rods))
+	else if (istype(I, /obj/item/stack/rods))
 		to_chat(user, "You fasten the metal rods together.")
 		var/obj/item/stack/rods/R = I
-		if(src.loc == user)
+		if (src.loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/rail_assembly/Q = new (get_turf(user))
 			user.put_in_hands(Q)
@@ -233,18 +233,18 @@ obj/item/weapon/banhammer/admin
 
 /obj/item/weapon/melee/bone_hammer/New(turf/T, var/p_borer = null)
 	..(T)
-	if(istype(p_borer, /mob/living/simple_animal/borer))
+	if (istype(p_borer, /mob/living/simple_animal/borer))
 		parent_borer = p_borer
-	if(!parent_borer)
+	if (!parent_borer)
 		qdel(src)
 	else
 		processing_objects.Add(src)
 
 /obj/item/weapon/melee/bone_hammer/Destroy()
-	if(parent_borer)
-		if(parent_borer.channeling_bone_hammer)
+	if (parent_borer)
+		if (parent_borer.channeling_bone_hammer)
 			parent_borer.channeling_bone_hammer = 0
-		if(parent_borer.channeling)
+		if (parent_borer.channeling)
 			parent_borer.channeling = 0
 		parent_borer = null
 	processing_objects.Remove(src)
@@ -252,11 +252,11 @@ obj/item/weapon/banhammer/admin
 
 /obj/item/weapon/melee/bone_hammer/process()
 	set waitfor = 0
-	if(!parent_borer)
+	if (!parent_borer)
 		return
-	if(!parent_borer.channeling_bone_hammer) //the borer has stopped sustaining the hammer
+	if (!parent_borer.channeling_bone_hammer) //the borer has stopped sustaining the hammer
 		qdel(src)
-	if(parent_borer.chemicals < 10) //the parent borer no longer has the chemicals required to sustain the hammer
+	if (parent_borer.chemicals < 10) //the parent borer no longer has the chemicals required to sustain the hammer
 		qdel(src)
 	else
 		parent_borer.chemicals -= 10

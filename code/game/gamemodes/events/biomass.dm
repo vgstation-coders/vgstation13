@@ -18,7 +18,7 @@
 	..()
 
 /obj/effect/biomass/proc/unreferenceMaster()
-	if(master)
+	if (master)
 		master.growth_queue -= src
 		master.vines -= src
 		master = null
@@ -27,37 +27,37 @@
 	if (!W || !user || !W.type)
 		return
 
-	switch(W.type) //This is absolutely terrible
-		if(/obj/item/weapon/circular_saw)
+	switch (W.type) //This is absolutely terrible
+		if (/obj/item/weapon/circular_saw)
 			qdel(src)
-		if(/obj/item/weapon/kitchen/utensil/knife)
+		if (/obj/item/weapon/kitchen/utensil/knife)
 			qdel(src)
-		if(/obj/item/weapon/fireaxe)
+		if (/obj/item/weapon/fireaxe)
 			qdel(src)
-		if(/obj/item/weapon/hatchet)
+		if (/obj/item/weapon/hatchet)
 			qdel(src)
-		if(/obj/item/weapon/melee/energy)
+		if (/obj/item/weapon/melee/energy)
 			qdel(src)
-		if(/obj/item/weapon/pickaxe/plasmacutter)
+		if (/obj/item/weapon/pickaxe/plasmacutter)
 			qdel(src)
 
 		// less effective weapons
-		if(/obj/item/weapon/wirecutters)
-			if(prob(25))
+		if (/obj/item/weapon/wirecutters)
+			if (prob(25))
 				qdel(src)
-		if(/obj/item/weapon/shard)
-			if(prob(25))
+		if (/obj/item/weapon/shard)
+			if (prob(25))
 				qdel(src)
 
 		else // weapons with subtypes
-			if(istype(W, /obj/item/weapon/melee/energy/sword))
+			if (istype(W, /obj/item/weapon/melee/energy/sword))
 				qdel(src)
-			else if(istype(W, /obj/item/weapon/scalpel))
+			else if (istype(W, /obj/item/weapon/scalpel))
 				qdel(src)
-			else if(istype(W, /obj/item/weapon/weldingtool))
+			else if (istype(W, /obj/item/weapon/weldingtool))
 				var/obj/item/weapon/weldingtool/WeldingTool = W
 
-				if(WeldingTool.remove_fuel(0, user))
+				if (WeldingTool.remove_fuel(0, user))
 					qdel(src)
 			else
 				return
@@ -65,7 +65,7 @@
 	..()
 
 /obj/effect/biomass/proc/grow()
-	if(energy <= 0)
+	if (energy <= 0)
 		icon_state = "stage2"
 		energy = 1
 	else
@@ -76,25 +76,25 @@
 /obj/effect/biomass/proc/spread()
 	var/location = get_step_rand(src)
 
-	if(istype(location, /turf/simulated/floor))
+	if (istype(location, /turf/simulated/floor))
 		var/turf/simulated/floor/Floor = location
 
-		if(isnull(locate(/obj/effect/biomass) in Floor))
-			if(Floor.Enter(src, loc))
-				if(master)
+		if (isnull(locate(/obj/effect/biomass) in Floor))
+			if (Floor.Enter(src, loc))
+				if (master)
 					master.spawn_biomass_piece(Floor)
 					return 1
 	return 0
 
 /obj/effect/biomass/ex_act(severity)
-	switch(severity)
-		if(1.0)
+	switch (severity)
+		if (1.0)
 			qdel(src)
-		if(2.0)
-			if(prob(90))
+		if (2.0)
+			if (prob(90))
 				qdel(src)
-		if(3.0)
-			if(prob(50))
+		if (3.0)
+			if (prob(50))
 				qdel(src)
 
 /obj/effect/biomass/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume) //hotspots kill biomass
@@ -116,15 +116,15 @@
 /obj/effect/biomass_controller/New(loc)
 	..(loc)
 
-	if(!istype(loc, /turf/simulated/floor))
+	if (!istype(loc, /turf/simulated/floor))
 		qdel(src)
 
 	spawn_biomass_piece(loc)
 	processing_objects += src
 
 /obj/effect/biomass_controller/Destroy() // controller is kill, no!!!111
-	if(vines && vines.len > 0)
-		for(var/obj/effect/biomass/Biomass in vines)
+	if (vines && vines.len > 0)
+		for (var/obj/effect/biomass/Biomass in vines)
 			Biomass.unreferenceMaster()
 
 	processing_objects -= src
@@ -137,26 +137,26 @@
 	growth_queue += Biomass
 
 /obj/effect/biomass_controller/process()
-	if(isnull(vines) || vines.len == 0) // sanity and existing biomass check
+	if (isnull(vines) || vines.len == 0) // sanity and existing biomass check
 		qdel(src)
 		return
 
-	if(isnull(growth_queue)) // sanity check
+	if (isnull(growth_queue)) // sanity check
 		qdel(src)
 		return
 
-	if(vines.len >= 250 && !reached_collapse_size)
+	if (vines.len >= 250 && !reached_collapse_size)
 		reached_collapse_size = TRUE
 
-	if(vines.len >= 30 && !reached_slowdown_size)
+	if (vines.len >= 30 && !reached_slowdown_size)
 		reached_slowdown_size = TRUE
 
 	var/maxgrowth = 0
 
-	if(reached_collapse_size)
+	if (reached_collapse_size)
 		maxgrowth = 0
-	else if(reached_slowdown_size)
-		if(prob(25))
+	else if (reached_slowdown_size)
+		if (prob(25))
 			maxgrowth = 1
 		else
 			maxgrowth = 0
@@ -168,22 +168,22 @@
 	var/growth = 0
 	var/list/obj/effect/biomass/queue_end = new
 
-	for(var/obj/effect/biomass/Biomass in growth_queue)
+	for (var/obj/effect/biomass/Biomass in growth_queue)
 		i++
 		growth_queue -= Biomass
 		queue_end += Biomass
 
-		if(Biomass.energy < 2) // if biomass isn't fully grown
-			if(prob(20))
+		if (Biomass.energy < 2) // if biomass isn't fully grown
+			if (prob(20))
 				Biomass.grow()
 
-		if(Biomass.spread())
+		if (Biomass.spread())
 			growth++
 
-			if(growth >= maxgrowth)
+			if (growth >= maxgrowth)
 				break
 
-		if(i >= length)
+		if (i >= length)
 			break
 
 	growth_queue = growth_queue + queue_end
@@ -194,14 +194,14 @@
 	// list of all the empty floor turfs in the hallway areas
 	var/list/turf/simulated/floor/Floors = new
 
-	for(var/type in typesof(/area/hallway))
+	for (var/type in typesof(/area/hallway))
 		var/area/Hallway = locate(type)
 
-		for(var/turf/simulated/floor/Floor in Hallway.contents)
-			if(!is_blocked_turf(Floor))
+		for (var/turf/simulated/floor/Floor in Hallway.contents)
+			if (!is_blocked_turf(Floor))
 				Floors += Floor
 
-	if(Floors.len) // pick a floor to spawn at
+	if (Floors.len) // pick a floor to spawn at
 		var/turf/simulated/floor/Floor = pick(Floors)
 		new/obj/effect/biomass_controller(Floor) // spawn a controller at floor
 		log_admin("Event: Biomass spawned at [Floor.loc] ([Floor.x],[Floor.y],[Floor.z]).")

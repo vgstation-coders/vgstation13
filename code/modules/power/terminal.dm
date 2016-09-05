@@ -20,13 +20,13 @@
 /obj/machinery/power/terminal/New()
 	..()
 	var/turf/T = src.loc
-	if(level==1)
+	if (level==1)
 		hide(T.intact)
 	return
 
 
 /obj/machinery/power/terminal/hide(var/i)
-	if(i)
+	if (i)
 		invisibility = 101
 		icon_state = "term-f"
 	else
@@ -41,19 +41,19 @@
 	..()
 
 /obj/machinery/power/terminal/attackby(obj/item/W, mob/user)
-	if(iswirecutter(W) && !master) //Sanity in the rare case something destroys a machine and leaves a terminal
+	if (iswirecutter(W) && !master) //Sanity in the rare case something destroys a machine and leaves a terminal
 		getFromPool(/obj/item/stack/cable_coil, get_turf(src), 10)
 		qdel(src)
 		return
 	..()
 
 /obj/machinery/power/proc/make_terminal(mob/user)
-	if(!can_attach_terminal(user))
+	if (!can_attach_terminal(user))
 		to_chat(user, "<span class='warning'>You can't wire \the [src] like that!</span>")
 		return 0
 
 	var/turf/T = get_turf(user)
-	if(T.intact)
+	if (T.intact)
 		to_chat(user, "<span class='warning'>The floor plating must be removed first.</span>")
 		return 0
 

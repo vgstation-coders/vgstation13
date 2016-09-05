@@ -19,10 +19,10 @@
 
 /obj/machinery/computer/general_air_control/atmos_automation/New()
 	..()
-	for(var/i = 1, i <= register_amount, i++)//Fill the registers
+	for (var/i = 1, i <= register_amount, i++)//Fill the registers
 		registers.Add(list(0))
 
-	for(var/i = 1 to max_linked_assembly_amount)
+	for (var/i = 1 to max_linked_assembly_amount)
 		linked_assemblies.Add(null)
 
 /obj/machinery/computer/general_air_control/atmos_automation/Destroy()
@@ -31,31 +31,31 @@
 	..()
 
 /obj/machinery/computer/general_air_control/atmos_automation/receive_signal(datum/signal/signal)
-	if(!signal || signal.encryption)
+	if (!signal || signal.encryption)
 		return
 
 	var/id_tag = signal.data["tag"]
-	if(!id_tag)
+	if (!id_tag)
 		return
 
 	sensor_information[id_tag] = signal.data
 
 /obj/machinery/computer/general_air_control/atmos_automation/process()
-	if(on)
-		for(var/datum/automation/A in automations)
+	if (on)
+		for (var/datum/automation/A in automations)
 			A.process()
 
 /obj/machinery/computer/general_air_control/atmos_automation/update_icon()
 	icon_state = initial(icon_state)
 	// Broken
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		icon_state += "b"
 
 	// Powered
-	else if(stat & NOPOWER)
+	else if (stat & NOPOWER)
 		icon_state = initial(icon_state)
 		icon_state += "0"
-	else if(on)
+	else if (on)
 		icon_state += "_active"
 
 /obj/machinery/computer/general_air_control/atmos_automation/proc/request_device_refresh(var/device)
@@ -71,25 +71,25 @@
 
 /obj/machinery/computer/general_air_control/atmos_automation/proc/selectValidChildFor(var/datum/automation/parent, var/mob/user, var/list/valid_returntypes)
 	var/list/choices=list()
-	for(var/childtype in automation_types)
+	for (var/childtype in automation_types)
 		var/datum/automation/A = new childtype(src)
-		if(A.returntype == null)
+		if (A.returntype == null)
 			continue
-		if(!(A.returntype in valid_returntypes))
+		if (!(A.returntype in valid_returntypes))
 			continue
 		choices[A.name]=A
 	if (choices.len==0)
 		testing("Unable to find automations with returntype in [english_list(valid_returntypes)]!")
 		return 0
 	var/label=input(user, "Select new automation:", "Automations", "Cancel") as null|anything in choices
-	if(!label)
+	if (!label)
 		return 0
 	return choices[label]
 
 /obj/machinery/computer/general_air_control/atmos_automation/return_text()
 	var/out=..()
 
-	if(on)
+	if (on)
 		out += "<a href=\"?src=\ref[src];on=1\" style=\"font-size:large;font-weight:bold;color:red;\">RUNNING</a>"
 	else
 		out += "<a href=\"?src=\ref[src];on=1\" style=\"font-size:large;font-weight:bold;color:green;\">STOPPED</a>"
@@ -120,10 +120,10 @@
 			Import
 		</a>
 		\]</p>"}
-	if(automations.len==0)
+	if (automations.len==0)
 		out += "<i>No automations present.</i>"
 	else
-		for(var/datum/automation/A in automations)
+		for (var/datum/automation/A in automations)
 			out += {"
 				<fieldset>
 					<legend>
@@ -136,7 +136,7 @@
 			"}
 
 	out += "<h2>Registers</h2>"
-	for(var/i = 1, i <= register_amount, i++)
+	for (var/i = 1, i <= register_amount, i++)
 		out += {"
 			<fieldset>
 				<legend>
@@ -149,65 +149,65 @@
 	return out
 
 /obj/machinery/computer/general_air_control/atmos_automation/Topic(href,href_list)
-	if(..())
+	if (..())
 		return
-	if(href_list["on"])
+	if (href_list["on"])
 		on = !on
 		updateUsrDialog()
 		update_icon()
 		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(usr)]")
 		return 1
 
-	if(href_list["add"])
+	if (href_list["add"])
 		var/new_child=selectValidChildFor(null,usr,list(0))
-		if(!new_child)
+		if (!new_child)
 			return 1
 		automations += new_child
 		updateUsrDialog()
 		return 1
 
-	if(href_list["label"])
+	if (href_list["label"])
 		var/datum/automation/A=locate(href_list["label"])
-		if(!A)
+		if (!A)
 			return 1
 		var/nl=input(usr, "Please enter a label for this automation task.") as text|null
-		if(!nl)
+		if (!nl)
 			return 1
 		nl	= copytext(sanitize(nl), 1, 50)
 		A.label=nl
 		updateUsrDialog()
 		return 1
 
-	if(href_list["reset"])
-		if(href_list["reset"]=="*")
+	if (href_list["reset"])
+		if (href_list["reset"]=="*")
 			investigation_log(I_ATMOS,"had all automations reset by [key_name(usr)]")
-			for(var/datum/automation/A in automations)
-				if(!A)
+			for (var/datum/automation/A in automations)
+				if (!A)
 					continue
 				A.OnReset()
 		else
 			var/datum/automation/A=locate(href_list["reset"])
-			if(!A)
+			if (!A)
 				return 1
 			A.OnReset()
 			investigation_log(I_ATMOS,"had the [A.name]/[A.desc] automation reset by [key_name(usr)]")
 		updateUsrDialog()
 		return 1
 
-	if(href_list["remove"])
-		if(href_list["remove"]=="*")
+	if (href_list["remove"])
+		if (href_list["remove"]=="*")
 			investigation_log(I_ATMOS,"had all automations removed by [key_name(usr)]")
 			var/confirm=alert("Are you sure you want to remove ALL automations?","Automations","Yes","No")
-			if(confirm == "No")
+			if (confirm == "No")
 				return 0
-			for(var/datum/automation/A in automations)
-				if(!A)
+			for (var/datum/automation/A in automations)
+				if (!A)
 					continue
 				A.OnRemove()
 				automations.Remove(A)
 		else
 			var/datum/automation/A=locate(href_list["remove"])
-			if(!A)
+			if (!A)
 				return 1
 			A.OnRemove()
 			automations.Remove(A)
@@ -215,9 +215,9 @@
 		updateUsrDialog()
 		return 1
 
-	if(href_list["read"])
+	if (href_list["read"])
 		var/code = input("Input exported AAC code.","Automations","") as message|null
-		if(!code || (!issilicon(usr) && !Adjacent(usr)))
+		if (!code || (!issilicon(usr) && !Adjacent(usr)))
 			return 0
 		try // To prevent invalid JSON causing runtimes.
 			ReadCode(code)
@@ -228,15 +228,15 @@
 		investigation_log(I_ATMOS,"had an automations list imported by [key_name(usr)]: [code]")
 		return 1
 
-	if(href_list["dump"])
+	if (href_list["dump"])
 		input("Exported AAC code:","Automations",DumpCode()) as message|null
 		return 0
 
-	if(href_list["editregister"])
+	if (href_list["editregister"])
 		var/registerid = text2num(href_list["editregister"])//This'll be text by default.
 		registerid = sanitize_integer(registerid, min = 1, max = register_amount)//Can't be too sure.
 
-		if(!registerid)//Something wasn't sane.
+		if (!registerid)//Something wasn't sane.
 			return 1
 
 		var/oldreg = registers[registerid]
@@ -247,16 +247,16 @@
 
 	//Assembly stuff
 
-	if(href_list["connect_assembly"])
+	if (href_list["connect_assembly"])
 		var/id = text2num(href_list["connect_assembly"])
 
 		var/obj/item/device/assembly/A = linked_assemblies[id]
 
-		if(isnull(A)) //Nothing connected in the specified socket - take assembly from hand and connect it
+		if (isnull(A)) //Nothing connected in the specified socket - take assembly from hand and connect it
 			var/obj/item/device/assembly/to_connect = usr.get_active_hand()
 
-			if(istype(to_connect)) //User's active hand holds an assembly
-				if(usr.drop_item(to_connect, src)) //Stick it in and connect it
+			if (istype(to_connect)) //User's active hand holds an assembly
+				if (usr.drop_item(to_connect, src)) //Stick it in and connect it
 					linked_assemblies[id] = to_connect
 			else
 				to_chat(usr, "<span class='info'>Hold the assembly in your hand and press this button to connect it.</span>")
@@ -269,9 +269,9 @@
 
 		href_list["view_assemblies"] = 1 //Update the window!
 
-	if(href_list["view_assemblies"]) //Open a separate window that lists connected assemblies
+	if (href_list["view_assemblies"]) //Open a separate window that lists connected assemblies
 		var/dat = "<h2>Connected assemblies</h2>"
-		for(var/i = 1 to max_linked_assembly_amount)
+		for (var/i = 1 to max_linked_assembly_amount)
 			dat += "<p>[i]) <a href=\"?src=\ref[src];connect_assembly=[i]\">[isnull(linked_assemblies[i]) ? "-click to insert-" : linked_assemblies[i]]</a></p>"
 
 		var/datum/browser/popup = new(usr, "AAC_assemblies", "[src]", 500, 300, src)
@@ -301,20 +301,20 @@
 
 /obj/machinery/computer/general_air_control/atmos_automation/proc/DumpCode()
 	var/list/json[0]
-	for(var/datum/automation/A in automations)
+	for (var/datum/automation/A in automations)
 		json += list(A.Export())
 	return list2json(json)
 
 /obj/machinery/computer/general_air_control/atmos_automation/proc/ReadCode(var/jsonStr)
 	automations.len = 0
 	var/list/json=json2list(jsonStr)
-	if(json && json.len > 0)
-		for(var/list/cData in json)
-			if(isnull(cData) || !("type" in cData))
+	if (json && json.len > 0)
+		for (var/list/cData in json)
+			if (isnull(cData) || !("type" in cData))
 				testing("AAC: Null cData in root JS array.")
 				continue
 			var/Atype=text2path(cData["type"])
-			if(!(Atype in automation_types))
+			if (!(Atype in automation_types))
 				testing("AAC: Unrecognized Atype [Atype].")
 				continue
 			var/datum/automation/A = new Atype(src)
@@ -333,7 +333,7 @@
 	// On State
 	// Pretty much this:
 	/*
-		if(get_sensor("inc_sensor","temperature") < 200)
+		if (get_sensor("inc_sensor","temperature") < 200)
 			set_injector_state("inc_in",1)
 			set_vent_pump_power("inc_out",0)
 		else
@@ -375,7 +375,7 @@
 
 	// Off state
 	/*
-		if(get_sensor("inc_sensor","temperature") > 1000)
+		if (get_sensor("inc_sensor","temperature") > 1000)
 			set_injector_state("inc_in",0)
 	*/
 	sensor=new(src)
@@ -444,10 +444,10 @@
 	// Nitrogen Injection
 	///////////////////////////////////////////////////////////////
 	/*
-	if(get_sensor_data("pressure") < 100)
+	if (get_sensor_data("pressure") < 100)
 		injector_on()
 	else
-		if(get_sensor_data("pressure") > 5000)
+		if (get_sensor_data("pressure") > 5000)
 			injector_off()
 	*/
 
@@ -486,10 +486,10 @@
 	// Outlet Management
 	///////////////////////////////////////////////////////////////
 	/*
-		if(get_sensor_data("pressure") >= 5000 && get_sensor_data("oxygen") >= 20)
+		if (get_sensor_data("pressure") >= 5000 && get_sensor_data("oxygen") >= 20)
 			vent_on()
 		else
-			if(get_sensor_data("oxygen") < 20 || get_sensor_data("pressure") < 100)
+			if (get_sensor_data("oxygen") < 20 || get_sensor_data("pressure") < 100)
 				vent_off()
 	*/
 

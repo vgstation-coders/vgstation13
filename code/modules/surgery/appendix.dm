@@ -19,7 +19,7 @@
 
 /datum/surgery_step/appendectomy/cut_appendix/tool_quality(obj/item/tool)
 	. = ..()
-	if(!tool.is_sharp())
+	if (!tool.is_sharp())
 		return 0
 
 /datum/surgery_step/appendectomy/cut_appendix
@@ -75,7 +75,7 @@
 		user.visible_message("<span class='notice'>[user] has removed [target]'s appendix with \the [tool].</span>", \
 		"<span class='notice'>You have removed [target]'s appendix with \the [tool].</span>")
 		var/app = 0
-		for(var/datum/disease/appendicitis/appendicitis in target.viruses)
+		for (var/datum/disease/appendicitis/appendicitis in target.viruses)
 			app = 1
 			appendicitis.cure()
 			target.resistances += appendicitis

@@ -15,7 +15,7 @@
 	on = text2num(json["on"])
 
 /datum/automation/set_emitter_power/process()
-	if(emitter)
+	if (emitter)
 		parent.send_signal(list ("tag" = emitter, "command"="set","state"=on))
 	return 0
 
@@ -24,21 +24,21 @@
 
 /datum/automation/set_emitter_power/Topic(href,href_list)
 	. = ..()
-	if(.)
+	if (.)
 		return
 
-	if(href_list["set_power"])
+	if (href_list["set_power"])
 		on = !on
 		parent.updateUsrDialog()
 		return 1
 
-	if(href_list["set_subject"])
+	if (href_list["set_subject"])
 		var/list/emitters = list()
-		for(var/obj/machinery/power/emitter/E in power_machines)
-			if(!isnull(E.id_tag) && E.frequency == parent.frequency)
+		for (var/obj/machinery/power/emitter/E in power_machines)
+			if (!isnull(E.id_tag) && E.frequency == parent.frequency)
 				emitters |= E.id_tag
 
-		if(emitters.len == 0)
+		if (emitters.len == 0)
 			to_chat(usr, "<span class='warning'>Unable to find any emitters on this frequency.</span>")
 			return
 

@@ -13,18 +13,18 @@
 /proc/getOPressureDifferential(var/turf/loc)
 	var/minp=16777216; //What is even the significance of this number?
 	var/maxp=0;
-	for(var/dir in cardinal)
+	for (var/dir in cardinal)
 		var/turf/simulated/T=get_turf(get_step(loc,dir))
 		var/cp=0
-		if(T && istype(T) && T.zone)
+		if (T && istype(T) && T.zone)
 			var/datum/gas_mixture/environment = T.return_air()
 			cp = environment.return_pressure()
 		else
-			if(istype(T,/turf/simulated))
+			if (istype(T,/turf/simulated))
 				continue
-		if(cp<minp)
+		if (cp<minp)
 			minp=cp
-		if(cp>maxp)
+		if (cp>maxp)
 			maxp=cp
 	return abs(minp-maxp)
 
@@ -35,17 +35,17 @@
 /proc/getPressureDifferentialFromTurfList(var/list/turf/simulated/turf_list)
 	var/minp=16777216; //What is even the significance of this number?
 	var/maxp=0;
-	for(var/turf/simulated/T in turf_list)
+	for (var/turf/simulated/T in turf_list)
 		var/cp = 0
-		if(T.zone)
+		if (T.zone)
 			var/datum/gas_mixture/environment = T.return_air()
 			cp = environment.return_pressure()
 		else
-			if(istype(T,/turf/simulated))
+			if (istype(T,/turf/simulated))
 				continue
-		if(cp<minp)
+		if (cp<minp)
 			minp=cp
-		if(cp>maxp)
+		if (cp>maxp)
 			maxp=cp
 	return abs(minp-maxp)
 
@@ -53,23 +53,23 @@
 // Checks pressure here vs. around us.
 /proc/performFalseWallPressureCheck(var/turf/loc)
 	var/turf/simulated/lT=loc
-	if(!istype(lT) || !lT.zone)
+	if (!istype(lT) || !lT.zone)
 		return 0
 	var/datum/gas_mixture/myenv=lT.return_air()
 	var/pressure=myenv.return_pressure()
 
-	for(var/dir in cardinal)
+	for (var/dir in cardinal)
 		var/turf/simulated/T=get_turf(get_step(loc,dir))
-		if(T && istype(T) && T.zone)
+		if (T && istype(T) && T.zone)
 			var/datum/gas_mixture/environment = T.return_air()
 			var/pdiff = abs(pressure - environment.return_pressure())
-			if(pdiff > FALSEDOOR_MAX_PRESSURE_DIFF)
+			if (pdiff > FALSEDOOR_MAX_PRESSURE_DIFF)
 				return pdiff
 	return 0
 
 /proc/performWallPressureCheck(var/turf/loc)
 	var/pdiff = getOPressureDifferential(loc)
-	if(pdiff > FALSEDOOR_MAX_PRESSURE_DIFF)
+	if (pdiff > FALSEDOOR_MAX_PRESSURE_DIFF)
 		return pdiff
 	return 0
 
@@ -77,7 +77,7 @@
 	set name = "Get PDiff"
 	set category = "Debug"
 
-	if(!mob || !holder)
+	if (!mob || !holder)
 		return
 	var/turf/T = mob.loc
 
@@ -116,20 +116,20 @@
 	var/temploc = src.loc
 
 	spawn(10)
-		for(var/turf/simulated/wall/W in range(temploc,1))
+		for (var/turf/simulated/wall/W in range(temploc,1))
 			W.relativewall()
 
-		for(var/obj/structure/falsewall/W in range(temploc,1))
+		for (var/obj/structure/falsewall/W in range(temploc,1))
 			W.relativewall()
 
-		for(var/obj/structure/falserwall/W in range(temploc,1))
+		for (var/obj/structure/falserwall/W in range(temploc,1))
 			W.relativewall()
 	..()
 
 
 /obj/structure/falsewall/relativewall()
 
-	if(!density)
+	if (!density)
 		icon_state = "[mineral]fwall_open"
 		return
 
@@ -137,15 +137,15 @@
 	icon_state = "[mineral][junction]"
 
 /obj/structure/falsewall/attack_ai(mob/user as mob)
-	if(isMoMMI(user))
+	if (isMoMMI(user))
 		src.add_hiddenprint(user)
 		attack_hand(user)
 
 /obj/structure/falsewall/attack_hand(mob/user as mob)
-	if(opening)
+	if (opening)
 		return
 
-	if(density)
+	if (density)
 		opening = 1
 		icon_state = "[mineral]fwall_open"
 		flick("[mineral]fwall_opening", src)
@@ -165,61 +165,61 @@
 
 /obj/structure/falsewall/update_icon()//Calling icon_update will refresh the smoothwalls if it's closed, otherwise it will make sure the icon is correct if it's open
 	..()
-	if(density)
+	if (density)
 		icon_state = "[mineral]0"
 		src.relativewall()
 	else
 		icon_state = "[mineral]fwall_open"
 
 /obj/structure/falsewall/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(opening)
+	if (opening)
 		to_chat(user, "<span class='warning'>You must wait until the door has stopped moving.</span>")
 		return
 
-	if(density)
+	if (density)
 		var/turf/T = get_turf(src)
-		if(T.density)
+		if (T.density)
 			to_chat(user, "<span class='warning'>The wall is blocked!</span>")
 			return
-		if(isscrewdriver(W))
+		if (isscrewdriver(W))
 			user.visible_message("[user] tightens some bolts on the wall.", "You tighten the bolts on the wall.")
-			if(!mineral || mineral == "metal")
+			if (!mineral || mineral == "metal")
 				T.ChangeTurf(/turf/simulated/wall)
 			else
 				T.ChangeTurf(text2path("/turf/simulated/wall/mineral/[mineral]"))
 			qdel(src)
 
-		if( istype(W, /obj/item/weapon/weldingtool) )
+		if ( istype(W, /obj/item/weapon/weldingtool) )
 			var/obj/item/weapon/weldingtool/WT = W
-			if( WT:welding )
-				if(!mineral)
+			if ( WT:welding )
+				if (!mineral)
 					T.ChangeTurf(/turf/simulated/wall)
 				else
 					T.ChangeTurf(text2path("/turf/simulated/wall/mineral/[mineral]"))
-				if(mineral != "plasma")//Stupid shit keeps me from pushing the attackby() to plasma walls -Sieve
+				if (mineral != "plasma")//Stupid shit keeps me from pushing the attackby() to plasma walls -Sieve
 					T = get_turf(src)
 					T.attackby(W,user)
 				qdel(src)
 	else
 		to_chat(user, "<span class='notice'>You can't reach, close it first!</span>")
 
-	if( istype(W, /obj/item/weapon/pickaxe) )
+	if ( istype(W, /obj/item/weapon/pickaxe) )
 		var/obj/item/weapon/pickaxe/used_pick = W
-		if(!(used_pick.diggables & DIG_WALLS))
+		if (!(used_pick.diggables & DIG_WALLS))
 			return
 		var/turf/T = get_turf(src)
-		if(!mineral)
+		if (!mineral)
 			T.ChangeTurf(/turf/simulated/wall)
 		else
 			T.ChangeTurf(text2path("/turf/simulated/wall/mineral/[mineral]"))
-		if(mineral != "plasma")
+		if (mineral != "plasma")
 			T = get_turf(src)
 			T.attackby(W,user)
 		qdel(src)
 
 /obj/structure/falsewall/update_icon()//Calling icon_update will refresh the smoothwalls if it's closed, otherwise it will make sure the icon is correct if it's open
 	..()
-	if(density)
+	if (density)
 		icon_state = "[mineral]0"
 		src.relativewall()
 	else
@@ -250,15 +250,15 @@
 
 
 /obj/structure/falserwall/attack_ai(mob/user as mob)
-	if(isMoMMI(user))
+	if (isMoMMI(user))
 		src.add_hiddenprint(user)
 		attack_hand(user)
 
 /obj/structure/falserwall/attack_hand(mob/user as mob)
-	if(opening)
+	if (opening)
 		return
 
-	if(density)
+	if (density)
 		opening = 1
 		// Open wall
 		icon_state = "frwall_open"
@@ -279,35 +279,35 @@
 
 /obj/structure/falserwall/relativewall()
 
-	if(!density)
+	if (!density)
 		icon_state = "frwall_open"
 		return
 	var/junction=findSmoothingNeighbors()
 	icon_state = "rwall[junction]"
 
 /obj/structure/falserwall/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(opening)
+	if (opening)
 		to_chat(user, "<span class='warning'>You must wait until the door has stopped moving.</span>")
 		return
 
-	if(isscrewdriver(W))
+	if (isscrewdriver(W))
 		var/turf/T = get_turf(src)
 		user.visible_message("[user] tightens some bolts on the r wall.", "You tighten the bolts on the wall.")
 		T.ChangeTurf(/turf/simulated/wall/r_wall) //Why not make rwall?
 		qdel(src)
 
-	if( istype(W, /obj/item/weapon/weldingtool) )
+	if ( istype(W, /obj/item/weapon/weldingtool) )
 		var/obj/item/weapon/weldingtool/WT = W
-		if( WT.remove_fuel(0,user) )
+		if ( WT.remove_fuel(0,user) )
 			var/turf/T = get_turf(src)
 			T.ChangeTurf(/turf/simulated/wall)
 			T = get_turf(src)
 			T.attackby(W,user)
 			qdel(src)
 
-	else if( istype(W, /obj/item/weapon/pickaxe) )
+	else if ( istype(W, /obj/item/weapon/pickaxe) )
 		var/obj/item/weapon/pickaxe/used_pick = W
-		if(!(used_pick.diggables & DIG_WALLS))
+		if (!(used_pick.diggables & DIG_WALLS))
 			return
 		var/turf/T = get_turf(src)
 		T.ChangeTurf(/turf/simulated/wall)
@@ -337,12 +337,12 @@
 	..()
 
 /obj/structure/falsewall/uranium/proc/radiate()
-	if(!active)
-		if(world.time > last_event+15)
+	if (!active)
+		if (world.time > last_event+15)
 			active = 1
-			for(var/mob/living/L in range(3,src))
+			for (var/mob/living/L in range(3,src))
 				L.apply_effect(12,IRRADIATE,0)
-			for(var/turf/simulated/wall/mineral/uranium/T in range(3,src))
+			for (var/turf/simulated/wall/mineral/uranium/T in range(3,src))
 				T.radiate()
 			last_event = world.time
 			active = null

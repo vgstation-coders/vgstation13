@@ -29,78 +29,78 @@
 
 	//TODO:  These locations should be specified by the map datum or by the area. //Area datums, any day now
 	//Something like area.is_quiet=1 or map.quiet_areas=list()
-	switch(location)
-		if(LOC_KITCHEN)
+	switch (location)
+		if (LOC_KITCHEN)
 			spawn_area_type = /area/crew_quarters/kitchen
 			locstring = "the Kitchen"
-		if(LOC_ATMOS)
+		if (LOC_ATMOS)
 			spawn_area_type = /area/engineering/atmos
 			locstring = "Atmospherics"
-		if(LOC_INCIN)
+		if (LOC_INCIN)
 			spawn_area_type = /area/maintenance/incinerator
 			locstring = "the Incinerator"
-		if(LOC_CHAPEL)
+		if (LOC_CHAPEL)
 			spawn_area_type = /area/chapel/main
 			locstring = "the Chapel"
-		if(LOC_LIBRARY)
+		if (LOC_LIBRARY)
 			spawn_area_type = /area/library
 			locstring = "the Library"
-		if(LOC_HYDRO)
+		if (LOC_HYDRO)
 			spawn_area_type = /area/hydroponics
 			locstring = "Hydroponics"
-		if(LOC_VAULT)
+		if (LOC_VAULT)
 			spawn_area_type = /area/storage/nuke_storage
 			locstring = "the Vault"
-		if(LOC_TECH)
+		if (LOC_TECH)
 			spawn_area_type = /area/storage/tech
 			locstring = "Technical Storage"
 
 	var/list/spawn_types = list()
 	var/max_number = 4
 	var/vermin = pick(VERM_MICE, VERM_LIZARDS, VERM_SPIDERS, VERM_SLIMES, VERM_BATS, VERM_BORERS, VERM_MIMICS)
-	switch(vermin)
-		if(VERM_MICE)
+	switch (vermin)
+		if (VERM_MICE)
 			spawn_types = list(/mob/living/simple_animal/mouse/gray, /mob/living/simple_animal/mouse/brown, /mob/living/simple_animal/mouse/white)
 			max_number = 12
 			vermstring = "mice"
-		if(VERM_LIZARDS)
+		if (VERM_LIZARDS)
 			spawn_types = list(/mob/living/simple_animal/lizard)
 			max_number = 6
 			vermstring = "lizards"
-		if(VERM_SPIDERS)
+		if (VERM_SPIDERS)
 			spawn_types = list(/mob/living/simple_animal/hostile/giant_spider/spiderling)
 			vermstring = "spiderlings"
-		if(VERM_SLIMES)
+		if (VERM_SLIMES)
 			spawn_types = typesof(/mob/living/carbon/slime) - /mob/living/carbon/slime - typesof(/mob/living/carbon/slime/adult)
 			vermstring = "slimes"
-		if(VERM_BATS)
+		if (VERM_BATS)
 			spawn_types = /mob/living/simple_animal/hostile/scarybat
 			vermstring = "space bats"
-		if(VERM_BORERS)
+		if (VERM_BORERS)
 			spawn_types = /mob/living/simple_animal/borer
 			vermstring = "borers"
 			max_number = 5
-		if(VERM_MIMICS)
+		if (VERM_MIMICS)
 			spawn_types = /mob/living/simple_animal/hostile/mimic/crate/item
 			vermstring = "mimics"
 			max_number = 1 //1 to 2
-		if(VERM_ROACHES)
+		if (VERM_ROACHES)
 			spawn_types = /mob/living/simple_animal/cockroach
 			vermstring = "roaches"
 			max_number = 30 //Thanks obama
 
 	var/number = rand(2, max_number)
 
-	for(var/i = 0, i <= number, i++)
+	for (var/i = 0, i <= number, i++)
 		var/area/A = locate(spawn_area_type)
 		var/list/turf/simulated/floor/valid = list()
 		//Loop through each floor in the supply drop area
-		for(var/turf/simulated/floor/F in A)
-			if(!F.has_dense_content())
+		for (var/turf/simulated/floor/F in A)
+			if (!F.has_dense_content())
 				valid.Add(F)
 
 		var/picked = pick(valid)
-		if(vermin == VERM_SPIDERS)
+		if (vermin == VERM_SPIDERS)
 			var/mob/living/simple_animal/hostile/giant_spider/spiderling/S = new(picked)
 			S.amount_grown = 0
 		else

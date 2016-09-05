@@ -21,9 +21,9 @@
 	icon_state = "flood[panel_open ? "o" : ""][panel_open && cell ? "b" : ""]0[on]"
 
 /obj/machinery/floodlight/process()
-	if(on)
-		if(cell && cell.use(powercost))
-			if(cell.charge < powercost)
+	if (on)
+		if (cell && cell.use(powercost))
+			if (cell.charge < powercost)
 				on = 0
 				update_icon()
 				set_light(0)
@@ -45,8 +45,8 @@
 	return src.attack_hand(user)
 
 /obj/machinery/floodlight/attack_hand(mob/user as mob)
-	if(panel_open && cell)
-		if(ishuman(user) || isMoMMI(user)) //Allow MoMMIs to do it, too
+	if (panel_open && cell)
+		if (ishuman(user) || isMoMMI(user)) //Allow MoMMIs to do it, too
 			cell.forceMove(user.loc)
 			cell.add_fingerprint(user)
 			cell.updateicon()
@@ -56,11 +56,11 @@
 			update_icon()
 			return
 
-	if(on)
+	if (on)
 		on = 0
 		set_light(0)
 	else
-		if(!cell || !cell.charge > powercost)
+		if (!cell || !cell.charge > powercost)
 			return
 		on = 1
 		set_light(brightness_on)
@@ -71,10 +71,10 @@
 	update_icon()
 
 /obj/machinery/floodlight/attack_ghost(var/mob/dead/observer/ghost)
-	if(blessed)
+	if (blessed)
 		to_chat(ghost, "Your hand goes right through \the [src]...Is that some holy water dripping from it?")
 		return 0
-	if(!ghost.can_poltergeist())
+	if (!ghost.can_poltergeist())
 		to_chat(ghost, "Your poltergeist abilities are still cooling down.")
 		return 0
 	investigation_log(I_GHOST, "|| was switched [on ? "off" : "on"] by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
@@ -82,13 +82,13 @@
 
 /obj/machinery/floodlight/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
-	if(istype(W, /obj/item/weapon/cell))
-		if(panel_open)
-			if(cell)
+	if (istype(W, /obj/item/weapon/cell))
+		if (panel_open)
+			if (cell)
 				to_chat(user, "<span class='warning'>There already is a power cell already installed.</span>")
 				return
 			else
-				if(user.drop_item(W, src))
+				if (user.drop_item(W, src))
 					cell = W
 					user.visible_message("<span class='notice'>[user] inserts \the [src] into \the [src].</span>", \
 					"<span class='notice'>You insert \the [src] into \the [src].</span>")

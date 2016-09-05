@@ -18,27 +18,27 @@
 	var/on_wall = 0 //Wall on which this decal is placed on
 
 /obj/effect/decal/cleanable/New()
-	if(random_icon_states && length(src.random_icon_states) > 0)
+	if (random_icon_states && length(src.random_icon_states) > 0)
 		src.icon_state = pick(src.random_icon_states)
 	..()
 
 
 /obj/effect/decal/cleanable/attackby(obj/item/O as obj, mob/user as mob)
-	if(istype(O,/obj/item/weapon/mop))
+	if (istype(O,/obj/item/weapon/mop))
 		return ..()
 	return 0 //No more "X HITS THE BLOOD WITH AN RCD"
 
 /obj/effect/decal/cleanable/Destroy()
 	blood_list -= src
-	for(var/datum/disease/D in viruses)
+	for (var/datum/disease/D in viruses)
 		D.cure(0)
 		D.holder = null
 
-	if(counts_as_blood)
+	if (counts_as_blood)
 		var/datum/game_mode/cult/cult_round = find_active_mode("cult")
-		if(cult_round)
+		if (cult_round)
 			var/turf/T = get_turf(src)
-			if(T && (T.z == map.zMainStation))
+			if (T && (T.z == map.zMainStation))
 				cult_round.bloody_floors -= T
 				cult_round.blood_check()
 	..()
@@ -50,7 +50,7 @@
 	amount = 0
 
 /obj/effect/decal/cleanable/Crossed(mob/living/carbon/human/perp)
-	if(amount > 0)
+	if (amount > 0)
 		add_blood_to(perp, amount)
 
 /obj/effect/decal/cleanable/attack_hand(mob/living/carbon/human/user)
@@ -62,7 +62,7 @@
 		var/taken = rand(1,amount)
 		amount -= taken
 		to_chat(user, "<span class='notice'>You get some of \the [src] on your hands.</span>")
-		if(transfers_dna)
+		if (transfers_dna)
 			if (!user.blood_DNA)
 				user.blood_DNA = list()
 			user.blood_DNA |= blood_DNA.Copy()
@@ -83,18 +83,18 @@
 	blood_list += src
 	update_icon()
 
-	if(counts_as_blood)
+	if (counts_as_blood)
 		var/datum/game_mode/cult/cult_round = find_active_mode("cult")
-		if(cult_round)
+		if (cult_round)
 			var/turf/T = get_turf(src)
-			if(T && (T.z == map.zMainStation))//F I V E   T I L E S
-				if(!(locate("\ref[T]") in cult_round.bloody_floors))
+			if (T && (T.z == map.zMainStation))//F I V E   T I L E S
+				if (!(locate("\ref[T]") in cult_round.bloody_floors))
 					cult_round.bloody_floors += T
 					cult_round.bloody_floors[T] = T
 					cult_round.blood_check()
-		if(src.loc && isturf(src.loc))
-			for(var/obj/effect/decal/cleanable/C in src.loc)
-				if(C.type in absorbs_types && C != src)
+		if (src.loc && isturf(src.loc))
+			for (var/obj/effect/decal/cleanable/C in src.loc)
+				if (C.type in absorbs_types && C != src)
 					// Transfer DNA, if possible.
 					if (transfers_dna && C.blood_DNA)
 						blood_DNA |= C.blood_DNA.Copy()
@@ -108,16 +108,16 @@
 /obj/effect/decal/cleanable/proc/add_blood_to(var/mob/living/carbon/human/perp, var/amount)
 	if (!istype(perp))
 		return
-	if(amount < 1)
+	if (amount < 1)
 		return
-	if(perp.shoes)
+	if (perp.shoes)
 		var/obj/item/clothing/shoes/S = perp.shoes
 		S.track_blood = max(0, amount, S.track_blood)                //Adding blood to shoes
 
-		if(!blood_overlays[S.type]) //If there isn't a precreated blood overlay make one
+		if (!blood_overlays[S.type]) //If there isn't a precreated blood overlay make one
 			S.generate_blood_overlay()
 
-		if(S.blood_overlay != null) // Just if(blood_overlay) doesn't work.  Have to use isnull here.
+		if (S.blood_overlay != null) // Just if (blood_overlay) doesn't work.  Have to use isnull here.
 			S.overlays.Remove(S.blood_overlay)
 		else
 			S.blood_overlay = blood_overlays[S.type]
@@ -126,17 +126,17 @@
 		S.overlays += S.blood_overlay
 		S.blood_color=basecolor
 
-		if(!S.blood_DNA)
+		if (!S.blood_DNA)
 			S.blood_DNA = list()
-		if(blood_DNA)
+		if (blood_DNA)
 			S.blood_DNA |= blood_DNA.Copy()
 		perp.update_inv_shoes(1)
 
 	else
 		perp.track_blood = max(amount, 0, perp.track_blood)                                //Or feet
-		if(!perp.feet_blood_DNA)
+		if (!perp.feet_blood_DNA)
 			perp.feet_blood_DNA = list()
-		if(!istype(blood_DNA, /list))
+		if (!istype(blood_DNA, /list))
 			blood_DNA = list()
 		else
 			perp.feet_blood_DNA |= blood_DNA.Copy()

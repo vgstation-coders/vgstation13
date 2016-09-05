@@ -30,10 +30,10 @@ Feel free to do whatever with this if you think it lacks.
 /obj/machinery/pdapainter/RefreshParts()
 	var/i = 0
 	var/total_rating = 0
-	for(var/obj/item/weapon/stock_parts/micro_laser/ML in component_parts)
+	for (var/obj/item/weapon/stock_parts/micro_laser/ML in component_parts)
 		total_rating += ML.rating
 		i++
-	if(!total_rating || !i)
+	if (!total_rating || !i)
 		total_rating = 1
 	total_rating = total_rating / i //takes the average
 
@@ -43,14 +43,14 @@ Feel free to do whatever with this if you think it lacks.
 /obj/machinery/pdapainter/update_icon()
 	overlays.len = 0
 
-	if(stat & BROKEN)
+	if (stat & BROKEN)
 		icon_state = "[initial(icon_state)]-broken"
 		return
 
-	if(storedpda)
+	if (storedpda)
 		overlays += image(icon = icon, icon_state = "[initial(icon_state)]-closed")
 
-	if(powered())
+	if (powered())
 		icon_state = initial(icon_state)
 	else
 		icon_state = "[initial(icon_state)]-off"
@@ -70,28 +70,28 @@ Feel free to do whatever with this if you think it lacks.
 							/obj/item/weapon/stock_parts/console_screen
 			)
 
-	for(var/P in typesof(/obj/item/device/pda) - blocked)
+	for (var/P in typesof(/obj/item/device/pda) - blocked)
 		var/obj/item/device/pda/D = P
 		src.colorlist[initial(D.name)] = D
 
 	RefreshParts()
 
 /obj/machinery/pdapainter/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(busy)
+	if (busy)
 		to_chat(user, "\The [src] is currently busy, try again later.")
 		return
 
-	if(..())
+	if (..())
 		return 1
 
-	if(istype(O, /obj/item/device/pda))
-		if(storedpda)
+	if (istype(O, /obj/item/device/pda))
+		if (storedpda)
 			to_chat(user, "There is already a PDA inside.")
 			return
 		else
 			var/obj/item/device/pda/P = O
-			if(istype(P))
-				if(user.drop_item(P, src))
+			if (istype(P))
+				if (user.drop_item(P, src))
 					storedpda = P
 					//P.add_fingerprint(usr)
 					update_icon()
@@ -99,16 +99,16 @@ Feel free to do whatever with this if you think it lacks.
 /obj/machinery/pdapainter/attack_hand(mob/user as mob)
 	..()
 
-	if(!ishuman(user))
+	if (!ishuman(user))
 		return
 
 	src.add_fingerprint(user)
-	if(storedpda)
+	if (storedpda)
 		var/chosenPDA
 		chosenPDA = input(user, "Select your color.", "PDA Painting") as null|anything in colorlist
-		if(!chosenPDA)
+		if (!chosenPDA)
 			return
-		if(!in_range(src, user))
+		if (!in_range(src, user))
 			return
 
 		busy = 1
@@ -116,7 +116,7 @@ Feel free to do whatever with this if you think it lacks.
 
 		storedpda.icon_state = initial(P.icon_state)
 		storedpda.desc = initial(P.desc)
-		if(!storedpda.owner)
+		if (!storedpda.owner)
 			storedpda.name = initial(P.name)
 
 		sleep(10)
@@ -132,10 +132,10 @@ Feel free to do whatever with this if you think it lacks.
 	set category = "Object"
 	set src in oview(1)
 
-	if(!ishuman(usr))
+	if (!ishuman(usr))
 		return
 
-	if(storedpda)
+	if (storedpda)
 		storedpda.forceMove(get_turf(src.loc))
 		storedpda = null
 		update_icon()
@@ -147,15 +147,15 @@ Feel free to do whatever with this if you think it lacks.
 	set category = "Object"
 	set src in oview(1)
 
-	if(!ishuman(usr))
+	if (!ishuman(usr))
 		return
-	if(storedpda)
+	if (storedpda)
 		to_chat(usr, "You can't print a PDA while \the [storedpda] is loaded into \the [src].")
 		return
-	if(busy)
+	if (busy)
 		to_chat(usr, "\The [src] is busy, try again later.")
 		return
-	if(last_print + 300 < world.timeofday)
+	if (last_print + 300 < world.timeofday)
 		src.visible_message("<span class='notice'>\The [src] begins to hum lightly.</span>")
 		busy = 1
 		sleep(build_time)

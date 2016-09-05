@@ -17,6 +17,6 @@
 
 /spell/targeted/flesh_to_stone/cast(var/list/targets, mob/user)
 	..()
-	for(var/mob/living/target in targets)
+	for (var/mob/living/target in targets)
 		new /obj/structure/closet/statue(target.loc, target) //makes the statue
 	return

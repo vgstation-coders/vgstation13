@@ -43,7 +43,7 @@
 		if (href_list["spell_teleport"])
 			if (src.uses >= 1)
 				teleportscroll(H)
-	if(H)
+	if (H)
 		attack_self(H)
 	return
 
@@ -57,7 +57,7 @@
 
 	if (!user || user.stat || user.restrained())
 		return
-	if(!((user == loc || (in_range(src, user) && istype(src.loc, /turf)))))
+	if (!((user == loc || (in_range(src, user) && istype(src.loc, /turf)))))
 		return
 
 	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
@@ -65,35 +65,35 @@
 	smoke.attach(user)
 	smoke.start()
 	var/list/L = list()
-	for(var/turf/T in get_area_turfs(thearea.type))
-		if(!T.density)
+	for (var/turf/T in get_area_turfs(thearea.type))
+		if (!T.density)
 			var/clear = 1
-			for(var/obj/O in T)
-				if(O.density)
+			for (var/obj/O in T)
+				if (O.density)
 					clear = 0
 					break
-			if(clear)
+			if (clear)
 				L+=T
 
-	if(!L.len)
+	if (!L.len)
 		to_chat(user, "The spell matrix was unable to locate a suitable teleport destination for an unknown reason. Sorry.")
 		return
 
-	if(user && user.locked_to)
+	if (user && user.locked_to)
 		user.unlock_from()
 
 	var/list/tempL = L
 	var/attempt = null
 	var/success = 0
-	while(tempL.len)
+	while (tempL.len)
 		attempt = pick(tempL)
 		success = user.Move(attempt)
-		if(!success)
+		if (!success)
 			tempL.Remove(attempt)
 		else
 			break
 
-	if(!success)
+	if (!success)
 		user.forceMove(pick(L))
 
 	smoke.start()

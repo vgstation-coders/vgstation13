@@ -22,7 +22,7 @@ var/prison_shuttle_timeleft = 0
 	light_color = LIGHT_COLOR_CYAN
 
 	attackby(I as obj, user as mob)
-		if(!..())
+		if (!..())
 			src.attack_hand(user)
 
 	attack_ai(var/mob/user as mob)
@@ -39,13 +39,13 @@ var/prison_shuttle_timeleft = 0
 		return
 
 	attack_hand(var/mob/user as mob)
-		if(!src.allowed(user) && (!emagged))
+		if (!src.allowed(user) && (!emagged))
 			to_chat(user, "<span class='warning'>Access Denied.</span>")
 			return
-		if(prison_break)
+		if (prison_break)
 			to_chat(user, "<span class='warning'>Unable to locate shuttle.</span>")
 			return
-		if(..())
+		if (..())
 			return
 		user.set_machine(src)
 		post_signal("prison")
@@ -64,7 +64,7 @@ var/prison_shuttle_timeleft = 0
 
 
 	Topic(href, href_list)
-		if(..())
+		if (..())
 			return 1
 
 		else
@@ -74,7 +74,7 @@ var/prison_shuttle_timeleft = 0
 			if (!prison_can_move())
 				to_chat(usr, "<span class='warning'>The prison shuttle is unable to leave.</span>")
 				return
-			if(!prison_shuttle_at_station|| prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison)
+			if (!prison_shuttle_at_station|| prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison)
 				return
 			post_signal("prison")
 			to_chat(usr, "<span class='notice'>The prison shuttle has been called and will arrive in [(PRISON_MOVETIME/10)] seconds.</span>")
@@ -89,7 +89,7 @@ var/prison_shuttle_timeleft = 0
 			if (!prison_can_move())
 				to_chat(usr, "<span class='warning'>The prison shuttle is unable to leave.</span>")
 				return
-			if(prison_shuttle_at_station || prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison)
+			if (prison_shuttle_at_station || prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison)
 				return
 			post_signal("prison")
 			to_chat(usr, "<span class='notice'>The prison shuttle has been called and will arrive in [(PRISON_MOVETIME/10)] seconds.</span>")
@@ -109,16 +109,16 @@ var/prison_shuttle_timeleft = 0
 
 
 	proc/prison_can_move()
-		if(prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison)
+		if (prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison)
 			return 0
 		else
 			return 1
 
 
 	proc/prison_break()
-		switch(prison_break)
+		switch (prison_break)
 			if (0)
-				if(!prison_shuttle_at_station || prison_shuttle_moving_to_prison)
+				if (!prison_shuttle_at_station || prison_shuttle_moving_to_prison)
 					return
 
 				prison_shuttle_moving_to_prison = 1
@@ -129,13 +129,13 @@ var/prison_shuttle_timeleft = 0
 				spawn(0)
 					prison_process()
 				prison_break = 1
-			if(1)
+			if (1)
 				prison_break = 0
 
 
 	proc/post_signal(var/command)
 		var/datum/radio_frequency/frequency = radio_controller.return_frequency(1311)
-		if(!frequency)
+		if (!frequency)
 			return
 		var/datum/signal/status_signal = getFromPool(/datum/signal)
 		status_signal.source = src
@@ -146,10 +146,10 @@ var/prison_shuttle_timeleft = 0
 
 
 	proc/prison_process()
-		while(prison_shuttle_time - world.timeofday > 0)
+		while (prison_shuttle_time - world.timeofday > 0)
 			var/ticksleft = prison_shuttle_time - world.timeofday
 
-			if(ticksleft > 1e5)
+			if (ticksleft > 1e5)
 				prison_shuttle_time = world.timeofday + 10	// midnight rollover
 
 			prison_shuttle_timeleft = (ticksleft / 10)
@@ -157,9 +157,9 @@ var/prison_shuttle_timeleft = 0
 		prison_shuttle_moving_to_station = 0
 		prison_shuttle_moving_to_prison = 0
 
-		switch(prison_shuttle_at_station)
+		switch (prison_shuttle_at_station)
 
-			if(0)
+			if (0)
 				prison_shuttle_at_station = 1
 				if (prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison)
 					return
@@ -174,23 +174,23 @@ var/prison_shuttle_timeleft = 0
 				var/list/dstturfs = list()
 				var/throwy = world.maxy
 
-				for(var/turf/T in end_location)
+				for (var/turf/T in end_location)
 					dstturfs += T
-					if(T.y < throwy)
+					if (T.y < throwy)
 						throwy = T.y
 							// hey you, get out of the way!
-				for(var/turf/T in dstturfs)
+				for (var/turf/T in dstturfs)
 								// find the turf to move things to
 					var/turf/D = locate(T.x, throwy - 1, 1)
 								//var/turf/E = get_step(D, SOUTH)
-					for(var/atom/movable/AM as mob|obj in T)
+					for (var/atom/movable/AM as mob|obj in T)
 						AM.Move(D)
-					if(istype(T, /turf/simulated))
+					if (istype(T, /turf/simulated))
 						qdel(T)
 						T = null
 				start_location.move_contents_to(end_location)
 
-			if(1)
+			if (1)
 				prison_shuttle_at_station = 0
 				if (prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison)
 					return
@@ -205,19 +205,19 @@ var/prison_shuttle_timeleft = 0
 				var/list/dstturfs = list()
 				var/throwy = world.maxy
 
-				for(var/turf/T in end_location)
+				for (var/turf/T in end_location)
 					dstturfs += T
-					if(T.y < throwy)
+					if (T.y < throwy)
 						throwy = T.y
 
 							// hey you, get out of the way!
-				for(var/turf/T in dstturfs)
+				for (var/turf/T in dstturfs)
 								// find the turf to move things to
 					var/turf/D = locate(T.x, throwy - 1, 1)
 								//var/turf/E = get_step(D, SOUTH)
-					for(var/atom/movable/AM as mob|obj in T)
+					for (var/atom/movable/AM as mob|obj in T)
 						AM.Move(D)
-					if(istype(T, /turf/simulated))
+					if (istype(T, /turf/simulated))
 						qdel(T)
 				start_location.move_contents_to(end_location)
 		return

@@ -41,11 +41,11 @@ var/global/list/investigations=list(
 	src.filename = "[INVESTIGATE_DIR][subject].html"
 
 	// Overridden filename?
-	if(!isnull(filename))
+	if (!isnull(filename))
 		src.filename = filename
 
 	// Delete existing files before opening? (akin to 'w' mode rather than 'a'ppend)
-	if(!persist)
+	if (!persist)
 		fdel(src.filename)
 
 	// Persistent file handle.
@@ -60,7 +60,7 @@ var/global/list/investigations=list(
 // Calls our own formatting functions, but then appends to the global log.
 /atom/proc/investigation_log(var/subject, var/message)
 	var/datum/log_controller/I = investigations[subject]
-	if(!I)
+	if (!I)
 		warning("SOME ASSHAT USED INVALID INVESTIGATION ID [subject]")
 		return
 	var/formatted=format_investigation_text(message)
@@ -78,7 +78,7 @@ var/global/list/investigations=list(
 // For non-atoms or very specific messages.
 /proc/minimal_investigation_log(var/subject, var/message, var/prefix)
 	var/datum/log_controller/I = investigations[subject]
-	if(!I)
+	if (!I)
 		warning("SOME ASSHAT USED INVALID INVESTIGATION ID [subject]")
 		return
 	I.write("<small>[time_stamp()][prefix]</small> || [message]<br />")
@@ -88,16 +88,16 @@ var/global/list/investigations=list(
 	set name = "Investigate"
 	set category = "Admin"
 
-	if(!holder)
+	if (!holder)
 		to_chat(src, "<span class='warning'>You're not an admin, go away.</span>")
 		return
 
-	if(!(subject in investigations))
+	if (!(subject in investigations))
 		to_chat(src, "<span class='warning'>Unable to find that subject.</span>")
 		return
 
 	var/datum/log_controller/I = investigations[subject]
-	if(!I)
+	if (!I)
 		to_chat(src, "<span class='warning'>No log for [subject] can be found.</span>")
 		return
 

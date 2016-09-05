@@ -16,7 +16,7 @@
 	var/datum/reagents/R = new/datum/reagents(100)
 	reagents = R
 	R.my_atom = src
-	if(name == "alien")
+	if (name == "alien")
 		name = text("alien ([rand(1, 1000)])")
 	real_name = name
 	add_spells_and_verbs()
@@ -29,24 +29,24 @@
 	add_spell(new /spell/targeted/alientransferplasma, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
 
 /mob/living/carbon/alien/humanoid/emp_act(severity)
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
 
-	if(wear_suit)
+	if (wear_suit)
 		wear_suit.emp_act(severity)
-	if(head)
+	if (head)
 		head.emp_act(severity)
-	if(r_store)
+	if (r_store)
 		r_store.emp_act(severity)
-	if(l_store)
+	if (l_store)
 		l_store.emp_act(severity)
 	..()
 
 /mob/living/carbon/alien/humanoid/ex_act(severity)
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
 
-	if(!blinded)
+	if (!blinded)
 		flash_eyes(visual = 1)
 
 	var/shielded = 0
@@ -54,21 +54,21 @@
 	var/b_loss = null
 	var/f_loss = null
 	switch (severity)
-		if(1.0)
+		if (1.0)
 			b_loss += 500
 			gib()
 			return
 
-		if(2.0)
-			if(!shielded)
+		if (2.0)
+			if (!shielded)
 				b_loss += 60
 			f_loss += 60
 			ear_damage += 30
 			ear_deaf += 120
 
-		if(3.0)
+		if (3.0)
 			b_loss += 30
-			if(prob(50) && !shielded)
+			if (prob(50) && !shielded)
 				Paralyse(1)
 			ear_damage += 15
 			ear_deaf += 60
@@ -79,18 +79,18 @@
 	updatehealth()
 
 /mob/living/carbon/alien/humanoid/blob_act()
-	if(flags & INVULNERABLE)
+	if (flags & INVULNERABLE)
 		return
-	if(stat == DEAD)
+	if (stat == DEAD)
 		return
 	..()
 	playsound(loc, 'sound/effects/blobattack.ogg',50,1)
 	var/shielded = 0
 	var/damage = null
-	if(stat != 2)
+	if (stat != 2)
 		damage = rand(30,40)
 
-	if(shielded)
+	if (shielded)
 		damage /= 4
 
 	to_chat(src, "<span class='warning'>The blob attacks you!</span>")
@@ -101,10 +101,10 @@
 	return
 
 /mob/living/carbon/alien/humanoid/attack_paw(mob/living/carbon/monkey/M as mob)
-	if(!ismonkey(M))
+	if (!ismonkey(M))
 		return//Fix for aliens receiving double messages when attacking other aliens.
 
-	if(!ticker)
+	if (!ticker)
 		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
 		return
 
@@ -115,14 +115,14 @@
 	*/
 	..()
 
-	switch(M.a_intent)
+	switch (M.a_intent)
 
-		if(I_HELP)
+		if (I_HELP)
 			help_shake_act(M)
 		else
-			if(istype(wear_mask, /obj/item/clothing/mask/muzzle))
+			if (istype(wear_mask, /obj/item/clothing/mask/muzzle))
 				return
-			if(health > 0)
+			if (health > 0)
 				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 				visible_message("<span class='danger'>\The [M] has bit \the [src]!</span>")
 				adjustBruteLoss(rand(1, 3))
@@ -131,52 +131,52 @@
 
 
 /mob/living/carbon/alien/humanoid/attack_slime(mob/living/carbon/slime/M as mob)
-	if(!ticker)
+	if (!ticker)
 		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
 		return
 
-	if(M.Victim)
+	if (M.Victim)
 		return // can't attack while eating!
 
-	if(health > -100)
+	if (health > -100)
 		visible_message("<span class='danger'>\The [M] glomps [src]!</span>")
 		add_logs(M, src, "glomped on", 0)
 
 		var/damage = rand(1, 3)
 
-		if(istype(M, /mob/living/carbon/slime/adult))
+		if (istype(M, /mob/living/carbon/slime/adult))
 			damage = rand(10, 40)
 		else
 			damage = rand(5, 35)
 
 		adjustBruteLoss(damage)
 
-		if(M.powerlevel > 0)
+		if (M.powerlevel > 0)
 			var/stunprob = 10
 			var/power = M.powerlevel + rand(0,3)
 
-			switch(M.powerlevel)
-				if(1 to 2)
+			switch (M.powerlevel)
+				if (1 to 2)
 					stunprob = 20
-				if(3 to 4)
+				if (3 to 4)
 					stunprob = 30
-				if(5 to 6)
+				if (5 to 6)
 					stunprob = 40
-				if(7 to 8)
+				if (7 to 8)
 					stunprob = 60
-				if(9)
+				if (9)
 					stunprob = 70
-				if(10)
+				if (10)
 					stunprob = 95
 
-			if(prob(stunprob))
+			if (prob(stunprob))
 				M.powerlevel -= 3
-				if(M.powerlevel < 0)
+				if (M.powerlevel < 0)
 					M.powerlevel = 0
 				visible_message("<span class='danger'>\The [M] has shocked [src]!</span>")
 
 				Weaken(power)
-				if(stuttering < power)
+				if (stuttering < power)
 					stuttering = power
 				Stun(power)
 
@@ -184,7 +184,7 @@
 				s.set_up(5, 1, src)
 				s.start()
 
-				if(prob(stunprob) && M.powerlevel >= 8)
+				if (prob(stunprob) && M.powerlevel >= 8)
 					adjustFireLoss(M.powerlevel * rand(6,10))
 
 		updatehealth()
@@ -196,15 +196,15 @@
 
 	..()
 
-	if(M.gloves && istype(M.gloves,/obj/item/clothing/gloves))
+	if (M.gloves && istype(M.gloves,/obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = M.gloves
-		if(G.cell)
-			if(M.a_intent == I_HURT)//Stungloves. Any contact will stun the alien.
-				if(G.cell.charge >= 2500)
+		if (G.cell)
+			if (M.a_intent == I_HURT)//Stungloves. Any contact will stun the alien.
+				if (G.cell.charge >= 2500)
 					G.cell.charge -= 2500
 
 					Weaken(5)
-					if(stuttering < 5)
+					if (stuttering < 5)
 						stuttering = 5
 					Stun(5)
 					visible_message("<span class='danger'>\The [src] has been touched with the stun gloves by [M] !</span>")
@@ -213,14 +213,14 @@
 					to_chat(M, "<span class='warning'>Not enough charge !</span>")
 					return
 
-	switch(M.a_intent)
+	switch (M.a_intent)
 
-		if(I_HELP)
-			if(health >= config.health_threshold_crit)
+		if (I_HELP)
+			if (health >= config.health_threshold_crit)
 				help_shake_act(M)
 				return 1
 			else
-				if(M.check_body_part_coverage(MOUTH))
+				if (M.check_body_part_coverage(MOUTH))
 					to_chat(M, "<span class='notice'><B>Remove your [M.get_body_part_coverage(MOUTH)]!</B></span>")
 					return 0
 
@@ -230,15 +230,15 @@
 				M.visible_message("<span class='danger'>\The [M] is trying perform CPR on \the [src]!</span>")
 
 				cpr_time = 0
-				if(do_after(M, src, 3 SECONDS))
+				if (do_after(M, src, 3 SECONDS))
 					adjustOxyLoss(-min(getOxyLoss(), 7))
 					M.visible_message("<span class='danger'>\The [M] performs CPR on \the [src]!</span>")
 					to_chat(src, "<span class='notice'>You feel a breath of fresh air enter your lungs. It feels good.</span>")
 					to_chat(M, "<span class='warning'>Repeat at least every 7 seconds.</span>")
 				cpr_time = 1
 
-		if(I_GRAB)
-			if(M == src)
+		if (I_GRAB)
+			if (M == src)
 				return
 			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M, src)
 
@@ -252,10 +252,10 @@
 			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 			visible_message("<span class='warning'>[M] has grabbed \the [src] passively!</span>")
 
-		if(I_HURT)
+		if (I_HURT)
 			var/damage = rand(1, 9)
-			if(prob(90))
-				if(M_HULK in M.mutations) //M_HULK SMASH
+			if (prob(90))
+				if (M_HULK in M.mutations) //M_HULK SMASH
 					damage += 14
 					spawn(0)
 						Weaken(damage) //Why can a hulk knock an alien out but not knock out a human? Damage is robust enough.
@@ -264,7 +264,7 @@
 						step_away(src, M, 15)
 				playsound(loc, "punch", 25, 1, -1)
 				visible_message("<span class='danger'>[M] has punched \the [src] !</span>")
-				if(damage > 9 ||prob(5))//Regular humans have a very small chance of weakening an alien.
+				if (damage > 9 ||prob(5))//Regular humans have a very small chance of weakening an alien.
 					Weaken(1, 5)
 					visible_message("<span class='danger'>[M] has weakened \the [src] !</span>")
 				adjustBruteLoss(damage)
@@ -273,14 +273,14 @@
 				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 				visible_message("<span class='danger'>[M] has attempted to punch \the [src] !</span>")
 
-		if(I_DISARM)
-			if(!lying)
-				if(prob(5)) //Very small chance to push an alien down.
+		if (I_DISARM)
+			if (!lying)
+				if (prob(5)) //Very small chance to push an alien down.
 					Weaken(2)
 					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 					visible_message("<span class='danger'>[M] has pushed down \the [src] !</span>")
 				else
-					if(prob(50))
+					if (prob(50))
 						drop_item()
 						playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 						visible_message("<span class='danger'>[M] has disarmed \the [src] !</span>")
@@ -297,9 +297,9 @@ In all, this is a lot like the monkey code. /N
 /mob/living/carbon/alien/humanoid/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
 	..()
 
-	switch(M.a_intent)
+	switch (M.a_intent)
 
-		if(I_HELP)
+		if (I_HELP)
 			sleeping = max(0,sleeping-5)
 			resting = 0
 			AdjustParalysis(-3)
@@ -307,7 +307,7 @@ In all, this is a lot like the monkey code. /N
 			AdjustWeakened(-3)
 			visible_message("<span class='notice'>[M] nuzzles [src] trying to wake it up !</span>")
 		else
-			if(health > 0)
+			if (health > 0)
 				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 				var/damage = rand(1, 3)
 				visible_message("<span class='danger'>\The [M] has bit [src]!</span>")
@@ -319,7 +319,7 @@ In all, this is a lot like the monkey code. /N
 
 
 /mob/living/carbon/alien/humanoid/restrained()
-	if(timestopped)
+	if (timestopped)
 		return 1 //under effects of time magick
 	if (handcuffed)
 		return 1
@@ -336,13 +336,13 @@ In all, this is a lot like the monkey code. /N
 	<B><HR><FONT size=3>[name]</FONT></B>
 	<BR><HR>"}
 
-	for(var/i = 1 to held_items.len) //Hands
+	for (var/i = 1 to held_items.len) //Hands
 		var/obj/item/I = held_items[i]
 		dat += "<B>[capitalize(get_index_limb_name(i))]</B> <A href='?src=\ref[src];hands=[i]'>[makeStrippingButton(I)]</A><BR>"
 
 	dat += "<BR><B>Head:</B> <A href='?src=\ref[src];item=[slot_head]'>[makeStrippingButton(head)]</A>"
 	dat += "<BR><B>Exosuit:</B> <A href='?src=\ref[src];item=[slot_wear_suit]'>[makeStrippingButton(wear_suit)]</A>"
-	if(pickpocket)
+	if (pickpocket)
 		dat += "<BR><B>Left pouch:</B> <A href='?src=\ref[src];pockets=left'>[(l_store && !(src.l_store.abstract)) ? l_store : "<font color=grey>Left (Empty)</font>"]</A>"
 		dat += " <A href='?src=\ref[src];pockets=right'>[(r_store && !(src.r_store.abstract)) ? r_store : "<font color=grey>Right (Empty)</font>"]</A>"
 	else
@@ -356,7 +356,7 @@ In all, this is a lot like the monkey code. /N
 
 /mob/living/carbon/alien/humanoid/Topic(href, href_list)
 	. = ..()
-	if(href_list["pockets"]) //href_list "pockets" would be "left" or "right"
-		if(usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
+	if (href_list["pockets"]) //href_list "pockets" would be "left" or "right"
+		if (usr.incapacitated() || !Adjacent(usr)|| isanimal(usr))
 			return
 		handle_strip_pocket(usr, href_list["pockets"])

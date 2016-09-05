@@ -19,13 +19,13 @@
 	max_duration = 90
 
 /datum/surgery_step/fix_vein/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	if(!hasorgans(target))
+	if (!hasorgans(target))
 		return 0
 
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
 	var/internal_bleeding = 0
-	for(var/datum/wound/W in affected.wounds) if(W.internal)
+	for (var/datum/wound/W in affected.wounds) if (W.internal)
 		internal_bleeding = 1
 		break
 
@@ -43,7 +43,7 @@
 	user.visible_message("<span class='notice'>[user] has patched the damaged vein in [target]'s [affected.display_name] with \the [tool].</span>", \
 		"<span class='notice'>You have patched the damaged vein in [target]'s [affected.display_name] with \the [tool].</span>")
 
-	for(var/datum/wound/W in affected.wounds) if(W.internal)
+	for (var/datum/wound/W in affected.wounds) if (W.internal)
 		affected.wounds -= W
 		affected.update_damages()
 	if (ishuman(user) && prob(40))
@@ -60,7 +60,7 @@
 //////FIX DEAD TISSUE/////
 /datum/surgery_step/fix_dead_tissue/tool_quality(obj/item/tool)
 	. = ..()
-	if(!tool.is_sharp())
+	if (!tool.is_sharp())
 		return 0
 
 /datum/surgery_step/fix_dead_tissue		//Debridement
@@ -78,7 +78,7 @@
 	max_duration = 160
 
 /datum/surgery_step/fix_dead_tissue/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	if(!hasorgans(target))
+	if (!hasorgans(target))
 		return 0
 
 	if (target_zone == "mouth" || target_zone == "eyes")
@@ -131,10 +131,10 @@
 		return 0
 
 	var/obj/item/weapon/reagent_containers/container = tool
-	if(!container.reagents.has_reagent(PERIDAXON))
+	if (!container.reagents.has_reagent(PERIDAXON))
 		return 0
 
-	if(!hasorgans(target))
+	if (!hasorgans(target))
 		return 0
 
 	if (target_zone == "mouth" || target_zone == "eyes")
@@ -162,7 +162,7 @@
 	if (trans > 0)
 		container.reagents.reaction(target, INGEST)	//technically it's contact, but the reagents are being applied to internal tissue
 
-		if(container.reagents.has_reagent(PERIDAXON))
+		if (container.reagents.has_reagent(PERIDAXON))
 			affected.status &= ~ORGAN_DEAD
 
 		user.visible_message("<span class='notice'>[user] applies [trans] units of the solution to affected tissue in [target]'s [affected.display_name]</span>", \

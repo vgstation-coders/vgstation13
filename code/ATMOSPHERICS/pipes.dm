@@ -26,15 +26,15 @@
 	if (findtext(mass_colour,"#"))
 		var/datum/pipeline/pipeline = parent
 		var/list/update_later = list()
-		for(var/obj/machinery/atmospherics/pipe in pipeline.members)
+		for (var/obj/machinery/atmospherics/pipe in pipeline.members)
 			pipe.color = mass_colour
-			if(!pipe.can_be_coloured)
+			if (!pipe.can_be_coloured)
 				pipe.default_colour = mass_colour
 				update_later += pipe
-		for(var/obj/machinery/atmospherics/pipe in pipeline.edges)
+		for (var/obj/machinery/atmospherics/pipe in pipeline.edges)
 			pipe.update_icon()
 		update_later -= pipeline.edges
-		for(var/obj/machinery/atmospherics/pipe in update_later)
+		for (var/obj/machinery/atmospherics/pipe in update_later)
 			pipe.update_icon(1)
 
 /obj/machinery/atmospherics/pipe/singularity_pull(/obj/machinery/singularity/S, size)
@@ -49,7 +49,7 @@
 	return 1
 
 /obj/machinery/atmospherics/pipe/update_icon(var/adjacent_procd)
-	if(color && centre_overlay)
+	if (color && centre_overlay)
 		centre_overlay.color = color
 		overlays.Cut()
 		overlays += centre_overlay
@@ -58,41 +58,41 @@
 
 
 /obj/machinery/atmospherics/pipe/return_air()
-	if(!parent)
+	if (!parent)
 		parent = getFromPool(/datum/pipeline)
 		parent.build_pipeline(src)
 	return parent.air
 
 
 /obj/machinery/atmospherics/pipe/build_network()
-	if(!parent)
+	if (!parent)
 		parent = getFromPool(/datum/pipeline)
 		parent.build_pipeline(src)
 	return parent.return_network()
 
 
 /obj/machinery/atmospherics/pipe/network_expand(datum/pipe_network/new_network, obj/machinery/atmospherics/pipe/reference)
-	if(!parent)
+	if (!parent)
 		parent = getFromPool(/datum/pipeline)
 		parent.build_pipeline(src)
 	return parent.network_expand(new_network, reference)
 
 
 /obj/machinery/atmospherics/pipe/return_network(obj/machinery/atmospherics/reference)
-	if(!parent)
+	if (!parent)
 		parent = getFromPool(/datum/pipeline)
 		parent.build_pipeline(src)
 	return parent.return_network(reference)
 
 
 /obj/machinery/atmospherics/pipe/Destroy()
-	if(parent)
+	if (parent)
 		returnToPool(parent)
-	for(var/obj/machinery/meter/M in src.loc)
-		if(M.target == src)
+	for (var/obj/machinery/meter/M in src.loc)
+		if (M.target == src)
 			new /obj/item/pipe_meter(src.loc)
 			qdel(M)
-	if(air_temporary && loc)
+	if (air_temporary && loc)
 		loc.assume_air(air_temporary)
 		air_temporary = null
 
@@ -122,18 +122,18 @@
 
 /obj/machinery/atmospherics/pipe/simple/New()
 	..()
-	switch(dir)
-		if(SOUTH || NORTH)
+	switch (dir)
+		if (SOUTH || NORTH)
 			initialize_directions = SOUTH|NORTH
-		if(EAST || WEST)
+		if (EAST || WEST)
 			initialize_directions = EAST|WEST
-		if(NORTHEAST)
+		if (NORTHEAST)
 			initialize_directions = NORTH|EAST
-		if(NORTHWEST)
+		if (NORTHWEST)
 			initialize_directions = NORTH|WEST
-		if(SOUTHEAST)
+		if (SOUTHEAST)
 			initialize_directions = SOUTH|EAST
-		if(SOUTHWEST)
+		if (SOUTHWEST)
 			initialize_directions = SOUTH|WEST
 
 /obj/machinery/atmospherics/pipe/simple/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
@@ -142,7 +142,7 @@
 	var/turf/T = loc
 	level = T.intact ? 2 : 1
 	initialize(1)
-	if(!node1&&!node2)
+	if (!node1&&!node2)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this pipe section to! A pipe segment must be connected to at least one other object!</span>")
 		return 0
 	update_icon()
@@ -157,36 +157,36 @@
 
 
 /obj/machinery/atmospherics/pipe/simple/hide(var/i)
-	if(level == 1 && istype(loc, /turf/simulated))
+	if (level == 1 && istype(loc, /turf/simulated))
 		invisibility = i ? 101 : 0
 	update_icon()
 
 
 /obj/machinery/atmospherics/pipe/simple/process()
-	if(!parent) //This should cut back on the overhead calling build_network thousands of times per cycle
+	if (!parent) //This should cut back on the overhead calling build_network thousands of times per cycle
 		. = ..()
 	atmos_machines.Remove(src)
 
 	/*if(!node1)
 		parent.mingle_with_turf(loc, volume)
-		if(!nodealert)
+		if (!nodealert)
 //			to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
 			nodealert = 1
 
-	else if(!node2)
+	else if (!node2)
 		parent.mingle_with_turf(loc, volume)
-		if(!nodealert)
+		if (!nodealert)
 //			to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
 			nodealert = 1
 	else if (nodealert)
 		nodealert = 0
 
 
-	else if(parent)
+	else if (parent)
 		var/environment_temperature = 0
 
-		if(istype(loc, /turf/simulated/))
-			if(loc:blocks_air)
+		if (istype(loc, /turf/simulated/))
+			if (loc:blocks_air)
 				environment_temperature = loc:temperature
 			else
 				var/datum/gas_mixture/environment = loc.return_air()
@@ -197,13 +197,13 @@
 
 		var/datum/gas_mixture/pipe_air = return_air()
 
-		if(abs(environment_temperature-pipe_air.temperature) > minimum_temperature_difference)
+		if (abs(environment_temperature-pipe_air.temperature) > minimum_temperature_difference)
 			parent.temperature_interact(loc, volume, thermal_conductivity)
 	*/
 
 
 /obj/machinery/atmospherics/pipe/simple/check_pressure(pressure)
-	if(!loc)
+	if (!loc)
 		return
 
 	// Note: This checks the difference between atmospheric pressure and pressure in the pipe.
@@ -213,11 +213,11 @@
 	var/pressure_difference = pressure - environment.return_pressure()
 
 	// Burst check first.
-	if(pressure_difference > maximum_pressure && prob(1))
+	if (pressure_difference > maximum_pressure && prob(1))
 		burst()
 
 	// Groan if that check failed and we're above fatigue pressure
-	else if(pressure_difference > fatigue_pressure && prob(1)) // 5 was too often
+	else if (pressure_difference > fatigue_pressure && prob(1)) // 5 was too often
 		groan()
 
 	// Otherwise, continue on.
@@ -245,35 +245,35 @@
 	log_game("Pipe burst in area [A.name] ")
 
 	// Disconnect first.
-	for(var/obj/machinery/atmospherics/node in pipeline_expansion())
-		if(node)
+	for (var/obj/machinery/atmospherics/node in pipeline_expansion())
+		if (node)
 			node.disconnect(src)
 			node = null
 
 	// Move away from explosion
 	loc=null
 
-	if(prob(50))
+	if (prob(50))
 		explosion(T, -1, 1, 2, adminlog=0)
 	else
 		explosion(T, 0, 1, 2, adminlog=0)
 
 	// Now connect burstpipes.
 	var/node_id=0
-	for(var/direction in cardinal)
-		if(initialize_directions & direction)
+	for (var/direction in cardinal)
+		if (initialize_directions & direction)
 			node_id++
 			var/obj/machinery/atmospherics/found
 			var/node_type=getNodeType(node_id)
-			switch(node_type)
-				if(PIPE_TYPE_STANDARD)
+			switch (node_type)
+				if (PIPE_TYPE_STANDARD)
 					found = findConnecting(direction)
-				if(PIPE_TYPE_HE)
+				if (PIPE_TYPE_HE)
 					found = findConnectingHE(direction)
 				else
 					error("UNKNOWN RESPONSE FROM [src.type]/getNodeType([node_id]): [node_type]")
 					return
-			if(!found)
+			if (!found)
 				continue
 
 			var/obj/machinery/atmospherics/unary/vent/burstpipe/BP = new burst_type(T, setdir=direction)
@@ -286,16 +286,16 @@
 
 
 /obj/machinery/atmospherics/pipe/simple/proc/normalize_dir()
-	if(dir==3)
+	if (dir==3)
 		dir = 1
-	else if(dir==12)
+	else if (dir==12)
 		dir = 4
 
 
 /obj/machinery/atmospherics/pipe/simple/Destroy()
-	if(node1)
+	if (node1)
 		node1.disconnect(src)
-	if(node2)
+	if (node2)
 		node2.disconnect(src)
 
 	node1 = null
@@ -310,18 +310,18 @@
 
 /obj/machinery/atmospherics/pipe/simple/update_icon(var/adjacent_procd)
 	var/node_list = list(node1,node2)
-	if(!node1||!node2)
+	if (!node1||!node2)
 		icon_state = "exposed"
 		..(adjacent_procd,node_list)
 	else
 		underlays.Cut()
 		icon_state = "intact"
 		alpha = invisibility ? 128 : 255
-		if(!adjacent_procd)
-			for(var/obj/machinery/atmospherics/node in node_list)
-				if(node.update_icon_ready && !(istype(node,/obj/machinery/atmospherics/pipe/simple)))
+		if (!adjacent_procd)
+			for (var/obj/machinery/atmospherics/node in node_list)
+				if (node.update_icon_ready && !(istype(node,/obj/machinery/atmospherics/pipe/simple)))
 					node.update_icon(1)
-	if(!node1&&!node2)
+	if (!node1&&!node2)
 		qdel(src) //TODO: silent deleting looks weird
 
 /obj/machinery/atmospherics/pipe/simple/initialize(var/suppress_icon_check=0)
@@ -331,19 +331,19 @@
 
 	var/turf/T = src.loc			// hide if turf is not intact
 	hide(T.intact)
-	if(!suppress_icon_check)
+	if (!suppress_icon_check)
 		update_icon()
 
 	T.soft_add_holomap(src)
 
 /obj/machinery/atmospherics/pipe/simple/disconnect(obj/machinery/atmospherics/reference)
-	if(reference == node1)
-		if(istype(node1, /obj/machinery/atmospherics/pipe) && !isnull(parent))
+	if (reference == node1)
+		if (istype(node1, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
 		node1 = null
 
-	if(reference == node2)
-		if(istype(node2, /obj/machinery/atmospherics/pipe) && !isnull(parent))
+	if (reference == node2)
+		if (istype(node2, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
 		node2 = null
 
@@ -456,7 +456,7 @@
 	var/turf/T = loc
 	level = T.intact ? 2 : 1
 	initialize(1)
-	if(!node1&&!node2&&!node3)
+	if (!node1&&!node2&&!node3)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this manifold to! A pipe segment must be connected to at least one other object!</span>")
 		return 0
 	update_icon() // Skipped in initialize()!
@@ -475,14 +475,14 @@
 
 /obj/machinery/atmospherics/pipe/manifold/New()
 	icon_state = "manifold"
-	switch(dir)
-		if(NORTH)
+	switch (dir)
+		if (NORTH)
 			initialize_directions = EAST|SOUTH|WEST
-		if(SOUTH)
+		if (SOUTH)
 			initialize_directions = WEST|NORTH|EAST
-		if(EAST)
+		if (EAST)
 			initialize_directions = SOUTH|WEST|NORTH
-		if(WEST)
+		if (WEST)
 			initialize_directions = NORTH|EAST|SOUTH
 	centre_overlay = manifold_centre
 	centre_overlay.color = color
@@ -491,7 +491,7 @@
 
 
 /obj/machinery/atmospherics/pipe/manifold/hide(var/i)
-	if(level == 1 && istype(loc, /turf/simulated))
+	if (level == 1 && istype(loc, /turf/simulated))
 		invisibility = i ? 101 : 0
 	update_icon()
 
@@ -501,23 +501,23 @@
 
 
 /obj/machinery/atmospherics/pipe/manifold/process()
-	if(!parent)
+	if (!parent)
 		. = ..()
 	atmos_machines.Remove(src)
 	/*
-	if(!node1)
+	if (!node1)
 		parent.mingle_with_turf(loc, 70)
-		if(!nodealert)
+		if (!nodealert)
 //			to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
 			nodealert = 1
-	else if(!node2)
+	else if (!node2)
 		parent.mingle_with_turf(loc, 70)
-		if(!nodealert)
+		if (!nodealert)
 //			to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
 			nodealert = 1
-	else if(!node3)
+	else if (!node3)
 		parent.mingle_with_turf(loc, 70)
-		if(!nodealert)
+		if (!nodealert)
 //			to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
 			nodealert = 1
 	else if (nodealert)
@@ -526,11 +526,11 @@
 
 
 /obj/machinery/atmospherics/pipe/manifold/Destroy()
-	if(node1)
+	if (node1)
 		node1.disconnect(src)
-	if(node2)
+	if (node2)
 		node2.disconnect(src)
-	if(node3)
+	if (node3)
 		node3.disconnect(src)
 
 	node1 = null
@@ -541,18 +541,18 @@
 
 
 /obj/machinery/atmospherics/pipe/manifold/disconnect(obj/machinery/atmospherics/reference)
-	if(reference == node1)
-		if(istype(node1, /obj/machinery/atmospherics/pipe) && !isnull(parent))
+	if (reference == node1)
+		if (istype(node1, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
 		node1 = null
 
-	if(reference == node2)
-		if(istype(node2, /obj/machinery/atmospherics/pipe) && !isnull(parent))
+	if (reference == node2)
+		if (istype(node2, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
 		node2 = null
 
-	if(reference == node3)
-		if(istype(node3, /obj/machinery/atmospherics/pipe) && !isnull(parent))
+	if (reference == node3)
+		if (istype(node3, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
 		node3 = null
 
@@ -565,7 +565,7 @@
 /obj/machinery/atmospherics/pipe/manifold/update_icon(var/adjacent_procd)
 	var/node_list = list(node1,node2,node3)
 	..(adjacent_procd,node_list)
-	if(!node1 && !node2 && !node3)
+	if (!node1 && !node2 && !node3)
 		qdel(src)
 
 
@@ -576,7 +576,7 @@
 
 	var/turf/T = src.loc			// hide if turf is not intact
 	hide(T.intact)
-	if(!skip_icon_update)
+	if (!skip_icon_update)
 		update_icon()
 
 	T.soft_add_holomap(src)
@@ -682,7 +682,7 @@
 	var/turf/T = loc
 	level = T.intact ? 2 : 1
 	initialize(1)
-	if(!node1 && !node2 && !node3 && !node4)
+	if (!node1 && !node2 && !node3 && !node4)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this manifold to! A pipe segment must be connected to at least one other object!</span>")
 		return 0
 	update_icon()
@@ -709,7 +709,7 @@
 	overlays += centre_overlay
 
 /obj/machinery/atmospherics/pipe/manifold4w/hide(var/i)
-	if(level == 1 && istype(loc, /turf/simulated))
+	if (level == 1 && istype(loc, /turf/simulated))
 		invisibility = i ? 101 : 0
 	update_icon()
 
@@ -719,23 +719,23 @@
 
 
 /obj/machinery/atmospherics/pipe/manifold4w/process()
-	if(!parent)
+	if (!parent)
 		. = ..()
 	atmos_machines.Remove(src)
 	/*
-	if(!node1)
+	if (!node1)
 		parent.mingle_with_turf(loc, 70)
-		if(!nodealert)
+		if (!nodealert)
 //			to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
 			nodealert = 1
-	else if(!node2)
+	else if (!node2)
 		parent.mingle_with_turf(loc, 70)
-		if(!nodealert)
+		if (!nodealert)
 //			to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
 			nodealert = 1
-	else if(!node3)
+	else if (!node3)
 		parent.mingle_with_turf(loc, 70)
-		if(!nodealert)
+		if (!nodealert)
 //			to_chat(world, "Missing node from [src] at [src.x],[src.y],[src.z]")
 			nodealert = 1
 	else if (nodealert)
@@ -744,13 +744,13 @@
 
 
 /obj/machinery/atmospherics/pipe/manifold4w/Destroy()
-	if(node1)
+	if (node1)
 		node1.disconnect(src)
-	if(node2)
+	if (node2)
 		node2.disconnect(src)
-	if(node3)
+	if (node3)
 		node3.disconnect(src)
-	if(node4)
+	if (node4)
 		node4.disconnect(src)
 
 	node1 = null
@@ -762,23 +762,23 @@
 
 
 /obj/machinery/atmospherics/pipe/manifold4w/disconnect(obj/machinery/atmospherics/reference)
-	if(reference == node1)
-		if(istype(node1, /obj/machinery/atmospherics/pipe) && !isnull(parent))
+	if (reference == node1)
+		if (istype(node1, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
 		node1 = null
 
-	if(reference == node2)
-		if(istype(node2, /obj/machinery/atmospherics/pipe) && !isnull(parent))
+	if (reference == node2)
+		if (istype(node2, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
 		node2 = null
 
-	if(reference == node3)
-		if(istype(node3, /obj/machinery/atmospherics/pipe) && !isnull(parent))
+	if (reference == node3)
+		if (istype(node3, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
 		node3 = null
 
-	if(reference == node4)
-		if(istype(node4, /obj/machinery/atmospherics/pipe) && !isnull(parent))
+	if (reference == node4)
+		if (istype(node4, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
 		node4 = null
 
@@ -790,7 +790,7 @@
 /obj/machinery/atmospherics/pipe/manifold4w/update_icon(var/adjacent_procd)
 	var/node_list = list(node1,node2,node3,node4)
 	..(adjacent_procd,node_list)
-	if(!node1 && !node2 && !node3 && !node4)
+	if (!node1 && !node2 && !node3 && !node4)
 		qdel(src)
 	return
 
@@ -801,7 +801,7 @@
 
 	var/turf/T = src.loc			// hide if turf is not intact
 	hide(T.intact)
-	if(!skip_update_icon)
+	if (!skip_update_icon)
 		update_icon()
 
 	T.soft_add_holomap(src)
@@ -874,36 +874,36 @@
 
 
 /obj/machinery/atmospherics/pipe/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	if(istype(W, /obj/item/device/rcd/rpd) || istype(W, /obj/item/device/pipe_painter))
+	if (istype(W, /obj/item/device/rcd/rpd) || istype(W, /obj/item/device/pipe_painter))
 		return // Coloring pipes.
 
-	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/red))
+	if (istype(W, /obj/item/weapon/reagent_containers/glass/paint/red))
 		src.color = PIPE_COLOR_RED
 		to_chat(user, "<span class='notice'>You paint the pipe red.</span>")
 		update_icon()
 		return 1
-	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/blue))
+	if (istype(W, /obj/item/weapon/reagent_containers/glass/paint/blue))
 		src.color = PIPE_COLOR_BLUE
 		to_chat(user, "<span class='notice'>You paint the pipe blue.</span>")
 		update_icon()
 		return 1
-	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/green))
+	if (istype(W, /obj/item/weapon/reagent_containers/glass/paint/green))
 		src.color = PIPE_COLOR_GREEN
 		to_chat(user, "<span class='notice'>You paint the pipe green.</span>")
 		update_icon()
 		return 1
-	if(istype(W, /obj/item/weapon/reagent_containers/glass/paint/yellow))
+	if (istype(W, /obj/item/weapon/reagent_containers/glass/paint/yellow))
 		src.color = PIPE_COLOR_ORANGE
 		to_chat(user, "<span class='notice'>You paint the pipe yellow.</span>")
 		update_icon()
 		return 1
 
-	if(istype(W, /obj/item/pipe_meter))
+	if (istype(W, /obj/item/pipe_meter))
 		var/obj/item/pipe_meter/meter = W
-		if(user.drop_item(meter, src.loc))
+		if (user.drop_item(meter, src.loc))
 			meter.setAttachLayer(src.piping_layer)
 
-	if(istype(W,/obj/item/device/analyzer))
+	if (istype(W,/obj/item/device/analyzer))
 		var/obj/item/device/analyzer/A = W
 		var/datum/gas_mixture/environment = src.return_air()
 		user.show_message(A.output_gas_scan(environment,src,1))
@@ -929,12 +929,12 @@
 	var/obj/machinery/atmospherics/other_node = null
 
 /obj/machinery/atmospherics/pipe/layer_manifold/New()
-	for(var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
+	for (var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
 		layer_nodes.Add(null)
-	switch(dir)
-		if(NORTH,SOUTH)
+	switch (dir)
+		if (NORTH,SOUTH)
 			initialize_directions = NORTH|SOUTH
-		if(EAST,WEST)
+		if (EAST,WEST)
 			initialize_directions = EAST|WEST
 	..()
 
@@ -947,12 +947,12 @@
 	var/turf/T = loc
 	level = T.intact ? 2 : 1
 	initialize(1)
-	if(!(locate(/obj/machinery/atmospherics) in layer_nodes) && !other_node)
+	if (!(locate(/obj/machinery/atmospherics) in layer_nodes) && !other_node)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this manifold to! A pipe segment must be connected to at least one other object!</span>")
 		return 0
 	update_icon()
 	build_network()
-	for(var/obj/machinery/atmospherics/node in layer_nodes)
+	for (var/obj/machinery/atmospherics/node in layer_nodes)
 		node.initialize()
 		node.build_network()
 	if (other_node)
@@ -961,7 +961,7 @@
 	return 1
 
 /obj/machinery/atmospherics/pipe/layer_manifold/hide(var/i)
-	if(level == 1 && istype(loc, /turf/simulated))
+	if (level == 1 && istype(loc, /turf/simulated))
 		invisibility = i ? 101 : 0
 	update_icon()
 
@@ -970,28 +970,28 @@
 
 
 /obj/machinery/atmospherics/pipe/layer_manifold/process()
-	if(!parent)
+	if (!parent)
 		. = ..()
 	atmos_machines.Remove(src)
 
 /obj/machinery/atmospherics/pipe/layer_manifold/Destroy()
-	for(var/obj/machinery/atmospherics/node in layer_nodes)
+	for (var/obj/machinery/atmospherics/node in layer_nodes)
 		node.disconnect(src)
-	if(other_node)
+	if (other_node)
 		other_node.disconnect(src)
 	..()
 
 
 /obj/machinery/atmospherics/pipe/layer_manifold/disconnect(obj/machinery/atmospherics/reference)
-	if(reference == other_node)
-		if(istype(other_node, /obj/machinery/atmospherics/pipe) && !isnull(parent))
+	if (reference == other_node)
+		if (istype(other_node, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
 		other_node = null
 
 	else
-		for(var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
-			if(reference == layer_nodes[pipelayer])
-				if(istype(layer_nodes[pipelayer], /obj/machinery/atmospherics/pipe) && !isnull(parent))
+		for (var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
+			if (reference == layer_nodes[pipelayer])
+				if (istype(layer_nodes[pipelayer], /obj/machinery/atmospherics/pipe) && !isnull(parent))
 					returnToPool(parent)
 				layer_nodes[pipelayer] = null
 
@@ -1003,13 +1003,13 @@
 	overlays.len = 0
 	alpha = invisibility ? 128 : 255
 	icon_state = baseicon
-	if(other_node)
+	if (other_node)
 		var/icon/con = new/icon(icon,"manifoldl_other_con")
 
 		overlays += new/image(con, dir = turn(src.dir, 180)) //adds the back connector
 
-	for(var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
-		if(layer_nodes[pipelayer]) //we are connected at this layer
+	for (var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
+		if (layer_nodes[pipelayer]) //we are connected at this layer
 
 			var/layer_diff = pipelayer - PIPING_LAYER_DEFAULT
 
@@ -1019,7 +1019,7 @@
 
 			overlays += con
 
-	if(!other_node && !(locate(/obj/machinery/atmospherics) in layer_nodes))
+	if (!other_node && !(locate(/obj/machinery/atmospherics) in layer_nodes))
 		qdel(src)
 	return
 
@@ -1030,45 +1030,45 @@
 
 	var/turf/T = src.loc			// hide if turf is not intact
 	hide(T.intact)
-	if(!skip_update_icon)
+	if (!skip_update_icon)
 		update_icon()
 
 	T.soft_add_holomap(src)
 
 /obj/machinery/atmospherics/pipe/layer_manifold/findAllConnections(var/connect_dirs)
-	for(var/direction in cardinal)
-		if(connect_dirs & direction)
-			if(direction == dir) //we're facing this
-				for(var/i = PIPING_LAYER_MIN; i <= PIPING_LAYER_MAX; i += PIPING_LAYER_INCREMENT)
+	for (var/direction in cardinal)
+		if (connect_dirs & direction)
+			if (direction == dir) //we're facing this
+				for (var/i = PIPING_LAYER_MIN; i <= PIPING_LAYER_MAX; i += PIPING_LAYER_INCREMENT)
 					var/obj/machinery/atmospherics/found
 					var/node_type=getNodeType(i)
-					switch(node_type)
-						if(PIPE_TYPE_STANDARD)
+					switch (node_type)
+						if (PIPE_TYPE_STANDARD)
 							found = findConnecting(direction, i) //we pass the layer to find the pipe
-						if(PIPE_TYPE_HE)
+						if (PIPE_TYPE_HE)
 							found = findConnectingHE(direction, i)
 						else
 							error("UNKNOWN RESPONSE FROM [src.type]/getNodeType([i]): [node_type]")
 							return
-					if(!found)
+					if (!found)
 						continue
 					layer_nodes[i] = found //put it in the list
 			else
 				var/obj/machinery/atmospherics/found
 				var/node_type=getNodeType(direction)
-				switch(node_type)
-					if(PIPE_TYPE_STANDARD)
+				switch (node_type)
+					if (PIPE_TYPE_STANDARD)
 						found = findConnecting(direction)
-					if(PIPE_TYPE_HE)
+					if (PIPE_TYPE_HE)
 						found = findConnectingHE(direction)
 					else
 						error("UNKNOWN RESPONSE FROM [src.type]/getNodeType([direction]): [node_type]")
-				if(!found)
+				if (!found)
 					continue
 				other_node = found
 
 /obj/machinery/atmospherics/pipe/layer_manifold/isConnectable(var/obj/machinery/atmospherics/target, var/direction, var/given_layer)
-	if(direction == turn(src.dir, 180))
+	if (direction == turn(src.dir, 180))
 		return (given_layer == PIPING_LAYER_DEFAULT)
 	return ..()
 
@@ -1080,16 +1080,16 @@
 	return
 
 /obj/machinery/atmospherics/pipe/layer_manifold/relaymove(mob/living/user, direction)
-	if(!(direction & initialize_directions)) //can't go in a way we aren't connecting to
+	if (!(direction & initialize_directions)) //can't go in a way we aren't connecting to
 		var/layer_mod = 0
 
-		if(dir & (NORTH|SOUTH))
-			if(direction == EAST) //Going up in layers
+		if (dir & (NORTH|SOUTH))
+			if (direction == EAST) //Going up in layers
 				layer_mod = 1
 			else
 				layer_mod = -1
 		else
-			if(direction == SOUTH) //
+			if (direction == SOUTH) //
 				layer_mod = 1
 			else
 				layer_mod = -1
@@ -1098,7 +1098,7 @@
 		to_chat(user, "You align yourself with the [user.ventcrawl_layer]\th output.")
 		return 1
 	else
-		if(direction != dir && user.ventcrawl_layer != PIPING_LAYER_DEFAULT) // The mob is moving to the single pipe outlet, we need to align it if it's on a layer that's not the default layer
+		if (direction != dir && user.ventcrawl_layer != PIPING_LAYER_DEFAULT) // The mob is moving to the single pipe outlet, we need to align it if it's on a layer that's not the default layer
 			user.ventcrawl_layer = PIPING_LAYER_DEFAULT
 			to_chat(user, "You are redirected into the [user.ventcrawl_layer]\th piping layer.")
 
@@ -1126,10 +1126,10 @@
 
 /obj/machinery/atmospherics/pipe/layer_adapter/New()
 	..()
-	switch(dir)
-		if(NORTH,SOUTH)
+	switch (dir)
+		if (NORTH,SOUTH)
 			initialize_directions = NORTH|SOUTH
-		if(EAST,WEST)
+		if (EAST,WEST)
 			initialize_directions = EAST|WEST
 
 /obj/machinery/atmospherics/pipe/layer_adapter/setPipingLayer(var/new_layer = PIPING_LAYER_DEFAULT)
@@ -1141,7 +1141,7 @@
 	var/turf/T = loc
 	level = T.intact ? 2 : 1
 	initialize(1)
-	if(!mid_node && !layer_node)
+	if (!mid_node && !layer_node)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this adapter to! A pipe segment must be connected to at least one other object!</span>")
 		return 0
 	update_icon()
@@ -1155,7 +1155,7 @@
 	return 1
 
 /obj/machinery/atmospherics/pipe/layer_adapter/hide(var/i)
-	if(level == 1 && istype(loc, /turf/simulated))
+	if (level == 1 && istype(loc, /turf/simulated))
 		invisibility = i ? 101 : 0
 	update_icon()
 
@@ -1164,25 +1164,25 @@
 
 
 /obj/machinery/atmospherics/pipe/layer_adapter/process()
-	if(!parent)
+	if (!parent)
 		. = ..()
 	atmos_machines.Remove(src)
 
 /obj/machinery/atmospherics/pipe/layer_adapter/Destroy()
-	if(mid_node)
+	if (mid_node)
 		mid_node.disconnect(src)
-	if(layer_node)
+	if (layer_node)
 		layer_node.disconnect(src)
 	..()
 
 
 /obj/machinery/atmospherics/pipe/layer_adapter/disconnect(var/obj/machinery/atmospherics/reference)
-	if(reference == mid_node)
-		if(istype(mid_node, /obj/machinery/atmospherics/pipe) && !isnull(parent))
+	if (reference == mid_node)
+		if (istype(mid_node, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
 		mid_node = null
-	if(reference == layer_node)
-		if(istype(layer_node, /obj/machinery/atmospherics/pipe) && !isnull(parent))
+	if (reference == layer_node)
+		if (istype(layer_node, /obj/machinery/atmospherics/pipe) && !isnull(parent))
 			returnToPool(parent)
 		layer_node = null
 
@@ -1194,7 +1194,7 @@
 	overlays.len = 0
 	alpha = invisibility ? 128 : 255
 	icon_state = "[baseicon]_[piping_layer]"
-	if(layer_node)
+	if (layer_node)
 		var/layer_diff = piping_layer - PIPING_LAYER_DEFAULT
 
 		var/image/con = image(icon(src.icon,"layer_con",turn(src.dir,180)))
@@ -1202,7 +1202,7 @@
 		con.pixel_y = layer_diff * PIPING_LAYER_P_Y
 
 		overlays += con
-	if(!mid_node && !layer_node)
+	if (!mid_node && !layer_node)
 		qdel(src)
 	return
 
@@ -1213,44 +1213,44 @@
 
 	var/turf/T = src.loc			// hide if turf is not intact
 	hide(T.intact)
-	if(!skip_update_icon)
+	if (!skip_update_icon)
 		update_icon()
 
 	T.soft_add_holomap(src)
 
 /obj/machinery/atmospherics/pipe/layer_adapter/findAllConnections(var/connect_dirs)
-	for(var/direction in cardinal)
-		if(connect_dirs & direction)
-			if(direction == dir) //we're facing this
+	for (var/direction in cardinal)
+		if (connect_dirs & direction)
+			if (direction == dir) //we're facing this
 				var/obj/machinery/atmospherics/found
 				var/node_type=getNodeType(direction)
-				switch(node_type)
-					if(PIPE_TYPE_STANDARD)
+				switch (node_type)
+					if (PIPE_TYPE_STANDARD)
 						found = findConnecting(direction, PIPING_LAYER_DEFAULT)
-					if(PIPE_TYPE_HE)
+					if (PIPE_TYPE_HE)
 						found = findConnectingHE(direction, PIPING_LAYER_DEFAULT)
 					else
 						error("UNKNOWN RESPONSE FROM [src.type]/getNodeType([direction]): [node_type]")
-				if(!found)
+				if (!found)
 					continue
 				mid_node = found
 			else
 				var/obj/machinery/atmospherics/found
 				var/node_type=getNodeType(direction)
-				switch(node_type)
-					if(PIPE_TYPE_STANDARD)
+				switch (node_type)
+					if (PIPE_TYPE_STANDARD)
 						found = findConnecting(direction, piping_layer) //we pass the layer to find the pipe
-					if(PIPE_TYPE_HE)
+					if (PIPE_TYPE_HE)
 						found = findConnectingHE(direction, piping_layer)
 					else
 						error("UNKNOWN RESPONSE FROM [src.type]/getNodeType([piping_layer]): [node_type]")
 						return
-				if(!found)
+				if (!found)
 					continue
 				layer_node = found
 
 /obj/machinery/atmospherics/pipe/layer_adapter/isConnectable(var/obj/machinery/atmospherics/target, var/direction, var/given_layer)
-	if(direction == dir)
+	if (direction == dir)
 		return (given_layer == PIPING_LAYER_DEFAULT)
 	return ..()
 
@@ -1263,7 +1263,7 @@
 
 /obj/machinery/atmospherics/pipe/layer_adapter/relaymove(mob/living/user, direction)
 	// Autoset layer
-	if(direction & initialize_directions)
+	if (direction & initialize_directions)
 		user.ventcrawl_layer = (direction == dir) ? PIPING_LAYER_DEFAULT : piping_layer
 		to_chat(user, "You are redirected into the [user.ventcrawl_layer]\th piping layer.")
 		return ..()

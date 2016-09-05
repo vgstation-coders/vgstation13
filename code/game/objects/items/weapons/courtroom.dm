@@ -32,8 +32,8 @@
 	var/cooldown = 0
 
 /obj/item/weapon/gavelblock/attackby(obj/item/I, mob/user, params)
-	if(istype(I, /obj/item/weapon/gavelhammer))
-		if(cooldown < world.time - 8)
+	if (istype(I, /obj/item/weapon/gavelhammer))
+		if (cooldown < world.time - 8)
 			playsound(loc, 'sound/items/gavel.ogg', 100, 1)
 			user.visible_message("<span class='warning'>[user] strikes \the [src] with \the [I].</span>")
 			cooldown = world.time

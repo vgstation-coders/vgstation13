@@ -12,7 +12,7 @@
 	var/tally = 5 + move_delay_add + config.alien_delay //Queens are slow as fuck
 
 	var/turf/T = loc
-	if(istype(T))
+	if (istype(T))
 		tally = T.adjust_slowdown(src, tally)
 
 	return tally
@@ -21,12 +21,12 @@
 	create_reagents(100)
 
 	//there should only be one queen
-	for(var/mob/living/carbon/alien/humanoid/queen/Q in living_mob_list)
-		if(Q == src)
+	for (var/mob/living/carbon/alien/humanoid/queen/Q in living_mob_list)
+		if (Q == src)
 			continue
-		if(Q.stat == DEAD)
+		if (Q.stat == DEAD)
 			continue
-		if(Q.client)
+		if (Q.client)
 			name = "alien princess ([rand(1, 999)])"	//if this is too cutesy feel free to change it/remove it.
 			break
 
@@ -49,18 +49,18 @@
 
 		..() //-Yvarov
 
-		if(src.healths)
-			if(src.stat != 2)
-				switch(health)
-					if(300 to INFINITY)
+		if (src.healths)
+			if (src.stat != 2)
+				switch (health)
+					if (300 to INFINITY)
 						src.healths.icon_state = "health0"
-					if(200 to 300)
+					if (200 to 300)
 						src.healths.icon_state = "health1"
-					if(125 to 200)
+					if (125 to 200)
 						src.healths.icon_state = "health2"
-					if(75 to 125)
+					if (75 to 125)
 						src.healths.icon_state = "health3"
-					if(0 to 75)
+					if (0 to 75)
 						src.healths.icon_state = "health4"
 					else
 						src.healths.icon_state = "health5"
@@ -76,13 +76,13 @@
 	lying_prev = lying	//so we don't update overlays for lying/standing unless our stance changes again
 	update_hud()		//TODO: remove the need for this to be here
 	overlays.len = 0
-	if(lying)
-		if(resting)
+	if (lying)
+		if (resting)
 			icon_state = "queen_sleep"
 		else						icon_state = "queen_l"
-		for(var/image/I in overlays_lying)
+		for (var/image/I in overlays_lying)
 			overlays += I
 	else
 		icon_state = "queen_s"
-		for(var/image/I in overlays_standing)
+		for (var/image/I in overlays_standing)
 			overlays += I

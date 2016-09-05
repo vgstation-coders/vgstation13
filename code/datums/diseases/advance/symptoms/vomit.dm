@@ -30,10 +30,10 @@ Bonus
 
 /datum/symptom/vomit/Activate(var/datum/disease/advance/A)
 	..()
-	if(prob(SYMPTOM_ACTIVATION_PROB / 2))
+	if (prob(SYMPTOM_ACTIVATION_PROB / 2))
 		var/mob/living/M = A.affected_mob
-		switch(A.stage)
-			if(1, 2, 3, 4)
+		switch (A.stage)
+			if (1, 2, 3, 4)
 				to_chat(M, "[pick("<span class='warning'>You feel nauseous...", "<span class='danger'>You feel like you're going to throw up!")]</span>")
 			else
 				Vomit(M)
@@ -87,7 +87,7 @@ Bonus
 
 	// They lose blood and health.
 	var/brute_dam = M.getBruteLoss()
-	if(brute_dam < 50)
+	if (brute_dam < 50)
 		M.adjustBruteLoss(3)
 
 	var/turf/simulated/pos = get_turf(M)

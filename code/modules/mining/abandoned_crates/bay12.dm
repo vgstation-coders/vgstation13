@@ -21,24 +21,24 @@
 /obj/structure/closet/crate/secure/loot/bay_04
 	New()
 		..()
-		for(var/i = 0, i < rand(10,20), i++)
+		for (var/i = 0, i < rand(10,20), i++)
 			new/obj/item/weapon/ore/diamond(src)
 
 /obj/structure/closet/crate/secure/loot/bay_05
 	New()
 		..()
-		for(var/i = 0, i < 3, i++)
+		for (var/i = 0, i < 3, i++)
 			new/obj/machinery/portable_atmospherics/hydroponics(src)
 /obj/structure/closet/crate/secure/loot/bay_06
 	New()
 		..()
-		for(var/i = 0, i < 3, i++)
+		for (var/i = 0, i < 3, i++)
 			new/obj/item/weapon/reagent_containers/glass/beaker/noreact/large(src)
 
 /obj/structure/closet/crate/secure/loot/bay_07
 	New()
 		..()
-		for(var/i = 0, i < 9, i++)
+		for (var/i = 0, i < 9, i++)
 			new/obj/item/bluespace_crystal(src)
 
 /obj/structure/closet/crate/secure/loot/bay_08
@@ -50,7 +50,7 @@
 	New()
 		..()
 		new/obj/item/clothing/under/chameleon(src)
-		for(var/i = 0, i < 7, i++)
+		for (var/i = 0, i < 7, i++)
 			new/obj/item/clothing/accessory/tie/horrible(src)
 
 /obj/structure/closet/crate/secure/loot/bay_10

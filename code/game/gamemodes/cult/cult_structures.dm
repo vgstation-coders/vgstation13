@@ -36,11 +36,11 @@
 	attackpylon(user, W.force)
 
 /obj/structure/cult/pylon/proc/attackpylon(mob/user as mob, var/damage)
-	if(!isbroken)
-		if(prob(1+ damage * 5))
+	if (!isbroken)
+		if (prob(1+ damage * 5))
 			to_chat(user, "You hit the pylon, and its crystal breaks apart!")
-			for(var/mob/M in viewers(src))
-				if(M == user)
+			for (var/mob/M in viewers(src))
+				if (M == user)
 					continue
 				M.show_message("[user.name] smashed the pylon!", 1, "You hear a tinkle of crystal shards.", 2)
 			playsound(get_turf(src), 'sound/effects/Glassbr3.ogg', 75, 1)
@@ -52,7 +52,7 @@
 			to_chat(user, "You hit the pylon!")
 			playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
 	else
-		if(prob(damage * 2))
+		if (prob(damage * 2))
 			to_chat(user, "You pulverize what was left of the pylon!")
 			qdel(src)
 		else
@@ -61,7 +61,7 @@
 
 
 /obj/structure/cult/pylon/proc/repair(mob/user as mob)
-	if(isbroken)
+	if (isbroken)
 		to_chat(user, "You repair the pylon.")
 		isbroken = 0
 		density = 1
@@ -136,19 +136,19 @@
 		qdel(src)
 
 /obj/effect/gateway/active/Crossed(var/atom/A)
-	if(!istype(A, /mob/living))
+	if (!istype(A, /mob/living))
 		return
 
 	var/mob/living/M = A
 
-	if(M.stat != DEAD)
-		if(M.monkeyizing)
+	if (M.stat != DEAD)
+		if (M.monkeyizing)
 			return
 
 
-		if(iscultist(M))
+		if (iscultist(M))
 			return
-		if(!ishuman(M) && !isrobot(M))
+		if (!ishuman(M) && !isrobot(M))
 			return
 
 		M.monkeyizing = 1
@@ -157,18 +157,18 @@
 		M.overlays.len = 0
 		M.invisibility = 101
 
-		if(iscarbon(M))
+		if (iscarbon(M))
 			var/mob/living/carbon/I = M
 			I.dropBorers()//drop because new mob is simple_animal
 
-		if(istype(M, /mob/living/silicon/robot))
+		if (istype(M, /mob/living/silicon/robot))
 			var/mob/living/silicon/robot/Robot = M
-			if(Robot.mmi)
+			if (Robot.mmi)
 				qdel(Robot.mmi)
 				Robot.mmi = null
 		else
-			for(var/obj/item/W in M)
-				if(istype(W, /obj/item/weapon/implant))	//TODO: Carn. give implants a dropped() or something
+			for (var/obj/item/W in M)
+				if (istype(W, /obj/item/weapon/implant))	//TODO: Carn. give implants a dropped() or something
 					qdel(W)
 					continue
 				W.layer = initial(W.layer)
@@ -185,7 +185,7 @@
 
 
 		new_mob.a_intent = I_HURT
-		if(M.mind)
+		if (M.mind)
 			M.mind.transfer_to(new_mob)
 		else
 			new_mob.key = M.key

@@ -9,20 +9,20 @@
 	effect_type = pick(4,5)
 
 /datum/artifact_effect/radiate/DoEffectTouch(var/mob/living/user)
-	if(user)
+	if (user)
 		user.apply_effect(radiation_amount * 5,IRRADIATE,0)
 		user.updatehealth()
 		return 1
 
 /datum/artifact_effect/radiate/DoEffectAura()
-	if(holder)
+	if (holder)
 		for (var/mob/living/M in range(src.effectrange,holder))
 			M.apply_effect(radiation_amount,IRRADIATE,0)
 			M.updatehealth()
 		return 1
 
 /datum/artifact_effect/radiate/DoEffectPulse()
-	if(holder)
+	if (holder)
 		for (var/mob/living/M in range(src.effectrange,holder))
 			M.apply_effect(radiation_amount * 25,IRRADIATE,0)
 			M.updatehealth()

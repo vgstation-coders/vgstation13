@@ -38,11 +38,11 @@
 
 
 /obj/machinery/power/am_engine/injector/attackby(obj/item/weapon/fuel/F, mob/user)
-	if( (stat & BROKEN) || !connected)
+	if ( (stat & BROKEN) || !connected)
 		return
 
-	if(istype(F, /obj/item/weapon/fuel/H))
-		if(injecting)
+	if (istype(F, /obj/item/weapon/fuel/H))
+		if (injecting)
 			to_chat(user, "Theres already a fuel rod in the injector!")
 			return
 		to_chat(user, "You insert the rod into the injector")
@@ -55,8 +55,8 @@
 			new/obj/item/weapon/fuel(src.loc)
 			connected.H_fuel += fuel
 
-	if(istype(F, /obj/item/weapon/fuel/antiH))
-		if(injecting)
+	if (istype(F, /obj/item/weapon/fuel/antiH))
+		if (injecting)
 			to_chat(user, "Theres already a fuel rod in the injector!")
 			return
 		to_chat(user, "You insert the rod into the injector")
@@ -87,16 +87,16 @@
 /obj/machinery/power/am_engine/engine/proc/engine_go()
 
 
-	if( (!src.connected) || (stat & BROKEN) )
+	if ( (!src.connected) || (stat & BROKEN) )
 		return
 
-	if(!antiH_fuel || !H_fuel)
+	if (!antiH_fuel || !H_fuel)
 		return
 
 	operating = 1
 	var/energy = 0
 
-	if(antiH_fuel == H_fuel)
+	if (antiH_fuel == H_fuel)
 		var/mass = antiH_fuel + H_fuel
 		energy = convert2energy(mass)
 		H_fuel = 0
@@ -105,14 +105,14 @@
 		var/residual_matter = modulus(H_fuel - antiH_fuel)
 		var/mass = antiH_fuel + H_fuel - residual_matter
 		energy = convert2energy(mass)
-		if( H_fuel > antiH_fuel )
+		if ( H_fuel > antiH_fuel )
 			H_fuel = residual_matter
 			antiH_fuel = 0
 		else
 			H_fuel = 0
 			antiH_fuel = residual_matter
 
-	for(var/mob/M in hearers(src, null))
+	for (var/mob/M in hearers(src, null))
 		M.show_message(text("<span class='warning'>You hear a loud bang!</span>"))
 
 	//Q = k x (delta T)
@@ -129,13 +129,13 @@
 
 
 	do
-		if( (!src.connected) || (stat & BROKEN) )
+		if ( (!src.connected) || (stat & BROKEN) )
 			return
 
-		if(!antiH_fuel || !H_fuel)
+		if (!antiH_fuel || !H_fuel)
 			return
 
-		if(operating)
+		if (operating)
 			return
 
 		operating = 1
@@ -147,7 +147,7 @@
 		var/antiH	//residual matter if antiH
 		var/mass	//total mass
 
-		if(antiH_fuel == H_fuel)		//if they're equal then convert the whole mass to energy
+		if (antiH_fuel == H_fuel)		//if they're equal then convert the whole mass to energy
 			mass = antiH_fuel + H_fuel
 			energy = convert2energy(mass)
 
@@ -158,14 +158,14 @@
 			mass = antiH_fuel + H_fuel - residual_matter
 			energy = convert2energy(mass)
 
-			if( H_fuel > antiH_fuel )
+			if ( H_fuel > antiH_fuel )
 				H = residual_matter
 			else
 				antiH = residual_matter
 
 
-		if(energy > convert2energy(8e-12))	//TOO MUCH ENERGY
-			for(var/mob/M in hearers(src, null))
+		if (energy > convert2energy(8e-12))	//TOO MUCH ENERGY
+			for (var/mob/M in hearers(src, null))
 				M.show_message(text("<span class='warning'>You hear a loud whirring!</span>"))
 			sleep(20)
 
@@ -183,8 +183,8 @@
 			H_fuel += H
 			antiH_fuel += antiH
 
-			if(energy > convert2energy(8e-12))	//FAR TOO MUCH ENERGY STILL
-				for(var/mob/M in hearers(src, null))
+			if (energy > convert2energy(8e-12))	//FAR TOO MUCH ENERGY STILL
+				for (var/mob/M in hearers(src, null))
 					M.show_message(text("<span class='warning'><big>BANG!</big></span>"))
 				new /obj/effect/bhole(src.loc)
 
@@ -205,7 +205,7 @@
 		operating = 0
 		sleep(100)
 
-	while(!stopping)
+	while (!stopping)
 
 	stopping = 0
 

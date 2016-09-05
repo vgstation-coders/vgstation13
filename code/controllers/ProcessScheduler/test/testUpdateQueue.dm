@@ -57,7 +57,7 @@ var/global/list/updateQueueTestCount = list()
 		testUpdateQueuePerformance()
 			incrementTestCount()
 			var/list/objs = new
-			for(var/i=1,i<=100000,i++)
+			for (var/i=1,i<=100000,i++)
 				objs.Add(new /datum/uqTestDatum/fast(updateQueueTestCount.len))
 			
 			var/datum/updateQueue/uq = new(objs)
@@ -73,14 +73,14 @@ var/global/list/updateQueueTestCount = list()
 		testUpdateQueueReinit()
 			incrementTestCount()
 			var/list/objs = new
-			for(var/i=1,i<=100,i++)
+			for (var/i=1,i<=100,i++)
 				objs.Add(new /datum/uqTestDatum/fast(updateQueueTestCount.len))
 
 			var/datum/updateQueue/uq = new(objs)
 			uq.Run()
 			objs = new
 
-			for(var/i=1,i<=100,i++)
+			for (var/i=1,i<=100,i++)
 				objs.Add(new /datum/uqTestDatum/fast(updateQueueTestCount.len))
 			uq.init(objs)
 			uq.Run()
@@ -91,7 +91,7 @@ var/global/list/updateQueueTestCount = list()
 		testInplace()
 			incrementTestCount()
 			var/list/objs = new
-			for(var/i=1,i<=100,i++)
+			for (var/i=1,i<=100,i++)
 				objs.Add(new /datum/uqTestDatum/fast(updateQueueTestCount.len))
 			var/datum/updateQueue/uq = new(objects = objs, inplace = 1)
 			uq.Run()
@@ -103,7 +103,7 @@ var/global/list/updateQueueTestCount = list()
 		testInplaceUpdateQueuePerformance()
 			incrementTestCount()
 			var/list/objs = new
-			for(var/i=1,i<=100000,i++)
+			for (var/i=1,i<=100000,i++)
 				objs.Add(new /datum/uqTestDatum/fast(updateQueueTestCount.len))
 			
 			var/datum/updateQueue/uq = new(objs)
@@ -117,10 +117,10 @@ var/global/list/updateQueueTestCount = list()
 		testCrashingQueue()
 			incrementTestCount()
 			var/list/objs = new
-			for(var/i=1,i<=10,i++)
+			for (var/i=1,i<=10,i++)
 				objs.Add(new /datum/uqTestDatum/fast(updateQueueTestCount.len))
 			objs.Add(new /datum/uqTestDatum/crasher(updateQueueTestCount.len))
-			for(var/i=1,i<=10,i++)
+			for (var/i=1,i<=10,i++)
 				objs.Add(new /datum/uqTestDatum/fast(updateQueueTestCount.len))
 			
 			var/datum/updateQueue/uq = new(objs)
@@ -141,7 +141,7 @@ var/global/list/updateQueueTestCount = list()
 		testManySlowItemsInQueue()
 			incrementTestCount()
 			var/list/objs = new
-			for(var/i=1,i<=30,i++)
+			for (var/i=1,i<=30,i++)
 				objs.Add(new /datum/uqTestDatum/slow(updateQueueTestCount.len))
 			var/datum/updateQueue/uq = new(objs)
 			uq.Run()
@@ -152,7 +152,7 @@ var/global/list/updateQueueTestCount = list()
 		testVariableWorkerTimeout()			
 			incrementTestCount()
 			var/list/objs = new
-			for(var/i=1,i<=20,i++)
+			for (var/i=1,i<=20,i++)
 				objs.Add(new /datum/uqTestDatum/slow(updateQueueTestCount.len))
 			var/datum/updateQueue/uq = new(objs, workerTimeout=6)
 			uq.Run()
@@ -163,10 +163,10 @@ var/global/list/updateQueueTestCount = list()
 		testReallySlowItemInQueue()
 			incrementTestCount()
 			var/list/objs = new
-			for(var/i=1,i<=10,i++)
+			for (var/i=1,i<=10,i++)
 				objs.Add(new /datum/uqTestDatum/fast(updateQueueTestCount.len))
 			objs.Add(new /datum/uqTestDatum/reallySlow(updateQueueTestCount.len))
-			for(var/i=1,i<=10,i++)
+			for (var/i=1,i<=10,i++)
 				objs.Add(new /datum/uqTestDatum/fast(updateQueueTestCount.len))
 			var/datum/updateQueue/uq = new(objs)
 			uq.Run()
@@ -185,7 +185,7 @@ datum/uqTestDatum
 		updateQueueTestCount[testNum]++
 	proc/lag(cycles)
 		set background = 1
-		for(var/i=0,i<cycles,)
+		for (var/i=0,i<cycles,)
 			i++
 datum/uqTestDatum/fast
 
@@ -193,14 +193,14 @@ datum/uqTestDatum/slow
 	update()
 		set background = 1
 		var/start = world.timeofday
-		while(world.timeofday - start < 5) // lag 4 deciseconds
+		while (world.timeofday - start < 5) // lag 4 deciseconds
 		..()
 		
 datum/uqTestDatum/reallySlow
 	update()
 		set background = 1
 		var/start = world.timeofday
-		while(world.timeofday - start < 300) // lag 30 seconds
+		while (world.timeofday - start < 300) // lag 30 seconds
 		..()
 
 datum/uqTestDatum/crasher

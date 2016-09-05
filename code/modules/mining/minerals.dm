@@ -2,9 +2,9 @@ var/list/name_to_mineral
 
 proc/SetupMinerals()
 	name_to_mineral = list()
-	for(var/type in typesof(/mineral) - /mineral)
+	for (var/type in typesof(/mineral) - /mineral)
 		var/mineral/new_mineral = new type
-		if(!new_mineral.name)
+		if (!new_mineral.name)
 			continue
 		name_to_mineral[new_mineral.name] = new_mineral
 	return 1
@@ -25,7 +25,7 @@ mineral
 
 	New()
 		. = ..()
-		if(!display_name)
+		if (!display_name)
 			display_name = name
 
 	proc/UpdateTurf(var/turf/unsimulated/mineral/T)
@@ -166,7 +166,7 @@ mineral/gibtonite
 	spread = 1
 	ore = /obj/item/weapon/gibtonite
 	UpdateTurf(var/turf/T)
-		if(!istype(T,/turf/unsimulated/mineral/gibtonite))
+		if (!istype(T,/turf/unsimulated/mineral/gibtonite))
 			T.ChangeTurf(/turf/unsimulated/mineral/gibtonite)
 		else
 			..()
@@ -178,7 +178,7 @@ mineral/cave
 	spread = 1
 	ore = null
 	UpdateTurf(var/turf/T)
-		if(!istype(T,/turf/unsimulated/floor/asteroid/cave))
+		if (!istype(T,/turf/unsimulated/floor/asteroid/cave))
 			T.ChangeTurf(/turf/unsimulated/floor/asteroid/cave)
 		else
 			..()

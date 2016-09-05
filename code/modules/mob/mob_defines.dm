@@ -202,7 +202,7 @@
 	This requires creating a verb for the object proc holder.
 
 	if (proc_holder_list.len)//Generic list for proc_holder objects.
-		for(var/obj/effect/proc_holder/P in proc_holder_list)
+		for (var/obj/effect/proc_holder/P in proc_holder_list)
 			statpanel("[P.panel]","",P)
 	*/
 
