@@ -88,7 +88,7 @@
 	desc = "The ancestral belt of Many-APCs-Charging, the original chief engineer from Space Native America. It's made out of the skins of the ancient enemy of engineers, giant spiders."
 	icon_state = "utilitychief"
 	item_state = "utilitychief"
-	fits_max_w_class = 3
+	fits_max_w_class = 5
 	can_only_hold = list(
 		"/obj/item/weapon/crowbar",
 		"/obj/item/weapon/screwdriver",
