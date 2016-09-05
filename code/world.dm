@@ -431,7 +431,6 @@ proc/setup_database_connection()
 		return 0
 
 	if(!dbcon)
-		world.log << "Fuck you BYOND, number 2."
 		dbcon = new()
 
 	var/user = sqlfdbklogin
@@ -477,7 +476,6 @@ proc/setup_old_database_connection()
 		return 0
 
 	if(!dbcon_old)
-		world.log << "Fuck you BYOND."
 		dbcon_old = new()
 
 	var/user = sqllogin
@@ -486,7 +484,6 @@ proc/setup_old_database_connection()
 	var/address = sqladdress
 	var/port = sqlport
 
-	world.log << dbcon_old
 	dbcon_old.Connect("dbi:mysql:[db]:[address]:[port]","[user]","[pass]")
 	. = dbcon_old.IsConnected()
 	if ( . )

@@ -31,10 +31,8 @@ CREATE TABLE IF NOT EXISTS [TABLE_NAME] (
 
 	var/list/rows=list()
 	while(query.NextRow())
-		world.log << json_encode(query.item)
 		rows[++rows.len] = query.item.Copy()
 
-	world.log << json_encode(rows)
 	return rows
 
 /datum/migration_controller/mysql/hasResult(var/sql)
