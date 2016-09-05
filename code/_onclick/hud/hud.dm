@@ -230,7 +230,6 @@ var/global/obj/screen/clicker/catcher = new()
 		using.dir = SOUTHWEST
 		using.icon = 'icons/mob/screen1.dmi'
 		using.icon_state = "block"
-		using.layer = HUD_BASE_LAYER
 		src.adding += using
 		mymob:schematics_background = using
 
@@ -239,7 +238,6 @@ var/global/obj/screen/clicker/catcher = new()
 	holomap_obj.icon = null
 	holomap_obj.icon_state = ""
 	holomap_obj.screen_loc = "SOUTH,WEST"
-	holomap_obj.layer = HUD_BASE_LAYER
 	holomap_obj.mouse_opacity = 0
 	holomap_obj.alpha = 255
 
