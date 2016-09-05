@@ -568,6 +568,10 @@
 /obj/item/device/camera/afterattack(atom/target, mob/user, flag)
 	if(!on || !pictures_left || (!isturf(target) && !isturf(target.loc)))
 		return
+
+	if(istype(target, /obj/structure/table/) && target.Adjacent(user))
+		return
+
 	captureimage(target, user, flag)
 
 	playsound(loc, "polaroid", 75, 1, -3)
