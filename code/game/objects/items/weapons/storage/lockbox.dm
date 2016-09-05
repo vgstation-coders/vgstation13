@@ -18,8 +18,8 @@
 	var/tracked_access = "It doesn't look like it's ever been used."
 	health = 50
 
-/obj/item/weapon/storage/lockbox/proc/damage()
-	if(istype(src, /obj/item/weapon/gun))
+/obj/item/weapon/storage/lockbox/proc/damage(var/obj/item/I)
+	if(istype(I, /obj/item/weapon/gun))
 		damaged = 1
 
 /obj/item/weapon/storage/lockbox/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -73,8 +73,8 @@
 	..()
 	if(health <= 0)
 		for(var/atom/movable/A as mob|obj in src)
+			damage(A)
 			remove_from_storage(A, loc)
-			damage()
 		qdel(src)
 	return
 
@@ -83,14 +83,14 @@
 		if(3)
 			if(prob(25))
 				for(var/atom/movable/A as mob|obj in src)
+					damage(A)
 					remove_from_storage(A, loc)
-					damage()
 				qdel(src)
 		if(2)
 			if(prob(80))
 				for(var/atom/movable/A as mob|obj in src)
+					damage(A)
 					remove_from_storage(A, loc)
-					damage()
 					A.ex_act(1)
 				qdel(src)
 		if(1)
@@ -105,22 +105,22 @@
 					locked = !locked
 					src.update_icon()
 					for(var/atom/movable/A as mob|obj in src)
+						damage(A)
 						remove_from_storage(A, loc)
-						damage()
 			if(2)
 				if(prob(50))
 					locked = !locked
 					src.update_icon()
 					for(var/atom/movable/A as mob|obj in src)
+						damage(A)
 						remove_from_storage(A, loc)
-						damage()
 			if(3)
 				if(prob(25))
 					locked = !locked
 					src.update_icon()
 					for(var/atom/movable/A as mob|obj in src)
+						damage(A)
 						remove_from_storage(A, loc)
-						damage()
 
 /obj/item/weapon/storage/lockbox/update_icon()
 	..()

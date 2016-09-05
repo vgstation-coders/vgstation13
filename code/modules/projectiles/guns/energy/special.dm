@@ -31,7 +31,7 @@
 	charge_cost = 100
 	projectile_type = "/obj/item/projectile/energy/declone"
 
-/obj/item/weapon/gun/energy/decloner/special_check(var/mob/living/carbon/human/M)
+/obj/item/weapon/gun/energy/decloner/failure_check(var/mob/living/carbon/human/M)
 	if(damaged && prob(25))
 		M.apply_effect(rand(10,30), IRRADIATE)
 		to_chat(M, "<span class='warning'>The [name] feels warm for a moment.</span>")

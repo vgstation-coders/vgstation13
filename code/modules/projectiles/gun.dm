@@ -63,6 +63,9 @@
 /obj/item/weapon/gun/proc/special_check(var/mob/M) //Placeholder for any special checks, like detective's revolver.
 	return 1
 
+/obj/item/weapon/gun/proc/failure_check(var/mob/M) //special_check, but in a different place
+	return 1
+
 /obj/item/weapon/gun/emp_act(severity)
 	for(var/obj/O in contents)
 		O.emp_act(severity)
@@ -155,6 +158,8 @@
 		return click_empty(user)
 
 	if(!in_chamber)
+		return
+	if(!failure_check(user))
 		return
 	if(!istype(src, /obj/item/weapon/gun/energy/laser/redtag) && !istype(src, /obj/item/weapon/gun/energy/laser/bluetag))
 		log_attack("[user.name] ([user.ckey]) fired \the [src] (proj:[in_chamber.name]) at [target] [ismob(target) ? "([target:ckey])" : ""] ([target.x],[target.y],[target.z])[struggle ? " due to being disarmed." :""]" )

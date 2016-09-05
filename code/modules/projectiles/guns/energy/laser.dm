@@ -27,7 +27,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	charge_cost = 100 // holds less "ammo" then the rifle variant.
 
-/obj/item/weapon/gun/energy/laser/pistol/special_check(var/mob/living/carbon/human/M)
+/obj/item/weapon/gun/energy/laser/pistol/failure_check(var/mob/living/carbon/human/M)
 	if(damaged && projectile_type == /obj/item/projectile/beam/lightlaser && prob(15))
 		projectile_type = /obj/item/projectile/beam/weaklaser
 		fire_delay +=3
@@ -39,8 +39,10 @@
 		to_chat(M, "<span class='warning'>Something inside the [name] pops.</span>")
 		return 1
 	if(damaged && prob(1))
-		power_supply.rigged = 1
-		to_chat(M, "<span class='warning'>A light on [name] flashes angrily.</span>")
+		to_chat(M, "<span class='danger'>The [name] explodes!.</span>")
+		explosion(get_turf(loc), 0, 0, 1)
+		M.drop_item(src, force_drop = 1)
+		qdel(src)
 		return 0
 	return 1
 
@@ -54,7 +56,7 @@
 	projectile_type = /obj/item/projectile/beam
 	charge_cost = 50
 
-/obj/item/weapon/gun/energy/laser/rifle/special_check(var/mob/living/carbon/human/M)
+/obj/item/weapon/gun/energy/laser/rifle/failure_check(var/mob/living/carbon/human/M)
 	if(damaged && projectile_type == /obj/item/projectile/beam && prob(25))
 		projectile_type = /obj/item/projectile/beam/lightlaser
 		fire_delay +=3
@@ -71,8 +73,10 @@
 		to_chat(M, "<span class='warning'>Something inside the [name] pops.</span>")
 		return 1
 	if(damaged && prob(1))
-		power_supply.rigged = 1
-		to_chat(M, "<span class='warning'>A light on [name] flashes angrily.</span>")
+		to_chat(M, "<span class='danger'>The [name] explodes!.</span>")
+		explosion(get_turf(loc), 0, 0, 1)
+		M.drop_item(src, force_drop = 1)
+		qdel(src)
 		return 0
 	return 1
 
@@ -208,9 +212,10 @@ obj/item/weapon/gun/energy/laser/retro
 	isHandgun()
 		return 0
 
-/obj/item/weapon/gun/energy/lasercannon/special_check(var/mob/living/carbon/human/M)
-	if(damaged && projectile_type == /obj/item/projectile/beam/heavylaser && prob(33))
+/obj/item/weapon/gun/energy/lasercannon/failure_check(var/mob/living/carbon/human/M)
+	if(damaged && projectile_type == "/obj/item/projectile/beam/heavylaser" && prob(33))
 		projectile_type = /obj/item/projectile/beam
+		fire_sound = 'sound/weapons/Laser.ogg'
 		to_chat(M, "<span class='warning'>Something inside the [name] pops.</span>")
 		return 1
 	if(damaged && projectile_type == /obj/item/projectile/beam && prob(20))
@@ -225,9 +230,8 @@ obj/item/weapon/gun/energy/laser/retro
 		projectile_type = /obj/item/projectile/beam/veryweaklaser
 		to_chat(M, "<span class='warning'>Something inside the [name] pops.</span>")
 		return 1
-	if(damaged && prob(2))
-		var/turf/T = get_turf(loc)
-		explosion(T, 0, 0, 2, 4)
+	if(damaged && prob(3))
+		explosion(get_turf(loc), -1, 0, 4, 7)
 		M.drop_item(src, force_drop = 1)
 		qdel(src)
 		to_chat(M, "<span class='danger'>The [name] explodes!.</span>")
@@ -280,7 +284,7 @@ obj/item/weapon/gun/energy/laser/retro
 	projectile_type = /obj/item/projectile/energy/plasma
 	charge_cost = 50
 
-/obj/item/weapon/gun/energy/plasma/special_check(var/mob/living/carbon/human/M)
+/obj/item/weapon/gun/energy/plasma/failure_check(var/mob/living/carbon/human/M)
 	if(damaged && prob(25))
 		fire_delay += rand(6, 12)
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
