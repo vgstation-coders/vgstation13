@@ -179,7 +179,7 @@ obj/machinery/anomaly/proc/FinishScan()
 		P.name = "[src] report #[++report_num]"
 		P.info = "<b>[src] analysis report #[report_num]</b><br><br>" + ScanResults()
 		P.stamped = list(/obj/item/weapon/stamp)
-		P.overlays = list("paper_stamped")
+		P.overlays = list("paper_stamp-qm")
 	else
 		src.visible_message("<span class='notice'>[bicon(src)] makes a low buzzing noise.</span>", 2)
 

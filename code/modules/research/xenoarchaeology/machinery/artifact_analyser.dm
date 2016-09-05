@@ -83,7 +83,12 @@
 		P.info += "<br>"
 		P.info += "[bicon(scanned_object)] [results]"
 		P.stamped = list(/obj/item/weapon/stamp)
-		P.overlays = list("paper_stamped")
+		P.overlays = list("paper_stamp-qm")
+
+		if(!findtext(P.info, "Mundane"))
+			P.origin_tech = Tc_ANOMALY+"=5"
+			P.info += "<br>"
+			P.info += "<br><i>Additional data has been encrypted into this report, pertaining to the Alden-Saraspova equation. A Deconstructive Analyzer can decipher it.</i>"
 
 		if(scanned_object && istype(scanned_object, /obj/machinery/artifact))
 			var/obj/machinery/artifact/A = scanned_object
