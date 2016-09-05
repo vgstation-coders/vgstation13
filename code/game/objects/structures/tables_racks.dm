@@ -407,7 +407,7 @@
 			var/clamp_y = clicked.Height() / 2
 			W.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
 			W.pixel_y = Clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)
-	return
+	return 1
 
 /obj/structure/table/proc/straight_table_check(var/direction)
 	var/obj/structure/table/T
