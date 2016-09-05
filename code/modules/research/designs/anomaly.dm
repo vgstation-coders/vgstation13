@@ -17,7 +17,7 @@
 	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_GOLD = 200, MAT_SILVER = 200)
 	category = "Anomaly"
 	build_path = /obj/item/device/depth_scanner
-
+/*
 /datum/design/ano_scanner
 	name = "Alden-Saraspova Counter"
 	desc = "Aids in triangulation of exotic particles."
@@ -27,3 +27,4 @@
 	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_GOLD = 200, MAT_URANIUM = 200)
 	category = "Anomaly"
 	build_path = /obj/item/device/ano_scanner
+*/
