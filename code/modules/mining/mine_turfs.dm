@@ -266,7 +266,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		to_chat(user, "<span class='rose'>You start [P.drill_verb][fail_message].</span>")
 
 		if(fail_message && prob(90))
-			if(prob(25))
+			if(prob(5))
 				excavate_find(5, finds[1])
 			else if(prob(50))
 				finds.Remove(finds[1])
@@ -298,7 +298,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 				var/obj/structure/boulder/B
 				if(artifact_find)
-					if( excavation_level > 0 || prob(15) )
+					if(P.excavation_amount < 100)
 
 						B = getFromPool(/obj/structure/boulder, src)
 						if(artifact_find)
@@ -457,37 +457,36 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	finds.Remove(F)
 
 /turf/unsimulated/mineral/proc/artifact_debris(var/severity = 0)
-	for(var/j in 1 to rand(1, 3 + max(min(severity, 1), 0) * 2))
-		switch(rand(1,7))
+	if(severity)
+		switch(rand(1,3))
+			if(1)
+				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, (src))
+				M.amount = rand(5,25)
+			if(2)
+				var/obj/item/stack/sheet/plasteel/R = new(src)
+				R.amount = rand(5,25)
+			if(3)
+				var/obj/item/stack/sheet/mineral/uranium/R = new(src)
+				R.amount = rand(5,25)
+	else
+		switch(rand(1,5))
 			if(1)
 				var/obj/item/stack/rods/R = new(src)
 				R.amount = rand(5,25)
-
 			if(2)
 				var/obj/item/stack/tile/plasteel/R = new(src)
 				R.amount = rand(1,5)
-
 			if(3)
 				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, (src))
-				M.amount = rand(5,25)
-
+				M.amount = rand(1,5)
 			if(4)
-				var/obj/item/stack/sheet/plasteel/R = new(src)
-				R.amount = rand(5,25)
-
-			if(5)
 				var/quantity = rand(1,3)
 				for(var/i=0, i<quantity, i++)
 					getFromPool(/obj/item/weapon/shard, loc)
-
-			if(6)
+			if(5)
 				var/quantity = rand(1,3)
 				for(var/i=0, i<quantity, i++)
 					getFromPool(/obj/item/weapon/shard/plasma, loc)
-
-			if(7)
-				var/obj/item/stack/sheet/mineral/uranium/R = new(src)
-				R.amount = rand(5,25)
 
 
 /**********************Asteroid**************************/
