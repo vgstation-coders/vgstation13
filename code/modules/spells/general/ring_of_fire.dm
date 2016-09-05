@@ -1,6 +1,6 @@
 /spell/aoe_turf/ring_of_fire
 	name = "Ring of Fire"
-	desc = "Summon a stationary ring of fire around your current location for 10 seconds. While the ring is active, you are immune to fire and high temperatures."
+	desc = "Summon a stationary ring of flames around your current location for 10 seconds. While the ring is active, you are fully immune to fire and burns."
 	school = "conjuration"
 	charge_max = 300
 	cooldown_min = 100
@@ -31,8 +31,11 @@
 	to_chat(user, "<span class='danger'>You summon a ring of fire around yourself.</span>")
 
 	if(isliving(user))
-		to_chat(user, "<span class='info'>You feel resistant to fire.</span>")
 		var/mob/living/L = user
+
+		if(!L.mutations.Find(M_RESIST_HEAT))
+			to_chat(L, "<span class='info'>You feel resistant to fire.</span>")
+
 		L.mutations.Add(M_RESIST_HEAT)
 		L.update_mutations()
 
@@ -41,7 +44,7 @@
 			L.update_mutations()
 
 			if(!L.mutations.Find(M_RESIST_HEAT))
-				to_chat(L, "<span class='info'>You no longer feel resistant to fire.</span>")
+				to_chat(L, "<span class='info'>You are no longer resistant to fire.</span>")
 
 	..()
 
@@ -50,7 +53,7 @@
 		if(Sp_MOVE)
 			spell_levels[Sp_MOVE]++
 			move_with_user = 1
-			desc = "Summon a ring of fire around yourself for 10 seconds. While the ring is active, you are immune to fire and high temperatures."
+			desc = "Summon a ring of flames around yourself for 10 seconds. The ring moves together with you, and while it's active you are immune to fire and burns."
 			return "The ring will now move together with you."
 
 	return ..()
@@ -71,20 +74,20 @@
 	..()
 
 	for(var/turf/T in locations)
-		var/obj/effect/fire_blast/ring_of_fire/F = getFromPool(/obj/effect/fire_blast/ring_of_fire, T)
-		F.duration = duration
+		var/obj/effect/fire_blast/ring_of_fire/F = new /obj/effect/fire_blast/ring_of_fire(T)
 
-		lock_atom(F, /datum/locking_category/ring_of_fire)
+		var/lock_id = "\ref[F]"
+		add_lock_cat(/datum/locking_category/ring_of_fire, lock_id)
+		lock_atom(F, lock_id)
 
 	spawn(duration)
 		qdel(src)
 
 /obj/effect/fire_blast/ring_of_fire
-	fire_damage = 7
+	fire_damage = 8
 	spread = 0
 
 /datum/locking_category/ring_of_fire
-	unique = 1 //Create an object for every locked atom
 
 /datum/locking_category/ring_of_fire/lock(atom/movable/AM)
 	x_offset = AM.x - owner.x
