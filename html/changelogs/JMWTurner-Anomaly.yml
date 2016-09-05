@@ -1,4 +1,0 @@
-author: JMWTurner
-delete-after: true
-changes:
-  - rscadd: Added an Anomaly R&D tech tree. Anomaly levels can be researched by deconstructing small artifacts, or analysis reports of large artifacts.
