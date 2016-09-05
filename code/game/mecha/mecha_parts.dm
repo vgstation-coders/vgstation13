@@ -19,13 +19,13 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 
-	attackby(obj/item/W as obj, mob/user as mob)
-		if(!construct || !construct.action(W, user))
-			..()
-		return
+/obj/item/mecha_parts/chassis/attackby(obj/item/W as obj, mob/user as mob)
+	if(!construct || !construct.action(W, user))
+		..()
+	return
 
-	attack_hand()
-		return
+/obj/item/mecha_parts/chassis/attack_hand()
+	return
 
 /////////// Ripley
 

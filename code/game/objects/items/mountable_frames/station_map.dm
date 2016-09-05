@@ -18,9 +18,12 @@
 	anchored = 1
 	density = 0
 
-	var/build = 0        // Build state
-	var/boardtype=/obj/item/weapon/circuitboard/station_map
-	var/obj/item/weapon/circuitboard/_circuitboard
+	var/datum/construction/construct
+
+/obj/machinery/station_map_frame/attackby(var/obj/item/W, var/mob/user)
+	if(!construct || !construct.action(W, user))
+		..()
+	return
 
 /obj/machinery/station_map_frame/New(turf/loc, var/ndir)
 	..()
@@ -39,108 +42,76 @@
 			pixel_x = -1*WORLD_ICON_SIZE
 			pixel_y = 0
 
+	construct = new /datum/construction/reversible/station_map(src)
+	/*
 /obj/machinery/station_map_frame/update_icon()
 	icon_state = "station_map_frame[build]"
+	*/
+/datum/construction/reversible/station_map
+	result = /obj/machinery/station_map
+	var/base_icon = "station_map_frame"
 
-/obj/machinery/station_map_frame/attackby(var/obj/item/W as obj, var/mob/user as mob)
-	switch(build)
-		if(0) // Empty hull
-			if(isscrewdriver(W))
-				to_chat(usr, "You begin removing screws from \the [src] backplate...")
-				if(do_after(user, src, 50))
-					to_chat(usr, "<span class='notice'>You unscrew \the [src] from the wall.</span>")
-					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-					new /obj/item/mounted/frame/station_map(get_turf(src))
-					qdel(src)
-				return 1
-			if(istype(W, /obj/item/weapon/circuitboard))
-				var/obj/item/weapon/circuitboard/C=W
-				if(!(istype(C,/obj/item/weapon/circuitboard/station_map)))
-					to_chat(user, "<span class='warning'>You cannot install this type of board into a [src].</span>")
-					return
-				to_chat(usr, "You begin to insert \the [C] into \the [src].")
-				if(do_after(user, src, 10))
-					if(user.drop_item(C, src))
-						to_chat(usr, "<span class='notice'>You secure \the [C]!</span>")
-						_circuitboard=C
-						playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
-						build++
-						update_icon()
-				return 1
-		if(1) // Circuitboard installed
-			if(iscrowbar(W))
-				to_chat(usr, "You begin to pry out \the [W] into \the [src].")
-				if(do_after(user, src, 10))
-					playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 0)
-					build--
-					update_icon()
-					var/obj/item/weapon/circuitboard/C
-					if(_circuitboard)
-						_circuitboard.forceMove(get_turf(src))
-						C=_circuitboard
-						_circuitboard=null
-					else
-						C=new boardtype(get_turf(src))
-					user.visible_message(\
-						"<span class='warning'>[user.name] has removed \the [C]!</span>",\
-						"You remove \the [C].")
-				return 1
-			if(istype(W, /obj/item/stack/cable_coil))
-				var/obj/item/stack/cable_coil/C=W
-				to_chat(user, "You start adding cables to \the [src]...")
-				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-				if(do_after(user, src, 20) && C.amount >= 5)
-					C.use(5)
-					build++
-					update_icon()
-					user.visible_message(\
-						"<span class='warning'>[user.name] has added cables to \the [src]!</span>",\
-						"You add cables to \the [src].")
-		if(2) // Circuitboard installed, wired.
-			if(iswirecutter(W))
-				to_chat(usr, "You begin to remove the wiring from \the [src].")
-				if(do_after(user, src, 50))
-					new /obj/item/stack/cable_coil(loc,5)
-					user.visible_message(\
-						"<span class='warning'>[user.name] cut the cables.</span>",\
-						"You cut the cables.")
-					build--
-					update_icon()
-				return 1
-			if(istype(W, /obj/item/stack/sheet/glass/glass))
-				var/obj/item/stack/sheet/glass/G=W
-				to_chat(user, "You begin to complete \the [src]...")
-				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-				if(do_after(user, src, 20) && G.amount >= 1)
-					if(!_circuitboard)
-						_circuitboard=new boardtype(src)
-					G.use(1)
-					build++
-					update_icon()
-					user.visible_message(\
-						"<span class='warning'>[user.name] has added a glass screen to \the [src]!</span>",\
-						"You add a glass screen to \the [src].")
-				return 1
-		if(3) // Screen in place
-			if(iscrowbar(W))
-				to_chat(user, "You begin to pry off the glass screen...")
-				playsound(get_turf(src), 'sound/effects/pop.ogg', 50, 1)
-				if(do_after(user, src, 30)).
-					new /obj/item/stack/sheet/glass/glass(loc,1)
-					user.visible_message(\
-						"<span class='warning'>[user.name] pried off the glass screen.</span>",\
-						"You pry off the glass screen.")
-					build--
-					update_icon()
-				return 1
-			if(isscrewdriver(W))
-				to_chat(usr, "You finish up \the [src]...")
-				if(do_after(user, src, 50))
-					to_chat(usr, "<span class='notice'>You finish up \the [src].</span>")
-					playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-					var/obj/machinery/station_map/S = new(loc)
-					S.dir = dir
-					S.update_icon()
-					qdel(src)
-				return 1
-	..()
+	steps = list(
+					//1
+					 list(Co_DESC="The glass screen is in place.",
+					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
+					 		Co_VIS_MSG = "{USER} close{s} the panel."),
+					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
+					 		Co_VIS_MSG = "{USER} prie{s} the glass screen from {HOLDER}.",
+					 		Co_START_MSG = "{USER} begin{s} removing the glass screen...",
+					 		Co_DELAY = 30,)
+					 	),
+					 //2
+					 list(Co_DESC="The wiring is added.",
+					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/sheet/glass/glass,
+					 		Co_AMOUNT = 1,
+					 		Co_VIS_MSG = "{USER} install{s} the glass screen to {HOLDER}.",
+					 		Co_START_MSG = "{USER} begin{s} installing the glass screen...",
+					 		Co_DELAY = 30),
+					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/wirecutters,
+					 		Co_VIS_MSG = "{USER} remove{s} the wiring from {HOLDER}.")
+					 	),
+					 //3
+					 list(Co_DESC="The circuitboard is installed",
+					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/cable_coil,
+					 		Co_AMOUNT = 5,
+					 		Co_VIS_MSG = "{USER} add{s} the wiring to {HOLDER}.",
+					 		Co_DELAY = 20),
+					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
+					 		Co_VIS_MSG = "{USER} prie{s} the glass screen from {HOLDER}.")
+					 	),
+					 //4
+					 list(Co_DESC="The frame is on the wall.",
+					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/circuitboard/station_map,
+					 		Co_VIS_MSG = "{USER} install{s} the circuitboard into {HOLDER}.",
+					 		Co_AMOUNT = 1),
+					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
+					 		Co_VIS_MSG = "{USER} unfasten{s} {HOLDER} from the wall.",
+					 		Co_START_MSG = "{USER} begin{s} removing {HOLDER}'s screws...",
+					 		Co_DELAY = 30)
+					 	)
+					)
+
+/datum/construction/reversible/station_map/custom_action(index, diff, atom/used_atom, mob/user)
+	if(!..())
+		return 0
+
+	holder.icon_state = "[base_icon][steps.len - index - diff]"
+	return 1
+
+/datum/construction/reversible/station_map/action(atom/used_atom,mob/user)
+	return check_step(used_atom,user)
+
+/datum/construction/reversible/station_map/spawn_result(mob/user as mob)
+	if(result)
+		testing("[user] finished a [result]!")
+
+		var/obj/machinery/station_map/S = new result(get_turf(holder))
+		S.dir = holder.dir
+		S.update_icon()
+
+		spawn()
+			qdel (holder)
+			holder = null
+
+	feedback_inc("station_map_created",1)
