@@ -60,17 +60,10 @@
 		..()
 
 /obj/item/weapon/gun/projectile/automatic/failure_check(var/mob/living/carbon/human/M)
-	if(damaged && prob(5))
-		jammed = 1
-		M.visible_message("*click click*", "<span class='danger'>*click*</span>")
-		playsound(M, empty_sound, 100, 1)
-		return 0
-	if(damaged && prob(5))
-		burstfire = !burstfire
-		if(!burstfire)
-			fire_delay = initial(fire_delay)
+	if(damaged && !burstfire && prob(5))
+		burstfire = 1
 		return 1
-	return 1
+	..()
 
 /obj/item/weapon/gun/projectile/automatic/lockbox
 	mag_type = "/obj/item/ammo_storage/magazine/smg9mm/empty"

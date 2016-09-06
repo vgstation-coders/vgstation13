@@ -44,7 +44,7 @@
 		M.drop_item(src, force_drop = 1)
 		qdel(src)
 		return 0
-	return 1
+	..()
 
 
 /obj/item/weapon/gun/energy/laser/rifle
@@ -78,7 +78,7 @@
 		M.drop_item(src, force_drop = 1)
 		qdel(src)
 		return 0
-	return 1
+	..()
 
 /obj/item/weapon/gun/energy/laser/admin
 	name = "infinite laser gun"
@@ -236,7 +236,7 @@ obj/item/weapon/gun/energy/laser/retro
 		qdel(src)
 		to_chat(M, "<span class='danger'>The [name] explodes!.</span>")
 		return 0
-	return 1
+	..()
 
 /obj/item/weapon/gun/energy/lasercannon/empty/New()
 	..()
@@ -306,7 +306,7 @@ obj/item/weapon/gun/energy/laser/retro
 		qdel(src)
 		to_chat(M, "<span class='danger'>The [name] explodes!.</span>")
 		return 0
-	return 1
+	..()
 
 /obj/item/weapon/gun/energy/plasma/pistol
 	name = "plasma pistol"

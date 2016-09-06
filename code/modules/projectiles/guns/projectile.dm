@@ -63,7 +63,7 @@
 				ACcham.forceMove(get_turf(src))
 				chambered = null
 				var/dropped_bullets = 1
-				var/to_drop = rand(4, 8)
+				var/to_drop = rand(3, 6)
 				for(var/i = 1; i<=min(to_drop, stored_magazine.stored_ammo.len); i++)
 					var/obj/item/ammo_casing/AC = stored_magazine.stored_ammo[1]
 					stored_magazine.stored_ammo -= AC
@@ -250,3 +250,11 @@
 			if(istype(AC))
 				bullets += 1
 	return bullets
+
+/obj/item/weapon/gun/projectile/failure_check(var/mob/living/carbon/human/M)
+	if(damaged && load_method == 2 && prob(5))
+		jammed = 1
+		M.visible_message("*click click*", "<span class='danger'>*click*</span>")
+		playsound(M, empty_sound, 100, 1)
+		return 0
+	..()

@@ -67,8 +67,8 @@
 	cell_type = "/obj/item/weapon/cell"
 
 /obj/item/weapon/gun/energy/stunrevolver/failure_check(var/mob/living/carbon/human/M)
-	if(damaged && prob(25))
-		power_supply.use(125)
+	if(damaged && prob(20))
+		fire_delay += 2
 		to_chat(M, "<span class='warning'>The [name] buzzes.</span>")
 		return 1
 	if(damaged && prob(10))
@@ -85,7 +85,7 @@
 		M.drop_item(src, force_drop = 1)
 		qdel(src)
 		return 0
-	return 1
+	..()
 
 
 
@@ -151,8 +151,9 @@
 	if(damaged && prob(5))
 		power_supply.maxcharge = 0
 		power_supply.charge = 0
+		processing_objects.Remove(src)
 		to_chat(M, "<span class='warning'>The [name] fizzles.</span>")
 		return 0
-	return 1
+	..()
 
 

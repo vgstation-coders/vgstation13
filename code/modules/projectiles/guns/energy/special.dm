@@ -47,7 +47,7 @@
 		M.drop_item(src, force_drop = 1)
 		qdel(src)
 		return 0
-	return 1
+	..()
 
 var/available_staff_transforms=list("monkey","robot","slime","xeno","human","furry","frankenstein")
 #define SOC_CHANGETYPE_COOLDOWN 2 MINUTES
@@ -512,6 +512,11 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	charge_cost = 100
 	cell_type = "/obj/item/weapon/cell"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
+
+obj/item/weapon/gun/energy/ricochet/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+	if(damaged && prob(50))
+		target = get_ranged_target_turf(user, pick(diagonal), 7)
+	..()
 
 /obj/item/weapon/gun/energy/bison
 	name = "\improper Righteous Bison"
