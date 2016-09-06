@@ -195,6 +195,9 @@
 	return ..()
 
 /obj/structure/bed/chair/comfy/attack_hand(var/mob/user)
+	if(locked_atoms.len)
+		return ..()
+
 	for (var/obj/item/I in src)
 		user.put_in_hands(I)
 		to_chat(user, "You pull out \the [I] between \the [src]'s cushions.")
