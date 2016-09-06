@@ -1,3 +1,5 @@
+[core]
+	hooksPath = ./tools/git-hooks
 [merge "merge-dmm"]
     name = mapmerge driver
     driver = ./maptools/mapmerge.sh %O %A %B
