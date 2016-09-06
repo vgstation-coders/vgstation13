@@ -1560,3 +1560,15 @@
 
 /mob/living/silicon/robot/CheckSlip()
 	return (istype(module,/obj/item/weapon/robot_module/engineering)? -1 : 0)
+
+//Help with the garbage collection of the module on the robot end
+/mob/living/silicon/robot/proc/remove_module()
+	uneq_all()
+	if(hud_used)
+		shown_robot_modules = 0
+		update_robot_modules_display()
+	if(client)
+		for(var/obj/A in upgrades)
+			client.screen -= A
+	module.remove_languages(R)
+	R.module = null
