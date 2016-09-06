@@ -115,16 +115,16 @@ Pipelines + Other Objects -> Pipe network
 	if (default_colour)
 		return default_colour
 
-	if (other.default_colour && other.default_colour != "#B4B4B4")
+	if (other.default_colour && other.default_colour != PIPE_COLOR_GREY)
 		return other.default_colour
 
-	return "#B4B4B4"
+	return PIPE_COLOR_GREY
 
 /obj/machinery/atmospherics/proc/node_layer()
-	return level == 1 ? PIPE_LAYER : EXPOSED_PIPE_LAYER
+	return level == LEVEL_BELOW_FLOOR ? PIPE_LAYER : EXPOSED_PIPE_LAYER
 
 /obj/machinery/atmospherics/proc/node_plane()
-	return level == 1 ? ABOVE_PLATING_PLANE : ABOVE_TURF_PLANE
+	return level == LEVEL_BELOW_FLOOR ? ABOVE_PLATING_PLANE : ABOVE_TURF_PLANE
 
 /obj/machinery/atmospherics/update_icon(var/adjacent_procd,node_list)
 	update_planes_and_layers()
@@ -154,7 +154,7 @@ Pipelines + Other Objects -> Pipe network
 	for (var/missing_dir in missing_nodes)
 		var/image/nodeex = icon_node_ex(missing_dir)
 		if(!color)
-			nodeex.color = default_colour ? default_colour : "#B4B4B4"
+			nodeex.color = default_colour ? default_colour : PIPE_COLOR_GREY
 		else
 			nodeex.color = null
 		nodeex.plane = node_plane()
@@ -289,7 +289,7 @@ Pipelines + Other Objects -> Pipe network
 	if(src.machine_flags & WRENCHMOVE)
 		return ..()
 	var/turf/T = src.loc
-	if (level==1 && isturf(T) && T.intact)
+	if (level==LEVEL_BELOW_FLOOR && isturf(T) && T.intact)
 		to_chat(user, "<span class='warning'>You must remove the plating first.</span>")
 		return 1
 	var/datum/gas_mixture/int_air = return_air()
@@ -367,7 +367,7 @@ Pipelines + Other Objects -> Pipe network
 // Tiny helper to see if the object is "exposed".
 // Basically whether it's partially covered up by a floor tile or not.
 /obj/machinery/atmospherics/proc/exposed()
-	if (level == 2 || !isturf(loc))
+	if (level == LEVEL_ABOVE_FLOOR || !isturf(loc))
 		return TRUE
 
 	var/turf/T = loc

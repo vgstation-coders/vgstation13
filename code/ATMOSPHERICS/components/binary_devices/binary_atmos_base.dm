@@ -36,7 +36,7 @@
 	air2.volume = 200
 
 /obj/machinery/atmospherics/binary/update_planes_and_layers()
-	if (level == 1)
+	if (level == LEVEL_BELOW_FLOOR)
 		layer = BINARY_PIPE_LAYER
 	else
 		layer = EXPOSED_BINARY_PIPE_LAYER
@@ -53,7 +53,7 @@
 	if (pipe.pipename)
 		name = pipe.pipename
 	var/turf/T = loc
-	level = T.intact ? 2 : 1
+	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
 	update_planes_and_layers()
 	initialize()
 	build_network()

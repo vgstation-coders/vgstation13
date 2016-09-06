@@ -24,7 +24,7 @@
 	var/baseicon=""
 
 /obj/machinery/atmospherics/pipe/update_planes_and_layers()
-	if (level == 1)
+	if (level == LEVEL_BELOW_FLOOR)
 		plane = ABOVE_PLATING_PLANE
 		layer = PIPE_LAYER
 	else
@@ -129,7 +129,7 @@
 	// Type of burstpipe to use on burst()
 	var/burst_type = /obj/machinery/atmospherics/unary/vent/burstpipe
 
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 
 /obj/machinery/atmospherics/pipe/simple/New()
 	..()
@@ -151,7 +151,7 @@
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
-	level = T.intact ? 2 : 1
+	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
 	update_planes_and_layers()
 	initialize(1)
 	if(!node1&&!node2)
@@ -388,39 +388,39 @@
 	color=PIPE_COLOR_GREEN
 
 /obj/machinery/atmospherics/pipe/simple/scrubbers/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/simple/supply/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/simple/supply/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/simple/supplymain/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/simple/supplymain/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/simple/general/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/simple/general/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/simple/yellow/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/simple/yellow/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/simple/cyan/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/simple/cyan/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/simple/filtering/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/simple/filtering/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/simple/insulated
 	name = "\improper Insulated pipe"
@@ -434,13 +434,13 @@
 	color = IPIPE_COLOR_RED
 /obj/machinery/atmospherics/pipe/simple/insulated/visible
 	icon_state = "intact"
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/simple/insulated/visible/blue
 	color=IPIPE_COLOR_BLUE
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden
 	icon_state = "intact"
 	alpha=128
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue
 	color= IPIPE_COLOR_BLUE
 
@@ -457,7 +457,7 @@
 	var/obj/machinery/atmospherics/node1
 	var/obj/machinery/atmospherics/node2
 	var/obj/machinery/atmospherics/node3
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	layer = PIPE_LAYER
 	var/global/image/manifold_centre = image('icons/obj/pipes.dmi',"manifold_centre")
 
@@ -465,7 +465,7 @@
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
-	level = T.intact ? 2 : 1
+	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
 	update_planes_and_layers()
 
 	initialize(1)
@@ -622,48 +622,48 @@
 	alert_pressure = 900*ONE_ATMOSPHERE
 	color=IPIPE_COLOR_RED
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold/supply/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold/supplymain/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold/supplymain/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold/general/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold/general/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold/insulated/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold/insulated/visible/blue
 	color=IPIPE_COLOR_BLUE
 /obj/machinery/atmospherics/pipe/manifold/insulated/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold/insulated/hidden/blue
 	color=IPIPE_COLOR_BLUE
 /obj/machinery/atmospherics/pipe/manifold/yellow/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold/yellow/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold/cyan/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold/cyan/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold/filtering/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold/filtering/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 
 /obj/machinery/atmospherics/pipe/manifold4w
@@ -679,7 +679,7 @@
 	var/obj/machinery/atmospherics/node2
 	var/obj/machinery/atmospherics/node3
 	var/obj/machinery/atmospherics/node4
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	layer = PIPE_LAYER
 	baseicon="manifold4w"
 	var/global/image/manifold4w_centre = image('icons/obj/pipes.dmi',"manifold4w_centre")
@@ -689,7 +689,7 @@
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
-	level = T.intact ? 2 : 1
+	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
 	update_planes_and_layers()
 	initialize(1)
 	if(!node1 && !node2 && !node3 && !node4)
@@ -841,40 +841,40 @@
 	alert_pressure = 900*ONE_ATMOSPHERE
 
 /obj/machinery/atmospherics/pipe/manifold4w/scrubbers/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold4w/scrubbers/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold4w/supply/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold4w/supply/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold4w/supplymain/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold4w/supplymain/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold4w/general/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold4w/general/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold4w/filtering/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold4w/filtering/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold4w/yellow/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold4w/yellow/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold4w/insulated/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold4w/insulated/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold4w/insulated/hidden/blue
 	color=IPIPE_COLOR_BLUE
 /obj/machinery/atmospherics/pipe/manifold4w/insulated/visible/blue
@@ -961,7 +961,7 @@
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
-	level = T.intact ? 2 : 1
+	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
 	update_planes_and_layers()
 	initialize(1)
 	if(!(locate(/obj/machinery/atmospherics) in layer_nodes) && !other_node)
@@ -1044,7 +1044,7 @@
 				is_partially_exposed = TRUE
 
 		else
-			ex.color = default_colour || "#B4B4B4"
+			ex.color = default_colour || PIPE_COLOR_GREY
 
 		underlays += ex
 
@@ -1169,7 +1169,7 @@
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
-	level = T.intact ? 2 : 1
+	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
 	update_planes_and_layers()
 	initialize(1)
 	if(!mid_node && !layer_node)

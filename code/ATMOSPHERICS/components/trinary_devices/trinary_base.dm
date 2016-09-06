@@ -18,7 +18,7 @@ obj/machinery/atmospherics/trinary
 	var/activity_log = ""
 
 /obj/machinery/atmospherics/trinary/update_planes_and_layers()
-	if (level == 1)
+	if (level == LEVEL_BELOW_FLOOR)
 		layer = TRINARY_PIPE_LAYER
 	else
 		layer = EXPOSED_BINARY_PIPE_LAYER
@@ -62,7 +62,7 @@ obj/machinery/atmospherics/trinary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	if (pipe.pipename)
 		name = pipe.pipename
 	var/turf/T = loc
-	level = T.intact ? 2 : 1
+	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
 	update_planes_and_layers()
 	initialize()
 	build_network()
