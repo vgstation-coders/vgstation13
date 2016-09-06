@@ -65,6 +65,7 @@
 		user.visible_message("[user] takes [I] out of [src]", "You take [I] out of [src].",\
 		"You hear someone rustle around in a plastic bag, and remove something.")
 		overlays.len = 0	//remove the overlays
+		underlays.len = 0	//and the underlays (due to xenoarch's core sampler)
 		user.put_in_hands(I)
 		w_class = W_CLASS_TINY
 		icon_state = "evidenceobj"
