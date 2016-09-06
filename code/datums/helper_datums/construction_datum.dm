@@ -84,6 +84,12 @@
 	else if(iswirecutter(used_atom))
 		playsound(holder, 'sound/items/Wirecutter.ogg', 50, 1)
 
+	else if(istype(used_atom,/obj/item/weapon/circuitboard))
+		playsound(holder, 'sound/items/Deconstruct.ogg', 50, 1)
+
+	else if(iswire(used_atom))
+		playsound(holder, 'sound/items/zip.ogg', 50, 1)
+
 	construct_message(step, user)
 	return 1
 
