@@ -95,13 +95,11 @@
 	flags = ONESIZEFITSALL
 	armor = list(melee = 50, bullet = 10, laser = 25, energy = 10, bomb = 0, bio = 0, rad = 0)
 	species_fit = list(VOX_SHAPED)
-	var/noir = 0
 
 /obj/item/clothing/suit/storage/det_suit/noir
 	desc = "Ah, your trusty coat. There's a few tears here and there, giving it a more timely look. Or at least, that's what you told yourself when you found out gettin' it repaired would set you back 200 credits."
 	icon_state = "noir_detective"
 	item_state = "noir_detective"
-	noir = 1
 
 //Forensics
 /obj/item/clothing/suit/storage/forensics

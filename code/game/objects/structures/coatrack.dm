@@ -9,8 +9,20 @@
 	flags = FPRINT
 	autoignition_temperature = AUTOIGNITION_WOOD
 	fire_fuel = 3
-	var/obj/item/clothing/suit/storage/det_suit/suit = null
-	var/obj/item/clothing/head/det_hat/hat = null
+	var/obj/item/clothing/suit/suit = null
+	var/obj/item/clothing/head/hat = null
+
+	var/list/allowed_suits = list(
+		/obj/item/clothing/suit/storage/det_suit,
+		/obj/item/clothing/suit/storage/forensics,
+		/obj/item/clothing/suit/storage/labcoat,
+		)
+	var/list/allowed_hats = list(
+		/obj/item/clothing/head/det_hat,
+		/obj/item/clothing/head/caphat,
+		/obj/item/clothing/head/centhat,
+		)
+
 
 /obj/structure/coatrack/attack_hand(mob/user)
 	if(suit)
@@ -34,19 +46,18 @@
 		return
 
 /obj/structure/coatrack/attackby(obj/item/clothing/C, mob/user)
-	if (istype(C, /obj/item/clothing/suit/storage/det_suit) && !suit)
+	if (istype(C, /obj/item/clothing/suit) && !suit && is_type_in_list(C, allowed_suits))
 		if(user.drop_item(C, src))
 			to_chat(user, "<span class='notice'>You place your [C] on \the [src]</span>")
 			playsound(get_turf(src), "rustle", 50, 1, -5)
 			suit = C
 			update_icon()
-	else if (istype(C, /obj/item/clothing/head/det_hat) && !hat)
+	else if (istype(C, /obj/item/clothing/head) && !hat && is_type_in_list(C, allowed_hats))
 		if(user.drop_item(C, src))
 			to_chat(user, "<span class='notice'>You place your [C] on \the [src]</span>")
 			playsound(get_turf(src), "rustle", 50, 1, -5)
 			hat = C
 			update_icon()
-
 	else
 		return ..()
 
@@ -74,12 +85,10 @@
 
 /obj/structure/coatrack/update_icon()
 	overlays.Cut()
-	if(suit && istype(suit,/obj/item/clothing/suit/storage/det_suit))
-		var/obj/item/clothing/suit/storage/det_suit/detective_suit = suit
-		overlays += image(icon,"coat[(detective_suit.noir) ? "_noir" : ""]")
-	if(hat && istype(hat,/obj/item/clothing/head/det_hat))
-		var/obj/item/clothing/head/det_hat/detective_hat = hat
-		overlays += image(icon,"hat[(detective_hat.noir) ? "_noir" : ""]")
+	if(suit)
+		overlays += image(icon,"coat-[suit.icon_state]")
+	if(hat)
+		overlays += image(icon,"hat-[hat.icon_state]")
 
 /obj/structure/coatrack/full
 
