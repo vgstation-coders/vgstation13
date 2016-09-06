@@ -136,10 +136,10 @@
 
 /mob/living/simple_animal/hostile/necro/zombie/Life()
 	..()
-	/*TODO
+	/*TODONE
 	First, check if the zombie can potentially evolve
 	Have the zombie move to a corpse and start chewing at it
-	If neither of these things are applicable, break some lights to set the mood
+	If neither of these things are applicable, break some lights to set the mood: Tried it. Do not recommend
 	Otherwise, start wandering and bust down some doors to find more food
 	*/
 	if(!isUnconscious())
@@ -198,9 +198,10 @@
 			stop_automated_movement = 0
 			walk(src,0)
 /mob/living/simple_animal/hostile/necro/zombie/proc/can_open_door(var/obj/machinery/door/D)
-	if(istype(D,/obj/machinery/door/poddoor) || istype(D, /obj/machinery/door/airlock/multi_tile/glass) || istype(D, /obj/machinery/door/window))
+	if((istype(D,/obj/machinery/door/poddoor) || istype(D, /obj/machinery/door/airlock/multi_tile/glass) || istype(D, /obj/machinery/door/window)) && !client)
 		return 0
-
+	if(break_doors == CANT)//Moreso used for when a player-controlled zombie attempts to forceopen a door
+		return 0
 	// Don't fuck with doors that are doing something
 	if(D.operating>0)
 		return 0
@@ -303,11 +304,22 @@
 		new evolve_to(src.loc)
 		qdel(src)
 
-/mob/living/simple_animal/hostile/necro/zombie/proc/drop_host()
-
 /mob/living/simple_animal/hostile/necro/zombie/delayedRegen()
 	..()
 	times_revived += 1
+
+/mob/living/simple_animal/hostile/necro/zombie/UnarmedAttack(atom/A) //There's got to be a better way to keep everything together
+	..()
+	if(istype(A, /obj/machinery/door))
+		if(can_open_door(A))
+			force_door(A)
+		else
+			visible_message("\The [src] looks over \the [A] for a moment.", "<span class='notice'>You don't think you can get \the [A] open.</span>")
+	if(istype(A, /mob/living/carbon/human))
+		if(check_edibility(A))
+			eat(A)
+		else
+			visible_message("\The [src] looks over \the [A] for a moment.", "<span class='notice'>\The [A] doesn't look too tasty.</span>")
 
 /mob/living/simple_animal/hostile/necro/zombie/turned //Not very useful
 	icon_state = "zombie_turned" //Looks almost not unlike just a naked guy to potentially catch others off guard
@@ -324,16 +336,12 @@
 	if(times_revived > 0 || times_eaten > 0)
 		evolve(/mob/living/simple_animal/hostile/necro/zombie/rotting)
 
-/mob/living/simple_animal/hostile/necro/zombie/turned/drop_host()
-	qdel(host) //Bye bye
-
-/mob/living/simple_animal/hostile/necro/zombie/turned/gib()
+/mob/living/simple_animal/hostile/necro/zombie/turned/Destroy()
+	if(host)
+		qdel(host)
+		host = null
 	..()
-	drop_host()
 
-/mob/living/simple_animal/hostile/necro/zombie/turned/dust()
-	..()
-	drop_host()
 
 /mob/living/simple_animal/hostile/necro/zombie/turned/attackby(var/obj/item/weapon/W, var/mob/user)
 	..()
