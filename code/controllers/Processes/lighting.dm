@@ -8,6 +8,11 @@
 /var/list/lighting_update_corners   = list()    // List of lighting corners  queued for update.
 /var/list/lighting_update_overlays  = list()    // List of lighting overlays queued for update.
 
+/var/list/lighting_update_lights_old    = list()    // List of lighting sources  currently being updated.
+/var/list/lighting_update_corners_old   = list()    // List of lighting corners  currently being updated.
+/var/list/lighting_update_overlays_old  = list()    // List of lighting overlays currently being updated.
+
+
 /datum/controller/process/lighting
 	schedule_interval = LIGHTING_INTERVAL
 
@@ -23,7 +28,7 @@
 	var/corner_updates  = 0
 	var/overlay_updates = 0
 
-	var/list/lighting_update_lights_old = lighting_update_lights //We use a different list so any additions to the update lists during a delay from scheck() don't cause things to be cut from the list without being updated.
+	lighting_update_lights_old = lighting_update_lights //We use a different list so any additions to the update lists during a delay from scheck() don't cause things to be cut from the list without being updated.
 	lighting_update_lights = list()
 	for(var/datum/light_source/L in lighting_update_lights_old)
 		if(light_updates >= MAX_LIGHT_UPDATES_PER_WORK)
@@ -46,7 +51,7 @@
 
 		scheck()
 
-	var/list/lighting_update_corners_old = lighting_update_corners //Same as above.
+	lighting_update_corners_old = lighting_update_corners //Same as above.
 	lighting_update_corners = list()
 	for(var/A in lighting_update_corners_old)
 		if(corner_updates >= MAX_CORNER_UPDATES_PER_WORK)
@@ -61,7 +66,7 @@
 
 		corner_updates++
 
-	var/list/lighting_update_overlays_old = lighting_update_overlays //Same as above.
+	lighting_update_overlays_old = lighting_update_overlays //Same as above.
 	lighting_update_overlays = list()
 
 	for(var/atom/movable/lighting_overlay/O in lighting_update_overlays_old)

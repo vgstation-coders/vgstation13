@@ -36,14 +36,14 @@
 	update_overlay()
 
 /atom/movable/lighting_overlay/Destroy()
-	global.all_lighting_overlays    -= src
-	global.lighting_update_overlays -= src
+	global.all_lighting_overlays        -= src
+	global.lighting_update_overlays     -= src
+	global.lighting_update_overlays_old -= src
 
 	var/turf/T   = loc
 	if (istype(T))
 		T.lighting_overlay = null
-
-	T.luminosity = 1
+		T.luminosity = 1
 
 	..()
 
@@ -57,6 +57,7 @@
 			warning("A lighting overlay realised it was in nullspace in update_overlay() and got pooled!")
 
 		returnToPool(src)
+		return
 
 	var/list/L = src.color:Copy() // For some dumb reason BYOND won't allow me to use [] on a colour matrix directly.
 	var/max    = 0
@@ -121,7 +122,7 @@
 	return
 
 // Override here to prevent things accidentally moving around overlays.
-/atom/movable/lighting_overlay/forceMove(atom/destination, var/harderforce = 0)
+/atom/movable/lighting_overlay/forceMove(atom/destination, var/no_tp=FALSE, var/harderforce = FALSE)
 	if(harderforce)
 		. = ..()
 
