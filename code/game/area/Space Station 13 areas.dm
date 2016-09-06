@@ -67,6 +67,8 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/general_area_name = "Station"
 
 	var/holomap_color = null
+	var/holomap_marker = null
+	var/list/holomap_filter = list()
 
 /*Adding a wizard area teleport list because motherfucking lag -- Urist*/
 /*I am far too lazy to make it a proper list of areas so I'll just make it run the usual telepot routine at the start of the game*/
@@ -1011,6 +1013,8 @@ proc/process_adminbus_teleport_locs()
 /area/crew_quarters/bar
 	name = "\improper Bar"
 	icon_state = "bar"
+	holomap_marker = "bar"
+	holomap_filter = list(HOLOMAP_EXTRA_STATIONMAP)
 
 /area/crew_quarters/theatre
 	name = "\improper Theatre"
