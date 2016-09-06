@@ -81,14 +81,15 @@
 				projectile.OnFired()
 				projectile.process()
 
-		switch(damage_type)
-			if(BRUTE, BURN, CLONE)
-				to_chat(L, "<span class='sinister'>\The [src.holder]'s wounds appear on your body!</span>")
-			else
-				to_chat(L, "<span class='sinister'>You feel deathly sick!</span>")
+			if(prob(30))
+				L.audible_scream()
 
-		if(prob(30) && amount >= 10)
-			L.audible_scream()
+		if(amount >= 5)
+			switch(damage_type)
+				if(BRUTE, BURN, CLONE)
+					to_chat(L, "<span class='sinister'>\The [src.holder]'s wounds appear on your body!</span>")
+				else
+					to_chat(L, "<span class='sinister'>You feel deathly sick!</span>")
 
 		L.apply_damage(amount, damage_type, ignore_events = 1) //The ignore_events part is to prevent recursion with two wizards
 		L.attack_log += "\[[time_stamp()]\] <font color='orange'>Received [amount] [damage_type] damage, reflected from [src.holder] by the [src.name] spell</font>"
