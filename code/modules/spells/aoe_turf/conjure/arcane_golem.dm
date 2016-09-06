@@ -21,9 +21,9 @@
 	var/golem_limit = 1
 	var/list/golems = list()
 
-	var/const/list/forbidden_spells = list(
-	/spell/aoe_turf/conjure/arcane_golem,
-	/spell/targeted/mind_transfer,
+	var/list/forbidden_spells = list(\
+	/spell/aoe_turf/conjure/arcane_golem,\
+	/spell/targeted/mind_transfer,\
 	)
 
 /spell/aoe_turf/conjure/arcane_golem/cast(list/targets, mob/user)
