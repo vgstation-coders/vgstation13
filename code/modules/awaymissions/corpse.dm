@@ -38,6 +38,7 @@
 	var/toxin_dmg = 0
 
 /obj/effect/landmark/corpse/New()
+	..()
 	if(ticker)
 		initialize()
 
