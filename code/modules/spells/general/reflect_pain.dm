@@ -21,6 +21,9 @@
 	var/absorbed_damage = 0
 	var/dealt_damage = 0
 
+	//How much damage can be done per one instance. There to prevent instakilling everybody by suiciding (which does 200 damage)
+	var/damage_limit = 80
+
 /spell/mirror_of_pain/New()
 	..()
 	user_overlay = image('icons/mob/mob.dmi', icon_state = "red_glow")
@@ -47,6 +50,7 @@
 
 	if(amount <= 0)
 		return
+	amount = min(amount, damage_limit)
 
 	absorbed_damage += amount
 
@@ -59,22 +63,23 @@
 
 		affected_amount++
 
-		var/obj/item/projectile/beam/pain/projectile = new(get_turf(src.holder), get_dir(src.holder, L))
+		if(amount >= 10)
+			var/obj/item/projectile/beam/pain/projectile = new(get_turf(src.holder), get_dir(src.holder, L))
 
-		projectile.damage_type = damage_type
-		projectile.damage = amount
+			//The projectile is purely visual - actual damage is done below
+			projectile.damage = 0
 
-		projectile.original = L
-		projectile.starting = get_turf(src.holder)
-		projectile.target = get_turf(L)
-		projectile.shot_from = src.holder //fired from the user
-		projectile.current = projectile.original
-		projectile.yo = L.y - src.holder.y
-		projectile.xo = L.x - src.holder.x
+			projectile.original = L
+			projectile.starting = get_turf(src.holder)
+			projectile.target = get_turf(L)
+			projectile.shot_from = src.holder //fired from the user
+			projectile.current = projectile.original
+			projectile.yo = L.y - src.holder.y
+			projectile.xo = L.x - src.holder.x
 
-		spawn()
-			projectile.OnFired()
-			projectile.process()
+			spawn()
+				projectile.OnFired()
+				projectile.process()
 
 		switch(damage_type)
 			if(BRUTE, BURN, CLONE)
