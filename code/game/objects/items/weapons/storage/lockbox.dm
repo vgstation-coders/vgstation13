@@ -19,8 +19,9 @@
 	health = 50
 
 /obj/item/weapon/storage/lockbox/proc/damage(var/obj/item/I)
-//	if(istype(I, /obj/item/weapon/gun))
-//		I.damaged = 1  //why doesn't this woooork
+	if(istype(I, /obj/item/weapon/gun))
+		var/obj/item/weapon/gun/gun = I
+		gun.damaged = 1
 
 /obj/item/weapon/storage/lockbox/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/card/id))
