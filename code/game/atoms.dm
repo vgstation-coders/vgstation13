@@ -769,7 +769,7 @@ its easier to just keep the beam vertical.
 /mob/living/carbon/human/setGender(gend = FEMALE)
 	if(gend == PLURAL || gend == NEUTER || (gend != FEMALE && gend != MALE))
 		CRASH("SOMEBODY SET A BAD GENDER ON [src] [gend]")
-	var/old_gender = src.gender
+	// var/old_gender = src.gender
 	src.gender = gend
 	// testing("Set [src]'s gender to [gend], old gender [old_gender] previous gender [prev_gender]")
 
