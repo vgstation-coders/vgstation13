@@ -94,6 +94,6 @@
 
 /obj/structure/coatrack/full/New()
 	..()
-	suit = new(src)
-	hat = new(src)
+	suit = new/obj/item/clothing/suit/storage/det_suit(src)
+	hat = new/obj/item/clothing/head/det_hat(src)
 	update_icon()
