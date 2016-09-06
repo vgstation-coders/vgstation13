@@ -45,8 +45,10 @@
 	return PROJREACT_WINDOWS
 
 /obj/structure/window/examine(mob/user)
-
 	..()
+	examine_health(user)
+
+/obj/structure/window/proc/examine_health(mob/user)
 	if(!anchored)
 		to_chat(user, "It appears to be completely loose and movable.")
 	//switch most likely can't take inequalities, so here's that if block
