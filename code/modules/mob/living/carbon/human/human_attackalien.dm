@@ -8,7 +8,7 @@
 		if (I_HELP)
 			visible_message(text("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>"))
 		if (I_GRAB)
-			if(M == src || anchored)
+			if(M.grab_check(src))
 				return
 			if (w_uniform)
 				w_uniform.add_fingerprint(M)

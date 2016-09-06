@@ -388,7 +388,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 						O.show_message("<span class='notice'>[M] [response_help] [src].</span>")
 
 		if(I_GRAB)
-			if (M == src || anchored)
+			if (M.grab_check(src))
 				return
 			if (!(status_flags & CANPUSH))
 				return
@@ -435,7 +435,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				if ((O.client && !( O.blinded )))
 					O.show_message(text("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>"), 1)
 		if (I_GRAB)
-			if(M == src || anchored)
+			if(M.grab_check(src))
 				return
 			if(!(status_flags & CANPUSH))
 				return
