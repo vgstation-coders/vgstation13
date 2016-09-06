@@ -118,7 +118,8 @@
 	for(var/area/A in areas)
 		if(A.holomap_marker && (A.holomap_filter & HOLOMAP_EXTRA_STATIONMAP))
 			var/turf/T = A.getAreaCenter(map.zMainStation)
-			big_map.Blend(icon('icons/holomap_markers.dmi',A.holomap_marker), ICON_OVERLAY, T.x-8, T.y-8)
+			if(T)
+				big_map.Blend(icon('icons/holomap_markers.dmi',A.holomap_marker), ICON_OVERLAY, T.x-8, T.y-8)
 
 	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAP
 	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP] = big_map
