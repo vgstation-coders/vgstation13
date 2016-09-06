@@ -1,0 +1,4 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - rscadd: Xenoarchaeologist excavation lockers are now secure, and have new sprites.
