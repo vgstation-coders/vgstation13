@@ -108,10 +108,16 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return (target in options)
 	return ((target in view_or_range(range, user, selection_type)) && istype(target, /mob/living))
 
-/spell/proc/perform(mob/user = usr, skipcharge = 0) //if recharge is started is important for the trigger spells
+/spell/proc/perform(mob/user, skipcharge = 0, list/target_override) //if recharge is started is important for the trigger spells
+	if(!user)
+		user = usr
+
 	if(!holder)
 		holder = user //just in case
-	if(spell_flags & WAIT_FOR_CLICK)
+
+	var/list/targets = target_override
+
+	if(!targets && (spell_flags & WAIT_FOR_CLICK))
 		channel_spell(user, skipcharge)
 		return
 	if(!cast_check(skipcharge, user))
@@ -120,7 +126,10 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return
 	if(before_target(user))
 		return
-	var/list/targets = choose_targets(user)
+
+	if(!targets)
+		targets = choose_targets(user)
+
 	if(!cast_check(skipcharge, user))
 		return //Prevent queueing of spells by opening several choose target windows.
 	if(targets && targets.len)
@@ -130,6 +139,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		invocation(user, targets)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
+		INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = targets))
 
 		if(prob(critfailchance))
 			critfail(targets, user)
@@ -182,6 +192,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		invocation(user, target)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
+		INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = target))
 
 		if(prob(critfailchance))
 			critfail(target, holder)
@@ -321,7 +332,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	if(!(spell_flags & GHOSTCAST) && holder == user)
 		if(user.stat && !(spell_flags & STATALLOWED))
-			to_chat(usr, "Not when you're incapacitated.")
+			to_chat(user, "Not when you're incapacitated.")
 			return 0
 
 		if(ishuman(user) || ismonkey(user) && !(invocation_type in list(SpI_EMOTE, SpI_NONE)))

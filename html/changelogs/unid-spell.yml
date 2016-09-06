@@ -1,0 +1,10 @@
+author: Unid
+
+delete-after: True
+
+changes: 
+- rscadd: "Added a new wizard spell: Forge Arcane Golem. Cooldown - 20 seconds (upgrading cooldown lowers it to 1 second). When cast, you will create a magical golem and infuse it with your mana and magical knowledge. The golem will possess basic, unupgraded versions of every spell you know."
+- rscadd: "The following spells can't be cast by arcane golems: Forge Arcane Golem, Mind Transfer."
+- rscadd: "Whenever you cast a spell, all of your arcane golems will cast it too. Targeted spells are cast at the same target."
+- rscadd: "Only 1 golem can exist at once. This limit may be raised by upgrading the spell, up to 3. Casting the spell when too many golems already exist will teleport all of your golems to you."
+- rscadd: "Arcane golems permanently follow you, are slow and have 50 health. When a golem dies, all of its masters' spells go on cooldown."

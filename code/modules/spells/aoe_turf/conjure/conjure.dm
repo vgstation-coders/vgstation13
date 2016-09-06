@@ -64,6 +64,8 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 		else
 			summoned_object = new summoned_object_type(spawn_place)
 
+		on_creation(summoned_object, user)
+
 		var/atom/movable/overlay/animation = new /atom/movable/overlay(spawn_place)
 		animation.name = "conjure"
 		animation.density = 0
@@ -83,6 +85,9 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 		conjure_animation(animation, spawn_place)
 
 	return !placed_successfully //prevent charge if we didn't cast anything
+
+/spell/aoe_turf/conjure/proc/on_creation(atom/movable/AM, mob/user)
+	return
 
 /spell/aoe_turf/conjure/proc/conjure_animation(var/atom/movable/overlay/animation, var/turf/target)
 	qdel(animation)

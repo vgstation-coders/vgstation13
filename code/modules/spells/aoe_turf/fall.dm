@@ -111,6 +111,8 @@
 			if(C.mob)
 				C.mob.see_fall()
 
+	INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = targets))
+
 		//animate(aoe_underlay, transform = null, time = 2)
 	var/oursound = (invocation == "ZA WARUDO" ? 'sound/effects/theworld.ogg' :'sound/effects/fall.ogg')
 	playsound(usr, oursound, 100, 0, 0, 0, 0)
