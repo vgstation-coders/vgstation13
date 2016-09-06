@@ -49,6 +49,7 @@
 
 	var/conventional_firearm = 1	//Used to determine whether, when examined, an /obj/item/weapon/gun/projectile will display the amount of rounds remaining.
 	var/damaged = 0 //Set to one if in a lockbox that was broken open
+	var/jammed = 0
 
 /obj/item/weapon/gun/proc/ready_to_fire()
 	if(world.time >= last_fired + fire_delay)
@@ -154,7 +155,7 @@
 			to_chat(user, "<span class='warning'>[src] is not ready to fire again!")
 		return
 
-	if(!process_chambered()) //CHECK
+	if(!process_chambered() || jammed) //CHECK
 		return click_empty(user)
 
 	if(!in_chamber)
@@ -169,6 +170,15 @@
 		in_chamber.def_zone = user.zone_sel.selecting
 	else
 		in_chamber.def_zone = LIMB_CHEST
+
+	if(damaged)
+		var/list/turf/shot_spread = list()
+		for(var/turf/T in range(target, min(1+recoil, max(0, get_dist(user, target)-1))))
+			shot_spread += T
+		var/temptarget = pick(shot_spread)
+		if(temptarget != targloc)
+			target = temptarget
+			targloc = get_turf(target)
 
 	if(targloc == curloc)
 		user.bullet_act(in_chamber)
@@ -248,14 +258,12 @@
 
 	user.update_inv_hand(user.active_hand)
 
-	if(damaged && recoil && prob(10))
-		var/list/turf/possible_turfs = list()
-		for(var/turf/T in orange(user,3))
-			possible_turfs += T
-		var/throwturf = pick(possible_turfs)
+	if(damaged && recoil && prob(5))
+		var/throwturf = get_ranged_target_turf(user, rand(0, 360), 5)
 		user.drop_item()
-		throw_at(throwturf)
-		user.visible_message("The [src] jumps out of [user]'s hands!","The [src] jumps out of your hands!")
+		user.visible_message("[src] jumps out of [user]'s hands!","[src] jumps out of your hands!")
+		throw_at(throwturf, rand(2, 6), 3)
+		return 1
 
 	return 1
 

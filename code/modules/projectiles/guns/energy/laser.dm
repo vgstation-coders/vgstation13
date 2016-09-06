@@ -38,7 +38,7 @@
 		fire_delay +=3
 		to_chat(M, "<span class='warning'>Something inside the [name] pops.</span>")
 		return 1
-	if(damaged && prob(1))
+	if(damaged && prob(2))
 		to_chat(M, "<span class='danger'>The [name] explodes!.</span>")
 		explosion(get_turf(loc), 0, 0, 1)
 		M.drop_item(src, force_drop = 1)
@@ -72,7 +72,7 @@
 		fire_delay +=3
 		to_chat(M, "<span class='warning'>Something inside the [name] pops.</span>")
 		return 1
-	if(damaged && prob(1))
+	if(damaged && prob(2))
 		to_chat(M, "<span class='danger'>The [name] explodes!.</span>")
 		explosion(get_turf(loc), 0, 0, 1)
 		M.drop_item(src, force_drop = 1)
@@ -230,7 +230,7 @@ obj/item/weapon/gun/energy/laser/retro
 		projectile_type = /obj/item/projectile/beam/veryweaklaser
 		to_chat(M, "<span class='warning'>Something inside the [name] pops.</span>")
 		return 1
-	if(damaged && prob(3))
+	if(damaged && prob(4))
 		explosion(get_turf(loc), -1, 0, 4, 7)
 		M.drop_item(src, force_drop = 1)
 		qdel(src)
@@ -301,7 +301,7 @@ obj/item/weapon/gun/energy/laser/retro
 		return 0
 	if(damaged && prob(1+fire_delay/3))
 		var/turf/T = get_turf(loc)
-		explosion(T, 0, 1, 2, 4)
+		explosion(T, 0, 1, 3, 5)
 		M.drop_item(src, force_drop = 1)
 		qdel(src)
 		to_chat(M, "<span class='danger'>The [name] explodes!.</span>")
