@@ -93,7 +93,7 @@
 		after_cast(targets) //generates the sparks, smoke, target messages etc.
 		invocation = initial(invocation)
 
-/spell/aoe_turf/fall/cast(list/targets)
+/spell/aoe_turf/fall/cast(list/targets, mob/user)
 	var/turf/ourturf = get_turf(usr)
 
 	var/list/potentials = circlerangeturfs(usr, range)
