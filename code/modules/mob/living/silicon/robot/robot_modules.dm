@@ -18,7 +18,7 @@
 	var/list/upgrades = list()
 
 /obj/item/weapon/robot_module/Destroy()
-	if(istype(loc, /mob/living/silicon/robot)
+	if(istype(loc, /mob/living/silicon/robot))
 		var/mob/living/silicon/robot/R = loc
 		R.remove_module() //Helps remove screen references on robot end
 

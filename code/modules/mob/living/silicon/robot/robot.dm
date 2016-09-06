@@ -1566,9 +1566,9 @@
 	uneq_all()
 	if(hud_used)
 		shown_robot_modules = 0
-		update_robot_modules_display()
+		hud_used.update_robot_modules_display()
 	if(client)
-		for(var/obj/A in upgrades)
+		for(var/obj/A in module.upgrades)
 			client.screen -= A
-	module.remove_languages(R)
-	R.module = null
+	module.remove_languages(src)
+	module = null
