@@ -38,6 +38,7 @@ Notes:
 /datum/tooltip/New(client/C)
 	if (C)
 		src.owner = C
+		send_asset(owner, "jquery.min.js")
 		src.owner << browse(file2text(src.file), "window=[src.control]")
 	..()
 
@@ -50,7 +51,7 @@ Notes:
 		src.init = 1
 		src.owner << output(list2params(list(world.icon_size, src.control)), "[src.control]:tooltip.init")
 	src.showing = 1
-		
+
 	if (title && content)
 		title = "<h1>[title]</h1>"
 		content = "<p>[content]</p>"
