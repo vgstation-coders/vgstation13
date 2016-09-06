@@ -21,8 +21,13 @@
 		/obj/item/clothing/head/det_hat,
 		/obj/item/clothing/head/caphat,
 		/obj/item/clothing/head/centhat,
+		/obj/item/clothing/head/beret,
+		/obj/item/clothing/head/that,
+		/obj/item/clothing/head/flatcap,
+		/obj/item/clothing/head/hgpiratecap,
+		/obj/item/clothing/head/helmet/tactical/warden,
+		/obj/item/clothing/head/helmet/tactical/HoS,
 		)
-
 
 /obj/structure/coatrack/attack_hand(mob/user)
 	if(suit)
@@ -45,7 +50,7 @@
 		update_icon()
 		return
 
-/obj/structure/coatrack/attackby(obj/item/clothing/C, mob/user)
+/obj/structure/coatrack/attackby(obj/item/C, mob/user)
 	if (istype(C, /obj/item/clothing/suit) && !suit && is_type_in_list(C, allowed_suits))
 		if(user.drop_item(C, src))
 			to_chat(user, "<span class='notice'>You place your [C] on \the [src]</span>")
@@ -58,6 +63,10 @@
 			playsound(get_turf(src), "rustle", 50, 1, -5)
 			hat = C
 			update_icon()
+	else if(iswrench(C))
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		getFromPool(/obj/item/stack/sheet/wood, get_turf(src), 2)
+		qdel(src)//the hat and suit on the coat rack are automatically dropped by Destroy()
 	else
 		return ..()
 
@@ -84,11 +93,16 @@
 	..()
 
 /obj/structure/coatrack/update_icon()
-	overlays.Cut()
+	overlays.len = 0
 	if(suit)
 		overlays += image(icon,"coat-[suit.icon_state]")
 	if(hat)
-		overlays += image(icon,"hat-[hat.icon_state]")
+		var/image/I = image('icons/mob/head.dmi', hat.icon_state, dir = SOUTH)
+		var/matrix/M = matrix()
+		M.Turn(90)
+		M.Translate(-9,6)
+		I.transform = M
+		overlays += I
 
 /obj/structure/coatrack/full
 
