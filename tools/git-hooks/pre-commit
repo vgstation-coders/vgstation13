@@ -1,0 +1,14 @@
+#!/bin/sh
+#
+# Simple parent script that runs everything in the pre-commit-hooks folder
+
+HOOKPATH=$(git config -f ./.gitconfig --get core.hooksPath)
+
+for SCRIPT in $HOOKPATH/pre-commit-hooks/*
+do
+	echo $SCRIPT
+	if [ -f $SCRIPT -a -x $SCRIPT ]
+	then
+		$SCRIPT
+	fi
+done
