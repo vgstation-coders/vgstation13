@@ -163,6 +163,7 @@ proc/SetupXenoarch()
 	new /obj/item/beacon(src)
 	new /obj/item/clothing/glasses/scanner/meson(src)
 	new /obj/item/weapon/pickaxe(src)
+	new /obj/item/weapon/wrench(src)
 	new /obj/item/device/measuring_tape(src)
 	new /obj/item/weapon/pickaxe/hand(src)
 	return
