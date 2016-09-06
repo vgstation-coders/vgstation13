@@ -31,7 +31,8 @@
 	ranged_cooldown_cap = 8
 	ranged_message = "leaps"
 
-	speed = 6
+	move_to_delay = 6
+	speed = 2
 
 	harm_intent_damage = 6
 	melee_damage_lower = 1

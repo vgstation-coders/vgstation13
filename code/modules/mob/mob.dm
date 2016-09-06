@@ -75,16 +75,6 @@ var/global/obj/screen/fuckstat/FUCK = new
 	return PROJREACT_MOBS
 
 /mob/proc/remove_screen_objs()
-	if(flash)
-		returnToPool(flash)
-		if(client)
-			client.screen -= flash
-		flash = null
-	if(blind)
-		returnToPool(blind)
-		if(client)
-			client.screen -= blind
-		blind = null
 	if(hands)
 		returnToPool(hands)
 		if(client)
@@ -256,14 +246,9 @@ var/global/obj/screen/fuckstat/FUCK = new
 
 /mob/Del()
 	if(flags & HEAR_ALWAYS)
-		var/found = 0
 		for(var/mob/virtualhearer/VH in virtualhearers)
 			if(VH.attached == src)
-				world.log << "Virtualhearer removed from [src] of type [type]"
 				returnToPool(VH)
-				found = 1
-		if(!found)
-			world.log << "Mob virtualhearer for [type] could not be found for [src]"
 	..()
 
 /mob/proc/is_muzzled()
@@ -407,10 +392,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 /atom/proc/visible_message(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message)
 	if(world.time>resethearers)
 		sethearing()
-	for(var/mob/virtualhearer/hearer in viewers(get_turf(src)))
-		if(!hearer.attached)
-			world.log << "visible_message is attempting to call on_see on a hearer that isn't attached to anything: [hearer]. Previous type of attached: [hearer.attached_type]. Attached text reference [hearer.attached_ref]"
-			continue
+	var/location = get_holder_at_turf_level(src) || get_turf(src)
+	for(var/mob/virtualhearer/hearer in viewers(location))
 		hearer.attached.on_see(message, blind_message, drugged_message, blind_drugged_message, src)
 
 /mob/proc/findname(msg)
@@ -458,8 +441,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 		narsimage.pixel_y = old_pixel_y
 		narglow.pixel_x = old_pixel_x
 		narglow.pixel_y = old_pixel_y
-		narsimage.loc = src.loc
-		narglow.loc = src.loc
+		narsimage.forceMove(src.loc)
+		narglow.forceMove(src.loc)
 		//Animate narsie based on dir
 		if(dir)
 			var/x_diff = 0
@@ -912,7 +895,7 @@ var/list/slot_equipment_priority = list( \
 			if (L.master == src)
 				var/list/temp = list(  )
 				temp += L.container
-				L.loc = null
+				L.forceMove(null)
 				return temp
 			else
 				return L.container
@@ -1725,7 +1708,7 @@ var/list/slot_equipment_priority = list( \
 	else
 		visible_message("<span class='danger'><b>[usr] rips [selection] out of [src]'s body.</b></span>","<span class='warning'>[usr] rips [selection] out of your body.</span>")
 
-	selection.loc = get_turf(src)
+	selection.forceMove(get_turf(src))
 
 	for(var/obj/item/weapon/O in pinned)
 		if(O == selection)

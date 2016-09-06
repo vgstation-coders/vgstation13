@@ -25,6 +25,7 @@ it creates. All the menus and other manipulation commands are in the R&D console
 	part_sets = list(
 		"Stock Parts" = list(),
 		"Bluespace" = list(),
+		"Anomaly" = list(),
 		"Data" = list(),
 		"Engineering" = list(),
 		"Medical" = list(),

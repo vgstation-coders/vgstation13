@@ -325,14 +325,9 @@ proc/handle_render(var/mob,var/message,var/speaker)
 var/global/resethearers = 0
 
 /proc/sethearing()
-	var/atom/A
 	for(var/mob/virtualhearer/VH in virtualhearers)
-		if(isnull(VH.attached))
-			returnToPool(VH)
-			continue
-		for(A=VH.attached.loc, A && !isturf(A), A=A.loc);
-		VH.loc = A
-	resethearers = world.time + 5
+		VH.loc = get_turf(VH.attached)
+	resethearers = world.time + 2
 
 // Returns a list of hearers in range of R from source. Used in saycode.
 /proc/get_hearers_in_view(var/R, var/atom/source)

@@ -80,7 +80,7 @@
 						return
 					if(T == chassis.loc && src == chassis.selected)
 						R.cargo += O
-						O.loc = chassis
+						O.forceMove(chassis)
 						if(!R.ore_box && istype(O, /obj/structure/ore_box))
 							R.ore_box = O
 						O.anchored = 0 //Why?
@@ -457,7 +457,7 @@
 		if(chassis.occupant)
 			for(var/obj/effect/speech_bubble/B in range(1, chassis))
 				if(B.parent == chassis.occupant)
-					B.loc = chassis.loc
+					B.forceMove(chassis.loc)
 	if(move_result)
 		wait = 1
 		chassis.use_power(energy_drain)
@@ -1281,7 +1281,7 @@
 				if(do_after_cooldown(target))
 					if(T == chassis.loc && src == chassis.selected)
 						cargo_holder.cargo += O
-						O.loc = chassis
+						O.forceMove(chassis)
 						O.anchored = 0
 						chassis.occupant_message("<font color='blue'>[target] succesfully loaded.</font>")
 						chassis.log_message("Loaded [O]. Cargo compartment capacity: [cargo_holder.cargo_capacity - cargo_holder.cargo.len]")

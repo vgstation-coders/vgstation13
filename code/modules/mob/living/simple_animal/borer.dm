@@ -151,34 +151,36 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 					host.say("*[pick(list("blink","blink_r","choke","aflap","drool","twitch","twitch_s","gasp"))]")
 
 	if(client)
-		var/severity = 0
+		regular_hud_updates()
 
-		var/healthpercent = (health/maxHealth)*100
+/mob/living/simple_animal/borer/regular_hud_updates()
+	var/severity = 0
 
-		switch(healthpercent)
-			if(100 to INFINITY)
-				healths.icon_state = "borer_health0"
-			if(75 to 100)
-				healths.icon_state = "borer_health1"
-				severity = 2
-			if(50 to 75)
-				healths.icon_state = "borer_health2"
-				severity = 3
-			if(25 to 50)
-				healths.icon_state = "borer_health3"
-				severity = 4
-			if(1 to 25)
-				healths.icon_state = "borer_health4"
-				severity = 5
-			else
-				healths.icon_state = "borer_health5"
-				severity = 6
+	var/healthpercent = (health/maxHealth)*100
 
-		if(severity > 0)
-			overlay_fullscreen("damage", /obj/screen/fullscreen/brute, severity)
+	switch(healthpercent)
+		if(100 to INFINITY)
+			healths.icon_state = "borer_health0"
+		if(75 to 100)
+			healths.icon_state = "borer_health1"
+			severity = 2
+		if(50 to 75)
+			healths.icon_state = "borer_health2"
+			severity = 3
+		if(25 to 50)
+			healths.icon_state = "borer_health3"
+			severity = 4
+		if(1 to 25)
+			healths.icon_state = "borer_health4"
+			severity = 5
 		else
-			clear_fullscreen("damage")
+			healths.icon_state = "borer_health5"
+			severity = 6
 
+	if(severity > 0)
+		overlay_fullscreen("damage", /obj/screen/fullscreen/brute, severity)
+	else
+		clear_fullscreen("damage")
 
 /mob/living/simple_animal/borer/proc/update_verbs(var/mode)
 	if(verb_holders.len>0)

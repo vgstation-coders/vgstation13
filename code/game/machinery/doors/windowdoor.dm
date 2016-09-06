@@ -315,7 +315,7 @@
 		else if (src.req_one_access && src.req_one_access.len > 0)
 			AE.conf_access = src.req_one_access
 			AE.one_access = 1
-	AE.loc = src.loc
+	AE.forceMove(src.loc)
 
 /obj/machinery/door/window/brigdoor
 	name = "Secure Window Door"

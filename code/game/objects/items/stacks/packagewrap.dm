@@ -134,17 +134,17 @@
 	icon_state = "deliverycrate[min(size,5)]"
 
 /obj/item/delivery/Destroy()
-	..()
 	if(wrapped)
 		wrapped.forceMove(get_turf(src.loc))
+	wrapped = null
+	..()
 
 /obj/item/delivery/attack_self(mob/user as mob)
 	if(wrapped)
 		if(ishuman(user))
 			user.put_in_hands(wrapped)
-		else
-			wrapped.forceMove(get_turf(src))
-		qdel(src)
+			wrapped = null
+	qdel(src)
 
 /obj/item/delivery/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/device/destTagger))
@@ -178,8 +178,9 @@
 	flags = FPRINT
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
 
-/obj/item/delivery/large/New(turf/loc, atom/movable/target, var/size = W_CLASS_GIANT)
+/obj/item/delivery/large/New(turf/loc, atom/movable/target)
 	..()
+	w_class = W_CLASS_GIANT
 	wrapped = target
 	if(istype(wrapped,/obj/structure/closet/crate) || ishuman(target))
 		icon_state = "deliverycrate"
@@ -194,8 +195,6 @@
 	return attack_hand(user)
 
 /obj/item/delivery/large/attack_hand(mob/user as mob)
-	if(wrapped)
-		wrapped.forceMove(get_turf(src.loc))
 	qdel(src)
 
 /obj/item/delivery/large/attack_robot(mob/user)

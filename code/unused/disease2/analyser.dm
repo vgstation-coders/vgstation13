@@ -17,7 +17,7 @@
 
 			dish = I
 			c.drop_item()
-			I.loc = src
+			I.forceMove(src)
 			for(var/mob/M in viewers(src))
 				if(M == user)
 					continue
@@ -51,7 +51,7 @@
 			P.info = r
 			dish.info = r
 			dish.analysed = 1
-			dish.loc = src.loc
+			dish.forceMove(src.loc)
 			dish = null
 			icon_state = "analyser"
 
@@ -65,7 +65,7 @@
 		else
 			pause = 1
 			spawn(25)
-				dish.loc = src.loc
+				dish.forceMove(src.loc)
 				dish = null
 				for(var/mob/M in viewers(src))
 					M.show_message("[bicon(src)] <span class='notice'>The [src.name] buzzes</span>", 2)

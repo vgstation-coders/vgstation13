@@ -39,6 +39,7 @@
 	var/list/datum/mind/deathsquad = list()
 	var/list/datum/mind/ert = list()
 	var/rage = 0
+	var/can_be_mixed = FALSE
 
 /datum/game_mode/proc/announce() //to be calles when round starts
 	to_chat(world, "<B>Notice</B>: [src] did not define announce()")

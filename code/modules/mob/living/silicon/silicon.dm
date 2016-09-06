@@ -330,3 +330,6 @@
 
 /mob/living/silicon/show_inv(mob/user)
 	return
+
+/mob/living/silicon/get_survive_objective()
+	return new /datum/objective/siliconsurvive

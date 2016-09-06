@@ -463,7 +463,7 @@
 		H.equip_or_collect(new /obj/item/clothing/shoes/centcom(H), slot_shoes)
 		H.equip_or_collect(new /obj/item/clothing/glasses/sunglasses(H), slot_glasses)
 		//H.equip_or_collect(new /obj/item/device/pda/lawyer(H), slot_belt)
-		H.put_in_hands(new /obj/item/weapon/storage/briefcase(H))
+		H.put_in_hands(new /obj/item/weapon/storage/briefcase/centcomm(H))
 		if(H.backbag == 1)
 			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		else

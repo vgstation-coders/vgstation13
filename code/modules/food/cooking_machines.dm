@@ -433,9 +433,9 @@ var/global/ingredientLimit = 10
 			src.transfer_reagents_to_food(src.ingredient)
 		src.ingredient.name = "deep fried [src.ingredient.name]"
 		src.ingredient.color = "#FFAD33"
-		src.ingredient.loc = src.loc
+		src.ingredient.forceMove(src.loc)
 		for(var/obj/item/embedded in src.ingredient.contents)
-			embedded.forceMove(src.loc)
+			embedded.forceMove(ingredient)
 	else //some admin enabled funfood and we're frying the captain's ID or someshit
 		var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(src.loc)
 		if(cooks_in_reagents)
@@ -454,7 +454,7 @@ var/global/ingredientLimit = 10
 				qdel(H.stored_mob)
 
 		for(var/obj/item/embedded in src.ingredient.contents)
-			embedded.forceMove(src.loc)
+			embedded.forceMove(D)
 
 		qdel(src.ingredient)
 
@@ -491,7 +491,7 @@ var/global/ingredientLimit = 10
 	src.active = 1
 	src.icon_state = src.icon_state_on
 	src.ingredient.pixel_y += 5 * PIXEL_MULTIPLIER
-	src.ingredient.loc = src.loc
+	src.ingredient.forceMove(src.loc)
 	src.ingredient.mouse_opacity = 0
 	if (cook_after(src.cookTime/3, 14))
 		src.ingredient.color = "#C28566"
@@ -517,7 +517,7 @@ var/global/ingredientLimit = 10
 	src.ingredient.mouse_opacity = 1
 	if(!(findtext(src.ingredient.name,"rotisserie")))
 		src.ingredient.name = "grilled [src.ingredient.name]"
-	src.ingredient.loc = src.loc
+	src.ingredient.forceMove(src.loc)
 
 	if(istype(src.ingredient, /obj/item/weapon/holder))
 		var/obj/item/weapon/holder/H = src.ingredient
@@ -553,7 +553,7 @@ var/global/ingredientLimit = 10
 	if(istype(I,/obj/item/weapon/crowbar) && do_after(user,src,30))
 		user.visible_message("<span class='notice'>[user] dissassembles the [src].</span>", "<span class='notice'>You dissassemble \the [src].</span>")
 		if(src.ingredient)
-			ingredient.loc = src.loc
+			ingredient.forceMove(src.loc)
 			src.ingredient = null
 		new /obj/item/stack/sheet/wood(user.loc)
 		qdel(src)

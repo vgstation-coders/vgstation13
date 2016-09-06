@@ -489,9 +489,9 @@
 
 /datum/recipe/fortunecookie/make_food(var/obj/container)
 	var/obj/item/weapon/paper/paper = locate() in container
-	paper.loc = null //prevent deletion
+	paper.forceMove(null) //prevent deletion
 	var/obj/item/weapon/reagent_containers/food/snacks/fortunecookie/being_cooked = ..(container)
-	paper.loc = being_cooked
+	paper.forceMove(being_cooked)
 	being_cooked.trash = paper
 	return being_cooked
 
@@ -1458,6 +1458,11 @@
 	reagents = list(CORNOIL = 3)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chicken_fillet
+
+/datum/recipe/crab_sticks
+	reagents = list(SODIUMCHLORIDE = 1, SUGAR = 1)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat)
+	result = /obj/item/weapon/reagent_containers/food/snacks/crab_sticks
 
 /datum/recipe/gigapuddi
 	reagents = list(MILK = 15)

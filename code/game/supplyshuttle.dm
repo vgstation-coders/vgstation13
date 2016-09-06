@@ -370,7 +370,7 @@ var/list/mechtoys = list(
 		slip.info += {"</ul><br>
 			CHECK CONTENTS AND STAMP BELOW THE LINE TO CONFIRM RECEIPT OF GOODS<hr>"}
 		if (SP.contraband)
-			slip.loc = null	//we are out of blanks for Form #44-D Ordering Illicit Drugs.
+			slip.forceMove(null)	//we are out of blanks for Form #44-D Ordering Illicit Drugs.
 
 	supply_shuttle.shoppinglist.len = 0
 	return
@@ -587,7 +587,7 @@ var/list/mechtoys = list(
 				getFromPool(/obj/item/weapon/shard, loc)
 				var/obj/item/weapon/circuitboard/supplycomp/M = new /obj/item/weapon/circuitboard/supplycomp( A )
 				for (var/obj/C in src)
-					C.loc = loc
+					C.forceMove(loc)
 				A.circuit = M
 				A.state = 3
 				A.icon_state = "3"
@@ -600,7 +600,7 @@ var/list/mechtoys = list(
 				if(can_order_contraband)
 					M.contraband_enabled = 1
 				for (var/obj/C in src)
-					C.loc = loc
+					C.forceMove(loc)
 				A.circuit = M
 				A.state = 4
 				A.icon_state = "4"

@@ -292,7 +292,7 @@
 
 					var/obj/item/meatslab = allmeat[i]
 					var/turf/Tx = locate(mob.x, mob.y, mob.z)
-					meatslab.loc = get_turf(H)
+					meatslab.forceMove(get_turf(H))
 					meatslab.throw_at(Tx, i, 3)
 
 					if(!Tx.density)

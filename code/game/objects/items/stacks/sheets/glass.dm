@@ -43,7 +43,7 @@
 		G.use(1)
 		if (!G && !RG && replace)
 			if(isMoMMI(user))
-				RG.loc=get_turf(user)
+				RG.forceMove(get_turf(user))
 			else
 				user.put_in_hands(RG)
 	else

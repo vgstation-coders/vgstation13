@@ -102,6 +102,7 @@
 	slot_flags = SLOT_BELT | SLOT_POCKET
 	w_class = W_CLASS_MEDIUM
 	storage_slots = 50
+	fits_max_w_class = 3
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * ore.w_class
 	can_only_hold = list("/obj/item/weapon/ore")
 
@@ -115,6 +116,7 @@
 	icon_state = "plantbag"
 	name = "Plant Bag"
 	storage_slots = 50; //the number of plant pieces it can carry.
+	fits_max_w_class = 3
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	w_class = W_CLASS_TINY
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/grown","/obj/item/seeds","/obj/item/weapon/grown", "/obj/item/weapon/reagent_containers/food/snacks/meat", "/obj/item/weapon/reagent_containers/food/snacks/egg", "/obj/item/weapon/reagent_containers/food/snacks/honeycomb")
@@ -129,6 +131,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/backpacks_n_bags.dmi', "right_hand" = 'icons/mob/in-hand/right/backpacks_n_bags.dmi')
 	name = "Food Delivery Bag"
 	storage_slots = 14; //the number of food items it can carry.
+	fits_max_w_class = 3
 	max_combined_w_class = 28 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	w_class = W_CLASS_MEDIUM
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks")
@@ -171,6 +174,7 @@
 	item_state = "pcollector"
 	origin_tech = Tc_BIOTECH + "=2;" + Tc_MATERIALS + "=1"
 	storage_slots = 50; //the number of plant pieces it can carry.
+	fits_max_w_class = 3
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	w_class = W_CLASS_TINY
 	can_only_hold = list("/obj/item/weapon/reagent_containers/glass/bottle","/obj/item/weapon/reagent_containers/pill","/obj/item/weapon/reagent_containers/syringe")
@@ -244,7 +248,7 @@
 				qdel (S)
 				S = null
 			else
-				S.loc = src
+				S.forceMove(src)
 
 		orient2hud(usr)
 		if(usr.s_active)

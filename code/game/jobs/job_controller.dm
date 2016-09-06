@@ -385,7 +385,7 @@ var/global/datum/controller/occupations/job_master
 		if(!S)
 			S = locate("start*[rank]") // use old stype
 		if(istype(S, /obj/effect/landmark/start) && istype(S.loc, /turf))
-			H.loc = S.loc
+			H.forceMove(S.loc)
 
 	var/balance_wallet = 0
 	if(job && !job.no_starting_money)

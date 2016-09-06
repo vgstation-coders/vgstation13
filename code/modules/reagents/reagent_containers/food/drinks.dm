@@ -312,7 +312,6 @@
 	name = "space milk"
 	desc = "It's milk. White and nutritious goodness!"
 	icon_state = "milk"
-	item_state = "carton"
 	vending_cat = "dairy products"
 /obj/item/weapon/reagent_containers/food/drinks/milk/New()
 	..()
@@ -325,7 +324,6 @@
 	desc = "A big bag of flour. Good for baking!"
 	icon = 'icons/obj/food.dmi'
 	icon_state = "flour"
-	item_state = "flour"
 /obj/item/weapon/reagent_containers/food/drinks/flour/New()
 	..()
 	reagents.add_reagent(FLOUR, 50)
@@ -336,7 +334,6 @@
 	name = "soy milk"
 	desc = "It's soy milk. White and nutritious goodness!"
 	icon_state = "soymilk"
-	item_state = "carton"
 	vending_cat = "dairy products"//it's not a dairy product but oh come on who cares
 /obj/item/weapon/reagent_containers/food/drinks/soymilk/New()
 	..()
@@ -358,7 +355,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/tea
 	name = "Tea"
 	icon_state = "tea"
-	item_state = "coffee"
+	item_state = "mug_empty"
 /obj/item/weapon/reagent_containers/food/drinks/tea/New()
 	..()
 	switch(pick(1,2,3))
@@ -391,7 +388,7 @@
 	name = "Dutch Hot Coco"
 	desc = "Made in Space South America."
 	icon_state = "tea"
-	item_state = "coffee"
+	item_state = "mug_empty"
 /obj/item/weapon/reagent_containers/food/drinks/h_chocolate/New()
 	..()
 	reagents.add_reagent(HOT_COCO, 30)
@@ -611,7 +608,6 @@
 	name = "Magm-Ale"
 	desc = "A true dorf's drink of choice."
 	icon_state = "alebottle"
-	item_state = "beer"
 	vending_cat = "fermented"
 	molotov = -1 //can become a molotov
 	isGlass = 1
@@ -1040,7 +1036,6 @@
 	name = "Orange Juice"
 	desc = "Full of vitamins and deliciousness!"
 	icon_state = "orangejuice"
-	item_state = "carton"
 	vending_cat = "fruit juices"
 	starting_materials = null
 
@@ -1052,7 +1047,6 @@
 	name = "Milk Cream"
 	desc = "It's cream. Made from milk. What else did you think you'd find in there?"
 	icon_state = "cream"
-	item_state = "carton"
 	vending_cat = "dairy products"
 	starting_materials = null
 
@@ -1064,7 +1058,6 @@
 	name = "Tomato Juice"
 	desc = "Well, at least it LOOKS like tomato juice. You can't tell with all that redness."
 	icon_state = "tomatojuice"
-	item_state = "carton"
 	vending_cat = "fruit juices"
 	starting_materials = null
 
@@ -1077,7 +1070,6 @@
 	name = "Lime Juice"
 	desc = "Sweet-sour goodness."
 	icon_state = "limejuice"
-	item_state = "carton"
 	vending_cat = "fruit juices"
 	starting_materials = null
 

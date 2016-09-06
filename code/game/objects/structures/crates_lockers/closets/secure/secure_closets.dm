@@ -101,9 +101,9 @@
 
 	if(!(src.locked) && !(src.welded))
 		for(var/obj/item/I in src)
-			I.loc = src.loc
+			I.forceMove(src.loc)
 		for(var/mob/M in src)
-			M.loc = src.loc
+			M.forceMove(src.loc)
 			if(M.client)
 				M.client.eye = M.client.mob
 				M.client.perspective = MOB_PERSPECTIVE

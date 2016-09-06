@@ -171,7 +171,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		var/obj/item/device/mmi/nmmi = mmi
 		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
 		if(T)
-			nmmi.loc = T
+			nmmi.forceMove(T)
 		if(mind)
 			mind.transfer_to(nmmi.brainmob)
 		mmi = null
@@ -438,10 +438,10 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		module_active=tool_state
 		if(TS && istype(TS))
 			if(src.is_in_modules(TS))
-				TS.loc = src.module
+				TS.forceMove(src.module)
 			else
 				TS.layer=initial(TS.layer)
-				TS.loc = src.loc
+				TS.forceMove(src.loc)
 
 		installed_modules()
 	return

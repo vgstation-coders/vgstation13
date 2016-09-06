@@ -182,19 +182,19 @@
 		copying = 0
 		if(copy)
 			if(!istype(usr,/mob/living/silicon/ai)) //surprised this check didn't exist before, putting stuff in AI's hand is bad
-				copy.loc = usr.loc
+				copy.forceMove(usr.loc)
 				usr.put_in_hands(copy)
 			else
-				copy.loc = src.loc
+				copy.forceMove(src.loc)
 			to_chat(usr, "<span class='notice'>You take [copy] out of [src].</span>")
 			copy = null
 			updateUsrDialog()
 		else if(photocopy)
 			if(!istype(usr,/mob/living/silicon/ai)) //same with this one, wtf
-				photocopy.loc = usr.loc
+				photocopy.forceMove(usr.loc)
 				usr.put_in_hands(photocopy)
 			else
-				photocopy.loc = src.loc
+				photocopy.forceMove(src.loc)
 			to_chat(usr, "<span class='notice'>You take [photocopy] out of [src].</span>")
 			photocopy = null
 			updateUsrDialog()
@@ -312,10 +312,10 @@
 			GM.forceMove(get_turf(src))
 			ass = GM
 			if(photocopy)
-				photocopy.loc = src.loc
+				photocopy.forceMove(src.loc)
 				photocopy = null
 			else if(copy)
-				copy.loc = src.loc
+				copy.forceMove(src.loc)
 				copy = null
 			updateUsrDialog()
 	else if(isscrewdriver(O))
@@ -342,7 +342,7 @@
 				for(var/obj/I in component_parts)
 					if(I.reliability != 100 && crit_fail)
 						I.crit_fail = 1
-					I.loc = src.loc
+					I.forceMove(src.loc)
 				qdel(src)
 				return 1
 	return
@@ -393,11 +393,11 @@
 	target.forceMove(get_turf(src))
 	ass = target
 	if(photocopy)
-		photocopy.loc = src.loc
+		photocopy.forceMove(src.loc)
 		visible_message("<span class='notice'>[photocopy] is shoved out of the way by [ass]!</span>")
 		photocopy = null
 	else if(copy)
-		copy.loc = src.loc
+		copy.forceMove(src.loc)
 		visible_message("<span class='notice'>[copy] is shoved out of the way by [ass]!</span>")
 		copy = null
 	updateUsrDialog()

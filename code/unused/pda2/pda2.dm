@@ -155,7 +155,7 @@
 /obj/item/device/pda2/attackby(obj/item/weapon/C as obj, mob/user as mob)
 	if (istype(C, /obj/item/weapon/disk/data/cartridge) && isnull(src.cartridge))
 		user.drop_item()
-		C.loc = src
+		C.forceMove(src)
 		to_chat(user, "<span class='notice'>You insert [C] into [src].</span>")
 		src.cartridge = C
 		src.updateSelfDialog()
@@ -231,7 +231,7 @@
 			if(src.scan_program && (src.scan_program.holder == src.cartridge))
 				src.scan_program = null
 
-			src.cartridge.loc = T
+			src.cartridge.forceMove(T)
 			src.cartridge = null
 
 		return

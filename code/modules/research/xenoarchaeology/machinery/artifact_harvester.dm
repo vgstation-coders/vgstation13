@@ -209,9 +209,10 @@
 			icon_state = "incubator"
 
 	if (href_list["ejectbattery"])
-		src.inserted_battery.loc = src.loc
+		src.inserted_battery.forceMove(src.loc)
 		src.inserted_battery = null
-		cur_artifact.anchored = 0
+		if(cur_artifact)
+			cur_artifact.anchored = 0
 
 	if (href_list["drainbattery"])
 		if(inserted_battery)

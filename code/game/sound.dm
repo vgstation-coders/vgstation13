@@ -66,6 +66,9 @@ var/list/soulstone_sound = list('sound/hallucinations/far_noise.ogg', 'sound/hal
 		if(!player || !player.client)
 			continue
 
+		if(player.is_deaf() && !(channel == CHANNEL_ADMINMUSIC || channel == CHANNEL_AMBIENCE)) //check their hearing for obvious reasons
+			continue
+
 		var/turf/player_turf = get_turf(player)
 
 		if (player_turf && turf_source && player_turf.z == turf_source.z)

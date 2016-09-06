@@ -495,7 +495,7 @@
 				new_objective.owner = src
 
 			if ("survive")
-				new_objective = new /datum/objective/survive
+				new_objective = current.get_survive_objective()
 				new_objective.owner = src
 
 			if ("die")
@@ -732,7 +732,7 @@
 					ticker.mode.update_wizard_icons_added(src)
 					log_admin("[key_name_admin(usr)] has wizard'ed [current].")
 			if("lair")
-				current.loc = pick(wizardstart)
+				current.forceMove(pick(wizardstart))
 			if("dressup")
 				ticker.mode.equip_wizard(current)
 			if("name")
@@ -814,7 +814,7 @@
 					ticker.mode.greet_syndicate(src)
 					log_admin("[key_name_admin(usr)] has nuke op'ed [current].")
 			if("lair")
-				current.loc = get_turf(locate("landmark*Syndicate-Spawn"))
+				current.forceMove(get_turf(locate("landmark*Syndicate-Spawn")))
 			if("dressup")
 				var/mob/living/carbon/human/H = current
 				qdel(H.belt)
@@ -1090,7 +1090,7 @@ proc/clear_memory(var/silent = 1)
 			var/obj/item/weapon/W = t
 			if (W.origradio)
 				var/obj/item/device/radio/R = t:origradio
-				R.loc = current.loc
+				R.forceMove(current.loc)
 				R.traitorradio = null
 				R.traitor_frequency = 0.0
 			del(W)
@@ -1153,7 +1153,7 @@ proc/clear_memory(var/silent = 1)
 		ticker.mode.forge_syndicate_objectives(src)
 		ticker.mode.greet_syndicate(src)
 
-		current.loc = get_turf(locate("landmark*Syndicate-Spawn"))
+		current.forceMove(get_turf(locate("landmark*Syndicate-Spawn")))
 
 		var/mob/living/carbon/human/H = current
 		qdel(H.belt)
@@ -1184,10 +1184,10 @@ proc/clear_memory(var/silent = 1)
 		//ticker.mode.learn_basic_spells(current)
 		ticker.mode.update_wizard_icons_added(src)
 		if(!wizardstart.len)
-			current.loc = pick(latejoin)
+			current.forceMove(pick(latejoin))
 			to_chat(current, "HOT INSERTION, GO GO GO")
 		else
-			current.loc = pick(wizardstart)
+			current.forceMove(pick(wizardstart))
 
 		ticker.mode.equip_wizard(current)
 		for(var/obj/item/weapon/spellbook/S in current.contents)

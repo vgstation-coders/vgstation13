@@ -120,7 +120,7 @@
 
 	if(mob)
 		if(emagged)
-			mob.loc = loc
+			mob.forceMove(loc)
 			mob.dir = dir
 		else
 			mob.dir = get_dir(mob,src)

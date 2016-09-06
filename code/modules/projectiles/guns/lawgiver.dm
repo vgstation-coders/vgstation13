@@ -150,7 +150,7 @@
 /obj/item/weapon/gun/lawgiver/proc/RemoveMag(var/mob/user)
 	if(magazine)
 		var/obj/item/ammo_storage/magazine/lawgiver/L = magazine
-		L.loc = get_turf(src.loc)
+		L.forceMove(get_turf(src.loc))
 		if(user)
 			user.put_in_hands(L)
 			to_chat(user, "<span class='notice'>You pull the magazine out of \the [src].</span>")

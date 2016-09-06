@@ -134,7 +134,7 @@
 
 	if(building)
 		if(loc)
-			src.loc = loc
+			src.forceMove(loc)
 
 		if(dir)
 			src.dir = dir
@@ -1138,7 +1138,7 @@ var/global/list/firealarms = list() //shrug
 	..()
 	name = "[areaMaster.name] fire alarm"
 	if(loc)
-		src.loc = loc
+		src.forceMove(loc)
 
 	if(dir)
 		src.dir = dir

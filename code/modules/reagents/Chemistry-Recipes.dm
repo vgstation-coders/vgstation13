@@ -825,7 +825,7 @@
 			holder.my_atom.visible_message("<span class='rose'>Infused with plasma, the core begins to quiver and grow, and soon a new baby slime emerges from it!</span>")
 
 		var/mob/living/carbon/slime/S = new /mob/living/carbon/slime
-		S.loc = get_turf(holder.my_atom)
+		S.forceMove(get_turf(holder.my_atom))
 
 /datum/chemical_reaction/slimemonkey
 	name = "Slime Monkey"
@@ -839,7 +839,7 @@
 /datum/chemical_reaction/slimemonkey/on_reaction(var/datum/reagents/holder)
 	for(var/i = 1, i <= 3, i++)
 		var /obj/item/weapon/reagent_containers/food/snacks/monkeycube/M = new /obj/item/weapon/reagent_containers/food/snacks/monkeycube
-		M.loc = get_turf(holder.my_atom)
+		M.forceMove(get_turf(holder.my_atom))
 
 //Green
 /datum/chemical_reaction/slimemutate
@@ -865,7 +865,7 @@
 	var/obj/item/weapon/reagent_containers/glass/bottle/B = new /obj/item/weapon/reagent_containers/glass/bottle
 	B.name = "peridaxon bottle"
 	B.reagents.add_reagent(PERIDAXON, 5)
-	B.loc = get_turf(holder.my_atom)
+	B.forceMove(get_turf(holder.my_atom))
 
 /datum/chemical_reaction/slimedexplus
 	name = "Slime Dexalin Plus"
@@ -881,7 +881,7 @@
 	var/obj/item/weapon/reagent_containers/glass/bottle/B = new /obj/item/weapon/reagent_containers/glass/bottle
 	B.name = "Dexalin Plus Bottle"
 	B.reagents.add_reagent(DEXALINP, 5)
-	B.loc = get_turf(holder.my_atom)
+	B.forceMove(get_turf(holder.my_atom))
 
 /datum/chemical_reaction/slimesdelight
 	name = "Slime Doctor's Delight"
@@ -897,7 +897,7 @@
 	var/obj/item/weapon/reagent_containers/glass/bottle/B = new /obj/item/weapon/reagent_containers/glass/bottle
 	B.name = "Doctor's Delight bottle"
 	B.reagents.add_reagent(DOCTORSDELIGHT, 10)
-	B.loc = get_turf(holder.my_atom)
+	B.forceMove(get_turf(holder.my_atom))
 
 /datum/chemical_reaction/slimebicard
 	name = "Slime Bicaridine"
@@ -913,7 +913,7 @@
 	var/obj/item/weapon/reagent_containers/glass/bottle/B = new /obj/item/weapon/reagent_containers/glass/bottle
 	B.name = "bicaridine bottle"
 	B.reagents.add_reagent(BICARIDINE, 10)
-	B.loc = get_turf(holder.my_atom)
+	B.forceMove(get_turf(holder.my_atom))
 
 /datum/chemical_reaction/slimedermaline
 	name = "Slime Dermaline"
@@ -929,7 +929,7 @@
 	var/obj/item/weapon/reagent_containers/glass/bottle/B = new /obj/item/weapon/reagent_containers/glass/bottle
 	B.name = "Dermaline bottle"
 	B.reagents.add_reagent(DERMALINE, 5)
-	B.loc = get_turf(holder.my_atom)
+	B.forceMove(get_turf(holder.my_atom))
 
 //Metal
 /datum/chemical_reaction/slimemetal
@@ -946,7 +946,7 @@
 	M.amount = 15
 	var/obj/item/stack/sheet/plasteel/P = new /obj/item/stack/sheet/plasteel
 	P.amount = 5
-	P.loc = get_turf(holder.my_atom)
+	P.forceMove(get_turf(holder.my_atom))
 
 /datum/chemical_reaction/slimegold
 	name = "Slime Gold"
@@ -960,7 +960,7 @@
 /datum/chemical_reaction/slimegold/on_reaction(var/datum/reagents/holder)
 	var/obj/item/stack/sheet/mineral/gold/G = new /obj/item/stack/sheet/mineral/gold
 	G.amount = 5
-	G.loc = get_turf(holder.my_atom)
+	G.forceMove(get_turf(holder.my_atom))
 
 /datum/chemical_reaction/slimesilver
 	name = "Slime Silver"
@@ -974,7 +974,7 @@
 /datum/chemical_reaction/slimesilver/on_reaction(var/datum/reagents/holder)
 	var/obj/item/stack/sheet/mineral/silver/S = new /obj/item/stack/sheet/mineral/silver
 	S.amount = 5
-	S.loc = get_turf(holder.my_atom)
+	S.forceMove(get_turf(holder.my_atom))
 
 /datum/chemical_reaction/slimeuranium
 	name = "Slime Uranium"
@@ -988,7 +988,7 @@
 /datum/chemical_reaction/slimeuranium/on_reaction(var/datum/reagents/holder)
 	var/obj/item/stack/sheet/mineral/uranium/U = new /obj/item/stack/sheet/mineral/uranium
 	U.amount = 5
-	U.loc = get_turf(holder.my_atom)
+	U.forceMove(get_turf(holder.my_atom))
 
 /datum/chemical_reaction/slimediamond
 	name = "Slime diamond"
@@ -1002,7 +1002,7 @@
 /datum/chemical_reaction/slimediamond/on_reaction(var/datum/reagents/holder)
 	var/obj/item/stack/sheet/mineral/diamond/K = new /obj/item/stack/sheet/mineral/diamond
 	K.amount = 2
-	K.loc = get_turf(holder.my_atom)
+	K.forceMove(get_turf(holder.my_atom))
 
 
 //Gold
@@ -1108,7 +1108,7 @@
 	var/chosen = pick(critters)
 	var/mob/living/simple_animal/hostile/C = new chosen
 	C.faction = "neutral" //Uh, beepsky ignores mobs in this faction as of Redmine #147 - N3X
-	C.loc = get_turf(holder.my_atom)
+	C.forceMove(get_turf(holder.my_atom))
 
 /datum/chemical_reaction/slimecritweak
 	name = "Slime Animation"
@@ -1201,7 +1201,7 @@
 		var/chosen = pick(borks)
 		var/obj/B = new chosen
 		if(B)
-			B.loc = get_turf(holder.my_atom)
+			B.forceMove(get_turf(holder.my_atom))
 
 			if(istype(B,/obj/item/weapon/reagent_containers/food/snacks/meat/human))
 				B.name = "human-meat"
@@ -1256,7 +1256,7 @@
 		var/obj/B = new chosen
 
 		if(B)
-			B.loc = get_turf(holder.my_atom)
+			B.forceMove(get_turf(holder.my_atom))
 
 			if(istype(B,/obj/item/weapon/reagent_containers/food/drinks/sillycup))
 				B.reagents.add_reagent(WATER, 10)
@@ -1339,7 +1339,7 @@
 /datum/chemical_reaction/slimenutrient/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	var/obj/item/weapon/slimenutrient/P = new /obj/item/weapon/slimenutrient
-	P.loc = get_turf(holder.my_atom)
+	P.forceMove(get_turf(holder.my_atom))
 
 //Orange
 /datum/chemical_reaction/slimecasp
@@ -1407,7 +1407,7 @@
 /datum/chemical_reaction/slimecell/on_reaction(var/datum/reagents/holder, var/created_volume)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	var/obj/item/weapon/cell/slime/P = new /obj/item/weapon/cell/slime
-	P.loc = get_turf(holder.my_atom)
+	P.forceMove(get_turf(holder.my_atom))
 
 //Was a broken recipe that was supposed to make the extract produce some light
 //I changed it, so it now creates an /obj/item/device/flashlight/lamp/slime
@@ -1424,7 +1424,7 @@
 /datum/chemical_reaction/slimeglow/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	var/obj/item/device/flashlight/lamp/slime/P = new /obj/item/device/flashlight/lamp/slime
-	P.loc = get_turf(holder.my_atom)
+	P.forceMove(get_turf(holder.my_atom))
 
 //Purple
 /datum/chemical_reaction/slimepsteroid
@@ -1439,7 +1439,7 @@
 /datum/chemical_reaction/slimepsteroid/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	var/obj/item/weapon/slimesteroid/P = new /obj/item/weapon/slimesteroid
-	P.loc = get_turf(holder.my_atom)
+	P.forceMove(get_turf(holder.my_atom))
 
 /datum/chemical_reaction/slimejam
 	name = "Slime Jam"
@@ -1468,7 +1468,7 @@
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	var/obj/item/stack/sheet/mineral/plasma/P = new /obj/item/stack/sheet/mineral/plasma
 	P.amount = 10
-	P.loc = get_turf(holder.my_atom)
+	P.forceMove(get_turf(holder.my_atom))
 
 //Red
 /datum/chemical_reaction/slimeglycerol
@@ -1496,7 +1496,7 @@
 /datum/chemical_reaction/slimeres/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	var/obj/item/weapon/slimeres/P = new /obj/item/weapon/slimeres
-	P.loc = get_turf(holder.my_atom)
+	P.forceMove(get_turf(holder.my_atom))
 
 /datum/chemical_reaction/slimebloodlust
 	name = "Bloodlust"
@@ -1531,7 +1531,7 @@
 /datum/chemical_reaction/slimeppotion/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	var/obj/item/weapon/slimepotion/P = new /obj/item/weapon/slimepotion
-	P.loc = get_turf(holder.my_atom)
+	P.forceMove(get_turf(holder.my_atom))
 
 //Black
 /datum/chemical_reaction/slimemutate2
@@ -1621,7 +1621,7 @@
 /datum/chemical_reaction/slimepotion2/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	var/obj/item/weapon/slimepotion2/P = new /obj/item/weapon/slimepotion2
-	P.loc = get_turf(holder.my_atom)
+	P.forceMove(get_turf(holder.my_atom))
 
 /datum/chemical_reaction/slimeparalyze
 	name = "Slime Paralyzer"
@@ -1649,7 +1649,7 @@
 /datum/chemical_reaction/slimegolem/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	var/obj/effect/golem_rune/Z = new /obj/effect/golem_rune
-	Z.loc = get_turf(holder.my_atom)
+	Z.forceMove(get_turf(holder.my_atom))
 	Z.announce_to_ghosts()
 
 /datum/chemical_reaction/slimediamond2
@@ -1665,7 +1665,7 @@
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	var/obj/item/stack/sheet/mineral/diamond/D = new /obj/item/stack/sheet/mineral/diamond
 	D.amount = 5
-	D.loc = get_turf(holder.my_atom)
+	D.forceMove(get_turf(holder.my_atom))
 
 /datum/chemical_reaction/slimephazon
 	name = "Slime Phazon"
@@ -1680,7 +1680,7 @@
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	var/obj/item/stack/sheet/mineral/phazon/P = new /obj/item/stack/sheet/mineral/phazon
 	P.amount = 5
-	P.loc = get_turf(holder.my_atom)
+	P.forceMove(get_turf(holder.my_atom))
 
 /datum/chemical_reaction/slimeclown
 	name = "Slime Clown"
@@ -1695,7 +1695,7 @@
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	var/obj/item/stack/sheet/mineral/clown/C = new /obj/item/stack/sheet/mineral/clown
 	C.amount = 5
-	C.loc = get_turf(holder.my_atom)
+	C.forceMove(get_turf(holder.my_atom))
 
 //Bluespace
 /datum/chemical_reaction/slimeteleport
@@ -1746,7 +1746,7 @@
 
 			var/turf/newloc = locate(A.x + x_distance, A.y + y_distance, towards.z) //Calculate the new place
 			if(!A.Move(newloc)) //If the atom, for some reason, can't move, force them to move! We try Move() first to invoke any movement-related checks the atom needs to perform after moving
-				A.loc = locate(A.x + x_distance, A.y + y_distance, towards.z)
+				A.forceMove(locate(A.x + x_distance, A.y + y_distance, towards.z))
 
 			spawn()
 				if(ismob(A) && !(A in flashers)) //Don't flash if we're already doing an effect
@@ -1793,7 +1793,7 @@
 /datum/chemical_reaction/slimepsteroid2/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	var/obj/item/weapon/slimesteroid2/P = new /obj/item/weapon/slimesteroid2
-	P.loc = get_turf(holder.my_atom)
+	P.forceMove(get_turf(holder.my_atom))
 
 /datum/chemical_reaction/slimedupe
 	name = "Slime Duplicator"
@@ -1807,7 +1807,7 @@
 /datum/chemical_reaction/slimedupe/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	var/obj/item/weapon/slimedupe/P = new /obj/item/weapon/slimedupe
-	P.loc = get_turf(holder.my_atom)
+	P.forceMove(get_turf(holder.my_atom))
 
 //Sepia
 /datum/chemical_reaction/slimecamera
@@ -1822,7 +1822,7 @@
 /datum/chemical_reaction/slimecamera/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	var/obj/item/device/camera/sepia/P = new /obj/item/device/camera/sepia
-	P.loc = get_turf(holder.my_atom)
+	P.forceMove(get_turf(holder.my_atom))
 
 /datum/chemical_reaction/slimefilm
 	name = "Slime Film"
@@ -1836,7 +1836,7 @@
 /datum/chemical_reaction/slimefilm/on_reaction(var/datum/reagents/holder)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	var/obj/item/device/camera_film/P = new /obj/item/device/camera_film
-	P.loc = get_turf(holder.my_atom)
+	P.forceMove(get_turf(holder.my_atom))
 
 //Pyrite
 /datum/chemical_reaction/slimepaint
@@ -1854,7 +1854,7 @@
 	var/chosen = pick(paints)
 	var/obj/P = new chosen
 	if(P)
-		P.loc = get_turf(holder.my_atom)
+		P.forceMove(get_turf(holder.my_atom))
 
 /datum/chemical_reaction/slimecash
 	name = "Slime Cash"
@@ -1868,7 +1868,7 @@
 /datum/chemical_reaction/slimecash/on_reaction(var/datum/reagents/holder)
 	var/obj/item/weapon/spacecash/c100/C = new /obj/item/weapon/spacecash/c100/
 	C.amount = 1
-	C.loc = get_turf(holder.my_atom)
+	C.forceMove(get_turf(holder.my_atom))
 
 //////////////////////////////////////////FOOD MIXTURES////////////////////////////////////
 
@@ -2073,6 +2073,13 @@
 	required_reagents = list(BERRYJUICE = 10)
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 10
+
+/datum/chemical_reaction/sangria
+	name = "Sangria"
+	id = SANGRIA
+	result = SANGRIA
+	required_reagents = list(WINE = 2, ORANGEJUICE = 1, SODAWATER = 1)
+	result_amount = 4
 
 /datum/chemical_reaction/pinacolada
 	name = "Pina Colada"

@@ -226,7 +226,7 @@
 
 			spawn (0)
 				if(was_pulling && MOB) //Carry the object they were pulling over when they transition
-					was_pulling.loc = MOB.loc
+					was_pulling.forceMove(MOB.loc)
 					MOB.pulling = was_pulling
 					was_pulling.pulledby = MOB
 				if ((A && A.loc))

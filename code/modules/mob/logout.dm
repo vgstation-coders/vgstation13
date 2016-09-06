@@ -4,14 +4,9 @@
 		location.on_logout(src)
 
 	if((flags & HEAR) && !(flags & HEAR_ALWAYS))
-		var/found = 0
 		for(var/mob/virtualhearer/VH in virtualhearers)
 			if(VH.attached == src)
-				world.log << "Virtualhearer removed from [src] of type [type]"
 				returnToPool(VH)
-				found = 1
-		if(!found)
-			world.log << "Mob virtualhearer for [type] could not be found for [src]"
 	world.log << "[src] logout"
 
 	remove_spell_channeling() //remove spell channeling before we log out
@@ -37,7 +32,7 @@
 			message_admins("Admin logout: [key_name(src)]")
 			if(available_admins == 0) // Apparently the admin logging out is no longer an admin at this point, so we have to check this towards 0 and not towards 1. Awell.
 				send2adminirc("[key_name(src)] logged out - no more admins online.")
-				send2admindiscord("[key_name(src)] logged out. **No more non-AFK admins online.** - **[admin_number_afk]** AFK {ADMIN_PING}")
+				send2admindiscord("[key_name(src)] logged out. **No more non-AFK admins online.** - **[admin_number_afk]** AFK", TRUE)
 
 	INVOKE_EVENT(on_logout, list())
 

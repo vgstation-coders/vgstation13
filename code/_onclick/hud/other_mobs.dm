@@ -9,16 +9,9 @@
 	mymob.visible.name = "visible"
 	mymob.visible.screen_loc = ui_health
 
-	mymob.flash = getFromPool(/obj/screen)
-	mymob.flash.icon = 'icons/mob/screen1.dmi'
-	mymob.flash.icon_state = "blank"
-	mymob.flash.name = "flash"
-	mymob.flash.screen_loc = ui_entire_screen
-	mymob.flash.layer = UNDER_HUD_LAYER
-
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list(mymob.visible, mymob.flash)
+	mymob.client.screen += list(mymob.visible)
 
 /datum/hud/proc/corgi_hud()
 	mymob.fire = getFromPool(/obj/screen)
@@ -51,16 +44,9 @@
 	mymob.toxin.name = "toxin"
 	mymob.toxin.screen_loc = ui_toxin
 
-	mymob.flash = getFromPool(/obj/screen)
-	mymob.flash.icon = 'icons/mob/screen1.dmi'
-	mymob.flash.icon_state = "blank"
-	mymob.flash.name = "flash"
-	mymob.flash.screen_loc = ui_entire_screen
-	mymob.flash.layer = UNDER_HUD_LAYER
-
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list(mymob.fire, mymob.healths, mymob.pullin, mymob.oxygen, mymob.toxin, mymob.flash)
+	mymob.client.screen += list(mymob.fire, mymob.healths, mymob.pullin, mymob.oxygen, mymob.toxin)
 
 /datum/hud/proc/brain_hud(ui_style = 'icons/mob/screen1_Midnight.dmi')
 
@@ -84,16 +70,9 @@
 	mymob.zone_sel.overlays.len = 0
 	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
 
-	mymob.flash = getFromPool(/obj/screen)
-	mymob.flash.icon = 'icons/mob/screen1.dmi'
-	mymob.flash.icon_state = "blank"
-	mymob.flash.name = "flash"
-	mymob.flash.screen_loc = ui_entire_screen
-	mymob.flash.layer = UNDER_HUD_LAYER
-
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list(mymob.healths, mymob.pullin, mymob.zone_sel, mymob.flash)
+	mymob.client.screen += list(mymob.healths, mymob.pullin, mymob.zone_sel)
 
 /datum/hud/proc/shade_hud()
 
@@ -121,16 +100,9 @@
 	mymob.zone_sel.overlays.len = 0
 	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
 
-	mymob.flash = getFromPool(/obj/screen)
-	mymob.flash.icon = 'icons/mob/screen1.dmi'
-	mymob.flash.icon_state = "blank"
-	mymob.flash.name = "flash"
-	mymob.flash.screen_loc = ui_entire_screen
-	mymob.flash.layer = UNDER_HUD_LAYER
-
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list(mymob.healths, mymob.pullin, mymob.zone_sel, mymob.purged, mymob.flash)
+	mymob.client.screen += list(mymob.healths, mymob.pullin, mymob.zone_sel, mymob.purged)
 
 /datum/hud/proc/borer_hud()
 
@@ -160,13 +132,6 @@
 		constructtype = "wraith"
 	else if(istype(mymob,/mob/living/simple_animal/construct/harvester))
 		constructtype = "harvester"
-
-	mymob.flash = getFromPool(/obj/screen)
-	mymob.flash.icon = 'icons/mob/screen1.dmi'
-	mymob.flash.icon_state = "blank"
-	mymob.flash.name = "flash"
-	mymob.flash.screen_loc = ui_entire_screen
-	mymob.flash.layer = UNDER_HUD_LAYER
 
 	if(constructtype)
 		mymob.fire = getFromPool(/obj/screen)
@@ -200,7 +165,7 @@
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list(mymob.fire, mymob.healths, mymob.pullin, mymob.zone_sel, mymob.purged, mymob.flash)
+	mymob.client.screen += list(mymob.fire, mymob.healths, mymob.pullin, mymob.zone_sel, mymob.purged)
 
 /datum/hud/proc/vampire_hud(ui_style = 'icons/mob/screen1_Midnight.dmi')
 

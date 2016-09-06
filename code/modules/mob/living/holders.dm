@@ -14,7 +14,7 @@
 	..()
 	processing_objects.Add(src)
 	if(M)
-		M.loc = src
+		M.forceMove(src)
 
 		src.stored_mob = M
 

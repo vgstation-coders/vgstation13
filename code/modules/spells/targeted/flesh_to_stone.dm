@@ -1,6 +1,7 @@
 /spell/targeted/flesh_to_stone
 	name = "Flesh to Stone"
 	desc = "This spell turns a single person into an inert statue for a long period of time."
+	abbreviation = "FS"
 
 	school = "transmutation"
 	charge_max = 600

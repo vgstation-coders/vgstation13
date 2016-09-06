@@ -1,7 +1,7 @@
 /obj/item/clothing/suit/storage
 	var/list/can_only_hold = new/list() //List of objects which this item can store (if set, it can't store anything else)
-	var/list/cant_hold = new/list() //List of objects which this item can't store (in effect only if can_only_hold isn't set)
-	var/fits_max_w_class = W_CLASS_SMALL //Max size of objects that this object can store (in effect only if can_only_hold isn't set)
+	var/list/cant_hold = new/list() //List of objects which this item can't store (even if it's in the can_only_hold list)
+	var/fits_max_w_class = W_CLASS_SMALL //Max size of objects that this object can store (in effect even if can_only_hold is set)
 	var/max_combined_w_class = 4 //The sum of the w_classes of all the items in this storage item.
 	var/storage_slots = 2 //The number of storage slots in this container.
 	var/obj/screen/storage/boxes = null
@@ -130,7 +130,7 @@
 			to_chat(user, "<span class='warning'>The [src] cannot hold \the [W].</span>")
 			return
 
-	if (W.w_class > fits_max_w_class && !can_only_hold.len) //fits_max_w_class doesn't matter if there's only a specific list of items you can put in
+	if (W.w_class > fits_max_w_class)
 		to_chat(user, "<span class='warning'>The [W] is too big for \the [src].</span>")
 		return
 
@@ -149,7 +149,7 @@
 
 	user.u_equip(W,1)
 	playsound(get_turf(src), "rustle", 50, 1, -5)
-	W.loc = src
+	W.forceMove(src)
 	if ((user.client && user.s_active != src))
 		user.client.screen -= W
 	src.orient2hud(user)

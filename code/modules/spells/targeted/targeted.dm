@@ -32,6 +32,12 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 	var/list/compatible_mobs = list()
 	var/believed_name
 
+/spell/targeted/is_valid_target(var/target, mob/user, list/options)
+	if(!(spell_flags & INCLUDEUSER) && target == user)
+		return 0
+	if(!(range == GLOBALCAST) && !(range == SELFCAST && target == user) && (options && !(target in options))) //Shouldn't be necessary but a good check in case of overrides
+		return 0
+	return !compatible_mobs.len || is_type_in_list(target, compatible_mobs)
 
 /spell/targeted/choose_targets(mob/user = usr)
 	if(mind_affecting && tinfoil_check(user))
@@ -54,12 +60,12 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 			var/mob/temp_target = user.mind.heard_before[target_name]
 			believed_name = target_name
 			targets += temp_target
-		else if((range == 0 || range == -1) && spell_flags & INCLUDEUSER)
+		else if((range == 0 || range == SELFCAST) && (spell_flags & INCLUDEUSER))
 			targets += user
 		else
 			var/list/possible_targets = list()
 			var/list/starting_targets
-			if(range == -2)
+			if(range == GLOBALCAST)
 				starting_targets = living_mob_list
 			else
 				starting_targets = view_or_range(range, holder, selection_type)

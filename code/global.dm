@@ -142,12 +142,10 @@ var/game_version = "veegee"
 var/changelog_hash = ""
 var/game_year = (text2num(time2text(world.realtime, "YYYY")) + 544)
 
-var/datum/air_tunnel/air_tunnel1/SS13_airtunnel = null
 var/going = 1.0
 var/master_mode = "extended"//"extended"
 var/secret_force_mode = "secret" // if this is anything but "secret", the secret rotation will forceably choose this mode
 
-var/datum/engine_eject/engine_eject_control = null
 var/host = null
 var/aliens_allowed = 1
 var/ooc_allowed = 1
@@ -293,8 +291,8 @@ var/custom_event_msg = null
 
 //Database connections
 //A connection is established on world creation. Ideally, the connection dies when the server restarts (After feedback logging.).
-var/DBConnection/dbcon = new()	//Feedback database (New database)
-var/DBConnection/dbcon_old = new()	//Tgstation database (Old database) - See the files in the SQL folder for information what goes where.
+var/DBConnection/dbcon	//Feedback database (New database)
+var/DBConnection/dbcon_old	//Tgstation database (Old database) - See the files in the SQL folder for information what goes where.
 
 #define MIDNIGHT_ROLLOVER		864000	//number of deciseconds in a day
 
@@ -424,3 +422,7 @@ var/adminblob_beat = 'sound/effects/blob_pulse.ogg'
 var/parallax_initialized = 0
 var/space_color = "#050505"
 var/list/parallax_icon[27]
+
+//HUD MINIMAPS
+var/list/holoMiniMaps = list()
+var/list/centcommMiniMaps = list()

@@ -24,7 +24,7 @@
 				if(delete_old)
 					qdel(old_item)
 				else
-					old_item.loc = L.loc
+					old_item.forceMove(L.loc)
 
 			if(duration)
 				summoned_items += new_item //we store it in a list to remove later

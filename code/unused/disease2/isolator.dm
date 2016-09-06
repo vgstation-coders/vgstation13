@@ -36,7 +36,7 @@
 
 		src.beaker =  B
 		user.drop_item()
-		B.loc = src
+		B.forceMove(src)
 		if(istype(B,/obj/item/weapon/reagent_containers/syringe))
 			to_chat(user, "You add the syringe to the machine!")
 			src.updateUsrDialog()
@@ -75,7 +75,7 @@
 			attack_hand(usr)
 			return
 		else if (href_list["eject"])
-			beaker:loc = src.loc
+			beaker:forceMove(src.loc)
 			beaker = null
 			icon_state = "isolator"
 			src.updateUsrDialog()

@@ -694,7 +694,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 						if(!border_obstacle.Cross(D, D.loc, 1, 0))
 							check_1 = 0
 
-			D.loc = src.loc
+			D.forceMove(src.loc)
 			if(step_to(D, Step_2))
 				check_2 = 1
 
@@ -728,7 +728,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 	//del(D)
 	//Garbage Collect Dummy
-	D.loc = null
+	D.forceMove(null)
 	D = null
 	if (!( ok ))
 
@@ -1054,7 +1054,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 	var/mob/living/carbon/slime/S = new M.primarytype // don't let's start
 	S.tame = M.tame
-	S.loc = get_turf(M)
+	S.forceMove(get_turf(M))
 	qdel(src)
 
 /obj/item/weapon/slimeres

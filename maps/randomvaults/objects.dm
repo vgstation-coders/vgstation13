@@ -5,6 +5,9 @@
 	icon_state = "firingrange"
 	dynamic_lighting = 1
 
+/area/vault/holomapAlwaysDraw()
+	return 0
+
 /area/vault/icetruck
 
 /area/vault/asteroid

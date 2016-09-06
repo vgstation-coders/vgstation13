@@ -44,7 +44,7 @@
 				loaded.use(30)
 				getFromPool(/obj/item/stack/cable_coil,user.loc,30)
 		loaded.max_amount = initial(loaded.max_amount)
-		loaded.loc = user.loc
+		loaded.forceMove(user.loc)
 		user.put_in_hands(loaded)
 		loaded = null
 		update_icon()

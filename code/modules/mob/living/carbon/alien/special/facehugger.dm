@@ -18,6 +18,8 @@ var/const/MAX_ACTIVE_TIME = 400
 	flags = FPRINT  | MASKINTERNALS | PROXMOVE
 	throw_range = 5
 	health = 5
+	plane = ABOVE_OBJ_PLANE
+	layer = FACEHUGGER_LAYER
 	var/real = 1 //Facehuggers are real, toys are not.
 
 	var/stat = CONSCIOUS //UNCONSCIOUS is the idle state in this case
@@ -269,7 +271,7 @@ var/const/MAX_ACTIVE_TIME = 400
 
 			target.visible_message("<span class='danger'>\The [src] tears \the [W] off of [target]'s face!</span>")
 
-		src.loc = target
+		src.forceMove(target)
 		target.equip_to_slot(src, slot_wear_mask)
 		target.update_inv_wear_mask()
 
@@ -277,7 +279,7 @@ var/const/MAX_ACTIVE_TIME = 400
 			L.Paralyse((preggers/10)+10) //something like 25 ticks = 20 seconds with the default settings
 	else if (iscorgi(M))
 		var/mob/living/simple_animal/corgi/C = M
-		src.loc = C
+		src.forceMove(C)
 		C.facehugger = src
 		C.wear_mask = src
 		//C.regenerate_icons()
@@ -308,7 +310,7 @@ var/const/MAX_ACTIVE_TIME = 400
 
 		if(iscorgi(target))
 			var/mob/living/simple_animal/corgi/C = target
-			src.loc = get_turf(C)
+			src.forceMove(get_turf(C))
 			C.facehugger = null
 	else
 		target.visible_message("<span class='danger'>\The [src] violates [target]'s face !</span>")

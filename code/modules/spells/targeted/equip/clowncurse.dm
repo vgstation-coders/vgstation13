@@ -1,6 +1,7 @@
 /spell/targeted/equip_item/clowncurse
 	name = "The Clown Curse"
 	desc = "A curse that will turn its victim into a miserable clown."
+	abbreviation = "CC"
 
 	school = "evocation"
 	charge_max = 300

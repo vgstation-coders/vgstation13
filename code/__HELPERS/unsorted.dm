@@ -988,8 +988,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 	var/list/toupdate = new/list()
 
-	var/copiedobjs = list()
-
+	var/list/copiedobjs = list()
 
 	moving:
 		for (var/turf/T in refined_src)
@@ -1029,7 +1028,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 
 					for(var/obj/O in newobjs)
-						O.loc = X
+						O.forceMove(X)
 
 					for(var/mob/M in T)
 
@@ -1041,7 +1040,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 						newmobs += DuplicateObject(M , 1)
 
 					for(var/mob/M in newmobs)
-						M.loc = X
+						M.forceMove(X)
 
 					copiedobjs += newobjs
 					copiedobjs += newmobs
@@ -1080,9 +1079,6 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 	for(var/obj/O in doors)
 		O:update_nearby_tiles()
-
-
-
 
 	return copiedobjs
 
@@ -1344,12 +1340,12 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 	if(!center)
 		return
 
-	dview_mob.loc = center
+	dview_mob.forceMove(center)
 
 	dview_mob.see_invisible = invis_flags
 
 	. = view(range, dview_mob)
-	dview_mob.loc = null
+	dview_mob.forceMove(null)
 
 /mob/dview
 	invisibility = 101

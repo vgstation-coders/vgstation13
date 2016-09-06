@@ -30,12 +30,12 @@
 		playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 		to_chat(user, "<span class = 'caution'>You jam \the [W] into \the [src]'s booster coil.</span>")
 		user.u_equip(W,1)
-		W.loc=src
+		W.forceMove(src)
 		amplifier=W
 		return
 	if(iscrowbar(W) && opened && amplifier)
 		to_chat(user, "<span class='notice'>You carefully pry \the [amplifier] from \the [src].</span>")
 		var/obj/item/bluespace_crystal/C=amplifier
-		C.loc=get_turf(src)
+		C.forceMove(get_turf(src))
 		amplifier=null
 		return

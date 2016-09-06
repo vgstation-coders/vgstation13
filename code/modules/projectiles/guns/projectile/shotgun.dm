@@ -38,7 +38,7 @@
 		return 1
 	else if(current_shell && current_shell.BB)
 		in_chamber = current_shell.BB //Load projectile into chamber.
-		current_shell.BB.loc = src //Set projectile loc to gun.
+		current_shell.BB.forceMove(src) //Set projectile loc to gun.
 		current_shell.BB = null
 		current_shell.update_icon()
 		return 1
@@ -48,7 +48,7 @@
 	playsound(M, 'sound/weapons/shotgunpump.ogg', 60, 1)
 	pumped = 0
 	if(current_shell)//We have a shell in the chamber
-		current_shell.loc = get_turf(src)//Eject casing
+		current_shell.forceMove(get_turf(src))//Eject casing
 		current_shell = null
 		if(in_chamber)
 			in_chamber = null
@@ -96,7 +96,7 @@
 	loaded += AC //Put it in at the end - because it hasn't been ejected yet
 	if(AC.BB)
 		in_chamber = AC.BB //Load projectile into chamber.
-		AC.BB.loc = src //Set projectile loc to gun.
+		AC.BB.forceMove(src) //Set projectile loc to gun.
 		AC.BB = null
 		AC.update_icon()
 		return 1
@@ -107,10 +107,10 @@
 		to_chat(user, "<span class='notice'>\The [src] is empty.</span>")
 		return
 
-	for(var/obj/item/ammo_casing/shotgun/shell in src)	//This feels like a hack.	//don't code at 3:30am kids!!
-		if(shell in loaded)
-			loaded -= shell
-		shell.loc = get_turf(src.loc)
+	for(var/obj/item/ammo_casing/shotgun/loaded_shell in src) //This feels like a hack. don't code at 3:30am kids!!
+		loaded_shell.forceMove(get_turf(src))
+		if(loaded_shell in loaded)
+			loaded -= loaded_shell
 
 	to_chat(user, "<span class='notice'>You break \the [src].</span>")
 	update_icon()

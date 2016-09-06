@@ -169,13 +169,13 @@
 	return
 
 /obj/machinery/computer/pandemic/proc/detach()
-	beaker.loc = src.loc
+	beaker.forceMove(src.loc)
 	if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
 		var/mob/living/silicon/robot/R = beaker:holder:loc
 		if(R.module_state_1 == beaker || R.module_state_2 == beaker || R.module_state_3 == beaker)
-			beaker.loc = R
+			beaker.forceMove(R)
 		else
-			beaker.loc = beaker:holder
+			beaker.forceMove(beaker:holder)
 	beaker = null
 	overlays -= image(icon = icon, icon_state = "mixer_overlay")
 	src.updateUsrDialog()

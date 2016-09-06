@@ -94,7 +94,7 @@
 			hud.icon_state = "!reinforce"
 	else
 		if(!affecting.locked_to)
-			affecting.loc = assailant.loc
+			affecting.forceMove(assailant.loc)
 
 	if(state >= GRAB_NECK)
 	//	affecting.Stun(5)	//It will hamper your voice, being choked and all.
@@ -155,7 +155,7 @@
 			state = GRAB_NECK
 			icon_state = "grabbed+1"
 			if(!affecting.locked_to)
-				affecting.loc = assailant.loc
+				affecting.forceMove(assailant.loc)
 			affecting.attack_log += "\[[time_stamp()]\] <font color='orange'>Has had their neck grabbed by [assailant.name] ([assailant.ckey])</font>"
 			assailant.attack_log += "\[[time_stamp()]\] <font color='red'>Grabbed the neck of [affecting.name] ([affecting.ckey])</font>"
 			log_attack("<font color='red'>[assailant.name] ([assailant.ckey]) grabbed the neck of [affecting.name] ([affecting.ckey])</font>")
@@ -240,7 +240,7 @@
 					return
 			user.visible_message("<span class='danger'>[user] devours [affecting]!</span>", \
 				drugged_message="<span class='danger'>[affecting] vanishes in disgust.</span>")
-			affecting.loc = user
+			affecting.forceMove(user)
 			attacker.stomach_contents.Add(affecting)
 			returnToPool(src)
 

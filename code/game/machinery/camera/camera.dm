@@ -191,7 +191,7 @@ var/list/camera_names=list()
 		if(weld(W, user))
 			if(assembly)
 				assembly.state = 1
-				assembly.loc = src.loc
+				assembly.forceMove(src.loc)
 				assembly = null
 
 			qdel(src)
@@ -235,7 +235,7 @@ var/list/camera_names=list()
 			if(U)
 				to_chat(user, "You unattach \the [U] from the camera.")
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-				U.loc = get_turf(src)
+				U.forceMove(get_turf(src))
 				assembly.upgrades -= U
 				update_upgrades()
 				update_icon()

@@ -33,7 +33,7 @@
 	if(held_container)
 		underlays = null
 		to_chat(user, "<span class='notice'>You remove the [held_container] from the [src].</span>")
-		held_container.loc = src.loc
+		held_container.forceMove(src.loc)
 		held_container.attack_hand(user)
 		held_container = null
 	else

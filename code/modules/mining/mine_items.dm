@@ -536,7 +536,7 @@ proc/move_mining_shuttle()
 	minbodytemp = 0
 	wander = 0
 	idle_vision_range = 5
-	speed = 10
+	move_to_delay = 10
 	retreat_distance = 1
 	minimum_distance = 2
 	health = 100
@@ -627,11 +627,11 @@ proc/move_mining_shuttle()
 /mob/living/simple_animal/hostile/mining_drone/proc/CollectOre()
 	var/obj/item/weapon/ore/O
 	for(O in src.loc)
-		O.loc = src
+		O.forceMove(src)
 	for(var/dir in alldirs)
 		var/turf/T = get_step(src,dir)
 		for(O in T)
-			O.loc = src
+			O.forceMove(src)
 	return
 
 /mob/living/simple_animal/hostile/mining_drone/proc/DropOre()
@@ -639,7 +639,7 @@ proc/move_mining_shuttle()
 		return
 	for(var/obj/item/weapon/ore/O in contents)
 		contents -= O
-		O.loc = src.loc
+		O.forceMove(src.loc)
 	return
 
 /mob/living/simple_animal/hostile/mining_drone/adjustBruteLoss()
@@ -681,7 +681,12 @@ proc/move_mining_shuttle()
 				if(istype(target, /mob/living/simple_animal/hostile))
 					var/mob/living/simple_animal/hostile/H = M
 					H.friends += user
-					log_game("[user] has revived hostile mob [target] with a lazarus injector")
+
+					log_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector.")
+					H.attack_log += "\[[time_stamp()]\] Revived by <b>[key_name(user)]</b> with a lazarus injector."
+					user.attack_log += "\[[time_stamp()]\] Revived hostile mob <b>[H]</b> with a lazarus injector."
+					msg_admin_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+
 				loaded = 0
 				user.visible_message("<span class='warning'>[user] injects [M] with \the [src], reviving it.</span>", \
 				"<span class='notice'>You inject [M] with \the [src], reviving it.</span>")
@@ -730,7 +735,7 @@ proc/move_mining_shuttle()
 				name = "lazarus capsule - [mname]"
 	..()
 
-/obj/item/device/mobcapsule/throw_impact(atom/A, mob/user)
+/obj/item/device/mobcapsule/throw_impact(atom/A, speed, mob/user)
 	..()
 	if(!tripped)
 		if(contained_mob)
@@ -757,7 +762,7 @@ proc/move_mining_shuttle()
 		return 0
 	else if(AM.density || AM.anchored)
 		return 0
-	AM.loc = src
+	AM.forceMove(src)
 	contained_mob = AM
 	name = "lazarus capsule - [AM.name]"
 	return 1
@@ -770,19 +775,26 @@ proc/move_mining_shuttle()
 	/*
 	//Cham Projector Exception
 	for(var/obj/effect/dummy/chameleon/AD in src)
-		AD.loc = src.loc
+		AD.forceMove(src.loc)
 
 	for(var/obj/O in src)
-		O.loc = src.loc
+		O.forceMove(src.loc)
 
 	for(var/mob/M in src)
-		M.loc = src.loc
+		M.forceMove(src.loc)
 		if(M.client)
 			M.client.eye = M.client.mob
 			M.client.perspective = MOB_PERSPECTIVE
 */
 	if(contained_mob)
-		contained_mob.loc = src.loc
+		contained_mob.forceMove(src.loc)
+
+		var/turf/turf = get_turf(src)
+		log_attack("[key_name(user)] has released hostile mob [contained_mob] with a capsule in area [turf.loc] ([x],[y],[z]).")
+		contained_mob.attack_log += "\[[time_stamp()]\] Released by <b>[key_name(user)]</b> in area [turf.loc] ([x],[y],[z])."
+		user.attack_log += "\[[time_stamp()]\] Released hostile mob <b>[contained_mob]</b> in area [turf.loc] ([x],[y],[z])."
+		msg_admin_attack("[key_name(user)] has released hostile mob [contained_mob] with a capsule in area [turf.loc] ([x],[y],[z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</A>).")
+
 		if(contained_mob.client)
 			contained_mob.client.eye = contained_mob.client.mob
 			contained_mob.client.perspective = MOB_PERSPECTIVE

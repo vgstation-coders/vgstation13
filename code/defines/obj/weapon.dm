@@ -243,7 +243,7 @@
 					H.Stun(2) //used instead of setting damage in vars to avoid non-human targets being affected
 					H.Weaken(4)
 					H.legcuffed = src //applies legcuff properties inherited through legcuffs
-					src.loc = H
+					src.forceMove(H)
 					H.update_inv_legcuffed()
 					if(!H.legcuffed) //in case it didn't happen, we need a safety net
 						throw_failed()
@@ -315,10 +315,10 @@
 	if(prob(20))
 		src.visible_message("<span class='rose'>\The [src] falls to pieces on impact!</span>")
 		if(weight1)
-			weight1.loc = src.loc
+			weight1.forceMove(src.loc)
 			weight1 = null
 		if(weight2)
-			weight2.loc = src.loc
+			weight2.forceMove(src.loc)
 			weight2 = null
 		update_icon(src)
 
@@ -348,10 +348,10 @@
 			else
 				user.show_message("<span class='notice'>You cut off [weight1] [weight2 ? "and [weight2]" : ""].</span>") //you remove the items currently attached
 				if(weight1)
-					weight1.loc = get_turf(usr)
+					weight1.forceMove(get_turf(usr))
 					weight1 = null
 				if(weight2)
-					weight2.loc = get_turf(usr)
+					weight2.forceMove(get_turf(usr))
 					weight2 = null
 				playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
 				update_icon()
@@ -438,7 +438,7 @@
 				return
 	if(isscrewdriver(I))
 		if(IED)
-			IED.loc = get_turf(src.loc)
+			IED.forceMove(get_turf(src.loc))
 			IED = null
 			to_chat(user, "<span class='notice'>You remove the IED from the [src].</span>")
 			return
@@ -469,7 +469,7 @@
 				if(H.m_intent == "run")
 					armed = 0
 					H.legcuffed = src
-					src.loc = H
+					src.forceMove(H)
 					H.update_inv_legcuffed()
 
 					feedback_add_details("handcuffs","B") //Yes, I know they're legcuffs. Don't change this, no need for an extra variable. The "B" is used to tell them apart.

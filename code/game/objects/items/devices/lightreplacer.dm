@@ -484,7 +484,7 @@
 					usr.put_in_hands(supply)
 					usr.visible_message("[usr] removes \the [supply] from \the [src].", "You remove \the [src]'s supply container, \the [supply].")
 				else
-					supply.loc = get_turf(src)
+					supply.forceMove(get_turf(src))
 				supply = null
 				if(usr)
 					attack_self(usr)
@@ -495,7 +495,7 @@
 					usr.put_in_hands(waste)
 					usr.visible_message("[usr] removes \the [waste] from \the [src].", "You remove \the [src]'s waste container, \the [waste].")
 				else
-					waste.loc = get_turf(src)
+					waste.forceMove(get_turf(src))
 				waste = null
 				if(usr)
 					attack_self(usr)
@@ -519,7 +519,7 @@
 			L = new light_path
 		L.switchcount = prod_quality
 		if(!insert_if_possible(L))
-			L.loc = get_turf(src)
+			L.forceMove(get_turf(src))
 			if(usr)
 				to_chat(usr, "<span class='notice'>\The [src] successfully fabricates \a [L], but it drops it on the floor.</span>")
 		else if(usr)

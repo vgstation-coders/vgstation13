@@ -532,7 +532,7 @@
 /obj/structure/singulo_chain/proc/move_child(var/turf/parent)
 	var/turf/T = get_turf(src)
 	if(parent)//I don't see how this could be null but a sanity check won't hurt
-		src.loc = parent
+		src.forceMove(parent)
 	if(child)
 		if(get_dist(src,child) > 1)
 			child.move_child(T)
@@ -543,11 +543,11 @@
 /obj/structure/singulo_chain/anchor/move_child(var/turf/parent)
 	var/turf/T = get_turf(src)
 	if(parent)
-		src.loc = parent
+		src.forceMove(parent)
 	else
 		dir = get_dir(T,src)
 	if(target)
-		target.loc = src.loc
+		target.forceMove(src.loc)
 
 /obj/structure/singulo_chain/cultify()
 	return

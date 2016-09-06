@@ -47,7 +47,7 @@
 
 /obj/structure/transit_tube_pod/Destroy()
 	for(var/atom/movable/AM in contents)
-		AM.loc = loc
+		AM.forceMove(loc)
 
 	..()
 
@@ -56,7 +56,7 @@ obj/structure/ex_act(severity)
 	switch(severity)
 		if(1.0)
 			for(var/atom/movable/AM in contents)
-				AM.loc = loc
+				AM.forceMove(loc)
 				// TODO: What the fuck are you doing
 				AM.ex_act(severity++)
 
@@ -65,7 +65,7 @@ obj/structure/ex_act(severity)
 		if(2.0)
 			if(prob(50))
 				for(var/atom/movable/AM in contents)
-					AM.loc = loc
+					AM.forceMove(loc)
 					AM.ex_act(severity++)
 
 				qdel(src)
@@ -112,7 +112,7 @@ obj/structure/ex_act(severity)
 		for(var/atom/movable/obstacle in large_dense)
 			if(!obstacle.Cross(AM, AM.loc) && AM != obstacle)
 				return ..()
-		AM.loc = src.loc
+		AM.forceMove(src.loc)
 		to_chat(AM, "<span class='info'>You slip under the tube.</span>")
 
 
@@ -125,7 +125,7 @@ obj/structure/ex_act(severity)
 	if(!pod_moving && icon_state == "open" && istype(AM, /mob))
 		for(var/obj/structure/transit_tube_pod/pod in loc)
 			if(!pod.moving && pod.dir in directions())
-				AM.loc = pod
+				AM.forceMove(pod)
 				return
 
 
@@ -419,7 +419,7 @@ obj/structure/ex_act(severity)
 	if(istype(mob, /mob) && mob.client)
 		// If the pod is not in a tube at all, you can get out at any time.
 		if(!(locate(/obj/structure/transit_tube) in loc))
-			mob.loc = loc
+			mob.forceMove(loc)
 			mob.client.Move(get_step(loc, direction), direction)
 
 			//if(moving && istype(loc, /turf/space))
@@ -432,7 +432,7 @@ obj/structure/ex_act(severity)
 					if(!station.pod_moving)
 						if(direction == station.dir)
 							if(station.icon_state == "open")
-								mob.loc = loc
+								mob.forceMove(loc)
 								mob.client.Move(get_step(loc, direction), direction)
 
 							else

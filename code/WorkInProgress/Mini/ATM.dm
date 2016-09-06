@@ -446,7 +446,7 @@ log transactions
 					playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
 			if("insert_card")
 				if(held_card)
-					held_card.loc = src.loc
+					held_card.forceMove(src.loc)
 					authenticated_account = null
 
 					if(ishuman(usr) && !usr.get_active_hand())

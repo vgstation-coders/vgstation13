@@ -112,13 +112,13 @@
 			if(istype(W.loc,/mob/living) && W.is_sharp()) //Projectile is embedded and suitable for pinning.
 
 				if(!istype(src,/mob/living/carbon/human)) //Handles embedding for non-humans and simple_animals.
-					O.loc = src
+					O.forceMove(src)
 					src.embedded += O
 
 				var/turf/T = near_wall(dir,2)
 
 				if(T)
-					src.loc = T
+					src.forceMove(T)
 					visible_message("<span class='warning'>[src] is pinned to the wall by [O]!</span>","<span class='warning'>You are pinned to the wall by [O]!</span>")
 					src.anchored = 1
 					src.pinned += O

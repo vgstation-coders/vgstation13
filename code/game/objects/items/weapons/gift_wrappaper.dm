@@ -299,7 +299,7 @@
 		to_chat(user, "<span class='notice'>You cut open the present.</span>")
 
 		for(var/mob/M in src) //Should only be one but whatever.
-			M.loc = get_turf(src)
+			M.forceMove(get_turf(src))
 			if (M.client)
 				M.client.eye = M.client.mob
 				M.client.perspective = MOB_PERSPECTIVE

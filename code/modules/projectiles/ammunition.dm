@@ -114,7 +114,7 @@
 /obj/item/ammo_storage/attack_self(mob/user) //allows you to remove individual bullets
 	if(stored_ammo.len)
 		var/obj/item/ammo_casing/dropped = stored_ammo[1]
-		dropped.loc = get_turf(user)
+		dropped.forceMove(get_turf(user))
 		stored_ammo -= dropped
 		update_icon()
 		to_chat(user, "<span class='notice'>You remove \a [dropped] from \the [src].</span>")
@@ -143,7 +143,7 @@
 		for(var/i = 1; i<=min(to_drop, bullets_from.stored_ammo.len); i++)
 			var/obj/item/ammo_casing/AC = bullets_from.stored_ammo[1]
 			bullets_from.stored_ammo -= AC
-			AC.loc = get_turf(target)
+			AC.forceMove(get_turf(target))
 			dropped_bullets++
 			bullets_from.update_icon()
 		if(usr)
@@ -170,7 +170,7 @@
 			if((AS.exact && (loading.type == text2path(AS.ammo_type))) || (!AS.exact && istype(loading, text2path(AS.ammo_type)))) //if it's the exact type we want, or the general class
 				bullets_from.stored_ammo -= loading
 				AS.stored_ammo += loading
-				loading.loc = AS
+				loading.forceMove(AS)
 				bullets_loaded++
 	if(istype(target, /obj/item/weapon/gun/projectile)) //if we load directly, this is what we want to do
 		if(istype(bullets_from, /obj/item/ammo_storage/box))
@@ -183,7 +183,7 @@
 			if(PW.caliber && PW.caliber[loading.caliber]) //hurrah for gun variables.
 				bullets_from.stored_ammo -= loading
 				PW.loaded += loading
-				loading.loc = PW
+				loading.forceMove(PW)
 				bullets_loaded++
 	bullets_from.update_icon()
 	target.update_icon()

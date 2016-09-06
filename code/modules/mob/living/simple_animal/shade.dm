@@ -21,7 +21,7 @@
 	min_oxy = 0
 	max_co2 = 0
 	max_tox = 0
-	speed = 2
+	speed = -1
 	stop_automated_movement = 1
 	status_flags = 0
 	faction = "cult"
@@ -94,6 +94,9 @@
 		return 0 //under effects of time magick
 	. = ..()
 
+	regular_hud_updates()
+
+/mob/living/simple_animal/shade/regular_hud_updates()
 	update_pull_icon() //why is this here?
 
 	if(purged)

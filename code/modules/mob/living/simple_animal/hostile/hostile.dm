@@ -2,7 +2,6 @@
 	faction = "hostile"
 	stop_automated_movement_when_pulled = 0
 	environment_smash = 1 //Set to 1 to break closets,tables,racks, etc; 2 for walls; 3 for rwalls
-	speed = 2
 
 	var/stance = HOSTILE_STANCE_IDLE	//Used to determine behavior
 	var/atom/target // /vg/ edit:  Removed type specification so spiders can target doors.
@@ -12,6 +11,7 @@
 	var/projectiletype
 	var/projectilesound
 	var/casingtype
+	var/move_to_delay = 2 //delay for the automated movement.
 	var/list/friends = list()
 	var/vision_range = 9 //How big of an area to search for targets in, a vision of 9 attempts to find targets as soon as they walk into screen view
 
@@ -191,16 +191,16 @@
 				AttackingTarget()
 			if(canmove)
 				if(retreat_distance != null && target_distance <= retreat_distance) //If we have a retreat distance, check if we need to run from our target
-					walk_away(src, target, retreat_distance, speed)
+					walk_away(src,target,retreat_distance,move_to_delay)
 				else
-					Goto(target, speed, minimum_distance)//Otherwise, get to our minimum distance so we chase them
+					Goto(target,move_to_delay,minimum_distance)//Otherwise, get to our minimum distance so we chase them
 			return
 
 	if(target.loc != null && get_dist(src, target.loc) <= vision_range)//We can't see our target, but he's in our vision range still
 		if(FindHidden(target) && environment_smash)//Check if he tried to hide in something to lose us
 			var/atom/A = target.loc
 			if(canmove)
-				Goto(A, speed, minimum_distance)
+				Goto(A,move_to_delay,minimum_distance)
 			if(A.Adjacent(src))
 				A.attack_animal(src)
 			return
@@ -284,13 +284,12 @@
 	if(rapid)
 		sleep(1)
 		TryToShoot(target_turf, ttarget)
-		sleep(4)
+		sleep(3)
 		TryToShoot(target_turf, ttarget)
-		sleep(6)
+		sleep(3)
 		TryToShoot(target_turf, ttarget)
 	else
 		TryToShoot(target_turf, ttarget)
-	return
 
 /mob/living/simple_animal/hostile/proc/TryToShoot(var/atom/target_turf, atom/target)
 	if(!target)

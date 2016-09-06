@@ -328,7 +328,7 @@
 		visible_message("<span class='warning'>\the [M.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
 		M.bullet_act(src, def_zone)
 		admin_warn(M)
-		BEE.loc = M.loc
+		BEE.forceMove(M.loc)
 		BEE.target = M
 	else
 		BEE.newTarget()
@@ -727,7 +727,7 @@
 			var/turf/targloc = pick(possible_turfs)
 			B.original = targloc
 			var/turf/curloc = get_turf(src)
-			B.loc = get_turf(src)
+			B.forceMove(get_turf(src))
 			B.starting = starting
 			B.shot_from = shot_from
 			B.silenced = silenced
@@ -749,7 +749,7 @@
 /obj/item/projectile/bullet/invisible/on_hit(var/atom/target, var/blocked = 0) //silence the target for a few seconds on hit
 	if (..(target, blocked))
 		var/mob/living/L = target
-		if(L.silent && L.silent < 5)
+		if(!L.silent || (L.silent && L.silent < 5))
 			L.silent = 5
 		return 1
 	return 0

@@ -55,7 +55,7 @@
 			if(ishuman(user))
 				user.put_in_hands(I)
 			else
-				I.loc = get_turf(src)
+				I.forceMove(get_turf(src))
 			to_chat(user, "<span class='notice'>You find \an [I] in the cistern.</span>")
 			w_items -= I.w_class
 			return
@@ -191,7 +191,6 @@
 	var/obj/effect/mist/mymist = null
 	var/ismist = 0 //Needs a var so we can make it linger~
 	var/watertemp = "cool" //Freezing, normal, or boiling
-	var/mobpresent = 0 //True if there is a mob on the shower's loc, this is to ease process()
 	var/obj/item/weapon/reagent_containers/glass/beaker/water/watersource = null
 
 	machine_flags = SCREWTOGGLE
@@ -303,13 +302,6 @@
 /obj/machinery/shower/Crossed(atom/movable/O)
 	..()
 	wash(O)
-	if(ismob(O))
-		mobpresent++
-
-/obj/machinery/shower/Uncrossed(atom/movable/O)
-	if(ismob(O))
-		mobpresent--
-	..()
 
 //Yes, showers are super powerful as far as washing goes
 //Shower cleaning has been nerfed (no, really). 75 % chance to clean everything on each tick
@@ -414,14 +406,14 @@
 		return
 
 	//Note : Remember process() rechecks this, so the mix/max procs slowly increase/decrease body temperature
-	//Every second under the shower adjusts body temperature by 0.5�C. Water conducts heat pretty efficiently in real life too
-	if(watertemp == "freezing cold") //Down to 0�C, Nanotrasen waterworks are perfect and never fluctuate even slightly below that
+	//Every second under the shower adjusts body temperature by 0.5 degree Celsius. Water conducts heat pretty efficiently in real life too
+	if(watertemp == "freezing cold") //Down to 0 degree Celsius, Nanotrasen waterworks are perfect and never fluctuate even slightly below that
 		C.bodytemperature = max(T0C, C.bodytemperature - 0.5)
 		return
-	if(watertemp == "searing hot") //Up to 60�c, upper limit for common water boilers
+	if(watertemp == "searing hot") //Up to 60 degree Celsius, upper limit for common water boilers
 		C.bodytemperature = min(T0C + 60, C.bodytemperature + 0.5)
 		return
-	if(watertemp == "cool") //Adjusts towards "perfect" body temperature, 37.5�C. Actual showers tend to average at 40�C, but it's the future
+	if(watertemp == "cool") //Adjusts towards "perfect" body temperature, 37.5 degree Celsius. Actual showers tend to average at 40 degree Celsius, but it's the future
 		if(C.bodytemperature > T0C + 37.5) //Cooling down
 			C.bodytemperature = max(T0C + 37.5, C.bodytemperature - 0.5)
 			return

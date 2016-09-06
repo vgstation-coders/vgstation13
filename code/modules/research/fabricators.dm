@@ -295,11 +295,11 @@
 			else
 				L = new /obj/item/weapon/storage/lockbox/unlockable(src) //Make an unlockable lockbox
 			*/
-			being_built.loc = L //Put the thing in the lockbox
+			being_built.forceMove(L) //Put the thing in the lockbox
 			L.name += " ([being_built.name])"
 			being_built = L //Building the lockbox now, with the thing in it
 		var/turf/output = get_output()
-		being_built.loc = get_turf(output)
+		being_built.forceMove(get_turf(output))
 		src.visible_message("[bicon(src)] \The [src] beeps: \"Succesfully completed \the [being_built.name].\"")
 		src.being_built = null
 	src.updateUsrDialog()
@@ -692,6 +692,6 @@
 				to_spawn = 0
 
 			materials.removeAmount(matID, mats.amount * mats.perunit)
-			mats.loc = src.loc
+			mats.forceMove(src.loc)
 		return total_amount
 	return 0

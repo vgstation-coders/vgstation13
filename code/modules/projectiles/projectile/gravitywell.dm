@@ -47,7 +47,7 @@
 	return
 
 /obj/item/projectile/gravitywell/singularity_act(var/current_size,var/obj/machinery/singularity/S)
-	src.loc = S.loc
+	src.forceMove(S.loc)
 	spawnGravityWell()
 	return
 

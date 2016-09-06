@@ -134,7 +134,7 @@
 	name = "Circuit Design (\"Marauder\" Central Control module)"
 	desc = "Allows for the construction of a \"Marauder\" Central Control module."
 	id = "marauder_main"
-	req_tech = list(Tc_PROGRAMMING = 4)
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_NANOTRASEN = 5)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
@@ -144,7 +144,7 @@
 	name = "Circuit Design (\"Marauder\" Peripherals Control module)"
 	desc = "Allows for the construction of a \"Marauder\" Peripheral Control module."
 	id = "marauder_peri"
-	req_tech = list(Tc_PROGRAMMING = 4)
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_NANOTRASEN = 5)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
@@ -154,7 +154,7 @@
 	name = "Circuit Design (\"Marauder\" Weapons & Targeting Control module)"
 	desc = "Allows for the construction of a \"Marauder\" Weapons & Targeting Control module."
 	id = "marauder_targ"
-	req_tech = list(Tc_PROGRAMMING = 4, Tc_COMBAT = 2)
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_COMBAT = 2, Tc_NANOTRASEN = 5)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"

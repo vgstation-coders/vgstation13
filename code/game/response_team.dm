@@ -76,7 +76,7 @@ client/verb/JoinResponseTeam()
 
 			ticker.mode.ert += new_commando.mind
 
-			message_admins("[new_commando]/[usr.key] has joined the Emergency Response Team.")
+			message_admins("[key_name(usr)] has joined the Emergency Response Team.")
 			return
 
 	else
@@ -162,7 +162,7 @@ proc/trigger_armed_response_team(var/force = 0)
 	P.name = "Emergency Nuclear Code, and ERT Orders"
 	for (var/obj/effect/landmark/A in landmarks_list)
 		if (A.name == "nukecode")
-			P.loc = A.loc
+			P.forceMove(A.loc)
 			qdel(A)
 			A = null
 			continue
@@ -283,7 +283,7 @@ proc/trigger_armed_response_team(var/force = 0)
 	M.mind.special_role = "Response Team"
 	if(!(M.mind in ticker.minds))
 		ticker.minds += M.mind//Adds them to regular mind list.
-	M.loc = spawn_location
+	M.forceMove(spawn_location)
 	M.equip_strike_team(leader_selected)
 	return M
 

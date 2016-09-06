@@ -154,6 +154,9 @@ proc/process_adminbus_teleport_locs()
 	dynamic_lighting = 1 //Lighting STILL disabled, even with the new bay engine, because lighting doesn't play nice with our shuttles, might just be our shuttle code, or the small changes in the lighting engine we have from bay.
 	//haha fuck you we dynamic lights now
 
+/area/shuttle/holomapAlwaysDraw()
+	return 0
+
 /area/shuttle/arrival
 	name = "\improper Arrival Shuttle"
 
@@ -1771,6 +1774,9 @@ proc/process_adminbus_teleport_locs()
 /area/derelict/ship
 	name = "\improper Abandoned Ship"
 	icon_state = "yellow"
+
+/area/derelict/ship/holomapAlwaysDraw()
+	return 0
 
 /area/solar/derelict_starboard
 	name = "\improper Derelict Starboard Solar Array"

@@ -26,6 +26,10 @@
 		)
 	enabled_jobs = list(/datum/job/trader)
 
+	load_map_elements = list(
+	/datum/map_element/dungeon/holodeck
+	)
+
 ////////////////////////////////////////////////////////////////
 #include "defficiency/pipes.dm" // Atmos layered pipes.
 #include "tgstation.dmm"

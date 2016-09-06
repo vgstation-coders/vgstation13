@@ -196,7 +196,7 @@
 		if(user.client)
 			user.client.screen -= W
 		user.u_equip(W,1)
-		W.loc = src
+		W.forceMove(src)
 		user.update_icons()
 		message_admins("AME loaded with fuel by [user.real_name] ([user.key]) at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
 		user.visible_message("[user.name] loads an [W.name] into the [src.name].", \
@@ -383,7 +383,7 @@
 	if(href_list["ejectjar"])
 		if(fueljar)
 			message_admins("AME fuel jar ejected by [usr.real_name] ([usr.key]) at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
-			fueljar.loc = src.loc
+			fueljar.forceMove(src.loc)
 			fueljar = null
 			//fueljar.control_unit = null currently it does not care where it is
 			//update_icon() when we have the icon for it

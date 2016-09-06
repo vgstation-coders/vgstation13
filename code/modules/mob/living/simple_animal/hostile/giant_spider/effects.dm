@@ -124,7 +124,7 @@
 
 /obj/effect/spider/spiderling/Bump(atom/user)
 	if(istype(user, /obj/structure/table))
-		src.loc = user.loc
+		src.forceMove(user.loc)
 	else
 		..()
 
@@ -156,7 +156,7 @@
 /obj/effect/spider/cocoon/Destroy()
 	src.visible_message("<span class='warning'>\the [src] splits open.</span>")
 	for(var/atom/movable/A in contents)
-		A.loc = src.loc
+		A.forceMove(src.loc)
 	..()
 
 #undef SPIDERWEB_BRUTE_DIVISOR

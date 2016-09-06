@@ -86,7 +86,7 @@
 
 /obj/mecha/combat/marauder/relaymove(mob/user,direction)
 	if(user != src.occupant) //While not "realistic", this piece is player friendly.
-		user.loc = get_turf(src)
+		user.forceMove(get_turf(src))
 		to_chat(user, "You climb out from [src]")
 		return 0
 	if(!can_move)
@@ -171,16 +171,16 @@
 		src.log_message("Toggled zoom mode.")
 		src.occupant_message("<font color='[src.zoom?"blue":"red"]'>Zoom mode [zoom?"en":"dis"]abled.</font>")
 		if(zoom)
-			src.occupant.client.view = 12
+			src.occupant.client.changeView(12)
 			src.occupant << sound('sound/mecha/imag_enh.ogg',volume=50)
 		else
-			src.occupant.client.view = world.view//world.view - default mob view size
+			src.occupant.client.changeView()//world.view - default mob view size
 	return
 
 
 /obj/mecha/combat/marauder/go_out()
 	if(src.occupant && src.occupant.client)
-		src.occupant.client.view = world.view
+		src.occupant.client.changeView()
 		src.zoom = 0
 	..()
 	return

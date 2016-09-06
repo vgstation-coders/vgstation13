@@ -16,7 +16,7 @@
 	if(suit)
 		to_chat(user, "<span class='notice'>You pick up \the [suit] from \the [src]</span>")
 		playsound(get_turf(src), "rustle", 50, 1, -5)
-		suit.loc = get_turf(src)
+		suit.forceMove(get_turf(src))
 		if(!user.get_active_hand())
 			user.put_in_hands(suit)
 		suit = null
@@ -26,7 +26,7 @@
 	if(hat)
 		to_chat(user, "<span class='notice'>You pick up \the [hat] from \the [src]</span>")
 		playsound(get_turf(src), "rustle", 50, 1, -5)
-		hat.loc = get_turf(src)
+		hat.forceMove(get_turf(src))
 		if(!user.get_active_hand())
 			user.put_in_hands(hat)
 		hat = null
@@ -67,9 +67,9 @@
 /obj/structure/coatrack/Destroy()
 	if(loc)
 		if(suit)
-			suit.loc = loc
+			suit.forceMove(loc)
 		if(hat)
-			hat.loc = loc
+			hat.forceMove(loc)
 	..()
 
 /obj/structure/coatrack/update_icon()

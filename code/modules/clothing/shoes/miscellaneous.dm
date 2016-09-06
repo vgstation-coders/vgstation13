@@ -376,3 +376,11 @@
 	desc = ""
 	icon_state = "doom"
 	item_state = "doom"
+
+/obj/item/clothing/shoes/workboots
+	name = "Workboots"
+	desc = "Thick-soled boots for industrial work environments."
+	icon_state = "workboots"
+	item_state = "workboots"
+	species_fit = list(VOX_SHAPED)
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots

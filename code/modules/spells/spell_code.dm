@@ -2,6 +2,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell
 	var/name = "Spell"
+	var/abbreviation = "" //Used for feedback gathering
+
 	var/desc = "A spell"
 	parent_type = /datum
 	var/panel = "Spells"//What panel the proc holder needs to go on.
@@ -15,6 +17,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/still_recharging_msg = "<span class='notice'>The spell is still recharging.</span>"
 
 	var/silenced = 0 //not a binary (though it seems that it is at the moment) - the length of time we can't cast this for, set by the spell_master silence_spells()
+
+	var/price = Sp_BASE_PRICE //How much does it cost to buy this spell from a spellbook
 
 	var/holder_var_type = "bruteloss" //only used if charge_type equals to "holder_var"
 	var/holder_var_amount = 20 //Amount to adjust var when spell is used, THIS VALUE IS SUBTRACTED
@@ -98,12 +102,10 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /spell/proc/choose_targets(mob/user = usr) //depends on subtype - see targeted.dm, aoe_turf.dm, dumbfire.dm, or code in general folder
 	return
 
-/spell/proc/is_valid_target(var/target, mob/user)
-	if(!(spell_flags & INCLUDEUSER) && target == usr)
-		return 0
-	if(get_dist(usr, target) > range) //Shouldn't be necessary but a good check in case of overrides
-		return 0
-	return istype(target, /mob/living)
+/spell/proc/is_valid_target(var/target, mob/user, options)
+	if(options)
+		return (target in options)
+	return ((target in view_or_range(range, user, selection_type)) && istype(target, /mob/living))
 
 /spell/proc/perform(mob/user = usr, skipcharge = 0) //if recharge is started is important for the trigger spells
 	if(!holder)
@@ -176,6 +178,10 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		target = before_cast(target, user) //applies any overlays and effects
 		if(!target.len) //before cast has rechecked what we can target
 			return
+		invocation(user, target)
+
+		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
+
 		if(prob(critfailchance))
 			critfail(target, holder)
 		else
@@ -229,7 +235,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/list/options = view_or_range(range,user,selection_type)
 	for(var/atom/target in targets)
 		// Check range again (fixes long-range EI NATH)
-		if(!(target in options))
+		if(!is_valid_target(target, user, options))
 			continue
 
 		valid_targets += target
@@ -248,8 +254,6 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			spawn(overlay_lifespan)
 				qdel(spell)
 				spell = null
-	if(spell_flags & INCLUDEUSER)
-		valid_targets |= user
 	return valid_targets
 
 /spell/proc/after_cast(list/targets)
@@ -463,3 +467,20 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(!user || (!(spell_flags & (STATALLOWED|GHOSTCAST)) && user.stat != originalstat)  || !(user.loc == Location))
 			return 0
 	return 1
+
+//UPGRADES
+/spell/proc/apply_upgrade(upgrade_type)
+	switch(upgrade_type)
+		if(Sp_SPEED)
+			return quicken_spell()
+		if(Sp_POWER)
+			return empower_spell()
+
+///INFO
+
+/spell/proc/get_upgrade_info(upgrade_type)
+	switch(upgrade_type)
+		if(Sp_SPEED)
+			return "Reduce this spell's cooldown."
+		if(Sp_POWER)
+			return "Increase this spell's power."

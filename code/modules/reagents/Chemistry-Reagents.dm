@@ -663,7 +663,7 @@
 					qdel(W)
 					continue
 				W.reset_plane_and_layer()
-				W.loc = C.loc
+				W.forceMove(C.loc)
 				W.dropped(C)
 			var/mob/living/carbon/slime/new_mob = new /mob/living/carbon/slime(C.loc)
 			new_mob.a_intent = I_HURT
@@ -4764,6 +4764,16 @@
 	color = "#2E6671" //rgb: 46, 102, 113
 	dizzy_adj = 15
 	slurr_adj = 15
+
+/datum/reagent/ethanol/deadrum/sangria
+	name = "Sangria"
+	id = SANGRIA
+	description = "So tasty you won't believe it's alcohol!"
+	reagent_state = LIQUID
+	color = "#53181A" //rgb: 83, 24, 26
+	dizzy_adj = 2
+	slur_start = 65
+	confused_start = 145
 
 /datum/reagent/ethanol/deadrum/sbiten
 	name = "Sbiten"

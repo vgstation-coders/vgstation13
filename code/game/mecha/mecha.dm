@@ -63,7 +63,7 @@
 	var/list/internals_req_access = list(access_engine,access_robotics)//required access level to open cell compartment
 
 	var/datum/global_iterator/pr_int_temp_processor //normalizes internal air mixture temperature
-	var/datum/global_iterator/pr_inertial_movement //controls intertial movement in spesss
+	var/datum/global_iterator/pr_inertial_movement //controls inertial movement in spesss
 	var/datum/global_iterator/pr_give_air //moves air from tank to cabin
 	var/datum/global_iterator/pr_internal_damage //processes internal damage
 
@@ -103,6 +103,7 @@
 	log_message("[src.name] created.")
 	loc.Entered(src)
 	mechas_list += src //global mech list
+	reset_icon()
 	return
 
 /obj/mecha/Destroy()
@@ -310,6 +311,7 @@
 	return call((proc_res["dyndomove"]||src), "dyndomove")(direction)
 
 /obj/mecha/proc/dyndomove(direction)
+	stopMechWalking()
 	if(!can_move)
 		return 0
 	if(src.pr_inertial_movement.active())
@@ -317,6 +319,7 @@
 	if(!has_charge(step_energy_drain))
 		return 0
 	var/move_result = 0
+	startMechWalking()
 	if(hasInternalDamage(MECHA_INT_CONTROL_LOST))
 		move_result = mechsteprand()
 	else if(src.dir!=direction)
@@ -334,6 +337,11 @@
 			can_move = 1
 		return 1
 	return 0
+
+/obj/mecha/proc/startMechWalking()
+
+/obj/mecha/proc/stopMechWalking()
+	icon_state = initial_icon
 
 /obj/mecha/proc/mechturn(direction)
 	dir = direction
@@ -613,7 +621,7 @@
 				var/obj/mecha/working/ripley/R = src
 				if(R.cargo)
 					for(var/obj/O in R.cargo) //Dump contents of stored cargo
-						O.loc = T
+						O.forceMove(T)
 						R.cargo -= O
 						T.Entered(O)
 
@@ -1179,9 +1187,9 @@
 		brainmob.client.perspective = EYE_PERSPECTIVE
 	*/
 		occupant = brainmob
-		brainmob.loc = src //should allow relaymove
+		brainmob.forceMove(src) //should allow relaymove
 		brainmob.canmove = 1
-		mmi_as_oc.loc = src
+		mmi_as_oc.forceMove(src)
 		mmi_as_oc.mecha = src
 		src.verbs -= /obj/mecha/verb/eject
 		src.Entered(mmi_as_oc)
@@ -1245,7 +1253,7 @@
 /obj/mecha/proc/empty_bad_contents() //stuff that shouldn't be there, possibly caused by the driver dropping it while inside the mech
 	for(var/obj/O in src)
 		if(!is_type_in_list(O,mech_parts))
-			O.loc = src.loc
+			O.forceMove(src.loc)
 	return
 
 /obj/mecha/proc/go_out(var/exit = loc)
@@ -1293,7 +1301,7 @@
 		if(istype(mob_container, /obj/item/device/mmi) || istype(mob_container, /obj/item/device/mmi/posibrain))
 			var/obj/item/device/mmi/mmi = mob_container
 			if(mmi.brainmob)
-				occupant.loc = mmi
+				occupant.forceMove(mmi)
 			mmi.mecha = null
 			src.occupant.canmove = 0
 			src.verbs += /obj/mecha/verb/eject

@@ -4,7 +4,7 @@
 	if(!check_rights(R_SOUNDS))
 		return
 
-	var/sound/uploaded_sound = sound(S, repeat = 0, wait = 1, channel = 777)
+	var/sound/uploaded_sound = sound(S, repeat = 0, wait = 1, channel = CHANNEL_ADMINMUSIC)
 	uploaded_sound.status = SOUND_STREAM | SOUND_UPDATE
 	uploaded_sound.priority = 250
 
@@ -38,7 +38,7 @@
 	log_admin("[key_name(src)] played a local sound [S]")
 	message_admins("[key_name_admin(src)] played a local sound [S]", 1)
 	S.status = SOUND_STREAM | SOUND_UPDATE
-	playsound(get_turf(src.mob), S, 50, 0, 0)
+	playsound(source = get_turf(src.mob), soundin = S, vol = 50, vary = 0, falloff = 0, channel = CHANNEL_ADMINMUSIC)
 	feedback_add_details("admin_verb","PLS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 

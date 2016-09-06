@@ -27,6 +27,9 @@
 
 	enabled_jobs = list(/datum/job/trader)
 
+	load_map_elements = list(
+	/datum/map_element/dungeon/holodeck
+	)
 
 // Metaclub areas
 /area/science/xenobiology/specimen_7

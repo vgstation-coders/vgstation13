@@ -158,7 +158,7 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 				temp = null
 		if("eject")
 			if(scanning)
-				scanning.loc = loc
+				scanning.forceMove(loc)
 				scanning = null
 			else
 				temp = "Eject Failed: No Object"
@@ -168,8 +168,8 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 			if(I && istype(I))
 				if(istype(I, /obj/item/weapon/evidencebag))
 					scanning = I.contents[1]
-					scanning.loc = src
-					I.overlays -= scanning
+					scanning.forceMove(src)
+					I.overlays.len = 0
 					I.icon_state = "evidenceobj"
 				else
 					if(M.drop_item(I, src))
@@ -188,7 +188,7 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 				if(card.amount > 1 || !card.fingerprints.len)
 					to_chat(usr, "<span class='warning'>ERROR: No prints/too many cards.</span>")
 					if(card.loc == src)
-						card.loc = src.loc
+						card.forceMove(src.loc)
 					card = null
 					return
 				if(M.drop_item(I, src))
@@ -633,7 +633,7 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 	else
 		to_chat(usr, "<span class='warning'>ERROR: No prints/too many cards.</span>")
 		if(card.loc == src)
-			card.loc = src.loc
+			card.forceMove(src.loc)
 		card = null
 		return
 	return

@@ -21,6 +21,7 @@
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 
+	can_be_mixed = TRUE
 
 /datum/game_mode/wizard/announce()
 	to_chat(world, "<B>The current game mode is - Wizard!</B>")
@@ -60,7 +61,7 @@
 		return 0
 
 	for(var/datum/mind/wwizard in wizards)
-		wwizard.current.loc = pick(wizardstart)
+		wwizard.current.forceMove(pick(wizardstart))
 
 	log_admin("Starting a round of wizard with [wizards.len] wizards.")
 	message_admins("Starting a round of wizard with [wizards.len] wizards.")
@@ -218,6 +219,9 @@
 
 
 /datum/game_mode/wizard/check_finished()
+	return ..()
+
+	/*
 	if(istype(ticker.mode, /datum/game_mode/mixed))
 		mixed = 1
 	if(config.continous_rounds || mixed)
@@ -246,7 +250,7 @@
 		finished = 1
 		return 1
 
-
+	*/
 
 /datum/game_mode/wizard/declare_completion(var/ragin = 0)
 	if(finished && !ragin)
