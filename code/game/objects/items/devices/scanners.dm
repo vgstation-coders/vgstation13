@@ -396,10 +396,6 @@ Subject's pulse: ??? BPM"})
 
 		var/datum/reagent/B = C.take_blood(src, src.reagents.maximum_volume)
 		if(B)
-			src.reagents.reagent_list |= B
-			src.reagents.update_total()
-			src.on_reagent_change()
-			src.reagents.handle_reactions()
 			update_icon()
 			user.visible_message("<span class='warning'>[user] takes a blood sample from [C].</span>", \
 			"<span class='notice'>You take a blood sample from [C]</span>")

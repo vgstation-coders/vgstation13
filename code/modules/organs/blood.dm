@@ -218,6 +218,13 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		temp_chem += R.id
 		temp_chem[R.id] = R.volume
 	B.data["trace_chem"] = list2params(temp_chem)
+
+	if(container)
+		container.reagents.reagent_list |= B
+		container.reagents.update_total()
+		container.on_reagent_change()
+		container.reagents.handle_reactions()
+		container.update_icon()
 	return B
 
 //For humans, blood does not appear from blue, it comes from vessels.
@@ -231,6 +238,11 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	. = ..()
 	vessel.remove_reagent(BLOOD,amount) // Removes blood if human
+
+/mob/living/carbon/monkey/take_blood(obj/item/weapon/reagent_containers/container, var/amount)
+	if(!isDead())
+		adjustOxyLoss(amount)
+		. = ..()
 
 //Transfers blood from container ot vessels
 /mob/living/carbon/proc/inject_blood(obj/item/weapon/reagent_containers/container, var/amount)
