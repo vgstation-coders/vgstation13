@@ -271,7 +271,7 @@ var/list/DummyCache = list()
 
 	//Now, check objects to block exit that are on the border
 	for(var/obj/border_obstacle in srcturf)
-		if(border_obstacle.flags & ON_BORDER)
+		if(!(target.flags & ON_BORDER) && (border_obstacle.flags & ON_BORDER))
 			if(!border_obstacle.Uncross(D, targetturf))
 				D.forceMove(null)
 				DummyCache.Add(D)
@@ -279,7 +279,7 @@ var/list/DummyCache = list()
 
 	//Next, check objects to block entry that are on the border
 	for(var/obj/border_obstacle in targetturf)
-		if(!(target.flags & ON_BORDER) && (border_obstacle.flags & ON_BORDER) && (target != border_obstacle))
+		if((border_obstacle.flags & ON_BORDER) && (target != border_obstacle))
 			if(!border_obstacle.Cross(D, srcturf, 1, 0))
 				D.forceMove(null)
 				DummyCache.Add(D)

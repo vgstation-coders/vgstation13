@@ -16,7 +16,11 @@
 		holoMiniMaps |= z
 		generateHoloMinimap(z)
 
-	generateStationMinimap()
+	//Station Holomaps display the map of the Z-Level they were built on.
+	generateStationMinimap(map.zMainStation)
+	generateStationMinimap(map.zAsteroid)
+	generateStationMinimap(map.zDerelict)
+	//If they were built on another Z-Level, they will display an error screen.
 
 	holomaps_initialized = 1
 
@@ -26,15 +30,21 @@
 /proc/generateHoloMinimap(var/zLevel=1)
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
 
-	if(zLevel != map.zCentcomm)//The Centcomm Zlevel's minimap will remain blank for immersion purposes. Until we add a way to only draw certain areas depending on the suit's faction
+	if(zLevel != map.zCentcomm)
 		for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 			for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 				var/turf/tile = locate(i, r, zLevel)
 				if(tile && tile.loc.holomapAlwaysDraw())
 					if((!istype(tile, /turf/space) && istype(tile.loc, /area/mine/unexplored)) || istype(tile, /turf/simulated/wall) || istype(tile, /turf/unsimulated/mineral) || istype(tile, /turf/unsimulated/wall) || (locate(/obj/structure/grille) in tile) || (locate(/obj/structure/window/full) in tile))
-						canvas.DrawBox("#FFFFFFDD", i, r)
+						if(map.holomap_offset_x.len >= zLevel)
+							canvas.DrawBox("#FFFFFFDD", min(i+holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+						else
+							canvas.DrawBox("#FFFFFFDD", i, r)
 					else if (istype(tile, /turf/simulated/floor) || istype(tile, /turf/unsimulated/floor) || (locate(/obj/structure/catwalk) in tile))
-						canvas.DrawBox("#66666699", i, r)
+						if(map.holomap_offset_x.len >= zLevel)
+							canvas.DrawBox("#66666699", min(i+holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+						else
+							canvas.DrawBox("#66666699", i, r)
 
 	holoMiniMaps[zLevel] = canvas
 
@@ -88,7 +98,7 @@
 
 	centcommMiniMaps[filter] = canvas
 
-/proc/generateStationMinimap()
+/proc/generateStationMinimap(var/StationZLevel)
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
 
 	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
@@ -99,12 +109,12 @@
 				if(areaToPaint.holomap_color)
 					canvas.DrawBox(areaToPaint.holomap_color, i, r)
 
-	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAPAREAS
-	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS] = canvas
+	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAPAREAS+"_[StationZLevel]"
+	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[StationZLevel]"] = canvas
 
 	var/icon/big_map = icon('icons/480x480.dmi', "stationmap")
 	var/icon/small_map = icon('icons/480x480.dmi', "blank")
-	var/icon/map_base = icon(holoMiniMaps[map.zMainStation])
+	var/icon/map_base = icon(holoMiniMaps[StationZLevel])
 
 	small_map.Blend(map_base,ICON_OVERLAY)
 	small_map.Blend(canvas,ICON_OVERLAY)
@@ -117,24 +127,24 @@
 
 	for(var/area/A in areas)
 		if(A.holomap_marker && (A.holomap_filter & HOLOMAP_EXTRA_STATIONMAP))
-			var/turf/T = A.getAreaCenter(map.zMainStation)
+			var/turf/T = A.getAreaCenter(StationZLevel)
 			if(T)
 				big_map.Blend(icon('icons/holomap_markers.dmi',A.holomap_marker), ICON_OVERLAY, T.x-8, T.y-8)
 
-	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAP
-	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP] = big_map
+	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAP+"_[StationZLevel]"
+	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP+"_[StationZLevel]"] = big_map
 
-	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH
-	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH] = small_map
+	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[StationZLevel]"
+	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[StationZLevel]"] = small_map
 
 	var/icon/small_map_east = turn(icon(small_map), 90)
-	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAPSMALL_EAST
-	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_EAST] = small_map_east
+	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAPSMALL_EAST+"_[StationZLevel]"
+	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_EAST+"_[StationZLevel]"] = small_map_east
 
 	var/icon/small_map_south = turn(icon(small_map_east), 90)
-	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAPSMALL_SOUTH
-	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_SOUTH] = small_map_south
+	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAPSMALL_SOUTH+"_[StationZLevel]"
+	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_SOUTH+"_[StationZLevel]"] = small_map_south
 
 	var/icon/small_map_west = turn(icon(small_map_south), 90)
-	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAPSMALL_WEST
-	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_WEST] = small_map_west
+	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAPSMALL_WEST+"_[StationZLevel]"
+	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_WEST+"_[StationZLevel]"] = small_map_west

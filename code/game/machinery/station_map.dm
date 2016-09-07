@@ -29,8 +29,12 @@ var/list/station_holomaps = list()
 	var/image/cursor = null
 	var/image/legend = null
 
+	var/original_zLevel = 1
+	var/bogus = 1
+
 /obj/machinery/station_map/New()
 	..()
+	original_zLevel = z
 	station_holomaps += src
 	flags |= ON_BORDER
 	component_parts = 0
@@ -62,16 +66,25 @@ var/list/station_holomaps = list()
 	return -1
 
 /obj/machinery/station_map/initialize()
-	station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP])
-	small_station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH])
+	if(!(HOLOMAP_EXTRA_STATIONMAP+"_[original_zLevel]"] in extraMiniMaps))
+		bogus = 1
+		station_map = image('icons/480x480.dmi', "stationmap")
+		legend = image('icons/effects/64x64.dmi', "notfound")
+		legend.pixel_x = 6*WORLD_ICON_SIZE
+		legend.pixel_y = 7*WORLD_ICON_SIZE
+		update_icon()
+		return
+
+	station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP+"_[original_zLevel]"])
+	small_station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[original_zLevel]"])
 	small_station_map.plane = LIGHTING_PLANE
 	small_station_map.layer = ABOVE_LIGHTING_LAYER
 	cursor = image('icons/holomap_markers.dmi', "you")
-	cursor.pixel_x = x-6
-	cursor.pixel_y = y-6
+	cursor.pixel_x = (x-6)*PIXEL_MULTIPLIER
+	cursor.pixel_y = (y-6)*PIXEL_MULTIPLIER
 	legend = image('icons/effects/64x64.dmi', "legend")
-	legend.pixel_x = 96
-	legend.pixel_y = 96
+	legend.pixel_x = 3*WORLD_ICON_SIZE
+	legend.pixel_y = 3*WORLD_ICON_SIZE
 	floor_markings = image('icons/turf/overlays.dmi', "station_map")
 	floor_markings.dir = dir
 	floor_markings.plane = ABOVE_TURF_PLANE
@@ -99,7 +112,10 @@ var/list/station_holomaps = list()
 			watching_mob.client.images |= station_map
 			watching_mob.callOnFace |= "\ref[src]"
 			watching_mob.callOnFace["\ref[src]"] = "checkPosition"
-			to_chat(user, "<span class='notice'>An hologram of the station appears before your eyes.</span>")
+			if(bogus)
+				to_chat(user, "<span class='warning'>The holomap failed to initialize. This area of space cannot be mapped.</span>")
+			else
+				to_chat(user, "<span class='notice'>An hologram of the station appears before your eyes.</span>")
 
 /obj/machinery/station_map/attack_paw(var/mob/user)
 	src.attack_hand(user)
@@ -147,23 +163,26 @@ var/list/station_holomaps = list()
 	else
 		icon_state = "station_map"
 
-		switch(dir)
-			if(NORTH)
-				small_station_map.icon = extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH]
-			if(SOUTH)
-				small_station_map.icon = extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_SOUTH]
-			if(EAST)
-				small_station_map.icon = extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_EAST]
-			if(WEST)
-				small_station_map.icon = extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_WEST]
+		if(bogus)
+			station_map.overlays.len = 0
+			station_map.overlays |= legend
+		else
+			switch(dir)
+				if(NORTH)
+					small_station_map.icon = extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[original_zLevel]"]
+				if(SOUTH)
+					small_station_map.icon = extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_SOUTH+"_[original_zLevel]"]
+				if(EAST)
+					small_station_map.icon = extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_EAST+"_[original_zLevel]"]
+				if(WEST)
+					small_station_map.icon = extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_WEST+"_[original_zLevel]"]
 
-		overlays |= small_station_map
-		station_map.overlays.len = 0
-		cursor.pixel_x = x-6
-		cursor.pixel_y = y-6
-		if(z == map.zMainStation)
+			overlays |= small_station_map
+			station_map.overlays.len = 0
+			cursor.pixel_x = (x-6)*PIXEL_MULTIPLIER
+			cursor.pixel_y = (y-6)*PIXEL_MULTIPLIER
 			station_map.overlays |= cursor
-		station_map.overlays |= legend
+			station_map.overlays |= legend
 
 	switch(dir)
 		if(NORTH)

@@ -557,6 +557,9 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "honk"
 	requires_power = 0
 
+/area/asteroid/clown/holomapAlwaysDraw()
+	return 0
+
 /area/tdome
 	name = "\improper Thunderdome"
 	icon_state = "thunder"
@@ -1737,6 +1740,9 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Ruskie DJ Station"
 	icon_state = "DJ"
 
+/area/djstation/holomapAlwaysDraw()
+	return 0
+
 /area/djstation/solars
 	name = "\improper DJ Station Solars"
 	icon_state = "DJ"
@@ -1779,6 +1785,9 @@ proc/process_adminbus_teleport_locs()
 /area/derelict/secret
 	name = "\improper Derelict Secret Room"
 	icon_state = "library"
+
+/area/derelict/secret/holomapAlwaysDraw()
+	return 0
 
 /area/derelict/bridge/access
 	name = "Derelict Control Room Access"

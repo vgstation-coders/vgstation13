@@ -37,6 +37,10 @@
 	var/tDomeY = 0
 	var/tDomeZ = 0
 
+	//Holomap offsets
+	var/list/holomap_offset_x = list()
+	var/list/holomap_offset_y = list()
+
 	//List for traitor items which are not in the map
 	var/list/unavailable_items
 
