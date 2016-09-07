@@ -10,4 +10,4 @@ delete-after: True
 # If you're using characters such as # ' : - or the like in your changelog, surround the entire change with quotes as shown in the second example. These quotes don't show up on the changelog once it's merged and prevent errors.
 # SCREW ANY OF THIS UP AND IT WON'T WORK.
 changes: 
- - bugfix: 35 percent chance per cycle to stunt and damage plant in hydroponics tray is now correctly applied to trays with less than 10u water in them, rather than those with more than 10u water.
+- bugfix: 35 percent chance per cycle to stunt and damage plant in hydroponics tray is now correctly applied to trays with less than 10u water in them, rather than those with more than 10u water.
