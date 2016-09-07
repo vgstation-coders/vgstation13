@@ -283,6 +283,7 @@
 	var/broken = 0
 	var/datum/song/song
 /obj/structure/piano/New()
+	dir = WEST
 	song = new("piano", src)
 	if(prob(50))
 		name = "space minimoog"
@@ -370,5 +371,6 @@
 	icon_state = "xylophone"
 
 /obj/structure/piano/xylophone/New()
+	..()
 	song = new("xylophone", src)
 	song.instrumentExt = "mid"
