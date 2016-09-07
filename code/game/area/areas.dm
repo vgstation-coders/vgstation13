@@ -68,7 +68,7 @@
 	var/center_y = 0
 
 	for(var/turf/T in area_turfs)
-		if(T.z == map.zMainStation)
+		if(T.z == zLevel)
 			center_x += T.x
 			center_y += T.y
 

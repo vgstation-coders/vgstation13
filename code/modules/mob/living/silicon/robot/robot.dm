@@ -12,6 +12,8 @@
 	var/custom_sprite = 0 //Due to all the sprites involved, a var for our custom borgs may be best
 	//var/crisis //Admin-settable for combat module use.
 
+	var/obj/item/device/station_map/station_holomap = null
+
 //Hud stuff
 
 	var/obj/screen/cells = null
@@ -114,6 +116,8 @@
 			lawupdate = 1
 		else
 			lawupdate = 0
+
+	station_holomap = new(src)
 
 	radio = new /obj/item/device/radio/borg(src)
 	if(!scrambledcodes && !camera)
@@ -527,6 +531,17 @@
 	else
 		C.toggled = 1
 		to_chat(src, "<span class='warning'>You enable [C.name].</span>")
+
+/mob/living/silicon/robot/verb/toggle_station_map()
+	set name = "Toggle Station Holomap"
+	set desc = "Toggle station holomap on your screen"
+	set category = "Robot Commands"
+	if(stat != CONSCIOUS)
+		return
+
+	station_holomap.toggleHolomap(src)
+
+	return
 
 /mob/living/silicon/robot/blob_act()
 	if(flags & INVULNERABLE)

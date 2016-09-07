@@ -2,7 +2,7 @@ var/list/station_holomaps = list()
 
 /obj/machinery/station_map
 	name = "station holomap"
-	desc = "A virtual map of the station."
+	desc = "A virtual map of the surrounding station."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "station_map"
 	anchored = 1
@@ -30,7 +30,7 @@ var/list/station_holomaps = list()
 	var/image/legend = null
 
 	var/original_zLevel = 1
-	var/bogus = 1
+	var/bogus = 0
 
 /obj/machinery/station_map/New()
 	..()
@@ -66,11 +66,12 @@ var/list/station_holomaps = list()
 	return -1
 
 /obj/machinery/station_map/initialize()
-	if(!(HOLOMAP_EXTRA_STATIONMAP+"_[original_zLevel]"] in extraMiniMaps))
+	original_zLevel = z
+	if(!(HOLOMAP_EXTRA_STATIONMAP+"_[original_zLevel]" in extraMiniMaps))
 		bogus = 1
 		station_map = image('icons/480x480.dmi', "stationmap")
 		legend = image('icons/effects/64x64.dmi', "notfound")
-		legend.pixel_x = 6*WORLD_ICON_SIZE
+		legend.pixel_x = 7*WORLD_ICON_SIZE
 		legend.pixel_y = 7*WORLD_ICON_SIZE
 		update_icon()
 		return
@@ -80,8 +81,12 @@ var/list/station_holomaps = list()
 	small_station_map.plane = LIGHTING_PLANE
 	small_station_map.layer = ABOVE_LIGHTING_LAYER
 	cursor = image('icons/holomap_markers.dmi', "you")
-	cursor.pixel_x = (x-6)*PIXEL_MULTIPLIER
-	cursor.pixel_y = (y-6)*PIXEL_MULTIPLIER
+	if(map.holomap_offset_x.len >= original_zLevel)
+		cursor.pixel_x = (x-6+map.holomap_offset_x[original_zLevel])*PIXEL_MULTIPLIER
+		cursor.pixel_y = (y-6+map.holomap_offset_y[original_zLevel])*PIXEL_MULTIPLIER
+	else
+		cursor.pixel_x = (x-6)*PIXEL_MULTIPLIER
+		cursor.pixel_y = (y-6)*PIXEL_MULTIPLIER
 	legend = image('icons/effects/64x64.dmi', "legend")
 	legend.pixel_x = 3*WORLD_ICON_SIZE
 	legend.pixel_y = 3*WORLD_ICON_SIZE
@@ -198,10 +203,11 @@ var/list/station_holomaps = list()
 			pixel_x = -1*WORLD_ICON_SIZE
 			pixel_y = 0
 
-	floor_markings.dir = dir
-	floor_markings.pixel_x = -1*pixel_x
-	floor_markings.pixel_y = -1*pixel_y
-	overlays |= floor_markings
+	if(floor_markings)
+		floor_markings.dir = dir
+		floor_markings.pixel_x = -1*pixel_x
+		floor_markings.pixel_y = -1*pixel_y
+		overlays |= floor_markings
 
 	if(panel_open)
 		overlays |= "station_map-panel"
@@ -220,3 +226,91 @@ var/list/station_holomaps = list()
 		if(3.0)
 			if (prob(25))
 				set_broken()
+
+//Portable holomaps, currently AI/Borg/MoMMI only
+/obj/item/device/station_map
+	name					= "portable station holomap"
+	desc					= "A virtual map of the surrounding station."
+	icon_state				= "station_map"
+	flags					= FPRINT
+	siemens_coefficient		= 1
+	force					= 5.0
+	w_class					= 2.0
+	throwforce				= 5.0
+	throw_range				= 15
+	throw_speed				= 3
+	starting_materials		= list(MAT_IRON = 50, MAT_GLASS = 20)
+	w_type					= RECYK_ELECTRONIC
+	melt_temperature		= MELTPOINT_SILICON
+	origin_tech				= Tc_MAGNETS + "=2;" + Tc_PROGRAMMING + "=2"
+
+	var/mob/watching_mob = null
+	var/image/station_map = null
+	var/image/cursor = null
+	var/image/legend = null
+
+/obj/item/device/station_map/attack_self(var/mob/user)
+	toggleHolomap(user)
+
+/obj/item/device/station_map/proc/toggleHolomap(var/mob/user,var/isAI=0)
+	if(watching_mob)
+		if(watching_mob == user)
+			stopWatching()
+			return
+		else
+			stopWatching()
+
+	if(user.hud_used && user.hud_used.holomap_obj)
+		watching_mob = user
+		var/turf/T = get_turf(user)
+		var/bogus = 0
+		if(!(HOLOMAP_EXTRA_STATIONMAP+"_[T.z]" in extraMiniMaps))
+			bogus = 1
+			station_map = image('icons/480x480.dmi', "stationmap")
+			legend = image('icons/effects/64x64.dmi', "notfound")
+			legend.pixel_x = 7*WORLD_ICON_SIZE
+			legend.pixel_y = 7*WORLD_ICON_SIZE
+			station_map.overlays |= legend
+		else
+			station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP+"_[T.z]"])
+			cursor = image('icons/holomap_markers.dmi', "you")
+			if(isAI)
+				T = get_turf(user.client.eye)
+			if(map.holomap_offset_x.len >= T.z)
+				cursor.pixel_x = (T.x-6+map.holomap_offset_x[T.z])*PIXEL_MULTIPLIER
+				cursor.pixel_y = (T.y-6+map.holomap_offset_y[T.z])*PIXEL_MULTIPLIER
+			else
+				cursor.pixel_x = (T.x-6)*PIXEL_MULTIPLIER
+				cursor.pixel_y = (T.y-6)*PIXEL_MULTIPLIER
+			legend = image('icons/effects/64x64.dmi', "legend")
+			legend.pixel_x = 3*WORLD_ICON_SIZE
+			legend.pixel_y = 3*WORLD_ICON_SIZE
+			station_map.overlays |= cursor
+			station_map.overlays |= legend
+
+		station_map.loc = user.hud_used.holomap_obj
+		station_map.alpha = 0
+		animate(station_map, alpha = 255, time = 5, easing = LINEAR_EASING)
+
+		user.client.images |= station_map
+
+		if(bogus)
+			to_chat(user, "<span class='warning'>The holomap failed to initialize. This area of space cannot be mapped.</span>")
+		else
+			to_chat(user, "<span class='notice'>An hologram of the station appears before your eyes.</span>")
+
+/obj/item/device/station_map/Destroy()
+	stopWatching()
+	..()
+
+/obj/item/device/station_map/dropped(mob/user)
+	stopWatching()
+
+/obj/item/device/station_map/proc/stopWatching()
+	if(watching_mob)
+		if(watching_mob.client)
+			var/mob/M = watching_mob
+			spawn(5)//we give it time to fade out
+				M.client.images -= station_map
+	watching_mob = null
+	animate(station_map, alpha = 0, time = 5, easing = LINEAR_EASING)

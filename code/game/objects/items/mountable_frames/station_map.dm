@@ -4,7 +4,7 @@
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "station_map_frame0"
 	flags = FPRINT
-	mount_reqs = list("simfloor", "nospace")
+	mount_reqs = list("nospace")
 
 /obj/item/mounted/frame/station_map/do_build(turf/on_wall, mob/user)
 	new /obj/machinery/station_map_frame(get_turf(src), get_dir(user, on_wall))
