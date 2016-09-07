@@ -275,15 +275,21 @@
 		return 1
 //////////////////////////////////////////////////////////////////////////
 /obj/structure/piano
-	name = "space minimoog"
+	name = "space piano"
+	desc = "This is a space piano, like a regular piano, but always in tune! Even if the musician isn't."
 	icon = 'icons/obj/musician.dmi'
-	icon_state = "minimoog"
+	icon_state = "piano"
 	anchored = 1
 	density = 1
 	var/broken = 0
 	var/datum/song/song
-/obj/structure/piano/New()
-	dir = WEST
+
+/obj/structure/piano/minimoog
+	name = "space minimoog"
+	icon_state = "minimoog"
+	desc = "This is a minimoog, like a space piano, but more spacey!"
+
+/obj/structure/piano/random/New()
 	song = new("piano", src)
 	if(prob(50))
 		name = "space minimoog"
@@ -293,10 +299,12 @@
 		name = "space piano"
 		desc = "This is a space piano, like a regular piano, but always in tune! Even if the musician isn't."
 		icon_state = "piano"
+
 /obj/structure/piano/Destroy()
 	qdel(song)
 	song = null
 	..()
+
 /obj/structure/piano/initialize()
 	song.tempo = song.sanitize_tempo(song.tempo) // tick_lag isn't set when the map is loaded
 	..()
