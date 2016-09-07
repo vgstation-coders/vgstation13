@@ -185,8 +185,12 @@ var/list/station_holomaps = list()
 
 			overlays |= small_station_map
 			station_map.overlays.len = 0
-			cursor.pixel_x = (x-6)*PIXEL_MULTIPLIER
-			cursor.pixel_y = (y-6)*PIXEL_MULTIPLIER
+			if(map.holomap_offset_x.len >= original_zLevel)
+				cursor.pixel_x = (x-6+map.holomap_offset_x[original_zLevel])*PIXEL_MULTIPLIER
+				cursor.pixel_y = (y-6+map.holomap_offset_y[original_zLevel])*PIXEL_MULTIPLIER
+			else
+				cursor.pixel_x = (x-6)*PIXEL_MULTIPLIER
+				cursor.pixel_y = (y-6)*PIXEL_MULTIPLIER
 			station_map.overlays |= cursor
 			station_map.overlays |= legend
 
