@@ -89,7 +89,7 @@
 		if(draw_warnings)
 			update_icon_after_process = 1
 	if(prob(35))
-		if(waterlevel < 10)
+		if(waterlevel > 10)
 			health += healthmod
 		else
 			affect_growth(-1)
