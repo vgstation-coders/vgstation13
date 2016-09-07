@@ -17,6 +17,25 @@
 	var/list/added_languages
 	var/list/upgrades = list()
 
+/obj/item/weapon/robot_module/Destroy()
+	if(istype(loc, /mob/living/silicon/robot))
+		var/mob/living/silicon/robot/R = loc
+		R.remove_module() //Helps remove screen references on robot end
+
+	for(var/obj/A in modules)
+		qdel(A)
+	modules = null
+	if(emag)
+		qdel(emag)
+		emag = null
+	if(jetpack)
+		qdel(jetpack)
+		jetpack = null
+	for(var/obj/A in upgrades)
+		qdel(upgrades)
+	upgrades = null
+	..()
+
 /obj/item/weapon/robot_module/proc/recharge_consumable()
 	return
 

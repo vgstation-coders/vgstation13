@@ -664,11 +664,11 @@ Thanks.
 							if (locate(/obj/item/weapon/grab, M.grabbed_by.len))
 								ok = 0
 						if (ok)
-							var/atom/movable/t = M.pulling
+							var/atom/movable/secondarypull = M.pulling
 							M.stop_pulling()
 							pulling.Move(T, get_dir(pulling, T))
-							if(M)
-								M.start_pulling(t)
+							if(M && secondarypull)
+								M.start_pulling(secondarypull)
 					else
 						if (pulling)
 							pulling.Move(T, get_dir(pulling, T))

@@ -260,3 +260,8 @@
 		returnToPool(hud)
 	hud = null
 	..()
+
+/mob/proc/grab_check(mob/victim)
+	if(victim == src || victim.anchored || lying)
+		return 1
+	return 0

@@ -47,7 +47,7 @@
 		icon_state += "_words"
 
 /obj/item/weapon/paper/examine(mob/user)
-	if(in_range(user, src))
+	if(user.range_check(src))
 		var/info_2 = ""
 		if(img)
 			user << browse_rsc(img.img, "tmp_photo.png")
@@ -61,6 +61,17 @@
 	else
 		..() //Only show a regular description if it is too far away to read.
 		to_chat(user, "<span class='notice'>It is too far away to read.</span>")
+
+/mob/proc/range_check(paper)
+	return Adjacent(paper)
+
+/mob/dead/range_check(paper)
+	return 1
+
+/mob/living/silicon/ai/range_check(paper)
+	if(ai_flags & HIGHRESCAMS)
+		return 1
+	return ..()
 
 /obj/item/weapon/paper/verb/rename()
 	set name = "Rename paper"

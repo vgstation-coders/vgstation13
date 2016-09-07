@@ -549,12 +549,12 @@
 	if(!Process_Spacemove(,1))
 		return
 	if(ismob(pulling))
-		var/mob/M = pulling
-		var/atom/movable/t = M.pulling
-		M.stop_pulling()
-		step(pulling, get_dir(pulling.loc, A))
-		if(M)
-			M.start_pulling(t)
+		var/mob/mobpulled = pulling
+		var/atom/movable/secondarypull = mobpulled.pulling
+		mobpulled.stop_pulling()
+		step(mobpulled, get_dir(mobpulled.loc, A))
+		if(mobpulled && secondarypull)
+			mobpulled.start_pulling(secondarypull)
 	else
 		step(pulling, get_dir(pulling.loc, A))
 	return

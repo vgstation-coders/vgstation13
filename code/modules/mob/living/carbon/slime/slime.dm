@@ -478,7 +478,7 @@
 			help_shake_act(M)
 
 		if (I_GRAB)
-			if (M == src)
+			if (M.grab_check(src))
 				return
 			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
 
@@ -569,7 +569,7 @@
 						O.show_message(text("<span class='danger'>[] has attempted to lunge at [name]!</span>", M), 1)
 
 		if (I_GRAB)
-			if (M == src)
+			if (M.grab_check(src))
 				return
 			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
 

@@ -69,20 +69,15 @@
 	if(..())
 		return FAILED_TO_ADD
 
-	R.uneq_all()
+	qdel(R.module)
 	if(R.hands)
 		R.hands.icon_state = "nomod"
 	R.icon_state = "robot"
 	R.base_icon = "robot"
-	R.module.remove_languages(R)
-	qdel(R.module)
-	R.module = null
 	R.camera.network.Remove(list("Engineering","Medical","MINE"))
 	R.updatename("Default")
 	R.status_flags |= CANPUSH
 	R.updateicon()
-	R.luminosity = 0 //flashlight fix
-	R.resurrect()
 
 /obj/item/borg/upgrade/rename
 	name = "robot reclassification board"
@@ -121,7 +116,7 @@
 				R.key = ghost.key
 
 	R.stat = CONSCIOUS
-
+	R.resurrect()
 
 /obj/item/borg/upgrade/vtec
 	name = "robotic VTEC Module"

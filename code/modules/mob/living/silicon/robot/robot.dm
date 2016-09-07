@@ -967,7 +967,7 @@
 					O.show_message(text("<span class='notice'>[M] caresses [src]'s plating with its scythe like arm.</span>"), 1)
 
 		if (I_GRAB)
-			if (M == src)
+			if (M.grab_check(src))
 				return
 			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
 
@@ -1560,3 +1560,15 @@
 
 /mob/living/silicon/robot/CheckSlip()
 	return (istype(module,/obj/item/weapon/robot_module/engineering)? -1 : 0)
+
+//Help with the garbage collection of the module on the robot end
+/mob/living/silicon/robot/proc/remove_module()
+	uneq_all()
+	if(hud_used)
+		shown_robot_modules = 0
+		hud_used.update_robot_modules_display()
+	if(client)
+		for(var/obj/A in module.upgrades)
+			client.screen -= A
+	module.remove_languages(src)
+	module = null
