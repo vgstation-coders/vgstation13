@@ -9,6 +9,9 @@
 	var/alert_pressure = 80*ONE_ATMOSPHERE
 	var/baseicon=""
 
+/obj/machinery/atmospherics/pipe/node_plane()
+	return FLOAT_PLANE
+
 /obj/machinery/atmospherics/pipe/update_planes_and_layers()
 	if (level == LEVEL_BELOW_FLOOR)
 		plane = ABOVE_PLATING_PLANE
@@ -52,6 +55,17 @@
 		overlays += centre_overlay
 	..()
 
+/obj/machinery/atmospherics/pipe/t_scanner_expose()
+	if (exposed())
+		return
+
+	invisibility = 0
+	plane = ABOVE_TURF_PLANE
+	layer = EXPOSED_PIPE_LAYER
+
+	spawn(1 SECONDS)
+		update_icon()
+		update_planes_and_layers()
 
 
 /obj/machinery/atmospherics/pipe/return_air()

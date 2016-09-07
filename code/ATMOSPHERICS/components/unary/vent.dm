@@ -52,7 +52,7 @@
 		bezel.plane = ABOVE_PLATING_PLANE
 
 	else
-		bezel.layer = EXPOSED_PIPE_LAYER
+		bezel.layer = EXPOSED_PIPE_LAYER + 1
 		bezel.plane = ABOVE_TURF_PLANE
 
 	underlays += bezel

@@ -79,8 +79,8 @@ What is the naming convention for planes or layers?
 	#define DISPOSALS_PIPE_LAYER	1
 	#define LATTICE_LAYER			2
 	#define PIPE_LAYER				3
-	#define VENT_BEZEL_LAYER		4
-	#define WIRE_LAYER				5
+	#define WIRE_LAYER				4
+	#define VENT_BEZEL_LAYER		5
 	#define WIRE_TERMINAL_LAYER		6
 
 #define TURF_PLANE				-19
