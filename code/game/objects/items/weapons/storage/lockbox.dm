@@ -26,7 +26,7 @@
 			gun.desc += " It doesn't look to be in the best shape."
 	if(istype(I, /obj/item/clothing/suit/armor/laserproof))
 		var/obj/item/clothing/suit/armor/laserproof/laserproof = I
-		if(!laserproof.damaged
+		if(!laserproof.damaged)
 			if(prob(75))
 				laserproof.basereflectchance = 0
 			if(prob(40))
