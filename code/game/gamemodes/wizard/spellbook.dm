@@ -36,6 +36,7 @@
 	/spell/targeted/flesh_to_stone,
 	/spell/targeted/buttbots_revenge,
 	/spell/aoe_turf/conjure/pontiac,
+	/spell/aoe_turf/conjure/arcane_golem,
 	/spell/noclothes
 	)
 

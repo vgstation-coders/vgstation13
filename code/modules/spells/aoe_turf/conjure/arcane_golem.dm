@@ -16,7 +16,7 @@
 	summon_type = list(/mob/living/simple_animal/arcane_golem)
 	duration = 0
 
-	hud_state = "wiz_mobile"
+	hud_state = "wiz_summon_golem"
 
 	var/golem_limit = 1
 	var/list/golems = list()
@@ -28,7 +28,7 @@
 
 /spell/aoe_turf/conjure/arcane_golem/cast(list/targets, mob/user)
 	//Link the golem to its master
-	newVars = list("master" = user)
+	newVars = list("master_spell" = src)
 	user.on_spellcast.Add(src, "copy_spellcast")
 
 	check_golems()
@@ -43,7 +43,12 @@
 
 /spell/aoe_turf/conjure/arcane_golem/proc/check_golems()
 	for(var/mob/living/simple_animal/arcane_golem/AG in golems)
-		if(AG.isDead() || !AG.master || AG.master.isDead())
+		if(!AG.master_spell)
+			continue
+
+		var/mob/master = AG.master_spell.holder
+		if(AG.isDead() || !istype(master) || master.isDead())
+			AG.master_spell = null
 			golems.Remove(AG)
 
 /spell/aoe_turf/conjure/arcane_golem/on_creation(mob/living/simple_animal/arcane_golem/AG, mob/user)
@@ -53,7 +58,7 @@
 
 		var/spell/copy = new S.type
 		copy.spell_flags = S.spell_flags &= ~NEEDSCLOTHES //Remove robes requirement
-		copy.charge_max = copy.charge_max * 0.25 //Lower cooldown
+		copy.charge_max = 0 //This is gonna suck with player controlled golems
 
 		AG.add_spell(copy)
 
@@ -64,12 +69,14 @@
 	var/spell/spell_to_copy = arguments["spell"]
 	var/target = arguments["target"]
 
-	if(!istype(spell_to_copy))
+	if(!istype(spell_to_copy) || !istype(spell_to_copy.holder))
 		return
 
 	var/turf/caster_turf = get_turf(spell_to_copy.holder)
 	if(!istype(caster_turf))
 		return
+
+	var/cast_dir = spell_to_copy.holder.dir
 
 	//Convert the target argument to a list of targets
 	var/list/targets
@@ -84,11 +91,14 @@
 		if(!istype(cast_spell))
 			continue
 
-		if(!(cast_spell.spell_flags & WAIT_FOR_CLICK)) //Not targeted at something - let the spell calculate the targets
+		//If the spell is targeted, OR the target can't be picked by the computer (because there's a popup menu or something like that)
+		//Use the same target as the main caster
+		if(!(cast_spell.spell_flags & WAIT_FOR_CLICK) && !(cast_spell.autocast_flags & AUTOCAST_NOTARGET))
 			targets = cast_spell.choose_targets(AG)
 
 		//Golems cast spells AFTER the wizard
 		spawn(rand(1,3))
+			AG.change_dir(cast_dir) //Face the same direction as the wizard
 			AG.cast_spell(cast_spell, targets)
 
 //UPGRADES

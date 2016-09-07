@@ -44,6 +44,12 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	//For AOE spells:
 		//IGNOREDENSE to ignore dense turfs in selection
 		//IGNORESPACE to ignore space turfs in selection
+
+	var/autocast_flags
+	//Flags for making AI-controlled spellcasters' life easier
+	//Possible flags:
+	//AUTOCAST_NOTARGET means that the AI can't pick a target for this spell by itself - a target must be given to it
+
 	var/invocation = "HURP DURP"	//what is uttered when the wizard casts the spell
 	var/invocation_type = SpI_NONE	//can be none, whisper, shout, and emote
 	var/range = 7					//the range of the spell; outer radius for aoe spells
