@@ -1,4 +1,0 @@
-author: JMWTurner
-delete-after: true
-changes:
-  - bugfix: Cameras no longer take pictures as you place them on a table.
