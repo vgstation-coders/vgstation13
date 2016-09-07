@@ -2706,7 +2706,7 @@
 	result_amount = 3
 
 /datum/chemical_reaction/antivenom
-	name = "Anti venom"
+	name = "Anti-Venom"
 	id = AVENOM
 	result = AVENOM
 	required_reagents = list(MERCURY = 1, SVENOM = 1, ANTI_TOXIN = 1)
