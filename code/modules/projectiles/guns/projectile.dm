@@ -59,11 +59,9 @@
 			to_chat(usr, "<span class='notice'>You begin unjamming \the [name]...</span>")
 			if(do_after(usr,src,50))
 				jammed = 0
-				var/obj/item/ammo_casing/ACcham = chambered
-				ACcham.forceMove(get_turf(src))
-				chambered = null
-				var/dropped_bullets = 1
-				var/to_drop = rand(3, 6)
+				in_chamber = null
+				var/dropped_bullets
+				var/to_drop = rand(stored_magazine.max_ammo/4, stored_magazine.max_ammo/3)
 				for(var/i = 1; i<=min(to_drop, stored_magazine.stored_ammo.len); i++)
 					var/obj/item/ammo_casing/AC = stored_magazine.stored_ammo[1]
 					stored_magazine.stored_ammo -= AC
@@ -174,7 +172,7 @@
 					chambered = AC
 					num_loaded++
 					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
-			else if(getAmmo() < max_shells)
+			else if(getAmmo() < max_shells && load_method != MAGAZINE)
 				if(user.drop_item(AC, src))
 					loaded += AC
 					num_loaded++
@@ -257,4 +255,4 @@
 		M.visible_message("*click click*", "<span class='danger'>*click*</span>")
 		playsound(M, empty_sound, 100, 1)
 		return 0
-	..()
+	return ..()

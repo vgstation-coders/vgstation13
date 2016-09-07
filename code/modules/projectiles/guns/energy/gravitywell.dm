@@ -67,6 +67,7 @@
 		new/obj/effect/overlay/gravitywell(loc)
 		M.drop_item(src, force_drop = 1)
 		qdel(src)
-		log_admin("\[[time_stamp()]\] <b>[key_name(M)]</b> has created a gravity well via gun failure at ([loc.x],[loc.y],[loc.z])")
-		message_admins("\[[time_stamp()]\] <b>[key_name(M)]</b> has created a gravity well via gun failure at (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[loc.x];Y=[loc.y];Z=[loc.z]'>([loc.x],[loc.y],[loc.z])</a>)", 1)
-	..()
+		log_admin("\[[time_stamp()]\] <b>[key_name(M)]</b> has created a gravity well via gun failure at ([M.x],[M.y],[M.z])")
+		message_admins("\[[time_stamp()]\] <b>[key_name(M)]</b> has created a gravity well via gun failure at (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>([M.x],[M.y],[M.z])</a>)", 1)
+		return 0
+	return ..()

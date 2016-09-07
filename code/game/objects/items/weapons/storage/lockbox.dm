@@ -21,7 +21,9 @@
 /obj/item/weapon/storage/lockbox/proc/damage(var/obj/item/I)
 	if(istype(I, /obj/item/weapon/gun))
 		var/obj/item/weapon/gun/gun = I
-		gun.damaged = 1
+		if(!gun.damaged)
+			gun.damaged = 1
+			gun.desc += " It doesn't look to be in the best shape."
 
 /obj/item/weapon/storage/lockbox/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/card/id))
@@ -105,23 +107,26 @@
 				if(prob(80))
 					locked = !locked
 					src.update_icon()
-					for(var/atom/movable/A as mob|obj in src)
-						damage(A)
-						remove_from_storage(A, loc)
+					if(!locked)
+						for(var/atom/movable/A as mob|obj in src)
+							damage(A)
+							remove_from_storage(A, loc)
 			if(2)
 				if(prob(50))
 					locked = !locked
 					src.update_icon()
-					for(var/atom/movable/A as mob|obj in src)
-						damage(A)
-						remove_from_storage(A, loc)
+					if(!locked)
+						for(var/atom/movable/A as mob|obj in src)
+							damage(A)
+							remove_from_storage(A, loc)
 			if(3)
 				if(prob(25))
 					locked = !locked
 					src.update_icon()
-					for(var/atom/movable/A as mob|obj in src)
-						damage(A)
-						remove_from_storage(A, loc)
+					if(!locked)
+						for(var/atom/movable/A as mob|obj in src)
+							damage(A)
+							remove_from_storage(A, loc)
 
 /obj/item/weapon/storage/lockbox/update_icon()
 	..()

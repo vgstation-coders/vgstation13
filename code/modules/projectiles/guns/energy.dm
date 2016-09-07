@@ -73,4 +73,4 @@
 		power_supply.use(charge_cost)
 		to_chat(M, "<span class='warning'>The [name] buzzes.</span>")
 		return 1
-	..()
+	return ..()

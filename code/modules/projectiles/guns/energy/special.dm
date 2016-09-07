@@ -33,10 +33,10 @@
 
 /obj/item/weapon/gun/energy/decloner/failure_check(var/mob/living/carbon/human/M)
 	if(damaged && prob(25))
-		M.apply_effect(rand(10,30), IRRADIATE)
+		M.apply_effect(rand(15,30), IRRADIATE)
 		to_chat(M, "<span class='warning'>The [name] feels warm for a moment.</span>")
 		return 1
-	if(damaged && prob(10))
+	if(damaged && prob(15))
 		M.adjustCloneLoss(rand(5,15))
 		to_chat(M, "<span class='warning'>The [name] feels warm for a moment.</span>")
 		return 1
@@ -47,7 +47,7 @@
 		M.drop_item(src, force_drop = 1)
 		qdel(src)
 		return 0
-	..()
+	return ..()
 
 var/available_staff_transforms=list("monkey","robot","slime","xeno","human","furry","frankenstein")
 #define SOC_CHANGETYPE_COOLDOWN 2 MINUTES
@@ -514,7 +514,7 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 
 obj/item/weapon/gun/energy/ricochet/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
-	if(damaged && prob(50))
+	if(damaged && prob(60))
 		target = get_ranged_target_turf(user, pick(diagonal), 7)
 	..()
 

@@ -46,9 +46,13 @@
 		for(var/i = 1; i <= to_shoot; i++)
 			..()
 			shots_fired++
-			if(!user.contents.Find(src))
+			if(!user.contents.Find(src) || jammed)
 				break
-			if(damaged && prob(max(0, shots_fired-burst_count*4)))
+			if(damaged && shots_fired > burst_count)
+				recoil = 1 + min(shots_fired - burst_count, 9)
+				spawn(10)
+				recoil = initial(recoil)
+			if(damaged && prob(max(0, shots_fired - burst_count * 4)))
 				to_chat(user, "<span class='danger'>The [name] explodes!.</span>")
 				explosion(get_turf(loc), -1, 0, 2)
 				user.drop_item(src, force_drop = 1)
@@ -63,7 +67,7 @@
 	if(damaged && !burstfire && prob(5))
 		burstfire = 1
 		return 1
-	..()
+	return ..()
 
 /obj/item/weapon/gun/projectile/automatic/lockbox
 	mag_type = "/obj/item/ammo_storage/magazine/smg9mm/empty"

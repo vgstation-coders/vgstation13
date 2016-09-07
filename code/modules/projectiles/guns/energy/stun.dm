@@ -71,7 +71,7 @@
 		fire_delay += 2
 		to_chat(M, "<span class='warning'>The [name] buzzes.</span>")
 		return 1
-	if(damaged && prob(10))
+	if(damaged && prob(15))
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(3, 1, src)
 		s.start()
@@ -85,7 +85,7 @@
 		M.drop_item(src, force_drop = 1)
 		qdel(src)
 		return 0
-	..()
+	return ..()
 
 
 
@@ -144,16 +144,17 @@
 		silenced = 0
 		to_chat(M, "<span class='warning'>The [name] makes a noise.</span>")
 		return 1
-	if(damaged && prob(20))
-		M.apply_effect(rand(10,25), IRRADIATE)
+	if(damaged && prob(25))
+		M.apply_effect(rand(15,30), IRRADIATE)
 		to_chat(M, "<span class='warning'>The [name] feels warm for a moment.</span>")
 		return 1
-	if(damaged && prob(5))
+	if(damaged && prob(10))
 		power_supply.maxcharge = 0
 		power_supply.charge = 0
+		in_chamber = null
 		processing_objects.Remove(src)
 		to_chat(M, "<span class='warning'>The [name] fizzles.</span>")
 		return 0
-	..()
+	return ..()
 
 
