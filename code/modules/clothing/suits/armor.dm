@@ -119,6 +119,7 @@
 	blood_overlay_type = "armor"
 	armor = list(melee = 10, bullet = 10, laser = 80, energy = 50, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0
+	var/basereflectchance = 60
 
 /obj/item/clothing/suit/armor/swat/officer
 	name = "officer jacket"

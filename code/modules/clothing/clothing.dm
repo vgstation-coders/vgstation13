@@ -12,6 +12,8 @@
 
 	var/list/obj/item/clothing/accessory/accessories = list()
 
+	var/damaged = 0 //Set to one if in a lockbox that was broken open
+
 /obj/item/clothing/examine(mob/user)
 	..()
 	for(var/obj/item/clothing/accessory/A in accessories)

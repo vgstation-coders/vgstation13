@@ -24,6 +24,40 @@
 		if(!gun.damaged)
 			gun.damaged = 1
 			gun.desc += " It doesn't look to be in the best shape."
+	if(istype(I, /obj/item/clothing/suit/armor/laserproof))
+		var/obj/item/clothing/suit/armor/laserproof/laserproof = I
+		if(!laserproof.damaged
+			if(prob(75))
+				laserproof.basereflectchance = 0
+			if(prob(40))
+				laserproof.slowdown++
+			if(prob(40))
+				laserproof.slowdown++
+	if(istype(I, /obj/item/clothing/glasses/sunglasses/sechud))
+		var/obj/item/clothing/glasses/sunglasses/sechud/sechud = I
+		if(!sechud.damaged)
+			if(prob(15))
+				new /obj/item/weapon/shard(loc)
+				playsound(get_turf(src), "shatter", 50, 1)
+				qdel(sechud)
+				return
+			if(prob(15))
+				new /obj/item/clothing/glasses/sunglasses(loc)
+				playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
+				qdel(sechud)
+				return
+			if(prob(55))
+				sechud.eyeprot = -2
+			if(prob(55))
+				qdel(sechud.hud)
+				sechud.hud = null
+	if(istype(I, /obj/item/clothing))
+		var/obj/item/clothing/clothing = I
+		if(!clothing.damaged)
+			clothing.damaged = 1
+			clothing.desc += " It doesn't look to be in the best shape."
+			for(var/A in clothing.armor)
+				A -= round(rand(A/2, A))
 
 /obj/item/weapon/storage/lockbox/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/card/id))
