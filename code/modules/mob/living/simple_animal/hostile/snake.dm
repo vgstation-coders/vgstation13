@@ -4,6 +4,7 @@
 	icon_living = "poisonsnake"
 	icon_dead = "poisonsnake_dead"
 	icon_gib = "poisonsnake_dead"
+
 	speak = list("hiss", "hisssss", "hissss")
 	maxHealth = 10
 	health = 10
@@ -34,5 +35,5 @@
 		var/mob/living/L = target
 		if(L.reagents)
 			if(prob(poison_chance))
-				src.visible_message("<span class='warning'>\the [src] injects a powerful toxin into [L]!</span>")
+				visible_message("<span class='warning'>\the [src] injects a powerful toxin into [L]!</span>")
 				L.reagents.add_reagent(poison_type, poison_per_bite)
