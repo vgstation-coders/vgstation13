@@ -139,7 +139,7 @@
 	w_type = RECYK_ELECTRONIC
 	projectile_type = "/obj/item/projectile/energy/bolt/large"
 
-/obj/item/weapon/gun/energy/crossbow/largecrossbow/failure_check(var/mob/living/carbon/human/M)
+/obj/item/weapon/gun/energy/crossbow/failure_check(var/mob/living/carbon/human/M)
 	if(damaged && silenced && prob(50))
 		silenced = 0
 		to_chat(M, "<span class='warning'>The [name] makes a noise.</span>")
