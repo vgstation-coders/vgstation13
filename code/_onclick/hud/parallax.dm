@@ -6,6 +6,9 @@
 #define GRID_WIDTH 3
 
 var/list/parallax_on_clients = list()
+var/parallax_initialized = 0
+var/space_color = "#050505"
+var/list/parallax_icon[(GRID_WIDTH**2)*3]
 
 /obj/screen/parallax
 	var/base_offset_x = 0
