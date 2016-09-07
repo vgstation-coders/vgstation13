@@ -34,7 +34,7 @@ var/list/station_holomaps = list()
 
 /obj/machinery/station_map/New()
 	..()
-	original_zLevel = z
+	original_zLevel = loc.z
 	station_holomaps += src
 	flags |= ON_BORDER
 	component_parts = 0
@@ -66,7 +66,8 @@ var/list/station_holomaps = list()
 	return -1
 
 /obj/machinery/station_map/initialize()
-	original_zLevel = z
+	bogus = 0
+	original_zLevel = loc.z
 	if(!(HOLOMAP_EXTRA_STATIONMAP+"_[original_zLevel]" in extraMiniMaps))
 		bogus = 1
 		station_map = image('icons/480x480.dmi', "stationmap")
