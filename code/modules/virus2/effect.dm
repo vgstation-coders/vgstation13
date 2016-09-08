@@ -894,17 +894,20 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	name = "Babel Syndrome"
 	stage = 4
 	var/list/original_languages = list()
+	var/has_been_triggered = 0
 
 
 /datum/disease2/effect/babel/activate(var/mob/living/carbon/mob,var/multiplier)
+	if(has_been_triggered)
+		return
+	has_been_triggered = 1
 	if(mob.languages.len <= 1)
 		to_chat(mob, "You realize your knowledge of language is just fine, and that you were panicking over nothing.")
 		return
 
-	while(mob.languages.len > 0)
-		var/datum/language/L = pick(mob.languages)
+	for(var/datum/language/L in mob.languages)
 		original_languages += L.name
-		mob.remove_language(L)
+		mob.remove_language(L.name)
 
 	var/list/new_languages = list()
 	for(var/L in all_languages)
