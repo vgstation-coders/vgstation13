@@ -31,10 +31,7 @@
 		if(!istype(spell_to_cast))
 			return FALSE
 
-	if(spell_to_cast.autocast_flags & AUTOCAST_PERFORM)
-		spell_to_cast.perform(src)
-	else
-		spell_to_cast.cast(src, 0, targets)
+	spell_to_cast.perform(src, 0, targets)
 
 /mob/proc/remove_spell(var/spell/spell_to_remove)
 	if(!spell_to_remove || !istype(spell_to_remove))

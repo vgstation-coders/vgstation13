@@ -5,7 +5,6 @@
 	abbreviation = "MS"
 
 	spell_flags = NEEDSCLOTHES
-	autocast_flags = AUTOCAST_PERFORM
 
 	selection_type = "range"
 	school = "transmutation"

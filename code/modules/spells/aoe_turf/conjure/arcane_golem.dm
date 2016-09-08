@@ -99,7 +99,7 @@
 		//Golems cast spells AFTER the wizard
 		spawn(rand(1,3))
 			AG.change_dir(cast_dir) //Face the same direction as the wizard
-			AG.cast_spell(cast_spell, targets)
+			AG.cast_spell(cast_spell, targets.Copy())
 
 //UPGRADES
 /spell/aoe_turf/conjure/arcane_golem/apply_upgrade(upgrade_type)
