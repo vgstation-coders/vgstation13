@@ -91,6 +91,8 @@
 		if(!istype(cast_spell))
 			continue
 
+		AG.change_dir(cast_dir) //Face the same direction as the wizard
+
 		//If the spell is targeted, OR the target can't be picked by the computer (because there's a popup menu or something like that)
 		//Use the same target as the main caster
 		if(!(cast_spell.spell_flags & WAIT_FOR_CLICK) && !(cast_spell.autocast_flags & AUTOCAST_NOTARGET))
@@ -98,7 +100,6 @@
 
 		//Golems cast spells AFTER the wizard
 		spawn(rand(1,3))
-			AG.change_dir(cast_dir) //Face the same direction as the wizard
 			AG.cast_spell(cast_spell, targets.Copy())
 
 //UPGRADES

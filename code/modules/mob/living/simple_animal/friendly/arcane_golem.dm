@@ -4,6 +4,9 @@
 
 	icon = 'icons/mob/critter.dmi'
 	icon_state = "arcane_golem"
+	icon_living = "arcane_golem"
+	treadmill_speed = 0
+
 
 	health = 50
 	maxHealth = 50
@@ -23,7 +26,9 @@
 	max_co2 = 0
 	min_n2 = 0
 	max_n2 = 0
-	minbodytemp = 0
+	heat_damage_per_tick = 0
+	cold_damage_per_tick = 0
+
 
 /mob/living/simple_animal/arcane_golem/Destroy()
 	..()
@@ -51,7 +56,11 @@
 
 		//Alive - follow the master
 		if(!isDead())
-			step_to(src, master, 3)
+			//Don't wander around if wizard is nearby - follow him instead
+			if(step_to(src, master, 2))
+				wander = FALSE
+			else
+				wander = TRUE
 
 /mob/living/simple_animal/arcane_golem/Die()
 	..()
