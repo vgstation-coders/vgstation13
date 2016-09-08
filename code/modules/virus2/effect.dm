@@ -908,8 +908,6 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	for(var/datum/language/L in mob.languages)
 		original_languages += L.name
 		mob.remove_language(L.name)
-		if(L in mob.languages)
-			to_chat(world, "AAAAAAA BROKEN PANIC")
 
 	var/list/new_languages = list()
 	for(var/L in all_languages)
