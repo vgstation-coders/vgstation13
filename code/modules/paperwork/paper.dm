@@ -282,6 +282,10 @@
 
 			update_icon()
 
+			if(istype(loc, /obj/item/weapon/clipboard))
+				var/obj/item/weapon/clipboard/C = loc
+				C.update_icon()
+
 	if(href_list["help"])
 		openhelp(usr)
 
