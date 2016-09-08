@@ -1,2 +1,4 @@
 author: ArthurDentist
-changes: []
+changes:
+  - rscadd: Added poisonous snake mobs. Poisonous snakes are incredibly weak but deadly in large numbers. They can inject you with Snake Venom which will weaken you and cause toxin damage over time.
+  - rscadd: Added an anti-venom reagent alongside a recipe to make it. Anti-venom counteracts snake venom entirely. The recipe for anti-venom is 1 Part mercury, 1 Part anti-toxin and 1 part snake venom.
