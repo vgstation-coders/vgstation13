@@ -1,0 +1,7 @@
+author: PJB3005
+delete-after: True
+changes:
+  - imageadd: "Gave the pipe layer manifold a new sprite made by DragonBro, and made the individual pipes all separated so they all colour nicely."
+  - bugfix: "Fixes a lot of bugs Celt made when he did his pipe colouration MR a year ago."
+  - bugfix: "Pipes now use PLANES to appear below floor tiles. The result? layered pipes don't look weird when part of them is under a floor tile and part not."
+  - tweak: "Applied the above technique to vents too, their bezel now appears underneath the floor if they're partially under it with layers, but the vent itself is always visible."

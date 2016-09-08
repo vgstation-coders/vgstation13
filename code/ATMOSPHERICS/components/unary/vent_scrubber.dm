@@ -29,6 +29,8 @@
 
 	machine_flags		= MULTITOOL_MENU
 
+	ex_node_offset = 3
+
 /obj/machinery/atmospherics/unary/vent_scrubber/on
 	on					= 1
 	icon_state			= "on"
@@ -52,25 +54,25 @@
 		src.broadcast_status()
 
 /obj/machinery/atmospherics/unary/vent_scrubber/update_icon()
-	if(welded)
-		icon_state = "hweld"
+	var/prefix = exposed() ? "" : "h"
+	if (welded)
+		icon_state = prefix + "weld"
 		return
-	var/suffix=""
-	if(scrub_O2)
-		suffix="1"
-	if(node && on && !(stat & (NOPOWER|BROKEN)))
-		if(scrubbing)
-			icon_state = "hon[suffix]"
+
+	icon_state = prefix + "off"
+
+	if (node && on && !(stat & (NOPOWER|BROKEN)))
+		var/state = ""
+		if (scrubbing)
+			state = "on"
+			if (scrub_O2)
+				state += "1"
 		else
-			icon_state = "hin"
-	else
-		icon_state = "hoff"
+			state = "in"
+
+		overlays += state
+
 	..()
-	if (istype(loc, /turf/simulated/floor) && node)
-		var/turf/simulated/floor/floor = loc
-		if(floor.floor_tile && node.alpha == 128)
-			underlays.Cut()
-	return
 
 /obj/machinery/atmospherics/unary/vent_scrubber/proc/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)

@@ -485,7 +485,9 @@ var/global/list/disposalpipeID2State = list(
 
 /datum/rcd_schematic/pipe/layer_adapter/register_icon(var/dir)
 	for(var/layer = PIPING_LAYER_MIN to PIPING_LAYER_MAX)
-		register_asset("RPD_[pipe_id]_[dir]_[layer].png", new/icon('icons/obj/atmospherics/pipe_adapter.dmi', "adapter_[layer]", dir))
+		var/icon/I = new/icon('icons/obj/atmospherics/pipe_adapter.dmi', "adapter_[layer]", dir)
+		I.Blend(PIPE_COLOR_GREY, ICON_MULTIPLY)
+		register_asset("RPD_[pipe_id]_[dir]_[layer].png", I)
 
 /datum/rcd_schematic/pipe/layer_adapter/send_icon(var/client/client, var/dir)
 	send_asset(client, "RPD_[pipe_id]_[dir]_[layer].png")

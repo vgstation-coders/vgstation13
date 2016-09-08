@@ -40,6 +40,8 @@ var/image/list/w_overlays = list("wet" = image('icons/effects/water.dmi',icon_st
 
 	melt_temperature = 1643.15 // Melting point of steel
 
+	plane = TURF_PLANE
+
 /turf/simulated/floor/New()
 	..()
 	if(!floor_tile)
@@ -355,6 +357,7 @@ turf/simulated/floor/update_icon()
 	broken = 0
 	burnt = 0
 	material = "metal"
+	plane = PLATING_PLANE
 
 	update_icon()
 	levelupdate()
@@ -366,6 +369,7 @@ turf/simulated/floor/update_icon()
 	broken = 0
 	burnt = 0
 	intact = 1
+	plane = TURF_PLANE
 	set_light(0)
 	if(floor_tile)
 		returnToPool(floor_tile)
@@ -396,6 +400,7 @@ turf/simulated/floor/update_icon()
 	broken = 0
 	burnt = 0
 	intact = 1
+	plane = TURF_PLANE
 	if(floor_tile)
 		returnToPool(floor_tile)
 	floor_tile = null
@@ -417,6 +422,7 @@ turf/simulated/floor/update_icon()
 	broken = 0
 	burnt = 0
 	intact = 1
+	plane = TURF_PLANE
 	if(floor_tile)
 		returnToPool(floor_tile)
 	floor_tile = null
@@ -437,6 +443,7 @@ turf/simulated/floor/update_icon()
 	broken = 0
 	burnt = 0
 	intact = 1
+	plane = TURF_PLANE
 	if(floor_tile)
 		returnToPool(floor_tile)
 	floor_tile = null
@@ -457,6 +464,7 @@ turf/simulated/floor/update_icon()
 	broken = 0
 	burnt = 0
 	intact = 1
+	plane = TURF_PLANE
 	if(floor_tile)
 		returnToPool(floor_tile)
 	floor_tile = null
@@ -546,6 +554,7 @@ turf/simulated/floor/update_icon()
 					floor_tile = getFromPool(T.type, null)
 					material = floor_tile.material
 					intact = 1
+					plane = TURF_PLANE
 					if(istype(T,/obj/item/stack/tile/light))
 						var/obj/item/stack/tile/light/L = T
 						var/obj/item/stack/tile/light/F = floor_tile

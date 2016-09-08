@@ -1,6 +1,6 @@
 /obj/machinery/atmospherics/unary/vent
 	icon = 'icons/obj/atmospherics/pipe_vent.dmi'
-	icon_state = "intact"
+	icon_state = "base"
 	name = "Vent"
 	desc = "A large air vent"
 	level = 1
@@ -9,13 +9,16 @@
 	initialize_directions = SOUTH
 	var/build_killswitch = 1
 
+	ex_node_offset = 3
+	var/static/image/bezel = image('icons/obj/atmospherics/pipe_vent.dmi', "bezel")
+
 /obj/machinery/atmospherics/unary/vent/high_volume
 	name = "Larger vent"
 	volume = 1000
 
 /obj/machinery/atmospherics/unary/vent/New()
 	..()
-	air_contents.volume=volume
+	air_contents.volume = volume
 
 /obj/machinery/atmospherics/unary/vent/process()
 	. = ..()
@@ -40,17 +43,19 @@
 
 
 /obj/machinery/atmospherics/unary/vent/update_icon()
-	if(node)
-		icon_state = "intact"
-	else
-		icon_state = "exposed"
+	icon_state = "base"
+
 	..()
-	if (istype(loc, /turf/simulated/floor) && node)
-		var/turf/simulated/floor/floor = loc
-		if(floor.floor_tile && node.alpha == 128)
-			underlays.Cut()
 
+	if (level == 1)
+		bezel.layer = VENT_BEZEL_LAYER
+		bezel.plane = ABOVE_PLATING_PLANE
 
+	else
+		bezel.layer = EXPOSED_PIPE_LAYER + 1
+		bezel.plane = ABOVE_TURF_PLANE
+
+	underlays += bezel
 
 /obj/machinery/atmospherics/unary/vent/initialize()
 	..()

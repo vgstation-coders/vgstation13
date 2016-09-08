@@ -1,26 +1,26 @@
-// Regular pipe colors
-//                         #RRGGBB
-#define PIPE_COLOR_BLUE   "#0000B7"
-#define PIPE_COLOR_CYAN   "#00B8B8"
-#define PIPE_COLOR_GREEN  "#00B900"
-#define PIPE_COLOR_GREY   "#B4B4B4"
-#define PIPE_COLOR_PURPLE "#800080"
-#define PIPE_COLOR_RED    "#B70000"
-#define PIPE_COLOR_ORANGE "#B77900"
-
-// Insulated pipes
-#define IPIPE_COLOR_RED   PIPE_COLOR_RED
-#define IPIPE_COLOR_BLUE  "#4285F4"
-
 /obj/machinery/atmospherics/pipe
 	var/datum/gas_mixture/air_temporary //used when reconstructing a pipeline that broke
 	var/datum/pipeline/parent
 	var/volume = 0
 	force = 20
+	plane = ABOVE_PLATING_PLANE
 	layer = PIPE_LAYER
 	use_power = 0
 	var/alert_pressure = 80*ONE_ATMOSPHERE
 	var/baseicon=""
+
+/obj/machinery/atmospherics/pipe/node_plane()
+	return FLOAT_PLANE
+
+/obj/machinery/atmospherics/pipe/update_planes_and_layers()
+	if (level == LEVEL_BELOW_FLOOR)
+		plane = ABOVE_PLATING_PLANE
+		layer = PIPE_LAYER
+	else
+		plane = ABOVE_TURF_PLANE
+		layer = EXPOSED_PIPE_LAYER
+
+	layer = PIPING_LAYER(layer, piping_layer)
 
 /obj/machinery/atmospherics/pipe/proc/mass_colouration(var/mass_colour)
 	if (findtext(mass_colour,"#"))
@@ -55,6 +55,17 @@
 		overlays += centre_overlay
 	..()
 
+/obj/machinery/atmospherics/pipe/t_scanner_expose()
+	if (exposed())
+		return
+
+	invisibility = 0
+	plane = ABOVE_TURF_PLANE
+	layer = EXPOSED_PIPE_LAYER
+
+	spawn(1 SECONDS)
+		update_icon()
+		update_planes_and_layers()
 
 
 /obj/machinery/atmospherics/pipe/return_air()
@@ -118,7 +129,7 @@
 	// Type of burstpipe to use on burst()
 	var/burst_type = /obj/machinery/atmospherics/unary/vent/burstpipe
 
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 
 /obj/machinery/atmospherics/pipe/simple/New()
 	..()
@@ -140,7 +151,8 @@
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
-	level = T.intact ? 2 : 1
+	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
+	update_planes_and_layers()
 	initialize(1)
 	if(!node1&&!node2)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this pipe section to! A pipe segment must be connected to at least one other object!</span>")
@@ -157,8 +169,6 @@
 
 
 /obj/machinery/atmospherics/pipe/simple/hide(var/i)
-	if(level == 1 && istype(loc, /turf/simulated))
-		invisibility = i ? 101 : 0
 	update_icon()
 
 
@@ -309,6 +319,11 @@
 
 
 /obj/machinery/atmospherics/pipe/simple/update_icon(var/adjacent_procd)
+	if (exposed() || (node1 && node1.exposed()) || (node2 && node2.exposed()))
+		invisibility = 0
+	else
+		invisibility = 101
+
 	var/node_list = list(node1,node2)
 	if(!node1||!node2)
 		icon_state = "exposed"
@@ -373,43 +388,42 @@
 	color=PIPE_COLOR_GREEN
 
 /obj/machinery/atmospherics/pipe/simple/scrubbers/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/simple/supply/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/simple/supply/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/simple/supplymain/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/simple/supplymain/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/simple/general/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/simple/general/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/simple/yellow/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/simple/yellow/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/simple/cyan/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/simple/cyan/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/simple/filtering/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/simple/filtering/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/simple/insulated
 	name = "\improper Insulated pipe"
-	//icon = 'icons/obj/atmospherics/red_pipe.dmi'
 	minimum_temperature_difference = 10000
 	thermal_conductivity = 0
 
@@ -417,19 +431,16 @@
 	fatigue_pressure =  900000 // 900k kPa
 	alert_pressure   =  900000
 
-	can_be_coloured = 1
 	color = IPIPE_COLOR_RED
 /obj/machinery/atmospherics/pipe/simple/insulated/visible
 	icon_state = "intact"
-	level = 2
-	color=IPIPE_COLOR_RED
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/simple/insulated/visible/blue
 	color=IPIPE_COLOR_BLUE
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden
 	icon_state = "intact"
 	alpha=128
-	level = 1
-	color=IPIPE_COLOR_RED
+	level = LEVEL_BELOW_FLOOR
 /obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue
 	color= IPIPE_COLOR_BLUE
 
@@ -446,7 +457,7 @@
 	var/obj/machinery/atmospherics/node1
 	var/obj/machinery/atmospherics/node2
 	var/obj/machinery/atmospherics/node3
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	layer = PIPE_LAYER
 	var/global/image/manifold_centre = image('icons/obj/pipes.dmi',"manifold_centre")
 
@@ -454,7 +465,9 @@
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
-	level = T.intact ? 2 : 1
+	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
+	update_planes_and_layers()
+
 	initialize(1)
 	if(!node1&&!node2&&!node3)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this manifold to! A pipe segment must be connected to at least one other object!</span>")
@@ -491,8 +504,6 @@
 
 
 /obj/machinery/atmospherics/pipe/manifold/hide(var/i)
-	if(level == 1 && istype(loc, /turf/simulated))
-		invisibility = i ? 101 : 0
 	update_icon()
 
 
@@ -563,11 +574,15 @@
 
 
 /obj/machinery/atmospherics/pipe/manifold/update_icon(var/adjacent_procd)
+	if (exposed() || (node1 && node1.exposed()) || (node2 && node2.exposed()) || (node3 && node3.exposed()))
+		invisibility = 0
+	else
+		invisibility = 101
+
 	var/node_list = list(node1,node2,node3)
 	..(adjacent_procd,node_list)
 	if(!node1 && !node2 && !node3)
 		qdel(src)
-
 
 /obj/machinery/atmospherics/pipe/manifold/initialize(var/skip_icon_update=0)
 	var/connect_directions = (NORTH|SOUTH|EAST|WEST)&(~dir)
@@ -604,57 +619,51 @@
 	color = PIPE_COLOR_GREEN
 /obj/machinery/atmospherics/pipe/manifold/insulated
 	name = "\improper Insulated pipe"
-	//icon = 'icons/obj/atmospherics/red_pipe.dmi'
-	icon_state = "manifold"
 	alert_pressure = 900*ONE_ATMOSPHERE
 	color=IPIPE_COLOR_RED
-	level = 2
-	can_be_coloured = 1
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold/scrubbers/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold/supply/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold/supply/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold/supplymain/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold/supplymain/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold/general/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold/general/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold/insulated/visible
-	level = 2
-	color=IPIPE_COLOR_RED
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold/insulated/visible/blue
 	color=IPIPE_COLOR_BLUE
 /obj/machinery/atmospherics/pipe/manifold/insulated/hidden
-	level = 1
-	color=IPIPE_COLOR_RED
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold/insulated/hidden/blue
 	color=IPIPE_COLOR_BLUE
 /obj/machinery/atmospherics/pipe/manifold/yellow/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold/yellow/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold/cyan/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold/cyan/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold/filtering/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold/filtering/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 
 /obj/machinery/atmospherics/pipe/manifold4w
@@ -670,7 +679,7 @@
 	var/obj/machinery/atmospherics/node2
 	var/obj/machinery/atmospherics/node3
 	var/obj/machinery/atmospherics/node4
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	layer = PIPE_LAYER
 	baseicon="manifold4w"
 	var/global/image/manifold4w_centre = image('icons/obj/pipes.dmi',"manifold4w_centre")
@@ -680,7 +689,8 @@
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
-	level = T.intact ? 2 : 1
+	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
+	update_planes_and_layers()
 	initialize(1)
 	if(!node1 && !node2 && !node3 && !node4)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this manifold to! A pipe segment must be connected to at least one other object!</span>")
@@ -709,8 +719,6 @@
 	overlays += centre_overlay
 
 /obj/machinery/atmospherics/pipe/manifold4w/hide(var/i)
-	if(level == 1 && istype(loc, /turf/simulated))
-		invisibility = i ? 101 : 0
 	update_icon()
 
 
@@ -788,12 +796,15 @@
 
 
 /obj/machinery/atmospherics/pipe/manifold4w/update_icon(var/adjacent_procd)
+	if (exposed() || (node1 && node1.exposed()) || (node2 && node2.exposed()) || (node3 && node3.exposed()) || (node4 && node4.exposed()))
+		invisibility = 0
+	else
+		invisibility = 101
+
 	var/node_list = list(node1,node2,node3,node4)
 	..(adjacent_procd,node_list)
 	if(!node1 && !node2 && !node3 && !node4)
 		qdel(src)
-	return
-
 
 /obj/machinery/atmospherics/pipe/manifold4w/initialize(var/skip_update_icon=0)
 
@@ -828,45 +839,42 @@
 	name = "\improper Insulated pipe"
 	color = IPIPE_COLOR_RED
 	alert_pressure = 900*ONE_ATMOSPHERE
-	color=IPIPE_COLOR_RED
-	level = 2
-	can_be_coloured = 1
 
 /obj/machinery/atmospherics/pipe/manifold4w/scrubbers/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold4w/scrubbers/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold4w/supply/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold4w/supply/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold4w/supplymain/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold4w/supplymain/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold4w/general/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold4w/general/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold4w/filtering/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold4w/filtering/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold4w/yellow/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold4w/yellow/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold4w/insulated/hidden
-	level = 1
+	level = LEVEL_BELOW_FLOOR
 	alpha=128
 /obj/machinery/atmospherics/pipe/manifold4w/insulated/visible
-	level = 2
+	level = LEVEL_ABOVE_FLOOR
 /obj/machinery/atmospherics/pipe/manifold4w/insulated/hidden/blue
 	color=IPIPE_COLOR_BLUE
 /obj/machinery/atmospherics/pipe/manifold4w/insulated/visible/blue
@@ -915,8 +923,8 @@
 	name = "pipe-layer manifold"
 
 	icon = 'icons/obj/atmospherics/pipe_manifold.dmi'
-	icon_state = "manifoldlayer"
-	baseicon = "manifoldlayer"
+	icon_state = "map_layer"
+	baseicon = ""
 
 	dir = SOUTH
 	initialize_directions = NORTH|SOUTH
@@ -925,8 +933,11 @@
 
 	pipe_flags = ALL_LAYER
 
+	color = PIPE_COLOR_GREY
+
 	var/list/layer_nodes = list()
 	var/obj/machinery/atmospherics/other_node = null
+	var/static/image/centre_image = image('icons/obj/atmospherics/pipe_manifold.dmi', "layer_center")
 
 /obj/machinery/atmospherics/pipe/layer_manifold/New()
 	for(var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
@@ -936,6 +947,11 @@
 			initialize_directions = NORTH|SOUTH
 		if(EAST,WEST)
 			initialize_directions = EAST|WEST
+
+	centre_overlay = centre_image
+	centre_overlay.color = color
+	overlays += centre_overlay
+	icon_state = ""
 	..()
 
 /obj/machinery/atmospherics/pipe/layer_manifold/setPipingLayer(var/new_layer = PIPING_LAYER_DEFAULT)
@@ -945,7 +961,8 @@
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
-	level = T.intact ? 2 : 1
+	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
+	update_planes_and_layers()
 	initialize(1)
 	if(!(locate(/obj/machinery/atmospherics) in layer_nodes) && !other_node)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this manifold to! A pipe segment must be connected to at least one other object!</span>")
@@ -961,8 +978,6 @@
 	return 1
 
 /obj/machinery/atmospherics/pipe/layer_manifold/hide(var/i)
-	if(level == 1 && istype(loc, /turf/simulated))
-		invisibility = i ? 101 : 0
 	update_icon()
 
 /obj/machinery/atmospherics/pipe/layer_manifold/pipeline_expansion()
@@ -999,30 +1014,45 @@
 
 	..()
 
-/obj/machinery/atmospherics/pipe/layer_manifold/update_icon()
-	overlays.len = 0
-	alpha = invisibility ? 128 : 255
-	icon_state = baseicon
-	if(other_node)
-		var/icon/con = new/icon(icon,"manifoldl_other_con")
+/obj/machinery/atmospherics/pipe/layer_manifold/icon_directions()
+	return list(turn(dir, 180))
 
-		overlays += new/image(con, dir = turn(src.dir, 180)) //adds the back connector
+/obj/machinery/atmospherics/pipe/layer_manifold/update_icon(var/adjacent_procd)
+	..(adjacent_procd, list(other_node)) // Adds the back connector
+
+	var/is_partially_exposed = exposed()
 
 	for(var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
-		if(layer_nodes[pipelayer]) //we are connected at this layer
+		var/obj/machinery/atmospherics/node = layer_nodes[pipelayer]
+		var/layer_diff = pipelayer - PIPING_LAYER_DEFAULT
 
-			var/layer_diff = pipelayer - PIPING_LAYER_DEFAULT
-
-			var/image/con = image(icon(src.icon,"manifoldl_con",src.dir))
+		var/image/ex = image(icon, "layer_[pipelayer]", layer = 100, dir = dir)
+		if(node) //we are connected at this layer
+			var/node_color = node_color_for(node)
+			var/image/con = image('icons/obj/pipes.dmi', "pipe_intact", layer = 200, dir = dir)
 			con.pixel_x = layer_diff * PIPING_LAYER_P_X
 			con.pixel_y = layer_diff * PIPING_LAYER_P_Y
+			con.color = node_color
+			ex.color = node_color
 
-			overlays += con
+			underlays += con
+
+			if (!adjacent_procd && node.update_icon_ready && !istype(node,/obj/machinery/atmospherics/pipe/simple))
+				node.update_icon(TRUE)
+
+			if (node.exposed())
+				is_partially_exposed = TRUE
+
+		else
+			ex.color = default_colour || PIPE_COLOR_GREY
+
+		underlays += ex
 
 	if(!other_node && !(locate(/obj/machinery/atmospherics) in layer_nodes))
 		qdel(src)
-	return
 
+	invisibility = is_partially_exposed ? 0 : 101
+	alpha = is_partially_exposed ? 255 : 128
 
 /obj/machinery/atmospherics/pipe/layer_manifold/initialize(var/skip_update_icon=0)
 
@@ -1139,7 +1169,8 @@
 	dir = pipe.dir
 	initialize_directions = pipe.get_pipe_dir()
 	var/turf/T = loc
-	level = T.intact ? 2 : 1
+	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
+	update_planes_and_layers()
 	initialize(1)
 	if(!mid_node && !layer_node)
 		to_chat(usr, "<span class='warning'>There's nothing to connect this adapter to! A pipe segment must be connected to at least one other object!</span>")
@@ -1155,8 +1186,6 @@
 	return 1
 
 /obj/machinery/atmospherics/pipe/layer_adapter/hide(var/i)
-	if(level == 1 && istype(loc, /turf/simulated))
-		invisibility = i ? 101 : 0
 	update_icon()
 
 /obj/machinery/atmospherics/pipe/layer_adapter/pipeline_expansion()
@@ -1186,8 +1215,6 @@
 			returnToPool(parent)
 		layer_node = null
 
-	update_icon()
-
 	..()
 
 /obj/machinery/atmospherics/pipe/layer_adapter/update_icon()
@@ -1204,8 +1231,11 @@
 		overlays += con
 	if(!mid_node && !layer_node)
 		qdel(src)
-	return
 
+	if (exposed() || (mid_node && mid_node.exposed()) || (layer_node && layer_node.exposed()))
+		invisibility = 0
+	else
+		invisibility = 101
 
 /obj/machinery/atmospherics/pipe/layer_adapter/initialize(var/skip_update_icon=0)
 

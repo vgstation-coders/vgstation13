@@ -35,6 +35,14 @@
 	air1.volume = 200
 	air2.volume = 200
 
+/obj/machinery/atmospherics/binary/update_planes_and_layers()
+	if (level == LEVEL_BELOW_FLOOR)
+		layer = BINARY_PIPE_LAYER
+	else
+		layer = EXPOSED_BINARY_PIPE_LAYER
+
+	layer = PIPING_LAYER(layer, piping_layer)
+
 /obj/machinery/atmospherics/binary/update_icon(var/adjacent_procd)
 	var/node_list = list(node1,node2)
 	..(adjacent_procd,node_list)
@@ -45,7 +53,8 @@
 	if (pipe.pipename)
 		name = pipe.pipename
 	var/turf/T = loc
-	level = T.intact ? 2 : 1
+	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
+	update_planes_and_layers()
 	initialize()
 	build_network()
 	if (node1)
@@ -150,7 +159,7 @@
 			returnToPool(network2)
 		node2 = null
 
-	return null
+	return ..()
 
 /obj/machinery/atmospherics/binary/unassign_network(datum/pipe_network/reference)
 	if(network1 == reference)
