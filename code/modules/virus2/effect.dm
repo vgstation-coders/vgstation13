@@ -917,6 +917,7 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 
 	var/picked_lang = pick(new_languages)
 	mob.add_language(picked_lang)
+	mob.default_language = mob.languages[1]
 
 	to_chat(mob, "You can't seem to remember any language but [picked_lang]. Odd.")
 
