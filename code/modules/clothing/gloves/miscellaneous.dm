@@ -10,6 +10,17 @@
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(VOX_SHAPED)
 
+/obj/item/clothing/gloves/centcom
+	desc = "Regal green gloves, with a nice gold trim. Lordy."
+	name = "nanotrasen leader's gloves"
+	icon_state = "centcom"
+	item_state = "centcom"
+	siemens_coefficient = 0
+	_color = "centcom"
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	pressure_resistance = 200 * ONE_ATMOSPHERE
+	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
+
 /obj/item/clothing/gloves/cyborg
 	desc = "beep boop borp"
 	name = "cyborg gloves"

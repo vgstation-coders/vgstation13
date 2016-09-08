@@ -663,10 +663,11 @@ Pressure: [env.return_pressure()]"}
 		"blue wizard",
 		"red wizard",
 		"marisa wizard",
-		"emergency rescue team",
+		"emergency response team",
 		"nanotrasen representative",
 		"nanotrasen officer",
 		"nanotrasen captain",
+		"nanotrasen supreme commander",
 		"Bomberman",
 		"Bomberman(arena)",
 		)
@@ -939,7 +940,6 @@ Pressure: [env.return_pressure()]"}
 			W.registered_name = M.real_name
 			M.equip_if_possible(W, slot_wear_id)
 
-
 		if("nanotrasen captain")
 			M.equip_if_possible(new /obj/item/clothing/under/rank/centcom/captain(M), slot_w_uniform)
 			M.equip_if_possible(new /obj/item/clothing/shoes/centcom(M), slot_shoes)
@@ -964,7 +964,32 @@ Pressure: [env.return_pressure()]"}
 			W.registered_name = M.real_name
 			M.equip_if_possible(W, slot_wear_id)
 
-		if("emergency rescue team")
+		if("nanotrasen supreme commander")
+			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/centcom/captain(M), slot_w_uniform)
+			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/centcom(M), slot_shoes)
+			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/centcom(M), slot_gloves)
+			M.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(M), slot_ears)
+			M.equip_to_slot_or_del(new /obj/item/clothing/head/centhat(M), slot_head)
+			M.equip_to_slot_or_del(new /obj/item/clothing/suit/armor/centcomm(M), slot_wear_suit)
+			M.equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses(M), slot_glasses)
+			M.equip_to_slot_or_del(new /obj/item/weapon/gun/energy/laser/captain(M), slot_belt)
+
+			var/obj/item/device/pda/heads/pda = new(M)
+			pda.owner = M.real_name
+			pda.ownjob = "Nanotrasen Supreme Commander"
+			pda.name = "PDA-[M.real_name] ([pda.ownjob])"
+
+			M.equip_to_slot_or_del(pda, slot_r_store)
+
+			var/obj/item/weapon/card/id/admin/W = new(M)
+			W.name = "[M.real_name]'s ID Card"
+			W.access = get_all_accesses()
+			W.access += get_all_centcom_access()
+			W.assignment = "Nanotrasen Supreme Commander"
+			W.registered_name = M.real_name
+			M.equip_to_slot_or_del(W, slot_wear_id)
+
+		if("emergency response team")
 			M.equip_to_slot_or_del(new /obj/item/clothing/under/rank/centcom_officer(M), slot_w_uniform)
 			M.equip_to_slot_or_del(new /obj/item/clothing/shoes/swat(M), slot_shoes)
 			M.equip_to_slot_or_del(new /obj/item/clothing/gloves/swat(M), slot_gloves)
