@@ -42,12 +42,16 @@
 				qdel(sechud)
 				return
 			if(prob(15))
-				new /obj/item/clothing/glasses/sunglasses(loc)
+				var/obj/item/clothing/glasses/sunglasses/S = new/obj/item/clothing/glasses/sunglasses(loc)
+				if(prob(50))
+					S.eyeprot = 0
+				S.damaged = 1
+				S.desc += " It doesn't look to be in the best shape."
 				playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
 				qdel(sechud)
 				return
 			if(prob(55))
-				sechud.eyeprot = -2
+				sechud.eyeprot = 0
 			if(prob(55))
 				qdel(sechud.hud)
 				sechud.hud = null
@@ -57,7 +61,25 @@
 			clothing.damaged = 1
 			clothing.desc += " It doesn't look to be in the best shape."
 			for(var/A in clothing.armor)
-				A -= round(rand(A/2, A))
+				A -= rand(A/2, A)
+	if(istype(I, /obj/item/mecha_parts/mecha_equipment/weapon/energy))
+		var/obj/item/mecha_parts/mecha_equipment/weapon/energy/energy = I
+		if(!energy.damaged)
+			energy.equip_cooldown = rand(energy.equip_cooldown*1.5, energy.equip_cooldown*2.5)
+			energy.energy_drain = rand(energy.energy_drain*3, energy.energy_drain*5)
+	if(istype(I, /obj/item/mecha_parts/mecha_equipment/weapon/ballistic))
+		var/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/ballistic = I
+		if(!ballistic.damaged)
+			ballistic.equip_cooldown = rand(ballistic.equip_cooldown*2, ballistic.equip_cooldown*3)
+			ballistic.projectile_energy_cost = rand(ballistic.projectile_energy_cost*1.5, ballistic.projectile_energy_cost*3)
+			ballistic.max_projectiles = rand(ballistic.max_projectiles/4, ballistic.max_projectiles*0.75)
+			if(ballistic.max_projectiles < ballistic.projectiles)
+				ballistic.projectiles = ballistic.max_projectiles
+	if(istype(I, /obj/item/mecha_parts/mecha_equipment/weapon))
+		var/obj/item/mecha_parts/mecha_equipment/weapon/weapon = I
+		if(!weapon.damaged)
+			weapon.damaged = 1
+			weapon.desc += " It doesn't look to be in the best shape."
 
 /obj/item/weapon/storage/lockbox/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/card/id))

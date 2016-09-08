@@ -141,11 +141,21 @@
 		return
 
 	add_fingerprint(user)
+	var/atom/originaltarget = target
 
 	var/turf/curloc = user.loc
 	var/turf/targloc = get_turf(target)
 	if (!istype(targloc) || !istype(curloc))
 		return
+
+	if(damaged)
+		var/list/turf/shot_spread = list()
+		for(var/turf/T in range(originaltarget, min(1+recoil, max(0, get_dist(user, originaltarget)-1))))
+			shot_spread += T
+		var/temptarget = pick(shot_spread)
+		if(temptarget != targloc)
+			target = temptarget
+			targloc = get_turf(target)
 
 	if(!special_check(user))
 		return
@@ -163,22 +173,13 @@
 	if(!failure_check(user))
 		return
 	if(!istype(src, /obj/item/weapon/gun/energy/laser/redtag) && !istype(src, /obj/item/weapon/gun/energy/laser/bluetag))
-		log_attack("[user.name] ([user.ckey]) fired \the [src] (proj:[in_chamber.name]) at [target] [ismob(target) ? "([target:ckey])" : ""] ([target.x],[target.y],[target.z])[struggle ? " due to being disarmed." :""]" )
+		log_attack("[user.name] ([user.ckey]) fired \the [src] (proj:[in_chamber.name]) at [originaltarget] [ismob(target) ? "([originaltarget:ckey])" : ""] ([originaltarget.x],[originaltarget.y],[originaltarget.z])[struggle ? " due to being disarmed." :""]" )
 	in_chamber.firer = user
 
 	if(user.zone_sel)
 		in_chamber.def_zone = user.zone_sel.selecting
 	else
 		in_chamber.def_zone = LIMB_CHEST
-
-	if(damaged)
-		var/list/turf/shot_spread = list()
-		for(var/turf/T in range(target, min(1+recoil, max(0, get_dist(user, target)-1))))
-			shot_spread += T
-		var/temptarget = pick(shot_spread)
-		if(temptarget != targloc)
-			target = temptarget
-			targloc = get_turf(target)
 
 	if(targloc == curloc)
 		user.bullet_act(in_chamber)
@@ -259,10 +260,10 @@
 	user.update_inv_hand(user.active_hand)
 
 	if(damaged && recoil && prob(5))
-		var/throwturf = get_ranged_target_turf(user, rand(0, 360), 5)
+		var/throwturf = get_ranged_target_turf(user, pick(alldirs), 7)
 		user.drop_item()
 		user.visible_message("[src] jumps out of [user]'s hands!","[src] jumps out of your hands!")
-		throw_at(throwturf, rand(2, 6), 3)
+		throw_at(throwturf, rand(3, 6), 3)
 		return 1
 
 	return 1
