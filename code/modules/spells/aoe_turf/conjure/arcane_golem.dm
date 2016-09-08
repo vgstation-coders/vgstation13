@@ -57,7 +57,7 @@
 			continue
 
 		var/spell/copy = new S.type
-		copy.spell_flags = S.spell_flags &= ~NEEDSCLOTHES //Remove robes requirement
+		copy.spell_flags = S.spell_flags & ~NEEDSCLOTHES //Remove robes requirement
 		copy.charge_max = 0 //This is gonna suck with player controlled golems
 
 		AG.add_spell(copy)
