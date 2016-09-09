@@ -43,8 +43,8 @@
 		if(Ph)
 			overlays += image(Ph.icon)
 	if(haspen)
-		overlays += "clipboard_pen"
-	overlays += "clipboard_over"
+		overlays += image(icon, "clipboard_pen")
+	overlays += image(icon, "clipboard_over")
 	return
 
 /obj/item/weapon/clipboard/attackby(obj/item/weapon/W as obj, mob/user as mob)
