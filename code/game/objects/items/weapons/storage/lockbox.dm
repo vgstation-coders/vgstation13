@@ -28,10 +28,10 @@
 		var/obj/item/clothing/suit/armor/laserproof/laserproof = I
 		if(!laserproof.damaged)
 			if(prob(75))
-				laserproof.basereflectchance = 0
-			if(prob(40))
+				laserproof.basereflectchance -= rand(laserproof.basereflectchance/3, laserproof.basereflectchance)
+			if(prob(50))
 				laserproof.slowdown++
-			if(prob(40))
+			if(prob(50))
 				laserproof.slowdown++
 	if(istype(I, /obj/item/clothing/glasses/sunglasses/sechud))
 		var/obj/item/clothing/glasses/sunglasses/sechud/sechud = I
@@ -61,7 +61,7 @@
 			clothing.damaged = 1
 			clothing.desc += " It doesn't look to be in the best shape."
 			for(var/A in clothing.armor)
-				A -= rand(A/2, A)
+				clothing.armor[A] -= rand(clothing.armor[A]/3, clothing.armor[A])
 	if(istype(I, /obj/item/mecha_parts/mecha_equipment/weapon/energy))
 		var/obj/item/mecha_parts/mecha_equipment/weapon/energy/energy = I
 		if(!energy.damaged)

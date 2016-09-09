@@ -313,8 +313,8 @@ obj/item/weapon/gun/energy/laser/retro
 		if(prob(10))
 			M.drop_item()
 			M.emote("scream",,, 1)
-			M.adjustFireLossByPart(10, LIMB_LEFT_HAND, src)
-			M.adjustFireLossByPart(10, LIMB_RIGHT_HAND, src)
+			M.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
+			M.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
 			to_chat(M, "<span class='danger'>The [name] burns your hands!.</span>")
 			return 0
 		if(prob(1+fire_delay/3))
