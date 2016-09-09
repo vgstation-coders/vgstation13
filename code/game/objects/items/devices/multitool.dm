@@ -142,6 +142,8 @@ obj/item/device/multitool/ai_detect/examine(mob/user)
 			to_chat(user, "<span class='info'>Tape recorder detected</span>")
 		if(detected & DETECT_ANALYZER)
 			to_chat(user, "<span class='info'>Voice analyzer detected</span>")
+	else
+		to_chat(user, "<span class='info'>The screen is not displaying anything.</span>")
 
 ////////////////////////////////////////////////////////////////////////
 #undef DETECT_TICKER_PERIOD
