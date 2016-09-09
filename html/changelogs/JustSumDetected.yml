@@ -1,7 +1,0 @@
-
-author: JustSumGuy
-
-delete-after: True
-
-changes: 
-- bugfix: "Examining a syndicate multitool will now properly tell you what's being detected."
