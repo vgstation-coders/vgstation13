@@ -138,8 +138,7 @@
 
 
 /obj/structure/displaycase/bullet_act(var/obj/item/projectile/Proj)
-	if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
-		health -= Proj.damage
+	health -= Proj.damage
 	..()
 	src.healthcheck()
 	return

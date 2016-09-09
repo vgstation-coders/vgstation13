@@ -23,6 +23,21 @@
 	var/health = 90
 	var/maxHealth = 90
 
+	//for mappers, with love
+	var/mapping_uniform = null
+	var/mapping_shoes = null
+	var/mapping_gloves = null
+	var/mapping_ears = null
+	var/mapping_suit = null
+	var/mapping_glasses = null
+	var/mapping_hat = null
+	var/mapping_belt = null
+	var/mapping_mask = null
+	var/mapping_back = null
+	var/mapping_id = null
+
+	var/mapping_hand_right = null
+	var/mapping_hand_left = null
 
 /obj/structure/mannequin/New()
 	..()
@@ -56,7 +71,7 @@
 		MANNEQUIN_ID_LAYER,
 		)
 
-	for(var/i = 1; i <= held_items.len; i++)
+	for(var/i in 1 to held_items.len)
 		obj_overlays |= "[MANNEQUIN_HAND_LAYER]-[i]"
 
 	obj_overlays[MANNEQUIN_UNIFORM_LAYER]	= getFromPool(/obj/Overlays/uniform_layer)
@@ -71,8 +86,11 @@
 	obj_overlays[MANNEQUIN_FACEMASK_LAYER]	= getFromPool(/obj/Overlays/facemask_layer)
 	obj_overlays[MANNEQUIN_HEAD_LAYER]		= getFromPool(/obj/Overlays/head_layer)
 
+	checkMappingWear()
+
 
 /obj/structure/mannequin/Destroy()
+	new /obj/effect/decal/cleanable/dirt(loc)
 	for(var/cloth in clothing)
 		if(clothing[cloth])
 			var/obj/item/cloth_to_drop = clothing[cloth]
@@ -101,8 +119,7 @@
 	if(user.a_intent == I_HURT)
 		user.delayNextAttack(8)
 		user.visible_message("<span class='danger'>[user.name] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>")
-		health -= 2
-		healthcheck()
+		getDamage(2)
 	else
 		show_inv(user)
 
@@ -113,19 +130,7 @@
 
 /obj/structure/mannequin/attackby(var/obj/item/weapon/W,var/mob/user)
 	if(iswrench(W))
-		if(anchored)
-			to_chat(user, "<span class='info'>You start unsecuring \the [src] from \the [loc].</span>")
-		else
-			if(!istype(loc, /turf/simulated/floor))
-				return
-			to_chat(user, "<span class='info'>You start securing \the [src] to \the [loc].</span>")
-
-		spawn()
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
-			if(do_after(user, src, 50))
-				anchored = !anchored
-				to_chat(user, "<span class='info'>[anchored ? "You successfully secure \the [src] to \the [loc]." : "You successfully unsecure \the [src] from \the [loc]."]")
-		return 1
+		return wrenchAnchor(user, 50)
 
 	attack_hand(user)
 
@@ -231,28 +236,24 @@
 			qdel(src)
 		if (2)
 			if (prob(50))
-				health -= 30
+				getDamage(30)
 			else
-				health -= 20
-			healthcheck()
+				getDamage(20)
 		if (3)
 			if (prob(50))
-				health -= 10
-				healthcheck()
+				getDamage(10)
 
 
 /obj/structure/mannequin/bullet_act(var/obj/item/projectile/Proj)
-	if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
-		health -= Proj.damage
+	getDamage(Proj.damage)
 	..()
-	healthcheck()
 
 
 /obj/structure/mannequin/blob_act()
 	if (prob(75))
 		qdel(src)
 	else
-		health -= 30
+		getDamage(30)
 
 
 /obj/structure/mannequin/update_icon()
@@ -339,6 +340,7 @@
 
 /obj/structure/mannequin/proc/getDamage(var/damage)
 	health -= damage
+	healthcheck()
 
 
 /obj/structure/mannequin/proc/healthcheck()
@@ -422,7 +424,8 @@
 /obj/structure/mannequin/proc/canEquip(var/mob/user, var/item_slot, var/obj/item/itemToCheck)
 	if((fat && ((item_slot == SLOT_MANNEQUIN_ICLOTHING) || (item_slot == SLOT_MANNEQUIN_OCLOTHING))) || bulky && (((item_slot == SLOT_MANNEQUIN_ICLOTHING) || (item_slot == SLOT_MANNEQUIN_OCLOTHING) || (item_slot == SLOT_MANNEQUIN_FEET) || (item_slot == SLOT_MANNEQUIN_GLOVES) || (item_slot == SLOT_MANNEQUIN_MASK))))
 		if(!(itemToCheck.flags & ONESIZEFITSALL))
-			to_chat(user, "<span class='warning'>\The [src] is too large for \the [itemToCheck]</span>")
+			if(user)
+				to_chat(user, "<span class='warning'>\The [src] is too large for \the [itemToCheck]</span>")
 			return 0
 
 	var/inv_slot
@@ -454,7 +457,8 @@
 	if(itemToCheck.slot_flags & inv_slot)
 		return 1
 
-	to_chat(user, "<span class='warning'>\The [itemToCheck] doesn't fit there.</span>")
+	if(user)
+		to_chat(user, "<span class='warning'>\The [itemToCheck] doesn't fit there.</span>")
 	return 0
 
 
@@ -829,6 +833,85 @@
 	return update_icon_hand(GRASP_RIGHT_HAND)
 
 
+
+/obj/structure/mannequin/proc/checkMappingWear()
+	if(mapping_uniform)
+		var/obj/item/clothToWear = new mapping_uniform(src)
+		if(canEquip(null, SLOT_MANNEQUIN_ICLOTHING, clothToWear))
+			clothing[SLOT_MANNEQUIN_ICLOTHING] = clothToWear
+		else
+			qdel(clothToWear)
+	if(mapping_shoes)
+		var/obj/item/clothToWear = new mapping_shoes(src)
+		if(canEquip(null, SLOT_MANNEQUIN_FEET, clothToWear))
+			clothing[SLOT_MANNEQUIN_FEET] = clothToWear
+		else
+			qdel(clothToWear)
+	if(mapping_gloves)
+		var/obj/item/clothToWear = new mapping_gloves(src)
+		if(canEquip(null, SLOT_MANNEQUIN_GLOVES, clothToWear))
+			clothing[SLOT_MANNEQUIN_GLOVES] = clothToWear
+		else
+			qdel(clothToWear)
+	if(mapping_ears)
+		var/obj/item/clothToWear = new mapping_ears(src)
+		if(canEquip(null, SLOT_MANNEQUIN_EARS, clothToWear))
+			clothing[SLOT_MANNEQUIN_EARS] = clothToWear
+		else
+			qdel(clothToWear)
+	if(mapping_suit)
+		var/obj/item/clothToWear = new mapping_suit(src)
+		if(canEquip(null, SLOT_MANNEQUIN_OCLOTHING, clothToWear))
+			clothing[SLOT_MANNEQUIN_OCLOTHING] = clothToWear
+		else
+			qdel(clothToWear)
+	if(mapping_glasses)
+		var/obj/item/clothToWear = new mapping_glasses(src)
+		if(canEquip(null, SLOT_MANNEQUIN_EYES, clothToWear))
+			clothing[SLOT_MANNEQUIN_EYES] = clothToWear
+		else
+			qdel(clothToWear)
+	if(mapping_belt)
+		var/obj/item/clothToWear = new mapping_belt(src)
+		if(canEquip(null, SLOT_MANNEQUIN_BELT, clothToWear))
+			clothing[SLOT_MANNEQUIN_BELT] = clothToWear
+		else
+			qdel(clothToWear)
+	if(mapping_hat)
+		var/obj/item/clothToWear = new mapping_hat(src)
+		if(canEquip(null, SLOT_MANNEQUIN_HEAD, clothToWear))
+			clothing[SLOT_MANNEQUIN_HEAD] = clothToWear
+		else
+			qdel(clothToWear)
+	if(mapping_mask)
+		var/obj/item/clothToWear = new mapping_mask(src)
+		if(canEquip(null, SLOT_MANNEQUIN_MASK, clothToWear))
+			clothing[SLOT_MANNEQUIN_MASK] = clothToWear
+		else
+			qdel(clothToWear)
+	if(mapping_back)
+		var/obj/item/clothToWear = new mapping_back(src)
+		if(canEquip(null, SLOT_MANNEQUIN_BACK, clothToWear))
+			clothing[SLOT_MANNEQUIN_BACK] = clothToWear
+		else
+			qdel(clothToWear)
+	if(mapping_id)
+		var/obj/item/clothToWear = new mapping_id(src)
+		if(canEquip(null, SLOT_MANNEQUIN_ID, clothToWear))
+			clothing[SLOT_MANNEQUIN_ID] = clothToWear
+		else
+			qdel(clothToWear)
+
+	if(mapping_hand_right)
+		var/obj/item/clothToWear = new mapping_hand_right(src)
+		held_items[1] = clothToWear
+	if(mapping_hand_left)
+		var/obj/item/clothToWear = new mapping_hand_left(src)
+		held_items[2] = clothToWear
+
+	update_icon()
+
+
 /obj/structure/mannequin/proc/spin()
 	change_dir(turn(dir, 90))
 
@@ -900,19 +983,7 @@
 
 /obj/structure/block/attackby(var/obj/item/weapon/W,var/mob/user)
 	if(iswrench(W))
-		if(anchored)
-			to_chat(user, "<span class='info'>You start unsecuring \the [src] from \the [loc].</span>")
-		else
-			if(!istype(loc, /turf/simulated/floor))
-				return
-			to_chat(user, "<span class='info'>You start securing \the [src] to \the [loc].</span>")
-
-		spawn()
-			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
-			if(do_after(user, src, 50))
-				anchored = !anchored
-				to_chat(user, "<span class='info'>[anchored ? "You successfully secure \the [src] to \the [loc]." : "You successfully unsecure \the [src] from \the [loc]."]")
-		return 1
+		return wrenchAnchor(user, 50)
 	else if(istype(W, /obj/item/weapon/chisel))
 
 		var/list/available_sculptures = list(
@@ -923,7 +994,7 @@
 
 		var/chosen_sculpture = input("Choose a sculpture type.", "[name]") as null|anything in available_sculptures
 
-		if(!chosen_sculpture)
+		if(!chosen_sculpture || !Adjacent(user))
 			return
 
 		user.visible_message("[user.name] starts sculpting \the [src] with a passion!","You start sculpting \the [src] with a passion!","You hear a repeated knocking sound.")
@@ -985,6 +1056,31 @@
 	..()
 	update_icon()
 
+/obj/structure/mannequin/cyber/Destroy()
+	getFromPool(/obj/item/stack/sheet/metal, loc, 5)//You get half the materials used to make a mannequin frame back.
+	var/parts_list = list(
+		/obj/item/robot_parts/head,
+		/obj/item/robot_parts/chest,
+		/obj/item/robot_parts/r_leg,
+		/obj/item/robot_parts/l_leg,
+		/obj/item/robot_parts/r_arm,
+		/obj/item/robot_parts/l_arm,
+		/obj/item/robot_parts/l_arm,
+		)
+
+	for(var/part in parts_list)
+		if(prob(40))//And 40% chance to get each robot limb back.
+			new part(loc)
+
+	if(prob(40))
+		var/obj/item/weapon/circuitboard/airlock/C = new(loc)
+		C.one_access=!(req_access && req_access.len>0)
+		if(!C.one_access)
+			C.conf_access=req_access
+		else
+			C.conf_access=req_one_access
+	..()
+
 /obj/structure/mannequin/cyber/ex_act(severity)
 	switch(severity)
 		if (1)
@@ -1001,27 +1097,24 @@
 				getDamage(30)
 			else
 				getDamage(20)
-			healthcheck()
 		if (3)
 			if (prob(50))
 				getDamage(10)
-				healthcheck()
 
 /obj/structure/mannequin/cyber/getDamage(var/damage)
 	if(destroyed || !locked)
 		health -= damage
 	else
 		shield -= damage
+	healthcheck()
 
 /obj/structure/mannequin/cyber/blob_act()
 	if(!destroyed && locked)
 		getDamage(30)
-		healthcheck()
 	else if (prob(75))
 		qdel(src)
 	else
 		getDamage(30)
-		healthcheck()
 
 /obj/structure/mannequin/cyber/healthcheck()
 	if(!destroyed)
@@ -1133,7 +1226,6 @@
 		user.delayNextAttack(8)
 		getDamage(W.force)
 		user.visible_message("<span class='danger'>[user.name] [W.attack_verb] \the [src]!</span>", "<span class='danger'>You [W.attack_verb] \the [src]!</span>")
-		healthcheck()
 	else
 		return ..()
 
@@ -1141,9 +1233,9 @@
 	overlays.len = 0
 	..()
 	if(destroyed)
-		overlays |= "mannequin_cover_broken"
+		overlays |= image(icon, "mannequin_cover_broken")
 	else if(locked)
-		overlays |= "mannequin_cover"
+		overlays |= image(icon, "mannequin_cover")
 
 /obj/structure/mannequin/cyber/acidable()
 	return 0
@@ -1156,7 +1248,6 @@
 			user.delayNextAttack(8)
 			user.visible_message("<span class='danger'>[user.name] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>", "You hear glass crack.")
 			getDamage(2)
-			healthcheck()
 		else
 			to_chat(user,"<span class='notice'>You gently run your hands over \the [src] in appreciation of its contents.</span>")
 	else
@@ -1233,7 +1324,7 @@
 
 	steps = list(
 		list(
-			Co_DESC="The circuitboard is installed",
+			Co_DESC="The frame needs a glass shield.",
 			Co_NEXTSTEP = list(
 				Co_KEY=/obj/item/stack/sheet/glass/glass,
 				Co_AMOUNT = 1,
@@ -1246,15 +1337,12 @@
 				)
 			),
 		list(
-			Co_DESC="The frame is on the wall.",
+			Co_DESC="The frame needs an airlock circuitboard.",
 			Co_NEXTSTEP = list(
 				Co_KEY=/obj/item/weapon/circuitboard/airlock,
 				Co_AMOUNT = 1,
 				Co_VIS_MSG = "{USER} install{s} the circuitboard into {HOLDER}.",
 				Co_AMOUNT = 1
-				),
-			Co_BACKSTEP = list(
-				Co_KEY=null
 				)
 			)
 		)
