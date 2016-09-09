@@ -14,7 +14,7 @@
 	var/list/areas = list()
 	var/flags=0
 
-/datum/theft_objective/proc/get_contents(var/obj/O)
+/datum/theft_objective/proc/get_contents(var/obj/O) //What a pile of shit. "What is this OOP you speak of?"
 	var/list/L = list()
 
 	if(istype(O,/obj/item/weapon/storage))
@@ -29,9 +29,10 @@
 
 	else if(istype(O,/obj/item/delivery))
 		var/obj/item/delivery/D = O
-		L += D.wrapped
-		if(istype(D.wrapped, /obj/item/weapon/storage)) //this should never happen
-			L += get_contents(D.wrapped)
+		for(var/atom/movable/wrapped in D) //Under normal circumstances, there will be only one thing in it, but not all circumstances are normal
+			L += wrapped
+			if(istype(wrapped, /obj/item/weapon/storage)) //this should never happen
+				L += get_contents(wrapped)
 	return L
 
 /datum/theft_objective/proc/check_completion(datum/mind/owner)

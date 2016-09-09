@@ -1,0 +1,7 @@
+author: Exxion
+
+delete-after: True
+
+changes: 
+- bugfix: "Fixed package wrap nullspacing things. (Actually fixed this several days ago but I didn't realize how long the bug had been happening so I didn't changelog it. Whoops!)"
+- tweak: "Small wrapped packages now place the wrapped item in the same hand the package was in when opened."

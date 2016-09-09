@@ -98,7 +98,6 @@ var/global/list/all_money_accounts = list()
 		var/obj/item/delivery/P = new /obj/item/delivery(source_db.loc)
 
 		var/obj/item/weapon/paper/R = new /obj/item/weapon/paper(P)
-		P.wrapped = R
 		R.name = "Account information: [M.owner_name]"
 
 		R.info = {"<b>Account details (confidential)</b><br><hr><br>
