@@ -70,7 +70,10 @@
 					return 1
 			return 0
 
-	return L[A.type]
+	if(istype(A))
+		A = A.type //Convert everything to a type
+
+	return L[A]
 
 /proc/generate_type_list_cache(L)
 	for(var/type in L)
