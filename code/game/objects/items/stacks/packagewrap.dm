@@ -32,7 +32,9 @@
 		)
 
 /obj/item/stack/package_wrap/afterattack(var/attacked, mob/user as mob, var/proximity_flag)
-	var/obj/target = attacked
+	var/atom/movable/target = attacked
+	if(!istype(target))
+		return
 	if(is_type_in_list(target, cannot_wrap))
 		return
 	if(target.anchored)
