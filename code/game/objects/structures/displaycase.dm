@@ -138,7 +138,8 @@
 
 
 /obj/structure/displaycase/bullet_act(var/obj/item/projectile/Proj)
-	health -= Proj.damage
+	if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
+		health -= Proj.damage
 	..()
 	src.healthcheck()
 	return
@@ -168,7 +169,7 @@
 		src.icon_state = "glassbox2b"
 	else
 		src.icon_state = "glassbox2[locked]"
-	overlays = 0
+	overlays.len = 0
 	if(occupant)
 		var/icon/occupant_icon=getFlatIcon(occupant)
 		occupant_icon.Scale(19,19)

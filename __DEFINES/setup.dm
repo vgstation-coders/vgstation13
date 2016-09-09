@@ -245,6 +245,21 @@ var/MAX_EXPLOSION_RANGE = 14
 #define SLOT_TWOEARS 8192
 #define SLOT_LEGS = 16384
 
+
+//MANNEQUIN SLOT BITMASKS
+#define SLOT_MANNEQUIN_ICLOTHING	"uniform"
+#define SLOT_MANNEQUIN_FEET			"shoes"
+#define SLOT_MANNEQUIN_GLOVES		"gloves"
+#define SLOT_MANNEQUIN_EARS			"earset"
+#define SLOT_MANNEQUIN_OCLOTHING	"suit"
+#define SLOT_MANNEQUIN_EYES			"glasses"
+#define SLOT_MANNEQUIN_BELT			"belt"
+#define SLOT_MANNEQUIN_MASK			"mask"
+#define SLOT_MANNEQUIN_HEAD			"hat"
+#define SLOT_MANNEQUIN_BACK			"backpack"
+#define SLOT_MANNEQUIN_ID			"idcard"
+
+
 //FLAGS BITMASK
 
 //Item flags!
@@ -335,6 +350,8 @@ var/MAX_EXPLOSION_RANGE = 14
 #define slot_in_backpack 16
 #define slot_legcuffed 17
 #define slot_legs 18
+
+#define is_valid_hand_index(index) ((index > 0) && (index <= held_items.len))
 
 //Cant seem to find a mob bitflags area other than the powers one
 
@@ -1198,6 +1215,21 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define TARGETED_LAYER			23		//BS12: Layer for the target overlay from weapon targeting system
 #define TOTAL_LAYERS			23
 //////////////////////////////////
+
+
+#define MANNEQUIN_UNIFORM_LAYER			1
+#define MANNEQUIN_SHOES_LAYER			2
+#define MANNEQUIN_GLOVES_LAYER			3
+#define MANNEQUIN_EARS_LAYER			4
+#define MANNEQUIN_SUIT_LAYER			5
+#define MANNEQUIN_GLASSES_LAYER			6
+#define MANNEQUIN_BELT_LAYER			7
+#define MANNEQUIN_FACEMASK_LAYER		8
+#define MANNEQUIN_HEAD_LAYER			9
+#define MANNEQUIN_BACK_LAYER			10
+#define MANNEQUIN_ID_LAYER				11
+#define MANNEQUIN_HAND_LAYER			12
+#define MANNEQUIN_TOTAL_LAYERS			13
 
 
 //COMMENT IF YOUR DREAMDAEMON VERSION IS BELOW 507.1248

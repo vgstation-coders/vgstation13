@@ -762,7 +762,7 @@ var/global/list/damage_icon_parts = list()
 				break
 
 		if(S.name in I.species_fit) //Allows clothes to display differently for multiple species
-			if(S.gloves_icons)
+			if(S.shoes_icons)
 				O.icon = S.shoes_icons
 
 		O.overlays.len = 0
