@@ -121,7 +121,8 @@ Pipelines + Other Objects -> Pipe network
 	return PIPE_COLOR_GREY
 
 /obj/machinery/atmospherics/proc/node_layer()
-	return level == LEVEL_BELOW_FLOOR ? PIPE_LAYER : EXPOSED_PIPE_LAYER
+	var/new_layer = level == LEVEL_BELOW_FLOOR ? PIPE_LAYER : EXPOSED_PIPE_LAYER
+	return PIPING_LAYER(new_layer, piping_layer)
 
 /obj/machinery/atmospherics/proc/node_plane()
 	return level == LEVEL_BELOW_FLOOR ? ABOVE_PLATING_PLANE : ABOVE_TURF_PLANE
