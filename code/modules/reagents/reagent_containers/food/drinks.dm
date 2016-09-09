@@ -797,7 +797,7 @@
 //	icon states.
 
 /obj/item/weapon/reagent_containers/food/drinks/shaker
-	name = "Shaker"
+	name = "\improper Shaker"
 	desc = "A metal shaker to mix drinks in."
 	icon_state = "shaker"
 	origin_tech = Tc_MATERIALS + "=1"
@@ -805,9 +805,9 @@
 	volume = 100
 
 /obj/item/weapon/reagent_containers/food/drinks/thermos
-	name = "Thermos"
+	name = "\improper Thermos"
 	desc = "A metal flask which insulates its contents from temperature - keeping hot beverages hot, and cold ones cold."
-	icon_state = "shaker"
+	icon_state = "vacuumflask"
 	origin_tech = Tc_MATERIALS + "=1"
 	amount_per_transfer_from_this = 10
 	volume = 100
@@ -816,6 +816,24 @@
 	..()
 	var/new_reagent = pick(COFFEE, HOT_COCO, ICECOFFEE, TEA, ICETEA, WATER, ICE, ICED_BEER)
 	reagents.add_reagent(new_reagent, rand(50,100))
+
+/obj/item/weapon/reagent_containers/food/drinks/waterbottle
+	name = "water bottle"
+	desc = "Chemically enhanced mineral water."
+	icon_state = "waterbottle"
+	origin_tech = Tc_MATERIALS + "=1"
+	amount_per_transfer_from_this = 10
+	volume = 100
+	melt_temperature = MELTPOINT_PLASTIC
+	starting_materials = list(MAT_PLASTIC = 500)
+
+/obj/item/weapon/reagent_containers/food/drinks/waterbottle/New()
+	..()
+	reagents.add_reagent(WATER, volume)
+
+/obj/item/weapon/reagent_containers/food/drinks/waterbottle/small
+	icon_state = "waterbottle_small"
+	volume = 50
 
 /obj/item/weapon/reagent_containers/food/drinks/flask
 	name = "Captain's Flask"

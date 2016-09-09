@@ -1,0 +1,5 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - imageadd: The thermos that spawns in Vox Traders' backpacks now have their own sprite and inhand icon.
+  - rscadd: Added sprites and code for water bottles, both large and small. Currently they can only be spawned through silver slime extract reactions though.
