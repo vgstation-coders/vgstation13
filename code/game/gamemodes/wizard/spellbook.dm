@@ -68,7 +68,6 @@
 			to_chat(user, "The contract has been used, you can't get your points back now.")
 		else
 			to_chat(user, "You feed the contract back into the spellbook, refunding your points.")
-			src.max_uses++
 			src.uses++
 			qdel (O)
 			O = null
@@ -224,11 +223,9 @@
 	else
 		return 0
 
-/obj/item/weapon/spellbook/proc/use(amount, no_refunds = 0)
+/obj/item/weapon/spellbook/proc/use(amount)
 	if(uses >= amount)
 		uses -= amount
-		if(no_refunds)
-			max_uses -= amount
 
 		return 1
 
@@ -238,9 +235,14 @@
 		to_chat(user, "<span class='notice'>No refunds once you leave your den.</span>")
 		return
 
-	uses = max_uses
-	user.spellremove()
-	to_chat(user, "All spells have been removed. You may now memorize a new set of spells.")
+	for(var/spell/S in user.spell_list)
+		if(S.refund_price <= 0)
+			continue
+
+		to_chat(user, "<span class='info'>You forget [S.name] and receive [S.refund_price] additional spell points.</span>")
+
+		user.remove_spell(S)
+		uses += S.refund_price
 
 /obj/item/weapon/spellbook/Topic(href, href_list)
 	if(..())
@@ -270,6 +272,7 @@
 				var/spell/S = buy_type
 				if(use(initial(S.price)))
 					var/spell/added = new buy_type
+					added.refund_price = added.price
 					add_spell(added, L)
 					to_chat(usr, "<span class='info'>You have learned [added.name].</span>")
 					feedback_add_details("wizard_spell_learned", added.abbreviation)
@@ -278,7 +281,7 @@
 			var/datum/spellbook_artifact/SA = locate(href_list["spell"])
 
 			if(istype(SA) && (SA in get_available_artifacts()))
-				if(SA.can_buy() && use(SA.price, no_refunds = 1))
+				if(SA.can_buy() && use(SA.price))
 					SA.purchased(usr)
 					feedback_add_details("wizard_spell_learned", SA.abbreviation)
 
@@ -290,6 +293,7 @@
 
 		if(istype(spell) && spell.can_improve(upgrade_type))
 			if(use(Sp_UPGRADE_PRICE))
+				spell.refund_price += Sp_UPGRADE_PRICE
 				var/temp = spell.apply_upgrade(upgrade_type)
 
 				if(temp)

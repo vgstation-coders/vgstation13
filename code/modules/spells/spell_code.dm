@@ -19,6 +19,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/silenced = 0 //not a binary (though it seems that it is at the moment) - the length of time we can't cast this for, set by the spell_master silence_spells()
 
 	var/price = Sp_BASE_PRICE //How much does it cost to buy this spell from a spellbook
+	var/refund_price = 0 //If 0, non-refundable
 
 	var/holder_var_type = "bruteloss" //only used if charge_type equals to "holder_var"
 	var/holder_var_amount = 20 //Amount to adjust var when spell is used, THIS VALUE IS SUBTRACTED
