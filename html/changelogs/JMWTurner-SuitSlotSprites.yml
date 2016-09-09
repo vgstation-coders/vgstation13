@@ -1,0 +1,5 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - tweak: oxygen tanks (emergency and not) now appear on your character when stored in your suit slot.
+  - imageadd: added sprites for cult blades stored in your suit slot.
