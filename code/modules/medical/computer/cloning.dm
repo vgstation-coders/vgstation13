@@ -492,6 +492,7 @@
 	return selected_record
 
 /obj/machinery/computer/cloning/update_icon()
+	..()
 	overlays = 0
 	if(!(stat & (NOPOWER | BROKEN)))
 		if(scanner && scanner.occupant)
