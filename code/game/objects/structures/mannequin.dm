@@ -14,7 +14,6 @@
 	var/datum/species/species
 	var/species_type = /datum/species/human //TODO: mannequin for other races
 	var/fat = 0
-	var/bulky = 0
 	var/primitive = 0
 	var/list/clothing = list()
 	var/list/obj_overlays = list()
