@@ -170,46 +170,47 @@
 	return 1
 
 /datum/teleport/instant/science/teleportChecks()
-	for (var/atom/movable/AM in recursive_type_check(teleatom))
-		if(istype(AM, /obj/item/weapon/disk/nuclear)) // Don't let nuke disks get teleported --NeoFite
-			AM.visible_message("<span class='danger'>\The [AM] bounces off of the portal!</span>")
+	if(istype(teleatom, /obj/item/weapon/disk/nuclear)) // Don't let nuke disks get teleported --NeoFite
+		teleatom.visible_message("<span class='danger'>The [teleatom] bounces off of the portal!</span>")
+		return 0
+	if(teleatom.locked_to)
+		return 0
+
+	if(!isemptylist(teleatom.search_contents_for(/obj/item/weapon/disk/nuclear)))
+		if(istype(teleatom, /mob/living))
+			var/mob/living/MM = teleatom
+			MM.visible_message("<span class='danger'>The [MM] bounces off of the portal!</span>","<span class='warning'>Something you are carrying seems to be unable to pass through the portal. Better drop it if you want to go through.</span>")
+		else
+			teleatom.visible_message("<span class='danger'>The [teleatom] bounces off of the portal!</span>")
+		return 0
+
+	if(destination.z == map.zCentcomm) //centcomm z-level
+		if(istype(teleatom, /obj/mecha) && (universe.name != "Supermatter Cascade"))
+			var/obj/mecha/MM = teleatom
+			to_chat(MM.occupant, "<span class='danger'>The mech would not survive the jump to a location so far away!</span>")//seriously though, why? who wrote that?
+
 			return 0
-		if(AM.locked_to)
-			return 0
-
-		if(!isemptylist(AM.search_contents_for(/obj/item/weapon/disk/nuclear)))
-			if(istype(AM, /mob/living))
-				var/mob/living/MM = AM
-				MM.visible_message("<span class='danger'>\The [MM] bounces off of the portal!</span>","<span class='warning'>Something you are carrying seems to be unable to pass through the portal. Better drop it if you want to go through.</span>")
-			else
-				AM.visible_message("<span class='danger'>\The [AM] bounces off of the portal!</span>")
-			return 0
-
-		if(destination.z == map.zCentcomm) //centcomm z-level
-			if(istype(AM, /obj/mecha) && (universe.name != "Supermatter Cascade"))
-				var/obj/mecha/MM = AM
-				to_chat(MM.occupant, "<span class='danger'>The mech would not survive the jump to a location so far away!</span>")//seriously though, why? who wrote that?
-
-				return 0
-			if(!isemptylist(AM.search_contents_for(/obj/item/weapon/storage/backpack/holding)))
-				AM.visible_message("<span class='danger'>The Bag of Holding bounces off of the portal!</span>")
-				return 0
-
-		if(istype(AM,/obj/item/clothing/head/tinfoil))
+		if(!isemptylist(teleatom.search_contents_for(/obj/item/weapon/storage/backpack/holding)))
+			teleatom.visible_message("<span class='danger'>The Bag of Holding bounces off of the portal!</span>")
 			return 0
 
-		if(istype(AM,/mob/living/carbon/human)) //Tinfoil hats resist teleportation, but only when worn
-			var/mob/living/carbon/human/H = AM
+	if(destination.z > 7) //Away mission z-levels
+		return 0
+
+	for (var/mob/M in recursive_type_check(teleatom, /mob))
+		if(istype(M,/mob/living/carbon/human)) //Tinfoil hats resist teleportation, but only when worn
+			var/mob/living/carbon/human/H = M
 			if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil))
 				to_chat(H, "<span class'info'>Your headgear has 'foiled' a teleport!</span>")
 				return 0
 
-		if(destination.z > 7) //Away mission z-levels
-			return 0
-
-		if(istype(AM, /mob/living))
-			var/mob/living/MM = AM
+		if(istype(M, /mob/living))
+			var/mob/living/MM = M
 			if(MM.locked_to_z != 0 && destination.z != MM.locked_to_z)
-				MM.visible_message("<span class='danger'>[MM] bounces off the portal!</span>","<span class='warning'>You're unable to go to that destination!</span>")
+				MM.visible_message("<span class='danger'>\The [teleatom] bounces off the portal!</span>", "<span class='warning'>You're unable to go to that destination!</span>")
 				return 0
+
+	if(!isemptylist(recursive_type_check(teleatom, /obj/item/clothing/head/tinfoil)))
+		return 0
+
 	return 1

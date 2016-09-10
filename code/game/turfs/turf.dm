@@ -263,12 +263,14 @@
 	return
 
 /turf/proc/levelupdate()
+	update_holomap_planes()
 	for(var/obj/O in src)
 		if(O.level == 1)
 			O.hide(src.intact)
 
 // override for space turfs, since they should never hide anything
 /turf/space/levelupdate()
+	update_holomap_planes()
 	for(var/obj/O in src)
 		if(O.level == 1)
 			O.hide(0)
@@ -404,7 +406,8 @@
 		else
 			lighting_clear_overlay()
 
-	holomap_data = old_holomap // Holomap persists through everything.
+	holomap_data = old_holomap // Holomap persists through everything...
+	update_holomap_planes() // But we might need to recalculate it.
 
 /turf/proc/AddDecal(const/image/decal)
 	if(!decals)
@@ -654,6 +657,7 @@
 		new powerup(src)
 
 // Holomap stuff!
+#define PLANE_FOR (intact ? ABOVE_TURF_PLANE : ABOVE_PLATING_PLANE)
 /turf/proc/add_holomap(var/atom/movable/AM)
 	var/image/I = new
 	I.appearance = AM.appearance
@@ -661,7 +665,11 @@
 	I.loc = src
 	I.dir = AM.dir
 	I.alpha = 128
-	I.plane = HOLOMAP_PLANE
+	// Since holomaps are overlays of the turf
+	// This'll make them always be just above the turf and not block interaction.
+	I.plane = PLANE_FOR
+	// When I said above turfs I mean it.
+	I.layer = HOLOMAP_LAYER
 
 	if (!holomap_data)
 		holomap_data = list()
@@ -671,6 +679,21 @@
 /turf/proc/soft_add_holomap(var/atom/movable/AM)
 	if (!ticker || ticker.current_state != GAME_STATE_PLAYING)
 		add_holomap(AM)
+
+// Goddamnit BYOND.
+// So for some reason, I incurred a rendering issue with the usage of FLOAT_PLANE for the holomap plane.
+//   (For some reason the existance of underlays prevented the main icon and overlays to render)
+//   (Yes, removing every underlay with VV instantly fixed the overlays and main icon)
+//   (Yes, I tried to reproduce it outside SS13, but got nothing)
+// So now I need to render the overlays at the plane above the turf (ABOVE_TURF_PLANE and ABOVE_PLATING_PLANE)
+// And as you probably already guessed, the plane required changes based on the turf type.
+// So this helper does that.
+/turf/proc/update_holomap_planes()
+	var/the_plane = PLANE_FOR
+	for (var/image/I in holomap_data)
+		I.plane = the_plane
+
+#undef PLANE_FOR
 
 // Return -1 to make movement instant for the mob
 // Return high values to make movement slower

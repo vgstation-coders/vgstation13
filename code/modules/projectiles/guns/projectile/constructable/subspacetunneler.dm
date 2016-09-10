@@ -184,6 +184,10 @@
 	else if(target == user)
 		return
 
+	var/datum/zLevel/L = get_z_level(target)
+	if (L.teleJammed)
+		return
+
 	if(istype(target, /turf) && !istype(target, /turf/simulated/wall))
 		send(target,user,params)
 		return

@@ -480,18 +480,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			return
 		linked_imprinter.reagents.clear_reagents()
 
-	else if(href_list["disposeP"] && linked_lathe)  //Causes the protolathe to dispose of a single reagent (all of it)
-		if(!src.allowed(usr))
-			to_chat(usr, "Unauthorized Access.")
-			return
-		linked_lathe.reagents.del_reagent(href_list["dispose"])
-
-	else if(href_list["disposeallP"] && linked_lathe) //Causes the protolathe to dispose of all it's reagents.
-		if(!src.allowed(usr))
-			to_chat(usr, "Unauthorized Access.")
-			return
-		linked_lathe.reagents.clear_reagents()
-
 	else if(href_list["removeQItem"]) //Causes the protolathe to dispose of all it's reagents.
 		var/i=text2num(href_list["removeQItem"])
 		switch(href_list["device"])
