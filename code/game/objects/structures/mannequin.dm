@@ -156,7 +156,6 @@
 /obj/structure/mannequin/examine(mob/user)
 	..()
 	var/msg = ""
-	//uniform
 	if(clothing[SLOT_MANNEQUIN_ICLOTHING])
 		var/obj/item/clothing/under/w_uniform = clothing[SLOT_MANNEQUIN_ICLOTHING]
 		if(w_uniform.blood_DNA && w_uniform.blood_DNA.len)
@@ -164,7 +163,6 @@
 		else
 			msg += "It's wearing [bicon(w_uniform)] \a [w_uniform].[w_uniform.description_accessories()]\n"
 
-	//head
 	if(clothing[SLOT_MANNEQUIN_HEAD])
 		var/obj/item/head = clothing[SLOT_MANNEQUIN_HEAD]
 		if(head.blood_DNA && head.blood_DNA.len)
@@ -172,7 +170,6 @@
 		else
 			msg += "It's wearing [bicon(head)] \a [head] on its head.[head.description_accessories()]\n"
 
-	//suit/armour
 	if(clothing[SLOT_MANNEQUIN_OCLOTHING])
 		var/obj/item/wear_suit = clothing[SLOT_MANNEQUIN_OCLOTHING]
 		if(wear_suit.blood_DNA && wear_suit.blood_DNA.len)
@@ -180,7 +177,6 @@
 		else
 			msg += "It's wearing [bicon(wear_suit)] \a [wear_suit].[wear_suit.description_accessories()]\n"
 
-	//back
 	if(clothing[SLOT_MANNEQUIN_BACK])
 		var/obj/item/back = clothing[SLOT_MANNEQUIN_BACK]
 		if(back.blood_DNA && back.blood_DNA.len)
@@ -188,14 +184,12 @@
 		else
 			msg += "It has [bicon(back)] \a [back] on its back.[back.description_accessories()]\n"
 
-	//hands
 	for(var/obj/item/I in held_items)
 		if(I.blood_DNA && I.blood_DNA.len)
 			msg += "<span class='warning'>I's holding [bicon(I)] [I.gender==PLURAL?"some":"a"] blood-stained [I.name] in its [get_index_limb_name(is_holding_item(I))]!</span>\n"
 		else
 			msg += "It's holding [bicon(I)] \a [I] in its [get_index_limb_name(is_holding_item(I))].\n"
 
-	//gloves
 	if(clothing[SLOT_MANNEQUIN_GLOVES])
 		var/obj/item/gloves = clothing[SLOT_MANNEQUIN_GLOVES]
 		if(gloves.blood_DNA && gloves.blood_DNA.len)
@@ -203,7 +197,6 @@
 		else
 			msg += "It has [bicon(gloves)] \a [gloves] on its hands.[gloves.description_accessories()]\n"
 
-	//belt
 	if(clothing[SLOT_MANNEQUIN_BELT])
 		var/obj/item/belt = clothing[SLOT_MANNEQUIN_BELT]
 		if(belt.blood_DNA && belt.blood_DNA.len)
@@ -211,7 +204,6 @@
 		else
 			msg += "It has [bicon(belt)] \a [belt] about its waist.[belt.description_accessories()]\n"
 
-	//shoes
 	if(clothing[SLOT_MANNEQUIN_FEET])
 		var/obj/item/shoes = clothing[SLOT_MANNEQUIN_FEET]
 		if(shoes.blood_DNA && shoes.blood_DNA.len)
@@ -219,7 +211,6 @@
 		else
 			msg += "It's wearing [bicon(shoes)] \a [shoes] on its feet.[shoes.description_accessories()]\n"
 
-	//mask
 	if(clothing[SLOT_MANNEQUIN_MASK])
 		var/obj/item/wear_mask = clothing[SLOT_MANNEQUIN_MASK]
 		if(wear_mask.blood_DNA && wear_mask.blood_DNA.len)
@@ -227,7 +218,6 @@
 		else
 			msg += "It has [bicon(wear_mask)] \a [wear_mask] on its face.[wear_mask.description_accessories()]\n"
 
-	//eyes
 	if(clothing[SLOT_MANNEQUIN_EYES])
 		var/obj/item/glasses = clothing[SLOT_MANNEQUIN_EYES]
 		if(glasses.blood_DNA && glasses.blood_DNA.len)
@@ -235,12 +225,10 @@
 		else
 			msg += "It has [bicon(glasses)] \a [glasses] covering its eyes.[glasses.description_accessories()]\n"
 
-	//ears
 	if(clothing[SLOT_MANNEQUIN_EARS])
 		var/obj/item/ears = clothing[SLOT_MANNEQUIN_EARS]
 		msg += "It has [bicon(ears)] \a [ears] on its ears.[ears.description_accessories()]\n"
 
-	//ID
 	if(clothing[SLOT_MANNEQUIN_ID])
 		var/obj/item/wear_id = clothing[SLOT_MANNEQUIN_ID]
 		msg += "It's wearing [bicon(wear_id)] \a [wear_id].\n"
@@ -369,7 +357,7 @@
 
 /obj/structure/mannequin/proc/breakDown()
 	getFromPool(/obj/effect/decal/cleanable/dirt,loc)
-	qdel()
+	qdel(src)
 
 
 /obj/structure/mannequin/proc/obj_to_plane_overlay(var/obj/Overlays/object,var/slot)
@@ -382,16 +370,15 @@
 	overlays += I
 
 
-/obj/structure/mannequin/proc/get_item_offset_by_index(index)
+////////////////HANDS STUFF//////////////////
+/obj/structure/mannequin/proc/get_item_offset_by_index(index)//Will come to use when we get multi-handed mannequins
 	return list()
-
 
 /obj/structure/mannequin/proc/get_held_item_by_index(index)
 	if(!is_valid_hand_index(index))
 		return null
 
 	return held_items[index]
-
 
 /obj/structure/mannequin/proc/get_index_limb_name(var/index)
 	switch(index)
@@ -402,17 +389,15 @@
 
 	return "hand"
 
-
 /obj/structure/mannequin/proc/is_holding_item(item)
 	return held_items.Find(item)
-
 
 /obj/structure/mannequin/proc/get_direction_by_index(index)
 	if(index % 2 == GRASP_RIGHT_HAND)
 		return "right_hand"
 	else
 		return "left_hand"
-
+////////////////HANDS STUFF END//////////////////
 
 /obj/structure/mannequin/proc/show_inv(var/mob/user)
 	var/dat
