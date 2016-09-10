@@ -23,7 +23,6 @@
 /obj/machinery/station_map_frame/attackby(var/obj/item/W, var/mob/user)
 	if(!construct || !construct.action(W, user))
 		..()
-	return
 
 /obj/machinery/station_map_frame/New(turf/loc, var/ndir)
 	..()
@@ -110,8 +109,7 @@
 		S.dir = holder.dir
 		S.update_icon()
 
-		spawn()
-			qdel (holder)
-			holder = null
+		qdel (holder)
+		holder = null
 
 	feedback_inc("station_map_created",1)

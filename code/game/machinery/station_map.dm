@@ -29,8 +29,9 @@ var/list/station_holomaps = list()
 	var/image/cursor = null
 	var/image/legend = null
 
-	var/original_zLevel = 1
-	var/bogus = 0
+	var/original_zLevel = 1	//zLevel on which the station map was initialized.
+	var/bogus = 0			//set to 1 when you initialize the station map on a zLevel that doesn't have its own icon formatted for use by station holomaps.
+							//currently, the only supported zLevels are the Station, the Asteroid, and the Derelict.
 
 /obj/machinery/station_map/New()
 	..()
@@ -116,7 +117,6 @@ var/list/station_holomaps = list()
 			watching_mob = user
 			flick("station_map_activate", src)
 			watching_mob.client.images |= station_map
-			watching_mob.callOnFace |= "\ref[src]"
 			watching_mob.callOnFace["\ref[src]"] = "checkPosition"
 			if(bogus)
 				to_chat(user, "<span class='warning'>The holomap failed to initialize. This area of space cannot be mapped.</span>")
@@ -221,14 +221,14 @@ var/list/station_holomaps = list()
 
 /obj/machinery/station_map/ex_act(severity)
 	switch(severity)
-		if(1.0)
+		if(1)
 			qdel(src)
-		if(2.0)
+		if(2)
 			if (prob(50))
 				qdel(src)
 			else
 				set_broken()
-		if(3.0)
+		if(3)
 			if (prob(25))
 				set_broken()
 

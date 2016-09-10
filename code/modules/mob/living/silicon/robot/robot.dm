@@ -536,12 +536,10 @@
 	set name = "Toggle Station Holomap"
 	set desc = "Toggle station holomap on your screen"
 	set category = "Robot Commands"
-	if(stat != CONSCIOUS)
+	if(!isUnconscious())
 		return
 
 	station_holomap.toggleHolomap(src)
-
-	return
 
 /mob/living/silicon/robot/blob_act()
 	if(flags & INVULNERABLE)
