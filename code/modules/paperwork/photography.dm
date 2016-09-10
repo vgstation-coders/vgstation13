@@ -453,7 +453,7 @@
 	var/icon/small_img = icon(temp)
 	var/icon/ic = icon('icons/obj/items.dmi',"photo")
 	small_img.Scale(8, 8)
-	ic.Blend(small_img,ICON_OVERLAY, 10, 13)
+	ic.Blend(small_img,ICON_OVERLAY, 13, 13)
 	P.icon = ic
 	P.img = temp
 	P.info = mobs
@@ -470,7 +470,7 @@
 	var/icon/small_img = icon(temp)
 	var/icon/ic = icon('icons/obj/items.dmi',"photo")
 	small_img.Scale(8, 8)
-	ic.Blend(small_img,ICON_OVERLAY, 10, 13)
+	ic.Blend(small_img,ICON_OVERLAY, 13, 13)
 	P.icon = ic
 	P.img = temp
 	P.info = mobs
@@ -496,7 +496,7 @@
 	var/icon/small_img = icon(temp)
 	var/icon/ic = icon('icons/obj/items.dmi',"photo")
 	small_img.Scale(8, 8)
-	ic.Blend(small_img,ICON_OVERLAY, 10, 13)
+	ic.Blend(small_img,ICON_OVERLAY, 13, 13)
 	var/icon = ic
 	var/img = temp
 	var/info = mobs

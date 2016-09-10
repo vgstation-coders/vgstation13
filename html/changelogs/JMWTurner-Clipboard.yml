@@ -1,0 +1,6 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - rscadd: Clipboards can now be crafted with 1 wood.
+  - rscadd: Photos will appear on clipboard if there are no other papers there.
+  - rscadd: Added a Move to Top button for clipboards with multiple papers so you can quickly change which one you want to write on.
