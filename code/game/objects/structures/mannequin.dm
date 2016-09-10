@@ -135,6 +135,14 @@
 	getDamage(damage)
 
 
+
+/obj/structure/mannequin/attack_animal(var/mob/living/simple_animal/user)
+	if(user.melee_damage_upper > 0)
+		user.visible_message("<span class='danger'>\The [user] [user.attack_verb] \the [src]!</span>", "<span class='danger'>You [user.attack_verb] \the [src]!</span>")
+		getDamage(rand(user.melee_damage_upper, user.melee_damage_upper))
+
+
+
 /obj/structure/displaycase/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
