@@ -11,3 +11,6 @@ changes:
   - bugfix: "Cryo tubes don't fuck you up if you ventcrawl into them anymore."
   - tweak: "Cryo tubes now have their internal atmosphere. A cryo tube in a raging plasmafire is safe now."
   - tweak: "Security belt can hold holobadges now."
+  - bugfix: "You can no longer use the bluespace tunneler to the centcomm z level."
+  - bugfix: "Digital valves with a frequence aren't blocked from ever being unwrenched anymore."
+  - bugfix: "Holomaps don't display over everything anymore."
