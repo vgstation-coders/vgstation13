@@ -15,11 +15,12 @@
 	var/species_type = /datum/species/human //TODO: mannequin for other races
 	var/fat = 0
 	var/bulky = 0
+	var/primitive = 0
 	var/list/clothing = list()
 	var/list/obj_overlays = list()
 	var/list/obj/item/held_items = list(null, null)
 	var/clothing_offset_x = 0
-	var/clothing_offset_y = 3
+	var/clothing_offset_y = 3*PIXEL_MULTIPLIER
 	var/health = 90
 	var/maxHealth = 90
 
@@ -90,7 +91,6 @@
 
 
 /obj/structure/mannequin/Destroy()
-	new /obj/effect/decal/cleanable/dirt(loc)
 	for(var/cloth in clothing)
 		if(clothing[cloth])
 			var/obj/item/cloth_to_drop = clothing[cloth]
@@ -115,13 +115,24 @@
 	show_inv(M)
 
 
-/obj/structure/mannequin/attack_hand(var/mob/user)
+/obj/structure/mannequin/attack_hand(var/mob/living/user)
 	if(user.a_intent == I_HURT)
 		user.delayNextAttack(8)
-		user.visible_message("<span class='danger'>[user.name] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>")
-		getDamage(2)
+		user.visible_message("<span class='danger'>[user.name] punches \the [src]!</span>", "<span class='danger'>You punch \the [src]!</span>")
+		getDamage(rand(1,7) * (user.get_strength() - 1))
 	else
 		show_inv(user)
+
+
+/obj/structure/mannequin/kick_act(mob/living/carbon/human/H)
+	H.visible_message("<span class='danger'>[H.name] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>")
+
+	var/damage = rand(1,7) * (H.get_strength() - 1)
+	var/obj/item/clothing/shoes/S = H.shoes
+	if(istype(S))
+		damage += S.bonus_kick_damage
+
+	getDamage(damage)
 
 
 /obj/structure/displaycase/attack_paw(mob/user as mob)
@@ -251,7 +262,7 @@
 
 /obj/structure/mannequin/blob_act()
 	if (prob(75))
-		qdel(src)
+		breakDown()
 	else
 		getDamage(30)
 
@@ -340,13 +351,18 @@
 
 /obj/structure/mannequin/proc/getDamage(var/damage)
 	health -= damage
-	healthcheck()
+	healthCheck()
 
 
-/obj/structure/mannequin/proc/healthcheck()
+/obj/structure/mannequin/proc/healthCheck()
 	if (src.health <= 0)
 		visible_message("\The [src] collapses.")
-		qdel(src)
+		breakDown()
+
+
+/obj/structure/mannequin/proc/breakDown()
+	getFromPool(/obj/effect/decal/cleanable/dirt,loc)
+	qdel()
 
 
 /obj/structure/mannequin/proc/obj_to_plane_overlay(var/obj/Overlays/object,var/slot)
@@ -402,14 +418,17 @@
 	dat += "<BR><B>Head:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_HEAD]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_HEAD])]</A>"
 	dat += "<BR><B>Mask:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_MASK]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_MASK])]</A>"
 	dat += "<BR><B>Eyes:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_EYES]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_EYES])]</A>"
-	dat += "<BR><B>Ears:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_EARS]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_EARS])]</A>"
+	if(!primitive)
+		dat += "<BR><B>Ears:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_EARS]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_EARS])]</A>"
 	dat += "<BR>"
-	dat += "<BR><B>Exosuit:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_OCLOTHING]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_OCLOTHING])]</A>"
-	dat += "<BR><B>Shoes:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_FEET]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_FEET])]</A>"
-	dat += "<BR><B>Gloves:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_GLOVES]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_GLOVES])]</A>"
+	if(!primitive)
+		dat += "<BR><B>Exosuit:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_OCLOTHING]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_OCLOTHING])]</A>"
+		dat += "<BR><B>Shoes:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_FEET]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_FEET])]</A>"
+		dat += "<BR><B>Gloves:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_GLOVES]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_GLOVES])]</A>"
 	dat += "<BR><B>Uniform:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_ICLOTHING]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_ICLOTHING])]</A>"
-	dat += "<BR><B>Belt:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_BELT]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_BELT])]</A>"
-	dat += "<BR><B>ID:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_ID]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_ID])]</A>"
+	if(!primitive)
+		dat += "<BR><B>Belt:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_BELT]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_BELT])]</A>"
+		dat += "<BR><B>ID:</B> <A href='?src=\ref[src];item=[SLOT_MANNEQUIN_ID]'>[makeStrippingButton(clothing[SLOT_MANNEQUIN_ID])]</A>"
 	dat += "<BR>"
 	dat += {"
 	<BR>
@@ -422,7 +441,7 @@
 
 
 /obj/structure/mannequin/proc/canEquip(var/mob/user, var/item_slot, var/obj/item/itemToCheck)
-	if((fat && ((item_slot == SLOT_MANNEQUIN_ICLOTHING) || (item_slot == SLOT_MANNEQUIN_OCLOTHING))) || bulky && (((item_slot == SLOT_MANNEQUIN_ICLOTHING) || (item_slot == SLOT_MANNEQUIN_OCLOTHING) || (item_slot == SLOT_MANNEQUIN_FEET) || (item_slot == SLOT_MANNEQUIN_GLOVES) || (item_slot == SLOT_MANNEQUIN_MASK))))
+	if((fat && ((item_slot == SLOT_MANNEQUIN_ICLOTHING) || (item_slot == SLOT_MANNEQUIN_OCLOTHING))) || ((species.flags & IS_BULKY) && ((item_slot == SLOT_MANNEQUIN_ICLOTHING) || (item_slot == SLOT_MANNEQUIN_OCLOTHING) || (item_slot == SLOT_MANNEQUIN_FEET) || (item_slot == SLOT_MANNEQUIN_GLOVES) || (item_slot == SLOT_MANNEQUIN_MASK))))
 		if(!(itemToCheck.flags & ONESIZEFITSALL))
 			if(user)
 				to_chat(user, "<span class='warning'>\The [src] is too large for \the [itemToCheck]</span>")
@@ -464,26 +483,31 @@
 
 /obj/structure/mannequin/proc/update_icon_uniform()
 	overlays -= obj_overlays[MANNEQUIN_UNIFORM_LAYER]
-	var/obj/item/clothing/under/w_uniform = clothing[SLOT_MANNEQUIN_ICLOTHING]
-	if(w_uniform && istype(w_uniform, /obj/item/clothing/under))
+	var/obj/item/clothing/w_uniform = clothing[SLOT_MANNEQUIN_ICLOTHING]
+	if(w_uniform && istype(w_uniform, /obj/item/clothing))
 		var/obj/Overlays/O = obj_overlays[MANNEQUIN_UNIFORM_LAYER]
 		O.overlays.len = 0
 		var/t_color = w_uniform._color
 		if(!t_color)
 			t_color = icon_state
-		var/image/standing	= image("icon_state" = "[t_color]_s")
-
-		if(fat || species.flags & IS_BULKY)
-			if(w_uniform.flags&ONESIZEFITSALL)
-				standing.icon	= 'icons/mob/uniform_fat.dmi'
-		else
-			standing.icon	= 'icons/mob/uniform.dmi'
+		var/image/standing
 
 		var/obj/item/clothing/under/under_uniform = w_uniform
 
-		if(species.name in under_uniform.species_fit) //Allows clothes to display differently for multiple species
-			if(species.uniform_icons)
-				standing.icon = species.uniform_icons
+		if(fat || species.flags & IS_BULKY)
+			if(w_uniform.flags&ONESIZEFITSALL)
+				standing = image('icons/mob/uniform_fat.dmi', "[t_color]_s")
+		else if(primitive)
+			var/t_state = w_uniform.item_state
+			if(!t_state)
+				t_state = w_uniform.icon_state
+			standing = image('icons/mob/monkey.dmi', "[t_state]")
+		else
+			standing = image('icons/mob/uniform.dmi', "[t_color]_s")
+
+			if(species.name in under_uniform.species_fit) //Allows clothes to display differently for multiple species
+				if(species.uniform_icons)
+					standing.icon = species.uniform_icons
 
 		if(w_uniform.icon_override)
 			standing.icon	= w_uniform.icon_override
@@ -636,13 +660,18 @@
 	overlays -= obj_overlays[MANNEQUIN_GLASSES_LAYER]
 	var/obj/item/glasses = clothing[SLOT_MANNEQUIN_EYES]
 	if(glasses)
-		var/image/standing = image("icon" = ((glasses.icon_override) ? glasses.icon_override : 'icons/mob/eyes.dmi'), "icon_state" = "[glasses.icon_state]")
+		var/image/standing
 
-		var/obj/item/I = glasses
+		if(primitive)
+			standing = image(icon = 'icons/mob/monkey_eyes.dmi', icon_state = glasses.icon_state)
+		else
+			standing = image("icon" = ((glasses.icon_override) ? glasses.icon_override : 'icons/mob/eyes.dmi'), "icon_state" = "[glasses.icon_state]")
 
-		if(species.name in I.species_fit)
-			if(species.glasses_icons)
-				standing.icon = species.glasses_icons
+			var/obj/item/I = glasses
+
+			if(species.name in I.species_fit)
+				if(species.glasses_icons)
+					standing.icon = species.glasses_icons
 
 		var/obj/Overlays/O = obj_overlays[MANNEQUIN_GLASSES_LAYER]
 		O.icon = standing
@@ -687,13 +716,19 @@
 	if(wear_mask)
 		var/obj/Overlays/O = obj_overlays[MANNEQUIN_FACEMASK_LAYER]
 		O.overlays.len = 0
-		var/image/standing	= image("icon" = ((wear_mask.icon_override) ? wear_mask.icon_override : 'icons/mob/mask.dmi'), "icon_state" = "[wear_mask.icon_state]")
 
-		var/obj/item/I = wear_mask
+		var/image/standing
 
-		if(species.name in I.species_fit) //Allows clothes to display differently for multiple species
-			if(species.wear_mask_icons)
-				standing.icon = species.wear_mask_icons
+		if(primitive)
+			standing = image(icon = 'icons/mob/monkey.dmi', icon_state = wear_mask.icon_state)
+		else
+			standing = image("icon" = ((wear_mask.icon_override) ? wear_mask.icon_override : 'icons/mob/mask.dmi'), "icon_state" = "[wear_mask.icon_state]")
+
+			var/obj/item/I = wear_mask
+
+			if(species.name in I.species_fit) //Allows clothes to display differently for multiple species
+				if(species.wear_mask_icons)
+					standing.icon = species.wear_mask_icons
 
 		if(wear_mask.dynamic_overlay)
 			if(wear_mask.dynamic_overlay["[MANNEQUIN_FACEMASK_LAYER]"])
@@ -719,13 +754,18 @@
 	if(head)
 		var/obj/Overlays/O = obj_overlays[MANNEQUIN_HEAD_LAYER]
 		O.overlays.len = 0
-		var/image/standing	= image("icon" = ((head.icon_override) ? head.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[head.icon_state]")
+		var/image/standing
 
-		var/obj/item/I = head
+		if(primitive)
+			standing = image(icon = 'icons/mob/monkey_head.dmi', icon_state = head.icon_state)
+		else
+			standing = image("icon" = ((head.icon_override) ? head.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[head.icon_state]")
 
-		if(species.name in I.species_fit) //Allows clothes to display differently for multiple species
-			if(species.head_icons)
-				standing.icon = species.head_icons
+			var/obj/item/I = head
+
+			if(species.name in I.species_fit) //Allows clothes to display differently for multiple species
+				if(species.head_icons)
+					standing.icon = species.head_icons
 
 		if(head.dynamic_overlay)
 			if(head.dynamic_overlay["[MANNEQUIN_HEAD_LAYER]"])
@@ -942,6 +982,12 @@
 	icon_state="mannequin_marble_vox"
 	species_type = /datum/species/vox
 
+/obj/structure/mannequin/monkey
+	name = "monkey marble mannequin"
+	icon_state="mannequin_marble_monkey"
+	primitive = 1
+	clothing_offset_y = -5*PIXEL_MULTIPLIER
+
 /obj/structure/mannequin/wood
 	name = "human wooden mannequin"
 	desc = "This should look great in a visual arts workshop."
@@ -949,7 +995,7 @@
 	health = 30
 	maxHealth = 30
 
-/obj/structure/mannequin/wood/Destroy()
+/obj/structure/mannequin/wood/breakDown()
 	getFromPool(/obj/item/stack/sheet/wood, loc, 5)//You get half the materials used to make a block back
 	..()
 
@@ -963,7 +1009,11 @@
 	icon_state="mannequin_wooden_vox"
 	species_type = /datum/species/vox
 
-
+/obj/structure/mannequin/wood/monkey
+	name = "monkey wooden mannequin"
+	icon_state="mannequin_wooden_monkey"
+	primitive = 1
+	clothing_offset_y = -5*PIXEL_MULTIPLIER
 
 
 
@@ -978,19 +1028,18 @@
 	icon = 'icons/obj/mannequin.dmi'
 	icon_state = "marble"
 	var/time_to_sculpt = 200
-	var/result = "/obj/structure/mannequin"
-	var/no_drop = 0
+	var/list/available_sculptures = list(
+		"human"		=	/obj/structure/mannequin,
+		"fat human"	=	/obj/structure/mannequin/fat,
+		"monkey"	=	/obj/structure/mannequin/monkey,
+		"vox"		=	/obj/structure/mannequin/vox,
+		)
+
 
 /obj/structure/block/attackby(var/obj/item/weapon/W,var/mob/user)
 	if(iswrench(W))
 		return wrenchAnchor(user, 50)
 	else if(istype(W, /obj/item/weapon/chisel))
-
-		var/list/available_sculptures = list(
-			"human",
-			"fat human",
-			"vox",
-			)
 
 		var/chosen_sculpture = input("Choose a sculpture type.", "[name]") as null|anything in available_sculptures
 
@@ -1001,33 +1050,29 @@
 		var/turf/T=get_turf(src)
 
 		if(do_after(user, src, time_to_sculpt))
-			new /obj/effect/decal/cleanable/dirt(T)
-			if(findtext(chosen_sculpture, "vox"))
-				result += "/vox"
-			var/obj/structure/mannequin/M = new result(T)
-			if(findtext(chosen_sculpture, "fat"))
-				M.fat = 1
-			M.name = "[chosen_sculpture] [icon_state] mannequin"
+			getFromPool(/obj/effect/decal/cleanable/dirt,T)
+			var/mannequin_type = available_sculptures[chosen_sculpture]
+			var/obj/structure/mannequin/M = new mannequin_type(T)
 			M.anchored = anchored
-			M.icon_state = "mannequin_[icon_state]_[replacetext(chosen_sculpture, " ", "_")]"
 			M.add_fingerprint(user)
 			user.visible_message("[user.name] finishes \the [M].","You finish \the [M].")
-			no_drop = 1
 			qdel(src)
 		return 1
 	else
 		..()
 
+
 /obj/structure/block/wood
 	name = "wooden block"
 	icon_state = "wooden"
 	time_to_sculpt = 100
-	result = "/obj/structure/mannequin/wood"
+	available_sculptures = list(
+		"human"		=	/obj/structure/mannequin/wood,
+		"fat human"	=	/obj/structure/mannequin/wood/fat,
+		"monkey"	=	/obj/structure/mannequin/wood/monkey,
+		"vox"		=	/obj/structure/mannequin/wood/vox,
+		)
 
-/obj/structure/block/wood/Destroy()
-	if(!no_drop)
-		getFromPool(/obj/item/stack/sheet/wood, loc, 10)
-	..()
 
 
 
@@ -1042,9 +1087,9 @@
 	desc = "Holy shit."
 	icon = 'icons/obj/mannequin_64x64.dmi'
 	icon_state="mannequin_cyber_human"
-	pixel_x = -16
-	clothing_offset_x = 16
-	clothing_offset_y = 7
+	pixel_x = -1*(WORLD_ICON_SIZE/2)
+	clothing_offset_x = 16*PIXEL_MULTIPLIER
+	clothing_offset_y = 7*PIXEL_MULTIPLIER
 	health = 150
 	maxHealth = 150
 	var/shield = 50
@@ -1056,7 +1101,7 @@
 	..()
 	update_icon()
 
-/obj/structure/mannequin/cyber/Destroy()
+/obj/structure/mannequin/cyber/breakDown()
 	getFromPool(/obj/item/stack/sheet/metal, loc, 5)//You get half the materials used to make a mannequin frame back.
 	var/parts_list = list(
 		/obj/item/robot_parts/head,
@@ -1079,7 +1124,9 @@
 			C.conf_access=req_access
 		else
 			C.conf_access=req_one_access
-	..()
+
+	qdel(src)
+
 
 /obj/structure/mannequin/cyber/ex_act(severity)
 	switch(severity)
@@ -1106,17 +1153,17 @@
 		health -= damage
 	else
 		shield -= damage
-	healthcheck()
+	healthCheck()
 
 /obj/structure/mannequin/cyber/blob_act()
 	if(!destroyed && locked)
 		getDamage(30)
 	else if (prob(75))
-		qdel(src)
+		breakDown()
 	else
 		getDamage(30)
 
-/obj/structure/mannequin/cyber/healthcheck()
+/obj/structure/mannequin/cyber/healthCheck()
 	if(!destroyed)
 		if(health <= 100)
 			destroyed = 1
@@ -1129,7 +1176,7 @@
 	else
 		if(health <= 0)
 			visible_message("\The [src] collapses.")
-			qdel(src)
+			breakDown()
 
 /obj/structure/mannequin/cyber/attackby(var/obj/item/weapon/W,var/mob/user)
 	if(istype(W, /obj/item/weapon/card/id))
@@ -1170,10 +1217,10 @@
 			var/obj/structure/mannequin_frame/new_frame = new(T)
 			new_frame.icon_state = "mannequin_cyber_human"
 			new_frame.overlays |= image(icon, "lightout")
-			new_frame.construct = new /datum/construction/reversible/mannequin(new_frame)
+			new_frame.construct = new /datum/construction/mannequin(new_frame)
 			qdel(src)
 
-	else if(istype(W, /obj/item/weapon/weldingtool) && (user.a_intent == I_HELP))
+	else if(istype(W, /obj/item/weapon/weldingtool) && user.a_intent == I_HELP)
 		if(locked)
 			to_chat(user, "<span class='warning'>You need to open the shield before you can fix the mannequin.</span>")
 		else
@@ -1189,7 +1236,7 @@
 				to_chat(user, "<span class='warning'>Need more welding fuel!</span>")
 				return
 
-	else if(istype(W, /obj/item/weapon/weldingtool) && (user.a_intent == I_HELP))
+	else if(istype(W, /obj/item/weapon/weldingtool) && user.a_intent == I_HELP)
 		if(locked)
 			to_chat(user, "<span class='warning'>You need to open the shield before you can fix the mannequin.</span>")
 		else
@@ -1237,21 +1284,26 @@
 	else if(locked)
 		overlays |= image(icon, "mannequin_cover")
 
-/obj/structure/mannequin/cyber/acidable()
-	return 0
 
-/obj/structure/mannequin/cyber/attack_hand(var/mob/user)
+/obj/structure/mannequin/cyber/attack_hand(var/mob/living/user)
 	if(destroyed)
 		show_inv(user)
 	else if(locked)
 		if(user.a_intent == I_HURT)
 			user.delayNextAttack(8)
-			user.visible_message("<span class='danger'>[user.name] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>", "You hear glass crack.")
-			getDamage(2)
+			user.visible_message("<span class='danger'>[user.name] punches \the [src]!</span>", "<span class='danger'>You punch \the [src]!</span>", "You hear glass crack.")
+			getDamage(rand(1,7) * (user.get_strength() - 1))
 		else
 			to_chat(user,"<span class='notice'>You gently run your hands over \the [src] in appreciation of its contents.</span>")
 	else
 		..()
+
+
+/obj/structure/mannequin/cyber/kick_act(mob/living/carbon/human/H)
+	if(locked)
+		playsound(get_turf(src), 'sound/effects/glassknock.ogg', 100, 1)
+	..()
+
 
 /obj/structure/mannequin/cyber/examine(mob/user)
 	..()
@@ -1274,7 +1326,7 @@
 	desc = "Lots of work just to display some clothes."
 	icon = 'icons/obj/mannequin_64x64.dmi'
 	icon_state="mannequin_cyber_human_frame"
-	pixel_x = -16
+	pixel_x = -1*(WORLD_ICON_SIZE/2)
 	anchored = 0
 	density = 0
 	var/datum/construction/construct
@@ -1309,45 +1361,35 @@
 
 /datum/construction/mannequin_frame/spawn_result(mob/user as mob)
 	var/obj/structure/mannequin_frame/const_holder = holder
-	const_holder.construct = new /datum/construction/reversible/mannequin(const_holder)
+	const_holder.construct = new /datum/construction/mannequin(const_holder)
 	const_holder.overlays.len = 0
 	const_holder.icon_state = "mannequin_cyber_human"
 	const_holder.overlays |= icon(const_holder.icon, "lightout")
-	spawn()
-		qdel (src)
+	qdel(src)
 
-/datum/construction/reversible/mannequin
+/datum/construction/mannequin
 
-/datum/construction/reversible/mannequin
+/datum/construction/mannequin
 	result = /obj/structure/mannequin/cyber
 	var/base_icon = "station_map_frame"
 
 	steps = list(
 		list(
 			Co_DESC="The frame needs a glass shield.",
-			Co_NEXTSTEP = list(
-				Co_KEY=/obj/item/stack/sheet/glass/glass,
-				Co_AMOUNT = 1,
-				Co_VIS_MSG = "{USER} install{s} the glass shield to {HOLDER}.",
-				Co_DELAY = 20
-				),
-			Co_BACKSTEP = list(
-				Co_KEY=/obj/item/weapon/crowbar,
-				Co_VIS_MSG = "{USER} prie{s} the circuitboard from {HOLDER}."
-				)
+			Co_KEY=/obj/item/stack/sheet/glass/glass,
+			Co_AMOUNT = 1,
+			Co_VIS_MSG = "{USER} install{s} the glass shield to {HOLDER}.",
+			Co_DELAY = 20
 			),
 		list(
 			Co_DESC="The frame needs an airlock circuitboard.",
-			Co_NEXTSTEP = list(
-				Co_KEY=/obj/item/weapon/circuitboard/airlock,
-				Co_AMOUNT = 1,
-				Co_VIS_MSG = "{USER} install{s} the circuitboard into {HOLDER}.",
-				Co_AMOUNT = 1
-				)
+			Co_KEY=/obj/item/weapon/circuitboard/airlock,
+			Co_AMOUNT = 1,
+			Co_VIS_MSG = "{USER} install{s} the circuitboard into {HOLDER}.",
 			)
 		)
 
-/datum/construction/reversible/mannequin/custom_action(index, diff, atom/used_atom, mob/user)
+/datum/construction/mannequin/custom_action(index, diff, atom/used_atom, mob/user)
 	if(!..())
 		return 0
 
@@ -1366,10 +1408,10 @@
 
 	return 1
 
-/datum/construction/reversible/mannequin/action(atom/used_atom,mob/user)
+/datum/construction/mannequin/action(atom/used_atom,mob/user)
 	return check_step(used_atom,user)
 
-/datum/construction/reversible/mannequin/spawn_result(mob/user as mob)
+/datum/construction/mannequin/spawn_result(mob/user as mob)
 	if(result)
 		testing("[user] finished a [result]!")
 
@@ -1379,8 +1421,7 @@
 		C.req_access = const_holder.req_access
 		C.req_one_access = const_holder.req_one_access
 
-		spawn()
-			qdel (holder)
-			holder = null
+		qdel (holder)
+		holder = null
 
 	feedback_inc("cyber_mannequin_created",1)
