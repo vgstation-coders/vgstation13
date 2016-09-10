@@ -69,6 +69,7 @@
 	air_contents.volume = 1000
 
 /obj/machinery/atmospherics/unary/vent_pump/update_icon()
+	overlays = null
 	icon_state = welded ? "weld" : "base"
 
 	if (on && ~stat & (NOPOWER|BROKEN))

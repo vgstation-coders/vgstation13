@@ -54,6 +54,7 @@
 		src.broadcast_status()
 
 /obj/machinery/atmospherics/unary/vent_scrubber/update_icon()
+	overlays = null
 	var/prefix = exposed() ? "" : "h"
 	if (welded)
 		icon_state = prefix + "weld"
