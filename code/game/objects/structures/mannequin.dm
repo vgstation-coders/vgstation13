@@ -137,7 +137,7 @@
 
 /obj/structure/mannequin/attack_animal(var/mob/living/simple_animal/user)
 	if(user.melee_damage_upper > 0)
-		user.visible_message("<span class='danger'>\The [user] [user.attack_verb] \the [src]!</span>", "<span class='danger'>You [user.attack_verb] \the [src]!</span>")
+		user.visible_message("<span class='danger'>\The [user] [user.attacktext] \the [src]!</span>", "<span class='danger'>You [user.attacktext] \the [src]!</span>")
 		getDamage(rand(user.melee_damage_upper, user.melee_damage_upper))
 
 
