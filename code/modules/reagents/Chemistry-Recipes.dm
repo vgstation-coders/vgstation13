@@ -456,7 +456,7 @@
 
 		var/eye_safety = 0
 
-		for(var/mob/living/carbon/M in viewers(get_turf(holder.my_atom), null))
+		for(var/mob/living/M in viewers(get_turf(holder.my_atom), null))
 			if(iscarbon(M))
 				eye_safety = M.eyecheck()
 
