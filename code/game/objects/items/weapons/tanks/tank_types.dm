@@ -123,6 +123,7 @@
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_SMALL
 	volume = 2
+	distribute_pressure = ONE_ATMOSPHERE*O2STANDARD
 
 /obj/item/weapon/tank/emergency_nitrogen/New()
 	. = ..()
