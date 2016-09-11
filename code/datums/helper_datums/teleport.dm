@@ -194,7 +194,8 @@
 			teleatom.visible_message("<span class='danger'>The Bag of Holding bounces off of the portal!</span>")
 			return 0
 
-	if(destination.z > 7) //Away mission z-levels
+	var/datum/zLevel/L = get_z_level(destination)
+	if (L.teleJammed)
 		return 0
 
 	for (var/mob/M in recursive_type_check(teleatom, /mob))
