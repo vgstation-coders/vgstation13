@@ -480,18 +480,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			return
 		linked_imprinter.reagents.clear_reagents()
 
-	else if(href_list["disposeP"] && linked_lathe)  //Causes the protolathe to dispose of a single reagent (all of it)
-		if(!src.allowed(usr))
-			to_chat(usr, "Unauthorized Access.")
-			return
-		linked_lathe.reagents.del_reagent(href_list["dispose"])
-
-	else if(href_list["disposeallP"] && linked_lathe) //Causes the protolathe to dispose of all it's reagents.
-		if(!src.allowed(usr))
-			to_chat(usr, "Unauthorized Access.")
-			return
-		linked_lathe.reagents.clear_reagents()
-
 	else if(href_list["removeQItem"]) //Causes the protolathe to dispose of all it's reagents.
 		var/i=text2num(href_list["removeQItem"])
 		switch(href_list["device"])
@@ -626,8 +614,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		options += "<A href='?src=\ref[src];menu=3.1'>Design Selection</A>"
 	if(screen!=3.2)
 		options += "<A href='?src=\ref[src];menu=3.2'>Material Storage</A>"
-	if(screen!=3.3)
-		options += "<A href='?src=\ref[src];menu=3.3'>Chemical Storage</A>"
 	if(screen!=3.4)
 		options += "<A href='?src=\ref[src];menu=3.4'>Production Queue</A> ([linked_lathe.queue.len])"
 	return {"\[<A href='?src=\ref[src];menu=1.0'>Main Menu</A>\]
@@ -907,15 +893,6 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 					dat += " - <em>(Empty)</em>"
 				dat += "</li>"
 			dat += "</ul>"
-
-		if(3.3) //Protolathe Chemical Storage Submenu
-
-			dat += protolathe_header()+{"Chemical Storage<BR><HR>"}
-			for(var/datum/reagent/R in linked_lathe.reagents.reagent_list)
-
-				dat += {"Name: [R.name] | Units: [R.volume]
-					<A href='?src=\ref[src];disposep=[R.id]'>(Purge)</A><BR>
-					<A href='?src=\ref[src];disposeallP=1'><U>Disposal All Chemicals in Storage</U></A><BR>"}
 
 		if(3.4) //Protolathe Queue Management
 			dat += protolathe_header()+"Production Queue<BR><HR><ul>"

@@ -344,6 +344,9 @@ About the new airlock wires panel:
 */
 // You can find code for the airlock wires in the wire datum folder.
 
+/obj/machinery/door/airlock/denied()
+	if (arePowerSystemsOn() && !(stat & (NOPOWER | BROKEN)))
+		..()
 
 /obj/machinery/door/airlock/bump_open(mob/living/user as mob) //Airlocks now zap you when you 'bump' them open when they're electrified. --NeoFite
 	if(!istype(user))

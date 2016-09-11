@@ -75,13 +75,14 @@ What is the naming convention for planes or layers?
 
 #define ABOVE_PLATING_PLANE		-20
 
-	#define CATWALK_LAYER			0
-	#define DISPOSALS_PIPE_LAYER	1
-	#define LATTICE_LAYER			2
-	#define PIPE_LAYER				3
-	#define WIRE_LAYER				4
-	#define VENT_BEZEL_LAYER		5
-	#define WIRE_TERMINAL_LAYER		6
+	#define HOLOMAP_LAYER			1 // NOTE: ENSURE this is equal to the one at ABOVE_TURF_PLANE!
+	#define CATWALK_LAYER			2
+	#define DISPOSALS_PIPE_LAYER	3
+	#define LATTICE_LAYER			4
+	#define PIPE_LAYER				5
+	#define WIRE_LAYER				6
+	#define VENT_BEZEL_LAYER		7
+	#define WIRE_TERMINAL_LAYER		8
 
 #define TURF_PLANE				-19
 
@@ -89,20 +90,21 @@ What is the naming convention for planes or layers?
 
 #define ABOVE_TURF_PLANE 		-18			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
 
-	#define RUNE_LAYER					1
-	#define DECAL_LAYER					2
-	#define TURF_FIRE_LAYER				3
-	#define ABOVE_TILE_LAYER			4
-	#define UNARY_PIPE_LAYER			5
-	#define TRINARY_PIPE_LAYER			6
-	#define BINARY_PIPE_LAYER			7
-	#define EXPOSED_PIPE_LAYER			8
-	#define EXPOSED_UNARY_PIPE_LAYER	9
-	#define EXPOSED_TRINARY_PIPE_LAYER	10
-	#define EXPOSED_BINARY_PIPE_LAYER	11
-	#define MOUSETRAP_LAYER 			12
-	#define FIREAXE_LOCKER_LAYER		13
-	#define BLOOD_LAYER					14
+	#define HOLOMAP_LAYER				1
+	#define RUNE_LAYER					2
+	#define DECAL_LAYER					3
+	#define TURF_FIRE_LAYER				4
+	#define ABOVE_TILE_LAYER			5
+	#define UNARY_PIPE_LAYER			6
+	#define TRINARY_PIPE_LAYER			7
+	#define BINARY_PIPE_LAYER			8
+	#define EXPOSED_PIPE_LAYER			9
+	#define EXPOSED_UNARY_PIPE_LAYER	10
+	#define EXPOSED_TRINARY_PIPE_LAYER	11
+	#define EXPOSED_BINARY_PIPE_LAYER	12
+	#define MOUSETRAP_LAYER 			13
+	#define FIREAXE_LOCKER_LAYER		14
+	#define BLOOD_LAYER					15
 	#define WEED_LAYER					420
 
 #define NOIR_BLOOD_PLANE 		-17		 	// For blood which is red, will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
@@ -197,8 +199,6 @@ What is the naming convention for planes or layers?
 
 #define BASE_PLANE 				0		// Not for anything, but this is the default.
 	#define AREA_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD 999
-
-#define HOLOMAP_PLANE			1
 
 #define STATIC_PLANE 			2		// For AI's static.
 
