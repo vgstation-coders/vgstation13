@@ -1,0 +1,6 @@
+author: Unid
+
+delete-after: True
+
+changes: 
+- tweak: "The wizard's spellbook now starts with 25 points. Multiplied all spellbook prices by 5 (ordinary spells now cost 5 points, no clothes costs 10, spellbook bundle costs 25). Effectively, all prices are still the same."
