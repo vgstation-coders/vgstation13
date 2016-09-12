@@ -477,6 +477,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(Sp_POWER)
 			return empower_spell()
 
+/spell/proc/get_upgrade_price(upgrade_type)
+	return src.price
+
 ///INFO
 
 /spell/proc/get_upgrade_info(upgrade_type)
