@@ -28,13 +28,11 @@
 		open()
 	else if (istype(user, /obj/machinery/bot))
 		open()
-#warn fix this
-//	else if(ismob(user))
-//		var/mob/M = user
-//		if(M.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //This is what we call blind trust
-//			return
-//		TryToSwitchState(user)
-	return
+	else if(ismob(user))
+		var/mob/M = user
+		if(M.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //This is what we call blind trust
+			return
+		TryToSwitchState(user)
 
 
 /obj/machinery/door/mineral/attack_ai(mob/user as mob) //those aren't really machinery, they're just big fucking slabs of a mineral
@@ -56,7 +54,6 @@
 	if(!user.restrained() && (user.size > SIZE_TINY))
 		add_fingerprint(user)
 		SwitchState()
-	return
 
 /obj/machinery/door/mineral/proc/SwitchState()
 	if(!density)
@@ -92,7 +89,6 @@
 /obj/machinery/door/mineral/proc/CheckHardness()
 	if(hardness <= 0)
 		Dismantle(1)
-	return
 
 /obj/machinery/door/mineral/proc/Dismantle(devastated = 0)
 	var/obj/item/stack/ore
@@ -120,7 +116,6 @@
 		if(3)
 			hardness -= 0.1
 			CheckHardness()
-	return
 
 
 /obj/machinery/door/mineral/iron
@@ -185,7 +180,6 @@
 
 		hardness -= toxinsToDeduce/100
 		CheckHardness()
-	return
 
 /obj/machinery/door/mineral/transparent/diamond
 	prefix = "diamond"
@@ -205,7 +199,6 @@
 		resource.amount = oreAmount
 		new resource(get_turf(src))
 	qdel(src)
-	return
 
 /obj/machinery/door/mineral/wood/cultify()
 	return
@@ -230,7 +223,6 @@
 
 /obj/machinery/door/mineral/resin/Dismantle(devastated = 0)
 	qdel(src)
-	return
 
 /obj/machinery/door/mineral/resin/CheckHardness()
 	playsound(get_turf(src), soundeffect, 100, 1)

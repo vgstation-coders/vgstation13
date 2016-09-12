@@ -45,57 +45,87 @@ Class Procs:
 /connection_manager/proc/get(d)
 	switch(d)
 		if(NORTH)
-			if(check(N)) return N
-			else return null
+			if(check(N))
+				return N
+			else
+				return null
 		if(SOUTH)
-			if(check(S)) return S
-			else return null
+			if(check(S))
+				return S
+			else
+				return null
 		if(EAST)
-			if(check(E)) return E
-			else return null
+			if(check(E))
+				return E
+			else
+				return null
 		if(WEST)
-			if(check(W)) return W
-			else return null
+			if(check(W))
+				return W
+			else
+				return null
 
 		#ifdef ZLEVELS
 		if(UP)
-			if(check(U)) return U
-			else return null
+			if(check(U))
+				return U
+			else
+				return null
 		if(DOWN)
-			if(check(D)) return D
-			else return null
+			if(check(D))
+				return D
+			else
+				return null
 		#endif
 
 /connection_manager/proc/place(connection/c, d)
 	switch(d)
-		if(NORTH) N = c
-		if(SOUTH) S = c
-		if(EAST) E = c
-		if(WEST) W = c
+		if(NORTH)
+			N = c
+		if(SOUTH)
+			S = c
+		if(EAST)
+			E = c
+		if(WEST)
+			W = c
 
 		#ifdef ZLEVELS
-		if(UP) U = c
-		if(DOWN) D = c
+		if(UP)
+			U = c
+		if(DOWN)
+			D = c
 		#endif
 
 /connection_manager/proc/update_all()
-	if(check(N)) N.update()
-	if(check(S)) S.update()
-	if(check(E)) E.update()
-	if(check(W)) W.update()
+	if(check(N))
+		N.update()
+	if(check(S))
+		S.update()
+	if(check(E))
+		E.update()
+	if(check(W))
+		W.update()
 	#ifdef ZLEVELS
-	if(check(U)) U.update()
-	if(check(D)) D.update()
+	if(check(U))
+		U.update()
+	if(check(D))
+		D.update()
 	#endif
 
 /connection_manager/proc/erase_all()
-	if(check(N)) N.erase()
-	if(check(S)) S.erase()
-	if(check(E)) E.erase()
-	if(check(W)) W.erase()
+	if(check(N))
+		N.erase()
+	if(check(S))
+		S.erase()
+	if(check(E))
+		E.erase()
+	if(check(W))
+		W.erase()
 	#ifdef ZLEVELS
-	if(check(U)) U.erase()
-	if(check(D)) D.erase()
+	if(check(U))
+		U.erase()
+	if(check(D))
+		D.erase()
 	#endif
 
 /connection_manager/proc/check(connection/c)

@@ -101,8 +101,8 @@ var/list/all_doors = list()
 
 /obj/machinery/door/proc/bump_open(mob/user as mob)
 //Prevents zas from forcing you to open doors
-//	if(user.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay))
-//		return
+	if(user.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay))
+		return
 
 	add_fingerprint(user)
 

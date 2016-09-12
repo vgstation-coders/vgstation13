@@ -43,9 +43,14 @@ obj/var/contaminated = 0
 
 /obj/item/proc/can_contaminate()
 	//Clothing and backpacks can be contaminated.
-	if(flags & PLASMAGUARD) return 0
-	else if(istype(src,/obj/item/weapon/storage/backpack)) return 0 //Cannot be washed :(
-	else if(istype(src,/obj/item/clothing)) return 1
+	if(flags & PLASMAGUARD)
+		return 0
+
+/obj/item/weapon/storage/backpack/can_contaminate()
+	return 0
+
+/obj/item/clothing/can_contaminate()
+	return 1
 
 /obj/item/proc/contaminate()
 	//Do a contamination overlay? Temporary measure to keep contamination less deadly than it was.
@@ -66,7 +71,8 @@ obj/var/contaminated = 0
 		suit_contamination()
 
 	if(!pl_head_protected())
-		if(prob(1)) suit_contamination() //Plasma can sometimes get through such an open suit.
+		if(prob(1))
+			suit_contamination() //Plasma can sometimes get through such an open suit.
 
 //Cannot wash backpacks currently.
 //	if(istype(back,/obj/item/weapon/storage/backpack))
@@ -77,80 +83,77 @@ obj/var/contaminated = 0
 /mob/living/carbon/human/pl_effects()
 	//Handles all the bad things plasma can do.
 
+	if(flags & INVULNERABLE)
+		return
+
 	//Contamination
-	if(zas_settings.Get(/datum/ZAS_Setting/CLOTH_CONTAMINATION)) contaminate()
+	if(zas_settings.Get(/datum/ZAS_Setting/CLOTH_CONTAMINATION))
+		contaminate()
 
 	//Anything else requires them to not be dead.
-	if(stat >= 2)
+	if(isDead())
+		return
+
+	if(species.breath_type == "plasma")
 		return
 
 	//Burn skin if exposed.
 	if(zas_settings.Get(/datum/ZAS_Setting/SKIN_BURNS))
 		if(!pl_head_protected() || !pl_suit_protected())
 			burn_skin(0.75)
-			if(prob(20)) src << "<span class='danger'>Your skin burns!</span>"
+			if(prob(20))
+				to_chat(src, "<span class='warning'>Your skin burns!</span>")
 			updatehealth()
 
 	//Burn eyes if exposed.
 	if(zas_settings.Get(/datum/ZAS_Setting/EYE_BURNS))
-		if(!head)
-			if(!wear_mask)
-				burn_eyes()
-			else
-				if(!(wear_mask.body_parts_covered & EYES))
-					burn_eyes()
-		else
-			if(!(head.body_parts_covered & EYES))
-				if(!wear_mask)
-					burn_eyes()
-				else
-					if(!(wear_mask.body_parts_covered & EYES))
-						burn_eyes()
+		var/eye_protection = get_body_part_coverage(EYES)
+		if(!eye_protection)
+			burn_eyes()
 
 	//Genetic Corruption
 	if(zas_settings.Get(/datum/ZAS_Setting/GENETIC_CORRUPTION))
 		if(rand(1,10000) < zas_settings.Get(/datum/ZAS_Setting/GENETIC_CORRUPTION))
 			randmutb(src)
-			src << "<span class='danger'>High levels of toxins cause you to spontaneously mutate!</span>"
+			to_chat(src, "<span class='warning'>High levels of toxins cause you to spontaneously mutate.</span>")
 			domutcheck(src,null)
 
 
 /mob/living/carbon/human/proc/burn_eyes()
-#warn NO IDEA IF "eyes" is correct in this context
-/*	var/obj/item/organ/internal/eyes/E = internal_organs_by_name["eyes"]
+	//The proc that handles eye burning.
+	if(!species.has_organ["eyes"])
+		return
+	var/datum/organ/internal/eyes/E = internal_organs_by_name["eyes"]
 	if(E)
-		if(prob(20)) src << "<span class='danger'>Your eyes burn!</span>"
+		if(prob(20))
+			to_chat(src, "<span class='warning'>Your eyes burn!</span>")
 		E.damage += 2.5
 		eye_blurry = min(eye_blurry+1.5,50)
-		if (prob(max(0,E.damage - 15) + 1) &&!eye_blind)
-			src << "<span class='danger'>You are blinded!</span>"
+		if (prob(max(0,E.damage - 15) + 1) && !eye_blind)
+			to_chat(src, "<span class='warning'>You are blinded!</span>")
 			eye_blind += 20
-*/
+
+
 /mob/living/carbon/human/proc/pl_head_protected()
 	//Checks if the head is adequately sealed.
 	if(head)
 		if(zas_settings.Get(/datum/ZAS_Setting/PLASMAGUARD_ONLY))
 			if(head.flags & PLASMAGUARD)
 				return 1
-		else if(head.body_parts_covered & EYES)
+		else if(check_body_part_coverage(EYES))
 			return 1
 	return 0
 
 /mob/living/carbon/human/proc/pl_suit_protected()
 	//Checks if the suit is adequately sealed.
-	var/coverage = 0
-	for(var/obj/item/protection in list(wear_suit, gloves, shoes))
-		if(!protection)
-			continue
-		if(zas_settings.Get(/datum/ZAS_Setting/PLASMAGUARD_ONLY) && !(protection.flags & PLASMAGUARD))
-			return 0
-		coverage |= protection.body_parts_covered
-
-	if(zas_settings.Get(/datum/ZAS_Setting/PLASMAGUARD_ONLY))
-		return 1
-
-#warn THE FUCK DOES THIS MEAN
-//	return BIT_TEST_ALL(coverage, UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS)
+	if(wear_suit)
+		if(zas_settings.Get(/datum/ZAS_Setting/PLASMAGUARD_ONLY))
+			if(wear_suit.flags & PLASMAGUARD)
+				return 1
+		else
+			if(is_slot_hidden(wear_suit.body_parts_covered,HIDEJUMPSUIT))
+				return 1
+	return 0
 
 /mob/living/carbon/human/proc/suit_contamination()
 	//Runs over the things that can be contaminated and does so.
@@ -158,7 +161,7 @@ obj/var/contaminated = 0
 	if(shoes) shoes.contaminate()
 	if(gloves) gloves.contaminate()
 
-
+/* We hate this
 turf/Entered(obj/item/I)
 	. = ..()
 	//Items that are in plasma, but not on a mob, can still be contaminated.
@@ -170,3 +173,4 @@ turf/Entered(obj/item/I)
 			if(gas_data.flags[g] & XGM_GAS_CONTAMINANT && env.gas[g] > gas_data.overlay_limit[g] + 1)
 				I.contaminate()
 				break
+*/

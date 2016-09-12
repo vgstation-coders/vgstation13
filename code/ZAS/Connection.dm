@@ -79,13 +79,11 @@ Class Procs:
 	if(!direct())
 		state |= CONNECTION_DIRECT
 		edge.direct++
-	//world << "Marked direct."
 
 /connection/proc/mark_indirect()
 	if(direct())
 		state &= ~CONNECTION_DIRECT
 		edge.direct--
-	//world << "Marked indirect."
 
 /connection/proc/mark_space()
 	state |= CONNECTION_SPACE
@@ -99,18 +97,14 @@ Class Procs:
 /connection/proc/erase()
 	edge.remove_connection(src)
 	state |= CONNECTION_INVALID
-	//world << "Connection Erased: [state]"
 
 /connection/proc/update()
-	//world << "Updated, \..."
 	if(!istype(A,/turf/simulated))
-		//world << "Invalid A."
 		erase()
 		return
 
 	var/block_status = air_master.air_blocked(A,B)
 	if(block_status & AIR_BLOCKED)
-		//world << "Blocked connection."
 		erase()
 		return
 	else if(block_status & ZONE_BLOCKED)
@@ -122,14 +116,11 @@ Class Procs:
 
 	if(state & CONNECTION_SPACE)
 		if(!b_is_space)
-			//world << "Invalid B."
 			erase()
 			return
 		if(A.zone != zoneA)
-			//world << "Zone changed, \..."
 			if(!A.zone)
 				erase()
-				//world << "erased."
 				return
 			else
 				edge.remove_connection(src)
@@ -137,22 +128,18 @@ Class Procs:
 				edge.add_connection(src)
 				zoneA = A.zone
 
-		//world << "valid."
 		return
 
 	else if(b_is_space)
-		//world << "Invalid B."
 		erase()
 		return
 
 	if(A.zone == B.zone)
-		//world << "A == B"
 		erase()
 		return
 
 	if(A.zone != zoneA || (zoneB && (B.zone != zoneB)))
 
-		//world << "Zones changed, \..."
 		if(A.zone && B.zone)
 			edge.remove_connection(src)
 			edge = air_master.get_edge(A.zone, B.zone)
@@ -160,9 +147,5 @@ Class Procs:
 			zoneA = A.zone
 			zoneB = B.zone
 		else
-			//world << "erased."
 			erase()
 			return
-
-
-	//world << "valid."

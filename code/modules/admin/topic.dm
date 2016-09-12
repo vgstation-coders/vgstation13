@@ -3689,12 +3689,11 @@
 			populate_inactive_customitems_list(src.owner)
 
 	else if(href_list["vsc"])
-#warn wtf
-//		if(check_rights(R_ADMIN|R_SERVER))
-//			if(href_list["vsc"] == "airflow")
-//				zas_settings.ChangeSettingsDialog(usr,zas_settings.settings)
-//			if(href_list["vsc"] == "default")
-//				zas_settings.SetDefault(usr)
+		if(check_rights(R_ADMIN|R_SERVER))
+			if(href_list["vsc"] == "airflow")
+				zas_settings.ChangeSettingsDialog(usr,zas_settings.settings)
+			if(href_list["vsc"] == "default")
+				zas_settings.SetDefault(usr)
 
 	else if(href_list["toglang"])
 		if(check_rights(R_SPAWN))

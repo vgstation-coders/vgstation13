@@ -8,6 +8,9 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 
 //#define FIREDBG
 
+
+////// Fire and atoms //////////////
+
 /atom
 	var/autoignition_temperature = 0 // In Kelvin.  0 = Not flammable
 	var/on_fire=0
@@ -26,20 +29,9 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 	return fire_fuel
 
 /atom/proc/burnFireFuel(var/used_fuel_ratio,var/used_reactants_ratio)
-	fire_fuel -= (fire_fuel * used_fuel_ratio * used_reactants_ratio) //* 5
-	if(fire_fuel<=0.1)
-		//testing("[src] ashifying (BFF)!")
+	fire_fuel -= (fire_fuel * used_fuel_ratio * used_reactants_ratio)
+	if(fire_fuel <= BASE_ZAS_FUEL_REQ)
 		ashify()
-
-/atom/proc/ignite(var/temperature)
-	on_fire=1
-	visible_message("\The [src] bursts into flame!")
-	overlays += image(fire_dmi,fire_sprite)
-	spawn(rand(3,10) SECONDS)
-		if(!on_fire)
-			return
-		new ashtype(src.loc)
-		qdel(src)
 
 /atom/proc/ashify()
 	if(!on_fire)
@@ -47,36 +39,84 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 	new ashtype(src.loc)
 	qdel(src)
 
+/atom/proc/ignite(var/temperature)
+	spawn(rand(3,10) SECONDS)
+		on_fire=1
+		visible_message("\The [src] bursts into flame!")
+		if(fire_dmi && fire_sprite)
+			overlays += image(fire_dmi,fire_sprite)
+
 /atom/proc/melt()
 	return
 
 /atom/proc/solidify()
 	return
 
-#warn This is only added to help compile, extinguish needs to be reworked to conform to bay zas
-/obj/fire/proc/Extinguish()
-	var/turf/simulated/S=loc
-
-	if(istype(S))
-		S.extinguish()
-
-	for(var/atom/A in loc)
-		A.extinguish()
-
-	qdel(src)
-
 /atom/proc/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(autoignition_temperature && !on_fire && exposed_temperature > autoignition_temperature)
 		ignite(exposed_temperature)
+		return 1
+	return 0
+
+/atom/proc/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	return null
+
+//////////Fire and turfs ////////////////
 
 /turf
 	var/soot_type = /obj/effect/decal/cleanable/soot
 
 /turf/var/obj/fire/fire = null
 
-//Some legacy definitions so fires can be started.
-/atom/proc/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	return null
+/turf/simulated/var/fire_protection = 0 //Protects newly extinguished tiles from being overrun again.
+/turf/proc/apply_fire_protection()
+/turf/simulated/apply_fire_protection()
+	fire_protection = world.time
+
+#warn IS THIS WISE? Perhaps add as setting????
+/turf/proc/adjacent_fire_act(turf/simulated/floor/source, temperature, volume)
+	return
+
+/turf/simulated/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	var/obj/effect/E = null
+	if(soot_type)
+		E = locate(soot_type) in src
+	if(..())
+		return 1
+	if(molten || on_fire)
+		if(istype(E))
+			qdel(E)
+		return 0
+	if(!E && soot_type && prob(25))
+		new soot_type(src)
+
+	return 0
+
+/turf/simulated/floor/adjacent_fire_act(turf/simulated/floor/adj_turf, datum/gas_mixture/adj_air, adj_temp, adj_volume)
+	var/dir_to = get_dir(src, adj_turf)
+
+	for(var/obj/structure/window/W in src)
+		if(W.dir == dir_to || W.is_fulltile()) //Same direction or diagonal (full tile)
+			W.fire_act(adj_air, adj_temp, adj_volume)
+
+/turf/simulated/wall/adjacent_fire_act(turf/simulated/floor/adj_turf, datum/gas_mixture/adj_air, adj_temp, adj_volume)
+//	burn(adj_temp)
+#warn hilarity ensuing
+	if(adj_temp > melt_temperature && prob(1))
+		dismantle_wall(1)
+
+	return ..()
+/*
+/turf/simulated/wall/proc/burn(temperature)
+	if(material.combustion_effect(src, temperature, 0.7))
+		spawn(2)
+			new /obj/structure/girder(src)
+			src.ChangeTurf(/turf/simulated/floor)
+			for(var/turf/simulated/wall/W in range(3,src))
+				W.burn((temperature/4))
+			for(var/obj/machinery/door/airlock/phoron/D in range(3,src))
+				D.ignite(temperature/4)
+*/
 
 
 /turf/proc/hotspot_expose(exposed_temperature, exposed_volume, soh = 0, surfaces = 0)
@@ -103,6 +143,41 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 
 		create_fire(exposed_temperature)
 	return igniting
+
+// ignite_temp: 0 = Don't check, just get fuel.
+/turf/simulated/proc/getAmtFuel(var/ignite_temp=0)
+	var/fuel_found=0
+	if(!ignite_temp || src.autoignition_temperature<ignite_temp)
+		fuel_found += src.getFireFuel()
+	for(var/atom/A in src)
+		if(!A)
+			continue
+		if(ignite_temp && A.autoignition_temperature>ignite_temp)
+			continue
+		fuel_found += A.getFireFuel()
+	return fuel_found
+
+/turf/proc/create_fire(fl)
+	return 0
+
+/turf/simulated/create_fire(fl)
+	if(fire)
+		fire.firelevel = max(fl, fire.firelevel)
+		return 1
+
+	if(!zone)
+		return 1
+
+	fire = new(src, fl)
+	air_master.active_fire_zones |= zone
+
+	var/obj/effect/decal/cleanable/liquid_fuel/fuel = locate() in src
+	zone.fire_tiles |= src
+	if(fuel) zone.fuel_objs += fuel
+
+	return 0
+
+///////////////// Fire and zones ///////////////////
 
 /zone/proc/process_fire()
 	var/datum/gas_mixture/burn_gas = air.remove_ratio(zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate), fire_tiles.len)
@@ -153,25 +228,7 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 				if(istype(T) && T.fire) qdel(T.fire)
 			qdel(fuel)
 
-/turf/proc/create_fire(fl)
-	return 0
-
-/turf/simulated/create_fire(fl)
-	if(fire)
-		fire.firelevel = max(fl, fire.firelevel)
-		return 1
-
-	if(!zone)
-		return 1
-
-	fire = new(src, fl)
-	air_master.active_fire_zones |= zone
-
-	var/obj/effect/decal/cleanable/liquid_fuel/fuel = locate() in src
-	zone.fire_tiles |= src
-	if(fuel) zone.fuel_objs += fuel
-
-	return 0
+/////////////////// Fire Object /////////////////////
 
 /obj/fire
 	//Icon for fire on turfs.
@@ -183,12 +240,15 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 
 	icon = 'icons/effects/fire.dmi'
 	icon_state = "1"
-	light_color = "#ED9200"
-	layer = TURF_LAYER
+	light_color = LIGHT_COLOR_FIRE
+	layer = TURF_FIRE_LAYER
+	plane = ABOVE_TURF_PLANE
 
 	var/firelevel = 1 //Calculated by gas_mixture.calculate_firelevel()
 
 /obj/fire/process()
+	if(timestopped)
+		return 0
 	. = 1
 
 	var/turf/simulated/my_tile = loc
@@ -280,13 +340,18 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 
 		T.fire = null
 		loc = null
+
+	var/turf/simulated/S=loc
+
+	if(istype(S))
+		S.extinguish()
+
+	for(var/atom/A in loc)
+		A.extinguish()
+
 	air_master.active_hotspots.Remove(src)
 
-
-/turf/simulated/var/fire_protection = 0 //Protects newly extinguished tiles from being overrun again.
-/turf/proc/apply_fire_protection()
-/turf/simulated/apply_fire_protection()
-	fire_protection = world.time
+	qdel(src)
 
 //Returns the firelevel
 /datum/gas_mixture/proc/zburn(zone/zone, force_burn, no_check = 0)
@@ -388,7 +453,7 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 
 		return firelevel
 
-datum/gas_mixture/proc/check_recombustability(list/fuel_objs)
+/datum/gas_mixture/proc/check_recombustability(list/fuel_objs)
 	. = 0
 	for(var/g in gas)
 		if(gas_data.flags[g] & XGM_GAS_OXIDIZER && gas[g] >= 0.1)
@@ -456,6 +521,8 @@ datum/gas_mixture/proc/check_recombustability(list/fuel_objs)
 	return max( 0, firelevel)
 
 
+////////////////// Fire and Mobs ////////////////////////////////
+
 /mob/living/proc/FireBurn(var/firelevel, var/last_temperature, var/pressure)
 	var/mx = 5 * firelevel/zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier) * min(pressure / ONE_ATMOSPHERE, 1)
 	apply_damage(2.5*mx, BURN)
@@ -500,6 +567,9 @@ datum/gas_mixture/proc/check_recombustability(list/fuel_objs)
 	apply_damage(0.6*mx*legs_exposure,  BURN, LIMB_RIGHT_LEG, 0, 0, "Fire")
 	apply_damage(0.4*mx*arms_exposure,  BURN, LIMB_LEFT_ARM, 0, 0, "Fire")
 	apply_damage(0.4*mx*arms_exposure,  BURN, LIMB_RIGHT_ARM, 0, 0, "Fire")
+
+
+/////////////////// Fire color ////////////////////////
 
 // heat2color functions. Adapted from: http://www.tannerhelland.com/4435/convert-temperature-rgb-algorithm-code/
 /proc/heat2color(temp)

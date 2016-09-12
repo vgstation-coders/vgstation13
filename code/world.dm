@@ -26,7 +26,7 @@ var/savefile/panicfile
 	on_ban   = new ()
 	on_unban = new ()
 
-#warn temporary hopefully
+#warn PJB REDO YOUR FUCKING HOOK SYSTEM
 	StartXGM()
 
 

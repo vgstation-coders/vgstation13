@@ -685,3 +685,6 @@
 		return A.has_gravity
 
 	return 1
+
+/turf/attack_hand(mob/user as mob)
+	user.Move_Pulled(src)

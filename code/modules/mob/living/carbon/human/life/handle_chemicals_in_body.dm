@@ -22,9 +22,8 @@
 
 	var/total_plasmaloss = 0
 	for(var/obj/item/I in src)
-#warn DELETE THIS
-//		if(I.contaminated)
-//			total_plasmaloss += zas_settings.Get(/datum/ZAS_Setting/CONTAMINATION_LOSS)
+		if(I.contaminated)
+			total_plasmaloss += zas_settings.Get(/datum/ZAS_Setting/CONTAMINATION_LOSS)
 		I.OnMobLife(src)
 	if(status_flags & GODMODE)
 		return 0 //Godmode

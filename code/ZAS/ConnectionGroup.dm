@@ -58,13 +58,14 @@ Class Procs:
 */
 
 
-/connection_edge/var/zone/A
+/connection_edge
+	var/zone/A
 
-/connection_edge/var/list/connecting_turfs = list()
-/connection_edge/var/direct = 0
-/connection_edge/var/sleeping = 1
+	var/list/connecting_turfs = list()
+	var/direct = 0
+	var/sleeping = 1
 
-/connection_edge/var/coefficient = 0
+	var/coefficient = 0
 
 /connection_edge/New()
 	CRASH("Cannot make connection edge without specifications.")
@@ -72,10 +73,8 @@ Class Procs:
 /connection_edge/proc/add_connection(connection/c)
 	coefficient++
 	if(c.direct()) direct++
-	//world << "Connection added: [type] Coefficient: [coefficient]"
 
 /connection_edge/proc/remove_connection(connection/c)
-	//world << "Connection removed: [type] Coefficient: [coefficient-1]"
 	coefficient--
 	if(coefficient <= 0)
 		erase()
@@ -85,23 +84,19 @@ Class Procs:
 
 /connection_edge/proc/erase()
 	air_master.remove_edge(src)
-	//world << "[type] Erased."
 
 /connection_edge/proc/tick()
 
 /connection_edge/proc/recheck()
 
 /connection_edge/proc/flow(list/movable, differential, repelled)
-	for(var/i = 1; i <= movable.len; i++)
-		var/atom/movable/M = movable[i]
-
+	for(var/atom/movable/M in movable)
 		//If they're already being tossed, don't do it again.
 		if(M.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) continue
 		if(M.airflow_speed) continue
 
 		//Check for knocking people over
 		if(ismob(M) && differential > zas_settings.Get(/datum/ZAS_Setting/airflow_stun_pressure))
-			if(M:status_flags & GODMODE) continue
 			M:airflow_stun()
 
 		if(M.check_airflow_movable(differential))
@@ -113,10 +108,10 @@ Class Procs:
 
 			M.airflow_dest = pick(close_turfs) //Pick a random midpoint to fly towards.
 
-			if(repelled) spawn if(M) M.RepelAirflowDest(differential/5)
-			else spawn if(M) M.GotoAirflowDest(differential/10)
-
-
+			if(repelled)
+				M.RepelAirflowDest(differential/5)
+			else
+				M.GotoAirflowDest(differential/10)
 
 
 /connection_edge/zone/var/zone/B
@@ -128,7 +123,6 @@ Class Procs:
 	A.edges.Add(src)
 	B.edges.Add(src)
 	//id = edge_id(A,B)
-	//world << "New edge between [A] and [B]"
 
 /connection_edge/zone/add_connection(connection/c)
 	. = ..()
@@ -197,7 +191,6 @@ Class Procs:
 	A.edges.Add(src)
 	air = B.return_air()
 	//id = 52*A.id
-	//world << "New edge from [A] to [B]."
 
 /connection_edge/unsimulated/add_connection(connection/c)
 	. = ..()

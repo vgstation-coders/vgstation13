@@ -40,20 +40,21 @@ Class Procs:
 */
 
 
-/zone/var/name
-/zone/var/invalid = 0
-/zone/var/list/contents = list()
-/zone/var/list/fire_tiles = list()
-/zone/var/list/fuel_objs = list()
+/zone
+	var/name
+	var/invalid = 0
+	var/list/contents = list()
+	var/list/fire_tiles = list()
+	var/list/fuel_objs = list()
 
-/zone/var/needs_update = 0
+	var/needs_update = 0
 
-/zone/var/list/edges = list()
+	var/list/edges = list()
 
-/zone/var/datum/gas_mixture/air = new
+	var/datum/gas_mixture/air = new
 
-/zone/var/list/graphic_add = list()
-/zone/var/list/graphic_remove = list()
+	var/list/graphic_add = list()
+	var/list/graphic_remove = list()
 
 /zone/New()
 	air_master.add_zone(src)
@@ -162,15 +163,15 @@ Class Procs:
 			E.recheck()
 
 /zone/proc/dbg_data(mob/M)
-	M << name
+	to_chat(M, name)
 	for(var/g in air.gas)
-		M << "[gas_data.name[g]]: [air.gas[g]]"
-	M << "P: [air.return_pressure()] kPa V: [air.volume]L T: [air.temperature]°K ([air.temperature - T0C]°C)"
-	M << "O2 per N2: [(air.gas["nitrogen"] ? air.gas["oxygen"]/air.gas["nitrogen"] : "N/A")] Moles: [air.total_moles]"
-	M << "Simulated: [contents.len] ([air.group_multiplier])"
+		to_chat(M, "[gas_data.name[g]]: [air.gas[g]]")
+	to_chat(M, "P: [air.return_pressure()] kPa V: [air.volume]L T: [air.temperature]°K ([air.temperature - T0C]°C)")
+	to_chat(M, "O2 per N2: [(air.gas["nitrogen"] ? air.gas["oxygen"]/air.gas["nitrogen"] : "N/A")] Moles: [air.total_moles]")
+	to_chat(M, "Simulated: [contents.len] ([air.group_multiplier])")
 	//M << "Unsimulated: [unsimulated_contents.len]"
 	//M << "Edges: [edges.len]"
-	if(invalid) M << "Invalid!"
+	if(invalid) to_chat(M, "Invalid!")
 	var/zone_edges = 0
 	var/space_edges = 0
 	var/space_coefficient = 0
@@ -179,10 +180,10 @@ Class Procs:
 		else
 			space_edges++
 			space_coefficient += E.coefficient
-			M << "[E:air:return_pressure()]kPa"
+			to_chat(M, "[E:air:return_pressure()]kPa")
 
-	M << "Zone Edges: [zone_edges]"
-	M << "Space Edges: [space_edges] ([space_coefficient] connections)"
+	to_chat(M, "Zone Edges: [zone_edges]")
+	to_chat(M, "Space Edges: [space_edges] ([space_coefficient] connections)")
 
 	//for(var/turf/T in unsimulated_contents)
 	//	M << "[T] at ([T.x],[T.y])"

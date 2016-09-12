@@ -51,7 +51,7 @@
 #define CARBON_LIFEFORM_FIRE_DAMAGE     4
 
 // Plasma fire properties.
-#define PLASMA_MINIMUM_BURN_TEMPERATURE    (T0C +  126) //400 K - autoignite temperature in tanks and canisters - enclosed environments I guess
+#define PLASMA_MINIMUM_BURN_TEMPERATURE    (T0C +  100) //374 K - autoignite temperature in tanks and canisters - enclosed environments I guess
 #define PLASMA_FLASHPOINT                  (T0C +  246) //519 K - autoignite temperature in air if that ever gets implemented.
 
 //These control the mole ratio of oxidizer and fuel used in the combustion reaction
@@ -91,17 +91,3 @@
 
 // Non-bay things here.
 #define BASE_ZAS_FUEL_REQ	0.1
-
-
-#warn TODO: Old, non-bay defines: keep or toss?
-// Fire Damage
-#define CARBON_LIFEFORM_FIRE_RESISTANCE 200+T0C
-#define CARBON_LIFEFORM_FIRE_DAMAGE		4
-
-//Plasma fire properties
-#define PLASMA_MINIMUM_BURN_TEMPERATURE		100+T0C
-#define PLASMA_FLASHPOINT 					246+T0C
-#define PLASMA_UPPER_TEMPERATURE			1370+T0C
-#define PLASMA_MINIMUM_OXYGEN_NEEDED		2
-#define PLASMA_MINIMUM_OXYGEN_PLASMA_RATIO	20
-#define PLASMA_OXYGEN_FULLBURN				10

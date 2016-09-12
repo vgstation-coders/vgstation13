@@ -1,14 +1,9 @@
-
 /atom/movable/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	//Purpose: Determines if the object (or airflow) can pass this atom.
-	//Called by: Movement, airflow.
-	//Inputs: The moving atom (optional), target turf, "height" and air group
-	//Outputs: Boolean if can pass.
-
 	return (!density || !height || air_group)
 
-/turf/proc/Cross(atom/movable/mover, turf/target, height=1.5,air_group=0)
-	if(!target) return 0
+/turf/proc/Cross(atom/movable/mover, turf/target, height=1.5, air_group=0)
+	if(!target)
+		return 0
 
 	if(istype(mover)) // turf/Enter(...) will perform more advanced checks
 		return !density
@@ -63,13 +58,16 @@
 	#ifdef ZLEVELS
 	if(other.z != src.z)
 		if(other.z < src.z)
-			if(!istype(src, /turf/simulated/open)) return BLOCKED
+			if(!istype(src, /turf/simulated/floor/open))
+				return BLOCKED
 		else
-			if(!istype(other, /turf/simulated/open)) return BLOCKED
+			if(!istype(other, /turf/simulated/floor/open))
+				return BLOCKED
 	#endif
 
 	var/result = 0
 	for(var/atom/movable/M in contents)
 		result |= M.c_airblock(other)
-		if(result == BLOCKED) return BLOCKED
+		if(result == BLOCKED)
+			return BLOCKED
 	return result
