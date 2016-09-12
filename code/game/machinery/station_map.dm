@@ -22,19 +22,19 @@ var/list/station_holomaps = list()
 	layer = ABOVE_WINDOW_LAYER
 
 	var/mob/watching_mob = null
-	var/image/station_map = null
 	var/image/small_station_map = null
 	var/image/floor_markings = null
 	var/image/panel = null
-	var/image/cursor = null
-	var/image/legend = null
 
 	var/original_zLevel = 1	//zLevel on which the station map was initialized.
 	var/bogus = 0			//set to 1 when you initialize the station map on a zLevel that doesn't have its own icon formatted for use by station holomaps.
 							//currently, the only supported zLevels are the Station, the Asteroid, and the Derelict.
 
+	var/datum/station_holomap/holomap_datum
+
 /obj/machinery/station_map/New()
 	..()
+	holomap_datum = new()
 	original_zLevel = loc.z
 	station_holomaps += src
 	flags |= ON_BORDER
@@ -68,36 +68,24 @@ var/list/station_holomaps = list()
 
 /obj/machinery/station_map/initialize()
 	bogus = 0
-	original_zLevel = loc.z
+	var/turf/T = get_turf(src)
+	original_zLevel = T.z
 	if(!(HOLOMAP_EXTRA_STATIONMAP+"_[original_zLevel]" in extraMiniMaps))
 		bogus = 1
-		station_map = image('icons/480x480.dmi', "stationmap")
-		legend = image('icons/effects/64x64.dmi', "notfound")
-		legend.pixel_x = 7*WORLD_ICON_SIZE
-		legend.pixel_y = 7*WORLD_ICON_SIZE
+		holomap_datum.initialize_holomap_bogus()
 		update_icon()
 		return
 
-	station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP+"_[original_zLevel]"])
+	holomap_datum.initialize_holomap(T)
+
 	small_station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[original_zLevel]"])
 	small_station_map.plane = LIGHTING_PLANE
 	small_station_map.layer = ABOVE_LIGHTING_LAYER
-	cursor = image('icons/holomap_markers.dmi', "you")
-	if(map.holomap_offset_x.len >= original_zLevel)
-		cursor.pixel_x = (x-6+map.holomap_offset_x[original_zLevel])*PIXEL_MULTIPLIER
-		cursor.pixel_y = (y-6+map.holomap_offset_y[original_zLevel])*PIXEL_MULTIPLIER
-	else
-		cursor.pixel_x = (x-6)*PIXEL_MULTIPLIER
-		cursor.pixel_y = (y-6)*PIXEL_MULTIPLIER
-	legend = image('icons/effects/64x64.dmi', "legend")
-	legend.pixel_x = 3*WORLD_ICON_SIZE
-	legend.pixel_y = 3*WORLD_ICON_SIZE
+
 	floor_markings = image('icons/turf/overlays.dmi', "station_map")
 	floor_markings.dir = dir
 	floor_markings.plane = ABOVE_TURF_PLANE
 	floor_markings.layer = DECAL_LAYER
-	station_map.overlays |= cursor
-	station_map.overlays |= legend
 	update_icon()
 
 /obj/machinery/station_map/attack_hand(var/mob/user)
@@ -111,12 +99,12 @@ var/list/station_holomaps = list()
 
 	if(isliving(user) && anchored && !(stat & (NOPOWER|BROKEN)))
 		if(user.hud_used && user.hud_used.holomap_obj)
-			station_map.loc = user.hud_used.holomap_obj
-			station_map.alpha = 0
-			animate(station_map, alpha = 255, time = 5, easing = LINEAR_EASING)
+			holomap_datum.station_map.loc = user.hud_used.holomap_obj
+			holomap_datum.station_map.alpha = 0
+			animate(holomap_datum.station_map, alpha = 255, time = 5, easing = LINEAR_EASING)
 			watching_mob = user
 			flick("station_map_activate", src)
-			watching_mob.client.images |= station_map
+			watching_mob.client.images |= holomap_datum.station_map
 			watching_mob.callOnFace["\ref[src]"] = "checkPosition"
 			if(bogus)
 				to_chat(user, "<span class='warning'>The holomap failed to initialize. This area of space cannot be mapped.</span>")
@@ -147,10 +135,10 @@ var/list/station_holomaps = list()
 		if(watching_mob.client)
 			var/mob/M = watching_mob
 			spawn(5)//we give it time to fade out
-				M.client.images -= station_map
+				M.client.images -= holomap_datum.station_map
 		watching_mob.callOnFace -= "\ref[src]"
 	watching_mob = null
-	animate(station_map, alpha = 0, time = 5, easing = LINEAR_EASING)
+	animate(holomap_datum.station_map, alpha = 0, time = 5, easing = LINEAR_EASING)
 
 /obj/machinery/station_map/power_change()
 	. = ..()
@@ -170,8 +158,8 @@ var/list/station_holomaps = list()
 		icon_state = "station_map"
 
 		if(bogus)
-			station_map.overlays.len = 0
-			station_map.overlays |= legend
+			holomap_datum.station_map.overlays.len = 0
+			holomap_datum.station_map.overlays |= holomap_datum.legend
 		else
 			switch(dir)
 				if(NORTH)
@@ -184,15 +172,15 @@ var/list/station_holomaps = list()
 					small_station_map.icon = extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_WEST+"_[original_zLevel]"]
 
 			overlays |= small_station_map
-			station_map.overlays.len = 0
+			holomap_datum.station_map.overlays.len = 0
 			if(map.holomap_offset_x.len >= original_zLevel)
-				cursor.pixel_x = (x-6+map.holomap_offset_x[original_zLevel])*PIXEL_MULTIPLIER
-				cursor.pixel_y = (y-6+map.holomap_offset_y[original_zLevel])*PIXEL_MULTIPLIER
+				holomap_datum.cursor.pixel_x = (x-6+map.holomap_offset_x[original_zLevel])*PIXEL_MULTIPLIER
+				holomap_datum.cursor.pixel_y = (y-6+map.holomap_offset_y[original_zLevel])*PIXEL_MULTIPLIER
 			else
-				cursor.pixel_x = (x-6)*PIXEL_MULTIPLIER
-				cursor.pixel_y = (y-6)*PIXEL_MULTIPLIER
-			station_map.overlays |= cursor
-			station_map.overlays |= legend
+				holomap_datum.cursor.pixel_x = (x-6)*PIXEL_MULTIPLIER
+				holomap_datum.cursor.pixel_y = (y-6)*PIXEL_MULTIPLIER
+			holomap_datum.station_map.overlays |= holomap_datum.cursor
+			holomap_datum.station_map.overlays |= holomap_datum.legend
 
 	switch(dir)
 		if(NORTH)
@@ -250,9 +238,12 @@ var/list/station_holomaps = list()
 	origin_tech				= Tc_MAGNETS + "=2;" + Tc_PROGRAMMING + "=2"
 
 	var/mob/watching_mob = null
-	var/image/station_map = null
-	var/image/cursor = null
-	var/image/legend = null
+
+	var/datum/station_holomap/holomap_datum
+
+/obj/item/device/station_map/New()
+	..()
+	holomap_datum = new()
 
 /obj/item/device/station_map/attack_self(var/mob/user)
 	toggleHolomap(user)
@@ -271,33 +262,15 @@ var/list/station_holomaps = list()
 		var/bogus = 0
 		if(!(HOLOMAP_EXTRA_STATIONMAP+"_[T.z]" in extraMiniMaps))
 			bogus = 1
-			station_map = image('icons/480x480.dmi', "stationmap")
-			legend = image('icons/effects/64x64.dmi', "notfound")
-			legend.pixel_x = 7*WORLD_ICON_SIZE
-			legend.pixel_y = 7*WORLD_ICON_SIZE
-			station_map.overlays |= legend
+			holomap_datum.initialize_holomap_bogus()
 		else
-			station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP+"_[T.z]"])
-			cursor = image('icons/holomap_markers.dmi', "you")
-			if(isAI)
-				T = get_turf(user.client.eye)
-			if(map.holomap_offset_x.len >= T.z)
-				cursor.pixel_x = (T.x-6+map.holomap_offset_x[T.z])*PIXEL_MULTIPLIER
-				cursor.pixel_y = (T.y-6+map.holomap_offset_y[T.z])*PIXEL_MULTIPLIER
-			else
-				cursor.pixel_x = (T.x-6)*PIXEL_MULTIPLIER
-				cursor.pixel_y = (T.y-6)*PIXEL_MULTIPLIER
-			legend = image('icons/effects/64x64.dmi', "legend")
-			legend.pixel_x = 3*WORLD_ICON_SIZE
-			legend.pixel_y = 3*WORLD_ICON_SIZE
-			station_map.overlays |= cursor
-			station_map.overlays |= legend
+			holomap_datum.initialize_holomap(T, isAI, user)
 
-		station_map.loc = user.hud_used.holomap_obj
-		station_map.alpha = 0
-		animate(station_map, alpha = 255, time = 5, easing = LINEAR_EASING)
+		holomap_datum.station_map.loc = user.hud_used.holomap_obj
+		holomap_datum.station_map.alpha = 0
+		animate(holomap_datum.station_map, alpha = 255, time = 5, easing = LINEAR_EASING)
 
-		user.client.images |= station_map
+		user.client.images |= holomap_datum.station_map
 
 		if(bogus)
 			to_chat(user, "<span class='warning'>The holomap failed to initialize. This area of space cannot be mapped.</span>")
@@ -316,6 +289,36 @@ var/list/station_holomaps = list()
 		if(watching_mob.client)
 			var/mob/M = watching_mob
 			spawn(5)//we give it time to fade out
-				M.client.images -= station_map
+				M.client.images -= holomap_datum.station_map
 	watching_mob = null
-	animate(station_map, alpha = 0, time = 5, easing = LINEAR_EASING)
+	animate(holomap_datum.station_map, alpha = 0, time = 5, easing = LINEAR_EASING)
+
+//Holomap datum, for initialization
+/datum/station_holomap
+	var/image/station_map
+	var/image/cursor
+	var/image/legend
+
+/datum/station_holomap/proc/initialize_holomap(var/turf/T, var/isAI=null, var/mob/user=null)
+	station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP+"_[T.z]"])
+	cursor = image('icons/holomap_markers.dmi', "you")
+	if(isAI)
+		T = get_turf(user.client.eye)
+	if(map.holomap_offset_x.len >= T.z)
+		cursor.pixel_x = (T.x-6+map.holomap_offset_x[T.z])*PIXEL_MULTIPLIER
+		cursor.pixel_y = (T.y-6+map.holomap_offset_y[T.z])*PIXEL_MULTIPLIER
+	else
+		cursor.pixel_x = (T.x-6)*PIXEL_MULTIPLIER
+		cursor.pixel_y = (T.y-6)*PIXEL_MULTIPLIER
+	legend = image('icons/effects/64x64.dmi', "legend")
+	legend.pixel_x = 3*WORLD_ICON_SIZE
+	legend.pixel_y = 3*WORLD_ICON_SIZE
+	station_map.overlays |= cursor
+	station_map.overlays |= legend
+
+/datum/station_holomap/proc/initialize_holomap_bogus()
+	station_map = image('icons/480x480.dmi', "stationmap")
+	legend = image('icons/effects/64x64.dmi', "notfound")
+	legend.pixel_x = 7*WORLD_ICON_SIZE
+	legend.pixel_y = 7*WORLD_ICON_SIZE
+	station_map.overlays |= legend
