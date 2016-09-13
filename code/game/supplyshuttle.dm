@@ -451,8 +451,10 @@ var/list/mechtoys = list(
 			if(I && SO.orderedby == I.registered_name)
 				orders_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name)))
 	data["orders"] = orders_list
-
-	data["money"] = current_acct.fmtBalance()
+	if(current_acct != null)
+		data["money"] = current_acct.fmtBalance()
+	else
+		data["money"] = "NO ACCOUNT"
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
 	if(!ui)
@@ -468,6 +470,8 @@ var/list/mechtoys = list(
 		usr.set_machine(src)
 
 	if (href_list["doorder"])
+		if(isAdminGhost(usr)) // Admin ghosts don't have accounts
+			return
 		if(world.time < reqtime)
 			for(var/mob/V in hearers(src))
 				V.show_message("<b>[src]</b>'s monitor flashes, \"[world.time - reqtime] seconds remaining until another requisition form may be printed.\"")
@@ -668,8 +672,11 @@ var/list/mechtoys = list(
 		if(SO)
 			orders_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name, "orderedby" = SO.orderedby, "comment" = SO.comment)))
 	data["orders"] = orders_list
-
-	data["money"] = current_acct.fmtBalance()
+	
+	if(current_acct != null)
+		data["money"] = current_acct.fmtBalance()
+	else
+		data["money"] = "NO ACCOUNT"
 	data["send"] = list("send" = 1)
 	data["moving"] = supply_shuttle.moving
 	data["at_station"] = supply_shuttle.at_station
@@ -704,6 +711,8 @@ var/list/mechtoys = list(
 			post_signal("supply")
 		
 	else if (href_list["doorder"])
+		if(isAdminGhost(usr)) // Admin ghosts don't have accounts
+			return
 		if(world.time < reqtime)
 			for(var/mob/V in hearers(src))
 				V.show_message("<b>[src]</b>'s monitor flashes, \"[world.time - reqtime] seconds remaining until another requisition form may be printed.\"")
