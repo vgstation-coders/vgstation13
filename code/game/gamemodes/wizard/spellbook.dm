@@ -707,7 +707,18 @@
 	spellname = "sculpting"
 	icon_state = "bookstatue"
 	desc = "This book is as dense as a rock."
-
+	
+/obj/item/weapon/spellbook/oneuse/ringoffire
+	spell = /spell/aoe_turf/ring_of_fire
+	spellname = "ring of fire"
+	icon_state = "bookring"
+	desc = "The cover of this book is much warmer than the pages within."
+	
+/obj/item/weapon/spellbook/oneuse/ringoffire/recoil(mob/living/carbon/user as mob)
+	user.adjust_fire_stacks(10)
+	user.IgniteMob()
+	to_chat(user, "<span class = 'warning'>The book sets you alight!</span>")
+	
 // Spell Book Bundles//
 
 /obj/item/weapon/storage/box/spellbook
