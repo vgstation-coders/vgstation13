@@ -407,6 +407,9 @@ var/list/mechtoys = list(
 	if(..())
 		return
 	current_acct = user.get_worn_id_account()
+	if(current_acct == null) // don't do anything if they don't have an account they can use
+		to_chat(user, "<span class='warning'>Please wear an ID with an associated bank account.</span>")
+		return
 	user.set_machine(src)
 	ui_interact(usr)
 	onclose(user, "computer")
@@ -470,8 +473,6 @@ var/list/mechtoys = list(
 		usr.set_machine(src)
 
 	if (href_list["doorder"])
-		if(isAdminGhost(usr)) // Admin ghosts don't have accounts
-			return
 		if(world.time < reqtime)
 			for(var/mob/V in hearers(src))
 				V.show_message("<b>[src]</b>'s monitor flashes, \"[world.time - reqtime] seconds remaining until another requisition form may be printed.\"")
@@ -590,6 +591,9 @@ var/list/mechtoys = list(
 		return
 
 	current_acct = user.get_worn_id_account()
+	if(current_acct == null) // don't do anything if they don't have an account they can use
+		to_chat(user, "<span class='warning'>Please wear an ID with an associated bank account.</span>")
+		return
 
 	user.set_machine(src)
 	post_signal("supply")
@@ -711,8 +715,6 @@ var/list/mechtoys = list(
 			post_signal("supply")
 		
 	else if (href_list["doorder"])
-		if(isAdminGhost(usr)) // Admin ghosts don't have accounts
-			return
 		if(world.time < reqtime)
 			for(var/mob/V in hearers(src))
 				V.show_message("<b>[src]</b>'s monitor flashes, \"[world.time - reqtime] seconds remaining until another requisition form may be printed.\"")
