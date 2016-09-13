@@ -22,7 +22,7 @@
 	starting_materials		= list(MAT_IRON = 50, MAT_GLASS = 20)
 	w_type					= RECYK_ELECTRONIC
 	melt_temperature		= MELTPOINT_SILICON
-	origin_tech				= "magnets=1;engineering=1"
+	origin_tech				= Tc_MAGNETS + "=1;" + Tc_ENGINEERING + "=1"
 	// VG: We dun changed dis so we can link simple machines. - N3X
 	var/obj/machinery/buffer // simple machine buffer for device linkage
 	var/clone				= 0 // If this is on cloning will happen, this is handled in machinery code.

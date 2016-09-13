@@ -1,0 +1,4 @@
+author: JMWTurner
+delete-after: true
+changes:
+  - rscadd: Added Station Holomaps. You can find them where the old station map signs used to be.
