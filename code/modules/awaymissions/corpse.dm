@@ -404,6 +404,63 @@
 /obj/effect/landmark/corpse/russian/ranged
 	corpsehelmet = /obj/item/clothing/head/ushanka
 
+
+//////////////////Adminbus Corpses///////////////////////
+
+/obj/effect/landmark/corpse/ertleader
+	name = "Emergency Response Organizer"
+	corpseuniform = /obj/item/clothing/under/rank/centcom/captain
+	corpsesuit = /obj/item/clothing/suit/armor/swat/officer
+	corpseshoes = /obj/item/clothing/shoes/centcom
+	corpseradio = /obj/item/device/radio/headset/ert
+	corpseglasses = /obj/item/clothing/glasses/hud/security/jensenshades
+	corpsegloves = /obj/item/clothing/gloves/combat
+	corpsebelt = /obj/item/weapon/gun/energy/pulse_rifle/M1911
+	corpsehelmet = /obj/item/clothing/head/beret/centcom/captain
+	corpseback = /obj/item/weapon/storage/backpack/satchel/withwallet
+	corpsepocket1 = /obj/item/weapon/pinpointer/advpinpointer
+
+/obj/effect/landmark/corpse/centcommander
+	name = "Central Commander"
+	corpseuniform = /obj/item/clothing/under/gimmick/rank/captain/suit
+	corpsesuit = /obj/item/clothing/suit/armor/swat/officer
+	corpseradio = /obj/item/device/radio/headset/ert
+	corpseshoes = /obj/item/clothing/shoes/centcom
+	corpseglasses = /obj/item/clothing/glasses/sunglasses
+	corpsegloves = /obj/item/clothing/gloves/centcom
+	corpsebelt = /obj/item/weapon/gun/energy/gun
+	corpsehelmet = /obj/item/clothing/head/centhat
+	corpseback = /obj/item/weapon/storage/backpack/satchel/withwallet
+	corpsepocket1 = /obj/item/weapon/pinpointer/advpinpointer
+
+/obj/effect/landmark/corpse/batman
+	name = "Batman"
+	corpseuniform = /obj/item/clothing/under/batmansuit
+	corpsesuit = /obj/item/clothing/suit/armor/vest
+	corpseradio = /obj/item/device/radio/headset/deathsquad
+	corpseshoes = /obj/item/clothing/shoes/jackboots/batmanboots
+	corpseglasses = /obj/item/clothing/glasses/thermal/jensen
+	corpsegloves = /obj/item/clothing/gloves/batmangloves
+	corpsebelt = /obj/item/weapon/storage/belt/security/batmanbelt
+	corpsemask = /obj/item/clothing/mask/gas/swat
+	corpsehelmet = /obj/item/clothing/head/batman
+	corpseback = /obj/item/weapon/storage/backpack/satchel/withwallet
+	corpsepocket1 = /obj/item/weapon/pinpointer/advpinpointer
+
+/obj/effect/landmark/corpse/dredd
+	name = "Judge Dredd"
+	corpseuniform = /obj/item/clothing/under/color/black
+	corpsesuit = /obj/item/clothing/suit/armor/xcomsquaddie/dredd
+	corpseradio = /obj/item/device/radio/headset/deathsquad
+	corpseshoes = /obj/item/clothing/shoes/combat
+	corpseglasses = /obj/item/clothing/glasses/sunglasses/sechud
+	corpsegloves = /obj/item/clothing/gloves/combat
+	corpsebelt = /obj/item/weapon/storage/belt/security
+	corpsemask = /obj/item/clothing/mask/gas/swat
+	corpsehelmet = /obj/item/clothing/head/helmet/dredd
+	corpseback = /obj/item/weapon/storage/backpack/satchel/withwallet
+	corpsepocket1 = /obj/item/weapon/pinpointer/advpinpointer
+
 //////////////////Misc Corpses///////////////////////////
 
 /obj/effect/landmark/corpse/civilian //Random corpse!
