@@ -5,7 +5,7 @@
 	return "Living"
 	
 /mob/living/carbon/player_panel_job()
-	return "Carbon"
+	return "Carbon-Based"
 	
 /mob/living/carbon/human/player_panel_job()
 	return job
