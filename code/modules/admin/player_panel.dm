@@ -253,7 +253,7 @@
 						M_job = "AI"
 					else if(ispAI(M))
 						M_job = "pAI"
-					else if(isrobot(M))
+					else if(isrobot(M) && !isMoMMI(M))
 						M_job = "Cyborg"
 					else if(isMoMMI(M))
 						M_job = "Mobile-MMI"
