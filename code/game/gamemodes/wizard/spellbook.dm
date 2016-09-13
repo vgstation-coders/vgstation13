@@ -14,6 +14,7 @@
 	/spell/targeted/projectile/magic_missile,
 	/spell/targeted/projectile/dumbfire/fireball,
 	/spell/lightning,
+	/spell/aoe_turf/ring_of_fire,
 	/spell/aoe_turf/disable_tech,
 	/spell/aoe_turf/smoke,
 	/spell/targeted/genetic/blind,

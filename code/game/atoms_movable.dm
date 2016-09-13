@@ -259,6 +259,16 @@
 
 	locked_to.unlock_atom(src)
 
+// Proc for adding an unique locking category with a certain ID.
+/atom/movable/proc/add_lock_cat(var/type, var/id)
+	if(locking_categories_name.Find(id))
+		return locking_categories_name[id]
+
+	var/datum/locking_category/C = getFromPool(type, src)
+	C.name = id
+	locking_categories_name[id] = C
+	locking_categories += C
+
 /atom/movable/proc/get_lock_cat(var/category = /datum/locking_category)
 	. = locking_categories_name[category]
 
