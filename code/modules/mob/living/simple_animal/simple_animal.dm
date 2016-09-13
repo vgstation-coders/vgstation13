@@ -620,7 +620,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		Die()
 
 /mob/living/simple_animal/adjustFireLoss(damage)
-
+	if(status_flags & GODMODE)
+		return 0
+	if(mutations.Find(M_RESIST_HEAT))
+		return 0
 	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = damage)))
 		return 0
 

@@ -306,7 +306,8 @@
 /mob/living/proc/adjustFireLoss(var/amount)
 	if(status_flags & GODMODE)
 		return 0	//godmode
-
+	if(mutations.Find(M_RESIST_HEAT))
+		return 0
 	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = amount)))
 		return 0
 
