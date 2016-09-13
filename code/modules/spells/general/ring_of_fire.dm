@@ -16,6 +16,7 @@
 
 	duration = 100
 	range = 3
+	selection_type = "range"
 	var/move_with_user = 0
 
 /spell/aoe_turf/ring_of_fire/choose_targets(mob/user = usr)
