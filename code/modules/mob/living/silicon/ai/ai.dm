@@ -843,7 +843,7 @@ var/list/ai_list = list()
 	set name = "Toggle Station Holomap"
 	set desc = "Toggle station holomap on your screen"
 	set category = "AI Commands"
-	if(!isUnconscious())
+	if(isUnconscious())
 		return
 
 	station_holomap.toggleHolomap(src,1)
