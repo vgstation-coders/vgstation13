@@ -344,6 +344,7 @@
 			move_delay += 7
 
 		//We are now going to move
+		var/old_dir = mob.dir
 		move_delay = max(move_delay,1)
 		if(mob.movement_speed_modifier)
 			move_delay *= (1/mob.movement_speed_modifier)
@@ -386,6 +387,9 @@
 		else
 			. = ..()
 			mob.last_movement=world.time
+
+		if(mob.dir != old_dir)
+			mob.Facing()
 
 ///Process_Grab()
 ///Called by client/Move()

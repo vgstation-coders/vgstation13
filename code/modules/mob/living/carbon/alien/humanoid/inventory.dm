@@ -5,7 +5,7 @@
 		return
 
 	if(src.is_holding_item(W))
-		src.u_equip(W)
+		src.u_equip(W, 0)
 
 	switch(slot)
 		if(slot_head)
@@ -75,9 +75,9 @@
 	if(success)
 		if (client)
 			client.screen -= W
-		W.forceMove(loc)
 		W.unequipped()
 		if(dropped)
+			W.forceMove(loc)
 			W.dropped(src)
 		if(W)
 			W.reset_plane_and_layer()

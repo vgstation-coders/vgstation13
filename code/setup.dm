@@ -1249,6 +1249,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 //upgrading
 #define Sp_SPEED	"cooldown"
 #define Sp_POWER	"power"
+#define Sp_MOVE		"mobility"
 #define Sp_TOTAL	"total"
 
 //casting costs
@@ -1261,8 +1262,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define GLOBALCAST -2
 
 //buying costs
-#define Sp_BASE_PRICE 1
-#define Sp_UPGRADE_PRICE 1
+#define Sp_BASE_PRICE 5
 
 ///////WIZ END/////////
 
@@ -1523,3 +1523,20 @@ var/proccalls = 1
 #define HOLOMAP_FILTER_NUKEOPS			3
 #define HOLOMAP_FILTER_ELITESYNDICATE	4
 #define HOLOMAP_FILTER_VOX				5
+
+#define HOLOMAP_AREACOLOR_COMMAND		"#447FC299"
+#define HOLOMAP_AREACOLOR_SECURITY		"#AE121299"
+#define HOLOMAP_AREACOLOR_MEDICAL		"#35803099"
+#define HOLOMAP_AREACOLOR_SCIENCE		"#A154A699"
+#define HOLOMAP_AREACOLOR_ENGINEERING	"#F1C23199"
+#define HOLOMAP_AREACOLOR_CARGO			"#E06F0099"
+#define HOLOMAP_AREACOLOR_HALLWAYS		"#FFFFFF66"
+#define HOLOMAP_AREACOLOR_ARRIVALS		"#0000FFCC"
+#define HOLOMAP_AREACOLOR_ESCAPE		"#FF0000CC"
+
+#define HOLOMAP_EXTRA_STATIONMAP				"stationmapformatted"
+#define HOLOMAP_EXTRA_STATIONMAPAREAS			"stationareas"
+#define HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH		"stationmapsmallnorth"
+#define HOLOMAP_EXTRA_STATIONMAPSMALL_SOUTH		"stationmapsmallsouth"
+#define HOLOMAP_EXTRA_STATIONMAPSMALL_EAST		"stationmapsmalleast"
+#define HOLOMAP_EXTRA_STATIONMAPSMALL_WEST		"stationmapsmallwest"

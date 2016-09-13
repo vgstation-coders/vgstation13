@@ -1,4 +1,6 @@
 var/global/list/mob/virtualhearer/virtualhearers = list()
+var/global/list/mob/virtualhearer/movable_hearers = list()
+var/global/list/mob/virtualhearer/mob_hearers = list()
 //To improve the performance of the virtualhearers loop, we do not need to
 //locate the virtualhearers of these stationary objects, as they should not move
 //and if they do move (singuloth), the virtualhearer should be moving with them
@@ -20,9 +22,6 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 	alpha = 0
 	animate_movement = 0
 	ignoreinvert = 1
-	//This can be expanded with vision flags to make a device to hear through walls for example
-	var/attached_type = null
-	var/attached_ref = null
 
 /mob/virtualhearer/New(atom/attachedto)
 	AddToProfiler()
@@ -34,15 +33,18 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 	if(istype(M))
 		sight = M.sight
 		see_invisible = M.see_invisible
+		mob_hearers[attachedto] = src
 
-/* An equally nonsense and good idea, keep stationary hearers from moving, but without a second list
-track virtualhearers how are you going to REMOVE virtualhearers
-	if(is_type_in_list(attachedto,stationary_hearers))
-		virtualhearers -= src
-*/
+	if(!is_type_in_list(attachedto,stationary_hearers))
+		movable_hearers += src
+
+	virtualhearers += src
+
 /mob/virtualhearer/Destroy()
 	..()
 	virtualhearers -= src
+	movable_hearers -= src
+	mob_hearers -= attached
 	attached = null
 
 /mob/virtualhearer/resetVariables()
@@ -78,6 +80,5 @@ track virtualhearers how are you going to REMOVE virtualhearers
 	if(removing)
 		sight &= ~removing
 	if(sight != oldsight)
-		for(var/mob/virtualhearer/VH in virtualhearers)
-			if(VH.attached == src)
-				VH.sight = sight
+		var/mob/virtualhearer/VH = mob_hearers[src]
+		VH.sight = sight

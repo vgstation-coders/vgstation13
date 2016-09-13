@@ -1,4 +1,4 @@
-#define STARTING_USES 5
+#define STARTING_USES 5 * Sp_BASE_PRICE
 
 /obj/item/weapon/spellbook
 	name = "spell book"
@@ -14,6 +14,7 @@
 	/spell/targeted/projectile/magic_missile,
 	/spell/targeted/projectile/dumbfire/fireball,
 	/spell/lightning,
+	/spell/aoe_turf/ring_of_fire,
 	/spell/aoe_turf/disable_tech,
 	/spell/aoe_turf/smoke,
 	/spell/targeted/genetic/blind,
@@ -44,6 +45,10 @@
 	var/max_uses = STARTING_USES
 
 	var/op = 1
+
+/obj/item/weapon/spellbook/admin
+	uses = 30 * Sp_BASE_PRICE
+	op = 0
 
 /obj/item/weapon/spellbook/New()
 	..()
@@ -130,7 +135,7 @@
 				if(!max)
 					continue
 
-				upgrade_data += "<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade_info=1'>[upgrade]</a>: [lvl]/[max] (<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade=1'>upgrade</a>)  "
+				upgrade_data += "<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade_info=1'>[upgrade]</a>: [lvl]/[max] (<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade=1'>upgrade ([spell.get_upgrade_price(upgrade)] points)</a>)  "
 
 			if(upgrade_data)
 				dat += "[upgrade_data]<br><br>"
@@ -292,8 +297,9 @@
 		var/spell/spell = locate(href_list["spell"])
 
 		if(istype(spell) && spell.can_improve(upgrade_type))
-			if(use(Sp_UPGRADE_PRICE))
-				spell.refund_price += Sp_UPGRADE_PRICE
+			var/price = spell.get_upgrade_price(upgrade_type)
+			if(use(price))
+				spell.refund_price += price
 				var/temp = spell.apply_upgrade(upgrade_type)
 
 				if(temp)
