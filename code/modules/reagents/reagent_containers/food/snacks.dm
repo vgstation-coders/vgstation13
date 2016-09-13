@@ -4364,3 +4364,21 @@
 	New()
 		..()
 		reagents.add_reagent(NUTRIMENT,3)
+
+/obj/item/weapon/reagent_containers/food/snacks/bait
+	name = "bait"
+	desc = "Don't fall for it."
+	icon_state = "bacon" //placeholder
+	bitesize = 1
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,1)
+
+/obj/item/weapon/reagent_containers/food/snacks/fish
+	name = "raw fish"
+	desc = "The product of a real man who lives off the land."
+	icon_state = "meat" //placeholder
+	bitesize = 1
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,1)
