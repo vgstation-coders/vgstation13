@@ -16,17 +16,11 @@
 
 	duration = 100
 	range = 3
+	selection_type = "range"
 	var/move_with_user = 0
 
 /spell/aoe_turf/ring_of_fire/choose_targets(mob/user = usr)
 	return trange(range, get_turf(user)) - trange(range - 1, get_turf(user))
-
-//Turfs that aren't in view are valid targets!
-/spell/aoe_turf/ring_of_fire/is_valid_target(atom/target, mob/user, options)
-	if(options)
-		return (target in options)
-	
-	return TRUE
 
 /spell/aoe_turf/ring_of_fire/cast(list/targets, mob/user)
 
