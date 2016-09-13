@@ -42,7 +42,7 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 /atom/proc/ignite(var/temperature)
 	spawn(rand(3,10) SECONDS)
 		on_fire=1
-		visible_message("\The [src] bursts into flame!")
+		visible_message("<span class ='warning'>\The [src] bursts into flame!</span>")
 		if(fire_dmi && fire_sprite)
 			overlays += image(fire_dmi,fire_sprite)
 
@@ -253,9 +253,7 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 
 	var/turf/simulated/my_tile = loc
 	if(!istype(my_tile) || !my_tile.zone)
-		if(my_tile.fire == src)
-			my_tile.fire = null
-		RemoveFire()
+		qdel(src)
 		return 1
 
 	var/datum/gas_mixture/air_contents = my_tile.return_air()
@@ -334,13 +332,6 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 	..()
 
 /obj/fire/proc/RemoveFire()
-	var/turf/T = loc
-	if (istype(T))
-		set_light(0)
-
-		T.fire = null
-		loc = null
-
 	var/turf/simulated/S=loc
 
 	if(istype(S))
@@ -349,9 +340,14 @@ If it gains pressure too slowly, it may leak or just rupture instead of explodin
 	for(var/atom/A in loc)
 		A.extinguish()
 
-	air_master.active_hotspots.Remove(src)
+	var/turf/T = loc
+	if (istype(T))
+		set_light(0)
 
-	qdel(src)
+		T.fire = null
+		loc = null
+
+	air_master.active_hotspots.Remove(src)
 
 //Returns the firelevel
 /datum/gas_mixture/proc/zburn(zone/zone, force_burn, no_check = 0)

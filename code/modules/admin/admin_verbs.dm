@@ -199,7 +199,9 @@ var/list/admin_verbs_debug = list(
 #endif
 	/client/proc/debugNatureMapGenerator,
 	/client/proc/callatomproc,
-	/client/proc/view_runtimes
+	/client/proc/view_runtimes,
+	/client/proc/testZAScolors,
+	/client/proc/testZAScolors_remove
 	)
 var/list/admin_verbs_possess = list(
 	/proc/possess,
@@ -1318,3 +1320,84 @@ var/list/admin_verbs_mod = list(
 		alert(src, "An external server error has occurred. Please report this.")
 		return 0
 
+/client/var/list/testZAScolors_turfs = list()
+/client/var/list/testZAScolors_zones = list()
+/client/var/usedZAScolors = 0
+/client/var/list/image/ZAScolors = list()
+
+/client/proc/recurse_zone(var/zone/Z, var/recurse_level =1)
+	testZAScolors_zones += Z
+	if(recurse_level > 10)
+		return
+	var/icon/yellow = new('icons/misc/debug_group.dmi', "yellow")
+
+	for(var/turf/T in Z.contents)
+		images += image(yellow, T, "zasdebug", TURF_LAYER)
+		testZAScolors_turfs += T
+	for(var/connection_edge/zone/edge in Z.edges)
+		var/zone/connected = edge.get_connected_zone(Z)
+		if(connected in testZAScolors_zones)
+			continue
+		recurse_zone(connected,recurse_level+1)
+
+
+/client/proc/testZAScolors()
+	set category = "ZAS"
+	set name = "Check ZAS connections"
+
+	if(!check_rights(R_DEBUG)) return
+	testZAScolors_remove()
+
+	var/turf/simulated/location = get_turf(usr)
+
+	if(!istype(location, /turf/simulated)) // We're in space, let's not cause runtimes.
+		to_chat(usr,"<span class = 'warning'>This debug tool cannot be used from space</span>")
+		return
+
+	var/icon/red = new('icons/misc/debug_group.dmi', "red")		//created here so we don't have to make thousands of these.
+	var/icon/green = new('icons/misc/debug_group.dmi', "green")
+	var/icon/blue = new('icons/misc/debug_group.dmi', "blue")
+
+	if(!usedZAScolors)
+		to_chat(usr,"ZAS Test Colors")
+		to_chat(usr,"Green = Zone you are standing in")
+		to_chat(usr,"Blue = Connected zone to the zone you are standing in")
+		to_chat(usr,"Yellow = A zone that is connected but not one adjacent to your connected zone")
+		to_chat(usr,"Red = Not connected")
+		usedZAScolors = 1
+
+	testZAScolors_zones += location.zone
+	for(var/turf/T in location.zone.contents)
+		images += image(green, T,"zasdebug", TURF_LAYER)
+		testZAScolors_turfs += T
+	for(var/connection_edge/zone/edge in location.zone.edges)
+		var/zone/Z = edge.get_connected_zone(location.zone)
+		testZAScolors_zones += Z
+		for(var/turf/T in Z.contents)
+			images += image(blue, T,"zasdebug",TURF_LAYER)
+			testZAScolors_turfs += T
+		for(var/connection_edge/zone/z_edge in Z.edges)
+			var/zone/connected = z_edge.get_connected_zone(Z)
+			if(connected in testZAScolors_zones)
+				continue
+			recurse_zone(connected,1)
+
+	for(var/turf/T in range(25,location))
+		if(!istype(T))
+			continue
+		if(T in testZAScolors_turfs)
+			continue
+		images += image(red, T, "zasdebug", TURF_LAYER)
+		testZAScolors_turfs += T
+
+/client/proc/testZAScolors_remove()
+	set category = "ZAS"
+	set name = "Remove ZAS connection colors"
+
+	testZAScolors_turfs.Cut()
+	testZAScolors_zones.Cut()
+
+	if(images.len)
+		for(var/image/i in images)
+			if(i.icon_state == "zasdebug")
+				images.Remove(i)
