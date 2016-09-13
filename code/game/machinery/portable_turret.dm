@@ -290,7 +290,7 @@ Status: []<BR>"},
 
 
 /obj/machinery/porta_turret/bullet_act(var/obj/item/projectile/Proj)
-	if(on && proj.damage > 0)
+	if(on && Proj.damage > 0)
 		attacked += 5
 
 	src.health -= Proj.damage
