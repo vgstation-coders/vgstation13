@@ -536,7 +536,7 @@
 	set name = "Toggle Station Holomap"
 	set desc = "Toggle station holomap on your screen"
 	set category = "Robot Commands"
-	if(!isUnconscious())
+	if(isUnconscious())
 		return
 
 	station_holomap.toggleHolomap(src)
