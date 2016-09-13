@@ -2,6 +2,12 @@
 /////////////////////////////////////////////////////////MANNEQUINS//////////////////////////////////////////////////////////
 //Basically statues that you can dress up.
 
+#define MANNEQUIN_ICONS_SLOT		"slot_icon"
+#define MANNEQUIN_ICONS_PRIMITIVE	"primitive_icon"
+#define MANNEQUIN_ICONS_SPECIES		"species_icon"
+#define MANNEQUIN_ICONS_FAT			"fat_icon"
+#define MANNEQUIN_DYNAMIC_LAYER		"dynamic_layer"
+
 /obj/structure/mannequin
 	name = "human marble mannequin"
 	desc = "You almost feel like it's going to come alive any second."
@@ -21,6 +27,8 @@
 	var/clothing_offset_y = 3*PIXEL_MULTIPLIER
 	var/health = 90
 	var/maxHealth = 90
+
+	var/list/all_slot_icons = list()
 
 	//for mappers, with love
 	var/mapping_uniform = null
@@ -56,6 +64,7 @@
 		SLOT_MANNEQUIN_BACK,
 		SLOT_MANNEQUIN_ID,
 		)
+	get_all_slot_icons()
 	checkMappingWear()
 
 
@@ -456,28 +465,30 @@
 
 		var/image/I
 
+		var/list/slotIcon = all_slot_icons[slot]
+
 		switch(slot)
 			if(SLOT_MANNEQUIN_ICLOTHING,SLOT_MANNEQUIN_OCLOTHING)
 				if(fat || species.flags & IS_BULKY)
 					if(clothToUpdate.flags&ONESIZEFITSALL)
-						I = image(get_fat_icons(slot), "[t_state]_s")
+						I = image(slotIcon[MANNEQUIN_ICONS_FAT], "[t_state]_s")
 				else if(primitive)
 					t_state = clothToUpdate.item_state
 					if(!t_state)
 						t_state = clothToUpdate.icon_state
-					I = image(get_primitive_icons(slot), "[t_state]")
+					I = image(slotIcon[MANNEQUIN_ICONS_PRIMITIVE], "[t_state]")
 				else
-					I = image(get_slot_icons(slot), "[t_state][(slot == SLOT_MANNEQUIN_ICLOTHING) ? "_s" : ""]")
+					I = image(slotIcon[MANNEQUIN_ICONS_SLOT], "[t_state][(slot == SLOT_MANNEQUIN_ICLOTHING) ? "_s" : ""]")
 			else
 				if(primitive)
-					I = image(get_primitive_icons(slot), t_state)
+					I = image(slotIcon[MANNEQUIN_ICONS_PRIMITIVE], t_state)
 				else if(clothToUpdate.icon_override)
 					I = image(clothToUpdate.icon_override, t_state)
 				else
-					I = image(get_slot_icons(slot), t_state)
+					I = image(slotIcon[MANNEQUIN_ICONS_SLOT], t_state)
 
 		if(species.name in clothToUpdate.species_fit)
-			var/icon/species_icon = get_species_icons(slot)
+			var/icon/species_icon = slotIcon[MANNEQUIN_ICONS_SPECIES]
 			if(species_icon)
 				I.icon = species_icon
 
@@ -487,8 +498,8 @@
 		O.overlays += I
 
 		if(clothToUpdate.dynamic_overlay)
-			if(clothToUpdate.dynamic_overlay["[get_dynamic_layer(slot)]"])
-				var/image/dyn_overlay = clothToUpdate.dynamic_overlay["[get_dynamic_layer(slot)]"]
+			if(clothToUpdate.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"])
+				var/image/dyn_overlay = clothToUpdate.dynamic_overlay["[slotIcon[MANNEQUIN_DYNAMIC_LAYER]]"]
 				O.overlays += dyn_overlay
 
 		if(clothToUpdate.blood_DNA && clothToUpdate.blood_DNA.len)
@@ -525,122 +536,81 @@
 
 		O.overlays += I
 
+/obj/structure/mannequin/proc/get_all_slot_icons()
+	all_slot_icons[SLOT_MANNEQUIN_ICLOTHING] = get_slot_icons(SLOT_MANNEQUIN_ICLOTHING)
+	all_slot_icons[SLOT_MANNEQUIN_FEET] = get_slot_icons(SLOT_MANNEQUIN_FEET)
+	all_slot_icons[SLOT_MANNEQUIN_GLOVES] = get_slot_icons(SLOT_MANNEQUIN_GLOVES)
+	all_slot_icons[SLOT_MANNEQUIN_EARS] = get_slot_icons(SLOT_MANNEQUIN_EARS)
+	all_slot_icons[SLOT_MANNEQUIN_OCLOTHING] = get_slot_icons(SLOT_MANNEQUIN_OCLOTHING)
+	all_slot_icons[SLOT_MANNEQUIN_EYES] = get_slot_icons(SLOT_MANNEQUIN_EYES)
+	all_slot_icons[SLOT_MANNEQUIN_BELT] = get_slot_icons(SLOT_MANNEQUIN_BELT)
+	all_slot_icons[SLOT_MANNEQUIN_MASK] = get_slot_icons(SLOT_MANNEQUIN_MASK)
+	all_slot_icons[SLOT_MANNEQUIN_HEAD] = get_slot_icons(SLOT_MANNEQUIN_HEAD)
+	all_slot_icons[SLOT_MANNEQUIN_BACK] = get_slot_icons(SLOT_MANNEQUIN_BACK)
+	all_slot_icons[SLOT_MANNEQUIN_ID] = get_slot_icons(SLOT_MANNEQUIN_ID)
+
 /obj/structure/mannequin/proc/get_slot_icons(var/slot)
+	var/list/slotIcon = list()
 	switch(slot)
 		if(SLOT_MANNEQUIN_ICLOTHING)
-			return 'icons/mob/uniform.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/uniform.dmi'
+			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/monkey.dmi'
+			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.uniform_icons
+			slotIcon[MANNEQUIN_ICONS_FAT] = species.fat_uniform_icons
+			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = UNIFORM_LAYER
 		if(SLOT_MANNEQUIN_FEET)
-			return 'icons/mob/feet.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/feet.dmi'
+			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/feet.dmi'
+			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.shoes_icons
+			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = SHOES_LAYER
 		if(SLOT_MANNEQUIN_GLOVES)
-			return 'icons/mob/hands.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/hands.dmi'
+			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/hands.dmi'
+			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.gloves_icons
+			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = GLOVES_LAYER
 		if(SLOT_MANNEQUIN_EARS)
-			return 'icons/mob/ears.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/ears.dmi'
+			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/ears.dmi'
+			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.ears_icons
+			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = EARS_LAYER
 		if(SLOT_MANNEQUIN_OCLOTHING)
-			return 'icons/mob/suit.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/suit.dmi'
+			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/suit.dmi'
+			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.wear_suit_icons
+			slotIcon[MANNEQUIN_ICONS_FAT] = species.fat_wear_suit_icons
+			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = SUIT_LAYER
 		if(SLOT_MANNEQUIN_EYES)
-			return 'icons/mob/eyes.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/eyes.dmi'
+			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/monkey_eyes.dmi'
+			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.glasses_icons
+			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = GLASSES_LAYER
 		if(SLOT_MANNEQUIN_BELT)
-			return 'icons/mob/belt.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/belt.dmi'
+			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/belt.dmi'
+			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.belt_icons
+			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = BELT_LAYER
 		if(SLOT_MANNEQUIN_MASK)
-			return 'icons/mob/mask.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/mask.dmi'
+			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/monkey.dmi'
+			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.wear_mask_icons
+			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = FACEMASK_LAYER
 		if(SLOT_MANNEQUIN_HEAD)
-			return 'icons/mob/head.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/head.dmi'
+			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/monkey_head.dmi'
+			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.head_icons
+			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = HEAD_LAYER
 		if(SLOT_MANNEQUIN_BACK)
-			return 'icons/mob/back.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/back.dmi'
+			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/back.dmi'
+			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.back_icons
+			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = BACK_LAYER
 		if(SLOT_MANNEQUIN_ID)
-			return 'icons/mob/ids.dmi'
-		else
-			return null
+			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/ids.dmi'
+			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/ids.dmi'
+			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = ID_LAYER
+	return slotIcon
 
-/obj/structure/mannequin/proc/get_primitive_icons(var/slot)
-	switch(slot)
-		if(SLOT_MANNEQUIN_ICLOTHING)
-			return 'icons/mob/monkey.dmi'
-		if(SLOT_MANNEQUIN_FEET)
-			return 'icons/mob/feet.dmi'
-		if(SLOT_MANNEQUIN_GLOVES)
-			return 'icons/mob/hands.dmi'
-		if(SLOT_MANNEQUIN_EARS)
-			return 'icons/mob/ears.dmi'
-		if(SLOT_MANNEQUIN_OCLOTHING)
-			return 'icons/mob/suit.dmi'
-		if(SLOT_MANNEQUIN_EYES)
-			return 'icons/mob/monkey_eyes.dmi'
-		if(SLOT_MANNEQUIN_BELT)
-			return 'icons/mob/belt.dmi'
-		if(SLOT_MANNEQUIN_MASK)
-			return 'icons/mob/monkey.dmi'
-		if(SLOT_MANNEQUIN_HEAD)
-			return 'icons/mob/monkey_head.dmi'
-		if(SLOT_MANNEQUIN_BACK)
-			return 'icons/mob/back.dmi'
-		if(SLOT_MANNEQUIN_ID)
-			return 'icons/mob/ids.dmi'
-		else
-			return null
-
-/obj/structure/mannequin/proc/get_species_icons(var/slot)
-	switch(slot)
-		if(SLOT_MANNEQUIN_ICLOTHING)
-			return species.uniform_icons
-		if(SLOT_MANNEQUIN_FEET)
-			return species.shoes_icons
-		if(SLOT_MANNEQUIN_GLOVES)
-			return species.gloves_icons
-		if(SLOT_MANNEQUIN_EARS)
-			return species.ears_icons
-		if(SLOT_MANNEQUIN_OCLOTHING)
-			return species.wear_suit_icons
-		if(SLOT_MANNEQUIN_EYES)
-			return species.glasses_icons
-		if(SLOT_MANNEQUIN_BELT)
-			return species.belt_icons
-		if(SLOT_MANNEQUIN_MASK)
-			return species.wear_mask_icons
-		if(SLOT_MANNEQUIN_HEAD)
-			return species.head_icons
-		if(SLOT_MANNEQUIN_BACK)
-			return species.back_icons
-		else
-			return null
-
-/obj/structure/mannequin/proc/get_fat_icons(var/slot)
-	switch(slot)
-		if(SLOT_MANNEQUIN_ICLOTHING)
-			return species.fat_uniform_icons
-		if(SLOT_MANNEQUIN_OCLOTHING)
-			return species.fat_wear_suit_icons
-		else
-			return null
-
-/obj/structure/mannequin/proc/get_dynamic_layer(var/slot)
-	switch(slot)
-		if(SLOT_MANNEQUIN_ICLOTHING)
-			return UNIFORM_LAYER
-		if(SLOT_MANNEQUIN_FEET)
-			return SHOES_LAYER
-		if(SLOT_MANNEQUIN_GLOVES)
-			return GLOVES_LAYER
-		if(SLOT_MANNEQUIN_EARS)
-			return EARS_LAYER
-		if(SLOT_MANNEQUIN_OCLOTHING)
-			return SUIT_LAYER
-		if(SLOT_MANNEQUIN_EYES)
-			return GLASSES_LAYER
-		if(SLOT_MANNEQUIN_BELT)
-			return BELT_LAYER
-		if(SLOT_MANNEQUIN_MASK)
-			return FACEMASK_LAYER
-		if(SLOT_MANNEQUIN_HEAD)
-			return HEAD_LAYER
-		if(SLOT_MANNEQUIN_BACK)
-			return BACK_LAYER
-		if(SLOT_MANNEQUIN_ID)
-			return ID_LAYER
-		else
-			return null
-
-/obj/structure/mannequin/proc/get_bloodsies_state(var/obj/item/bloodied,var/slot)
+/obj/structure/mannequin/proc/get_bloodsies_state(var/slot, var/obj/item/clothToWear)
 	switch(slot)
 		if(SLOT_MANNEQUIN_ICLOTHING)
 			return "uniformblood"
@@ -649,7 +619,7 @@
 		if(SLOT_MANNEQUIN_GLOVES)
 			return "bloodyhands"
 		if(SLOT_MANNEQUIN_OCLOTHING)
-			var/obj/item/clothing/suit/C = bloodied
+			var/obj/item/clothing/suit/C = clothToWear
 			return "[C.blood_overlay_type]blood"
 		if(SLOT_MANNEQUIN_MASK)
 			return "maskblood"
@@ -1209,3 +1179,9 @@
 		holder = null
 
 	feedback_inc("cyber_mannequin_created",1)
+
+#undef MANNEQUIN_ICONS_SLOT
+#undef MANNEQUIN_ICONS_PRIMITIVE
+#undef MANNEQUIN_ICONS_SPECIES
+#undef MANNEQUIN_ICONS_FAT
+#undef MANNEQUIN_DYNAMIC_LAYER
