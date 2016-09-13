@@ -204,14 +204,18 @@ Status: []<BR>"},
 /obj/machinery/porta_turret/emag(mob/user)
 	if(!emagged)
 		to_chat(user, "<span class='warning'>You short out [src]'s threat assessment circuits.</span>")
-		for(var/mob/O in hearers(src, null))
-			O.show_message("<span class='warning'>[src] hums oddly...</span>", 1)
+		if(anchored) //this is like this because the turret itself is invisible when retracted, so the cover displays the message instead
+			cover.visible_message("<span class='warning'>[src] hums oddly...</span>", "<span class='warning'>You hear an odd humming.</span>")
+		else //But when unsecured the cover is gone, so it shows the message itself
+			visible_message("<span class='warning'>[src] hums oddly...</span>", "<span class='warning'>You hear an odd humming.</span>")
 		if(istype(installed, /obj/item/weapon/gun/energy/laser/redtag) || istype(installed, /obj/item/weapon/gun/energy/laser/redtag))
 			installed.projectile_type = /obj/item/projectile/beam/lasertag/omni //if you manage to get this gun back out, good for you
 		emagged = 1
-		src.on = 0 // turns off the turret temporarily
+		req_access = null
+		on = 0 // turns off the turret temporarily
 		sleep(60) // 6 seconds for the traitor to gtfo of the area before the turret decides to ruin his shit
-		on = 1 // turns it back on. The cover popUp() popDown() are automatically called in process(), no need to define it here
+		if(anchored) //Can't turn on if not secure
+			on = 1 // turns it back on. The cover popUp() popDown() are automatically called in process(), no need to define it here
 
 /obj/machinery/porta_turret/attackby(obj/item/W as obj, mob/user as mob)
 	if(stat & BROKEN)
