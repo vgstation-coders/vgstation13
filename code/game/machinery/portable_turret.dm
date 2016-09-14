@@ -93,6 +93,7 @@
 /obj/machinery/porta_turret/Destroy()
 	// deletes its own cover with it
 	qdel(cover)
+	qdel(installed)
 	..()
 
 
@@ -234,11 +235,10 @@ Status: []<BR>"},
 					lasercolor = null
 					salvaged++
 			if(prob(75))
-				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,loc)
-				M.amount = rand(2,6)
+				getFromPool(/obj/item/stack/sheet/metal, loc, rand(2,6))
 				salvaged++
 			if(prob(50))
-				new /obj/item/device/assembly/prox_sensor(locate(x,y,z))
+				new /obj/item/device/assembly/prox_sensor(get_turf(src))
 				salvaged++
 			if(salvaged)
 				to_chat(user, "You remove the turret and salvage some components.")
@@ -249,7 +249,7 @@ Status: []<BR>"},
 
 	..()
 
-	if((iswrench(W)) && (!on) && !raised && wrenchAnchor(user))
+	if(iswrench(W) && !on && !raised && wrenchAnchor(user))
 		// This code handles moving the turret around. After all, it's a portable turret!
 
 		if(anchored)
@@ -388,73 +388,62 @@ Status: []<BR>"},
 
 
 
-	if(emagged)
-		for(var/mob/living/L in view(12, src))
-			if(L.flags & INVULNERABLE)
-				continue
-			if(istype(L, /mob/living/silicon/robot/mommi) || istype(L, /mob/living/silicon/pai)) //mommis are always safe, can't shoot pAIs
-				continue
-			if(L.isDead())         //if the turret is emagged, skip all the fancy target picking stuff
-				continue
-			if(L.isUnconscious())  //and focus on murdering everything
-				secondarytargets += L
+
+	for(var/mob/living/L in view(7+emagged*5, src))
+		if(L.flags & INVULNERABLE)
+			continue
+		if(L.isDead() || isMoMMI(L))//mommis are always safe
+			continue
+		if(emagged)
+			if(L.isUnconscious())
+				secondarytargets += L //if the turret is emagged, skip all the fancy target picking stuff
 			else
-				targets += L
+				targets += L  //and focus on murdering everything
 
-	else
-		if(src.check_anomalies) // if its set to check for xenos/carps, check for non-mob "crittersssss"(And simple_animals)
-			for(var/mob/living/simple_animal/C in view(7,src))
-				if(C.stat)
-					continue
-				if(C.flags & INVULNERABLE)
-					continue
-				// Ignore lazarus-injected mobs.
-				if(dd_hasprefix(C.faction, "lazarus"))
-					continue
-				targets += C
+		else if(!issilicon(L))
+			if(isanimal(L)) // if its set to check for xenos/carps, check for non-mob "crittersssss"(And simple_animals)
+				if(check_anomalies || stun_all || attacked)
+					if(L.isUnconscious())
+						continue
+					// Ignore lazarus-injected mobs.
+					if(dd_hasprefix(L.faction, "lazarus"))
+						continue
+					targets += L
 
-		for (var/mob/living/carbon/C in view(7,src)) // loops through all living carbon-based lifeforms in view(7)
-			if(C.flags & INVULNERABLE)
-				continue
+			if(isalien(L))
+				if(check_anomalies || stun_all || attacked) // git those fukken xenos
+					if(!L.isUnconscious())
+						targets += L
+					else
+						secondarytargets += L
 
 			else
-				if(istype(C, /mob/living/carbon/alien) && src.check_anomalies) // git those fukken xenos
-					if(!C.stat) // if it's dead/dying, there's no need to keep shooting at it. //if there are still standing xenos
-						targets += C
-					else if(C.stat == UNCONSCIOUS) // finish purging if nothing else to do
-						secondarytargets += C
+				if(L.isUnconscious() || L.restrained()) // if the perp is handcuffed or dead/dying, no need to bother really
+					continue // move onto next potential victim!
 
-				else
-					if (C.stat || C.handcuffed) // if the perp is handcuffed or dead/dying, no need to bother really
-						continue // move onto next potential victim!
-
-					var/dst = get_dist(src, C) // if it's too far away, why bother?
-					if (dst > 7)
+				if(ai) // If it's set to attack all nonsilicons, target them!
+					if(L.lying)
+						secondarytargets += L
+						continue
+					else
+						targets += L
 						continue
 
-					if(ai) // If it's set to attack all nonsilicons, target them!
-						if(C.lying)
-							if(lasercolor)
-								continue
-							else
-								secondarytargets += C
-								continue
-						else
-							targets += C
-							continue
+				if(ishuman(L)) // if the target is a human, analyze threat level
+					if(assess_perp(L)<4)
+						continue // if threat level < 4, keep going
 
-					if (istype(C, /mob/living/carbon/human)) // if the target is a human, analyze threat level
-						if(src.assess_perp(C)<4)
-							continue // if threat level < 4, keep going
+				if(ismonkey(L) && !(stun_all || check_anomalies || attacked))
+					continue // Don't target monkeys or borgs/AIs you dumb shit
 
-					else if (istype(C, /mob/living/carbon/monkey))
-						continue // Don't target monkeys or borgs/AIs you dumb shit
+				if(isslime(L) && !(stun_all || check_anomalies || attacked))
+					continue
 
-					if (C.lying) // if the perp is lying down, it's still a target but a less-important target
-						secondarytargets += C
-						continue
+				if(L.lying) // if the perp is lying down, it's still a target but a less-important target
+					secondarytargets += L
+					continue
 
-					targets += C // if the perp has passed all previous tests, congrats, it is now a "shoot-me!" nominee
+				targets += L // if the perp has passed all previous tests, congrats, it is now a "shoot-me!" nominee
 
 
 	if (targets.len>0) // if there are targets to shoot
@@ -676,9 +665,7 @@ Status: []<BR>"},
 			else if(iscrowbar(W) && !anchored)
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 75, 1)
 				to_chat(user, "You dismantle the turret construction.")
-				//new /obj/item/stack/sheet/metal( loc, 5)
-				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, loc)
-				M.amount = 5
+				getFromPool(/obj/item/stack/sheet/metal, loc, 5)
 				qdel(src)
 				return
 
@@ -720,9 +707,7 @@ Status: []<BR>"},
 						return
 					build_step = 1
 					to_chat(user, "You remove the turret's interior metal armor.")
-					//new /obj/item/stack/sheet/metal( loc, 2)
-					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,loc)
-					M.amount = 2
+					getFromPool(/obj/item/stack/sheet/metal, loc, 2)
 					icon_state = "turret_frame"
 					return
 
@@ -730,7 +715,7 @@ Status: []<BR>"},
 		if(3)
 			if(istype(W, /obj/item/weapon/gun/energy)) // the gun installation part
 				if(!user.drop_item(W, src))
-					user << "<span class='warning'>You can't let go of \the [W]!</span>"
+					to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
 					return
 				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 100, 1)
 				installed = W
@@ -747,7 +732,7 @@ Status: []<BR>"},
 		if(4)
 			if(isprox(W))
 				if(!user.drop_item(W, src))
-					user << "<span class='warning'>You can't let go of \the [W]!</span>"
+					to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
 					return
 				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 100, 1)
 				build_step = 5
@@ -809,9 +794,7 @@ Status: []<BR>"},
 			else if(iscrowbar(W))
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 75, 1)
 				to_chat(user, "You pry off the turret's exterior armor.")
-				//new /obj/item/stack/sheet/metal( loc, 2)
-				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,loc)
-				M.amount = 2
+				getFromPool(/obj/item/stack/sheet/metal, loc, 2)
 				build_step = 6
 				return
 
@@ -842,22 +825,14 @@ Status: []<BR>"},
 
 			to_chat(user, "You remove \the [installed] from the turret frame.")
 			var/obj/item/I = installed
-			I.forceMove(get_turf(src))
+			user.put_in_hands(I)
 			installed = null
 
 		if(5)
 			to_chat(user, "You remove the prox sensor from the turret frame.")
-			new/obj/item/device/assembly/prox_sensor(locate(x,y,z))
+			var/obj/item/device/assembly/prox_sensor/P = new(user.loc)
+			user.put_in_hands(P)
 			build_step = 4
-
-
-
-
-
-
-
-
-
 
 
 
@@ -871,7 +846,6 @@ Status: []<BR>"},
 	var/obj/machinery/porta_turret/Parent_Turret = null
 
 	machine_flags = SHUTTLEWRENCH
-
 
 
 /obj/machinery/porta_turret_cover/attack_ai(mob/user as mob)
