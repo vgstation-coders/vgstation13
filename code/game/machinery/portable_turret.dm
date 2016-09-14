@@ -607,13 +607,6 @@ Status: []<BR>"},
 		if(H.lying)
 			return
 
-//	if(last_fired || !raised)
-//		return
-//	last_fired = 1   //It already only fires once per process(), seems like enough of a cooldown
-//	spawn()
-//		sleep(shot_delay)
-//		last_fired = 0
-
 	var/turf/T = get_turf(src)
 	var/turf/U = get_turf(target)
 	if (!istype(T) || !istype(U))
