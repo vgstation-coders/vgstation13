@@ -1,3 +1,2 @@
 author: DrCelt
-changes: 
-- bugfix: fixes a bug where a remnant of 64x64 would make items which were forked, or in the display case, render a quarter of the size and slightly down and to the left.
+changes: []
