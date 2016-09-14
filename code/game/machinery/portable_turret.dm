@@ -227,7 +227,7 @@ Status: []<BR>"},
 			sleep(20)
 			var/salvaged
 			if(installed)
-				if(prob(50))
+				if(prob(70))
 					var/obj/item/I = installed
 					I.forceMove(get_turf(src))
 					installed = null
@@ -394,12 +394,12 @@ Status: []<BR>"},
 				continue
 			if(istype(L, /mob/living/silicon/robot/mommi) || istype(L, /mob/living/silicon/pai)) //mommis are always safe, can't shoot pAIs
 				continue
-			if(L.stat == DEAD)         //if the turret is emagged, skip all the fancy target picking stuff
+			if(L.isDead())         //if the turret is emagged, skip all the fancy target picking stuff
 				continue
-			if(L.stat == CONSCIOUS)    //and focus on murdering everything
-				targets += L
-			if(L.stat == UNCONSCIOUS)  //all the way
+			if(L.isUnconscious())  //and focus on murdering everything
 				secondarytargets += L
+			else
+				targets += L
 
 	else
 		if(src.check_anomalies) // if its set to check for xenos/carps, check for non-mob "crittersssss"(And simple_animals)
@@ -640,7 +640,8 @@ Status: []<BR>"},
 	A.yo = U.y - T.y
 	A.xo = U.x - T.x
 	A.OnFired()
-	A.process()
+	spawn()
+		A.process()
 
 	if(emagged && !last_fired)
 		sleep(5)
