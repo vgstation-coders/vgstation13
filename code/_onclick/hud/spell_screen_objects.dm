@@ -33,13 +33,13 @@
 		return
 
 	return ..()
-	
-/obj/screen/movable/spell_master/MouseEntered(location,control,params)	
+
+/obj/screen/movable/spell_master/MouseEntered(location,control,params)
 	openToolTip(usr,src,params,title = name,content = "Click and drag while closed to move this around the screen")
-	
+
 /obj/screen/movable/spell_master/MouseExited()
 	closeToolTip(usr)
-	
+
 /obj/screen/movable/spell_master/Click()
 	if(!spell_objects.len)
 		returnToPool(src)
@@ -175,7 +175,7 @@
 
 	var/icon/last_charged_icon
 	var/channeling_image
-	
+
 /obj/screen/spell/MouseEntered(location,control,params)
 	if(!spell)
 		return
@@ -196,10 +196,10 @@
 		if(SELFCAST)
 			dat += "<br>Range: Self"
 	openToolTip(usr,src,params,title = name,content = dat)
-	
+
 /obj/screen/spell/MouseExited()
 	closeToolTip(usr)
-	
+
 /obj/screen/spell/Destroy()
 	..()
 	spell = null
@@ -243,7 +243,7 @@
 	else
 		icon_state = "[spell_base]_spell_ready"
 
-	overlays += spell.hud_state
+	overlays += image(icon = icon, icon_state = spell.hud_state)
 
 	last_charge = spell.charge_counter
 
@@ -251,10 +251,15 @@
 	if(spell.silenced)
 		overlays += image(icon = icon, icon_state = "silence")
 
-/obj/screen/spell/Click()
+/obj/screen/spell/Click(location, control, params)
 	if(!usr || !spell)
 		returnToPool(src)
 		return
+
+	var/list/param_list = params2list(params)
+	if(param_list["middle"])
+		if(spell.on_right_click(usr))
+			return
 
 	spell.perform(usr)
 	update_charge(1)

@@ -278,6 +278,7 @@
 				if(use(initial(S.price)))
 					var/spell/added = new buy_type
 					added.refund_price = added.price
+					added.on_learn(usr)
 					add_spell(added, L)
 					to_chat(usr, "<span class='info'>You have learned [added.name].</span>")
 					feedback_add_details("wizard_spell_learned", added.abbreviation)
