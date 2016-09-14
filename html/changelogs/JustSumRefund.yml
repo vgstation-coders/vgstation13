@@ -1,0 +1,7 @@
+
+author: JustSumGuy
+
+delete-after: True
+
+changes: 
+- rscadd: "Refunding a wizard apprentice contract now properly gives you back 5 spell points instead of 1."
