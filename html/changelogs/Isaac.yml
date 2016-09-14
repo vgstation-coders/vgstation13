@@ -1,0 +1,7 @@
+author: Isaac
+
+delete-after: true
+
+changes: 
+- tweak: "The Special ops crate (emagged console) has its para-pen and incindeary grenade removed and replaced with a silenced pistol and ammo for said pistol."
+- rscadd: "Added a new crate for the emagged console, a russian weapons crate. It has a random three items chosen from the following pools, 1/12 a mosin nagant, 2/12 a laserAK, 3/12 a full 7.62 stripper clip, 3/12 an empty 7.62 stripper clip, 3/12 a 7.62 ammo box."
