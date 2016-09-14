@@ -628,7 +628,7 @@ Status: []<BR>"},
 	A = new installed.projectile_type(loc)
 	A.original = target
 	A.starting = T
-	A.shot_from = src
+	A.shot_from = installed
 	A.current = T
 	A.yo = U.y - T.y
 	A.xo = U.x - T.x
