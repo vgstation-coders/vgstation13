@@ -9,6 +9,7 @@
 // BEGIN_PREFERENCES
 #define DEBUG
 // END_PREFERENCES
+#include "code\__DEFINES\hooks.dm"
 // BEGIN_INCLUDE
 #include "code\_planes+layers.dm"
 #include "code\_secrets.dm"

@@ -13,6 +13,7 @@
 var/savefile/panicfile
 /world/New()
 	SetupHooks()
+	CallHook(HOOK_STARTUP)
 	//populate_seed_list()
 	plant_controller = new()
 
@@ -25,9 +26,6 @@ var/savefile/panicfile
 	on_login = new ()
 	on_ban   = new ()
 	on_unban = new ()
-
-#warn PJB REDO YOUR FUCKING HOOK SYSTEM
-	StartXGM()
 
 
 	/*Runtimes, not sure if i need it still so commenting out for now
