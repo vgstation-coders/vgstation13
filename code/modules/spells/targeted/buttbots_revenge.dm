@@ -48,3 +48,8 @@
 	desc = "This spell removes the target's ass in a firey explosion, turning it into a fully functioning butt-bot."
 
 	return upgrade_desc
+	
+/spell/targeted/buttbots_revenge/get_upgrade_info(upgrade_type, level)
+	if(upgrade_type == Sp_POWER)
+		return "Make the spell instead summon a butt-bot at the target's location."
+	return ..()
