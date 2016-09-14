@@ -1507,13 +1507,6 @@
 
 	pose =  copytext(sanitize(input(usr, "This is [src]. It is...", "Pose", null)  as text), 1, MAX_MESSAGE_LEN)
 
-/mob/living/silicon/robot/verb/set_flavor()
-	set name = "Set Flavour Text"
-	set desc = "Sets an extended description of your character's features."
-	set category = "IC"
-
-	flavor_text =  copytext(sanitize(input(usr, "Please enter your new flavour text.", "Flavour text", null)  as text), 1)
-
 /mob/living/silicon/robot/proc/choose_icon(var/triesleft, var/list/module_sprites)
 	if(triesleft == 0 || !module_sprites.len)
 		return
