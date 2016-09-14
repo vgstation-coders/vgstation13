@@ -28,6 +28,7 @@
 	var/flags = 0
 
 /hook_handler/xgm/proc/OnStartup(var/list/args)
+	world.log << "Yes, XGM works!"
 	gas_data = new
 	for(var/p in (typesof(/decl/xgm_gas) - /decl/xgm_gas))
 		var/decl/xgm_gas/gas = new p //avoid initial() because of potential New() actions
