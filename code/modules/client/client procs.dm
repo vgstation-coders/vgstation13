@@ -428,7 +428,8 @@
 		var/mob/living/carbon/human/H = mob
 		var/obj/item/clothing/under/U = H.get_item_by_slot(slot_w_uniform)
 		if(istype(U))
-			U.update_holomap()
+			for(var/obj/item/clothing/accessory/holomap_chip/HC in U.accessories)
+				HC.update_holomap()
 
 /client/verb/SwapSides()
 	set name = "swapsides"
