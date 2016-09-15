@@ -88,8 +88,6 @@ you will have to do something like if(client.rights & R_ADMIN) yourself.
 		if(usr.client.holder)
 			if(!other || !other.holder)
 				return 1
-			if(usr.check_rights(R_PERMISSIONS))
-				return 1
 			if(usr.client.holder.rights != other.holder.rights)
 				if( (usr.client.holder.rights & other.holder.rights) == other.holder.rights )
 					return 1	//we have all the rights they have and more
