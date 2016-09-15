@@ -73,7 +73,7 @@
 			to_chat(user, "The contract has been used, you can't get your points back now.")
 		else
 			to_chat(user, "You feed the contract back into the spellbook, refunding your points.")
-			src.uses += 5
+			src.uses += Sp_BASE_PRICE
 			qdel (O)
 			O = null
 
