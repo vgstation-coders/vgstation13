@@ -64,7 +64,10 @@
 		SLOT_MANNEQUIN_BACK,
 		SLOT_MANNEQUIN_ID,
 		)
-	get_all_slot_icons()
+
+	for(var/cloth_slot in clothing)
+		all_slot_icons[cloth_slot] = get_slot_icons(cloth_slot)
+
 	checkMappingWear()
 
 
@@ -82,15 +85,20 @@
 	..()
 
 
-/obj/structure/mannequin/MouseDrop(var/mob/M)
+/obj/structure/mannequin/MouseDrop(var/atom/over_object)
 	..()
-	if(M != usr)
+	var/mob/user = usr
+	if(user != over_object)
 		return
-	if(!Adjacent(M))
+	if(user.incapacitated())
 		return
-	if(istype(M,/mob/living/silicon/ai))
+	if(user.lying)
 		return
-	show_inv(M)
+	if(!Adjacent(user))
+		return
+	if(isAI(user))
+		return
+	show_inv(user)
 
 
 /obj/structure/mannequin/attack_hand(var/mob/living/user)
@@ -128,40 +136,16 @@
 /obj/structure/mannequin/attackby(var/obj/item/weapon/W,var/mob/user)
 	if(iswrench(W))
 		return wrenchAnchor(user, 50)
-
-	attack_hand(user)
-
+	else if(user.a_intent == I_HURT)
+		user.delayNextAttack(8)
+		getDamage(W.force)
+		user.visible_message("<span class='danger'>[user.name] [(W.attack_verb && W.attack_verb.len) ? "[pick(W.attack_verb)]" : "attacks" ] \the [src] with \the [W]!</span>", "<span class='danger'>You [(W.attack_verb && W.attack_verb.len) ? "[pick(W.attack_verb)]" : "attack" ] \the [src] with \the [W]!</span>")
+	else
+		attack_hand(user)
 
 /obj/structure/mannequin/examine(mob/user)
 	..()
 	var/msg = ""
-	if(clothing[SLOT_MANNEQUIN_ICLOTHING])
-		var/obj/item/clothing/under/w_uniform = clothing[SLOT_MANNEQUIN_ICLOTHING]
-		if(w_uniform.blood_DNA && w_uniform.blood_DNA.len)
-			msg += "<span class='warning'>It's wearing [bicon(w_uniform)] [w_uniform.gender==PLURAL?"some":"a"] blood-stained [w_uniform.name]![w_uniform.description_accessories()]</span>\n"
-		else
-			msg += "It's wearing [bicon(w_uniform)] \a [w_uniform].[w_uniform.description_accessories()]\n"
-
-	if(clothing[SLOT_MANNEQUIN_HEAD])
-		var/obj/item/head = clothing[SLOT_MANNEQUIN_HEAD]
-		if(head.blood_DNA && head.blood_DNA.len)
-			msg += "<span class='warning'>It's wearing [bicon(head)] [head.gender==PLURAL?"some":"a"] blood-stained [head.name] on its head![head.description_accessories()]</span>\n"
-		else
-			msg += "It's wearing [bicon(head)] \a [head] on its head.[head.description_accessories()]\n"
-
-	if(clothing[SLOT_MANNEQUIN_OCLOTHING])
-		var/obj/item/wear_suit = clothing[SLOT_MANNEQUIN_OCLOTHING]
-		if(wear_suit.blood_DNA && wear_suit.blood_DNA.len)
-			msg += "<span class='warning'>It's wearing [bicon(wear_suit)] [wear_suit.gender==PLURAL?"some":"a"] blood-stained [wear_suit.name]![wear_suit.description_accessories()]</span>\n"
-		else
-			msg += "It's wearing [bicon(wear_suit)] \a [wear_suit].[wear_suit.description_accessories()]\n"
-
-	if(clothing[SLOT_MANNEQUIN_BACK])
-		var/obj/item/back = clothing[SLOT_MANNEQUIN_BACK]
-		if(back.blood_DNA && back.blood_DNA.len)
-			msg += "<span class='warning'>It has [bicon(back)] [back.gender==PLURAL?"some":"a"] blood-stained [back] on its back![back.description_accessories()]</span>\n"
-		else
-			msg += "It has [bicon(back)] \a [back] on its back.[back.description_accessories()]\n"
 
 	for(var/obj/item/I in held_items)
 		if(I.blood_DNA && I.blood_DNA.len)
@@ -169,51 +153,35 @@
 		else
 			msg += "It's holding [bicon(I)] \a [I] in its [get_index_limb_name(is_holding_item(I))].\n"
 
-	if(clothing[SLOT_MANNEQUIN_GLOVES])
-		var/obj/item/gloves = clothing[SLOT_MANNEQUIN_GLOVES]
-		if(gloves.blood_DNA && gloves.blood_DNA.len)
-			msg += "<span class='warning'>It has [bicon(gloves)] [gloves.gender==PLURAL?"some":"a"] blood-stained [gloves.name] on its hands![gloves.description_accessories()]</span>\n"
-		else
-			msg += "It has [bicon(gloves)] \a [gloves] on its hands.[gloves.description_accessories()]\n"
+	for(var/slot_cloth in clothing)
+		var/obj/item/clothToExamine = clothing[slot_cloth]
+		if(clothToExamine)
 
-	if(clothing[SLOT_MANNEQUIN_BELT])
-		var/obj/item/belt = clothing[SLOT_MANNEQUIN_BELT]
-		if(belt.blood_DNA && belt.blood_DNA.len)
-			msg += "<span class='warning'>It has [bicon(belt)] [belt.gender==PLURAL?"some":"a"] blood-stained [belt.name] about its waist![belt.description_accessories()]</span>\n"
-		else
-			msg += "It has [bicon(belt)] \a [belt] about its waist.[belt.description_accessories()]\n"
+			var/slot_examine = ""
+			switch(slot_cloth)
+				if(SLOT_MANNEQUIN_HEAD)
+					slot_examine = " on its head"
+				if(SLOT_MANNEQUIN_BACK)
+					slot_examine = " on its back"
+				if(SLOT_MANNEQUIN_GLOVES)
+					slot_examine = " on its hands"
+				if(SLOT_MANNEQUIN_BELT)
+					slot_examine = " about its waist"
+				if(SLOT_MANNEQUIN_FEET)
+					slot_examine = " on its feet"
+				if(SLOT_MANNEQUIN_MASK)
+					slot_examine = " on its face"
+				if(SLOT_MANNEQUIN_EYES)
+					slot_examine = " covering its eyes"
+				if(SLOT_MANNEQUIN_EARS)
+					slot_examine = " on its ears"
 
-	if(clothing[SLOT_MANNEQUIN_FEET])
-		var/obj/item/shoes = clothing[SLOT_MANNEQUIN_FEET]
-		if(shoes.blood_DNA && shoes.blood_DNA.len)
-			msg += "<span class='warning'>It's wearing [bicon(shoes)] [shoes.gender==PLURAL?"some":"a"] blood-stained [shoes.name] on its feet![shoes.description_accessories()]</span>\n"
-		else
-			msg += "It's wearing [bicon(shoes)] \a [shoes] on its feet.[shoes.description_accessories()]\n"
-
-	if(clothing[SLOT_MANNEQUIN_MASK])
-		var/obj/item/wear_mask = clothing[SLOT_MANNEQUIN_MASK]
-		if(wear_mask.blood_DNA && wear_mask.blood_DNA.len)
-			msg += "<span class='warning'>It has [bicon(wear_mask)] [wear_mask.gender==PLURAL?"some":"a"] blood-stained [wear_mask.name] on its face![wear_mask.description_accessories()]</span>\n"
-		else
-			msg += "It has [bicon(wear_mask)] \a [wear_mask] on its face.[wear_mask.description_accessories()]\n"
-
-	if(clothing[SLOT_MANNEQUIN_EYES])
-		var/obj/item/glasses = clothing[SLOT_MANNEQUIN_EYES]
-		if(glasses.blood_DNA && glasses.blood_DNA.len)
-			msg += "<span class='warning'>It has [bicon(glasses)] [glasses.gender==PLURAL?"some":"a"] blood-stained [glasses] covering its eyes![glasses.description_accessories()]</span>\n"
-		else
-			msg += "It has [bicon(glasses)] \a [glasses] covering its eyes.[glasses.description_accessories()]\n"
-
-	if(clothing[SLOT_MANNEQUIN_EARS])
-		var/obj/item/ears = clothing[SLOT_MANNEQUIN_EARS]
-		msg += "It has [bicon(ears)] \a [ears] on its ears.[ears.description_accessories()]\n"
-
-	if(clothing[SLOT_MANNEQUIN_ID])
-		var/obj/item/wear_id = clothing[SLOT_MANNEQUIN_ID]
-		msg += "It's wearing [bicon(wear_id)] \a [wear_id].\n"
+			if(clothToExamine.blood_DNA && clothToExamine.blood_DNA.len)
+				msg += "<span class='warning'>It's wearing [bicon(clothToExamine)] [clothToExamine.gender==PLURAL?"some":"a"] blood-stained [clothToExamine][slot_examine]![clothToExamine.description_accessories()]</span>\n"
+			else
+				msg += "It's wearing [bicon(clothToExamine)] \a [clothToExamine][slot_examine].[clothToExamine.description_accessories()] \n"
 
 	to_chat(user, msg)
-
 
 /obj/structure/mannequin/ex_act(severity)
 	switch(severity)
@@ -433,17 +401,8 @@
 	O.layer = FLOAT_LAYER
 	O.overlays.len = 0
 
-	update_icon_slot(O,SLOT_MANNEQUIN_ICLOTHING)
-	update_icon_slot(O,SLOT_MANNEQUIN_FEET)
-	update_icon_slot(O,SLOT_MANNEQUIN_GLOVES)
-	update_icon_slot(O,SLOT_MANNEQUIN_EARS)
-	update_icon_slot(O,SLOT_MANNEQUIN_OCLOTHING)
-	update_icon_slot(O,SLOT_MANNEQUIN_EYES)
-	update_icon_slot(O,SLOT_MANNEQUIN_BELT)
-	update_icon_slot(O,SLOT_MANNEQUIN_MASK)
-	update_icon_slot(O,SLOT_MANNEQUIN_HEAD)
-	update_icon_slot(O,SLOT_MANNEQUIN_BACK)
-	update_icon_slot(O,SLOT_MANNEQUIN_ID)
+	for(var/cloth_slot in clothing)
+		update_icon_slot(O,cloth_slot)
 
 	for(var/i in 1 to held_items.len)
 		update_icon_hand(O,i)
@@ -536,19 +495,6 @@
 
 		O.overlays += I
 
-/obj/structure/mannequin/proc/get_all_slot_icons()
-	all_slot_icons[SLOT_MANNEQUIN_ICLOTHING] = get_slot_icons(SLOT_MANNEQUIN_ICLOTHING)
-	all_slot_icons[SLOT_MANNEQUIN_FEET] = get_slot_icons(SLOT_MANNEQUIN_FEET)
-	all_slot_icons[SLOT_MANNEQUIN_GLOVES] = get_slot_icons(SLOT_MANNEQUIN_GLOVES)
-	all_slot_icons[SLOT_MANNEQUIN_EARS] = get_slot_icons(SLOT_MANNEQUIN_EARS)
-	all_slot_icons[SLOT_MANNEQUIN_OCLOTHING] = get_slot_icons(SLOT_MANNEQUIN_OCLOTHING)
-	all_slot_icons[SLOT_MANNEQUIN_EYES] = get_slot_icons(SLOT_MANNEQUIN_EYES)
-	all_slot_icons[SLOT_MANNEQUIN_BELT] = get_slot_icons(SLOT_MANNEQUIN_BELT)
-	all_slot_icons[SLOT_MANNEQUIN_MASK] = get_slot_icons(SLOT_MANNEQUIN_MASK)
-	all_slot_icons[SLOT_MANNEQUIN_HEAD] = get_slot_icons(SLOT_MANNEQUIN_HEAD)
-	all_slot_icons[SLOT_MANNEQUIN_BACK] = get_slot_icons(SLOT_MANNEQUIN_BACK)
-	all_slot_icons[SLOT_MANNEQUIN_ID] = get_slot_icons(SLOT_MANNEQUIN_ID)
-
 /obj/structure/mannequin/proc/get_slot_icons(var/slot)
 	var/list/slotIcon = list()
 	switch(slot)
@@ -629,72 +575,29 @@
 			return null
 
 /obj/structure/mannequin/proc/checkMappingWear()
-	if(mapping_uniform)
-		var/obj/item/clothToWear = new mapping_uniform(src)
-		if(canEquip(null, SLOT_MANNEQUIN_ICLOTHING, clothToWear))
-			clothing[SLOT_MANNEQUIN_ICLOTHING] = clothToWear
-		else
-			qdel(clothToWear)
-	if(mapping_shoes)
-		var/obj/item/clothToWear = new mapping_shoes(src)
-		if(canEquip(null, SLOT_MANNEQUIN_FEET, clothToWear))
-			clothing[SLOT_MANNEQUIN_FEET] = clothToWear
-		else
-			qdel(clothToWear)
-	if(mapping_gloves)
-		var/obj/item/clothToWear = new mapping_gloves(src)
-		if(canEquip(null, SLOT_MANNEQUIN_GLOVES, clothToWear))
-			clothing[SLOT_MANNEQUIN_GLOVES] = clothToWear
-		else
-			qdel(clothToWear)
-	if(mapping_ears)
-		var/obj/item/clothToWear = new mapping_ears(src)
-		if(canEquip(null, SLOT_MANNEQUIN_EARS, clothToWear))
-			clothing[SLOT_MANNEQUIN_EARS] = clothToWear
-		else
-			qdel(clothToWear)
-	if(mapping_suit)
-		var/obj/item/clothToWear = new mapping_suit(src)
-		if(canEquip(null, SLOT_MANNEQUIN_OCLOTHING, clothToWear))
-			clothing[SLOT_MANNEQUIN_OCLOTHING] = clothToWear
-		else
-			qdel(clothToWear)
-	if(mapping_glasses)
-		var/obj/item/clothToWear = new mapping_glasses(src)
-		if(canEquip(null, SLOT_MANNEQUIN_EYES, clothToWear))
-			clothing[SLOT_MANNEQUIN_EYES] = clothToWear
-		else
-			qdel(clothToWear)
-	if(mapping_belt)
-		var/obj/item/clothToWear = new mapping_belt(src)
-		if(canEquip(null, SLOT_MANNEQUIN_BELT, clothToWear))
-			clothing[SLOT_MANNEQUIN_BELT] = clothToWear
-		else
-			qdel(clothToWear)
-	if(mapping_hat)
-		var/obj/item/clothToWear = new mapping_hat(src)
-		if(canEquip(null, SLOT_MANNEQUIN_HEAD, clothToWear))
-			clothing[SLOT_MANNEQUIN_HEAD] = clothToWear
-		else
-			qdel(clothToWear)
-	if(mapping_mask)
-		var/obj/item/clothToWear = new mapping_mask(src)
-		if(canEquip(null, SLOT_MANNEQUIN_MASK, clothToWear))
-			clothing[SLOT_MANNEQUIN_MASK] = clothToWear
-		else
-			qdel(clothToWear)
-	if(mapping_back)
-		var/obj/item/clothToWear = new mapping_back(src)
-		if(canEquip(null, SLOT_MANNEQUIN_BACK, clothToWear))
-			clothing[SLOT_MANNEQUIN_BACK] = clothToWear
-		else
-			qdel(clothToWear)
-	if(mapping_id)
-		var/obj/item/clothToWear = new mapping_id(src)
-		if(canEquip(null, SLOT_MANNEQUIN_ID, clothToWear))
-			clothing[SLOT_MANNEQUIN_ID] = clothToWear
-		else
-			qdel(clothToWear)
+
+	var/list/mapped_clothing = list(
+		SLOT_MANNEQUIN_ICLOTHING = mapping_uniform,
+		SLOT_MANNEQUIN_FEET = mapping_shoes,
+		SLOT_MANNEQUIN_GLOVES = mapping_gloves,
+		SLOT_MANNEQUIN_EARS = mapping_ears,
+		SLOT_MANNEQUIN_OCLOTHING = mapping_suit,
+		SLOT_MANNEQUIN_EYES = mapping_shoes,
+		SLOT_MANNEQUIN_BELT = mapping_belt,
+		SLOT_MANNEQUIN_MASK = mapping_mask,
+		SLOT_MANNEQUIN_HEAD = mapping_hat,
+		SLOT_MANNEQUIN_BACK = mapping_back,
+		SLOT_MANNEQUIN_ID = mapping_id,
+		)
+
+	for(var/mapped_slot in mapped_clothing)
+		var/mapped_cloth = mapped_clothing[mapped_slot]
+		if(mapped_cloth)
+			var/obj/item/clothToWear = new mapped_cloth(src)
+			if(canEquip(null, mapped_slot, clothToWear))
+				clothing[mapped_slot] = clothToWear
+			else
+				qdel(clothToWear)
 
 	if(mapping_hand_right)
 		var/obj/item/clothToWear = new mapping_hand_right(src)
@@ -918,8 +821,8 @@
 		getDamage(30)
 
 /obj/structure/mannequin/cyber/healthCheck()
-	if(!destroyed)
-		if(health <= 100)
+	if(!destroyed	)
+		if(shield <= 0)
 			destroyed = 1
 			locked = 0
 			getFromPool(/obj/item/weapon/shard, loc)
@@ -927,10 +830,10 @@
 			update_icon()
 		else
 			playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
-	else
-		if(health <= 0)
-			visible_message("\The [src] collapses.")
-			breakDown()
+
+	if(health <= 0)
+		visible_message("\The [src] collapses.")
+		breakDown()
 
 /obj/structure/mannequin/cyber/attackby(var/obj/item/weapon/W,var/mob/user)
 	if(istype(W, /obj/item/weapon/card/id))
@@ -1026,7 +929,7 @@
 	else if(user.a_intent == I_HURT)
 		user.delayNextAttack(8)
 		getDamage(W.force)
-		user.visible_message("<span class='danger'>[user.name] [W.attack_verb] \the [src]!</span>", "<span class='danger'>You [W.attack_verb] \the [src]!</span>")
+		user.visible_message("<span class='danger'>[user.name] [(W.attack_verb && W.attack_verb.len) ? "[pick(W.attack_verb)]" : "attacks" ] \the [src] with \the [W]!</span>", "<span class='danger'>You [(W.attack_verb && W.attack_verb.len) ? "[pick(W.attack_verb)]" : "attack" ] \the [src] with \the [W]!</span>")
 	else
 		return ..()
 
