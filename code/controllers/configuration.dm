@@ -88,6 +88,7 @@
 	var/banappeals
 	var/wikiurl = "http://baystation12.net/wiki/index.php?title=Main_Page"
 	var/vgws_base_url = "http://ss13.moe" // No hanging slashes.
+	var/vgws_ip = "198.245.63.50" // IP address in the `world.Topic()` call when the vgws sends a request over TCP.
 	var/forumurl = "http://baystation12.net/forums/"
 
 	var/media_base_url = "" // http://ss13.nexisonline.net/media
@@ -539,6 +540,8 @@
 					media_secret_key = value
 				if("vgws_base_url")
 					vgws_base_url = value
+				if("vgws_ip")
+					vgws_ip = value
 				if("map_voting")
 					map_voting = 1
 				if("renders_url")
