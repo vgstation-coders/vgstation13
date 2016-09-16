@@ -90,6 +90,11 @@
 	user.visible_message("<span class='danger'>[user] puts the [src.name] over \his head and tightens the handles around \his neck! It looks like \he's trying to commit suicide.</span>")
 	return(OXYLOSS)
 
+/obj/item/weapon/storage/bag/plasticbag/baitbag/New()
+	..()
+	for(var/i = 1 to 21)
+		new /obj/item/weapon/reagent_containers/food/snacks/bait(src)
+
 // -----------------------------
 //        Mining Satchel
 // -----------------------------

@@ -645,8 +645,16 @@
 	New()
 		..()
 		reagents.add_reagent(NUTRIMENT, 4)
-		reagents.add_reagent(CARPPHEROMONES, 3)
 		bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/fishfingers/carp
+	name = "carp fish fingers"
+	desc = "Crumbed fish with some zing."
+	icon_state = "fishfingers"
+
+	New()
+		..()
+		reagents.add_reagent(CARPPHEROMONES, 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice
 	name = "huge mushroom slice"
@@ -803,15 +811,22 @@
 		bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/fishburger
-	name = "fillet -o- carp sandwich"
-	desc = "Almost like a carp is yelling somewhere... Give me back that fillet -o- carp, give me that carp."
+	name = "fish burger"
+	desc = "The perfect sea man's lunch."
 	icon_state = "fishburger"
 	food_flags = FOOD_MEAT
 	New()
 		..()
 		reagents.add_reagent(NUTRIMENT, 6)
-		reagents.add_reagent(CARPPHEROMONES, 3)
 		bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/fishburger/carp
+	name = "fillet -o- carp sandwich"
+	desc = "Almost like a carp is yelling somewhere... Give me back that fillet -o- carp, give me that carp."
+	icon_state = "fishburger"
+	New()
+		..()
+		reagents.add_reagent(CARPPHEROMONES, 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/tofuburger
 	name = "tofu burger"
@@ -1822,8 +1837,16 @@
 	New()
 		..()
 		reagents.add_reagent(NUTRIMENT, 6)
-		reagents.add_reagent(CARPPHEROMONES, 3)
 		bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/fishandchips/carp
+	name = "Carp Fish and Chips"
+	desc = "The fish has a strong odour about it."
+	icon_state = "fishandchips"
+
+	New()
+		..()
+		reagents.add_reagent(CARPPHEROMONES, 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/crab_sticks
 	name = "\improper Not-Actually-Imitation Crab sticks"
@@ -3159,16 +3182,24 @@
 		bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/sashimi
-	name = "carp sashimi"
-	desc = "Celebrate surviving attack from hostile alien lifeforms by hospitalising yourself."
+	name = "sashimi"
+	desc = "A fine Japanese delicacy."
 	icon_state = "sashimi"
 	food_flags = FOOD_MEAT
 
 	New()
 		..()
 		reagents.add_reagent(NUTRIMENT, 6)
-		reagents.add_reagent(CARPPHEROMONES, 5)
 		bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/sashimi/carp
+	name = "carp sashimi"
+	desc = "Celebrate surviving attack from hostile alien lifeforms by hospitalising yourself."
+	icon_state = "sashimi"
+
+	New()
+		..()
+		reagents.add_reagent(CARPPHEROMONES, 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/assburger
 	name = "assburger"
@@ -4379,6 +4410,40 @@
 	desc = "The product of a real man who lives off the land."
 	icon_state = "meat" //placeholder
 	bitesize = 1
+	var/list/fish_guts = list(/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet) // contains anything the fish will will drop when filleted
 	New()
 		..()
 		reagents.add_reagent(NUTRIMENT,1)
+
+/obj/item/weapon/reagent_containers/food/snacks/fish/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W, /obj/item/weapon/kitchen/utensil/knife/large))
+		Fillet(user)
+	else
+		..()
+
+/obj/item/weapon/reagent_containers/food/snacks/fish/proc/Fillet(mob/user)
+	if(!isturf(loc) && !user.is_holding_item(src))
+		return
+	var/ground = get_turf(src)
+	if(fish_guts.len == 1) // put fish_guts in hand if there's only 1 and we are filleting in hand
+		var/obj/item/weapon/temp = fish_guts[1]
+		var/obj/item/weapon/cont = new temp
+		if(user.is_holding_item(src))
+			if(user.drop_item(src, user))
+				user.put_in_hands(cont)
+		else
+			cont.forceMove(ground)
+	else
+		for(var/C in fish_guts)
+			new C(ground)
+	to_chat(user, "<span class='notice'>You fillet and clean the [name].</span>")
+	qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi
+	name = "sushi"
+	desc = "Now you can pretend you're the Japanese person you'll never, ever be."
+	icon_state = "eggplantsushi"
+	bitesize = 3
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,4)

@@ -57,7 +57,7 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat
+/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp
 	name = "carp fillet"
 	desc = "A fillet of spess carp meat"
 	icon_state = "fishfillet"
@@ -69,7 +69,7 @@
 		reagents.add_reagent(CARPOTOXIN, 3)
 		bitesize = 6
 
-/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/imitation
+/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp/imitation
 	name = "imitation carp fillet"
 	desc = "Almost just like the real thing, kinda."
 
@@ -163,3 +163,17 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	desc = "I know what you're thinking, but this isn't from a mimic."
 	icon_state = "rottenmeat"
 	var/amount_cloned = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet
+	name = "non-descript fish fillet"
+	desc = "You wonder where this came from."
+	icon_state = "fishfillet"
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/normal
+	name = "raw fish fillet"
+	desc = "A cut and cleaned fillet of fresh fish."
+	icon_state = "fishfillet"
+
+	New()
+		..()
+		bitesize = 2

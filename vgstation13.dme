@@ -396,6 +396,7 @@
 #include "code\game\machinery\bees_items.dm"
 #include "code\game\machinery\biogenerator.dm"
 #include "code\game\machinery\bioprinter.dm"
+#include "code\game\machinery\bluespace_pond.dm"
 #include "code\game\machinery\buttons.dm"
 #include "code\game\machinery\buynsell.dm"
 #include "code\game\machinery\candymachine.dm"
