@@ -430,8 +430,8 @@ Status: []<BR>"},
 						continue
 
 				if(ishuman(L)) // if the target is a human, analyze threat level
-					if(assess_perp(L)<4)
-						continue // if threat level < 4, keep going
+					if(assess_perp(L) < PERP_LEVEL_ARREST)
+						continue // if threat level < PERP_LEVEL_ARREST, keep going
 
 				if(ismonkey(L) && !(stun_all || check_anomalies || attacked))
 					continue // Don't target monkeys or borgs/AIs you dumb shit
@@ -520,12 +520,12 @@ Status: []<BR>"},
 	var/threatcount = 0 // the integer returned
 
 	if(src.emagged)
-		return 10 // if emagged, always return 10.
+		return PERP_LEVEL_ARREST + rand(PERP_LEVEL_ARREST, PERP_LEVEL_ARREST*5) // if emagged, always return more than PERP_LEVEL_ARREST.
 
 	if((stun_all && !src.allowed(perp)) || attacked && !src.allowed(perp))
 		// if the turret has been attacked or is angry, target all non-sec people
 		if(!src.allowed(perp))
-			return 10
+			return PERP_LEVEL_ARREST + rand(PERP_LEVEL_ARREST, PERP_LEVEL_ARREST*5)
 
 	if(auth_weapons) // check for weapon authorization
 		if((isnull(perp.wear_id)) || (istype(perp.wear_id.GetID(), /obj/item/weapon/card/id/syndicate)))
@@ -541,28 +541,28 @@ Status: []<BR>"},
 					continue
 				//Scan for guns and stun batons. Bartender's shotgun doesn't trigger the turret
 
-				threatcount += 4
+				threatcount += PERP_LEVEL_ARREST
 
 			if(istype(perp.belt, /obj/item/weapon/gun) || istype(perp.belt, /obj/item/weapon/melee/baton))
-				threatcount += 2
+				threatcount += PERP_LEVEL_ARREST/2
 
 	if((src.lasercolor) == "b")//Lasertag turrets target the opposing team, how great is that? -Sieve
 		threatcount = 0//But does not target anyone else
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/redtag))
-			threatcount += 4
+			threatcount += PERP_LEVEL_ARREST
 		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/laser/redtag))
-			threatcount += 4
+			threatcount += PERP_LEVEL_ARREST
 		if(istype(perp.belt, /obj/item/weapon/gun/energy/laser/redtag))
-			threatcount += 2
+			threatcount += PERP_LEVEL_ARREST/2
 
 	if((src.lasercolor) == "r")
 		threatcount = 0
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/bluetag))
-			threatcount += 4
+			threatcount += PERP_LEVEL_ARREST
 		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/laser/bluetag))
-			threatcount += 4
+			threatcount += PERP_LEVEL_ARREST
 		if(istype(perp.belt, /obj/item/weapon/gun/energy/laser/bluetag))
-			threatcount += 2
+			threatcount += PERP_LEVEL_ARREST/2
 
 	if (src.check_records) // if the turret can check the records, check if they are set to *Arrest* on records
 		for (var/datum/data/record/E in data_core.general)
@@ -576,7 +576,7 @@ Status: []<BR>"},
 			if (E.fields["name"] == perpname)
 				for (var/datum/data/record/R in data_core.security)
 					if ((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*Arrest*"))
-						threatcount = 4
+						threatcount = PERP_LEVEL_ARREST
 						break
 
 
