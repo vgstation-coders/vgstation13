@@ -29,7 +29,7 @@
 	var/locked = 1			// if the turret's behaviour control access is locked
 
 	var/obj/item/weapon/gun/energy/installed = null		// the type of weapon installed
-	var/reqpower = 0 //holder for power needed
+	var/reqpower = 750 //power used per shot
 
 	var/obj/machinery/porta_turret_cover/cover = null	// the cover that is covering this turret
 	var/last_fired = 0		// 1: if the turret is cooling down from a shot, 0: turret is ready to fire
@@ -88,7 +88,6 @@
 				stun_all = 0
 				check_anomalies = 0
 
-	reqpower = installed.charge_cost*7 //normal weapon charge_cost is 100
 
 /obj/machinery/porta_turret/Destroy()
 	// deletes its own cover with it
