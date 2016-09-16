@@ -117,8 +117,14 @@ var/list/station_holomaps = list()
 /obj/machinery/station_map/attack_animal(var/mob/user)
 	src.attack_hand(user)
 
-/obj/machinery/station_map/attack_ai(var/mob/user)
-	return//TODO: Give AIs their own holomap
+/obj/machinery/station_map/attack_ghost(var/mob/user)
+	if(blessed)
+		return
+	add_hiddenprint(user)
+	flick("station_map_activate", src)
+
+/obj/machinery/station_map/attack_ai(var/mob/living/silicon/robot/user)
+	user.station_holomap.toggleHolomap(src)
 
 /obj/machinery/station_map/process()
 	if((stat & (NOPOWER|BROKEN)) || !anchored)

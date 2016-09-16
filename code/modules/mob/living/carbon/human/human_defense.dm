@@ -105,9 +105,10 @@ emp_act
 
 
 /mob/living/carbon/human/proc/check_shields(var/damage = 0, var/attack_text = "the attack")
-	for(var/obj/item/weapon/I in held_items)
-		if(I.IsShield() && I.on_block(damage, attack_text))
-			return 1
+	if(!incapacitated())
+		for(var/obj/item/weapon/I in held_items)
+			if(I.IsShield() && I.on_block(damage, attack_text))
+				return 1
 
 	if(istype(wear_suit, /obj/item/)) //Check armor
 		var/obj/item/I = wear_suit

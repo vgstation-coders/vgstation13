@@ -1148,8 +1148,9 @@
 	else if(href_list["boot2"])
 		var/mob/M = locate(href_list["boot2"])
 		if (ismob(M))
-			if(!check_if_greater_rights_than(M.client))
-				return
+			if(!check_rights(R_PERMISSIONS,0))
+				if(!check_if_greater_rights_than(M.client))
+					return
 			to_chat(M, "<span class='warning'>You have been kicked from the server</span>")
 			log_admin("[key_name(usr)] booted [key_name(M)].")
 			message_admins("<span class='notice'>[key_name_admin(usr)] booted [key_name_admin(M)].</span>", 1)

@@ -32,7 +32,9 @@
 		)
 
 /obj/item/stack/package_wrap/afterattack(var/attacked, mob/user as mob, var/proximity_flag)
-	var/obj/target = attacked
+	var/atom/movable/target = attacked
+	if(!istype(target))
+		return
 	if(is_type_in_list(target, cannot_wrap))
 		return
 	if(target.anchored)
@@ -124,26 +126,23 @@
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "deliverycrateSmall"
 	var/sortTag
-	var/atom/movable/wrapped
 	flags = FPRINT
 
 /obj/item/delivery/New(turf/loc, var/obj/item/target = null, var/size = 2)
 	..()
 	w_class = size
-	wrapped = target
 	icon_state = "deliverycrate[min(size,5)]"
 
 /obj/item/delivery/Destroy()
-	if(wrapped)
-		wrapped.forceMove(get_turf(src.loc))
-	wrapped = null
+	for(var/atom/movable/AM in src)
+		AM.forceMove(loc)
 	..()
 
 /obj/item/delivery/attack_self(mob/user as mob)
-	if(wrapped)
+	user.drop_item(src, user.loc)
+	if(contents.len)
 		if(ishuman(user))
-			user.put_in_hands(wrapped)
-			wrapped = null
+			user.put_in_hands(contents[1])
 	qdel(src)
 
 /obj/item/delivery/attackby(obj/item/W as obj, mob/user as mob)
@@ -181,14 +180,13 @@
 /obj/item/delivery/large/New(turf/loc, atom/movable/target)
 	..()
 	w_class = W_CLASS_GIANT
-	wrapped = target
-	if(istype(wrapped,/obj/structure/closet/crate) || ishuman(target))
+	if(istype(target,/obj/structure/closet/crate) || ishuman(target))
 		icon_state = "deliverycrate"
-	else if(istype(wrapped,/obj/structure/vendomatpack))
+	else if(istype(target,/obj/structure/vendomatpack))
 		icon_state = "deliverypack"
-	else if(istype(wrapped,/obj/structure/stackopacks))
+	else if(istype(target,/obj/structure/stackopacks))
 		icon_state = "deliverystack"
-	else if(istype(wrapped,/obj/structure/closet))
+	else if(istype(target,/obj/structure/closet))
 		icon_state = "deliverycloset" //Only IF it isn't a crate-type
 
 /obj/item/delivery/large/attack_paw(mob/user as mob)

@@ -1,6 +1,6 @@
 
 -- Table: players
-CREATE TABLE players ( 
+CREATE TABLE players (
     ID                  INTEGER PRIMARY KEY AUTOINCREMENT,
     player_ckey         TEXT    NOT NULL,
     player_slot         INTEGER NOT NULL,
@@ -11,7 +11,6 @@ CREATE TABLE players (
     age                 INTEGER,
     species             TEXT,
     language            TEXT,
-    flavor_text         TEXT,
     med_record          TEXT,
     sec_record          TEXT,
     gen_record          TEXT,
@@ -19,12 +18,12 @@ CREATE TABLE players (
     be_special          TEXT,
     disabilities        INTEGER,
     nanotrasen_relation TEXT,
-    UNIQUE ( player_ckey, player_slot ) 
+    UNIQUE ( player_ckey, player_slot )
 );
 
 
 -- Table: body
-CREATE TABLE body ( 
+CREATE TABLE body (
     ID                INTEGER PRIMARY KEY AUTOINCREMENT,
     player_ckey       TEXT    NOT NULL,
     player_slot       INTEGER NOT NULL,
@@ -44,12 +43,12 @@ CREATE TABLE body (
     backbag           INTEGER,
     b_type            TEXT,
     FOREIGN KEY ( player_ckey, player_slot ) REFERENCES players ( player_ckey, player_slot ) ON DELETE CASCADE,
-    UNIQUE ( player_ckey, player_slot ) 
+    UNIQUE ( player_ckey, player_slot )
 );
 
 
 -- Table: jobs
-CREATE TABLE jobs ( 
+CREATE TABLE jobs (
     ID                INTEGER PRIMARY KEY AUTOINCREMENT,
     player_ckey       TEXT    NOT NULL,
     player_slot       INTEGER NOT NULL,
@@ -64,12 +63,12 @@ CREATE TABLE jobs (
     job_engsec_med    INTEGER,
     job_engsec_low    INTEGER,
     FOREIGN KEY ( player_ckey, player_slot ) REFERENCES players ( player_ckey, player_slot ) ON DELETE CASCADE,
-    UNIQUE ( player_ckey, player_slot ) 
+    UNIQUE ( player_ckey, player_slot )
 );
 
 
 -- Table: limbs
-CREATE TABLE limbs ( 
+CREATE TABLE limbs (
     ID          INTEGER PRIMARY KEY AUTOINCREMENT,
     player_ckey TEXT    NOT NULL,
     player_slot INTEGER NOT NULL,
@@ -84,12 +83,12 @@ CREATE TABLE limbs (
     heart       TEXT,
     eyes        TEXT,
     FOREIGN KEY ( player_ckey, player_slot ) REFERENCES players ( player_ckey, player_slot ) ON DELETE CASCADE,
-    UNIQUE ( player_ckey, player_slot ) 
+    UNIQUE ( player_ckey, player_slot )
 );
 
 
 -- Table: client
-CREATE TABLE client ( 
+CREATE TABLE client (
     ID             INTEGER NOT NULL
                            PRIMARY KEY AUTOINCREMENT,
     ckey           INTEGER UNIQUE,
@@ -115,11 +114,11 @@ CREATE TABLE client (
 
 
 -- Table: client_roles
-CREATE TABLE client_roles ( 
+CREATE TABLE client_roles (
     ckey       TEXT    NOT NULL,
     slot       INTEGER NOT NULL,
     role       TEXT    NOT NULL,
     preference INTEGER NOT NULL,
     PRIMARY KEY ( ckey, slot, role ),
-    FOREIGN KEY ( ckey, slot ) REFERENCES players ( player_ckey, player_slot ) ON DELETE CASCADE 
+    FOREIGN KEY ( ckey, slot ) REFERENCES players ( player_ckey, player_slot ) ON DELETE CASCADE
 );

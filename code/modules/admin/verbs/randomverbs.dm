@@ -611,6 +611,9 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		alert("Cannot revive a ghost")
 		return
 	if(config.allow_admin_rev)
+		var/confirm = alert(src, "Rejuvenate [M]?", "Confirm", "Yes", "No")
+		if(confirm != "Yes")
+			return
 		M.revive(0)
 		M.suiciding = 0
 
