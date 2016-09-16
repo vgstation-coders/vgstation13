@@ -1000,3 +1000,15 @@
 		/obj/item/weapon/storage/firstaid/regular,
 		/obj/item/weapon/storage/box/handcuffs,
 		)
+
+// DEFF station vault /////////////////////
+/obj/map/spawner/misc/deffvault
+	name = "deffvaultspawner"
+	icon_state = "space_tools"
+	chance = 100
+	amount = 1
+	jiggle = 5
+	to_spawn = list(
+	/obj/item/weapon/switchtool,
+	/obj/item/weapon/switchtool/swiss_army_knife
+	)
