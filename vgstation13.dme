@@ -1777,6 +1777,7 @@
 #include "code\modules\research\designs\boards\computer_science.dm"
 #include "code\modules\research\designs\boards\computer_sec.dm"
 #include "code\modules\research\designs\boards\machine_command.dm"
+#include "code\modules\research\designs\boards\machine_engie.dm"
 #include "code\modules\research\designs\boards\machine_hospitality.dm"
 #include "code\modules\research\designs\boards\machine_hydro.dm"
 #include "code\modules\research\designs\boards\machine_medical.dm"
