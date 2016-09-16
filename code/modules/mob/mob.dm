@@ -1065,11 +1065,6 @@ var/list/slot_equipment_priority = list( \
 	face_atom(I)
 	I.verb_pickup(src)
 
-/mob/verb/help()
-	set name = "Help"
-	src << browse('html/help.html', "window=help")
-	return
-
 /mob/verb/abandon_mob()
 	set name = "Respawn"
 	set category = "OOC"
