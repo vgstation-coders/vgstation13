@@ -323,7 +323,8 @@
 		..()
 
 /mob/living/simple_animal/hostile/retaliate/box/Life()
-	if(!..()) return 0
+	if(!..())
+		return 0
 	if(size<SIZE_BIG)
 		fat += rand(2)
 	if(fat>BOX_GROWTH_BAR)
