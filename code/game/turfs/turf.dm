@@ -169,7 +169,7 @@
 
 			var/locked_to_current_z = 0//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
 
-			for(var/obj/item/weapon/disk/nuclear in contents_brought)
+			for(var/obj/item/weapon/disk/nuclear/nuclear in contents_brought)
 				locked_to_current_z = map.zMainStation
 				break
 
