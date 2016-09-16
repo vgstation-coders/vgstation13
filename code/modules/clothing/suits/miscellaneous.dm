@@ -389,6 +389,7 @@
 	blood_overlay_type = "coat"
 	cant_hold = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
 	armor = list(melee = 30, bullet = 20, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
+	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/suit/maidapron
 	name = "Apron"
@@ -443,18 +444,23 @@
 	heat_conductivity = INS_ARMOUR_HEAT_CONDUCTIVITY
 	body_parts_covered = FULL_TORSO|ARMS
 	icon_state = "cjumper-red"
+	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/suit/jumper/christmas/red
 	desc = "Made by professional knitting nanas to truly fit the festive mood. This one has a tasteful red colour to it, and a festive Fir tree."
 	icon_state = "cjumper-red"
+	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/suit/jumper/christmas/blue
 	desc = "Made by professional knitting nanas to truly fit the festive mood. This one has a nice light blue colouring to it, and has a snowman on it."
 	icon_state = "cjumper-blue"
+	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/suit/jumper/christmas/green
 	desc = "Made by professional knitting nanas to truly fit the festive mood. This one is green in colour, and has a reindeer with a red nose on the front. At least you think it's a reindeer."
 	icon_state = "cjumper-green"
+	species_fit = list(GREY_SHAPED)
+
 
 /obj/item/clothing/suit/spaceblanket
 	plane = ABOVE_OBJ_PLANE
