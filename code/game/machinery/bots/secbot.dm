@@ -206,7 +206,7 @@ Auto Patrol: []"},
 		return
 	if(!isscrewdriver(W) && (W.force) && (!target) ) // Added check for welding tool to fix #2432. Welding tool behavior is handled in superclass.
 		threatlevel = user.assess_threat(src)
-		threatlevel += PERP_LEVEL_ARREST + PERP_LEVEL_ARREST/2
+		threatlevel += PERP_LEVEL_ARREST_MORE
 		if(threatlevel > 0)
 			target = user
 			mode = SECBOT_HUNT
@@ -215,7 +215,7 @@ Auto Patrol: []"},
 	..()
 
 	threatlevel = H.assess_threat(src)
-	threatlevel += PERP_LEVEL_ARREST + PERP_LEVEL_ARREST/2
+	threatlevel += PERP_LEVEL_ARREST_MORE
 
 	if(threatlevel > 0)
 		src.target = H

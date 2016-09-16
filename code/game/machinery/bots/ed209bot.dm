@@ -237,7 +237,7 @@ Auto Patrol: []"},
 		if (!isscrewdriver(W) && (!src.target))
 			if(hasvar(W,"force") && W.force)//If force is defined and non-zero
 				threatlevel = user.assess_threat(src)
-				threatlevel += (PERP_LEVEL_ARREST + PERP_LEVEL_ARREST/2)
+				threatlevel += PERP_LEVEL_ARREST_MORE
 				if(threatlevel > 0)
 					src.target = user
 					src.shootAt(user)
@@ -247,7 +247,7 @@ Auto Patrol: []"},
 	..()
 
 	threatlevel = H.assess_threat(src)
-	threatlevel += (PERP_LEVEL_ARREST + PERP_LEVEL_ARREST/2)
+	threatlevel += PERP_LEVEL_ARREST_MORE
 
 	if(threatlevel > 0)
 		src.target = H
