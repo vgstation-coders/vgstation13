@@ -94,9 +94,7 @@ var/list/existing_vaults = list()
 /datum/map_element/vault/prison
 	file_path = "maps/randomvaults/prison_ship.dmm"
 
-/datum/map_element/vault/prison/initialize(list/objects)
-	..()
-
+/datum/map_element/vault/prison/pre_load()
 	load_dungeon(/datum/map_element/dungeon/prison)
 
 /datum/map_element/dungeon/prison
