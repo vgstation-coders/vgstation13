@@ -177,3 +177,12 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	New()
 		..()
 		bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/clown
+	name = "clownfish fillet"
+	desc = "A fine cut of the ocean's biggest prankster."
+	icon_state = "fishfillet" // placeholder
+
+	New()
+		..()
+		bitesize = 2

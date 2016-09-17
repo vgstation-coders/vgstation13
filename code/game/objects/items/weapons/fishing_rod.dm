@@ -19,6 +19,12 @@
       list(/obj/item/weapon/reagent_containers/food/snacks/fish, 100)
       )
 
+/datum/bait_type/clown
+  bait = /obj/item/clothing/mask/gas/clown_hat
+  fish = list(
+    list(/obj/item/weapon/reagent_containers/food/snacks/fish/clown, 100)
+    )
+
 // -----------------------------
 //         Fishing Rod
 // -----------------------------
@@ -45,12 +51,13 @@
   attack_verb = list("smacks", "whacks", "whips", "belts", "lashes")
   var/busy = 0 //check if in use to stop bait scumming
   var/obj/item/weapon/hookeditem
-  var/list/fishables = list( //list of stuff that can be fished
+  var/list/fishables = list( //list of atoms that can be fished
       /obj/machinery/bluespace_pond,
       /turf/unsimulated/beach/water/deep,
       )
-  var/list/bait_types = list(
-      /datum/bait_type/standard_bait
+  var/list/bait_types = list( // The types of bait this rod is able to use
+      /datum/bait_type/standard_bait,
+      /datum/bait_type/clown,
       )
 
 /obj/item/weapon/fishingrod/suicide_act(mob/user)
@@ -88,7 +95,7 @@
   else
     to_chat(user, "<span class='notice'>You cannot use [hookeditem.name] as bait.</span>")
 
-/obj/item/weapon/fishingrod/attackby(obj/item/weapon/W, mob/user)
+/obj/item/weapon/fishingrod/attackby(obj/item/W, mob/user)
   ..()
   var/datum/bait_type/bait_fish = find_bait(W)
   if(bait_fish)

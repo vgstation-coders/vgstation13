@@ -1393,6 +1393,10 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp)
 	result = /obj/item/weapon/reagent_containers/food/snacks/fishburger/carp
 
+/datum/recipe/fishburger/clown
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/clown)
+	result = /obj/item/weapon/reagent_containers/food/snacks/fishburger/clown
+
 /datum/recipe/fishandchips
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/fries,

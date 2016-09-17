@@ -39,7 +39,7 @@
 //Proc for effects that trigger on eating that aren't directly tied to the reagents.
 /obj/item/weapon/reagent_containers/food/snacks/proc/after_consume(var/mob/user, var/datum/reagents/reagentreference)
 	if(!user)
-		return
+		return 1
 	if(reagents)
 		reagentreference = reagents
 	if(!reagentreference || !reagentreference.total_volume) //Are we done eating (determined by the amount of reagents left, here 0)
@@ -80,7 +80,7 @@
 
 		qdel(src) //Remove the item, we consumed it
 
-	return
+	return 0
 
 /obj/item/weapon/reagent_containers/food/snacks/attack_self(mob/user)
 	if(can_consume(user, user))
@@ -819,6 +819,18 @@
 		..()
 		reagents.add_reagent(NUTRIMENT, 6)
 		bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/fishburger/clown
+	name = "clownfish burger"
+	desc = "Considered fine dining on the Clown Planet."
+	icon_state = "fishburger" //placeholder
+	New()
+		..()
+		bitesize = 6
+	after_consume(var/mob/user, var/datum/reagents/reagentreference)
+		if(!..())
+			user.dna.SetSEState(CLUMSYBLOCK, 1)
+			domutcheck(user, null, MUTCHK_FORCED)
 
 /obj/item/weapon/reagent_containers/food/snacks/fishburger/carp
 	name = "fillet -o- carp sandwich"
@@ -4438,6 +4450,15 @@
 			new C(ground)
 	to_chat(user, "<span class='notice'>You fillet and clean the [name].</span>")
 	qdel(src)
+
+/obj/item/weapon/reagent_containers/food/snacks/fish/clown
+	name = "clownfish"
+	desc = "Honking Nemo."
+	icon_state = "meat" // placeholder
+	fish_guts = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/clown,
+		/obj/item/weapon/bikehorn
+		)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi
 	name = "sushi"
