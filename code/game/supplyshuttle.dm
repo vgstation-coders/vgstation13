@@ -407,6 +407,9 @@ var/list/mechtoys = list(
 	if(..())
 		return
 	current_acct = user.get_worn_id_account()
+	if(current_acct == null) // don't do anything if they don't have an account they can use
+		to_chat(user, "<span class='warning'>Please wear an ID with an associated bank account.</span>")
+		return
 	user.set_machine(src)
 	ui_interact(usr)
 	onclose(user, "computer")
@@ -451,7 +454,6 @@ var/list/mechtoys = list(
 			if(I && SO.orderedby == I.registered_name)
 				orders_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name)))
 	data["orders"] = orders_list
-
 	data["money"] = current_acct.fmtBalance()
 
 	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
@@ -466,7 +468,25 @@ var/list/mechtoys = list(
 
 	if( isturf(loc) && (in_range(src, usr) || istype(usr, /mob/living/silicon)) )
 		usr.set_machine(src)
-
+	
+	var/idname = "*None Provided*"
+	var/idrank = "*None Provided*"
+	var/obj/item/weapon/card/id/usr_id = usr.get_id_card()
+	var/datum/money_account/account
+	if(ishuman(usr))
+		if(usr_id == null) // stops card dropping run times
+			to_chat(usr, "<span class='warning'>Please wear an ID with an associated bank account.</span>")
+			return
+		idname = usr_id.registered_name
+		idrank = usr_id.GetJobName()
+		account = get_card_account(usr_id)
+		if(account == null) // stops card swapping run times
+			to_chat(usr, "<span class='warning'>Please wear an ID with an associated bank account.</span>")
+			return
+	else if(issilicon(usr))
+		idname = usr.real_name
+		account = station_account
+		
 	if (href_list["doorder"])
 		if(world.time < reqtime)
 			for(var/mob/V in hearers(src))
@@ -487,24 +507,6 @@ var/list/mechtoys = list(
 			var/num_input = input(usr, "Amount:", "How many crates?", "") as num
 			// Maximum 20 crates ordered at a time
 			crates = Clamp(round(text2num(num_input)), 1, 20)
-
-		var/idname = "*None Provided*"
-		var/idrank = "*None Provided*"
-		var/datum/money_account/account
-		if(ishuman(usr))
-			var/obj/item/weapon/card/id/I = usr.get_id_card()
-			if(I)
-				idname = I.registered_name
-				idrank = I.GetJobName()
-				account = get_card_account(I)
-			else
-				to_chat(usr, "<span class='warning'>Please wear an ID with an associated bank account.</span>")
-				return
-
-
-		else if(issilicon(usr))
-			idname = usr.real_name
-			account = station_account
 
 		// Calculate money tied up in usr's requests
 		var/total_money_req = 0
@@ -586,6 +588,9 @@ var/list/mechtoys = list(
 		return
 
 	current_acct = user.get_worn_id_account()
+	if(current_acct == null) // don't do anything if they don't have an account they can use
+		to_chat(user, "<span class='warning'>Please wear an ID with an associated bank account.</span>")
+		return
 
 	user.set_machine(src)
 	post_signal("supply")
@@ -668,7 +673,6 @@ var/list/mechtoys = list(
 		if(SO)
 			orders_list.Add(list(list("ordernum" = SO.ordernum, "supply_type" = SO.object.name, "orderedby" = SO.orderedby, "comment" = SO.comment)))
 	data["orders"] = orders_list
-
 	data["money"] = current_acct.fmtBalance()
 	data["send"] = list("send" = 1)
 	data["moving"] = supply_shuttle.moving
@@ -687,6 +691,23 @@ var/list/mechtoys = list(
 		return
 	if(..())
 		return 1
+	var/idname = "*None Provided*"
+	var/idrank = "*None Provided*"
+	var/obj/item/weapon/card/id/usr_id = usr.get_id_card()
+	var/datum/money_account/account
+	if(ishuman(usr))
+		if(usr_id == null) // stops card dropping run times
+			to_chat(usr, "<span class='warning'>Please wear an ID with an associated bank account.</span>")
+			return
+		idname = usr_id.registered_name
+		idrank = usr_id.GetJobName()
+		account = get_card_account(usr_id)
+		if(account == null) // stops card swapping run times
+			to_chat(usr, "<span class='warning'>Please wear an ID with an associated bank account.</span>")
+			return
+	else if(issilicon(usr))
+		idname = usr.real_name
+		account = station_account
 	//Calling the shuttle
 	if(href_list["send"])
 		if(!map.linked_to_centcomm)
@@ -721,21 +742,6 @@ var/list/mechtoys = list(
 		if(multi)
 			var/tempcount = input(usr, "Amount:", "How many crates?", "") as num
 			crates = Clamp(round(text2num(tempcount)), 1, 20)
-		var/idname = "*None Provided*"
-		var/idrank = "*None Provided*"
-		var/datum/money_account/account
-		if(ishuman(usr))
-			var/obj/item/weapon/card/id/I = usr.get_id_card()
-			if(I)
-				idname = I.registered_name
-				idrank = I.GetJobName()
-				account = get_card_account(I)
-			else
-				to_chat(usr, "[bicon(src)]<span class='warning'>Please wear an ID with an associated bank account.</span>")
-				return
-		else if(issilicon(usr))
-			idname = usr.real_name
-			account = station_account
 
 		// Calculate money tied up in requests
 		var/total_money_req = 0
