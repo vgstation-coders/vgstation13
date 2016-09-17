@@ -437,3 +437,10 @@
 		winset(usr, "mainwindow.mainvsplit", "right=mapwindow;left=rpane;splitter=[newsplit]")
 	else
 		winset(usr, "mainwindow.mainvsplit", "right=rpane;left=mapwindow;splitter=[newsplit]")
+
+/client/verb/modify_preferences()
+	set name = "modifypreferences"
+	if(!prefs.saveloaded)
+		to_chat(src, "<span class='warning'>Your character preferences have not yet loaded.</span>")
+		return
+	prefs.ShowChoices(usr)

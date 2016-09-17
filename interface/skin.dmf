@@ -424,6 +424,20 @@ menu "menu"
 		command = "hotkeys-help"
 		category = "&Help"
 		saved-params = "is-checked"
+	elem "sweet"
+		name = "New shit"
+		command = ""
+		saved-params = "is-checked"
+	elem 
+		name = "Swap Sides"
+		command = "Swap Sides"
+		category = "New shit"
+		saved-params = "is-checked"
+	elem 
+		name = "Preferences"
+		command = "modifypreferences"
+		category = "New shit"
+		saved-params = "is-checked"
 
 
 window "Telecomms IDE"
@@ -711,7 +725,6 @@ window "mapwindow"
 		size = 640x480
 		anchor1 = none
 		anchor2 = none
-		background-color = none
 		saved-params = "pos;size;is-minimized;is-maximized"
 		titlebar = false
 		statusbar = false

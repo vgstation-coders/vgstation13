@@ -345,3 +345,23 @@ div.notice
 	/* Remove antialias to prevent cataracts */
 	-ms-interpolation-mode: nearest-neighbor;
 }
+
+td.column {
+    width: 60px;
+    text-align: center;
+}
+td.clmNever {
+    background: #ffcccc;
+}
+
+td.clmNo {
+    background: #ffeeee;
+}
+
+td.clmYes {
+    background: #eeffee;
+}
+
+td.clmAlways {
+    background: #ccffcc;
+}

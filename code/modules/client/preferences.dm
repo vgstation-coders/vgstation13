@@ -298,37 +298,10 @@ var/const/MAX_SAVE_SLOTS = 8
 	if(config.allow_Metadata)
 		dat += "<b>OOC Notes:</b> <a href='?_src_=prefs;preference=metadata;task=input'> Edit </a><br>"
 
-	dat += "</td><td width='300px' height='300px' valign='top'><h2>Antagonist Settings</h2>"
-
-	if(jobban_isbanned(user, "Syndicate"))
-		dat += "<b>You are banned from antagonist roles.</b>"
-	else
-		for (var/i in antag_roles)
-			if(antag_roles[i]) //if mode is available on the server
-				if(jobban_isbanned(user, i))
-					dat += "<b>Be [i]:</b> <font color=red><b> \[BANNED]</b></font><br>"
-				else if(i == "pai candidate")
-					if(jobban_isbanned(user, "pAI"))
-						dat += "<b>Be [i]:</b> <font color=red><b> \[BANNED]</b></font><br>"
-				else
-					var/wikiroute = role_wiki[i]
-					dat += "<b>Be [i]:</b> <a href='?_src_=prefs;preference=toggle_role;role_id=[i]'><b>[roles[i] & ROLEPREF_ENABLE ? "Yes" : "No"]</b></a> [wikiroute ? "<a HREF='?src=\ref[user];getwiki=[wikiroute]'>wiki</a>" : ""]<br>"
-
-	dat += "</td><td width='300px' height='300px' valign='top'><h2>Special Roles Settings</h2>"
-
-	for (var/i in nonantag_roles)
-		if(nonantag_roles[i]) //if mode is available on the server
-			if(jobban_isbanned(user, i))
-				dat += "<b>Be [i]:</b> <font color=red><b> \[BANNED]</b></font><br>"
-			else if(i == "pai candidate")
-				if(jobban_isbanned(user, "pAI"))
-					dat += "<b>Be [i]:</b> <font color=red><b> \[BANNED]</b></font><br>"
-			else
-				var/wikiroute = role_wiki[i]
-				dat += "<b>Be [i]:</b> <a href='?_src_=prefs;preference=toggle_role;role_id=[i]'><b>[roles[i] & ROLEPREF_ENABLE ? "Yes" : "No"]</b></a> [wikiroute ? "<a HREF='?src=\ref[user];getwiki=[wikiroute]'>wiki</a>" : ""]<br>"
-
 	dat += "</td></tr></table>"
+
 	return dat
+
 /datum/preferences/proc/getPrefLevelText(var/datum/job/job)
 	if(GetJobDepartment(job, 1) & job.flag)
 		return "High"
@@ -338,6 +311,7 @@ var/const/MAX_SAVE_SLOTS = 8
 		return "Low"
 	else
 		return "NEVER"
+
 /datum/preferences/proc/getPrefLevelUpOrDown(var/datum/job/job, var/inc)
 	if(GetJobDepartment(job, 1) & job.flag)
 		if(inc)
@@ -551,7 +525,8 @@ var/const/MAX_SAVE_SLOTS = 8
 
 	dat += "<center><a href='?_src_=prefs;preference=tab;tab=0' [current_tab == 0 ? "class='linkOn'" : ""]>Character Settings</a> | "
 	dat += "<a href='?_src_=prefs;preference=tab;tab=1' [current_tab == 1 ? "class='linkOn'" : ""]>UI Settings</a> | "
-	dat += "<a href='?_src_=prefs;preference=tab;tab=2' [current_tab == 2 ? "class='linkOn'" : ""]>General Settings</a></center><br>"
+	dat += "<a href='?_src_=prefs;preference=tab;tab=2' [current_tab == 2 ? "class='linkOn'" : ""]>General Settings</a> | "
+	dat += "<a href='?_src_=prefs;preference=tab;tab=3' [current_tab == 3 ? "class='linkOn'" : ""]>Special Roles</a></center><br>"
 
 	if(appearance_isbanned(user))
 		dat += "<b>You are banned from using custom names and appearances. You can continue to adjust your characters, but you will be randomised once you join the game.</b><br>"
@@ -563,6 +538,8 @@ var/const/MAX_SAVE_SLOTS = 8
 			dat = setup_UI(dat, user)
 		if(2)
 			dat = setup_special(dat, user)
+		if(3)
+			dat = configure_special_roles(dat, user)
 
 	dat += "<br><hr>"
 
@@ -923,11 +900,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	save_character_sqlite(user.ckey, user, default_slot)
 
 	return 1
+
 /datum/preferences/proc/process_link(mob/user, list/href_list)
 	if(!user)
-		return
-
-	if(!istype(user, /mob/new_player))
 		return
 
 	if(href_list["preference"] == "job")
@@ -1665,8 +1640,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 /datum/preferences/proc/close_load_dialog(mob/user)
 	user << browse(null, "window=saves")
 
-/datum/preferences/proc/configure_special_roles(var/mob/user)
-	var/html={"<form method="get">
+/datum/preferences/proc/configure_special_roles(var/dat, var/mob/user)
+	dat+={"<form method="get">
 	<input type="hidden" name="src" value="\ref[src]" />
 	<input type="hidden" name="preference" value="set_roles" />
 	<h1>Special Role Preferences</h1>
@@ -1675,44 +1650,94 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 		<legend>Legend</legend>
 		<dl>
 			<dt>Never:</dt>
-			<dd>Always answer no to this role.</dd>
+			<dd>Automatically respond 'no' to all requests to become this role.</dd>
 			<dt>No:</dt>
-			<dd>Answer no for this round. (Default)</dd>
+			<dd>Responds no to requests to become this role, with options to sign up to become it. Default.</dd>
 			<dt>Yes:</dt>
-			<dd>Answer yes for this round.</dd>
+			<dd>Responds yes to requests to become this role, with options to opt out of becoming it.</dd>
 			<dt>Always:</dt>
-			<dd>Always answer yes to this role.</dd>
+			<dd>Automatically respond 'yes' to all requests to become this role.</dd>
 		</dl>
 	</fieldset>
-	<table border=\"0\">
+
+	<table border=\"0\" padding-left = 20px;>
 		<thead>
 			<tr>
-				<th>Role</th>
+				<th colspan='6' height = '40px' valign='bottom'><h1>Antagonist Roles</h1></th>
+			</tr>
+		</thead>
+		<tbody>"}
+
+
+	dat += {"<tr>
+				<th><u>Role</u></th>
+				<th>Instructions</th>
 				<th class="clmNever">Never</th>
 				<th class="clmNo">No</th>
 				<th class="clmYes">Yes</th>
 				<th class="clmAlways">Always</th>
-			</tr>
-		</thead>
-		<tbody>"}
-	for(var/role_id in special_roles)
-		var/desire = get_role_desire_str(roles[role_id])
-		html += {"<tr>
-			<th>[role_id]</th>
-			<td class='column clmNever'><input type="radio" name="[role_id]" value="[ROLEPREF_PERSIST]" title="Never"[desire=="Never"?" checked='checked'":""]/></td>
-			<td class='column clmNo'><input type="radio" name="[role_id]" value="0" title="No"[desire=="No"?" checked='checked'":""] /></td>
-			<td class='column clmYes'><input type="radio" name="[role_id]" value="[ROLEPREF_ENABLE]" title="Yes"[desire=="Yes"?" checked='checked'":""] /></td>
-			<td class='column clmAlways'><input type="radio" name="[role_id]" value="[ROLEPREF_ENABLE|ROLEPREF_PERSIST]" title="Always"[desire=="Always"?" checked='checked'":""] /></td>
-		</tr>"}
-	html += {"</tbody>
+			</tr>"}
+
+	if(jobban_isbanned(user, "Syndicate"))
+		dat += "<th colspan='5' text-align = 'center' height = '40px'><h1>You are banned from antagonist roles</h1></th>"
+	else
+		for(var/role_id in antag_roles)
+			dat += "<tr>"
+			dat += "<td>[capitalize(role_id)]</td>"
+			if(antag_roles[role_id]) //if mode is available on the server
+				if(jobban_isbanned(user, role_id))
+					dat += "<td class='column clmNever' colspan='5'><font color=red><b>\[BANNED]</b></font></td>"
+				else if(role_id == "pai candidate")
+					if(jobban_isbanned(user, "pAI"))
+						dat += "<td class='column clmNever' colspan='5'><font color=red><b>\[BANNED]</b></font></td>"
+				else
+					var/wikiroute = role_wiki[role_id]
+					var/desire = get_role_desire_str(roles[role_id])
+					dat += {"<td class='column'>[wikiroute ? "<a HREF='?src=\ref[user];getwiki=[wikiroute]'>Role Wiki</a>" : ""]</td>
+						<td class='column clmNever'><input type="radio" name="[role_id]" value="[ROLEPREF_PERSIST]" title="Never"[desire=="Never"?" checked='checked'":""]/></td>
+						<td class='column clmNo'><input type="radio" name="[role_id]" value="0" title="No"[desire=="No"?" checked='checked'":""] /></td>
+						<td class='column clmYes'><input type="radio" name="[role_id]" value="[ROLEPREF_ENABLE]" title="Yes"[desire=="Yes"?" checked='checked'":""] /></td>
+						<td class='column clmAlways'><input type="radio" name="[role_id]" value="[ROLEPREF_ENABLE|ROLEPREF_PERSIST]" title="Always"[desire=="Always"?" checked='checked'":""] /></td>
+					</tr>"}
+
+	dat += "<th colspan='6' height = '60px' valign='bottom'><h1>Non-Antagonist Roles</h1></th>"
+
+	dat += {"<tr>
+				<th><u>Role</u></th>
+				<th>Instructions</th>
+				<th class="clmNever">Never</th>
+				<th class="clmNo">No</th>
+				<th class="clmYes">Yes</th>
+				<th class="clmAlways">Always</th>
+			</tr>"}
+
+	for(var/role_id in nonantag_roles)
+		dat += "<tr>"
+		dat += "<td>[capitalize(role_id)]</td>"
+		if(nonantag_roles[role_id]) //if mode is available on the server
+			if(jobban_isbanned(user, role_id))
+				dat += "<td class='column clmNever' colspan='5'><font color=red><b>\[BANNED]</b></font></td>"
+			else if(role_id == "pai candidate")
+				if(jobban_isbanned(user, "pAI"))
+					dat += "<td class='column clmNever' colspan='5'><font color=red><b>\[BANNED]</b></font></td>"
+			else
+				var/wikiroute = role_wiki[role_id]
+				var/desire = get_role_desire_str(roles[role_id])
+				dat += {"<td class='column'>[wikiroute ? "<a HREF='?src=\ref[user];getwiki=[wikiroute]'>Role Wiki</a>" : ""]</td>
+					<td class='column clmNever'><input type="radio" name="[role_id]" value="[ROLEPREF_PERSIST]" title="Never"[desire=="Never"?" checked='checked'":""]/></td>
+					<td class='column clmNo'><input type="radio" name="[role_id]" value="0" title="No"[desire=="No"?" checked='checked'":""] /></td>
+					<td class='column clmYes'><input type="radio" name="[role_id]" value="[ROLEPREF_ENABLE]" title="Yes"[desire=="Yes"?" checked='checked'":""] /></td>
+					<td class='column clmAlways'><input type="radio" name="[role_id]" value="[ROLEPREF_ENABLE|ROLEPREF_PERSIST]" title="Always"[desire=="Always"?" checked='checked'":""] /></td>
+				</tr>"}
+
+	dat += {"</tbody>
 		</table>
+		<br>
 		<input type="submit" value="Submit" />
 		<input type="reset" value="Reset" />
-		</form>"}
-	var/datum/browser/B = new /datum/browser/clean(user, "roles", "Role Selections", 300, 390)
-	B.set_content(html)
-	B.add_stylesheet("specialroles", 'html/browser/config_roles.css')
-	B.open()
+		</form>
+		<br>"}
+	return dat
 
 /datum/preferences/Topic(href, href_list)
 	if(!usr || !client)
