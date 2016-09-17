@@ -59,49 +59,33 @@
 		returnToPool(src)
 		return
 
-	var/list/L = src.color:Copy() // For some dumb reason BYOND won't allow me to use [] on a colour matrix directly.
-	var/max    = 0
+	// To the future coder who sees this and thinks
+	// "Why didn't he just use a loop?"
+	// Well my man, it's because the loop performed like shit.
+	// And there's no way to improve it because
+	// without a loop you can make the list all at once which is the fastest you're gonna get.
+	// Oh it's also shorter line wise.
+	// Including with these comments.
 
-	for (var/datum/lighting_corner/C in T.corners)
-		var/i = 0
+	// See LIGHTING_CORNER_DIAGONAL in lighting_corner.dm for why these values are what they are.
+	// No I seriously cannot think of a more efficient method, fuck off Comic.
+	var/datum/lighting_corner/cr  = T.corners[3]
+	var/datum/lighting_corner/cg  = T.corners[2]
+	var/datum/lighting_corner/cb  = T.corners[4]
+	var/datum/lighting_corner/ca  = T.corners[1]
 
-		// Huge switch to determine i based on D.
-		switch (turn(C.masters[T], 180))
-			if (NORTHEAST)
-				i = CL_MATRIX_AR
+	var/max = max(cr.cache_mx, cg.cache_mx, cb.cache_mx, ca.cache_mx)
 
-			if (SOUTHEAST)
-				i = CL_MATRIX_GR
+	color  = list(
+		cr.cache_r, cr.cache_g, cr.cache_b, 0,
+		cg.cache_r, cg.cache_g, cg.cache_b, 0,
+		cb.cache_r, cb.cache_g, cb.cache_b, 0,
+		ca.cache_r, ca.cache_g, ca.cache_b, 0,
+		0, 0, 0, 1
+	)
+	luminosity = max > LIGHTING_SOFT_THRESHOLD
 
-			if (SOUTHWEST)
-				i = CL_MATRIX_RR
-
-			if (NORTHWEST)
-				i = CL_MATRIX_BR
-
-		var/mx = max(C.lum_r, C.lum_g, C.lum_b) // Scale it so 1 is the strongest lum, if it is above 1.
-		. = 1 // factor
-		if (mx > 1)
-			. = 1 / mx
-
-		else if (mx < LIGHTING_SOFT_THRESHOLD)
-			. = 0 // 0 means soft lighting.
-
-		max = max(max, mx)
-
-		if (.)
-			L[i + 0]   = C.lum_r * .
-			L[i + 1]   = C.lum_g * .
-			L[i + 2]   = C.lum_b * .
-		else
-			L[i + 0]   = LIGHTING_SOFT_THRESHOLD
-			L[i + 1]   = LIGHTING_SOFT_THRESHOLD
-			L[i + 2]   = LIGHTING_SOFT_THRESHOLD
-
-	src.color  = L
-	luminosity = (max > LIGHTING_SOFT_THRESHOLD)
-
-	// Variety of overrides so the overlays don't get affected by weird things.
+// Variety of overrides so the overlays don't get affected by weird things.
 
 /atom/movable/lighting_overlay/ex_act(severity)
 	return 0
