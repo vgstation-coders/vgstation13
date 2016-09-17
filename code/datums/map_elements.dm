@@ -25,6 +25,9 @@ var/list/datum/map_element/map_elements = list()
 
 	//Build powernets
 	for(var/obj/structure/cable/C in objects)
+		if(C.powernet)
+			continue
+		
 		C.rebuild_from()
 
 /datum/map_element/proc/load(x, y, z)
