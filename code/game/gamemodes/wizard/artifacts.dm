@@ -62,12 +62,14 @@
 	abbreviation = "SN"
 	spawned_items = list(/obj/item/weapon/staff/necro)
 
+#define APPRENTICE_PRICE 5
 /datum/spellbook_artifact/apprentice
 	name = "Contract of Apprenticeship"
 	desc = "A magical contract binding an apprentice wizard to your service, using it will summon them to your side."
 	abbreviation = "CT"
 	spawned_items = list(/obj/item/weapon/antag_spawner/contract)
-
+	price = APPRENTICE_PRICE
+	
 /datum/spellbook_artifact/bundle
 	name = "Spellbook Bundle"
 	desc = "Feeling adventurous? Buy this bundle and recieve seven random spellbooks! Who knows what spells you will get? (Warning, each spell book may only be used once! No refunds)."
