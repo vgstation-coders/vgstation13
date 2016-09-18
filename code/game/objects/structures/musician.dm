@@ -288,9 +288,12 @@
 	name = "space minimoog"
 	icon_state = "minimoog"
 	desc = "This is a minimoog, like a space piano, but more spacey!"
-
-/obj/structure/piano/random/New()
+	
+/obj/structure/piano/New()
 	song = new("piano", src)
+	
+/obj/structure/piano/random/New()
+	..()
 	if(prob(50))
 		name = "space minimoog"
 		desc = "This is a minimoog, like a space piano, but more spacey!"
