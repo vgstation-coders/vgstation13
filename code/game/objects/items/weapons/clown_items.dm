@@ -172,33 +172,38 @@
 		return
 
 	if(spent)
-		user << "<span class='warning'>There's no glue left in the bottle.</span>"
+		to_chat(user,"<span class='warning'>There's no glue left in the bottle.</span>")
 		return
 
 	if(!istype(target)) //Can only apply to items!
-		user << "<span class='warning'>That would be such a waste of glue.</span>"
+		to_chat(user,"<span class='warning'>That would be such a waste of glue.</span>")
 		return
 	else
 		if(istype(target, /obj/item/stack)) //The whole cant_drop thing is EXTREMELY fucky with stacks and can be bypassed easily
-			user << "<span class='warning'>There's not enough glue in \the [src] to cover the whole [target]!</span>"
+			to_chat(user,"<span class='warning'>There's not enough glue in \the [src] to cover the whole [target]!</span>")
 			return
 
 		if(target.abstract) //Can't glue TK grabs, grabs, offhands!
 			return
 
-	user << "<span class='info'>You gently apply the whole [src] to \the [target].</span>"
+	to_chat(user,"<span class='info'>You gently apply the whole [src] to \the [target].</span>")
 	spent = 1
 	update_icon()
 	apply_glue(target)
 
 /obj/item/weapon/glue/proc/apply_glue(obj/item/target)
 	src = null
-
-	target.cant_drop++
+	if(istype(target, /obj/item/clothing))
+		target.canremove = 0
+	else
+		target.cant_drop++
 
 	if(GLUE_WEAROFF_TIME > 0)
 		spawn(GLUE_WEAROFF_TIME)
-			target.cant_drop--
+			if(istype(target, /obj/item/clothing))
+				target.canremove = 1
+			else
+				target.cant_drop--
 
 /obj/item/weapon/glue/infinite/afterattack()
 	.=..()
