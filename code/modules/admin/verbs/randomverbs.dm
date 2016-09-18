@@ -614,6 +614,8 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		var/confirm = alert(src, "Rejuvenate [M]?", "Confirm", "Yes", "No")
 		if(confirm != "Yes")
 			return
+		if(!M)
+			return
 		M.revive(0)
 		M.suiciding = 0
 
