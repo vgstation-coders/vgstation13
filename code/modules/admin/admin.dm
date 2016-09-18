@@ -1176,6 +1176,10 @@ var/global/floorIsLava = 0
 		if (ticker.mode.config_tag == "wizard")
 			return 2
 		return 1
+	if(isapprentice(M))
+		if (ticker.mode.config_tag == "wizard")
+			return 2
+		return 1
 	if(ischangeling(M))
 		if (ticker.mode.config_tag == "changeling")
 			return 2

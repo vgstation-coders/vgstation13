@@ -127,7 +127,8 @@
 	new_objective:target = usr:mind
 	new_objective.explanation_text = "Protect [usr.real_name], the wizard."
 	M.mind.objectives += new_objective
-	ticker.mode.traitors += M.mind
+	ticker.mode.apprentices += M.mind
+	ticker.mode.update_wizard_icons_added(M.mind)
 	M.mind.special_role = "apprentice"
 
 	M.make_all_robot_parts_organic()
