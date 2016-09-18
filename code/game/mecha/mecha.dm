@@ -1131,13 +1131,13 @@
 
 		// -- Mode/mind specific stuff goes here
 		if(H.mind)
-			if((H.mind in ticker.mode:revolutionaries) || (H.mind in ticker.mode:head_revolutionaries))
+			if(isrev(H) || isrevhead(H))
 				ticker.mode.update_all_rev_icons()
-			if(H.mind in ticker.mode.syndicates)
+			if(isnukeop(H))
 				ticker.mode.update_all_synd_icons()
-			if (H.mind in ticker.mode.cult)
+			if (iscult(H))
 				ticker.mode.update_all_cult_icons()
-			if(H.mind in ticker.mode.wizards)
+			if(iswizard(H) || isapprentice(H))
 				ticker.mode.update_all_wizard_icons()
 		// -- End mode specific stuff
 
@@ -1309,13 +1309,13 @@
 
 		// -- Mode/mind specific stuff goes here
 		if(src.occupant.mind)
-			if((src.occupant.mind in ticker.mode:revolutionaries) || (src.occupant.mind in ticker.mode:head_revolutionaries))
+			if(isrev(src.occupant) || isrevhead(src.occupant))
 				ticker.mode.update_all_rev_icons()
-			if(src.occupant.mind in ticker.mode.syndicates)
+			if(isnukeop(src.occupant))
 				ticker.mode.update_all_synd_icons()
-			if (src.occupant.mind in ticker.mode.cult)
+			if (iscult(src.occupant))
 				ticker.mode.update_all_cult_icons()
-			if(src.occupant.mind in ticker.mode.wizards)
+			if(iswizard(src.occupant) || isapprentice(src.occupant))
 				ticker.mode.update_all_wizard_icons()
 		// -- End mode specific stuff
 

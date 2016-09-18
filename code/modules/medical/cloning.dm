@@ -247,14 +247,14 @@
 
 	// -- Mode/mind specific stuff goes here
 
-	if((H.mind in ticker.mode:revolutionaries) || (H.mind in ticker.mode:head_revolutionaries))
+	if(isrev(H) || isrevhead(H))
 		ticker.mode.update_all_rev_icons() //So the icon actually appears
-	if(H.mind in ticker.mode.syndicates)
+	if(isnukeop(H))
 		ticker.mode.update_all_synd_icons()
-	if (H.mind in ticker.mode.cult)
+	if (iscult(H))
 		ticker.mode.add_cultist(src.occupant.mind)
 		ticker.mode.update_all_cult_icons() //So the icon actually appears
-	if(H.mind in ticker.mode.wizards)
+	if(iswizard(H) || isapprentice(H))
 		ticker.mode.update_all_wizard_icons()
 	if(("\ref[H.mind]" in ticker.mode.necromancer) || (H.mind in ticker.mode.risen))
 		ticker.mode.update_all_necro_icons()

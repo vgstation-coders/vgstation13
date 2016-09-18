@@ -657,7 +657,7 @@
 	attack_verb = wielded ? list("rams into", "charges at") : list("bludgeons", "whacks", "cleans", "dusts")
 	if(user)
 		user.update_inv_hands()
-		if(user.mind in ticker.mode.wizards)
+		if(iswizard(user) || isapprentice(user))
 			user.flying = wielded ? 1 : 0
 			if(wielded)
 				to_chat(user, "<span class='notice'>You hold \the [src] between your legs.</span>")

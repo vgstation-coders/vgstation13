@@ -134,6 +134,7 @@
 		"revolution",
 		"cult",
 		"wizard",
+		"apprentice",
 		"changeling",
 		"vampire",
 		"nuclear",
@@ -213,6 +214,21 @@
 		else
 			text += "<a href='?src=\ref[src];wizard=wizard'>yes</a>|<b>NO</b>"
 		sections["wizard"] = text
+
+		/** WIZARD'S APPRENTICES ***/
+		text = "apprentice"
+		if (ticker.mode.config_tag=="wizard")
+			text = uppertext(text)
+		text = "<i><b>[text]</b></i>: "
+		if (src in ticker.mode.apprentices)
+
+			text += {"<b>YES</b>|<a href='?src=\ref[src];apprentice=clear'>no</a>
+				<br><a href='?src=\ref[src];apprentice=lair'>To lair</a>, <a href='?src=\ref[src];common=undress'>undress</a>, <a href='?src=\ref[src];apprentice=dressup'>dress up</a>, <a href='?src=\ref[src];apprentice=name'>let choose name</a>."}
+			if (objectives.len==0)
+				text += "<br>Objectives are empty! <a href='?src=\ref[src];apprentice=autoobjectives'>Randomize!</a>"
+		else
+			text += "<a href='?src=\ref[src];apprentice=apprentice'>yes</a>|<b>NO</b>"
+		sections["apprentice"] = text
 
 		/** CHANGELING ***/
 		text = "changeling"
@@ -740,6 +756,37 @@
 			if("autoobjectives")
 				ticker.mode.forge_wizard_objectives(src)
 				to_chat(usr, "<span class='notice'>The objectives for wizard [key] have been generated. You can edit them and anounce manually.</span>")
+		ticker.mode.update_all_wizard_icons()
+
+	else if (href_list["apprentice"])
+		switch(href_list["apprentice"])
+			if("clear")
+				if(src in ticker.mode.apprentices)
+					ticker.mode.apprentices -= src
+					special_role = null
+					current.spellremove(current, config.feature_object_spell_system? "object":"verb")
+					to_chat(current, "<span class='danger'><FONT size = 3>You have been brainwashed! You are no longer a wizard's apprentice!</FONT></span>")
+					ticker.mode.update_wizard_icons_removed(src)
+					log_admin("[key_name_admin(usr)] has de-apprentice'ed [current].")
+			if("apprentice")
+				if(!(src in ticker.mode.apprentices))
+					ticker.mode.apprentices += src
+					special_role = "apprentice"
+					//ticker.mode.learn_basic_spells(current)
+					to_chat(current, "<span class='danger'>You are a Space Wizard's apprentice!!</span>")
+					var/wikiroute = role_wiki[ROLE_WIZARD]
+					to_chat(current, "<span class='info'><a HREF='?src=\ref[current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+					ticker.mode.update_wizard_icons_added(src)
+					log_admin("[key_name_admin(usr)] has apprentice'ed [current].")
+			if("lair")
+				current.forceMove(pick(wizardstart))
+			if("dressup")
+				ticker.mode.equip_wizard(current)
+			if("name")
+				ticker.mode.name_wizard(current)
+			if("autoobjectives")
+				ticker.mode.forge_wizard_objectives(src)
+				to_chat(usr, "<span class='notice'>Random wizard objectives for apprentice [key] have been generated. You can edit them and anounce manually.</span>")
 		ticker.mode.update_all_wizard_icons()
 
 	else if (href_list["changeling"])
