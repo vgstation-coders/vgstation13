@@ -1,7 +1,0 @@
-author: Kurfurst
-delete-after: True
-
-changes: 
-- bugfix: Boxen no longer grow after death (also fixes a sprite issue with dead boxen)
-- bugfix: Boxen now properly give different amounts of meat based on how fat they were.
-- bugfix: Boxen now scream when killed, not when gibbed.
