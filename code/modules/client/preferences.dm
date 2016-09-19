@@ -9,7 +9,7 @@ var/global/list/special_roles = list(
 	ROLE_CHANGELING   = IS_MODE_COMPILED("changeling"),
 	ROLE_CULTIST      = IS_MODE_COMPILED("cult"),
 	ROLE_PLANT        = 1,
-	"infested monkey" = IS_MODE_COMPILED("monkey"),
+//	"infested monkey" = IS_MODE_COMPILED("monkey"),
 	ROLE_MALF         = IS_MODE_COMPILED("malfunction"),
 	//ROLE_NINJA        = 1,
 	ROLE_OPERATIVE    = IS_MODE_COMPILED("nuclear"),
@@ -34,7 +34,7 @@ var/list/antag_roles = list(
 	ROLE_VAMPIRE      = IS_MODE_COMPILED("vampire"),
 	ROLE_VOXRAIDER    = IS_MODE_COMPILED("heist"),
 	ROLE_WIZARD       = 1,
-	"infested monkey" = IS_MODE_COMPILED("monkey"),
+//	"infested monkey" = IS_MODE_COMPILED("monkey"),
 )
 
 var/list/nonantag_roles = list(
