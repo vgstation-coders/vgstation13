@@ -96,13 +96,20 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		sleep(1)
 	return
 
+/spell/proc/on_learn(mob/user)
+	return
+
 /////////////////
 /////CASTING/////
 /////////////////
 
+/spell/proc/on_right_click(mob/user)
+	return
+
 /spell/proc/choose_targets(mob/user = usr) //depends on subtype - see targeted.dm, aoe_turf.dm, dumbfire.dm, or code in general folder
 	return
 
+//Proc used by spell channeling only!
 /spell/proc/is_valid_target(var/target, mob/user, options)
 	if(options)
 		return (target in options)
