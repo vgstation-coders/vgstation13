@@ -191,19 +191,21 @@
 	update_icon()
 	apply_glue(target)
 
-/obj/item/weapon/glue/proc/apply_glue(obj/item/target)
-	src = null
-	if(istype(target, /obj/item/clothing))
-		target.canremove = 0
-	else
-		target.cant_drop++
-
+/obj/item/proc/glue_act() //proc for when glue is used on something
+	cant_drop++
 	if(GLUE_WEAROFF_TIME > 0)
 		spawn(GLUE_WEAROFF_TIME)
-			if(istype(target, /obj/item/clothing))
-				target.canremove = 1
-			else
-				target.cant_drop--
+			cant_drop--
+			
+/obj/item/clothing/glue_act()
+	canremove--
+	if(GLUE_WEAROFF_TIME > 0)
+		spawn(GLUE_WEAROFF_TIME)
+			canremove++
+			
+/obj/item/weapon/glue/proc/apply_glue(obj/item/target)
+	src = null
+	target.glue_act()
 
 /obj/item/weapon/glue/infinite/afterattack()
 	.=..()
