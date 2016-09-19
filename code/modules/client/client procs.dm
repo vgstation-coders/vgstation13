@@ -345,7 +345,7 @@
 /client/verb/resend_resources()
 	set name = "Resend Resources"
 	set desc = "Re-send resources for NanoUI. May help those with NanoUI issues."
-	set category = "Preferences"
+	set category = "OOC"
 
 	to_chat(usr, "<span class='notice'>Re-sending NanoUI resources.  This may result in lag.</span>")
 	nanomanager.send_resources(src)
@@ -431,16 +431,23 @@
 			U.update_holomap()
 
 /client/verb/SwapSides()
-	set name = "Swap Sides"
+	set name = "swapsides"
+	set hidden = 1
 	var/newsplit = 100 - text2num(winget(usr, "mainwindow.mainvsplit", "splitter"))
 	if(winget(usr, "mainwindow.mainvsplit", "right") == "rpane")
 		winset(usr, "mainwindow.mainvsplit", "right=mapwindow;left=rpane;splitter=[newsplit]")
 	else
 		winset(usr, "mainwindow.mainvsplit", "right=rpane;left=mapwindow;splitter=[newsplit]")
 
-/client/verb/modify_preferences()
+/client/verb/modify_preferences(page as num)
 	set name = "modifypreferences"
+	set hidden = 1
 	if(!prefs.saveloaded)
 		to_chat(src, "<span class='warning'>Your character preferences have not yet loaded.</span>")
 		return
+	switch(page)
+		if(1)
+			prefs.current_tab = 2
+		if(2)
+			prefs.current_tab = 3
 	prefs.ShowChoices(usr)
