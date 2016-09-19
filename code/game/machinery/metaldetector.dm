@@ -36,7 +36,7 @@
 
 //THIS CODE IS COPYPASTED IN ed209bot.dm AND secbot.dm, with slight variations
 /obj/machinery/detector/proc/assess_perp(mob/living/carbon/human/perp as mob)
-	var/threatcount = 0 //If threat >= 4 at the end, they get arrested
+	var/threatcount = 0 //If threat >= PERP_LEVEL_ARREST at the end, they get arrested
 	if(!(istype(perp, /mob/living/carbon)) || isalien(perp) || isbrain(perp))
 		return -1
 
@@ -45,36 +45,36 @@
 		if(!wpermit(perp))
 			for(var/obj/item/I in perp.held_items)
 				if(check_for_weapons(I))
-					threatcount += 4
+					threatcount += PERP_LEVEL_ARREST
 
 			for(var/obj/item/I in list(perp.back, perp.belt, perp.s_store) + (scanmode ? list(perp.l_store, perp.r_store) : null))
 				if(check_for_weapons(I))
-					threatcount += 2
+					threatcount += PERP_LEVEL_ARREST/2
 
 				if (perp.back && istype(perp.back, /obj/item/weapon/storage/backpack))
 					var/obj/item/weapon/storage/backpack/B = perp.back
 					for(var/obj/item/weapon/thing in B.contents)
 						if(check_for_weapons(I))
-							threatcount += 2
+							threatcount += PERP_LEVEL_ARREST/2
 
 		if(idmode)
 			if(!perp.wear_id)
-				threatcount += 4
+				threatcount += PERP_LEVEL_ARREST
 
 		else
 			if(!perp.wear_id)
-				threatcount += 2
+				threatcount += PERP_LEVEL_ARREST/2
 
 		if(ishuman(perp))
 			if(istype(perp.wear_suit, /obj/item/clothing/suit/wizrobe))
-				threatcount += 2
+				threatcount += PERP_LEVEL_ARREST/2
 
 		if(perp.dna && perp.dna.mutantrace && perp.dna.mutantrace != "none")
-			threatcount += 2
+			threatcount += PERP_LEVEL_ARREST/2
 
 		//Agent cards lower threatlevel.
 		if(perp.wear_id && istype(perp.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
-			threatcount -= 2
+			threatcount -= PERP_LEVEL_ARREST/2
 
 	var/passperpname = ""
 	for (var/datum/data/record/E in data_core.general)
@@ -91,12 +91,12 @@
 		if(E.fields["name"] == perpname)
 			for (var/datum/data/record/R in data_core.security)
 				if((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*Arrest*"))
-					threatcount = 4
+					threatcount = PERP_LEVEL_ARREST
 					break
 
 	var/list/retlist = list(threatcount, passperpname)
 	if(emagged)
-		retlist[1] = 10
+		retlist[1] = PERP_LEVEL_ARREST + rand(PERP_LEVEL_ARREST, PERP_LEVEL_ARREST*5)
 	return retlist
 
 
@@ -199,7 +199,7 @@
 
 
 
-		if (dudesthreat >= 4)
+		if (dudesthreat >= PERP_LEVEL_ARREST)
 
 			if(maxthreat < 2)
 				sndstr = "sound/machines/alert.ogg"
@@ -212,7 +212,7 @@
 			src.visible_message("<span class = 'warning'>Threat Detected! Subject: [dudesname]</span>")////
 
 
-		else if(dudesthreat <= 3 && dudesthreat != 0 && senset)
+		else if(dudesthreat <= PERP_LEVEL_ARREST*0.75 && dudesthreat != 0 && senset)
 
 			if(maxthreat < 1)
 				sndstr = "sound/machines/domore.ogg"

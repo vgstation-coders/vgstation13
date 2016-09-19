@@ -27,6 +27,7 @@
 #include "code\__DEFINES\pipes.dm"
 #include "code\__DEFINES\reagents.dm"
 #include "code\__DEFINES\research_levels.dm"
+#include "code\__DEFINES\security.dm"
 #include "code\__HELPERS\_macros.dm"
 #include "code\__HELPERS\cmp.dm"
 #include "code\__HELPERS\constants.dm"

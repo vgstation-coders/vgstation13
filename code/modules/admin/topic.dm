@@ -3308,11 +3308,10 @@
 					return
 				var/obj/item/weapon/gun/energy/gun = new choice()
 				var/obj/machinery/porta_turret/Turret = new(get_turf(usr))
-				Turret.installation = choice
-				Turret.gun_charge = gun.power_supply.charge
+				Turret.installed = gun
+				gun.forceMove(Turret)
 				Turret.update_gun()
-				qdel(gun)
-				var/emag = input("Emag the turret?") in list("Yes", "No")
+				var/emag = input("Emag the turret?") in list("No", "Yes")
 				if(emag=="Yes")
 					Turret.emag(usr)
 			if("hardcore_mode")
