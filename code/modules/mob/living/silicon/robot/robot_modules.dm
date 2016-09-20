@@ -194,7 +194,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 			src.modules -= null
 			var/obj/item/stack/O = new T(src)
 			if(istype(O,/obj/item/stack/medical))
-				O.max_amount = 15
+				O.max_amount = 10
 			src.modules += O
 			O.amount = 1
 	return
