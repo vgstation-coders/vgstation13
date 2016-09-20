@@ -431,3 +431,6 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	for(var/language in added_languages)
 		R.remove_language(language)
 	added_languages.len = 0
+	
+#undef STANDARD_MAX_KIT
+#undef MEDBORG_MAX_KIT
