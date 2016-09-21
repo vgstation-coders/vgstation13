@@ -41,8 +41,9 @@
 /obj/item/weapon/claymore
 	name = "claymore"
 	desc = "What are you standing around staring at this for? Get to killing!"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon_state = "claymore"
-	item_state = "claymore"
+	item_state = null
 	hitsound = "sound/weapons/bloodyslice.ogg"
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -72,8 +73,9 @@
 /obj/item/weapon/katana
 	name = "katana"
 	desc = "Woefully underpowered in D20"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon_state = "katana"
-	item_state = "katana"
+	item_state = null
 	hitsound = "sound/weapons/bloodyslice.ogg"
 	flags = FPRINT
 	siemens_coefficient = 1

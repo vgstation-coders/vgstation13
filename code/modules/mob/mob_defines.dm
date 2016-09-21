@@ -85,7 +85,6 @@
 	var/stuttering = null	//Carbon
 	var/slurring = null		//Carbon
 	var/real_name = null
-	var/flavor_text = ""
 	var/med_record = ""
 	var/sec_record = ""
 	var/gen_record = ""
@@ -276,8 +275,11 @@
 
 	var/list/languages[0]
 	var/stat_fucked = 1
+	var/event/on_spellcast
 	var/event/on_uattack
 	var/event/on_logout
+	var/event/on_damaged
+
 	forceinvertredraw = 1
 
 	var/list/alphas = list()

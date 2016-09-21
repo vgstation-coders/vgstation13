@@ -2,6 +2,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell
 	var/name = "Spell"
+	var/abbreviation = "" //Used for feedback gathering
+
 	var/desc = "A spell"
 	parent_type = /datum
 	var/panel = "Spells"//What panel the proc holder needs to go on.
@@ -15,6 +17,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/still_recharging_msg = "<span class='notice'>The spell is still recharging.</span>"
 
 	var/silenced = 0 //not a binary (though it seems that it is at the moment) - the length of time we can't cast this for, set by the spell_master silence_spells()
+
+	var/price = Sp_BASE_PRICE //How much does it cost to buy this spell from a spellbook
+	var/refund_price = 0 //If 0, non-refundable
 
 	var/holder_var_type = "bruteloss" //only used if charge_type equals to "holder_var"
 	var/holder_var_amount = 20 //Amount to adjust var when spell is used, THIS VALUE IS SUBTRACTED
@@ -39,6 +44,12 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	//For AOE spells:
 		//IGNOREDENSE to ignore dense turfs in selection
 		//IGNORESPACE to ignore space turfs in selection
+
+	var/autocast_flags
+	//Flags for making AI-controlled spellcasters' life easier
+	//Possible flags:
+	//AUTOCAST_NOTARGET means that the AI can't pick a target for this spell by itself - a target must be given to it
+
 	var/invocation = "HURP DURP"	//what is uttered when the wizard casts the spell
 	var/invocation_type = SpI_NONE	//can be none, whisper, shout, and emote
 	var/range = 7					//the range of the spell; outer radius for aoe spells
@@ -103,10 +114,13 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return (target in options)
 	return ((target in view_or_range(range, user, selection_type)) && istype(target, /mob/living))
 
-/spell/proc/perform(mob/user = usr, skipcharge = 0) //if recharge is started is important for the trigger spells
+/spell/proc/perform(mob/user = usr, skipcharge = 0, list/target_override) //if recharge is started is important for the trigger spells
 	if(!holder)
 		holder = user //just in case
-	if(spell_flags & WAIT_FOR_CLICK)
+
+	var/list/targets = target_override
+
+	if(!targets && (spell_flags & WAIT_FOR_CLICK))
 		channel_spell(user, skipcharge)
 		return
 	if(!cast_check(skipcharge, user))
@@ -115,7 +129,10 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return
 	if(before_target(user))
 		return
-	var/list/targets = choose_targets(user)
+
+	if(!targets)
+		targets = choose_targets(user)
+
 	if(!cast_check(skipcharge, user))
 		return //Prevent queueing of spells by opening several choose target windows.
 	if(targets && targets.len)
@@ -125,6 +142,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		invocation(user, targets)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
+		INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = targets))
 
 		if(prob(critfailchance))
 			critfail(targets, user)
@@ -177,6 +195,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		invocation(user, target)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
+		INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = target))
 
 		if(prob(critfailchance))
 			critfail(target, holder)
@@ -316,7 +335,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	if(!(spell_flags & GHOSTCAST) && holder == user)
 		if(user.stat && !(spell_flags & STATALLOWED))
-			to_chat(usr, "Not when you're incapacitated.")
+			to_chat(user, "Not when you're incapacitated.")
 			return 0
 
 		if(ishuman(user) || ismonkey(user) && !(invocation_type in list(SpI_EMOTE, SpI_NONE)))
@@ -463,3 +482,27 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(!user || (!(spell_flags & (STATALLOWED|GHOSTCAST)) && user.stat != originalstat)  || !(user.loc == Location))
 			return 0
 	return 1
+
+//UPGRADES
+/spell/proc/apply_upgrade(upgrade_type)
+	switch(upgrade_type)
+		if(Sp_SPEED)
+			return quicken_spell()
+		if(Sp_POWER)
+			return empower_spell()
+
+/spell/proc/get_upgrade_price(upgrade_type)
+	return src.price
+
+///INFO
+
+/spell/proc/get_upgrade_info(upgrade_type)
+	switch(upgrade_type)
+		if(Sp_SPEED)
+			return "Reduce this spell's cooldown."
+		if(Sp_POWER)
+			return "Increase this spell's power."
+
+//Return a string that gets appended to the spell on the scoreboard
+/spell/proc/get_scoreboard_suffix()
+	return

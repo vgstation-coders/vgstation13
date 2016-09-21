@@ -28,6 +28,11 @@
 	item_state = "that"
 	flags = FPRINT
 	siemens_coefficient = 0.9
+	
+/obj/item/clothing/head/that/armored
+	name = "armored top-hat"
+	desc = "It's an amish looking top hat. This one looks sturdier."
+	armor = list(melee = 35, bullet = 15, laser = 30, energy = 5, bomb = 10, bio = 0, rad = 0)
 
 /obj/item/clothing/head/redcoat
 	name = "redcoat's hat"
@@ -79,14 +84,6 @@
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD
 	item_state="cueball"
-
-/obj/item/clothing/head/that
-	name = "sturdy top-hat"
-	desc = "It's an amish looking armored top hat."
-	icon_state = "tophat"
-	item_state = "that"
-	flags = FPRINT
-
 
 /obj/item/clothing/head/greenbandana
 	name = "green bandana"

@@ -206,7 +206,7 @@ Auto Patrol: []"},
 		return
 	if(!isscrewdriver(W) && (W.force) && (!target) ) // Added check for welding tool to fix #2432. Welding tool behavior is handled in superclass.
 		threatlevel = user.assess_threat(src)
-		threatlevel += 6
+		threatlevel += PERP_LEVEL_ARREST_MORE
 		if(threatlevel > 0)
 			target = user
 			mode = SECBOT_HUNT
@@ -215,7 +215,7 @@ Auto Patrol: []"},
 	..()
 
 	threatlevel = H.assess_threat(src)
-	threatlevel += 6
+	threatlevel += PERP_LEVEL_ARREST_MORE
 
 	if(threatlevel > 0)
 		src.target = H
@@ -686,7 +686,7 @@ Auto Patrol: []"},
 		if(!src.threatlevel)
 			continue
 
-		else if(src.threatlevel >= 4)
+		else if(src.threatlevel >= PERP_LEVEL_ARREST)
 			src.target = M
 			src.oldtarget_name = M.name
 			src.speak("Level [src.threatlevel] infraction alert!")
@@ -707,34 +707,34 @@ Auto Patrol: []"},
 	var/threatcount = 0 //If threat >= 4 at the end, they get arrested
 
 	if(src.emagged == 2)
-		return 10 //Everyone is a criminal!
+		return PERP_LEVEL_ARREST + rand(PERP_LEVEL_ARREST, PERP_LEVEL_ARREST*5) //Everyone is a criminal!
 
 	if(!src.allowed(perp)) //cops can do no wrong, unless set to arrest.
 
 		if(weaponscheck && !wpermit(perp))
 			for(var/obj/item/I in perp.held_items)
 				if(check_for_weapons(I))
-					threatcount += 4
+					threatcount += PERP_LEVEL_ARREST
 
 			if(istype(perp.belt, /obj/item/weapon/gun) || istype(perp.belt, /obj/item/weapon/melee))
 				if(!(perp.belt.type in safe_weapons))
-					threatcount += 2
+					threatcount += PERP_LEVEL_ARREST/2
 
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/wizrobe))
-			threatcount += 2
+			threatcount += PERP_LEVEL_ARREST/2
 
 		if(perp.dna && perp.dna.mutantrace && perp.dna.mutantrace != "none")
-			threatcount += 2
+			threatcount += PERP_LEVEL_ARREST/2
 		var/visible_id = perp.get_visible_id()
 		if(!visible_id)
 			if(idcheck)
-				threatcount += 4
+				threatcount += PERP_LEVEL_ARREST
 			else
-				threatcount += 2
+				threatcount += PERP_LEVEL_ARREST/2
 
 		//Agent cards lower threatlevel.
 		if(istype(visible_id, /obj/item/weapon/card/id/syndicate))
-			threatcount -= 2
+			threatcount -= PERP_LEVEL_ARREST/2
 
 	if(src.check_records)
 		for (var/datum/data/record/E in data_core.general)
@@ -746,7 +746,7 @@ Auto Patrol: []"},
 			if(E.fields["name"] == perpname)
 				for (var/datum/data/record/R in data_core.security)
 					if((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*Arrest*"))
-						threatcount = 4
+						threatcount = PERP_LEVEL_ARREST
 						break
 
 	return threatcount

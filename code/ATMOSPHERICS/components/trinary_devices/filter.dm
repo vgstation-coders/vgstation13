@@ -24,6 +24,8 @@ Filter types:
 	var/frequency = 0
 	var/datum/radio_frequency/radio_connection
 
+	ex_node_offset = 5
+
 obj/machinery/atmospherics/trinary/filter/proc/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
@@ -49,6 +51,7 @@ obj/machinery/atmospherics/trinary/filter/power_change()
 	var/old_stat = stat
 	..()
 	if(old_stat != stat)
+		on = !on
 		update_icon()
 
 obj/machinery/atmospherics/trinary/filter/process()

@@ -65,7 +65,7 @@
 //We add the plastic cost to this output so people can see it
 /obj/machinery/r_n_d/fabricator/mechanic_fab/output_part_cost(var/datum/design/part)
 	var/output = ..()
-	if(plastic_added)
+	if(plastic_added && !(MAT_PLASTIC in part.materials))
 		output += " | [get_resource_cost_w_coeff(part, MAT_PLASTIC)] Plastic"
 	return output
 

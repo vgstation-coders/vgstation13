@@ -1,6 +1,7 @@
 /spell/targeted/equip_item/frenchcurse
 	name = "French Curse"
 	desc = "This curse will silence your target for a very long time."
+	abbreviation = "FC"
 
 	school = "evocation"
 	charge_max = 300

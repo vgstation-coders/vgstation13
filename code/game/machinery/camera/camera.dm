@@ -90,19 +90,21 @@ var/list/camera_names=list()
 	var/basename=A.name
 	var/nethash=english_list(network)
 	var/suffix = 0
-	while(!suffix || nethash+c_tag in camera_names)
+	while(!suffix || (nethash+c_tag in camera_names))
 		c_tag = "[basename]"
 		if(suffix)
 			c_tag += " [suffix]"
 		suffix++
 	camera_names[nethash+c_tag]=src
 
-/obj/machinery/camera/change_area(oldarea, newarea)
+/obj/machinery/camera/change_area(var/area/oldarea, var/area/newarea)
 	var/nethash=english_list(network)
 	camera_names[nethash+c_tag]=null
 	..()
-	if(name != replacetext(name,oldarea,newarea))
-		name_camera()
+
+/obj/machinery/camera/change_area_name(oldname, oldarea)
+	..()
+	name_camera()
 
 /obj/machinery/camera/Destroy()
 	deactivate(null, 0) //kick anyone viewing out

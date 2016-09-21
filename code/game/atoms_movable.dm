@@ -78,6 +78,11 @@
 	locking_categories      = null
 	locking_categories_name = null
 
+	if((flags & HEAR) && !ismob(src))
+		for(var/mob/virtualhearer/VH in virtualhearers)
+			if(VH.attached == src)
+				returnToPool(VH)
+
 	..()
 
 /proc/delete_profile(var/type, code = 0)
@@ -101,11 +106,6 @@
 		soft_dels += 1
 
 /atom/movable/Del()
-	if((flags & HEAR) && !ismob(src))
-		for(var/mob/virtualhearer/VH in virtualhearers)
-			if(VH.attached == src)
-				returnToPool(VH)
-
 	if (gcDestroyed)
 
 		if (hard_deleted)
@@ -259,6 +259,16 @@
 
 	locked_to.unlock_atom(src)
 
+// Proc for adding an unique locking category with a certain ID.
+/atom/movable/proc/add_lock_cat(var/type, var/id)
+	if(locking_categories_name.Find(id))
+		return locking_categories_name[id]
+
+	var/datum/locking_category/C = getFromPool(type, src)
+	C.name = id
+	locking_categories_name[id] = C
+	locking_categories += C
+
 /atom/movable/proc/get_lock_cat(var/category = /datum/locking_category)
 	. = locking_categories_name[category]
 
@@ -306,7 +316,8 @@
 	if (Obstacle)
 		Obstacle.Bumped(src)
 
-/atom/movable/proc/forceMove(atom/destination,var/no_tp=0)
+// harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
+/atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE)
 
 	if(loc)
 		loc.Exited(src)

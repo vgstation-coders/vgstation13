@@ -47,6 +47,7 @@
 	var/list/stored_ammo = list()
 	var/ammo_type = "/obj/item/ammo_casing/a357"
 	var/exact = 1 //whether or not the item only takes ammo_type, or also subtypes. Set to 1 to only take the specified ammo
+	var/caliber = "357" //lets us define what magazines can go into guns
 	var/max_ammo = 7
 	var/starting_ammo = -1 //-1 makes it spawn the max ammo, 0 and above makes it spawn that number
 	var/multiple_sprites = 0 //if it has multiple sprites. Please sprite more than 2 sprites if you set this to true, you fricks
@@ -69,8 +70,11 @@
 	if(istype(A, /obj/item/ammo_casing)) //loading a bullet into the magazine or box
 		var/obj/item/ammo_casing/AC = A
 		var/accepted = 0
-		if((exact && (AC.type == text2path(ammo_type))) || (!exact && istype(AC, text2path(ammo_type))))//if it's the exact type we want, or the general class
+		if((exact && (AC.type == text2path(ammo_type))) || (!exact && (AC.caliber == caliber)))
 			accepted = 1
+		else
+			to_chat(user, "<span class='warning'>\the [AC] does not fit into [src]. </span>")
+			return
 		if(AC.BB && accepted && stored_ammo.len < max_ammo)
 			if(user.drop_item(A, src))
 				to_chat(user, "<span class='notice'>You successfully load the [src] with \the [AC]. </span>")
@@ -167,7 +171,7 @@
 		for(var/obj/item/ammo_casing/loading in bullets_from.stored_ammo)
 			if(AS.stored_ammo.len >= AS.max_ammo)
 				break
-			if((AS.exact && (loading.type == text2path(AS.ammo_type))) || (!AS.exact && istype(loading, text2path(AS.ammo_type)))) //if it's the exact type we want, or the general class
+			if((AS.exact && (loading.type == text2path(AS.ammo_type))) || (!AS.exact && (bullets_from.caliber == caliber))) //If not exact, check if same caliber
 				bullets_from.stored_ammo -= loading
 				AS.stored_ammo += loading
 				loading.forceMove(AS)

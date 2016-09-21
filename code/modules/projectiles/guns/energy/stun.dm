@@ -66,6 +66,27 @@
 	projectile_type = "/obj/item/projectile/energy/electrode"
 	cell_type = "/obj/item/weapon/cell"
 
+/obj/item/weapon/gun/energy/stunrevolver/failure_check(var/mob/living/carbon/human/M)
+	if(prob(15))
+		fire_delay += 2
+		to_chat(M, "<span class='warning'>\The [src] buzzes.</span>")
+		return 1
+	if(prob(5))
+		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+		s.set_up(3, 1, src)
+		s.start()
+		M.apply_effects(3,3,,,5)
+		power_supply.use(250)
+		to_chat(M, "<span class='danger'>\The [src] shocks you!.</span>")
+		return 0
+	if(prob(1))
+		to_chat(M, "<span class='danger'>\The [src] explodes!.</span>")
+		explosion(get_turf(loc), 0, 0, 1)
+		M.drop_item(src, force_drop = 1)
+		qdel(src)
+		return 0
+	return ..()
+
 
 
 /obj/item/weapon/gun/energy/crossbow
@@ -117,5 +138,23 @@
 	starting_materials = list(MAT_IRON = 200000)
 	w_type = RECYK_ELECTRONIC
 	projectile_type = "/obj/item/projectile/energy/bolt/large"
+
+/obj/item/weapon/gun/energy/crossbow/failure_check(var/mob/living/carbon/human/M)
+	if(silenced && prob(50))
+		silenced = 0
+		to_chat(M, "<span class='warning'>\The [src] makes a noise.</span>")
+		return 1
+	if(prob(15))
+		M.apply_effect(rand(15,30), IRRADIATE)
+		to_chat(M, "<span class='warning'>\The [src] feels warm for a moment.</span>")
+		return 1
+	if(prob(10))
+		power_supply.maxcharge = 0
+		power_supply.charge = 0
+		in_chamber = null
+		processing_objects.Remove(src)
+		to_chat(M, "<span class='warning'>\The [src] fizzles.</span>")
+		return 0
+	return ..()
 
 

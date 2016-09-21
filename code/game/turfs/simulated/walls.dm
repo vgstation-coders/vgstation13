@@ -351,12 +351,11 @@
 	return
 
 /turf/simulated/wall/attack_construct(mob/user as mob)
-	if(istype(user,/mob/living/simple_animal/construct/builder) && (get_dist(src,user) <= 3))
+	if(istype(user,/mob/living/simple_animal/construct/builder))
 		var/spell/aoe_turf/conjure/wall/S = locate() in user.spell_list
-		S.turf_override = src
-		S.perform(user,0)
-		var/obj/screen/spell/SS = S.connected_button
-		SS.update_charge(1)
+		S.perform(user, 0, list(src))
+		//var/obj/screen/spell/SS = S.connected_button
+		//SS.update_charge(1)
 		return 1
 	return 0
 

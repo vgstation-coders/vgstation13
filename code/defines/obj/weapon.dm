@@ -657,7 +657,7 @@
 	attack_verb = wielded ? list("rams into", "charges at") : list("bludgeons", "whacks", "cleans", "dusts")
 	if(user)
 		user.update_inv_hands()
-		if(user.mind in ticker.mode.wizards)
+		if(iswizard(user) || isapprentice(user))
 			user.flying = wielded ? 1 : 0
 			if(wielded)
 				to_chat(user, "<span class='notice'>You hold \the [src] between your legs.</span>")
@@ -796,6 +796,12 @@
 	name = "power control module"
 	icon_state = "power_mod"
 	desc = "Heavy-duty switching circuits for power control."
+
+/obj/item/weapon/circuitboard/station_map
+	icon = 'icons/obj/module.dmi'
+	name = "holomap module"
+	icon_state = "card_mod"
+	desc = "Holographic circuits for station holomaps."
 
 /obj/item/weapon/module/id_auth
 	name = "\improper ID authentication module"

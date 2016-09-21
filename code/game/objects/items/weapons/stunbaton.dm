@@ -17,21 +17,26 @@
 	var/hitcost = 100 // 10 hits on crap cell
 	var/mob/foundmob = "" //Used in throwing proc.
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is putting the live [src.name] in \his mouth! It looks like \he's trying to commit suicide.</span>")
-		return (FIRELOSS)
+/obj/item/weapon/melee/baton/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is putting the live [src.name] in \his mouth! It looks like \he's trying to commit suicide.</span>")
+	return (FIRELOSS)
 
 /obj/item/weapon/melee/baton/New()
 	..()
 	update_icon()
-	return
+
+/obj/item/weapon/melee/baton/Destroy()
+	if (bcell)
+		qdel(bcell)
+		bcell = null
+
+	return ..()
 
 /obj/item/weapon/melee/baton/loaded/New() //this one starts with a cell pre-installed.
 	..()
 	bcell = new(src)
 	bcell.charge=bcell.maxcharge // Charge this shit
 	update_icon()
-	return
 
 /obj/item/weapon/melee/baton/proc/deductcharge(var/chrgdeductamt)
 	if(bcell)
@@ -88,7 +93,6 @@
 			update_icon()
 			return
 		..()
-	return
 
 /obj/item/weapon/melee/baton/attack_self(mob/user)
 	if(status && (M_CLUMSY in user.mutations) && prob(50))
@@ -164,12 +168,7 @@
 			self_drugged_message="<span class='userdanger'>[user]'s [src.name] sucks the life right out of you!</span>")
 		playsound(loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
 
-		if(isrobot(loc))
-			var/mob/living/silicon/robot/R = loc
-			if(R && R.cell)
-				R.cell.use(hitcost)
-		else
-			deductcharge(hitcost)
+		deductcharge(hitcost)
 
 		if(ishuman(L))
 			var/mob/living/carbon/human/H = L
@@ -200,12 +199,7 @@
 				L.visible_message("<span class='danger'>[L] has been stunned with [src] by [foundmob ? foundmob : "Unknown"]!</span>")
 				playsound(loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
 
-				if(isrobot(loc))
-					var/mob/living/silicon/robot/R = loc
-					if(R && R.cell)
-						R.cell.use(hitcost)
-				else
-					deductcharge(hitcost)
+				deductcharge(hitcost)
 
 				if(ishuman(L))
 					var/mob/living/carbon/human/H = L
@@ -244,3 +238,14 @@
 	stunforce = 5
 	hitcost = 2500
 	slot_flags = null
+
+// Yes, loaded, this is so attack_self() works.
+// In the unlikely event somebody manages to get a hold of this item, don't allow them to fuck with the nonexistant cell.
+/obj/item/weapon/melee/baton/loaded/borg/attackby(var/obj/item/W, var/mob/user)
+	return
+
+/obj/item/weapon/melee/baton/loaded/borg/deductcharge(var/chrgdeductamt)
+	if (isrobot(loc))
+		var/mob/living/silicon/robot/R = loc
+		if (R.cell)
+			R.cell.use(hitcost)

@@ -11,7 +11,8 @@ emp_act
 /mob/living/carbon/human/bullet_act(var/obj/item/projectile/P, var/def_zone)
 	if(wear_suit && istype(wear_suit, /obj/item/clothing/suit/armor/laserproof))
 		if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
-			var/reflectchance = 60 - round(P.damage/3)
+			var/obj/item/clothing/suit/armor/laserproof/armor = wear_suit
+			var/reflectchance = armor.basereflectchance - round(P.damage/3)
 			if(!(def_zone in list(LIMB_CHEST, LIMB_GROIN)))
 				reflectchance /= 2
 			if(prob(reflectchance))
@@ -105,9 +106,10 @@ emp_act
 
 
 /mob/living/carbon/human/proc/check_shields(var/damage = 0, var/attack_text = "the attack")
-	for(var/obj/item/weapon/I in held_items)
-		if(I.IsShield() && I.on_block(damage, attack_text))
-			return 1
+	if(!incapacitated())
+		for(var/obj/item/weapon/I in held_items)
+			if(I.IsShield() && I.on_block(damage, attack_text))
+				return 1
 
 	if(istype(wear_suit, /obj/item/)) //Check armor
 		var/obj/item/I = wear_suit

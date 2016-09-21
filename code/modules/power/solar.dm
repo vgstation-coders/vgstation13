@@ -49,7 +49,6 @@ var/list/solars_list = list()
 	if(!anchored && isturf(loc))
 		if(iswrench(W))
 			anchored = 1
-			density = 1
 			user.visible_message("<span class='notice'>[user] wrenches [src] down.</span>", \
 			"<span class='notice'>You wrench [src] down.</span>")
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
@@ -57,7 +56,6 @@ var/list/solars_list = list()
 	else
 		if(iswrench(W))
 			anchored = 0
-			density = 0
 			user.visible_message("<span class='notice'>[user] unwrenches [src] from the ground.</span>", \
 			"<span class='notice'>You unwrench [src] from the ground.</span>")
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)

@@ -139,7 +139,7 @@
 			var/mob/dead/observer/observer = new()
 
 			spawning = 1
-			src << sound(null, repeat = 0, wait = 0, volume = 85, channel = 1) // MAD JAMS cant last forever yo
+			src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY) // MAD JAMS cant last forever yo
 
 
 			observer.started_as_observer = 1
@@ -213,6 +213,16 @@
 		if(isnum(pollid))
 			src.poll_player(pollid)
 		return
+
+	if(href_list["pollresult"])
+
+		if(!config.poll_results_url)
+			return
+		if(alert("This will open the results page in your browser. Are you sure?",,"Yes","No")=="No")
+			return
+		var/pollid = href_list["pollresult"]
+		var/link = "[config.poll_results_url]/[pollid]"
+		src << link(link)
 
 	if(href_list["votepollid"] && href_list["votetype"])
 		var/pollid = text2num(href_list["votepollid"])
@@ -426,11 +436,10 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 		new_character.setGender(pick(MALE, FEMALE))
 		client.prefs.real_name = random_name(new_character.gender)
 		client.prefs.randomize_appearance_for(new_character)
-		client.prefs.flavor_text = ""
 	else
 		client.prefs.copy_to(new_character)
 
-	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = 1)// MAD JAMS cant last forever yo
+	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY)// MAD JAMS cant last forever yo
 
 
 	if (mind)

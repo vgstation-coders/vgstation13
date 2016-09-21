@@ -260,6 +260,10 @@
 /mob/living/proc/adjustBruteLoss(var/amount)
 	if(status_flags & GODMODE)
 		return 0	//godmode
+
+	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = amount)))
+		return 0
+
 	bruteloss = min(max(bruteloss + (amount * brute_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/getOxyLoss()
@@ -268,6 +272,10 @@
 /mob/living/proc/adjustOxyLoss(var/amount)
 	if(status_flags & GODMODE)
 		return 0	//godmode
+
+	if(INVOKE_EVENT(on_damaged, list("type" = OXY, "amount" = amount)))
+		return 0
+
 	oxyloss = min(max(oxyloss + (amount * oxy_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setOxyLoss(var/amount)
@@ -281,6 +289,10 @@
 /mob/living/proc/adjustToxLoss(var/amount)
 	if(status_flags & GODMODE)
 		return 0	//godmode
+
+	if(INVOKE_EVENT(on_damaged, list("type" = TOX, "amount" = amount)))
+		return 0
+
 	toxloss = min(max(toxloss + (amount * tox_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setToxLoss(var/amount)
@@ -294,6 +306,11 @@
 /mob/living/proc/adjustFireLoss(var/amount)
 	if(status_flags & GODMODE)
 		return 0	//godmode
+	if(mutations.Find(M_RESIST_HEAT))
+		return 0
+	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = amount)))
+		return 0
+
 	fireloss = min(max(fireloss + (amount * burn_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/getCloneLoss()
@@ -302,6 +319,10 @@
 /mob/living/proc/adjustCloneLoss(var/amount)
 	if(status_flags & GODMODE)
 		return 0	//godmode
+
+	if(INVOKE_EVENT(on_damaged, list("type" = CLONE, "amount" = amount)))
+		return 0
+
 	cloneloss = min(max(cloneloss + (amount * clone_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setCloneLoss(var/amount)
@@ -315,6 +336,10 @@
 /mob/living/proc/adjustBrainLoss(var/amount)
 	if(status_flags & GODMODE)
 		return 0	//godmode
+
+	if(INVOKE_EVENT(on_damaged, list("type" = BRAIN, "amount" = amount)))
+		return 0
+
 	brainloss = min(max(brainloss + (amount * brain_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setBrainLoss(var/amount)
@@ -365,9 +390,10 @@
 				L += get_contents(G.gift)
 
 		for(var/obj/item/delivery/D in Storage.return_inv()) //Check for package wrapped items
-			L += D.wrapped
-			if(istype(D.wrapped, /obj/item/weapon/storage)) //this should never happen
-				L += get_contents(D.wrapped)
+			for(var/atom/movable/wrapped in D) //Basically always only one thing, but could theoretically be more
+				L += wrapped
+				if(istype(wrapped, /obj/item/weapon/storage)) //this should never happen
+					L += get_contents(wrapped)
 		return L
 
 	else
@@ -385,9 +411,10 @@
 				L += get_contents(G.gift)
 
 		for(var/obj/item/delivery/D in src.contents) //Check for package wrapped items
-			L += D.wrapped
-			if(istype(D.wrapped, /obj/item/weapon/storage)) //this should never happen
-				L += get_contents(D.wrapped)
+			for(var/atom/movable/wrapped in D) //Basically always only one thing, but could theoretically be more
+				L += wrapped
+				if(istype(wrapped, /obj/item/weapon/storage)) //this should never happen
+					L += get_contents(wrapped)
 		return L
 
 /mob/living/proc/can_inject()
@@ -664,11 +691,11 @@ Thanks.
 							if (locate(/obj/item/weapon/grab, M.grabbed_by.len))
 								ok = 0
 						if (ok)
-							var/atom/movable/t = M.pulling
+							var/atom/movable/secondarypull = M.pulling
 							M.stop_pulling()
 							pulling.Move(T, get_dir(pulling, T))
-							if(M)
-								M.start_pulling(t)
+							if(M && secondarypull)
+								M.start_pulling(secondarypull)
 					else
 						if (pulling)
 							pulling.Move(T, get_dir(pulling, T))

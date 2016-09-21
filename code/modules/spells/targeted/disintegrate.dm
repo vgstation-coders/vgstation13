@@ -1,6 +1,7 @@
 /spell/targeted/disintegrate
 	name = "Disintegrate"
 	desc = "This spell instantly kills somebody adjacent to you with the vilest of magick."
+	abbreviation = "DG"
 
 	school = "evocation"
 	charge_max = 600

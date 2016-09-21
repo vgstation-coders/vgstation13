@@ -123,7 +123,7 @@ var/list/holomap_cache = list()
 			var/holomap_marker = "deathsquad_\ref[src]_\ref[D]_[mob_indicator]"
 
 			if(!(holomap_marker in holomap_cache))
-				holomap_cache[holomap_marker] = image('icons/12x12.dmi',"ds[mob_indicator]")
+				holomap_cache[holomap_marker] = image('icons/holomap_markers.dmi',"ds[mob_indicator]")
 
 			var/image/I = holomap_cache[holomap_marker]
 			I.plane = HUD_PLANE

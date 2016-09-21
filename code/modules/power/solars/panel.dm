@@ -22,7 +22,6 @@
 		solar_assembly = new /obj/machinery/power/solar_assembly()
 		solar_assembly.glass_type = /obj/item/stack/sheet/glass/rglass
 		solar_assembly.anchored = 1
-		solar_assembly.density = 1
 		solar_assembly.tracker = tracker
 	else
 		solar_assembly = S
@@ -49,6 +48,7 @@
 			qdel(src)
 	else if(W)
 		add_fingerprint(user)
+		user.delayNextAttack(10)
 		health -= W.force
 		healthcheck()
 	..()
@@ -61,9 +61,15 @@
 
 	healthcheck()
 
+/obj/machinery/power/solar/panel/bullet_act(var/obj/item/projectile/Proj)
+	if(Proj.damage)
+		health -= Proj.damage
+		healthcheck()
+	..()
+
 /obj/machinery/power/solar/panel/proc/healthcheck()
 	if(health <= 0)
-		if(!(stat & BROKEN))
+		if(!(stat & BROKEN) && health > -maxhealth)
 			broken()
 		else
 			var/obj/item/stack/sheet/glass/G = solar_assembly.glass_type

@@ -1689,10 +1689,17 @@ var/global/num_vending_terminals = 1
 	product_slogans = "BODA: We sell drink.;BODA: Drink today.;BODA: We're better then Comrade Dan."
 	product_ads = "For Tsar and Country.;Have you fulfilled your nutrition quota today?;Very nice!;We are simple people, for this is all we eat.;If there is a person, there is a problem. If there is no person, then there is no problem."
 	products = list(
-		/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/soda = 30,
+		/obj/item/weapon/reagent_containers/food/drinks/plastic/water = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/plastic/water/small = 20,
+		/obj/item/weapon/reagent_containers/food/drinks/plastic/sodawater = 8,
 		)
 	contraband = list(
-		/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/cola = 20,
+		/obj/item/weapon/reagent_containers/food/drinks/plastic/cola = 20,
+		)
+	prices = list(
+		/obj/item/weapon/reagent_containers/food/drinks/plastic/water = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/plastic/water/small = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/plastic/sodawater = 15,
 		)
 
 	pack = /obj/structure/vendomatpack/sovietsoda

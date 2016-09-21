@@ -202,14 +202,6 @@
 		viewpictures()
 */
 
-
-/obj/item/device/camera/attack(atom/movable/M, mob/user)
-	if(istype(M, /obj/structure/table/))
-		return //Stop taking photos of tables while putting cameras on them
-
-	return afterattack(M, user)
-
-
 /obj/item/device/camera/attackby(obj/item/I, mob/user)
 	if(isscrewdriver(I))
 		to_chat(user, "You [panelopen ? "close" : "open"] the panel on the side of \the [src].")
@@ -461,7 +453,7 @@
 	var/icon/small_img = icon(temp)
 	var/icon/ic = icon('icons/obj/items.dmi',"photo")
 	small_img.Scale(8, 8)
-	ic.Blend(small_img,ICON_OVERLAY, 10, 13)
+	ic.Blend(small_img,ICON_OVERLAY, 13, 13)
 	P.icon = ic
 	P.img = temp
 	P.info = mobs
@@ -478,7 +470,7 @@
 	var/icon/small_img = icon(temp)
 	var/icon/ic = icon('icons/obj/items.dmi',"photo")
 	small_img.Scale(8, 8)
-	ic.Blend(small_img,ICON_OVERLAY, 10, 13)
+	ic.Blend(small_img,ICON_OVERLAY, 13, 13)
 	P.icon = ic
 	P.img = temp
 	P.info = mobs
@@ -504,7 +496,7 @@
 	var/icon/small_img = icon(temp)
 	var/icon/ic = icon('icons/obj/items.dmi',"photo")
 	small_img.Scale(8, 8)
-	ic.Blend(small_img,ICON_OVERLAY, 10, 13)
+	ic.Blend(small_img,ICON_OVERLAY, 13, 13)
 	var/icon = ic
 	var/img = temp
 	var/info = mobs
@@ -568,6 +560,7 @@
 /obj/item/device/camera/afterattack(atom/target, mob/user, flag)
 	if(!on || !pictures_left || (!isturf(target) && !isturf(target.loc)))
 		return
+
 	captureimage(target, user, flag)
 
 	playsound(loc, "polaroid", 75, 1, -3)

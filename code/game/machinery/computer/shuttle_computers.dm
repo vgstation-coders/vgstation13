@@ -47,7 +47,10 @@
 	..()
 
 /obj/item/weapon/disk/shuttle_coords/proc/compactible(datum/shuttle/S)
-	return ()
+	if(!allowed_shuttles.len)
+		return TRUE
+	
+	return is_type_in_list(S, allowed_shuttles)
 
 /obj/item/weapon/disk/shuttle_coords/proc/reset()
 	destination = null

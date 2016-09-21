@@ -481,6 +481,18 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Formalwear for the best occasions."
 	group = "Clothing"
 
+/datum/supply_packs/formal_wear/armored
+	contains = list(/obj/item/clothing/head/that/armored,
+					/obj/item/clothing/head/that/armored,
+					/obj/item/clothing/under/sl_suit/armored,
+					/obj/item/clothing/under/sl_suit/armored)
+	name = "Armored formalwear closet"
+	cost = 100
+	containertype = /obj/structure/closet
+	containername = "Armored formalwear, for the not-so-best occasions."
+	contraband = 1
+	group = "Clothing"
+	
 /datum/supply_packs/waifu
 	name = "Feminine formalwear"
 	contains = list(/obj/item/clothing/under/dress/dress_fire,
@@ -574,11 +586,33 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/grenade/smokebomb,
 					/obj/item/weapon/grenade/smokebomb,
 					/obj/item/weapon/grenade/smokebomb,
-					/obj/item/weapon/pen/paralysis,
-					/obj/item/weapon/grenade/chem_grenade/incendiary)
+					/obj/item/weapon/gun/projectile/silenced,
+					/obj/item/ammo_storage/magazine/c45)
 	cost = 20
 	containertype = /obj/structure/closet/crate
 	containername = "Special Ops crate"
+	group = "Security"
+	hidden = 1
+
+/datum/supply_packs/randomised/russianguns
+	name = "Russian weapons"
+	num_contained = 3 //number of items picked to be contained in a randomised
+	contains = list(/obj/item/weapon/gun/projectile/nagant,
+					/obj/item/ammo_storage/speedloader/a762x55,
+					/obj/item/ammo_storage/speedloader/a762x55,
+					/obj/item/ammo_storage/speedloader/a762x55,
+					/obj/item/ammo_storage/speedloader/a762x55/empty,
+					/obj/item/ammo_storage/speedloader/a762x55/empty,
+					/obj/item/ammo_storage/speedloader/a762x55/empty,
+					/obj/item/ammo_storage/box/b762x55,
+					/obj/item/ammo_storage/box/b762x55,
+					/obj/item/ammo_storage/box/b762x55,
+					/obj/item/weapon/gun/energy/laser/LaserAK,
+					/obj/item/weapon/gun/energy/laser/LaserAK)
+	name = "Rusian Weapons"
+	cost = 150
+	containertype = /obj/structure/closet/crate
+	containername = "Russian Weapons"
 	group = "Security"
 	hidden = 1
 
@@ -768,6 +802,52 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Security Barriers crate"
 	group = "Security"
 
+/datum/supply_packs/fourtyfive
+	name = ".45 Security Pistol crate"
+	contains = list(/obj/item/weapon/gun/projectile/sec,
+					/obj/item/weapon/gun/projectile/sec)
+	cost = 200
+	containertype = /obj/structure/closet/crate/secure/weapon
+	containername = ".45 pistols"
+	access = access_armory
+	group = "Security"
+
+/datum/supply_packs/fourtyfive/lethals
+	name = ".45 Security Pistol Lethal Ammo crate"
+	contains = list(/obj/item/ammo_storage/box/c45,
+					/obj/item/ammo_storage/magazine/c45/empty,
+					/obj/item/ammo_storage/magazine/c45/empty,
+					/obj/item/ammo_storage/magazine/c45)
+	cost = 50
+	containertype = /obj/structure/closet/crate/secure/gear
+	containername = ".45 Pistol Lethal Ammo"
+	access = access_armory
+	group = "Security"
+
+/datum/supply_packs/fourtyfive/practice
+	name = ".45 Security Pistol Practice Ammo crate"
+	contains = list(/obj/item/ammo_storage/box/c45/practice,
+					/obj/item/ammo_storage/magazine/c45/practice/empty,
+					/obj/item/ammo_storage/magazine/c45/practice/empty,
+					/obj/item/ammo_storage/magazine/c45/practice)
+	cost = 10
+	containertype = /obj/structure/closet/crate/secure/gear
+	containername = ".45 pistol Practice Ammo"
+	access = access_security
+	group = "Security"
+
+/datum/supply_packs/fourtyfive/rubber
+	name = ".45 Security Pistol Rubber Ammo crate"
+	contains = list(/obj/item/ammo_storage/box/c45/rubber,
+					/obj/item/ammo_storage/magazine/c45/rubber/empty,
+					/obj/item/ammo_storage/magazine/c45/rubber/empty,
+					/obj/item/ammo_storage/magazine/c45/rubber)
+	cost = 30
+	containertype = /obj/structure/closet/crate/secure/gear
+	containername = ".45 pistol Rubber Ammo"
+	access = access_security
+	group = "Security"
+
 //////HOSPITALITY//////
 
 /datum/supply_packs/food
@@ -926,7 +1006,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/instrument/recorder,
 					/obj/item/device/instrument/harmonica,
 					/obj/structure/piano/xylophone,
-					/obj/structure/piano)
+					/obj/structure/piano/random)
 	name = "Random instrument"
 	cost = 50
 	containertype = /obj/structure/closet/crate
@@ -943,6 +1023,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/instrument/recorder,
 					/obj/item/device/instrument/harmonica,
 					/obj/structure/piano/xylophone,
+					/obj/structure/piano/minimoog,
 					/obj/structure/piano)
 	name = "Big band instrument collection"
 	cost = 500

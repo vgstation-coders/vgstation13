@@ -517,7 +517,8 @@
 	else
 		user.visible_message("<font color='red'><b>[user] hits [src.name]. Nothing happens</b></font>","<font color='red'><b>You hit [src.name] with no visible effect.</b></font>")
 		src.log_append_to_last("Armor saved.")
-	return
+
+	user.delayNextAttack(10)
 
 /obj/mecha/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -537,8 +538,8 @@
 		to_chat(user, "<span class='good'>Your claws had no effect!</span>")
 		src.occupant_message("<span class='notice'>The [user]'s claws are stopped by the armor.</span>")
 		visible_message("<span class='notice'>The [user] rebounds off [src.name]'s armor!</span>")
-	return
 
+	user.delayNextAttack(10)
 
 /obj/mecha/attack_animal(mob/living/simple_animal/user as mob)
 	src.log_message("Attack by simple animal. Attacker - [user].",1)
@@ -1130,13 +1131,13 @@
 
 		// -- Mode/mind specific stuff goes here
 		if(H.mind)
-			if((H.mind in ticker.mode:revolutionaries) || (H.mind in ticker.mode:head_revolutionaries))
+			if(isrev(H) || isrevhead(H))
 				ticker.mode.update_all_rev_icons()
-			if(H.mind in ticker.mode.syndicates)
+			if(isnukeop(H))
 				ticker.mode.update_all_synd_icons()
-			if (H.mind in ticker.mode.cult)
+			if (iscult(H))
 				ticker.mode.update_all_cult_icons()
-			if(H.mind in ticker.mode.wizards)
+			if(iswizard(H) || isapprentice(H))
 				ticker.mode.update_all_wizard_icons()
 		// -- End mode specific stuff
 
@@ -1308,13 +1309,13 @@
 
 		// -- Mode/mind specific stuff goes here
 		if(src.occupant.mind)
-			if((src.occupant.mind in ticker.mode:revolutionaries) || (src.occupant.mind in ticker.mode:head_revolutionaries))
+			if(isrev(src.occupant) || isrevhead(src.occupant))
 				ticker.mode.update_all_rev_icons()
-			if(src.occupant.mind in ticker.mode.syndicates)
+			if(isnukeop(src.occupant))
 				ticker.mode.update_all_synd_icons()
-			if (src.occupant.mind in ticker.mode.cult)
+			if (iscult(src.occupant))
 				ticker.mode.update_all_cult_icons()
-			if(src.occupant.mind in ticker.mode.wizards)
+			if(iswizard(src.occupant) || isapprentice(src.occupant))
 				ticker.mode.update_all_wizard_icons()
 		// -- End mode specific stuff
 

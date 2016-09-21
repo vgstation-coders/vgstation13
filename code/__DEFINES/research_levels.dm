@@ -9,3 +9,4 @@
 #define Tc_BIOTECH           "biotech"
 #define Tc_POWERSTORAGE      "powerstorage"
 #define Tc_NANOTRASEN        "nanotrasen"
+#define Tc_ANOMALY           "anomaly"

@@ -70,18 +70,18 @@
 				B.name = "The Quran"
 				J = "Imam"
 				deity_name = "Allah"
-			if("slam")
+			if("slam", "bball", "basketball", "basket ball")
 				B.name = "Barkley: Shut Up and Jam - Gaiden"
 				if(H.gender == FEMALE)
 					J = "Mistress of Slam"
 				else
 					J = "Master of Slam"
 				deity_name = "Charles Barkley"
-			if("jew", "judaism")
+			if("jew", "judaism", "jews")
 				B.name = pick("The Torah", "The Talmud")
 				J = "Rabbi"
 				deity_name = "Yahweh"
-			if("hindu", "hinduism")
+			if("hindu", "hinduism", "india")
 				B.name = pick("The Vedas", "The Mahabharata")
 				J = "Guru"
 				deity_name = pick("Brahma", "Vishnu", "Shiva", "Ganesha") //The major ones at least, and yes it's polytheist
@@ -89,7 +89,7 @@
 				B.name = "The Tripitaka"
 				J = "Monk"
 				deity_name = "Buddha"
-			if("shinto", "shintoism")
+			if("shinto", "shintoism", "anime", "weeaboo", "japan", "waifu")
 				B.name = "Kojiki"
 				if(H.gender == FEMALE)
 					J = "Shrine Maiden"
@@ -100,30 +100,36 @@
 				B.name = "The Book of Mormon"
 				J = "Apostle"
 				deity_name = "God the Father-Elohim"
-			if("confucianism")
+			if("confucianism", "china", "chinese", "tao", "taoism", "dao", "daoism")
 				B.name = pick("The I Ching", "Great Learning")
-				J = "Scholar" //I don't know honestly
+				J = "Xian"
 				deity_name = "Tian" //I found this somewhere, I guess that's true
-			if("wicca", "paganism")
+			if("wicca", "pagan", "paganism")
 				B.name = "The Book of Shadows"
 				if(H.gender == FEMALE)
 					J = "High Priestess"
 				else
 					J = "High Priest"
 				deity_name = "The Gods" //Damn pagans
-			if("norse")
-				B.name = "The Edda"
+			if("norse", "german pagan","viking")
+				B.name = "The Eddas"
 				J = "Godi"
-				deity_name = pick("Thor", "Odin") //Literally the only two I know, bite me
+				deity_name = pick("Thor", "Odin", "Freyja", "Loki", "Tyr")
 			if("druidism", "celtic")
 				B.name = "The Book of Leinster"
 				J = "Druid"
 				deity_name = pick("Toutatis", "Belenus", "Britannia") //Hon
 			if("atheism", "none")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
 				B.name = "The God Delusion"
 				H.equip_or_collect(new /obj/item/clothing/head/fedora(H), slot_head)
 				deity_name = "Richard Dawkins"
 			if("evolution", "biology", "monkey", "monkeys")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
 				B.name = "The Theory of Evolution"
 				J = "Biologist"
 				deity_name = "Charles Darwin"
@@ -138,10 +144,16 @@
 			if("rastafarianism", "rastafari movement")
 				B.name = "The Holy Piby"
 				deity_name = "Haile Selassie I"
-			if("hellenism") //None of that roman copypasta, incidentally
+			if("hellenism", "greece", "greek")
 				B.name = "The Odyssey"
 				J = "Oracle"
-				deity_name = pick("Zeus", "Neptune", "Athena", "Persephone")
+				deity_name = pick("Zeus", "Poseidon", "Athena", "Persephone", "Ares", "Apollo")
+			if("Latin", "Rome", "Roma", "Roman")
+				B.name = "Cult of Rome"
+				H.equip_or_collect(new /obj/item/clothing/head/helmet/roman/legionaire(H), slot_head)
+				H.equip_or_collect(new /obj/item/clothing/under/roman(H), slot_w_uniform)
+				J = "Pontifex"
+				deity_name = pick("Jupiter", "Neptune", "Mars", "Minerva", "Rome", "Julius Caeser", "Roma")
 			if("pastafarianism")
 				B.name = "The Gospel of the Flying Spaghetti Monster"
 				deity_name = "The Flying Spaghetti Monster"
@@ -160,19 +172,29 @@
 				B.name = "The Toolbox Manifesto"
 				J = "Chief Assistant"
 				deity_name = "The Toolbox"
-			if("homosexuality", "faggotry", "gayness", "gay", "penis", "faggot", "cock", "cocks")
+			if("homosexuality", "faggotry", "gayness", "gay", "penis", "faggot", "cock", "cocks", "dick", "dicks")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
 				B.name = pick("Guys Gone Wild", "Hunk Rump", "It's Okay to be Gay", "Daddy Gave You Good Advice")
 				J = "LGBT Advocate"
+				H.equip_or_collect(new /obj/item/clothing/under/darkholme(H), slot_w_uniform)
 				deity_name = "Steve Rambo" //Pushing Gaywards
-			if("lol", "wtf", "ass", "poo", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", ":^)", "XD", "le")
+			if("lol", "wtf", "ass", "poo", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "tumblr", "9gag")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
 				B.name = pick("Woody's Got Wood: The Aftermath", "War of the Cocks", "Sweet Bro and Hella Jef: Expanded Edition", "The Book of Pomf")
 				H.setBrainLoss(100) //Starts off retarded as fuck, that'll teach him
 				J = "Retard"
 				deity_name = "Brian Damag" //Ha
 			if("science")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
 				B.name = pick("Principle of Relativity", "Quantum Enigma: Physics Encounters Consciousness", "Programming the Universe", "Quantum Physics and Theology", \
 							  "For I Have Tasted The Fruit", "Non-Linear Genetics", "The Mysteries of Bluespace", "Playing God: Collector's Edition")
-				J = "Academician"
+				J = "Acamedian"
 				deity_name = pick("Albert Einstein", "Isaac Newton", "Niels Bohr", "Stephen Hawking")
 			if("tribunal", "almsivi")
 				B.name = "The 36 Lessons of Vivec"
@@ -201,7 +223,7 @@
 				B.name = "The Abydos Cartouche"
 				J = "First Prime"
 				deity_name = "Ra"
-			if("unitology")
+			if("unitology", "marker")
 				B.name = "Teachings of Unitology"
 				J = "Vested"
 				deity_name = "The Marker"
@@ -209,28 +231,43 @@
 				B.name = "The Visions of Akarat"
 				J = "Disciple"
 				deity_name = "The Light"
-			if("ianism")
-				B.name = "The Poky Little Puppy"
+			if("ianism", "ian", "dog", "puppy", "doggo", "pupper")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
+				B.name = "The Porky Little Puppy"
 				J = "Veterinarian"
 				deity_name = "Ian"
 			if("adminism", "admintology", "admin", "admins", "adminhelp", "adminbus")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
 				B.name = "Breaking Through the Fourth Wall"
 				J = "Trial Admin"
 				deity_name = "The Adminbus"
-			if("coding", "coder", "coders")
+			if("coding", "coder", "coders", "coderbus")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
 				B.name = "Guide to Github"
 				J = "Coder"
 				deity_name = "The Coderbus"
 			if("42")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
 				B.name = "The Hitchhiker's Guide to the Galaxy"
 				J = "Hitchhiker"
-				deity_name = "Arthur Dent" //Don't care
-			if("spook", "spooky", "boo", "ghost")
+				deity_name = "42"
+			if("spook", "spooky", "boo", "ghost", "halloween", "2spooky")
 				B.name = "The Spooky Spook" //SPOOK
 				J = "Ghost"
 				deity_name = "The Spook" //SPOOK
 				H.equip_or_collect(new /obj/item/clothing/head/pumpkinhead(H), slot_head)
 			if("medbay", "ride", "wild ride", "cryo")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
 				B.name = "The Wild Ride"
 				if(H.gender == FEMALE)
 					J = "Nurse"
@@ -239,26 +276,45 @@
 				//Give them basic medical garb
 				H.equip_or_collect(new /obj/item/clothing/head/surgery/blue(H), slot_head)
 				H.equip_or_collect(new /obj/item/clothing/mask/surgical(H), slot_wear_mask)
+				H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat(H), slot_wear_suit)
 				deity_name = "The Chief Medical Officer"
 			if("busta", "bustatime", "zas", "airflow", "hardcore", "hardcores")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
 				B.name = "The Hardcores"
 				if(!(M_HARDCORE in H.mutations))
 					H.mutations.Add(M_HARDCORE)
 				J = "Atmospheric Technician"
+				H.equip_or_collect(new /obj/item/clothing/shoes/magboots(H), slot_shoes)
 				deity_name = "Bustatime"
 			if("me", "i", "myself", "narcissism", "self importance", "selfishness")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
 				B.name = "A God Am I - The Teachings of [H]" //Quite literally
 				J = "God"
 				deity_name = "[H]" //Very literally, too
 			if("alcohol", "booze", "beer", "wine", "ethanol", "c2h6o")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
 				B.name = "The Drunken Ramblings"
+				if(!(M_SOBER in H.mutations))
+					H.mutations.Add(M_SOBER)
 				J = "Drunkard"
 				deity_name = "Hic"
 			if("robust", "robustness", "strength")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
 				B.name = "The Rules of Robustness"
 				J = "Robuster"
 				deity_name = "The Robust"
 			if("suicide", "death", "succumb")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
 				B.name = "The Sweet Release of Death"
 				J = "Reaper"
 				deity_name = "The Grim Reaper"
@@ -266,13 +322,20 @@
 				B.name = "The Communist Manifesto"
 				J = "Komrade"
 				deity_name = "Karl Max"
-				H.equip_or_collect(new /obj/item/clothing/head/ushanka(H), slot_head)
-			if("capitalism", "free market", "liberalism")
+				H.equip_or_collect(new /obj/item/clothing/head/russofurhat(H), slot_head)
+				H.equip_or_collect(new /obj/item/clothing/suit/russofurcoat(H), slot_wear_suit)
+			if("capitalism", "free market", "liberalism", "money")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
 				B.name = "The Free Market"
 				J = "Stockholder"
 				deity_name = "Adam Smith"
 				H.equip_or_collect(new /obj/item/clothing/head/that(H), slot_head)
 			if("freedom", "america", "muhrica", "usa")
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
 				B.name = "The Constitution"
 				J = "Senator"
 				deity_name = "George Washington"
@@ -291,6 +354,7 @@
 				B.name = "The Syndicate Bundle"
 				J = "Syndicate Agent"
 				deity_name = "The Syndicate"
+				H.equip_or_collect(new /obj/item/clothing/suit/syndicatefake(H), slot_wear_suit)
 				H.equip_or_collect(new /obj/item/clothing/head/syndicatefake(H), slot_head)
 			if("cult", "narsie", "nar'sie", "narnar")
 				B.name = "The Arcane Tome"
@@ -303,7 +367,7 @@
 			if("revolution", "rev", "revolt")
 				B.name = "Down With Nanotrasen"
 				J = "Revolutionary"
-				deity_name = "Maximilien Robespierre" //From THE Revolution that defined the rest
+				deity_name = pick("Maximilien Robespierre", "Saul Alinsky")
 			if("wizard", "wiz", "magic")
 				B.name = "Spell Book"
 				J = "Wizard"
@@ -312,10 +376,12 @@
 			if("malfunction", "malf", "rogue", "rouge", "AI")
 				B.name = "Hostile Runtimes"
 				J = "Cyborg"
-				deity_name = pick("Skynet", "HAL 9000", "GLaDOS", "SHODAN")
 				H.equip_or_collect(new /obj/item/clothing/head/cardborg(H), slot_head)
-			if("vampire", "vamp", "blood")
+				H.equip_or_collect(new /obj/item/clothing/suit/cardborg(H), slot_wear_suit)
+				deity_name = pick("Skynet", "HAL 9000", "GLaDOS", "SHODAN")
+			if("vampire", "vamp", "blood","dracula")
 				B.name = "The Veil of Darkness"
+				H.equip_or_collect(new /obj/item/clothing/suit/storage/draculacoat(H), slot_wear_suit)//What could possibly go wrong?
 				J = "Vampire"
 				deity_name = "Vlad the Impaler" //Dracula for the incults
 			if("vox", "raiders", "raid", "bird", "birb")
@@ -326,7 +392,20 @@
 				B.name = "A Guide To Biohazard Alerts"
 				J = "Blob Core"
 				deity_name = "Blob Overmind"
+			if("honk", "clown", "honkmother")
+				B.name = "Honkmothers Coloring Book"
+				H.equip_or_collect(new /obj/item/clothing/mask/gas/clown_hat(H), slot_wear_mask)
+				J = "Co-Clown"
+				deity_name = "Honkmother"
+			if("silence", "mime", "quiet", "...")
+				B.name = "..."
+				H.equip_or_collect(new /obj/item/clothing/mask/gas/mime(H), slot_wear_mask)
+				J = "..."
+				deity_name = "Silence"
 			else //Boring, give them a stock name
+				qdel(B)
+				B = new /obj/item/weapon/storage/bible/booze(H)
+				H.put_in_hands(B)
 				B.name = "The Holy Book of [new_religion]"
 
 		//This goes down here due to problems with loading orders that took me 4 hours to identify

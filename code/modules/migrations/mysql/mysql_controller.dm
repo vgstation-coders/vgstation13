@@ -31,7 +31,8 @@ CREATE TABLE IF NOT EXISTS [TABLE_NAME] (
 
 	var/list/rows=list()
 	while(query.NextRow())
-		rows += list(query.item)
+		rows[++rows.len] = query.item.Copy()
+
 	return rows
 
 /datum/migration_controller/mysql/hasResult(var/sql)

@@ -214,14 +214,17 @@ to_chat(#define MP_DEBUG(x) owner, x)
 
 /client/verb/change_volume()
 	set name = "Set Volume"
-	set category = "Preferences"
+	set category = "OOC"
 	set desc = "Set jukebox volume"
+
+/client/proc/set_new_volume()
 	if(!media || !istype(media))
 		to_chat(usr, "You have no media datum to change, if you're not in the lobby tell an admin.")
 		return
+	var/oldvolume = prefs.volume
 	var/value = input("Choose your Jukebox volume.", "Jukebox volume", media.volume)
 	value = round(max(0, min(100, value)))
 	media.update_volume(value)
-	if(prefs)
+	if(prefs && (oldvolume != value))
 		prefs.volume = value
 		prefs.save_preferences_sqlite(src, ckey)

@@ -388,7 +388,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 						O.show_message("<span class='notice'>[M] [response_help] [src].</span>")
 
 		if(I_GRAB)
-			if (M == src || anchored)
+			if (M.grab_check(src))
 				return
 			if (!(status_flags & CANPUSH))
 				return
@@ -435,7 +435,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				if ((O.client && !( O.blinded )))
 					O.show_message(text("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>"), 1)
 		if (I_GRAB)
-			if(M == src || anchored)
+			if(M.grab_check(src))
 				return
 			if(!(status_flags & CANPUSH))
 				return
@@ -611,11 +611,22 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			adjustBruteLoss(30)
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
+
+	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = damage)))
+		return 0
+
 	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		Die()
 
 /mob/living/simple_animal/adjustFireLoss(damage)
+	if(status_flags & GODMODE)
+		return 0
+	if(mutations.Find(M_RESIST_HEAT))
+		return 0
+	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = damage)))
+		return 0
+
 	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		Die()

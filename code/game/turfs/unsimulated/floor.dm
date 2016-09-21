@@ -32,6 +32,7 @@
 	icon_state = "grass[rand(1,4)]"
 
 /turf/unsimulated/floor/mars
+	name = "surface"
 	icon_state = "ironsand1"
 
 	carbon_dioxide = MOLES_CO2MARS
@@ -50,3 +51,12 @@
 	oxygen = MOLES_O2STANDARD
 	nitrogen = MOLES_N2STANDARD
 	temperature = T20C
+
+/turf/unsimulated/floor/mars/border
+	icon_state = "magenta" //Makes it visible while mapping
+	density = 1
+
+/turf/unsimulated/floor/mars/border/New()
+	icon_state = "ironsand1"
+
+	..()

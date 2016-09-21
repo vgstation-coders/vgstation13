@@ -34,6 +34,7 @@ var/list/ai_list = list()
 	var/icon/holo_icon//Default is assigned when AI is created.
 	var/obj/item/device/pda/ai/aiPDA = null
 	var/obj/item/device/multitool/aiMulti = null
+	var/obj/item/device/station_map/station_holomap = null
 	var/custom_sprite = 0 //For our custom sprites
 	var/obj/item/device/camera/ai_camera/aicamera = null
 //Hud stuff
@@ -112,6 +113,8 @@ var/list/ai_list = list()
 	aiPDA.ownjob = "AI"
 	aiPDA.name = name + " (" + aiPDA.ownjob + ")"
 
+	station_holomap = new(src)
+
 	aiMulti = new(src)
 	aicamera = new/obj/item/device/camera/ai_camera(src)
 	if (istype(loc, /turf))
@@ -147,7 +150,6 @@ var/list/ai_list = list()
 	set name = "Radio Configuration"
 	if(stat || aiRestorePowerRoutine)
 		return
-	radio.recalculateChannels()
 	radio.attack_self(usr)
 
 /mob/living/silicon/ai/verb/rename_photo() //This is horrible but will do for now
@@ -835,6 +837,15 @@ var/list/ai_list = list()
 
 	to_chat(src, "Camera lights activated.")
 	return
+
+/mob/living/silicon/ai/verb/toggle_station_map()
+	set name = "Toggle Station Holomap"
+	set desc = "Toggle station holomap on your screen"
+	set category = "AI Commands"
+	if(isUnconscious())
+		return
+
+	station_holomap.toggleHolomap(src,1)
 
 //AI_CAMERA_LUMINOSITY
 

@@ -705,6 +705,11 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 
 	return english_list(., nothing_text = "")
 
+/datum/reagents/proc/log_bad_reagents(var/mob/user, var/atom/A)
+	var/badreagents = write_logged_reagents()
+	if(badreagents)
+		add_gamelogs(user, "used \a [A] containing [badreagents]", admin = TRUE, tp_link = TRUE)
+
 /datum/reagents/proc/is_empty()
 	return total_volume <= 0
 

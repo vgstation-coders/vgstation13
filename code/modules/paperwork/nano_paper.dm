@@ -59,6 +59,7 @@
 		\[hr\] : Adds a horizontal rule. <br>
 		\[img\]http://url\[/img\] : add an image <br>
 		\[video\]http://url.wmv\[/video\] : add a video with simple controls, MUST BE IN WMV FORMAT!!<br>
+		\[youtube\]Any youtube url\[/youtube\] : embed a youtube url into the nanopaper, should function with any youtube url format!<br>
 		<br>
 		<center>Fonts</center><br>
 		\[agency\] - \[/agency\] : <span style=\"font-family:Agency FB\">Agency FB</span><br>

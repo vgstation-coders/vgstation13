@@ -52,3 +52,22 @@
 	else
 		icon_state = "gravitywell0"
 		item_state = "gravitywell0"
+
+/obj/item/weapon/gun/gravitywell/failure_check(var/mob/living/carbon/human/M)
+	if(prob(25))
+		M.adjustBruteLossByPart(rand(5, 20), LIMB_LEFT_HAND, src)
+		M.adjustBruteLossByPart(rand(5, 20), LIMB_RIGHT_HAND, src)
+		M.adjustBruteLossByPart(rand(5, 20), LIMB_LEFT_ARM, src)
+		M.adjustBruteLossByPart(rand(5, 20), LIMB_RIGHT_ARM, src)
+		M.adjustBruteLossByPart(rand(5, 20), LIMB_CHEST, src)
+		M.adjustBruteLossByPart(rand(5, 20), LIMB_GROIN, src)
+		M.adjustBruteLossByPart(rand(5, 20), LIMB_HEAD, src)
+		M.Weaken(20)
+		to_chat(M, "<span class='danger'>\The [src] generates a gravity well inside itself!.</span>")
+		new/obj/effect/overlay/gravitywell(loc)
+		M.drop_item(src, force_drop = 1)
+		qdel(src)
+		log_admin("\[[time_stamp()]\] <b>[key_name(M)]</b> has created a gravity well via gun failure at ([M.x],[M.y],[M.z])")
+		message_admins("\[[time_stamp()]\] <b>[key_name(M)]</b> has created a gravity well via gun failure at (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.x];Y=[M.y];Z=[M.z]'>([M.x],[M.y],[M.z])</a>)", 1)
+		return 0
+	return ..()

@@ -17,6 +17,25 @@
 	var/list/added_languages
 	var/list/upgrades = list()
 
+/obj/item/weapon/robot_module/Destroy()
+	if(istype(loc, /mob/living/silicon/robot))
+		var/mob/living/silicon/robot/R = loc
+		R.remove_module() //Helps remove screen references on robot end
+
+	for(var/obj/A in modules)
+		qdel(A)
+	modules = null
+	if(emag)
+		qdel(emag)
+		emag = null
+	if(jetpack)
+		qdel(jetpack)
+		jetpack = null
+	for(var/obj/A in upgrades)
+		qdel(upgrades)
+	upgrades = null
+	..()
+
 /obj/item/weapon/robot_module/proc/recharge_consumable()
 	return
 
@@ -72,10 +91,11 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 
 /obj/item/weapon/robot_module/standard
 	name = "standard robot module"
-
+	
+#define STANDARD_MAX_KIT 15
 /obj/item/weapon/robot_module/standard/New()
 	..()
-	src.modules += new /obj/item/weapon/melee/baton/loaded(src)
+	src.modules += new /obj/item/weapon/melee/baton/loaded/borg(src)
 	src.modules += new /obj/item/weapon/extinguisher(src)
 	src.modules += new /obj/item/weapon/wrench(src)
 	src.modules += new /obj/item/weapon/crowbar(src)
@@ -88,22 +108,18 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 
 
 	var/obj/item/stack/medical/bruise_pack/B = new /obj/item/stack/medical/bruise_pack(src)
-	B.max_amount = 15
-	B.amount = 15
+	B.max_amount = STANDARD_MAX_KIT
+	B.amount = STANDARD_MAX_KIT
 	src.modules += B
 
 	var/obj/item/stack/medical/ointment/O = new /obj/item/stack/medical/ointment(src)
-	O.max_amount = 15
-	O.amount = 15
+	O.max_amount = STANDARD_MAX_KIT
+	O.amount = STANDARD_MAX_KIT
 	src.modules += O
 
 	fix_modules()
 
 /obj/item/weapon/robot_module/standard/respawn_consumable(var/mob/living/silicon/robot/R)
-	// Recharge baton battery
-	for(var/obj/item/weapon/melee/baton/B in src.modules)
-		if(B && B.bcell)
-			B.bcell.give(175)
 	// Replenish ointment and bandages
 	var/list/what = list (
 		/obj/item/stack/medical/bruise_pack,
@@ -114,7 +130,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 			src.modules -= null
 			var/obj/item/stack/O = new T(src)
 			if(istype(O,/obj/item/stack/medical))
-				O.max_amount = 15
+				O.max_amount = STANDARD_MAX_KIT
 			src.modules += O
 			O.amount = 1
 	return
@@ -124,7 +140,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 /obj/item/weapon/robot_module/medical
 	name = "medical robot module"
 
-
+#define MEDBORG_MAX_KIT 10
 /obj/item/weapon/robot_module/medical/New()
 	..()
 	src.modules += new /obj/item/device/healthanalyzer(src)
@@ -152,18 +168,18 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	src.emag.name = "Polyacid spray"
 
 	var/obj/item/stack/medical/advanced/bruise_pack/B = new /obj/item/stack/medical/advanced/bruise_pack(src)
-	B.max_amount = 10
-	B.amount = 10
+	B.max_amount = MEDBORG_MAX_KIT
+	B.amount = MEDBORG_MAX_KIT
 	src.modules += B
 
 	var/obj/item/stack/medical/advanced/ointment/O = new /obj/item/stack/medical/advanced/ointment(src)
-	O.max_amount = 10
-	O.amount = 10
+	O.max_amount = MEDBORG_MAX_KIT
+	O.amount = MEDBORG_MAX_KIT
 	src.modules += O
 
 	var/obj/item/stack/medical/splint/S = new /obj/item/stack/medical/splint(src)
-	S.max_amount = 10
-	S.amount = 10
+	S.max_amount = MEDBORG_MAX_KIT
+	S.amount = MEDBORG_MAX_KIT
 	src.modules += S
 
 	fix_modules()
@@ -179,7 +195,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 			src.modules -= null
 			var/obj/item/stack/O = new T(src)
 			if(istype(O,/obj/item/stack/medical))
-				O.max_amount = 15
+				O.max_amount = MEDBORG_MAX_KIT
 			src.modules += O
 			O.amount = 1
 	return
@@ -262,7 +278,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 
 /obj/item/weapon/robot_module/security/New()
 	..()
-	src.modules += new /obj/item/weapon/melee/baton/loaded(src)
+	src.modules += new /obj/item/weapon/melee/baton/loaded/borg(src)
 	src.modules += new /obj/item/weapon/gun/energy/taser/cyborg(src)
 	src.modules += new /obj/item/weapon/handcuffs/cyborg(src)
 	src.modules += new /obj/item/weapon/reagent_containers/spray/pepper(src)
@@ -271,14 +287,6 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	src.emag = new /obj/item/weapon/gun/energy/laser/cyborg(src)
 	sensor_augs = list("Security", "Medical", "Disable")
 	fix_modules()
-
-/obj/item/weapon/robot_module/security/respawn_consumable(var/mob/living/silicon/robot/R)
-	// Recharge baton battery
-	for(var/obj/item/M in src.modules)
-		if(istype(M,/obj/item/weapon/melee/baton))
-			var/obj/item/weapon/melee/baton/B=M
-			if(B && B.bcell)
-				B.bcell.give(175)
 
 /obj/item/weapon/robot_module/janitor
 	name = "janitorial robot module"
@@ -409,7 +417,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	src.modules += new /obj/item/borg/combat/mobility(src)
 	src.modules += new /obj/item/weapon/wrench(src) //Is a combat android really going to be stopped by a chair?
 	src.modules += new /obj/item/weapon/crowbar(src)
-	src.emag = new /obj/item/weapon/gun/energy/lasercannon/cyborg(src)
+	src.emag = new /obj/item/weapon/gun/energy/laser/cannon/cyborg(src)
 	sensor_augs = list("Security", "Medical", "Mesons", "Thermal", "Light Amplification", "Disable")
 
 	fix_modules()
@@ -423,3 +431,6 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	for(var/language in added_languages)
 		R.remove_language(language)
 	added_languages.len = 0
+	
+#undef STANDARD_MAX_KIT
+#undef MEDBORG_MAX_KIT

@@ -157,6 +157,8 @@
 
 #define iswizard(H) (H.mind in ticker.mode.wizards)
 
+#define isapprentice(H) (H.mind in ticker.mode.apprentices)
+
 #define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || H.mind in ticker.mode.infected_monkeys)
 
 #define isdeathsquad(H) (H.mind in ticker.mode.deathsquads)
@@ -167,7 +169,15 @@
 #define isspace(A) (A.type == /area)
 
 //This one returns the "space" area
-#define get_space_area (get_area(locate(1,1,2))) //xd
+//#define get_space_area (get_area(locate(1,1,2))) //xd
+proc/get_space_area()
+	//global.space_area is defined in code/game/areas/areas.dm, and set when the space area is created
+	if(!global.space_area)
+		var/area/new_space_area = new /area
+
+		global.space_area = new_space_area
+
+	return global.space_area
 
 //1 line helper procs compressed into defines.
 #define Clamp(x, y, z) 	(x <= y ? y : (x >= z ? z : x))

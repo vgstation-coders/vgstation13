@@ -37,7 +37,7 @@
 /area/random_vault/v10
 
 /proc/generate_vaults()
-	var/area/space = get_space_area
+	var/area/space = get_space_area()
 
 	var/list/list_of_vault_spawners = shuffle(typesof(/area/random_vault) - /area/random_vault)
 	var/list/list_of_vaults = typesof(/datum/map_element/vault) - /datum/map_element/vault

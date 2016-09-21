@@ -86,6 +86,24 @@
 	stun = 0
 	weaken = 0
 
+/obj/item/projectile/bullet/fourtyfive //secgun ammo!
+	damage = 15
+	stun = 2 //stopping power
+	weaken = 2
+	penetration = 2
+
+/obj/item/projectile/bullet/fourtyfive/practice
+	damage = 2
+	stun = 1
+	weaken = 1
+	embed = 0
+
+/obj/item/projectile/bullet/fourtyfive/rubber
+	damage = 8
+	stun = 5
+	weaken = 5
+	embed = 0
+
 /obj/item/projectile/bullet/suffocationbullet//How does this even work?
 	name = "CO2 bullet"
 	damage = 20
@@ -739,13 +757,13 @@
 			spawn()
 				B.process()
 	..()
-	
+
 /obj/item/projectile/bullet/invisible
 	name = "invisible bullet"
 	icon_state = null
 	damage = 25
 	fire_sound = null
-	
+
 /obj/item/projectile/bullet/invisible/on_hit(var/atom/target, var/blocked = 0) //silence the target for a few seconds on hit
 	if (..(target, blocked))
 		var/mob/living/L = target
@@ -753,3 +771,4 @@
 			L.silent = 5
 		return 1
 	return 0
+

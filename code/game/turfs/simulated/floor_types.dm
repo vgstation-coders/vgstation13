@@ -182,6 +182,7 @@
 	name = "plating"
 	icon_state = "plating"
 	intact = 0
+	plane = PLATING_PLANE
 
 /turf/simulated/floor/plating/deck
 	name = "deck"

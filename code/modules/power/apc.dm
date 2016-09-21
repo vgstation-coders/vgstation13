@@ -1146,7 +1146,7 @@
 			equipment = autoset(equipment, 1)
 			lighting = autoset(lighting, 1)
 			environ = autoset(environ, 1)
-			if(cell.percent() > 75 && !areaMaster.poweralm && !make_alerts)
+			if(cell.percent() > 75 && !areaMaster.poweralm && make_alerts)
 				areaMaster.poweralert(1, src)
 
 		// now trickle-charge the cell
@@ -1330,10 +1330,6 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 /obj/machinery/power/apc/cultify()
 	if(src.invisibility != INVISIBILITY_MAXIMUM)
 		src.invisibility = INVISIBILITY_MAXIMUM
-
-/obj/machinery/power/apc/change_area(oldarea, newarea)
-	..()
-	name = replacetext(name,oldarea,newarea)
 
 /obj/machinery/power/apc/wirejack(var/mob/living/silicon/pai/P)
 	if(..())
