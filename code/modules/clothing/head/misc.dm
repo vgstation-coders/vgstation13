@@ -84,7 +84,7 @@
 	name = "armored top-hat"
 	desc = "It's an amish looking top hat. This one looks sturdier."
 	icon_state = "tophat"
-	item_state = "athat"
+	item_state = "that"
 	armor = list(melee = 35, bullet = 15, laser = 30, energy = 5, bomb = 10, bio = 0, rad = 0)
 	flags = FPRINT
 
