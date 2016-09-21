@@ -51,14 +51,21 @@
 	projectile_type = "/obj/item/projectile/bullet/midbullet2"
 	w_type = RECYK_METAL
 
-
 /obj/item/ammo_casing/c45
 	desc = "A .45 bullet casing."
 	caliber = ".45"
-	projectile_type = "/obj/item/projectile/bullet/midbullet"
-	w_type = RECYK_METAL
+	projectile_type = /obj/item/projectile/bullet/fourtyfive
+/*
+/obj/item/ammo_casing/c45p
+	desc = "A .45 practice bullet casing."
+	caliber = ".45"
+	projectile_type = /obj/item/projectile/bullet/fourtyfive/practice
 
-
+/obj/item/ammo_casing/c45r
+	desc = "A .45 rubber bullet casing."
+	caliber = ".45"
+	projectile_type = /obj/item/projectile/bullet/fourtyfive/rubber
+*/ //Gotta port the Polaris caliber system first else there's no point.
 /obj/item/ammo_casing/a12mm
 	desc = "A 12mm bullet casing."
 	caliber = "12mm"
@@ -169,4 +176,3 @@
 	desc = "An invisible bullet casing, it's hard to tell if it's been spent or not."
 	projectile_type = "/obj/item/projectile/bullet/invisible"
 	icon_state = null
-	

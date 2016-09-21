@@ -87,7 +87,8 @@
 	starting_ammo = 0
 
 /obj/item/ammo_storage/magazine/c45
-	name = "magazine (.45)"
+	name = "Pistol magazine (.45)"
+	desc = "A magazine designed for common .45 pistols. Holds 8 rounds."
 	icon_state = "45"
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/c45"
@@ -97,7 +98,19 @@
 
 /obj/item/ammo_storage/magazine/c45/empty
 	starting_ammo = 0
+/*
+/obj/item/ammo_storage/magazine/c45/rubber
+	name = "magazine (.45 rubber)"
+	desc = "A magazine designed to load rubber bullets into common .45 pistols. Holds 8 rounds."
+	icon_state = "45R"
+	ammo_type = "/obj/item/ammo_casing/c45r"
 
+/obj/item/ammo_storage/magazine/c45/practice
+	name = "magazine (.45 practice)"
+	desc = "A magazine designed to load practice bullets into common .45 pistols. Holds 8 rounds."
+	icon_state = "45P"
+	ammo_type = "/obj/item/ammo_casing/c45p"
+*/ //Gotta port the Polaris caliber system first else there's no point.
 /obj/item/ammo_storage/magazine/uzi45 //Uzi mag
 	name = "magazine (.45)"
 	icon_state = "uzi45"
