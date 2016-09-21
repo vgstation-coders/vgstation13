@@ -81,4 +81,5 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 		sight &= ~removing
 	if(sight != oldsight)
 		var/mob/virtualhearer/VH = mob_hearers[src]
-		VH.sight = sight
+		if(VH)
+			VH.sight = sight
