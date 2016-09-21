@@ -438,16 +438,3 @@
 		winset(usr, "mainwindow.mainvsplit", "right=mapwindow;left=rpane;splitter=[newsplit]")
 	else
 		winset(usr, "mainwindow.mainvsplit", "right=rpane;left=mapwindow;splitter=[newsplit]")
-
-/client/verb/modify_preferences(page as num)
-	set name = "modifypreferences"
-	set hidden = 1
-	if(!prefs.saveloaded)
-		to_chat(src, "<span class='warning'>Your character preferences have not yet loaded.</span>")
-		return
-	switch(page)
-		if(1)
-			prefs.current_tab = 2
-		if(2)
-			prefs.current_tab = 3
-	prefs.ShowChoices(usr)

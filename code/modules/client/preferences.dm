@@ -1,4 +1,7 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:33
+#define CHARACTER_SETUP 0
+#define UI_SETUP 1
+#define GENERAL_SETUP 2
+#define SPECIAL_ROLES_SETUP 3
 
 var/list/preferences_datums = list()
 
@@ -574,22 +577,22 @@ var/const/MAX_SAVE_SLOTS = 8
 	else
 		dat += "Please create an account to save your preferences."
 
-	dat += "<center><a href='?_src_=prefs;preference=tab;tab=0' [current_tab == 0 ? "class='linkOn'" : ""]>Character Settings</a> | "
-	dat += "<a href='?_src_=prefs;preference=tab;tab=1' [current_tab == 1 ? "class='linkOn'" : ""]>UI Settings</a> | "
-	dat += "<a href='?_src_=prefs;preference=tab;tab=2' [current_tab == 2 ? "class='linkOn'" : ""]>General Settings</a> | "
-	dat += "<a href='?_src_=prefs;preference=tab;tab=3' [current_tab == 3 ? "class='linkOn'" : ""]>Special Roles</a></center><br>"
+	dat += "<center><a href='?_src_=prefs;preference=tab;tab=0' [current_tab == CHARACTER_SETUP ? "class='linkOn'" : ""]>Character Settings</a> | "
+	dat += "<a href='?_src_=prefs;preference=tab;tab=1' [current_tab == UI_SETUP ? "class='linkOn'" : ""]>UI Settings</a> | "
+	dat += "<a href='?_src_=prefs;preference=tab;tab=2' [current_tab == GENERAL_SETUP ? "class='linkOn'" : ""]>General Settings</a> | "
+	dat += "<a href='?_src_=prefs;preference=tab;tab=3' [current_tab == SPECIAL_ROLES_SETUP ? "class='linkOn'" : ""]>Special Roles</a></center><br>"
 
 	if(appearance_isbanned(user))
 		dat += "<b>You are banned from using custom names and appearances. You can continue to adjust your characters, but you will be randomised once you join the game.</b><br>"
 
 	switch(current_tab)
-		if(0)
+		if(CHARACTER_SETUP)
 			dat = setup_character_options(dat, user)
-		if(1)
+		if(UI_SETUP)
 			dat = setup_UI(dat, user)
-		if(2)
+		if(GENERAL_SETUP)
 			dat = setup_special(dat, user)
-		if(3)
+		if(SPECIAL_ROLES_SETUP)
 			dat = configure_special_roles(dat, user)
 
 	dat += "<br><hr>"
@@ -1776,7 +1779,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 				else
 					var/wikiroute = role_wiki[role_id]
 					var/desire = get_role_desire_str(roles[role_id])
-					dat += {"<td class='column'>[wikiroute ? "<a HREF='?src=\ref[user];getwiki=[wikiroute]'>Role Wiki</a>" : ""]</td>
+					dat += {"<td class='column'>[wikiroute ? "<a HREF='?src=\ref[user];getwiki=[wikiroute]'>Role Wiki</a>" : "None"]</td>
 							<td class='column clmNever'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_PERSIST]" title="Never"[desire=="Never"?" checked='checked'":""]/></label></td>
 							<td class='column clmNo'><label class="fullsize"><input type="radio" name="[role_id]" value="0" title="No"[desire=="No"?" checked='checked'":""] /></label></td>
 							<td class='column clmYes'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_ENABLE]" title="Yes"[desire=="Yes"?" checked='checked'":""] /></label></td>
@@ -1833,3 +1836,16 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 			return SetRoles(usr, href_list)
 		if("set_role")
 			return SetRole(usr, href_list)
+
+/client/verb/modify_preferences(page as num)
+	set name = "modifypreferences"
+	set hidden = 1
+	if(!prefs.saveloaded)
+		to_chat(src, "<span class='warning'>Your character preferences have not yet loaded.</span>")
+		return
+	switch(page)
+		if(1)
+			prefs.current_tab = GENERAL_SETUP
+		if(2)
+			prefs.current_tab = SPECIAL_ROLES_SETUP
+	prefs.ShowChoices(usr)
