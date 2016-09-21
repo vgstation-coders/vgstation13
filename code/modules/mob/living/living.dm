@@ -260,6 +260,10 @@
 /mob/living/proc/adjustBruteLoss(var/amount)
 	if(status_flags & GODMODE)
 		return 0	//godmode
+
+	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = amount)))
+		return 0
+
 	bruteloss = min(max(bruteloss + (amount * brute_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/getOxyLoss()
@@ -268,6 +272,10 @@
 /mob/living/proc/adjustOxyLoss(var/amount)
 	if(status_flags & GODMODE)
 		return 0	//godmode
+
+	if(INVOKE_EVENT(on_damaged, list("type" = OXY, "amount" = amount)))
+		return 0
+
 	oxyloss = min(max(oxyloss + (amount * oxy_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setOxyLoss(var/amount)
@@ -281,6 +289,10 @@
 /mob/living/proc/adjustToxLoss(var/amount)
 	if(status_flags & GODMODE)
 		return 0	//godmode
+
+	if(INVOKE_EVENT(on_damaged, list("type" = TOX, "amount" = amount)))
+		return 0
+
 	toxloss = min(max(toxloss + (amount * tox_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setToxLoss(var/amount)
@@ -294,6 +306,10 @@
 /mob/living/proc/adjustFireLoss(var/amount)
 	if(status_flags & GODMODE)
 		return 0	//godmode
+
+	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = amount)))
+		return 0
+
 	fireloss = min(max(fireloss + (amount * burn_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/getCloneLoss()
@@ -302,6 +318,10 @@
 /mob/living/proc/adjustCloneLoss(var/amount)
 	if(status_flags & GODMODE)
 		return 0	//godmode
+
+	if(INVOKE_EVENT(on_damaged, list("type" = CLONE, "amount" = amount)))
+		return 0
+
 	cloneloss = min(max(cloneloss + (amount * clone_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setCloneLoss(var/amount)
@@ -315,6 +335,10 @@
 /mob/living/proc/adjustBrainLoss(var/amount)
 	if(status_flags & GODMODE)
 		return 0	//godmode
+
+	if(INVOKE_EVENT(on_damaged, list("type" = BRAIN, "amount" = amount)))
+		return 0
+
 	brainloss = min(max(brainloss + (amount * brain_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setBrainLoss(var/amount)

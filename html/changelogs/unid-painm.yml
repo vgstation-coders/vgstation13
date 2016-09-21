@@ -1,0 +1,7 @@
+author: Unid
+
+# Optional: Remove this file after generating master changelog.  Useful for PR changelogs that won't get used again.
+delete-after: True
+
+changes: 
+- rscadd: "Added a new wizard spell: Pain Mirror. It has a cooldown of 90 seconds, and it lasts for 5 seconds. Any damage you take while the spell is active will be also dealt to everybody around you."

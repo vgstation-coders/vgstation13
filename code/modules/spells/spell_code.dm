@@ -488,3 +488,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			return "Reduce this spell's cooldown."
 		if(Sp_POWER)
 			return "Increase this spell's power."
+
+//Return a string that gets appended to the spell on the scoreboard
+/spell/proc/get_scoreboard_suffix()
+	return

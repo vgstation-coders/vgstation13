@@ -277,6 +277,8 @@
 	var/stat_fucked = 1
 	var/event/on_uattack
 	var/event/on_logout
+	var/event/on_damaged
+
 	forceinvertredraw = 1
 
 	var/list/alphas = list()

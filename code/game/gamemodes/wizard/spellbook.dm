@@ -26,6 +26,7 @@
 	/spell/targeted/genetic/mutate,
 	/spell/targeted/ethereal_jaunt,
 	/spell/aoe_turf/fall,
+	/spell/mirror_of_pain,
 	/spell/aoe_turf/knock,
 	/spell/targeted/equip_item/horsemask,
 	/spell/targeted/equip_item/clowncurse,

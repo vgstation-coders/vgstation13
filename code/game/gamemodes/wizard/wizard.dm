@@ -316,7 +316,7 @@
 					var/icon/spellicon = icon('icons/mob/screen_spells.dmi', S.hud_state)
 					end_icons += spellicon
 					tempstate = end_icons.len
-					text += {"<br><img src="logo_[tempstate].png"> [S.name]"}
+					text += {"<br><img src="logo_[tempstate].png"> [S.name][S.get_scoreboard_suffix()]"}
 					if(wizard.current.spell_list.len > i)
 						text += ", "
 					i++
