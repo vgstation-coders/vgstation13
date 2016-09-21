@@ -3,6 +3,7 @@
 	var/optiontext
 
 /mob/new_player/proc/handle_player_polling()
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/new_player/proc/handle_player_polling() called tick#: [world.time]")
 	establish_db_connection()
 	if(dbcon.IsConnected())
 		var/isadmin = 0
@@ -13,8 +14,11 @@
 		select_query.Execute()
 
 
+		// AUTOFIXED BY fix_string_idiocy.py
+		// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:56: var/output = "<div align='center'><B>Player polls</B>"
 		var/output = {"<div align='center'><B>Player polls</B>
 <hr>"}
+		// END AUTOFIX
 		var/pollid
 		var/pollquestion
 
@@ -26,7 +30,7 @@
 		while(select_query.NextRow())
 			pollid = select_query.item[1]
 			pollquestion = select_query.item[2]
-			output += "<tr bgcolor='[ (i % 2 == 1) ? color1 : color2 ]'><td><a href=\"byond://?src=\ref[src];pollid=[pollid]\"><b>[pollquestion]</b></a> | <a href=\"byond://?src=\ref[src];pollid=[pollid];results=1\">Results</a></td></tr>"
+			output += "<tr bgcolor='[ (i % 2 == 1) ? color1 : color2 ]'><td>[!client.holder && client.player_age <= 30 ? "<b>[pollquestion]</b> (<span class='danger'>You cannot vote on this</span>)" : "<a href=\"byond://?src=\ref[src];pollid=[pollid]\"><b>[pollquestion]</b></a>"] | <a href=http://ss13.moe/index.php/poll/[pollid]>Results</a></td></tr>"
 			i++
 
 		output += "</table>"
@@ -36,6 +40,7 @@
 
 
 /mob/new_player/proc/poll_player(var/pollid = -1)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/new_player/proc/poll_player() called tick#: [world.time]")
 	if(pollid == -1)
 		return
 	establish_db_connection()
@@ -88,15 +93,21 @@
 
 				var/output = "<div align='center'><B>Player poll</B>"
 
+				// AUTOFIXED BY fix_string_idiocy.py
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:133: output +="<hr>"
 				output += {"<hr>
 					<b>Question: [pollquestion]</b><br>
 					<font size='2'>Poll runs from <b>[pollstarttime]</b> until <b>[pollendtime]</b></font><p>"}
+				// END AUTOFIX
 				if(!voted)	//Only make this a form if we have not voted yet
 
+					// AUTOFIXED BY fix_string_idiocy.py
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:138: output += "<form name='cardcomp' action='?src=\ref[src]' method='get'>"
 					output += {"<form name='cardcomp' action='?src=\ref[src]' method='get'>
 						<input type='hidden' name='src' value='\ref[src]'>
 						<input type='hidden' name='votepollid' value='[pollid]'>
 						<input type='hidden' name='votetype' value='OPTION'>"}
+					// END AUTOFIX
 
 				output += "<table><tr><td>"
 				for(var/datum/polloption/O in options)
@@ -112,8 +123,11 @@
 
 				if(!voted)	//Only make this a form if we have not voted yet
 
+					// AUTOFIXED BY fix_string_idiocy.py
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:156: output += "<p><input type='submit' value='Vote'>"
 					output += {"<p><input type='submit' value='Vote'>
 						</form>"}
+					// END AUTOFIX
 
 				output += "</div>"
 
@@ -134,11 +148,16 @@
 
 				var/output = "<div align='center'><B>Player poll</B>"
 
+				// AUTOFIXED BY fix_string_idiocy.py
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:177: output +="<hr>"
 				output += {"<hr>
 					<b>Question: [pollquestion]</b><br>
 					<font size='2'>Feedback gathering runs from <b>[pollstarttime]</b> until <b>[pollendtime]</b></font><p>"}
+				// END AUTOFIX
 				if(!voted)	//Only make this a form if we have not voted yet
 
+					// AUTOFIXED BY fix_string_idiocy.py
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:182: output += "<form name='cardcomp' action='?src=\ref[src]' method='get'>"
 					output += {"<form name='cardcomp' action='?src=\ref[src]' method='get'>
 						<input type='hidden' name='src' value='\ref[src]'>
 						<input type='hidden' name='votepollid' value='[pollid]'>
@@ -154,6 +173,7 @@
 						<input type='hidden' name='replytext' value='ABSTAIN'>
 						<input type='submit' value='Abstain'>
 						</form>"}
+					// END AUTOFIX
 				else
 					output += "[vote_text]"
 
@@ -166,9 +186,12 @@
 
 				var/output = "<div align='center'><B>Player poll</B>"
 
+				// AUTOFIXED BY fix_string_idiocy.py
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:211: output +="<hr>"
 				output += {"<hr>
 					<b>Question: [pollquestion]</b><br>
 					<font size='2'>Poll runs from <b>[pollstarttime]</b> until <b>[pollendtime]</b></font><p>"}
+				// END AUTOFIX
 				var/voted = 0
 				while(voted_query.NextRow())
 					voted = 1
@@ -180,10 +203,13 @@
 
 				if(!voted)	//Only make this a form if we have not voted yet
 
+					// AUTOFIXED BY fix_string_idiocy.py
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:225: output += "<form name='cardcomp' action='?src=\ref[src]' method='get'>"
 					output += {"<form name='cardcomp' action='?src=\ref[src]' method='get'>
 						<input type='hidden' name='src' value='\ref[src]'>
 						<input type='hidden' name='votepollid' value='[pollid]'>
 						<input type='hidden' name='votetype' value='NUMVAL'>"}
+					// END AUTOFIX
 					var/minid = 999999
 					var/maxid = 0
 
@@ -209,8 +235,11 @@
 							continue
 
 
+						// AUTOFIXED BY fix_string_idiocy.py
+						// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:254: output += "<br>[optiontext]: <select name='o[optionid]'>"
 						output += {"<br>[optiontext]: <select name='o[optionid]'>
 							<option value='abstain'>abstain</option>"}
+						// END AUTOFIX
 						for (var/j = minvalue; j <= maxvalue; j++)
 							if(j == minvalue && descmin)
 								output += "<option value='[j]'>[j] ([descmin])</option>"
@@ -224,10 +253,13 @@
 						output += "</select>"
 
 
+					// AUTOFIXED BY fix_string_idiocy.py
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:268: output += "<input type='hidden' name='minid' value='[minid]'>"
 					output += {"<input type='hidden' name='minid' value='[minid]'>
 						<input type='hidden' name='maxid' value='[maxid]'>
 						<p><input type='submit' value='Submit'>
 						</form>"}
+					// END AUTOFIX
 				src << browse(output,"window=playerpoll;size=500x500")
 			if("MULTICHOICE")
 				var/DBQuery/voted_query = dbcon.NewQuery("SELECT optionid FROM erro_poll_vote WHERE pollid = [pollid] AND ckey = '[usr.ckey]'")
@@ -261,17 +293,23 @@
 
 				var/output = "<div align='center'><B>Player poll</B>"
 
+				// AUTOFIXED BY fix_string_idiocy.py
+				// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:306: output +="<hr>"
 				output += {"<hr>
 					<b>Question: [pollquestion]</b><br>You can select up to [multiplechoiceoptions] options. If you select more, the first [multiplechoiceoptions] will be saved.<br>
 					<font size='2'>Poll runs from <b>[pollstarttime]</b> until <b>[pollendtime]</b></font><p>"}
+				// END AUTOFIX
 				if(!voted)	//Only make this a form if we have not voted yet
 
+					// AUTOFIXED BY fix_string_idiocy.py
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:311: output += "<form name='cardcomp' action='?src=\ref[src]' method='get'>"
 					output += {"<form name='cardcomp' action='?src=\ref[src]' method='get'>
 						<input type='hidden' name='src' value='\ref[src]'>
 						<input type='hidden' name='votepollid' value='[pollid]'>
 						<input type='hidden' name='votetype' value='MULTICHOICE'>
 						<input type='hidden' name='maxoptionid' value='[maxoptionid]'>
 						<input type='hidden' name='minoptionid' value='[minoptionid]'>"}
+					// END AUTOFIX
 
 				output += "<table><tr><td>"
 				for(var/datum/polloption/O in options)
@@ -287,8 +325,11 @@
 
 				if(!voted)	//Only make this a form if we have not voted yet
 
+					// AUTOFIXED BY fix_string_idiocy.py
+					// C:\Users\Rob\\documents\\\projects\vgstation13\code\\modules\\mob\new_player\\\poll.dm:331: output += "<p><input type='submit' value='Vote'>"
 					output += {"<p><input type='submit' value='Vote'>
 						</form>"}
+					// END AUTOFIX
 
 				output += "</div>"
 
@@ -296,6 +337,7 @@
 		return
 
 /mob/new_player/proc/vote_on_poll(var/pollid = -1, var/optionid = -1, var/multichoice = 0)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/new_player/proc/vote_on_poll() called tick#: [world.time]")
 	if(pollid == -1 || optionid == -1)
 		return
 
@@ -366,6 +408,7 @@
 
 
 /mob/new_player/proc/log_text_poll_reply(var/pollid = -1, var/replytext = "")
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/new_player/proc/log_text_poll_reply() called tick#: [world.time]")
 	if(pollid == -1 || replytext == "")
 		return
 
@@ -424,6 +467,7 @@
 
 
 /mob/new_player/proc/vote_on_numval_poll(var/pollid = -1, var/optionid = -1, var/rating = null)
+	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/mob/new_player/proc/vote_on_numval_poll() called tick#: [world.time]")
 	if(pollid == -1 || optionid == -1)
 		return
 
@@ -457,7 +501,7 @@
 			break
 
 		if(!validoption)
-			to_chat(usr, "<span class='warning'>Poll option is not valid.</span>")
+			to_chat(usr, "<span class='warning'>Poll is not valid.</span>")
 			return
 
 		var/alreadyvoted = 0
