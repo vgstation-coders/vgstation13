@@ -86,7 +86,7 @@
 	stun = 0
 	weaken = 0
 
-/obj/item/projectile/bullet/fourtyfive //secglock ammo!
+/obj/item/projectile/bullet/fourtyfive //secgun ammo!
 	damage = 15
 	stun = 2 //stopping power
 	weaken = 2
@@ -95,7 +95,7 @@
 /obj/item/projectile/bullet/fourtyfive/practice
 	damage = 2
 	stun = 1
-	weaken = 0
+	weaken = 1
 	embed = 0
 
 /obj/item/projectile/bullet/fourtyfive/rubber
