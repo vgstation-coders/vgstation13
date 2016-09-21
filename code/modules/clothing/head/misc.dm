@@ -82,7 +82,7 @@
 
 /obj/item/clothing/head/athat
 	name = "Armored top-hat"
-	desc = "It's an amish looking top hat. This one looks sturdier"
+	desc = "It's an amish looking top hat. This one looks sturdier."
 	icon_state = "tophat"
 	item_state = "athat"
 	armor = list(melee = 35, bullet = 15, laser = 30, energy = 5, bomb = 10, bio = 0, rad = 0)
