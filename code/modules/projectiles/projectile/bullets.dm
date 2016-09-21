@@ -91,7 +91,7 @@
 	stun = 2 //stopping power
 	weaken = 2
 	penetration = 2
-/*
+
 /obj/item/projectile/bullet/fourtyfive/practice
 	damage = 2
 	stun = 1
@@ -103,7 +103,7 @@
 	stun = 5
 	weaken = 5
 	embed = 0
-*/ //Gotta port the Polaris caliber system first else there's no point.
+
 /obj/item/projectile/bullet/suffocationbullet//How does this even work?
 	name = "CO2 bullet"
 	damage = 20

@@ -92,25 +92,34 @@
 	icon_state = "45"
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/c45"
+	exact = 0
+	caliber = ".45"
 	max_ammo = 8
 	multiple_sprites = 1
 	sprite_modulo = 1
 
 /obj/item/ammo_storage/magazine/c45/empty
 	starting_ammo = 0
-/*
-/obj/item/ammo_storage/magazine/c45/rubber
+
+/obj/item/ammo_storage/magazine/c45/rubber //I'd like to make it so magazines get recolored by contents, but whatever --Sonix
 	name = "magazine (.45 rubber)"
-	desc = "A magazine designed to load rubber bullets into common .45 pistols. Holds 8 rounds."
+	desc = "A magazine designed for common .45 pistols. This one has a blue marking to indicate it should contain rubber bullets. Holds 8 rounds."
 	icon_state = "45R"
-	ammo_type = "/obj/item/ammo_casing/c45r"
+	ammo_type = "/obj/item/ammo_casing/c45/rubber"
+
+/obj/item/ammo_storage/magazine/c45/rubber/empty
+	starting_ammo = 0
 
 /obj/item/ammo_storage/magazine/c45/practice
 	name = "magazine (.45 practice)"
-	desc = "A magazine designed to load practice bullets into common .45 pistols. Holds 8 rounds."
+	desc = "A magazine designed for common .45 pistols. This one has a white marking to indicate it should contain practice bullets.  Holds 8 rounds."
 	icon_state = "45P"
-	ammo_type = "/obj/item/ammo_casing/c45p"
-*/ //Gotta port the Polaris caliber system first else there's no point.
+	ammo_type = "/obj/item/ammo_casing/c45/practice"
+
+
+/obj/item/ammo_storage/magazine/c45/practice/empty
+	starting_ammo = 0
+
 /obj/item/ammo_storage/magazine/uzi45 //Uzi mag
 	name = "magazine (.45)"
 	icon_state = "uzi45"

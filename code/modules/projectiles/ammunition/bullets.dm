@@ -54,18 +54,20 @@
 /obj/item/ammo_casing/c45
 	desc = "A .45 bullet casing."
 	caliber = ".45"
-	projectile_type = /obj/item/projectile/bullet/fourtyfive
-/*
-/obj/item/ammo_casing/c45p
+	projectile_type = "/obj/item/projectile/bullet/fourtyfive"
+
+/obj/item/ammo_casing/c45/practice
 	desc = "A .45 practice bullet casing."
 	caliber = ".45"
-	projectile_type = /obj/item/projectile/bullet/fourtyfive/practice
+	projectile_type = "/obj/item/projectile/bullet/fourtyfive/practice"
+	icon_state = "s-p-casing"
 
-/obj/item/ammo_casing/c45r
+/obj/item/ammo_casing/c45/rubber
 	desc = "A .45 rubber bullet casing."
 	caliber = ".45"
-	projectile_type = /obj/item/projectile/bullet/fourtyfive/rubber
-*/ //Gotta port the Polaris caliber system first else there's no point.
+	projectile_type = "/obj/item/projectile/bullet/fourtyfive/rubber"
+	icon_state = "s-r-casing"
+
 /obj/item/ammo_casing/a12mm
 	desc = "A 12mm bullet casing."
 	caliber = "12mm"

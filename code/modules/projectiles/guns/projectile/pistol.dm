@@ -116,7 +116,7 @@
 	icon_state = "secguncomp"
 	mag_type = "/obj/item/ammo_storage/magazine/c45"
 	caliber = ".45"
-	origin_tech = list(TECH_COMBAT = 2, TECH_MATERIAL = 2)
+	origin_tech = Tc_COMBAT + "=3"
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = MAGAZINE
 

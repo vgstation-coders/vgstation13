@@ -35,3 +35,4 @@ delete-after: True
 changes: 
 - rscadd: Ported Polaris .45 Security pistols.
 - rscadd: Added .45 pistol and ammo crates to cargo.
+- tweak: Slightly changed ammo interchangability backend. Only guns that share magazines are affected.

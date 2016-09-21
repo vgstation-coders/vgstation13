@@ -811,16 +811,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = ".45 Pistol Lethal Ammo"
 	access = access_armory
 	group = "Security"
-/*
+
 /datum/supply_packs/fourtyfive/practice
 	name = "..45 Security Pistol Practice Ammo crate"
 	contains = list(/obj/item/ammo_storage/box/c45/practice,
-					/obj/item/ammo_storage/box/c45/practice,
-					/obj/item/ammo_storage/magazine/c45/practice,
-					/obj/item/ammo_storage/magazine/c45/practice,
-					/obj/item/ammo_storage/magazine/c45/practice,
-					/obj/item/ammo_storage/magazine/c45/practice,
-					/obj/item/ammo_storage/magazine/c45/practice,
+					/obj/item/ammo_storage/magazine/c45/practice/empty,
+					/obj/item/ammo_storage/magazine/c45/practice/empty,
 					/obj/item/ammo_storage/magazine/c45/practice)
 	cost = 10
 	containertype = /obj/structure/closet/crate/secure/gear
@@ -831,19 +827,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/fourtyfive/rubber
 	name = ".45 Security Pistol Rubber Ammo crate"
 	contains = list(/obj/item/ammo_storage/box/c45/rubber,
-					/obj/item/ammo_storage/box/c45/rubber,
-					/obj/item/ammo_storage/magazine/c45/rubber,
-					/obj/item/ammo_storage/magazine/c45/rubber,
-					/obj/item/ammo_storage/magazine/c45/rubber,
-					/obj/item/ammo_storage/magazine/c45/rubber,
-					/obj/item/ammo_storage/magazine/c45/rubber,
+					/obj/item/ammo_storage/magazine/c45/rubber/empty,
+					/obj/item/ammo_storage/magazine/c45/rubber/empty,
 					/obj/item/ammo_storage/magazine/c45/rubber)
-	cost = 20
+	cost = 30
 	containertype = /obj/structure/closet/crate/secure/gear
 	containername = ".45 pistol Rubber Ammo"
 	access = access_security
 	group = "Security"
-*/ //Gotta port the Polaris caliber system first else there's no point.
+
 //////HOSPITALITY//////
 
 /datum/supply_packs/food

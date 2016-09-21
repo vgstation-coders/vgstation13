@@ -55,27 +55,24 @@
 /obj/item/ammo_storage/box/c45
 	name = "pistol ammo box (.45)"
 	desc = "A box of .45 bullets. Holds 24 rounds."
-	icon_state = "9mm"
+	icon_state = "9mmred"
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/c45"
-	max_ammo = 24
-/*
-/obj/item/ammo_storage/box/c45/practice
-	name = "Pistol ammo box (.45 practice)"
-	desc = "A box of .45 practice bullets. Holds 24 rounds."
-	icon_state = "9mm"
-	origin_tech = Tc_COMBAT + "=2"
-	ammo_type = "/obj/item/ammo_casing/c45"
+	caliber = ".45"
 	max_ammo = 24
 
+/obj/item/ammo_storage/box/c45/practice
+	name = "pistol ammo box (.45 practice)"
+	desc = "A box of .45 practice bullets. Holds 24 rounds."
+	icon_state = "9mmwhite"
+	ammo_type = "/obj/item/ammo_casing/c45/practice"
+
 /obj/item/ammo_storage/box/c45/rubber
-	name = "Pistol ammo box (.45 rubber)"
+	name = "pistol ammo box (.45 rubber)"
 	desc = "A box of .45 rubber bullets. Holds 24 rounds."
-	icon_state = "9mm"
-	origin_tech = Tc_COMBAT + "=2"
-	ammo_type = "/obj/item/ammo_casing/c45"
-	max_ammo = 24
-*/ //Gotta port the Polaris caliber system first else there's no point.
+	icon_state = "9mmblue"
+	ammo_type = "/obj/item/ammo_casing/c45/rubber"
+
 /obj/item/ammo_storage/box/BMG50
 	name = "ammo box (.50 BMG)"
 	icon_state = "50BMG"
