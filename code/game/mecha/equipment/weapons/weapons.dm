@@ -13,9 +13,20 @@
 			return 1
 	return 0
 
+/obj/item/mecha_parts/mecha_equipment/weapon/become_damaged()
+	if(!damaged)
+		damaged = 1
+		desc += " It doesn't look to be in the best shape."
+	return ..()
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy
 	name = "General Energy Weapon"
+
+/obj/item/mecha_parts/mecha_equipment/weapon/energy/become_damaged()
+	if(!damaged)
+		equip_cooldown = rand(equip_cooldown*1.5, equip_cooldown*2.5)
+		energy_drain = rand(energy_drain*3, energy_drain*5)
+	return ..()
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/action(atom/target)
 	if(!action_checks(target))
@@ -169,6 +180,15 @@
 	..()
 	projectiles = max_projectiles
 	return
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/become_damaged()
+	if(!damaged)
+		equip_cooldown = rand(equip_cooldown*2, equip_cooldown*3)
+		projectile_energy_cost = rand(projectile_energy_cost*1.5, projectile_energy_cost*3)
+		max_projectiles = rand(max_projectiles/4, max_projectiles*0.75)
+		if(max_projectiles < projectiles)
+			projectiles = max_projectiles
+	return ..()
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/action_checks(atom/target)
 	if(..())

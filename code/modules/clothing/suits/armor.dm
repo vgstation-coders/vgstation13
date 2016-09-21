@@ -121,6 +121,16 @@
 	siemens_coefficient = 0
 	var/basereflectchance = 60
 
+/obj/item/clothing/suit/armor/laserproof/become_damaged()
+	if(!damaged)
+		if(prob(75))
+			basereflectchance -= rand(basereflectchance/3, basereflectchance)
+		if(prob(50))
+			slowdown++
+		if(prob(50))
+			slowdown++
+	return ..()
+
 /obj/item/clothing/suit/armor/swat/officer
 	name = "officer jacket"
 	desc = "An armored jacket used in special operations."

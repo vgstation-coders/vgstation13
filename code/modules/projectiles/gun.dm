@@ -341,3 +341,9 @@
 			return ..() //Allows a player to choose to melee instead of shoot, by being on help intent.
 	else
 		return ..() //Pistolwhippin'
+
+/obj/item/weapon/gun/become_damaged()
+	if(!damaged)
+		damaged = 1
+		desc += " It doesn't look to be in the best shape."
+	return ..()

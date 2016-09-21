@@ -18,69 +18,6 @@
 	var/tracked_access = "It doesn't look like it's ever been used."
 	health = 50
 
-/obj/item/weapon/storage/lockbox/proc/damage(var/obj/item/I)
-	if(istype(I, /obj/item/weapon/gun))
-		var/obj/item/weapon/gun/gun = I
-		if(!gun.damaged)
-			gun.damaged = 1
-			gun.desc += " It doesn't look to be in the best shape."
-	if(istype(I, /obj/item/clothing/suit/armor/laserproof))
-		var/obj/item/clothing/suit/armor/laserproof/laserproof = I
-		if(!laserproof.damaged)
-			if(prob(75))
-				laserproof.basereflectchance -= rand(laserproof.basereflectchance/3, laserproof.basereflectchance)
-			if(prob(50))
-				laserproof.slowdown++
-			if(prob(50))
-				laserproof.slowdown++
-	if(istype(I, /obj/item/clothing/glasses/sunglasses/sechud))
-		var/obj/item/clothing/glasses/sunglasses/sechud/sechud = I
-		if(!sechud.damaged)
-			if(prob(15))
-				new /obj/item/weapon/shard(loc)
-				playsound(get_turf(src), "shatter", 50, 1)
-				qdel(sechud)
-				return
-			if(prob(15))
-				var/obj/item/clothing/glasses/sunglasses/S = new/obj/item/clothing/glasses/sunglasses(loc)
-				if(prob(50))
-					S.eyeprot = 0
-				S.damaged = 1
-				S.desc += " It doesn't look to be in the best shape."
-				playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
-				qdel(sechud)
-				return
-			if(prob(55))
-				sechud.eyeprot = 0
-			if(prob(55))
-				qdel(sechud.hud)
-				sechud.hud = null
-	if(istype(I, /obj/item/clothing))
-		var/obj/item/clothing/clothing = I
-		if(!clothing.damaged)
-			clothing.damaged = 1
-			clothing.desc += " It doesn't look to be in the best shape."
-			for(var/A in clothing.armor)
-				clothing.armor[A] -= rand(clothing.armor[A]/3, clothing.armor[A])
-	if(istype(I, /obj/item/mecha_parts/mecha_equipment/weapon/energy))
-		var/obj/item/mecha_parts/mecha_equipment/weapon/energy/energy = I
-		if(!energy.damaged)
-			energy.equip_cooldown = rand(energy.equip_cooldown*1.5, energy.equip_cooldown*2.5)
-			energy.energy_drain = rand(energy.energy_drain*3, energy.energy_drain*5)
-	if(istype(I, /obj/item/mecha_parts/mecha_equipment/weapon/ballistic))
-		var/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/ballistic = I
-		if(!ballistic.damaged)
-			ballistic.equip_cooldown = rand(ballistic.equip_cooldown*2, ballistic.equip_cooldown*3)
-			ballistic.projectile_energy_cost = rand(ballistic.projectile_energy_cost*1.5, ballistic.projectile_energy_cost*3)
-			ballistic.max_projectiles = rand(ballistic.max_projectiles/4, ballistic.max_projectiles*0.75)
-			if(ballistic.max_projectiles < ballistic.projectiles)
-				ballistic.projectiles = ballistic.max_projectiles
-	if(istype(I, /obj/item/mecha_parts/mecha_equipment/weapon))
-		var/obj/item/mecha_parts/mecha_equipment/weapon/weapon = I
-		if(!weapon.damaged)
-			weapon.damaged = 1
-			weapon.desc += " It doesn't look to be in the best shape."
-
 /obj/item/weapon/storage/lockbox/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/ID = W
@@ -132,7 +69,7 @@
 	..()
 	if(health <= 0)
 		for(var/atom/movable/A as mob|obj in src)
-			damage(A)
+			A.become_damaged()
 			remove_from_storage(A, loc)
 		qdel(src)
 	return
@@ -142,13 +79,13 @@
 		if(3)
 			if(prob(25))
 				for(var/atom/movable/A as mob|obj in src)
-					damage(A)
+					A.become_damaged()
 					remove_from_storage(A, loc)
 				qdel(src)
 		if(2)
 			if(prob(80))
 				for(var/atom/movable/A as mob|obj in src)
-					damage(A)
+					A.become_damaged()
 					remove_from_storage(A, loc)
 					A.ex_act(1)
 				qdel(src)
@@ -165,7 +102,7 @@
 					src.update_icon()
 					if(!locked)
 						for(var/atom/movable/A as mob|obj in src)
-							damage(A)
+							A.become_damaged()
 							remove_from_storage(A, loc)
 			if(2)
 				if(prob(50))
@@ -173,7 +110,7 @@
 					src.update_icon()
 					if(!locked)
 						for(var/atom/movable/A as mob|obj in src)
-							damage(A)
+							A.become_damaged()
 							remove_from_storage(A, loc)
 			if(3)
 				if(prob(25))
@@ -181,7 +118,7 @@
 					src.update_icon()
 					if(!locked)
 						for(var/atom/movable/A as mob|obj in src)
-							damage(A)
+							A.become_damaged()
 							remove_from_storage(A, loc)
 
 /obj/item/weapon/storage/lockbox/update_icon()
