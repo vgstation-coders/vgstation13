@@ -87,7 +87,7 @@
 	starting_ammo = 0
 
 /obj/item/ammo_storage/magazine/c45
-	name = "Pistol magazine (.45)"
+	name = "pistol magazine (.45)"
 	desc = "A magazine designed for common .45 pistols. Holds 8 rounds."
 	icon_state = "45"
 	origin_tech = Tc_COMBAT + "=2"

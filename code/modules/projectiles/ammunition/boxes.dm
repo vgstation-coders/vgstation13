@@ -53,7 +53,7 @@
 	ammo_type = "/obj/item/ammo_casing/a12mm/assault"
 
 /obj/item/ammo_storage/box/c45
-	name = "Pistol ammo box (.45)"
+	name = "pistol ammo box (.45)"
 	desc = "A box of .45 bullets. Holds 24 rounds."
 	icon_state = "9mm"
 	origin_tech = Tc_COMBAT + "=2"

@@ -111,7 +111,7 @@
 			user.say(pick("BANG!", "BOOM!", "PEW!", "KAPOW!"))
 
 /obj/item/weapon/gun/projectile/sec
-	name = "NT Mk58 .45 pistol"
+	name = "\improper NT Mk58 .45 pistol"
 	desc = "The NT Mk58 is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .45 rounds."
 	icon_state = "secguncomp"
 	mag_type = "/obj/item/ammo_storage/magazine/c45"
@@ -122,19 +122,13 @@
 
 /obj/item/weapon/gun/projectile/sec/update_icon()
 	..()
-	if(stored_magazine)
-		icon_state = "secguncomp"
-	else
-		icon_state = "secguncomp-e"
+	icon_state = "secguncomp[stored_magazine ? "" : "-e"]"
 
 /obj/item/weapon/gun/projectile/sec/wood
 	desc = "The NT Mk58 is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. This one has a sweet wooden grip. Uses .45 rounds."
-	name = "NT Mk58 Custom"
+	name = "\improper NT Mk58 .45 Custom"
 	icon_state = "secgundark"
 
 /obj/item/weapon/gun/projectile/sec/wood/update_icon()
 	..()
-	if(stored_magazine)
-		icon_state = "secgundark"
-	else
-		icon_state = "secgundark-e"
+	icon_state = "secgundark[stored_magazine ? "" : "-e"]"
