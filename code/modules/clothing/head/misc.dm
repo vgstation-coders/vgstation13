@@ -81,7 +81,7 @@
 	item_state="cueball"
 
 /obj/item/clothing/head/athat
-	name = "Armored top-hat"
+	name = "armored top-hat"
 	desc = "It's an amish looking top hat. This one looks sturdier."
 	icon_state = "tophat"
 	item_state = "athat"
