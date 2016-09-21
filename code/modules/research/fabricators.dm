@@ -82,7 +82,7 @@
 
 /obj/machinery/r_n_d/fabricator/emag()
 	sleep()
-	if(!research_flags & ACCESS_EMAG)
+	if(!(research_flags & ACCESS_EMAG))
 		return
 	switch(emagged)
 		if(0)
