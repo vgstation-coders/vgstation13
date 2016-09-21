@@ -216,7 +216,7 @@ var/global/datum/controller/gameticker/ticker
 
 	if(0 == admins.len)
 		send2adminirc("Round has started with no admins online.")
-		send2admindiscord("**Round has started with no admins online.** {ADMIN_PING}")
+		send2admindiscord("**Round has started with no admins online.**", TRUE)
 
 	/*
 	supply_shuttle.process() 		//Start the supply shuttle regenerating points -- TLE

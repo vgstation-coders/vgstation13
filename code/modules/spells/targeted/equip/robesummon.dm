@@ -6,6 +6,7 @@
 /spell/targeted/equip_item/robesummon
 	name = "Summon Robes"
 	desc = "A spell which will summon you a new set of robes."
+	abbreviation = "RS"
 
 	school = "evocation"
 	charge_max = 300
@@ -66,6 +67,12 @@
 	desc = "A spell which will summon you a wizard hardsuit."
 	delete_old = 1
 	return "You have improved Summon Robes into [name]. It will now summon a gem-encrusted hardsuit with internals."
+
+
+/spell/targeted/equip_item/robesummon/get_upgrade_info(upgrade_type, level)
+	if(upgrade_type == Sp_POWER)
+		return "Make the spell summon a gem-encrusted hardsuit and internals."
+	return ..()
 
 #undef ROBES_BLUE
 #undef ROBES_RED

@@ -17,6 +17,25 @@
 	var/list/added_languages
 	var/list/upgrades = list()
 
+/obj/item/weapon/robot_module/Destroy()
+	if(istype(loc, /mob/living/silicon/robot))
+		var/mob/living/silicon/robot/R = loc
+		R.remove_module() //Helps remove screen references on robot end
+
+	for(var/obj/A in modules)
+		qdel(A)
+	modules = null
+	if(emag)
+		qdel(emag)
+		emag = null
+	if(jetpack)
+		qdel(jetpack)
+		jetpack = null
+	for(var/obj/A in upgrades)
+		qdel(upgrades)
+	upgrades = null
+	..()
+
 /obj/item/weapon/robot_module/proc/recharge_consumable()
 	return
 
@@ -75,7 +94,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 
 /obj/item/weapon/robot_module/standard/New()
 	..()
-	src.modules += new /obj/item/weapon/melee/baton/loaded(src)
+	src.modules += new /obj/item/weapon/melee/baton/loaded/borg(src)
 	src.modules += new /obj/item/weapon/extinguisher(src)
 	src.modules += new /obj/item/weapon/wrench(src)
 	src.modules += new /obj/item/weapon/crowbar(src)
@@ -100,10 +119,6 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	fix_modules()
 
 /obj/item/weapon/robot_module/standard/respawn_consumable(var/mob/living/silicon/robot/R)
-	// Recharge baton battery
-	for(var/obj/item/weapon/melee/baton/B in src.modules)
-		if(B && B.bcell)
-			B.bcell.give(175)
 	// Replenish ointment and bandages
 	var/list/what = list (
 		/obj/item/stack/medical/bruise_pack,
@@ -262,7 +277,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 
 /obj/item/weapon/robot_module/security/New()
 	..()
-	src.modules += new /obj/item/weapon/melee/baton/loaded(src)
+	src.modules += new /obj/item/weapon/melee/baton/loaded/borg(src)
 	src.modules += new /obj/item/weapon/gun/energy/taser/cyborg(src)
 	src.modules += new /obj/item/weapon/handcuffs/cyborg(src)
 	src.modules += new /obj/item/weapon/reagent_containers/spray/pepper(src)
@@ -271,14 +286,6 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	src.emag = new /obj/item/weapon/gun/energy/laser/cyborg(src)
 	sensor_augs = list("Security", "Medical", "Disable")
 	fix_modules()
-
-/obj/item/weapon/robot_module/security/respawn_consumable(var/mob/living/silicon/robot/R)
-	// Recharge baton battery
-	for(var/obj/item/M in src.modules)
-		if(istype(M,/obj/item/weapon/melee/baton))
-			var/obj/item/weapon/melee/baton/B=M
-			if(B && B.bcell)
-				B.bcell.give(175)
 
 /obj/item/weapon/robot_module/janitor
 	name = "janitorial robot module"

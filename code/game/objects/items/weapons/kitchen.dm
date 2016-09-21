@@ -66,6 +66,10 @@
 	reagents = new(10)
 	reagents.my_atom = src
 
+/obj/item/weapon/kitchen/utensil/fork/attack_self(var/mob/living/carbon/user)
+	if(loaded_food)
+		attack(user,user)
+
 /obj/item/weapon/kitchen/utensil/fork/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M) || !istype(user))
 		return ..()

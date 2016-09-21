@@ -167,15 +167,20 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 
 
 /obj/machinery/atmospherics/unary/cryo_cell/relaymove(mob/user as mob)
+	// Just gonna assume this guy's vent crawling don't mind me.
+	if (user != occupant)
+		return ..()
+
 	if(user.stat)
 		return
+
 	go_out()
-	return
+
 
 /obj/machinery/atmospherics/unary/cryo_cell/examine(mob/user)
 	..()
 	if(Adjacent(user))
-		if(contents)
+		if(contents.len)
 			to_chat(user, "You can just about make out some properties of the cryo's murky depths:")
 			for(var/atom/movable/floater in (contents - beaker))
 				to_chat(user, "A figure floats in the depths, they appear to be [floater.name]")
@@ -547,6 +552,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	put_mob(usr)
 	return
 
+/obj/machinery/atmospherics/unary/cryo_cell/return_air()
+	return air_contents
 
 
 /datum/data/function/proc/reset()

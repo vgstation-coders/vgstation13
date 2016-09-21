@@ -199,14 +199,16 @@
 		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
 		if(!src.canremove)
 			return
-		else
-			user.u_equip(src,0)
+
+		user.u_equip(src,0)
 	else
 		if(isliving(src.loc))
 			return
 		//user.next_move = max(user.next_move+2,world.time + 2)
 	add_fingerprint(user)
-	user.put_in_active_hand(src)
+	if(!user.put_in_active_hand(src))
+		forceMove(get_turf(user))
+
 	return
 
 /obj/item/requires_dexterity(mob/user)

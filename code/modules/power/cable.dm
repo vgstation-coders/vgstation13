@@ -27,7 +27,7 @@ By design, d1 is the smallest direction and d2 is the highest
 
 
 /obj/structure/cable
-	level = 1								// is underfloor
+	level = LEVEL_BELOW_FLOOR
 	anchored =1
 	var/datum/powernet/powernet
 	name = "power cable"
@@ -36,7 +36,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	icon_state = "0-1"
 	var/d1 = 0								// cable direction 1 (see above)
 	var/d2 = 1								// cable direction 2 (see above)
-	plane = ABOVE_TURF_PLANE
+	plane = ABOVE_PLATING_PLANE
 	layer = WIRE_LAYER
 	var/obj/item/device/powersink/attached	// holding this here for qdel
 	var/_color = "red"
@@ -95,7 +95,7 @@ By design, d1 is the smallest direction and d2 is the highest
 	if(!istype(T))
 		if(!Catwalk)
 			return //It's just space, abort
-	if(level == 1)
+	if(level == LEVEL_BELOW_FLOOR)
 		hide(T.intact)
 
 	cable_list += src		//add it to the global cable list
@@ -142,8 +142,7 @@ By design, d1 is the smallest direction and d2 is the highest
 
 // if underfloor, hide the cable
 /obj/structure/cable/hide(i)
-
-	if(level == 1 && isturf(loc))
+	if(level == LEVEL_BELOW_FLOOR && isturf(loc))
 		invisibility = i ? 101 : 0
 
 	update_icon()
@@ -153,6 +152,20 @@ By design, d1 is the smallest direction and d2 is the highest
 		icon_state = "[d1]-[d2]-f"
 	else
 		icon_state = "[d1]-[d2]"
+
+/obj/structure/cable/t_scanner_expose()
+	if (level != LEVEL_BELOW_FLOOR)
+		return
+
+	invisibility = 0
+	plane = ABOVE_TURF_PLANE
+
+	spawn(1 SECONDS)
+		var/turf/U = loc
+		if(istype(U) && U.intact)
+			invisibility = 101
+			plane = initial(plane)
+
 
 //Provides sanity for cases in which there may not be a powernet
 //Not necessary for checking powernet during process() of power_machines as it is guaranteed to have a powernet at that time

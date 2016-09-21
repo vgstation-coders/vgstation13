@@ -815,6 +815,7 @@ var/list/admin_verbs_mod = list(
 	set name = "Check AI Laws"
 	set category = "Admin"
 	if(holder)
+		log_admin("[key_name(usr)] checked silicon laws.")
 		src.holder.output_ai_laws()
 
 

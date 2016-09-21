@@ -217,7 +217,7 @@
 		return 0
 	if(!prob(prb)) //If the probability roll failed, don't go further
 		return 0
-	if(!in_range(src, user)) //To prevent TK and mech users from getting shocked
+	if(!Adjacent(user)) //To prevent TK and mech users from getting shocked
 		return 0
 	//Process the shocking via powernet, our job is done here
 	var/turf/T = get_turf(src)

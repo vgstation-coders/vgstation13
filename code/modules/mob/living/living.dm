@@ -365,9 +365,10 @@
 				L += get_contents(G.gift)
 
 		for(var/obj/item/delivery/D in Storage.return_inv()) //Check for package wrapped items
-			L += D.wrapped
-			if(istype(D.wrapped, /obj/item/weapon/storage)) //this should never happen
-				L += get_contents(D.wrapped)
+			for(var/atom/movable/wrapped in D) //Basically always only one thing, but could theoretically be more
+				L += wrapped
+				if(istype(wrapped, /obj/item/weapon/storage)) //this should never happen
+					L += get_contents(wrapped)
 		return L
 
 	else
@@ -385,9 +386,10 @@
 				L += get_contents(G.gift)
 
 		for(var/obj/item/delivery/D in src.contents) //Check for package wrapped items
-			L += D.wrapped
-			if(istype(D.wrapped, /obj/item/weapon/storage)) //this should never happen
-				L += get_contents(D.wrapped)
+			for(var/atom/movable/wrapped in D) //Basically always only one thing, but could theoretically be more
+				L += wrapped
+				if(istype(wrapped, /obj/item/weapon/storage)) //this should never happen
+					L += get_contents(wrapped)
 		return L
 
 /mob/living/proc/can_inject()
@@ -664,11 +666,11 @@ Thanks.
 							if (locate(/obj/item/weapon/grab, M.grabbed_by.len))
 								ok = 0
 						if (ok)
-							var/atom/movable/t = M.pulling
+							var/atom/movable/secondarypull = M.pulling
 							M.stop_pulling()
 							pulling.Move(T, get_dir(pulling, T))
-							if(M)
-								M.start_pulling(t)
+							if(M && secondarypull)
+								M.start_pulling(secondarypull)
 					else
 						if (pulling)
 							pulling.Move(T, get_dir(pulling, T))

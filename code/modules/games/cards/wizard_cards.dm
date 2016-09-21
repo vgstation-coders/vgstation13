@@ -252,6 +252,7 @@ var/global/list/wizard_cards_normal = list(
 	icon_state = "cardpack"
 	name = "Wizard Card Pack"
 	storage_slots = 50
+	fits_max_w_class = 3
 	max_combined_w_class = 200
 	w_class = W_CLASS_TINY
 	can_only_hold = list("/obj/item/toy/wizard_card","/obj/item/weapon/reagent_containers/food/snacks/chocofrog")

@@ -1,4 +1,5 @@
 #define FED_PING_DELAY 40
+#define INCUBATOR_MAX_SIZE 100
 
 /obj/machinery/disease2/incubator
 	name = "Pathogenic incubator"
@@ -179,8 +180,8 @@
 			icon_state = "incubator"
 		if(foodsupply)
 			foodsupply -= 1
-			dish.growth += growthrate
-			if(dish.growth >= 100)
+			dish.growth = min(growthrate + dish.growth, INCUBATOR_MAX_SIZE)
+			if(dish.growth >= INCUBATOR_MAX_SIZE)
 				if(icon_state != "incubator_fed")
 					icon_state = "incubator_fed"
 				if(last_notice + FED_PING_DELAY < world.time)
@@ -214,3 +215,5 @@
 			toxins += 1
 
 	src.updateUsrDialog()
+
+#undef INCUBATOR_MAX_SIZE

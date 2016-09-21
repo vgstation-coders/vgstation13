@@ -8,7 +8,8 @@
 	w_type=NOT_RECYCLABLE
 	var/fire_damage = 0
 	var/blast_age = 1
-
+	var/duration = 10 //1/10ths of a second
+	var/spread = 1
 
 /obj/effect/fire_blast/New(turf/T, var/damage = 0, var/current_step = 0, var/age = 1, var/pressure = 0, var/blast_temperature = 0)
 	..(T)
@@ -50,7 +51,7 @@
 			adjusted_fire_damage = fire_damage * 0.25
 
 	spawn()
-		if(current_step >= spread_start && blast_age < 4)
+		if(spread && current_step >= spread_start && blast_age < 4)
 			var/turf/TS = get_turf(src)
 			for(var/turf/TU in range(1, TS))
 				if(TU != get_turf(src))
@@ -68,16 +69,23 @@
 				sleep(1)
 
 	spawn()
-		for(var/i = 1; i <= 5; i++)
+		for(var/i = 1; i <= (duration * 0.5); i++)
 			for(var/mob/living/L in get_turf(src))
-				if(!istype(L, /mob/living/silicon)) //Silicons are immune to fire
-					if(!istype(L, /mob/living/carbon/human))
-						L.adjustFireLoss(adjusted_fire_damage * 2) //Deals double damage to non-human mobs
-					else
-						L.adjustFireLoss(adjusted_fire_damage)
-					if(!L.on_fire)
-						L.adjust_fire_stacks(0.5)
-						L.IgniteMob()
+				if(issilicon(L))
+					continue
+
+				if(!L.on_fire)
+					L.adjust_fire_stacks(0.5)
+					L.IgniteMob()
+
+				if(L.mutations.Find(M_RESIST_HEAT)) //Heat resistance protects you from damage, but you still get set on fire
+					continue
+
+				if(!istype(L, /mob/living/carbon/human))
+					L.adjustFireLoss(adjusted_fire_damage * 2) //Deals double damage to non-human mobs
+				else
+					L.adjustFireLoss(adjusted_fire_damage)
+
 			for(var/obj/O in T)
 				if(istype(O, /obj/structure/reagent_dispensers/fueltank))
 					var/obj/structure/reagent_dispensers/fueltank/F = O

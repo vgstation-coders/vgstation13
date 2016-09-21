@@ -107,10 +107,14 @@
 		to_chat(user, "<span class='notice'>\The [src] is empty.</span>")
 		return
 
+	var/i = 0
 	for(var/obj/item/ammo_casing/shotgun/loaded_shell in src) //This feels like a hack. don't code at 3:30am kids!!
 		loaded_shell.forceMove(get_turf(src))
+		loaded_shell.pixel_x = min(-3 + (i*4),15) * PIXEL_MULTIPLIER
+		loaded_shell.pixel_y = min( 3 - (i*4),15) * PIXEL_MULTIPLIER
 		if(loaded_shell in loaded)
 			loaded -= loaded_shell
+		i++
 
 	to_chat(user, "<span class='notice'>You break \the [src].</span>")
 	update_icon()

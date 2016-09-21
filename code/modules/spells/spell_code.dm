@@ -2,6 +2,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell
 	var/name = "Spell"
+	var/abbreviation = "" //Used for feedback gathering
+
 	var/desc = "A spell"
 	parent_type = /datum
 	var/panel = "Spells"//What panel the proc holder needs to go on.
@@ -15,6 +17,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/still_recharging_msg = "<span class='notice'>The spell is still recharging.</span>"
 
 	var/silenced = 0 //not a binary (though it seems that it is at the moment) - the length of time we can't cast this for, set by the spell_master silence_spells()
+
+	var/price = Sp_BASE_PRICE //How much does it cost to buy this spell from a spellbook
+	var/refund_price = 0 //If 0, non-refundable
 
 	var/holder_var_type = "bruteloss" //only used if charge_type equals to "holder_var"
 	var/holder_var_amount = 20 //Amount to adjust var when spell is used, THIS VALUE IS SUBTRACTED
@@ -463,3 +468,23 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(!user || (!(spell_flags & (STATALLOWED|GHOSTCAST)) && user.stat != originalstat)  || !(user.loc == Location))
 			return 0
 	return 1
+
+//UPGRADES
+/spell/proc/apply_upgrade(upgrade_type)
+	switch(upgrade_type)
+		if(Sp_SPEED)
+			return quicken_spell()
+		if(Sp_POWER)
+			return empower_spell()
+
+/spell/proc/get_upgrade_price(upgrade_type)
+	return src.price
+
+///INFO
+
+/spell/proc/get_upgrade_info(upgrade_type)
+	switch(upgrade_type)
+		if(Sp_SPEED)
+			return "Reduce this spell's cooldown."
+		if(Sp_POWER)
+			return "Increase this spell's power."

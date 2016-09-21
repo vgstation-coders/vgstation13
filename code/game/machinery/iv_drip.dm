@@ -140,13 +140,9 @@
 				if(prob(5))
 					visible_message("\The [src] beeps loudly.")
 
-			var/datum/reagent/B = T.take_blood(beaker,amount)
+			var/datum/reagent/blood/B = T.take_blood(beaker,amount)
 
-			if (B)
-				beaker.reagents.reagent_list |= B
-				beaker.reagents.update_total()
-				beaker.on_reagent_change()
-				beaker.reagents.handle_reactions()
+			if(B)
 				update_icon()
 
 /obj/machinery/iv_drip/attack_hand(mob/user as mob)

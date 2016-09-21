@@ -23,6 +23,8 @@ var/global/disable_vents     = 0
 #define CHECK_DISABLED(TYPE) /* DO NOTHINK */
 #endif
 
+#define PIPING_LAYER(base, piping_layer) base + ((piping_layer - PIPING_LAYER_DEFAULT) * PIPING_LAYER_LCHANGE)
+
 #define PIPING_LAYER_DEFAULT	3 //starting value - this is the "central" pipe
 #define PIPING_LAYER_INCREMENT	1 //how much the smallest step in piping_layer is
 
@@ -1245,17 +1247,23 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define SpI_NONE	"none"
 
 //upgrading
-#define Sp_SPEED	"speed"
+#define Sp_SPEED	"cooldown"
 #define Sp_POWER	"power"
+#define Sp_MOVE		"mobility"
 #define Sp_TOTAL	"total"
 
 //casting costs
 #define Sp_RECHARGE	1
 #define Sp_CHARGES	2
 #define Sp_HOLDVAR	4
+
 //spell range
 #define SELFCAST -1
 #define GLOBALCAST -2
+
+//buying costs
+#define Sp_BASE_PRICE 5
+
 ///////WIZ END/////////
 
 //Some alien checks for reagents for alien races.
@@ -1515,3 +1523,20 @@ var/proccalls = 1
 #define HOLOMAP_FILTER_NUKEOPS			3
 #define HOLOMAP_FILTER_ELITESYNDICATE	4
 #define HOLOMAP_FILTER_VOX				5
+
+#define HOLOMAP_AREACOLOR_COMMAND		"#447FC299"
+#define HOLOMAP_AREACOLOR_SECURITY		"#AE121299"
+#define HOLOMAP_AREACOLOR_MEDICAL		"#35803099"
+#define HOLOMAP_AREACOLOR_SCIENCE		"#A154A699"
+#define HOLOMAP_AREACOLOR_ENGINEERING	"#F1C23199"
+#define HOLOMAP_AREACOLOR_CARGO			"#E06F0099"
+#define HOLOMAP_AREACOLOR_HALLWAYS		"#FFFFFF66"
+#define HOLOMAP_AREACOLOR_ARRIVALS		"#0000FFCC"
+#define HOLOMAP_AREACOLOR_ESCAPE		"#FF0000CC"
+
+#define HOLOMAP_EXTRA_STATIONMAP				"stationmapformatted"
+#define HOLOMAP_EXTRA_STATIONMAPAREAS			"stationareas"
+#define HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH		"stationmapsmallnorth"
+#define HOLOMAP_EXTRA_STATIONMAPSMALL_SOUTH		"stationmapsmallsouth"
+#define HOLOMAP_EXTRA_STATIONMAPSMALL_EAST		"stationmapsmalleast"
+#define HOLOMAP_EXTRA_STATIONMAPSMALL_WEST		"stationmapsmallwest"

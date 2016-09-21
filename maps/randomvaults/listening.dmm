@@ -64,7 +64,7 @@
 "bl" = (/obj/structure/window/reinforced,/turf/space,/area)
 "bm" = (/obj/item/device/radio/intercom{dir = 4; pixel_x = 30},/turf/simulated/floor,/area/vault/listening)
 "bn" = (/obj/structure/table,/turf/simulated/floor,/area/vault/listening)
-"bo" = (/obj/structure/disposalpipe/trunk{dir = 4},/obj/structure/catwalk,/obj/structure/disposaloutlet{dir = 8},/turf/space,/area)
+"bo" = (/obj/structure/disposalpipe/trunk{dir = 4},/obj/structure/catwalk,/obj/structure/disposaloutlet{dir = 8},/turf/space,/area/vault/listening)
 "bp" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/floor/plating,/area/vault/listening)
 "bq" = (/obj/structure/table,/obj/item/weapon/kitchen/utensil/fork/plastic,/obj/item/weapon/kitchen/utensil/knife/plastic{pixel_x = 9},/obj/item/weapon/kitchen/utensil/spoon/plastic,/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/floor{icon_state = "bar"},/area/vault/listening)
 "br" = (/obj/item/weapon/stool,/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/floor{icon_state = "bar"},/area/vault/listening)

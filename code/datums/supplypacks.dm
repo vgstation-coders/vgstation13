@@ -574,11 +574,33 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/grenade/smokebomb,
 					/obj/item/weapon/grenade/smokebomb,
 					/obj/item/weapon/grenade/smokebomb,
-					/obj/item/weapon/pen/paralysis,
-					/obj/item/weapon/grenade/chem_grenade/incendiary)
+					/obj/item/weapon/gun/projectile/silenced,
+					/obj/item/ammo_storage/magazine/c45)
 	cost = 20
 	containertype = /obj/structure/closet/crate
 	containername = "Special Ops crate"
+	group = "Security"
+	hidden = 1
+
+/datum/supply_packs/randomised/russianguns
+	name = "Russian weapons"
+	num_contained = 3 //number of items picked to be contained in a randomised
+	contains = list(/obj/item/weapon/gun/projectile/nagant,
+					/obj/item/ammo_storage/speedloader/a762x55,
+					/obj/item/ammo_storage/speedloader/a762x55,
+					/obj/item/ammo_storage/speedloader/a762x55,
+					/obj/item/ammo_storage/speedloader/a762x55/empty,
+					/obj/item/ammo_storage/speedloader/a762x55/empty,
+					/obj/item/ammo_storage/speedloader/a762x55/empty,
+					/obj/item/ammo_storage/box/b762x55,
+					/obj/item/ammo_storage/box/b762x55,
+					/obj/item/ammo_storage/box/b762x55,
+					/obj/item/weapon/gun/energy/laser/LaserAK,
+					/obj/item/weapon/gun/energy/laser/LaserAK)
+	name = "Rusian Weapons"
+	cost = 150
+	containertype = /obj/structure/closet/crate
+	containername = "Russian Weapons"
 	group = "Security"
 	hidden = 1
 
@@ -926,7 +948,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/instrument/recorder,
 					/obj/item/device/instrument/harmonica,
 					/obj/structure/piano/xylophone,
-					/obj/structure/piano)
+					/obj/structure/piano/random)
 	name = "Random instrument"
 	cost = 50
 	containertype = /obj/structure/closet/crate
@@ -943,6 +965,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/instrument/recorder,
 					/obj/item/device/instrument/harmonica,
 					/obj/structure/piano/xylophone,
+					/obj/structure/piano/minimoog,
 					/obj/structure/piano)
 	name = "Big band instrument collection"
 	cost = 500
