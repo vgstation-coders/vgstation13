@@ -813,7 +813,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Security"
 
 /datum/supply_packs/fourtyfive/practice
-	name = "..45 Security Pistol Practice Ammo crate"
+	name = ".45 Security Pistol Practice Ammo crate"
 	contains = list(/obj/item/ammo_storage/box/c45/practice,
 					/obj/item/ammo_storage/magazine/c45/practice/empty,
 					/obj/item/ammo_storage/magazine/c45/practice/empty,
