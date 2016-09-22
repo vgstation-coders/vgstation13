@@ -214,6 +214,16 @@
 			src.poll_player(pollid)
 		return
 
+	if(href_list["pollresult"])
+
+		if(!config.poll_results_url)
+			return
+		if(alert("This will open the results page in your browser. Are you sure?",,"Yes","No")=="No")
+			return
+		var/pollid = href_list["pollresult"]
+		var/link = "[config.poll_results_url]/[pollid]"
+		src << link(link)
+
 	if(href_list["votepollid"] && href_list["votetype"])
 		var/pollid = text2num(href_list["votepollid"])
 		var/votetype = href_list["votetype"]
