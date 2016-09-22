@@ -404,6 +404,83 @@
 /obj/effect/landmark/corpse/russian/ranged
 	corpsehelmet = /obj/item/clothing/head/ushanka
 
+//////////////////Admin Use//////////////////////////////
+
+/obj/effect/landmark/corpse/ertleader
+	name = "Emergency Response Organizer"
+	corpseuniform = /obj/item/clothing/under/rank/centcom/captain
+	corpsesuit = /obj/item/clothing/suit/armor/swat/officer
+	corpseglasses = /obj/item/clothing/glasses/sunglasses/sechud
+	corpsehelmet = /obj/item/clothing/head/beret/centcom/captain
+	corpseshoes = /obj/item/clothing/shoes/centcom
+	corpsebelt = /obj/item/weapon/storage/belt/security
+
+/obj/effect/landmark/corpse/centcom
+	name = "Central Commander Green"
+	corpseuniform = /obj/item/clothing/under/rank/centcom_commander
+	corpseglasses = /obj/item/clothing/glasses/sunglasses/sechud
+	corpsemask = /obj/item/clothing/mask/cigarette/cigar/cohiba
+	corpsehelmet = /obj/item/clothing/head/centhat
+	corpsegloves = /obj/item/clothing/gloves/combat
+	corpseshoes = /obj/item/clothing/shoes/combat
+	corpsepocket1 = /obj/item/weapon/storage/fancy/matchbox
+	corpsebelt = /obj/item/weapon/storage/belt/security
+
+/obj/effect/landmark/corpse/creed
+	name = "Major Creed"
+	corpseuniform = /obj/item/clothing/under/darkred
+	corpsesuit = /obj/item/clothing/suit/armor/hos/jensen
+	corpseglasses = /obj/item/clothing/glasses/thermal/eyepatch
+	corpsemask = /obj/item/clothing/mask/cigarette/cigar/cohiba
+	corpsehelmet = /obj/item/clothing/head/helmet/tactical/HoS/dermal
+	corpsegloves = /obj/item/clothing/gloves/combat
+	corpseshoes = /obj/item/clothing/shoes/combat
+	corpsepocket1 = /obj/item/weapon/storage/fancy/matchbox
+	corpsebelt = /obj/item/weapon/storage/belt/security
+
+/obj/effect/landmark/corpse/batman
+	name = "Batman"
+	corpseuniform = /obj/item/clothing/under/batmansuit
+	corpsesuit = /obj/item/clothing/suit/armor/bulletproof
+	corpseglasses = /obj/item/clothing/glasses/thermal/jensen
+	corpsemask = /obj/item/clothing/mask/gas/swat
+	corpsehelmet = /obj/item/clothing/head/batman
+	corpsegloves = /obj/item/clothing/gloves/batmangloves
+	corpseshoes = /obj/item/clothing/shoes/jackboots/batmanboots
+	corpsebelt = /obj/item/weapon/storage/belt/security/batmanbelt
+
+/obj/effect/landmark/corpse/doomguy
+	name = "Doomguy"
+	corpseuniform = /obj/item/clothing/under/doomguy
+	corpsesuit = /obj/item/clothing/suit/armor/doomguy
+	corpseglasses = /obj/item/clothing/glasses/thermal/jensen
+	corpsehelmet = /obj/item/clothing/head/helmet/doomguy
+	corpsegloves = /obj/item/clothing/gloves/doomguy
+	corpseshoes = /obj/item/clothing/shoes/combat
+	corpsebelt = /obj/item/weapon/storage/belt/security/doomguy
+
+/obj/effect/landmark/corpse/dredd
+	name = "Judge Dredd"
+	corpseuniform = /obj/item/clothing/under/darkred
+	corpsesuit = /obj/item/clothing/suit/armor/xcomsquaddie/dredd
+	corpseglasses = /obj/item/clothing/glasses/hud/security
+	corpsemask = /obj/item/clothing/mask/gas/swat
+	corpsehelmet = /obj/item/clothing/head/helmet/dredd
+	corpsegloves = /obj/item/clothing/gloves/combat
+	corpseshoes = /obj/item/clothing/shoes/combat
+	corpsebelt = /obj/item/weapon/storage/belt/security
+
+/obj/effect/landmark/corpse/jensen
+	name = "Agent Jensen"
+	corpseuniform = /obj/item/clothing/under/acj
+	corpsesuit = /obj/item/clothing/suit/armor/hos/jensen
+	corpseglasses = /obj/item/clothing/glasses/hud/security/jensenshades
+	corpsehelmet = /obj/item/clothing/head/helmet/tactical/HoS/dermal
+	corpsegloves = /obj/item/clothing/gloves/combat
+	corpseshoes = /obj/item/clothing/shoes/combat
+	corpsebelt = /obj/item/weapon/storage/belt/security
+
+
 //////////////////Misc Corpses///////////////////////////
 
 /obj/effect/landmark/corpse/civilian //Random corpse!
