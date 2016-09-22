@@ -5,7 +5,6 @@
 	icon_state = "ai-crash"
 	spawn(10)
 		explosion(loc, 3, 6, 12, 15)
+		gib()
 
-	for(var/obj/machinery/ai_status_display/O in machines) //change status
-		O.mode = 2
 	return ..(gibbed)
