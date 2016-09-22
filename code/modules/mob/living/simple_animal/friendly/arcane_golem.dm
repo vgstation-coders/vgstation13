@@ -1,6 +1,6 @@
 /mob/living/simple_animal/arcane_golem
 	name = "arcane golem"
-	desc = "A construct created by wizards who wish to avoid human contact, but still want a companion. It's inexpensive, doesn't annoy its master and never refuses to learn a new spell."
+	desc = "A soulless construct forged by a wizard. It's linked to its master's magic powers, and it casts spells simultaneously with them. If one of them dies, the other's spellcasting abilities will be affected."
 
 	icon = 'icons/mob/critter.dmi'
 	icon_state = "arcane_golem"

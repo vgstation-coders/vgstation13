@@ -1,6 +1,6 @@
 /spell/aoe_turf/conjure/arcane_golem
 	name = "Forge Arcane Golem"
-	desc = "Creates a fragile construct that follows you around. It knows a basic version of all of your spells, and will cast them together with you at the same target. If cast while an arcane golem is already summoned, your arcane golem will be teleported to you instead. It's unable to learn Mind Transfer and Forge Arcane Golem."
+	desc = "Creates a fragile construct that follows you around. It knows a basic version of all of your spells, and will cast them simultaneously with you - at the same target. If cast while an arcane golem is already summoned, your arcane golems will be teleported to you instead. It's unable to learn Mind Transfer and Forge Arcane Golem."
 
 	charge_max = 20 SECONDS
 	cooldown_min = 1 SECONDS
