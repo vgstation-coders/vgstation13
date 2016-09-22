@@ -26,7 +26,7 @@
 		while(select_query.NextRow())
 			pollid = select_query.item[1]
 			pollquestion = select_query.item[2]
-			output += "<tr bgcolor='[ (i % 2 == 1) ? color1 : color2 ]'><td>[!client.holder && client.player_age <= 30 ? "<b>[pollquestion]</b> (<span class='danger'>You cannot vote on this</span>)" : "<a href=\"byond://?src=\ref[src];pollid=[pollid]\"><b>[pollquestion]</b></a>"][config.poll_results_url ? " | <a href=[config.poll_results_url]/[pollid]>Results</a></td></tr>" : ""]"
+			output += "<tr bgcolor='[ (i % 2 == 1) ? color1 : color2 ]'><td>[!client.holder && client.player_age <= 30 ? "<b>[pollquestion]</b> (<span class='danger'>You cannot vote on this</span>)" : "<a href=\"byond://?src=\ref[src];pollid=[pollid]\"><b>[pollquestion]</b></a>"][config.poll_results_url ? " | <a href=\"byond://?src=\ref[src];pollresult=[pollid]\>Results</a></td></tr>" : ""]"
 			i++
 
 		output += "</table>"
