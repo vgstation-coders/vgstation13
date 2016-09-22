@@ -59,6 +59,8 @@
 	spark_system.set_up(5, 0, src)
 	spark_system.attach(src)
 	power_change()
+	cover = new /obj/machinery/porta_turret_cover(loc)
+	cover.Parent_Turret = src
 	spawn(10)
 		update_gun()
 
@@ -401,7 +403,7 @@ Status: []<BR>"},
 
 		else if(!issilicon(L))
 			if(isanimal(L)) // if its set to check for xenos/carps, check for non-mob "crittersssss"(And simple_animals)
-				if(check_anomalies || stun_all || attacked)
+				if(check_anomalies || attacked)
 					if(L.isUnconscious())
 						continue
 					// Ignore lazarus-injected mobs.
@@ -410,7 +412,7 @@ Status: []<BR>"},
 					targets += L
 
 			if(isalien(L))
-				if(check_anomalies || stun_all || attacked) // git those fukken xenos
+				if(check_anomalies || attacked) // git those fukken xenos
 					if(!L.isUnconscious())
 						targets += L
 					else
@@ -432,10 +434,10 @@ Status: []<BR>"},
 					if(assess_perp(L) < PERP_LEVEL_ARREST)
 						continue // if threat level < PERP_LEVEL_ARREST, keep going
 
-				if(ismonkey(L) && !(stun_all || check_anomalies || attacked))
+				if(ismonkey(L) && !(check_anomalies || attacked))
 					continue // Don't target monkeys or borgs/AIs you dumb shit
 
-				if(isslime(L) && !(stun_all || check_anomalies || attacked))
+				if(isslime(L) && !(check_anomalies || attacked))
 					continue
 
 				if(L.lying) // if the perp is lying down, it's still a target but a less-important target
@@ -659,6 +661,7 @@ Status: []<BR>"},
 		if(0) // first step
 			if(iswrench(W) && !anchored && wrenchAnchor(user))
 				build_step = 1
+				anchored = 1
 				return
 
 			else if(iscrowbar(W) && !anchored)
@@ -682,6 +685,7 @@ Status: []<BR>"},
 
 			else if(iswrench(W) && wrenchAnchor(user))
 				build_step = 0
+				anchored = 0
 				return
 
 
