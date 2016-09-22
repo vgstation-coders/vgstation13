@@ -12,6 +12,8 @@
 	var/custom_sprite = 0 //Due to all the sprites involved, a var for our custom borgs may be best
 	//var/crisis //Admin-settable for combat module use.
 
+	var/obj/item/device/station_map/station_holomap = null
+
 //Hud stuff
 
 	var/obj/screen/cells = null
@@ -114,6 +116,8 @@
 			lawupdate = 1
 		else
 			lawupdate = 0
+
+	station_holomap = new(src)
 
 	radio = new /obj/item/device/radio/borg(src)
 	if(!scrambledcodes && !camera)
@@ -527,6 +531,15 @@
 	else
 		C.toggled = 1
 		to_chat(src, "<span class='warning'>You enable [C.name].</span>")
+
+/mob/living/silicon/robot/verb/toggle_station_map()
+	set name = "Toggle Station Holomap"
+	set desc = "Toggle station holomap on your screen"
+	set category = "Robot Commands"
+	if(isUnconscious())
+		return
+
+	station_holomap.toggleHolomap(src)
 
 /mob/living/silicon/robot/blob_act()
 	if(flags & INVULNERABLE)
@@ -967,7 +980,7 @@
 					O.show_message(text("<span class='notice'>[M] caresses [src]'s plating with its scythe like arm.</span>"), 1)
 
 		if (I_GRAB)
-			if (M == src)
+			if (M.grab_check(src))
 				return
 			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
 
@@ -1494,13 +1507,6 @@
 
 	pose =  copytext(sanitize(input(usr, "This is [src]. It is...", "Pose", null)  as text), 1, MAX_MESSAGE_LEN)
 
-/mob/living/silicon/robot/verb/set_flavor()
-	set name = "Set Flavour Text"
-	set desc = "Sets an extended description of your character's features."
-	set category = "IC"
-
-	flavor_text =  copytext(sanitize(input(usr, "Please enter your new flavour text.", "Flavour text", null)  as text), 1)
-
 /mob/living/silicon/robot/proc/choose_icon(var/triesleft, var/list/module_sprites)
 	if(triesleft == 0 || !module_sprites.len)
 		return
@@ -1560,3 +1566,15 @@
 
 /mob/living/silicon/robot/CheckSlip()
 	return (istype(module,/obj/item/weapon/robot_module/engineering)? -1 : 0)
+
+//Help with the garbage collection of the module on the robot end
+/mob/living/silicon/robot/proc/remove_module()
+	uneq_all()
+	if(hud_used)
+		shown_robot_modules = 0
+		hud_used.update_robot_modules_display()
+	if(client)
+		for(var/obj/A in module.upgrades)
+			client.screen -= A
+	module.remove_languages(src)
+	module = null

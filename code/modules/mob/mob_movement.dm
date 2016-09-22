@@ -344,6 +344,7 @@
 			move_delay += 7
 
 		//We are now going to move
+		var/old_dir = mob.dir
 		move_delay = max(move_delay,1)
 		if(mob.movement_speed_modifier)
 			move_delay *= (1/mob.movement_speed_modifier)
@@ -386,6 +387,9 @@
 		else
 			. = ..()
 			mob.last_movement=world.time
+
+		if(mob.dir != old_dir)
+			mob.Facing()
 
 ///Process_Grab()
 ///Called by client/Move()
@@ -549,12 +553,12 @@
 	if(!Process_Spacemove(,1))
 		return
 	if(ismob(pulling))
-		var/mob/M = pulling
-		var/atom/movable/t = M.pulling
-		M.stop_pulling()
-		step(pulling, get_dir(pulling.loc, A))
-		if(M)
-			M.start_pulling(t)
+		var/mob/mobpulled = pulling
+		var/atom/movable/secondarypull = mobpulled.pulling
+		mobpulled.stop_pulling()
+		step(mobpulled, get_dir(mobpulled.loc, A))
+		if(mobpulled && secondarypull)
+			mobpulled.start_pulling(secondarypull)
 	else
 		step(pulling, get_dir(pulling.loc, A))
 	return

@@ -60,6 +60,28 @@
 
 	return A.contents
 
+/area/proc/getAreaCenter(var/zLevel=1)
+	if(!area_turfs.len)
+		return null
+
+	var/center_x = 0
+	var/center_y = 0
+
+	for(var/turf/T in area_turfs)
+		if(T.z == zLevel)
+			center_x += T.x
+			center_y += T.y
+
+	center_x = round(center_x / area_turfs.len)
+	center_y = round(center_y / area_turfs.len)
+
+	if(!center_x || !center_y)
+		return null
+
+	var/turf/T = locate(center_x,center_y,zLevel)
+
+	return T
+
 /area/proc/poweralert(var/state, var/obj/source as obj)
 	if (suspend_alert)
 		return

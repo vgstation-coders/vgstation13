@@ -874,3 +874,10 @@ var/list/beam_master = list()
 		return 1
 	else
 		return ..()
+
+//Used by the pain mirror spell
+//Damage type and damage done varies
+/obj/item/projectile/beam/pain
+	name = "bolt of pain"
+	pass_flags = PASSALL //Go through everything
+	icon_state = "pain"

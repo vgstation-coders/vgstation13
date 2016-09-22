@@ -19,9 +19,7 @@
 	fire_temp_threshold = 100 //Wooden barricades REALLY don't like fire
 	fire_volume_mod = 10 //They REALLY DON'T
 
-/obj/structure/window/barricade/examine(mob/user)
-
-	..()
+/obj/structure/window/barricade/examine_health(mob/user)
 	//Switch most likely can't take inequalities, so here's that if block
 	if(health >= initial(health)) //Sanity
 		to_chat(user, "It's in perfect shape, not even a scratch.")

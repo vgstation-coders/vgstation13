@@ -9,8 +9,25 @@
 	flags = FPRINT
 	autoignition_temperature = AUTOIGNITION_WOOD
 	fire_fuel = 3
-	var/obj/item/clothing/suit/storage/det_suit/suit = null
-	var/obj/item/clothing/head/det_hat/hat = null
+	var/obj/item/clothing/suit/suit = null
+	var/obj/item/clothing/head/hat = null
+
+	var/list/allowed_suits = list(
+		/obj/item/clothing/suit/storage/det_suit,
+		/obj/item/clothing/suit/storage/forensics,
+		/obj/item/clothing/suit/storage/labcoat,
+		)
+	var/list/allowed_hats = list(
+		/obj/item/clothing/head/det_hat,
+		/obj/item/clothing/head/caphat,
+		/obj/item/clothing/head/centhat,
+		/obj/item/clothing/head/beret,
+		/obj/item/clothing/head/that,
+		/obj/item/clothing/head/flatcap,
+		/obj/item/clothing/head/hgpiratecap,
+		/obj/item/clothing/head/helmet/tactical/warden,
+		/obj/item/clothing/head/helmet/tactical/HoS,
+		)
 
 /obj/structure/coatrack/attack_hand(mob/user)
 	if(suit)
@@ -33,20 +50,23 @@
 		update_icon()
 		return
 
-/obj/structure/coatrack/attackby(obj/item/clothing/C, mob/user)
-	if (istype(C, /obj/item/clothing/suit/storage/det_suit) && !suit)
+/obj/structure/coatrack/attackby(obj/item/C, mob/user)
+	if (istype(C, /obj/item/clothing/suit) && !suit && is_type_in_list(C, allowed_suits))
 		if(user.drop_item(C, src))
 			to_chat(user, "<span class='notice'>You place your [C] on \the [src]</span>")
 			playsound(get_turf(src), "rustle", 50, 1, -5)
 			suit = C
 			update_icon()
-	else if (istype(C, /obj/item/clothing/head/det_hat) && !hat)
+	else if (istype(C, /obj/item/clothing/head) && !hat && is_type_in_list(C, allowed_hats))
 		if(user.drop_item(C, src))
 			to_chat(user, "<span class='notice'>You place your [C] on \the [src]</span>")
 			playsound(get_turf(src), "rustle", 50, 1, -5)
 			hat = C
 			update_icon()
-
+	else if(iswrench(C))
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+		getFromPool(/obj/item/stack/sheet/wood, get_turf(src), 2)
+		qdel(src)//the hat and suit on the coat rack are automatically dropped by Destroy()
 	else
 		return ..()
 
@@ -73,18 +93,21 @@
 	..()
 
 /obj/structure/coatrack/update_icon()
-	overlays.Cut()
-	if(suit && istype(suit,/obj/item/clothing/suit/storage/det_suit))
-		var/obj/item/clothing/suit/storage/det_suit/detective_suit = suit
-		overlays += image(icon,"coat[(detective_suit.noir) ? "_noir" : ""]")
-	if(hat && istype(hat,/obj/item/clothing/head/det_hat))
-		var/obj/item/clothing/head/det_hat/detective_hat = hat
-		overlays += image(icon,"hat[(detective_hat.noir) ? "_noir" : ""]")
+	overlays.len = 0
+	if(suit)
+		overlays += image(icon,"coat-[suit.icon_state]")
+	if(hat)
+		var/image/I = image('icons/mob/head.dmi', hat.icon_state, dir = SOUTH)
+		var/matrix/M = matrix()
+		M.Turn(90)
+		M.Translate(-9,6)
+		I.transform = M
+		overlays += I
 
 /obj/structure/coatrack/full
 
 /obj/structure/coatrack/full/New()
 	..()
-	suit = new(src)
-	hat = new(src)
+	suit = new/obj/item/clothing/suit/storage/det_suit(src)
+	hat = new/obj/item/clothing/head/det_hat(src)
 	update_icon()

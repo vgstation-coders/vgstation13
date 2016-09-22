@@ -30,9 +30,9 @@
 		if (W)
 			if (client)
 				client.screen -= W
-			W.forceMove(loc)
 			W.unequipped()
 			if(dropped)
+				W.forceMove(loc)
 				W.dropped(src)
 			if(W)
 				W.reset_plane_and_layer()

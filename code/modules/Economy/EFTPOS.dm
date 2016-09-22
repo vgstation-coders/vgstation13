@@ -42,7 +42,6 @@
 	R.stamps += "<HR><i>This paper has been stamped by the EFTPOS device.</i>"
 	var/obj/item/delivery/D = new(R.loc)
 	R.forceMove(D)
-	D.wrapped = R
 	D.name = "small parcel - 'EFTPOS access code'"
 
 /obj/item/device/eftpos/proc/reconnect_database()

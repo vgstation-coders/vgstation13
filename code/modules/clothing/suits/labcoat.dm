@@ -12,29 +12,29 @@
 
 
 
+/obj/item/clothing/suit/storage/labcoat/update_icon()
+	if(open)
+		icon_state="[base_icon_state]_open"
+	else
+		icon_state="[base_icon_state]"
+
+/obj/item/clothing/suit/storage/labcoat/verb/toggle()
+	set name = "Toggle Labcoat Buttons"
+	set category = "Object"
+	set src in usr
+
+	if(usr.incapacitated())
+		return 0
+
+	if(open)
+		to_chat(usr, "You button up the labcoat.")
+		src.body_parts_covered |= IGNORE_INV
+	else
+		to_chat(usr, "You unbutton the labcoat.")
+		src.body_parts_covered ^= IGNORE_INV
+	open=!open
 	update_icon()
-		if(open)
-			icon_state="[base_icon_state]_open"
-		else
-			icon_state="[base_icon_state]"
-
-	verb/toggle()
-		set name = "Toggle Labcoat Buttons"
-		set category = "Object"
-		set src in usr
-
-		if(usr.incapacitated())
-			return 0
-
-		if(open)
-			to_chat(usr, "You button up the labcoat.")
-			src.body_parts_covered |= IGNORE_INV
-		else
-			to_chat(usr, "You unbutton the labcoat.")
-			src.body_parts_covered ^= IGNORE_INV
-		open=!open
-		update_icon()
-		usr.update_inv_wear_suit()	//so our overlays update
+	usr.update_inv_wear_suit()	//so our overlays update
 
 /obj/item/clothing/suit/storage/labcoat/New()
 	. = ..()

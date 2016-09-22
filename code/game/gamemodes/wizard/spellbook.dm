@@ -1,4 +1,4 @@
-#define STARTING_USES 5
+#define STARTING_USES 5 * Sp_BASE_PRICE
 
 /obj/item/weapon/spellbook
 	name = "spell book"
@@ -14,6 +14,7 @@
 	/spell/targeted/projectile/magic_missile,
 	/spell/targeted/projectile/dumbfire/fireball,
 	/spell/lightning,
+	/spell/aoe_turf/ring_of_fire,
 	/spell/aoe_turf/disable_tech,
 	/spell/aoe_turf/smoke,
 	/spell/targeted/genetic/blind,
@@ -25,6 +26,7 @@
 	/spell/targeted/genetic/mutate,
 	/spell/targeted/ethereal_jaunt,
 	/spell/aoe_turf/fall,
+	/spell/mirror_of_pain,
 	/spell/aoe_turf/knock,
 	/spell/targeted/equip_item/horsemask,
 	/spell/targeted/equip_item/clowncurse,
@@ -44,6 +46,10 @@
 	var/max_uses = STARTING_USES
 
 	var/op = 1
+
+/obj/item/weapon/spellbook/admin
+	uses = 30 * Sp_BASE_PRICE
+	op = 0
 
 /obj/item/weapon/spellbook/New()
 	..()
@@ -68,8 +74,7 @@
 			to_chat(user, "The contract has been used, you can't get your points back now.")
 		else
 			to_chat(user, "You feed the contract back into the spellbook, refunding your points.")
-			src.max_uses++
-			src.uses++
+			src.uses += APPRENTICE_PRICE
 			qdel (O)
 			O = null
 
@@ -131,7 +136,7 @@
 				if(!max)
 					continue
 
-				upgrade_data += "<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade_info=1'>[upgrade]</a>: [lvl]/[max] (<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade=1'>upgrade</a>)  "
+				upgrade_data += "<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade_info=1'>[upgrade]</a>: [lvl]/[max] (<a href='?src=\ref[src];spell=\ref[spell];upgrade_type=[upgrade];upgrade=1'>upgrade ([spell.get_upgrade_price(upgrade)] points)</a>)  "
 
 			if(upgrade_data)
 				dat += "[upgrade_data]<br><br>"
@@ -224,11 +229,9 @@
 	else
 		return 0
 
-/obj/item/weapon/spellbook/proc/use(amount, no_refunds = 0)
+/obj/item/weapon/spellbook/proc/use(amount)
 	if(uses >= amount)
 		uses -= amount
-		if(no_refunds)
-			max_uses -= amount
 
 		return 1
 
@@ -238,9 +241,14 @@
 		to_chat(user, "<span class='notice'>No refunds once you leave your den.</span>")
 		return
 
-	uses = max_uses
-	user.spellremove()
-	to_chat(user, "All spells have been removed. You may now memorize a new set of spells.")
+	for(var/spell/S in user.spell_list)
+		if(S.refund_price <= 0)
+			continue
+
+		to_chat(user, "<span class='info'>You forget [S.name] and receive [S.refund_price] additional spell points.</span>")
+
+		user.remove_spell(S)
+		uses += S.refund_price
 
 /obj/item/weapon/spellbook/Topic(href, href_list)
 	if(..())
@@ -270,6 +278,7 @@
 				var/spell/S = buy_type
 				if(use(initial(S.price)))
 					var/spell/added = new buy_type
+					added.refund_price = added.price
 					add_spell(added, L)
 					to_chat(usr, "<span class='info'>You have learned [added.name].</span>")
 					feedback_add_details("wizard_spell_learned", added.abbreviation)
@@ -278,7 +287,7 @@
 			var/datum/spellbook_artifact/SA = locate(href_list["spell"])
 
 			if(istype(SA) && (SA in get_available_artifacts()))
-				if(SA.can_buy() && use(SA.price, no_refunds = 1))
+				if(SA.can_buy() && use(SA.price))
 					SA.purchased(usr)
 					feedback_add_details("wizard_spell_learned", SA.abbreviation)
 
@@ -289,7 +298,9 @@
 		var/spell/spell = locate(href_list["spell"])
 
 		if(istype(spell) && spell.can_improve(upgrade_type))
-			if(use(Sp_UPGRADE_PRICE))
+			var/price = spell.get_upgrade_price(upgrade_type)
+			if(use(price))
+				spell.refund_price += price
 				var/temp = spell.apply_upgrade(upgrade_type)
 
 				if(temp)
@@ -697,7 +708,18 @@
 	spellname = "sculpting"
 	icon_state = "bookstatue"
 	desc = "This book is as dense as a rock."
-
+	
+/obj/item/weapon/spellbook/oneuse/ringoffire
+	spell = /spell/aoe_turf/ring_of_fire
+	spellname = "ring of fire"
+	icon_state = "bookring"
+	desc = "The cover of this book is much warmer than the pages within."
+	
+/obj/item/weapon/spellbook/oneuse/ringoffire/recoil(mob/living/carbon/user as mob)
+	user.adjust_fire_stacks(10)
+	user.IgniteMob()
+	to_chat(user, "<span class = 'warning'>The book sets you alight!</span>")
+	
 // Spell Book Bundles//
 
 /obj/item/weapon/storage/box/spellbook

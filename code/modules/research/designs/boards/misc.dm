@@ -58,6 +58,16 @@
 	category = "Engineering Boards"
 	build_path = /obj/item/weapon/circuitboard/power_control
 
+/datum/design/station_map
+	name = "Circuit Design (Station Holomap)"
+	desc = "Allows for the construction of circuit boards used to build a station holomap"
+	id = "station_map"
+	req_tech = list(Tc_MAGNETS = 2, Tc_PROGRAMMING = 2)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Engineering Boards"
+	build_path = /obj/item/weapon/circuitboard/station_map
+
 //ECBs
 
 /datum/design/access_control

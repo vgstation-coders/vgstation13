@@ -246,7 +246,7 @@
 
 
 		if(I_GRAB)
-			if(M == src || anchored)
+			if(M.grab_check(src))
 				return 0
 			if(w_uniform)
 				w_uniform.add_fingerprint(M)

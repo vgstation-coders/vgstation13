@@ -88,7 +88,9 @@
 	var/banappeals
 	var/wikiurl = "http://baystation12.net/wiki/index.php?title=Main_Page"
 	var/vgws_base_url = "http://ss13.moe" // No hanging slashes.
+	var/vgws_ip = "198.245.63.50" // IP address in the `world.Topic()` call when the vgws sends a request over TCP.
 	var/forumurl = "http://baystation12.net/forums/"
+	var/poll_results_url
 
 	var/media_base_url = "" // http://ss13.nexisonline.net/media
 	var/media_secret_key = "" // Random string
@@ -532,13 +534,17 @@
 				if("assistant_ratio")
 					config.assistantratio = text2num(value)
 				if("copy_logs")
-					copy_logs=value
+					copy_logs = value
 				if("media_base_url")
 					media_base_url = value
 				if("media_secret_key")
 					media_secret_key = value
 				if("vgws_base_url")
 					vgws_base_url = value
+				if("vgws_ip")
+					vgws_ip = value
+				if("poll_results_url")
+					poll_results_url = value
 				if("map_voting")
 					map_voting = 1
 				if("renders_url")

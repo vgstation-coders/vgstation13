@@ -218,7 +218,7 @@
 	//This is down here because of the browse() calls in tooltip/New()
 	if(!tooltips)
 		tooltips = new /datum/tooltip(src)
-		
+
 	//////////////
 	//DISCONNECT//
 	//////////////
@@ -248,21 +248,34 @@
 
 	account_joined = Joined
 
-	var/sql_id = 0
 	var/sql_ckey = sanitizeSQL(ckey)
 	var/age
 	testing("sql_ckey = [sql_ckey]")
-
-	var/list/query1 = Query1()
-	sql_id = query1[1]
-	player_age = query1[2]
-	age = query1[3]
+	var/DBQuery/query = dbcon.NewQuery("SELECT id, datediff(Now(),firstseen) as age, datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = '[sql_ckey]'")
+	query.Execute()
+	var/sql_id = 0
+	while(query.NextRow())
+		sql_id = query.item[1]
+		player_age = text2num(query.item[2])
+		age = text2num(query.item[3])
+		break
 
 	var/sql_address = sanitizeSQL(address)
-	Query2(sql_address)
+
+	var/DBQuery/query_ip = dbcon.NewQuery("SELECT distinct ckey FROM erro_connection_log WHERE ip = '[sql_address]'")
+	query_ip.Execute()
+	related_accounts_ip = ""
+	while(query_ip.NextRow())
+		related_accounts_ip += "[query_ip.item[1]], "
+
 
 	var/sql_computerid = sanitizeSQL(computer_id)
-	Query3(sql_computerid)
+
+	var/DBQuery/query_cid = dbcon.NewQuery("SELECT distinct ckey FROM erro_connection_log WHERE computerid = '[sql_computerid]'")
+	query_cid.Execute()
+	related_accounts_cid = ""
+	while(query_cid.NextRow())
+		related_accounts_cid += "[query_cid.item[1]], "
 
 	//Just the standard check to see if it's actually a number
 	if(sql_id)
@@ -270,14 +283,6 @@
 			sql_id = text2num(sql_id)
 		if(!isnum(sql_id))
 			return
-	//else
-		//var/url = pick("byond://ss13.nexisonline.net:1336", "byond://ss13.nexisonline.net:1336", "byond://ss13.nexisonline.net:1336", "byond://ss13.nexisonline.net:1336")
-//		to_chat(src, link(url))
-
-		//var/Server/s = random_server_list[key]
-		//world.log << "Sending [src.key] to random server: [url]"
-//		to_chat(src, link(s.url))
-		//del(src)
 
 	var/admin_rank = "Player"
 
@@ -287,15 +292,30 @@
 	var/sql_admin_rank = sanitizeSQL(admin_rank)
 
 	if(sql_id)
-		Query4(age, sql_address, sql_computerid, sql_admin_rank, sql_id, Joined)
+		//Player already identified previously, we need to just update the 'lastseen', 'ip' and 'computer_id' variables
+		var/DBQuery/query_update
+		if(isnum(age))
+			query_update = dbcon.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_address]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]' WHERE id = [sql_id]")
+		else
+			query_update = dbcon.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_address]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]', accountjoined = '[Joined]' WHERE id = [sql_id]")
+		query_update.Execute()
+		if(query_update.ErrorMsg())
+			WARNING("FINGERPRINT: [query_update.ErrorMsg()]")
+
 	else
-		Query5(sql_ckey, sql_address, sql_computerid, sql_admin_rank, Joined)
+		//New player!! Need to insert all the stuff
+		var/DBQuery/query_insert = dbcon.NewQuery("INSERT INTO erro_player (id, ckey, firstseen, lastseen, ip, computerid, lastadminrank, accountjoined) VALUES (null, '[sql_ckey]', Now(), Now(), '[sql_address]', '[sql_computerid]', '[sql_admin_rank]', '[Joined]')")
+		query_insert.Execute()
+		if(query_insert.ErrorMsg())
+			WARNING("FINGERPRINT: [query_insert.ErrorMsg()]")
 
 	if(!isnum(age))
-		age = Query6(sql_ckey, age)
-	if(!isnum(player_age)) //If they've never logged in before
+		var/DBQuery/query_age = dbcon.NewQuery("SELECT datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = '[sql_ckey]'")
+		query_age.Execute()
+		while(query_age.NextRow())
+			age = text2num(query_age.item[1])
+	if(!isnum(player_age))
 		player_age = 0
-
 	if(age < 14)
 		message_admins("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age]  First seen = [player_age]")
 		log_admin(("[ckey(key)]/([src]) is a relatively new player, may consider watching them. AGE = [age] First seen = [player_age]"))
@@ -303,62 +323,13 @@
 	account_age = age
 
 	// logging player access
-	Query7(sql_ckey, sql_address, sql_computerid)
-
-/client/proc/Query1(sql_address, sql_computerid, sql_ckey)
-	var/DBQuery/query = dbcon.NewQuery("SELECT id, datediff(Now(),firstseen) as age, datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = '[sql_ckey]'")
-	query.Execute()
-	var/sql_id
-	var/player_age
-	var/age
-	while(query.NextRow())
-		sql_id = query.item[1]
-		player_age = text2num(query.item[2])
-		age = text2num(query.item[3])
-		break
-	return list(sql_id, player_age, age)
-
-/client/proc/Query2(sql_address)
-	var/DBQuery/query_ip = dbcon.NewQuery("SELECT ckey FROM erro_player WHERE ip = '[sql_address]'")
-	query_ip.Execute()
-	related_accounts_ip = ""
-	while(query_ip.NextRow())
-		related_accounts_ip += "[query_ip.item[1]], "
-
-/client/proc/Query3(sql_computerid)
-	var/DBQuery/query_cid = dbcon.NewQuery("SELECT ckey FROM erro_player WHERE computerid = '[sql_computerid]'")
-	query_cid.Execute()
-	related_accounts_cid = ""
-	while(query_cid.NextRow())
-		related_accounts_cid += "[query_cid.item[1]], "
-
-/client/proc/Query4(age, sql_address, sql_computerid, sql_admin_rank, sql_id, Joined)
-	//Player already identified previously, we need to just update the 'lastseen', 'ip' and 'computer_id' variables
-	var/DBQuery/query_update
-	if(isnum(age))
-		query_update = dbcon.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_address]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]' WHERE id = [sql_id]")
-	else
-		query_update = dbcon.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_address]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]', accountjoined = '[Joined]' WHERE id = [sql_id]")
-	query_update.Execute()
-
-/client/proc/Query5(sql_ckey, sql_address, sql_computerid, sql_admin_rank, Joined)
-	//New player!! Need to insert all the stuff
-	var/DBQuery/query_insert = dbcon.NewQuery("INSERT INTO erro_player (id, ckey, firstseen, lastseen, ip, computerid, lastadminrank, accountjoined) VALUES (null, '[sql_ckey]', Now(), Now(), '[sql_address]', '[sql_computerid]', '[sql_admin_rank]', '[Joined]')")
-	query_insert.Execute()
-
-/client/proc/Query6(sql_ckey)
-	var/DBQuery/query_age = dbcon.NewQuery("SELECT datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = '[sql_ckey]'")
-	var/age
-	query_age.Execute()
-	while(query_age.NextRow())
-		age = text2num(query_age.item[1])
-	return age
-
-/client/proc/Query7(sql_ckey, sql_address, sql_computerid)
 	var/server_address_port = "[world.internet_address]:[world.port]"
 	var/sql_server_address_port = sanitizeSQL(server_address_port)
 	var/DBQuery/query_connection_log = dbcon.NewQuery("INSERT INTO `erro_connection_log`(`id`,`datetime`,`serverip`,`ckey`,`ip`,`computerid`) VALUES(null,Now(),'[sql_server_address_port]','[sql_ckey]','[sql_address]','[sql_computerid]');")
+
 	query_connection_log.Execute()
+	if(query_connection_log.ErrorMsg())
+		WARNING("FINGERPRINT: [query_connection_log.ErrorMsg()]")
 
 #undef TOPIC_SPAM_DELAY
 #undef UPLOAD_LIMIT
@@ -374,7 +345,7 @@
 /client/verb/resend_resources()
 	set name = "Resend Resources"
 	set desc = "Re-send resources for NanoUI. May help those with NanoUI issues."
-	set category = "Preferences"
+	set category = "OOC"
 
 	to_chat(usr, "<span class='notice'>Re-sending NanoUI resources.  This may result in lag.</span>")
 	nanomanager.send_resources(src)
@@ -458,3 +429,12 @@
 		var/obj/item/clothing/under/U = H.get_item_by_slot(slot_w_uniform)
 		if(istype(U))
 			U.update_holomap()
+
+/client/verb/SwapSides()
+	set name = "swapsides"
+	set hidden = 1
+	var/newsplit = 100 - text2num(winget(usr, "mainwindow.mainvsplit", "splitter"))
+	if(winget(usr, "mainwindow.mainvsplit", "right") == "rpane")
+		winset(usr, "mainwindow.mainvsplit", "right=mapwindow;left=rpane;splitter=[newsplit]")
+	else
+		winset(usr, "mainwindow.mainvsplit", "right=rpane;left=mapwindow;splitter=[newsplit]")

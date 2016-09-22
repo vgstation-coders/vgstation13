@@ -25,6 +25,10 @@
 	fire_fuel = 3
 	sheet_path = /obj/item/stack/sheet/wood
 
+/obj/item/weapon/stool/piano/initialize()
+	..()
+	handle_layer()
+
 //So they don't get picked up.
 /obj/item/weapon/stool/piano/attack_hand()
 	return
@@ -56,3 +60,15 @@
 		return
 
 	. = ..()
+
+/obj/item/weapon/stool/piano/update_dir()
+	..()
+
+	handle_layer()
+
+/obj/item/weapon/stool/piano/proc/handle_layer()
+	if(dir == NORTH)
+		plane = ABOVE_HUMAN_PLANE
+	else
+		plane = OBJ_PLANE
+
