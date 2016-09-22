@@ -100,9 +100,9 @@
 				B.name = "The Book of Mormon"
 				J = "Apostle"
 				deity_name = "God the Father-Elohim"
-			if("confucianism", "china", "chinese")
+			if("confucianism", "china", "chinese", "tao", "taoism", "dao", "daoism")
 				B.name = pick("The I Ching", "Great Learning")
-				J = "Scholar" //I don't know honestly
+				J = "Xian"
 				deity_name = "Tian" //I found this somewhere, I guess that's true
 			if("wicca", "pagan", "paganism")
 				B.name = "The Book of Shadows"
@@ -150,7 +150,8 @@
 				deity_name = pick("Zeus", "Poseidon", "Athena", "Persephone", "Ares", "Apollo")
 			if("Latin", "Rome", "Roma", "Roman")
 				B.name = "Cult of Rome"
-				H.equip_or_collect(new /obj/item/clothing/head/roman/legionaire(H), slot_head)
+				H.equip_or_collect(new /obj/item/clothing/head/helmet/roman/legionaire(H), slot_head)
+				H.equip_or_collect(new /obj/item/clothing/under/roman(H), slot_w_uniform)
 				J = "Pontifex"
 				deity_name = pick("Jupiter", "Neptune", "Mars", "Minerva", "Rome", "Julius Caeser", "Roma")
 			if("pastafarianism")
@@ -177,6 +178,7 @@
 				H.put_in_hands(B)
 				B.name = pick("Guys Gone Wild", "Hunk Rump", "It's Okay to be Gay", "Daddy Gave You Good Advice")
 				J = "LGBT Advocate"
+				H.equip_or_collect(new /obj/item/clothing/under/darkholme(H), slot_w_uniform)
 				deity_name = "Steve Rambo" //Pushing Gaywards
 			if("lol", "wtf", "ass", "poo", "badmin", "shitmin", "deadmin", "nigger", "dickbutt", ":^)", "XD", "le", "meme", "memes", "ayy", "ayy lmao", "lmao", "reddit", "4chan", "tumblr", "9gag")
 				qdel(B)
@@ -192,7 +194,7 @@
 				H.put_in_hands(B)
 				B.name = pick("Principle of Relativity", "Quantum Enigma: Physics Encounters Consciousness", "Programming the Universe", "Quantum Physics and Theology", \
 							  "For I Have Tasted The Fruit", "Non-Linear Genetics", "The Mysteries of Bluespace", "Playing God: Collector's Edition")
-				J = "Academician"
+				J = "Acamedian"
 				deity_name = pick("Albert Einstein", "Isaac Newton", "Niels Bohr", "Stephen Hawking")
 			if("tribunal", "almsivi")
 				B.name = "The 36 Lessons of Vivec"
@@ -274,7 +276,7 @@
 				//Give them basic medical garb
 				H.equip_or_collect(new /obj/item/clothing/head/surgery/blue(H), slot_head)
 				H.equip_or_collect(new /obj/item/clothing/mask/surgical(H), slot_wear_mask)
-				H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat(H), slot_suit)
+				H.equip_or_collect(new /obj/item/clothing/suit/storage/labcoat(H), slot_wear_suit)
 				deity_name = "The Chief Medical Officer"
 			if("busta", "bustatime", "zas", "airflow", "hardcore", "hardcores")
 				qdel(B)
@@ -284,6 +286,7 @@
 				if(!(M_HARDCORE in H.mutations))
 					H.mutations.Add(M_HARDCORE)
 				J = "Atmospheric Technician"
+				H.equip_or_collect(new /obj/item/clothing/shoes/magboots(H), slot_shoes)
 				deity_name = "Bustatime"
 			if("me", "i", "myself", "narcissism", "self importance", "selfishness")
 				qdel(B)
@@ -320,7 +323,7 @@
 				J = "Komrade"
 				deity_name = "Karl Max"
 				H.equip_or_collect(new /obj/item/clothing/head/russofurhat(H), slot_head)
-				H.equip_or_collect(new /obj/item/clothing/suit/russofurcoat(H), slot_suit)
+				H.equip_or_collect(new /obj/item/clothing/suit/russofurcoat(H), slot_wear_suit)
 			if("capitalism", "free market", "liberalism", "money")
 				qdel(B)
 				B = new /obj/item/weapon/storage/bible/booze(H)
@@ -351,7 +354,7 @@
 				B.name = "The Syndicate Bundle"
 				J = "Syndicate Agent"
 				deity_name = "The Syndicate"
-				H.equip_or_collect(new /obj/item/clothing/suit/syndicatefake(H), slot_suit)
+				H.equip_or_collect(new /obj/item/clothing/suit/syndicatefake(H), slot_wear_suit)
 				H.equip_or_collect(new /obj/item/clothing/head/syndicatefake(H), slot_head)
 			if("cult", "narsie", "nar'sie", "narnar")
 				B.name = "The Arcane Tome"
@@ -364,7 +367,7 @@
 			if("revolution", "rev", "revolt")
 				B.name = "Down With Nanotrasen"
 				J = "Revolutionary"
-				deity_name = "Maximilien Robespierre" //From THE Revolution that defined the rest
+				deity_name = pick("Maximilien Robespierre", "Saul Alinsky")
 			if("wizard", "wiz", "magic")
 				B.name = "Spell Book"
 				J = "Wizard"
@@ -374,11 +377,11 @@
 				B.name = "Hostile Runtimes"
 				J = "Cyborg"
 				H.equip_or_collect(new /obj/item/clothing/head/cardborg(H), slot_head)
-				H.equip_or_collect(new /obj/item/clothing/suit/storage/cardborg(H), slot_suit)
+				H.equip_or_collect(new /obj/item/clothing/suit/cardborg(H), slot_wear_suit)
 				deity_name = pick("Skynet", "HAL 9000", "GLaDOS", "SHODAN")
 			if("vampire", "vamp", "blood","dracula")
 				B.name = "The Veil of Darkness"
-				H.equip_or_collect(new /obj/item/clothing/suit/storage/draculacoat(H), slot_suit)//What could possibly go wrong?
+				H.equip_or_collect(new /obj/item/clothing/suit/storage/draculacoat(H), slot_wear_suit)//What could possibly go wrong?
 				J = "Vampire"
 				deity_name = "Vlad the Impaler" //Dracula for the incults
 			if("vox", "raiders", "raid", "bird", "birb")
@@ -391,12 +394,12 @@
 				deity_name = "Blob Overmind"
 			if("honk", "clown", "honkmother")
 				B.name = "Honkmothers Coloring Book"
-				H.equip_or_collect(new /obj/item/clothing/mask/gas/clown_hat(H), slot_mask)
-				J = "Clown"
+				H.equip_or_collect(new /obj/item/clothing/mask/gas/clown_hat(H), slot_wear_mask)
+				J = "Co-Clown"
 				deity_name = "Honkmother"
-			if("silence", "mime", "Quiet")
+			if("silence", "mime", "quiet", "...")
 				B.name = "..."
-				H.equip_or_collect(new /obj/item/clothing/mask/gas/mime(H), slot_mask)
+				H.equip_or_collect(new /obj/item/clothing/mask/gas/mime(H), slot_wear_mask)
 				J = "..."
 				deity_name = "Silence"
 			else //Boring, give them a stock name
