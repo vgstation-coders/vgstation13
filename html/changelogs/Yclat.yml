@@ -33,4 +33,4 @@ delete-after: True
 # If you're using characters such as # ' : - or the like in your changelog, surround the entire change with quotes as shown in the second example. These quotes don't show up on the changelog once it's merged and prevent errors.
 # SCREW ANY OF THIS UP AND IT WON'T WORK.
 changes: 
-- rscadd: Adds an armored tophat.
+- rscadd: Added an armored, armored tuxedo and a contraband crate to fit them in.

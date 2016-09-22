@@ -35,6 +35,11 @@
 	_color = "sl_suit"
 	flags = FPRINT  | ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
+	
+/obj/item/clothing/under/sl_suit/armored
+	desc = "It's a very amish looking suit. This one looks armored."
+	name = "armored amish suit"
+	armor = list(melee = 30, bullet = 20, laser = 10,energy = 5, bomb = 5, bio = 0, rad = 0)
 
 /obj/item/clothing/under/waiter
 	name = "waiter's outfit"
