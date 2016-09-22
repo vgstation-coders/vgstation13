@@ -27,7 +27,7 @@
 	screen_loc = "CENTER-7,CENTER-7"
 	maptext_height = 480
 	maptext_width = 480
-	
+
 /obj/screen/adminbus
 
 /obj/screen/specialblob
@@ -99,13 +99,13 @@
 	if(overlay != null)
 		overlay.loc = null
 		overlay = null
-		
+
 /obj/screen/item_action/MouseEntered(location,control,params)
 	openToolTip(usr,src,params,title = name,content = desc)
 
 /obj/screen/item_action/MouseExited()
 	closeToolTip(usr)
-	
+
 /obj/screen/item_action/Click()
 	if(!usr || !owner)
 		return 1
@@ -185,13 +185,13 @@
 		icon_state = "gun0"
 		screen_loc = ui_gun_select
 		//dir = 1
-		
+
 /obj/screen/gun/MouseEntered(location,control,params)
 	openToolTip(usr,src,params,title = name,content = desc)
 
 /obj/screen/gun/MouseExited()
 	closeToolTip(usr)
-	
+
 /obj/screen/zone_sel
 	name = "damage zone"
 	icon_state = "zone_sel"

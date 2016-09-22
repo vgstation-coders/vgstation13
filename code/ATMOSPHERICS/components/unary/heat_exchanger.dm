@@ -1,22 +1,14 @@
 /obj/machinery/atmospherics/unary/heat_exchanger
 
 	icon = 'icons/obj/atmospherics/heat_exchanger.dmi'
-	icon_state = "intact"
+	icon_state = "main"
 	density = 1
 
-	name = "Heat Exchanger"
+	name = "heat exchanger"
 	desc = "Exchanges heat between two input gases. Setup for fast heat transfer"
 
 	var/obj/machinery/atmospherics/unary/heat_exchanger/partner = null
 	var/update_cycle
-
-/obj/machinery/atmospherics/unary/heat_exchanger/update_icon()
-	if(node)
-		icon_state = "intact"
-	else
-		icon_state = "exposed"
-	..()
-	return
 
 /obj/machinery/atmospherics/unary/heat_exchanger/initialize()
 	if(!partner)
@@ -61,3 +53,26 @@
 			partner.network.update = 1
 
 	return 1
+
+/obj/machinery/atmospherics/unary/heat_exchanger/icon_node_con(var/dir)
+	var/static/list/node_con = list(
+		"[NORTH]" = image('icons/obj/atmospherics/heat_exchanger.dmi', "intact", dir = NORTH),
+		"[SOUTH]" = image('icons/obj/atmospherics/heat_exchanger.dmi', "intact", dir = SOUTH),
+		"[EAST]"  = image('icons/obj/atmospherics/heat_exchanger.dmi', "intact", dir = EAST),
+		"[WEST]"  = image('icons/obj/atmospherics/heat_exchanger.dmi', "intact", dir = WEST)
+	)
+
+	return node_con["[dir]"]
+
+/obj/machinery/atmospherics/unary/heat_exchanger/icon_node_ex(var/dir)
+	var/static/list/node_ex = list(
+		"[NORTH]" = image('icons/obj/atmospherics/heat_exchanger.dmi', "exposed", dir = NORTH),
+		"[SOUTH]" = image('icons/obj/atmospherics/heat_exchanger.dmi', "exposed", dir = SOUTH),
+		"[EAST]"  = image('icons/obj/atmospherics/heat_exchanger.dmi', "exposed", dir = EAST),
+		"[WEST]"  = image('icons/obj/atmospherics/heat_exchanger.dmi', "exposed", dir = WEST)
+	)
+
+	return node_ex["[dir]"]
+
+/obj/machinery/atmospherics/unary/heat_exchanger/hide(var/i)
+	update_icon()

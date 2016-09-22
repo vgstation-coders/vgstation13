@@ -889,3 +889,42 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	to_chat(mob, "<span class = 'notice'>You feel optimistic!</span>")
 	if (mob.reagents.get_reagent_amount(TRICORDRAZINE) < 1)
 		mob.reagents.add_reagent(TRICORDRAZINE, 1)
+
+/datum/disease2/effect/babel
+	name = "Babel Syndrome"
+	stage = 4
+	var/list/original_languages = list()
+	var/has_been_triggered = 0
+
+
+/datum/disease2/effect/babel/activate(var/mob/living/carbon/mob,var/multiplier)
+	if(has_been_triggered)
+		return
+	has_been_triggered = 1
+	if(mob.languages.len <= 1)
+		to_chat(mob, "You realize your knowledge of language is just fine, and that you were panicking over nothing.")
+		return
+
+	for(var/datum/language/L in mob.languages)
+		original_languages += L.name
+		mob.remove_language(L.name)
+
+	var/list/new_languages = list()
+	for(var/L in all_languages)
+		var/datum/language/lang = all_languages[L]
+		if(!(lang.flags & RESTRICTED))
+			new_languages += lang.name
+
+	var/picked_lang = pick(new_languages)
+	mob.add_language(picked_lang)
+	mob.default_language = mob.languages[1]
+
+	to_chat(mob, "You can't seem to remember any language but [picked_lang]. Odd.")
+
+/datum/disease2/effect/babel/deactivate(var/mob/living/carbon/mob,var/multiplier)
+	if(original_languages.len)
+		for(var/forgotten in original_languages)
+			mob.add_language(forgotten)
+
+		to_chat(mob, "Suddenly, your knowledge of languages comes back to you.")
+	..()

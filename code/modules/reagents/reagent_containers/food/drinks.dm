@@ -6,7 +6,7 @@
 	desc = "yummy"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/drinkingglass.dmi', "right_hand" = 'icons/mob/in-hand/right/drinkingglass.dmi')
 	icon = 'icons/obj/drinks.dmi'
-	icon_state = null
+	icon_state = "glassbottle"
 	flags = FPRINT  | OPENCONTAINER
 	var/gulp_size = 5 //This is now officially broken ... need to think of a nice way to fix it.
 	possible_transfer_amounts = list(5, 10, 25)
@@ -797,7 +797,7 @@
 //	icon states.
 
 /obj/item/weapon/reagent_containers/food/drinks/shaker
-	name = "Shaker"
+	name = "\improper Shaker"
 	desc = "A metal shaker to mix drinks in."
 	icon_state = "shaker"
 	origin_tech = Tc_MATERIALS + "=1"
@@ -805,9 +805,9 @@
 	volume = 100
 
 /obj/item/weapon/reagent_containers/food/drinks/thermos
-	name = "Thermos"
+	name = "\improper Thermos"
 	desc = "A metal flask which insulates its contents from temperature - keeping hot beverages hot, and cold ones cold."
-	icon_state = "shaker"
+	icon_state = "vacuumflask"
 	origin_tech = Tc_MATERIALS + "=1"
 	amount_per_transfer_from_this = 10
 	volume = 100
@@ -816,6 +816,49 @@
 	..()
 	var/new_reagent = pick(COFFEE, HOT_COCO, ICECOFFEE, TEA, ICETEA, WATER, ICE, ICED_BEER)
 	reagents.add_reagent(new_reagent, rand(50,100))
+
+/obj/item/weapon/reagent_containers/food/drinks/plastic
+	name = "plastic bottle"
+	desc = "Remember to recycle."
+	icon_state = "plasticbottle"
+	origin_tech = Tc_MATERIALS + "=1"
+	melt_temperature = MELTPOINT_PLASTIC
+	starting_materials = list(MAT_PLASTIC = 500)
+	volume = 100
+	amount_per_transfer_from_this = 10
+
+/obj/item/weapon/reagent_containers/food/drinks/plastic/water
+	name = "water bottle"
+	desc = "Chemically enhanced mineral water."
+	icon_state = "waterbottle"
+
+/obj/item/weapon/reagent_containers/food/drinks/plastic/water/New()
+	..()
+	reagents.add_reagent(WATER, volume)
+
+/obj/item/weapon/reagent_containers/food/drinks/plastic/water/small
+	name = "small water bottle"
+	icon_state = "waterbottle_small"
+	volume = 50
+	amount_per_transfer_from_this = 5
+
+/obj/item/weapon/reagent_containers/food/drinks/plastic/sodawater
+	name = "soda water bottle"
+	desc = "Good ole carbonated water."
+	icon_state = "sodawaterbottle"
+
+/obj/item/weapon/reagent_containers/food/drinks/plastic/sodawater/New()
+	..()
+	reagents.add_reagent(SODAWATER, volume)
+
+/obj/item/weapon/reagent_containers/food/drinks/plastic/cola
+	name = "space cola bottle"
+	desc = "During hard times, place your trust in mega corporations, and their sponsored drinks."
+	icon_state = "colaplasticbottle"
+
+/obj/item/weapon/reagent_containers/food/drinks/plastic/cola/New()
+	..()
+	reagents.add_reagent(COLA, volume)
 
 /obj/item/weapon/reagent_containers/food/drinks/flask
 	name = "Captain's Flask"

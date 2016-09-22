@@ -26,6 +26,15 @@
 	multiple_sprites = 1
 	sprite_modulo = 2
 
+/obj/item/ammo_storage/magazine/a12mm/ops
+	name = "magazine (12mm)"
+	icon_state = "12mm"
+	origin_tech = Tc_COMBAT + "=2"
+	ammo_type = "/obj/item/ammo_casing/a12mm"
+	max_ammo = 20
+	multiple_sprites = 1
+	sprite_modulo = 2
+
 
 /obj/item/ammo_storage/magazine/a12mm/empty
 	starting_ammo = 0

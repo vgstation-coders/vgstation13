@@ -14,6 +14,8 @@ obj/machinery/atmospherics/trinary/mixer
 
 	//node 3 is the outlet, nodes 1 & 2 are intakes
 
+	ex_node_offset = 5
+
 obj/machinery/atmospherics/trinary/mixer/update_icon()
 	if(stat & NOPOWER)
 		icon_state = "intact_off"

@@ -295,6 +295,7 @@
 /mob/living/simple_animal/hostile/retaliate/box/proc/updatefat()
 	if(size<SIZE_BIG)
 		size++
+		meat_amount = size
 		fat = 0
 	update_icon()
 
@@ -322,13 +323,14 @@
 		..()
 
 /mob/living/simple_animal/hostile/retaliate/box/Life()
-	. = ..()
+	if(!..())
+		return 0
 	if(size<SIZE_BIG)
 		fat += rand(2)
 	if(fat>BOX_GROWTH_BAR)
 		updatefat()
 
-/mob/living/simple_animal/hostile/retaliate/box/death()
+/mob/living/simple_animal/hostile/retaliate/box/Die()
 	..()
 	playsound(src, 'sound/effects/box_scream.ogg', 100, 1)
 

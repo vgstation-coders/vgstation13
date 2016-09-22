@@ -16,14 +16,6 @@
 	initialize_directions = dir
 	..()
 
-/obj/machinery/atmospherics/unary/portables_connector/update_icon()
-	..()
-	if (istype(loc, /turf/simulated/floor) && node)
-		var/turf/simulated/floor/floor = loc
-		if(floor.floor_tile && node.alpha == 128)
-			underlays.Cut()
-	return
-
 /obj/machinery/atmospherics/unary/portables_connector/hide(var/i) //to make the little pipe section invisible, the icon changes.
 	update_icon()
 

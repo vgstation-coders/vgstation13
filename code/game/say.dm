@@ -325,7 +325,7 @@ proc/handle_render(var/mob,var/message,var/speaker)
 var/global/resethearers = 0
 
 /proc/sethearing()
-	for(var/mob/virtualhearer/VH in virtualhearers)
+	for(var/mob/virtualhearer/VH in movable_hearers)
 		VH.loc = get_turf(VH.attached)
 	resethearers = world.time + 2
 

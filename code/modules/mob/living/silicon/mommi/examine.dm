@@ -14,7 +14,8 @@
 		else
 			msg += "<B>It looks severely burnt and heat-warped!</B>\n"
 	msg += "</span>"
-
+	if(head_state)
+		msg += "It is wearing [bicon(head_state)] [head_state] on its head.\n"
 	if(tool_state)
 		var/obj/item/I = tool_state
 		msg += "Its utitility claw is gripping [bicon(I)] [I.gender==PLURAL?"some":"a"] [I.name].\n"

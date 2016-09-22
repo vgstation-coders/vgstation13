@@ -22,7 +22,7 @@
 	starting_materials		= list(MAT_IRON = 50, MAT_GLASS = 20)
 	w_type					= RECYK_ELECTRONIC
 	melt_temperature		= MELTPOINT_SILICON
-	origin_tech				= "magnets=1;engineering=1"
+	origin_tech				= Tc_MAGNETS + "=1;" + Tc_ENGINEERING + "=1"
 	// VG: We dun changed dis so we can link simple machines. - N3X
 	var/obj/machinery/buffer // simple machine buffer for device linkage
 	var/clone				= 0 // If this is on cloning will happen, this is handled in machinery code.
@@ -134,14 +134,16 @@ obj/item/device/multitool/ai_detect/examine(mob/user)
 	..()
 	if(src.detected)
 		user << "<span class='info'>The screen displays:</span>"
-		if(DETECT_AI)
+		if(detected & DETECT_AI)
 			to_chat(user, "<span class='info'>AI detected</span>")
-		if(DETECT_PAI)
-			to_chat(user, "<span class='info'>pAI detected></span>")
-		if(DETECT_RECORDER)
+		if(detected & DETECT_PAI)
+			to_chat(user, "<span class='info'>pAI detected</span>")
+		if(detected & DETECT_RECORDER)
 			to_chat(user, "<span class='info'>Tape recorder detected</span>")
-		if(DETECT_ANALYZER)
+		if(detected & DETECT_ANALYZER)
 			to_chat(user, "<span class='info'>Voice analyzer detected</span>")
+	else
+		to_chat(user, "<span class='info'>The screen is not displaying anything.</span>")
 
 ////////////////////////////////////////////////////////////////////////
 #undef DETECT_TICKER_PERIOD

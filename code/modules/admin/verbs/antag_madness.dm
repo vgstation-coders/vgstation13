@@ -543,9 +543,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			M.equip_to_slot_or_del(new/obj/item/device/radio/headset, slot_ears)
 			M.equip_to_slot_or_del(new/obj/item/clothing/under/lightpurple, slot_w_uniform)
 			M.equip_to_slot_or_del(new/obj/item/weapon/storage/backpack/satchel, slot_back)
-			var/obj/item/weapon/spellbook/S = new/obj/item/weapon/spellbook(M)
-			S.uses = 30
-			S.op = 0
+			var/obj/item/weapon/spellbook/S = new/obj/item/weapon/spellbook/admin(M)
 			M.put_in_hands(S)
 
 			var/obj/item/weapon/teleportation_scroll/T = new/obj/item/weapon/teleportation_scroll(M)

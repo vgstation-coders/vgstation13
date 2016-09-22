@@ -24,12 +24,20 @@
 	return amount
 
 /mob/living/silicon/robot/adjustBruteLoss(var/amount)
+
+	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = amount)))
+		return 0
+
 	if(amount > 0)
 		take_overall_damage(amount, 0)
 	else
 		heal_overall_damage(-amount, 0)
 
 /mob/living/silicon/robot/adjustFireLoss(var/amount)
+
+	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = amount)))
+		return 0
+
 	if(amount > 0)
 		take_overall_damage(0, amount)
 	else

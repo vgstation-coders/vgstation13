@@ -630,6 +630,7 @@ $(function() {
 			href = escaper(href);
 			runByond('?action=openLink&link='+href);
 		}
+		runByond('byond://winset?mapwindow.map.focus=true');
 	});
 
 	//Fuck everything about this event. Will look into alternatives.

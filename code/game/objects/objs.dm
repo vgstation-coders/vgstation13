@@ -379,3 +379,15 @@ a {
 
 /obj/acidable()
 	return !(flags & INVULNERABLE)
+
+/obj/proc/t_scanner_expose()
+	if (level != LEVEL_BELOW_FLOOR)
+		return
+
+	if (invisibility == 101)
+		invisibility = 0
+
+		spawn(1 SECONDS)
+			var/turf/U = loc
+			if(istype(U) && U.intact)
+				invisibility = 101

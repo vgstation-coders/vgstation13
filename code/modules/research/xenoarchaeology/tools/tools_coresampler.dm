@@ -77,6 +77,7 @@
 			//update the sample bag
 			filled_bag.icon_state = "evidence"
 			var/image/I = image("icon"=R, "layer"=FLOAT_LAYER)
+			I.plane = FLOAT_PLANE
 			filled_bag.underlays += I
 			filled_bag.w_class = W_CLASS_TINY
 

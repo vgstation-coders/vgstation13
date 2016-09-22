@@ -84,8 +84,7 @@ var/list/all_doors = list()
 			if (mecha.occupant && !operating && (allowed(mecha.occupant) || check_access_list(mecha.operation_req_access)))
 				open()
 			else if(!operating)
-				playsound(src.loc, 'sound/machines/denied.ogg', 50, 1)
-				door_animate("deny")
+				denied()
 
 	if (istype(AM, /obj/structure/bed/chair/vehicle))
 		var/obj/structure/bed/chair/vehicle/vehicle = AM
@@ -96,8 +95,7 @@ var/list/all_doors = list()
 					vehicle.forceMove(get_step(vehicle,vehicle.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
 				open()
 			else if(!operating)
-				playsound(src.loc, 'sound/machines/denied.ogg', 50, 1)
-				door_animate("deny")
+				denied()
 
 /obj/machinery/door/proc/bump_open(mob/user as mob)
 	// TODO: analyze this
@@ -112,8 +110,7 @@ var/list/all_doors = list()
 	if(allowed(user))
 		open()
 	else if(!operating)
-		playsound(src.loc, 'sound/machines/denied.ogg', 50, 1)
-		door_animate("deny")
+		denied()
 
 /obj/machinery/door/attack_ai(mob/user as mob)
 	add_hiddenprint(user)
@@ -174,9 +171,7 @@ var/list/all_doors = list()
 		else
 			return open()
 
-	playsound(src.loc, 'sound/machines/denied.ogg', 50, 1)
-	if(density) //Why are we playing a denied animation on an OPEN DOOR
-		door_animate("deny")
+	denied()
 
 /obj/machinery/door/blob_act()
 	if(prob(BLOB_PROBABILITY))
@@ -382,6 +377,12 @@ var/list/all_doors = list()
 			bound_height = width * WORLD_ICON_SIZE
 
 	update_nearby_tiles()
+
+// Flash denied and such.
+/obj/machinery/door/proc/denied()
+	playsound(loc, 'sound/machines/denied.ogg', 50, 1)
+	if (density) //Why are we playing a denied animation on an OPEN DOOR
+		door_animate("deny")
 
 /obj/machinery/door/morgue
 	icon = 'icons/obj/doors/morgue.dmi'

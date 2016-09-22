@@ -510,7 +510,7 @@
 	icon_state = "cooked_book"
 	author = "Lord Frenrir Cageth"
 	title = "Chef Recipes"
-	wiki_page = "Chef_recipes"
+	wiki_page = "Guide_to_Food_and_Drinks"
 
 /obj/item/weapon/book/manual/barman_recipes
 	name = "Barman Recipes"
