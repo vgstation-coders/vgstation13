@@ -1,4 +1,7 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:33
+#define CHARACTER_SETUP 0
+#define UI_SETUP 1
+#define GENERAL_SETUP 2
+#define SPECIAL_ROLES_SETUP 3
 
 var/list/preferences_datums = list()
 
@@ -9,7 +12,7 @@ var/global/list/special_roles = list(
 	ROLE_CHANGELING   = IS_MODE_COMPILED("changeling"),
 	ROLE_CULTIST      = IS_MODE_COMPILED("cult"),
 	ROLE_PLANT        = 1,
-	"infested monkey" = IS_MODE_COMPILED("monkey"),
+//	"infested monkey" = IS_MODE_COMPILED("monkey"),
 	ROLE_MALF         = IS_MODE_COMPILED("malfunction"),
 	//ROLE_NINJA        = 1,
 	ROLE_OPERATIVE    = IS_MODE_COMPILED("nuclear"),
@@ -34,6 +37,7 @@ var/list/antag_roles = list(
 	ROLE_VAMPIRE      = IS_MODE_COMPILED("vampire"),
 	ROLE_VOXRAIDER    = IS_MODE_COMPILED("heist"),
 	ROLE_WIZARD       = 1,
+//	"infested monkey" = IS_MODE_COMPILED("monkey"),
 )
 
 var/list/nonantag_roles = list(
@@ -273,62 +277,85 @@ var/const/MAX_SAVE_SLOTS = 8
 
 	return dat
 
-/datum/preferences/proc/setup_special(var/dat, var/user)
-	dat += {"<table><tr><td width='340px' height='300px' valign='top'>
-	<h2>General Settings</h2>
-	<b>Space Parallax:</b> <a href='?_src_=prefs;preference=parallax'><b>[space_parallax ? "Enabled" : "Disabled"]</b></a><br>
-	<b>Parallax Speed:</b> <a href='?_src_=prefs;preference=p_speed'><b>[parallax_speed]</b></a><br>
-	<b>Space Dust:</b> <a href='?_src_=prefs;preference=dust'><b>[space_dust ? "Yes" : "No"]</b></a><br>
-	<b>Play admin midis:</b> <a href='?_src_=prefs;preference=hear_midis'><b>[(toggles & SOUND_MIDI) ? "Yes" : "No"]</b></a><br>
-	<b>Play lobby music:</b> <a href='?_src_=prefs;preference=lobby_music'><b>[(toggles & SOUND_LOBBY) ? "Yes" : "No"]</b></a><br>
-	<b>Hear streamed media:</b> <a href='?_src_=prefs;preference=jukebox'><b>[(toggles & SOUND_STREAMING) ? "Yes" : "No"]</b></a><br>
-	<b>Use WMP:</b> <a href='?_src_=prefs;preference=wmp'><b>[(usewmp) ? "Yes" : "No"]</b></a><br>
-	<b>Use NanoUI:</b> <a href='?_src_=prefs;preference=nanoui'><b>[(usenanoui) ? "Yes" : "No"]</b></a><br>
-	<b>Progress Bars:</b> <a href='?_src_=prefs;preference=progbar'><b>[(progress_bars) ? "Yes" : "No"]</b></a><br>
-	<b>Randomized Character Slot:</b> <a href='?_src_=prefs;preference=randomslot'><b>[randomslot ? "Yes" : "No"]</b></a><br>
-	<b>Ghost ears:</b> <a href='?_src_=prefs;preference=ghost_ears'><b>[(toggles & CHAT_GHOSTEARS) ? "All Speech" : "Nearby Speech"]</b></a><br>
-	<b>Ghost sight:</b> <a href='?_src_=prefs;preference=ghost_sight'><b>[(toggles & CHAT_GHOSTSIGHT) ? "All Emotes" : "Nearby Emotes"]</b></a><br>
-	<b>Ghost radio:</b> <a href='?_src_=prefs;preference=ghost_radio'><b>[(toggles & CHAT_GHOSTRADIO) ? "All Chatter" : "Nearby Speakers"]</b></a><br>
-	<b>Ghost PDA:</b> <a href='?_src_=prefs;preference=ghost_pda'><b>[(toggles & CHAT_GHOSTPDA) ? "All PDA Messages" : "No PDA Messages"]</b></a><br>
-	<b>Special Windows: </b><a href='?_src_=prefs;preference=special_popup'><b>[special_popup ? "Yes" : "No"]</b></a><br>
-	<b>Character Records:<b> [jobban_isbanned(user, "Records") ? "Banned" : "<a href=\"byond://?src=\ref[user];preference=records;record=1\">Set</a></b><br>"]
-	<b>Show Tooltips:</b> <a href='?_src_=prefs;preference=tooltips'><b>[(tooltips) ? "Yes" : "No"]</b></a><br>
-	"}
+/datum/preferences/proc/setup_special(var/dat, var/mob/user)
+	if(user.client.holder)
+		dat += {"
+		<h1><font color=red>Admin Only Settings</font></h1>
+	<div id="container" style="border:1px solid #000; width:96%; padding-left:2%; padding-right:2%; overflow:auto; padding-top:5px; padding-bottom:5px;">
+	  <div id="leftDiv" style="width:50%;height:100%;float:left;">
+		<b>Toggle Adminhelp Sound</b>
+		<a href='?_src_=prefs;preference=hear_ahelp'><b>[toggles & SOUND_ADMINHELP ? "Enabled" : "Disabled"]</b></a><br>
+		<b>Toggle Prayers</b>
+		<a href='?_src_=prefs;preference=hear_prayer'><b>[toggles & CHAT_PRAYER ? "Enabled" : "Disabled"]</b></a><br>
+		<b>Toggle Hear Radio</b>
+		<a href='?_src_=prefs;preference=hear_radio'><b>[toggles & CHAT_GHOSTRADIO ? "Enabled" : "Disabled"]</b></a><br>
+	  </div>
+	  <div id="rightDiv" style="width:50%;height:100%;float:right;">
+		<b>Toggle Attack Logs</b>
+		<a href='?_src_=prefs;preference=hear_attack'><b>[toggles & CHAT_ATTACKLOGS ? "Enabled" : "Disabled"]</b></a><br>
+		<b>Toggle Debug Logs</b>
+		<a href='?_src_=prefs;preference=hear_debug'><b>[toggles & CHAT_DEBUGLOGS ? "Enabled" : "Disabled"]</b></a><br>
+	  </div>
+	</div>"}
+
+	dat += {"
+	<h1>General Settings</h1>
+<div id="container" style="border:1px solid #000; width:96; padding-left:2%; padding-right:2%; overflow:auto; padding-top:5px; padding-bottom:5px;">
+  <div id="leftDiv" style="width:50%;height:100%;float:left;">
+	<b>Space Parallax:</b>
+	<a href='?_src_=prefs;preference=parallax'><b>[space_parallax ? "Enabled" : "Disabled"]</b></a><br>
+	<b>Parallax Speed:</b>
+	<a href='?_src_=prefs;preference=p_speed'><b>[parallax_speed]</b></a><br>
+	<b>Space Dust:</b>
+	<a href='?_src_=prefs;preference=dust'><b>[space_dust ? "Yes" : "No"]</b></a><br>
+	<b>Play admin midis:</b>
+	<a href='?_src_=prefs;preference=hear_midis'><b>[(toggles & SOUND_MIDI) ? "Yes" : "No"]</b></a><br>
+	<b>Play lobby music:</b>
+	<a href='?_src_=prefs;preference=lobby_music'><b>[(toggles & SOUND_LOBBY) ? "Yes" : "No"]</b></a><br>
+	<b>Play Ambience:</b>
+	<a href='?_src_=prefs;preference=ambience'><b>[(toggles & SOUND_AMBIENCE) ? "Yes" : "No"]</b></a><br>
+	<b>Hear streamed media:</b>
+	<a href='?_src_=prefs;preference=jukebox'><b>[(toggles & SOUND_STREAMING) ? "Yes" : "No"]</b></a><br>
+	<b>Streaming Program:</b>
+	<a href='?_src_=prefs;preference=wmp'><b>[(usewmp) ? "WMP (compatibility)" : "VLC (requires plugin)"]</b></a><br>
+	<b>Streaming Volume</b>
+	<a href='?_src_=prefs;preference=volume'><b>[volume]</b></a><br>
+	<b>UI Display:</b>
+	<a href='?_src_=prefs;preference=nanoui'><b>[(usenanoui) ? "NanoUI" : "HTML"]</b></a><br>
+	<b>Progress Bars:</b>
+	<a href='?_src_=prefs;preference=progbar'><b>[(progress_bars) ? "Yes" : "No"]</b></a><br>
+  </div>
+  <div id="rightDiv" style="width:50%;height:100%;float:right;">
+	<b>Randomized Character Slot:</b>
+	<a href='?_src_=prefs;preference=randomslot'><b>[randomslot ? "Yes" : "No"]</b></a><br>
+	<b>Show Deadchat:</b>
+	<a href='?_src_=prefs;preference=ghost_ears'><b>[(toggles & CHAT_GHOSTEARS) ? "All Speech" : "Nearby Speech"]</b></a><br>
+	<b>Ghost Hearing:</b>
+	<a href='?_src_=prefs;preference=ghost_ears'><b>[(toggles & CHAT_GHOSTEARS) ? "All Speech" : "Nearby Speech"]</b></a><br>
+	<b>Ghost Sight:</b>
+	<a href='?_src_=prefs;preference=ghost_sight'><b>[(toggles & CHAT_GHOSTSIGHT) ? "All Emotes" : "Nearby Emotes"]</b></a><br>
+	<b>Ghost Radio:</b>
+	<a href='?_src_=prefs;preference=ghost_radio'><b>[(toggles & CHAT_GHOSTRADIO) ? "All Chatter" : "Nearby Speakers"]</b></a><br>
+	<b>Ghost PDA:</b>
+	<a href='?_src_=prefs;preference=ghost_pda'><b>[(toggles & CHAT_GHOSTPDA) ? "All PDA Messages" : "No PDA Messages"]</b></a><br>
+	<b>Show OOC:</b>
+	<a href='?_src_=prefs;preference=show_ooc'><b>[(toggles & CHAT_OOC) ? "Enabled" : "Disabled"]</b></a><br>
+	<b>Show LOOC:</b>
+	<a href='?_src_=prefs;preference=show_looc'><b>[(toggles & CHAT_LOOC) ? "Enabled" : "Disabled"]</b></a><br>
+	<b>Show Tooltips:</b>
+	<a href='?_src_=prefs;preference=tooltips'><b>[(tooltips) ? "Yes" : "No"]</b></a><br>
+	<b>Adminhelp Special Tab:</b>
+	<a href='?_src_=prefs;preference=special_popup'><b>[special_popup ? "Yes" : "No"]</b></a><br>
+	<b>Character Records:<b>
+	[jobban_isbanned(user, "Records") ? "Banned" : "<a href=\"byond://?src=\ref[user];preference=records;record=1\">Set</a></b><br>"]
+  </div>
+</div>"}
 
 	if(config.allow_Metadata)
 		dat += "<b>OOC Notes:</b> <a href='?_src_=prefs;preference=metadata;task=input'> Edit </a><br>"
 
-	dat += "</td><td width='300px' height='300px' valign='top'><h2>Antagonist Settings</h2>"
-
-	if(jobban_isbanned(user, "Syndicate"))
-		dat += "<b>You are banned from antagonist roles.</b>"
-	else
-		for (var/i in antag_roles)
-			if(antag_roles[i]) //if mode is available on the server
-				if(jobban_isbanned(user, i))
-					dat += "<b>Be [i]:</b> <font color=red><b> \[BANNED]</b></font><br>"
-				else if(i == "pai candidate")
-					if(jobban_isbanned(user, "pAI"))
-						dat += "<b>Be [i]:</b> <font color=red><b> \[BANNED]</b></font><br>"
-				else
-					var/wikiroute = role_wiki[i]
-					dat += "<b>Be [i]:</b> <a href='?_src_=prefs;preference=toggle_role;role_id=[i]'><b>[roles[i] & ROLEPREF_ENABLE ? "Yes" : "No"]</b></a> [wikiroute ? "<a HREF='?src=\ref[user];getwiki=[wikiroute]'>wiki</a>" : ""]<br>"
-
-	dat += "</td><td width='300px' height='300px' valign='top'><h2>Special Roles Settings</h2>"
-
-	for (var/i in nonantag_roles)
-		if(nonantag_roles[i]) //if mode is available on the server
-			if(jobban_isbanned(user, i))
-				dat += "<b>Be [i]:</b> <font color=red><b> \[BANNED]</b></font><br>"
-			else if(i == "pai candidate")
-				if(jobban_isbanned(user, "pAI"))
-					dat += "<b>Be [i]:</b> <font color=red><b> \[BANNED]</b></font><br>"
-			else
-				var/wikiroute = role_wiki[i]
-				dat += "<b>Be [i]:</b> <a href='?_src_=prefs;preference=toggle_role;role_id=[i]'><b>[roles[i] & ROLEPREF_ENABLE ? "Yes" : "No"]</b></a> [wikiroute ? "<a HREF='?src=\ref[user];getwiki=[wikiroute]'>wiki</a>" : ""]<br>"
-
-	dat += "</td></tr></table>"
 	return dat
+
 /datum/preferences/proc/getPrefLevelText(var/datum/job/job)
 	if(GetJobDepartment(job, 1) & job.flag)
 		return "High"
@@ -338,6 +365,7 @@ var/const/MAX_SAVE_SLOTS = 8
 		return "Low"
 	else
 		return "NEVER"
+
 /datum/preferences/proc/getPrefLevelUpOrDown(var/datum/job/job, var/inc)
 	if(GetJobDepartment(job, 1) & job.flag)
 		if(inc)
@@ -549,20 +577,23 @@ var/const/MAX_SAVE_SLOTS = 8
 	else
 		dat += "Please create an account to save your preferences."
 
-	dat += "<center><a href='?_src_=prefs;preference=tab;tab=0' [current_tab == 0 ? "class='linkOn'" : ""]>Character Settings</a> | "
-	dat += "<a href='?_src_=prefs;preference=tab;tab=1' [current_tab == 1 ? "class='linkOn'" : ""]>UI Settings</a> | "
-	dat += "<a href='?_src_=prefs;preference=tab;tab=2' [current_tab == 2 ? "class='linkOn'" : ""]>General Settings</a></center><br>"
+	dat += "<center><a href='?_src_=prefs;preference=tab;tab=0' [current_tab == CHARACTER_SETUP ? "class='linkOn'" : ""]>Character Settings</a> | "
+	dat += "<a href='?_src_=prefs;preference=tab;tab=1' [current_tab == UI_SETUP ? "class='linkOn'" : ""]>UI Settings</a> | "
+	dat += "<a href='?_src_=prefs;preference=tab;tab=2' [current_tab == GENERAL_SETUP ? "class='linkOn'" : ""]>General Settings</a> | "
+	dat += "<a href='?_src_=prefs;preference=tab;tab=3' [current_tab == SPECIAL_ROLES_SETUP ? "class='linkOn'" : ""]>Special Roles</a></center><br>"
 
 	if(appearance_isbanned(user))
 		dat += "<b>You are banned from using custom names and appearances. You can continue to adjust your characters, but you will be randomised once you join the game.</b><br>"
 
 	switch(current_tab)
-		if(0)
+		if(CHARACTER_SETUP)
 			dat = setup_character_options(dat, user)
-		if(1)
+		if(UI_SETUP)
 			dat = setup_UI(dat, user)
-		if(2)
+		if(GENERAL_SETUP)
 			dat = setup_special(dat, user)
+		if(SPECIAL_ROLES_SETUP)
+			dat = configure_special_roles(dat, user)
 
 	dat += "<br><hr>"
 
@@ -923,11 +954,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	save_character_sqlite(user.ckey, user, default_slot)
 
 	return 1
+
 /datum/preferences/proc/process_link(mob/user, list/href_list)
 	if(!user)
-		return
-
-	if(!istype(user, /mob/new_player))
 		return
 
 	if(href_list["preference"] == "job")
@@ -1296,7 +1325,6 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					if(new_relation)
 						nanotrasen_relation = new_relation
 
-
 				if("limbs")
 					var/list/limb_input = list(
 						"Left Leg [organ_data[LIMB_LEFT_LEG]]" = LIMB_LEFT_LEG,
@@ -1472,9 +1500,18 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 				if("lobby_music")
 					toggles ^= SOUND_LOBBY
 					if(toggles & SOUND_LOBBY)
-						user << sound(ticker.login_music, repeat = 0, wait = 0, volume = 85, channel = 1)
+						if(istype(user,/mob/new_player))
+							user << sound(ticker.login_music, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY)
 					else
-						user << sound(null, repeat = 0, wait = 0, volume = 85, channel = 1)
+						user << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_LOBBY)
+
+				if("volume")
+					user.client.set_new_volume()
+
+				if("ambience")
+					toggles ^= SOUND_AMBIENCE
+					if(!(toggles & SOUND_LOBBY))
+						user << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_AMBIENCE)
 
 				if("jukebox")
 					toggles ^= SOUND_STREAMING
@@ -1498,6 +1535,12 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("ghost_pda")
 					toggles ^= CHAT_GHOSTPDA
+
+				if("show_ooc")
+					toggles ^= CHAT_OOC
+
+				if("show_looc")
+					toggles ^= CHAT_LOOC
 
 				if("save")
 					if(world.timeofday >= (lastPolled + POLLED_LIMIT))
@@ -1527,6 +1570,24 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 				if("tab")
 					if(href_list["tab"])
 						current_tab = text2num(href_list["tab"])
+
+			if(user.client.holder)
+				switch(href_list["preference"])
+					if("hear_ahelp")
+						toggles ^= SOUND_ADMINHELP
+
+					if("hear_prayer")
+						toggles ^= CHAT_PRAYER
+
+					if("hear_radio")
+						toggles ^= CHAT_GHOSTRADIO
+
+					if("hear_attack")
+						toggles ^= CHAT_ATTACKLOGS
+
+					if("hear_debug")
+						toggles ^= CHAT_DEBUGLOGS
+
 	ShowChoices(user)
 	return 1
 
@@ -1665,8 +1726,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 /datum/preferences/proc/close_load_dialog(mob/user)
 	user << browse(null, "window=saves")
 
-/datum/preferences/proc/configure_special_roles(var/mob/user)
-	var/html={"<form method="get">
+/datum/preferences/proc/configure_special_roles(var/dat, var/mob/user)
+	dat+={"<form method="get">
 	<input type="hidden" name="src" value="\ref[src]" />
 	<input type="hidden" name="preference" value="set_roles" />
 	<h1>Special Role Preferences</h1>
@@ -1675,44 +1736,94 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 		<legend>Legend</legend>
 		<dl>
 			<dt>Never:</dt>
-			<dd>Always answer no to this role.</dd>
+			<dd>Automatically respond 'no' to all requests to become this role.</dd>
 			<dt>No:</dt>
-			<dd>Answer no for this round. (Default)</dd>
+			<dd>Responds no to requests to become this role, with options to sign up to become it. Default.</dd>
 			<dt>Yes:</dt>
-			<dd>Answer yes for this round.</dd>
+			<dd>Responds yes to requests to become this role, with options to opt out of becoming it.</dd>
 			<dt>Always:</dt>
-			<dd>Always answer yes to this role.</dd>
+			<dd>Automatically respond 'yes' to all requests to become this role.</dd>
 		</dl>
 	</fieldset>
-	<table border=\"0\">
+
+	<table border=\"0\" padding-left = 20px;>
 		<thead>
 			<tr>
-				<th>Role</th>
+				<th colspan='6' height = '40px' valign='bottom'><h1>Antagonist Roles</h1></th>
+			</tr>
+		</thead>
+		<tbody>"}
+
+
+	dat += {"<tr>
+				<th><u>Role</u></th>
+				<th>Instructions</th>
 				<th class="clmNever">Never</th>
 				<th class="clmNo">No</th>
 				<th class="clmYes">Yes</th>
 				<th class="clmAlways">Always</th>
-			</tr>
-		</thead>
-		<tbody>"}
-	for(var/role_id in special_roles)
-		var/desire = get_role_desire_str(roles[role_id])
-		html += {"<tr>
-			<th>[role_id]</th>
-			<td class='column clmNever'><input type="radio" name="[role_id]" value="[ROLEPREF_PERSIST]" title="Never"[desire=="Never"?" checked='checked'":""]/></td>
-			<td class='column clmNo'><input type="radio" name="[role_id]" value="0" title="No"[desire=="No"?" checked='checked'":""] /></td>
-			<td class='column clmYes'><input type="radio" name="[role_id]" value="[ROLEPREF_ENABLE]" title="Yes"[desire=="Yes"?" checked='checked'":""] /></td>
-			<td class='column clmAlways'><input type="radio" name="[role_id]" value="[ROLEPREF_ENABLE|ROLEPREF_PERSIST]" title="Always"[desire=="Always"?" checked='checked'":""] /></td>
-		</tr>"}
-	html += {"</tbody>
+			</tr>"}
+
+	if(jobban_isbanned(user, "Syndicate"))
+		dat += "<th colspan='6' text-align = 'center' height = '40px'><h1>You are banned from antagonist roles</h1></th>"
+	else
+		for(var/role_id in antag_roles)
+			dat += "<tr>"
+			dat += "<td>[capitalize(role_id)]</td>"
+			if(antag_roles[role_id]) //if mode is available on the server
+				if(jobban_isbanned(user, role_id))
+					dat += "<td class='column clmNever' colspan='5'><font color=red><b>\[BANNED]</b></font></td>"
+				else if(role_id == "pai candidate")
+					if(jobban_isbanned(user, "pAI"))
+						dat += "<td class='column clmNever' colspan='5'><font color=red><b>\[BANNED]</b></font></td>"
+				else
+					var/wikiroute = role_wiki[role_id]
+					var/desire = get_role_desire_str(roles[role_id])
+					dat += {"<td class='column'>[wikiroute ? "<a HREF='?src=\ref[user];getwiki=[wikiroute]'>Role Wiki</a>" : "None"]</td>
+							<td class='column clmNever'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_PERSIST]" title="Never"[desire=="Never"?" checked='checked'":""]/></label></td>
+							<td class='column clmNo'><label class="fullsize"><input type="radio" name="[role_id]" value="0" title="No"[desire=="No"?" checked='checked'":""] /></label></td>
+							<td class='column clmYes'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_ENABLE]" title="Yes"[desire=="Yes"?" checked='checked'":""] /></label></td>
+							<td class='column clmAlways'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_ENABLE|ROLEPREF_PERSIST]" title="Always"[desire=="Always"?" checked='checked'":""] /></label></td>
+					</tr>"}
+
+	dat += "<th colspan='6' height = '60px' valign='bottom'><h1>Non-Antagonist Roles</h1></th>"
+
+	dat += {"<tr>
+				<th><u>Role</u></th>
+				<th>Instructions</th>
+				<th class="clmNever">Never</th>
+				<th class="clmNo">No</th>
+				<th class="clmYes">Yes</th>
+				<th class="clmAlways">Always</th>
+			</tr>"}
+
+	for(var/role_id in nonantag_roles)
+		dat += "<tr>"
+		dat += "<td>[capitalize(role_id)]</td>"
+		if(nonantag_roles[role_id]) //if mode is available on the server
+			if(jobban_isbanned(user, role_id))
+				dat += "<td class='column clmNever' colspan='5'><font color=red><b>\[BANNED]</b></font></td>"
+			else if(role_id == "pai candidate")
+				if(jobban_isbanned(user, "pAI"))
+					dat += "<td class='column clmNever' colspan='5'><font color=red><b>\[BANNED]</b></font></td>"
+			else
+				var/wikiroute = role_wiki[role_id]
+				var/desire = get_role_desire_str(roles[role_id])
+				dat += {"<td class='column'>[wikiroute ? "<a HREF='?src=\ref[user];getwiki=[wikiroute]'>Role Wiki</a>" : ""]</td>
+						<td class='column clmNever'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_PERSIST]" title="Never"[desire=="Never"?" checked='checked'":""]/></label></td>
+						<td class='column clmNo'><label class="fullsize"><input type="radio" name="[role_id]" value="0" title="No"[desire=="No"?" checked='checked'":""] /></label></td>
+						<td class='column clmYes'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_ENABLE]" title="Yes"[desire=="Yes"?" checked='checked'":""] /></label></td>
+						<td class='column clmAlways'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_ENABLE|ROLEPREF_PERSIST]" title="Always"[desire=="Always"?" checked='checked'":""] /></label></td>
+				</tr>"}
+
+	dat += {"</tbody>
 		</table>
+		<br>
 		<input type="submit" value="Submit" />
 		<input type="reset" value="Reset" />
-		</form>"}
-	var/datum/browser/B = new /datum/browser/clean(user, "roles", "Role Selections", 300, 390)
-	B.set_content(html)
-	B.add_stylesheet("specialroles", 'html/browser/config_roles.css')
-	B.open()
+		</form>
+		<br>"}
+	return dat
 
 /datum/preferences/Topic(href, href_list)
 	if(!usr || !client)
@@ -1725,3 +1836,16 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 			return SetRoles(usr, href_list)
 		if("set_role")
 			return SetRole(usr, href_list)
+
+/client/verb/modify_preferences(page as num)
+	set name = "modifypreferences"
+	set hidden = 1
+	if(!prefs.saveloaded)
+		to_chat(src, "<span class='warning'>Your character preferences have not yet loaded.</span>")
+		return
+	switch(page)
+		if(1)
+			prefs.current_tab = GENERAL_SETUP
+		if(2)
+			prefs.current_tab = SPECIAL_ROLES_SETUP
+	prefs.ShowChoices(usr)

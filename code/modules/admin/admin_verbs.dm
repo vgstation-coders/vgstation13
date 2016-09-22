@@ -1,7 +1,6 @@
 //admin verb groups - They can overlap if you so wish. Only one of each verb will exist in the verbs list regardless
 var/list/admin_verbs_default = list(
 	/datum/admins/proc/show_player_panel,	/*shows an interface for individual players, with various links (links require additional flags*/
-	/client/proc/toggleadminhelpsound,	/*toggles whether we hear a sound when adminhelps/PMs are used*/
 	/client/proc/deadmin_self,			/*destroys our own admin datum so we can play as a regular player*/
 	/client/proc/hide_verbs,			/*hides all our adminverbs*/
 	/client/proc/hide_most_verbs,		/*hides all our hideable adminverbs*/
@@ -55,9 +54,6 @@ var/list/admin_verbs_admin = list(
 	/client/proc/check_ai_laws,			/*shows AI and borg laws*/
 	/client/proc/admin_memo,			/*admin memo system. show/delete/write. +SERVER needed to delete admin memos of others*/
 	/client/proc/dsay,					/*talk in deadchat using our ckey/fakekey*/
-	/client/proc/toggleprayers,			/*toggles prayers on/off*/
-//	/client/proc/toggle_hear_deadcast,	/*toggles whether we hear deadchat*/
-	/client/proc/toggle_hear_radio,		/*toggles whether we hear the radio*/
 	/client/proc/investigate_show,		/*various admintools for investigation. Such as a singulo grief-log*/
 	/client/proc/secrets,
 	/client/proc/shuttle_magic,
@@ -72,8 +68,6 @@ var/list/admin_verbs_admin = list(
 	/client/proc/free_slot,			/*frees slot for chosen job*/
 	/client/proc/cmd_admin_change_custom_event,
 	/client/proc/cmd_admin_rejuvenate,
-	/client/proc/toggleattacklogs,
-	/client/proc/toggledebuglogs,
 	/client/proc/check_customitem_activity,
 	// /client/proc/man_up,
 	// /client/proc/global_man_up,
@@ -171,7 +165,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/restart_controller,
 	/client/proc/enable_debug_verbs,
 	/client/proc/callproc,
-	/client/proc/toggledebuglogs,
 	/client/proc/qdel_toggle,              // /vg/
 	/client/proc/cmd_admin_dump_instances, // /vg/
 	/client/proc/cmd_admin_dump_machine_type_list, // /vg/
@@ -218,9 +211,6 @@ var/list/admin_verbs_polling = list(
 var/list/admin_verbs_hideable = list(
 	/client/proc/set_ooc,
 	/client/proc/deadmin_self,
-//	/client/proc/deadchat,
-	/client/proc/toggleprayers,
-	/client/proc/toggle_hear_radio,
 	/datum/admins/proc/show_traitor_panel,
 	/datum/admins/proc/toggleenter,
 	/datum/admins/proc/toggleguests,
@@ -295,7 +285,6 @@ var/list/admin_verbs_mod = list(
 	/client/proc/cmd_admin_pm_context,	/*right-click adminPM interface*/
 	/client/proc/cmd_admin_pm_panel,	/*admin-pm list*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game.*/
-	/client/proc/toggledebuglogs,
 	/datum/admins/proc/PlayerNotes,
 	/client/proc/admin_ghost,			/*allows us to ghost/reenter body at will*/
 	/client/proc/cmd_mod_say,
@@ -910,17 +899,6 @@ var/list/admin_verbs_mod = list(
 			job_master.FreeRole(job)
 	return
 
-/client/proc/toggleattacklogs()
-	set name = "Toggle Attack Log Messages"
-	set category = "Preferences"
-
-	prefs.toggles ^= CHAT_ATTACKLOGS
-	prefs.save_preferences_sqlite(src, ckey)
-	if (prefs.toggles & CHAT_ATTACKLOGS)
-		to_chat(usr, "You now will get attack log messages")
-	else
-		to_chat(usr, "You now won't get attack log messages")
-
 /client/proc/commandname()
 	set name = "Set Command Name"
 	set category = "Fun"
@@ -928,18 +906,6 @@ var/list/admin_verbs_mod = list(
 	var/text = input(usr,"Please select a new Central Command name.", null)as text|null
 	if(text)
 		change_command_name(text)
-
-/client/proc/toggledebuglogs()
-	set name = "Toggle Debug Log Messages"
-	set category = "Preferences"
-
-	prefs.toggles ^= CHAT_DEBUGLOGS
-	prefs.save_preferences_sqlite(src, ckey)
-	if (prefs.toggles & CHAT_DEBUGLOGS)
-		to_chat(usr, "You now will get debug log messages")
-	else
-		to_chat(usr, "You now won't get debug log messages")
-
 
 /client/proc/man_up(mob/T as mob in mob_list)
 	set category = "Fun"

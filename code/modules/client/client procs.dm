@@ -345,7 +345,7 @@
 /client/verb/resend_resources()
 	set name = "Resend Resources"
 	set desc = "Re-send resources for NanoUI. May help those with NanoUI issues."
-	set category = "Preferences"
+	set category = "OOC"
 
 	to_chat(usr, "<span class='notice'>Re-sending NanoUI resources.  This may result in lag.</span>")
 	nanomanager.send_resources(src)
@@ -429,3 +429,12 @@
 		var/obj/item/clothing/under/U = H.get_item_by_slot(slot_w_uniform)
 		if(istype(U))
 			U.update_holomap()
+
+/client/verb/SwapSides()
+	set name = "swapsides"
+	set hidden = 1
+	var/newsplit = 100 - text2num(winget(usr, "mainwindow.mainvsplit", "splitter"))
+	if(winget(usr, "mainwindow.mainvsplit", "right") == "rpane")
+		winset(usr, "mainwindow.mainvsplit", "right=mapwindow;left=rpane;splitter=[newsplit]")
+	else
+		winset(usr, "mainwindow.mainvsplit", "right=rpane;left=mapwindow;splitter=[newsplit]")
