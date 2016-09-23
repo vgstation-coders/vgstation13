@@ -466,6 +466,8 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	job_engsec_med = sanitize_integer(job_engsec_med, 0, 65535, initial(job_engsec_med))
 	job_engsec_low = sanitize_integer(job_engsec_low, 0, 65535, initial(job_engsec_low))
 
+	for(var/role_id in special_roles)
+		roles[role_id]=0
 	q = new
 	q.Add("SELECT role, preference FROM client_roles WHERE ckey=? AND slot=?", ckey, slot)
 	if(q.Execute(db))
