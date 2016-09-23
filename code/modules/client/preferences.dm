@@ -1015,9 +1015,6 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	else if(href_list["preference"] == "set_roles")
 		return SetRoles(user,href_list)
 
-	else if(href_list["preference"] == "toggle_role")
-		ToggleRole(user,href_list)
-
 	switch(href_list["task"])
 		if("random")
 			switch(href_list["preference"])
@@ -1828,21 +1825,6 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 	save_preferences_sqlite(user, user.ckey)
 	save_character_sqlite(user.ckey, user, default_slot)
-	return 1
-
-/datum/preferences/proc/ToggleRole(var/mob/user, var/list/href_list)
-	var/role_id = href_list["role_id"]
-//	to_chat(user, "<span class='info'>Toggling role [role_id] (currently at [roles[role_id]])...</span>")
-	if(!(role_id in special_roles))
-		to_chat(user, "<span class='danger'>BUG: Unable to find role [role_id].</span>")
-		return 0
-
-	if(roles[role_id] == null || roles[role_id] == "")
-		roles[role_id] = 0
-	// Always set persist.
-	roles[role_id] |= ROLEPREF_PERSIST
-	// Toggle role enable
-	roles[role_id] ^= ROLEPREF_ENABLE
 	return 1
 
 /datum/preferences/Topic(href, href_list)
