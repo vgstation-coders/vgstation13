@@ -91,7 +91,8 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 
 /obj/item/weapon/robot_module/standard
 	name = "standard robot module"
-
+	
+#define STANDARD_MAX_KIT 15
 /obj/item/weapon/robot_module/standard/New()
 	..()
 	src.modules += new /obj/item/weapon/melee/baton/loaded/borg(src)
@@ -107,13 +108,13 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 
 
 	var/obj/item/stack/medical/bruise_pack/B = new /obj/item/stack/medical/bruise_pack(src)
-	B.max_amount = 15
-	B.amount = 15
+	B.max_amount = STANDARD_MAX_KIT
+	B.amount = STANDARD_MAX_KIT
 	src.modules += B
 
 	var/obj/item/stack/medical/ointment/O = new /obj/item/stack/medical/ointment(src)
-	O.max_amount = 15
-	O.amount = 15
+	O.max_amount = STANDARD_MAX_KIT
+	O.amount = STANDARD_MAX_KIT
 	src.modules += O
 
 	fix_modules()
@@ -129,7 +130,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 			src.modules -= null
 			var/obj/item/stack/O = new T(src)
 			if(istype(O,/obj/item/stack/medical))
-				O.max_amount = 15
+				O.max_amount = STANDARD_MAX_KIT
 			src.modules += O
 			O.amount = 1
 	return
@@ -139,7 +140,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 /obj/item/weapon/robot_module/medical
 	name = "medical robot module"
 
-
+#define MEDBORG_MAX_KIT 10
 /obj/item/weapon/robot_module/medical/New()
 	..()
 	src.modules += new /obj/item/device/healthanalyzer(src)
@@ -167,18 +168,18 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	src.emag.name = "Polyacid spray"
 
 	var/obj/item/stack/medical/advanced/bruise_pack/B = new /obj/item/stack/medical/advanced/bruise_pack(src)
-	B.max_amount = 10
-	B.amount = 10
+	B.max_amount = MEDBORG_MAX_KIT
+	B.amount = MEDBORG_MAX_KIT
 	src.modules += B
 
 	var/obj/item/stack/medical/advanced/ointment/O = new /obj/item/stack/medical/advanced/ointment(src)
-	O.max_amount = 10
-	O.amount = 10
+	O.max_amount = MEDBORG_MAX_KIT
+	O.amount = MEDBORG_MAX_KIT
 	src.modules += O
 
 	var/obj/item/stack/medical/splint/S = new /obj/item/stack/medical/splint(src)
-	S.max_amount = 10
-	S.amount = 10
+	S.max_amount = MEDBORG_MAX_KIT
+	S.amount = MEDBORG_MAX_KIT
 	src.modules += S
 
 	fix_modules()
@@ -194,7 +195,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 			src.modules -= null
 			var/obj/item/stack/O = new T(src)
 			if(istype(O,/obj/item/stack/medical))
-				O.max_amount = 15
+				O.max_amount = MEDBORG_MAX_KIT
 			src.modules += O
 			O.amount = 1
 	return
@@ -430,3 +431,6 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	for(var/language in added_languages)
 		R.remove_language(language)
 	added_languages.len = 0
+	
+#undef STANDARD_MAX_KIT
+#undef MEDBORG_MAX_KIT
