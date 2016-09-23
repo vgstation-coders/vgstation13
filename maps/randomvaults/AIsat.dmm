@@ -63,12 +63,12 @@
 "bk" = (/obj/structure/closet/crate{icon_state = "crateopen"; opened = 1},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating/airless,/area/vault/AIsat)
 "bl" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/wall/r_wall,/area/vault/AIsat)
 "bm" = (/obj/item/device/radio/intercom{name = "Custom Channel"; step_y = 25; pixel_x = -27; pixel_y = 4; listening = 0; freerange = 1},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; tag = ""},/turf/simulated/wall/r_wall,/area/vault/AIsat)
-"bn" = (/obj/structure/closet/crate,/obj/item/weapon/aiModule/core/antimov,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor/plating/airless,/area/vault/AIsat)
-"bo" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor/plating/airless/damaged,/area/vault/AIsat)
-"bp" = (/obj/machinery/power/solar/control/vault_listening,/obj/structure/cable,/turf/simulated/floor/plating/airless/damaged,/area/vault/AIsat)
-"bq" = (/obj/machinery/power/battery/smes/vault_listening,/obj/structure/cable,/turf/simulated/floor/plating/airless/damaged,/area/vault/AIsat)
-"br" = (/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/machinery/power/terminal{dir = 8},/turf/simulated/floor/plating/airless,/area/vault/AIsat)
-"bs" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"bn" = (/obj/machinery/power/terminal,/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/wall/r_wall,/area/vault/AIsat)
+"bo" = (/obj/structure/closet/crate,/obj/item/weapon/aiModule/core/antimov,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"bp" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor/plating/airless/damaged,/area/vault/AIsat)
+"bq" = (/obj/machinery/power/solar/control/vault_listening,/obj/structure/cable,/turf/simulated/floor/plating/airless/damaged,/area/vault/AIsat)
+"br" = (/obj/structure/cable,/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/machinery/power/monitor,/turf/simulated/floor/plating/airless/damaged,/area/vault/AIsat)
+"bs" = (/obj/machinery/power/battery/smes/vault_listening,/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor/plating/airless,/area/vault/AIsat)
 "bt" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/obj/structure/catwalk,/obj/structure/catwalk,/turf/space,/area/vault/AIsat)
 "bu" = (/obj/structure/girder/reinforced,/obj/item/stack/sheet/plasteel,/turf/simulated/floor/plating/airless,/area/vault/AIsat)
 "bv" = (/obj/machinery/porta_turret/AIvault,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating/airless/damaged,/area/vault/AIsat)
@@ -88,8 +88,8 @@ arararararaaaaaaaiasatauatavawataxasaiaaaaaaararararar
 ayazazaAaAaBaCaaaiaDataEaFataGaHaxaIaiaaaJaBaKaKaKaKaL
 aMaMaNaOaPaaaQadaiatataiaRaSaTaiaxataiadaQaaaMaMaMaMaM
 adaaaUaaaVaaaWaBaXaYaZaiaibabbaibcaYaXaBbdaaadaaaaaaad
-aaaVaaaUbebfbgbhbibjanbkblbmaXbnboataiadaQaaararararar
-aaaaaaaaadadbeaaacaFaFatbpbqbrbsataIaiaabtaBaKaKaKaKaL
+aaaVaaaUbebfbgbhbibjanbkblbmbnbobpataiadaQaaararararar
+aaaaaaaaadadbeaaacaFaFatbqbrbsatataIaiaabtaBaKaKaKaKaL
 aaaaaVaaaaaaaaaabubvaFbwatavataFatasaiaaaaaaaMaMaMaMaM
 aaaaaaaaaaaaaabhaiaiaGaHatatatbxataiaiaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaadacaiaiaiaibybzaiaiaibAaaaaaaaaaaaaaaaa
