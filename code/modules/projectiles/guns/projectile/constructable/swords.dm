@@ -35,7 +35,7 @@
 		overlays += hypo_icon
 
 /obj/item/weapon/sword/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/metal_blade))
+	if(istype(W, /obj/item/weapon/large_metal_blade))
 		to_chat(user, "You attach \the [W] to \the [src].")
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
@@ -230,7 +230,7 @@
 	if(complete)
 		return
 	to_chat(user, "You detach the metal blade from \the [src].")
-	new /obj/item/weapon/metal_blade(get_turf(user.loc))
+	new /obj/item/weapon/large_metal_blade(get_turf(user.loc))
 	new /obj/item/weapon/sword(get_turf(user.loc))
 	qdel(src)
 
