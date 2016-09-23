@@ -95,6 +95,7 @@ var/global/list/battery_online =	list(
 
 	var/_charging = charging
 	var/_online = online
+	var/_chargedisplay = chargedisplay()
 
 	// Input
 	var/excess = surplus()
@@ -137,7 +138,7 @@ var/global/list/battery_online =	list(
 			lastout = 0
 
 	// Only update icon if state changed
-	if(_charging != charging || _online != online)
+	if(_charging != charging || _online != online || _chargedisplay != chargedisplay())
 		update_icon()
 
 /obj/machinery/power/battery/proc/chargedisplay()
@@ -321,4 +322,3 @@ var/global/list/battery_online =	list(
 	if(Limit)
 		return "[href]=-[Limit]'>-</A>"+rate+"[href]=[Limit]'>+</A>"
 	return rate
-
