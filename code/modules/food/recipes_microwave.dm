@@ -1384,6 +1384,13 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/enchiladas
 
+/datum/recipe/clownfishandcrayons
+	items = list(
+		/obj/item/weapon/storage/fancy/crayons,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp/clown,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/clownfishandcrayons
+
 /datum/recipe/fishburger
 	reagents = list(FLOUR = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/normal)
@@ -1392,10 +1399,6 @@
 /datum/recipe/fishburger/carp
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp)
 	result = /obj/item/weapon/reagent_containers/food/snacks/fishburger/carp
-
-/datum/recipe/fishburger/clown
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/clown)
-	result = /obj/item/weapon/reagent_containers/food/snacks/fishburger/clown
 
 /datum/recipe/fishandchips
 	items = list(

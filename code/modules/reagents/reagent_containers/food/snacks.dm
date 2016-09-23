@@ -642,19 +642,19 @@
 	icon_state = "fishfingers"
 	food_flags = FOOD_MEAT
 
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT, 4)
-		bitesize = 3
+/obj/item/weapon/reagent_containers/food/snacks/fishfingers/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 4)
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/fishfingers/carp
 	name = "carp fish fingers"
 	desc = "Crumbed fish with some zing."
 	icon_state = "fishfingers"
 
-	New()
-		..()
-		reagents.add_reagent(CARPPHEROMONES, 3)
+/obj/item/weapon/reagent_containers/food/snacks/fishfingers/carp/New()
+	..()
+	reagents.add_reagent(CARPPHEROMONES, 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice
 	name = "huge mushroom slice"
@@ -815,30 +815,20 @@
 	desc = "The perfect sea man's lunch."
 	icon_state = "fishburger"
 	food_flags = FOOD_MEAT
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT, 6)
-		bitesize = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/fishburger/clown
-	name = "clownfish burger"
-	desc = "Considered fine dining on the Clown Planet."
-	icon_state = "fishburger" //placeholder
-	New()
-		..()
-		bitesize = 6
-	after_consume(var/mob/user, var/datum/reagents/reagentreference)
-		if(!..())
-			user.dna.SetSEState(CLUMSYBLOCK, 1)
-			domutcheck(user, null, MUTCHK_FORCED)
+/obj/item/weapon/reagent_containers/food/snacks/fishburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/fishburger/carp
 	name = "fillet -o- carp sandwich"
 	desc = "Almost like a carp is yelling somewhere... Give me back that fillet -o- carp, give me that carp."
 	icon_state = "fishburger"
-	New()
-		..()
-		reagents.add_reagent(CARPPHEROMONES, 3)
+
+/obj/item/weapon/reagent_containers/food/snacks/fishburger/carp/New()
+	..()
+	reagents.add_reagent(CARPPHEROMONES, 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/tofuburger
 	name = "tofu burger"
@@ -1841,24 +1831,24 @@
 		bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/fishandchips
-	name = "Fish and Chips"
+	name = "fish and chips"
 	desc = "I do say so myself chap."
 	icon_state = "fishandchips"
 	food_flags = FOOD_MEAT
 
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT, 6)
-		bitesize = 3
+/obj/item/weapon/reagent_containers/food/snacks/fishandchips/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/fishandchips/carp
-	name = "Carp Fish and Chips"
+	name = "carp fish and chips"
 	desc = "The fish has a strong odour about it."
 	icon_state = "fishandchips"
 
-	New()
-		..()
-		reagents.add_reagent(CARPPHEROMONES, 3)
+/obj/item/weapon/reagent_containers/food/snacks/fishandchips/carp/New()
+	..()
+	reagents.add_reagent(CARPPHEROMONES, 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/crab_sticks
 	name = "\improper Not-Actually-Imitation Crab sticks"
@@ -4410,8 +4400,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/bait
 	name = "bait"
-	desc = "Don't fall for it."
-	icon_state = "bacon" //placeholder
+	desc = "This is bait."
+	icon_state = "bait"
 	bitesize = 1
 	New()
 		..()
@@ -4420,12 +4410,40 @@
 /obj/item/weapon/reagent_containers/food/snacks/fish
 	name = "raw fish"
 	desc = "The product of a real man who lives off the land."
-	icon_state = "meat" //placeholder
+	icon_state = "fish_salmon"
 	bitesize = 1
-	var/list/fish_guts = list(/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet) // contains anything the fish will will drop when filleted
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT,1)
+	var/list/fish_guts = list(/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/normal) // contains anything the fish will will drop when filleted
+
+/obj/item/weapon/reagent_containers/food/snacks/fish/New()
+	..()
+	reagents.add_reagent(NUTRIMENT,1)
+
+/obj/item/weapon/reagent_containers/food/snacks/fish/salmon
+	name = "salmon"
+	desc = "This little guy spent his life dodging bears and jumping up waterfalls."
+	icon_state = "fish_salmon"
+
+/obj/item/weapon/reagent_containers/food/snacks/fish/bream
+	name = "bream"
+	desc = "A common fish, but delicious all the same."
+	icon_state = "fish_bream"
+
+/obj/item/weapon/reagent_containers/food/snacks/fish/perch
+	name = "perch"
+	desc = "While not usually caught as a meal, they are still quite tasty."
+	icon_state = "fish_perch"
+
+/obj/item/weapon/reagent_containers/food/snacks/fish/rainbowtrout
+	name = "rainbow trout"
+	desc = "The fabled rainbow trout.  Truly a prize to be beholden."
+	icon_state = "fish_rainbowtrout"
+	fish_guts = list(/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/normal,
+		/obj/item/weapon/storage/fancy/crayons)
+
+/obj/item/weapon/reagent_containers/food/snacks/fish/walleye
+	name = "walleye"
+	desc = "A goofy looking fish.  Usually caught at night."
+	icon_state = "fish_walleye"
 
 /obj/item/weapon/reagent_containers/food/snacks/fish/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/kitchen/utensil/knife/large))
@@ -4436,35 +4454,42 @@
 /obj/item/weapon/reagent_containers/food/snacks/fish/proc/Fillet(mob/user)
 	if(!isturf(loc) && !user.is_holding_item(src))
 		return
+	var/in_hand = user.is_holding_item(src)
 	var/ground = get_turf(src)
+	to_chat(user, "<span class='notice'>You fillet and clean \the [name].</span>")
+	qdel(src)
 	if(fish_guts.len == 1) // put fish_guts in hand if there's only 1 and we are filleting in hand
-		var/obj/item/weapon/temp = fish_guts[1]
-		var/obj/item/weapon/cont = new temp
-		if(user.is_holding_item(src))
-			if(user.drop_item(src, user))
-				user.put_in_hands(cont)
+		var/obj/item/temp = fish_guts[1]
+		var/obj/item/cont = new temp
+		if(in_hand)
+			user.put_in_hands(cont)
 		else
 			cont.forceMove(ground)
 	else
 		for(var/C in fish_guts)
 			new C(ground)
-	to_chat(user, "<span class='notice'>You fillet and clean the [name].</span>")
-	qdel(src)
-
-/obj/item/weapon/reagent_containers/food/snacks/fish/clown
-	name = "clownfish"
-	desc = "Honking Nemo."
-	icon_state = "meat" // placeholder
-	fish_guts = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/clown,
-		/obj/item/weapon/bikehorn
-		)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi
 	name = "sushi"
 	desc = "Now you can pretend you're the Japanese person you'll never, ever be."
 	icon_state = "eggplantsushi"
 	bitesize = 3
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT,4)
+
+/obj/item/weapon/reagent_containers/food/snacks/sushi/New()
+	..()
+	reagents.add_reagent(NUTRIMENT,4)
+
+/obj/item/weapon/reagent_containers/food/snacks/clownfishandcrayons
+	name = "clownfish and crayons"
+	desc = "A staple of any healthy clown's diet."
+	icon_state = "fishandcrayons"
+	bitesize = 4
+
+/obj/item/weapon/reagent_containers/food/snacks/clownfishandcrayons/New()
+	..()
+	reagents.add_reagent(NUTRIMENT,8)
+
+/obj/item/weapon/reagent_containers/food/snacks/clownfishandcrayons/after_consume(var/mob/user)
+	if(!..())
+		user.dna.SetSEState(CLUMSYBLOCK, 1)
+		domutcheck(user, null, MUTCHK_FORCED)

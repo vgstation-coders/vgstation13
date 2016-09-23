@@ -61,17 +61,23 @@
 	name = "carp fillet"
 	desc = "A fillet of spess carp meat"
 	icon_state = "fishfillet"
-	New()
-		..()
-		poisonsacs = new /obj/item/weapon/reagent_containers/food/snacks/carppoisongland
-		eatverb = pick("bite","chew","choke down","gnaw","swallow","chomp")
-		reagents.add_reagent(NUTRIMENT, 3)
-		reagents.add_reagent(CARPOTOXIN, 3)
-		bitesize = 6
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp/New()
+	..()
+	poisonsacs = new /obj/item/weapon/reagent_containers/food/snacks/carppoisongland
+	eatverb = pick("bite","chew","choke down","gnaw","swallow","chomp")
+	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(CARPOTOXIN, 3)
+	bitesize = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp/imitation
 	name = "imitation carp fillet"
 	desc = "Almost just like the real thing, kinda."
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp/clown
+	name = "clownfish fillet"
+	desc = "A fine cut of the ocean's biggest prankster."
+	icon_state = "clownfillet"
 
 /obj/item/weapon/reagent_containers/food/snacks/carppoisongland
 	name = "venomous spines"
@@ -174,15 +180,6 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	desc = "A cut and cleaned fillet of fresh fish."
 	icon_state = "fishfillet"
 
-	New()
-		..()
-		bitesize = 2
-
-/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/clown
-	name = "clownfish fillet"
-	desc = "A fine cut of the ocean's biggest prankster."
-	icon_state = "fishfillet" // placeholder
-
-	New()
-		..()
-		bitesize = 2
+/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/normal/New()
+	..()
+	bitesize = 2
