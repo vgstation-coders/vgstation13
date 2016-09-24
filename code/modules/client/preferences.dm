@@ -1467,7 +1467,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("hear_midis")
 					toggles ^= SOUND_MIDI
-					if(!(toggles & SOUND_LOBBY))
+					if(!(toggles & SOUND_MIDI))
 						user << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_ADMINMUSIC)
 
 				if("lobby_music")
