@@ -39,8 +39,9 @@
 
 /obj/machinery/power/battery/smes/initialize()
 	..()
-	if(!terminal)
-		stat |= BROKEN
+	spawn(5)
+		if(!terminal)
+			stat |= BROKEN
 
 /obj/machinery/power/battery/smes/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob) //these can only be moved by being reconstructed, solves having to remake the powernet.
 	if(iscrowbar(W) && panel_open && terminal)
