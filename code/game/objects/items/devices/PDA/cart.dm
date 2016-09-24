@@ -37,6 +37,22 @@
 	var/message2
 	var/list/stored_data = list()
 
+/obj/item/weapon/cartridge/Destroy()
+	if(radio)
+		qdel(radio)
+		radio = null
+
+	active1 = null
+	active2 = null
+	active3 = null
+	powmonitor = null
+	powermonitors = null
+	alertmonitor = null
+	alertmonitors = null
+	stored_data = null
+
+	..()
+
 /obj/item/weapon/cartridge/engineering
 	name = "Power-ON Cartridge"
 	icon_state = "cart-e"

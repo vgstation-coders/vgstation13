@@ -78,6 +78,11 @@
 	locking_categories      = null
 	locking_categories_name = null
 
+	if((flags & HEAR) && !ismob(src))
+		for(var/mob/virtualhearer/VH in virtualhearers)
+			if(VH.attached == src)
+				returnToPool(VH)
+
 	..()
 
 /proc/delete_profile(var/type, code = 0)
@@ -101,11 +106,6 @@
 		soft_dels += 1
 
 /atom/movable/Del()
-	if((flags & HEAR) && !ismob(src))
-		for(var/mob/virtualhearer/VH in virtualhearers)
-			if(VH.attached == src)
-				returnToPool(VH)
-
 	if (gcDestroyed)
 
 		if (hard_deleted)

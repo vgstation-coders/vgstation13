@@ -141,6 +141,7 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/Destroy()
 	if(myhuman)
+		clear_organs(myhuman)
 		myhuman = null
 	..()
 
@@ -159,15 +160,20 @@ var/global/list/whitelisted_species = list("Human")
 	if(H.organs)
 		H.organs.len=0
 	if(H.internal_organs)
-		for(var/datum/organ/internal/I in H.internal_organs)
-			// I.Remove(H) // THIS DOES NOTHING AT THE MOMENT
-			qdel(I) // These don't get special garbage collection as is so they never get gotten from pool
+		for(var/datum/organ/I in H.internal_organs)
+			qdel(I)
 		H.internal_organs.len=0
 	if(H.organs_by_name)
+		for(var/datum/organ/I in H.organs_by_name)
+			qdel(I)
 		H.organs_by_name.len=0
 	if(H.internal_organs_by_name)
+		for(var/datum/organ/I in H.internal_organs_by_name)
+			qdel(I)
 		H.internal_organs_by_name.len=0
 	if(H.grasp_organs)
+		for(var/datum/organ/I in H.grasp_organs)
+			qdel(I)
 		H.grasp_organs.len = 0
 
 
