@@ -720,6 +720,16 @@
 	user.IgniteMob()
 	to_chat(user, "<span class = 'warning'>The book sets you alight!</span>")
 	
+/obj/item/weapon/spellbook/oneuse/mirror_of_pain
+	spell = /spell/mirror_of_pain
+	spellname = "pain mirror"
+	icon_state = "bookmirror"
+	desc = "The cover of the book seems to stare back at you."
+	
+/obj/item/weapon/spellbook/oneuse/mirror_of_pain/recoil(mob/living/carbon/user as mob)
+	scramble(1, user, 100)
+	to_chat(user, "<span class = 'warning'>Your reflection becomes warped and distorted!</span>")
+	
 // Spell Book Bundles//
 
 /obj/item/weapon/storage/box/spellbook

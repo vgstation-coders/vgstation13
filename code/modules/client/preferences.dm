@@ -891,36 +891,6 @@ var/const/MAX_SAVE_SLOTS = 8
 				if(3) //low
 					job_engsec_low = new_flags
 
-/datum/preferences/proc/SetRoles(var/mob/user, var/list/href_list)
-	// We just grab the role from the POST(?) data.
-	for(var/role_id in special_roles)
-		if(!(role_id in href_list))
-			to_chat(user, "<span class='danger'>BUG: Unable to find role [role_id].</span>")
-			continue
-		var/oldval=text2num(roles[role_id])
-		roles[role_id] = text2num(href_list[role_id])
-		if(oldval!=roles[role_id])
-			to_chat(user, "<span class='info'>Set role [role_id] to [get_role_desire_str(user.client.prefs.roles[role_id])]!</span>")
-
-	save_preferences_sqlite(user, user.ckey)
-	save_character_sqlite(user.ckey, user, default_slot)
-	return 1
-
-/datum/preferences/proc/ToggleRole(var/mob/user, var/list/href_list)
-	var/role_id = href_list["role_id"]
-//	to_chat(user, "<span class='info'>Toggling role [role_id] (currently at [roles[role_id]])...</span>")
-	if(!(role_id in special_roles))
-		to_chat(user, "<span class='danger'>BUG: Unable to find role [role_id].</span>")
-		return 0
-
-	if(roles[role_id] == null || roles[role_id] == "")
-		roles[role_id] = 0
-	// Always set persist.
-	roles[role_id] |= ROLEPREF_PERSIST
-	// Toggle role enable
-	roles[role_id] ^= ROLEPREF_ENABLE
-	return 1
-
 /datum/preferences/proc/SetRole(var/mob/user, var/list/href_list)
 	var/role_id = href_list["role_id"]
 //	to_chat(user, "<span class='info'>Toggling role [role_id] (currently at [roles[role_id]])...</span>")
@@ -1044,9 +1014,6 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 	else if(href_list["preference"] == "set_roles")
 		return SetRoles(user,href_list)
-
-	else if(href_list["preference"] == "toggle_role")
-		ToggleRole(user,href_list)
 
 	switch(href_list["task"])
 		if("random")
@@ -1475,9 +1442,13 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("parallax")
 					space_parallax = !space_parallax
+					if(user && user.hud_used)
+						user.hud_used.update_parallax_existence()
 
 				if("dust")
 					space_dust = !space_dust
+					if(user && user.hud_used)
+						user.hud_used.update_parallax_existence()
 
 				if("p_speed")
 					parallax_speed = min(max(input(user, "Enter a number between 0 and 5 included (default=2)","Parallax Speed Preferences",parallax_speed),0),5)
@@ -1496,6 +1467,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("hear_midis")
 					toggles ^= SOUND_MIDI
+					if(!(toggles & SOUND_MIDI))
+						user << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_ADMINMUSIC)
 
 				if("lobby_music")
 					toggles ^= SOUND_LOBBY
@@ -1510,7 +1483,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("ambience")
 					toggles ^= SOUND_AMBIENCE
-					if(!(toggles & SOUND_LOBBY))
+					if(!(toggles & SOUND_AMBIENCE))
 						user << sound(null, repeat = 0, wait = 0, volume = 0, channel = CHANNEL_AMBIENCE)
 
 				if("jukebox")
@@ -1518,6 +1491,14 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("wmp")
 					usewmp = !usewmp
+					if(!user.client.media)
+						return
+					user.client.media.stop_music()
+					user.client.media.playerstyle = (usewmp ? PLAYER_OLD_HTML : PLAYER_HTML)
+					if(toggles & SOUND_STREAMING)
+						user.client.media.open()
+						user.client.media.update_music()
+
 				if("nanoui")
 					usenanoui = !usenanoui
 				if("tooltips")
@@ -1824,6 +1805,27 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 		</form>
 		<br>"}
 	return dat
+
+/datum/preferences/proc/SetRoles(var/mob/user, var/list/href_list)
+	// We just grab the role from the POST(?) data.
+	var/updated = 0
+	for(var/role_id in special_roles)
+		if(!(role_id in href_list))
+			to_chat(user, "<span class='danger'>BUG: Unable to find role [role_id].</span>")
+			continue
+		var/oldval=text2num(roles[role_id])
+		roles[role_id] = text2num(href_list[role_id])
+		if(oldval!=roles[role_id])
+			updated = 1
+			to_chat(user, "<span class='info'>Set role [role_id] to [get_role_desire_str(user.client.prefs.roles[role_id])]!</span>")
+
+	if(!updated)
+		to_chat(user, "<span class='warning'>No changes to role preferences found!</span>")
+		return 0
+
+	save_preferences_sqlite(user, user.ckey)
+	save_character_sqlite(user.ckey, user, default_slot)
+	return 1
 
 /datum/preferences/Topic(href, href_list)
 	if(!usr || !client)

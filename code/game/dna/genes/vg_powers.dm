@@ -134,6 +134,7 @@ Obviously, requires DNA2.
 
 /obj/screen/plane_master/noir_dummy
 	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
+	alpha = 0
 	appearance_flags = 0
 	plane = NOIR_BLOOD_PLANE
 

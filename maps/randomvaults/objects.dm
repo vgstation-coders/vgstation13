@@ -41,6 +41,21 @@
 
 /area/vault/hive_shuttle
 
+//prison vault
+
+/area/vault/prison_ship
+	requires_power = 1
+
+/area/vault/prison
+
+/obj/item/weapon/disk/shuttle_coords/vault/prison
+	destination = /obj/docking_port/destination/vault/prison
+
+/obj/docking_port/destination/vault/prison
+	areaname = "holding facility 10"
+
+//listening outpost
+
 /area/vault/listening
 	requires_power = 1
 
@@ -49,9 +64,10 @@
 
 /obj/docking_port/destination/vault/listening
 	areaname = "outpost V-24"
-
 /area/vault/biodome
 	requires_power = 1
+
+//biodome
 
 /obj/item/weapon/disk/shuttle_coords/vault/biodome
 	destination = /obj/docking_port/destination/vault/biodome

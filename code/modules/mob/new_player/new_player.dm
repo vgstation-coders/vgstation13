@@ -139,7 +139,7 @@
 			var/mob/dead/observer/observer = new()
 
 			spawning = 1
-			src << sound(null, repeat = 0, wait = 0, volume = 85, channel = 1) // MAD JAMS cant last forever yo
+			src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY) // MAD JAMS cant last forever yo
 
 
 			observer.started_as_observer = 1
@@ -439,7 +439,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	else
 		client.prefs.copy_to(new_character)
 
-	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = 1)// MAD JAMS cant last forever yo
+	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY)// MAD JAMS cant last forever yo
 
 
 	if (mind)
