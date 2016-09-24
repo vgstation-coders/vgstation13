@@ -1331,9 +1331,9 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	if(src.invisibility != INVISIBILITY_MAXIMUM)
 		src.invisibility = INVISIBILITY_MAXIMUM
 
-/obj/machinery/power/apc/change_area(oldarea, newarea)
+/obj/machinery/power/apc/change_area(var/area/oldarea, var/area/newarea)
 	..()
-	name = replacetext(name,oldarea,newarea)
+	name = replacetext(name,oldarea.name,newarea.name)
 
 /obj/machinery/power/apc/wirejack(var/mob/living/silicon/pai/P)
 	if(..())

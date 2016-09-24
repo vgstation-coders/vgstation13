@@ -97,11 +97,11 @@ var/list/camera_names=list()
 		suffix++
 	camera_names[nethash+c_tag]=src
 
-/obj/machinery/camera/change_area(oldarea, newarea)
+/obj/machinery/camera/change_area(var/area/oldarea, var/area/newarea)
 	var/nethash=english_list(network)
 	camera_names[nethash+c_tag]=null
 	..()
-	if(name != replacetext(name,oldarea,newarea))
+	if(name != replacetext(name,oldarea.name,newarea.name))
 		name_camera()
 
 /obj/machinery/camera/Destroy()

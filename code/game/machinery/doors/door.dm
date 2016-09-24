@@ -361,9 +361,9 @@ var/list/all_doors = list()
 		else
 			source.thermal_conductivity = initial(source.thermal_conductivity)
 
-/obj/machinery/door/change_area(oldarea, newarea)
+/obj/machinery/door/change_area(var/area/oldarea, var/area/newarea)
 	..()
-	name = replacetext(name,oldarea,newarea)
+	name = replacetext(name,oldarea.name,newarea.name)
 
 /obj/machinery/door/Move(new_loc, new_dir)
 	update_nearby_tiles()

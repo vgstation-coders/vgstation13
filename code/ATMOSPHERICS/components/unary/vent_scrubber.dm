@@ -368,11 +368,11 @@
 
 	return ..()
 
-/obj/machinery/atmospherics/unary/vent_scrubber/change_area(oldarea, newarea)
+/obj/machinery/atmospherics/unary/vent_scrubber/change_area(var/area/oldarea, var/area/newarea)
 	areaMaster.air_scrub_info.Remove(id_tag)
 	areaMaster.air_scrub_names.Remove(id_tag)
 	..()
-	name = replacetext(name,newarea,oldarea)
+	name = replacetext(name,oldarea.name,newarea.name)
 	area_uid = areaMaster.uid
 	broadcast_status()
 
