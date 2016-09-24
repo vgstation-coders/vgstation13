@@ -90,3 +90,13 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/brokeufo
 	file_path = "maps/randomvaults/brokeufo.dmm"
+
+/datum/map_element/vault/prison
+	file_path = "maps/randomvaults/prison_ship.dmm"
+
+/datum/map_element/vault/prison/pre_load()
+	load_dungeon(/datum/map_element/dungeon/prison)
+
+/datum/map_element/dungeon/prison
+	file_path = "maps/randomvaults/dungeons/prison.dmm"
+

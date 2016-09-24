@@ -91,7 +91,6 @@
 	var/can_evolve = FALSE //False if we don't want it to evolve
 	var/busy //If the zombie is busy, and what it's busy doing
 
-
 #define CANT 0
 #define CAN 1
 #define CANPLUS 2
@@ -155,7 +154,7 @@
 				if((health < maxHealth) || (maxHealth < health_cap) && !busy)
 					var/mob/living/carbon/human/C = find_food(can_see)//Is there something to eat in range?
 					if(C) //If so, chow down
-						Goto(C, speed)
+						Goto(C, move_to_delay)
 						busy = MOVING_TO_TARGET
 						give_up(C) //If we're not there in 10 seconds, give up
 						if(C.Adjacent(src) && busy != EATING) //Once we've finally caught up
@@ -166,7 +165,7 @@
 				if(!busy && break_doors != CANT)//So we don't try to eat and open doors
 					var/obj/machinery/door/D = find_door(can_see)//Is there a door to open in range?
 					if(D)
-						Goto(D, speed)
+						Goto(D, move_to_delay)
 						busy = MOVING_TO_TARGET
 						give_up(D)
 						if(D.Adjacent(src) && busy != OPENING_DOOR)
@@ -248,13 +247,15 @@
 					A.jammed = 0
 				D.open(1)
 			else
-				if(prob(15))
+				if(prob(33))
 					D.visible_message("<span class='warning'>\The [D] creaks open under force, steadily</span>")
 					D.open(1)
 	busy = 0
 	stop_automated_movement = 0
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/check_edibility(var/mob/living/carbon/human/target)
+	if(!(target.isDead()))
+		return 0 //It ain't dead
 	if(isjusthuman(target)) //Humans are always edible
 		return 1
 	if(target.health > -400) //So they're not caught eating the same dumb bird all day
@@ -270,7 +271,7 @@
 		playsound(get_turf(src), 'sound/weapons/bite.ogg', 50, 1)
 		var/damage = rand(melee_damage_lower, melee_damage_upper)
 		target.adjustBruteLoss(damage)
-		health += (damage/2)
+		health = min(maxHealth, health+damage)
 		if(maxHealth < health_cap)
 			maxHealth += 5 //A well fed zombie is a scary zombie
 		times_eaten += 1
@@ -292,6 +293,20 @@
 /*	if(istype(src, /mob/living/simple_animal/hostile/necro/zombie/turned))
 	else if (istype(src, /mob/living/simple_animal/hostile/necro/zombie/rotting))
 		*/
+
+/mob/living/simple_animal/hostile/necro/zombie/verb/check_can_evolve()
+	set name = "Check Evolve"
+	set category = "IC"
+	check_evolve()
+
+/mob/living/simple_animal/hostile/necro/zombie/proc/stats()
+	stat(null, "Times revived - [times_revived]")
+	stat(null, "Times eaten - [times_eaten]")
+
+/mob/living/simple_animal/hostile/necro/zombie/Stat()
+	..()
+	if(statpanel("Status"))
+		stats()
 
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/evolve(var/mob/living/simple_animal/evolve_to)
@@ -320,8 +335,6 @@
 	if(istype(A, /mob/living/carbon/human))
 		if(check_edibility(A))
 			eat(A)
-		else
-			visible_message("\The [src] looks over \the [A] for a moment.", "<span class='notice'>\The [A] doesn't look too tasty.</span>")
 
 /mob/living/simple_animal/hostile/necro/zombie/turned //Not very useful
 	icon_state = "zombie_turned" //Looks almost not unlike just a naked guy to potentially catch others off guard
