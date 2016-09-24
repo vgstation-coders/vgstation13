@@ -1,2 +1,4 @@
 author: BarneyGumball
-changes: []
+changes: 
+- bugfix: Fixed mechanic fabricator part cost display error.
+- bugfix: Airlocks and a bunch of other items will now be named correctly when creating/changing areas with blueprints.
