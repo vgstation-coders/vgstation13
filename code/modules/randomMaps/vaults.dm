@@ -6,7 +6,7 @@
 //2. add the map's name to the vault_map_names list
 //3. the game will handle the rest
 
-#define MINIMUM_VAULT_AMOUNT 1 //Amount of guaranteed vault spawns
+#define MINIMUM_VAULT_AMOUNT 8 //Amount of guaranteed vault spawns
 
 //#define SPAWN_ALL_VAULTS //Uncomment to spawn all existing vaults (otherwise only some will spawn)!
 
@@ -35,6 +35,15 @@
 /area/random_vault/v8
 /area/random_vault/v9
 /area/random_vault/v10
+/area/random_vault/v11
+/area/random_vault/v12
+/area/random_vault/v13
+/area/random_vault/v14
+/area/random_vault/v15
+/area/random_vault/v16
+/area/random_vault/v17
+/area/random_vault/v18
+/area/random_vault/v19
 
 /proc/generate_vaults()
 	var/area/space = get_space_area
