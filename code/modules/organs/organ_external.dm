@@ -904,6 +904,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 /datum/organ/external/proc/process_grasp(var/obj/item/c_hand, var/hand_name)
 	if(!c_hand)
 		return
+	if(c_hand.cant_drop)
+		return
 
 	if(is_broken() && !istype(c_hand,/obj/item/tk_grab))
 		owner.drop_item(c_hand)

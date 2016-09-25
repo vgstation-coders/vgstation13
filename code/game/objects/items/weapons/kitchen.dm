@@ -199,6 +199,8 @@
 
 /obj/item/weapon/kitchen/utensil/knife/large/attackby(obj/item/weapon/W, mob/user)
 	..()
+	if(user.is_in_modules(src))
+		return
 	if(istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))

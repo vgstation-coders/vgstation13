@@ -50,6 +50,8 @@
 
 /obj/item/weapon/wrench/attackby(obj/item/weapon/W, mob/user)
 	..()
+	if(user.is_in_modules(src))
+		return
 	if(istype(W, /obj/item/weapon/handcuffs/cable) && !istype(src, /obj/item/weapon/wrench/socket))
 		to_chat(user, "<span class='notice'>You wrap the cable restraint around the top of the wrench.</span>")
 		if(src.loc == user)
@@ -247,6 +249,8 @@
 	to_chat(user, "It contains [get_fuel()]/[src.max_fuel] units of fuel!")
 
 /obj/item/weapon/weldingtool/attackby(obj/item/W as obj, mob/user as mob)
+	if(user.is_in_modules(src))
+		return
 	if(istype(W,/obj/item/weapon/screwdriver))
 		if(welding)
 			to_chat(user, "<span class='warning'>Stop welding first!</span>")

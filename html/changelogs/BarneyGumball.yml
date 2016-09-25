@@ -1,2 +1,5 @@
 author: BarneyGumball
-changes: []
+changes: 
+- bugfix: Silicons can no longer combine their modules into other items (thereby losing the module).
+- bugfix: Chat no longer gets spammed when your hand is broken and an item is superglued to it.
+- bugfix: SMES now display their current charge levels accurately.

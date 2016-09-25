@@ -24,6 +24,8 @@ var/global/list/logged_sprayed_reagents = list(SACID, PACID, LUBE, FUEL)
 	var/list/ignore_spray_types = list(/obj/item/weapon/storage, /obj/structure/table, /obj/structure/rack, /obj/structure/closet, /obj/structure/sink)
 
 /obj/item/weapon/reagent_containers/spray/attackby(obj/item/weapon/W, mob/user)
+	if(user.is_in_modules(src))
+		return
 	if(!melted)
 		if(W.is_hot())
 			to_chat(user, "You slightly melt the plastic on the top of \the [src] with \the [W].")
