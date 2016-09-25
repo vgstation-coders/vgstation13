@@ -42,7 +42,7 @@ echo SCRIPT_COUNTER=0 >> !GIT_HOOKS_FILE!
 echo for SCRIPT in !SH_HOOKS_FOLDER!/* >> !GIT_HOOKS_FILE!
 echo do >> !GIT_HOOKS_FILE!
 echo 	echo "Running : $SCRIPT" >> !GIT_HOOKS_FILE!
-echo 	SCRIPT_COUNTER=$^(expr $USCOUNTER + 1^) >> !GIT_HOOKS_FILE!
+echo 	SCRIPT_COUNTER=$^(expr $SCRIPT_COUNTER + 1^) >> !GIT_HOOKS_FILE!
 echo 	#If the script file exists and can be executed >> !GIT_HOOKS_FILE!
 echo 	if [ -f "$SCRIPT" -a -x "$SCRIPT" ] >> !GIT_HOOKS_FILE!
 echo 	then >> !GIT_HOOKS_FILE!

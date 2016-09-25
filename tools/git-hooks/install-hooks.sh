@@ -40,7 +40,7 @@ SCRIPT_COUNTER=0
 for SCRIPT in $HOOKS_FOLDER/*
 do
 	echo "Running : \$SCRIPT"
-	SCRIPT_COUNTER=\$(expr \$USCOUNTER + 1)
+	SCRIPT_COUNTER=\$(expr \$SCRIPT_COUNTER + 1)
 	#If the script file exists and can be executed
 	if [ -f "\$SCRIPT" -a -x "\$SCRIPT" ]
 	then
