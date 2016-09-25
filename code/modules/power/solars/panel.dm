@@ -48,6 +48,7 @@
 			qdel(src)
 	else if(W)
 		add_fingerprint(user)
+		user.delayNextAttack(10)
 		health -= W.force
 		healthcheck()
 	..()
