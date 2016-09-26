@@ -32,14 +32,44 @@
 	greaterform = "Vox"
 	alien = 1
 	eggsleft = rand(1,6)
+	set_hand_amount(1)
+
+/mob/living/carbon/monkey/vox/Life()
+	..()
+	if(prob(5) && eggsleft > 4)
+		lay_egg()
+
+/mob/living/carbon/monkey/vox/say(var/message)
+	if (prob(25))
+		message += pick("  sqrk", "  bok bok", ",bwak", ",cluck!")
+
+	return ..(message)
+
+/mob/living/carbon/monkey/vox/attackby(var/obj/item/O as obj, var/mob/user as mob)
+	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat)) //feedin' dem chickens
+		if(!stat && eggsleft < 8)
+			if(!user.drop_item(O))
+				to_chat(user, "<span class='notice'>You can't let go of \the [O]!</span>")
+				return
+
+			user.visible_message("<span class='notice'>[user] feeds [O] to [name]! It clucks happily.</span>","<span class='notice'>You feed [O] to [name]! It clucks happily.</span>")
+			qdel(O)
+			eggsleft += rand(1, 4)
+//			to_chat(world, eggsleft)
+		else
+			to_chat(user, "<span class='notice'>[name] doesn't seem hungry!</span>")
+	else
+		..()
 
 /mob/living/carbon/monkey/vox/put_in_hand_check(var/obj/item/W) //Silly chicken, you don't have hands
-	return 0
-
+	if(src.reagents.has_reagent(GRAVY) || src.reagents.has_reagent(METHYLIN))
+		return 1
+	else
+		return 0
 
 //Cant believe I'm doing this
 /mob/living/carbon/monkey/vox/proc/lay_egg()
-	if(!stat && nutrition > 250)
+	if(!stat && nutrition > 250 && eggsleft > 0)
 		visible_message("[src] [pick("lays an egg.","squats down and croons.","begins making a huge racket.","begins clucking raucously.")]")
 		nutrition -= eggcost
 		eggsleft--

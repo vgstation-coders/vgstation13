@@ -1388,6 +1388,7 @@
 #include "code\modules\mob\living\carbon\monkey\powers.dm"
 #include "code\modules\mob\living\carbon\monkey\rock.dm"
 #include "code\modules\mob\living\carbon\monkey\say.dm"
+#include "code\modules\mob\living\carbon\monkey\skeleton.dm"
 #include "code\modules\mob\living\carbon\monkey\update_icons.dm"
 #include "code\modules\mob\living\carbon\monkey\vox.dm"
 #include "code\modules\mob\living\carbon\monkey\martian\martian.dm"
