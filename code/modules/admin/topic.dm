@@ -3460,7 +3460,7 @@
 							dat += "<tr><td>[H]</td><td>H.dna = null</td></tr>"
 				dat += "</table>"
 				usr << browse(dat, "window=fingerprints;size=440x410")
-			if("spawn_objects")
+			if("show_admin_log")
 				var/dat = "<B>Admin Log<HR></B>"
 				for(var/l in admin_log)
 					dat += "<li>[l]</li>"
