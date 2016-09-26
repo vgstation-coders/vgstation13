@@ -56,7 +56,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		return
 	playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
 	reagents.reaction(where, TOUCH) //I don't think this will ever do anything but I guess maybe polyacid could melt a toilet
-	spawn() src.reagents.clear_reagents()
+	src.reagents.clear_reagents()
 	to_chat(user, "<span class='notice'>You flush \the [src] down \the [where].</span>")
 
 
