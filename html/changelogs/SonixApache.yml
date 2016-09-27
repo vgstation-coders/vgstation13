@@ -35,6 +35,6 @@ delete-after: True
 changes: 
 - wip: These changes apply to Box station.
 - rscadd: Added 3 .45 pistols to secure armory, each with two extra magazines.
-- rscadd: Moved the security hardsuits to Security E.V.A., located just above the brig medbay.
+- rscadd: Moved the security hardsuits from the secure armory to Security E.V.A., located just above the brig medbay.
 - rscadd: Added some .45 practice ammo to the firing range.
 - rscadd: Added 2 boxes of holobadges to the briefing room.
