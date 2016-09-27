@@ -51,6 +51,7 @@ obj/machinery/atmospherics/trinary/filter/power_change()
 	var/old_stat = stat
 	..()
 	if(old_stat != stat)
+		on = !on
 		update_icon()
 
 obj/machinery/atmospherics/trinary/filter/process()
