@@ -9,7 +9,7 @@
 	canWearHats = 0
 	canWearGlasses = 0
 	languagetoadd = LANGUAGE_CLATTER
-	brute_damage_modifier = 3.5
+	brute_damage_modifier = 2
 	movement_speed_modifier = 0.23
 	greaterform = "Skellington"
 
@@ -32,4 +32,7 @@
 	voice_name = "flaming skull"
 	icon_state = "flaming_skull"
 	greaterform = "Plasmaman"
+	light_range = 2
+	light_power = 0.5
+	light_color = "#FAA019"
 	species_type = /mob/living/carbon/monkey/skellington/plasma
