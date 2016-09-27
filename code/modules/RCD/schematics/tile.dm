@@ -18,10 +18,6 @@
 /datum/rcd_schematic/clear_decals/attack(var/turf/A, var/mob/user)
 	to_chat(user, "Clearing decals...")
 	playsound(get_turf(master), 'sound/effects/spray3.ogg', 15, 1)
-	if (!do_after(user, A, 20))
-		return 1
-
-	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
 
 	A.ClearDecals()
 
@@ -118,10 +114,6 @@
 	to_chat(user, "Painting floor...")
 	//playsound(get_turf(master), 'sound/AI/animes.ogg', 50, 1)
 	playsound(get_turf(master), 'sound/effects/spray3.ogg', 15, 1)
-	if (!do_after(user, A, 20))
-		return 1
-
-	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
 
 	selection.apply(A, nname, ndesc, thisdir)
 
