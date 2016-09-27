@@ -1,0 +1,98 @@
+"aa" = (/turf/space,/area)
+"ab" = (/obj/structure/catwalk,/obj/machinery/porta_turret/AIvault,/turf/space,/area/vault/AIsat)
+"ac" = (/obj/structure/lattice,/turf/space,/area/vault/AIsat)
+"ad" = (/obj/structure/lattice,/turf/space,/area)
+"ae" = (/obj/structure/grille,/obj/structure/lattice,/turf/space,/area)
+"af" = (/obj/structure/lattice,/obj/structure/grille/broken,/turf/space,/area)
+"ag" = (/obj/structure/grille,/turf/space,/area)
+"ah" = (/obj/structure/cable{d2 = 2; icon_state = "0-2"; pixel_y = 0},/obj/structure/catwalk,/obj/machinery/power/solar/panel/tracker,/turf/space,/area)
+"ai" = (/turf/simulated/wall/r_wall,/area/vault/AIsat)
+"aj" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/wall/r_wall,/area/vault/AIsat)
+"ak" = (/obj/machinery/computer/aifixer,/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"al" = (/obj/machinery/computer/station_alert,/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"am" = (/obj/machinery/recharge_station,/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"an" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor/plating/airless/damaged,/area/vault/AIsat)
+"ao" = (/obj/machinery/r_n_d/fabricator/mech,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"ap" = (/obj/machinery/computer/rdconsole/robotics,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"aq" = (/obj/machinery/computer/security,/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"ar" = (/obj/structure/cable{icon_state = "0-2"; d2 = 2},/obj/machinery/power/solar/panel,/turf/simulated/floor/airless{icon_state = "solarpanel"},/area/vault/AIsat)
+"as" = (/obj/machinery/porta_turret/AIvault,/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"at" = (/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"au" = (/obj/item/weapon/storage/box/emps,/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"av" = (/obj/machinery/ai_slipper,/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"aw" = (/obj/item/robot_parts/robot_suit,/obj/item/robot_parts/chest,/obj/item/robot_parts/head,/obj/item/robot_parts/l_arm,/obj/item/robot_parts/r_arm,/obj/item/robot_parts/l_leg,/obj/item/robot_parts/r_leg,/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"ax" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"ay" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"; tag = ""},/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/obj/structure/catwalk,/turf/space,/area/vault/AIsat)
+"az" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"; tag = ""},/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/obj/structure/catwalk,/turf/space,/area/vault/AIsat)
+"aA" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/obj/structure/catwalk,/turf/space,/area/vault/AIsat)
+"aB" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/catwalk,/turf/space,/area/vault/AIsat)
+"aC" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/structure/catwalk,/obj/structure/catwalk,/turf/space,/area/vault/AIsat)
+"aD" = (/obj/machinery/light/small{dir = 8; flickering = 1},/turf/simulated/floor/plating/airless/damaged,/area/vault/AIsat)
+"aE" = (/obj/effect/landmark/corpse/engineer/rig,/turf/simulated/floor/plating/airless/damaged,/area/vault/AIsat)
+"aF" = (/turf/simulated/floor/plating/airless/damaged,/area/vault/AIsat)
+"aG" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"aH" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating/airless/damaged,/area/vault/AIsat)
+"aI" = (/obj/machinery/light/small{dir = 4},/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"aJ" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"; tag = ""},/obj/structure/catwalk,/obj/structure/catwalk,/turf/space,/area/vault/AIsat)
+"aK" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/obj/structure/catwalk,/turf/space,/area/vault/AIsat)
+"aL" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/obj/structure/catwalk,/turf/space,/area/vault/AIsat)
+"aM" = (/obj/structure/cable,/obj/machinery/power/solar/panel,/turf/simulated/floor/airless{icon_state = "solarpanel"},/area/vault/AIsat)
+"aN" = (/obj/structure/cable,/turf/simulated/floor/airless{icon_state = "solarpanel"},/area/vault/AIsat)
+"aO" = (/obj/item/stack/cable_coil/cut,/obj/structure/lattice,/turf/space,/area/vault/AIsat)
+"aP" = (/obj/item/weapon/shard,/obj/structure/lattice,/turf/space,/area/vault/AIsat)
+"aQ" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; tag = ""},/obj/structure/catwalk,/turf/space,/area/vault/AIsat)
+"aR" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/machinery/power/apc/no_alerts/vault_AIsat{step_x = 0},/turf/simulated/floor/greengrid,/area/vault/AIsat)
+"aS" = (/obj/machinery/door/window{dir = 1; name = "AI Core Door"; req_access_txt = "109"},/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor/greengrid,/area/vault/AIsat)
+"aT" = (/obj/structure/window/reinforced{dir = 1},/obj/machinery/light/small{dir = 4},/turf/simulated/floor/greengrid,/area/vault/AIsat)
+"aU" = (/obj/item/weapon/shard,/turf/space,/area)
+"aV" = (/obj/item/stack/cable_coil/cut,/turf/space,/area)
+"aW" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"; tag = ""},/obj/structure/catwalk,/turf/space,/area/vault/AIsat)
+"aX" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/wall/r_wall,/area/vault/AIsat)
+"aY" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating/airless/damaged,/area/vault/AIsat)
+"aZ" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"ba" = (/obj/item/device/radio/intercom{broadcasting = 1; freerange = 1; name = "Common Channel"; pixel_x = 27; pixel_y = -3},/obj/item/device/radio/intercom{broadcasting = 1; frequency = 1447; name = "Private AI Channel"; pixel_y = -25},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; tag = ""},/mob/living/silicon/decoy/AIvault,/turf/simulated/floor/greengrid,/area/vault/AIsat)
+"bb" = (/obj/machinery/flasher{step_x = -9; step_y = 10},/turf/simulated/wall/r_wall,/area/vault/AIsat)
+"bc" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"; tag = ""},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"bd" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/structure/catwalk,/turf/space,/area/vault/AIsat)
+"be" = (/obj/structure/lattice,/obj/item/stack/cable_coil/cut,/turf/space,/area)
+"bf" = (/obj/effect/gibspawner/robot,/turf/space,/area)
+"bg" = (/obj/structure/cable,/obj/structure/catwalk,/turf/space,/area/vault/AIsat)
+"bh" = (/obj/item/stack/sheet/metal,/turf/space,/area)
+"bi" = (/obj/structure/girder/reinforced,/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"bj" = (/obj/item/stack/rods,/turf/simulated/floor/plating/airless/damaged,/area/vault/AIsat)
+"bk" = (/obj/structure/closet/crate{icon_state = "crateopen"; opened = 1},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"bl" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/wall/r_wall,/area/vault/AIsat)
+"bm" = (/obj/item/device/radio/intercom{name = "Custom Channel"; step_y = 25; pixel_x = -27; pixel_y = 4; listening = 0; freerange = 1},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; tag = ""},/turf/simulated/wall/r_wall,/area/vault/AIsat)
+"bn" = (/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"; tag = ""},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"; pixel_x = 0; tag = ""},/turf/simulated/wall/r_wall,/area/vault/AIsat)
+"bo" = (/obj/structure/closet/crate,/obj/item/weapon/aiModule/core/antimov,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"bp" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor/plating/airless/damaged,/area/vault/AIsat)
+"bq" = (/obj/machinery/power/solar/control/vault_listening,/obj/structure/cable,/turf/simulated/floor/plating/airless/damaged,/area/vault/AIsat)
+"br" = (/obj/structure/cable,/obj/machinery/power/battery/smes/vault_listening,/turf/simulated/floor/plating/airless/damaged,/area/vault/AIsat)
+"bs" = (/obj/structure/cable,/obj/machinery/power/terminal{dir = 8},/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"bt" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/obj/structure/catwalk,/obj/structure/catwalk,/turf/space,/area/vault/AIsat)
+"bu" = (/obj/structure/girder/reinforced,/obj/item/stack/sheet/plasteel,/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"bv" = (/obj/machinery/porta_turret/AIvault,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating/airless/damaged,/area/vault/AIsat)
+"bw" = (/obj/effect/gibspawner/robot,/obj/item/broken_device,/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"bx" = (/obj/effect/decal/remains/robot,/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"by" = (/obj/structure/sign/securearea{desc = "A warning sign which reads 'LETHAL TURRETS'. Enter at your own risk!"; name = "LETHAL TURRETS"; pixel_x = -32},/obj/machinery/door/airlock/external{icon_state = "door_locked"; locked = 1; name = "AI Satellite Access"; req_access_txt = "15"},/turf/simulated/floor/plating/airless,/area/vault/AIsat)
+"bz" = (/obj/machinery/ai_status_display,/turf/simulated/wall/r_wall,/area/vault/AIsat)
+"bA" = (/obj/structure/lattice,/obj/structure/lattice,/turf/space,/area/vault/AIsat)
+"bB" = (/obj/structure/catwalk,/turf/space,/area)
+
+(1,1,1) = {"
+aaaaaaaaaaaaabacacaaaaaaaaaaaaaaaaadacacabaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaacaeafaeagahafafaeaeacaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaacaiaiaiaiajaiaiaiaiacaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaiaiakalamanaoapaqaiaiaaaaaaaaaaaaaaaa
+arararararaaaaaaaiasatauatavawataxasaiaaaaaaararararar
+ayazazaAaAaBaCaaaiaDataEaFataGaHaxaIaiaaaJaBaKaKaKaKaL
+aMaMaNaOaPaaaQadaiatataiaRaSaTaiaxataiadaQaaaMaMaMaMaM
+adaaaUaaaVaaaWaBaXaYaZaiaibabbaibcaYaXaBbdaaadaaaaaaad
+aaaVaaaUbebfbgbhbibjanbkblbmbnbobpataiadaQaaararararar
+aaaaaaaaadadbeaaacaFaFatbqbrbsatataIaiaabtaBaKaKaKaKaL
+aaaaaVaaaaaaaaaabubvaFbwatavataFatasaiaaaaaaaMaMaMaMaM
+aaaaaaaaaaaaaabhaiaiaGaHatatatbxataiaiaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaadacaiaiaiaibybzaiaiaibAaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaacbBbBbBbBbBbBbBbBbBacaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaabacacaaaaaaaaaaaaaaaaaaacacabaaaaaaaaaaaa
+"}

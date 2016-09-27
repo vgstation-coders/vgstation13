@@ -78,6 +78,9 @@
 /area/vault/brokeufo
 	requires_power = 1
 
+/area/vault/AIsat
+	requires_power = 1
+
 /mob/living/simple_animal/hostile/monster/cyber_horror/quiet
 	speak_chance = 1 //shut the fuck up
 
@@ -190,7 +193,7 @@
 
 /obj/machinery/power/apc/no_alerts/vault_listening/initialize()
 	. = ..()
-	name = "\improper Listening Outpost APC."
+	name = "\improper Listening Outpost APC"
 
 /obj/machinery/power/battery/smes/vault_listening
 	chargelevel = 30000
@@ -226,3 +229,37 @@
 	name = "space cabin"
 	id = "spacepond"
 	height = 0
+
+/mob/living/silicon/decoy/AIvault/New()
+	name = pick(ai_names)
+	icon_state = "ai-malf"
+	..()
+
+/obj/machinery/power/apc/no_alerts/vault_AIsat/initialize()
+	. = ..()
+	name = "\improper AI Satellite APC"
+
+/obj/machinery/porta_turret/AIvault
+	req_access = list(access_ai_upload)
+	check_records = 1
+	criminals = 1
+	auth_weapons = 1
+	stun_all = 1
+	check_anomalies = 1
+	ai = 1
+
+/obj/machinery/porta_turret/AIvault/New()
+	installed = new/obj/item/weapon/gun/energy/laser/retro/ancient(src)
+	..()
+	if(prob(25))
+		dir = pick(alldirs)
+		die()
+
+/obj/item/weapon/gun/energy/laser/retro/ancient
+	name = "ancient laser gun"
+	desc = "Once a highly dangerous weapon, this laser has degraded over decades into a still somewhat dangerous weapon."
+	projectile_type = /obj/item/projectile/beam/retro/weak
+
+/obj/item/projectile/beam/retro/weak
+	damage = 15
+	linear_movement = 0
