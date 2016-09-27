@@ -481,6 +481,18 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Formalwear for the best occasions."
 	group = "Clothing"
 
+/datum/supply_packs/formal_wear/armored
+	contains = list(/obj/item/clothing/head/that/armored,
+					/obj/item/clothing/head/that/armored,
+					/obj/item/clothing/under/sl_suit/armored,
+					/obj/item/clothing/under/sl_suit/armored)
+	name = "Armored formalwear closet"
+	cost = 100
+	containertype = /obj/structure/closet
+	containername = "Armored formalwear, for the not-so-best occasions."
+	contraband = 1
+	group = "Clothing"
+	
 /datum/supply_packs/waifu
 	name = "Feminine formalwear"
 	contains = list(/obj/item/clothing/under/dress/dress_fire,
