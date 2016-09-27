@@ -51,13 +51,22 @@
 	projectile_type = "/obj/item/projectile/bullet/midbullet2"
 	w_type = RECYK_METAL
 
-
 /obj/item/ammo_casing/c45
 	desc = "A .45 bullet casing."
 	caliber = ".45"
-	projectile_type = "/obj/item/projectile/bullet/midbullet"
-	w_type = RECYK_METAL
+	projectile_type = "/obj/item/projectile/bullet/fourtyfive"
 
+/obj/item/ammo_casing/c45/practice
+	desc = "A .45 practice bullet casing."
+	caliber = ".45"
+	projectile_type = "/obj/item/projectile/bullet/fourtyfive/practice"
+	icon_state = "s-p-casing"
+
+/obj/item/ammo_casing/c45/rubber
+	desc = "A .45 rubber bullet casing."
+	caliber = ".45"
+	projectile_type = "/obj/item/projectile/bullet/fourtyfive/rubber"
+	icon_state = "s-r-casing"
 
 /obj/item/ammo_casing/a12mm
 	desc = "A 12mm bullet casing."
@@ -169,4 +178,3 @@
 	desc = "An invisible bullet casing, it's hard to tell if it's been spent or not."
 	projectile_type = "/obj/item/projectile/bullet/invisible"
 	icon_state = null
-	
