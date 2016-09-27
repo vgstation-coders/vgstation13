@@ -40,9 +40,6 @@ var/list/ai_list = list()
 //Hud stuff
 
 	//MALFUNCTION
-	var/datum/module_picker/malf_picker
-	var/processing_time = 100
-	var/list/datum/AI_Module/current_modules = list()
 	var/ai_flags = 0
 
 	var/control_disabled = 0 // Set to 1 to stop AI from interacting via Click() -- TLE
@@ -301,7 +298,11 @@ var/list/ai_list = list()
 				if (malf.apcs >= 3)
 					stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
 
-
+/mob/proc/remove_malf_spells()
+	for(var/spell/S in spell_list)
+		if(S.panel == "Malfunction")
+			remove_spell(S)
+			
 /mob/living/silicon/ai/proc/ai_alerts()
 
 
@@ -705,13 +706,6 @@ var/list/ai_list = list()
 				break
 		to_chat(src, "<span class='notice'>Switched to [network] camera network.</span>")
 //End of code by Mord_Sith
-
-
-/mob/living/silicon/ai/proc/choose_modules()
-	set category = "Malfunction"
-	set name = "Choose Module"
-
-	malf_picker.use(src)
 
 /mob/living/silicon/ai/proc/ai_statuschange()
 	set category = "AI Commands"

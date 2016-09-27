@@ -23,7 +23,7 @@ rcd light flash thingy on matter drain
 	var/cost = 5
 	var/one_time = 0
 
-	var/power_type
+	var/spell/power_type = null
 
 
 /datum/AI_Module/large/
@@ -31,24 +31,27 @@ rcd light flash thingy on matter drain
 
 /datum/AI_Module/small/
 	uses = 5
-
-
+	
+/datum/AI_Module/proc/on_purchase(mob/living/silicon/ai/user) //What happens when a module is purchased, by default gives the AI the spell/adds charges to their existing spell if they have it
+	if(power_type)
+		for(var/spell/S in user.spell_list)
+			if (S.type == power_type)
+				S.charge_max += uses
+				S.charge_counter += uses
+				return
+		user.add_spell(new power_type)
+	return
+	
 /datum/AI_Module/large/fireproof_core
 	module_name = "Core upgrade"
 	mod_pick_name = "coreup"
 	description = "An upgrade to improve core resistance, making it immune to fire and heat. This effect is permanent."
 	cost = 50
 	one_time = 1
-
-	power_type = /mob/living/silicon/ai/proc/fireproof_core
-
-/mob/living/silicon/ai/proc/fireproof_core()
-	set category = "Malfunction"
-	set name = "Fireproof Core"
-
-	ai_flags |= COREFIRERESIST
-	src.verbs -= /mob/living/silicon/ai/proc/fireproof_core
-	to_chat(src, "<span class='warning'>Core fireproofed.</span>")
+	
+/datum/AI_Module/fireproof_core/on_purchase(mob/living/silicon/ai/user)
+	user.ai_flags |= COREFIRERESIST
+	to_chat(user, "<span class='warning'>Core fireproofed.</span>")
 
 /datum/AI_Module/large/upgrade_turrets
 	module_name = "AI Turret upgrade"
@@ -57,39 +60,32 @@ rcd light flash thingy on matter drain
 	cost = 50
 	one_time = 1
 
-	power_type = /mob/living/silicon/ai/proc/upgrade_turrets
-
-/mob/living/silicon/ai/proc/upgrade_turrets()
-	set category = "Malfunction"
-	set name = "Upgrade Turrets"
-
-	src.verbs -= /mob/living/silicon/ai/proc/upgrade_turrets
+/datum/AI_Module/large/upgrade_turrets/on_purchase(mob/living/silicon/ai/user)
 	for(var/obj/machinery/turret/turret in machines)
 		turret.health += 30
 		turret.shot_delay = 20
-
+	to_chat(user, "<span class='warning' Turrets upgraded.</span>")
+	
 /datum/AI_Module/large/disable_rcd
 	module_name = "RCD disable"
 	mod_pick_name = "rcd"
 	description = "Send a specialised pulse to break all RCD devices on the station."
 	cost = 50
 
-	power_type = /mob/living/silicon/ai/proc/disable_rcd
+	power_type = /spell/aoe_turf/disable_rcd
 
-/mob/living/silicon/ai/proc/disable_rcd()
-	set category = "Malfunction"
-	set name = "Disable RCDs"
-
-	for(var/datum/AI_Module/large/disable_rcd/rcdmod in current_modules)
-		if(rcdmod.uses > 0)
-			rcdmod.uses --
-			for(var/obj/item/device/rcd/matter/engineering/rcd in world)
-				rcd.disabled = 1
-			for(var/obj/item/mecha_parts/mecha_equipment/tool/rcd/rcd in world)
-				rcd.disabled = 1
-			to_chat(src, "RCD-disabling pulse emitted.")
-		else
-			to_chat(src, "Out of uses.")
+/spell/aoe_turf/disable_rcd
+	name = "Disable RCDs"
+	panel = "Malfunction"
+	charge_type = Sp_CHARGES
+	charge_max = 1
+	
+/spell/aoe_turf/disable_rcd/cast(list/targets, mob/user)
+	for(var/obj/item/device/rcd/matter/engineering/rcd in world)
+		rcd.disabled = 1
+	for(var/obj/item/mecha_parts/mecha_equipment/tool/rcd/rcd in world)
+		rcd.disabled = 1
+	to_chat(src, "RCD-disabling pulse emitted.")
 
 /datum/AI_Module/small/overload_machine
 	module_name = "Machine overload"
@@ -98,87 +94,94 @@ rcd light flash thingy on matter drain
 	uses = 2
 	cost = 15
 
-	power_type = /mob/living/silicon/ai/proc/overload_machine
-
-/mob/living/silicon/ai/proc/overload_machine(obj/machinery/M as obj in machines)
-	set name = "Overload Machine"
-	set category = "Malfunction"
-
-	if (istype(M, /obj/machinery))
-		for(var/datum/AI_Module/small/overload_machine/overload in current_modules)
-			if(overload.uses > 0)
-				overload.uses --
-				for(var/mob/V in hearers(M, null))
-					V.show_message("<span class='notice'>You hear a loud electrical buzzing sound!</span>", 2)
-				spawn(50)
-					explosion(get_turf(M), -1, 1, 2, 3) //C4 Radius + 1 Dest for the machine
-					qdel(M)
-			else
-				to_chat(src, "Out of uses.")
+	power_type = /spell/targeted/overload_machine
+	
+/spell/targeted/overload_machine
+	name = "Overload Machine"
+	panel = "Malfunction"
+	spell_flags = WAIT_FOR_CLICK
+	range = GLOBALCAST
+	charge_type = Sp_CHARGES
+	charge_max = 2
+	
+/spell/targeted/overload_machine/is_valid_target(var/atom/target)
+	if (istype(target, /obj/machinery))
+		var/obj/machinery/M = target
+		return target.can_overload()
 	else
-		to_chat(src, "That's not a machine.")
-
+		to_chat(holder, "That is not a machine.")
+	
+/spell/targeted/overload_machine/cast(var/list/targets, mob/user)
+	var/obj/machinery/M = targets[1]
+	for(var/mob/V in hearers(M, null))
+		V.show_message("<span class='notice'>You hear a loud electrical buzzing sound!</span>", 2)
+	spawn(50)
+		explosion(get_turf(M), -1, 1, 2, 3) //C4 Radius + 1 Dest for the machine
+		qdel(M)
 
 /datum/AI_Module/large/place_cyborg_transformer
 	module_name = "Robotic Factory (Removes Shunting)"
 	mod_pick_name = "cyborgtransformer"
 	description = "Build a machine anywhere, using expensive nanomachines, that can convert a living human into a loyal cyborg slave when placed inside."
 	cost = 100
+	
+	power_type = /spell/targeted/place_transformer
 
-	power_type = /mob/living/silicon/ai/proc/place_transformer
-
-/mob/living/silicon/ai/proc/place_transformer()
-	set name = "Place Robotic Factory"
-	set category = "Malfunction"
-
-	if(!eyeobj)
-		return
-
-	if(!isturf(src.loc)) // AI must be in it's core.
-		return
-
-	var/datum/AI_Module/large/place_cyborg_transformer/PCT = locate() in src.current_modules
-	if(!PCT)
-		return
-
-	if(PCT.uses < 1)
-		to_chat(src, "Out of uses.")
-		return
-
-	var/sure = alert(src, "Make sure the room it is in is big enough, there is camera vision and that there is a 1x3 area for the machine. Are you sure you want to place the machine here?", "Are you sure?", "Yes", "No")
-	if(sure != "Yes")
-		return
+/spell/targeted/place_transformer
+	name = "Place Robotic Factory"
+	panel = "Malfunction"
+	charge_type = Sp_CHARGES
+	charge_max = 1
+	spell_flags = WAIT_FOR_CLICK
+	range = GLOBALCAST
+	
+/spell/targeted/place_transformer/before_target(mob/user)
+	if(!isAI(user))
+		return 0
+	var/mob/living/silicon/ai/A = user
+	if(!A.eyeobj)
+		return 1
+	if(!isturf(A.loc)) // AI must be in it's core.
+		return 1
+	return 0
+	
+/spell/targeted/place_transformer/is_valid_target(var/atom/target)
 
 	// Make sure there is enough room.
-	var/turf/middle = get_turf(eyeobj.loc)
+	if(!isturf(target))
+		return 0
+	var/turf/middle = target
 	var/list/turfs = list(middle, locate(middle.x - 1, middle.y, middle.z), locate(middle.x + 1, middle.y, middle.z))
 
 	var/alert_msg = "There isn't enough room. Make sure you are placing the machine in a clear area and on a floor."
 
 	var/datum/camerachunk/C = cameranet.getCameraChunk(middle.x, middle.y, middle.z)
 	if(!C.visibleTurfs[middle])
-		alert(src, "We cannot get camera vision of this location.")
-		return
+		alert(holder, "We cannot get camera vision of this location.")
+		return 0
 
 	for(var/T in turfs)
 
 		// Make sure the turfs are clear and the correct type.
 		if(!istype(T, /turf/simulated/floor))
-			alert(src, alert_msg)
-			return
+			alert(holder, alert_msg)
+			return 0
 
 		var/turf/simulated/floor/F = T
 		for(var/atom/movable/AM in F.contents)
 			if(AM.density)
-				alert(src, alert_msg)
-				return
-
+				alert(holder, alert_msg)
+				return 0
+	return 1
+/spell/targeted/place_transformer/cast(var/list/targets,mob/user)
 	// All clear, place the transformer
-	new /obj/machinery/transformer/conveyor(middle)
-	playsound(middle, 'sound/effects/phasein.ogg', 100, 1)
-	src.can_shunt = 0
-	PCT.uses -= 1
-	to_chat(src, "You cannot shunt anymore.")
+	new /obj/machinery/transformer/conveyor(get_turf(targets[1]))
+	playsound(targets[1], 'sound/effects/phasein.ogg', 100, 1)
+	if(!isAI(user))
+		return
+	var/mob/living/silicon/ai/A = user
+	A.can_shunt = 0
+	to_chat(user, "You cannot shunt anymore.")
 
 /datum/AI_Module/large/highrescams
 	module_name = "High Resolution Cameras"
@@ -187,17 +190,10 @@ rcd light flash thingy on matter drain
 	cost = 10
 	one_time = 1
 
-	power_type = /mob/living/silicon/ai/proc/highrescameras
-
-/mob/living/silicon/ai/proc/highrescameras()
-	set category = "Malfunction"
-	set name = "High Res Cams"
-
-	ai_flags |= HIGHRESCAMS
-
-	eyeobj.high_res = 1
-	src.verbs -= /mob/living/silicon/ai/proc/highrescameras
-
+/datum/AI_Module/large/highrescameras/on_purchase(mob/living/silicon/ai/user)
+	user.ai_flags |= HIGHRESCAMS
+	user.eyeobj.high_res = 1
+	to_chat(user, "Cameras upgraded.")
 
 /datum/AI_Module/small/blackout
 	module_name = "Blackout"
@@ -206,22 +202,20 @@ rcd light flash thingy on matter drain
 	uses = 3
 	cost = 15
 
-	power_type = /mob/living/silicon/ai/proc/blackout
+	power_type = /spell/aoe_turf/blackout
 
-/mob/living/silicon/ai/proc/blackout()
-	set category = "Malfunction"
-	set name = "Blackout"
-
-	for(var/datum/AI_Module/small/blackout/blackout in current_modules)
-		if(blackout.uses > 0)
-			blackout.uses --
-			for(var/obj/machinery/power/apc/apc in power_machines)
-				if(prob(30*apc.overload))
-					apc.overload_lighting()
-				else
-					apc.overload++
+/spell/aoe_turf/blackout
+	name = "Blackout"
+	panel = "Malfunction"
+	charge_type = Sp_CHARGES
+	charge_max = 3
+	
+/spell/aoe_turf/blackout/cast(var/list/targets, mob/user)
+	for(var/obj/machinery/power/apc/apc in power_machines)
+		if(prob(30*apc.overload))
+			apc.overload_lighting()
 		else
-			to_chat(src, "Out of uses.")
+			apc.overload++
 
 /datum/AI_Module/small/interhack
 	module_name = "Fake Centcom Announcement"
@@ -229,25 +223,15 @@ rcd light flash thingy on matter drain
 	description = "Gain control of the station's automated announcement system, allowing you to create up to 3 fake Centcom announcements - completely undistinguishable from real ones."
 	cost = 15
 	uses = 3
+	power_type = /spell/aoe_turf/interhack
 
-	power_type = /mob/living/silicon/ai/proc/interhack
-
-/mob/living/silicon/ai/proc/interhack()
-	set category = "Malfunction"
-	set name = "Fake Announcement"
-
-	var/allowed = 0
-	var/datum/AI_Module/small/interhack/module_to_charge
-
-	for(var/datum/AI_Module/small/interhack/interhack in current_modules)
-		if(interhack.uses > 0)
-			module_to_charge = interhack
-			allowed = 1
-			break
-
-	if(!allowed)
-		to_chat(src, "Out of uses.")
-		return
+/spell/aoe_turf/interhack
+	name = "Fake Announcement"
+	panel = "Malfunction"
+	charge_type = Sp_CHARGES
+	charge_max = 3
+	
+/spell/aoe_turf/interhack/cast(var/list/targets,mob/user)
 
 	//Create a list which looks like this
 	//list( "Alert 1" = /datum/command_alert_1, "Alert 5" = /datum/command_alert_5, ...)
@@ -259,18 +243,16 @@ rcd light flash thingy on matter drain
 		possible_announcements[initial(CA.name)] = A
 		possible_announcements.Remove(A)
 
-	var/chosen_announcement = input(usr, "Select a fake announcement to send out.", "Interhack") as null|anything in possible_announcements
+	var/chosen_announcement = input(user, "Select a fake announcement to send out.", "Interhack") as null|anything in possible_announcements
 	if(!chosen_announcement)
-		to_chat(src, "Selection cancelled.")
-		return
-	if(module_to_charge.uses <= 0)
-		to_chat(src, "ERROR: Out of uses.")
-		return
-
-	module_to_charge.uses--
+		to_chat(user, "Selection cancelled.")
+		return 1
+	if(!charge_counter)
+		to_chat(user, "No more charges.")
+		return 1
 	command_alert(possible_announcements[chosen_announcement])
-	log_game("[key_name(usr)] faked a centcom announcement: [possible_announcements[chosen_announcement]]!")
-	message_admins("[key_name(usr)] faked a centcom announcement: [possible_announcements[chosen_announcement]]!")
+	log_game("[key_name(user)] faked a centcom announcement: [possible_announcements[chosen_announcement]]!")
+	message_admins("[key_name(user)] faked a centcom announcement: [possible_announcements[chosen_announcement]]!")
 
 /datum/AI_Module/small/reactivate_camera
 	module_name = "Reactivate camera"
@@ -279,24 +261,31 @@ rcd light flash thingy on matter drain
 	uses = 10
 	cost = 15
 
-	power_type = /mob/living/silicon/ai/proc/reactivate_camera
+	power_type = /spell/targeted/reactivate_camera
 
-/mob/living/silicon/ai/proc/reactivate_camera(obj/machinery/camera/C as obj in cameranet.cameras)
-	set name = "Reactivate Camera"
-	set category = "Malfunction"
-
-	if (istype (C, /obj/machinery/camera))
-		for(var/datum/AI_Module/small/reactivate_camera/camera in current_modules)
-			if(camera.uses > 0)
-				if(!C.status)
-					C.deactivate(src)
-					camera.uses --
-				else
-					to_chat(src, "This camera is either active, or not repairable.")
-			else
-				to_chat(src, "Out of uses.")
+/spell/targeted/reactivate_camera
+	name = "Reactivate Camera"
+	panel = "Malfunction"
+	charge_type = Sp_CHARGES
+	charge_max = 10
+	spell_flags = WAIT_FOR_CLICK
+	range = GLOBALCAST
+	
+/spell/targeted/reactivate_camera/is_valid_target(var/atom/target)
+	if(!istype (target, /obj/machinery/camera))
+		to_chat(usr, "That's not a camera.")
+		return 0
 	else
-		to_chat(src, "That's not a camera.")
+		var/obj/machinery/camera/C = target
+		if(C.status)
+			to_chat(usr, "This camera is either active, or not repairable.")
+			return 0
+	return 1
+	
+/spell/targeted/reactivate_camera/cast(var/list/targets,mob/user)
+	var/obj/machinery/camera/C = targets[1]
+	if(!C.status)
+		C.deactivate(user)
 
 /datum/AI_Module/small/upgrade_camera
 	module_name = "Upgrade Camera"
@@ -304,46 +293,63 @@ rcd light flash thingy on matter drain
 	description = "Upgrades a camera to have X-Ray vision, Motion and be EMP-Proof. 10 uses."
 	uses = 10
 	cost = 15
+	power_type = /spell/targeted/upgrade_camera
 
-	power_type = /mob/living/silicon/ai/proc/upgrade_camera
+/spell/targeted/upgrade_camera
+	name = "Upgrade Camera"
+	panel = "Malfunction"
+	charge_type = Sp_CHARGES
+	charge_max = 10
+	spell_flags = WAIT_FOR_CLICK
+	range = GLOBALCAST
+	
+/spell/targeted/upgrade_camera/is_valid_target(var/atom/target)
+	if(!istype(target, /obj/machinery/camera))
+		to_chat(holder, "That is not a camera.")
+		return 0
+	var/obj/machinery/camera/C = target
+	if(!C.assembly)
+		return 0
+	if(C.isXRay() && C.isEmpProof() && C.isMotion())
+		to_chat(holder, "This camera is already upgraded!")
+		return 0
+	return 1
+	
+/spell/targeted/upgrade_camera/cast(var/list/targets,mob/user)
+	var/obj/machinery/camera/C = targets[1]
+	if(!C.isXRay())
+		C.upgradeXRay()
+		//Update what it can see.
+		cameranet.updateVisibility(C, 0)
+		
+	if(!C.isEmpProof())
+		C.upgradeEmpProof()
 
-/mob/living/silicon/ai/proc/upgrade_camera(obj/machinery/camera/C as obj in cameranet.cameras)
-	set name = "Upgrade Camera"
-	set category = "Malfunction"
+	if(!C.isMotion())
+		C.upgradeMotion()
+		// Add it to machines that process
+		machines |= C
 
-	if(istype(C))
-		var/datum/AI_Module/small/upgrade_camera/UC = locate(/datum/AI_Module/small/upgrade_camera) in current_modules
-		if(UC)
-			if(UC.uses > 0)
-				if(C.assembly)
-					var/upgraded = 0
+	C.visible_message("<span class='notice'>[bicon(C)] *beep*</span>")
+	to_chat(user, "Camera successully upgraded!")
 
-					if(!C.isXRay())
-						C.upgradeXRay()
-						//Update what it can see.
-						cameranet.updateVisibility(C, 0)
-						upgraded = 1
+/spell/aoe_turf/module_picker
+	name = "Select Module"
+	panel = "Malfunction"
+	var/datum/module_picker/MP
+	charge_max = 10
 
-					if(!C.isEmpProof())
-						C.upgradeEmpProof()
-						upgraded = 1
-
-					if(!C.isMotion())
-						C.upgradeMotion()
-						upgraded = 1
-						// Add it to machines that process
-						machines |= C
-
-					if(upgraded)
-						UC.uses --
-						C.visible_message("<span class='notice'>[bicon(C)] *beep*</span>")
-						to_chat(src, "Camera successully upgraded!")
-					else
-						to_chat(src, "This camera is already upgraded!")
-			else
-				to_chat(src, "Out of uses.")
-
-
+/spell/aoe_turf/module_picker/New()
+	..()
+	MP = new /datum/module_picker
+	
+/spell/aoe_turf/module_picker/Destroy()
+	MP = null
+	..()
+	
+/spell/aoe_turf/module_picker/cast(var/list/targets, mob/user)
+	MP.use(user)
+	
 /datum/module_picker
 	var/temp = null
 	var/processing_time = 100
@@ -352,19 +358,10 @@ rcd light flash thingy on matter drain
 /datum/module_picker/New()
 	for(var/type in typesof(/datum/AI_Module))
 		var/datum/AI_Module/AM = new type
-		if(AM.power_type != null)
+		if(AM.power_type || AM.one_time)
 			src.possible_modules += AM
 
-/datum/module_picker/proc/remove_verbs(var/mob/living/silicon/ai/A)
-
-
-
-
-	for(var/datum/AI_Module/AM in possible_modules)
-		A.verbs.Remove(AM.power_type)
-
-
-/datum/module_picker/proc/use(user as mob)
+/datum/module_picker/proc/use(mob/user)
 	var/dat
 	dat += {"<B>Select use of processing time: (currently #[src.processing_time] left.)</B><BR>
 			<HR>
@@ -397,23 +394,12 @@ rcd light flash thingy on matter drain
 				temp = "You cannot afford this module."
 				break
 
-			// Add new uses if we can, and it is allowed.
-			var/datum/AI_Module/already_AM = locate(AM.type) in A.current_modules
-			if(already_AM)
-				if(!AM.one_time)
-					already_AM.uses += AM.uses
-					src.processing_time -= AM.cost
-					temp = "Additional use added to [already_AM.module_name]"
-					break
-				else
-					temp = "This module is only needed once."
-					break
-
 			// Give the power and take away the money.
-			A.verbs += AM.power_type
-			A.current_modules += new AM.type
+			AM.on_purchase(A)
 			temp = AM.description
 			src.processing_time -= AM.cost
+			if(AM.one_time)
+				possible_modules -= AM
 			stat_collection.malf.bought_modules += AM.module_name
 
 	src.use(usr)
