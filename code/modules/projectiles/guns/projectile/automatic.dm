@@ -54,7 +54,7 @@
 			if(!user.contents.Find(src) || jammed)
 				break
 			if(damaged && shots_fired > burst_count)
-				recoil = 1 + min(shots_fired - burst_count, 9)
+				recoil = 1 + min(shots_fired - burst_count, 6)
 			if(damaged && prob(max(0, shots_fired - burst_count * 4)))
 				to_chat(user, "<span class='danger'>The [name] explodes!.</span>")
 				explosion(get_turf(loc), -1, 0, 2)

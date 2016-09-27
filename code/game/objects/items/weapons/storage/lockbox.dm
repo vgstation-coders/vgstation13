@@ -17,6 +17,7 @@
 	var/icon_broken = "lockbox+b"
 	var/tracked_access = "It doesn't look like it's ever been used."
 	health = 50
+	var/oneuse = 0
 
 /obj/item/weapon/storage/lockbox/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/card/id))
@@ -35,6 +36,10 @@
 				src.icon_state = src.icon_closed
 				to_chat(user, "<span class='rose'>You unlock the [src.name]!</span>")
 				tracked_access = "The tracker reads: 'Last unlocked by [ID.registered_name].'"
+				if(oneuse)
+					for(var/atom/movable/A as mob|obj in src)
+						remove_from_storage(A, loc)
+					qdel(src)
 				return
 		else
 			to_chat(user, "<span class='warning'>Access Denied.</span>")
@@ -45,6 +50,10 @@
 		icon_state = src.icon_broken
 		for(var/mob/O in viewers(user, 3))
 			O.show_message(text("<span class='notice'>The lockbox has been broken by [] with an electromagnetic card!</span>", user), 1, text("You hear a faint electrical spark."), 2)
+		if(oneuse)
+			for(var/atom/movable/A as mob|obj in src)
+				remove_from_storage(A, loc)
+			qdel(src)
 
 	if(!locked)
 		. = ..()
@@ -104,6 +113,10 @@
 						for(var/atom/movable/A as mob|obj in src)
 							A.become_damaged()
 							remove_from_storage(A, loc)
+						if(oneuse)
+							for(var/atom/movable/A as mob|obj in src)
+								remove_from_storage(A, loc)
+							qdel(src)
 			if(2)
 				if(prob(50))
 					locked = !locked
@@ -112,6 +125,10 @@
 						for(var/atom/movable/A as mob|obj in src)
 							A.become_damaged()
 							remove_from_storage(A, loc)
+						if(oneuse)
+							for(var/atom/movable/A as mob|obj in src)
+								remove_from_storage(A, loc)
+							qdel(src)
 			if(3)
 				if(prob(25))
 					locked = !locked
@@ -120,6 +137,10 @@
 						for(var/atom/movable/A as mob|obj in src)
 							A.become_damaged()
 							remove_from_storage(A, loc)
+						if(oneuse)
+							for(var/atom/movable/A as mob|obj in src)
+								remove_from_storage(A, loc)
+							qdel(src)
 
 /obj/item/weapon/storage/lockbox/update_icon()
 	..()
@@ -241,3 +262,7 @@
 /obj/item/weapon/storage/lockbox/lawgiver/New()
 	..()
 	new /obj/item/weapon/gun/lawgiver(src)
+
+/obj/item/weapon/storage/lockbox/oneuse
+	desc = "A locked box. When unlocked, the case will fall apart."
+	oneuse = 1
