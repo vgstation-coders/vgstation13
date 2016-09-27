@@ -40,7 +40,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
 		usr.investigation_log(I_CHEMS, "has emptied \a [src] \ref[src] containing [reagents.get_reagent_ids(1)] onto \the [usr.loc].")
 		reagents.reaction(usr.loc)
-		spawn() src.reagents.clear_reagents()
+		spawn()
+			src.reagents.clear_reagents()
 		usr.visible_message("<span class='warning'>[usr] splashes something onto the floor!</span>",
 						 "<span class='notice'>You empty \the [src] onto the floor.</span>")
 
@@ -55,8 +56,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		to_chat(usr, "<span class='warning'>\The [src] is empty.</span>")
 		return
 	playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
-	reagents.reaction(where, TOUCH) //I don't think this will ever do anything but I guess maybe polyacid could melt a toilet
-	spawn() src.reagents.clear_reagents()
+	spawn()
+		src.reagents.clear_reagents()
 	to_chat(user, "<span class='notice'>You flush \the [src] down \the [where].</span>")
 
 
