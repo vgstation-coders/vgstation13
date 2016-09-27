@@ -47,11 +47,17 @@
 		ticker.mode.update_cult_icons_removed(mind)
 		ticker.mode.cult -= mind
 
-	species = null
+	if(species)
+		qdel(species)
+		species = null
 
 	if(decapitated)
 		decapitated.origin_body = null
 		decapitated = null
+
+	if(vessel)
+		qdel(vessel)
+		vessel = null
 
 	..()
 

@@ -66,7 +66,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 	var/list/incoming_transactions = list()
 
-	var/list/currentevents1 = list("The Prime Minister of Space Australia has announced today a new policy to hand out fake dollar bills to the poor.",
+	var/global/list/currentevents1 = list("The Prime Minister of Space Australia has announced today a new policy to hand out fake dollar bills to the poor.",
 		"The President of Space America issued a press release today stating that he is not in fact, a Tajaran in disguise.",
 		"The Prime Minister of Space England is in hot water today after he announced that space tea would now be made with 20% more nuclear waste.",
 		"The Czar of the Space Soviet Union has issued a press release stating 'Spess Amerikans suck cocks!' we're working on a translation.",
@@ -88,7 +88,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		"The Czar of Space Russia has accused the President of Space America of being a dirty catbeast. The President wiggled his trademark ears and said that if he was a Tajaran, the Czar was a space shark. The President is being treated for bite wounds.",
 		"The 'Universes Largest Oven' has been completed today in Space Germany. Prime Minister Adole Himmler has invited Space Isreal to see the oven first at its grand opening."
 		)
-	var/list/currentevents2 = list("CEO Discount Dan has been sued. Again.",
+	var/global/list/currentevents2 = list("CEO Discount Dan has been sued. Again.",
 		"Nanotrasen has inducted a new policy wherein clowns will be spanked for stealing milk.",
 		"Discount Dan's has created a new line of Discountu Danu food product for Space Japan. The food is comprised of Space Carp on rice. More at ten.",
 		"Discount Dan's has come under fire for their new 'Horsemeat Lasagna'",
@@ -110,7 +110,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		"Discount Dan has come under fire today after trying to hug a plasmaman whilst smoking a cigar. He is being treated for 3rd degree burns at the moment, and we at the newsroom wish him luck.",
 		"Nanotrasen's treasurer Shlomo Goldburginstein died today in a tragic cooking incident with NT Officer Gass Judenraigh."
 		)
-	var/list/currentevents3 = list("Border patrol around Space America has tightened today after a wave of Tajarans yiffed their way across. We have reports of over 2000 molested Space Americans. More to come at seven.",
+	var/global/list/currentevents3 = list("Border patrol around Space America has tightened today after a wave of Tajarans yiffed their way across. We have reports of over 2000 molested Space Americans. More to come at seven.",
 		"Tajarans continue to protest in their 'Trillion Fur March' today. We have reports that the Space American army is giving a KOS order on all non-humans in the area.",
 		"Read the all new book by known Plasmaman rights activist Spookler Boney, 'AGHGHHGHGH KILL ME IT BURNS AGHHHHHHH'",
 		"Read the all new book by the worlds most renown skeleton Johnny Hips, 'It aint easy, being bony.'",
@@ -127,7 +127,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		"Supermatter researchers today have reported that the substance is highly volatile and could possibly rip apart the universe in large quantities. Discount Dan has been reported as ordering over 1000 pounds of supermatter shards.",
 		"Scientists working at the BPRF have discovered a pocket universe comprised fully of dead clown souls today. 40 scientists are being treated for madness."
 		)
-	var/list/history = list("Adolf Hitler's cyborg body was lain to rest after the ending of WW4.",
+	var/global/list/history = list("Adolf Hitler's cyborg body was lain to rest after the ending of WW4.",
 		"World War Buttbot began, the following war claimed the asses of over 500000 young gentlemen.",
 		"The 54th President of the United States of Space America was shot in the dick. He succumbed to his injuries after medbay threw him in cryo for an entire day.",
 		"The first great zombie apocalypse began on Venus.",
@@ -143,7 +143,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		"Everyone in the universe said 'Dave sucks.' at the same time. The cause of this event was unknown, but over 200000 men named Dave were murdered.",
 		"A cult religion following the belief god was a chicken was created.",
 		)
-	var/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, you have $1.19. You also have the largest amount of money in coins without being able to make change for a dollar.",
+	var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, you have $1.19. You also have the largest amount of money in coins without being able to make change for a dollar.",
 		"The numbers '172' can be found on the back of the U.S. $5 dollar bill in the bushes at the base of the Lincoln Memorial.",
 		"President Kennedy was the fastest random speaker in the world with upwards of 350 words per minute.",
 		"In the average lifetime, a person will walk the equivalent of 5 times around the equator.",
@@ -2285,10 +2285,32 @@ obj/item/device/pda/AltClick()
 
 /obj/item/device/pda/Destroy()
 	PDAs -= src
+
 	if (src.id)
 		src.id.forceMove(get_turf(src.loc))
+		id = null
+
 	if(src.pai)
 		src.pai.forceMove(get_turf(src.loc))
+		pai = null
+
+	if(cartridge)
+		qdel(cartridge)
+		cartridge = null
+
+	if(atmos_analys)
+		qdel(atmos_analys)
+		atmos_analys = null
+
+	if(dev_analys)
+		qdel(dev_analys)
+		dev_analys = null
+
+	for(var/A in applications)
+		qdel(A)
+
+	for(var/obj/A in src) //Clear out any items that may still be left inside ie pens
+		qdel(A)
 	..()
 
 /obj/item/device/pda/Del()

@@ -34,6 +34,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
+	if(mind && mind.original == src)
+		mind.original = null
 	spellremove(src)
 	if(istype(src,/mob/living/carbon))//iscarbon is defined at the mob/living level
 		var/mob/living/carbon/Ca = src
