@@ -503,7 +503,7 @@
 
 	var/area/space
 
-	space = get_space_area
+	space = get_space_area()
 	if(!space)
 		warning("There is no area at 1,1,2!")
 
