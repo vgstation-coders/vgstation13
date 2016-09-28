@@ -101,8 +101,7 @@ var/list/camera_names=list()
 	var/nethash=english_list(network)
 	camera_names[nethash+c_tag]=null
 	..()
-	if(name != replacetext(name,oldarea.name,newarea.name))
-		name_camera()
+	name_camera()
 
 /obj/machinery/camera/Destroy()
 	deactivate(null, 0) //kick anyone viewing out

@@ -128,10 +128,6 @@
 	else
 		icon_state = "doorctrl0"
 
-/obj/machinery/door_control/change_area(var/area/oldarea, var/area/newarea)
-	..()
-	name = replacetext(name,oldarea.name,newarea.name)
-
 /obj/machinery/driver_button/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
 	return src.attack_hand(user)
@@ -204,7 +200,3 @@
 
 	icon_state = "launcherbtt"
 	active = 0
-
-/obj/machinery/driver_button/change_area(var/area/oldarea, var/area/newarea)
-	..()
-	name = replacetext(name,oldarea.name,newarea.name)

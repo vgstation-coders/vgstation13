@@ -372,7 +372,6 @@
 	areaMaster.air_scrub_info.Remove(id_tag)
 	areaMaster.air_scrub_names.Remove(id_tag)
 	..()
-	name = replacetext(name,oldarea.name,newarea.name)
 	area_uid = areaMaster.uid
 	broadcast_status()
 

@@ -126,7 +126,3 @@
 		return
 	power_change()
 	..(severity)
-
-/obj/machinery/light_switch/change_area(var/area/oldarea, var/area/newarea)
-	..()
-	name = replacetext(name,oldarea.name,newarea.name)

@@ -227,6 +227,16 @@
 
 	return 1
 
+/obj/item/weapon/reagent_containers/food/snacks/proc/splat_reagent_reaction(turf/T)
+	if(reagents.total_volume > 0)
+		reagents.reaction(T)
+		for(var/atom/A in T)
+			if (A == src)
+				continue
+			reagents.reaction(A)
+		return 1
+	return 0
+
 /obj/item/weapon/reagent_containers/food/snacks/examine(mob/user)
 	..()
 	if (bitecount)
