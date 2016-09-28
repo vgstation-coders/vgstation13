@@ -114,10 +114,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return (target in options)
 	return ((target in view_or_range(range, user, selection_type)) && istype(target, /mob/living))
 
-/spell/proc/perform(mob/user, skipcharge = 0, list/target_override) //if recharge is started is important for the trigger spells
-	if(!user)
-		user = usr
-
+/spell/proc/perform(mob/user = usr, skipcharge = 0, list/target_override) //if recharge is started is important for the trigger spells
 	if(!holder)
 		holder = user //just in case
 
