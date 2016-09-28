@@ -33,7 +33,9 @@ delete-after: True
 # If you're using characters such as # ' : - or the like in your changelog, surround the entire change with quotes as shown in the second example. These quotes don't show up on the changelog once it's merged and prevent errors.
 # SCREW ANY OF THIS UP AND IT WON'T WORK.
 changes: 
-- wip: These changes apply to Box station.
-- rscadd: Added 4 .45 pistols to secure armory, each with one extra magazine.
-- rscadd: Added some .45 practice ammo to the firing range.
-- rscadd: Added 2 boxes of holobadges to the briefing room.
+- rscadd: Added .45 pistols to secure armories of all maps, each with one extra magazine. The weapons in their place were moved to the secure lockers.
+- rscadd: "Box: Added some .45 practice ammo to the firing range."
+- rscadd: "Box and Meta: Added 2 boxes of holobadges to the briefing room"
+- tweak: "Box: Security officers can now use the external airlocks in maint just outside security."
+
+
