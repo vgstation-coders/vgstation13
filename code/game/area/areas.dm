@@ -2,6 +2,8 @@
 #define DOORALERT_ATMOS 1
 #define DOORALERT_FIRE  2
 
+var/area/space_area
+
 /area
 	var/global/global_uid = 0
 	var/uid
@@ -27,6 +29,7 @@
 		power_light = 0
 		power_equip = 0
 		power_environ = 0
+		space_area = src
 //		lighting_state = 4
 		//has_gravity = 0    // Space has gravity.  Because.. because.
 
