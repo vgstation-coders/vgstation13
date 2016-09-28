@@ -74,7 +74,7 @@
 
 	// Log reagents
 	reagents.log_bad_reagents(user, src)
-	user.investigation_log(I_CHEMS, "sprayed [amount_per_transfer_from_this]u from \a [src] \ref[src] containing [reagents.get_reagent_ids(1)] towards [A] ([A.x], [A.y], [A.z]).")
+	user.investigation_log(I_CHEMS, "sprayed [amount_per_transfer_from_this]u from \a [src] ([type]) containing [reagents.get_reagent_ids(1)] towards [A] ([A.x], [A.y], [A.z]).")
 
 	// Override for your custom puff behaviour
 	make_puff(A, user)

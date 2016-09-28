@@ -562,7 +562,7 @@
 		D.icon_state = "chempuff"
 		D.create_reagents(5)
 		reagents.log_bad_reagents(user, src)
-		user.investigation_log(I_CHEMS, "sprayed 1u from \a [src] \ref[src] containing [reagents.get_reagent_ids(1)] towards [A] ([A.x], [A.y], [A.z]).")
+		user.investigation_log(I_CHEMS, "sprayed 1u from \a [src] ([type]) containing [reagents.get_reagent_ids(1)] towards [A] ([A.x], [A.y], [A.z]).")
 		src.reagents.trans_to(D, 1)
 		playsound(get_turf(src), 'sound/effects/spray3.ogg', 50, 1, -6)
 
