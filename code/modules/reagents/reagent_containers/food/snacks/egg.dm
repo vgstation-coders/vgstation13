@@ -21,11 +21,15 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/throw_impact(atom/hit_atom)
 	..()
-	new/obj/effect/decal/cleanable/egg_smudge(src.loc)
-	src.reagents.reaction(hit_atom, TOUCH)
-	src.visible_message("<span class='warning'>\The [src.name] has been squashed.</span>","<span class='warning'>You hear a smack.</span>")
-	playsound(src.loc, 'sound/items/egg_squash.ogg', 50, 1)
-	qdel(src)
+	if(isturf(hit_atom))
+		new/obj/effect/decal/cleanable/egg_smudge(loc)
+		var/turf/T = get_turf(src)
+		reagents.reaction(T, TOUCH)
+		for(var/atom/A in T)
+			reagents.reaction(A, TOUCH)
+		visible_message("<span class='warning'>\The [src] has been squashed.</span>","<span class='warning'>You hear a smack.</span>")
+		playsound(loc, 'sound/items/egg_squash.ogg', 50, 1)
+		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/blue
 	icon_state = "egg-blue"
