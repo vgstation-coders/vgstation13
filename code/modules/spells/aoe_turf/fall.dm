@@ -68,9 +68,7 @@
 		for(i = -x, i <= x, i++)
 			. += "[x],[y]"
 
-/spell/aoe_turf/fall/perform(mob/user, skipcharge = 0) //if recharge is started is important for the trigger spells
-	if(!user)
-		user = usr
+/spell/aoe_turf/fall/perform(mob/user = usr, skipcharge = 0) //if recharge is started is important for the trigger spells
 	if(!holder)
 		holder = user //just in case
 	if(!cast_check(skipcharge, user))
