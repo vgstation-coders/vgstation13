@@ -295,6 +295,9 @@
 	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive/nuclear(synd_mob)
 	E.imp_in = synd_mob
 	E.implanted = 1
+	var/datum/organ/external/affected = synd_mob.get_organ(LIMB_HEAD)
+	affected.implants += E
+	E.part = affected
 	synd_mob.update_icons()
 	return 1
 
