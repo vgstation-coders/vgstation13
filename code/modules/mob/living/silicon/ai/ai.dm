@@ -798,14 +798,21 @@ var/list/ai_list = list()
 
 	return
 
-/mob/living/silicon/ai/proc/corereturn()
-	set category = "Malfunction"
-	set name = "Return to Main Core"
-
-	var/obj/machinery/power/apc/apc = src.loc
-	if(!istype(apc))
+/spell/aoe_turf/corereturn
+	name = "Return to Core"
+	panel = "Malfunction"
+	charge_type = SpCHARGES
+	charge_max = 1
+	
+/spell/aoe_turf/corereturn/before_target(mob/user)
+	if(istype(user.loc, /obj/machinery/power/apc))
+		return 0
+	else
 		to_chat(src, "<span class='notice'>You are already in your Main Core.</span>")
-		return
+		return 1
+
+/spell/aoe_turf/corereturn/cast(var/list/targets, mob/user)
+	var/obj/machinery/power/apc/apc = user.loc
 	apc.malfvacate()
 
 //Toggles the luminosity and applies it by re-entereing the camera.

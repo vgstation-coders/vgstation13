@@ -113,8 +113,7 @@ rcd light flash thingy on matter drain
 	
 /spell/targeted/overload_machine/cast(var/list/targets, mob/user)
 	var/obj/machinery/M = targets[1]
-	for(var/mob/V in hearers(M, null))
-		V.show_message("<span class='notice'>You hear a loud electrical buzzing sound!</span>", 2)
+	M.visible_message("<span class='notice'>You hear a loud electrical buzzing sound!</span>")
 	spawn(50)
 		explosion(get_turf(M), -1, 1, 2, 3) //C4 Radius + 1 Dest for the machine
 		qdel(M)
@@ -125,57 +124,41 @@ rcd light flash thingy on matter drain
 	description = "Build a machine anywhere, using expensive nanomachines, that can convert a living human into a loyal cyborg slave when placed inside."
 	cost = 100
 	
-	power_type = /spell/targeted/place_transformer
+	power_type = /spell/aoe_turf/conjure/place_transformer
 
-/spell/targeted/place_transformer
+/spell/aoe_turf/conjure/place_transformer
 	name = "Place Robotic Factory"
 	panel = "Malfunction"
 	charge_type = Sp_CHARGES
 	charge_max = 1
-	spell_flags = WAIT_FOR_CLICK
+	spell_flags = WAIT_FOR_CLICK|NODUPLICATE
 	range = GLOBALCAST
+	summon_type = list(/obj/machinery/transformer/conveyor)
 	
-/spell/targeted/place_transformer/before_target(mob/user)
-	if(!isAI(user))
-		return 0
+/spell/aoe_turf/conjure/place_transformer/before_target(mob/user)
 	var/mob/living/silicon/ai/A = user
+	if(!istype(user))
+		return 1
 	if(!A.eyeobj)
 		return 1
 	if(!isturf(A.loc)) // AI must be in it's core.
 		return 1
 	return 0
 	
-/spell/targeted/place_transformer/is_valid_target(var/atom/target)
-
+/spell/aoe_turf/conjure/place_transformer/is_valid_target(var/atom/target)
 	// Make sure there is enough room.
 	if(!isturf(target))
 		return 0
 	var/turf/middle = target
-	var/list/turfs = list(middle, locate(middle.x - 1, middle.y, middle.z), locate(middle.x + 1, middle.y, middle.z))
-
-	var/alert_msg = "There isn't enough room. Make sure you are placing the machine in a clear area and on a floor."
-
 	var/datum/camerachunk/C = cameranet.getCameraChunk(middle.x, middle.y, middle.z)
 	if(!C.visibleTurfs[middle])
 		alert(holder, "We cannot get camera vision of this location.")
 		return 0
-
-	for(var/T in turfs)
-
-		// Make sure the turfs are clear and the correct type.
-		if(!istype(T, /turf/simulated/floor))
-			alert(holder, alert_msg)
-			return 0
-
-		var/turf/simulated/floor/F = T
-		for(var/atom/movable/AM in F.contents)
-			if(AM.density)
-				alert(holder, alert_msg)
-				return 0
 	return 1
-/spell/targeted/place_transformer/cast(var/list/targets,mob/user)
+	
+/spell/aoe_turf/conjure/place_transformer/cast(var/list/targets,mob/user)
 	// All clear, place the transformer
-	new /obj/machinery/transformer/conveyor(get_turf(targets[1]))
+	..()
 	playsound(targets[1], 'sound/effects/phasein.ogg', 100, 1)
 	if(!isAI(user))
 		return
@@ -261,14 +244,13 @@ rcd light flash thingy on matter drain
 	uses = 10
 	cost = 15
 
-	power_type = /spell/targeted/reactivate_camera
+	power_type = /spell/aoe_turf/reactivate_camera
 
-/spell/targeted/reactivate_camera
+/spell/aoe_turf/reactivate_camera
 	name = "Reactivate Camera"
 	panel = "Malfunction"
 	charge_type = Sp_CHARGES
 	charge_max = 10
-	spell_flags = WAIT_FOR_CLICK
 	range = GLOBALCAST
 	
 /spell/targeted/reactivate_camera/is_valid_target(var/atom/target)
