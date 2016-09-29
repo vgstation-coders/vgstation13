@@ -90,7 +90,7 @@ var/list/camera_names=list()
 	var/basename=A.name
 	var/nethash=english_list(network)
 	var/suffix = 0
-	while(!suffix || nethash+c_tag in camera_names)
+	while(!suffix || (nethash+c_tag in camera_names))
 		c_tag = "[basename]"
 		if(suffix)
 			c_tag += " [suffix]"
@@ -100,6 +100,9 @@ var/list/camera_names=list()
 /obj/machinery/camera/change_area(var/area/oldarea, var/area/newarea)
 	var/nethash=english_list(network)
 	camera_names[nethash+c_tag]=null
+	..()
+
+/obj/machinery/camera/change_area_name(oldname, oldarea)
 	..()
 	name_camera()
 
