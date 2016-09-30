@@ -166,7 +166,7 @@ move an amendment</a> to the drawing.</p>
 		return
 	areachanged.name = str
 	for(var/atom/allthings in areachanged.contents)
-		allthings.change_area(prevname,areachanged)
+		allthings.change_area_name(prevname,str)
 	to_chat(usr, "<span class='notice'>You set the area '[prevname]' title to '[str]'.</span>")
 	interact()
 

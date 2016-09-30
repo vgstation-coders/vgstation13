@@ -777,10 +777,10 @@ its easier to just keep the beam vertical.
 	return 0
 
 /atom/proc/change_area(var/area/oldarea, var/area/newarea)
-	if(istype(oldarea))
-		oldarea = "[oldarea.name]"
-	if(istype(newarea))
-		newarea = "[newarea.name]"
+	change_area_name(oldarea.name, newarea.name)
+
+/atom/proc/change_area_name(var/oldname, var/newname)
+	name = replacetext(name,oldname,newname)
 
 //Called in /spell/aoe_turf/boo/cast() (code/modules/mob/dead/observer/spells.dm)
 /atom/proc/spook(mob/dead/observer/ghost, var/log_this = FALSE)

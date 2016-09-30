@@ -55,7 +55,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 	if(stat >= 2)
 		return
 
-	if(species.breath_type != "plasma")
+	if(species.breath_type != "toxins")
 
 		//Burn skin if exposed.
 		if(zas_settings.Get(/datum/ZAS_Setting/SKIN_BURNS))

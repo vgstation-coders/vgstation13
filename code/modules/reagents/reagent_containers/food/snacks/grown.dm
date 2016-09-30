@@ -192,14 +192,6 @@
 		S.set_light(1, l_color = seed.biolum_colour)
 	return 1
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/proc/splat_reagent_reaction(turf/T)
-	if(src.reagents.total_volume > 0)
-		src.reagents.reaction(T)
-		for(var/atom/A in T)
-			src.reagents.reaction(A)
-		return 1
-	return 0
-
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/thorns_apply_damage(mob/living/carbon/human/H, datum/organ/external/affecting)
 	if(!seed.thorny || !affecting)
 		return 0
