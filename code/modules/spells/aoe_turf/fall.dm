@@ -93,10 +93,10 @@
 		after_cast(targets) //generates the sparks, smoke, target messages etc.
 		invocation = initial(invocation)
 
-/spell/aoe_turf/fall/cast(list/targets)
-	var/turf/ourturf = get_turf(usr)
+/spell/aoe_turf/fall/cast(list/targets, mob/user)
+	var/turf/ourturf = get_turf(user)
 
-	var/list/potentials = circlerangeturfs(usr, range)
+	var/list/potentials = circlerangeturfs(user, range)
 	if(istype(potentials) && potentials.len)
 		targets = potentials
 	/*spawn(120)
@@ -111,9 +111,11 @@
 			if(C.mob)
 				C.mob.see_fall()
 
+	INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = targets))
+
 		//animate(aoe_underlay, transform = null, time = 2)
 	var/oursound = (invocation == "ZA WARUDO" ? 'sound/effects/theworld.ogg' :'sound/effects/fall.ogg')
-	playsound(usr, oursound, 100, 0, 0, 0, 0)
+	playsound(user, oursound, 100, 0, 0, 0, 0)
 
 	sleepfor = world.time + sleeptime
 	for(var/turf/T in targets)
@@ -171,8 +173,11 @@
 
 	while (processing_list.len)
 		var/atom/A = processing_list[1]
+
 		affected |= A
-		A.timestopped = 1
+
+		if(A != holder)
+			A.timestopped = 1
 
 		for (var/atom/B in A)
 			if (!processed_list[B])
@@ -229,7 +234,9 @@
 //	to_chat(world, "invert color start")
 	if(A.ignoreinvert)
 		return
-	A.tempoverlay = A.appearance
+	if(!A.tempoverlay)
+		A.tempoverlay = A.appearance
+
 	A.color=	  list(-1,0,0,
 						0,-1,0,
 						0,0,-1,

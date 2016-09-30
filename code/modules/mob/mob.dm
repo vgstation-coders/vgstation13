@@ -27,6 +27,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 		for(var/M in mind.heard_before)
 			if(mind.heard_before[M] == src)
 				mind.heard_before[M] = null
+	if(on_spellcast)
+		on_spellcast.holder = null
 	if(on_uattack)
 		on_uattack.holder = null
 	if(on_damaged)
@@ -70,8 +72,11 @@ var/global/obj/screen/fuckstat/FUCK = new
 	on_logout = null
 	qdel(on_moved)
 	on_moved = null
+	qdel(on_spellcast)
 	qdel(on_uattack)
 	qdel(on_damaged)
+
+	on_spellcast = null
 	on_uattack = null
 	on_damaged = null
 
@@ -242,6 +247,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 		living_mob_list += src
 
 	store_position()
+	on_spellcast=new("owner"=src)
 	on_uattack = new("owner"=src)
 	on_logout = new("owner"=src)
 	on_damaged= new("owner"=src)
