@@ -213,7 +213,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		if (!container.is_open_container() && istype(container,/obj/item/weapon/reagent_containers))
 			return -1
 
-		success = transfer_sub(src, target, amount_per_transfer_from_this, user, log_transfer = TRUE)
+		if(target.is_open_container())
+			success = transfer_sub(src, target, amount_per_transfer_from_this, user, log_transfer = TRUE)
 
 		if(success)
 			if (success > 0)
