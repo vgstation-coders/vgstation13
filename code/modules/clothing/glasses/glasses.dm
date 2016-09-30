@@ -205,7 +205,7 @@
 			qdel(src)
 			return
 		if(prob(15))
-			new/obj/item/clothing/glasses/sunglasses(loc)
+			new/obj/item/clothing/glasses/sunglasses(get_turf(src))
 			playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
 			qdel(src)
 			return

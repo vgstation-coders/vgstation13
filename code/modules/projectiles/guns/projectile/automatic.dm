@@ -56,7 +56,7 @@
 			if(damaged && shots_fired > burst_count)
 				recoil = 1 + min(shots_fired - burst_count, 6)
 			if(damaged && prob(max(0, shots_fired - burst_count * 4)))
-				to_chat(user, "<span class='danger'>The [name] explodes!.</span>")
+				to_chat(user, "<span class='danger'>\The [src] explodes!.</span>")
 				explosion(get_turf(loc), -1, 0, 2)
 				user.drop_item(src, force_drop = 1)
 				qdel(src)

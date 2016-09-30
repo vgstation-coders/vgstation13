@@ -149,13 +149,8 @@
 		return
 
 	if(damaged)
-		var/list/turf/shot_spread = list()
-		for(var/turf/T in range(originaltarget, min(1+recoil, max(0, get_dist(user, originaltarget)-1))))
-			shot_spread += T
-		var/temptarget = pick(shot_spread)
-		if(temptarget != targloc)
-			target = temptarget
-			targloc = get_turf(target)
+		target = get_inaccuracy(originaltarget, 1+recoil)
+		targloc = get_turf(target)
 
 	if(!special_check(user))
 		return
@@ -259,10 +254,10 @@
 
 	user.update_inv_hand(user.active_hand)
 
-	if(damaged && recoil && prob(5))
+	if(damaged && recoil && prob(3))
 		var/throwturf = get_ranged_target_turf(user, pick(alldirs), 7)
 		user.drop_item()
-		user.visible_message("[src] jumps out of [user]'s hands!","[src] jumps out of your hands!")
+		user.visible_message("\The [src] jumps out of [user]'s hands!","\The [src] jumps out of your hands!")
 		throw_at(throwturf, rand(3, 6), 3)
 		return 1
 
@@ -345,5 +340,16 @@
 /obj/item/weapon/gun/become_damaged()
 	if(!damaged)
 		damaged = 1
-		desc += " It doesn't look to be in the best shape."
+		desc += "\nIt doesn't look to be in the best shape."
 	return ..()
+
+/obj/item/weapon/gun/proc/get_inaccuracy(var/atom/target, var/spread)
+	var/turf/curloc = get_turf(src)
+	var/turf/targloc = get_turf(target)
+	var/list/shot_spread = list()
+	for(var/turf/T in trange(min(spread, max(0, get_dist(curloc, targloc)-1)), targloc))
+		shot_spread += T
+	var/turf/newtarget = pick(shot_spread)
+	if(newtarget == targloc)
+		return target
+	return newtarget

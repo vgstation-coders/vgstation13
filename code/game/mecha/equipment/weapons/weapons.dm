@@ -16,8 +16,22 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/become_damaged()
 	if(!damaged)
 		damaged = 1
-		desc += " It doesn't look to be in the best shape."
+		desc += "/nIt doesn't look to be in the best shape."
 	return ..()
+
+/obj/item/mecha_parts/mecha_equipment/weapon/proc/get_inaccuracy(var/atom/target, var/spread, var/obj/mecha/chassis)
+	var/turf/curloc = get_turf(src)
+	var/turf/targloc = get_turf(target)
+	var/list/turf/shot_spread = list()
+	for(var/turf/T in trange(min(spread, max(0, get_dist(curloc, targloc)-1)), targloc))
+		var/dir_to_targ = get_dir(chassis, target)
+		if(dir_to_targ && !(dir_to_targ & chassis.dir))
+			continue
+		shot_spread += T
+	var/turf/newtarget = pick(shot_spread)
+	if(newtarget == targloc)
+		return target
+	return newtarget
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy
 	name = "General Energy Weapon"
@@ -34,16 +48,11 @@
 	var/originaltarget = target
 	var/turf/curloc = chassis.loc
 	var/atom/targloc = get_turf(target)
+	if(damaged)
+		target = get_inaccuracy(originaltarget, 1, chassis)
+		targloc = get_turf(target)
 	if (!targloc || !istype(targloc, /turf) || !curloc)
 		return
-	if(damaged)
-		var/list/turf/shot_spread = list()
-		for(var/turf/T in range(target, min(1, max(0, get_dist(curloc, targloc)-1))))
-			shot_spread += T
-		var/temptarget = pick(shot_spread)
-		if(temptarget != targloc)
-			target = temptarget
-			targloc = get_turf(target)
 	if (targloc == curloc)
 		return
 	set_ready_state(0)
@@ -243,16 +252,8 @@
 	for(var/i=1 to min(projectiles, projectiles_per_shot))
 //		targloc = locate(target_x+GaussRandRound(deviation,1),target_y+GaussRandRound(deviation,1),target_z)
 		if(damaged)
-			var/list/turf/shot_spread = list()
-			for(var/turf/T in range(originaltarget, min(2, max(0, get_dist(chassis, originaltarget)-1))))
-				var/dir_to_targ = get_dir(chassis,T)
-				if(dir_to_targ && !(dir_to_targ & chassis.dir))
-					continue
-				shot_spread += T
-			var/temptarget = pick(shot_spread)
-			if(temptarget != targloc)
-				target = temptarget
-				targloc = get_turf(target)
+			target = get_inaccuracy(originaltarget, 2, chassis)
+			targloc = get_turf(target)
 		if(!targloc || targloc == curloc)
 			break
 		playsound(chassis, fire_sound, 80, 1)
@@ -301,16 +302,8 @@
 		var/turf/curloc = get_turf(chassis)
 //		targloc = locate(target_x+GaussRandRound(deviation,1),target_y+GaussRandRound(deviation,1),target_z)
 		if(damaged)
-			var/list/turf/shot_spread = list()
-			for(var/turf/T in range(originaltarget, min(2, max(0, get_dist(curloc, originaltarget)-1))))
-				var/dir_to_targ = get_dir(chassis,T)
-				if(dir_to_targ && !(dir_to_targ & chassis.dir))
-					continue
-				shot_spread += T
-			var/temptarget = pick(shot_spread)
-			if(temptarget != targloc)
-				target = temptarget
-				targloc = get_turf(target)
+			target = get_inaccuracy(originaltarget, 2, chassis)
+			targloc = get_turf(target)
 		if (!targloc || !curloc)
 			continue
 		if (targloc == curloc)
@@ -355,13 +348,7 @@
 	playsound(chassis, fire_sound, 50, 1)
 	var/originaltarget = target
 	if(damaged)
-		var/list/turf/shot_spread = list()
-		for(var/turf/T in range(originaltarget, min(2, max(0, get_dist(chassis.loc, originaltarget)-1))))
-			var/dir_to_targ = get_dir(chassis,T)
-			if(dir_to_targ && !(dir_to_targ & chassis.dir))
-				continue
-			shot_spread += T
-		target = pick(shot_spread)
+		target = get_inaccuracy(originaltarget, 2, chassis)
 	M.throw_at(target, missile_range, missile_speed)
 	projectiles--
 	log_message("Fired from [src.name], targeting [originaltarget].")
@@ -404,13 +391,7 @@
 	playsound(chassis, fire_sound, 50, 1)
 	var/originaltarget = target
 	if(damaged)
-		var/list/turf/shot_spread = list()
-		for(var/turf/T in range(originaltarget, min(3, max(0, get_dist(chassis.loc, originaltarget)-1))))
-			var/dir_to_targ = get_dir(chassis,T)
-			if(dir_to_targ && !(dir_to_targ & chassis.dir))
-				continue
-			shot_spread += T
-		target = pick(shot_spread)
+		target = get_inaccuracy(originaltarget, 3, chassis)
 	F.throw_at(target, missile_range, missile_speed)
 	projectiles--
 	log_message("Fired from [src.name], targeting [originaltarget].")
@@ -543,13 +524,7 @@
 	playsound(chassis, fire_sound, 50, 1)
 	var/originaltarget = target
 	if(damaged)
-		var/list/turf/shot_spread = list()
-		for(var/turf/T in range(originaltarget, min(1, max(0, get_dist(chassis.loc, originaltarget)-1))))
-			var/dir_to_targ = get_dir(chassis,T)
-			if(dir_to_targ && !(dir_to_targ & chassis.dir))
-				continue
-			shot_spread += T
-		target = pick(shot_spread)
+		target = get_inaccuracy(originaltarget, 1, chassis)
 	M.thrown_from = src
 	M.throw_at(target, missile_range, missile_speed)
 	projectiles--
