@@ -310,17 +310,15 @@
 			if(!O.up && tinted_weldhelh)
 				overlay_fullscreen("tint", /obj/screen/fullscreen/impaired, 2)
 				masked = 1
-			else
-				clear_fullscreen("tint")
-		else
-			clear_fullscreen("tint")
 
 		if(!masked && istype(glasses, /obj/item/clothing/glasses/welding) && !istype(glasses, /obj/item/clothing/glasses/welding/superior))
 			var/obj/item/clothing/glasses/welding/O = glasses
 			if(!O.up && tinted_weldhelh)
 				overlay_fullscreen("tint", /obj/screen/fullscreen/impaired, 2)
-			else
-				clear_fullscreen("tint")
+				masked = 1
+
+		if(!masked)
+			clear_fullscreen("tint")
 
 		if(machine)
 			if(!machine.check_eye(src))
