@@ -109,7 +109,7 @@
 				src.icon_state = "mw"
 				src.broken = 0 // Fix it!
 				src.dirty = 0 // just to be sure
-				src.flags = OPENCONTAINER
+				src.flags |= OPENCONTAINER
 		else
 			to_chat(user, "<span class='warning'>It's broken!</span>")
 			return 1
@@ -130,7 +130,7 @@
 					src.dirty = 0 // It's clean!
 					src.broken = 0 // just to be sure
 					src.icon_state = "mw"
-					src.flags = OPENCONTAINER
+					src.flags |= OPENCONTAINER
 					return 1
 		else //Otherwise bad luck!!
 			to_chat(user, "<span class='warning'>It's too dirty!</span>")
@@ -397,7 +397,7 @@
 	playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 1)
 	src.visible_message("<span class='warning'>The microwave gets covered in muck!</span>")
 	src.dirty = 100 // Make it dirty so it can't be used util cleaned
-	src.flags = 0 //So you can't add condiments
+	src.flags &= ~OPENCONTAINER //So you can't add condiments
 	src.icon_state = "mwbloody" // Make it look dirty too
 	src.operating = 0 // Turn it off again aferwards
 	src.updateUsrDialog()
@@ -409,7 +409,7 @@
 	src.icon_state = "mwb" // Make it look all busted up and shit
 	src.visible_message("<span class='warning'>The microwave breaks!</span>") //Let them know they're stupid
 	src.broken = 2 // Make it broken so it can't be used util fixed
-	src.flags = 0 //So you can't add condiments
+	src.flags &= ~OPENCONTAINER //So you can't add condiments
 	src.operating = 0 // Turn it off again aferwards
 	src.updateUsrDialog()
 
