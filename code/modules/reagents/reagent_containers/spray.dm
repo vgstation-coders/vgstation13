@@ -1,6 +1,3 @@
-// Reagents to log when sprayed
-var/global/list/logged_sprayed_reagents = list(SACID, PACID, LUBE, FUEL)
-
 /obj/item/weapon/reagent_containers/spray
 	name = "spray bottle"
 	desc = "A spray bottle, with an unscrewable top."
@@ -76,16 +73,8 @@ var/global/list/logged_sprayed_reagents = list(SACID, PACID, LUBE, FUEL)
 			return
 
 	// Log reagents
-	var/list/log_reagent_list = list()
-
-	for (var/reagent_id in logged_sprayed_reagents)
-		if (reagents.has_reagent(reagent_id))
-			log_reagent_list += "'[reagent_id]'"
-
-	if (log_reagent_list.len > 0)
-		add_gamelogs(user, "sprayed {[english_list(log_reagent_list, and_text = ", ")]} with \the [src]", admin = TRUE, tp_link = TRUE)
-
-	user.investigation_log(I_CHEMS, "sprayed [amount_per_transfer_from_this]u from \a [src] \ref[src] containing [reagents.get_reagent_ids(1)] towards [A] ([A.x], [A.y], [A.z]).")
+	reagents.log_bad_reagents(user, src)
+	user.investigation_log(I_CHEMS, "sprayed [amount_per_transfer_from_this]u from \a [src] ([type]) containing [reagents.get_reagent_ids(1)] towards [A] ([A.x], [A.y], [A.z]).")
 
 	// Override for your custom puff behaviour
 	make_puff(A, user)

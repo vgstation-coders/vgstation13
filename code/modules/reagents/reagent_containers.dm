@@ -38,7 +38,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	if(isturf(usr.loc))
 		if(reagents.total_volume > 10) //Beakersplashing only likes to do this sound when over 10 units
 			playsound(get_turf(src), 'sound/effects/slosh.ogg', 25, 1)
-		usr.investigation_log(I_CHEMS, "has emptied \a [src] \ref[src] containing [reagents.get_reagent_ids(1)] onto \the [usr.loc].")
+		usr.investigation_log(I_CHEMS, "has emptied \a [src] ([type]) containing [reagents.get_reagent_ids(1)] onto \the [usr.loc].")
 		reagents.reaction(usr.loc)
 		spawn()
 			src.reagents.clear_reagents()

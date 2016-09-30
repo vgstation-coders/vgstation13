@@ -534,7 +534,7 @@
 /obj/item/toy/waterflower/attack(mob/living/carbon/human/M as mob, mob/user as mob)
 	return
 
-/obj/item/toy/waterflower/afterattack(atom/A as mob|obj, mob/user as mob)
+/obj/item/toy/waterflower/afterattack(atom/A as mob|obj, mob/user as mob, proximity_flag)
 
 	if (istype(A, /obj/item/weapon/storage/backpack ) || istype(A, /obj/structure/bed/chair/vehicle/clowncart))
 		return
@@ -542,7 +542,7 @@
 	else if (locate (/obj/structure/table, src.loc))
 		return
 
-	else if (istype(A, /obj/structure/reagent_dispensers/watertank) && get_dist(src,A) <= 1)
+	else if (istype(A, /obj/structure/reagent_dispensers) && proximity_flag)
 		A.reagents.trans_to(src, 10)
 		to_chat(user, "<span class = 'notice'>You refill your flower!</span>")
 		return
@@ -561,6 +561,8 @@
 		D.icon = 'icons/obj/chemical.dmi'
 		D.icon_state = "chempuff"
 		D.create_reagents(5)
+		reagents.log_bad_reagents(user, src)
+		user.investigation_log(I_CHEMS, "sprayed 1u from \a [src] ([type]) containing [reagents.get_reagent_ids(1)] towards [A] ([A.x], [A.y], [A.z]).")
 		src.reagents.trans_to(D, 1)
 		playsound(get_turf(src), 'sound/effects/spray3.ogg', 50, 1, -6)
 
@@ -571,7 +573,7 @@
 				for(var/atom/T in get_turf(D))
 					D.reagents.reaction(T)
 					if(ismob(T) && T:client)
-						to_chat(T:client, "<span class = 'danger'>[user] has sprayed you with water!</span>")
+						to_chat(T:client, "<span class = 'danger'>[user] has sprayed you with \the [src]!</span>")
 				sleep(4)
 			qdel(D)
 			D = null
