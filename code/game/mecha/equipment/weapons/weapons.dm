@@ -19,20 +19,6 @@
 		desc += "/nIt doesn't look to be in the best shape."
 	return ..()
 
-/obj/item/mecha_parts/mecha_equipment/weapon/proc/get_inaccuracy(var/atom/target, var/spread, var/obj/mecha/chassis)
-	var/turf/curloc = get_turf(src)
-	var/turf/targloc = get_turf(target)
-	var/list/turf/shot_spread = list()
-	for(var/turf/T in trange(min(spread, max(0, get_dist(curloc, targloc)-1)), targloc))
-		var/dir_to_targ = get_dir(chassis, target)
-		if(dir_to_targ && !(dir_to_targ & chassis.dir))
-			continue
-		shot_spread += T
-	var/turf/newtarget = pick(shot_spread)
-	if(newtarget == targloc)
-		return target
-	return newtarget
-
 /obj/item/mecha_parts/mecha_equipment/weapon/energy
 	name = "General Energy Weapon"
 

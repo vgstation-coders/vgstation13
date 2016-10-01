@@ -342,14 +342,3 @@
 		damaged = 1
 		desc += "\nIt doesn't look to be in the best shape."
 	return ..()
-
-/obj/item/weapon/gun/proc/get_inaccuracy(var/atom/target, var/spread)
-	var/turf/curloc = get_turf(src)
-	var/turf/targloc = get_turf(target)
-	var/list/shot_spread = list()
-	for(var/turf/T in trange(min(spread, max(0, get_dist(curloc, targloc)-1)), targloc))
-		shot_spread += T
-	var/turf/newtarget = pick(shot_spread)
-	if(newtarget == targloc)
-		return target
-	return newtarget

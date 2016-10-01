@@ -30,7 +30,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_DIAMOND = 2000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/energy/lasercannon
+	build_path = /obj/item/weapon/gun/energy/laser/cannon
 	locked = 1
 	req_lock_access = list(access_armory, access_weapons)
 

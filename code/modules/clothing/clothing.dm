@@ -209,7 +209,7 @@
 /obj/item/clothing/become_damaged()
 	if(!damaged)
 		damaged = 1
-		desc += " It doesn't look to be in the best shape."
+		desc += "\nIt doesn't look to be in the best shape."
 		for(var/A in armor)
 			armor[A] -= rand(armor[A]/3, armor[A])
 	return ..()

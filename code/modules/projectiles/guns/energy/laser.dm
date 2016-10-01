@@ -42,47 +42,54 @@
 			projectile_type = /obj/item/projectile/beam/lightlaser
 			in_chamber = null
 			in_chamber = new projectile_type(src)
-			fire_delay +=2
+			fire_delay +=3
+			to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
+			return 1
+		if(projectile_type == "/obj/item/projectile/beam/heavylaser" && prob(15))
+			projectile_type = /obj/item/projectile/beam
+			in_chamber = null
+			in_chamber = new projectile_type(src)
+			fire_sound = 'sound/weapons/Laser.ogg'
 			to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
 			return 1
 		if(projectile_type == /obj/item/projectile/beam && prob(10))
 			projectile_type = /obj/item/projectile/beam/lightlaser
 			in_chamber = null
 			in_chamber = new projectile_type(src)
-			fire_delay +=2
+			fire_delay +=3
 			to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
 			return 1
 		if(projectile_type == "/obj/item/projectile/beam" && prob(10))
 			projectile_type = /obj/item/projectile/beam/lightlaser
 			in_chamber = null
 			in_chamber = new projectile_type(src)
-			fire_delay +=2
+			fire_delay +=3
 			to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
 			return 1
 		if(projectile_type == /obj/item/projectile/beam/retro && prob(10))
 			projectile_type = /obj/item/projectile/beam/lightlaser
 			in_chamber = null
 			in_chamber = new projectile_type(src)
-			fire_delay +=2
+			fire_delay +=3
 			to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
 			return 1
 		if(projectile_type == /obj/item/projectile/beam/lightlaser && prob(8))
 			projectile_type = /obj/item/projectile/beam/weaklaser
 			in_chamber = null
 			in_chamber = new projectile_type(src)
-			fire_delay +=2
+			fire_delay +=3
 			to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
 			return 1
 		if(projectile_type == /obj/item/projectile/beam/weaklaser && prob(5))
 			projectile_type = /obj/item/projectile/beam/veryweaklaser
 			in_chamber = null
 			in_chamber = new projectile_type(src)
-			fire_delay +=2
+			fire_delay +=3
 			to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
 			return 1
 		if(prob(1))
 			to_chat(M, "<span class='danger'>\The [src] explodes!.</span>")
-			explosion(get_turf(loc), 0, 0, 1)
+			explosion(get_turf(loc), -1, 0, 2)
 			M.drop_item(src, force_drop = 1)
 			qdel(src)
 			return 0
@@ -205,7 +212,7 @@ obj/item/weapon/gun/energy/laser/retro
 		charge_tick = 0
 
 
-/obj/item/weapon/gun/energy/lasercannon
+/obj/item/weapon/gun/energy/laser/cannon
 	name = "laser cannon"
 	desc = "With the L.A.S.E.R. cannon, the lasing medium is enclosed in a tube lined with uranium-235 and subjected to high neutron flux in a nuclear reactor core. This incredible technology may help YOU achieve high excitation rates with small laser volumes!"
 	icon_state = "lasercannon"
@@ -220,49 +227,14 @@ obj/item/weapon/gun/energy/laser/retro
 	isHandgun()
 		return 0
 
-/obj/item/weapon/gun/energy/lasercannon/failure_check(var/mob/living/carbon/human/M)
-	if(damaged)
-		if(projectile_type == "/obj/item/projectile/beam/heavylaser" && prob(15))
-			projectile_type = /obj/item/projectile/beam
-			in_chamber = null
-			in_chamber = new projectile_type(src)
-			fire_sound = 'sound/weapons/Laser.ogg'
-			to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
-			return 1
-		if(projectile_type == /obj/item/projectile/beam && prob(10))
-			projectile_type = /obj/item/projectile/beam/lightlaser
-			in_chamber = null
-			in_chamber = new projectile_type(src)
-			to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
-			return 1
-		if(projectile_type == /obj/item/projectile/beam/lightlaser && prob(8))
-			projectile_type = /obj/item/projectile/beam/weaklaser
-			in_chamber = null
-			in_chamber = new projectile_type(src)
-			to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
-			return 1
-		if(projectile_type == /obj/item/projectile/beam/weaklaser && prob(5))
-			projectile_type = /obj/item/projectile/beam/veryweaklaser
-			in_chamber = null
-			in_chamber = new projectile_type(src)
-			to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
-			return 1
-		if(prob(4))
-			explosion(get_turf(loc), -1, 0, 4, 7)
-			M.drop_item(src, force_drop = 1)
-			qdel(src)
-			to_chat(M, "<span class='danger'>\The [src] explodes!.</span>")
-			return 0
-	return ..()
-
-/obj/item/weapon/gun/energy/lasercannon/empty/New()
+/obj/item/weapon/gun/energy/laser/cannon/empty/New()
 	..()
 
 	if(power_supply)
 		power_supply.charge = 0
 		update_icon()
 
-/obj/item/weapon/gun/energy/lasercannon/cyborg/process_chambered()
+/obj/item/weapon/gun/energy/laser/cannon/cyborg/process_chambered()
 	if(in_chamber)
 		return 1
 	if(isrobot(src.loc))
@@ -273,7 +245,7 @@ obj/item/weapon/gun/energy/laser/retro
 			return 1
 	return 0
 
-/obj/item/weapon/gun/energy/lasercannon/cyborg/restock()
+/obj/item/weapon/gun/energy/laser/cannon/cyborg/restock()
 	if(power_supply.charge < power_supply.maxcharge)
 		power_supply.give(charge_cost)
 		update_icon()
