@@ -311,12 +311,8 @@
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)
 		if(0)
-			if(iswrench(P))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-				if(do_after(user, src, 5) && state == 0)
-					to_chat(user, "<span class='notice'>You wrench the frame into place.</span>")
-					src.anchored = 1
-					src.state = 1
+			if(iswrench(P) && wrenchAnchor(user))
+				src.state = 1
 				return 1
 			if(iswelder(P))
 				var/obj/item/weapon/weldingtool/WT = P
@@ -334,12 +330,8 @@
 					qdel(src)
 				return 1
 		if(1)
-			if(iswrench(P))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-				if(do_after(user, src, 20) && state == 1)
-					to_chat(user, "<span class='notice'>You unfasten the frame.</span>")
-					src.anchored = 0
-					src.state = 0
+			if(iswrench(P) && wrenchAnchor(user))
+				src.state = 0
 				return 1
 			if(istype(P, /obj/item/weapon/circuitboard) && !circuit)
 				var/obj/item/weapon/circuitboard/B = P
@@ -443,3 +435,6 @@
 				qdel(src)
 				return 1
 	return 0
+
+/obj/structure/computerframe/can_wrench_shuttle()
+	return 1

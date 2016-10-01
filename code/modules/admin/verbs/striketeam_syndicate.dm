@@ -178,9 +178,12 @@ var/global/sent_syndicate_strike_team = 0
 	W.registered_name = real_name
 	equip_to_slot_or_del(W, slot_wear_id)
 
-	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive(src) //no loyalty implant because you're already syndicate scum
+	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive/nuclear(src) //no loyalty implant because you're already syndicate scum
 	E.imp_in = src
 	E.implanted = 1
+	var/datum/organ/external/affected = get_organ(LIMB_HEAD)
+	affected.implants += E
+	E.part = affected
 	src.update_icons()
 
 	return 1

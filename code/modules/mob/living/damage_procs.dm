@@ -8,9 +8,10 @@
 	Returns
 	standard 0 if fail
 */
-/mob/living/proc/apply_damage(var/damage = 0,var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, var/used_weapon = null)
+/mob/living/proc/apply_damage(var/damage = 0,var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, var/used_weapon = null, ignore_events = 0)
 	if(!damage || (blocked >= 2))
 		return 0
+
 	switch(damagetype)
 		if(BRUTE)
 			adjustBruteLoss(damage/(blocked+1))
@@ -26,6 +27,8 @@
 			adjustCloneLoss(damage/(blocked+1))
 		if(HALLOSS)
 			adjustHalLoss(damage/(blocked+1))
+		if(BRAIN)
+			adjustBrainLoss(damage/(blocked+1))
 	updatehealth()
 	return 1
 

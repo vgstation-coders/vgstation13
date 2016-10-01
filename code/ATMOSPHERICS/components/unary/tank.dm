@@ -24,6 +24,7 @@
 
 /obj/machinery/atmospherics/unary/tank/carbon_dioxide
 	name = "Pressure Tank (Carbon Dioxide)"
+
 /obj/machinery/atmospherics/unary/tank/carbon_dioxide/New()
 	..()
 
@@ -99,3 +100,6 @@
 		user.visible_message("<span class='attack'>[user] has used [W] on [bicon(icon)] [src]</span>", "<span class='attack'>You use \the [W] on [bicon(icon)] [src]</span>")
 		var/obj/item/device/analyzer/analyzer = W
 		user.show_message(analyzer.output_gas_scan(air_contents, src, 0), 1)
+
+/obj/machinery/atmospherics/unary/tank/hide(var/i)
+	update_icon()

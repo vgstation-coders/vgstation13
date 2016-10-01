@@ -444,9 +444,9 @@ client/proc/antag_madness(var/mob/M in mob_list)
 					//I.dropped(M)
 					I.forceMove(pack)
 
-			M.equip_to_slot_or_del(new/obj/item/device/radio/headset/syndicate, slot_ears)
-			M.equip_to_slot_or_del(new/obj/item/clothing/under/color/green, slot_w_uniform)
-			M.equip_to_slot_or_del(new/obj/item/clothing/shoes/swat, slot_shoes)
+			M.equip_to_slot_or_del(new/obj/item/device/radio/headset/deathsquad, slot_ears)
+			M.equip_to_slot_or_del(new/obj/item/clothing/under/deathsquad, slot_w_uniform)
+			M.equip_to_slot_or_del(new/obj/item/clothing/shoes/magboots/deathsquad, slot_shoes)
 			M.equip_to_slot_or_del(new/obj/item/clothing/mask/gas/swat, slot_wear_mask)
 			M.equip_to_slot_or_del(new/obj/item/weapon/storage/backpack/security, slot_back)
 			var/obj/item/weapon/card/id/centcom/ID = new(M)
@@ -543,9 +543,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			M.equip_to_slot_or_del(new/obj/item/device/radio/headset, slot_ears)
 			M.equip_to_slot_or_del(new/obj/item/clothing/under/lightpurple, slot_w_uniform)
 			M.equip_to_slot_or_del(new/obj/item/weapon/storage/backpack/satchel, slot_back)
-			var/obj/item/weapon/spellbook/S = new/obj/item/weapon/spellbook(M)
-			S.uses = 30
-			S.op = 0
+			var/obj/item/weapon/spellbook/S = new/obj/item/weapon/spellbook/admin(M)
 			M.put_in_hands(S)
 
 			var/obj/item/weapon/teleportation_scroll/T = new/obj/item/weapon/teleportation_scroll(M)

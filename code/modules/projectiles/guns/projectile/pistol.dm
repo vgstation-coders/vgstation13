@@ -86,7 +86,7 @@
 	icon_state = "[initial(icon_state)][silenced ? "-silencer" : ""][chambered ? "" : "-e"]"
 	return
 
-/obj/item/weapon/gun/projectile/handgun //mime fingergun 
+/obj/item/weapon/gun/projectile/handgun //mime fingergun
 	name = "hand-gun"
 	desc = "This is a stickup!"
 	icon_state = "handgun"
@@ -98,8 +98,8 @@
 	silenced = TRUE
 	fire_sound = null
 	load_method = MAGAZINE
-	
-	
+
+
 /obj/item/weapon/gun/projectile/handgun/RemoveMag(var/mob/user)
 	to_chat(user, "<span class = 'warning'>Try as you might, you can't seem to find a magazine on \the [src]!</span>")
 
@@ -109,3 +109,26 @@
 			user.emote("me",1,"pretends to fire a gun at [target]!")
 		else
 			user.say(pick("BANG!", "BOOM!", "PEW!", "KAPOW!"))
+
+/obj/item/weapon/gun/projectile/sec
+	name = "\improper NT Mk58 .45 pistol"
+	desc = "The NT Mk58 is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .45 rounds."
+	icon_state = "secguncomp"
+	mag_type = "/obj/item/ammo_storage/magazine/c45"
+	caliber = ".45"
+	origin_tech = Tc_COMBAT + "=3"
+	fire_sound = 'sound/weapons/semiauto.ogg'
+	load_method = MAGAZINE
+
+/obj/item/weapon/gun/projectile/sec/update_icon()
+	..()
+	icon_state = "secguncomp[stored_magazine ? "" : "-e"]"
+
+/obj/item/weapon/gun/projectile/sec/wood
+	desc = "The NT Mk58 is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. This one has a sweet wooden grip. Uses .45 rounds."
+	name = "\improper NT Mk58 .45 Custom"
+	icon_state = "secgundark"
+
+/obj/item/weapon/gun/projectile/sec/wood/update_icon()
+	..()
+	icon_state = "secgundark[stored_magazine ? "" : "-e"]"

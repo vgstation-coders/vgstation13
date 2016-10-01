@@ -21,6 +21,7 @@
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 
+	can_be_mixed = TRUE
 
 /datum/game_mode/wizard/announce()
 	to_chat(world, "<B>The current game mode is - Wizard!</B>")
@@ -200,7 +201,7 @@
 		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel_norm(wizard_mob), slot_back)
 	if(wizard_mob.backbag == 4)
 		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(wizard_mob), slot_back)
-	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/box(wizard_mob), slot_in_backpack)
+	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival(wizard_mob), slot_in_backpack)
 //	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/scrying_gem(wizard_mob), slot_l_store) For scrying gem.
 	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/teleportation_scroll(wizard_mob), slot_r_store)
 	wizard_mob.put_in_hands(new /obj/item/weapon/spellbook(wizard_mob))
@@ -218,6 +219,9 @@
 
 
 /datum/game_mode/wizard/check_finished()
+	return ..()
+
+	/*
 	if(istype(ticker.mode, /datum/game_mode/mixed))
 		mixed = 1
 	if(config.continous_rounds || mixed)
@@ -246,7 +250,7 @@
 		finished = 1
 		return 1
 
-
+	*/
 
 /datum/game_mode/wizard/declare_completion(var/ragin = 0)
 	if(finished && !ragin)
@@ -312,7 +316,7 @@
 					var/icon/spellicon = icon('icons/mob/screen_spells.dmi', S.hud_state)
 					end_icons += spellicon
 					tempstate = end_icons.len
-					text += {"<br><img src="logo_[tempstate].png"> [S.name]"}
+					text += {"<br><img src="logo_[tempstate].png"> [S.name][S.get_scoreboard_suffix()]"}
 					if(wizard.current.spell_list.len > i)
 						text += ", "
 					i++

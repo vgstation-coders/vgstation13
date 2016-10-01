@@ -1,7 +1,8 @@
 /spell/targeted/shoesnatch
-
 	name = "Shoe Snatching Charm"
 	desc = "This spell allows you to steal somebody's shoes right off of their feet!"
+	abbreviation = "SS"
+
 	school = "evocation"
 	charge_type = Sp_RECHARGE
 	charge_max = 150
@@ -53,3 +54,8 @@
 	desc = "This spell allows you to steal somebody's shoes right off of their feet. If they aren't wearing any shoes, 4 glass shards will be conjured around them."
 
 	return upgrade_desc
+
+/spell/targeted/shoesnatch/get_upgrade_info(upgrade_type, level)
+	if(upgrade_type == Sp_POWER)
+		return "Make the spell summon glass shards around targets who aren't wearing any shoes."
+	return ..()

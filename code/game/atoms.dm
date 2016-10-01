@@ -802,6 +802,9 @@ its easier to just keep the beam vertical.
 /atom/proc/acidable()
 	return 0
 
+/atom/proc/holomapAlwaysDraw()
+	return 1
+
 /atom/proc/get_inaccuracy(var/atom/target, var/spread, var/obj/mecha/chassis)
 	var/turf/curloc = get_turf(src)
 	var/turf/targloc = get_turf(target)

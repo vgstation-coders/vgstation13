@@ -681,7 +681,12 @@ proc/move_mining_shuttle()
 				if(istype(target, /mob/living/simple_animal/hostile))
 					var/mob/living/simple_animal/hostile/H = M
 					H.friends += user
-					log_game("[user] has revived hostile mob [target] with a lazarus injector")
+
+					log_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector.")
+					H.attack_log += "\[[time_stamp()]\] Revived by <b>[key_name(user)]</b> with a lazarus injector."
+					user.attack_log += "\[[time_stamp()]\] Revived hostile mob <b>[H]</b> with a lazarus injector."
+					msg_admin_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+
 				loaded = 0
 				user.visible_message("<span class='warning'>[user] injects [M] with \the [src], reviving it.</span>", \
 				"<span class='notice'>You inject [M] with \the [src], reviving it.</span>")
@@ -730,7 +735,7 @@ proc/move_mining_shuttle()
 				name = "lazarus capsule - [mname]"
 	..()
 
-/obj/item/device/mobcapsule/throw_impact(atom/A, mob/user)
+/obj/item/device/mobcapsule/throw_impact(atom/A, speed, mob/user)
 	..()
 	if(!tripped)
 		if(contained_mob)
@@ -783,6 +788,13 @@ proc/move_mining_shuttle()
 */
 	if(contained_mob)
 		contained_mob.forceMove(src.loc)
+
+		var/turf/turf = get_turf(src)
+		log_attack("[key_name(user)] has released hostile mob [contained_mob] with a capsule in area [turf.loc] ([x],[y],[z]).")
+		contained_mob.attack_log += "\[[time_stamp()]\] Released by <b>[key_name(user)]</b> in area [turf.loc] ([x],[y],[z])."
+		user.attack_log += "\[[time_stamp()]\] Released hostile mob <b>[contained_mob]</b> in area [turf.loc] ([x],[y],[z])."
+		msg_admin_attack("[key_name(user)] has released hostile mob [contained_mob] with a capsule in area [turf.loc] ([x],[y],[z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</A>).")
+
 		if(contained_mob.client)
 			contained_mob.client.eye = contained_mob.client.mob
 			contained_mob.client.perspective = MOB_PERSPECTIVE

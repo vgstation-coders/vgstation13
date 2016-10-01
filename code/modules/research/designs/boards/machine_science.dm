@@ -92,7 +92,7 @@
 	name = "Circuit Design (Fourier Transform Spectroscope)"
 	desc = "Allows for the construction of circuit boards used in Xenoarcheology."
 	id = "fourier"
-	req_tech = list(Tc_PROGRAMMING = 4)
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_ANOMALY = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
@@ -103,22 +103,22 @@
 	id = "accelerator"
 	build_path = /obj/item/weapon/circuitboard/anom/accelerator
 
-/datum/design/anom/accelerator
+/datum/design/anom/gas
 	name = "Circuit Design (Gas Chromatography Spectrometer)"
 	id = "gaschromatography"
 	build_path = /obj/item/weapon/circuitboard/anom/gas
 
-/datum/design/anom/accelerator
+/datum/design/anom/hyper
 	name = "Circuit Design (Hyperspectral Imager)"
 	id = "hyperspectral"
 	build_path = /obj/item/weapon/circuitboard/anom/hyper
 
-/datum/design/anom/accelerator
+/datum/design/anom/ion
 	name = "Circuit Design (Ion Mobility Spectrometer)"
 	id = "ionmobility"
 	build_path = /obj/item/weapon/circuitboard/anom/ion
 
-/datum/design/anom/accelerator
+/datum/design/anom/iso
 	name = "Circuit Design (Isotope Ratio Spectrometer)"
 	id = "isotoperatio"
 	build_path = /obj/item/weapon/circuitboard/anom/iso

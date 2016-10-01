@@ -110,6 +110,9 @@
 		open()
 		openDuringInit = 0
 
+	else
+		update_icon()
+
 /obj/machinery/atmospherics/binary/valve/digital		// can be controlled by AI
 	name = "digital valve"
 	desc = "A digitally controlled valve."
@@ -213,11 +216,3 @@
 			state_changed=1
 	if(state_changed)
 		investigation_log(I_ATMOS,"was [(state ? "opened (side)" : "closed (straight) ")] by a signal")
-
-
-// Just for digital valves.
-/obj/machinery/atmospherics/binary/valve/digital/attackby(var/obj/item/W as obj, var/mob/user as mob)
-	if(src.frequency && iswrench(W))
-		to_chat(user, "<span class='warning'>You cannot unwrench this [src], it's digitally connected to another device.</span>")
-		return 1
-	return ..() 	// Pass to the method below (does stuff ALL valves should do)

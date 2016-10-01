@@ -28,6 +28,7 @@
 	src.modules += new /obj/item/blueprints/mommiprints(src)
 	src.modules += new /obj/item/device/material_synth/robot/mommi(src)
 	src.modules += new /obj/item/device/holomap(src)
+	src.modules += new /obj/item/device/station_map(src)
 	sensor_augs = list("Mesons", "Disable")
 	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil(src)
 	W.amount = 50

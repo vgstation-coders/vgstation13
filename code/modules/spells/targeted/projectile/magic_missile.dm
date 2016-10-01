@@ -1,5 +1,6 @@
 /spell/targeted/projectile/magic_missile
 	name = "Magic Missile"
+	abbreviation = "MM"
 	desc = "This spell fires several, slow moving, magic projectiles at nearby targets."
 
 	school = "evocation"

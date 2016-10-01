@@ -503,9 +503,9 @@
 
 	var/area/space
 
-	space = get_space_area
+	space = get_space_area()
 	if(!space)
-		warning("There is no area at 1,1,2!")
+		warning("Unable to find space area for shuttle [src.type]")
 
 	//Make a list of coordinates of turfs to move, and associate the coordinates with the turfs they represent
 	var/list/turfs_to_move = list()

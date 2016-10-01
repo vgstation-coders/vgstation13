@@ -1,6 +1,7 @@
 /spell/targeted/projectile/dumbfire/fireball
 	name = "Fireball"
-	desc = "This spell fires a fireball at a target and does not require wizard garb."
+	abbreviation = "FB"
+	desc = "This spell conjures a fireball that will fly in the direction you're facing and explode on collision with anything."
 
 	proj_type = /obj/item/projectile/spell_projectile/fireball
 
@@ -60,6 +61,11 @@
 		return 0
 
 	return (isturf(target) || isturf(target.loc))
+
+/spell/targeted/projectile/dumbfire/fireball/get_upgrade_info(upgrade_type, level)
+	if(upgrade_type == Sp_POWER)
+		return "Make the spell targetable."
+	return ..()
 
 //PROJECTILE
 

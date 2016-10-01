@@ -49,17 +49,8 @@ REAGENT SCANNER
 			continue
 
 		for(var/obj/O in T.contents)
+			O.t_scanner_expose()
 
-			if(O.level != 1)
-				continue
-
-			if(O.invisibility == 101)
-				O.invisibility = 0
-				spawn(10)
-					if(O)
-						var/turf/U = O.loc
-						if(U && U.intact)
-							O.invisibility = 101
 		for(var/mob/living/M in T.contents)
 			var/oldalpha = M.alpha
 			if(M.alpha < 255 && istype(M))
@@ -396,10 +387,6 @@ Subject's pulse: ??? BPM"})
 
 		var/datum/reagent/B = C.take_blood(src, src.reagents.maximum_volume)
 		if(B)
-			src.reagents.reagent_list |= B
-			src.reagents.update_total()
-			src.on_reagent_change()
-			src.reagents.handle_reactions()
 			update_icon()
 			user.visible_message("<span class='warning'>[user] takes a blood sample from [C].</span>", \
 			"<span class='notice'>You take a blood sample from [C]</span>")

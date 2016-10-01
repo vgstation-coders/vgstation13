@@ -56,29 +56,19 @@ var/global/list/mixed_allowed = list(
 			else
 				qdel(GM)
 	else
-		var/list/datum/game_mode/possible = typesof(/datum/game_mode) - list(
-																			/datum/game_mode,
-																			/datum/game_mode/mixed,
-																			/datum/game_mode/malfunction,
-																			/datum/game_mode/traitor,
-																			/datum/game_mode/traitor/double_agents,
-																			/datum/game_mode/sandbox,
-																			/datum/game_mode/revolution,
-																			/datum/game_mode/meteor,
-																			/datum/game_mode/extended,
-																			/datum/game_mode/heist,
-																			/datum/game_mode/nuclear,
-																			/datum/game_mode/traitor/changeling,
-																			/datum/game_mode/wizard/raginmages,
-																			/datum/game_mode/blob,
-																			)
+		var/list/datum/game_mode/possible = typesof(/datum/game_mode) - list(/datum/game_mode, /datum/game_mode/mixed)
 		while(modes.len < 3)
 			if(!possible.len)
 				break
-			var/ourmode = pick(possible)
+			var/datum/game_mode/ourmode = pick(possible)
 			possible -= ourmode
+			if(!initial(ourmode.can_be_mixed))
+				continue
 			var/datum/game_mode/M = new ourmode
+			// I put this in a separate block just in case BYOND does something silly with &&
+
 			M.mixed = 1
+
 			if(!M.pre_setup())
 				qdel(M)
 				continue

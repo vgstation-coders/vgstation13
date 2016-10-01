@@ -32,6 +32,7 @@
 
 	var/start_end_anims = 0
 
+	machine_flags	= SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 	research_flags = TAKESMATIN | HASOUTPUT | HASMAT_OVER | NANOTOUCH
 
 /obj/machinery/r_n_d/fabricator/New()
@@ -81,7 +82,7 @@
 
 /obj/machinery/r_n_d/fabricator/emag()
 	sleep()
-	if(!research_flags &ACCESS_EMAG)
+	if(!(research_flags & ACCESS_EMAG))
 		return
 	switch(emagged)
 		if(0)
@@ -473,7 +474,9 @@
 /obj/machinery/r_n_d/fabricator/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	if(stat & (BROKEN|NOPOWER))
 		return
-	if(user.stat || user.restrained() || !allowed(user))
+	if(user.stat || user.restrained())
+		return
+	if(!allowed(user) && !emagged)
 		return
 
 	var/data[0]
@@ -613,7 +616,7 @@
 	if(stat & BROKEN)
 		return
 
-	if(!allowed(user))
+	if(!allowed(user) && !emagged)
 		src.visible_message("<span class='warning'>Unauthorized Access</span>: attempted by <b>[user]</b>")
 		return
 

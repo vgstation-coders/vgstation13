@@ -18,6 +18,8 @@ var/const/MAX_ACTIVE_TIME = 400
 	flags = FPRINT  | MASKINTERNALS | PROXMOVE
 	throw_range = 5
 	health = 5
+	plane = ABOVE_OBJ_PLANE
+	layer = FACEHUGGER_LAYER
 	var/real = 1 //Facehuggers are real, toys are not.
 
 	var/stat = CONSCIOUS //UNCONSCIOUS is the idle state in this case

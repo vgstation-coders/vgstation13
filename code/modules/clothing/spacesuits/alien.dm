@@ -467,6 +467,7 @@
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 10, bio = 100, rad = 50)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	body_parts_covered = FULL_HEAD|IGNORE_INV
 	species_restricted = list("Grey")
 
 /obj/item/clothing/suit/space/grey

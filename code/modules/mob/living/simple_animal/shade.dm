@@ -94,6 +94,9 @@
 		return 0 //under effects of time magick
 	. = ..()
 
+	regular_hud_updates()
+
+/mob/living/simple_animal/shade/regular_hud_updates()
 	update_pull_icon() //why is this here?
 
 	if(purged)

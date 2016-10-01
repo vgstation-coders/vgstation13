@@ -8,6 +8,7 @@
 
 	var/list/possible_traitors
 	var/num_players = 0
+	can_be_mixed = TRUE
 
 /datum/game_mode/traitor/autotraitor/announce()
 	..()
@@ -209,5 +210,3 @@
 				//message_admins("New traitor roll failed.  No new traitor.")
 	//else
 		//message_admins("Late Joiner does not have Be Syndicate")
-
-

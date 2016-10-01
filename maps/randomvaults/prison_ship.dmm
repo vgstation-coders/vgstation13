@@ -1,0 +1,41 @@
+"a" = (/turf/space,/area)
+"b" = (/turf/unsimulated/mineral,/area)
+"c" = (/turf/simulated/shuttle/wall{icon_state = "swall_f6"},/area/vault/prison_ship)
+"d" = (/turf/simulated/shuttle/wall{icon_state = "swall14"},/area/vault/prison_ship)
+"e" = (/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/vault/prison_ship)
+"f" = (/obj/item/stack/rods,/turf/simulated/shuttle/plating,/area/vault/prison_ship)
+"g" = (/obj/item/stack/rods,/turf/unsimulated/mineral,/area/vault/prison_ship)
+"h" = (/obj/item/stack/rods,/obj/effect/landmark/corpse/mutilated,/turf/simulated/shuttle/plating,/area/vault/prison_ship)
+"i" = (/obj/structure/shuttle/engine/heater{dir = 4},/obj/structure/shuttle/engine/propulsion/burst{dir = 4; pixel_x = -24},/turf/simulated/shuttle/floor4,/area/vault/prison_ship)
+"j" = (/turf/simulated/shuttle/wall{icon_state = "swall11"},/area/vault/prison_ship)
+"k" = (/obj/item/weapon/reagent_containers/glass/bucket,/obj/effect/landmark/corpse/civilian,/turf/simulated/shuttle/floor4,/area/vault/prison_ship)
+"l" = (/obj/item/stack/sheet/cardboard,/obj/effect/landmark/corpse/civilian,/turf/simulated/shuttle/floor4,/area/vault/prison_ship)
+"m" = (/obj/structure/fence,/turf/simulated/shuttle/floor4,/area/vault/prison_ship)
+"n" = (/obj/item/device/flashlight/flare/ever_bright,/turf/simulated/shuttle/floor4,/area/vault/prison_ship)
+"o" = (/obj/item/stack/rods,/turf/simulated/shuttle/floor4,/area/vault/prison_ship)
+"p" = (/obj/structure/displaycase/broken,/obj/item/toy/gasha/skub,/turf/simulated/shuttle/floor4,/area/vault/prison_ship)
+"q" = (/obj/structure/fence{dir = 4},/turf/simulated/shuttle/floor4,/area/vault/prison_ship)
+"r" = (/obj/structure/fence/door/secure/from_south,/turf/simulated/shuttle/floor4,/area/vault/prison_ship)
+"s" = (/obj/structure/fence/corner,/turf/simulated/shuttle/floor4,/area/vault/prison_ship)
+"t" = (/turf/simulated/shuttle/floor4,/area/vault/prison_ship)
+"u" = (/obj/effect/landmark/corpse/mutilated,/turf/simulated/shuttle/floor4,/area/vault/prison_ship)
+"v" = (/obj/structure/computerframe,/turf/simulated/shuttle/floor4,/area/vault/prison_ship)
+"w" = (/obj/structure/computerframe,/obj/item/weapon/disk/shuttle_coords/vault/prison,/turf/simulated/shuttle/floor4,/area/vault/prison_ship)
+"x" = (/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/vault/prison_ship)
+"y" = (/obj/item/toy/gasha/nurse,/turf/simulated/shuttle/floor4,/area/vault/prison_ship)
+"z" = (/obj/structure/displaycase/broken,/turf/simulated/shuttle/floor4,/area/vault/prison_ship)
+"A" = (/turf/simulated/shuttle/wall{icon_state = "swall_f5"},/area/vault/prison_ship)
+"B" = (/turf/simulated/shuttle/wall{icon_state = "swall13"},/area/vault/prison_ship)
+"C" = (/obj/machinery/door/airlock/external,/turf/simulated/shuttle/floor4,/area/vault/prison_ship)
+"D" = (/turf/simulated/shuttle/wall{icon_state = "swall_f9"},/area/vault/prison_ship)
+
+(1,1,1) = {"
+aaaaaaaabbbbaa
+aaabaaabbbbbba
+abcdeeeefghbba
+aaijklmnopgbba
+aaijqrstuvfbaa
+aaijtttotwxbaa
+aaijtotytzxaaa
+aaABeCCeeeDaaa
+"}

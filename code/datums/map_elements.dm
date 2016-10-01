@@ -23,6 +23,13 @@ var/list/datum/map_element/map_elements = list()
 	if(!location && objects.len)
 		location = locate(/turf) in objects
 
+	//Build powernets
+	for(var/obj/structure/cable/C in objects)
+		if(C.powernet)
+			continue
+		
+		C.rebuild_from()
+
 /datum/map_element/proc/load(x, y, z)
 	pre_load()
 

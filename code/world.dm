@@ -238,6 +238,9 @@ var/savefile/panicfile
 
 		return list2params(s)
 	else if (findtext(T,"notes:"))
+		if (!config || addr != config.vgws_ip)
+			return "Denied"
+
 		var/notekey = copytext(T, 7)
 		return list2params(exportnotes(notekey))
 

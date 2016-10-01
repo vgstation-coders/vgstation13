@@ -63,7 +63,7 @@
 	var/list/internals_req_access = list(access_engine,access_robotics)//required access level to open cell compartment
 
 	var/datum/global_iterator/pr_int_temp_processor //normalizes internal air mixture temperature
-	var/datum/global_iterator/pr_inertial_movement //controls intertial movement in spesss
+	var/datum/global_iterator/pr_inertial_movement //controls inertial movement in spesss
 	var/datum/global_iterator/pr_give_air //moves air from tank to cabin
 	var/datum/global_iterator/pr_internal_damage //processes internal damage
 
@@ -103,6 +103,7 @@
 	log_message("[src.name] created.")
 	loc.Entered(src)
 	mechas_list += src //global mech list
+	reset_icon()
 	return
 
 /obj/mecha/Destroy()
@@ -310,6 +311,7 @@
 	return call((proc_res["dyndomove"]||src), "dyndomove")(direction)
 
 /obj/mecha/proc/dyndomove(direction)
+	stopMechWalking()
 	if(!can_move)
 		return 0
 	if(src.pr_inertial_movement.active())
@@ -317,6 +319,7 @@
 	if(!has_charge(step_energy_drain))
 		return 0
 	var/move_result = 0
+	startMechWalking()
 	if(hasInternalDamage(MECHA_INT_CONTROL_LOST))
 		move_result = mechsteprand()
 	else if(src.dir!=direction)
@@ -334,6 +337,11 @@
 			can_move = 1
 		return 1
 	return 0
+
+/obj/mecha/proc/startMechWalking()
+
+/obj/mecha/proc/stopMechWalking()
+	icon_state = initial_icon
 
 /obj/mecha/proc/mechturn(direction)
 	dir = direction
@@ -509,7 +517,8 @@
 	else
 		user.visible_message("<font color='red'><b>[user] hits [src.name]. Nothing happens</b></font>","<font color='red'><b>You hit [src.name] with no visible effect.</b></font>")
 		src.log_append_to_last("Armor saved.")
-	return
+
+	user.delayNextAttack(10)
 
 /obj/mecha/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -529,8 +538,8 @@
 		to_chat(user, "<span class='good'>Your claws had no effect!</span>")
 		src.occupant_message("<span class='notice'>The [user]'s claws are stopped by the armor.</span>")
 		visible_message("<span class='notice'>The [user] rebounds off [src.name]'s armor!</span>")
-	return
 
+	user.delayNextAttack(10)
 
 /obj/mecha/attack_animal(mob/living/simple_animal/user as mob)
 	src.log_message("Attack by simple animal. Attacker - [user].",1)

@@ -263,6 +263,12 @@ datum/tech/nanotrasen
 	max_level=8
 	new_category = "Nanotrasen"
 
+datum/tech/anomaly
+	name = "Anomaly Research"
+	desc = "The study of high energy materials and technology reconstruction."
+	id = "anomaly"
+	max_level=6
+
 /*
 datum/tech/arcane
 	name = "Arcane Research"

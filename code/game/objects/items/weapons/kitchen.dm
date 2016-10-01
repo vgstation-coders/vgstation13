@@ -66,6 +66,10 @@
 	reagents = new(10)
 	reagents.my_atom = src
 
+/obj/item/weapon/kitchen/utensil/fork/attack_self(var/mob/living/carbon/user)
+	if(loaded_food)
+		attack(user,user)
+
 /obj/item/weapon/kitchen/utensil/fork/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M) || !istype(user))
 		return ..()
@@ -195,6 +199,8 @@
 
 /obj/item/weapon/kitchen/utensil/knife/large/attackby(obj/item/weapon/W, mob/user)
 	..()
+	if(user.is_in_modules(src))
+		return
 	if(istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))

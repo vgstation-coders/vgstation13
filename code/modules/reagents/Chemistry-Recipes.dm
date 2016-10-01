@@ -456,7 +456,7 @@
 
 		var/eye_safety = 0
 
-		for(var/mob/living/carbon/M in viewers(get_turf(holder.my_atom), null))
+		for(var/mob/living/M in viewers(get_turf(holder.my_atom), null))
 			if(iscarbon(M))
 				eye_safety = M.eyecheck()
 
@@ -2073,6 +2073,13 @@
 	required_reagents = list(BERRYJUICE = 10)
 	required_catalysts = list(ENZYME = 5)
 	result_amount = 10
+
+/datum/chemical_reaction/sangria
+	name = "Sangria"
+	id = SANGRIA
+	result = SANGRIA
+	required_reagents = list(WINE = 2, ORANGEJUICE = 1, SODAWATER = 1)
+	result_amount = 4
 
 /datum/chemical_reaction/pinacolada
 	name = "Pina Colada"

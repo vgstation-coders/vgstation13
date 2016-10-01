@@ -220,10 +220,10 @@ obj/effect/bmode/buildholder/New()
 /client/MouseWheel(object,delta_x,delta_y,location,control,params)
 	if(istype(mob,/mob/dead/observer) || buildmode) //DEAD FAGS CAN ZOOM OUT THIS WILL END POORLY
 		if(delta_y > 0)
-			view--
+			changeView(view - 1)
 		else
-			view++
-		view = max(view,1)
+			changeView(view + 1)
+		changeView(max(view,1))
 		haszoomed = 1
 	..()
 
@@ -618,11 +618,11 @@ obj/effect/bmode/buildholder/New()
 					to_chat(usr, "<span class='notice'>You don't have sufficient rights to clone [object.type]</span>")
 				else
 					if(ismob(object))
-						holder.buildmode.objholder = object.type
-						to_chat(usr, "<span class='info'>You will now build [object.type] when clicking.</span>")
-					else
 						holder.buildmode.copycat = object
 						to_chat(usr, "<span class='info'>You will now build a lookalike of [object] when clicking.</span>")
+					else
+						holder.buildmode.objholder = object.type
+						to_chat(usr, "<span class='info'>You will now build [object.type] when clicking.</span>")
 
 		if(3)
 			if(pa.Find("left")) //I cant believe this shit actually compiles.

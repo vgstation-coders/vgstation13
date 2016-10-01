@@ -320,7 +320,7 @@
 						O.show_message(text("<span class='danger'>[] has attempted to punch [name]!</span>", M), 1)
 		else
 			if (M.a_intent == I_GRAB)
-				if (M == src || anchored)
+				if (M.grab_check(src))
 					return
 
 				var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
@@ -390,7 +390,7 @@
 						O.show_message(text("<span class='danger'>[] has attempted to lunge at [name]!</span>", M), 1)
 
 		if (I_GRAB)
-			if (M == src)
+			if (M.grab_check(src))
 				return
 			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
 
@@ -591,7 +591,7 @@
 		if(id)
 			break
 	return id
-	
+
 /mob/living/carbon/monkey/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
 	if(judgebot.emagged == 2)
 		return 10 //Everyone is a criminal!

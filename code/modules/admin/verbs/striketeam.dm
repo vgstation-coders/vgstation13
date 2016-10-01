@@ -130,7 +130,7 @@ var/global/sent_strike_team = 0
 	equip_to_slot_or_del(new /obj/item/device/radio/headset/deathsquad(src), slot_ears)
 
 	if (leader_selected == 0)
-		equip_to_slot_or_del(new /obj/item/clothing/under/color/green(src), slot_w_uniform)
+		equip_to_slot_or_del(new /obj/item/clothing/under/deathsquad(src), slot_w_uniform)
 	else
 		equip_to_slot_or_del(new /obj/item/clothing/under/rank/centcom_officer(src), slot_w_uniform)
 	equip_to_slot_or_del(new /obj/item/clothing/shoes/magboots/deathsquad(src), slot_shoes)
@@ -162,9 +162,14 @@ var/global/sent_strike_team = 0
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(src)//Here you go Deuryn
 	L.imp_in = src
 	L.implanted = 1
-	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive(src)
+	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive/nuclear(src)
 	E.imp_in = src
 	E.implanted = 1
+	var/datum/organ/external/affected = get_organ(LIMB_HEAD)
+	affected.implants += L
+	L.part = affected
+	affected.implants += E
+	E.part = affected
 	src.update_icons()
 
 

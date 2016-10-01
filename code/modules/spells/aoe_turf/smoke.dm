@@ -1,6 +1,7 @@
 /spell/aoe_turf/smoke
 	name = "Smoke"
 	desc = "This spell spawns a cloud of choking smoke at your location and does not require wizard garb."
+	abbreviation = "SM"
 
 	school = "conjuration"
 	charge_max = 120

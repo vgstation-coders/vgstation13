@@ -29,9 +29,13 @@ var/global/obj/screen/fuckstat/FUCK = new
 				mind.heard_before[M] = null
 	if(on_uattack)
 		on_uattack.holder = null
+	if(on_damaged)
+		on_damaged.holder = null
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
+	if(mind && mind.original == src)
+		mind.original = null
 	spellremove(src)
 	if(istype(src,/mob/living/carbon))//iscarbon is defined at the mob/living level
 		var/mob/living/carbon/Ca = src
@@ -67,7 +71,9 @@ var/global/obj/screen/fuckstat/FUCK = new
 	qdel(on_moved)
 	on_moved = null
 	qdel(on_uattack)
+	qdel(on_damaged)
 	on_uattack = null
+	on_damaged = null
 
 	..()
 
@@ -238,6 +244,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 	store_position()
 	on_uattack = new("owner"=src)
 	on_logout = new("owner"=src)
+	on_damaged= new("owner"=src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
@@ -1065,42 +1072,6 @@ var/list/slot_equipment_priority = list( \
 	face_atom(I)
 	I.verb_pickup(src)
 
-/mob/proc/update_flavor_text()
-	set src in usr
-
-	if(usr != src)
-		to_chat(usr, "No.")
-		return
-
-	var/msg = input(usr,"Set the flavor text in your 'examine' verb. Can also be used for OOC notes about your character.","Flavor Text",html_decode(flavor_text)) as message|null
-
-	if(msg != null)
-		msg = copytext(msg, 1, MAX_MESSAGE_LEN)
-		msg = html_encode(msg)
-
-		flavor_text = msg
-
-/mob/proc/warn_flavor_changed()
-	if(flavor_text) // Don't spam people that don't use it!
-		to_chat(src, "<h2 class='alert'>OOC Warning:</h2>")
-		to_chat(src, "<span class='alert'>Your flavor text is likely out of date! <a href='?src=\ref[src];flavor_text=change'>Change</a></span>")
-
-/mob/proc/print_flavor_text()
-	if(flavor_text)
-		var/msg = replacetext(flavor_text, "\n", "<br />")
-
-		if(length(msg) <= 32)
-			return "<font color='#ffa000'><b>[msg]</b></font>"
-		else
-			return "<font color='#ffa000'><b>[copytext(msg, 1, 32)]...<a href='?src=\ref[src];flavor_text=more'>More</a></b></font>"
-
-/*
-/mob/verb/help()
-	set name = "Help"
-	src << browse('html/help.html', "window=help")
-	return
-*/
-
 /mob/verb/abandon_mob()
 	set name = "Respawn"
 	set category = "OOC"
@@ -1299,13 +1270,6 @@ var/list/slot_equipment_priority = list( \
 		var/t1 = text("window=[href_list["mach_close"]]")
 		unset_machine()
 		src << browse(null, t1)
-
-	switch(href_list["flavor_text"])
-		if("more")
-			usr << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", name, replacetext(flavor_text, "\n", "<BR>")), text("window=[];size=500x200", name))
-			onclose(usr, "[name]")
-		if("change")
-			update_flavor_text()
 
 /mob/proc/pull_damage()
 	if(ishuman(src))

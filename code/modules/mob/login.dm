@@ -44,6 +44,8 @@
 	gui_icons = new /datum/ui_icons(src)
 	client.screen += catcher //Catcher of clicks
 
+	regular_hud_updates()
+
 	if(round_end_info == "")
 		winset(client, "rpane.round_end", "is-visible=false")
 
@@ -74,7 +76,7 @@
 			client.verbs += /client/proc/readmin
 
 		if(M_FARSIGHT in mutations)
-			client.view = max(client.view, world.view+1)
+			client.changeView(max(client.view, world.view+1))
 	CallHook("Login", list("client" = src.client, "mob" = src))
 
 	if(spell_masters)
@@ -87,7 +89,7 @@
 		location.on_login(src)
 
 	if(client && client.haszoomed && !client.holder)
-		client.view = world.view
+		client.changeView()
 		client.haszoomed = 0
 
 	if(bad_changing_colour_ckeys["[client.ckey]"] == 1)
