@@ -114,15 +114,17 @@
 	name = "\improper NT Mk58 .45 pistol"
 	desc = "The NT Mk58 is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .45 rounds."
 	icon_state = "secguncomp"
+	ammo_type = "/obj/item/ammo_casing/c45"
 	mag_type = "/obj/item/ammo_storage/magazine/c45"
-	caliber = ".45"
+	max_shells = 8
+	caliber = list(".45"  = 1)
 	origin_tech = Tc_COMBAT + "=3"
 	fire_sound = 'sound/weapons/semiauto.ogg'
-	load_method = MAGAZINE
+	load_method = 2
 
 /obj/item/weapon/gun/projectile/sec/update_icon()
 	..()
-	icon_state = "secguncomp[stored_magazine ? "" : "-e"]"
+	icon_state = "secguncomp[chambered ? "" : "-e"]"
 
 /obj/item/weapon/gun/projectile/sec/wood
 	desc = "The NT Mk58 is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. This one has a sweet wooden grip. Uses .45 rounds."
@@ -131,4 +133,4 @@
 
 /obj/item/weapon/gun/projectile/sec/wood/update_icon()
 	..()
-	icon_state = "secgundark[stored_magazine ? "" : "-e"]"
+	icon_state = "secgundark[chambered ? "" : "-e"]"
