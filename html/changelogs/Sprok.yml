@@ -34,3 +34,4 @@ delete-after: True
 # SCREW ANY OF THIS UP AND IT WON'T WORK.
 changes: 
 - tweak: Opening lockboxes without a valid ID or emag has negative impacts on the items contained inside.
+- tweak: Science weapon lockboxes can now be opened with "weapon permit" access, contact your local HoP for details.
