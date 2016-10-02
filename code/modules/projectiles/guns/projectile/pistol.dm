@@ -126,11 +126,11 @@
 	..()
 	icon_state = "secguncomp[chambered ? "" : "-e"]"
 
-/obj/item/weapon/gun/projectile/sec/wood
-	desc = "The NT Mk58 is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. This one has a sweet wooden grip. Uses .45 rounds."
+/obj/item/weapon/gun/projectile/sec/fancy
+	desc = "The NT Mk58 is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. This one has a sweet pearl finish. Uses .45 rounds."
 	name = "\improper NT Mk58 .45 Custom"
-	icon_state = "secgundark"
+	icon_state = "secgunfancy"
 
-/obj/item/weapon/gun/projectile/sec/wood/update_icon()
+/obj/item/weapon/gun/projectile/sec/fancy/update_icon()
 	..()
-	icon_state = "secgundark[chambered ? "" : "-e"]"
+	icon_state = "secgunfancy[chambered ? "" : "-e"]"
