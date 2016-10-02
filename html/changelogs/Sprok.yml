@@ -33,5 +33,5 @@ delete-after: True
 # If you're using characters such as # ' : - or the like in your changelog, surround the entire change with quotes as shown in the second example. These quotes don't show up on the changelog once it's merged and prevent errors.
 # SCREW ANY OF THIS UP AND IT WON'T WORK.
 changes: 
-- tweak: Opening lockboxes without a valid ID or emag has negative impacts on the items contained inside.
+- tweak: Opening lockboxes without a valid ID or emag has negative impacts on the items contained inside. Guns specifically will not fire perfectly accurately, and can degrade or otherwise be less effective when used.
 - tweak: Science weapon lockboxes can now be opened with "weapon permit" access, contact your local HoP for details.
