@@ -54,7 +54,7 @@
 		item_state = "gravitywell0"
 
 /obj/item/weapon/gun/gravitywell/failure_check(var/mob/living/carbon/human/M)
-	if(damaged && prob(25))
+	if(prob(25))
 		M.adjustBruteLossByPart(rand(5, 20), LIMB_LEFT_HAND, src)
 		M.adjustBruteLossByPart(rand(5, 20), LIMB_RIGHT_HAND, src)
 		M.adjustBruteLossByPart(rand(5, 20), LIMB_LEFT_ARM, src)

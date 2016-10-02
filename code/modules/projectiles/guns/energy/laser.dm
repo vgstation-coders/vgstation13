@@ -37,62 +37,61 @@
 	charge_cost = 50
 
 /obj/item/weapon/gun/energy/laser/failure_check(var/mob/living/carbon/human/M)
-	if(damaged)
-		if(projectile_type == "/obj/item/projectile/beam/captain" && prob(5))
-			projectile_type = /obj/item/projectile/beam/lightlaser
-			in_chamber = null
-			in_chamber = new projectile_type(src)
-			fire_delay +=3
-			to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
-			return 1
-		if(projectile_type == "/obj/item/projectile/beam/heavylaser" && prob(15))
-			projectile_type = /obj/item/projectile/beam
-			in_chamber = null
-			in_chamber = new projectile_type(src)
-			fire_sound = 'sound/weapons/Laser.ogg'
-			to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
-			return 1
-		if(projectile_type == /obj/item/projectile/beam && prob(10))
-			projectile_type = /obj/item/projectile/beam/lightlaser
-			in_chamber = null
-			in_chamber = new projectile_type(src)
-			fire_delay +=3
-			to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
-			return 1
-		if(projectile_type == "/obj/item/projectile/beam" && prob(10))
-			projectile_type = /obj/item/projectile/beam/lightlaser
-			in_chamber = null
-			in_chamber = new projectile_type(src)
-			fire_delay +=3
-			to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
-			return 1
-		if(projectile_type == /obj/item/projectile/beam/retro && prob(10))
-			projectile_type = /obj/item/projectile/beam/lightlaser
-			in_chamber = null
-			in_chamber = new projectile_type(src)
-			fire_delay +=3
-			to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
-			return 1
-		if(projectile_type == /obj/item/projectile/beam/lightlaser && prob(8))
-			projectile_type = /obj/item/projectile/beam/weaklaser
-			in_chamber = null
-			in_chamber = new projectile_type(src)
-			fire_delay +=3
-			to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
-			return 1
-		if(projectile_type == /obj/item/projectile/beam/weaklaser && prob(5))
-			projectile_type = /obj/item/projectile/beam/veryweaklaser
-			in_chamber = null
-			in_chamber = new projectile_type(src)
-			fire_delay +=3
-			to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
-			return 1
-		if(prob(1))
-			to_chat(M, "<span class='danger'>\The [src] explodes!.</span>")
-			explosion(get_turf(loc), -1, 0, 2)
-			M.drop_item(src, force_drop = 1)
-			qdel(src)
-			return 0
+	if(projectile_type == "/obj/item/projectile/beam/captain" && prob(5))
+		projectile_type = /obj/item/projectile/beam/lightlaser
+		in_chamber = null
+		in_chamber = new projectile_type(src)
+		fire_delay +=3
+		to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
+		return 1
+	if(projectile_type == "/obj/item/projectile/beam/heavylaser" && prob(15))
+		projectile_type = /obj/item/projectile/beam
+		in_chamber = null
+		in_chamber = new projectile_type(src)
+		fire_sound = 'sound/weapons/Laser.ogg'
+		to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
+		return 1
+	if(projectile_type == /obj/item/projectile/beam && prob(10))
+		projectile_type = /obj/item/projectile/beam/lightlaser
+		in_chamber = null
+		in_chamber = new projectile_type(src)
+		fire_delay +=3
+		to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
+		return 1
+	if(projectile_type == "/obj/item/projectile/beam" && prob(10))
+		projectile_type = /obj/item/projectile/beam/lightlaser
+		in_chamber = null
+		in_chamber = new projectile_type(src)
+		fire_delay +=3
+		to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
+		return 1
+	if(projectile_type == /obj/item/projectile/beam/retro && prob(10))
+		projectile_type = /obj/item/projectile/beam/lightlaser
+		in_chamber = null
+		in_chamber = new projectile_type(src)
+		fire_delay +=3
+		to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
+		return 1
+	if(projectile_type == /obj/item/projectile/beam/lightlaser && prob(8))
+		projectile_type = /obj/item/projectile/beam/weaklaser
+		in_chamber = null
+		in_chamber = new projectile_type(src)
+		fire_delay +=3
+		to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
+		return 1
+	if(projectile_type == /obj/item/projectile/beam/weaklaser && prob(5))
+		projectile_type = /obj/item/projectile/beam/veryweaklaser
+		in_chamber = null
+		in_chamber = new projectile_type(src)
+		fire_delay +=3
+		to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
+		return 1
+	if(prob(1))
+		to_chat(M, "<span class='danger'>\The [src] explodes!.</span>")
+		explosion(get_turf(loc), -1, 0, 2)
+		M.drop_item(src, force_drop = 1)
+		qdel(src)
+		return 0
 	return ..()
 
 /obj/item/weapon/gun/energy/laser/admin
@@ -274,28 +273,27 @@ obj/item/weapon/gun/energy/laser/retro
 	charge_cost = 50
 
 /obj/item/weapon/gun/energy/plasma/failure_check(var/mob/living/carbon/human/M)
-	if(damaged)
-		if(prob(15))
-			fire_delay += rand(2, 6)
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(3, 1, src)
-			s.start()
-			to_chat(M, "<span class='warning'>\The [src] sparks violently.</span>")
-			return 1
-		if(prob(5))
-			M.drop_item()
-			M.emote("scream",,, 1)
-			M.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
-			M.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
-			to_chat(M, "<span class='danger'>\The [src] burns your hands!.</span>")
-			return 0
-		if(prob(-5+fire_delay/2))
-			var/turf/T = get_turf(loc)
-			explosion(T, 0, 1, 3, 5)
-			M.drop_item(src, force_drop = 1)
-			qdel(src)
-			to_chat(M, "<span class='danger'>\The [src] explodes!.</span>")
-			return 0
+	if(prob(15))
+		fire_delay += rand(2, 6)
+		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+		s.set_up(3, 1, src)
+		s.start()
+		to_chat(M, "<span class='warning'>\The [src] sparks violently.</span>")
+		return 1
+	if(prob(5))
+		M.drop_item()
+		M.emote("scream",,, 1)
+		M.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
+		M.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
+		to_chat(M, "<span class='danger'>\The [src] burns your hands!.</span>")
+		return 0
+	if(prob(-5+fire_delay/2))
+		var/turf/T = get_turf(loc)
+		explosion(T, 0, 1, 3, 5)
+		M.drop_item(src, force_drop = 1)
+		qdel(src)
+		to_chat(M, "<span class='danger'>\The [src] explodes!.</span>")
+		return 0
 	return ..()
 
 /obj/item/weapon/gun/energy/plasma/pistol

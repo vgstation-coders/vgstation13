@@ -27,6 +27,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/auto_holomap = FALSE // Whether we automatically soft-add ourselves to the holomap in New(), make sure this is false is something does it manually.
 	plane = OBJ_PLANE
 
+	var/defective = 0
+
 /obj/New()
 	..()
 	if (auto_holomap && isturf(loc))
@@ -391,3 +393,8 @@ a {
 			var/turf/U = loc
 			if(istype(U) && U.intact)
 				invisibility = 101
+
+/obj/proc/become_defective()
+	if(!defective)
+		defective = 1
+		desc += "\nIt doesn't look to be in the best shape."

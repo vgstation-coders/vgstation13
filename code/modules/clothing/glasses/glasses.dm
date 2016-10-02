@@ -197,8 +197,9 @@
 		src.hud = new/obj/item/clothing/glasses/hud/security(src)
 		return
 
-/obj/item/clothing/glasses/sunglasses/sechud/become_damaged()
-	if(!damaged)
+/obj/item/clothing/glasses/sunglasses/sechud/become_defective()
+	if(!defective)
+		..()
 		if(prob(15))
 			new /obj/item/weapon/shard(loc)
 			playsound(get_turf(src), "shatter", 50, 1)
@@ -214,7 +215,6 @@
 		if(prob(55))
 			hud = null
 			qdel(hud)
-	return ..()
 
 /obj/item/clothing/glasses/thermal
 	name = "Optical Thermal Scanner"

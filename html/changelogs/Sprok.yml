@@ -35,3 +35,4 @@ delete-after: True
 changes: 
 - tweak: Opening lockboxes without a valid ID or emag has negative impacts on the items contained inside. Guns specifically will not fire perfectly accurately, and can degrade or otherwise be less effective when used.
 - tweak: Science weapon lockboxes can now be opened with "weapon permit" access, contact your local HoP for details.
+- tweak: Weapon permits show up on people examined by sechud users.

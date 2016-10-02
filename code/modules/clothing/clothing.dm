@@ -12,8 +12,6 @@
 
 	var/list/obj/item/clothing/accessory/accessories = list()
 
-	var/damaged = 0 //Set to one if in a lockbox that was broken open
-
 /obj/item/clothing/examine(mob/user)
 	..()
 	for(var/obj/item/clothing/accessory/A in accessories)
@@ -206,13 +204,11 @@
 			if(I)
 				I.stripped(stripper)
 
-/obj/item/clothing/become_damaged()
-	if(!damaged)
-		damaged = 1
-		desc += "\nIt doesn't look to be in the best shape."
+/obj/item/clothing/become_defective()
+	if(!defective)
+		..()
 		for(var/A in armor)
 			armor[A] -= rand(armor[A]/3, armor[A])
-	return ..()
 
 //Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears

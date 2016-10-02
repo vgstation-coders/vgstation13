@@ -667,6 +667,3 @@
 
 /atom/movable/proc/can_apply_inertia()
 	return (!src.anchored && !(src.pulledby && src.pulledby.Adjacent(src)))
-
-/atom/movable/proc/become_damaged()
-	return

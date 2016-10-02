@@ -45,7 +45,7 @@
 			return
 		var/shots_fired = 0 //haha, I'm so clever
 		var/to_shoot = min(burst_count, getAmmo())
-		if(damaged && prob(20))
+		if(defective && prob(20))
 			to_shoot = getAmmo()
 		for(var/i = 1; i <= to_shoot; i++)
 			..()
@@ -53,9 +53,9 @@
 			shots_fired++
 			if(!user.contents.Find(src) || jammed)
 				break
-			if(damaged && shots_fired > burst_count)
+			if(defective && shots_fired > burst_count)
 				recoil = 1 + min(shots_fired - burst_count, 6)
-			if(damaged && prob(max(0, shots_fired - burst_count * 4)))
+			if(defective && prob(max(0, shots_fired - burst_count * 4)))
 				to_chat(user, "<span class='danger'>\The [src] explodes!.</span>")
 				explosion(get_turf(loc), -1, 0, 2)
 				user.drop_item(src, force_drop = 1)
@@ -69,7 +69,7 @@
 		..()
 
 /obj/item/weapon/gun/projectile/automatic/failure_check(var/mob/living/carbon/human/M)
-	if(damaged && !burstfire && prob(5))
+	if(!burstfire && prob(5))
 		burstfire = 1
 		return 1
 	return ..()
