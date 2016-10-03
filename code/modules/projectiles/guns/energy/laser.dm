@@ -275,7 +275,7 @@ obj/item/weapon/gun/energy/laser/retro
 		M.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
 		to_chat(M, "<span class='danger'>\The [src] burns your hands!.</span>")
 		return 0
-	if(prob(-5+fire_delay/2))
+	if(prob(max(0, fire_delay/2-10)))
 		var/turf/T = get_turf(loc)
 		explosion(T, 0, 1, 3, 5)
 		M.drop_item(src, force_drop = 1)
