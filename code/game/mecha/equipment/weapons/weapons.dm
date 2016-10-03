@@ -167,7 +167,6 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/New()
 	..()
 	projectiles = max_projectiles
-	return
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/become_defective()
 	if(!defective)

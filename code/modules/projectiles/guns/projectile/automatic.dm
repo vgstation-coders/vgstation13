@@ -60,7 +60,6 @@
 				explosion(get_turf(loc), -1, 0, 2)
 				user.drop_item(src, force_drop = 1)
 				qdel(src)
-				break
 		message_admins("[usr] just shot [shots_fired] burst fire bullets out of [getAmmo() + shots_fired] from their [src].")
 		fire_delay = shots_fired * 10
 		recoil = initial(recoil)
