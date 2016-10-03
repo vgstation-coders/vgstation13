@@ -37,16 +37,18 @@
 	charge_cost = 50
 
 /obj/item/weapon/gun/energy/laser/failure_check(var/mob/living/carbon/human/M)
+	if(istext(projectile_type))
+		projectile_type = text2path(projectile_type)
 	switch(projectile_type)
-		if("/obj/item/projectile/beam/captain")
+		if(/obj/item/projectile/beam/captain)
 			if(prob(5))
 				downgradelaser(M)
 				return 1
-		if("/obj/item/projectile/beam/heavylaser")
+		if(/obj/item/projectile/beam/heavylaser)
 			if(prob(15))
 				downgradelaser(M)
 				return 1
-		if(/obj/item/projectile/beam, "/obj/item/projectile/beam", /obj/item/projectile/beam/retro)
+		if(/obj/item/projectile/beam, /obj/item/projectile/beam/retro)
 			if(prob(10))
 				downgradelaser(M)
 				return 1
@@ -68,10 +70,10 @@
 
 /obj/item/weapon/gun/energy/laser/proc/downgradelaser(var/mob/living/carbon/human/M)
 	switch(projectile_type)
-		if("/obj/item/projectile/beam/heavylaser")
+		if(/obj/item/projectile/beam/heavylaser)
 			projectile_type = /obj/item/projectile/beam
 			fire_sound = 'sound/weapons/Laser.ogg'
-		if("/obj/item/projectile/beam/captain", /obj/item/projectile/beam, "/obj/item/projectile/beam", /obj/item/projectile/beam/retro)
+		if(/obj/item/projectile/beam/captain, /obj/item/projectile/beam, /obj/item/projectile/beam/retro)
 			projectile_type = /obj/item/projectile/beam/lightlaser
 		if(/obj/item/projectile/beam/lightlaser)
 			projectile_type = /obj/item/projectile/beam/weaklaser
@@ -275,7 +277,7 @@ obj/item/weapon/gun/energy/laser/retro
 		M.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
 		to_chat(M, "<span class='danger'>\The [src] burns your hands!.</span>")
 		return 0
-	if(prob(max(0, fire_delay/2-10)))
+	if(prob(max(0, fire_delay/2-5)))
 		var/turf/T = get_turf(loc)
 		explosion(T, 0, 1, 3, 5)
 		M.drop_item(src, force_drop = 1)
