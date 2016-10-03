@@ -81,7 +81,6 @@
 	in_chamber = new projectile_type(src)
 	fire_delay +=3
 	to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
-	return
 
 /obj/item/weapon/gun/energy/laser/admin
 	name = "infinite laser gun"
