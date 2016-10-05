@@ -209,7 +209,7 @@
 	var/uniquefilename = time2text(round_start_time, "HHMMSS")
 	// Iterate until we have an unused file.
 	while(fexists(file(("[STAT_OUTPUT_DIR]statistics_[filename_date].[uniquefilename].txt"))))
-		uniquefilename = uniquefilename += "1"
+		uniquefilename = "[uniquefilename].dupe"
 	var/statfile = file("[STAT_OUTPUT_DIR]statistics_[filename_date].[uniquefilename].txt")
 
 	world << "Writing statistics to file"
