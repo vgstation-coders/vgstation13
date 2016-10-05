@@ -292,6 +292,8 @@
 /obj/machinery/microwave/proc/cook()
 	if(stat & (NOPOWER|BROKEN))
 		return
+	if(operating)
+		return
 	start()
 	if (reagents.total_volume==0 && !(locate(/obj) in contents)) //dry run
 		if (!wzhzhzh(10))
