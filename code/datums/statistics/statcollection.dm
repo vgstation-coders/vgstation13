@@ -206,11 +206,11 @@
 
 /datum/stat_collector/proc/Process()
 	var/filename_date = time2text(round_start_time, "YYYY.DD.MM")
-	var/roundnum = 1
+	var/uniquefilename = time2text(round_start_time, "HHMMSS")
 	// Iterate until we have an unused file.
-	while(fexists(file(("[STAT_OUTPUT_DIR]statistics_[filename_date].[roundnum].txt"))))
-		roundnum++
-	var/statfile = file("[STAT_OUTPUT_DIR]statistics_[filename_date].[roundnum].txt")
+	while(fexists(file(("[STAT_OUTPUT_DIR]statistics_[filename_date].[uniquefilename].txt"))))
+		uniquefilename = "[uniquefilename].dupe"
+	var/statfile = file("[STAT_OUTPUT_DIR]statistics_[filename_date].[uniquefilename].txt")
 
 	world << "Writing statistics to file"
 
