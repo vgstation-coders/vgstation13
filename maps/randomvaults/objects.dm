@@ -297,6 +297,7 @@
 
 /obj/machinery/power/monitor/old
 	icon_state = "powerold"
+	light_color = LIGHT_COLOR_BLUE
 
 /obj/effect/landmark/corpse/engineer/old
 	generate_random_mob_name = 1
@@ -373,6 +374,7 @@
 
 /obj/machinery/computer/ejectedengine/engine
 	icon_state = "engine1"
+	light_color = LIGHT_COLOR_BLUE
 
 /obj/machinery/computer/ejectedengine/engine/attack_hand(var/mob/user as mob)
 	if(..())
@@ -383,6 +385,7 @@
 
 /obj/machinery/computer/ejectedengine/shield
 	icon_state = "escape"
+	light_color = LIGHT_COLOR_BLUE
 
 /obj/machinery/computer/ejectedengine/shield/attack_hand(var/mob/user as mob)
 	if(..())
