@@ -66,7 +66,7 @@
 "bn" = (/obj/machinery/firealarm{dir = 4; pixel_x = 24},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
 "bo" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"; tag = "90Curve"},/turf/simulated/wall,/area/vault/ejectedengine/SMES)
 "bp" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"bq" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/light_switch,/turf/simulated/floor,/area/vault/ejectedengine/SMES)
+"bq" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/light_switch{pixel_y = -24},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
 "br" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
 "bs" = (/obj/structure/cable,/obj/machinery/power/monitor/old,/turf/simulated/floor,/area/vault/ejectedengine/SMES)
 "bt" = (/obj/machinery/atmospherics/unary/vent/visible,/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
@@ -276,13 +276,14 @@
 "fp" = (/obj/structure/girder/reinforced,/turf/simulated/floor/plating/airless/damaged,/area)
 "fq" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{tag = "icon-intact (NORTHEAST)"; icon_state = "intact"; dir = 5},/turf/simulated/wall/r_wall,/area)
 "fr" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/turf/simulated/wall/r_wall,/area/vault/ejectedengine/gasstorage)
-"fs" = (/obj/machinery/light/burnt,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"ft" = (/obj/structure/boulder,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"fu" = (/obj/machinery/artifact,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
-"fv" = (/obj/item/bluespace_crystal/flawless,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
-"fw" = (/obj/structure/closet/welded,/obj/effect/landmark/corpse/civilian,/turf/space,/area)
-"fx" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/wall/r_wall,/area/vault/ejectedengine/gasstorage)
-"fy" = (/obj/structure/crystal,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
+"fs" = (/obj/machinery/atmospherics/unary/vent_scrubber/on{dir = 8},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
+"ft" = (/obj/machinery/light/burnt,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
+"fu" = (/obj/structure/boulder,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
+"fv" = (/obj/machinery/artifact,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
+"fw" = (/obj/item/bluespace_crystal/flawless,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
+"fx" = (/obj/structure/closet/welded,/obj/effect/landmark/corpse/civilian,/turf/space,/area)
+"fy" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/wall/r_wall,/area/vault/ejectedengine/gasstorage)
+"fz" = (/obj/structure/crystal,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabacaaaaaaacaaadaaaaaaaaaaaaaaaaaa
@@ -311,7 +312,7 @@ aaasataHaHbkblaIaIaIaIaIaIaIaHaIaIaIaIaIaIaIbkbleOePeQeReBeSeMeTeUeGeGeGeVeJaaaa
 aaasajataHaHaHbkblaIaIaIaIaIaHaIaIaIaIaIbkblaHaHeOePeQeWeDeGeVeXeYeZeGeGfaeJaaaaaaaaaaaaaa
 aaaaasajatatatfbfbbkblbkblbkfcblbkblbkblfbfbaHaHeOePeQeWeDeGeGeGfdfefefffgfhfhaaaaaaaaaaaa
 aaaaaaasasajajfifiatatatatatatatatatatatfifiajajajeJfjeWfkeGeGfleUeVflfhfhfmfhfhaaaaaaaaaa
-aaaaaaaaaaaeagfnfoajajfpajajajajajajajajfqfnagalaefreWeWfkeGeVfseUftfhfmfufvfhfhaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaasajasaafwaaaaaaaaaaaaaaeJeJeJeJeJeJeJfxeJfhfhfyfmfhaaaaaaaaaaaa
+aaaaaaaaaaaeagfnfoajajfpajajajajajajajajfqfnagalaefrfseWfkeGeVfteUfufhfmfvfwfhfhaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaasajasaafxaaaaaaaaaaaaaaeJeJeJeJeJeJeJfyeJfhfhfzfmfhaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaafhfhfhfhaaaaaaaaaaaa
 "}
