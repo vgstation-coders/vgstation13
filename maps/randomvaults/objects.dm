@@ -373,6 +373,8 @@
 	level = LEVEL_ABOVE_FLOOR
 
 /obj/machinery/computer/ejectedengine/engine
+	name = "Engine Ejection Console"
+	desc = "Allows access to the engine ejection system."
 	icon_state = "engine1"
 	light_color = LIGHT_COLOR_BLUE
 
@@ -384,6 +386,8 @@
 	user << browse(dat, "window=computer;size=400x500")
 
 /obj/machinery/computer/ejectedengine/shield
+	name = "Shield Control Console"
+	desc = "Controls the station's external shielding."
 	icon_state = "escape"
 	light_color = LIGHT_COLOR_BLUE
 

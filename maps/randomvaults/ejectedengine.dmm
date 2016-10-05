@@ -51,7 +51,7 @@
 "aY" = (/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/structure/cable{icon_state = "0-2"; pixel_y = 1; d2 = 2},/obj/structure/cable,/obj/machinery/power/battery/smes{charge = 5e+006},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
 "aZ" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
 "ba" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
-"bb" = (/obj/machinery/door/airlock/engineering{name = "Engineering Access"; req_access_txt = "10"},/obj/machinery/atmospherics/pipe/simple/general/hidden,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
+"bb" = (/obj/machinery/atmospherics/pipe/simple/general/hidden,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/door/airlock/engineering{icon_state = "door_locked"; locked = 1; name = "Engineering Access"; req_access_txt = "10"},/turf/simulated/floor,/area/vault/ejectedengine/SMES)
 "bc" = (/obj/structure/reagent_dispensers/fueltank,/turf/simulated/floor,/area/vault/ejectedengine/SMES)
 "bd" = (/obj/structure/reagent_dispensers/watertank,/turf/simulated/floor,/area/vault/ejectedengine/SMES)
 "be" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plating,/area/vault/ejectedengine/SMES)
@@ -227,7 +227,7 @@
 "es" = (/obj/structure/grille,/obj/structure/window/full/reinforced,/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 10},/turf/simulated/floor/plating,/area/vault/ejectedengine/generator)
 "et" = (/obj/effect/glowshroom/single,/turf/simulated/floor,/area/vault/ejectedengine/generator)
 "eu" = (/obj/structure/dispenser/oxygen,/turf/simulated/floor,/area/vault/ejectedengine/generator)
-"ev" = (/obj/structure/closet/wardrobe/engineering_yellow,/turf/simulated/floor,/area/vault/ejectedengine/generator)
+"ev" = (/obj/structure/closet/wardrobe/yellow,/turf/simulated/floor,/area/vault/ejectedengine/generator)
 "ew" = (/obj/structure/rack,/obj/item/clothing/gloves/yellow/power,/obj/item/clothing/suit/fire,/obj/item/clothing/mask/gas,/turf/simulated/floor,/area/vault/ejectedengine/generator)
 "ex" = (/obj/item/device/multitool,/turf/simulated/floor,/area/vault/ejectedengine/generator)
 "ey" = (/obj/machinery/atmospherics/unary/portables_connector{dir = 1},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/light/burnt,/turf/simulated/floor,/area/vault/ejectedengine/generator)
@@ -248,42 +248,43 @@
 "eN" = (/obj/machinery/camera/noview{dir = 8},/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/obj/machinery/light/burnt{dir = 4},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
 "eO" = (/obj/machinery/door/poddoor{id_tag = "engine_gas"; name = "Engine Blast Door"},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
 "eP" = (/obj/machinery/door/firedoor,/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
-"eQ" = (/obj/machinery/mass_driver{dir = 8; id_tag = "engine_gas"},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
+"eQ" = (/obj/machinery/mass_driver{dir = 8; id_tag = "engine_gas"},/obj/machinery/portable_atmospherics/canister/old/plasma,/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
 "eR" = (/obj/machinery/light/small{dir = 1},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
 "eS" = (/obj/machinery/camera/noview{dir = 4},/obj/structure/cable{icon_state = "0-4"; d2 = 4},/obj/machinery/driver_button{id_tag = "engine_gas"; pixel_x = -25; pixel_y = 0},/obj/machinery/light/burnt{dir = 1},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
 "eT" = (/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/obj/machinery/portable_atmospherics/canister/old/oxygen,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
 "eU" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
 "eV" = (/obj/effect/glowshroom/single,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"eW" = (/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
-"eX" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"; tag = "90Curve"},/obj/machinery/portable_atmospherics/canister/old/oxygen,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"eY" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"eZ" = (/obj/machinery/portable_atmospherics/canister/old/oxygen,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"fa" = (/obj/machinery/alarm{dir = 8; pixel_x = 24},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"fb" = (/obj/machinery/atmospherics/unary/vent_scrubber/on/burn_chamber,/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"fc" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 4},/obj/machinery/camera/noview{dir = 1},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
-"fd" = (/obj/machinery/atmospherics/unary/vent_pump,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"fe" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"ff" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/obj/structure/boulder,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"fg" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 10},/obj/machinery/portable_atmospherics/canister/old/plasma,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"fh" = (/turf/unsimulated/mineral,/area/vault/ejectedengine/gasstorage)
-"fi" = (/obj/machinery/atmospherics/pipe/simple/general/hidden,/turf/simulated/wall/r_wall,/area/vault/ejectedengine/burnroom)
-"fj" = (/obj/machinery/firealarm{dir = 8; pixel_x = -24},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
-"fk" = (/obj/machinery/door/airlock/engineering{name = "Engineering Access"; req_access_txt = "10"},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
-"fl" = (/obj/machinery/portable_atmospherics/canister/old/plasma,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"fm" = (/turf/unsimulated/mineral/cerenkite,/area/vault/ejectedengine/gasstorage)
-"fn" = (/obj/machinery/atmospherics/pipe/manifold/general/hidden,/turf/simulated/wall/r_wall,/area)
-"fo" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{tag = "icon-intact (NORTHWEST)"; icon_state = "intact"; dir = 9},/turf/simulated/wall/r_wall,/area)
-"fp" = (/obj/structure/girder/reinforced,/turf/simulated/floor/plating/airless/damaged,/area)
-"fq" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{tag = "icon-intact (NORTHEAST)"; icon_state = "intact"; dir = 5},/turf/simulated/wall/r_wall,/area)
-"fr" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/turf/simulated/wall/r_wall,/area/vault/ejectedengine/gasstorage)
-"fs" = (/obj/machinery/atmospherics/unary/vent_scrubber/on{dir = 8},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
-"ft" = (/obj/machinery/light/burnt,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"fu" = (/obj/structure/boulder,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"fv" = (/obj/machinery/artifact,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
-"fw" = (/obj/item/bluespace_crystal/flawless,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
-"fx" = (/obj/structure/closet/welded,/obj/effect/landmark/corpse/civilian,/turf/space,/area)
-"fy" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/wall/r_wall,/area/vault/ejectedengine/gasstorage)
-"fz" = (/obj/structure/crystal,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
+"eW" = (/obj/machinery/mass_driver{dir = 8; id_tag = "engine_gas"},/obj/machinery/portable_atmospherics/canister/old/oxygen,/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
+"eX" = (/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
+"eY" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"; tag = "90Curve"},/obj/machinery/portable_atmospherics/canister/old/oxygen,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
+"eZ" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
+"fa" = (/obj/machinery/portable_atmospherics/canister/old/oxygen,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
+"fb" = (/obj/machinery/alarm{dir = 8; pixel_x = 24},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
+"fc" = (/obj/machinery/atmospherics/unary/vent_scrubber/on/burn_chamber,/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
+"fd" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 4},/obj/machinery/camera/noview{dir = 1},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/burnroom)
+"fe" = (/obj/machinery/atmospherics/unary/vent_pump,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
+"ff" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
+"fg" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/obj/structure/boulder,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
+"fh" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 10},/obj/machinery/portable_atmospherics/canister/old/plasma,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
+"fi" = (/turf/unsimulated/mineral,/area/vault/ejectedengine/gasstorage)
+"fj" = (/obj/machinery/atmospherics/pipe/simple/general/hidden,/turf/simulated/wall/r_wall,/area/vault/ejectedengine/burnroom)
+"fk" = (/obj/machinery/firealarm{dir = 8; pixel_x = -24},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
+"fl" = (/obj/machinery/door/airlock/engineering{name = "Engineering Access"; req_access_txt = "10"},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
+"fm" = (/obj/machinery/portable_atmospherics/canister/old/plasma,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
+"fn" = (/turf/unsimulated/mineral/cerenkite,/area/vault/ejectedengine/gasstorage)
+"fo" = (/obj/machinery/atmospherics/pipe/manifold/general/hidden,/turf/simulated/wall/r_wall,/area)
+"fp" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{tag = "icon-intact (NORTHWEST)"; icon_state = "intact"; dir = 9},/turf/simulated/wall/r_wall,/area)
+"fq" = (/obj/structure/girder/reinforced,/turf/simulated/floor/plating/airless/damaged,/area)
+"fr" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{tag = "icon-intact (NORTHEAST)"; icon_state = "intact"; dir = 5},/turf/simulated/wall/r_wall,/area)
+"fs" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/turf/simulated/wall/r_wall,/area/vault/ejectedengine/gasstorage)
+"ft" = (/obj/machinery/atmospherics/unary/vent_scrubber/on{dir = 8},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
+"fu" = (/obj/machinery/light/burnt,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
+"fv" = (/obj/structure/boulder,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
+"fw" = (/obj/machinery/artifact,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
+"fx" = (/obj/item/bluespace_crystal/flawless,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
+"fy" = (/obj/structure/closet/welded,/obj/effect/landmark/corpse/civilian,/turf/space,/area)
+"fz" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/wall/r_wall,/area/vault/ejectedengine/gasstorage)
+"fA" = (/obj/structure/crystal,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabacaaaaaaacaaadaaaaaaaaaaaaaaaaaa
@@ -309,10 +310,10 @@ aaasatbkblaIaIaIaIaIavawavawemavawavawaIaIaHaHaHaHaIaHaHateBeCeCeBeDeDeDeEeFadaa
 aaasataHaHaIaIaIaIaIaIaIaIaIaHaIaIaIaIaIaIavawavbmblaHatateBeGeGeHeGeGeGeIeJaaaaaaaaaaaaaa
 aaasataHaHaIaIaIaIaIaIaIaIaIaHaIaIaIaIaIaIaIaIaIatatatateBeBeKeGeLeMeMeMeNeJaaaaaaaaaaaaaa
 aaasataHaHbkblaIaIaIaIaIaIaIaHaIaIaIaIaIaIaIbkbleOePeQeReBeSeMeTeUeGeGeGeVeJaaaaaaaaaaaaaa
-aaasajataHaHaHbkblaIaIaIaIaIaHaIaIaIaIaIbkblaHaHeOePeQeWeDeGeVeXeYeZeGeGfaeJaaaaaaaaaaaaaa
-aaaaasajatatatfbfbbkblbkblbkfcblbkblbkblfbfbaHaHeOePeQeWeDeGeGeGfdfefefffgfhfhaaaaaaaaaaaa
-aaaaaaasasajajfifiatatatatatatatatatatatfifiajajajeJfjeWfkeGeGfleUeVflfhfhfmfhfhaaaaaaaaaa
-aaaaaaaaaaaeagfnfoajajfpajajajajajajajajfqfnagalaefrfseWfkeGeVfteUfufhfmfvfwfhfhaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaasajasaafxaaaaaaaaaaaaaaeJeJeJeJeJeJeJfyeJfhfhfzfmfhaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaafhfhfhfhaaaaaaaaaaaa
+aaasajataHaHaHbkblaIaIaIaIaIaHaIaIaIaIaIbkblaHaHeOePeWeXeDeGeVeYeZfaeGeGfbeJaaaaaaaaaaaaaa
+aaaaasajatatatfcfcbkblbkblbkfdblbkblbkblfcfcaHaHeOePeQeXeDeGeGeGfefffffgfhfifiaaaaaaaaaaaa
+aaaaaaasasajajfjfjatatatatatatatatatatatfjfjajajajeJfkeXfleGeGfmeUeVfmfififnfifiaaaaaaaaaa
+aaaaaaaaaaaeagfofpajajfqajajajajajajajajfrfoagalaefsfteXfleGeVfueUfvfifnfwfxfifiaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaasajasaafyaaaaaaaaaaaaaaeJeJeJeJeJeJeJfzeJfififAfnfiaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaafifififiaaaaaaaaaaaa
 "}
