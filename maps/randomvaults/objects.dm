@@ -81,6 +81,29 @@
 /area/vault/AIsat
 	requires_power = 1
 
+/area/vault/ejectedengine
+	requires_power = 1
+
+/area/vault/ejectedengine/SMES
+	name = "\improper Engine SMES"
+	icon_state = "engine_smes"
+
+/area/vault/ejectedengine/generator
+	name = "\improper Generator Room"
+	icon_state = "thermo_engine"
+
+/area/vault/ejectedengine/gasstorage
+	name = "\improper Engine Gas Storage"
+	icon_state = "engine_storage"
+
+/area/vault/ejectedengine/monitering
+	name = "Engine Monitering"
+	icon_state = "engiaux"
+
+/area/vault/ejectedengine/burnroom
+	name = "\improper Engine Hallway"
+	icon_state = "engine"
+
 /mob/living/simple_animal/hostile/monster/cyber_horror/quiet
 	speak_chance = 1 //shut the fuck up
 
@@ -263,3 +286,107 @@
 /obj/item/projectile/beam/retro/weak
 	damage = 15
 	linear_movement = 0
+
+/turf/simulated/floor/engine/old
+	icon_state = "engineold"
+
+/obj/machinery/camera/noview/New()
+	..()
+	network = list()
+	cameranet.removeCamera(src)
+
+/obj/machinery/power/monitor/old
+	icon_state = "powerold"
+
+/obj/effect/landmark/corpse/engineer/old
+	generate_random_mob_name = 1
+	mutantrace = "Skellington"
+	corpseradio = /obj/item/device/radio/headset
+	corpseback = /obj/item/weapon/storage/backpack
+	corpsebelt = null
+
+/obj/machinery/light/burnt/New()
+	status = LIGHT_BURNED
+	update(0)
+	..()
+
+/obj/structure/closet/welded/New()
+	..()
+	welded = 1
+	update_icon()
+
+/obj/machinery/portable_atmospherics/canister/old
+	filled = 0.8
+	volume = 50000
+
+/obj/machinery/portable_atmospherics/canister/old/New()
+
+	status_overlays = 1
+
+	status_overlays_pressure = new
+	status_overlays_other = new
+
+	status_overlays_pressure.len = 4
+	status_overlays_other.len = 2
+
+	status_overlays_pressure[1] = image(icon, "old-o0")
+	status_overlays_pressure[2] = image(icon, "old-o1")
+	status_overlays_pressure[3] = image(icon, "old-o2")
+	status_overlays_pressure[4] = image(icon, "old-o3")
+
+	status_overlays_other[1]  = image(icon, "old-open")
+	status_overlays_other[2]  = image(icon, "old-connector")
+	..()
+
+/obj/machinery/portable_atmospherics/canister/old/process()
+	..()
+	can_label = 0
+
+/obj/machinery/portable_atmospherics/canister/old/plasma
+	name = "Canister: \[Toxins\]"
+	icon_state = "orangeold"
+	canister_color = "orangeold"
+	can_label = 0
+
+/obj/machinery/portable_atmospherics/canister/old/plasma/New(loc)
+	..(loc)
+	air_contents.adjust(tx = (maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	update_icon()
+
+/obj/machinery/portable_atmospherics/canister/old/oxygen
+	name = "Canister: \[Oxygen\]"
+	icon_state = "blueold"
+	canister_color = "blueold"
+	can_label = 0
+
+/obj/machinery/portable_atmospherics/canister/old/oxygen/New(loc)
+	..(loc)
+	air_contents.adjust((maximum_pressure * filled) * air_contents.volume / (R_IDEAL_GAS_EQUATION * air_contents.temperature))
+	update_icon()
+
+/mob/living/simple_animal/hostile/retaliate/malf_drone/vault
+	environment_smash = 1
+	speak_chance = 1
+
+/obj/machinery/atmospherics/unary/vent/visible
+	level = LEVEL_ABOVE_FLOOR
+
+/obj/machinery/computer/ejectedengine/engine
+	icon_state = "engine1"
+
+/obj/machinery/computer/ejectedengine/engine/attack_hand(var/mob/user as mob)
+	if(..())
+		return
+
+	var/dat = text("<B>Engine Ejection Module</B><HR>\nStatus: Ejected<BR>\n<BR>\nCountdown: N/60 \[Reset\]<BR>\n<BR>\nEngine Ejected!<BR>\n<BR>\n<A href='?src=\ref[];mach_close=computer'>Close</A>", user)
+	user << browse(dat, "window=computer;size=400x500")
+
+/obj/machinery/computer/ejectedengine/shield
+	icon_state = "escape"
+
+/obj/machinery/computer/ejectedengine/shield/attack_hand(var/mob/user as mob)
+	if(..())
+		return
+
+	var/dat = text("<B>Shield Generator Control</B><HR>\n<font color=red>Error:</font> Cannot locate projector array<BR>\n<font color=red>Error:</font> Cannot locate shield capacitors<BR>\n<font color=red>Error:</font> Cannot locate command signal<BR>\n<BR>\n<A href='?src=\ref[];mach_close=computer'>Close</A>", user)
+	user << browse(dat, "window=computer;size=400x500")

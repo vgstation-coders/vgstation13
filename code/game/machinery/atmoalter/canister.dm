@@ -32,9 +32,9 @@
 	melt_temperature = MELTPOINT_STEEL
 
 	//Icon Update Code
-	var/global/status_overlays = 0
-	var/global/list/status_overlays_pressure
-	var/global/list/status_overlays_other
+	var/status_overlays = 0
+	var/list/status_overlays_pressure
+	var/list/status_overlays_other
 	var/overlay_status = 0
 
 	var/log="" // Bad boys, bad boys.
