@@ -152,7 +152,7 @@
 "cV" = (/obj/machinery/firealarm{pixel_y = 24},/obj/machinery/camera/noview,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
 "cW" = (/obj/machinery/atmospherics/unary/portables_connector,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
 "cX" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 5},/obj/machinery/meter,/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/light/burnt{dir = 1},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
-"cY" = (/obj/machinery/door/firedoor,/obj/machinery/atmospherics/pipe/manifold/general/visible{dir = 1},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/light_switch,/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
+"cY" = (/obj/machinery/door/firedoor,/obj/machinery/atmospherics/pipe/manifold/general/visible{dir = 1},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/machinery/light_switch{pixel_y = 24},/turf/simulated/floor,/area/vault/ejectedengine/burnroom)
 "cZ" = (/obj/machinery/door/airlock/engineering{name = "Engineering Access"; req_access_txt = "10"},/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 4},/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor,/area/vault/ejectedengine/generator)
 "da" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 9},/obj/structure/cable{d1 = 2; d2 = 8; icon_state = "2-8"},/turf/simulated/floor,/area/vault/ejectedengine/generator)
 "db" = (/obj/machinery/atmospherics/pipe/simple/general/visible{dir = 6},/turf/simulated/floor,/area/vault/ejectedengine/generator)
@@ -266,24 +266,23 @@
 "ff" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/obj/structure/boulder,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
 "fg" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 10},/obj/machinery/portable_atmospherics/canister/old/plasma,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
 "fh" = (/turf/unsimulated/mineral,/area/vault/ejectedengine/gasstorage)
-"fi" = (/turf/unsimulated/mineral,/area)
-"fj" = (/obj/machinery/atmospherics/pipe/simple/general/hidden,/turf/simulated/wall/r_wall,/area/vault/ejectedengine/burnroom)
-"fk" = (/obj/machinery/firealarm{dir = 8; pixel_x = -24},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
-"fl" = (/obj/machinery/door/airlock/engineering{name = "Engineering Access"; req_access_txt = "10"},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
-"fm" = (/obj/machinery/portable_atmospherics/canister/old/plasma,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"fn" = (/turf/unsimulated/mineral/cerenkite,/area/vault/ejectedengine/gasstorage)
-"fo" = (/obj/machinery/atmospherics/pipe/manifold/general/hidden,/turf/simulated/wall/r_wall,/area)
-"fp" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{tag = "icon-intact (NORTHWEST)"; icon_state = "intact"; dir = 9},/turf/simulated/wall/r_wall,/area)
-"fq" = (/obj/structure/girder/reinforced,/turf/simulated/floor/plating/airless/damaged,/area)
-"fr" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{tag = "icon-intact (NORTHEAST)"; icon_state = "intact"; dir = 5},/turf/simulated/wall/r_wall,/area)
-"fs" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/turf/simulated/wall/r_wall,/area/vault/ejectedengine/gasstorage)
-"ft" = (/obj/machinery/light/burnt,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"fu" = (/obj/structure/boulder,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
-"fv" = (/obj/machinery/artifact,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
-"fw" = (/obj/item/bluespace_crystal/flawless,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
-"fx" = (/obj/structure/closet/welded,/obj/effect/landmark/corpse/civilian,/turf/space,/area)
-"fy" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/wall/r_wall,/area/vault/ejectedengine/gasstorage)
-"fz" = (/obj/structure/crystal,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
+"fi" = (/obj/machinery/atmospherics/pipe/simple/general/hidden,/turf/simulated/wall/r_wall,/area/vault/ejectedengine/burnroom)
+"fj" = (/obj/machinery/firealarm{dir = 8; pixel_x = -24},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
+"fk" = (/obj/machinery/door/airlock/engineering{name = "Engineering Access"; req_access_txt = "10"},/turf/simulated/floor/engine/old,/area/vault/ejectedengine/gasstorage)
+"fl" = (/obj/machinery/portable_atmospherics/canister/old/plasma,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
+"fm" = (/turf/unsimulated/mineral/cerenkite,/area/vault/ejectedengine/gasstorage)
+"fn" = (/obj/machinery/atmospherics/pipe/manifold/general/hidden,/turf/simulated/wall/r_wall,/area)
+"fo" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{tag = "icon-intact (NORTHWEST)"; icon_state = "intact"; dir = 9},/turf/simulated/wall/r_wall,/area)
+"fp" = (/obj/structure/girder/reinforced,/turf/simulated/floor/plating/airless/damaged,/area)
+"fq" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{tag = "icon-intact (NORTHEAST)"; icon_state = "intact"; dir = 5},/turf/simulated/wall/r_wall,/area)
+"fr" = (/obj/machinery/atmospherics/pipe/simple/general/hidden{dir = 4},/turf/simulated/wall/r_wall,/area/vault/ejectedengine/gasstorage)
+"fs" = (/obj/machinery/light/burnt,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
+"ft" = (/obj/structure/boulder,/turf/simulated/floor,/area/vault/ejectedengine/gasstorage)
+"fu" = (/obj/machinery/artifact,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
+"fv" = (/obj/item/bluespace_crystal/flawless,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
+"fw" = (/obj/structure/closet/welded,/obj/effect/landmark/corpse/civilian,/turf/space,/area)
+"fx" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/wall/r_wall,/area/vault/ejectedengine/gasstorage)
+"fy" = (/obj/structure/crystal,/turf/unsimulated/floor/asteroid,/area/vault/ejectedengine/gasstorage)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabacaaaaaaacaaadaaaaaaaaaaaaaaaaaa
@@ -310,9 +309,9 @@ aaasataHaHaIaIaIaIaIaIaIaIaIaHaIaIaIaIaIaIavawavbmblaHatateBeGeGeHeGeGeGeIeJaaaa
 aaasataHaHaIaIaIaIaIaIaIaIaIaHaIaIaIaIaIaIaIaIaIatatatateBeBeKeGeLeMeMeMeNeJaaaaaaaaaaaaaa
 aaasataHaHbkblaIaIaIaIaIaIaIaHaIaIaIaIaIaIaIbkbleOePeQeReBeSeMeTeUeGeGeGeVeJaaaaaaaaaaaaaa
 aaasajataHaHaHbkblaIaIaIaIaIaHaIaIaIaIaIbkblaHaHeOePeQeWeDeGeVeXeYeZeGeGfaeJaaaaaaaaaaaaaa
-aaaaasajatatatfbfbbkblbkblbkfcblbkblbkblfbfbaHaHeOePeQeWeDeGeGeGfdfefefffgfhfiaaaaaaaaaaaa
-aaaaaaasasajajfjfjatatatatatatatatatatatfjfjajajajeJfkeWfleGeGfmeUeVfmfhfhfnfifiaaaaaaaaaa
-aaaaaaaaaaaeagfofpajajfqajajajajajajajajfrfoagalaefseWeWfleGeVfteUfufhfnfvfwfifiaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaasajasaafxaaaaaaaaaaaaaaeJeJeJeJeJeJeJfyeJfhfhfzfnfiaaaaaaaaaaaa
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaafifififiaaaaaaaaaaaa
+aaaaasajatatatfbfbbkblbkblbkfcblbkblbkblfbfbaHaHeOePeQeWeDeGeGeGfdfefefffgfhfhaaaaaaaaaaaa
+aaaaaaasasajajfifiatatatatatatatatatatatfifiajajajeJfjeWfkeGeGfleUeVflfhfhfmfhfhaaaaaaaaaa
+aaaaaaaaaaaeagfnfoajajfpajajajajajajajajfqfnagalaefreWeWfkeGeVfseUftfhfmfufvfhfhaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaasajasaafwaaaaaaaaaaaaaaeJeJeJeJeJeJeJfxeJfhfhfyfmfhaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadaaaafhfhfhfhaaaaaaaaaaaa
 "}
