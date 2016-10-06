@@ -1,2 +1,3 @@
 author: BarneyGumball
-changes: []
+changes: 
+- bugfix: Orders no longer get deleted if they didn't fit on the supply shuttle
