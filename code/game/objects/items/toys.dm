@@ -524,7 +524,7 @@
 	icon_state = "sunflower"
 	item_state = "sunflower"
 	var/empty = 0
-	flags = 0
+	flags = OPENCONTAINER
 
 /obj/item/toy/waterflower/New()
 	. = ..()
