@@ -320,28 +320,30 @@
 	filled = 0.8
 	volume = 50000
 
-/obj/machinery/portable_atmospherics/canister/old/New()
+/obj/machinery/portable_atmospherics/canister/old/pressure_overlays(var/state)
+	var/static/list/status_overlays_pressure = list(
+		image(icon, "old-o0"),
+		image(icon, "old-o1"),
+		image(icon, "old-o2"),
+		image(icon, "old-o3")
+	)
 
-	status_overlays = 1
+	return status_overlays_pressure[state]
 
-	status_overlays_pressure = new
-	status_overlays_other = new
+/obj/machinery/portable_atmospherics/canister/old/other_overlays(var/state)
+	var/static/list/status_overlays_other = list(
+		image(icon, "old-open"),
+		image(icon, "old-connector")
+	)
 
-	status_overlays_pressure.len = 4
-	status_overlays_other.len = 2
-
-	status_overlays_pressure[1] = image(icon, "old-o0")
-	status_overlays_pressure[2] = image(icon, "old-o1")
-	status_overlays_pressure[3] = image(icon, "old-o2")
-	status_overlays_pressure[4] = image(icon, "old-o3")
-
-	status_overlays_other[1]  = image(icon, "old-open")
-	status_overlays_other[2]  = image(icon, "old-connector")
-	..()
+	return status_overlays_other[state]
 
 /obj/machinery/portable_atmospherics/canister/old/process()
 	..()
 	can_label = 0
+
+/obj/machinery/portable_atmospherics/canister/attack_ai()
+	return
 
 /obj/machinery/portable_atmospherics/canister/old/plasma
 	name = "Canister: \[Toxins\]"
@@ -397,3 +399,8 @@
 
 	var/dat = text("<B>Shield Generator Control</B><HR>\n<font color=red>Error:</font> Cannot locate projector array<BR>\n<font color=red>Error:</font> Cannot locate shield capacitors<BR>\n<font color=red>Error:</font> Cannot locate command signal<BR>\n<BR>\n<A href='?src=\ref[];mach_close=computer'>Close</A>", user)
 	user << browse(dat, "window=computer;size=400x500")
+
+/obj/machinery/door/firedoor/red
+	name = "\improper Firelock"
+	desc = "Emergency air-tight shutter, for keeping fires contained."
+	icon = 'icons/obj/doors/Doorfire.dmi'
