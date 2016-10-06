@@ -801,7 +801,7 @@ var/list/ai_list = list()
 /spell/aoe_turf/corereturn
 	name = "Return to Core"
 	panel = "Malfunction"
-	charge_type = SpCHARGES
+	charge_type = Sp_CHARGES
 	charge_max = 1
 	
 /spell/aoe_turf/corereturn/before_target(mob/user)

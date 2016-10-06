@@ -36,7 +36,6 @@ rcd light flash thingy on matter drain
 	if(power_type)
 		for(var/spell/S in user.spell_list)
 			if (S.type == power_type)
-				S.charge_max += uses
 				S.charge_counter += uses
 				return
 		user.add_spell(new power_type)
@@ -49,7 +48,7 @@ rcd light flash thingy on matter drain
 	cost = 50
 	one_time = 1
 	
-/datum/AI_Module/fireproof_core/on_purchase(mob/living/silicon/ai/user)
+/datum/AI_Module/large/fireproof_core/on_purchase(mob/living/silicon/ai/user)
 	user.ai_flags |= COREFIRERESIST
 	to_chat(user, "<span class='warning'>Core fireproofed.</span>")
 
@@ -107,7 +106,7 @@ rcd light flash thingy on matter drain
 /spell/targeted/overload_machine/is_valid_target(var/atom/target)
 	if (istype(target, /obj/machinery))
 		var/obj/machinery/M = target
-		return target.can_overload()
+		return M.can_overload()
 	else
 		to_chat(holder, "That is not a machine.")
 	
@@ -137,8 +136,8 @@ rcd light flash thingy on matter drain
 	
 /spell/aoe_turf/conjure/place_transformer/before_target(mob/user)
 	var/mob/living/silicon/ai/A = user
-	if(!istype(user))
-		return 1
+	if(!istype(A))
+		return 0
 	if(!A.eyeobj)
 		return 1
 	if(!isturf(A.loc)) // AI must be in it's core.
@@ -173,7 +172,7 @@ rcd light flash thingy on matter drain
 	cost = 10
 	one_time = 1
 
-/datum/AI_Module/large/highrescameras/on_purchase(mob/living/silicon/ai/user)
+/datum/AI_Module/large/highrescams/on_purchase(mob/living/silicon/ai/user)
 	user.ai_flags |= HIGHRESCAMS
 	user.eyeobj.high_res = 1
 	to_chat(user, "Cameras upgraded.")
