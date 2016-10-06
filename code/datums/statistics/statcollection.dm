@@ -248,6 +248,9 @@
 	malf.doPostRoundChecks()
 	malf.writeStats(statfile)
 
+	revsquad.doPostRoundChecks()
+	revsquad.writeStats(statfile)
+
 	antagCheck(statfile)
 
 	Write_Footer(statfile)
