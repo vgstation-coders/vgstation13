@@ -5,6 +5,7 @@
 #define SUPPLY_TAX 10 // Credits to charge per order.
 #define SCREEN_WIDTH 480 // Dimensions of supply computer windows
 #define SCREEN_HEIGHT 590
+#define REASON_LEN 140 // max length for reason message, nanoui appears to not like long strings.
 var/datum/controller/supply_shuttle/supply_shuttle = new
 
 var/list/mechtoys = list(
@@ -430,7 +431,7 @@ var/list/mechtoys = list(
 		to_chat(user, "<span class='warning'>Please wear an ID with an associated bank account.</span>")
 		return
 	user.set_machine(src)
-	ui_interact(usr)
+	ui_interact(user)
 	onclose(user, "computer")
 	return
 
@@ -454,7 +455,7 @@ var/list/mechtoys = list(
 				// command1 is for a single crate order, command2 is for multi crate order
 	data["supply_packs"] = packs_list
 
-	var/obj/item/weapon/card/id/I = usr.get_id_card()
+	var/obj/item/weapon/card/id/I = user.get_id_card()
 	// current usr's cargo requests
 	var/requests_list[0]
 	for(var/set_name in supply_shuttle.requestlist)
@@ -530,7 +531,7 @@ var/list/mechtoys = list(
 			var/max_crates = round((account.money - total_money_req) / (P.cost + SUPPLY_TAX))
 			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
 			return
-		var/reason = copytext(sanitize(input(usr,"Reason:","Why do you require this item?","") as null|text),1,MAX_MESSAGE_LEN)
+		var/reason = copytext(sanitize(input(usr,"Reason:","Why do you require this item?","") as null|text),1,REASON_LEN)
 		if(world.time > timeout)
 			return
 		if(!reason)
@@ -754,7 +755,7 @@ var/list/mechtoys = list(
 			to_chat(usr, "<span class='warning'>You can only afford [max_crates] crates.</span>")
 			return
 		var/timeout = world.time + 600
-		var/reason = copytext(sanitize(input(usr, "Reason:", "Why do you require this item?", "") as null|text), 1, MAX_MESSAGE_LEN)
+		var/reason = copytext(sanitize(input(usr, "Reason:", "Why do you require this item?", "") as null|text), 1, REASON_LEN)
 		if(world.time > timeout)
 			return
 		if(!reason)
