@@ -1,0 +1,7 @@
+
+author: JustSumGuy
+
+delete-after: True
+
+changes: 
+- bugfix: "Fixed an issue preventing artificers from building in space."
