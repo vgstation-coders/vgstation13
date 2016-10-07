@@ -58,9 +58,12 @@
 	var/obj/effect/decal/rod_line/line_decal = new // decal for the fishing line in the water
 	var/tmp/busy = 0 //check if in use to stop bait scumming
 	var/obj/item/weapon/hookeditem
+	var/fishstage = rand(30, 70) // when fishstage hits 0, we catch the fish, if it goes above 100, we lose the fish
+	var/rodtension = 0 // if tension hits 100 the line snaps, pulling power is based on tension scaling from 0 - no pulling to 99 - strongest pull
 	var/list/fishables = list( //list of atoms that can be fished
 		/obj/machinery/bluespace_pond,
 		/turf/unsimulated/beach/water/deep,
+		/turf/space,
 		)
 	var/list/bait_types = list( // The types of bait this rod is able to use
 		/datum/bait_type/standard_bait,
@@ -137,7 +140,7 @@
 			return BT
 	return 0
 
-// TODO: Implement this proc
+// old proc, remove asap
 /obj/item/weapon/fishingrod/proc/do_fishing(var/mob/user as mob, var/atom/target)
 	var/holding = user.get_active_hand()
 	var/start_loc = user.loc
@@ -148,6 +151,15 @@
 		if(!user || user.isStunned() || !(user.loc == start_loc) || !(target.loc == target_start_loc) || !(user.find_held_item_by_type(src)))
 			return 0
 	return 1
+
+// TODO: FINISH THIS PROC AND THEN IMPLEMENT IT
+/obj/item/weapon/fishingrod/proc/do_fishing(var/mob/user as mob, var/atom/target)
+	busy = 1
+	fishstage = rand(30, 70)
+	rodtension = rand(20, 40)
+	var/sleepfraction = TIME_TO_CATCH_MAX / 10
+	for (var/i = 1; i <= 10; i++)
+		sleep(sleepfraction)
 
 /obj/item/weapon/fishingrod/attack_self(var/mob/user)
 	if(hookeditem && !busy)
