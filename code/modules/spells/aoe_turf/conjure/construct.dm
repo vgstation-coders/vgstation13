@@ -36,7 +36,7 @@
 	cast_sound = 'sound/items/welder.ogg'
 
 /spell/aoe_turf/conjure/floor/choose_targets(mob/user = usr)
-	return get_turf(user)
+	return list(get_turf(user))
 
 /spell/aoe_turf/conjure/floor/conjure_animation(var/atom/movable/overlay/animation, var/turf/target)
 	animation.icon_state = "cultfloor"
@@ -60,7 +60,7 @@
 	cast_sound = 'sound/items/welder.ogg'
 
 /spell/aoe_turf/conjure/wall/choose_targets(mob/user = usr)
-	return get_turf(user)
+	return list(get_turf(user))
 
 /spell/aoe_turf/conjure/wall/conjure_animation(var/atom/movable/overlay/animation, var/turf/target)
 	animation.icon_state = "cultwall"
