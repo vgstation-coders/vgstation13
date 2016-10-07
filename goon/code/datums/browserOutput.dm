@@ -203,10 +203,10 @@ For the main html chat area
 
 	// Either an atom or somebody fucked up and is gonna get a runtime, which I'm fine with.
 	var/atom/A = obj
-	var/key = "[istype(A.icon, /icon) ? "\ref[A.icon]" : A.icon]:[A.icon_state]"
+	var/key = "\ref[A.appearance]"
 	if (!bicon_cache[key]) // Doesn't exist, make it.
-		var/icon/I = icon(A.icon, A.icon_state, SOUTH, 1)
-		if (ishuman(obj)) // Shitty workaround for a BYOND issue.
+		var/icon/I = getFlatIcon(A, SOUTH)
+		if (!"[A.icon]") // Shitty workaround for a BYOND issue. Just... don't even question it.
 			var/icon/temp = I
 			I = icon()
 			I.Insert(temp, dir = SOUTH)
