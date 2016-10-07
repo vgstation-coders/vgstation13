@@ -68,6 +68,13 @@
 	icon_state = "webbing"
 	_color = "webbing"
 
+/obj/item/clothing/accessory/storage/webbing/paramed
+	name = "paramedic webbing"
+	desc = "Sturdy mess of synthcotton belts and buckles. Made to be worn by medical personnel"
+	icon_state = "vest_white"
+	_color = "vest_white"
+	slots = 4
+
 /obj/item/clothing/accessory/storage/black_vest
 	name = "black webbing vest"
 	desc = "Robust black synthcotton vest with lots of pockets to hold whatever you need, but cannot hold in hands."
