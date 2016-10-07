@@ -1,4 +1,2 @@
 author: BarneyGumball
-changes: 
-- tweak: "Limited the reason length, when ordering a crate, to 140 characters. (Sorry Woody, your amazing tale was breaking the cargo computer)"
-- bugfix: Fixed rare runtime on the supply ordering console.
+changes: []
