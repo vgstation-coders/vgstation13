@@ -174,7 +174,10 @@ var/list/blob_looks
 		apply_beam_damage(B)
 	update_health()
 	update_icon()
-
+	
+/obj/effect/blob/can_mech_drill()
+	return TRUE
+	
 /obj/effect/blob/process()
 	handle_beams()
 	Life()
