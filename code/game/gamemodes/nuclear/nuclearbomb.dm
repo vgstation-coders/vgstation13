@@ -1,5 +1,5 @@
 var/bomb_set
-var/global/obj/item/weapon/disk/nuclear/nukedisk
+var/obj/item/weapon/disk/nuclear/nukedisk
 
 /obj/machinery/nuclearbomb
 	name = "\improper Nuclear Fission Explosive"
