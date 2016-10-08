@@ -157,3 +157,9 @@
 	desc = "An encryption key for a radio headset.  Contains cypherkeys."
 	icon_state = "ert_cypherkey"
 	channels = list("Response Team" = 1, "Science" = 1, "Command" = 1, "Medical" = 1, "Engineering" = 1, "Security" = 1, "Mining" = 1, "Cargo" = 1,)
+
+/obj/item/device/encryptionkey/ai
+	name = "AI Encryption Key"
+	desc = "An encryption key for a radio headset.  Contains cypherkeys."
+	icon_state = "cap_cypherkey"
+	channels = list("AI Private" = 1, "Command" = 1, "Security" = 1, "Engineering" = 0, "Science" = 0, "Medical" = 0, "Supply" = 0, "Service" = 0)

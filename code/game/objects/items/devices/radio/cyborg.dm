@@ -116,5 +116,5 @@
 	name = "AI Integrated Radio"
 
 /obj/item/device/radio/borg/ai/New()
-	keyslot = new /obj/item/device/encryptionkey/heads/captain
+	keyslot = new /obj/item/device/encryptionkey/ai
 	..()
