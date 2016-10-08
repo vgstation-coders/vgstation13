@@ -67,7 +67,7 @@
 /datum/theft_objective/traitor/hand_tele
 	name = "a hand teleporter"
 	typepath = /obj/item/weapon/hand_tele
-	protected_jobs = list("Captain")
+	protected_jobs = list("Captain", "Research Director")
 
 /datum/theft_objective/traitor/rcd
 	name = "an RCD"
@@ -169,10 +169,10 @@
 /datum/theft_objective/traitor/planningframe
 	name = "the law planning frame"
 	typepath = /obj/item/weapon/planning_frame
-	protected_jobs = list("Captain", "Research Director")
+	protected_jobs = list("Captain", "Research Director", "Chief Engineer")
 
 /datum/theft_objective/traitor/belt
-	name = "the advanced toolbelt"
+	name = "the chief engineers advanced toolbelt"
 	typepath = /obj/item/weapon/storage/belt/utility/chief
 	protected_jobs = list("Captain", "Chief Engineer")
 

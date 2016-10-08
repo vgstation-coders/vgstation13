@@ -3,4 +3,5 @@ changes:
 - rscadd: "Added new antagonist steal objectives: A TTV, the CE's fancy belt, the telebaton, the planning frame and the antibody scanner."
 - tweak: "Some jobs with easy access to old objectives have been removed from being able to take these items (mostly the captain taking jumpsuits)."
 - rscdel: "Removes the AI steal objective as you never actually needed to steal an AI, just the AI card."
+- tweak: "Roboticists no longer have Toxins access, and scientists no longer have robotics access."
 delete-after: false
