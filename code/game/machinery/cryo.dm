@@ -380,7 +380,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 								overlays += cryo_health_indicator["average"]
 							if(25 to 50)
 								overlays += cryo_health_indicator["bad"]
-							if(1 to 25)
+							if(0 to 25)
 								overlays += cryo_health_indicator["worse"]
 							else //Shouldn't ever happen.
 								overlays += cryo_health_indicator["dead"]
