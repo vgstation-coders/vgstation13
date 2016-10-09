@@ -249,10 +249,9 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 /mob/living/carbon/monkey/take_blood(obj/item/weapon/reagent_containers/container, var/amount)
 
-	if(vessel.get_reagent_amount(BLOOD) < amount || isDead())
+	if(vessel.get_reagent_amount(BLOOD) < amount)
 		return null
 
-	adjustOxyLoss(amount)
 	. = ..()
 	vessel.remove_reagent(BLOOD,amount)
 
