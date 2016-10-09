@@ -118,6 +118,8 @@
 		add_language(languagetoadd)
 		default_language = all_languages[languagetoadd]
 
+		make_blood()
+
 	..()
 	update_icons()
 	return
