@@ -1,0 +1,4 @@
+author: coldcola
+delete-after: True
+changes:
+- tweak: Allows all Command Staff to change the Security Code.
