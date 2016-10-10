@@ -9,7 +9,7 @@
 	fits_max_w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
 	storage_slots = 4
-	req_access = list(access_armory)
+	req_one_access = list(access_armory)
 	var/locked = 1
 	var/broken = 0
 	var/icon_locked = "lockbox+l"
@@ -17,8 +17,7 @@
 	var/icon_broken = "lockbox+b"
 	var/tracked_access = "It doesn't look like it's ever been used."
 	health = 50
-
-
+	var/oneuse = 0
 
 /obj/item/weapon/storage/lockbox/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/card/id))
@@ -37,6 +36,10 @@
 				src.icon_state = src.icon_closed
 				to_chat(user, "<span class='rose'>You unlock the [src.name]!</span>")
 				tracked_access = "The tracker reads: 'Last unlocked by [ID.registered_name].'"
+				if(oneuse)
+					for(var/atom/movable/A in src)
+						remove_from_storage(A, loc)
+					qdel(src)
 				return
 		else
 			to_chat(user, "<span class='warning'>Access Denied.</span>")
@@ -46,7 +49,11 @@
 		desc = "It appears to be broken."
 		icon_state = src.icon_broken
 		for(var/mob/O in viewers(user, 3))
-			O.show_message(text("<span class='notice'>The locker has been broken by [] with an electromagnetic card!</span>", user), 1, text("You hear a faint electrical spark."), 2)
+			O.show_message(text("<span class='notice'>The lockbox has been broken by [] with an electromagnetic card!</span>", user), 1, text("You hear a faint electrical spark."), 2)
+		if(oneuse)
+			for(var/atom/movable/A in src)
+				remove_from_storage(A, loc)
+			qdel(src)
 
 	if(!locked)
 		. = ..()
@@ -70,19 +77,32 @@
 			health -= Proj.damage
 	..()
 	if(health <= 0)
-		for(var/atom/movable/A as mob|obj in src)
+		for(var/atom/movable/A in src)
+			for(var/obj/O in src)
+				O.become_defective()
 			remove_from_storage(A, loc)
 		qdel(src)
 	return
 
 /obj/item/weapon/storage/lockbox/ex_act(severity)
-	var/newsev = max(3,severity+1)
-	for(var/atom/movable/A as mob|obj in src)//pulls everything out of the locker and hits it with an explosion
-		remove_from_storage(A, loc)
-		A.ex_act(newsev)
-	newsev=4-severity
-	if(prob(newsev*25)+25) // 1=100, 2=75, 3=50
-		qdel(src)
+	switch(severity)
+		if(1)
+			qdel(src)
+		if(2)
+			if(prob(80))
+				for(var/atom/movable/A in src)
+					for(var/obj/O in src)
+						O.become_defective()
+					remove_from_storage(A, loc)
+					A.ex_act(3)
+				qdel(src)
+		if(3)
+			if(prob(50))
+				for(var/atom/movable/A in src)
+					for(var/obj/O in src)
+						O.become_defective()
+					remove_from_storage(A, loc)
+				qdel(src)
 
 /obj/item/weapon/storage/lockbox/emp_act(severity)
 	..()
@@ -92,14 +112,35 @@
 				if(prob(80))
 					locked = !locked
 					src.update_icon()
+					if(!locked)
+						for(var/atom/movable/A in src)
+							for(var/obj/O in src)
+								O.become_defective()
+							remove_from_storage(A, loc)
+						if(oneuse)
+							qdel(src)
 			if(2)
 				if(prob(50))
 					locked = !locked
 					src.update_icon()
+					if(!locked)
+						for(var/atom/movable/A in src)
+							for(var/obj/O in src)
+								O.become_defective()
+							remove_from_storage(A, loc)
+						if(oneuse)
+							qdel(src)
 			if(3)
 				if(prob(25))
 					locked = !locked
 					src.update_icon()
+					if(!locked)
+						for(var/atom/movable/A in src)
+							for(var/obj/O in src)
+								O.become_defective()
+							remove_from_storage(A, loc)
+						if(oneuse)
+							qdel(src)
 
 /obj/item/weapon/storage/lockbox/update_icon()
 	..()
@@ -113,7 +154,7 @@
 
 /obj/item/weapon/storage/lockbox/loyalty
 	name = "lockbox (loyalty implants)"
-	req_access = list(access_security)
+	req_one_access = list(access_security)
 
 /obj/item/weapon/storage/lockbox/loyalty/New()
 	..()
@@ -124,7 +165,7 @@
 
 /obj/item/weapon/storage/lockbox/tracking
 	name = "lockbox (tracking implants)"
-	req_access = list(access_security)
+	req_one_access = list(access_security)
 
 /obj/item/weapon/storage/lockbox/tracking/New()
 	..()
@@ -136,7 +177,7 @@
 
 /obj/item/weapon/storage/lockbox/chem
 	name = "lockbox (chemical implants)"
-	req_access = list(access_security)
+	req_one_access = list(access_security)
 
 /obj/item/weapon/storage/lockbox/chem/New()
 	..()
@@ -149,7 +190,7 @@
 /obj/item/weapon/storage/lockbox/clusterbang
 	name = "lockbox (clusterbang)"
 	desc = "You have a bad feeling about opening this."
-	req_access = list(access_security)
+	req_one_access = list(access_security)
 
 /obj/item/weapon/storage/lockbox/clusterbang/New()
 	..()
@@ -158,7 +199,7 @@
 /obj/item/weapon/storage/lockbox/secway
 	name = "lockbox (secway keys)"
 	desc = "Nobody knows this mall better than I do."
-	req_access = list(access_security)
+	req_one_access = list(access_security)
 	
 /obj/item/weapon/storage/lockbox/secway/New()
 	..()
@@ -170,7 +211,7 @@
 /obj/item/weapon/storage/lockbox/unlockable
 	name = "semi-secure lockbox"
 	desc = "A securable locked box. Can't lock anything, but can track whoever used it."
-	req_access = list()
+	req_one_access = list()
 
 /obj/item/weapon/storage/lockbox/examine(mob/user)
 	..()
@@ -207,7 +248,7 @@
 	force = 8
 	throwforce = 10
 	storage_slots = 20
-	req_access = list(access_qm)
+	req_one_access = list(access_qm)
 	locked = 1
 	broken = 0
 	icon_locked = "coinbox+l"
@@ -216,8 +257,12 @@
 
 /obj/item/weapon/storage/lockbox/lawgiver
 	name = "lockbox (lawgiver)"
-	req_access = list(access_armory)
+	req_one_access = list(access_armory)
 
 /obj/item/weapon/storage/lockbox/lawgiver/New()
 	..()
 	new /obj/item/weapon/gun/lawgiver(src)
+
+/obj/item/weapon/storage/lockbox/oneuse
+	desc = "A locked box. When unlocked, the case will fall apart."
+	oneuse = 1

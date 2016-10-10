@@ -36,6 +36,54 @@
 	projectile_type = /obj/item/projectile/beam
 	charge_cost = 50
 
+/obj/item/weapon/gun/energy/laser/failure_check(var/mob/living/carbon/human/M)
+	if(istext(projectile_type))
+		projectile_type = text2path(projectile_type)
+	switch(projectile_type)
+		if(/obj/item/projectile/beam/captain)
+			if(prob(5))
+				downgradelaser(M)
+				return 1
+		if(/obj/item/projectile/beam/heavylaser)
+			if(prob(15))
+				downgradelaser(M)
+				return 1
+		if(/obj/item/projectile/beam, /obj/item/projectile/beam/retro)
+			if(prob(10))
+				downgradelaser(M)
+				return 1
+		if(/obj/item/projectile/beam/lightlaser)
+			if(prob(8))
+				downgradelaser(M)
+				return 1
+		if(/obj/item/projectile/beam/weaklaser)
+			if(prob(5))
+				downgradelaser(M)
+				return 1
+	if(prob(1))
+		to_chat(M, "<span class='danger'>\The [src] explodes!.</span>")
+		explosion(get_turf(loc), -1, 0, 2)
+		M.drop_item(src, force_drop = 1)
+		qdel(src)
+		return 0
+	return ..()
+
+/obj/item/weapon/gun/energy/laser/proc/downgradelaser(var/mob/living/carbon/human/M)
+	switch(projectile_type)
+		if(/obj/item/projectile/beam/heavylaser)
+			projectile_type = /obj/item/projectile/beam
+			fire_sound = 'sound/weapons/Laser.ogg'
+		if(/obj/item/projectile/beam/captain, /obj/item/projectile/beam, /obj/item/projectile/beam/retro)
+			projectile_type = /obj/item/projectile/beam/lightlaser
+		if(/obj/item/projectile/beam/lightlaser)
+			projectile_type = /obj/item/projectile/beam/weaklaser
+		if(/obj/item/projectile/beam/weaklaser)
+			projectile_type = /obj/item/projectile/beam/veryweaklaser
+	in_chamber = null
+	in_chamber = new projectile_type(src)
+	fire_delay +=3
+	to_chat(M, "<span class='warning'>Something inside \the [src] pops.</span>")
+
 /obj/item/weapon/gun/energy/laser/admin
 	name = "infinite laser gun"
 	desc = "Spray and /pray."
@@ -153,7 +201,7 @@ obj/item/weapon/gun/energy/laser/retro
 		charge_tick = 0
 
 
-/obj/item/weapon/gun/energy/lasercannon
+/obj/item/weapon/gun/energy/laser/cannon
 	name = "laser cannon"
 	desc = "With the L.A.S.E.R. cannon, the lasing medium is enclosed in a tube lined with uranium-235 and subjected to high neutron flux in a nuclear reactor core. This incredible technology may help YOU achieve high excitation rates with small laser volumes!"
 	icon_state = "lasercannon"
@@ -168,14 +216,14 @@ obj/item/weapon/gun/energy/laser/retro
 	isHandgun()
 		return 0
 
-/obj/item/weapon/gun/energy/lasercannon/empty/New()
+/obj/item/weapon/gun/energy/laser/cannon/empty/New()
 	..()
 
 	if(power_supply)
 		power_supply.charge = 0
 		update_icon()
 
-/obj/item/weapon/gun/energy/lasercannon/cyborg/process_chambered()
+/obj/item/weapon/gun/energy/laser/cannon/cyborg/process_chambered()
 	if(in_chamber)
 		return 1
 	if(isrobot(src.loc))
@@ -186,7 +234,7 @@ obj/item/weapon/gun/energy/laser/retro
 			return 1
 	return 0
 
-/obj/item/weapon/gun/energy/lasercannon/cyborg/restock()
+/obj/item/weapon/gun/energy/laser/cannon/cyborg/restock()
 	if(power_supply.charge < power_supply.maxcharge)
 		power_supply.give(charge_cost)
 		update_icon()
@@ -213,6 +261,30 @@ obj/item/weapon/gun/energy/laser/retro
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=2"
 	projectile_type = /obj/item/projectile/energy/plasma
 	charge_cost = 50
+
+/obj/item/weapon/gun/energy/plasma/failure_check(var/mob/living/carbon/human/M)
+	if(prob(15))
+		fire_delay += rand(2, 6)
+		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+		s.set_up(3, 1, src)
+		s.start()
+		to_chat(M, "<span class='warning'>\The [src] sparks violently.</span>")
+		return 1
+	if(prob(5))
+		M.drop_item()
+		M.emote("scream",,, 1)
+		M.adjustFireLossByPart(rand(5, 10), LIMB_LEFT_HAND, src)
+		M.adjustFireLossByPart(rand(5, 10), LIMB_RIGHT_HAND, src)
+		to_chat(M, "<span class='danger'>\The [src] burns your hands!.</span>")
+		return 0
+	if(prob(max(0, fire_delay/2-5)))
+		var/turf/T = get_turf(loc)
+		explosion(T, 0, 1, 3, 5)
+		M.drop_item(src, force_drop = 1)
+		qdel(src)
+		to_chat(M, "<span class='danger'>\The [src] explodes!.</span>")
+		return 0
+	return ..()
 
 /obj/item/weapon/gun/energy/plasma/pistol
 	name = "plasma pistol"

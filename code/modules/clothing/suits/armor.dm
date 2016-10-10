@@ -119,6 +119,17 @@
 	blood_overlay_type = "armor"
 	armor = list(melee = 10, bullet = 10, laser = 80, energy = 50, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0
+	var/basereflectchance = 60
+
+/obj/item/clothing/suit/armor/laserproof/become_defective()
+	if(!defective)
+		..()
+		if(prob(75))
+			basereflectchance -= rand(basereflectchance/3, basereflectchance)
+		if(prob(50))
+			slowdown++
+		if(prob(50))
+			slowdown++
 
 /obj/item/clothing/suit/armor/swat/officer
 	name = "officer jacket"
