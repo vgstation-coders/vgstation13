@@ -3,7 +3,7 @@
 
 #define FAILED_TO_ADD 1
 
-/obj/item/borg/upgrade/var/vtec_bonus = 0.5
+/obj/item/borg/upgrade/var/vtec_bonus = 0.25
 
 /obj/item/borg/upgrade
 	name = "A borg upgrade module."
