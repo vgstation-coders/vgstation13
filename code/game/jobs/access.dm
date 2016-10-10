@@ -95,9 +95,9 @@
 /var/const/access_paramedic = 500
 /var/const/access_mechanic = 501
 
-/obj/var/list/req_access = null
+/obj/var/list/req_access = list()
 /obj/var/req_access_txt = "0"			// A user must have ALL of these accesses to use the object
-/obj/var/list/req_one_access = null
+/obj/var/list/req_one_access = list()
 /obj/var/req_one_access_txt = "0"		// If this list is populated, a user must have at least ONE of these accesses to use the object
 
 //returns 1 if this mob has sufficient access to use this object

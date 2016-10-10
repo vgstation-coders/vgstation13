@@ -25,7 +25,7 @@
 		if(src.broken)
 			to_chat(user, "<span class='rose'>It appears to be broken.</span>")
 			return
-		if(src.allowed(user))
+		if(can_access(ID.GetAccess(), req_access, req_one_access))
 			src.locked = !( src.locked )
 			if(src.locked)
 				src.icon_state = src.icon_locked
