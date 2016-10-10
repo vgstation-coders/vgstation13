@@ -97,6 +97,9 @@
 			if(istype(S, /obj/structure/window/barricade/full/block))
 				to_chat(user, "<span class='warning'>There already is a barricade here</span>")
 				return
+			if(istype(A, /obj/structure/window/barricade))
+				to_chat(user, "<span class='warning'>There already is a barricade here</span>")
+				return
 			if(istype(S,/obj/structure/grille)) //Used as a makeshift check for a full window
 				user.visible_message("<span class='warning'>[user] starts barricading \the [A].</span>", \
 				"<span class='notice'>You start barricading \the [A].</span>")
@@ -109,6 +112,7 @@
 						qdel(src) //Get rid of it
 				break //If grilles somehow end up stacked, please don't multiply the problem
 		return 0 //Don't fire attack, please
+
 
 /obj/item/weapon/barricade_kit/attack(var/atom/A, mob/user as mob)
 
