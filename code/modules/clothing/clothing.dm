@@ -204,12 +204,6 @@
 			if(I)
 				I.stripped(stripper)
 
-/obj/item/clothing/become_defective()
-	if(!defective)
-		..()
-		for(var/A in armor)
-			armor[A] -= rand(armor[A]/3, armor[A])
-
 //Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears
 	name = "ears"

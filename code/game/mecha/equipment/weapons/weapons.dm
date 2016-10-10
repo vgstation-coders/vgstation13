@@ -12,24 +12,15 @@
 			return 1
 	return 0
 
+
 /obj/item/mecha_parts/mecha_equipment/weapon/energy
 	name = "General Energy Weapon"
-
-/obj/item/mecha_parts/mecha_equipment/weapon/energy/become_defective()
-	if(!defective)
-		..()
-		equip_cooldown = rand(equip_cooldown*1.5, equip_cooldown*2.5)
-		energy_drain = rand(energy_drain*3, energy_drain*5)
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/action(atom/target)
 	if(!action_checks(target))
 		return
-	var/originaltarget = target
 	var/turf/curloc = chassis.loc
 	var/atom/targloc = get_turf(target)
-	if(defective)
-		target = get_inaccuracy(originaltarget, 1, chassis)
-		targloc = get_turf(target)
 	if (!targloc || !istype(targloc, /turf) || !curloc)
 		return
 	if (targloc == curloc)
@@ -46,9 +37,9 @@
 	chassis.use_power(energy_drain)
 	A.OnFired()
 	A.process()
-	chassis.log_message("Fired from [src.name], targeting [originaltarget].")
-	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [originaltarget] ([formatJumpTo(chassis)])",0,1)
-	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [originaltarget] ([formatLocation(chassis)])")
+	chassis.log_message("Fired from [src.name], targeting [target].")
+	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [target] ([formatJumpTo(chassis)])",0,1)
+	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [target] ([formatLocation(chassis)])")
 	do_after_cooldown()
 	return
 
@@ -160,22 +151,8 @@
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic
 	name = "General Ballisic Weapon"
-	var/max_projectiles
 	var/projectiles
 	var/projectile_energy_cost
-
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/New()
-	..()
-	projectiles = max_projectiles
-
-/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/become_defective()
-	if(!defective)
-		..()
-		equip_cooldown = rand(equip_cooldown*2, equip_cooldown*3)
-		projectile_energy_cost = rand(projectile_energy_cost*1.5, projectile_energy_cost*3)
-		max_projectiles = rand(max_projectiles/4, max_projectiles*0.75)
-		if(max_projectiles < projectiles)
-			projectiles = max_projectiles
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/action_checks(atom/target)
 	if(..())
@@ -184,11 +161,11 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/get_equip_info()
-	return "[..()]\[[src.projectiles]\][(src.projectiles < src.max_projectiles)?" - <a href='?src=\ref[src];rearm=1'>Rearm</a>":null]"
+	return "[..()]\[[src.projectiles]\][(src.projectiles < initial(src.projectiles))?" - <a href='?src=\ref[src];rearm=1'>Rearm</a>":null]"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/proc/rearm()
-	if(projectiles < max_projectiles)
-		var/projectiles_to_add = max_projectiles - projectiles
+	if(projectiles < initial(projectiles))
+		var/projectiles_to_add = initial(projectiles) - projectiles
 		while(chassis.get_charge() >= projectile_energy_cost && projectiles_to_add)
 			projectiles++
 			projectiles_to_add--
@@ -210,34 +187,29 @@
 	equip_cooldown = 20
 	projectile = /obj/item/projectile/bullet/midbullet
 	fire_sound = 'sound/weapons/shotgun.ogg'
-	max_projectiles = 40
+	projectiles = 40
 	projectile_energy_cost = 25
 	var/projectiles_per_shot = 4
-//	var/deviation = 0.7  //the shots were perfectly accurate no matter what this was set to
+	var/deviation = 0.7
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot/action(atom/target)
 	if(!action_checks(target))
 		return
-	var/originaltarget = target
 	var/turf/curloc = get_turf(chassis)
 	var/turf/targloc = get_turf(target)
 	if(!curloc || !targloc)
 		return
-//	var/target_x = targloc.x
-//	var/target_y = targloc.y
-//	var/target_z = targloc.z
-//	targloc = null
+	var/target_x = targloc.x
+	var/target_y = targloc.y
+	var/target_z = targloc.z
+	targloc = null
 	for(var/i=1 to min(projectiles, projectiles_per_shot))
-//		targloc = locate(target_x+GaussRandRound(deviation,1),target_y+GaussRandRound(deviation,1),target_z)
-		if(defective)
-			target = get_inaccuracy(originaltarget, 2, chassis)
-			targloc = get_turf(target)
+		targloc = locate(target_x+GaussRandRound(deviation,1),target_y+GaussRandRound(deviation,1),target_z)
 		if(!targloc || targloc == curloc)
 			break
 		playsound(chassis, fire_sound, 80, 1)
 		var/obj/item/projectile/A = getFromPool(projectile,curloc)//new projectile(curloc)
 		src.projectiles--
-		A.firer = chassis.occupant
 		A.original = target
 		A.current = curloc
 		A.starting = curloc
@@ -246,9 +218,9 @@
 		set_ready_state(0)
 		A.OnFired()
 		A.process()
-	log_message("Fired from [src.name], targeting [originaltarget].")
-	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [originaltarget] ([formatJumpTo(chassis)])",0,1)
-	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [originaltarget] ([formatLocation(chassis)])")
+	log_message("Fired from [src.name], targeting [target].")
+	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [target] ([formatJumpTo(chassis)])",0,1)
+	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [target] ([formatLocation(chassis)])")
 	do_after_cooldown()
 	return
 
@@ -260,28 +232,24 @@
 	equip_cooldown = 10
 	projectile = /obj/item/projectile/bullet/weakbullet
 	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
-	max_projectiles = 300
+	projectiles = 300
 	projectile_energy_cost = 20
 	var/projectiles_per_shot = 3
-//	var/deviation = 0.3
+	var/deviation = 0.3
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg/action(atom/target)
 	if(!action_checks(target))
 		return
-	var/originaltarget = target
 	var/turf/targloc = get_turf(target)
-//	var/target_x = targloc.x
-//	var/target_y = targloc.y
-//	var/target_z = targloc.z
-//	targloc = null
+	var/target_x = targloc.x
+	var/target_y = targloc.y
+	var/target_z = targloc.z
+	targloc = null
 	spawn	for(var/i=1 to min(projectiles, projectiles_per_shot))
 		if(!chassis)
 			break
 		var/turf/curloc = get_turf(chassis)
-//		targloc = locate(target_x+GaussRandRound(deviation,1),target_y+GaussRandRound(deviation,1),target_z)
-		if(defective)
-			target = get_inaccuracy(originaltarget, 2, chassis)
-			targloc = get_turf(target)
+		targloc = locate(target_x+GaussRandRound(deviation,1),target_y+GaussRandRound(deviation,1),target_z)
 		if (!targloc || !curloc)
 			continue
 		if (targloc == curloc)
@@ -290,7 +258,6 @@
 		playsound(chassis, fire_sound, 50, 1)
 		var/obj/item/projectile/A = new projectile(curloc)
 		src.projectiles--
-		A.firer = chassis.occupant
 		A.original = target
 		A.current = curloc
 		A.starting = curloc
@@ -300,9 +267,9 @@
 		A.process()
 		sleep(2)
 	set_ready_state(0)
-	log_message("Fired from [src.name], targeting [originaltarget].")
-	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [originaltarget] ([formatJumpTo(chassis)])",0,1)
-	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [originaltarget] ([formatLocation(chassis)])")
+	log_message("Fired from [src.name], targeting [target].")
+	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [target] ([formatJumpTo(chassis)])",0,1)
+	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [target] ([formatLocation(chassis)])")
 	do_after_cooldown()
 	return
 
@@ -311,7 +278,7 @@
 	icon_state = "mecha_missilerack"
 	projectile = /obj/item/missile
 	fire_sound = 'sound/weapons/rocket.ogg'
-	max_projectiles = 8
+	projectiles = 8
 	projectile_energy_cost = 1000
 	equip_cooldown = 60
 	var/missile_speed = 2
@@ -324,14 +291,11 @@
 	var/obj/item/missile/M = new projectile(chassis.loc)
 	M.primed = 1
 	playsound(chassis, fire_sound, 50, 1)
-	var/originaltarget = target
-	if(defective)
-		target = get_inaccuracy(originaltarget, 2, chassis)
 	M.throw_at(target, missile_range, missile_speed)
 	projectiles--
-	log_message("Fired from [src.name], targeting [originaltarget].")
-	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [originaltarget] ([formatJumpTo(chassis)])",0,1)
-	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [originaltarget] ([formatLocation(chassis)])")
+	log_message("Fired from [src.name], targeting [target].")
+	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [target] ([formatJumpTo(chassis)])",0,1)
+	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [target] ([formatLocation(chassis)])")
 	do_after_cooldown()
 	return
 
@@ -355,7 +319,7 @@
 	icon_state = "mecha_grenadelnchr"
 	projectile = /obj/item/weapon/grenade/flashbang
 	fire_sound = 'sound/weapons/grenadelauncher.ogg'
-	max_projectiles = 6
+	projectiles = 6
 	missile_speed = 1.5
 	projectile_energy_cost = 800
 	equip_cooldown = 60
@@ -367,14 +331,11 @@
 	set_ready_state(0)
 	var/obj/item/weapon/grenade/flashbang/F = new projectile(chassis.loc)
 	playsound(chassis, fire_sound, 50, 1)
-	var/originaltarget = target
-	if(defective)
-		target = get_inaccuracy(originaltarget, 3, chassis)
 	F.throw_at(target, missile_range, missile_speed)
 	projectiles--
-	log_message("Fired from [src.name], targeting [originaltarget].")
-	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [originaltarget] ([formatJumpTo(chassis)])",0,1)
-	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [originaltarget] ([formatLocation(chassis)])")
+	log_message("Fired from [src.name], targeting [target].")
+	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [target] ([formatJumpTo(chassis)])",0,1)
+	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [target] ([formatLocation(chassis)])")
 	spawn(det_time)
 		F.prime()
 	do_after_cooldown()
@@ -395,7 +356,7 @@
 	icon_state = "mecha_bananamrtr"
 	projectile = /obj/item/weapon/bananapeel
 	fire_sound = 'sound/items/bikehorn.ogg'
-	max_projectiles = 15
+	projectiles = 15
 	missile_speed = 1.5
 	projectile_energy_cost = 100
 	equip_cooldown = 20
@@ -425,7 +386,7 @@
 	icon_state = "mecha_mousetrapmrtr"
 	projectile = /obj/item/device/assembly/mousetrap
 	fire_sound = 'sound/items/bikehorn.ogg'
-	max_projectiles = 15
+	projectiles = 15
 	missile_speed = 1.5
 	projectile_energy_cost = 100
 	equip_cooldown = 10
@@ -456,7 +417,7 @@
 	icon_state = "mecha_bananamrtr"
 	projectile = /obj/item/weapon/reagent_containers/food/snacks/pie/empty //because some chucklefuck will try to catch the pie somehow for free nutriment
 	fire_sound = 'sound/items/bikehorn.ogg'
-	max_projectiles = 15
+	projectiles = 15
 	missile_speed = 0.75 //for maximum pie-traveling
 	projectile_energy_cost = 100
 	equip_cooldown = 5
@@ -487,7 +448,7 @@
 	icon_state = "mecha_bolas"
 	projectile = /obj/item/weapon/legcuffs/bolas
 	fire_sound = 'sound/weapons/whip.ogg'
-	max_projectiles = 10
+	projectiles = 10
 	missile_speed = 1
 	missile_range = 30
 	projectile_energy_cost = 50
@@ -500,14 +461,11 @@
 	set_ready_state(0)
 	var/obj/item/weapon/legcuffs/bolas/M = new projectile(chassis.loc)
 	playsound(chassis, fire_sound, 50, 1)
-	var/originaltarget = target
-	if(defective)
-		target = get_inaccuracy(originaltarget, 1, chassis)
 	M.thrown_from = src
 	M.throw_at(target, missile_range, missile_speed)
 	projectiles--
-	log_message("Fired from [src.name], targeting [originaltarget].")
-	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [originaltarget] ([formatJumpTo(chassis)])",0,1)
-	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [originaltarget] ([formatLocation(chassis)])")
+	log_message("Fired from [src.name], targeting [target].")
+	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [target] ([formatJumpTo(chassis)])",0,1)
+	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [target] ([formatLocation(chassis)])")
 	do_after_cooldown()
 	return
