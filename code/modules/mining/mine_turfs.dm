@@ -255,15 +255,14 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 		playsound(user, P.drill_sound, 20, 1)
 
-		//handle any archaeological finds we might uncover
 		var/fail_message = ""
+		//handle any archaeological finds we might uncover
 		if(finds && finds.len)
 			var/datum/find/F = finds[1]
+
 			if(excavation_level + P.excavation_amount > F.excavation_required)
-
-				fail_message = ", <b>[pick("there is a crunching noise","[W] collides with some different rock","part of the rock face crumbles away","something breaks under [W]")]</b>"
-
-		to_chat(user, "<span class='rose'>You start [P.drill_verb][fail_message].</span>")
+				fail_message = "<b>[pick("There is a crunching noise","[W] collides with some different rock","Part of the rock face crumbles away","Something breaks under [W]")]</b>"
+				to_chat(user, "<span class='rose'>[fail_message].</span>")
 
 		if(fail_message && prob(90))
 			if(prob(5))
@@ -276,8 +275,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		busy = 1
 
 		if(do_after(user, src, P.digspeed) && user)
-			to_chat(user, "<span class='notice'>You finish [P.drill_verb] the rock.</span>")
-
 			busy = 0
 
 			if(finds && finds.len)
