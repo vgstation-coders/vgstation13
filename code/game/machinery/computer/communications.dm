@@ -110,7 +110,7 @@ var/shuttle_call/shuttle_calls[0]
 				var/obj/item/device/pda/pda = I
 				I = pda.id
 			if (I && istype(I))
-				if(access_captain in I.access || access_heads in I.access) //Let heads change the alert level.
+				if(access_heads in I.access) //Let heads change the alert level.
 					var/old_level = security_level
 					if(!tmp_alertlevel)
 						tmp_alertlevel = SEC_LEVEL_GREEN
