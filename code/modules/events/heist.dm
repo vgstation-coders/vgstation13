@@ -86,6 +86,7 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 		vox.dna.mutantrace = "vox"
 		vox.set_species("Vox")
 		vox.generate_name()
+		vox.dna.real_name = vox.real_name
 		//vox.languages = HUMAN // Removing language from chargen.
 		vox.add_language(LANGUAGE_VOX)
 		vox.remove_language(LANGUAGE_GALACTIC_COMMON)

@@ -122,6 +122,7 @@
 	M.mind.name = newname
 	M.real_name = newname
 	M.name = newname
+	M.dna.real_name = newname
 	var/datum/objective/protect/new_objective = new /datum/objective/protect
 	new_objective.owner = M:mind
 	new_objective:target = usr:mind

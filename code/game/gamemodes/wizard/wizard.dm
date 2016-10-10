@@ -149,6 +149,7 @@
 
 		wizard_mob.real_name = newname
 		wizard_mob.name = newname
+		wizard_mob.dna.real_name = newname
 		if(wizard_mob.mind)
 			wizard_mob.mind.name = newname
 	return

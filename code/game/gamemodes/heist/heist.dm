@@ -97,6 +97,7 @@
 		vox.dna.mutantrace = "vox"
 		vox.set_species("Vox")
 		vox.generate_name()
+		vox.dna.real_name = vox.real_name
 		//vox.languages = HUMAN // Removing language from chargen.
 		vox.default_language = all_languages[LANGUAGE_VOX]
 		vox.species.default_language = LANGUAGE_VOX

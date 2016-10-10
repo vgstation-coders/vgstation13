@@ -447,4 +447,5 @@
 			if(FEMALE)
 				synd_mind.name = "[pick(first_names_female)] [lastname]"
 		synd_mind.current.real_name = synd_mind.name
+		synd_mind.current.dna.real_name = synd_mind.name
 	return
