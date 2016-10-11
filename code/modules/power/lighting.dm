@@ -285,13 +285,13 @@ var/global/list/obj/machinery/light/alllights = list()
 	..()
 	switch(status)
 		if(LIGHT_OK)
-			to_chat(user, "<span class='info'>[desc] It is turned [on? "on" : "off"].</span>")
+			to_chat(user, "<span class='info'>It is turned [on? "on" : "off"].</span>")
 		if(LIGHT_EMPTY)
-			to_chat(user, "<span class='info'>[desc] The [fitting] has been removed.</span>")
+			to_chat(user, "<span class='info'>The [fitting] has been removed.</span>")
 		if(LIGHT_BURNED)
-			to_chat(user, "<span class='info'>[desc] The [fitting] is burnt out.</span>")
+			to_chat(user, "<span class='info'>The [fitting] is burnt out.</span>")
 		if(LIGHT_BROKEN)
-			to_chat(user, "<span class='info'>[desc] The [fitting] has been smashed.</span>")
+			to_chat(user, "<span class='info'>The [fitting] has been smashed.</span>")
 
 
 // attack with item - insert light (if right type), otherwise try to break the light
