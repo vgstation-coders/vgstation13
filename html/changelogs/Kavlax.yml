@@ -1,0 +1,7 @@
+
+author: Kavlax
+
+delete-after: True
+
+changes:
+    - rscadd: "Reduce mining message spam."
