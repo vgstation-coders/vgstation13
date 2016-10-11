@@ -79,7 +79,6 @@
 	if(health <= 0)
 		for(var/atom/movable/A in src)
 			for(var/obj/O in src)
-				O.become_defective()
 			remove_from_storage(A, loc)
 		qdel(src)
 	return
@@ -92,7 +91,6 @@
 			if(prob(80))
 				for(var/atom/movable/A in src)
 					for(var/obj/O in src)
-						O.become_defective()
 					remove_from_storage(A, loc)
 					A.ex_act(3)
 				qdel(src)
@@ -100,7 +98,6 @@
 			if(prob(50))
 				for(var/atom/movable/A in src)
 					for(var/obj/O in src)
-						O.become_defective()
 					remove_from_storage(A, loc)
 				qdel(src)
 
@@ -115,7 +112,6 @@
 					if(!locked)
 						for(var/atom/movable/A in src)
 							for(var/obj/O in src)
-								O.become_defective()
 							remove_from_storage(A, loc)
 						if(oneuse)
 							qdel(src)
@@ -126,7 +122,6 @@
 					if(!locked)
 						for(var/atom/movable/A in src)
 							for(var/obj/O in src)
-								O.become_defective()
 							remove_from_storage(A, loc)
 						if(oneuse)
 							qdel(src)
@@ -137,7 +132,6 @@
 					if(!locked)
 						for(var/atom/movable/A in src)
 							for(var/obj/O in src)
-								O.become_defective()
 							remove_from_storage(A, loc)
 						if(oneuse)
 							qdel(src)
@@ -200,14 +194,14 @@
 	name = "lockbox (secway keys)"
 	desc = "Nobody knows this mall better than I do."
 	req_one_access = list(access_security)
-	
+
 /obj/item/weapon/storage/lockbox/secway/New()
 	..()
 	new /obj/item/key/security(src)
 	new /obj/item/key/security(src)
 	new /obj/item/key/security(src)
 	new /obj/item/key/security(src)
-	
+
 /obj/item/weapon/storage/lockbox/unlockable
 	name = "semi-secure lockbox"
 	desc = "A securable locked box. Can't lock anything, but can track whoever used it."
