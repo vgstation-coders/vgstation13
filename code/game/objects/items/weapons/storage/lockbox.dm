@@ -94,7 +94,7 @@
 			if(prob(80))
 				for(var/atom/movable/A in src)
 					for(var/obj/O in src)
-					remove_from_storage(A, loc)
+					remove_from_storage(A, get_turf(src))
 					A.ex_act(3)
 				qdel(src)
 		if(3)
@@ -102,7 +102,6 @@
 				for(var/atom/movable/A in src)
 					for(var/obj/O in src)
 					remove_from_storage(A, get_turf(src))
-
 				qdel(src)
 
 /obj/item/weapon/storage/lockbox/emp_act(severity)
@@ -117,7 +116,6 @@
 						for(var/atom/movable/A in src)
 							for(var/obj/O in src)
 							remove_from_storage(A, get_turf(src))
-
 						if(oneuse)
 							qdel(src)
 			if(2)
@@ -128,7 +126,6 @@
 						for(var/atom/movable/A in src)
 							for(var/obj/O in src)
 							remove_from_storage(A, get_turf(src))
-
 						if(oneuse)
 							qdel(src)
 			if(3)
@@ -139,7 +136,6 @@
 						for(var/atom/movable/A in src)
 							for(var/obj/O in src)
 							remove_from_storage(A, get_turf(src))
-
 						if(oneuse)
 							qdel(src)
 
