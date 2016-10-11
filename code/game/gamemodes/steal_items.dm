@@ -72,7 +72,7 @@
 /datum/theft_objective/traitor/rcd
 	name = "an RCD"
 	typepath = /obj/item/device/rcd/matter/engineering
-	protected_jobs = list("Chief Engineer")
+	protected_jobs = list("Chief Engineer", "Atmospherics Technician", "Station Engineer")
 
 /datum/theft_objective/traitor/rpd
 	name = "an RPD"
@@ -87,14 +87,12 @@
 /datum/theft_objective/traitor/cap_jumpsuit
 	name = "the captain's jumpsuit"
 	typepath = /obj/item/clothing/under/rank/captain
-	protected_jobs = list("Captain")
+	protected_jobs = list("Captain", "Head of Personnel")
 
-/*
 /datum/theft_objective/traitor/ai
 	name = "a functional AI"
 	typepath = /obj/item/device/aicard
-*/
-
+	protected_jobs = list("Captain", "Research Director", "Head of Personnel")
 
 /datum/theft_objective/traitor/magboots
 	name = "a pair of advanced magboots"
@@ -124,22 +122,22 @@
 /datum/theft_objective/traitor/rd_jumpsuit
 	name = "the research director's jumpsuit"
 	typepath = /obj/item/clothing/under/rank/research_director
-	protected_jobs = list("Captain", "Research Director")
+	protected_jobs = list("Captain", "Research Director", "Head of Personnel")
 
 /datum/theft_objective/traitor/ce_jumpsuit
 	name = "the chief engineer's jumpsuit"
 	typepath = /obj/item/clothing/under/rank/chief_engineer
-	protected_jobs = list("Captain", "Chief Engineer")
+	protected_jobs = list("Captain", "Chief Engineer", "Head of Personnel")
 
 /datum/theft_objective/traitor/cmo_jumpsuit
 	name = "the chief medical officer's jumpsuit"
 	typepath = /obj/item/clothing/under/rank/chief_medical_officer
-	protected_jobs = list("Captain", "Chief Medical Officer")
+	protected_jobs = list("Captain", "Chief Medical Officer", "Head of Personnel")
 
 /datum/theft_objective/traitor/hos_jumpsuit
 	name = "the head of security's jumpsuit"
 	typepath = /obj/item/clothing/under/rank/head_of_security
-	protected_jobs = list("Captain", "Head of Security")
+	protected_jobs = list("Captain", "Head of Security", "Head of Personnel")
 
 /datum/theft_objective/traitor/hop_jumpsuit
 	name = "the head of personnel's jumpsuit"
@@ -169,17 +167,12 @@
 /datum/theft_objective/traitor/planningframe
 	name = "the law planning frame"
 	typepath = /obj/item/weapon/planning_frame
-	protected_jobs = list("Captain", "Research Director", "Chief Engineer")
+	protected_jobs = list("Captain", "Research Director", "Chief Engineer", "Head of Personnel")
 
 /datum/theft_objective/traitor/belt
 	name = "the chief engineers advanced toolbelt"
 	typepath = /obj/item/weapon/storage/belt/utility/chief
 	protected_jobs = list("Captain", "Chief Engineer")
-
-/datum/theft_objective/traitor/antibody
-	name = "an antibody scanner"
-	typepath = /obj/item/device/antibody_scanner
-	protected_jobs = list("Chief Medical Officer", "Medical Doctor")
 
 /datum/theft_objective/traitor/ttv
 	name = "a tank transfer valve"
