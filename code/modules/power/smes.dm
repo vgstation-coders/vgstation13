@@ -39,7 +39,7 @@
 
 /obj/machinery/power/battery/smes/initialize()
 	..()
-	spawn(50)
+	spawn(5)
 		if(!terminal)
 			stat |= BROKEN
 
