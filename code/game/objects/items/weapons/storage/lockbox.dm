@@ -1,5 +1,3 @@
-
-
 /obj/item/weapon/storage/lockbox
 	name = "lockbox"
 	desc = "A locked box."
@@ -25,7 +23,7 @@
 		if(src.broken)
 			to_chat(user, "<span class='rose'>It appears to be broken.</span>")
 			return
-		if(can_access(ID.GetAccess(), req_access, req_one_access))
+		if(src.allowed(user))
 			src.locked = !( src.locked )
 			if(src.locked)
 				src.icon_state = src.icon_locked
@@ -38,7 +36,7 @@
 				tracked_access = "The tracker reads: 'Last unlocked by [ID.registered_name].'"
 				if(oneuse)
 					for(var/atom/movable/A in src)
-						remove_from_storage(A, loc)
+						remove_from_storage(A, get_turf(src))
 					qdel(src)
 				return
 		else
@@ -52,7 +50,7 @@
 			O.show_message(text("<span class='notice'>The lockbox has been broken by [] with an electromagnetic card!</span>", user), 1, text("You hear a faint electrical spark."), 2)
 		if(oneuse)
 			for(var/atom/movable/A in src)
-				remove_from_storage(A, loc)
+				remove_from_storage(A, get_turf(src))
 			qdel(src)
 
 	if(!locked)
@@ -79,7 +77,7 @@
 	if(health <= 0)
 		for(var/atom/movable/A in src)
 			for(var/obj/O in src)
-			remove_from_storage(A, loc)
+			remove_from_storage(A, get_turf(src))
 		qdel(src)
 	return
 
@@ -91,14 +89,14 @@
 			if(prob(80))
 				for(var/atom/movable/A in src)
 					for(var/obj/O in src)
-					remove_from_storage(A, loc)
+					remove_from_storage(A, get_turf(src))
 					A.ex_act(3)
 				qdel(src)
 		if(3)
 			if(prob(50))
 				for(var/atom/movable/A in src)
 					for(var/obj/O in src)
-					remove_from_storage(A, loc)
+					remove_from_storage(A, get_turf(src))
 				qdel(src)
 
 /obj/item/weapon/storage/lockbox/emp_act(severity)
@@ -112,7 +110,7 @@
 					if(!locked)
 						for(var/atom/movable/A in src)
 							for(var/obj/O in src)
-							remove_from_storage(A, loc)
+							remove_from_storage(A, get_turf(src))
 						if(oneuse)
 							qdel(src)
 			if(2)
@@ -122,7 +120,7 @@
 					if(!locked)
 						for(var/atom/movable/A in src)
 							for(var/obj/O in src)
-							remove_from_storage(A, loc)
+							remove_from_storage(A, get_turf(src))
 						if(oneuse)
 							qdel(src)
 			if(3)
@@ -132,7 +130,7 @@
 					if(!locked)
 						for(var/atom/movable/A in src)
 							for(var/obj/O in src)
-							remove_from_storage(A, loc)
+							remove_from_storage(A, get_turf(src))
 						if(oneuse)
 							qdel(src)
 
