@@ -1,2 +1,4 @@
 author: BarneyGumball
-changes: []
+changes: 
+- bugfix: Pinpointers will now track the nuke disk properly when the disk is destroyed.
+- bugfix: Advanced Pinpointers work now.
