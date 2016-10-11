@@ -155,3 +155,20 @@
 		new /obj/item/clothing/suit/space/vox/pressure(src)
 		new /obj/item/clothing/under/vox/vox_casual(src)
 		new /obj/item/weapon/tank/jetpack/nitrogen(src)
+
+
+/obj/structure/closet/vox_raiders/trader
+	name = "vox armoury closet"
+	desc = "Polly wants a gun."
+	icon_state = "syndicate"
+	icon_closed = "syndicate"
+	icon_opened = "syndicateopen"
+
+	New()
+		sleep(2)
+		new /obj/item/clothing/head/helmet/space/vox/civ/trader(src)
+		new /obj/item/clothing/mask/breath/vox(src)
+		new /obj/item/clothing/shoes/magboots/vox(src)
+		new /obj/item/clothing/suit/space/vox/civ/trader(src)
+		new /obj/item/clothing/under/vox/vox_casual(src)
+		new /obj/item/weapon/tank/jetpack/nitrogen(src)
