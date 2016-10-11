@@ -25,7 +25,7 @@
 		if(src.broken)
 			to_chat(user, "<span class='rose'>It appears to be broken.</span>")
 			return
-		if(src.allowed(user))
+		if(check_access(ID))
 			src.locked = !( src.locked )
 			if(src.locked)
 				src.icon_state = src.icon_locked
