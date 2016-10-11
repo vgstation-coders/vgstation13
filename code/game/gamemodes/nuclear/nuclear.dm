@@ -443,8 +443,7 @@
 	for(var/datum/mind/synd_mind in syndicates)
 		switch(synd_mind.current.gender)
 			if(MALE)
-				synd_mind.name = "[pick(first_names_male)] [lastname]"
+				synd_mind.current.fully_replace_character_name(synd_mind.current.real_name, "[pick(first_names_male)] [lastname]")
 			if(FEMALE)
-				synd_mind.name = "[pick(first_names_female)] [lastname]"
-		synd_mind.current.real_name = synd_mind.name
+				synd_mind.current.fully_replace_character_name(synd_mind.current.real_name, "[pick(first_names_female)] [lastname]")
 	return
