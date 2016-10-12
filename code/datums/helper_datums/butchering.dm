@@ -17,6 +17,8 @@
 	var/stored_in_organ
 	//Example value: LIMB_HEAD or "arm". When an organ with the same type is cut off, this object will be transferred to it.
 
+	var/butcher_time = 20
+
 /datum/butchering_product/New()
 	..()
 
@@ -167,6 +169,7 @@
 	verb_name = "remove legs from"
 	verb_gerund = "removing legs from"
 	amount = 8 //Amount of legs that all normal spiders have
+	butcher_time = 10
 
 /datum/butchering_product/spider_legs/desc_modifier()
 	if(amount < 8)
@@ -190,6 +193,7 @@
 	verb_name = "remove legs from"
 	verb_gerund = "removing legs from"
 	amount = 2 //not a magic number, frogs have 2 legs
+	butcher_time = 10
 
 /datum/butchering_product/frog_leg/desc_modifier()
 	if(amount < 2)
@@ -201,6 +205,7 @@
 	result = /obj/item/asteroid/hivelord_core
 	verb_name = "remove the core from"
 	verb_gerund = "removing the core from"
+	butcher_time = 2
 
 /datum/butchering_product/hivelord_core/desc_modifier()
 	if(!amount)
