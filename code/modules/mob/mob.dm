@@ -186,11 +186,11 @@ var/global/obj/screen/fuckstat/FUCK = new
 		if(client)
 			client.screen -= gun_run_icon
 		gun_run_icon = null
-	if(gun_setting_icon)
-		returnToPool(gun_setting_icon)
-		if(client)
-			client.screen -= gun_setting_icon
-		gun_setting_icon = null
+	//if(gun_setting_icon)
+	//	returnToPool(gun_setting_icon)
+	//	if(client)
+	//		client.screen -= gun_setting_icon
+	//	gun_setting_icon = null
 	if(m_suitclothes)
 		returnToPool(m_suitclothes)
 		if(client)
