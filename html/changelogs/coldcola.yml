@@ -1,0 +1,4 @@
+author: coldcola
+delete-after: True
+changes:
+- tweak: no more infinite stack barricades
