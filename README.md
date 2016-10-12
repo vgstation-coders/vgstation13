@@ -1,10 +1,9 @@
-# vgstation
+# Atlas Station
+[![Build Status](https://travis-ci.org/AtlasStation/AtlasStation2.svg?branch=Bleeding-Edge)](https://travis-ci.org/AtlasStation/AtlasStation2)
 
-[Website](http://ss13.moe) - [Code](https://github.com/d3athrow/vgstation13)
+[Website](https://atlas-station.com/) - [Code](https://github.com/AtlasStation/AtlasStation2)
 
-[IRC](irc://irc.rizon.net/vgstation) (irc.rizon.net #vgstation), here is an embedded link to it
-
-[![Visit our IRC channel](https://kiwiirc.com/buttons/irc.rizon.net/vgstation.png)](https://kiwiirc.com/client/irc.rizon.net/?nick=Newcomer|?&theme=basic#vgstation)
+[Public Discord](https://discord.gg/aZN2VTp) < click for instant invite!
 
 ---
 
