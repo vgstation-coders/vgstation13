@@ -284,6 +284,7 @@
 					H.equip_or_collect(new /obj/item/clothing/under/rank/clown(H), slot_w_uniform)
 					H.equip_or_collect(new /obj/item/clothing/shoes/clown_shoes(H), slot_shoes)
 		H.real_name = pick(clown_names)
+		H.dna.real_name = H.real_name
 		H.rename_self("clown")
 		return 1
 

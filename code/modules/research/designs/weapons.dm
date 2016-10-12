@@ -20,7 +20,7 @@
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/energy/stunrevolver
 	locked = 1
-	req_lock_access = list(access_security)
+	req_lock_access = list(access_security, access_weapons)
 
 /datum/design/lasercannon
 	name = "Laser Cannon"
@@ -30,9 +30,9 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_DIAMOND = 2000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/energy/lasercannon
+	build_path = /obj/item/weapon/gun/energy/laser/cannon
 	locked = 1
-	req_lock_access = list(access_armory)
+	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/xcomplasmapistol
 	name = "Plasma Pistol"
@@ -44,7 +44,7 @@
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/energy/plasma/pistol
 	locked = 1
-	req_lock_access = list(access_armory)
+	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/xcomplasmarifle
 	name = "Plasma Cannon"
@@ -56,7 +56,7 @@
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/energy/plasma/rifle
 	locked = 1
-	req_lock_access = list(access_armory)
+	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/xcomlightplasmarifle
 	name = "Plasma Rifle"
@@ -68,7 +68,7 @@
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/energy/plasma/light
 	locked = 1
-	req_lock_access = list(access_armory)
+	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/xcomlaserrifle
 	name = "Laser Rifle"
@@ -80,7 +80,7 @@
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/energy/laser/rifle
 	locked = 1
-	req_lock_access = list(access_armory)
+	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/xcomlaserpistol
 	name = "Laser Pistol"
@@ -92,7 +92,7 @@
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/energy/laser/pistol
 	locked = 1
-	req_lock_access = list(access_armory)
+	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/xcomar
 	name = "Assault Rifle"
@@ -104,7 +104,7 @@
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/projectile/automatic/xcom/lockbox
 	locked = 1
-	req_lock_access = list(access_armory)
+	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/ammo_12mm
 	name = "Ammunition Box (12mm)"
@@ -136,7 +136,7 @@
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/energy/decloner
 	locked = 1
-	req_lock_access = list(access_armory)
+	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/chemsprayer
 	name = "Chem Sprayer"
@@ -170,7 +170,7 @@
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/energy/crossbow/largecrossbow
 	locked = 1
-	req_lock_access = list(access_armory)
+	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/temp_gun
 	name = "Temperature Gun"
@@ -216,7 +216,7 @@
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/projectile/automatic/lockbox
 	locked = 1
-	req_lock_access = list(access_armory)
+	req_lock_access = list(access_armory, access_weapons)
 
 /datum/design/ammo_9mm
 	name = "Ammunition Box (9mm)"

@@ -1,6 +1,8 @@
 /datum/controller/gameticker/proc/scoreboard(var/completions)
 
 
+	completions += mode.completion_text
+
 	//Calls auto_declare_completion_* for all modes
 	for(var/handler in typesof(/datum/game_mode/proc))
 		if(findtext("[handler]","auto_declare_completion_"))

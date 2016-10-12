@@ -13,6 +13,7 @@
 	fire_delay = 0
 	var/burstfire = 0 //Whether or not the gun fires multiple bullets at once
 	var/burst_count = 3
+	var/burstfiring = 0
 	load_method = 2
 	mag_type = "/obj/item/ammo_storage/magazine/smg9mm"
 
@@ -22,10 +23,13 @@
 /obj/item/weapon/gun/projectile/automatic/verb/ToggleFire()
 	set name = "Toggle Burstfire"
 	set category = "Object"
-	burstfire = !burstfire
-	if(!burstfire)//fixing a bug where burst fire being toggled on then off would leave the gun unable to shoot at its normal speed.
-		fire_delay = initial(fire_delay)
-	to_chat(usr, "You toggle \the [src]'s firing setting to [burstfire ? "burst fire" : "single fire"].")
+	if(!(world.time >= last_fired + fire_delay) || burstfiring)
+		to_chat(usr, "<span class='warning'>\The [src] is still cooling down!</span>")
+	else
+		burstfire = !burstfire
+		if(!burstfire)//fixing a bug where burst fire being toggled on then off would leave the gun unable to shoot at its normal speed.
+			fire_delay = initial(fire_delay)
+		to_chat(usr, "You toggle \the [src]'s firing setting to [burstfire ? "burst fire" : "single fire"].")
 
 /obj/item/weapon/gun/projectile/automatic/update_icon()
 	..()
@@ -41,13 +45,33 @@
 			return
 		var/shots_fired = 0 //haha, I'm so clever
 		var/to_shoot = min(burst_count, getAmmo())
+		if(defective && prob(20))
+			to_shoot = getAmmo()
 		for(var/i = 1; i <= to_shoot; i++)
 			..()
+			burstfiring = 1
 			shots_fired++
+			if(!user.contents.Find(src) || jammed)
+				break
+			if(defective && shots_fired > burst_count)
+				recoil = 1 + min(shots_fired - burst_count, 6)
+			if(defective && prob(max(0, shots_fired - burst_count * 4)))
+				to_chat(user, "<span class='danger'>\The [src] explodes!.</span>")
+				explosion(get_turf(loc), -1, 0, 2)
+				user.drop_item(src, force_drop = 1)
+				qdel(src)
 		message_admins("[usr] just shot [shots_fired] burst fire bullets out of [getAmmo() + shots_fired] from their [src].")
 		fire_delay = shots_fired * 10
+		recoil = initial(recoil)
+		burstfiring = 0
 	else
 		..()
+
+/obj/item/weapon/gun/projectile/automatic/failure_check(var/mob/living/carbon/human/M)
+	if(!burstfire && prob(5))
+		burstfire = 1
+		return 1
+	return ..()
 
 /obj/item/weapon/gun/projectile/automatic/lockbox
 	mag_type = "/obj/item/ammo_storage/magazine/smg9mm/empty"

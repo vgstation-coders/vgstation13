@@ -147,10 +147,7 @@
 		if (!newname)
 			newname = randomname
 
-		wizard_mob.real_name = newname
-		wizard_mob.name = newname
-		if(wizard_mob.mind)
-			wizard_mob.mind.name = newname
+		wizard_mob.fully_replace_character_name(wizard_mob.real_name, newname)
 	return
 
 

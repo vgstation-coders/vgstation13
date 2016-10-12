@@ -24,6 +24,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/wheat      = list(FLOUR,5),
 		/obj/item/weapon/reagent_containers/food/snacks/grown/ricestalk  = list(RICE,5),
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries   = list(CHERRYJELLY,1),
+		/obj/item/weapon/reagent_containers/food/drinks/soda_cans        = list(ALUMINUM,10),
 		/obj/item/seeds	                      = list(BLACKPEPPER,5),
 		/obj/item/device/flashlight/flare     = list(SULFUR,10),
 		/obj/item/stack/cable_coil            = list(COPPER, 10),

@@ -49,7 +49,7 @@
 					new /obj/item/weapon/gun/projectile/pistol(get_turf(H))
 					new /obj/item/gun_part/silencer(get_turf(H))
 				if("cannon")
-					new /obj/item/weapon/gun/energy/lasercannon(get_turf(H))
+					new /obj/item/weapon/gun/energy/laser/cannon(get_turf(H))
 				if("doublebarrel")
 					new /obj/item/weapon/gun/projectile/shotgun/pump/(get_turf(H))
 				if("shotgun")

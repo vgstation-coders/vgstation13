@@ -971,7 +971,7 @@
 	src.occupant.cancel_camera()
 	if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
 		for(var/obj/item/weapon/pinpointer/point in world)
-			point.the_disk = src //the pinpointer will detect the shunted AI
+			point.target = src //the pinpointer will detect the shunted AI
 
 	stat_collection.malf.did_shunt = 1
 
@@ -990,7 +990,7 @@
 				for(var/datum/mind/AI_mind in ticker.mode.malf_ai)
 					var/mob/living/silicon/ai/A = AI_mind.current // the current mob the mind owns
 					if(A.stat != DEAD)
-						point.the_disk = A //The pinpointer tracks the AI back into its core.
+						point.target = A //The pinpointer tracks the AI back into its core.
 
 	else
 		to_chat(src.occupant, "<span class='warning'>Primary core damaged, unable to return core processes.</span>")
@@ -999,7 +999,7 @@
 			src.occupant.death()
 			src.occupant.gib()
 			for(var/obj/item/weapon/pinpointer/point in world)
-				point.the_disk = null //the pinpointer will go back to pointing at the nuke disc.
+				point.target = null //the pinpointer will go back to pointing at the nuke disc.
 
 
 /obj/machinery/power/apc/proc/ion_act()

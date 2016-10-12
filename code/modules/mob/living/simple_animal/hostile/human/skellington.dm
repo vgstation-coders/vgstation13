@@ -60,7 +60,7 @@
 	attacktext = "kicks"
 
 	corpse = /obj/effect/landmark/corpse/skellington/cannoneer
-	items_to_drop = list(/obj/item/weapon/gun/energy/lasercannon/empty)
+	items_to_drop = list(/obj/item/weapon/gun/energy/laser/cannon/empty)
 
 //Skellington petards
 //Explode on attack or death
