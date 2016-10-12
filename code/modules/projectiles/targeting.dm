@@ -289,19 +289,19 @@ client/proc/remove_gun_icons()
 		screen -= usr.gun_run_icon
 		usr.gun_run_icon = null
 
-client/verb/ToggleGunMode()
-	set hidden = 1
-	gun_mode = !gun_mode
-	if(gun_mode)
-		to_chat(usr, "You will now take people captive.")
-		add_gun_icons()
-	else
-		to_chat(usr, "You will now shoot where you target.")
-		for(var/obj/item/weapon/gun/G in usr)
-			G.stop_aim()
-		remove_gun_icons()
-	if(usr.gun_setting_icon)
-		usr.gun_setting_icon.icon_state = "gun[gun_mode]"
+//client/verb/ToggleGunMode()
+//	set hidden = 1
+//	gun_mode = !gun_mode
+//	if(gun_mode)
+//		to_chat(usr, "You will now take people captive.")
+//		add_gun_icons()
+//	else
+//		to_chat(usr, "You will now shoot where you target.")
+//		for(var/obj/item/weapon/gun/G in usr)
+//			G.stop_aim()
+//		remove_gun_icons()
+//	if(usr.gun_setting_icon)
+//		usr.gun_setting_icon.icon_state = "gun[gun_mode]"
 
 
 client/verb/AllowTargetMove()
