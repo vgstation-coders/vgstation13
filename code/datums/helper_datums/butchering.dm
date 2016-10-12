@@ -17,6 +17,8 @@
 	var/stored_in_organ
 	//Example value: LIMB_HEAD or "arm". When an organ with the same type is cut off, this object will be transferred to it.
 
+	var/butcher_time = 20
+
 /datum/butchering_product/New()
 	..()
 
@@ -136,6 +138,11 @@
 /datum/butchering_product/skin/goliath
 	result = /obj/item/asteroid/goliath_hide
 
+/datum/butchering_product/skin/basilisk
+	result = /obj/item/asteroid/basilisk_hide
+	verb_name = "break crystals off"
+	verb_gerund = "breaking crystals off"
+
 /datum/butchering_product/skin/bear
 	result = /obj/item/clothing/head/bearpelt/real
 
@@ -162,6 +169,7 @@
 	verb_name = "remove legs from"
 	verb_gerund = "removing legs from"
 	amount = 8 //Amount of legs that all normal spiders have
+	butcher_time = 10
 
 /datum/butchering_product/spider_legs/desc_modifier()
 	if(amount < 8)
@@ -185,10 +193,23 @@
 	verb_name = "remove legs from"
 	verb_gerund = "removing legs from"
 	amount = 2 //not a magic number, frogs have 2 legs
+	butcher_time = 10
 
 /datum/butchering_product/frog_leg/desc_modifier()
 	if(amount < 2)
 		return "It only has [amount] [amount==1 ? "leg" : "legs"]. "
+
+//======hivelord core
+
+/datum/butchering_product/hivelord_core
+	result = /obj/item/asteroid/hivelord_core
+	verb_name = "remove the core from"
+	verb_gerund = "removing the core from"
+	butcher_time = 2
+
+/datum/butchering_product/hivelord_core/desc_modifier()
+	if(!amount)
+		return "Its core has been taken. "
 
 #define TEETH_FEW		/datum/butchering_product/teeth/few		//4-8
 #define TEETH_BUNCH		/datum/butchering_product/teeth/bunch	//8-16
@@ -200,6 +221,8 @@ var/global/list/animal_butchering_products = list(
 	/mob/living/simple_animal/corgi						= list(/datum/butchering_product/skin/corgi, TEETH_FEW),
 	/mob/living/simple_animal/lizard					= list(/datum/butchering_product/skin/lizard),
 	/mob/living/simple_animal/hostile/asteroid/goliath	= list(/datum/butchering_product/skin/goliath, TEETH_LOTS),
+	/mob/living/simple_animal/hostile/asteroid/basilisk	= list(/datum/butchering_product/skin/basilisk),
+	/mob/living/simple_animal/hostile/asteroid/hivelord	= list(/datum/butchering_product/hivelord_core),
 	/mob/living/simple_animal/hostile/giant_spider		= list(/datum/butchering_product/spider_legs),
 	/mob/living/simple_animal/hostile/bear				= list(/datum/butchering_product/skin/bear, TEETH_LOTS),
 	/mob/living/carbon/alien/humanoid					= list(/datum/butchering_product/xeno_claw, /datum/butchering_product/skin/xeno, TEETH_BUNCH),
