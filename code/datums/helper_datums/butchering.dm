@@ -209,7 +209,7 @@
 
 /datum/butchering_product/hivelord_core/desc_modifier()
 	if(!amount)
-		return "Its core has been taken"
+		return "Its core has been taken. "
 
 #define TEETH_FEW		/datum/butchering_product/teeth/few		//4-8
 #define TEETH_BUNCH		/datum/butchering_product/teeth/bunch	//8-16
