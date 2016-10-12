@@ -372,12 +372,8 @@ var/savefile/panicfile
 		s += "<b>[config.server_name]</b> &#8212; "
 
 
-	s += {"<b>[station_name()]</b>"
-		(
-		<a href=\"http://\">" //Change this to wherever you want the hub to link to
-		Default"  //Replace this with something else. Or ever better, delete it and uncomment the game version
-		</a>
-		)"}
+	s += "<h2><b><a href=\"http://atlas-station.com\">[station_name()]</a></b></h2>"
+
 	var/list/features = list()
 
 	if(ticker)
