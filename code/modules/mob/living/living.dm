@@ -1381,8 +1381,8 @@ default behaviour is:
 			else
 				to_chat(user, "<span class='info'>You finish [our_product.verb_gerund] \the [src].</span>")
 				src.being_butchered = 0
-				src.update_icons()
 				our_product.spawn_result(get_turf(src), src)
+				src.update_icons()
 			return
 
 	user.visible_message("<span class='notice'>[user] starts butchering \the [src][tool ? " with \the [tool]" : ""].</span>",\

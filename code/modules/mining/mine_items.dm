@@ -676,29 +676,43 @@ proc/move_mining_shuttle()
 			var/mob/living/simple_animal/M = target
 
 			if(M.stat == DEAD)
-				M.faction = "lazarus \ref[user]"
-				M.revive()
-				if(istype(target, /mob/living/simple_animal/hostile))
-					var/mob/living/simple_animal/hostile/H = M
-					H.friends += user
 
-					log_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector.")
-					H.attack_log += "\[[time_stamp()]\] Revived by <b>[key_name(user)]</b> with a lazarus injector."
-					user.attack_log += "\[[time_stamp()]\] Revived hostile mob <b>[H]</b> with a lazarus injector."
-					msg_admin_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+				if(can_revive(M))
+					M.faction = "lazarus \ref[user]"
+					M.revive()
+					if(istype(target, /mob/living/simple_animal/hostile))
+						var/mob/living/simple_animal/hostile/H = M
+						H.friends += user
 
-				loaded = 0
-				user.visible_message("<span class='warning'>[user] injects [M] with \the [src], reviving it.</span>", \
-				"<span class='notice'>You inject [M] with \the [src], reviving it.</span>")
-				playsound(src,'sound/effects/refill.ogg',50,1)
-				update_icon()
-				return
+						log_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector.")
+						H.attack_log += "\[[time_stamp()]\] Revived by <b>[key_name(user)]</b> with a lazarus injector."
+						user.attack_log += "\[[time_stamp()]\] Revived hostile mob <b>[H]</b> with a lazarus injector."
+						msg_admin_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+
+					loaded = 0
+					user.visible_message("<span class='warning'>[user] injects [M] with \the [src], reviving it.</span>", \
+					"<span class='notice'>You inject [M] with \the [src], reviving it.</span>")
+					playsound(src,'sound/effects/refill.ogg',50,1)
+					update_icon()
+					return
+				else
+					to_chat(user, "<span class='warning'>\The [M] isn't intact enough to revive.</span>")
+					return
 			else
 				to_chat(user, "<span class='warning'>\The [src] is only effective on the dead.</span>")
 				return
 		else
 			to_chat(user, "<span class='warning'>\The [src] is only effective on lesser beings.</span>")
 			return
+
+/obj/item/weapon/lazarus_injector/proc/can_revive(mob/living/simple_animal/M)
+	if(M.meat_taken)
+		return 0
+	if(M.butchering_drops)
+		for(var/datum/butchering_product/B in M.butchering_drops)
+			if(B.amount != B.initial_amount)
+				return 0
+	return 1
 
 /obj/item/weapon/lazarus_injector/examine(mob/user)
 	..()

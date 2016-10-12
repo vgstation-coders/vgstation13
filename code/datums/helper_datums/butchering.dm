@@ -136,6 +136,11 @@
 /datum/butchering_product/skin/goliath
 	result = /obj/item/asteroid/goliath_hide
 
+/datum/butchering_product/skin/basilisk
+	result = /obj/item/asteroid/basilisk_hide
+	verb_name = "break crystals off"
+	verb_gerund = "breaking crystals off"
+
 /datum/butchering_product/skin/bear
 	result = /obj/item/clothing/head/bearpelt/real
 
@@ -190,6 +195,17 @@
 	if(amount < 2)
 		return "It only has [amount] [amount==1 ? "leg" : "legs"]. "
 
+//======hivelord core
+
+/datum/butchering_product/hivelord_core
+	result = /obj/item/asteroid/hivelord_core
+	verb_name = "remove the core from"
+	verb_gerund = "removing the core from"
+
+/datum/butchering_product/hivelord_core/desc_modifier()
+	if(!amount)
+		return "Its core has been taken"
+
 #define TEETH_FEW		/datum/butchering_product/teeth/few		//4-8
 #define TEETH_BUNCH		/datum/butchering_product/teeth/bunch	//8-16
 #define TEETH_LOTS		/datum/butchering_product/teeth/lots	//16-24
@@ -200,6 +216,8 @@ var/global/list/animal_butchering_products = list(
 	/mob/living/simple_animal/corgi						= list(/datum/butchering_product/skin/corgi, TEETH_FEW),
 	/mob/living/simple_animal/lizard					= list(/datum/butchering_product/skin/lizard),
 	/mob/living/simple_animal/hostile/asteroid/goliath	= list(/datum/butchering_product/skin/goliath, TEETH_LOTS),
+	/mob/living/simple_animal/hostile/asteroid/basilisk	= list(/datum/butchering_product/skin/basilisk),
+	/mob/living/simple_animal/hostile/asteroid/hivelord	= list(/datum/butchering_product/hivelord_core),
 	/mob/living/simple_animal/hostile/giant_spider		= list(/datum/butchering_product/spider_legs),
 	/mob/living/simple_animal/hostile/bear				= list(/datum/butchering_product/skin/bear, TEETH_LOTS),
 	/mob/living/carbon/alien/humanoid					= list(/datum/butchering_product/xeno_claw, /datum/butchering_product/skin/xeno, TEETH_BUNCH),
