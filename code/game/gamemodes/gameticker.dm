@@ -124,11 +124,16 @@ var/global/datum/controller/gameticker/ticker
 	else
 		src.mode = config.pick_mode(master_mode)
 	if (!src.mode.can_start())
-		to_chat(world, "<B>Unable to start [mode.name].</B> Not enough players, [mode.required_players] players needed. Reverting to pre-game lobby.")
-		del(mode)
-		current_state = GAME_STATE_PREGAME
-		job_master.ResetOccupations()
-		return 0
+		var/datum/game_mode/M = config.pick_mode("extended")
+		if(M.can_start())
+			log_admin("Couldn't start a normal gamemode so starting an extended round.")
+			src.mode = config.pick_mode("extended")
+		else
+			to_chat(world, "<B>Unable to start [mode.name].</B> Not enough players, [mode.required_players] players needed. Reverting to pre-game lobby.")
+			del(mode)
+			current_state = GAME_STATE_PREGAME
+			job_master.ResetOccupations()
+			return 0
 
 	//Configure mode and assign player to special mode stuff
 	job_master.DivideOccupations() //Distribute jobs
