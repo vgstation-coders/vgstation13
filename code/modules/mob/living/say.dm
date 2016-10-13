@@ -48,6 +48,7 @@ var/list/department_radio_keys = list(
 	  ":g" = "changeling",	"#g" = "changeling",	".g" = "changeling",
 	  ":x" = "cultchat",	"#x" = "cultchat",		".x" = "cultchat",
 	  ":y" = "ancientchat",	"#y" = "ancientchat",	".y" = "ancientchat",
+	  ":p" = "AI Private",	"#p" = "AI Private",	".p" = "AI Private",
 
 	  ":R" = "right ear",	"#R" = "right ear",		".R" = "right ear", "!R" = "fake right ear",
 	  ":L" = "left ear",	"#L" = "left ear",		".L" = "left ear",  "!L" = "fake left ear",
@@ -68,6 +69,7 @@ var/list/department_radio_keys = list(
 	  ":G" = "changeling",	"#G" = "changeling",	".G" = "changeling",
 	  ":X" = "cultchat",	"#X" = "cultchat",		".X" = "cultchat",
 	  ":Y" = "ancientchat",	"#Y" = "ancientchat", 	".Y" = "ancientchat",
+	  ":P" = "AI Private",	"#P" = "AI Private",	".P" = "AI Private",
 
 	  //kinda localization -- rastaf0
 	  //same keys as above, but on russian keyboard layout. This file uses cp1251 as encoding.

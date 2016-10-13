@@ -1,0 +1,7 @@
+
+author: Kavlax
+
+delete-after: True
+
+changes:
+- rscadd: "Give AI headset access to AI Private."
