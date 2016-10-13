@@ -421,6 +421,8 @@
 				new_mob = M.change_mob_type( /mob/living/simple_animal/construct/wraith , null, null, delmob )
 			if("shade")
 				new_mob = M.change_mob_type( /mob/living/simple_animal/shade , null, null, delmob )
+			if("ai")
+				new_mob = M.AIize(spawn_here = 1, del_mob = delmob)
 //		to_chat(world, "Made a [new_mob] [usr ? "usr still exists" : "usr does not exist"]")
 		if(new_mob && new_mob != M)
 //			to_chat(world, "[new_mob.client] vs [CLIENT] they [new_mob.client == CLIENT ? "match" : "don't match"]")
@@ -1754,9 +1756,11 @@
 			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human")
 			return
 
+		var/spawn_here = alert("Spawn AI at your location?", "Spawn Location", "Yes", "No")
+
 		message_admins("<span class='warning'>Admin [key_name_admin(usr)] AIized [key_name_admin(H)]!</span>", 1)
 		log_admin("[key_name(usr)] AIized [key_name(H)]")
-		var/mob/M = H.AIize()
+		var/mob/M = H.AIize(spawn_here == "Yes"? 1 : 0)
 		if(M)
 			if(M.client == CLIENT)
 				usr = M //We probably transformed ourselves

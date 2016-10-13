@@ -79,11 +79,11 @@
 		qdel(src)
 	return new_mob
 
-/mob/new_player/AIize()
+/mob/new_player/AIize(var/spawn_here = 0, var/del_mob = 1)
 	spawning = 1
 	return ..()
 
-/mob/living/carbon/human/AIize()
+/mob/living/carbon/human/AIize(var/spawn_here = 0, var/del_mob = 1)
 	if (monkeyizing)
 		return
 	for(var/t in organs)
@@ -91,7 +91,7 @@
 
 	return ..()
 
-/mob/living/carbon/AIize()
+/mob/living/carbon/AIize(var/spawn_here = 0, var/del_mob = 1)
 	if (monkeyizing)
 		return
 	for(var/obj/item/W in src)
@@ -104,7 +104,7 @@
 	delayNextAttack(50)
 	return ..()
 
-/mob/proc/AIize()
+/mob/proc/AIize(var/spawn_here = 0, var/del_mob = 1)
 	if(client)
 		src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY)// stop the jams for AIs
 
@@ -119,27 +119,29 @@
 		O.key = key
 
 	var/obj/loc_landmark
-	for(var/obj/effect/landmark/start/sloc in landmarks_list)
-		if (sloc.name != "AI")
-			continue
-		if (locate(/mob/living) in sloc.loc)
-			continue
-		loc_landmark = sloc
-	if (!loc_landmark)
-		for(var/obj/effect/landmark/tripai in landmarks_list)
-			if (tripai.name == "tripai")
-				if(locate(/mob/living) in tripai.loc)
-					continue
-				loc_landmark = tripai
-	if (!loc_landmark)
-		to_chat(O, "Oh god sorry we can't find an unoccupied AI spawn location, so we're spawning you on top of someone.")
-		for(var/obj/effect/landmark/start/sloc in landmarks_list)
-			if (sloc.name == "AI")
-				loc_landmark = sloc
 
-	O.forceMove(loc_landmark.loc)
-	for (var/obj/item/device/radio/intercom/comm in O.loc)
-		comm.ai += O
+	if(!spawn_here)
+		for(var/obj/effect/landmark/start/sloc in landmarks_list)
+			if (sloc.name != "AI")
+				continue
+			if (locate(/mob/living) in sloc.loc)
+				continue
+			loc_landmark = sloc
+		if (!loc_landmark)
+			for(var/obj/effect/landmark/tripai in landmarks_list)
+				if (tripai.name == "tripai")
+					if(locate(/mob/living) in tripai.loc)
+						continue
+					loc_landmark = tripai
+		if (!loc_landmark)
+			to_chat(O, "Oh god sorry we can't find an unoccupied AI spawn location, so we're spawning you on top of someone.")
+			for(var/obj/effect/landmark/start/sloc in landmarks_list)
+				if (sloc.name == "AI")
+					loc_landmark = sloc
+
+		O.forceMove(loc_landmark.loc)
+		for (var/obj/item/device/radio/intercom/comm in O.loc)
+			comm.ai += O
 
 	to_chat(O, "<B>You are playing the station's AI. The AI cannot move, but can interact with many objects while viewing them (through cameras).</B>")
 	to_chat(O, "<B>To look at other parts of the station, click on yourself to get a camera menu.</B>")
@@ -162,7 +164,8 @@
 
 	O.rename_self("ai",1)
 	. = O
-	qdel(src)
+	if(del_mob)
+		qdel(src)
 
 
 //human -> robot
