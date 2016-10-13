@@ -14,7 +14,6 @@
 	holder_type = /obj/item/weapon/holder/diona
 	var/list/donors = list()
 	var/ready_evolve = 0
-	var/sting_range = 1
 	canWearHats = 1
 	canWearClothes = 0
 	canWearGlasses = 0
@@ -136,17 +135,6 @@
 				return 1
 	return ..()
 
-/mob/proc/sample_can_reach(mob/M as mob, sting_range = 1)
-	if(M.loc == src.loc)
-		return 1 //target and source are in the same thing
-	if(!isturf(src.loc) || !isturf(M.loc))
-		return 0 //One is inside, the other is outside something.
-	if(sting_range < 2)
-		return Adjacent(M)
-	if(AStar(src.loc, M.loc, /turf/proc/AdjacentTurfs, /turf/proc/Distance, sting_range)) //If a path exists, good!
-		return 1
-	return 0
-
 /mob/living/carbon/monkey/diona/verb/steal_blood()
 	set category = "Diona"
 	set name = "Take Blood Sample"
@@ -161,11 +149,8 @@
 
 	if(!M || !src)
 		return
-	if(!(M in view(sting_range)))
+	if(!Adjacent(M))
 		return
-	if(!sample_can_reach(M, sting_range))
-		return
-
 	if(donors.Find(M.real_name))
 		to_chat(src, "<span class='warning'>That donor offers you nothing new.</span>")
 		return
