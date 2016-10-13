@@ -1,0 +1,6 @@
+author: Arsling
+
+delete-after: True
+
+changes: 
+- tweak: f3 is now 'Asay' instead of 'Say'.
