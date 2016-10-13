@@ -149,7 +149,7 @@
 
 	if(!M || !src)
 		return
-	if(!Adjacent(M))
+	if(!Adjacent(M) || is_holder_of(M, src))
 		return
 	if(donors.Find(M.real_name))
 		to_chat(src, "<span class='warning'>That donor offers you nothing new.</span>")
