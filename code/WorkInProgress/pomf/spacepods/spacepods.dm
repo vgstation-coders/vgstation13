@@ -471,7 +471,7 @@
 			to_chat(user, "<span class='warning'>Unknown error has occurred, yell at pomf.</span>")
 		return 0
 	battery.charge = max(0, battery.charge - 3)
-	move_delayer.delayNext(movement_delay)
+	move_delayer.delayNext(round(movement_delay,world.tick_lag))
 
 /obj/spacepod/process_inertia(turf/start)
 	set waitfor = 0
