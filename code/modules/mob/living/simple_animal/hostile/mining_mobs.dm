@@ -263,14 +263,30 @@ obj/item/asteroid/basilisk_hide/New()
 /mob/living/simple_animal/hostile/asteroid/hivelord/Die()
 	mouse_opacity = 1
 	..()
+	update_icons()
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/update_icons()
 	.=..()
 
 	if(stat == DEAD && butchering_drops)
+		icon_state = "[icon_dead][has_core() ? "" : "_nocore"]"
+
+/mob/living/simple_animal/hostile/asteroid/hivelord/Aggro()
+	..()
+	if(butchering_drops)
+		icon_state = "[icon_aggro][has_core() ? "" : "_nocore"]"
+
+/mob/living/simple_animal/hostile/asteroid/hivelord/LoseAggro()
+	..()
+	if(butchering_drops)
+		icon_state = "[icon_living][has_core() ? "" : "_nocore"]"
+
+/mob/living/simple_animal/hostile/asteroid/hivelord/proc/has_core()
+	if(butchering_drops)
 		var/datum/butchering_product/hivelord_core/core = locate(/datum/butchering_product/hivelord_core) in butchering_drops
 		if(istype(core))
-			icon_state = "[icon_dead][core.amount ? "" : "_nocore"]"
+			return core.amount
+	return 1
 
 /obj/item/asteroid/hivelord_core
 	name = "hivelord remains"
