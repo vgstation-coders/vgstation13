@@ -474,7 +474,7 @@ obj/item/asteroid/basilisk_hide/New()
 			var/obj/item/clothing/C = target
 			var/current_armor = C.armor
 			if(current_armor.["melee"] < 90)
-				current_armor.["melee"] = min(current_armor.["melee"] + 20, 90)
+				current_armor.["melee"] = min(current_armor.["melee"] + 10, 90)
 				to_chat(user, "<span class='info'>You strengthen [target], improving its resistance against melee attacks.</span>")
 				qdel(src)
 			else
