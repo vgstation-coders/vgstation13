@@ -62,7 +62,7 @@
 	loaded = null
 	last = null
 	active = 0
-	set_move_hook()
+	set_move_event()
 	..()
 
 /obj/item/weapon/rcl/update_icon()
@@ -97,9 +97,9 @@
 /obj/item/weapon/rcl/dropped(mob/wearer as mob)
 	..()
 	active = 0
-	set_move_hook(wearer)
+	set_move_event(wearer)
 
-/obj/item/weapon/rcl/proc/set_move_hook(mob/user)
+/obj/item/weapon/rcl/proc/set_move_event(mob/user)
 	if(active && user)
 		trigger(user)
 		targetMoveKey = user.on_moved.Add(src, "holder_moved")
@@ -110,7 +110,7 @@
 /obj/item/weapon/rcl/attack_self(mob/user as mob)
 	active = !active
 	to_chat(user, "<span class='notice'>You turn \the [src] [active ? "on" : "off"].<span>")
-	set_move_hook(user)
+	set_move_event(user)
 
 /obj/item/weapon/rcl/proc/holder_moved(var/list/args)
 	to_chat(world, "holder_moved called")
