@@ -314,6 +314,8 @@ var/global/list/whitelisted_species = list("Human")
 
 	move_speed_mod = 3
 
+	primitive = /mob/living/carbon/monkey/skellington
+
 /datum/species/skellington/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	if (prob(25))
 		speech.message += "  ACK ACK!"
@@ -457,7 +459,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	max_hurt_damage = 3 // From 5 (for humans)
 
-	primitive = /mob/living/carbon/monkey // TODO
+	primitive = /mob/living/carbon/monkey/grey // TODO
 
 	flags = IS_WHITELISTED | HAS_LIPS | CAN_BE_FAT
 

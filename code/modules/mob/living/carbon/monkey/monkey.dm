@@ -78,6 +78,13 @@
 	species_type = /mob/living/carbon/monkey/unathi
 	languagetoadd = LANGUAGE_UNATHI
 
+/mob/living/carbon/monkey/grey
+	name = "greyling"
+	voice_name = "greyling"
+	icon_state = "grey"
+	canWearGlasses = 0
+	languagetoadd = LANGUAGE_GREY
+
 /mob/living/carbon/monkey/New()
 	var/datum/reagents/R = new/datum/reagents(1000)
 	reagents = R
