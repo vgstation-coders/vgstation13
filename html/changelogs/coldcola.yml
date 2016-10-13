@@ -1,0 +1,4 @@
+author: coldcola
+delete-after: True
+changes:
+- tweak: Vampire Rejuvenate skill actually does what it says it does now
