@@ -113,7 +113,6 @@
 	set_move_event(user)
 
 /obj/item/weapon/rcl/proc/holder_moved(var/list/args)
-	to_chat(world, "holder_moved called")
 	var/event/E = args["event"]
 	if(!targetMoveKey)
 		E.handlers.Remove("\ref[src]:holder_moved")
