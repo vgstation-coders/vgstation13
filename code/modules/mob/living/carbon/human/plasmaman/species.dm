@@ -11,6 +11,7 @@
 	flags = NO_BLOOD|IS_WHITELISTED
 
 	//default_mutations=list(SKELETON) // This screws things up
+	primitive = /mob/living/carbon/monkey/skellington/plasma
 
 	breath_type = "toxins"
 

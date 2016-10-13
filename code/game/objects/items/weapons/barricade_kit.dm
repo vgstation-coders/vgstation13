@@ -70,7 +70,7 @@
 
 //Preattack to avoid bashing windows or opening airlocks when working
 /obj/item/weapon/barricade_kit/preattack(var/atom/A, mob/user as mob)
-	if(istype(A, /obj/machinery/door/airlock) || istype(A, /obj/structure/window/full)) //Apply on a full window or an airlock
+	if(istype(A, /obj/machinery/door/airlock) || istype(A, /obj/structure/window/full) || istype(A, /obj/structure/grille)) //Apply on a full window or an airlock
 		if(get_dist(user,A) > 1) //There, it's unfucked
 			return
 		var/turf/T = get_turf(A)
@@ -87,27 +87,6 @@
 			kit_uses--
 			if(kit_uses < 1)
 				qdel(src) //Get rid of it
-		return 0 //Don't fire attack, please
-
-	if(istype(A, /obj/structure/window) && !istype(A, /obj/structure/window/full)) //Windows
-		if(get_dist(user,A) > 1)
-			return
-		var/turf/T = get_turf(A)
-		for(var/obj/structure/S in T)
-			if(istype(S, /obj/structure/window/barricade/full/block))
-				to_chat(user, "<span class='warning'>There already is a barricade here</span>")
-				return
-			if(istype(S,/obj/structure/grille)) //Used as a makeshift check for a full window
-				user.visible_message("<span class='warning'>[user] starts barricading \the [A].</span>", \
-				"<span class='notice'>You start barricading \the [A].</span>")
-				if(do_after(user, T, 30))
-					new /obj/structure/window/barricade/full/block(get_turf(T))
-					user.visible_message("<span class='warning'>[user] barricades \the [A].</span>", \
-					"<span class='notice'>You barricade \the [A].</span>")
-					kit_uses--
-					if(kit_uses < 1)
-						qdel(src) //Get rid of it
-				break //If grilles somehow end up stacked, please don't multiply the problem
 		return 0 //Don't fire attack, please
 
 /obj/item/weapon/barricade_kit/attack(var/atom/A, mob/user as mob)

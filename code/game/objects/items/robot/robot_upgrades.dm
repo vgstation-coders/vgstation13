@@ -3,6 +3,8 @@
 
 #define FAILED_TO_ADD 1
 
+/obj/item/borg/upgrade/var/vtec_bonus = 0.25
+
 /obj/item/borg/upgrade
 	name = "A borg upgrade module."
 	desc = "Protected by FRM."
@@ -69,6 +71,9 @@
 	if(..())
 		return FAILED_TO_ADD
 
+	if (/obj/item/borg/upgrade/vtec in R.module.upgrades)
+		R.movement_speed_modifier -= vtec_bonus
+
 	qdel(R.module)
 	if(R.hands)
 		R.hands.icon_state = "nomod"
@@ -122,17 +127,14 @@
 	name = "robotic VTEC Module"
 	desc = "Used to kick in a robot's VTEC systems, increasing their speed."
 	icon_state = "cyborg_upgrade2"
-	multi_upgrades = 1
 	add_to_mommis = 1
 
 /obj/item/borg/upgrade/vtec/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 
-	if(R.speed == -1)
-		return FAILED_TO_ADD
 	if(..())
 		return FAILED_TO_ADD
 
-	R.speed--
+	R.movement_speed_modifier += vtec_bonus
 
 
 /obj/item/borg/upgrade/tasercooler
