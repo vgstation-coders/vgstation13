@@ -41,7 +41,7 @@ script:
 notifications:
   irc:
     channels:
-      - "irc.rizon.net#vgstation"
+      - "irc.rizon.net#atlas-adminbus"
     template:
       - "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}"
       - "Change view : %{compare_url}"
