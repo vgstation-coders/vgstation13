@@ -20,6 +20,7 @@
 	var/active = 0
 	var/obj/structure/cable/last = null
 	var/obj/item/stack/cable_coil/loaded = null
+	var/targetMoveKey = null
 
 /obj/item/weapon/rcl/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W,/obj/item/stack/cable_coil))
@@ -60,6 +61,8 @@
 	qdel(loaded)
 	loaded = null
 	last = null
+	active = 0
+	set_move_hook()
 	..()
 
 /obj/item/weapon/rcl/update_icon()
@@ -87,18 +90,36 @@
 		to_chat(user, "<span class='notice'>The last of the cables unreel from \the [src].</span>")
 		returnToPool(loaded)
 		loaded = null
+		active = 0
 		return 1
 	return 0
 
 /obj/item/weapon/rcl/dropped(mob/wearer as mob)
 	..()
 	active = 0
+	set_move_hook(wearer)
+
+/obj/item/weapon/rcl/proc/set_move_hook(mob/user)
+	if(active && user)
+		trigger(user)
+		targetMoveKey = user.on_moved.Add(src, "holder_moved")
+		return
+	user.on_moved.Remove(targetMoveKey)
+	targetMoveKey = null
 
 /obj/item/weapon/rcl/attack_self(mob/user as mob)
 	active = !active
-	to_chat(user, "<span class='notice'>You turn the [src] [active ? "on" : "off"].<span>")
+	to_chat(user, "<span class='notice'>You turn \the [src] [active ? "on" : "off"].<span>")
+	set_move_hook(user)
+
+/obj/item/weapon/rcl/proc/holder_moved(var/list/args)
+	to_chat(world, "holder_moved called")
+	var/event/E = args["event"]
+	if(!targetMoveKey)
+		E.handlers.Remove("\ref[src]:holder_moved")
+		return
 	if(active)
-		trigger(user)
+		trigger(E.holder)
 
 /obj/item/weapon/rcl/proc/trigger(mob/user as mob)
 	if(!loaded)
