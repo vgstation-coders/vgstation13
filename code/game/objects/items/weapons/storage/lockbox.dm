@@ -39,7 +39,6 @@
 				if(oneuse)
 					for(var/atom/movable/A in src)
 						remove_from_storage(A, get_turf(src))
-
 					qdel(src)
 				return
 		else
@@ -54,7 +53,6 @@
 		if(oneuse)
 			for(var/atom/movable/A in src)
 				remove_from_storage(A, get_turf(src))
-
 			qdel(src)
 
 	if(!locked)
@@ -81,8 +79,8 @@
 	if(health <= 0)
 		for(var/atom/movable/A in src)
 			for(var/obj/O in src)
+				O.become_defective()
 			remove_from_storage(A, get_turf(src))
-
 		qdel(src)
 	return
 
@@ -94,6 +92,7 @@
 			if(prob(80))
 				for(var/atom/movable/A in src)
 					for(var/obj/O in src)
+						O.become_defective()
 					remove_from_storage(A, get_turf(src))
 					A.ex_act(3)
 				qdel(src)
@@ -101,6 +100,7 @@
 			if(prob(50))
 				for(var/atom/movable/A in src)
 					for(var/obj/O in src)
+						O.become_defective()
 					remove_from_storage(A, get_turf(src))
 				qdel(src)
 
@@ -115,6 +115,7 @@
 					if(!locked)
 						for(var/atom/movable/A in src)
 							for(var/obj/O in src)
+								O.become_defective()
 							remove_from_storage(A, get_turf(src))
 						if(oneuse)
 							qdel(src)
@@ -125,6 +126,7 @@
 					if(!locked)
 						for(var/atom/movable/A in src)
 							for(var/obj/O in src)
+								O.become_defective()
 							remove_from_storage(A, get_turf(src))
 						if(oneuse)
 							qdel(src)
@@ -135,6 +137,7 @@
 					if(!locked)
 						for(var/atom/movable/A in src)
 							for(var/obj/O in src)
+								O.become_defective()
 							remove_from_storage(A, get_turf(src))
 						if(oneuse)
 							qdel(src)
