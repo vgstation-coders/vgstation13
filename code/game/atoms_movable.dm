@@ -158,9 +158,8 @@
 				if(Dir & direction)
 					if(is_blocked_turf(get_step(src, direction)))
 						blocked++
-			if(blocked >= 2) // both cardinals blocked, can't move on this diagonal
-				return
-			. = ..()
+			if(blocked < 2) // path is open to the diagonal
+				. = ..()
 
 	if(. && locked_atoms && locked_atoms.len)	//The move was succesful, update locked atoms.
 		spawn(0)
