@@ -37,6 +37,7 @@
 	/spell/targeted/buttbots_revenge,
 	/spell/aoe_turf/conjure/pontiac,
 	/spell/aoe_turf/conjure/arcane_golem,
+	/spell/targeted/recall,
 	/spell/noclothes
 	)
 
