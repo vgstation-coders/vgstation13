@@ -145,14 +145,6 @@
 	hitsound = 'sound/items/quack.ogg'
 	honk_delay = 10
 
-/obj/item/weapon/bikehorn/baton
-	name = "honk baton"
-	desc = "A stun baton for honking people with."
-	icon = 'icons/obj/weapons.dmi'
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	icon_state = "honkbaton"
-	item_state = "honkbaton"
-
 #define GLUE_WEAROFF_TIME -1 //was 9000: 15 minutes, or 900 seconds. Negative values = infinite glue
 
 /obj/item/weapon/glue
@@ -204,13 +196,13 @@
 	if(GLUE_WEAROFF_TIME > 0)
 		spawn(GLUE_WEAROFF_TIME)
 			cant_drop--
-
+			
 /obj/item/clothing/glue_act()
 	canremove--
 	if(GLUE_WEAROFF_TIME > 0)
 		spawn(GLUE_WEAROFF_TIME)
 			canremove++
-
+			
 /obj/item/weapon/glue/proc/apply_glue(obj/item/target)
 	src = null
 	target.glue_act()
