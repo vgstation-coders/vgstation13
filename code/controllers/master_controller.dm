@@ -186,73 +186,74 @@ datum/controller/game_controller/proc/cachedamageicons()
 	del(H)
 
 /datum/controller/game_controller/proc/setup_objects()
-	var/watch = start_watch()
-	var/overwatch = start_watch() // Overall.
+	spawn(-1) // YOLO
+		var/watch = start_watch()
+		var/overwatch = start_watch() // Overall.
 
-	log_startup_progress("Populating asset cache...")
-	populate_asset_cache()
-	log_startup_progress("  Populated [asset_cache.len] assets in [stop_watch(watch)]s.")
+		log_startup_progress("Populating asset cache...")
+		populate_asset_cache()
+		log_startup_progress("  Populated [asset_cache.len] assets in [stop_watch(watch)]s.")
 
-	if(!config.skip_vault_generation)
-		watch = start_watch()
-		log_startup_progress("Placing random space structures...")
-		generate_vaults()
-		log_startup_progress("  Finished placing structures in [stop_watch(watch)]s.")
-	else
-		log_startup_progress("Not generating vaults - SKIP_VAULT_GENERATION found in config/config.txt")
-
-	watch = start_watch()
-	log_startup_progress("Building powernets...")
-	makepowernets()
-	log_startup_progress("  Finished building powernets in [stop_watch(watch)]s.")
-
-	watch = start_watch()
-	log_startup_progress("Initializing objects...")
-	//sleep(-1) // Why
-	//var/last_init_type = null
-	var/count=0
-	for(var/atom/movable/object in world)
-		//if(last_init_type != object.type)
-		//	testing("Initializing [object.type]")
-		//	last_init_type = object.type
-		object.initialize()
-		count++
-	log_startup_progress("  Initialized [count] objects in [stop_watch(watch)]s.")
-
-	watch = start_watch()
-	count=0
-	log_startup_progress("Initializing pipe networks...")
-	//sleep(-1)
-	for(var/obj/machinery/atmospherics/machine in atmos_machines)
-		machine.build_network()
-		count++
-	log_startup_progress("  Initialized [count] pipe networks in [stop_watch(watch)]s.")
-
-	watch = start_watch()
-	count=0
-	log_startup_progress("Initializing atmos machinery...")
-	//sleep(-1)
-	for(var/obj/machinery/atmospherics/unary/U in atmos_machines)
-		if(istype(U, /obj/machinery/atmospherics/unary/vent_pump))
-			var/obj/machinery/atmospherics/unary/vent_pump/T = U
-			T.broadcast_status()
-			count++
-		else if(istype(U, /obj/machinery/atmospherics/unary/vent_scrubber))
-			var/obj/machinery/atmospherics/unary/vent_scrubber/T = U
-			T.broadcast_status()
-			count++
-	log_startup_progress("  Initialized [count] atmos devices in [stop_watch(watch)]s.")
-
-	if(!config.skip_minimap_generation)
-		spawn()
+		if(!config.skip_vault_generation)
 			watch = start_watch()
-			log_startup_progress("Generating in-game minimaps...")
-			generateMiniMaps()
-			log_startup_progress("  Finished minimaps in [stop_watch(watch)]s.")
-	else
-		log_startup_progress("Not generating minimaps - SKIP_MINIMAP_GENERATION found in config/config.txt")
+			log_startup_progress("Placing random space structures...")
+			generate_vaults()
+			log_startup_progress("  Finished placing structures in [stop_watch(watch)]s.")
+		else
+			log_startup_progress("Not generating vaults - SKIP_VAULT_GENERATION found in config/config.txt")
 
-	log_startup_progress("Finished initializations in [stop_watch(overwatch)]s.")
+		watch = start_watch()
+		log_startup_progress("Building powernets...")
+		makepowernets()
+		log_startup_progress("  Finished building powernets in [stop_watch(watch)]s.")
+
+		watch = start_watch()
+		log_startup_progress("Initializing objects...")
+		//sleep(-1) // Why
+		//var/last_init_type = null
+		var/count=0
+		for(var/atom/movable/object in world)
+			//if(last_init_type != object.type)
+			//	testing("Initializing [object.type]")
+			//	last_init_type = object.type
+			object.initialize()
+			count++
+		log_startup_progress("  Initialized [count] objects in [stop_watch(watch)]s.")
+
+		watch = start_watch()
+		count=0
+		log_startup_progress("Initializing pipe networks...")
+		//sleep(-1)
+		for(var/obj/machinery/atmospherics/machine in atmos_machines)
+			machine.build_network()
+			count++
+		log_startup_progress("  Initialized [count] pipe networks in [stop_watch(watch)]s.")
+
+		watch = start_watch()
+		count=0
+		log_startup_progress("Initializing atmos machinery...")
+		//sleep(-1)
+		for(var/obj/machinery/atmospherics/unary/U in atmos_machines)
+			if(istype(U, /obj/machinery/atmospherics/unary/vent_pump))
+				var/obj/machinery/atmospherics/unary/vent_pump/T = U
+				T.broadcast_status()
+				count++
+			else if(istype(U, /obj/machinery/atmospherics/unary/vent_scrubber))
+				var/obj/machinery/atmospherics/unary/vent_scrubber/T = U
+				T.broadcast_status()
+				count++
+		log_startup_progress("  Initialized [count] atmos devices in [stop_watch(watch)]s.")
+
+		if(!config.skip_minimap_generation)
+			spawn()
+				watch = start_watch()
+				log_startup_progress("Generating in-game minimaps...")
+				generateMiniMaps()
+				log_startup_progress("  Finished minimaps in [stop_watch(watch)]s.")
+		else
+			log_startup_progress("Not generating minimaps - SKIP_MINIMAP_GENERATION found in config/config.txt")
+
+		log_startup_progress("Finished initializations in [stop_watch(overwatch)]s.")
 
 
 
