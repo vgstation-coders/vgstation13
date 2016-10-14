@@ -1,4 +1,4 @@
-var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXIN, MINDBREAKER, SPIRITBREAKER, CYANIDE, IMPEDREZENE)
+var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXIN, MINDBREAKER, SPIRITBREAKER, CYANIDE, IMPEDREZENE, LUBE)
 /obj
 	var/origin_tech = null	//Used by R&D to determine what research bonuses it grants.
 	var/reliability = 100	//Used by SOME devices to determine how reliable they are.
@@ -26,6 +26,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/holomap = FALSE // Whether we should be on the holomap.
 	var/auto_holomap = FALSE // Whether we automatically soft-add ourselves to the holomap in New(), make sure this is false is something does it manually.
 	plane = OBJ_PLANE
+
+	var/defective = 0
 
 /obj/New()
 	..()
@@ -391,3 +393,8 @@ a {
 			var/turf/U = loc
 			if(istype(U) && U.intact)
 				invisibility = 101
+
+/obj/proc/become_defective()
+	if(!defective)
+		defective = 1
+		desc += "\nIt doesn't look to be in the best shape."

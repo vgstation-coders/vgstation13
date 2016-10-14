@@ -25,7 +25,6 @@
 								   /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff,
 								   /obj/item/weapon/grenade/iedcasing/preassembled,
 								   /obj/item/weapon/gun/projectile/pistol,
-								   /obj/item/gun_part/silencer,
 								   /obj/item/clothing/suit/armor/vest
 								  )
 

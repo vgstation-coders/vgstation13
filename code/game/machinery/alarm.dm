@@ -873,10 +873,6 @@
 	if (buildstage < 1)
 		to_chat(user, "<span class='info'>The circuit is missing.</span>")
 
-/obj/machinery/alarm/change_area(oldarea, newarea)
-	..()
-	name = replacetext(name,oldarea,newarea)
-
 /obj/machinery/alarm/wirejack(var/mob/living/silicon/pai/P)
 	if(..())
 		locked = !locked
@@ -1156,10 +1152,6 @@ var/global/list/firealarms = list() //shrug
 /obj/machinery/firealarm/Destroy()
 	firealarms.Remove(src)
 	..()
-
-/obj/machinery/firealarm/change_area(oldarea, newarea)
-	..()
-	name = replacetext(name,oldarea,newarea)
 
 /obj/machinery/partyalarm
 	name = "\improper PARTY BUTTON"

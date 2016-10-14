@@ -236,6 +236,13 @@
 			to_chat(M.current, "<span class='danger'><FONT size = 3>Your powers ebb and you feel weak. You are no longer a wizard.</FONT></span>")
 			ticker.mode.update_wizard_icons_removed(M)
 
+		if(M in ticker.mode.apprentices)
+			ticker.mode.apprentices -= M
+			M.special_role = null
+			M.current.spellremove(M.current, config.feature_object_spell_system? "object":"verb")
+			to_chat(M.current, "<span class='danger'><FONT size = 3>What little magic you have leaves you. You are no longer a wizard's apprentice.</FONT></span>")
+			ticker.mode.update_wizard_icons_removed(M)
+
 		if(M in ticker.mode.changelings)
 			ticker.mode.changelings -= M
 			M.special_role = null

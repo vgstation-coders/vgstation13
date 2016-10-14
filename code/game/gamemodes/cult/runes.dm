@@ -670,12 +670,15 @@
 
 /obj/effect/rune/proc/talisman()//only tome, communicate, hide, reveal, emp, teleport, deafen, blind, stun and armor runes can be imbued
 	var/obj/item/weapon/paper/newtalisman
+	var/papers[] = new()
+	for(var/obj/item/weapon/paper/O in src.loc)
+		papers += O
 	var/unsuitable_newtalisman = 0
-	for(var/obj/item/weapon/paper/P in src.loc)
-		if(!P.info)
+	for(var/obj/item/weapon/paper/P in papers)
+		if(!(P.info || istype(P, /obj/item/weapon/paper/talisman)))
 			newtalisman = P
 			break
-		else
+		else if(P.info && papers.len == 1)
 			unsuitable_newtalisman = 1
 	if (!newtalisman)
 		if (unsuitable_newtalisman)

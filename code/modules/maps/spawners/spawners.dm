@@ -109,7 +109,7 @@
 		/obj/item/weapon/gun/energy/gun,
 		/obj/item/weapon/gun/energy/ionrifle,
 		/obj/item/weapon/gun/energy/laser,
-		/obj/item/weapon/gun/energy/lasercannon,
+		/obj/item/weapon/gun/energy/laser/cannon,
 		/obj/item/weapon/gun/projectile/automatic/mini_uzi,
 		/obj/item/weapon/gun/projectile/automatic,
 		/obj/item/weapon/gun/projectile/automatic/l6_saw,

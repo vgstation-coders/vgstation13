@@ -150,7 +150,6 @@ var/list/ai_list = list()
 	set name = "Radio Configuration"
 	if(stat || aiRestorePowerRoutine)
 		return
-	radio.recalculateChannels()
 	radio.attack_self(usr)
 
 /mob/living/silicon/ai/verb/rename_photo() //This is horrible but will do for now

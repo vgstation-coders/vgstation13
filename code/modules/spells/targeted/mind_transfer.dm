@@ -71,6 +71,7 @@
 			if(caster.mind.special_verbs.len)//If they had any special verbs, we add them here.
 				for(var/V in caster.mind.special_verbs)
 					victim.verbs += V
+			ticker.mode.update_all_wizard_icons()
 			//MIND TRANSFER END
 
 			//Target is handled in ..(), so we handle the caster here

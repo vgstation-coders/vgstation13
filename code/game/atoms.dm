@@ -777,10 +777,10 @@ its easier to just keep the beam vertical.
 	return 0
 
 /atom/proc/change_area(var/area/oldarea, var/area/newarea)
-	if(istype(oldarea))
-		oldarea = "[oldarea.name]"
-	if(istype(newarea))
-		newarea = "[newarea.name]"
+	change_area_name(oldarea.name, newarea.name)
+
+/atom/proc/change_area_name(var/oldname, var/newname)
+	name = replacetext(name,oldname,newname)
 
 //Called in /spell/aoe_turf/boo/cast() (code/modules/mob/dead/observer/spells.dm)
 /atom/proc/spook(mob/dead/observer/ghost, var/log_this = FALSE)
@@ -804,3 +804,18 @@ its easier to just keep the beam vertical.
 
 /atom/proc/holomapAlwaysDraw()
 	return 1
+
+/atom/proc/get_inaccuracy(var/atom/target, var/spread, var/obj/mecha/chassis)
+	var/turf/curloc = get_turf(src)
+	var/turf/targloc = get_turf(target)
+	var/list/turf/shot_spread = list()
+	for(var/turf/T in trange(min(spread, max(0, get_dist(curloc, targloc)-1)), targloc))
+		if(chassis)
+			var/dir_to_targ = get_dir(chassis, T)
+			if(dir_to_targ && !(dir_to_targ & chassis.dir))
+				continue
+		shot_spread += T
+	var/turf/newtarget = pick(shot_spread)
+	if(newtarget == targloc)
+		return target
+	return newtarget

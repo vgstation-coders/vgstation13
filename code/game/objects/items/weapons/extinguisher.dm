@@ -1,3 +1,4 @@
+#define REAGENT_USE 5 // amount of reagent used on each spray
 
 /obj/item/weapon/extinguisher
 	name = "fire extinguisher"
@@ -125,7 +126,7 @@
 
 		if(is_open_container() && reagents.total_volume)
 			to_chat(user, "<span class='notice'>You empty \the [src] onto [target].</span>")
-			user.investigation_log(I_CHEMS, "has splashed [reagents.get_reagent_ids(1)] from \a [src] \ref[src] onto \the [target].")
+			user.investigation_log(I_CHEMS, "has splashed [reagents.get_reagent_ids(1)] from \a [src] ([type]) onto \the [target].")
 			if(reagents.has_reagent(FUEL))
 				message_admins("[user.name] ([user.ckey]) poured Welder Fuel onto [target]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 				log_game("[user.name] ([user.ckey]) poured Welder Fuel onto [target]. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
@@ -144,10 +145,9 @@
 		if (world.time < src.last_use + 20)
 			return
 		user.delayNextAttack(5, 1)
-		var/badshit = reagents.write_logged_reagents()
-		if(badshit)
-			message_admins("[user.name] ([user.ckey]) used \a [src] that contained (<span class='warning'>[badshit]</span>). (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-			log_game("[user.name] ([user.ckey]) used \a [src] that contained [badshit] at [user.x], [user.y], [user.z]")
+
+		reagents.log_bad_reagents(user, src)
+		user.investigation_log(I_CHEMS, "sprayed [REAGENT_USE]u from \a [src] ([type]) containing [reagents.get_reagent_ids(1)] towards [target] ([target.x], [target.y], [target.z]).")
 
 		src.last_use = world.time
 
@@ -191,7 +191,7 @@
 
 		var/list/the_targets = list(T,T1,T2)
 
-		for(var/a=0, a<5, a++)
+		for(var/a=0, a<REAGENT_USE, a++)
 			spawn(0)
 				var/datum/reagents/R = new/datum/reagents(5)
 				R.my_atom = src
@@ -296,7 +296,7 @@
 
 		var/list/the_targets = list(T,T1,T2)
 
-		for(var/a=0, a<5, a++)
+		for(var/a=0, a<REAGENT_USE, a++)
 			spawn(0)
 				var/datum/reagents/R = new/datum/reagents(5)
 				R.my_atom = src
@@ -336,3 +336,5 @@
 	else
 		return ..()
 	return
+
+#undef REAGENT_USE

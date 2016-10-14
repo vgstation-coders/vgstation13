@@ -6,6 +6,7 @@
 	school = "abjuration"
 	charge_max = 600
 	spell_flags = NEEDSCLOTHES
+	autocast_flags = AUTOCAST_NOTARGET
 	invocation = "SCYAR NILA"
 	invocation_type = SpI_SHOUT
 	cooldown_min = 200 //100 deciseconds reduction per rank

@@ -387,8 +387,7 @@ Class Procs:
 	src.add_fingerprint(usr)
 	src.add_hiddenprint(usr)
 
-	handle_multitool_topic(href,href_list,usr)
-	return 0
+	return handle_multitool_topic(href,href_list,usr)
 
 /obj/machinery/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
@@ -405,7 +404,7 @@ Class Procs:
 	var/ghost_flags=0
 	if(ghost_read)
 		ghost_flags |= PERMIT_ALL
-	if(canGhostRead(usr,src,ghost_flags))	
+	if(canGhostRead(usr,src,ghost_flags))
 		return src.attack_ai(user)
 
 /obj/machinery/attack_paw(mob/user as mob)

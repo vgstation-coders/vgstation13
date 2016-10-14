@@ -1,4 +1,5 @@
 var/bomb_set
+var/obj/item/weapon/disk/nuclear/nukedisk
 
 /obj/machinery/nuclearbomb
 	name = "\improper Nuclear Fission Explosive"
@@ -347,15 +348,15 @@ var/bomb_set
 	item_state = "card-id"
 	w_class = W_CLASS_TINY
 	var/respawned = 0
-	var/watched_by = list()
+
+/obj/item/weapon/disk/nuclear/New()
+	..()
+	if(!nukedisk)
+		nukedisk = src
 
 /obj/item/weapon/disk/nuclear/Destroy()
 	..()
 	replace_disk()
-	for(var/obj/item/weapon/pinpointer/pinpointers in watched_by)
-		if(pinpointers.the_disk == src)
-			pinpointers.the_disk = null
-	watched_by = null
 
 /**
  * NOTE: Don't change it to Destroy().
@@ -365,11 +366,11 @@ var/bomb_set
 	..()
 
 /obj/item/weapon/disk/nuclear/proc/replace_disk()
-	if(blobstart.len > 0 && !respawned)
+	if(blobstart.len > 0 && !respawned && (nukedisk == src))
 		var/picked_turf = get_turf(pick(blobstart))
 		var/picked_area = formatLocation(picked_turf)
 		var/log_message = "[type] has been destroyed. Creating one at"
 		log_game("[log_message] [picked_area]")
 		message_admins("[log_message] [formatJumpTo(picked_turf, picked_area)]")
-		new /obj/item/weapon/disk/nuclear(picked_turf)
+		nukedisk = new /obj/item/weapon/disk/nuclear(picked_turf)
 		respawned = 1

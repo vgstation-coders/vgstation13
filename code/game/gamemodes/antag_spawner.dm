@@ -119,15 +119,14 @@
 	var/newname = copytext(sanitize(input(M, "You are the wizard's apprentice. Would you like to change your name to something else?", "Name change", randomname) as null|text),1,MAX_NAME_LEN)
 	if (!newname)
 		newname = randomname
-	M.mind.name = newname
-	M.real_name = newname
-	M.name = newname
+	M.fully_replace_character_name(M.real_name, newname)
 	var/datum/objective/protect/new_objective = new /datum/objective/protect
 	new_objective.owner = M:mind
 	new_objective:target = usr:mind
 	new_objective.explanation_text = "Protect [usr.real_name], the wizard."
 	M.mind.objectives += new_objective
-	ticker.mode.traitors += M.mind
+	ticker.mode.apprentices += M.mind
+	ticker.mode.update_wizard_icons_added(M.mind)
 	M.mind.special_role = "apprentice"
 
 	M.make_all_robot_parts_organic()

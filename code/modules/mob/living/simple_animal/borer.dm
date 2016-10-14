@@ -1040,7 +1040,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	if(!candidate)
 		return
 
-	src.mind = candidate.mob.mind
 	src.ckey = candidate.ckey
 	if(src.mind)
 		src.mind.assigned_role = "Borer"
