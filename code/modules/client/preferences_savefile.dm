@@ -790,7 +790,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 			continue
 		q = new
 		q.Add("INSERT INTO client_roles (ckey, slot, role, preference) VALUES (?,?,?,?)", ckey, slot, role_id, (roles[role_id] & ROLEPREF_SAVEMASK))
-		testing("INSERT INTO client_roles (ckey, slot, role, preference) VALUES ('[ckey]',[slot],'[role_id]',[roles[role_id] & ROLEPREF_SAVEMASK])")
+		message_admins("INSERT INTO client_roles (ckey, slot, role, preference) VALUES ('[ckey]',[slot],'[role_id]',[roles[role_id] & ROLEPREF_SAVEMASK])")
 		if(!q.Execute(db)) // This never triggers on error, for some reason.
 			message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 			WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
