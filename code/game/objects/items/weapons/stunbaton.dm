@@ -98,13 +98,13 @@
 	..()
 	if(istype(I, /obj/item/weapon/bikehorn))
 
-		if (src.type == /obj/item/weapon/melee/baton/cattleprod)
+		if(istype(src, /obj/item/weapon/melee/baton/cattleprod))
 			return
 
 		user.visible_message("<span class='notice'>[user] starts jamming \a [src] into the mouth of \a [I].</span>",\
 		"<span class='info'>You do your best to jam \the [src] into the mouth of \the [I].</span>")
 
-		if(do_after(user, get_turf(src), 5 SECONDS))
+		if(do_after(user, src, 5 SECONDS))
 			if(!I || !src)
 				return
 
