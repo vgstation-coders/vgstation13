@@ -88,7 +88,7 @@
 	var/banappeals
 	var/wikiurl = "http://baystation12.net/wiki/index.php?title=Main_Page"
 	var/vgws_base_url = "http://ss13.moe" // No hanging slashes.
-	var/vgws_ip = "198.245.63.50" // IP address in the `world.Topic()` call when the vgws sends a request over TCP.
+	var/vgws_ip = "127.0.0.1" // IP address in the `world.Topic()` call when the vgws sends a request over TCP.
 	var/forumurl = "http://baystation12.net/forums/"
 	var/poll_results_url
 
