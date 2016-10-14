@@ -681,10 +681,13 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	return
 
 /mob/living/simple_animal/revive(refreshbutcher = 1)
-	health = maxHealth
 	if(refreshbutcher)
 		butchering_drops = null
 		meat_taken = 0
+	if(meat_taken)
+		maxHealth = initial(maxHealth)
+		maxHealth -= (initial(maxHealth) / meat_amount) * meat_taken
+	health = maxHealth
 	..()
 
 /mob/living/simple_animal/proc/make_babies() // <3 <3 <3

@@ -1399,9 +1399,6 @@ default behaviour is:
 	src.being_butchered = 0
 
 	if(src.meat_taken < src.meat_amount)
-		if(istype(src, /mob/living/simple_animal))
-			var/mob/living/simple_animal/S = src
-			S.maxHealth -= initial(S.maxHealth) / meat_amount
 		to_chat(user, "<span class='info'>You cut a chunk of meat out of \the [src].</span>")
 		return
 
