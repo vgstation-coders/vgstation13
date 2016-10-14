@@ -803,6 +803,7 @@ var/list/ai_list = list()
 	panel = "Malfunction"
 	charge_type = Sp_CHARGES
 	charge_max = 1
+	spell_flags = 0
 	
 /spell/aoe_turf/corereturn/before_target(mob/user)
 	if(istype(user.loc, /obj/machinery/power/apc))

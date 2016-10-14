@@ -130,14 +130,14 @@ rcd light flash thingy on matter drain
 	panel = "Malfunction"
 	charge_type = Sp_CHARGES
 	charge_max = 1
-	spell_flags = WAIT_FOR_CLICK|NODUPLICATE
+	spell_flags = WAIT_FOR_CLICK | NODUPLICATE | IGNORESPACE | IGNOREDENSE
 	range = GLOBALCAST
 	summon_type = list(/obj/machinery/transformer/conveyor)
 	
 /spell/aoe_turf/conjure/place_transformer/before_target(mob/user)
 	var/mob/living/silicon/ai/A = user
 	if(!istype(A))
-		return 0
+		return 1
 	if(!A.eyeobj)
 		return 1
 	if(!isturf(A.loc)) // AI must be in it's core.
@@ -159,8 +159,6 @@ rcd light flash thingy on matter drain
 	// All clear, place the transformer
 	..()
 	playsound(targets[1], 'sound/effects/phasein.ogg', 100, 1)
-	if(!isAI(user))
-		return
 	var/mob/living/silicon/ai/A = user
 	A.can_shunt = 0
 	to_chat(user, "You cannot shunt anymore.")
@@ -243,14 +241,19 @@ rcd light flash thingy on matter drain
 	uses = 10
 	cost = 15
 
-	power_type = /spell/aoe_turf/reactivate_camera
+	power_type = /spell/targeted/reactivate_camera
 
-/spell/aoe_turf/reactivate_camera
+/spell/targeted/reactivate_camera
 	name = "Reactivate Camera"
 	panel = "Malfunction"
 	charge_type = Sp_CHARGES
 	charge_max = 10
 	range = GLOBALCAST
+	spell_flags = SELECTABLE
+	
+/spell/targeted/reactivate_camera/choose_targets(mob/user = usr)
+	var/list/targets = input(user, "Choose a Camera to reactivate.", "Targeting") as null|obj in cameranet.cameras
+	return targets
 	
 /spell/targeted/reactivate_camera/is_valid_target(var/atom/target)
 	if(!istype (target, /obj/machinery/camera))
@@ -265,8 +268,7 @@ rcd light flash thingy on matter drain
 	
 /spell/targeted/reactivate_camera/cast(var/list/targets,mob/user)
 	var/obj/machinery/camera/C = targets[1]
-	if(!C.status)
-		C.deactivate(user)
+	C.deactivate(user)
 
 /datum/AI_Module/small/upgrade_camera
 	module_name = "Upgrade Camera"
