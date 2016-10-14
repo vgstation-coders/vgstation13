@@ -134,8 +134,8 @@ var/list/holomap_cache = list()
 			I.loc = activator.hud_used.holomap_obj
 
 			if(!I.pixel_x || !I.pixel_y)
-				I.pixel_x = TD.x - T.x + activator.client.view*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32)
-				I.pixel_y = TD.y - T.y + activator.client.view*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32)
+				I.pixel_x = TD.x - map.holomap_offset_x[T.z] - T.x + activator.client.view*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32)
+				I.pixel_y = TD.y - map.holomap_offset_y[T.z] - T.y + activator.client.view*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32)
 
 			animate(I,alpha = 255, pixel_x = TD.x - T.x + activator.client.view*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32), pixel_y = TD.y - T.y + activator.client.view*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32), time = 5, loop = -1, easing = LINEAR_EASING)
 			animate(alpha = 255, time = 8, loop = -1, easing = SINE_EASING)
