@@ -784,6 +784,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		message_admins("Error #: [check.Error()] - [check.ErrorMsg()]")
 		WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 		return 0
+	to_chat(user, "Deleted old Roles")
 
 	for(var/role_id in roles)
 		if(!(roles[role_id] & ROLEPREF_PERSIST))
@@ -795,6 +796,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 			message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 			WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 			return 0
+	to_chat(user, "Updated Roles")
 
 	return 1
 
