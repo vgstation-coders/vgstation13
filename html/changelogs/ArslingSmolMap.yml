@@ -1,6 +1,0 @@
-author: Arsling
-
-delete-after: True
-
-changes: 
-- tweak: Shrank the maps down from 500x500 > 255x255.
