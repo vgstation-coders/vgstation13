@@ -186,7 +186,7 @@ rcd light flash thingy on matter drain
 	panel = MALFUNCTION
 	charge_type = Sp_CHARGES
 	charge_max = 3
-	range = GLOBAL_CAST
+	range = GLOBALCAST
 	
 /spell/aoe_turf/blackout/cast(var/list/targets, mob/user)
 	for(var/obj/machinery/power/apc/apc in power_machines)
