@@ -2427,6 +2427,9 @@
 /datum/reagent/autistnanites
 	name = "Autist nanites"
 	id = AUTISTNANITES
+	description = "Really autistic microscopic construction robots."
+	reagent_state = LIQUID
+	color = "#535E66" //rgb: 83, 94, 102
 
 /datum/reagent/autistnanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
