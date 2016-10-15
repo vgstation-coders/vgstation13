@@ -164,7 +164,7 @@
 									aiRestorePowerRoutine = 3
 									to_chat(src, "Here are your current laws:")
 									show_laws()
-							sleep(50)
+							spawn(50)
 							theAPC = null
 
 /mob/living/silicon/ai/updatehealth()
