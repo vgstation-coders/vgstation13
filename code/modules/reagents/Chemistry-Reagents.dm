@@ -2408,6 +2408,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
 /datum/reagent/nanites
 	name = "Nanites"
 	id = NANITES
@@ -2423,11 +2424,14 @@
 	if((prob(10) && method == TOUCH) || method == INGEST)
 		M.contract_disease(new /datum/disease/robotic_transformation(0), 1)
 
-/datum/reagent/nanites/autist
+/datum/reagent/autistnanites
 	name = "Autist nanites"
 	id = AUTISTNANITES
+	description = "Really autistic microscopic construction robots."
+	reagent_state = LIQUID
+	color = "#535E66" //rgb: 83, 94, 102
 
-/datum/reagent/nanites/autist/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/autistnanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
 	if(..())
 		return 1
@@ -2521,7 +2525,7 @@
 					for(var/datum/disease/D in M.viruses)
 						D.spread = "Remissive"
 						D.stage--
-						if(D.stage < 1)
+						if(D.stage >= 1)
 							D.cure()
 		if(5 to 20)		//Danger zone healing. Adds to a human mob's "percent machine" var, which is directly translated into the chance that it will turn horror each tick that the reagent is above 5u.
 			if(ishuman(M))
@@ -2584,7 +2588,7 @@
 					for(var/datum/disease/D in M.viruses)
 						D.spread = "Remissive"
 						D.stage--
-						if(D.stage < 1)
+						if(D.stage >= 1)
 							D.cure()
 					if(prob(percent_machine))
 						holder.add_reagent("mednanobots", 20)
