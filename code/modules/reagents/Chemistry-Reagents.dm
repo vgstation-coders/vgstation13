@@ -2408,6 +2408,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
 /datum/reagent/nanites
 	name = "Nanites"
 	id = NANITES
@@ -2428,9 +2429,6 @@
 	id = AUTISTNANITES
 
 /datum/reagent/nanites/autist/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
-
-	if(..())
-		return 1
 
 	if((prob(10) && method == TOUCH) || method == INGEST)
 		M.contract_disease(new /datum/disease/robotic_transformation/mommi(0), 1)
