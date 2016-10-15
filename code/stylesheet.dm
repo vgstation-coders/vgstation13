@@ -14,6 +14,8 @@ em						{font-style: normal;	font-weight: bold;}
 .adminobserver			{color: #996600;	font-weight: bold;}
 .admin					{color: #386aff;	font-weight: bold;}
 .adminsay				{color: #9611D4;	font-weight: bold;}
+.mentoradmin			{color: #7171C6;	font-weight: bold;}
+.mentor					{color: #8A2BE2;	font-weight: bold;}
 .name					{					font-weight: bold;}
 .say					{}
 .siliconsay				{font-family: 'Courier New', Courier, monospace;}
@@ -52,6 +54,7 @@ h1.alert, h2.alert		{color: #000000;}
 .rose					{color: #ff5050;}
 .info					{color: #0000CC;}
 .notice					{color: #000099;}
+.mentornotice			{color: #0000ff;}
 .bnotice				{color: #000099; 	font-weight: bold;}
 .sans					{font-family: 'Comic Sans MS', cursive, sans-serif;}
 .alien					{color: #543354;}

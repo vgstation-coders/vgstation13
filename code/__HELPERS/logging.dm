@@ -54,8 +54,9 @@
 		if(C.prefs.toggles & CHAT_DEBUGLOGS)
 			to_chat(C, "DEBUG: [text]")
 
-
-
+/proc/log_mentor(text)
+	mentor_log.Add(text)
+	diary << "\[[time_stamp()]]MENTOR: [text]"
 
 /proc/log_adminghost(text)
 	if (config.log_adminghost)

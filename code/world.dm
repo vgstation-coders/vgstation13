@@ -75,6 +75,7 @@ var/savefile/panicfile
 	load_motd()
 	load_admins()
 	load_mods()
+	load_mentors()
 	LoadBansjob()
 	if(config.usewhitelist)
 		load_whitelist()

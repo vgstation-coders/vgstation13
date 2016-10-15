@@ -134,6 +134,17 @@
 	usr << browse(output,"window=radioreport")
 	feedback_add_details("admin_verb","RR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
+/client/proc/reload_mentors()
+	set name = "Reload Mentors"
+	set category = "Admin" // puting this in admin for now for now.
+
+	if(!check_rights(R_ADMIN))
+		return
+
+	message_admins("[usr] has manually reloaded mentors")
+	load_mentors()
+	feedback_add_details("admin_verb","RLDM") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
 /client/proc/reload_admins()
 	set name = "Reload Admins"
 	set category = "Debug"

@@ -51,6 +51,20 @@
 		cmd_admin_pm(C,null)
 		return
 
+	//Mentor PM
+	if(href_list["mentor_msg"])
+		cmd_mentor_pm(href_list["mentor_msg"],null)
+		return
+
+	//Mentor Follow
+	if(href_list["mentor_follow"])
+		var/mob/living/M = locate(href_list["mentor_follow"])
+		if(istype(M))
+			mentor_follow(M)
+			return
+
+
+
 	//Wiki shortcuts
 	if(href_list["getwiki"])
 		var/url = href_list["getwiki"]
@@ -139,6 +153,12 @@
 	if(holder)
 		admins += src
 		holder.owner = src
+
+	//Mentor hell
+	var/mentor = mentor_datums[ckey]
+	if(mentor)
+		verbs += /client/proc/cmd_mentor_say
+		mentors += src
 
 	if(connection != "seeker")			//Invalid connection type.
 		if(connection == "web")

@@ -131,3 +131,12 @@
 					numModsOnline++
 
 	to_chat(src, "\n<b>Current Admins ([numAdminsOnline]):</b>\n" + aNames + "\n<b>Current Moderators ([numModsOnline]):</b>\n" + mNames + "\n")
+
+/client/verb/mentorwho()
+	set category = "Mentor"
+	set name = "Mentorwho"
+	var/mentorNames = ""
+
+	for(var/client/C in mentors)
+		mentorNames += "\t[C]\n"
+		to_chat(src, "<b>Current Mentors:</b>\n" + mentorNames + "\n")

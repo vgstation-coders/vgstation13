@@ -74,7 +74,8 @@ var/list/admin_verbs_admin = list(
 	/client/proc/response_team, // Response Teams admin verb
 	/client/proc/toggle_antagHUD_use,
 	/client/proc/toggle_antagHUD_restrictions,
-	/client/proc/allow_character_respawn    /* Allows a ghost to respawn */
+	/client/proc/allow_character_respawn,    /* Allows a ghost to respawn */
+	/client/proc/reload_mentors
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -262,6 +263,7 @@ var/list/admin_verbs_hideable = list(
 	/client/proc/callproc,
 	/client/proc/Debug2,
 	/client/proc/reload_admins,
+	/client/proc/reload_mentors,
 	/client/proc/kill_air,
 	/client/proc/cmd_debug_make_powernets,
 	/client/proc/kill_airgroup,
@@ -1284,4 +1286,3 @@ var/list/admin_verbs_mod = list(
 	else
 		alert(src, "An external server error has occurred. Please report this.")
 		return 0
-
