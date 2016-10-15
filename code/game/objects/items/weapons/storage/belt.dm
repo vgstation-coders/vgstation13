@@ -193,6 +193,7 @@
 		"/obj/item/weapon/melee/baton",
 		"/obj/item/taperoll/police",
 		"/obj/item/weapon/gun/energy/taser",
+		"/obj/item/weapon/gun/projectile/sec",
 		"/obj/item/weapon/legcuffs/bolas",
 		"/obj/item/device/hailer",
 		"obj/item/weapon/melee/telebaton",
