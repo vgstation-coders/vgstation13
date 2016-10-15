@@ -2521,7 +2521,7 @@
 					for(var/datum/disease/D in M.viruses)
 						D.spread = "Remissive"
 						D.stage--
-						if(D.stage < 1)
+						if(D.stage >= 1)
 							D.cure()
 		if(5 to 20)		//Danger zone healing. Adds to a human mob's "percent machine" var, which is directly translated into the chance that it will turn horror each tick that the reagent is above 5u.
 			if(ishuman(M))
