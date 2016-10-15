@@ -363,7 +363,7 @@
 		to_chat(M, "<span class='warning'>You can't seem to get through to [M.name] mentally.</span>")
 		return
 
-	var/msg = input(usr, "Message to [M.name]:","Telepathy")
+	var/msg = copytext(sanitize(input(usr, "Message to [M.name]:","Telepathy") as text|null), 1, MAX_MESSAGE_LEN)
 	if (!msg)
 		return
 

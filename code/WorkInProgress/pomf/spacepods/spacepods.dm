@@ -27,6 +27,9 @@
 	var/health = 400
 	appearance_flags = 0
 
+	var/datum/delay_controller/move_delayer = new(0.1, ARBITRARILY_LARGE_NUMBER) //See setup.dm, 12
+	var/movement_delay = 0.4 //Speed of the vehicle decreases as this value increases. Anything above 6 is slow, 1 is fast and 0 is very fast
+
 /obj/spacepod/New()
 	. = ..()
 	if(!pod_overlays)
@@ -443,6 +446,8 @@
 	return 1
 
 /obj/spacepod/relaymove(mob/user, direction)
+	if(move_delayer.blocked())
+		return 0
 	var/moveship = 1
 	if(battery && battery.charge >= 3 && health)
 		src.dir = direction
@@ -466,6 +471,7 @@
 			to_chat(user, "<span class='warning'>Unknown error has occurred, yell at pomf.</span>")
 		return 0
 	battery.charge = max(0, battery.charge - 3)
+	move_delayer.delayNext(round(movement_delay,world.tick_lag))
 
 /obj/spacepod/process_inertia(turf/start)
 	set waitfor = 0

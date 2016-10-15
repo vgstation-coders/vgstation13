@@ -3008,7 +3008,7 @@
 		if( src.open )
 			return
 
-		var/t = input("Enter what you want to add to the tag:", "Write", null, null) as text
+		var/t = copytext(sanitize(input("Enter what you want to add to the tag:", "Write", null, null) as text|null), 1, MAX_MESSAGE_LEN)
 		if (!Adjacent(user) || user.stat)
 			return
 
