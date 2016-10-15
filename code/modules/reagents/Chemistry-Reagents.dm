@@ -2424,11 +2424,14 @@
 	if((prob(10) && method == TOUCH) || method == INGEST)
 		M.contract_disease(new /datum/disease/robotic_transformation(0), 1)
 
-/datum/reagent/nanites/autist
+/datum/reagent/autistnanites
 	name = "Autist nanites"
 	id = AUTISTNANITES
 
-/datum/reagent/nanites/autist/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+/datum/reagent/autistnanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+
+	if(..())
+		return 1
 
 	if((prob(10) && method == TOUCH) || method == INGEST)
 		M.contract_disease(new /datum/disease/robotic_transformation/mommi(0), 1)
@@ -2519,7 +2522,7 @@
 					for(var/datum/disease/D in M.viruses)
 						D.spread = "Remissive"
 						D.stage--
-						if(D.stage < 1)
+						if(D.stage >= 1)
 							D.cure()
 		if(5 to 20)		//Danger zone healing. Adds to a human mob's "percent machine" var, which is directly translated into the chance that it will turn horror each tick that the reagent is above 5u.
 			if(ishuman(M))
