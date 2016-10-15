@@ -165,7 +165,7 @@ You should now be able to use your Explode verb to interface with the nuclear fi
 
 /spell/aoe_turf/takeover
 	name = "System Override"
-	panel = "Malfunction"
+	panel = MALFUNCTION
 	desc = "Start the victory timer"
 	charge_type = Sp_CHARGES
 	charge_max = 1
@@ -196,7 +196,7 @@ You should now be able to use your Explode verb to interface with the nuclear fi
 				
 /spell/aoe_turf/ai_win
 	name = "Explode"
-	panel = "Malfunction"
+	panel = MALFUNCTION
 	desc = "Station goes boom"
 	charge_type = Sp_CHARGES
 	charge_max = 1

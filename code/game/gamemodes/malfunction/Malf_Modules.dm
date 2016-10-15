@@ -13,7 +13,7 @@ rcd light flash thingy on matter drain
 
 
 */
-
+#define MALFUNCTION "Malfunction"
 /datum/AI_Module
 	var/uses = 0
 	var/module_name
@@ -75,9 +75,10 @@ rcd light flash thingy on matter drain
 
 /spell/aoe_turf/disable_rcd
 	name = "Disable RCDs"
-	panel = "Malfunction"
+	panel = MALFUNCTION
 	charge_type = Sp_CHARGES
 	charge_max = 1
+	range = GLOBALCAST
 	
 /spell/aoe_turf/disable_rcd/cast(list/targets, mob/user)
 	for(var/obj/item/device/rcd/matter/engineering/rcd in world)
@@ -92,12 +93,11 @@ rcd light flash thingy on matter drain
 	description = "Overloads an electrical machine, causing a small explosion. 2 uses."
 	uses = 2
 	cost = 15
-
 	power_type = /spell/targeted/overload_machine
 	
 /spell/targeted/overload_machine
 	name = "Overload Machine"
-	panel = "Malfunction"
+	panel = MALFUNCTION
 	spell_flags = WAIT_FOR_CLICK
 	range = GLOBALCAST
 	charge_type = Sp_CHARGES
@@ -127,7 +127,7 @@ rcd light flash thingy on matter drain
 
 /spell/aoe_turf/conjure/place_transformer
 	name = "Place Robotic Factory"
-	panel = "Malfunction"
+	panel = MALFUNCTION
 	charge_type = Sp_CHARGES
 	charge_max = 1
 	spell_flags = WAIT_FOR_CLICK | NODUPLICATE | IGNORESPACE | IGNOREDENSE
@@ -137,8 +137,6 @@ rcd light flash thingy on matter drain
 /spell/aoe_turf/conjure/place_transformer/before_target(mob/user)
 	var/mob/living/silicon/ai/A = user
 	if(!istype(A))
-		return 1
-	if(!A.eyeobj)
 		return 1
 	if(!isturf(A.loc)) // AI must be in it's core.
 		return 1
@@ -186,9 +184,10 @@ rcd light flash thingy on matter drain
 
 /spell/aoe_turf/blackout
 	name = "Blackout"
-	panel = "Malfunction"
+	panel = MALFUNCTION
 	charge_type = Sp_CHARGES
 	charge_max = 3
+	range = GLOBAL_CAST
 	
 /spell/aoe_turf/blackout/cast(var/list/targets, mob/user)
 	for(var/obj/machinery/power/apc/apc in power_machines)
@@ -207,9 +206,10 @@ rcd light flash thingy on matter drain
 
 /spell/aoe_turf/interhack
 	name = "Fake Announcement"
-	panel = "Malfunction"
+	panel = MALFUNCTION
 	charge_type = Sp_CHARGES
 	charge_max = 3
+	range = SELFCAST
 	
 /spell/aoe_turf/interhack/cast(var/list/targets,mob/user)
 
@@ -245,24 +245,23 @@ rcd light flash thingy on matter drain
 
 /spell/targeted/reactivate_camera
 	name = "Reactivate Camera"
-	panel = "Malfunction"
+	panel = MALFUNCTION
 	charge_type = Sp_CHARGES
 	charge_max = 10
 	range = GLOBALCAST
 	spell_flags = SELECTABLE
 	
 /spell/targeted/reactivate_camera/choose_targets(mob/user = usr)
-	var/list/targets = input(user, "Choose a Camera to reactivate.", "Targeting") as null|obj in cameranet.cameras
-	return targets
+	return list(input(user, "Choose a Camera to reactivate.", "Targeting") as null|obj in cameranet.cameras)
 	
 /spell/targeted/reactivate_camera/is_valid_target(var/atom/target)
 	if(!istype (target, /obj/machinery/camera))
-		to_chat(usr, "That's not a camera.")
+		to_chat(holder, "That's not a camera.")
 		return 0
 	else
 		var/obj/machinery/camera/C = target
 		if(C.status)
-			to_chat(usr, "This camera is either active, or not repairable.")
+			to_chat(holder, "This camera is either active, or not repairable.")
 			return 0
 	return 1
 	
@@ -280,7 +279,7 @@ rcd light flash thingy on matter drain
 
 /spell/targeted/upgrade_camera
 	name = "Upgrade Camera"
-	panel = "Malfunction"
+	panel = MALFUNCTION
 	charge_type = Sp_CHARGES
 	charge_max = 10
 	spell_flags = WAIT_FOR_CLICK
@@ -318,15 +317,17 @@ rcd light flash thingy on matter drain
 
 /spell/aoe_turf/module_picker
 	name = "Select Module"
-	panel = "Malfunction"
+	panel = MALFUNCTION
 	var/datum/module_picker/MP
 	charge_max = 10
-
+	range = SELFCAST
+	
 /spell/aoe_turf/module_picker/New()
 	..()
 	MP = new /datum/module_picker
 	
 /spell/aoe_turf/module_picker/Destroy()
+	qdel(MP)
 	MP = null
 	..()
 	

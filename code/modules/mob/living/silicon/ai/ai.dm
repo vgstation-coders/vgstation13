@@ -300,7 +300,7 @@ var/list/ai_list = list()
 
 /mob/proc/remove_malf_spells()
 	for(var/spell/S in spell_list)
-		if(S.panel == "Malfunction")
+		if(S.panel == MALFUNCTION)
 			remove_spell(S)
 			
 /mob/living/silicon/ai/proc/ai_alerts()
@@ -800,7 +800,7 @@ var/list/ai_list = list()
 
 /spell/aoe_turf/corereturn
 	name = "Return to Core"
-	panel = "Malfunction"
+	panel = MALFUNCTION
 	charge_type = Sp_CHARGES
 	charge_max = 1
 	spell_flags = 0
@@ -809,11 +809,14 @@ var/list/ai_list = list()
 	if(istype(user.loc, /obj/machinery/power/apc))
 		return 0
 	else
-		to_chat(src, "<span class='notice'>You are already in your Main Core.</span>")
+		to_chat(user, "<span class='notice'>You are already in your Main Core.</span>")
 		return 1
-
+		
+/spell/aoe_turf/corereturn/choose_targets(mob/user = usr)
+	return list(user.loc)
+	
 /spell/aoe_turf/corereturn/cast(var/list/targets, mob/user)
-	var/obj/machinery/power/apc/apc = user.loc
+	var/obj/machinery/power/apc/apc = targets[1]
 	apc.malfvacate()
 
 //Toggles the luminosity and applies it by re-entereing the camera.

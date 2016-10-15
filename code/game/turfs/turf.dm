@@ -88,10 +88,6 @@
 		return ..()
 	return ..()
 
-/turf/Click()
-	if(!isAI(usr))
-		..()
-
 /turf/ex_act(severity)
 	return 0
 

@@ -977,8 +977,10 @@
 
 /obj/machinery/power/apc/proc/malfvacate(var/forced)
 	if(!src.occupant)
+		to_chat(usr, "no occupant")
 		return
 	if(src.occupant.parent && src.occupant.parent.stat != 2)
+		to_chat(usr, "src.occupant.parent and not dead")
 		src.occupant.mind.transfer_to(src.occupant.parent)
 		src.occupant.parent.adjustOxyLoss(src.occupant.getOxyLoss())
 		src.occupant.parent.cancel_camera()
@@ -990,7 +992,7 @@
 					var/mob/living/silicon/ai/A = AI_mind.current // the current mob the mind owns
 					if(A.stat != DEAD)
 						point.target = A //The pinpointer tracks the AI back into its core.
-
+		to_chat(usr, "mind shit trasnferred")
 	else
 		to_chat(src.occupant, "<span class='warning'>Primary core damaged, unable to return core processes.</span>")
 		if(forced)
