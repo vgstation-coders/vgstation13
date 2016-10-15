@@ -39,7 +39,6 @@ rcd light flash thingy on matter drain
 				S.charge_counter += uses
 				return
 		user.add_spell(new power_type)
-	return
 	
 /datum/AI_Module/large/fireproof_core
 	module_name = "Core upgrade"
@@ -361,7 +360,6 @@ rcd light flash thingy on matter drain
 	var/datum/browser/popup = new(user, "modpicker", "Malf Module Menu")
 	popup.set_content(dat)
 	popup.open()
-	return
 
 /datum/module_picker/Topic(href, href_list)
 	..()
@@ -387,4 +385,3 @@ rcd light flash thingy on matter drain
 			stat_collection.malf.bought_modules += AM.module_name
 
 	src.use(usr)
-	return
