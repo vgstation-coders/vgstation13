@@ -206,6 +206,9 @@
 				if(2)
 					var/turf/T = get_turf(src)
 					msg_admin_attack("[key_name(user)] has planted a spreading vine packet. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
+			if(S.seed.exude_gasses)
+				var/turf/T = get_turf(src)
+				msg_admin_attack("[key_name(user)] has planted a packet exuding [english_list(S.seed.exude_gasses)]. <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>")
 
 			seed = S.seed //Grab the seed datum.
 			dead = 0
