@@ -514,3 +514,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 //Return a string that gets appended to the spell on the scoreboard
 /spell/proc/get_scoreboard_suffix()
 	return
+
+/spell/proc/on_added(mob/user)
+	return
+
+/spell/proc/on_removed(mob/user)
+	return

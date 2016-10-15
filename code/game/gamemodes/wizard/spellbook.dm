@@ -732,6 +732,21 @@
 	scramble(1, user, 100)
 	to_chat(user, "<span class = 'warning'>Your reflection becomes warped and distorted!</span>")
 	
+/obj/item/weapon/spellbook/oneuse/recall
+	spell = /spell/targeted/recall
+	spellname = "recall"
+	icon_state = "bookrecall"
+	desc = "This book seems like it's already in your hands."
+
+/obj/item/weapon/spellbook/oneuse/recall/recoil(mob/living/carbon/user as mob)
+	to_chat(user, "<span class = 'warning'>Your surroundings are drawn to you!</span>")
+	var/counter = 0
+	for(var/obj/item/I in oview(5))
+		if(!I.anchored && counter <= 10)
+			sleep(1)
+			I.throw_at(user, 16, 2)
+			counter++
+
 // Spell Book Bundles//
 
 /obj/item/weapon/storage/box/spellbook
