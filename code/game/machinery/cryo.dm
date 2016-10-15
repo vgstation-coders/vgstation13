@@ -3,7 +3,10 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 												"average" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_average"),\
 												"bad" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_bad"),\
 												"worse" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_worse"),\
-												"crit" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_crit"),\
+												"critgood" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_critgood"),\
+												"critaverage" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_critaverage"),\
+												"critbad" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_critbad"),\
+												"critworse" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_critworse"),\
 												"dead" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_dead"))
 /obj/machinery/atmospherics/unary/cryo_cell
 	name = "cryo cell"
@@ -368,22 +371,27 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 				if(occupant.health >= occupant.maxHealth)
 					overlays += cryo_health_indicator["full"]
 				else
-					if(occupant.health < config.health_threshold_crit)
-						overlays += cryo_health_indicator["crit"]
-					else
-						switch((occupant.health / occupant.maxHealth) * 100) // Get a ratio of health to work with
-							if(100 to INFINITY) // No idea how we got here with the check above...
-								overlays += cryo_health_indicator["full"]
-							if(75 to 100)
-								overlays += cryo_health_indicator["good"]
-							if(50 to 75)
-								overlays += cryo_health_indicator["average"]
-							if(25 to 50)
-								overlays += cryo_health_indicator["bad"]
-							if(1 to 25)
-								overlays += cryo_health_indicator["worse"]
-							else //Shouldn't ever happen.
-								overlays += cryo_health_indicator["dead"]
+					switch((occupant.health / occupant.maxHealth) * 100) // Get a ratio of health to work with
+						if(100 to INFINITY) // No idea how we got here with the check above...
+							overlays += cryo_health_indicator["full"]
+						if(75 to 100)
+							overlays += cryo_health_indicator["good"]
+						if(50 to 75)
+							overlays += cryo_health_indicator["average"]
+						if(25 to 50)
+							overlays += cryo_health_indicator["bad"]
+						if(0 to 25)
+							overlays += cryo_health_indicator["worse"]
+						if(-25 to -1)
+							overlays += cryo_health_indicator["critgood"]
+						if(-50 to -25)
+							overlays += cryo_health_indicator["critaverage"]
+						if(-75 to -50)
+							overlays += cryo_health_indicator["critbad"]
+						if(-100 to -75)
+							overlays += cryo_health_indicator["critworse"]
+						else //Shouldn't ever happen.
+							overlays += cryo_health_indicator["dead"]
 			icon_state = "cell-occupied"
 			return
 		icon_state = "cell-on"

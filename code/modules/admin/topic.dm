@@ -421,6 +421,8 @@
 				new_mob = M.change_mob_type( /mob/living/simple_animal/construct/wraith , null, null, delmob )
 			if("shade")
 				new_mob = M.change_mob_type( /mob/living/simple_animal/shade , null, null, delmob )
+			if("ai")
+				new_mob = M.AIize(spawn_here = 1, del_mob = delmob)
 //		to_chat(world, "Made a [new_mob] [usr ? "usr still exists" : "usr does not exist"]")
 		if(new_mob && new_mob != M)
 //			to_chat(world, "[new_mob.client] vs [CLIENT] they [new_mob.client == CLIENT ? "match" : "don't match"]")
@@ -1754,9 +1756,11 @@
 			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human")
 			return
 
+		var/spawn_here = alert("Spawn AI at your location?", "Spawn Location", "Yes", "No")
+
 		message_admins("<span class='warning'>Admin [key_name_admin(usr)] AIized [key_name_admin(H)]!</span>", 1)
 		log_admin("[key_name(usr)] AIized [key_name(H)]")
-		var/mob/M = H.AIize()
+		var/mob/M = H.AIize(spawn_here == "Yes"? 1 : 0)
 		if(M)
 			if(M.client == CLIENT)
 				usr = M //We probably transformed ourselves
@@ -2460,30 +2464,11 @@
 			return
 
 		switch(href_list["secretsfun"])
-			if("sec_clothes")
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","SC")
-				for(var/obj/item/clothing/under/O in world)
-					del(O)
 			if("sec_all_clothes")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SAC")
 				for(var/obj/item/clothing/O in world)
 					del(O)
-			if("sec_classic1")
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","SC1")
-				for(var/obj/item/clothing/suit/fire/O in world)
-					del(O)
-				for(var/obj/structure/grille/O in world)
-					del(O)
-/*					for(var/obj/machinery/vehicle/pod/O in world)
-					for(var/mob/M in src)
-						M.forceMove(src.loc)
-						if (M.client)
-							M.client.perspective = MOB_PERSPECTIVE
-							M.client.eye = M
-					del(O)*/
 			if("monkey")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","M")
@@ -2594,76 +2579,6 @@
 				log_admin("[key_name(usr)] created a link with central command", 1)
 				message_admins("<span class='notice'>[key_name_admin(usr)] created a link with central command</span>", 1)
 				link_to_centcomm()
-			if("activateprison")
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","AP")
-				to_chat(world, "<span class='notice'><B>Transit signature detected.</B></span>")
-				to_chat(world, "<span class='notice'><B>Incoming shuttle.</B></span>")
-				/*
-				var/A = locate(/area/shuttle_prison)
-				for(var/atom/movable/AM as mob|obj in A)
-					AM.z = 1
-					AM.Move()
-				*/
-				message_admins("<span class='notice'>[key_name_admin(usr)] sent the prison shuttle to the station.</span>", 1)
-			if("deactivateprison")
-				/*
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","DP")
-				var/A = locate(/area/shuttle_prison)
-				for(var/atom/movable/AM as mob|obj in A)
-					AM.z = map.zCentcomm
-					AM.Move()
-				*/
-				message_admins("<span class='notice'>[key_name_admin(usr)] sent the prison shuttle back.</span>", 1)
-			if("toggleprisonstatus")
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","TPS")
-				for(var/obj/machinery/computer/prison_shuttle/PS in machines)
-					PS.allowedtocall = !(PS.allowedtocall)
-					message_admins("<span class='notice'>[key_name_admin(usr)] toggled status of prison shuttle to [PS.allowedtocall].</span>", 1)
-			if ("prisonwarp")
-				if (!ticker)
-					alert("The game hasn't started yet!", null, null, null, null, null)
-					return
-
-				feedback_inc("admin_secrets_fun_used", 1)
-
-				feedback_add_details("admin_secrets_fun_used", "PW")
-
-				message_admins("<span class='notice'>[key_name_admin(usr)] teleported all players to the prison station.</span>", 1)
-
-				var/security
-
-				for (var/mob/living/carbon/human/H in mob_list)
-					if (H)
-						if (H in prisonwarped) // don't warp them if they aren't ready or are already there
-							continue
-
-						security = FALSE
-
-						H.Paralyse(5)
-
-						var/obj/item/weapon/card/id/id = H.get_id_card()
-
-						if(id)
-							if (access_security in id.access)
-								security = TRUE
-
-						if (!security)
-							// strip their stuff before they teleport into a cell :downs:
-							for (var/obj/item/I in H.get_all_slots())
-								H.drop_from_inventory(I)
-
-							H.forceMove(pick(prisonwarp)) // teleport person to cell
-
-							H.equip_to_slot_or_del(new /obj/item/clothing/under/color/prisoner(H), slot_w_uniform)
-
-							H.equip_to_slot_or_del(new /obj/item/clothing/shoes/orange(H), slot_shoes)
-						else
-							H.forceMove(pick(prisonsecuritywarp)) // teleport security person
-
-						prisonwarped += H
 			if("traitor_all")
 				if(!ticker)
 					alert("The game hasn't started yet!")
@@ -2716,12 +2631,6 @@
 
 				message_admins("<span class='notice'>[key_name_admin(usr)] moved the centcom ferry</span>", 1)
 				log_admin("[key_name(usr)] moved the centcom ferry")
-			if("movealienship")
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","ShX")
-				move_alien_ship()
-				message_admins("<span class='notice'>[key_name_admin(usr)] moved the alien dinghy</span>", 1)
-				log_admin("[key_name(usr)] moved the alien dinghy")
 			if("togglebombcap")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BC")

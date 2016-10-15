@@ -725,8 +725,6 @@ Thanks.
 				for(var/mob/living/M in G.target)
 					if(M && !(M in view(src)))
 						M.NotTargeted(G)
-	// Update on_moved listeners.
-	INVOKE_EVENT(on_moved,list("loc"=loc))
 
 /mob/living/proc/handle_hookchain(var/direct)
 	for(var/obj/item/weapon/gun/hookshot/hookshot in src)

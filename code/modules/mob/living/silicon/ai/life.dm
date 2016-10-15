@@ -76,8 +76,6 @@
 			return
 
 		else // We are in an AI core and are unpowered.
-			var/unblindme = 0
-
 			overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
 			if(client)
 				change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS)
@@ -100,7 +98,7 @@
 							if (!istype(T, /turf/space))
 								to_chat(src, "Alert cancelled. Power has been restored without our assistance.")
 								aiRestorePowerRoutine = 0
-								unblindme = 1
+								clear_fullscreen("blind")
 								return
 						to_chat(src, "Fault confirmed: missing external power. Shutting down main control system to save power.")
 						sleep(20)
@@ -141,7 +139,7 @@
 								if (!istype(T, /turf/space))
 									to_chat(src, "Alert cancelled. Power has been restored without our assistance.")
 									aiRestorePowerRoutine = 0
-									unblindme = 1
+									clear_fullscreen("blind")
 									return
 							switch(PRP)
 								if (1)
@@ -166,10 +164,8 @@
 									aiRestorePowerRoutine = 3
 									to_chat(src, "Here are your current laws:")
 									show_laws()
-							sleep(50)
+							spawn(50)
 							theAPC = null
-			if(unblindme)
-				clear_fullscreen("blind")
 
 /mob/living/silicon/ai/updatehealth()
 	if(status_flags & GODMODE)

@@ -279,6 +279,7 @@ var/list/mechtoys = list(
 					if(slip.stamped && slip.stamped.len) //yes, the clown stamp will work. clown is the highest authority on the station, it makes sense
 						cargo_acct.money += credits_per_slip
 						find_slip = 0
+					qdel(A)
 					continue
 
 				SellObjToOrders(A,0)
@@ -372,9 +373,7 @@ var/list/mechtoys = list(
 			CHECK CONTENTS AND STAMP BELOW THE LINE TO CONFIRM RECEIPT OF GOODS<hr>"}
 		if (SP.contraband)
 			slip.forceMove(null)	//we are out of blanks for Form #44-D Ordering Illicit Drugs.
-
-	supply_shuttle.shoppinglist.len = 0
-	return
+		shoppinglist.Remove(S)
 
 /datum/controller/supply_shuttle/proc/forbidden_atoms_check(atom/A)
 	var/contents = get_contents_in_object(A)

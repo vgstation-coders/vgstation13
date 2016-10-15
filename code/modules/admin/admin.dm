@@ -120,7 +120,7 @@ var/global/floorIsLava = 0
 
 			//AI / Cyborg
 			if(isAI(M))
-				body += "<B>Is an AI</B> "
+				body += "<B>Is an AI</B> | "
 			else if(ishuman(M))
 				body += {"<A href='?src=\ref[src];makeai=\ref[M]'>Make AI</A> |
 					<A href='?src=\ref[src];makerobot=\ref[M]'>Make Robot</A> |
@@ -173,26 +173,27 @@ var/global/floorIsLava = 0
 			body += {"<br><br>
 				<b>Rudimentary transformation:</b><font size=2><br>These transformations only create a new mob type and copy stuff over. They do not take into account MMIs and similar mob-specific things. The buttons in 'Transformations' are preferred, when possible.</font><br>
 				<A href='?src=\ref[src];simplemake=observer;mob=\ref[M]'>Observer</A> |
-				\[ Alien: <A href='?src=\ref[src];simplemake=drone;mob=\ref[M]'>Drone</A>,
-				<A href='?src=\ref[src];simplemake=hunter;mob=\ref[M]'>Hunter</A>,
-				<A href='?src=\ref[src];simplemake=queen;mob=\ref[M]'>Queen</A>,
-				<A href='?src=\ref[src];simplemake=sentinel;mob=\ref[M]'>Sentinel</A>,
-				<A href='?src=\ref[src];simplemake=larva;mob=\ref[M]'>Larva</A> \]
-				<A href='?src=\ref[src];simplemake=human;mob=\ref[M]'>Human</A>
-				\[ slime: <A href='?src=\ref[src];simplemake=slime;mob=\ref[M]'>Baby</A>,
-				<A href='?src=\ref[src];simplemake=adultslime;mob=\ref[M]'>Adult</A> \]
+				<A href='?src=\ref[src];simplemake=human;mob=\ref[M]'>Human</A> |
 				<A href='?src=\ref[src];simplemake=monkey;mob=\ref[M]'>Monkey</A> |
-				<A href='?src=\ref[src];simplemake=robot;mob=\ref[M]'>Cyborg</A> |
 				<A href='?src=\ref[src];simplemake=cat;mob=\ref[M]'>Cat</A> |
 				<A href='?src=\ref[src];simplemake=runtime;mob=\ref[M]'>Runtime</A> |
 				<A href='?src=\ref[src];simplemake=corgi;mob=\ref[M]'>Corgi</A> |
 				<A href='?src=\ref[src];simplemake=ian;mob=\ref[M]'>Ian</A> |
 				<A href='?src=\ref[src];simplemake=crab;mob=\ref[M]'>Crab</A> |
-				<A href='?src=\ref[src];simplemake=coffee;mob=\ref[M]'>Coffee</A> |
-				\[ Construct: <A href='?src=\ref[src];simplemake=constructarmoured;mob=\ref[M]'>Armoured</A> ,
-				<A href='?src=\ref[src];simplemake=constructbuilder;mob=\ref[M]'>Builder</A> ,
-				<A href='?src=\ref[src];simplemake=constructwraith;mob=\ref[M]'>Wraith</A> \]
-				<A href='?src=\ref[src];simplemake=shade;mob=\ref[M]'>Shade</A>
+				<A href='?src=\ref[src];simplemake=coffee;mob=\ref[M]'>Coffee</A>
+				<br>\[ Silicon: <A href='?src=\ref[src];simplemake=ai;mob=\ref[M]'>AI</A>, |
+				<A href='?src=\ref[src];simplemake=robot;mob=\ref[M]'>Cyborg</A> \]
+				<br>\[ Alien: <A href='?src=\ref[src];simplemake=drone;mob=\ref[M]'>Drone</A>,
+				<A href='?src=\ref[src];simplemake=hunter;mob=\ref[M]'>Hunter</A>,
+				<A href='?src=\ref[src];simplemake=queen;mob=\ref[M]'>Queen</A>,
+				<A href='?src=\ref[src];simplemake=sentinel;mob=\ref[M]'>Sentinel</A>,
+				<A href='?src=\ref[src];simplemake=larva;mob=\ref[M]'>Larva</A> \]
+				<br>\[ Slime: <A href='?src=\ref[src];simplemake=slime;mob=\ref[M]'>Baby</A>,
+				<A href='?src=\ref[src];simplemake=adultslime;mob=\ref[M]'>Adult</A> \]
+				<br>\[ Construct: <A href='?src=\ref[src];simplemake=constructarmoured;mob=\ref[M]'>Armoured</A>,
+				<A href='?src=\ref[src];simplemake=constructbuilder;mob=\ref[M]'>Builder</A>,
+				<A href='?src=\ref[src];simplemake=constructwraith;mob=\ref[M]'>Wraith</A>,
+				<A href='?src=\ref[src];simplemake=shade;mob=\ref[M]'>Shade</A> \]
 				<br>
 			"}
 
@@ -720,17 +721,21 @@ var/global/floorIsLava = 0
 	if(check_rights(R_ADMIN,0))
 		dat += {"
 			<B>Admin Secrets</B><BR>
+			<BR><BR>
+			<A href='?src=\ref[src];secretsadmin=manifest'>Show Crew Manifest</A><BR>
+			<A href='?src=\ref[src];secretsadmin=showgm'>Show Game Mode</A><BR>
+			<A href='?src=\ref[src];secretsadmin=check_antagonist'>Show current traitors and objectives</A><BR>
+			<BR>
+			<A href='?src=\ref[src];secretsadmin=DNA'>List DNA (Blood)</A><BR>
+			<A href='?src=\ref[src];secretsadmin=fingerprints'>List Fingerprints</A><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsadmin=clear_bombs'>Remove all bombs currently in existence</A><BR>
 			<A href='?src=\ref[src];secretsadmin=list_bombers'>Bombing List</A><BR>
-			<A href='?src=\ref[src];secretsadmin=check_antagonist'>Show current traitors and objectives</A><BR>
 			<A href='?src=\ref[src];secretsadmin=list_signalers'>Show last [length(lastsignalers)] signalers</A><BR>
-			<A href='?src=\ref[src];secretsadmin=list_lawchanges'>Show last [length(lawchanges)] law changes</A><BR>
+			<BR>
 			<A href='?src=\ref[src];secretsadmin=showailaws'>Show AI Laws</A><BR>
-			<A href='?src=\ref[src];secretsadmin=showgm'>Show Game Mode</A><BR>
-			<A href='?src=\ref[src];secretsadmin=manifest'>Show Crew Manifest</A><BR>
-			<A href='?src=\ref[src];secretsadmin=DNA'>List DNA (Blood)</A><BR>
-			<A href='?src=\ref[src];secretsadmin=fingerprints'>List Fingerprints</A><BR><BR>
+			<A href='?src=\ref[src];secretsadmin=list_lawchanges'>Show last [length(lawchanges)] law changes</A><BR>
+			<BR>
 			<BR>
 			"}
 
@@ -738,71 +743,76 @@ var/global/floorIsLava = 0
 		dat += {"
 			<B>'Random' Events</B><BR>
 			<BR>
-			<A href='?src=\ref[src];secretsfun=gravity'>Toggle station artificial gravity</A><BR>
 			<A href='?src=\ref[src];secretsfun=wave'>Spawn a wave of meteors (aka lagocolyptic shower)</A><BR>
 			<A href='?src=\ref[src];secretsfun=silent_meteors'>Spawn a wave of meteors with no warning</A><BR>
+			<A href='?src=\ref[src];secretsfun=gravity'>Toggle station artificial gravity</A><BR>
 			<A href='?src=\ref[src];secretsfun=gravanomalies'>Spawn a gravitational anomaly (aka lagitational anomolag)</A><BR>
 			<A href='?src=\ref[src];secretsfun=timeanomalies'>Spawn wormholes</A><BR>
+			<A href='?src=\ref[src];secretsfun=immovable'>Spawn an Immovable Rod</A><BR>
+			<A href='?src=\ref[src];secretsfun=meaty_gores'>Trigger an Organic Debris Field</A><BR>
+			<BR>
 			<A href='?src=\ref[src];secretsfun=blobwave'>Spawn a blob cluster</A><BR>
 			<A href='?src=\ref[src];secretsfun=blobstorm'>Spawn a blob conglomerate</A><BR>
 			<A href='?src=\ref[src];secretsfun=aliens'>Trigger an Alien infestation</A><BR>
 			<A href='?src=\ref[src];secretsfun=alien_silent'>Spawn an Alien silently</A><BR>
 			<A href='?src=\ref[src];secretsfun=spiders'>Trigger a Spider infestation</A><BR>
 			<A href='?src=\ref[src];secretsfun=hostile_infestation'>Spawn a hostile creature infestation</A><BR>
-			<A href='?src=\ref[src];secretsfun=striketeam'>Send in a strike team</A><BR>
 			<A href='?src=\ref[src];secretsfun=carp'>Trigger a Carp migration</A><BR>
-			<A href='?src=\ref[src];secretsfun=radiation'>Irradiate the station</A><BR>
-			<A href='?src=\ref[src];secretsfun=prison_break'>Trigger a Prison Break</A><BR>
-			<A href='?src=\ref[src];secretsfun=virus'>Trigger a Virus Outbreak</A><BR>
-			<A href='?src=\ref[src];secretsfun=immovable'>Spawn an Immovable Rod</A><BR>
-			<A href='?src=\ref[src];secretsfun=meaty_gores'>Trigger an Organic Debris Field</A><BR>
-			<A href='?src=\ref[src];secretsfun=lightsout'>Toggle a "lights out" event</A><BR>
-			<A href='?src=\ref[src];secretsfun=mass_hallucination'>Cause the crew to hallucinate</A><BR>
-			<A href='?src=\ref[src];secretsfun=ionstorm'>Spawn an Ion Storm</A><BR>
+			<A href='?src=\ref[src];secretsfun=mobswarm'>Trigger mobs of your choice appearing out of thin air</A><BR>
+			<BR>
 			<A href='?src=\ref[src];secretsfun=spacevines'>Spawn Space-Vines</A><BR>
+			<A href='?src=\ref[src];secretsfun=radiation'>Irradiate the station</A><BR>
+			<A href='?src=\ref[src];secretsfun=virus'>Trigger a Virus Outbreak</A><BR>
+			<A href='?src=\ref[src];secretsfun=mass_hallucination'>Cause the crew to hallucinate</A><BR>
+			<BR>
+			<A href='?src=\ref[src];secretsfun=lightsout'>Toggle a "lights out" event</A><BR>
+			<A href='?src=\ref[src];secretsfun=prison_break'>Trigger a Prison Break</A><BR>
+			<A href='?src=\ref[src];secretsfun=ionstorm'>Spawn an Ion Storm</A><BR>
 			<A href='?src=\ref[src];secretsfun=comms_blackout'>Trigger a communication blackout</A><BR>
 			<A href='?src=\ref[src];secretsfun=pda_spam'>Trigger a wave of PDA spams</A><BR>
-			<A href='?src=\ref[src];secretsfun=mobswarm'>Trigger mobs of your choice appearing out of thin air</A><BR>
+
 			<BR>
 			<B>Fun Secrets</B><BR>
 			<BR>
 			<A href='?src=\ref[src];secretsfun=hardcore_mode'>[ticker&&ticker.hardcore_mode ? "Disable" : "Enable"] hardcore mode (makes starvation kill!)</A><BR>
-			<A href='?src=\ref[src];secretsfun=sec_clothes'>Remove 'internal' clothing</A><BR>
-			<A href='?src=\ref[src];secretsfun=sec_all_clothes'>Remove ALL clothing</A><BR>
-			<A href='?src=\ref[src];secretsfun=monkey'>Turn all humans into monkeys</A><BR>
-			<A href='?src=\ref[src];secretsfun=sec_classic1'>Remove firesuits, grilles, and pods</A><BR>
+			<A href='?src=\ref[src];secretsfun=tripleAI'>Triple AI mode (needs to be used in the lobby)</A><BR>
+			<A href='?src=\ref[src];secretsfun=eagles'>Egalitarian Station Mode</A><BR>
+			<BR>
 			<A href='?src=\ref[src];secretsfun=power'>Make all areas powered</A><BR>
 			<A href='?src=\ref[src];secretsfun=unpower'>Make all areas unpowered</A><BR>
 			<A href='?src=\ref[src];secretsfun=quickpower'>Power all SMES</A><BR>
 			<A href='?src=\ref[src];secretsfun=breaklink'>Break the station's link with Central Command</A><BR>
 			<A href='?src=\ref[src];secretsfun=makelink'>Make the station linked with Central Command</A><BR>
-			<A href='?src=\ref[src];secretsfun=toggleprisonstatus'>Toggle Prison Shuttle Status(Use with S/R)</A><BR>
-			<A href='?src=\ref[src];secretsfun=activateprison'>Send Prison Shuttle</A><BR>
-			<A href='?src=\ref[src];secretsfun=deactivateprison'>Return Prison Shuttle</A><BR>
-			<A href='?src=\ref[src];secretsfun=prisonwarp'>Warp all Players to Prison</A><BR>
-			<A href='?src=\ref[src];secretsfun=tripleAI'>Triple AI mode (needs to be used in the lobby)</A><BR>
-			<A href='?src=\ref[src];secretsfun=traitor_all'>Everyone is the traitor</A><BR>
-			<A href='?src=\ref[src];secretsfun=onlyone'>There can be only one!</A><BR>
-			<A href='?src=\ref[src];secretsfun=flicklights'>Ghost Mode</A><BR>
-			<A href='?src=\ref[src];secretsfun=retardify'>Make all players retarded</A><BR>
-			<A href='?src=\ref[src];secretsfun=fakeguns'>Make all items look like guns</A><BR>
-			<A href='?src=\ref[src];secretsfun=experimentalguns'>Distribute experimental guns to the crew</A><BR>
-			<A href='?src=\ref[src];secretsfun=schoolgirl'>Japanese Animes Mode</A><BR>
-			<A href='?src=\ref[src];secretsfun=eagles'>Egalitarian Station Mode</A><BR>
-			<A href='?src=\ref[src];secretsfun=movealienship'>Move Alien Dinghy</A><BR>
 			<A href='?src=\ref[src];secretsfun=blackout'>Break all lights</A><BR>
 			<A href='?src=\ref[src];secretsfun=whiteout'>Fix all lights</A><BR>
-			<A href='?src=\ref[src];secretsfun=thebees'>Unleash THE BEES onto the crew</A><BR>
-			<A href='?src=\ref[src];secretsfun=floorlava'>The floor is lava! (DANGEROUS: extremely lame)</A><BR>
+			<BR>
 			<A href='?src=\ref[src];secretsfun=togglenarsie'>Toggle Nar-Sie's behaviour</A><BR>
+			<BR>
 			<A href='?src=\ref[src];secretsfun=fakealerts'>Trigger a fake alert</A><BR>
 			<A href='?src=\ref[src];secretsfun=fakebooms'>Adds in some Micheal Bay to the shift without major destruction</A><BR>
+			<BR>
+			<A href='?src=\ref[src];secretsfun=striketeam'>Send in a strike team</A><BR>
+			<A href='?src=\ref[src];secretsfun=placeturret'>Create a turret</A><BR>
+			<BR>
+			<A href='?src=\ref[src];secretsfun=traitor_all'>Everyone is the traitor</A><BR>
+			<A href='?src=\ref[src];secretsfun=onlyone'>There can be only one!</A><BR>
+			<A href='?src=\ref[src];secretsfun=experimentalguns'>Distribute experimental guns to the crew</A><BR>
+			<A href='?src=\ref[src];secretsfun=flicklights'>Ghost Mode</A><BR>
+			<A href='?src=\ref[src];secretsfun=monkey'>Turn all humans into monkeys</A><BR>
+			<BR>
+			<A href='?src=\ref[src];secretsfun=sec_all_clothes'>Remove ALL clothing</A><BR>
+			<A href='?src=\ref[src];secretsfun=retardify'>Make all players retarded</A><BR>
+			<A href='?src=\ref[src];secretsfun=fakeguns'>Make all items look like guns</A><BR>
+			<A href='?src=\ref[src];secretsfun=schoolgirl'>Japanese Animes Mode</A><BR>
+			<BR>
+			<A href='?src=\ref[src];secretsfun=thebees'>Unleash THE BEES onto the crew</A><BR>
+			<A href='?src=\ref[src];secretsfun=floorlava'>The floor is lava! (DANGEROUS: extremely lame)</A><BR>
+			<BR>
 			<A href='?src=\ref[src];secretsfun=massbomber'>Turn every players into Bomberman</A><BR>
 			<A href='?src=\ref[src];secretsfun=bomberhurt'>Make Bomberman Bombs actually hurt players</A><BR>
 			<A href='?src=\ref[src];secretsfun=bomberdestroy'>Make Bomberman Bombs actually destroy stuff</A><BR>
 			<A href='?src=\ref[src];secretsfun=bombernohurt'>Make Bomberman Bombs harmless to players(default)</A><BR>
 			<A href='?src=\ref[src];secretsfun=bombernodestroy'>Make Bomberman Bombs harmless to the environnement(default)</A><BR>
-			<A href='?src=\ref[src];secretsfun=placeturret'>Create a turret</A><BR>
 			<BR>
 			<B>Final Solutions</B><BR>
 			<I>(Warning, these will end the round!)</I><BR>
