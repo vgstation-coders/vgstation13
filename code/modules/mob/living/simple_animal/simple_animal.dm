@@ -614,6 +614,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = damage)))
 		return 0
+	if(skinned())
+		damage = damage * 2
 
 	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
@@ -626,10 +628,20 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return 0
 	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = damage)))
 		return 0
+	if(skinned())
+		damage = damage * 2
 
 	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		Die()
+
+/mob/living/simple_animal/proc/skinned()
+	if(butchering_drops)
+		var/datum/butchering_product/skin/skin = locate(/datum/butchering_product/skin) in butchering_drops
+		if(istype(skin))
+			if(skin.amount != skin.initial_amount)
+				return 1
+	return 0
 
 /mob/living/simple_animal/proc/SA_attackable(target)
 	return CanAttack(target)
@@ -668,10 +680,14 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/ExtinguishMob()
 	return
 
-/mob/living/simple_animal/revive()
+/mob/living/simple_animal/revive(refreshbutcher = 1)
+	if(refreshbutcher)
+		butchering_drops = null
+		meat_taken = 0
+	if(meat_taken)
+		maxHealth = initial(maxHealth)
+		maxHealth -= (initial(maxHealth) / meat_amount) * meat_taken
 	health = maxHealth
-	butchering_drops = null
-	meat_taken = 0
 	..()
 
 /mob/living/simple_animal/proc/make_babies() // <3 <3 <3

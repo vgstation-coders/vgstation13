@@ -676,8 +676,9 @@ proc/move_mining_shuttle()
 			var/mob/living/simple_animal/M = target
 
 			if(M.stat == DEAD)
+
 				M.faction = "lazarus \ref[user]"
-				M.revive()
+				M.revive(refreshbutcher = 0)
 				if(istype(target, /mob/living/simple_animal/hostile))
 					var/mob/living/simple_animal/hostile/H = M
 					H.friends += user

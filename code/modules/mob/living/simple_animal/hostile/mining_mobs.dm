@@ -110,13 +110,20 @@
 		if(3.0)
 			adjustBruteLoss(110)
 
-/mob/living/simple_animal/hostile/asteroid/basilisk/Die()
+obj/item/asteroid/basilisk_hide
+	name = "basilisk crystals"
+	desc = "You shouldn't ever see this."
+	icon = 'icons/obj/mining.dmi'
+	icon_state = "Diamond ore"
+
+obj/item/asteroid/basilisk_hide/New()
 	var/counter
 	for(counter=0, counter<2, counter++)
 		var/obj/item/weapon/ore/diamond/D = new /obj/item/weapon/ore/diamond(src.loc)
-		D.plane = plane
-		D.layer = layer + 0.001
+		D.plane = MOB_PLANE
+		D.layer = MOB_LAYER + 0.001
 	..()
+	qdel(src)
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub
 	name = "goldgrub"
@@ -255,8 +262,31 @@
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/Die()
 	mouse_opacity = 1
-	new /obj/item/asteroid/hivelord_core(src.loc)
 	..()
+	update_icons()
+
+/mob/living/simple_animal/hostile/asteroid/hivelord/update_icons()
+	.=..()
+
+	if(stat == DEAD && butchering_drops)
+		icon_state = "[icon_dead][has_core() ? "" : "_nocore"]"
+
+/mob/living/simple_animal/hostile/asteroid/hivelord/Aggro()
+	..()
+	if(butchering_drops)
+		icon_state = "[icon_aggro][has_core() ? "" : "_nocore"]"
+
+/mob/living/simple_animal/hostile/asteroid/hivelord/LoseAggro()
+	..()
+	if(butchering_drops)
+		icon_state = "[icon_living][has_core() ? "" : "_nocore"]"
+
+/mob/living/simple_animal/hostile/asteroid/hivelord/proc/has_core()
+	if(butchering_drops)
+		var/datum/butchering_product/hivelord_core/core = locate(/datum/butchering_product/hivelord_core) in butchering_drops
+		if(istype(core))
+			return core.amount
+	return 1
 
 /obj/item/asteroid/hivelord_core
 	name = "hivelord remains"
@@ -266,6 +296,7 @@
 	var/inert = 0
 
 /obj/item/asteroid/hivelord_core/New()
+	..()
 	spawn(1200)
 		inert = 1
 		desc = "The remains of a hivelord that have become useless, having been left alone too long after being harvested."

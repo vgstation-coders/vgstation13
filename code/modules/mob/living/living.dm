@@ -1373,14 +1373,14 @@ default behaviour is:
 			user.visible_message("<span class='notice'>[user] starts [our_product.verb_gerund] \the [src][tool ? "with \the [tool]" : ""].</span>",\
 				"<span class='info'>You start [our_product.verb_gerund] \the [src].</span>")
 			src.being_butchered = 1
-			if(!do_after(user,src,butchering_time / speed_mod))
+			if(!do_after(user,src,(our_product.butcher_time * size) / speed_mod))
 				to_chat(user, "<span class='warning'>Your attempt to [our_product.verb_name] \the [src] has been interrupted.</span>")
 				src.being_butchered = 0
 			else
 				to_chat(user, "<span class='info'>You finish [our_product.verb_gerund] \the [src].</span>")
 				src.being_butchered = 0
-				src.update_icons()
 				our_product.spawn_result(get_turf(src), src)
+				src.update_icons()
 			return
 
 	user.visible_message("<span class='notice'>[user] starts butchering \the [src][tool ? " with \the [tool]" : ""].</span>",\
