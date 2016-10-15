@@ -140,8 +140,8 @@
 		user.add_spell(unbind)
 
 /spell/targeted/bound_object/on_removed(mob/user)
+	clear_bound()
 	for(var/spell/unbind/spell in user.spell_list)
-		spell.bound_object = null
 		user.remove_spell(spell)
 
 /spell/unbind
