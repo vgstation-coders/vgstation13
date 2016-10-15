@@ -2584,7 +2584,7 @@
 					for(var/datum/disease/D in M.viruses)
 						D.spread = "Remissive"
 						D.stage--
-						if(D.stage < 1)
+						if(D.stage >= 1)
 							D.cure()
 					if(prob(percent_machine))
 						holder.add_reagent("mednanobots", 20)
