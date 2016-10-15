@@ -1,17 +1,17 @@
-/spell/targeted/recall
-	name = "Recall"
-	desc = "This spell allows a wizard to put a 'mark' on almost any object, then teleport it to them at will. Middle click the spell icon or use the 'clear mark' spell to clear the marked object."
-	abbreviation = "RC"
+/spell/targeted/bound_object
+	name = "Bound Object"
+	desc = "This spell allows a wizard to bind an object to themselves, then teleport it to them at will. Middle click the spell icon or use the 'Unbind' spell to select a new object."
+	abbreviation = "BO"
 
 	school = "abjuration"
 	charge_max = 100
 	spell_flags = SELECTABLE | WAIT_FOR_CLICK
-	hud_state = "wiz_recall"
+	hud_state = "wiz_bound"
 	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 2, Sp_POWER = 1)
 
 	var/has_object = 0
-	var/obj/marked
-	var/icon/marked_icon
+	var/obj/bound
+	var/icon/bound_icon
 
 	var/allow_anchored = 0
 
@@ -50,7 +50,7 @@
 		)
 
 
-/spell/targeted/recall/is_valid_target(var/obj/target)
+/spell/targeted/bound_object/is_valid_target(var/obj/target)
 	if(!istype(target))
 		return 0
 	if(target.anchored && !allow_anchored)
@@ -61,29 +61,29 @@
 
 	return target
 
-/spell/targeted/recall/before_channel(mob/user)
+/spell/targeted/bound_object/before_channel(mob/user)
 	if(has_object)
 		if(cast_check(0, user))
-			if(!marked || marked.loc == null) //if it's deleted or something
-				to_chat(user, "<span class='danger'>You can't find your marked object anywhere!</span>")
-				clear_marked()
+			if(!bound || bound.loc == null) //if it's deleted or something
+				to_chat(user, "<span class='danger'>The link to your bound object has been severed!</span>")
+				clear_bound()
 				return 1
-			if(marked.anchored && !allow_anchored)
-				to_chat(user, "<span class='danger'>You can't seem to move your marked object!</span>")
-				clear_marked()
+			if(bound.anchored && !allow_anchored)
+				to_chat(user, "<span class='danger'>You can't seem to summon your bound object!</span>")
+				clear_bound()
 				return 1
-			var/turf/oldloc = get_turf(marked)
-			if(istype(marked, /obj/item))
-				var/obj/item/I = marked
+			var/turf/oldloc = get_turf(bound)
+			if(istype(bound, /obj/item))
+				var/obj/item/I = bound
 				if(istype(I.loc, /mob))
-					var/mob/M = marked.loc
+					var/mob/M = bound.loc
 					if(M == user) //you already have it you dumb
 						return 1
 					M.drop_item(I, force_drop = 1)
 					M.update_icons()
 				user.put_in_hands(I)
 			else
-				marked.forceMove(get_turf(user))
+				bound.forceMove(get_turf(user))
 			var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
 			sparks.set_up(3, 0, oldloc)
 			sparks.start()
@@ -91,86 +91,86 @@
 		return 1
 	return 0
 
-/spell/targeted/recall/cast(list/targets, mob/user = user)
+/spell/targeted/bound_object/cast(list/targets, mob/user = user)
 	for(var/obj/target in targets)
 		if(!has_object)
 			has_object = 1
-			marked = target
-			marked_icon = image(target.icon, target.icon_state, layer = HUD_ITEM_LAYER)
-			connected_button.overlays += marked_icon
-			to_chat(user, "You place a magic mark on \the [target].")
+			bound = target
+			bound_icon = image(target.icon, target.icon_state, layer = HUD_ITEM_LAYER)
+			connected_button.overlays += bound_icon
+			to_chat(user, "You bind \the [target] to yourself.")
 			channel_spell(force_remove = 1)
 	return 1
 
-/spell/targeted/recall/empower_spell()
+/spell/targeted/bound_object/empower_spell()
 	spell_levels[Sp_POWER]++
 	allow_anchored = 1
 
-	var/upgrade_desc = "You have increased the array of objects that can be moved."
+	var/upgrade_desc = "You have reduced the restrictions on your binding."
 
 	return upgrade_desc
 
-/spell/targeted/recall/get_upgrade_info(upgrade_type, level)
+/spell/targeted/bound_object/get_upgrade_info(upgrade_type, level)
 	if(upgrade_type == Sp_POWER)
-		return "Increases the variety of objects that can be marked, letting anchored structures and machines be moved."
+		return "Increases your binding skill, allowing otherwise immobile structures and machines to be moved."
 	return ..()
 
-/spell/targeted/recall/on_right_click(mob/user)
+/spell/targeted/bound_object/on_right_click(mob/user)
 	if(has_object)
-		if(!marked)
-			to_chat(user, "You remove your magic mark.")
+		if(!bound)
+			to_chat(user, "You feel unbound.")
 		else
-			to_chat(user, "You remove the mark from \the [marked].")
-		clear_marked()
+			to_chat(user, "You unbind \the [bound] from yourself.")
+		clear_bound()
 	return 1
 
-/spell/targeted/recall/proc/clear_marked()
+/spell/targeted/bound_object/proc/clear_bound()
 	has_object = 0
-	marked = null
-	connected_button.overlays -= marked_icon
-	marked_icon = null
+	bound = null
+	connected_button.overlays -= bound_icon
+	bound_icon = null
 
-/spell/targeted/recall/on_added(mob/user)
-	if(alert(user, "The marked object is cleared by middle-clicking the spell icon. You can also have a dedicated spell for clearing the mark. Do you want this?",,"Yes","No") == "Yes")
-		var/spell/clear_mark/clear_mark = new /spell/clear_mark
+/spell/targeted/bound_object/on_added(mob/user)
+	if(alert(user, "You can unbind the chosen object by middle-clicking the spell icon. You can also have a dedicated spell for unbinding. Do you want this?",,"Yes","No") == "Yes")
+		var/spell/unbind/unbind = new /spell/unbind
 		if(user.mind)
 			if(!user.mind.wizard_spells)
 				user.mind.wizard_spells = list()
-			user.mind.wizard_spells += clear_mark
-		user.add_spell(clear_mark)
+			user.mind.wizard_spells += unbind
+		user.add_spell(unbind)
 
-/spell/targeted/recall/on_removed(mob/user)
-	for(var/spell/clear_mark/spell in user.spell_list)
-		spell.recall = null
+/spell/targeted/bound_object/on_removed(mob/user)
+	for(var/spell/unbind/spell in user.spell_list)
+		spell.bound_object = null
 		user.remove_spell(spell)
 
-/spell/clear_mark
-	name = "Remove Mark"
-	desc = "Clears any magic mark you've previously set"
+/spell/unbind
+	name = "Unbind"
+	desc = "Dispells any objects bound to you, allowing a new object to be bound."
 
 	school = "abjuration"
 	charge_max = 10
 	spell_flags = 0
-	hud_state = "wiz_clear_mark"
+	hud_state = "wiz_unbind"
 	level_max = list(Sp_TOTAL = 0)
 
-	var/spell/targeted/recall/recall
+	var/spell/targeted/bound_object/linked_spell
 
-/spell/clear_mark/choose_targets(mob/user = usr)
+/spell/unbind/choose_targets(mob/user = usr)
 	return list(user)
 
-/spell/clear_mark/cast(list/targets, mob/user)
-	if(recall.has_object)
-		if(!recall.marked)
-			to_chat(user, "You remove your magic mark.")
+/spell/unbind/cast(list/targets, mob/user)
+	if(linked_spell.has_object)
+		if(!linked_spell.bound)
+			to_chat(user, "You feel unbound.")
 		else
-			to_chat(user, "You remove the mark from \the [recall.marked].")
-		recall.clear_marked()
+			to_chat(user, "You unbind \the [linked_spell.bound] from yourself.")
+		linked_spell.clear_bound()
 
-/spell/clear_mark/on_added(mob/user)
-	var/spell = /spell/targeted/recall
+/spell/unbind/on_added(mob/user)
+	var/spell = /spell/targeted/bound_object
 	if(!(locate(spell) in user.spell_list))
 		user.remove_spell(src)
 		return
-	for(var/spell/targeted/recall/recallspell in user.spell_list)
-		recall = recallspell
+	for(var/spell/targeted/bound_object/bound_object in user.spell_list)
+		linked_spell = bound_object
