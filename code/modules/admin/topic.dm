@@ -1811,6 +1811,25 @@
 				usr = M //We probably transformed ourselves
 			show_player_panel(M)
 
+	else if(href_list["makecatbeast"])
+		if(!check_rights(R_SPAWN))
+			return
+
+		var/mob/living/carbon/human/H = locate(href_list["makecatbeast"])
+		if(!istype(H))
+			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human")
+			return
+
+		if(alert(src.owner, "Are you sure you wish to catbeast [key_name(H)]?",  "Catbeast?" , "Yes" , "No") != "Yes")
+			return
+
+		if(H)
+			H.set_species("Tajaran", force_organs=1)
+			H.regenerate_icons()
+			add_gamelogs(usr, "turned [key_name(H)] into a catbeast", tp_link = FALSE)
+		else
+			to_chat(usr, "Failed! Something went wrong.")
+
 	else if(href_list["makerobot"])
 		if(!check_rights(R_SPAWN))
 			return

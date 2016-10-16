@@ -97,6 +97,17 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];subtlemessage=\ref[M]'>Subtle message</A>
 	"}
 
+	if(istype(M, /mob/living/carbon/human))
+		body += {"<br><br>
+			<b>Punishments:</b>
+			<br>"}
+		body += {"
+			<A href='?src=\ref[src];BlueSpaceArtillery=\ref[M]'>BSA</A> |
+			<A href='?src=\ref[src];addcancer=\ref[M]'>Inflict Cancer</A> |
+			<A href='?src=\ref[src];makecatbeast=\ref[M]'>Make Catbeast</A> |
+			<A href='?src=\ref[src];makecluwne=\ref[M]'>Make Cluwne</A> |
+		"}
+
 	// Mob-specific controls.
 	body += M.player_panel_controls(usr)
 
@@ -127,7 +138,6 @@ var/global/floorIsLava = 0
 					<A href='?src=\ref[src];makemommi=\ref[M]'>Make MoMMI</A> |
 					<A href='?src=\ref[src];makealien=\ref[M]'>Make Alien</A> |
 					<A href='?src=\ref[src];makeslime=\ref[M]'>Make slime</A> |
-					<A href='?src=\ref[src];makecluwne=\ref[M]'>Make Cluwne</A> |
 				"}
 
 			//Simple Animals
@@ -206,7 +216,6 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];tdome2=\ref[M]'>Thunderdome Red</A> |
 			<A href='?src=\ref[src];tdomeadmin=\ref[M]'>Thunderdome Admin</A> |
 			<A href='?src=\ref[src];tdomeobserve=\ref[M]'>Thunderdome Observer</A> |
-			<A href='?src=\ref[src];addcancer=\ref[M]'>Inflict Cancer</A> |
 		"}
 
 	// language toggles
