@@ -149,7 +149,7 @@
 			spilltarget = 100 + rand(0,player_list.len * 3)
 			explanation = "We must prepare this place for the Geometer of Blood's coming. Spill blood and gibs over [spilltarget] floor tiles."
 		if("sacrifice")
-			explanation = "We need to sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role], for his blood is the key that will lead our master to this realm. You will need 3 cultists around a Sacrifice rune (Hell Blood Join) to perform the ritual."
+			explanation = "We need to sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role=="MODE" ? (sacrifice_target.special_role) : (sacrifice_target.assigned_role)], for his blood is the key that will lead our master to this realm. You will need 3 cultists around a Sacrifice rune (Hell Blood Join) to perform the ritual."
 
 	for(var/datum/mind/cult_mind in cult)
 		equip_cultist(cult_mind.current)
@@ -216,7 +216,7 @@
 				spilltarget = 100 + rand(0,player_list.len * 3)
 				explanation = "We must prepare this place for the Geometer of Blood's coming. Spread blood and gibs over [spilltarget] of the Station's floor tiles."
 			if("sacrifice")
-				explanation = "We need to sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role], for his blood is the key that will lead our master to this realm. You will need 3 cultists around a Sacrifice rune (Hell Blood Join) to perform the ritual."
+				explanation = "We need to sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role=="MODE" ? (sacrifice_target.special_role) : (sacrifice_target.assigned_role)], for his blood is the key that will lead our master to this realm. You will need 3 cultists around a Sacrifice rune (Hell Blood Join) to perform the ritual."
 
 		for(var/datum/mind/cult_mind in cult)
 			to_chat(cult_mind.current, "<span class='sinister'>You and your acolytes have completed your task, but this place requires yet more preparation!</span>")
@@ -369,7 +369,7 @@
 		if("bloodspill")
 			explanation = "We must prepare this place for the Geometer of Blood's coming. Spill blood and gibs over [spilltarget] floor tiles."
 		if("sacrifice")
-			explanation = "We need to sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role], for his blood is the key that will lead our master to this realm. You will need 3 cultists around a Sacrifice rune (Hell Blood Join) to perform the ritual."
+			explanation = "We need to sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role=="MODE" ? (sacrifice_target.special_role) : (sacrifice_target.assigned_role)], for his blood is the key that will lead our master to this realm. You will need 3 cultists around a Sacrifice rune (Hell Blood Join) to perform the ritual."
 		if("eldergod")
 			explanation = "Summon Nar-Sie via the use of the Tear Reality rune (Hell Join Self). You will need 9 cultists standing on and around the rune to summon Him."
 	to_chat(cult_mind.current, "<B>Objective #[current_objective]</B>: [explanation]")
@@ -607,13 +607,13 @@
 				if("sacrifice")//sacrifice a high value target
 					if(sacrifice_target)
 						if(sacrifice_target in sacrificed)
-							explanation = "Sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role]. <font color='green'><B>Success!</B></font>"
+							explanation = "Sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role=="MODE" ? (sacrifice_target.special_role) : (sacrifice_target.assigned_role)]. <font color='green'><B>Success!</B></font>"
 							feedback_add_details("cult_objective","cult_sacrifice|SUCCESS")
 						else if(sacrifice_target && sacrifice_target.current)
-							explanation = "Sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role]. <font color='red'>Fail.</font>"
+							explanation = "Sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role=="MODE" ? (sacrifice_target.special_role) : (sacrifice_target.assigned_role)]. <font color='red'>Fail.</font>"
 							feedback_add_details("cult_objective","cult_sacrifice|FAIL")
 						else
-							explanation = "Sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role]. <font color='red'>Fail (Gibbed).</font>"
+							explanation = "Sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role=="MODE" ? (sacrifice_target.special_role) : (sacrifice_target.assigned_role)]. <font color='red'>Fail (Gibbed).</font>"
 							feedback_add_details("cult_objective","cult_sacrifice|FAIL|GIBBED")
 
 				if("eldergod")//summon narsie
