@@ -2479,7 +2479,7 @@
 		if(1 to 5)
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
-				if(H.species.name != "Dionae")
+				if(H.species.name != "Diona")
 					var/datum/organ/external/affecting = H.get_organ()
 					for(var/datum/wound/W in affecting.wounds)
 						spawn(1)
@@ -2526,7 +2526,7 @@
 		if(5 to 20)		//Danger zone healing. Adds to a human mob's "percent machine" var, which is directly translated into the chance that it will turn horror each tick that the reagent is above 5u.
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
-				if(H.species.name != "Dionae")
+				if(H.species.name != "Diona")
 					var/datum/organ/external/affecting = H.get_organ()
 					for(var/datum/wound/W in affecting.wounds)
 						spawn(1)
@@ -2649,7 +2649,7 @@
 		if(4.5 to 15)
 			if(ishuman(M)) //Does nothing to non-humans.
 				var/mob/living/carbon/human/H = M
-				if(H.species.name != "Dionae") //Dionae are broken as fuck
+				if(H.species.name != "Diona") //Dionae are broken as fuck
 					if(H.hulk_time<world.time && !has_been_armstrong)
 						H.hulk_time = world.time + (45 SECONDS)
 						armstronged_at = H.hulk_time
@@ -3035,7 +3035,7 @@
 		if(25 to INFINITY)
 			if(ishuman(M)) //Does nothing to non-humans.
 				var/mob/living/carbon/human/H = M
-				if(H.species.name != "Dionae") //Dionae are broken as fuck
+				if(H.species.name != "Diona") //Dionae are broken as fuck
 					if(H.hulk_time<world.time && !has_been_hulk)
 						H.hulk_time = world.time + (30 SECONDS)
 						hulked_at = H.hulk_time
