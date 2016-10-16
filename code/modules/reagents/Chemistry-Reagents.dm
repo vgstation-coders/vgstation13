@@ -2409,35 +2409,26 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
 /datum/reagent/nanites
-	name = "Nanites"
-	id = NANITES
-	description = "Microscopic construction robots."
-	reagent_state = LIQUID
-	color = "#535E66" //rgb: 83, 94, 102
+    name = "Nanites"
+    id = NANITES
+    description = "Microscopic construction robots."
+    reagent_state = LIQUID
+    color = "#535E66" //rgb: 83, 94, 102
+    var/diseasetype = /datum/disease/robotic_transformation
+/datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/robot_type)
 
-/datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+    if(..())
+        return 1
 
-	if(..())
-		return 1
+    if((prob(10) && method == TOUCH && robot_type == "cyborg") || method == INGEST)
+        M.contract_disease(new diseasetype)
 
-	if((prob(10) && method == TOUCH) || method == INGEST)
-		M.contract_disease(new /datum/disease/robotic_transformation(0), 1)
-
-/datum/reagent/autistnanites
-	name = "Autist nanites"
-	id = AUTISTNANITES
-	description = "Really autistic microscopic construction robots."
-	reagent_state = LIQUID
-	color = "#535E66" //rgb: 83, 94, 102
-
-/datum/reagent/autistnanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
-
-	if(..())
-		return 1
-
-	if((prob(10) && method == TOUCH) || method == INGEST)
-		M.contract_disease(new /datum/disease/robotic_transformation/mommi(0), 1)
+/datum/reagent/nanites/autist
+    name = "Autist nanites"
+    id = AUTISTNANITES
+    diseasetype = /datum/disease/robotic_transformation/mommi
 
 /datum/reagent/xenomicrobes
 	name = "Xenomicrobes"
@@ -2525,7 +2516,7 @@
 					for(var/datum/disease/D in M.viruses)
 						D.spread = "Remissive"
 						D.stage--
-						if(D.stage < 1)
+						if(D.stage >= 1)
 							D.cure()
 		if(5 to 20)		//Danger zone healing. Adds to a human mob's "percent machine" var, which is directly translated into the chance that it will turn horror each tick that the reagent is above 5u.
 			if(ishuman(M))
@@ -2588,7 +2579,7 @@
 					for(var/datum/disease/D in M.viruses)
 						D.spread = "Remissive"
 						D.stage--
-						if(D.stage < 1)
+						if(D.stage >= 1)
 							D.cure()
 					if(prob(percent_machine))
 						holder.add_reagent("mednanobots", 20)
