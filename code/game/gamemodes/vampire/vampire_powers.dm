@@ -99,6 +99,7 @@
 		M.current.weakened = 0
 		M.current.stunned = 0
 		M.current.paralysis = 0
+		M.current.reagents.clear_reagents()
 		//M.vampire.bloodusable -= 10
 		to_chat(M.current, "<span class='notice'>You flush your system with clean blood and remove any incapacitating effects.</span>")
 		spawn(1)
@@ -406,7 +407,7 @@
 		else
 			alphas["vampire_cloak"] = round((255 * 0.80))
 
-/mob/proc/can_suck(mob/living/carbon/target) 
+/mob/proc/can_suck(mob/living/carbon/target)
 	if(lying || incapacitated())
 		to_chat(src, "<span class='warning'> You cannot do this while on the ground!</span>")
 		return 0
@@ -424,7 +425,7 @@
 			else
 				to_chat(M, "<span class='notice'>With practiced ease, you shift aside your mask for each gulp of blood.</span>")
 	return 1
-	
+
 /mob/proc/can_enthrall(mob/living/carbon/C)
 	var/enthrall_safe = 0
 	if(restrained())

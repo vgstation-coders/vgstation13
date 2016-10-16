@@ -96,11 +96,11 @@ var/global/list/ghdel_profiling = list()
 // throw_impact is called multiple times when an item is thrown: see /atom/movable/proc/hit_check at atoms_movable.dm
 // Do NOT delete an item as part of it's throw_impact unless you've checked the hit_atom is a turf, as that's effectively the last time throw_impact is called in a single throw.
 // Otherwise, shit will runtime in the subsequent throw_impact calls.
-/atom/proc/throw_impact(atom/hit_atom, var/speed, user)
+/atom/proc/throw_impact(atom/hit_atom, var/speed, mob/user)
 	if(istype(hit_atom,/mob/living))
 		var/mob/living/M = hit_atom
 		M.hitby(src,speed,src.dir)
-		log_attack("<font color='red'>[hit_atom] ([M ? M.ckey : "what"]) was hit by [src] thrown by ([src.fingerprintslast])</font>")
+		log_attack("<font color='red'>[hit_atom] ([M ? M.ckey : "what"]) was hit by [src] thrown by [user] ([user ? user.ckey : "what"])</font>")
 
 	else if(isobj(hit_atom))
 		var/obj/O = hit_atom
@@ -449,7 +449,10 @@ its easier to just keep the beam vertical.
 
 /atom/proc/mech_drill_act(var/severity, var/child=null)
 	return ex_act(severity, child)
-
+	
+/atom/proc/can_mech_drill()
+	return acidable()
+	
 /atom/proc/blob_act(destroy = 0)
 	//DEBUG to_chat(pick(player_list),"blob_act() on [src] ([src.type])")
 	if(flags & INVULNERABLE)
@@ -804,3 +807,18 @@ its easier to just keep the beam vertical.
 
 /atom/proc/holomapAlwaysDraw()
 	return 1
+
+/atom/proc/get_inaccuracy(var/atom/target, var/spread, var/obj/mecha/chassis)
+	var/turf/curloc = get_turf(src)
+	var/turf/targloc = get_turf(target)
+	var/list/turf/shot_spread = list()
+	for(var/turf/T in trange(min(spread, max(0, get_dist(curloc, targloc)-1)), targloc))
+		if(chassis)
+			var/dir_to_targ = get_dir(chassis, T)
+			if(dir_to_targ && !(dir_to_targ & chassis.dir))
+				continue
+		shot_spread += T
+	var/turf/newtarget = pick(shot_spread)
+	if(newtarget == targloc)
+		return target
+	return newtarget

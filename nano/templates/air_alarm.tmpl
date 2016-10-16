@@ -1,4 +1,4 @@
-<!-- 
+<!--
 Title: Air Alarm UI
 Used In File(s): /code/game/machinery/alarm.dm
 -->
@@ -216,7 +216,7 @@ Used In File(s): /code/game/machinery/alarm.dm
 		<div class="statusDisplay">
 			{{for data.presets}}
 			<div class="line">
-				<div class="statusLabel">{{:helper.link(value.name,'gear',{'preset':index+1},null,(index+1==value.preset?'linkOn':''))}}</div>
+				<div class="statusLabel">{{:helper.link(value.name,'gear',{'preset':index+1},null,(index+1==data.preset?'linkOn':''))}}</div>
 				<div class="statusValue">
 					{{:value.desc}}
 				</div>

@@ -67,3 +67,10 @@
 
 	..()
 */
+
+/obj/item/weapon/gun/energy/failure_check(var/mob/living/carbon/human/M)
+	if(prob(10))
+		power_supply.use(charge_cost)
+		to_chat(M, "<span class='warning'>\The [src] buzzes.</span>")
+		return 1
+	return ..()

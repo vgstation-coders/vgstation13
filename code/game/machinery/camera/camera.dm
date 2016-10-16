@@ -178,7 +178,9 @@ var/list/camera_names=list()
 	add_hiddenprint(user)
 	deactivate(user,0)
 
-/obj/machinery/camera/attackby(W as obj, mob/living/user as mob)
+var/list/camera_messages = list()
+
+/obj/machinery/camera/attackby(obj/W as obj, mob/living/user as mob)
 
 	// DECONSTRUCTION
 	if(isscrewdriver(W))
@@ -253,38 +255,43 @@ var/list/camera_names=list()
 	else if ((istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/device/pda)) && isliving(user))
 		user.delayNextAttack(5)
 		var/mob/living/U = user
-		var/obj/item/weapon/paper/X = null
-		var/obj/item/device/pda/P = null
+		to_chat(U, "You hold \a [W] up to the camera ...")
 
-		var/itemname = ""
 		var/info = ""
 		if(istype(W, /obj/item/weapon/paper))
-			X = W
-			itemname = X.name
+			var/obj/item/weapon/paper/X = W
 			info = X.info
 		else
-			P = W
-			itemname = P.name
+			var/obj/item/device/pda/P = W
 			info = P.notehtml
-		to_chat(U, "You hold \a [itemname] up to the camera ...")
+
+		camera_messages["[html_encode(W.name)]"] = info
+
 		for(var/mob/living/silicon/ai/O in living_mob_list)
 			if(!O.client)
 				continue
 			if(U.name == "Unknown")
-				to_chat( O, "<span class='name'>[U]</span> holds \a [itemname] up to one of your cameras ...")
+				to_chat( O, "<span class='name'>[U]</span> holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of your cameras ...")
 			else
-				to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track2=\ref[O];track=\ref[U]'>[U]</a></span> holds \a [itemname] up to one of your cameras ...")
+				to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track2=\ref[O];track=\ref[U]'>[U]</a></span> holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of your cameras ...")
 
-			O << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", itemname, info), text("window=[]", itemname))
 		for(var/mob/O in player_list)
 			if (istype(O.machine, /obj/machinery/computer/security))
 				var/obj/machinery/computer/security/S = O.machine
 				if (S.current == src)
-					to_chat(O, "[U] holds \a [itemname] up to one of the cameras ...")
-					O << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", itemname, info), text("window=[]", itemname))
+					to_chat(O, "[U] holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of the cameras ...")
 	else
 		..()
 	return
+
+/obj/machinery/camera/Topic(href, href_list)
+	if(..())
+		return 1
+
+	if(href_list["picturename"])
+		var/picturename = href_list["picturename"]
+		var/pictureinfo = camera_messages[picturename]
+		usr << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", picturename, pictureinfo), text("window=[]", picturename))
 
 /obj/machinery/camera/attack_pai(mob/user as mob)
 	wirejack(user)

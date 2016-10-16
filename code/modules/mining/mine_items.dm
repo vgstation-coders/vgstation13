@@ -651,7 +651,7 @@ proc/move_mining_shuttle()
 
 /obj/item/weapon/lazarus_injector
 	name = "lazarus injector"
-	desc = "An injector with a cocktail of nanomachines and chemicals, this device can seemingly raise animals from the dead and make them friendly to the user (but retains previous nature aside from that). Unfortunately, the process is useless on higher lifeforms and incredibly costly, so these were stored away until an executive thought they'd be great motivation for some of their employees."
+	desc = "An injector containing a cocktail of rejuvenating chemicals, this device can seemingly raise animals from the dead and make them friendly to the user (but retains previous nature aside from that). Unfortunately, the process is useless on higher lifeforms and incredibly costly, so these were stored away until an executive thought they'd be great motivation for some of their employees."
 	icon = 'icons/obj/syringe.dmi'
 	icon_state = "lazarus_hypo"
 	item_state = "hypo"
@@ -676,8 +676,9 @@ proc/move_mining_shuttle()
 			var/mob/living/simple_animal/M = target
 
 			if(M.stat == DEAD)
+
 				M.faction = "lazarus \ref[user]"
-				M.revive()
+				M.revive(refreshbutcher = 0)
 				if(istype(target, /mob/living/simple_animal/hostile))
 					var/mob/living/simple_animal/hostile/H = M
 					H.friends += user

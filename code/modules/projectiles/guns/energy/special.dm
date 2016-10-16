@@ -31,6 +31,24 @@
 	charge_cost = 100
 	projectile_type = "/obj/item/projectile/energy/declone"
 
+/obj/item/weapon/gun/energy/decloner/failure_check(var/mob/living/carbon/human/M)
+	if(prob(15))
+		M.apply_effect(rand(15,30), IRRADIATE)
+		to_chat(M, "<span class='warning'>\The [src] feels warm for a moment.</span>")
+		return 1
+	if(prob(15))
+		M.adjustCloneLoss(rand(5,15))
+		to_chat(M, "<span class='warning'>\The [src] feels warm for a moment.</span>")
+		return 1
+	if(prob(3))
+		M.apply_effect(rand(60,80), IRRADIATE)
+		M.adjustCloneLoss(rand(30,50))
+		to_chat(M, "<span class='danger'>\The [src] breaks apart!.</span>")
+		M.drop_item(src, force_drop = 1)
+		qdel(src)
+		return 0
+	return ..()
+
 var/available_staff_transforms=list("monkey","robot","slime","xeno","human","furry","frankenstein")
 #define SOC_CHANGETYPE_COOLDOWN 2 MINUTES
 
@@ -494,6 +512,11 @@ obj/item/weapon/gun/energy/staff/focus/attack_self(mob/living/user as mob)
 	charge_cost = 100
 	cell_type = "/obj/item/weapon/cell"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
+
+obj/item/weapon/gun/energy/ricochet/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+	if(defective && prob(30))
+		target = get_ranged_target_turf(user, pick(diagonal), 7)
+	..()
 
 /obj/item/weapon/gun/energy/bison
 	name = "\improper Righteous Bison"

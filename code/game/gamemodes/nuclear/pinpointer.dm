@@ -12,7 +12,7 @@
 	starting_materials = list(MAT_IRON = 500)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL
-	var/obj/item/weapon/disk/nuclear/the_disk = null
+	var/obj/target = null // this can be used to override disk tracking on normal pinpointers (ie. for shunted malf ais)
 	var/active = 0
 	var/watches_nuke = 1
 
@@ -34,13 +34,13 @@
 		processing_objects -= src
 
 /obj/item/weapon/pinpointer/proc/workdisk()
-	if(!the_disk)
-		the_disk = locate()
-		the_disk.watched_by += src
 	process()
 
 /obj/item/weapon/pinpointer/process()
-	point_at(the_disk)
+	if(target)
+		point_at(target)
+		return
+	point_at(nukedisk)
 
 /obj/item/weapon/pinpointer/proc/point_at(atom/target)
 	if(!active)
@@ -89,7 +89,6 @@
 	desc = "A larger version of the normal pinpointer, this unit features a helpful quantum entanglement detection system to locate various objects that do not broadcast a locator signal."
 	var/mode = 0  // Mode 0 locates disk, mode 1 locates coordinates.
 	var/turf/location = null
-	var/obj/target = null
 	watches_nuke = 0
 
 /obj/item/weapon/pinpointer/advpinpointer/attack_self()
@@ -107,7 +106,7 @@
 /obj/item/weapon/pinpointer/advpinpointer/process()
 	switch(mode)
 		if(0)
-			workdisk()
+			point_at(nukedisk)
 		if(1)
 			point_at(location)
 		if(2)
@@ -151,15 +150,14 @@
 			mode = 2
 			switch(alert("Search for item signature or DNA fragment?" , "Signature Mode Select" , "" , "Item" , "DNA"))
 				if("Item")
-					var/list/item_names[0]
 					var/list/item_paths[0]
-					for(var/typepath in potential_theft_objectives)
-						var/obj/item/tmp_object=new typepath
-						var/n="[tmp_object]"
-						item_names+=n
-						item_paths[n]=typepath
-						qdel(tmp_object)
-					var/targetitem = input("Select item to search for.", "Item Mode Select","") as null|anything in potential_theft_objectives
+					for(var/index in potential_theft_objectives)
+						var/list/datumlist = potential_theft_objectives[index]
+						for(var/D in datumlist)
+							var/datum/theft_objective/O = D
+							var/obj/Dtypepath = initial(O.typepath)
+							item_paths[initial(Dtypepath.name)] = Dtypepath
+					var/targetitem = input("Select item to search for.", "Item Mode Select","") as null|anything in item_paths
 					if(!targetitem)
 						return
 					target=locate(item_paths[targetitem])
@@ -220,14 +218,7 @@
 		playsound(loc, 'sound/machines/twobeep.ogg', 50, 1)	//Plays a beep
 		visible_message("Shuttle Locator active.")			//Lets the mob holding it know that the mode has changed
 		return		//Get outta here
-	if(!the_disk)
-		the_disk = locate()
-		the_disk.watched_by += src
-		if(!the_disk)
-			icon_state = "pinonnull"
-			return
-	point_at(the_disk)
-
+	point_at(nukedisk)
 
 /obj/item/weapon/pinpointer/nukeop/proc/worklocation()
 	if(!bomb_set)
@@ -246,7 +237,6 @@
 /obj/item/weapon/pinpointer/pdapinpointer
 	name = "pda pinpointer"
 	desc = "A pinpointer that has been illegally modified to track the PDA of a crewmember for malicious reasons."
-	var/obj/target = null
 	var/used = 0
 	watches_nuke = 0
 
