@@ -137,6 +137,9 @@
 			message_admins("[key_name_admin(src)] has attempted to advertise in LOOC: [msg]")
 			return
 		*/
+		if((copytext(msg, 1, 2) in list(".",";",":","#")) || (findtext(lowertext(copytext(msg, 1, 5)), "say")))
+			if(alert("Your message \"[msg]\" looks like it was meant for in game communication, say it in LOOC?", "Meant for LOOC?", "No", "Yes") != "Yes")
+				return
 	log_ooc("(LOCAL) [mob.name]/[key] (@[mob.x],[mob.y],[mob.z]): [msg]")
 	var/list/heard
 	var/mob/living/silicon/ai/AI
