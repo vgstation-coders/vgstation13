@@ -90,6 +90,12 @@ var/global/list/atmos_controllers = list()
 	if(user.stat && !isobserver(user))
 		return
 
+	if(user.client)
+		for (var/z = 1 to world.maxz)
+			if(z == CENTCOMM_Z)
+				continue
+			user.client << browse_rsc(file("[getMinimapFile(z)].png"), "[map.nameShort][z].png")
+
 	var/list/data[0]
 	data["alarm"]=null
 	if(current)
