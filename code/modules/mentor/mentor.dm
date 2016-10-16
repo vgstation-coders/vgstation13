@@ -2,6 +2,7 @@ var/list/mentor_datums = list()
 
 /datum/mentors
 	var/client/owner	= null
+	var/following		= null
 
 /datum/mentors/New(ckey)
 	if(!ckey)
@@ -34,9 +35,8 @@ var/list/mentor_datums = list()
 	if(C)
 		var/mentor = mentor_datums[C.ckey]
 		if(C.holder && C.holder.rank)
-			if(C.holder & R_ADMIN)
+			if(C.holder.rights & R_ADMIN)
 				return 1
 		else if(mentor)
 			return 1
-
 	return 0

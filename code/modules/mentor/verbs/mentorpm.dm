@@ -43,28 +43,26 @@
 
 	log_mentor("Mentor PM: [key_name(src)]->[key_name(C)]: [msg]")
 
-	C << 'sound/effects/msn.ogg'
-
+	//msg = emoji_parse(msg)
+	C << 'sound/items/bikehorn.ogg'
 	if(check_mentor_other(C))
 		if(check_mentor())	//both are mentors
 			C << "<font color='purple'>Mentor PM from-<b>[key_name_mentor(src, C, 1, 0, 0)]</b>: [msg]</font>"
 			src << "<font color='green'>Mentor PM to-<b>[key_name_mentor(C, C, 1, 0, 0)]</b>: [msg]</font>"
 
 		else		//recipient is an mentor but sender is not
-			C << "<font color='purple'>Reply PM from-<b>[key_name_mentor(src, C, 1, 0)]</b>: [msg]</font>"
+			C << "<font color='purple'>Reply PM from-<b>[key_name_mentor(src, C, 1, 0, 1)]</b>: [msg]</font>"
 			src << "<font color='green'>Mentor PM to-<b>[key_name_mentor(C, C, 1, 0, 0)]</b>: [msg]</font>"
 
 	else
 		if(check_mentor())	//sender is an mentor but recipient is not.
 			C << "<font color='purple'>Mentor PM from-<b>[key_name_mentor(src, C, 1, 0, 0)]</b>: [msg]</font>"
-			src << "<font color='green'>Mentor PM to-<b>[key_name_mentor(C, C, 1, 0)]</b>: [msg]</font>"
+			src << "<font color='green'>Mentor PM to-<b>[key_name_mentor(C, C, 1, 0, 1)]</b>: [msg]</font>"
 
 	//we don't use message_Mentors here because the sender/receiver might get it too
-	var/show_char_sender = !check_mentor_other(src)
-	var/show_char_recip = !check_mentor_other(C)
 	for(var/client/X in mentors)
 		if(X.key!=key && X.key!=C.key)	//check client/X is an Mentor and isn't the sender or recipient
-			X << "<B><font color='green'>Mentor PM: [key_name_mentor(src, X, 0, 0, show_char_sender)]-&gt;[key_name_mentor(C, X, 0, 0, show_char_recip)]:</B> \blue [msg]</font>" //inform X
+			X << "<B><font color='green'>Mentor PM: [key_name_mentor(src, X, 0, !check_mentor_other(src))]-&gt;[key_name_mentor(C, X, 0, !check_mentor_other(C))]:</B> \blue [msg]</font>" //inform X
 	for(var/client/A in admins)
 		if(A.key!=key && A.key!=C.key)	//check client/A is an Mentor and isn't the sender or recipient
-			A << "<B><font color='green'>Mentor PM: [key_name_mentor(src, A, 0, 0, show_char_sender)]-&gt;[key_name_mentor(C, A, 0, 0, show_char_recip)]:</B> \blue [msg]</font>" //inform A
+			A << "<B><font color='green'>Mentor PM: [key_name_mentor(src, A, 0, 0, !check_mentor_other(src))]-&gt;[key_name_mentor(C, A, 0, 0, !check_mentor_other(C))]:</B> \blue [msg]</font>" //inform A
