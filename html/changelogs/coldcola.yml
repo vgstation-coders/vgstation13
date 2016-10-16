@@ -1,4 +1,4 @@
 author: coldcola
 delete-after: True
 changes:
-- bugfix: fixes mommi spaghetti producing cyborgs 
+- bugfix: fixes mommi spaghetti producing cyborgs + mednanos not curing disease/viruses.
