@@ -180,11 +180,11 @@
 		icon_state = "no_item0"
 		screen_loc = ui_gun1
 
-	mode
-		name = "Toggle Gun Mode"
-		icon_state = "gun0"
-		screen_loc = ui_gun_select
-		//dir = 1
+	//mode
+	//	name = "Toggle Gun Mode"
+	//	icon_state = "gun0"
+	//	screen_loc = ui_gun_select
+	//	//dir = 1
 
 /obj/screen/gun/MouseEntered(location,control,params)
 	openToolTip(usr,src,params,title = name,content = desc)
@@ -572,8 +572,8 @@
 			usr.client.AllowTargetClick()
 			gun_click_time = world.time
 
-		if("Toggle Gun Mode")
-			usr.client.ToggleGunMode()
+		//if("Toggle Gun Mode")
+		//	usr.client.ToggleGunMode()
 
 		else
 			return 0

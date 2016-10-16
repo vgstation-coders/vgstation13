@@ -43,7 +43,7 @@ var/list/all_doors = list()
 	var/prefix = null
 
 	// TODO: refactor to best :(
-	var/animation_delay = 12
+	var/animation_delay = 6
 	var/animation_delay_2 = null
 
 	// turf animation
@@ -207,7 +207,7 @@ var/list/all_doors = list()
 
 	door_animate("opening")
 	set_opacity(0)
-	sleep(10)
+	sleep(5)
 	layer = open_layer
 	density = 0
 	explosion_resistance = 0

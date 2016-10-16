@@ -11,10 +11,10 @@
 
 // Globals /////////////////////////////////////////////////////
 
-var/global/deepFriedEverything = 0
-var/global/deepFriedNutriment = 0
-var/global/foodNesting = 0
-var/global/recursiveFood = 0
+var/global/deepFriedEverything = 1
+var/global/deepFriedNutriment = 10
+var/global/foodNesting = 1
+var/global/recursiveFood = 1
 var/global/ingredientLimit = 10
 
 /client/proc/configFood()

@@ -88,7 +88,7 @@
 	var/banappeals
 	var/wikiurl = "http://baystation12.net/wiki/index.php?title=Main_Page"
 	var/vgws_base_url = "http://ss13.moe" // No hanging slashes.
-	var/vgws_ip = "198.245.63.50" // IP address in the `world.Topic()` call when the vgws sends a request over TCP.
+	var/vgws_ip = "127.0.0.1" // IP address in the `world.Topic()` call when the vgws sends a request over TCP.
 	var/forumurl = "http://baystation12.net/forums/"
 	var/poll_results_url
 
@@ -136,6 +136,7 @@
 
 	var/admin_legacy_system = 0	//Defines whether the server uses the legacy admin system with admins.txt or the SQL system. Config option in config.txt
 	var/ban_legacy_system = 0	//Defines whether the server uses the legacy banning system with the files in /data or the SQL system. Config option in config.txt
+	var/mentor_legacy_system = 0 ////Defines whether the server uses the legacy mentor system with mentors.txt or the SQL system. Config option in config.txt
 	var/use_age_restriction_for_jobs = 0 //Do jobs use account age restrictions? --requires database
 
 	var/simultaneous_pm_warning_timeout = 100

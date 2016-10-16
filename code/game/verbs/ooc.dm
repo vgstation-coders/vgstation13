@@ -53,6 +53,8 @@
 			display_colour = "#184880"	//dark blue
 		if(holder.rights & R_DEBUG && !(holder.rights & R_ADMIN))
 			display_colour = "#1b521f"	//dark green
+		if(check_mentor())
+			display_colour = "#71C67" // purple i guess
 		else if(holder.rights & R_ADMIN)
 			if(config.allow_admin_ooccolor)
 				display_colour = src.prefs.ooccolor

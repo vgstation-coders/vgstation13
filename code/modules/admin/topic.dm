@@ -3318,6 +3318,13 @@
 				for(var/sig in lawchanges)
 					dat += "[sig]<BR>"
 				usr << browse(dat, "window=lawchanges;size=800x500")
+			if("mentor_log")
+				var/dat = "<B>Mentor Log<HR></B>"
+				for(var/l in mentor_log)
+					dat += "<li>[l]</li>"
+				if(!mentor_log.len)
+					dat += "No mentors have done anything this round!"
+				usr << browse(dat, "window=mentor_log")			
 			if("list_job_debug")
 				var/dat = "<B>Job Debug info.</B><HR>"
 				if(job_master)

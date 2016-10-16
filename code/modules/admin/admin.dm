@@ -849,6 +849,7 @@ var/global/floorIsLava = 0
 		<BR>
 		<A href='?src=\ref[src];secretsadmin=list_job_debug'>Show Job Debug</A><BR>
 		<A href='?src=\ref[src];secretsadmin=show_admin_log'>Admin Log</A><BR>
+		<A href='?src=\ref[src];secretsgeneral=mentor_log'>Mentor Log</A><BR>
 		<BR>
 		"}
 

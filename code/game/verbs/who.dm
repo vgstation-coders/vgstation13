@@ -131,3 +131,25 @@
 					numModsOnline++
 
 	to_chat(src, "\n<b>Current Admins ([numAdminsOnline]):</b>\n" + aNames + "\n<b>Current Moderators ([numModsOnline]):</b>\n" + mNames + "\n")
+
+/client/verb/mentorwho()
+	set category = "Mentor"
+	set name = "Mentorwho"
+
+	var/msg = "<b>Current Mentors:</b>\n"
+	for(var/client/C in mentors)
+		var/suffix = ""
+		if(holder)
+			if(isobserver(C.mob))
+				suffix += " - Observing"
+			else if(istype(C.mob,/mob/new_player))
+				suffix += " - Lobby"
+			else
+				suffix += " - Playing"
+
+			if(C.is_afk())
+				suffix += " (AFK)"
+
+		msg += "\t[C][suffix]\n"
+
+	src << msg
