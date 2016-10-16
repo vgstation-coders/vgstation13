@@ -131,7 +131,7 @@
 	if(!action_checks(target))
 		return
 	if(isobj(target))
-		if(!target.acidable())
+		if(!target.can_mech_drill())
 			return
 	set_ready_state(0)
 	chassis.visible_message("<font color='red'><b>[chassis] starts to drill [target]!</b></font>", "You hear a drill.")
