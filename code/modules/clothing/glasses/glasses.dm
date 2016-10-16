@@ -8,7 +8,7 @@
 
 /obj/item/clothing/glasses/science
 	name = "science goggles"
-	desc = "nothing"
+	desc = "nothing."
 	icon_state = "purple"
 	item_state = "glasses"
 	origin_tech = Tc_MATERIALS + "=1"
@@ -265,7 +265,7 @@
 
 /obj/item/clothing/glasses/thermal/eyepatch
 	name = "Optical Thermal Eyepatch"
-	desc = "An eyepatch with built-in thermal optics"
+	desc = "An eyepatch with built-in thermal optics."
 	icon_state = "eyepatch"
 	item_state = "eyepatch"
 	min_harm_label = 3
@@ -282,7 +282,7 @@
 
 /obj/item/clothing/glasses/thermal/jensen
 	name = "Optical Thermal Implants"
-	desc = "A set of implantable lenses designed to augment your vision"
+	desc = "A set of implantable lenses designed to augment your vision."
 	icon_state = "thermalimplants"
 	item_state = "syringe_kit"
 	species_fit = list(VOX_SHAPED)

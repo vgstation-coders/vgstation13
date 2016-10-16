@@ -351,7 +351,7 @@
 
 /obj/item/clothing/suit/space/vox/civ/medical/paramedic
 	name = "vox paramedic pressure suit"
-	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for paramedics"
+	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for paramedics."
 	icon_state = "vox-civ-paramedic"
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic

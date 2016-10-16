@@ -11,7 +11,7 @@
 
 /obj/item/clothing/suit/bluetag
 	name = "blue laser tag armour"
-	desc = "Blue Pride, Station Wide"
+	desc = "Blue Pride, Station Wide."
 	icon_state = "bluetag"
 	item_state = "bluetag"
 	blood_overlay_type = "armor"
@@ -22,7 +22,7 @@
 
 /obj/item/clothing/suit/redtag
 	name = "red laser tag armour"
-	desc = "Pew pew pew"
+	desc = "Pew pew pew."
 	icon_state = "redtag"
 	item_state = "redtag"
 	blood_overlay_type = "armor"
@@ -62,7 +62,7 @@
 
 /obj/item/clothing/suit/greatcoat
 	name = "great coat"
-	desc = "A Nazi great coat"
+	desc = "A Nazi great coat."
 	icon_state = "nazi"//broken on mob, item fine
 	flags = FPRINT
 
@@ -77,7 +77,7 @@
 
 /obj/item/clothing/suit/justice
 	name = "justice suit"
-	desc = "this pretty much looks ridiculous"
+	desc = "this pretty much looks ridiculous."
 	icon_state = "justice"
 	flags = FPRINT
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
@@ -121,7 +121,7 @@
 
 /obj/item/clothing/suit/hastur
 	name = "Hastur's Robes"
-	desc = "Robes not meant to be worn by man"
+	desc = "Robes not meant to be worn by man."
 	icon_state = "hastur"
 	item_state = "hastur"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
@@ -145,7 +145,7 @@
 
 /obj/item/clothing/suit/monkeysuit
 	name = "Monkey Suit"
-	desc = "A suit that looks like a primate"
+	desc = "A suit that looks like a primate."
 	icon_state = "monkeysuit"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	siemens_coefficient = 2.0
@@ -266,7 +266,7 @@
 
 /obj/item/clothing/under/stripper/mankini
 	name = "the mankini"
-	desc = "No honest man would wear this abomination"
+	desc = "No honest man would wear this abomination."
 	icon_state = "mankini"
 	_color = "mankini"
 	siemens_coefficient = 1
@@ -322,7 +322,7 @@
 
 /obj/item/clothing/suit/simonjacket
 	name = "Simon's Jacket"
-	desc = "Now you too can pierce the heavens"
+	desc = "Now you too can pierce the heavens."
 	icon_state = "simonjacket"
 	species_fit = list(VOX_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
@@ -341,7 +341,7 @@
 
 /obj/item/clothing/suit/soldiercoat
 	name = "Soldier's Coat"
-	desc = "Und das heiﬂt: Erika"
+	desc = "Und das heiﬂt: Erika."
 	icon_state = "soldiersuit"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 

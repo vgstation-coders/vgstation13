@@ -238,7 +238,7 @@
 
 /obj/item/clothing/mask/gas/cyborg
 	name = "cyborg visor"
-	desc = "Beep boop"
+	desc = "Beep boop."
 	icon_state = "death"
 	species_fit = list(VOX_SHAPED)
 	can_flip = 0

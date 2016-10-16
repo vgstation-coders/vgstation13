@@ -150,7 +150,7 @@
 
 /obj/item/clothing/head/helmet/volnutthelmet
 	name = "Digouter Helmet"
-	desc = "A sturdy helmet, fortified to protect from falling rocks or buster shots"
+	desc = "A sturdy helmet, fortified to protect from falling rocks or buster shots."
 	icon_state = "volnutthelmet"
 	flags = FPRINT
 	item_state = "volnutthelmet"

@@ -74,7 +74,7 @@
 
 /obj/item/clothing/shoes/combat //Basically SWAT shoes combined with galoshes.
 	name = "combat boots"
-	desc = "When you REALLY want to turn up the heat"
+	desc = "When you REALLY want to turn up the heat."
 	icon_state = "swat"
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 25, bomb = 50, bio = 10, rad = 0)
 	flags = NOSLIP
@@ -288,7 +288,7 @@
 
 /obj/item/clothing/shoes/cyborg
 	name = "cyborg boots"
-	desc = "Shoes for a cyborg costume"
+	desc = "Shoes for a cyborg costume."
 	icon_state = "boots"
 
 /obj/item/clothing/shoes/slippers
@@ -317,14 +317,14 @@
 
 /obj/item/clothing/shoes/simonshoes
 	name = "Simon's Shoes"
-	desc = "Simon's Shoes"
+	desc = "Simon's Shoes."
 	icon_state = "simonshoes"
 	item_state = "simonshoes"
 	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/kneesocks
 	name = "kneesocks"
-	desc = "A pair of girly knee-high socks"
+	desc = "A pair of girly knee-high socks."
 	icon_state = "kneesock"
 	item_state = "kneesock"
 
@@ -336,7 +336,7 @@
 
 /obj/item/clothing/shoes/aviatorboots
 	name = "Aviator Boots"
-	desc = "Boots suitable for just about any occasion"
+	desc = "Boots suitable for just about any occasion."
 	icon_state = "aviator_boots"
 	item_state = "aviator_boots"
 	species_restricted = list("exclude",VOX_SHAPED)
