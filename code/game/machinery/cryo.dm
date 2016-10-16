@@ -382,7 +382,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 							overlays += cryo_health_indicator["bad"]
 						if(0 to 25)
 							overlays += cryo_health_indicator["worse"]
-						if(-25 to -1)
+						if(-25 to 0)
 							overlays += cryo_health_indicator["critgood"]
 						if(-50 to -25)
 							overlays += cryo_health_indicator["critaverage"]
@@ -390,7 +390,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 							overlays += cryo_health_indicator["critbad"]
 						if(-100 to -75)
 							overlays += cryo_health_indicator["critworse"]
-						else //Shouldn't ever happen.
+						else //Shouldn't ever happen. I really hope it doesn't ever happen.
 							overlays += cryo_health_indicator["dead"]
 			icon_state = "cell-occupied"
 			return
