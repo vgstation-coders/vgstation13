@@ -62,7 +62,7 @@
 
 /obj/item/clothing/suit/greatcoat
 	name = "great coat"
-	desc = "A Nazi great coa.t"
+	desc = "A Nazi great coat."
 	icon_state = "nazi"//broken on mob, item fine
 	flags = FPRINT
 

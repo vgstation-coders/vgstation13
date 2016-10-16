@@ -372,7 +372,7 @@
 	item_state = "joeboots"
 
 /obj/item/clothing/shoes/doomguy
-	name = "Doomguy's boots."
+	name = "Doomguy's boots"
 	desc = ""
 	icon_state = "doom"
 	item_state = "doom"
