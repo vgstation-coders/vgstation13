@@ -239,11 +239,6 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	. = ..()
 	vessel.remove_reagent(BLOOD,amount) // Removes blood if human
 
-/mob/living/carbon/monkey/take_blood(obj/item/weapon/reagent_containers/container, var/amount)
-	if(!isDead())
-		adjustOxyLoss(amount)
-		. = ..()
-
 //Transfers blood from container ot vessels
 /mob/living/carbon/proc/inject_blood(obj/item/weapon/reagent_containers/container, var/amount)
 	var/datum/reagent/blood/injected = get_blood(container.reagents)
