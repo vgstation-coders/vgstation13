@@ -19,6 +19,8 @@
 			            access_heads, access_hos, access_RC_announce, access_keycard_auth, access_gateway)
 	minimal_player_age = 14
 
+	species_whitelist = list("Human")
+
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/heads/hos
 
