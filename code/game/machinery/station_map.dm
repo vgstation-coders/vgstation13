@@ -297,7 +297,8 @@ var/list/station_holomaps = list()
 			spawn(5)//we give it time to fade out
 				M.client.images -= holomap_datum.station_map
 	watching_mob = null
-	animate(holomap_datum.station_map, alpha = 0, time = 5, easing = LINEAR_EASING)
+	if(holomap_datum && holomap_datum.station_map)//sanity check to prevent runtime when silicons get destroyed.
+		animate(holomap_datum.station_map, alpha = 0, time = 5, easing = LINEAR_EASING)
 
 //Holomap datum, for initialization
 /datum/station_holomap
