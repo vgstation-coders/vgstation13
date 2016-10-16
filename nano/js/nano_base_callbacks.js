@@ -88,8 +88,16 @@ NanoBaseCallbacks = function ()
                     });
                 });
                 
-                $('#uiMapImage').attr('src', 'minimap_' + updateData['config']['mapZLevel'] + '.png');
-                
+				$('#uiMapImage').attr('src', updateData['config']['mapName'] + updateData['config']['mapZLevel'] + '.png');
+				$('#uiMapImage').css('width', updateData['config']['worldmaxx']);
+				$('#uiMapImage').css('height', updateData['config']['worldmaxy']);
+
+				$('#uiMap').css('width', updateData['config']['worldmaxx']);
+				$('#uiMap').css('height', updateData['config']['worldmaxy']);
+
+				$('#uiMapContent').css('width', updateData['config']['worldmaxx']);
+				$('#uiMapContent').css('height', updateData['config']['worldmaxy']);
+				
                 return updateData;
         }
 	};
