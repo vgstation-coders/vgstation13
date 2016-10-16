@@ -35,7 +35,7 @@ rcd light flash thingy on matter drain
 /datum/AI_Module/proc/on_purchase(mob/living/silicon/ai/user) //What happens when a module is purchased, by default gives the AI the spell/adds charges to their existing spell if they have it
 	if(power_type)
 		for(var/spell/S in user.spell_list)
-			if (S.type == power_type)
+			if (istype(S,power_type))
 				S.charge_counter += uses
 				return
 		user.add_spell(new power_type)
@@ -77,7 +77,6 @@ rcd light flash thingy on matter drain
 	panel = MALFUNCTION
 	charge_type = Sp_CHARGES
 	charge_max = 1
-	range = GLOBALCAST
 	
 /spell/aoe_turf/disable_rcd/cast(list/targets, mob/user)
 	for(var/obj/item/device/rcd/matter/engineering/rcd in world)
@@ -146,6 +145,18 @@ rcd light flash thingy on matter drain
 	if(!isturf(target))
 		return 0
 	var/turf/middle = target
+	var/list/turfs = list(middle, locate(middle.x - 1, middle.y, middle.z), locate(middle.x + 1, middle.y, middle.z))
+	var/alert_msg = "There isn't enough room. Make sure you are placing the machine in a clear area and on a floor."
+	for(var/T in turfs)
+		// Make sure the turfs are clear and the correct type.
+		if(!istype(T, /turf/simulated/floor))
+			alert(src, alert_msg)
+			return
+		var/turf/simulated/floor/F = T
+		for(var/atom/movable/AM in F.contents)
+			if(AM.density)
+				alert(src, alert_msg)
+				return
 	var/datum/camerachunk/C = cameranet.getCameraChunk(middle.x, middle.y, middle.z)
 	if(!C.visibleTurfs[middle])
 		alert(holder, "We cannot get camera vision of this location.")
@@ -186,7 +197,6 @@ rcd light flash thingy on matter drain
 	panel = MALFUNCTION
 	charge_type = Sp_CHARGES
 	charge_max = 3
-	range = GLOBALCAST
 	
 /spell/aoe_turf/blackout/cast(var/list/targets, mob/user)
 	for(var/obj/machinery/power/apc/apc in power_machines)
@@ -208,7 +218,6 @@ rcd light flash thingy on matter drain
 	panel = MALFUNCTION
 	charge_type = Sp_CHARGES
 	charge_max = 3
-	range = SELFCAST
 	
 /spell/aoe_turf/interhack/cast(var/list/targets,mob/user)
 
@@ -319,7 +328,6 @@ rcd light flash thingy on matter drain
 	panel = MALFUNCTION
 	var/datum/module_picker/MP
 	charge_max = 10
-	range = SELFCAST
 	
 /spell/aoe_turf/module_picker/New()
 	..()
@@ -350,9 +358,7 @@ rcd light flash thingy on matter drain
 			<HR>
 			<B>Install Module:</B><BR>
 			<I>The number afterwards is the amount of processing time it consumes.</I><BR>"}
-	for(var/datum/AI_Module/large/module in src.possible_modules)
-		dat += "<A href='byond://?src=\ref[src];[module.mod_pick_name]=1'>[module.module_name]</A> ([module.cost])<BR>"
-	for(var/datum/AI_Module/small/module in src.possible_modules)
+	for(var/datum/AI_Module/module in src.possible_modules)
 		dat += "<A href='byond://?src=\ref[src];[module.mod_pick_name]=1'>[module.module_name]</A> ([module.cost])<BR>"
 	dat += "<HR>"
 	if (src.temp)

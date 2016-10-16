@@ -128,7 +128,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	for(var/datum/mind/AI_mind in malf_ai)
 		to_chat(AI_mind.current, {"<span class='notice'>Congratulations! The station is now under your exclusive control.<br>
 You may decide to blow up the station. You have 60 seconds to choose.<br>
-You should now be able to use your Explode verb to interface with the nuclear fission device.</span>"})
+You should now be able to use your Explode spell to interface with the nuclear fission device.</span>"})
 		AI_mind.current.add_spell(new /spell/aoe_turf/ai_win)
 	spawn (600)
 		to_nuke_or_not_to_nuke = 0
@@ -191,7 +191,7 @@ You should now be able to use your Explode verb to interface with the nuclear fi
 	ticker.mode:malf_mode_declared = 1
 	for(var/datum/mind/AI_mind in ticker.mode:malf_ai)
 		for(var/spell/S in AI_mind.current.spell_list)
-			if(istype(S,src))
+			if(istype(S,type))
 				AI_mind.current.remove_spell(S)
 				
 /spell/aoe_turf/ai_win
@@ -224,7 +224,7 @@ You should now be able to use your Explode verb to interface with the nuclear fi
 	ticker.mode:to_nuke_or_not_to_nuke = 0
 	for(var/datum/mind/AI_mind in ticker.mode:malf_ai)
 		for(var/spell/S in AI_mind.current.spell_list)
-			if(istype(S,src))
+			if(istype(S,/spell/aoe_turf/ai_win))
 				AI_mind.current.remove_spell(S)
 	ticker.mode:explosion_in_progress = 1
 	for(var/mob/M in player_list)
