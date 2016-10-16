@@ -27,7 +27,8 @@
 	sprite_modulo = 2
 
 /obj/item/ammo_storage/magazine/a12mm/ops
-	name = "magazine (12mm)"
+	name = "C-20r magazine (12mm)"
+	desc = "A magazine designed for the C-20r. Has 'SA' engraved on the side. Holds 20 rounds."
 	icon_state = "12mm"
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/a12mm"
