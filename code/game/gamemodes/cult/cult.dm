@@ -296,8 +296,6 @@
 			for(var/mob/living/carbon/human/player in player_list)
 				if(player.z == map.zCentcomm) //We can't sacrifice people that are on the centcom z-level
 					continue
-				if(player.mind.assigned_role == "MODE") //Excludes wizards, ERT members, deathsquads, and the like
-					continue
 				if(player.mind && !(player.mind in cult))
 					possible_targets += player.mind
 
