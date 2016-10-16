@@ -213,7 +213,7 @@
 //Head of Personnell
 /obj/item/clothing/suit/storage/Hop_Coat
 	name = "Head of Personnel's dress jacket"
-	desc = "A slightly armoured greatcoat. It looks like it's mostly ceremonial ."
+	desc = "A slightly armoured greatcoat. It looks like it's mostly ceremonial."
 	icon_state = "HoP_Coat"
 	item_state = "HoP_Coat"
 	blood_overlay_type = "coat"

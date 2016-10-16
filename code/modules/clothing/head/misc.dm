@@ -28,7 +28,7 @@
 	item_state = "that"
 	flags = FPRINT
 	siemens_coefficient = 0.9
-	
+
 /obj/item/clothing/head/that/armored
 	name = "armored top-hat"
 	desc = "It's an amish looking top hat. This one looks sturdier."
@@ -56,7 +56,7 @@
 
 /obj/item/clothing/head/hasturhood
 	name = "hastur's hood"
-	desc = "It's unspeakably stylish"
+	desc = "It's unspeakably stylish."
 	icon_state = "hasturhood"
 	flags = FPRINT
 	body_parts_covered = EARS|HEAD
@@ -373,13 +373,13 @@
 
 /obj/item/clothing/head/christmas/santahat/red
 	name = "red santa hat"
-	desc = "Not quite as magical as the real thing, but it flops over one ear and itches your head just the same"
+	desc = "Not quite as magical as the real thing, but it flops over one ear and itches your head just the same."
 	icon_state = "santahatred"
 	item_state = "santahatred"
 
 /obj/item/clothing/head/christmas/santahat/green
 	name = "green santa hat"
-	desc = "Not quite as magical as the real thing, but it flops over one ear and itches your head just the same"
+	desc = "Not quite as magical as the real thing, but it flops over one ear and itches your head just the same."
 	icon_state = "santahatgreen"
 	item_state = "santahatgreen"
 

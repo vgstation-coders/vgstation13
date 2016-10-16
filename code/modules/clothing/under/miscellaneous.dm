@@ -23,7 +23,7 @@
 
 /obj/item/clothing/under/scratch
 	name = "white suit"
-	desc = "A white suit, suitable for an excellent host"
+	desc = "A white suit, suitable for an excellent host."
 	icon_state = "scratch"
 	item_state = "scratch"
 	_color = "scratch"
@@ -35,7 +35,7 @@
 	_color = "sl_suit"
 	flags = FPRINT  | ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
-	
+
 /obj/item/clothing/under/sl_suit/armored
 	desc = "It's a very amish looking suit. This one looks armored."
 	name = "armored amish suit"
@@ -249,7 +249,7 @@
 
 /obj/item/clothing/under/kilt
 	name = "kilt"
-	desc = "Includes shoes and plaid"
+	desc = "Includes shoes and plaid."
 	icon_state = "kilt"
 	item_state = "kilt"
 	_color = "kilt"
@@ -409,7 +409,7 @@
 
 /obj/item/clothing/under/simonpants
 	name = "Simon's Pants"
-	desc = "Simon's pants, clad with belt and whatever the fuck that thing is around his neck"
+	desc = "Simon's pants, clad with belt and whatever the fuck that thing is around his neck."
 	icon_state = "spants"
 	_color = "simonpants"
 	item_state = "spants"
@@ -474,7 +474,7 @@
 
 /obj/item/clothing/under/libertyshirt
 	name = "liberty shirt"
-	desc = "For any freedom loving patriot out there"
+	desc = "For any freedom loving patriot out there."
 	icon_state = "libertyshirt"
 	item_state = "libertyshirt"
 	_color = "libertyshirt"
@@ -551,7 +551,7 @@
 
 /obj/item/clothing/under/gokugi
 	name = "turtle hermit outfit"
-	desc = "An outfit from one trained by the great Turtle Hermit"
+	desc = "An outfit from one trained by the great Turtle Hermit."
 	icon_state = "gokugi"
 	item_state = "gokugi"
 	_color = "gokugi"
@@ -565,7 +565,7 @@
 
 /obj/item/clothing/under/vault13
 	name = "vault 13 Jumpsuit"
-	desc = "Oddly similar to the station's usual jumpsuits, but with a rustic charm to it. Has a large thirteen emblazened on the back"
+	desc = "Oddly similar to the station's usual jumpsuits, but with a rustic charm to it. Has a large thirteen emblazened on the back."
 	icon_state = "v13-jumpsuit"
 	item_state = "v13-jumpsuit"
 	_color = "v13-jumpsuit"

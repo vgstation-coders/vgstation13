@@ -28,7 +28,7 @@
 
 /obj/item/clothing/head/helmet/space/rig/ghettorig
 	name = "jury-rigged fire helmet"
-	desc = "Let me give it to you straight like a pear cider made from 100% pears, this helmet isn't particularly good"
+	desc = "Let me give it to you straight like a pear cider made from 100% pears, this helmet isn't particularly good."
 	icon_state = "ghettorig"
 	_color = "ghetto"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
@@ -100,7 +100,7 @@
 	name = "jury-rigged firesuit"
 	icon_state = "ghettorig"
 	item_state = "ghettorig"
-	desc = "Let me give it to you straight like a pear cider made from 100% pears, this space suit isn't particularly good"
+	desc = "Let me give it to you straight like a pear cider made from 100% pears, this space suit isn't particularly good."
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	species_fit = list(GREY_SHAPED)
 
@@ -435,7 +435,7 @@
 
 /obj/item/clothing/suit/space/rig/knight
 	name = "Space-Knight armour"
-	desc = "A well polished set of armour belonging to a Space-Knight. Maidens Rescued in Space: 100, Maidens who have slept with me in Space: 0"
+	desc = "A well polished set of armour belonging to a Space-Knight. Maidens Rescued in Space: 100, Maidens who have slept with me in Space: 0."
 	icon_state = "rig-knight"
 	item_state = "rig-knight"
 	slowdown = 1
