@@ -675,8 +675,8 @@ var/global/list/whitelisted_species = list("Human")
 //			tank_slot=null
 //			tank_slot_name = "hand"
 		if("Trader")
-			suit = /obj/item/clothing/suit/space/vox/pressure
-			helm = /obj/item/clothing/head/helmet/space/vox/pressure
+			suit = /obj/item/clothing/suit/space/vox/civ/trader
+			helm = /obj/item/clothing/head/helmet/space/vox/civ/trader
 
 		if("MODE") // Gamemode stuff
 			switch(H.mind.special_role)
