@@ -342,7 +342,7 @@
 	..()
 	can_label = 0
 
-/obj/machinery/portable_atmospherics/canister/attack_ai()
+/obj/machinery/portable_atmospherics/canister/old/attack_ai()
 	return
 
 /obj/machinery/portable_atmospherics/canister/old/plasma
