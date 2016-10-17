@@ -123,7 +123,16 @@
 		to_chat(src, "There is another core blob nearby, move more than 15 tiles away from it!")
 		return
 
-	if(!can_buy(100))
+	var/cost = 100
+	var/number_of_cores
+
+	for(var/obj/effect/blob/core/C in world)
+		number_of_cores++
+
+	cost = cost*number_of_cores
+
+	if(!can_buy(cost))
+		to_chat(src, "Current cost of a blob core is [cost]!")
 		return
 
 
@@ -166,6 +175,7 @@
 		N.overmind = src
 		special_blobs += N
 		update_specialblobs()
+	max_blob_points +=10
 	return
 
 
@@ -314,4 +324,5 @@
 	to_chat(world, "<span class='warning'>Your vision becomes cloudy, and your mind becomes clear.</span>")
 	spawn(5)
 	to_chat(world, "<span class='blob'>[message]</span>")
+	add_gamelogs(src, "used blob telepathy to convey [message]", tp_link = TRUE)
 	log_blobtelepathy("[key_name(usr)]: [message]")

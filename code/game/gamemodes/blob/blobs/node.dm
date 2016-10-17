@@ -30,6 +30,7 @@
 		overmind.special_blobs -= src
 		overmind.update_specialblobs()
 	processing_objects.Remove(src)
+	overmind.max_blob_points -= 10
 	..()
 
 /obj/effect/blob/node/Life()
