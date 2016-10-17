@@ -1,0 +1,4 @@
+﻿author: Sprok
+delete-after: True
+changes: 
+ - rscadd: Added a new wizard spell, Bound Object, which allows a wizard to select an object and teleport it to themselves freely.

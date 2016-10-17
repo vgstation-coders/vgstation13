@@ -251,10 +251,15 @@
 	if(spell.silenced)
 		overlays += image(icon = icon, icon_state = "silence")
 
-/obj/screen/spell/Click()
+/obj/screen/spell/Click(location, control, params)
 	if(!usr || !spell)
 		returnToPool(src)
 		return
+
+	var/list/param_list = params2list(params)
+	if(param_list["middle"])
+		if(spell.on_right_click(usr))
+			return
 
 	spell.perform(usr)
 	update_charge(1)
