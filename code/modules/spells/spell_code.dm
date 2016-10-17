@@ -106,6 +106,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /////CASTING/////
 /////////////////
 
+/spell/proc/on_right_click(mob/user)
+	return
+
 /spell/proc/choose_targets(mob/user = usr) //depends on subtype - see targeted.dm, aoe_turf.dm, dumbfire.dm, or code in general folder
 	return
 
@@ -120,6 +123,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/list/targets = target_override
 
+	if(before_channel(user))
+		return
 	if(!targets && (spell_flags & WAIT_FOR_CLICK))
 		channel_spell(user, skipcharge)
 		return
@@ -207,6 +212,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			take_charge(holder, 0)
 		return 1
 	return 0
+
+/spell/proc/before_channel(mob/user)
+	return
 
 /spell/proc/before_target(mob/user)
 	return
@@ -505,4 +513,10 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 //Return a string that gets appended to the spell on the scoreboard
 /spell/proc/get_scoreboard_suffix()
+	return
+
+/spell/proc/on_added(mob/user)
+	return
+
+/spell/proc/on_removed(mob/user)
 	return

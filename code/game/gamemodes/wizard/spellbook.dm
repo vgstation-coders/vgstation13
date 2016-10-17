@@ -37,6 +37,7 @@
 	/spell/targeted/buttbots_revenge,
 	/spell/aoe_turf/conjure/pontiac,
 	/spell/aoe_turf/conjure/arcane_golem,
+	/spell/targeted/bound_object,
 	/spell/noclothes
 	)
 
@@ -730,7 +731,22 @@
 /obj/item/weapon/spellbook/oneuse/mirror_of_pain/recoil(mob/living/carbon/user as mob)
 	scramble(1, user, 100)
 	to_chat(user, "<span class = 'warning'>Your reflection becomes warped and distorted!</span>")
-	
+
+/obj/item/weapon/spellbook/oneuse/bound_object
+	spell = /spell/targeted/bound_object
+	spellname = "binding"
+	icon_state = "bookbound"
+	desc = "This book seems like it's already in your hands."
+
+/obj/item/weapon/spellbook/oneuse/bound_object/recoil(mob/living/carbon/user as mob)
+	to_chat(user, "<span class = 'warning'>Your surroundings are drawn to you!</span>")
+	var/counter = 0
+	for(var/obj/item/I in oview(5))
+		if(!I.anchored && counter <= 10)
+			sleep(1)
+			I.throw_at(user, 16, 2)
+			counter++
+
 // Spell Book Bundles//
 
 /obj/item/weapon/storage/box/spellbook
