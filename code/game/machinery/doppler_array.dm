@@ -34,6 +34,12 @@ var/list/doppler_arrays = list()
 	if(stat & (BROKEN|NOPOWER))
 		return
 
+	if(user.client)
+		for (var/z = 1 to world.maxz)
+			if(z == CENTCOMM_Z)
+				continue
+			user.client << browse_rsc(file("[getMinimapFile(z)].png"), "[map.nameShort][z].png")
+
 	var/list/data[0]
 	var/list/explosions = list()
 	for(var/list/bangarangs in bangs) //Removing sortAtom because nano updates it just enough for the lag to happen
