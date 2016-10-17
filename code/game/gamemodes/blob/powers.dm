@@ -324,5 +324,5 @@
 	to_chat(world, "<span class='warning'>Your vision becomes cloudy, and your mind becomes clear.</span>")
 	spawn(5)
 	to_chat(world, "<span class='blob'>[message]</span>")
-	add_gamelogs(src, "used blob telepathy to convey [message]", tp_link = TRUE)
+	add_gamelogs(src, "used blob telepathy to convey \"[message]\"", tp_link = TRUE)
 	log_blobtelepathy("[key_name(usr)]: [message]")
