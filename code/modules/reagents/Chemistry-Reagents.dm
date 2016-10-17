@@ -2417,12 +2417,12 @@
     reagent_state = LIQUID
     color = "#535E66" //rgb: 83, 94, 102
     var/diseasetype = /datum/disease/robotic_transformation
-/datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume, var/robot_type)
+/datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
     if(..())
         return 1
 
-    if((prob(10) && method == TOUCH && robot_type == "cyborg") || method == INGEST)
+    if((prob(10) && method == TOUCH) || method == INGEST)
         M.contract_disease(new diseasetype)
 
 /datum/reagent/nanites/autist
