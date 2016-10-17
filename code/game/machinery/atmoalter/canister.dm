@@ -32,9 +32,8 @@
 	melt_temperature = MELTPOINT_STEEL
 
 	//Icon Update Code
-	var/global/status_overlays = 0
-	var/global/list/status_overlays_pressure
-	var/global/list/status_overlays_other
+	var/global/list/status_overlays_pressure = list()
+	var/global/list/status_overlays_other = list()
 	var/overlay_status = 0
 
 	var/log="" // Bad boys, bad boys.
@@ -85,23 +84,6 @@
 		overlays.len = 0
 		return
 
-	if(!status_overlays)
-		status_overlays = 1
-
-		status_overlays_pressure = new
-		status_overlays_other = new
-
-		status_overlays_pressure.len = 4
-		status_overlays_other.len = 2
-
-		status_overlays_pressure[1] = image(icon, "can-o0")
-		status_overlays_pressure[2] = image(icon, "can-o1")
-		status_overlays_pressure[3] = image(icon, "can-o2")
-		status_overlays_pressure[4] = image(icon, "can-o3")
-
-		status_overlays_other[1]  = image(icon, "can-open")
-		status_overlays_other[2]  = image(icon, "can-connector")
-
 	if (canister_color != old_color)
 		icon_state = "[canister_color]"
 		old_color = canister_color
@@ -114,27 +96,45 @@
 		overlay_status = 0
 
 		if (holding)
-			overlays += status_overlays_other[1]
+			overlays += other_overlays(1)
 			overlay_status |= OVERLAY_HOLDING
 
 		if (connected_port)
-			overlays += status_overlays_other[2]
+			overlays += other_overlays(2)
 			overlay_status |= OVERLAY_CONNECTED
 
 		switch(tank_pressure)
 			if(15 * ONE_ATMOSPHERE to INFINITY)
-				overlays += status_overlays_pressure[4]
+				overlays += pressure_overlays(4)
 				overlay_status |= OVERLAY_HIGH_PRESSURE
 			if(ONE_ATMOSPHERE to 15 * ONE_ATMOSPHERE)
-				overlays += status_overlays_pressure[3]
+				overlays += pressure_overlays(3)
 				overlay_status |= OVERLAY_MEDIUM_PRESSURE
 			if(10 to ONE_ATMOSPHERE)
-				overlays += status_overlays_pressure[2]
+				overlays += pressure_overlays(2)
 				overlay_status |= OVERLAY_LOW_PRESSURE
 			else
-				overlays += status_overlays_pressure[1]
+				overlays += pressure_overlays(1)
 				overlay_status |= OVERLAY_NO_PRESSURE
 	return
+
+/obj/machinery/portable_atmospherics/canister/proc/pressure_overlays(var/state)
+	var/static/list/status_overlays_pressure = list(
+		image(icon, "can-o0"),
+		image(icon, "can-o1"),
+		image(icon, "can-o2"),
+		image(icon, "can-o3")
+	)
+
+	return status_overlays_pressure[state]
+
+/obj/machinery/portable_atmospherics/canister/proc/other_overlays(var/state)
+	var/static/list/status_overlays_other = list(
+		image(icon, "can-open"),
+		image(icon, "can-connector")
+	)
+
+	return status_overlays_other[state]
 
 /obj/machinery/portable_atmospherics/canister/proc/check_updates(tank_pressure = 0)
 	if((overlay_status & OVERLAY_HOLDING) != holding)
