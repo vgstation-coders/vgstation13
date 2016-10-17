@@ -14,6 +14,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	max_amount = 60
+	var/active
 
 	material = "metal"
 
@@ -22,26 +23,49 @@
 	pixel_x = rand(1, 14) * PIXEL_MULTIPLIER
 	pixel_y = rand(1, 14) * PIXEL_MULTIPLIER
 
-/*
-/obj/item/stack/tile/plasteel/attack_self(mob/user as mob)
-	if (usr.stat)
+/obj/item/stack/tile/plasteel/Destroy()
+	..()
+	if(active)
+		returnToPool(active)
+		active = null
+
+/obj/item/stack/tile/plasteel/attack_self(mob/user)
+	if(!active) //Start click drag construction
+		active = getFromPool(/obj/screen/draggable, src, user)
+		to_chat(user, "Beginning plating construction mode, click and hold to use.")
 		return
-	var/T = user.loc
-	if (!( istype(T, /turf) ))
-		to_chat(user, "<span class='warning'>You must be on the ground!</span>")
-		return
-	if (!( istype(T, /turf/space) ))
-		to_chat(user, "<span class='warning'>You cannot build on or repair this turf!</span>")
-		return
-	src.build(T)
-	src.add_fingerprint(user)
-	use(1)
-	return
-*/
+	else //End click drag construction, create grille
+		returnToPool(active)
+
+/obj/item/stack/tile/plasteel/can_drag_use(mob/user, turf/T)
+	if(user.Adjacent(T)) //can we place here
+		var/canbuild = T.canBuildPlating()
+		if(canbuild == BUILD_SUCCESS || canbuild == BUILD_IGNORE)
+			if(use(1)) //place and use rod
+				return 1
+			else
+				returnToPool(active) //otherwise remove the draggable screen
+				active = null
+
+/obj/item/stack/tile/plasteel/drag_use(mob/user, turf/T)
+	if(T.canBuildPlating() == BUILD_SUCCESS) //This deletes lattices, only necessary for BUILD_SUCCESS
+		var/L = locate(/obj/structure/lattice) in T
+		if(!L)
+			return
+		qdel(L)
+	playsound(T, 'sound/weapons/Genhit.ogg', 25, 1)
+	build(T)
+
+/obj/item/stack/tile/plasteel/end_drag_use()
+	active = null
+
+/obj/item/stack/tile/plasteel/dropped()
+	..()
+	if(active)
+		returnToPool(active)
+		active = null
 
 /obj/item/stack/tile/plasteel/proc/build(turf/S as turf)
-
-
 	if(istype(S,/turf/space) || istype(S,/turf/unsimulated))
 		S.ChangeTurf(/turf/simulated/floor/plating/airless)
 	else
@@ -76,7 +100,6 @@
 		if(isturf(target) || istype(target, /obj/structure/lattice))
 			var/turf/T = get_turf(target)
 			var/obj/structure/lattice/L
-			var/obj/item/stack/tile/plasteel/S = src
 			switch(T.canBuildPlating())
 				if(BUILD_SUCCESS)
 					L = locate(/obj/structure/lattice) in T
@@ -84,13 +107,13 @@
 						return
 					qdel(L)
 					playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1)
-					S.build(T)
-					S.use(1)
+					build(T)
+					use(1)
 					return
 				if(BUILD_IGNORE)
 					playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1)
-					S.build(T)
-					S.use(1)
+					build(T)
+					use(1)
 				if(BUILD_FAILURE)
 					to_chat(user, "<span class='warning'>The plating is going to need some support.</span>")
 					return
