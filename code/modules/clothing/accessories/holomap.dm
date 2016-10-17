@@ -145,9 +145,9 @@ var/list/holomap_cache = list()
 	bgmap.color = holomap_color
 	bgmap.loc = activator.hud_used.holomap_obj
 
+	//Prevents the map background from sliding across the screen when the map is enabled for the first time.
 	if(!bgmap.pixel_x)
 		bgmap.pixel_x = -1*T.x + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32)
-
 	if(!bgmap.pixel_y)
 		bgmap.pixel_y = -1*T.y + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32)
 
@@ -193,6 +193,7 @@ var/list/holomap_cache = list()
 				I.layer = HUD_ITEM_LAYER
 			I.loc = activator.hud_used.holomap_obj
 
+			//if a new marker is created, we immediately set its offset instead of letting animate() take care of it, so it doesn't slide accross the screen.
 			if(!I.pixel_x || !I.pixel_y)
 				I.pixel_x = TU.x - T.x + activator.client.view*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32)
 				I.pixel_y = TU.y - T.y + activator.client.view*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32)
