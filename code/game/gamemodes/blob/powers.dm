@@ -33,7 +33,7 @@
 
 /mob/camera/blob/verb/create_shield_power()
 	set category = "Blob"
-	set name = "Create Shield Blob ([BLOBSHICOST])"
+	set name = "Create Shield Blob"
 	set desc = "Create a shield blob."
 
 	var/turf/T = get_turf(src)
@@ -63,7 +63,7 @@
 
 /mob/camera/blob/verb/create_resource()
 	set category = "Blob"
-	set name = "Create Resource Blob ([BLOBRESCOST])"
+	set name = "Create Resource Blob"
 	set desc = "Create a resource tower which will generate points for you."
 
 
@@ -140,7 +140,7 @@
 
 /mob/camera/blob/verb/create_node()
 	set category = "Blob"
-	set name = "Create Node Blob ([BLOBNODCOST])"
+	set name = "Create Node Blob"
 	set desc = "Create a Node."
 
 
@@ -179,7 +179,7 @@
 
 /mob/camera/blob/verb/create_factory()
 	set category = "Blob"
-	set name = "Create Factory Blob ([BLOBFACCOST])"
+	set name = "Create Factory Blob"
 	set desc = "Create a Spore producing blob."
 
 
@@ -262,7 +262,7 @@
 
 /mob/camera/blob/verb/expand_blob_power()
 	set category = "Blob"
-	set name = "Expand/Attack Blob ([BLOBATTCOST])"
+	set name = "Expand/Attack Blob"
 	set desc = "Attempts to create a new blob in this tile. If the tile isn't clear we will attack it, which might clear it."
 
 	var/turf/T = get_turf(src)
@@ -290,7 +290,7 @@
 
 /mob/camera/blob/verb/rally_spores_power()
 	set category = "Blob"
-	set name = "Rally Spores ([BLOBRALCOST])"
+	set name = "Rally Spores"
 	set desc = "Rally the spores to move to your location."
 
 	var/turf/T = get_turf(src)
