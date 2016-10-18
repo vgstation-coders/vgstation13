@@ -1,7 +1,0 @@
-
-author: Jeroen52
-
-delete-after: True
-
-changes: 
-- rscadd: "Placed a 'safety filter' on LOOC warning them if a message seems like it was intended for IC. This was copied from JustSumGuy's OOC safety filter."
