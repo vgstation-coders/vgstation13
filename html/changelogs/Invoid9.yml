@@ -1,5 +1,0 @@
-﻿author: Invoid9
-delete-after: True
-changes: 
-- bugfix: Fixes cryo indicating people at 0 life as dead.
-- tweak: Cryo now also indicates just how far in crit the occupant is. When the occupant is dead, the bar becomes full red and does not flash.
