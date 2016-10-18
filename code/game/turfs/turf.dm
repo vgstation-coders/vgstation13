@@ -38,9 +38,6 @@
 	// holy water
 	var/holy = 0
 
-	// wizard sleep spell probably better way to do this
-	var/sleeping = 0
-
 	// left by bullets that went all the way through
 	var/bullet_marks = 0
 	penetration_dampening = 10
