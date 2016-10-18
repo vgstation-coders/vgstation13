@@ -23,7 +23,7 @@
  * Yes, this allows for hyperspeed building stacks, but I wouldn't recommend that, as it doesn't carry over too well when stacks are merged or separated.
  * Might work for borg stack modules, though. Worth looking into.
  */
-/atom
+/atom/movable
 	var/list/construction_delay_mult = null
 	//Formatted as list(Co_CON_SPEED = value, Co_DECON_SPEED = value)
 
