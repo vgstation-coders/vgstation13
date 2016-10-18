@@ -16,6 +16,7 @@
 	var/throw_range = 7
 	var/moved_recently = 0
 	var/mob/pulledby = null
+	var/pass_flags = 0
 
 	var/area/areaMaster
 

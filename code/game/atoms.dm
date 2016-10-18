@@ -13,7 +13,6 @@ var/global/list/ghdel_profiling = list()
 	var/fingerprintslast = null
 	var/list/blood_DNA
 	var/blood_color
-	var/pass_flags = 0
 	var/germ_level = 0 // The higher the germ level, the more germ on the atom.
 	var/pressure_resistance = ONE_ATMOSPHERE
 	var/penetration_dampening = 5 //drains some of a projectile's penetration power whenever it goes through the atom
@@ -752,7 +751,7 @@ its easier to just keep the beam vertical.
 	else
 		return 0
 
-/atom/proc/checkpass(passflag)
+/atom/movable/proc/checkpass(passflag)
 	return pass_flags&passflag
 
 /datum/proc/setGender(gend = FEMALE)
