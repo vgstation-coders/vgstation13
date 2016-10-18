@@ -2408,32 +2408,27 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+
 /datum/reagent/nanites
 	name = "Nanites"
 	id = NANITES
 	description = "Microscopic construction robots."
 	reagent_state = LIQUID
 	color = "#535E66" //rgb: 83, 94, 102
-
+	var/diseasetype = /datum/disease/robotic_transformation
 /datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
 	if(..())
 		return 1
 
 	if((prob(10) && method == TOUCH) || method == INGEST)
-		M.contract_disease(new /datum/disease/robotic_transformation(0), 1)
+		M.contract_disease(new diseasetype)
 
 /datum/reagent/nanites/autist
 	name = "Autist nanites"
 	id = AUTISTNANITES
-
-/datum/reagent/nanites/autist/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
-
-	if(..())
-		return 1
-
-	if((prob(10) && method == TOUCH) || method == INGEST)
-		M.contract_disease(new /datum/disease/robotic_transformation/mommi(0), 1)
+	diseasetype = /datum/disease/robotic_transformation/mommi
 
 /datum/reagent/xenomicrobes
 	name = "Xenomicrobes"
