@@ -93,7 +93,8 @@
 
 	if(!Adjacent(T))
 		if(E.holder)
-			E.holder.on_moved.Remove(targetMoveKey)
+			var/atom/movable/holder = E.holder
+			holder.on_moved.Remove(targetMoveKey)
 		detach()
 
 /obj/machinery/chem_master/ex_act(severity)

@@ -99,7 +99,8 @@
 
 	if(!Adjacent(T))
 		if(E.holder)
-			E.holder.on_moved.Remove(targetMoveKey)
+			var/atom/movable/holder = E.holder
+			holder.on_moved.Remove(targetMoveKey)
 		detach()
 
 

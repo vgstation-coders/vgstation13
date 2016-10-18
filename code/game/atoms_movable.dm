@@ -43,6 +43,9 @@
 	var/throwpass = 0
 	var/level = 2
 
+	// When this object moves. (args: loc)
+	var/event/on_moved
+
 /atom/movable/New()
 	. = ..()
 	areaMaster = get_area_master(src)
@@ -52,10 +55,15 @@
 	locked_atoms            = list()
 	locking_categories      = list()
 	locking_categories_name = list()
+	on_moved = new("owner"=src)
 
 /atom/movable/Destroy()
 	gcDestroyed = "Bye, world!"
 	tag = null
+
+	if(on_moved)
+		on_moved.holder = null
+		on_moved = null
 
 	var/turf/un_opaque
 	if (opacity && isturf(loc))

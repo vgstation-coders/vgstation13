@@ -35,8 +35,7 @@ var/global/list/ghdel_profiling = list()
 	// On Destroy()
 	var/event/on_destroyed
 
-	// When this object moves. (args: loc)
-	var/event/on_moved
+
 
 	var/labeled //Stupid and ugly way to do it, but the alternative would probably require rewriting everywhere a name is read.
 	var/min_harm_label = 0 //Minimum langth of harm-label to be effective. 0 means it cannot be harm-labeled. If any label should work, set this to 1 or 2.
@@ -139,9 +138,6 @@ var/global/list/ghdel_profiling = list()
 	// Idea by ChuckTheSheep to make the object even more unreferencable.
 	invisibility = 101
 	INVOKE_EVENT(on_destroyed, list()) // No args.
-	if(on_moved)
-		on_moved.holder = null
-		on_moved = null
 	if(on_destroyed)
 		on_destroyed.holder = null
 		on_destroyed = null
@@ -158,7 +154,6 @@ var/global/list/ghdel_profiling = list()
 
 /atom/New()
 	on_destroyed = new("owner"=src)
-	on_moved = new("owner"=src)
 	. = ..()
 	if(starting_materials)
 		materials = getFromPool(/datum/materials, src)
