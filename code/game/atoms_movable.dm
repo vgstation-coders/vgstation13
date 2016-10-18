@@ -22,7 +22,7 @@
 
 	var/sound_override = 0 //Do we make a sound when bumping into something?
 	var/hard_deleted = 0
-
+	var/pressure_resistance = ONE_ATMOSPHERE
 	var/obj/effect/overlay/chain/tether = null
 	var/tether_pull = 0
 

@@ -14,7 +14,6 @@ var/global/list/ghdel_profiling = list()
 	var/list/blood_DNA
 	var/blood_color
 	var/germ_level = 0 // The higher the germ level, the more germ on the atom.
-	var/pressure_resistance = ONE_ATMOSPHERE
 	var/penetration_dampening = 5 //drains some of a projectile's penetration power whenever it goes through the atom
 
 	///Chemistry.
