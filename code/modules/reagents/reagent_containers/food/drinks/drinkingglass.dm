@@ -63,7 +63,7 @@
 					icon_state  = "glass_white"
 					item_state = "glass_white"
 					name = "glass of cream"
-					desc = "Ewwww..."
+					desc = "Ew..."
 				if("chocolate")
 					icon_state  = "chocolateglass"
 					item_state  = "chocolateglass"
