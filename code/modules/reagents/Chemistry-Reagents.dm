@@ -2419,11 +2419,11 @@
     var/diseasetype = /datum/disease/robotic_transformation
 /datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
-    if(..())
-        return 1
+	if(..())
+		return 1
 
-    if((prob(10) && method == TOUCH) || method == INGEST)
-        M.contract_disease(new diseasetype)
+	if((prob(10) && method == TOUCH) || method == INGEST)
+		M.contract_disease(new diseasetype)
 
 /datum/reagent/nanites/autist
     name = "Autist nanites"
@@ -2474,7 +2474,7 @@
 		if(1 to 5)
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
-				if(H.species.name != "Dionae")
+				if(H.species.name != "Diona")
 					var/datum/organ/external/affecting = H.get_organ()
 					for(var/datum/wound/W in affecting.wounds)
 						spawn(1)
@@ -2513,15 +2513,15 @@
 						H.dizziness = max(0, H.dizziness - 15)
 					if(H.confused != 0)
 						H.confused = max(0, H.confused - 5)
-					for(var/datum/disease/D in M.viruses)
+					for(var/datum/disease/D in (M.viruses))
 						D.spread = "Remissive"
 						D.stage--
-						if(D.stage >= 1)
+						if(D.stage < 1)
 							D.cure()
 		if(5 to 20)		//Danger zone healing. Adds to a human mob's "percent machine" var, which is directly translated into the chance that it will turn horror each tick that the reagent is above 5u.
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
-				if(H.species.name != "Dionae")
+				if(H.species.name != "Diona")
 					var/datum/organ/external/affecting = H.get_organ()
 					for(var/datum/wound/W in affecting.wounds)
 						spawn(1)
@@ -2576,10 +2576,10 @@
 						H.dizziness = max(0, H.dizziness - 15)
 					if(H.confused != 0)
 						H.confused = max(0, H.confused - 5)
-					for(var/datum/disease/D in M.viruses)
+					for(var/datum/disease/D in (M.viruses))
 						D.spread = "Remissive"
 						D.stage--
-						if(D.stage >= 1)
+						if(D.stage < 1)
 							D.cure()
 					if(prob(percent_machine))
 						holder.add_reagent("mednanobots", 20)
