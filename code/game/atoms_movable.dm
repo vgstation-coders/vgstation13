@@ -7,7 +7,6 @@
 
 	var/last_move = null //Direction in which this atom last moved
 	var/last_moved = 0   //world.time when this atom last moved
-
 	var/anchored = 0
 	var/move_speed = 10
 	var/l_move_time = 1
@@ -19,10 +18,6 @@
 	var/mob/pulledby = null
 
 	var/area/areaMaster
-
-	// Garbage collection (controller).
-	//var/gcDestroyed
-	//var/timeDestroyed
 
 	var/sound_override = 0 //Do we make a sound when bumping into something?
 	var/hard_deleted = 0
@@ -43,6 +38,9 @@
 	// Can we send relaymove() if gravity is disabled or we are in space? (Should be handled by relaymove, but shitcode abounds)
 	var/internal_gravity = 0
 	var/inertia_dir = null
+
+	var/throwpass = 0
+	var/level = 2
 
 /atom/movable/New()
 	. = ..()
@@ -399,8 +397,9 @@
 					. = 0
 
 			else if(isobj(A))
-				if(A.density && !A.throwpass)	// **TODO: Better behaviour for windows which are dense, but shouldn't always stop movement
-					src.throw_impact(A, speed, user)
+				var/obj/O = A
+				if(O.density && !O.throwpass)	// **TODO: Better behaviour for windows which are dense, but shouldn't always stop movement
+					src.throw_impact(O, speed, user)
 					src.throwing = 0
 					. = 0
 

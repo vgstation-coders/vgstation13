@@ -7,7 +7,6 @@ var/global/list/ghdel_profiling = list()
 	var/ghost_write = 0 // Only aghosts can write
 	var/blessed=0 // Chaplain did his thing. (set by bless() proc, which is called by holywater)
 
-	var/level = 2
 	var/flags = FPRINT
 	var/list/fingerprints
 	var/list/fingerprintshidden
@@ -15,7 +14,6 @@ var/global/list/ghdel_profiling = list()
 	var/list/blood_DNA
 	var/blood_color
 	var/pass_flags = 0
-	var/throwpass = 0
 	var/germ_level = 0 // The higher the germ level, the more germ on the atom.
 	var/pressure_resistance = ONE_ATMOSPHERE
 	var/penetration_dampening = 5 //drains some of a projectile's penetration power whenever it goes through the atom
@@ -51,7 +49,6 @@ var/global/list/ghdel_profiling = list()
 	//var/harm_label_icon_state //Makes sense to have this, but I can't sprite. May be added later.
 	var/list/last_beamchecks // timings for beam checks.
 	var/ignoreinvert = 0
-	var/forceinvertredraw = 0
 	var/tempoverlay
 	var/timestopped
 
@@ -449,10 +446,10 @@ its easier to just keep the beam vertical.
 
 /atom/proc/mech_drill_act(var/severity, var/child=null)
 	return ex_act(severity, child)
-	
+
 /atom/proc/can_mech_drill()
 	return acidable()
-	
+
 /atom/proc/blob_act(destroy = 0)
 	//DEBUG to_chat(pick(player_list),"blob_act() on [src] ([src.type])")
 	if(flags & INVULNERABLE)

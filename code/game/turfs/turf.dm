@@ -1,6 +1,5 @@
 /turf
 	icon = 'icons/turf/floors.dmi'
-	level = 1.0
 	plane = TURF_PLANE
 	layer = TURF_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD
 	luminosity = 0
@@ -62,7 +61,6 @@
 	//See code/datums/shuttle.dm @ 544
 	var/preserve_underlay = 0
 
-	forceinvertredraw = 1
 
 	// This is the placed to store data for the holomap.
 	var/list/image/holomap_data
