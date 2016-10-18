@@ -1,3 +1,5 @@
+var/global/list/falltempoverlays = list()
+
 
 /spell/aoe_turf/fall
 	name = "Time Stop"
@@ -119,50 +121,25 @@
 
 	sleepfor = world.time + sleeptime
 	for(var/turf/T in targets)
-//		to_chat(world, "Starting [T]")
 		oureffects += getFromPool(/obj/effect/stop/sleeping, T, sleepfor, usr:mind, src, invocation == "ZA WARUDO")
 		for(var/atom/movable/everything in T)
-//			to_chat(world, "[T] doing [everything]")
 			if(isliving(everything))
-//				to_chat(world, "[everything] is living")
 				var/mob/living/L = everything
 				if(L == holder)
 					continue
-//				to_chat(world, "[everything] is not holder")
-//				to_chat(world, "paralyzing [everything]")
 				affected += L
 				invertcolor(L)
 				spawn() recursive_timestop(L)
-				//L.Paralyse(5)
-				//L.update_canmove()
-//				to_chat(world, "done")
 				L.playsound_local(L, invocation == "ZA WARUDO" ? 'sound/effects/theworld2.ogg' : 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
-//			to_chat(world, "checking for color invertion")
 			else
 				spawn() recursive_timestop(everything)
 				if(everything.ignoreinvert)
-//					to_chat(world, "[everything] is ignoring inverts.")
 					continue
-//				to_chat(world, "Inverting [everything] [everything.type] [everything.forceinvertredraw ? "forcing redraw" : ""]")
 				invertcolor(everything)
-//				to_chat(world, "Done")
 				affected += everything
 			everything.timestopped = 1
-//		to_chat(world, "inverting [T]")
 		invertcolor(T)
 		T.timestopped = 1
-//		to_chat(world, "Done")
-		/*var/icon/I = T.tempoverlay
-
-		if(!istype(I))
-			I = icon(T.icon, T.icon_state, T.dir)
-			I.MapColors(-1,0,0, 0,-1,0, 0,0,-1, 1,1,1)
-		//else
-			//if(T.icon_state != initial(T.icon_state))
-				//I = icon(I, T.icon_state, T.dir)
-		T.tempoverlay = I
-		T.overlays += I*/
-
 
 		affected += T
 	return
@@ -194,15 +171,11 @@
 		returnToPool(S)
 		oureffects -= S
 	for(var/atom/everything in affected)
-		if(!istype(everything))
-			continue
-		everything.appearance = everything.tempoverlay
-		everything.tempoverlay = null
+		everything.appearance = falltempoverlays[everything]
+		falltempoverlays -= everything
 		everything.ignoreinvert = initial(everything.ignoreinvert)
 		everything.timestopped = 0
 	affected.len = 0
-
-	return
 
 /mob/var/image/fallimage
 
@@ -234,8 +207,8 @@
 //	to_chat(world, "invert color start")
 	if(A.ignoreinvert)
 		return
-	if(!A.tempoverlay)
-		A.tempoverlay = A.appearance
+	if(!falltempoverlays[A])
+		falltempoverlays[A] = A.appearance
 
 	A.color=	  list(-1,0,0,
 						0,-1,0,

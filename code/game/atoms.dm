@@ -49,7 +49,6 @@ var/global/list/ghdel_profiling = list()
 	//var/harm_label_icon_state //Makes sense to have this, but I can't sprite. May be added later.
 	var/list/last_beamchecks // timings for beam checks.
 	var/ignoreinvert = 0
-	var/tempoverlay
 	var/timestopped
 
 	appearance_flags = TILE_BOUND
