@@ -28,9 +28,6 @@ var/global/list/ghdel_profiling = list()
 	// replaced by OPENCONTAINER flags and atom/proc/is_open_container()
 	///Chemistry.
 
-	//Detective Work, used for the duplicate data points kept in the scanners
-	var/list/original_atom
-
 	var/list/beams
 
 	// EVENTS
