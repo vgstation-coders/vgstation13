@@ -7,8 +7,14 @@
 	cache_lifespan = 0	//stops player uploaded stuff from being kept in the rsc past the current session
 	//loop_checks = 0
 	icon_size = WORLD_ICON_SIZE
-#define RECOMMENDED_VERSION 510
+#define RECOMMENDED_VERSION 511
 
+#if DM_VERSION < 511
+//fix a byond bug by creating a sound and icon at world init. (byond bug ID:2024361)
+//	This is here because this has to run before any save files are loaded in order to work.
+var/sound/fixcleanbotbug_sound = sound()
+var/icon/fixcleanbotbug_icon = icon()
+#endif
 
 var/savefile/panicfile
 /world/New()
