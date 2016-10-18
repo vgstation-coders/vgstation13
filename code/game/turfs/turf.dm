@@ -29,9 +29,6 @@
 	// Bot shit
 	var/targetted_by=null
 
-	// Decal shit.
-	var/list/decals
-
 	// Flick animation shit
 	var/atom/movable/overlay/c_animation = null
 
