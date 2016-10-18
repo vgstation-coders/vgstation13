@@ -129,7 +129,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 		to_chat(AI_mind.current, {"<span class='notice'>Congratulations! The station is now under your exclusive control.<br>
 You may decide to blow up the station. You have 60 seconds to choose.<br>
 You should now be able to use your Explode spell to interface with the nuclear fission device.</span>"})
-		AI_mind.current.add_spell(new /spell/aoe_turf/ai_win)
+		AI_mind.current.add_spell(new /spell/aoe_turf/ai_win, "grey_spell_ready",/obj/screen/movable/spell_master/malf)
 	spawn (600)
 		to_nuke_or_not_to_nuke = 0
 	return
@@ -169,6 +169,7 @@ You should now be able to use your Explode spell to interface with the nuclear f
 	desc = "Start the victory timer"
 	charge_type = Sp_CHARGES
 	charge_max = 1
+	hud_state = "systemtakeover"
 	
 /spell/aoe_turf/takeover/before_target(mob/user)
 	if (!istype(ticker.mode,/datum/game_mode/malfunction))
@@ -200,6 +201,7 @@ You should now be able to use your Explode spell to interface with the nuclear f
 	desc = "Station goes boom"
 	charge_type = Sp_CHARGES
 	charge_max = 1
+	hud_state = "radiation"
 	
 /spell/aoe_turf/ai_win/before_target(mob/user)
 	if(!ticker.mode:station_captured)

@@ -38,7 +38,7 @@ rcd light flash thingy on matter drain
 			if (istype(S,power_type))
 				S.charge_counter += uses
 				return
-		user.add_spell(new power_type)
+		user.add_spell(new power_type, "grey_spell_ready",/obj/screen/movable/spell_master/malf)
 	
 /datum/AI_Module/large/fireproof_core
 	module_name = "Core upgrade"
@@ -77,6 +77,7 @@ rcd light flash thingy on matter drain
 	panel = MALFUNCTION
 	charge_type = Sp_CHARGES
 	charge_max = 1
+	hud_state = "rcd_disable"
 	
 /spell/aoe_turf/disable_rcd/cast(list/targets, mob/user)
 	for(var/obj/item/device/rcd/matter/engineering/rcd in world)
@@ -100,6 +101,7 @@ rcd light flash thingy on matter drain
 	range = GLOBALCAST
 	charge_type = Sp_CHARGES
 	charge_max = 2
+	hud_state = "overload"
 	
 /spell/targeted/overload_machine/is_valid_target(var/atom/target)
 	if (istype(target, /obj/machinery))
@@ -122,7 +124,7 @@ rcd light flash thingy on matter drain
 	cost = 100
 	
 	power_type = /spell/aoe_turf/conjure/place_transformer
-
+	
 /spell/aoe_turf/conjure/place_transformer
 	name = "Place Robotic Factory"
 	panel = MALFUNCTION
@@ -131,6 +133,7 @@ rcd light flash thingy on matter drain
 	spell_flags = WAIT_FOR_CLICK | NODUPLICATE | IGNORESPACE | IGNOREDENSE
 	range = GLOBALCAST
 	summon_type = list(/obj/machinery/transformer/conveyor)
+	hud_state = "autoborger"
 	
 /spell/aoe_turf/conjure/place_transformer/before_target(mob/user)
 	var/mob/living/silicon/ai/A = user
@@ -197,6 +200,7 @@ rcd light flash thingy on matter drain
 	panel = MALFUNCTION
 	charge_type = Sp_CHARGES
 	charge_max = 3
+	hud_state = "blackout"
 	
 /spell/aoe_turf/blackout/cast(var/list/targets, mob/user)
 	for(var/obj/machinery/power/apc/apc in power_machines)
@@ -218,6 +222,7 @@ rcd light flash thingy on matter drain
 	panel = MALFUNCTION
 	charge_type = Sp_CHARGES
 	charge_max = 3
+	hud_state = "fakemessage"
 	
 /spell/aoe_turf/interhack/cast(var/list/targets,mob/user)
 
@@ -258,6 +263,7 @@ rcd light flash thingy on matter drain
 	charge_max = 10
 	range = GLOBALCAST
 	spell_flags = SELECTABLE
+	hud_state = "camera_reactivate"
 	
 /spell/targeted/reactivate_camera/choose_targets(mob/user = usr)
 	return list(input(user, "Choose a Camera to reactivate.", "Targeting") as null|obj in cameranet.cameras)
@@ -292,6 +298,7 @@ rcd light flash thingy on matter drain
 	charge_max = 10
 	spell_flags = WAIT_FOR_CLICK
 	range = GLOBALCAST
+	hud_state = "camera_upgrade"
 	
 /spell/targeted/upgrade_camera/is_valid_target(var/atom/target)
 	if(!istype(target, /obj/machinery/camera))
