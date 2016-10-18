@@ -21,7 +21,6 @@
 	var/temperature = T20C
 
 	var/blocks_air = 0
-	var/icon_old = null
 
 	//associated PathNode in the A* algorithm
 	var/PathNode/PNode = null
