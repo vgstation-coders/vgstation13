@@ -2513,7 +2513,7 @@
 						H.dizziness = max(0, H.dizziness - 15)
 					if(H.confused != 0)
 						H.confused = max(0, H.confused - 5)
-					for(var/datum/disease/D in (M.viruses))
+					for(var/datum/disease/D in M.viruses)
 						D.spread = "Remissive"
 						D.stage--
 						if(D.stage < 1)
@@ -2576,7 +2576,7 @@
 						H.dizziness = max(0, H.dizziness - 15)
 					if(H.confused != 0)
 						H.confused = max(0, H.confused - 5)
-					for(var/datum/disease/D in (M.viruses))
+					for(var/datum/disease/D in M.viruses)
 						D.spread = "Remissive"
 						D.stage--
 						if(D.stage < 1)
