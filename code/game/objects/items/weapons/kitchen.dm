@@ -133,7 +133,7 @@
 
 /obj/item/weapon/kitchen/utensil/fork/proc/feed_to(mob/living/carbon/user, mob/living/carbon/target)
 	reagents.reaction(target, INGEST)
-	reagents.trans_to(target.reagents, reagents.total_volume, reagents.total_volume, log_transfer = TRUE, whodunnit = user)
+	reagents.trans_to(target.reagents, reagents.total_volume, log_transfer = TRUE, whodunnit = user)
 	overlays -= loaded_food
 	del(loaded_food)
 	loaded_food_name = null
