@@ -15,16 +15,44 @@
 	attack_verb = list("hits", "bludgeons", "whacks")
 	w_type=RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
+	var/active = 0
+
+/obj/item/stack/rods/Destroy()
+	..()
+	if(active)
+		returnToPool(active)
+		active = null
+
+/obj/item/stack/rods/can_drag_use(mob/user, turf/T)
+	if(user.Adjacent(T) && T.canBuildLattice(src)) //can we place here
+
+		if(use(1)) //place and use rod
+			return 1
+		else
+			returnToPool(active) //otherwise remove the draggable screen
+			active = null
+
+/obj/item/stack/rods/drag_use(mob/user, turf/T)
+	playsound(T, 'sound/weapons/Genhit.ogg', 25, 1)
+	new /obj/structure/lattice(T)
+
+/obj/item/stack/rods/end_drag_use()
+	active = null
+
+/obj/item/stack/rods/dropped()
+	..()
+	if(active)
+		returnToPool(active)
+		active = null
 
 /obj/item/stack/rods/afterattack(atom/Target, mob/user, adjacent, params)
 	var/busy = 0
 	if(adjacent)
 		if(isturf(Target) || istype(Target, /obj/structure/lattice))
 			var/turf/T = get_turf(Target)
-			var/obj/item/stack/rods/R = src
-			var/obj/structure/lattice/L = T.canBuildCatwalk(R)
+			var/obj/structure/lattice/L = T.canBuildCatwalk(src)
 			if(istype(L))
-				if(R.amount < 2)
+				if(amount < 2)
 					to_chat(user, "<span class='warning'>You need atleast 2 rods to build a catwalk!</span>")
 					return
 				if(busy) //We are already building a catwalk, avoids stacking catwalks
@@ -33,7 +61,7 @@
 				busy = 1
 				if(do_after(user, Target, 30))
 					busy = 0
-					if(R.amount < 2)
+					if(amount < 2)
 						to_chat(user, "<span class='warning'>You ran out of rods!</span>")
 						return
 					if(!istype(L) || L.loc != T)
@@ -41,16 +69,16 @@
 						return
 					playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
 					to_chat(user, "<span class='notice'>You build a catwalk!</span>")
-					R.use(2)
+					use(2)
 					new /obj/structure/catwalk(T)
 					qdel(L)
 					return
 
-			if(T.canBuildLattice(R))
+			if(T.canBuildLattice(src))
 				to_chat(user, "<span class='notice'>Constructing support lattice ...</span>")
 				playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1)
 				new /obj/structure/lattice(T)
-				R.use(1)
+				use(1)
 				return
 
 /obj/item/stack/rods/attackby(obj/item/W as obj, mob/user as mob)
@@ -80,6 +108,13 @@
 
 /obj/item/stack/rods/attack_self(mob/user as mob)
 	src.add_fingerprint(user)
+
+	if(!active) //Start click drag construction
+		active = getFromPool(/obj/screen/draggable, src, user)
+		to_chat(user, "Beginning lattice construction mode, click and hold to use. Use rods again to create grille.")
+		return
+	else //End click drag construction, create grille
+		returnToPool(active)
 
 	if(!istype(user.loc, /turf))
 		return 0
