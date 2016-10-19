@@ -83,7 +83,9 @@
 		if(!target.is_open_container() && !istype(target,/obj/structure/reagent_dispensers))
 			to_chat(user, "<span class='warning'>You cannot directly remove reagents from [target].</span>")
 			return
-
+		if(target.is_open_container() && ismob(target))
+			to_chat(user, "<span class='warning'>That doesn't make much sense.</span>")
+			return
 		if(!target.reagents.total_volume)
 			to_chat(user, "<span class='warning'>[target] is empty.</span>")
 			return
