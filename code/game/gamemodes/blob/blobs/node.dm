@@ -1,3 +1,5 @@
+#define BLOBPOINTINC 10
+
 /obj/effect/blob/node
 	name = "blob node"
 	icon_state = "node"
