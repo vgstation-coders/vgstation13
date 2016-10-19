@@ -55,7 +55,7 @@ var/global/list/floorbot_targets=list()
 	var/turf/target
 	var/turf/oldtarget
 	var/oldloc = null
-	req_access = list(access_robotics)
+	req_access = list(access_robotics, access_construction)
 	var/path[] = new()
 	var/targetdirection
 	var/beacon_freq = 1445		// navigation beacon frequency
