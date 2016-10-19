@@ -635,17 +635,12 @@
 		return
 
 	if ( (get_dist(src, user) > 1 ))
-		if (!istype(user, /mob/living/silicon))
-			user << browse(null, "window=AAlarmwires")
-			return
-
-
-		else if (istype(user, /mob/living/silicon) && aidisabled)
+		if (issilicon(user) && aidisabled)
 			to_chat(user, "AI control for this Air Alarm interface has been disabled.")
 			user << browse(null, "window=air_alarm")
 			return
 
-	if(wiresexposed && (isMoMMI(user) || !istype(user, /mob/living/silicon)))
+	if(wiresexposed && (isMoMMI(user) || !issilicon(user)))
 		wires.Interact(user)
 	if(!shorted)
 		ui_interact(user)
