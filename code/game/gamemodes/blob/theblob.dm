@@ -38,7 +38,7 @@ var/list/blob_looks
 
 /obj/effect/blob
 	name = "blob"
-	icon = 'icons/mob/blob_64x64.dmi'
+	icon = 'icons/mob/blob/blob_64x64.dmi'
 	icon_state = "center"
 	luminosity = 2
 	desc = "Some blob creature thingy"
@@ -174,10 +174,10 @@ var/list/blob_looks
 		apply_beam_damage(B)
 	update_health()
 	update_icon()
-	
+
 /obj/effect/blob/can_mech_drill()
 	return TRUE
-	
+
 /obj/effect/blob/process()
 	handle_beams()
 	Life()
@@ -262,11 +262,15 @@ var/list/blob_looks
 
 	switch(looks)
 		if("new")
-			icon = 'icons/mob/blob_64x64.dmi'
+			icon = 'icons/mob/blob/blob_64x64.dmi'
 		if("classic")
-			icon = 'icons/mob/blob.dmi'
+			icon = 'icons/mob/blob/blob.dmi'
 		if("adminbus")
 			icon = adminblob_icon
+		if("clownscape")
+			icon = 'icons/mob/blob/blob_honkscape.dmi'
+		if("AME")
+			icon = 'icons/mob/blob/blob_AME.dmi'
 		//<----------------------------------------------------------------------------DEAR SPRITERS, THIS IS WHERE YOU ADD YOUR NEW BLOB DMIs
 		/*EXAMPLES
 		if("fleshy")
@@ -282,6 +286,8 @@ var/list/blob_looks = list(
 	"new" = 64,
 	"classic" = 32,
 	"adminbus" = adminblob_size,
+	"clownscape" = 32,
+	"AME" = 32,
 	)
 	//<---------------------------------------ALSO ADD THE NAME OF YOUR BLOB LOOKS HERE, AS WELL AS THE RESOLUTION OF THE DMIS (64 or 32)
 

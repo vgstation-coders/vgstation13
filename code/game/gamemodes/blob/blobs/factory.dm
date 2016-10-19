@@ -79,7 +79,7 @@
 /mob/living/simple_animal/hostile/blobspore
 	name = "Blob Spore"
 	desc = "A form of blob antibodies that attack foreign entities."
-	icon = 'icons/mob/blob.dmi'
+	icon = 'icons/mob/blob/blob.dmi'
 	icon_state = "blobpod"
 	icon_living = "blobpod"
 	pass_flags = PASSBLOB
@@ -104,6 +104,7 @@
 	if(istype(linked_node))
 		factory = linked_node
 		factory.spores += src
+		icon = factory.icon
 	..()
 
 /mob/living/simple_animal/hostile/blobspore/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)

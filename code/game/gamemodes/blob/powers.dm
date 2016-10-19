@@ -123,13 +123,12 @@
 		to_chat(src, "There is another core blob nearby, move more than 15 tiles away from it!")
 		return
 
-	var/cost = 100
-	var/number_of_cores
+	var/base_cost = 100
+	var/cost_increment = 50
+	var/number_of_cores = blob_cores.len
 
-	for(var/obj/effect/blob/core/C in world)
-		number_of_cores++
 
-	cost = cost*number_of_cores
+	var/cost = base_cost+(cost_increment*(number_of_cores-1))
 
 	if(!can_buy(cost))
 		to_chat(src, "Current cost of a blob core is [cost]!")
