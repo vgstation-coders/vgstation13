@@ -1576,6 +1576,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	if(be_random_name)
 		real_name = random_name(gender,species)
 
+	if(be_random_body)
+		random_character(gender)
+
 	if(config.humans_need_surnames && species == "Human")
 		var/firstspace = findtext(real_name, " ")
 		var/name_length = length(real_name)
