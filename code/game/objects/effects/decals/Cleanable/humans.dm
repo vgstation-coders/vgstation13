@@ -17,7 +17,7 @@ var/global/list/blood_list = list()
 	appearance_flags = TILE_BOUND
 	var/base_icon = 'icons/effects/blood.dmi'
 
-	basecolor="#A10808" // Color when wet.
+	basecolor=DEFAULT_BLOOD // Color when wet.
 	amount = 5
 	counts_as_blood = 1
 	transfers_dna = 1
@@ -35,7 +35,7 @@ var/global/list/blood_list = list()
 	if(basecolor == "rainbow")
 		basecolor = "#[pick(list("FF0000","FF7F00","FFFF00","00FF00","0000FF","4B0082","8F00FF"))]"
 	color = basecolor
-	if(basecolor == "#FF0000"||basecolor == "#A10808") // no dirty dumb vox scum allowed
+	if(basecolor == "#FF0000"||basecolor == DEFAULT_BLOOD) // no dirty dumb vox scum allowed
 		plane = NOIR_BLOOD_PLANE
 	else
 		plane = ABOVE_TURF_PLANE
@@ -92,7 +92,7 @@ var/global/list/blood_list = list()
 	var/fleshcolor = "#FFFFFF"
 
 /obj/effect/decal/cleanable/blood/gibs/update_icon()
-	if(basecolor == "#FF0000"||basecolor == "#A10808") // no dirty dumb vox scum allowed
+	if(basecolor == "#FF0000"||basecolor == DEFAULT_BLOOD) // no dirty dumb vox scum allowed
 		plane = NOIR_BLOOD_PLANE
 	else
 		plane = ABOVE_TURF_PLANE

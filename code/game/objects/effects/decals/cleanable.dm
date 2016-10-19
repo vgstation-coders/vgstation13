@@ -11,7 +11,7 @@
 	var/transfers_dna=0
 	var/list/viruses = list()
 	blood_DNA = list()
-	var/basecolor="#A10808" // Color when wet.
+	var/basecolor=DEFAULT_BLOOD // Color when wet.
 	var/list/datum/disease2/disease/virus2 = list()
 	var/list/absorbs_types=list() // Types to aggregate.
 

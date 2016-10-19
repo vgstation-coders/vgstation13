@@ -449,10 +449,10 @@ its easier to just keep the beam vertical.
 
 /atom/proc/mech_drill_act(var/severity, var/child=null)
 	return ex_act(severity, child)
-	
+
 /atom/proc/can_mech_drill()
 	return acidable()
-	
+
 /atom/proc/blob_act(destroy = 0)
 	//DEBUG to_chat(pick(player_list),"blob_act() on [src] ([src.type])")
 	if(flags & INVULNERABLE)
@@ -689,7 +689,7 @@ its easier to just keep the beam vertical.
 	if(!M)//if the blood is of non-human source
 		if(!blood_DNA || !istype(blood_DNA, /list))
 			blood_DNA = list()
-		blood_color = "#A10808"
+		blood_color = DEFAULT_BLOOD
 		return 1
 	if (!( istype(M, /mob/living/carbon/human) ))
 		return 0
@@ -701,7 +701,7 @@ its easier to just keep the beam vertical.
 		return 0
 	if(!blood_DNA || !istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.
 		blood_DNA = list()
-	blood_color = "#A10808"
+	blood_color = DEFAULT_BLOOD
 	if (M.species)
 		blood_color = M.species.blood_color
 	//adding blood to humans
