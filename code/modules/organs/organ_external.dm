@@ -1353,15 +1353,17 @@ obj/item/weapon/organ/r_leg/New(loc, mob/living/carbon/human/H)
 		if(B)
 			B.infest_limb(src)
 
-obj/item/weapon/organ/head
+/obj/item/weapon/organ/head
 	dir = NORTH
 	name = LIMB_HEAD
 	icon_state = "head_m"
 	part = LIMB_HEAD
-	ashtype = /obj/item/weapon/skull
 	var/mob/living/carbon/brain/brainmob
 	var/brain_op_stage = 0
 	var/mob/living/carbon/human/origin_body = null
+
+/obj/item/weapon/organ/head/ashtype()
+	return /obj/item/weapon/skull
 
 obj/item/weapon/organ/head/Destroy()
 	if(brainmob)

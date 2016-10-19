@@ -280,8 +280,6 @@
 	var/event/on_logout
 	var/event/on_damaged
 
-	forceinvertredraw = 1
-
 	var/list/alphas = list()
 	var/spell_channeling
 

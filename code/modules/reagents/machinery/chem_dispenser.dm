@@ -81,7 +81,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 	if(!Adjacent(T))
 		if(E.holder)
-			E.holder.on_moved.Remove(targetMoveKey)
+			var/atom/movable/holder = E.holder
+			holder.on_moved.Remove(targetMoveKey)
 		detach()
 
 /obj/machinery/chem_dispenser/proc/recharge()

@@ -1,6 +1,5 @@
 /turf
 	icon = 'icons/turf/floors.dmi'
-	level = 1.0
 	plane = TURF_PLANE
 	layer = TURF_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD
 	luminosity = 0
@@ -22,16 +21,12 @@
 	var/temperature = T20C
 
 	var/blocks_air = 0
-	var/icon_old = null
 
 	//associated PathNode in the A* algorithm
 	var/PathNode/PNode = null
 
 	// Bot shit
 	var/targetted_by=null
-
-	// Decal shit.
-	var/list/decals
 
 	// Flick animation shit
 	var/atom/movable/overlay/c_animation = null
@@ -41,9 +36,6 @@
 
 	// holy water
 	var/holy = 0
-
-	// wizard sleep spell probably better way to do this
-	var/sleeping = 0
 
 	// left by bullets that went all the way through
 	var/bullet_marks = 0
@@ -62,7 +54,6 @@
 	//See code/datums/shuttle.dm @ 544
 	var/preserve_underlay = 0
 
-	forceinvertredraw = 1
 
 	// This is the placed to store data for the holomap.
 	var/list/image/holomap_data

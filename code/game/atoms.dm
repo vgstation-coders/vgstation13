@@ -7,32 +7,21 @@ var/global/list/ghdel_profiling = list()
 	var/ghost_write = 0 // Only aghosts can write
 	var/blessed=0 // Chaplain did his thing. (set by bless() proc, which is called by holywater)
 
-	var/level = 2
 	var/flags = FPRINT
 	var/list/fingerprints
 	var/list/fingerprintshidden
 	var/fingerprintslast = null
 	var/list/blood_DNA
 	var/blood_color
-	var/pass_flags = 0
-	var/throwpass = 0
 	var/germ_level = 0 // The higher the germ level, the more germ on the atom.
-	var/pressure_resistance = ONE_ATMOSPHERE
 	var/penetration_dampening = 5 //drains some of a projectile's penetration power whenever it goes through the atom
 
 	///Chemistry.
 	var/datum/reagents/reagents = null
 
-	//Material datums - the fun way of doing things in a laggy manner
-	var/datum/materials/materials = null
-	var/list/starting_materials //starting set of mats - used in New(), you can set this to an empty list to have the datum be generated but not filled
-
 	//var/chem_is_open_container = 0
 	// replaced by OPENCONTAINER flags and atom/proc/is_open_container()
 	///Chemistry.
-
-	//Detective Work, used for the duplicate data points kept in the scanners
-	var/list/original_atom
 
 	var/list/beams
 
@@ -41,8 +30,7 @@ var/global/list/ghdel_profiling = list()
 	// On Destroy()
 	var/event/on_destroyed
 
-	// When this object moves. (args: loc)
-	var/event/on_moved
+
 
 	var/labeled //Stupid and ugly way to do it, but the alternative would probably require rewriting everywhere a name is read.
 	var/min_harm_label = 0 //Minimum langth of harm-label to be effective. 0 means it cannot be harm-labeled. If any label should work, set this to 1 or 2.
@@ -51,8 +39,6 @@ var/global/list/ghdel_profiling = list()
 	//var/harm_label_icon_state //Makes sense to have this, but I can't sprite. May be added later.
 	var/list/last_beamchecks // timings for beam checks.
 	var/ignoreinvert = 0
-	var/forceinvertredraw = 0
-	var/tempoverlay
 	var/timestopped
 
 	appearance_flags = TILE_BOUND
@@ -141,15 +127,9 @@ var/global/list/ghdel_profiling = list()
 		qdel(reagents)
 		reagents = null
 
-	if(materials)
-		returnToPool(materials)
-
 	// Idea by ChuckTheSheep to make the object even more unreferencable.
 	invisibility = 101
 	INVOKE_EVENT(on_destroyed, list()) // No args.
-	if(on_moved)
-		on_moved.holder = null
-		on_moved = null
 	if(on_destroyed)
 		on_destroyed.holder = null
 		on_destroyed = null
@@ -166,12 +146,7 @@ var/global/list/ghdel_profiling = list()
 
 /atom/New()
 	on_destroyed = new("owner"=src)
-	on_moved = new("owner"=src)
 	. = ..()
-	if(starting_materials)
-		materials = getFromPool(/datum/materials, src)
-		for(var/matID in starting_materials)
-			materials.addAmount(matID, starting_materials[matID])
 	AddToProfiler()
 
 /atom/proc/assume_air(datum/gas_mixture/giver)
@@ -449,10 +424,10 @@ its easier to just keep the beam vertical.
 
 /atom/proc/mech_drill_act(var/severity, var/child=null)
 	return ex_act(severity, child)
-	
+
 /atom/proc/can_mech_drill()
 	return acidable()
-	
+
 /atom/proc/blob_act(destroy = 0)
 	//DEBUG to_chat(pick(player_list),"blob_act() on [src] ([src.type])")
 	if(flags & INVULNERABLE)
@@ -756,7 +731,7 @@ its easier to just keep the beam vertical.
 	else
 		return 0
 
-/atom/proc/checkpass(passflag)
+/atom/movable/proc/checkpass(passflag)
 	return pass_flags&passflag
 
 /datum/proc/setGender(gend = FEMALE)

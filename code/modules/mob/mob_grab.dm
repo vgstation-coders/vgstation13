@@ -115,7 +115,7 @@
 
 
 /obj/item/weapon/grab/proc/s_click(obj/screen/S)
-	if(!affecting || !assailant || timeDestroyed)
+	if(!affecting || !assailant || gcDestroyed)
 		return
 	if(assailant.attack_delayer.blocked())
 		return

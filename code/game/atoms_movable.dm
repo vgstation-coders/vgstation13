@@ -7,7 +7,6 @@
 
 	var/last_move = null //Direction in which this atom last moved
 	var/last_moved = 0   //world.time when this atom last moved
-
 	var/anchored = 0
 	var/move_speed = 10
 	var/l_move_time = 1
@@ -17,20 +16,21 @@
 	var/throw_range = 7
 	var/moved_recently = 0
 	var/mob/pulledby = null
+	var/pass_flags = 0
 
 	var/area/areaMaster
 
-	// Garbage collection (controller).
-	//var/gcDestroyed
-	//var/timeDestroyed
-
 	var/sound_override = 0 //Do we make a sound when bumping into something?
 	var/hard_deleted = 0
-
+	var/pressure_resistance = ONE_ATMOSPHERE
 	var/obj/effect/overlay/chain/tether = null
 	var/tether_pull = 0
 
 	//glide_size = 8
+
+	//Material datums - the fun way of doing things in a laggy manner
+	var/datum/materials/materials = null
+	var/list/starting_materials //starting set of mats - used in New(), you can set this to an empty list to have the datum be generated but not filled
 
 	//Atom locking stuff.
 	var/list/locked_atoms // Assoc list of atom = category.
@@ -44,19 +44,38 @@
 	var/internal_gravity = 0
 	var/inertia_dir = null
 
+	var/throwpass = 0
+	var/level = 2
+
+	// When this object moves. (args: loc)
+	var/event/on_moved
+
 /atom/movable/New()
 	. = ..()
 	areaMaster = get_area_master(src)
 	if((flags & HEAR) && !ismob(src))
 		getFromPool(/mob/virtualhearer, src)
 
+	if(starting_materials)
+		materials = getFromPool(/datum/materials, src)
+		for(var/matID in starting_materials)
+			materials.addAmount(matID, starting_materials[matID])
+
 	locked_atoms            = list()
 	locking_categories      = list()
 	locking_categories_name = list()
+	on_moved = new("owner"=src)
 
 /atom/movable/Destroy()
 	gcDestroyed = "Bye, world!"
 	tag = null
+
+	if(materials)
+		returnToPool(materials)
+
+	if(on_moved)
+		on_moved.holder = null
+		on_moved = null
 
 	var/turf/un_opaque
 	if (opacity && isturf(loc))
@@ -399,8 +418,9 @@
 					. = 0
 
 			else if(isobj(A))
-				if(A.density && !A.throwpass)	// **TODO: Better behaviour for windows which are dense, but shouldn't always stop movement
-					src.throw_impact(A, speed, user)
+				var/obj/O = A
+				if(O.density && !O.throwpass)	// **TODO: Better behaviour for windows which are dense, but shouldn't always stop movement
+					src.throw_impact(O, speed, user)
 					src.throwing = 0
 					. = 0
 

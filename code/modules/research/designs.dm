@@ -85,7 +85,7 @@ The required techs are the following:
 //it then finds the design which has a buildpath of that type
 //material_strict will check the atom's materials against the design's materials if set to 1, but won't for machines
 //If you want to check machine materials strictly as well, set material_strict to 2
-proc/FindDesign(var/atom/part, material_strict = 0)
+proc/FindDesign(var/atom/movable/part, material_strict = 0)
 	if(ispath(part))
 		return FindTypeDesign(part)
 
