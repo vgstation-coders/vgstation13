@@ -1,6 +1,6 @@
 /datum/event/grid_check	//NOTE: Times are measured in master controller ticks!
 	announceWhen		= 5
-	var/list/charges = list()
+	var/list/settings = list()
 
 /datum/event/grid_check/setup()
 	endWhen = rand(30,120)
@@ -9,7 +9,7 @@
 	power_failure(0)
 
 	for(var/obj/machinery/power/battery/smes/S in power_machines)
-		charges[S] = S.charge
+		settings[S] = list(S.charge, S.output, S.online)
 
 /datum/event/grid_check/announce()
 	command_alert(/datum/command_alert/power_disabled)
@@ -20,6 +20,10 @@
 		return
 	power_restore()
 
-	for(var/obj/machinery/power/battery/smes/S in charges)
-		S.charge = charges[S]
-	charges = null
+	for(var/obj/machinery/power/battery/smes/S in settings)
+		var/list/oursettings = settings[S]
+		if(oursettings)
+			S.charge = oursettings[1]
+			S.output = oursettings[2]
+			S.online = oursettings[3]
+	settings = null
