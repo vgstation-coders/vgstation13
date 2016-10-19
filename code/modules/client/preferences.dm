@@ -329,7 +329,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	<b>Randomized Character Slot:</b>
 	<a href='?_src_=prefs;preference=randomslot'><b>[randomslot ? "Yes" : "No"]</b></a><br>
 	<b>Show Deadchat:</b>
-	<a href='?_src_=prefs;preference=ghost_ears'><b>[(toggles & CHAT_GHOSTEARS) ? "All Speech" : "Nearby Speech"]</b></a><br>
+	<a href='?_src_=prefs;preference=ghost_deadchat'><b>[(toggles & CHAT_DEAD) ? "On" : "Off"]</b></a><br>
 	<b>Ghost Hearing:</b>
 	<a href='?_src_=prefs;preference=ghost_ears'><b>[(toggles & CHAT_GHOSTEARS) ? "All Speech" : "Nearby Speech"]</b></a><br>
 	<b>Ghost Sight:</b>
@@ -1505,6 +1505,10 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					tooltips = !tooltips
 				if("progbar")
 					progress_bars = !progress_bars
+
+				if("ghost_deadchat")
+					toggles ^= CHAT_DEAD
+
 				if("ghost_ears")
 					toggles ^= CHAT_GHOSTEARS
 

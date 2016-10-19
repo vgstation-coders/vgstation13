@@ -254,7 +254,6 @@
 /spell/targeted/eat/is_valid_target(var/target)
 	if(!(spell_flags & INCLUDEUSER) && target == usr)
 		return 0
-	to_chat(world, "[get_dist(usr,target)]")
 	if(get_dist(usr, target) > range)
 		return 0
 	return is_type_in_list(target, compatible_mobs)
