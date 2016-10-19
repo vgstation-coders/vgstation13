@@ -776,6 +776,8 @@
 				O.show_message(message, m_type)
 		else if (m_type & 2)
 			for (var/mob/O in hearers(src.loc, null))
+				if((stat == UNCONSCIOUS) && (O == src)) // stop people almost hearing their own emotes when unconscious
+					continue
 				O.show_message(message, m_type)
 
 /mob/living/carbon/human/verb/pose()
