@@ -116,7 +116,7 @@ var/list/alldepartments = list("Central Command")
 	return
 
 /obj/machinery/faxmachine/Topic(href, href_list)
-	if ((!in_range(src, usr)))
+	if(..())
 		return 1
 	if(href_list["send"])
 		if(tofax)
