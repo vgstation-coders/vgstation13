@@ -55,8 +55,8 @@
 /turf/simulated/proc/update_visuals()
 	overlays = 0
 
-	if(decals.len)
-		overlays += decals
+	if(turfdecals.len)
+		overlays += turfdecals
 
 	var/siding_icon_state = return_siding_icon_state()
 	if(siding_icon_state)
