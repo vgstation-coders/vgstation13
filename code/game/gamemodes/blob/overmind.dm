@@ -113,8 +113,6 @@
 		blob_points = Clamp(blob_points + points, 0, max_blob_points)
 		stat_collection.blobblob.res_generated += points
 
-	var/base_cost = 100
-	var/cost_increment = 40
 	var/number_of_cores = blob_cores.len
 
 	//Updating the HUD
@@ -150,7 +148,7 @@
 		if(blob_points >= 60)
 			hud_used.mymob.gui_icons.blob_spawnfactory.color = null
 			hud_used.mymob.gui_icons.blob_spawnnode.color = null
-		if(blob_points >= base_cost+(cost_increment*(number_of_cores-1)))
+		if(blob_points >= BLOBCOREBASECOST+(BLOBCORECOSTINC*(number_of_cores-1)))
 			hud_used.mymob.gui_icons.blob_spawncore.color = null
 
 /mob/camera/blob/say(var/message)
