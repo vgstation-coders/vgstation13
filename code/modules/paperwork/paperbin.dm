@@ -15,6 +15,7 @@
 
 
 /obj/item/weapon/paper_bin/ashify()
+	var/ashtype = ashtype()
 	new ashtype(src.loc)
 	papers=0
 	amount=0
