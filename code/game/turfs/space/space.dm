@@ -39,8 +39,10 @@
 		return BUILD_FAILURE
 	else if (src.y >= (world.maxy - TRANSITIONEDGE || src.y <= TRANSITIONEDGE ))
 		return BUILD_FAILURE
+	else if(locate(/obj/structure/catwalk) in contents)
+		return BUILD_FAILURE
 	else if(!(locate(/obj/structure/lattice) in contents) && !(istype(material,/obj/item/stack/sheet/wood)))
-		return 1
+		return BUILD_SUCCESS
 	return BUILD_FAILURE
 
 /turf/space/canBuildPlating(var/material)
