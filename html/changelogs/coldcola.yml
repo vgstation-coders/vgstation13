@@ -1,4 +1,0 @@
-author: coldcola
-delete-after: True
-changes:
-- bugfix: droppers and basters can no longer remove reagents from living mobs
