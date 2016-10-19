@@ -28,6 +28,10 @@
 
 	//glide_size = 8
 
+	//Material datums - the fun way of doing things in a laggy manner
+	var/datum/materials/materials = null
+	var/list/starting_materials //starting set of mats - used in New(), you can set this to an empty list to have the datum be generated but not filled
+
 	//Atom locking stuff.
 	var/list/locked_atoms // Assoc list of atom = category.
 	var/atom/movable/locked_to
@@ -52,6 +56,11 @@
 	if((flags & HEAR) && !ismob(src))
 		getFromPool(/mob/virtualhearer, src)
 
+	if(starting_materials)
+		materials = getFromPool(/datum/materials, src)
+		for(var/matID in starting_materials)
+			materials.addAmount(matID, starting_materials[matID])
+
 	locked_atoms            = list()
 	locking_categories      = list()
 	locking_categories_name = list()
@@ -60,6 +69,9 @@
 /atom/movable/Destroy()
 	gcDestroyed = "Bye, world!"
 	tag = null
+
+	if(materials)
+		returnToPool(materials)
 
 	if(on_moved)
 		on_moved.holder = null

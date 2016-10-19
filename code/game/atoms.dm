@@ -19,10 +19,6 @@ var/global/list/ghdel_profiling = list()
 	///Chemistry.
 	var/datum/reagents/reagents = null
 
-	//Material datums - the fun way of doing things in a laggy manner
-	var/datum/materials/materials = null
-	var/list/starting_materials //starting set of mats - used in New(), you can set this to an empty list to have the datum be generated but not filled
-
 	//var/chem_is_open_container = 0
 	// replaced by OPENCONTAINER flags and atom/proc/is_open_container()
 	///Chemistry.
@@ -131,9 +127,6 @@ var/global/list/ghdel_profiling = list()
 		qdel(reagents)
 		reagents = null
 
-	if(materials)
-		returnToPool(materials)
-
 	// Idea by ChuckTheSheep to make the object even more unreferencable.
 	invisibility = 101
 	INVOKE_EVENT(on_destroyed, list()) // No args.
@@ -154,10 +147,6 @@ var/global/list/ghdel_profiling = list()
 /atom/New()
 	on_destroyed = new("owner"=src)
 	. = ..()
-	if(starting_materials)
-		materials = getFromPool(/datum/materials, src)
-		for(var/matID in starting_materials)
-			materials.addAmount(matID, starting_materials[matID])
 	AddToProfiler()
 
 /atom/proc/assume_air(datum/gas_mixture/giver)
