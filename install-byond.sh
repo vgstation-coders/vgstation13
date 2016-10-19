@@ -1,6 +1,6 @@
 #!/bin/sh
 set -e
-if [[ -d "$HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin" ] && [ -e "$HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/DreamMaker"]];
+if [ -e "$HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/DreamMaker"];
 then
   echo "Using cached directory."
 else
