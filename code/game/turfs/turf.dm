@@ -28,6 +28,8 @@
 	// Bot shit
 	var/targetted_by=null
 
+	var/list/turfdecals
+
 	// Flick animation shit
 	var/atom/movable/overlay/c_animation = null
 
@@ -401,20 +403,20 @@
 	update_holomap_planes() // But we might need to recalculate it.
 
 /turf/proc/AddDecal(const/image/decal)
-	if(!decals)
-		decals = new
+	if(!turfdecals)
+		turfdecals = new
 
-	decals += decal
+	turfdecals += decal
 	overlays += decal
 
 /turf/proc/ClearDecals()
-	if(!decals)
+	if(!turfdecals)
 		return
 
-	for(var/image/decal in decals)
+	for(var/image/decal in turfdecals)
 		overlays -= decal
 
-	decals = 0
+	turfdecals.len = 0
 
 
 //Commented out by SkyMarshal 5/10/13 - If you are patching up space, it should be vacuum.
