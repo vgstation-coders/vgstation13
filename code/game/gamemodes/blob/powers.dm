@@ -173,7 +173,7 @@
 		N.overmind = src
 		special_blobs += N
 		update_specialblobs()
-	max_blob_points += BLOBPOINTINC
+	max_blob_points += BLOBNDPOINTINC
 	return
 
 

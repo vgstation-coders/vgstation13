@@ -7,3 +7,5 @@
 #define BLOBNODCOST 60
 #define BLOBATTCOST 5
 #define BLOBRALCOST 5
+
+#define BLOBNDPOINTINC 10
