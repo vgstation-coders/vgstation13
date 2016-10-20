@@ -487,6 +487,12 @@
 
 	interact(user)
 
+/obj/machinery/alarm/attack_ai(mob/user)
+	if(aidisabled)
+		to_chat(user, "<span class='warning'>AI control of this device has been disabled.</span>")
+		return
+	..()
+
 /obj/machinery/alarm/proc/ui_air_status()
 	var/turf/location = get_turf(src)
 
@@ -633,20 +639,9 @@
 /obj/machinery/alarm/interact(mob/user)
 	if(buildstage!=2)
 		return
-
-	if ( (get_dist(src, user) > 1 ))
-		if (!istype(user, /mob/living/silicon))
-			user << browse(null, "window=AAlarmwires")
-			return
-
-
-		else if (istype(user, /mob/living/silicon) && aidisabled)
-			to_chat(user, "AI control for this Air Alarm interface has been disabled.")
-			user << browse(null, "window=air_alarm")
-			return
-
-	if(wiresexposed && (isMoMMI(user) || !istype(user, /mob/living/silicon)))
+	if(wiresexposed)
 		wires.Interact(user)
+		return
 	if(!shorted)
 		ui_interact(user)
 

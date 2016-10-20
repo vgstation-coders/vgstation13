@@ -289,11 +289,6 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 
 /obj/machinery/field_generator/proc/cleanup()
 	clean_up = 1
-	for (var/obj/effect/beam/B in beams)
-		if(!B)
-			continue
-		if(B.target == src)
-			B.target = null
 	for (var/obj/machinery/containment_field/F in fields)
 		if (isnull(F))
 			continue

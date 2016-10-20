@@ -270,10 +270,8 @@
 			// No subtypes allowed.
 			if("[W.type]"==copytext(A,2))
 				nope = 1
-				break
 		else if(istype(W, text2path(A) ))
 			nope = 1
-			break
 		if(nope)
 			if(!stop_messages)
 				to_chat(usr, "<span class='notice'>\The [src] cannot hold \the [W].</span>")
