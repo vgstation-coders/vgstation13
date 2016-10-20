@@ -1172,7 +1172,7 @@ default behaviour is:
 
 /mob/living/Bump(atom/movable/AM as mob|obj)
 	spawn(0)
-		if (now_pushing || !loc)
+		if (now_pushing || !loc || size <= SIZE_TINY)
 			return
 		now_pushing = 1
 		if (istype(AM, /obj/structure/bed/roller)) //no pushing rollerbeds that have people on them

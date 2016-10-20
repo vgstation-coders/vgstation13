@@ -95,7 +95,8 @@
 
 /obj/effect/portal/attack_ghost(mob/user as mob)
 	if(target)
-		user.forceMove(get_turf(target))
+		spawn()
+			teleport(user)
 
 // -------------------------------------------
 // This was supposed to be used by adminghosts

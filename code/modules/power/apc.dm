@@ -679,6 +679,7 @@
 
 	if (wiresexposed)
 		wires.Interact(user)
+		return
 
 	if (stat & (BROKEN | MAINT | EMPED))
 		return

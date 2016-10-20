@@ -115,7 +115,7 @@ var/list/word_to_uristrune_table = null
 
 var/list/uristrune_cache = list()
 
-/obj/effect/rune/proc/get_uristrune(symbol_bits, animated = 0, bloodcolor = "#A10808")
+/obj/effect/rune/proc/get_uristrune(symbol_bits, animated = 0, bloodcolor = DEFAULT_BLOOD)
 	var/lookup = "[symbol_bits]-[animated]-[bloodcolor]"
 
 	if(lookup in uristrune_cache)

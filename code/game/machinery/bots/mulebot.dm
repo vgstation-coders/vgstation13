@@ -64,7 +64,7 @@ var/global/mulebot_count = 0
 	var/list/can_load = list()
 
 	var/bloodiness = 0		// count of bloodiness
-	var/currentBloodColor = "#A10808"
+	var/currentBloodColor = DEFAULT_BLOOD
 
 /obj/machinery/bot/mulebot/New()
 	..()
