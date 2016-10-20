@@ -1,8 +1,0 @@
-author: BarneyGumball
-delete-after: True
-changes: 
-- bugfix: "Fixes some reagents not working in the electrolyzer (e.g Doctor's Delight, Beepsky Smash, etc)"
-- bugfix: "Stopped mobs from almost hearing their own gasps/emotes when unconscious."
-- bugfix: Emitter beams now update properly when a Field Generator gets moved or destroyed.
-- bugfix: Telekinesis now works on Air Alarms.
-- bugfix: Fixed various bags being able to pick up the nuke disk.
