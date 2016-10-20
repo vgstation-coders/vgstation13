@@ -545,7 +545,7 @@
 
 /datum/chemical_reaction/lipozine
 	name = "Lipozine"
-	id = "Lipozine"
+	id = LIPOZINE
 	result = LIPOZINE
 	required_reagents = list(SODIUMCHLORIDE = 1, ETHANOL = 1, RADIUM = 1)
 	result_amount = 3
@@ -683,7 +683,7 @@
 
 /datum/chemical_reaction/surfactant
 	name = "Foam surfactant"
-	id = "foam surfactant"
+	id = FLUOROSURFACTANT
 	result = FLUOROSURFACTANT
 	required_reagents = list(FLUORINE = 2, CARBON = 2, SACID = 1)
 	result_amount = 5
@@ -2090,7 +2090,7 @@
 
 /datum/chemical_reaction/spacebeer
 	name = "Space Beer"
-	id = "spacebeer"
+	id = BEER
 	result = BEER
 	required_reagents = list(FLOUR = 10)
 	required_catalysts = list(ENZYME = 5)
@@ -2206,14 +2206,14 @@
 
 /datum/chemical_reaction/beepsky_smash
 	name = "Beepksy Smash"
-	id = "beepksysmash"
+	id = BEEPSKYSMASH
 	result = BEEPSKYSMASH
 	required_reagents = list(LIMEJUICE = 2, WHISKEY = 2, IRON = 1)
 	result_amount = 4
 
 /datum/chemical_reaction/doctor_delight
 	name = "The Doctor's Delight"
-	id = "doctordelight"
+	id = DOCTORSDELIGHT
 	result = DOCTORSDELIGHT
 	required_reagents = list(LIMEJUICE = 1, TOMATOJUICE = 1, ORANGEJUICE = 1, CREAM = 1, TRICORDRAZINE = 1)
 	result_amount = 5
@@ -2304,8 +2304,8 @@
 
 /datum/chemical_reaction/manhattan_proj
 	name = "Manhattan Project"
-	id = "manhattan_proj"
-	result = "manhattan_proj"
+	id = MANHATTAN_PROJ
+	result = MANHATTAN_PROJ
 	required_reagents = list(MANHATTAN = 10, URANIUM = 1)
 	result_amount = 10
 
@@ -2680,7 +2680,7 @@
 
 /datum/chemical_reaction/etank
 	name = "Recharger"
-	id = "tank"
+	id = ETANK
 	result = ETANK
 	required_reagents = list(COFFEE = 1, IRON = 1, LITHIUM = 1, FUEL = 1, ALUMINUM = 1)
 	result_amount = 5
