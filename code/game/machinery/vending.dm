@@ -2237,7 +2237,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/discount
 	name = "Discount Dan's"
 	desc = "A snack machine owned by the infamous 'Discount Dan' franchise."
-	product_slogans = "Discount Dan, he's the man!;There 'aint nothing better in this world then a bite of mystery.;Don't listen to those other machines, buy my product!;Quantity over Quality!;Don't listen to those eggheads at the CDC, buy now!;Discount Dan's: We're good for you! Nope, couldn't say it with a straight face.;Discount Dan's: Only the best quality produ-*BZZT*"
+	product_slogans = "Discount Dan, he's the man!;There 'aint nothing better in this world than a bite of mystery.;Don't listen to those other machines, buy my product!;Quantity over Quality!;Don't listen to those eggheads at the CDC, buy now!;Discount Dan's: We're good for you! Nope, couldn't say it with a straight face.;Discount Dan's: Only the best quality produ-*BZZT*"
 	product_ads = "Discount Dan(tm) is not responsible for any damages caused by misuse of his product."
 	vend_reply = "No refunds."
 	icon_state = DISCOUNT
