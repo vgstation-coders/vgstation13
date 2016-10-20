@@ -164,7 +164,7 @@ var/global/list/damage_icon_parts = list()
 
 			var/icon/DI
 
-			DI = get_damage_icon_part(O.damage_state, O.icon_name, (species.blood_color == "#A10808" ? "" : species.blood_color))
+			DI = get_damage_icon_part(O.damage_state, O.icon_name, (species.blood_color == DEFAULT_BLOOD ? "" : species.blood_color))
 
 			standing_image.overlays += DI
 	var/obj/Overlays/O = obj_overlays[DAMAGE_LAYER]

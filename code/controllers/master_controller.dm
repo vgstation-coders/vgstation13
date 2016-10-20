@@ -170,7 +170,7 @@ datum/controller/game_controller/proc/cachedamageicons()
 	var/icon/DI
 	var/species_blood
 	for(var/datum/species/S in slist)
-		species_blood = (S.blood_color == "#A10808" ? "" : S.blood_color)
+		species_blood = (S.blood_color == DEFAULT_BLOOD ? "" : S.blood_color)
 		testing("Generating [S], Blood([species_blood])")
 		for(var/datum/organ/external/O in H.organs)
 			//testing("[O] part")

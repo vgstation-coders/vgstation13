@@ -97,7 +97,6 @@ mob/living/carbon/proc/handle_hallucinations()
 						possible_points += F
 					if(possible_points.len)
 						var/turf/simulated/floor/target = pick(possible_points)
-						halimage.plane = OBJ_PLANE
 						switch(rand(1,4))
 							if(1) //Space
 								halimage = image('icons/turf/space.dmi',target,"[rand(1,25)]",TURF_LAYER)
@@ -107,7 +106,7 @@ mob/living/carbon/proc/handle_hallucinations()
 								halimage = image('icons/obj/assemblies.dmi',target,"plastic-explosive2",OBJ_LAYER+0.01)
 							if(4) //Flashbang
 								halimage = image('icons/obj/grenade.dmi',target,"flashbang_active",OBJ_LAYER)
-
+						halimage.plane = OBJ_PLANE
 
 						if(client)
 							client.images += halimage
@@ -471,10 +470,14 @@ proc/check_panel(mob/M)
 	collapse = 1
 	updateimage()
 */
-/proc/fake_blood(var/mob/target)
+/proc/fake_blood(var/mob/living/carbon/human/target)
 	var/obj/effect/overlay/O = getFromPool(/obj/effect/overlay,target.loc)
 	O.name = "blood"
 	var/image/I = image('icons/effects/blood.dmi',O,"floor[rand(1,7)]",O.dir,1)
+	var/blood_color = DEFAULT_BLOOD
+	if(target.species && target.species.blood_color)
+		blood_color = target.species.blood_color
+	I.color = blood_color
 	target << I
 	spawn(300)
 		returnToPool(O)

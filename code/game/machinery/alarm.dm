@@ -1081,8 +1081,6 @@ FIRE ALARM
 /obj/machinery/firealarm/Topic(href, href_list)
 	if(..())
 		return 1
-	if (usr.stat || stat & (BROKEN|NOPOWER))
-		return
 
 	if (buildstage != 2)
 		return

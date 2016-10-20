@@ -400,7 +400,7 @@
 //	if(shieldload >= maxshieldload) //there was a loop caused by specifics of process(), so this was needed.
 //		shieldload = maxshieldload
 
-	if(src.active == 1)
+	if(src.active == 1 && power)
 		if(!anchored)
 			src.active = 0
 			return
@@ -413,20 +413,19 @@
 		spawn(4)
 			setup_field(8)
 		src.active = 2
-	if(src.active == 1)
-		if(src.power == 0)
-			src.visible_message("<span class='warning'>The [src.name] shuts down due to lack of power!</span>", \
-				"You hear heavy droning fade out")
-			icon_state = "Shield_Gen"
-			src.active = 0
-			spawn(1)
-				src.cleanup(1)
-			spawn(1)
-				src.cleanup(2)
-			spawn(1)
-				src.cleanup(4)
-			spawn(1)
-				src.cleanup(8)
+	if(!power && active)
+		src.visible_message("<span class='warning'>The [src.name] shuts down due to lack of power!</span>", \
+			"You hear heavy droning fade out")
+		icon_state = "Shield_Gen"
+		src.active = 0
+		spawn(1)
+			src.cleanup(1)
+		spawn(1)
+			src.cleanup(2)
+		spawn(1)
+			src.cleanup(4)
+		spawn(1)
+			src.cleanup(8)
 
 /obj/machinery/shieldwallgen/proc/setup_field(var/NSEW = 0)
 	var/turf/T = src.loc

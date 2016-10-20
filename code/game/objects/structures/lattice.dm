@@ -46,8 +46,8 @@
 		var/obj/item/weapon/weldingtool/WeldingTool = C
 		if(WeldingTool.remove_fuel(0, user))
 			to_chat(user, "<span class='notice'>Slicing [src] joints...</span>")
-		new/obj/item/stack/rods(loc)
-		qdel(src)
+			new/obj/item/stack/rods(loc)
+			qdel(src)
 	else
 		var/turf/T = get_turf(src)
 		T.attackby(C, user) //Attacking to the lattice will attack to the space turf

@@ -219,7 +219,6 @@
 	cast_sound = 'sound/items/eatfood.ogg'
 	compatible_mobs = list(
 		/obj/item,
-		/mob/living/simple_animal/hostile,
 		/mob/living/simple_animal/parrot,
 		/mob/living/simple_animal/cat,
 		/mob/living/simple_animal/corgi,

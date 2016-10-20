@@ -212,7 +212,7 @@
 	color = "#a00000" //rgb: 160, 0, 0
 
 	data = new/list("donor"= null, "viruses" = null, "blood_DNA" = null, "blood_type" = null, \
-	"blood_colour" = "#A10808", "resistances" = null, "trace_chem" = null, "antibodies" = null)
+	"blood_colour" = DEFAULT_BLOOD, "resistances" = null, "trace_chem" = null, "antibodies" = null)
 
 /datum/reagent/blood/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
