@@ -354,7 +354,12 @@
 /mob/living/simple_animal/hostile/proc/DestroySurroundings()
 	if(environment_smash)
 		EscapeConfinement()
-		for(var/dir in cardinal)
+		var/list/smash_dirs = list()
+		if(!target || !CanAttack(target))
+			smash_dirs |= cardinal //if no target, attack everywhere
+		else
+			smash_dirs += get_cardinal_dir(src, target) //otherwise smash towards the target
+		for(var/dir in smash_dirs)
 			var/turf/T = get_step(src, dir)
 			if(istype(T, /turf/simulated/wall))
 				T.attack_animal(src)
