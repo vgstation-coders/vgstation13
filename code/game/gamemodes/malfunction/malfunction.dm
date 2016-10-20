@@ -170,6 +170,7 @@ You should now be able to use your Explode spell to interface with the nuclear f
 	charge_type = Sp_CHARGES
 	charge_max = 1
 	hud_state = "systemtakeover"
+	override_base = "grey"
 	
 /spell/aoe_turf/takeover/before_target(mob/user)
 	if (!istype(ticker.mode,/datum/game_mode/malfunction))
@@ -202,6 +203,7 @@ You should now be able to use your Explode spell to interface with the nuclear f
 	charge_type = Sp_CHARGES
 	charge_max = 1
 	hud_state = "radiation"
+	override_base = "grey"
 	
 /spell/aoe_turf/ai_win/before_target(mob/user)
 	if(!ticker.mode:station_captured)

@@ -804,6 +804,7 @@ var/list/ai_list = list()
 	charge_type = Sp_CHARGES
 	charge_max = 1
 	hud_state = "unshunt"
+	override_base = "grey"
 	
 /spell/aoe_turf/corereturn/before_target(mob/user)
 	if(istype(user.loc, /obj/machinery/power/apc))

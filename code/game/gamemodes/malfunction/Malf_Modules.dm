@@ -78,6 +78,7 @@ rcd light flash thingy on matter drain
 	charge_type = Sp_CHARGES
 	charge_max = 1
 	hud_state = "rcd_disable"
+	override_base = "grey"
 	
 /spell/aoe_turf/disable_rcd/cast(list/targets, mob/user)
 	for(var/obj/item/device/rcd/matter/engineering/rcd in world)
@@ -102,6 +103,7 @@ rcd light flash thingy on matter drain
 	charge_type = Sp_CHARGES
 	charge_max = 2
 	hud_state = "overload"
+	override_base = "grey"
 	
 /spell/targeted/overload_machine/is_valid_target(var/atom/target)
 	if (istype(target, /obj/machinery))
@@ -134,6 +136,7 @@ rcd light flash thingy on matter drain
 	range = GLOBALCAST
 	summon_type = list(/obj/machinery/transformer/conveyor)
 	hud_state = "autoborger"
+	override_base = "grey"
 	
 /spell/aoe_turf/conjure/place_transformer/before_target(mob/user)
 	var/mob/living/silicon/ai/A = user
@@ -201,6 +204,7 @@ rcd light flash thingy on matter drain
 	charge_type = Sp_CHARGES
 	charge_max = 3
 	hud_state = "blackout"
+	override_base = "grey"
 	
 /spell/aoe_turf/blackout/cast(var/list/targets, mob/user)
 	for(var/obj/machinery/power/apc/apc in power_machines)
@@ -223,6 +227,7 @@ rcd light flash thingy on matter drain
 	charge_type = Sp_CHARGES
 	charge_max = 3
 	hud_state = "fakemessage"
+	override_base = "grey"
 	
 /spell/aoe_turf/interhack/cast(var/list/targets,mob/user)
 
@@ -262,11 +267,31 @@ rcd light flash thingy on matter drain
 	charge_type = Sp_CHARGES
 	charge_max = 10
 	range = GLOBALCAST
-	spell_flags = SELECTABLE
+	spell_flags = WAIT_FOR_CLICK
 	hud_state = "camera_reactivate"
+	override_base = "grey"
+	var/list/camera_images = list()
 	
-/spell/targeted/reactivate_camera/choose_targets(mob/user = usr)
-	return list(input(user, "Choose a Camera to reactivate.", "Targeting") as null|obj in cameranet.cameras)
+/spell/targeted/reactivate_camera/before_channel(mob/user)
+	for(var/obj/machinery/camera/C in cameranet.cameras)
+		if(C.status)
+			continue
+		var/image/I = image(C.icon, C.icon_state)
+		I.appearance = C.appearance
+		I.plane = ABOVE_LIGHTING_LAYER
+		I.alpha = 128
+		I.loc = C
+		camera_images += I
+	user.client.images += camera_images
+	
+/spell/targeted/reactivate_camera/channel_spell(mob/user = usr, skipcharge = 0, force_remove = 0)
+	if(!..())
+		return 0
+	if(!force_remove && !currently_channeled)
+		if(user.client)
+			user.client.images -= camera_images
+			camera_images.len = 0
+	return 1
 	
 /spell/targeted/reactivate_camera/is_valid_target(var/atom/target)
 	if(!istype (target, /obj/machinery/camera))
@@ -282,7 +307,10 @@ rcd light flash thingy on matter drain
 /spell/targeted/reactivate_camera/cast(var/list/targets,mob/user)
 	var/obj/machinery/camera/C = targets[1]
 	C.deactivate(user)
-
+	if(user.client)
+		user.client.images -= camera_images
+	camera_images.len = 0
+	
 /datum/AI_Module/small/upgrade_camera
 	module_name = "Upgrade Camera"
 	mod_pick_name = "upgradecam"
@@ -299,6 +327,7 @@ rcd light flash thingy on matter drain
 	spell_flags = WAIT_FOR_CLICK
 	range = GLOBALCAST
 	hud_state = "camera_upgrade"
+	override_base = "grey"
 	
 /spell/targeted/upgrade_camera/is_valid_target(var/atom/target)
 	if(!istype(target, /obj/machinery/camera))
@@ -335,6 +364,8 @@ rcd light flash thingy on matter drain
 	panel = MALFUNCTION
 	var/datum/module_picker/MP
 	charge_max = 10
+	hud_state = "choose_module"
+	override_base = "grey"
 	
 /spell/aoe_turf/module_picker/New()
 	..()
@@ -366,7 +397,7 @@ rcd light flash thingy on matter drain
 			<B>Install Module:</B><BR>
 			<I>The number afterwards is the amount of processing time it consumes.</I><BR>"}
 	for(var/datum/AI_Module/module in src.possible_modules)
-		dat += "<A href='byond://?src=\ref[src];[module.mod_pick_name]=1'>[module.module_name]</A> ([module.cost])<BR>"
+		dat += "<A href='byond://?src=\ref[src];buy=1;module=\ref[module]'>[module.module_name]</A> <A href='byond://?src=\ref[src];desc=1;module=\ref[module]'>?</A>([module.cost])<BR>"
 	dat += "<HR>"
 	if (src.temp)
 		dat += "[src.temp]"
@@ -380,21 +411,23 @@ rcd light flash thingy on matter drain
 	if(!isAI(usr))
 		return
 	var/mob/living/silicon/ai/A = usr
-
-	for(var/datum/AI_Module/AM in possible_modules)
-		if (href_list[AM.mod_pick_name])
-
-			// Cost check
-			if(AM.cost > src.processing_time)
-				temp = "You cannot afford this module."
-				break
+	
+	if(href_list["buy"])
+		var/datum/AI_Module/AM = locate(href_list["module"])
+		if(AM.cost > src.processing_time)
+			temp = "You cannot afford this module."
+			return
 
 			// Give the power and take away the money.
-			AM.on_purchase(A)
-			temp = AM.description
-			src.processing_time -= AM.cost
-			if(AM.one_time)
-				possible_modules -= AM
-			stat_collection.malf.bought_modules += AM.module_name
+		AM.on_purchase(A)
+		temp = AM.description
+		src.processing_time -= AM.cost
+		if(AM.one_time)
+			possible_modules -= AM
+		stat_collection.malf.bought_modules += AM.module_name
+
+	if(href_list["desc"])
+		var/datum/AI_Module/AM = locate(href_list["module"])
+		temp = AM.description
 
 	src.use(usr)
