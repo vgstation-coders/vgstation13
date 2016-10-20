@@ -771,14 +771,10 @@
 		// Borers, other internal things.
 		INVOKE_EVENT(on_emote, list("mob"=src,"message"=message,"m_type"=m_type))
 
-		if (m_type & 1)
-			for (var/mob/O in viewers(src, null))
-				O.show_message(message, m_type)
-		else if (m_type & 2)
-			for (var/mob/O in hearers(src.loc, null))
-				if((stat == UNCONSCIOUS) && (O == src)) // stop people almost hearing their own emotes when unconscious
-					continue
-				O.show_message(message, m_type)
+		if (m_type & VISIBLE)
+			visible_message(message, null)
+		else if (m_type & HEARABLE)
+			visible_message(message, null, message, ignore_self = (stat==UNCONSCIOUS)?1:0) // stop spamming ourselves with our own emotes when unconscious
 
 /mob/living/carbon/human/verb/pose()
 	set name = "Set Pose"

@@ -366,8 +366,9 @@ var/global/obj/screen/fuckstat/FUCK = new
 // drugged_message (optional) is shown to hallucinating mobs instead of message
 // self_drugged_message (optional) is shown to src mob if it's hallucinating
 // blind_drugged_message (optional) is shown to blind hallucinating people
+// ignore_self (optional) won't show the message to the mob sending the message
 
-/mob/visible_message(var/message, var/self_message, var/blind_message, var/drugged_message, var/self_drugged_message, var/blind_drugged_message)
+/mob/visible_message(var/message, var/self_message, var/blind_message, var/drugged_message, var/self_drugged_message, var/blind_drugged_message, var/ignore_self = 0)
 	var/hallucination = hallucinating()
 	var/msg = message
 	var/msg2 = blind_message
@@ -380,7 +381,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 		if(blind_drugged_message)
 			msg2 = blind_drugged_message
 
-	show_message( msg, 1, msg2, 2)
+	if(!ignore_self)
+		show_message( msg, 1, msg2, 2)
 
 	..(message, blind_message, drugged_message, blind_drugged_message)
 
