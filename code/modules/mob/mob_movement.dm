@@ -13,22 +13,6 @@
 
 	return (!mover.density || !density || lying)
 
-/client/North()
-	..()
-
-
-/client/South()
-	..()
-
-
-/client/West()
-	..()
-
-
-/client/East()
-	..()
-
-
 /client/Northeast()
 	treat_hotkeys(NORTHEAST)
 
