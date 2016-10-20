@@ -30,6 +30,7 @@
 #include "code\world.dm"
 #include "code\__DEFINES\spell_flags.dm"
 #include "code\__HELPERS\_macros.dm"
+#include "code\__HELPERS\angles_dirs.dm"
 #include "code\__HELPERS\cmp.dm"
 #include "code\__HELPERS\constants.dm"
 #include "code\__HELPERS\datumpool.dm"
