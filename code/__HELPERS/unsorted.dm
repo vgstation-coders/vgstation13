@@ -7,21 +7,6 @@
 /proc/SAFE_CRASH(var/msg)
 	CRASH(msg)
 
-/proc/Get_Angle(atom/movable/start,atom/movable/end)//For beams.
-	if(!start || !end)
-		return 0
-	var/dy
-	var/dx
-	dy=(WORLD_ICON_SIZE*end.y+end.pixel_y)-(WORLD_ICON_SIZE*start.y+start.pixel_y)
-	dx=(WORLD_ICON_SIZE*end.x+end.pixel_x)-(WORLD_ICON_SIZE*start.x+start.pixel_x)
-	if(!dy)
-		return (dx>=0)?90:270
-	.=arctan(dx/dy)
-	if(dy<0)
-		.+=180
-	else if(dx<0)
-		.+=360
-
 //Returns location. Returns null if no location was found.
 /proc/get_teleport_loc(turf/location,mob/target,distance = 1, density = 0, errorx = 0, errory = 0, eoffsetx = 0, eoffsety = 0)
 /*
@@ -1082,13 +1067,6 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 	return copiedobjs
 
-
-
-proc/get_cardinal_dir(atom/A, atom/B)
-	var/dx = abs(B.x - A.x)
-	var/dy = abs(B.y - A.y)
-	return get_dir(A, B) & (rand() * (dx+dy) < dy ? 3 : 12)
-
 //chances are 1:value. anyprob(1) will always return true
 proc/anyprob(value)
 	return (rand(1,value)==value)
@@ -1211,25 +1189,6 @@ var/global/list/common_tools = list(
 	(locate(/obj/structure/bed/roller, M.loc) && prob(75)) || \
 	(locate(/obj/structure/table/, M.loc) && prob(66)))
 
-/proc/reverse_direction(var/dir)
-	switch(dir)
-		if(NORTH)
-			return SOUTH
-		if(NORTHEAST)
-			return SOUTHWEST
-		if(EAST)
-			return WEST
-		if(SOUTHEAST)
-			return NORTHWEST
-		if(SOUTH)
-			return NORTH
-		if(SOUTHWEST)
-			return NORTHEAST
-		if(WEST)
-			return EAST
-		if(NORTHWEST)
-			return SOUTHEAST
-
 /*
 Checks if that loc and dir has a item on the wall
 */
@@ -1273,10 +1232,6 @@ var/list/WALLITEMS = list(
 				if(abs(O.pixel_x) <= 10*PIXEL_MULTIPLIER && abs(O.pixel_y) <=10*PIXEL_MULTIPLIER)
 					return 1
 	return 0
-
-
-proc/get_angle(atom/a, atom/b)
-    return Atan2(b.y - a.y, b.x - a.x)
 
 proc/rotate_icon(file, state, step = 1, aa = FALSE)
 	var icon/base = icon(file, state)
@@ -1366,54 +1321,6 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 		z = A.z
 
 	. = map.zLevels[z]
-
-/proc/get_dir_cardinal(var/atom/T1,var/atom/T2)
-	if(!T1 || !T2)
-		return null
-
-	var/direc = get_dir(T1,T2)
-
-	if(direc in cardinal)
-		return direc
-
-	switch(direc)
-		if(NORTHEAST)
-			if((T2.x - T1.x) > (T2.y - T1.y))
-				return EAST
-			else
-				return NORTH
-		if(SOUTHEAST)
-			if((T2.x - T1.x) > ((T2.y - T1.y)*-1))
-				return EAST
-			else
-				return SOUTH
-		if(NORTHWEST)
-			if(((T2.x - T1.x)*-1) > (T2.y - T1.y))
-				return WEST
-			else
-				return NORTH
-		if(SOUTHWEST)
-			if((T2.x - T1.x) > (T2.y - T1.y))
-				return WEST
-			else
-				return SOUTH
-		else
-			return null
-
-/proc/adjustAngle(angle)
-	angle = round(angle) + 45
-	if(angle > 180)
-		angle -= 180
-	else
-		angle += 180
-	if(!angle)
-		angle = 1
-	/*if(angle < 0)
-		//angle = (round(abs(get_angle(A, user))) + 45) - 90
-		angle = round(angle) + 45 + 180
-	else
-		angle = round(angle) + 45*/
-	return angle
 
 /proc/print_runtime(exception/e)
 	world.log << "[time_stamp()] Runtime detected\n[e] at [e.file]:[e.line]\n [e.desc]"
