@@ -133,13 +133,13 @@
 			dirs = list(EAST, WEST)
 		if(WEST)
 			dirs = list(WEST, EAST)
-		if(NORTHEAST)
-			dirs = list(EAST, SOUTH)
-		if(NORTHWEST)
-			dirs = list(SOUTH, WEST)
 		if(SOUTHEAST)
-			dirs = list(NORTH, EAST)
+			dirs = list(EAST, SOUTH)
 		if(SOUTHWEST)
+			dirs = list(SOUTH, WEST)
+		if(NORTHEAST)
+			dirs = list(NORTH, EAST)
+		if(NORTHWEST)
 			dirs = list(WEST, NORTH)
 	if(reverse)
 		dirs.Swap(1,2)
@@ -262,8 +262,6 @@
 /obj/machinery/conveyor/clone(var/obj/machinery/O)
 	if(istype(O, /obj/machinery/conveyor))
 		var/obj/machinery/conveyor/it = O
-		dir = it.dir
-		in_reverse = it.in_reverse
 		operating = 0
 		id_tag = it.id_tag
 		frequency = it.frequency
@@ -318,7 +316,7 @@
 	update()
 
 /obj/machinery/conveyor/dropFrame()
-	new /obj/machinery/conveyor_assembly(src.loc, src.dir)
+	new /obj/structure/conveyor_assembly(src.loc, src.dir)
 
 // the conveyor control switch
 //
