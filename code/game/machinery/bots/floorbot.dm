@@ -55,7 +55,7 @@ var/global/list/floorbot_targets=list()
 	var/turf/target
 	var/turf/oldtarget
 	var/oldloc = null
-	req_access = list(access_construction)
+	req_one_access = list(access_robotics, access_construction)
 	var/path[] = new()
 	var/targetdirection
 	var/beacon_freq = 1445		// navigation beacon frequency
@@ -115,7 +115,7 @@ var/global/list/floorbot_targets=list()
 		dat += "Finds tiles: <A href='?src=\ref[src];operation=tiles'>[src.eattiles ? "Yes" : "No"]</A><BR>"
 		dat += "Make single pieces of metal into tiles when empty: <A href='?src=\ref[src];operation=make'>[src.maketiles ? "Yes" : "No"]</A><BR>"
 
-	user << browse("<HEAD><TITLE>Repairbot v1.0 controls</TITLE></HEAD>[dat]", "window=autorepair")
+	user << browse("<HEAD><TITLE>Repairbot v0.1 controls (alpha)</TITLE></HEAD>[dat]", "window=autorepair")
 	onclose(user, "autorepair")
 	return
 
