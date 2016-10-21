@@ -108,6 +108,22 @@
 
 	H.rightandwrong(0)
 	to_chat(H, "<span class='userdanger'>You have summoned guns.</span>")
+	
+//SUMMON MAGIC
+/datum/spellbook_artifact/summon_magic
+	name = "Summon Magic"
+	desc = "Share the power of magic with the crew and turn them against each other. Or just empower them against you."
+	abbreviation = "SM"
+
+/datum/spellbook_artifact/summon_magic/can_buy()
+	//Can't summon magic during ragin' mages
+	return !ticker.mode.rage
+
+/datum/spellbook_artifact/summon_magic/purchased(mob/living/carbon/human/H)
+	..()
+
+	H.rightandwrong(1)
+	to_chat(H, "<span class='userdanger'>You have shared the gift of magic with everyone.</span>")
 
 //SANTA BUNDLE
 
