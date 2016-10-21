@@ -63,7 +63,7 @@
 					icon_state  = "glass_white"
 					item_state = "glass_white"
 					name = "glass of cream"
-					desc = "Ewwww..."
+					desc = "Ew..."
 				if("chocolate")
 					icon_state  = "chocolateglass"
 					item_state  = "chocolateglass"
@@ -370,7 +370,7 @@
 					icon_state = BOOGER
 					item_state = BOOGER
 					name = "\improper Booger"
-					desc = "Ewww..."
+					desc = "Eww..."
 				if(SNOWWHITE)
 					icon_state = SNOWWHITE
 					item_state = SNOWWHITE
