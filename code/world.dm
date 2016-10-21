@@ -7,7 +7,7 @@
 	cache_lifespan = 0	//stops player uploaded stuff from being kept in the rsc past the current session
 	//loop_checks = 0
 	icon_size = WORLD_ICON_SIZE
-#define RECOMMENDED_VERSION 510
+#define RECOMMENDED_VERSION 511
 
 
 var/savefile/panicfile
