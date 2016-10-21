@@ -354,12 +354,18 @@
 /mob/living/simple_animal/hostile/proc/DestroySurroundings()
 	if(environment_smash)
 		EscapeConfinement()
-		for(var/dir in cardinal)
+		var/list/smash_dirs = list(0)
+		if(!target || !CanAttack(target))
+			smash_dirs |= alldirs //if no target, attack everywhere
+		else
+			var/targdir = get_dir(src, target)
+			smash_dirs |= widen_dir(targdir) //otherwise smash towards the target
+		for(var/dir in smash_dirs)
 			var/turf/T = get_step(src, dir)
-			if(istype(T, /turf/simulated/wall))
+			if(istype(T, /turf/simulated/wall) && Adjacent(T))
 				T.attack_animal(src)
 			for(var/atom/A in T)
-				if(istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack))
+				if((istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack)) && Adjacent(A))
 					A.attack_animal(src)
 	return
 
