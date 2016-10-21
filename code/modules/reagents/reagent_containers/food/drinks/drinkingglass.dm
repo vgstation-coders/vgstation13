@@ -370,7 +370,7 @@
 					icon_state = BOOGER
 					item_state = BOOGER
 					name = "\improper Booger"
-					desc = "Ewww..."
+					desc = "Eww..."
 				if(SNOWWHITE)
 					icon_state = SNOWWHITE
 					item_state = SNOWWHITE
