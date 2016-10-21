@@ -98,7 +98,7 @@
 	else
 		..()
 
-/obj/item/device/mmi/posibrain/attack_ghost(var/mob/dead/observer/O)
+/obj/item/weapon/reagent_containers/food/snacks/borer_egg/attack_ghost(var/mob/dead/observer/O)
 	visible_message(message = "<span class='notice'>\The [src] wriggles vigorously.</span>", blind_message = "<span class='danger'>You hear what you think is someone jiggling a jelly.</span>")
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/Destroy()
