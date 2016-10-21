@@ -457,16 +457,7 @@
 		return 1
 
 	if(volume >= 1)
-		if(T.wet >= 2)
-			return
-		T.wet = 2
-		spawn(800)
-			if(!istype(T))
-				return
-			T.wet = 0
-			if(T.wet_overlay)
-				T.overlays -= T.wet_overlay
-				T.wet_overlay = null
+		T.wet(800, TURF_WET_LUBE)
 
 /datum/reagent/anti_toxin
 	name = "Anti-Toxin (Dylovene)"
