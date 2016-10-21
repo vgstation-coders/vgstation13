@@ -1023,10 +1023,17 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/assembly/signaler = 4,
 		/obj/item/weapon/wirecutters = 1,
 		/obj/item/weapon/cartridge/signal = 4,
+		/obj/item/weapon/stock_parts/manipulator = 5,
+		/obj/item/weapon/stock_parts/micro_laser = 3,
+		/obj/item/weapon/stock_parts/matter_bin = 5,
+		/obj/item/weapon/stock_parts/scanning_module = 3,
+		/obj/item/weapon/stock_parts/capacitor = 2,
+		/obj/item/weapon/stock_parts/console_screen = 4,
 		)
 	contraband = list(
 		/obj/item/device/flashlight = 5,
 		/obj/item/device/assembly/timer = 2,
+		/obj/item/weapon/reagent_containers/glass/bottle/sacid = 2,
 		)
 	premium = list(
 		/obj/item/device/assembly_frame = 1,
