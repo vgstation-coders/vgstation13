@@ -195,10 +195,8 @@
 		return
 
 	if (istype(target, /obj/item/clothing/mask/facehugger/lamarr))
-		to_chat(world, "IT'S A LAMARR")
 		var/obj/item/clothing/mask/facehugger/lamarr/L = target
 		if(!user.is_holding_item(target))
-			to_chat(world, "NOT BEING HELD")
 			if(L.stat != DEAD)
 				to_chat(user, "<span class='warning'>\The [target] is squirming around too much. She needs to be held still.</span>")
 				return
