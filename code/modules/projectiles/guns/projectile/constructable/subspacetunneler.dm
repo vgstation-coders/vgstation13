@@ -59,9 +59,14 @@
 		/obj/machinery/hologram/holopad,						//AI holopads
 		/obj/machinery/media/receiver/boombox/wallmount,		//sound systems
 		/obj/machinery/keycard_auth,							//keycard authentication devices
+		/obj/machinery/power/battery/smes,						//SMES
+		/obj/structure/particle_accelerator,					//the particle accelerator
+		/obj/machinery/am_shielding,							//the AME
+		/obj/machinery/gateway,									//the gateway
 		)
 
 /obj/item/weapon/subspacetunneler/Destroy()
+	var/turf/currturf = get_turf(src.loc) //This doesn't work because the container gets qdel()'d first, nullspacing the tunneler
 	if(loaded_crystal)
 		qdel(loaded_crystal)
 		loaded_crystal = null
@@ -69,11 +74,11 @@
 		qdel(loaded_matter_bin)
 		loaded_matter_bin = null
 	if(stored_items.len)
-		src.visible_message("<span class='warning'>The [src]'s stored [stored_items.len > 1 ? "items are" : "item is"] forcibly ejected as \the [src] is destroyed!</span>")
+		src.visible_message("<span class='warning'>\The [src]'s stored [stored_items.len > 1 ? "items are" : "item is"] forcibly ejected as \the [src] is destroyed!</span>")
 		for(var/I in stored_items)
 			var/offset_x = rand(-3,3)
 			var/offset_y = rand(-3,3)
-			var/turf/T = locate(x+offset_x, y+offset_y, z)
+			var/turf/T = locate(currturf.x+offset_x, currturf.y+offset_y, z)
 			send(T)
 			sleep(1)
 	..()
@@ -169,19 +174,10 @@
 			to_chat(user, "<span class='info'>The gauge on \the [src]'s [M.name] indicates that there [stored_items.len > 1 ? "are [stored_items.len] objects" : "is [stored_items.len] object"] stored inside it.</span>")
 
 /obj/item/weapon/subspacetunneler/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, params)
-	if (istype(target, /obj/item/weapon/storage/backpack ))
+	if (target.loc == user)
 		return
 
-	else if (target.loc == user.loc)
-		return
-
-	else if (target.loc == user)
-		return
-
-	else if (locate (/obj/structure/table, src.loc))
-		return
-
-	else if(target == user)
+	if(target == user)
 		return
 
 	var/datum/zLevel/L = get_z_level(target)
@@ -228,8 +224,13 @@
 
 	for(var/J in invuln)
 		if(istype(O, J))
-			to_chat(user, "<span class='warning'>This entity is too powerful to be pulled into subspace!</span>")
+			to_chat(user, "<span class='warning'>That entity is too powerful to be pulled into subspace!</span>")
 			return
+
+	var/list/diskcheck = O.search_contents_for(/obj/item/weapon/disk/nuclear)
+	if(!isemptylist(diskcheck))
+		to_chat(user, "<span class='warning'>There's something inside that entity that is too powerful to be pulled into subspace!</span>")
+		return
 
 	for(var/J in prohibited)
 		if(istype(O, J))
