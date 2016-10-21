@@ -83,8 +83,9 @@
 
 	if (holder)
 		for (var/client/C in admins)
+			var/displayrank = "\improper [C.holder.rank]"
 			if (R_ADMIN & C.holder.rights || !(R_MOD & C.holder.rights))
-				aNames += "\t[C] is a [C.holder.rank]"
+				aNames += "\t[C] is \an [displayrank]"
 
 				if (C.holder.fakekey)
 					aNames += " <i>(as [C.holder.fakekey])</i>"
@@ -102,7 +103,7 @@
 				aNames += "\n"
 				numAdminsOnline++
 			else
-				mNames += "\t[C] is a [C.holder.rank]"
+				mNames += "\t[C] is \an [displayrank]"
 
 				if (C.holder.fakekey)
 					mNames += " <i>(as [C.holder.fakekey])</i>"
@@ -121,13 +122,14 @@
 				numModsOnline++
 	else
 		for (var/client/C in admins)
+			var/displayrank = "\improper [C.holder.rank]"
 			if (R_ADMIN & C.holder.rights || !(R_MOD & C.holder.rights))
 				if (!C.holder.fakekey)
-					aNames += "\t[C] is a [C.holder.rank]\n"
+					aNames += "\t[C] is \an [displayrank]\n"
 					numAdminsOnline++
 			else
 				if (!C.holder.fakekey)
-					mNames += "\t[C] is a [C.holder.rank]\n"
+					mNames += "\t[C] is \an [displayrank]\n"
 					numModsOnline++
 
 	to_chat(src, "\n<b>Current Admins ([numAdminsOnline]):</b>\n" + aNames + "\n<b>Current Moderators ([numModsOnline]):</b>\n" + mNames + "\n")
