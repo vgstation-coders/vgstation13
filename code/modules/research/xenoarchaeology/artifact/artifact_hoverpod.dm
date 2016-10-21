@@ -3,6 +3,8 @@
 	name = "hover pod"
 	icon_state = "engineering_pod"
 	desc = "Stubby and round, it has a human sized access hatch on the top."
+	step_energy_drain = 2
+	step_in = 1
 	wreckage = /obj/effect/decal/mecha_wreckage/hoverpod
 
 //duplicate of parent proc, but without space drifting
@@ -50,6 +52,9 @@
 	if(result)
 		playsound(src,'sound/machines/hiss.ogg',40,1)
 	return result
+
+/obj/mecha/working/hoverpod/can_apply_inertia()
+	return 0 //doesn't drift in space
 
 /obj/effect/decal/mecha_wreckage/hoverpod
 	name = "Hover pod wreckage"

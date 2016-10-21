@@ -8,7 +8,7 @@
 	energy_drain = 10
 	var/dam_force = 20
 
-/obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/can_attach(obj/mecha/working/ripley/M as obj)
+/obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/can_attach(obj/mecha/working/M as obj)
 	if(..())
 		if(istype(M))
 			return 1
@@ -16,24 +16,24 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/attach(obj/mecha/M as obj)
 	..()
-	if(istype(chassis, /obj/mecha/working/ripley))
-		var/obj/mecha/working/ripley/R = chassis
-		R.hydraulic_clamp = src
+	if(istype(chassis, /obj/mecha/working))
+		var/obj/mecha/working/W = chassis
+		W.hydraulic_clamp = src
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/detach()
 	..()
-	if(istype(chassis, /obj/mecha/working/ripley))
-		var/obj/mecha/working/ripley/R = chassis
-		R.hydraulic_clamp = null
+	if(istype(chassis, /obj/mecha/working))
+		var/obj/mecha/working/W = chassis
+		W.hydraulic_clamp = null
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/action(atom/target)
 	if(!action_checks(target))
 		return
-	if(!istype(chassis, /obj/mecha/working/ripley))
+	if(!istype(chassis, /obj/mecha/working))
 		return
-	var/obj/mecha/working/ripley/R = chassis
+	var/obj/mecha/working/W = chassis
 
 	if(istype(target,/obj/machinery/power/supermatter))
 		var/obj/machinery/power/supermatter/supermatter = target
@@ -56,18 +56,18 @@
 				FD.force_open(chassis.occupant, src)
 			return
 		if(!O.anchored)
-			if(istype(O, /obj/item/weapon/ore) && R.ore_box)
+			if(istype(O, /obj/item/weapon/ore) && W.ore_box)
 				var/count = 0
 				for(var/obj/item/weapon/ore/I in get_turf(target))
 					if(I.material)
-						R.ore_box.materials.addAmount(I.material, 1)
+						W.ore_box.materials.addAmount(I.material, 1)
 						returnToPool(I)
 						count++
 				if(count)
 					log_message("Loaded [count] ore into compatible ore box.")
 					occupant_message("<font color='blue'>[count] ore successfully loaded into cargo compartment.</font>")
 					chassis.visible_message("[chassis] scoops up the ore from the ground and loads it into cargo compartment.")
-			else if(R.cargo.len < R.cargo_capacity)
+			else if(W.cargo.len < W.cargo_capacity)
 				occupant_message("You lift [target] and start to load it into cargo compartment.")
 				chassis.visible_message("[chassis] lifts [target] and starts to load it into cargo compartment.")
 				set_ready_state(0)
@@ -79,13 +79,13 @@
 					if(oh_shit_new_living_in_target.len)
 						return
 					if(T == chassis.loc && src == chassis.selected)
-						R.cargo += O
+						W.cargo += O
 						O.forceMove(chassis)
-						if(!R.ore_box && istype(O, /obj/structure/ore_box))
-							R.ore_box = O
+						if(!W.ore_box && istype(O, /obj/structure/ore_box))
+							W.ore_box = O
 						O.anchored = 0 //Why?
 						occupant_message("<font color='blue'>[target] succesfully loaded.</font>")
-						log_message("Loaded [O]. Cargo compartment capacity: [R.cargo_capacity - R.cargo.len]")
+						log_message("Loaded [O]. Cargo compartment capacity: [W.cargo_capacity - W.cargo.len]")
 					else
 						occupant_message("<font color='red'>You must hold still while handling objects.</font>")
 						O.anchored = initial(O.anchored) //WHY??
@@ -168,13 +168,13 @@
 				if(get_dir(chassis,M)&chassis.dir)
 					M.GetDrilled()
 			log_message("Drilled through [target]")
-			if(istype(chassis, /obj/mecha/working/ripley))
-				var/obj/mecha/working/ripley/R = chassis
-				if(R.hydraulic_clamp && R.ore_box)
+			if(istype(chassis, /obj/mecha/working))
+				var/obj/mecha/working/W = chassis
+				if(W.hydraulic_clamp && W.ore_box)
 					var/count = 0
 					for(var/obj/item/weapon/ore/ore in range(chassis,1))
 						if(get_dir(chassis,ore)&chassis.dir && ore.material)
-							R.ore_box.materials.addAmount(ore.material,1)
+							W.ore_box.materials.addAmount(ore.material,1)
 							returnToPool(ore)
 							count++
 					if(count)
@@ -185,10 +185,10 @@
 			var/count = 0
 			var/obj/structure/ore_box/ore_box
 			var/obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp/hydraulic_clamp
-			if(istype(chassis, /obj/mecha/working/ripley))
-				var/obj/mecha/working/ripley/R = chassis
-				ore_box = R.ore_box
-				hydraulic_clamp = R.hydraulic_clamp
+			if(istype(chassis, /obj/mecha/working))
+				var/obj/mecha/working/W = chassis
+				ore_box = W.ore_box
+				hydraulic_clamp = W.hydraulic_clamp
 			for(var/turf/unsimulated/floor/asteroid/M in range(chassis,1)) //Get a 3x3 area around the mech
 				if(get_dir(chassis,M)&chassis.dir || istype(src, /obj/item/mecha_parts/mecha_equipment/tool/drill/diamonddrill)) //Only dig frontmost 1x3 unless the drill is diamond
 					M.gets_dug()
@@ -247,7 +247,7 @@
 	energy_drain = 15
 	var/dam_force = 20
 
-/obj/item/mecha_parts/mecha_equipment/tool/scythe/can_attach(obj/mecha/working/ripley/M as obj)
+/obj/item/mecha_parts/mecha_equipment/tool/scythe/can_attach(obj/mecha/working/M as obj)
 	if(..())
 		if(istype(M))
 			return 1
