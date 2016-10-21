@@ -1960,6 +1960,11 @@
 		if(!isobserver(usr))
 			C.admin_ghost()
 		sleep(2)
+		if(!isobserver(usr))
+			return
+		var/mob/dead/observer/O = usr
+		if(O.locked_to)
+			O.manual_stop_follow(O.locked_to)
 		if(C)
 			C.jumptomob(M)
 
