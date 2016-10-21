@@ -15,13 +15,14 @@ var/list/opposite_dirs = list(SOUTH,NORTH,null,WEST,null,null,null,EAST)
 	//EAST = 4
 	//WEST = 8
 
+//#define ALLOW_DIAGONAL_MOVEMENT
 /client/verb/MoveKey(Dir as num,State as num)
 	set hidden = 1
 	set instant = 1
 	//if we are currently not moving at the start of this function call, set a flag for later
 	if(!move_dir)
 		. = 1
-
+#ifdef ALLOW_DIAGONAL_MOVEMENT
 	//get the opposite direction
 	var/opposite = opposite_dirs[Dir]
 	if(State)
@@ -39,7 +40,12 @@ var/list/opposite_dirs = list(SOUTH,NORTH,null,WEST,null,null,null,EAST)
 		//restore non-dominant directional keypress
 		if(opposite&keypresses)
 			move_dir |= opposite
-
+#else
+	if(State)
+		move_dir = Dir
+	else
+		move_dir &= ~Dir
+#endif
 	//if earlier flag was set, and we now are going to be moving
 	if(.&&move_dir)
 		move_loop()
