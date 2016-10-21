@@ -206,7 +206,6 @@
 /mob/proc/put_in_hand_check(var/obj/item/W, index)
 	if(lying) //&& !(W.flags & ABSTRACT))
 		return 0
-
 	if(!isitem(W))
 		return 0
 
@@ -216,6 +215,12 @@
 	if(W.flags & MUSTTWOHAND)
 		if(!W.wield(src, 1))
 			to_chat(src, "You need both hands to pick up \the [W].")
+			return 0
+
+	if(W.cant_drop) //if the item can't be dropped
+		var/I = is_holding_item(W) //AND the item is currently being held in one of the mob's hands
+		if(I)
+			to_chat(src, "You can't pry \the [W] out of your [get_index_limb_name(I)]!")
 			return 0
 
 	return 1
