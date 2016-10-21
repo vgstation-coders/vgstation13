@@ -6,7 +6,7 @@
 	name = "conveyor belt assembly"
 	desc = "These are the thingies that make the loop go round."
 	icon = 'icons/obj/recycling.dmi'
-	icon_state = "conveyor-assembly"
+	icon_state = "conveyor_folded"
 	max_amount = 30
 	var/active
 	var/image/placeimage
@@ -54,7 +54,7 @@
 	placeimage.overlays += arrow
 
 /obj/item/stack/conveyor_assembly/drag_success(mob/user, turf/T)
-	if(use(1))
+	if(user.Adjacent(placeloc) && use(1))
 		new /obj/structure/conveyor_assembly(placeloc, placeimage.dir)
 	if(amount)
 		spawn()
