@@ -81,6 +81,8 @@
 		reagents.update_total()
 		if(M == user)
 			user.visible_message("<span class='notice'>[user] eats a delicious forkful of [loaded_food_name]!</span>")
+			feed_to(user, user)
+			return
 		else
 			user.visible_message("<span class='notice'>[user] attempts to feed [M] a delicious forkful of [loaded_food_name].</span>")
 			if(do_mob(user, M))
@@ -88,12 +90,8 @@
 					return
 
 				user.visible_message("<span class='notice'>[user] feeds [M] a delicious forkful of [loaded_food_name]!</span>")
-		reagents.reaction(M, INGEST)
-		reagents.trans_to(M.reagents, reagents.total_volume, reagents.total_volume, log_transfer = TRUE, whodunnit = user)
-		overlays -= loaded_food
-		del(loaded_food)
-		loaded_food_name = null
-		return
+				feed_to(user, M)
+				return
 	else
 		if((M_CLUMSY in user.mutations) && prob(50))
 			return eyestab(user,user)
@@ -132,6 +130,14 @@
 			snack.bitecount++
 			snack.after_consume(user)
 	return 1
+
+/obj/item/weapon/kitchen/utensil/fork/proc/feed_to(mob/living/carbon/user, mob/living/carbon/target)
+	reagents.reaction(target, INGEST)
+	reagents.trans_to(target.reagents, reagents.total_volume, log_transfer = TRUE, whodunnit = user)
+	overlays -= loaded_food
+	qdel(loaded_food)
+	loaded_food = null
+	loaded_food_name = null
 
 /obj/item/weapon/kitchen/utensil/fork/plastic
 	name = "plastic fork"
