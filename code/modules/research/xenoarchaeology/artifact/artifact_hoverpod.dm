@@ -69,7 +69,9 @@
 	return result
 
 /obj/mecha/working/hoverpod/can_apply_inertia()
-	return 0 //doesn't drift in space
+	if(has_charge(step_energy_drain))
+		return 0 //doesn't drift in space if it has power
+	return 1
 
 /obj/effect/decal/mecha_wreckage/hoverpod
 	name = "Hover pod wreckage"
