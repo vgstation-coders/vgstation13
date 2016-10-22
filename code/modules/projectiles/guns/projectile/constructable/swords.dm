@@ -86,14 +86,8 @@
 	..()
 	if(beaker)
 		to_chat(user, "[bicon(beaker)] There is \a [beaker] in \the [src]'s beaker port.")
-		to_chat(user, "It contains:")
 		var/obj/item/weapon/reagent_containers/glass/beaker/B = beaker
-		if(!B.reagents.total_volume)
-			to_chat(user, "<span class='info'>Nothing.</span>")
-		else
-			if(B.reagents.reagent_list.len)
-				for(var/datum/reagent/R in B.reagents.reagent_list)
-					to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
+		B.show_list_of_reagents(user)
 
 /obj/item/weapon/sword/venom/Destroy()
 	if(beaker)
