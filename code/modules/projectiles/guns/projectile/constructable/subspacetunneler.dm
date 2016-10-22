@@ -191,7 +191,7 @@
 
 	if(!loaded_crystal)
 		user.visible_message("*click click*", "<span class='danger'>*click*</span>")
-//		playsound(user, 'sound/weapons/empty.ogg', 100, 1)
+		playsound(user, 'sound/weapons/empty.ogg', 100, 1)
 		return 0
 	else
 		if(istype(target, /obj))
@@ -220,7 +220,7 @@
 		stored_items -= O
 		if(user)
 			user.visible_message("<span class='warning'>[user] ejects \the [O] from \his [src.name] through a subspace rift!</span>","You eject \the [O] from your [src.name] through a subspace rift.")
-//		playsound(O, 'sound/effects/phasein.ogg', 50, 1)
+		playsound(O, 'sound/effects/phasein.ogg', 50, 1)
 		anim(location = T,a_icon = 'icons/obj/weaponsmithing.dmi',flick_anim = "subspace_rift",name = "subspace rift")
 
 /obj/item/weapon/subspacetunneler/proc/get_random_nearby_turf()

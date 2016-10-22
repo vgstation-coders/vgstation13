@@ -200,7 +200,8 @@ steam.start() -- spawns the effect
 /datum/effect/effect/system/spark_spread/start()
 	if (holder)
 		location = get_turf(holder)
-
+	if(!location)
+		return
 	var/list/directions
 	if (cardinals)
 		directions = cardinal.Copy()
