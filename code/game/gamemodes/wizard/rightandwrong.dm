@@ -7,6 +7,8 @@
 	for(var/mob/living/carbon/human/H in player_list)
 		if(H.stat == DEAD || !(H.client))
 			continue
+		if(summon_type && iswizard(H))
+			continue
 		if(prob(35) && !is_special_character(H))
 			ticker.mode.traitors += H.mind
 			H.mind.special_role = "traitor"
