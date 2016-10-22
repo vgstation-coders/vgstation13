@@ -10,5 +10,12 @@ Large changes require discussion.  If you're doing a large, game-changing modifi
 Merging your own PRs is considered bad practice, as it generally means you bypass peer review, which is a core part of how we develop.
 
 It is also suggested that you hop into irc.rizon.net #vgstation to discuss your changes, or if you need help.
--->
 
+When working with in body changelogs, the syntax is as follows:
+:cl: (as the emoji)
+ * rscadd: Did stuff!
+ * rscdel: did other stuff!
+
+for the keys you can use in a changelog, they are the same as described in html/changelogs/example.yml
+NOTE that anything *after* the :cl: will be parsed as a changelog, if it somehow manages to be parseable as such, so always put the changelog at the VERY end!
+-->
