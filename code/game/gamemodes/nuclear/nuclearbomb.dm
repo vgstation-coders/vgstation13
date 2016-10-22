@@ -315,7 +315,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 				var/datum/game_mode/nuclear/GM = ticker.mode
 				GM.nukes_left --
 			else
-				to_chat(world, "<B>The station was destoyed by the nuclear blast!</B>")
+				to_chat(world, "<B>The station was destroyed by the nuclear blast!</B>")
 
 			ticker.mode.station_was_nuked = (off_station<2)	//offstation==1 is a draw. the station becomes irradiated and needs to be evacuated.
 															//kinda shit but I couldn't  get permission to do what I wanted to do.
