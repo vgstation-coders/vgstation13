@@ -178,7 +178,7 @@
 			last_ping_time = world.time
 			visible_message(message = "<span class='notice'>\The [src] pings softly.</span>", blind_message = "<span class='danger'>You hear what you think is a microwave finishing.</span>")
 		else
-			to_chat(O, "The [src] is recharging. Try again in a few moments.")
+			to_chat(O, "[src] is recharging. Try again in a few moments.")
 
 /obj/item/device/mmi/posibrain/OnMobDeath(var/mob/living/carbon/brain/B)
 	visible_message(message = "<span class='danger'>[B] begins to go dark, having seemingly thought himself to death</span>", blind_message = "<span class='danger'>You hear the wistful sigh of a hopeful machine powering off with a tone of finality.</span>")
