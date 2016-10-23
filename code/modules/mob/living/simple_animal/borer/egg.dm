@@ -14,7 +14,7 @@
 	var/datum/recruiter/recruiter = null
 	var/child_prefix_index = 1
 	var/last_ping_time = 0
-	var/ping_cooldown = 150
+	var/ping_cooldown = 50
 
 	var/list/required_mols=list(
 		"toxins"=MOLES_PLASMA_VISIBLE,
@@ -106,7 +106,7 @@
 		visible_message(message = "<span class='notice'>\The [src] wriggles vigorously.</span>", blind_message = "<span class='danger'>You hear what you think is someone jiggling a jelly.</span>")
 		last_ping_time = world.time
 	else
-		to_chat(O, "Don't spam the egg you cunt.")
+		to_chat(O, "The egg is recovering. Try again in a few moments.")
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/Destroy()
 	qdel(recruiter)
