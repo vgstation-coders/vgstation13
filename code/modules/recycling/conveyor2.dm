@@ -97,8 +97,6 @@
 	if(newdir)
 		dir = newdir
 
-	component_parts = newlist(/obj/item/weapon/circuitboard/conveyor)
-
 	updateConfig(!building)
 
 	if(!id_tag) //Without an ID tag we'll never work, so let's try to copy it from one of our neighbors.
