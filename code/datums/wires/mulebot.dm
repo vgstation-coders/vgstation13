@@ -28,6 +28,8 @@ var/const/WIRE_REMOTE_TX = 128	// remote trans status
 var/const/WIRE_BEACON_RX = 256	// beacon ping recv
 
 /datum/wires/mulebot/CanUse(var/mob/living/L)
+	if(!..())
+		return 0
 	var/obj/machinery/bot/mulebot/M = holder
 	if(M.open)
 		return 1

@@ -27,6 +27,8 @@
 	return .
 
 /datum/wires/camera/CanUse(var/mob/living/L)
+	if(!..())
+		return 0
 	var/obj/machinery/camera/C = holder
 	if(!C.panel_open)
 		return 0

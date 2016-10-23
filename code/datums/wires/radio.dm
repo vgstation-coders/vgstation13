@@ -15,6 +15,8 @@ var/const/WIRE_RECEIVE = 2
 var/const/WIRE_TRANSMIT = 4
 
 /datum/wires/radio/CanUse(var/mob/living/L)
+	if(!..())
+		return 0
 	var/obj/item/device/radio/R = holder
 	if(R.b_stat)
 		return 1

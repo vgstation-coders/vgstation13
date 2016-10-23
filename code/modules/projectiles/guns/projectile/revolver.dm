@@ -221,7 +221,7 @@
 	AC.forceMove(src) //get back in there you
 
 /obj/item/weapon/gun/projectile/russian/force_removeMag()
-	if(usr.isUnconscious())
+	if(usr.incapacitated())
 		return
 	if(getAmmo() > 0)
 		for(var/obj/item/ammo_casing/AC in loaded)

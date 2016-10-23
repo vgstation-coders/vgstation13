@@ -98,5 +98,5 @@
 	set name = "Eject assembly from port"
 	set category = "Object"
 	set src in oview(1)
-	if(!usr.isUnconscious())
+	if(!usr.incapacitated())
 		eject_assembly()

@@ -114,7 +114,10 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 	if(in_range(holder, usr) && isliving(usr))
 
 		var/mob/living/L = usr
-		if(CanUse(L) && href_list["action"])
+		if(!CanUse(L))
+			to_chat(usr, "<span class='notice'>You are incapable of this right now.</span>")
+			return
+		if(href_list["action"])
 			var/obj/item/I = L.get_active_hand()
 			holder.add_hiddenprint(L)
 			if(href_list["cut"]) // Toggles the cut/mend status
@@ -174,6 +177,10 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 	return
 
 /datum/wires/proc/CanUse(var/mob/living/L)
+	if(!L.dexterity_check())
+		return 0
+	if(L.incapacitated() || L.lying)
+		return 0
 	return 1
 
 // Example of use:
