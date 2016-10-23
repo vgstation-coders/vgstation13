@@ -197,13 +197,10 @@
 		..()
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw/force_removeMag() //special because of its cover
-	if(cover_open && stored_magazine)
-		RemoveMag(usr)
-		to_chat(usr, "<span class='notice'>You remove the magazine from [src].</span>")
-	else if(stored_magazine)
+	if(!cover_open)
 		to_chat(usr, "<span class='rose'>The [src]'s cover has to be open to do that!</span>")
-	else
-		to_chat(usr, "<span class='rose'>There is no magazine to remove!</span>")
+		return
+	..()
 
 
 /* The thing I found with guns in ss13 is that they don't seem to simulate the rounds in the magazine in the gun.
