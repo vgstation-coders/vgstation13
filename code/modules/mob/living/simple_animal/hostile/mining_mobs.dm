@@ -294,11 +294,13 @@ obj/item/asteroid/basilisk_hide/New()
 	icon = 'icons/obj/food.dmi'
 	icon_state = "boiledrorocore"
 	var/inert = 0
-	var/timer = 60
+	var/time_left = 1200 //deciseconds
+	var/last_process
 
 /obj/item/asteroid/hivelord_core/New()
 	..()
 	create_reagents(5)
+	last_process = world.time
 	processing_objects.Add(src)
 
 /obj/item/asteroid/hivelord_core/Destroy()
@@ -312,16 +314,18 @@ obj/item/asteroid/basilisk_hide/New()
 		processing_objects.Remove(src)
 		return
 
-	if(timer <= 0)
+	if(time_left <= 0)
 		inert = 1
 		desc = "The remains of a hivelord that have become useless, having been left alone too long after being harvested."
 		processing_objects.Remove(src)
 		return
 
 	if(loc && (istype(loc, /obj/structure/closet/crate/freezer) || istype(loc, /obj/structure/closet/secure_closet/freezer)))
+		last_process = world.time
 		return
 
-	timer--
+	time_left -= world.time - last_process
+	last_process = world.time
 
 /obj/item/asteroid/hivelord_core/attack(mob/living/M as mob, mob/living/user as mob)
 	if (iscarbon(M) && user.a_intent != I_HURT)
