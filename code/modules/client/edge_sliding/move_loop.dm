@@ -4,7 +4,9 @@ var/list/opposite_dirs = list(SOUTH,NORTH,null,WEST,null,null,null,EAST)
 	var/tmp
 		mloop = 0
 		move_dir = 0 //keep track of the direction the player is currently trying to move in.
+		true_dir = 0
 		keypresses = 0
+		CAN_MOVE_DIAGONALLY = 0
 
 	//rebind your interface so that your north/south/east/west keypresses are bound to:
 	//keydown: MoveKey [Direction] 1
@@ -15,14 +17,12 @@ var/list/opposite_dirs = list(SOUTH,NORTH,null,WEST,null,null,null,EAST)
 	//EAST = 4
 	//WEST = 8
 
-//#define ALLOW_DIAGONAL_MOVEMENT
 /client/verb/MoveKey(Dir as num,State as num)
 	set hidden = 1
 	set instant = 1
 	//if we are currently not moving at the start of this function call, set a flag for later
 	if(!move_dir)
 		. = 1
-#ifdef ALLOW_DIAGONAL_MOVEMENT
 	//get the opposite direction
 	var/opposite = opposite_dirs[Dir]
 	if(State)
@@ -32,6 +32,7 @@ var/list/opposite_dirs = list(SOUTH,NORTH,null,WEST,null,null,null,EAST)
 		//make sure that conflicting directions result in the newest one being dominant.
 		if(opposite&keypresses)
 			move_dir &= ~opposite
+
 	else
 		//turn off the bitflags
 		move_dir &= ~Dir
@@ -40,14 +41,17 @@ var/list/opposite_dirs = list(SOUTH,NORTH,null,WEST,null,null,null,EAST)
 		//restore non-dominant directional keypress
 		if(opposite&keypresses)
 			move_dir |= opposite
-#else
-	if(State)
-		move_dir = Dir
+
+		else
+			move_dir |= keypresses
+
+	if(CAN_MOVE_DIAGONALLY)
+		true_dir = move_dir)
 	else
-		move_dir &= ~Dir
-#endif
+		true_dir = move_dir^(move_dir&move_dir-1)
+
 	//if earlier flag was set, and we now are going to be moving
-	if(.&&move_dir)
+	if(.&&true_dir)
 		move_loop()
 
 /client/North()
@@ -59,10 +63,10 @@ var/list/opposite_dirs = list(SOUTH,NORTH,null,WEST,null,null,null,EAST)
 	set waitfor = 0
 	if(src.mloop) return
 	mloop = 1
-	src.Move(mob.loc,move_dir)
-	while(src.move_dir)
+	src.Move(mob.loc,true_dir)
+	while(src.true_dir)
 		sleep(world.tick_lag)
-		if(src.move_dir)
-			src.Move(mob.loc,move_dir)
+		if(src.true_dir)
+			src.Move(mob.loc,true_dir)
 	mloop = 0
 
