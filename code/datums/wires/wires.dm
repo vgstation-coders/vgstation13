@@ -70,11 +70,11 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 		src.wires[colour] = index
 		//wires = shuffle(wires)
 
-/datum/wires/proc/Interact(var/mob/living/user)
-	if(!istype(user))
+/datum/wires/proc/Interact(var/mob/user)
+	if(!user || !CanUse(user))
 		return 0
 	var/html = null
-	if(holder && CanUse(user))
+	if(holder)
 		html = GetInteractWindow()
 	if(html)
 		user.set_machine(holder)
