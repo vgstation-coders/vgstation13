@@ -46,7 +46,7 @@ var/list/opposite_dirs = list(SOUTH,NORTH,null,WEST,null,null,null,EAST)
 			move_dir |= keypresses
 
 	if(CAN_MOVE_DIAGONALLY)
-		true_dir = move_dir)
+		true_dir = move_dir
 	else
 		true_dir = move_dir^(move_dir&move_dir-1)
 
