@@ -294,16 +294,30 @@ obj/item/asteroid/basilisk_hide/New()
 	icon = 'icons/obj/food.dmi'
 	icon_state = "boiledrorocore"
 	var/inert = 0
+	var/timer = 60
 
 /obj/item/asteroid/hivelord_core/New()
 	..()
 	create_reagents(5)
-	spawn(1200)
-		if(reagents && reagents.has_reagent("frostoil", 5))
-			desc = "All that remains of a hivelord, it seems to be what allows it to break pieces of itself off without being hurt. It is covered in a thin coat of frost."
-		else
-			inert = 1
-			desc = "The remains of a hivelord that have become useless, having been left alone too long after being harvested."
+	processing_objects.Add(src)
+
+/obj/item/asteroid/hivelord_core/process()
+	if(reagents && reagents.has_reagent(FROSTOIL, 5))
+		playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
+		desc = "All that remains of a hivelord, it seems to be what allows it to break pieces of itself off without being hurt. It is covered in a thin coat of frost."
+		processing_objects.Remove(src)
+		return
+
+	if(timer <= 0)
+		inert = 1
+		desc = "The remains of a hivelord that have become useless, having been left alone too long after being harvested."
+		processing_objects.Remove(src)
+		return
+
+	if(loc && (istype(loc, /obj/structure/closet/crate/freezer) || istype(loc, /obj/structure/closet/secure_closet/freezer)))
+		return
+
+	timer--
 
 /obj/item/asteroid/hivelord_core/attack(mob/living/M as mob, mob/living/user as mob)
 	if (iscarbon(M) && user.a_intent != I_HURT)
