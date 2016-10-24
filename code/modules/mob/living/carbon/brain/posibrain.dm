@@ -13,10 +13,13 @@
 	req_access = list(access_robotics)
 	locked = 2
 	mecha = null//This does not appear to be used outside of reference in mecha.dm.
+	var/last_ping_time = 0
+	var/ping_cooldown = 50
 
 #ifdef DEBUG_ROLESELECT
 /obj/item/device/mmi/posibrain/test/New()
 	..()
+	last_ping_time = world.time
 	search_for_candidates()
 #endif
 
@@ -171,8 +174,11 @@
 	if(searching)
 		volunteer(O)
 	else
-		if(!brainmob.ckey)
+		if(!brainmob.ckey && last_ping_time + ping_cooldown <= world.time)
+			last_ping_time = world.time
 			visible_message(message = "<span class='notice'>\The [src] pings softly.</span>", blind_message = "<span class='danger'>You hear what you think is a microwave finishing.</span>")
+		else
+			to_chat(O, "[src] is recharging. Try again in a few moments.")
 
 /obj/item/device/mmi/posibrain/OnMobDeath(var/mob/living/carbon/brain/B)
 	visible_message(message = "<span class='danger'>[B] begins to go dark, having seemingly thought himself to death</span>", blind_message = "<span class='danger'>You hear the wistful sigh of a hopeful machine powering off with a tone of finality.</span>")
