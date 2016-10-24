@@ -297,9 +297,13 @@ obj/item/asteroid/basilisk_hide/New()
 
 /obj/item/asteroid/hivelord_core/New()
 	..()
+	create_reagents(5)
 	spawn(1200)
-		inert = 1
-		desc = "The remains of a hivelord that have become useless, having been left alone too long after being harvested."
+		if(reagents && reagents.has_reagent("frostoil", 5))
+			desc = "All that remains of a hivelord, it seems to be what allows it to break pieces of itself off without being hurt. It is covered in a thin coat of frost."
+		else
+			inert = 1
+			desc = "The remains of a hivelord that have become useless, having been left alone too long after being harvested."
 
 /obj/item/asteroid/hivelord_core/attack(mob/living/M as mob, mob/living/user as mob)
 	if (iscarbon(M) && user.a_intent != I_HURT)
