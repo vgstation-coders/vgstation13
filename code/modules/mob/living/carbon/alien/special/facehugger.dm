@@ -142,7 +142,7 @@ var/const/MAX_ACTIVE_TIME = 400
 		if(real) // Lamarr still tries to couple with heads, but toys won't
 			processing_objects.Add(src)
 
-	else
+	else if(!sterile)
 		qdel(src)
 
 /obj/item/clothing/mask/facehugger/examine(mob/user)
@@ -244,7 +244,7 @@ var/const/MAX_ACTIVE_TIME = 400
 			if(istype(mouth_protection, /obj/item/clothing/head/helmet/space/rig))
 				rng = 15
 			if(prob(rng)) // Temporary balance change, all mouth-covering hats will be more effective
-				H.visible_message("<span class='danger'>\The [src] smashes against [H]'s [mouth_protection], and rips it off in the process!</span>")
+				H.visible_message("<span class='danger'>\The [src] smashes against [H]'s \the [mouth_protection], and rips it off in the process!</span>")
 				H.drop_from_inventory(mouth_protection)
 				GoIdle(15)
 				return

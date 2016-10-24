@@ -194,9 +194,12 @@
 		to_chat(user, "<span class='warning'>\The [src] is empty.</span>")
 		return
 
-	if (istype(target, /obj/item/clothing/mask/facehugger/lamarr) && !user.is_holding_item(target))
-		to_chat(user, "<span class='warning'>\The [target] is squirming around too much. She needs to be held still.</span>")
-		return
+	if (istype(target, /obj/item/clothing/mask/facehugger/lamarr))
+		var/obj/item/clothing/mask/facehugger/lamarr/L = target
+		if(!user.is_holding_item(target))
+			if(L.stat != DEAD)
+				to_chat(user, "<span class='warning'>\The [target] is squirming around too much. She needs to be held still.</span>")
+				return
 
 	// TODO Remove snowflake
 	if (!ismob(target) && !target.is_open_container() && !is_type_in_list(target, injectable_types))

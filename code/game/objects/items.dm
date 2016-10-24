@@ -196,6 +196,8 @@
 		if(src == user.get_inactive_hand())
 			if(src.flags & TWOHANDABLE)
 				return src.wield(user)
+		if(!user.put_in_hand_check(src, user.get_active_hand()))
+			return
 		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
 		if(!src.canremove)
 			return
@@ -232,6 +234,8 @@
 					M.client.screen -= src
 	src.throwing = 0
 	if (src.loc == user)
+		if(!user.put_in_hand_check(src, user.get_active_hand()))
+			return
 		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
 		if(istype(src, /obj/item/clothing) && !src:canremove)
 			return
