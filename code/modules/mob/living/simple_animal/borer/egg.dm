@@ -1,5 +1,5 @@
 // Amount of time between retries for recruits. As to not spam ghosts every minute.
-#define BORER_EGG_RERECRUITE_DELAY 7.5 MINUTES
+#define BORER_EGG_RERECRUITE_DELAY 5.0 MINUTES
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg
 	name = "borer egg"
@@ -13,6 +13,8 @@
 	var/hatching = 0 // So we don't spam ghosts.
 	var/datum/recruiter/recruiter = null
 	var/child_prefix_index = 1
+	var/last_ping_time = 0
+	var/ping_cooldown = 50
 
 	var/list/required_mols=list(
 		"toxins"=MOLES_PLASMA_VISIBLE,
@@ -21,6 +23,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/New()
 	..()
+	last_ping_time = world.time
 	reagents.add_reagent(NUTRIMENT, 4)
 	spawn(rand(1200,1500))//the egg takes a while to "ripen"
 		Grow()
@@ -97,6 +100,13 @@
 		return
 	else
 		..()
+
+/obj/item/weapon/reagent_containers/food/snacks/borer_egg/attack_ghost(var/mob/dead/observer/O)
+	if(last_ping_time + ping_cooldown <= world.time)
+		visible_message(message = "<span class='notice'>\The [src] wriggles vigorously.</span>", blind_message = "<span class='danger'>You hear what you think is someone jiggling a jelly.</span>")
+		last_ping_time = world.time
+	else
+		to_chat(O, "The egg is recovering. Try again in a few moments.")
 
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/Destroy()
 	qdel(recruiter)
