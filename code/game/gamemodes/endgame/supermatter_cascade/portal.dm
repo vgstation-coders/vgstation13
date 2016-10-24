@@ -25,7 +25,7 @@
 	for(var/mob/M in player_list)
 		if(M.client)
 			M.see_rift(src)
-	eat()
+	consume()
 
 /obj/machinery/singularity/narsie/large/exit/acquire(var/mob/food)
 	return
