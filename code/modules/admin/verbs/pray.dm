@@ -24,6 +24,7 @@
 
 	send_prayer_to_admins(msg, 'sound/effects/prayer.ogg')
 
+	log_admin("PRAYER: [key_name(usr)] at [formatJumpTo(get_turf(usr))]: [orig_message]")
 	if(!stat)
 		usr.whisper(orig_message)
 	to_chat(usr, "Your prayers have been received by the gods.")
