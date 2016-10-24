@@ -618,12 +618,12 @@
 			loc.Exited(src)
 		loc = null
 		if(T)
-			if(istype(src, /obj/mecha/working/ripley/))
-				var/obj/mecha/working/ripley/R = src
-				if(R.cargo)
-					for(var/obj/O in R.cargo) //Dump contents of stored cargo
+			if(istype(src, /obj/mecha/working/))
+				var/obj/mecha/working/W = src
+				if(W.cargo)
+					for(var/obj/O in W.cargo) //Dump contents of stored cargo
 						O.forceMove(T)
-						R.cargo -= O
+						W.cargo -= O
 						T.Entered(O)
 
 			if(prob(30))
