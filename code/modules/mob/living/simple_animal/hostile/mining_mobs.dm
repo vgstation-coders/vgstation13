@@ -301,6 +301,10 @@ obj/item/asteroid/basilisk_hide/New()
 	create_reagents(5)
 	processing_objects.Add(src)
 
+/obj/item/asteroid/hivelord_core/Destroy()
+	processing_objects.Remove(src)
+	..()
+
 /obj/item/asteroid/hivelord_core/process()
 	if(reagents && reagents.has_reagent(FROSTOIL, 5))
 		playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
