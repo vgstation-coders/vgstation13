@@ -1,4 +1,4 @@
-
+/*
 /obj/item/clothing/under/golem/coal
 	name = "coal body"
 	icon_state="golem_coal"
@@ -63,3 +63,5 @@
 		if(ticker.mode.name == "sandbox")
 			H.CanBuild()
 			to_chat(H, "Sandbox tab enabled.")
+
+*/

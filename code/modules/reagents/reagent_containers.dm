@@ -282,3 +282,12 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		return data
 	else
 		return "No reagents"
+
+/obj/item/weapon/reagent_containers/proc/show_list_of_reagents(mob/user) //Displays a list of the reagents to a mob, formatted for reading
+	to_chat(user, "It contains:")
+	if(!reagents.total_volume)
+		to_chat(user, "<span class='info'>Nothing.</span>")
+	else
+		if(reagents.reagent_list.len)
+			for(var/datum/reagent/R in reagents.reagent_list)
+				to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
