@@ -17,9 +17,9 @@ var/const/VENDING_WIRE_ELECTRIFY = 4
 var/const/VENDING_WIRE_IDSCAN = 8
 
 /datum/wires/vending/CanUse(var/mob/living/L)
-	var/obj/machinery/vending/V = holder
-	if(L.lying || L.incapacitated())
+	if(!..())
 		return 0
+	var/obj/machinery/vending/V = holder
 	if(!istype(L, /mob/living/silicon))
 		if(V.seconds_electrified)
 			if(V.shock(L, 100))

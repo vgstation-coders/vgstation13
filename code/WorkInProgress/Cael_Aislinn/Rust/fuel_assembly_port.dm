@@ -8,6 +8,7 @@
 	var/obj/item/weapon/fuel_assembly/cur_assembly
 	var/busy = 0
 	anchored = 1
+	ghost_read = 0
 
 	var/opened = 1 //0=closed, 1=opened
 	var/has_electronics = 0 // 0 - none, bit 1 - circuitboard, bit 2 - wires
@@ -23,8 +24,9 @@
 				to_chat(user, "<span class='notice'>You insert [I] into [src]. Touch the panel again to insert [I] into the injector.</span>")
 
 /obj/machinery/rust_fuel_assembly_port/attack_hand(mob/user)
-	add_fingerprint(user)
-	if(stat & (BROKEN|NOPOWER) || opened)
+	if(..())
+		return
+	if(opened)
 		return
 
 	if(cur_assembly)
@@ -96,6 +98,5 @@
 	set name = "Eject assembly from port"
 	set category = "Object"
 	set src in oview(1)
-
-	eject_assembly()
-
+	if(!usr.incapacitated())
+		eject_assembly()

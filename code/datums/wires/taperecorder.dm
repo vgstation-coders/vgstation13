@@ -14,6 +14,8 @@ var/const/WIRE_RECORD = 2
 			record()
 
 /datum/wires/taperecorder/CanUse(var/mob/living/L)
+	if(!..())
+		return 0
 	var/obj/item/device/taperecorder/T = holder
 	if(T.open_panel)
 		return 1

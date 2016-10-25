@@ -88,6 +88,8 @@ var/const/BORG_WIRE_LAWCHECK    = 16 // Not used on MoMMIs
 			R.SetLockdown(!R.lockcharge) // Toggle
 
 /datum/wires/robot/CanUse(var/mob/living/L)
+	if(!..())
+		return 0
 	var/mob/living/silicon/robot/R = holder
 	if(R.wiresexposed)
 		return 1
