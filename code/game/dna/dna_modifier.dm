@@ -291,6 +291,11 @@
 
 	return 1
 
+/obj/machinery/dna_scannernew/proc/contains_husk()
+	if(occupant && (M_HUSK in occupant.mutations))
+		return 1
+	return 0
+
 /obj/machinery/dna_scannernew/on_login(var/mob/M)
 	if(M.mind && !M.client && locate(/obj/machinery/computer/cloning) in range(src, 1)) //!M.client = mob has ghosted out of their body
 		var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
@@ -597,11 +602,6 @@
 
 	add_fingerprint(usr)
 
-	// Stops people modifying husk dna.  Without this check, husks can be monkeyed and rehumanised to de-husk them
-	var/occupant_husk = FALSE
-	if(connected.occupant && (M_HUSK in connected.occupant.mutations))
-		occupant_husk = TRUE
-
 	if (href_list["selectMenuKey"])
 		selected_menu_key = href_list["selectMenuKey"]
 		return 1 // return 1 forces an update to all Nano uis attached to src
@@ -612,7 +612,7 @@
 		return 1 // return 1 forces an update to all Nano uis attached to src
 
 	if (href_list["pulseRadiation"])
-		if(occupant_husk)
+		if(connected.contains_husk())
 			to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
 			return 1
 		irradiating = src.radiation_duration
@@ -713,7 +713,7 @@
 		return 1 // return 1 forces an update to all Nano uis attached to src
 
 	if (href_list["pulseUIRadiation"])
-		if(occupant_husk)
+		if(connected.contains_husk())
 			to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
 			return 1
 		var/block = src.connected.occupant.dna.GetUISubBlock(src.selected_ui_block,src.selected_ui_subblock)
@@ -772,7 +772,7 @@
 		return 1 // return 1 forces an update to all Nano uis attached to src
 
 	if (href_list["pulseSERadiation"])
-		if(occupant_husk)
+		if(connected.contains_husk())
 			to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
 			return 1
 		var/block = src.connected.occupant.dna.GetSESubBlock(src.selected_se_block,src.selected_se_subblock)
@@ -883,7 +883,7 @@
 			return 0 // Not a valid buffer id
 
 		if (bufferOption == "saveUI")
-			if(occupant_husk)
+			if(connected.contains_husk())
 				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
 				return 1
 			if(src.connected.occupant && src.connected.occupant.dna)
@@ -897,7 +897,7 @@
 			return 1
 
 		if (bufferOption == "saveUIAndUE")
-			if(occupant_husk)
+			if(connected.contains_husk())
 				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
 				return 1
 			if(src.connected.occupant && src.connected.occupant.dna)
@@ -911,7 +911,7 @@
 			return 1
 
 		if (bufferOption == "saveSE")
-			if(occupant_husk)
+			if(connected.contains_husk())
 				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
 				return 1
 			if(src.connected.occupant && src.connected.occupant.dna)
@@ -936,7 +936,7 @@
 			return 1
 
 		if (bufferOption == "transfer")
-			if(occupant_husk)
+			if(connected.contains_husk())
 				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
 				return 1
 			if (!src.connected.occupant || (M_NOCLONE in src.connected.occupant.mutations) || !src.connected.occupant.dna)
