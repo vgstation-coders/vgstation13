@@ -176,10 +176,10 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 /datum/wires/proc/UpdatePulsed(var/index)
 	return
 
-/datum/wires/proc/CanUse(var/mob/living/L)
+/datum/wires/proc/CanUse(var/mob/L)
 	if(!L.dexterity_check())
 		return 0
-	if(L.incapacitated() || L.lying)
+	if((L.incapacitated() && !isAdminGhost(L)) || L.lying)
 		return 0
 	return 1
 
