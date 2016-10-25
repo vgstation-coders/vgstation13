@@ -561,24 +561,25 @@
 	idle_power_usage = 2
 	active_power_usage = 6
 	power_channel = ENVIRON
+	ghost_read = 0
 
 /obj/machinery/readybutton/attack_ai(mob/user as mob)
-	to_chat(user, "The station AI is not to interact with these devices")
-	return
+	if(issilicon(user))
+		to_chat(user, "<span='warning'>The station's silicons are not to interact with these devices.</span>")
+		return
+	..()
 
 /obj/machinery/readybutton/attack_paw(mob/user as mob)
-	to_chat(user, "You are too primitive to use this device")
-	return
+	to_chat(user, "<span='warning'>You are too primitive to use this device.</span>")
 
 /obj/machinery/readybutton/New()
 	..()
 
 /obj/machinery/readybutton/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	to_chat(user, "The device is a solid button, there's nothing you can do with it!")
+	to_chat(user, "<span='warning'>The device is a solid button, there's nothing you can do with it!</span>")
 
 /obj/machinery/readybutton/attack_hand(mob/user as mob)
-	if(user.stat || stat & (NOPOWER|BROKEN))
-		to_chat(user, "This device is not powered.")
+	if(..())
 		return
 
 	currentarea = get_area(src.loc)
@@ -586,7 +587,7 @@
 		qdel(src)
 
 	if(eventstarted)
-		to_chat(usr, "The event has already begun!")
+		to_chat(usr, "<span='notice'>The event has already begun!</span>")
 		return
 
 	ready = !ready
