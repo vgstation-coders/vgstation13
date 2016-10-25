@@ -144,12 +144,28 @@ var/list/holomap_cache = list()
 	bgmap.layer = HUD_BASE_LAYER
 	bgmap.color = holomap_color
 	bgmap.loc = activator.hud_used.holomap_obj
+	bgmap.overlays.len = 0
 
 	//Prevents the map background from sliding across the screen when the map is enabled for the first time.
 	if(!bgmap.pixel_x)
 		bgmap.pixel_x = -1*T.x + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32)
 	if(!bgmap.pixel_y)
 		bgmap.pixel_y = -1*T.y + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32)
+
+
+	for(var/datum/holomap_marker/holomarker in holomap_markers)
+		if(holomarker.z == T.z && holomarker.filter & holomap_filter))
+			var/image/markerImage = image(holomarker.icon,holomarker.id)
+			markerImage.plane = FLOAT_PLANE
+			markerImage.layer = FLOAT_LAYER
+			if(map.holomap_offset_x.len >= zLevel)
+				markerImage.pixel_x = holomarker.x+holomarker.pixel_x+map.holomap_offset_x[StationZLevel]
+				markerImage.pixel_y = holomarker.y+holomarker.pixel_y+map.holomap_offset_y[StationZLevel]
+			else
+				markerImage.pixel_x = holomarker.x+holomarker.pixel_x
+				markerImage.pixel_y = holomarker.y+holomarker.pixel_y
+
+			bgmap.overlays += markerImage
 
 	animate(bgmap,pixel_x = -1*T.x + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32), pixel_y = -1*T.y + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
 	holomap_images += bgmap
@@ -227,6 +243,7 @@ var/list/holomap_cache = list()
 /obj/item/clothing/accessory/holomap_chip/process()
 	update_holomap()
 
+//Allows players who got gibbed/annihilated to appear as dead on their allies' holomaps for a minute.
 /obj/item/clothing/accessory/holomap_chip/destroyed
 	invisibility = 101
 	anchored = 1
