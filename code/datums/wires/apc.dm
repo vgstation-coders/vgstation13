@@ -23,6 +23,8 @@ var/const/APC_WIRE_AI_CONTROL = 8
 
 
 /datum/wires/apc/CanUse(var/mob/living/L)
+	if(!..())
+		return 0
 	var/obj/machinery/power/apc/A = holder
 	if(A.wiresexposed)
 		return 1

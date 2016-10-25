@@ -40,6 +40,8 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 		..()
 
 /datum/wires/airlock/CanUse(var/mob/living/L)
+	if(!..())
+		return 0
 	var/obj/machinery/door/airlock/A = holder
 	if(!istype(L, /mob/living/silicon))
 		if(A.isElectrified())

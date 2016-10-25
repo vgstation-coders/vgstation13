@@ -21,6 +21,8 @@ var/const/AALARM_WIRE_AALARM = 16
 
 
 /datum/wires/alarm/CanUse(var/mob/living/L)
+	if(!..())
+		return 0
 	var/obj/machinery/alarm/A = holder
 	if(A.wiresexposed)
 		return 1

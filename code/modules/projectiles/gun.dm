@@ -19,6 +19,7 @@
 	mech_flags = MECH_SCAN_ILLEGAL
 	min_harm_label = 20
 	harm_label_examine = list("<span class='info'>A label is stuck to the trigger, but it is too small to get in the way.</span>", "<span class='warning'>A label firmly sticks the trigger to the guard!</span>")
+	ghost_read = 0
 
 	var/fire_sound = 'sound/weapons/Gunshot.ogg'
 	var/empty_sound = 'sound/weapons/empty.ogg'

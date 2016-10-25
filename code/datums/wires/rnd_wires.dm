@@ -15,6 +15,8 @@ var/const/RND_WIRE_SHOCK = 2
 var/const/RND_WIRE_HACK = 4
 
 /datum/wires/rnd/CanUse(var/mob/living/L)
+	if(!..())
+		return 0
 	var/obj/machinery/r_n_d/rnd = holder
 	if(rnd.panel_open)
 		return 1

@@ -221,12 +221,14 @@
 	AC.forceMove(src) //get back in there you
 
 /obj/item/weapon/gun/projectile/russian/force_removeMag()
+	if(usr.incapacitated())
+		return
 	if(getAmmo() > 0)
 		for(var/obj/item/ammo_casing/AC in loaded)
 			AC.forceMove(get_turf(src))
 			loaded -= AC
 			loaded += null
-	src.loc.visible_message("<span class='warning'>[src] empties onto the ground!</span>")
+	visible_message("<span class='warning'>[src] empties onto the ground!</span>")
 
 
 /obj/item/weapon/gun/projectile/russian/empty/New()

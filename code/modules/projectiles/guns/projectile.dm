@@ -89,8 +89,11 @@
 	set name = "Remove Ammo / Magazine"
 	set category = "Object"
 	set src in range(0)
+	if(usr.incapacitated())
+		to_chat(usr, "<span class='rose'>You can't do this!</span>")
+		return
 	if(stored_magazine)
-		RemoveMag()
+		RemoveMag(usr)
 	else
 		to_chat(usr, "<span class='rose'>There is no magazine to remove!</span>")
 
