@@ -86,7 +86,7 @@ var/list/blob_looks
 	src.dir = pick(cardinal)
 	time_since_last_pulse = world.time
 
-	if(blob_looks[looks] == 64)
+	/*if(blob_looks[looks] == 64)
 		if(spawning && !no_morph)
 			icon_state = initial(icon_state) + "_spawn"
 			spawn(10)
@@ -97,7 +97,7 @@ var/list/blob_looks
 			spawning = 0
 			update_icon()
 			for(var/obj/effect/blob/B in orange(src,1))
-				B.update_icon()
+				B.update_icon()*/
 
 	..(loc)
 	for(var/atom/A in loc)
@@ -109,7 +109,7 @@ var/list/blob_looks
 	dying = 1
 	blobs -= src
 
-	if(blob_looks[looks] == 64)
+	/*if(blob_looks[looks] == 64)
 		for(var/atom/movable/overlay/O in loc)
 			returnToPool(O)
 
@@ -117,7 +117,7 @@ var/list/blob_looks
 			B.update_icon()
 			if(!spawning)
 				anim(target = B.loc, a_icon = icon, flick_anim = "connect_die", sleeptime = 50, direction = get_dir(B,src), lay = layer+0.3, offX = -16, offY = -16, col = "red")
-
+	*/
 	if(!manual_remove)
 		for(var/obj/effect/blob/core/C in range(loc,4))
 			if((C != src) && C.overmind && (C.overmind.blob_warning <= world.time))
@@ -228,7 +228,7 @@ var/list/blob_looks
 	update_icon()
 	return
 
-/obj/effect/blob/update_icon(var/spawnend = 0)
+/*/obj/effect/blob/update_icon(var/spawnend = 0)
 	if(blob_looks[looks] == 64)
 		if(health < maxhealth)
 			var/hurt_percentage = round((health * 100) / maxhealth)
@@ -242,10 +242,10 @@ var/list/blob_looks
 					hurt_icon = "hurt_50"
 				else
 					hurt_icon = "hurt_25"
-			overlays += image(icon,hurt_icon)
+			overlays += image(icon,hurt_icon)*/
 
 /obj/effect/blob/proc/update_looks(var/right_now = 0)
-	switch(blob_looks[looks])
+	switch(blob_looks_admin[looks])//blob_looks_admin should have everything blob_looks_player has
 		if(64)
 			icon_state = icon_new
 			pixel_x = -WORLD_ICON_SIZE/2
@@ -282,12 +282,16 @@ var/list/blob_looks
 	if(right_now)
 		update_icon()
 
-var/list/blob_looks = list(
+var/list/blob_looks_admin = list(//Options available to admins
 	"new" = 64,
 	"classic" = 32,
 	"adminbus" = adminblob_size,
 	"clownscape" = 32,
 	"AME" = 32,
+	)
+var/list/blob_looks_player = list(//Options available to players
+	"new" = 64,
+	"classic" = 32,
 	)
 	//<---------------------------------------ALSO ADD THE NAME OF YOUR BLOB LOOKS HERE, AS WELL AS THE RESOLUTION OF THE DMIS (64 or 32)
 
@@ -363,22 +367,21 @@ var/list/blob_looks = list(
 	var/obj/effect/blob/normal/B = new(src.loc, newlook = looks)
 	B.density = 1
 
-	if(blob_looks[looks] == 64)
+	/*if(blob_looks[looks] == 64)
 		if(istype(src,/obj/effect/blob/normal))
 			var/num = rand(1,100)
 			num /= 10000
-			B.layer = layer - num
+			B.layer = layer - num*/
 
 	if(T.Enter(B,src))//Attempt to move into the tile
 		B.density = initial(B.density)
-		if(blob_looks[looks] == 64)
+		/*if(blob_looks[looks] == 64)
 			spawn(1)
 				B.forceMove(T)
 				B.aftermove()
 				if(B.spawning > 1)
-					B.spawning = 1
-		else
-			B.forceMove(T)
+					B.spawning = 1*/
+		B.forceMove(T)
 	else
 		T.blob_act()//If we cant move in hit the turf
 		B.manual_remove = 1
@@ -419,14 +422,14 @@ var/list/blob_looks = list(
 
 /obj/effect/blob/normal/Delete()
 	..()
-
+/*
 /obj/effect/blob/normal/Pulse(var/pulse = 0, var/origin_dir = 0)
 	..()
 	if(blob_looks[looks] == 64)
 		anim(target = loc, a_icon = icon, flick_anim = "pulse", sleeptime = 15, direction = dir, lay = 12, offX = -16, offY = -16, alph = 51)
-
+*/
 /obj/effect/blob/normal/update_icon(var/spawnend = 0)
-	if(blob_looks[looks] == 64)
+	/*if(blob_looks[looks] == 64)
 		spawn(1)
 			overlays.len = 0
 			underlays.len = 0
@@ -453,6 +456,6 @@ var/list/blob_looks = list(
 					update_icon()
 
 			..()
-	else
-		if(health <= 15)
-			icon_state = "blob_damaged"
+	else*/
+	if(health <= 15)
+		icon_state = "blob_damaged"

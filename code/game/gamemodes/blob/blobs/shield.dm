@@ -39,7 +39,7 @@
 
 	health += 10
 	return 1
-
+/*
 /obj/effect/blob/shield/Pulse(var/pulse = 0, var/origin_dir = 0)
 	..()
 	if(blob_looks[looks] == 64)
@@ -61,3 +61,4 @@
 					update_icon()
 
 			..()
+*/
