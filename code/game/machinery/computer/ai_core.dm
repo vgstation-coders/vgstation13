@@ -214,7 +214,7 @@ That prevents a few funky behaviors.
 							if (ticker.mode.name == "AI malfunction")
 								var/datum/game_mode/malfunction/malf = ticker.mode
 								for (var/datum/mind/malfai in malf.malf_ai)
-									if (T.mind == malfai)
+									if (T.mind == malfai && malf.malf_mode_declared)
 										to_chat(U, "<span class='danger'>ERROR:</span> Remote transfer interface disabled.")//Do ho ho ho~
 
 										return

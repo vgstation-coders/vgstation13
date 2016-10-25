@@ -1,0 +1,7 @@
+
+author: Kavlax
+
+delete-after: True
+
+changes:
+        - rscadd: "Permit carding malf AIs before code delta."
