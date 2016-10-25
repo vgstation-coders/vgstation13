@@ -119,4 +119,4 @@
 	slot_flags = SLOT_MASK
 	force = 5
 	w_class = W_CLASS_SMALL
-	action_button_name = "Use Harmonica"
+	actions_types = list(/datum/action/item_action/instrument)

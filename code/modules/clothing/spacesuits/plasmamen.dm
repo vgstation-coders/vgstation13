@@ -42,8 +42,8 @@
 	var/brightness_on = 4 //luminosity when on
 	var/on = 0
 	var/no_light=0 // Disable the light on the atmos suit
-	action_button_name = "Toggle Helmet Light"
-
+	actions_types = list(/datum/action/item_action/toggle_light)
+	
 /obj/item/clothing/head/helmet/space/plasmaman/attack_self(mob/user)
 	if(no_light)
 		return

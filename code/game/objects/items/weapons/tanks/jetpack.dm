@@ -11,19 +11,15 @@
 	var/on = 0.0
 	var/stabilization_on = 0
 	var/volume_rate = 500              //Needed for borg jetpack transfer
-	action_button_name = "Toggle Jetpack"
-
-/obj/item/weapon/tank/jetpack/verb/toggle_rockets()
-	set name = "Toggle Jetpack Stabilization"
-	set category = "Object"
+	actions_types = list(/datum/action/item_action/set_internals, /datum/action/item_action/jetpack_stabilization,/datum/action/item_action/toggle_jetpack)
+	
+/obj/item/weapon/tank/jetpack/proc/toggle_rockets()
 	src.stabilization_on = !( src.stabilization_on )
 	to_chat(usr, "You toggle the stabilization [stabilization_on? "on":"off"].")
 	return
 
 
-/obj/item/weapon/tank/jetpack/verb/toggle()
-	set name = "Toggle Jetpack"
-	set category = "Object"
+/obj/item/weapon/tank/jetpack/proc/toggle()
 	on = !on
 	if(on)
 		icon_state = "[icon_state]-on"
@@ -53,8 +49,13 @@
 	G = null
 	return
 
-/obj/item/weapon/tank/jetpack/ui_action_click()
-	toggle()
+/obj/item/weapon/tank/jetpack/ui_action_click(mob/user, actiontype)
+	if(actiontype == /datum/action/item_action/jetpack_stabilization)
+		toggle_rockets()
+	else if(actiontype == /datum/action/item_action/toggle_jetpack)
+		toggle()
+	else
+		attack_self(user)
 
 /obj/item/weapon/tank/jetpack/New()
 	. = ..()

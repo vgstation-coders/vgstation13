@@ -12,7 +12,7 @@
 	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 20)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL // Assuming big beefy fucking maglite.
-	action_button_name = "Toggle Light"
+	actions_types = list(/datum/action/item_action/toggle_light)
 	var/on = 0
 	var/brightness_on = 4 //luminosity when on
 	var/has_sound = 1 //The CLICK sound when turning on/off
@@ -154,7 +154,7 @@
 	light_power = 2.5
 	icon_state = "flare"
 	item_state = "flare"
-	action_button_name = null //just pull it manually, neckbeard.
+	actions_types = list(/datum/action/item_action/toggle_light)
 	sound_on = "sound/items/flare_on.ogg"
 	sound_off = ""
 	var/fuel = 0

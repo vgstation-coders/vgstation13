@@ -334,13 +334,10 @@ BLIND     // can't see anything
 	var/can_flip = null
 	var/is_flipped = 1
 	var/ignore_flip = 0
-	action_button_name = "Toggle Mask"
+	actions_types = list(/datum/action/item_action/toggle_mask)
 	heat_conductivity = MASK_HEAT_CONDUCTIVITY
 
-/obj/item/clothing/mask/verb/togglemask()
-	set name = "Toggle Mask"
-	set category = "Object"
-	set src in usr
+/obj/item/clothing/mask/proc/togglemask()
 	if(ignore_flip)
 		return
 	else
@@ -370,9 +367,7 @@ BLIND     // can't see anything
 /obj/item/clothing/mask/New()
 	..()
 	if(!can_flip /*&& !istype(/obj/item/clothing/mask/gas/voice)*/) //the voice changer has can_flip = 1 anyways but it's worth noting that it exists if anybody changes this in the future
-		action_button_name = null
-		verbs -= /obj/item/clothing/mask/verb/togglemask
-
+		actions_types = null
 
 /obj/item/clothing/mask/attack_self()
 	togglemask()

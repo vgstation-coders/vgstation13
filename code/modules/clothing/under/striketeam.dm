@@ -10,7 +10,7 @@ var/list/holomap_cache = list()
 	item_state = "deathsquad"
 	_color = "deathsquad"
 	flags = FPRINT  | ONESIZEFITSALL
-	action_button_name = "Toggle Holomap"
+	actions_types = list(/datum/action/item_action/toggle_minimap)
 
 /obj/item/clothing/under/deathsquad/New()
 	..()

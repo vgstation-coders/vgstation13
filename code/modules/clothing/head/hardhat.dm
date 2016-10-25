@@ -9,7 +9,7 @@
 	var/on = 0
 	_color = "yellow" //Determines used sprites: hardhat[on]_[_color] and hardhat[on]_[_color]2 (lying down sprite)
 	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)
-	action_button_name = "Toggle Helmet Light"
+	actions_types = list(/datum/action/item_action/toggle_light)
 	siemens_coefficient = 0.9
 
 /obj/item/clothing/head/hardhat/attack_self(mob/user)
