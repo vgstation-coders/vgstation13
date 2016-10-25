@@ -99,7 +99,7 @@ var/list/blob_looks
 			spawning = 0
 			update_icon()
 			for(var/obj/effect/blob/B in orange(src,1))
-				B.update_icon()
+				B.update_icon()*/
 
 	..(loc)
 	for(var/atom/A in loc)
