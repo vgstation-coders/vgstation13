@@ -363,7 +363,7 @@
 
 	var/inv_slot
 
-	switch(item_slot)
+	switch(item_slot)//human slot defines are bitflags, so mannequins require their own string-based slot defines to avoid bugs when using lists.
 		if(SLOT_MANNEQUIN_ICLOTHING)
 			inv_slot = SLOT_ICLOTHING
 		if(SLOT_MANNEQUIN_FEET)
