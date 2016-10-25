@@ -248,27 +248,41 @@
 				break
 
 /obj/machinery/conveyor/togglePanelOpen(var/obj/item/toggle_item, mob/user)
-	if(operating)
-		to_chat(user, "You can't reach \the [src]'s panel through the moving machinery.")
-		return -1
-	return ..()
+	return
 
 /obj/machinery/conveyor/crowbarDestroy(mob/user)
-	if(operating)
-		to_chat(user, "You can't reach \the [src]'s panel through the moving machinery.")
-		return -1
-	var/turf/T = loc
-	. = ..()
-	if(.)
-		getFromPool(/obj/item/stack/sheet/metal, T, 3)
+	return
 
-// attack with item, place item on conveyor
-/obj/machinery/conveyor/attackby(var/obj/item/W, mob/user)
+/obj/machinery/conveyor/attackby(obj/item/W, mob/user)
+	if(iswelder(W))
+		var/obj/item/weapon/weldingtool/WT = W
+		if(WT.remove_fuel(0,user))
+			playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
+			if(do_after(user, 30))
+				user.visible_message("<span class='warning'>Plates of metal are cut off \the [src] by [user.name] with the welding tool.</span>", \
+				"<span class='warning'>You cut the metal plates off \the [src] with the welding tool.</span>", \
+				"<span class='warning'>You hear welding.</span>")
+				new /obj/structure/conveyor_assembly(loc,dir)
+				getFromPool(/obj/item/stack/sheet/metal, loc, 3)
+				qdel(src)
 	. = ..()
 	if(.)
 		return .
 	user.drop_item(W, src.loc)
-	return 0
+
+/obj/machinery/conveyor/MouseDrop(over_object,src_location,over_location,src_control,over_control,params)
+	var/mob/user = usr
+	if(user.incapacitated() || user.lying)
+		return
+	if(!isturf(over_location) || !Adjacent(user))
+		return
+	var/obj/O = user.get_active_hand()
+	if(iscrowbar(O))
+		update_dir(get_dir(src, over_location))
+		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 25, 1)
+		to_chat(user, "You change the direction of \the [src] using \the [O].")
+		return
+	return ..()
 
 /obj/machinery/conveyor/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	//var/obj/item/device/multitool/P = get_multitool(user)
