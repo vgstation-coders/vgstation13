@@ -19,6 +19,7 @@
 	throwforce				= 5.0
 	throw_range				= 15
 	throw_speed				= 3
+	attack_delay			= 5
 	starting_materials		= list(MAT_IRON = 50, MAT_GLASS = 20)
 	w_type					= RECYK_ELECTRONIC
 	melt_temperature		= MELTPOINT_SILICON

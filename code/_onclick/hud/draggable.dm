@@ -54,7 +54,7 @@
 /obj/screen/draggable/Destroy()
 	..()
 	if(attachedobject)
-		attachedobject.end_drag_use()
+		attachedobject.end_drag_use(attachedmob)
 		attachedobject = null
 	if(attachedmob && attachedmob.client)
 		attachedmob.client.screen -= src
@@ -71,9 +71,11 @@
 	var/list/modifiers = params2list(params)
 	var/turf/origin = screen_loc2turf(modifiers["screen-loc"], get_turf(attachedmob), attachedmob)
 
-	if(origin) //Find start click location so we have initial centerdist coordinates
+	if(istype(origin)) //Find start click location so we have initial centerdist coordinates
 		centerdist_x = origin.x - attachedmob.x
 		centerdist_y = origin.y - attachedmob.y
+
+	attachedobject.drag_mousedown(attachedmob, origin)
 
 	while(attachedmob && attachedmob.client)
 		if(isnum(centerdist_x)) //prevent automatically laying down rods below us if we have no centerdist
@@ -85,15 +87,19 @@
 		sleep(world.tick_lag)
 
 /obj/screen/draggable/MouseDrag(over_object,src_location,turf/over_location,src_control,over_control,params)
-	if(over_location && attachedmob) //null when over black space
+	if(istype(over_location) && attachedmob) //null when over black space
 		centerdist_x = over_location.x - attachedmob.x //maintains distance from usr in case usr moves
 		centerdist_y = over_location.y - attachedmob.y
 	if(fuckbyond) //This isn't a single click, therefore we can remove the FUCK BYOND object
 		returnToPool(fuckbyond)
 		fuckbyond = null
 
-/obj/screen/draggable/MouseDrop()
+/obj/screen/draggable/MouseDrop(over_object,src_location,over_location,src_control,over_control,params)
+	if(attachedobject)
+		attachedobject.drag_success(attachedmob, over_location)
 	returnToPool(src) //releasing the drag ends the usage
+
+/obj/proc/drag_mousedown()
 
 /obj/proc/can_drag_use()
 
@@ -102,3 +108,5 @@
 /obj/proc/start_drag_use()
 
 /obj/proc/end_drag_use()
+
+/obj/proc/drag_success()

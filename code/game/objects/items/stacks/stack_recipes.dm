@@ -62,26 +62,21 @@
 	return 1
 
 /datum/stack_recipe/conveyor_frame/can_build_here(var/mob/usr, var/turf/T)
-	if(one_per_turf)
-		for(var/atom/movable/AM in T)
-			if(is_type_in_list(AM, list(/obj/machinery/conveyor_assembly, /obj/machinery/conveyor)))
-				to_chat(usr, "<span class='warning'>There is already a conveyor belt here!</span>")
-				return 0
 	if(on_floor && (istype(T, /turf/space)))
 		to_chat(usr, "<span class='warning'>\The [title] must be constructed on solid floor!</span>")
 		return 0
 	return 1
 
 var/global/list/datum/stack_recipe/metal_recipes = list (
-	new/datum/stack_recipe("floor tile", /obj/item/stack/tile/plasteel, 1, 4, 20),
+	new/datum/stack_recipe("floor tile", /obj/item/stack/tile/plasteel, 1, 4, 60),
 	new/datum/stack_recipe("metal rod",  /obj/item/stack/rods,          1, 2, 60),
+	new/datum/stack_recipe("conveyor belt", /obj/item/stack/conveyor_assembly, 2, 1, 20),
 	null,
 	new/datum/stack_recipe("computer frame", /obj/structure/computerframe,                      5, time = 25, one_per_turf = 1			    ),
 	new/datum/stack_recipe("wall girders",   /obj/structure/girder,                             2, time = 50, one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("machine frame",  /obj/machinery/constructable_frame/machine_frame,  5, time = 25, one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("mirror frame",   /obj/structure/mirror_frame,                       5, time = 25, one_per_turf = 1, on_floor = 1),
 	new/datum/stack_recipe("turret frame",   /obj/machinery/porta_turret_construct,             5, time = 25, one_per_turf = 1, on_floor = 1),
-	new/datum/stack_recipe/conveyor_frame("conveyor frame", /obj/machinery/conveyor_assembly,   5, time = 25, one_per_turf = 1, on_floor = 1),
 	null,
 	new/datum/stack_recipe_list("chairs and beds",list(
 		new/datum/stack_recipe/chair("dark office chair",  /obj/structure/bed/chair/office/dark,  1, one_per_turf = 1, on_floor = 1),
