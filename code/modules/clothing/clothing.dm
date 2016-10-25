@@ -12,6 +12,12 @@
 
 	var/list/obj/item/clothing/accessory/accessories = list()
 
+/obj/item/clothing/Destroy()
+	for(var/obj/item/clothing/accessory/A in accessories)
+		accessories.Remove(A)
+		qdel(A)
+	..()
+
 /obj/item/clothing/examine(mob/user)
 	..()
 	for(var/obj/item/clothing/accessory/A in accessories)
@@ -479,11 +485,6 @@ BLIND     // can't see anything
 		*/
 	var/displays_id = 1
 
-	//Holomap stuff
-	var/mob/living/carbon/human/activator = null
-	var/holomap_activated = 0
-	var/list/holomap_images = list()
-
 /obj/item/clothing/under/Destroy()
 	for(var/obj/machinery/computer/crew/C in machines)
 		if(C && src in C.tracked)
@@ -503,6 +504,11 @@ BLIND     // can't see anything
 		if(3)
 			mode = "Its vital tracker and tracking beacon appear to be enabled."
 	to_chat(user, "<span class='info'>" + mode + "</span>")
+
+
+/obj/item/clothing/under/ui_action_click()
+	for(var/obj/item/clothing/accessory/holomap_chip/HC in accessories)
+		HC.togglemap()
 
 /obj/item/clothing/under/proc/set_sensors(mob/user as mob)
 	if(user.incapacitated())
