@@ -197,6 +197,10 @@
 		dirs.Swap(1,2)
 	return dirs
 
+/obj/machinery/conveyor/examine(mob/user)
+	..()
+	to_chat(user, "<span class='info'>It looks like it can be pried into a different direction using a crowbar but cannot be moved without welding it apart.</span>")
+
 /obj/machinery/conveyor/proc/updateConfig(var/startup=0)
 	var/list/dirs = conveyor_directions(dir, in_reverse)
 	forwards = dirs[1]
