@@ -115,7 +115,6 @@
 		if(C)
 			C.check_unsmooth() //Unsmooth from nearby diagonals
 
-
 /obj/machinery/conveyor/update_dir(newdirection)
 	var/turf/T = loc
 	var/list/directions = conveyor_directions(dir, in_reverse) //Find what directions it was
@@ -258,13 +257,14 @@
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0,user))
 			playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
-			if(do_after(user, 30))
+			if(do_after(user, src, 30))
 				user.visible_message("<span class='warning'>Plates of metal are cut off \the [src] by [user.name] with the welding tool.</span>", \
 				"<span class='warning'>You cut the metal plates off \the [src] with the welding tool.</span>", \
 				"<span class='warning'>You hear welding.</span>")
 				new /obj/structure/conveyor_assembly(loc,dir)
 				getFromPool(/obj/item/stack/sheet/metal, loc, 3)
 				qdel(src)
+			return 1
 	. = ..()
 	if(.)
 		return .
