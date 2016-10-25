@@ -2,82 +2,117 @@
 //
 //
 
-/obj/machinery/conveyor_assembly
+/obj/item/stack/conveyor_assembly
+	name = "conveyor belt assembly"
+	singular_name = "conveyor belt"
+	desc = "Stick them to the ground to make your very own baggage claim."
+	icon = 'icons/obj/recycling.dmi'
+	icon_state = "conveyor_folded"
+	max_amount = 20
+	var/active
+	var/image/placeimage
+	var/placeloc
+
+/obj/item/stack/conveyor_assembly/dropped()
+	..()
+	if(active)
+		returnToPool(active)
+		active = null
+
+/obj/item/stack/conveyor_assembly/attack_self(mob/user)
+	if(!active) //Start click drag construction
+		active = getFromPool(/obj/screen/draggable, src, user)
+		to_chat(user, "Beginning conveyor construction mode, click and drag screen in direction you wish conveyor to go.")
+		return
+	else
+		returnToPool(active)
+		active = null
+
+/obj/item/stack/conveyor_assembly/drag_mousedown(mob/user, turf/origin)
+	if(istype(origin) && user.Adjacent(origin) && (!locate(/obj/structure/conveyor_assembly) in origin) && (!locate(/obj/machinery/conveyor) in origin) && !origin.density)
+		placeimage = image(icon = 'icons/obj/recycling.dmi', icon_state = "conveyor0")
+		placeimage.loc = origin
+		user.client.images += placeimage
+		placeloc = origin
+	else
+		returnToPool(active)
+		active = null
+
+/obj/item/stack/conveyor_assembly/can_drag_use(mob/user, turf/T)
+	return placeimage.dir != get_dir(placeloc, T)
+
+/obj/item/stack/conveyor_assembly/drag_use(mob/user, turf/T)
+	var/direction = get_dir(placeloc, T)
+
+	var/image/arrow = image(icon = 'icons/mob/screen1.dmi', icon_state = "arrow")
+	var/matrix/M = matrix()
+	M.Translate(0,-WORLD_ICON_SIZE*1.5)
+	M.Turn(dir2angle(direction) + 180)
+	arrow.transform = M
+
+	placeimage.dir = direction
+	placeimage.overlays = null
+	placeimage.overlays += arrow
+
+/obj/item/stack/conveyor_assembly/drag_success(mob/user, turf/T)
+	if(user.Adjacent(placeloc) && use(1))
+		new /obj/structure/conveyor_assembly(placeloc, placeimage.dir)
+	if(amount)
+		spawn()
+			active = getFromPool(/obj/screen/draggable, src, user)
+
+/obj/item/stack/conveyor_assembly/end_drag_use(mob/user)
+	if(placeimage && user && user.client)
+		user.client.images -= placeimage
+	placeimage = null
+	placeloc = null
+	active = null
+
+/obj/item/stack/conveyor_assembly/attackby(obj/item/W, mob/user)
+	if(iswelder(W))
+		var/obj/item/weapon/weldingtool/WT = W
+		if(WT.remove_fuel(0,user))
+			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal)
+			user.visible_message("<span class='warning'>[src] is shaped into metal by [user.name] with the welding tool.</span>", \
+			"<span class='warning'>You shape the [src] into metal with the welding tool.</span>", \
+			"<span class='warning'>You hear welding.</span>")
+			use(1)
+			user.put_in_hands(M)
+		return 1
+	return ..()
+
+
+/obj/structure/conveyor_assembly
 	name = "conveyor belt assembly"
 	desc = "These are the thingies that make the loop go round."
 	icon = 'icons/obj/recycling.dmi'
 	icon_state = "conveyor-assembly"
 	density = 0
 	anchored = 1
-	use_power = 0
-	var/obj/item/weapon/circuitboard/conveyor/circuit = null
 
-/obj/machinery/conveyor_assembly/New(loc, var/newdir)
+/obj/structure/conveyor_assembly/New(loc, var/newdir)
 	. = ..(loc)
 	if(newdir)
 		dir = newdir
 
-/obj/machinery/conveyor_assembly/examine(mob/user)
+/obj/structure/conveyor_assembly/examine(mob/user)
 	..()
-	if(!circuit)
-		to_chat(user, "<span class='info'>It needs a conveyor belt circuit.</span>")
-	else
-		to_chat(user, "<span class='info'>It needs to be screwed together.</span>")
+	to_chat(user, "<span class='info'>It needs some plates applied as sheeting.</span>")
 
-/obj/machinery/conveyor_assembly/attackby(obj/item/P, mob/user)
-	..()
-	if(iswrench(P))
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		if(do_after(user, src, 20))
-			to_chat(user, "<span class='notice'>You dismantle the frame.</span>")
-			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, src.loc)
-			M.amount = 5
-			if(circuit)
-				circuit.forceMove(src.loc)
-				circuit = null
+/obj/structure/conveyor_assembly/attackby(obj/item/P, mob/user)
+	if(iscrowbar(P))
+		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 75, 1)
+		if(do_after(user, src, 10))
+			to_chat(user, "<span class='notice'>You unhinge the frame.</span>")
+			getFromPool(/obj/item/stack/conveyor_assembly, src.loc)
 			qdel(src)
 			return
-	if(!circuit)
-		if(istype(P, /obj/item/weapon/circuitboard/conveyor))
-			if(!user.drop_item(P, src))
-				user << "<span class='warning'>You can't let go of \the [P]!</span>"
-				return
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-			circuit = P
-			to_chat(user, "<span class='notice'>You insert the circuit into the conveyor frame.</span>")
-	else
-		if(isscrewdriver(P))
-			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-			if(do_after(user, src, 30))
-				to_chat(user, "<span class='notice'>You put together \the [src].</span>")
-				var/obj/machinery/conveyor/CB = new(src.loc, src.dir)
-				//Transplanting the circuitboard, I'm not sure if this is the way it's meant to be done but the constructable frame code for this part is indecipherable
-				for(var/obj/O in CB.component_parts)
-					returnToPool(O)
-				CB.component_parts = list()
-				circuit.forceMove(null) //I swear this is what happens for constructable frames
-				CB.component_parts += circuit
-				circuit = null
+	else if(istype(P, /obj/item/stack/sheet/metal))
+		var/obj/item/stack/S = P
+		if(S.amount > 4)
+			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
+			if(do_after(user, src, 30) && S.amount > 4)
+				S.use(4)
+				to_chat(user, "<span class='notice'>You add the plates to \the [src].</span>")
+				new /obj/machinery/conveyor(src.loc, src.dir)
 				qdel(src)
-
-/*/obj/machinery/conveyor_assembly/proc/flush_with()
-	var/mob/builder = locate() in loc //until someone gives me a better idea on how to get the user that builds us this is what we're using
-	dir = builder.dir
-	check_for_parent_belt:
-		for(var/direction in cardinal)
-			for(var/obj/machinery/domino in get_step(src, direction))
-				var/list/dirs = list()
-				if(istype(domino, /obj/machinery/conveyor))
-					var/obj/machinery/conveyor/CB = domino
-					dirs = conveyor_directions(CB.dir, CB.in_reverse)
-				else if(istype(domino, /obj/machinery/conveyor_assembly))
-					dirs = conveyor_directions(domino.dir)
-				world << "Testing [domino] with a dir of [domino.dir]"
-				if(dirs.len)
-					world << "[domino] seems to have a forwards of [dirs[1]] and a backwards of [dirs[2]]"
-				if(dirs.len && get_step(domino, dirs[1]) == loc)
-					world << "We have a parent, [domino], whose dir is [domino.dir] and whose forwards is [dirs[1]]."
-					world << "Since our dir is [dir], we're adding [dirs[1]] to it and the final result is [dir+dirs[1]]"
-					if(dir != dirs[1])
-						dir = dir + dirs[1]
-					break check_for_parent_belt*/
