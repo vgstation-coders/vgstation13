@@ -28,6 +28,8 @@
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU
 
+	var/smoothed = 0 //States whether or not a diagonal smoothed with its straight line neighbor
+
 /obj/machinery/conveyor/centcom_auto
 	id_tag = "round_end_belt"
 
@@ -102,6 +104,31 @@
 	if(!id_tag) //Without an ID tag we'll never work, so let's try to copy it from one of our neighbors.
 		copy_radio_from_neighbors()
 
+	update_nearby_conveyors() //smooth with diagonals
+
+/obj/machinery/conveyor/Destroy()
+	var/turf/T = loc
+	var/list/directions = conveyor_directions(dir, in_reverse) //Save where we were pointing
+	..() //Remove ourselves
+	for(var/direction in directions)
+		var/obj/machinery/conveyor/C = locate() in get_step(T, direction)
+		if(C)
+			C.check_unsmooth() //Unsmooth from nearby diagonals
+
+
+/obj/machinery/conveyor/update_dir(newdirection)
+	var/turf/T = loc
+	var/list/directions = conveyor_directions(dir, in_reverse) //Find what directions it was
+
+	dir = 0 //Remove ourselves from the calculation
+	for(var/direction in directions)
+		var/obj/machinery/conveyor/C = locate() in get_step(T, direction)
+		if(C)
+			C.check_unsmooth() //Try to unsmooth from nearby diagonals
+
+	dir = newdirection
+	update_nearby_conveyors() //Try to resmooth with nearby diagonals
+
 /obj/machinery/conveyor/proc/copy_radio_from_neighbors()
 	var/obj/machinery/conveyor_switch/lever = locate() in orange(src,1)
 	if(lever && lever.id_tag)
@@ -120,6 +147,34 @@
 				updateConfig()
 			return
 
+/obj/machinery/conveyor/proc/update_nearby_conveyors()
+	if(!(dir & dir-1) || smoothed) //straight line segments or previously smoothed diagonals
+		var/list/directions = conveyor_directions(dir, in_reverse) //what directions do we point
+		for(var/i = 1 to 2) //Going through our two directions to "smooth" with any diagonals
+			var/turf/T = get_step(loc, directions[i])
+			var/obj/machinery/conveyor/C = locate() in T
+			if(C && (C.dir & C.dir-1) && !C.smoothed) //found an unsmoothed diagonal conveyor belt
+				var/list/secondarydirections = conveyor_directions(C.dir) //retrieve its dirs
+				if(directions[i] == reverse_direction(secondarydirections[i])) //check if the direction it is pointing is towards/away from us, if necessary reverse it
+					in_reverse = 1
+					C.smoothed = 1
+					C.update_nearby_conveyors() //For diagonal to smooth out the other connected diagonals
+				else if(directions[1+!(i-1)] == secondarydirections[1+!(i-1)])//1+!(i-1) ? literal wallhacks to get 1 instead of 2, and 2 instead of 1
+					C.smoothed = 1
+					C.update_nearby_conveyors() //For diagonal to smooth out the other connected diagonals
+
+/obj/machinery/conveyor/proc/check_unsmooth()
+	if(dir & dir-1)
+		var/list/directions = conveyor_directions(dir, in_reverse) //what directions do we point
+		for(var/i = 1 to 2) //Going through our two directions to "smooth" with any diagonals
+			var/turf/T = get_step(loc, directions[i])
+			var/obj/machinery/conveyor/C = locate() in T
+			if(C)
+				var/list/secondarydirections = conveyor_directions(C.dir) //retrieve its dirs
+				if(directions[i] != secondarydirections[i] || directions[1+!(i-1)] == secondarydirections[1+!(i-1)])
+					return //it's still smoothed with something
+		smoothed = 0 //We're no longer smoothing with anything
+
 /proc/conveyor_directions(var/dir, var/reverse = 0)
 	var/list/dirs = list()
 	switch(dir)
@@ -131,14 +186,14 @@
 			dirs = list(EAST, WEST)
 		if(WEST)
 			dirs = list(WEST, EAST)
-		if(SOUTHEAST)
-			dirs = list(EAST, SOUTH)
-		if(SOUTHWEST)
-			dirs = list(SOUTH, WEST)
 		if(NORTHEAST)
 			dirs = list(NORTH, EAST)
 		if(NORTHWEST)
 			dirs = list(WEST, NORTH)
+		if(SOUTHEAST)
+			dirs = list(EAST, SOUTH)
+		if(SOUTHWEST)
+			dirs = list(SOUTH, WEST)
 	if(reverse)
 		dirs.Swap(1,2)
 	return dirs
@@ -202,7 +257,10 @@
 	if(operating)
 		to_chat(user, "You can't reach \the [src]'s panel through the moving machinery.")
 		return -1
-	return ..()
+	var/turf/T = loc
+	. = ..()
+	if(.)
+		getFromPool(/obj/item/stack/sheet/metal, T, 3)
 
 // attack with item, place item on conveyor
 /obj/machinery/conveyor/attackby(var/obj/item/W, mob/user)
@@ -234,8 +292,7 @@
 		<li><b>ID Tag:</b> <a href="?src=\ref[src];set_id=1">[dis_id_tag]</a></li>
 
 		<li>To quickly copy configuration: Add a Conveyor or a Conveyor Switch into buffer, activate the Multitool in your hand to enable Cloning Mode, then use it on another Conveyor.</li>
-		<li><i>Cloning from a Conveyor Switch will only copy the Frequency and ID Tag, not direction.</i></li>
-		<li>To make counter-clockwise corners: Use the Reverse Direction button in this menu.</li>
+		<li>To make counter-clockwise corners: Use the Reverse Direction button in this menu. Diagonals will attempt to auto set direction based on connected straight line segments.</li>
 	</ul>"}
 
 
@@ -245,7 +302,7 @@
 		return .
 	if("setdir" in href_list)
 		operating=0
-		dir=text2num(href_list["setdir"])
+		update_dir(text2num(href_list["setdir"]))
 		updateConfig()
 		return MT_UPDATE
 	if("reverse" in href_list)

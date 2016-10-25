@@ -4,10 +4,11 @@
 
 /obj/item/stack/conveyor_assembly
 	name = "conveyor belt assembly"
-	desc = "These are the thingies that make the loop go round."
+	singular_name = "conveyor belt"
+	desc = "Stick them to the ground to make your very own baggage claim."
 	icon = 'icons/obj/recycling.dmi'
 	icon_state = "conveyor_folded"
-	max_amount = 30
+	max_amount = 20
 	var/active
 	var/image/placeimage
 	var/placeloc
@@ -67,12 +68,27 @@
 	placeloc = null
 	active = null
 
+/obj/item/stack/conveyor_assembly/attackby(obj/item/W, mob/user)
+	if(iswelder(W))
+		var/obj/item/weapon/weldingtool/WT = W
+		if(WT.remove_fuel(0,user))
+			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal)
+			user.visible_message("<span class='warning'>[src] is shaped into metal by [user.name] with the welding tool.</span>", \
+			"<span class='warning'>You shape the [src] into metal with the welding tool.</span>", \
+			"<span class='warning'>You hear welding.</span>")
+			use(1)
+			user.put_in_hands(M)
+		return 1
+	return ..()
+
+
 /obj/structure/conveyor_assembly
 	name = "conveyor belt assembly"
 	desc = "These are the thingies that make the loop go round."
 	icon = 'icons/obj/recycling.dmi'
 	icon_state = "conveyor-assembly"
 	density = 0
+	anchored = 1
 
 /obj/structure/conveyor_assembly/New(loc, var/newdir)
 	. = ..(loc)
