@@ -11,8 +11,6 @@
 	var/id
 	var/icon = 'icons/holomap_markers.dmi'
 
-var/list/holomap_markers = list()
-
 /proc/generateHoloMinimaps()
 	var/list/filters = list(
 		HOLOMAP_FILTER_DEATHSQUAD,
@@ -46,18 +44,19 @@ var/list/holomap_markers = list()
 	//generating area markers
 	for(var/area/A in areas)
 		if(A.holomap_marker)
-			var/datum/holomap_marker/newMarker = new()
-			newMarker.id = A.holomap_marker
-			newMarker.filter = A.holomap_filter
 			var/turf/T = A.getAreaCenter(ZLevel)
-			newMarker.x = T.x
-			newMarker.y = Y.y
-			newMarker.z = ZLevel
-			holomap_markers |= newMarker
+			if(T)
+				var/datum/holomap_marker/newMarker = new()
+				newMarker.id = A.holomap_marker
+				newMarker.filter = A.holomap_filter
+				newMarker.x = T.x
+				newMarker.y = T.y
+				newMarker.z = ZLevel
+				holomap_markers |= newMarker
 	//generating specific markers
-	if(nukedisk)
+	if(nukedisk)//Only gives the disk's original position on the map
 		var/datum/holomap_marker/newMarker = new()
-		newMarker.id = cap
+		newMarker.id = "cap"
 		newMarker.filter = HOLOMAP_FILTER_NUKEOPS
 		newMarker.x = nukedisk.x
 		newMarker.y = nukedisk.y
@@ -173,7 +172,7 @@ var/list/holomap_markers = list()
 	big_map.Blend(canvas,ICON_OVERLAY)
 
 	for(var/datum/holomap_marker/holomarker in holomap_markers)
-		if(holomarker.z == StationZLevel && holomarker.filter & HOLOMAP_EXTRA_STATIONMAP))
+		if(holomarker.z == StationZLevel && holomarker.filter & HOLOMAP_FILTER_STATIONMAP))
 			if(map.holomap_offset_x.len >= StationZLevel)
 				big_map.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8+map.holomap_offset_x[StationZLevel]	, holomarker.y-8+map.holomap_offset_y[StationZLevel])
 			else

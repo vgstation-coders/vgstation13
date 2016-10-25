@@ -154,13 +154,13 @@ var/list/holomap_cache = list()
 
 
 	for(var/datum/holomap_marker/holomarker in holomap_markers)
-		if(holomarker.z == T.z && holomarker.filter & holomap_filter))
+		if(holomarker.z == T.z && holomarker.filter & holomap_filter)
 			var/image/markerImage = image(holomarker.icon,holomarker.id)
 			markerImage.plane = FLOAT_PLANE
 			markerImage.layer = FLOAT_LAYER
-			if(map.holomap_offset_x.len >= zLevel)
-				markerImage.pixel_x = holomarker.x+holomarker.pixel_x+map.holomap_offset_x[StationZLevel]
-				markerImage.pixel_y = holomarker.y+holomarker.pixel_y+map.holomap_offset_y[StationZLevel]
+			if(map.holomap_offset_x.len >= T.z)
+				markerImage.pixel_x = holomarker.x+holomarker.pixel_x+map.holomap_offset_x[T.z]
+				markerImage.pixel_y = holomarker.y+holomarker.pixel_y+map.holomap_offset_y[T.z]
 			else
 				markerImage.pixel_x = holomarker.x+holomarker.pixel_x
 				markerImage.pixel_y = holomarker.y+holomarker.pixel_y

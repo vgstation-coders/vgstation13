@@ -1032,7 +1032,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Bar"
 	icon_state = "bar"
 	holomap_marker = "bar"
-	holomap_filter = list(HOLOMAP_EXTRA_STATIONMAP)
+	holomap_filter = list(HOLOMAP_FILTER_STATIONMAP)
 
 /area/crew_quarters/theatre
 	name = "\improper Theatre"
@@ -2087,7 +2087,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Vox Bar"
 	icon_state = "bar"
 	holomap_marker = "bar"
-	holomap_filter = list(HOLOMAP_EXTRA_STATIONMAP)
+	holomap_filter = list(HOLOMAP_FILTER_STATIONMAP)
 
 /area/vox_trading_post/medbay
 	name = "\improper Vox Medbay"

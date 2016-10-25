@@ -43,7 +43,7 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 	newMarker.pixel_x = -15
 	newMarker.pixel_y = -4
 
-	holomap_markers[syndishuttle] |= newMarker
+	holomap_markers["syndishuttle"] |= newMarker
 
 /datum/shuttle/syndicate/after_flight()
 	..()
