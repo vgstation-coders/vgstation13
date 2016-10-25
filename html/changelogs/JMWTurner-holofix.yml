@@ -1,4 +1,0 @@
-author: JMWTurner
-delete-after: true
-changes:
-  - bugfix: Fixed station holomaps not working on the station Z levels of Meta and Deff.
