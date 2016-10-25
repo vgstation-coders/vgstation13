@@ -29,7 +29,7 @@
 		active = null
 
 /obj/item/stack/conveyor_assembly/drag_mousedown(mob/user, turf/origin)
-	if(istype(origin) && user.Adjacent(origin) && (!locate(/obj/structure/conveyor_assembly) in origin) && !origin.density)
+	if(istype(origin) && user.Adjacent(origin) && (!locate(/obj/structure/conveyor_assembly) in origin) && (!locate(/obj/machinery/conveyor) in origin) && !origin.density)
 		placeimage = image(icon = 'icons/obj/recycling.dmi', icon_state = "conveyor0")
 		placeimage.loc = origin
 		user.client.images += placeimage
