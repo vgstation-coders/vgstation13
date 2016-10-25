@@ -497,63 +497,69 @@
 
 /obj/structure/mannequin/proc/get_slot_icons(var/slot)
 	var/list/slotIcon = list()
+
+	var/datum/species/default_icons = new()
+
 	switch(slot)
 		if(SLOT_MANNEQUIN_ICLOTHING)
-			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/uniform.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = default_icons.uniform_icons
 			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/monkey.dmi'
 			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.uniform_icons
 			slotIcon[MANNEQUIN_ICONS_FAT] = species.fat_uniform_icons
 			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = UNIFORM_LAYER
 		if(SLOT_MANNEQUIN_FEET)
-			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/feet.dmi'
-			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/feet.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = default_icons.shoes_icons
+			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = default_icons.shoes_icons
 			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.shoes_icons
 			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = SHOES_LAYER
 		if(SLOT_MANNEQUIN_GLOVES)
-			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/hands.dmi'
-			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/hands.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = default_icons.gloves_icons
+			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = default_icons.gloves_icons
 			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.gloves_icons
 			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = GLOVES_LAYER
 		if(SLOT_MANNEQUIN_EARS)
-			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/ears.dmi'
-			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/ears.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = default_icons.ears_icons
+			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = default_icons.ears_icons
 			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.ears_icons
 			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = EARS_LAYER
 		if(SLOT_MANNEQUIN_OCLOTHING)
-			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/suit.dmi'
-			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/suit.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = default_icons.wear_suit_icons
+			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = default_icons.wear_suit_icons
 			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.wear_suit_icons
 			slotIcon[MANNEQUIN_ICONS_FAT] = species.fat_wear_suit_icons
 			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = SUIT_LAYER
 		if(SLOT_MANNEQUIN_EYES)
-			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/eyes.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = default_icons.glasses_icons
 			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/monkey_eyes.dmi'
 			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.glasses_icons
 			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = GLASSES_LAYER
 		if(SLOT_MANNEQUIN_BELT)
-			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/belt.dmi'
-			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/belt.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = default_icons.belt_icons
+			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = default_icons.belt_icons
 			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.belt_icons
 			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = BELT_LAYER
 		if(SLOT_MANNEQUIN_MASK)
-			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/mask.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = default_icons.wear_mask_icons
 			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/monkey.dmi'
 			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.wear_mask_icons
 			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = FACEMASK_LAYER
 		if(SLOT_MANNEQUIN_HEAD)
-			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/head.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = default_icons.head_icons
 			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/monkey_head.dmi'
 			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.head_icons
 			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = HEAD_LAYER
 		if(SLOT_MANNEQUIN_BACK)
-			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/back.dmi'
-			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/back.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = default_icons.back_icons
+			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = default_icons.back_icons
 			slotIcon[MANNEQUIN_ICONS_SPECIES] = species.back_icons
 			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = BACK_LAYER
 		if(SLOT_MANNEQUIN_ID)
-			slotIcon[MANNEQUIN_ICONS_SLOT] = 'icons/mob/ids.dmi'
-			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = 'icons/mob/ids.dmi'
+			slotIcon[MANNEQUIN_ICONS_SLOT] = default_icons.id_icons
+			slotIcon[MANNEQUIN_ICONS_PRIMITIVE] = default_icons.id_icons
 			slotIcon[MANNEQUIN_DYNAMIC_LAYER] = ID_LAYER
+
+	qdel(default_icons)
+
 	return slotIcon
 
 /obj/structure/mannequin/proc/get_bloodsies_state(var/slot, var/obj/item/clothToWear)

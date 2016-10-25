@@ -109,6 +109,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/fat_wear_suit_icons = 'icons/mob/suit_fat.dmi'
 	var/wear_mask_icons     = 'icons/mob/mask.dmi'
 	var/back_icons          = 'icons/mob/back.dmi'
+	var/id_icons            = 'icons/mob/ids.dmi'
 
 
 	//Used in icon caching.
