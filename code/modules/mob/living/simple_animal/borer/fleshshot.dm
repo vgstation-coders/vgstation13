@@ -25,6 +25,10 @@
 	if(!parent_borer)
 		qdel(src)
 
+/obj/item/weapon/gun/hookshot/flesh/dropped()
+	..()
+	qdel(src)
+
 /obj/item/weapon/gun/hookshot/flesh/Destroy()//if a single link of the chain is destroyed, the rest of the chain is instantly destroyed as well.
 	if(parent_borer)
 		if(parent_borer.extend_o_arm == src)

@@ -662,6 +662,7 @@
 				C.mind.transfer_to(new_mob)
 			else
 				new_mob.key = C.key
+			C.transferBorers(new_mob)
 			qdel(C)
 
 /datum/reagent/stoxin
