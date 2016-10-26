@@ -19,7 +19,7 @@
 	..()
 	if(icon_size == 64)
 		flick("morph_factory",src)
-		spore_delay = world.time + (2 SECONDS)*/
+		spore_delay = world.time + (2 SECONDS)
 
 /obj/effect/blob/factory/run_action()
 	if(spores.len >= max_spores)
@@ -33,8 +33,8 @@
 		anim(target = loc, a_icon = icon, flick_anim = "sporepulse", sleeptime = 15, lay = 7.2, offX = -16, offY = -16, alph = 220)
 		spawn(10)
 			new/mob/living/simple_animal/hostile/blobspore(src.loc, src)
-	else*/
-	new/mob/living/simple_animal/hostile/blobspore(src.loc, src)
+	else
+		new/mob/living/simple_animal/hostile/blobspore(src.loc, src)
 
 	stat_collection.blobblob.spores_spawned++
 
@@ -49,7 +49,7 @@
 		overmind.special_blobs -= src
 		overmind.update_specialblobs()
 	..()
-/*
+
 /obj/effect/blob/factory/update_icon(var/spawnend = 0)
 	if(icon_size == 64)
 		spawn(1)
@@ -65,7 +65,7 @@
 				spawn(10)
 					update_icon()
 
-			..()*/
+			..()
 
 /////////////BLOB SPORE///////////////////////////////////////////////////////////////////////////////////////////////
 
