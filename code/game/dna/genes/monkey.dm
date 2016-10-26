@@ -16,11 +16,13 @@
 	var/mob/living/carbon/human/H = M
 	var/mob/living/carbon/monkey/O = H.monkeyize()
 	H = null
-	if (O && connected) // properly put new monkey inside machine
+	if (connected) // properly put new monkey inside machine
 		var/obj/machinery/dna_scannernew/C = connected
-		O.forceMove(C)
-		C.occupant = O
-		connected = null
+		if(O)
+			O.forceMove(C)
+			C.occupant = O
+			return
+		C.occupant = null
 
 //Monkey to human
 /datum/dna/gene/monkey/deactivate(var/mob/living/M, var/connected, var/flags)
