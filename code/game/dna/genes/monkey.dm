@@ -16,7 +16,7 @@
 	var/mob/living/carbon/human/H = M
 	var/mob/living/carbon/monkey/O = H.monkeyize()
 	H = null
-	if (connected) //inside dna thing
+	if (O && connected) // properly put new monkey inside machine
 		var/obj/machinery/dna_scannernew/C = connected
 		O.forceMove(C)
 		C.occupant = O
