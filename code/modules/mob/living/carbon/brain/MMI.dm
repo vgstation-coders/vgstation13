@@ -167,7 +167,6 @@ obj/item/device/mmi/Destroy()
 	if(brainmob)
 		O.attack(brainmob, user)//Oh noooeeeee
 		return
-	..()
 
 	//TODO: ORGAN REMOVAL UPDATE. Make the brain remain in the MMI so it doesn't lose organ data.
 /obj/item/device/mmi/attack_self(mob/user as mob)
