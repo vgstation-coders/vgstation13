@@ -628,15 +628,13 @@
 	if(!target)
 		target = get_turf(src)
 
-//	var/mob/living/simple_animal/borer/B = has_brain_worms()
 	var/list/borer_list = get_brain_worms()
-	for(var/mob/living/simple_animal/borer/B in borer_list)
-		for(var/mob/M in src)//mobs, all of them
-			if(M == B)
-				continue
-			if(M in src.stomach_contents)
-				src.stomach_contents.Remove(M)
-			M.forceMove(target)
+	for(var/mob/M in src)//mobs, all of them
+		if(M in borer_list)
+			continue
+		if(M in src.stomach_contents)
+			src.stomach_contents.Remove(M)
+		M.forceMove(target)
 
 	for(var/obj/O in src)//objects, only the ones in the stomach
 		if(O in src.stomach_contents)
