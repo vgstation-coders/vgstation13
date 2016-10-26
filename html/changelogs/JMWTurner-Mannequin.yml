@@ -1,6 +1,0 @@
-author: JMWTurner
-delete-after: true
-changes:
-  - rscadd: Added mannequins. Can be chiseled out of wooden blocks (crafted from wooden planks), out of marble blocks (imported from cargo), or built with parts from the exosuit fabricator. This last one features a locked cover similar to the one display cases have.
-  - rscadd: Wooden and Marble mannequins can currently be sculpted in the form of a human, a fat human, a monkey, or a vox.
-  - rscadd: You can place clothes on mannequins the same way you'd place clothes on a mob. If mannequins are broken, they drop their clothes.
