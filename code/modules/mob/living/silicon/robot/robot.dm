@@ -866,14 +866,16 @@
 				if(!remove)
 					return
 				var/datum/robot_component/C = components[remove]
-				if(istype(C.wrapped, /obj/item/broken_device)
+				if(istype(C.wrapped, /obj/item/broken_device))
 					var/obj/item/broken_device/I = C.wrapped
+					to_chat(user, "You remove \the [I].")
+					I.forceMove(src.loc)
 				else
 					var/obj/item/robot_parts/robot_component/I = C.wrapped
 					I.brute_damage = C.brute_damage
 					I.electronics_damage = C.electronics_damage
-				to_chat(user, "You remove \the [I].")
-				I.forceMove(src.loc)
+					to_chat(user, "You remove \the [I].")
+					I.forceMove(src.loc)
 
 				if(C.installed == 1)
 					C.uninstall()
