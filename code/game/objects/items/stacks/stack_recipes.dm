@@ -209,6 +209,7 @@ var/global/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("coat rack",			/obj/structure/coatrack,				2,		time = 20,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe("wooden door",		/obj/machinery/door/mineral/wood,		10,		time = 20,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe("coffin",			/obj/structure/closet/coffin,			5,		time = 15,	one_per_turf = 1,	on_floor = 1),
+	new/datum/stack_recipe("wooden block",		/obj/structure/block/wood,				10,		time = 50,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe("apiary",			/obj/item/apiary,						10,		time = 25,	one_per_turf = 0,	on_floor = 0),
 	new/datum/stack_recipe("bowl",				/obj/item/trash/bowl,					1													),
 	new/datum/stack_recipe("notice board",		/obj/structure/noticeboard,				2,		time = 15,	one_per_turf = 1,	on_floor = 1),

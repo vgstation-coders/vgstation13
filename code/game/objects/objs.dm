@@ -308,7 +308,7 @@ a {
 		machine._using += src
 		machine.in_use = 1
 
-/obj/proc/wrenchAnchor(var/mob/user) //proc to wrench an object that can be secured
+/obj/proc/wrenchAnchor(var/mob/user, var/time_to_wrench=30) //proc to wrench an object that can be secured
 	for(var/obj/other in loc) //ensure multiple things aren't anchored in one place
 		if(other.anchored == 1 && other.density == 1 && density && !anchored && !(other.flags & ON_BORDER))
 			to_chat(user, "\The [other] is already anchored in this location.")
@@ -324,7 +324,7 @@ a {
 	user.visible_message(	"[user] begins to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.",
 							"You begin to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.")
 	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
-	if(do_after(user, src, 30))
+	if(do_after(user, src, time_to_wrench))
 		anchored = !anchored
 		user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
 								"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
