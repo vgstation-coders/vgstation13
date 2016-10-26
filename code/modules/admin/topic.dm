@@ -421,6 +421,11 @@
 				new_mob = M.change_mob_type( /mob/living/simple_animal/construct/wraith , null, null, delmob )
 			if("shade")
 				new_mob = M.change_mob_type( /mob/living/simple_animal/shade , null, null, delmob )
+			if("blob")
+				var/obj/effect/blob/core/core = new(loc = get_turf(M), new_overmind = M.client)
+				new_mob = core.overmind
+				if(delmob)
+					qdel(M)
 			if("ai")
 				new_mob = M.AIize(spawn_here = 1, del_mob = delmob)
 //		to_chat(world, "Made a [new_mob] [usr ? "usr still exists" : "usr does not exist"]")
