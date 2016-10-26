@@ -24,11 +24,11 @@
 	blob_cores += src
 	processing_objects.Add(src)
 	creator = C
-	/*if((blob_looks[looks] == 64) && !no_morph)
+	if((icon_size == 64) && !no_morph)
 		if(new_overmind)
 			flick("core_spawn",src)
 		else
-			flick("morph_core",src)*/
+			flick("morph_core",src)
 	playsound(src, get_sfx("gib"),50,1)
 	if(!overmind)
 		create_overmind(new_overmind)
@@ -91,11 +91,11 @@
 
 	if(!spawning)//no expanding on the first Life() tick
 
-		/*if(blob_looks[looks] == 64)
-			anim(target = loc, a_icon = icon, flick_anim = "corepulse", sleeptime = 15, lay = 12, offX = -16, offY = -16, alph = 200)
+		if(icon_size == 64)
+		//	anim(target = loc, a_icon = icon, flick_anim = "corepulse", sleeptime = 15, lay = 12, offX = -16, offY = -16, alph = 200)
 			for(var/mob/M in viewers(src))
 				M.playsound_local(loc, adminblob_beat, 50, 0, null, FALLOFF_SOUNDS, 0)
-		*/
+
 		var/turf/T = get_turf(overmind) //The overmind's mind can expand the blob
 		var/obj/effect/blob/O = locate() in T //As long as it is 'thinking' about a blob already
 		for(var/i = 1; i < 8; i += i)
@@ -187,9 +187,9 @@
 			mode.infected_crew += B.mind
 		return 1
 	return 0
-/*
+
 /obj/effect/blob/core/update_icon(var/spawnend = 0)
-	if(blob_looks[looks] == 64)
+	if(icon_size == 64)
 		spawn(1)
 			overlays.len = 0
 			underlays.len = 0
@@ -203,4 +203,4 @@
 				spawn(10)
 					update_icon()
 
-			..()*/
+			..()

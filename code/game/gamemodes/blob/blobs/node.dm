@@ -17,8 +17,8 @@
 	processing_objects.Add(src)
 	..(loc, newlook)
 
-	/*if((blob_looks[looks] == 64) && !no_morph)
-		flick("morph_node",src)*/
+	if((icon_size == 64) && !no_morph)
+		flick("morph_node",src)
 
 /obj/effect/blob/node/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	return
@@ -37,11 +37,11 @@
 	if(timestopped)
 		return 0 //under effects of time magick
 
-	/*if(blob_looks[looks] == 64)
-		anim(target = loc, a_icon = icon, flick_anim = "nodepulse", sleeptime = 15, lay = 12, offX = -16, offY = -16, alph = 150)
+	if(icon_size == 64)
+	//	anim(target = loc, a_icon = icon, flick_anim = "nodepulse", sleeptime = 15, lay = 12, offX = -16, offY = -16, alph = 150)
 		for(var/mob/M in viewers(src))
 			M.playsound_local(loc, adminblob_beat, 50, 0, null, FALLOFF_SOUNDS, 0)
-	*/
+
 	for(var/i = 1; i < 8; i += i)
 		Pulse(5, i)
 
@@ -59,9 +59,9 @@
 
 /obj/effect/blob/node/run_action()
 	return 0
-/*
+
 /obj/effect/blob/node/update_icon(var/spawnend = 0)
-	if(blob_looks[looks] == 64)
+	if(icon_size == 64)
 		spawn(1)
 			overlays.len = 0
 			underlays.len = 0
@@ -76,5 +76,5 @@
 					update_icon()
 
 
-			..()*/
+			..()
 

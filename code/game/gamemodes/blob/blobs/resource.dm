@@ -16,8 +16,8 @@
 	..()
 	blob_resources += src
 
-	/*if(blob_looks[looks] == 64)
-		flick("morph_resource",src)*/
+	if(icon_size == 64)
+		flick("morph_resource",src)
 
 /obj/effect/blob/resource/Destroy()
 	blob_resources -= src
@@ -67,7 +67,7 @@
 		else
 			color = "#888888"
 
-	/*if(blob_looks[looks] == 64)
+	if(icon_size == 64)
 		spawn(1)
 			overlays.len = 0
 			underlays.len = 0
@@ -81,4 +81,3 @@
 					update_icon()
 
 			..()
-*/
