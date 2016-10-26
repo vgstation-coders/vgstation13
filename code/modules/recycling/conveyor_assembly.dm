@@ -58,9 +58,10 @@
 	var/direction = get_dir(placeloc, T)
 	if(!direction && placeimage.dir)
 		direction = placeimage.dir
+	var/placelocation = placeloc
 
 	if(user.Adjacent(placeloc) && direction && use(1))
-		new /obj/structure/conveyor_assembly(placeloc, direction)
+		new /obj/structure/conveyor_assembly(placelocation, direction)
 	if(amount && !disposed)
 		spawn()
 			active = getFromPool(/obj/screen/draggable, src, user)
