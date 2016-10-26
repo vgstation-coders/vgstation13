@@ -33,18 +33,6 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 
 	set_transit_dock(/obj/docking_port/destination/syndicate/transit)
 
-	var/datum/holomap_marker/newMarker = new()
-	newMarker.id = "syndishuttle"
-	newMarker.icon = 'icons/holomap_markers_32x32.dmi'
-	newMarker.filter = HOLOMAP_FILTER_NUKEOPS
-	newMarker.x = current_port.x
-	newMarker.y = current_port.y
-	newMarker.z = current_port.z
-	newMarker.pixel_x = -15
-	newMarker.pixel_y = -4
-
-	holomap_markers["syndishuttle"] = newMarker
-
 /datum/shuttle/syndicate/after_flight()
 	..()
 	if("syndishuttle" in holomap_markers)
@@ -52,6 +40,7 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 		updateMarker.x = current_port.x
 		updateMarker.y = current_port.y
 		updateMarker.z = current_port.z
+		updateMarker.pixel_y = -5
 
 /obj/machinery/computer/shuttle_control/syndicate
 	icon_state = "syndishuttle"
@@ -62,6 +51,18 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 /obj/machinery/computer/shuttle_control/syndicate/New() //Main shuttle_control code is in code/game/machinery/computer/shuttle_computer.dm
 	link_to(syndicate_shuttle)
 	.=..()
+
+	var/datum/holomap_marker/newMarker = new()
+	newMarker.id = "syndishuttle"
+	newMarker.icon = 'icons/holomap_markers_32x32.dmi'
+	newMarker.filter = HOLOMAP_FILTER_NUKEOPS
+	newMarker.x = x
+	newMarker.y = y
+	newMarker.z = z
+	newMarker.pixel_x = -16
+	newMarker.pixel_y = -25
+
+	holomap_markers["syndishuttle"] = newMarker
 
 //code/game/objects/structures/docking_port.dm
 

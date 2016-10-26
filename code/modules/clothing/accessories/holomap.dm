@@ -132,7 +132,7 @@ var/list/holomap_cache = list()
 		holomap_bgmap = "background_\ref[src]_[map.zCentcomm]"
 
 		if(!(holomap_bgmap in holomap_cache))
-			holomap_cache[holomap_bgmap] = image(centcommMiniMaps[holomap_filter])
+			holomap_cache[holomap_bgmap] = image(centcommMiniMaps["[holomap_filter]"])
 	else
 		holomap_bgmap = "background_\ref[src]_[T.z]"
 
@@ -153,7 +153,8 @@ var/list/holomap_cache = list()
 		bgmap.pixel_y = -1*T.y + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32)
 
 
-	for(var/datum/holomap_marker/holomarker in holomap_markers)
+	for(var/marker in holomap_markers)
+		var/datum/holomap_marker/holomarker = holomap_markers[marker]
 		if(holomarker.z == T.z && holomarker.filter & holomap_filter)
 			var/image/markerImage = image(holomarker.icon,holomarker.id)
 			markerImage.plane = FLOAT_PLANE
@@ -164,7 +165,7 @@ var/list/holomap_cache = list()
 			else
 				markerImage.pixel_x = holomarker.x+holomarker.pixel_x
 				markerImage.pixel_y = holomarker.y+holomarker.pixel_y
-
+			markerImage.appearance_flags = RESET_COLOR
 			bgmap.overlays += markerImage
 
 	animate(bgmap,pixel_x = -1*T.x + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32), pixel_y = -1*T.y + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)

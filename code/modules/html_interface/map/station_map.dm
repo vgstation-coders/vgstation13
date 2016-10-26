@@ -21,7 +21,6 @@
 		)
 
 	for (var/f in filters)
-		centcommMiniMaps |= f
 		generateCentcommMinimap(f)
 
 	for (var/z = 1 to world.maxz)
@@ -52,7 +51,7 @@
 				newMarker.x = T.x
 				newMarker.y = T.y
 				newMarker.z = ZLevel
-				holomap_markers |= newMarker
+				holomap_markers[newMarker.id] |= newMarker
 	//generating specific markers
 	if(nukedisk)//Only gives the disk's original position on the map
 		var/datum/holomap_marker/newMarker = new()
@@ -61,7 +60,7 @@
 		newMarker.x = nukedisk.x
 		newMarker.y = nukedisk.y
 		newMarker.z = nukedisk.z
-		holomap_markers |= newMarker
+		holomap_markers["cap"] = newMarker
 
 
 /proc/generateHoloMinimap(var/zLevel=1)
@@ -139,7 +138,7 @@
 					else
 						canvas.DrawBox(HOLOMAP_PATH, i, r)
 
-	centcommMiniMaps[filter] = canvas
+	centcommMiniMaps["[filter]"] = canvas
 
 /proc/generateStationMinimap(var/StationZLevel)
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
@@ -171,7 +170,8 @@
 	big_map.Blend(map_base,ICON_OVERLAY)
 	big_map.Blend(canvas,ICON_OVERLAY)
 
-	for(var/datum/holomap_marker/holomarker in holomap_markers)
+	for(var/marker in holomap_markers)
+		var/datum/holomap_marker/holomarker = holomap_markers[marker]
 		if(holomarker.z == StationZLevel && holomarker.filter & HOLOMAP_FILTER_STATIONMAP))
 			if(map.holomap_offset_x.len >= StationZLevel)
 				big_map.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8+map.holomap_offset_x[StationZLevel]	, holomarker.y-8+map.holomap_offset_y[StationZLevel])
