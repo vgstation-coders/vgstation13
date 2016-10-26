@@ -297,7 +297,7 @@ var/list/potential_theft_objectives=list(
 	if(issilicon(owner.current))
 		return 0
 	var/area/shuttle = locate(/area/shuttle/escape/centcom)
-	var/list/protected_mobs = list(/mob/living/silicon/ai, /mob/living/silicon/pai)
+	var/list/protected_mobs = list(/mob/living/silicon/ai, /mob/living/silicon/pai, /mob/living/simple_animal/borer)
 	// Implemented in response to 21/12/2013 player vote,  .
 	// Comment this if you want Borgs and MoMMIs counted.
 	// TODO: Check if borgs are subverted. Best I can think of is a fuzzy check for strings used in syndie laws. BYOND can't do regex, sadly. - N3X
@@ -324,7 +324,7 @@ var/list/potential_theft_objectives=list(
 	if(!owner.current)
 		return 0
 	var/area/shuttle = locate(/area/shuttle/escape/centcom)
-	var/protected_mobs[] = list(/mob/living/silicon/ai, /mob/living/silicon/pai, /mob/living/silicon/robot, /mob/living/silicon/robot/mommi)
+	var/protected_mobs[] = list(/mob/living/silicon/ai, /mob/living/silicon/pai, /mob/living/silicon/robot, /mob/living/silicon/robot/mommi, /mob/living/simple_animal/borer)
 	for(var/mob/living/player in player_list)
 		if(player.type in protected_mobs)
 			continue
