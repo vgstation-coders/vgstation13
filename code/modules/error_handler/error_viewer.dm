@@ -117,7 +117,12 @@
 	if (error_source.next_message_at <= world.time)
 		var/const/viewtext = "\[view]" // Nesting these in other brackets went poorly
 		log_debug("Runtime in <b>[e.file]</b>, line <b>[e.line]</b>: <b>[html_encode(e.name)]</b> [error_entry.make_link(viewtext)]")
-		error_source.next_message_at = world.time + config.error_msg_delay
+		var/err_msg_delay
+		if(config)
+			err_msg_delay = config.error_msg_delay
+		else
+			err_msg_delay = initial(config.error_msg_delay)
+		error_source.next_message_at = world.time + err_msg_delay
 
 /datum/error_viewer/error_source
 	var/list/errors = list()

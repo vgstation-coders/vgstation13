@@ -47,7 +47,7 @@
 		admin_diary << html_decode(text_to_log)
 
 /proc/log_debug(text)
-	if (config.log_debug)
+	if (!config || (config && config.log_debug)) // Sorry, if config isn't loaded we'll assume you want debug output.
 		diary << html_decode("\[[time_stamp()]]DEBUG: [text]")
 
 	for(var/client/C in admins)
