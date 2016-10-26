@@ -301,7 +301,7 @@
 			being_built = L //Building the lockbox now, with the thing in it
 		var/turf/output = get_output()
 		being_built.forceMove(get_turf(output))
-		src.visible_message("[bicon(src)] \The [src] beeps: \"Succesfully completed \the [being_built.name].\"")
+		src.visible_message("[bicon(src)] \The [src] beeps: \"Successfully completed \the [being_built.name].\"")
 		src.being_built = null
 	src.updateUsrDialog()
 	src.busy = 0
@@ -446,7 +446,7 @@
 		if(i || tech_output)
 			new_data=1
 	if(new_data)
-		src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Succesfully synchronized with R&D server. New data processed.\"")
+		src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Successfully synchronized with R&D server. New data processed.\"")
 	if(!silent && !found)
 		temp = "Unable to connect to local R&D Database.<br>Please check your connections and try again.<br><a href='?src=\ref[src];clear_temp=1'>Return</a>"
 	src.updateUsrDialog()

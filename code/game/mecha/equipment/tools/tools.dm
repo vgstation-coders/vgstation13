@@ -84,7 +84,7 @@
 						if(!W.ore_box && istype(O, /obj/structure/ore_box))
 							W.ore_box = O
 						O.anchored = 0 //Why?
-						occupant_message("<font color='blue'>[target] succesfully loaded.</font>")
+						occupant_message("<font color='blue'>[target] successfully loaded.</font>")
 						log_message("Loaded [O]. Cargo compartment capacity: [W.cargo_capacity - W.cargo.len]")
 					else
 						occupant_message("<font color='red'>You must hold still while handling objects.</font>")
@@ -1283,7 +1283,7 @@
 						cargo_holder.cargo += O
 						O.forceMove(chassis)
 						O.anchored = 0
-						chassis.occupant_message("<font color='blue'>[target] succesfully loaded.</font>")
+						chassis.occupant_message("<font color='blue'>[target] successfully loaded.</font>")
 						chassis.log_message("Loaded [O]. Cargo compartment capacity: [cargo_holder.cargo_capacity - cargo_holder.cargo.len]")
 					else
 						chassis.occupant_message("<font color='red'>You must hold still while handling objects.</font>")
