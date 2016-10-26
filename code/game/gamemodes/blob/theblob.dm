@@ -148,9 +148,7 @@ var/list/blob_looks
 
 /obj/effect/blob/beam_disconnect(var/obj/effect/beam/B)
 	..()
-	apply_beam_damage(B)
 	last_beamchecks.Remove("\ref[B]") // RIP
-	update_health()
 	update_icon()
 	if(beams.len == 0)
 		if(!custom_process && src in processing_objects)
@@ -174,10 +172,10 @@ var/list/blob_looks
 		apply_beam_damage(B)
 	update_health()
 	update_icon()
-	
+
 /obj/effect/blob/can_mech_drill()
 	return TRUE
-	
+
 /obj/effect/blob/process()
 	handle_beams()
 	Life()
