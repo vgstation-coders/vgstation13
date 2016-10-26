@@ -55,9 +55,14 @@
 	placeimage.overlays += arrow
 
 /obj/item/stack/conveyor_assembly/drag_success(mob/user, turf/T)
-	if(user.Adjacent(placeloc) && use(1))
-		new /obj/structure/conveyor_assembly(placeloc, placeimage.dir)
-	if(amount)
+	var/direction = get_dir(placeloc, T)
+	if(!direction && placeimage.dir)
+		direction = placeimage.dir
+	var/placelocation = placeloc
+
+	if(user.Adjacent(placeloc) && direction && use(1))
+		new /obj/structure/conveyor_assembly(placelocation, direction)
+	if(amount && !disposed)
 		spawn()
 			active = getFromPool(/obj/screen/draggable, src, user)
 
