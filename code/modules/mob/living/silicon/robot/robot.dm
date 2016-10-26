@@ -791,8 +791,11 @@
 		for(var/V in components)
 			var/datum/robot_component/C = components[V]
 			if(!C.installed && istype(W, C.external_type))
+				var/obj/item/robot_parts/robot_component/I = W
 				C.installed = 1
 				C.wrapped = W
+				C.electronics_damage = I.electronics_damage
+				C.brute_damage = I.brute_damage
 				C.install()
 				user.drop_item(W)
 				W.forceMove(null)
@@ -863,9 +866,16 @@
 				if(!remove)
 					return
 				var/datum/robot_component/C = components[remove]
-				var/obj/item/I = C.wrapped
-				to_chat(user, "You remove \the [I].")
-				I.forceMove(src.loc)
+				if(istype(C.wrapped, /obj/item/broken_device))
+					var/obj/item/broken_device/I = C.wrapped
+					to_chat(user, "You remove \the [I].")
+					I.forceMove(src.loc)
+				else
+					var/obj/item/robot_parts/robot_component/I = C.wrapped
+					I.brute_damage = C.brute_damage
+					I.electronics_damage = C.electronics_damage
+					to_chat(user, "You remove \the [I].")
+					I.forceMove(src.loc)
 
 				if(C.installed == 1)
 					C.uninstall()
