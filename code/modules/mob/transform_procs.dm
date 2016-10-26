@@ -1,52 +1,65 @@
-/mob/living/carbon/human/proc/monkeyize()
-	if (monkeyizing)
-		return
+#define MONKEY_ANIM_TIME 22
+
+// A standardized proc for turning a mob into a monkey
+// ignore_primitive will force the mob to specifically become a monkey and not its primitive type
+// returns the monkey mob
+/mob/living/carbon/human/proc/monkeyize(var/ignore_primitive = 0)
+	if(monkeyizing)
+		return 0
+	monkeyizing = 1
+	if(isturf(loc)) // no need to do animations if we're inside something
+		canmove = 0
+		icon = null
+		overlays.len = 0
+		invisibility = 101
+		delayNextAttack(50)
+		var/atom/movable/overlay/animation = new(loc)
+		animation.icon_state = "blank"
+		animation.icon = 'icons/mob/mob.dmi'
+		animation.master = src
+		flick("h2monkey", animation)
+		sleep(MONKEY_ANIM_TIME)
+		animation.master = null
+		qdel(animation)
 
 	for(var/obj/item/W in src)
-		if (W==w_uniform) // will be torn
-			continue
-		drop_from_inventory(W)
-	regenerate_icons()
-	monkeyizing = 1
-	canmove = 0
-	delayNextAttack(50)
-	icon = null
-	invisibility = 101
+		u_equip(W, 1)
+	for(var/obj/O in src)
+		qdel(O)
 
-	for(var/t in organs)
-		qdel(t)
-	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "h2monkey", sleeptime = 15)
-	sleep(33)
-
-	if(!species.primitive) //If the creature in question has no primitive set, this is going to be messy.
-		gib()
-		return
-
-	var/mob/living/carbon/monkey/O = null
-
-	O = new species.primitive(get_turf(src))
-
-	transferBorers(O)
-
-	O.dna = dna.Clone()
-	O.dna.SetSEState(MONKEYBLOCK,1)
-	O.dna.SetSEValueRange(MONKEYBLOCK,0xDAC, 0xFFF)
-	O.forceMove(loc)
-	O.viruses = viruses
-	viruses = list()
-	for(var/datum/disease/D in O.viruses)
-		D.affected_mob = O
-
-	if (client)
-		client.mob = O
+	var/mob/living/Mo
+	if(ignore_primitive)
+		Mo = new /mob/living/carbon/monkey(loc)
+	else
+		if(!species.primitive)
+			dropBorers()
+			gib()
+			return 0
+		Mo = new species.primitive(loc)
+	Mo.dna = dna.Clone()
+	if(!Mo.dna.GetSEState(MONKEYBLOCK)) // make sure our copied dna has the right monkey blocks
+		Mo.dna.SetSEState(MONKEYBLOCK,1)
+		Mo.dna.SetSEValueRange(MONKEYBLOCK, 0xDAC, 0xFFF)
+	transferImplantsTo(Mo)
+	transferBorers(Mo)
+	Mo.suiciding = suiciding
+	Mo.take_overall_damage(getBruteLoss(), getFireLoss())
+	Mo.setToxLoss(getToxLoss())
+	Mo.setOxyLoss(getOxyLoss())
+	Mo.stat = stat
+	Mo.delayNextAttack(0)
+	Mo.a_intent = a_intent
 	if(mind)
-		mind.transfer_to(O)
+		mind.transfer_to(Mo)
 
-	to_chat(O, "<B>You are now [O]. </B>")
+	for(var/datum/disease/D in viruses)
+		Mo.viruses += D
+		D.affected_mob = Mo
+		viruses -= D
 
+	monkeyizing = 0
 	qdel(src)
-
-	return O
+	return Mo
 
 /mob/living/carbon/human/proc/Cluwneize()
 	if (monkeyizing)
@@ -471,5 +484,4 @@
 	//Not in here? Must be untested!
 	return 0
 
-
-
+#undef MONKEY_ANIM_TIME
