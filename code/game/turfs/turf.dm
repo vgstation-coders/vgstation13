@@ -136,8 +136,8 @@
 			if(objects > loopsanity)
 				break
 			objects++
-			spawn( 0 )
-				if ((A && Obj) && Obj.flags & PROXMOVE)
+			if(Obj.flags & PROXMOVE)
+				spawn( 0 )
 					Obj.HasProximity(A, 1)
 	// THIS IS NOW TRANSIT STUFF
 	if ((!(A) || src != A.loc))
