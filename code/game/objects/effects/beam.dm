@@ -151,7 +151,8 @@
 		beam_testing("\ref[BM] - Disconnecting [BM.target]: target changed.")
 		BM.disconnect(0)
 	BM.target=AM
-	BM.targetMoveKey    = AM.on_moved.Add(BM,    "target_moved")
+	if(istype(AM))
+		BM.targetMoveKey    = AM.on_moved.Add(BM,    "target_moved")
 	BM.targetDestroyKey = AM.on_destroyed.Add(BM,"target_destroyed")
 	BM.targetContactLoc = AM.loc
 	beam_testing("\ref[BM] - Connected to [AM]")
@@ -179,7 +180,8 @@
 /obj/effect/beam/proc/disconnect(var/re_emit=1)
 	var/obj/effect/beam/_master=get_master()
 	if(_master.target)
-		_master.target.on_moved.Remove(_master.targetMoveKey)
+		if(isatommovable(_master.target) && _master.target.on_moved)
+			_master.target.on_moved.Remove(_master.targetMoveKey)
 		_master.target.on_destroyed.Remove(_master.targetDestroyKey)
 		_master.target.beam_disconnect(_master)
 		_master.target=null

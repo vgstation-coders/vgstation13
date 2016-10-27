@@ -8,6 +8,7 @@
 	custom_process=1
 	layer = BLOB_NODE_LAYER
 	spawning = 0
+	destroy_sound = "sound/effects/blobsplatspecial.ogg"
 
 	icon_new = "node"
 	icon_classic = "blob_node"
@@ -48,14 +49,6 @@
 		health = min(maxhealth, health + 1)
 		update_icon()
 
-/obj/effect/blob/node/update_health()
-	if(health <= 0)
-		dying = 1
-		playsound(get_turf(src), 'sound/effects/blobsplatspecial.ogg', 50, 1)
-		Delete()
-		return
-	return
-
 /obj/effect/blob/node/run_action()
 	return 0
 
@@ -76,4 +69,3 @@
 
 
 			..()
-
