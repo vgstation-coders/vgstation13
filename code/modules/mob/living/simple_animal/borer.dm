@@ -86,8 +86,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/obj/item/weapon/gun/hookshot/flesh/extend_o_arm = null
 	var/extend_o_arm_unlocked = 0
 
-	var/attack_cooldown = 0 //to prevent spamming extend_o_arm attacks at close range
-
 	// Event handles
 	var/eh_emote
 
@@ -1197,12 +1195,11 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				if(host.Adjacent(A))
 					if(hostlimb == LIMB_RIGHT_ARM)
 						if(host.get_held_item_by_index(GRASP_RIGHT_HAND))
-							if(attack_cooldown)
+							if(check_attack_cooldown())
 								return
 							else
 								A.attackby(host.get_held_item_by_index(GRASP_RIGHT_HAND), host, 1, src)
-								attack_cooldown = 1
-								reset_attack_cooldown()
+								set_attack_cooldown()
 								return
 						else if(istype(A, /obj/item))
 							var/obj/item/I = A
@@ -1211,12 +1208,11 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 								return
 					else
 						if(host.get_held_item_by_index(GRASP_LEFT_HAND))
-							if(attack_cooldown)
+							if(check_attack_cooldown())
 								return
 							else
 								A.attackby(host.get_held_item_by_index(GRASP_LEFT_HAND), host, 1, src)
-								attack_cooldown = 1
-								reset_attack_cooldown()
+								set_attack_cooldown()
 								return
 						else if(istype(A, /obj/item))
 							var/obj/item/I = A
@@ -1247,6 +1243,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 								chemicals -= 10
 				extend_o_arm.afterattack(A, host)
 
-/mob/living/simple_animal/borer/proc/reset_attack_cooldown()
-	spawn(10)
-		attack_cooldown = 0
+/mob/living/simple_animal/borer/proc/check_attack_cooldown()
+	var/datum/delay_controller/host_attack_delayer = host.attack_delayer
+	return host_attack_delayer.blocked()
+
+/mob/living/simple_animal/borer/proc/set_attack_cooldown()
+	host.delayNextAttack(10)
