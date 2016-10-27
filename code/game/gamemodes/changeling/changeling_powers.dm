@@ -425,7 +425,12 @@
 	if(!istype(M))
 		return
 
-	M.changeling_lesser_form()
+	if(ishuman(M))
+		M.changeling_lesser_form()
+	else if(ismonkey(M))
+		M.changeling_lesser_transform()
+	else
+		to_chat(M, "<span class='warning'>We cannot perform this ability in this form!</span>")
 
 //Transform into a monkey. 	//TODO replace with monkeyize proc
 /mob/proc/changeling_lesser_form()
@@ -485,22 +490,11 @@
 	O.a_intent = I_HURT
 	C.mind.transfer_to(O)
 	O.make_changeling(1)
-	O.add_changeling_verb(/obj/item/verbs/changeling/proc/changeling_lesser_transform)
 	O.changeling_update_languages(O.mind.changeling.absorbed_languages)
 	feedback_add_details("changeling_powers","LF")
 	qdel(C)
 	C =  null
 	return 1
-
-/obj/item/verbs/changeling/proc/changeling_lesser_transform()
-	set category = "Changeling"
-	set name = "Transform (1)"
-
-	var/mob/M = loc
-	if(!istype(M))
-		return
-
-	M.changeling_lesser_transform()
 
 //Transform into a human
 /mob/proc/changeling_lesser_transform()
