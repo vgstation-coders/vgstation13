@@ -212,7 +212,7 @@
 
 /obj/structure/mannequin/Topic(href, href_list)
 	..()
-	if(usr.incapacitated() || !Adjacent(usr) || !iscarbon(usr))
+	if(usr.incapacitated() || !Adjacent(usr) || !(iscarbon(usr) || isMoMMI(usr)))
 		return
 	var/mob/living/carbon/user = usr
 
@@ -418,9 +418,7 @@
 /obj/structure/mannequin/proc/update_icon_slot(var/obj/Overlays/O, var/slot)
 	var/obj/item/clothing/clothToUpdate = clothing[slot]
 	if(clothToUpdate)
-		var/t_state = clothToUpdate._color
-		if(!t_state)
-			t_state = clothToUpdate.icon_state
+		var/t_state = clothToUpdate.icon_state
 
 		var/image/I
 
@@ -428,6 +426,8 @@
 
 		switch(slot)
 			if(SLOT_MANNEQUIN_ICLOTHING,SLOT_MANNEQUIN_OCLOTHING)
+				if(clothToUpdate._color)
+					t_state = clothToUpdate._color
 				if(fat || species.flags & IS_BULKY)
 					if(clothToUpdate.flags&ONESIZEFITSALL)
 						I = image(slotIcon[MANNEQUIN_ICONS_FAT], "[t_state]_s")
