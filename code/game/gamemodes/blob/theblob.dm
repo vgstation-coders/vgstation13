@@ -57,6 +57,7 @@ var/list/blob_looks
 	var/spawning = 2
 	var/dying = 0
 	var/mob/camera/blob/overmind = null
+	var/destroy_sound = "sound/effects/blobsplat.ogg"
 
 	var/looks = "new"
 
@@ -148,7 +149,9 @@ var/list/blob_looks
 
 /obj/effect/blob/beam_disconnect(var/obj/effect/beam/B)
 	..()
+	apply_beam_damage(B)
 	last_beamchecks.Remove("\ref[B]") // RIP
+	update_health()
 	update_icon()
 	if(beams.len == 0)
 		if(!custom_process && src in processing_objects)
@@ -397,12 +400,11 @@ var/list/blob_looks = list(
 	qdel(src)
 
 /obj/effect/blob/proc/update_health()
-	if(health <= 0)
+	if(!dying && (health <= 0))
 		dying = 1
-		playsound(get_turf(src), 'sound/effects/blobsplat.ogg', 50, 1)
-
+		if(get_turf(src))
+			playsound(src, destroy_sound, 50, 1)
 		Delete()
-		return
 
 //////////////////NORMAL BLOBS/////////////////////////////////
 /obj/effect/blob/normal
