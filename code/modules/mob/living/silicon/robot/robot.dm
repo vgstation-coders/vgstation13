@@ -895,14 +895,18 @@
 			to_chat(user, "Close the panel first.")
 		else if(cell)
 			to_chat(user, "You swap the power cell within with the new cell in your hand.")
-			var/obj/item/weapon/oldpowercell = cell
+			var/obj/item/weapon/cell/oldpowercell = cell
 			C.wrapped = null
 			C.installed = 0
 			cell = W
+			oldpowercell.electronics_damage = C.electronics_damage
+			oldpowercell.brute_damage = C.brute_damage
 			user.drop_item(W, src)
 			user.put_in_hands(oldpowercell)
 			C.installed = 1
 			C.wrapped = W
+			C.electronics_damage = cell.electronics_damage
+			C.brute_damage = cell.brute_damage
 			C.install()
 		else
 			user.drop_item(W, src)
@@ -911,6 +915,8 @@
 
 			C.installed = 1
 			C.wrapped = W
+			C.electronics_damage = cell.electronics_damage
+			C.brute_damage = cell.brute_damage
 			C.install()
 
 	else if (iswiretool(W))
@@ -1134,6 +1140,8 @@
 	if(opened && !wiresexposed && (!istype(user, /mob/living/silicon)))
 		var/datum/robot_component/cell_component = components["power cell"]
 		if(cell)
+			cell.electronics_damage = cell_component.electronics_damage
+			cell.brute_damage = cell_component.brute_damage
 			cell.updateicon()
 			cell.add_fingerprint(user)
 			user.put_in_active_hand(cell)
