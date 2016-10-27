@@ -17,6 +17,7 @@
 	anchored = 1
 	plane = ABOVE_HUMAN_PLANE
 	layer = VEHICLE_LAYER
+	flags = FPRINT | PROXMOVE
 	var/trueForm = /mob/living/simple_animal/hostile/mannequin
 	var/datum/species/species
 	var/species_type = /datum/species/human //TODO: mannequin for other races
@@ -47,6 +48,11 @@
 	var/mapping_hand_right = null
 	var/mapping_hand_left = null
 
+	var/awakening = 0
+	var/trapped_prox = 0
+	var/trapped_strip = 0
+	var/chaintrap_range = 0
+
 /obj/structure/mannequin/New()
 	..()
 
@@ -70,6 +76,12 @@
 		all_slot_icons[cloth_slot] = get_slot_icons(cloth_slot)
 
 	checkMappingWear()
+
+/obj/structure/mannequin/HasProximity(var/atom/movable/AM)
+	if(trapped_prox)
+		Awaken()
+		return 1
+	return 0
 
 
 /obj/structure/mannequin/MouseDrop(var/atom/over_object)
@@ -204,6 +216,9 @@
 	var/mob/living/carbon/user = usr
 
 	if(href_list["hands"])
+		if(trapped_strip)
+			Awaken()
+			return
 		var/obj/item/item_in_hand = usr.get_active_hand()
 		var/hand_index = text2num(href_list["hands"])
 		if(!item_in_hand)
@@ -227,6 +242,9 @@
 				to_chat(user, "<span class='info'>You place \the [item_in_hand] on \the [src].</span>")
 
 	else if(href_list["item"])
+		if(trapped_strip)
+			Awaken()
+			return
 		var/obj/item/item_in_hand = usr.get_active_hand()
 		var/item_slot = href_list["item"]
 		if(!item_in_hand)
@@ -678,6 +696,9 @@
 	Awaken(firer)
 
 /obj/structure/mannequin/proc/Awaken(var/mob/firer)
+	awakening = 1
+	for(var/obj/structure/mannequin/M in range(src,chaintrap_range))
+		M.Awaken()
 	getFromPool(/obj/item/trash/mannequin,loc)
 	var/mob/living/simple_animal/hostile/mannequin/M = new trueForm(loc)
 	M.name = name
@@ -1011,6 +1032,9 @@
 		Awaken(firer)
 
 /obj/structure/mannequin/cyber/Awaken(var/mob/firer)
+	awakening = 1
+	for(var/obj/structure/mannequin/M in range(src,chaintrap_range))
+		M.Awaken()
 	destroyed = 0
 	locked = 0
 	update_icon()
