@@ -125,6 +125,16 @@
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
 
+/obj/item/trash/mannequin
+	name = "mannequin pedestale"
+	icon = 'icons/obj/mannequin.dmi'
+	icon_state = "mannequin_empty"
+	autoignition_temperature = AUTOIGNITION_WOOD
+
+/obj/item/trash/mannequin/large
+	name = "cyber mannequin pedestale"
+	icon_state = "mannequin_cyber_empty"
+
 /obj/item/trash/attack(mob/M as mob, mob/living/user as mob)
 	return
 

@@ -17,6 +17,7 @@
 	anchored = 1
 	plane = ABOVE_HUMAN_PLANE
 	layer = VEHICLE_LAYER
+	var/trueForm = /mob/living/simple_animal/hostile/mannequin
 	var/datum/species/species
 	var/species_type = /datum/species/human //TODO: mannequin for other races
 	var/fat = 0
@@ -69,20 +70,6 @@
 		all_slot_icons[cloth_slot] = get_slot_icons(cloth_slot)
 
 	checkMappingWear()
-
-
-/obj/structure/mannequin/Destroy()
-	for(var/cloth in clothing)
-		if(clothing[cloth])
-			var/obj/item/cloth_to_drop = clothing[cloth]
-			cloth_to_drop.forceMove(loc)
-			clothing[cloth] = null
-	for(var/item in held_items)
-		if(held_items[item])
-			var/obj/item/item_to_drop = held_items[item]
-			item_to_drop.forceMove(loc)
-			held_items[item] = null
-	..()
 
 
 /obj/structure/mannequin/MouseDrop(var/atom/over_object)
@@ -288,6 +275,14 @@
 
 /obj/structure/mannequin/proc/breakDown()
 	getFromPool(/obj/effect/decal/cleanable/dirt,loc)
+	for(var/cloth in clothing)
+		if(clothing[cloth])
+			var/obj/item/cloth_to_drop = clothing[cloth]
+			cloth_to_drop.forceMove(loc)
+			clothing[cloth] = null
+	for(var/obj/item_to_drop in held_items)
+		item_to_drop.forceMove(loc)
+		held_items -= item_to_drop
 	qdel(src)
 
 
@@ -657,6 +652,7 @@
 	icon_state="mannequin_wooden_human"
 	health = 30
 	maxHealth = 30
+	trueForm = /mob/living/simple_animal/hostile/mannequin/wood
 
 /obj/structure/mannequin/wood/breakDown()
 	getFromPool(/obj/item/stack/sheet/wood, loc, 5)//You get half the materials used to make a block back
@@ -678,7 +674,40 @@
 	primitive = 1
 	clothing_offset_y = -5*PIXEL_MULTIPLIER
 
+/obj/structure/mannequin/animationBolt(var/mob/firer)
+	Awaken(firer)
 
+/obj/structure/mannequin/proc/Awaken(var/mob/firer)
+	getFromPool(/obj/item/trash/mannequin,loc)
+	var/mob/living/simple_animal/hostile/mannequin/M = new trueForm(loc)
+	M.name = name
+	M.icon_state = icon_state
+	M.health = health
+	M.maxHealth = maxHealth
+	M.dir = dir
+	var/image/I = image('icons/effects/32x32.dmi',"blank")
+	I.overlays = overlays
+	I.pixel_y = -3*PIXEL_MULTIPLIER
+	M.overlays += I
+	for(var/slot in clothing)
+		if(clothing[slot])
+			var/obj/item/cloth = clothing[slot]
+			cloth.forceMove(M)
+			M.clothing += cloth
+			clothing[slot] = null
+	for(var/obj/item/tool in held_items)
+		tool.forceMove(M)
+		M.clothing += tool
+		held_items -= tool
+		if(tool.force >= M.melee_damage_lower)
+			M.melee_damage_lower = tool.force
+			M.melee_damage_upper = tool.force
+			M.attacktext = "swings its [tool] at"
+			if(tool.hitsound)
+				M.attack_sound = tool.hitsound
+	if(firer)
+		M.faction = "\ref[firer]"
+	qdel(src)
 
 /////////////////////////////////////////////////////////BLOCKS//////////////////////////////////////////////////////////
 //Use a chisel on those to sculpt them into mannequins.
@@ -977,9 +1006,45 @@
 	health = 100
 	destroyed = 1
 
+/obj/structure/mannequin/cyber/animationBolt(var/mob/firer)
+	if(destroyed || !locked)
+		Awaken(firer)
 
-
-
+/obj/structure/mannequin/cyber/Awaken(var/mob/firer)
+	destroyed = 0
+	locked = 0
+	update_icon()
+	getFromPool(/obj/item/trash/mannequin/large,loc)
+	var/mob/living/simple_animal/hostile/mannequin/M = new trueForm(loc)
+	M.name = name
+	M.icon_state = icon_state
+	M.health = health
+	M.maxHealth = maxHealth
+	M.dir = dir
+	var/image/I = image('icons/effects/32x32.dmi',"blank")
+	I.overlays = overlays
+	I.pixel_x = -16*PIXEL_MULTIPLIER
+	I.pixel_y = -7*PIXEL_MULTIPLIER
+	M.overlays += I
+	for(var/slot in clothing)
+		if(clothing[slot])
+			var/obj/item/cloth = clothing[slot]
+			cloth.forceMove(M)
+			M.clothing += cloth
+			clothing[slot] = null
+	for(var/obj/item/tool in held_items)
+		tool.forceMove(M)
+		M.clothing += tool
+		held_items -= tool
+		if(tool.force >= M.melee_damage_lower)
+			M.melee_damage_lower = tool.force
+			M.melee_damage_upper = tool.force
+			M.attacktext = "swings its [tool] at"
+			if(tool.hitsound)
+				M.attack_sound = tool.hitsound
+	if(firer)
+		M.faction = "\ref[firer]"
+	qdel(src)
 
 /////////////////////////////////////////////////////////MANNEQUIN FRAME//////////////////////////////////////////////////////////
 //Used to build cyber mannequins.
