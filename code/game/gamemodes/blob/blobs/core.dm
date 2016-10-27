@@ -6,6 +6,7 @@
 	maxhealth = 200
 	fire_resist = 2
 	custom_process=1
+	destroy_sound = "sound/effects/blobkill.ogg"
 	var/overmind_get_delay = 0 // we don't want to constantly try to find an overmind, do it every 30 seconds
 	var/resource_delay = 0
 	var/last_resource_collection
@@ -66,13 +67,7 @@
 			to_chat(overmind,"<span class='danger'>YOUR CORE IS UNDER ATTACK!</span> <b><a href='?src=\ref[overmind];blobjump=\ref[loc]'>(JUMP)</a></b>")
 
 	previous_health = health
-
-	if(health <= 0)
-		dying = 1
-		playsound(get_turf(src), 'sound/effects/blobkill.ogg', 50, 1)
-		Delete()
-		return
-	return
+	..()
 
 /obj/effect/blob/core/Life()
 	if(timestopped)
