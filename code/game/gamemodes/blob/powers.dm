@@ -314,10 +314,16 @@
 			BS.Goto(pick(surrounding_turfs), BS.move_to_delay)
 	return
 
-/mob/camera/blob/verb/telepathy(message as text)
+/mob/camera/blob/verb/telepathy_power()
 	set category = "Blob"
-	set name = "Psionic Message (15)"
+	set name = "Psionic Message"
 	set desc = "Give a psionic message to all creatures on and around the station."
+	telepathy()
+
+/mob/camera/blob/proc/telepathy(message as text)
+
+	if(!can_buy(BLOBTAUNTCOST))
+		return
 
 	to_chat(world, "<span class='warning'>Your vision becomes cloudy, and your mind becomes clear.</span>")
 	spawn(5)

@@ -136,16 +136,16 @@
 		hud_used.mymob.gui_icons.blob_rally.color = grayscale
 		hud_used.mymob.gui_icons.blob_taunt.color = grayscale
 
-		if(blob_points >= 5)
+		if(blob_points >= BLOBATTCOST)
 			hud_used.mymob.gui_icons.blob_spawnblob.color = null
 			hud_used.mymob.gui_icons.blob_rally.color = null
-		if(blob_points >= 10)
+		if(blob_points >= BLOBSHICOST)
 			hud_used.mymob.gui_icons.blob_spawnstrong.color = null
-		if(blob_points >= 15)
+		if(blob_points >= BLOBTAUNTCOST)
 			hud_used.mymob.gui_icons.blob_taunt.color = null
-		if(blob_points >= 40)
+		if(blob_points >= BLOBRESCOST)
 			hud_used.mymob.gui_icons.blob_spawnresource.color = null
-		if(blob_points >= 60)
+		if(blob_points >= BLOBFACCOST)
 			hud_used.mymob.gui_icons.blob_spawnfactory.color = null
 			hud_used.mymob.gui_icons.blob_spawnnode.color = null
 		if(blob_points >= BLOBCOREBASECOST+(BLOBCORECOSTINC*(number_of_cores-1)))
