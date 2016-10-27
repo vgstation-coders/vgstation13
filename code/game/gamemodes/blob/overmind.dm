@@ -1,7 +1,7 @@
 /mob/camera/blob
 	name = "Blob Overmind"
 	real_name = "Blob Overmind"
-	icon = 'icons/mob/blob.dmi'
+	icon = 'icons/mob/blob/blob.dmi'
 	icon_state = "marker"
 
 	see_in_dark = 8
@@ -113,6 +113,8 @@
 		blob_points = Clamp(blob_points + points, 0, max_blob_points)
 		stat_collection.blobblob.res_generated += points
 
+	var/number_of_cores = blob_cores.len
+
 	//Updating the HUD
 	if(hud_used)
 		var/matrix/M = matrix()
@@ -146,7 +148,7 @@
 		if(blob_points >= 60)
 			hud_used.mymob.gui_icons.blob_spawnfactory.color = null
 			hud_used.mymob.gui_icons.blob_spawnnode.color = null
-		if(blob_points >= 100)
+		if(blob_points >= BLOBCOREBASECOST+(BLOBCORECOSTINC*(number_of_cores-1)))
 			hud_used.mymob.gui_icons.blob_spawncore.color = null
 
 /mob/camera/blob/say(var/message)

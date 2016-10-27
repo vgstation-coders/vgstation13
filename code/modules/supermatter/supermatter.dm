@@ -119,6 +119,9 @@
 		else
 			return explode()
 
+/obj/machinery/power/supermatter/blob_act()
+	explode()
+
 /obj/machinery/power/supermatter/shard/singularity_act(current_size, obj/machinery/singularity/S)
 	var/prints = ""
 	if(src.fingerprintshidden)
