@@ -13,4 +13,7 @@
 	else if(istype(change, /mob/living/simple_animal/hostile/mimic/copy))
 		var/mob/living/simple_animal/hostile/mimic/copy/targeted = change
 		targeted.ChangeOwner(firer)
+	else if(istype(change, /mob/living/simple_animal/hostile/mannequin))
+		var/mob/living/simple_animal/hostile/mannequin/targeted = change
+		targeted.ChangeOwner(firer)
 	..()

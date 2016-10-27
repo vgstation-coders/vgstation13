@@ -19,8 +19,9 @@
 	layer = VEHICLE_LAYER
 	flags = FPRINT | PROXMOVE
 	var/trueForm = /mob/living/simple_animal/hostile/mannequin
+	var/pedestal = /obj/item/trash/mannequin
 	var/datum/species/species
-	var/species_type = /datum/species/human //TODO: mannequin for other races
+	var/species_type = /datum/species/human
 	var/fat = 0
 	var/primitive = 0
 	var/list/clothing = list()
@@ -49,9 +50,12 @@
 	var/mapping_hand_left = null
 
 	var/awakening = 0
-	var/trapped_prox = 0
-	var/trapped_strip = 0
-	var/chaintrap_range = 0
+
+	//mappers vars
+	var/awake = 0//1 = Mannequin awakens on spawn. It won't leave a pedestal behind.
+	var/trapped_prox = 0//1 = Mannequin awakens if you get near it.
+	var/trapped_strip = 0//1= Mannequin awakens if you try to strip it or to wrench it.
+	var/chaintrap_range = 0//= Range at which mannequin awakens nearby mannequins when it awakens.
 
 /obj/structure/mannequin/New()
 	..()
@@ -76,6 +80,9 @@
 		all_slot_icons[cloth_slot] = get_slot_icons(cloth_slot)
 
 	checkMappingWear()
+
+	if(awake)
+		Awaken()
 
 /obj/structure/mannequin/HasProximity(var/atom/movable/AM)
 	if(trapped_prox)
@@ -128,9 +135,14 @@
 
 
 
-/obj/structure/displaycase/attack_paw(mob/user as mob)
+/obj/structure/mannequin/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
+/obj/structure/mannequin/wrenchAnchor(var/mob/user, var/time_to_wrench=30)
+	if(trapped_strip)
+		Awaken()
+		return
+	..()
 
 /obj/structure/mannequin/attackby(var/obj/item/weapon/W,var/mob/user)
 	if(iswrench(W))
@@ -217,6 +229,7 @@
 
 	if(href_list["hands"])
 		if(trapped_strip)
+			to_chat(user,"<span class='danger'>\The [src] starts moving.</span>")
 			Awaken()
 			return
 		var/obj/item/item_in_hand = usr.get_active_hand()
@@ -243,6 +256,7 @@
 
 	else if(href_list["item"])
 		if(trapped_strip)
+			to_chat(user,"<span class='danger'>\The [src] starts moving.</span>")
 			Awaken()
 			return
 		var/obj/item/item_in_hand = usr.get_active_hand()
@@ -283,6 +297,8 @@
 /obj/structure/mannequin/proc/getDamage(var/damage)
 	health -= damage
 	healthCheck()
+	if(health > 0 && trapped_strip || trapped_prox)
+		Awaken()
 
 
 /obj/structure/mannequin/proc/healthCheck()
@@ -696,38 +712,42 @@
 	Awaken(firer)
 
 /obj/structure/mannequin/proc/Awaken(var/mob/firer)
+	if(awakening)
+		return
 	awakening = 1
 	for(var/obj/structure/mannequin/M in range(src,chaintrap_range))
 		M.Awaken()
-	getFromPool(/obj/item/trash/mannequin,loc)
-	var/mob/living/simple_animal/hostile/mannequin/M = new trueForm(loc)
-	M.name = name
-	M.icon_state = icon_state
-	M.health = health
-	M.maxHealth = maxHealth
-	M.dir = dir
+	var/obj/item/trash/mannequin/newPedestal = getFromPool(pedestal,loc)
+	newPedestal.dir = dir
+	var/mob/living/simple_animal/hostile/mannequin/livingMannequin = new trueForm(loc)
+	livingMannequin.name = name
+	livingMannequin.icon_state = icon_state
+	livingMannequin.health = health
+	livingMannequin.maxHealth = maxHealth
+	livingMannequin.dir = dir
 	var/image/I = image('icons/effects/32x32.dmi',"blank")
-	I.overlays = overlays
-	I.pixel_y = -3*PIXEL_MULTIPLIER
-	M.overlays += I
+	I.overlays |= overlays
+	I.pixel_x = -1*clothing_offset_x
+	I.pixel_y = -1*clothing_offset_y
+	livingMannequin.overlays += I
 	for(var/slot in clothing)
 		if(clothing[slot])
 			var/obj/item/cloth = clothing[slot]
-			cloth.forceMove(M)
-			M.clothing += cloth
+			cloth.forceMove(livingMannequin)
+			livingMannequin.clothing += cloth
 			clothing[slot] = null
 	for(var/obj/item/tool in held_items)
-		tool.forceMove(M)
-		M.clothing += tool
+		tool.forceMove(livingMannequin)
+		livingMannequin.clothing += tool
 		held_items -= tool
-		if(tool.force >= M.melee_damage_lower)
-			M.melee_damage_lower = tool.force
-			M.melee_damage_upper = tool.force
-			M.attacktext = "swings its [tool] at"
+		if(tool.force >= livingMannequin.melee_damage_lower)
+			livingMannequin.melee_damage_lower = tool.force
+			livingMannequin.melee_damage_upper = tool.force
+			livingMannequin.attacktext = "swings its [tool] at"
 			if(tool.hitsound)
-				M.attack_sound = tool.hitsound
+				livingMannequin.attack_sound = tool.hitsound
 	if(firer)
-		M.faction = "\ref[firer]"
+		livingMannequin.faction = "\ref[firer]"
 	qdel(src)
 
 /////////////////////////////////////////////////////////BLOCKS//////////////////////////////////////////////////////////
@@ -800,6 +820,7 @@
 	desc = "Holy shit."
 	icon = 'icons/obj/mannequin_64x64.dmi'
 	icon_state="mannequin_cyber_human"
+	pedestal = /obj/item/trash/mannequin/large
 	pixel_x = -1*(WORLD_ICON_SIZE/2)
 	clothing_offset_x = 16*PIXEL_MULTIPLIER
 	clothing_offset_y = 7*PIXEL_MULTIPLIER
@@ -867,6 +888,8 @@
 	else
 		shield -= damage
 	healthCheck()
+	if(health > 0 && trapped_strip || trapped_prox)
+		Awaken()
 
 /obj/structure/mannequin/cyber/blob_act()
 	if(!destroyed && locked)
@@ -1032,43 +1055,10 @@
 		Awaken(firer)
 
 /obj/structure/mannequin/cyber/Awaken(var/mob/firer)
-	awakening = 1
-	for(var/obj/structure/mannequin/M in range(src,chaintrap_range))
-		M.Awaken()
 	destroyed = 0
 	locked = 0
 	update_icon()
-	getFromPool(/obj/item/trash/mannequin/large,loc)
-	var/mob/living/simple_animal/hostile/mannequin/M = new trueForm(loc)
-	M.name = name
-	M.icon_state = icon_state
-	M.health = health
-	M.maxHealth = maxHealth
-	M.dir = dir
-	var/image/I = image('icons/effects/32x32.dmi',"blank")
-	I.overlays = overlays
-	I.pixel_x = -16*PIXEL_MULTIPLIER
-	I.pixel_y = -7*PIXEL_MULTIPLIER
-	M.overlays += I
-	for(var/slot in clothing)
-		if(clothing[slot])
-			var/obj/item/cloth = clothing[slot]
-			cloth.forceMove(M)
-			M.clothing += cloth
-			clothing[slot] = null
-	for(var/obj/item/tool in held_items)
-		tool.forceMove(M)
-		M.clothing += tool
-		held_items -= tool
-		if(tool.force >= M.melee_damage_lower)
-			M.melee_damage_lower = tool.force
-			M.melee_damage_upper = tool.force
-			M.attacktext = "swings its [tool] at"
-			if(tool.hitsound)
-				M.attack_sound = tool.hitsound
-	if(firer)
-		M.faction = "\ref[firer]"
-	qdel(src)
+	..()
 
 /////////////////////////////////////////////////////////MANNEQUIN FRAME//////////////////////////////////////////////////////////
 //Used to build cyber mannequins.
@@ -1177,6 +1167,51 @@
 		holder = null
 
 	feedback_inc("cyber_mannequin_created",1)
+
+//////////////////////////////////////////CULT MANNEQUIN/////////////////////////////
+
+/obj/structure/mannequin/cultify()
+	var/obj/structure/mannequin/cult/C = new (loc)
+	C.dir = dir
+	C.anchored = anchored
+	for(var/cloth in clothing)
+		if(clothing[cloth])
+			var/obj/item/cloth_to_drop = clothing[cloth]
+			cloth_to_drop.forceMove(C)
+			C.clothing[cloth] = cloth_to_drop
+	for(var/i = 1 to held_items.len)
+		var/obj/item_to_drop = held_items[i]
+		if(item_to_drop)
+			item_to_drop.forceMove(C)
+			C.held_items[i] = item_to_drop
+	C.update_icon()
+	qdel(src)
+
+
+/obj/structure/mannequin/cult
+	name = "cult mannequin"
+	desc = "Has Nar-Sie been taking sculpting classes?"
+	icon = 'icons/obj/mannequin_64x64.dmi'
+	icon_state="mannequin_cult"
+	pedestal = /obj/item/trash/mannequin/cult
+	pixel_x = -1*(WORLD_ICON_SIZE/2)
+	clothing_offset_x = 16*PIXEL_MULTIPLIER
+	clothing_offset_y = 7*PIXEL_MULTIPLIER
+	health = 100
+	maxHealth = 100
+	density = 1
+	anchored = 1
+	plane = ABOVE_HUMAN_PLANE
+	layer = VEHICLE_LAYER
+	flags = FPRINT | PROXMOVE
+	trueForm = /mob/living/simple_animal/hostile/mannequin/cult
+	species_type = /datum/species/human
+
+	trapped_strip = 1
+	chaintrap_range = 3
+
+/obj/structure/mannequin/cult/cultify()
+	return
 
 #undef MANNEQUIN_ICONS_SLOT
 #undef MANNEQUIN_ICONS_PRIMITIVE
