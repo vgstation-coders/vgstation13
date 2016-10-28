@@ -293,6 +293,7 @@
 #define HOT_RAMEN		"hot_ramen"
 #define HELL_RAMEN		"hell_ramen"
 #define CLOTTING_AGENT	"clotting_agent"
+#define BIOFOAM			"biofoam"
 #define SOY_LATTE		"soy_latte"
 #define CAFE_LATTE		"cafe_latte"
 #define NUKA_COLA		"nuka_cola"

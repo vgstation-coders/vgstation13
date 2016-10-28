@@ -502,11 +502,11 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 		//Internal wounds get worse over time. Low temperatures (cryo) stop them.
 		if(W.internal && !W.is_treated() && owner.bodytemperature >= 170 && !(owner.species && owner.species.flags & NO_BLOOD))
-			if(!owner.reagents.has_reagent(BICARIDINE) && !owner.reagents.has_reagent(INAPROVALINE) && !owner.reagents.has_reagent(CLOTTING_AGENT))	//Bicard, inaprovaline, and clotting agent stops internal wounds from growing bigger with time, and also slow bleeding
+			if(!owner.reagents.has_reagent(BICARIDINE) && !owner.reagents.has_reagent(INAPROVALINE) && !owner.reagents.has_reagent(CLOTTING_AGENT) && !owner.reagents.has_reagent(BIOFOAM))	//Bicard, inaprovaline, clotting agent, and biofoam stop internal wounds from growing bigger with time, and also slow bleeding
 				W.open_wound(0.1 * wound_update_accuracy)
 				owner.vessel.remove_reagent(BLOOD, 0.05 * W.damage * wound_update_accuracy)
 
-			if(!owner.reagents.has_reagent(CLOTTING_AGENT))	//Clotting agent stops bleeding entirely.
+			if(!owner.reagents.has_reagent(CLOTTING_AGENT) && !owner.reagents.has_reagent(BIOFOAM))	//Clotting agent and biofoam stop bleeding entirely.
 				owner.vessel.remove_reagent(BLOOD, 0.02 * W.damage * wound_update_accuracy)
 			if(prob(1 * wound_update_accuracy))
 				owner.custom_pain("You feel a stabbing pain in your [display_name]!", 1)
