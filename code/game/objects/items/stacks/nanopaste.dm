@@ -42,3 +42,12 @@
 					return
 			else
 				to_chat(user, "<span class='notice'>Nothing to fix in here.</span>")
+	if(istype(M,/obj/item/robot_parts/robot_component))
+		var/obj/item/robot_parts/robot_component/I = M
+		if(I.getElectronicsDamage() || I.getBruteDamage())
+			I.adjustElectronicsDamage(rand(-15, -20))
+			I.adjustBruteDamage(rand(-15,-20))
+			use(1)
+			to_chat(user, "<span class='notice'>You apply some [src] to the damaged component.</span>")
+		else
+			to_chat(user, "<span class='notice'>Nothing to fix here.</span>")
