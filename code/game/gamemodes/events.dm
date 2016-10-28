@@ -200,6 +200,7 @@
 
 		var/mob/living/carbon/alien/larva/new_xeno = new(vent.loc)
 		new_xeno.key = candidate
+		new_xeno << sound('sound/voice/alienspawn.ogg')
 
 		candidates -= candidate
 		vents -= vent
