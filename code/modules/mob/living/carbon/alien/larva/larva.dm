@@ -29,6 +29,10 @@
 	add_spell(new /spell/aoe_turf/alien_hide, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
 	add_spell(new /spell/aoe_turf/evolve/larva, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
 
+/mob/living/carbon/alien/larva/Login()
+	. = ..()
+	src << sound('sound/voice/alienspawn.ogg')
+
 //This needs to be fixed
 /mob/living/carbon/alien/larva/Stat()
 	..()
