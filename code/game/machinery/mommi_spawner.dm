@@ -91,9 +91,8 @@
 	spawn(50)
 		building=0
 		update_icon()
-		if(!user || !istype(user))
-			return
-		makeMoMMI(user)
+		if(user && istype(user))
+			makeMoMMI(user)
 
 
 /obj/machinery/mommi_spawner/attackby(var/obj/item/O as obj, var/mob/user as mob)
