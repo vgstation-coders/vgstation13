@@ -284,16 +284,9 @@
 			M.special_role = null
 			var/mob/living/silicon/ai/A = M.current
 
-			A.verbs.Remove(/mob/living/silicon/ai/proc/choose_modules,
-			/datum/game_mode/malfunction/proc/takeover,
-			/datum/game_mode/malfunction/proc/ai_win)
-
-			A.malf_picker.remove_verbs(A)
-
+			A.remove_malf_spells()
 
 			A.laws = new base_law_type
-			qdel(A.malf_picker)
-			A.malf_picker = null
 			A.show_laws()
 			A.icon_state = "ai"
 

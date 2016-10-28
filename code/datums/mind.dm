@@ -966,16 +966,8 @@
 					special_role = null
 					var/mob/living/silicon/ai/A = current
 
-					A.verbs.Remove(/mob/living/silicon/ai/proc/choose_modules,
-					/datum/game_mode/malfunction/proc/takeover,
-					/datum/game_mode/malfunction/proc/ai_win)
-
-					A.malf_picker.remove_verbs(A)
-
-
 					A.laws = new base_law_type
-					qdel(A.malf_picker)
-					A.malf_picker = null
+					A.remove_malf_spells()
 					A.show_laws()
 					A.icon_state = "ai"
 
@@ -1174,9 +1166,8 @@ proc/clear_memory(var/silent = 1)
 	if(!(src in ticker.mode.malf_ai))
 		ticker.mode.malf_ai += src
 		var/mob/living/silicon/ai/A = current
-		A.verbs += /mob/living/silicon/ai/proc/choose_modules
-		A.verbs += /datum/game_mode/malfunction/proc/takeover
-		A.malf_picker = new /datum/module_picker
+		A.add_spell(new /spell/aoe_turf/module_picker, "grey_spell_ready",/obj/screen/movable/spell_master/malf)
+		A.add_spell(new /spell/aoe_turf/takeover, "grey_spell_ready",/obj/screen/movable/spell_master/malf)
 		var/datum/ai_laws/laws = A.laws
 		laws.malfunction()
 		A.show_laws()

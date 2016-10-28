@@ -173,7 +173,6 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		var/event/E = user.on_uattack
 		E.handlers.Remove(user.spell_channeling)
 		user.spell_channeling = null
-		charge_counter = charge_max
 		currently_channeled = 0
 		connected_button.remove_channeling()
 		connected_button.name = name

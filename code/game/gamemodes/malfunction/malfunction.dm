@@ -60,20 +60,17 @@ Rebooting world in 5 seconds."})
 			sleep(50)
 			world.Reboot()
 			return
-		AI_mind.current.verbs += /mob/living/silicon/ai/proc/choose_modules
+		AI_mind.current.add_spell(new /spell/aoe_turf/module_picker)
+		AI_mind.current.add_spell(new /spell/aoe_turf/takeover)
 		//AI_mind.current:laws = new /datum/ai_laws/malfunction
 		AI_mind.current:laws_sanity_check()
 		var/datum/ai_laws/laws = AI_mind.current:laws
 		laws.malfunction()
-		AI_mind.current:malf_picker = new /datum/module_picker
 		AI_mind.current:show_laws()
 
 		greet_malf(AI_mind)
 
 		AI_mind.special_role = "malfunction"
-
-		AI_mind.current.verbs += /datum/game_mode/malfunction/proc/takeover
-		AI_mind.current.verbs += /datum/game_mode/malfunction/proc/ai_win // Fix borrowed from Bay, with added checks avoids "logging in and back out" garbage
 
 /*		AI_mind.current.icon_state = "ai-malf"
 		spawn(10)
@@ -131,8 +128,8 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	for(var/datum/mind/AI_mind in malf_ai)
 		to_chat(AI_mind.current, {"<span class='notice'>Congratulations! The station is now under your exclusive control.<br>
 You may decide to blow up the station. You have 60 seconds to choose.<br>
-You should now be able to use your Explode verb to interface with the nuclear fission device.</span>"})
-		AI_mind.current.verbs += /datum/game_mode/malfunction/proc/ai_win
+You should now be able to use your Explode spell to interface with the nuclear fission device.</span>"})
+		AI_mind.current.add_spell(new /spell/aoe_turf/ai_win, "grey_spell_ready",/obj/screen/movable/spell_master/malf)
 	spawn (600)
 		to_nuke_or_not_to_nuke = 0
 	return
@@ -166,53 +163,73 @@ You should now be able to use your Explode verb to interface with the nuclear fi
 	return
 
 
-/datum/game_mode/malfunction/proc/takeover()
-	set category = "Malfunction"
-	set name = "System Override"
-	set desc = "Start the victory timer"
-
+/spell/aoe_turf/takeover
+	name = "System Override"
+	panel = MALFUNCTION
+	desc = "Start the victory timer"
+	charge_type = Sp_CHARGES
+	charge_max = 1
+	hud_state = "systemtakeover"
+	override_base = "grey"
+	
+/spell/aoe_turf/takeover/before_target(mob/user)
 	if (!istype(ticker.mode,/datum/game_mode/malfunction))
 		to_chat(usr, "<span class='warning'>You cannot begin a takeover in this round type!</span>")
-		return
+		return 1
 	if (ticker.mode:malf_mode_declared)
 		to_chat(usr, "<span class='warning'>You've already begun your takeover.</span>")
-		return
+		return 1
 	if (ticker.mode:apcs < 3)
 		to_chat(usr, "<span class='notice'>You don't have enough hacked APCs to take over the station yet. You need to hack at least 3, however hacking more will make the takeover faster. You have hacked [ticker.mode:apcs] APCs so far.</span>")
-		return
+		return 1
 
 	if (alert(usr, "Are you sure you wish to initiate the takeover? The station hostile runtime detection software is bound to alert everyone. You have hacked [ticker.mode:apcs] APCs.", "Takeover:", "Yes", "No") != "Yes")
-		return
-
+		return 1
+		
+/spell/aoe_turf/takeover/cast(var/list/targets, mob/user)
 	command_alert(/datum/command_alert/malf_announce)
 	set_security_level("delta")
 
 	ticker.mode:malf_mode_declared = 1
 	for(var/datum/mind/AI_mind in ticker.mode:malf_ai)
-		AI_mind.current.verbs -= /datum/game_mode/malfunction/proc/takeover
-
-
-/datum/game_mode/malfunction/proc/ai_win()
-	set category = "Malfunction"
-	set name = "Explode"
-	set desc = "Station goes boom"
-
+		for(var/spell/S in AI_mind.current.spell_list)
+			if(istype(S,type))
+				AI_mind.current.remove_spell(S)
+				
+/spell/aoe_turf/ai_win
+	name = "Explode"
+	panel = MALFUNCTION
+	desc = "Station goes boom"
+	charge_type = Sp_CHARGES
+	charge_max = 1
+	hud_state = "radiation"
+	override_base = "grey"
+	
+/spell/aoe_turf/ai_win/before_target(mob/user)
 	if(!ticker.mode:station_captured)
 		to_chat(usr, "<span class='warning'>You are unable to access the self-destruct system as you don't control the station yet.</span>")
-		return
+		return 1
 
 	if(ticker.mode:explosion_in_progress || ticker.mode:station_was_nuked)
 		to_chat(usr, "<span class='notice'>The self-destruct countdown was already triggered!</span>")
-		return
+		return 1
 
 	if(!ticker.mode:to_nuke_or_not_to_nuke) //Takeover IS completed, but 60s timer passed.
 		to_chat(usr, "<span class='warning'>Cannot interface, it seems a neutralization signal was sent!</span>")
-		return
-
+		return 1
+		
+/spell/aoe_turf/ai_win/cast(var/list/targets, mob/user)
+	if(istype(ticker.mode, /datum/game_mode/malfunction))
+		var/datum/game_mode/malfunction/G = ticker.mode
+		G.ai_win()
+	
+/datum/game_mode/malfunction/proc/ai_win()
 	to_chat(usr, "<span class='danger'>Detonation signal sent!</span>")
 	ticker.mode:to_nuke_or_not_to_nuke = 0
 	for(var/datum/mind/AI_mind in ticker.mode:malf_ai)
-		AI_mind.current.verbs -= /datum/game_mode/malfunction/proc/ai_win
+		for(var/spell/S in AI_mind.current.spell_list)
+			if(istype(S,/spell/aoe_turf/ai_win))
+				AI_mind.current.remove_spell(S)
 	ticker.mode:explosion_in_progress = 1
 	for(var/mob/M in player_list)
 		if(M.client)

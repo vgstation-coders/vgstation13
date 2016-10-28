@@ -40,9 +40,6 @@ var/list/ai_list = list()
 //Hud stuff
 
 	//MALFUNCTION
-	var/datum/module_picker/malf_picker
-	var/processing_time = 100
-	var/list/datum/AI_Module/current_modules = list()
 	var/ai_flags = 0
 
 	var/control_disabled = 0 // Set to 1 to stop AI from interacting via Click() -- TLE
@@ -301,7 +298,11 @@ var/list/ai_list = list()
 				if (malf.apcs >= 3)
 					stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
 
-
+/mob/proc/remove_malf_spells()
+	for(var/spell/S in spell_list)
+		if(S.panel == MALFUNCTION)
+			remove_spell(S)
+			
 /mob/living/silicon/ai/proc/ai_alerts()
 
 
@@ -706,13 +707,6 @@ var/list/ai_list = list()
 		to_chat(src, "<span class='notice'>Switched to [network] camera network.</span>")
 //End of code by Mord_Sith
 
-
-/mob/living/silicon/ai/proc/choose_modules()
-	set category = "Malfunction"
-	set name = "Choose Module"
-
-	malf_picker.use(src)
-
 /mob/living/silicon/ai/proc/ai_statuschange()
 	set category = "AI Commands"
 	set name = "AI Status"
@@ -804,14 +798,26 @@ var/list/ai_list = list()
 
 	return
 
-/mob/living/silicon/ai/proc/corereturn()
-	set category = "Malfunction"
-	set name = "Return to Main Core"
-
-	var/obj/machinery/power/apc/apc = src.loc
-	if(!istype(apc))
-		to_chat(src, "<span class='notice'>You are already in your Main Core.</span>")
-		return
+/spell/aoe_turf/corereturn
+	name = "Return to Core"
+	panel = MALFUNCTION
+	charge_type = Sp_CHARGES
+	charge_max = 1
+	hud_state = "unshunt"
+	override_base = "grey"
+	
+/spell/aoe_turf/corereturn/before_target(mob/user)
+	if(istype(user.loc, /obj/machinery/power/apc))
+		return 0
+	else
+		to_chat(user, "<span class='notice'>You are already in your Main Core.</span>")
+		return 1
+		
+/spell/aoe_turf/corereturn/choose_targets(mob/user = usr)
+	return list(user.loc)
+	
+/spell/aoe_turf/corereturn/cast(var/list/targets, mob/user)
+	var/obj/machinery/power/apc/apc = targets[1]
 	apc.malfvacate()
 
 //Toggles the luminosity and applies it by re-entereing the camera.
