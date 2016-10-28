@@ -89,7 +89,7 @@ Note: Must be placed within 3 tiles of the R&D Console
 			spawn(10)
 				icon_state = "d_analyzer_l"
 				busy = 0
-	return
+	return 1
 
 /obj/machinery/r_n_d/destructive_analyzer/attack_hand(mob/user as mob)
 	if (..(user))

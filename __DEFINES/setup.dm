@@ -245,6 +245,21 @@ var/MAX_EXPLOSION_RANGE = 14
 #define SLOT_TWOEARS 8192
 #define SLOT_LEGS = 16384
 
+
+//MANNEQUIN SLOT BITMASKS
+#define SLOT_MANNEQUIN_ICLOTHING	"uniform"
+#define SLOT_MANNEQUIN_FEET			"shoes"
+#define SLOT_MANNEQUIN_GLOVES		"gloves"
+#define SLOT_MANNEQUIN_EARS			"earset"
+#define SLOT_MANNEQUIN_OCLOTHING	"suit"
+#define SLOT_MANNEQUIN_EYES			"glasses"
+#define SLOT_MANNEQUIN_BELT			"belt"
+#define SLOT_MANNEQUIN_MASK			"mask"
+#define SLOT_MANNEQUIN_HEAD			"hat"
+#define SLOT_MANNEQUIN_BACK			"backpack"
+#define SLOT_MANNEQUIN_ID			"idcard"
+
+
 //FLAGS BITMASK
 
 //Item flags!
@@ -335,6 +350,8 @@ var/MAX_EXPLOSION_RANGE = 14
 #define slot_in_backpack 16
 #define slot_legcuffed 17
 #define slot_legs 18
+
+#define is_valid_hand_index(index) ((index > 0) && (index <= held_items.len))
 
 //Cant seem to find a mob bitflags area other than the powers one
 

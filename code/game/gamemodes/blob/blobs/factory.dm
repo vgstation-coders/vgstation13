@@ -10,6 +10,7 @@
 	var/spore_delay = 50
 	spawning = 0
 	layer = BLOB_FACTORY_LAYER
+	destroy_sound = "sound/effects/blobsplatspecial.ogg"
 
 	icon_new = "factory"
 	icon_classic = "blob_factory"
@@ -19,14 +20,6 @@
 	if(blob_looks[looks] == 64)
 		flick("morph_factory",src)
 		spore_delay = world.time + (2 SECONDS)
-
-/obj/effect/blob/factory/update_health()
-	if(health <= 0)
-		dying = 1
-		playsound(get_turf(src), 'sound/effects/blobsplatspecial.ogg', 50, 1)
-		qdel(src)
-		return
-	return
 
 /obj/effect/blob/factory/run_action()
 	if(spores.len >= max_spores)

@@ -27,3 +27,13 @@
 	req_tech = list(Tc_ENGINEERING = 5, Tc_MATERIALS = 3, Tc_BLUESPACE = 3)
 	materials = list(MAT_GLASS = 8000, MAT_IRON=2000)
 	category = "Misc"
+
+/datum/design/mannequin_frame
+	name = "Cyber Mannequin Frame"
+	desc = "So much effort just just display material goods."
+	id = "mannequin_frame"
+	build_type = MECHFAB
+	build_path = /obj/structure/mannequin_frame
+	req_tech = list(Tc_ENGINEERING = 1, Tc_MATERIALS = 1)
+	materials = list(MAT_IRON=37500)
+	category = "Misc"

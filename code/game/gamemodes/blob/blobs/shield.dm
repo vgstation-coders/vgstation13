@@ -7,6 +7,7 @@
 	fire_resist = 2
 	layer = BLOB_SHIELD_LAYER
 	spawning = 0
+	destroy_sound = "sound/effects/blobsplat.ogg"
 
 	icon_new = "strong"
 	icon_classic = "blob_idle"
@@ -14,14 +15,6 @@
 /obj/effect/blob/shield/New(loc,newlook = "new")
 	..()
 	flick("morph_strong",src)
-
-/obj/effect/blob/shield/update_health()
-	if(health <= 0)
-		dying = 1
-		playsound(get_turf(src), 'sound/effects/blobsplat.ogg', 50, 1)
-		qdel(src)
-		return
-	return
 
 /obj/effect/blob/shield/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	return
