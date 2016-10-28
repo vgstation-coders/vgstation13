@@ -161,6 +161,21 @@
 	name = "radio"
 	icon_state = "radio"
 
+/obj/item/robot_parts/robot_component/proc/getElectronicsDamage()
+	return electronics_damage
+
+/obj/item/robot_parts/robot_component/proc/getBruteDamage()
+	return brute_damage
+
+/obj/item/robot_parts/robot_component/proc/adjustElectronicsDamage(var/amount)
+	electronics_damage += amount
+	if (electronics_damage < 0)
+		electronics_damage = 0
+
+/obj/item/robot_parts/robot_component/proc/adjustBruteDamage(var/amount)
+	brute_damage += amount
+	if (brute_damage < 0)
+		brute_damage = 0
 //
 //Robotic Component Analyser, basically a health analyser for robots
 //
