@@ -89,9 +89,9 @@
 	building=1
 	update_icon()
 	spawn(50)
+		building=0
+		update_icon()
 		if(!user || !istype(user))
-			building=0
-			update_icon()
 			return
 		makeMoMMI(user)
 
