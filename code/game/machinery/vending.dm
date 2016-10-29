@@ -2345,23 +2345,31 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/trader	// Boxes are defined in trader.dm
 	name = "Jewvend"
 	desc = "Its coin groove has been modified."
-	req_access = list(access_chapel_office)
-	product_slogans = "JOKE."
+	product_slogans = "Profits."
 	product_ads = "MORE."
 	vend_reply = "JOKES!"
 	icon_state = "voxseed"
-	premium = list(
-		/obj/item/weapon/storage/marauder = 1,
-		/obj/item/weapon/storage/backpack/holding = 1,
-		/obj/item/weapon/reagent_containers/glass/beaker/bluespace = 5,
-		/obj/item/weapon/storage/bluespace_crystal = 1,
-		/obj/item/clothing/shoes/magboots/elite = 1,
-		/obj/item/weapon/reagent_containers/food/snacks/borer_egg = 1,
-		/obj/item/weapon/reagent_containers/glass/bottle/random = 1, //random disease
-		/obj/item/weapon/reagent_containers/glass/bottle/peridaxon = 1,
-		/obj/item/weapon/reagent_containers/glass/bottle/rezadone = 1,
-		/obj/item/weapon/reagent_containers/glass/bottle/nanites = 1,	
+	products = list (
+		/obj/item/weapon/storage/fancy/donut_box = 2,
 		)
+	premium = list(
+		/obj/item/weapon/storage/marauder,
+		/obj/item/weapon/storage/backpack/holding,
+		/obj/item/weapon/reagent_containers/glass/beaker/bluespace,
+		/obj/item/weapon/storage/bluespace_crystal,
+		/obj/item/clothing/shoes/magboots/elite,
+		/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
+		/obj/item/weapon/reagent_containers/glass/bottle/random, //random disease
+		/obj/item/weapon/reagent_containers/glass/bottle/peridaxon,
+		/obj/item/weapon/reagent_containers/glass/bottle/rezadone,
+		/obj/item/weapon/reagent_containers/glass/bottle/nanites,	
+		)
+
+/obj/machinery/vending/trader/New()
+	..()
+	for(var/random_items = 1 to 5)
+		premium.Remove(pick(premium))
+	src.updateUsrDialog()
 
 /obj/machinery/vending/trader/attackby(var/obj/item/W, var/mob/user) //Snowflake. This shitcode has been put in here to make it easier to remove in the future
 	if (istype(W, /obj/item/weapon/coin))
