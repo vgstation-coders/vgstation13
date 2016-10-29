@@ -27,3 +27,23 @@
 	for(var/amount = 1 to 6)
 		new /obj/item/bluespace_crystal/artificial(src)
 	new /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato(src)
+
+/*/obj/item/weapon/storage/bluespace_crystal
+	name = "Clown S"
+	desc = "Hmmm... it smells like tomato"
+	icon_state = "box_of_doom"
+	item_state = "box_of_doom"
+
+/obj/item/weapon/storage/bluespace_crystal/New()
+	..()
+	for(var/amount = 1 to 6)
+		new /obj/item/bluespace_crystal/artificial(src)
+	new /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato(src)*/
+
+/*/obj/structure/cage/with_random_slime
+	..()
+	
+	add_mob
+
+/mob/living/carbon/slime/proc/randomSlime()
+*/	

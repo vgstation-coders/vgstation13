@@ -2342,7 +2342,7 @@ var/global/num_vending_terminals = 1
 	pack = /obj/structure/vendomatpack/chapelvend
 
 
-/obj/machinery/vending/trader
+/obj/machinery/vending/trader	// Boxes are defined in trader.dm
 	name = "Jewvend"
 	desc = "Insert coin."
 	req_access = list(access_chapel_office)
@@ -2352,7 +2352,10 @@ var/global/num_vending_terminals = 1
 	icon_state = "voxseed"
 	premium = list(
 		/obj/item/weapon/storage/marauder = 1,
-		/obj/item/weapon/storage/backpack/holding = 2,
+		/obj/item/weapon/storage/backpack/holding = 1,
 		/obj/item/weapon/reagent_containers/glass/beaker/bluespace = 5,
-		/obj/item/weapon/storage/bluespace_crystal = 1,
+		/obj/item/weapon/bluespace_crystal = 1,
+		/obj/item/clothing/shoes/magboots/elite = 1,
+		/obj/item/weapon/cell/infinite = 1,
+		/obj/item/weapon/reagent_containers/food/snacks/borer_egg = 1,
 		)
