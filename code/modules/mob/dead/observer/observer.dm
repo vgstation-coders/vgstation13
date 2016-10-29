@@ -792,9 +792,11 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	// Toggle alpha
 	if(alpha == 127)
 		alpha = 0
+		mouse_opacity = 0
 		to_chat(src, "<span class='warning'>Sprite hidden.</span>")
 	else
 		alpha = 127
+		mouse_opacity = 1
 		to_chat(src, "<span class='info'>Sprite shown.</span>")
 
 
