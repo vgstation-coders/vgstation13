@@ -39,8 +39,10 @@
 	return
 
 /mob/living/simple_animal/hostile/viscerator/CanAttack(var/atom/the_target)
-	if(isnukeop(the_target) && faction == "syndicate")
-		return 0
+	if(ismob(the_target))
+		var/mob/mob_target = the_target
+		if(isnukeop(mob_target.mind) && faction == "syndicate")
+			return 0
 	return ..(the_target)
 
 /mob/living/simple_animal/hostile/viscerator/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
