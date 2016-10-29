@@ -41,7 +41,7 @@
 /mob/living/simple_animal/hostile/viscerator/CanAttack(var/atom/the_target)
 	if(ismob(the_target))
 		var/mob/mob_target = the_target
-		if(isnukeop(mob_target.mind) && faction == "syndicate")
+		if(isnukeop(mob_target) && faction == "syndicate")
 			return 0
 	return ..(the_target)
 
