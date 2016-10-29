@@ -161,11 +161,12 @@
 
 /obj/item/broken_device/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(istype(W, /obj/item/stack/nanopaste))
-		var/obj/item/stack/nanopaste/C = W
-		new src.component (src.loc)
-		to_chat(user, "<span class='notice'>You fix the broken component.</span>")
-		C.use(1)
-		qdel(src)
+		if(do_after(user,src,30))
+			var/obj/item/stack/nanopaste/C = W
+			new src.component (src.loc)
+			to_chat(user, "<span class='notice'>You fix the broken component.</span>")
+			C.use(1)
+			qdel(src)
 
 //
 //Robotic Component Analyser, basically a health analyser for robots
