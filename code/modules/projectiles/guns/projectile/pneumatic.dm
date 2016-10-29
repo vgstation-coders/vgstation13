@@ -115,6 +115,13 @@
 
 	add_fingerprint(user)
 
+	if(clumsy_check)
+		if(istype(user, /mob/living))
+			var/mob/living/M = user
+			if ((M_CLUMSY in M.mutations) && prob(50))
+				to_chat(M, "<span class='danger'>[src] blows up in your face.</span>")
+				target = M
+
 	var/turf/curloc = get_turf(user)
 	var/turf/targloc = get_turf(target)
 	if (!istype(targloc) || !istype(curloc))
@@ -127,9 +134,7 @@
 		return 0
 
 	var/obj/item/object = contents[1]
-	var/speed = ((fire_pressure*tank.volume)/object.w_class)/force_divisor //projectile speed.
-	if(speed>80)
-		speed = 80 //damage cap.
+	var/speed = min(40,((fire_pressure*tank.volume)/object.w_class)/force_divisor)
 
 	user.visible_message("<span class='danger'>[user] fires [src] and launches [object] at [target]!</span>","<span class='danger'>You fire [src] and launch [object] at [target]!</span>")
 
@@ -137,7 +142,9 @@
 	object.throw_at(target,10,speed)
 
 	if(istype(object,/obj/item/weapon/reagent_containers/food/snacks) && ishuman(target) && object.Adjacent(target))
-		object.attack(target,target) //This way it is instant
+		var/mob/living/carbon/human/victim = target
+		if(!istype(victim.get_item_by_slot(slot_head), /obj/item/clothing/head/helmet) && !istype(victim.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask))
+			object.attack(target,target) //This way it is instant
 
 	var/lost_gas_amount = tank.air_contents.total_moles*(pressure_setting/100)
 	var/datum/gas_mixture/removed = tank.air_contents.remove(lost_gas_amount)
