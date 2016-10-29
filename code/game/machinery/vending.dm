@@ -2344,7 +2344,7 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/trader	// Boxes are defined in trader.dm
 	name = "Jewvend"
-	desc = "Insert coin."
+	desc = "Its coin groove has been modified."
 	req_access = list(access_chapel_office)
 	product_slogans = "JOKE."
 	product_ads = "MORE."
@@ -2374,6 +2374,6 @@ var/global/num_vending_terminals = 1
 		else
 			to_chat(user, "<span class='notice'>It doesn't fit.</span>")
 		return
-	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/chococoin)
+	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/chococoin))
 		return
 	..()
