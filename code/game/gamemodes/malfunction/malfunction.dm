@@ -161,6 +161,9 @@ You should now be able to use your Explode verb to interface with the nuclear fi
 
 /datum/game_mode/malfunction/Topic(href, href_list)
 	..()
+	var/mob/living/silicon/ai/malf = usr
+	if(!istype(malf) || !(malf.mind in malf_ai))
+		return
 	if (href_list["ai_win"])
 		ai_win()
 	return

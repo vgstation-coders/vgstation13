@@ -142,7 +142,7 @@ var/shuttle_call/shuttle_calls[0]
 				if(message_cooldown)
 					return
 				var/input = stripped_input(usr, "Please choose a message to announce to the station crew.", "What?")
-				if(!input || !(usr in view(1,src)))
+				if(message_cooldown || !input || !usr.Adjacent(src))
 					return
 				captain_announce(input)//This should really tell who is, IE HoP, CE, HoS, RD, Captain
 				var/turf/T = get_turf(usr)
