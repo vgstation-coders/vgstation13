@@ -172,7 +172,7 @@
 	if(!istype(M))
 		return
 
-	if(!can_operate(M))
+	if(!can_operate(M, user))
 		return
 
 	if(target_name != M.name)

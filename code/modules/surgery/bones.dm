@@ -20,13 +20,6 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	return (affected.open >= 2 || (target.species.flags & NO_SKIN)) && affected.stage == 0
 
-/*/datum/surgery_step/glue_bone/can_operate(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	var/datum/organ/external/affected = target.get_organ(target_zone)
-	if(affected.brute_dam >= affected.min_broken_damage * config.organ_health_multiplier)
-		to_chat(user, "<span class='warning'>The [affected.display_name] is far too damaged to operate on the fracture. Fix some of the damage first.</span>")
-		return 0
-	return ..()*/
-
 /datum/surgery_step/glue_bone/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	if (affected.stage == 0)
@@ -61,13 +54,6 @@
 /datum/surgery_step/set_bone/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	return affected.name != LIMB_HEAD && (affected.open >= 2 || (target.species.flags & NO_SKIN)) && affected.stage == 1
-
-/*/datum/surgery_step/set_bone/can_operate(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	var/datum/organ/external/affected = target.get_organ(target_zone)
-	if(affected.brute_dam >= affected.min_broken_damage * config.organ_health_multiplier)
-		to_chat(user, "<span class='warning'>The [affected.display_name] is far too damaged to operate on the fracture. Fix some of the damage first.</span>")
-		return 0
-	return ..()*/
 
 /datum/surgery_step/set_bone/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -109,13 +95,6 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	return affected.name == LIMB_HEAD && (affected.open >= 2 || (target.species.flags & NO_SKIN))&& affected.stage == 1
 
-/*/datum/surgery_step/mend_skull/can_operate(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	var/datum/organ/external/affected = target.get_organ(target_zone)
-	if(affected.brute_dam >= affected.min_broken_damage * config.organ_health_multiplier)
-		to_chat(user, "<span class='warning'>The [affected.display_name] is far too damaged to operate on the fracture. Fix some of the damage first.</span>")
-		return 0
-	return ..()*/
-
 /datum/surgery_step/mend_skull/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("[user] is beginning piece together [target]'s skull with \the [tool]."  , \
 		"You are beginning piece together [target]'s skull with \the [tool].")
@@ -153,13 +132,6 @@
 /datum/surgery_step/finish_bone/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	return (affected.open >= 2 || (target.species.flags & NO_SKIN)) && affected.stage == 2
-
-/*/datum/surgery_step/finish_bone/can_operate(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-	var/datum/organ/external/affected = target.get_organ(target_zone)
-	if(affected.brute_dam >= affected.min_broken_damage * config.organ_health_multiplier)
-		to_chat(user, "<span class='warning'>The [affected.display_name] is far too damaged to operate on the fracture. Fix some of the damage first.</span>")
-		return 0
-	return ..()*/
 
 /datum/surgery_step/finish_bone/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
