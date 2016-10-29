@@ -49,7 +49,7 @@ var/list/nest_locations = list()
 		weed++
 		if(locate(/obj/effect/alien/weeds) in T)
 			weed += 4
-	else if(!stat && !client)
+	else if(!stat && !client && !istype(locked_to, /obj/structure/cage))
 		if(!(locate(/obj/effect/alien/weeds) in T) && !(locate(/obj/structure/bed/nest) in T) && !(locate(/obj/effect/alien/egg) in T) && isturf(src.loc) && !istype(T, /turf/space))
 			weed = 0
 			visible_message("<span class='alien'>[src] has planted some alien weeds!</span>")
@@ -299,7 +299,7 @@ var/list/nest_locations = list()
 		nest++
 		if(locate(/obj/effect/alien/weeds) in T)
 			nest += 4
-	else if(!stat && !client)
+	else if(!stat && !client && !istype(locked_to, /obj/structure/cage))
 		if(!(locate(/obj/effect/alien/weeds/node) in T) && !(locate(/obj/structure/bed/nest) in T) && !(locate(/obj/effect/alien/egg) in T) && isturf(src.loc) && !istype(T, /turf/space))
 			var/nearby_nests = 0
 			for(var/obj/structure/bed/nest/N in range(5,src))
@@ -313,7 +313,7 @@ var/list/nest_locations = list()
 		egg++
 		if(locate(/obj/effect/alien/weeds) in T)
 			egg += 4
-	else if(!stat && !client)
+	else if(!stat && !client && !istype(locked_to, /obj/structure/cage))
 		if(!(locate(/obj/effect/alien/weeds/node) in T) && !(locate(/obj/structure/bed/nest) in T) && !(locate(/obj/effect/alien/egg) in T) && isturf(src.loc) && !istype(T, /turf/space))
 			var/nearby_eggs = 0
 			for(var/obj/effect/alien/egg/E in range(3,src))
