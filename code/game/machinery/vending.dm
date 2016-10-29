@@ -2352,6 +2352,9 @@ var/global/num_vending_terminals = 1
 	products = list (
 		/obj/item/weapon/storage/fancy/donut_box = 2,
 		)
+
+/obj/machinery/vending/trader/New()
+	..()
 	premium = list(
 		/obj/item/weapon/storage/marauder,
 		/obj/item/weapon/storage/backpack/holding,
@@ -2365,11 +2368,9 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/glass/bottle/nanites,	
 		)
 
-/obj/machinery/vending/trader/New()
-	..()
 	for(var/random_items = 1 to 5)
 		premium.Remove(pick(premium))
-	src.updateUsrDialog()
+	src.initialize()
 
 /obj/machinery/vending/trader/attackby(var/obj/item/W, var/mob/user) //Snowflake. This shitcode has been put in here to make it easier to remove in the future
 	if (iscoin(W))
