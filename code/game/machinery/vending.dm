@@ -2356,10 +2356,24 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/glass/beaker/bluespace = 5,
 		/obj/item/weapon/storage/bluespace_crystal = 1,
 		/obj/item/clothing/shoes/magboots/elite = 1,
-		/obj/item/weapon/cell/infinite = 1,
 		/obj/item/weapon/reagent_containers/food/snacks/borer_egg = 1,
 		/obj/item/weapon/reagent_containers/glass/bottle/random = 1, //random disease
 		/obj/item/weapon/reagent_containers/glass/bottle/peridaxon = 1,
 		/obj/item/weapon/reagent_containers/glass/bottle/rezadone = 1,
 		/obj/item/weapon/reagent_containers/glass/bottle/nanites = 1,	
 		)
+
+/obj/machinery/vending/trader/attackby(var/obj/item/W, var/mob/user) //Snowflake. This shitcode has been put in here to make it easier to remove in the future
+	if (istype(W, /obj/item/weapon/coin))
+		if (istype(W, /obj/item/weapon/coin/trader))
+			if (isnull(coin))
+				if(user.drop_item(W, src))
+					coin = W
+					to_chat(user, "<span class='notice'>You insert a coin into [src].</span>")
+					src.updateUsrDialog()
+		else
+			to_chat(user, "<span class='notice'>It doesn't fit.</span>")
+		return
+	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/chococoin)
+		return
+	..()

@@ -3,6 +3,11 @@
  *	Feel free to add stuff.
 */
 
+/obj/item/weapon/coin/trader
+	material=MAT_GOLD
+	name = "Trader coin"
+	icon_state = "coin_mythril"
+
 /obj/item/weapon/storage/marauder
 	name = "Box of Marauder circuits"
 	desc = "All in one box!"
@@ -17,7 +22,7 @@
 	new /obj/item/weapon/circuitboard/mecha/marauder/main(src)
 
 /obj/item/weapon/storage/bluespace_crystal
-	name = "Bluespace crystals box"
+	name = "Natural bluespace crystals box"
 	desc = "Hmmm... it smells like tomato"
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
@@ -25,7 +30,7 @@
 /obj/item/weapon/storage/bluespace_crystal/New()
 	..()
 	for(var/amount = 1 to 6)
-		new /obj/item/bluespace_crystal/artificial(src)
+		new /obj/item/bluespace_crystal(src)
 	new /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato(src)
 
 /*/obj/item/weapon/storage/bluespace_crystal
