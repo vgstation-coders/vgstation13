@@ -2372,7 +2372,7 @@ var/global/num_vending_terminals = 1
 	src.updateUsrDialog()
 
 /obj/machinery/vending/trader/attackby(var/obj/item/W, var/mob/user) //Snowflake. This shitcode has been put in here to make it easier to remove in the future
-	if (istype(W, /obj/item/weapon/coin))
+	if (is_valid_coin(W))
 		if (istype(W, /obj/item/weapon/coin/trader))
 			if (isnull(coin))
 				if(user.drop_item(W, src))
@@ -2381,7 +2381,5 @@ var/global/num_vending_terminals = 1
 					src.updateUsrDialog()
 		else
 			to_chat(user, "<span class='notice'>It doesn't fit.</span>")
-		return
-	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/chococoin))
 		return
 	..()
