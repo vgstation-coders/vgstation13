@@ -362,7 +362,7 @@ var/global/num_vending_terminals = 1
 		if(panel_open)
 			attack_hand(user)
 		return
-	else if(premium.len > 0 && is_type_in_list(W, list(/obj/item/weapon/coin/, /obj/item/weapon/reagent_containers/food/snacks/chococoin)))
+	else if(premium.len > 0 && iscoin(W))
 		if (isnull(coin))
 			if(user.drop_item(W, src))
 				coin = W
@@ -2372,7 +2372,7 @@ var/global/num_vending_terminals = 1
 	src.updateUsrDialog()
 
 /obj/machinery/vending/trader/attackby(var/obj/item/W, var/mob/user) //Snowflake. This shitcode has been put in here to make it easier to remove in the future
-	if (is_valid_coin(W))
+	if (iscoin(W))
 		if (istype(W, /obj/item/weapon/coin/trader))
 			if (isnull(coin))
 				if(user.drop_item(W, src))
