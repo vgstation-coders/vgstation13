@@ -2354,8 +2354,12 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/marauder = 1,
 		/obj/item/weapon/storage/backpack/holding = 1,
 		/obj/item/weapon/reagent_containers/glass/beaker/bluespace = 5,
-		/obj/item/weapon/bluespace_crystal = 1,
+		/obj/item/weapon/storage/bluespace_crystal = 1,
 		/obj/item/clothing/shoes/magboots/elite = 1,
 		/obj/item/weapon/cell/infinite = 1,
 		/obj/item/weapon/reagent_containers/food/snacks/borer_egg = 1,
+		/obj/item/weapon/reagent_containers/glass/bottle/random = 1, //random disease
+		/obj/item/weapon/reagent_containers/glass/bottle/peridaxon = 1,
+		/obj/item/weapon/reagent_containers/glass/bottle/rezadone = 1,
+		/obj/item/weapon/reagent_containers/glass/bottle/nanites = 1,	
 		)
