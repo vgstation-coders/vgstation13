@@ -115,12 +115,11 @@
 
 	add_fingerprint(user)
 
-	if(clumsy_check)
-		if(istype(user, /mob/living))
-			var/mob/living/M = user
-			if ((M_CLUMSY in M.mutations) && prob(50))
-				to_chat(M, "<span class='danger'>[src] blows up in your face.</span>")
-				target = M
+	if(istype(user, /mob/living))
+		var/mob/living/M = user
+		if ((M_CLUMSY in M.mutations) && prob(50))
+			to_chat(M, "<span class='danger'>[src] blows up in your face.</span>")
+			target = M
 
 	var/turf/curloc = get_turf(user)
 	var/turf/targloc = get_turf(target)
