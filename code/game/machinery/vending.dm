@@ -2340,3 +2340,19 @@ var/global/num_vending_terminals = 1
  		/obj/item/clothing/suit/armor/knight/templar = 5,
 		)
 	pack = /obj/structure/vendomatpack/chapelvend
+
+
+/obj/machinery/vending/trader
+	name = "Jewvend"
+	desc = "Insert coin."
+	req_access = list(access_chapel_office)
+	product_slogans = "JOKE."
+	product_ads = "MORE."
+	vend_reply = "JOKES!"
+	icon_state = "voxseed"
+	premium = list(
+		/obj/item/weapon/storage/marauder = 1,
+		/obj/item/weapon/storage/backpack/holding = 2,
+		/obj/item/weapon/reagent_containers/glass/beaker/bluespace = 5,
+		/obj/item/weapon/storage/bluespace_crystal = 1,
+		)
