@@ -22,7 +22,7 @@
 				to_chat(H, "<B>Objective #[obj_count]</B>: [OBJ.explanation_text]")
 				obj_count++
 		var/randomizeguns = pick("taser","egun","laser","revolver","detective","smg","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","beegun")
-		var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","blink","subjugate","staffchange","armor","scrying")
+		var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","blink","subjugate","staffchange","armor","scrying", "clowncurse", "mimecurse", "shoesnatch", "robesummon")
 		if(!summon_type)
 			switch (randomizeguns)
 				if("taser")
@@ -106,6 +106,14 @@
 					new /obj/item/weapon/spellbook/oneuse/teleport/blink(get_turf(H))
 				if("subjugate")
 					new /obj/item/weapon/spellbook/oneuse/subjugate(get_turf(H))
+				if("clowncurse")
+					new /obj/item/weapon/spellbook/oneuse/clown(get_turf(H))
+				if("mimecurse")
+					new /obj/item/weapon/spellbook/oneuse/mime(get_turf(H))
+				if("shoesnatch")
+					new /obj/item/weapon/spellbook/oneuse/shoesnatch(get_turf(H))
+				if("robesummon")
+					new /obj/item/weapon/spellbook/oneuse/robesummon(get_turf(H))
 				/* TODO: Port /tg/ guncode.
 				if("wandnothing")
 					new /obj/item/weapon/gun/magic/wand(get_turf(H))
