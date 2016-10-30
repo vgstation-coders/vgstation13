@@ -170,7 +170,7 @@ var/list/uplink_items = list()
 	item = /obj/item/clothing/gloves/white/advanced
 	cost = 6
 	job = list("Mime")
-	
+
 //Security
 /datum/uplink_item/jobspecific/syndicuffs
 	name = "Syndicate Cuffs"
@@ -318,6 +318,13 @@ var/list/uplink_items = list()
 	desc = "A modified briefcase capable of storing and firing a gun under a false bottom. Starts with an internal SMG and 18 rounds. Use a screwdriver to pry away the false bottom and make modifications."
 	item = /obj/item/weapon/storage/briefcase/false_bottomed/smg
 	cost = 6
+	job = list("Internal Affairs Agent")
+
+/datum/uplink_item/jobspecific/explosiveposter
+	name = "Explosive Commendation poster"
+	desc = "A Commendation poster intercepted from NT HR and fitted with an effective explosive."
+	item = /obj/item/mounted/poster/explosive
+	cost = 5
 	job = list("Internal Affairs Agent")
 
 // DANGEROUS WEAPONS
