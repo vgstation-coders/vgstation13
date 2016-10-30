@@ -1576,9 +1576,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/toy/waterflower = 1,
 		)
 
-	allowed_inputs = list(
-		/obj/item/seeds,
-		)
 	pack = /obj/structure/vendomatpack/hydroseeds
 
 /obj/machinery/vending/voxseeds
@@ -1604,10 +1601,6 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/weapon/storage/box/boxen = 1
-		)
-
-	allowed_inputs = list(
-		/obj/item/seeds,
 		)
 
 /obj/machinery/vending/magivend
