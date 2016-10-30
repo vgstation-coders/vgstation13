@@ -60,6 +60,7 @@ var/list/datum/power/changeling/powerinstances = list()
 	name = "Lesser Form"
 	desc = "We debase ourselves and become lesser.  We become a monkey."
 	genomecost = 1
+	allowduringlesserform = 1
 	verbpath = /obj/item/verbs/changeling/proc/changeling_lesser_form
 
 /datum/power/changeling/horror_form
