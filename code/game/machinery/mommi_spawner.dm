@@ -86,14 +86,7 @@
 	if(alert(user, "Do you wish to be turned into a MoMMI at this position?", "Confirm", "Yes", "No") != "Yes")
 		return
 
-	building=1
-	update_icon()
-	spawn(50)
-		if(!user || !istype(user))
-			building=0
-			update_icon()
-			return
-		makeMoMMI(user)
+	makeMoMMI(user)
 
 
 /obj/machinery/mommi_spawner/attackby(var/obj/item/O as obj, var/mob/user as mob)
@@ -129,53 +122,63 @@
 				return TRUE
 
 			if(user.drop_item(O, src))
-				building=1
-				update_icon()
 				mmi.icon = null
 				mmi.invisibility = 101
-				spawn(50)
-					makeMoMMI(mmi.brainmob)
+				makeMoMMI(mmi.brainmob)
 				return TRUE
 
 /obj/machinery/mommi_spawner/proc/makeMoMMI(var/mob/user)
-	if(!user.client)
-		return // Player has already been made into another mob before this one spawned, so don't make a new one
-	var/turf/T = get_turf(src)
-
-	var/mob/living/silicon/robot/mommi/M = new /mob/living/silicon/robot/mommi(T)
-	if(!M)
-		return
-
-	M.invisibility = 0
-	if (locked_to_zlevel)
-		M.add_ion_law("You belong to the station where you were created; do not leave it.")
-		M.locked_to_z = T.z
-
-	if(user.mind)
-		user.mind.transfer_to(M)
-		if(M.mind.assigned_role == "MoMMI")
-			M.mind.original = M
-		else if(user.mind.special_role)
-			M.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")
-	M.key = user.key
-	M.job = "Mobile MMI"
-
-	//M.cell = locate(/obj/item/weapon/cell) in contents
-	//M.cell.loc = M
-	user.forceMove(M)//Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
-
-	M.mmi = new /obj/item/device/mmi(M)
-	M.mmi.transfer_identity(user)
-	M.Namepick()
-	M.updatename()
-
-	qdel(user)
-
-	metal=0
-	building=0
+	building = TRUE
 	update_icon()
-	M.cell.maxcharge = 15000
-	M.cell.charge = 15000
+	if(!user || istype(user) || !user.client)
+		// Player has already been made into another mob before this one spawned, so let's reset the spawner
+		building = FALSE
+		update_icon()
+		return FALSE
+	spawn(50)
+		if(!user || istype(user) || !user.client)
+			// Player disappeared between clicking on the spawner and now, so we have no one to give a MoMMI to!
+			building = FALSE
+			update_icon()
+			return FALSE
+
+		// Make the MoMMI!
+		var/turf/T = get_turf(src)
+
+		var/mob/living/silicon/robot/mommi/M = new /mob/living/silicon/robot/mommi(T)
+		if(!M)
+			return
+
+		M.invisibility = 0
+		if (locked_to_zlevel)
+			M.add_ion_law("You belong to the station where you were created; do not leave it.")
+			M.locked_to_z = T.z
+
+		if(user.mind)
+			user.mind.transfer_to(M)
+			if(M.mind.assigned_role == "MoMMI")
+				M.mind.original = M
+			else if(user.mind.special_role)
+				M.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")
+		M.key = user.key
+		M.job = "Mobile MMI"
+
+		//M.cell = locate(/obj/item/weapon/cell) in contents
+		//M.cell.loc = M
+		user.forceMove(M)//Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
+
+		M.mmi = new /obj/item/device/mmi(M)
+		M.mmi.transfer_identity(user)
+		M.Namepick()
+		M.updatename()
+
+		qdel(user)
+
+		metal=0
+		building=0
+		update_icon()
+		M.cell.maxcharge = 15000
+		M.cell.charge = 15000
 
 /obj/machinery/mommi_spawner/update_icon()
 	if(stat & NOPOWER)
