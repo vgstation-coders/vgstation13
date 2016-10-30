@@ -180,6 +180,7 @@
 	name = "the void"
 	icon_state = "void"
 	desc = "The final final frontier."
+	plane = PLANE_ABOVE_PARALLAX
 
 /turf/space/void/New()
 	return
