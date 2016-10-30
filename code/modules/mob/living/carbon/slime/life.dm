@@ -391,6 +391,8 @@
 				A.powerlevel = max(0, powerlevel-1)
 				A.Friends = Friends
 				A.tame = tame
+				transferImplantsTo(A)
+				transferBorers(A)
 				qdel(src)
 
 

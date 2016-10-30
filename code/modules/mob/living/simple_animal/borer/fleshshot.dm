@@ -25,6 +25,10 @@
 	if(!parent_borer)
 		qdel(src)
 
+/obj/item/weapon/gun/hookshot/flesh/dropped()
+	..()
+	qdel(src)
+
 /obj/item/weapon/gun/hookshot/flesh/Destroy()//if a single link of the chain is destroyed, the rest of the chain is instantly destroyed as well.
 	if(parent_borer)
 		if(parent_borer.extend_o_arm == src)
@@ -358,14 +362,13 @@
 			if(OE.grasp_id) //If borer is in an arm
 				var/obj/item/held = L.get_held_item_by_index(OE.grasp_id)
 				if(held)
-					if(!parent_borer.attack_cooldown)
+					if(!parent_borer.check_attack_cooldown())
 						A.attackby(held, L, 1, parent_borer)
 						if(!parent_borer)	//There's already a check for this above, but for some reason when it hits an airlock it gets qdel()'d before it gets to this point.
 							bullet_die()
 							return
 
-						parent_borer.attack_cooldown = 1
-						parent_borer.reset_attack_cooldown()
+						parent_borer.set_attack_cooldown()
 					bullet_die()
 					return
 

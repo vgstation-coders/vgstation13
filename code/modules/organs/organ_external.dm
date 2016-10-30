@@ -633,9 +633,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 		src.status &= ~ORGAN_SPLINTED
 		src.status &= ~ORGAN_DEAD
 
-		for(var/implant in implants)
-			qdel(implant)
-
 		//If any organs are attached to this, destroy them
 		for(var/datum/organ/external/O in children)
 			O.droplimb(1)
@@ -646,6 +643,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 			if(species) //Transfer species to the generated organ
 				organ.species = src.species
 				organ.update_icon()
+
+		for(var/implant in implants)
+			qdel(implant)
 
 		src.species = null
 

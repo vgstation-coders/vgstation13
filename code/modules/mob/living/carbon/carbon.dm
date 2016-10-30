@@ -532,7 +532,6 @@
 			var/mob/living/simple_animal/borer/B = I
 			if(B.hostlimb == host_region)
 				return B
-
 	return 0
 
 /mob/proc/get_brain_worms()
@@ -600,8 +599,8 @@
 				affected.implants += I
 
 /mob/living/carbon/proc/dropBorers(var/gibbed = null)
-	var/mob/living/simple_animal/borer/B = has_brain_worms()
-	if(B)
+	var/list/borer_list = get_brain_worms()
+	for(var/mob/living/simple_animal/borer/B in borer_list)
 		B.detach()
 		if(gibbed)
 			to_chat(B, "<span class='danger'>As your host is violently destroyed, so are you!</span>")
@@ -611,12 +610,17 @@
 			to_chat(B, "<span class='notice'>You're forcefully popped out of your host!</span>")
 
 /mob/living/carbon/proc/transferBorers(mob/living/target)
-	var/mob/living/simple_animal/borer/B = has_brain_worms()
-	if(B)
+	var/list/borer_list = get_brain_worms()
+	for(var/mob/living/simple_animal/borer/B in borer_list)
+		var/currenthostlimb = B.hostlimb
 		B.detach()
 		if(iscarbon(target))
+			if(!ishuman(target))
+				if(currenthostlimb != LIMB_HEAD)
+					to_chat(B, "<span class='notice'>You're forcefully popped out of your host!</span>")
+					return
 			var/mob/living/carbon/C = target
-			B.perform_infestation(C)
+			B.perform_infestation(C, currenthostlimb)
 		else
 			to_chat(B, "<span class='notice'>You're forcefully popped out of your host!</span>")
 
@@ -624,9 +628,9 @@
 	if(!target)
 		target = get_turf(src)
 
-	var/mob/living/simple_animal/borer/B = src.has_brain_worms()
+	var/list/borer_list = get_brain_worms()
 	for(var/mob/M in src)//mobs, all of them
-		if(M == B)
+		if(M in borer_list)
 			continue
 		if(M in src.stomach_contents)
 			src.stomach_contents.Remove(M)

@@ -7,7 +7,6 @@
 			continue
 		drop_from_inventory(W)
 	regenerate_icons()
-	dropBorers()
 	monkeyizing = 1
 	canmove = 0
 	delayNextAttack(50)
@@ -26,6 +25,8 @@
 	var/mob/living/carbon/monkey/O = null
 
 	O = new species.primitive(get_turf(src))
+
+	transferBorers(O)
 
 	O.dna = dna.Clone()
 	O.dna.SetSEState(MONKEYBLOCK,1)
@@ -306,7 +307,6 @@
 		return
 	for(var/obj/item/W in src)
 		drop_from_inventory(W)
-	dropBorers()
 	regenerate_icons()
 	monkeyizing = 1
 	canmove = 0
@@ -317,6 +317,7 @@
 		qdel(t)
 
 	var/mob/living/carbon/slime/new_slime
+	transferBorers(new_slime)
 	if(reproduce)
 		var/number = pick(14;2,3,4)	//reproduce (has a small chance of producing 3 or 4 offspring)
 		var/list/babies = list()

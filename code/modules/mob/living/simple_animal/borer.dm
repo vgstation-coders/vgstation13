@@ -86,8 +86,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/obj/item/weapon/gun/hookshot/flesh/extend_o_arm = null
 	var/extend_o_arm_unlocked = 0
 
-	var/attack_cooldown = 0 //to prevent spamming extend_o_arm attacks at close range
-
 	// Event handles
 	var/eh_emote
 
@@ -317,7 +315,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	for(var/mob/M in player_list)
 		if(istype(M, /mob/new_player))
 			continue
-		if(istype(M,/mob/dead/observer)  && (M.client && M.client.prefs.toggles & CHAT_GHOSTEARS))
+		if(istype(M,/mob/dead/observer)  && (M.client && (M.client.prefs.toggles & CHAT_GHOSTEARS || get_turf(src) in view(M))))
 			var/controls = "<a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>Follow</a>"
 			if(M.client.holder)
 				controls+= " | <A HREF='?_src_=holder;adminmoreinfo=\ref[src]'>?</A>"
@@ -535,7 +533,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 /mob/living/simple_animal/borer/proc/infest_limb(var/obj/item/weapon/organ/limb)
 	detach()
 	limb.borer=src
-	loc=limb
+	forceMove(limb)
 
 	update_verbs(BORER_MODE_SEVERED)
 
@@ -572,22 +570,32 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	if(!src)
 		return
 
-	if(hostlimb == LIMB_HEAD)
-		to_chat(src, "<span class='info'>You begin disconnecting from [host]'s synapses and prodding at their internal ear canal.</span>")
+	if(severed)
+		if(istype(loc, /obj/item/weapon/organ/head))
+			to_chat(src, "<span class='info'>You begin disconnecting from \the [loc]'s synapses and prodding at its internal ear canal.</span>")
+		else
+			to_chat(src, "<span class='info'>You begin disconnecting from \the [loc]'s nerve endings and prodding at the surface of its skin.</span>")
 	else
-		to_chat(src, "<span class='info'>You begin disconnecting from [host]'s nerve endings and prodding at the surface of their skin.</span>")
+		if(hostlimb == LIMB_HEAD)
+			to_chat(src, "<span class='info'>You begin disconnecting from \the [host]'s synapses and prodding at their internal ear canal.</span>")
+		else
+			to_chat(src, "<span class='info'>You begin disconnecting from \the [host]'s nerve endings and prodding at the surface of their skin.</span>")
 
-	spawn(200)
+	var/leave_time = 200
+	if(severed)
+		leave_time = 20
+
+	spawn(leave_time)
 
 		if((!host && !severed) || !src)
 			return
 
 		if(src.stat)
-			to_chat(src, "<span class='warning'>You cannot abandon [host] in your current state.</span>")
+			to_chat(src, "<span class='warning'>You cannot abandon [host ? host : "\the [loc]"] in your current state.</span>")
 			return
 
 		if(channeling)
-			to_chat(src, "<span class='warning'>You cannot abandon [host] while your focus is directed elsewhere.</span>")
+			to_chat(src, "<span class='warning'>You cannot abandon [host ? host : "\the [loc]"] while your focus is directed elsewhere.</span>")
 			return
 
 		if(controlling)
@@ -599,15 +607,15 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			return
 
 		if(severed)
-			if(hostlimb == LIMB_HEAD)
+			if(istype(loc, /obj/item/weapon/organ/head))
 				to_chat(src, "<span class='info'>You wiggle out of the ear of \the [loc] and plop to the ground.</span>")
 			else
-				to_chat(src, "<span class='info'>You wiggle out of \the [limb_to_name(hostlimb)] and plop to the ground.</span>")
+				to_chat(src, "<span class='info'>You wiggle out of \the [loc] and plop to the ground.</span>")
 		else
 			if(hostlimb == LIMB_HEAD)
-				to_chat(src, "<span class='info'>You wiggle out of [host]'s ear and plop to the ground.</span>")
+				to_chat(src, "<span class='info'>You wiggle out of \the [host]'s ear and plop to the ground.</span>")
 			else
-				to_chat(src, "<span class='info'>You wiggle out of [host]'s [limb_to_name(hostlimb)] and plop to the ground.</span>")
+				to_chat(src, "<span class='info'>You wiggle out of \the [host]'s [limb_to_name(hostlimb)] and plop to the ground.</span>")
 
 		detach()
 
@@ -1171,6 +1179,8 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				if(!extend_o_arm)
 					extend_o_arm = new /obj/item/weapon/gun/hookshot/flesh(src, src)
 					extend_o_arm.forceMove(host)
+				if(!check_can_do())
+					return
 				if(istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/offhand) || istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/offhand)) //If the host is two-handing something.
 					to_chat(src, "<span class='warning'>You cannot swing this item while your host holds it with both hands!</span>")
 					return
@@ -1185,12 +1195,11 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 				if(host.Adjacent(A))
 					if(hostlimb == LIMB_RIGHT_ARM)
 						if(host.get_held_item_by_index(GRASP_RIGHT_HAND))
-							if(attack_cooldown)
+							if(check_attack_cooldown())
 								return
 							else
 								A.attackby(host.get_held_item_by_index(GRASP_RIGHT_HAND), host, 1, src)
-								attack_cooldown = 1
-								reset_attack_cooldown()
+								set_attack_cooldown()
 								return
 						else if(istype(A, /obj/item))
 							var/obj/item/I = A
@@ -1199,12 +1208,11 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 								return
 					else
 						if(host.get_held_item_by_index(GRASP_LEFT_HAND))
-							if(attack_cooldown)
+							if(check_attack_cooldown())
 								return
 							else
 								A.attackby(host.get_held_item_by_index(GRASP_LEFT_HAND), host, 1, src)
-								attack_cooldown = 1
-								reset_attack_cooldown()
+								set_attack_cooldown()
 								return
 						else if(istype(A, /obj/item))
 							var/obj/item/I = A
@@ -1235,6 +1243,9 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 								chemicals -= 10
 				extend_o_arm.afterattack(A, host)
 
-/mob/living/simple_animal/borer/proc/reset_attack_cooldown()
-	spawn(10)
-		attack_cooldown = 0
+/mob/living/simple_animal/borer/proc/check_attack_cooldown()
+	var/datum/delay_controller/host_attack_delayer = host.attack_delayer
+	return host_attack_delayer.blocked()
+
+/mob/living/simple_animal/borer/proc/set_attack_cooldown()
+	host.delayNextAttack(10)
