@@ -1323,6 +1323,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_CULT "Cult"
 #define LANGUAGE_MOUSE "Mouse"
 #define LANGUAGE_GOLEM "Golem"
+#define LANGUAGE_SUID "Suid"
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG

@@ -862,3 +862,13 @@ var/global/list/whitelisted_species = list("Human")
 					qdel(src)
 		else
 			to_chat(user, "<span class='warning'>The used extract doesn't have any effect on \the [src].</span>")
+
+/datum/species/suid
+	name = "Suid"
+	icobase = 'icons/mob/human_races/r_suid.dmi'
+	deform = 'icons/mob/human_races/r_def_suid.dmi'
+	known_languages = list(LANGUAGE_SUID)
+	attack_verb = "punches"
+	flags = HAS_LIPS | IS_BULKY | HAS_SKIN_TONE | IS_WHITELISTED
+	uniform_icons = 'icons/mob/uniform_fat.dmi'
+	primitive = /mob/living/carbon/monkey/rock

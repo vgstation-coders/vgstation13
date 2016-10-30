@@ -79,6 +79,7 @@ var/list/ai_list = list()
 	add_language(LANGUAGE_MONKEY, 1)
 	add_language(LANGUAGE_VOX, 1)
 	add_language(LANGUAGE_GOLEM, 1)
+	add_language(LANGUAGE_SUID, 1)
 	add_language(LANGUAGE_TRADEBAND, 1)
 	add_language(LANGUAGE_MOUSE, 1)
 	add_language(LANGUAGE_HUMAN, 1)
@@ -302,7 +303,7 @@ var/list/ai_list = list()
 	for(var/spell/S in spell_list)
 		if(S.panel == MALFUNCTION)
 			remove_spell(S)
-			
+
 /mob/living/silicon/ai/proc/ai_alerts()
 
 
@@ -805,17 +806,17 @@ var/list/ai_list = list()
 	charge_max = 1
 	hud_state = "unshunt"
 	override_base = "grey"
-	
+
 /spell/aoe_turf/corereturn/before_target(mob/user)
 	if(istype(user.loc, /obj/machinery/power/apc))
 		return 0
 	else
 		to_chat(user, "<span class='notice'>You are already in your Main Core.</span>")
 		return 1
-		
+
 /spell/aoe_turf/corereturn/choose_targets(mob/user = usr)
 	return list(user.loc)
-	
+
 /spell/aoe_turf/corereturn/cast(var/list/targets, mob/user)
 	var/obj/machinery/power/apc/apc = targets[1]
 	apc.malfvacate()
