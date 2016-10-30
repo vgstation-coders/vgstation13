@@ -57,7 +57,6 @@ var/global/list/narsie_list = list()
 		if (emergency_shuttle)
 			emergency_shuttle.incall()
 			emergency_shuttle.can_recall = 0
-			emergency_shuttle.settimeleft(600)
 
 		if(narnar)
 			SetUniversalState(/datum/universal_state/hell)
