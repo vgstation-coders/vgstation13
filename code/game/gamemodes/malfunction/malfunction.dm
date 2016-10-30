@@ -158,6 +158,9 @@ You should now be able to use your Explode spell to interface with the nuclear f
 
 /datum/game_mode/malfunction/Topic(href, href_list)
 	..()
+	var/mob/living/silicon/ai/malf = usr
+	if(!istype(malf) || !(malf.mind in malf_ai))
+		return
 	if (href_list["ai_win"])
 		ai_win()
 	return
