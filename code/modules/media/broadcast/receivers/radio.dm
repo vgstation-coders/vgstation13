@@ -44,6 +44,8 @@
 		disconnect_frequency()
 
 /obj/machinery/media/receiver/boombox/Topic(href,href_list)
+	if(..())
+		return 1
 	if(isobserver(usr) && !isAdminGhost(usr))
 		to_chat(usr, "<span class='warning'>You can't push buttons when your fingers go right through them, dummy.</span>")
 		return
@@ -112,7 +114,8 @@
 	update_on(TRUE)
 
 /obj/machinery/media/receiver/boombox/wallmount/Topic(href,href_list)
-	..()
+	if(..())
+		return 1
 	relay_area_configuration()
 
 /obj/machinery/media/receiver/boombox/wallmount/update_on(var/no_message = FALSE)
