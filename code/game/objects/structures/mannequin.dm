@@ -727,8 +727,8 @@
 	livingMannequin.dir = dir
 	var/image/I = image('icons/effects/32x32.dmi',"blank")
 	I.overlays |= overlays
-	I.pixel_x = -1*clothing_offset_x
-	I.pixel_y = -1*clothing_offset_y
+	I.pixel_x = -clothing_offset_x
+	I.pixel_y = -clothing_offset_y
 	livingMannequin.overlays += I
 	for(var/slot in clothing)
 		if(clothing[slot])
@@ -820,6 +820,7 @@
 	desc = "Holy shit."
 	icon = 'icons/obj/mannequin_64x64.dmi'
 	icon_state="mannequin_cyber_human"
+	trueForm = /mob/living/simple_animal/hostile/mannequin/cyber
 	pedestal = /obj/item/trash/mannequin/large
 	pixel_x = -1*(WORLD_ICON_SIZE/2)
 	clothing_offset_x = 16*PIXEL_MULTIPLIER

@@ -67,6 +67,42 @@
 	visible_message("<span class='warning'><b>[src]</b> collapses!</span>")
 	playsound(loc, 'sound/effects/woodcutting.ogg', 100, 1)
 	getFromPool(/obj/item/stack/sheet/wood, loc, 5)
+	for(var/obj/cloth in clothing)
+		cloth.forceMove(loc)
+		clothing -= cloth
+	getFromPool(/obj/effect/decal/cleanable/dirt,loc)
+
+/mob/living/simple_animal/hostile/mannequin/cyber
+	name = "human cyber mannequin"
+	icon_state = "mannequin_cyber_human"
+	icon_living = "mannequin_cyber_human"
+	harm_intent_damage = 10
+	melee_damage_lower = 10
+	melee_damage_upper = 10
+	maxHealth = 150
+	health = 150
+
+/mob/living/simple_animal/hostile/mannequin/cyber/breakDown()
+	visible_message("<span class='warning'><b>[src]</b> explodes!</span>")
+	explosion(loc,0,0,2)
+	playsound(loc, 'sound/effects/sparks4.ogg', 100, 1)
+	getFromPool(/obj/item/stack/sheet/metal, loc, 5)
+	var/parts_list = list(
+		/obj/item/robot_parts/head,
+		/obj/item/robot_parts/chest,
+		/obj/item/robot_parts/r_leg,
+		/obj/item/robot_parts/l_leg,
+		/obj/item/robot_parts/r_arm,
+		/obj/item/robot_parts/l_arm,
+		/obj/item/robot_parts/l_arm,
+		)
+	for(var/part in parts_list)
+		if(prob(40))
+			new part(loc)
+	for(var/obj/cloth in clothing)
+		cloth.forceMove(loc)
+		clothing -= cloth
+	getFromPool(/obj/effect/decal/cleanable/dirt,loc)
 
 /mob/living/simple_animal/hostile/mannequin/cultify()
 	var/mob/living/simple_animal/hostile/mannequin/cult/C = new(loc)
@@ -87,6 +123,10 @@
 	supernatural = 1
 	speak_emote = list("hisses")
 	emote_hear = list("wails","screeches")
+
+/mob/living/simple_animal/hostile/mannequin/cult/breakDown()
+	new /obj/item/weapon/ectoplasm(loc)
+	..()
 
 /mob/living/simple_animal/hostile/mannequin/cult/CanAttack(var/atom/the_target)
 	if(iscultist(the_target))
