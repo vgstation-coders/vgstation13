@@ -221,6 +221,13 @@ var/list/rc_control_boards = list()
   if(!target)
     user.unset_machine()
 
+/obj/item/device/syndicate_controller/OnMobDeath(var/mob/user)
+  if(active == 1)
+    user.ckey = user_ckey
+    active = 0
+    current_board.inUse = 0
+
+
 /obj/item/device/syndicate_controller/check_eye(var/mob/user)
   if ( loc != user || user.get_active_hand() != src || !user.canmove || user.blinded || !current_camera || !current_camera.active || current_camera.camera_target.isDead() || current_camera.camera_target.z != user.z)
     active = 0
