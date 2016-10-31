@@ -697,3 +697,4 @@
 	icon_state = "vox-skelesuit"
 	item_state = "vox-skelesuit"
 	_color = "vox-skelesuit"
+	species_restricted = list(VOX_SHAPED)
