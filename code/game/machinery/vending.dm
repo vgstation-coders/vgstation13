@@ -427,7 +427,8 @@ var/global/num_vending_terminals = 1
  *  usr is the mob who gets the change.
  */
 /obj/machinery/vending/proc/pay_with_cash(var/obj/item/weapon/spacecash/cashmoney, mob/user)
-	if(!currently_vending) return
+	if(!currently_vending) 
+		return
 	if(currently_vending.price > cashmoney.get_total())
 		// This is not a status display message, since it's something the character
 		// themselves is meant to see BEFORE putting the money in
