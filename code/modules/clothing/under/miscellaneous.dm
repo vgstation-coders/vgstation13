@@ -690,3 +690,11 @@
 	icon_state = "nr_uniform"
 	item_state = "nr_uniform"
 	_color = "nr_uniform"
+
+/obj/item/clothing/under/skelevoxsuit
+	name = "skelevox suit"
+	desc = "Feels like wearing literally nothing at all!"
+	icon_state = "vox-skelesuit"
+	item_state = "vox-skelesuit"
+	_color = "vox-skelesuit"
+	species_restricted = list(VOX_SHAPED)

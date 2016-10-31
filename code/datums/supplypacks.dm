@@ -368,6 +368,18 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = access_theatre
 	group = "Clothing"
 
+/datum/supply_packs/spookycostume
+	name = "Halloween Costume crate"
+	contains = list(/obj/item/clothing/suit/space/plasmaman/moltar,
+					/obj/item/clothing/head/helmet/space/plasmaman/moltar,
+					/obj/item/clothing/mask/joy,
+					/obj/item/clothing/under/skelevoxsuit,
+					/obj/item/clothing/head/snake)
+	cost = 31
+	containertype = /obj/structure/closet/crate
+	containername = "Halloween Costumes"
+	group = "Clothing"
+
 /datum/supply_packs/wizard
 	name = "Wizard costume"
 	contains = list(/obj/item/weapon/staff,
@@ -499,7 +511,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Armored formalwear, for the not-so-best occasions."
 	contraband = 1
 	group = "Clothing"
-	
+
 /datum/supply_packs/waifu
 	name = "Feminine formalwear"
 	contains = list(/obj/item/clothing/under/dress/dress_fire,
