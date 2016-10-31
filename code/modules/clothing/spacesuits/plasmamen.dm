@@ -307,7 +307,7 @@
 
 /obj/item/clothing/head/helmet/space/plasmaman/moltar
 	name = "moltar's mask"
-	icon_state = "plasmamanAssistant_helmet0"
+	icon_state = "plasmamanMoltar_helmet"
 	base_state = "plasmamanMoltar_helmet"
 	no_light=1
 
