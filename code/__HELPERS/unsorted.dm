@@ -1183,11 +1183,18 @@ var/global/list/common_tools = list(
 	)
 
 //check if mob is lying down on something we can operate him on.
-/proc/can_operate(mob/living/carbon/M)
-	return (ishuman(M) && M.lying && \
-	locate(/obj/machinery/optable, M.loc) || \
-	(locate(/obj/structure/bed/roller, M.loc) && prob(75)) || \
-	(locate(/obj/structure/table/, M.loc) && prob(66)))
+/proc/can_operate(mob/living/carbon/M, mob/U)
+	if(U == M)
+		return 0
+	if(ishuman(M) && M.lying)
+		if(locate(/obj/machinery/optable,M.loc))
+			return 1
+		if(locate(/obj/structure/bed/roller, M.loc) && prob(75))
+			return 1
+		var/obj/structure/table/T = locate(/obj/structure/table/, M.loc)
+		if(T && !T.flipped && prob(66))
+			return 1
+	return 0
 
 /*
 Checks if that loc and dir has a item on the wall
