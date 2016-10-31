@@ -61,6 +61,10 @@ obj/structure/sign/poster/New(var/serial)
 		name = "Award of Sufficiency"
 		desc = "The mere sight of it makes you very proud."
 		icon_state = "goldstar"
+	if(serial_number == -2)
+		name = "Award of Sufficiency"
+		desc = "The mere sight of it makes you very proud."
+		icon_state = "goldstar"
 	else
 		if(serial_number == loc)
 			serial_number = rand(1, poster_designs.len)	//This is for the mappers that want individual posters without having to use rolled posters.
@@ -116,10 +120,8 @@ obj/structure/sign/poster/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 		H.apply_damage(rand(5,7), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
 
-
-
-/obj/item/mounted/poster/explosive
-	name = "Commendation Poster"
+/obj/item/mounted/poster/explosive/New(turf/loc, var/given_serial = -2)
+	name = "commendation poster"
 	desc = "The poster comes with its own automatic adhesive mechanism, for easy pinning to any vertical surface. Remove at personal risk."
 	icon = 'icons/obj/posters.dmi'
 	icon_state = "rolled_poster"
@@ -127,20 +129,19 @@ obj/structure/sign/poster/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 /obj/item/mounted/poster/explosive/do_build(turf/on_wall, mob/user)
 	to_chat(user, "<span class='notice'>You start placing the poster on the wall...</span>")
-	var/obj/structure/sign/poster/explosive/D = new(src)
-
+	var/obj/structure/sign/poster/explosive/D = new(on_wall)
 	flick("poster_being_set",D)
-	D.forceMove(on_wall)
 	qdel(src)
 	playsound(D.loc, 'sound/items/poster_being_created.ogg', 100, 1)
 
 
-obj/structure/sign/poster/explosive/New()
+/obj/structure/sign/poster/explosive/New(var/serial)
+	..()
 	name = "Award of Sufficiency"
 	desc = "The mere sight of it makes you very proud."
 	icon_state = "goldstar"
 
-obj/structure/sign/poster/explosive/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/sign/poster/explosive/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(ismultitool(W))
 		to_chat(user, "<span class='notice'>You carefully deactivate the bomb.</span>")
 		qdel(src)
@@ -148,8 +149,6 @@ obj/structure/sign/poster/explosive/attackby(obj/item/weapon/W as obj, mob/user 
 		return
 
 /obj/structure/sign/poster/explosive/attack_hand(mob/user as mob)
-	if(ruined)
-		return
 	var/temp_loc = user.loc
 	switch(alert("Do I want to rip the poster from the wall?","You think...","Yes","No"))
 		if("Yes")
@@ -161,7 +160,6 @@ obj/structure/sign/poster/explosive/attackby(obj/item/weapon/W as obj, mob/user 
 			add_fingerprint(user)
 		if("No")
 			return
-
 
 /datum/poster
 	// Name suffix. Poster - [name]
