@@ -444,7 +444,7 @@ var/global/num_vending_terminals = 1
 	qdel(cashmoney)
 
 	if(left)
-		dispense_cash(left, src.loc, user)
+		dispense_cash(left, src.loc)
 
 	src.vend(src.currently_vending, usr)
 	currently_vending = null
