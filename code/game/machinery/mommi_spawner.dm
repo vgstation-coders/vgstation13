@@ -130,13 +130,13 @@
 /obj/machinery/mommi_spawner/proc/makeMoMMI(var/mob/user)
 	building = TRUE
 	update_icon()
-	if(!user || istype(user) || !user.client)
+	if(!user || !istype(user) || !user.client)
 		// Player has already been made into another mob before this one spawned, so let's reset the spawner
 		building = FALSE
 		update_icon()
 		return FALSE
 	spawn(50)
-		if(!user || istype(user) || !user.client)
+		if(!user || !istype(user) || !user.client)
 			// Player disappeared between clicking on the spawner and now, so we have no one to give a MoMMI to!
 			building = FALSE
 			update_icon()
