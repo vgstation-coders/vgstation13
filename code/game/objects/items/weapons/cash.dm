@@ -126,6 +126,9 @@ var/global/list/moneytypes = list(
 			update_icon()
 			to_chat(user, "<span class='notice'>You add [collected] [src.name][amount > 1 ? "s":""] to your stack of cash.</span>")
 
+/obj/item/weapon/spacecash/proc/get_total()//I can't believe this didn't exist here already.
+	return worth * amount
+
 /obj/item/weapon/spacecash/c10
 	icon_state = "cash10"
 	worth = 10
