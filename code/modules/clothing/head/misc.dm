@@ -419,6 +419,6 @@
 
 /obj/item/clothing/head/snake
 	name = "snake head"
-	desc = "Reenact acts of violence against reptiles, or sneak into a swamp unnoticed"
+	desc = "Reenact acts of violence against reptiles, or sneak into a swamp unnoticed."
 	icon_state = "snakehead"
 	item_state = "snakehead"
