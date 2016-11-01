@@ -2257,8 +2257,8 @@
 
 		var/sentname = input(src.owner, "Pick a title for the report", "Title") as text|null
 
-		var/replyfax = SendFax(sent, sentname, centcomm = 1)
-		if(!replyfax)
+		var/obj/item/weapon/paper/replyfax = SendFax(sent, sentname, centcomm = 1)
+		if(!istype(replyfax))
 			to_chat(src.owner, "Message reply to [key_name(H)] failed.")
 			return
 		to_chat(src.owner, "Message reply to [key_name(H)] transmitted successfully.")
