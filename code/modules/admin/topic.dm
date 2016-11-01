@@ -2208,7 +2208,7 @@
 
 		to_chat(src.owner, "You sent [input] to [M] via a secure channel.")
 		log_admin("[src.owner] replied to [key_name(M)]'s Centcomm message with the message [input].")
-		message_admins("[src.owner] replied to [key_name(M)]'s Centcom message with: \"[input]\"")
+		output_to_msay("[src.owner] replied to [key_name(M)]'s Centcom message with: \"[input]\"")
 		to_chat(M, "You hear something crackle from your [receive_type] for a moment before a voice speaks.  \"Please stand by for a message from Central Command.  Message as follows. <b>\"[input]\"</b>  Message ends.\"")
 
 	else if(href_list["SyndicateReply"])
@@ -2235,7 +2235,7 @@
 
 		to_chat(src.owner, "You sent [input] to [M] via a secure channel.")
 		log_admin("[src.owner] replied to [key_name(M)]'s Syndicate message with the message [input].")
-		message_admins("[src.owner] replied to [key_name(M)]'s Syndicate message with: \"[input]\"")
+		output_to_msay("[src.owner] replied to [key_name(M)]'s Syndicate message with: \"[input]\"")
 		to_chat(M, "You hear something crackle from your [receive_type] for a moment before a voice speaks.  \"Please stand by for a message from your benefactor.  Message as follows, agent. <b>\"[input]\"</b>  Message ends.\"")
 
 	else if(href_list["CentcommFaxView"])
@@ -2261,7 +2261,7 @@
 
 		to_chat(src.owner, "Message reply to transmitted successfully.")
 		log_admin("[key_name(src.owner)] replied to a fax message from [key_name(H)]: [sent]")
-		message_admins("[key_name_admin(src.owner)] replied to a fax message from [key_name_admin(H)]", 1)
+		output_to_msay("[key_name_admin(src.owner)] replied to a fax message from [key_name_admin(H)]: [sent]", 1)
 
 
 	else if(href_list["jumpto"])
