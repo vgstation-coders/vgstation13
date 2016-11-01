@@ -2179,7 +2179,7 @@
 	else if (href_list["PrayerReply"])
 		if(!check_rights(R_ADMIN))
 			return
-		var/mob/M = locate(href_list["subtlemessage"])
+		var/mob/M = locate(href_list["PrayerReply"])
 		output_to_msay("[key_name(src.owner)] is replying to a prayer from [key_name(M)]")
 
 		usr.client.cmd_admin_subtle_message(M)
