@@ -147,20 +147,34 @@ var/global/list/accessable_z_levels = list()
 	name = "station"
 	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_STATION_MODIFIER
 
+/datum/zLevel/station/snow
+	base_turf = /turf/snow
+
 /datum/zLevel/centcomm
 
 	name = "centcomm"
 	teleJammed = 1
 	movementJammed = 1
 
+/datum/zLevel/centcomm/snow
+	base_turf = /turf/snow
+
 /datum/zLevel/space
 
 	name = "space"
 	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_SPACE_MODIFIER
 
+/datum/zLevel/space/snow
+	name = "tundra"
+	base_turf = /turf/snow
+
 /datum/zLevel/mining
 
 	name = "mining"
+
+
+/datum/zLevel/mining/snow
+	base_turf = /turf/snow
 
 //Currently experimental, contains nothing worthy of interest
 /datum/zLevel/desert

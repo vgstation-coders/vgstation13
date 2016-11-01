@@ -168,7 +168,7 @@
 	name = "snow biome movable generator"
 	desc = "An undefined and cold-hearted generator."
 	icon_state = "gen_snow"
-	expected_turfs = list(/turf/unsimulated/floor/snow) //Will return if turf type is different from any in the list, good to avoid generator collision with other terrain features
+	expected_turfs = list(/turf/snow) //Will return if turf type is different from any in the list, good to avoid generator collision with other terrain features
 
 //A thin snow forest, equivalent to some lightly forested terrain
 /obj/structure/radial_gen/movable/snow_nature/snow_forest
@@ -304,9 +304,9 @@
 	gen_prob_hard_fall = 10	//Probability reduction per tile after last soft radius, overrides the former
 
 	//What types do we generate from this generator, array must contain individual probabilities for each turf. Only in soft radius
-	gen_types_turf_soft = list(/turf/unsimulated/floor/snow = 100)
+	gen_types_turf_soft = list(/turf/snow = 100)
 	//Ditto above, but only in hard radius. Obviously, if you want it to spawn in both, add to both lists. OBVIOUSLY
-	gen_types_turf_hard = list(/turf/unsimulated/floor/snow = 100)
+	gen_types_turf_hard = list(/turf/snow = 100)
 
 //A very large patch of snow
 /obj/structure/radial_gen/turf/snow_nature/snow_patch/large
@@ -320,7 +320,7 @@
 	gen_prob_hard_fall = 5	//Probability reduction per tile after last soft radius, overrides the former
 
 //A patch of permafrost
-/obj/structure/radial_gen/turf/snow_nature/permafrost
+/*/obj/structure/radial_gen/turf/snow_nature/permafrost
 
 	name = "permafrost generator"
 	desc = "A patch of frozen dirt."
@@ -334,9 +334,9 @@
 	gen_clear_tiles = 1 //FOR TESTING ONLY
 
 	//What types do we generate from this generator, array must contain individual probabilities for each turf. Only in soft radius
-	gen_types_turf_soft = list(/turf/unsimulated/floor/snow/permafrost = 100)
+	gen_types_turf_soft = list(/turf/snow/permafrost = 100)
 	//Ditto above, but only in hard radius. Obviously, if you want it to spawn in both, add to both lists. OBVIOUSLY
-	gen_types_turf_hard = list(/turf/unsimulated/floor/snow/permafrost = 100)
+	gen_types_turf_hard = list(/turf/snow/permafrost = 100)
 
 //A very large patch of permafrost
 /obj/structure/radial_gen/turf/snow_nature/permafrost/large
@@ -348,3 +348,4 @@
 	gen_soft_radius = 15 //Soft generator radius, different rules beyond this point. Starts after minimum but ends relative to center
 	gen_hard_radius = 30 //Hard generator radius, nothing will generate past this, ever
 	gen_prob_hard_fall = 5	//Probability reduction per tile after last soft radius, overrides the former
+*/
