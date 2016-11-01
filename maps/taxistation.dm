@@ -1,10 +1,10 @@
 //**************************************************************
-// Map Datum -- Taxistation (now with snow!)
+// Map Datum -- Taxistation
 //**************************************************************
 
 /datum/map/active
 	nameShort = "taxi"
-	nameLong = "Taxi Research Stations"
+	nameLong = "Taxi Station"
 	map_dir = "taxistation"
 	tDomeX = 127
 	tDomeY = 67
@@ -12,18 +12,18 @@
 	zAsteroid = 6
 	zDeepSpace = 5
 	zLevels = list(
-		/datum/zLevel/station/snow,
-		/datum/zLevel/centcomm/snow,
-		/datum/zLevel/space/snow{
+		/datum/zLevel/station,
+		/datum/zLevel/centcomm,
+		/datum/zLevel/space{
 			name = "spaceOldSat" ;
 			},
-		/datum/zLevel/space/snow{
+		/datum/zLevel/space{
 			name = "derelict" ;
 			},
-		/datum/zLevel/space/snow{
+		/datum/zLevel/space{
 			name = "spacePirateShip" ;
 			},
-		/datum/zLevel/mining/snow,
+		/datum/zLevel/mining,
 		)
 	enabled_jobs = list(/datum/job/trader)
 

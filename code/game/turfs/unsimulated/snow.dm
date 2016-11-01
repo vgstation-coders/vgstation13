@@ -20,12 +20,23 @@
 	dynamic_lighting = 0
 	luminosity = 1
 	plane = BELOW_TURF_PLANE
-	layer = PERMAFROST_LAYER
 
 	var/snowballs = 0
 	var/global/list/cached_appearances = list()
 	var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound/misc/snow3.ogg', 'sound/misc/snow4.ogg', 'sound/misc/snow5.ogg', 'sound/misc/snow6.ogg')
 
+/turf/snow/New()
+	var/seed = rand(1,10000)
+	switch(seed)
+		if(1 to 100)
+			new /obj/structure/radial_gen/movable/snow_nature/snow_forest(src)
+		if(101 to 110)
+			new /obj/structure/radial_gen/movable/snow_nature/snow_forest/dense(src)
+		if(110 to 300)
+			new /obj/structure/radial_gen/movable/snow_nature/snow_grass(src)
+	..()
+	if(ticker)
+		initialize()
 
 /turf/snow/initialize()
 	if(!cached_appearances.len)	// first time running, let's CACHE IMAGES
@@ -170,7 +181,7 @@
 
 /obj/dirtpath/relativewall_neighbours()
 	..()
-	for(var/direction in alldirs)
+	for(var/direction in diagonal)
 		var/turf/adj_tile = get_step(src, direction)
 		for(var/atom/A in adj_tile)
 			if(isSmoothableNeighbor(A))
