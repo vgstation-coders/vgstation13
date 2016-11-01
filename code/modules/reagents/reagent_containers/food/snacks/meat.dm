@@ -175,3 +175,10 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	desc = "I know what you're thinking, but this isn't from a mimic."
 	icon_state = "rottenmeat"
 	var/amount_cloned = 0
+/obj/item/weapon/reagent_containers/food/snacks/meat/rabbit
+	name = "rabbit meat"
+	desc = "A slice of rabbit"
+
+	New()
+		..()
+		reagents.add_reagent("hyperzine", rand(0,3))
