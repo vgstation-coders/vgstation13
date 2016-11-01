@@ -1313,7 +1313,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	contains = list (/obj/item/weapon/rcs)
 	cost = 80
 	containertype = /obj/structure/closet/crate/engi
-	containername = "RCS Crate"
+	containername = "\improper RCS Crate"
 	group = "Engineering"
 
 /datum/supply_packs/rcs_telepad
@@ -1323,7 +1323,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					 /obj/item/device/telepad_beacon)
 	cost = 80
 	containertype = /obj/structure/closet/crate/engi
-	containername = "RCS Telepad Crate"
+	containername = "\improper RCS Telepad Crate"
 	group = "Engineering"
 
 
