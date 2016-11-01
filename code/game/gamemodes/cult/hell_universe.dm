@@ -112,7 +112,7 @@ In short:
 		if(istype(T, /turf/space))
 			T.overlays += image(icon = T.icon, icon_state = "hell01")
 		else
-			if(!T.holy && prob(1))
+			if(!T.holy && prob(1) && T.z != CENTCOMM_Z)
 				new /obj/effect/gateway/active/cult(T)
 			T.underlays += "hell01"
 		tcheck(85,1)
@@ -146,5 +146,5 @@ In short:
 /datum/universal_state/hell/proc/KillMobs()
 	for(var/mob/living/simple_animal/M in mob_list)
 		if(M && !M.client)
-			M.stat = DEAD
+			M.Die()
 		tcheck(80,1)
