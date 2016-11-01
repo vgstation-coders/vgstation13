@@ -698,3 +698,4 @@
 	item_state = "vox-skelesuit"
 	_color = "vox-skelesuit"
 	species_restricted = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED)
