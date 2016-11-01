@@ -249,3 +249,5 @@ proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm)
 						P.stamped += /obj/item/weapon/stamp
 						P.overlays += stampoverlay
 						P.stamps += "<HR><i>This paper has been stamped by the Central Command Quantum Relay.</i>"
+
+					return P
