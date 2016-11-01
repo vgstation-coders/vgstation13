@@ -62,8 +62,10 @@
 		if (usr.client)
 			if(usr.client.holder)
 				M.get_subtle_message(msg, deity)
+
+
 	log_admin("SubtlePM: [key_name(usr)] as [deity] -> [key_name(M)] : [msg]")
-	message_admins("<span class='notice'><B>SubtleMessage: [key_name_admin(usr)] as [deity] -> [key_name_admin(M)] : [msg]</B></span>", 1)
+	output_to_msay("<span class='notice'><B>SubtleMessage: [key_name_admin(usr)] as [deity] -> [key_name_admin(M)] : [msg]</B></span>")
 	feedback_add_details("admin_verb","SMS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/cmd_admin_world_narrate() // Allows administrators to fluff events a little easier -- TLE
@@ -1073,4 +1075,3 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	usr << ftp(F)
 
 	feedback_add_details("admin_verb", "SCO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-
