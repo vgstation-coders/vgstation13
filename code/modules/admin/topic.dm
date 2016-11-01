@@ -2176,8 +2176,19 @@
 			M.Weaken(20)
 			M.stuttering = 20
 
+	else if (href_list["PrayerReply"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/mob/M = locate(href_list["subtlemessage"])
+		output_to_msay("[key_name(src.owner)] is replying to a prayer from [key_name(M)]")
+
+		usr.client.cmd_admin_subtle_message(M)
+
 	else if(href_list["CentcommReply"])
 		var/mob/M = locate(href_list["CentcommReply"])
+
+		output_to_msay("[key_name(src.owner)] is replying to a Centcomm message from [key_name(M)]")
+
 		var/receive_type
 		if(istype(M, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
@@ -2202,6 +2213,9 @@
 
 	else if(href_list["SyndicateReply"])
 		var/mob/M = locate(href_list["SyndicateReply"])
+
+		output_to_msay("[key_name(src.owner)] is replying to a Syndicate message from [key_name(M)]")
+
 		var/receive_type
 		if(istype(M, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
@@ -2235,6 +2249,7 @@
 	else if(href_list["CentcommFaxReply"])
 		var/mob/living/carbon/human/H = locate(href_list["CentcommFaxReply"])
 
+		output_to_msay("[key_name(src.owner)] is replying to a fax message from [key_name(H)]")
 
 		var/sent = input(src.owner, "Please enter a message to reply to [key_name(H)] via secure connection. NOTE: BBCode does not work, but HTML tags do! Use <br> for line breaks.", "Outgoing message from Centcomm", "") as message|null
 		if(!sent)
