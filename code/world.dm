@@ -250,6 +250,8 @@ var/savefile/panicfile
 		if(usr && usr.client)
 			if(!usr.client.holder)
 				return 0
+	for(var/datum/html_interface/D in html_interfaces)
+		D.closeAll()
 	if(config.map_voting)
 		//testing("we have done a map vote")
 		if(fexists(vote.chosen_map))
