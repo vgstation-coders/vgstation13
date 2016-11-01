@@ -802,12 +802,17 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	mineral = new /mineral/clown
 	scan_state = "rock_Clown"
 
+/turf/unsimulated/mineral/clown/snow
+	mined_type = /turf/snow/undersnow
 
 /turf/unsimulated/mineral/phazon
 	name = "Phazite deposit"
 	icon_state = "rock_Phazon"
 	mineral = new /mineral/phazon
 	scan_state = "rock_Phazon"
+
+/turf/unsimulated/mineral/phazon/snow
+	mined_type = /turf/snow/undersnow
 
 /turf/unsimulated/mineral/pharosium
 	name = "Pharosium deposit"
