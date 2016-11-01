@@ -2257,11 +2257,13 @@
 
 		var/sentname = input(src.owner, "Pick a title for the report", "Title") as text|null
 
-		SendFax(sent, sentname, centcomm = 1)
-
-		to_chat(src.owner, "Message reply to transmitted successfully.")
+		var/replyfax = SendFax(sent, sentname, centcomm = 1)
+		if(!replyfax)
+			to_chat(src.owner, "Message reply to [key_name(H)] failed.")
+			
+		to_chat(src.owner, "Message reply to [key_name(H)] transmitted successfully.")
 		log_admin("[key_name(src.owner)] replied to a fax message from [key_name(H)]: [sent]")
-		output_to_msay("[key_name_admin(src.owner)] replied to a fax message from [key_name_admin(H)]: [sent]", 1)
+		output_to_msay("[key_name_admin(src.owner)] replied to a fax message from [key_name_admin(H)]: <a href='?_src_=holder;CentcommFaxView=\ref[replyfax]'>view message</a>", 1)
 
 
 	else if(href_list["jumpto"])
