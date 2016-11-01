@@ -55,8 +55,8 @@
 								if(A.locs[1] != A.loc)
 									allturfcontents -= A
 
-						//Remove the following line if you want to add space to your renders, I think it is cheaper to merely use a pregenned image for this
-						if(!istype(currentturf,/turf/space))
+						//Remove the following line if you want to add base turfs to your renders, I think it is cheaper to merely use a pregenned image for this
+						if(!istype(currentturf,get_base_turf(z)))
 							allturfcontents += currentturf
 
 						//Due to processing order, a pixelshifted object will be overriden in certain directions,
