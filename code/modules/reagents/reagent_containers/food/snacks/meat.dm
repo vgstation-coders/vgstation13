@@ -213,3 +213,11 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 
 	reagents.add_reagent(OXYGEN, rand(1,5))
 	reagents.add_reagent(ETHANOL, rand(1,5))
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/rabbit
+	name = "rabbit meat"
+	desc = "A slice of rabbit"
+
+	New()
+		..()
+		reagents.add_reagent("hyperzine", rand(0,3))

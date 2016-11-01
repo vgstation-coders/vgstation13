@@ -23,10 +23,9 @@
 	var/datum/artifact_find/artifact_find
 	var/scan_state = null //Holder for the image we display when we're pinged by a mining scanner
 	var/busy = 0 //Used for a bunch of do_after actions, because we can walk into the rock to trigger them
+	var/mined_type = /turf/unsimulated/floor/asteroid //Holds the turf that appears when the mineral is destroyed
 
-	var/mined_type = /turf/unsimulated/floor/asteroid
-
-/turf/unsimulated/mineral/air
+turf/unsimulated/mineral/air
 	oxygen = MOLES_O2STANDARD
 	nitrogen = MOLES_N2STANDARD
 	temperature = T20C
@@ -34,6 +33,10 @@
 
 /turf/unsimulated/mineral/hive
 	mined_type = /turf/unsimulated/floor/evil
+
+/turf/unsimulated/mineral/snow
+	//icon = 'icons/turf/snowwalls.dmi'
+	mined_type = /turf/snow/undersnow
 
 /turf/unsimulated/mineral/Destroy()
 	return
@@ -48,7 +51,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	mineral_turfs -= src
 	return ..(N, tell_universe, 1, allow)
 
-/turf/unsimulated/mineral/initialize() 	// TODO: OPTIMISE THIS USING PLANES
+/turf/unsimulated/mineral/initialize()  // TODO: OPTIMISE THIS USING PLANES
 	spawn(1)
 		var/image/I = image('icons/turf/walls.dmi')
 		I.plane = ABOVE_TURF_PLANE
@@ -268,8 +271,8 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		//handle any archaeological finds we might uncover
 		if(finds && finds.len)
 			var/datum/find/F = finds[1]
-
 			if(excavation_level + P.excavation_amount > F.excavation_required)
+
 				fail_message = "<b>[pick("There is a crunching noise","[W] collides with some different rock","Part of the rock face crumbles away","Something breaks under [W]")]</b>"
 				to_chat(user, "<span class='rose'>[fail_message].</span>")
 
@@ -425,8 +428,12 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		visible_message("<span class='notice'>An old dusty crate was buried within!</span>")
 		DropAbandonedCrate()
 
-	var/turf/unsimulated/floor/asteroid/N = ChangeTurf(mined_type)
-	N.fullUpdateMineralOverlays()
+
+	if(mined_type == /turf/unsimulated/floor/asteroid)
+		var/turf/unsimulated/floor/asteroid/N = ChangeTurf(mined_type)
+		N.fullUpdateMineralOverlays()
+	else
+		ChangeTurf(mined_type) //There's got to be a better way!
 
 /turf/unsimulated/mineral/proc/DropAbandonedCrate()
 	var/crate_type = pick(valid_abandoned_crate_types)
@@ -496,7 +503,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				for(var/i=0, i<quantity, i++)
 					getFromPool(/obj/item/weapon/shard/plasma, loc)
 
-
 /**********************Asteroid**************************/
 
 /turf/unsimulated/floor/airless //floor piece
@@ -513,6 +519,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	temperature = TCMB
 	//icon_plating = "asteroid"
 	var/dug = 0       //0 = has not yet been dug, 1 = has already been dug
+	var/mined_type = /turf/unsimulated/floor/asteroid
 
 /turf/unsimulated/floor/asteroid/air
 	oxygen = MOLES_O2STANDARD
@@ -659,6 +666,10 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	//Currently, Adamantine won't spawn as it has no uses. -Durandan
 	var/mineralChance = 10  //means 10% chance of this plot changing to a mineral deposit
 
+/turf/unsimulated/mineral/random/snow
+	//icon = 'icons/turf/snowwalls.dmi'
+	mined_type = /turf/snow/undersnow
+
 /turf/unsimulated/mineral/random/New()
 	icon_state = "rock"
 	if (prob(mineralChance) && !mineral)
@@ -670,6 +681,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		if (mineral_name)
 			if(mineral_name in name_to_mineral)
 				mineral = name_to_mineral[mineral_name]
+				mineral.mined_type = mined_type
 				mineral.UpdateTurf(src)
 			else
 				warning("Unknown mineral ID: [mineral_name]")
@@ -703,6 +715,10 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		*/
 	)
 
+/turf/unsimulated/mineral/random/high_chance/snow
+	//icon = 'icons/turf/snowwalls.dmi'
+	mined_type = /turf/snow/undersnow
+
 /turf/unsimulated/mineral/random/high_chance_clown
 	icon_state = "rock(clown)"
 	mineralChance = 40
@@ -731,6 +747,10 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		"Clown"   = 15,
 		"Phazon"  = 10
 	)
+
+/turf/unsimulated/mineral/random/high_chance_clown/snow
+	//icon = 'icons/turf/snowwalls.dmi'
+	mined_type = /turf/snow/undersnow
 
 /turf/unsimulated/mineral/random/Destroy()
 	return
@@ -860,10 +880,15 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	icon_state = "rock_Gibtonite"
 	mineral = new /mineral/gibtonite
 	scan_state = "rock_Gibtonite"
+	mined_type = /turf/unsimulated/floor/asteroid/gibtonite_remains
 	var/det_time = 8 //Countdown till explosion, but also rewards the player for how close you were to detonation when you defuse it
 	var/stage = 0 //How far into the lifecycle of gibtonite we are, 0 is untouched, 1 is active and attempting to detonate, 2 is benign and ready for extraction
 	var/activated_ckey = null //These are to track who triggered the gibtonite deposit for logging purposes
 	var/activated_name = null
+
+/turf/unsimulated/mineral/gibtonite/snow
+	//icon = 'icons/turf/snowwalls.dmi'
+	mined_type = /turf/snow/undersnow
 
 /turf/unsimulated/mineral/gibtonite/New()
 	icon_state="rock_Diamond"
@@ -955,12 +980,23 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		if(det_time >= 1 && det_time <= 2)
 			G.quality = 2
 			G.icon_state = "Gibtonite ore 2"
-	var/turf/unsimulated/floor/asteroid/gibtonite_remains/G = ChangeTurf(/turf/unsimulated/floor/asteroid/gibtonite_remains)
-	G.fullUpdateMineralOverlays()
+	if(mined_type == /turf/unsimulated/floor/asteroid)
+		var/turf/unsimulated/floor/asteroid/G = ChangeTurf(mined_type)
+		G.fullUpdateMineralOverlays()
+	else if(mined_type == /turf/snow/undersnow)
+		mined_type = /turf/snow/undersnow/gibtonite_remains
+		ChangeTurf(mined_type)
+	else
+		ChangeTurf(mined_type)
 
 /turf/unsimulated/floor/asteroid/gibtonite_remains
 	var/det_time = 0
 	var/stage = 0
+
+/turf/snow/undersnow/gibtonite_remains
+	var/det_time = 0
+	var/stage = 0
+
 
 ////////////////////////////////End Gibtonite
 
@@ -973,6 +1009,9 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		/mob/living/simple_animal/hostile/asteroid/hivelord = 5
 	)
 	var/sanity = 1
+
+/turf/unsimulated/floor/asteroid/cave/snow
+	mined_type = /turf/snow/permafrost
 
 /turf/unsimulated/floor/asteroid/cave/New(loc, var/length, var/go_backwards = 1, var/exclude_dir = -1)
 
@@ -1043,7 +1082,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 	SpawnMonster(T)
 
-	new /turf/unsimulated/floor/asteroid(T)
+	new mined_type(T)
 
 /turf/unsimulated/floor/asteroid/cave/proc/SpawnMonster(var/turf/T)
 	if(prob(2))
