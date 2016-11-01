@@ -1063,3 +1063,6 @@ var/global/list/image/blood_overlays = list()
 
 	Crossed(H) //So you can't kick shards while naked without suffering
 	throw_at(T, kick_power, 1)
+
+/obj/item/animationBolt(var/mob/firer)
+	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)
