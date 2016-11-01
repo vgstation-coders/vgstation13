@@ -743,7 +743,7 @@
 		if(tool.force >= livingMannequin.melee_damage_lower)
 			livingMannequin.melee_damage_lower = tool.force
 			livingMannequin.melee_damage_upper = tool.force
-			livingMannequin.attacktext = "swings its [tool] at"
+			livingMannequin.attacktext = "swings [tool] at"
 			if(tool.hitsound)
 				livingMannequin.attack_sound = tool.hitsound
 	if(firer)

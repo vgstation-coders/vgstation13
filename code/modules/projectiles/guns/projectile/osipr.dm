@@ -122,7 +122,7 @@
 	flags = FPRINT
 	force = 1
 	throwforce = 1
-	w_class = W_CLASS_MEDIUM
+	w_class = W_CLASS_SMALL
 	var/bullets = 10
 	var/max_bullets = 10
 	var/caliber = "osipr"	//base icon name
@@ -148,7 +148,7 @@
 	name = "pulse magazine"
 	desc = "Primary ammo for OSIPR. Can be replenished by a recharger."
 	icon_state = "osipr-magfull"
-	w_class = W_CLASS_MEDIUM
+	w_class = W_CLASS_SMALL
 	bullets = 30
 	max_bullets = 30
 	caliber = "osipr"
@@ -165,7 +165,7 @@
 	flags = FPRINT
 	force = 1
 	throwforce = 1
-	w_class = W_CLASS_MEDIUM
+	w_class = W_CLASS_SMALL
 
 /obj/item/osipr_core/New()
 	..()
