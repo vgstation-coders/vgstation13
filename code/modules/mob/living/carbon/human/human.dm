@@ -68,6 +68,10 @@
 	gender = NEUTER
 	meat_type = /obj/item/weapon/ore/diamond
 
+/mob/living/carbon/human/suid/New(var/new_loc, delay_ready_dna = 0)
+	h_style = "Bald"
+	..(new_loc, "Suid")
+
 /mob/living/carbon/human/frankenstein/New(var/new_loc, delay_ready_dna = 0) //Just fuck my shit up: the mob
 	f_style = pick(facial_hair_styles_list)
 	h_style = pick(hair_styles_list)

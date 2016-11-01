@@ -29,6 +29,8 @@
 
 #define isgolem(A) (ishuman(A) && A.species && istype(A.species, /datum/species/golem))
 
+#define issuid(A) (ishuman(A) && A.species && istype(A.species, /datum/species/suid))
+
 #define isbrain(A) istype(A, /mob/living/carbon/brain)
 
 #define isalien(A) istype(A, /mob/living/carbon/alien)

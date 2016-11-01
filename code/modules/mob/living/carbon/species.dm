@@ -865,7 +865,11 @@ var/global/list/all_species = list()
 	icobase = 'icons/mob/human_races/r_suid.dmi'
 	deform = 'icons/mob/human_races/r_def_suid.dmi'
 	known_languages = list(LANGUAGE_SUID)
-	attack_verb = "punches"
-	flags = HAS_LIPS | IS_BULKY | HAS_SKIN_TONE
+	flags = HAS_LIPS | IS_BULKY | HAS_SKIN_TONE | HUNGER_BASED_STRENGTH
 	uniform_icons = 'icons/mob/uniform_fat.dmi'
-	primitive = /mob/living/carbon/monkey/rock
+	primitive = /mob/living/carbon/monkey/pig
+
+	default_mutations=list(M_EAT)
+	default_block_names=list("EAT")
+
+	survival_gear = /obj/item/weapon/storage/box/survival/suid

@@ -242,7 +242,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	<table width='100%'><tr><td width='24%' valign='top'>
 	<b>Species:</b> <a href='?_src_=prefs;preference=species;task=input'>[species]</a><BR>
 	<b>Secondary Language:</b> <a href='byond://?src=\ref[user];preference=language;task=input'>[language]</a><br>
-	<b>Skin Tone:</b> <a href='?_src_=prefs;preference=s_tone;task=input'>[species == "Human" ? "[-s_tone + 35]/220" : "[s_tone]"]</a><br><BR>
+	<b>Skin Tone:</b> <a href='?_src_=prefs;preference=s_tone;task=input'>[(species == "Human" || species == "Suid") ? "[-s_tone + 35]/220" : "[s_tone]"]</a><br><BR>
 	<b>Handicaps:</b> <a href='byond://?src=\ref[user];task=input;preference=disabilities'><b>Set</a></b><br>
 	<b>Limbs:</b> <a href='byond://?src=\ref[user];preference=limbs;task=input'>Set</a><br>
 	<b>Organs:</b> <a href='byond://?src=\ref[user];preference=organs;task=input'>Set</a><br>
@@ -1273,6 +1273,10 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 									to_chat(user,"Your vox will now be brown.")
 								else
 									to_chat(user,"Your vox will now be green.")
+					else if(species == "Suid")
+						var/new_s_tone = input(user, "Choose your character's skin-tone:\n(Light 1 - 220 Dark)", "Character Preference")  as num|null
+						if(new_s_tone)
+							s_tone = 35 - max(min(round(new_s_tone),220),1)
 					else
 						to_chat(user,"Your species doesn't have different skin tones. Yet?")
 						return

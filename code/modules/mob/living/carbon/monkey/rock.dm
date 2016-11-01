@@ -12,6 +12,6 @@
 
 	canWearClothes = 0
 	canWearHats = 1
-	canWearGlasses = 1
+	canWearGlasses = 0
 	greaterform = "Golem"
 	languagetoadd = LANGUAGE_GOLEM
