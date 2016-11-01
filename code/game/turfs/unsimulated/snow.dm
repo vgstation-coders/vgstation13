@@ -26,14 +26,6 @@
 	var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound/misc/snow3.ogg', 'sound/misc/snow4.ogg', 'sound/misc/snow5.ogg', 'sound/misc/snow6.ogg')
 
 /turf/snow/New()
-	var/seed = rand(1,10000)
-	switch(seed)
-		if(1 to 100)
-			new /obj/structure/radial_gen/movable/snow_nature/snow_forest(src)
-		if(101 to 110)
-			new /obj/structure/radial_gen/movable/snow_nature/snow_forest/dense(src)
-		if(110 to 300)
-			new /obj/structure/radial_gen/movable/snow_nature/snow_grass(src)
 	..()
 	if(ticker)
 		initialize()
@@ -47,13 +39,23 @@
 		for(var/dirtdir in alldirs)
 			cached_appearances["side[dirtdir]"] = image('icons/turf/new_snow.dmi', "permafrost_side" ,dir = dirtdir)
 
+	if(z != map.zCentcomm)
+		var/feelinglucky = rand(1,world.maxy*world.maxx*(map.zLevels.len-1)) // as of 31/10/2016, this is 500x500x5, which is 1,250,000.
+		switch(feelinglucky)
+			if(1 to 500)
+				new /obj/structure/radial_gen/movable/snow_nature/snow_forest(src)
+			if(501 to 750)
+				new /obj/structure/radial_gen/movable/snow_nature/snow_forest/dense(src)
+			if(751 to 1000)
+				new /obj/structure/radial_gen/movable/snow_nature/snow_grass(src)
+
 	var/snowrand = rand(0, 5)
 	var/list/oranges = orange(1,src)
-	if(locate(/turf/simulated) in oranges)
+	if(locate(/turf/simulated) in oranges || (locate(/turf/unsimulated) in oranges && z != map.zCentcomm))
 		update_icon(oranges,snowrand)
 		set_light(5, 0.5)
-	else if(cached_appearances["[snowrand]0"])
-		appearance = cached_appearances["[snowrand]0"]
+	else if(cached_appearances["[snowrand]-0"])
+		appearance = cached_appearances["[snowrand]-0"]
 	else
 		update_icon(oranges,snowrand)
 	..()
@@ -65,20 +67,20 @@
 	for(var/turf/simulated/T in oranges)
 		var/direction = get_dir(src,T)
 		dirlist += direction
-		dirnum &= direction
+		dirnum |= direction
 
-	if(cached_appearances["[snowrand][dirnum]"])
-		appearance = cached_appearances["[snowrand][dirnum]"]
+	if(cached_appearances["[snowrand]-[dirnum]"])
+		appearance = cached_appearances["[snowrand]-[dirnum]"]
 	else
 		icon_state = "snow[snowrand]"
 
-		for(var/direction in dirlist)
-			overlays += cached_appearances["side[direction]"]
+		//for(var/direction in dirlist) - temporary measure: readd soon
+		//	overlays += cached_appearances["side[direction]"]
 
 		for(var/i = 1 to SNOW_LAYER_NUMBER) // saves us one (1!) whole lines but I don't like copypasting, plus hopefully one day people will make more (yes this line is copypasted from above, sue me :^) )
 			overlays += cached_appearances["snowlayer[i]"]
 
-		cached_appearances["[snowrand][dirnum]"] = appearance
+		cached_appearances["[snowrand]-[dirnum]"] = appearance
 
 
 /turf/snow/permafrost/initialize()
@@ -210,6 +212,7 @@
 		appearances["snow3"] = image('icons/turf/new_snow.dmi', "permafrost", dir = NORTH)
 		appearances["snow12"] = image('icons/turf/new_snow.dmi', "permafrost", dir = WEST)
 
+	overlays.Cut()
 	var/junction = findSmoothingNeighbors()
 	var/dircount = 0
 	for(var/direction in diagonal)
