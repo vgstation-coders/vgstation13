@@ -70,11 +70,8 @@ What is the naming convention for planes or layers?
 
 #define BELOW_TURF_PLANE 		-22 		// objects that are below turfs. Useful for asteroid smoothing or other such magic.
 	// todo: use this for asteroids to make them be faster
-	#define PERMAFROST_LAYER		0
-	#define SNOW_LAYER				1
 
 #define PLATING_PLANE 			-21
-	#define SNOWVERLAYER 			-1000	// snow overlay layer
 
 
 #define ABOVE_PLATING_PLANE		-20
