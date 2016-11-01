@@ -53,7 +53,6 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 	overlays += image(icon = 'icons/mob/screen1.dmi', icon_state = "blank")
 	if(universe)
 		universe.convert_parallax(src)
-		to_chat(world, "converting parallax")
 
 /obj/screen/plane_master/parallax_dustmaster
 	plane = PLANE_SPACE_DUST
