@@ -1,29 +1,30 @@
 //**************************************************************
-// Map Datum -- Taxistation (now with snow!)
+// Map Datum -- Snow Taxistation
 //**************************************************************
 
 /datum/map/active
-	nameShort = "snowtaxi"
-	nameLong = "TAXI Research Outposts"
-	map_dir = "snowtaxistation"
+	nameShort = "taxi"
+	nameLong = "Taxi Station"
+	map_dir = "taxistation"
 	tDomeX = 127
 	tDomeY = 67
 	tDomeZ = 2
 	zAsteroid = 6
 	zDeepSpace = 5
+	base_turf = /turf/snow
 	zLevels = list(
-		/datum/zLevel/station/snow,
-		/datum/zLevel/centcomm/snow,
-		/datum/zLevel/space/snow{
+		/datum/zLevel/station,
+		/datum/zLevel/centcomm,
+		/datum/zLevel/space{
 			name = "spaceOldSat" ;
 			},
-		/datum/zLevel/space/snow{
+		/datum/zLevel/space{
 			name = "derelict" ;
 			},
-		/datum/zLevel/space/snow{
+		/datum/zLevel/space{
 			name = "spacePirateShip" ;
 			},
-		/datum/zLevel/mining/snow,
+		/datum/zLevel/mining,
 		)
 	enabled_jobs = list(/datum/job/trader)
 
@@ -34,4 +35,4 @@
 	research_shuttle.req_access = list() //It's shared by miners and researchers, so remove access requirements
 
 ////////////////////////////////////////////////////////////////
-#include "snowtaxistation.dmm"
+#include "snowtaxi.dmm"

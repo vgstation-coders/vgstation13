@@ -31,7 +31,7 @@
 	var/zDerelict = 4
 	var/zAsteroid = 5
 	var/zDeepSpace = 6
-
+	var/base_turf = /turf/space
 	//Center of thunderdome admin room
 	var/tDomeX = 0
 	var/tDomeY = 0
@@ -113,7 +113,7 @@
 		warning("ERROR: addZLevel received [level ? "a bad level of type [ispath(level) ? "[level]" : "[level.type]" ]" : "no level at all!"]")
 		return
 	if(!level.base_turf)
-		level.base_turf = /turf/space
+		level.base_turf = base_turf
 	if(z_to_use > zLevels.len)
 		zLevels.len = z_to_use
 	zLevels[z_to_use] = level
@@ -137,7 +137,7 @@ var/global/list/accessable_z_levels = list()
 	var/teleJammed = 0
 	var/movementJammed = 0 //Prevents you from accessing the zlevel by drifting
 	var/movementChance = ZLEVEL_BASE_CHANCE
-	var/base_turf //Our base turf, what shows under the station when destroyed. Defaults to space because it's fukken Space Station 13
+	var/base_turf //Our base turf, what shows under the station when destroyed. - Defaults to the map's base turf, usually space.
 	var/z //Number of the z-level (the z coordinate)
 
 ////////////////////////////////
@@ -148,7 +148,9 @@ var/global/list/accessable_z_levels = list()
 	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_STATION_MODIFIER
 
 /datum/zLevel/station/snow
+	name = "outpost"
 	base_turf = /turf/snow
+	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_STATION_MODIFIER
 
 /datum/zLevel/centcomm
 
