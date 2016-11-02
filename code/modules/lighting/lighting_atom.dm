@@ -8,17 +8,20 @@
 
 // The proc you should always use to set the light of this atom.
 // Nonesensical value for l_color default, so we can detect if it gets set to null.
-/atom/proc/set_light(var/l_range, var/l_power, var/l_color = -99999)
+#define NONSENSICAL_VALUE -99999
+/atom/proc/set_light(var/l_range, var/l_power, var/l_color = NONSENSICAL_VALUE)
 	if (l_power != null)
 		light_power = l_power
 
 	if (l_range != null)
 		light_range = l_range
 
-	if (l_color != -99999)
+	if (l_color != NONSENSICAL_VALUE)
 		light_color = l_color
 
 	update_light()
+
+#undef NONSENSICAL_VALUE
 
 // Will update the light (duh).
 // Creates or destroys it if needed, makes it update values, makes sure it's got the correct source turf...
