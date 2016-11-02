@@ -23,7 +23,7 @@
 								   /obj/item/weapon/gun/projectile/automatic,
 								   /obj/item/device/flash/revsquad,
 								   /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff,
-								   /obj/item/weapon/grenade/iedcasing/preassembled,
+								   /obj/item/weapon/plastique,
 								   /obj/item/weapon/gun/projectile/pistol,
 								   /obj/item/weapon/aiModule/freeform/syndicate
 								  )
@@ -132,6 +132,7 @@
 
 /datum/game_mode/revsquad/proc/get_revsquad_item(var/mob/living/carbon/human/M)
 	var/obj/item/requisitioned = pick(possible_items)
+	possible_items.Remove(requisitioned) // No 3 pairs of insulated gloves
 	if(istype(requisitioned, /obj/item/device/flash/revsquad))
 		var/obj/item/device/flash/revsquad/FR = new(M)
 		requisitioned = FR
