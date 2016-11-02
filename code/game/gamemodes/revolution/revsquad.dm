@@ -114,7 +114,7 @@
 	var/obj_count = 1
 	if (you_are)
 		to_chat(rev_mind.current, "<span class='big bold center red'>You are a member of the organized revolutionary organization that has infiltrated this station!</span>")
-		to_chat(character, "<span class='info'><a HREF='?src=\ref[character];getwiki=["Revolutionary Squad"]'>(Wiki Guide)</a></span>") // Hacky but revsquad doesn't have a pref define or anything
+		to_chat(rev_mind.current, "<span class='info'><a HREF='?src=\ref[rev_mind.current];getwiki=["Revolutionary Squad"]'>(Wiki Guide)</a></span>") // Hacky but revsquad doesn't have a pref define or anything
 	for(var/datum/objective/objective in rev_mind.objectives)
 		to_chat(rev_mind.current, "<b>Objective #[obj_count]</B>: [objective.explanation_text]")
 		rev_mind.special_role = "Revolutionary Squad Member"
@@ -219,7 +219,7 @@
 /datum/game_mode/proc/auto_declare_completion_revsquad()
 	var/list/targets = list()
 	var/text = ""
-	if(head_revolutionaries.len || istype(ticker.mode,/datum/game_mode/revolution/revsquad))
+	if(head_revolutionaries.len || istype(ticker.mode,/datum/game_mode/revsquad))
 		var/icon/logo1 = icon('icons/mob/mob.dmi', "rev_head-logo")
 		end_icons += logo1
 		var/tempstate = end_icons.len
