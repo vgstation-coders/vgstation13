@@ -132,7 +132,7 @@
 
 	..()
 	var/objects = 0
-	if(A && A.flags & PROXMOVE)
+	if(ticker && A && A.flags & PROXMOVE)
 		for(var/atom/Obj as mob|obj|turf|area in range(1))
 			if(objects > loopsanity)
 				break
@@ -266,6 +266,13 @@
 
 // override for space turfs, since they should never hide anything
 /turf/space/levelupdate()
+	update_holomap_planes()
+	for(var/obj/O in src)
+		if(O.level == 1)
+			O.hide(0)
+
+// override for snow turfs, since they should never hide anything
+/turf/snow/levelupdate()
 	update_holomap_planes()
 	for(var/obj/O in src)
 		if(O.level == 1)
