@@ -1553,6 +1553,6 @@ Game Mode config tags:
 /proc/output_to_msay(msg)
 	for(var/client/C in admins)
 		if(C.prefs.special_popup)
-			C << output(msg, "window1.msay_output")
+			C << output("\[[time_stamp()]] [msg]", "window1.msay_output")
 		else
 			to_chat(C, msg)
