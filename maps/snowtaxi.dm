@@ -27,6 +27,7 @@
 		/datum/zLevel/mining,
 		)
 	enabled_jobs = list(/datum/job/trader)
+	radial_generate = RADIAL_GENERATE_SNOW_MAP
 
 /datum/map/active/New()
 	.=..()

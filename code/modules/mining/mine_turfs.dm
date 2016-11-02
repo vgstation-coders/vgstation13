@@ -36,7 +36,7 @@ turf/unsimulated/mineral/air
 
 /turf/unsimulated/mineral/snow
 	//icon = 'icons/turf/snowwalls.dmi'
-	mined_type = /turf/snow/undersnow
+	mined_type = /turf/snow/permafrost
 
 /turf/unsimulated/mineral/Destroy()
 	return
@@ -658,7 +658,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 /turf/unsimulated/mineral/random/snow
 	//icon = 'icons/turf/snowwalls.dmi'
-	mined_type = /turf/snow/undersnow
+	mined_type = /turf/snow/permafrost
 
 /turf/unsimulated/mineral/random/New()
 	icon_state = "rock"
@@ -707,7 +707,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 /turf/unsimulated/mineral/random/high_chance/snow
 	//icon = 'icons/turf/snowwalls.dmi'
-	mined_type = /turf/snow/undersnow
+	mined_type = /turf/snow/permafrost
 
 /turf/unsimulated/mineral/random/high_chance_clown
 	icon_state = "rock(clown)"
@@ -740,7 +740,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 /turf/unsimulated/mineral/random/high_chance_clown/snow
 	//icon = 'icons/turf/snowwalls.dmi'
-	mined_type = /turf/snow/undersnow
+	mined_type = /turf/snow/permafrost
 
 /turf/unsimulated/mineral/random/Destroy()
 	return
@@ -793,7 +793,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	scan_state = "rock_Clown"
 
 /turf/unsimulated/mineral/clown/snow
-	mined_type = /turf/snow/undersnow
+	mined_type = /turf/snow/permafrost
 
 /turf/unsimulated/mineral/phazon
 	name = "Phazite deposit"
@@ -802,7 +802,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	scan_state = "rock_Phazon"
 
 /turf/unsimulated/mineral/phazon/snow
-	mined_type = /turf/snow/undersnow
+	mined_type = /turf/snow/permafrost
 
 /turf/unsimulated/mineral/pharosium
 	name = "Pharosium deposit"
@@ -883,7 +883,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 /turf/unsimulated/mineral/gibtonite/snow
 	//icon = 'icons/turf/snowwalls.dmi'
-	mined_type = /turf/snow/undersnow
+	mined_type = /turf/snow/permafrost
 
 /turf/unsimulated/mineral/gibtonite/New()
 	icon_state="rock_Diamond"
@@ -978,8 +978,8 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if(mined_type == /turf/unsimulated/floor/asteroid)
 		var/turf/unsimulated/floor/asteroid/G = ChangeTurf(mined_type)
 		G.fullUpdateMineralOverlays()
-	else if(mined_type == /turf/snow/undersnow)
-		mined_type = /turf/snow/undersnow/gibtonite_remains
+	else if(mined_type == /turf/snow/permafrost)
+		mined_type = /turf/snow/permafrost/gibtonite_remains
 		ChangeTurf(mined_type)
 	else
 		ChangeTurf(mined_type)
@@ -988,7 +988,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	var/det_time = 0
 	var/stage = 0
 
-/turf/snow/undersnow/gibtonite_remains
+/turf/snow/permafrost/gibtonite_remains
 	var/det_time = 0
 	var/stage = 0
 
