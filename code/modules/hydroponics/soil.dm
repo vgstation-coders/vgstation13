@@ -5,15 +5,19 @@
 	density = 0
 	use_power = 0
 	draw_warnings = 0
-
+	var/sand = 1
 	machine_flags = 0 // THIS SHOULD NOT EVER BE UNWRENCHED AND IT SHOULD NOT EVER SPAWN MACHINE FRAMES, MY GOD
+
+/obj/machinery/portable_atmospherics/hydroponics/soil/snow
+	sand = 0
 
 /obj/machinery/portable_atmospherics/hydroponics/soil/attackby(var/obj/item/W, var/mob/user)
 	if(istype(W, /obj/item/weapon/pickaxe/shovel))
 		if(!seed)
-			to_chat(user, "You clear up [src]!")
-			new /obj/item/weapon/ore/glass(loc)//we get some of the dirt back
-			new /obj/item/weapon/ore/glass(loc)
+			to_chat(user, "You clear up \the [src]!")
+			if(sand)
+				new /obj/item/weapon/ore/glass(loc)//we get some of the dirt back
+				new /obj/item/weapon/ore/glass(loc)
 			qdel(src)
 			return 1
 		else
