@@ -20,7 +20,6 @@
 	name = "lighting"
 
 	create_all_lighting_overlays()
-	create_all_lighting_corners()
 
 /datum/controller/process/lighting/doWork()
 	// Counters

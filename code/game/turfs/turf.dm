@@ -302,16 +302,6 @@
 
 	var/datum/gas_mixture/env
 
-	if (!lighting_corners_initialised && global.lighting_corners_initialised)
-		if (!corners)
-			corners = list(null, null, null, null)
-
-		for (var/i = 1 to 4)
-			if (corners[i]) // Already have a corner on this direction.
-				continue
-
-			corners[i] = new/datum/lighting_corner(src, LIGHTING_CORNER_DIAGONAL[i])
-
 	var/old_opacity = opacity
 	var/old_dynamic_lighting = dynamic_lighting
 	var/old_affecting_lights = affecting_lights
