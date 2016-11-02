@@ -1451,7 +1451,6 @@
 /obj/structure/disposalpipe/broken/New()
 	..()
 	update()
-	return
 
 	// called when welded
 	// for broken pipe, remove and turn into scrap
@@ -1525,8 +1524,6 @@
 					AM.throw_at(target, 3, 1)
 		H.vent_gas(src.loc)
 		qdel(H)
-
-	return
 
 /obj/structure/disposaloutlet/attackby(var/obj/item/I, var/mob/user)
 	if(!I || !user)

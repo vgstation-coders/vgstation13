@@ -145,7 +145,6 @@
 			return /obj/structure/disposalpipe/sortjunction
 		if(11, 12)
 			return /obj/structure/disposalpipe/wrapsortjunction
-	return
 
 
 
