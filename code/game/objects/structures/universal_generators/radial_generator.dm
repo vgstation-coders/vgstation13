@@ -44,7 +44,7 @@
 		if(expected_turfs.len && !is_type_in_list(T, expected_turfs)) //We are expecting a specific turf type, and it is not this one
 			continue
 
-		if(gen_empty_only && T.has_contents()) //We are looking for empty turfs, this turf isn't empty
+		if(gen_empty_only && T.contents.len) //We are looking for empty turfs, this turf isn't empty
 			continue
 
 		if(gen_no_dense_only && T.has_dense_content()) //We are looking for turfs without dense contents, this turf has some
