@@ -87,31 +87,35 @@ var/global/list/snow_turfs = list()
 	snowballs = 0
 	new /obj/dirtpath(src)
 
-/turf/snow/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
+/turf/snow/attackby(var/obj/item/weapon/W, var/mob/user)
+	if(contents.len)
+		for(var/obj/structure/flora/flora in contents)
+			flora.attackby(W,user)
+			return 0
 	..()
 
 	if(istype(W, /obj/item/weapon/pickaxe/shovel) && snowballs)
 		user.visible_message("<span class='notice'>[user] starts digging out some snow with \the [W].</span>", \
 		"<span class='notice'>You start digging out some snow with \the [W].</span>")
 		user.delayNextAttack(20)
-		if(do_after(user, src, 20) && extract_snowballs(5, 0, user))
+		if(do_after(user, src, 20) && extract_snowballs(5, user))
 			user.visible_message("<span class='notice'>[user] digs out some snow with \the [W].</span>", \
 			"<span class='notice'>You dig out some snow with \the [W].</span>")
 
 
-/turf/snow/attack_hand(mob/user as mob)
+/turf/snow/attack_hand(var/mob/user)
 	if(snowballs) //Reach down and make a snowball
 		user.visible_message("<span class='notice'>[user] reaches down and starts forming a snowball.</span>", \
 		"<span class='notice'>You reach down and start forming a snowball.</span>")
-		user.delayNextAttack(10)
-		if(do_after(user, src, 5) && extract_snowballs(1, 1, user))
+		user.delayNextAttack(5)
+		if(do_after(user, src, 5) && extract_snowballs(1,user,1))
 			user.visible_message("<span class='notice'>[user] finishes forming a snowball.</span>", \
 			"<span class='notice'>You finish forming a snowball.</span>")
 
 	..()
 
-/turf/snow/proc/extract_snowballs(var/snowball_amount = 0, var/pick_up = 0, var/mob/user)
+/turf/snow/proc/extract_snowballs(var/snowball_amount = 0, var/mob/user, var/pick_up = 0)
 
 	if(!snowball_amount || !snowballs)
 		return
@@ -119,9 +123,7 @@ var/global/list/snow_turfs = list()
 	var/extract_amount = min(snowballs, snowball_amount)
 
 	for(var/i = 0; i < extract_amount, i++)
-		var/obj/item/stack/sheet/snow/snowball = new /obj/item/stack/sheet/snow(user.loc)
-		snowball.pixel_x = rand(-16, 16) * PIXEL_MULTIPLIER //Would be wise to move this into snowball New() down the line
-		snowball.pixel_y = rand(-16, 16) * PIXEL_MULTIPLIER
+		var/obj/item/stack/sheet/snow/snowball = new
 
 		if(pick_up)
 			user.put_in_hands(snowball)
@@ -130,6 +132,7 @@ var/global/list/snow_turfs = list()
 
 	if(!snowballs) //We're out of snow, get a path.
 		new /obj/dirtpath(src)
+	return 1
 
 //In the future, catwalks should be the base to build in the arctic, not lattices
 //This would however require a decent rework of floor construction and deconstruction
@@ -159,6 +162,8 @@ var/global/list/snow_turfs = list()
 	return BUILD_FAILURE
 
 /turf/snow/Entered(mob/user)
+	if(!ticker)
+		return
 	..()
 	if(isliving(user) && !user.locked_to && !user.lying && !user.flying)
 		playsound(get_turf(src), pick(snowsound), 10, 1, -1, channel = 123)
@@ -167,10 +172,11 @@ var/global/list/snow_turfs = list()
 	name = "dirt path"
 	desc = "A frozen dirt path."
 	icon = 'icons/turf/new_snow.dmi'
-	canSmoothWith = "/obj/dirtpath"
-	var/list/appearances = list()
+	canSmoothWith = "/obj/dirtpath=0&/turf/simulated"
+	var/global/list/diags = list()
 	anchored = 1
 	density = 0
+	plane = PLATING_PLANE
 
 /obj/dirtpath/New()
 	if(!istype(loc,/turf/snow))
@@ -180,49 +186,46 @@ var/global/list/snow_turfs = list()
 	relativewall()
 	relativewall_neighbours()
 
+/obj/dirtpath/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W, /obj/item/weapon/pickaxe/shovel) && !locate(/obj/machinery/portable_atmospherics/hydroponics/soil,src))
+		user.visible_message("<span class='notice'>[user] begins to dig away at the dirt path.</span>", \
+		"<span class='notice'>You begin to dig away at the dirt path.</span>")
+		user.delayNextAttack(5)
+		if(do_after(user, src, 5))
+			user.visible_message("<span class='notice'>[user] finishes digging at the dirt path.</span>", \
+			"<span class='notice'>You finish digging at the dirt path.</span>")
+			new /obj/machinery/portable_atmospherics/hydroponics/soil/snow(src)
+	else ..()
+
 /obj/dirtpath/relativewall_neighbours()
 	..()
 	for(var/direction in diagonal)
 		var/turf/adj_tile = get_step(src, direction)
+		if(isSmoothableNeighbor(adj_tile))
+			adj_tile.relativewall()
 		for(var/atom/A in adj_tile)
 			if(isSmoothableNeighbor(A))
 				A.relativewall()
 
 /obj/dirtpath/relativewall()
-	if(!appearances.len) // this is awful but because of smoothwall not liking diagonals it's the only way to do this right now. certainly a TODO
-		for(var/diagdir in diagonal)
-			appearances["diag[diagdir]"] = image('icons/turf/new_snow.dmi', "permafrost_corner", dir = diagdir)
-			appearances["snow[diagdir]"] = image('icons/turf/new_snow.dmi', "permafrost", dir = diagdir)
-		for(var/dirtdir in cardinal)
-			appearances["snow[dirtdir]"] = image('icons/turf/new_snow.dmi', "permafrost_half", dir = dirtdir)
-			var/realdir = null
-			switch(dirtdir)
-				if(NORTH)
-					realdir = EAST|SOUTH|WEST
-				if(SOUTH)
-					realdir = WEST|NORTH|EAST
-				if(EAST)
-					realdir = SOUTH|WEST|NORTH
-				if(WEST)
-					realdir = NORTH|EAST|SOUTH
-			appearances["snow[realdir]"] = image('icons/turf/new_snow.dmi', "permafrost_tjunction", dir = dirtdir)
-		appearances["snow15"] = image('icons/turf/new_snow.dmi', "permafrost_crossroads")
-		appearances["snow0"] = image('icons/turf/new_snow.dmi', "permafrost_circle")
-		appearances["snow3"] = image('icons/turf/new_snow.dmi', "permafrost", dir = NORTH)
-		appearances["snow12"] = image('icons/turf/new_snow.dmi', "permafrost", dir = WEST)
-
 	overlays.Cut()
+	if(!diags.len)
+		for(var/diagdir in diagonal)
+			diags["diag[diagdir]"] = image('icons/turf/new_snow.dmi', "permafrost_corner", dir = diagdir)
 	var/junction = findSmoothingNeighbors()
 	var/dircount = 0
 	for(var/direction in diagonal)
-		if(locate(/obj/dirtpath,get_step(src, direction)))
+		var/turf/adj_tile = get_step(src, direction)
+		if(isSmoothableNeighbor(adj_tile) || locate(/obj/dirtpath,adj_tile))
 			if((direction & junction) == direction)
-				overlays += appearances["diag[direction]"]
+				overlays += diags["diag[direction]"]
 				dircount++
-	if(dircount == 4)
-		overlays.Cut()
-		icon_state = "permafrost_full"
-	else if(junction)
-		overlays += appearances["snow[junction]"]
-	else
-		overlays += appearances["snow0"]
+
+	switch(dircount)
+		if(4)
+			overlays.Cut()
+			junction = "_full"
+		if(0)
+			if(!junction)
+				junction = "_circle"
+	icon_state = "permafrost[junction]"
