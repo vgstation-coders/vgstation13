@@ -121,7 +121,7 @@
 		if(trunk)
 			trunk.linked = src	// link the pipe trunk to self
 
-/obj/machinery/disposal/deliveryChute/interact()
+/obj/machinery/disposal/deliveryChute/ui_interact()
 	return
 
 /obj/machinery/disposal/deliveryChute/update_icon()
