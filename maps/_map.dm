@@ -50,7 +50,7 @@
 	//Fuck the preprocessor
 	var/dorf = 0
 	var/linked_to_centcomm = 1
-
+	var/radial_generate = NO_RADIAL_GENERATE
 	//If 1, only spawn vaults that are exclusive to this map (other vaults aren't spawned). For more info, see code/modules/randomMaps/vault_definitions.dm
 	var/only_spawn_map_exclusive_vaults = 0
 
