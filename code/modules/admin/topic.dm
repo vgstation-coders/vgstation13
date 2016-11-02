@@ -2180,14 +2180,14 @@
 		if(!check_rights(R_ADMIN))
 			return
 		var/mob/M = locate(href_list["PrayerReply"])
-		output_to_msay("<b>[key_name_admin(src.owner)] is replying to a prayer from [key_name_admin(M)]</b>.")
+		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] is replying to a prayer from [key_name_admin(M)]</span>.")
 
 		usr.client.cmd_admin_subtle_message(M)
 
 	else if(href_list["CentcommReply"])
 		var/mob/M = locate(href_list["CentcommReply"])
 
-		output_to_msay("<b>[key_name_admin(src.owner)] is replying to a Centcomm message from [key_name_admin(M)]</b>.")
+		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] is replying to a Centcomm message from [key_name_admin(M)]</span>.")
 
 		var/receive_type
 		if(istype(M, /mob/living/carbon/human))
@@ -2206,15 +2206,15 @@
 		if(!input)
 			return
 
-		to_chat(src.owner, "You sent <b>\"[input]\"</b> to <b>[M]</b> via a secure channel.")
+		to_chat(src.owner, "You sent <span class = 'bold'>\"[input]\"</span> to <span class = 'bold'>[M]</span> via a secure channel.")
 		log_admin("[src.owner] replied to [key_name(M)]'s Centcomm message with the message [input].")
-		output_to_msay("<b>[key_name_admin(src.owner)] replied to [key_name_admin(M)]'s Centcom message with:</b> \"[input]\"")
-		to_chat(M, "<span class='notice'>You hear something crackle from your [receive_type] for a moment before a voice speaks:</span>\n\"Please stand by for a message from Central Command. Message as follows.\"\n<b>\"[input]\"</b>")
+		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] replied to [key_name_admin(M)]'s Centcom message with:</span> \"[input]\"")
+		to_chat(M, "<span class='notice'>You hear something crackle from your [receive_type] for a moment before a voice speaks:</span>\n\"Please stand by for a message from Central Command. Message as follows.\"\n<span class = 'bold'>\"[input]\"</span>")
 
 	else if(href_list["SyndicateReply"])
 		var/mob/M = locate(href_list["SyndicateReply"])
 
-		output_to_msay("<b>[key_name_admin(src.owner)] is replying to a Syndicate message from [key_name_admin(M)]</b>.")
+		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] is replying to a Syndicate message from [key_name_admin(M)]</span>.")
 
 		var/receive_type
 		if(istype(M, /mob/living/carbon/human))
@@ -2233,10 +2233,10 @@
 		if(!input)
 			return
 
-		to_chat(src.owner, "You sent <b>\"[input]\"</b> to <b>[M]</b> via a secure channel.")
+		to_chat(src.owner, "You sent <span class = 'bold'>\"[input]\"</span> to <span class = 'bold'>[M]</span> via a secure channel.")
 		log_admin("[src.owner] replied to [key_name(M)]'s Syndicate message with the message [input].")
-		output_to_msay("<b>[key_name_admin(src.owner)] replied to [key_name_admin(M)]'s Syndicate message with:</b> \"[input]\"")
-		to_chat(M, "<span class='notice'>You hear something crackle from your [receive_type] for a moment before a voice speaks:</span>\n\"Please stand by for a message from your benefactor, agent. Message as follows.\"\n<b>\"[input]\"</b>")
+		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] replied to [key_name_admin(M)]'s Syndicate message with:</span> \"[input]\"")
+		to_chat(M, "<span class='notice'>You hear something crackle from your [receive_type] for a moment before a voice speaks:</span>\n\"Please stand by for a message from your benefactor, agent. Message as follows.\"\n<span class = 'bold'>\"[input]\"</span>")
 
 	else if(href_list["CentcommFaxView"])
 		var/obj/item/weapon/paper/P = locate(href_list["CentcommFaxView"])
@@ -2249,7 +2249,7 @@
 	else if(href_list["CentcommFaxReply"])
 		var/mob/living/carbon/human/H = locate(href_list["CentcommFaxReply"])
 
-		output_to_msay("<b>[key_name_admin(src.owner)] is replying to a fax message from [key_name_admin(H)].</b>")
+		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] is replying to a fax message from [key_name_admin(H)].</span>")
 
 		var/sent = input(src.owner, "Please enter a message to reply to [key_name(H)] via secure connection. NOTE: BBCode does not work, but HTML tags do! Use <br> for line breaks.", "Outgoing message from Centcomm", "") as message|null
 		if(!sent)
@@ -2264,7 +2264,7 @@
 
 		to_chat(src.owner, "<span class='notice'>Message reply to [key_name(H)] transmitted successfully.</span>")
 		log_admin("[key_name(src.owner)] replied to a fax message from [key_name(H)]: [sent]")
-		output_to_msay("<b>[key_name_admin(src.owner)] replied to a fax message from [key_name_admin(H)]:</b> <a href='?_src_=holder;CentcommFaxView=\ref[replyfax]'>View Message</a>")
+		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] replied to a fax message from [key_name_admin(H)]:</span> <a href='?_src_=holder;CentcommFaxView=\ref[replyfax]'>View Message</a>")
 
 
 	else if(href_list["jumpto"])
