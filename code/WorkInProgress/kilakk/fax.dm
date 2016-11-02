@@ -219,9 +219,7 @@ var/list/alldepartments = list("Central Command")
 
 proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm)
 
-
-
-
+	var/faxed = null
 	for(var/obj/machinery/faxmachine/F in allfaxes)
 
 		if(centcomm || F.department == dpt )
@@ -253,4 +251,5 @@ proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm)
 				spawn(20)
 					P.forceMove(F.loc)
 
-				return P
+				faxed = P //doesn't return here in case there's multiple faxes in the department
+	return faxed
