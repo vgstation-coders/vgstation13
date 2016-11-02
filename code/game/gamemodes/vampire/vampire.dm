@@ -131,6 +131,7 @@
 				text += {"<br><img src="logo_[tempstate].png"> [vampire.key] was [vampire.name] ("}
 				text += "body destroyed"
 			text += ")"
+			text += {"<br><b>Total blood accumulated:</b> [vampire.vampire.bloodtotal]"}
 
 			if(vampire.objectives.len)//If the traitor had no objectives, don't need to process this.
 				var/count = 1
