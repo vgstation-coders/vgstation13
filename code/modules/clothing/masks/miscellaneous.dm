@@ -77,6 +77,11 @@
 	w_class = W_CLASS_SMALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
+/obj/item/clothing/mask/balaclava/skimask
+	heat_conductivity = INS_MASK_HEAT_CONDUCTIVITY
+	name = "ski mask"
+	desc = "This NT-brand skimask is sure to keep you warm."
+
 /obj/item/clothing/mask/neorussian
 	name = "neo-Russian mask"
 	desc = "Somehow, it makes you act and look way more polite than usual."

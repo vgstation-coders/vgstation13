@@ -36,7 +36,7 @@
 		for(var/path in spawnitems)
 			new path(src.loc)
 		amount--
-	return
+
 
 /obj/structure/closet/walllocker/emerglocker/north
 	pixel_y = WORLD_ICON_SIZE
@@ -51,6 +51,26 @@
 	dir = WEST
 
 /obj/structure/closet/walllocker/emerglocker/east
+	pixel_x = WORLD_ICON_SIZE
+	dir = EAST
+
+/obj/structure/closet/walllocker/emerglocker/snow
+	spawnitems = list(/obj/item/weapon/hatchet,/obj/item/weapon/pickaxe/shovel/spade,/obj/item/clothing/mask/balaclava/skimask,/obj/item/clothing/suit/spaceblanket)
+	amount = 2
+
+/obj/structure/closet/walllocker/emerglocker/snow/north
+	pixel_y = WORLD_ICON_SIZE
+	dir = SOUTH
+
+/obj/structure/closet/walllocker/emerglocker/snow/south
+	pixel_y = -WORLD_ICON_SIZE
+	dir = NORTH
+
+/obj/structure/closet/walllocker/emerglocker/snow/west
+	pixel_x = -WORLD_ICON_SIZE
+	dir = WEST
+
+/obj/structure/closet/walllocker/emerglocker/snow/east
 	pixel_x = WORLD_ICON_SIZE
 	dir = EAST
 

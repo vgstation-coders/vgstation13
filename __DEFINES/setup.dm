@@ -117,7 +117,7 @@ var/global/disable_vents     = 0
 #define INS_ARMOUR_HEAT_CONDUCTIVITY 	0.2	//For heat insulated suits like hardsuits or jumpers.
 
 #define MASK_HEAT_CONDUCTIVITY			0.4	//For normal masks
-#define INS_MASK_HEAT_CONDUCTIVITY 		0.2	//For heat insulated masks such as a balaclavas, scarves & gas masks
+#define INS_MASK_HEAT_CONDUCTIVITY 		0.2	//For heat insulated masks such as a ski masks, scarves & gas masks
 
 #define JUMPSUIT_HEAT_CONDUCTIVITY		0.4 //For normal jumpsuits
 #define INS_JUMPSUIT_HEAT_CONDUCTIVITY	0.1 //For heat insulated jumpsuits, if such a thing is even possible.
@@ -1583,3 +1583,6 @@ var/proccalls = 1
 #define HOLOMAP_MARKER_SYNDISHUTTLE		"syndishuttle"
 
 #define DEFAULT_BLOOD "#A10808"
+
+#define NO_RADIAL_GENERATE				0
+#define RADIAL_GENERATE_SNOW_MAP		1

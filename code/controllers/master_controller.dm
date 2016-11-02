@@ -9,6 +9,7 @@ var/global/last_tick_duration = 0
 var/global/air_processing_killed = 0
 var/global/pipe_processing_killed = 0
 
+
 #ifdef PROFILE_MACHINES
 // /type = time this tick
 var/list/machine_profiling=list()
@@ -130,6 +131,36 @@ datum/controller/game_controller/proc/setup()
 			//make_dorf_secret()
 		//else
 		make_mining_asteroid_secret()
+	if(map.radial_generate)
+		watch = start_watch()
+		var/list_of_turfs = list() // what turfs to consider for radial generating on
+		var/list_of_options = list() // what to radial generate on them, in terms of percentage chance
+		var/chance 			 // around about how many you want to have spawned on a map.
+		var/rmap_name
+		switch(map.radial_generate)	// yes this is a switch statement for the literally one map that uses it, but it never hurts to be optimistic.
+			if(RADIAL_GENERATE_SNOW_MAP)
+				list_of_turfs = snow_turfs
+				list_of_options = list(/obj/structure/radial_gen/movable/snow_nature/snow_forest = 60,
+									   /obj/structure/radial_gen/movable/snow_nature/snow_forest/dense = 20,
+									   /obj/structure/radial_gen/movable/snow_nature/snow_grass = 20)
+				chance = 4000
+				rmap_name = "snow"
+
+		log_startup_progress("Radially generating a [rmap_name] map...")
+
+		var/count = 0
+		var/radial_gen_total = 0
+		for(var/turf/T in list_of_turfs)
+			count++
+			if(!(count % 50000))
+				sleep(world.tick_lag)
+			if(rand(1,world.maxy*world.maxx*(map.zLevels.len-1)) <= chance)	// as of 31/10/2016, this is 500x500x5, which is 1,250,000.
+				var/radial_gen_type = pickweight(list_of_options)
+				new radial_gen_type(T)
+				radial_gen_total++
+
+
+		log_startup_progress("Finished radially generating the map with [radial_gen_total] radial generators in [stop_watch(watch)]s")
 
 	//if(config.socket_talk)
 	//	keepalive()

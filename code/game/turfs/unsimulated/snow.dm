@@ -7,6 +7,8 @@
 #define MOLES_N2STANDARD_ARCTIC MOLES_ARCTICSTANDARD*N2STANDARD	//N2 standard value (79%)
 #define SNOW_LAYER_NUMBER 2
 
+var/global/list/snow_turfs = list()
+
 /turf/snow
 	name = "snow"
 	desc = "A layer of frozen water particles, kept solid by temperatures way below freezing."
@@ -26,9 +28,15 @@
 	var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound/misc/snow3.ogg', 'sound/misc/snow4.ogg', 'sound/misc/snow5.ogg', 'sound/misc/snow6.ogg')
 
 /turf/snow/New()
+	if(z != map.zCentcomm)
+		snow_turfs += src
 	..()
 	if(ticker)
 		initialize()
+
+/turf/snow/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+	snow_turfs -= src
+	return ..()
 
 /turf/snow/initialize()
 	if(!cached_appearances.len)	// first time running, let's CACHE IMAGES
@@ -38,17 +46,6 @@
 			cached_appearances["snowlayer[i]"] = snowfx
 		for(var/dirtdir in alldirs)
 			cached_appearances["side[dirtdir]"] = image('icons/turf/new_snow.dmi', "permafrost_side" ,dir = dirtdir)
-
-	if(z != map.zCentcomm)
-		var/feelinglucky = rand(1,world.maxy*world.maxx*(map.zLevels.len-1)) // as of 31/10/2016, this is 500x500x5, which is 1,250,000.
-		switch(feelinglucky)
-			if(1 to 500)
-				new /obj/structure/radial_gen/movable/snow_nature/snow_forest(src)
-			if(501 to 750)
-				new /obj/structure/radial_gen/movable/snow_nature/snow_forest/dense(src)
-			if(751 to 1000)
-				new /obj/structure/radial_gen/movable/snow_nature/snow_grass(src)
-
 	var/snowrand = rand(0, 5)
 	var/list/oranges = orange(1,src)
 	if(locate(/turf/simulated) in oranges || (locate(/turf/unsimulated) in oranges && z != map.zCentcomm))
@@ -82,6 +79,8 @@
 
 		cached_appearances["[snowrand]-[dirnum]"] = appearance
 
+/turf/snow/permafrost
+	icon_state = "permafrost_full"
 
 /turf/snow/permafrost/initialize()
 	..()
