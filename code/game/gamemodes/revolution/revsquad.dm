@@ -25,7 +25,7 @@
 								   /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff,
 								   /obj/item/weapon/grenade/iedcasing/preassembled,
 								   /obj/item/weapon/gun/projectile/pistol,
-								   /obj/item/clothing/suit/armor/vest
+								   /obj/item/weapon/aiModule/freeform/syndicate
 								  )
 
 /datum/game_mode/revsquad/announce()
