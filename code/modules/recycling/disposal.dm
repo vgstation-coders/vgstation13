@@ -115,7 +115,7 @@
 					C.ptype = 6 // 6 = disposal unit
 					C.anchored = 1
 					C.density = 1
-					C.update_icon()
+					C.update()
 					qdel(src)
 				return
 			else
@@ -1156,91 +1156,91 @@
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Research
-		sort_tag = DISP_RESEARCH
+	sort_tag = DISP_RESEARCH
 
 /obj/structure/disposalpipe/sortjunction/Research/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/RD
-		sort_tag = DISP_RD_OFFICE
+	sort_tag = DISP_RD_OFFICE
 
 /obj/structure/disposalpipe/sortjunction/RD/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Robotics
-		sort_tag = DISP_ROBOTICS
+	sort_tag = DISP_ROBOTICS
 
 /obj/structure/disposalpipe/sortjunction/Robotics/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/HoP
-		sort_tag = DISP_HOP_OFFICE
+	sort_tag = DISP_HOP_OFFICE
 
 /obj/structure/disposalpipe/sortjunction/HoP/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Library
-		sort_tag = DISP_LIBRARY
+	sort_tag = DISP_LIBRARY
 
 /obj/structure/disposalpipe/sortjunction/Library/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Chapel
-		sort_tag = DISP_CHAPEL
+	sort_tag = DISP_CHAPEL
 
 /obj/structure/disposalpipe/sortjunction/Chapel/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Theatre
-		sort_tag = DISP_THEATRE
+	sort_tag = DISP_THEATRE
 
 /obj/structure/disposalpipe/sortjunction/Theatre/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Bar
-		sort_tag = DISP_BAR
+	sort_tag = DISP_BAR
 
 /obj/structure/disposalpipe/sortjunction/Bar/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Kitchen
-		sort_tag = DISP_KITCHEN
+	sort_tag = DISP_KITCHEN
 
 /obj/structure/disposalpipe/sortjunction/Kitchen/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Hydroponics
-		sort_tag = DISP_HYDROPONICS
+	sort_tag = DISP_HYDROPONICS
 
 /obj/structure/disposalpipe/sortjunction/Hydroponics/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Janitor
-		sort_tag = DISP_JANITOR_CLOSET
+	sort_tag = DISP_JANITOR_CLOSET
 
 /obj/structure/disposalpipe/sortjunction/Janitor/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Genetics
-		sort_tag = DISP_GENETICS
+	sort_tag = DISP_GENETICS
 
 /obj/structure/disposalpipe/sortjunction/Genetics/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Telecomms
-		sort_tag = DISP_TELECOMMS
+	sort_tag = DISP_TELECOMMS
 
 /obj/structure/disposalpipe/sortjunction/Telecomms/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Mechanics
-		sort_tag = DISP_MECHANICS
+	sort_tag = DISP_MECHANICS
 
 /obj/structure/disposalpipe/sortjunction/Mechanics/mirrored
 	icon_state = "pipe-j2s"
 
 /obj/structure/disposalpipe/sortjunction/Telescience
-		sort_tag = DISP_TELESCIENCE
+	sort_tag = DISP_TELESCIENCE
 
 /obj/structure/disposalpipe/sortjunction/Telescience/mirrored
 	icon_state = "pipe-j2s"
@@ -1422,10 +1422,12 @@
 		var/obj/structure/disposaloutlet/O = linked
 		if(istype(O) && (H))
 			O.expel(H)	// expel at outlet
+			return H
 		else
 			var/obj/machinery/disposal/D = linked
 			if(H)
 				D.expel(H)	// expel at disposal
+				return H
 	else
 		if(H)
 			src.expel(H, src.loc, 0)	// expel at turf
@@ -1446,18 +1448,17 @@
 					// i.e. will be treated as an empty turf
 	desc = "A broken piece of disposal pipe."
 
-	New()
-		..()
-		update()
-		return
+/obj/structure/disposalpipe/broken/New()
+	..()
+	update()
 
 	// called when welded
 	// for broken pipe, remove and turn into scrap
 
-	welded()
-//		var/obj/item/scrap/S = new(src.loc)
-//		S.set_components(200,0,0)
-		qdel(src)
+/obj/structure/disposalpipe/broken/welded()
+//	var/obj/item/scrap/S = new(src.loc)
+//	S.set_components(200,0,0)
+	qdel(src)
 
 // the disposal outlet machine
 
@@ -1476,90 +1477,89 @@
 	holomap = TRUE
 	auto_holomap = TRUE
 
-	New()
-		. = ..()
+/obj/structure/disposaloutlet/New()
+	. = ..()
 
-		spawn(1)
-			target = get_ranged_target_turf(src, dir, 10)
+	spawn(1)
+		target = get_ranged_target_turf(src, dir, 10)
 
-			trunk = locate() in loc
+		trunk = locate() in loc
 
-			if(trunk)
-				if(trunk.disposaloutlet != src)
-					trunk.disposaloutlet = src
-
-				if(trunk.linked != trunk.disposaloutlet)
-					trunk.linked = trunk.disposaloutlet
-
-	Destroy()
 		if(trunk)
-			if(trunk.disposaloutlet)
-				trunk.disposaloutlet = null
+			if(trunk.disposaloutlet != src)
+				trunk.disposaloutlet = src
 
-			if(trunk.linked)
-				trunk.linked = null
+			if(trunk.linked != trunk.disposaloutlet)
+				trunk.linked = trunk.disposaloutlet
 
-			trunk = null
+/obj/structure/disposaloutlet/Destroy()
+	if(trunk)
+		if(trunk.disposaloutlet)
+			trunk.disposaloutlet = null
 
-		..()
+		if(trunk.linked)
+			trunk.linked = null
+
+		trunk = null
+
+	..()
 
 	// expel the contents of the holder object, then delete it
 	// called when the holder exits the outlet
-	proc/expel(var/obj/structure/disposalholder/H)
+/obj/structure/disposaloutlet/proc/expel(var/obj/structure/disposalholder/H)
 
+	if(H)
+		H.active = 0
+	flick("outlet-open", src)
+	playsound(src, 'sound/machines/warning-buzzer.ogg', 50, 0, 0)
+	sleep(20)	//wait until correct animation frame
+	playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
 
-		flick("outlet-open", src)
-		playsound(src, 'sound/machines/warning-buzzer.ogg', 50, 0, 0)
-		sleep(20)	//wait until correct animation frame
-		playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
+	if(H)
+		for(var/atom/movable/AM in H)
+			AM.forceMove(src.loc)
+			AM.pipe_eject(dir)
+			spawn(5)
+				if(AM)
+					AM.throw_at(target, 3, 1)
+		H.vent_gas(src.loc)
+		qdel(H)
 
-		if(H)
-			for(var/atom/movable/AM in H)
-				AM.forceMove(src.loc)
-				AM.pipe_eject(dir)
-				spawn(5)
-					if(AM)
-						AM.throw_at(target, 3, 1)
-			H.vent_gas(src.loc)
-			qdel(H)
-
+/obj/structure/disposaloutlet/attackby(var/obj/item/I, var/mob/user)
+	if(!I || !user)
 		return
-
-	attackby(var/obj/item/I, var/mob/user)
-		if(!I || !user)
+	src.add_fingerprint(user)
+	if(isscrewdriver(I))
+		if(mode==0)
+			mode=1
+			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+			to_chat(user, "You remove the screws around the power connection.")
 			return
-		src.add_fingerprint(user)
-		if(isscrewdriver(I))
-			if(mode==0)
-				mode=1
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-				to_chat(user, "You remove the screws around the power connection.")
-				return
-			else if(mode==1)
-				mode=0
-				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
-				to_chat(user, "You attach the screws around the power connection.")
-				return
-		else if(istype(I,/obj/item/weapon/weldingtool) && mode==1)
-			var/obj/item/weapon/weldingtool/W = I
-			if(W.remove_fuel(0,user))
-				playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
-				to_chat(user, "You start slicing the floorweld off the disposal outlet.")
-				if(do_after(user, src,20))
-					if(!src || !W.isOn())
-						return
-					to_chat(user, "You sliced the floorweld off the disposal outlet.")
-					var/obj/structure/disposalconstruct/C = new (src.loc)
-					src.transfer_fingerprints_to(C)
-					C.ptype = 7 // 7 =  outlet
-					C.update()
-					C.anchored = 1
-					C.density = 1
-					qdel(src)
-				return
-			else
-				to_chat(user, "You need more welding fuel to complete this task.")
-				return
+		else if(mode==1)
+			mode=0
+			playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
+			to_chat(user, "You attach the screws around the power connection.")
+			return
+	else if(istype(I,/obj/item/weapon/weldingtool) && mode==1)
+		var/obj/item/weapon/weldingtool/W = I
+		if(W.remove_fuel(0,user))
+			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
+			to_chat(user, "You start slicing the floorweld off the disposal outlet.")
+			if(do_after(user, src,20))
+				if(!src || !W.isOn())
+					return
+				to_chat(user, "You sliced the floorweld off the disposal outlet.")
+				var/obj/structure/disposalconstruct/C = new (src.loc)
+				src.transfer_fingerprints_to(C)
+				C.ptype = 7 // 7 =  outlet
+				C.update()
+				C.anchored = 1
+				C.density = 1
+				qdel(src)
+			return
+		else
+			to_chat(user, "You need more welding fuel to complete this task.")
+			return
 
 
 
