@@ -19,46 +19,46 @@
 
 
 /obj/item/clothing/suit/wintercoat/cargo
-    name = "cargo technicians winter coat"
+    name = "cargo winter coat"
     icon_state = "coatcargo"
 
 
 /obj/item/clothing/suit/wintercoat/science
-    name = "scientists winter coat"
+    name = "science winter coat"
     icon_state = "coatscience"
 
 
 /obj/item/clothing/suit/wintercoat/medical
-    name = "doctors winter coat"
+    name = "medical winter coat"
     icon_state = "coatmedical"
 
 
 /obj/item/clothing/suit/wintercoat/captain
-    name = "captains winter coat"
+    name = "captain winter coat"
     icon_state = "coatcaptain"
 
 
 /obj/item/clothing/suit/wintercoat/engineering
-    name = "engineers winter coat"
+    name = "engineering winter coat"
     icon_state = "coatengineering"
 
 
 /obj/item/clothing/suit/wintercoat/hydro
-    name = "gardeners winter coat"
+    name = "hydroponics winter coat"
     icon_state = "coathydro"
 
 
 /obj/item/clothing/suit/wintercoat/atmos
-    name = "atmos technicians winter coat"
+    name = "atmos winter coat"
     icon_state = "coatatmos"
 
 
 
 /obj/item/clothing/suit/wintercoat/security
-    name = "securitys winter coat"
+    name = "security winter coat"
     icon_state = "coatsecurity"
 
 
 /obj/item/clothing/suit/wintercoat/mining
-    name = "miners winter coat"
+    name = "mining winter coat"
     icon_state = "coatmining"
