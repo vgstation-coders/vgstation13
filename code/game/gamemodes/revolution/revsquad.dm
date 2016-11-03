@@ -199,9 +199,9 @@
 ///////////////////////////////
 /datum/game_mode/revsquad/check_finished()
 	if(config.continous_rounds)
-		if(finished != 0)
-			if(emergency_shuttle)
-				emergency_shuttle.always_fake_recall = 0
+		// if(finished != 0)
+		// 	if(emergency_shuttle)
+		// 		emergency_shuttle.always_fake_recall = 0
 		return ..()
 	return finished != 0
 
