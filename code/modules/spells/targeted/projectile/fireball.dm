@@ -39,7 +39,7 @@
 /spell/targeted/projectile/dumbfire/fireball/choose_prox_targets(mob/user = usr, var/atom/movable/spell_holder)
 	var/list/targets = ..()
 	for(var/mob/living/M in targets)
-		if(M.isUnconscious())
+		if(M.lying)
 			targets -= M
 	return targets
 
