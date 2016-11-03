@@ -115,7 +115,7 @@
 	pod_code = "[rand(10000, 99999.0)]"
 
 /obj/machinery/door/poddoor/droneship
-	name = "OSIPR Pod-Door"
+	name = "\improper OSIPR Pod-Door"
 	id_tag = "denied"
 
 /obj/machinery/door/poddoor/droneship/New()
