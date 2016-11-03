@@ -55,8 +55,9 @@
 	dir = EAST
 
 /obj/structure/closet/walllocker/emerglocker/snow
-	spawnitems = list(/obj/item/weapon/hatchet,/obj/item/weapon/pickaxe/shovel/spade,/obj/item/clothing/mask/balaclava/skimask,/obj/item/clothing/suit/spaceblanket)
+	spawnitems = list(/obj/item/weapon/storage/toolbox/emergency/snow)
 	amount = 2
+	icon_state = "cold"
 
 /obj/structure/closet/walllocker/emerglocker/snow/north
 	pixel_y = WORLD_ICON_SIZE
