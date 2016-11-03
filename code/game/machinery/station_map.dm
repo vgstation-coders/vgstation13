@@ -124,7 +124,7 @@ var/list/station_holomaps = list()
 	flick("station_map_activate", src)
 
 /obj/machinery/station_map/attack_ai(var/mob/living/silicon/robot/user)
-	user.station_holomap.toggleHolomap(src)
+	user.station_holomap.toggleHolomap(user, isAI(user))
 
 /obj/machinery/station_map/process()
 	if((stat & (NOPOWER|BROKEN)) || !anchored)
