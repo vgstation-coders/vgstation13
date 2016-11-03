@@ -49,7 +49,7 @@
 
 
 /obj/item/clothing/suit/wintercoat/atmos
-    name = "atmos winter coat"
+    name = "atmospherics winter coat"
     icon_state = "coatatmos"
 
 
