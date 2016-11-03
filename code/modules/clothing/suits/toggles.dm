@@ -18,183 +18,47 @@
     )
 
 
-/obj/item/clothing/suit/wintercoatcargo
+/obj/item/clothing/suit/wintercoat/cargo
     name = "cargo technicians winter coat"
-    desc = "A warm, fluffy and incredibly comfortable jacket made from animal furs."
     icon_state = "coatcargo"
-    var item_state_slots = list(slot_r_hand_str = "coatwinter", slot_l_hand_str = "coatwinter")
-    body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
-    heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-    armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-//    action_button_name = "Toggle Hood"
-    allowed = list (
-    /obj/item/weapon/pen,
-    /obj/item/weapon/paper,
-    /obj/item/device/flashlight,
-    /obj/item/weapon/tank/emergency_oxygen,
-    /obj/item/weapon/storage/fancy/cigarettes,
-//    /obj/item/weapon/storage/box/matches,
-    /obj/item/weapon/reagent_containers/food/drinks/flask
-    )
 
 
-/obj/item/clothing/suit/wintercoatscience
+/obj/item/clothing/suit/wintercoat/science
     name = "scientists winter coat"
-    desc = "A warm, fluffy and incredibly comfortable jacket made from animal furs."
     icon_state = "coatscience"
-    var item_state_slots = list(slot_r_hand_str = "coatwinter", slot_l_hand_str = "coatwinter")
-    body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
-    heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-    armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-//    action_button_name = "Toggle Hood"
-    allowed = list (
-    /obj/item/weapon/pen,
-    /obj/item/weapon/paper,
-    /obj/item/device/flashlight,
-    /obj/item/weapon/tank/emergency_oxygen,
-    /obj/item/weapon/storage/fancy/cigarettes,
-//    /obj/item/weapon/storage/box/matches,
-    /obj/item/weapon/reagent_containers/food/drinks/flask
-    )
 
 
-/obj/item/clothing/suit/wintercoatmedical
+/obj/item/clothing/suit/wintercoat/medical
     name = "doctors winter coat"
-    desc = "A warm, fluffy and incredibly comfortable jacket made from animal furs."
     icon_state = "coatmedical"
-    var item_state_slots = list(slot_r_hand_str = "coatwinter", slot_l_hand_str = "coatwinter")
-    body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
-    heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-    armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-//    action_button_name = "Toggle Hood"
-    allowed = list (
-    /obj/item/weapon/pen,
-    /obj/item/weapon/paper,
-    /obj/item/device/flashlight,
-    /obj/item/weapon/tank/emergency_oxygen,
-    /obj/item/weapon/storage/fancy/cigarettes,
-//    /obj/item/weapon/storage/box/matches,
-    /obj/item/weapon/reagent_containers/food/drinks/flask
-    )
 
 
-/obj/item/clothing/suit/wintercoatcaptain
+/obj/item/clothing/suit/wintercoat/captain
     name = "captains winter coat"
-    desc = "A warm, fluffy and incredibly comfortable jacket made from animal furs."
     icon_state = "coatcaptain"
-    var item_state_slots = list(slot_r_hand_str = "coatwinter", slot_l_hand_str = "coatwinter")
-    body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
-    heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-    armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-//    action_button_name = "Toggle Hood"
-    allowed = list (
-    /obj/item/weapon/pen,
-    /obj/item/weapon/paper,
-    /obj/item/device/flashlight,
-    /obj/item/weapon/tank/emergency_oxygen,
-    /obj/item/weapon/storage/fancy/cigarettes,
-//    /obj/item/weapon/storage/box/matches,
-    /obj/item/weapon/reagent_containers/food/drinks/flask
-    )
 
 
-/obj/item/clothing/suit/wintercoatengineering
+/obj/item/clothing/suit/wintercoat/engineering
     name = "engineers winter coat"
-    desc = "A warm, fluffy and incredibly comfortable jacket made from animal furs."
     icon_state = "coatengineering"
-    var item_state_slots = list(slot_r_hand_str = "coatwinter", slot_l_hand_str = "coatwinter")
-    body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
-    heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-    armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-//    action_button_name = "Toggle Hood"
-    allowed = list (
-    /obj/item/weapon/pen,
-    /obj/item/weapon/paper,
-    /obj/item/device/flashlight,
-    /obj/item/weapon/tank/emergency_oxygen,
-    /obj/item/weapon/storage/fancy/cigarettes,
-//    /obj/item/weapon/storage/box/matches,
-    /obj/item/weapon/reagent_containers/food/drinks/flask
-    )
 
 
-/obj/item/clothing/suit/wintercoathydro
+/obj/item/clothing/suit/wintercoat/hydro
     name = "gardeners winter coat"
-    desc = "A warm, fluffy and incredibly comfortable jacket made from animal furs."
     icon_state = "coathydro"
-    var item_state_slots = list(slot_r_hand_str = "coatwinter", slot_l_hand_str = "coatwinter")
-    body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
-    heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-    armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-//    action_button_name = "Toggle Hood"
-    allowed = list (
-    /obj/item/weapon/pen,
-    /obj/item/weapon/paper,
-    /obj/item/device/flashlight,
-    /obj/item/weapon/tank/emergency_oxygen,
-    /obj/item/weapon/storage/fancy/cigarettes,
-//    /obj/item/weapon/storage/box/matches,
-    /obj/item/weapon/reagent_containers/food/drinks/flask
-    )
 
 
-/obj/item/clothing/suit/wintercoatatmos
+/obj/item/clothing/suit/wintercoat/atmos
     name = "atmos technicians winter coat"
-    desc = "A warm, fluffy and incredibly comfortable jacket made from animal furs."
     icon_state = "coatatmos"
-    var item_state_slots = list(slot_r_hand_str = "coatwinter", slot_l_hand_str = "coatwinter")
-    body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
-    heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-    armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-//    action_button_name = "Toggle Hood"
-    allowed = list (
-    /obj/item/weapon/pen,
-    /obj/item/weapon/paper,
-    /obj/item/device/flashlight,
-    /obj/item/weapon/tank/emergency_oxygen,
-    /obj/item/weapon/storage/fancy/cigarettes,
-//    /obj/item/weapon/storage/box/matches,
-    /obj/item/weapon/reagent_containers/food/drinks/flask
-    )
 
 
 
-/obj/item/clothing/suit/wintercoatsecurity
+/obj/item/clothing/suit/wintercoat/security
     name = "securitys winter coat"
-    desc = "A warm, fluffy and incredibly comfortable jacket made from animal furs."
     icon_state = "coatsecurity"
-    var item_state_slots = list(slot_r_hand_str = "coatwinter", slot_l_hand_str = "coatwinter")
-    body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
-    heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-    armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-//    action_button_name = "Toggle Hood"
-    allowed = list (
-    /obj/item/weapon/pen,
-    /obj/item/weapon/paper,
-    /obj/item/device/flashlight,
-    /obj/item/weapon/tank/emergency_oxygen,
-    /obj/item/weapon/storage/fancy/cigarettes,
-//    /obj/item/weapon/storage/box/matches,
-    /obj/item/weapon/reagent_containers/food/drinks/flask
-    )
 
 
-
-/obj/item/clothing/suit/wintercoatmining
+/obj/item/clothing/suit/wintercoat/mining
     name = "miners winter coat"
-    desc = "A warm, fluffy and incredibly comfortable jacket made from animal furs."
     icon_state = "coatmining"
-    var item_state_slots = list(slot_r_hand_str = "coatwinter", slot_l_hand_str = "coatwinter")
-    body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
-    heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-    armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-//    action_button_name = "Toggle Hood"
-    allowed = list (
-    /obj/item/weapon/pen,
-    /obj/item/weapon/paper,
-    /obj/item/device/flashlight,
-    /obj/item/weapon/tank/emergency_oxygen,
-    /obj/item/weapon/storage/fancy/cigarettes,
-//    /obj/item/weapon/storage/box/matches,
-    /obj/item/weapon/reagent_containers/food/drinks/flask
-    )
