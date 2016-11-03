@@ -49,11 +49,19 @@
 	name = "emergency toolbox"
 	icon_state = "red"
 	item_state = "toolbox_red"
+	var/snow = 0
 
 /obj/item/weapon/storage/toolbox/emergency/New()
 	..()
-	new /obj/item/weapon/crowbar/red(src)
-	new /obj/item/weapon/extinguisher/mini(src)
+	if(snow)
+		new /obj/item/weapon/lighter(src)
+		new /obj/item/clothing/mask/balaclava/skimask(src)
+		new /obj/item/weapon/hatchet(src)
+		new /obj/item/weapon/pickaxe/shovel/spade(src)
+		new /obj/item/weapon/storage/firstaid/regular(src)
+	else
+		new /obj/item/weapon/extinguisher/mini(src)
+		new /obj/item/weapon/crowbar/red(src)
 	var/lighting = pick( //emergency lighting yay
 		20;/obj/item/device/flashlight,
 		30;/obj/item/weapon/storage/fancy/flares,
@@ -62,6 +70,16 @@
 	new /obj/item/device/radio(src)
 	if(prob(5))
 		new /obj/item/airbag(src)
+
+/obj/item/weapon/storage/toolbox/emergency/snow
+	snow = 1
+	icon_state = "rusty"
+	desc = "This ancient toolbox creaks when you open it."
+
+/obj/item/weapon/storage/toolbox/emergency/snow/New()
+	..()
+	pixel_x = rand(-13,13) * PIXEL_MULTIPLIER
+	pixel_y = rand(-13,13) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/storage/toolbox/mechanical
 	name = "mechanical toolbox"
