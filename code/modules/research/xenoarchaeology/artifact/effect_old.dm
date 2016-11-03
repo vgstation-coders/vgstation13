@@ -110,13 +110,13 @@
 					user.radiation += 25
 					user.nutrition -= min(50, user.nutrition)
 					user.Dizzy(6)
-					user.weakened += 6
+					user.knockdown += 6
 					return 1
 				to_chat(else user, "Nothing happens.")
 			if("stun")
 				if (istype(user, /mob/living/carbon/))
 					to_chat(user, "<span class='warning'>A powerful force overwhelms your consciousness.</span>")
-					user.weakened += 45
+					user.knockdown += 45
 					user.stuttering += 45
 					if(prob(50))
 						user.stunned += rand(1,10)
@@ -200,7 +200,7 @@
 					if(prob(20))
 						to_chat(M, "<span class='warning'>Your body goes numb for a moment.</span>")
 						M.stunned += 2
-						M.weakened += 2
+						M.knockdown += 2
 						M.stuttering += 2
 				return 1
 			if("roboheal")
@@ -288,7 +288,7 @@
 					M.adjustOxyLoss(5)
 					M.adjustBrainLoss(5)
 					M.Dizzy(6)
-					M.weakened += 3
+					M.knockdown += 3
 					M.updatehealth()
 				return 1
 			if("stun")
@@ -297,7 +297,7 @@
 						continue
 					to_chat(M, "<span class='warning'>A wave of energy overwhelms your senses!</span>")
 					M.paralysis += 3
-					M.weakened += 4
+					M.knockdown += 4
 					M.stuttering += 4
 				return 1
 			if("roboheal")
@@ -426,7 +426,7 @@
 						continue
 					to_chat(M, "<span class='warning'>A powerful force causes you to black out momentarily.</span>")
 					M.paralysis += 5
-					M.weakened += 8
+					M.knockdown += 8
 					M.stuttering += 8
 				return 1
 			if("roboheal")

@@ -946,7 +946,7 @@ LOOK FOR SURGERY.DM*/
 			target.resting = 0
 		target.AdjustParalysis(-3)
 		target.AdjustStunned(-3)
-		target.AdjustWeakened(-3)
+		target.AdjustKnockdown(-3)
 		playsound(get_turf(target), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 		target.visible_message(
 			"<span class='notice'>[user] prods [target] trying to wake \him up!</span>",

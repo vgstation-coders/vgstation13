@@ -188,14 +188,14 @@
 		usr.visible_message("<span class='danger'>[usr] invokes a talisman at [T]</span>")
 
 		if(issilicon(T))
-			T.Weaken(15)
+			T.Knockdown(15)
 
 		else if(iscarbon(T))
 			var/mob/living/carbon/C = T
 			C.flash_eyes(visual = 1)
 			if (!(M_HULK in C.mutations))
 				C.silent += 15
-			C.Weaken(25)
+			C.Knockdown(25)
 			C.Stun(25)
 	return
 

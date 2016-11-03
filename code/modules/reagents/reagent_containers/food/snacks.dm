@@ -3837,7 +3837,7 @@
 		to_chat(H, "<SPAN CLASS='notice'>You slipped on the [name]!</SPAN>")
 		playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
 		H.Stun(3)
-		H.Weaken(2)
+		H.Knockdown(2)
 
 ////////////////SLIDERS END////////////////
 

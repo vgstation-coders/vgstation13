@@ -12,7 +12,7 @@
 		var/weakness = GetAnomalySusceptibility(C)
 		if(prob(weakness * 100))
 			to_chat(C, "<span class='warning'>A powerful force overwhelms your consciousness.</span>")
-			C.weakened += 45 * weakness
+			C.knockdown += 45 * weakness
 			C.stuttering += 45 * weakness
 			C.stunned += rand(1,10) * weakness
 
@@ -22,7 +22,7 @@
 			var/weakness = GetAnomalySusceptibility(C)
 			if(prob(10 * weakness))
 				to_chat(C, "<span class='warning'>Your body goes numb for a moment.</span>")
-				C.weakened += 2
+				C.knockdown += 2
 				C.stuttering += 2
 				if(prob(10))
 					C.stunned += 1
@@ -35,7 +35,7 @@
 			var/weakness = GetAnomalySusceptibility(C)
 			if(prob(100 * weakness))
 				to_chat(C, "<span class='warning'>A wave of energy overwhelms your senses!</span>")
-				C.weakened += 4 * weakness
+				C.knockdown += 4 * weakness
 				C.stuttering += 4 * weakness
 				if(prob(10))
 					C.stunned += 1 * weakness

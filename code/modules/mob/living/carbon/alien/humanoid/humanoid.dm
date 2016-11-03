@@ -175,7 +175,7 @@
 					M.powerlevel = 0
 				visible_message("<span class='danger'>\The [M] has shocked [src]!</span>")
 
-				Weaken(power)
+				Knockdown(power)
 				if(stuttering < power)
 					stuttering = power
 				Stun(power)
@@ -203,7 +203,7 @@
 				if(G.cell.charge >= 2500)
 					G.cell.charge -= 2500
 
-					Weaken(5)
+					Knockdown(5)
 					if(stuttering < 5)
 						stuttering = 5
 					Stun(5)
@@ -258,15 +258,15 @@
 				if(M_HULK in M.mutations) //M_HULK SMASH
 					damage += 14
 					spawn(0)
-						Weaken(damage) //Why can a hulk knock an alien out but not knock out a human? Damage is robust enough.
+						Knockdown(damage) //Why can a hulk knock an alien out but not knock out a human? Damage is robust enough.
 						step_away(src, M, 15)
 						sleep(3)
 						step_away(src, M, 15)
 				playsound(loc, "punch", 25, 1, -1)
 				visible_message("<span class='danger'>[M] has punched \the [src] !</span>")
 				if(damage > 9 ||prob(5))//Regular humans have a very small chance of weakening an alien.
-					Weaken(1, 5)
-					visible_message("<span class='danger'>[M] has weakened \the [src] !</span>")
+					Knockdown(1, 5)
+					visible_message("<span class='danger'>[M] has knockdown \the [src] !</span>")
 				adjustBruteLoss(damage)
 				updatehealth()
 			else
@@ -276,7 +276,7 @@
 		if(I_DISARM)
 			if(!lying)
 				if(prob(5)) //Very small chance to push an alien down.
-					Weaken(2)
+					Knockdown(2)
 					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 					visible_message("<span class='danger'>[M] has pushed down \the [src] !</span>")
 				else
@@ -304,7 +304,7 @@ In all, this is a lot like the monkey code. /N
 			resting = 0
 			AdjustParalysis(-3)
 			AdjustStunned(-3)
-			AdjustWeakened(-3)
+			AdjustKnockdown(-3)
 			visible_message("<span class='notice'>[M] nuzzles [src] trying to wake it up !</span>")
 		else
 			if(health > 0)

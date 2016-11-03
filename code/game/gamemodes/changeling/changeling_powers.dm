@@ -685,7 +685,7 @@
 	C.stat = 0
 	C.SetParalysis(0)
 	C.SetStunned(0)
-	C.SetWeakened(0)
+	C.SetKnockdown(0)
 	C.lying = 0
 	C.update_canmove()
 
@@ -1054,7 +1054,7 @@ var/list/datum/dna/hivemind_bank = list()
 		return
 
 	to_chat(target, "<span class='userdanger'>Your muscles begin to painfully tighten.</span>")
-	target.Weaken(20)
+	target.Knockdown(20)
 	feedback_add_details("changeling_powers", "PS")
 	return 1
 

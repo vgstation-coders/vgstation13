@@ -1248,7 +1248,7 @@ About the new airlock wires panel:
 					continue
 
 				L.SetStunned(5)
-				L.SetWeakened(5)
+				L.SetKnockdown(5)
 				var/obj/effect/stop/S = new()
 				S.forceMove(loc)
 				S.victim = L

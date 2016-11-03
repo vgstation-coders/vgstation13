@@ -281,9 +281,9 @@ Auto Patrol: []"},
 							if(M.stuttering < 10 && (!(M_HULK in M.mutations)))
 								M.stuttering = 10
 							M.Stun(10)
-							M.Weaken(10)
+							M.Knockdown(10)
 						else
-							M.Weaken(10)
+							M.Knockdown(10)
 							M.stuttering = 10
 							M.Stun(10)
 						if(declare_arrests)
@@ -334,7 +334,7 @@ Auto Patrol: []"},
 		if(SECBOT_PREP_ARREST)		// preparing to arrest target
 
 			// see if he got away
-			if((get_dist(src, src.target) > 1) || ((src.target:loc != src.target_lastloc) && src.target:weakened < 2))
+			if((get_dist(src, src.target) > 1) || ((src.target:loc != src.target_lastloc) && src.target:knockdown < 2))
 				src.anchored = 0
 				mode = SECBOT_HUNT
 				return

@@ -92,7 +92,7 @@
 			if(activated)
 				visible_message("<span class='warning'>[nick] lets out a last honk before running out of fuel and activating its ejection seat.</span>")
 				if(ishuman(user)) //This shouldn't be needed, but fucks sakes
-					user.Weaken(5)
+					user.Knockdown(5)
 				playsound(get_turf(src), 'sound/items/bikehorn.ogg', 50, 1)
 				activated = 0
 				reagents.remove_reagent(BANANA, 5)
@@ -270,7 +270,7 @@
 			to_chat(user, "<span class='warning'>[src] has no fuel, it activates its ejection seat as soon as you jam down the pedal!</span>")
 			unlock_atom(user)
 			activated = 0
-			user.Weaken(5) //Only Weaken after unbuckling
+			user.Knockdown(5) //Only Weaken after unbuckling
 		return
 	if(activated)
 		var/old_pos = get_turf(src)

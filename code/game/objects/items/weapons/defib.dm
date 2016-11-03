@@ -51,7 +51,7 @@
 			to_chat(user, "<span class='warning'>You touch the paddles together, shorting the device.</span>")
 			sparks.start()
 			playsound(get_turf(src),'sound/items/defib.ogg',50,1)
-			user.Weaken(5)
+			user.Knockdown(5)
 			var/mob/living/carbon/human/H = user
 			if(ishuman(user))
 				H.apply_damage(20, BURN)
@@ -108,7 +108,7 @@
 /obj/item/weapon/melee/defibrillator/proc/shockAttack(mob/living/carbon/human/target,mob/user)
 	var/datum/organ/internal/heart/heart = target.internal_organs_by_name["heart"]
 	target.visible_message("<span class='danger'>[target] has been shocked in the chest with the [src] by [user]!</span>")
-	target.Weaken(rand(6,12))
+	target.Knockdown(rand(6,12))
 	target.apply_damage(rand(30,60),BURN,LIMB_CHEST)
 	heart.damage += rand(5,60)
 	target.emote("scream",,, 1) //If we're going this route, it kinda hurts

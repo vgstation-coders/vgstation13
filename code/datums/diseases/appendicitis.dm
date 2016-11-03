@@ -41,13 +41,13 @@
 				H.vomit()
 			else
 				to_chat(affected_mob, "<span class='warning'>You gag as you want to throw up, but there's nothing in your stomach!</span>")
-				affected_mob.Weaken(10)
+				affected_mob.Knockdown(10)
 				affected_mob.adjustToxLoss(3)
 	if(stage > 3)
 		if(prob(1) && ishuman(affected_mob))
 			var/mob/living/carbon/human/H = affected_mob
 			to_chat(H, "<span class='warning'>Your abdomen is a world of pain!</span>")
-			H.Weaken(10)
+			H.Knockdown(10)
 			H.op_stage.appendix = 2.0
 
 			var/datum/organ/external/groin = H.get_organ(LIMB_GROIN)

@@ -69,7 +69,7 @@ proc/move_research_shuttle()
 						shake_camera(M, 10, 1) // unlocked_to, HOLY SHIT SHAKE THE ROOM
 			if(istype(M, /mob/living/carbon))
 				if(!M.locked_to)
-					M.Weaken(3)
+					M.Knockdown(3)
 
 		research_shuttle_moving = 0
 	return

@@ -123,7 +123,7 @@
 					if(thorns_apply_damage(M, affecting))
 						to_chat(H, "<span class='danger'>You step on \the [src]'s sharp thorns!</span>")
 						if(H.species && !(H.species.flags & NO_PAIN))
-							H.Weaken(3)
+							H.Knockdown(3)
 					if(stinging_apply_reagents(M))
 						to_chat(H, "<span class='danger'>You step on \the [src]'s stingers!</span>")
 						potency -= rand(1,(potency/3)+1)
@@ -842,7 +842,7 @@
 	for(var/mob/living/carbon/C in view(1))
 		if(C.CheckSlip() < 1)
 			continue
-		C.Weaken(5)
+		C.Knockdown(5)
 	playsound(get_turf(src), 'sound/effects/bang.ogg', 10, 1)
 	qdel(src)
 

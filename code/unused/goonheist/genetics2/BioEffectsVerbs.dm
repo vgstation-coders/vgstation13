@@ -227,7 +227,7 @@
 		if (usr:bioHolder.HasEffect("fat") && prob(66))
 			usr.visible_message("<span class='warning'><b>[usr.name]</b> crashes due to their heavy weight!</span>")
 			playsound(usr.loc, 'zhit.wav', 50, 1)
-			usr.weakened += 10
+			usr.knockdown += 10
 			usr.stunned += 5
 
 		usr.layer = prevLayer
@@ -236,7 +236,7 @@
 		var/obj/container = usr.loc
 		to_chat(usr, "<span class='warning'>You leap and slam your head against the inside of [container]! Ouch!</span>")
 		usr.paralysis += 3
-		usr.weakened += 5
+		usr.knockdown += 5
 		container.visible_message("<span class='warning'><b>[usr.loc]</b> emits a loud thump and rattles a bit.</span>")
 		playsound(usr.loc, 'bang.ogg', 50, 1)
 		var/wiggle = 6
@@ -646,7 +646,7 @@
 				if (V == L)
 					continue
 				to_chat(V, "<span class='warning'>You are sent flying!</span>")
-				V.weakened += 5 // why the hell was this set to 12 christ
+				V.knockdown += 5 // why the hell was this set to 12 christ
 				step_away(V,get_turf(L),15)
 				step_away(V,get_turf(L),15)
 				step_away(V,get_turf(L),15)

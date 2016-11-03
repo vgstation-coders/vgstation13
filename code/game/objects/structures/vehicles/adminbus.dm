@@ -236,7 +236,7 @@
 				if(L.locked_to)
 					L.locked_to = 0
 				L.Stun(5)
-				L.Weaken(5)
+				L.Knockdown(5)
 				L.apply_effect(STUTTER, 5)
 				playsound(src, pick(hit_sound), 50, 0, 0)
 		if(3)

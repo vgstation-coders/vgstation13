@@ -129,7 +129,7 @@ var/list/all_doors = list()
 			if (!istype(H.head, /obj/item/clothing/head/helmet))
 				visible_message("<span class='warning'>[user] headbutts the airlock.</span>")
 				H.Stun(8)
-				H.Weaken(5)
+				H.Knockdown(5)
 				var/datum/organ/external/O = H.get_organ(LIMB_HEAD)
 
 				// TODO: analyze the called proc

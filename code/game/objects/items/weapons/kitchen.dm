@@ -268,7 +268,7 @@
 	if(istype(hit_atom, /mob/living) && prob(85))
 		var/mob/living/L = hit_atom
 		L.Stun(5)
-		L.Weaken(5)
+		L.Knockdown(5)
 	return ..()
 
 /*
@@ -363,7 +363,7 @@
 
 	if((M_CLUMSY in user.mutations) && prob(50))              //What if he's a clown?
 		to_chat(M, "<span class='warning'>You accidentally slam yourself with the [src]!</span>")
-		M.Weaken(1)
+		M.Knockdown(1)
 		user.take_organ_damage(2)
 		if(prob(50))
 			playsound(M, 'sound/items/trayhit1.ogg', 50, 1)
@@ -392,7 +392,7 @@
 			M.LAssailant = user
 
 		if(prob(15))
-			M.Weaken(3)
+			M.Knockdown(3)
 			M.take_organ_damage(3)
 		else
 			M.take_organ_damage(5)
@@ -463,7 +463,7 @@
 		else
 			M.take_organ_damage(8)
 			if(prob(30))
-				M.Weaken(2)
+				M.Knockdown(2)
 				return
 			return
 /*

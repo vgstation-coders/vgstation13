@@ -322,7 +322,7 @@
 					if ((O.client && !( O.blinded )))
 						O.show_message(text("<span class='danger'>The [M.name] has shocked []!</span>", src), 1)
 
-				Weaken(power)
+				Knockdown(power)
 				if (stuttering < power)
 					stuttering = power
 				Stun(power)

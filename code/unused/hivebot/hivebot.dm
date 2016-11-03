@@ -215,7 +215,7 @@
 			if (M.class == "combat")
 				damage += 15
 				if(prob(20))
-					src.weakened = max(src.weakened,4)
+					src.knockdown = max(src.knockdown,4)
 					src.stunned = max(src.stunned,4)
 		*/
 			playsound(src.loc, 'sound/weapons/slash.ogg', 25, 1, -1)

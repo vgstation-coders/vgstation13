@@ -160,7 +160,7 @@
 		if(STUN)
 			stunned = max(stunned,(effect/(blocked+1)))
 		if(WEAKEN)
-			weakened = max(weakened,(effect/(blocked+1)))
+			knockdown = max(knockdown,(effect/(blocked+1)))
 		if(PARALYZE)
 			paralysis = max(paralysis,(effect/(blocked+1)))
 		if(IRRADIATE)

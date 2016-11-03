@@ -23,7 +23,7 @@
 			switch(rand(1,100))
 				if(1 to 20)
 					to_chat(H, "<span class='sinister'>You look like [pick("a monster","a goliath","a catbeast","a ghost","a chicken","the mailman","a demon")]! Your heart skips a beat.</span>")
-					H.Weaken(4)
+					H.Knockdown(4)
 					return
 				if(21 to 40)
 					to_chat(H, "<span class='sinister'>There's [pick("somebody","a monster","a little girl","a zombie","a ghost","a catbeast","a demon")] standing behind you!</span>")
