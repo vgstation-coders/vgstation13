@@ -130,27 +130,29 @@
 		var/mob/living/carbon/human/H = M
 		if(isjusthuman(H) || isunathi(H))	//Humans and unathi are the only races with actual hair.
 			var/area = user.zone_sel.selecting
+			var/area_string = "hair"
 			if(area == "mouth")
 				if(H.f_style == "Shaved")	//if they have no facial hair
 					to_chat(user, "<span class='notice'>[H == user ? "You don't" : "\The [H] doesn't"] seem to have any facial hair!</span>")
 					return
+				area_string = "facial hair"
 			else
 				if(H.h_style == "Bald")	//if they have no hair
 					to_chat(user, "<span class='notice'>[H == user ? "You don't" : "\The [H] doesn't"] seem to have any hair!</span>")
 					return
 			if(H == user)
-				user.visible_message("<span class='notice'>[user] colors their [area == "mouth" ? "facial hair" : "hair"] with \the [src].</span>", \
-									 "<span class='notice'>You color your [area == "mouth" ? "facial hair" : "hair"] with \the [src].</span>")
+				user.visible_message("<span class='notice'>[user] colors their [area_string] with \the [src].</span>", \
+									 "<span class='notice'>You color your [area_string] with \the [src].</span>")
 				if(area == "mouth")
 					color_hair(H,1)
 				else
 					color_hair(H)
 			else
-				user.visible_message("<span class='warning'>[user] begins to color \the [H]'s [area == "mouth" ? "facial hair" : "hair"] with \the [src].</span>", \
-									 "<span class='notice'>You begin to color \the [H]'s [area == "mouth" ? "facial hair" : "hair"] with \the [src].</span>")
+				user.visible_message("<span class='warning'>[user] begins to color \the [H]'s [area_string] with \the [src].</span>", \
+									 "<span class='notice'>You begin to color \the [H]'s [area_string] with \the [src].</span>")
 				if(do_after(user,H, 20))	//user needs to keep their active hand, H does not.
-					user.visible_message("<span class='notice'>[user] colors [H]'s [area == "mouth" ? "facial hair" : "hair"] with \the [src].</span>", \
-										 "<span class='notice'>You color [H]'s [area == "mouth" ? "facial hair" : "hair"] with \the [src].</span>")
+					user.visible_message("<span class='notice'>[user] colors [H]'s [area_string] with \the [src].</span>", \
+										 "<span class='notice'>You color [H]'s [area_string] with \the [src].</span>")
 					if(area == "mouth")
 						color_hair(H,1)
 					else
