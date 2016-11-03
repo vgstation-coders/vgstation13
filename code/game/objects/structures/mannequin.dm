@@ -297,7 +297,7 @@
 /obj/structure/mannequin/proc/getDamage(var/damage)
 	health -= damage
 	healthCheck()
-	if(health > 0 && trapped_strip || trapped_prox)
+	if(health > 0 && (trapped_strip || trapped_prox))
 		Awaken()
 
 
@@ -889,7 +889,7 @@
 	else
 		shield -= damage
 	healthCheck()
-	if(health > 0 && trapped_strip || trapped_prox)
+	if((destroyed || !locked) && health > 0 && (trapped_strip || trapped_prox))
 		Awaken()
 
 /obj/structure/mannequin/cyber/blob_act()

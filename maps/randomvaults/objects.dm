@@ -107,6 +107,7 @@
 /area/vault/droneship
 	name = "\improper Drone Ship"
 	requires_power = 1
+	jammed = 2
 	var/pod_code = "00000"
 
 /area/vault/droneship/New()
