@@ -330,38 +330,38 @@ BLIND     // can't see anything
 	slot_flags = SLOT_HEAD
 	species_restricted = list("exclude","Muton")
 		// this is for hoods
-//	var/can_hood = null
-//	var/is_hooded = 2
-//	var/ignore_hood = 0
-//	action_button_name = "Toggle Hood"
+/*	var/can_hood = null
+	var/is_hooded = 2
+	var/ignore_hood = 0
+	action_button_name = "Toggle Hood"
 
 //Hoods
-///obj/item/clothing/head/verb/togglehood()
-//	set name = "Toggle Hood"
-//	set category = "Object"
-//	set src in usr
-//	if(ignore_hood)
-//		return
-//	else
-//		if(usr.incapacitated())
-//			return
-//		if(!can_hood)
-//			to_chat(usr, "You try to put your hood up but something is in the way, you put it back down.")
-//			return
-//		if(src.is_hooded == 2)
-//			icon = "icons/obj/clothing/suits/generic_hood.dmi"
-//			flags = initial(flags)
-//			body_parts_covered &= ~(HEAD)
-//			to_chat(usr, "You put \the hood up.")
-//			src.is_hooded = 1
-//		else
-//			icon = null
-//			to_chat(usr, "You put \the hood down.")
-//			flags = 0
-//			src.is_hooded = 2
-//			body_parts_covered = initial(body_parts_covered)
-//		usr.update_inv_head()
-
+obj/item/clothing/head/verb/togglehood()
+	set name = "Toggle Hood"
+	set category = "Object"
+	set src in usr
+	if(ignore_hood)
+		return
+	else
+		if(usr.incapacitated())
+			return
+		if(!can_hood)
+			to_chat(usr, "You try to put your hood up but something is in the way, you put it back down.")
+			return
+		if(src.is_hooded == 2)
+			icon = "icons/obj/clothing/suits/generic_hood.dmi"
+			flags = initial(flags)
+			body_parts_covered &= ~(HEAD)
+			to_chat(usr, "You put \the hood up.")
+			src.is_hooded = 1
+		else
+			icon = null
+			to_chat(usr, "You put \the hood down.")
+			flags = 0
+			src.is_hooded = 2
+			body_parts_covered = initial(body_parts_covered)
+		usr.update_inv_head()
+*/
 //Mask
 /obj/item/clothing/mask
 	name = "mask"
