@@ -132,7 +132,6 @@ var/global/list/whitelisted_species = list("Human")
 	var/move_speed_mod = 0 //Higher value is slower, lower is faster.
 	var/can_be_hypothermic = 1
 	var/has_sweat_glands = 1
-	var/can_have_hair = 0 //Whether or not the species can have hair.
 
 /datum/species/New()
 	..()
@@ -257,7 +256,6 @@ var/global/list/whitelisted_species = list("Human")
 	name = "Human"
 	known_languages = list(LANGUAGE_HUMAN)
 	primitive = /mob/living/carbon/monkey
-	can_have_hair = 1
 
 	flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT
 
@@ -280,7 +278,6 @@ var/global/list/whitelisted_species = list("Human")
 	punch_damage = 5
 	primitive = /mob/living/carbon/monkey/unathi
 	darksight = 3
-	can_have_hair = 1
 
 	cold_level_1 = 280 //Default 260 - Lower is better
 	cold_level_2 = 220 //Default 200

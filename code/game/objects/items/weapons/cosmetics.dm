@@ -128,39 +128,46 @@
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(H.species)
-			var/datum/species/S = H.species
-			if(S.can_have_hair)
-				var/area = user.zone_sel.selecting
-				var/area_string = "hair"
-				if(area == "mouth")
-					if(H.f_style == "Shaved")	//if they have no facial hair
-						to_chat(user, "<span class='notice'>[H == user ? "You don't" : "\The [H] doesn't"] seem to have any facial hair!</span>")
-						return
-					area_string = "facial hair"
-				else
-					if(H.h_style == "Bald")	//if they have no hair
-						to_chat(user, "<span class='notice'>[H == user ? "You don't" : "\The [H] doesn't"] seem to have any hair!</span>")
-						return
-				if(H == user)
-					user.visible_message("<span class='notice'>[user] colors their [area_string] with \the [src].</span>", \
-										 "<span class='notice'>You color your [area_string] with \the [src].</span>")
-					if(area == "mouth")
-						color_hair(H,1)
-					else
-						color_hair(H)
-				else
-					user.visible_message("<span class='warning'>[user] begins to color \the [H]'s [area_string] with \the [src].</span>", \
-										 "<span class='notice'>You begin to color \the [H]'s [area_string] with \the [src].</span>")
-					if(do_after(user,H, 20))	//user needs to keep their active hand, H does not.
-						user.visible_message("<span class='notice'>[user] colors [H]'s [area_string] with \the [src].</span>", \
-											 "<span class='notice'>You color [H]'s [area_string] with \the [src].</span>")
-						if(area == "mouth")
-							color_hair(H,1)
-						else
-							color_hair(H)
+		var/area = user.zone_sel.selecting
+		var/area_string = "hair"
+		if(area == "mouth")
+			if(!H.f_style || H.f_style == "Shaved")	//if they have no facial hair
+				to_chat(user, "<span class='notice'>[H == user ? "You don't" : "\The [H] doesn't"] seem to have any facial hair!</span>")
 				return
-	to_chat(user, "<span class='notice'>\The [M] doesn't seem to have any hair!</span>")
+			else
+				var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.f_style]
+				if(!facial_hair_style.do_colouration)
+					to_chat(user, "<span class='notice'>\The [H] doesn't seem to have any colorable facial hair!</span>")
+					return
+			area_string = "facial hair"
+		else
+			if(!H.h_style || H.h_style == "Bald")	//if they have no hair
+				to_chat(user, "<span class='notice'>[H == user ? "You don't" : "\The [H] doesn't"] seem to have any hair!</span>")
+				return
+			else
+				var/datum/sprite_accessory/hair_style = hair_styles_list[H.h_style]
+				if(!hair_style.do_colouration)
+					to_chat(user, "<span class='notice'>\The [H] doesn't seem to have any colorable hair!</span>")
+					return
+		if(H == user)
+			user.visible_message("<span class='notice'>[user] colors their [area_string] with \the [src].</span>", \
+								 "<span class='notice'>You color your [area_string] with \the [src].</span>")
+			if(area == "mouth")
+				color_hair(H,1)
+			else
+				color_hair(H)
+		else
+			user.visible_message("<span class='warning'>[user] begins to color \the [H]'s [area_string] with \the [src].</span>", \
+								 "<span class='notice'>You begin to color \the [H]'s [area_string] with \the [src].</span>")
+			if(do_after(user,H, 20))	//user needs to keep their active hand, H does not.
+				user.visible_message("<span class='notice'>[user] colors [H]'s [area_string] with \the [src].</span>", \
+									 "<span class='notice'>You color [H]'s [area_string] with \the [src].</span>")
+				if(area == "mouth")
+					color_hair(H,1)
+				else
+					color_hair(H)
+	else
+		to_chat(user, "<span class='notice'>\The [M] doesn't seem to have any hair!</span>")
 
 /obj/item/weapon/hair_dye/proc/color_hair(mob/living/carbon/human/H, var/facial = 0)
 	if(!H)
@@ -174,3 +181,4 @@
 		H.g_hair = color_g
 		H.b_hair = color_b
 	H.update_hair()
+	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
