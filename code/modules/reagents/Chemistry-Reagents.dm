@@ -3572,6 +3572,14 @@
 	color = "#a00000" //rgb: 160, 0, 0
 	custom_metabolism = 0.1
 
+/datum/reagent/biofoam	//Does exactly what clotting agent does but our reagent system won't let two chems with the same behavior share an ID.
+	name = "Biofoam"
+	id = BIOFOAM
+	description = "A fast-hardening, biocompatible foam used to stem internal bleeding for a short time."
+	reagent_state = LIQUID
+	color = "#D9C0E7" //rgb: 217, 192, 231
+	custom_metabolism = 0.1
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////DRINKS BELOW, Beer is up there though, along with cola. Cap'n Pete's Cuban Spiced Rum//////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
