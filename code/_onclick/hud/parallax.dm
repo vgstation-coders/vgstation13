@@ -45,7 +45,6 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 	0,0,0,0,
 	0,0,0,0,
 	0,0,0,0,
-	0,0,0,0,
 	1,1,1,1)
 
 /obj/screen/plane_master/parallax_spacemaster/New()
