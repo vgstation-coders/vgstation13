@@ -529,7 +529,7 @@
 		if (owner:health <= 25)
 			timeLeft = 1
 			to_chat(owner, "<span class='warning'>You suddenly feel very weak.</span>")
-			owner:knockdown = 3
+			owner:SetKnockdown(3)
 			owner:emote("collapse")
 
 
