@@ -482,16 +482,16 @@
 			if (M_FAT in target.mutations && prob(66))
 				target.visible_message("<span class='warning'><b>[target.name]</b> crashes due to their heavy weight!</span>")
 				//playsound(usr.loc, 'zhit.wav', 50, 1)
-				target.knockdown += 10
-				target.stunned += 5
+				target.AdjustKnockdown(10)
+				target.AdjustStunned(5)
 
 			target.layer = prevLayer
 
 		if (istype(target.loc,/obj/))
 			var/obj/container = target.loc
 			to_chat(target, "<span class='warning'>You leap and slam your head against the inside of [container]! Ouch!</span>")
-			target.paralysis += 3
-			target.knockdown += 5
+			target.AdjustParalysis(3)
+			target.AdjustKnockdown(5)
 			container.visible_message("<span class='warning'><b>[container]</b> emits a loud thump and rattles a bit.</span>")
 			playsound(target.loc, 'sound/effects/bang.ogg', 50, 1)
 			var/wiggle = 6
