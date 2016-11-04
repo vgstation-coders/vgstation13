@@ -132,14 +132,15 @@
 
 	..()
 	var/objects = 0
-	if(ticker && A && A.flags & PROXMOVE)
+	if(A && A.flags & PROXMOVE)
 		for(var/atom/Obj as mob|obj|turf|area in range(1))
 			if(objects > loopsanity)
 				break
 			objects++
 			if(Obj.flags & PROXMOVE)
 				spawn( 0 )
-					Obj.HasProximity(A, 1)
+					if(Obj && A)
+						Obj.HasProximity(A, 1)
 	// THIS IS NOW TRANSIT STUFF
 	if ((!(A) || src != A.loc))
 		return
