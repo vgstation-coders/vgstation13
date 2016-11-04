@@ -211,7 +211,7 @@
 		Tempstun = 0
 
 	/*moved after the temperature damage code so freeze beams can instantly kill slimes -Deity Link*/
-	if(loc_temp < 310.15) // a cold place
+	if(loc_temp < T37C) // a cold place
 		bodytemperature += adjust_body_temperature(bodytemperature, loc_temp, 1)
 	else // a hot place
 		bodytemperature += adjust_body_temperature(bodytemperature, loc_temp, 1)

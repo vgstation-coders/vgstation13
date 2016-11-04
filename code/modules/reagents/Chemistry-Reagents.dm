@@ -28,6 +28,8 @@
 	//var/list/viruses = list()
 	var/color = "#000000" //rgb: 0, 0, 0 (does not support alpha channels - yet!)
 	var/alpha = 255
+	var/temperature = T37C
+	var/heat_conductivity = 1 // how effective a reagent is at conducting heat - used for leporazine & stablizine
 
 /datum/reagent/proc/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	set waitfor = 0
@@ -119,6 +121,9 @@
 		return 1
 	if(overdose && volume >= overdose) //This is the current overdose system
 		M.adjustToxLoss(overdose_dam)
+
+	var/tempdiff = temperature - M.bodytemperature
+	M.bodytemperature += tempdiff*volume*TEMPERATURE_DAMAGE_COEFFICIENT*heat_conductivity
 
 /datum/reagent/proc/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	if(!holder)
@@ -1806,16 +1811,12 @@
 	description = "Leporazine can be use to stabilize an individuals body temperature."
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
+	heat_conductivity = 20
 
 /datum/reagent/leporazine/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
-
-	if(M.bodytemperature > 310)
-		M.bodytemperature = max(310, M.bodytemperature - (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
-	else if(M.bodytemperature < 311)
-		M.bodytemperature = min(310, M.bodytemperature + (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 /datum/reagent/cryptobiolin
 	name = "Cryptobiolin"
@@ -2376,6 +2377,7 @@
 	reagent_state = LIQUID
 	color = "#833484" //rgb: 131, 52, 132
 	custom_metabolism = 0.1
+	heat_conductivity = 10
 
 /datum/reagent/stabilizine/on_mob_life(var/mob/living/M, var/alien)
 
@@ -2392,11 +2394,6 @@
 		M.losebreath = max(10, M.losebreath - 5)
 
 	M.adjustOxyLoss(-2 * REM)
-
-	if(M.bodytemperature > 310)
-		M.bodytemperature = max(310, M.bodytemperature - (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
-	else if(M.bodytemperature < 311)
-		M.bodytemperature = min(310, M.bodytemperature + (40 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2827,34 +2824,16 @@
 	color = "#B31008" //rgb: 179, 16, 8
 	data = 1 //Used as a tally
 	custom_metabolism = FOOD_METABOLISM
+	temperature = T0C+50
 
 /datum/reagent/capsaicin/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
+	M.adjustFireLoss(REM,LIMB_HEAD,"Capsaicin burn")
+	if(holder.has_reagent(FROSTOIL))
+		holder.remove_reagent(FROSTOIL, 5)
 
-	switch(data)
-		if(1 to 15)
-			M.bodytemperature += 0.6 * TEMPERATURE_DAMAGE_COEFFICIENT
-			if(holder.has_reagent("frostoil"))
-				holder.remove_reagent("frostoil", 5)
-			if(isslime(M))
-				M.bodytemperature += rand(5,20)
-			if(M.dna.mutantrace == "slime")
-				M.bodytemperature += rand(5,20)
-		if(15 to 25)
-			M.bodytemperature += 0.9 * TEMPERATURE_DAMAGE_COEFFICIENT
-			if(isslime(M))
-				M.bodytemperature += rand(10,20)
-			if(M.dna.mutantrace == "slime")
-				M.bodytemperature += rand(10,20)
-		if(25 to INFINITY)
-			M.bodytemperature += 1.2 * TEMPERATURE_DAMAGE_COEFFICIENT
-			if(isslime(M))
-				M.bodytemperature += rand(15,20)
-			if(M.dna.mutantrace == "slime")
-				M.bodytemperature += rand(15,20)
-	data++
 
 /datum/reagent/condensedcapsaicin
 	name = "Condensed Capsaicin"
@@ -2919,36 +2898,16 @@
 	color = "#B31008" //rgb: 139, 166, 233
 	data = 1 //Used as a tally
 	custom_metabolism = FOOD_METABOLISM
+	temperature = T0C+10
 
 /datum/reagent/frostoil/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
+	M.adjustFireLoss(REM,LIMB_HEAD,"Frost Oil burn")
+	if(holder.has_reagent(CAPSAICIN))
+		holder.remove_reagent(CAPSAICIN, 5)
 
-	switch(data)
-		if(1 to 15)
-			M.bodytemperature = max(M.bodytemperature-0.3 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
-			if(holder.has_reagent("capsaicin"))
-				holder.remove_reagent("capsaicin", 5)
-			if(isslime(M))
-				M.bodytemperature -= rand(5,20)
-			if(M.dna && M.dna.mutantrace == "slime")
-				M.bodytemperature -= rand(5,20)
-		if(15 to 25)
-			M.bodytemperature = max(M.bodytemperature-0.6 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
-			if(isslime(M))
-				M.bodytemperature -= rand(10,20)
-			if(M.dna.mutantrace == "slime")
-				M.bodytemperature -= rand(10,20)
-		if(25 to INFINITY)
-			M.bodytemperature = max(M.bodytemperature-0.9 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
-			if(prob(1))
-				M.emote("shiver")
-			if(isslime(M))
-				M.bodytemperature -= rand(15,20)
-			if(M.dna.mutantrace == "slime")
-				M.bodytemperature -= rand(15,20)
-	data++
 
 /datum/reagent/frostoil/reaction_turf(var/turf/simulated/T, var/volume)
 
@@ -3138,8 +3097,8 @@
 	if(..())
 		return 1
 
-	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
-		M.bodytemperature = min(310, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
+	if(M.bodytemperature < T37C) //310 is the normal bodytemp. 310.055
+		M.bodytemperature = min(T37C, M.bodytemperature + (5 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 	M.nutrition += nutriment_factor
 
@@ -3353,8 +3312,8 @@
 		return 1
 
 	M.nutrition += nutriment_factor
-	if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
-		M.bodytemperature = min(310, M.bodytemperature + (10 * TEMPERATURE_DAMAGE_COEFFICIENT))
+	if(M.bodytemperature < T37C) //310 is the normal bodytemp. 310.055
+		M.bodytemperature = min(T37C, M.bodytemperature + (10 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 /datum/reagent/hell_ramen
 	name = "Hell Ramen"
@@ -3370,7 +3329,6 @@
 		return 1
 
 	M.nutrition += nutriment_factor
-	M.bodytemperature += 10 * TEMPERATURE_DAMAGE_COEFFICIENT
 
 /datum/reagent/flour
 	name = "flour"
@@ -3595,7 +3553,6 @@
 	var/adj_dizzy = 0
 	var/adj_drowsy = 0
 	var/adj_sleepy = 0
-	var/adj_temp = 0
 
 /datum/reagent/drink/on_mob_life(var/mob/living/M)
 
@@ -3610,9 +3567,6 @@
 		M.drowsyness = max(0,M.drowsyness + adj_drowsy)
 	if(adj_sleepy)
 		M.sleeping = max(0,M.sleeping + adj_sleepy)
-	if(adj_temp)
-		if(M.bodytemperature < 310) //310 is the normal bodytemp. 310.055
-			M.bodytemperature = min(310, M.bodytemperature + (25 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
 /datum/reagent/drink/orangejuice
 	name = "Orange juice"
@@ -3761,8 +3715,8 @@
 
 	if(M.getBruteLoss() && prob(20))
 		M.heal_organ_damage(1, 0)
-	if(holder.has_reagent("capsaicin"))
-		holder.remove_reagent("capsaicin", 10 * REAGENTS_METABOLISM)
+	if(holder.has_reagent(CAPSAICIN))
+		holder.remove_reagent(CAPSAICIN, 10 * REAGENTS_METABOLISM)
 	if(prob(50))
 		M.heal_organ_damage(1, 0)
 
@@ -3786,7 +3740,7 @@
 	description = "Made with love! And coco beans."
 	nutriment_factor = 2 * FOOD_METABOLISM
 	color = "#403010" //rgb: 64, 48, 16
-	adj_temp = 5
+	temperature = T0C+60
 
 /datum/reagent/drink/coffee
 	name = "Coffee"
@@ -3796,7 +3750,7 @@
 	adj_dizzy = -5
 	adj_drowsy = -3
 	adj_sleepy = -2
-	adj_temp = 25
+	temperature = T0C+60
 	custom_metabolism = 0.1
 	var/causes_jitteriness = 1
 
@@ -3806,15 +3760,15 @@
 		return 1
 	if(causes_jitteriness)
 		M.Jitter(5)
-	if(adj_temp > 0 && holder.has_reagent("frostoil"))
-		holder.remove_reagent("frostoil", 10 * REAGENTS_METABOLISM)
+	if(temperature > T0C && holder.has_reagent(FROSTOIL))
+		holder.remove_reagent(FROSTOIL, 10 * REAGENTS_METABOLISM)
 
 /datum/reagent/drink/coffee/icecoffee
 	name = "Iced Coffee"
 	id = ICECOFFEE
 	description = "Coffee and ice, refreshing and cool."
 	color = "#102838" //rgb: 16, 40, 56
-	adj_temp = -5
+	temperature = T0C
 
 /datum/reagent/drink/coffee/soy_latte
 	name = "Soy Latte"
@@ -3822,7 +3776,6 @@
 	description = "A nice and tasty beverage while you are reading your hippie books."
 	color = "#664300" //rgb: 102, 67, 0
 	adj_sleepy = 0
-	adj_temp = 5
 
 /datum/reagent/drink/coffee/soy_latte/on_mob_life(var/mob/living/M)
 
@@ -3840,7 +3793,6 @@
 	description = "A nice, strong and tasty beverage while you are reading."
 	color = "#664300" //rgb: 102, 67, 0
 	adj_sleepy = 0
-	adj_temp = 5
 
 /datum/reagent/drink/coffee/cafe_latte/on_mob_life(var/mob/living/M)
 
@@ -3860,7 +3812,7 @@
 	adj_dizzy = -2
 	adj_drowsy = -1
 	adj_sleepy = -3
-	adj_temp = 20
+	temperature = T0C+65
 
 /datum/reagent/drink/tea/on_mob_life(var/mob/living/M)
 
@@ -3875,14 +3827,14 @@
 	id = ICETEA
 	description = "No relation to a certain rapper or actor."
 	color = "#104038" //rgb: 16, 64, 56
-	adj_temp = -5
+	temperature = T0C + 5
 
 /datum/reagent/drink/tea/arnoldpalmer
 	name = "Arnold Palmer"
 	id = ARNOLDPALMER
 	description = "Known as half and half to some.  A mix of ice tea and lemonade."
 	color = "#104038" //rgb: 16, 64, 56
-	adj_temp = -5
+	temperature = T0C + 5
 	adj_sleepy = -3
 	adj_dizzy = -1
 	adj_drowsy = -3
@@ -3905,7 +3857,7 @@
 
 /datum/reagent/drink/cold
 	name = "Cold drink"
-	adj_temp = -5
+	temperature = T0C+5
 
 /datum/reagent/drink/cold/tonic
 	name = "Tonic Water"
@@ -3976,14 +3928,12 @@
 	id = SPACE_UP
 	description = "Tastes like a hull breach in your mouth."
 	color = "#202800" //rgb: 32, 40, 0
-	adj_temp = -8
 
 /datum/reagent/drink/cold/lemon_lime
 	name = "Lemon Lime"
 	description = "A tangy substance made of 0.5% natural citrus!"
 	id = LEMON_LIME
 	color = "#878F00" //rgb: 135, 40, 0
-	adj_temp = -8
 
 /datum/reagent/drink/cold/lemonade
 	name = "Lemonade"
@@ -4002,14 +3952,12 @@
 	description = "Its not what it sounds like..."
 	id = BROWNSTAR
 	color = "#9F3400" //rgb: 159, 052, 000
-	adj_temp = -2
 
 /datum/reagent/drink/cold/milkshake
 	name = "Milkshake"
 	description = "Glorious brainfreezing mixture."
 	id = MILKSHAKE
 	color = "#AEE5E4" //rgb" 174, 229, 228
-	adj_temp = -9
 	custom_metabolism = FOOD_METABOLISM
 	data = 1 //Used as a tally
 
@@ -4018,30 +3966,8 @@
 	if(..())
 		return 1
 
-	switch(data)
-		if(1 to 15)
-			M.bodytemperature -= 0.1 * TEMPERATURE_DAMAGE_COEFFICIENT
-			if(holder.has_reagent("capsaicin"))
-				holder.remove_reagent("capsaicin", 5)
-			if(isslime(M))
-				M.bodytemperature -= rand(5,20)
-			if(M.dna.mutantrace == "slime")
-				M.bodytemperature -= rand(5,20)
-		if(15 to 25)
-			M.bodytemperature -= 0.2 * TEMPERATURE_DAMAGE_COEFFICIENT
-			if(isslime(M))
-				M.bodytemperature -= rand(10,20)
-			if(M.dna.mutantrace == "slime")
-				M.bodytemperature -= rand(10,20)
-		if(25 to INFINITY)
-			M.bodytemperature -= 0.3 * TEMPERATURE_DAMAGE_COEFFICIENT
-			if(prob(1))
-				M.emote("shiver")
-			if(isslime(M))
-				M.bodytemperature -= rand(15,20)
-			if(M.dna.mutantrace == "slime")
-				M.bodytemperature -= rand(15,20)
-	data++
+	if(holder.has_reagent(CAPSAICIN))
+		holder.remove_reagent(CAPSAICIN, 5)
 
 /datum/reagent/drink/cold/rewriter
 	name = "Rewriter"
@@ -4646,6 +4572,7 @@
 	description = "Coffee, Irish Cream, and congac. You will get bombed."
 	reagent_state = LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	temperature = T0C+60
 
 /datum/reagent/ethanol/deadrum/irishcoffee
 	name = "Irish Coffee"
@@ -4653,6 +4580,7 @@
 	description = "Coffee, and alcohol. More fun than a Mimosa to drink in the morning."
 	reagent_state = LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	temperature = T0C+60
 
 /datum/reagent/ethanol/deadrum/margarita
 	name = "Margarita"
@@ -4678,7 +4606,7 @@
 /datum/reagent/ethanol/deadrum/manhattan_proj
 	name = "Manhattan Project"
 	id = MANHATTAN_PROJ
-	description = "A scienitst's drink of choice, for pondering ways to blow up the station."
+	description = "A scientist's drink of choice, for pondering ways to blow up the station."
 	reagent_state = LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
@@ -4812,14 +4740,12 @@
 	description = "A beer which is so cold the air around it freezes."
 	reagent_state = LIQUID
 	color = "#664300" //rgb: 102, 67, 0
+	temperature = T0C
 
 /datum/reagent/ethanol/deadrum/iced_beer/on_mob_life(var/mob/living/M)
 
 	if(..())
 		return 1
-
-	if(M.bodytemperature < T0C+33)
-		M.bodytemperature = min(T0C+33, M.bodytemperature - 4) //310 is the normal bodytemp. 310.055
 
 /datum/reagent/ethanol/deadrum/grog
 	name = "Grog"

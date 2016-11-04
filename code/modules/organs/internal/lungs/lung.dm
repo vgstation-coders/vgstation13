@@ -39,7 +39,7 @@
 		G.set_context(src,breath,H)
 		G.handle_exhale()
 
-	if( (abs(310.15 - breath.temperature) > 50) && !(M_RESIST_HEAT in H.mutations)) // Hot air hurts :(
+	if( (abs(T37C - breath.temperature) > 50) && !(M_RESIST_HEAT in H.mutations)) // Hot air hurts :(
 		if(H.status_flags & GODMODE)
 			return 1	//godmode
 		if(breath.temperature < H.species.cold_level_1)

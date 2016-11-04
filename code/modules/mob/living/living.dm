@@ -530,7 +530,7 @@ Thanks.
 	traumatic_shock = 0
 	radiation = 0
 	nutrition = 400
-	bodytemperature = 310
+	bodytemperature = T37C
 	sdisabilities = 0
 	disabilities = 0
 	blinded = 0

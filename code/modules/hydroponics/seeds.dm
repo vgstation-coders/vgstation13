@@ -373,7 +373,7 @@
 	name = "packet of cinnamomum seeds"
 	seed_type = "cinnamomum"
 	vending_cat = "trees"
-	
+
 /obj/item/seeds/test
 	name = "packet of testing data seed"
 	seed_type = "test"
@@ -1678,7 +1678,7 @@
 	yield = 4
 	potency = 20
 	growth_stages = 3
-	ideal_heat = 310
+	ideal_heat = T37C
 	thorny = 1
 
 /datum/seed/vaporsac
