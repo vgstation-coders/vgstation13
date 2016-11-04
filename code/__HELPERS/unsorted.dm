@@ -1547,3 +1547,12 @@ Game Mode config tags:
 	for(var/mob/M in mobs)
 		if(M.client)
 			. += M.client
+
+
+// A standard proc for generic output to the msay window, Not useful for things that have their own prefs settings (prayers for instance)
+/proc/output_to_msay(msg)
+	for(var/client/C in admins)
+		if(C.prefs.special_popup)
+			C << output("\[[time_stamp()]] [msg]", "window1.msay_output")
+		else
+			to_chat(C, msg)

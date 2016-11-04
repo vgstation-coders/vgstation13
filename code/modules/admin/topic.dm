@@ -2140,14 +2140,14 @@
 			return
 
 		if(BSACooldown)
-			to_chat(src.owner, "Standby!  Reload cycle in progress!  Gunnary crews ready in five seconds!")
+			to_chat(src.owner, "Standby!  Reload cycle in progress!  Gunnery crews ready in five seconds!")
 			return
 
 		BSACooldown = 1
 		spawn(50)
 			BSACooldown = 0
 
-		to_chat(M, "You've been hit by bluespace artillery!")
+		to_chat(M, "<span class='danger'>You've been hit by bluespace artillery!</span>")
 
 		log_admin("[key_name(M)] has been hit by Bluespace Artillery fired by [src.owner]")
 		message_admins("[key_name(M)] has been hit by Bluespace Artillery fired by [src.owner]")
@@ -2176,53 +2176,67 @@
 			M.Weaken(20)
 			M.stuttering = 20
 
+	else if (href_list["PrayerReply"])
+		if(!check_rights(R_ADMIN))
+			return
+		var/mob/M = locate(href_list["PrayerReply"])
+		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] is replying to a prayer from [key_name_admin(M)]</span>.")
+
+		usr.client.cmd_admin_subtle_message(M)
+
 	else if(href_list["CentcommReply"])
 		var/mob/M = locate(href_list["CentcommReply"])
+
+		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] is replying to a Centcomm message from [key_name_admin(M)]</span>.")
+
 		var/receive_type
 		if(istype(M, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
 			if(!istype(H.ears, /obj/item/device/radio/headset))
-				to_chat(usr, "The person you are trying to contact is not wearing a headset")
+				to_chat(usr, "<span class='warning'>The person you are trying to contact is not wearing a headset.</span>")
 				return
 			receive_type = "headset"
 		else if(istype(M, /mob/living/silicon))
 			receive_type = "official communication channel"
 		if(!receive_type)
-			to_chat(usr, "This mob type cannot be replied to")
+			to_chat(usr, "<span class='warning'>This mob type cannot be replied to.</span>")
 			return
 
 		var/input = input(src.owner, "Please enter a message to reply to [key_name(M)] via their [receive_type].","Outgoing message from Central Command", "")
 		if(!input)
 			return
 
-		to_chat(src.owner, "You sent [input] to [M] via a secure channel.")
+		to_chat(src.owner, "You sent <span class = 'bold'>\"[input]\"</span> to <span class = 'bold'>[M]</span> via a secure channel.")
 		log_admin("[src.owner] replied to [key_name(M)]'s Centcomm message with the message [input].")
-		message_admins("[src.owner] replied to [key_name(M)]'s Centcom message with: \"[input]\"")
-		to_chat(M, "You hear something crackle from your [receive_type] for a moment before a voice speaks.  \"Please stand by for a message from Central Command.  Message as follows. <b>\"[input]\"</b>  Message ends.\"")
+		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] replied to [key_name_admin(M)]'s Centcom message with:</span> \"[input]\"")
+		to_chat(M, "<span class='notice'>You hear something crackle from your [receive_type] for a moment before a voice speaks:</span>\n\"Please stand by for a message from Central Command. Message as follows.\"\n<span class = 'bold'>\"[input]\"</span>")
 
 	else if(href_list["SyndicateReply"])
 		var/mob/M = locate(href_list["SyndicateReply"])
+
+		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] is replying to a Syndicate message from [key_name_admin(M)]</span>.")
+
 		var/receive_type
 		if(istype(M, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = M
 			if(!istype(H.ears, /obj/item/device/radio/headset))
-				to_chat(usr, "The person you are trying to contact is not wearing a headset")
+				to_chat(usr, "<span class='warning'>The person you are trying to contact is not wearing a headset.</span>")
 				return
 			receive_type = "headset"
 		else if(istype(M, /mob/living/silicon))
 			receive_type = "undetectable communications channel"
 		if(!receive_type)
-			to_chat(usr, "This mob type cannot be replied to")
+			to_chat(usr, "<span class='warning'>This mob type cannot be replied to.</span>")
 			return
 
 		var/input = input(src.owner, "Please enter a message to reply to [key_name(M)] via their [receive_type].","Outgoing message from The Syndicate", "")
 		if(!input)
 			return
 
-		to_chat(src.owner, "You sent [input] to [M] via a secure channel.")
+		to_chat(src.owner, "You sent <span class = 'bold'>\"[input]\"</span> to <span class = 'bold'>[M]</span> via a secure channel.")
 		log_admin("[src.owner] replied to [key_name(M)]'s Syndicate message with the message [input].")
-		message_admins("[src.owner] replied to [key_name(M)]'s Syndicate message with: \"[input]\"")
-		to_chat(M, "You hear something crackle from your [receive_type] for a moment before a voice speaks.  \"Please stand by for a message from your benefactor.  Message as follows, agent. <b>\"[input]\"</b>  Message ends.\"")
+		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] replied to [key_name_admin(M)]'s Syndicate message with:</span> \"[input]\"")
+		to_chat(M, "<span class='notice'>You hear something crackle from your [receive_type] for a moment before a voice speaks:</span>\n\"Please stand by for a message from your benefactor, agent. Message as follows.\"\n<span class = 'bold'>\"[input]\"</span>")
 
 	else if(href_list["CentcommFaxView"])
 		var/obj/item/weapon/paper/P = locate(href_list["CentcommFaxView"])
@@ -2235,6 +2249,7 @@
 	else if(href_list["CentcommFaxReply"])
 		var/mob/living/carbon/human/H = locate(href_list["CentcommFaxReply"])
 
+		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] is replying to a fax message from [key_name_admin(H)].</span>")
 
 		var/sent = input(src.owner, "Please enter a message to reply to [key_name(H)] via secure connection. NOTE: BBCode does not work, but HTML tags do! Use <br> for line breaks.", "Outgoing message from Centcomm", "") as message|null
 		if(!sent)
@@ -2242,11 +2257,14 @@
 
 		var/sentname = input(src.owner, "Pick a title for the report", "Title") as text|null
 
-		SendFax(sent, sentname, centcomm = 1)
+		var/obj/item/weapon/paper/replyfax = SendFax(sent, sentname, centcomm = 1)
+		if(!istype(replyfax))
+			to_chat(src.owner, "<span class='warning'>Message reply to [key_name(H)] failed.</span>")
+			return
 
-		to_chat(src.owner, "Message reply to transmitted successfully.")
+		to_chat(src.owner, "<span class='notice'>Message reply to [key_name(H)] transmitted successfully.</span>")
 		log_admin("[key_name(src.owner)] replied to a fax message from [key_name(H)]: [sent]")
-		message_admins("[key_name_admin(src.owner)] replied to a fax message from [key_name_admin(H)]", 1)
+		output_to_msay("<span class = 'bold'>[key_name_admin(src.owner)] replied to a fax message from [key_name_admin(H)]:</span> <a href='?_src_=holder;CentcommFaxView=\ref[replyfax]'>View Message</a>")
 
 
 	else if(href_list["jumpto"])
