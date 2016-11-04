@@ -397,6 +397,10 @@ var/global/num_vending_terminals = 1
 			if(bag.contents.len > 0)
 				to_chat(user, "<span class='notice'>Some items are refused.</span>")
 			src.updateUsrDialog()
+	
+	else if(istype(W, /obj/item/weapon/spacecash))
+		var/obj/item/weapon/spacecash/C = W
+		pay_with_cash(C, user)
 	else
 		if(is_type_in_list(W, allowed_inputs))
 			if(user.drop_item(W, src))
@@ -416,6 +420,36 @@ var/global/num_vending_terminals = 1
 			to_chat(usr, "[bicon(src)]<span class='warning'>Unable to connect to accounts database.</span>")*/
 
 //H.wear_id
+
+/**
+ *  Receive payment with cashmoney.
+ *
+ *  usr is the mob who gets the change.
+ */
+/obj/machinery/vending/proc/pay_with_cash(var/obj/item/weapon/spacecash/cashmoney, mob/user)
+	if(!currently_vending) 
+		return
+	if(currently_vending.price > cashmoney.get_total())
+		// This is not a status display message, since it's something the character
+		// themselves is meant to see BEFORE putting the money in
+		to_chat(user, "[bicon(cashmoney)] <span class='warning'>That is not enough money.</span>")
+		return 0
+
+	// Bills (banknotes) cannot really have worth different than face value,
+	// so we have to eat the bill and spit out change in a bundle
+	// This is really dirty, but there's no superclass for all bills, so we
+	// just assume that all spacecash that's not something else is a bill
+
+	visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>")
+	var/left = cashmoney.get_total() - currently_vending.price
+	qdel(cashmoney)
+
+	if(left)
+		dispense_cash(left, src.loc)
+
+	src.vend(src.currently_vending, usr)
+	currently_vending = null
+	return 1
 
 /obj/machinery/vending/scan_card(var/obj/item/weapon/card/I)
 	if(!currently_vending)
