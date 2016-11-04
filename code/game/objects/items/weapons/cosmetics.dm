@@ -131,23 +131,31 @@
 		var/area = user.zone_sel.selecting
 		var/area_string = "hair"
 		if(area == "mouth")
+			var/obj/item/clothing/cover = H.get_body_part_coverage(MOUTH)
+			if(cover)
+				to_chat(user, "<span class='notice'>You can't color [H == user ? "your" : "\the [H]'s"] facial hair through that [cover.name]!</span>")
+				return
 			if(!H.f_style || H.f_style == "Shaved")	//if they have no facial hair
 				to_chat(user, "<span class='notice'>[H == user ? "You don't" : "\The [H] doesn't"] seem to have any facial hair!</span>")
 				return
 			else
 				var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.f_style]
 				if(!facial_hair_style.do_colouration)
-					to_chat(user, "<span class='notice'>\The [H] doesn't seem to have any colorable facial hair!</span>")
+					to_chat(user, "<span class='notice'>\The [H == user ? "You don't" : "\The [H] doesn't"] doesn't seem to have any colorable facial hair!</span>")
 					return
 			area_string = "facial hair"
 		else
+			var/obj/item/clothing/cover = H.get_body_part_coverage(HEAD)
+			if(cover)
+				to_chat(user, "<span class='notice'>You can't color [H == user ? "your" : "\the [H]'s"] hair through that [cover.name]!</span>")
+				return
 			if(!H.h_style || H.h_style == "Bald")	//if they have no hair
 				to_chat(user, "<span class='notice'>[H == user ? "You don't" : "\The [H] doesn't"] seem to have any hair!</span>")
 				return
 			else
 				var/datum/sprite_accessory/hair_style = hair_styles_list[H.h_style]
 				if(!hair_style.do_colouration)
-					to_chat(user, "<span class='notice'>\The [H] doesn't seem to have any colorable hair!</span>")
+					to_chat(user, "<span class='notice'>\The [H == user ? "You don't" : "\The [H] doesn't"] doesn't seem to have any colorable hair!</span>")
 					return
 		if(H == user)
 			user.visible_message("<span class='notice'>[user] colors their [area_string] with \the [src].</span>", \
