@@ -1,7 +1,7 @@
 /spell/targeted/projectile/dumbfire/fireball
 	name = "Fireball"
 	abbreviation = "FB"
-	desc = "This spell conjures a fireball that will fly in the direction you're facing and explode on collision with anything."
+	desc = "This spell conjures a fireball that will fly in the direction you're facing and explode on collision with anything, or when it gets close to anyone else."
 
 	proj_type = /obj/item/projectile/spell_projectile/fireball
 
@@ -34,6 +34,13 @@
 	for(var/mob/living/M in targets)
 		apply_spell_damage(M)
 	explosion(get_turf(spell_holder), ex_severe, ex_heavy, ex_light, ex_flash)
+	return targets
+
+/spell/targeted/projectile/dumbfire/fireball/choose_prox_targets(mob/user = usr, var/atom/movable/spell_holder)
+	var/list/targets = ..()
+	for(var/mob/living/M in targets)
+		if(M.lying)
+			targets -= M
 	return targets
 
 /spell/targeted/projectile/dumbfire/fireball/empower_spell()
@@ -74,3 +81,8 @@
 	icon_state = "fireball"
 	animate_movement = 2
 	linear_movement = 0
+
+/obj/item/projectile/spell_projectile/fireball/Bump(var/atom/A)
+	if(!isliving(A))
+		forceMove(get_turf(A))
+	return ..()
