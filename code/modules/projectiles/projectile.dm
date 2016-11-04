@@ -564,6 +564,7 @@ var/list/impact_master = list()
 	var/turf/T = get_turf(src)
 	var/turf/W = get_turf(A)
 	playsound(T, bounce_sound, 30, 1)
+	reflected = 1
 	var/orientation = SOUTH
 	if(T == W)
 		orientation = dir
