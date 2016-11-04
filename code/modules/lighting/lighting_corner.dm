@@ -1,4 +1,5 @@
 /var/list/datum/lighting_corner/all_lighting_corners = list()
+/var/datum/lighting_corner/dummy/dummy_lighting_corner = new
 // Because we can control each corner of every lighting overlay.
 // And corners get shared between multiple turfs (unless you're on the corners of the map, then 1 corner doesn't).
 // For the record: these should never ever ever be deleted, even if the turf doesn't have dynamic lighting.
@@ -25,6 +26,8 @@
 	var/cache_g  = 0
 	var/cache_b  = 0
 	var/cache_mx = 0
+
+	var/update_gen = 0
 
 /datum/lighting_corner/New(var/turf/new_turf, var/diagonal)
 	. = ..()
@@ -122,3 +125,7 @@
 				T.lighting_overlay.needs_update = TRUE
 				lighting_update_overlays += T.lighting_overlay
 			#endif
+
+
+/datum/lighting_corner/dummy/New()
+	return
