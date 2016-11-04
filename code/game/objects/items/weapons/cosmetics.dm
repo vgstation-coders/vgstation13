@@ -141,7 +141,7 @@
 			else
 				var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.f_style]
 				if(!facial_hair_style.do_colouration)
-					to_chat(user, "<span class='notice'>\The [H == user ? "You don't" : "\The [H] doesn't"] doesn't seem to have any colorable facial hair!</span>")
+					to_chat(user, "<span class='notice'>[H == user ? "You don't" : "\The [H] doesn't"] seem to have any colorable facial hair!</span>")
 					return
 			area_string = "facial hair"
 		else
@@ -155,7 +155,7 @@
 			else
 				var/datum/sprite_accessory/hair_style = hair_styles_list[H.h_style]
 				if(!hair_style.do_colouration)
-					to_chat(user, "<span class='notice'>\The [H == user ? "You don't" : "\The [H] doesn't"] doesn't seem to have any colorable hair!</span>")
+					to_chat(user, "<span class='notice'>[H == user ? "You don't" : "\The [H] doesn't"] seem to have any colorable hair!</span>")
 					return
 		if(H == user)
 			user.visible_message("<span class='notice'>[user] colors their [area_string] with \the [src].</span>", \
