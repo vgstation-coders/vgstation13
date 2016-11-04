@@ -115,6 +115,6 @@
 
 	gasses = list(
 		new /datum/lung_gas/metabolizable("toxins", min_pp=16, max_pp=140),
-		new /datum/lung_gas/waste("oxygen",         max_pp=0),
+		new /datum/lung_gas/waste("carbon_dioxide",         max_pp=10),
 		new /datum/lung_gas/sleep_agent("/datum/gas/sleeping_agent", trace_gas=1, min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
 	)
