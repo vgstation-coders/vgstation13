@@ -3,6 +3,7 @@
 	desc = "Used for blinding and being an asshole."
 	icon_state = "flash"
 	item_state = "flash"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/electronics.dmi', "right_hand" = 'icons/mob/in-hand/right/electronics.dmi')
 	throwforce = 5
 	w_class = W_CLASS_TINY
 	throw_speed = 4
@@ -68,6 +69,7 @@
 				broken = 1
 				to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 				icon_state = "flashburnt"
+				item_state = "flashburnt"
 				return
 			times_used++
 		else	//can only use it  5 times a minute
@@ -157,6 +159,7 @@
 				broken = 1
 				to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 				icon_state = "flashburnt"
+				item_state = "flashburnt"
 				return
 			times_used++
 		else	//can only use it  5 times a minute
@@ -207,6 +210,7 @@
 			if(prob(2*times_used))
 				broken = 1
 				icon_state = "flashburnt"
+				item_state = "flashburnt"
 				return
 			times_used++
 			if(istype(loc, /mob/living/carbon) && harm_labeled < min_harm_label)
@@ -224,6 +228,7 @@
 		broken = 0
 		times_used = 0
 		icon_state = "flash"
+		item_state = "flash"
 
 /obj/item/device/flash/synthetic
 	name = "synthetic flash"
@@ -237,6 +242,7 @@
 		broken = 1
 		to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 		icon_state = "flashburnt"
+		item_state = "flashburnt"
 
 /obj/item/device/flash/synthetic/attack_self(mob/living/carbon/user as mob, flag = 0, emp = 0)
 	..()
@@ -244,6 +250,7 @@
 		broken = 1
 		to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 		icon_state = "flashburnt"
+		item_state = "flashburnt"
 
 /obj/item/device/flash/revsquad
 	limited_conversions = REVSQUAD_FLASH_USES
