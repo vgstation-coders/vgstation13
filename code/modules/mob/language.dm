@@ -207,11 +207,24 @@
 	ask_verb = "groans"
 	exclaim_verb = "cracks"
 	whisper_verb = "grumbles"
-	colour = "brown"
+	colour = "cyan"
 	native = 1
 	key = "p"
 	flags = RESTRICTED
 	syllables = list("oa","ur","ae","um","tu","gor","an","lo","ag","oon","po")
+
+/datum/language/suid
+	name = LANGUAGE_SUID
+	desc = "A rather inelegant language formed by passing air through the sinuses."
+	speech_verb = "snorts"
+	ask_verb = "sniffs"
+	exclaim_verb = "squeals"
+	whisper_verb = "grunts"
+	colour = "brown"
+	native = 1
+	key = "f"
+	flags = RESTRICTED
+	syllables = list("sn","rk","hr","oo","ahn","uh","hu","gn","ohn","ul","ool")
 
 /datum/language/skellington/say_misunderstood(mob/M, message)
 	message="CLICK"

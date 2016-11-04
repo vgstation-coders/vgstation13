@@ -84,6 +84,16 @@
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 	return
 
+/obj/item/weapon/storage/box/survival/suid/New()
+	..()
+	contents = list()
+	sleep(1)
+	new /obj/item/clothing/mask/breath(src)
+	new /obj/item/weapon/tank/emergency_oxygen(src)
+	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+	new /obj/item/weapon/reagent_containers/food/snacks/monkeyburger(src)
+	return
+
 /obj/item/weapon/storage/box/survival/engineer/New()
 	..()
 	contents = list()

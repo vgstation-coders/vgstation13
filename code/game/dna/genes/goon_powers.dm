@@ -193,6 +193,8 @@
 	drug_activation_messages=list("You are getting the munchies.")
 	drug_deactivation_messages=list("You no longer getting the munchies.")
 
+	mutation=M_EAT
+
 	spelltype=	/spell/targeted/eat
 
 	New()

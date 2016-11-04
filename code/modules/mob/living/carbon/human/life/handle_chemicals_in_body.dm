@@ -87,6 +87,14 @@
 		var/reduce_nutrition_by = HUNGER_FACTOR
 		if(sleeping)
 			reduce_nutrition_by *= 0.75 //Reduce hunger factor by 25%
+		if(species.flags & HUNGER_BASED_STRENGTH)
+			if(nutrition > 450)
+				var/to_reduce = ((nutrition - 450)/5)
+				if(to_reduce < 5)
+					to_reduce = 5
+				reduce_nutrition_by *= to_reduce
+			else
+				reduce_nutrition_by *= 5	//This flag causes hunger to set in faster.
 		burn_calories(reduce_nutrition_by,1)
 
 	if(nutrition > 450)

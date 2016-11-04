@@ -511,14 +511,15 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_SUPER_FART    205		// Duh
 #define M_SMILE         206		// :)
 #define M_ELVIS         207		// You ain't nothin' but a hound dog.
+#define M_EAT         	208		// Eat anything.
 
 // /vg/ muts
-#define M_LOUD		208		// CAUSES INTENSE YELLING
-#define M_WHISPER	209		// causes quiet whispering
-#define M_DIZZY		210		// Trippy.
-#define M_SANS		211		// IF YOU SEE THIS WHILST BROWSING CODE, YOU HAVE BEEN VISITED BY: THE FONT OF SHITPOSTING. GREAT LUCK AND WEALTH WILL COME TO YOU, BUT ONLY IF YOU SAY 'fuck comic sans' IN YOUR PR.
-#define M_FARSIGHT	212		// Increases mob's view range by 2
-#define M_NOIR		213		// aww yis detective noir
+#define M_LOUD		209		// CAUSES INTENSE YELLING
+#define M_WHISPER	210		// causes quiet whispering
+#define M_DIZZY		211		// Trippy.
+#define M_SANS		212		// IF YOU SEE THIS WHILST BROWSING CODE, YOU HAVE BEEN VISITED BY: THE FONT OF SHITPOSTING. GREAT LUCK AND WEALTH WILL COME TO YOU, BUT ONLY IF YOU SAY 'fuck comic sans' IN YOUR PR.
+#define M_FARSIGHT	213		// Increases mob's view range by 2
+#define M_NOIR		214		// aww yis detective noir
 
 var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 				 				  0.33,0.33,0.33,0,\
@@ -962,7 +963,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 
 #define IS_SLOW 256
 #define IS_PLANT 512
-#define IS_WHITELISTED 1024
+#define HUNGER_BASED_STRENGTH 1024
 
 #define RAD_ABSORB 2048
 #define REQUIRE_LIGHT 4096
@@ -1323,6 +1324,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_CULT "Cult"
 #define LANGUAGE_MOUSE "Mouse"
 #define LANGUAGE_GOLEM "Golem"
+#define LANGUAGE_SUID "Suid"
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG
