@@ -28,17 +28,6 @@ var/global/list/snow_turfs = list()
 	var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound/misc/snow3.ogg', 'sound/misc/snow4.ogg', 'sound/misc/snow5.ogg', 'sound/misc/snow6.ogg')
 
 /turf/snow/New()
-	if(z != map.zCentcomm)
-		snow_turfs += src
-	..()
-	if(ticker)
-		initialize()
-
-/turf/snow/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
-	snow_turfs -= src
-	return ..()
-
-/turf/snow/initialize()
 	if(!cached_appearances.len)	// first time running, let's CACHE IMAGES
 		for(var/i = 1 to SNOW_LAYER_NUMBER) // saves us two (2!) whole lines but I don't like copypasting, plus hopefully one day people will make more
 			var/image/snowfx = image('icons/turf/snowfx.dmi', "snowlayer[i]")
@@ -46,6 +35,22 @@ var/global/list/snow_turfs = list()
 			cached_appearances["snowlayer[i]"] = snowfx
 		for(var/dirtdir in alldirs)
 			cached_appearances["side[dirtdir]"] = image('icons/turf/new_snow.dmi', "permafrost_side" ,dir = dirtdir)
+
+		// because it's our first time running, let's make the lists
+		for(var/zLevel = 1 to  map.zLevels.len)
+			snow_turfs["[zLevel]"] = list()
+
+	if(z != map.zCentcomm)
+		snow_turfs["[z]"] += src
+	..()
+	if(ticker)
+		initialize()
+
+/turf/snow/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+	snow_turfs["[z]"] -= src
+	return ..()
+
+/turf/snow/initialize()
 	var/snowrand = rand(0, 5)
 	var/list/oranges = orange(1,src)
 	if(locate(/turf/simulated) in oranges || (locate(/turf/unsimulated) in oranges && z != map.zCentcomm))
@@ -162,8 +167,6 @@ var/global/list/snow_turfs = list()
 	return BUILD_FAILURE
 
 /turf/snow/Entered(mob/user)
-	if(!ticker)
-		return
 	..()
 	if(isliving(user) && !user.locked_to && !user.lying && !user.flying)
 		playsound(get_turf(src), pick(snowsound), 10, 1, -1, channel = 123)
