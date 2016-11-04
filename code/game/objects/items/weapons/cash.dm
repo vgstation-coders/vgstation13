@@ -164,4 +164,4 @@ var/global/list/moneytypes = list(
 /proc/count_cash(var/list/cash)
 	. = 0
 	for(var/obj/item/weapon/spacecash/C in cash)
-		. += C.amount * C.worth
+		. += C.get_total()
