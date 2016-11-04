@@ -241,11 +241,11 @@
 		"<span class='warning'>You hear a policeman whistling!</span>"
 	)
 
-	//if(src.stunned < shock_damage)	src.stunned = shock_damage
+	//if(src.stunned < shock_damage)	src.SetStunned(shock_damage)
 
 	Stun(10) // this should work for now, more is really silly and makes you lay there forever
 
-	//if(src.knockdown < 20*siemens_coeff)	src.knockdown = 20*siemens_coeff
+	//if(src.knockdown < 20*siemens_coeff)	SetKnockdown(20*siemens_coeff)
 
 	Knockdown(10)
 

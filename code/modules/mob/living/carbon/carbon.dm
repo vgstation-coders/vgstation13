@@ -140,8 +140,8 @@
 		"<span class='warning'>You hear a policeman whistling!</span>"
 	)
 
-	//if(src.stunned < shock_damage)	src.stunned = shock_damage
-	//if(src.knockdown < 20*siemens_coeff)	src.knockdown = 20*siemens_coeff
+	//if(src.stunned < shock_damage)	src.SetStunned(shock_damage)
+	//if(src.knockdown < 20*siemens_coeff)	src.SetKnockdown(20*siemens_coeff)
 
 	var/datum/effect/effect/system/spark_spread/SparkSpread = new
 	SparkSpread.set_up(5, 1, loc)

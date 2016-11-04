@@ -4883,7 +4883,7 @@
 		return 1
 
 	M.adjustOxyLoss(1)
-	M.knockdown = max(M.knockdown, 15)
+	M.SetKnockdown(max(M.knockdown, 15))
 	M.silent = max(M.silent, 15)
 
 /datum/reagent/drink/bananahonk

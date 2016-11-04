@@ -902,7 +902,7 @@
 		/*
 		to_chat(M, "<span class='warning'>You stab yourself in the eye.</span>")
 		M.sdisabilities |= BLIND
-		M.knockdown += 4
+		M.AdjustKnockdown(4)
 		M.adjustBruteLoss(10)
 		*/
 

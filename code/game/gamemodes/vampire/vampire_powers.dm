@@ -96,9 +96,9 @@
 	if(!M)
 		return
 	if(M.current.vampire_power(0, 1))
-		M.current.knockdown = 0
-		M.current.stunned = 0
-		M.current.paralysis = 0
+		M.current.SetKnockdown(0)
+		M.current.SetStunned(0)
+		M.current.SetParalysis(0)
 		M.current.reagents.clear_reagents()
 		//M.vampire.bloodusable -= 10
 		to_chat(M.current, "<span class='notice'>You flush your system with clean blood and remove any incapacitating effects.</span>")
