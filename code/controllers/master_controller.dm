@@ -135,32 +135,43 @@ datum/controller/game_controller/proc/setup()
 		watch = start_watch()
 		var/list_of_turfs = list() // what turfs to consider for radial generating on
 		var/list_of_options = list() // what to radial generate on them, in terms of percentage chance
-		var/chance 			 // around about how many you want to have spawned on a map.
+		var/chance 			 // around about how many you want to have spawned on a z-level.
 		var/rmap_name
 		switch(map.radial_generate)	// yes this is a switch statement for the literally one map that uses it, but it never hurts to be optimistic.
 			if(RADIAL_GENERATE_SNOW_MAP)
 				list_of_turfs = snow_turfs
-				list_of_options = list(/obj/structure/radial_gen/movable/snow_nature/snow_forest = 60,
-									   /obj/structure/radial_gen/movable/snow_nature/snow_forest/dense = 20,
-									   /obj/structure/radial_gen/movable/snow_nature/snow_grass = 20)
-				chance = 4000
+				list_of_options = list(/obj/structure/radial_gen/movable/snow_nature/snow_forest = 50,
+									   /obj/structure/radial_gen/movable/snow_nature/snow_forest/large = 10,
+									   /obj/structure/radial_gen/movable/snow_nature/snow_forest/dense = 15,
+									   /obj/structure/radial_gen/movable/snow_nature/snow_forest/large/dense = 5,
+									   /obj/structure/radial_gen/movable/snow_nature/snow_grass = 15,
+									   /obj/structure/radial_gen/movable/snow_nature/snow_grass/large = 5)
+				chance = 1250	// FROM MY EXPERIENCE GOING ABOVE 1000ish WILL CAUSE RUNTIMES FOR NO REASON.
 				rmap_name = "snow"
 
 		log_startup_progress("Radially generating a [rmap_name] map...")
 
 		var/count = 0
 		var/radial_gen_total = 0
-		for(var/turf/T in list_of_turfs)
-			count++
-			if(!(count % 50000))
-				sleep(world.tick_lag)
-			if(rand(1,world.maxy*world.maxx*(map.zLevels.len-1)) <= chance)	// as of 31/10/2016, this is 500x500x5, which is 1,250,000.
-				var/radial_gen_type = pickweight(list_of_options)
-				new radial_gen_type(T)
-				radial_gen_total++
+		for(var/zLevel = 1 to map.zLevels.len)
+			if(zLevel == map.zCentcomm)
+				continue
 
+			var/radial_gen_z = 0
+			for(var/turf/T in list_of_turfs["[zLevel]"])
+				count++
+				if(!(count % 50000))
+					sleep(world.tick_lag)
+				if(rand(1,world.maxy*world.maxx) <= chance)
+					var/radial_gen_type = pickweight(list_of_options)
+					new radial_gen_type(T)
+					radial_gen_z++
+			var/datum/zLevel/zlevesoninquiry = map.zLevels[zLevel]
+			log_startup_progress("Finished radially generating z:[zLevel]([zlevesoninquiry.name]) with [radial_gen_z] radial generators")
+			sleep(world.tick_lag)
+			radial_gen_total += radial_gen_z
 
-		log_startup_progress("Finished radially generating the map with [radial_gen_total] radial generators in [stop_watch(watch)]s")
+		log_startup_progress("Finished radially generating the entire map with [radial_gen_total] radial generators in [stop_watch(watch)]s")
 
 	//if(config.socket_talk)
 	//	keepalive()
