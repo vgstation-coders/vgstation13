@@ -45,12 +45,14 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 	0,0,0,0,
 	0,0,0,0,
 	0,0,0,0,
-	1,1,1,1,
-	0,0,0,0)
+	0,0,0,0,
+	1,1,1,1)
 
 /obj/screen/plane_master/parallax_spacemaster/New()
 	..()
 	overlays += image(icon = 'icons/mob/screen1.dmi', icon_state = "blank")
+	if(universe)
+		universe.convert_parallax(src)
 
 /obj/screen/plane_master/parallax_dustmaster
 	plane = PLANE_SPACE_DUST
