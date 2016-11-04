@@ -6,6 +6,7 @@
 
 #define MELEE 1
 #define RANGED 2
+#define BOTH 4	//for mech equipment with effects depending on whether the target is adjacent
 
 #define STATE_BOLTSHIDDEN 0
 #define STATE_BOLTSEXPOSED 1

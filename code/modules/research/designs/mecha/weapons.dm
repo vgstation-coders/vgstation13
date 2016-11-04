@@ -86,6 +86,18 @@
 	req_lock_access = list(access_armory)
 	materials = list(MAT_IRON=20000)
 
+/datum/design/mech_restrainment
+	name = "Weapon Design (PCMK-7 Restrainment Module)"
+	desc = "Allows for the construction of PCMK-7 Restrainment Module."
+	id = "mech_restrainment"
+	build_type = MECHFAB
+	req_tech = list(Tc_COMBAT = 4)
+	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas/restrainment
+	category = "Exosuit_Weapons"
+	locked = 1
+	req_lock_access = list(access_armory)
+	materials = list(MAT_IRON=20000)
+
 /datum/design/mech_laser
 	name = "Weapon Design (CH-PS \"Immolator\" Laser)"
 	desc = "Allows for the construction of CH-PS Laser."
