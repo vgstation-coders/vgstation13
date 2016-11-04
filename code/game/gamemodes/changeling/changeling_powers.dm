@@ -309,6 +309,7 @@
 	src.visible_message("<span class='danger'>[src] sucks the fluids from [T]!</span>")
 	to_chat(T, "<span class='danger'>You have been absorbed by the changeling!</span>")
 	playsound(get_turf(src), 'sound/effects/lingabsorbs.ogg', 50, 1)
+	add_attacklogs(src, T, "absorbed")
 
 	T.dna.real_name = T.real_name //Set this again, just to be sure that it's properly set.
 	changeling.absorbed_dna |= T.dna
