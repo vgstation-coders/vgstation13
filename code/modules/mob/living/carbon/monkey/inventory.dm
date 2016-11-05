@@ -74,20 +74,24 @@
 
 /mob/living/carbon/monkey/u_equip(obj/item/W as obj, dropped = 1)
 	var/success = 0
+	var/slot = null
 	if(!W)
 		return 0
 
 	if(W == hat)
 		hat = null
 		success = 1
+		slot = slot_head
 		update_inv_hat()
 	else if(W == glasses)
 		glasses = null
 		success = 1
+		slot = slot_glasses
 		update_inv_glasses()
 	else if(W == uniform)
 		uniform = null
 		success = 1
+		slot = slot_w_uniform
 		update_inv_uniform()
 	else
 		..()
@@ -95,7 +99,7 @@
 		if (W)
 			if (client)
 				client.screen -= W
-			W.unequipped()
+			W.unequipped(src, slot)
 			if(dropped)
 				W.forceMove(loc)
 				W.dropped(src)

@@ -210,7 +210,7 @@
 		return 0
 
 	var/success
-
+	var/slot = null
 	var/index = is_holding_item(W)
 	if(index)
 		held_items[index] = null
@@ -221,6 +221,7 @@
 			u_equip(s_store, 1)
 		success = 1
 		wear_suit = null
+		slot = slot_wear_suit
 		update_inv_wear_suit()
 	else if (W == w_uniform)
 		if (r_store)
@@ -233,34 +234,42 @@
 			u_equip(belt, 1)
 		w_uniform = null
 		success = 1
+		slot = slot_w_uniform
 		update_inv_w_uniform()
 	else if (W == gloves)
 		gloves = null
 		success = 1
+		slot = slot_gloves
 		update_inv_gloves()
 	else if (W == glasses)
 		glasses = null
 		success = 1
+		slot = slot_glasses
 		update_inv_glasses()
 	else if (W == head)
 		head = null
 		success = 1
+		slot = slot_head
 		update_inv_head()
 	else if(W == ears)
 		ears = null
 		success = 1
+		slot = slot_ears
 		update_inv_ears()
 	else if (W == shoes)
 		shoes = null
 		success = 1
+		slot = slot_shoes
 		update_inv_shoes()
 	else if (W == belt)
 		belt = null
 		success = 1
+		slot = slot_belt
 		update_inv_belt()
 	else if (W == wear_mask)
 		wear_mask = null
 		success = 1
+		slot = slot_wear_mask
 		if(internal)
 			if(internals)
 				internals.icon_state = "internal0"
@@ -269,32 +278,39 @@
 	else if (W == wear_id)
 		wear_id = null
 		success = 1
+		slot = slot_wear_id
 		update_inv_wear_id()
 	else if (W == r_store)
 		r_store = null
 		success = 1
+		slot = slot_r_store
 		update_inv_pockets()
 	else if (W == l_store)
 		l_store = null
 		success = 1
+		slot = slot_l_store
 		update_inv_pockets()
 	else if (W == s_store)
 		s_store = null
 		success = 1
+		slot = slot_s_store
 		update_inv_s_store()
 	else if (W == back)
 		back = null
 		success = 1
+		slot = slot_back
 		update_inv_back()
 	else if (W == handcuffed)
 		if(handcuffed.on_remove(src)) //If this returns 1, then the unquipping action was interrupted
 			return 0
 		handcuffed = null
 		success = 1
+		slot = slot_handcuffed
 		update_inv_handcuffed()
 	else if (W == legcuffed)
 		legcuffed = null
 		success = 1
+		slot = slot_legcuffed
 		update_inv_legcuffed()
 	else
 		return 0
@@ -305,7 +321,7 @@
 		if (W)
 			if (client)
 				client.screen -= W
-			W.unequipped()
+			W.unequipped(src, slot)
 			if(dropped)
 				W.forceMove(loc)
 				W.dropped(src)
