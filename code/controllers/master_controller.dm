@@ -132,7 +132,6 @@ datum/controller/game_controller/proc/setup()
 		//else
 		make_mining_asteroid_secret()
 	if(map.radial_generate)
-		watch = start_watch()
 		var/list_of_turfs = list() // what turfs to consider for radial generating on
 		var/list_of_options = list() // what to radial generate on them, in terms of percentage chance
 		var/chance 			 // around about how many you want to have spawned on a z-level.
@@ -146,32 +145,65 @@ datum/controller/game_controller/proc/setup()
 									   /obj/structure/radial_gen/movable/snow_nature/snow_forest/large/dense = 5,
 									   /obj/structure/radial_gen/movable/snow_nature/snow_grass = 15,
 									   /obj/structure/radial_gen/movable/snow_nature/snow_grass/large = 5)
-				chance = 1250	// FROM MY EXPERIENCE GOING ABOVE 1000ish WILL CAUSE RUNTIMES FOR NO REASON.
+				chance = 750	// FROM MY EXPERIENCE GOING ABOVE 1000ish WILL CAUSE RUNTIMES IN NEW() FOR NO REASON. I BELIEVE WITH THAT AMOUNT WE REACH PEAK BYOND.
+								// I HAVE TRIED FOR TWO (!!2!!) WHOLE DAYS STRAIGHT TO FIX THIS. IF YOU CAN FIX THIS, WHILE RETAINING ALL THE OTHER FUNCTIONALITY,
+								// AND I'M STILL AROUND ON /vg/ I WILL PAY YOU $20CAD (or your regional equivalent) (the reward is negotiable.)
+								// METHODS I HAVE TRIED: POOLING THE RADIAL GENERATORS
+								// COMMENTING OUT THE ERROR HANDLER
+								// MAKING THIS A PROC AND DOING IT MANUALLY (THE FOURTH CALL OF THE PROC WILL ALWAYS CAUSE THE RUNTIME, NO MATTER WHAT ORDER IT IS IN)
+								// ^ DOING THIS AFTER ROUNDSTART AND EVERYTHING IS INITIALISED
+								// I'VE EVEN MADE A TEST CASE IN DREAMMAKER USING ONLY THIS CODE AND THE NECESSARY OTHER STUFF
+								// TO SEE IF I CAN REPRODUCE THIS BUG. (I CAN'T, IT'S ABLE TO HANDLE !!29709!! AND NOT CRASH - PROBABLY FAR MORE.)
+								// WE CAN HANDLE ABOUT 4500 AND NOT CRASH, BUT THAT'S PUSHING IT.
+								// THE RUNTIMES ARE SEEMINGLY UNRELATED TO THIS CODE AT ALL, IT'S JUST CREATING NEW() STUFF.
+								// HERE IS AN EXAMPLE:
+								/*runtime error: cannot read from list
+								proc name: New (/atom/movable/New)
+								  source file: atoms_movable.dm,67
+								  usr: null
+								  src: the bush (/obj/structure/flora/bush)
+								  src.loc: the snow (280,175,5) (/turf/snow)
+								  call stack:
+								the bush (/obj/structure/flora/bush): New(the snow (280,175,5) (/turf/snow))
+								the bush (/obj/structure/flora/bush): New(the snow (280,175,5) (/turf/snow))
+								the bush (/obj/structure/flora/bush): New(the snow (280,175,5) (/turf/snow))
+								the bush (/obj/structure/flora/bush): New(the snow (280,175,5) (/turf/snow))
+								the large snow grass generator (/obj/structure/radial_gen/movable/snow_nature/snow_grass/large): perform spawn("soft", the snow (280,175,5) (/turf/snow), /obj/structure/flora/bush (/obj/structure/flora/bush))
+								the large snow grass generator (/obj/structure/radial_gen/movable/snow_nature/snow_grass/large): deploy generator()
+								the large snow grass generator (/obj/structure/radial_gen/movable/snow_nature/snow_grass/large): New(the snow (287,200,5) (/turf/snow))
+								getFromPool(/obj/structure/radial_gen/mova... (/obj/structure/radial_gen/movable/snow_nature/snow_grass/large), the snow (287,200,5) (/turf/snow))
+								/datum/controller/game_control... (/datum/controller/game_controller): setup()
+								world: New()*/
+
 				rmap_name = "snow"
 
 		log_startup_progress("Radially generating a [rmap_name] map...")
 
 		var/count = 0
+		var/total_time
 		var/radial_gen_total = 0
 		for(var/zLevel = 1 to map.zLevels.len)
 			if(zLevel == map.zCentcomm)
 				continue
 
 			var/radial_gen_z = 0
+			watch = start_watch()
 			for(var/turf/T in list_of_turfs["[zLevel]"])
 				count++
 				if(!(count % 50000))
 					sleep(world.tick_lag)
 				if(rand(1,world.maxy*world.maxx) <= chance)
 					var/radial_gen_type = pickweight(list_of_options)
-					new radial_gen_type(T)
+					getFromPool(radial_gen_type,T)
 					radial_gen_z++
 			var/datum/zLevel/zlevesoninquiry = map.zLevels[zLevel]
-			log_startup_progress("Finished radially generating z:[zLevel]([zlevesoninquiry.name]) with [radial_gen_z] radial generators")
+			var/time = stop_watch(watch)
+			log_startup_progress("Finished radially generating z:[zLevel]([zlevesoninquiry.name]) with [radial_gen_z] radial generators in [time]s")
+			total_time += time
 			sleep(world.tick_lag)
 			radial_gen_total += radial_gen_z
 
-		log_startup_progress("Finished radially generating the entire map with [radial_gen_total] radial generators in [stop_watch(watch)]s")
+		log_startup_progress("Finished radially generating the entire map with [radial_gen_total] radial generators in [total_time]s")
 
 	//if(config.socket_talk)
 	//	keepalive()

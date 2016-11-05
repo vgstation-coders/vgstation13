@@ -1,3 +1,12 @@
+#define HARD "hard"
+#define SOFT "soft"
+
+#define GEN_TYPES_SOFT "gen_types_soft"
+#define GEN_TYPES_HARD "gen_types_hard"
+#define EXPECTED_TURFS "expected_turfs"
+
+var/global/list/precached_lists_for_pooling_rad_gen = list()
+
 /*
  * Why have simple atom generation when you can have complex atom generation ?
  * Instead of placing individual items at random, we have a much smaller chance of placing "generation seeds"
@@ -27,13 +36,29 @@
 	var/gen_no_dense_only = 0 //Generator will only work on tiles without dense contents
 	var/gen_clear_tiles = 0 //Generator will clear up the contents of all the tiles it is working on before spawning stuff
 	var/list/expected_turfs = list() //Will return if turf type is different from any in the list, good to avoid generator collision with other terrain features
+	var/list/gen_types_soft = list() //What types do we generate from this generator, array must contain individual probabilities for each turf. Only in soft radius
+	var/list/gen_types_hard = list() //Ditto above, but only in hard radius. Obviously, if you want it to spawn in both, add to both lists. OBVIOUSLY
 
 /obj/structure/radial_gen/New()
+	if(!precached_lists_for_pooling_rad_gen["[type]"])
+		var/list/precached_list = list()
+		precached_list[EXPECTED_TURFS] = expected_turfs
+		precached_list[GEN_TYPES_HARD] = gen_types_hard
+		precached_list[GEN_TYPES_SOFT] = gen_types_soft
+		precached_lists_for_pooling_rad_gen["[type]"] = precached_list
 
 	..()
 
 	deploy_generator()
-	qdel(src) //This is exclusively used to generate other things, delete it once we're done
+	returnToPool(src)
+
+/obj/structure/radial_gen/resetVariables()
+	..(EXPECTED_TURFS,GEN_TYPES_SOFT,GEN_TYPES_HARD)
+	var/list/precached_list = precached_lists_for_pooling_rad_gen["[type]"]
+	expected_turfs = precached_list[EXPECTED_TURFS]
+	gen_types_hard = precached_list[GEN_TYPES_HARD]
+	gen_types_soft = precached_list[GEN_TYPES_SOFT]
+
 
 //Uses modular code structure, so you can define different behaviour
 //We start by initializing shared behavior between all three generator sub-types, then we fire a spawn proc that they will modify
@@ -65,9 +90,9 @@
 				if(gen_clear_tiles) //We attempt to clear the tile's contents. Hopefully this does not fail, because we won't dabble on it
 					T.clear_contents(list(type))
 
-				var/picked = perform_pick("soft", T)
+				var/picked = perform_pick(SOFT, T)
 
-				perform_spawn("soft", T, picked)
+				perform_spawn(SOFT, T, picked)
 
 			continue
 
@@ -80,19 +105,19 @@
 				if(gen_clear_tiles) //We attempt to clear the tile's contents. Hopefully this does not fail, because we won't dabble on it
 					T.clear_contents(list(type))
 
-				var/picked = perform_pick("soft", T)
+				var/picked = perform_pick(SOFT, T)
 
-				perform_spawn("hard", T, picked)
+				perform_spawn(HARD, T, picked)
 
 			continue
 
 //We pick the thing we will possibly spawn, because we need that to roll out adjacency rules
-/obj/structure/radial_gen/proc/perform_pick(var/gen_type = "soft", var/turf/T)
+/obj/structure/radial_gen/proc/perform_pick(var/gen_type = SOFT, var/turf/T)
 
 	return 0
 
 //We now have all that shit out of the way, spawn the fucking thing
-/obj/structure/radial_gen/proc/perform_spawn(var/gen_type = "soft", var/turf/T)
+/obj/structure/radial_gen/proc/perform_spawn(var/gen_type = SOFT, var/turf/T)
 
 	return 0
 
@@ -102,32 +127,30 @@
 	desc = "This generator can manifest any atom in reality. Which one it summons was not specified."
 	icon_state = "gen_mov"
 
-	var/list/gen_types_movable_soft = list() //What types do we generate from this generator, array must contain individual probabilities for each movable. Only in soft radius
-	var/list/gen_types_movable_hard = list() //Ditto above, but only in hard radius. Obviously, if you want it to spawn in both, add to both lists. OBVIOUSLY
-
-/obj/structure/radial_gen/movable/perform_pick(var/gen_type = "soft", var/turf/T)
+/obj/structure/radial_gen/movable/perform_pick(var/gen_type = SOFT, var/turf/T)
 
 	switch(gen_type)
 
-		if("soft")
+		if(SOFT)
 
-			if(gen_types_movable_soft.len)
+			if(gen_types_soft.len)
 
-				var/picked_movable = pickweight(gen_types_movable_soft)
-
-				return picked_movable
-
-		if("hard")
-
-			if(gen_types_movable_hard.len)
-
-				var/picked_movable = pickweight(gen_types_movable_hard)
+				var/picked_movable = pickweight(gen_types_soft)
 
 				return picked_movable
 
-/obj/structure/radial_gen/movable/perform_spawn(var/gen_type = "soft", var/turf/T, var/atom/movable/picked)
+		if(HARD)
 
-	new picked(T)
+			if(gen_types_hard.len)
+
+				var/picked_movable = pickweight(gen_types_hard)
+
+				return picked_movable
+
+/obj/structure/radial_gen/movable/perform_spawn(var/gen_type = SOFT, var/turf/T, var/atom/movable/picked)
+	if(picked)
+		new picked(T)
+	else world.log << "warning! failed to create something"
 
 /obj/structure/radial_gen/turf
 
@@ -135,30 +158,27 @@
 	desc = "This generator can change the very fabric of reality. Which one it threads was not specified."
 	icon_state = "gen_turf"
 
-	var/list/gen_types_turf_soft = list() //What types do we generate from this generator, array must contain individual probabilities for each turf. Only in soft radius
-	var/list/gen_types_turf_hard = list() //Ditto above, but only in hard radius. Obviously, if you want it to spawn in both, add to both lists. OBVIOUSLY
-
-/obj/structure/radial_gen/turf/perform_pick(var/gen_type = "soft", var/turf/T, var/turf/picked)
+/obj/structure/radial_gen/turf/perform_pick(var/gen_type = SOFT, var/turf/T, var/turf/picked)
 
 	switch(gen_type)
 
-		if("soft")
+		if(SOFT)
 
-			if(gen_types_turf_soft.len)
+			if(gen_types_soft.len)
 
-				var/picked_turf = pickweight(gen_types_turf_soft)
-
-				return picked_turf
-
-		if("hard")
-
-			if(gen_types_turf_hard.len)
-
-				var/picked_turf = pickweight(gen_types_turf_hard)
+				var/picked_turf = pickweight(gen_types_soft)
 
 				return picked_turf
 
-/obj/structure/radial_gen/turf/perform_spawn(var/gen_type = "soft", var/turf/T, var/turf/picked)
+		if(HARD)
+
+			if(gen_types_hard.len)
+
+				var/picked_turf = pickweight(gen_types_hard)
+
+				return picked_turf
+
+/obj/structure/radial_gen/turf/perform_spawn(var/gen_type = SOFT, var/turf/T, var/turf/picked)
 
 	T.ChangeTurf(picked)
 
@@ -186,12 +206,12 @@
 	gen_no_dense_only = 1 //Generator will only work on tiles without dense contents
 
 	//What types do we generate from this generator, array must contain individual probabilities for each turf. Only in soft radius
-	gen_types_movable_soft = list(/obj/structure/flora/tree/pine = 100, \
+	gen_types_soft = list(/obj/structure/flora/tree/pine = 100, \
 								/obj/structure/flora/rock/pile/snow = 200, \
 								/obj/structure/flora/bush = 200, \
 								/obj/structure/flora/grass/white = 1000)
 	//Ditto above, but only in hard radius. Obviously, if you want it to spawn in both, add to both lists. OBVIOUSLY
-	gen_types_movable_hard = list(/obj/structure/flora/tree/pine = 100, \
+	gen_types_hard = list(/obj/structure/flora/tree/pine = 100, \
 								/obj/structure/flora/bush = 100, \
 								/obj/structure/flora/rock/pile/snow = 200, \
 								/obj/structure/flora/grass/white = 1000)
@@ -204,12 +224,12 @@
 	icon_state = "gen_s_forest"
 
 	//What types do we generate from this generator, array must contain individual probabilities for each turf. Only in soft radius
-	gen_types_movable_soft = list(/obj/structure/flora/tree/pine = 500, \
+	gen_types_soft = list(/obj/structure/flora/tree/pine = 500, \
 								/obj/structure/flora/rock/pile/snow = 250, \
 								/obj/structure/flora/bush = 250, \
 								/obj/structure/flora/grass/white = 1000)
 	//Ditto above, but only in hard radius. Obviously, if you want it to spawn in both, add to both lists. OBVIOUSLY
-	gen_types_movable_hard = list(/obj/structure/flora/tree/pine = 250, \
+	gen_types_hard = list(/obj/structure/flora/tree/pine = 250, \
 								/obj/structure/flora/bush = 100, \
 								/obj/structure/flora/rock/pile/snow = 200, \
 								/obj/structure/flora/grass/white = 1000)
@@ -236,12 +256,12 @@
 	icon_state = "gen_s_forest"
 
 	//What types do we generate from this generator, array must contain individual probabilities for each turf. Only in soft radius
-	gen_types_movable_soft = list(/obj/structure/flora/tree/pine = 500, \
+	gen_types_soft = list(/obj/structure/flora/tree/pine = 500, \
 								/obj/structure/flora/rock/pile/snow = 250, \
 								/obj/structure/flora/bush = 250, \
 								/obj/structure/flora/grass/white = 1000)
 	//Ditto above, but only in hard radius. Obviously, if you want it to spawn in both, add to both lists. OBVIOUSLY
-	gen_types_movable_hard = list(/obj/structure/flora/tree/pine = 250, \
+	gen_types_hard = list(/obj/structure/flora/tree/pine = 250, \
 								/obj/structure/flora/bush = 100, \
 								/obj/structure/flora/rock/pile/snow = 200, \
 								/obj/structure/flora/grass/white = 1000)
@@ -262,11 +282,11 @@
 	gen_no_dense_only = 1 //Generator will only work on tiles without dense contents
 
 	//What types do we generate from this generator, array must contain individual probabilities for each turf. Only in soft radius
-	gen_types_movable_soft = list(/obj/structure/flora/rock/pile/snow = 100, \
+	gen_types_soft = list(/obj/structure/flora/rock/pile/snow = 100, \
 								/obj/structure/flora/bush = 400, \
 								/obj/structure/flora/grass/white = 1000)
 	//Ditto above, but only in hard radius. Obviously, if you want it to spawn in both, add to both lists. OBVIOUSLY
-	gen_types_movable_hard = list(/obj/structure/flora/rock/pile/snow = 50, \
+	gen_types_hard = list(/obj/structure/flora/rock/pile/snow = 50, \
 								/obj/structure/flora/bush = 200, \
 								/obj/structure/flora/grass/white = 1000)
 
@@ -304,9 +324,9 @@
 	gen_prob_hard_fall = 10	//Probability reduction per tile after last soft radius, overrides the former
 
 	//What types do we generate from this generator, array must contain individual probabilities for each turf. Only in soft radius
-	gen_types_turf_soft = list(/turf/snow = 100)
+	gen_types_soft = list(/turf/snow = 100)
 	//Ditto above, but only in hard radius. Obviously, if you want it to spawn in both, add to both lists. OBVIOUSLY
-	gen_types_turf_hard = list(/turf/snow = 100)
+	gen_types_hard = list(/turf/snow = 100)
 
 //A very large patch of snow
 /obj/structure/radial_gen/turf/snow_nature/snow_patch/large
@@ -334,9 +354,9 @@
 	gen_clear_tiles = 1 //FOR TESTING ONLY
 
 	//What types do we generate from this generator, array must contain individual probabilities for each turf. Only in soft radius
-	gen_types_turf_soft = list(/turf/snow/permafrost = 100)
+	gen_types_soft = list(/turf/snow/permafrost = 100)
 	//Ditto above, but only in hard radius. Obviously, if you want it to spawn in both, add to both lists. OBVIOUSLY
-	gen_types_turf_hard = list(/turf/snow/permafrost = 100)
+	gen_types_hard = list(/turf/snow/permafrost = 100)
 
 //A very large patch of permafrost
 /obj/structure/radial_gen/turf/snow_nature/permafrost/large
