@@ -372,7 +372,6 @@
 
 		. = W
 
-	lighting_corners_initialised = TRUE
 	recalc_atom_opacity()
 	lighting_overlay = old_lighting_overlay
 	affecting_lights = old_affecting_lights
