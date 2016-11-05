@@ -1375,10 +1375,10 @@
 				to_chat(src, "<span class='notice'>Security records overlay enabled.</span>")
 			if ("Medical")
 				sensor_mode = MED_HUD
-				to_chat(src, "<span class='notice'>Life signs monitor overlay enabled.</span>"/*)
+				to_chat(src, "<span class='notice'>Life signs monitor overlay enabled.</span>")
 			if ("Light Amplification")
 				src.sensor_mode = NIGHT
-				to_chat(src, "<span class='notice'>Light amplification mode enabled.</span>"*/)
+				to_chat(src, "<span class='notice'>Light amplification mode enabled.</span>")
 			if ("Mesons")
 				sensor_mode = MESON_VISION
 				to_chat(src, "<span class='notice'>Meson Vison augmentation enabled.</span>")
