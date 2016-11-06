@@ -13,7 +13,7 @@
 
 /datum/disease2/effectholder/proc/runeffect(var/mob/living/carbon/human/mob,var/stage)
 	if(happensonce > -1 && effect.stage <= stage && prob(chance))
-		effect.activate(mob)
+		effect.activate(mob, multiplier)
 		if(happensonce == 1)
 			happensonce = -1
 
@@ -53,8 +53,11 @@
 	var/stage = 4
 	var/maxm = 1
 	var/badness = 1
+	var/affect_voice = 0
+	var/affect_voice_active = 0
 	proc/activate(var/mob/living/carbon/mob,var/multiplier)
 	proc/deactivate(var/mob/living/carbon/mob)
+	proc/affect_mob_voice(var/datum/speech/speech) //Called by /mob/living/carbon/human/treat_speech
 
 ////////////////////////SPECIAL/////////////////////////////////
 /*/datum/disease2/effect/alien
@@ -928,3 +931,200 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 
 		to_chat(mob, "Suddenly, your knowledge of languages comes back to you.")
 	..()
+
+
+/datum/disease2/effect/lubefoot
+	name = "Self-lubricating Footstep Syndrome"
+	stage = 3
+
+/datum/disease2/effect/lubefoot/activate(var/mob/living/carbon/mob,var/multiplier)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/affected = mob
+		if(!(M_CLUMSY in affected.mutations))
+			to_chat(affected, "You feel slightly more inept than usual.")
+			affected.mutations.Add(M_CLUMSY)
+		var/obj/item/clothing/shoes/clown_shoes/slippy/honkers = new /obj/item/clothing/shoes/clown_shoes/slippy
+		if(affected.shoes && !istype(affected.shoes, /obj/item/clothing/shoes/clown_shoes))//Clown shoes may save you
+			affected.u_equip(affected.shoes,1)
+			affected.equip_to_slot(honkers, slot_shoes)
+		if(!affected.shoes)
+			affected.equip_to_slot(honkers, slot_shoes)
+
+		honkers.lube_chance = 10*multiplier
+	if(prob(15))
+		to_chat(mob, "Your feet feel slippy!")
+
+
+
+/obj/item/clothing/shoes/clown_shoes/slippy
+	canremove = 0
+	var/lube_chance = 10
+
+/obj/item/clothing/shoes/clown_shoes/slippy/step_action() //The honkpocalypse is here
+	..()
+	if(ishuman(loc) && prob(lube_chance))
+		var/mob/living/carbon/human/mob = loc
+		if(istype(mob.loc,/turf/simulated))
+			var/turf/simulated/T = mob.loc
+			if(T.wet < 2)
+				T.wet = 2
+				if(T.wet_overlay)
+					T.overlays -= T.wet_overlay
+					T.wet_overlay = null
+				T.wet_overlay = image('icons/effects/water.dmi',T,"wet_floor")
+				T.overlays += T.wet_overlay
+				spawn(800)
+					if (istype(T) && T.wet >= 2)
+						T.wet = 0
+						if(T.wet_overlay)
+							T.overlays -= T.wet_overlay
+							T.wet_overlay = null
+
+/obj/item/clothing/shoes/clown_shoes/slippy/dropped(mob/user as mob)
+	canremove = 1
+	..()
+
+/datum/disease2/effect/hangman
+	name = "Hanging Man's Syndrome"
+	stage = 2
+	var/triggered = 0
+	affect_voice = 1
+
+/datum/disease2/effect/hangman/activate(var/mob/living/carbon/mob,var/multiplier)
+//Add filters to change a,A,e,E,i,I,o,O,u,U to _
+	if(!triggered)
+		to_chat(mob, "<span class='warning'>Y__ f__l _ b_t str_ng _p.</span>")
+		affect_voice_active = 1
+		triggered = 1
+
+/datum/disease2/effect/hangman/affect_mob_voice(var/datum/speech/speech)
+	var/message=speech.message
+	message = replacetext(message, "a", "_")
+	message = replacetext(message, "A", "_")
+	message = replacetext(message, "e", "_")
+	message = replacetext(message, "E", "_")
+	message = replacetext(message, "i", "_")
+	message = replacetext(message, "I", "_")
+	message = replacetext(message, "o", "_")
+	message = replacetext(message, "O", "_")
+	message = replacetext(message, "u", "_")
+	message = replacetext(message, "U", "_")
+
+	speech.message = message
+
+
+/datum/disease2/effect/anime_hair
+	name = "Pro-tagonista Syndrome"
+	stage = 3
+	var/triggered = 0
+	var/given_katana = 0
+	affect_voice = 1
+
+/datum/disease2/effect/anime_hair/activate(var/mob/living/carbon/mob,var/multiplier)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/affected = mob
+		if(!triggered)
+			var/list/hair_colors = list("pink","red","green","blue","purple")
+			var/hair_color = pick(hair_colors)
+
+			switch(hair_color)
+				if("pink")
+					affected.b_hair = 153
+					affected.g_hair = 102
+					affected.r_hair = 255
+				if("red")
+					affected.b_hair = 0
+					affected.g_hair = 0
+					affected.r_hair = 255
+				if("green")
+					affected.b_hair = 0
+					affected.g_hair = 255
+					affected.r_hair = 0
+				if("blue")
+					affected.b_hair = 255
+					affected.g_hair = 0
+					affected.r_hair = 0
+				if("purple")
+					affected.b_hair = 102
+					affected.g_hair = 0
+					affected.r_hair = 102
+			affected.update_hair()
+			triggered = 1
+
+		if(multiplier)
+			if(multiplier >= 1.5)
+				//Give them schoolgirl outfits /obj/item/clothing/under/schoolgirl
+				var/obj/item/clothing/under/schoolgirl/schoolgirl = new /obj/item/clothing/under/schoolgirl
+				schoolgirl.canremove = 0
+				if(affected.w_uniform && !istype(affected.w_uniform, /obj/item/clothing/under/schoolgirl))
+					affected.u_equip(affected.w_uniform,1)
+					affected.equip_to_slot(schoolgirl, slot_w_uniform)
+				if(!affected.w_uniform)
+					affected.equip_to_slot(schoolgirl, slot_w_uniform)
+			if(multiplier >= 1.8)
+				//Kneesocks /obj/item/clothing/shoes/kneesocks
+				var/obj/item/clothing/shoes/kneesocks/kneesock = new /obj/item/clothing/shoes/kneesocks
+				kneesock.canremove = 0
+				if(affected.shoes && !istype(affected.shoes, /obj/item/clothing/shoes/kneesocks))
+					affected.u_equip(affected.shoes,1)
+					affected.equip_to_slot(kneesock, slot_shoes)
+				if(!affected.w_uniform)
+					affected.equip_to_slot(kneesock, slot_shoes)
+
+			if(multiplier >= 2)
+				if(multiplier >=2.3)
+					//Cursed, pure evil cat ears that should not have been created
+					var/obj/item/clothing/head/kitty/cursed/kitty_c = new /obj/item/clothing/head/kitty/cursed
+					if(affected.head && !istype(affected.head, /obj/item/clothing/head/kitty/cursed))
+						affected.u_equip(affected.head,1)
+						affected.equip_to_slot(kitty_c, slot_head)
+					if(!affected.head)
+						affected.equip_to_slot(kitty_c, slot_head)
+				else
+					//Regular cat ears /obj/item/clothing/head/kitty
+					var/obj/item/clothing/head/kitty/kitty = new /obj/item/clothing/head/kitty
+					if(affected.head && !istype(affected.head, /obj/item/clothing/head/kitty))
+						affected.u_equip(affected.head,1)
+						affected.equip_to_slot(kitty, slot_head)
+					if(!affected.head)
+						affected.equip_to_slot(kitty, slot_head)
+				affect_voice_active = 1
+
+			if(multiplier >= 2.5 && !given_katana)
+				if(multiplier >= 3)
+					//REAL katana /obj/item/weapon/katana
+					var/obj/item/weapon/katana/real_katana = new /obj/item/weapon/katana
+					affected.put_in_hands(real_katana)
+				else
+					//Toy katana /obj/item/toy/katana
+					var/obj/item/toy/katana/fake_katana = new /obj/item/toy/katana
+					affected.put_in_hands(fake_katana)
+				given_katana = 1
+
+datum/disease2/effect/anime_hair/deactivate(var/mob/living/carbon/mob)
+	to_chat(mob, "<span class = 'notice'>You no longer feel quite like the main character</notice>")
+	var/mob/living/carbon/human/affected = mob
+	if(affected.shoes && istype(affected.shoes, /obj/item/clothing/shoes/kneesocks))
+		affected.shoes.canremove = 1
+	if(affected.w_uniform && istype(affected.w_uniform, /obj/item/clothing/under/schoolgirl))
+		affected.w_uniform.canremove = 1
+
+/datum/disease2/effect/anime_hair/affect_mob_voice(var/datum/speech/speech)
+	var/message=speech.message
+
+	if(prob(20))
+		message += pick(" Nyaa", "  nya", " , Nyaa~", "~")
+
+	speech.message = message
+
+/obj/item/clothing/head/kitty/cursed
+	canremove = 0
+
+
+/datum/disease2/effect/spyndrome
+	name = "Gyroscopic Manipulation Syndrome"
+	stage = 1
+
+/datum/disease2/effect/spyndrome/activate(var/mob/living/carbon/mob,var/multiplier)
+	if (mob.reagents.get_reagent_amount(GYRO) < 1)
+		mob.reagents.add_reagent(GYRO, 1)
