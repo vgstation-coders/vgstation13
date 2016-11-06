@@ -1,5 +1,6 @@
 #define TIME_TO_CATCH_MIN 60
 #define TIME_TO_CATCH_MAX 160
+#define MAX_LINE_TENSION 100
 
 // -----------------------------
 //         Bait Datums
@@ -59,11 +60,10 @@
 	var/tmp/busy = 0 //check if in use to stop bait scumming
 	var/obj/item/weapon/hookeditem
 	var/fishstage = rand(30, 70) // when fishstage hits 0, we catch the fish, if it goes above 100, we lose the fish
-	var/rodtension = 0 // if tension hits 100 the line snaps, pulling power is based on tension scaling from 0 - no pulling to 99 - strongest pull
+	var/rodtension = 0 // if tension hits MAX_LINE_TENSION the line snaps, pulling power is based on tension scaling from 0: no pulling to (MAX_LINE_TENSION - 1): strongest pull
 	var/list/fishables = list( //list of atoms that can be fished
 		/obj/machinery/bluespace_pond,
 		/turf/unsimulated/beach/water/deep,
-		/turf/space,
 		)
 	var/list/bait_types = list( // The types of bait this rod is able to use
 		/datum/bait_type/standard_bait,
