@@ -1033,7 +1033,6 @@ var/global/num_vending_terminals = 1
 	contraband = list(
 		/obj/item/device/flashlight = 5,
 		/obj/item/device/assembly/timer = 2,
-		/obj/item/weapon/reagent_containers/glass/bottle/sacid = 2,
 		)
 	premium = list(
 		/obj/item/device/assembly_frame = 1,
@@ -1758,7 +1757,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/cell/high = 10,
 		/obj/item/weapon/reagent_containers/glass/fuelcan = 5,
 		/obj/item/weapon/stock_parts/capacitor = 10,
-		/obj/item/device/holomap = 2
+		/obj/item/device/holomap = 2,
+		/obj/item/weapon/reagent_containers/glass/bottle/sacid = 2,
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
