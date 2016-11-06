@@ -39,7 +39,8 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 	var/list/gen_types_soft = list() //What types do we generate from this generator, array must contain individual probabilities for each turf. Only in soft radius
 	var/list/gen_types_hard = list() //Ditto above, but only in hard radius. Obviously, if you want it to spawn in both, add to both lists. OBVIOUSLY
 
-/obj/structure/radial_gen/New()
+
+/obj/structure/radial_gen/New(var/mapspawned=1)
 	if(!precached_lists_for_pooling_rad_gen["[type]"])
 		var/list/precached_list = list()
 		precached_list[EXPECTED_TURFS] = expected_turfs
@@ -48,9 +49,9 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 		precached_lists_for_pooling_rad_gen["[type]"] = precached_list
 
 	..()
-
-	deploy_generator()
-	returnToPool(src)
+	if(mapspawned)
+		deploy_generator(get_turf(src))
+		returnToPool(src)
 
 /obj/structure/radial_gen/resetVariables()
 	..(EXPECTED_TURFS,GEN_TYPES_SOFT,GEN_TYPES_HARD)
@@ -62,9 +63,9 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 
 //Uses modular code structure, so you can define different behaviour
 //We start by initializing shared behavior between all three generator sub-types, then we fire a spawn proc that they will modify
-/obj/structure/radial_gen/proc/deploy_generator()
+/obj/structure/radial_gen/proc/deploy_generator(var/turf/where)
 
-	for(var/turf/T in spiral_block(get_turf(src), gen_hard_radius, 0))
+	for(var/turf/T in spiral_block(where, gen_hard_radius, 0))
 
 		if(expected_turfs.len && !is_type_in_list(T, expected_turfs)) //We are expecting a specific turf type, and it is not this one
 			continue
@@ -75,7 +76,7 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 		if(gen_no_dense_only && T.has_dense_content()) //We are looking for turfs without dense contents, this turf has some
 			continue
 
-		var/dist = cheap_pythag(T.x - x, T.y - y)
+		var/dist = cheap_pythag(T.x - where.x, T.y - where.y)
 
 		if(dist < gen_min_radius) //Distance is below the minimum radius, forget this one
 
@@ -91,7 +92,6 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 					T.clear_contents(list(type))
 
 				var/picked = perform_pick(SOFT, T)
-
 				perform_spawn(SOFT, T, picked)
 
 			continue
@@ -105,8 +105,7 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 				if(gen_clear_tiles) //We attempt to clear the tile's contents. Hopefully this does not fail, because we won't dabble on it
 					T.clear_contents(list(type))
 
-				var/picked = perform_pick(SOFT, T)
-
+				var/picked = perform_pick(HARD, T)
 				perform_spawn(HARD, T, picked)
 
 			continue
@@ -148,9 +147,7 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 				return picked_movable
 
 /obj/structure/radial_gen/movable/perform_spawn(var/gen_type = SOFT, var/turf/T, var/atom/movable/picked)
-	if(picked)
-		new picked(T)
-	else world.log << "warning! failed to create something"
+	new picked(T)
 
 /obj/structure/radial_gen/turf
 
