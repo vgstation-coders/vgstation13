@@ -53,6 +53,16 @@
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 
+/obj/item/weapon/melee/energy/sword/activated/New()
+	..()
+	active = 1
+	force = 30
+	w_class = W_CLASS_LARGE
+	sharpness = 1.5
+	hitsound = "sound/weapons/blade1.ogg"
+	update_icon()
+
+
 /obj/item/weapon/melee/energy/sword/IsShield()
 	if(active)
 		return 1

@@ -104,6 +104,45 @@
 	name = "\improper Engine Hallway"
 	icon_state = "engine"
 
+/area/vault/droneship
+	name = "\improper Drone Ship"
+	requires_power = 1
+	jammed = 2
+	var/pod_code = "00000"
+
+/area/vault/droneship/New()
+	..()
+	pod_code = "[rand(10000, 99999.0)]"
+
+/obj/machinery/door/poddoor/droneship
+	name = "\improper OSIPR Pod-Door"
+	id_tag = "denied"
+
+/obj/machinery/door/poddoor/droneship/New()
+	..()
+	var/area/A = get_area(src)
+	if(A && istype(A,/area/vault/droneship))
+		var/area/vault/droneship/DS = A
+		id_tag = DS.pod_code
+
+/obj/item/weapon/p_folded/ball/droneship
+	name = "crushed ball of paper"
+
+/obj/item/weapon/p_folded/ball/droneship/New()
+	..()
+	qdel(unfolded)
+	unfolded = new /obj/item/weapon/paper/crumpled/droneship(src)
+
+/obj/item/weapon/paper/crumpled/droneship
+	name = "paper- 'OSIPR Pod-Door ID'"
+	info = "denied"
+
+/obj/item/weapon/paper/crumpled/droneship/New()
+	var/area/A = get_area(src)
+	if(A && istype(A,/area/vault/droneship))
+		var/area/vault/droneship/DS = A
+		info = "[DS.pod_code]"
+
 /mob/living/simple_animal/hostile/monster/cyber_horror/quiet
 	speak_chance = 1 //shut the fuck up
 
