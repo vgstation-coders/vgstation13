@@ -1758,7 +1758,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/glass/fuelcan = 5,
 		/obj/item/weapon/stock_parts/capacitor = 10,
 		/obj/item/device/holomap = 2,
-		/obj/item/weapon/reagent_containers/glass/bottle/sacid = 2,
+		/obj/item/weapon/reagent_containers/glass/bottle/sacid = 3,
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
