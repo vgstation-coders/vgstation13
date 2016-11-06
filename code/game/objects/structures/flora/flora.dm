@@ -1,4 +1,5 @@
 /obj/structure/flora
+	lockflags = CANT_LOCK_TO_AT_ALL_EVEN_CONCIEVABLY
 	var/shovelaway = 1
 
 /obj/structure/flora/attackby(var/obj/item/weapon/W, var/mob/user)
