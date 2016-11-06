@@ -800,3 +800,6 @@ its easier to just keep the beam vertical.
 
 /atom/proc/animationBolt(var/mob/firer)
 	return
+
+/atom/proc/spawned_by_map_element(datum/map_element/ME, list/objects)
+	return
