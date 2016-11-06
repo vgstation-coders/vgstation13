@@ -632,7 +632,7 @@ var/list/global_mutations = list() // list of hidden mutation things
 
 //Bitflags defining which status effects could be or are inflicted on a mob
 #define CANSTUN		1
-#define CANWEAKEN	2
+#define CANKNOCKDOWN	2
 #define CANPARALYSE	4
 #define CANPUSH		8
 #define GODMODE		4096

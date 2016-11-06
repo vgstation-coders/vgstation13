@@ -147,7 +147,7 @@ datum/shuttle_controller/proc/move_pod(var/start_type,var/end_type,var/direction
 					shake_camera(M, 10, 2) // unlocked_to, HOLY SHIT SHAKE THE ROOM
 		if(istype(M, /mob/living/carbon))
 			if(!M.locked_to)
-				M.Weaken(5)
+				M.Knockdown(5)
 
 
 datum/shuttle_controller/emergency_shuttle

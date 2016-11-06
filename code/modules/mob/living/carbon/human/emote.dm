@@ -706,7 +706,7 @@
 									if (V == src)
 										continue
 									to_chat(V, "<span class = 'danger'>You're sent flying!</span>")
-									V.Weaken(5) // why the hell was this set to 12 christ
+									V.Knockdown(5) // why the hell was this set to 12 christ
 									step_away(V,location,15)
 									step_away(V,location,15)
 									step_away(V,location,15)

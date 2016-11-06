@@ -288,7 +288,7 @@ var/global/list/crate_mimic_disguises = list(\
 		if(H in locked)
 			if(prob(20))
 				to_chat(H, "<span class='danger'>You feel very weak!</span>")
-				H.Weaken(3)
+				H.Knockdown(3)
 
 /mob/living/simple_animal/hostile/mimic/crate/chest/LoseTarget()
 	if(target in get_locked(/datum/locking_category/mimic))
@@ -628,7 +628,7 @@ var/global/list/protected_objects = list(
 		var/mob/living/L = .
 		if(istype(L))
 			if(prob(15))
-				L.Weaken(1)
+				L.Knockdown(1)
 				L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
 
 

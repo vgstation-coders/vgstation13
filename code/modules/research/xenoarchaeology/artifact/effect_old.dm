@@ -110,16 +110,16 @@
 					user.radiation += 25
 					user.nutrition -= min(50, user.nutrition)
 					user.Dizzy(6)
-					user.weakened += 6
+					user.AdjustKnockdown(6)
 					return 1
 				to_chat(else user, "Nothing happens.")
 			if("stun")
 				if (istype(user, /mob/living/carbon/))
 					to_chat(user, "<span class='warning'>A powerful force overwhelms your consciousness.</span>")
-					user.weakened += 45
+					user.AdjustKnockdown(45)
 					user.stuttering += 45
 					if(prob(50))
-						user.stunned += rand(1,10)
+						user.AdjustStunned(rand(1,10))
 					return 1
 				to_chat(else user, "Nothing happens.")
 			if("roboheal")
@@ -199,8 +199,8 @@
 					to_chat(if(prob(10)) M, "<span class='warning'>Energy radiating from the [originator] is making you feel numb.</span>")
 					if(prob(20))
 						to_chat(M, "<span class='warning'>Your body goes numb for a moment.</span>")
-						M.stunned += 2
-						M.weakened += 2
+						M.AdjustStunned(2)
+						M.AdjustKnockdown(2)
 						M.stuttering += 2
 				return 1
 			if("roboheal")
@@ -288,7 +288,7 @@
 					M.adjustOxyLoss(5)
 					M.adjustBrainLoss(5)
 					M.Dizzy(6)
-					M.weakened += 3
+					M.AdjustKnockdown(3)
 					M.updatehealth()
 				return 1
 			if("stun")
@@ -296,8 +296,8 @@
 					if(ishuman(M) && istype(M:wear_suit,/obj/item/clothing/suit/bio_suit/anomaly) && istype(M:head,/obj/item/clothing/head/bio_hood/anomaly))
 						continue
 					to_chat(M, "<span class='warning'>A wave of energy overwhelms your senses!</span>")
-					M.paralysis += 3
-					M.weakened += 4
+					M.AdjustParalysis(3)
+					M.AdjustKnockdown(4)
 					M.stuttering += 4
 				return 1
 			if("roboheal")
@@ -425,8 +425,8 @@
 					if(ishuman(M) && istype(M:wear_suit,/obj/item/clothing/suit/bio_suit/anomaly) && istype(M:head,/obj/item/clothing/head/bio_hood/anomaly))
 						continue
 					to_chat(M, "<span class='warning'>A powerful force causes you to black out momentarily.</span>")
-					M.paralysis += 5
-					M.weakened += 8
+					M.AdjustParalysis(5)
+					M.AdjustKnockdown(8)
 					M.stuttering += 8
 				return 1
 			if("roboheal")

@@ -187,8 +187,8 @@
 		if(stunned)
 			AdjustStunned(-1)
 
-		if(weakened)
-			weakened = max(weakened - 1,0) //Before you get mad Rockdtben: I done this so update_canmove isn't called multiple times
+		if(knockdown)
+			knockdown = max(knockdown - 1,0) //Before you get mad Rockdtben: I done this so update_canmove isn't called multiple times
 
 		if(stuttering)
 			stuttering = max(stuttering - 1, 0)

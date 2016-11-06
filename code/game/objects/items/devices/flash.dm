@@ -85,7 +85,7 @@
 		var/safe = Subject.eyecheck()
 
 		if(safe <= 0)
-			Subject.Weaken(10)
+			Subject.Knockdown(10)
 			Subject.flash_eyes(visual = 1, affect_silicon = 1)
 
 			if(user.mind && isrevhead(user)) // alien revhead when?
@@ -117,7 +117,7 @@
 		else
 			flashfail = TRUE
 	else if(issilicon(M))
-		M.Weaken(rand(5, 10))
+		M.Knockdown(rand(5, 10))
 	else
 		flashfail = TRUE
 
@@ -217,7 +217,7 @@
 				var/mob/living/carbon/M = loc
 				var/safety = M.eyecheck()
 				if(safety <= 0)
-					M.Weaken(10)
+					M.Knockdown(10)
 					M.flash_eyes(visual = 1)
 					for(var/mob/O in viewers(M, null))
 						O.show_message("<span class='disarm'>[M] is blinded by the flash!</span>")

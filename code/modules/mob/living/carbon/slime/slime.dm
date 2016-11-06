@@ -20,7 +20,7 @@
 
 	can_butcher = 0
 
-	// canstun and canweaken don't affect slimes because they ignore stun and weakened variables
+	// canstun and CANKNOCKDOWN don't affect slimes because they ignore stun and knockdown variables
 	// for the sake of cleanliness, though, here they are.
 	status_flags = CANPARALYSE|CANPUSH
 

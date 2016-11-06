@@ -54,13 +54,13 @@ mob/proc/airflow_stun()
 		return 0
 	if(last_airflow_stun > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_stun_cooldown))
 		return 0
-	if(!(status_flags & CANSTUN) && !(status_flags & CANWEAKEN))
+	if(!(status_flags & CANSTUN) && !(status_flags & CANKNOCKDOWN))
 		to_chat(src, "<span class='notice'>You stay upright as the air rushes past you.</span>")
 		return 0
 
-	if(weakened <= 0)
+	if(knockdown <= 0)
 		to_chat(src, "<span class='warning'>The sudden rush of air knocks you over!</span>")
-	SetWeakened(5)
+	SetKnockdown(5)
 	last_airflow_stun = world.time
 	return
 
@@ -78,13 +78,13 @@ mob/living/carbon/human/airflow_stun()
 	if(shoes)
 		if(CheckSlip() < 1)
 			return 0
-	if(!(status_flags & CANSTUN) && !(status_flags & CANWEAKEN))
+	if(!(status_flags & CANSTUN) && !(status_flags & CANKNOCKDOWN))
 		to_chat(src, "<span class='notice'>You stay upright as the air rushes past you.</span>")
 		return 0
 
-	if(weakened <= 0)
+	if(knockdown <= 0)
 		to_chat(src, "<span class='warning'>The sudden rush of air knocks you over!</span>")
-	SetWeakened(rand(1,5))
+	SetKnockdown(rand(1,5))
 	last_airflow_stun = world.time
 	return
 
@@ -409,9 +409,9 @@ mob/airflow_hit(atom/A)
 	//playsound(get_turf(src), "smash.ogg", 25, 1, -1)
 	if(istype(A,/obj/item))
 		var/obj/item/item = A
-		SetWeakened(item.w_class)
+		SetKnockdown(item.w_class)
 	else
-		SetWeakened(rand(1,5))
+		SetKnockdown(rand(1,5))
 	. = ..()
 
 obj/airflow_hit(atom/A)

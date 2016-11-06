@@ -380,7 +380,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 		src.uses--
 		to_chat(source, "<span class = 'notice'>You feel a sudden surge of energy!</span>")
 		source.SetStunned(0)
-		source.SetWeakened(0)
+		source.SetKnockdown(0)
 		source.SetParalysis(0)
 
 	return

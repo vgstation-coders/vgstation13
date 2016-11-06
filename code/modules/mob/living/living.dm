@@ -523,7 +523,7 @@ Thanks.
 	halloss = 0
 	paralysis = 0
 	stunned = 0
-	weakened = 0
+	knockdown = 0
 	remove_jitter()
 	germ_level = 0
 	next_pain_time = 0
@@ -997,7 +997,7 @@ Thanks.
 	//putting out a fire
 		if(CM.on_fire && CM.canmove)
 			CM.fire_stacks -= 5
-			CM.SetWeakened(3)
+			CM.SetKnockdown(3)
 			playsound(CM.loc, 'sound/effects/bodyfall.ogg', 50, 1)
 			CM.visible_message("<span class='danger'>[CM] rolls on the floor, trying to put themselves out!</span>",
 							   "<span class='warning'>You stop, drop, and roll!</span>")

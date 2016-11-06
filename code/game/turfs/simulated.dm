@@ -101,7 +101,7 @@
 				M.visible_message("<span class='warning'>[M] slips on the floor!</span>", \
 				"<span class='warning'>You slip on the floor!</span>")
 				playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
-				M.Weaken(10)
+				M.Knockdown(10)
 
 			if(3) // Ice
 				if(prob(30) && M.Slip(4, 3))

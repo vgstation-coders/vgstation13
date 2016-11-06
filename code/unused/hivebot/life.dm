@@ -32,7 +32,7 @@
 
 			stunned = max(min(stunned, 10),0)
 			paralysis = max(min(paralysis, 1), 0)
-			weakened = max(min(weakened, 15), 0)
+			knockdown = max(min(knockdown, 15), 0)
 			sleeping = max(min(sleeping, 1), 0)
 			setToxLoss(0)
 			setOxyLoss(0)
@@ -83,8 +83,8 @@
 					if (src.stunned > 0)
 						src.stunned--
 						src.stat = 0
-					if (src.weakened > 0)
-						src.weakened--
+					if (src.knockdown > 0)
+						src.knockdown--
 						src.lying = 0
 						src.stat = 0
 					if (src.paralysis > 0)

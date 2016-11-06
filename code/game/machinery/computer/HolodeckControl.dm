@@ -388,7 +388,7 @@
 			to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 			return
 		G.affecting.forceMove(src.loc)
-		G.affecting.Weaken(5)
+		G.affecting.Knockdown(5)
 		visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on the table.</span>")
 		qdel(W)
 		return
@@ -523,7 +523,7 @@
 			return
 
 		G.affecting.forceMove(src.loc)
-		G.affecting.Weaken(5)
+		G.affecting.Knockdown(5)
 		visible_message("<span class='warning'>[G.assailant] dunks [G.affecting] into the [src]!</span>")
 		qdel(W)
 		return

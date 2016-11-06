@@ -281,7 +281,7 @@
 			if(M.a_intent == I_HURT)//Stungloves. Any contact will stun the alien.
 				if(G.cell.charge >= 2500)
 					G.cell.use(2500)
-					Weaken(5)
+					Knockdown(5)
 					if (stuttering < 5)
 						stuttering = 5
 					Stun(5)
@@ -416,7 +416,7 @@
 			playsound(loc, 'sound/weapons/pierce.ogg', 25, 1, -1)
 			var/damage = 5
 			if(prob(95))
-				Weaken(15)
+				Knockdown(15)
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
 						O.show_message(text("<span class='danger'>[] has tackled down [name]!</span>", M), 1)
@@ -482,7 +482,7 @@
 					if ((O.client && !( O.blinded )))
 						O.show_message(text("<span class='danger'>The [M.name] has shocked []!</span>", src), 1)
 
-				Weaken(power)
+				Knockdown(power)
 				if (stuttering < power)
 					stuttering = power
 				Stun(power)

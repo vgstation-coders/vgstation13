@@ -54,7 +54,7 @@ Obviously, requires DNA2.
 			M.update_mutations()		//update our mutation overlays
 			M.update_body()
 			to_chat(M, "<span class='warning'>You suddenly feel very weak.</span>")
-			M.Weaken(3)
+			M.Knockdown(3)
 			M.emote("collapse")
 
 /spell/targeted/genetic/hulk

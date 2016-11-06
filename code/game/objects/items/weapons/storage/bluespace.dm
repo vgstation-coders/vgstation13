@@ -43,7 +43,7 @@
 
 //BoH+BoH=Singularity, WAS commented out
 /obj/item/weapon/storage/backpack/holding/proc/singulocreate(var/obj/item/weapon/storage/backpack/holding/H, var/mob/user)
-	user.Weaken(10)
+	user.Knockdown(10)
 	investigation_log(I_SINGULO,"has become a singularity. Caused by [user.key]")
 	message_admins("[key_name_admin(user)] detonated [H] and [src], creating a singularity.")
 	log_game("[key_name(user)] detonated [H] and [src], creating a singularity.")
@@ -51,7 +51,7 @@
 	to_chat(user, "<span class='danger'>FUCK!</span>")
 	qdel(H)
 	new /obj/machinery/singularity (get_turf(src))
-	user.throw_at(get_turf(src), 10, 5) //if they moved away from the turf before getting weakened, they end up back in the singulo's grasp anyway.
+	user.throw_at(get_turf(src), 10, 5) //if they moved away from the turf before getting knockdown, they end up back in the singulo's grasp anyway.
 	qdel(src)
 
 /obj/item/weapon/storage/backpack/holding/singularity_act(var/current_size,var/obj/machinery/singularity/S)

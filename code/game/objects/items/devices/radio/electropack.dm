@@ -139,7 +139,7 @@
 		s.set_up(3, 1, M)
 		s.start()
 
-		M.Weaken(10)
+		M.Knockdown(10)
 
 	if(master && isWireCut(1))
 		master.receive_signal()

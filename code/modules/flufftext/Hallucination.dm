@@ -269,7 +269,7 @@ mob/living/carbon/proc/handle_hallucinations()
 				flash_eyes(visual = 1)
 
 				if(prob(20))
-					src.Weaken(10)
+					src.Knockdown(10)
 			if(82 to 85) //Clown
 				src << get_sfx("clownstep")
 				spawn(rand(16,28))

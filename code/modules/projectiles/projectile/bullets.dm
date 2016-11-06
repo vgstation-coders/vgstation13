@@ -297,7 +297,7 @@
 				M.playsound_local(starting, 'sound/weapons/hecate_fire_far.ogg', 25, 1)
 	for (var/mob/living/carbon/human/H in range(src,1))
 		if(!H.earprot())
-			H.Weaken(2)
+			H.Knockdown(2)
 			H.Stun(2)
 			H.ear_damage += rand(3, 5)
 			H.ear_deaf = max(H.ear_deaf,15)

@@ -210,7 +210,7 @@
 				M.Sleeping(300)//putting them to sleep for 5 minutes.
 				to_chat(usr, "<span class='danger'>The ritual didn't work! Looks like this person just isn't suited to be part of our cult.</span>")
 				to_chat(usr, "<span class='notice'>It appears that the ritual at least put the target to sleep. Try to figure a way to deal with them before they wake up.</span>")
-			else if(M.weakened)
+			else if(M.knockdown)
 				to_chat(usr, "<span class='danger'>The ritual didn't work, either something is disrupting it, or this person just isn't suited to be part of our cult.</span>")
 				to_chat(usr, "<span class='danger'>You have to restrain him before the talisman's effects wear off!</span>")
 			to_chat(M, "<span class='sinister'>Your blood pulses. Your head throbs. The world goes red. All at once you are aware of a horrible, horrible truth. The veil of reality has been ripped away and in the festering wound left behind something sinister takes root.</span>")
@@ -1288,13 +1288,13 @@
 				C.flash_eyes(visual = 1)
 				if(C.stuttering < 1 && (!(M_HULK in C.mutations)))
 					C.stuttering = 1
-				C.Weaken(1)
+				C.Knockdown(1)
 				C.Stun(1)
 				C.visible_message("<span class='warning'>The rune explodes in a bright flash.</span>")
 
 			else if(issilicon(L))
 				var/mob/living/silicon/S = L
-				S.Weaken(5)
+				S.Knockdown(5)
 				S.visible_message("<span class='warning'>BZZZT... The rune has exploded in a bright flash.</span>")
 	qdel(src)
 	return

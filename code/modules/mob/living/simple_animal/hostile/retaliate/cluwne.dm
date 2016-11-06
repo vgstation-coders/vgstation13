@@ -152,7 +152,7 @@
 							var/mob/living/L = target_mob
 							L.attack_animal(src)
 							if(prob(10))
-								L.Weaken(5)
+								L.Knockdown(5)
 								L.visible_message("<span class='danger'>\the [src] slips \the [L]!</span>")
 							for(var/mob/H in viewers(src, null))
 								if(istype(H, /mob/living/simple_animal/clown))
@@ -245,7 +245,7 @@
 	if(isliving(target))
 		var/mob/living/L = target
 		if(prob(10))
-			L.Weaken(5)
+			L.Knockdown(5)
 			L.visible_message("<span class='danger'>\The [src.name] slips \the [L.name]!</span>")
 			return
 	return ..()

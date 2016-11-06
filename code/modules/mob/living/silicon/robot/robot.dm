@@ -1016,7 +1016,7 @@
 				if (M.class == "combat")
 					damage += 15
 					if(prob(20))
-						weakened = max(weakened,4)
+						knockdown = max(knockdown,4)
 						stunned = max(stunned,4)
 				What is this?*/
 

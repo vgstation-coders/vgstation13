@@ -1447,7 +1447,7 @@ var/list/slot_equipment_priority = list( \
 			lying = (category.flags & LOCKED_SHOULD_LIE) ? TRUE : FALSE //A lying value that !=1 will break this
 
 
-	else if(isUnconscious() || weakened || paralysis || resting || !can_stand)
+	else if(isUnconscious() || knockdown || paralysis || resting || !can_stand)
 		stop_pulling()
 		lying = 1
 		canmove = 0
@@ -1554,21 +1554,21 @@ var/list/slot_equipment_priority = list( \
 		stunned = max(stunned + amount,0)
 	return
 
-/mob/proc/Weaken(amount)
-	if(status_flags & CANWEAKEN)
-		weakened = max(max(weakened,amount),0)
+/mob/proc/Knockdown(amount)
+	if(status_flags & CANKNOCKDOWN)
+		knockdown = max(max(knockdown,amount),0)
 		update_canmove()	//updates lying, canmove and icons
 	return
 
-/mob/proc/SetWeakened(amount)
-	if(status_flags & CANWEAKEN)
-		weakened = max(amount,0)
+/mob/proc/SetKnockdown(amount)
+	if(status_flags & CANKNOCKDOWN)
+		knockdown = max(amount,0)
 		update_canmove()	//updates lying, canmove and icons
 	return
 
-/mob/proc/AdjustWeakened(amount)
-	if(status_flags & CANWEAKEN)
-		weakened = max(weakened + amount,0)
+/mob/proc/AdjustKnockdown(amount)
+	if(status_flags & CANKNOCKDOWN)
+		knockdown = max(knockdown + amount,0)
 		update_canmove()	//updates lying, canmove and icons
 	return
 

@@ -109,7 +109,7 @@
 		return
 	..()
 
-/mob/living/carbon/human/Weaken(amount)
+/mob/living/carbon/human/Knockdown(amount)
 	if(M_HULK in mutations)
 		return
 	..()
