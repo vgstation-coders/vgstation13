@@ -1023,12 +1023,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/assembly/signaler = 4,
 		/obj/item/weapon/wirecutters = 1,
 		/obj/item/weapon/cartridge/signal = 4,
- 		/obj/item/weapon/stock_parts/manipulator = 5,
- 		/obj/item/weapon/stock_parts/micro_laser = 3,
- 		/obj/item/weapon/stock_parts/matter_bin = 5,
- 		/obj/item/weapon/stock_parts/scanning_module = 3,
- 		/obj/item/weapon/stock_parts/capacitor = 2,
- 		/obj/item/weapon/stock_parts/console_screen = 4,
 		)
 	contraband = list(
 		/obj/item/device/flashlight = 5,
@@ -1757,8 +1751,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/cell/high = 10,
 		/obj/item/weapon/reagent_containers/glass/fuelcan = 5,
 		/obj/item/weapon/stock_parts/capacitor = 10,
-		/obj/item/device/holomap = 2,
-		/obj/item/weapon/reagent_containers/glass/bottle/sacid = 3,
+		/obj/item/device/holomap = 2
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
