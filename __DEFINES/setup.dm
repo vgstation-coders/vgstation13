@@ -862,8 +862,9 @@ SEE_PIXELS	256
 // Second bit is persistence (save to char prefs).
 // Third bit is whether we polled for that role yet.
 #define ROLEPREF_ENABLE         1 // Enable role for this character.
-#define ROLEPREF_PERSIST        2 // Save preference.
+#define ROLEPREF_PERSIST        2 // Used to flag a pref as Always/Never
 #define ROLEPREF_POLLED         4 // Have we polled this guy?
+#define ROLEPREF_SAVE           8 // Flag the pref to be saved permanently.
 
 #define ROLEPREF_NEVER   ROLEPREF_PERSIST
 #define ROLEPREF_NO      0
@@ -871,8 +872,7 @@ SEE_PIXELS	256
 #define ROLEPREF_ALWAYS  (ROLEPREF_ENABLE|ROLEPREF_PERSIST)
 
 // Masks.
-#define ROLEPREF_SAVEMASK 1 // 0b00000001 - For saving shit.
-#define ROLEPREF_VALMASK  3 // 0b00000011 - For a lot of things.
+#define ROLEPREF_VALMASK  3 // 0b00000011 - Used to get ROLEPREF flags without the ROLEPREF_POLLED and ROLEPREF_SAVE bits
 
 // Should correspond to jobbans, too.
 #define ROLE_ALIEN      "alien"
