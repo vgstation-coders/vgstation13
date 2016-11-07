@@ -196,7 +196,7 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 
 	gen_soft_radius = 5 //Soft generator radius, different rules beyond this point. Starts after minimum but ends relative to center
 	gen_hard_radius = 10 //Hard generator radius, nothing will generate past this, ever
-	gen_prob_base = 75 //Base probability to plant something on a tile
+	gen_prob_base = 65 //Base probability to plant something on a tile
 	gen_prob_soft_fall = 5 //Probability reduction per tile after center
 	gen_prob_hard_fall = 10	//Probability reduction per tile after last soft radius, overrides the former
 	gen_empty_only = 1 //Generator will only work on tiles that are completely empty (!contents.len)
@@ -241,7 +241,7 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 
 	gen_soft_radius = 15 //Soft generator radius, different rules beyond this point. Starts after minimum but ends relative to center
 	gen_hard_radius = 30 //Hard generator radius, nothing will generate past this, ever
-	gen_prob_base = 90 //Base probability to plant something on a tile
+	gen_prob_base = 45 //Base probability to plant something on a tile
 	gen_prob_soft_fall = 2 //Probability reduction per tile after center
 	gen_prob_hard_fall = 4	//Probability reduction per tile after last soft radius, overrides the former
 
@@ -272,7 +272,7 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 
 	gen_soft_radius = 10 //Soft generator radius, different rules beyond this point. Starts after minimum but ends relative to center
 	gen_hard_radius = 15 //Hard generator radius, nothing will generate past this, ever
-	gen_prob_base = 85 //Base probability to plant something on a tile
+	gen_prob_base = 35 //Base probability to plant something on a tile
 	gen_prob_soft_fall = 1 //Probability reduction per tile after center
 	gen_prob_hard_fall = 15	//Probability reduction per tile after last soft radius, overrides the former
 	gen_empty_only = 1 //Generator will only work on tiles that are completely empty (!contents.len)
@@ -296,7 +296,7 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 
 	gen_soft_radius = 15 //Soft generator radius, different rules beyond this point. Starts after minimum but ends relative to center
 	gen_hard_radius = 30 //Hard generator radius, nothing will generate past this, ever
-	gen_prob_base = 95 //Base probability to plant something on a tile
+	gen_prob_base = 35 //Base probability to plant something on a tile
 	gen_prob_soft_fall = 1 //Probability reduction per tile after center
 	gen_prob_hard_fall = 5	//Probability reduction per tile after last soft radius, overrides the former
 
