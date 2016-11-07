@@ -515,7 +515,7 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas/restrainment
 	name = "\improper PCMK-7 Restrainment Module"
 	desc = "This upgraded version of the PCMK-6 is capable of applying handcuffs as well as launching bolas."
-	range = BOTH
+	range = MELEE | RANGED
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas/restrainment/action(target)
 	if(!action_checks(target))
