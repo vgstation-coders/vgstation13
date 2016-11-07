@@ -3,9 +3,9 @@
 //**************************************************************
 
 /datum/map/active
-	nameShort = "taxi"
+	nameShort = "snaxi"
 	nameLong = "Taxi Station"
-	map_dir = "taxistation"
+	map_dir = "snowtaxi"
 	tDomeX = 127
 	tDomeY = 67
 	tDomeZ = 2
