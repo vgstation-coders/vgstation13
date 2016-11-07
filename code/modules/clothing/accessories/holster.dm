@@ -102,11 +102,13 @@
 /obj/item/clothing/accessory/holster/on_attached(obj/item/clothing/under/S)
 	..()
 	//We're making a new verb, see http://www.byond.com/forum/?post=238593
-	attached_to.verbs += new/obj/item/clothing/accessory/holster/verb/holster_verb(attached_to,holster_verb_name)
+	if(attached_to)
+		attached_to.verbs += new/obj/item/clothing/accessory/holster/verb/holster_verb(attached_to,holster_verb_name)
 
 /obj/item/clothing/accessory/holster/on_removed(mob/user as mob)
 	//Yes, we're calling "new" when removing a verb. I blame verbs entirely for this shit. See: http://www.byond.com/forum/?post=80230
-	attached_to.verbs -= new/obj/item/clothing/accessory/holster/verb/holster_verb(attached_to,holster_verb_name)
+	if(attached_to)
+		attached_to.verbs -= new/obj/item/clothing/accessory/holster/verb/holster_verb(attached_to,holster_verb_name)
 	..()
 
 //

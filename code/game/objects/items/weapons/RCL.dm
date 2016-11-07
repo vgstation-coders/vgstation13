@@ -100,11 +100,12 @@
 	set_move_event(wearer)
 
 /obj/item/weapon/rcl/proc/set_move_event(mob/user)
-	if(active && user)
-		trigger(user)
-		targetMoveKey = user.on_moved.Add(src, "holder_moved")
-		return
-	user.on_moved.Remove(targetMoveKey)
+	if(user)
+		if(active)
+			trigger(user)
+			targetMoveKey = user.on_moved.Add(src, "holder_moved")
+			return
+		user.on_moved.Remove(targetMoveKey)
 	targetMoveKey = null
 
 /obj/item/weapon/rcl/attack_self(mob/user as mob)
