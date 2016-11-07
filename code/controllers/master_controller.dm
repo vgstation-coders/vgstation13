@@ -145,7 +145,7 @@ datum/controller/game_controller/proc/setup()
 									   new /obj/structure/radial_gen/movable/snow_nature/snow_forest/large/dense(mapspawned = 0) = 5,
 									   new /obj/structure/radial_gen/movable/snow_nature/snow_grass(mapspawned = 0) = 15,
 									   new /obj/structure/radial_gen/movable/snow_nature/snow_grass/large(mapspawned = 0) = 5)
-				chance = 900 // make sure all items which have a chance of being spawned have the CANT_LOCK_TO_AT_ALL_EVEN_CONCIEVABLY flag in lockflags or the game will run out of lists
+				chance = 1000 // make sure all items which have a chance of being spawned have the CANT_LOCK_TO_AT_ALL_EVEN_CONCIEVABLY flag in lockflags or the game will run out of lists
 				rmap_name = "snow"
 
 		log_startup_progress("Radially generating a [rmap_name] map...")
