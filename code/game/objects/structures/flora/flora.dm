@@ -4,7 +4,7 @@
 
 /obj/structure/flora/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(shovelaway && istype(W, /obj/item/weapon/pickaxe/shovel))
-		to_chat(user,"you clear away \the [src]")
+		to_chat(user,"<span class='notice'>You clear away \the [src]</span>")
 		qdel(src)
 		return
 	..()

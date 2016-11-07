@@ -42,18 +42,20 @@ var/global/list/snow_turfs = list()
 
 	if(z != map.zCentcomm)
 		snow_turfs["[z]"] += src
+	snowballs = rand(1,10)
 	..()
 	if(ticker)
 		initialize()
 
 /turf/snow/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
-	snow_turfs["[z]"] -= src
+	if(z != map.zCentcomm)
+		snow_turfs["[z]"] -= src
 	return ..()
 
 /turf/snow/initialize()
 	var/snowrand = rand(0, 5)
 	var/list/oranges = orange(1,src)
-	if(locate(/turf/simulated) in oranges || (locate(/turf/unsimulated) in oranges && z != map.zCentcomm))
+	if(locate(/turf/simulated) in oranges || (z != map.zCentcomm && locate(/turf/unsimulated) in oranges) )
 		update_icon(oranges,snowrand)
 		set_light(5, 0.5)
 	else if(cached_appearances["[snowrand]-0"])
@@ -175,7 +177,7 @@ var/global/list/snow_turfs = list()
 	name = "dirt path"
 	desc = "A frozen dirt path."
 	icon = 'icons/turf/new_snow.dmi'
-	canSmoothWith = "/obj/dirtpath=0&/turf/simulated"
+	canSmoothWith = "/obj/dirtpath=0&/turf/simulated&/turf/unsimulated"
 	var/global/list/diags = list()
 	anchored = 1
 	density = 0
@@ -200,6 +202,7 @@ var/global/list/snow_turfs = list()
 			if(do_after(user, src, 5))
 				user.visible_message("<span class='notice'>[user] finishes digging at the dirt path.</span>", \
 					"<span class='notice'>You finish digging at the dirt path.</span>")
+				new /obj/machinery/portable_atmospherics/hydroponics/soil/snow(src)
 	else
 		..()
 
@@ -222,7 +225,7 @@ var/global/list/snow_turfs = list()
 	var/dircount = 0
 	for(var/direction in diagonal)
 		var/turf/adj_tile = get_step(src, direction)
-		if(isSmoothableNeighbor(adj_tile) || locate(/obj/dirtpath,adj_tile))
+		if(isSmoothableNeighbor(adj_tile) || locate(/obj/dirtpath) in adj_tile)
 			if((direction & junction) == direction)
 				overlays += diags["diag[direction]"]
 				dircount++
