@@ -92,12 +92,10 @@
 		return
 	var/N = input("Injection amount:","[src]") as null|num
 	if (N)
-		if(N < min_inject_amount)
-			N = min_inject_amount
-		if(N > max_inject_amount)
-			N = max_inject_amount
-		inject_amount = N
-		to_chat(usr, "<span class='notice'>\The [src] will now inject [N] units each hit.</span>")
+		if(usr.incapacitated() || !(usr in range(src,0)))
+			return
+		inject_amount = Clamp(N, min_inject_amount, max_inject_amount)
+		to_chat(usr, "<span class='notice'>\The [src] will now inject [inject_amount] units each hit.</span>")
 
 /obj/item/weapon/sword/venom/examine(mob/user)
 	..()
