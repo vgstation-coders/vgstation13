@@ -67,9 +67,9 @@
 		return
 	to_chat(user, "Planting explosives...")
 	if(ismob(target))
+		var/mob/M = target
 
-		user.attack_log += "\[[time_stamp()]\] <font color='red'> [user.real_name] tried planting [name] on [target:real_name] ([target:ckey])</font>"
-
+		add_attacklogs(user, M, "tried planting [name] on")
 		user.visible_message("<span class='warning'>[user.name] is trying to plant some kind of explosive on [target.name]!</span>")
 
 	if(do_after(user, target, 50) && user.Adjacent(target))
