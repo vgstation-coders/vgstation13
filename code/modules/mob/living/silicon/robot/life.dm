@@ -30,7 +30,7 @@
 
 //	SetStunned(min(stunned, 30))
 	SetParalysis(min(paralysis, 30))
-//	SetWeakened(min(weakened, 20))
+//	SetKnockdown(min(knockdown, 20))
 	sleeping = 0
 	adjustBruteLoss(0)
 	adjustToxLoss(0)
@@ -80,18 +80,18 @@
 		src.sleeping--
 
 	if(src.resting)
-		Weaken(5)
+		Knockdown(5)
 
 	if(health <= 0 && src.stat != 2) //die only once
 		death()
 
 	if (src.stat != 2) //Alive.
-		if (src.paralysis || src.stunned || src.weakened) //Stunned etc.
+		if (src.paralysis || src.stunned || src.knockdown) //Stunned etc.
 			src.stat = 1
 			if (src.stunned > 0)
 				AdjustStunned(-1)
-			if (src.weakened > 0)
-				AdjustWeakened(-1)
+			if (src.knockdown > 0)
+				AdjustKnockdown(-1)
 			if (src.paralysis > 0)
 				AdjustParalysis(-1)
 				src.blinded = 1
@@ -334,7 +334,7 @@
 //Robots on fire
 
 /mob/living/silicon/robot/update_canmove()
-	if(paralysis || stunned || weakened || locked_to || lockcharge)
+	if(paralysis || stunned || knockdown || locked_to || lockcharge)
 		canmove = 0
 	else
 		canmove = 1

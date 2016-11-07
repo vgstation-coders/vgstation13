@@ -30,15 +30,32 @@
 
 	// Handle cooldowns and silencing spammy errors
 	var/silencing = 0
+
+	// We can runtime before config is initialized because BYOND initialize objs/map before a bunch of other stuff happens.
+	// This is a bunch of workaround code for that. Hooray!
+	var/configured_error_cooldown
+	var/configured_error_limit
+	var/configured_error_silence_time
+	if(config)
+		configured_error_cooldown = config.error_cooldown
+		configured_error_limit = config.error_limit
+		configured_error_silence_time = config.error_silence_time
+	else
+		configured_error_cooldown = initial(config.error_cooldown)
+		configured_error_limit = initial(config.error_limit)
+		configured_error_silence_time = initial(config.error_silence_time)
+
 	// Each occurrence of a unique error adds to its "cooldown" time...
-	cooldown = max(0, cooldown - (world.time - last_seen)) + config.error_cooldown
+	cooldown = max(0, cooldown - (world.time - last_seen)) + configured_error_cooldown
+
+
 	// ... which is used to silence an error if it occurs too often, too fast
-	if (cooldown > config.error_cooldown * config.error_limit)
+	if (cooldown > configured_error_cooldown * configured_error_limit)
 		cooldown = -1
 		silencing = 1
 		spawn (0)
 			usr = null
-			sleep(config.error_silence_time)
+			sleep(configured_error_silence_time)
 			var/skipcount = abs(global.error_cooldown[erroruid]) - 1
 			global.error_cooldown[erroruid] = 0
 			if (skipcount > 0)
@@ -81,7 +98,7 @@
 		desclines.Add(usrinfo)
 
 	if (silencing)
-		desclines += "  (This error will now be silenced for [config.error_silence_time / 600] minutes)"
+		desclines += "  (This error will now be silenced for [configured_error_silence_time / 600] minutes)"
 
 	// Now to actually output the error info...
 	world.log << "\[[time_stamp()]] Runtime in [e.file],[e.line]: [e]"

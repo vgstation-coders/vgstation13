@@ -400,7 +400,7 @@
 			if(C.locked_to)
 				C.locked_to = 0
 			C.Stun(5)
-			C.Weaken(5)
+			C.Knockdown(5)
 			C.apply_effect(STUTTER, 5)
 			playsound(src, pick(hit_sound), 50, 0, 0)
 			breakthrough = 1
@@ -618,12 +618,12 @@
 			loc.Exited(src)
 		loc = null
 		if(T)
-			if(istype(src, /obj/mecha/working/ripley/))
-				var/obj/mecha/working/ripley/R = src
-				if(R.cargo)
-					for(var/obj/O in R.cargo) //Dump contents of stored cargo
+			if(istype(src, /obj/mecha/working/))
+				var/obj/mecha/working/W = src
+				if(W.cargo)
+					for(var/obj/O in W.cargo) //Dump contents of stored cargo
 						O.forceMove(T)
-						R.cargo -= O
+						W.cargo -= O
 						T.Entered(O)
 
 			if(prob(30))
@@ -1287,7 +1287,7 @@
 					loc.assume_air(removed)
 
 			occupant.SetStunned(5)
-			occupant.SetWeakened(5)
+			occupant.SetKnockdown(5)
 			to_chat(occupant, "You were blown out of the mech!")
 	*/
 		src.log_message("[mob_container] moved out.")
@@ -1329,7 +1329,7 @@
 	spark_system.start()
 	if (occupant)
 		to_chat(occupant, "<span class='danger'>You feel a sharp shock!</span>")
-		occupant.Weaken(10)
+		occupant.Knockdown(10)
 		spawn(10)
 		emergency_eject()
 

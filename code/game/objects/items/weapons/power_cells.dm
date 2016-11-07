@@ -18,6 +18,8 @@
 	melt_temperature = MELTPOINT_STEEL // Rugged
 	var/rigged = 0		// true if rigged to explode
 	var/minor_fault = 0 //If not 100% reliable, it will build up faults.
+	var/brute_damage = 0 //Used by cyborgs
+	var/electronics_damage = 0 //Used by cyborgs
 
 	suicide_act(mob/user)
 		to_chat(viewers(user), "<span class='danger'>[user] is licking the electrodes of the [src.name]! It looks like \he's trying to commit suicide.</span>")

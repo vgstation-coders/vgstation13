@@ -264,7 +264,7 @@
 			M.sleeping = 0
 			M.stuttering += 20
 			M.ear_deaf += 30
-			M.Weaken(3)
+			M.Knockdown(3)
 			if(prob(30))
 				M.Stun(10)
 				M.Paralyse(4)

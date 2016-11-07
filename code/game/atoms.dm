@@ -797,3 +797,6 @@ its easier to just keep the beam vertical.
 	if(newtarget == targloc)
 		return target
 	return newtarget
+
+/atom/proc/animationBolt(var/mob/firer)
+	return

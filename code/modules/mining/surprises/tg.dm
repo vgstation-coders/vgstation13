@@ -80,7 +80,7 @@
 		/obj/structure/bed/chair/vehicle/wizmobile=1
 	)
 	fluffitems = list(
-		/obj/structure/safe/floor=1,
+		/obj/structure/safe/floor/wizard=1,
 		// /obj/structure/wardrobe=1,
 		/obj/item/weapon/storage/belt/soulstone=1,
 		/obj/item/trash/candle=3,

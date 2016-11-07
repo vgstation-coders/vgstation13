@@ -250,10 +250,10 @@
 					M.Stun(2)
 				if(0)
 					M.Stun(4)
-					M.Weaken(10)
+					M.Knockdown(10)
 				if(-1)
 					M.Stun(7)
-					M.Weaken(15)
+					M.Knockdown(15)
 
 		if(ear_safety < 2)
 			switch(ear_safety)

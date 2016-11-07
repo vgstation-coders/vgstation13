@@ -38,16 +38,6 @@
 	category = "Engineering Boards"
 	build_path = /obj/item/weapon/intercom_electronics
 
-/datum/design/conveyor
-	name = "Circuit Design (Conveyor)"
-	desc = "Allows for the construction of circuit boards used to build a conveyor belt."
-	id = "conveyor"
-	req_tech = list(Tc_PROGRAMMING = 2)
-	build_type = IMPRINTER
-	materials = list(MAT_GLASS = 200, SACID = 5)
-	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/conveyor
-
 /datum/design/apc_board
 	name = "Circuit Design (Power Control Module)"
 	desc = "Allows for the construction of circuit boards used to build a new APC"

@@ -19,7 +19,7 @@
 	var/frequency = 0
 	var/obj/machinery/computer/cloning/connected = null //So we remember the connected clone machine.
 	var/mess = 0 //Need to clean out it if it's full of exploded clone.
-	var/attempting = 0 //One clone attempt at a time thanks
+	var/working = 0 //One clone attempt at a time thanks
 	var/eject_wait = 0 //Don't eject them as soon as they are created fuckkk
 	var/biomass = 0
 	var/time_coeff = 1 //Upgraded via part upgrading
@@ -185,7 +185,7 @@
 
 //Start growing a human clone in the pod!
 /obj/machinery/cloning/clonepod/proc/growclone(var/datum/dna2/record/R)
-	if(mess || attempting)
+	if(mess || working)
 		return 0
 	var/datum/mind/clonemind = locate(R.mind)
 	if(!istype(clonemind,/datum/mind))	//not a mind
@@ -209,7 +209,7 @@
 
 
 	src.heal_level = rand(10,40) //Randomizes what health the clone is when ejected
-	src.attempting = 1 //One at a time!!
+	src.working = 1 //One at a time!!
 	src.locked = 1
 
 	src.eject_wait = 1
@@ -278,7 +278,6 @@
 	H.real_name = H.dna.real_name
 
 	H.suiciding = 0
-	src.attempting = 0
 	return 1
 
 //Grow clones to maturity then kick them out.  FREELOADERS
@@ -409,6 +408,7 @@
 
 	if (mess) //Clean that mess and dump those gibs!
 		mess = 0
+		working = 0 //NOW we're done.
 		gibs(loc)
 		icon_state = "pod_0"
 
@@ -441,6 +441,7 @@
 		biomass = 0
 
 	connected.update_icon()
+	working = 0 //NOW we're done.
 
 	return 1
 

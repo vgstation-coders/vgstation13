@@ -502,11 +502,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 		//Internal wounds get worse over time. Low temperatures (cryo) stop them.
 		if(W.internal && !W.is_treated() && owner.bodytemperature >= 170 && !(owner.species && owner.species.flags & NO_BLOOD))
-			if(!owner.reagents.has_reagent(BICARIDINE) && !owner.reagents.has_reagent(INAPROVALINE) && !owner.reagents.has_reagent(CLOTTING_AGENT))	//Bicard, inaprovaline, and clotting agent stops internal wounds from growing bigger with time, and also stop bleeding
+			if(!owner.reagents.has_reagent(BICARIDINE) && !owner.reagents.has_reagent(INAPROVALINE) && !owner.reagents.has_reagent(CLOTTING_AGENT) && !owner.reagents.has_reagent(BIOFOAM))	//Bicard, inaprovaline, clotting agent, and biofoam stop internal wounds from growing bigger with time, and also slow bleeding
 				W.open_wound(0.1 * wound_update_accuracy)
 				owner.vessel.remove_reagent(BLOOD, 0.05 * W.damage * wound_update_accuracy)
 
-			owner.vessel.remove_reagent(BLOOD, 0.02 * W.damage * wound_update_accuracy) //Bicaridine slows Internal Bleeding
+			if(!owner.reagents.has_reagent(CLOTTING_AGENT) && !owner.reagents.has_reagent(BIOFOAM))	//Clotting agent and biofoam stop bleeding entirely.
+				owner.vessel.remove_reagent(BLOOD, 0.02 * W.damage * wound_update_accuracy)
 			if(prob(1 * wound_update_accuracy))
 				owner.custom_pain("You feel a stabbing pain in your [display_name]!", 1)
 
@@ -632,9 +633,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 		src.status &= ~ORGAN_SPLINTED
 		src.status &= ~ORGAN_DEAD
 
-		for(var/implant in implants)
-			qdel(implant)
-
 		//If any organs are attached to this, destroy them
 		for(var/datum/organ/external/O in children)
 			O.droplimb(1)
@@ -645,6 +643,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 			if(species) //Transfer species to the generated organ
 				organ.species = src.species
 				organ.update_icon()
+
+		for(var/implant in implants)
+			qdel(implant)
 
 		src.species = null
 

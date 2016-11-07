@@ -425,7 +425,12 @@
 	if(!istype(M))
 		return
 
-	M.changeling_lesser_form()
+	if(ishuman(M))
+		M.changeling_lesser_form()
+	else if(ismonkey(M))
+		M.changeling_lesser_transform()
+	else
+		to_chat(M, "<span class='warning'>We cannot perform this ability in this form!</span>")
 
 //Transform into a monkey. 	//TODO replace with monkeyize proc
 /mob/proc/changeling_lesser_form()
@@ -444,63 +449,13 @@
 	C.visible_message("<span class='warning'>[C] transforms!</span>")
 	changeling.geneticdamage = 30
 	to_chat(C, "<span class='warning'>Our genes cry out!</span>")
-
-	C.monkeyizing = 1
-	C.canmove = 0
-	C.icon = null
-	C.overlays.len = 0
-	C.invisibility = 101
-	C.delayNextAttack(50)
-
-	var/atom/movable/overlay/animation = new /atom/movable/overlay( C.loc )
-	animation.icon_state = "blank"
-	animation.icon = 'icons/mob/mob.dmi'
-	animation.master = src
-	flick("h2monkey", animation)
-	sleep(48)
-	animation.master = null
-	qdel(animation)
-
-
-	var/mob/living/carbon/monkey/O = new /mob/living/carbon/monkey(src)
-	O.dna = C.dna.Clone()
-	C.dna = null
-	C.transferImplantsTo(O)
-	C.transferBorers(O)
 	C.remove_changeling_verb() //remove the verb holder
-
-	for(var/obj/item/W in C)
-		C.drop_from_inventory(W)
-	for(var/obj/T in C)
-		qdel(T)
-
-	O.forceMove(C.loc)
-	O.name = "monkey ([rand(1,1000)])"
-	O.setToxLoss(C.getToxLoss())
-	O.adjustBruteLoss(C.getBruteLoss())
-	O.setOxyLoss(C.getOxyLoss())
-	O.adjustFireLoss(C.getFireLoss())
-	O.stat = C.stat
-	O.delayNextAttack(0)
-	O.a_intent = I_HURT
-	C.mind.transfer_to(O)
+	var/mob/living/carbon/monkey/O = C.monkeyize(ignore_primitive = 1) // stops us from becoming the monkey version of whoever we were pretending to be
 	O.make_changeling(1)
-	O.add_changeling_verb(/obj/item/verbs/changeling/proc/changeling_lesser_transform)
 	O.changeling_update_languages(O.mind.changeling.absorbed_languages)
 	feedback_add_details("changeling_powers","LF")
-	qdel(C)
-	C =  null
+	C = null
 	return 1
-
-/obj/item/verbs/changeling/proc/changeling_lesser_transform()
-	set category = "Changeling"
-	set name = "Transform (1)"
-
-	var/mob/M = loc
-	if(!istype(M))
-		return
-
-	M.changeling_lesser_transform()
 
 //Transform into a human
 /mob/proc/changeling_lesser_transform()
@@ -730,7 +685,7 @@
 	C.stat = 0
 	C.SetParalysis(0)
 	C.SetStunned(0)
-	C.SetWeakened(0)
+	C.SetKnockdown(0)
 	C.lying = 0
 	C.update_canmove()
 
@@ -1099,7 +1054,7 @@ var/list/datum/dna/hivemind_bank = list()
 		return
 
 	to_chat(target, "<span class='userdanger'>Your muscles begin to painfully tighten.</span>")
-	target.Weaken(20)
+	target.Knockdown(20)
 	feedback_add_details("changeling_powers", "PS")
 	return 1
 

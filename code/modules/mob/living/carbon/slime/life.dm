@@ -295,8 +295,8 @@
 			if (src.stunned > 0)
 				AdjustStunned(-1)
 				src.stat = 0
-			if (src.weakened > 0)
-				AdjustWeakened(-1)
+			if (src.knockdown > 0)
+				AdjustKnockdown(-1)
 				src.lying = 0
 				src.stat = 0
 			if (src.paralysis > 0)
@@ -391,6 +391,8 @@
 				A.powerlevel = max(0, powerlevel-1)
 				A.Friends = Friends
 				A.tame = tame
+				transferImplantsTo(A)
+				transferBorers(A)
 				qdel(src)
 
 

@@ -98,6 +98,26 @@
 /obj/item/weapon/reagent_containers/hypospray/autoinjector/examine(mob/user)
 	..()
 	if(reagents && reagents.reagent_list.len)
-		to_chat(user, "<span class='info'>It ready for injection.</span>")
+		to_chat(user, "<span class='info'>It is ready for injection.</span>")
 	else
-		to_chat(user, "<span class='info'>The autoinjector has been spent.</span>")
+		to_chat(user, "<span class='info'>The [name] has been spent.</span>")
+
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector
+	name = "biofoam injector"
+	desc = "A small, single-use device used to administer biofoam in the field."
+	icon_state = "biofoam1"
+	amount_per_transfer_from_this = 15
+	volume = 15
+	flags = FPRINT
+
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector/New()
+	..()
+	reagents.remove_reagent(DOCTORSDELIGHT, 30)
+	reagents.add_reagent(BIOFOAM, 15)
+	return
+
+/obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector/update_icon()
+	if(reagents.total_volume > 0)
+		icon_state = "biofoam1"
+	else
+		icon_state = "biofoam0"

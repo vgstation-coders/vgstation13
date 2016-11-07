@@ -290,6 +290,13 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Arts and Crafts crate"
 	group = "Supplies"
 
+/datum/supply_packs/artscrafts
+	name = "Marble Block crate"
+	contains = list(/obj/structure/block)
+	cost = 50
+	containertype = /obj/structure/largecrate
+	containername = "marble block crate"
+	group = "Supplies"
 
 /datum/supply_packs/randomised/contraband
 	num_contained = 5
@@ -354,11 +361,24 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/mask/gas/mime,
 					/obj/item/clothing/head/beret,
 					/obj/item/clothing/suit/suspenders,
-					/obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing)
+					/obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing,
+					/obj/item/weapon/hair_dye)
 	cost = 10
 	containertype = /obj/structure/closet/crate/secure
 	containername = "Standard Costumes"
 	access = access_theatre
+	group = "Clothing"
+
+/datum/supply_packs/spookycostume
+	name = "Halloween Costume crate"
+	contains = list(/obj/item/clothing/suit/space/plasmaman/moltar,
+					/obj/item/clothing/head/helmet/space/plasmaman/moltar,
+					/obj/item/clothing/mask/joy,
+					/obj/item/clothing/under/skelevoxsuit,
+					/obj/item/clothing/head/snake)
+	cost = 31
+	containertype = /obj/structure/closet/crate
+	containername = "Halloween Costumes"
 	group = "Clothing"
 
 /datum/supply_packs/wizard
@@ -492,7 +512,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Armored formalwear, for the not-so-best occasions."
 	contraband = 1
 	group = "Clothing"
-	
+
 /datum/supply_packs/waifu
 	name = "Feminine formalwear"
 	contains = list(/obj/item/clothing/under/dress/dress_fire,

@@ -338,7 +338,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 				var/randn = rand(1,100)
 				//var/talked = 0;
 				if (randn <= 25)
-					weakened = 3
+					knockdown = 3
 					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 					visible_message("<span class='danger'>[user] has pushed [src]!</span>")
 					var/obj/item/found = locate(tool_state) in src.module.modules

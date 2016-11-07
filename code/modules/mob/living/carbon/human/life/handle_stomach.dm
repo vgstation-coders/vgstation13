@@ -74,10 +74,10 @@
 					adjustOxyLoss(rand(1,10))
 					to_chat(src, "<span class='danger'>[pick(hunger_phrases)]</span>")
 
-				else if(prob(5)) //5% chance of being weakened
+				else if(prob(5)) //5% chance of being knocked down
 
 					eye_blurry += 10
-					Weaken(10)
+					Knockdown(10)
 					adjustOxyLoss(rand(1,15))
 					to_chat(src, "<span class='danger'>You're starving! The lack of strength makes you black out for a few moments...</span>")
 
@@ -90,8 +90,8 @@
 					adjustOxyLoss(rand(1,20))
 					to_chat(src, "<span class='danger'>You're starving. You feel your life force slowly leaving your body...</span>")
 					eye_blurry += 20
-					if(weakened < 1)
-						Weaken(20)
+					if(knockdown < 1)
+						Knockdown(20)
 
 				else if(paralysis<1 && prob(5)) //Mini seizure (25% duration and strength of a normal seizure)
 
@@ -109,4 +109,4 @@
 				adjustBrainLoss(STARVATION_BRAIN_DAMAGE)
 
 				if(prob(10))
-					Weaken(15)
+					Knockdown(15)

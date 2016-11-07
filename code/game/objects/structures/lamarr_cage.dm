@@ -95,14 +95,15 @@
 	sterile = 1
 	setGender(FEMALE)
 
-/obj/item/clothing/mask/facehugger/lamarr/New()//to prevent deleting it if aliums are disabled
+/obj/item/clothing/mask/facehugger/lamarr/New()
+	..()
 	create_reagents(15)
 
 /obj/item/clothing/mask/facehugger/lamarr/process()
 	if(istype(loc, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = loc
-		if(src.reagents)
-			for (var/datum/reagent/current_reagent in src.reagents.reagent_list)
+		if(reagents)
+			for (var/datum/reagent/current_reagent in reagents.reagent_list)
 				if (current_reagent.id == CREATINE)
 					to_chat(H, "<span class='warning'>[src]'s body contorts and expands!</span>")
 					var/index = H.is_holding_item(src)
@@ -113,15 +114,12 @@
 					if(index)
 						H.put_in_hand(index, I)
 					qdel(src)
+					return
 
-		src.reagents.clear_reagents()
+		reagents.clear_reagents()
 	..()
 
 /obj/item/clothing/mask/facehugger/lamarr/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/reagent_containers/syringe))
-		if(src.loc == user && user.is_holding_item(W))
-			processing_objects.Add(src)
-	else
+	if(!istype(W, /obj/item/weapon/reagent_containers/syringe))
 		..(W, user)
-		return
 

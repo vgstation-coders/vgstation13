@@ -187,3 +187,29 @@ obj/structure/safe/ex_act(severity)
 
 /obj/structure/safe/floor/hide(var/intact)
 	invisibility = intact ? 101 : 0
+
+/obj/structure/safe/floor/wizard	//Given that these are so difficult to open, and only spawn in wizard dens, they should have some good loot.
+	var/list/loot_list = list(
+		/obj/item/weapon/spellbook/oneuse/fireball,
+		/obj/item/weapon/spellbook/oneuse/smoke,
+		/obj/item/weapon/spellbook/oneuse/blind,
+		/obj/item/weapon/spellbook/oneuse/subjugate,
+		/obj/item/weapon/spellbook/oneuse/mindswap,
+		/obj/item/weapon/spellbook/oneuse/forcewall,
+		/obj/item/weapon/spellbook/oneuse/teleport/blink,
+		/obj/item/weapon/spellbook/oneuse/knock,
+		/obj/item/weapon/spellbook/oneuse/horsemask,
+		/obj/item/weapon/spellbook/oneuse/clown,
+		/obj/item/weapon/spellbook/oneuse/mime,
+		/obj/item/weapon/spellbook/oneuse/shoesnatch,
+		/obj/item/weapon/spellbook/oneuse/bound_object,
+		/obj/item/weapon/gun/energy/staff,
+		/obj/item/weapon/gun/energy/staff/animate,
+		/obj/item/weapon/gun/energy/staff/focus,
+		/obj/item/clothing/suit/space/rig/wizard/complete
+		)
+
+/obj/structure/safe/floor/wizard/New()
+	..()
+	var/I = pick(loot_list)
+	new I(src)

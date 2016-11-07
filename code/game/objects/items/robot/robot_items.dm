@@ -22,7 +22,7 @@
 
 		user.cell.charge -= 30
 
-		M.Weaken(5)
+		M.Knockdown(5)
 		if (M.stuttering < 5)
 			M.stuttering = 5
 		M.Stun(5)

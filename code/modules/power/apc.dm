@@ -967,8 +967,7 @@
 	if(malf.parent)
 		qdel(malf)
 		malf = null
-	src.occupant.verbs += /mob/living/silicon/ai/proc/corereturn
-	src.occupant.verbs += /datum/game_mode/malfunction/proc/takeover
+	src.occupant.add_spell(new /spell/aoe_turf/corereturn, "grey_spell_ready",/obj/screen/movable/spell_master/malf)
 	src.occupant.cancel_camera()
 	if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
 		for(var/obj/item/weapon/pinpointer/point in world)
@@ -992,7 +991,6 @@
 					var/mob/living/silicon/ai/A = AI_mind.current // the current mob the mind owns
 					if(A.stat != DEAD)
 						point.target = A //The pinpointer tracks the AI back into its core.
-
 	else
 		to_chat(src.occupant, "<span class='warning'>Primary core damaged, unable to return core processes.</span>")
 		if(forced)

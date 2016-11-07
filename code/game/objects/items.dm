@@ -196,6 +196,8 @@
 		if(src == user.get_inactive_hand())
 			if(src.flags & TWOHANDABLE)
 				return src.wield(user)
+			if(!user.put_in_hand_check(src, user.get_active_hand()))
+				return
 		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
 		if(!src.canremove)
 			return
@@ -232,6 +234,8 @@
 					M.client.screen -= src
 	src.throwing = 0
 	if (src.loc == user)
+		if(!user.put_in_hand_check(src, user.get_active_hand()))
+			return
 		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
 		if(istype(src, /obj/item/clothing) && !src:canremove)
 			return
@@ -898,7 +902,7 @@
 		/*
 		to_chat(M, "<span class='warning'>You stab yourself in the eye.</span>")
 		M.sdisabilities |= BLIND
-		M.weakened += 4
+		M.AdjustKnockdown(4)
 		M.adjustBruteLoss(10)
 		*/
 
@@ -928,7 +932,7 @@
 					M.drop_item()
 				M.eye_blurry += 10
 				M.Paralyse(1)
-				M.Weaken(4)
+				M.Knockdown(4)
 			if (eyes.damage >= eyes.min_broken_damage)
 				if(M.stat != 2)
 					to_chat(M, "<span class='warning'>You go blind!</span>")
@@ -1059,3 +1063,6 @@ var/global/list/image/blood_overlays = list()
 
 	Crossed(H) //So you can't kick shards while naked without suffering
 	throw_at(T, kick_power, 1)
+
+/obj/item/animationBolt(var/mob/firer)
+	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)

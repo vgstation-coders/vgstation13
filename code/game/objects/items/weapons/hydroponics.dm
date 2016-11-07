@@ -213,7 +213,7 @@
 		M.eye_blurry += force/7
 		if(prob(20))
 			M.Paralyse(force/6)
-			M.Weaken(force/15)
+			M.Knockdown(force/15)
 		M.drop_item()
 
 

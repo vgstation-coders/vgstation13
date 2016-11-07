@@ -14,11 +14,11 @@
 	sparks_spread = 1
 	sparks_amt = 4
 
-	amt_weakened = 8
+	amt_knockdown = 8
 	amt_stunned = 8
 
 	hud_state = "wiz_butt"
-	
+
 	var/summon_bot = 0
 
 /spell/targeted/buttbots_revenge/cast(var/list/targets)
@@ -29,7 +29,7 @@
 			if(C.op_stage.butt != 4) // does the target have an ass
 				if(summon_bot)
 					new /obj/machinery/bot/buttbot(C.loc)
-				else	
+				else
 					var/obj/item/clothing/head/butt/B = new(C.loc)
 					B.transfer_buttdentity(C)
 				C.op_stage.butt = 4 //No having two butts.
@@ -38,7 +38,7 @@
 			C.apply_damage(40, BRUTE, LIMB_GROIN)
 			C.apply_damage(10, BURN, LIMB_GROIN)
 	return
-	
+
 /spell/targeted/buttbots_revenge/empower_spell()
 	spell_levels[Sp_POWER]++
 	summon_bot = 1
@@ -48,7 +48,7 @@
 	desc = "This spell removes the target's ass in a firey explosion, turning it into a fully functioning butt-bot."
 
 	return upgrade_desc
-	
+
 /spell/targeted/buttbots_revenge/get_upgrade_info(upgrade_type, level)
 	if(upgrade_type == Sp_POWER)
 		return "Make the spell instead summon a butt-bot at the target's location."

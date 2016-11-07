@@ -159,6 +159,15 @@
 
 	screen_loc = ui_alien_master
 	length = 9
+	
+/obj/screen/movable/spell_master/malf
+	name = "Malfunction Modules"
+	icon_state = "grey_spell_ready"
+	
+	open_state = "malf_open"
+	closed_state = "malf_closed"
+	
+	screen_loc = ui_alien_master
 
 //////////////ACTUAL SPELLS//////////////
 //This is what you click to cast things//

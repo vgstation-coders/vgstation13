@@ -133,7 +133,7 @@
 	if ((M_HULK in mutations) && health <= 25)
 		mutations.Remove(M_HULK)
 		to_chat(src, "<span class='warning'>You suddenly feel very weak.</span>")
-		Weaken(3)
+		Knockdown(3)
 		emote("collapse")
 		if(reagents.has_reagent(CREATINE))
 			var/datum/reagent/creatine/C = reagents.get_reagent(CREATINE)
@@ -153,7 +153,7 @@
 
 		if (radiation > 100)
 			radiation = 100
-			Weaken(10)
+			Knockdown(10)
 			to_chat(src, "<span class='warning'>You feel weak.</span>")
 			emote("collapse")
 
@@ -169,7 +169,7 @@
 				adjustToxLoss(1)
 				if(prob(5))
 					radiation -= 5
-					Weaken(3)
+					Knockdown(3)
 					to_chat(src, "<span class='warning'>You feel weak.</span>")
 					emote("collapse")
 				updatehealth()
@@ -626,8 +626,8 @@
 		if(stunned)
 			AdjustStunned(-1)
 
-		if(weakened)
-			weakened = max(weakened-1,0)	//before you get mad Rockdtben: I done this so update_canmove isn't called multiple times
+		if(knockdown)
+			knockdown = max(knockdown-1,0)	//before you get mad Rockdtben: I done this so update_canmove isn't called multiple times
 
 		if(stuttering)
 			stuttering = max(stuttering-1, 0)

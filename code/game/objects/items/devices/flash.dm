@@ -3,6 +3,7 @@
 	desc = "Used for blinding and being an asshole."
 	icon_state = "flash"
 	item_state = "flash"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/electronics.dmi', "right_hand" = 'icons/mob/in-hand/right/electronics.dmi')
 	throwforce = 5
 	w_class = W_CLASS_TINY
 	throw_speed = 4
@@ -68,6 +69,7 @@
 				broken = 1
 				to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 				icon_state = "flashburnt"
+				item_state = "flashburnt"
 				return
 			times_used++
 		else	//can only use it  5 times a minute
@@ -83,7 +85,7 @@
 		var/safe = Subject.eyecheck()
 
 		if(safe <= 0)
-			Subject.Weaken(10)
+			Subject.Knockdown(10)
 			Subject.flash_eyes(visual = 1, affect_silicon = 1)
 
 			if(user.mind && isrevhead(user)) // alien revhead when?
@@ -115,7 +117,7 @@
 		else
 			flashfail = TRUE
 	else if(issilicon(M))
-		M.Weaken(rand(5, 10))
+		M.Knockdown(rand(5, 10))
 	else
 		flashfail = TRUE
 
@@ -157,6 +159,7 @@
 				broken = 1
 				to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 				icon_state = "flashburnt"
+				item_state = "flashburnt"
 				return
 			times_used++
 		else	//can only use it  5 times a minute
@@ -207,13 +210,14 @@
 			if(prob(2*times_used))
 				broken = 1
 				icon_state = "flashburnt"
+				item_state = "flashburnt"
 				return
 			times_used++
 			if(istype(loc, /mob/living/carbon) && harm_labeled < min_harm_label)
 				var/mob/living/carbon/M = loc
 				var/safety = M.eyecheck()
 				if(safety <= 0)
-					M.Weaken(10)
+					M.Knockdown(10)
 					M.flash_eyes(visual = 1)
 					for(var/mob/O in viewers(M, null))
 						O.show_message("<span class='disarm'>[M] is blinded by the flash!</span>")
@@ -224,6 +228,7 @@
 		broken = 0
 		times_used = 0
 		icon_state = "flash"
+		item_state = "flash"
 
 /obj/item/device/flash/synthetic
 	name = "synthetic flash"
@@ -237,6 +242,7 @@
 		broken = 1
 		to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 		icon_state = "flashburnt"
+		item_state = "flashburnt"
 
 /obj/item/device/flash/synthetic/attack_self(mob/living/carbon/user as mob, flag = 0, emp = 0)
 	..()
@@ -244,6 +250,7 @@
 		broken = 1
 		to_chat(user, "<span class='warning'>The bulb has burnt out!</span>")
 		icon_state = "flashburnt"
+		item_state = "flashburnt"
 
 /obj/item/device/flash/revsquad
 	limited_conversions = REVSQUAD_FLASH_USES

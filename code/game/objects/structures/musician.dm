@@ -276,7 +276,7 @@
 //////////////////////////////////////////////////////////////////////////
 /obj/structure/piano
 	name = "space piano"
-	desc = "This is a space piano, like a regular piano, but always in tune! Even if the musician isn't."
+	desc = "This is a space piano; just like a regular piano, but always in tune! Even if the musician isn't."
 	icon = 'icons/obj/musician.dmi'
 	icon_state = "piano"
 	anchored = 1
@@ -287,17 +287,17 @@
 /obj/structure/piano/minimoog
 	name = "space minimoog"
 	icon_state = "minimoog"
-	desc = "This is a minimoog, like a space piano, but more spacey!"
-	
+	desc = "This is a minimoog; just like a space piano, but more spacey!"
+
 /obj/structure/piano/New()
 	..()
 	song = new("piano", src)
-	
+
 /obj/structure/piano/random/New()
 	..()
 	if(prob(50))
 		name = "space minimoog"
-		desc = "This is a minimoog, like a space piano, but more spacey!"
+		desc = "This is a minimoog; just like a space piano, but more spacey!"
 		icon_state = "minimoog"
 
 /obj/structure/piano/Destroy()
@@ -314,7 +314,7 @@
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 1
 	if(broken)
-		to_chat(user, "<span class='warning'>That [src] is broken for good.</span>")
+		to_chat(user, "<span class='warning'>\The [src] is broken for good.</span>")
 		return 1
 	interact(user)
 

@@ -33,7 +33,6 @@
 	var/has_enabled_antagHUD = 0
 	var/medHUD = 0
 	var/antagHUD = 0
-	var/atom/movable/following = null
 	incorporeal_move = INCORPOREAL_GHOST
 	var/movespeed = 0.75
 	var/lastchairspin
@@ -111,7 +110,6 @@
 
 /mob/dead/observer/Destroy()
 	..()
-	following = null
 	ghostMulti = null
 	observers.Remove(src)
 
@@ -794,9 +792,11 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	// Toggle alpha
 	if(alpha == 127)
 		alpha = 0
+		mouse_opacity = 0
 		to_chat(src, "<span class='warning'>Sprite hidden.</span>")
 	else
 		alpha = 127
+		mouse_opacity = 1
 		to_chat(src, "<span class='info'>Sprite shown.</span>")
 
 
@@ -886,15 +886,14 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 				if(!T)
 					to_chat(A, "<span class='warning'>Target not in a turf.</span>")
 					return
-				// Why.
-				//if(!client)
-				//	to_chat(A, "<span class='warning'>Target doesn't have a client.</span>")
-				//	return
+				if(locked_to)
+					manual_stop_follow(locked_to)
 				forceMove(T)
-			following = null
 
 	if(href_list["jumptoarenacood"])
 		var/datum/bomberman_arena/targetarena = locate(href_list["targetarena"])
+		if(locked_to)
+			manual_stop_follow(locked_to)
 		usr.forceMove(targetarena.center)
 		to_chat(usr, "Remember to enable darkness to be able to see the spawns. Click on a green spawn between rounds to register on it.")
 

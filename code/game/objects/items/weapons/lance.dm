@@ -178,7 +178,7 @@
 
 
 			if(amount_of_turfs_charged >= 5)
-				victim.Weaken(min(amount_of_turfs_charged-5, 5))//Stun begins at 5 charged turfs. Maximum effect at 10 charged turfs
+				victim.Knockdown(min(amount_of_turfs_charged-5, 5))//Stun begins at 5 charged turfs. Maximum effect at 10 charged turfs
 
 			if(amount_of_turfs_charged >= 10)
 				victim.throw_at(get_edge_target_turf(get_turf(victim), last_move), amount_of_turfs_charged * 0.25, 0.1)

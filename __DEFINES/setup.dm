@@ -245,6 +245,21 @@ var/MAX_EXPLOSION_RANGE = 14
 #define SLOT_TWOEARS 8192
 #define SLOT_LEGS = 16384
 
+
+//MANNEQUIN SLOT BITMASKS
+#define SLOT_MANNEQUIN_ICLOTHING	"uniform"
+#define SLOT_MANNEQUIN_FEET			"shoes"
+#define SLOT_MANNEQUIN_GLOVES		"gloves"
+#define SLOT_MANNEQUIN_EARS			"earset"
+#define SLOT_MANNEQUIN_OCLOTHING	"suit"
+#define SLOT_MANNEQUIN_EYES			"glasses"
+#define SLOT_MANNEQUIN_BELT			"belt"
+#define SLOT_MANNEQUIN_MASK			"mask"
+#define SLOT_MANNEQUIN_HEAD			"hat"
+#define SLOT_MANNEQUIN_BACK			"backpack"
+#define SLOT_MANNEQUIN_ID			"idcard"
+
+
 //FLAGS BITMASK
 
 //Item flags!
@@ -335,6 +350,8 @@ var/MAX_EXPLOSION_RANGE = 14
 #define slot_in_backpack 16
 #define slot_legcuffed 17
 #define slot_legs 18
+
+#define is_valid_hand_index(index) ((index > 0) && (index <= held_items.len))
 
 //Cant seem to find a mob bitflags area other than the powers one
 
@@ -615,7 +632,7 @@ var/list/global_mutations = list() // list of hidden mutation things
 
 //Bitflags defining which status effects could be or are inflicted on a mob
 #define CANSTUN		1
-#define CANWEAKEN	2
+#define CANKNOCKDOWN	2
 #define CANPARALYSE	4
 #define CANPUSH		8
 #define GODMODE		4096
@@ -845,8 +862,9 @@ SEE_PIXELS	256
 // Second bit is persistence (save to char prefs).
 // Third bit is whether we polled for that role yet.
 #define ROLEPREF_ENABLE         1 // Enable role for this character.
-#define ROLEPREF_PERSIST        2 // Save preference.
+#define ROLEPREF_PERSIST        2 // Used to flag a pref as Always/Never
 #define ROLEPREF_POLLED         4 // Have we polled this guy?
+#define ROLEPREF_SAVE           8 // Flag the pref to be saved permanently.
 
 #define ROLEPREF_NEVER   ROLEPREF_PERSIST
 #define ROLEPREF_NO      0
@@ -854,8 +872,7 @@ SEE_PIXELS	256
 #define ROLEPREF_ALWAYS  (ROLEPREF_ENABLE|ROLEPREF_PERSIST)
 
 // Masks.
-#define ROLEPREF_SAVEMASK 1 // 0b00000001 - For saving shit.
-#define ROLEPREF_VALMASK  3 // 0b00000011 - For a lot of things.
+#define ROLEPREF_VALMASK  3 // 0b00000011 - Used to get ROLEPREF flags without the ROLEPREF_POLLED and ROLEPREF_SAVE bits
 
 // Should correspond to jobbans, too.
 #define ROLE_ALIEN      "alien"
@@ -1514,6 +1531,8 @@ var/proccalls = 1
 #define EVENT_PROC_INDEX "p"
 
 #define HIGHLANDER "highlander"
+
+#define SPELL_ANIMATION_TTL 2 MINUTES
 
 //Grasp indexes
 #define GRASP_RIGHT_HAND 1

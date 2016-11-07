@@ -291,6 +291,11 @@
 
 	return 1
 
+/obj/machinery/dna_scannernew/proc/contains_husk()
+	if(occupant && (M_HUSK in occupant.mutations))
+		return 1
+	return 0
+
 /obj/machinery/dna_scannernew/on_login(var/mob/M)
 	if(M.mind && !M.client && locate(/obj/machinery/computer/cloning) in range(src, 1)) //!M.client = mob has ghosted out of their body
 		var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
@@ -607,6 +612,9 @@
 		return 1 // return 1 forces an update to all Nano uis attached to src
 
 	if (href_list["pulseRadiation"])
+		if(connected.contains_husk())
+			to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+			return 1
 		irradiating = src.radiation_duration
 		var/lock_state = src.connected.locked
 		src.connected.locked = 1//lock it
@@ -705,6 +713,9 @@
 		return 1 // return 1 forces an update to all Nano uis attached to src
 
 	if (href_list["pulseUIRadiation"])
+		if(connected.contains_husk())
+			to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+			return 1
 		var/block = src.connected.occupant.dna.GetUISubBlock(src.selected_ui_block,src.selected_ui_subblock)
 
 		irradiating = src.radiation_duration
@@ -761,6 +772,9 @@
 		return 1 // return 1 forces an update to all Nano uis attached to src
 
 	if (href_list["pulseSERadiation"])
+		if(connected.contains_husk())
+			to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+			return 1
 		var/block = src.connected.occupant.dna.GetSESubBlock(src.selected_se_block,src.selected_se_subblock)
 		//var/original_block=block
 		//testing("Irradiating SE block [src.selected_se_block]:[src.selected_se_subblock] ([block])...")
@@ -869,6 +883,9 @@
 			return 0 // Not a valid buffer id
 
 		if (bufferOption == "saveUI")
+			if(connected.contains_husk())
+				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+				return 1
 			if(src.connected.occupant && src.connected.occupant.dna)
 				var/datum/dna2/record/databuf=new
 				databuf.types = DNA2_BUF_UI // DNA2_BUF_UE
@@ -880,6 +897,9 @@
 			return 1
 
 		if (bufferOption == "saveUIAndUE")
+			if(connected.contains_husk())
+				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+				return 1
 			if(src.connected.occupant && src.connected.occupant.dna)
 				var/datum/dna2/record/databuf=new
 				databuf.types = DNA2_BUF_UI|DNA2_BUF_UE
@@ -891,6 +911,9 @@
 			return 1
 
 		if (bufferOption == "saveSE")
+			if(connected.contains_husk())
+				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+				return 1
 			if(src.connected.occupant && src.connected.occupant.dna)
 				var/datum/dna2/record/databuf=new
 				databuf.types = DNA2_BUF_SE
@@ -913,6 +936,9 @@
 			return 1
 
 		if (bufferOption == "transfer")
+			if(connected.contains_husk())
+				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+				return 1
 			if (!src.connected.occupant || (M_NOCLONE in src.connected.occupant.mutations) || !src.connected.occupant.dna)
 				return
 

@@ -7,7 +7,7 @@
 		return 1
 
 /mob/proc/isStunned() //Because we have around four slighly different stunned variables for some reason.
-	if(isUnconscious() || paralysis || stunned || weakened)
+	if(isUnconscious() || paralysis || stunned || knockdown)
 		return 1
 
 /mob/proc/incapacitated()

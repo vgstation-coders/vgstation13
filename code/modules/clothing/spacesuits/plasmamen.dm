@@ -301,6 +301,17 @@
 	base_state = "plasmaman_prisoner_helmet"
 	pressure_resistance = null
 
+/obj/item/clothing/suit/space/plasmaman/moltar
+	name = "moltar's firesuit"
+	icon_state = "plasmamanMoltar_suit"
+
+/obj/item/clothing/head/helmet/space/plasmaman/moltar
+	name = "moltar's mask"
+	icon_state = "plasmamanMoltar_helmet"
+	base_state = "plasmamanMoltar_helmet"
+	no_light=1
+
+
 
 //NUKEOPS
 

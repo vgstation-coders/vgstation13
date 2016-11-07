@@ -214,7 +214,7 @@ That prevents a few funky behaviors.
 							if (ticker.mode.name == "AI malfunction")
 								var/datum/game_mode/malfunction/malf = ticker.mode
 								for (var/datum/mind/malfai in malf.malf_ai)
-									if (T.mind == malfai)
+									if (T.mind == malfai && malf.malf_mode_declared)
 										to_chat(U, "<span class='danger'>ERROR:</span> Remote transfer interface disabled.")//Do ho ho ho~
 
 										return
@@ -249,7 +249,7 @@ That prevents a few funky behaviors.
 							C.overlays.len = 0
 							A.cancel_camera()
 							to_chat(A, "You have been uploaded to a stationary terminal. Remote device connection restored.")
-							to_chat(U, "<span class='notice'><b>Transfer successful</b>:</span> [A.name] ([rand(1000,9999)].exe) installed and executed succesfully. Local copy has been removed.")
+							to_chat(U, "<span class='notice'><b>Transfer successful</b>:</span> [A.name] ([rand(1000,9999)].exe) installed and executed successfully. Local copy has been removed.")
 							qdel(T)
 							T = null
 			if("AIFIXER")//AI Fixer terminal.
@@ -276,7 +276,7 @@ That prevents a few funky behaviors.
 									T.overlays -= image('icons/obj/computer.dmi', "ai-fixer-empty")
 									A.cancel_camera()
 									to_chat(A, "You have been uploaded to a stationary terminal. Sadly, there is no remote access from here.")
-									to_chat(U, "<span class='notice'><b>Transfer successful</b>:</span> [A.name] ([rand(1000,9999)].exe) installed and executed succesfully. Local copy has been removed.")
+									to_chat(U, "<span class='notice'><b>Transfer successful</b>:</span> [A.name] ([rand(1000,9999)].exe) installed and executed successfully. Local copy has been removed.")
 						else
 							if(!C.contents.len && T.occupant && !T.active)
 								C.name = "inteliCard - [T.occupant.name]"

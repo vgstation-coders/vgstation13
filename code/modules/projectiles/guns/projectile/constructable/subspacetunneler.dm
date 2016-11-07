@@ -59,9 +59,14 @@
 		/obj/machinery/hologram/holopad,						//AI holopads
 		/obj/machinery/media/receiver/boombox/wallmount,		//sound systems
 		/obj/machinery/keycard_auth,							//keycard authentication devices
+		/obj/machinery/power/battery/smes,						//SMES
+		/obj/structure/particle_accelerator,					//the particle accelerator
+		/obj/machinery/am_shielding,							//the AME
+		/obj/machinery/gateway,									//the gateway
 		)
 
 /obj/item/weapon/subspacetunneler/Destroy()
+	var/turf/currturf = get_turf(src)
 	if(loaded_crystal)
 		qdel(loaded_crystal)
 		loaded_crystal = null
@@ -69,13 +74,14 @@
 		qdel(loaded_matter_bin)
 		loaded_matter_bin = null
 	if(stored_items.len)
-		src.visible_message("<span class='warning'>The [src]'s stored [stored_items.len > 1 ? "items are" : "item is"] forcibly ejected as \the [src] is destroyed!</span>")
-		for(var/I in stored_items)
-			var/offset_x = rand(-3,3)
-			var/offset_y = rand(-3,3)
-			var/turf/T = locate(x+offset_x, y+offset_y, z)
-			send(T)
-			sleep(1)
+		spawn(0)
+			src.visible_message("<span class='warning'>\The [src]'s stored [stored_items.len > 1 ? "items are" : "item is"] forcibly ejected as \the [src] is destroyed!</span>")
+			for(var/I in stored_items)
+				var/offset_x = rand(-3,3)
+				var/offset_y = rand(-3,3)
+				var/turf/T = locate(currturf.x+offset_x, currturf.y+offset_y, currturf.z)
+				send(T)
+				sleep(1)
 	..()
 
 /obj/item/weapon/subspacetunneler/attack_self(mob/user as mob)
@@ -168,20 +174,11 @@
 			var/obj/item/weapon/stock_parts/matter_bin/M = loaded_matter_bin
 			to_chat(user, "<span class='info'>The gauge on \the [src]'s [M.name] indicates that there [stored_items.len > 1 ? "are [stored_items.len] objects" : "is [stored_items.len] object"] stored inside it.</span>")
 
-/obj/item/weapon/subspacetunneler/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, params)
-	if (istype(target, /obj/item/weapon/storage/backpack ))
+/obj/item/weapon/subspacetunneler/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj)
+	if (target.loc == user)
 		return
 
-	else if (target.loc == user.loc)
-		return
-
-	else if (target.loc == user)
-		return
-
-	else if (locate (/obj/structure/table, src.loc))
-		return
-
-	else if(target == user)
+	if(target == user)
 		return
 
 	var/datum/zLevel/L = get_z_level(target)
@@ -189,7 +186,7 @@
 		return
 
 	if(istype(target, /turf) && !istype(target, /turf/simulated/wall))
-		send(target,user,params)
+		send(target,user)
 		return
 
 	if(!loaded_crystal)
@@ -198,10 +195,14 @@
 		return 0
 	else
 		if(istype(target, /obj))
-			receive(target,user,params)
+			receive(target,user)
 			return
 
-/obj/item/weapon/subspacetunneler/proc/send(turf/T as turf, mob/living/user as mob|obj, params, reflex = 0)
+/obj/item/weapon/subspacetunneler/proc/send(turf/T as turf, mob/living/user as mob|obj)
+	if(!T)
+		T = get_random_nearby_turf()
+	if(!T)
+		return
 	if(stored_items.len)
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 		s.set_up(3, 1, src)
@@ -222,14 +223,42 @@
 		playsound(O, 'sound/effects/phasein.ogg', 50, 1)
 		anim(location = T,a_icon = 'icons/obj/weaponsmithing.dmi',flick_anim = "subspace_rift",name = "subspace rift")
 
+/obj/item/weapon/subspacetunneler/proc/get_random_nearby_turf()
+	var/turf/currturf = get_turf(src)
+	var/offset_x = rand(-3,3)
+	var/offset_y = rand(-3,3)
+	return locate(currturf.x+offset_x, currturf.y+offset_y, currturf.z)
+
+/obj/item/weapon/subspacetunneler/proc/break_out(mob/living/captive)
+	if(!captive)
+		return
+	var/turf/T = get_random_nearby_turf()
+	if(!T)
+		return
+	var/list/mobcheck = search_contents_for(/mob/living)
+	for(var/mob/living/M in mobcheck)
+		if(M == captive)
+			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+			s.set_up(3, 1, src)
+			s.start()
+			captive.forceMove(T)
+			src.visible_message("<span class='warning'>\The [captive] breaks free from the storage bin of \the [src]!</span>")
+			playsound(captive, 'sound/effects/phasein.ogg', 50, 1)
+			anim(location = T,a_icon = 'icons/obj/weaponsmithing.dmi',flick_anim = "subspace_rift",name = "subspace rift")
+
 /obj/item/weapon/subspacetunneler/proc/receive(obj/O as obj, mob/living/user as mob|obj, params, reflex = 0)
 	if(!loaded_crystal)
 		return
 
 	for(var/J in invuln)
 		if(istype(O, J))
-			to_chat(user, "<span class='warning'>This entity is too powerful to be pulled into subspace!</span>")
+			to_chat(user, "<span class='warning'>That entity is too powerful to be pulled into subspace!</span>")
 			return
+
+	var/list/diskcheck = O.search_contents_for(/obj/item/weapon/disk/nuclear)
+	if(!isemptylist(diskcheck))
+		to_chat(user, "<span class='warning'>There's something inside that entity that is too powerful to be pulled into subspace!</span>")
+		return
 
 	for(var/J in prohibited)
 		if(istype(O, J))
@@ -313,5 +342,11 @@
 			loaded_crystal = null
 	if(!loaded_crystal)
 		to_chat(user, "<span class='notice'>\The [B] is consumed by the eruption of bluespace energy.</span>")
+
+/obj/item/weapon/subspacetunneler/complete/New() //Comes with a flawless bluespace crystal and supermatter bin by default
+	..()
+	loaded_crystal = new /obj/item/bluespace_crystal/flawless(src)
+	loaded_matter_bin = new /obj/item/weapon/stock_parts/matter_bin/adv/super(src)
+	update_icon()
 
 #undef MAX_BIN_MASS

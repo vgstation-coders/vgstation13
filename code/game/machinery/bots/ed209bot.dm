@@ -344,9 +344,9 @@ Auto Patrol: []"},
 						if (M.stuttering < 10 && (!(M_HULK in M.mutations))  /*&& (!istype(M:wear_suit, /obj/item/clothing/suit/judgerobe))*/)
 							M.stuttering = 10
 						M.Stun(10)
-						M.Weaken(10)
+						M.Knockdown(10)
 					else
-						M.Weaken(10)
+						M.Knockdown(10)
 						M.stuttering = 10
 						M.Stun(10)
 					maxstuns--
@@ -381,7 +381,7 @@ Auto Patrol: []"},
 				src.anchored = 0
 				return
 			// see if he got away
-			if ((!Adjacent(target)) || ((src.target:loc != src.target_lastloc) && src.target:weakened < 2))
+			if ((!Adjacent(target)) || ((src.target:loc != src.target_lastloc) && src.target:knockdown < 2))
 				src.anchored = 0
 				mode = SECBOT_HUNT
 				return

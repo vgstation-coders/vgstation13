@@ -605,9 +605,14 @@ Class Procs:
 	if(!P.hackloop(src))
 		return 0
 	return 1
-
+	
+/obj/machinery/proc/can_overload(mob/user) //used for AI machine overload
+	return(src in machines)
+	
 /obj/machinery/proc/shock(mob/user, prb, var/siemenspassed = -1)
 	if(stat & (BROKEN|NOPOWER))		// unpowered, no shock
+		return 0
+	if(!user.Adjacent(src))
 		return 0
 	if(!prob(prb))
 		return 0

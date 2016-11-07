@@ -486,7 +486,7 @@
 /obj/item/weapon/spellbook/oneuse/knock/recoil(mob/user as mob)
 	..()
 	to_chat(user, "<span class='warning'>You're knocked down!</span>")
-	user.Weaken(20)
+	user.Knockdown(20)
 
 /obj/item/weapon/spellbook/oneuse/horsemask
 	spell = /spell/targeted/equip_item/horsemask
@@ -710,24 +710,24 @@
 	spellname = "sculpting"
 	icon_state = "bookstatue"
 	desc = "This book is as dense as a rock."
-	
+
 /obj/item/weapon/spellbook/oneuse/ringoffire
 	spell = /spell/aoe_turf/ring_of_fire
 	spellname = "ring of fire"
 	icon_state = "bookring"
 	desc = "The cover of this book is much warmer than the pages within."
-	
+
 /obj/item/weapon/spellbook/oneuse/ringoffire/recoil(mob/living/carbon/user as mob)
 	user.adjust_fire_stacks(10)
 	user.IgniteMob()
 	to_chat(user, "<span class = 'warning'>The book sets you alight!</span>")
-	
+
 /obj/item/weapon/spellbook/oneuse/mirror_of_pain
 	spell = /spell/mirror_of_pain
 	spellname = "pain mirror"
 	icon_state = "bookmirror"
 	desc = "The cover of the book seems to stare back at you."
-	
+
 /obj/item/weapon/spellbook/oneuse/mirror_of_pain/recoil(mob/living/carbon/user as mob)
 	scramble(1, user, 100)
 	to_chat(user, "<span class = 'warning'>Your reflection becomes warped and distorted!</span>")

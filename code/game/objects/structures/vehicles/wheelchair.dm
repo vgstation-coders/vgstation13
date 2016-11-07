@@ -258,13 +258,13 @@
 		if(isrobot(L))
 			src.visible_message("<span class='warning'>[src] slams into [L]!</span>")
 			L.Stun(2)
-			L.Weaken(2)
+			L.Knockdown(2)
 			L.adjustBruteLoss(rand(4,6))
 		else
 			src.visible_message("<span class='warning'>[src] knocks over [L]!</span>")
 			L.stop_pulling()
 			L.Stun(8)
-			L.Weaken(5)
+			L.Knockdown(5)
 			L.lying = 1
 			L.update_icons()
 	..()

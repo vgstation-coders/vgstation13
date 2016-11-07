@@ -433,7 +433,7 @@ var/global/list/damage_icon_parts = list()
 
 	if(dna)
 		switch(dna.mutantrace)
-			if("golem","slime","shadow","adamantine","coalgolem")
+			if("slime","shadow")
 				if(species && (!species.override_icon && species.has_mutant_race))
 					var/obj/Overlays/O = obj_overlays[MUTANTRACE_LAYER]
 					O.icon = 'icons/effects/genetics.dmi'
@@ -762,7 +762,7 @@ var/global/list/damage_icon_parts = list()
 				break
 
 		if(S.name in I.species_fit) //Allows clothes to display differently for multiple species
-			if(S.gloves_icons)
+			if(S.shoes_icons)
 				O.icon = S.shoes_icons
 
 		O.overlays.len = 0

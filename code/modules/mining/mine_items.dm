@@ -107,7 +107,7 @@ proc/move_mining_shuttle()
 						shake_camera(M, 10, 1) // unlocked_to, HOLY SHIT SHAKE THE ROOM
 			if(istype(M, /mob/living/carbon))
 				if(!M.locked_to)
-					M.Weaken(3)
+					M.Knockdown(3)
 
 		mining_shuttle_moving = 0
 	return
@@ -401,7 +401,7 @@ proc/move_mining_shuttle()
 
 	if(isliving(M))
 		var/mob/living/L = M
-		L.Weaken(3)
+		L.Knockdown(3)
 		if(ishuman(L))
 			shake_camera(L, 20, 1)
 			spawn(20)
@@ -521,7 +521,7 @@ proc/move_mining_shuttle()
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "mining_drone"
 	icon_living = "mining_drone"
-	status_flags = CANSTUN|CANWEAKEN|CANPUSH
+	status_flags = CANSTUN|CANKNOCKDOWN|CANPUSH
 	mouse_opacity = 1
 	faction = "neutral"
 	a_intent = I_HURT

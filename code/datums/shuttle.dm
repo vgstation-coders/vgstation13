@@ -425,7 +425,7 @@
 
 				if(!src.stable)
 					if(istype(M, /mob/living/carbon))
-						M.Weaken(3)
+						M.Knockdown(3)
 			else
 				shake_camera(M, 3, 1) // buckled, not a lot of shaking
 

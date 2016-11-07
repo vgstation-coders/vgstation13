@@ -37,6 +37,7 @@
 	new /obj/item/clothing/suit/bio_suit/scientist(src)
 	new /obj/item/clothing/head/bio_hood/scientist(src)
 	new /obj/item/clothing/under/rank/research_director(src)
+	new /obj/item/clothing/under/dress/dress_rd(src)
 	new /obj/item/clothing/suit/storage/labcoat(src)
 	new /obj/item/weapon/cartridge/rd(src)
 	new /obj/item/clothing/shoes/white(src)

@@ -1,4 +1,3 @@
-#define SPELL_ANIMATION_TTL 2 MINUTES
 
 /obj/item/projectile/animate
 	name = "bolt of animation"
@@ -10,6 +9,11 @@
 
 /obj/item/projectile/animate/Bump(var/atom/change)
 	if(istype(change, /obj/item) || istype(change, /obj/structure) && !is_type_in_list(change, protected_objects))
-		var/obj/O = change
-		new /mob/living/simple_animal/hostile/mimic/copy(O.loc, O, firer, duration=SPELL_ANIMATION_TTL)
+		change.animationBolt(firer)
+	else if(istype(change, /mob/living/simple_animal/hostile/mimic/copy))
+		var/mob/living/simple_animal/hostile/mimic/copy/targeted = change
+		targeted.ChangeOwner(firer)
+	else if(istype(change, /mob/living/simple_animal/hostile/mannequin))
+		var/mob/living/simple_animal/hostile/mannequin/targeted = change
+		targeted.ChangeOwner(firer)
 	..()

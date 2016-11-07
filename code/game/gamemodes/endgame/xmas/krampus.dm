@@ -39,7 +39,7 @@
 /mob/living/carbon/human/krampus/Stun(amount)
 	return
 
-/mob/living/carbon/human/krampus/Weaken(amount)
+/mob/living/carbon/human/krampus/Knockdown(amount)
 	return
 
 /mob/living/carbon/human/krampus/Paralyse(amount)

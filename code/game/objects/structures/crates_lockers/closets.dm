@@ -387,7 +387,7 @@
 			C.images += temp_overlay
 			L << sound('sound/machines/click.ogg')
 			L << sound('sound/hallucinations/scary.ogg')
-			L.Weaken(5)
+			L.Knockdown(5)
 
 			sleep(50)
 

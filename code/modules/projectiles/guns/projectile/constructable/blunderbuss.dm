@@ -110,6 +110,7 @@
 			loaded_item = W
 		user.visible_message("[user] jams \the [W] into the muzzle of the [src].","You jam \the [W] into the muzzle of \the [src].")
 		update_verbs()
+		return 1
 	else if(!loaded_item && item_prohibited)
 		to_chat(user, "<span class='warning'>That won't fit into the muzzle!</span>")
 		return 1

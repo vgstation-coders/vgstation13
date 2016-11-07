@@ -287,7 +287,7 @@
 		var/mob/living/carbon/C = hit_atom
 		if(C.stuttering < 1 && (!(M_HULK in C.mutations)))
 			C.stuttering = 1
-		C.Weaken(1)
+		C.Knockdown(1)
 		C.Stun(1)
 		playsound(C.loc, "swing_hit", 50, 1)
 		if(C.bodytemperature >= T0C+30)

@@ -457,16 +457,7 @@
 		return 1
 
 	if(volume >= 1)
-		if(T.wet >= 2)
-			return
-		T.wet = 2
-		spawn(800)
-			if(!istype(T))
-				return
-			T.wet = 0
-			if(T.wet_overlay)
-				T.overlays -= T.wet_overlay
-				T.wet_overlay = null
+		T.wet(800, TURF_WET_LUBE)
 
 /datum/reagent/anti_toxin
 	name = "Anti-Toxin (Dylovene)"
@@ -671,6 +662,7 @@
 				C.mind.transfer_to(new_mob)
 			else
 				new_mob.key = C.key
+			C.transferBorers(new_mob)
 			qdel(C)
 
 /datum/reagent/stoxin
@@ -722,7 +714,7 @@
 		if(25 to INFINITY)
 			M.sleeping += 1
 			M.adjustOxyLoss(-M.getOxyLoss())
-			M.SetWeakened(0)
+			M.SetKnockdown(0)
 			M.SetStunned(0)
 			M.SetParalysis(0)
 			M.dizziness = 0
@@ -1990,7 +1982,7 @@
 	M.sdisabilities = 0
 	M.eye_blurry = 0
 	M.eye_blind = 0
-	M.SetWeakened(0)
+	M.SetKnockdown(0)
 	M.SetStunned(0)
 	M.SetParalysis(0)
 	M.silent = 0
@@ -2023,7 +2015,7 @@
 	M.drowsyness = max(M.drowsyness-  5, 0)
 	M.AdjustParalysis(-1)
 	M.AdjustStunned(-1)
-	M.AdjustWeakened(-1)
+	M.AdjustKnockdown(-1)
 	if(holder.has_reagent("mindbreaker"))
 		holder.remove_reagent("mindbreaker", 5)
 	M.hallucination = max(0, M.hallucination - 10)
@@ -2296,7 +2288,7 @@
 		M.status_flags &= ~FAKEDEATH
 	M.adjustOxyLoss(0.5 * REM)
 	M.adjustToxLoss(0.5 * REM)
-	M.Weaken(10)
+	M.Knockdown(10)
 	M.silent = max(M.silent, 10)
 	M.tod = worldtime2text()
 
@@ -3578,6 +3570,14 @@
 	description = "Concentrated blood platelets, capable of stemming bleeding."
 	reagent_state = LIQUID
 	color = "#a00000" //rgb: 160, 0, 0
+	custom_metabolism = 0.1
+
+/datum/reagent/biofoam	//Does exactly what clotting agent does but our reagent system won't let two chems with the same behavior share an ID.
+	name = "Biofoam"
+	id = BIOFOAM
+	description = "A fast-hardening, biocompatible foam used to stem internal bleeding for a short time."
+	reagent_state = LIQUID
+	color = "#D9C0E7" //rgb: 217, 192, 231
 	custom_metabolism = 0.1
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4883,7 +4883,7 @@
 		return 1
 
 	M.adjustOxyLoss(1)
-	M.weakened = max(M.weakened, 15)
+	M.SetKnockdown(max(M.knockdown, 15))
 	M.silent = max(M.silent, 15)
 
 /datum/reagent/drink/bananahonk

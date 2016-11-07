@@ -287,7 +287,7 @@
 
 		return
 	else if (bullets == 0)
-		user.Weaken(5)
+		user.Knockdown(5)
 		for(var/mob/O in viewers(world.view, user))
 			O.show_message(text("<span class = 'danger'>[] realizes they are out of ammo and starts scrounging for some!<span>", user), 1)
 
@@ -311,7 +311,7 @@
 		for(var/mob/O in viewers(M, null))
 			if (O.client)
 				O.show_message(text("<span class = 'danger'><B>[] casually lines up a shot with []'s head, pulls the trigger, then realizes they are out of ammo and drops to the floor in search of some!</B></span>", user, M), 1, "<span class = 'danger'>You hear someone fall</span>", 2)
-		user.Weaken(5)
+		user.Knockdown(5)
 	return
 
 /obj/item/toy/ammo/crossbow

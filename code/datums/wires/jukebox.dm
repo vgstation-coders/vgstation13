@@ -35,6 +35,8 @@ var/const/JUKE_CONFIG = 64 //Cut emags. Pulse plays IAMERROR.ogg
 var/const/JUKE_SETTING = 128 //Cut shocks. Pulse toggles settings menu.
 
 /datum/wires/jukebox/CanUse(var/mob/living/L)
+	if(!..())
+		return 0
 	var/obj/machinery/media/jukebox/J = holder
 	if(J.panel_open)
 		return 1

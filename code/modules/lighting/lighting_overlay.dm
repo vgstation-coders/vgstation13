@@ -69,10 +69,10 @@
 
 	// See LIGHTING_CORNER_DIAGONAL in lighting_corner.dm for why these values are what they are.
 	// No I seriously cannot think of a more efficient method, fuck off Comic.
-	var/datum/lighting_corner/cr  = T.corners[3]
-	var/datum/lighting_corner/cg  = T.corners[2]
-	var/datum/lighting_corner/cb  = T.corners[4]
-	var/datum/lighting_corner/ca  = T.corners[1]
+	var/datum/lighting_corner/cr  = T.corners[3] || dummy_lighting_corner
+	var/datum/lighting_corner/cg  = T.corners[2] || dummy_lighting_corner
+	var/datum/lighting_corner/cb  = T.corners[4] || dummy_lighting_corner
+	var/datum/lighting_corner/ca  = T.corners[1] || dummy_lighting_corner
 
 	var/max = max(cr.cache_mx, cg.cache_mx, cb.cache_mx, ca.cache_mx)
 

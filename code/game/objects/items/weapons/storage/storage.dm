@@ -591,7 +591,6 @@
 		. = 1 //returns 1 if any mobs actually got a close(M) call
 
 /obj/item/weapon/storage/Destroy()
-	..()
 	close_all()
 	returnToPool(boxes)
 	returnToPool(closer)
@@ -600,6 +599,7 @@
 	for(var/atom/movable/AM in contents)
 		qdel(AM)
 	contents = null
+	..()
 
 /obj/item/weapon/storage/preattack(atom/target, mob/user, adjacent, params)
 	if(!adjacent)

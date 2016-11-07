@@ -200,7 +200,8 @@ steam.start() -- spawns the effect
 /datum/effect/effect/system/spark_spread/start()
 	if (holder)
 		location = get_turf(holder)
-
+	if(!location)
+		return
 	var/list/directions
 	if (cardinals)
 		directions = cardinal.Copy()
@@ -1051,7 +1052,7 @@ steam.start() -- spawns the effect
 			for(var/mob/M in viewers(1, location))
 				if (prob (50 * amount))
 					to_chat(M, "<span class='warning'>The explosion knocks you down.</span>")
-					M.Weaken(rand(1,5))
+					M.Knockdown(rand(1,5))
 			return
 		else
 			var/devastation = -1

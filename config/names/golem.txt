@@ -26,7 +26,7 @@ Aheylite
 Ahlfeldite
 Aikinite
 Ajoite
-Akaganéite
+Akaganeite
 Akatoreite
 Akdalaite
 Åkermanite
@@ -36,7 +36,7 @@ Akrochordite
 Aksaite
 Aktashite
 Alabandite
-Alacránite
+Alacranite
 Alamosite
 Alarsite
 Albite
@@ -157,7 +157,7 @@ Barstowite
 Baryte
 Barytocalcite
 Bassanite
-Bastnäsite
+Bastnasite
 Baumhauerite
 Bayldonite
 Bayleyite
@@ -178,7 +178,7 @@ Beryllonite
 Beudantite
 Bicchulite
 Biehlite
-Bílinite
+Bilinite
 Billietite
 Billwiseite
 Biotite
@@ -190,7 +190,7 @@ Bismuthinite
 Bismutite
 Bityite
 Bixbyite
-Blödite
+Blodite
 Blossite
 Bobfergusonite
 Boehmite
@@ -371,8 +371,8 @@ Cyrilovite
 Danalite
 Danburite
 Datolite
-Daubréeite
-Daubréelite
+Daubreeite
+Daubreelite
 Davidite
 Dawsonite
 Delafossite
@@ -438,7 +438,7 @@ Faustite
 Fayalite
 Feldspar
 Feldspathoid
-Felsobányaite
+Felsobanyaite
 Ferberite
 Fergusonite
 Feroxyhyte
@@ -466,7 +466,7 @@ Fluorite
 Fluororichterite
 Fornacite
 Forsterite
-Fougèrite
+Fougerite
 Fourmarierite
 Fraipontite
 Francevillite
@@ -544,7 +544,7 @@ Hagendorfite
 Haggertyite
 Haidingerite
 Haiweeite
-Håleniusite
+Haleniusite
 Halite
 Halloysite
 Halotrichite
@@ -573,7 +573,7 @@ Herderite
 Hessite
 Heulandite
 Hexaferrum
-Hiärneite
+Hiarneite
 Hibonite
 Hidalgoite
 Hilgardite
@@ -588,7 +588,7 @@ Hornblende
 Howlite
 Hsianghualite
 Hubeite
-Hübnerite
+Hubnerite
 Huemulite
 Humite
 Huntite
@@ -675,13 +675,13 @@ Kolbeckite
 Kornerupine
 Kosmochlor
 Kostovite
-Köttigite
+Kottigite
 Kovdorskite
 Kratochvílite
 Kremersite
 Krennerite
 Krieselite
-Kröhnkite
+Krohnkite
 Krotite
 Krutovite
 Kukharenkoite
@@ -716,7 +716,7 @@ Letovicite
 Leucite
 Leucophanite
 Leucophoenicite
-Lévyne
+Levyne
 Libethenite
 Liebigite
 Linarite
@@ -731,8 +731,8 @@ Lizardite
 Loellingite
 Lonsdaleite
 Loparite
-Lópezite
-Lorándite
+Lopezite
+Lorandite
 Lorenzenite
 Loveringite
 Ludlamite
@@ -828,7 +828,7 @@ Nabalamprophyllite
 Nabesite
 Nacrite
 Nadorite
-Nagyágite
+Nagyagite
 Nahcolite
 Naldrettite
 Nambulite
@@ -841,7 +841,7 @@ Nekrasovite
 Nelenite
 Nenadkevichite
 Nepheline
-Népouite
+Nepouite
 Neptunite
 Nichromite
 Nickel
@@ -865,7 +865,7 @@ Olgite
 Olivenite
 Olivine
 Omphacite
-Ordóñezite
+Ordonezite
 Oregonite
 Orpiment
 Orthoclase
@@ -875,7 +875,7 @@ Osumilite
 Otavite
 Ottrelite
 Otwayite
-Pääkkönenite
+Paakkonenite
 Pabstite
 Painite
 Palladium
@@ -890,9 +890,9 @@ Pararealgar
 Pargasite
 Parisite
 Parsonsite
-Parthéite
+Partheite
 Pascoite
-Patrónite
+Patronite
 Paulingite
 Paulscherrerite
 Pearceite
@@ -984,13 +984,13 @@ Ringwoodite
 Roaldite
 Robertsite
 Rodalquilarite
-Romanèchite
+Romanechite
 Romeite
 Rosasite
 Roscoelite
 Roselite
 Rosenbergite
-Rosickýite
+Rosickyite
 Routhierite
 Rozenite
 Rubicline
@@ -1005,7 +1005,7 @@ Sabieite
 Sabinaite
 Sacrofanite
 Safflorite
-Sal ammoniac
+Sal Ammoniac
 Saleeite
 Saliotite
 Salzburgite
@@ -1027,14 +1027,14 @@ Satterlyite
 Sauconite
 Sborgite
 Scapolite
-Schäferite
+Schaferite
 Scheelite
 Schmiederite
 Schoepite
 Schorl
 Schreibersite
 Schreyerite
-Schröckingerite
+Schrockingerite
 Schwertmannite
 Scolecite
 Scorodite
@@ -1052,7 +1052,7 @@ Sellaite
 Semseyite
 Senarmontite
 Sepiolite
-Sérandite
+Serandite
 Serendibite
 Serpentine
 Serpierite
@@ -1116,7 +1116,7 @@ Strontianite
 Struvite
 Studenitsite
 Studtite
-Stützite
+Stutzite
 Suanite
 Suessite
 Sugilite
@@ -1212,7 +1212,7 @@ Uklonskovite
 Ulexite
 Ullmannite
 Ulrichite
-Ulvöspinel
+Ulvospinel
 Umangite
 Umbite
 Upalite
@@ -1278,7 +1278,7 @@ Wollastonite
 Woodhouseite
 Wulfenite
 Wurtzite
-Wüstite
+Wustite
 Wyartite
 Xanthiosite
 Xanthoconite
@@ -1302,7 +1302,7 @@ Yuksporite
 Zabuyelite
 Zaccagnaite
 Zaherite
-Zaïrite
+Zairite
 Zakharovite
 Zanazziite
 Zaratite

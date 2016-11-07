@@ -523,7 +523,7 @@ Thanks.
 	halloss = 0
 	paralysis = 0
 	stunned = 0
-	weakened = 0
+	knockdown = 0
 	remove_jitter()
 	germ_level = 0
 	next_pain_time = 0
@@ -777,6 +777,22 @@ Thanks.
 
 	var/mob/living/L = usr
 
+	//Escaping from within a subspace tunneler.
+	var/obj/item/weapon/subspacetunneler/inside_tunneler = get_holder_of_type(L, /obj/item/weapon/subspacetunneler)
+	if(inside_tunneler)
+		var/breakout_time = 0.5 //30 seconds by default
+		L.delayNext(DELAY_ALL,100)
+		L.visible_message("<span class='danger'>\The [inside_tunneler]'s storage bin shudders.</span>","<span class='warning'>You wander through subspace, looking for a way out (this will take about [breakout_time * 60] seconds).</span>")
+		spawn(0)
+			if(do_after(usr,src,breakout_time * 60 * 10)) //minutes * 60seconds * 10deciseconds
+				var/obj/item/weapon/subspacetunneler/still_in = get_holder_of_type(L, /obj/item/weapon/subspacetunneler)
+				if(!inside_tunneler || !L || L.stat != CONSCIOUS || !still_in) //tunneler/user destroyed OR user dead/unconcious OR user no longer in tunneler
+					return
+
+				//Well then break it!
+				inside_tunneler.break_out(L)
+		return
+
 	//Getting out of someone's inventory.
 	if(istype(src.loc,/obj/item/weapon/holder))
 		var/obj/item/weapon/holder/H = src.loc
@@ -981,7 +997,7 @@ Thanks.
 	//putting out a fire
 		if(CM.on_fire && CM.canmove)
 			CM.fire_stacks -= 5
-			CM.SetWeakened(3)
+			CM.SetKnockdown(3)
 			playsound(CM.loc, 'sound/effects/bodyfall.ogg', 50, 1)
 			CM.visible_message("<span class='danger'>[CM] rolls on the floor, trying to put themselves out!</span>",
 							   "<span class='warning'>You stop, drop, and roll!</span>")

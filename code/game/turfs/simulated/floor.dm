@@ -630,31 +630,27 @@ turf/simulated/floor/update_icon()
 						spam_flag = 0
 						update_icon()
 
-/turf/simulated/proc/wet(delay = 800)
-	if(wet >= 1)
+/turf/simulated/proc/wet(delay = 800, slipperiness = TURF_WET_WATER)
+	if(wet >= slipperiness)
 		return
-	wet = 1
+	wet = slipperiness
 	if(wet_overlay)
 		overlays -= wet_overlay
 		wet_overlay = null
 	wet_overlay = w_overlays["wet"]
 	overlays += wet_overlay
-	spawn() dry(delay)
-
-/turf/simulated/proc/dry(delay = 800)
-	if(drying || wet >= 2)
-		return
-	drying = 1
 	spawn(delay)
-		if (!istype(src))
+		if(!istype(src, /turf/simulated)) //Because turfs don't get deleted, they change, adapt, transform, evolve and deform. they are one and they are all.
 			return
-		if(wet >= 2)
-			return
-		wet = 0
-		drying = 0
-		if(wet_overlay)
-			overlays -= wet_overlay
-			wet_overlay = null
+		dry(slipperiness)
+
+/turf/simulated/proc/dry(slipperiness = TURF_WET_WATER)
+	if(wet > slipperiness)
+		return
+	wet = TURF_DRY
+	if(wet_overlay)
+		overlays -= wet_overlay
+		wet_overlay = null
 
 /turf/simulated/floor/attack_construct(mob/user as mob)
 	if(istype(src,/turf/simulated/floor/carpet))

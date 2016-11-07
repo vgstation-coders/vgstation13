@@ -9,7 +9,7 @@
 	name = "secway key"
 	desc = "A keyring with a small steel key, and a rubber stun baton accessory."
 	icon_state = "keysec"
-	
+
 /obj/structure/bed/chair/vehicle/secway/check_key(var/mob/user)
 	return user.find_held_item_by_type(keytype) //any secway key works with any other secway
 
@@ -54,13 +54,13 @@
 			var/mob/living/M = occupant
 			if(!(M_CLUMSY in M.mutations) && M.dizziness < 450)
 				return
-	occupant.Weaken(2)
+	occupant.Knockdown(2)
 	occupant.Stun(2)
 	playsound(get_turf(src), "sound/effects/meteorimpact.ogg", 25, 1)
 	occupant.visible_message("<span class='danger'>[occupant] crashes into \the [obstacle]!</span>", "<span class='danger'>You crash into \the [obstacle]!</span>")
 
 	if(istype(obstacle, /mob/living))
 		var/mob/living/idiot = obstacle
-		idiot.Weaken(2)
+		idiot.Knockdown(2)
 		idiot.Stun(2)
 

@@ -215,8 +215,8 @@
 			if (M.class == "combat")
 				damage += 15
 				if(prob(20))
-					src.weakened = max(src.weakened,4)
-					src.stunned = max(src.stunned,4)
+					src.SetKnockdown(max(src.knockdown,4))
+					src.SetStunned(max(src.stunned,4))
 		*/
 			playsound(src.loc, 'sound/weapons/slash.ogg', 25, 1, -1)
 			for(var/mob/O in viewers(src, null))

@@ -198,7 +198,7 @@
 				H.sleeping = 0
 				H.stuttering += 20
 				H.ear_deaf += 30
-				H.Weaken(3) //Copied from honkerblast 5000
+				H.Knockdown(3) //Copied from honkerblast 5000
 				if(prob(30))
 					H.Stun(10)
 					H.Paralyse(4)

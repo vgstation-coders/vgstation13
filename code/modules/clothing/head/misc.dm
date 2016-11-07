@@ -416,3 +416,9 @@
 	desc = "A conical paper hat which used to be used as a punishment in schools. Misbehaving children had to wear it while standing in a corner. The writing on it says \"DUNCE\"."
 	icon_state = "duncecap"
 	item_state = "duncecap"
+
+/obj/item/clothing/head/snake
+	name = "snake head"
+	desc = "Reenact acts of violence against reptiles, or sneak into a swamp unnoticed."
+	icon_state = "snakehead"
+	item_state = "snakehead"

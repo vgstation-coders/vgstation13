@@ -20,7 +20,7 @@
 
 	can_butcher = 0
 
-	// canstun and canweaken don't affect slimes because they ignore stun and weakened variables
+	// canstun and CANKNOCKDOWN don't affect slimes because they ignore stun and knockdown variables
 	// for the sake of cleanliness, though, here they are.
 	status_flags = CANPARALYSE|CANPUSH
 
@@ -1064,7 +1064,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	icon_state = "bottle14"
 
 ////////Adamantine Golem stuff I dunno where else to put it
-
+/*
 /obj/item/clothing/under/golem
 	name = "adamantine skin"
 	desc = "a golem's skin"
@@ -1136,7 +1136,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 /obj/item/clothing/head/space/golem/acidable()
 	return 0
-
+*/
 /obj/effect/golem_rune
 	anchored = 1
 	desc = "a strange rune used to create golems. It glows when spirits are nearby."

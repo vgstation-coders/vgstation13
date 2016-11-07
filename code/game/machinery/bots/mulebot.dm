@@ -739,7 +739,7 @@ var/global/mulebot_count = 0
 				src.visible_message("<span class='warning'>[src] knocks over [M]!</span>")
 				M.stop_pulling()
 				M.Stun(8)
-				M.Weaken(5)
+				M.Knockdown(5)
 				M.lying = 1
 	..()
 

@@ -13,22 +13,6 @@
 
 	return (!mover.density || !density || lying)
 
-/client/North()
-	..()
-
-
-/client/South()
-	..()
-
-
-/client/West()
-	..()
-
-
-/client/East()
-	..()
-
-
 /client/Northeast()
 	treat_hotkeys(NORTHEAST)
 
@@ -385,7 +369,7 @@
 			step_rand(mob)
 			mob.last_movement=world.time
 		else
-			. = ..()
+			step(mob, dir)
 			mob.last_movement=world.time
 
 		if(mob.dir != old_dir)

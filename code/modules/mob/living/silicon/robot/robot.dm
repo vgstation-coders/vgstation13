@@ -791,8 +791,11 @@
 		for(var/V in components)
 			var/datum/robot_component/C = components[V]
 			if(!C.installed && istype(W, C.external_type))
+				var/obj/item/robot_parts/robot_component/I = W
 				C.installed = 1
 				C.wrapped = W
+				C.electronics_damage = I.electronics_damage
+				C.brute_damage = I.brute_damage
 				C.install()
 				user.drop_item(W)
 				W.forceMove(null)
@@ -863,9 +866,16 @@
 				if(!remove)
 					return
 				var/datum/robot_component/C = components[remove]
-				var/obj/item/I = C.wrapped
-				to_chat(user, "You remove \the [I].")
-				I.forceMove(src.loc)
+				if(istype(C.wrapped, /obj/item/broken_device))
+					var/obj/item/broken_device/I = C.wrapped
+					to_chat(user, "You remove \the [I].")
+					I.forceMove(src.loc)
+				else
+					var/obj/item/robot_parts/robot_component/I = C.wrapped
+					I.brute_damage = C.brute_damage
+					I.electronics_damage = C.electronics_damage
+					to_chat(user, "You remove \the [I].")
+					I.forceMove(src.loc)
 
 				if(C.installed == 1)
 					C.uninstall()
@@ -885,14 +895,18 @@
 			to_chat(user, "Close the panel first.")
 		else if(cell)
 			to_chat(user, "You swap the power cell within with the new cell in your hand.")
-			var/obj/item/weapon/oldpowercell = cell
+			var/obj/item/weapon/cell/oldpowercell = cell
 			C.wrapped = null
 			C.installed = 0
 			cell = W
+			oldpowercell.electronics_damage = C.electronics_damage
+			oldpowercell.brute_damage = C.brute_damage
 			user.drop_item(W, src)
 			user.put_in_hands(oldpowercell)
 			C.installed = 1
 			C.wrapped = W
+			C.electronics_damage = cell.electronics_damage
+			C.brute_damage = cell.brute_damage
 			C.install()
 		else
 			user.drop_item(W, src)
@@ -901,6 +915,8 @@
 
 			C.installed = 1
 			C.wrapped = W
+			C.electronics_damage = cell.electronics_damage
+			C.brute_damage = cell.brute_damage
 			C.install()
 
 	else if (iswiretool(W))
@@ -1000,7 +1016,7 @@
 				if (M.class == "combat")
 					damage += 15
 					if(prob(20))
-						weakened = max(weakened,4)
+						knockdown = max(knockdown,4)
 						stunned = max(stunned,4)
 				What is this?*/
 
@@ -1124,6 +1140,8 @@
 	if(opened && !wiresexposed && (!istype(user, /mob/living/silicon)))
 		var/datum/robot_component/cell_component = components["power cell"]
 		if(cell)
+			cell.electronics_damage = cell_component.electronics_damage
+			cell.brute_damage = cell_component.brute_damage
 			cell.updateicon()
 			cell.add_fingerprint(user)
 			user.put_in_active_hand(cell)

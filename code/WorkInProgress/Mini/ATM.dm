@@ -241,6 +241,8 @@ log transactions
 		user << browse(null,"window=atm")
 
 /obj/machinery/atm/Topic(var/href, var/href_list)
+	if(..())
+		return 1
 	var/failsafe = 0
 	if(href_list["choice"])
 		switch(href_list["choice"])

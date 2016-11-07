@@ -90,10 +90,6 @@
 		return ..()
 	return ..()
 
-/turf/Click()
-	if(!isAI(usr))
-		..()
-
 /turf/ex_act(severity)
 	return 0
 
@@ -136,8 +132,8 @@
 			if(objects > loopsanity)
 				break
 			objects++
-			spawn( 0 )
-				if ((A && Obj) && Obj.flags & PROXMOVE)
+			if(Obj.flags & PROXMOVE)
+				spawn( 0 )
 					Obj.HasProximity(A, 1)
 	// THIS IS NOW TRANSIT STUFF
 	if ((!(A) || src != A.loc))
@@ -306,16 +302,6 @@
 
 	var/datum/gas_mixture/env
 
-	if (!lighting_corners_initialised && global.lighting_corners_initialised)
-		if (!corners)
-			corners = list(null, null, null, null)
-
-		for (var/i = 1 to 4)
-			if (corners[i]) // Already have a corner on this direction.
-				continue
-
-			corners[i] = new/datum/lighting_corner(src, LIGHTING_CORNER_DIAGONAL[i])
-
 	var/old_opacity = opacity
 	var/old_dynamic_lighting = dynamic_lighting
 	var/old_affecting_lights = affecting_lights
@@ -386,7 +372,6 @@
 
 		. = W
 
-	lighting_corners_initialised = TRUE
 	recalc_atom_opacity()
 	lighting_overlay = old_lighting_overlay
 	affecting_lights = old_affecting_lights

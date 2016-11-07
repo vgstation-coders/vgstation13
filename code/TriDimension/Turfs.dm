@@ -68,8 +68,8 @@ atom/movable/Move() //Hackish
 						H.apply_damage(0.5*damage, BRUTE, "r_leg")
 						H.apply_damage(0.5*damage, BRUTE, "l_arm")
 						H.apply_damage(0.5*damage, BRUTE, "r_arm")
-						H:weakened = max(H:weakened,2)
-						H:updatehealth()
+						H.SetKnockdown(max(H.knockdown,2))
+						H.updatehealth()
 		return ..()
 
 	attackby()

@@ -1183,11 +1183,18 @@ var/global/list/common_tools = list(
 	)
 
 //check if mob is lying down on something we can operate him on.
-/proc/can_operate(mob/living/carbon/M)
-	return (ishuman(M) && M.lying && \
-	locate(/obj/machinery/optable, M.loc) || \
-	(locate(/obj/structure/bed/roller, M.loc) && prob(75)) || \
-	(locate(/obj/structure/table/, M.loc) && prob(66)))
+/proc/can_operate(mob/living/carbon/M, mob/U)
+	if(U == M)
+		return 0
+	if(ishuman(M) && M.lying)
+		if(locate(/obj/machinery/optable,M.loc))
+			return 1
+		if(locate(/obj/structure/bed/roller, M.loc) && prob(75))
+			return 1
+		var/obj/structure/table/T = locate(/obj/structure/table/, M.loc)
+		if(T && !T.flipped && prob(66))
+			return 1
+	return 0
 
 /*
 Checks if that loc and dir has a item on the wall
@@ -1540,3 +1547,12 @@ Game Mode config tags:
 	for(var/mob/M in mobs)
 		if(M.client)
 			. += M.client
+
+
+// A standard proc for generic output to the msay window, Not useful for things that have their own prefs settings (prayers for instance)
+/proc/output_to_msay(msg)
+	for(var/client/C in admins)
+		if(C.prefs.special_popup)
+			C << output("\[[time_stamp()]] [msg]", "window1.msay_output")
+		else
+			to_chat(C, msg)
