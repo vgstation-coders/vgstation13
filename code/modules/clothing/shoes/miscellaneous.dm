@@ -391,3 +391,12 @@
 	item_state = "workboots"
 	species_fit = list(VOX_SHAPED)
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots
+
+/obj/item/clothing/shoes/winterboots
+	name = "Winter boots"
+	desc = "Boots lined with 'synthetic' animal fur."
+	icon_state = "winterboots"
+	item_state = "winterboots"
+	species_fit = list(VOX_SHAPED)
+	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots
