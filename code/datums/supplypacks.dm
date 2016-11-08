@@ -361,7 +361,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/mask/gas/mime,
 					/obj/item/clothing/head/beret,
 					/obj/item/clothing/suit/suspenders,
-					/obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing)
+					/obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing,
+					/obj/item/weapon/hair_dye)
 	cost = 10
 	containertype = /obj/structure/closet/crate/secure
 	containername = "Standard Costumes"
@@ -372,7 +373,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Halloween Costume crate"
 	contains = list(/obj/item/clothing/suit/space/plasmaman/moltar,
 					/obj/item/clothing/head/helmet/space/plasmaman/moltar,
-					/obj/item/clothing/mask/joy,
 					/obj/item/clothing/under/skelevoxsuit,
 					/obj/item/clothing/head/snake)
 	cost = 31

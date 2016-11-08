@@ -134,7 +134,7 @@
 	var/overeatduration = 0		// How long this guy is overeating //Carbon
 	var/paralysis = 0.0
 	var/stunned = 0.0
-	var/weakened = 0.0
+	var/knockdown = 0.0
 	var/losebreath = 0.0//Carbon
 	var/nobreath = 0.0//Carbon, but only used for humans so far
 	var/intent = null//Living
@@ -223,7 +223,7 @@
 
 	var/update_icon = 1 //Set to 1 to trigger update_icons() at the next life() call
 
-	var/status_flags = CANSTUN|CANWEAKEN|CANPARALYSE|CANPUSH	//bitflags defining which status effects can be inflicted (replaces canweaken, canstun, etc)
+	var/status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH	//bitflags defining which status effects can be inflicted (replaces CANKNOCKDOWN, canstun, etc)
 
 	var/digitalcamo = 0 // Can they be tracked by the AI?
 

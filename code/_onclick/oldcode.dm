@@ -128,7 +128,7 @@
 			usr.update_inv_r_hand(0)
 		return
 
-	// ------- PARALYSIS, STUN, WEAKENED, DEAD, (And not AI) -------
+	// ------- PARALYSIS, STUN, KNOCKDOWN, DEAD, (And not AI) -------
 	if ((user.incapacitated() && !istype(usr, /mob/living/silicon/ai)))
 		return
 

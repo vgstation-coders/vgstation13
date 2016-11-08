@@ -714,7 +714,7 @@
 		if(25 to INFINITY)
 			M.sleeping += 1
 			M.adjustOxyLoss(-M.getOxyLoss())
-			M.SetWeakened(0)
+			M.SetKnockdown(0)
 			M.SetStunned(0)
 			M.SetParalysis(0)
 			M.dizziness = 0
@@ -1982,7 +1982,7 @@
 	M.sdisabilities = 0
 	M.eye_blurry = 0
 	M.eye_blind = 0
-	M.SetWeakened(0)
+	M.SetKnockdown(0)
 	M.SetStunned(0)
 	M.SetParalysis(0)
 	M.silent = 0
@@ -2015,7 +2015,7 @@
 	M.drowsyness = max(M.drowsyness-  5, 0)
 	M.AdjustParalysis(-1)
 	M.AdjustStunned(-1)
-	M.AdjustWeakened(-1)
+	M.AdjustKnockdown(-1)
 	if(holder.has_reagent("mindbreaker"))
 		holder.remove_reagent("mindbreaker", 5)
 	M.hallucination = max(0, M.hallucination - 10)
@@ -2288,7 +2288,7 @@
 		M.status_flags &= ~FAKEDEATH
 	M.adjustOxyLoss(0.5 * REM)
 	M.adjustToxLoss(0.5 * REM)
-	M.Weaken(10)
+	M.Knockdown(10)
 	M.silent = max(M.silent, 10)
 	M.tod = worldtime2text()
 
@@ -4883,7 +4883,7 @@
 		return 1
 
 	M.adjustOxyLoss(1)
-	M.weakened = max(M.weakened, 15)
+	M.SetKnockdown(max(M.knockdown, 15))
 	M.silent = max(M.silent, 15)
 
 /datum/reagent/drink/bananahonk

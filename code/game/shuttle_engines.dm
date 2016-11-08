@@ -41,21 +41,12 @@
 	icon_state = "propulsion"
 	opacity = 1
 
-/obj/structure/shuttle/engine/propulsion/proc/shoot_exhaust()
+/obj/structure/shuttle/engine/propulsion/left
+	icon_state = "propulsion_l"
 
-	var/turf/target = get_edge_target_turf(src,dir)
-	var/turf/T = get_turf(src)
+/obj/structure/shuttle/engine/propulsion/right
+	icon_state = "propulsion_r"
 
-	var/obj/item/projectile/A = new /obj/item/projectile/fire_breath/shuttle_exhaust(T)
-	A.original = target
-	A.starting = T
-	A.shot_from = src
-	A.current = T
-	A.yo = target.y - T.y
-	A.xo = target.x - T.x
-	A.OnFired()
-	spawn()
-		A.process()
 
 /obj/structure/shuttle/engine/propulsion/cultify()
 	var/turf/T = get_turf(src)
@@ -67,11 +58,9 @@
 	name = "burst"
 
 /obj/structure/shuttle/engine/propulsion/burst/left
-	name = "left"
 	icon_state = "burst_l"
 
 /obj/structure/shuttle/engine/propulsion/burst/right
-	name = "right"
 	icon_state = "burst_r"
 
 /obj/structure/shuttle/engine/router

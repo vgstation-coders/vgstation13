@@ -55,7 +55,7 @@
 		qdel(src)
 
 		var/mob/living/T = M
-		T.Weaken(10)
+		T.Knockdown(10)
 		T.apply_damage(20)
 		return
 

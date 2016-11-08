@@ -123,7 +123,7 @@
 		if((H.species.flags & IS_PLANT))
 			if(prob(mutstrength*2))
 				M.apply_effect((rand(30,80)),IRRADIATE)
-				M.Weaken(5)
+				M.Knockdown(5)
 				for (var/mob/V in viewers(src))
 					V.show_message("<span class='warning'>[M] writhes in pain as \his vacuoles boil.</span>", 1, "<span class='warning'>You hear the crunching of leaves.</span>", 2)
 			if(prob(mutstrength*3))

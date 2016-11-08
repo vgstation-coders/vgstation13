@@ -241,7 +241,7 @@
 					step(H, H.dir)
 					H.visible_message("<span class='warning'>[H] was tripped by the bolas!</span>","<span class='warning'>Your legs have been tangled!</span>");
 					H.Stun(2) //used instead of setting damage in vars to avoid non-human targets being affected
-					H.Weaken(4)
+					H.Knockdown(4)
 					H.legcuffed = src //applies legcuff properties inherited through legcuffs
 					src.forceMove(H)
 					H.update_inv_legcuffed()

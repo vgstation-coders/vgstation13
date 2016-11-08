@@ -62,7 +62,7 @@
 			Stun(altered)
 		if(WEAKEN)
 			altered = effect/(blocked+1)
-			Weaken(altered)
+			Knockdown(altered)
 		if(PARALYZE)
 			altered = effect/(blocked+1)
 			Paralyse(altered)

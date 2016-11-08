@@ -64,7 +64,7 @@
 
 	if((src == M) || ((M_CLUMSY in M.mutations) && prob(20))) //Kicking yourself (or being clumsy) = stun
 		M.visible_message("<span class='notice'>\The [M] trips while attempting to kick \the [src]!</span>", "<span class='userdanger'>While attempting to kick \the [src], you trip and fall!</span>")
-		M.Weaken(rand(1,10))
+		M.Knockdown(rand(1,10))
 		return
 
 	var/stomping = 0
@@ -312,7 +312,7 @@
 			visible_message("<span class='danger'>[M] [M.species.attack_verb] [src]!</span>")
 
 			if((knockout >= M.species.max_hurt_damage) && prob(50))
-				visible_message("<span class='danger'>[M] has weakened [src]!</span>")
+				visible_message("<span class='danger'>[M] has knocked down [src]!</span>")
 				apply_effect(2, WEAKEN, armor_block)
 
 			if(M.species.punch_damage)

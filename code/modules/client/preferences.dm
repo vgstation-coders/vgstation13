@@ -911,13 +911,13 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	var/newval=0
 	switch(answer)
 		if("Never")
-			newval = ROLEPREF_NEVER
+			newval = ROLEPREF_NEVER|ROLEPREF_SAVE
 		if("No")
 			newval = ROLEPREF_NO
 		if("Yes")
 			newval = ROLEPREF_YES
 		if("Always")
-			newval = ROLEPREF_ALWAYS
+			newval = ROLEPREF_ALWAYS|ROLEPREF_SAVE
 	roles[role_id] = (roles[role_id] & ~ROLEPREF_VALMASK) | newval // We only set the lower 2 bits, leaving polled and friends untouched.
 
 	save_preferences_sqlite(user, user.ckey)
@@ -1768,10 +1768,10 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					var/wikiroute = role_wiki[role_id]
 					var/desire = get_role_desire_str(roles[role_id])
 					dat += {"<td class='column'>[wikiroute ? "<a HREF='?src=\ref[user];getwiki=[wikiroute]'>Role Wiki</a>" : "None"]</td>
-							<td class='column clmNever'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_PERSIST]" title="Never"[desire=="Never"?" checked='checked'":""]/></label></td>
-							<td class='column clmNo'><label class="fullsize"><input type="radio" name="[role_id]" value="0" title="No"[desire=="No"?" checked='checked'":""] /></label></td>
-							<td class='column clmYes'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_ENABLE]" title="Yes"[desire=="Yes"?" checked='checked'":""] /></label></td>
-							<td class='column clmAlways'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_ENABLE|ROLEPREF_PERSIST]" title="Always"[desire=="Always"?" checked='checked'":""] /></label></td>
+							<td class='column clmNever'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_NEVER|ROLEPREF_SAVE]" title="Never"[desire=="Never"?" checked='checked'":""]/></label></td>
+							<td class='column clmNo'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_NO|ROLEPREF_SAVE]" title="No"[desire=="No"?" checked='checked'":""] /></label></td>
+							<td class='column clmYes'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_YES|ROLEPREF_SAVE]" title="Yes"[desire=="Yes"?" checked='checked'":""] /></label></td>
+							<td class='column clmAlways'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_ALWAYS|ROLEPREF_SAVE]" title="Always"[desire=="Always"?" checked='checked'":""] /></label></td>
 					</tr>"}
 
 	dat += "<th colspan='6' height = '60px' valign='bottom'><h1>Non-Antagonist Roles</h1></th>"
@@ -1798,10 +1798,10 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 				var/wikiroute = role_wiki[role_id]
 				var/desire = get_role_desire_str(roles[role_id])
 				dat += {"<td class='column'>[wikiroute ? "<a HREF='?src=\ref[user];getwiki=[wikiroute]'>Role Wiki</a>" : ""]</td>
-						<td class='column clmNever'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_PERSIST]" title="Never"[desire=="Never"?" checked='checked'":""]/></label></td>
-						<td class='column clmNo'><label class="fullsize"><input type="radio" name="[role_id]" value="0" title="No"[desire=="No"?" checked='checked'":""] /></label></td>
-						<td class='column clmYes'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_ENABLE]" title="Yes"[desire=="Yes"?" checked='checked'":""] /></label></td>
-						<td class='column clmAlways'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_ENABLE|ROLEPREF_PERSIST]" title="Always"[desire=="Always"?" checked='checked'":""] /></label></td>
+						<td class='column clmNever'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_NEVER|ROLEPREF_SAVE]" title="Never"[desire=="Never"?" checked='checked'":""]/></label></td>
+						<td class='column clmNo'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_NO|ROLEPREF_SAVE]" title="No"[desire=="No"?" checked='checked'":""] /></label></td>
+						<td class='column clmYes'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_YES|ROLEPREF_SAVE]" title="Yes"[desire=="Yes"?" checked='checked'":""] /></label></td>
+						<td class='column clmAlways'><label class="fullsize"><input type="radio" name="[role_id]" value="[ROLEPREF_ALWAYS|ROLEPREF_SAVE]" title="Always"[desire=="Always"?" checked='checked'":""] /></label></td>
 				</tr>"}
 
 	dat += {"</tbody>

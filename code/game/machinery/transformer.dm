@@ -81,7 +81,7 @@
 		R.cell.charge = robot_cell_charge
 
 	 	// So he can't jump out the gate right away.
-		R.weakened = 5
+		R.SetKnockdown(5)
 
 		// /vg/: Force borg module, if needed.
 		R.pick_module(force_borg_module)
@@ -90,7 +90,7 @@
 	spawn(50)
 		playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 0)
 		if(R)
-			R.weakened = 0
+			R.SetKnockdown(0)
 
 	// Activate the cooldown
 	cooldown_time = world.time + cooldown_duration

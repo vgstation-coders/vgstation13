@@ -19,7 +19,7 @@
 
 	hud_state = "wiz_mm"
 
-	amt_weakened = 3
+	amt_knockdown = 3
 	amt_stunned = 3
 
 	amt_dam_fire = 10

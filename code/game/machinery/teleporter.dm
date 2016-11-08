@@ -347,7 +347,7 @@ obj/machinery/teleport/station/New()
 
 /obj/machinery/teleport/station/attack_hand(var/mob/user)
 	if(engaged)
-		src.disengage()
+		src.disengage(user)
 	else
 		src.engage()
 
@@ -367,7 +367,7 @@ obj/machinery/teleport/station/New()
 	src.engaged = 1
 	return
 
-/obj/machinery/teleport/station/proc/disengage()
+/obj/machinery/teleport/station/proc/disengage(mob/user)
 	var/atom/l = src.loc
 	var/obj/machinery/teleport/hub/hub = locate(/obj/machinery/teleport/hub, locate(l.x + 1, l.y, l.z))
 	if (hub)
@@ -375,7 +375,8 @@ obj/machinery/teleport/station/New()
 		hub.update_icon()
 		for(var/mob/O in hearers(src, null))
 			O.show_message("<span class='notice'>Teleporter disengaged!</span>", 2)
-	src.add_fingerprint(usr)
+	if(user)
+		src.add_fingerprint(user)
 	src.engaged = 0
 	return
 

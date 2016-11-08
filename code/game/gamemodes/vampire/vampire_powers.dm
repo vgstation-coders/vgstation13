@@ -96,9 +96,9 @@
 	if(!M)
 		return
 	if(M.current.vampire_power(0, 1))
-		M.current.weakened = 0
-		M.current.stunned = 0
-		M.current.paralysis = 0
+		M.current.SetKnockdown(0)
+		M.current.SetStunned(0)
+		M.current.SetParalysis(0)
 		M.current.reagents.clear_reagents()
 		//M.vampire.bloodusable -= 10
 		to_chat(M.current, "<span class='notice'>You flush your system with clean blood and remove any incapacitating effects.</span>")
@@ -181,7 +181,7 @@
 	spawn(1800)
 		if(M && M.current)
 			M.current.verbs += /client/proc/vampire_hypnotise
-	var/enhancements = ((C.weakened ? 2 : 0) + (C.stunned ? 1 : 0) + (C.sleeping || C.paralysis ? 3 : 0))
+	var/enhancements = ((C.knockdown ? 2 : 0) + (C.stunned ? 1 : 0) + (C.sleeping || C.paralysis ? 3 : 0))
 	if(do_mob(M.current, C, 10 - enhancements))
 		M.current.remove_vampire_blood(10)
 		if(C.mind && C.mind.vampire)
@@ -276,7 +276,7 @@
 		dist_mobs -= close_mobs //So they don't get double affected.
 		for(var/mob/living/carbon/C in close_mobs)
 			C.Stun(8)
-			C.Weaken(8)
+			C.Knockdown(8)
 			C.stuttering += 20
 			if(!C.blinded)
 				C.blinded = 1
@@ -285,7 +285,7 @@
 			var/distance_value = max(0, abs((get_dist(C, M.current)-3)) + 1)
 			C.Stun(distance_value)
 			if(distance_value > 1)
-				C.Weaken(distance_value)
+				C.Knockdown(distance_value)
 			C.stuttering += 5+distance_value * ((VAMP_CHARISMA in M.vampire.powers) ? 2 : 1) //double stutter time with Charisma
 			if(!C.blinded)
 				C.blinded = 1
@@ -329,7 +329,7 @@
 			if(!C.vampire_affected(M))
 				continue
 			to_chat(C, "<span class='danger'><font size='3'>You hear a ear piercing shriek and your senses dull!</font></span>")
-			C.Weaken(8)
+			C.Knockdown(8)
 			C.ear_deaf = 20
 			C.stuttering = 20
 			C.Stun(8)

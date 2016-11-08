@@ -103,7 +103,7 @@
 			L.adjustOxyLoss(1)
 
 	if(state >= GRAB_KILL)
-		affecting.Weaken(5)	//Should keep you down unless you get help.
+		affecting.Knockdown(5)	//Should keep you down unless you get help.
 		affecting.losebreath = min(affecting.losebreath + 2, 3)
 
 /obj/item/weapon/grab/attack_self()

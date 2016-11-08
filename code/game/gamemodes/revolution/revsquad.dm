@@ -23,9 +23,9 @@
 								   /obj/item/weapon/gun/projectile/automatic,
 								   /obj/item/device/flash/revsquad,
 								   /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff,
-								   /obj/item/weapon/grenade/iedcasing/preassembled,
+								   /obj/item/weapon/plastique,
 								   /obj/item/weapon/gun/projectile/pistol,
-								   /obj/item/clothing/suit/armor/vest
+								   /obj/item/weapon/aiModule/freeform/syndicate
 								  )
 
 /datum/game_mode/revsquad/announce()
@@ -113,7 +113,8 @@
 /datum/game_mode/revsquad/proc/greet_revsquad(var/datum/mind/rev_mind, var/you_are=1)
 	var/obj_count = 1
 	if (you_are)
-		to_chat(rev_mind.current, "<span class='notice'>You are a member of the organized revolutionary organization that has infiltrated this station!</span>")
+		to_chat(rev_mind.current, "<span class='big bold center red'>You are a member of the organized revolutionary organization that has infiltrated this station!</span>")
+		to_chat(rev_mind.current, "<span class='info'><a HREF='?src=\ref[rev_mind.current];getwiki=["Revolutionary Squad"]'>(Wiki Guide)</a></span>") // Hacky but revsquad doesn't have a pref define or anything
 	for(var/datum/objective/objective in rev_mind.objectives)
 		to_chat(rev_mind.current, "<b>Objective #[obj_count]</B>: [objective.explanation_text]")
 		rev_mind.special_role = "Revolutionary Squad Member"
@@ -132,6 +133,7 @@
 
 /datum/game_mode/revsquad/proc/get_revsquad_item(var/mob/living/carbon/human/M)
 	var/obj/item/requisitioned = pick(possible_items)
+	possible_items.Remove(requisitioned) // No 3 pairs of insulated gloves
 	if(istype(requisitioned, /obj/item/device/flash/revsquad))
 		var/obj/item/device/flash/revsquad/FR = new(M)
 		requisitioned = FR
@@ -197,9 +199,9 @@
 ///////////////////////////////
 /datum/game_mode/revsquad/check_finished()
 	if(config.continous_rounds)
-		if(finished != 0)
-			if(emergency_shuttle)
-				emergency_shuttle.always_fake_recall = 0
+		// if(finished != 0)
+		// 	if(emergency_shuttle)
+		// 		emergency_shuttle.always_fake_recall = 0
 		return ..()
 	return finished != 0
 
@@ -217,7 +219,7 @@
 /datum/game_mode/proc/auto_declare_completion_revsquad()
 	var/list/targets = list()
 	var/text = ""
-	if(head_revolutionaries.len || istype(ticker.mode,/datum/game_mode/revolution))
+	if(head_revolutionaries.len || istype(ticker.mode,/datum/game_mode/revsquad))
 		var/icon/logo1 = icon('icons/mob/mob.dmi', "rev_head-logo")
 		end_icons += logo1
 		var/tempstate = end_icons.len

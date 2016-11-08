@@ -463,7 +463,7 @@
 			if(get_dist(M, location) <= 3)
 				if(eye_safety < 1)
 					M.flash_eyes(visual = 1)
-					M.Weaken(15)
+					M.Knockdown(15)
 			else if(get_dist(M, location) <= 5)
 				if(eye_safety < 1)
 					M.flash_eyes(visual = 1)

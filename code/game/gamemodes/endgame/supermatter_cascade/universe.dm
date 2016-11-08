@@ -181,7 +181,7 @@
 		if(!istype(M.current,/mob/living))
 			continue
 		if(M.current.stat!=2)
-			M.current.Weaken(10)
+			M.current.Knockdown(10)
 			M.current.flash_eyes(visual = 1)
 		tcheck(80,1)
 

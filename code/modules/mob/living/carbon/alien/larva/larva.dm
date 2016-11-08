@@ -178,7 +178,7 @@
 				if(G.cell.charge >= 2500)
 					G.cell.use(2500)
 
-					Weaken(5)
+					Knockdown(5)
 					if(stuttering < 5)
 						stuttering = 5
 					Stun(5)
@@ -221,8 +221,8 @@
 				playsound(loc, "punch", 25, 1, -1)
 				visible_message("<span class='danger'>[M] has punched \the [src] !</span>")
 				if(damage > 4.9)
-					Weaken(rand(10,15))
-					visible_message("<span class='danger'>[M] has weakened \the [src] !</span>")
+					Knockdown(rand(10,15))
+					visible_message("<span class='danger'>[M] has knocked down \the [src] !</span>")
 				adjustBruteLoss(damage)
 				updatehealth()
 			else
@@ -249,7 +249,7 @@
 			resting = 0
 			AdjustParalysis(-3)
 			AdjustStunned(-3)
-			AdjustWeakened(-3)
+			AdjustKnockdown(-3)
 			visible_message("<span class='notice'>[M.name] nuzzles [src] trying to wake it up !</span>")
 
 		else

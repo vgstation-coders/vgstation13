@@ -473,7 +473,7 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	if(q.Execute(db))
 		while(q.NextRow())
 			var/list/row = q.GetRowData()
-			roles[row["role"]] = text2num(row["preference"]) | ROLEPREF_PERSIST
+			roles[row["role"]] = text2num(row["preference"])
 	else
 		message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 		WARNING("[__LINE__]: datum/preferences/load_save_sqlite has returned")
@@ -786,11 +786,11 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		return 0
 
 	for(var/role_id in roles)
-		if(!(roles[role_id] & ROLEPREF_PERSIST))
+		if(!(roles[role_id] & ROLEPREF_SAVE))
 			continue
 		q = new
-		q.Add("INSERT INTO client_roles (ckey, slot, role, preference) VALUES (?,?,?,?)", ckey, slot, role_id, (roles[role_id] & ROLEPREF_SAVEMASK))
-		//testing("INSERT INTO client_roles (ckey, slot, role, preference) VALUES ('[ckey]',[slot],'[role_id]',[roles[role_id] & ROLEPREF_SAVEMASK])")
+		q.Add("INSERT INTO client_roles (ckey, slot, role, preference) VALUES (?,?,?,?)", ckey, slot, role_id, (roles[role_id] & ROLEPREF_VALMASK))
+		//testing("INSERT INTO client_roles (ckey, slot, role, preference) VALUES ('[ckey]',[slot],'[role_id]',[roles[role_id] & ROLEPREF_VALMASK])")
 		if(!q.Execute(db)) // This never triggers on error, for some reason.
 			message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 			WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")

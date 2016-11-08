@@ -85,7 +85,7 @@
 	if(ishuman(M))
 		target = M
 	if((target) && (target.op_stage.butt == 4)) //Butt surgery is at stage 4
-		if(!M.weakened)	//Spam prevention
+		if(!M.knockdown)	//Spam prevention
 			if(M == usr)
 				M.visible_message(\
 					"<span class='notice'>[M.name] has no butt, and slides right out of [src]!</span>",\
@@ -98,7 +98,7 @@
 					"Having no butt, you slide right out of the [src]",\
 					"You hear metal clanking.")
 
-			M.Weaken(5)
+			M.Knockdown(5)
 		else
 			to_chat(user, "You can't buckle [M.name] to [src], They just fell out!")
 

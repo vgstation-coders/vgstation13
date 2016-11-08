@@ -122,14 +122,14 @@
 		heal_overall_damage(damage/2, damage/2)
 		Jitter(10)
 		Stun(5)
-		Weaken(5)
+		Knockdown(5)
 		//It would be cool if someone added an animation of some electrical shit going through the body
 	else
 		if(take_overall_damage(0, damage, used_weapon = "[source]") == 0) // godmode
 			return 0
 		Jitter(20)
 		Stun(10)
-		Weaken(10)
+		Knockdown(10)
 
 	visible_message( \
 		"<span class='warning'>[src] was shocked by the [source]!</span>", \
@@ -140,8 +140,8 @@
 		"<span class='warning'>You hear a policeman whistling!</span>"
 	)
 
-	//if(src.stunned < shock_damage)	src.stunned = shock_damage
-	//if(src.weakened < 20*siemens_coeff)	src.weakened = 20*siemens_coeff
+	//if(src.stunned < shock_damage)	src.SetStunned(shock_damage)
+	//if(src.knockdown < 20*siemens_coeff)	src.SetKnockdown(20*siemens_coeff)
 
 	var/datum/effect/effect/system/spark_spread/SparkSpread = new
 	SparkSpread.set_up(5, 1, loc)
@@ -227,7 +227,7 @@
 				src.resting = 0
 			AdjustParalysis(-3)
 			AdjustStunned(-3)
-			AdjustWeakened(-3)
+			AdjustKnockdown(-3)
 			playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 			M.visible_message( \
 				"<span class='notice'>[M] shakes [src] trying to wake [t_him] up!</span>", \
@@ -578,7 +578,7 @@
 
 	stop_pulling()
 	Stun(stun_amount)
-	Weaken(weaken_amount)
+	Knockdown(weaken_amount)
 
 	playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
 

@@ -31,14 +31,14 @@
 		var/turf/T = get_turf(suspension_field)
 		if(field_type == "carbon")
 			for(var/mob/living/carbon/M in T)
-				M.weakened = max(M.weakened, 3)
+				M.SetKnockdown(max(M.knockdown, 3))
 				cell.charge -= power_use
 				if(prob(5))
 					to_chat(M, "<span class='notice'>[pick("You feel tingly.","You feel like floating.","It is hard to speak.","You can barely move.")]</span>")
 
 		if(field_type == "iron")
 			for(var/mob/living/silicon/M in T)
-				M.weakened = max(M.weakened, 3)
+				M.SetKnockdown(max(M.knockdown, 3))
 				cell.charge -= power_use
 				if(prob(5))
 					to_chat(M, "<span class='notice'>[pick("You feel tingly.","You feel like floating.","It is hard to speak.","You can barely move.")]</span>")
@@ -50,7 +50,7 @@
 			I.forceMove(suspension_field)
 
 		for(var/mob/living/simple_animal/M in T)
-			M.weakened = max(M.weakened, 3)
+			M.SetKnockdown(max(M.knockdown, 3))
 			cell.charge -= power_use
 			if(prob(5))
 				to_chat(M, "<span class='notice'>[pick("You feel tingly.","You feel like floating.","It is hard to speak.","You can barely move.")]</span>")
@@ -255,7 +255,7 @@
 		if("carbon")
 			success = 1
 			for(var/mob/living/carbon/C in T)
-				C.weakened += 5
+				C.AdjustKnockdown(5)
 				C.visible_message("<span class='notice'>[bicon(C)] [C] begins to float in the air!</span>","You feel tingly and light, but it is difficult to move.")
 		if("nitrogen")
 			success = 1
@@ -278,7 +278,7 @@
 		if("iron")
 			success = 1
 			for(var/mob/living/silicon/R in T)
-				R.weakened += 5
+				R.AdjustKnockdown(5)
 				R.visible_message("<span class='notice'>[bicon(R)] [R] begins to float in the air!</span>","You feel tingly and light, but it is difficult to move.")
 			//
 	//in case we have a bad field type
@@ -287,7 +287,7 @@
 
 	for(var/mob/living/simple_animal/C in T)
 		C.visible_message("<span class='notice'>[bicon(C)] [C] begins to float in the air!</span>","You feel tingly and light, but it is difficult to move.")
-		C.weakened += 5
+		C.AdjustKnockdown(5)
 
 	suspension_field = new(T)
 	suspension_field.field_type = field_type
@@ -314,7 +314,7 @@
 
 	for(var/mob/M in T)
 		to_chat(M, "<span class='info'>You no longer feel like floating.</span>")
-		M.weakened = min(M.weakened, 3)
+		M.SetKnockdown(min(M.knockdown, 3))
 
 	src.visible_message("<span class='notice'>[bicon(src)] [src] deactivates with a gentle shudder.</span>")
 	qdel(suspension_field)

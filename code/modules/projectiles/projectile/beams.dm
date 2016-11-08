@@ -602,7 +602,7 @@ var/list/beam_master = list()
 		if(istype(target, /mob/living/carbon/human))
 			var/mob/living/carbon/human/M = target
 			if(istype(M.wear_suit, /obj/item/clothing/suit/redtag))
-				M.Weaken(5)
+				M.Knockdown(5)
 		return 1
 
 /obj/item/projectile/beam/lasertag/red
@@ -617,7 +617,7 @@ var/list/beam_master = list()
 		if(istype(target, /mob/living/carbon/human))
 			var/mob/living/carbon/human/M = target
 			if(istype(M.wear_suit, /obj/item/clothing/suit/bluetag))
-				M.Weaken(5)
+				M.Knockdown(5)
 		return 1
 
 /obj/item/projectile/beam/lasertag/omni//A laser tag bolt that stuns EVERYONE
@@ -632,7 +632,7 @@ var/list/beam_master = list()
 		if(istype(target, /mob/living/carbon/human))
 			var/mob/living/carbon/human/M = target
 			if((istype(M.wear_suit, /obj/item/clothing/suit/bluetag))||(istype(M.wear_suit, /obj/item/clothing/suit/redtag)))
-				M.Weaken(5)
+				M.Knockdown(5)
 		return 1
 
 /obj/item/projectile/beam/bison

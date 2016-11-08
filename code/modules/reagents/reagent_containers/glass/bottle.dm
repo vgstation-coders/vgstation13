@@ -404,3 +404,11 @@
 	New()
 		..()
 		reagents.add_reagent(BICARODYNE, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/sacid
+	name = "Sulphuric Acid Bottle"
+	desc = "A small bottle. Contains a small amount of Sulphuric Acid."
+	icon = 'icons/obj/chemical.dmi'
+	New()
+		..()
+		reagents.add_reagent(SACID, 30)

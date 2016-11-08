@@ -20,7 +20,7 @@
 
 	if(isliving(A))
 		var/mob/living/M = A
-		M.Weaken(5)
+		M.Knockdown(5)
 
 	forceMove(get_step(loc,dir))
 

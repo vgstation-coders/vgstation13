@@ -165,8 +165,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	if(stunned)
 		AdjustStunned(-1)
-	if(weakened)
-		AdjustWeakened(-1)
+	if(knockdown)
+		AdjustKnockdown(-1)
 	if(paralysis)
 		AdjustParalysis(-1)
 
