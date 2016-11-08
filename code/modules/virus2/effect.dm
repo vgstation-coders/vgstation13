@@ -954,35 +954,15 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	if(prob(15))
 		to_chat(mob, "Your feet feel slippy!")
 
+datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
+	if(ishuman(mob)
+		var/mob/living/carbon/human/affected = mob
 
-
-/obj/item/clothing/shoes/clown_shoes/slippy
-	canremove = 0
-	var/lube_chance = 10
-
-/obj/item/clothing/shoes/clown_shoes/slippy/step_action() //The honkpocalypse is here
-	..()
-	if(ishuman(loc) && prob(lube_chance))
-		var/mob/living/carbon/human/mob = loc
-		if(istype(mob.loc,/turf/simulated))
-			var/turf/simulated/T = mob.loc
-			if(T.wet < 2)
-				T.wet = 2
-				if(T.wet_overlay)
-					T.overlays -= T.wet_overlay
-					T.wet_overlay = null
-				T.wet_overlay = image('icons/effects/water.dmi',T,"wet_floor")
-				T.overlays += T.wet_overlay
-				spawn(800)
-					if (istype(T) && T.wet >= 2)
-						T.wet = 0
-						if(T.wet_overlay)
-							T.overlays -= T.wet_overlay
-							T.wet_overlay = null
-
-/obj/item/clothing/shoes/clown_shoes/slippy/dropped(mob/user as mob)
-	canremove = 1
-	..()
+		if(affected.shoes && istype(affected.shoes, /obj/item/clothing/shoes/clown_shoes/slippy))
+			var/obj/item/clothing/shoes/clown_shoes/slippy/honkers = affected.shoes
+			to_chat(mob, "Your shoes now don't feel quite as slippery")
+			honkers.lube_chance = 0
+			honkers.canremove = 1
 
 /datum/disease2/effect/hangman
 	name = "Hanging Man's Syndrome"
@@ -1116,10 +1096,6 @@ datum/disease2/effect/anime_hair/deactivate(var/mob/living/carbon/mob)
 		message += pick(" Nyaa", "  nya", " , Nyaa~", "~")
 
 	speech.message = message
-
-/obj/item/clothing/head/kitty/cursed
-	canremove = 0
-
 
 /datum/disease2/effect/spyndrome
 	name = "Gyroscopic Manipulation Syndrome"

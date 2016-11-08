@@ -245,6 +245,34 @@
 /obj/item/clothing/shoes/clown_shoes/stickymagic/acidable()
 	return 0
 
+/obj/item/clothing/shoes/clown_shoes/slippy
+	canremove = 0
+	var/lube_chance = 10
+
+/obj/item/clothing/shoes/clown_shoes/slippy/step_action() //The honkpocalypse is here
+	..()
+	if(ishuman(loc) && prob(lube_chance))
+		var/mob/living/carbon/human/mob = loc
+		if(istype(mob.loc,/turf/simulated))
+			var/turf/simulated/T = mob.loc
+			if(T.wet < 2)
+				T.wet = 2
+				if(T.wet_overlay)
+					T.overlays -= T.wet_overlay
+					T.wet_overlay = null
+				T.wet_overlay = image('icons/effects/water.dmi',T,"wet_floor")
+				T.overlays += T.wet_overlay
+				spawn(800)
+					if (istype(T) && T.wet >= 2)
+						T.wet = 0
+						if(T.wet_overlay)
+							T.overlays -= T.wet_overlay
+							T.wet_overlay = null
+
+/obj/item/clothing/shoes/clown_shoes/slippy/dropped(mob/user as mob)
+	canremove = 1
+	..()
+
 #undef CLOWNSHOES_RANDOM_SOUND
 
 /obj/item/clothing/shoes/jackboots
