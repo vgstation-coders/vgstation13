@@ -6,7 +6,7 @@ var/global/datum/shuttle/supply/cargo_shuttle = new(starting_area = /area/shuttl
 	var/obj/docking_port/destination/dock_centcom
 	var/obj/docking_port/destination/dock_station
 
-	pre_flight_delay = 0
+	pre_flight_delay = 10
 
 	cooldown = 0
 

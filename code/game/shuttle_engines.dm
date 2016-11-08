@@ -41,6 +41,21 @@
 	icon_state = "propulsion"
 	opacity = 1
 
+/obj/structure/shuttle/engine/propulsion/proc/shoot_exhaust()
+
+	var/turf/target = get_edge_target_turf(src,dir)
+	var/turf/T = get_turf(src)
+
+	var/obj/item/projectile/A = new /obj/item/projectile/fire_breath/shuttle_exhaust(T)
+	A.original = target
+	A.starting = T
+	A.shot_from = src
+	A.current = T
+	A.yo = target.y - T.y
+	A.xo = target.x - T.x
+	A.OnFired()
+	spawn()
+		A.process()
 
 /obj/structure/shuttle/engine/propulsion/cultify()
 	var/turf/T = get_turf(src)

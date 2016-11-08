@@ -344,6 +344,7 @@ obj/item/projectile/kinetic/New()
 	var/fire_damage = 10
 	var/pressure = ONE_ATMOSPHERE * 4.5
 	var/temperature = T0C + 175
+	var/fire_duration
 
 /obj/item/projectile/fire_breath/process_step()
 	..()
@@ -358,4 +359,10 @@ obj/item/projectile/kinetic/New()
 	if(!T)
 		return
 
-	new /obj/effect/fire_blast(T, fire_damage, stepped_range, 1, pressure, temperature)
+	new /obj/effect/fire_blast(T, fire_damage, stepped_range, 1, pressure, temperature, fire_duration)
+
+/obj/item/projectile/fire_breath/shuttle_exhaust //don't stand behind rockets
+	temperature = PLASMA_UPPER_TEMPERATURE
+	max_range = 14
+	fire_damage = 20
+	fire_duration = 6 //shorter but hotter
