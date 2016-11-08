@@ -151,3 +151,4 @@
 	item_state = "sawnshotgun"
 	w_class = W_CLASS_MEDIUM
 	slot_flags = SLOT_BELT
+	ammo_type = "/obj/item/ammo_casing/shotgun/buckshot"
