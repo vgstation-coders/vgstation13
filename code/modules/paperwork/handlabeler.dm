@@ -135,8 +135,6 @@
 	name = "label roll"
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "label_cart" //Placeholder image; recolored police tape
-	origin_tech = Tc_MATERIALS + "=1"
-	starting_materials = list(MAT_GLASS = 200)
 	w_class = W_CLASS_TINY
 	var/left = 250
 
