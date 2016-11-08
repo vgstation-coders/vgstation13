@@ -255,19 +255,7 @@
 		var/mob/living/carbon/human/mob = loc
 		if(istype(mob.loc,/turf/simulated))
 			var/turf/simulated/T = mob.loc
-			if(T.wet < 2)
-				T.wet = 2
-				if(T.wet_overlay)
-					T.overlays -= T.wet_overlay
-					T.wet_overlay = null
-				T.wet_overlay = image('icons/effects/water.dmi',T,"wet_floor")
-				T.overlays += T.wet_overlay
-				spawn(800)
-					if (istype(T) && T.wet >= 2)
-						T.wet = 0
-						if(T.wet_overlay)
-							T.overlays -= T.wet_overlay
-							T.wet_overlay = null
+			T.wet(800, TURF_WET_LUBE)
 
 /obj/item/clothing/shoes/clown_shoes/slippy/dropped(mob/user as mob)
 	canremove = 1
