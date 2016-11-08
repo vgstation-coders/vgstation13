@@ -1052,7 +1052,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 				given_katana = 1
 
 datum/disease2/effect/anime_hair/deactivate(var/mob/living/carbon/mob)
-	to_chat(mob, "<span class = 'notice'>You no longer feel quite like the main character</notice>")
+	to_chat(mob, "<span class = 'notice'>You no longer feel quite like the main character. </span>")
 	var/mob/living/carbon/human/affected = mob
 	if(affected.shoes && istype(affected.shoes, /obj/item/clothing/shoes/kneesocks))
 		affected.shoes.canremove = 1
@@ -1063,7 +1063,7 @@ datum/disease2/effect/anime_hair/deactivate(var/mob/living/carbon/mob)
 	var/message=speech.message
 
 	if(prob(20))
-		message += pick(" Nyaa", "  nya", " , Nyaa~", "~")
+		message += pick(" Nyaa", "  nya", "  Nyaa~", "~")
 
 	speech.message = message
 

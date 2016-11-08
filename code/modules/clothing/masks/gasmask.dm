@@ -171,16 +171,16 @@
 	//TODO species_fit = list("Vox")
 
 /obj/item/clothing/mask/gas/clown_hat/virus //why isn't this just a subtype of clown_hat??????? //Is now
-	desc = "A true prankster's facial attire. A clown is incomplete without his wig and mask.<span class = 'notice'>On second look, it looks like it's coming out of the wearers skin!</span>"
+	desc = "A true prankster's facial attire. A clown is incomplete without his wig and mask. <span class = 'notice'>On second look, it looks like it's coming out of the wearers skin!</span>"
 
-/obj/item/clothing/mask/gas/virusclown_hat/dropped(mob/user as mob)
+/obj/item/clothing/mask/gas/clown_hat/virus/dropped(mob/user as mob)
 	canremove = 1
 	..()
 
-/obj/item/clothing/mask/gas/virusclown_hat/equipped(var/mob/user, var/slot)
+/obj/item/clothing/mask/gas/clown_hat/virus/equipped(var/mob/user, var/slot)
 	if (slot == slot_wear_mask)
-		canremove = 0		//curses!
-		can_flip = 0   //no pushing the mask up off your face
+		canremove = 0
+		can_flip = 0
 	..()
 
 

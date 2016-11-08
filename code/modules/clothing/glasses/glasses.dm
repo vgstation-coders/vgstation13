@@ -83,13 +83,13 @@
 
 /obj/item/clothing/glasses/sunglasses/virus
 
-/obj/item/clothing/glasses/virussunglasses/dropped(mob/user as mob)
+/obj/item/clothing/glasses/sunglasses/virus/dropped(mob/user as mob)
 	canremove = 1
 	..()
 
-/obj/item/clothing/glasses/virussunglasses/equipped(var/mob/user, var/slot)
+/obj/item/clothing/glasses/sunglasses/virus/equipped(var/mob/user, var/slot)
 	if (slot == slot_glasses)
-		canremove = 0		//curses!
+		canremove = 0
 	..()
 
 /obj/item/clothing/glasses/sunglasses/kick_act(mob/living/carbon/human/H)
