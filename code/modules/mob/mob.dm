@@ -257,6 +257,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 	if(flags & HEAR_ALWAYS)
 		getFromPool(/mob/virtualhearer, src)
 
+	update_colour(0,1)
+
 /mob/Del()
 	if(flags & HEAR_ALWAYS)
 		for(var/mob/virtualhearer/VH in virtualhearers)
@@ -1415,7 +1417,7 @@ var/list/slot_equipment_priority = list( \
 					statpanel(S.panel,"Required [S.holder_var_type]: [S.holder_var_amount]",S.connected_button)
 				else if(charge_type & Sp_CHARGES)
 					statpanel(S.panel,"[S.charge_max? "[S.charge_counter]/[S.charge_max] charges" : "Free"]",S.connected_button)
-				else if(charge_type & Sp_RECHARGE)
+				else if(charge_type & Sp_RECHARGE || charge_type & Sp_GRADUAL)
 					statpanel(S.panel,"[S.charge_max? "[S.charge_counter/10.0]/[S.charge_max/10] seconds" : "Free"]",S.connected_button)
 	sleep(world.tick_lag * 2)
 

@@ -93,6 +93,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/chem_flags = 0 //how we handle chemicals and eating/drinking i guess
 
 	var/list/abilities = list()	// For species-derived or admin-given powers
+	var/list/spells = list()	// Because spells are the hip new thing to replace verbs
 
 	var/blood_color = DEFAULT_BLOOD //Red.
 	var/flesh_color = "#FFC896" //Pink.
@@ -132,6 +133,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/move_speed_mod = 0 //Higher value is slower, lower is faster.
 	var/can_be_hypothermic = 1
 	var/has_sweat_glands = 1
+	var/move_speed_multiplier = 1	//This is a multiplier, and can make the mob either faster or slower.
 
 /datum/species/New()
 	..()
@@ -862,3 +864,65 @@ var/global/list/whitelisted_species = list("Human")
 					qdel(src)
 		else
 			to_chat(user, "<span class='warning'>The used extract doesn't have any effect on \the [src].</span>")
+
+/datum/species/grue
+	name = "Grue"
+	icobase = 'icons/mob/human_races/r_human.dmi'		// Normal icon set.
+	deform = 'icons/mob/human_races/r_def_human.dmi'	// Mutated icon set.
+	attack_verb = "claws"
+	flags = HAS_LIPS | NO_PAIN | IS_WHITELISTED
+	punch_damage = 7
+	darksight = 8
+	default_mutations=list(M_HULK,M_CLAWS,M_TALONS)
+	burn_mod = 2
+	brute_mod = 2
+	move_speed_multiplier = 2
+	can_be_hypothermic = 0
+	has_mutant_race = 0
+
+	spells = list(/spell/swallow_light)
+
+	has_organ = list(
+		"heart" =    /datum/organ/internal/heart,
+		"lungs" =    /datum/organ/internal/lungs,
+		"liver" =    /datum/organ/internal/liver,
+		"kidneys" =  /datum/organ/internal/kidney,
+		"brain" =    /datum/organ/internal/brain,
+		"appendix" = /datum/organ/internal/appendix,
+		"eyes" =     /datum/organ/internal/eyes/grue
+	)
+
+/datum/species/grue/makeName()
+	return "grue"
+
+/spell/swallow_light
+	name = "Swallow Light"
+	abbreviation = "SL"
+	desc = "Create a void of darkness around yourself."
+	panel = "Racial Abilities"
+	spell_flags = INCLUDEUSER
+	charge_type = Sp_GRADUAL
+	charge_max = 600
+	minimum_charge = 100
+	range = SELFCAST
+	cast_sound = 'sound/misc/grue_growl.ogg'
+	still_recharging_msg = "<span class='notice'>You're still regaining your strength.</span>"
+	hud_state = "racial_dark"
+	override_base = "racial"
+
+/spell/swallow_light/cast(list/targets, mob/user)
+	user.set_light(8,-20)
+	playsound(user, cast_sound, 50, 1)
+	playsound(user, 'sound/misc/grue_ambience.ogg', 50, channel = CHANNEL_GRUE)
+
+/spell/swallow_light/stop_casting(list/targets, mob/user)
+	user.set_light(0)
+	playsound(user, null, 50, channel = CHANNEL_GRUE)
+
+/spell/swallow_light/choose_targets(mob/user = usr)
+	var/list/targets = list()
+	targets += user
+	return targets
+
+/spell/swallow_light/is_valid_target(var/target, mob/user, options)
+	return(target == user)

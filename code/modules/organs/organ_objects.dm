@@ -172,6 +172,12 @@
 	prosthetic_name = "vox visual prosthesis"
 	organ_type = /datum/organ/internal/eyes/vox
 
+/obj/item/organ/eyes/grue
+	name = "grue eyeballs"
+//	icon_state = "eyes"
+	prosthetic_name = "grue visual prosthesis"
+	organ_type = /datum/organ/internal/eyes/grue
+
 /obj/item/organ/eyes/adv_1
 	name = "advanced prosthesis eyeballs"
 	robotic = 2
