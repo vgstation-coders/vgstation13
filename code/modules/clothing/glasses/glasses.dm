@@ -81,6 +81,17 @@
 	eyeprot = 1
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
+/obj/item/clothing/glasses/sunglasses/virus
+
+/obj/item/clothing/glasses/sunglasses/virus/dropped(mob/user as mob)
+	canremove = 1
+	..()
+
+/obj/item/clothing/glasses/sunglasses/virus/equipped(var/mob/user, var/slot)
+	if (slot == slot_glasses)
+		canremove = 0
+	..()
+
 /obj/item/clothing/glasses/sunglasses/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")
 	playsound(get_turf(src), "shatter", 50, 1)

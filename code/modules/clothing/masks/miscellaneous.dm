@@ -109,6 +109,18 @@
 	if(src.voicechange)
 		speech.message = pick("NEEIIGGGHHHH!", "NEEEIIIIGHH!", "NEIIIGGHH!", "HAAWWWWW!", "HAAAWWW!")
 
+/obj/item/clothing/mask/horsehead/magic
+	voicechange = 1		//NEEEEIIGHH
+
+/obj/item/clothing/mask/horsehead/magic/dropped(mob/user as mob)
+	canremove = 1
+	..()
+
+/obj/item/clothing/mask/horsehead/magic/equipped(var/mob/user, var/slot)
+	if (slot == slot_wear_mask)
+		canremove = 0		//curses!
+	..()
+
 /obj/item/clothing/mask/chapmask
 	name = "venetian mask"
 	desc = "A plain porcelain mask that covers the entire face. Standard attire for particularly unspeakable religions. The eyes are wide shut."
