@@ -898,6 +898,7 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 /datum/disease2/effect/lubefoot
 	name = "Self-lubricating Footstep Syndrome"
 	stage = 3
+	maxm = 9.5 //Potential for 95% lube chance per step
 	var/triggered
 
 /datum/disease2/effect/lubefoot/activate(var/mob/living/carbon/mob,var/multiplier)
@@ -969,6 +970,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	var/triggered = 0
 	var/given_katana = 0
 	affect_voice = 1
+	maxm = 4
 
 /datum/disease2/effect/anime_hair/activate(var/mob/living/carbon/mob,var/multiplier)
 	if(ishuman(mob))
