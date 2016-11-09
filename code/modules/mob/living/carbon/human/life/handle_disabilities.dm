@@ -70,6 +70,7 @@
 						"SKELINGTON IS 4 SHITERS!", \
 						"MOMMSI R THE WURST SCUM!!", \
 						"How do we engiener=", \
+						"try to live freely and automatically good bye", \
 						"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!"))
 				if(3)
 					emote("drool")
