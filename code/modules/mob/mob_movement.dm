@@ -343,7 +343,7 @@
 					if(M)
 						if ((mob.Adjacent(M) || M.loc == mob.loc))
 							var/turf/T = mob.loc
-							. = ..()
+							step(mob, dir)
 							if (isturf(M.loc))
 								var/diag = get_dir(mob, M)
 								if ((diag - 1) & diag)
