@@ -338,6 +338,8 @@ obj/item/projectile/kinetic/New()
 	penetration_message = 0
 	grillepasschance = 100
 
+	var/fire_blast_type = /obj/effect/fire_blast
+
 	var/stepped_range = 0
 	var/max_range = 9
 
@@ -359,9 +361,11 @@ obj/item/projectile/kinetic/New()
 	if(!T)
 		return
 
-	new /obj/effect/fire_blast(T, fire_damage, stepped_range, 1, pressure, temperature, fire_duration)
+	new fire_blast_type(T, fire_damage, stepped_range, 1, pressure, temperature, fire_duration)
 
 /obj/item/projectile/fire_breath/shuttle_exhaust //don't stand behind rockets
+	fire_blast_type = /obj/effect/fire_blast/blue
+
 	temperature = PLASMA_UPPER_TEMPERATURE
 	max_range = 14
 	fire_damage = 20

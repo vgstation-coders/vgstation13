@@ -107,6 +107,9 @@
 
 		qdel(src)
 
+/obj/effect/fire_blast/blue
+	icon = 'icons/effects/fireblue.dmi'
+
 /obj/effect/gas_puff
 	name = "gas puff"
 	desc = "A small puff of gas."
