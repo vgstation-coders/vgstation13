@@ -28,17 +28,6 @@ Obviously, requires DNA2.
 	..()
 	block = HULKBLOCK
 
-/datum/dna/gene/basic/grant_spell/hulk/OnDrawUnderlays(var/mob/M,var/g,var/fat)
-	if(M_HULK in M.mutations)
-		if(ishuman(M))
-			var/mob/living/carbon/human/H = M
-			if(isjusthuman(H))
-				if(fat)
-					return "hulk_[fat]_s"
-				else
-					return "hulk_[g]_s"
-	return 0
-
 /datum/dna/gene/basic/grant_spell/hulk/OnMobLife(var/mob/living/carbon/human/M)
 	if(!istype(M))
 		return
