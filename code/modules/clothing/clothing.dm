@@ -373,6 +373,7 @@ BLIND     // can't see anything
 			body_parts_covered &= ~(MOUTH|HEAD|BEARD|FACE)
 		usr.update_inv_wear_mask()
 
+
 /obj/item/clothing/mask/New()
 	..()
 	if(!can_flip /*&& !istype(/obj/item/clothing/mask/gas/voice)*/) //the voice changer has can_flip = 1 anyways but it's worth noting that it exists if anybody changes this in the future
@@ -427,6 +428,7 @@ BLIND     // can't see anything
 	var/blood_overlay_type = "suit"
 	species_restricted = list("exclude","Muton")
 	siemens_coefficient = 0.9
+
 
 //Spacesuit
 //Note: Everything in modules/clothing/spacesuits should have the entire suit grouped together.
