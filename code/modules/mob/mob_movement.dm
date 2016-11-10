@@ -365,7 +365,7 @@
 							M.animate_movement = 2
 							return
 
-		if(mob.confused)
+		else if(mob.confused)
 			step_rand(mob)
 			mob.last_movement=world.time
 		else
