@@ -67,7 +67,7 @@
 							if(D.density)
 								obstructed = 1
 					if(prob(spread_chance) && TS.Adjacent(TU) && !TU.density && !tilehasfire && !obstructed)
-						new /obj/effect/fire_blast(TU, fire_damage, current_step, blast_age+1, pressure, blast_temperature, duration)
+						new type(TU, fire_damage, current_step, blast_age+1, pressure, blast_temperature, duration)
 				sleep(1)
 
 	spawn()
