@@ -198,7 +198,7 @@
 /datum/reagent/slimejelly/on_mob_life(var/mob/living/M, var/alien)
 	if(..())
 		return 1
-	if(M.dna.mutantrace != "slime" || !isslime(M))
+	if(M.dna.mutantrace != "slime" && !isslime(M))
 		if(prob(10))
 			to_chat(M, "<span class='warning'>Your insides are burning!</span>")
 			M.adjustToxLoss(rand(20, 60) * REM)
