@@ -10,6 +10,8 @@
 	var/blast_age = 1
 	var/duration = 10 //1/10ths of a second
 	var/spread = 1
+	var/spread_start = 100
+	var/spread_chance = 20
 
 /obj/effect/fire_blast/New(turf/T, var/damage = 0, var/current_step = 0, var/age = 1, var/pressure = 0, var/blast_temperature = 0, var/fire_duration)
 	..(T)
@@ -23,9 +25,7 @@
 		fire_damage = damage
 	set_light(3)
 
-	var/spread_start = 100
 	pressure = round(pressure)
-	var/spread_chance = 20
 	var/adjusted_fire_damage = fire_damage
 
 	switch(pressure)
@@ -109,6 +109,11 @@
 
 /obj/effect/fire_blast/blue
 	icon = 'icons/effects/fireblue.dmi'
+
+/obj/effect/fire_blast/blue/New(T, var/damage = 0, var/current_step = 0, var/age = 1, var/pressure = 0, var/blast_temperature = 0, var/fire_duration)
+	..(T, damage, current_step, age, pressure, blast_temperature, fire_duration)
+	spread_start = 0
+	spread_chance = 30
 
 /obj/effect/gas_puff
 	name = "gas puff"

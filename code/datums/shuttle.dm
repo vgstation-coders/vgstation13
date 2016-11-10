@@ -276,7 +276,8 @@
 	if(get_pre_flight_delay())
 		spawn(max(1,get_pre_flight_delay()-5))
 			for(var/obj/structure/shuttle/engine/propulsion/P in linked_area)
-				P.shoot_exhaust()
+				spawn()
+					P.shoot_exhaust()
 
 	spawn(get_pre_flight_delay())
 		//If moving to another zlevel, check for items which can't leave the zlevel (nuke disk, primarily)
@@ -321,7 +322,8 @@
 			move_to_dock(transit_port)
 			spawn(max(1,get_transit_delay()-5))
 				for(var/obj/structure/shuttle/engine/propulsion/P in linked_area)
-					P.shoot_exhaust()
+					spawn()
+						P.shoot_exhaust()
 			sleep(get_transit_delay())
 
 	if(destination_port)

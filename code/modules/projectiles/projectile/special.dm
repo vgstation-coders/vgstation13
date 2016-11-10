@@ -370,3 +370,6 @@ obj/item/projectile/kinetic/New()
 	max_range = 14
 	fire_damage = 20
 	fire_duration = 6 //shorter but hotter
+
+/obj/item/projectile/fire_breath/shuttle_exhaust/back
+	max_range = 9

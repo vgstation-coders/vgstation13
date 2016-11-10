@@ -45,17 +45,23 @@
 
 	var/turf/target = get_edge_target_turf(src,dir)
 	var/turf/T = get_turf(src)
-
 	var/obj/item/projectile/A = new /obj/item/projectile/fire_breath/shuttle_exhaust(T)
-	A.original = target
-	A.starting = T
-	A.shot_from = src
-	A.current = T
-	A.yo = target.y - T.y
-	A.xo = target.x - T.x
-	A.OnFired()
-	spawn()
-		A.process()
+
+	for(var/i=0, i<2, i++)
+		A.original = target
+		A.starting = T
+		A.shot_from = src
+		A.current = T
+		A.yo = target.y - T.y
+		A.xo = target.x - T.x
+		A.OnFired()
+		spawn()
+			A.process()
+
+		target = T
+		T = get_ranged_target_turf(src,dir,5)
+		A = new /obj/item/projectile/fire_breath/shuttle_exhaust/back(T)
+		sleep(3)
 
 /obj/structure/shuttle/engine/propulsion/left
 	icon_state = "propulsion_l"
