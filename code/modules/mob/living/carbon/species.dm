@@ -867,8 +867,9 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/grue
 	name = "Grue"
-	icobase = 'icons/mob/human_races/r_human.dmi'		// Normal icon set.
-	deform = 'icons/mob/human_races/r_def_human.dmi'	// Mutated icon set.
+	icobase = 'icons/mob/human_races/r_grue.dmi'		// Normal icon set.
+	deform = 'icons/mob/human_races/r_def_grue.dmi'	// Mutated icon set.
+	eyes = "grue_eyes_s"
 	attack_verb = "claws"
 	flags = HAS_LIPS | NO_PAIN | IS_WHITELISTED
 	punch_damage = 7
@@ -880,7 +881,7 @@ var/global/list/whitelisted_species = list("Human")
 	can_be_hypothermic = 0
 	has_mutant_race = 0
 
-	spells = list(/spell/swallow_light)
+	spells = list(/spell/racial/swallow_light)
 
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
@@ -894,35 +895,3 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/grue/makeName()
 	return "grue"
-
-/spell/swallow_light
-	name = "Swallow Light"
-	abbreviation = "SL"
-	desc = "Create a void of darkness around yourself."
-	panel = "Racial Abilities"
-	spell_flags = INCLUDEUSER
-	charge_type = Sp_GRADUAL
-	charge_max = 600
-	minimum_charge = 100
-	range = SELFCAST
-	cast_sound = 'sound/misc/grue_growl.ogg'
-	still_recharging_msg = "<span class='notice'>You're still regaining your strength.</span>"
-	hud_state = "racial_dark"
-	override_base = "racial"
-
-/spell/swallow_light/cast(list/targets, mob/user)
-	user.set_light(8,-20)
-	playsound(user, cast_sound, 50, 1)
-	playsound(user, 'sound/misc/grue_ambience.ogg', 50, channel = CHANNEL_GRUE)
-
-/spell/swallow_light/stop_casting(list/targets, mob/user)
-	user.set_light(0)
-	playsound(user, null, 50, channel = CHANNEL_GRUE)
-
-/spell/swallow_light/choose_targets(mob/user = usr)
-	var/list/targets = list()
-	targets += user
-	return targets
-
-/spell/swallow_light/is_valid_target(var/target, mob/user, options)
-	return(target == user)
