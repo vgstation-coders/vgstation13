@@ -189,7 +189,7 @@ var/global/list/damage_icon_parts = list()
 
 	var/husk = (M_HUSK in src.mutations)  //100% unnecessary -Agouri	//nope, do you really want to iterate through src.mutations repeatedly? -Pete
 	var/fat = (M_FAT in src.mutations) && (species && species.flags & CAN_BE_FAT)
-	var/hulk = (M_HULK in src.mutations) && species.name != "Horror" // Part of the species.
+	var/hulk = (M_HULK in src.mutations) && species.name != "Horror" && species.name != "Grue" && mind.special_role != HIGHLANDER // Part of the species.
 	var/skeleton = (SKELETON in src.mutations)
 
 	var/g = "m"
@@ -373,11 +373,12 @@ var/global/list/damage_icon_parts = list()
 		switch(mut)
 			if(M_HULK)
 				if(!hulk)
-					if(fat)
-						standing.underlays	+= "hulk_[fat]_s"
-					else
-						standing.underlays	+= "hulk_[g]_s"
-					add_image = 1
+					if(isjusthuman(src))
+						if(fat)
+							standing.underlays	+= "hulk_[fat]_s"
+						else
+							standing.underlays	+= "hulk_[g]_s"
+						add_image = 1
 			/*if(M_RESIST_COLD)
 				standing.underlays	+= "fire[fat]_s"
 				add_image = 1
