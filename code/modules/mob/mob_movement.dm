@@ -343,7 +343,7 @@
 					if(M)
 						if ((mob.Adjacent(M) || M.loc == mob.loc))
 							var/turf/T = mob.loc
-							. = ..()
+							step(mob, dir)
 							if (isturf(M.loc))
 								var/diag = get_dir(mob, M)
 								if ((diag - 1) & diag)
@@ -365,7 +365,7 @@
 							M.animate_movement = 2
 							return
 
-		else if(mob.confused)
+		if(mob.confused)
 			step_rand(mob)
 			mob.last_movement=world.time
 		else
