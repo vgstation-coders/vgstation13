@@ -516,3 +516,71 @@
 	if(!istype(M) || M.incapacitated())
 		return
 	M.visible_message("<span class='notice'>\The [M] opens \his [src.name], allowing you to see inside. <a HREF='?src=\ref[M];listitems=\ref[hold]'>Take a closer look.</a></span>","<span class='notice'>You flash the contents of your [src.name].</span>")
+	
+// WINTER COATS
+
+/obj/item/clothing/suit/wintercoat
+	name = "winter coat"
+	desc = "A heavy jacket made from 'synthetic' animal furs."
+	icon_state = "coatwinter"
+	item_state = "labcoat"
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
+	var/is_hooded = 0
+	var/obj/item/clothing/head/winterhood/hood
+	action_button_name = "Toggle Hood"
+
+/obj/item/clothing/suit/wintercoat/New()
+	..()
+	hood = new()
+
+/obj/item/clothing/head/winterhood
+	name = "winter hood"
+	desc = "A hood attached to a heavy winter jacket."
+	icon_state = "whood"
+	body_parts_covered = HIDEHEADHAIR
+	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	canremove = 0
+
+/obj/item/clothing/suit/wintercoat/captain
+	name = "captain's winter coat"
+	icon_state = "coatcaptain"
+	armor = list(melee = 20, bullet = 15, laser = 20, energy = 10, bomb = 15, bio = 0, rad = 0)
+
+/obj/item/clothing/suit/wintercoat/security
+	name = "security winter coat"
+	icon_state = "coatsecurity"
+	armor = list(melee = 25, bullet = 20, laser = 20, energy = 15, bomb = 20, bio = 0, rad = 0)
+
+/obj/item/clothing/suit/wintercoat/medical
+	name = "medical winter coat"
+	icon_state = "coatmedical"
+	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 50, rad = 0)
+
+/obj/item/clothing/suit/wintercoat/science
+	name = "science winter coat"
+	icon_state = "coatscience"
+	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 10, bio = 0, rad = 0)
+
+/obj/item/clothing/suit/wintercoat/engineering
+	name = "engineering winter coat"
+	icon_state = "coatengineer"
+	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 20)
+
+/obj/item/clothing/suit/wintercoat/engineering/atmos
+	name = "atmospherics winter coat"
+	icon_state = "coatatmos"
+
+/obj/item/clothing/suit/wintercoat/hydro
+	name = "hydroponics winter coat"
+	icon_state = "coathydro"
+
+/obj/item/clothing/suit/wintercoat/cargo
+	name = "cargo winter coat"
+	icon_state = "coatcargo"
+
+/obj/item/clothing/suit/wintercoat/miner
+	name = "mining winter coat"
+	icon_state = "coatminer"
+	armor = list(melee = 10, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
