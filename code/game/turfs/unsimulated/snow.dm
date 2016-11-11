@@ -192,8 +192,10 @@ var/global/list/snow_turfs = list()
 	relativewall_neighbours()
 
 /obj/dirtpath/attackby(obj/item/weapon/W, mob/user)
+	..()
+	var/turf/T = get_turf(src)
 	if(istype(W, /obj/item/weapon/pickaxe/shovel))
-		if(contents.len)
+		if(T.contents.len)
 			to_chat(user,"<span class='warning'>You can't dig there - there's something in the way!</span>")
 		else
 			user.visible_message("<span class='notice'>[user] begins to dig away at the dirt path.</span>", \
@@ -202,9 +204,9 @@ var/global/list/snow_turfs = list()
 			if(do_after(user, src, 5))
 				user.visible_message("<span class='notice'>[user] finishes digging at the dirt path.</span>", \
 					"<span class='notice'>You finish digging at the dirt path.</span>")
-				new /obj/machinery/portable_atmospherics/hydroponics/soil/snow(src)
+				new /obj/machinery/portable_atmospherics/hydroponics/soil/snow(T)
 	else
-		..()
+		return T.attackby(W,user)
 
 /obj/dirtpath/relativewall_neighbours()
 	..()
