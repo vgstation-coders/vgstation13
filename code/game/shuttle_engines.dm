@@ -58,10 +58,9 @@
 		spawn()
 			A.process()
 
-		target = T
-		T = get_ranged_target_turf(src,dir,5)
-		A = new /obj/item/projectile/fire_breath/shuttle_exhaust/back(T)
-		sleep(3)
+		target = get_edge_target_turf(src,reverse_direction(dir))
+		sleep(6)
+		A = new /obj/item/projectile/fire_breath/shuttle_exhaust(T)
 
 /obj/structure/shuttle/engine/propulsion/left
 	icon_state = "propulsion_l"

@@ -206,7 +206,7 @@ var/list/mechtoys = list(
 		for(var/obj/structure/shuttle/engine/propulsion/P in cargo_shuttle.linked_area)
 			spawn()
 				P.shoot_exhaust()
-		sleep(1)
+		sleep(3)
 		destination = cargo_shuttle.dock_centcom
 
 		at_station = 0
