@@ -21,8 +21,8 @@
 	update_icon()
 
 // Calls update_icon() on the surrounding bluespace ponds
-// T: source turf to update around
-// ignore_T: set to TRUE to ignore T.  Used when deleting/packing up pond pieces
+// T:				source turf to update around
+// ignore_T:	set to TRUE to ignore T.  Used when deleting/packing up pond pieces
 /obj/machinery/bluespace_pond/proc/update_nearby_icons(var/turf/T, var/ignore_T = FALSE)
 	if(!T)
 		T = get_turf(src)

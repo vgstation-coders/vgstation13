@@ -4403,40 +4403,59 @@
 	desc = "This is bait."
 	icon_state = "bait"
 	bitesize = 1
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT,1)
+
+/obj/item/weapon/reagent_containers/food/snacks/bait/New()
+	..()
+	reagents.add_reagent(NUTRIMENT,1)
 
 /obj/item/weapon/reagent_containers/food/snacks/fish
 	name = "raw fish"
 	desc = "The product of a real man who lives off the land."
 	icon_state = "fish_salmon"
 	bitesize = 1
+	var/weight = 1 // in lbs
+	var/length = 1 // in inches
 	var/list/fish_guts = list(/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/normal) // contains anything the fish will will drop when filleted
 
 /obj/item/weapon/reagent_containers/food/snacks/fish/New()
 	..()
+	//weight and length randomization: add or subtract up to half of the default value
+	var/R = rand() - 0.5
+	weight += round(weight*R)
+	length += round(weight*R)
 	reagents.add_reagent(NUTRIMENT,1)
+
+/obj/item/weapon/reagent_containers/food/snacks/fish/Destroy()
+	fish_guts = null
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/fish/salmon
 	name = "salmon"
-	desc = "This little guy spent his life dodging bears and jumping up waterfalls."
+	desc = "This big guy spent his life dodging bears and jumping up waterfalls."
 	icon_state = "fish_salmon"
+	weight = 15
+	length = 29
 
 /obj/item/weapon/reagent_containers/food/snacks/fish/bream
 	name = "bream"
 	desc = "A common fish, but delicious all the same."
 	icon_state = "fish_bream"
+	weight = 6
+	length = 17
 
 /obj/item/weapon/reagent_containers/food/snacks/fish/perch
 	name = "perch"
-	desc = "While not usually caught as a meal, they are still quite tasty."
+	desc = "Praised for their food quality, a nice catch."
 	icon_state = "fish_perch"
+	weight = 2
+	length = 8
 
 /obj/item/weapon/reagent_containers/food/snacks/fish/rainbowtrout
 	name = "rainbow trout"
-	desc = "The fabled rainbow trout.  Truly a prize to be beholden."
+	desc = "The fabled rainbow trout.  Truly a prize to be behold."
 	icon_state = "fish_rainbowtrout"
+	weight = 6
+	length = 16
 	fish_guts = list(/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/normal,
 		/obj/item/weapon/storage/fancy/crayons)
 
@@ -4444,6 +4463,8 @@
 	name = "walleye"
 	desc = "A goofy looking fish.  Usually caught at night."
 	icon_state = "fish_walleye"
+	weight = 20
+	length = 30
 
 /obj/item/weapon/reagent_containers/food/snacks/fish/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/kitchen/utensil/knife/large))
@@ -4457,7 +4478,6 @@
 	var/in_hand = user.is_holding_item(src)
 	var/ground = get_turf(src)
 	to_chat(user, "<span class='notice'>You fillet and clean \the [name].</span>")
-	qdel(src)
 	if(fish_guts.len == 1) // put fish_guts in hand if there's only 1 and we are filleting in hand
 		var/obj/item/temp = fish_guts[1]
 		var/obj/item/cont = new temp
@@ -4468,6 +4488,7 @@
 	else
 		for(var/C in fish_guts)
 			new C(ground)
+	qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/sushi
 	name = "sushi"
