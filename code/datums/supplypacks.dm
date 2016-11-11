@@ -1327,6 +1327,25 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Engineering"
 	access = access_ce
 
+/datum/supply_packs/rcs_device
+	name = "Rapid Crate Sender Crate"
+	contains = list (/obj/item/weapon/rcs)
+	cost = 80
+	containertype = /obj/structure/closet/crate/engi
+	containername = "\improper RCS Crate"
+	group = "Engineering"
+
+/datum/supply_packs/rcs_telepad
+	name = "Cargo Telepad Crate"
+	contains = list (/obj/item/device/telepad_beacon,
+					 /obj/item/device/telepad_beacon,
+					 /obj/item/device/telepad_beacon)
+	cost = 80
+	containertype = /obj/structure/closet/crate/engi
+	containername = "\improper RCS Telepad Crate"
+	group = "Engineering"
+
+
 //////MEDICAL//////
 
 /datum/supply_packs/medical
@@ -1542,6 +1561,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Borer egg crate"
 	access = access_xenobiology
 	group = "Science"
+
 
 //////HYDROPONICS//////
 
