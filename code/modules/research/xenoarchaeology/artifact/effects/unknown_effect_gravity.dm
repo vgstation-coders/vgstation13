@@ -3,6 +3,7 @@
 	effect_type = 1
 
 	var/pull_strength
+	copy_for_battery = list("pull_strength")
 
 /datum/artifact_effect/gravity/New()
 	..()

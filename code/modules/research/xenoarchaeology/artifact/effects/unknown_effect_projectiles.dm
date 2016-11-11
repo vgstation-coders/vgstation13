@@ -27,6 +27,7 @@
 
 	var/projectiletype
 	var/num_of_shots
+	copy_for_battery = list("projectiletype", "num_of_shots")
 
 /datum/artifact_effect/projectiles/New()
 	..()

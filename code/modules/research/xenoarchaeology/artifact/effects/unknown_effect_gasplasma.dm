@@ -3,6 +3,7 @@
 	effecttype = "gasplasma"
 	var/max_pressure
 	var/target_percentage
+	copy_for_battery = list("max_pressure")
 
 /datum/artifact_effect/gasplasma/New()
 	..()

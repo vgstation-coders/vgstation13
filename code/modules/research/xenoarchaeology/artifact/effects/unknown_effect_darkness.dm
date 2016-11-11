@@ -1,6 +1,7 @@
 /datum/artifact_effect/darkness
 	effecttype = "darkness"
 	var/dark_level
+	copy_for_battery = list("dark_level")
 
 /datum/artifact_effect/darkness/New()
 	..()

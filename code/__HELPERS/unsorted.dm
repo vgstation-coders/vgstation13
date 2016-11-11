@@ -1573,7 +1573,8 @@ Game Mode config tags:
 	A.original = target
 	A.target = U
 	A.shot_from = source
-	A.firer = source
+	if(istype(source, /mob))
+		A.firer = source
 	A.current = T
 	A.starting = T
 	A.yo = U.y - T.y

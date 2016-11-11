@@ -11,6 +11,7 @@
 	var/chargelevelmax = 10
 	var/artifact_id = ""
 	var/effect_type = 0
+	var/list/copy_for_battery  //add any effect-specific variables you need copied for anomaly batteries as a list of strings
 
 //0 = Unknown / none detectable
 //1 = Concentrated energy

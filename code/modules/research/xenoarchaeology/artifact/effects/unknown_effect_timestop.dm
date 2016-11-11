@@ -3,6 +3,8 @@
 
 	var/mob/caster
 	var/spell/aoe_turf/fall/fall
+	var/stop_length
+	copy_for_battery = list("stop_length")
 
 /datum/artifact_effect/timestop/New()
 	..()
@@ -21,6 +23,11 @@
 	effectrange = rand(2, 15)
 	fall.range = effectrange
 	fall.sleeptime = rand(10,chargelevelmax*2)
+	spawn(10) //this is here to give the anomaly battery thing enough time to set variables in the right places
+		if(stop_length) //because this is all done in such an awful way
+			fall.sleeptime = stop_length
+		else
+			stop_length = fall.sleeptime
 
 /datum/artifact_effect/timestop/Destroy()
 	fall = null

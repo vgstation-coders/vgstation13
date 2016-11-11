@@ -2,6 +2,7 @@
 /datum/artifact_effect/gasoxy
 	effecttype = "gasoxy"
 	var/max_pressure
+	copy_for_battery = list("max_pressure")
 
 /datum/artifact_effect/gasoxy/New()
 	..()

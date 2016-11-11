@@ -3,6 +3,7 @@
 /datum/artifact_effect/heat
 	effecttype = "heat"
 	var/target_temp
+	copy_for_battery = list("target_temp")
 
 /datum/artifact_effect/heat/New()
 	..()
