@@ -61,6 +61,9 @@
 				H.fire_alert = max(H.fire_alert, 1)
 		else
 			switch(breath.temperature)
+				if(H.species.cold_level_1 to H.species.heat_level_1)
+					return
+
 				if(-INFINITY to H.species.cold_level_3)
 					H.apply_damage(COLD_GAS_DAMAGE_LEVEL_3, BURN, LIMB_HEAD, used_weapon = "Excessive Cold")
 					H.fire_alert = max(H.fire_alert, 1)

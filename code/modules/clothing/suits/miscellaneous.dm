@@ -533,7 +533,7 @@
 
 /obj/item/clothing/suit/wintercoat/New()
 	..()
-	hood = new()
+	hood = new(src)
 
 /obj/item/clothing/head/winterhood
 	name = "winter hood"
@@ -541,7 +541,14 @@
 	icon_state = "whood"
 	body_parts_covered = HIDEHEADHAIR
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-	canremove = 0
+	var/obj/item/clothing/suit/wintercoat/coat
+
+/obj/item/clothing/head/winterhood/New(var/obj/item/clothing/suit/wintercoat/wc)
+	..()
+	if(wc && istype(wc))
+		coat = wc
+	else if(!coat)
+		qdel(src)
 
 /obj/item/clothing/suit/wintercoat/captain
 	name = "captain's winter coat"
