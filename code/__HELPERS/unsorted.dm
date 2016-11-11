@@ -1563,7 +1563,7 @@ Game Mode config tags:
 	if (!T || !U)
 		return
 	var/obj/item/projectile/A
-	A = new projectile(source.loc)
+	A = new projectile(T)
 	var/fire_sound
 	if(shot_sound)
 		fire_sound = shot_sound
