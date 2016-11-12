@@ -18,11 +18,14 @@
 /area/vault/automap
 
 /area/vault/automap/spawned_by_map_element(datum/map_element/ME, list/objects)
-	var/area/vault/automap/new_area = new (src.type)
+	var/area/vault/automap/new_area = new src.type
 
-	for(var/turf/T in objects)
-		if(T.loc == src)
-			new_area.contents.Add(T)
+	for(var/turf/T in src.contents)
+		new_area.contents.Add(T)
+
+		T.change_area(src, new_area)
+		for(var/atom/allthings in T.contents)
+			allthings.change_area(src, new_area)
 
 	new_area.tag = "[new_area.type]/\ref[ME]"
 	new_area.addSorted()

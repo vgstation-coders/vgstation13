@@ -60,7 +60,7 @@
 	if(!nick)
 		nick=name
 	set_keys()
-		
+
 /obj/structure/bed/chair/vehicle/proc/set_keys()
 	if(keytype && !vin)
 		mykey = new keytype(src.loc)

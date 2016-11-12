@@ -1,10 +1,10 @@
-"a" = (/turf/unsimulated/wall,/area/vault/automap)
-"b" = (/turf/unsimulated/floor/asteroid,/area/vault/automap)
-"c" = (/obj/structure/girder,/turf/unsimulated/floor/asteroid,/area/vault/automap)
-"d" = (/obj/effect/mapping/playable_mob/single{name = "priest of Nar-Sie"},/mob/living/simple_animal/hostile/humanoid/cult/priest,/turf/unsimulated/floor/asteroid,/area/vault/automap)
-"e" = (/obj/effect/mapping/playable_mob/team{name = "Faithless"; role_description = "You are a servant of Nar-Sie."},/mob/living/simple_animal/hostile/faithless/cult,/turf/unsimulated/floor/asteroid,/area/vault/automap)
-"f" = (/obj/effect/mapping/playable_mob/team{name = "creatures"; role_description = "You are a horrible creature summoned by a cultist."},/mob/living/simple_animal/hostile/creature/cult,/turf/unsimulated/floor/asteroid,/area/vault/automap)
-"g" = (/obj/machinery/door/airlock/glass,/turf/unsimulated/floor/asteroid,/area/vault/automap)
+"a" = (/turf/unsimulated/wall/other,/area/vault/automap)
+"b" = (/turf/unsimulated/floor/grass,/area/vault/automap)
+"c" = (/obj/structure/girder,/turf/unsimulated/floor/grass,/area/vault/automap)
+"d" = (/obj/effect/mapping/playable_mob/single{name = "priest of Nar-Sie"},/mob/living/simple_animal/hostile/humanoid/cult/priest,/turf/unsimulated/floor/grass,/area/vault/automap)
+"e" = (/obj/effect/mapping/playable_mob/team{name = "Faithless"; role_description = "You are a servant of Nar-Sie."},/mob/living/simple_animal/hostile/faithless/cult,/turf/unsimulated/floor/grass,/area/vault/automap)
+"f" = (/obj/effect/mapping/playable_mob/team{name = "creatures"; role_description = "You are a horrible creature summoned by a cultist."},/mob/living/simple_animal/hostile/creature/cult,/turf/unsimulated/floor/grass,/area/vault/automap)
+"g" = (/obj/machinery/door/airlock/glass,/turf/unsimulated/floor/grass,/area/vault/automap)
 
 (1,1,1) = {"
 aaaaaaaaaa

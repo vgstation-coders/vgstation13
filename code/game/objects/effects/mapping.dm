@@ -9,9 +9,20 @@
 	icon_state = "event_playable"
 
 	var/role_description = null
+	var/list/allowed_mobs = list()
 
-/obj/effect/mapping/proc/notify_observer(mob/dead/observer/O)
+/obj/effect/mapping/playable_mob/proc/notify_observer(mob/dead/observer/O)
 	return
+
+/obj/effect/mapping/playable_mob/proc/link_mob(mob/living/L)
+	allowed_mobs.Add(L)
+	L.on_destroyed.Add(src, "check_mobs")
+
+//Remove references, allowing the mob to be garbage collected on deletion
+/obj/effect/mapping/playable_mob/proc/check_mobs()
+	for(var/mob/living/L in allowed_mobs)
+		if(isnull(L.loc))
+			allowed_mobs.Remove(L)
 
 /obj/effect/mapping/playable_mob/Topic(href,href_list)
 	if(href_list["signup"])
@@ -41,6 +52,8 @@
 	if(istype(body, /mob/living))
 		if(!isnull(body.client))
 			to_chat(O, "<span class='info'>The role has already been taken.</span>")
+		if(!allowed_mobs.Find(body))
+			to_chat(O, "<span class='info'>The role is no longer available.</span>")
 	else
 		return
 
@@ -93,6 +106,7 @@
 	//List of team names associated with mobs
 	//list( "wild animals" = list(mob,mob) , "hunters" = list(mob,mob,mob) )
 	existing_teams = list()
+	allowed_mobs = list()
 
 	for(var/obj/effect/mapping/playable_mob/team/T in objects)
 		if(!existing_teams.Find(T.name))
@@ -102,6 +116,7 @@
 		var/mob/living/linked = locate(/mob/living) in get_turf(T)
 
 		L.Add(linked)
+		link_mob(linked)
 		objects.Remove(T)
 
 	for(var/team_index in existing_teams)
@@ -146,6 +161,16 @@
 	else
 		return ..()
 
+/obj/effect/mapping/playable_mob/team/check_mobs()
+	for(var/mob/living/L in allowed_mobs)
+		if(isnull(L.loc) || L.isDead())
+			allowed_mobs.Remove(L)
+
+			for(var/T in existing_teams)
+				var/list/team = existing_teams[T]
+				if(istype(team))
+					team.Remove(L)
+
 //Individual marker: every marker sends a prompt to every observer. Example:
 //"prison guard" position available. __Click_here__ to join as a prison guard.
 //"inmate" position available. __Click_here__ to join as an inmate.
@@ -157,6 +182,8 @@
 
 	//Find linked mob and send a message to all observers
 	var/mob/living/linked = locate(/mob/living) in get_turf(src)
+	allowed_mobs = list()
+	link_mob(linked)
 
 	for(var/mob/dead/observer/O in player_list)
 		notify_observer(O, linked)
