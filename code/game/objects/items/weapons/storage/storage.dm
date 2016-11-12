@@ -96,7 +96,7 @@
 	user.client.screen -= src.contents
 	user.client.screen += src.boxes
 	user.client.screen += src.closer
-	user.client.screen += src.contentsw
+	user.client.screen += src.contents
 	user.s_active = src
 	is_seeing |= user
 	return
