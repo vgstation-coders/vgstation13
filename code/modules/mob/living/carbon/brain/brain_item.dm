@@ -71,3 +71,9 @@
 			brainmob.mind.transfer_to(target)
 		else
 			target.key = brainmob.key
+
+/obj/item/organ/brain/ash/removed(var/mob/living/target,var/mob/living/user)
+	..()
+	visible_message("<span class = 'sinister'>\The [src] suddenly turns to ash, unable to exist detached from its host.</span>")
+	new /obj/effect/decal/cleanable/ash(loc)
+	qdel(src)
