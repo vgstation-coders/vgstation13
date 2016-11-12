@@ -84,7 +84,7 @@
 	return L
 
 /obj/item/weapon/storage/proc/show_to(mob/user as mob)
-	if(isliving(user))
+	if(!user.incapacitated())
 		if(user.s_active != src)
 			for(var/obj/item/I in src)
 				if(I.on_found(user))
@@ -96,7 +96,7 @@
 	user.client.screen -= src.contents
 	user.client.screen += src.boxes
 	user.client.screen += src.closer
-	user.client.screen += src.contents
+	user.client.screen += src.contentsw
 	user.s_active = src
 	is_seeing |= user
 	return
