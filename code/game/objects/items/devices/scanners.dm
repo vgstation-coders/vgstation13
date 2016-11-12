@@ -323,6 +323,7 @@ Subject's pulse: ??? BPM"})
 		var/n2_concentration = scanned.nitrogen/total_moles
 		var/co2_concentration = scanned.carbon_dioxide/total_moles
 		var/plasma_concentration = scanned.toxins/total_moles
+		var/heat_capacity = scanned.heat_capacity()
 
 		var/unknown_concentration =  1 - (o2_concentration + n2_concentration + co2_concentration + plasma_concentration)
 
@@ -338,6 +339,7 @@ Subject's pulse: ??? BPM"})
 			message += "<br><span class='notice'>Unknown: [round(unknown_concentration*100)]%</span>"
 
 		message += "<br>[human_standard && !(scanned.temperature in range(BODYTEMP_COLD_DAMAGE_LIMIT, BODYTEMP_HEAT_DAMAGE_LIMIT)) ? "<span class='bad'>" : "<span class='notice'>"] Temperature: [round(scanned.temperature-T0C)]&deg;C"
+		message += "<br><span class='notice'>Heat capacity: [round(heat_capacity, 0.01)]</span>"
 	else
 		message += "<br><span class='warning'>No gasses detected[container && !istype(container, /turf) ? " in \the [container]." : ""]!</span>"
 	return message
