@@ -52,8 +52,10 @@
 	if(istype(body, /mob/living))
 		if(!isnull(body.client))
 			to_chat(O, "<span class='info'>The role has already been taken.</span>")
+			return
 		if(!allowed_mobs.Find(body))
 			to_chat(O, "<span class='info'>The role is no longer available.</span>")
+			return
 	else
 		return
 

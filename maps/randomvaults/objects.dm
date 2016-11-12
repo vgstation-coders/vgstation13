@@ -7,7 +7,7 @@
 /area/vault
 	name = "mysterious structure"
 	requires_power = 0
-	icon_state = "firingrange"
+	icon_state = "ME_vault"
 	dynamic_lighting = 1
 
 /area/vault/holomapAlwaysDraw()
@@ -29,6 +29,10 @@
 
 	new_area.tag = "[new_area.type]/\ref[ME]"
 	new_area.addSorted()
+
+/area/vault/automap/no_light
+	icon_state = "ME_vault_lit"
+	dynamic_lighting = FALSE
 
 /area/vault/icetruck
 
