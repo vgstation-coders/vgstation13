@@ -18,7 +18,7 @@
 /datum/map_element/event/example
 	file_path = "maps/randomvaults/events/example.dmm"
 
-/datum/map_element/event/caravan
-	file_path = "maps/randomvaults/events/trader_ship.dmm"
-
-	announcement_info = "<i>A caravan from a nearby solar system has decided to approach station.</i>"
+///datum/map_element/event/caravan
+//	file_path = "maps/randomvaults/events/trader_ship.dmm"
+//
+//	announcement_info = "<i>A caravan from a nearby solar system has decided to approach station.</i>"
