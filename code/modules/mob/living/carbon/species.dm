@@ -267,6 +267,12 @@ var/global/list/whitelisted_species = list("Human")
 	primitive = /mob/living/carbon/monkey
 
 	flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | NO_BLOOD
+	
+/datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
+	if(H.decapitated)
+		qdel(H.decapitated)
+		H.decapitated = null
+	H.dust()
 
 /datum/species/unathi
 	name = "Unathi"
