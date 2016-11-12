@@ -8,20 +8,36 @@
 	name = "DO NOT USE"
 	icon_state = "event_playable"
 
+	var/role_description = null
+
+/obj/effect/mapping/proc/notify_observer(mob/dead/observer/O)
+	return
 
 /obj/effect/mapping/playable_mob/Topic(href,href_list)
-	if("signup" in href_list)
-		var/mob/dead/observer/O = locate(href_list["signup"])
+	if(href_list["signup"])
+		var/client/C = get_client_by_ckey(href_list["signup"])
+		if(!istype(C) || (C.ckey != usr.ckey))
+			return
+
+		var/mob/dead/observer/O = C.mob
 		var/mob/dead/observer/body = locate(href_list["body"])
 
-		if(!istype(O))
+		if(!check_observer(O))
 			return
 
 		volunteer(O, body)
+	if(href_list["teleport"])
+		var/mob/dead/observer/O = locate(href_list["teleport"])
+
+		if(!check_observer(O))
+			return
+
+		O.forceMove(get_turf(src))
 
 /obj/effect/mapping/playable_mob/proc/volunteer(mob/dead/observer/O, mob/living/body)
 	//O: observer that is volunteering
-	//body: either a mob or a list of mobs. If allow_choosing_
+	//body: mob
+
 	if(istype(body, /mob/living))
 		if(!isnull(body.client))
 			to_chat(O, "<span class='info'>The role has already been taken.</span>")
@@ -29,18 +45,32 @@
 		return
 
 	body.key = O.key
-	to_chat(body, "don't metagame, fucker") //todo
+	message_admins("<span class='adminnotice'>[key_name(usr)] has joined the role [src.name] ([formatJumpTo(get_turf(body))])</span>")
+	to_chat(body, {"<span class='userdanger'>Unless specified otherwise, you forget all the information about the round that you've gained from your previous character(s).
+	Using such knowledge will lead to a ban.</span>"})
+	if(role_description)
+		to_chat(body, "<span class='info'>Additional information about the role:</span>")
+		to_chat(body, "[role_description]")
+	else
+		to_chat(body, "<span class='info'>No additional information about the role has been provided.</span>")
 
 /obj/effect/mapping/playable_mob/proc/check_observer(var/mob/dead/observer/O)
+	if(!istype(O))
+		to_chat(O, "<span class='info'>You must be a ghost to do this.</span>")
+		return 0
 	if(O.has_enabled_antagHUD == 1 && config.antag_hud_restricted)
+		to_chat(O, "<span class='info'>You are unable to do this because you enabled antagHUD.</span>")
 		return 0
 	if(jobban_isbanned(O, "Syndicate")) // Antag-banned
+		to_chat(O, "<span class='info'>You are unable to do this because you are banned from antagonist roles.</span>")
 		return 0
 	if(!O.client)
 		return 0
-	if(((O.client.inactivity/10)/60) <= ALIEN_SELECT_AFK_BUFFER) // Filter AFK
-		return 1
-	return 0
+	if(!O.client.is_afk(ALIEN_SELECT_AFK_BUFFER)) // Filter AFK
+		to_chat(O, "<span class='info'>You are unable to do this because you are AFK.</span>")
+		return 0
+
+	return 1
 
 
 //Team marker: all markers with the same name form a "team"
@@ -74,23 +104,37 @@
 		L.Add(linked)
 		objects.Remove(T)
 
-	to_chat(world, "Set up [existing_teams.len] teams!")
 	for(var/team_index in existing_teams)
 		var/list/L = existing_teams[team_index]
 
 		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "[team_index] is hiring ([L.len] positions): <a href='?src=\ref[src];signup=\ref[O];body=[existing_teams.Find(team_index)]'>JOIN</a>")
+			notify_observer(O, L, team_index)
+
+/obj/effect/mapping/playable_mob/team/notify_observer(mob/dead/observer/O, list/team, name)
+	//Instead of passing a \ref[O], pass the mob's ckey (prevents many less-noticeable and rare but still nasty bugs)
+	to_chat(O, "<span class='recruit'>[team.len] roles in team \"[name]\" are available (<a href='?src=\ref[src];signup=[O.ckey];body=[existing_teams.Find(name)]'>Join</a> | <a href='?src=\ref[src];teleport=\ref[O]'>Teleport</a>)</span>")
 
 /obj/effect/mapping/playable_mob/team/Topic(href,href_list)
-	if("signup" in href_list)
-		var/mob/dead/observer/O = locate(href_list["signup"])
-		var/team_index = locate(href_list["body"])
-
-		if(!team_index || !istype(O))
+	if(href_list["signup"])
+		var/client/C = get_client_by_ckey(href_list["signup"])
+		if(!istype(C) || (C.ckey != usr.ckey))
 			return
 
-		var/list/L = existing_teams[team_index]
-		if(!L || !L.len)
+		var/mob/dead/observer/O = C.mob
+		var/team_index = text2num(href_list["body"])
+
+		if(!team_index)
+			return
+		if(!check_observer(O))
+			return
+
+		//The line below is slightly confusing
+		//existing_teams is a list of team tags associated with list of mobs ->  list("red team" = list(), "blue team" = list())
+		//team_index is a number
+		//existing_teams[team_index] returns the item at value (team_index), which is the team tag (like "red team" or "blue team"
+		//existing_teams[existing_teams[team_index]] gives you the list of mobs
+		var/list/L = existing_teams[existing_teams[team_index]]
+		if(!istype(L) || !L.len)
 			return
 
 		var/mob/living/new_body = pick(L)
@@ -99,6 +143,8 @@
 		L.Remove(new_body)
 
 		volunteer(O, new_body)
+	else
+		return ..()
 
 //Individual marker: every marker sends a prompt to every observer. Example:
 //"prison guard" position available. __Click_here__ to join as a prison guard.
@@ -113,4 +159,8 @@
 	var/mob/living/linked = locate(/mob/living) in get_turf(src)
 
 	for(var/mob/dead/observer/O in player_list)
-		to_chat(O, "[src.name] position is available: <a href='?src=\ref[src];signup=\ref[O];body=\ref[linked]'>JOIN</a>")
+		notify_observer(O, linked)
+
+/obj/effect/mapping/playable_mob/single/notify_observer(mob/dead/observer/O, mob/living/body)
+	//Instead of passing a \ref[O], pass the mob's ckey (prevents many less-noticeable and rare but still nasty bugs)
+	to_chat(O, "<span class='recruit'>\"[src.name]\" role is available (<a href='?src=\ref[src];signup=[O.ckey];body=\ref[body]'>Join</a> | <a href='?src=\ref[src];teleport=\ref[O]'>Teleport</a>)</span>")

@@ -1,5 +1,10 @@
 //Object and area definitions go here
-/area/vault //Please make all areas used in vaults a subtype of this!
+//Please make all areas used in vaults one of these:
+//  * subtype of /area/vault
+//  * /area/vault/automap (preferred option)
+//  * subtype of /area/vault/automap
+
+/area/vault
 	name = "mysterious structure"
 	requires_power = 0
 	icon_state = "firingrange"
@@ -7,6 +12,20 @@
 
 /area/vault/holomapAlwaysDraw()
 	return 0
+
+//Special area that can be used in map elements. When loaded, it creates a new area object and transfers all of its contents into it.
+//This means that this area can be put into multiple map elements without any issues
+/area/vault/automap
+
+/area/vault/automap/spawned_by_map_element(datum/map_element/ME, list/objects)
+	var/area/vault/automap/new_area = new (src.type)
+
+	for(var/turf/T in objects)
+		if(T.loc == src)
+			new_area.contents.Add(T)
+
+	new_area.tag = "[new_area.type]/\ref[ME]"
+	new_area.addSorted()
 
 /area/vault/icetruck
 
