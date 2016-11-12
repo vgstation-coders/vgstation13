@@ -60,7 +60,7 @@
 		return
 
 	body.key = O.key
-	message_admins("<span class='adminnotice'>[key_name(usr)] has joined the role [src.name] ([formatJumpTo(get_turf(body))])</span>")
+	message_admins("<span class='adminnotice'>[key_name(body)] has joined the role [src.name] ([formatJumpTo(get_turf(body))])</span>")
 	to_chat(body, {"<span class='userdanger'>Unless specified otherwise, you forget all the information about the round that you've gained from your previous character(s).
 	Using such knowledge will lead to a ban.</span>"})
 	if(role_description)
