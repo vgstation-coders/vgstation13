@@ -282,6 +282,8 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			if(!istype(M,/mob/new_player) && M.client)
 				to_chat(M, "<b><font size = 3><font color = red>[department] announcement:</font color> [message]</font size></b>")
 				M << sound(announceSound)
+		log_say("[key_name(usr)] (@[usr.x],[usr.y],[usr.z]) has made an announcement from \the [src]: [message]")
+		message_admins("[key_name_admin(usr)] has made an announcement from \the [src].", 1)
 		announceAuth = 0
 		message = ""
 		screen = 0

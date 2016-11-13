@@ -64,6 +64,8 @@
 
 				user.visible_message("<span class='warning'>[user] has forced [our_mob] onto the spike, killing it instantly!</span>")
 
+				add_attacklogs(user, our_mob, "meatspiked", admin_warn = FALSE)
+
 				our_mob.death(0)
 				our_mob.ghostize()
 
