@@ -1,7 +1,6 @@
 //Simple and crappy but working maze generator
 //Spawning it asks you for its size and wall/floor types
-//Create a subtype and set its width and height to something else than 0 to make it fully automated
-//Alternatively do this:      new /datum/map_element/customizable/maze{width = 10, height = 10} - it only works with constants though
+//Set its width and height to something else than 0 before calling load() to make it more automated
 
 /datum/map_element/customizable/maze
 	file_path = null
