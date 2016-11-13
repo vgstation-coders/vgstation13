@@ -1696,6 +1696,7 @@
 #include "code\modules\projectiles\projectile\rocket.dm"
 #include "code\modules\projectiles\projectile\special.dm"
 #include "code\modules\randomMaps\dungeons.dm"
+#include "code\modules\randomMaps\special.dm"
 #include "code\modules\randomMaps\transit.dm"
 #include "code\modules\randomMaps\vault_definitions.dm"
 #include "code\modules\randomMaps\vaults.dm"
