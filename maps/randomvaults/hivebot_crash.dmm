@@ -15,14 +15,14 @@
 "ao" = (/obj/structure/closet/wardrobe/grey,/turf/simulated/shuttle/floor/airless,/area/vault/hive_shuttle)
 "ap" = (/obj/machinery/light_construct{dir = 1},/turf/simulated/shuttle/floor/airless,/area/vault/hive_shuttle)
 "aq" = (/turf/simulated/shuttle/wall{icon_state = "swall7"},/area/vault/hive_shuttle)
-"ar" = (/obj/structure/shuttle/engine/propulsion{icon_state = "burst_r"; dir = 8},/turf/space,/area/vault/hive_shuttle)
+"ar" = (/obj/structure/shuttle/engine/propulsion{dir = 4},/turf/space,/area/vault/hive_shuttle)
 "as" = (/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/vault/hive_shuttle)
 "at" = (/obj/structure/computerframe,/turf/simulated/shuttle/floor/airless,/area/vault/hive_shuttle)
 "au" = (/obj/structure/bed/chair{dir = 8},/obj/machinery/light_construct{dir = 4},/obj/effect/landmark/corpse/engineer,/turf/simulated/shuttle/floor/airless,/area/vault/hive_shuttle)
 "av" = (/obj/structure/bed/chair{dir = 8},/obj/effect/landmark/corpse/civilian,/turf/simulated/shuttle/floor/airless,/area/vault/hive_shuttle)
 "aw" = (/obj/effect/decal/cleanable/blood/drip,/turf/simulated/shuttle/floor/airless,/area/vault/hive_shuttle)
 "ax" = (/obj/structure/shuttle/engine/heater{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/shuttle/plating/airless,/area/vault/hive_shuttle)
-"ay" = (/obj/structure/shuttle/engine/propulsion{dir = 8},/turf/space,/area/vault/hive_shuttle)
+"ay" = (/obj/structure/shuttle/engine/propulsion/right{dir = 4},/turf/space,/area/vault/hive_shuttle)
 "az" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/shuttle/plating,/area/vault/hive_shuttle)
 "aA" = (/obj/structure/bed/chair{dir = 8},/obj/effect/landmark/corpse/civilian,/turf/simulated/shuttle/plating/airless,/area/vault/hive_shuttle)
 "aB" = (/mob/living/simple_animal/hostile/hivebot,/turf/simulated/shuttle/plating/airless,/area/vault/hive_shuttle)
@@ -34,7 +34,7 @@
 "aH" = (/obj/machinery/light_construct,/mob/living/simple_animal/hostile/hivebot,/turf/simulated/shuttle/plating/airless,/area/vault/hive_shuttle)
 "aI" = (/obj/item/stack/rods,/obj/effect/decal/cleanable/blood/gibs/robot,/turf/simulated/shuttle/plating/airless,/area/vault/hive_shuttle)
 "aJ" = (/obj/machinery/light_construct,/turf/simulated/shuttle/plating/airless,/area/vault/hive_shuttle)
-"aK" = (/obj/structure/shuttle/engine/propulsion{icon_state = "burst_l"; dir = 8},/turf/space,/area/vault/hive_shuttle)
+"aK" = (/obj/structure/shuttle/engine/propulsion/left{dir = 4},/turf/space,/area/vault/hive_shuttle)
 "aL" = (/obj/item/stack/tile/plasteel,/obj/structure/grille/broken,/obj/effect/decal/cleanable/blood/gibs/robot,/turf/simulated/shuttle/plating/airless,/area/vault/hive_shuttle)
 "aM" = (/obj/item/stack/rods,/turf/simulated/shuttle/plating/airless,/area/vault/hive_shuttle)
 "aN" = (/turf/simulated/shuttle/wall{icon_state = "swall13"},/area/vault/hive_shuttle)
@@ -78,17 +78,17 @@
 "bz" = (/obj/machinery/computer/aifixer,/turf/simulated/floor/engine/airless,/area/vault/hive_shuttle)
 "bA" = (/obj/structure/shuttle/engine/heater,/obj/structure/window/reinforced/plasma{dir = 1},/turf/simulated/shuttle/plating/airless,/area/vault/hive_shuttle)
 "bB" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "diagonalWall3"},/area/vault/hive_shuttle)
-"bC" = (/obj/structure/shuttle/engine/propulsion{dir = 1; icon_state = "burst_l"},/turf/space,/area/vault/hive_shuttle)
-"bD" = (/obj/structure/shuttle/engine/propulsion{dir = 1},/turf/space,/area/vault/hive_shuttle)
-"bE" = (/obj/structure/shuttle/engine/propulsion{dir = 1; icon_state = "burst_r"},/turf/space,/area/vault/hive_shuttle)
+"bC" = (/obj/structure/shuttle/engine/propulsion/left,/turf/space,/area/vault/hive_shuttle)
+"bD" = (/obj/structure/shuttle/engine/propulsion,/turf/space,/area/vault/hive_shuttle)
+"bE" = (/obj/structure/shuttle/engine/propulsion/right,/turf/space,/area/vault/hive_shuttle)
 "bF" = (/turf/space,/turf/simulated/shuttle/wall{dir = 4; icon_state = "diagonalWall3"},/area/vault/hive_shuttle)
 
 (1,1,1) = {"
 aaaaaaabacadacacaeafacacadagah
-abacacaiajajakalamanaoapajaqar
-asatauasajavawavajavajavajaxay
-azatajajajaAajavaBavawavajaCay
-asatauasajavaDaAaEaFaDavajaCay
+abacacaiajajakalamanaoapajaqay
+asatauasajavawavajavajavajaxar
+azatajajajaAajavaBavawavajaCar
+asatauasajavaDaAaEaFaDavajaCar
 aGacacaiajajaHaIaEaEaIaJaEaqaK
 aaaaaaaGacadacaEaLaMaEacadaNaO
 aaaaaaaaaaaaaPaQaRaSaTaPaaaaaa
@@ -102,3 +102,4 @@ aaaaaaaaaaaPbwbebxbybtbzaPaaaa
 aaaaaaaaaaaPaPbAbAbAbAaPaPaaaa
 aaaaaaaaaabBbCbDbDbDbDbEbFaaaa
 "}
+

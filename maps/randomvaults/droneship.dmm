@@ -1,12 +1,12 @@
 "a" = (/turf/space,/area)
-"b" = (/obj/structure/shuttle/engine/propulsion/burst{dir = 4; pixel_x = -24},/turf/simulated/shuttle/wall{icon_state = "wall3"},/area/vault/droneship)
+"b" = (/obj/structure/shuttle/engine/propulsion{dir = 8},/turf/space,/area)
 "c" = (/turf/simulated/shuttle/wall{icon_state = "wall3"},/area/vault/droneship)
 "d" = (/turf/simulated/shuttle/wall{dir = 1; icon_state = "diagonalWall3"},/area/vault/droneship)
 "e" = (/turf/simulated/shuttle/wall{dir = 8; icon_state = "diagonalWall3"},/area/vault/droneship)
 "f" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/shuttle/plating/airless,/area/vault/droneship)
 "g" = (/obj/item/robot_parts/l_arm,/turf/space,/area)
 "h" = (/obj/item/stack/rods,/turf/space,/area)
-"i" = (/obj/structure/shuttle/engine/propulsion{dir = 4},/turf/space,/area)
+"i" = (/obj/structure/shuttle/engine/propulsion/burst{dir = 8; pixel_x = -24},/turf/simulated/shuttle/wall{icon_state = "wall3"},/area/vault/droneship)
 "j" = (/obj/structure/shuttle/engine/heater{dir = 8},/obj/item/weapon/shard,/obj/effect/decal/cleanable/soot,/turf/simulated/shuttle/plating/airless,/area/vault/droneship)
 "k" = (/obj/effect/decal/cleanable/soot,/obj/effect/decal/cleanable/molten_item,/obj/machinery/computer/pod{id_tags = list("Cyber"); name = "Pod Door Control"},/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/droneship)
 "l" = (/turf/simulated/shuttle/floor{icon_state = "floor2"},/area/vault/droneship)
@@ -36,11 +36,12 @@
 "J" = (/turf/simulated/shuttle/wall{icon_state = "diagonalWall3"},/area/vault/droneship)
 
 (1,1,1) = {"
-aaaaaaaaaaabccdaaa
+aaaaaaaaaaaiccdaaa
 aaaaeccfcccccccdaa
-gahaijklmcnopqrccd
+gahabjklmcnopqrccd
 asaatuvwxyxxxxxzAc
-aaBaiCDlEcnFGHnccI
+aaBabCDlEcnFGHnccI
 aaaaJccfcccccccIaa
-aaaaaaaaaaabccIaaa
+aaaaaaaaaaaiccIaaa
 "}
+

@@ -1,8 +1,8 @@
 "aa" = (/turf/space,/area)
 "ab" = (/turf/simulated/shuttle/wall,/area/vault/brokeufo)
-"ac" = (/obj/structure/shuttle/engine/propulsion{icon_state = "propulsion_r"; dir = 1},/turf/space,/area/vault/brokeufo)
-"ad" = (/obj/structure/shuttle/engine/propulsion,/turf/space,/area/vault/brokeufo)
-"ae" = (/obj/structure/shuttle/engine/propulsion{icon_state = "propulsion_l"; dir = 1},/turf/space,/area/vault/brokeufo)
+"ac" = (/obj/machinery/light,/obj/structure/table/flipped{dir = 8},/turf/simulated/floor{tag = "icon-white"; icon_state = "white"},/area/vault/brokeufo)
+"ad" = (/obj/structure/shuttle/engine/propulsion{dir = 1},/turf/space,/area/vault/brokeufo)
+"ae" = (/obj/structure/shuttle/engine/propulsion/right{dir = 1},/turf/space,/area/vault/brokeufo)
 "af" = (/turf/simulated/shuttle/wall{tag = "icon-swall_s6"; icon_state = "swall_s6"},/area/vault/brokeufo)
 "ag" = (/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/vault/brokeufo)
 "ah" = (/turf/simulated/shuttle/wall{icon_state = "swall11"},/area/vault/brokeufo)
@@ -17,7 +17,7 @@
 "aq" = (/obj/item/weapon/soap/deluxe,/turf/simulated/floor{tag = "icon-whitebluefull"; icon_state = "whitebluefull"},/area/vault/brokeufo)
 "ar" = (/obj/structure/bed,/obj/effect/landmark/corpse/tajaran,/turf/simulated/floor{tag = "icon-whitebluefull"; icon_state = "whitebluefull"},/area/vault/brokeufo)
 "as" = (/obj/machinery/door/unpowered/shuttle,/turf/simulated/floor{tag = "icon-white"; icon_state = "white"},/area/vault/brokeufo)
-"at" = (/obj/machinery/light,/turf/simulated/floor{tag = "icon-white"; icon_state = "white"},/area/vault/brokeufo)
+"at" = (/obj/structure/shuttle/engine/propulsion/left{dir = 1},/turf/space,/area/vault/brokeufo)
 "au" = (/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/brokeufo)
 "av" = (/mob/living/simple_animal/hostile/humanoid/grey/space{name = "Klaatu"},/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/brokeufo)
 "aw" = (/obj/item/clothing/gloves/yellow,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/brokeufo)
@@ -62,10 +62,10 @@
 "bj" = (/obj/item/toy/gasha/wizard,/turf/space,/area)
 
 (1,1,1) = {"
-aaaaaaaaabacadaeabaaaaaaaaaaaa
+aaaaaaaaabaeadatabaaaaaaaaaaaa
 aaaaafagahaiaiaiajagagakaaaaaa
 aaaaalamalanaoapalaqaralaaaaaa
-aaaaasatasauavawalaxayalaaaaaa
+aaaaasacasauavawalaxayalaaaaaa
 aaafazagaAagasagahaBaCalaaaaaa
 aaalaDaEalaFaGaHalaCaIalaaaaaa
 aaaJaKaGasaGaGaGasaLaCalaaaaaa
@@ -78,3 +78,4 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaabjaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 "}
+
