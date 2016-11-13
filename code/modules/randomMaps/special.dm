@@ -16,13 +16,13 @@
 	.=..()
 
 	if(usr && (!width || !height))
-		width  = input(usr, "Enter the maze's width (4-100). The starting point is the lower left corner. Enter an invalid value to cancel.", "Maze Generator") as num
-		if(width < 4 || width > 100)
+		width  = input(usr, "Enter the maze's width (4-200). The starting point is the lower left corner. Enter an invalid value to cancel.", "Maze Generator") as num
+		if(width < 4 || width > 200)
 			width = 0
 			return
 
-		height = input(usr, "Enter the maze's height (4-100). The starting point is the lower left corner. Enter an invalid value to cancel.", "Maze Generator") as num
-		if(height < 4 || height > 100)
+		height = input(usr, "Enter the maze's height (4-200). The starting point is the lower left corner. Enter an invalid value to cancel.", "Maze Generator") as num
+		if(height < 4 || height > 200)
 			height = 0
 			return
 
@@ -67,10 +67,11 @@
 				area_object = new area_type
 				area_object.tag = "[area_type]/\ref[src]"
 				area_object.addSorted()
-				to_chat(world, "Creating new area object [area_object.dynamic_lighting]")
 
 			area_object.contents.Add(T)
 			T.change_area(old_area, area_object)
+
+		tcheck(80,1)
 
 	var/list/chambers = list(list(location_x + 1, location_y + 1, location_x + width - 1, location_y + height - 1))
 
