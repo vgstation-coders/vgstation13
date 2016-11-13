@@ -405,6 +405,12 @@ var/area/space_area
 /area/Entered(atom/movable/Obj, atom/OldLoc)
 	var/area/oldArea = Obj.areaMaster
 	Obj.areaMaster = src
+
+	if(issnow(src))
+		Obj.update_shadow()
+	else if(istype(oldArea) && issnow(oldArea))
+		Obj.underlays -= Obj.shadow
+
 	if(!ismob(Obj))
 		return
 
