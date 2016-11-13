@@ -265,8 +265,19 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/r_def_manifested.dmi'
 	known_languages = list(LANGUAGE_HUMAN)
 	primitive = /mob/living/carbon/monkey
-
+	has_organ = list(
+		"heart" =    /datum/organ/internal/heart,
+		"lungs" =    /datum/organ/internal/lungs,
+		"liver" =    /datum/organ/internal/liver,
+		"kidneys" =  /datum/organ/internal/kidney,
+		"brain" =    /datum/organ/internal/brain/ash,
+		"appendix" = /datum/organ/internal/appendix,
+		"eyes" =     /datum/organ/internal/eyes
+		)
 	flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | NO_BLOOD
+	
+/datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
+	H.dust()
 
 /datum/species/unathi
 	name = "Unathi"

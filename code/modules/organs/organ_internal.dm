@@ -208,6 +208,8 @@
 	removed_type = /obj/item/organ/brain
 	vital = 1
 
+/datum/organ/internal/brain/ash
+	removed_type = /obj/item/organ/brain/ash
 
 /datum/organ/internal/appendix
 	name = "appendix"
