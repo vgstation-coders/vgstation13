@@ -48,7 +48,7 @@
 			scancount += SP.rating-1
 		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating-1
-	mutatechance = initial(mutatechance) * scancount
+	mutatechance = initial(mutatechance) * max(1, scancount)
 	growthrate = initial(growthrate) + lasercount
 
 /obj/machinery/disease2/incubator/attackby(var/obj/B as obj, var/mob/user as mob)
