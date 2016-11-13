@@ -86,16 +86,22 @@
 			var/c_height= c_end_y - c_start_y
 			//place a wall that divides the chamber
 
-			//In order to always get an even number, divide the upper and lower limits by 2, then multiply result by 2 (rand(2-16) -> rand(1-8)*2 -> (2,4,6,...,16))
-			if(prob(50)) //50% chance to make a horizontal wall
+			var/horizontal_wall_chance_modifier = (c_height > c_width ? 20 : -20)
+			if(prob(50 + horizontal_wall_chance_modifier))
 				if(c_height < 2)
 					chambers.Remove(list(chamber))
 					continue
 
-				var/new_wall_y = rand((c_start_y+1)*0.5, (c_end_y-1)*0.5)*2
+				//The wall's coodrinate must be an even number, to prevent conflicts with openings
+				var/new_wall_y = round((rand()+rand()+rand())/3 * (c_height-2)) + c_start_y
+				if((new_wall_y - location_y) % 2) //odd
+					new_wall_y++
 
-				//New opening's coordinate must be an odd number, to prevent conflicts with walls (do same thing that we did to get an even number and subtract 1): rand(1,19) -> rand(1, 10)*2 - 1 -> (1,3,...,19))
-				var/new_opening_x = rand((c_start_x+1)*0.5, (c_end_x+1)*0.5)*2 - 1
+				//New opening's coordinate must be an odd number, to prevent conflicts with walls
+				var/new_opening_x = rand(c_start_x, c_end_x-2)
+				if((new_opening_x - location_x) % 2 == 0) //even
+					new_opening_x++
+
 				var/list/new_chamber_1 = list(c_start_x, c_start_y, c_end_x, new_wall_y - 1)
 				var/list/new_chamber_2 = list(c_start_x, new_wall_y + 1, c_end_x, c_end_y)
 
@@ -116,10 +122,14 @@
 					chambers.Remove(list(chamber))
 					continue
 
-				var/new_wall_x = rand((c_start_x+1)*0.5, (c_end_x-1)*0.5)*2
+				var/new_wall_x = round((rand()+rand()+rand())/3 * (c_width-2)) + c_start_x
+				if((new_wall_x - location_x) % 2) //odd
+					new_wall_x++
 
-				//New opening's coordinate must be an odd number, to prevent conflicts with walls (do same thing that we did to get an even number and subtract 1): rand(1,19) -> rand(1, 10)*2 - 1 -> (1,3,...,19))
-				var/new_opening_y = rand((c_start_y+1)*0.5, (c_end_y+1)*0.5)*2 - 1
+				var/new_opening_y = rand(c_start_y, c_end_y-1)
+				if((new_opening_y - location_y) % 2 == 0) //even
+					new_opening_y++
+
 				var/list/new_chamber_1 = list(c_start_x, c_start_y, new_wall_x - 1, c_end_y)
 				var/list/new_chamber_2 = list(new_wall_x + 1, c_start_y, c_end_x, c_end_y)
 
