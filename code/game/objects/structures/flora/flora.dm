@@ -145,6 +145,7 @@
 /obj/structure/flora/tree/pine/New()
 	..()
 	icon_state = "pine_[rand(1, 3)]"
+	update_shadow()
 
 /obj/structure/flora/tree/pine/xmas
 	name = "xmas tree"
@@ -176,10 +177,13 @@
 	icon_state = "pine_stump"
 
 //grass
-/obj/structure/flora/grass
+/obj/structure/flora/grass/
 	name = "grass"
 	icon = 'icons/obj/flora/snowflora.dmi'
 	anchored = 1
+
+/obj/structure/flora/grass/has_shadow()
+	return 0
 
 /obj/structure/flora/grass/brown
 	icon_state = "snowgrass1bb"
@@ -218,6 +222,8 @@
 	icon_state = "snowbush1"
 	anchored = 1
 
+/obj/structure/flora/bush/has_shadow()
+	return 0
 
 /obj/structure/flora/bush/New()
 	..()
@@ -391,6 +397,10 @@
 	icon_state = "rock1"
 	icon = 'icons/obj/flora/rocks.dmi'
 	anchored = 1
+
+/obj/structure/flora/rock/has_shadow()
+	return 0
+
 
 /obj/structure/flora/rock/New()
 	..()
