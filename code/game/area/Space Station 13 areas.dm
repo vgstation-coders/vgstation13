@@ -1479,6 +1479,8 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "Armory"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
+	holomap_marker = "armory"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP_STRATEGIC
 
 /area/security/hos
 	name = "\improper Head of Security's Office"
@@ -1960,6 +1962,8 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper AI Chamber"
 	icon_state = "ai_chamber"
 	jammed=1
+	holomap_marker = "ai"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP_STRATEGIC
 
 /area/turret_protected/aisat
 	name = "\improper AI Satellite"
@@ -2135,6 +2139,8 @@ proc/process_adminbus_teleport_locs()
 /area/tcomms/chamber
 	name = "\improper Telecoms Chamber"
 	icon_state = "ai"
+	holomap_marker = "tcomms"
+	holomap_filter = HOLOMAP_FILTER_STATIONMAP_STRATEGIC
 
 /area/tcomms/storage
 	name = "\improper Telecoms Storage"

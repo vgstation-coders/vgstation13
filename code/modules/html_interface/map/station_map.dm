@@ -40,6 +40,26 @@
 		S.initialize()
 
 /proc/generateMarkers(var/ZLevel)
+	//generating specific markers
+	if(ZLevel == map.zMainStation)
+		var/i = 1
+		for(var/obj/machinery/power/battery/smes/S in smes_list)
+			var/datum/holomap_marker/newMarker = new()
+			newMarker.id = "smes"
+			newMarker.filter = HOLOMAP_FILTER_STATIONMAP_STRATEGIC
+			newMarker.x = S.x
+			newMarker.y = S.y
+			newMarker.z = S.z
+			holomap_markers["smes_[i]"] = newMarker
+			i++
+		if(nukedisk)//Only gives the disk's original position on the map
+			var/datum/holomap_marker/newMarker = new()
+			newMarker.id = "cap"
+			newMarker.filter = HOLOMAP_FILTER_STATIONMAP_STRATEGIC
+			newMarker.x = nukedisk.x
+			newMarker.y = nukedisk.y
+			newMarker.z = nukedisk.z
+			holomap_markers["cap"] = newMarker
 	//generating area markers
 	for(var/area/A in areas)
 		if(A.holomap_marker)
@@ -51,16 +71,7 @@
 				newMarker.x = T.x
 				newMarker.y = T.y
 				newMarker.z = ZLevel
-				holomap_markers[newMarker.id] |= newMarker
-	//generating specific markers
-	if(nukedisk)//Only gives the disk's original position on the map
-		var/datum/holomap_marker/newMarker = new()
-		newMarker.id = "cap"
-		newMarker.filter = HOLOMAP_FILTER_NUKEOPS
-		newMarker.x = nukedisk.x
-		newMarker.y = nukedisk.y
-		newMarker.z = nukedisk.z
-		holomap_markers["cap"] = newMarker
+				holomap_markers[newMarker.id] = newMarker
 
 
 /proc/generateHoloMinimap(var/zLevel=1)
@@ -170,9 +181,20 @@
 	big_map.Blend(map_base,ICON_OVERLAY)
 	big_map.Blend(canvas,ICON_OVERLAY)
 
+	if(StationZLevel == map.zMainStation)
+		var/icon/strategic_map = icon(big_map)
+
+		for(var/marker in holomap_markers)
+			var/datum/holomap_marker/holomarker = holomap_markers[marker]
+			if(holomarker.z == StationZLevel && holomarker.filter & HOLOMAP_FILTER_STATIONMAP_STRATEGIC)
+				strategic_map.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8+map.holomap_offset_x[StationZLevel]	, holomarker.y-8+map.holomap_offset_y[StationZLevel])
+
+		extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAP_STRATEGIC
+		extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP_STRATEGIC] = strategic_map
+
 	for(var/marker in holomap_markers)
 		var/datum/holomap_marker/holomarker = holomap_markers[marker]
-		if(holomarker.z == StationZLevel && holomarker.filter & HOLOMAP_FILTER_STATIONMAP))
+		if(holomarker.z == StationZLevel && holomarker.filter & HOLOMAP_FILTER_STATIONMAP)
 			if(map.holomap_offset_x.len >= StationZLevel)
 				big_map.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8+map.holomap_offset_x[StationZLevel]	, holomarker.y-8+map.holomap_offset_y[StationZLevel])
 			else
