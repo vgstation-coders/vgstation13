@@ -1,7 +1,6 @@
 //Simple and crappy but working maze generator
 //Spawning it asks you for its size and wall/floor types
-//Create a subtype and set its width and height to something else than 0 to make it fully automated
-//Alternatively do this:      new /datum/map_element/customizable/maze{width = 10, height = 10} - it only works with constants though
+//Set its width and height to something else than 0 before calling load() to make it more automated
 
 /datum/map_element/customizable/maze
 	file_path = null
@@ -73,6 +72,12 @@
 
 		tcheck(80,1)
 
+	//Use the recursive division method: https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_division_method
+	//Start with a single chamber and divide it into two chambers with a wall (which has an opening somewhere)
+	//Continue dividing the chambers until they can no longer be divided
+	//Each chamber is represented by a list. First two elements are the chamber's starting X and Y, the next two are the chamber's ending X and Y
+	//list(1,1,20,20) is a chamber from [1;1] to [20;20]
+	//The chambers list contains all currently processed chambers
 	var/list/chambers = list(list(location_x + 1, location_y + 1, location_x + width - 1, location_y + height - 1))
 
 	while(chambers.len)
@@ -117,7 +122,7 @@
 
 					var/turf/T = locate(dx, new_wall_y, location_z)
 					T.ChangeTurf(wall_type)
-			else
+			else //Same as above but x and y are switched around
 				if(c_width < 2)
 					chambers.Remove(list(chamber))
 					continue
