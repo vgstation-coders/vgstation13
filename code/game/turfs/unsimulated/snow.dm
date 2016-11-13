@@ -22,6 +22,7 @@ var/global/list/snow_turfs = list()
 	dynamic_lighting = 0
 	luminosity = 1
 	plane = BELOW_TURF_PLANE
+	var/slowdown = 6
 
 	var/snowballs = 0
 	var/global/list/cached_appearances = list()
@@ -131,7 +132,7 @@ var/global/list/snow_turfs = list()
 
 	for(var/i = 0; i < extract_amount, i++)
 		var/obj/item/stack/sheet/snow/snowball = new
-
+		snowball.forceMove(get_turf(src))
 		if(pick_up)
 			user.put_in_hands(snowball)
 
@@ -170,8 +171,14 @@ var/global/list/snow_turfs = list()
 
 /turf/snow/Entered(mob/user)
 	..()
-	if(isliving(user) && !user.locked_to && !user.lying && !user.flying)
+	if(snowballs && isliving(user) && !user.locked_to && !user.lying && !user.flying)
 		playsound(get_turf(src), pick(snowsound), 10, 1, -1, channel = 123)
+
+/turf/snow/adjust_slowdown(mob/living/L, base_slowdown)
+	if(snowballs) // ie, there is snow on this turf
+		return base_slowdown + slowdown
+	else
+		return base_slowdown
 
 /obj/dirtpath
 	name = "dirt path"
