@@ -10,6 +10,7 @@
 	height = 0
 	var/wall_type = /turf/unsimulated/wall/rock
 	var/floor_type = /turf/unsimulated/floor/asteroid/air
+	var/area_type = null
 
 /datum/map_element/customizable/maze/pre_load()
 	.=..()
@@ -29,7 +30,7 @@
 		width  = ((width % 2) ? width + 1 : width)
 		height = ((height% 2) ? height + 1: height)
 
-		if(alert(usr, "Would you like to set the maze's wall and floor types?", "Maze Generator", "Yes", "No") == "Yes")
+		if(alert(usr, "Would you like to set the maze's wall and floor types?", "Maze Generator", "No", "Yes") == "Yes")
 			wall_type = input(usr, "Select wall type.", "Maze Generator", wall_type) as null|anything in typesof(/turf)
 			if(!wall_type)
 				wall_type = initial(wall_type)
@@ -40,6 +41,9 @@
 				floor_type = initial(floor_type)
 				to_chat(usr, "Floor type reset to [floor_type]")
 
+		if(alert(usr, "Would you like the maze to have dynamic lightning and darkness?", "Maze Generator", "No", "Yes") == "Yes")
+			area_type = /area/vault
+
 /datum/map_element/customizable/maze/initialize()
 	if(!location)
 		return
@@ -49,12 +53,24 @@
 	var/location_x = location.x
 	var/location_y = location.y
 	var/location_z = location.z
+	var/area/area_object = null
+	var/area/old_area = get_space_area()
 
 	for(var/turf/T in block(locate(location_x, location_y, location_z), locate(location_x + width, location_y + height, location_z)))
 		if(T.x == location_x || T.y == location_y || T.x == location_x + width || T.y == location_y + height) //Border walls
 			T.ChangeTurf(wall_type)
 		else
 			T.ChangeTurf(floor_type)
+
+		if(area_type != null)
+			if(!area_object)
+				area_object = new area_type
+				area_object.tag = "[area_type]/\ref[src]"
+				area_object.addSorted()
+				to_chat(world, "Creating new area object [area_object.dynamic_lighting]")
+
+			area_object.contents.Add(T)
+			T.change_area(old_area, area_object)
 
 	var/list/chambers = list(list(location_x + 1, location_y + 1, location_x + width - 1, location_y + height - 1))
 
