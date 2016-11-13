@@ -587,6 +587,15 @@
 	name = "cargo winter coat"
 	icon_state = "coatcargo"
 
+/obj/item/clothing/suit/wintercoat/prisoner
+	name = "prisoner winter coat"
+	icon_state = "coatprisoner"
+
+/obj/item/clothing/suit/wintercoat/hop
+	name = "Head of Personnel's winter coat"
+	icon_state = "coathop"
+	armor = list(melee = 50, bullet = 10, laser = 25, energy = 10, bomb = 0, bio = 0, rad = 0)
+
 /obj/item/clothing/suit/wintercoat/miner
 	name = "mining winter coat"
 	icon_state = "coatminer"

@@ -4,6 +4,9 @@
 /mob/dead/gib()		//ghosts can't be gibbed.
 	return
 
+/mob/dead/has_shadow() // ghosts do not have shadows
+	return
+
 /mob/dead/cultify()
 	if(icon_state != "ghost-narsie")
 		icon = 'icons/mob/mob.dmi'

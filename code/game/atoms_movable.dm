@@ -49,6 +49,8 @@
 
 	// When this object moves. (args: loc)
 	var/event/on_moved
+	var/obj/shadow/shadow
+
 
 /atom/movable/New()
 	. = ..()
