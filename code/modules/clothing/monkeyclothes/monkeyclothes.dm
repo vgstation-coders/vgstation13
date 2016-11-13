@@ -1,6 +1,6 @@
 /obj/item/clothing/monkeyclothes
 	name = "monkey-sized waiter suit"
-	desc = "Adorable. comes with green contact lens."
+	desc = "Adorable. Comes with green contact lens."
 	icon = 'icons/mob/monkey.dmi'
 	icon_state = "punpunsuit_icon"
 	item_state = "punpunsuit_item"
