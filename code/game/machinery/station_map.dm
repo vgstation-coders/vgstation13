@@ -109,7 +109,7 @@ var/list/station_holomaps = list()
 			if(bogus)
 				to_chat(user, "<span class='warning'>The holomap failed to initialize. This area of space cannot be mapped.</span>")
 			else
-				to_chat(user, "<span class='notice'>An hologram of the station appears before your eyes.</span>")
+				to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
 
 /obj/machinery/station_map/attack_paw(var/mob/user)
 	src.attack_hand(user)
@@ -281,7 +281,7 @@ var/list/station_holomaps = list()
 		if(bogus)
 			to_chat(user, "<span class='warning'>The holomap failed to initialize. This area of space cannot be mapped.</span>")
 		else
-			to_chat(user, "<span class='notice'>An hologram of the station appears before your eyes.</span>")
+			to_chat(user, "<span class='notice'>A hologram of the station appears before your eyes.</span>")
 
 /obj/item/device/station_map/Destroy()
 	stopWatching()
