@@ -1,6 +1,6 @@
 /mob/living/carbon/monkey
 	name = "monkey"
-	real_name = "monkey (123)" //To stop Pun-Pun becoming generic
+	real_name = "randomgen" //To stop Pun Pun becoming generic. Give your subtype a real_name matching its name.
 	voice_name = "monkey"
 	//speak_emote = list("chimpers")
 	icon_state = "monkey1"
@@ -41,7 +41,7 @@
 	reagents = R
 	R.my_atom = src
 
-	if(name != real_name) //To stop Pun-Pun becoming generic.
+	if(real_name == "randomgen") //To stop Pun Pun becoming generic.
 		name = "[name] ([rand(1, 1000)])"
 		real_name = name
 
