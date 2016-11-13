@@ -203,6 +203,10 @@ var/list/mechtoys = list(
 			message_admins("WARNING: Cargo shuttle unable to find the station!")
 			warning("Cargo shuttle can't find centcomm")
 	else //at station
+		for(var/obj/structure/shuttle/engine/propulsion/P in cargo_shuttle.linked_area)
+			spawn()
+				P.shoot_exhaust()
+		sleep(3)
 		destination = cargo_shuttle.dock_centcom
 
 		at_station = 0

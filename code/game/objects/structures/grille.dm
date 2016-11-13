@@ -127,6 +127,9 @@
 		else
 			return !density
 
+/obj/structure/grille/projectile_check() //handled by the projectile's grillepasschance in Cross()
+	return
+
 /obj/structure/grille/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
 		return

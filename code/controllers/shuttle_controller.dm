@@ -128,6 +128,10 @@ datum/shuttle_controller/proc/move_pod(var/start_type,var/end_type,var/direction
 	var/area/start_location=locate(start_type)
 	var/area/end_location=locate(end_type)
 
+	for(var/obj/structure/shuttle/engine/propulsion/P in start_location)
+		spawn()
+			P.shoot_exhaust()
+
 	start_location.move_contents_to(end_location, null, direction)
 
 	for(var/obj/machinery/door/D in all_doors)
@@ -189,6 +193,9 @@ datum/shuttle_controller/emergency_shuttle/process()
 
 			/* --- Shuttle is in transit to Central Command from SS13 --- */
 			if(direction == 2)
+				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
+					spawn()
+						P.shoot_exhaust()
 				if(timeleft>0)
 					return 0
 
@@ -265,6 +272,9 @@ datum/shuttle_controller/emergency_shuttle/process()
 					spawn(0)
 						D.close()
 						D.locked = 1
+				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
+					spawn()
+						P.shoot_exhaust()
 
 			if(timeleft>0)
 				return 0
@@ -293,6 +303,11 @@ datum/shuttle_controller/emergency_shuttle/process()
 				if(shuttle && istype(shuttle,/datum/shuttle/escape))
 					var/datum/shuttle/escape/E = shuttle
 					E.close_all_doors()
+
+					for(var/obj/structure/shuttle/engine/propulsion/P in E.linked_area)
+						spawn()
+							P.shoot_exhaust()
+
 					if(!E.move_to_dock(E.transit_port, 0, turn(E.dir,180))) //Throw everything backwards
 						message_admins("WARNING: THE EMERGENCY SHUTTLE FAILED TO FIND TRANSIT! PANIC PANIC PANIC")
 				else
