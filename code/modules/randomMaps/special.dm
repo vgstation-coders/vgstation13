@@ -72,6 +72,12 @@
 
 		tcheck(80,1)
 
+	//Use the recursive division method: https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_division_method
+	//Start with a single chamber and divide it into two chambers with a wall (which has an opening somewhere)
+	//Continue dividing the chambers until they can no longer be divided
+	//Each chamber is represented by a list. First two elements are the chamber's starting X and Y, the next two are the chamber's ending X and Y
+	//list(1,1,20,20) is a chamber from [1;1] to [20;20]
+	//The chambers list contains all currently processed chambers
 	var/list/chambers = list(list(location_x + 1, location_y + 1, location_x + width - 1, location_y + height - 1))
 
 	while(chambers.len)
@@ -86,6 +92,7 @@
 			//place a wall that divides the chamber
 
 			//In order to always get an even number, divide the upper and lower limits by 2, then multiply result by 2 (rand(2-16) -> rand(1-8)*2 -> (2,4,6,...,16))
+			//Walls' coordinates are even, openings' coordinates are odd. This ensures that two perpendicular walls never block each other's openings
 			if(prob(50)) //50% chance to make a horizontal wall
 				if(c_height < 2)
 					chambers.Remove(list(chamber))
@@ -110,7 +117,7 @@
 
 					var/turf/T = locate(dx, new_wall_y, location_z)
 					T.ChangeTurf(wall_type)
-			else
+			else //Same as above but x and y are switched around
 				if(c_width < 2)
 					chambers.Remove(list(chamber))
 					continue
