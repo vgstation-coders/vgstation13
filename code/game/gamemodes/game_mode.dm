@@ -29,7 +29,7 @@
 	var/recommended_enemies = 0
 	var/newscaster_announcements = null
 	var/uplink_welcome = "Syndicate Uplink Console:"
-	var/uplink_uses = 10
+	var/uplink_uses = 20
 	var/mixed = 0 // denotes whether its apart of a mixed mode or not
 	var/list/datum/mind/necromancer = list() //Those who use a necromancy staff OR soulstone a shade/construct
 	var/list/datum/mind/risen = list() // Those risen by necromancy or soulstone
@@ -198,7 +198,7 @@
 			// If they're a traitor or likewise, give them extra TC in exchange.
 			var/obj/item/device/uplink/hidden/suplink = man.mind.find_syndicate_uplink()
 			if(suplink)
-				var/extra = 4
+				var/extra = 8
 				suplink.uses += extra
 				if(man.mind)
 					man.mind.total_TC += extra

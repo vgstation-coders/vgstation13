@@ -20,7 +20,7 @@
 	var/brigged_time = 0
 
 	uplink_welcome = "Syndicate Uplink Console:"
-	uplink_uses = 10
+	uplink_uses = 20
 
 
 /datum/game_mode/rp_revolution/announce()

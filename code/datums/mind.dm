@@ -1065,8 +1065,8 @@
 				else if (!ticker.mode.equip_traitor(current, !(src in ticker.mode.traitors)))
 					to_chat(usr, "<span class='warning'>Equipping a syndicate failed!</span>")
 				else
-					log_admin("[key_name(usr)] gave [key_name(current)] an uplink with 10 telecrystals.")
-					message_admins("<span class='notice'>[key_name(usr)] gave [key_name(current)] an uplink with 10 telecrystals.</span>")
+					log_admin("[key_name(usr)] gave [key_name(current)] an uplink with 20 telecrystals.")
+					message_admins("<span class='notice'>[key_name(usr)] gave [key_name(current)] an uplink with 20 telecrystals.</span>")
 
 	else if (href_list["obj_announce"])
 		var/obj_count = 1

@@ -11,7 +11,7 @@
 	recommended_enemies = 5
 
 	uplink_welcome = "Corporate Backed Uplink Console:"
-	uplink_uses = 40
+	uplink_uses = 80
 
 	var/obj/nuclear_uplink
 	var/const/agents_possible = 5 //If we ever need more syndicate agents.
