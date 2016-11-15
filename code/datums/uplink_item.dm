@@ -118,7 +118,7 @@ var/list/uplink_items = list()
 	name = "The E20"
 	desc = "A seemingly innocent die, those who are not afraid to roll for attack will find it's effects quite explosive. Has a four second timer."
 	item = /obj/item/weapon/dice/d20/e20
-	cost = 3
+	cost = 6
 	job = list("Librarian")
 
 //Cargo Technician
