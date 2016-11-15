@@ -525,22 +525,26 @@
 	icon_state = "coatwinter"
 	item_state = "labcoat"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
-	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
 	var/is_hooded = 0
+	var/nohood = 0
 	var/obj/item/clothing/head/winterhood/hood
 	action_button_name = "Toggle Hood"
 
 /obj/item/clothing/suit/wintercoat/New()
 	..()
-	hood = new(src)
+	if(!nohood)
+		hood = new(src)
+	else
+		action_button_name = null
 
 /obj/item/clothing/head/winterhood
 	name = "winter hood"
 	desc = "A hood attached to a heavy winter jacket."
 	icon_state = "whood"
 	body_parts_covered = HIDEHEADHAIR
-	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
 	var/obj/item/clothing/suit/wintercoat/coat
 
 /obj/item/clothing/head/winterhood/New(var/obj/item/clothing/suit/wintercoat/wc)
@@ -559,6 +563,18 @@
 	name = "security winter coat"
 	icon_state = "coatsecurity"
 	armor = list(melee = 25, bullet = 20, laser = 20, energy = 15, bomb = 20, bio = 0, rad = 0)
+
+/obj/item/clothing/suit/wintercoat/security/hos
+	name = "Head of Security's winter coat"
+	icon_state = "coathos"
+	nohood = 1
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS
+
+/obj/item/clothing/suit/wintercoat/security/warden
+	name = "Warden's winter coat"
+	icon_state = "coatwarden"
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS
+	nohood = 1
 
 /obj/item/clothing/suit/wintercoat/medical
 	name = "medical winter coat"
@@ -595,8 +611,21 @@
 	name = "Head of Personnel's winter coat"
 	icon_state = "coathop"
 	armor = list(melee = 50, bullet = 10, laser = 25, energy = 10, bomb = 0, bio = 0, rad = 0)
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS
 
 /obj/item/clothing/suit/wintercoat/miner
 	name = "mining winter coat"
 	icon_state = "coatminer"
 	armor = list(melee = 10, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
+
+/obj/item/clothing/suit/wintercoat/clown
+	name = "Elfen winter coat"
+	icon_state = "coatclown"
+
+/obj/item/clothing/suit/wintercoat/ce
+	name = "Chief Engineer's winter coat"
+	icon_state = "coatce"
+
+/obj/item/clothing/suit/wintercoat/cmo
+	name = "Chief Medical Officer's winter coat"
+	icon_state = "coatcmo"
