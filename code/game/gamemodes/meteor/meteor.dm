@@ -13,7 +13,7 @@
 	required_players_secret = 20
 
 	uplink_welcome = "EVIL METEOR Uplink Console:"
-	uplink_uses = 10
+	uplink_uses = 20
 
 /datum/game_mode/meteor/announce()
 	to_chat(world, "<B>The current game mode is - Meteor!</B>")
