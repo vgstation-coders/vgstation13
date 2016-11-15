@@ -118,7 +118,7 @@ var/list/uplink_items = list()
 	name = "The E20"
 	desc = "A seemingly innocent die, those who are not afraid to roll for attack will find it's effects quite explosive. Has a four second timer."
 	item = /obj/item/weapon/dice/d20/e20
-	cost = 6
+	cost = 3
 	job = list("Librarian")
 
 //Cargo Technician
@@ -147,7 +147,7 @@ var/list/uplink_items = list()
 	name = "1 Banana Grenade"
 	desc = "A grenade that explodes into HONK! brand banana peels that are genetically modified to be extra slippery and extrude caustic acid when stepped on"
 	item = /obj/item/weapon/grenade/clown_grenade
-	cost = 8
+	cost = 5
 	job = list("Clown")
 
 /datum/uplink_item/jobspecific/bsword
@@ -199,7 +199,7 @@ var/list/uplink_items = list()
 	name = "Ambrosia Cruciatus Seeds"
 	desc = "Part of the notorious Ambrosia family, this species is nearly indistinguishable from Ambrosia Vulgaris- but its' branches contain a revolting toxin. Eight units are enough to drive victims insane after a three-minute delay."
 	item = /obj/item/seeds/ambrosiacruciatusseed
-	cost = 4
+	cost = 2
 	job = list("Botanist")
 
 //Chef
@@ -207,7 +207,7 @@ var/list/uplink_items = list()
 	name = "Chef Excellence's Special Sauce"
 	desc = "A custom made sauce made from the toxin glands of 1000 space carp, if somebody ingests enough they'll be dead in 3 minutes or less guaranteed."
 	item = /obj/item/weapon/reagent_containers/food/condiment/syndisauce
-	cost = 4
+	cost = 2
 	job = list("Chef")
 
 /datum/uplink_item/jobspecific/meatcleaver
@@ -277,7 +277,7 @@ var/list/uplink_items = list()
 	name = "Power Gloves"
 	desc = "Insulated gloves that can utilize the power of the station to deliver a short arc of electricity at a target. Must be standing on a powered cable to use."
 	item = /obj/item/clothing/gloves/yellow/power
-	cost = 14
+	cost = 10
 	job = list("Station Engineer", "Chief Engineer")
 
 //Atmos Tech
@@ -285,7 +285,7 @@ var/list/uplink_items = list()
 	name = "Contortionist's Jumpsuit"
 	desc = "A highly flexible jumpsuit that will help you navigate the ventilation loops of the station internally. Comes with pockets and ID slot, but can't be used without stripping off most gear, including backpack, belt, helmet, and exosuit. Free hands are also necessary to crawl around inside."
 	item = /obj/item/clothing/under/contortionist
-	cost = 8
+	cost = 6
 	job = list("Atmospheric Technician", "Chief Engineer")
 
 //Geneticist
@@ -329,7 +329,7 @@ var/list/uplink_items = list()
 	name = "Fully Loaded Revolver"
 	desc = "A traditional handgun which fires .357 rounds. Has 7 chambers. Can down an unarmoured target with two shots."
 	item = /obj/item/weapon/gun/projectile
-	cost = 12
+	cost = 13
 
 /datum/uplink_item/dangerous/ammo
 	name = "Ammo-357"
@@ -341,7 +341,7 @@ var/list/uplink_items = list()
 	name = "Energy Crossbow"
 	desc = "A miniature energy crossbow that is small enough both to fit into a pocket and to slip into a backpack unnoticed by observers. Fires bolts tipped with toxin, a poisonous substance that is the product of a living organism. Stuns enemies for a short period of time. Recharges automatically."
 	item = /obj/item/weapon/gun/energy/crossbow
-	cost = 10
+	cost = 12
 
 /datum/uplink_item/dangerous/sword
 	name = "Energy Sword"
@@ -377,13 +377,13 @@ var/list/uplink_items = list()
 	name = "Paralysis Pen"
 	desc = "A syringe disguised as a functional pen, filled with a neuromuscular-blocking drug that renders a target immobile on injection and makes them seem dead to observers. Side effects of the drug include noticeable drooling. The pen holds one dose of paralyzing agent, and cannot be refilled."
 	item = /obj/item/weapon/pen/paralysis
-	cost = 6
+	cost = 8
 
 /datum/uplink_item/stealthy_weapons/soap
 	name = "Syndicate Soap"
 	desc = "A sinister-looking surfactant used to clean blood stains to hide murders and prevent DNA analysis. You can also drop it underfoot to slip people."
 	item = /obj/item/weapon/soap/syndie
-	cost = 2
+	cost = 1
 
 /datum/uplink_item/stealthy_weapons/detomatix
 	name = "Detomatix PDA Cartridge"
@@ -406,25 +406,25 @@ var/list/uplink_items = list()
 	name = "Chameleon Jumpsuit"
 	desc = "A jumpsuit used to imitate the uniforms of Nanotrasen crewmembers."
 	item = /obj/item/clothing/under/chameleon
-	cost = 6
+	cost = 2
 
 /datum/uplink_item/stealthy_tools/syndigolashes
 	name = "No-Slip Syndicate Shoes"
 	desc = "These allow you to run on wet floors. They do not work on lubricated surfaces."
 	item = /obj/item/clothing/shoes/syndigaloshes
-	cost = 4
+	cost = 2
 
 /datum/uplink_item/stealthy_tools/agent_card
 	name = "Agent ID Card"
 	desc = "Agent cards prevent artificial intelligences from tracking the wearer, and can copy access from other identification cards. The access is cumulative, so scanning one card does not erase the access gained from another."
 	item = /obj/item/weapon/card/id/syndicate
-	cost = 4
+	cost = 2
 
 /datum/uplink_item/stealthy_tools/voice_changer
 	name = "Voice Changer"
 	desc = "A conspicuous gas mask that mimics the voice named on your identification card. When no identification is worn, the mask will render your voice unrecognizable."
 	item = /obj/item/clothing/mask/gas/voice
-	cost = 8
+	cost = 3
 
 /datum/uplink_item/stealthy_tools/dnascrambler
 	name = "DNA Scrambler"
@@ -436,7 +436,7 @@ var/list/uplink_items = list()
 	name = "Chameleon-Projector"
 	desc = "Projects an image across a user, disguising them as an object scanned with it, as long as they don't move the projector from their hand. The disguised user cannot run and projectiles pass over them."
 	item = /obj/item/device/chameleon
-	cost = 6
+	cost = 7
 
 
 // DEVICE AND TOOLS
@@ -455,19 +455,19 @@ var/list/uplink_items = list()
 	name = "Fully Loaded Toolbox"
 	desc = "The syndicate toolbox is a suspicious black and red. Aside from tools, it comes with cable and a multitool. Insulated gloves are not included."
 	item = /obj/item/weapon/storage/toolbox/syndicate
-	cost = 2
+	cost = 1
 
 /datum/uplink_item/device_tools/bugdetector
 	name = "Bug Detector"
 	desc = "A functional multitool that can detect certain surveillance devices. Its screen changes color if the AI or a pAI can see you, or if a tape recorder or voice analyzer is nearby. Examine it to see everything it detects."
 	item = /obj/item/device/multitool/ai_detect
-	cost = 4
+	cost = 3
 
 /datum/uplink_item/device_tools/space_suit
 	name = "Space Suit"
 	desc = "The red syndicate space suit is less encumbering than Nanotrasen variants, fits inside bags, and has a weapon slot. Nanotrasen crewmembers are trained to report red space suit sightings."
 	item = /obj/item/weapon/storage/box/syndie_kit/space
-	cost = 6
+	cost = 4
 
 /datum/uplink_item/device_tools/thermal
 	name = "Thermal Imaging Glasses"
@@ -491,7 +491,7 @@ var/list/uplink_items = list()
 	name = "Binary Translator Key"
 	desc = "A key, that when inserted into a radio headset, allows you to listen to and talk with artificial intelligences and cybernetic organisms in binary."
 	item = /obj/item/device/encryptionkey/binary
-	cost = 6
+	cost = 5
 
 /datum/uplink_item/device_tools/cipherkey
 	name = "Centcomm Encryption Key"
@@ -512,7 +512,7 @@ var/list/uplink_items = list()
 	cost = 4
 
 /datum/uplink_item/device_tools/powersink
-	name = "Power sink"
+	name = "Power Sink"
 	desc = "When screwed to wiring attached to an electric grid, then activated, this large device places excessive load on the grid, causing a stationwide blackout. The sink cannot be carried because of its excessive size. Ordering this sends you a small beacon that will teleport the power sink to your location on activation."
 	item = /obj/item/device/powersink
 	cost = 10
@@ -552,13 +552,13 @@ var/list/uplink_items = list()
 	name = "Freedom Implant"
 	desc = "An implant injected into the body and later activated using a bodily gesture to attempt to slip restraints."
 	item = /obj/item/weapon/storage/box/syndie_kit/imp_freedom
-	cost = 6
+	cost = 5
 
 /datum/uplink_item/implants/uplink
 	name = "Uplink Implant"
-	desc = "An implant injected into the body, and later activated using a bodily gesture to open an uplink with 5 telecrystals. The ability for an agent to open an uplink after their posessions have been stripped from them makes this implant excellent for escaping confinement."
+	desc = "An implant injected into the body, and later activated using a bodily gesture to open an uplink with 10 telecrystals. The ability for an agent to open an uplink after their posessions have been stripped from them makes this implant excellent for escaping confinement."
 	item = /obj/item/weapon/storage/box/syndie_kit/imp_uplink
-	cost = 20
+	cost = 14
 
 /datum/uplink_item/implants/explosive
 	name = "Explosive Implant"
