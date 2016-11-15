@@ -23,7 +23,9 @@
 
 
 /obj/item/clothing/suit/wintercoat/attack_self()
-	togglehood()
+	if(!nohood)
+		togglehood()
+	..()
 
 /obj/item/clothing/suit/wintercoat/proc/hoodup(var/mob/living/carbon/human/user)
 	user.equip_to_slot(hood, slot_head)
@@ -39,11 +41,11 @@
 	user.update_inv_wear_suit()
 
 /obj/item/clothing/suit/wintercoat/unequipped(var/mob/living/carbon/human/user)
-	if(hood && istype(user) && user.head == hood)
+	if(!nohood && hood && istype(user) && user.head == hood)
 		hooddown(user)
 
 /obj/item/clothing/head/winterhood/pickup(var/mob/living/carbon/human/user)
-	if(coat && istype(coat) && user.wear_suit == coat)
+	if(coat && istype(coat) && !(coat.nohood) && user.wear_suit == coat)
 		coat.hooddown(user,unequip = 0)
 		user.drop_from_inventory(src)
 		forceMove(coat)
