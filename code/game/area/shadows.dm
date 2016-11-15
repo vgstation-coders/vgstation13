@@ -4,6 +4,9 @@
 #define SHADOW_ALPHA 80
 
 /atom/movable/proc/has_shadow()
+	return density // If something has density, we can assume it's A) not on the ground and B) large enough to cast a shadow. Bit of a hacky way to do it, but better than writing an exception for everything
+
+/obj/structure/closet/has_shadow()
 	return 1
 
 /atom/movable/proc/update_shadow()
@@ -27,14 +30,14 @@
 	shadow.transform = M
 	apply_shadow()
 
-/atom/movable/proc/apply_shadow() // should work for most standard shaped objects
+/atom/movable/proc/apply_shadow() // should work for most standard shaped objects - when it doesn't, override this proc. thanks OOP
 	var/icon/I = new/icon(icon,icon_state) //Used to calculate the size of the object
 	shadow.pixel_y -= I.Height()/SHADOW_PIXEL_Y_DIVISOR // this should not require pixel multiplier
 	shadow.pixel_x += I.Width()/SHADOW_PIXEL_X_DIVISOR // this should not require pixel multiplier
 	underlays += shadow
 
 /obj/structure/flora/tree/pine/apply_shadow()
-	shadow.pixel_y = 74*PIXEL_MULTIPLIER
+	shadow.pixel_y = -74*PIXEL_MULTIPLIER
 	shadow.pixel_x = 16*PIXEL_MULTIPLIER
 	underlays += shadow
 
