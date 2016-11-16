@@ -963,7 +963,8 @@
 	else if(istype(W, /obj/item/device/camera_bug))
 		help_shake_act(user)
 		return 0
-
+	if(istype(W, /obj/item/device/syndicate_remote_cyborg_camera))
+		return 0
 	else
 		spark_system.start()
 		return ..()

@@ -320,6 +320,14 @@ var/list/uplink_items = list()
 	cost = 12
 	job = list("Internal Affairs Agent")
 
+//Roboticist
+/datum/uplink_item/jobspecific/remotecyborg_kit
+	name = "Remote Cyborg Kit"
+	desc = "A box including everything you need to make a remote cyborg, plus a couple of cyborg cameras."
+	item = /obj/item/weapon/storage/box/remotecontrolkit
+	cost = 6
+	job = list("Roboticist")
+
 // DANGEROUS WEAPONS
 
 /datum/uplink_item/dangerous
