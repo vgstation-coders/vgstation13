@@ -9,11 +9,14 @@
 				new /obj/item/clothing/mask/gas/voice(src)
 				new /obj/item/weapon/card/id/syndicate(src)
 				new /obj/item/clothing/shoes/syndigaloshes(src)
+				new /obj/item/weapon/storage/box/syndie_kit/surveillance(src)
+				new /obj/item/weapon/dnascrambler(src)
 
 			if("stealth")
 				new /obj/item/weapon/gun/energy/crossbow(src)
 				new /obj/item/weapon/pen/paralysis(src)
 				new /obj/item/device/chameleon(src)
+				new /obj/item/weapon/soap/syndie(src)
 
 
 			if("screwed")
@@ -54,6 +57,7 @@
 				new /obj/item/weapon/aiModule/freeform/syndicate(src)
 				new /obj/item/weapon/card/emag(src)
 				new /obj/item/device/encryptionkey/binary(src)
+				new /obj/item/device/multitool/ai_detect(src)
 
 
 			if("lordsingulo")
@@ -97,6 +101,7 @@
 
 
 			if("balloon")
+				new /obj/item/toy/syndicateballoon(src)
 				new /obj/item/toy/syndicateballoon(src)
 				new /obj/item/toy/syndicateballoon(src)
 				new /obj/item/toy/syndicateballoon(src)

@@ -121,7 +121,7 @@ var/list/uplink_items = list()
 	name = "The E20"
 	desc = "A seemingly innocent die, those who are not afraid to roll for attack will find it's effects quite explosive. Has a four second timer."
 	item = /obj/item/weapon/dice/d20/e20
-	cost = 7
+	cost = 6
 	job = list("Librarian")
 
 //Cargo Technician
@@ -475,7 +475,7 @@ var/list/uplink_items = list()
 	name = "Chameleon-Projector"
 	desc = "Projects an image across a user, disguising them as an object scanned with it, as long as they don't move the projector from their hand. The disguised user cannot run and projectiles pass over them."
 	item = /obj/item/device/chameleon
-	cost = 7
+	cost = 6
 
 
 // DEVICE AND TOOLS
@@ -639,7 +639,7 @@ var/list/uplink_items = list()
  	name = "Raincoat"
  	desc = "It's hip to be square!"
  	item = /obj/item/clothing/suit/raincoat
- 	cost = 2
+ 	cost = 1
 
 /datum/uplink_item/badass/random
 	name = "Random Item"
