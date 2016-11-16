@@ -15,6 +15,8 @@ var/list/uplink_items = list()
 				continue
 			if(I.gamemodes.len && ticker && !(ticker.mode.name in I.gamemodes))
 				continue
+			if(I.excludefrom.len && ticker && (ticker.mode.type in I.excludefrom))
+				continue
 			if(I.last)
 				last += I
 				continue
@@ -44,6 +46,7 @@ var/list/uplink_items = list()
 	var/last = 0 // Appear last
 	var/abstract = 0
 	var/list/gamemodes = list() // Empty list means it is in all the gamemodes. Otherwise place the gamemode name here.
+	var/list/excludefrom = list() //Empty list does nothing. Place the name of gamemode you don't want this item to be available in here.
 	var/list/job = null
 
 /datum/uplink_item/proc/spawn_item(var/turf/loc, var/obj/item/device/uplink/U, mob/user)
@@ -118,7 +121,7 @@ var/list/uplink_items = list()
 	name = "The E20"
 	desc = "A seemingly innocent die, those who are not afraid to roll for attack will find it's effects quite explosive. Has a four second timer."
 	item = /obj/item/weapon/dice/d20/e20
-	cost = 6
+	cost = 7
 	job = list("Librarian")
 
 //Cargo Technician
@@ -277,7 +280,7 @@ var/list/uplink_items = list()
 	name = "Power Gloves"
 	desc = "Insulated gloves that can utilize the power of the station to deliver a short arc of electricity at a target. Must be standing on a powered cable to use."
 	item = /obj/item/clothing/gloves/yellow/power
-	cost = 10
+	cost = 12
 	job = list("Station Engineer", "Chief Engineer")
 
 //Atmos Tech
@@ -309,7 +312,7 @@ var/list/uplink_items = list()
 	name = "Modified Device Analyser"
 	desc = "A device analyser with the safety features disabled. Allows the user to replicate any kind of Syndicate equipment."
 	item = /obj/item/device/device_analyser/syndicate
-	cost = 8
+	cost = 6
 	job = list("Mechanic")
 
 //IAA - Internal Affairs Agent
@@ -319,6 +322,38 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/storage/briefcase/false_bottomed/smg
 	cost = 12
 	job = list("Internal Affairs Agent")
+
+//Nuke Ops Prices
+/datum/uplink_item/nukeprice
+	gamemodes = list("nuclear emergency")
+
+/datum/uplink_item/nukeprice/crossbow
+	name = "Energy Crossbow"
+	desc = "A miniature energy crossbow that is small enough both to fit into a pocket and to slip into a backpack unnoticed by observers. Fires bolts tipped with toxin, a poisonous substance that is the product of a living organism. Stuns enemies for a short period of time. Recharges automatically."
+	category = "Highly Visible and Dangerous Weapons"
+	item = /obj/item/weapon/gun/energy/crossbow
+	cost = 10
+
+/datum/uplink_item/nukeprice/voice_changer
+	name = "Voice Changer"
+	desc = "A conspicuous gas mask that mimics the voice named on your identification card. When no identification is worn, the mask will render your voice unrecognizable."
+	category = "Stealth and Camouflage Items"
+	item = /obj/item/clothing/mask/gas/voice
+	cost = 8
+
+/datum/uplink_item/nukeprice/syndigolashes
+	name = "No-Slip Syndicate Shoes"
+	desc = "These allow you to run on wet floors. They do not work on lubricated surfaces."
+	category = "Stealth and Camouflage Items"
+	item = /obj/item/clothing/shoes/syndigaloshes
+	cost = 4
+
+/datum/uplink_item/nukeprice/chameleon_jumpsuit
+	name = "Chameleon Jumpsuit"
+	desc = "A jumpsuit used to imitate the uniforms of Nanotrasen crewmembers."
+	category = "Stealth and Camouflage Items"
+	item = /obj/item/clothing/under/chameleon
+	cost = 6
 
 // DANGEROUS WEAPONS
 
@@ -342,6 +377,7 @@ var/list/uplink_items = list()
 	desc = "A miniature energy crossbow that is small enough both to fit into a pocket and to slip into a backpack unnoticed by observers. Fires bolts tipped with toxin, a poisonous substance that is the product of a living organism. Stuns enemies for a short period of time. Recharges automatically."
 	item = /obj/item/weapon/gun/energy/crossbow
 	cost = 12
+	excludefrom = list("nuclear emergency")
 
 /datum/uplink_item/dangerous/sword
 	name = "Energy Sword"
@@ -407,12 +443,14 @@ var/list/uplink_items = list()
 	desc = "A jumpsuit used to imitate the uniforms of Nanotrasen crewmembers."
 	item = /obj/item/clothing/under/chameleon
 	cost = 2
+	excludefrom = list("nuclear emergency")
 
 /datum/uplink_item/stealthy_tools/syndigolashes
 	name = "No-Slip Syndicate Shoes"
 	desc = "These allow you to run on wet floors. They do not work on lubricated surfaces."
 	item = /obj/item/clothing/shoes/syndigaloshes
 	cost = 2
+	excludefrom = list("nuclear emergency")
 
 /datum/uplink_item/stealthy_tools/agent_card
 	name = "Agent ID Card"
@@ -424,7 +462,8 @@ var/list/uplink_items = list()
 	name = "Voice Changer"
 	desc = "A conspicuous gas mask that mimics the voice named on your identification card. When no identification is worn, the mask will render your voice unrecognizable."
 	item = /obj/item/clothing/mask/gas/voice
-	cost = 3
+	cost = 5
+	excludefrom = list("nuclear emergency")
 
 /datum/uplink_item/stealthy_tools/dnascrambler
 	name = "DNA Scrambler"
@@ -558,7 +597,7 @@ var/list/uplink_items = list()
 	name = "Uplink Implant"
 	desc = "An implant injected into the body, and later activated using a bodily gesture to open an uplink with 10 telecrystals. The ability for an agent to open an uplink after their posessions have been stripped from them makes this implant excellent for escaping confinement."
 	item = /obj/item/weapon/storage/box/syndie_kit/imp_uplink
-	cost = 14
+	cost = 18
 
 /datum/uplink_item/implants/explosive
 	name = "Explosive Implant"
