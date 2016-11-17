@@ -320,6 +320,13 @@ var/list/uplink_items = list()
 	cost = 12
 	job = list("Internal Affairs Agent")
 
+/datum/uplink_item/jobspecific/explosiveposter
+	name = "Explosive Commendation poster"
+	desc = "A Commendation poster intercepted from NT HR and fitted with an effective explosive."
+	item = /obj/item/mounted/poster/explosive
+	cost = 5
+	job = list("Internal Affairs Agent")
+
 // DANGEROUS WEAPONS
 
 /datum/uplink_item/dangerous
