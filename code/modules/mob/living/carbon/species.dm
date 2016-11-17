@@ -275,7 +275,7 @@ var/global/list/whitelisted_species = list("Human")
 		"eyes" =     /datum/organ/internal/eyes
 		)
 	flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | NO_BLOOD
-	
+
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
 	H.dust()
 
@@ -608,84 +608,19 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/vox/equip(var/mob/living/carbon/human/H)
 	// Unequip existing suits and hats.
-	if(H.mind.assigned_role != "MODE")
+	if((H.mind.assigned_role != "MODE") && (H.mind.assigned_role == "Trader"))
 		H.u_equip(H.wear_suit,1)
 		H.u_equip(H.head,1)
 	if(H.mind.assigned_role!="Clown")
 		H.u_equip(H.wear_mask,1)
 
 	H.equip_or_collect(new /obj/item/clothing/mask/breath/vox(H), slot_wear_mask)
-	var/suit=/obj/item/clothing/suit/space/vox/civ
-	var/helm=/obj/item/clothing/head/helmet/space/vox/civ
+	var/suit= /obj/item/clothing/suit/tank_harness
+	var/helm
 	var/tank_slot = slot_s_store
 	var/tank_slot_name = "suit storage"
 	switch(H.mind.assigned_role)
 
-		if("Bartender")
-			suit=/obj/item/clothing/suit/space/vox/civ/bartender
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/bartender
-		if("Chef")
-			suit=/obj/item/clothing/suit/space/vox/civ/chef
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/chef
-		if("Botanist")
-			suit=/obj/item/clothing/suit/space/vox/civ/botanist
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/botanist
-		if("Janitor")
-			suit=/obj/item/clothing/suit/space/vox/civ/janitor
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/janitor
-		if("Cargo Technician","Quartermaster")
-			suit=/obj/item/clothing/suit/space/vox/civ/cargo
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/cargo
-		if("Chaplain")
-			suit=/obj/item/clothing/suit/space/vox/civ/chaplain
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/chaplain
-		if("Librarian")
-			suit=/obj/item/clothing/suit/space/vox/civ/librarian
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/librarian
-
-		if("Chief Engineer")
-			suit=/obj/item/clothing/suit/space/vox/civ/engineer/ce
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer/ce
-		if("Station Engineer")
-			suit=/obj/item/clothing/suit/space/vox/civ/engineer
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer
-		if("Atmospheric Technician")
-			suit=/obj/item/clothing/suit/space/vox/civ/engineer/atmos
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos
-
-		if("Scientist","Roboticist")
-			suit=/obj/item/clothing/suit/space/vox/civ/science
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/science
-		if("Research Director")
-			suit=/obj/item/clothing/suit/space/vox/civ/science/rd
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/science/rd
-
-		if("Medical Doctor")
-			suit=/obj/item/clothing/suit/space/vox/civ/medical
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical
-		if("Paramedic")
-			suit=/obj/item/clothing/suit/space/vox/civ/medical/paramedic
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic
-		if("Geneticist")
-			suit=/obj/item/clothing/suit/space/vox/civ/medical/geneticist
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/geneticist
-		if("Virologist")
-			suit=/obj/item/clothing/suit/space/vox/civ/medical/virologist
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/virologist
-		if("Chemist")
-			suit=/obj/item/clothing/suit/space/vox/civ/medical/chemist
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/chemist
-		if("Chief Medical Officer")
-			suit=/obj/item/clothing/suit/space/vox/civ/medical/cmo
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/cmo
-
-		if("Head of Security","Warden","Detective","Security Officer")
-			suit=/obj/item/clothing/suit/space/vox/civ/security
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/security
-
-//		if("Clown","Mime")
-//			tank_slot=null
-//			tank_slot_name = "hand"
 		if("Trader")
 			suit = /obj/item/clothing/suit/space/vox/civ/trader
 			helm = /obj/item/clothing/head/helmet/space/vox/civ/trader
@@ -702,9 +637,9 @@ var/global/list/whitelisted_species = list("Human")
 	if(helm)
 		H.equip_or_collect(new helm(H), slot_head)
 	if(tank_slot)
-		H.equip_or_collect(new/obj/item/weapon/tank/nitrogen(H), tank_slot)
-	else
 		H.put_in_hands(new/obj/item/weapon/tank/nitrogen(H))
+	else
+		H.equip_or_collect(new/obj/item/weapon/tank/nitrogen(H), tank_slot)
 	to_chat(H, "<span class='info'>You are now running on nitrogen internals from the [H.s_store] in your [tank_slot_name]. Your species finds oxygen toxic, so <b>you must breathe nitrogen (AKA N<sub>2</sub>) only</b>.</span>")
 	H.internal = H.get_item_by_slot(tank_slot)
 	if (H.internals)

@@ -6,15 +6,14 @@
 	desc = "A paramedic space helmet. Used in the recovery of bodies from space."
 	icon_state = "paramedic-eva-helmet"
 	item_state = "paramedic-eva-helmet"
-	species_fit = list(GREY_SHAPED)
-	species_restricted = list("exclude",VOX_SHAPED)
+	species_fit = list(GREY_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/suit/space/paramedic
 	name = "Paramedic EVA suit"
 	icon_state = "paramedic-eva"
 	item_state = "paramedic-eva"
 	desc = "A paramedic space suit. Used in the recovery of bodies from space."
-	species_restricted = list("exclude",VOX_SHAPED)
+	species_fit = list(VOX_SHAPED)
 	slowdown = 1
 
 //Space santa outfit suit
