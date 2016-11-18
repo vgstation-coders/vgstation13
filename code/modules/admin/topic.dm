@@ -1200,67 +1200,7 @@
 		var/mob/M = locate(href_list["newban"])
 		if(!ismob(M))
 			return
-
-		// now you can! if(M.client && M.client.holder)	return	//admins cannot be banned. Even if they could, the ban doesn't affect them anyway
-
-		switch(alert("Temporary Ban?",,"Yes","No", "Cancel"))
-			if("Yes")
-				var/mins = input(usr,"How long (in minutes)?","Ban time",1440) as num|null
-				if(!mins)
-					return
-				if(mins >= 525600)
-					mins = 525599
-				var/reason = input(usr,"Reason?","reason","Griefer") as text|null
-				if(!reason)
-					return
-				AddBan(M.ckey, M.computer_id, reason, usr.ckey, 1, mins)
-				ban_unban_log_save("[usr.client.ckey] has banned [M.ckey]. - Reason: [reason] - This will be removed in [mins] minutes.")
-				to_chat(M, "<span class='warning'><BIG><B>You have been banned by [usr.client.ckey].\nReason: [reason].</B></BIG></span>")
-				to_chat(M, "<span class='warning'>This is a temporary ban, it will be removed in [mins] minutes.</span>")
-				feedback_inc("ban_tmp",1)
-				DB_ban_record(BANTYPE_TEMP, M, mins, reason)
-				feedback_inc("ban_tmp_mins",mins)
-				if(config.banappeals)
-					to_chat(M, "<span class='warning'>To try to resolve this matter head to [config.banappeals]</span>")
-				else
-					to_chat(M, "<span class='warning'>No ban appeals URL has been set.</span>")
-				log_admin("[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.")
-				message_admins("<span class='warning'>[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis will be removed in [mins] minutes.</span>")
-
-				del(M.client)
-				//del(M)	// See no reason why to delete mob. Important stuff can be lost. And ban can be lifted before round ends.
-			if("No")
-				var/reason = input(usr,"Reason?","reason","Griefer") as text|null
-				if(!reason)
-					return
-				switch(alert(usr,"IP ban?",,"Yes","No","Cancel"))
-					if("Cancel")
-						return
-					if("Yes")
-						AddBan(M.ckey, M.computer_id, reason, usr.ckey, 0, 0, M.lastKnownIP)
-					if("No")
-						AddBan(M.ckey, M.computer_id, reason, usr.ckey, 0, 0)
-				var/sticky = alert(usr,"Sticky Ban [M.ckey]? Use this only if you never intend to unban the player.","Sticky Icky","Yes", "No") == "Yes"
-				if(sticky)
-					world.SetConfig("SYSTEM/keyban",M.ckey,"type=sticky&reason=[reason]&message=[reason]&admin=[ckey(usr.key)]")
-					message_admins("[key_name_admin(usr)] has sticky banned [key_name(M)].")
-					log_admin("[key_name(usr)] has sticky banned [key_name(M)].")
-				to_chat(M, "<span class='warning'><BIG><B>You have been banned by [usr.client.ckey].\nReason: [reason].</B></BIG></span>")
-				to_chat(M, "<span class='warning'>This is a permanent ban.</span>")
-				if(config.banappeals)
-					to_chat(M, "<span class='warning'>To try to resolve this matter head to [config.banappeals]</span>")
-				else
-					to_chat(M, "<span class='warning'>No ban appeals URL has been set.</span>")
-				ban_unban_log_save("[usr.client.ckey] has permabanned [M.ckey]. - Reason: [reason] - This is a permanent ban.")
-				log_admin("[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis is a permanent ban.")
-				message_admins("<span class='warning'>[usr.client.ckey] has banned [M.ckey].\nReason: [reason]\nThis is a permanent ban.</span>")
-				feedback_inc("ban_perma",1)
-				DB_ban_record(BANTYPE_PERMA, M, -1, reason)
-
-				del(M.client)
-				//del(M)
-			if("Cancel")
-				return
+		newban(M)
 
 	else if(href_list["stickyunban"])
 		if(!check_rights(R_BAN))
