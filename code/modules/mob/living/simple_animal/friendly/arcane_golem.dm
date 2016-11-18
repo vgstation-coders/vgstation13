@@ -15,7 +15,7 @@
 	speak_emote = list("vocalizes")
 
 	speak_chance = 0.25
-	move_to_delay = 14
+	move_to_delay = 20
 
 	melee_damage_lower = 15
 	melee_damage_upper = 25
