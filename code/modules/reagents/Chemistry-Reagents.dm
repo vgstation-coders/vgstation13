@@ -5305,7 +5305,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		holder.del_reagent(BLOCKIZINE,volume) //needs to be del_reagent, because metabolism is 0
 		return
 
-	if(istype(H))
+	if(istype(H) && volume >= 25)
 		holder.isolate_reagent(BLOCKIZINE)
 		volume = holder.maximum_volume
 		holder.update_total()
