@@ -4,19 +4,23 @@
 		var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "balloon" = 1))
 
 		switch (tagname)
-			if("bloodyspai")
+			if("bloodyspai")//2+5+2+2+4+4+4=23
 				new /obj/item/clothing/under/chameleon(src)
 				new /obj/item/clothing/mask/gas/voice(src)
 				new /obj/item/weapon/card/id/syndicate(src)
 				new /obj/item/clothing/shoes/syndigaloshes(src)
+				new /obj/item/weapon/dnascrambler(src)
+				new /obj/item/weapon/dnascrambler(src)
+				new /obj/item/weapon/dnascrambler(src)
 
-			if("stealth")
+			if("stealth")//12+8+6+1=27
 				new /obj/item/weapon/gun/energy/crossbow(src)
 				new /obj/item/weapon/pen/paralysis(src)
 				new /obj/item/device/chameleon(src)
+				new /obj/item/weapon/soap/syndie(src)
 
 
-			if("screwed")
+			if("screwed")//6?+6?+10+4=26
 				new /obj/effect/spawner/newbomb/timer/syndicate(src)
 				new /obj/effect/spawner/newbomb/timer/syndicate(src)
 				new /obj/item/device/powersink(src)
@@ -24,14 +28,14 @@
 				new /obj/item/clothing/head/helmet/space/syndicate(src)
 
 
-			if("guns")
+			if("guns")//13+4+6+4=27
 				new /obj/item/weapon/gun/projectile(src)
 				new /obj/item/ammo_storage/box/a357(src)
 				new /obj/item/weapon/card/emag(src)
 				new /obj/item/weapon/plastique(src)
 
 
-			if("murder")
+			if("murder")//8+6+6+2+4=26
 				new /obj/item/weapon/melee/energy/sword(src)
 				new /obj/item/clothing/glasses/thermal/syndi(src)
 				new /obj/item/weapon/card/emag(src)
@@ -39,7 +43,7 @@
 				new /obj/item/weapon/storage/belt/skull(src)
 
 
-			if("freedom")
+			if("freedom")//18+5=23
 				var/obj/item/weapon/implanter/O = new /obj/item/weapon/implanter(src)
 				O.imp = new /obj/item/weapon/implant/freedom(O)
 				O.update()
@@ -50,20 +54,21 @@
 				U.name = "Uplink"
 
 
-			if("hacker")
+			if("hacker")//14+6+5+3=28
 				new /obj/item/weapon/aiModule/freeform/syndicate(src)
 				new /obj/item/weapon/card/emag(src)
 				new /obj/item/device/encryptionkey/binary(src)
+				new /obj/item/device/multitool/ai_detect(src)
 
 
-			if("lordsingulo")
+			if("lordsingulo")//14+4+6=24
 				new /obj/item/beacon/syndicate(src)
 				new /obj/item/clothing/suit/space/syndicate(src)
 				new /obj/item/clothing/head/helmet/space/syndicate(src)
 				new /obj/item/weapon/card/emag(src)
 
 
-			if("smoothoperator")
+			if("smoothoperator")//6?+2+2?+1+1?+1?+4+4=21
 				new /obj/item/weapon/gun/projectile/pistol(src)
 				new /obj/item/gun_part/silencer(src)
 				new /obj/item/clothing/gloves/knuckles/spiked(src)
@@ -72,9 +77,13 @@
 				new /obj/item/bodybag(src)
 				new /obj/item/clothing/under/suit_jacket(src)
 				new /obj/item/clothing/shoes/laceup(src)
+				new /obj/item/weapon/soap/syndie(src)
+				new /obj/item/device/chameleon(src)
+				new /obj/item/device/encryptionkey/syndicate/hacked(src)
+				new /obj/item/weapon/plastique(src)
 
 
-			if("psycho")
+			if("psycho")//1+1+5+2+6+(fireaxe, 6?)+2=23
 				new /obj/item/clothing/suit/raincoat(src)
 				new /obj/item/clothing/under/suit_jacket(src)
 				new /obj/item/weapon/soap/syndie(src)
@@ -83,9 +92,10 @@
 				new /obj/item/weapon/card/emag(src)
 				new /obj/item/weapon/newspaper(src)
 				new /obj/item/weapon/fireaxe(src)
+				new /obj/item/clothing/shoes/syndigaloshes(src)
 
 
-			if("hotline")
+			if("hotline")//5+10+2+(hyperzine pills, 2x2?)=22
 				new /obj/item/clothing/under/bikersuit(src)
 				new /obj/item/clothing/head/helmet/biker(src)
 				new /obj/item/clothing/shoes/mime/biker(src)
@@ -93,10 +103,13 @@
 				new /obj/item/clothing/mask/gas/voice(src)
 				new /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver(src)
 				new /obj/item/weapon/storage/pill_bottle/hyperzine(src)
+				new /obj/item/weapon/storage/pill_bottle/hyperzine(src)
 				new /obj/item/weapon/card/id/syndicate(src)
+				new /obj/item/weapon/soap/syndie(src)
 
 
-			if("balloon")
+			if("balloon")//20+20+20+20+20+20+20+20=160
+				new /obj/item/toy/syndicateballoon(src)
 				new /obj/item/toy/syndicateballoon(src)
 				new /obj/item/toy/syndicateballoon(src)
 				new /obj/item/toy/syndicateballoon(src)
