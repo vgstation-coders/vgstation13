@@ -155,6 +155,12 @@
 	if(current_species)
 		if(current_species.name == "Vox")
 			switch(s_tone)
+				if(6)
+					icobase = 'icons/mob/human_races/vox/r_voxemrl.dmi'
+				if(5)
+					icobase = 'icons/mob/human_races/vox/r_voxazu.dmi'
+				if(4)
+					icobase = 'icons/mob/human_races/vox/r_voxlgrn.dmi'
 				if(3)
 					icobase = 'icons/mob/human_races/vox/r_voxgry.dmi'
 				if(2)

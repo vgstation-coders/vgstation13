@@ -84,7 +84,7 @@ proc/random_skin_tone(species = "Human")
 				. = rand(-185,34)
 		return min(max( .+rand(-25, 25), -185),34)
 	else if(species == "Vox")
-		. = rand(1,3)
+		. = rand(1,6)
 		return .
 	else
 		return 0
@@ -112,6 +112,12 @@ proc/skintone2racedescription(tone, species = "Human")
 				return "unknown"
 	else if(species == "Vox")
 		switch(tone)
+			if(6)
+				return "emerald"
+			if(5)
+				return "azure"
+			if(4)
+				return "light green"
 			if(2)
 				return "brown"
 			if(3)
