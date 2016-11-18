@@ -13,7 +13,7 @@
 	invocation_type = SpI_SHOUT
 	range = 0
 
-	summon_type = list(/mob/living/simple_animal/arcane_golem)
+	summon_type = list(/mob/living/simple_animal/hostile/arcane_golem)
 	duration = 0
 
 	hud_state = "wiz_summon_golem"
@@ -42,7 +42,7 @@
 			L.forceMove(get_step(user, pick(alldirs)))
 
 /spell/aoe_turf/conjure/arcane_golem/proc/check_golems()
-	for(var/mob/living/simple_animal/arcane_golem/AG in golems)
+	for(var/mob/living/simple_animal/hostile/arcane_golem/AG in golems)
 		if(!AG.master_spell)
 			continue
 
@@ -51,7 +51,7 @@
 			AG.master_spell = null
 			golems.Remove(AG)
 
-/spell/aoe_turf/conjure/arcane_golem/on_creation(mob/living/simple_animal/arcane_golem/AG, mob/user)
+/spell/aoe_turf/conjure/arcane_golem/on_creation(mob/living/simple_animal/hostile/arcane_golem/AG, mob/user)
 	for(var/spell/S in user.spell_list)
 		if(is_type_in_list(S, forbidden_spells))
 			continue
@@ -62,6 +62,7 @@
 
 		AG.add_spell(copy)
 
+	AG.faction = "\ref[user]"
 	to_chat(user, "<span class='sinister'>You infuse \the [AG] with your mana and knowledge. If it dies, your arcane abilities will be affected.</span>")
 	src.golems.Add(AG)
 
@@ -86,7 +87,7 @@
 	else if(!isnull(target))
 		targets = list(target)
 
-	for(var/mob/living/simple_animal/arcane_golem/AG in golems)
+	for(var/mob/living/simple_animal/hostile/arcane_golem/AG in golems)
 		var/spell/cast_spell = locate(spell_to_copy.type) in AG.spell_list
 		if(!istype(cast_spell))
 			continue
