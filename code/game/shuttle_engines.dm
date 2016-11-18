@@ -41,11 +41,12 @@
 	icon_state = "propulsion"
 	opacity = 1
 
-/obj/structure/shuttle/engine/propulsion/proc/shoot_exhaust()
+/obj/structure/shuttle/engine/propulsion/proc/shoot_exhaust(forward=9, backward=9)
 
 	var/turf/target = get_edge_target_turf(src,dir)
 	var/turf/T = get_turf(src)
-	var/obj/item/projectile/A = new /obj/item/projectile/fire_breath/shuttle_exhaust(T)
+	var/obj/item/projectile/fire_breath/A = new /obj/item/projectile/fire_breath/shuttle_exhaust(T)
+	A.max_range = forward
 
 	for(var/i=0, i<2, i++)
 		A.original = target
@@ -61,6 +62,7 @@
 		target = get_edge_target_turf(src,reverse_direction(dir))
 		sleep(6)
 		A = new /obj/item/projectile/fire_breath/shuttle_exhaust(T)
+		A.max_range = backward
 
 /obj/structure/shuttle/engine/propulsion/left
 	icon_state = "propulsion_l"

@@ -195,7 +195,7 @@ datum/shuttle_controller/emergency_shuttle/process()
 			if(direction == 2)
 				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
 					spawn()
-						P.shoot_exhaust()
+						P.shoot_exhaust(backward = 3)
 				if(timeleft>0)
 					return 0
 
@@ -274,7 +274,7 @@ datum/shuttle_controller/emergency_shuttle/process()
 						D.locked = 1
 				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
 					spawn()
-						P.shoot_exhaust()
+						P.shoot_exhaust(backward = 3)
 
 			if(timeleft>0)
 				return 0
@@ -306,7 +306,7 @@ datum/shuttle_controller/emergency_shuttle/process()
 
 					for(var/obj/structure/shuttle/engine/propulsion/P in E.linked_area)
 						spawn()
-							P.shoot_exhaust()
+							P.shoot_exhaust(backward = 3)
 
 					if(!E.move_to_dock(E.transit_port, 0, turn(E.dir,180))) //Throw everything backwards
 						message_admins("WARNING: THE EMERGENCY SHUTTLE FAILED TO FIND TRANSIT! PANIC PANIC PANIC")
