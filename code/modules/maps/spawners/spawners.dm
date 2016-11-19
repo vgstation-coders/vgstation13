@@ -864,6 +864,19 @@
 	chance = 50
 	to_spawn = list(/mob/living/simple_animal/hostile/humanoid/wizard)
 
+/obj/map/spawner/mobs/wolf
+	name = "wolf spawner"
+	icon_state = "mob_wolf"
+	amount = 7
+	chance = 60
+	to_spawn = list(/mob/living/simple_animal/hostile/wolf/alpha,
+					/mob/living/simple_animal/hostile/wolf/alpha,
+					/mob/living/simple_animal/hostile/wolf,
+					/mob/living/simple_animal/hostile/wolf,
+					/mob/living/simple_animal/hostile/wolf,
+					/mob/living/simple_animal/hostile/wolf,
+					/mob/living/simple_animal/hostile/wolf,
+					/mob/living/simple_animal/hostile/wolf)
 
 // Robutts /////////////////////////////////////////////////////
 
