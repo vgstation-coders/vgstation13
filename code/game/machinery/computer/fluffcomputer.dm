@@ -49,7 +49,7 @@ This is not related to actual functional consoles in any way */
 
 /obj/machinery/computer/unusable_shuttle_control_2 /*fluff shuttle control 2 */
     name = "Shuttle Control"
-    desc = "A code locked console that controls the ship. Doesnt look like you will be flying the ship anytime soon."
+    desc = "A code locked console that controls the ship. Doesn't look like you will be flying the ship anytime soon."
     icon_state = "syndishuttle"
     circuit = "/obj/item/weapon/circuitboard/unusable_shuttle_control_2"
 
@@ -72,7 +72,7 @@ This is not related to actual functional consoles in any way */
 
 /obj/machinery/computer/unusable_shuttle_engine_control /*fluff shuttle console 3 */
     name = "Engine Control"
-    desc = "A code locked console that controls the ships engines and power systems."
+    desc = "A code locked console that controls the ship's engines and power systems."
     icon_state = "airtunnel01"
     circuit = "/obj/item/weapon/circuitboard/unusable_shuttle_engine_control"
 
@@ -97,14 +97,14 @@ This is not related to actual functional consoles in any way */
 
 /obj/machinery/computer/whiteship_console_1  /*console 1*/
     name = "Starmap"
-    desc = "A console with a map of the local area. Just by looking at this thing you can tell its years out of date and is too old to be used effectivly"
+    desc = "A console with a map of the local area. Just by looking at this thing you can tell it is years out of date and is too old to be used effectivly"
     icon_state = "comm_serv"
     circuit = "/obj/item/weapon/circuitboard/whiteship_console_1"
 
     light_color = LIGHT_COLOR_GREEN
 
 /obj/machinery/computer/whiteship_console_1/attack_ai(var/mob/user as mob)
-        to_chat(user, "The console is so old that it cannot be remotely controlled by sillicons")
+        to_chat(user, "The console is so old that it cannot be remotely controlled by silicons.")
 
 /obj/machinery/computer/whiteship_console_1/attack_paw(var/mob/user as mob)
 
@@ -115,19 +115,19 @@ This is not related to actual functional consoles in any way */
     say("Access Denied") /* maybe if it displayed a static image of like a outdated map of the local area for lore purposes? */
 
 /obj/machinery/computer/whiteship_console_1/emag(mob/user as mob)
-	to_chat(user, "The console must be so old that not even the cryptographic sequencer is compatible with it ")
+	to_chat(user, "The cryptographic sequencer causes some lights on the console to light up before emitting a dull buzzing noise.")
 
 
 /obj/machinery/computer/whiteship_console_2  /*console 2*/
     name = "Engine Control"
-    desc = "A console displaying the status of the ships engines."
+    desc = "A console displaying the status of the ship's engines."
     icon_state = "engine1"
     circuit = "/obj/item/weapon/circuitboard/whiteship_console_2"
 
     light_color = LIGHT_COLOR_BLUE
 
 /obj/machinery/computer/whiteship_console_2/attack_ai(var/mob/user as mob)
-        to_chat(user, "The console is so old that it cannot be remotely controlled by sillicons")
+        to_chat(user, "The console is so old that it cannot be remotely controlled by silicons.")
 
 /obj/machinery/computer/whiteship_console_2/attack_paw(var/mob/user as mob)
 
@@ -135,7 +135,7 @@ This is not related to actual functional consoles in any way */
     return
 
 /obj/machinery/computer/whiteship_console_2/attack_hand(var/mob/user as mob)
-    say("ERROR FUEL RESERVE EMPTY. SHUTTING DOWN") /*needs a better message for why it doesnt work. Taking suggestions */
+    say("WARNING: FUEL RESERVES LOW. ENGINES SHUTTING DOWN.) /*needs a better message for why it doesnt work. Taking suggestions */
 
 /obj/machinery/computer/whiteship_console_2/emag(mob/user as mob)
-    to_chat(user, "The console must be so old that not even the cryptographic sequencer is compatible with it ")
+    to_chat(user, "The cryptographic sequencer causes some lights on the console to light up before emitting a dull buzzing noise.")
