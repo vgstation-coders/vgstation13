@@ -396,7 +396,7 @@ var/list/uplink_items = list()
 	desc = "The minibomb is a grenade with a five-second fuse. Upon detonation, it will create a small hull breach \
 			in addition to dealing high amounts of damage to nearby personnel."
 	item = /obj/item/weapon/grenade/syndieminibomb
-	cost = 6
+	cost = 10
 
 /datum/uplink_item/dangerous/viscerator
 	name = "Viscerator Grenade"
@@ -438,7 +438,7 @@ var/list/uplink_items = list()
 	name = "Pizza Bomb"
 	desc = "A pizza box with a bomb taped inside of it. The timer needs to be set by opening the box; afterwards, opening the box again will trigger the detonation."
 	item = /obj/item/device/pizza_bomb
-	cost = 5
+	cost = 6
 
 /datum/uplink_item/stealthy_weapons/dehy_carp
 	name = "Dehydrated Space Carp"
@@ -596,6 +596,7 @@ var/list/uplink_items = list()
 			be defused, and some crew may attempt to do so."
 	item = /obj/item/beacon/syndicate/bomb
 	cost = 13
+	gamemodes = list("nuclear emergency")
 
 /datum/uplink_item/device_tools/syndicate_detonator
 	name = "Syndicate Detonator"
