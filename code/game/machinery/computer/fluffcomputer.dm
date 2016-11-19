@@ -135,7 +135,7 @@ This is not related to actual functional consoles in any way */
     return
 
 /obj/machinery/computer/whiteship_console_2/attack_hand(var/mob/user as mob)
-    say("WARNING: FUEL RESERVES LOW. ENGINES SHUTTING DOWN.) /*needs a better message for why it doesnt work. Taking suggestions */
+    say("WARNING: FUEL RESERVES LOW. ENGINES SHUTTING DOWN.") /*needs a better message for why it doesnt work. Taking suggestions */
 
 /obj/machinery/computer/whiteship_console_2/emag(mob/user as mob)
     to_chat(user, "The cryptographic sequencer causes some lights on the console to light up before emitting a dull buzzing noise.")
