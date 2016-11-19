@@ -13,7 +13,7 @@
 	return 0
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy
-	name = "General Energy Weapon"
+	name = "\improper General Energy Weapon"
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/become_defective()
 	if(!defective)
@@ -55,7 +55,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/laser
 	equip_cooldown = 8
-	name = "CH-PS \"Immolator\" Laser"
+	name = "\improper CH-PS \"Immolator\" Laser"
 	icon_state = "mecha_laser"
 	energy_drain = 30
 	projectile = /obj/item/projectile/beam
@@ -63,7 +63,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/weapon/energy/laser/heavy
 	equip_cooldown = 15
-	name = "CH-LC \"Solaris\" Laser Cannon"
+	name = "\improper CH-LC \"Solaris\" Laser Cannon"
 	icon_state = "mecha_laser"
 	energy_drain = 60
 	projectile = /obj/item/projectile/beam/heavylaser
@@ -159,7 +159,7 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic
-	name = "General Ballisic Weapon"
+	name = "\improper General Ballistic Weapon"
 	var/max_projectiles
 	var/projectiles
 	var/projectile_energy_cost
@@ -205,7 +205,7 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/scattershot
-	name = "LBX AC 10 \"Scattershot\""
+	name = "\improper LBX AC 10 \"Scattershot\""
 	icon_state = "mecha_scatter"
 	equip_cooldown = 20
 	projectile = /obj/item/projectile/bullet/midbullet
@@ -255,7 +255,7 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/lmg
-	name = "Ultra AC 2"
+	name = "\improper Ultra AC 2"
 	icon_state = "mecha_uac2"
 	equip_cooldown = 10
 	projectile = /obj/item/projectile/bullet/weakbullet
@@ -307,7 +307,7 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack
-	name = "SRM-8 Missile Rack"
+	name = "\improper SRM-8 Missile Rack"
 	icon_state = "mecha_missilerack"
 	projectile = /obj/item/missile
 	fire_sound = 'sound/weapons/rocket.ogg'
@@ -351,7 +351,7 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang
-	name = "SGL-6 Grenade Launcher"
+	name = "\improper SGL-6 Grenade Launcher"
 	icon_state = "mecha_grenadelnchr"
 	projectile = /obj/item/weapon/grenade/flashbang
 	fire_sound = 'sound/weapons/grenadelauncher.ogg'
@@ -381,7 +381,7 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang//Because I am a heartless bastard -Sieve
-	name = "SOP-6 Grenade Launcher"
+	name = "\improper SOP-6 Grenade Launcher"
 	projectile = /obj/item/weapon/grenade/flashbang/clusterbang
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang/limited/get_equip_info()//Limited version of the clusterbang launcher that can't reload
@@ -391,7 +391,7 @@
 	return//Extra bit of security
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar
-	name = "Banana Mortar"
+	name = "\improper Banana Mortar"
 	icon_state = "mecha_bananamrtr"
 	projectile = /obj/item/weapon/bananapeel
 	fire_sound = 'sound/items/bikehorn.ogg'
@@ -421,7 +421,7 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/mousetrap_mortar
-	name = "Mousetrap Mortar"
+	name = "\improper Mousetrap Mortar"
 	icon_state = "mecha_mousetrapmrtr"
 	projectile = /obj/item/device/assembly/mousetrap
 	fire_sound = 'sound/items/bikehorn.ogg'
@@ -452,7 +452,7 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/creampie_mortar //why waste perfectly good food synthetizing technology in solving world hunger when you can have clowntide instead?
-	name = "Rapid-Fire Cream Pie Mortar"
+	name = "\improper Rapid-Fire Cream Pie Mortar"
 	icon_state = "mecha_bananamrtr"
 	projectile = /obj/item/weapon/reagent_containers/food/snacks/pie/empty //because some chucklefuck will try to catch the pie somehow for free nutriment
 	fire_sound = 'sound/items/bikehorn.ogg'
@@ -483,7 +483,7 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas
-	name = "PCMK-6 Bolas Launcher"
+	name = "\improper PCMK-6 Bolas Launcher"
 	icon_state = "mecha_bolas"
 	projectile = /obj/item/weapon/legcuffs/bolas
 	fire_sound = 'sound/weapons/whip.ogg'
@@ -511,3 +511,44 @@
 	log_attack("[key_name(chassis.occupant)] fired \a [src] from [chassis] towards [originaltarget] ([formatLocation(chassis)])")
 	do_after_cooldown()
 	return
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas/restrainment
+	name = "\improper PCMK-7 Restrainment Module"
+	desc = "This upgraded version of the PCMK-6 is capable of applying handcuffs as well as launching bolas."
+	range = MELEE | RANGED
+
+/obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas/restrainment/action(target)
+	if(!action_checks(target))
+		return
+	if(loc.Adjacent(target) && istype(target, /mob/living/carbon))
+		var/obj/mecha/M = loc
+		if(!istype(M))
+			return ..()
+		var/mob/living/carbon/human/user = M.occupant
+		if(!istype(user))
+			return ..()
+
+		var/mob/living/carbon/C = target
+		if(ishuman(C))
+			var/mob/living/carbon/human/H = C
+			if (!H.has_organ_for_slot(slot_handcuffed))
+				to_chat(user, "<span class='danger'>\The [C] needs at least two wrists before you can cuff them together!</span>")
+				return
+
+		playsound(get_turf(src), 'sound/weapons/handcuffs.ogg', 30, 1, -2)
+		user.visible_message("<span class='danger'>\The [M] is trying to handcuff \the [C]!</span>",
+							 "<span class='danger'>You try to handcuff \the [C]!</span>")
+
+		if(do_after(user, C, 3 SECONDS, 10, FALSE, TRUE))
+			var/obj/item/weapon/handcuffs/cuffs = new(src)
+			feedback_add_details("handcuffs", "H")
+
+			user.visible_message("<span class='danger'>\The [M] has put \the [cuffs] on \the [C]!</span>")
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has put \the [cuffs] on [C.name] ([C.ckey])</font>")
+			C.attack_log += text("\[[time_stamp()]\] <font color='red'>Handcuffed with \the [cuffs] by [user.name] ([user.ckey])</font>")
+			log_attack("[user.name] ([user.ckey]) has cuffed [C.name] ([C.ckey]) with \the [cuffs] while piloting \the [M]")
+
+			C.equip_to_slot(cuffs, slot_handcuffed)
+			projectiles--
+	else
+		..()
