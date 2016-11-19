@@ -97,7 +97,7 @@
 		/obj/item/toy/gasha/cattoy,
 		/obj/item/toy/gasha/parrottoy,
 		/obj/item/toy/gasha/beartoy,
-		/obj/item/toy/gasha/carptoy,
+		/obj/item/toy/carpplushie,
 		/obj/item/toy/gasha/monkeytoy,
 		/obj/item/toy/gasha/huggertoy,
 		/obj/item/toy/gasha/narnar,

@@ -435,6 +435,11 @@
 		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/cube = O
 		if(!cube.wrapped)
 			cube.Expand()
+	// Dehydrated carp
+	if(istype(O,/obj/item/toy/carpplushie/dehy_carp))
+		var/obj/item/toy/carpplushie/dehy_carp/dehy = O
+		dehy.Swell() // Makes a carp
+	return
 
 /datum/reagent/water/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
 	..()

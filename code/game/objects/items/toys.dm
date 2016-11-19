@@ -987,10 +987,6 @@
 	desc = "HOO, HA! HOO, HA!"
 	icon_state = "beartoy"
 
-/obj/item/toy/gasha/carptoy
-	name = "plush carp"
-	desc = "Can not be used as a distraction during a space carp attack."
-	icon_state = "carptoy"
 /obj/item/toy/gasha/monkeytoy
 	name = "plush monkey"
 	desc = "Slightly less likely to throw poop than the real one."
@@ -1082,3 +1078,25 @@
 	desc = "Small mechanical canary in a cage, does absolutely nothing of any importance!"
 	icon = 'icons/mob/animal.dmi'
 	icon_state = "canary"
+
+//Carp plushie
+/obj/item/toy/carpplushie
+	name = "space carp plushie"
+	desc = "An adorable stuffed toy that resembles a space carp."
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "carpplushie"
+	item_state = "carp_plushie"
+	w_class = 2
+	attack_verb = list("bitten", "eaten", "fin slapped")
+	var/bitesound = 'sound/weapons/bite.ogg'
+
+//Attack mob
+/obj/item/toy/carpplushie/attack(mob/M, mob/user)
+	playsound(loc, bitesound, 20, 1)	//Play bite sound in local area
+	return ..()
+
+//Attack self
+/obj/item/toy/carpplushie/attack_self(mob/user)
+	playsound(src.loc, bitesound, 20, 1)
+	to_chat(user, "<span class='notice'>You pet [src]. D'awww.</span>")
+	return ..()
