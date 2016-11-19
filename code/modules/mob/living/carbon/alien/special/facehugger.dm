@@ -158,13 +158,15 @@ var/const/MAX_ACTIVE_TIME = 400
 		to_chat(user, "<span class='danger'>It looks like \the [src]'s proboscis has been removed.</span>")
 	return
 
-/obj/item/clothing/mask/facehugger/attackby()
-	Die()
-	return
+/obj/item/clothing/mask/facehugger/attackby(obj/item/weapon/W)
+	if(W.force)
+		health -= W.force
+		healthcheck()
 
 /obj/item/clothing/mask/facehugger/bullet_act(var/obj/item/projectile/Proj)
-	health -= Proj.damage
-	return
+	if(Proj.damage)
+		health -= Proj.damage
+		healthcheck()
 
 /obj/item/clothing/mask/facehugger/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature > 300)
