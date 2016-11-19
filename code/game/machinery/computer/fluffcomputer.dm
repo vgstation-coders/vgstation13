@@ -45,7 +45,7 @@ This is not related to actual functional consoles in any way */
     say("Access Denied")
 
 /obj/machinery/computer/unusable_shuttle_control_1/emag(mob/user as mob)
-    to_chat(user, "You hold the cryptographic sequencer up to the ID scanner and nothing happens. Guess this only works")
+    to_chat(user, "You hold the cryptographic sequencer up to the ID scanner and nothing happens. Guess this only works with NT technology")
 
 /obj/machinery/computer/unusable_shuttle_control_2 /*fluff shuttle control 2 */
     name = "Shuttle Control"
