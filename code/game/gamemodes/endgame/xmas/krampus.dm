@@ -49,7 +49,7 @@
 	if(response == "Cancel" || !M)
 		return
 
-	forceMove(M.loc)
+	forceMove(get_turf(M))
 	M.drop_all()
 	M.forceMove(src) //need somewhere to store them while they're getting banned
 	to_chat(world, "<span class='sinister'>Krampus just sacked [M]. What a naughty little brat.<span>")
