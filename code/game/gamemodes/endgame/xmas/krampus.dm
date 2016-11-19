@@ -31,12 +31,12 @@
 /mob/living/carbon/human/krampus/New(var/new_loc)
 	h_style = "Bald"
 	..(new_loc, "Krampus")
-	maxHealth=999999
-	health=999999
+	maxHealth = INFINITY
+	health = maxHealth
 	var/obj/item/weapon/krampus/sack = new /obj/item/weapon/krampus(src)
 	put_in_hands(sack)
 
-/mob/living/carbon/human/krampus/proc/SackEm(var/mob/M)
+/mob/living/carbon/human/krampus/proc/sack_em(var/mob/M)
 	if(!istype(M))
 		return
 
@@ -44,44 +44,38 @@
 	if(!(Krampus && check_rights(R_BAN)))
 		return
 
-	var/response = alert("Ban them too, or just sack them?",,"Ban", "Sack", "Cancel")
-	if(response == "Cancel")
-		return
-	if(response == "Ban" && !M.ckey)
-		to_chat(src, "You can only do that to mobs with a ckey.")
+	var/youwillneverhide = M.ckey
+	var/response = alert("Ban them, or just sack them?",,"Ban", "Sack", "Cancel")
+	if(response == "Cancel" || !M)
 		return
 
+	forceMove(M.loc)
 	M.drop_all()
-	M.loc = src //need somewhere to store them while they're getting banned
-	var/g
-	switch(M.gender)
-		if("male")
-			g = "boy"
-		if("female")
-			g = "girl"
-		else
-			g = "thing"
-	to_chat(world, "<span class='danger'>Krampus sacked [M]. What a naughty little [g].<span>")
+	M.forceMove(src) //need somewhere to store them while they're getting banned
+	to_chat(world, "<span class='sinister'>Krampus just sacked [M]. What a naughty little brat.<span>")
 	log_admin("[key_name_admin(src)] sacked [key_name_admin(M)].")
 
 	if(response == "Ban")
+		if(M.ckey != youwillneverhide)
+			M.ghostize(0)//In case of someone who mindswapped into them or something while responding, you don't want them getting disconnected and being able to re-join from lobby.
+			M.ckey = youwillneverhide
 		Krampus.newban(M)
 
 	qdel(M)
 
 /obj/item/weapon/krampus
-	name = "Krampus' Sack"
-	desc = "Krampus' sack that he shoves naughty spacemen in."
+	name = "Krampus's Sack"
+	desc = "Krampus's sack that he shoves naughty spacemen in."
 	icon = 'icons/mob/human_races/krampus.dmi' //you're holding a mini krampus :^)
 	icon_state = null
 	cant_drop = 1
 
-/obj/item/weapon/krampus/attack(mob/target, mob/user)
+/obj/item/weapon/krampus/attack(mob/target, mob/user) //lack of adjacency check intentional, Krampus teleports to them on sackage.
 	var/mob/living/carbon/human/krampus/K = user
 	if(!istype(K))
-		to_chat(user, "<span class='danger'>You've been a very naughty boy.</span>")
+		to_chat(user, "<span class='danger'>You've been a very naughty little brat.</span>")
 		user.death()
-	K.SackEm(target)
+	K.sack_em(target)
 
 // I'M THE KRAMPUS, BITCH
 /mob/living/carbon/human/krampus/Stun(amount)
