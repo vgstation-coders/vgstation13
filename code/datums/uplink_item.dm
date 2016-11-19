@@ -597,6 +597,16 @@ var/list/uplink_items = list()
 	item = /obj/item/beacon/syndicate/bomb
 	cost = 13
 
+/datum/uplink_item/device_tools/syndicate_detonator
+	name = "Syndicate Detonator"
+	desc = "The Syndicate detonator is a companion device to the Syndicate bomb. Simply press the included button \
+			and an encrypted radio frequency will instruct all live Syndicate bombs to detonate. \
+			Useful for when speed matters or you wish to synchronize multiple bomb blasts. Be sure to stand clear of \
+			the blast radius before using the detonator."
+	item = /obj/item/device/syndicatedetonator
+	cost = 3
+	gamemodes = list("nuclear emergency")
+
 /datum/uplink_item/device_tools/pdapinpointer
 	name = "PDA Pinpointer"
 	desc = "A pinpointer that tracks any PDA on the station. Useful for locating assassination targets or other high-value targets that you can't find. WARNING: Can only set once."

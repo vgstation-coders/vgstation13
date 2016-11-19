@@ -15,8 +15,6 @@
 		to_chat(user, "<span class='notice'>[src] stares up at you with friendly eyes.</span>")
 		owner = user
 		owned = 1
-		// Make carp non-hostile to user, yes this means
-		owner.reagents.add_reagent(CARPPHEROMONES, 50)
 	return ..()
 
 
@@ -41,6 +39,8 @@
 	sleep(6)
 	if(!src || qdeleted(src))//we got toasted while animating
 		return
+	// Make carp non-hostile to user, yes this means
+	owner.reagents.add_reagent(CARPPHEROMONES, 30)
 	//Make space carp
 	new /mob/living/simple_animal/hostile/carp(get_turf(src))
 	qdel(src)
