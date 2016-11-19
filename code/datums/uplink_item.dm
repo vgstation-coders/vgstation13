@@ -531,7 +531,7 @@ var/list/uplink_items = list()
 	name = "Syndicate Hardsuit"
 	desc = "The feared suit of a syndicate nuclear agent. Nanotrasen crew who spot these suits are known to panic."
 	item = /obj/item/weapon/storage/box/syndie_kit/hardsuit
-	cost = 8
+	cost = 12
 
 /datum/uplink_item/device_tools/thermal
 	name = "Thermal Imaging Glasses"

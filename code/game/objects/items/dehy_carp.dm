@@ -4,6 +4,19 @@
  */
 
 // Child of carpplushie because this should do everything the toy does and more
+
+/mob/living/simple_animal/hostile/carp/instant_carp
+	var/owner = null
+
+/mob/living/simple_animal/hostile/carp/instant_carp/CanAttack(var/atom/the_target)
+	if(ismob(the_target))
+		var/mob/mob_target = the_target
+		if(isnukeop(mob_target))
+			return 0
+		if(mob_target == owner)
+			return 0
+	return ..()
+
 /obj/item/toy/carpplushie/dehy_carp
 	var/mob/owner = null	// Carp doesn't attack owner, set when using in hand
 	var/owned = 0	// Boolean, no owner to begin with
@@ -39,8 +52,7 @@
 	sleep(6)
 	if(!src || qdeleted(src))//we got toasted while animating
 		return
-	// Make carp non-hostile to user, yes this means
-	owner.reagents.add_reagent(CARPPHEROMONES, 30)
 	//Make space carp
-	new /mob/living/simple_animal/hostile/carp(get_turf(src))
+	var/mob/living/simple_animal/hostile/carp/instant_carp/C = new/mob/living/simple_animal/hostile/carp/instant_carp(get_turf(src))
+	C.owner = owner
 	qdel(src)
