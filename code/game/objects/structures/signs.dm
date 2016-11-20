@@ -242,3 +242,42 @@
 	name = "CRIME DOES NOT PAY"
 	desc = "A warning sign which suggests that you reconsider your poor life choices."
 	icon_state = "crime"
+
+/obj/structure/sign/chinese
+	name = "Sign"
+	desc = "A sign written using traditional chinese characters."
+	var/true_message = ""
+
+/obj/structure/sign/chinese/examine(mob/user)
+	..()
+
+	//IMMERSIONS
+	if(locate(/datum/language/human) in user.languages)
+		if(true_message)
+			to_chat(user, "<span class='info'>It doesn't seem to make much sense.</span>")
+		else
+			to_chat(user, "<span class='info'>It says <b>\"[true_message]\"</b>.</span>")
+
+/obj/structure/sign/chinese/restricted_area
+	icon_state = "CH_restricted_area"
+	true_message = "Restricted Area"
+
+/obj/structure/sign/chinese/caution
+	icon_state = "CH_caution"
+	true_message = "Caution"
+
+/obj/structure/sign/chinese/danger
+	icon_state = "CH_danger"
+	true_message = "Danger"
+
+/obj/structure/sign/chinese/electrical_equipment
+	icon_state = "CH_electrical_equipment"
+	true_message = "Electrical Equipment"
+
+/obj/structure/sign/chinese/access_restricted
+	icon_state = "CH_access_restricted"
+	true_message = "Personnel Only"
+
+/obj/structure/sign/chinese/notice
+	icon_state = "CH_notice"
+	true_message = "Notice: Only Certified Operators Allowed"
