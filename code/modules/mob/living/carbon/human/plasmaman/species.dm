@@ -124,3 +124,6 @@
 	H.internal = H.get_item_by_slot(tank_slot)
 	if (H.internals)
 		H.internals.icon_state = "internal1"
+
+/datum/species/plasmaman/can_artifact_revive()
+	return 0

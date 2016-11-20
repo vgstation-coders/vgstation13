@@ -3,18 +3,18 @@
 
 /datum/artifact_effect/darkrevive/New()
 	..()
-	effect = pick(EFFECT_TOUCH)
+	effect = EFFECT_TOUCH
 	effect_type = pick(0,2,5)
 
 /datum/artifact_effect/darkrevive/DoEffectTouch(var/mob/living/carbon/human/user)
-	if(holder && !isplasmaman(user) && !isskellington(user) && !isgolem(user) && !user.isDead() && user.dna.mutantrace != "shadow")
+	if(holder && user.species && user.species.can_artifact_revive() && !user.isDead() && user.dna.mutantrace != "shadow")
 		var/list/targets = list()
 		FOR_DVIEW(var/mob/living/carbon/human/H,world.view,get_turf(holder),0)
 			if(!H.mind)
 				continue
-			if(isplasmaman(H) || isskellington(H) || isgolem(H))
+			if(H.species && !H.species.can_artifact_revive())
 				continue
-			if(H.dna.mutantrace == "shadow")
+			if(H.dna && H.dna.mutantrace == "shadow")
 				continue
 			var/datum/organ/external/head/head = H.get_organ(LIMB_HEAD)
 			if(!head || head.status & ORGAN_DESTROYED || M_NOCLONE in H.mutations  || !H.has_brain())
@@ -63,7 +63,6 @@
 	target.traumatic_shock = 0
 	target.stat = UNCONSCIOUS
 	target.regenerate_icons()
-	target.update_canmove()
 	target.flash_eyes(visual = 1)
 	target.apply_effect(10, EYE_BLUR)
 	target.apply_effect(10, WEAKEN)

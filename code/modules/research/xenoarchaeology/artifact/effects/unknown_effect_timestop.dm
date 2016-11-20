@@ -14,8 +14,8 @@
 	caster.density = 0
 	caster.anchored = 1
 	caster.flags = INVULNERABLE
-	caster.add_spell(new /spell/aoe_turf/fall)
-	fall = locate() in caster.spell_list
+	fall = new /spell/aoe_turf/fall
+	caster.add_spell(fall)
 	fall.spell_flags = 0
 	fall.invocation_type = SpI_NONE
 	fall.the_world_chance = 0
