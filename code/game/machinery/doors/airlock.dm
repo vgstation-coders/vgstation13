@@ -71,6 +71,7 @@
 	icon = 'icons/obj/doors/Doorcom.dmi'
 	assembly_type = /obj/structure/door_assembly/door_assembly_com
 
+
 /obj/machinery/door/airlock/security
 	name = "Airlock"
 	icon = 'icons/obj/doors/Doorsec.dmi'
@@ -91,11 +92,17 @@
 	icon = 'icons/obj/doors/Doormaint.dmi'
 	assembly_type = /obj/structure/door_assembly/door_assembly_mai
 
+
 /obj/machinery/door/airlock/external
 	name = "External Airlock"
 	icon = 'icons/obj/doors/Doorext.dmi'
 	assembly_type = /obj/structure/door_assembly/door_assembly_ext
 	normalspeed = 0 //So they close fast, not letting the air to depressurize in a fucking second
+
+/obj/machinery/door/airlock/external/snow
+	icon = 'icons/obj/doors/Doorsteel.dmi'
+	assembly_type = /obj/structure/door_assembly/door_assembly_ext/snow
+	normalspeed = 1
 
 /obj/machinery/door/airlock/external/cultify()
 	new /obj/machinery/door/mineral/wood(loc)

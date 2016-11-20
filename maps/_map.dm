@@ -50,7 +50,6 @@
 	//Fuck the preprocessor
 	var/dorf = 0
 	var/linked_to_centcomm = 1
-	var/radial_generate = NO_RADIAL_GENERATE
 	//If 1, only spawn vaults that are exclusive to this map (other vaults aren't spawned). For more info, see code/modules/randomMaps/vault_definitions.dm
 	var/only_spawn_map_exclusive_vaults = 0
 
@@ -139,6 +138,7 @@ var/global/list/accessable_z_levels = list()
 	var/movementChance = ZLEVEL_BASE_CHANCE
 	var/base_turf //Our base turf, what shows under the station when destroyed. - Defaults to the map's base turf, usually space.
 	var/z //Number of the z-level (the z coordinate)
+	var/procedurally_generate = NO_PROCEDURAL_GENERATION
 
 ////////////////////////////////
 
@@ -151,6 +151,7 @@ var/global/list/accessable_z_levels = list()
 	name = "outpost"
 	base_turf = /turf/snow
 	movementChance = ZLEVEL_BASE_CHANCE * ZLEVEL_STATION_MODIFIER
+	procedurally_generate = SNOW_PROCEDURAL_GENERATION
 
 /datum/zLevel/centcomm
 
@@ -169,14 +170,15 @@ var/global/list/accessable_z_levels = list()
 /datum/zLevel/space/snow
 	name = "tundra"
 	base_turf = /turf/snow
+	procedurally_generate = SNOW_PROCEDURAL_GENERATION
 
 /datum/zLevel/mining
-
 	name = "mining"
 
 
 /datum/zLevel/mining/snow
 	base_turf = /turf/snow
+	procedurally_generate = SNOWMINE_PROCEDURAL_GENERATION
 
 //Currently experimental, contains nothing worthy of interest
 /datum/zLevel/desert

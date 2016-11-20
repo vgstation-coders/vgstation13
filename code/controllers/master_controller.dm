@@ -131,52 +131,9 @@ datum/controller/game_controller/proc/setup()
 			//make_dorf_secret()
 		//else
 		make_mining_asteroid_secret()
-	if(map.radial_generate)
-		var/list_of_turfs = list() // what turfs to consider for radial generating on
-		var/list_of_options = list() // what to radial generate on them, in terms of percentage chance
-		var/chance 			 // around about how many you want to have spawned on a z-level.
-		var/rmap_name
-		switch(map.radial_generate)	// yes this is a switch statement for the literally one map that uses it, but it never hurts to be optimistic.
-			if(RADIAL_GENERATE_SNOW_MAP)
-				list_of_turfs = snow_turfs
-				list_of_options = list(new /obj/structure/radial_gen/movable/snow_nature/snow_forest(mapspawned = 0) = 50,
-									   new /obj/structure/radial_gen/movable/snow_nature/snow_forest/large(mapspawned = 0) = 10,
-									   new /obj/structure/radial_gen/movable/snow_nature/snow_forest/dense(mapspawned = 0) = 15,
-									   new /obj/structure/radial_gen/movable/snow_nature/snow_forest/large/dense(mapspawned = 0) = 5,
-									   new /obj/structure/radial_gen/movable/snow_nature/snow_grass(mapspawned = 0) = 15,
-									   new /obj/structure/radial_gen/movable/snow_nature/snow_grass/large(mapspawned = 0) = 5)
-				chance = 1000 // make sure all items which have a chance of being spawned have the CANT_LOCK_TO_AT_ALL_EVEN_CONCIEVABLY flag in lockflags or the game will run out of lists
-				rmap_name = "snow"
 
-		log_startup_progress("Radially generating a [rmap_name] map...")
+	procedurally_generate()
 
-		var/count = 0
-		var/total_time
-		var/radial_gen_total = 0
-		for(var/zLevel = 1 to map.zLevels.len)
-			if(zLevel == map.zCentcomm)
-				continue
-
-			var/radial_gen_z = 0
-			watch = start_watch()
-			for(var/turf/T in list_of_turfs["[zLevel]"])
-				count++
-				if(!(count % 50000))
-					sleep(world.tick_lag)
-				if(rand(1,world.maxy*world.maxx) <= chance)
-					var/obj/structure/radial_gen/movable/radial_gen_type = pickweight(list_of_options)
-					radial_gen_type.deploy_generator(T)
-					radial_gen_z++
-			var/datum/zLevel/zlevesoninquiry = map.zLevels[zLevel]
-			var/time = stop_watch(watch)
-			log_startup_progress("Finished radially generating z:[zLevel]([zlevesoninquiry.name]) with [radial_gen_z] radial generators in [time]s")
-			total_time += time
-			sleep(world.tick_lag)
-			radial_gen_total += radial_gen_z
-
-		log_startup_progress("Finished radially generating the entire map with [radial_gen_total] radial generators in [total_time]s")
-		for(var/obj/structure/radial_gen/movable/radial_gen_type in list_of_options)
-			returnToPool(radial_gen_type)
 	//if(config.socket_talk)
 	//	keepalive()
 /*
@@ -553,3 +510,55 @@ datum/controller/game_controller/recover()		//Mostly a placeholder for now.
 				else
 					msg += "\t [varname] = [varval]\n"
 	world.log << msg
+
+
+datum/controller/game_controller/proc/procedurally_generate()
+	var/total_time
+	var/watch
+	var/gen_total = 0
+	for(var/datum/zLevel/current_zlevel in map.zLevels)
+		if(current_zlevel.procedurally_generate)
+			var/list_of_turfs = list() // what turfs to consider for radial generating on
+			var/list_of_options = list() // what to radial generate on them, in terms of percentage chance
+			var/chance 			 // around about how many you want to have spawned on a z-level.
+			var/rmap_name
+			switch(current_zlevel.procedurally_generate)
+				if(SNOW_PROCEDURAL_GENERATION)
+					list_of_turfs = snow_turfs
+					list_of_options = list(new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest(mapspawned = 0) = 45,
+										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest/large(mapspawned = 0) = 10,
+										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest/dense(mapspawned = 0) = 15,
+										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest/large/dense(mapspawned = 0) = 5,
+										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_grass(mapspawned = 0) = 15,
+										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_grass/large(mapspawned = 0) = 5,
+										   new /obj/procedural_generator/cellular_automata/ice(mapspawned = 0) = 5)
+					chance = 1250 // make sure all items which have a chance of being spawned have the CANT_LOCK_TO_AT_ALL_EVEN_CONCIEVABLY flag in lockflags or the game will run out of lists
+					rmap_name = "snow"
+				if(SNOWMINE_PROCEDURAL_GENERATION)
+					return // not coded yet
+
+			log_startup_progress("Procedurally generating a [rmap_name] map on z level: [current_zlevel.name]")
+
+			var/count = 0
+			var/procedural_gen_z = 0
+			watch = start_watch()
+			for(var/turf/T in list_of_turfs["[current_zlevel.z]"])
+				count++
+				if(!(count % 50000))
+					sleep(world.tick_lag)
+				if(rand(1,world.maxy*world.maxx) <= chance)
+					var/obj/procedural_generator/procedural_gen_type = pickweight(list_of_options)
+					procedural_gen_type.deploy_generator(T)
+					procedural_gen_z++
+			var/time = stop_watch(watch)
+			log_startup_progress("Finished procedurally generating z:[current_zlevel.z]([current_zlevel.name]) with [procedural_gen_z] radial generators in [time]s")
+			total_time += time
+			sleep(world.tick_lag)
+			gen_total += procedural_gen_z
+			for(var/obj/procedural_generator/pgen in list_of_options)
+				if(pgen.pooled)
+					returnToPool(pgen)
+				else
+					qdel(pgen)
+
+	log_startup_progress("Finished procedurally generating the entire map with [gen_total] procedural generators in [total_time]s")
