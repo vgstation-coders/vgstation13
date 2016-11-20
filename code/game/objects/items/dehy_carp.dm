@@ -7,6 +7,7 @@
 
 /mob/living/simple_animal/hostile/carp/instant_carp
 	var/owner = null
+	can_breed = 0
 
 /mob/living/simple_animal/hostile/carp/instant_carp/CanAttack(var/atom/the_target)
 	if(ismob(the_target))
