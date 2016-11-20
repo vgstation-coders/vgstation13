@@ -19,7 +19,7 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 
 //Base instance to define variables
 //This will not spawn anything, so we need to go down one tier
-/obj/structure/radial_gen
+/obj/procedural_generator/radial_gen
 
 	name = "generator"
 	desc = "The randomly generated seed of all things."
@@ -38,9 +38,10 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 	var/list/expected_turfs = list() //Will return if turf type is different from any in the list, good to avoid generator collision with other terrain features
 	var/list/gen_types_soft = list() //What types do we generate from this generator, array must contain individual probabilities for each turf. Only in soft radius
 	var/list/gen_types_hard = list() //Ditto above, but only in hard radius. Obviously, if you want it to spawn in both, add to both lists. OBVIOUSLY
+	pooled = 1
 
 
-/obj/structure/radial_gen/New(var/mapspawned=1)
+/obj/procedural_generator/radial_gen/New(var/mapspawned=1)
 	if(!precached_lists_for_pooling_rad_gen["[type]"])
 		var/list/precached_list = list()
 		precached_list[EXPECTED_TURFS] = expected_turfs
@@ -48,12 +49,9 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 		precached_list[GEN_TYPES_SOFT] = gen_types_soft
 		precached_lists_for_pooling_rad_gen["[type]"] = precached_list
 
-	..()
-	if(mapspawned)
-		deploy_generator(get_turf(src))
-		returnToPool(src)
+	..(mapspawned)
 
-/obj/structure/radial_gen/resetVariables()
+/obj/procedural_generator/radial_gen/resetVariables()
 	..(EXPECTED_TURFS,GEN_TYPES_SOFT,GEN_TYPES_HARD)
 	var/list/precached_list = precached_lists_for_pooling_rad_gen["[type]"]
 	expected_turfs = precached_list[EXPECTED_TURFS]
@@ -63,7 +61,7 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 
 //Uses modular code structure, so you can define different behaviour
 //We start by initializing shared behavior between all three generator sub-types, then we fire a spawn proc that they will modify
-/obj/structure/radial_gen/proc/deploy_generator(var/turf/where)
+/obj/procedural_generator/radial_gen/deploy_generator(var/turf/where)
 
 	for(var/turf/T in spiral_block(where, gen_hard_radius, 0))
 
@@ -111,22 +109,22 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 			continue
 
 //We pick the thing we will possibly spawn, because we need that to roll out adjacency rules
-/obj/structure/radial_gen/proc/perform_pick(var/gen_type = SOFT, var/turf/T)
+/obj/procedural_generator/radial_gen/proc/perform_pick(var/gen_type = SOFT, var/turf/T)
 
 	return 0
 
 //We now have all that shit out of the way, spawn the fucking thing
-/obj/structure/radial_gen/proc/perform_spawn(var/gen_type = SOFT, var/turf/T)
+/obj/procedural_generator/radial_gen/proc/perform_spawn(var/gen_type = SOFT, var/turf/T)
 
 	return 0
 
-/obj/structure/radial_gen/movable
+/obj/procedural_generator/radial_gen/movable
 
 	name = "movable generator"
 	desc = "This generator can manifest any atom in reality. Which one it summons was not specified."
 	icon_state = "gen_mov"
 
-/obj/structure/radial_gen/movable/perform_pick(var/gen_type = SOFT, var/turf/T)
+/obj/procedural_generator/radial_gen/movable/perform_pick(var/gen_type = SOFT, var/turf/T)
 
 	switch(gen_type)
 
@@ -146,16 +144,16 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 
 				return picked_movable
 
-/obj/structure/radial_gen/movable/perform_spawn(var/gen_type = SOFT, var/turf/T, var/atom/movable/picked)
+/obj/procedural_generator/radial_gen/movable/perform_spawn(var/gen_type = SOFT, var/turf/T, var/atom/movable/picked)
 	new picked(T)
 
-/obj/structure/radial_gen/turf
+/obj/procedural_generator/radial_gen/turf
 
 	name = "turf generator"
 	desc = "This generator can change the very fabric of reality. Which one it threads was not specified."
 	icon_state = "gen_turf"
 
-/obj/structure/radial_gen/turf/perform_pick(var/gen_type = SOFT, var/turf/T, var/turf/picked)
+/obj/procedural_generator/radial_gen/turf/perform_pick(var/gen_type = SOFT, var/turf/T, var/turf/picked)
 
 	switch(gen_type)
 
@@ -175,12 +173,12 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 
 				return picked_turf
 
-/obj/structure/radial_gen/turf/perform_spawn(var/gen_type = SOFT, var/turf/T, var/turf/picked)
+/obj/procedural_generator/radial_gen/turf/perform_spawn(var/gen_type = SOFT, var/turf/T, var/turf/picked)
 
 	T.ChangeTurf(picked)
 
 //Children spawn snow-related atoms
-/obj/structure/radial_gen/movable/snow_nature
+/obj/procedural_generator/radial_gen/movable/snow_nature
 
 	name = "snow biome movable generator"
 	desc = "An undefined and cold-hearted generator."
@@ -188,7 +186,7 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 	expected_turfs = list(/turf/snow) //Will return if turf type is different from any in the list, good to avoid generator collision with other terrain features
 
 //A thin snow forest, equivalent to some lightly forested terrain
-/obj/structure/radial_gen/movable/snow_nature/snow_forest
+/obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest
 
 	name = "snow forest generator"
 	desc = "A source of wood, can be rid off given time."
@@ -196,7 +194,7 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 
 	gen_soft_radius = 5 //Soft generator radius, different rules beyond this point. Starts after minimum but ends relative to center
 	gen_hard_radius = 10 //Hard generator radius, nothing will generate past this, ever
-	gen_prob_base = 65 //Base probability to plant something on a tile
+	gen_prob_base = 55 //Base probability to plant something on a tile
 	gen_prob_soft_fall = 5 //Probability reduction per tile after center
 	gen_prob_hard_fall = 10	//Probability reduction per tile after last soft radius, overrides the former
 	gen_empty_only = 1 //Generator will only work on tiles that are completely empty (!contents.len)
@@ -214,7 +212,7 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 								/obj/structure/flora/grass/white = 1000)
 
 //A much more dense forest, with a lot more trees
-/obj/structure/radial_gen/movable/snow_nature/snow_forest/dense
+/obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest/dense
 
 	name = "dense snow forest generator"
 	desc = "A source of wood, easy to get lost in."
@@ -233,7 +231,7 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 
 
 //A larger thin forest, falls offs slowly at first and after a 15 tile radii down to 0 % chance after 30
-/obj/structure/radial_gen/movable/snow_nature/snow_forest/large
+/obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest/large
 
 	name = "large snow forest generator"
 	desc = "A plentiful source of wood, sparse tree coverage, but certainly blocks construction projects."
@@ -241,12 +239,12 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 
 	gen_soft_radius = 15 //Soft generator radius, different rules beyond this point. Starts after minimum but ends relative to center
 	gen_hard_radius = 30 //Hard generator radius, nothing will generate past this, ever
-	gen_prob_base = 45 //Base probability to plant something on a tile
+	gen_prob_base = 40 //Base probability to plant something on a tile
 	gen_prob_soft_fall = 2 //Probability reduction per tile after center
 	gen_prob_hard_fall = 4	//Probability reduction per tile after last soft radius, overrides the former
 
 //A much more dense forest, with a lot more trees
-/obj/structure/radial_gen/movable/snow_nature/snow_forest/large/dense
+/obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest/large/dense
 
 	name = "dense and large snow forest generator"
 	desc = "A massive source of wood, easy to get lost in."
@@ -264,7 +262,7 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 								/obj/structure/flora/grass/white = 1000)
 
 //A patch of snowy grass, with some rocks and bushes thrown in
-/obj/structure/radial_gen/movable/snow_nature/snow_grass
+/obj/procedural_generator/radial_gen/movable/snow_nature/snow_grass
 
 	name = "snow grass generator"
 	desc = "A bunch of tundra plants, managing to thrive even in otherwise awful weather for plant life."
@@ -288,7 +286,7 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 								/obj/structure/flora/grass/white = 1000)
 
 //A large patch of snowy grass, with some rocks and bushes thrown in
-/obj/structure/radial_gen/movable/snow_nature/snow_grass/large
+/obj/procedural_generator/radial_gen/movable/snow_nature/snow_grass/large
 
 	name = "large snow grass generator"
 	desc = "A large bunch of tundra plants, managing to thrive even in otherwise awful weather for plant life."
@@ -296,19 +294,19 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 
 	gen_soft_radius = 15 //Soft generator radius, different rules beyond this point. Starts after minimum but ends relative to center
 	gen_hard_radius = 30 //Hard generator radius, nothing will generate past this, ever
-	gen_prob_base = 35 //Base probability to plant something on a tile
+	gen_prob_base = 30 //Base probability to plant something on a tile
 	gen_prob_soft_fall = 1 //Probability reduction per tile after center
 	gen_prob_hard_fall = 5	//Probability reduction per tile after last soft radius, overrides the former
 
 //Children spawn snow-related turfs
-/obj/structure/radial_gen/turf/snow_nature
+/obj/procedural_generator/radial_gen/turf/snow_nature
 
 	name = "snow biome turf generator"
 	desc = "An undefined and cold-hearted generator."
 	icon_state = "gen_s_turf"
 
 //A patch of snow
-/obj/structure/radial_gen/turf/snow_nature/snow_patch
+/obj/procedural_generator/radial_gen/turf/snow_nature/snow_patch
 
 	name = "snow generator"
 	desc = "A patch of frozen water particles."
@@ -326,7 +324,7 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 	gen_types_hard = list(/turf/snow = 100)
 
 //A very large patch of snow
-/obj/structure/radial_gen/turf/snow_nature/snow_patch/large
+/obj/procedural_generator/radial_gen/turf/snow_nature/snow_patch/large
 
 	name = "large snow generator"
 	desc = "A large patch of frozen water particles."
@@ -337,7 +335,7 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 	gen_prob_hard_fall = 5	//Probability reduction per tile after last soft radius, overrides the former
 
 //A patch of permafrost
-/*/obj/structure/radial_gen/turf/snow_nature/permafrost
+/*/obj/procedural_generator/radial_gen/turf/snow_nature/permafrost
 
 	name = "permafrost generator"
 	desc = "A patch of frozen dirt."
@@ -356,7 +354,7 @@ var/global/list/precached_lists_for_pooling_rad_gen = list()
 	gen_types_hard = list(/turf/snow/permafrost = 100)
 
 //A very large patch of permafrost
-/obj/structure/radial_gen/turf/snow_nature/permafrost/large
+/obj/procedural_generator/radial_gen/turf/snow_nature/permafrost/large
 
 	name = "large permafrost generator"
 	desc = "A large patch of frozen dirt."

@@ -247,3 +247,66 @@ var/global/list/snow_turfs = list()
 			if(!junction)
 				junction = "_circle"
 	icon_state = "permafrost[junction]"
+
+/turf/snow/ice
+	icon_state = "ice"
+
+/turf/snow/ice/New()
+	..()
+	snowballs = 0
+	new /obj/glacier(src)
+
+/obj/glacier
+	name = "glacier"
+	desc = "A frozen lake, kept solid by temperatures way below freezing."
+	icon = 'icons/turf/ice.dmi'
+	icon_state = "ice1"
+	canSmoothWith = "/obj/glacier"
+	anchored = 1
+	density = 0
+	plane = PLATING_PLANE
+
+/obj/glacier/New()
+	if(!istype(loc,/turf/snow))
+		qdel(src)
+		return
+	..()
+	icon_state = "ice[rand(1,6)]"
+	relativewall()
+	relativewall_neighbours()
+
+/obj/glacier/relativewall(var/log = 0)
+	overlays.Cut()
+	var/junction = findSmoothingNeighbors()
+	if(log) world.log << "1 [junction]"
+	for(var/direction in diagonal)
+		var/turf/adj_tile = get_step(src, direction)
+		if(locate(/obj/glacier) in adj_tile)
+			if((direction & junction) == direction)
+				junction |= dir_to_smoothingdir(direction)
+				if(log) world.log << "found new diag dir [direction], [junction]"
+	if(log) world.log << "2 [junction]"
+	if(junction == SMOOTHING_ALLDIRS) // you win the not-having-to-smooth-lottery
+		if(log) world.log << "nosmooth"
+		return
+	else
+		switch(junction)
+			if(SMOOTHING_L_CURVES)
+				var/direction = dir_to_smoothingdir(junction)
+				var/list/directions = list(reverse_direction(direction),direction)
+				for(var/D in directions)
+					var/turf/adj_tile = get_step(src,D)
+					adj_tile.icon_state = "edge"
+					adj_tile.dir = D
+		if(log) world.log << "3 [juncton]"
+		icon_state = "junction[junction]"
+
+/obj/glacier/relativewall_neighbours()
+	..()
+	for(var/direction in diagonal)
+		var/turf/adj_tile = get_step(src, direction)
+		if(isSmoothableNeighbor(adj_tile))
+			adj_tile.relativewall()
+		for(var/atom/A in adj_tile)
+			if(isSmoothableNeighbor(A))
+				A.relativewall()

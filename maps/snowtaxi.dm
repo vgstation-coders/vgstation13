@@ -4,7 +4,7 @@
 
 /datum/map/active
 	nameShort = "snaxi"
-	nameLong = "Taxi Station"
+	nameLong = "Taxi Outpost"
 	map_dir = "snowtaxi"
 	tDomeX = 127
 	tDomeY = 67
@@ -13,21 +13,20 @@
 	zDeepSpace = 5
 	base_turf = /turf/snow
 	zLevels = list(
-		/datum/zLevel/station,
+		/datum/zLevel/station/snow,
 		/datum/zLevel/centcomm,
-		/datum/zLevel/space{
-			name = "spaceOldSat" ;
+		/datum/zLevel/space/snow{
+			name = "abandonedListeningOutpost" ;
 			},
-		/datum/zLevel/space{
-			name = "derelict" ;
+		/datum/zLevel/space/snow{
+			name = "russianColony" ;
 			},
-		/datum/zLevel/space{
-			name = "spacePirateShip" ;
+		/datum/zLevel/space/snow{
+			name = "tundraCrashedShip" ;
 			},
-		/datum/zLevel/mining,
+		/datum/zLevel/mining/snow,
 		)
 	enabled_jobs = list(/datum/job/trader)
-	radial_generate = RADIAL_GENERATE_SNOW_MAP
 
 /datum/map/active/New()
 	.=..()
