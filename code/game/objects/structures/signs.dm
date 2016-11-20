@@ -264,3 +264,19 @@
 
 /obj/structure/sign/chinese/notice
 	icon_state = "CH_notice"
+
+/obj/structure/sign/chinese/security
+	icon_state = "CH_security"
+
+/obj/structure/sign/chinese/engineering
+	icon_state = "CH_engineering"
+
+/obj/structure/sign/chinese/science
+	icon_state = "CH_science"
+
+/obj/structure/sign/chinese/medbay
+	icon_state = "CH_medbay"
+
+/obj/structure/sign/chinese/evacuation
+	icon_state = "CH_evacuation"
+
