@@ -861,10 +861,12 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	name = "Itching"
 	stage = 1
 /datum/disease2/effect/itching/activate(var/mob/living/carbon/mob,var/multiplier)
-	if(istype(mob, /mob/living/carbon/human/skellington)||istype(mob, /mob/living/carbon/human/skelevox))
+	var/mob/living/carbon/human/H = mob
+	if (istype(H) && H.species.flags & NO_SKIN)
 		to_chat(mob, "<span class='warning'>Your bones itch!</span>")
 	else
 		to_chat(mob, "<span class='warning'>Your skin itches!</span>")
+
 
 /datum/disease2/effect/drained
 	name = "Drained Feeling"
