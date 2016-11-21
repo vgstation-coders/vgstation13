@@ -396,7 +396,8 @@ var/list/uplink_items = list()
 	desc = "The minibomb is a grenade with a five-second fuse. Upon detonation, it will create a small hull breach \
 			in addition to dealing high amounts of damage to nearby personnel."
 	item = /obj/item/weapon/grenade/syndieminibomb
-	cost = 10
+	cost = 6
+	gamemodes = list("nuclear emergency")
 
 /datum/uplink_item/dangerous/viscerator
 	name = "Viscerator Grenade"
@@ -531,7 +532,7 @@ var/list/uplink_items = list()
 	name = "Syndicate Hardsuit"
 	desc = "The feared suit of a syndicate nuclear agent. Nanotrasen crew who spot these suits are known to panic."
 	item = /obj/item/weapon/storage/box/syndie_kit/hardsuit
-	cost = 12
+	cost = 8
 
 /datum/uplink_item/device_tools/thermal
 	name = "Thermal Imaging Glasses"
