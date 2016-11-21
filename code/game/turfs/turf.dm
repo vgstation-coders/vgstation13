@@ -250,6 +250,9 @@
 /turf/proc/return_siding_icon_state()		//used for grass floors, which have siding.
 	return 0
 
+/turf/proc/slippy_by_default()
+	return 0
+
 /turf/proc/inertial_drift(atom/movable/A as mob|obj)
 	if(!(A.last_move))
 		return

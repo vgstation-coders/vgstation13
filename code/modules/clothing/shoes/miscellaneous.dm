@@ -1,3 +1,14 @@
+/obj/item/clothing/shoes/proc/step_action() //this was made to rewrite clown shoes squeaking
+
+/obj/item/clothing/shoes/proc/prevent_snow_slip()
+	return 0
+
+/obj/item/clothing/shoes/proc/prevent_snow_slow()
+	return 0
+
+/obj/item/clothing/shoes/proc/allow_ski()
+	return 0
+
 /obj/item/clothing/shoes/syndigaloshes
 	desc = "A pair of brown shoes. They seem to have extra grip." //change line ~346 in code/datums/uplink_item.dm if you remove the second sentence
 	name = "brown shoes"

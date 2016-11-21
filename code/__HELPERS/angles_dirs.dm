@@ -115,18 +115,23 @@ proc/get_cardinal_dir(atom/A, atom/B)
 
 // smoothing dirs - now you can tell the difference between a tile being surrounded by north and west and a tile being surrounded by northwest.
 // used for 3x3/diagonal smoothers - not suitable for cardinal smoothing.
+// because for some reason it seems that north and south and east and west byond variables are actually capped to 15 when adding other flags, we need to redefine those too.
 
+#define SMOOTHING_NORTH 	1
+#define SMOOTHING_SOUTH		2
+#define SMOOTHING_EAST		4
+#define SMOOTHING_WEST		8
 #define SMOOTHING_NORTHWEST 16
 #define SMOOTHING_NORTHEAST 32
 #define SMOOTHING_SOUTHEAST 64
 #define SMOOTHING_SOUTHWEST 128
 
 
-#define SMOOTHING_ALLNORTH SMOOTHING_NORTHWEST|NORTH|SMOOTHING_NORTHEAST // 16 + 1 + 32 = 49
-#define SMOOTHING_ALLEAST SMOOTHING_SOUTHEAST|EAST|SMOOTHING_NORTHEAST // 64 + 4 + 32 = 100
-#define SMOOTHING_ALLWEST SMOOTHING_SOUTHWEST|WEST|SMOOTHING_NORTHWEST // 128 + 8 + 16 = 152
-#define SMOOTHING_ALLSOUTH SMOOTHING_SOUTHWEST|SOUTH|SMOOTHING_SOUTHEAST // 128 + 2 + 64 = 194
-#define SMOOTHING_ALLDIRS SMOOTHING_NORTHWEST|SMOOTHING_NORTHEAST|SMOOTHING_SOUTHEAST|SMOOTHING_SOUTHWEST|NORTH|EAST|WEST|SOUTH // 255
+#define SMOOTHING_ALLNORTH SMOOTHING_NORTHWEST|SMOOTHING_NORTH|SMOOTHING_NORTHEAST // 16 + 1 + 32 = 49
+#define SMOOTHING_ALLEAST SMOOTHING_SOUTHEAST|SMOOTHING_EAST|SMOOTHING_NORTHEAST // 64 + 4 + 32 = 100
+#define SMOOTHING_ALLWEST SMOOTHING_SOUTHWEST|SMOOTHING_WEST|SMOOTHING_NORTHWEST // 128 + 8 + 16 = 152
+#define SMOOTHING_ALLSOUTH SMOOTHING_SOUTHWEST|SMOOTHING_SOUTH|SMOOTHING_SOUTHEAST // 128 + 2 + 64 = 194
+#define SMOOTHING_ALLDIRS 255
 
 
 // L curves - x is our object, # is smoothable, . is not
@@ -158,7 +163,7 @@ proc/get_cardinal_dir(atom/A, atom/B)
 #define SMOOTHING_L_CURVE_SOUTHEAST SMOOTHING_ALLSOUTH|SMOOTHING_ALLEAST
 #define SMOOTHING_L_CURVES SMOOTHING_L_CURVE_NORTHWEST,SMOOTHING_L_CURVE_NORTHEAST,SMOOTHING_L_CURVE_SOUTHWEST,SMOOTHING_L_CURVE_SOUTHEAST
 
-/proc/smoothingdir_to_dir(var/dir)
+/proc/dir_to_smoothingdir(var/dir)
 	switch(dir)
 		if(NORTHEAST)
 			return SMOOTHING_NORTHEAST
@@ -171,7 +176,7 @@ proc/get_cardinal_dir(atom/A, atom/B)
 	return dir
 
 
-/proc/dir_to_smoothingdir(var/dir)
+/proc/smoothingdir_to_dir(var/dir)
 	switch(dir)
 		if(SMOOTHING_NORTHEAST,SMOOTHING_L_CURVE_NORTHEAST)
 			return NORTHEAST
@@ -181,4 +186,12 @@ proc/get_cardinal_dir(atom/A, atom/B)
 			return SOUTHWEST
 		if(SMOOTHING_NORTHWEST,SMOOTHING_L_CURVE_NORTHWEST)
 			return NORTHWEST
+		if(SMOOTHING_NORTH)
+			return NORTH
+		if(SMOOTHING_SOUTH)
+			return SOUTH
+		if(SMOOTHING_EAST)
+			return EAST
+		if(SMOOTHING_WEST)
+			return WEST
 	return dir

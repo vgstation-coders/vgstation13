@@ -705,7 +705,7 @@
 
 /atom/movable/proc/process_inertia(turf/start)
 	set waitfor = 0
-	if(Process_Spacemove(1))
+	if(Process_Spacemove(1) && !start.slippy_by_default())
 		inertia_dir  = 0
 		return
 

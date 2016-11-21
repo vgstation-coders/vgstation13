@@ -6,6 +6,7 @@
 #define MOLES_O2STANDARD_ARCTIC MOLES_ARCTICSTANDARD*O2STANDARD	//O2 standard value (21%)
 #define MOLES_N2STANDARD_ARCTIC MOLES_ARCTICSTANDARD*N2STANDARD	//N2 standard value (79%)
 #define SNOW_LAYER_NUMBER 2
+#define SNOWBALLS_ICE -1
 
 var/global/list/snow_turfs = list()
 
@@ -103,7 +104,7 @@ var/global/list/snow_turfs = list()
 			return 0
 	..()
 
-	if(istype(W, /obj/item/weapon/pickaxe/shovel) && snowballs)
+	if(istype(W, /obj/item/weapon/pickaxe/shovel) && snowballs && snowballs > 0)
 		user.visible_message("<span class='notice'>[user] starts digging out some snow with \the [W].</span>", \
 		"<span class='notice'>You start digging out some snow with \the [W].</span>")
 		user.delayNextAttack(20)
@@ -113,7 +114,7 @@ var/global/list/snow_turfs = list()
 
 
 /turf/snow/attack_hand(var/mob/user)
-	if(snowballs) //Reach down and make a snowball
+	if(snowballs && snowballs > 0) //Reach down and make a snowball
 		user.visible_message("<span class='notice'>[user] reaches down and starts forming a snowball.</span>", \
 		"<span class='notice'>You reach down and start forming a snowball.</span>")
 		user.delayNextAttack(5)
@@ -125,7 +126,7 @@ var/global/list/snow_turfs = list()
 
 /turf/snow/proc/extract_snowballs(var/snowball_amount = 0, var/mob/user, var/pick_up = 0)
 
-	if(!snowball_amount || !snowballs)
+	if(!snowball_amount || !snowballs || snowballs < 1)
 		return
 
 	var/extract_amount = min(snowballs, snowball_amount)
@@ -171,11 +172,27 @@ var/global/list/snow_turfs = list()
 
 /turf/snow/Entered(mob/user)
 	..()
-	if(snowballs && isliving(user) && !user.locked_to && !user.lying && !user.flying)
+	if(snowballs && snowballs > 0 && isliving(user) && !user.locked_to && !user.lying && !user.flying)
 		playsound(get_turf(src), pick(snowsound), 10, 1, -1, channel = 123)
 
+/turf/snow/has_gravity()
+	if(snowballs == SNOWBALLS_ICE)
+		return 0 // it just werks
+	else return ..()
+
+/turf/snow/inertial_drift(var/atom/movable/A)
+	if(istype(A,/mob/living/carbon))
+		var/mob/living/carbon/C = A
+		if(C.m_intent != "walk" || prob(80))
+			C.Slip(8,5)
+		else return
+	return ..()
+
+/turf/snow/slippy_by_default()
+	return 1
+
 /turf/snow/adjust_slowdown(mob/living/L, base_slowdown)
-	if(snowballs) // ie, there is snow on this turf
+	if(snowballs && snowballs > 0) // ie, there is snow on this turf
 		return base_slowdown + slowdown
 	else
 		return base_slowdown
@@ -253,7 +270,7 @@ var/global/list/snow_turfs = list()
 
 /turf/snow/ice/New()
 	..()
-	snowballs = 0
+	snowballs = SNOWBALLS_ICE
 	new /obj/glacier(src)
 
 /obj/glacier
@@ -265,41 +282,42 @@ var/global/list/snow_turfs = list()
 	anchored = 1
 	density = 0
 	plane = PLATING_PLANE
+	var/isedge
 
 /obj/glacier/New()
-	if(!istype(loc,/turf/snow))
+	var/turf/snow/T = loc
+	if(!istype(T))
 		qdel(src)
 		return
 	..()
-	icon_state = "ice[rand(1,6)]"
+	T.snowballs = SNOWBALLS_ICE
 	relativewall()
 	relativewall_neighbours()
 
-/obj/glacier/relativewall(var/log = 0)
+/obj/glacier/relativewall()
 	overlays.Cut()
-	var/junction = findSmoothingNeighbors()
-	if(log) world.log << "1 [junction]"
-	for(var/direction in diagonal)
+	var/junction = 0
+	isedge = 0
+	var/edgenum = 0
+	var/edgesnum = 0
+	for(var/direction in alldirs)
 		var/turf/adj_tile = get_step(src, direction)
-		if(locate(/obj/glacier) in adj_tile)
-			if((direction & junction) == direction)
-				junction |= dir_to_smoothingdir(direction)
-				if(log) world.log << "found new diag dir [direction], [junction]"
-	if(log) world.log << "2 [junction]"
-	if(junction == SMOOTHING_ALLDIRS) // you win the not-having-to-smooth-lottery
-		if(log) world.log << "nosmooth"
-		return
+		var/obj/glacier/adj_glacier = locate(/obj/glacier) in adj_tile
+		if(adj_glacier)
+			junction |= dir_to_smoothingdir(direction)
+			if(adj_glacier.isedge && direction in cardinal)
+				edgenum |= direction
+				edgesnum = adj_glacier.isedge
+	if(junction == SMOOTHING_ALLDIRS) // you win the not-having-to-smooth-lotterys
+		icon_state = "ice[rand(1,6)]"
 	else
 		switch(junction)
 			if(SMOOTHING_L_CURVES)
-				var/direction = dir_to_smoothingdir(junction)
-				var/list/directions = list(reverse_direction(direction),direction)
-				for(var/D in directions)
-					var/turf/adj_tile = get_step(src,D)
-					adj_tile.icon_state = "edge"
-					adj_tile.dir = D
-		if(log) world.log << "3 [juncton]"
+				isedge = junction
+				relativewall_neighbours()
 		icon_state = "junction[junction]"
+	if(edgenum && !isedge)
+		icon_state = "edge[edgenum]-[edgesnum]"
 
 /obj/glacier/relativewall_neighbours()
 	..()

@@ -124,7 +124,7 @@ here is an example of what it might look like:
 
 
 /obj/procedural_generator/cellular_automata/proc/apply_mapgrid_to_turfs(var/list/mapgrid,var/turf/bottomleft)
-	var/number_of_turfs_changed
+//	var/number_of_turfs_changed
 	for(var/row = 1 to mapgrid_height)
 		for(var/column = 1 to mapgrid_width)
 //			if(!((column + row*column) % 50000))
@@ -133,9 +133,8 @@ here is an example of what it might look like:
 				var/turf/T = locate((bottomleft.x-1)+column,(bottomleft.y-1)+row,bottomleft.z)
 				if(T && istype(T,ca_wall))
 					makefloor(T)
-					number_of_turfs_changed++
-	var/datum/zLevel/zlevesoninquiry = map.zLevels[bottomleft.z]
-	log_startup_progress("Finished cellular automata generaton on z:[bottomleft.z]([zlevesoninquiry.name]) with [number_of_turfs_changed] new [name]s in [stop_watch(watch)]s")
+//	var/datum/zLevel/zlevesoninquiry = map.zLevels[bottomleft.z]
+//	log_startup_progress("Finished cellular automata generaton on z:[bottomleft.z]([zlevesoninquiry.name]) with [number_of_turfs_changed] new [name]s in [stop_watch(watch)]s")
 
 /obj/procedural_generator/cellular_automata/proc/makefloor(var/turf/T)
 	T.clear_contents(list(type))
@@ -152,6 +151,7 @@ here is an example of what it might look like:
 	percent_area_walls = 70
 	..()
 
-/obj/procedural_generator/cellular_automata/ice/makefloor(var/turf/T)
-	T.clear_contents(list(type))
-	new /obj/glacier(T)
+/obj/procedural_generator/cellular_automata/ice/makefloor(var/turf/snow/T)
+	if(T.snowballs)
+		T.clear_contents(list(type))
+		new /obj/glacier(T)
