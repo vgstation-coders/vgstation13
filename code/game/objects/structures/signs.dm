@@ -244,7 +244,7 @@
 	icon_state = "crime"
 
 /obj/structure/sign/chinese
-	name = "Imcomprehensible Sign"
+	name = "incomprehensible sign"
 	desc = "A sign written using traditional chinese characters. A native Sol Common speaker might understand it."
 
 /obj/structure/sign/chinese/restricted_area
@@ -280,3 +280,15 @@
 /obj/structure/sign/chinese/evacuation
 	icon_state = "CH_evacuation"
 
+/obj/structure/sign/russian
+	name = "incomprehensible sign"
+	desc = "A sign written in russian."
+
+/obj/structure/sign/russian/electrical_danger
+	icon_state = "RU_electrical_danger"
+
+/obj/structure/sign/russian/caution
+	icon_state = "RU_caution"
+
+/obj/structure/sign/russian/staff_only
+	icon_state = "RU_staff_only"
