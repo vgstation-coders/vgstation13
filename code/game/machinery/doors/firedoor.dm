@@ -216,6 +216,9 @@ var/global/list/alert_overlays_global = list()
 /obj/machinery/door/firedoor/attack_hand(mob/user as mob)
 	return attackby(null, user)
 
+/obj/machinery/door/firedoor/attack_alien(mob/living/carbon/alien/humanoid/user)
+	force_open(user)
+
 /obj/machinery/door/firedoor/attackby(obj/item/weapon/C as obj, mob/user as mob)
 	add_fingerprint(user)
 	if(operating)
@@ -329,14 +332,14 @@ var/global/list/alert_overlays_global = list()
 	var/alarmed = A.doors_down || A.fire
 
 	if( blocked )
-		user.visible_message("<span class='attack'>\The [istype(user.loc,/obj/mecha) ? "[user.loc.name]" : "[user]"] pries at \the [src] with \a [C], but \the [src] is welded in place!</span>",\
+		user.visible_message("<span class='attack'>\The [istype(user.loc,/obj/mecha) ? "[user.loc.name]" : "[user]"] pries at \the [src][istype(C) ? " with \a [C]" : ""], but \the [src] is welded in place!</span>",\
 		"You try to pry \the [src] [density ? "open" : "closed"], but it is welded in place!",\
 		"You hear someone struggle and metal straining.")
 		return
 
 	//thank you Tigercat2000
-	user.visible_message("<span class='attack'>\The [istype(user.loc,/obj/mecha) ? "[user.loc.name]" : "[user]"] forces \the [src] [density ? "open" : "closed"] with \a [C]!</span>",\
-		"You force \the [src] [density ? "open" : "closed"] with \the [C]!",\
+	user.visible_message("<span class='attack'>\The [istype(user.loc,/obj/mecha) ? "[user.loc.name]" : "[user]"] forces \the [src] [density ? "open" : "closed"][istype(C) ? " with \a [C]" : ""]!</span>",\
+		"You force \the [src] [density ? "open" : "closed"][istype(C) ? " with \the [C]" : ""]!",\
 		"You hear metal strain, and a door [density ? "open" : "close"].")
 
 	if(density)
