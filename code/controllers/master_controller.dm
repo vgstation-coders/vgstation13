@@ -525,13 +525,13 @@ datum/controller/game_controller/proc/procedurally_generate()
 			switch(current_zlevel.procedurally_generate)
 				if(SNOW_PROCEDURAL_GENERATION)
 					list_of_turfs = snow_turfs
-					list_of_options = list(new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest(mapspawned = 0) = 45,
+					list_of_options = list(new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest(mapspawned = 0) = 47,
 										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest/large(mapspawned = 0) = 10,
 										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest/dense(mapspawned = 0) = 15,
 										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest/large/dense(mapspawned = 0) = 5,
 										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_grass(mapspawned = 0) = 15,
 										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_grass/large(mapspawned = 0) = 5,
-										   new /obj/procedural_generator/cellular_automata/ice(mapspawned = 0) = 5)
+										   new /obj/procedural_generator/cellular_automata/ice(mapspawned = 0) = 3)
 					chance = 1250 // make sure all items which have a chance of being spawned have the CANT_LOCK_TO_AT_ALL_EVEN_CONCIEVABLY flag in lockflags or the game will run out of lists
 					rmap_name = "snow"
 				if(SNOWMINE_PROCEDURAL_GENERATION)

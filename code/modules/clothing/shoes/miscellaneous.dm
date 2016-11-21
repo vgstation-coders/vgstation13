@@ -1,3 +1,14 @@
+/obj/item/clothing/shoes/proc/step_action() //this was made to rewrite clown shoes squeaking
+
+/obj/item/clothing/shoes/proc/prevent_snow_slip()
+	return 0
+
+/obj/item/clothing/shoes/proc/prevent_snow_slow()
+	return 0
+
+/obj/item/clothing/shoes/proc/allow_ski()
+	return 0
+
 /obj/item/clothing/shoes/syndigaloshes
 	desc = "A pair of brown shoes. They seem to have extra grip."
 	name = "brown shoes"
