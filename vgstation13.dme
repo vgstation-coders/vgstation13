@@ -1043,6 +1043,7 @@
 #include "code\modules\clothing\accessories\armband.dm"
 #include "code\modules\clothing\accessories\holomap.dm"
 #include "code\modules\clothing\accessories\holster.dm"
+#include "code\modules\clothing\accessories\shoe_accessory.dm"
 #include "code\modules\clothing\accessories\storage.dm"
 #include "code\modules\clothing\back\cape.dm"
 #include "code\modules\clothing\glasses\glasses.dm"
