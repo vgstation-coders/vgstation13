@@ -308,7 +308,7 @@ var/global/list/snow_turfs = list()
 			if(adj_glacier.isedge && direction in cardinal)
 				edgenum |= direction
 				edgesnum = adj_glacier.isedge
-	if(junction == SMOOTHING_ALLDIRS) // you win the not-having-to-smooth-lotterys
+	if(junction == SMOOTHING_ALLDIRS) // you win the not-having-to-smooth-lottery
 		icon_state = "ice[rand(1,6)]"
 	else
 		switch(junction)
