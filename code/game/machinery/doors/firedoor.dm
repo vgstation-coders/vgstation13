@@ -355,14 +355,6 @@ var/global/list/alert_overlays_global = list()
 	latetoggle()
 	layer = closed_layer
 
-/obj/machinery/door/firedoor/door_animate(animation)
-	switch(animation)
-		if("opening")
-			flick("door_opening", src)
-		if("closing")
-			flick("door_closing", src)
-
-
 /obj/machinery/door/firedoor/update_icon()
 	overlays.len = 0
 	if(density)

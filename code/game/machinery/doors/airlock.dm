@@ -123,6 +123,7 @@
 
 	explosion_block = 3//that's some high quality plasteel door
 	penetration_dampening = 20
+	animation_delay = 11
 
 /obj/machinery/door/airlock/freezer
 	name = "Freezer Airlock"
@@ -141,6 +142,7 @@
 	icon = 'icons/obj/doors/Doorhatchmaint2.dmi'
 	opacity = 1
 	assembly_type = /obj/structure/door_assembly/door_assembly_mhatch
+	animation_delay = 12
 
 /obj/machinery/door/airlock/glass_command
 	name = "Maintenance Hatch"
@@ -328,6 +330,7 @@
 	icon = 'icons/obj/doors/hightechsecurity.dmi'
 	assembly_type = /obj/structure/door_assembly/door_assembly_highsecurity
 	emag_cost = 2 // in MJ
+	animation_delay = 14
 
 /*
 About the new airlock wires panel:
@@ -499,8 +502,7 @@ About the new airlock wires panel:
 			if(overlays)
 				overlays.len = 0
 			if(panel_open)
-				spawn(2) // The only work around that works. Downside is that the door will be gone for a millisecond.
-					flick("o_door_opening", src)  //can not use flick due to BYOND bug updating overlays right before flicking
+				flick("o_door_opening", src)
 			else
 				flick("door_opening", src)
 		if("closing")
