@@ -67,7 +67,7 @@
 /datum/theft_objective/traitor/hand_tele
 	name = "a hand teleporter"
 	typepath = /obj/item/weapon/hand_tele
-	protected_jobs = list("Captain", "Research Director")
+	protected_jobs = list("Captain", "Research Director", "Head of Personnel")
 
 /datum/theft_objective/traitor/rcd
 	name = "an RCD"
@@ -92,7 +92,7 @@
 /datum/theft_objective/traitor/ai
 	name = "a functional AI"
 	typepath = /obj/item/device/aicard
-	protected_jobs = list("Captain", "Research Director", "Head of Personnel")
+	protected_jobs = list("Captain", "Research Director", "Head of Personnel", "Chief Engineer")
 
 /datum/theft_objective/traitor/magboots
 	name = "a pair of advanced magboots"
@@ -117,7 +117,7 @@
 /datum/theft_objective/traitor/corgi
 	name = "a piece of corgi meat"
 	typepath = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/corgi
-	protected_jobs = list("Head of Personnel") //Really HoP? Your own dog?
+	protected_jobs = list("Captain", "Head of Personnel") //Really HoP? Your own dog?
 
 /datum/theft_objective/traitor/rd_jumpsuit
 	name = "the research director's jumpsuit"
@@ -170,7 +170,7 @@
 	protected_jobs = list("Captain", "Research Director", "Chief Engineer", "Head of Personnel")
 
 /datum/theft_objective/traitor/belt
-	name = "the chief engineers advanced toolbelt"
+	name = "the chief engineer's advanced toolbelt"
 	typepath = /obj/item/weapon/storage/belt/utility/chief
 	protected_jobs = list("Captain", "Chief Engineer")
 
@@ -223,7 +223,7 @@
 						continue //Stealing a card with no contents doesn't count
 					var/is_at_least_one_alive = 0
 					for(var/mob/living/silicon/ai/A in C)
-						if(A.stat != 2)
+						if(A.stat != DEAD)
 							is_at_least_one_alive++
 					if(!is_at_least_one_alive)
 						continue
@@ -243,6 +243,7 @@
 	typepath = /obj/item/weapon/tank
 	min=28
 	max=28
+	protected_jobs = list("Research Director", "Scientist")
 
 /datum/theft_objective/number/traitor/plasma_gas/getAmountStolen(var/obj/item/I)
 	return I:air_contents:toxins
