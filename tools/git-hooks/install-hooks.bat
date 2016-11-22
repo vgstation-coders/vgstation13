@@ -10,10 +10,6 @@ SETLOCAL ENABLEDELAYEDEXPANSION
 set BASEDIR=%~dp0
 
 ::This is one of the few good ways to get a command output into a var
-FOR /F "tokens=* USEBACKQ" %%F IN (`git rev-parse --show-toplevel`) DO (
-	set REPO_ROOT=%%F
-)
-
 FOR /F "tokens=* USEBACKQ" %%G IN (`git rev-parse --git-dir`) DO (
 	set REPO_GIT_DIR=%%G
 )

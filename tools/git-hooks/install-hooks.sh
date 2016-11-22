@@ -10,9 +10,9 @@ GIT_HOOKS="applypatch-msg pre-applypatch post-applypatch pre-commit prepare-comm
 post-commit pre-rebase post-checkout post-merge pre-auto-gc post-rewrite
 pre-push"
 
-BASEDIR="`( cd \"$MY_PATH\" && pwd )`"
 REPO_ROOT=`git rev-parse --show-toplevel`
 REPO_GIT_DIR=`git rev-parse --git-dir`
+BASEDIR="$REPO_ROOT/tools/git-hooks"
 
 for hook in $GIT_HOOKS; do
 	#Slave scripts are stored under this folder
