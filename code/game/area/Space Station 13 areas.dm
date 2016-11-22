@@ -1400,6 +1400,14 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Paramedic Station"
 	icon_state = "paramedics"
 
+/area/medical/paramedics/supply
+	name = "\improper Paramedic Station"
+	icon_state = "paramedics"
+
+/area/medical/paramedics/security
+	name = "\improper Paramedic Station"
+	icon_state = "paramedics"
+
 //Security
 /area/security
 	holomap_color = HOLOMAP_AREACOLOR_SECURITY
@@ -1693,6 +1701,16 @@ proc/process_adminbus_teleport_locs()
 
 //Storage
 
+/area/storage/eva
+	name = "EVA Gear Storage"
+	icon_state = "storage"
+
+/area/storage/eva/supply
+
+/area/storage/eva/medbay
+
+/area/storage/eva/security
+
 /area/storage/tools
 	name = "Auxiliary Tool Storage"
 	icon_state = "storage"
@@ -1700,6 +1718,7 @@ proc/process_adminbus_teleport_locs()
 /area/storage/primary
 	name = "Primary Tool Storage"
 	icon_state = "primarystorage"
+
 
 /area/storage/autolathe
 	name = "Autolathe Storage"

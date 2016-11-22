@@ -242,3 +242,8 @@
 	name = "CRIME DOES NOT PAY"
 	desc = "A warning sign which suggests that you reconsider your poor life choices."
 	icon_state = "crime"
+
+/obj/structure/sign/snow
+	name = "WARNING: SUB-ZERO TEMPERATURE AHEAD"
+	desc = "A warning sign which reads 'WARNING: SUB-ZERO TEMPERATURE AHEAD'"
+	icon_state = "cold"
