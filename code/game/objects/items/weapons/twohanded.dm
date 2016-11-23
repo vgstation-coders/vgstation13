@@ -158,6 +158,7 @@
 	flags = FPRINT | TWOHANDABLE
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+	clumsy_check = 0
 
 /obj/item/weapon/dualsaber/bananabunch/update_wield(mob/user)
 	..()

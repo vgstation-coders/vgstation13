@@ -51,6 +51,7 @@
 	flags = FPRINT
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+	clumsy_check = 1
 
 
 /obj/item/weapon/melee/energy/sword/activated/New()
@@ -76,7 +77,7 @@
 	update_icon()
 
 /obj/item/weapon/melee/energy/sword/attack_self(mob/living/user as mob)
-	if ((M_CLUMSY in user.mutations) && prob(50) && active) //only an on blade can cut
+	if (clumsy_check && (M_CLUMSY in user.mutations) && prob(50) && active) //only an on blade can cut
 		to_chat(user, "<span class='danger'>You accidentally cut yourself with [src].</span>")
 		user.take_organ_damage(5,5)
 		return
@@ -138,17 +139,13 @@
 	flags = FPRINT
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+	clumsy_check = 0
 
 
 /obj/item/weapon/melee/energy/sword/bsword/IsShield()
 	if(active)
 		return 1
 	return 0
-
-/obj/item/weapon/melee/energy/sword/bsword/attack_self(mob/living/user as mob)
-	toggleActive(user)
-	add_fingerprint(user)
-	return
 
 /obj/item/weapon/melee/energy/sword/bsword/update_icon()
 	if(active)
