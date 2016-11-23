@@ -242,3 +242,53 @@
 	name = "CRIME DOES NOT PAY"
 	desc = "A warning sign which suggests that you reconsider your poor life choices."
 	icon_state = "crime"
+
+/obj/structure/sign/chinese
+	name = "incomprehensible sign"
+	desc = "A sign written using traditional chinese characters. A native Sol Common speaker might understand it."
+
+/obj/structure/sign/chinese/restricted_area
+	icon_state = "CH_restricted_area"
+
+/obj/structure/sign/chinese/caution
+	icon_state = "CH_caution"
+
+/obj/structure/sign/chinese/danger
+	icon_state = "CH_danger"
+
+/obj/structure/sign/chinese/electrical_equipment
+	icon_state = "CH_electrical_equipment"
+
+/obj/structure/sign/chinese/access_restricted
+	icon_state = "CH_access_restricted"
+
+/obj/structure/sign/chinese/notice
+	icon_state = "CH_notice"
+
+/obj/structure/sign/chinese/security
+	icon_state = "CH_security"
+
+/obj/structure/sign/chinese/engineering
+	icon_state = "CH_engineering"
+
+/obj/structure/sign/chinese/science
+	icon_state = "CH_science"
+
+/obj/structure/sign/chinese/medbay
+	icon_state = "CH_medbay"
+
+/obj/structure/sign/chinese/evacuation
+	icon_state = "CH_evacuation"
+
+/obj/structure/sign/russian
+	name = "incomprehensible sign"
+	desc = "A sign written in russian."
+
+/obj/structure/sign/russian/electrical_danger
+	icon_state = "RU_electrical_danger"
+
+/obj/structure/sign/russian/caution
+	icon_state = "RU_caution"
+
+/obj/structure/sign/russian/staff_only
+	icon_state = "RU_staff_only"
