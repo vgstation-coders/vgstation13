@@ -1031,6 +1031,29 @@ About the new airlock wires panel:
 
 	return
 
+/obj/machinery/door/airlock/attack_alien(mob/living/carbon/alien/humanoid/user)
+	if(isElectrified())
+		shock(user, 100)
+
+	user.delayNextAttack(10)
+	if(operating)
+		return
+	if(locked || welded || jammed)
+		to_chat(user, "<span class='notice'>The airlock won't budge!</span>")
+	else if(arePowerSystemsOn() && !(stat & NOPOWER))
+		to_chat(user, "<span class='notice'>You start forcing the airlock [density ? "open" : "closed"].</span>")
+		visible_message("<span class='warning'>\The [src]'s motors whine as something begins trying to force it [density ? "open" : "closed"]!</span>",\
+						"<span class='notice'>You hear groaning metal and overworked motors.</span>")
+		if(do_after(user,src,100))
+			if(locked || welded || jammed) //if it got welded/bolted during the do_after
+				to_chat(user, "<span class='notice'>The airlock won't budge!</span>")
+				return
+			visible_message("<span class='warning'>\The [user] forces \the [src] [density ? "open" : "closed"]!</span>")
+			density ? open(1) : close(1)
+	else
+		visible_message("<span class='warning'>\The [user] forces \the [src] [density ? "open" : "closed"]!</span>")
+		density ? open(1) : close(1)
+
 //You can ALWAYS screwdriver a door. Period. Well, at least you can even if it's open
 /obj/machinery/door/airlock/togglePanelOpen(var/obj/toggleitem, mob/user)
 	if(!operating)
