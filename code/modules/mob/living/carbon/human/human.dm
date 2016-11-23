@@ -366,12 +366,7 @@
 			WC.crush(src,species.blood_color)
 		else
 			return //Don't make blood
-	var/obj/effect/decal/cleanable/blood/B = getFromPool(/obj/effect/decal/cleanable/blood, get_turf(src))
-	B.basecolor = species.blood_color
-	B.update_icon()
-	B.New(B.loc)
-	B.blood_DNA = list()
-	B.blood_DNA[src.dna.unique_enzymes] = src.dna.b_type
+	blood_splatter(loc,src,1)
 
 //gets assignment from ID or ID inside PDA or PDA itself
 //Useful when player do something with computers
