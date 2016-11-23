@@ -142,7 +142,7 @@
 				A.randomize_appearance_for(new_mob)
 
 				var/mob/living/carbon/human/H = new_mob
-				var/newspecies = pick(all_species - list("Krampus", "Horror"))
+				var/newspecies = pick(all_species - "Krampus")
 				H.set_species(newspecies)
 				H.generate_name()
 				H.languages |= M.languages

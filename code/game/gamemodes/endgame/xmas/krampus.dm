@@ -23,45 +23,25 @@
 	heat_level_2 = 3000
 	heat_level_3 = 4000
 
+/datum/species/krampus/handle_post_spawn(var/mob/living/carbon/human/H)
+	..()
+	H.status_flags = GODMODE|CANPUSH
+	H.maxHealth = INFINITY
+	H.health = H.maxHealth
+	var/obj/item/weapon/krampus/sack = new /obj/item/weapon/krampus(H)
+	H.put_in_hands(sack)
+	H.universal_understand = 1
+
+
 
 /mob/living/carbon/human/krampus
 	real_name = "Krampus"
-	status_flags = GODMODE|CANPUSH
 
 /mob/living/carbon/human/krampus/New(var/new_loc)
 	h_style = "Bald"
 	..(new_loc, "Krampus")
-	maxHealth = INFINITY
-	health = maxHealth
-	var/obj/item/weapon/krampus/sack = new /obj/item/weapon/krampus(src)
-	put_in_hands(sack)
 
-/mob/living/carbon/human/krampus/proc/sack_em(var/mob/M)
-	if(!istype(M))
-		return
 
-	var/datum/admins/Krampus = client.holder
-	if(!(Krampus && check_rights(R_BAN)))
-		return
-
-	var/youwillneverhide = M.ckey
-	var/response = alert("Ban them, or just sack them?",,"Ban", "Sack", "Cancel")
-	if(response == "Cancel" || !M)
-		return
-
-	forceMove(get_turf(M))
-	M.drop_all()
-	M.forceMove(src) //need somewhere to store them while they're getting banned
-	to_chat(world, "<span class='sinister'>Krampus just sacked [M]. What a naughty little brat.<span>")
-	log_admin("[key_name_admin(src)] sacked [key_name_admin(M)].")
-
-	if(response == "Ban")
-		if(M.ckey != youwillneverhide)
-			M.ghostize(0)//In case of someone who mindswapped into them or something while responding, you don't want them getting disconnected and being able to re-join from lobby.
-			M.ckey = youwillneverhide
-		Krampus.newban(M)
-
-	qdel(M)
 
 /obj/item/weapon/krampus
 	name = "Krampus's Sack"
@@ -71,13 +51,45 @@
 	cant_drop = 1
 
 /obj/item/weapon/krampus/attack(mob/target, mob/user) //lack of adjacency check intentional, Krampus teleports to them on sackage.
-	var/mob/living/carbon/human/krampus/K = user
-	if(!istype(K))
+	var/mob/living/carbon/human/H = user
+	if(!istype(H) || !iskrampus(H))
 		to_chat(user, "<span class='danger'>You've been a very naughty little brat.</span>")
 		user.death()
-	K.sack_em(target)
+		return
+	sack_em(target,user)
+
+/obj/item/weapon/krampus/proc/sack_em(var/mob/M, var/mob/user)
+	if(!istype(M))
+		return
+
+	var/datum/admins/Krampus = user.client.holder
+	if(!(Krampus && user.check_rights(R_BAN)))
+		return
+
+	var/youwillneverhide = M.ckey
+	var/response = alert("Ban them, or just sack them?",,"Ban", "Sack", "Cancel")
+	if(response == "Cancel" || !M)
+		return
+
+	if(M.ckey != youwillneverhide)
+		M.ghostize(0)//In case of someone who mindswapped into them or something while responding, you don't want them getting disconnected and being able to re-join from lobby.
+		M.ckey = youwillneverhide
+
+	user.forceMove(get_turf(M))
+	M.drop_all()
+	M.forceMove(src) //need somewhere to store them while they're getting banned
+	to_chat(world, "<span class='sinister'>Krampus just sacked [M.real_name]. What a naughty little brat.<span>")
+	log_admin("[key_name_admin(user)] sacked [key_name_admin(M)].")
+
+	if(response == "Ban")
+		Krampus.newban(M)
+
+	qdel(M)
+
+
 
 // I'M THE KRAMPUS, BITCH
+//funny how none of these respect GODMODE
 /mob/living/carbon/human/krampus/Stun(amount)
 	return
 

@@ -922,7 +922,7 @@ body
 			to_chat(usr, "This can only be done to instances of type /mob/living/carbon/human")
 			return
 
-		var/new_species = input("Please choose a new species.","Species",null) as null|anything in (all_species - "Krampus")
+		var/new_species = input("Please choose a new species.","Species",null) as null|anything in all_species
 
 		if(!H)
 			to_chat(usr, "Mob doesn't exist anymore")
