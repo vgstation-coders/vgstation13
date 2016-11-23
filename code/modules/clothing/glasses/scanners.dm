@@ -1,9 +1,49 @@
 /obj/item/clothing/glasses/scanner
 	item_state = "glasses"
 	var/on = TRUE
+	var/list/color_matrix = null
 
 /obj/item/clothing/glasses/scanner/attack_self()
 	toggle()
+
+/obj/item/clothing/glasses/scanner/proc/apply_color(mob/living/carbon/user)	//for altering the color of the wearer's vision while active
+	if(color_matrix)
+		if(user.client)
+			var/client/C = user.client
+			C.color =  color_matrix
+
+/obj/item/clothing/glasses/scanner/proc/remove_color(mob/living/carbon/user)
+	if(color_matrix)
+		if(user.client)
+			var/client/C = user.client
+			C.color = initial(C.color)
+
+/obj/item/clothing/glasses/scanner/equipped(M as mob, glasses)
+	if(istype(M, /mob/living/carbon/monkey))
+		var/mob/living/carbon/monkey/O = M
+		if(O.glasses != src)
+			return
+	else if(istype(M, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = M
+		if(H.glasses != src)
+			return
+	else
+		return
+	if(on)
+		if(iscarbon(M))
+			apply_color(M)
+
+/obj/item/clothing/glasses/scanner/unequipped(mob/user, var/from_slot = null)
+	if(from_slot == slot_glasses)
+		if(on)
+			if(iscarbon(user))
+				remove_color(user)
+
+/obj/item/clothing/glasses/scanner/update_icon()
+	icon_state = initial(icon_state)
+
+	if (!on)
+		icon_state += "off"
 
 /obj/item/clothing/glasses/scanner/verb/toggle()
 	set category = "Object"
@@ -31,10 +71,57 @@
 /obj/item/clothing/glasses/scanner/proc/enable(var/mob/C)
 	on = TRUE
 	to_chat(C, "You turn \the [src] on.")
+	if(iscarbon(loc))
+		if(istype(loc, /mob/living/carbon/monkey))
+			var/mob/living/carbon/monkey/M = C
+			if(M.glasses && (M.glasses == src))
+				apply_color(M)
+		else if(istype(loc, /mob/living/carbon/human))
+			var/mob/living/carbon/human/H = C
+			if(H.glasses && (H.glasses == src))
+				apply_color(H)
 
 /obj/item/clothing/glasses/scanner/proc/disable(var/mob/C)
 	on = FALSE
 	to_chat(C, "You turn \the [src] off.")
+	if(iscarbon(loc))
+		if(istype(loc, /mob/living/carbon/monkey))
+			var/mob/living/carbon/monkey/M = C
+			if(M.glasses && (M.glasses == src))
+				remove_color(M)
+		else if(istype(loc, /mob/living/carbon/human))
+			var/mob/living/carbon/human/H = C
+			if(H.glasses && (H.glasses == src))
+				remove_color(H)
+
+/obj/item/clothing/glasses/scanner/night
+	name = "night vision goggles"
+	desc = "You can totally see in the dark now!"
+	icon_state = "night"
+	item_state = "glasses"
+	origin_tech = Tc_MAGNETS + "=2"
+	see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
+	see_in_dark = 8
+	action_button_name = "Toggle Night Vision Goggles"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	eyeprot = -1
+	color_matrix = list(0.33,0.33,0.33,0,
+						0.33,0.33,0.33,0,
+				 		0.33,0.33,0.33,0,
+				 		0,0,0,1,
+				 		-0.2,0,-0.2,0)
+
+/obj/item/clothing/glasses/scanner/night/enable(var/mob/C)
+	see_invisible = initial(see_invisible)
+	see_in_dark = initial(see_in_dark)
+	eyeprot = initial(eyeprot)
+	..()
+
+/obj/item/clothing/glasses/scanner/night/disable(var/mob/C)
+	see_invisible = 0
+	see_in_dark = 0
+	eyeprot = 0
+	..()
 
 /obj/item/clothing/glasses/scanner/meson
 	name = "optical meson scanner"
@@ -60,12 +147,6 @@
 	vision_flags &= ~SEE_TURFS
 	see_invisible &= ~SEE_INVISIBLE_MINIMUM
 	..()
-
-/obj/item/clothing/glasses/scanner/meson/update_icon()
-	icon_state = initial(icon_state)
-
-	if (!on)
-		icon_state += "off"
 
 /obj/item/clothing/glasses/scanner/material
 	name = "optical material scanner"

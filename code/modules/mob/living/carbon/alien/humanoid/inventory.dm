@@ -75,7 +75,7 @@
 	if(success)
 		if (client)
 			client.screen -= W
-		W.unequipped()
+		W.unequipped(src)
 		if(dropped)
 			W.forceMove(loc)
 			W.dropped(src)

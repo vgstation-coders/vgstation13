@@ -13,17 +13,6 @@
 	item_state = "glasses"
 	origin_tech = Tc_MATERIALS + "=1"
 
-/obj/item/clothing/glasses/night
-	name = "night vision goggles"
-	desc = "You can totally see in the dark now!."
-	icon_state = "night"
-	item_state = "glasses"
-	origin_tech = Tc_MAGNETS + "=2"
-	see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
-	see_in_dark = 8
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-	eyeprot = -1
-
 /obj/item/clothing/glasses/eyepatch
 	name = "eyepatch"
 	desc = "Yarr."
