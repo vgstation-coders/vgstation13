@@ -70,7 +70,7 @@
 		else if(M.client && M.stat == DEAD && (M.client.prefs.toggles & CHAT_DEAD))
 			//M.show_message(rendered2, 2) //Takes into account blindness and such.
 			to_chat(M, rendered2)
-		else if(M.client && istype(M,/mob/living/carbon/brain) && !istype(M.loc, /obj/item/device/mmi) && (M.client.prefs.toggles & CHAT_DEAD))
+		else if(M.client && istype(M,/mob/living/carbon/brain) && !istype(M.loc, /obj/item/device/mmi) && !istype(M.loc, /obj/mecha) && (M.client.prefs.toggles & CHAT_DEAD))
 			to_chat(M, rendered2)
 
 /mob/proc/emote(var/act, var/type, var/message, var/auto)
