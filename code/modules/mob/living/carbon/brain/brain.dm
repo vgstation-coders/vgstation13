@@ -65,3 +65,6 @@
 
 /mob/living/carbon/brain/teleport_to(var/atom/A)
 	container.forceMove(get_turf(A))
+
+/mob/living/carbon/brain/proc/brain_dead_chat()
+	return !(container && (istype(container, /obj/item/device/mmi)))
