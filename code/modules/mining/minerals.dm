@@ -22,6 +22,7 @@ mineral
 
 	///Path to the resultant ore.
 	var/ore
+
 	///For snow snowflake nonsense, so certain minerals can inherit it
 	var/mined_type
 
@@ -169,7 +170,11 @@ mineral/gibtonite
 	ore = /obj/item/weapon/gibtonite
 	UpdateTurf(var/turf/unsimulated/mineral/T)
 		if(!istype(T,/turf/unsimulated/mineral/gibtonite))
-			T.ChangeTurf(/turf/unsimulated/mineral/gibtonite)
+			if(mined_type == /turf/snow/permafrost)
+				T.ChangeTurf(/turf/unsimulated/mineral/gibtonite/snow)
+				//T.icon = 'icons/turf/snowwalls.dmi' //I hate hardcoding this, but it's being weird
+			else
+				T.ChangeTurf(/turf/unsimulated/mineral/gibtonite)
 			T.mined_type = mined_type
 		else
 			..()
