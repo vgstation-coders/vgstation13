@@ -1,0 +1,4 @@
+author: PJB3005
+delete-after: true
+changes:
+  - rscadd: Removes gene masks from the xenobotany machinery. No more wasting your fucking time on discovering what the genes do.

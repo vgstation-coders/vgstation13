@@ -158,8 +158,9 @@
 	var/list/data = list()
 
 	var/list/geneMasks[0]
-	for(var/gene_tag in plant_controller.gene_tag_masks)
-		geneMasks.Add(list(list("tag" = gene_tag, "mask" = plant_controller.gene_tag_masks[gene_tag])))
+	for(var/gene_tag in plant_controller.gene_tag_list)
+		geneMasks[list("tag" = gene_tag)] = null // For some reason the JSON writer sees it as assoc if it's a list of strings.
+
 	data["geneMasks"] = geneMasks
 
 	data["activity"] = active
@@ -265,8 +266,8 @@
 		if(!genetics.roundstart)
 			loaded_disk.genesource += " (variety #[genetics.uid])"
 
-		loaded_disk.name += " ([plant_controller.gene_tag_masks[href_list["get_gene"]]], #[genetics.uid])"
-		loaded_disk.desc += " The label reads \'gene [plant_controller.gene_tag_masks[href_list["get_gene"]]], sampled from [genetics.display_name]\'."
+		loaded_disk.name += " ([href_list["get_gene"]], #[genetics.uid])"
+		loaded_disk.desc += " The label reads 'gene [href_list["get_gene"]], sampled from [genetics.display_name]'."
 		eject_disk = 1
 
 		degradation += rand(20,60)
@@ -325,7 +326,9 @@
 		for(var/datum/plantgene/P in loaded_disk.genes)
 			if(data["locus"] != "")
 				data["locus"] += ", "
-			data["locus"] += "[plant_controller.gene_tag_masks[P.genetype]]"
+
+			data["locus"] += P.genetype
+
 
 	else
 		data["disk"] = 0
