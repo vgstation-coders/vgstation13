@@ -11,7 +11,7 @@
 	recommended_enemies = 5
 
 	uplink_welcome = "Corporate Backed Uplink Console:"
-	uplink_uses = 40
+	uplink_uses = 80
 
 	var/obj/nuclear_uplink
 	var/const/agents_possible = 5 //If we ever need more syndicate agents.
@@ -82,7 +82,8 @@
 							var/imageloc = synd_mind_1.current
 							if(istype(synd_mind_1.current.loc,/obj/mecha))
 								imageloc = synd_mind_1.current.loc
-							var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd", layer = 13)
+							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd")
+							I.plane = SYNDIE_ANTAG_HUD_PLANE
 							synd_mind.current.client.images += I
 
 /datum/game_mode/proc/update_synd_icons_added(datum/mind/synd_mind)
@@ -95,14 +96,16 @@
 					var/imageloc = synd_mind.current
 					if(istype(synd_mind.current.loc,/obj/mecha))
 						imageloc = synd_mind.current.loc
-					var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd", layer = 13)
+					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd")
+					I.plane = SYNDIE_ANTAG_HUD_PLANE
 					synd.current.client.images += I
 			if(synd_mind.current)
 				if(synd_mind.current.client)
 					var/imageloc = synd_mind.current
 					if(istype(synd_mind.current.loc,/obj/mecha))
 						imageloc = synd_mind.current.loc
-					var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd", layer = 13)
+					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "synd")
+					I.plane = SYNDIE_ANTAG_HUD_PLANE
 					synd_mind.current.client.images += I
 
 		update_all_synd_icons()
@@ -150,7 +153,7 @@
 	for(var/datum/mind/synd_mind in syndicates)
 		if(spawnpos > synd_spawn.len)
 			spawnpos = 1
-		synd_mind.current.loc = synd_spawn[spawnpos]
+		synd_mind.current.forceMove(synd_spawn[spawnpos])
 
 		forge_syndicate_objectives(synd_mind)
 		greet_syndicate(synd_mind)
@@ -179,7 +182,8 @@
 		the_bomb.r_code = nuke_code
 
 	spawn (rand(waittime_l, waittime_h))
-		if(!mixed) send_intercept()
+		if(!mixed)
+			send_intercept()
 
 	return ..()
 
@@ -196,10 +200,10 @@
 		P.info = "The nuclear authorization code is: <b>[nuke_code]</b>"
 		P.name = "nuclear bomb code"
 		if (ticker.mode.config_tag=="nuclear")
-			P.loc = synd_mind.current.loc
+			P.forceMove(synd_mind.current.loc)
 		else
 			var/mob/living/carbon/human/H = synd_mind.current
-			P.loc = H.loc
+			P.forceMove(H.loc)
 			H.equip_to_slot_or_del(P, slot_r_store, 0)
 			H.update_icons()
 
@@ -277,11 +281,13 @@
 			synd_mob.internals.icon_state = "internal1"
 
 	synd_mob.equip_to_slot_or_del(new /obj/item/weapon/card/id/syndicate(synd_mob), slot_wear_id)
-	if(synd_mob.backbag == 2) synd_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/security(synd_mob), slot_back)
-	if(synd_mob.backbag == 3 || synd_mob.backbag == 4) synd_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel_sec(synd_mob), slot_back)
+	if(synd_mob.backbag == 2)
+		synd_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/security(synd_mob), slot_back)
+	if(synd_mob.backbag == 3 || synd_mob.backbag == 4)
+		synd_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel_sec(synd_mob), slot_back)
 	//if(synd_mob.backbag == 4) synd_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(synd_mob), slot_back)
-	synd_mob.equip_to_slot_or_del(new /obj/item/ammo_storage/magazine/a12mm(synd_mob), slot_in_backpack)
-	synd_mob.equip_to_slot_or_del(new /obj/item/ammo_storage/magazine/a12mm(synd_mob), slot_in_backpack)
+	synd_mob.equip_to_slot_or_del(new /obj/item/ammo_storage/magazine/a12mm/ops(synd_mob), slot_in_backpack)
+	synd_mob.equip_to_slot_or_del(new /obj/item/ammo_storage/magazine/a12mm/ops(synd_mob), slot_in_backpack)
 	synd_mob.equip_to_slot_or_del(new /obj/item/weapon/reagent_containers/pill/cyanide(synd_mob), slot_in_backpack) // For those who hate fun
 	synd_mob.equip_to_slot_or_del(new /obj/item/weapon/reagent_containers/pill/creatine(synd_mob), slot_in_backpack) // HOOOOOO HOOHOHOHOHOHO - N3X
 	synd_mob.equip_to_slot_or_del(new /obj/item/weapon/gun/projectile/automatic/c20r(synd_mob), slot_belt)
@@ -289,6 +295,9 @@
 	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive/nuclear(synd_mob)
 	E.imp_in = synd_mob
 	E.implanted = 1
+	var/datum/organ/external/affected = synd_mob.get_organ(LIMB_HEAD)
+	affected.implants += E
+	E.part = affected
 	synd_mob.update_icons()
 	return 1
 
@@ -434,8 +443,7 @@
 	for(var/datum/mind/synd_mind in syndicates)
 		switch(synd_mind.current.gender)
 			if(MALE)
-				synd_mind.name = "[pick(first_names_male)] [lastname]"
+				synd_mind.current.fully_replace_character_name(synd_mind.current.real_name, "[pick(first_names_male)] [lastname]")
 			if(FEMALE)
-				synd_mind.name = "[pick(first_names_female)] [lastname]"
-		synd_mind.current.real_name = synd_mind.name
+				synd_mind.current.fully_replace_character_name(synd_mind.current.real_name, "[pick(first_names_female)] [lastname]")
 	return

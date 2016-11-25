@@ -24,6 +24,12 @@ var/global/list/pda_app_menus = list(
 		pda_device = device
 		pda_device.applications += src
 
+/datum/pda_app/Destroy()
+	if(pda_device.applications)
+		pda_device.applications -= src
+	pda_device = null
+	..()
+
 /////////////////////////////////////////////////
 
 /datum/pda_app/ringer
@@ -74,6 +80,10 @@ var/global/list/pda_app_menus = list(
 				linked_db = DB
 				break
 
+/datum/pda_app/balance_check/Destroy()
+	linked_db = null
+	..()
+
 /datum/pda_app/station_map
 	name = "Station Map"
 	desc = "Displays a minimap of the station. You'll find a marker at your location. Place more markers using coordinates."
@@ -82,6 +92,10 @@ var/global/list/pda_app_menus = list(
 	var/list/markers = list()
 	var/markx = 1
 	var/marky = 1
+
+/datum/pda_app/station_map/Destroy()
+	markers = null
+	..()
 
 /datum/minimap_marker
 	var/name = "default marker"
@@ -115,6 +129,10 @@ var/global/list/pda_app_menus = list(
 			templist[y] = 0
 
 	snake_game = new()
+
+/datum/pda_app/snake/Destroy()
+	snake_game = null
+	..()
 
 /datum/pda_app/snake/proc/game_tick(var/mob/user)
 	snake_game.game_tick(user.dir)
@@ -212,6 +230,10 @@ var/global/list/pda_app_menus = list(
 	..()
 	minesweeper_game = new()
 
+/datum/pda_app/minesweeper/Destroy()
+	minesweeper_game = null
+	..()
+
 /datum/pda_app/minesweeper/proc/game_tick(var/mob/user)
 	sleep(1)	//to give the game the time to process all tiles if many are dug at once.
 	if(minesweeper_game.gameover && (minesweeper_game.face == "win"))
@@ -233,7 +255,8 @@ var/global/list/pda_app_menus = list(
 				user << browse(null, "window=pda")
 
 /datum/pda_app/minesweeper/proc/save_score()
-	if(minesweeper_game.current_difficulty == "custom")	return
+	if(minesweeper_game.current_difficulty == "custom")
+		return
 	if(minesweeper_game.end_timer < minesweeper_station_highscores[minesweeper_game.current_difficulty])
 		minesweeper_station_highscores[minesweeper_game.current_difficulty] = minesweeper_game.end_timer
 		minesweeper_best_players[minesweeper_game.current_difficulty] = pda_device.owner
@@ -295,6 +318,12 @@ var/global/list/pda_app_menus = list(
 			if((DB.stat == 0) && DB.activated )
 				linked_db = DB
 				break
+
+/datum/pda_app/spesspets/Destroy()
+	linked_db = null
+	challenged = null
+	visited = null
+	..()
 
 /datum/pda_app/spesspets/proc/game_tick(var/mob/user)
 	if (game_state == 1)

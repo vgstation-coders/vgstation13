@@ -2,7 +2,7 @@
 	name = "Exosuit Structure (H.O.N.K. chassis)"
 	desc = "Used to build a H.O.N.K. chassis."
 	id = "honker_chassis"
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/chassis/honker
 	category = "HONK"
@@ -12,7 +12,7 @@
 	name = "Exosuit Structure (H.O.N.K. torso)"
 	desc = "Used to build a H.O.N.K. torso."
 	id = "honker_torso"
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/honker_torso
 	category = "HONK"
@@ -22,7 +22,7 @@
 	name = "Exosuit Structure (H.O.N.K. left arm)"
 	desc = "Used to build a H.O.N.K. left arm."
 	id = "honker_larm"
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/honker_left_arm
 	category = "HONK"
@@ -32,7 +32,7 @@
 	name = "Exosuit Structure (H.O.N.K. right arm)"
 	desc = "Used to build a H.O.N.K. right arm."
 	id = "honker_rarm"
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/honker_right_arm
 	category = "HONK"
@@ -42,7 +42,7 @@
 	name = "Exosuit Structure (H.O.N.K. left leg)"
 	desc = "Used to build a H.O.N.K. left leg."
 	id = "honker_lleg"
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/honker_left_leg
 	category = "HONK"
@@ -52,7 +52,7 @@
 	name = "Exosuit Structure (H.O.N.K. right leg)"
 	desc = "Used to build a H.O.N.K. right leg."
 	id = "honker_rleg"
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/honker_right_leg
 	category = "HONK"
@@ -62,7 +62,7 @@
 	name = "Exosuit Structure (H.O.N.K. head)"
 	desc = "Used to build a H.O.N.K. head."
 	id = "honker_head"
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/honker_head
 	category = "HONK"

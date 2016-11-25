@@ -94,9 +94,9 @@
 	if(world.timeofday >= upgrade_finished && upgrade_finished != -1)
 		if(istype(upgrading, /obj/item/weapon/cell))
 			if(occupant:cell)
-				occupant:cell.loc = get_turf(src)
+				occupant:cell.forceMove(get_turf(src))
 			upgrade_holder -= upgrading
-			upgrading:loc = occupant
+			upgrading:forceMove(occupant)
 			occupant:cell = upgrading
 			occupant:cell:charge = occupant:cell.maxcharge // its been in a recharger so it makes sense
 			upgrading = 0
@@ -135,7 +135,7 @@
 			return
 		user.put_in_hands(removed)
 		if(removed.loc == src)
-			removed.loc = get_turf(src)
+			removed.forceMove(get_turf(src))
 		upgrade_holder -= removed
 
 /obj/machinery/recharge_station/verb/apply_cell_upgrade()

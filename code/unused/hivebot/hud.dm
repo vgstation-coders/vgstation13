@@ -112,7 +112,7 @@
 	using.icon = 'icons/mob/screen1_robot.dmi'
 	using.icon_state = "inv3"
 	using.screen_loc = ui_inv3
-	using.layer = 20
+	using.layer = HUD_ITEM_LAYER
 	src.adding += using
 	mymob:inv3 = using
 
@@ -125,7 +125,7 @@
 	using.icon = 'icons/mob/screen1_robot.dmi'
 	using.icon_state = (mymob.a_intent == "hurt" ? "harm" : mymob.a_intent)
 	using.screen_loc = ui_acti
-	using.layer = 20
+	using.layer = HUD_ITEM_LAYER
 	src.adding += using
 	action_intent = using
 
@@ -135,7 +135,7 @@
 	using.icon_state = "s_arrow"
 	using.dir = WEST
 	using.screen_loc = ui_iarrowleft
-	using.layer = 19
+	using.layer = HUD_BASE_LAYER
 	src.adding += using
 
 	using = new src.h_type( src )
@@ -144,7 +144,7 @@
 	using.icon_state = "s_arrow"
 	using.dir = EAST
 	using.screen_loc = ui_iarrowright
-	using.layer = 19
+	using.layer = HUD_BASE_LAYER
 	src.adding += using
 //End of Intent
 
@@ -175,7 +175,7 @@
 	using.icon = 'icons/mob/screen1_robot.dmi'
 	using.icon_state = "panel"
 	using.screen_loc = ui_throw
-	using.layer = 19
+	using.layer = HUD_BASE_LAYER
 	src.adding += using
 
 //Store
@@ -204,28 +204,11 @@
 	mymob.fire.name = "fire"
 	mymob.fire.screen_loc = ui_fire
 
-
-
 	mymob.pullin = new /obj/screen( null )
 	mymob.pullin.icon = 'icons/mob/screen1_robot.dmi'
 	mymob.pullin.icon_state = "pull0"
 	mymob.pullin.name = "pull"
 	mymob.pullin.screen_loc = ui_pull
-
-	mymob.blind = new /obj/screen( null )
-	mymob.blind.icon = 'icons/mob/screen1_full.dmi''
-	mymob.blind.icon_state = "blackimageoverlay"
-	mymob.blind.name = " "
-	mymob.blind.screen_loc = "1,1"
-	mymob.blind.layer = 0
-	mymob.blind.mouse_opacity = 0
-
-	mymob.flash = new /obj/screen( null )
-	mymob.flash.icon = 'icons/mob/screen1_robot.dmi'
-	mymob.flash.icon_state = "blank"
-	mymob.flash.name = "flash"
-	mymob.flash.screen_loc = "1,1 to 15,15"
-	mymob.flash.layer = 17
 
 	mymob.sleep = new /obj/screen( null )
 	mymob.sleep.icon = 'icons/mob/screen1_robot.dmi'
@@ -246,7 +229,7 @@
 
 	mymob.client.reset_screen()
 
-	mymob.client.screen += list(mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.fire, mymob.hands, mymob.healths, mymob:cells, mymob.pullin, mymob.blind, mymob.flash, mymob.rest, mymob.sleep) //, mymob.mach )
+	mymob.client.screen += list(mymob.throw_icon, mymob.zone_sel, mymob.oxygen, mymob.fire, mymob.hands, mymob.healths, mymob:cells, mymob.pullin, mymob.rest, mymob.sleep) //, mymob.mach )
 	mymob.client.screen += src.adding + src.other
 
 	return

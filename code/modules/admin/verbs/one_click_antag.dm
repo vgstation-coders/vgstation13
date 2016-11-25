@@ -128,7 +128,8 @@ client/proc/one_click_antag()
 	var/mob/living/carbon/human/H = null
 
 	for(var/mob/living/carbon/human/applicant in player_list)
-		if(!applicant.client) continue
+		if(!applicant.client)
+			continue
 		if(applicant.client.desires_role(ROLE_REV))
 			if(applicant.stat == CONSCIOUS)
 				if(applicant.mind)
@@ -159,7 +160,8 @@ client/proc/one_click_antag()
 	if(candidates.len)
 		shuffle(candidates)
 		for(var/mob/i in candidates)
-			if(!i || !i.client) continue //Dont bother removing them from the list since we only grab one wizard
+			if(!i || !i.client)
+				continue //Dont bother removing them from the list since we only grab one wizard
 
 			theghost = i
 			break
@@ -254,7 +256,7 @@ client/proc/one_click_antag()
 			var/obj/item/weapon/paper/P = new
 			P.info = "Sadly, the Syndicate could not get you a nuclear bomb.  We have, however, acquired the arming code for the station's onboard nuke.  The nuclear authorization code is: <b>[nuke_code]</b>"
 			P.name = "nuclear bomb code and instructions"
-			P.loc = nuke_spawn.loc
+			P.forceMove(nuke_spawn.loc)
 
 		if(closet_spawn)
 			new /obj/structure/closet/syndicate/nuclear(closet_spawn.loc)
@@ -356,7 +358,8 @@ client/proc/one_click_antag()
 
 
 /proc/makeBody(var/mob/dead/observer/G_found) // Uses stripped down and bastardized code from respawn character
-	if(!G_found || !G_found.key)	return
+	if(!G_found || !G_found.key)
+		return
 
 	//First we spawn a dude.
 	var/mob/living/carbon/human/new_character = new(pick(latejoin))//The mob being spawned.
@@ -463,7 +466,7 @@ client/proc/one_click_antag()
 	new_vox.dna.mutantrace = "vox"
 	new_vox.set_species("Vox") // Actually makes the vox! How about that.
 	new_vox.generate_name()
-	//new_vox.add_language("Vox-pidgin")
+	//new_vox.add_language(LANGUAGE_VOX)
 	new_vox.mind_initialize()
 	new_vox.mind.assigned_role = "MODE"
 	new_vox.mind.special_role = "Vox Raider"

@@ -1,5 +1,6 @@
 /mob/living/silicon/ai/death(gibbed)
-	if(stat == DEAD)	return
+	if(stat == DEAD)
+		return
 	stat = DEAD
 	if (src.custom_sprite == 1)//check for custom AI sprite, defaulting to blue screen if no.
 		icon_state = "[ckey]-ai-crash"
@@ -7,29 +8,28 @@
 	update_canmove()
 	if(src.eyeobj)
 		src.eyeobj.forceMove(get_turf(src))
-	if(blind)	blind.layer = 0
-	sight |= SEE_TURFS|SEE_MOBS|SEE_OBJS
+	change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 	see_in_dark = 8
 	see_invisible = SEE_INVISIBLE_LEVEL_TWO
 
 	var/callshuttle = 0
 
 	for(var/obj/machinery/computer/communications/commconsole in machines)
-		if(commconsole.z == 2)
+		if(commconsole.z == map.zCentcomm)
 			continue
 		if(istype(commconsole.loc,/turf))
 			break
 		callshuttle++
 
 	for(var/obj/item/weapon/circuitboard/communications/commboard in world)
-		if(commboard.z == 2)
+		if(commboard.z == map.zCentcomm)
 			continue
 		if(istype(commboard.loc,/turf) || istype(commboard.loc,/obj/item/weapon/storage))
 			break
 		callshuttle++
 
 	for(var/mob/living/silicon/ai/shuttlecaller in player_list)
-		if(shuttlecaller.z == 2)
+		if(shuttlecaller.z == map.zCentcomm)
 			continue
 		if(!shuttlecaller.stat && shuttlecaller.client && istype(shuttlecaller.loc,/turf))
 			break

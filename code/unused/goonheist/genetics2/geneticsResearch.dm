@@ -39,7 +39,8 @@ var/datum/geneticsResearchManager/genResearch = new()
 	proc/isResearched(var/type)
 		if(researchTree.Find(type))
 			var/datum/geneticsResearchEntry/E = researchTree[type]
-			if(E.isResearched == 1) return 1
+			if(E.isResearched == 1)
+				return 1
 		return 0
 
 	proc/progress()

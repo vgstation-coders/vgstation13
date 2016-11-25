@@ -9,7 +9,7 @@ var/list/SPS_list = list()
 	w_class = W_CLASS_SMALL
 	flags = FPRINT
 	slot_flags = SLOT_BELT
-	origin_tech = "bluespace=2;magnets=2"
+	origin_tech = Tc_BLUESPACE + "=2;" + Tc_MAGNETS + "=2"
 	var/gpstag = "COM0"
 	var/emped = 0
 
@@ -136,14 +136,16 @@ var/global/secure_GPS_count = 0
 
 
 /obj/item/device/gps/secure/OnMobDeath(mob/wearer as mob)
-	if(emped) return
+	if(emped)
+		return
 
 	for(var/E in SPS_list)
 		var/obj/item/device/gps/secure/S  = E //No idea why casting it like this makes it work better instead of just defining it in the for each
 		S.announce(wearer, src, "has detected the death of their wearer")
 
 /obj/item/device/gps/secure/stripped(mob/wearer as mob)
-	if(emped) return
+	if(emped)
+		return
 	.=..()
 
 	for(var/E in SPS_list)

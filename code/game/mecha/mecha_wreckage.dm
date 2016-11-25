@@ -65,7 +65,7 @@
 		if(!isemptylist(crowbar_salvage))
 			var/obj/S = pick(crowbar_salvage)
 			if(S)
-				S.loc = get_turf(user)
+				S.forceMove(get_turf(user))
 				crowbar_salvage -= S
 				user.visible_message("[user] pries [S] from [src].", "You pry [S] from [src].")
 			return
@@ -102,6 +102,23 @@
 /obj/effect/decal/mecha_wreckage/marauder
 	name = "Marauder wreckage"
 	icon_state = "marauder-broken"
+
+/obj/effect/decal/mecha_wreckage/marauder/New()
+	..()
+	var/list/parts = list(
+		/obj/item/mecha_parts/part/marauder_torso,
+		/obj/item/mecha_parts/part/marauder_head,
+		/obj/item/mecha_parts/part/marauder_left_arm,
+		/obj/item/mecha_parts/part/marauder_right_arm,
+		/obj/item/mecha_parts/part/marauder_left_leg,
+		/obj/item/mecha_parts/part/marauder_right_leg,
+		)
+
+	for(var/i=0;i<2;i++)
+		if(prob(40))
+			var/part = pick(parts)
+			welder_salvage += part
+			parts -= part
 
 /obj/effect/decal/mecha_wreckage/mauler
 	name = "Mauler Wreckage"

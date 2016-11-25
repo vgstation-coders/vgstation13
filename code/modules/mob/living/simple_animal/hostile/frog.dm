@@ -146,8 +146,8 @@
 
 	to_chat(victim, "<span class='danger'>\The [src] climbs on top of you!</span>")
 
-	pixel_x = rand(-8,8)
-	pixel_y = rand(-8,8)
+	pixel_x = rand(-8,8) * PIXEL_MULTIPLIER
+	pixel_y = rand(-8,8) * PIXEL_MULTIPLIER
 
 /mob/living/simple_animal/hostile/frog/AttackingTarget()
 	.=..()
@@ -157,7 +157,7 @@
 
 		if(prob(10))
 			to_chat(L, "<span class='userdanger'>\The [src] throws you to the ground!</span>")
-			L.Weaken(rand(2,5))
+			L.Knockdown(rand(2,5))
 
 /mob/living/simple_animal/hostile/frog/adjustBruteLoss(amount)
 	.=..()

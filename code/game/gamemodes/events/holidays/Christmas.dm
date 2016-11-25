@@ -1,6 +1,7 @@
 /proc/Christmas_Game_Start()
 	for(var/obj/structure/flora/tree/pine/xmas in world)
-		if(xmas.z != 1)	continue
+		if(xmas.z != map.zMainStation)
+			continue
 		for(var/turf/simulated/floor/T in orange(1,xmas))
 			for(var/i=1,i<=rand(1,5),i++)
 				new /obj/item/weapon/winter_gift/regular(T)

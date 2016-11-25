@@ -31,7 +31,8 @@
 
 	if(possible_changelings.len>0)
 		var/datum/mind/changeling = pick(possible_changelings)
-		//possible_changelings-=changeling
+		possible_changelings -= changeling
+		changeling.special_role = "Changeling"
 		changelings += changeling
 		modePlayer += changelings
 		if(mixed)
@@ -42,9 +43,6 @@
 			for(var/datum/mind/P in modePlayer)
 				ticker.mode.modePlayer -= P
 				ticker.mode.changelings -= P
-		else
-			ticker.mode.modePlayer += traitors
-			ticker.mode.traitors += traitors
 		return .
 	else
 		return 0
@@ -52,7 +50,6 @@
 /datum/game_mode/traitor/changeling/post_setup()
 	for(var/datum/mind/changeling in changelings)
 		grant_changeling_powers(changeling.current)
-		changeling.special_role = "Changeling"
 		forge_changeling_objectives(changeling)
 		greet_changeling(changeling)
 	..()

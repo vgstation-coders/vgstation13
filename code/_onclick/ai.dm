@@ -14,7 +14,8 @@
 		build_click(src, client.buildmode, params, A)
 		return
 
-	if(control_disabled || stat) return
+	if(control_disabled || stat)
+		return
 
 	if(ismob(A))
 		ai_actual_track(A)
@@ -62,6 +63,8 @@
 		RestrainedClickOn(A)
 	else
 	*/
+	if(INVOKE_EVENT(on_uattack,list("atom"=A))) //This returns 1 when doing an action intercept
+		return
 	A.add_hiddenprint(src)
 	A.attack_ai(src)
 

@@ -93,7 +93,7 @@
 			M.simple_message("<span class='notice'>You slipped on \the [name]!</span>",\
 				"<span class='userdanger'>Please, just end the pain!</span>")
 			playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
-			M.Weaken(10)
+			M.Knockdown(10)
 			M.take_overall_damage(0, burned)
 
 /obj/item/weapon/bananapeel/traitorpeel/throw_impact(atom/hit_atom)

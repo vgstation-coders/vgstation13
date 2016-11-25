@@ -16,12 +16,14 @@ Attach to transfer valve and open. BOOM.
 	var/fire_dmi = 'icons/effects/fire.dmi'
 	var/fire_sprite = "fire"
 	var/fire_overlay = null
-	var/ashtype = /obj/effect/decal/cleanable/ash
 
 	var/melt_temperature=0
 	var/molten = 0
 
 	var/volatility = BASE_ZAS_FUEL_REQ //the lower this is, the easier it burns with low fuel in it. Starts at the define value
+
+/atom/proc/ashtype()
+	return /obj/effect/decal/cleanable/ash
 
 /atom/proc/getFireFuel()
 	return fire_fuel
@@ -35,6 +37,7 @@ Attach to transfer valve and open. BOOM.
 /atom/proc/ashify()
 	if(!on_fire)
 		return
+	var/ashtype = ashtype()
 	new ashtype(src.loc)
 	qdel(src)
 
@@ -109,8 +112,10 @@ Attach to transfer valve and open. BOOM.
 	if(!ignite_temp || src.autoignition_temperature<ignite_temp)
 		fuel_found += src.getFireFuel()
 	for(var/atom/A in src)
-		if(!A) continue
-		if(ignite_temp && A.autoignition_temperature>ignite_temp) continue
+		if(!A)
+			continue
+		if(ignite_temp && A.autoignition_temperature>ignite_temp)
+			continue
 		fuel_found += A.getFireFuel()
 	return fuel_found
 
@@ -124,8 +129,8 @@ Attach to transfer valve and open. BOOM.
 
 	icon = 'icons/effects/fire.dmi'
 	icon_state = "1"
-	layer = TURF_LAYER+0.1
-	plane = PLANE_TURF
+	layer = TURF_FIRE_LAYER
+	plane = ABOVE_TURF_PLANE
 
 	light_color = LIGHT_COLOR_FIRE
 
@@ -142,7 +147,8 @@ Attach to transfer valve and open. BOOM.
 
 
 /obj/fire/process()
-	if(timestopped) return 0
+	if(timestopped)
+		return 0
 	. = 1
 
 	// Get location and check if it is in a proper ZAS zone.
@@ -210,8 +216,10 @@ Attach to transfer valve and open. BOOM.
 			if(istype(enemy_tile))
 				var/datum/gas_mixture/acs = enemy_tile.return_air()
 
-				if(!acs) continue
-				if(!acs.check_recombustability(enemy_tile)) continue
+				if(!acs)
+					continue
+				if(!acs.check_recombustability(enemy_tile))
+					continue
 				//If extinguisher mist passed over the turf it's trying to spread to, don't spread and
 				//reduce firelevel.
 				var/obj/effect/effect/foam/fire/W = locate() in enemy_tile
@@ -277,7 +285,8 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 		var/can_use_turf=(T && istype(T))
 		if(can_use_turf)
 			for(var/atom/A in T)
-				if(!A) continue
+				if(!A)
+					continue
 				total_fuel += A.getFireFuel()
 
 		if (0 == total_fuel) // Fix zburn /0 runtime
@@ -355,7 +364,8 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 	// We have to check all objects in order to extinguish object fires.
 	var/still_burning=0
 	for(var/atom/A in T)
-		if(!A) continue
+		if(!A)
+			continue
 		if(!oxygen/* || A.autoignition_temperature > temperature*/)
 			A.extinguish()
 			continue
@@ -388,7 +398,8 @@ datum/gas_mixture/proc/check_combustability(var/turf/T, var/objects)
 
 	if(objects && istype(T))
 		for(var/atom/A in T)
-			if(!A || !oxygen || A.autoignition_temperature > temperature) continue
+			if(!A || !oxygen || A.autoignition_temperature > temperature)
+				continue
 			if(QUANTIZE(A.getFireFuel() * zas_settings.Get(/datum/ZAS_Setting/fire_consumption_rate)) >= A.volatility)
 				return 1
 
@@ -447,7 +458,8 @@ datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
 	//Get heat transfer coefficients for clothing.
 
 	for(var/obj/item/clothing/C in src)
-		if(is_holding_item(C)) continue
+		if(is_holding_item(C))
+			continue
 
 		if( C.max_heat_protection_temperature >= last_temperature )
 			if(!is_slot_hidden(C.body_parts_covered,FULL_HEAD))

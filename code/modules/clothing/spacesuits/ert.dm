@@ -8,6 +8,7 @@
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	flags = FPRINT  | PLASMAGUARD
 	var/obj/machinery/camera/camera
+	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 3
@@ -43,6 +44,7 @@
 	/obj/item/weapon/gun/energy/taser, /obj/item/weapon/melee/baton, /obj/item/weapon/gun/energy/gun)
 	siemens_coefficient = 0.6
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 
 //Commander
@@ -51,6 +53,7 @@
 	desc = "A helmet worn by the commander of a Nanotrasen Emergency Response Team. Armoured, space ready and fire resistant."
 	icon_state = "ert_commander"
 	item_state = "helm-command"
+	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 
 /obj/item/clothing/suit/space/ert/commander
@@ -66,6 +69,7 @@
 	desc = "A helmet worn by the security members of a Nanotrasen Emergency Response Team. Armoured, space ready and fire resistant."
 	icon_state = "ert_security"
 	item_state = "syndicate-helm-black-red"
+	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 
 /obj/item/clothing/suit/space/ert/security
@@ -79,6 +83,7 @@
 	name = "emergency response team engineer helmet"
 	desc = "A helmet worn by the engineering members of a Nanotrasen Emergency Response Team. Armoured, space ready and fire resistant. This one is radiation resistant as well."
 	icon_state = "ert_engineer"
+	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 50, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 100, rad = 100)
 
@@ -93,6 +98,7 @@
 	name = "emergency response team medical helmet"
 	desc = "A helmet worn by the medical members of a Nanotrasen Emergency Response Team. Armoured, space ready and fire resistant."
 	icon_state = "ert_medical"
+	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 
 /obj/item/clothing/suit/space/ert/medical

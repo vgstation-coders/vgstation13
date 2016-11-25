@@ -13,7 +13,7 @@
 	starting_materials = list(MAT_IRON = 15000)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "materials=9;bluespace=5"
+	origin_tech = Tc_MATERIALS + "=9;" + Tc_BLUESPACE + "=5"
 
 	//the colon separates the typepath from the name
 	var/list/obj/item/stored_modules = list("/obj/item/weapon/screwdriver:screwdriver" = null,
@@ -102,7 +102,8 @@
 					return 1
 
 /obj/item/weapon/switchtool/proc/remove_module(mob/user)
-	deployed.loc = get_turf(user)
+	deployed.cant_drop = 0
+	deployed.forceMove(get_turf(user))
 	for(var/module in stored_modules)
 		if(stored_modules[module] == deployed)
 			stored_modules[module] = null
@@ -114,9 +115,9 @@
 
 /obj/item/weapon/switchtool/proc/undeploy()
 	playsound(get_turf(src), "sound/weapons/switchblade.ogg", 10, 1)
+	deployed.cant_drop = 0
 	deployed = null
 	overlays.len = 0
-	deployed.cant_drop = 0
 	w_class = initial(w_class)
 
 /obj/item/weapon/switchtool/proc/deploy(var/module)
@@ -166,7 +167,7 @@
 	icon_state = "surg_switchtool"
 	desc = "A switchtool containing most of the necessary items for impromptu surgery. For the surgeon on the go."
 
-	origin_tech = "materials=4;bluespace=3;biotech=3"
+	origin_tech = Tc_MATERIALS + "=4;" + Tc_BLUESPACE + "=3;" + Tc_BIOTECH + "=3"
 	stored_modules = list("/obj/item/weapon/scalpel:scalpel" = null,
 						"/obj/item/weapon/circular_saw:circular saw" = null,
 						"/obj/item/weapon/surgicaldrill:surgical drill" = null,

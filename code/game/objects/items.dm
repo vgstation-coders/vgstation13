@@ -96,6 +96,23 @@
 	..()
 	qdel(src)
 
+/obj/item/Topic(href, href_list)
+	.=..()
+	if(href_list["close"])
+		return
+
+	if(usr.incapacitated())
+		return 1
+	if (!usr.dexterity_check())
+		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return 1
+	if (!in_range(src, usr))
+		return 1
+
+	src.add_fingerprint(usr)
+	src.add_hiddenprint(usr)
+	return 0
+
 /obj/item/proc/restock() //used for borg recharging
 	return
 
@@ -122,9 +139,9 @@
 
 	var/turf/T = src.loc
 
-	src.loc = null
+	src.forceMove(null)
 
-	src.loc = T
+	src.forceMove(T)
 
 /obj/item/examine(mob/user)
 	var/size
@@ -159,13 +176,15 @@
 				return 0
 			attack_hand(user)
 	else if(isrobot(user))
-		if(!istype(src.loc, /obj/item/weapon/robot_module)) return
+		if(!istype(src.loc, /obj/item/weapon/robot_module))
+			return
 		var/mob/living/silicon/robot/R = user
 		R.activate_module(src)
 		R.hud_used.update_robot_modules_display()
 
 /obj/item/attack_hand(mob/user as mob)
-	if (!user) return
+	if (!user)
+		return
 
 	if (istype(src.loc, /obj/item/weapon/storage))
 		//If the item is in a storage item, take it out.
@@ -177,17 +196,21 @@
 		if(src == user.get_inactive_hand())
 			if(src.flags & TWOHANDABLE)
 				return src.wield(user)
+			if(!user.put_in_hand_check(src, user.get_active_hand()))
+				return
 		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
 		if(!src.canremove)
 			return
-		else
-			user.u_equip(src,0)
+
+		user.u_equip(src,0)
 	else
 		if(isliving(src.loc))
 			return
 		//user.next_move = max(user.next_move+2,world.time + 2)
 	add_fingerprint(user)
-	user.put_in_active_hand(src)
+	if(!user.put_in_active_hand(src))
+		forceMove(get_turf(user))
+
 	return
 
 /obj/item/requires_dexterity(mob/user)
@@ -211,6 +234,8 @@
 					M.client.screen -= src
 	src.throwing = 0
 	if (src.loc == user)
+		if(!user.put_in_hand_check(src, user.get_active_hand()))
+			return
 		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
 		if(istype(src, /obj/item/clothing) && !src:canremove)
 			return
@@ -236,8 +261,7 @@
 	return
 
 /obj/item/proc/dropped(mob/user as mob)
-	layer = initial(layer) //nothing bad can come from this right?
-	plane = initial(plane) //wrong
+	reset_plane_and_layer()
 	if(wielded)
 		unwield(user)
 
@@ -283,15 +307,17 @@
 	return
 
 // called after an item is unequipped or stripped
-/obj/item/proc/unequipped(mob/user)
+/obj/item/proc/unequipped(mob/user, var/from_slot = null)
 	return
 
 //the mob M is attempting to equip this item into the slot passed through as 'slot'. Return 1 if it can do this and 0 if it can't.
 //If you are making custom procs but would like to retain partial or complete functionality of this one, include a 'return ..()' to where you want this to happen.
 //Set disable_warning to 1 if you wish it to not give you outputs.
 /obj/item/proc/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
-	if(!slot) return CANNOT_EQUIP
-	if(!M) return CANNOT_EQUIP
+	if(!slot)
+		return CANNOT_EQUIP
+	if(!M)
+		return CANNOT_EQUIP
 
 	if(wielded)
 		if(!disable_warning)
@@ -801,8 +827,10 @@
 		//if(((user.get_active_hand() in list(null, src)) && user.put_in_inactive_hand(wielded)) || (!inactive && ((user.get_inactive_hand() in list(null, src)) && user.put_in_active_hand(wielded))))
 
 		for(var/i = 1 to user.held_items.len)
-			if(user.held_items[i]) continue
-			if(user.active_hand == i) continue
+			if(user.held_items[i])
+				continue
+			if(user.active_hand == i)
+				continue
 
 			if(user.put_in_hand(i, wielded))
 				wielded.attach_to(src)
@@ -874,7 +902,7 @@
 		/*
 		to_chat(M, "<span class='warning'>You stab yourself in the eye.</span>")
 		M.sdisabilities |= BLIND
-		M.weakened += 4
+		M.AdjustKnockdown(4)
 		M.adjustBruteLoss(10)
 		*/
 
@@ -904,7 +932,7 @@
 					M.drop_item()
 				M.eye_blurry += 10
 				M.Paralyse(1)
-				M.Weaken(4)
+				M.Knockdown(4)
 			if (eyes.damage >= eyes.min_broken_damage)
 				if(M.stat != 2)
 					to_chat(M, "<span class='warning'>You go blind!</span>")
@@ -996,7 +1024,8 @@ var/global/list/image/blood_overlays = list()
 			step_towards(src,S)
 		else if(current_size > STAGE_ONE)
 			step_towards(src,S)
-		else ..()
+		else
+			..()
 
 //Gets the rating of the item, used in stuff like machine construction.
 /obj/item/proc/get_rating()
@@ -1012,7 +1041,8 @@ var/global/list/image/blood_overlays = list()
 		return
 
 	var/kick_dir = get_dir(H, src)
-	if(H.loc == src.loc) kick_dir = H.dir
+	if(H.loc == src.loc)
+		kick_dir = H.dir
 
 	var/turf/T = get_edge_target_turf(loc, kick_dir)
 
@@ -1023,7 +1053,7 @@ var/global/list/image/blood_overlays = list()
 	if(kick_power > 6) //Fly in an arc!
 		spawn()
 			var/original_pixel_y = pixel_y
-			animate(src, pixel_y = original_pixel_y + 32, time = 10, easing = CUBIC_EASING)
+			animate(src, pixel_y = original_pixel_y + WORLD_ICON_SIZE, time = 10, easing = CUBIC_EASING)
 
 			while(loc)
 				if(!throwing)
@@ -1033,3 +1063,6 @@ var/global/list/image/blood_overlays = list()
 
 	Crossed(H) //So you can't kick shards while naked without suffering
 	throw_at(T, kick_power, 1)
+
+/obj/item/animationBolt(var/mob/firer)
+	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)

@@ -2,9 +2,10 @@
 	name = "holster"
 	icon_state = "holster"
 	_color = "holster"
-	origin_tech = "combat=2"
+	origin_tech = Tc_COMBAT + "=2"
 	var/obj/item/holstered = null
 	accessory_exclusion = HOLSTER
+	var/holster_verb_name = "Holster"
 
 /obj/item/clothing/accessory/holster/proc/can_holster(obj/item/weapon/gun/W)
 	return
@@ -16,6 +17,9 @@
 
 	if (!can_holster(I))
 		to_chat(user, "<span class='warning'>\The [I] won't fit in the [src]!</span>")
+		return
+
+	if(user.attack_delayer.blocked())
 		return
 
 	if(user.drop_item(I, src))
@@ -51,15 +55,16 @@
 		return
 
 	var/obj/item/clothing/accessory/holster/H = null
-	if (istype(src, /obj/item/clothing/accessory/holster))
+	if(istype(src, /obj/item/clothing/accessory/holster))
 		H = src
-	else if (istype(src, /obj/item/clothing/))
+	else if(istype(src, /obj/item/clothing/))
 		var/obj/item/clothing/S = src
 		if (S.accessories.len)
 			H = locate() in S.accessories
 
-	if (!H)
+	if(!H)
 		to_chat(usr, "<span class='warning'>Something is very wrong.</span>")
+		return
 
 	if(!H.holstered)
 		var/obj/item/W = usr.get_active_hand()
@@ -96,15 +101,24 @@
 
 /obj/item/clothing/accessory/holster/on_attached(obj/item/clothing/under/S)
 	..()
-	attached_to.verbs += /obj/item/clothing/accessory/holster/verb/holster_verb
+	//We're making a new verb, see http://www.byond.com/forum/?post=238593
+	if(attached_to)
+		attached_to.verbs += new/obj/item/clothing/accessory/holster/verb/holster_verb(attached_to,holster_verb_name)
 
 /obj/item/clothing/accessory/holster/on_removed(mob/user as mob)
-	attached_to.verbs -= /obj/item/clothing/accessory/holster/verb/holster_verb
+	//Yes, we're calling "new" when removing a verb. I blame verbs entirely for this shit. See: http://www.byond.com/forum/?post=80230
+	if(attached_to)
+		attached_to.verbs -= new/obj/item/clothing/accessory/holster/verb/holster_verb(attached_to,holster_verb_name)
 	..()
 
 //
 // Handguns
 //
+/obj/item/clothing/accessory/holster/handgun
+	name = "shoulder holster"
+	desc = "A handgun holster. Perfect for concealed carry."
+	holster_verb_name = "Holster (Handgun)"
+
 /obj/item/clothing/accessory/holster/handgun/can_holster(obj/item/weapon/gun/W)
 	if(!istype(W))
 		return
@@ -117,10 +131,6 @@
 	else
 		user.visible_message("<span class='notice'>[user] draws \the [holstered], pointing it at the ground.</span>", \
 		"<span class='notice'>You draw \the [holstered], pointing it at the ground.</span>")
-
-/obj/item/clothing/accessory/holster/handgun
-	name = "shoulder holster"
-	desc = "A handgun holster. Perfect for concealed carry."
 
 /obj/item/clothing/accessory/holster/handgun/wornout
 	desc = "A worn-out handgun holster. Perfect for concealed carry."
@@ -136,6 +146,11 @@
 //
 // Knives
 //
+/obj/item/clothing/accessory/holster/knife
+	name = "knife holster"
+	desc = "A holster that takes knives. The possibilities are endless."
+	holster_verb_name = "Holster (Knife)"
+
 /obj/item/clothing/accessory/holster/knife/can_holster(obj/item/weapon/W)
 	if(!istype(W))
 		return
@@ -152,7 +167,6 @@
 	"<span class='warning'>You draw your [holstered.name]!</span>")
 
 /obj/item/clothing/accessory/holster/knife/boot
-	name = "knife holster"
 	desc = "A knife holster that can be attached to any pair of boots."
 	item_state = "bootknife"
 	icon_state = "bootknife"

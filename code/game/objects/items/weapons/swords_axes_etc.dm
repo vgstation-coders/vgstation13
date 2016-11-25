@@ -26,7 +26,7 @@
 	icon_state = "baton"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	item_state = "classic_baton"
-	origin_tech = "combat=3"
+	origin_tech = Tc_COMBAT + "=3"
 	mech_flags = MECH_SCAN_FAIL
 	flags = FPRINT
 	slot_flags = SLOT_BELT
@@ -35,7 +35,7 @@
 /obj/item/weapon/melee/classic_baton/attack(mob/M as mob, mob/living/user as mob)
 	if ((M_CLUMSY in user.mutations) && prob(50))
 		to_chat(user, "<span class='warning'>You club yourself over the head.</span>")
-		user.Weaken(3 * force)
+		user.Knockdown(3 * force)
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
 			H.apply_damage(2*force, BRUTE, LIMB_HEAD)
@@ -50,18 +50,20 @@
 	log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
 */
 	if (user.a_intent == I_HURT)
-		if(!..()) return
+		if(!..())
+			return
 		playsound(get_turf(src), "swing_hit", 50, 1, -1)
 		if (M.stuttering < 8 && (!(M_HULK in M.mutations))  /*&& (!istype(H:wear_suit, /obj/item/clothing/suit/judgerobe))*/)
 			M.stuttering = 8
 		M.Stun(8)
-		M.Weaken(8)
+		M.Knockdown(8)
 		for(var/mob/O in viewers(M))
-			if (O.client)	O.show_message("<span class='danger'>[M] has been beaten with \the [src] by [user]!</span>", 1, "<span class='warning'>You hear someone fall</span>", 2)
+			if (O.client)
+				O.show_message("<span class='danger'>[M] has been beaten with \the [src] by [user]!</span>", 1, "<span class='warning'>You hear someone fall</span>", 2)
 	else
 		playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1, -1)
 		M.Stun(5)
-		M.Weaken(5)
+		M.Knockdown(5)
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
 		log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
@@ -72,7 +74,8 @@
 		src.add_fingerprint(user)
 
 		for(var/mob/O in viewers(M))
-			if (O.client)	O.show_message("<span class='danger'>[M] has been stunned with \the [src] by [user]!</span>", 1, "<span class='warning'>You hear someone fall</span>", 2)
+			if (O.client)
+				O.show_message("<span class='danger'>[M] has been stunned with \the [src] by [user]!</span>", 1, "<span class='warning'>You hear someone fall</span>", 2)
 
 //Telescopic baton
 /obj/item/weapon/melee/telebaton
@@ -81,7 +84,7 @@
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "telebaton_0"
 	item_state = "telebaton_0"
-	origin_tech = "combat=2"
+	origin_tech = Tc_COMBAT + "=2"
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_SMALL
@@ -142,7 +145,7 @@
 			user.simple_message("<span class='warning'>You club yourself over the head.</span>",
 				"<span class='danger'>The fishing rod goes mad!</span>")
 
-			user.Weaken(3 * force)
+			user.Knockdown(3 * force)
 			if(ishuman(user))
 				var/mob/living/carbon/human/H = user
 				H.apply_damage(2*force, BRUTE, LIMB_HEAD)
@@ -150,14 +153,15 @@
 				user.take_organ_damage(2*force)
 			return
 		if (user.a_intent == I_HURT)
-			if(!..()) return
+			if(!..())
+				return
 			if(!isrobot(target))
 				playsound(get_turf(src), "swing_hit", 50, 1, -1)
 				//target.Stun(4)	//naaah
-				target.Weaken(4)
+				target.Knockdown(4)
 		else
 			playsound(get_turf(src), 'sound/weapons/Genhit.ogg', 50, 1, -1)
-			target.Weaken(2)
+			target.Knockdown(2)
 			target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [target.name] ([target.ckey])</font>")
 			log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [target.name] ([target.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")

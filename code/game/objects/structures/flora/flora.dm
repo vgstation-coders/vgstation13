@@ -5,11 +5,11 @@
 	density = 1
 
 	layer = FLY_LAYER
-	plane = PLANE_EFFECTS
+	plane = ABOVE_HUMAN_PLANE
 	icon = 'icons/obj/flora/deadtrees.dmi'
 	icon_state = "tree_1"
 
-	pixel_x = -16
+	pixel_x = -WORLD_ICON_SIZE/2
 
 	var/health = 100
 	var/maxHealth = 100
@@ -69,6 +69,7 @@
 		if(W.is_sharp() >= 1.2) //As sharp as a knife
 			if(W.w_class <= W_CLASS_SMALL) //Big enough to use to cut down trees
 				health -= (user.get_strength() * W.force)
+				playsound(loc, 'sound/effects/woodcuttingshort.ogg', 50, 1)
 			else
 				to_chat(user, "<span class='info'>\The [W] doesn't appear to be big enough to cut into \the [src]. Try something bigger.</span>")
 		else
@@ -85,11 +86,14 @@
 	var/turf/our_turf = get_turf(src) //Turf at which this tree is located
 	var/turf/current_turf = get_turf(src) //Turf in which to spawn a log. Updated in the loop
 
+	playsound(loc, 'sound/effects/woodcutting.ogg', 50, 1)
+
 	qdel(src)
 
 	spawn()
 		while(height > 0)
-			if(!current_turf) break //If the turf in which to spawn a log doesn't exist, stop the thing
+			if(!current_turf)
+				break //If the turf in which to spawn a log doesn't exist, stop the thing
 
 			var/obj/item/I = new log_type(our_turf) //Spawn a log and throw it at the "current_turf"
 			I.throw_at(current_turf, 10, 10)
@@ -204,7 +208,7 @@
 	icon = 'icons/obj/plants.dmi'
 	icon_state = "plant-26"
 	layer = FLY_LAYER
-	plane = PLANE_EFFECTS
+	plane = ABOVE_HUMAN_PLANE
 
 /obj/structure/flora/pottedplant/Destroy()
 	for(var/I in contents)
@@ -232,6 +236,9 @@
 		user.put_in_active_hand(I)
 	else
 		to_chat(user, "You root around in the roots.")
+
+/obj/structure/flora/pottedplant/attack_paw(mob/user)
+	return attack_hand(user)
 
 // /vg/
 /obj/structure/flora/pottedplant/random/New()

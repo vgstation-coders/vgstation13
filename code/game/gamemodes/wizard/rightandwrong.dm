@@ -5,8 +5,10 @@
 	message_admins("[key_name_admin(usr, 1)] summoned [summon_type ? "magic" : "guns"]!")
 	log_game("[key_name(usr)] summoned [summon_type ? "magic" : "guns"]!")
 	for(var/mob/living/carbon/human/H in player_list)
-		if(H.stat == DEAD || !(H.client)) continue
-		if(is_special_character(H)) continue
+		if(H.stat == DEAD || !(H.client))
+			continue
+		if(is_special_character(H))
+			continue
 		if(prob(35) && !(H.mind in ticker.mode.traitors))
 			ticker.mode.traitors += H.mind
 			H.mind.special_role = "traitor"
@@ -20,7 +22,7 @@
 				to_chat(H, "<B>Objective #[obj_count]</B>: [OBJ.explanation_text]")
 				obj_count++
 		var/randomizeguns = pick("taser","egun","laser","revolver","detective","smg","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","nagant","beegun")
-		var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","charge","wandnothing", "wanddeath", "wandresurrection", "wandpolymorph", "wandteleport", "wanddoor", "wandfireball", "staffchange", "staffhealing", "armor", "scrying")
+		var/randomizemagic = pick("fireball","smoke","blind","mindswap","forcewall","knock","horsemask","blink","subjugate","staffchange","armor","scrying", "clowncurse", "mimecurse", "shoesnatch", "robesummon")
 		if(!summon_type)
 			switch (randomizeguns)
 				if("taser")
@@ -47,7 +49,7 @@
 					new /obj/item/weapon/gun/projectile/pistol(get_turf(H))
 					new /obj/item/gun_part/silencer(get_turf(H))
 				if("cannon")
-					new /obj/item/weapon/gun/energy/lasercannon(get_turf(H))
+					new /obj/item/weapon/gun/energy/laser/cannon(get_turf(H))
 				if("doublebarrel")
 					new /obj/item/weapon/gun/projectile/shotgun/pump/(get_turf(H))
 				if("shotgun")
@@ -100,8 +102,18 @@
 					new /obj/item/weapon/spellbook/oneuse/knock(get_turf(H))
 				if("horsemask")
 					new /obj/item/weapon/spellbook/oneuse/horsemask(get_turf(H))
-				if("charge")
-					new /obj/item/weapon/spellbook/oneuse/charge(get_turf(H))
+				if("blink")
+					new /obj/item/weapon/spellbook/oneuse/teleport/blink(get_turf(H))
+				if("subjugate")
+					new /obj/item/weapon/spellbook/oneuse/subjugate(get_turf(H))
+				if("clowncurse")
+					new /obj/item/weapon/spellbook/oneuse/clown(get_turf(H))
+				if("mimecurse")
+					new /obj/item/weapon/spellbook/oneuse/mime(get_turf(H))
+				if("shoesnatch")
+					new /obj/item/weapon/spellbook/oneuse/shoesnatch(get_turf(H))
+				if("robesummon")
+					new /obj/item/weapon/spellbook/oneuse/robesummon(get_turf(H))
 				/* TODO: Port /tg/ guncode.
 				if("wandnothing")
 					new /obj/item/weapon/gun/magic/wand(get_turf(H))
@@ -115,11 +127,11 @@
 					new /obj/item/weapon/gun/magic/wand/teleport(get_turf(H))
 				if("wanddoor")
 					new /obj/item/weapon/gun/magic/wand/door(get_turf(H))
-				if("staffchange")
-					new /obj/item/weapon/gun/magic/staff/change(get_turf(H))
 				if("staffhealing")
 					new /obj/item/weapon/gun/magic/staff/healing(get_turf(H))
 				*/
+				if("staffchange")
+					new /obj/item/weapon/gun/energy/staff(get_turf(H))
 				if("armor")
 					new /obj/item/clothing/suit/space/rig/wizard(get_turf(H))
 					new /obj/item/clothing/head/helmet/space/rig/wizard(get_turf(H))
@@ -127,7 +139,7 @@
 					new /obj/item/weapon/scrying(get_turf(H))
 					if (!(M_XRAY in H.mutations))
 						H.mutations.Add(M_XRAY)
-						H.sight |= (SEE_MOBS|SEE_OBJS|SEE_TURFS)
+						H.change_sight(adding = SEE_MOBS|SEE_OBJS|SEE_TURFS)
 						H.see_in_dark = 8
 						H.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 						to_chat(H, "<span class='notice'>The walls suddenly disappear.</span>")

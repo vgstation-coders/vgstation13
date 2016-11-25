@@ -37,6 +37,10 @@
 	var/tDomeY = 0
 	var/tDomeZ = 0
 
+	//Holomap offsets
+	var/list/holomap_offset_x = list()
+	var/list/holomap_offset_y = list()
+
 	//List for traitor items which are not in the map
 	var/list/unavailable_items
 
@@ -82,11 +86,18 @@
 
 	var/list/enabled_jobs = list()
 
-/datum/map/New()
+	//Map elements that should be loaded together with this map. Stuff like the holodeck areas, etc.
+	var/list/load_map_elements = list()
 
+/datum/map/New()
 	. = ..()
+
 	src.loadZLevels(src.zLevels)
-	return
+
+	//The spawn below is needed
+	spawn()
+		for(var/T in load_map_elements)
+			load_dungeon(T)
 
 /datum/map/proc/loadZLevels(list/levelPaths)
 
@@ -193,7 +204,8 @@ proc/change_base_turf(var/choice,var/new_base_path,var/update_old_base = 0)
 		var/count = 0
 		for(var/turf/T in turfs)
 			count++
-			if(!(count % 50000)) sleep(world.tick_lag)
+			if(!(count % 50000))
+				sleep(world.tick_lag)
 			if(T.type == get_base_turf(choice) && T.z == choice)
 				T.ChangeTurf(new_base_path)
 	var/datum/zLevel/L = map.zLevels[choice]

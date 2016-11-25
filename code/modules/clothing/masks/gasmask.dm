@@ -10,7 +10,7 @@
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	body_parts_covered = FACE
 	pressure_resistance = ONE_ATMOSPHERE
 	var/canstage = 1
@@ -87,14 +87,14 @@
 	var/voice = "Unknown"
 	var/vchange = 1//This didn't do anything before. It now checks if the mask has special functions/N
 	canstage = 0
-	origin_tech = "syndicate=4"
+	origin_tech = Tc_SYNDICATE + "=4"
 	action_button_name = "Toggle Mask"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	var/list/clothing_choices = list()
 
 /obj/item/clothing/mask/gas/voice/New()
 	..()
-	for(var/Type in typesof(/obj/item/clothing/mask) - list(/obj/item/clothing/mask, /obj/item/clothing/mask/gas/voice))
+	for(var/Type in existing_typesof(/obj/item/clothing/mask) - list(/obj/item/clothing/mask, /obj/item/clothing/mask/gas/voice))
 		clothing_choices += new Type
 	return
 
@@ -144,7 +144,7 @@
 	desc = "A true prankster's facial attire. A clown is incomplete without his wig and mask."
 	icon_state = "clown"
 	item_state = "clown_hat"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	can_flip = 0
 	canstage = 0
 
@@ -155,6 +155,12 @@
 		qdel(W)
 		qdel(src)
 
+/obj/item/clothing/mask/gas/clown_hat/stickymagic
+	canremove = 0
+
+/obj/item/clothing/mask/gas/clown_hat/stickymagic/acidable()
+	return 0
+
 /obj/item/clothing/mask/gas/clown_hat/wiz
 	name = "purple clown wig and mask"
 	desc = "Some pranksters are truly magical."
@@ -164,14 +170,19 @@
 	canstage = 0
 	//TODO species_fit = list("Vox")
 
-/obj/item/clothing/mask/gas/virusclown_hat //why isn't this just a subtype of clown_hat???????
-	name = "clown wig and mask"
-	desc = "A true prankster's facial attire. A clown is incomplete without his wig and mask."
-	icon_state = "clown"
-	item_state = "clown_hat"
-	species_fit = list(VOX_SHAPED)
-	can_flip = 0
-	canstage = 0
+/obj/item/clothing/mask/gas/clown_hat/virus //why isn't this just a subtype of clown_hat??????? //Is now
+	desc = "A true prankster's facial attire. A clown is incomplete without his wig and mask. <span class = 'notice'>On second look, it looks like it's coming out of the wearers skin!</span>"
+
+/obj/item/clothing/mask/gas/clown_hat/virus/dropped(mob/user as mob)
+	canremove = 1
+	..()
+
+/obj/item/clothing/mask/gas/clown_hat/virus/equipped(var/mob/user, var/slot)
+	if (slot == slot_wear_mask)
+		canremove = 0
+		can_flip = 0
+	..()
+
 
 /obj/item/clothing/mask/gas/sexyclown
 	name = "sexy-clown wig and mask"
@@ -187,7 +198,7 @@
 	desc = "The traditional mime's mask. It has an eerie facial posture."
 	icon_state = "mime"
 	item_state = "mime"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	can_flip = 0
 	canstage = 0
 	var/muted = 0
@@ -195,6 +206,13 @@
 /obj/item/clothing/mask/gas/mime/treat_mask_speech(var/datum/speech/speech)
 	if(src.muted)
 		speech.message=""
+
+/obj/item/clothing/mask/gas/mime/stickymagic
+	canremove = 0
+	muted = 1
+
+/obj/item/clothing/mask/gas/mime/acidable()
+	return 0
 
 /obj/item/clothing/mask/gas/monkeymask
 	name = "monkey mask"
@@ -225,7 +243,7 @@
 
 /obj/item/clothing/mask/gas/cyborg
 	name = "cyborg visor"
-	desc = "Beep boop"
+	desc = "Beep boop."
 	icon_state = "death"
 	species_fit = list(VOX_SHAPED)
 	can_flip = 0

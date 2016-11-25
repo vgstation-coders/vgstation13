@@ -10,8 +10,8 @@
 
 /obj/item/weapon/disk/botany/New()
 	..()
-	pixel_x = rand(-5,5)
-	pixel_y = rand(-5,5)
+	pixel_x = rand(-5,5) * PIXEL_MULTIPLIER
+	pixel_y = rand(-5,5) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/disk/botany/attack_self(var/mob/user as mob)
 	if(genes.len)
@@ -55,7 +55,8 @@
 /obj/machinery/botany/process()
 
 	..()
-	if(!active) return
+	if(!active)
+		return
 
 	if(world.time > last_action + action_time)
 		finished_task()
@@ -196,10 +197,12 @@
 	if(..())
 		return 1
 	if(href_list["close"])
-		if(usr.machine == src) usr.unset_machine()
+		if(usr.machine == src)
+			usr.unset_machine()
 
 	if(href_list["eject_packet"])
-		if(!loaded_seed) return
+		if(!loaded_seed)
+			return
 		loaded_seed.forceMove(get_turf(src))
 
 		if(loaded_seed.seed.name == "new line" || isnull(plant_controller.seeds[loaded_seed.seed.name]))
@@ -213,7 +216,8 @@
 		loaded_seed = null
 
 	if(href_list["eject_disk"])
-		if(!loaded_disk) return
+		if(!loaded_disk)
+			return
 		loaded_disk.forceMove(get_turf(src))
 		visible_message("[bicon(src)] [src] beeps and spits out [loaded_disk].")
 
@@ -232,7 +236,8 @@
 
 	if(href_list["scan_genome"])
 
-		if(!loaded_seed) return
+		if(!loaded_seed)
+			return
 
 		last_action = world.time
 		active = 1
@@ -246,13 +251,15 @@
 
 	if(href_list["get_gene"])
 
-		if(!genetics || !loaded_disk) return
+		if(!genetics || !loaded_disk)
+			return
 
 		last_action = world.time
 		active = 1
 
 		var/datum/plantgene/P = genetics.get_gene(href_list["get_gene"])
-		if(!P) return
+		if(!P)
+			return
 		loaded_disk.genes += P
 
 		loaded_disk.genesource = "[genetics.display_name]"
@@ -270,7 +277,8 @@
 			degradation = 0
 
 	if(href_list["clear_buffer"])
-		if(!genetics) return
+		if(!genetics)
+			return
 		genetics = null
 		degradation = 0
 	return 1
@@ -316,8 +324,11 @@
 		data["locus"] = ""
 
 		for(var/datum/plantgene/P in loaded_disk.genes)
-			if(data["locus"] != "") data["locus"] += ", "
+			if(data["locus"] != "")
+				data["locus"] += ", "
+
 			data["locus"] += P.genetype
+
 
 	else
 		data["disk"] = 0
@@ -342,7 +353,8 @@
 		return 1
 
 	if(href_list["apply_gene"])
-		if(!loaded_disk || !loaded_seed) return
+		if(!loaded_disk || !loaded_seed)
+			return
 
 		last_action = world.time
 		active = 1

@@ -1,6 +1,7 @@
 /spell/targeted/subjugation
 	name = "Subjugation"
-	desc = "This spell temporarily subjugates a target's mind and does not require wizard garb."
+	desc = "This spell temporarily subjugates a target's mind."
+	abbreviation = "SJ"
 
 	school = "transmutation"
 	charge_max = 300
@@ -15,5 +16,6 @@
 	amt_stuttering = 86
 
 	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
+	spell_flags = WAIT_FOR_CLICK
 
 	hud_state = "wiz_subj"

@@ -10,9 +10,10 @@
 	attack_hand(mob/user as mob)
 		switch(alert("Travel back to ss13?",,"Yes","No"))
 			if("Yes")
-				if(user.z != src.z)	return
+				if(user.z != src.z)
+					return
 				user.loc.loc.Exited(user)
-				user.loc = pick(latejoin)
+				user.forceMove(pick(latejoin))
 			if("No")
 				return
 
@@ -21,18 +22,13 @@
 	icon = 'icons/misc/mark.dmi'
 	icon_state = "blank"
 	anchored = 1
-	layer = 99
 	mouse_opacity = 0
-	unacidable = 1//Just to be sure.
-
-
 
 /obj/effect/begin
 	name = "begin"
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "begin"
 	anchored = 1.0
-	unacidable = 1
 
 /*
  * This item is completely unused, but removing it will break something in R&D and Radio code causing PDA and Ninja code to fail on compile
@@ -311,7 +307,6 @@ var/global/list/PDA_Manifest = list()
 	desc = "A stand with the empty body of a cyborg bolted to it."
 	density = 1
 	anchored = 1
-	unacidable = 1//temporary until I decide whether the borg can be removed. -veyveyr
 
 /obj/item/mouse_drag_pointer = MOUSE_ACTIVE_POINTER
 
@@ -367,10 +362,11 @@ var/global/list/PDA_Manifest = list()
 	if(sleeptime > world.time)
 		if(ismob(A))
 			var/mob/living/L = A
-			if(L.client)
-				L.client.move_delayer.next_allowed = sleeptime //So we don't need to check timestopped in client/move
 			if(L.mind != owner)
-				if(!L.stat) L.playsound_local(src, theworld == 1 ? 'sound/effects/theworld2.ogg' : 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
+				if(L.client)
+					L.client.move_delayer.next_allowed = sleeptime //So we don't need to check timestopped in client/move
+				if(!L.stat)
+					L.playsound_local(src, theworld == 1 ? 'sound/effects/theworld2.ogg' : 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
 				//L.Paralyse(round(((sleeptime - world.time)/10)/2, 1))
 				//L.update_canmove()
 				if(!(L in ourspell.affected))

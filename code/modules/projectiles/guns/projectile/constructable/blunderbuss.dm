@@ -10,7 +10,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BACK | SLOT_BELT
-	origin_tech = "materials=1;engineering=1;combat=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1;" + Tc_COMBAT + "=1"
 	attack_verb = list("strikes", "hits", "bashes")
 	mech_flags = MECH_SCAN_ILLEGAL
 	var/damage_multiplier = 2	//To allow easy modifications to the damage this weapon deals. At a value of 1, a metal rod fired with 10u of fuel deals 16 damage.
@@ -110,6 +110,7 @@
 			loaded_item = W
 		user.visible_message("[user] jams \the [W] into the muzzle of the [src].","You jam \the [W] into the muzzle of \the [src].")
 		update_verbs()
+		return 1
 	else if(!loaded_item && item_prohibited)
 		to_chat(user, "<span class='warning'>That won't fit into the muzzle!</span>")
 		return 1
@@ -240,7 +241,8 @@
 		speed = ((fire_force*2)/5)
 
 	speed = speed * damage_multiplier
-	if(speed>80) speed = 80 //damage cap.
+	if(speed>80)
+		speed = 80 //damage cap.
 
 	var/distance = round((20/loaded_item.w_class)*(fuel_level/10))
 

@@ -108,7 +108,7 @@
 			eject_brain()
 
 			if(held_item)
-				held_item.loc = src.loc
+				held_item.forceMove(src.loc)
 				held_item = null
 
 			return 1
@@ -162,8 +162,9 @@
 	if(mmi)
 		var/turf/T = get_turf(loc)
 		if(T)
-			mmi.loc = T
-		if(mind)	mind.transfer_to(mmi.brainmob)
+			mmi.forceMove(T)
+		if(mind)
+			mind.transfer_to(mmi.brainmob)
 		mmi = null
 		src.name = "Spider-bot"
 		update_icon()
@@ -189,7 +190,7 @@
 	if(camera)
 		camera.status = 0
 	if(held_item && !isnull(held_item))
-		held_item.loc = src.loc
+		held_item.forceMove(src.loc)
 		held_item = null
 
 	robogibs(src.loc, viruses)
@@ -210,13 +211,11 @@
 	set desc = "Allows to hide beneath tables or certain items. Toggled on or off."
 	set category = "Spiderbot"
 
-	if (layer != TURF_LAYER+0.2)
-		layer = TURF_LAYER+0.2
-		plane = PLANE_TURF
+	if (plane != HIDING_MOB_PLANE)
+		plane = HIDING_MOB_PLANE
 		to_chat(src, text("<span class='notice'>You are now hiding.</span>"))
 	else
-		layer = MOB_LAYER
-		plane = PLANE_MOB
+		plane = MOB_PLANE
 		to_chat(src, text("<span class='notice'>You have stopped hiding.</span>"))
 
 //Cannibalized from the parrot mob. ~Zuhayr
@@ -236,18 +235,16 @@
 	if(istype(held_item, /obj/item/weapon/grenade))
 		visible_message("<span class='warning'>[src] launches \the [held_item]!</span>", "<span class='warning'>You launch \the [held_item]!</span>", "You hear a skittering noise and a thump!")
 		var/obj/item/weapon/grenade/G = held_item
-		G.loc = src.loc
+		G.forceMove(src.loc)
 		G.prime()
 		held_item = null
 		return 1
 
 	visible_message("<span class='notice'>[src] drops \the [held_item]!</span>", "<span class='notice'>You drop \the [held_item]!</span>", "You hear a skittering noise and a soft thump.")
 
-	held_item.loc = src.loc
+	held_item.forceMove(src.loc)
 	held_item = null
 	return 1
-
-	return
 
 /mob/living/simple_animal/spiderbot/verb_pickup()
 	return get_item()
@@ -275,14 +272,13 @@
 		for(var/obj/item/I in view(1, src))
 			if(selection == I)
 				held_item = selection
-				selection.loc = src
+				selection.forceMove(src)
 				visible_message("<span class='notice'>[src] scoops up \the [held_item]!</span>", "<span class='notice'>You grab \the [held_item]!</span>", "You hear a skittering noise and a clink.")
 				return held_item
 		to_chat(src, "<span class='warning'>\The [selection] is too far away.</span>")
 		return 0
 
 	to_chat(src, "<span class='warning'>There is nothing of interest to take.</span>")
-	return 0
 
 /mob/living/simple_animal/spiderbot/examine(mob/user)
 	..()

@@ -2,7 +2,6 @@
 	//Liquid fuel is used for things that used to rely on volatile fuels or plasma being contained to a couple tiles.
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "fuel"
-	layer = TURF_LAYER+0.2
 	anchored = 1
 	amount = 1 //Basically moles.
 
@@ -32,7 +31,8 @@
 
 /obj/effect/decal/cleanable/liquid_fuel/proc/Spread()
 	//Allows liquid fuels to sometimes flow into other tiles.
-	if(amount < 0.5) return
+	if(amount < 0.5)
+		return
 
 	var/turf/simulated/origin = get_turf(src)
 	if (!istype(origin))
@@ -57,14 +57,17 @@
 /obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel/New(newLoc, amt = 1, d = 0)
 	dir = d //Setting this direction means you won't get torched by your own flamethrower.
 	var/turf/T = newLoc
-	if(istype(T)) T.hotspot_expose(70000, 50000, 1, surfaces=1)
+	if(istype(T))
+		T.hotspot_expose(70000, 50000, 1, surfaces=1)
 	//. = ..()
 
 /obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel/Spread()
 	//The spread for flamethrower fuel is much more precise, to create a wide fire pattern.
-	if(amount < 0.1) return
+	if(amount < 0.1)
+		return
 	var/turf/simulated/S = loc
-	if(!istype(S)) return
+	if(!istype(S))
+		return
 
 	var/transferred_amount = 0
 	for(var/d in list(turn(dir,90),turn(dir,-90), dir))

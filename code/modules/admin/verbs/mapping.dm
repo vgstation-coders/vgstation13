@@ -27,8 +27,8 @@ var/intercom_range_display_status = 0
 	icon_state = "25percent"
 
 	New()
-		src.pixel_x = -224
-		src.pixel_y = -224
+		src.pixel_x = -224 * PIXEL_MULTIPLIER
+		src.pixel_y = -224 * PIXEL_MULTIPLIER
 
 /obj/effect/debugging/marker
 	icon = 'icons/turf/areas.dmi'
@@ -127,7 +127,8 @@ var/intercom_range_display_status = 0
 	set category = "Debug"
 	set name = "Debug verbs"
 
-	if(!check_rights(R_DEBUG)) return
+	if(!check_rights(R_DEBUG))
+		return
 
 	src.verbs += /client/proc/do_not_use_these 			//-errorage
 	src.verbs += /client/proc/camera_view 				//-errorage
@@ -177,15 +178,20 @@ var/intercom_range_display_status = 0
 	set name = "Count Objects On Level"
 
 	var/level = input("Which z-level?","Level?") as text
-	if(!level) return
+	if(!level)
+		return
 	var/num_level = text2num(level)
-	if(!num_level) return
-	if(!isnum(num_level)) return
+	if(!num_level)
+		return
+	if(!isnum(num_level))
+		return
 
 	var/type_text = input("Which type path?","Path?") as text
-	if(!type_text) return
+	if(!type_text)
+		return
 	var/type_path = text2path(type_text)
-	if(!type_path) return
+	if(!type_path)
+		return
 
 	var/count = 0
 
@@ -222,9 +228,11 @@ var/intercom_range_display_status = 0
 	set name = "Count Objects All"
 
 	var/type_text = input("Which type path?","") as text
-	if(!type_text) return
+	if(!type_text)
+		return
 	var/type_path = text2path(type_text)
-	if(!type_path) return
+	if(!type_path)
+		return
 
 	var/count = 0
 

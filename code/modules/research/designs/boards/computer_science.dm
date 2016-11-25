@@ -4,7 +4,7 @@
 	name = "Circuit Design (Robotics Control Console)"
 	desc = "Allows for the construction of circuit boards used to build a Robotics Control console."
 	id = "robocontrol"
-	req_tech = list("programming" = 4)
+	req_tech = list(Tc_PROGRAMMING = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -14,7 +14,7 @@
 	name = "Circuit Design (Exosuit Control Console)"
 	desc = "Allows for the construction of circuit boards used to build an exosuit control console."
 	id = "mechacontrol"
-	req_tech = list("programming" = 3)
+	req_tech = list(Tc_PROGRAMMING = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -24,7 +24,7 @@
 	name = "Circuit Design (Mech Bay Power Control Console)"
 	desc = "Allows for the construction of circuit boards used to build a mech bay power control console."
 	id = "mechapower"
-	req_tech = list("programming" = 2, "powerstorage" = 3)
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_POWERSTORAGE = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -34,7 +34,7 @@
 	name = "Circuit Design (Core R&D Console)"
 	desc = "Allows for the construction of circuit boards used to build a new R&D console."
 	id = "rdconsole_core"
-	req_tech = list("programming" = 4)
+	req_tech = list(Tc_PROGRAMMING = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -64,7 +64,7 @@
 	name = "Circuit Design (AI Integrity Restorer)"
 	desc = "Allows for the construction of circuit boards used to build an AI Integrity Restorer."
 	id = "aifixer"
-	req_tech = list("programming" = 3, "biotech" = 2)
+	req_tech = list(Tc_PROGRAMMING = 3, Tc_BIOTECH = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -74,7 +74,7 @@
 	name = "Circuit Design (Bhangmeter)"
 	desc = "Allows for the construction of circuit boards used to build a bhangmeter."
 	id = "bhangmeter"
-	req_tech = list("programming" = 2)
+	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -84,7 +84,7 @@
 	name = "Circuit Design(R&D Server Control Console)"
 	desc = "The circuit board for a R&D Server Control Console"
 	id = "rdservercontrol"
-	req_tech = list("programming" = 3)
+	req_tech = list(Tc_PROGRAMMING = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"

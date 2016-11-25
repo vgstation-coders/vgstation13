@@ -13,10 +13,10 @@
 	// These two accept a string containing the type path and the following optional prefixes:
 	//  = - Strict type matching.  Will NOT check for subtypes.
 	var/list/can_only_hold = new/list() //List of objects which this item can store (if set, it can't store anything else)
-	var/list/cant_hold = new/list() //List of objects which this item can't store (in effect only if can_only_hold isn't set)
-	var/list/fits_ignoring_w_class = new/list() //List of objects which will fit in this item, regardless of size. Doesn't restrict to ONLY items of these types, and doesn't ignore max_combined_w_class. (in effect only if can_only_hold isn't set)
+	var/list/cant_hold = new/list() //List of objects which this item can't store (in effect even if can_only_hold is set)
+	var/list/fits_ignoring_w_class = new/list() //List of objects which will fit in this item, regardless of size. Doesn't restrict to ONLY items of these types, and doesn't ignore max_combined_w_class. (in effect even if can_only_hold isn set)
 	var/list/is_seeing = new/list() //List of mobs which are currently seeing the contents of this item's storage
-	var/fits_max_w_class = W_CLASS_SMALL //Max size of objects that this object can store (in effect only if can_only_hold isn't set)
+	var/fits_max_w_class = W_CLASS_SMALL //Max size of objects that this object can store (in effect even if can_only_hold is set)
 	var/max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
 	var/storage_slots = 7 //The number of storage slots in this container.
 	var/obj/screen/storage/boxes = null
@@ -48,7 +48,7 @@
 		if(!( M.restrained() ) && !( M.stat ))
 			var/obj/screen/inventory/OI = over_object
 
-			if(OI.hand_index)
+			if(OI.hand_index && M.put_in_hand_check(src, OI.hand_index))
 				M.u_equip(src, 0)
 				M.put_in_hand(OI.hand_index, src)
 				src.add_fingerprint(usr)
@@ -65,8 +65,8 @@
 	var/turf = get_turf(place)
 	for(var/obj/objects in contents)
 		remove_from_storage(objects, turf)
-		objects.pixel_x = rand(-6,6)
-		objects.pixel_y = rand(-6,6)
+		objects.pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
+		objects.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/storage/proc/return_inv()
 
@@ -84,7 +84,7 @@
 	return L
 
 /obj/item/weapon/storage/proc/show_to(mob/user as mob)
-	if(isliving(user))
+	if(!user.incapacitated())
 		if(user.s_active != src)
 			for(var/obj/item/I in src)
 				if(I.on_found(user))
@@ -126,11 +126,10 @@
 /obj/item/weapon/storage/proc/orient_objs(tx, ty, mx, my)
 	var/cx = tx
 	var/cy = ty
-	src.boxes.screen_loc = "[tx]:,[ty] to [mx],[my]"
+	src.boxes.screen_loc = "[tx],[ty] to [mx],[my]"
 	for(var/obj/O in src.contents)
 		O.screen_loc = "[cx],[cy]"
-		O.layer = 20
-		O.plane = PLANE_HUD
+		O.hud_layerise()
 		cx++
 		if (cx > mx)
 			cx = tx
@@ -142,15 +141,14 @@
 /obj/item/weapon/storage/proc/standard_orient_objs(var/rows, var/cols, var/list/obj/item/display_contents)
 	var/cx = 4
 	var/cy = 2+rows
-	src.boxes.screen_loc = "4:16,2:16 to [4+cols]:16,[2+rows]:16"
+	src.boxes.screen_loc = "4:[WORLD_ICON_SIZE/2],2:[WORLD_ICON_SIZE/2] to [4+cols]:[WORLD_ICON_SIZE/2],[2+rows]:[WORLD_ICON_SIZE/2]"
 
 	if(display_contents_with_number)
 		for(var/datum/numbered_display/ND in display_contents)
 			ND.sample_object.mouse_opacity = 2
-			ND.sample_object.screen_loc = "[cx]:16,[cy]:16"
+			ND.sample_object.screen_loc = "[cx]:[WORLD_ICON_SIZE/2],[cy]:[WORLD_ICON_SIZE/2]"
 			ND.sample_object.maptext = "<font color='white'>[(ND.number > 1)? "[ND.number]" : ""]</font>"
-			ND.sample_object.layer = 20
-			ND.sample_object.plane = PLANE_HUD
+			ND.sample_object.hud_layerise()
 			cx++
 			if (cx > (4+cols))
 				cx = 4
@@ -158,15 +156,14 @@
 	else
 		for(var/obj/O in contents)
 			O.mouse_opacity = 2 //This is here so storage items that spawn with contents correctly have the "click around item to equip"
-			O.screen_loc = "[cx]:16,[cy]:16"
+			O.screen_loc = "[cx]:[WORLD_ICON_SIZE/2],[cy]:[WORLD_ICON_SIZE/2]"
 			O.maptext = ""
-			O.layer = 20
-			O.plane = PLANE_HUD
+			O.hud_layerise()
 			cx++
 			if (cx > (4+cols))
 				cx = 4
 				cy--
-	src.closer.screen_loc = "[4+cols+1]:16,2:16"
+	src.closer.screen_loc = "[4+cols+1]:[WORLD_ICON_SIZE/2],2:[WORLD_ICON_SIZE/2]"
 	return
 
 /datum/numbered_display
@@ -213,7 +210,8 @@
 //This proc return 1 if the item can be picked up and 0 if it can't.
 //Set the stop_messages to stop it from printing messages
 /obj/item/weapon/storage/proc/can_be_inserted(obj/item/W as obj, stop_messages = 0)
-	if(!istype(W)) return //Not an item
+	if(!istype(W))
+		return //Not an item
 
 	if(src.loc == W)
 		return 0 //Means the item is already in the storage item
@@ -246,6 +244,18 @@
 			else if(istype(W, text2path(A) ))
 				ok = 1
 				break
+			else if(fits_ignoring_w_class.len)
+				for(var/B in fits_ignoring_w_class)
+					if(dd_hasprefix(B,"="))
+						// Force strict matching of type.
+						// No subtypes allowed.
+						if("[W.type]"==copytext(B,2))
+							ok = 1
+							break
+					else if(istype(W, text2path(B) ))
+						ok = 1
+						break
+
 		if(!ok)
 			if(!stop_messages)
 				if (istype(W, /obj/item/weapon/hand_labeler))
@@ -260,16 +270,14 @@
 			// No subtypes allowed.
 			if("[W.type]"==copytext(A,2))
 				nope = 1
-				break
 		else if(istype(W, text2path(A) ))
 			nope = 1
-			break
 		if(nope)
 			if(!stop_messages)
 				to_chat(usr, "<span class='notice'>\The [src] cannot hold \the [W].</span>")
 			return 0
 
-	if ((W.w_class > fits_max_w_class) && !can_only_hold.len) //fits_max_w_class doesn't matter if there's only a specific list of items you can put in
+	if (W.w_class > fits_max_w_class)
 		var/yeh = 0
 		if(fits_ignoring_w_class.len)
 			for(var/A in fits_ignoring_w_class)
@@ -308,7 +316,8 @@
 //The stop_warning parameter will stop the insertion message from being displayed. It is intended for cases where you are inserting multiple items at once,
 //such as when picking up all the items on a tile with one click.
 /obj/item/weapon/storage/proc/handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
-	if(!istype(W)) return 0
+	if(!istype(W))
+		return 0
 	if(usr)
 		usr.u_equip(W,1)
 		usr.update_icons()	//update our overlays
@@ -339,7 +348,8 @@
 //Call this proc to handle the removal of an item from the storage item. The item will be moved to the atom sent as new_target
 //force needs to be 1 if you want to override the can_be_inserted() if the target's a storage item.
 /obj/item/weapon/storage/proc/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0)
-	if(!istype(W)) return 0
+	if(!istype(W))
+		return 0
 
 	if(!force && istype(new_location, /obj/item/weapon/storage))
 		var/obj/item/weapon/storage/A = new_location
@@ -378,8 +388,7 @@
 			usr.s_active.show_to(usr)
 	if(W.maptext)
 		W.maptext = ""
-	W.layer = initial(W.layer)
-	W.plane = initial(W.plane)
+	W.reset_plane_and_layer()
 	W.on_exit_storage(src)
 	update_icon()
 	W.mouse_opacity = initial(W.mouse_opacity)
@@ -519,11 +528,11 @@
 	src.boxes.master = src
 	src.boxes.icon_state = "block"
 	src.boxes.screen_loc = "7,7 to 10,8"
-	src.boxes.layer = 19
+	src.boxes.layer = HUD_BASE_LAYER
 	src.closer = getFromPool(/obj/screen/close)
 	src.closer.master = src
 	src.closer.icon_state = "x"
-	src.closer.layer = 20
+	src.closer.layer = HUD_ITEM_LAYER
 	orient2hud()
 
 /obj/item/weapon/storage/emp_act(severity)
@@ -582,7 +591,6 @@
 		. = 1 //returns 1 if any mobs actually got a close(M) call
 
 /obj/item/weapon/storage/Destroy()
-	..()
 	close_all()
 	returnToPool(boxes)
 	returnToPool(closer)
@@ -591,9 +599,11 @@
 	for(var/atom/movable/AM in contents)
 		qdel(AM)
 	contents = null
+	..()
 
 /obj/item/weapon/storage/preattack(atom/target, mob/user, adjacent, params)
-	if(!adjacent) return 0
+	if(!adjacent)
+		return 0
 	if(use_to_pickup)
 		if(collection_mode) //Mode is set to collect all items on a tile and we clicked on a valid one.
 			var/turf/gather_location

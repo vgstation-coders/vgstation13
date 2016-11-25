@@ -211,18 +211,23 @@ var/global/Holiday = null
 			Floorlist = null
 			var/obj/structure/closet/C = locate(/obj/structure/closet) in F
 			var/obj/item/weapon/reagent_containers/food/snacks/chocolateegg/wrapped/Egg
-			if( C )			Egg = new(C)
-			else			Egg = new(F)
+			if( C )
+				Egg = new(C)
+			else
+				Egg = new(F)
 
 			var/list/obj/containers = list()
 			for(var/obj/item/weapon/storage/S in world)
-				if(S.z != 1)	continue
+				if(S.z != map.zMainStation)
+					continue
 				containers += S
 
 			message_admins("<span class='notice'>DEBUG: Event: Egg spawned at [Egg.loc] ([Egg.x],[Egg.y],[Egg.z])</span>")*/
 
 		if("End of the World")
-			if(prob(eventchance))	GameOver()
+			if(prob(eventchance))
+				GameOver()
 
 		if("Christmas","Christmas Eve")
-			if(prob(eventchance))	ChristmasEvent()
+			if(prob(eventchance))
+				ChristmasEvent()

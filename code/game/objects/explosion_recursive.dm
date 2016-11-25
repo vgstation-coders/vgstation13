@@ -39,13 +39,16 @@ proc/explosion_rec(turf/epicenter, power)
 
 	var/loopbreak = 0
 	while(explosion_in_progress)
-		if(loopbreak >= 15) return
+		if(loopbreak >= 15)
+			return
 		sleep(10)
 		loopbreak++
 
-	if(power <= 0) return
+	if(power <= 0)
+		return
 	epicenter = get_turf(epicenter)
-	if(!epicenter) return
+	if(!epicenter)
+		return
 
 	message_admins("Explosion with size ([power]) in area [epicenter.loc.name] ([epicenter.x],[epicenter.y],[epicenter.z]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[epicenter.x];Y=[epicenter.y];Z=[epicenter.z]'>JMP</A>)")
 	log_game("Explosion with size ([power]) in area [epicenter.loc.name] ")
@@ -66,8 +69,10 @@ proc/explosion_rec(turf/epicenter, power)
 
 	//This step applies the ex_act effects for the explosion, as planned in the previous step.
 	for( var/datum/explosion_turf/ET in explosion_turfs )
-		if(ET.max_power <= 0) continue
-		if(!ET.turf) continue
+		if(ET.max_power <= 0)
+			continue
+		if(!ET.turf)
+			continue
 
 		//Wow severity looks confusing to calculate... Fret not, I didn't leave you with any additional instructions or help. (just kidding, see the line under the calculation)
 		var/severity = 4 - round(max(min( 3, ((ET.max_power - ET.turf.explosion_resistance) / (max(3,(power/3)))) ) ,1), 1)

@@ -21,7 +21,8 @@
 	name = "[prefix] door"
 
 /obj/machinery/door/mineral/Bumped(atom/user)
-	if(operating) return
+	if(operating)
+		return
 
 	if(istype(user, /obj/mecha))
 		open()
@@ -48,7 +49,8 @@
 	return TryToSwitchState(user)
 
 /obj/machinery/door/mineral/proc/TryToSwitchState(mob/user as mob)
-	if(operating) return
+	if(operating)
+		return
 
 	if(!user.restrained() && (user.size > SIZE_TINY))
 		add_fingerprint(user)
@@ -99,7 +101,8 @@
 		var/P = text2path("/obj/item/stack/sheet/mineral/[prefix]")
 		ore = new P(get_turf(src))
 	ore.amount = oreAmount
-	if(devastated) ore.amount -= 2
+	if(devastated)
+		ore.amount -= 2
 	qdel(src)
 	return
 
@@ -232,3 +235,5 @@
 	playsound(get_turf(src), soundeffect, 100, 1)
 	return ..()
 
+/obj/machinery/door/mineral/resin/acidable()
+	return 0

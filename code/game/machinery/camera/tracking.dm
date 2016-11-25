@@ -57,7 +57,7 @@
 		var/turf/T = get_turf(M)
 		if(!T)
 			continue
-		if(T.z == 2)
+		if(T.z == map.zCentcomm)
 			continue
 		if(T.z > 6)
 			continue
@@ -110,7 +110,8 @@
 	ai_actual_track(target)
 
 /mob/living/silicon/ai/proc/open_nearest_door(mob/living/target as mob)
-	if(!istype(target)) return
+	if(!istype(target))
+		return
 	spawn(0)
 		if(istype(target, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = target
@@ -126,7 +127,8 @@
 		var/obj/machinery/door/airlock/tobeopened
 		var/dist = -1
 		for(var/obj/machinery/door/airlock/D in range(3,target))
-			if(!D.density) continue
+			if(!D.density)
+				continue
 			if(dist < 0)
 				dist = get_dist(D, target)
 //				to_chat(world, dist)
@@ -151,7 +153,8 @@
 			to_chat(src, "<span class='warning'>You've failed to open an airlock for [target]</span>")
 		return
 /mob/living/silicon/ai/proc/ai_actual_track(mob/living/target as mob)
-	if(!istype(target))	return
+	if(!istype(target))
+		return
 	var/mob/living/silicon/ai/U = usr
 
 	U.cameraFollow = target

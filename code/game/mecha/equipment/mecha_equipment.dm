@@ -7,7 +7,7 @@
 	icon = 'icons/mecha/mecha_equipment.dmi'
 	icon_state = "mecha_equip"
 	force = 5
-	origin_tech = "materials=2"
+	origin_tech = Tc_MATERIALS + "=2"
 	var/equip_cooldown = 0
 	var/equip_ready = 1
 	var/energy_drain = 0
@@ -65,14 +65,15 @@
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/get_equip_info()
-	if(!chassis) return
+	if(!chassis)
+		return
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[chassis.selected==src?"<b>":"<a href='?src=\ref[chassis];select_equip=\ref[src]'>"][src.name][chassis.selected==src?"</b>":"</a>"]"
 
 /obj/item/mecha_parts/mecha_equipment/proc/is_ranged()//add a distance restricted equipment. Why not?
-	return range&RANGED
+	return (range&RANGED)
 
 /obj/item/mecha_parts/mecha_equipment/proc/is_melee()
-	return range&MELEE
+	return (range&MELEE)
 
 
 /obj/item/mecha_parts/mecha_equipment/proc/action_checks(atom/target)
@@ -100,7 +101,7 @@
 /obj/item/mecha_parts/mecha_equipment/proc/attach(obj/mecha/M as obj)
 	M.equipment += src
 	chassis = M
-	src.loc = M
+	src.forceMove(M)
 	M.log_message("[src] initialized.")
 	if(!M.selected)
 		M.selected = src
@@ -110,7 +111,7 @@
 /obj/item/mecha_parts/mecha_equipment/proc/detach(atom/moveto=null)
 	if(!moveto)
 		moveto = get_turf(chassis)
-	src.loc = moveto
+	src.forceMove(moveto)
 	chassis.equipment -= src
 	if(chassis.selected == src)
 		chassis.selected = null

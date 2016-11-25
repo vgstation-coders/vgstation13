@@ -14,6 +14,17 @@
 	freq_config_data[JUKE_POWER_TWO] = rand(1,14)
 	freq_config_data[JUKE_POWER_THREE] = rand(1,14)
 
+	wire_names=list(
+		"[JUKE_POWER_ONE]" 		= "Power 1",
+		"[JUKE_POWER_TWO]" 		= "Power 2",
+		"[JUKE_POWER_THREE]" 	= "Power 3",
+		"[JUKE_SHUFFLE]" 		= "Shuffle",
+		"[JUKE_CAPITAL]" 		= "Capital",
+		"[JUKE_TRANSMIT]" 		= "Transmit",
+		"[JUKE_CONFIG]" 		= "Config",
+		"[JUKE_SETTING]" 		= "Settings"
+	)
+
 var/const/JUKE_POWER_ONE = 1 //Power. Cut for shock and off. Pulse toggles.
 var/const/JUKE_POWER_TWO = 2 //Power. Cut for shock and off. Pulse toggles.
 var/const/JUKE_POWER_THREE = 4 //Power. Cut for shock and off. Pulse toggles.
@@ -24,6 +35,8 @@ var/const/JUKE_CONFIG = 64 //Cut emags. Pulse plays IAMERROR.ogg
 var/const/JUKE_SETTING = 128 //Cut shocks. Pulse toggles settings menu.
 
 /datum/wires/jukebox/CanUse(var/mob/living/L)
+	if(!..())
+		return 0
 	var/obj/machinery/media/jukebox/J = holder
 	if(J.panel_open)
 		return 1
@@ -38,7 +51,8 @@ var/const/JUKE_SETTING = 128 //Cut shocks. Pulse toggles settings menu.
 	An unlabelled light is [J.emagged ? "dark" : "blinking occasionally"].<BR>"}
 
 /datum/wires/jukebox/UpdatePulsed(var/index)
-	if(interference) return
+	if(interference)
+		return
 	var/obj/machinery/media/jukebox/J = holder
 	switch(index)
 		if(JUKE_POWER_ONE,JUKE_POWER_TWO,JUKE_POWER_THREE)

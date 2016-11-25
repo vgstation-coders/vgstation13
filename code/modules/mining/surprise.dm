@@ -62,7 +62,8 @@ var/global/list/mining_surprises = typesof(/mining_surprise)-/mining_surprise
 		for(var/atom/A in T.contents)
 			sti.types |= A.type
 
-		if(no_adjacent) return
+		if(no_adjacent)
+			return
 		UpdateAdjacentsOfTurf(T)
 
 	proc/AddTypeToTurf(var/turf/T, var/newtype)
@@ -263,7 +264,7 @@ var/global/list/mining_surprises = typesof(/mining_surprise)-/mining_surprise
 				l_size_y=sy
 			else if(complex_max_size==nrooms)
 				// Failed to make first room, abort.
-				qdel(complex_area)
+				del(complex_area)
 				complex_area = null
 				return 0
 			else
@@ -276,10 +277,12 @@ var/global/list/mining_surprises = typesof(/mining_surprise)-/mining_surprise
 
 	proc/postProcessRoom(var/surprise_room/room)
 		for(var/turf/floor in room.turfs)
-			if(floor.density) continue
+			if(floor.density)
+				continue
 			for(var/turf/T in floor.AdjacentTurfs())
 				if(T in room.turfs)
-					if(T.density) continue
+					if(T.density)
+						continue
 					candidates|=T
 					break
 

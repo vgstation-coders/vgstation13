@@ -31,14 +31,14 @@
 		var/turf/T = get_turf(suspension_field)
 		if(field_type == "carbon")
 			for(var/mob/living/carbon/M in T)
-				M.weakened = max(M.weakened, 3)
+				M.SetKnockdown(max(M.knockdown, 3))
 				cell.charge -= power_use
 				if(prob(5))
 					to_chat(M, "<span class='notice'>[pick("You feel tingly.","You feel like floating.","It is hard to speak.","You can barely move.")]</span>")
 
 		if(field_type == "iron")
 			for(var/mob/living/silicon/M in T)
-				M.weakened = max(M.weakened, 3)
+				M.SetKnockdown(max(M.knockdown, 3))
 				cell.charge -= power_use
 				if(prob(5))
 					to_chat(M, "<span class='notice'>[pick("You feel tingly.","You feel like floating.","It is hard to speak.","You can barely move.")]</span>")
@@ -47,10 +47,10 @@
 			if(!suspension_field.contents.len)
 				suspension_field.icon_state = "energynet"
 				suspension_field.overlays += image(icon = suspension_field.icon, icon_state = "shield2")
-			I.loc = suspension_field
+			I.forceMove(suspension_field)
 
 		for(var/mob/living/simple_animal/M in T)
-			M.weakened = max(M.weakened, 3)
+			M.SetKnockdown(max(M.knockdown, 3))
 			cell.charge -= power_use
 			if(prob(5))
 				to_chat(M, "<span class='notice'>[pick("You feel tingly.","You feel like floating.","It is hard to speak.","You can barely move.")]</span>")
@@ -114,7 +114,8 @@
 	onclose(user, "suspension")
 
 /obj/machinery/suspension_gen/Topic(href, href_list)
-	if(..()) return
+	if(..())
+		return
 	usr.set_machine(src)
 
 	if(href_list["toggle_field"])
@@ -140,12 +141,12 @@
 	else if(href_list["ejectcard"])
 		if(auth_card)
 			if(ishuman(usr))
-				auth_card.loc = usr.loc
+				auth_card.forceMove(usr.loc)
 				if(!usr.get_active_hand())
 					usr.put_in_hands(auth_card)
 				auth_card = null
 			else
-				auth_card.loc = loc
+				auth_card.forceMove(loc)
 				auth_card = null
 	else if(href_list["lock"])
 		locked = 1
@@ -161,7 +162,7 @@
 	else if(cell)
 		if(isobserver(user))
 			return 0
-		cell.loc = loc
+		cell.forceMove(loc)
 		cell.add_fingerprint(user)
 		cell.updateicon()
 
@@ -254,7 +255,7 @@
 		if("carbon")
 			success = 1
 			for(var/mob/living/carbon/C in T)
-				C.weakened += 5
+				C.AdjustKnockdown(5)
 				C.visible_message("<span class='notice'>[bicon(C)] [C] begins to float in the air!</span>","You feel tingly and light, but it is difficult to move.")
 		if("nitrogen")
 			success = 1
@@ -277,7 +278,7 @@
 		if("iron")
 			success = 1
 			for(var/mob/living/silicon/R in T)
-				R.weakened += 5
+				R.AdjustKnockdown(5)
 				R.visible_message("<span class='notice'>[bicon(R)] [R] begins to float in the air!</span>","You feel tingly and light, but it is difficult to move.")
 			//
 	//in case we have a bad field type
@@ -286,7 +287,7 @@
 
 	for(var/mob/living/simple_animal/C in T)
 		C.visible_message("<span class='notice'>[bicon(C)] [C] begins to float in the air!</span>","You feel tingly and light, but it is difficult to move.")
-		C.weakened += 5
+		C.AdjustKnockdown(5)
 
 	suspension_field = new(T)
 	suspension_field.field_type = field_type
@@ -294,7 +295,7 @@
 	icon_state = "suspension3"
 
 	for(var/obj/item/I in T)
-		I.loc = suspension_field
+		I.forceMove(suspension_field)
 		collected++
 
 	if(collected)
@@ -313,7 +314,7 @@
 
 	for(var/mob/M in T)
 		to_chat(M, "<span class='info'>You no longer feel like floating.</span>")
-		M.weakened = min(M.weakened, 3)
+		M.SetKnockdown(min(M.knockdown, 3))
 
 	src.visible_message("<span class='notice'>[bicon(src)] [src] deactivates with a gentle shudder.</span>")
 	qdel(suspension_field)
@@ -345,5 +346,5 @@
 
 /obj/effect/suspension_field/Destroy()
 	for(var/obj/I in src)
-		I.loc = src.loc
+		I.forceMove(src.loc)
 	..()

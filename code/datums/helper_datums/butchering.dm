@@ -17,6 +17,8 @@
 	var/stored_in_organ
 	//Example value: LIMB_HEAD or "arm". When an organ with the same type is cut off, this object will be transferred to it.
 
+	var/butcher_time = 20
+
 /datum/butchering_product/New()
 	..()
 
@@ -41,8 +43,10 @@
 	stored_in_organ = LIMB_HEAD //Cutting a LIMB_HEAD off will transfer teeth to the head object
 
 /datum/butchering_product/teeth/desc_modifier(mob/parent, mob/user)
-	if(amount == initial_amount) return
-	if(!isliving(parent)) return
+	if(amount == initial_amount)
+		return
+	if(!isliving(parent))
+		return
 
 	var/mob/living/L = parent
 
@@ -57,8 +61,10 @@
 			return //If his mouth is covered, we can't see his teeth
 
 	var/pronoun = "Its"
-	if(L.gender == MALE) pronoun = "His"
-	if(L.gender == FEMALE) pronoun = "Her"
+	if(L.gender == MALE)
+		pronoun = "His"
+	if(L.gender == FEMALE)
+		pronoun = "Her"
 
 	if(amount == 0)
 		return "[pronoun] teeth are gone. "
@@ -70,7 +76,8 @@
 
 #define ALL_TEETH -1
 /datum/butchering_product/teeth/spawn_result(location, mob/parent, drop_amount = ALL_TEETH)
-	if(amount <= 0) return
+	if(amount <= 0)
+		return
 
 	var/obj/item/stack/teeth/T = new(location)
 	T.update_name(parent) //Change name of the teeth - from the default "teeth" to "corgi teeth", for example
@@ -113,8 +120,10 @@
 /datum/butchering_product/skin/desc_modifier(mob/parent)
 	if(!amount)
 		var/pronoun = "It"
-		if(parent.gender == MALE) pronoun = "He"
-		if(parent.gender == FEMALE) pronoun = "She"
+		if(parent.gender == MALE)
+			pronoun = "He"
+		if(parent.gender == FEMALE)
+			pronoun = "She"
 		return "[pronoun] has been skinned. "
 
 /datum/butchering_product/skin/cat
@@ -128,6 +137,11 @@
 
 /datum/butchering_product/skin/goliath
 	result = /obj/item/asteroid/goliath_hide
+
+/datum/butchering_product/skin/basilisk
+	result = /obj/item/asteroid/basilisk_hide
+	verb_name = "break crystals off"
+	verb_gerund = "breaking crystals off"
 
 /datum/butchering_product/skin/bear
 	result = /obj/item/clothing/head/bearpelt/real
@@ -155,6 +169,7 @@
 	verb_name = "remove legs from"
 	verb_gerund = "removing legs from"
 	amount = 8 //Amount of legs that all normal spiders have
+	butcher_time = 10
 
 /datum/butchering_product/spider_legs/desc_modifier()
 	if(amount < 8)
@@ -178,10 +193,23 @@
 	verb_name = "remove legs from"
 	verb_gerund = "removing legs from"
 	amount = 2 //not a magic number, frogs have 2 legs
+	butcher_time = 10
 
 /datum/butchering_product/frog_leg/desc_modifier()
 	if(amount < 2)
 		return "It only has [amount] [amount==1 ? "leg" : "legs"]. "
+
+//======hivelord core
+
+/datum/butchering_product/hivelord_core
+	result = /obj/item/asteroid/hivelord_core
+	verb_name = "remove the core from"
+	verb_gerund = "removing the core from"
+	butcher_time = 2
+
+/datum/butchering_product/hivelord_core/desc_modifier()
+	if(!amount)
+		return "Its core has been taken. "
 
 #define TEETH_FEW		/datum/butchering_product/teeth/few		//4-8
 #define TEETH_BUNCH		/datum/butchering_product/teeth/bunch	//8-16
@@ -193,6 +221,8 @@ var/global/list/animal_butchering_products = list(
 	/mob/living/simple_animal/corgi						= list(/datum/butchering_product/skin/corgi, TEETH_FEW),
 	/mob/living/simple_animal/lizard					= list(/datum/butchering_product/skin/lizard),
 	/mob/living/simple_animal/hostile/asteroid/goliath	= list(/datum/butchering_product/skin/goliath, TEETH_LOTS),
+	/mob/living/simple_animal/hostile/asteroid/basilisk	= list(/datum/butchering_product/skin/basilisk),
+	/mob/living/simple_animal/hostile/asteroid/hivelord	= list(/datum/butchering_product/hivelord_core),
 	/mob/living/simple_animal/hostile/giant_spider		= list(/datum/butchering_product/spider_legs),
 	/mob/living/simple_animal/hostile/bear				= list(/datum/butchering_product/skin/bear, TEETH_LOTS),
 	/mob/living/carbon/alien/humanoid					= list(/datum/butchering_product/xeno_claw, /datum/butchering_product/skin/xeno, TEETH_BUNCH),
@@ -203,6 +233,8 @@ var/global/list/animal_butchering_products = list(
 	/mob/living/carbon/monkey							= list(/datum/butchering_product/skin/monkey, TEETH_FEW),
 
 	/mob/living/carbon/human							= list(TEETH_HUMAN),
+	/mob/living/carbon/human/unathi						= list(TEETH_LOTS),
+	/mob/living/carbon/human/skrell						= list(TEETH_LOTS),
 	/mob/living/carbon/human/skellington				= list(TEETH_HUMAN),
 	/mob/living/carbon/human/tajaran					= list(TEETH_HUMAN),
 	/mob/living/carbon/human/dummy						= list(TEETH_HUMAN),

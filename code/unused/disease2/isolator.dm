@@ -36,20 +36,25 @@
 
 		src.beaker =  B
 		user.drop_item()
-		B.loc = src
+		B.forceMove(src)
 		if(istype(B,/obj/item/weapon/reagent_containers/syringe))
 			to_chat(user, "You add the syringe to the machine!")
 			src.updateUsrDialog()
 			icon_state = "isolator_in"
 
 	Topic(href, href_list)
-		if(..()) return 1
-		if(stat & BROKEN) return
-		if(usr.stat || usr.restrained()) return
-		if(!in_range(src, usr)) return
+		if(..())
+			return 1
+		if(stat & BROKEN)
+			return
+		if(usr.stat || usr.restrained())
+			return
+		if(!in_range(src, usr))
+			return
 
 		usr.machine = src
-		if(!beaker) return
+		if(!beaker)
+			return
 		var/datum/reagents/R = beaker:reagents
 
 		if (href_list["isolate"])
@@ -70,7 +75,7 @@
 			attack_hand(usr)
 			return
 		else if (href_list["eject"])
-			beaker:loc = src.loc
+			beaker:forceMove(src.loc)
 			beaker = null
 			icon_state = "isolator"
 			src.updateUsrDialog()

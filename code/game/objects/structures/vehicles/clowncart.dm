@@ -22,7 +22,7 @@
 	density = 1
 	nick = "honkin' ride" //For fucks sake, well then
 	flags = OPENCONTAINER
-	overrideghostspin = 0
+	noghostspin = 0
 
 	max_health = 100 //Bananium sheets increases maximum health by 20
 	var/activated = 0 //Honk to activate, it stays active while you sit in it, and will deactivate when you unbuckle
@@ -92,7 +92,7 @@
 			if(activated)
 				visible_message("<span class='warning'>[nick] lets out a last honk before running out of fuel and activating its ejection seat.</span>")
 				if(ishuman(user)) //This shouldn't be needed, but fucks sakes
-					user.Weaken(5)
+					user.Knockdown(5)
 				playsound(get_turf(src), 'sound/items/bikehorn.ogg', 50, 1)
 				activated = 0
 				reagents.remove_reagent(BANANA, 5)
@@ -123,14 +123,18 @@
 		visible_message("<span class='notice'>[user] applies [W] to \the [src].</span>")
 		health += 10 //Banana peels repair some damage
 		empstun -= 1 //And help remove EMP stun
-		if(health > max_health) health = max_health
-		if(empstun ==0) visible_message("<span class='danger'>\The [src] comes back to life!</span>")
-		if(empstun < 0) empstun = 0
+		if(health > max_health)
+			health = max_health
+		if(empstun ==0)
+			visible_message("<span class='danger'>\The [src] comes back to life!</span>")
+		if(empstun < 0)
+			empstun = 0
 		qdel(W)
 	else if(istype(W, /obj/item/seeds/bananaseed))
 		visible_message("<span class='notice'>[user] applies [W] to \the [src].</span>")
 		health += 50
-		if(health > max_health) health = max_health
+		if(health > max_health)
+			health = max_health
 		if(empstun!=0)
 			empstun=0
 			visible_message("<span class='danger'>\The [src] comes back to life!</span>")
@@ -266,7 +270,7 @@
 			to_chat(user, "<span class='warning'>[src] has no fuel, it activates its ejection seat as soon as you jam down the pedal!</span>")
 			unlock_atom(user)
 			activated = 0
-			user.Weaken(5) //Only Weaken after unbuckling
+			user.Knockdown(5) //Only Weaken after unbuckling
 		return
 	if(activated)
 		var/old_pos = get_turf(src)
@@ -341,7 +345,8 @@
 
 /obj/structure/bed/chair/vehicle/clowncart/proc/feed(obj/item/W, mob/living/user)
 	var/datum/reagents/R=W.reagents
-	if(!R) return
+	if(!R)
+		return
 	if(R.has_reagent(BANANA))
 		var/added_banana=R.get_reagent_amount(BANANA)
 		if(reagents.total_volume + added_banana > 5000)

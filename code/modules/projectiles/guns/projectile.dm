@@ -7,7 +7,7 @@
 	name = "revolver"
 	icon_state = "revolver"
 	caliber = list("357" = 1)
-	origin_tech = "combat=2;materials=2"
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 1000)
 	w_type = RECYK_METAL
@@ -55,7 +55,25 @@
 
 /obj/item/weapon/gun/projectile/proc/RemoveMag(var/mob/user)
 	if(stored_magazine)
-		stored_magazine.loc = get_turf(src.loc)
+		if(jammed)
+			to_chat(usr, "<span class='notice'>You begin unjamming \the [name]...</span>")
+			if(do_after(usr,src,50))
+				jammed = 0
+				in_chamber = null
+				var/dropped_bullets
+				var/to_drop = rand(stored_magazine.max_ammo/4, stored_magazine.max_ammo/3)
+				for(var/i = 1; i<=min(to_drop, stored_magazine.stored_ammo.len); i++)
+					var/obj/item/ammo_casing/AC = stored_magazine.stored_ammo[1]
+					stored_magazine.stored_ammo -= AC
+					AC.forceMove(get_turf(user))
+					dropped_bullets++
+					stored_magazine.update_icon()
+				to_chat(usr, "<span class='notice'>You unjam the [name], and spill [dropped_bullets] bullet\s in the process.</span>")
+				chamber_round()
+				update_icon()
+				return 0
+			return 0
+		stored_magazine.forceMove(get_turf(src.loc))
 		if(user)
 			user.put_in_hands(stored_magazine)
 			to_chat(usr, "<span class='notice'>You pull the magazine out of \the [src]!</span>")
@@ -71,8 +89,11 @@
 	set name = "Remove Ammo / Magazine"
 	set category = "Object"
 	set src in range(0)
+	if(usr.incapacitated())
+		to_chat(usr, "<span class='rose'>You can't do this!</span>")
+		return
 	if(stored_magazine)
-		RemoveMag()
+		RemoveMag(usr)
 	else
 		to_chat(usr, "<span class='rose'>There is no magazine to remove!</span>")
 
@@ -84,7 +105,7 @@
 		var/obj/item/ammo_casing/round = stored_magazine.get_round()
 		if(istype(round))
 			chambered = round
-			chambered.loc = src
+			chambered.forceMove(src)
 			return 1
 	return 0
 
@@ -108,10 +129,10 @@
 	else
 		loaded -= AC //Remove casing from loaded list.
 	if(gun_flags &EMPTYCASINGS)
-		AC.loc = get_turf(src) //Eject casing onto ground.
+		AC.forceMove(get_turf(src)) //Eject casing onto ground.
 	if(AC.BB)
 		in_chamber = AC.BB //Load projectile into chamber.
-		AC.BB.loc = src //Set projectile loc to gun.
+		AC.BB.forceMove(src) //Set projectile loc to gun.
 		AC.BB = null //Empty casings
 		AC.update_icon()
 		return 1
@@ -154,7 +175,7 @@
 					chambered = AC
 					num_loaded++
 					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
-			else if(getAmmo() < max_shells)
+			else if(getAmmo() < max_shells && load_method != MAGAZINE)
 				if(user.drop_item(AC, src))
 					loaded += AC
 					num_loaded++
@@ -173,7 +194,7 @@
 		if (load_method == SPEEDLOADER)
 			var/obj/item/ammo_casing/AC = loaded[1]
 			loaded -= AC
-			AC.loc = get_turf(src) //Eject casing onto ground.
+			AC.forceMove(get_turf(src)) //Eject casing onto ground.
 			to_chat(user, "<span class='notice'>You unload \the [AC] from \the [src]!</span>")
 			update_icon()
 			return
@@ -182,7 +203,7 @@
 	else if(loc == user)
 		if(chambered) // So it processing unloading of a bullet first
 			var/obj/item/ammo_casing/AC = chambered
-			AC.loc = get_turf(src) //Eject casing onto ground.
+			AC.forceMove(get_turf(src)) //Eject casing onto ground.
 			chambered = null
 			to_chat(user, "<span class='notice'>You unload \the [AC] from \the [src]!</span>")
 			update_icon()
@@ -230,3 +251,11 @@
 			if(istype(AC))
 				bullets += 1
 	return bullets
+
+/obj/item/weapon/gun/projectile/failure_check(var/mob/living/carbon/human/M)
+	if(load_method == MAGAZINE && prob(3))
+		jammed = 1
+		M.visible_message("*click click*", "<span class='danger'>*click*</span>")
+		playsound(M, empty_sound, 100, 1)
+		return 0
+	return ..()

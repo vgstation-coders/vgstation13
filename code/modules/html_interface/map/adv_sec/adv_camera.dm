@@ -15,17 +15,21 @@
 	if (src.z > 6)
 		to_chat(user, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
-	if(stat & (NOPOWER|BROKEN))	return
+	if(stat & (NOPOWER|BROKEN))
+		return
 	adv_camera.show(user, (current ? current.z : z))
-	if(current) user.reset_view(current)
+	if(current)
+		user.reset_view(current)
 	user.machine = src
 	return
 
 /obj/machinery/computer/security/advanced/check_eye(var/mob/user as mob)
 	if (( ( get_dist(user, src) > 1 ) || !( user.canmove ) || ( user.blinded )) && (!istype(user, /mob/living/silicon)))
-		if(user.machine == src) user.machine = null
+		if(user.machine == src)
+			user.machine = null
 		return null
-	if(stat & (NOPOWER|BROKEN)) return null
+	if(stat & (NOPOWER|BROKEN))
+		return null
 	user.reset_view(current)
 	return 1
 
@@ -54,7 +58,8 @@ var/global/datum/interactive_map/camera/adv_camera = new
 
 /datum/interactive_map/camera/show(mob/mob, z, datum/html_interface/currui)
 	z = text2num(z)
-	if (!z) z = mob.z
+	if (!z)
+		z = mob.z
 	sendResources(mob.client)
 
 	if (!(z in zlevels))
@@ -70,7 +75,7 @@ var/global/datum/interactive_map/camera/adv_camera = new
 			"[MAPHEADER] </script><script type=\"text/javascript\">\
 			var mapname = \"[map.nameShort]\"; \
 			var z = [z]; \
-			var tile_size = [world.icon_size]; \
+			var tile_size = [WORLD_ICON_SIZE]; \
 			var maxx = [world.maxx]; \
 			var maxy = [world.maxy];</script>\
 			<script type=\"text/javascript\" src=\"advcamera.js\"></script>")
@@ -95,7 +100,8 @@ var/global/datum/interactive_map/camera/adv_camera = new
 
 /datum/interactive_map/camera/updateFor(hclient_or_mob, datum/html_interface/hi, z, single)
 	//copy pasted code but given so many cameras i dont want to iterate over the entire worlds worth of cams, so we save our data based on zlevel
-	if(!single) hi.callJavaScript("clearAll", new/list(), hclient_or_mob)
+	if(!single)
+		hi.callJavaScript("clearAll", new/list(), hclient_or_mob)
 	data = zlevel_data["[z]"]
 	for (var/list/L in data)
 		hi.callJavaScript("add", L, hclient_or_mob)
@@ -106,7 +112,8 @@ var/global/datum/interactive_map/camera/adv_camera = new
 /datum/interactive_map/camera/update(z, ignore_unused = FALSE, var/obj/machinery/camera/single, adding = 0)
 	if (src.interfaces["[z]"])
 		var/zz = text2num(z)
-		if(!zz) zz = z
+		if(!zz)
+			zz = z
 		var/datum/html_interface/hi = src.interfaces["[zz]"]
 		var/ID
 		var/status
@@ -128,7 +135,7 @@ var/global/datum/interactive_map/camera/adv_camera = new
 						continue
 					if(pos.z != zz)
 						camerasbyzlevel["[zz]"] -= C //bad zlevel
-						if(pos.z == 1 || pos.z == 5)
+						if(pos.z == map.zMainStation || pos.z == map.zAsteroid)
 							camerasbyzlevel["[zz]"] |= C //try to fix the zlevel list.
 						continue
 					ID="\ref[C]"
@@ -149,9 +156,10 @@ var/global/datum/interactive_map/camera/adv_camera = new
 				var/turf/pos = get_turf(single)
 				if(pos.z != zz)
 					camerasbyzlevel["[zz]"] -= single //bad zlevel
-					if(pos.z == 1 || pos.z == 5)
+					if(pos.z == map.zMainStation || pos.z == map.zAsteroid)
 						camerasbyzlevel["[zz]"] |= single //try to fix the zlevel list
-					else adding = 2 //Set to remove
+					else
+						adding = 2 //Set to remove
 				ID="\ref[single]"
 				status = single.alarm_on //1 = alarming 0 = all is well
 				if(!single.can_use())
@@ -177,12 +185,14 @@ var/global/datum/interactive_map/camera/adv_camera = new
 	var/z = ""
 
 	for (z in src.interfaces)
-		if (src.interfaces[z] == hi) break
+		if (src.interfaces[z] == hi)
+			break
 */
 	. = ..()
 
 	var/los = hclient.client.mob.html_mob_check(/obj/machinery/computer/security/advanced)
-	if(!los) hclient.client.mob.reset_view(hclient.client.mob)
+	if(!los)
+		hclient.client.mob.reset_view(hclient.client.mob)
 
 	return (. && los)
 

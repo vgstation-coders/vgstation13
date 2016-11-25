@@ -112,13 +112,13 @@
 			if(istype(W.loc,/mob/living) && W.is_sharp()) //Projectile is embedded and suitable for pinning.
 
 				if(!istype(src,/mob/living/carbon/human)) //Handles embedding for non-humans and simple_animals.
-					O.loc = src
+					O.forceMove(src)
 					src.embedded += O
 
 				var/turf/T = near_wall(dir,2)
 
 				if(T)
-					src.loc = T
+					src.forceMove(T)
 					visible_message("<span class='warning'>[src] is pinned to the wall by [O]!</span>","<span class='warning'>You are pinned to the wall by [O]!</span>")
 					src.anchored = 1
 					src.pinned += O
@@ -180,7 +180,7 @@
 
 	if((M_CLUMSY in M.mutations) && prob(20)) //Kicking yourself (or being clumsy) = stun
 		M.visible_message("<span class='notice'>\The [M] trips while attempting to kick \the [src]!</span>", "<span class='userdanger'>While attempting to kick \the [src], you trip and fall!</span>")
-		M.Weaken(rand(1,10))
+		M.Knockdown(rand(1,10))
 		return
 
 	var/stomping = 0
@@ -242,7 +242,8 @@
 		set_light(src.light_range + 3)
 		update_fire()
 		return 1
-	else return 0
+	else
+		return 0
 
 /mob/living/proc/ExtinguishMob()
 	if(on_fire)

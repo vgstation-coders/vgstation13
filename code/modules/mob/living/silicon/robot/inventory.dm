@@ -44,13 +44,13 @@
 			var/obj/item/weapon/reagent_containers/glass/beaker/large/ourbeaker = module_active
 			if(istype(ourbeaker.loc, /obj/machinery))
 				ourbeaker.loc:detach()
-				ourbeaker.loc = src
+				ourbeaker.forceMove(src)
 			else if(ismob(ourbeaker.loc))
 				var/mob/living/L = ourbeaker.loc
 				L.drop_item(ourbeaker)
-				ourbeaker.loc = src
+				ourbeaker.forceMove(src)
 			else
-				ourbeaker.loc = src
+				ourbeaker.forceMove(src)
 	if(module_state_1 == module_active)
 		uneq_module(module_state_1)
 		module_state_1 = null
@@ -77,22 +77,19 @@
 	if(!module_state_1)
 		O.mouse_opacity = initial(O.mouse_opacity)
 		module_state_1 = O
-		O.layer = 20
-		O.plane = PLANE_HUD
+		O.hud_layerise()
 		O.screen_loc = inv1.screen_loc
 		O.forceMove(src)
 	else if(!module_state_2)
 		O.mouse_opacity = initial(O.mouse_opacity)
 		module_state_2 = O
-		O.layer = 20
-		O.plane = PLANE_HUD
+		O.hud_layerise()
 		O.screen_loc = inv2.screen_loc
 		O.forceMove(src)
 	else if(!module_state_3)
 		O.mouse_opacity = initial(O.mouse_opacity)
 		module_state_3 = O
-		O.layer = 20
-		O.plane = PLANE_HUD
+		O.hud_layerise()
 		O.screen_loc = inv3.screen_loc
 		O.forceMove(src)
 	else
@@ -139,7 +136,8 @@
 
 //module_active(module) - Checks whether there is a module active in the slot specified by "module".
 /mob/living/silicon/robot/proc/module_active(var/module) //Module is 1-3
-	if(module < 1 || module > 3) return 0
+	if(module < 1 || module > 3)
+		return 0
 
 	switch(module)
 		if(1)
@@ -166,9 +164,11 @@
 
 //select_module(module) - Selects the module slot specified by "module"
 /mob/living/silicon/robot/proc/select_module(var/module) //Module is 1-3
-	if(module < 1 || module > 3) return
+	if(module < 1 || module > 3)
+		return
 
-	if(!module_active(module)) return
+	if(!module_active(module))
+		return
 
 	switch(module)
 		if(1)
@@ -196,7 +196,8 @@
 
 //deselect_module(module) - Deselects the module slot specified by "module"
 /mob/living/silicon/robot/proc/deselect_module(var/module) //Module is 1-3
-	if(module < 1 || module > 3) return
+	if(module < 1 || module > 3)
+		return
 
 	switch(module)
 		if(1)
@@ -218,7 +219,8 @@
 
 //toggle_module(module) - Toggles the selection of the module slot specified by "module".
 /mob/living/silicon/robot/proc/toggle_module(var/module) //Module is 1-3
-	if(module < 1 || module > 3) return
+	if(module < 1 || module > 3)
+		return
 
 	if(module_selected(module))
 		deselect_module(module)
@@ -232,7 +234,8 @@
 //cycle_modules() - Cycles through the list of selected modules.
 /mob/living/silicon/robot/proc/cycle_modules()
 	var/slot_start = get_selected_module()
-	if(slot_start) deselect_module(slot_start) //Only deselect if we have a selected slot.
+	if(slot_start)
+		deselect_module(slot_start) //Only deselect if we have a selected slot.
 
 	var/slot_num
 	if(slot_start == 0)
@@ -246,7 +249,8 @@
 			select_module(slot_num)
 			return
 		slot_num++
-		if(slot_num > 3) slot_num = 1 //Wrap around.
+		if(slot_num > 3)
+			slot_num = 1 //Wrap around.
 
 	return
 

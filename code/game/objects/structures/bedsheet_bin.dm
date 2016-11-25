@@ -5,13 +5,14 @@ LINEN BINS
 */
 
 /obj/item/weapon/bedsheet
+	plane = ABOVE_OBJ_PLANE
+	layer = BLANKIES_LAYER
 	name = "bedsheet"
 	desc = "A surprisingly soft linen bedsheet."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "sheetwhite"
 	item_state = "bedsheet"
 	slot_flags = SLOT_BACK
-	layer = 4.0
 	throwforce = 1
 	throw_speed = 1
 	throw_range = 2
@@ -32,13 +33,14 @@ LINEN BINS
 	if(cut_time)
 		to_chat(user, "<span  class='notice'>You begin cutting the [src].</span>")
 		if(do_after(user, src, cut_time))
-			if(!src) return
+			if(!src)
+				return
 			to_chat(user, "<span  class='notice'>You have cut the [src] into rags.</span>")
 			var/turf/location = get_turf(src)
 			for(var/x=0; x<=8; x++)
 				var/obj/item/weapon/reagent_containers/glass/rag/S = new/obj/item/weapon/reagent_containers/glass/rag/(location)
-				S.pixel_x = rand(-5.0, 5)
-				S.pixel_y = rand(-5.0, 5)
+				S.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
+				S.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 			qdel(src)
 
 //todo: hold one if possible?
@@ -46,15 +48,6 @@ LINEN BINS
 //todo: finger prints?
 //todo: more cutting tools?
 //todo: sharp thing code/game/objects/objs.dm
-
-/obj/item/weapon/bedsheet/attack_self(mob/user as mob)
-	user.drop_item(src, force_drop = 1)
-	if(layer == initial(layer))
-		layer = MOB_LAYER + 0.1
-	else
-		layer = initial(layer)
-	add_fingerprint(user)
-	return
 
 
 /obj/item/weapon/bedsheet/blue
@@ -151,8 +144,10 @@ LINEN BINS
 
 /obj/structure/bedsheetbin/update_icon()
 	switch(amount)
-		if(0)				icon_state = "linenbin-empty"
-		if(1 to amount / 2)	icon_state = "linenbin-half"
+		if(0)
+			icon_state = "linenbin-empty"
+		if(1 to amount / 2)
+			icon_state = "linenbin-half"
 		else				icon_state = "linenbin-full"
 
 
@@ -184,12 +179,12 @@ LINEN BINS
 		else
 			B = new /obj/item/weapon/bedsheet(loc)
 
-		B.loc = user.loc
+		B.forceMove(user.loc)
 		user.put_in_hands(B)
 		to_chat(user, "<span class='notice'>You take [B] out of [src].</span>")
 
 		if(hidden)
-			hidden.loc = user.loc
+			hidden.forceMove(user.loc)
 			to_chat(user, "<span class='notice'>[hidden] falls out of [B]!</span>")
 			hidden = null
 
@@ -208,12 +203,12 @@ LINEN BINS
 		else
 			B = new /obj/item/weapon/bedsheet(loc)
 
-		B.loc = loc
+		B.forceMove(loc)
 		to_chat(user, "<span class='notice'>You telekinetically remove [B] from [src].</span>")
 		update_icon()
 
 		if(hidden)
-			hidden.loc = loc
+			hidden.forceMove(loc)
 			hidden = null
 
 

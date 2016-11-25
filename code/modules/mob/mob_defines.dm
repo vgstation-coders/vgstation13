@@ -1,7 +1,7 @@
 
 /mob
 	density = 1
-	layer = 4.0
+	layer = MOB_LAYER
 	animate_movement = 2
 
 	w_type = RECYK_BIOLOGICAL
@@ -12,8 +12,6 @@
 
 	var/stat = 0 //Whether a mob is alive or dead. TODO: Move this to living - Nodrak
 
-	var/obj/screen/flash = null
-	var/obj/screen/blind = null
 	var/obj/screen/hands = null
 	var/obj/screen/pullin = null
 	var/obj/screen/kick_icon = null
@@ -87,7 +85,6 @@
 	var/stuttering = null	//Carbon
 	var/slurring = null		//Carbon
 	var/real_name = null
-	var/flavor_text = ""
 	var/med_record = ""
 	var/sec_record = ""
 	var/gen_record = ""
@@ -97,7 +94,6 @@
 	var/druggy = 0			//Carbon
 	var/confused = 0		//Carbon
 	var/antitoxs = null
-	var/plasma = null
 	var/sleeping = 0		//Carbon
 	var/resting = 0			//Carbon
 	var/lying = 0
@@ -105,7 +101,6 @@
 	var/canmove = 1
 	var/candrop = 1
 	var/lastpuke = 0
-	var/unacidable = 0
 
 	var/size = SIZE_NORMAL
 	//SIZE_TINY for tiny animals like mice and borers
@@ -139,7 +134,7 @@
 	var/overeatduration = 0		// How long this guy is overeating //Carbon
 	var/paralysis = 0.0
 	var/stunned = 0.0
-	var/weakened = 0.0
+	var/knockdown = 0.0
 	var/losebreath = 0.0//Carbon
 	var/nobreath = 0.0//Carbon, but only used for humans so far
 	var/intent = null//Living
@@ -170,8 +165,6 @@
 	var/in_throw_mode = 0
 
 	var/coughedtime = null
-
-	var/inertia_dir = 0
 
 	var/job = null//Living
 
@@ -224,16 +217,13 @@
 //List of active diseases
 
 	var/viruses = list() // replaces var/datum/disease/virus
-
-//Monkey/infected mode
 	var/list/resistances = list()
-	var/datum/disease/virus = null
 
 	mouse_drag_pointer = MOUSE_ACTIVE_POINTER
 
 	var/update_icon = 1 //Set to 1 to trigger update_icons() at the next life() call
 
-	var/status_flags = CANSTUN|CANWEAKEN|CANPARALYSE|CANPUSH	//bitflags defining which status effects can be inflicted (replaces canweaken, canstun, etc)
+	var/status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH	//bitflags defining which status effects can be inflicted (replaces CANKNOCKDOWN, canstun, etc)
 
 	var/digitalcamo = 0 // Can they be tracked by the AI?
 
@@ -282,9 +272,10 @@
 
 	var/list/languages[0]
 	var/stat_fucked = 1
+	var/event/on_spellcast
 	var/event/on_uattack
 	var/event/on_logout
-	forceinvertredraw = 1
+	var/event/on_damaged
 
 	var/list/alphas = list()
 	var/spell_channeling

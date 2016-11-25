@@ -12,7 +12,7 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
 	caliber = list("7.62x55" = 1)
-	origin_tech = "combat=4;materials=2"
+	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=2"
 	ammo_type ="/obj/item/ammo_casing/a762x55"
 	var/recentpump = 0 // to prevent spammage
 	var/pumped = 0
@@ -25,7 +25,8 @@
 		return 0
 
 /obj/item/weapon/gun/projectile/nagant/attack_self(mob/living/user as mob)
-	if(recentpump)	return
+	if(recentpump)
+		return
 	pump(user)
 	recentpump = 1
 	spawn(10)
@@ -37,7 +38,7 @@
 		return 1
 	else if(current_shell && current_shell.BB)
 		in_chamber = current_shell.BB //Load projectile into chamber.
-		current_shell.BB.loc = src //Set projectile loc to gun.
+		current_shell.BB.forceMove(src) //Set projectile loc to gun.
 		current_shell.BB = null
 		current_shell.update_icon()
 		return 1
@@ -47,7 +48,7 @@
 	playsound(M, 'sound/weapons/nagantreload.ogg', 100, 1)
 	pumped = 0
 	if(current_shell)//We have a shell in the chamber
-		current_shell.loc = get_turf(src)//Eject casing
+		current_shell.forceMove(get_turf(src))//Eject casing
 		current_shell = null
 		if(in_chamber)
 			in_chamber = null
@@ -87,7 +88,8 @@
 	slot_flags = SLOT_BELT
 
 /obj/item/weapon/gun/projectile/nagant/obrez/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
-	if(flag)	return //we're placing gun on a table or in backpack
+	if(flag)
+		return //we're placing gun on a table or in backpack
 	if(current_shell && current_shell.BB)
 		//explosion(src.loc,-1,1,2)
 		var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()

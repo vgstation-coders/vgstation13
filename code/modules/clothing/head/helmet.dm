@@ -8,6 +8,7 @@
 	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.7
+	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/head/helmet/siren
 	name = "siren helmet"
@@ -18,6 +19,7 @@
 	light_color = LIGHT_COLOR_RED
 	action_button_name = "Activate Siren"
 	var/spamcheck = 0
+	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/head/helmet/siren/attack_self(mob/user)
 	if(spamcheck)
@@ -148,7 +150,7 @@
 
 /obj/item/clothing/head/helmet/volnutthelmet
 	name = "Digouter Helmet"
-	desc = "A sturdy helmet, fortified to protect from falling rocks or buster shots"
+	desc = "A sturdy helmet, fortified to protect from falling rocks or buster shots."
 	icon_state = "volnutthelmet"
 	flags = FPRINT
 	item_state = "volnutthelmet"
@@ -200,3 +202,9 @@
 	desc = "Deus Vult."
 	icon_state = "knight_templar"
 	item_state = "knight_templar"
+
+/obj/item/clothing/head/helmet/neorussian
+	name = "neo-Russian helmet"
+	desc = "This piece of equipment can double as a pillow, a bowl, an emergency toilet, and sometimes as a helmet."
+	icon_state = "nr_helmet"
+	item_state = "nr_helmet"

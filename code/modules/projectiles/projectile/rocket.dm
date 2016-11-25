@@ -44,7 +44,7 @@
 	animate_movement = 2
 	linear_movement = 0
 	kill_count = 100
-	layer = 13
+	layer = PROJECTILE_LAYER
 	var/mob/living/carbon/mob = null
 	var/obj/item/weapon/gun/projectile/rocketlauncher/nikita/nikita = null
 	var/steps_since_last_turn = 0
@@ -120,7 +120,7 @@
 
 	if(mob)
 		if(emagged)
-			mob.loc = loc
+			mob.forceMove(loc)
 			mob.dir = dir
 		else
 			mob.dir = get_dir(mob,src)

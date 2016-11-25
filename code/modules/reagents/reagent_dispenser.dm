@@ -113,7 +113,7 @@
 		if(do_after(usr, src, 20))
 			usr.visible_message("<span class='notice'>[usr] detaches [rig] from \the [src].", "<span class='notice'>You detach [rig] from \the [src]</span>")
 			if(rig)
-				rig.loc = get_turf(usr)
+				rig.forceMove(get_turf(usr))
 				rig = null
 			overlays = new/list()
 
@@ -182,11 +182,9 @@
 	if(exposed_temperature >= AUTOIGNITION_WELDERFUEL)
 		explode()
 
-/obj/structure/reagent_dispensers/fueltank/Bumped(atom/AM)
-	if (istype(AM, /obj/structure/bed/chair/vehicle/wizmobile))
-		visible_message("<span class='danger'>\the [AM] crashes into \the [src]!!</span>")
-		explode()
-	return ..()
+/obj/structure/reagent_dispensers/fueltank/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/wizmobile/W)
+	visible_message("<span class='danger'>\the [W] crashes into \the [src]!</span>")
+	explode()
 
 /obj/structure/reagent_dispensers/fueltank/proc/explode()
 	if (reagents.total_volume > 500)
@@ -340,4 +338,3 @@
 		to_chat(user, "<span class='notice'>Sprayer refilled.</span>")
 		playsound(get_turf(src), 'sound/effects/refill.ogg', 50, 1, -6)
 		return 1
-

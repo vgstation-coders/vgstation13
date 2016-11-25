@@ -5,8 +5,7 @@
 	icon = 'icons/obj/pipes.dmi'
 	icon_state = "cap"
 	level = 2
-	layer = 2.4 //under wires with their 2.44
-	//volume = 35
+	layer = PIPE_LAYER
 	can_be_coloured = 1
 
 

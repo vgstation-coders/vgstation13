@@ -18,15 +18,14 @@
 	density = 1 //Dense. To raise the heat.
 	opacity = 1 ///opaque. Menacing.
 	anchored = 1 //no pulling around.
-	unacidable = 1 //and no deleting hoomans inside
 	layer = MOB_LAYER //icon draw layer
-	plane = PLANE_MOB
+	plane = MOB_PLANE
 	infra_luminosity = 15 //byond implementation is bugged.
 	var/initial_icon = null //Mech type for resetting icon. Only used for reskinning kits (see custom items)
 	var/can_move = 1
 	var/mob/living/carbon/occupant = null
 	var/step_in = 10 //make a step in step_in/10 sec.
-	var/dir_in = 2//What direction will the mech face when entered/powered on? Defaults to South.
+	var/dir_in = SOUTH//What direction will the mech face when entered/powered on? Defaults to South.
 	var/step_energy_drain = 10
 	var/health = 300 //health is health
 	var/deflect_chance = 10 //chance to deflect the incoming projectiles, hits, or lesser the effect of ex_act.
@@ -64,7 +63,7 @@
 	var/list/internals_req_access = list(access_engine,access_robotics)//required access level to open cell compartment
 
 	var/datum/global_iterator/pr_int_temp_processor //normalizes internal air mixture temperature
-	var/datum/global_iterator/pr_inertial_movement //controls intertial movement in spesss
+	var/datum/global_iterator/pr_inertial_movement //controls inertial movement in spesss
 	var/datum/global_iterator/pr_give_air //moves air from tank to cabin
 	var/datum/global_iterator/pr_internal_damage //processes internal damage
 
@@ -104,6 +103,7 @@
 	log_message("[src.name] created.")
 	loc.Entered(src)
 	mechas_list += src //global mech list
+	reset_icon()
 	return
 
 /obj/mecha/Destroy()
@@ -111,6 +111,9 @@
 	mechas_list -= src //global mech list
 	..()
 	return
+
+/obj/mecha/can_apply_inertia()
+	return 1 //No anchored check - so that mechas can fly off into space
 
 /obj/mecha/is_airtight()
 	return !use_internal_tank
@@ -223,10 +226,12 @@
 	var/mob/M = src.mob
 	if(M && M.in_contents_of(/obj/mecha))
 
-		if(mech_click == world.time) return
+		if(mech_click == world.time)
+			return
 		mech_click = world.time
 
-		if(!istype(object, /atom)) return
+		if(!istype(object, /atom))
+			return
 		if(istype(object, /obj/screen))
 			var/obj/screen/using = object
 			if(using.screen_loc == ui_acti || using.screen_loc == ui_iarrowleft || using.screen_loc == ui_iarrowright)//ignore all HUD objects save 'intent' and its arrows
@@ -242,13 +247,17 @@
 */
 
 /obj/mecha/proc/click_action(atom/target,mob/user)
-	if(!src.occupant || src.occupant != user ) return
-	if(user.stat) return
+	if(!src.occupant || src.occupant != user )
+		return
+	if(user.stat)
+		return
 	if(state)
 		occupant_message("<font color='red'>Maintenance protocols in effect.</font>")
 		return
-	if(!get_charge()) return
-	if(src == target) return
+	if(!get_charge())
+		return
+	if(src == target)
+		return
 	var/dir_to_target = get_dir(src,target)
 	if(dir_to_target && !(dir_to_target & src.dir))//wrong direction
 		return
@@ -302,6 +311,7 @@
 	return call((proc_res["dyndomove"]||src), "dyndomove")(direction)
 
 /obj/mecha/proc/dyndomove(direction)
+	stopMechWalking()
 	if(!can_move)
 		return 0
 	if(src.pr_inertial_movement.active())
@@ -309,6 +319,7 @@
 	if(!has_charge(step_energy_drain))
 		return 0
 	var/move_result = 0
+	startMechWalking()
 	if(hasInternalDamage(MECHA_INT_CONTROL_LOST))
 		move_result = mechsteprand()
 	else if(src.dir!=direction)
@@ -326,6 +337,11 @@
 			can_move = 1
 		return 1
 	return 0
+
+/obj/mecha/proc/startMechWalking()
+
+/obj/mecha/proc/stopMechWalking()
+	icon_state = initial_icon
 
 /obj/mecha/proc/mechturn(direction)
 	dir = direction
@@ -384,7 +400,7 @@
 			if(C.locked_to)
 				C.locked_to = 0
 			C.Stun(5)
-			C.Weaken(5)
+			C.Knockdown(5)
 			C.apply_effect(STUTTER, 5)
 			playsound(src, pick(hit_sound), 50, 0, 0)
 			breakthrough = 1
@@ -424,7 +440,8 @@
 ///////////////////////////////////
 
 /obj/mecha/proc/check_for_internal_damage(var/list/possible_int_damage,var/ignore_threshold=null)
-	if(!islist(possible_int_damage) || isemptylist(possible_int_damage)) return
+	if(!islist(possible_int_damage) || isemptylist(possible_int_damage))
+		return
 	if(prob(20))
 		if(ignore_threshold || src.health*100/initial(src.health)<src.internal_damage_threshold)
 			for(var/T in possible_int_damage)
@@ -500,7 +517,8 @@
 	else
 		user.visible_message("<font color='red'><b>[user] hits [src.name]. Nothing happens</b></font>","<font color='red'><b>You hit [src.name] with no visible effect.</b></font>")
 		src.log_append_to_last("Armor saved.")
-	return
+
+	user.delayNextAttack(10)
 
 /obj/mecha/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
@@ -520,8 +538,8 @@
 		to_chat(user, "<span class='good'>Your claws had no effect!</span>")
 		src.occupant_message("<span class='notice'>The [user]'s claws are stopped by the armor.</span>")
 		visible_message("<span class='notice'>The [user] rebounds off [src.name]'s armor!</span>")
-	return
 
+	user.delayNextAttack(10)
 
 /obj/mecha/attack_animal(mob/living/simple_animal/user as mob)
 	src.log_message("Attack by simple animal. Attacker - [user].",1)
@@ -540,7 +558,7 @@
 			src.occupant_message("<span class='notice'>The [user]'s attack is stopped by the armor.</span>")
 			visible_message("<span class='notice'>The [user] rebounds off [src.name]'s armor!</span>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name]</font>")
-	return
+	user.delayNextAttack(10)
 
 /obj/mecha/hitby(atom/movable/A as mob|obj) //wrapper
 	src.log_message("Hit by [A].",1)
@@ -600,12 +618,12 @@
 			loc.Exited(src)
 		loc = null
 		if(T)
-			if(istype(src, /obj/mecha/working/ripley/))
-				var/obj/mecha/working/ripley/R = src
-				if(R.cargo)
-					for(var/obj/O in R.cargo) //Dump contents of stored cargo
-						O.loc = T
-						R.cargo -= O
+			if(istype(src, /obj/mecha/working/))
+				var/obj/mecha/working/W = src
+				if(W.cargo)
+					for(var/obj/O in W.cargo) //Dump contents of stored cargo
+						O.forceMove(T)
+						W.cargo -= O
 						T.Entered(O)
 
 			if(prob(30))
@@ -771,9 +789,12 @@
 	else if(iscrowbar(W))
 		if(state==STATE_BOLTSOPENED)
 			var/list/removable_components = list()
-			if(cell) removable_components += "power cell"
-			if(tracking) removable_components += "exosuit tracking beacon"
-			if(electropack) removable_components += "electropack"
+			if(cell)
+				removable_components += "power cell"
+			if(tracking)
+				removable_components += "exosuit tracking beacon"
+			if(electropack)
+				removable_components += "electropack"
 			var/obj/remove = input(user, "Which component do you want to pry out?", "Remove Component") as null|anything in removable_components
 			if(!remove)
 				return
@@ -975,7 +996,8 @@
 	set category = "Exosuit Interface"
 	set src = usr.loc
 	set popup_menu = 0
-	if(!src.occupant) return
+	if(!src.occupant)
+		return
 	if(usr!=src.occupant)
 		return
 	var/obj/machinery/atmospherics/unary/portables_connector/possible_port = locate(/obj/machinery/atmospherics/unary/portables_connector/) in loc
@@ -997,7 +1019,8 @@
 	set category = "Exosuit Interface"
 	set src = usr.loc
 	set popup_menu = 0
-	if(!src.occupant) return
+	if(!src.occupant)
+		return
 	if(usr!=src.occupant)
 		return
 	if(disconnect())
@@ -1012,10 +1035,13 @@
 	set category = "Exosuit Interface"
 	set src = usr.loc
 	set popup_menu = 0
-	if(usr!=occupant)	return
+	if(usr!=occupant)
+		return
 	lights = !lights
-	if(lights)	set_light(luminosity + lights_power)
-	else		set_light(luminosity - lights_power)
+	if(lights)
+		set_light(luminosity + lights_power)
+	else
+		set_light(luminosity - lights_power)
 	src.occupant_message("Toggled lights [lights?"on":"off"].")
 	log_message("Toggled lights [lights?"on":"off"].")
 	return
@@ -1105,13 +1131,13 @@
 
 		// -- Mode/mind specific stuff goes here
 		if(H.mind)
-			if((H.mind in ticker.mode:revolutionaries) || (H.mind in ticker.mode:head_revolutionaries))
+			if(isrev(H) || isrevhead(H))
 				ticker.mode.update_all_rev_icons()
-			if(H.mind in ticker.mode.syndicates)
+			if(isnukeop(H))
 				ticker.mode.update_all_synd_icons()
-			if (H.mind in ticker.mode.cult)
+			if (iscult(H))
 				ticker.mode.update_all_cult_icons()
-			if(H.mind in ticker.mode.wizards)
+			if(iswizard(H) || isapprentice(H))
 				ticker.mode.update_all_wizard_icons()
 		// -- End mode specific stuff
 
@@ -1162,9 +1188,9 @@
 		brainmob.client.perspective = EYE_PERSPECTIVE
 	*/
 		occupant = brainmob
-		brainmob.loc = src //should allow relaymove
+		brainmob.forceMove(src) //should allow relaymove
 		brainmob.canmove = 1
-		mmi_as_oc.loc = src
+		mmi_as_oc.forceMove(src)
 		mmi_as_oc.mecha = src
 		src.verbs -= /obj/mecha/verb/eject
 		src.Entered(mmi_as_oc)
@@ -1228,11 +1254,12 @@
 /obj/mecha/proc/empty_bad_contents() //stuff that shouldn't be there, possibly caused by the driver dropping it while inside the mech
 	for(var/obj/O in src)
 		if(!is_type_in_list(O,mech_parts))
-			O.loc = src.loc
+			O.forceMove(src.loc)
 	return
 
 /obj/mecha/proc/go_out(var/exit = loc)
-	if(!src.occupant) return
+	if(!src.occupant)
+		return
 	var/atom/movable/mob_container
 	if(ishuman(occupant))
 		mob_container = src.occupant
@@ -1260,7 +1287,7 @@
 					loc.assume_air(removed)
 
 			occupant.SetStunned(5)
-			occupant.SetWeakened(5)
+			occupant.SetKnockdown(5)
 			to_chat(occupant, "You were blown out of the mech!")
 	*/
 		src.log_message("[mob_container] moved out.")
@@ -1275,20 +1302,20 @@
 		if(istype(mob_container, /obj/item/device/mmi) || istype(mob_container, /obj/item/device/mmi/posibrain))
 			var/obj/item/device/mmi/mmi = mob_container
 			if(mmi.brainmob)
-				occupant.loc = mmi
+				occupant.forceMove(mmi)
 			mmi.mecha = null
 			src.occupant.canmove = 0
 			src.verbs += /obj/mecha/verb/eject
 
 		// -- Mode/mind specific stuff goes here
 		if(src.occupant.mind)
-			if((src.occupant.mind in ticker.mode:revolutionaries) || (src.occupant.mind in ticker.mode:head_revolutionaries))
+			if(isrev(src.occupant) || isrevhead(src.occupant))
 				ticker.mode.update_all_rev_icons()
-			if(src.occupant.mind in ticker.mode.syndicates)
+			if(isnukeop(src.occupant))
 				ticker.mode.update_all_synd_icons()
-			if (src.occupant.mind in ticker.mode.cult)
+			if (iscult(src.occupant))
 				ticker.mode.update_all_cult_icons()
-			if(src.occupant.mind in ticker.mode.wizards)
+			if(iswizard(src.occupant) || isapprentice(src.occupant))
 				ticker.mode.update_all_wizard_icons()
 		// -- End mode specific stuff
 
@@ -1302,7 +1329,7 @@
 	spark_system.start()
 	if (occupant)
 		to_chat(occupant, "<span class='danger'>You feel a sharp shock!</span>")
-		occupant.Weaken(10)
+		occupant.Knockdown(10)
 		spawn(10)
 		emergency_eject()
 
@@ -1517,7 +1544,8 @@
 
 
 /obj/mecha/proc/output_access_dialog(obj/item/weapon/card/id/id_card, mob/user)
-	if(!id_card || !user) return
+	if(!id_card || !user)
+		return
 	var/output = {"<html>
 						<head><style>
 						h1 {font-size:15px;margin-bottom:4px;}
@@ -1531,9 +1559,11 @@
 		output += "[get_access_desc(a)] - <a href='?src=\ref[src];del_req_access=[a];user=\ref[user];id_card=\ref[id_card]'>Delete</a><br>"
 	output += "<hr><h1>Following keycodes were detected on portable device:</h1>"
 	for(var/a in id_card.access)
-		if(a in operation_req_access) continue
+		if(a in operation_req_access)
+			continue
 		var/a_name = get_access_desc(a)
-		if(!a_name) continue //there's some strange access without a name
+		if(!a_name)
+			continue //there's some strange access without a name
 		output += "[a_name] - <a href='?src=\ref[src];add_req_access=[a];user=\ref[user];id_card=\ref[id_card]'>Add</a><br>"
 
 	output += {"<hr><a href='?src=\ref[src];finish_req_access=1;user=\ref[user]'>Finish</a> <font color='red'>(Warning! The ID upload panel will be locked. It can be unlocked only through Exosuit Interface.)</font>
@@ -1543,7 +1573,8 @@
 	return
 
 /obj/mecha/proc/output_maintenance_dialog(obj/item/weapon/card/id/id_card,mob/user)
-	if(!id_card || !user) return
+	if(!id_card || !user)
+		return
 	var/output = {"<html>
 						<head>
 						<style>
@@ -1590,7 +1621,8 @@
 /obj/mecha/Topic(href, href_list)
 	..()
 	if(href_list["update_content"])
-		if(usr != src.occupant)	return
+		if(usr != src.occupant)
+			return
 		send_byjax(src.occupant,"exosuit.browser","content",src.get_stats_part())
 		return
 	if(href_list["close"])
@@ -1599,7 +1631,8 @@
 		return
 	var/datum/topic_input/filter = new /datum/topic_input(href,href_list)
 	if(href_list["select_equip"])
-		if(usr != src.occupant)	return
+		if(usr != src.occupant)
+			return
 		var/obj/item/mecha_parts/mecha_equipment/equip = filter.getObj("select_equip")
 		if(equip)
 			src.selected = equip
@@ -1608,29 +1641,35 @@
 			send_byjax(src.occupant,"exosuit.browser","eq_list",src.get_equipment_list())
 		return
 	if(href_list["eject"])
-		if(usr != src.occupant)	return
+		if(usr != src.occupant)
+			return
 		src.eject()
 		return
 	if(href_list["toggle_lights"])
-		if(usr != src.occupant)	return
+		if(usr != src.occupant)
+			return
 		src.toggle_lights()
 		return
 	if(href_list["toggle_airtank"])
-		if(usr != src.occupant)	return
+		if(usr != src.occupant)
+			return
 		src.toggle_internal_tank()
 		return
 	if(href_list["rmictoggle"])
-		if(usr != src.occupant)	return
+		if(usr != src.occupant)
+			return
 		radio.broadcasting = !radio.broadcasting
 		send_byjax(src.occupant,"exosuit.browser","rmicstate",(radio.broadcasting?"Engaged":"Disengaged"))
 		return
 	if(href_list["rspktoggle"])
-		if(usr != src.occupant)	return
+		if(usr != src.occupant)
+			return
 		radio.listening = !radio.listening
 		send_byjax(src.occupant,"exosuit.browser","rspkstate",(radio.listening?"Engaged":"Disengaged"))
 		return
 	if(href_list["rfreq"])
-		if(usr != src.occupant)	return
+		if(usr != src.occupant)
+			return
 		var/new_frequency = (radio.frequency + filter.getNum("rfreq"))
 		if (!radio.freerange || (radio.frequency < 1200 || radio.frequency > 1600))
 			new_frequency = sanitize_frequency(new_frequency)
@@ -1638,20 +1677,24 @@
 		send_byjax(src.occupant,"exosuit.browser","rfreq","[format_frequency(radio.frequency)]")
 		return
 	if(href_list["port_disconnect"])
-		if(usr != src.occupant)	return
+		if(usr != src.occupant)
+			return
 		src.disconnect_from_port()
 		return
 	if (href_list["port_connect"])
-		if(usr != src.occupant)	return
+		if(usr != src.occupant)
+			return
 		src.connect_to_port()
 		return
 	if (href_list["view_log"])
-		if(usr != src.occupant)	return
+		if(usr != src.occupant)
+			return
 		src.occupant << browse(src.get_log_html(), "window=exosuit_log")
 		onclose(occupant, "exosuit_log")
 		return
 	if (href_list["change_name"])
-		if(usr != src.occupant)	return
+		if(usr != src.occupant)
+			return
 		var/newname = strip_html_simple(input(occupant,"Choose new exosuit name","Rename exosuit",initial(name)) as text, MAX_NAME_LEN)
 		if(newname && trim(newname))
 			name = newname
@@ -1659,12 +1702,14 @@
 			alert(occupant, "nope.avi")
 		return
 	if (href_list["toggle_id_upload"])
-		if(usr != src.occupant)	return
+		if(usr != src.occupant)
+			return
 		add_req_access = !add_req_access
 		send_byjax(src.occupant,"exosuit.browser","t_id_upload","[add_req_access?"L":"Unl"]ock ID upload panel")
 		return
 	if(href_list["toggle_maint_access"])
-		if(usr != src.occupant)	return
+		if(usr != src.occupant)
+			return
 		if(state)
 			occupant_message("<font color='red'>Maintenance protocols in effect.</font>")
 			return
@@ -1672,11 +1717,13 @@
 		send_byjax(src.occupant,"exosuit.browser","t_maint_access","[maint_access?"Forbid":"Permit"] maintenance protocols")
 		return
 	if(href_list["req_access"] && add_req_access)
-		if(!in_range(src, usr))	return
+		if(!in_range(src, usr))
+			return
 		output_access_dialog(filter.getObj("id_card"),filter.getMob("user"))
 		return
 	if(href_list["maint_access"] && maint_access)
-		if(!in_range(src, usr))	return
+		if(!in_range(src, usr))
+			return
 		var/mob/user = filter.getMob("user")
 		if(user)
 			if(state==STATE_BOLTSHIDDEN)
@@ -1698,7 +1745,8 @@
 			output_maintenance_dialog(filter.getObj("id_card"),user)
 		return
 	if(href_list["set_internal_tank_valve"] && state >=STATE_BOLTSEXPOSED)
-		if(!in_range(src, usr))	return
+		if(!in_range(src, usr))
+			return
 		var/mob/user = filter.getMob("user")
 		if(user)
 			var/new_pressure = input(user,"Input new output pressure","Pressure setting",internal_tank_valve) as num
@@ -1706,32 +1754,38 @@
 				internal_tank_valve = new_pressure
 				to_chat(user, "The internal pressure valve has been set to [internal_tank_valve]kPa.")
 	if(href_list["add_req_access"] && add_req_access && filter.getObj("id_card"))
-		if(!in_range(src, usr))	return
+		if(!in_range(src, usr))
+			return
 		operation_req_access += filter.getNum("add_req_access")
 		output_access_dialog(filter.getObj("id_card"),filter.getMob("user"))
 		return
 	if(href_list["del_req_access"] && add_req_access && filter.getObj("id_card"))
-		if(!in_range(src, usr))	return
+		if(!in_range(src, usr))
+			return
 		operation_req_access -= filter.getNum("del_req_access")
 		output_access_dialog(filter.getObj("id_card"),filter.getMob("user"))
 		return
 	if(href_list["finish_req_access"])
-		if(!in_range(src, usr))	return
+		if(!in_range(src, usr))
+			return
 		add_req_access = 0
 		var/mob/user = filter.getMob("user")
 		user << browse(null,"window=exosuit_add_access")
 		return
 	if(href_list["dna_lock"])
-		if(usr != src.occupant)	return
+		if(usr != src.occupant)
+			return
 		if(src.occupant && (!istype(src.occupant, /obj/item/device/mmi/posibrain) || !istype(src.occupant, /obj/item/device/mmi)))
 			src.dna = src.occupant.dna.unique_enzymes
 			src.occupant_message("You feel a prick as the needle takes your DNA sample.")
 		return
 	if(href_list["reset_dna"])
-		if(usr != src.occupant)	return
+		if(usr != src.occupant)
+			return
 		src.dna = null
 	if(href_list["repair_int_control_lost"])
-		if(usr != src.occupant)	return
+		if(usr != src.occupant)
+			return
 		src.occupant_message("Recalibrating coordination system.")
 		src.log_message("Recalibration of coordination system started.")
 		var/T = src.loc
@@ -1815,7 +1869,8 @@
 	return call((proc_res["dyngetcharge"]||src), "dyngetcharge")()
 
 /obj/mecha/proc/dyngetcharge()//returns null if no powercell, else returns cell.charge
-	if(!src.cell) return
+	if(!src.cell)
+		return
 	return max(0, src.cell.charge)
 
 /obj/mecha/proc/use_power(amount)
@@ -1839,6 +1894,9 @@
 	else
 		icon_state = initial(icon_state)
 	return icon_state
+
+/obj/mecha/acidable()
+	return 0
 
 //////////////////////////////////////////
 ////////  Mecha global iterators  ////////
@@ -1944,7 +2002,8 @@
 	set name = "Test internal damage"
 	set category = "Exosuit Interface"
 	set src in view(0)
-	if(!occupant) return
+	if(!occupant)
+		return
 	if(usr!=occupant)
 		return
 	var/output = {"<html>

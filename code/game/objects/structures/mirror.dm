@@ -10,7 +10,8 @@
 
 
 /obj/structure/mirror/attack_hand(mob/user as mob)
-	if(shattered)	return
+	if(shattered)
+		return
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
@@ -22,7 +23,7 @@
 			switch(rand(1,100))
 				if(1 to 20)
 					to_chat(H, "<span class='sinister'>You look like [pick("a monster","a goliath","a catbeast","a ghost","a chicken","the mailman","a demon")]! Your heart skips a beat.</span>")
-					H.Weaken(4)
+					H.Knockdown(4)
 					return
 				if(21 to 40)
 					to_chat(H, "<span class='sinister'>There's [pick("somebody","a monster","a little girl","a zombie","a ghost","a catbeast","a demon")] standing behind you!</span>")
@@ -49,7 +50,8 @@
 				species_facial_hair = facial_hair_styles_list
 
 			var/new_style = input(user, "Select a facial hair style", "Grooming")  as null|anything in species_facial_hair
-			if(userloc != H.loc) return	//no tele-grooming
+			if(userloc != H.loc)
+				return	//no tele-grooming
 			if(new_style)
 				H.f_style = new_style
 
@@ -64,7 +66,8 @@
 			species_hair = hair_styles_list
 
 		var/new_style = input(user, "Select a hair style", "Grooming")  as null|anything in species_hair
-		if(userloc != H.loc) return	//no tele-grooming
+		if(userloc != H.loc)
+			return	//no tele-grooming
 		if(new_style)
 			H.h_style = new_style
 
@@ -72,7 +75,8 @@
 
 
 /obj/structure/mirror/proc/shatter()
-	if(shattered)	return
+	if(shattered)
+		return
 	shattered = 1
 	icon_state = "mirror_broke"
 	playsound(src, "shatter", 70, 1)
@@ -112,7 +116,8 @@
 
 
 /obj/structure/mirror/attack_alien(mob/user as mob)
-	if(islarva(user)) return
+	if(islarva(user))
+		return
 	if(shattered)
 		playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		return
@@ -121,9 +126,11 @@
 
 
 /obj/structure/mirror/attack_animal(mob/user as mob)
-	if(!isanimal(user)) return
+	if(!isanimal(user))
+		return
 	var/mob/living/simple_animal/M = user
-	if(M.melee_damage_upper <= 0) return
+	if(M.melee_damage_upper <= 0)
+		return
 	if(shattered)
 		playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		return
@@ -132,7 +139,8 @@
 
 
 /obj/structure/mirror/attack_slime(mob/user as mob)
-	if(!isslimeadult(user)) return
+	if(!isslimeadult(user))
+		return
 	if(shattered)
 		playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		return

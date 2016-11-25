@@ -17,7 +17,7 @@
 	canWearHats = 1
 	canWearClothes = 0
 	canWearGlasses = 0
-	languagetoadd = "Rootspeak"
+	languagetoadd = LANGUAGE_ROOTSPEAK
 
 /mob/living/carbon/monkey/diona/attack_hand(mob/living/carbon/human/M as mob)
 
@@ -51,7 +51,8 @@
 
 	var/obj/machinery/portable_atmospherics/hydroponics/target = input("Select a tray:") as null|anything in trays
 
-	if(!src || !target || target.nutrilevel == 10) return //Sanity check.
+	if(!src || !target || target.nutrilevel == 10)
+		return //Sanity check.
 
 	src.nutrition -= ((10-target.nutrilevel)*5)
 	target.nutrilevel = 10
@@ -71,7 +72,8 @@
 
 	var/obj/machinery/portable_atmospherics/hydroponics/target = input("Select a tray:") as null|anything in trays
 
-	if(!src || !target || target.weedlevel == 0) return //Sanity check.
+	if(!src || !target || target.weedlevel == 0)
+		return //Sanity check.
 
 	src.reagents.add_reagent(NUTRIMENT, target.weedlevel)
 	target.weedlevel = 0
@@ -125,9 +127,10 @@
 	qdel(src)
 
 /mob/living/carbon/monkey/diona/say_understands(var/mob/other,var/datum/language/speaking = null)
-	if(other) other = other.GetSource()
+	if(other)
+		other = other.GetSource()
 	if (istype(other, /mob/living/carbon/human))
-		if(speaking && speaking.name == "Galactic Common")
+		if(speaking && speaking.name == LANGUAGE_GALACTIC_COMMON)
 			if(donors.len >= 2) // They have sucked down some blood.
 				return 1
 	return ..()
@@ -144,8 +147,10 @@
 
 	var/mob/living/M = input(src,"Who do you wish to take a sample from?") in null|choices
 
-	if(!M || !src) return
-
+	if(!M || !src)
+		return
+	if(!Adjacent(M))
+		return
 	if(donors.Find(M.real_name))
 		to_chat(src, "<span class='warning'>That donor offers you nothing new.</span>")
 		return
@@ -166,8 +171,8 @@
 		to_chat(src, "<span class='good'>You feel ready to move on to your next stage of growth.</span>")
 	else if(donors.len == 4)
 		to_chat(src, "<span class='good'>You feel your vocal range expand, and realize you know how to speak with the creatures around you.</span>")
-		add_language("Galactic Common")
-		default_language = all_languages["Galactic Common"]
+		add_language(LANGUAGE_GALACTIC_COMMON)
+		default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 	else if(donors.len == 3)
 		to_chat(src, "<span class='good'>More blood seeps into you, continuing to expand your growing collection of memories.</span>")
 	else if(donors.len == 2)

@@ -25,7 +25,8 @@
 	//ethereal=1 // NERF
 	var/can_move=1
 	layer = FLY_LAYER
-	plane = PLANE_EFFECTS
+	plane = ABOVE_HUMAN_PLANE
+	pass_flags = PASSMOB|PASSDOOR
 
 	var/datum/effect/effect/system/trail/firebird/ion_trail
 
@@ -35,6 +36,11 @@
 	ion_trail.set_up(src)
 	ion_trail.start()
 
+/obj/structure/bed/chair/vehicle/wizmobile/can_apply_inertia()
+	return FALSE
+
+/obj/structure/bed/chair/vehicle/wizmobile/Process_Spacemove(var/check_drift = 0)
+	return TRUE
 
 /* Server vote on 16-12-2014 to disable wallmoving (10-7 Y)
 // Shit be ethereal.
@@ -49,37 +55,25 @@
 	switch(dir)
 		if(SOUTH)
 			occupant.pixel_x = 0
-			occupant.pixel_y = 7
+			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
 		if(WEST)
-			occupant.pixel_x = 3 // 13
-			occupant.pixel_y = 7
+			occupant.pixel_x = 3 * PIXEL_MULTIPLIER// 13
+			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
 		if(NORTH)
 			occupant.pixel_x = 0
-			occupant.pixel_y = 4
+			occupant.pixel_y = 4 * PIXEL_MULTIPLIER
 		if(EAST)
-			occupant.pixel_x = -3 // -13
-			occupant.pixel_y = 7
+			occupant.pixel_x = -3 * PIXEL_MULTIPLIER// -13
+			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
 
 /obj/structure/bed/chair/vehicle/wizmobile/handle_layer()
 	return
 
 /obj/structure/bed/chair/vehicle/wizmobile/Bump(var/atom/obstacle)
-
-	/*												most likely a bad idea
-	if(istype(obstacle, /obj/structure/window/))
-		obstacle.Destroy(brokenup = 1)
-
-	if(istype(obstacle, /obj/structure/grille/))
-		var/obj/structure/grille/G = obstacle
-		G.health = (0.25*initial(G.health))
-		G.broken = 1
-		G.icon_state = "[initial(G.icon_state)]-b"
-		G.density = 0
-		getFromPool(/obj/item/stack/rods, get_turf(G.loc))
-	*/
-
-	..()
-
+	if(throwing)
+		return ..()
+	else
+		return obstacle.bumped_by_firebird(src) //Yep
 
 /* Server vote on 16-12-2014 to disable wallmoving (10-7 Y)
 /obj/structure/bed/chair/vehicle/wizmobile/Bump(var/atom/obstacle)

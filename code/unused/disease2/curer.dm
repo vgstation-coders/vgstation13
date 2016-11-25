@@ -21,7 +21,7 @@
 				new /obj/item/weapon/shard( src.loc )
 				var/obj/item/weapon/circuitboard/curer/M = new /obj/item/weapon/circuitboard/curer( A )
 				for (var/obj/C in src)
-					C.loc = src.loc
+					C.forceMove(src.loc)
 				A.circuit = M
 				A.state = 3
 				A.icon_state = "3"
@@ -32,7 +32,7 @@
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 				var/obj/item/weapon/circuitboard/curer/M = new /obj/item/weapon/circuitboard/curer( A )
 				for (var/obj/C in src)
-					C.loc = src.loc
+					C.forceMove(src.loc)
 				A.circuit = M
 				A.state = 4
 				A.icon_state = "4"
@@ -44,7 +44,7 @@
 
 			dish = I
 			c.drop_item()
-			I.loc = src
+			I.forceMove(src)
 
 	//else
 	src.attack_hand(user)
@@ -125,7 +125,7 @@
 			dish.growth -= 100
 			src.icon_state = "dna"
 		else if(href_list["eject"])
-			dish.loc = src.loc
+			dish.forceMove(src.loc)
 			dish = null
 
 		src.add_fingerprint(usr)

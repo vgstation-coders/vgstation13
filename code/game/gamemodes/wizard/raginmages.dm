@@ -10,6 +10,8 @@
 	var/exhausted_pool = 0
 	rage = 1
 
+	can_be_mixed = FALSE
+
 /datum/game_mode/wizard/announce()
 	to_chat(world, "<B>The current game mode is - Ragin' Mages!</B>")
 	to_chat(world, "<B>The <span class='danger'>Space Wizard Federation is pissed, help defeat all the space wizards!</span>")
@@ -57,7 +59,8 @@
 		wizards_alive++
 
 	if (wizards_alive)
-		if(!time_checked) time_checked = world.time
+		if(!time_checked)
+			time_checked = world.time
 		if(world.time > time_checked + 12000 && (mages_made < max_mages))
 			time_checked = world.time
 			make_more_mages()
@@ -99,7 +102,8 @@
 			exhausted_pool = 0
 			shuffle(candidates)
 			for(var/mob/i in candidates)
-				if(!i || !i.client) continue //Dont bother removing them from the list since we only grab one wizard
+				if(!i || !i.client)
+					continue //Dont bother removing them from the list since we only grab one wizard
 
 				theghost = i
 				break

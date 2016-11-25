@@ -47,7 +47,7 @@
 		admin_diary << html_decode(text_to_log)
 
 /proc/log_debug(text)
-	if (config.log_debug)
+	if (!config || (config && config.log_debug)) // Sorry, if config isn't loaded we'll assume you want debug output.
 		diary << html_decode("\[[time_stamp()]]DEBUG: [text]")
 
 	for(var/client/C in admins)
@@ -108,26 +108,6 @@
 	log_game(msg)
 	if (admin)
 		message_admins(msg)
-
-/**
- * Helper function to log reagent transfers, usually 'bad' ones.
- *
- * @param user The user that performed the transfer
- * @param source The item from which the reagents are transferred.
- * @param target The destination of the transfer
- * @param amount The amount of units transferred
- * @param reagent_names List of reagent names to log
- */
-/proc/log_reagents(var/mob/user, var/source, var/target, var/amount, var/list/reagent_names)
-	if (amount == 0)
-		return
-
-	if (reagent_names && reagent_names.len > 0)
-		var/reagent_text = "<span class='danger'>[english_list(reagent_names)]</span>"
-		add_gamelogs(user, "added [amount]u (inc. [reagent_text]) to \a [target] with \the [source]", admin = TRUE, tp_link = TRUE)
-	else
-		add_gamelogs(user, "added [amount]u to \a [target] with \the [source]", admin = TRUE, tp_link = FALSE)
-
 
 /**
  * Standardized method for tracking startup times.

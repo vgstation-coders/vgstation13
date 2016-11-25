@@ -15,7 +15,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BACK | SLOT_BELT
-	origin_tech = "materials=1;engineering=1;combat=1;power=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1;" + Tc_COMBAT + "=1;" + Tc_POWERSTORAGE + "=1"
 	ejectshell = 0
 	caliber = null
 	ammo_type = null
@@ -233,7 +233,8 @@
 		if(C.stored_charge <=0)
 			click_empty(user)
 			return
-	if(flag)	return //we're placing gun on a table or in backpack
+	if(flag)
+		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
 		to_chat(user, "<span class='warning'>A label sticks the trigger to the trigger guard!</span>")//Such a new feature, the player might not know what's wrong if it doesn't tell them.
 		return

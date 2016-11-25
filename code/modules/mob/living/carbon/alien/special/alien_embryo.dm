@@ -29,7 +29,8 @@
 /obj/item/alien_embryo/Topic(href,href_list)
 	if("signup" in href_list)
 		var/mob/dead/observer/O = locate(href_list["signup"])
-		if(!O) return
+		if(!O)
+			return
 		volunteer(O)
 
 
@@ -66,7 +67,8 @@
 	..()
 
 /obj/item/alien_embryo/process()
-	if(!affected_mob)	return
+	if(!affected_mob)
+		return
 	if(loc != affected_mob)
 		affected_mob.status_flags &= ~(XENO_HOST)
 		processing_objects.Remove(src)
@@ -102,11 +104,11 @@
 			if(prob(2))
 				to_chat(affected_mob, "<span class='warning'>Your stomach hurts.</span>")
 				if(prob(20))
-					affected_mob.adjustToxLoss(1)
+					affected_mob.AdjustPlasma(1)
 					affected_mob.updatehealth()
 		if(5)
 			to_chat(affected_mob, "<span class='danger'>You feel something tearing its way out of your stomach...</span>")
-			affected_mob.adjustToxLoss(10)
+			affected_mob.AdjustPlasma(10)
 			affected_mob.updatehealth()
 			if(prob(50))
 				AttemptGrow()

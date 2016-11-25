@@ -107,7 +107,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/rejuvenate(animation = 0)
 	var/turf/T = get_turf(src)
-	if(animation) T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = PLANE_EFFECTS)
+	if(animation)
+		T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = EFFECTS_PLANE)
 	src.health = src.maxHealth
 	return 1
 /mob/living/simple_animal/New()
@@ -137,7 +138,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	Move(dest)
 
 /mob/living/simple_animal/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	..()
 
 	//Health
@@ -163,8 +165,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	if(stunned)
 		AdjustStunned(-1)
-	if(weakened)
-		AdjustWeakened(-1)
+	if(knockdown)
+		AdjustKnockdown(-1)
 	if(paralysis)
 		AdjustParalysis(-1)
 
@@ -333,7 +335,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	return "says, [text]";
 
 /mob/living/simple_animal/emote(var/act, var/type, var/desc, var/auto)
-	if(timestopped) return //under effects of time magick
+	if(timestopped)
+		return //under effects of time magick
 	if(stat)
 		return
 	if(act == "scream")
@@ -361,7 +364,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		updatehealth()
 
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
-	if(!Proj)	return
+	if(!Proj)
+		return
 	// FUCK mice. - N3X
 	if(ismouse(src) && (Proj.stun+Proj.weaken+Proj.paralyze+Proj.agony)>5)
 		var/mob/living/simple_animal/mouse/M=src
@@ -384,7 +388,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 						O.show_message("<span class='notice'>[M] [response_help] [src].</span>")
 
 		if(I_GRAB)
-			if (M == src || anchored)
+			if (M.grab_check(src))
 				return
 			if (!(status_flags & CANPUSH))
 				return
@@ -431,7 +435,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				if ((O.client && !( O.blinded )))
 					O.show_message(text("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>"), 1)
 		if (I_GRAB)
-			if(M == src || anchored)
+			if(M.grab_check(src))
 				return
 			if(!(status_flags & CANPUSH))
 				return
@@ -471,7 +475,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 			if(stat != DEAD)
 				adjustBruteLoss(damage)
-				L.amount_grown = min(L.amount_grown + damage, L.max_grown)
+				L.growth = min(L.growth + damage, LARVA_GROW_TIME)
 
 
 /mob/living/simple_animal/attack_slime(mob/living/carbon/slime/M as mob)
@@ -479,7 +483,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		to_chat(M, "You cannot attack people before the game has started.")
 		return
 
-	if(M.Victim) return // can't attack while eating!
+	if(M.Victim)
+		return // can't attack while eating!
 
 	visible_message("<span class='danger'>[M.name] glomps [src]!</span>")
 	add_logs(M, src, "glomped on", 0)
@@ -606,14 +611,37 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			adjustBruteLoss(30)
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
+
+	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = damage)))
+		return 0
+	if(skinned())
+		damage = damage * 2
+
 	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		Die()
 
 /mob/living/simple_animal/adjustFireLoss(damage)
+	if(status_flags & GODMODE)
+		return 0
+	if(mutations.Find(M_RESIST_HEAT))
+		return 0
+	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = damage)))
+		return 0
+	if(skinned())
+		damage = damage * 2
+
 	health = Clamp(health - damage, 0, maxHealth)
 	if(health < 1 && stat != DEAD)
 		Die()
+
+/mob/living/simple_animal/proc/skinned()
+	if(butchering_drops)
+		var/datum/butchering_product/skin/skin = locate(/datum/butchering_product/skin) in butchering_drops
+		if(istype(skin))
+			if(skin.amount != skin.initial_amount)
+				return 1
+	return 0
 
 /mob/living/simple_animal/proc/SA_attackable(target)
 	return CanAttack(target)
@@ -652,11 +680,15 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/ExtinguishMob()
 	return
 
-/mob/living/simple_animal/revive()
+/mob/living/simple_animal/revive(refreshbutcher = 1)
+	if(refreshbutcher)
+		butchering_drops = null
+		meat_taken = 0
+	if(meat_taken)
+		maxHealth = initial(maxHealth)
+		maxHealth -= (initial(maxHealth) / meat_amount) * meat_taken
 	health = maxHealth
-	butchering_drops = null
-	meat_taken = 0
-	..()
+	..(0)
 
 /mob/living/simple_animal/proc/make_babies() // <3 <3 <3
 	if(gender != FEMALE || stat || !scan_ready || !childtype || !species_type)
@@ -717,13 +749,15 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	src.faction = from.faction
 
 /mob/living/simple_animal/say_understands(var/mob/other,var/datum/language/speaking = null)
-	if(other) other = other.GetSource()
+	if(other)
+		other = other.GetSource()
 	if(issilicon(other))
 		return 1
 	return ..()
 
 /mob/living/simple_animal/proc/reagent_act(id, method, volume)
-	if(isDead()) return
+	if(isDead())
+		return
 
 	switch(id)
 		if(SACID)

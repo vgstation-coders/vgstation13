@@ -100,6 +100,9 @@
 	holomap = TRUE
 	auto_holomap = TRUE
 
+/obj/machinery/power/apc/no_alerts
+	make_alerts = FALSE
+
 // Frame only.
 /obj/machinery/power/apc/frame
 	icon_state = "apcmaint"
@@ -125,9 +128,9 @@
 
 	if(src.tdir & 3)
 		pixel_x = 0
-		pixel_y = (src.tdir == 1 ? 24 : -24)
+		pixel_y = (src.tdir == 1 ? 24 * PIXEL_MULTIPLIER: -24 * PIXEL_MULTIPLIER)
 	else
-		pixel_x = (src.tdir == 4 ? 24 : -24)
+		pixel_x = (src.tdir == 4 ? 24 * PIXEL_MULTIPLIER: -24 * PIXEL_MULTIPLIER)
 		pixel_y = 0
 
 	if (building==0)
@@ -361,9 +364,11 @@
 			update_icon()
 			updating_icon = 0
 
-/obj/machinery/power/apc/spook()
-	if(spooky) return // Fuck you we're already spooky
-	if(!..()) return //If blessed, return
+/obj/machinery/power/apc/spook(mob/dead/observer/ghost)
+	if(spooky)
+		return // Fuck you we're already spooky
+	if(!..(ghost, TRUE))
+		return //If blessed, return
 
 	spooky=1
 	update_icon()
@@ -542,7 +547,8 @@
 		to_chat(user, "You start welding the APC frame...")
 		playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 		if (do_after(user, src, 50))
-			if(!src || !WT.remove_fuel(3, user)) return
+			if(!src || !WT.remove_fuel(3, user))
+				return
 			if (emagged || malfhack || (stat & BROKEN) || opened==2)
 				getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 1)
 				user.visible_message(\
@@ -626,7 +632,7 @@
 					interact(user)
 					return
 				else if(issilicon(user) && !isMoMMI(user)) // MoMMIs can hold one item in their tool slot.
-					cell.loc=src.loc // Drop it, whoops.
+					cell.forceMove(src.loc) // Drop it, whoops.
 				else
 					user.put_in_hands(cell)
 
@@ -673,6 +679,7 @@
 
 	if (wiresexposed)
 		wires.Interact(user)
+		return
 
 	if (stat & (BROKEN | MAINT | EMPED))
 		return
@@ -839,7 +846,8 @@
 	if(..())
 		return 0
 	if(href_list["close"])
-		if(usr.machine == src) usr.unset_machine()
+		if(usr.machine == src)
+			usr.unset_machine()
 		return 1
 	if(!can_use(usr, 1))
 		return 0
@@ -959,12 +967,13 @@
 	if(malf.parent)
 		qdel(malf)
 		malf = null
-	src.occupant.verbs += /mob/living/silicon/ai/proc/corereturn
-	src.occupant.verbs += /datum/game_mode/malfunction/proc/takeover
+	src.occupant.add_spell(new /spell/aoe_turf/corereturn, "grey_spell_ready",/obj/screen/movable/spell_master/malf)
 	src.occupant.cancel_camera()
 	if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
 		for(var/obj/item/weapon/pinpointer/point in world)
-			point.the_disk = src //the pinpointer will detect the shunted AI
+			point.target = src //the pinpointer will detect the shunted AI
+
+	stat_collection.malf.did_shunt = 1
 
 
 /obj/machinery/power/apc/proc/malfvacate(var/forced)
@@ -981,16 +990,15 @@
 				for(var/datum/mind/AI_mind in ticker.mode.malf_ai)
 					var/mob/living/silicon/ai/A = AI_mind.current // the current mob the mind owns
 					if(A.stat != DEAD)
-						point.the_disk = A //The pinpointer tracks the AI back into its core.
-
+						point.target = A //The pinpointer tracks the AI back into its core.
 	else
 		to_chat(src.occupant, "<span class='warning'>Primary core damaged, unable to return core processes.</span>")
 		if(forced)
-			src.occupant.loc = src.loc
+			src.occupant.forceMove(src.loc)
 			src.occupant.death()
 			src.occupant.gib()
 			for(var/obj/item/weapon/pinpointer/point in world)
-				point.the_disk = null //the pinpointer will go back to pointing at the nuke disc.
+				point.target = null //the pinpointer will go back to pointing at the nuke disc.
 
 
 /obj/machinery/power/apc/proc/ion_act()
@@ -1137,7 +1145,7 @@
 			equipment = autoset(equipment, 1)
 			lighting = autoset(lighting, 1)
 			environ = autoset(environ, 1)
-			if(cell.percent() > 75 && !areaMaster.poweralm && !make_alerts)
+			if(cell.percent() > 75 && !areaMaster.poweralm && make_alerts)
 				areaMaster.poweralert(1, src)
 
 		// now trickle-charge the cell
@@ -1297,7 +1305,7 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 		malfvacate(1)
 
 	if(cell)
-		cell.loc = loc
+		cell.forceMove(loc)
 		cell = null
 
 	if(terminal)
@@ -1321,10 +1329,6 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 /obj/machinery/power/apc/cultify()
 	if(src.invisibility != INVISIBILITY_MAXIMUM)
 		src.invisibility = INVISIBILITY_MAXIMUM
-
-/obj/machinery/power/apc/change_area(oldarea, newarea)
-	..()
-	name = replacetext(name,oldarea,newarea)
 
 /obj/machinery/power/apc/wirejack(var/mob/living/silicon/pai/P)
 	if(..())

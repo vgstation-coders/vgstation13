@@ -3,7 +3,10 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 												"average" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_average"),\
 												"bad" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_bad"),\
 												"worse" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_worse"),\
-												"crit" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_crit"),\
+												"critgood" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_critgood"),\
+												"critaverage" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_critaverage"),\
+												"critbad" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_critbad"),\
+												"critworse" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_critworse"),\
 												"dead" = image("icon" = 'icons/obj/cryogenics.dmi', "icon_state" = "moverlay_dead"))
 /obj/machinery/atmospherics/unary/cryo_cell
 	name = "cryo cell"
@@ -11,8 +14,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	icon_state = "cell-off"
 	density = 1
 	anchored = 1.0
-	layer = 2.8
-	plane = PLANE_OBJ
+	layer = ABOVE_WINDOW_LAYER
+	plane = OBJ_PLANE
 
 	var/on = 0
 	var/ejecting = 0
@@ -52,7 +55,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		node.build_network()
 
 /obj/machinery/atmospherics/unary/cryo_cell/initialize()
-	if(node) return
+	if(node)
+		return
 	for(var/cdir in cardinal)
 		node = findConnecting(cdir)
 		if(node)
@@ -166,15 +170,20 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 
 
 /obj/machinery/atmospherics/unary/cryo_cell/relaymove(mob/user as mob)
+	// Just gonna assume this guy's vent crawling don't mind me.
+	if (user != occupant)
+		return ..()
+
 	if(user.stat)
 		return
+
 	go_out()
-	return
+
 
 /obj/machinery/atmospherics/unary/cryo_cell/examine(mob/user)
 	..()
 	if(Adjacent(user))
-		if(contents)
+		if(contents.len)
 			to_chat(user, "You can just about make out some properties of the cryo's murky depths:")
 			for(var/atom/movable/floater in (contents - beaker))
 				to_chat(user, "A figure floats in the depths, they appear to be [floater.name]")
@@ -276,7 +285,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		return 0 // don't update UIs attached to this object
 
 	if(href_list["close"])
-		if(usr.machine == src) usr.unset_machine()
+		if(usr.machine == src)
+			usr.unset_machine()
 		return 1
 
 	if(href_list["switchOn"])
@@ -300,13 +310,13 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	return 1 // update UIs attached to this object
 /obj/machinery/atmospherics/unary/cryo_cell/proc/detach()
 	if(beaker)
-		beaker.loc = get_step(loc, SOUTH)
+		beaker.forceMove(get_step(loc, SOUTH))
 		if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
 			var/mob/living/silicon/robot/R = beaker:holder:loc
 			if(R.module_state_1 == beaker || R.module_state_2 == beaker || R.module_state_3 == beaker)
-				beaker.loc = R
+				beaker.forceMove(R)
 			else
-				beaker.loc = beaker:holder
+				beaker.forceMove(beaker:holder)
 		beaker = null
 
 /obj/machinery/atmospherics/unary/cryo_cell/crowbarDestroy(mob/user)
@@ -328,6 +338,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if(user.drop_item(G, src))
 			beaker =  G
 			user.visible_message("[user] adds \a [G] to \the [src]!", "You add \a [G] to \the [src]!")
+			investigation_log(I_CHEMS, "was loaded with \a [G] by [key_name(user)], containing [G.reagents.get_reagent_ids(1)]")
 	if(iswrench(G))//FUCK YOU PARENT, YOU AREN'T MY REAL DAD
 		return
 	if(..())
@@ -360,22 +371,27 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 				if(occupant.health >= occupant.maxHealth)
 					overlays += cryo_health_indicator["full"]
 				else
-					if(occupant.health < config.health_threshold_crit)
-						overlays += cryo_health_indicator["crit"]
-					else
-						switch((occupant.health / occupant.maxHealth) * 100) // Get a ratio of health to work with
-							if(100 to INFINITY) // No idea how we got here with the check above...
-								overlays += cryo_health_indicator["full"]
-							if(75 to 100)
-								overlays += cryo_health_indicator["good"]
-							if(50 to 75)
-								overlays += cryo_health_indicator["average"]
-							if(25 to 50)
-								overlays += cryo_health_indicator["bad"]
-							if(1 to 25)
-								overlays += cryo_health_indicator["worse"]
-							else //Shouldn't ever happen.
-								overlays += cryo_health_indicator["dead"]
+					switch((occupant.health / occupant.maxHealth) * 100) // Get a ratio of health to work with
+						if(100 to INFINITY) // No idea how we got here with the check above...
+							overlays += cryo_health_indicator["full"]
+						if(75 to 100)
+							overlays += cryo_health_indicator["good"]
+						if(50 to 75)
+							overlays += cryo_health_indicator["average"]
+						if(25 to 50)
+							overlays += cryo_health_indicator["bad"]
+						if(0 to 25)
+							overlays += cryo_health_indicator["worse"]
+						if(-25 to 0)
+							overlays += cryo_health_indicator["critgood"]
+						if(-50 to -25)
+							overlays += cryo_health_indicator["critaverage"]
+						if(-75 to -50)
+							overlays += cryo_health_indicator["critbad"]
+						if(-100 to -75)
+							overlays += cryo_health_indicator["critworse"]
+						else //Shouldn't ever happen. I really hope it doesn't ever happen.
+							overlays += cryo_health_indicator["dead"]
 			icon_state = "cell-occupied"
 			return
 		icon_state = "cell-on"
@@ -397,7 +413,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			if(istype(guy) && guy.species && guy.species.breath_type != "oxygen")
 				occupant.nobreath = 15 //Prevent them from suffocating until someone can get them internals. Also prevents plasmamen from combusting.
 			if(air_contents.oxygen > 2)
-				if(occupant.getOxyLoss()) occupant.adjustOxyLoss(-1)
+				if(occupant.getOxyLoss())
+					occupant.adjustOxyLoss(-1)
 			else
 				occupant.adjustOxyLoss(-1)
 			//severe damage should heal waaay slower without proper chemicals
@@ -497,7 +514,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(usr.pulling == M)
 		usr.stop_pulling()
 	M.stop_pulling()
-	M.loc = src
+	M.forceMove(src)
 	M.reset_view()
 	if(M.health > -100 && (M.health < 0 || M.sleeping))
 		to_chat(M, "<span class='bnotice'>You feel a cold liquid surround you. Your skin starts to freeze up.</span>")
@@ -543,6 +560,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	put_mob(usr)
 	return
 
+/obj/machinery/atmospherics/unary/cryo_cell/return_air()
+	return air_contents
 
 
 /datum/data/function/proc/reset()

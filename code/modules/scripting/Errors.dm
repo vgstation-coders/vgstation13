@@ -13,7 +13,8 @@
 	var/message
 
 /datum/scriptError/New(msg = null)
-	if(msg)message = msg
+	if(msg)
+		message = msg
 
 /datum/scriptError/BadToken
 	message = "Unexpected token: "

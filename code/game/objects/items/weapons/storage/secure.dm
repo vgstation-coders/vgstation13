@@ -37,7 +37,7 @@
 			emagged = 1
 			src.overlays += image('icons/obj/storage.dmi', icon_sparking)
 			sleep(6)
-			src.overlays = null
+			overlays.len = 0
 			overlays += image('icons/obj/storage.dmi', icon_locking)
 			locked = 0
 			to_chat(user, "You short out the lock on [src].")
@@ -62,7 +62,8 @@
 				else
 					user.show_message(text("<span class='warning'>Unable to reset internal memory.</span>"), 1)
 					src.l_hacking = 0
-			else	src.l_hacking = 0
+			else
+				src.l_hacking = 0
 			return
 		//At this point you have exhausted all the special things to do when locked
 		// ... but it's still locked.
@@ -135,17 +136,18 @@
 /obj/item/weapon/storage/secure/briefcase
 	name = "secure briefcase"
 	icon = 'icons/obj/storage.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/backpacks_n_bags.dmi', "right_hand" = 'icons/mob/in-hand/right/backpacks_n_bags.dmi')
 	icon_state = "secure"
-	item_state = "sec-case"
+	item_state = "secure-r"
 	desc = "A large briefcase with a digital locking system."
-	origin_tech = "materials=2;magnets=2;programming=1"
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_MAGNETS + "=2;" + Tc_PROGRAMMING + "=1"
 	flags = FPRINT
 	force = 8.0
 	throw_speed = 1
 	throw_range = 4
 	w_class = W_CLASS_LARGE
 
-/obj/item/weapon/storage/secure/briefcase/New()
+/obj/item/weapon/storage/secure/briefcase/paperpen/New()
 	..()
 	new /obj/item/weapon/paper(src)
 	new /obj/item/weapon/pen(src)
@@ -166,6 +168,24 @@
 		src.orient2hud(user)
 	src.add_fingerprint(user)
 	return
+
+/obj/item/weapon/storage/secure/briefcase/attackby(var/obj/item/weapon/W, var/mob/user)
+	..()
+	update_icon()
+
+/obj/item/weapon/storage/secure/briefcase/Topic(href, href_list)
+	..()
+	update_icon()
+
+/obj/item/weapon/storage/secure/briefcase/update_icon()
+	if(locked || emagged)
+		item_state = "secure-g"
+	else
+		item_state = "secure-r"
+
+	if(ismob(loc))
+		var/mob/M = loc
+		M.update_inv_hands()
 
 	//I consider this worthless but it isn't my code so whatever.  Remove or uncomment.
 	/*attack(mob/M as mob, mob/living/user as mob)
@@ -194,7 +214,8 @@
 						H.Paralyse(time)
 					else
 						H.Stun(time)
-					if(H.stat != 2)	H.stat = 1
+					if(H.stat != 2)
+						H.stat = 1
 					for(var/mob/O in viewers(H, null))
 						O.show_message(text("<span class='danger'>[] has been knocked unconscious!</span>", H), 1, "<span class='warning'>You hear someone fall.</span>", 2)
 				else

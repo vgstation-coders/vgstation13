@@ -9,7 +9,6 @@
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "medibot0"
 	icon_initial = "medibot"
-	layer = 5.0
 	density = 0
 	anchored = 0
 	health = 20
@@ -184,7 +183,7 @@
 
 	else if (href_list["eject"] && (!isnull(src.reagent_glass)))
 		if(!src.locked)
-			src.reagent_glass.loc = get_turf(src)
+			src.reagent_glass.forceMove(get_turf(src))
 			src.reagent_glass = null
 		else
 			to_chat(usr, "<span class='notice'>You cannot eject the beaker because the panel is locked.</span>")
@@ -226,6 +225,7 @@
 		if(user.drop_item(W, src))
 			src.reagent_glass = W
 			to_chat(user, "<span class='notice'>You insert [W].</span>")
+			investigation_log(I_CHEMS, "was loaded with \a [W] by [key_name(user)], containing [W.reagents.get_reagent_ids(1)]")
 			src.updateUsrDialog()
 			return
 
@@ -238,13 +238,15 @@
 	..()
 	if(open && !locked)
 		declare_crit = 0
-		if(user) to_chat(user, "<span class='warning'>You short out [src]'s reagent synthesis circuits.</span>")
+		if(user)
+			to_chat(user, "<span class='warning'>You short out [src]'s reagent synthesis circuits.</span>")
 		spawn(0)
 			for(var/mob/O in hearers(src, null))
 				O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
 		flick("medibot_spark", src)
 		src.patient = null
-		if(user) src.oldpatient = user
+		if(user)
+			src.oldpatient = user
 		src.currently_healing = 0
 		src.last_found = world.time
 		src.anchored = 0
@@ -325,7 +327,8 @@
 	if(src.patient && src.path.len == 0 && (get_dist(src,src.patient) > 1))
 		spawn(0)
 			src.path = AStar(src.loc, get_turf(src.patient), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 30,id=botcard)
-			if (!path) path = list()
+			if (!path)
+				path = list()
 			if(src.path.len == 0)
 				src.oldpatient = src.patient
 				src.patient = null
@@ -495,7 +498,7 @@
 	new /obj/item/device/healthanalyzer(Tsec)
 
 	if(src.reagent_glass)
-		src.reagent_glass.loc = Tsec
+		src.reagent_glass.forceMove(Tsec)
 		src.reagent_glass = null
 
 	if (prob(50))
@@ -514,7 +517,7 @@
 			D.open()
 			src.frustration = 0
 	else if ((istype(M, /mob/living/)) && (!src.anchored))
-		src.loc = M:loc
+		src.forceMove(M:loc)
 		src.frustration = 0
 	return
 
@@ -523,7 +526,7 @@
 	spawn(0)
 		if (M)
 			var/turf/T = get_turf(src)
-			M:loc = T
+			M:forceMove(T)
 */
 
 /*

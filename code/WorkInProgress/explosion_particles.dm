@@ -23,8 +23,10 @@
 
 /datum/effect/system/expl_particles/proc/set_up(n = 10, loca)
 	number = n
-	if(istype(loca, /turf/)) location = loca
-	else location = get_turf(loca)
+	if(istype(loca, /turf/))
+		location = loca
+	else
+		location = get_turf(loca)
 
 /datum/effect/system/expl_particles/proc/start()
 	var/i = 0
@@ -43,21 +45,23 @@
 	opacity = 1
 	anchored = 1
 	mouse_opacity = 0
-	pixel_x = -32
-	pixel_y = -32
+	pixel_x = -WORLD_ICON_SIZE
+	pixel_y = -WORLD_ICON_SIZE
 
 /obj/effect/explosion/New()
 	..()
 	spawn (10)
-		src.loc = null
+		src.forceMove(null)
 	return
 
 /datum/effect/system/explosion
 	var/turf/location
 
 /datum/effect/system/explosion/proc/set_up(loca)
-	if(istype(loca, /turf/)) location = loca
-	else location = get_turf(loca)
+	if(istype(loca, /turf/))
+		location = loca
+	else
+		location = get_turf(loca)
 
 /datum/effect/system/explosion/proc/start()
 	new/obj/effect/explosion( location )
@@ -76,8 +80,8 @@
 	opacity = 0
 	anchored = 1
 	mouse_opacity = 0
-	pixel_x = -32
-	pixel_y = -32
+	pixel_x = -WORLD_ICON_SIZE
+	pixel_y = -WORLD_ICON_SIZE
 
 /obj/effect/small_explosion/New(turf/loc,var/ex_iconstate = "explosion_small", var/pX = 0, var/pY = 0)
 	..()
@@ -85,7 +89,7 @@
 	pixel_y += pY
 	icon_state = ex_iconstate
 	spawn (20)
-		src.loc = null
+		src.forceMove(null)
 	return
 
 /datum/effect/system/small_explosion
@@ -95,8 +99,10 @@
 	var/pixel_y = 0
 
 /datum/effect/system/small_explosion/proc/set_up(loca,var/ex_iconstate = "explosion_small", var/pX = 0, var/pY = 0)
-	if(istype(loca, /turf/)) location = loca
-	else location = get_turf(loca)
+	if(istype(loca, /turf/))
+		location = loca
+	else
+		location = get_turf(loca)
 	ex_icon = ex_iconstate
 	pixel_x = pX
 	pixel_y = pY

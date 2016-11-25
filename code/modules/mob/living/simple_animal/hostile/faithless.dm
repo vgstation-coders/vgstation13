@@ -48,7 +48,7 @@
 	var/mob/living/L = .
 	if(istype(L))
 		if(prob(12))
-			L.Weaken(3)
+			L.Knockdown(3)
 			L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
 
 /mob/living/simple_animal/hostile/faithless/cult
@@ -66,7 +66,8 @@
 	return
 
 /mob/living/simple_animal/hostile/faithless/cult/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	..()
 	if(emergency_shuttle.location == 1)
 		if(!enroute && !target)	//The shuttle docked, all monsters rush for the escape hallway

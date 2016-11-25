@@ -6,7 +6,8 @@
 //Mutates the plant overall (randomly).
 /obj/machinery/portable_atmospherics/hydroponics/proc/mutate(var/severity)
 
-	if(!severity) return
+	if(!severity)
+		return
 
 	// No seed? Try to mutate the weeds or pests in the tray, if any.
 	if(!seed)
@@ -32,7 +33,8 @@
 /obj/machinery/portable_atmospherics/hydroponics/proc/pick_mut(var/severity, var/mutation_category = "")
 
 	var/datum/seed/S = seed
-	if (!S) return
+	if (!S)
+		return
 
 	//First we'll pick a CATEGORY of mutations to look from, for simplicity and to keep an even ratio of good things to bad things if more mutations are added.
 	//This looks like shit, but it's a lot easier to read/change this way. Maybe. Promise. Hahaha. Shit.
@@ -133,7 +135,8 @@
 /obj/machinery/portable_atmospherics/hydroponics/proc/apply_mut(var/mutation_type, var/severity)
 
 	// Check if we should even bother working on the current seed datum.
-	if(seed.immutable > 0) return
+	if(seed.immutable > 0)
+		return
 
 	check_for_divergence()
 
@@ -482,11 +485,13 @@
 						source_turf.visible_message("<span class='notice'>\The [display_name] shudders hungrily.</span>")
 			if(6)
 				weed_tolerance  =           max(0,  min(10,  weed_tolerance       + (rand(-2,2)   * degree)))
-				if(prob(degree*5))          parasite = !parasite
+				if(prob(degree*5))
+					parasite = !parasite
 
 			if(7)
 				lifespan =                  max(10, min(30,  lifespan             + (rand(-2,2)   * degree)))
-				if(yield != -1) yield =     max(0,  min(10,  yield                + (rand(-2,2)   * degree)))
+				if(yield != -1)
+					yield =     max(0,  min(10,  yield                + (rand(-2,2)   * degree)))
 			if(8)
 				endurance =                 max(10, min(100, endurance            + (rand(-5,5)   * degree)))
 				production =                max(1,  min(10,  production           + (rand(-1,1)   * degree)))
@@ -521,7 +526,8 @@
 
 //Returns a key corresponding to an entry in the global seed list.
 /datum/seed/proc/get_mutant_variant()
-	if(!mutants || !mutants.len || immutable > 0) return 0
+	if(!mutants || !mutants.len || immutable > 0)
+		return 0
 	return pick(mutants)
 
 /obj/machinery/portable_atmospherics/hydroponics/proc/mutate_species()

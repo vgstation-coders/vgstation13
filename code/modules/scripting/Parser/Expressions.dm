@@ -35,7 +35,7 @@
 		top = top.precedence
 
 	if(istype(input))
-		
+
 		input = input:precedence
 
 	if(top >= input)
@@ -115,7 +115,7 @@
 	if(ispath(O))
 		O = new O						//catches path from last check
 
-	else 
+	else
 		return null								//Unknown type
 
 	return O

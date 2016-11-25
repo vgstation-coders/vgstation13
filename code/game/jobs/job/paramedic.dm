@@ -8,17 +8,20 @@
 	supervisors = "the chief medical officer"
 	selection_color = "#ffeef0"
 	idtype = /obj/item/weapon/card/id/medical
-	access = list(access_paramedic, access_medical, access_sec_doors, access_maint_tunnels, access_external_airlocks)
-	minimal_access=list(access_paramedic, access_medical, access_sec_doors, access_maint_tunnels, access_external_airlocks)
+	access = list(access_paramedic, access_medical, access_sec_doors, access_maint_tunnels, access_external_airlocks, access_eva)
+	minimal_access=list(access_paramedic, access_medical, access_sec_doors, access_maint_tunnels, access_external_airlocks, access_eva)
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/medical
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		H.equip_or_collect(new /obj/item/device/radio/headset/headset_med(H), slot_ears)
-		if(H.backbag == 2) H.equip_or_collect(new /obj/item/weapon/storage/backpack/medic (H), slot_back)
-		if(H.backbag == 3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_med(H), slot_back)
+		if(H.backbag == 2)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/medic (H), slot_back)
+		if(H.backbag == 3)
+			H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_med(H), slot_back)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/medical/paramedic(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/black(H), slot_shoes)
 		//H.equip_or_collect(new /obj/item/device/pda/medical(H), slot_belt)

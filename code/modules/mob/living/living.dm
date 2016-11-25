@@ -69,13 +69,16 @@
 		to_chat(user, "<span class='info'>[butchery]</span>")
 
 /mob/living/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
 	..()
 	if (flags & INVULNERABLE)
 		bodytemperature = initial(bodytemperature)
-	if (monkeyizing)	return
-	if(!loc)			return	// Fixing a null error that occurs when the mob isn't found in the world -- TLE
+	if (monkeyizing)
+		return
+	if(!loc)
+		return	// Fixing a null error that occurs when the mob isn't found in the world -- TLE
 	if(reagents && reagents.has_reagent(BUSTANUT))
 		if(!(M_HARDCORE in mutations))
 			mutations.Add(M_HARDCORE)
@@ -90,11 +93,13 @@
 	for(var/toCall in src.callOnLife)
 		if(locate(toCall) && callOnLife[toCall])
 			call(locate(toCall),callOnLife[toCall])()
-		else callOnLife -= toCall
+		else
+			callOnLife -= toCall
 
 	if(mind)
 		if(mind in ticker.mode.implanted)
-			if(implanting) return
+			if(implanting)
+				return
 //			to_chat(world, "[src.name]")
 			var/datum/mind/head = ticker.mode.implanted[mind]
 			//var/list/removal
@@ -208,7 +213,8 @@
 		var/divided_damage = (burn_amount)/(H.organs.len)
 		var/extradam = 0	//added to when organ is at max dam
 		for(var/datum/organ/external/affecting in H.organs)
-			if(!affecting)	continue
+			if(!affecting)
+				continue
 			if(affecting.take_damage(0, divided_damage+extradam))	//TODO: fix the extradam stuff. Or, ebtter yet...rewrite this entire proc ~Carn
 				H.UpdateDamageIcon()
 		H.updatehealth()
@@ -252,69 +258,106 @@
 	return bruteloss
 
 /mob/living/proc/adjustBruteLoss(var/amount)
-	if(status_flags & GODMODE)	return 0	//godmode
+	if(status_flags & GODMODE)
+		return 0	//godmode
+
+	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = amount)))
+		return 0
+
 	bruteloss = min(max(bruteloss + (amount * brute_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/getOxyLoss()
 	return oxyloss
 
 /mob/living/proc/adjustOxyLoss(var/amount)
-	if(status_flags & GODMODE)	return 0	//godmode
+	if(status_flags & GODMODE)
+		return 0	//godmode
+
+	if(INVOKE_EVENT(on_damaged, list("type" = OXY, "amount" = amount)))
+		return 0
+
 	oxyloss = min(max(oxyloss + (amount * oxy_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setOxyLoss(var/amount)
-	if(status_flags & GODMODE)	return 0	//godmode
+	if(status_flags & GODMODE)
+		return 0	//godmode
 	oxyloss = amount
 
 /mob/living/proc/getToxLoss()
 	return toxloss
 
 /mob/living/proc/adjustToxLoss(var/amount)
-	if(status_flags & GODMODE)	return 0	//godmode
+	if(status_flags & GODMODE)
+		return 0	//godmode
+
+	if(INVOKE_EVENT(on_damaged, list("type" = TOX, "amount" = amount)))
+		return 0
+
 	toxloss = min(max(toxloss + (amount * tox_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setToxLoss(var/amount)
-	if(status_flags & GODMODE)	return 0	//godmode
+	if(status_flags & GODMODE)
+		return 0	//godmode
 	toxloss = amount
 
 /mob/living/proc/getFireLoss()
 	return fireloss
 
 /mob/living/proc/adjustFireLoss(var/amount)
-	if(status_flags & GODMODE)	return 0	//godmode
+	if(status_flags & GODMODE)
+		return 0	//godmode
+	if(mutations.Find(M_RESIST_HEAT))
+		return 0
+	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = amount)))
+		return 0
+
 	fireloss = min(max(fireloss + (amount * burn_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/getCloneLoss()
 	return cloneloss
 
 /mob/living/proc/adjustCloneLoss(var/amount)
-	if(status_flags & GODMODE)	return 0	//godmode
+	if(status_flags & GODMODE)
+		return 0	//godmode
+
+	if(INVOKE_EVENT(on_damaged, list("type" = CLONE, "amount" = amount)))
+		return 0
+
 	cloneloss = min(max(cloneloss + (amount * clone_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setCloneLoss(var/amount)
-	if(status_flags & GODMODE)	return 0	//godmode
+	if(status_flags & GODMODE)
+		return 0	//godmode
 	cloneloss = amount
 
 /mob/living/proc/getBrainLoss()
 	return brainloss
 
 /mob/living/proc/adjustBrainLoss(var/amount)
-	if(status_flags & GODMODE)	return 0	//godmode
+	if(status_flags & GODMODE)
+		return 0	//godmode
+
+	if(INVOKE_EVENT(on_damaged, list("type" = BRAIN, "amount" = amount)))
+		return 0
+
 	brainloss = min(max(brainloss + (amount * brain_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setBrainLoss(var/amount)
-	if(status_flags & GODMODE)	return 0	//godmode
+	if(status_flags & GODMODE)
+		return 0	//godmode
 	brainloss = amount
 
 /mob/living/proc/getHalLoss()
 	return halloss
 
 /mob/living/proc/adjustHalLoss(var/amount)
-	if(status_flags & GODMODE)	return 0	//godmode
+	if(status_flags & GODMODE)
+		return 0	//godmode
 	halloss = min(max(halloss + (amount * hal_damage_modifier), 0),(maxHealth*2))
 
 /mob/living/proc/setHalLoss(var/amount)
-	if(status_flags & GODMODE)	return 0	//godmode
+	if(status_flags & GODMODE)
+		return 0	//godmode
 	halloss = amount
 
 /mob/living/proc/getMaxHealth()
@@ -347,9 +390,10 @@
 				L += get_contents(G.gift)
 
 		for(var/obj/item/delivery/D in Storage.return_inv()) //Check for package wrapped items
-			L += D.wrapped
-			if(istype(D.wrapped, /obj/item/weapon/storage)) //this should never happen
-				L += get_contents(D.wrapped)
+			for(var/atom/movable/wrapped in D) //Basically always only one thing, but could theoretically be more
+				L += wrapped
+				if(istype(wrapped, /obj/item/weapon/storage)) //this should never happen
+					L += get_contents(wrapped)
 		return L
 
 	else
@@ -367,9 +411,10 @@
 				L += get_contents(G.gift)
 
 		for(var/obj/item/delivery/D in src.contents) //Check for package wrapped items
-			L += D.wrapped
-			if(istype(D.wrapped, /obj/item/weapon/storage)) //this should never happen
-				L += get_contents(D.wrapped)
+			for(var/atom/movable/wrapped in D) //Basically always only one thing, but could theoretically be more
+				L += wrapped
+				if(istype(wrapped, /obj/item/weapon/storage)) //this should never happen
+					L += get_contents(wrapped)
 		return L
 
 /mob/living/proc/can_inject()
@@ -410,8 +455,10 @@
 
 // damage ONE external organ, organ gets randomly selected from damaged ones.
 /mob/living/proc/take_organ_damage(var/brute, var/burn)
-	if(status_flags & GODMODE)	return 0	//godmode
-	if(flags & INVULNERABLE)	return 0
+	if(status_flags & GODMODE)
+		return 0	//godmode
+	if(flags & INVULNERABLE)
+		return 0
 	adjustBruteLoss(brute)
 	adjustFireLoss(burn)
 	src.updatehealth()
@@ -424,8 +471,10 @@
 
 // damage MANY external organs, in random order
 /mob/living/proc/take_overall_damage(var/brute, var/burn, var/used_weapon = null)
-	if(status_flags & GODMODE)	return 0	//godmode
-	if(flags & INVULNERABLE)	return 0
+	if(status_flags & GODMODE)
+		return 0	//godmode
+	if(flags & INVULNERABLE)
+		return 0
 	adjustBruteLoss(brute)
 	adjustFireLoss(burn)
 	src.updatehealth()
@@ -461,7 +510,8 @@ Thanks.
 
 /mob/living/proc/rejuvenate(animation = 0)
 	var/turf/T = get_turf(src)
-	if(animation) T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = PLANE_EFFECTS)
+	if(animation)
+		T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = EFFECTS_PLANE)
 
 	// shut down various types of badness
 	toxloss = 0
@@ -473,7 +523,7 @@ Thanks.
 	halloss = 0
 	paralysis = 0
 	stunned = 0
-	weakened = 0
+	knockdown = 0
 	remove_jitter()
 	germ_level = 0
 	next_pain_time = 0
@@ -641,11 +691,11 @@ Thanks.
 							if (locate(/obj/item/weapon/grab, M.grabbed_by.len))
 								ok = 0
 						if (ok)
-							var/atom/movable/t = M.pulling
+							var/atom/movable/secondarypull = M.pulling
 							M.stop_pulling()
 							pulling.Move(T, get_dir(pulling, T))
-							if(M)
-								M.start_pulling(t)
+							if(M && secondarypull)
+								M.start_pulling(secondarypull)
 					else
 						if (pulling)
 							pulling.Move(T, get_dir(pulling, T))
@@ -675,8 +725,6 @@ Thanks.
 				for(var/mob/living/M in G.target)
 					if(M && !(M in view(src)))
 						M.NotTargeted(G)
-	// Update on_moved listeners.
-	INVOKE_EVENT(on_moved,list("loc"=loc))
 
 /mob/living/proc/handle_hookchain(var/direct)
 	for(var/obj/item/weapon/gun/hookshot/hookshot in src)
@@ -728,6 +776,22 @@ Thanks.
 	delayNext(DELAY_ALL,20) // Attack, Move, and Special.
 
 	var/mob/living/L = usr
+
+	//Escaping from within a subspace tunneler.
+	var/obj/item/weapon/subspacetunneler/inside_tunneler = get_holder_of_type(L, /obj/item/weapon/subspacetunneler)
+	if(inside_tunneler)
+		var/breakout_time = 0.5 //30 seconds by default
+		L.delayNext(DELAY_ALL,100)
+		L.visible_message("<span class='danger'>\The [inside_tunneler]'s storage bin shudders.</span>","<span class='warning'>You wander through subspace, looking for a way out (this will take about [breakout_time * 60] seconds).</span>")
+		spawn(0)
+			if(do_after(usr,src,breakout_time * 60 * 10)) //minutes * 60seconds * 10deciseconds
+				var/obj/item/weapon/subspacetunneler/still_in = get_holder_of_type(L, /obj/item/weapon/subspacetunneler)
+				if(!inside_tunneler || !L || L.stat != CONSCIOUS || !still_in) //tunneler/user destroyed OR user dead/unconcious OR user no longer in tunneler
+					return
+
+				//Well then break it!
+				inside_tunneler.break_out(L)
+		return
 
 	//Getting out of someone's inventory.
 	if(istype(src.loc,/obj/item/weapon/holder))
@@ -933,7 +997,7 @@ Thanks.
 	//putting out a fire
 		if(CM.on_fire && CM.canmove)
 			CM.fire_stacks -= 5
-			CM.SetWeakened(3)
+			CM.SetKnockdown(3)
 			playsound(CM.loc, 'sound/effects/bodyfall.ogg', 50, 1)
 			CM.visible_message("<span class='danger'>[CM] rolls on the floor, trying to put themselves out!</span>",
 							   "<span class='warning'>You stop, drop, and roll!</span>")
@@ -1019,7 +1083,7 @@ Thanks.
 							return // time leniency for lag which also might make this whole thing pointless but the server
 						CM.visible_message("<span class='danger'>[CM] manages to remove [HC]!</span>",
 										   "<span class='notice'>You successfully remove [HC].</span>")
-						CM.legcuffed.loc = usr.loc
+						CM.legcuffed.forceMove(usr.loc)
 						CM.legcuffed = null
 						CM.update_inv_legcuffed()
 					else
@@ -1029,6 +1093,9 @@ Thanks.
 	set name = "Rest"
 	set category = "IC"
 
+	if(client.move_delayer.blocked())
+		return
+	delayNextMove(10)
 	resting = !resting
 	update_canmove()
 	to_chat(src, "<span class='notice'>You are now [resting ? "resting" : "getting up"]</span>")
@@ -1121,7 +1188,7 @@ default behaviour is:
 
 /mob/living/Bump(atom/movable/AM as mob|obj)
 	spawn(0)
-		if (now_pushing || !loc)
+		if (now_pushing || !loc || size <= SIZE_TINY)
 			return
 		now_pushing = 1
 		if (istype(AM, /obj/structure/bed/roller)) //no pushing rollerbeds that have people on them
@@ -1160,7 +1227,8 @@ default behaviour is:
 						dense = !A.Cross(src, src.loc)
 					else
 						dense = 1
-				if(dense) break
+				if(dense)
+					break
 			if((tmob.a_intent == I_HELP || tmob.restrained()) && (a_intent == I_HELP || src.restrained()) && tmob.canmove && canmove && !dense && can_move_mob(tmob, 1, 0)) // mutual brohugs all around!
 				var/turf/oldloc = loc
 				forceMove(tmob.loc)
@@ -1222,7 +1290,8 @@ default behaviour is:
 	return 1
 
 /mob/living/proc/drop_meat(location)
-	if(!meat_type) return 0
+	if(!meat_type)
+		return 0
 
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/M = new meat_type(location)
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/A = M
@@ -1299,32 +1368,35 @@ default behaviour is:
 		var/list/actions = list()
 		actions += "Butcher"
 		for(var/datum/butchering_product/B in src.butchering_drops)
-			if(B.amount <= 0) continue
+			if(B.amount <= 0)
+				continue
 
 			actions |= capitalize(B.verb_name)
 			actions[capitalize(B.verb_name)] = B
 		actions += "Cancel"
 
 		var/choice = input(user,"What would you like to do with \the [src]?","Butchering") in actions
-		if(!Adjacent(user) || !(usr.get_active_hand() == tool)) return
+		if(!Adjacent(user) || !(usr.get_active_hand() == tool))
+			return
 
 		if(choice == "Cancel")
 			return 0
 		else if(choice != "Butcher")
 			var/datum/butchering_product/our_product = actions[choice]
-			if(!istype(our_product)) return
+			if(!istype(our_product))
+				return
 
 			user.visible_message("<span class='notice'>[user] starts [our_product.verb_gerund] \the [src][tool ? "with \the [tool]" : ""].</span>",\
 				"<span class='info'>You start [our_product.verb_gerund] \the [src].</span>")
 			src.being_butchered = 1
-			if(!do_after(user,src,butchering_time / speed_mod))
+			if(!do_after(user,src,(our_product.butcher_time * size) / speed_mod))
 				to_chat(user, "<span class='warning'>Your attempt to [our_product.verb_name] \the [src] has been interrupted.</span>")
 				src.being_butchered = 0
 			else
 				to_chat(user, "<span class='info'>You finish [our_product.verb_gerund] \the [src].</span>")
 				src.being_butchered = 0
-				src.update_icons()
 				our_product.spawn_result(get_turf(src), src)
+				src.update_icons()
 			return
 
 	user.visible_message("<span class='notice'>[user] starts butchering \the [src][tool ? " with \the [tool]" : ""].</span>",\
@@ -1362,14 +1434,15 @@ default behaviour is:
 	. = strength
 
 /mob/living/proc/scoop_up(mob/M) //M = mob who scoops us up!
-	if(!holder_type) return
+	if(!holder_type)
+		return
 
 	var/obj/item/weapon/holder/D = getFromPool(holder_type, loc, src)
 
 	if(M.put_in_active_hand(D))
 		to_chat(M, "You scoop up [src].")
 		to_chat(src, "[M] scoops you up.")
-		src.loc = D //Only move the mob into the holder after we're sure he has been picked up!
+		src.forceMove(D) //Only move the mob into the holder after we're sure he has been picked up!
 	else
 		returnToPool(D)
 

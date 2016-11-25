@@ -16,7 +16,8 @@ var/list/bioEffectList = null
 
 /proc/addBio()
 	var/mob/M = input(usr, "Select Mob:") as mob in world
-	if(!M) return
+	if(!M)
+		return
 	//if(hasvar(M, "bioHolder"))
 	var/id = input(usr, "Effect ID:")
 	M:bioHolder.AddEffect(id)
@@ -115,9 +116,12 @@ var/list/bioEffectList = null
 			owner:detail_icon_state = detail_list[d_style]
 		owner.gender = src.gender
 
-		if(hascall(owner, "set_face_icon_dirty")) owner:set_face_icon_dirty()
-		if(hascall(owner, "set_body_icon_dirty")) owner:set_body_icon_dirty()
-		if(hascall(owner, "set_clothing_icon_dirty")) owner:set_clothing_icon_dirty()
+		if(hascall(owner, "set_face_icon_dirty"))
+			owner:set_face_icon_dirty()
+		if(hascall(owner, "set_body_icon_dirty"))
+			owner:set_body_icon_dirty()
+		if(hascall(owner, "set_clothing_icon_dirty"))
+			owner:set_clothing_icon_dirty()
 		return
 
 /datum/bioHolder //Holds the apperanceholder aswell as the effects. Controls adding and removing of effects.
@@ -220,7 +224,8 @@ var/list/bioEffectList = null
 
 		for(var/T in bioEffectList)
 			var/datum/bioEffect/instance = bioEffectList[T]
-			if(HasEffect(instance.id) || instance.isHidden) continue
+			if(HasEffect(instance.id) || instance.isHidden)
+				continue
 			if(src.owner)
 				if (src.owner.type in instance.mob_exclusion)
 					continue
@@ -256,7 +261,8 @@ var/list/bioEffectList = null
 	proc/OnLife()
 		for(var/datum/bioEffect/curr in effects)
 			curr.OnLife()
-			if(curr.timeLeft != -1) curr.timeLeft--
+			if(curr.timeLeft != -1)
+				curr.timeLeft--
 			if(curr.timeLeft == 0)
 				RemoveEffect(curr.id)
 		return
@@ -293,14 +299,16 @@ var/list/bioEffectList = null
 
 				if(HasEffect(curr.id))
 					var/datum/bioEffect/newCopy = GetEffect(curr.id)
-					if(!newCopy) continue
+					if(!newCopy)
+						continue
 
 					newCopy.timeLeft = curr.timeLeft
 					newCopy.variant = curr.variant
 					newCopy.data = curr.data
 				else
 					var/datum/bioEffect/newCopy = AddEffect(curr.id)
-					if(!newCopy) continue
+					if(!newCopy)
+						continue
 
 					newCopy.timeLeft = curr.timeLeft
 					newCopy.variant = curr.variant
@@ -321,7 +329,8 @@ var/list/bioEffectList = null
 		age += (toCopy.age - age) / (11 - progress)
 
 	proc/AddEffect(var/idToAdd, var/variant = 0, var/timeleft = 0) //Adds an effect to this holder. Returns the newly created effect if succesful else 0.
-		if(!owner) return
+		if(!owner)
+			return
 
 		for(var/datum/bioEffect/D in effects)
 			if(lowertext(D.id) == lowertext(idToAdd))
@@ -335,8 +344,10 @@ var/list/bioEffectList = null
 					if(curr.type == effectTypeMutantRace && newEffect.type == effectTypeMutantRace) //Can only have one mutant race.
 						RemoveEffect(curr.id)
 
-				if(variant) newEffect.variant = variant
-				if(timeleft) newEffect.timeLeft = timeleft
+				if(variant)
+					newEffect.variant = variant
+				if(timeleft)
+					newEffect.timeLeft = timeleft
 
 				effects.Add(newEffect)
 				newEffect.owner = owner
@@ -358,7 +369,8 @@ var/list/bioEffectList = null
 
 	proc/RemoveAllEffects(var/type = null)
 		for(var/datum/bioEffect/D in effects)
-			if(D.isHidden) continue
+			if(D.isHidden)
+				continue
 			if(type != null)
 				if(D.effectType == type)
 					RemoveEffect(D.id)
@@ -378,7 +390,8 @@ var/list/bioEffectList = null
 	proc/HasEffect(var/id) //Returns variant if this holder has an effect with the given ID else 0. Returns 1 if it has the effect with variant 0, special case for limb tone.
 		for(var/datum/bioEffect/D in effects)
 			if(lowertext(D.id) == lowertext(id))
-				if(D.variant == 0) return 1
+				if(D.variant == 0)
+					return 1
 				return D.variant
 		return 0
 
@@ -423,7 +436,8 @@ var/list/bioEffectList = null
 
 		for(var/T in bioEffectList)
 			var/datum/bioEffect/instance = bioEffectList[T]
-			if(HasEffect(instance.id) || instance.isHidden) continue
+			if(HasEffect(instance.id) || instance.isHidden)
+				continue
 			switch(lowertext(type))
 				if("good")
 					if(instance.isBad)
@@ -434,7 +448,8 @@ var/list/bioEffectList = null
 			filtered.Add(instance)
 			filtered[instance] = instance.probability
 
-		if(!filtered.len) return
+		if(!filtered.len)
+			return
 
 		var/datum/bioEffect/E = null
 

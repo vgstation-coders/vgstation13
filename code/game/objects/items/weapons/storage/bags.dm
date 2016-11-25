@@ -98,10 +98,11 @@
 	name = "\improper Mining Satchel" //need the improper for the
 	desc = "This little bugger can be used to store and transport ores."
 	icon = 'icons/obj/mining.dmi'
-	icon_state = "satchel"
+	icon_state = "mining_satchel"
 	slot_flags = SLOT_BELT | SLOT_POCKET
 	w_class = W_CLASS_MEDIUM
 	storage_slots = 50
+	fits_max_w_class = 3
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * ore.w_class
 	can_only_hold = list("/obj/item/weapon/ore")
 
@@ -115,6 +116,7 @@
 	icon_state = "plantbag"
 	name = "Plant Bag"
 	storage_slots = 50; //the number of plant pieces it can carry.
+	fits_max_w_class = 3
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	w_class = W_CLASS_TINY
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/grown","/obj/item/seeds","/obj/item/weapon/grown", "/obj/item/weapon/reagent_containers/food/snacks/meat", "/obj/item/weapon/reagent_containers/food/snacks/egg", "/obj/item/weapon/reagent_containers/food/snacks/honeycomb")
@@ -129,6 +131,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/backpacks_n_bags.dmi', "right_hand" = 'icons/mob/in-hand/right/backpacks_n_bags.dmi')
 	name = "Food Delivery Bag"
 	storage_slots = 14; //the number of food items it can carry.
+	fits_max_w_class = 3
 	max_combined_w_class = 28 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	w_class = W_CLASS_MEDIUM
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks")
@@ -169,8 +172,9 @@
 	icon_state = "pcollector"
 	name = "Pill Collector"
 	item_state = "pcollector"
-	origin_tech = "biotech=2;materials=1"
+	origin_tech = Tc_BIOTECH + "=2;" + Tc_MATERIALS + "=1"
 	storage_slots = 50; //the number of plant pieces it can carry.
+	fits_max_w_class = 3
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	w_class = W_CLASS_TINY
 	can_only_hold = list("/obj/item/weapon/reagent_containers/glass/bottle","/obj/item/weapon/reagent_containers/pill","/obj/item/weapon/reagent_containers/syringe")
@@ -214,7 +218,8 @@
 // Modified handle_item_insertion.  Would prefer not to, but...
 	handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
 		var/obj/item/stack/sheet/S = W
-		if(!istype(S)) return 0
+		if(!istype(S))
+			return 0
 
 		var/amount
 		var/inserted = 0
@@ -243,7 +248,7 @@
 				qdel (S)
 				S = null
 			else
-				S.loc = src
+				S.forceMove(src)
 
 		orient2hud(usr)
 		if(usr.s_active)
@@ -296,7 +301,8 @@
 // Instead of removing
 	remove_from_storage(obj/item/W as obj, atom/new_location)
 		var/obj/item/stack/sheet/S = W
-		if(!istype(S)) return 0
+		if(!istype(S))
+			return 0
 
 		//I would prefer to drop a new stack, but the item/attack_hand code
 		// that calls this can't recieve a different object than you clicked on.

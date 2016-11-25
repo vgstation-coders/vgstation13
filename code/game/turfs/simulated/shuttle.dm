@@ -4,7 +4,6 @@
 	icon = 'icons/turf/shuttle.dmi'
 	thermal_conductivity = 0.05
 	heat_capacity = 0
-	layer = 2
 	dynamic_lighting = 1 //We dynamic lighting now
 
 	soot_type = null
@@ -38,12 +37,16 @@
 
 /turf/simulated/shuttle/wall/cultify()
 	ChangeTurf(/turf/simulated/wall/cult)
-	turf_animation('icons/effects/effects.dmi',"cultwall",0,0,MOB_LAYER-1, anim_plane = PLANE_OBJ)
+	turf_animation('icons/effects/effects.dmi',"cultwall",0,0,MOB_LAYER-1, anim_plane = OBJ_PLANE)
 	return
 
 /turf/simulated/shuttle/floor
 	name = "floor"
 	icon_state = "floor"
+
+/turf/simulated/shuttle/floor/airless
+	oxygen   = 0.01
+	nitrogen = 0.01
 
 /turf/simulated/shuttle/floor/ex_act(severity)
 	switch(severity)
@@ -63,13 +66,17 @@
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 		name = "engraved floor"
 		icon_state = "cult"
-		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1, anim_plane = PLANE_OBJ)
+		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1, anim_plane = OBJ_PLANE)
 	return
 
 /turf/simulated/shuttle/plating
 	name = "plating"
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "plating"
+
+/turf/simulated/shuttle/plating/airless
+	oxygen   = 0.01
+	nitrogen = 0.01
 
 /turf/simulated/shuttle/floor4 // Added this floor tile so that I have a seperate turf to check in the shuttle -- Polymorph
 	name = "Brig floor"        // Also added it into the 2x3 brig area of the shuttle.
@@ -92,5 +99,5 @@
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 		name = "engraved floor"
 		icon_state = "cult"
-		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1, anim_plane = PLANE_OBJ)
+		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1, anim_plane = OBJ_PLANE)
 	return

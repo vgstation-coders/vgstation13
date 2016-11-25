@@ -49,14 +49,16 @@
 	dig_tile(first_T)
 
 /datum/minesweeper_game/proc/dig_tile(var/datum/mine_tile/T,var/force=0)
-	if(T.dug)	return
+	if(T.dug)
+		return
 	if(!T.selected && !force)
 		for(var/datum/mine_tile/other_T in tiles)
 			other_T.selected = 0
 		T.selected = 1
 		face = "fear"
 		return
-	if(T.flagged == 1)	return
+	if(T.flagged == 1)
+		return
 	T.selected = 0
 	face = "normal"
 	T.dug = 1

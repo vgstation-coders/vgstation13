@@ -4,7 +4,7 @@
 
 
 /datum/event/electrical_storm/announce()
-	command_alert("An electrical storm has been detected in your area, please repair potential electronic overloads.", "Electrical Storm Alert")
+	command_alert(/datum/command_alert/electrical_storm)
 
 
 /datum/event/electrical_storm/start()

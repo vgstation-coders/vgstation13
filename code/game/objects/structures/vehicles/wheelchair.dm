@@ -18,7 +18,7 @@
 /obj/structure/bed/chair/vehicle/wheelchair/New()
 	. = ..()
 	wheel_overlay = image("icons/obj/objects.dmi", "[icon_state]_overlay", MOB_LAYER + 0.1)
-	wheel_overlay = PLANE_MOB
+	wheel_overlay = MOB_PLANE
 
 /obj/structure/bed/chair/vehicle/wheelchair/attackby(obj/item/weapon/W, mob/user)
 	if(occupant)
@@ -65,7 +65,8 @@
 
 	//Wheelchair's speed depends on the resulting value
 	var/mob/living/carbon/M = user
-	if(!M) return 0
+	if(!M)
+		return 0
 
 	//Speed is determined by availability of hands
 	//Initial score is amount of hands * 2
@@ -96,14 +97,16 @@
 	if(ishuman(M)) //Human check - 0 to 4
 		var/mob/living/carbon/human/H = user
 
-		if(H.l_hand == null) left_hand_exists++ //Check to see if left hand is holding anything
+		if(H.l_hand == null)
+			left_hand_exists++ //Check to see if left hand is holding anything
 		var/datum/organ/external/left_hand = H.get_organ(LIMB_LEFT_HAND)
 		if(!left_hand)
 			left_hand_exists = 0
 		else if(left_hand.status & ORGAN_DESTROYED)
 			left_hand_exists = 0
 
-		if(H.r_hand == null) right_hand_exists++
+		if(H.r_hand == null)
+			right_hand_exists++
 		var/datum/organ/external/right_hand = H.get_organ(LIMB_RIGHT_HAND)
 		if(!right_hand)
 			right_hand_exists = 0
@@ -111,17 +114,20 @@
 			right_hand_exists = 0
 	else if( ismonkey(M) || isalien(M) ) //Monkey and alien check - 0 to 2
 		left_hand_exists = 0
-		if(user.l_hand == null) left_hand_exists++
+		if(user.l_hand == null)
+			left_hand_exists++
 
 		right_hand_exists = 0
-		if(user.r_hand == null) right_hand_exists++
+		if(user.r_hand == null)
+			right_hand_exists++
 
 	return ( left_hand_exists + right_hand_exists )*/
 
 /obj/structure/bed/chair/vehicle/wheelchair/getMovementDelay()
 	//Speed is determined by amount of usable hands and whether they're carrying something
 	var/hands = check_hands(occupant) //See check_hands() proc above
-	if(hands <= 0) return 0
+	if(hands <= 0)
+		return 0
 	return movement_delay * (4 / hands)
 
 /obj/structure/bed/chair/vehicle/wheelchair/relaymove(var/mob/user, direction)
@@ -132,11 +138,9 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/handle_layer()
 	if(dir == NORTH)
-		layer = FLY_LAYER
-		plane = PLANE_EFFECTS
+		plane = ABOVE_HUMAN_PLANE
 	else
-		layer = OBJ_LAYER
-		plane = PLANE_OBJ
+		plane = OBJ_PLANE
 
 /obj/structure/bed/chair/vehicle/wheelchair/check_key(var/mob/user)
 	if(check_hands(user))
@@ -149,7 +153,7 @@
 /obj/structure/bed/chair/vehicle/wheelchair/update_mob()
 	if(occupant)
 		occupant.pixel_x = 0
-		occupant.pixel_y = 3
+		occupant.pixel_y = 3 * PIXEL_MULTIPLIER
 
 /obj/structure/bed/chair/vehicle/wheelchair/die()
 	getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 4)
@@ -176,7 +180,7 @@
 	var/i = 0
 	for(var/mob/living/L in locked_atoms)
 		L.pixel_x = 0
-		L.pixel_y = 3 + (i*6) //Stack people on top of each other!
+		L.pixel_y = 3 * PIXEL_MULTIPLIER + (i * 6 * PIXEL_MULTIPLIER) //Stack people on top of each other!
 
 		i++
 
@@ -235,28 +239,32 @@
 		if(user.drop_item(W,src))
 			internal_battery = W
 			user.visible_message("<span class='notice'>[user] inserts \the [W] into the \the [src].</span>", "<span class='notice'>You insert \the [W] into \the [src].</span>", "You hear something being slid into place.")
-	else ..()
+	else
+		..()
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate
+	name = "medical malpractice"
 	nick = "medical malpractice"
-	desc = "A chair with fitted wheels which is powered by an internal cell. It seems to ride higher than other wheelchairs."
+	icon_state = "wheelchair-syndie"
+	desc = "A high-riding wheelchair fitted with a powerful cell and blades under the carriage. Better get a table between you and it."
+	var/attack_cooldown = 0
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/getMovementDelay()
 	return (..() + 1) //Somewhat slower
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/Bump(var/atom/A)
-	if(isliving(A))
+	if(isliving(A) && !attack_cooldown)
 		var/mob/living/L = A
 		if(isrobot(L))
 			src.visible_message("<span class='warning'>[src] slams into [L]!</span>")
 			L.Stun(2)
-			L.Weaken(2)
+			L.Knockdown(2)
 			L.adjustBruteLoss(rand(4,6))
 		else
 			src.visible_message("<span class='warning'>[src] knocks over [L]!</span>")
 			L.stop_pulling()
 			L.Stun(8)
-			L.Weaken(5)
+			L.Knockdown(5)
 			L.lying = 1
 			L.update_icons()
 	..()
@@ -268,6 +276,9 @@
 	H.apply_damage(damage, BRUTE, LIMB_CHEST)
 	H.apply_damage(damage, BRUTE, LIMB_LEFT_LEG)
 	H.apply_damage(damage, BRUTE, LIMB_RIGHT_LEG)
+	attack_cooldown = 1
+	spawn(10)
+		attack_cooldown = 0
 
 /obj/item/syndicate_wheelchair_kit
 	name = "Compressed Wheelchair Kit"

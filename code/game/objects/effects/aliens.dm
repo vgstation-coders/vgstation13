@@ -14,7 +14,6 @@
 	name = "alien thing"
 	desc = "theres something alien about this"
 	icon = 'icons/mob/alien.dmi'
-//	unacidable = 1 //Aliens won't ment their own.
 	w_type=NOT_RECYCLABLE
 
 /*
@@ -135,7 +134,7 @@
 				if(G.state<2)
 					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 					return
-				G.affecting.loc = src
+				G.affecting.forceMove(src)
 				G.affecting.paralysis = 10
 				for(var/mob/O in viewers(world.view, src))
 					if (O.client)
@@ -155,7 +154,8 @@
 	..()
 
 /obj/effect/alien/resin/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group) return 0
+	if(air_group)
+		return 0
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return !opacity
 	return !density
@@ -174,7 +174,8 @@
 
 	anchored = 1
 	density = 0
-	layer = 2
+	plane = ABOVE_TURF_PLANE
+	layer = WEED_LAYER
 	var/health = 14
 	var/obj/effect/alien/weeds/node/linked_node = null
 	var/obj/machinery/door/jammin = null
@@ -192,7 +193,6 @@
 	icon_state = "weednode"
 	name = "purple sac"
 	desc = "Weird purple octopus-like thing."
-	layer = 3
 	luminosity = NODERANGE
 	var/node_range = NODERANGE
 	var/list/obj/effect/alien/weeds/connected_weeds
@@ -229,7 +229,8 @@
 	if(linked_node)
 		linked_node.connected_weeds.Add(src)
 
-	if(icon_state == "weeds")icon_state = pick("weeds", "weeds1", "weeds2")
+	if(icon_state == "weeds")
+		icon_state = pick("weeds", "weeds1", "weeds2")
 	spawn(rand(100, 250))
 		if(src)
 			Life()
@@ -360,6 +361,7 @@
 	density = 0
 	opacity = 0
 	anchored = 1
+	layer = ABOVE_DOOR_LAYER
 
 	var/atom/target
 	var/ticks = 0
@@ -370,9 +372,17 @@
 	desc = "Burbling corrossive stuff. The radical kind."
 	icon_state = "acid-hyper"
 
-/obj/effect/alien/acid/New(loc, target)
+/datum/locking_category/acid
+
+/obj/effect/alien/acid/New(loc, atom/target)
 	..(loc)
 	src.target = target
+	pixel_x = target.pixel_x
+	pixel_y = target.pixel_y
+	if(istype(target,/atom/movable))
+		var/atom/movable/locker = target
+		locker.lock_atom(src, /datum/locking_category/acid)
+		glide_size = locker.glide_size
 
 	if(isturf(target)) // Turf take twice as long to take down.
 		target_strength = 8
@@ -383,19 +393,14 @@
 /obj/effect/alien/acid/proc/tick()
 	if(!target)
 		qdel(src)
+		return
 
 	ticks += 1
 
 	if(ticks >= target_strength)
 
-		for(var/mob/O in hearers(src, null))
-			O.show_message("<span class='good'><B>[src.target] collapses under its own weight into a puddle of goop and undigested debris!</B></span>", 1)
-
-		if(istype(target, /turf/simulated/wall)) // I hate turf code.
-			var/turf/simulated/wall/W = target
-			W.dismantle_wall(1)
-		else
-			qdel(target)
+		visible_message("<span class='good'><B>[src.target] collapses under its own weight into a puddle of goop and undigested debris!</B></span>")
+		target.acid_act()
 		qdel(src)
 		return
 
@@ -409,6 +414,14 @@
 		if(0 to 1)
 			visible_message("<span class='good'><B>[src.target] begins to crumble under the acid!</B></span>")
 	spawn(rand(150, 200)) tick()
+
+/atom/proc/acid_act()
+
+/obj/acid_act()
+	qdel(src)
+
+/turf/simulated/wall/acid_act()
+	dismantle_wall(1)
 
 /obj/effect/alien/acid/hyper/tick()
 	visible_message("<span class='good'><B>[src.target] begins to crumble under the acid!</B></span>")

@@ -12,9 +12,12 @@
 				if(!L)
 					src.adjustToxLoss(1)
 			switch(src.species.type)
-				if(/datum/species/diona)	alien = IS_DIONA
-				if(/datum/species/vox)	alien = IS_VOX
-				if(/datum/species/plasmaman)	alien = IS_PLASMA
+				if(/datum/species/diona)
+					alien = IS_DIONA
+				if(/datum/species/vox)
+					alien = IS_VOX
+				if(/datum/species/plasmaman)
+					alien = IS_PLASMA
 		reagents.metabolize(src,alien)
 
 	var/total_plasmaloss = 0
@@ -32,7 +35,7 @@
 		var/light_amount = 0 //How much light there is in the place, affects receiving nutrition and healing
 		if(isturf(loc)) //Else, there's considered to be no light
 			var/turf/T = loc
-			light_amount = T.get_lumcount(0.5) * 10
+			light_amount = T.get_lumcount() * 10
 
 		nutrition += light_amount
 		traumatic_shock -= light_amount

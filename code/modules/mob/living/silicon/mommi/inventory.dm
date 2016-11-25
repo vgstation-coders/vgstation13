@@ -46,13 +46,12 @@
 		if(!is_in_modules(tool_state))
 			drop_item(TS)
 		else
-			TS.loc = src.module
+			TS.forceMove(src.module)
 		contents -= tool_state
 		if (client)
 			client.screen -= tool_state
 	tool_state = W
-	W.layer = 20
-	W.plane = PLANE_HUD
+	W.hud_layerise()
 	W.forceMove(src)
 
 	// Make crap we pick up active so there's less clicking and carpal. - N3X
@@ -68,8 +67,7 @@
 	src.u_equip(O,0)
 	if (src.client)
 		src.client.screen -= O
-	O.layer = initial(O.layer)
-	O.plane = initial(O.plane)
+	O.reset_plane_and_layer()
 	O.screen_loc = null
 	return 1
 
@@ -115,15 +113,13 @@
 		contents -= tool_state
 		var/obj/item/TS = tool_state
 		if(!Target)
-			Target = get_turf(src)
+			Target = src.loc
 
-		TS.layer=initial(TS.layer)
-		TS.loc = Target
+		TS.forceMove(Target)
 
-		if(istype(Target, /turf))
-			var/turf/T = Target
-			T.Entered(tool_state)
+		//this all should be using remove_from_mob() but I couldn't easily get it to work for some reason so for now it continues to be copypasted ass
 		TS.dropped(src)
+		TS.layer=initial(TS.layer)
 		tool_state = null
 		module_active=null
 		inv_tool.icon_state="inv1"
@@ -138,6 +134,9 @@
 	var/obj/item/TS
 	if(isnull(module_active))
 		return
+	if(stat != CONSCIOUS || !isturf(loc))
+		return
+
 	if((module_active in src.contents) && !(module_active in src.module.modules) && (module_active != src.module.emag) && candrop)
 		TS = tool_state
 		drop_item(TS)
@@ -232,7 +231,8 @@
 /mob/living/silicon/robot/mommi/select_module(var/module)
 	if(!(module in INV_SLOT_TOOL))
 		return
-	if(!module_active(module)) return
+	if(!module_active(module))
+		return
 
 	if(INV_SLOT_TOOL)
 		if(module_active != tool_state)
@@ -272,8 +272,10 @@
 // Returns a 0 or 1 based on whether or not the equipping worked
 /mob/living/silicon/robot/mommi/equip_to_slot(obj/item/W as obj, slot, redraw_mob = 1)
 	// If the parameters were given incorrectly, return an error
-	if(!slot) return 0
-	if(!istype(W)) return 0
+	if(!slot)
+		return 0
+	if(!istype(W))
+		return 0
 
 	// If this item does not equip to this slot type, return
 	if( !(W.slot_flags & SLOT_HEAD) )
@@ -318,8 +320,7 @@
 			to_chat(src, "<span class='warning'>You are trying to equip this item to an unsupported inventory slot. How the heck did you manage that? Stop it...</span>")
 			return 0
 	// Set the item layer and update the MoMMI's icons
-	W.layer = 20
-	W.plane = PLANE_HUD
+	W.hud_layerise()
 	update_inv_head()
 	return 1
 

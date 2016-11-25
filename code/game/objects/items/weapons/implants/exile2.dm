@@ -27,7 +27,8 @@
 	return dat
 
 /obj/item/weapon/implant/exile/implanted(mob/M)
-	if(!istype(M, /mob/living/carbon))	return 0
+	if(!istype(M, /mob/living/carbon))
+		return 0
 	var/mob/living/carbon/I = M
 	to_chat(I, "<span class='notice'>You shiver as you feel a weak bluespace void surround you.</span>")
 	I.locked_to_z = ASTEROID_Z

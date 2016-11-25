@@ -12,6 +12,7 @@
 	desc = "You shouldn't see this."
 
 	density=0
+	abstract=1
 
 // Then you just slap verbs in here and send_verbs(mob).
 // Done.

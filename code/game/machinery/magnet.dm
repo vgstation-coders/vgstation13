@@ -11,7 +11,6 @@
 	name = "Electromagnetic Generator"
 	desc = "A device that uses station power to create points of magnetic energy."
 	level = 1		// underfloor
-	layer = 2.5
 	anchored = 1
 	use_power = 1
 	idle_power_usage = 50
@@ -77,9 +76,11 @@
 		if(command)
 			switch(command)
 				if("set-electriclevel")
-					if(modifier)	electricity_level = modifier
+					if(modifier)
+						electricity_level = modifier
 				if("set-magneticfield")
-					if(modifier)	magnetic_field = modifier
+					if(modifier)
+						magnetic_field = modifier
 
 				if("add-elec")
 					electricity_level++
@@ -99,9 +100,11 @@
 						magnetic_field = 1
 
 				if("set-x")
-					if(modifier)	center_x = modifier
+					if(modifier)
+						center_x = modifier
 				if("set-y")
-					if(modifier)	center_y = modifier
+					if(modifier)
+						center_y = modifier
 
 				if("N") // NORTH
 					center_y++
@@ -119,7 +122,8 @@
 					center_y = rand(-max_dist, max_dist)
 
 				if("set-code")
-					if(modifier)	code = modifier
+					if(modifier)
+						code = modifier
 				if("toggle-power")
 					on = !on
 
@@ -172,7 +176,8 @@
 
 
 	proc/magnetic_process() // proc that actually does the pulling
-		if(pulling) return
+		if(pulling)
+			return
 		while(on)
 
 			pulling = 1
@@ -183,7 +188,8 @@
 						step_towards(M, center)
 
 				for(var/mob/living/silicon/S in orange(magnetic_field, center))
-					if(istype(S, /mob/living/silicon/ai)) continue
+					if(istype(S, /mob/living/silicon/ai))
+						continue
 					step_towards(S, center)
 
 			use_power(electricity_level * 5)
@@ -340,7 +346,8 @@
 		updateUsrDialog()
 
 	proc/MagnetMove()
-		if(looping) return
+		if(looping)
+			return
 
 		while(moving && rpath.len >= 1)
 

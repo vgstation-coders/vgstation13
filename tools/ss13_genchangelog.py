@@ -75,7 +75,7 @@ failed_cache_read = True
 if os.path.isfile(changelog_cache):
     try:
         with open(changelog_cache) as f:
-            (_, all_changelog_entries) = yaml.load_all(f)
+            (_, all_changelog_entries) = yaml.safe_load_all(f)
             failed_cache_read = False
 
             # Convert old timestamps to newer format.
@@ -146,7 +146,7 @@ for fileName in glob.glob(os.path.join(args.ymlDir, "*.yml")):
     print(' Reading {}...'.format(fileName))
     cl = {}
     with open(fileName, 'r') as f:
-        cl = yaml.load(f)
+        cl = yaml.safe_load(f)
         f.close()
     if today not in all_changelog_entries:
         all_changelog_entries[today] = {}

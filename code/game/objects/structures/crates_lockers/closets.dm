@@ -41,7 +41,8 @@
 	return get_turf(src)
 
 /obj/structure/closet/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0 || wall_mounted)) return 1
+	if(air_group || (height==0 || wall_mounted))
+		return 1
 	return (!density)
 
 /obj/structure/closet/proc/can_open()
@@ -66,13 +67,13 @@
 
 	//Cham Projector Exception
 	for(var/obj/effect/dummy/chameleon/AD in src)
-		AD.loc = src.loc
+		AD.forceMove(src.loc)
 
 	for(var/obj/O in src)
-		O.loc = src.loc
+		O.forceMove(src.loc)
 
 	for(var/mob/M in src)
-		M.loc = src.loc
+		M.forceMove(src.loc)
 		if(M.client)
 			M.client.eye = M.client.mob
 			M.client.perspective = MOB_PERSPECTIVE
@@ -123,7 +124,7 @@
 		return 0
 	else if(AM.density || AM.anchored || istype(AM,/obj/structure/closet))
 		return 0
-	AM.loc = src
+	AM.forceMove(src)
 	return 1
 
 /obj/structure/closet/proc/close()
@@ -140,14 +141,14 @@
 	for(var/obj/effect/dummy/chameleon/AD in src.loc)
 		if(itemcount >= storage_capacity)
 			break
-		AD.loc = src
+		AD.forceMove(src)
 		itemcount++
 
 	for(var/obj/item/I in src.loc)
 		if(itemcount >= storage_capacity)
 			break
 		if(!I.anchored)
-			I.loc = src
+			I.forceMove(src)
 			itemcount++
 
 	for(var/mob/M in src.loc)
@@ -162,7 +163,7 @@
 			M.client.perspective = EYE_PERSPECTIVE
 			M.client.eye = src
 
-		M.loc = src
+		M.forceMove(src)
 		itemcount++
 	*/
 	src.icon_state = src.icon_closed
@@ -186,19 +187,19 @@
 	switch(severity)
 		if(1)
 			for(var/atom/movable/A as mob|obj in src)//pulls everything out of the locker and hits it with an explosion
-				A.loc = src.loc
+				A.forceMove(src.loc)
 				A.ex_act(severity++)
 			qdel(src)
 		if(2)
 			if(prob(50))
 				for (var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.forceMove(src.loc)
 					A.ex_act(severity++)
 				qdel(src)
 		if(3)
 			if(prob(5))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.forceMove(src.loc)
 					A.ex_act(severity++)
 				qdel(src)
 
@@ -214,7 +215,7 @@
 	..()
 	if(health <= 0)
 		for(var/atom/movable/A as mob|obj in src)
-			A.loc = src.loc
+			A.forceMove(src.loc)
 		qdel(src)
 
 	return
@@ -259,14 +260,14 @@
 	if(user.environment_smash)
 		visible_message("<span class='warning'>[user] destroys the [src]. </span>")
 		for(var/atom/movable/A as mob|obj in src)
-			A.loc = src.loc
+			A.forceMove(src.loc)
 		qdel(src)
 
 // this should probably use dump_contents()
 /obj/structure/closet/blob_act()
 	if(prob(75))
 		for(var/atom/movable/A as mob|obj in src)
-			A.loc = src.loc
+			A.forceMove(src.loc)
 		qdel(src)
 
 /obj/structure/closet/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -285,8 +286,7 @@
 			if(!WT.remove_fuel(0,user))
 				to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
 				return
-			var/obj/item/stack/sheet/metal/Met = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
-			Met.amount = 2
+			materials.makeSheets(src)
 			for(var/mob/M in viewers(src))
 				M.show_message("<span class='notice'>\The [src] has been cut apart by [user] with \the [WT].</span>", 1, "You hear welding.", 2)
 			qdel(src)
@@ -366,21 +366,28 @@
 
 			var/image/spooky_overlay
 			switch(rand(0,5))
-				if(0) spooky_overlay = image('icons/mob/animal.dmi',icon_state="hunter",dir=turn(L.dir,180))
-				if(1) spooky_overlay = image('icons/mob/animal.dmi',icon_state="zombie",dir=turn(L.dir,180))
-				if(2) spooky_overlay = image('icons/mob/horror.dmi',icon_state="horror_[pick("male","female")]",dir=turn(L.dir,180))
-				if(3) spooky_overlay = image('icons/mob/animal.dmi',icon_state="faithless",dir=turn(L.dir,180))
-				if(4) spooky_overlay = image('icons/mob/animal.dmi',icon_state="carp",dir=turn(L.dir,180))
-				if(5) spooky_overlay = image('icons/mob/animal.dmi',icon_state="skelly",dir=turn(L.dir,180))
+				if(0)
+					spooky_overlay = image('icons/mob/animal.dmi',icon_state="hunter",dir=turn(L.dir,180))
+				if(1)
+					spooky_overlay = image('icons/mob/animal.dmi',icon_state="zombie",dir=turn(L.dir,180))
+				if(2)
+					spooky_overlay = image('icons/mob/horror.dmi',icon_state="horror_[pick("male","female")]",dir=turn(L.dir,180))
+				if(3)
+					spooky_overlay = image('icons/mob/animal.dmi',icon_state="faithless",dir=turn(L.dir,180))
+				if(4)
+					spooky_overlay = image('icons/mob/animal.dmi',icon_state="carp",dir=turn(L.dir,180))
+				if(5)
+					spooky_overlay = image('icons/mob/animal.dmi',icon_state="skelly",dir=turn(L.dir,180))
 
-			if(!spooky_overlay) return
+			if(!spooky_overlay)
+				return
 
 			temp_overlay.overlays += spooky_overlay
 
 			C.images += temp_overlay
 			L << sound('sound/machines/click.ogg')
 			L << sound('sound/hallucinations/scary.ogg')
-			L.Weaken(5)
+			L.Knockdown(5)
 
 			sleep(50)
 
@@ -428,7 +435,8 @@
 // should be independently resolved, but this is also an interesting twist.
 /obj/structure/closet/Exit(atom/movable/AM)
 	open()
-	if(AM.loc == src) return 0
+	if(AM.loc == src)
+		return 0
 	return 1
 
 /obj/structure/closet/container_resist()

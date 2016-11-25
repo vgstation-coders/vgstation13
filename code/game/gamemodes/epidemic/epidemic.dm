@@ -100,7 +100,8 @@
 	var/list/crew = list()
 	for(var/mob/living/carbon/human/H in mob_list) if(H.client)
 		// heads should not be infected
-		if(H.mind.assigned_role in command_positions) continue
+		if(H.mind.assigned_role in command_positions)
+			continue
 		crew += H
 
 	if(crew.len < 2)
@@ -138,7 +139,8 @@
 	stage = 1
 
 	spawn (rand(waittime_l, waittime_h))
-		if(!mixed) send_intercept()
+		if(!mixed)
+			send_intercept()
 
 
 	..()
@@ -169,8 +171,10 @@
 	var/alive = 0
 	var/sick = 0
 	for(var/mob/living/carbon/human/H in mob_list)
-		if(H.key && H.stat != 2) alive++
-		if(H.virus2.len && H.stat != 2) sick++
+		if(H.key && H.stat != 2)
+			alive++
+		if(H.virus2.len && H.stat != 2)
+			sick++
 
 	if(alive == 0)
 		finished = 2

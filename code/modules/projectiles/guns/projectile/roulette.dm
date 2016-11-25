@@ -3,7 +3,7 @@
 	desc = "A strange-looking revolver. Its construction appears somewhat slapdash."
 	icon_state = "roulette_revolver"
 	item_state = "gun"
-	origin_tech = "combat=4;materials=4"
+	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=4"
 	w_class = W_CLASS_SMALL
 	starting_materials = list(MAT_IRON = 1000)
 	w_type = RECYK_METAL
@@ -72,7 +72,8 @@
 		return
 
 /obj/item/weapon/gun/projectile/roulette_revolver/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
-	if(flag)	return //we're placing gun on a table or in backpack
+	if(flag)
+		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
 		to_chat(user, "<span class='warning'>A label sticks the trigger to the trigger guard!</span>")//Such a new feature, the player might not know what's wrong if it doesn't tell them.
 		return

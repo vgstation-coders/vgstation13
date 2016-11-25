@@ -7,7 +7,7 @@
 	w_class = W_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
 	species_fit = list(VOX_SHAPED)
-	origin_tech = "biotech=2"
+	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = MOUTH
 
 //Monkeys can not take the muzzle off of themself! Call PETA!
@@ -29,7 +29,7 @@
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.01
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 25, rad = 0)
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/mask/fakemoustache
 	name = "fake moustache"
@@ -75,7 +75,14 @@
 	flags = FPRINT
 	body_parts_covered = FACE
 	w_class = W_CLASS_SMALL
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+
+/obj/item/clothing/mask/neorussian
+	name = "neo-Russian mask"
+	desc = "Somehow, it makes you act and look way more polite than usual."
+	icon_state = "nr_mask"
+	item_state = "nr_mask"
+	body_parts_covered = FACE
 
 /obj/item/clothing/mask/pig
 	name = "pig mask"
@@ -102,6 +109,18 @@
 	if(src.voicechange)
 		speech.message = pick("NEEIIGGGHHHH!", "NEEEIIIIGHH!", "NEIIIGGHH!", "HAAWWWWW!", "HAAAWWW!")
 
+/obj/item/clothing/mask/horsehead/magic
+	voicechange = 1		//NEEEEIIGHH
+
+/obj/item/clothing/mask/horsehead/magic/dropped(mob/user as mob)
+	canremove = 1
+	..()
+
+/obj/item/clothing/mask/horsehead/magic/equipped(var/mob/user, var/slot)
+	if (slot == slot_wear_mask)
+		canremove = 0		//curses!
+	..()
+
 /obj/item/clothing/mask/chapmask
 	name = "venetian mask"
 	desc = "A plain porcelain mask that covers the entire face. Standard attire for particularly unspeakable religions. The eyes are wide shut."
@@ -122,3 +141,8 @@
 obj/item/clothing/mask/bandana/red
 	name = "red bandana"
 	icon_state = "bandred"
+
+obj/item/clothing/mask/joy
+	name = "joy mask"
+	desc = "Express your happiness or hide your sorrows with this laughing face with crying tears of joy cutout."
+	icon_state = "joy"

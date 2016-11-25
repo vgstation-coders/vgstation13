@@ -8,11 +8,11 @@
 	w_class = W_CLASS_SMALL
 	siemens_coefficient = 3.0
 	gas_transfer_coefficient = 0.90
-	unacidable = 1
 
 /obj/item/clothing/mask/happy/equipped(M as mob, wear_mask)
 	var/mob/living/carbon/human/H = M
-	if(!istype(H)) return
+	if(!istype(H))
+		return
 	if(H.wear_mask == src)
 		flick("happiest_flash", src)
 		to_chat(H, "<span class='sinister'>Your thoughts are bombarded by incessant laughter.</span>")
@@ -54,9 +54,12 @@
 
 /obj/item/clothing/mask/happy/proc/RaiseShade(var/mob/living/carbon/human/H)
 	for(var/mob/living/carbon/human/M in view(4, H))
-		if(!M) return
-		if(M.stat != 2) continue
-		if(M.client == null) continue
+		if(!M)
+			return
+		if(M.stat != 2)
+			continue
+		if(M.client == null)
+			continue
 		flick("happiest_flash", src)
 		var/mob/living/simple_animal/shade/S = new /mob/living/simple_animal/shade( M.loc )
 		S.name = "Shade of [M.real_name]"
@@ -67,3 +70,6 @@
 		flick("happiest_flash", src)
 		to_chat(H, "<span class='sinister'>Oh joy! [M.real_name]'s decided to join the party!</span>")
 		to_chat(S, "<span class='sinister'>You have been given form by the power of the happiest mask! Go forth and cause joyful chaos for [H.real_name]!</span>")
+
+/obj/item/clothing/mask/happy/acidable()
+	return 0

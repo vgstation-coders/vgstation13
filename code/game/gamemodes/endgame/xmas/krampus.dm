@@ -3,7 +3,7 @@
 	override_icon = 'icons/mob/human_races/krampus.dmi'
 	icobase = 'icons/mob/human_races/krampus.dmi'
 	deform = 'icons/mob/human_races/krampus.dmi'
-	language = "Clatter"
+	known_languages = list(LANGUAGE_CLATTER)
 	attack_verb = "punches"
 
 	//flags = IS_WHITELISTED /*| HAS_LIPS | HAS_TAIL | NO_EAT | NO_BREATHE | NON_GENDERED*/ | NO_BLOOD
@@ -39,7 +39,7 @@
 /mob/living/carbon/human/krampus/Stun(amount)
 	return
 
-/mob/living/carbon/human/krampus/Weaken(amount)
+/mob/living/carbon/human/krampus/Knockdown(amount)
 	return
 
 /mob/living/carbon/human/krampus/Paralyse(amount)

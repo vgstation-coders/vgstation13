@@ -32,6 +32,7 @@
 
 	var/start_end_anims = 0
 
+	machine_flags	= SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 	research_flags = TAKESMATIN | HASOUTPUT | HASMAT_OVER | NANOTOUCH
 
 /obj/machinery/r_n_d/fabricator/New()
@@ -81,7 +82,7 @@
 
 /obj/machinery/r_n_d/fabricator/emag()
 	sleep()
-	if(!research_flags &ACCESS_EMAG)
+	if(!(research_flags & ACCESS_EMAG))
 		return
 	switch(emagged)
 		if(0)
@@ -289,18 +290,18 @@
 		if(part.locked && research_flags &LOCKBOXES)
 			var/obj/item/weapon/storage/lockbox/L
 			//if(research_flags &TRUELOCKS)
-			L = new/obj/item/weapon/storage/lockbox(src) //Make a lockbox
-			L.req_access = part.req_lock_access //we set the access from the design
+			L = new/obj/item/weapon/storage/lockbox/oneuse(src) //Make a lockbox
+			L.req_one_access = part.req_lock_access //we set the access from the design
 			/*
 			else
 				L = new /obj/item/weapon/storage/lockbox/unlockable(src) //Make an unlockable lockbox
 			*/
-			being_built.loc = L //Put the thing in the lockbox
+			being_built.forceMove(L) //Put the thing in the lockbox
 			L.name += " ([being_built.name])"
 			being_built = L //Building the lockbox now, with the thing in it
 		var/turf/output = get_output()
-		being_built.loc = get_turf(output)
-		src.visible_message("[bicon(src)] \The [src] beeps: \"Succesfully completed \the [being_built.name].\"")
+		being_built.forceMove(get_turf(output))
+		src.visible_message("[bicon(src)] \The [src] beeps: \"Successfully completed \the [being_built.name].\"")
 		src.being_built = null
 	src.updateUsrDialog()
 	src.busy = 0
@@ -372,7 +373,8 @@
 
 
 /obj/machinery/r_n_d/fabricator/proc/convert_designs()
-	if(!files) return
+	if(!files)
+		return
 	var/i = 0
 	for(var/datum/design/D in files.known_designs)
 		if(D.build_type & src.build_number)
@@ -385,7 +387,8 @@
 	return i
 
 /obj/machinery/r_n_d/fabricator/proc/update_tech()
-	if(!files) return
+	if(!files)
+		return
 	var/output
 	for(var/datum/tech/T in files.known_tech)
 		if(T && T.level > 1)
@@ -443,7 +446,7 @@
 		if(i || tech_output)
 			new_data=1
 	if(new_data)
-		src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Succesfully synchronized with R&D server. New data processed.\"")
+		src.visible_message("[bicon(src)] <b>[src]</b> beeps, \"Successfully synchronized with R&D server. New data processed.\"")
 	if(!silent && !found)
 		temp = "Unable to connect to local R&D Database.<br>Please check your connections and try again.<br><a href='?src=\ref[src];clear_temp=1'>Return</a>"
 	src.updateUsrDialog()
@@ -471,7 +474,9 @@
 /obj/machinery/r_n_d/fabricator/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
 	if(stat & (BROKEN|NOPOWER))
 		return
-	if(user.stat || user.restrained() || !allowed(user))
+	if(user.stat || user.restrained())
+		return
+	if(!allowed(user) && !emagged)
 		return
 
 	var/data[0]
@@ -530,7 +535,8 @@
 	if(..()) // critical exploit prevention, do not remove unless you replace it -walter0o
 		return
 	if(href_list["close"])
-		if(usr.machine == src) usr.unset_machine()
+		if(usr.machine == src)
+			usr.unset_machine()
 		return 1
 	var/datum/topic_input/filter = new /datum/topic_input(href,href_list)
 
@@ -591,7 +597,8 @@
 	if(href_list["screen"])
 		var/prevscreen=screen
 		screen = text2num(href_list["screen"])
-		if(prevscreen==screen) return 0
+		if(prevscreen==screen)
+			return 0
 		ui_interact(usr)
 		return 1
 
@@ -609,7 +616,7 @@
 	if(stat & BROKEN)
 		return
 
-	if(!allowed(user))
+	if(!allowed(user) && !emagged)
 		src.visible_message("<span class='warning'>Unauthorized Access</span>: attempted by <b>[user]</b>")
 		return
 
@@ -678,7 +685,8 @@
 			var/obj/item/stack/sheet/mats
 			if(material.sheettype == /obj/item/stack/sheet/metal)
 				mats = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
-			else mats = new material.sheettype(src)
+			else
+				mats = new material.sheettype(src)
 			if(to_spawn > mats.max_amount)
 				mats.amount = mats.max_amount
 				to_spawn -= mats.max_amount
@@ -687,6 +695,6 @@
 				to_spawn = 0
 
 			materials.removeAmount(matID, mats.amount * mats.perunit)
-			mats.loc = src.loc
+			mats.forceMove(src.loc)
 		return total_amount
 	return 0

@@ -12,7 +12,8 @@
 	minimal_player_age = 30
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		return 1
 
 /datum/job/cyborg
@@ -28,7 +29,8 @@
 	no_id = 1
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		return 1
 
 /datum/job/mommi
@@ -44,5 +46,6 @@
 	no_id = 1
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		return 1

@@ -24,7 +24,8 @@
 
 	if(shock_stage >= 30)
 		if(shock_stage == 30)
-			emote("me", 1, "is having trouble keeping their eyes open.")
+			if(!isUnconscious())
+				visible_message("<B>[src]</B> is having trouble keeping their eyes open.")
 		eye_blurry = max(2, eye_blurry)
 		stuttering = max(stuttering, 5)
 
@@ -33,15 +34,16 @@
 
 	if(shock_stage >= 60)
 		if(shock_stage == 60)
-			emote("me",1,"'s body becomes limp.")
+			if(!isUnconscious())
+				visible_message("<B>[src]</B>'s body becomes limp.")
 		if(prob(2))
 			to_chat(src, "<span class='danger'>[pick("The pain is excrutiating!", "Please, just end the pain!", "Your whole body is going numb!")]</span>")
-			Weaken(20)
+			Knockdown(20)
 
 	if(shock_stage >= 80)
 		if(prob(5))
 			to_chat(src, "<span class='danger'>[pick("The pain is excrutiating!", "Please, just end the pain!", "Your whole body is going numb!")]</span>")
-			Weaken(20)
+			Knockdown(20)
 
 	if(shock_stage >= 120)
 		if(prob(2))
@@ -49,8 +51,9 @@
 			Paralyse(5)
 
 	if(shock_stage == 150)
-		emote("me", 1, "can no longer stand, collapsing!")
-		Weaken(20)
+		if(!isUnconscious())
+			visible_message("<B>[src]</b> can no longer stand, collapsing!")
+		Knockdown(20)
 
 	if(shock_stage >= 150)
-		Weaken(20)
+		Knockdown(20)

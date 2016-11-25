@@ -44,7 +44,8 @@ minus the pound (#) symbol.
 proc/colour2html(colour)
 	var/T
 	for(T in html_colours)
-		if(ckey(T) == ckey(colour)) break
+		if(ckey(T) == ckey(colour))
+			break
 	if(!T)
 		world.log << "Warning!  Could not find matching colour entry for '[colour]'."
 		return "#FFFFFF"
@@ -78,7 +79,8 @@ var/html_colours[0]
 proc/LoadHTMLAssociations()
 	var/savefile/F = new ("s_html.sav")
 	F["html_colours"] >> html_colours
-	if(!html_colours) html_colours = list()
+	if(!html_colours)
+		html_colours = list()
 
 	if(!html_colours.len)
 		HTMLAssociate("aliceblue",        "f0f8ff")

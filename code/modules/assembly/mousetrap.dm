@@ -4,7 +4,7 @@
 	icon_state = "mousetrap"
 	starting_materials = list(MAT_IRON = 100)
 	w_type = RECYK_METAL
-	origin_tech = "combat=1"
+	origin_tech = Tc_COMBAT + "=1"
 	var/armed = 0
 	wires = WIRE_PULSE
 
@@ -31,7 +31,7 @@
 			if("feet")
 				if(!H.shoes)
 					affecting = H.get_organ(pick(LIMB_LEFT_LEG, LIMB_RIGHT_LEG))
-					H.Weaken(3)
+					H.Knockdown(3)
 			if(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)
 				if(!H.gloves)
 					affecting = H.get_organ(type)
@@ -123,5 +123,6 @@
 	if(usr.isUnconscious())
 		return
 
-	layer = TURF_LAYER+0.2
+	plane = ABOVE_TURF_PLANE
+	layer = MOUSETRAP_LAYER
 	to_chat(usr, "<span class='notice'>You hide [src].</span>")

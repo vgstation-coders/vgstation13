@@ -16,6 +16,7 @@ extern "C" DLL_EXPORT char * init_renderer(int argc, char ** argv);
 
 std::string result;
 hoedown_html_flags flags = HOEDOWN_HTML_ESCAPE;
+hoedown_extensions 	extensions = static_cast<hoedown_extensions>(HOEDOWN_EXT_BLOCK | HOEDOWN_EXT_SPAN | HOEDOWN_EXT_FLAGS);
 hoedown_buffer *html = NULL; //= hoedown_buffer_new(16);
 hoedown_document *document = NULL;
 hoedown_renderer *renderer = NULL;
@@ -24,7 +25,7 @@ hoedown_renderer *renderer = NULL;
 
 char * init_renderer(int argc, char ** argv) {
 	renderer = hoedown_html_renderer_new(flags, 0);
-	document = hoedown_document_new(renderer, HOEDOWN_EXT_TABLES, 16);
+	document = hoedown_document_new(renderer, extensions, 16);
 	html = hoedown_buffer_new(16);
 	return "Initalized";
 }

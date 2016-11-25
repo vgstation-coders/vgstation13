@@ -1,3 +1,9 @@
+#define VALUE_SCANNING "Scanning"
+#define VALUE_SCAN_RANGE "Scan range"
+#define VALUE_REMAINING_TIME "Remaining time"
+#define VALUE_DEFAULT_TIME "Default time"
+#define VALUE_TIMING "Timing"
+
 /var/global/list/prox_sensor_ignored_types = list \
 (
 	/obj/effect/beam
@@ -11,7 +17,7 @@
 	icon_state = "prox"
 	starting_materials = list(MAT_IRON = 800, MAT_GLASS = 200)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "magnets=1"
+	origin_tech = Tc_MAGNETS + "=1"
 
 	wires = WIRE_PULSE | WIRE_RECEIVE
 
@@ -27,14 +33,16 @@
 
 	var/range = 2
 
-	accessible_values = list("Scanning" = "scanning;number",\
-		"Scan range" = "range;number;1;5",\
-		"Remaining time" = "time;number",\
-		"Default time" = "default_time;number",\
-		"Timing" = "timing;number")
+	accessible_values = list(\
+		VALUE_SCANNING = "scanning;"+VT_NUMBER,\
+		VALUE_SCAN_RANGE = "range;"+VT_NUMBER+";1;5",\
+		VALUE_REMAINING_TIME = "time;"+VT_NUMBER,\
+		VALUE_DEFAULT_TIME = "default_time;"+VT_NUMBER,\
+		VALUE_TIMING = "timing;"+VT_NUMBER)
 
 /obj/item/device/assembly/prox_sensor/activate()
-	if(!..())	return 0//Cooldown check
+	if(!..())
+		return 0//Cooldown check
 	timing = !timing
 	update_icon()
 	return 0
@@ -64,7 +72,8 @@
 	var/turf/mainloc = get_turf(src)
 //	if(scanning && cooldown <= 0)
 //		mainloc.visible_message("[bicon(src)] *boop* *boop*", "*boop* *boop*")
-	if((!holder && !secured)||(!scanning)||(cooldown > 0))	return 0
+	if((!holder && !secured)||(!scanning)||(cooldown > 0))
+		return 0
 	pulse(0)
 	if(!holder)
 		mainloc.visible_message("[bicon(src)] *beep* *beep*", "*beep* *beep*")
@@ -95,7 +104,8 @@
 	return
 
 /obj/item/device/assembly/prox_sensor/proc/toggle_scan()
-	if(!secured)	return 0
+	if(!secured)
+		return 0
 	scanning = !scanning
 	update_icon()
 	return
@@ -176,3 +186,9 @@
 		attack_self(usr)
 
 	return
+
+#undef VALUE_SCANNING
+#undef VALUE_SCAN_RANGE
+#undef VALUE_REMAINING_TIME
+#undef VALUE_DEFAULT_TIME
+#undef VALUE_TIMING

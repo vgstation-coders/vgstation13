@@ -58,7 +58,7 @@
 */
 
 /datum/language/unathi
-	name = "Sinta'unathi"
+	name = LANGUAGE_UNATHI
 	desc = "The common language of Moghes, composed of sibilant hisses and rattles. Spoken natively by Unathi."
 	speech_verb = "hisses"
 	ask_verb = "hisses"
@@ -69,7 +69,7 @@
 	syllables = list("ss","ss","ss","ss","skak","seeki","resh","las","esi","kor","sh")
 
 /datum/language/tajaran
-	name = "Siik'tajr"
+	name = LANGUAGE_CATBEAST
 	desc = "An expressive language that combines yowls and chirps with posture, tail and ears. Native to the Tajaran."
 	speech_verb = "mrowls"
 	ask_verb = "mrowls"
@@ -83,7 +83,7 @@
 	"hal","ket","jurl","mah","tul","cresh","azu","ragh", "mro", "mra")
 
 /datum/language/skrell
-	name = "Skrellian"
+	name = LANGUAGE_SKRELLIAN
 	desc = "A melodic and complex language spoken by the Skrell of Qerrbalak. Some of the notes are inaudible to humans."
 	speech_verb = "warbles"
 	ask_verb = "warbles"
@@ -94,7 +94,7 @@
 	syllables = list("qr","qrr","xuq","qil","quum","xuqm","vol","xrim","zaoo","qu-uu","qix","qoo","zix","*","!")
 
 /datum/language/vox
-	name = "Vox-pidgin"
+	name = LANGUAGE_VOX
 	desc = "The common tongue of the various Vox ships making up the Shoal. It sounds like chaotic shrieking to everyone else."
 	speech_verb = "caws"
 	ask_verb = "creels"
@@ -106,7 +106,7 @@
 	"SKRE","AHK","EHK","RAWK","KRA","AAA","EEE","KI","II","KRI","KA")
 
 /datum/language/diona
-	name = "Rootspeak"
+	name = LANGUAGE_ROOTSPEAK
 	desc = "A creaking, subvocal language spoken instinctively by the Dionaea. Due to the unique makeup of the average Diona, a phrase of Rootspeak can be a combination of anywhere from one to twelve individual voices and notes."
 	speech_verb = "creaks and rustles"
 	ask_verb = "creaks"
@@ -117,7 +117,7 @@
 	syllables = list("hs","zt","kr","st","sh")
 
 /datum/language/common
-	name = "Galactic Common"
+	name = LANGUAGE_GALACTIC_COMMON
 	desc = "The language no one would ever use is now the language every race uses."
 	key = "1"
 	flags = RESTRICTED
@@ -126,14 +126,14 @@
 	"po","vas","va","he","min","mi","cu","dig","di","gi","gis","nu","ven","as","kie","re","ven","dau")
 
 /datum/language/human
-	name = "Sol Common"
+	name = LANGUAGE_HUMAN
 	desc = "A bastardized hybrid of informal English and elements of Mandarin Chinese; the common language of the Sol system."
 	key = "7"
 	colour = "solcom"
 	flags = RESTRICTED
 
 /datum/language/human/monkey
-	name = "Monkey"
+	name = LANGUAGE_MONKEY
 	desc = "Ook ook ook."
 	speech_verb = "chimpers"
 	ask_verb = "chimpers"
@@ -143,7 +143,7 @@
 
 // Galactic common languages (systemwide accepted standards).
 /datum/language/trader
-	name = "Tradeband"
+	name = LANGUAGE_TRADEBAND
 	desc = "Maintained by the various trading cartels in major systems, this elegant, structured language is used for bartering and bargaining."
 	speech_verb = "enunciates"
 	colour = "say_quote"
@@ -159,7 +159,7 @@
 					 "in", "culpa", "qui", "officia", "deserunt", "mollit", "anim", "id", "est", "laborum")
 
 /datum/language/gutter
-	name = "Gutter"
+	name = LANGUAGE_GUTTER
 	desc = "Much like Standard, this crude pidgin tongue descended from numerous languages and serves as Tradeband for criminal elements."
 	speech_verb = "growls"
 	colour = "gutter"
@@ -167,7 +167,7 @@
 	syllables = list("gra","ba","ba","breh","bra","rah","dur","ra","ro","gro","go","ber","bar","geh","heh","gra")
 
 /datum/language/grey
-	name = "Grey"
+	name = LANGUAGE_GREY
 	desc = "Sounds more like quacking than anything else."
 	key = "k"
 	speech_verb = "quacks"
@@ -188,7 +188,7 @@
 	return message+"!"
 
 /datum/language/skellington
-	name = "Clatter"
+	name = LANGUAGE_CLATTER
 	desc = "Click clack go the bones."
 	key = "z"
 	speech_verb = "chatters"
@@ -201,7 +201,7 @@
 	syllables = list("CLICK", "CLACK")
 
 /datum/language/golem
-	name = "Golem"
+	name = LANGUAGE_GOLEM
 	desc = "A slow, guttural language produced by the grinding of a golem's joints against one another."
 	speech_verb = "grinds"
 	ask_verb = "groans"
@@ -222,7 +222,7 @@
 	return message+"!"
 
 /datum/language/xenocommon
-	name = "Xenomorph"
+	name = LANGUAGE_XENO
 	colour = "alien"
 	desc = "The common tongue of the xenomorphs."
 	speech_verb = "hisses"
@@ -236,7 +236,7 @@
 	return speech_verb
 
 /datum/language/cultcommon
-	name = "Cult"
+	name = LANGUAGE_CULT
 	desc = "The chants of the occult, the incomprehensible."
 	speech_verb = "intones"
 	ask_verb = "intones"
@@ -254,7 +254,7 @@
 		"d'rekkathnor", "khari'd", "gual'te", "nikka", "nikt'o", "barada", "kla'atu", "barhah", "hra" ,"zar'garis")
 
 /datum/language/mouse
-	name = "Mouse"
+	name = LANGUAGE_MOUSE
 	desc = "Literally just squeaks"
 	speech_verb = "squeaks"
 	colour = "say_quote"

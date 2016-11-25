@@ -6,7 +6,7 @@
 	w_class = W_CLASS_SMALL
 	flags = FPRINT
 	slot_flags = SLOT_BELT
-	origin_tech = "programming=2"
+	origin_tech = Tc_PROGRAMMING + "=2"
 	var/looking_for_personality = 0
 	var/mob/living/silicon/pai/pai
 
@@ -131,24 +131,42 @@
 		src.overlays.len = 0
 		pai.overlays.len = 0
 		switch(emotion)
-			if(1) face = "pai-happy"
-			if(2) face = "pai-cat"
-			if(3) face = "pai-extremely-happy"
-			if(4) face = "pai-face"
-			if(5) face = "pai-laugh"
-			if(6) face = "pai-off"
-			if(7) face = "pai-sad"
-			if(8) face = "pai-angry"
-			if(9) face = "pai-what"
-			if(10) face = "pai-longface"
-			if(11) face = "pai-sick"
-			if(12) face = "pai-high"
-			if(13) face = "pai-love"
-			if(14) face = "pai-electric"
-			if(15) face = "pai-pissed"
-			if(16) face = "pai-nose"
-			if(17) face = "pai-kawaii"
-			if(18) face = "pai-cry"
+			if(1)
+				face = "pai-happy"
+			if(2)
+				face = "pai-cat"
+			if(3)
+				face = "pai-extremely-happy"
+			if(4)
+				face = "pai-face"
+			if(5)
+				face = "pai-laugh"
+			if(6)
+				face = "pai-off"
+			if(7)
+				face = "pai-sad"
+			if(8)
+				face = "pai-angry"
+			if(9)
+				face = "pai-what"
+			if(10)
+				face = "pai-longface"
+			if(11)
+				face = "pai-sick"
+			if(12)
+				face = "pai-high"
+			if(13)
+				face = "pai-love"
+			if(14)
+				face = "pai-electric"
+			if(15)
+				face = "pai-pissed"
+			if(16)
+				face = "pai-nose"
+			if(17)
+				face = "pai-kawaii"
+			if(18)
+				face = "pai-cry"
 		src.overlays += image(icon=icon, icon_state = "[face]")
 		pai.overlays += image(icon=icon, icon_state = "[face]")//we also update the mob's overlay so it appears properly on the scoreboard.
 

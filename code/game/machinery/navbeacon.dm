@@ -8,7 +8,8 @@
 	name = "navigation beacon"
 	desc = "A radio beacon used for bot navigation."
 	level = 1		// underfloor
-	layer = 2.5
+	plane = ABOVE_TURF_PLANE
+	layer = ABOVE_TILE_LAYER
 	anchored = 1
 
 	var/locked = 1		// true if controls are locked
@@ -88,7 +89,8 @@
 
 		var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
 
-		if(!frequency) return
+		if(!frequency)
+			return
 
 		var/datum/signal/signal = getFromPool(/datum/signal)
 		signal.source = src
@@ -182,7 +184,8 @@ Transponder Codes:<UL>"}
 		return
 
 	Topic(href, href_list)
-		if(..()) return 1
+		if(..())
+			return 1
 		else
 			if(panel_open && !locked)
 				usr.set_machine(src)

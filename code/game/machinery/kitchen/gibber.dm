@@ -121,7 +121,7 @@ obj/machinery/gibber/New()
 		if(M.client)
 			M.client.perspective = EYE_PERSPECTIVE
 			M.client.eye = src
-		M.loc = src
+		M.forceMove(src)
 		src.occupant = M
 		returnToPool(G)
 		update_icon()
@@ -154,7 +154,7 @@ obj/machinery/gibber/New()
 		if(user.client)
 			user.client.perspective = EYE_PERSPECTIVE
 			user.client.eye = src
-		user.loc = src
+		user.forceMove(src)
 		src.occupant = user
 		update_icon()
 
@@ -179,7 +179,7 @@ obj/machinery/gibber/New()
 	if (src.occupant.client)
 		src.occupant.client.eye = src.occupant.client.mob
 		src.occupant.client.perspective = MOB_PERSPECTIVE
-	src.occupant.loc = src.loc
+	src.occupant.forceMove(src.loc)
 	src.occupant = null
 	update_icon()
 	return
@@ -240,7 +240,7 @@ obj/machinery/gibber/New()
 		for (var/i=1 to totalslabs)
 			var/obj/item/meatslab = allmeat[i]
 			var/turf/Tx = locate(src.x - i, src.y, src.z)
-			meatslab.loc = src.loc
+			meatslab.forceMove(src.loc)
 			meatslab.throw_at(Tx,i,3)
 			if (!Tx.density)
 				var/obj/effect/decal/cleanable/blood/gibs/O = getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx)
@@ -324,7 +324,7 @@ obj/machinery/gibber/New()
 		var/obj/item/organ/brain/B = new(src.loc)
 		B.transfer_identity(victim)
 		var/turf/Tx = locate(src.x - 2, src.y, src.z)
-		B.loc = src.loc
+		B.forceMove(src.loc)
 		B.throw_at(Tx,2,3)
 		if(isalien(victim))
 			var/obj/effect/decal/cleanable/blood/gibs/xeno/O = getFromPool(/obj/effect/decal/cleanable/blood/gibs/xeno, Tx)

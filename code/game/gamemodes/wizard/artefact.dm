@@ -21,7 +21,6 @@
 	icon = 'icons/obj/biomass.dmi'
 	icon_state = "rift"
 	density = 1
-	unacidable = 1
 	anchored = 1.0
 
 /obj/effect/rend/New()
@@ -62,7 +61,8 @@
 	return
 
 /obj/effect/rend/cow/process()
-	if(locate(/mob) in loc) return
+	if(locate(/mob) in loc)
+		return
 	new /mob/living/simple_animal/cow(loc)
 	cowsleft--
 	if(cowsleft <= 0)
@@ -124,7 +124,8 @@
 
 /obj/item/weapon/staff/necro/process()
 	charge_tick++
-	if(charge_tick < 4) return 0
+	if(charge_tick < 4)
+		return 0
 	charge_tick = 0
 	charges++
 	return 1

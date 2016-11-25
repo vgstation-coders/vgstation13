@@ -99,22 +99,23 @@
 
 	//If limb took enough damage, try to cut or tear it off
 	if(body_part != UPPER_TORSO && body_part != LOWER_TORSO) //As hilarious as it is, getting hit on the chest too much shouldn't effectively gib you.
-		if(config.limbs_can_break && brute_dam >= max_damage * config.organ_health_multiplier)
+		if(config.limbs_can_break && brute_dam + burn_dam >= max_damage * config.organ_health_multiplier)
 			if(((sharp || is_peg()) && prob((5 * brute) * sharp)) || (brute > 20 && prob(2 * brute))) //sharp things have a greater chance to sever based on how sharp they are
 				droplimb(1)
 				return
-		else if((config.limbs_can_break && sharp == 100) || ((sharp >= 2) && (config.limbs_can_break && brute_dam >= (max_damage * config.organ_health_multiplier)/sharp))) //items of exceptional sharpness are capable of severing the limb below its damage threshold, the necessary threshold scaling inversely with sharpness
+		else if((config.limbs_can_break && sharp == 100) || ((sharp >= 2) && (config.limbs_can_break && brute_dam + burn_dam >= (max_damage * config.organ_health_multiplier)/sharp))) //items of exceptional sharpness are capable of severing the limb below its damage threshold, the necessary threshold scaling inversely with sharpness
 			if(prob((5 * (brute * sharp)) * (sharp - 1))) //the same chance multiplier based on sharpness applies here as well
 				droplimb(1)
 				return
 
 	//High brute damage or sharp objects may damage internal organs
 	if(internal_organs != null)
-		if((sharp && brute >= 5) || brute >= 10) if(prob(5))
-			//Damage an internal organ
-			var/datum/organ/internal/I = pick(internal_organs)
-			I.take_damage(brute / 2)
-			brute -= brute / 2
+		if((sharp && brute >= 5) || brute >= 10)
+			if(prob(5))
+				//Damage an internal organ
+				var/datum/organ/internal/I = pick(internal_organs)
+				I.take_damage(brute / 2)
+				brute -= brute / 2
 
 	if(is_broken() && prob(40) && brute)
 		owner.emote("scream", , , 1) //Getting hit on broken and unsplinted limbs hurts
@@ -227,7 +228,7 @@
 	//Remove embedded objects and drop them on the floor
 	for(var/obj/implanted_object in implants)
 		if(!istype(implanted_object,/obj/item/weapon/implant))	//We don't want to remove REAL implants. Just shrapnel etc.
-			implanted_object.loc = owner.loc
+			implanted_object.forceMove(owner.loc)
 			implants -= implanted_object
 
 	owner.updatehealth()
@@ -501,11 +502,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 		//Internal wounds get worse over time. Low temperatures (cryo) stop them.
 		if(W.internal && !W.is_treated() && owner.bodytemperature >= 170 && !(owner.species && owner.species.flags & NO_BLOOD))
-			if(!owner.reagents.has_reagent(BICARIDINE) && !owner.reagents.has_reagent(INAPROVALINE) && !owner.reagents.has_reagent(CLOTTING_AGENT))	//Bicard, inaprovaline, and clotting agent stops internal wounds from growing bigger with time, and also stop bleeding
+			if(!owner.reagents.has_reagent(BICARIDINE) && !owner.reagents.has_reagent(INAPROVALINE) && !owner.reagents.has_reagent(CLOTTING_AGENT) && !owner.reagents.has_reagent(BIOFOAM))	//Bicard, inaprovaline, clotting agent, and biofoam stop internal wounds from growing bigger with time, and also slow bleeding
 				W.open_wound(0.1 * wound_update_accuracy)
 				owner.vessel.remove_reagent(BLOOD, 0.05 * W.damage * wound_update_accuracy)
 
-			owner.vessel.remove_reagent(BLOOD, 0.02 * W.damage * wound_update_accuracy) //Bicaridine slows Internal Bleeding
+			if(!owner.reagents.has_reagent(CLOTTING_AGENT) && !owner.reagents.has_reagent(BIOFOAM))	//Clotting agent and biofoam stop bleeding entirely.
+				owner.vessel.remove_reagent(BLOOD, 0.02 * W.damage * wound_update_accuracy)
 			if(prob(1 * wound_update_accuracy))
 				owner.custom_pain("You feel a stabbing pain in your [display_name]!", 1)
 
@@ -631,9 +633,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 		src.status &= ~ORGAN_SPLINTED
 		src.status &= ~ORGAN_DEAD
 
-		for(var/implant in implants)
-			qdel(implant)
-
 		//If any organs are attached to this, destroy them
 		for(var/datum/organ/external/O in children)
 			O.droplimb(1)
@@ -644,6 +643,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 			if(species) //Transfer species to the generated organ
 				organ.species = src.species
 				organ.update_icon()
+
+		for(var/implant in implants)
+			qdel(implant)
 
 		src.species = null
 
@@ -897,8 +899,13 @@ Note that amputating the affected organ does in fact remove the infection from t
 /datum/organ/external/proc/can_use_advanced_tools()
 	return !(status & (ORGAN_DESTROYED|ORGAN_MUTATED|ORGAN_DEAD|ORGAN_PEG|ORGAN_CUT_AWAY))
 
+/datum/organ/external/proc/can_grasp()
+	return (can_grasp && grasp_id)
+
 /datum/organ/external/proc/process_grasp(var/obj/item/c_hand, var/hand_name)
 	if(!c_hand)
+		return
+	if(c_hand.cant_drop)
 		return
 
 	if(is_broken() && !istype(c_hand,/obj/item/tk_grab))
@@ -927,7 +934,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(ismob(W.loc))
 		var/mob/living/H = W.loc
 		H.drop_item(W, force_drop = 1)
-	W.loc = owner
+	W.forceMove(owner)
 
 /****************************************************
 			   ORGAN DEFINES
@@ -964,7 +971,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	grasp_id = GRASP_LEFT_HAND
 
 /datum/organ/external/l_arm/generate_dropped_organ(current_organ)
-	if(status & ORGAN_PEG) current_organ = new /obj/item/stack/sheet/wood(owner.loc)
+	if(status & ORGAN_PEG)
+		current_organ = new /obj/item/stack/sheet/wood(owner.loc)
 	if(!current_organ)
 		if(status & ORGAN_ROBOT)
 			current_organ= new /obj/item/robot_parts/l_arm(owner.loc)
@@ -1249,7 +1257,8 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 /obj/item/weapon/organ/update_icon(mob/living/carbon/human/H)
 	..()
 
-	if(!H && !species) return
+	if(!H && !species)
+		return
 
 	var/icon/base
 	if(H)
@@ -1345,15 +1354,17 @@ obj/item/weapon/organ/r_leg/New(loc, mob/living/carbon/human/H)
 		if(B)
 			B.infest_limb(src)
 
-obj/item/weapon/organ/head
+/obj/item/weapon/organ/head
 	dir = NORTH
 	name = LIMB_HEAD
 	icon_state = "head_m"
 	part = LIMB_HEAD
-	ashtype = /obj/item/weapon/skull
 	var/mob/living/carbon/brain/brainmob
 	var/brain_op_stage = 0
 	var/mob/living/carbon/human/origin_body = null
+
+/obj/item/weapon/organ/head/ashtype()
+	return /obj/item/weapon/skull
 
 obj/item/weapon/organ/head/Destroy()
 	if(brainmob)

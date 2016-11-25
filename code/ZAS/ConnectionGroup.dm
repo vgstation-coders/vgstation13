@@ -100,7 +100,8 @@ Class Procs:
 
 		//Check for knocking people over
 		if(ismob(M) && differential > zas_settings.Get(/datum/ZAS_Setting/airflow_stun_pressure))
-			if(M:status_flags & GODMODE) continue
+			if(M:status_flags & GODMODE)
+				continue
 			M:airflow_stun()
 
 		if(M.check_airflow_movable(differential))
@@ -128,7 +129,7 @@ Class Procs:
 							continue
 					else if(!(M.loc in src:A.contents))
 						continue
-						M.GotoAirflowDest(differential/10)
+					M.GotoAirflowDest(differential/10)
 
 
 
@@ -148,11 +149,13 @@ Class Procs:
 /connection_edge/zone/add_connection(connection/c)
 	. = ..()
 	connecting_turfs.Add(c.A)
-	if(c.direct()) direct++
+	if(c.direct())
+		direct++
 
 /connection_edge/zone/remove_connection(connection/c)
 	connecting_turfs.Remove(c.A)
-	if(c.direct()) direct--
+	if(c.direct())
+		direct--
 	. = ..()
 
 /connection_edge/zone/contains_zone(zone/Z)
@@ -183,7 +186,8 @@ Class Procs:
 //	to_chat(world, "equalized.")
 
 	var/differential = A.air.return_pressure() - B.air.return_pressure()
-	if(abs(differential) < zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure)) return
+	if(abs(differential) < zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
+		return
 
 	var/list/attracted
 	var/list/repelled
@@ -201,8 +205,10 @@ Class Procs:
 
 //Helper proc to get connections for a zone.
 /connection_edge/zone/proc/get_connected_zone(zone/from)
-	if(A == from) return B
-	else return A
+	if(A == from)
+		return B
+	else
+		return A
 
 /connection_edge/unsimulated/var/turf/B
 /connection_edge/unsimulated/var/datum/gas_mixture/air
@@ -242,7 +248,8 @@ Class Procs:
 	air_master.mark_zone_update(A)
 
 	var/differential = A.air.return_pressure() - air.return_pressure()
-	if(abs(differential) < zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure)) return
+	if(abs(differential) < zas_settings.Get(/datum/ZAS_Setting/airflow_lightest_pressure))
+		return
 
 	var/list/attracted = A.movables()
 	flow(attracted, abs(differential), differential < 0)
@@ -325,8 +332,10 @@ proc/ShareRatio(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 	A.update_values()
 	B.update_values()
 
-	if(A.compare(B)) return 1
-	else return 0
+	if(A.compare(B))
+		return 1
+	else
+		return 0
 
 proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 	//A modified version of ShareRatio for spacing gas at the same rate as if it were going into a large airless room.
@@ -432,7 +441,8 @@ proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 
 	A.update_values()
 
-	if(dbg_output) to_chat(world, "Result: [abs(old_pressure - A.return_pressure())] kPa")
+	if(dbg_output)
+		to_chat(world, "Result: [abs(old_pressure - A.return_pressure())] kPa")
 
 	return abs(old_pressure - A.return_pressure())
 

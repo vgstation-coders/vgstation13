@@ -38,9 +38,12 @@
 
 	//I put the nutriment stuff here
 
-	if(!hardcore_mode_on) return //If hardcore mode isn't on, return
-	if(!eligible_for_hardcore_mode(src)) return //If our mob isn't affected by hardcore mode (like it isn't player controlled), return
-	if(src.isDead()) return //Don't affect dead dudes
+	if(!hardcore_mode_on)
+		return //If hardcore mode isn't on, return
+	if(!eligible_for_hardcore_mode(src))
+		return //If our mob isn't affected by hardcore mode (like it isn't player controlled), return
+	if(src.isDead())
+		return //Don't affect dead dudes
 
 	if(nutrition < 100) //Nutrition is below 100 = starvation
 
@@ -56,35 +59,39 @@
 
 		switch(nutrition)
 			if(STARVATION_NOTICE to STARVATION_MIN) //60-80
-				if(sleeping) return
+				if(sleeping)
+					return
 
 				if(prob(2))
 					to_chat(src, "<span class='notice'>[pick("You're very hungry.","You really could use a meal right now.")]</span>")
 
 			if(STARVATION_WEAKNESS to STARVATION_NOTICE) //30-60
-				if(sleeping) return
+				if(sleeping)
+					return
 
 				if(prob(3)) //3% chance of a tiny amount of oxygen damage (1-10)
 
 					adjustOxyLoss(rand(1,10))
 					to_chat(src, "<span class='danger'>[pick(hunger_phrases)]</span>")
 
-				else if(prob(5)) //5% chance of being weakened
+				else if(prob(5)) //5% chance of being knocked down
 
 					eye_blurry += 10
-					Weaken(10)
+					Knockdown(10)
 					adjustOxyLoss(rand(1,15))
 					to_chat(src, "<span class='danger'>You're starving! The lack of strength makes you black out for a few moments...</span>")
 
 			if(STARVATION_NEARDEATH to STARVATION_WEAKNESS) //5-30, 5% chance of weakening and 1-230 oxygen damage. 5% chance of a seizure. 10% chance of dropping item
-				if(sleeping) return
+				if(sleeping)
+					return
 
 				if(prob(5))
 
 					adjustOxyLoss(rand(1,20))
 					to_chat(src, "<span class='danger'>You're starving. You feel your life force slowly leaving your body...</span>")
 					eye_blurry += 20
-					if(weakened < 1) Weaken(20)
+					if(knockdown < 1)
+						Knockdown(20)
 
 				else if(paralysis<1 && prob(5)) //Mini seizure (25% duration and strength of a normal seizure)
 
@@ -102,4 +109,4 @@
 				adjustBrainLoss(STARVATION_BRAIN_DAMAGE)
 
 				if(prob(10))
-					Weaken(15)
+					Knockdown(15)

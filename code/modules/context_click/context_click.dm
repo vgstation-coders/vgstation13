@@ -22,8 +22,8 @@ IDs can then be used to cause certain behaviour using the action() proc
 		return
 
 	var/list/params_list = params2list(params)
-	var/x_pos_clicked = Clamp(text2num(params_list["icon-x"]), 1, 32)
-	var/y_pos_clicked = Clamp(text2num(params_list["icon-y"]), 1, 32)
+	var/x_pos_clicked = Clamp(text2num(params_list["icon-x"]), 1, WORLD_ICON_SIZE)
+	var/y_pos_clicked = Clamp(text2num(params_list["icon-y"]), 1, WORLD_ICON_SIZE)
 
 	return return_clicked_id(x_pos_clicked, y_pos_clicked)
 

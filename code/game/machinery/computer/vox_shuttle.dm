@@ -78,7 +78,8 @@ var/global/vox_shuttle_location
 	return
 
 /obj/machinery/computer/vox_station/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 
 	var/mob/user = usr
 

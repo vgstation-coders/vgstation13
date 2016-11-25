@@ -21,7 +21,7 @@
 	if(!isnull(src.loc))
 		if(carried)
 			var/list/targets = choose_prox_targets(user = carried.holder, spell_holder = src)
-			if(targets.len)
+			if(targets && targets.len)
 				src.prox_cast(targets)
 		if(proj_trail && src && src.loc) //pretty trails
 			var/obj/effect/overlay/trail = getFromPool(/obj/effect/overlay, src.loc)
@@ -49,7 +49,10 @@
 	return
 
 /obj/item/projectile/spell_projectile/proc/choose_prox_targets(user = carried.holder, spell_holder = src)
-	return carried.choose_prox_targets(args)
+	if(!carried)
+		return
+
+	return carried.choose_prox_targets(arglist(args))
 
 /obj/item/projectile/spell_projectile/seeking
 	name = "seeking spell"

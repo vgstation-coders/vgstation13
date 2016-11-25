@@ -92,7 +92,8 @@
 /obj/item/weapon/reagent_containers/glass/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
 		var/tmp_label = sanitize(input(user, "Enter a label for [src.name]","Label",src.label_text))
-		if (!Adjacent(user) || user.stat) return
+		if (!Adjacent(user) || user.stat)
+			return
 		if(length(tmp_label) > 10)
 			to_chat(user, "<span class='warning'>The label can be at most 10 characters long.</span>")
 		else
@@ -113,7 +114,7 @@
 	icon_state = "beaker"
 	item_state = "beaker"
 	starting_materials = list(MAT_GLASS = 500)
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 
 /obj/item/weapon/reagent_containers/glass/beaker/attackby(obj/item/weapon/W, mob/user)
 	if(src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/weapon/surgicaldrill)) //regular beakers only
@@ -186,13 +187,20 @@
 
 		var/percent = round((reagents.total_volume / volume) * 100)
 		switch(percent)
-			if(0 to 9)		filling.icon_state = "[icon_state]-10"
-			if(10 to 24) 	filling.icon_state = "[icon_state]10"
-			if(25 to 49)	filling.icon_state = "[icon_state]25"
-			if(50 to 74)	filling.icon_state = "[icon_state]50"
-			if(75 to 79)	filling.icon_state = "[icon_state]75"
-			if(80 to 90)	filling.icon_state = "[icon_state]80"
-			if(91 to INFINITY)	filling.icon_state = "[icon_state]100"
+			if(0 to 9)
+				filling.icon_state = "[icon_state]-10"
+			if(10 to 24)
+				filling.icon_state = "[icon_state]10"
+			if(25 to 49)
+				filling.icon_state = "[icon_state]25"
+			if(50 to 74)
+				filling.icon_state = "[icon_state]50"
+			if(75 to 79)
+				filling.icon_state = "[icon_state]75"
+			if(80 to 90)
+				filling.icon_state = "[icon_state]80"
+			if(91 to INFINITY)
+				filling.icon_state = "[icon_state]100"
 
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
@@ -225,7 +233,7 @@
 	starting_materials = list(MAT_GLASS = 500)
 	volume = 50
 	flags = FPRINT  | OPENCONTAINER | NOREACT
-	origin_tech = "bluespace=3;materials=4"
+	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=4"
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/large
 	name = "large stasis beaker"
@@ -233,7 +241,7 @@
 	icon_state = "beakernoreactlarge"
 	starting_materials = list(MAT_GLASS = 1500)
 	volume = 100
-	origin_tech = "bluespace=4;materials=6"
+	origin_tech = Tc_BLUESPACE + "=4;" + Tc_MATERIALS + "=6"
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace
 	name = "bluespace beaker"
@@ -244,7 +252,7 @@
 	w_type = RECYK_GLASS
 	possible_transfer_amounts = list(5,10,15,25,30,50,100,200)
 	flags = FPRINT  | OPENCONTAINER
-	origin_tech = "bluespace=2;materials=3"
+	origin_tech = Tc_BLUESPACE + "=2;" + Tc_MATERIALS + "=3"
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace/large
 	name = "large bluespace beaker"
@@ -253,7 +261,7 @@
 	starting_materials = list(MAT_GLASS = 5000)
 	volume = 300
 	possible_transfer_amounts = list(5,10,15,25,30,50,100,150,200,300)
-	origin_tech = "bluespace=3;materials=5"
+	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=5"
 
 /obj/item/weapon/reagent_containers/glass/beaker/vial
 	name = "vial"

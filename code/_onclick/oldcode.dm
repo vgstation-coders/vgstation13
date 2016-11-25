@@ -1,5 +1,6 @@
 /atom/DblClick(location, control, params) //TODO: DEFERRED: REWRITE
-	if(!usr)	return
+	if(!usr)
+		return
 
 	// ------- TIME SINCE LAST CLICK -------
 	if (world.time <= usr:lastDblClick+1)
@@ -23,16 +24,24 @@
 
 			if(dy || dx)
 				if(abs(dx) < abs(dy))
-					if(dy > 0)	usr.dir = NORTH
-					else		usr.dir = SOUTH
+					if(dy > 0)
+						usr.dir = NORTH
+					else
+						usr.dir = SOUTH
 				else
-					if(dx > 0)	usr.dir = EAST
-					else		usr.dir = WEST
+					if(dx > 0)
+						usr.dir = EAST
+					else
+						usr.dir = WEST
 			else
-				if(pixel_y > 16)		usr.dir = NORTH
-				else if(pixel_y < -16)	usr.dir = SOUTH
-				else if(pixel_x > 16)	usr.dir = EAST
-				else if(pixel_x < -16)	usr.dir = WEST
+				if(pixel_y > 16)
+					usr.dir = NORTH
+				else if(pixel_y < -16)
+					usr.dir = SOUTH
+				else if(pixel_x > 16)
+					usr.dir = EAST
+				else if(pixel_x < -16)
+					usr.dir = WEST
 
 
 
@@ -46,7 +55,8 @@
 	// ------- CYBORG -------
 	else if (istype(usr, /mob/living/silicon/robot))
 		var/mob/living/silicon/robot/bot = usr
-		if (bot.lockcharge) return
+		if (bot.lockcharge)
+			return
 	..()
 
 
@@ -55,7 +65,8 @@
 	if(params)
 		var/parameters = params2list(params)
 
-		if(parameters["shift"]){
+		if(parameters["shift"])
+			{
 			if(!isAI(usr))
 				ShiftClick(usr)
 			else
@@ -65,7 +76,8 @@
 
 		// ------- ALT-CLICK -------
 
-		if(parameters["alt"]){
+		if(parameters["alt"])
+			{
 			if(!isAI(usr))
 				AltClick(usr)
 			else
@@ -75,7 +87,8 @@
 
 		// ------- CTRL-CLICK -------
 
-		if(parameters["ctrl"]){
+		if(parameters["ctrl"])
+			{
 			if(!isAI(usr))
 				CtrlClick(usr)
 			else
@@ -85,7 +98,8 @@
 
 		// ------- MIDDLE-CLICK -------
 
-		if(parameters["middle"]){
+		if(parameters["middle"])
+			{
 			if(!isAI(usr))
 				MiddleClick(usr)
 				return
@@ -114,7 +128,7 @@
 			usr.update_inv_r_hand(0)
 		return
 
-	// ------- PARALYSIS, STUN, WEAKENED, DEAD, (And not AI) -------
+	// ------- PARALYSIS, STUN, KNOCKDOWN, DEAD, (And not AI) -------
 	if ((user.incapacitated() && !istype(usr, /mob/living/silicon/ai)))
 		return
 
@@ -204,7 +218,7 @@
 									// ------- YOU TRIED TO CLICK ON AN ITEM THROUGH A WINDOW (OR SIMILAR THING THAT LIMITS ON BORDERS) ON THE TILE YOU'RE ON -------
 									check_1 = 0
 
-					D.loc = usr.loc
+					D.forceMove(usr.loc)
 					if(step_to(D, Step_2))
 						check_2 = 1
 
@@ -255,7 +269,7 @@
 
 			//del(D)
 			// Garbage Collect Dummy
-			D.loc = null
+			D.forceMove(null)
 			D = null
 
 			// ------- DUMMY OBJECT'S SERVED IT'S PURPOSE, IT'S REWARDED WITH A SWIFT DELETE -------

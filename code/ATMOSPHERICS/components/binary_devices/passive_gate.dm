@@ -138,7 +138,8 @@
 	return
 
 /obj/machinery/atmospherics/binary/passive_gate/Topic(href,href_list)
-	if(..()) return
+	if(..())
+		return
 	if(href_list["power"])
 		on = !on
 		investigation_log(I_ATMOS,"was turned [on ? "on" : "off"] by [key_name(usr)]")

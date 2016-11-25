@@ -467,6 +467,14 @@
 	result = "/obj/mecha/combat/durand"
 	base_icon = "durand"
 
+/datum/construction/reversible/mecha/combat/marauder
+	mainboard = /obj/item/weapon/circuitboard/mecha/marauder/main
+	peripherals = /obj/item/weapon/circuitboard/mecha/marauder/peripherals
+	targeting = /obj/item/weapon/circuitboard/mecha/marauder/targeting
+	armor_plates = /obj/item/mecha_parts/part/marauder_armour
+	result = "/obj/mecha/combat/marauder/series"
+	base_icon = "marauder"
+
 /datum/construction/reversible/mecha/honker
 	base_icon = "honker"
 	result = "/obj/mecha/combat/honker"

@@ -88,7 +88,9 @@
 	var/banappeals
 	var/wikiurl = "http://baystation12.net/wiki/index.php?title=Main_Page"
 	var/vgws_base_url = "http://ss13.moe" // No hanging slashes.
+	var/vgws_ip = "198.245.63.50" // IP address in the `world.Topic()` call when the vgws sends a request over TCP.
 	var/forumurl = "http://baystation12.net/forums/"
+	var/poll_results_url
 
 	var/media_base_url = "" // http://ss13.nexisonline.net/media
 	var/media_secret_key = "" // Random string
@@ -180,6 +182,10 @@
 	var/error_silence_time = 6000 // How long a unique error will be silenced for
 	var/error_msg_delay = 50 // How long to wait between messaging admins about occurrences of a unique error
 
+	// Discord crap.
+	var/discord_url
+	var/discord_password
+
 /datum/configuration/New()
 	. = ..()
 	var/list/L = typesof(/datum/game_mode) - /datum/game_mode
@@ -206,7 +212,8 @@
 	var/list/Lines = file2list(filename)
 
 	for(var/t in Lines)
-		if(!t)	continue
+		if(!t)
+			continue
 
 		t = trim(t)
 		if (length(t) == 0)
@@ -231,10 +238,10 @@
 			switch (name)
 				if ("resource_urls")
 					config.resource_urls = splittext(value, " ")
-					
-				if("tts_server")	
+
+				if("tts_server")
 					config.tts_server = value
-					
+
 				if ("admin_legacy_system")
 					config.admin_legacy_system = 1
 
@@ -527,13 +534,17 @@
 				if("assistant_ratio")
 					config.assistantratio = text2num(value)
 				if("copy_logs")
-					copy_logs=value
+					copy_logs = value
 				if("media_base_url")
 					media_base_url = value
 				if("media_secret_key")
 					media_secret_key = value
 				if("vgws_base_url")
 					vgws_base_url = value
+				if("vgws_ip")
+					vgws_ip = value
+				if("poll_results_url")
+					poll_results_url = value
 				if("map_voting")
 					map_voting = 1
 				if("renders_url")
@@ -558,6 +569,10 @@
 					error_silence_time = value
 				if("error_msg_delay")
 					error_msg_delay = value
+				if("discord_url")
+					discord_url = value
+				if("discord_password")
+					discord_password = value
 
 				else
 					diary << "Unknown setting in configuration: '[name]'"
@@ -628,7 +643,8 @@
 /datum/configuration/proc/loadsql(filename)  // -- TLE
 	var/list/Lines = file2list(filename)
 	for(var/t in Lines)
-		if(!t)	continue
+		if(!t)
+			continue
 
 		t = trim(t)
 		if (length(t) == 0)
@@ -674,7 +690,8 @@
 /datum/configuration/proc/loadforumsql(filename)  // -- TLE
 	var/list/Lines = file2list(filename)
 	for(var/t in Lines)
-		if(!t)	continue
+		if(!t)
+			continue
 
 		t = trim(t)
 		if (length(t) == 0)

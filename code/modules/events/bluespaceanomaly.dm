@@ -34,7 +34,7 @@
 
 
 /datum/event/bluespace_anomaly/announce()
-	command_alert("Bluespace anomaly detected in the vicinity of [station_name()]. [impact_area.name] has been affected.", "Anomaly Alert")
+	command_alert(new /datum/command_alert/bluespace_anomaly(impact_area.name))
 
 
 /datum/event/bluespace_anomaly/start()
@@ -66,11 +66,16 @@
 			var/y_distance = TO.y - FROM.y
 			var/x_distance = TO.x - FROM.x
 			for (var/atom/movable/A in range(12, FROM )) // iterate thru list of mobs in the area
-				if(istype(A, /obj/item/beacon)) continue // don't teleport beacons because that's just insanely stupid
-				if(A.anchored && (istype(A, /obj/machinery) || istype(A,/obj/structure))) continue
-				if(istype(A, /obj/structure/disposalpipe )) continue
-				if(istype(A, /obj/structure/cable )) continue
-				if(istype(A, /atom/movable/lighting_overlay)) continue
+				if(istype(A, /obj/item/beacon))
+					continue // don't teleport beacons because that's just insanely stupid
+				if(A.anchored && (istype(A, /obj/machinery) || istype(A,/obj/structure)))
+					continue
+				if(istype(A, /obj/structure/disposalpipe ))
+					continue
+				if(istype(A, /obj/structure/cable ))
+					continue
+				if(istype(A, /atom/movable/lighting_overlay))
+					continue
 
 				var/turf/newloc = locate(A.x + x_distance, A.y + y_distance, TO.z) // calculate the new place
 				A.forceMove(newloc)
@@ -83,7 +88,8 @@
 							blueeffect.screen_loc = "WEST,SOUTH to EAST,NORTH"
 							blueeffect.icon = 'icons/effects/effects.dmi'
 							blueeffect.icon_state = "shieldsparkles"
-							blueeffect.layer = 17
+							blueeffect.plane = HUD_PLANE
+							blueeffect.layer = UNDER_HUD_LAYER
 							blueeffect.mouse_opacity = 0
 							M.client.screen += blueeffect
 							sleep(20)

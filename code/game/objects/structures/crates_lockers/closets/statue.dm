@@ -21,7 +21,7 @@
 		if(L.client)
 			L.client.perspective = EYE_PERSPECTIVE
 			L.client.eye = src
-		L.loc = src
+		L.forceMove(src)
 		L.sdisabilities |= MUTE
 		L.delayNextAttack(timer)
 		L.click_delayer.setDelay(timer)
@@ -57,6 +57,7 @@
 		M.adjustFireLoss(intialFire - M.getFireLoss())
 		M.adjustBruteLoss(intialBrute - M.getBruteLoss())
 		M.setOxyLoss(intialOxy)
+		M.Paralyse(2)
 	if (timer <= 0)
 		dump_contents()
 		processing_objects.Remove(src)
@@ -65,10 +66,10 @@
 /obj/structure/closet/statue/dump_contents()
 
 	for(var/obj/O in src)
-		O.loc = src.loc
+		O.forceMove(src.loc)
 
 	for(var/mob/living/M in src)
-		M.loc = src.loc
+		M.forceMove(src.loc)
 		M.sdisabilities &= ~MUTE
 		M.take_overall_damage((M.health - health - 100),0) //any new damage the statue incurred is transfered to the mob
 		if(M.client)

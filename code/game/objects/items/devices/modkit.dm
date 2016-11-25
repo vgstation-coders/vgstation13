@@ -3,7 +3,7 @@
 	name = "modification kit"
 	desc = "A kit containing all the needed tools and parts to modify an item into another one."
 	icon_state = "modkit"
-	origin_tech = "materials=2;engineering=2"
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
 	var/list/parts = list()		//how many times can this kit perform a given modification
 	var/list/original = list()	//the starting parts
 	var/list/finished = list()	//the finished products
@@ -132,7 +132,7 @@
 	parts[1] =	1
 	original[1] = /obj/item/weapon/gun/energy/polarstar
 	finished[1] = /obj/item/weapon/gun/energy/polarstar/spur
-	
+
 /obj/item/device/modkit/aeg_parts
 	name = "advanced energy gun modkit"
 	desc = "A kit containing all the needed tools and parts to modify an energy gun into an advanced energy gun, granting it the ability to recharge itself."

@@ -29,7 +29,8 @@
 	usable_unlocks=list()
 	avail_unlocks=list()
 	for(var/datum/unlockable/U in get_avail_unlocks())
-		if(!U.id) continue
+		if(!U.id)
+			continue
 		U.set_context(src)
 		if(!U.unlocked && U.can_buy(src) && U.check_prerequisites(src) && U.check_antirequisites(src))
 			usable_unlocks[U.id]="\ref[U]"

@@ -165,7 +165,38 @@
 	item_state = "white"
 	_color = "mime"
 	species_fit = list(VOX_SHAPED)
-
+	
+/obj/item/clothing/gloves/white/advanced //mime traitor gloves, spawn in a silent hand gun with two shots 
+	action_button_name = "Prime Gun/Lower Aim"
+	var/obj/item/weapon/gun/projectile/handgun/current_gun = null
+	var/charging = FALSE
+	
+/obj/item/clothing/gloves/white/advanced/attack_self(mob/user)
+	var/mob/living/carbon/human/M = user
+	if(!istype(M))
+		return
+	if(current_gun)
+		to_chat(M, "<span class ='notice'>Your gun evaporates into thin air!</span>")
+		qdel(current_gun)
+		current_gun = null
+		charging = TRUE
+		spawn(50)
+			charging = FALSE
+		return
+	if(!charging)
+		if(!M.get_active_hand())
+			var/obj/item/weapon/gun/projectile/handgun/G = new
+			current_gun = G
+			if(!M.miming) //nonmimes get a loud version
+				G.silenced = FALSE
+				G.fire_sound = 'sound/weapons/Gunshot.ogg'
+			M.put_in_active_hand(G)
+			to_chat(M, "<span class ='notice'>You begin to channel an invisible gun through your fingers!</span>")
+		else
+			to_chat(M, "<span class = 'warning'> Your hand is full! </span>")
+	else
+		to_chat(M, "<span class ='warning'>You need to regain your focus before channeling another gun!</span>")
+			
 /obj/item/clothing/gloves/white/stunglove // For Clown Planet's mimes. - N3X
 	New()
 		..()

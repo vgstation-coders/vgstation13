@@ -18,6 +18,10 @@
 	visible_message("<span class='danger'>[user] is using the deconstruct function on \the [src] on \himself! It looks like \he's  trying to commit suicide!</span>")
 	return (user.death(1))
 
+/obj/item/device/rcd/matter/engineering/pre_loaded/New() //Comes with max energy
+	..()
+	matter = max_matter
+
 /obj/item/device/rcd/borg/engineering
 	schematics = list(
 	/datum/rcd_schematic/decon,
@@ -35,9 +39,9 @@
 	opacity = 0
 	density = 0
 	anchored = 0.0
-	origin_tech = "materials=2"
+	origin_tech = Tc_MATERIALS + "=2"
 	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_IRON = 30000, MAT_GLASS = 15000)
+	starting_materials = list(MAT_IRON = 20000, MAT_GLASS = 10000)
 	w_type = RECYK_ELECTRONIC
 
 /obj/item/weapon/rcd_ammo/attackby(var/obj/O, mob/user)

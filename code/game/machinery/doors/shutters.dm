@@ -5,10 +5,11 @@
 	power_channel = ENVIRON
 	var/sound_open = 'sound/machines/shutter_open.ogg'
 	var/sound_close = 'sound/machines/shutter_close.ogg'
+	animation_delay = 7
 
 /obj/machinery/door/poddoor/shutters/New()
 	..()
-	layer = 3.1
+	layer = ABOVE_DOOR_LAYER
 
 /obj/machinery/door/poddoor/shutters/preopen
 	icon_state = "shutter0"
@@ -24,12 +25,10 @@
 		spawn(-1)
 			flick("shutterc0", src)
 			icon_state = "shutter0"
-			sleep(15)
+			sleep(animation_delay)
 			density = 0
 			set_opacity(0)
 			operating = 0
-			return
-	return
 
 /obj/machinery/door/poddoor/shutters/open()
 	if(operating == 1) //doors can still open when emag-disabled
@@ -41,7 +40,7 @@
 	flick("shutterc0", src)
 	icon_state = "shutter0"
 	playsound(src.loc, sound_open, 100, 1)
-	sleep(10)
+	sleep(animation_delay)
 	density = 0
 	set_opacity(0)
 	update_nearby_tiles()
@@ -66,6 +65,5 @@
 		set_opacity(1)
 	update_nearby_tiles()
 
-	sleep(10)
+	sleep(animation_delay)
 	operating = 0
-	return

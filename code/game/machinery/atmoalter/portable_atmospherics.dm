@@ -119,7 +119,8 @@
 					to_chat(user, "<span class='notice'>[name] failed to connect to the port.</span>")
 					return 0
 			else
-				if(..()) return 1 //Give a chance for the wrench flag if it is wrenchable, it's not snowflake if I say it isn't ya hear!
+				if(..())
+					return 1 //Give a chance for the wrench flag if it is wrenchable, it's not snowflake if I say it isn't ya hear!
 				to_chat(user, "<span class='notice'>Nothing happens.</span>")
 				return 0
 	if(..()) //Let the other machine flags have a shot

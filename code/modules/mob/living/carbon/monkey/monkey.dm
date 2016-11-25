@@ -1,5 +1,6 @@
 /mob/living/carbon/monkey
 	name = "monkey"
+	real_name = "randomgen" //To stop Pun Pun becoming generic. Give your subtype a real_name matching its name.
 	voice_name = "monkey"
 	//speak_emote = list("chimpers")
 	icon_state = "monkey1"
@@ -35,54 +36,12 @@
 	var/update_muts = 1                        // Monkey gene must be set at start.
 	var/alien = 0								//Used for reagent metabolism.
 
-/mob/living/carbon/monkey/Destroy()
-	..()
-	uniform = null
-	hat = null
-	glasses = null
-
-/mob/living/carbon/monkey/abiotic()
-	for(var/obj/item/I in held_items)
-		if(I.abstract) continue
-
-		return 1
-
-	return (wear_mask || back || uniform || hat)
-
-/mob/living/carbon/monkey/tajara
-	name = "farwa"
-	voice_name = "farwa"
-	speak_emote = list("mews")
-	icon_state = "tajkey1"
-	uni_append = list(0x0A0,0xE00) // 0A0E00
-	species_type = /mob/living/carbon/monkey/tajara
-	languagetoadd = "Siik'tajr"
-
-/mob/living/carbon/monkey/skrell
-	name = "neaera"
-	voice_name = "neaera"
-	speak_emote = list("squicks")
-	icon_state = "skrellkey1"
-	uni_append = list(0x01C,0xC92) // 01CC92
-	species_type = /mob/living/carbon/monkey/skrell
-	languagetoadd = "Skrellian"
-
-/mob/living/carbon/monkey/unathi
-	name = "stok"
-	voice_name = "stok"
-	speak_emote = list("hisses")
-	icon_state = "stokkey1"
-	uni_append = list(0x044,0xC5D) // 044C5D
-	canWearClothes = 0
-	species_type = /mob/living/carbon/monkey/unathi
-	languagetoadd = "Sinta'unathi"
-
 /mob/living/carbon/monkey/New()
 	var/datum/reagents/R = new/datum/reagents(1000)
 	reagents = R
 	R.my_atom = src
 
-	if(name == initial(name)) //To stop Pun-Pun becoming generic.
+	if(real_name == "randomgen") //To stop Pun Pun becoming generic.
 		name = "[name] ([rand(1, 1000)])"
 		real_name = name
 
@@ -121,23 +80,83 @@
 	update_icons()
 	return
 
-/mob/living/carbon/monkey/unathi/New()
-
+/mob/living/carbon/monkey/Destroy()
 	..()
-	dna.mutantrace = "lizard"
-	greaterform = "Unathi"
+	uniform = null
+	hat = null
+	glasses = null
 
-/mob/living/carbon/monkey/skrell/New()
+/mob/living/carbon/monkey/abiotic()
+	for(var/obj/item/I in held_items)
+		if(I.abstract)
+			continue
 
+		return 1
+
+	return (wear_mask || back || uniform || hat)
+
+/mob/living/carbon/monkey/punpun
+	name = "Pun Pun"
+	real_name = "Pun Pun"
+
+/mob/living/carbon/monkey/punpun/New()
+	var/obj/item/clothing/monkeyclothes/suit = new /obj/item/clothing/monkeyclothes
+	equip_to_slot(suit, slot_w_uniform)
 	..()
-	dna.mutantrace = "skrell"
-	greaterform = "Skrell"
+
+/mob/living/carbon/monkey/tajara
+	name = "farwa"
+	voice_name = "farwa"
+	speak_emote = list("mews")
+	icon_state = "tajkey1"
+	uni_append = list(0x0A0,0xE00) // 0A0E00
+	species_type = /mob/living/carbon/monkey/tajara
+	languagetoadd = LANGUAGE_CATBEAST
+	greaterform = "Tajaran"
 
 /mob/living/carbon/monkey/tajara/New()
 
 	..()
 	dna.mutantrace = "tajaran"
-	greaterform = "Tajaran"
+
+/mob/living/carbon/monkey/skrell
+	name = "neaera"
+	voice_name = "neaera"
+	speak_emote = list("squicks")
+	icon_state = "skrellkey1"
+	uni_append = list(0x01C,0xC92) // 01CC92
+	species_type = /mob/living/carbon/monkey/skrell
+	languagetoadd = LANGUAGE_SKRELLIAN
+	greaterform = "Skrell"
+
+/mob/living/carbon/monkey/skrell/New()
+
+	..()
+	dna.mutantrace = "skrell"
+
+/mob/living/carbon/monkey/unathi
+	name = "stok"
+	voice_name = "stok"
+	speak_emote = list("hisses")
+	icon_state = "stokkey1"
+	uni_append = list(0x044,0xC5D) // 044C5D
+	canWearClothes = 0
+	species_type = /mob/living/carbon/monkey/unathi
+	languagetoadd = LANGUAGE_UNATHI
+	greaterform = "Unathi"
+
+/mob/living/carbon/monkey/unathi/New()
+
+	..()
+	dna.mutantrace = "lizard"
+
+/mob/living/carbon/monkey/grey
+	name = "greyling"
+	voice_name = "greyling"
+	icon_state = "grey"
+	canWearGlasses = 0
+	languagetoadd = LANGUAGE_GREY
+	greaterform = "Grey"
 
 
 ///mob/living/carbon/monkey/diona/New()
@@ -154,7 +173,8 @@
 			return -1
 
 	var/health_deficiency = (100 - health)
-	if(health_deficiency >= 45) tally += (health_deficiency / 25)
+	if(health_deficiency >= 45)
+		tally += (health_deficiency / 25)
 
 	if (bodytemperature < 283.222)
 		tally += (283.222 - bodytemperature) / 10 * 1.75
@@ -247,8 +267,10 @@
 
 /mob/living/carbon/monkey/proc/defense(var/power, var/def_zone)
 	var/armor = run_armor_check(def_zone, "melee", "Your armor has protected your [def_zone].", "Your armor has softened hit to your [def_zone].")
-	if(armor >= 2)	return 0
-	if(!power)	return 0
+	if(armor >= 2)
+		return 0
+	if(!power)
+		return 0
 
 	var/damage = power
 	if(armor)
@@ -270,7 +292,7 @@
 			if(M.a_intent == I_HURT)//Stungloves. Any contact will stun the alien.
 				if(G.cell.charge >= 2500)
 					G.cell.use(2500)
-					Weaken(5)
+					Knockdown(5)
 					if (stuttering < 5)
 						stuttering = 5
 					Stun(5)
@@ -316,7 +338,7 @@
 						O.show_message(text("<span class='danger'>[] has attempted to punch [name]!</span>", M), 1)
 		else
 			if (M.a_intent == I_GRAB)
-				if (M == src || anchored)
+				if (M.grab_check(src))
 					return
 
 				var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
@@ -386,7 +408,7 @@
 						O.show_message(text("<span class='danger'>[] has attempted to lunge at [name]!</span>", M), 1)
 
 		if (I_GRAB)
-			if (M == src)
+			if (M.grab_check(src))
 				return
 			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
 
@@ -405,7 +427,7 @@
 			playsound(loc, 'sound/weapons/pierce.ogg', 25, 1, -1)
 			var/damage = 5
 			if(prob(95))
-				Weaken(15)
+				Knockdown(15)
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
 						O.show_message(text("<span class='danger'>[] has tackled down [name]!</span>", M), 1)
@@ -425,7 +447,8 @@
 		to_chat(M, "You cannot attack people before the game has started.")
 		return
 
-	if(M.Victim) return // can't attack while eating!
+	if(M.Victim)
+		return // can't attack while eating!
 
 	if (health > -100)
 
@@ -448,12 +471,18 @@
 			var/power = M.powerlevel + rand(0,3)
 
 			switch(M.powerlevel)
-				if(1 to 2) stunprob = 20
-				if(3 to 4) stunprob = 30
-				if(5 to 6) stunprob = 40
-				if(7 to 8) stunprob = 60
-				if(9) 	   stunprob = 70
-				if(10) 	   stunprob = 95
+				if(1 to 2)
+					stunprob = 20
+				if(3 to 4)
+					stunprob = 30
+				if(5 to 6)
+					stunprob = 40
+				if(7 to 8)
+					stunprob = 60
+				if(9)
+					stunprob = 70
+				if(10)
+					stunprob = 95
 
 			if(prob(stunprob))
 				M.powerlevel -= 3
@@ -464,7 +493,7 @@
 					if ((O.client && !( O.blinded )))
 						O.show_message(text("<span class='danger'>The [M.name] has shocked []!</span>", src), 1)
 
-				Weaken(power)
+				Knockdown(power)
 				if (stuttering < power)
 					stuttering = power
 				Stun(power)
@@ -513,7 +542,8 @@
 	if(flags & INVULNERABLE)
 		return
 
-	if(wear_id) wear_id.emp_act(severity)
+	if(wear_id)
+		wear_id.emp_act(severity)
 	..()
 
 /mob/living/carbon/monkey/ex_act(severity)
@@ -572,6 +602,13 @@
 		ACL |= I.GetAccess()
 	return ACL
 
+/mob/living/carbon/monkey/get_visible_id()
+	var/id = null
+	for(var/obj/item/I in held_items)
+		id = I.GetID()
+		if(id)
+			break
+	return id
 
 /mob/living/carbon/monkey/assess_threat(var/obj/machinery/bot/secbot/judgebot, var/lasercolor)
 	if(judgebot.emagged == 2)
@@ -613,8 +650,6 @@
 
 /mob/living/carbon/monkey/reset_layer()
 	if(lying)
-		plane = PLANE_OBJ
-		layer = MOB_LAYER - 0.1 //so we move under bedsheets
+		plane = LYING_MOB_PLANE
 	else
-		plane = PLANE_MOB
-		layer = MOB_LAYER
+		plane = MOB_PLANE

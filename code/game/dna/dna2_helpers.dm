@@ -22,27 +22,31 @@
 
 // Give Random Bad Mutation to M
 /proc/randmutb(var/mob/living/M)
-	if(!M) return
+	if(!M)
+		return
 	M.dna.check_integrity()
 	var/block = pick(bad_blocks)
 	M.dna.SetSEState(block, 1)
 
 // Give Random Good Mutation to M
 /proc/randmutg(var/mob/living/M)
-	if(!M) return
+	if(!M)
+		return
 	M.dna.check_integrity()
 	var/block = pick(good_blocks)
 	M.dna.SetSEState(block, 1)
 
 // Random Appearance Mutation
 /proc/randmuti(var/mob/living/M)
-	if(!M) return
+	if(!M)
+		return
 	M.dna.check_integrity()
 	M.dna.SetUIValue(rand(1,DNA_UI_LENGTH),rand(1,4095))
 
 // Scramble UI or SE.
 /proc/scramble(var/UI, var/mob/M, var/prob)
-	if(!M)	return
+	if(!M)
+		return
 	M.dna.check_integrity()
 	if(UI)
 		for(var/i = 1, i <= DNA_UI_LENGTH-1, i++)
@@ -71,7 +75,8 @@
 		output = pick(prob((rs*10));"4",prob((rs*10));"5",prob((rs*10));"A",prob((rs*10));"B",prob((rs*5)+(rd));"C",prob((rs*5)+(rd));"D",prob((rs*5)+(rd));"2",prob((rs*5)+(rd));"3")
 	if (input == "0" || input == "1" || input == "2" || input == "3")
 		output = pick(prob((rs*10));"8",prob((rs*10));"9",prob((rs*10));"A",prob((rs*10));"B",prob((rs*10)-(rd));"C",prob((rs*10)-(rd));"D",prob((rs*5)+(rd));"E",prob((rs*5)+(rd));"F")
-	if (!output) output = "5"
+	if (!output)
+		output = "5"
 	return output
 
 // HELLO I MAKE BELL CURVES AROUND YOUR DESIRED TARGET
@@ -176,8 +181,12 @@
 	. = list()
 	for(var/gene_type in dna_genes)
 		var/datum/dna/gene/gene = dna_genes[gene_type]
-		if(!gene.block) continue
-		if(genetype>-1 && gene.genetype!=genetype) continue
-		if(flags!=0 && !(gene.flags & flags)) continue
-		if(notflags!=0 && (gene.flags & notflags)) continue
+		if(!gene.block)
+			continue
+		if(genetype>-1 && gene.genetype!=genetype)
+			continue
+		if(flags!=0 && !(gene.flags & flags))
+			continue
+		if(notflags!=0 && (gene.flags & notflags))
+			continue
 		. += gene.block

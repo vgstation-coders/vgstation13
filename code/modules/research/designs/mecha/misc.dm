@@ -2,7 +2,7 @@
 	name = "Phazon Phase Array"
 	desc = "Show physics who's boss."
 	id = "phazon_phasearray"
-	req_tech = list("bluespace" = 10, "programming" = 4)
+	req_tech = list(Tc_BLUESPACE = 10, Tc_PROGRAMMING = 4)
 	build_type = MECHFAB
 	materials = list(MAT_IRON = 5000, MAT_PHAZON = 2000)
 	category = "Exosuit_Modules"
@@ -12,7 +12,7 @@
 	name = "Structure (Firefighter chassis)"
 	desc = "Used to build a Ripley Firefighter chassis."
 	id = "firef_chassis"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/chassis/firefighter
 	category = "Exosuit_Modules"

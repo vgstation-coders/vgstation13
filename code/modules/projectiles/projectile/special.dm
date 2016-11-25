@@ -4,7 +4,7 @@
 	damage = 0
 	damage_type = BURN
 	nodamage = 1
-	layer = 13
+	layer = PROJECTILE_LAYER
 	flag = "energy"
 	fire_sound = 'sound/weapons/ion.ogg'
 
@@ -29,7 +29,7 @@
 	damage = 0
 	damage_type = BURN
 	nodamage = 1
-	layer = 13
+	layer = PROJECTILE_LAYER
 	flag = "energy"
 	var/temperature = 300
 	fire_sound = 'sound/weapons/pulse3.ogg'
@@ -123,7 +123,7 @@
 		if((H.species.flags & IS_PLANT))
 			if(prob(mutstrength*2))
 				M.apply_effect((rand(30,80)),IRRADIATE)
-				M.Weaken(5)
+				M.Knockdown(5)
 				for (var/mob/V in viewers(src))
 					V.show_message("<span class='warning'>[M] writhes in pain as \his vacuoles boil.</span>", 1, "<span class='warning'>You hear the crunching of leaves.</span>", 2)
 			if(prob(mutstrength*3))
@@ -215,7 +215,8 @@ obj/item/projectile/kinetic/New()
 */
 
 /obj/item/projectile/kinetic/on_hit(var/atom/target, var/blocked = 0)
-	if(!loc) return
+	if(!loc)
+		return
 	var/turf/target_turf = get_turf(target)
 	//testing("Hit [target.type], on [target_turf.type].")
 	if(istype(target_turf, /turf/unsimulated/mineral))
@@ -225,7 +226,8 @@ obj/item/projectile/kinetic/New()
 	..(target,blocked)
 
 /obj/item/projectile/kinetic/Bump(atom/A as mob|obj|turf|area)
-	if(!loc) return
+	if(!loc)
+		return
 	if(A == firer)
 		loc = A.loc
 		return
@@ -253,7 +255,7 @@ obj/item/projectile/kinetic/New()
 	name = "kinetic explosion"
 	icon = 'icons/obj/projectiles.dmi'
 	icon_state = "kinetic_blast"
-	layer = 4.1
+	plane = ABOVE_HUMAN_PLANE
 
 /obj/item/effect/kinetic_blast/New()
 	..()
@@ -268,7 +270,8 @@ obj/item/projectile/kinetic/New()
 
 
 /obj/item/projectile/stickybomb/Bump(atom/A as mob|obj|turf|area)
-	if(bumped)	return 0
+	if(bumped)
+		return 0
 	bumped = 1
 
 	if(A)
@@ -335,12 +338,15 @@ obj/item/projectile/kinetic/New()
 	penetration_message = 0
 	grillepasschance = 100
 
+	var/fire_blast_type = /obj/effect/fire_blast
+
 	var/stepped_range = 0
 	var/max_range = 9
 
 	var/fire_damage = 10
 	var/pressure = ONE_ATMOSPHERE * 4.5
 	var/temperature = T0C + 175
+	var/fire_duration
 
 /obj/item/projectile/fire_breath/process_step()
 	..()
@@ -352,6 +358,15 @@ obj/item/projectile/kinetic/New()
 		return
 
 	var/turf/T = get_turf(src)
-	if(!T) return
+	if(!T)
+		return
 
-	new /obj/effect/fire_blast(T, fire_damage, stepped_range, 1, pressure, temperature)
+	new fire_blast_type(T, fire_damage, stepped_range, 1, pressure, temperature, fire_duration)
+
+/obj/item/projectile/fire_breath/shuttle_exhaust //don't stand behind rockets
+	fire_blast_type = /obj/effect/fire_blast/blue
+
+	temperature = PLASMA_UPPER_TEMPERATURE
+	max_range = 9
+	fire_damage = 20
+	fire_duration = 6 //shorter but hotter

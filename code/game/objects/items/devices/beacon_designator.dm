@@ -19,7 +19,8 @@
 
 /obj/item/weapon/beacon_dispenser/attack_self(mob/user)
 	id++
-	if(id>4) id=1
+	if(id>4)
+		id=1
 	to_chat(user, "Spawning beacons with ID: [id]")
 
 /obj/item/weapon/beacon_dispenser/afterattack(atom/A, mob/user as mob)
@@ -31,7 +32,8 @@
 		return
 
 	var/area/AR = get_area(T)
-	if(!AR) return
+	if(!AR)
+		return
 
 	if(AR.name == "Space")
 		var/obj/item/bluespace_beacon/B = new(T)
@@ -57,7 +59,8 @@
 				B.overlays += image('icons/obj/bluespace_beacon.dmi', icon_state = "bad")
 			turfs |= get_turf(B)
 
-	if(conflict) return
+	if(conflict)
+		return
 
 	var/area/shuttle/newarea = new
 	areas += newarea

@@ -105,7 +105,7 @@
 	//hands
 	for(var/obj/item/I in held_items)
 		if(I.blood_DNA && I.blood_DNA.len)
-			msg += "<span class='warning'>[t_He] [t_is] holding [bicon(I)] [I.gender==PLURAL?"some":"a"] blood_stained [I.name] in [t_his] [get_index_limb_name(is_holding_item(I))]!</span>\n"
+			msg += "<span class='warning'>[t_He] [t_is] holding [bicon(I)] [I.gender==PLURAL?"some":"a"] blood-stained [I.name] in [t_his] [get_index_limb_name(is_holding_item(I))]!</span>\n"
 		else
 			msg += "[t_He] [t_is] holding [bicon(I)] \a [I] in [t_his] [get_index_limb_name(is_holding_item(I))].\n"
 
@@ -170,7 +170,8 @@
 			id = idcard.registered_name
 		if(id && (id != real_name) && (get_dist(src, user) <= 1) && prob(10))
 			msg += "<span class='warning'>[t_He] [t_is] wearing [bicon(wear_id)] \a [wear_id] yet something doesn't seem right...</span>\n"
-		else*/
+		else
+			*/
 		msg += "[t_He] [t_is] wearing [bicon(wear_id)] \a [wear_id].\n"
 
 	switch(jitteriness)
@@ -244,18 +245,20 @@
 					continue
 				else
 					wound_flavor_text["[temp.display_name]"] = "<span class='warning'>[t_He] has a peg [temp.display_name], it has"
-				if(temp.brute_dam) switch(temp.brute_dam)
-					if(0 to 20)
-						wound_flavor_text["[temp.display_name]"] += " some marks"
-					if(21 to INFINITY)
-						wound_flavor_text["[temp.display_name]"] += pick(" a lot of damage"," severe cracks and splintering")
+				if(temp.brute_dam)
+					switch(temp.brute_dam)
+						if(0 to 20)
+							wound_flavor_text["[temp.display_name]"] += " some marks"
+						if(21 to INFINITY)
+							wound_flavor_text["[temp.display_name]"] += pick(" a lot of damage"," severe cracks and splintering")
 				if(temp.brute_dam && temp.burn_dam)
 					wound_flavor_text["[temp.display_name]"] += " and"
-				if(temp.burn_dam) switch(temp.burn_dam)
-					if(0 to 20)
-						wound_flavor_text["[temp.display_name]"] += " some burns"
-					if(21 to INFINITY)
-						wound_flavor_text["[temp.display_name]"] += pick(" a lot of burns"," severe charring")
+				if(temp.burn_dam)
+					switch(temp.burn_dam)
+						if(0 to 20)
+							wound_flavor_text["[temp.display_name]"] += " some burns"
+						if(21 to INFINITY)
+							wound_flavor_text["[temp.display_name]"] += pick(" a lot of burns"," severe charring")
 				wound_flavor_text["[temp.display_name]"] += "!</span>\n"
 			else if(temp.status & ORGAN_ROBOT)
 				if(!(temp.brute_dam + temp.burn_dam))
@@ -263,28 +266,35 @@
 					continue
 				else
 					wound_flavor_text["[temp.display_name]"] = "<span class='warning'>[t_He] has a robot [temp.display_name], it has"
-				if(temp.brute_dam) switch(temp.brute_dam)
-					if(0 to 20)
-						wound_flavor_text["[temp.display_name]"] += " some dents"
-					if(21 to INFINITY)
-						wound_flavor_text["[temp.display_name]"] += pick(" a lot of dents"," severe denting")
+				if(temp.brute_dam)
+					switch(temp.brute_dam)
+						if(0 to 20)
+							wound_flavor_text["[temp.display_name]"] += " some dents"
+						if(21 to INFINITY)
+							wound_flavor_text["[temp.display_name]"] += pick(" a lot of dents"," severe denting")
 				if(temp.brute_dam && temp.burn_dam)
 					wound_flavor_text["[temp.display_name]"] += " and"
-				if(temp.burn_dam) switch(temp.burn_dam)
-					if(0 to 20)
-						wound_flavor_text["[temp.display_name]"] += " some burns"
-					if(21 to INFINITY)
-						wound_flavor_text["[temp.display_name]"] += pick(" a lot of burns"," severe melting")
+				if(temp.burn_dam)
+					switch(temp.burn_dam)
+						if(0 to 20)
+							wound_flavor_text["[temp.display_name]"] += " some burns"
+						if(21 to INFINITY)
+							wound_flavor_text["[temp.display_name]"] += pick(" a lot of burns"," severe melting")
 				wound_flavor_text["[temp.display_name]"] += "!</span>\n"
 			else if(temp.wounds.len > 0)
 				var/list/wound_descriptors = list()
 				for(var/datum/wound/W in temp.wounds)
-					if(W.internal && !temp.open) continue // can't see internal wounds
+					if(W.internal && !temp.open)
+						continue // can't see internal wounds
 					var/this_wound_desc = W.desc
-					if(W.bleeding()) this_wound_desc = "bleeding [this_wound_desc]"
-					else if(W.bandaged) this_wound_desc = "bandaged [this_wound_desc]"
-					if(W.germ_level > 600) this_wound_desc = "badly infected [this_wound_desc]"
-					else if(W.germ_level > 330) this_wound_desc = "lightly infected [this_wound_desc]"
+					if(W.bleeding())
+						this_wound_desc = "bleeding [this_wound_desc]"
+					else if(W.bandaged)
+						this_wound_desc = "bandaged [this_wound_desc]"
+					if(W.germ_level > 600)
+						this_wound_desc = "badly infected [this_wound_desc]"
+					else if(W.germ_level > 330)
+						this_wound_desc = "lightly infected [this_wound_desc]"
 					if(this_wound_desc in wound_descriptors)
 						wound_descriptors[this_wound_desc] += W.amount
 						continue
@@ -430,6 +440,8 @@
 
 			msg += {"<span class = 'deptradio'>Criminal status:</span> <a href='?src=\ref[src];criminal=1'>\[[criminal]\]</a>
 <span class = 'deptradio'>Security records:</span> <a href='?src=\ref[src];secrecord=`'>\[View\]</a>  <a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]</a>\n"}
+			msg += {"[wpermit(src) ? "<span class = 'deptradio'>Has weapon permit.</span>\n" : ""]"}
+
 	if(hasHUD(user,"medical"))
 		var/perpname = "wot"
 		var/medical = "None"
@@ -452,7 +464,6 @@
 
 		msg += {"<span class = 'deptradio'>Physical status:</span> <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>\n
 			<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]</a> <a href='?src=\ref[src];medrecordadd=`'>\[Add comment\]</a>\n"}
-	if(print_flavor_text()) msg += "[print_flavor_text()]\n"
 
 	msg += "*---------*</span>"
 	if (pose)

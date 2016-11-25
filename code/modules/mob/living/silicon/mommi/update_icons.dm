@@ -34,14 +34,16 @@
 
 	// Add the MoMMI eyes
 	// Put our eyes just on top of the lighting, so it looks emissive in maint tunnels.
-	var/overlay_layer = LIGHTING_LAYER + 1
-	var/overlay_plane = PLANE_LIGHTING
-	if(layer != MOB_LAYER)
-		overlay_plane = PLANE_TURF
-		overlay_layer=TURF_LAYER+0.2
+	var/overlay_layer = ABOVE_LIGHTING_LAYER
+	var/overlay_plane = LIGHTING_PLANE
+	if(plane == HIDING_MOB_PLANE)	// ie it's hiding
+		overlay_plane = FLOAT_PLANE
+		overlay_layer = FLOAT_LAYER
+
 	var/image/eyes = image(icon,"eyes-[subtype][emagged?"-emagged":""]",overlay_layer)
 	eyes.plane = overlay_plane
 	overlays += eyes
+
 	if(anchored)
 		overlays += image(icon,"[subtype]-park",overlay_layer)
 
@@ -53,19 +55,19 @@
 			// Sad note: only the hat's overall position can be modified, and we cannot change the hat's position per each direction separately
 			// The hats are currently centered on the MoMMIs
 			if("mommi")
-				I.pixel_y = -8
+				I.pixel_y = -8 * PIXEL_MULTIPLIER
 			if("hovermommi")
-				I.pixel_y = -5
+				I.pixel_y = -5 * PIXEL_MULTIPLIER
 			if("keeper")
-				I.pixel_y = -7
+				I.pixel_y = -7 * PIXEL_MULTIPLIER
 			if("repairbot")
-				I.pixel_y = -14
+				I.pixel_y = -14 * PIXEL_MULTIPLIER
 			if("replicator")
-				I.pixel_y = -10
+				I.pixel_y = -10 * PIXEL_MULTIPLIER
 			if("mommiprime")
-				I.pixel_y = -7
+				I.pixel_y = -7 * PIXEL_MULTIPLIER
 			if("scout")
-				I.pixel_y = -15
+				I.pixel_y = -15 * PIXEL_MULTIPLIER
 		// Add the adjusted hat to our overlays
 		overlays += I
 

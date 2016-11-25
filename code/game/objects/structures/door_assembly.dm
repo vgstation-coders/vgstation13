@@ -126,31 +126,34 @@
 
 /obj/structure/door_assembly/multi_tile/New()
 	if(dir in list(EAST, WEST))
-		bound_width = width * world.icon_size
-		bound_height = world.icon_size
+		bound_width = width * WORLD_ICON_SIZE
+		bound_height = WORLD_ICON_SIZE
 	else
-		bound_width = world.icon_size
-		bound_height = width * world.icon_size
+		bound_width = WORLD_ICON_SIZE
+		bound_height = width * WORLD_ICON_SIZE
 	..()
 
 /obj/structure/door_assembly/multi_tile/Move()
 	. = ..()
 	if(dir in list(EAST, WEST))
-		bound_width = width * world.icon_size
-		bound_height = world.icon_size
+		bound_width = width * WORLD_ICON_SIZE
+		bound_height = WORLD_ICON_SIZE
 	else
-		bound_width = world.icon_size
-		bound_height = width * world.icon_size
+		bound_width = WORLD_ICON_SIZE
+		bound_height = width * WORLD_ICON_SIZE
 
 
 
 /obj/structure/door_assembly/attackby(obj/item/W as obj, mob/user as mob)
-	if(busy) return
+	if(busy)
+		return
 
 	if(istype(W, /obj/item/weapon/pen))
 		var/t = copytext(stripped_input(user, "Enter the name for the door.", src.name, src.created_name),1,MAX_NAME_LEN)
-		if(!t)	return
-		if(!in_range(src, usr) && src.loc != usr)	return
+		if(!t)
+			return
+		if(!in_range(src, usr) && src.loc != usr)
+			return
 		created_name = t
 		return
 
@@ -214,7 +217,8 @@
 			user.visible_message("[user] secures the airlock assembly to the floor.", "You start to secure the airlock assembly to the floor.")
 
 		if(do_after(user, src, 40))
-			if(!src) return
+			if(!src)
+				return
 			to_chat(user, "<span class='notice'>You [anchored? "un" : ""]secured the airlock assembly!</span>")
 			anchored = !anchored
 		busy = 0
@@ -224,7 +228,8 @@
 		var/obj/item/stack/cable_coil/coil = W
 		user.visible_message("[user] wires the airlock assembly.", "You start to wire the airlock assembly.")
 		if(do_after(user, src, 40))
-			if(!src) return
+			if(!src)
+				return
 			coil.use(1)
 			src.state = 1
 			to_chat(user, "<span class='notice'>You wire the Airlock!</span>")
@@ -236,7 +241,8 @@
 		user.visible_message("[user] cuts the wires from the airlock assembly.", "You start to cut the wires from airlock assembly.")
 
 		if(do_after(user, src, 40))
-			if(!src) return
+			if(!src)
+				return
 			to_chat(user, "<span class='notice'>You cut the airlock wires.!</span>")
 			new/obj/item/stack/cable_coil(src.loc, 1)
 			src.state = 0
@@ -249,7 +255,8 @@
 		user.drop_item(W, src, force_drop = 1)
 
 		if(do_after(user, src, 40))
-			if(!src) return
+			if(!src)
+				return
 			var/obj/item/weapon/circuitboard/airlock/electronic = W
 			electronic.installed = 1
 			to_chat(user, "<span class='notice'>You installed the airlock electronics!</span>")
@@ -257,7 +264,7 @@
 			src.name = "Near finished Airlock Assembly"
 			src.electronics = W
 		else
-			W.loc = src.loc
+			W.forceMove(src.loc)
 		busy = 0
 
 	else if(iscrowbar(W) && state == 2 )
@@ -266,7 +273,8 @@
 		user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to install electronics into the airlock assembly.")
 
 		if(do_after(user, src, 40))
-			if(!src) return
+			if(!src)
+				return
 			to_chat(user, "<span class='notice'>You removed the airlock electronics!</span>")
 			src.state = 1
 			src.name = "Wired Airlock Assembly"
@@ -277,7 +285,7 @@
 				ae = electronics
 				electronics.installed = 0
 				electronics = null
-				ae.loc = src.loc
+				ae.forceMove(src.loc)
 		busy = 0
 
 	else if(istype(W, /obj/item/stack/sheet) && !glass)
@@ -309,7 +317,8 @@
 		to_chat(user, "<span class='notice'>Now finishing the airlock.</span>")
 
 		if(do_after(user, src, 40))
-			if(!src) return
+			if(!src)
+				return
 			to_chat(user, "<span class='notice'>You finish the airlock!</span>")
 			var/path
 			if(istext(glass))
@@ -333,7 +342,7 @@
 				door.name = created_name
 			else
 				door.name = "[istext(glass) ? "[glass] airlock" : base_name]"
-			src.electronics.loc = door
+			src.electronics.forceMove(door)
 			src.electronics.installed = 1
 			qdel(src)
 		busy = 0

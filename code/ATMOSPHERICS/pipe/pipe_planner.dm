@@ -10,7 +10,7 @@
 	var/datum/context_click/pipe_planner/planner
 
 	layer = OBJ_LAYER + (PIPING_LAYER_MIN - (PIPING_LAYER_DEFAULT + PIPING_LAYER_INCREMENT)) * PIPING_LAYER_LCHANGE
-	plane = PLANE_OBJ
+	plane = OBJ_PLANE
 
 /obj/item/pipe_planner/New()
 	..()

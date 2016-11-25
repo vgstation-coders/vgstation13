@@ -98,7 +98,8 @@
 	if ((istype(O, /obj/item/weapon/handcuffs) && !( src.chained )))
 		var/obj/item/weapon/handcuffs/H=O
 		//H = null
-		if (src.icon_state != "orange") return
+		if (src.icon_state != "orange")
+			return
 		src.chained = 1
 		src.chaintype = H.type
 		src.slowdown = 15

@@ -32,7 +32,7 @@
 			to_chat(wizard.current, "<span class='danger'>A starting location for you could not be found, please report this bug!</span>")
 		else
 			var/starting_loc = pick(wizardstart)
-			wizard.current.loc = starting_loc
+			wizard.current.forceMove(starting_loc)
 
 	for (var/obj/effect/landmark/A in world)
 		if (A.name == "Teleport-Scroll")
@@ -161,9 +161,9 @@
 			if(istype(w.loc, /mob))
 				var/mob/M = w.loc
 				M.drop_item()
-				w.loc = usr.loc
+				w.forceMove(usr.loc)
 			else
-				w.loc = usr.loc
+				w.forceMove(usr.loc)
 		src.verbs -= /client/proc/summon_weapon
 		spawn(300) src.verbs += /client/proc/summon_weapon
 		return
@@ -189,7 +189,8 @@
 	var/list/candidates = list()
 
 	for(var/mob/living/carbon/human/H in player_list)
-		if(!H.client || H.client == src) continue
+		if(!H.client || H.client == src)
+			continue
 		//if(!H.client) continue
 		candidates.Add(H)
 
@@ -197,7 +198,8 @@
 
 	var/mob/living/carbon/human/H = pick(candidates)
 
-	if(!H) return
+	if(!H)
+		return
 
 	var/filename="crmap[ckey].tmp"
 	var/html="<html><body bgcolor=black><table border=0 cellspacing=0 cellpadding=0>"
@@ -206,7 +208,8 @@
 	var/tilesizey=32
 	//If the temp. file exists, delete it
 	src << browse("<h2>Sensing prey...</h2>", "window=hunt")
-	if (fexists(filename)) fdel(filename)
+	if (fexists(filename))
+		fdel(filename)
 
 	//Display everything in the world
 	for (var/y=H.y-3,y<=H.y+3,y++)
@@ -218,7 +221,8 @@
 		for(var/x=H.x-3, x<=H.x+3, x++)
 			//Turfs
 			var/turf/T=locate(x,y,H.z)
-			if (!T) continue
+			if (!T)
+				continue
 			var/icon/I=icon(T.icon,T.icon_state)
 			var/imgstring=replacetext("[T.type]-[T.icon_state]","/","_")
 
@@ -230,9 +234,11 @@
 					if (istype(A,X))
 						allowed=0
 						break
-				if (!allowed) continue
+				if (!allowed)
+					continue
 
-				if (A.icon) I.Blend(icon(A.icon,A.icon_state,A.dir),ICON_OVERLAY)
+				if (A.icon)
+					I.Blend(icon(A.icon,A.icon_state,A.dir),ICON_OVERLAY)
 				imgstring+=replacetext("__[A.type]_[A.icon_state]","/","_")
 
 			//Output it

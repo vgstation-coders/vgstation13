@@ -18,7 +18,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	caliber = list("flare" = 1)
-	origin_tech = "combat=2;materials=2"
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/shotgun/flare"
 	gun_flags = 0
 
@@ -27,4 +27,4 @@
 	recoil = 3
 	fire_delay = 5 //faster, because it's also meant to be a weapon
 	caliber = list("flare" = 1, "shotgun" = 1)
-	origin_tech = "combat=4;materials=2;syndicate=2"
+	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=2"

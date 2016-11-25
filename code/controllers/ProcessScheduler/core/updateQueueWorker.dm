@@ -24,7 +24,8 @@ datum/updateQueueWorker/proc/init(var/list/objects, var/procName, var/list/argum
 
 datum/updateQueueWorker/proc/doWork()
 	// If there's nothing left to execute or we were killed, mark finished and return.
-	if (!objects || !objects.len) return finished()
+	if (!objects || !objects.len)
+		return finished()
 
 	lastStart = world.timeofday // Absolute number of ticks since the world started up
 
@@ -38,7 +39,8 @@ datum/updateQueueWorker/proc/doWork()
 
 	// If there's nothing left to execute
 	// or we were killed while running the above code, mark finished and return.
-	if (!objects || !objects.len) return finished()
+	if (!objects || !objects.len)
+		return finished()
 
 	if (world.cpu > cpuThreshold)
 		// We don't want to force a tick into overtime!

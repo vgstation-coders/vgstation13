@@ -9,5 +9,5 @@
 
 /obj/item/weapon/reagent_containers/food/New()
 		..()
-		src.pixel_x = rand(-5.0, 5)	//Randomizes position slightly.
-		src.pixel_y = rand(-5.0, 5)
+		src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER	//Randomizes position slightly.
+		src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER

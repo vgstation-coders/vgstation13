@@ -19,6 +19,7 @@
 	soundeffect = 'sound/machines/windowdoor.ogg'
 	var/shard = /obj/item/weapon/shard
 	penetration_dampening = 2
+	animation_delay = 7
 
 /obj/machinery/door/window/New()
 	..()
@@ -69,10 +70,11 @@
 	return
 
 /obj/machinery/door/window/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return 1
 	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
-		if(air_group) return 0
+		if(air_group)
+			return 0
 		return !density
 	else
 		return 1
@@ -83,18 +85,21 @@
 
 
 /obj/machinery/door/window/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return 1
-	if(flags & ON_BORDER)
+	if(flags & ON_BORDER) //but it will always be on border tho
 		if(target) //Are we doing a manual check to see
 			if(get_dir(loc, target) == dir)
 				return !density
 		else if(mover.dir == dir) //Or are we using move code
-			if(density)	mover.Bump(src)
+			if(density)
+				mover.Bump(src)
 			return !density
 	return 1
 
 /obj/machinery/door/window/open()
+	if (!density) //it's already open you silly cunt
+		return 0
 	if (src.operating == 1) //doors can still open when emag-disabled
 		return 0
 	if (!ticker)
@@ -104,7 +109,7 @@
 	flick(text("[]opening", src.base_state), src)
 	playsound(get_turf(src), soundeffect, 100, 1)
 	src.icon_state = text("[]open", src.base_state)
-	sleep(10)
+	sleep(animation_delay)
 
 	explosion_resistance = 0
 	src.density = 0
@@ -129,7 +134,7 @@
 //		SetOpacity(1)	//TODO: why is this here? Opaque windoors? ~Carn
 	update_nearby_tiles()
 
-	sleep(10)
+	sleep(animation_delay)
 
 	src.operating = 0
 	return 1
@@ -311,7 +316,7 @@
 		else if (src.req_one_access && src.req_one_access.len > 0)
 			AE.conf_access = src.req_one_access
 			AE.one_access = 1
-	AE.loc = src.loc
+	AE.forceMove(src.loc)
 
 /obj/machinery/door/window/brigdoor
 	name = "Secure Window Door"

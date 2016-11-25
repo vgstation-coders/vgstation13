@@ -51,15 +51,16 @@
 
 	if(cover_state == C_CLOSED)
 		var/image/cover_overlay = image('icons/obj/cage.dmi', icon_state = "cage_cover", layer = OBJ_LAYER)
-		cover_overlay.plane = PLANE_OBJ
+		cover_overlay.plane = OBJ_PLANE
 		overlays += cover_overlay
 	else if(door_state == C_CLOSED) //Door is only visible when the cover is open
-		var/image/door_overlay = image('icons/obj/cage.dmi', icon_state = "cage_door", layer = MOB_LAYER + 0.5) //Above mobs
-		door_overlay.plane = PLANE_MOB
+		var/image/door_overlay = image('icons/obj/cage.dmi', icon_state = "cage_door")
+		door_overlay.plane = ABOVE_HUMAN_PLANE
 		overlays += door_overlay
 
 /obj/structure/cage/attack_animal(mob/living/simple_animal/user)
-	if(!istype(user)) return
+	if(!istype(user))
+		return
 
 	var/damage = rand(user.melee_damage_lower, user.melee_damage_upper)
 	if((damage >= damage_threshold_to_break))
@@ -102,7 +103,8 @@
 
 			user.visible_message("<span class='danger'>[user] starts forcing \the [src]'s door open with \the [W]!</span>", "<span class='info'>You start forcing \the [src]'s door open with \the [W]. This will take around [(time / 10)] seconds.</span>")
 			if(do_after(user, src, time))
-				if(door_state == C_CLOSED) toggle_door(user)
+				if(door_state == C_CLOSED)
+					toggle_door(user)
 
 		else
 			if(W.force < 20) //Force
@@ -111,7 +113,8 @@
 				to_chat(user, "<span class='info'>\The [W] isn't sharp or hot enough to cut through \the [src]'s bars!</span>")
 
 /obj/structure/cage/relaymove(mob/living/user)
-	if(!istype(user)) return
+	if(!istype(user))
+		return
 
 	if(cover_state == C_CLOSED)
 		var/time = 30 SECONDS
@@ -123,7 +126,8 @@
 				toggle_cover(user)
 
 /obj/structure/cage/attack_hand(mob/living/user)
-	if(!istype(user)) return
+	if(!istype(user))
+		return
 
 	if(mob_is_inside(user)) //Inside the cage
 		if(door_state == C_CLOSED)
@@ -164,7 +168,8 @@
 
 	if(cover_state == C_OPENED)
 		cover_state = C_CLOSED
-		if(user) user.visible_message("<span class='info'>\The [user] closes \the [src]'s cover.</span>")
+		if(user)
+			user.visible_message("<span class='info'>\The [user] closes \the [src]'s cover.</span>")
 
 		for(var/mob/living/L in get_locked(/datum/locking_category/cage)) //Move atom locked mobs inside
 			unlock_atom(L)
@@ -172,7 +177,8 @@
 
 	else
 		cover_state = C_OPENED
-		if(user) user.visible_message("<span class='info'>\The [user] opens \the [src]'s cover.</span>")
+		if(user)
+			user.visible_message("<span class='info'>\The [user] opens \the [src]'s cover.</span>")
 
 		for(var/mob/living/L in contents) //Move hidden mobs to the outside
 			L.forceMove(get_turf(src))
@@ -183,7 +189,8 @@
 /obj/structure/cage/proc/toggle_door(mob/user)
 	switch(door_state)
 		if(C_OPENED) //Close the door
-			if(cover_state == C_OPENED) toggle_cover() //Close the cover, too
+			if(cover_state == C_OPENED)
+				toggle_cover() //Close the cover, too
 
 			door_state = C_CLOSED
 			density = 1
@@ -192,7 +199,8 @@
 				add_mob(L)
 
 		if(C_CLOSED) //Open the door
-			if(cover_state == C_CLOSED) toggle_cover() //Open the cover, too
+			if(cover_state == C_CLOSED)
+				toggle_cover() //Open the cover, too
 
 			for(var/mob/living/L in (contents + get_locked(/datum/locking_category/cage)))
 				unlock_atom(L)

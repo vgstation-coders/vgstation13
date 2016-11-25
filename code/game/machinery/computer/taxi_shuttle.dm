@@ -125,7 +125,8 @@ var/global/list/taxi_computers = list()
 	return
 
 /obj/machinery/computer/taxi_shuttle/Topic(href, href_list)
-	if(..())	return 1
+	if(..())
+		return 1
 	var/mob/user = usr
 
 	user.set_machine(src)

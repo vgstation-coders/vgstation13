@@ -6,12 +6,11 @@
 
 	maxHealth = 25
 	health = 25
-	storedPlasma = 50
+	plasma = 50
 	max_plasma = 50
 	size = SIZE_TINY
 
-	var/amount_grown = 0
-	var/max_grown = 200
+	var/growth = 0
 	var/time_of_birth
 
 //This is fine right now, if we're adding organ specific damage this needs to be updated
@@ -27,15 +26,18 @@
 	default_language = all_languages[LANGUAGE_XENO]
 	..()
 
+	add_spell(new /spell/aoe_turf/alien_hide, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/aoe_turf/evolve/larva, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
+
 //This needs to be fixed
 /mob/living/carbon/alien/larva/Stat()
 	..()
 	if(statpanel("Status"))
-		stat(null, "Progress: [amount_grown]/[max_grown]")
+		stat(null, "Progress: [growth]/[LARVA_GROW_TIME]")
 
-/mob/living/carbon/alien/larva/adjustToxLoss(amount)
+/mob/living/carbon/alien/larva/AdjustPlasma(amount)
 	if(stat != DEAD)
-		amount_grown = min(amount_grown + 1, max_grown)
+		growth = min(growth + 1, LARVA_GROW_TIME)
 	..(amount)
 
 
@@ -135,7 +137,8 @@
 		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
 		return
 
-	if(M.Victim) return // can't attack while eating!
+	if(M.Victim)
+		return // can't attack while eating!
 
 	if(health > -100)
 
@@ -175,7 +178,7 @@
 				if(G.cell.charge >= 2500)
 					G.cell.use(2500)
 
-					Weaken(5)
+					Knockdown(5)
 					if(stuttering < 5)
 						stuttering = 5
 					Stun(5)
@@ -192,7 +195,7 @@
 			help_shake_act(M)
 
 		if(I_GRAB)
-			if(M == src)
+			if(M.grab_check(src))
 				return
 			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
 
@@ -218,8 +221,8 @@
 				playsound(loc, "punch", 25, 1, -1)
 				visible_message("<span class='danger'>[M] has punched \the [src] !</span>")
 				if(damage > 4.9)
-					Weaken(rand(10,15))
-					visible_message("<span class='danger'>[M] has weakened \the [src] !</span>")
+					Knockdown(rand(10,15))
+					visible_message("<span class='danger'>[M] has knocked down \the [src] !</span>")
 				adjustBruteLoss(damage)
 				updatehealth()
 			else
@@ -246,7 +249,7 @@
 			resting = 0
 			AdjustParalysis(-3)
 			AdjustStunned(-3)
-			AdjustWeakened(-3)
+			AdjustKnockdown(-3)
 			visible_message("<span class='notice'>[M.name] nuzzles [src] trying to wake it up !</span>")
 
 		else
@@ -263,7 +266,8 @@
 	return
 
 /mob/living/carbon/alien/larva/restrained()
-	if(timestopped) return 1 //under effects of time magick
+	if(timestopped)
+		return 1 //under effects of time magick
 
 	return 0
 
@@ -295,5 +299,4 @@
 
 /mob/living/carbon/alien/larva/reset_layer()
 	if(stat == DEAD)
-		layer = MOB_LAYER //unhide
-		plane = PLANE_MOB
+		plane = MOB_PLANE

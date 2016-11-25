@@ -57,7 +57,7 @@
 					to_chat(user, "\blue Your skin feels icy to the touch.")
 				if (!(M_XRAY in user.mutations))
 					user.mutations.Add(M_XRAY)
-					user.sight |= (SEE_MOBS|SEE_OBJS|SEE_TURFS)
+					user.change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 					user.see_in_dark = 8
 					user.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 					to_chat(user, "\blue The walls suddenly disappear.")
@@ -107,7 +107,6 @@
 	desc = "What is that thing?"
 	density = 1
 	anchored = 1
-	layer = 3
 	icon = 'icons/mob/critter.dmi'
 	icon_state = "blob"
 	var/triggerproc = "explode" //name of the proc thats called when the mine is triggered
@@ -121,7 +120,8 @@
 
 /obj/effect/meatgrinder/Bumped(mob/M as mob|obj)
 
-	if(triggered) return
+	if(triggered)
+		return
 
 	if(istype(M, /mob/living/carbon/human) || istype(M, /mob/living/carbon/monkey))
 		for(var/mob/O in viewers(world.view, src.loc))
@@ -166,7 +166,7 @@
 		C.setCloneLoss(0)
 		C.SetParalysis(0)
 		C.SetStunned(0)
-		C.SetWeakened(0)
+		C.SetKnockdown(0)
 		C.radiation = 0
 		C.heal_overall_damage(C.getBruteLoss(), C.getFireLoss())
 		C.reagents.clear_reagents()

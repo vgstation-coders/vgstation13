@@ -1,9 +1,9 @@
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper
-	name = "Mounted Sleeper"
+	name = "\improper Mounted Sleeper"
 	desc = "Mounted Sleeper. (Can be attached to: Medical Exosuits)"
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "sleeper_0"
-	origin_tech = "programming=2;biotech=3"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=3"
 	energy_drain = 20
 	range = MELEE
 	reliability = 1000
@@ -227,10 +227,10 @@
 		M.adjustOxyLoss(-1)
 		M.updatehealth()
 	M.AdjustStunned(-4)
-	M.AdjustWeakened(-4)
+	M.AdjustKnockdown(-4)
 	M.AdjustStunned(-4)
 	M.Paralyse(2)
-	M.Weaken(2)
+	M.Knockdown(2)
 	M.Stun(2)
 	if(M.reagents.get_reagent_amount(INAPROVALINE) < 5)
 		M.reagents.add_reagent(INAPROVALINE, 5)
@@ -240,7 +240,7 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer //why the fuck is this under medical_tools?
-	name = "Cable Layer"
+	name = "\improper Cable Layer"
 	icon_state = "mecha_wire"
 	var/datum/event/event
 	var/turf/old_turf
@@ -386,7 +386,7 @@
 	return 1
 
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun
-	name = "Exosuit-Mounted Syringe Gun"
+	name = "\improper Exosuit-Mounted Syringe Gun"
 	desc = "Exosuit-mounted chem synthesizer with syringe gun. Reagents inside are held in stasis, so no reactions will occur. (Can be attached to: Medical Exosuits)"
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "syringegun"
@@ -401,7 +401,7 @@
 	var/datum/global_iterator/mech_synth/synth
 	range = MELEE|RANGED
 	equip_cooldown = 10
-	origin_tech = "materials=3;biotech=4;magnets=4;programming=3"
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_BIOTECH + "=4;" + Tc_MAGNETS + "=4;" + Tc_PROGRAMMING + "=3"
 
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun/New()
 	..()

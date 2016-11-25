@@ -73,10 +73,10 @@
 	overlay_1 = image('icons/obj/slot_machine.dmi',icon_state="[value_1]",loc = src)
 
 	overlay_2 = image('icons/obj/slot_machine.dmi',icon_state="[value_2]",loc = src)
-	overlay_2.pixel_x = 4
+	overlay_2.pixel_x = 4 * PIXEL_MULTIPLIER
 
 	overlay_3 = image('icons/obj/slot_machine.dmi',icon_state="[value_3]",loc = src)
-	overlay_3.pixel_x = 8
+	overlay_3.pixel_x = 8 * PIXEL_MULTIPLIER
 
 	//The reason why there guys aren't actually added to the overlays list is that their icon_state has to be changed during the spin() proc,
 	//which would be impossible if they were in the overlays list
@@ -118,7 +118,8 @@
 				return
 
 /obj/machinery/computer/slot_machine/proc/spin(mob/user)
-	if(spinning) return
+	if(spinning)
+		return
 
 	//Charge money:
 	if(stored_money >= spin_cost) //If there's cash in the machine
@@ -255,7 +256,8 @@
 
 //Broadcast something over the radio!
 /obj/machinery/computer/slot_machine/proc/broadcast(var/message)
-	if(!message) return
+	if(!message)
+		return
 
 	Broadcast_Message(radio, all_languages[LANGUAGE_GALACTIC_COMMON], null, radio, message, "[capitalize(src.name)]", "Money Snatcher", "Slot machine #[id]", 0, 0, list(0,1), 1459)
 

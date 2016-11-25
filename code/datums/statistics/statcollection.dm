@@ -17,7 +17,7 @@
 
 // To ensure that if output file syntax is changed, we will still be able to process
 // new and old files
-#define STAT_OUTPUT_VERSION "1.0"
+#define STAT_OUTPUT_VERSION "1.1"
 #define STAT_OUTPUT_DIR "data/statfiles/"
 
 /datum/stat_collector
@@ -40,6 +40,9 @@
 	// Stat blobs
 	var/datum/stat_blob/cult/cult = new
 	var/datum/stat_blob/xeno/xeno = new
+	var/datum/stat_blob/blobmode/blobblob = new
+	var/datum/stat_blob/malf/malf = new
+	var/datum/stat_blob/revsquad/revsquad = new
 
 	var/gamemode = "UNSET"
 	var/mixed_gamemodes = null
@@ -79,7 +82,7 @@
 		var/obj/item/weapon/storage/box/B = resulting_item
 		for(var/obj/O in B.contents)
 			BAD.contains += O.type
-		BAD.purchaser_key = user.mind.key
+		BAD.purchaser_key = ckey(user.mind.key)
 		BAD.purchaser_name = user.mind.name
 		BAD.purchaser_is_traitor = was_traitor
 		badass_bundles += BAD
@@ -90,7 +93,7 @@
 		else
 			UP.itemtype = bundle.item
 		UP.bundle = bundle.type
-		UP.purchaser_key = user.mind.key
+		UP.purchaser_key = ckey(user.mind.key)
 		UP.purchaser_name = user.mind.name
 		UP.purchaser_is_traitor = was_traitor
 		uplink_purchases += UP
@@ -113,7 +116,8 @@
 
 /datum/stat_collector/proc/add_death_stat(var/mob/M)
 	//if(istype(M, /mob/living/carbon/human)) return 0
-	if(ticker.current_state != 3) return 0 // We don't care about pre-round or post-round deaths. 3 is GAME_STATE_PLAYING which is undefined I guess
+	if(ticker.current_state != 3)
+		return 0 // We don't care about pre-round or post-round deaths. 3 is GAME_STATE_PLAYING which is undefined I guess
 	var/datum/stat/death_stat/d = new
 	d.time_of_death = M.timeofdeath
 	d.last_attacked_by = M.LAssailant
@@ -123,9 +127,12 @@
 	d.mob_typepath = M.type
 	d.realname = M.name
 	if(M.mind)
-		if(M.mind.special_role && M.mind.special_role != "") d.special_role = M.mind.special_role
-		if(M.mind.key) d.key = M.mind.key
-		if(M.mind.name) d.realname = M.mind.name
+		if(M.mind.special_role && M.mind.special_role != "")
+			d.special_role = M.mind.special_role
+		if(M.mind.key)
+			d.key = ckey(M.mind.key) // To prevent newlines in keys
+		if(M.mind.name)
+			d.realname = M.mind.name
 	stat_collection.death_stats += d
 
 /datum/stat/explosion_stat
@@ -181,7 +188,9 @@
 
 // This guy writes the first line(s) of the stat file! Woo!
 /datum/stat_collector/proc/Write_Header(statfile)
-	statfile << "STATLOG_START|[STAT_OUTPUT_VERSION]|[map.nameLong]|[num2text(round_start_time, 30)]|[num2text(world.realtime, 30)]"
+	var/start_timestamp = time2text(round_start_time, "YYYY.MM.DD.hh.mm.ss")
+	var/end_timestamp = time2text(world.realtime, "YYYY.MM.DD.hh.mm.ss")
+	statfile << "STATLOG_START|[STAT_OUTPUT_VERSION]|[map.nameLong]|[start_timestamp]|[end_timestamp]"
 	statfile << "MASTERMODE|[master_mode]" // sekrit, or whatever else was decided as the 'actual' mode on round start.
 	if(istype(ticker.mode, /datum/game_mode/mixed))
 		var/datum/game_mode/mixed/mixy = ticker.mode
@@ -189,18 +198,19 @@
 		for(var/datum/game_mode/GM in mixy.modes)
 			T += "|[GM.name]"
 		statfile << T
-	else statfile << "GAMEMODE|[ticker.mode.name]"
+	else
+		statfile << "GAMEMODE|[ticker.mode.name]"
 
 /datum/stat_collector/proc/Write_Footer(statfile)
 	statfile << "WRITE_COMPLETE" // because I'd like to know if a write was interrupted and therefore invalid
 
 /datum/stat_collector/proc/Process()
 	var/filename_date = time2text(round_start_time, "YYYY.DD.MM")
-	var/roundnum = 1
+	var/uniquefilename = time2text(round_start_time, "hhmmss")
 	// Iterate until we have an unused file.
-	while(fexists(file(("[STAT_OUTPUT_DIR]statistics_[filename_date].[roundnum].txt"))))
-		roundnum++
-	var/statfile = file("[STAT_OUTPUT_DIR]statistics_[filename_date].[roundnum].txt")
+	while(fexists(file(("[STAT_OUTPUT_DIR]statistics_[filename_date].[uniquefilename].txt"))))
+		uniquefilename = "[uniquefilename].dupe"
+	var/statfile = file("[STAT_OUTPUT_DIR]statistics_[filename_date].[uniquefilename].txt")
 
 	world << "Writing statistics to file"
 
@@ -221,7 +231,7 @@
 	for(var/datum/stat/uplink_purchase_stat/U in uplink_purchases)
 		statfile << "UPLINK_ITEM|[U.purchaser_key]|[U.purchaser_name]|[U.purchaser_is_traitor]|[U.bundle]|[U.itemtype]"
 	for(var/datum/stat/uplink_badass_bundle_stat/B in badass_bundles)
-		var/o 	= 		"BADASS_BUNDLE|[B.purchaser_key]|[B.purchaser_name]|[B.purchaser_is_traitor]"
+		var/o 	= 	"BADASS_BUNDLE|[B.purchaser_key]|[B.purchaser_name]|[B.purchaser_is_traitor]"
 		for(var/S in B.contains)
 			o += "|[S]"
 		statfile << "[o]"
@@ -231,6 +241,15 @@
 
 	xeno.doPostRoundChecks()
 	xeno.writeStats(statfile)
+
+	blobblob.doPostRoundChecks()
+	blobblob.writeStats(statfile)
+
+	malf.doPostRoundChecks()
+	malf.writeStats(statfile)
+
+	revsquad.doPostRoundChecks()
+	revsquad.writeStats(statfile)
 
 	antagCheck(statfile)
 

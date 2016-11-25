@@ -22,7 +22,7 @@
 	new /obj/item/weapon/card/id/syndicate(src)
 	new /obj/item/device/multitool(src)
 	new /obj/item/weapon/shield/energy(src)
-	new /obj/item/clothing/shoes/magboots(src)
+	new /obj/item/clothing/shoes/magboots/syndie(src)
 
 
 /obj/structure/closet/syndicate/nuclear
@@ -31,11 +31,11 @@
 /obj/structure/closet/syndicate/nuclear/New()
 	..()
 	sleep(2)
-	new /obj/item/ammo_storage/magazine/a12mm(src)
-	new /obj/item/ammo_storage/magazine/a12mm(src)
-	new /obj/item/ammo_storage/magazine/a12mm(src)
-	new /obj/item/ammo_storage/magazine/a12mm(src)
-	new /obj/item/ammo_storage/magazine/a12mm(src)
+	new /obj/item/ammo_storage/magazine/a12mm/ops(src)
+	new /obj/item/ammo_storage/magazine/a12mm/ops(src)
+	new /obj/item/ammo_storage/magazine/a12mm/ops(src)
+	new /obj/item/ammo_storage/magazine/a12mm/ops(src)
+	new /obj/item/ammo_storage/magazine/a12mm/ops(src)
 	new /obj/item/weapon/storage/box/handcuffs(src)
 	new /obj/item/weapon/storage/box/flashbangs(src)
 	new /obj/item/weapon/storage/box/emps(src)
@@ -51,7 +51,7 @@
 	new /obj/item/weapon/pinpointer/nukeop(src)
 	new /obj/item/device/pda/syndicate(src)
 	var/obj/item/device/radio/uplink/U = new(src)
-	U.hidden_uplink.uses = 40
+	U.hidden_uplink.uses = 80
 	return
 
 /obj/structure/closet/syndicate/resources/
@@ -153,5 +153,22 @@
 		new /obj/item/clothing/mask/breath/vox(src)
 		new /obj/item/clothing/shoes/magboots/vox(src)
 		new /obj/item/clothing/suit/space/vox/pressure(src)
+		new /obj/item/clothing/under/vox/vox_casual(src)
+		new /obj/item/weapon/tank/jetpack/nitrogen(src)
+
+
+/obj/structure/closet/vox_raiders/trader
+	name = "vox armoury closet"
+	desc = "Polly wants a gun."
+	icon_state = "syndicate"
+	icon_closed = "syndicate"
+	icon_opened = "syndicateopen"
+
+	New()
+		sleep(2)
+		new /obj/item/clothing/head/helmet/space/vox/civ/trader(src)
+		new /obj/item/clothing/mask/breath/vox(src)
+		new /obj/item/clothing/shoes/magboots/vox(src)
+		new /obj/item/clothing/suit/space/vox/civ/trader(src)
 		new /obj/item/clothing/under/vox/vox_casual(src)
 		new /obj/item/weapon/tank/jetpack/nitrogen(src)

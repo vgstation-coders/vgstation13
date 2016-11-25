@@ -39,7 +39,7 @@
 	if(istype(target,/obj/item/weapon/nullrod))
 		var/turf/T = get_turf(target)
 		nullblock = 1
-		T.turf_animation('icons/effects/96x96.dmi',"nullding",-32,-32,MOB_LAYER+1,'sound/piano/Ab7.ogg',anim_plane = PLANE_EFFECTS)
+		T.turf_animation('icons/effects/96x96.dmi',"nullding",-WORLD_ICON_SIZE,-WORLD_ICON_SIZE,MOB_LAYER+1,'sound/instruments/piano/Ab7.ogg',anim_plane = EFFECTS_PLANE)
 		return 1
 	else if(target.contents)
 		for(var/atom/A in target.contents)
@@ -133,8 +133,10 @@
 
 
 /obj/item/weapon/paper/talisman/Topic(href, href_list)
-	if(!src)	return
-	if (usr.stat || usr.restrained() || !in_range(src, usr))	return
+	if(!src)
+		return
+	if (usr.stat || usr.restrained() || !in_range(src, usr))
+		return
 
 	if (href_list["rune"])
 		switch(href_list["rune"])
@@ -186,14 +188,14 @@
 		usr.visible_message("<span class='danger'>[usr] invokes a talisman at [T]</span>")
 
 		if(issilicon(T))
-			T.Weaken(15)
+			T.Knockdown(15)
 
 		else if(iscarbon(T))
 			var/mob/living/carbon/C = T
 			C.flash_eyes(visual = 1)
 			if (!(M_HULK in C.mutations))
 				C.silent += 15
-			C.Weaken(25)
+			C.Knockdown(25)
 			C.Stun(25)
 	return
 

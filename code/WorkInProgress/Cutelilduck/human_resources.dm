@@ -38,7 +38,8 @@
 		return
 	else
 		var/str = copytext(reject_bad_text(input(user,"Enter the properly capitalized name for demotion","Set name","") as text|null),1,MAX_NAME_LEN)
-		if (!Adjacent(user) || user.stat) return
+		if (!Adjacent(user) || user.stat)
+			return
 		if(!str)
 			alert("Invalid name.")
 			target_name = null

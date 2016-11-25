@@ -6,15 +6,8 @@
 //Vampire code
 	if(M.zone_sel && M.zone_sel.selecting == LIMB_HEAD && src != M)
 		if(M.mind && isvampire(M) && !M.mind.vampire.draining)
-			if(src.check_body_part_coverage(MOUTH))
-				to_chat(M, "<span class='warning'>Remove their mask!</span>")
+			if(!M.can_suck(src))
 				return 0
-			if(M.check_body_part_coverage(MOUTH))
-				if(M.species.breath_type == "oxygen")
-					to_chat(M, "<span class='warning'>Remove your mask!</span>")
-					return 0
-				else
-					to_chat(M, "<span class='notice'>With practiced ease, you shift aside your mask for each gulp of blood.</span>")
 			if(mind && mind.vampire && (mind in ticker.mode.vampires))
 				to_chat(M, "<span class='warning'>Your fangs fail to pierce [src.name]'s cold flesh.</span>")
 				return 0
@@ -71,7 +64,7 @@
 
 	if((src == M) || ((M_CLUMSY in M.mutations) && prob(20))) //Kicking yourself (or being clumsy) = stun
 		M.visible_message("<span class='notice'>\The [M] trips while attempting to kick \the [src]!</span>", "<span class='userdanger'>While attempting to kick \the [src], you trip and fall!</span>")
-		M.Weaken(rand(1,10))
+		M.Knockdown(rand(1,10))
 		return
 
 	var/stomping = 0
@@ -138,7 +131,8 @@
 				returnToPool(G)
 
 				var/throw_dir = M.dir
-				if(M.loc != src.loc) throw_dir = get_dir(M, src)
+				if(M.loc != src.loc)
+					throw_dir = get_dir(M, src)
 
 				var/turf/T = get_edge_target_turf(get_turf(src), throw_dir)
 				var/throw_strength = 3 * M.get_strength()
@@ -204,7 +198,8 @@
 			var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
 			var/armor_block = run_armor_check(affecting, "melee")
 
-			if(M_HULK in M.mutations)			damage += 5
+			if(M_HULK in M.mutations)
+				damage += 5
 
 			playsound(loc, "punch", 25, 1, -1)
 
@@ -251,7 +246,7 @@
 
 
 		if(I_GRAB)
-			if(M == src || anchored)
+			if(M.grab_check(src))
 				return 0
 			if(w_uniform)
 				w_uniform.add_fingerprint(M)
@@ -296,11 +291,13 @@
 			var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
 			var/armor_block = run_armor_check(affecting, "melee")
 
-			if(M_HULK in M.mutations)							damage += 5
+			if(M_HULK in M.mutations)
+				damage += 5
 
 			var/knockout = damage
 
-			if((M_CLAWS in M.mutations) && !istype(M.gloves))	damage += 3 //Claws mutation + no gloves (doesn't affect weaken chance)
+			if((M_CLAWS in M.mutations) && !istype(M.gloves))
+				damage += 3 //Claws mutation + no gloves (doesn't affect weaken chance)
 
 			if(istype(M.gloves)) //Attacker has gloves
 				var/obj/item/clothing/gloves/G = M.gloves
@@ -315,7 +312,7 @@
 			visible_message("<span class='danger'>[M] [M.species.attack_verb] [src]!</span>")
 
 			if((knockout >= M.species.max_hurt_damage) && prob(50))
-				visible_message("<span class='danger'>[M] has weakened [src]!</span>")
+				visible_message("<span class='danger'>[M] has knocked down [src]!</span>")
 				apply_effect(2, WEAKEN, armor_block)
 
 			if(M.species.punch_damage)
@@ -338,7 +335,8 @@
 				var/mob/living/carbon/human/H = M
 				if(H.zone_sel && H.zone_sel.selecting == "mouth")
 					var/chance = 0.5 * damage
-					if(M_HULK in H.mutations) chance += 50
+					if(M_HULK in H.mutations)
+						chance += 50
 					if(prob(chance))
 						knock_out_teeth(H)
 

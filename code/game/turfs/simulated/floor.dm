@@ -40,6 +40,8 @@ var/image/list/w_overlays = list("wet" = image('icons/effects/water.dmi',icon_st
 
 	melt_temperature = 1643.15 // Melting point of steel
 
+	plane = TURF_PLANE
+
 /turf/simulated/floor/New()
 	..()
 	if(!floor_tile)
@@ -265,8 +267,10 @@ turf/simulated/floor/update_icon()
 	return 0
 
 /turf/simulated/floor/proc/break_tile()
-	if(istype(src,/turf/simulated/floor/engine)) return
-	if(broken) return
+	if(istype(src,/turf/simulated/floor/engine))
+		return
+	if(broken)
+		return
 	if(is_plasteel_floor())
 		src.icon_state = "damaged[pick(1,2,3,4,5)]"
 		broken = 1
@@ -286,8 +290,10 @@ turf/simulated/floor/update_icon()
 		src.icon_state = "sand[pick("1","2","3")]"
 		broken = 1
 	else if(is_mineral_floor())
-		if(material=="diamond") return //diamond doesn't break
-		if(material=="plastic") return //you can't break legos
+		if(material=="diamond")
+			return //diamond doesn't break
+		if(material=="plastic")
+			return //you can't break legos
 		if(material=="phazon") //Phazon shatters
 			spawn(rand(2,10))
 				playsound(get_turf(src), "shatter", 70, 1)
@@ -297,8 +303,10 @@ turf/simulated/floor/update_icon()
 		src.icon_state = "[material]_broken"
 
 /turf/simulated/floor/proc/burn_tile()
-	if(istype(src,/turf/simulated/floor/engine)) return
-	if(istype(src,/turf/unsimulated/floor/asteroid)) return//Asteroid tiles don't burn
+	if(istype(src,/turf/simulated/floor/engine))
+		return
+	if(istype(src,/turf/unsimulated/floor/asteroid))
+		return//Asteroid tiles don't burn
 	if(is_plasteel_floor())
 		src.icon_state = "damaged[pick(1,2,3,4,5)]"
 		burnt = 1
@@ -323,7 +331,8 @@ turf/simulated/floor/update_icon()
 //This proc will delete the floor_tile and the update_iocn() proc will then change the icon_state of the turf
 //This proc auto corrects the grass tiles' siding.
 /turf/simulated/floor/proc/make_plating()
-	if(istype(src,/turf/simulated/floor/engine)) return
+	if(istype(src,/turf/simulated/floor/engine))
+		return
 
 	if(is_grass_floor())
 		for(var/direction in cardinal)
@@ -348,6 +357,7 @@ turf/simulated/floor/update_icon()
 	broken = 0
 	burnt = 0
 	material = "metal"
+	plane = PLATING_PLANE
 
 	update_icon()
 	levelupdate()
@@ -359,8 +369,10 @@ turf/simulated/floor/update_icon()
 	broken = 0
 	burnt = 0
 	intact = 1
+	plane = TURF_PLANE
 	set_light(0)
-	if(floor_tile) returnToPool(floor_tile)
+	if(floor_tile)
+		returnToPool(floor_tile)
 	floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/plasteel))
@@ -388,7 +400,9 @@ turf/simulated/floor/update_icon()
 	broken = 0
 	burnt = 0
 	intact = 1
-	if(floor_tile) returnToPool(floor_tile)
+	plane = TURF_PLANE
+	if(floor_tile)
+		returnToPool(floor_tile)
 	floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/light))
@@ -408,7 +422,9 @@ turf/simulated/floor/update_icon()
 	broken = 0
 	burnt = 0
 	intact = 1
-	if(floor_tile) returnToPool(floor_tile)
+	plane = TURF_PLANE
+	if(floor_tile)
+		returnToPool(floor_tile)
 	floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/grass))
@@ -427,7 +443,9 @@ turf/simulated/floor/update_icon()
 	broken = 0
 	burnt = 0
 	intact = 1
-	if(floor_tile) returnToPool(floor_tile)
+	plane = TURF_PLANE
+	if(floor_tile)
+		returnToPool(floor_tile)
 	floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/wood))
@@ -446,7 +464,9 @@ turf/simulated/floor/update_icon()
 	broken = 0
 	burnt = 0
 	intact = 1
-	if(floor_tile) returnToPool(floor_tile)
+	plane = TURF_PLANE
+	if(floor_tile)
+		returnToPool(floor_tile)
 	floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/carpet))
@@ -465,14 +485,14 @@ turf/simulated/floor/update_icon()
 	if(current_size >= STAGE_FIVE)
 		if(prob(75))
 			if(floor_tile && !broken && !burnt)
-				floor_tile.loc = src
+				floor_tile.forceMove(src)
 				floor_tile = null
 			make_plating()
 		return
 	if(current_size == STAGE_FOUR)
 		if(prob(30))
 			if(floor_tile && !broken && !burnt)
-				floor_tile.loc = src
+				floor_tile.forceMove(src)
 				floor_tile = null
 			make_plating()
 
@@ -488,7 +508,7 @@ turf/simulated/floor/update_icon()
 				to_chat(user, "<span class='warning'>You forcefully pry off the planks, destroying them in the process.</span>")
 			else
 				to_chat(user, "<span class='notice'>You remove the [floor_tile.name].</span>")
-				floor_tile.loc = src
+				floor_tile.forceMove(src)
 				floor_tile = null
 
 		make_plating()
@@ -528,11 +548,13 @@ turf/simulated/floor/update_icon()
 			if(!broken && !burnt)
 				var/obj/item/stack/tile/T = C
 				if(T.use(1))
-					if(floor_tile) returnToPool(floor_tile)
+					if(floor_tile)
+						returnToPool(floor_tile)
 					floor_tile = null
 					floor_tile = getFromPool(T.type, null)
 					material = floor_tile.material
 					intact = 1
+					plane = TURF_PLANE
 					if(istype(T,/obj/item/stack/tile/light))
 						var/obj/item/stack/tile/light/L = T
 						var/obj/item/stack/tile/light/F = floor_tile
@@ -608,37 +630,37 @@ turf/simulated/floor/update_icon()
 						spam_flag = 0
 						update_icon()
 
-/turf/simulated/proc/wet(delay = 800)
-	if(wet >= 1) return
-	wet = 1
+/turf/simulated/proc/wet(delay = 800, slipperiness = TURF_WET_WATER)
+	if(wet >= slipperiness)
+		return
+	wet = slipperiness
 	if(wet_overlay)
 		overlays -= wet_overlay
 		wet_overlay = null
 	wet_overlay = w_overlays["wet"]
 	overlays += wet_overlay
-	spawn() dry(delay)
-
-/turf/simulated/proc/dry(delay = 800)
-	if(drying || wet >= 2)
-		return
-	drying = 1
 	spawn(delay)
-		if (!istype(src)) return
-		if(wet >= 2) return
-		wet = 0
-		drying = 0
-		if(wet_overlay)
-			overlays -= wet_overlay
-			wet_overlay = null
+		if(!istype(src, /turf/simulated)) //Because turfs don't get deleted, they change, adapt, transform, evolve and deform. they are one and they are all.
+			return
+		dry(slipperiness)
+
+/turf/simulated/proc/dry(slipperiness = TURF_WET_WATER)
+	if(wet > slipperiness)
+		return
+	wet = TURF_DRY
+	if(wet_overlay)
+		overlays -= wet_overlay
+		wet_overlay = null
 
 /turf/simulated/floor/attack_construct(mob/user as mob)
-	if(istype(src,/turf/simulated/floor/carpet))	return//carpets are cool
-	if(istype(user,/mob/living/simple_animal/construct/builder) && (get_dist(src,user) <= 3))
+	if(istype(src,/turf/simulated/floor/carpet))
+		return//carpets are cool
+	if(istype(user,/mob/living/simple_animal/construct/builder))
 		if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 			var/spell/aoe_turf/conjure/floor/S = locate() in user.spell_list
-			S.perform(user,0,src)
-			var/obj/screen/spell/SS = S.connected_button
-			SS.update_charge(1)
+			S.perform(user, 0, list(src))
+			//var/obj/screen/spell/SS = S.connected_button
+			//SS.update_charge(1)
 			return 1
 	return 0
 
@@ -646,7 +668,7 @@ turf/simulated/floor/update_icon()
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 		name = "engraved floor"
 		icon_state = "cult"
-		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1,anim_plane = PLANE_OBJ)
+		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1,anim_plane = OBJ_PLANE)
 	return
 
 /turf/simulated/floor/adjust_slowdown(mob/living/L, current_slowdown)

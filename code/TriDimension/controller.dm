@@ -59,9 +59,12 @@
 			continue
 
 		switch (I)
-			if(1)	slow += T
-			if(2)	normal += T
-			if(3)	fast += T
+			if(1)
+				slow += T
+			if(2)
+				normal += T
+			if(3)
+				fast += T
 
 		if(transfer > 0)
 			if(up)
@@ -140,7 +143,7 @@ atom/movable/Move() //Hackish
 
 					temp.color = rgb(127,127,127)
 					temp.overlays += below.overlays
-					temp.plane = PLANE_TURF
+					temp.plane = TURF_PLANE
 					t_img += temp
 					T.overlays += t_img
 					T.z_overlays += t_img
@@ -149,11 +152,12 @@ atom/movable/Move() //Hackish
 				var/image/o_img = list()
 				for(var/obj/o in below)
 					// ingore objects that have any form of invisibility
-					if(o.invisibility) continue
+					if(o.invisibility)
+						continue
 					new_list = 2
 					var/image/temp2 = image(o, dir=o.dir, layer = TURF_LAYER+0.05*o.layer)
 					temp2.color = rgb(127,127,127)
-					temp2.plane = PLANE_TURF
+					temp2.plane = TURF_PLANE
 					temp2.overlays += o.overlays
 					o_img += temp2
 					// you need to add a list to .overlays or it will not display any because space
@@ -164,12 +168,14 @@ atom/movable/Move() //Hackish
 				var/image/m_img = list()
 				for(var/mob/m in below)
 					// ingore mobs that have any form of invisibility
-					if(m.invisibility) continue
+					if(m.invisibility)
+						continue
 					// only add this tile to fastprocessing if there is a living mob, not a dead one
-					if(istype(m, /mob/living)) new_list = 3
+					if(istype(m, /mob/living))
+						new_list = 3
 					var/image/temp2 = image(m, dir=m.dir, layer = TURF_LAYER+0.05*m.layer)
 					temp2.color = rgb(127,127,127)
-					temp2.plane = PLANE_TURF
+					temp2.plane = TURF_PLANE
 					temp2.overlays += m.overlays
 					m_img += temp2
 					// you need to add a list to .overlays or it will not display any because space
@@ -194,11 +200,13 @@ atom/movable/Move() //Hackish
 							var/turf/nT = get_step(mT,f)
 							if(istype(nT, /turf/space) || istype(nT, /turf/simulated/floor/open))
 								eligeable = 1*/
-				if(istype(above, /turf/space) || istype(above, /turf/simulated/floor/open)) eligeable = 1
+				if(istype(above, /turf/space) || istype(above, /turf/simulated/floor/open))
+					eligeable = 1
 				if(eligeable == 1)
 					if(!(istype(above, /turf/space) || istype(above, /turf/simulated/floor/open)))
 						var/image/t_img = list()
-						if(new_list < 1) new_list = 1
+						if(new_list < 1)
+							new_list = 1
 
 						above.overlays -= above.z_overlays
 						var/image/temp = image(above, dir=above.dir, layer = 5 + 0.04)
@@ -215,8 +223,10 @@ atom/movable/Move() //Hackish
 					var/image/o_img = list()
 					for(var/obj/o in above)
 						// ingore objects that have any form of invisibility
-						if(o.invisibility) continue
-						if(new_list < 2) new_list = 2
+						if(o.invisibility)
+							continue
+						if(new_list < 2)
+							new_list = 2
 						var/image/temp2 = image(o, dir=o.dir, layer = 5+0.05*o.layer)
 						temp2.alpha = 100
 						temp2.overlays += o.overlays
@@ -229,9 +239,11 @@ atom/movable/Move() //Hackish
 					var/image/m_img = list()
 					for(var/mob/m in above)
 						// ingore mobs that have any form of invisibility
-						if(m.invisibility) continue
+						if(m.invisibility)
+							continue
 						// only add this tile to fastprocessing if there is a living mob, not a dead one
-						if(istype(m, /mob/living) && new_list < 3) new_list = 3
+						if(istype(m, /mob/living) && new_list < 3)
+							new_list = 3
 						var/image/temp2 = image(m, dir=m.dir, layer = 5+0.05*m.layer)
 						temp2.alpha = 100
 						temp2.overlays += m.overlays

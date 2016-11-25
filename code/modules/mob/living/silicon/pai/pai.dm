@@ -63,9 +63,9 @@
 	var/obj/item/radio/integrated/signal/sradio // AI's signaller
 
 /mob/living/silicon/pai/New(var/obj/item/device/paicard)
-	sight &= ~BLIND
+	change_sight(removing = BLIND)
 	canmove = 0
-	src.loc = paicard
+	src.forceMove(paicard)
 	card = paicard
 	sradio = new(src)
 	if(!radio)
@@ -79,9 +79,9 @@
 		pda.name = pda.owner + " (" + pda.ownjob + ")"
 		pda.toff = 1
 
-	add_language("Galactic Common", 1)
-	add_language("Tradeband", 1)
-	add_language("Gutter", 1)
+	add_language(LANGUAGE_GALACTIC_COMMON, 1)
+	add_language(LANGUAGE_TRADEBAND, 1)
+	add_language(LANGUAGE_GUTTER, 1)
 
 	..()
 
@@ -139,7 +139,8 @@
 	return 0
 
 /mob/living/silicon/pai/restrained()
-	if(timestopped) return 1 //under effects of time magick
+	if(timestopped)
+		return 1 //under effects of time magick
 	return 0
 
 /mob/living/silicon/pai/emp_act(severity)
@@ -222,7 +223,8 @@
 		src.unset_machine()
 		src.reset_view(null)
 		return 0
-	if (stat == 2 || !C.status || !(src.network in C.network)) return 0
+	if (stat == 2 || !C.status || !(src.network in C.network))
+		return 0
 
 	// ok, we're alive, camera is good and in our network...
 

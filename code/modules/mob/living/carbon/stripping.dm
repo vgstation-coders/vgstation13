@@ -109,7 +109,8 @@
 			log_attack("[user.name] ([user.ckey]) has failed to place \a [held] into [src.name]'s [src.slotID2slotname(slot)] ([src.ckey])")
 
 /mob/living/carbon/proc/handle_strip_hand(var/mob/living/user, var/index)
-	if(!index || !isnum(index))	return
+	if(!index || !isnum(index))
+		return
 
 	var/obj/item/held = user.get_active_hand()
 	var/obj/item/target_item = src.held_items[index]
@@ -269,6 +270,9 @@
 
 // Set internals on or off.
 /mob/living/carbon/proc/set_internals(var/mob/living/user)
+	if(user.incapacitated())
+		return
+	
 	if(!has_breathing_mask())
 		to_chat(user, "<span class='warning'>\The [src] is not wearing a breathing mask.</span>")
 		return

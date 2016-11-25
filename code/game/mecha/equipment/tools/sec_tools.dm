@@ -1,10 +1,10 @@
 #define MECH_JAIL_TIME 10
 
 /obj/item/mecha_parts/mecha_equipment/tool/jail
-	name = "Mounted Jail Cell"
+	name = "\improper Mounted Jail Cell"
 	desc = "Mounted Jail Cell, capable of holding up to two prisoners for a limited time. (Can be attached to Gygax)"
 	icon_state = "mecha_jail"
-	origin_tech = "biotech=2;combat=4"
+	origin_tech = Tc_BIOTECH + "=2;" + Tc_COMBAT + "=4"
 	energy_drain = 20
 	range = MELEE
 	reliability = 1000
@@ -35,7 +35,7 @@
 		var/celldetails = cells[cell]
 		if(celldetails["mob"])
 			var/mob/living/carbon/occupant = celldetails["mob"]
-			occupant.loc = get_turf(src)
+			occupant.forceMove(get_turf(src))
 	return ..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/jail/Exit(atom/movable/O)

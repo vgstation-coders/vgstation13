@@ -16,7 +16,7 @@
 	icon_state = "film"
 	item_state = "electropack"
 	w_class = W_CLASS_TINY
-	origin_tech = "materials=1;programming=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_PROGRAMMING + "=1"
 
 
 /*
@@ -106,7 +106,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
-	origin_tech = "materials=1;programming=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_PROGRAMMING + "=1"
 	starting_materials = list(MAT_IRON = 2000)
 	w_type = RECYK_ELECTRONIC
 	min_harm_label = 3
@@ -170,7 +170,8 @@
 	set name = "Set Camera Zoom"
 	set category = "Object"
 
-	if(usr.incapacitated()) return
+	if(usr.incapacitated())
+		return
 
 	if(photo_size == 3)
 		photo_size = 1
@@ -200,13 +201,6 @@
 
 		viewpictures()
 */
-
-
-/obj/item/device/camera/attack(atom/movable/M, mob/user)
-	if(istype(M, /obj/structure/table/)) return //Stop taking photos of tables while putting cameras on them
-
-	return afterattack(M, user)
-
 
 /obj/item/device/camera/attackby(obj/item/I, mob/user)
 	if(isscrewdriver(I))
@@ -262,7 +256,9 @@
 		var/atom/c = atoms[i]
 		for(j = sorted.len, j > 0, --j)
 			var/atom/c2 = sorted[j]
-			if(c2.layer <= c.layer)
+			if(c2.plane < c.plane)
+				break
+			else if((c2.plane == c.plane) && (c2.layer <= c.layer))
 				break
 		sorted.Insert(j+1, c)
 
@@ -273,8 +269,8 @@
 		if(istype(A, /mob/living) && A:lying)
 			img.Turn(A:lying)
 
-		var/offX = 1 + (photo_size-1)*16 + (A.x - center.x) * 32 + A.pixel_x
-		var/offY = 1 + (photo_size-1)*16 + (A.y - center.y) * 32 + A.pixel_y
+		var/offX = 1 + (photo_size-1)*WORLD_ICON_SIZE/2 + (A.x - center.x) * WORLD_ICON_SIZE + A.pixel_x
+		var/offY = 1 + (photo_size-1)*WORLD_ICON_SIZE/2 + (A.y - center.y) * WORLD_ICON_SIZE + A.pixel_y
 
 		if(istype(A, /atom/movable))
 			offX += A:step_x
@@ -311,7 +307,9 @@
 		var/atom/c = atoms[i]
 		for(j = sorted.len, j > 0, --j)
 			var/atom/c2 = sorted[j]
-			if(c2.layer <= c.layer)
+			if(c2.plane < c.plane)
+				break
+			else if((c2.plane == c.plane) && (c2.layer <= c.layer))
 				break
 		sorted.Insert(j+1, c)
 
@@ -322,8 +320,8 @@
 		if(istype(A, /mob/living) && A:lying)
 			img.Turn(A:lying)
 
-		var/offX = 32 * (A.x - center.x) + A.pixel_x + 33
-		var/offY = 32 * (A.y - center.y) + A.pixel_y + 33
+		var/offX = WORLD_ICON_SIZE * (A.x - center.x) + A.pixel_x + (WORLD_ICON_SIZE+1)
+		var/offY = WORLD_ICON_SIZE * (A.y - center.y) + A.pixel_y + (WORLD_ICON_SIZE+1)
 		if(istype(A, /atom/movable))
 			offX += A:step_x
 			offY += A:step_y
@@ -345,7 +343,8 @@
 /obj/item/device/camera/proc/camera_get_mobs(turf/the_turf)
 	var/mob_detail
 	for(var/mob/living/carbon/A in the_turf)
-		if(A.invisibility) continue
+		if(A.invisibility)
+			continue
 		var/holding = null
 		for(var/obj/item/I in A.held_items)
 			var/item_count = 0
@@ -363,13 +362,15 @@
 		else
 			mob_detail += "You can also see [A] on the photo[A:health < 75 ? " - [A] looks hurt":""].[holding ? " [holding]":"."]."
 	for(var/mob/living/simple_animal/S in the_turf)
-		if(S.invisibility != 0) continue
+		if(S.invisibility != 0)
+			continue
 		if(!mob_detail)
 			mob_detail = "You can see [S] on the photo[S.health < (S.maxHealth/2) ? " - [S] looks hurt":""]."
 		else
 			mob_detail += "You can also see [S] on the photo[S.health < (S.maxHealth/2) ? " - [S] looks hurt":""]."
 	for(var/mob/dead/observer/O in the_turf)//in case ghosts have been made visible
-		if(O.invisibility != 0) continue
+		if(O.invisibility != 0)
+			continue
 		if(!mob_detail)
 			mob_detail = "Wait...is that [O] on the photo? "
 		else
@@ -452,12 +453,12 @@
 	var/icon/small_img = icon(temp)
 	var/icon/ic = icon('icons/obj/items.dmi',"photo")
 	small_img.Scale(8, 8)
-	ic.Blend(small_img,ICON_OVERLAY, 10, 13)
+	ic.Blend(small_img,ICON_OVERLAY, 13, 13)
 	P.icon = ic
 	P.img = temp
 	P.info = mobs
-	P.pixel_x = rand(-10, 10)
-	P.pixel_y = rand(-10, 10)
+	P.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	P.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 	if(blueprints)
 		P.blueprints = 1
@@ -469,12 +470,12 @@
 	var/icon/small_img = icon(temp)
 	var/icon/ic = icon('icons/obj/items.dmi',"photo")
 	small_img.Scale(8, 8)
-	ic.Blend(small_img,ICON_OVERLAY, 10, 13)
+	ic.Blend(small_img,ICON_OVERLAY, 13, 13)
 	P.icon = ic
 	P.img = temp
 	P.info = mobs
-	P.pixel_x = rand(-10, 10)
-	P.pixel_y = rand(-10, 10)
+	P.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	P.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 	if(blueprints)
 		P.blueprints = 1
@@ -495,12 +496,12 @@
 	var/icon/small_img = icon(temp)
 	var/icon/ic = icon('icons/obj/items.dmi',"photo")
 	small_img.Scale(8, 8)
-	ic.Blend(small_img,ICON_OVERLAY, 10, 13)
+	ic.Blend(small_img,ICON_OVERLAY, 13, 13)
 	var/icon = ic
 	var/img = temp
 	var/info = mobs
-	var/pixel_x = rand(-10, 10)
-	var/pixel_y = rand(-10, 10)
+	var/pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	var/pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 	var/injectblueprints = 1
 	if(blueprints)
@@ -557,7 +558,9 @@
 	del P    //so 10 thousdand pictures items are not left in memory should an AI take them and then view them all.
 
 /obj/item/device/camera/afterattack(atom/target, mob/user, flag)
-	if(!on || !pictures_left || (!isturf(target) && !isturf(target.loc))) return
+	if(!on || !pictures_left || (!isturf(target) && !isturf(target.loc)))
+		return
+
 	captureimage(target, user, flag)
 
 	playsound(loc, "polaroid", 75, 1, -3)

@@ -67,21 +67,24 @@
 	T.toxins += 4
 	if(T.seed && !T.dead)
 		T.health -= 1.5
-		if(prob(20))T.mutation_mod += 0.1 //ha ha
+		if(prob(20))
+			T.mutation_mod += 0.1 //ha ha
 
 /datum/reagent/fertilizer/left4zed/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.adjust_nutrient(1)
 	if(T.seed && !T.dead)
 		T.health -= 0.5
-		if(prob(30)) T.mutation_mod += 0.2
+		if(prob(30))
+			T.mutation_mod += 0.2
 
 /datum/reagent/diethylamine
 	custom_plant_metabolism = 0.1
 /datum/reagent/diethylamine/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.adjust_nutrient(0.1)
-	if(prob(100*custom_plant_metabolism)) T.pestlevel -= 1
+	if(prob(100*custom_plant_metabolism))
+		T.pestlevel -= 1
 	if(T.seed && !T.dead)
 		T.health += 0.1
 		if(prob(200*custom_plant_metabolism))
@@ -102,8 +105,10 @@
 /datum/reagent/fertilizer/robustharvest/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.adjust_nutrient(0.05)
-	if(prob(25*custom_plant_metabolism)) T.weedlevel += 1
-	if(T.seed && !T.dead && prob(25*custom_plant_metabolism)) T.pestlevel += 1
+	if(prob(25*custom_plant_metabolism))
+		T.weedlevel += 1
+	if(T.seed && !T.dead && prob(25*custom_plant_metabolism))
+		T.pestlevel += 1
 	if(T.seed && !T.dead && !T.seed.immutable)
 		var/chance
 		chance = unmix(T.seed.potency, 15, 150)*350*custom_plant_metabolism

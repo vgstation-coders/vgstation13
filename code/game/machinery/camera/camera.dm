@@ -7,7 +7,7 @@ var/list/camera_names=list()
 	use_power = 2
 	idle_power_usage = 5
 	active_power_usage = 10
-	layer = 5
+	plane = ABOVE_HUMAN_PLANE
 
 	var/datum/wires/camera/wires = null // Wires datum
 	var/list/network = list("SS13")
@@ -90,19 +90,21 @@ var/list/camera_names=list()
 	var/basename=A.name
 	var/nethash=english_list(network)
 	var/suffix = 0
-	while(!suffix || nethash+c_tag in camera_names)
+	while(!suffix || (nethash+c_tag in camera_names))
 		c_tag = "[basename]"
 		if(suffix)
 			c_tag += " [suffix]"
 		suffix++
 	camera_names[nethash+c_tag]=src
 
-/obj/machinery/camera/change_area(oldarea, newarea)
+/obj/machinery/camera/change_area(var/area/oldarea, var/area/newarea)
 	var/nethash=english_list(network)
 	camera_names[nethash+c_tag]=null
 	..()
-	if(name != replacetext(name,oldarea,newarea))
-		name_camera()
+
+/obj/machinery/camera/change_area_name(oldname, oldarea)
+	..()
+	name_camera()
 
 /obj/machinery/camera/Destroy()
 	deactivate(null, 0) //kick anyone viewing out
@@ -176,7 +178,9 @@ var/list/camera_names=list()
 	add_hiddenprint(user)
 	deactivate(user,0)
 
-/obj/machinery/camera/attackby(W as obj, mob/living/user as mob)
+var/list/camera_messages = list()
+
+/obj/machinery/camera/attackby(obj/W as obj, mob/living/user as mob)
 
 	// DECONSTRUCTION
 	if(isscrewdriver(W))
@@ -191,7 +195,7 @@ var/list/camera_names=list()
 		if(weld(W, user))
 			if(assembly)
 				assembly.state = 1
-				assembly.loc = src.loc
+				assembly.forceMove(src.loc)
 				assembly = null
 
 			qdel(src)
@@ -212,7 +216,8 @@ var/list/camera_names=list()
 			s.use(1)
 			assembly.upgrades += new /obj/item/stack/sheet/mineral/plasma
 		else
-			if(!user.drop_item(W, src)) return
+			if(!user.drop_item(W, src))
+				return
 			assembly.upgrades += W
 		to_chat(user, "You attach the [W] into the camera's inner circuits.")
 		update_upgrades()
@@ -234,7 +239,7 @@ var/list/camera_names=list()
 			if(U)
 				to_chat(user, "You unattach \the [U] from the camera.")
 				playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-				U.loc = get_turf(src)
+				U.forceMove(get_turf(src))
 				assembly.upgrades -= U
 				update_upgrades()
 				update_icon()
@@ -250,35 +255,43 @@ var/list/camera_names=list()
 	else if ((istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/device/pda)) && isliving(user))
 		user.delayNextAttack(5)
 		var/mob/living/U = user
-		var/obj/item/weapon/paper/X = null
-		var/obj/item/device/pda/P = null
+		to_chat(U, "You hold \a [W] up to the camera ...")
 
-		var/itemname = ""
 		var/info = ""
 		if(istype(W, /obj/item/weapon/paper))
-			X = W
-			itemname = X.name
+			var/obj/item/weapon/paper/X = W
 			info = X.info
 		else
-			P = W
-			itemname = P.name
+			var/obj/item/device/pda/P = W
 			info = P.notehtml
-		to_chat(U, "You hold \a [itemname] up to the camera ...")
-		for(var/mob/living/silicon/ai/O in living_mob_list)
-			if(!O.client) continue
-			if(U.name == "Unknown") to_chat( O, "<span class='name'>[U]</span> holds \a [itemname] up to one of your cameras ...")
-			else to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track2=\ref[O];track=\ref[U]'>[U]</a></span> holds \a [itemname] up to one of your cameras ...")
 
-			O << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", itemname, info), text("window=[]", itemname))
+		camera_messages["[html_encode(W.name)]"] = info
+
+		for(var/mob/living/silicon/ai/O in living_mob_list)
+			if(!O.client)
+				continue
+			if(U.name == "Unknown")
+				to_chat( O, "<span class='name'>[U]</span> holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of your cameras ...")
+			else
+				to_chat(O, "<span class='name'><a href='byond://?src=\ref[O];track2=\ref[O];track=\ref[U]'>[U]</a></span> holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of your cameras ...")
+
 		for(var/mob/O in player_list)
 			if (istype(O.machine, /obj/machinery/computer/security))
 				var/obj/machinery/computer/security/S = O.machine
 				if (S.current == src)
-					to_chat(O, "[U] holds \a [itemname] up to one of the cameras ...")
-					O << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", itemname, info), text("window=[]", itemname))
+					to_chat(O, "[U] holds a <a href='byond://?src=\ref[src];picturename=[html_encode(W.name)]'>[W]</a> up to one of the cameras ...")
 	else
 		..()
 	return
+
+/obj/machinery/camera/Topic(href, href_list)
+	if(..())
+		return 1
+
+	if(href_list["picturename"])
+		var/picturename = href_list["picturename"]
+		var/pictureinfo = camera_messages[picturename]
+		usr << browse(text("<HTML><HEAD><TITLE>[]</TITLE></HEAD><BODY><TT>[]</TT></BODY></HTML>", picturename, pictureinfo), text("window=[]", picturename))
 
 /obj/machinery/camera/attack_pai(mob/user as mob)
 	wirejack(user)
@@ -438,7 +451,8 @@ var/list/camera_names=list()
 	use_power = 0
 	idle_power_usage = 0
 	active_power_usage = 0
-	layer = 2.1
+	layer = DECAL_LAYER
+	plane = ABOVE_TURF_PLANE
 
 /obj/machinery/camera/arena/New()
 	..()
@@ -484,3 +498,4 @@ var/list/camera_names=list()
 	to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
 
 	H.apply_damage(rand(1,2), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
+	return SPECIAL_ATTACK_FAILED

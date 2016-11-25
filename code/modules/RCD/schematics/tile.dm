@@ -18,10 +18,6 @@
 /datum/rcd_schematic/clear_decals/attack(var/turf/A, var/mob/user)
 	to_chat(user, "Clearing decals...")
 	playsound(get_turf(master), 'sound/effects/spray3.ogg', 15, 1)
-	if (!do_after(user, A, 20))
-		return 1
-
-	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
 
 	A.ClearDecals()
 
@@ -118,10 +114,6 @@
 	to_chat(user, "Painting floor...")
 	//playsound(get_turf(master), 'sound/AI/animes.ogg', 50, 1)
 	playsound(get_turf(master), 'sound/effects/spray3.ogg', 15, 1)
-	if (!do_after(user, A, 20))
-		return 1
-
-	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
 
 	selection.apply(A, nname, ndesc, thisdir)
 
@@ -154,9 +146,12 @@
 		name = nname
 	else
 		switch (ftype)
-			if (PAINT_FLOOR)      name = "floor"
-			if (PAINT_REINFORCED) name = "reinforced floor"
-			if (PAINT_PLATING)    name = "plating"
+			if (PAINT_FLOOR)
+				name = "floor"
+			if (PAINT_REINFORCED)
+				name = "reinforced floor"
+			if (PAINT_PLATING)
+				name = "plating"
 
 //This is used to give the user a hint that he's a massive retard for using a floor painter on the carpet
 /datum/paint_info/proc/validate(var/turf/simulated/floor/test)

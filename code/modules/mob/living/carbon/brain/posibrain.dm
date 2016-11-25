@@ -4,7 +4,7 @@
 	icon = 'icons/obj/assemblies.dmi'
 	icon_state = "posibrain"
 	w_class = W_CLASS_MEDIUM
-	origin_tech = "engineering=4;materials=4;bluespace=2;programming=4"
+	origin_tech = Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=4;" + Tc_BLUESPACE + "=2;" + Tc_PROGRAMMING + "=4"
 
 	var/searching = 0
 	var/askDelay = 10 * 60 * 1
@@ -13,10 +13,13 @@
 	req_access = list(access_robotics)
 	locked = 2
 	mecha = null//This does not appear to be used outside of reference in mecha.dm.
+	var/last_ping_time = 0
+	var/ping_cooldown = 50
 
 #ifdef DEBUG_ROLESELECT
 /obj/item/device/mmi/posibrain/test/New()
 	..()
+	last_ping_time = world.time
 	search_for_candidates()
 #endif
 
@@ -56,9 +59,11 @@
 
 /obj/item/device/mmi/posibrain/proc/question(var/client/C)
 	spawn(0)
-		if(!C)	return
+		if(!C)
+			return
 		var/response = alert(C, "Someone is requesting a personality for \a [src]. Would you like to play as one?", "[src] request", "Yes", "No", "Never for this round")
-		if(!C || brainmob.key || 0 == searching)	return		//handle logouts that happen whilst the alert is waiting for a response, and responses issued after a brain has been located.
+		if(!C || brainmob.key || 0 == searching)
+			return		//handle logouts that happen whilst the alert is waiting for a response, and responses issued after a brain has been located.
 		if(response == "Yes")
 			transfer_personality(C.mob)
 
@@ -85,7 +90,8 @@
 /obj/item/device/mmi/posibrain/proc/reset_search() //We give the players sixty seconds to decide, then reset the timer.
 
 
-	if(src.brainmob && src.brainmob.key) return
+	if(src.brainmob && src.brainmob.key)
+		return
 
 	src.searching = 0
 	icon_state = "posibrain"
@@ -97,7 +103,8 @@
 /obj/item/device/mmi/posibrain/Topic(href,href_list)
 	if("signup" in href_list)
 		var/mob/dead/observer/O = locate(href_list["signup"])
-		if(!O) return
+		if(!O)
+			return
 		volunteer(O)
 
 /obj/item/device/mmi/posibrain/proc/volunteer(var/mob/dead/observer/O)
@@ -150,7 +157,7 @@
 	src.brainmob = new(src)
 	src.brainmob.name = "[pick(list("PBU","HIU","SINA","ARMA","OSI"))]-[rand(100, 999)]"
 	src.brainmob.real_name = src.brainmob.name
-	src.brainmob.loc = src
+	src.brainmob.forceMove(src)
 	src.brainmob.container = src
 	src.brainmob.stat = 0
 	src.brainmob.silent = 0
@@ -167,11 +174,13 @@
 	if(searching)
 		volunteer(O)
 	else
-		var/turf/T = get_turf(src.loc)
-		for (var/mob/M in viewers(T))
-			M.show_message("<span class='notice'>\The [src] pings softly.</span>")
+		if(!brainmob.ckey && last_ping_time + ping_cooldown <= world.time)
+			last_ping_time = world.time
+			visible_message(message = "<span class='notice'>\The [src] pings softly.</span>", blind_message = "<span class='danger'>You hear what you think is a microwave finishing.</span>")
+		else
+			to_chat(O, "[src] is recharging. Try again in a few moments.")
 
 /obj/item/device/mmi/posibrain/OnMobDeath(var/mob/living/carbon/brain/B)
-	visible_message(message = "<span class='danger'>[B] begins to go dark, having seemingly thought himself to death</span>", blind_message = "<span class='danger'>You hear the wistful sigh of a hopeful machine powering off with a tone of finality.<span>")
+	visible_message(message = "<span class='danger'>[B] begins to go dark, having seemingly thought himself to death</span>", blind_message = "<span class='danger'>You hear the wistful sigh of a hopeful machine powering off with a tone of finality.</span>")
 	icon_state = "posibrain"
 	searching = 0

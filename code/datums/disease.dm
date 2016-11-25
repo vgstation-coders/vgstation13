@@ -78,7 +78,8 @@ var/list/diseases = typesof(/datum/disease) - /datum/disease
 	return
 
 /datum/disease/proc/has_cure()//check if affected_mob has required reagents.
-	if((!cure_id && !cure_list) || !curable) return 0
+	if((!cure_id && !cure_list) || !curable)
+		return 0
 	var/result = 1
 	if(!cure_list || cure_list == cure_id) //if no cure_list or cure list is the same as cure_id, just check _id
 		if(istype(cure_id, /list)) //if cure_id is a list, check inside of it
@@ -163,7 +164,7 @@ var/list/diseases = typesof(/datum/disease) - /datum/disease
 			if(D != src)
 				if(IsSame(D))
 					//error("Deleting [D.name] because it's the same as [src.name].")
-					del(D) // if there are somehow two viruses of the same kind in the system, delete the other one
+					qdel(D) // if there are somehow two viruses of the same kind in the system, delete the other one
 
 	if(holder == affected_mob)
 		if(affected_mob.stat != DEAD) //he's alive
@@ -187,11 +188,9 @@ var/list/diseases = typesof(/datum/disease) - /datum/disease
 			affected_mob.resistances += text2path(saved_type)
 		/*if(istype(src, /datum/disease/alien_embryo))	//Get rid of the infection flag if it's a xeno embryo.
 			affected_mob.status_flags &= ~(XENO_HOST)*/
-		affected_mob.viruses -= src		//remove the datum from the list
-	del(src)	//delete the datum to stop it processing
-	return
+	qdel(src)	//delete the datum to stop it processing
 
-/datum/disease/Del()
+/datum/disease/Destroy()
 	active_diseases -= src
 	if(affected_mob)
 		affected_mob.viruses -= src

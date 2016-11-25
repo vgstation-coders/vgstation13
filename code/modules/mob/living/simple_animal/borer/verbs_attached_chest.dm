@@ -10,7 +10,8 @@
 	message = capitalize(message)
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.borer_speak(message)
 
 /obj/item/verbs/borer/attached_chest/verb/evolve()
@@ -19,7 +20,8 @@
 	set desc = "Upgrade yourself or your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.evolve()
 
 /obj/item/verbs/borer/attached_chest/verb/secrete_chemicals()
@@ -28,7 +30,8 @@
 	set desc = "Push some chemicals into your host's bloodstream."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.secrete_chemicals()
 
 /obj/item/verbs/borer/attached_chest/verb/abandon_host()
@@ -37,7 +40,8 @@
 	set desc = "Slither out of your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.abandon_host()
 
 /obj/item/verbs/borer/attached_chest/verb/advanced_analyze_host()
@@ -46,7 +50,8 @@
 	set desc = "An in-depth check of the host's physical status."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.advanced_analyze_host()
 
 /mob/living/simple_animal/borer/proc/advanced_analyze_host()
@@ -152,7 +157,8 @@
 	dat += text("[]\tDexalin: [] units<BR>", (occ["dexalin_amount"] < 30 ? "<font color='black'>" : "<font color='red'>"), occ["dexalin_amount"])
 
 	for(var/datum/reagent/R in occ["all_chems"])
-		if(R.id == BLOOD || R.id == INAPROVALINE || R.id == STOXIN || R.id == DERMALINE || R.id == BICARIDINE || R.id == DEXALIN) continue //no repeats
+		if(R.id == BLOOD || R.id == INAPROVALINE || R.id == STOXIN || R.id == DERMALINE || R.id == BICARIDINE || R.id == DEXALIN)
+			continue //no repeats
 		else
 			dat += text("<font color='black'>Detected</font> <font color='blue'>[R.volume]</font> <font color='black'>units of</font> <font color='blue'>[R.name]</font><BR>")
 	for(var/datum/disease/D in occ["tg_diseases_list"])
@@ -271,7 +277,8 @@
 	set desc = "Expend chemicals constantly in order to mitigate brute damage done to your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.brute_resist()
 
 /mob/living/simple_animal/borer/proc/brute_resist()
@@ -321,7 +328,8 @@
 	set desc = "Expend chemicals constantly in order to mitigate burn damage done to your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.burn_resist()
 
 /mob/living/simple_animal/borer/proc/burn_resist()

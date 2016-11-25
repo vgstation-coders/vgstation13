@@ -7,7 +7,7 @@
 
 	charge_cost = 100 //How much energy is needed to fire.
 	projectile_type = "/obj/item/projectile/energy/electrode"
-	origin_tech = "combat=3;magnets=2"
+	origin_tech = Tc_COMBAT + "=3;" + Tc_MAGNETS + "=2"
 	modifystate = "energystun"
 
 	var/mode = 0 //0 = stun, 1 = kill
@@ -37,7 +37,7 @@
 	name = "Advanced Energy Gun"
 	desc = "An energy gun with an experimental miniaturized reactor."
 	icon_state = "nucgun"
-	origin_tech = "combat=3;materials=5;powerstorage=3"
+	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=5;" + Tc_POWERSTORAGE + "=3"
 	var/lightfail = 0
 	var/charge_tick = 0
 
@@ -53,11 +53,14 @@
 
 	process()
 		charge_tick++
-		if(charge_tick < 4) return 0
+		if(charge_tick < 4)
+			return 0
 		charge_tick = 0
-		if(!power_supply) return 0
+		if(!power_supply)
+			return 0
 		if((power_supply.charge / power_supply.maxcharge) != 1)
-			if(!failcheck())	return 0
+			if(!failcheck())
+				return 0
 			power_supply.give(100)
 			update_icon()
 		return 1
@@ -66,7 +69,8 @@
 	proc
 		failcheck()
 			lightfail = 0
-			if (prob(src.reliability)) return 1 //No failure
+			if (prob(src.reliability))
+				return 1 //No failure
 			if (prob(src.reliability))
 				for (var/mob/living/M in range(0,src)) //Only a minor failure, enjoy your radiation if you're in the same tile or carrying it
 					if (src in M.contents)

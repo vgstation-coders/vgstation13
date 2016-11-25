@@ -8,11 +8,10 @@
 	icon_state = "term"
 	desc = "It's an underfloor wiring terminal for power equipment."
 	level = 1
-	layer = TURF_LAYER
-	plane = PLANE_TURF
+	plane = ABOVE_PLATING_PLANE
 	var/obj/machinery/power/master
 	anchored = 1
-	layer = 2.6 // a bit above wires
+	layer = WIRE_TERMINAL_LAYER
 
 	holomap = TRUE
 	auto_holomap = TRUE
@@ -21,7 +20,8 @@
 /obj/machinery/power/terminal/New()
 	..()
 	var/turf/T = src.loc
-	if(level==1) hide(T.intact)
+	if(level==1)
+		hide(T.intact)
 	return
 
 
@@ -32,6 +32,19 @@
 	else
 		invisibility = 0
 		icon_state = "term"
+
+/obj/machinery/power/terminal/t_scanner_expose()
+	if (level != LEVEL_BELOW_FLOOR)
+		return
+
+	invisibility = 0
+	plane = ABOVE_TURF_PLANE
+
+	spawn(1 SECONDS)
+		var/turf/U = loc
+		if(istype(U) && U.intact)
+			invisibility = 101
+			plane = initial(plane)
 
 /obj/machinery/power/terminal/Destroy()
 	if (master)

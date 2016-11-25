@@ -2,6 +2,8 @@
 #define HEAT_DAMAGE_LEVEL_2 4 //Amount of damage applied when your body temperature passes the 400K point
 #define HEAT_DAMAGE_LEVEL_3 8 //Amount of damage applied when your body temperature passes the 460K point and you are on fire
 
+#define LARVA_GROW_TIME 100
+
 /mob/living/carbon/alien
 	name = "alien" //The alien, not Alien
 	voice_name = "alien"
@@ -16,7 +18,7 @@
 
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat
 
-	var/storedPlasma = 250
+	var/plasma = 250
 	var/max_plasma = 500
 	var/neurotoxin_cooldown = 0
 
@@ -35,19 +37,18 @@
 
 	var/heat_protection = 0.5
 
-/mob/living/carbon/alien/adjustToxLoss(amount)
-	storedPlasma = min(max(storedPlasma + amount,0),max_plasma) //upper limit of max_plasma, lower limit of 0
+/mob/living/carbon/alien/AdjustPlasma(amount)
+	plasma = min(max(plasma + amount,0),max_plasma) //upper limit of max_plasma, lower limit of 0
 	updatePlasmaHUD()
-	return
 
 /mob/living/carbon/alien/proc/updatePlasmaHUD()
 	if(hud_used)
 		if(!hud_used.vampire_blood_display)
 			hud_used.plasma_hud()
 			//hud_used.human_hud(hud_used.ui_style)
-		hud_used.vampire_blood_display.maptext_width = 64
-		hud_used.vampire_blood_display.maptext_height = 32
-		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'> P:<font color='#E9DAE9' size='1'>[storedPlasma]</font><br>  / <font color='#BE7DBE' size='1'>[max_plasma]</font></div>"
+		hud_used.vampire_blood_display.maptext_width = WORLD_ICON_SIZE*2
+		hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
+		hud_used.vampire_blood_display.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'> P:<font color='#E9DAE9' size='1'>[plasma]</font><br>  / <font color='#BE7DBE' size='1'>[max_plasma]</font></div>"
 	return
 
 /*
@@ -61,7 +62,7 @@
 //No longer weak to fire
 
 /mob/living/carbon/alien/proc/getPlasma()
-	return storedPlasma
+	return plasma
 
 /mob/living/carbon/alien/eyecheck()
 	return 2
@@ -82,20 +83,15 @@
 		health = maxHealth
 		stat = CONSCIOUS
 	else
-		//oxyloss is only used for suicide
-		//toxloss isn't used for aliens, its actually used as alien powers!!
 		health = maxHealth - getOxyLoss() - getFireLoss() - getBruteLoss() - getCloneLoss()
 
 /mob/living/carbon/alien/proc/handle_environment(var/datum/gas_mixture/environment)
-
-
-	//If there are alien weeds on the ground then heal if needed or give some toxins
 	if(locate(/obj/effect/alien/weeds) in loc)
 		if(health < maxHealth - getCloneLoss())
 			adjustBruteLoss(-heal_rate)
 			adjustFireLoss(-heal_rate)
 			adjustOxyLoss(-heal_rate)
-		adjustToxLoss(plasma_rate)
+		AdjustPlasma(plasma_rate)
 
 	if(!environment || (flags & INVULNERABLE))
 		return
@@ -165,17 +161,17 @@
 			if(1 to 49)
 				radiation--
 				if(prob(25))
-					adjustToxLoss(1)
+					AdjustPlasma(1)
 
 			if(50 to 74)
 				radiation -= 2
-				adjustToxLoss(1)
+				AdjustPlasma(1)
 				if(prob(5))
 					radiation -= 5
 
 			if(75 to 100)
 				radiation -= 3
-				adjustToxLoss(3)
+				AdjustPlasma(3)
 
 /mob/living/carbon/alien/handle_fire()//Aliens on fire code
 	if(..())
@@ -245,13 +241,13 @@
 		"<span class='warning'>You hear a policeman whistling!</span>"
 	)
 
-	//if(src.stunned < shock_damage)	src.stunned = shock_damage
+	//if(src.stunned < shock_damage)	src.SetStunned(shock_damage)
 
 	Stun(10) // this should work for now, more is really silly and makes you lay there forever
 
-	//if(src.weakened < 20*siemens_coeff)	src.weakened = 20*siemens_coeff
+	//if(src.knockdown < 20*siemens_coeff)	SetKnockdown(20*siemens_coeff)
 
-	Weaken(10)
+	Knockdown(10)
 
 	var/datum/effect/effect/system/spark_spread/SparkSpread = new
 	SparkSpread.set_up(5, 1, loc)

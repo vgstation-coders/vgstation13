@@ -5,8 +5,8 @@
 	icon_state = "latticefull"
 	density = 0
 	anchored = 1.0
-	layer = 2.3 //under pipes
-	plane = PLANE_TURF // thanks for using a define up there it's really useful and maintainable.
+	layer = LATTICE_LAYER
+	plane = ABOVE_PLATING_PLANE
 
 	//	flags = CONDUCT
 
@@ -46,8 +46,8 @@
 		var/obj/item/weapon/weldingtool/WeldingTool = C
 		if(WeldingTool.remove_fuel(0, user))
 			to_chat(user, "<span class='notice'>Slicing [src] joints...</span>")
-		new/obj/item/stack/rods(loc)
-		qdel(src)
+			new/obj/item/stack/rods(loc)
+			qdel(src)
 	else
 		var/turf/T = get_turf(src)
 		T.attackby(C, user) //Attacking to the lattice will attack to the space turf

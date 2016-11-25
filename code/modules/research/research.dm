@@ -157,7 +157,8 @@ var/global/list/hidden_tech = list(
 /datum/research/proc/UpdateTech(var/ID, var/level)
 	for(var/datum/tech/KT in known_tech)
 		if(KT.id == ID)
-			if(KT.level <= level) KT.level = max((KT.level + 1), (level - 1))
+			if(KT.level <= level)
+				KT.level = max((KT.level + 1), (level - 1))
 	return
 
 /datum/research/proc/UpdateDesign(var/path)
@@ -262,6 +263,12 @@ datum/tech/nanotrasen
 	max_level=8
 	new_category = "Nanotrasen"
 
+datum/tech/anomaly
+	name = "Anomaly Research"
+	desc = "The study of high energy materials and technology reconstruction."
+	id = "anomaly"
+	max_level=6
+
 /*
 datum/tech/arcane
 	name = "Arcane Research"
@@ -274,19 +281,19 @@ datum/tech/explosives
 	name = "Explosives Research"
 	desc = "The creation and application of explosive materials."
 	id = "explosives"
-	req_tech = list("materials" = 3)
+	req_tech = list(Tc_MATERIALS = 3)
 
 datum/tech/generators
 	name = "Power Generation Technology"
 	desc = "Research into more powerful and more reliable sources."
 	id = "generators"
-	req_tech = list("powerstorage" = 2)
+	req_tech = list(Tc_POWERSTORAGE = 2)
 
 datum/tech/robotics
 	name = "Robotics Technology"
 	desc = "The development of advanced automated, autonomous machines."
 	id = "robotics"
-	req_tech = list("materials" = 3, "programming" = 3)
+	req_tech = list(Tc_MATERIALS = 3, Tc_PROGRAMMING = 3)
 */
 
 
@@ -303,8 +310,8 @@ datum/tech/robotics
 
 /obj/item/weapon/disk/tech_disk/New()
 	..()
-	src.pixel_x = rand(-5.0, 5)
-	src.pixel_y = rand(-5.0, 5)
+	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/disk/tech_disk/nanotrasen
 	name = "Technology Disk (Nanotrasen 1)"

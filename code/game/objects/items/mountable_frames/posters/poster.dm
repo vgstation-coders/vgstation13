@@ -27,12 +27,13 @@
 
 	var/temp_loc = user.loc
 	flick("poster_being_set",D)
-	D.loc = on_wall
+	D.forceMove(on_wall)
 	qdel(src)	//delete it now to cut down on sanity checks afterwards. Agouri's code supports rerolling it anyway
 	playsound(D.loc, 'sound/items/poster_being_created.ogg', 100, 1)
 
 
-	if(!D)	return
+	if(!D)
+		return
 
 	if(do_after(user, on_wall, 17))//Let's check if everything is still there
 		to_chat(user, "<span class='notice'>You place the poster!</span>")

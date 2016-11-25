@@ -2,11 +2,12 @@
 	return "chimpers, [text]";
 
 /mob/living/carbon/monkey/say_understands(var/mob/other,var/datum/language/speaking = null)
-	if(other) other = other.GetSource()
+	if(other)
+		other = other.GetSource()
 	if(issilicon(other))
 		return 1
 
-	if(speaking && speaking.name == "Galactic Common")
+	if(speaking && speaking.name == LANGUAGE_GALACTIC_COMMON)
 		if(dexterity_check())
 			return 1
 

@@ -62,7 +62,8 @@
 			to_chat(user, "<span flags='rose'>It appears to be broken.</span>")
 			return
 		var/obj/item/weapon/card/id/I = W
-		if(!I || !I.registered_name)	return
+		if(!I || !I.registered_name)
+			return
 		togglelock(user, I.registered_name)
 	else
 		..() //get the other stuff to do it

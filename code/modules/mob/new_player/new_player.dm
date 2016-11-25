@@ -27,8 +27,10 @@
 	output += {"<hr>
 		<p><a href='byond://?src=\ref[src];show_preferences=1'>Setup Character</A></p>"}
 	if(!ticker || ticker.current_state <= GAME_STATE_PREGAME)
-		if(!ready)	output += "<p><a href='byond://?src=\ref[src];ready=1'>Declare Ready</A></p>"
-		else	output += "<p><b>You are ready</b> (<a href='byond://?src=\ref[src];ready=2'>Cancel</A>)</p>"
+		if(!ready)
+			output += "<p><a href='byond://?src=\ref[src];ready=1'>Declare Ready</A></p>"
+		else
+			output += "<p><b>You are ready</b> (<a href='byond://?src=\ref[src];ready=2'>Cancel</A>)</p>"
 
 	else
 		ready = 0 // prevent setup character issues
@@ -89,7 +91,8 @@
 			for(var/mob/new_player/player in player_list)
 				stat("[player.key]", (player.ready)?("(Playing)"):(null))
 				totalPlayers++
-				if(player.ready)totalPlayersReady++
+				if(player.ready)
+					totalPlayersReady++
 
 /mob/new_player/Topic(href, href_list[])
 	//var/timestart = world.timeofday
@@ -97,7 +100,8 @@
 	if(usr != src)
 		return 0
 
-	if(!client)	return 0
+	if(!client)
+		return 0
 
 	if(href_list["show_preferences"])
 		if(!client.prefs.saveloaded)
@@ -129,19 +133,20 @@
 			to_chat(usr, "<span class='warning'>Your character preferences have not yet loaded.</span>")
 			return
 		if(alert(src,"Are you sure you wish to observe? You will not be able to play this round!","Player Setup","Yes","No") == "Yes")
-			if(!client)	return 1
+			if(!client)
+				return 1
 			sleep(1)
 			var/mob/dead/observer/observer = new()
 
 			spawning = 1
-			src << sound(null, repeat = 0, wait = 0, volume = 85, channel = 1) // MAD JAMS cant last forever yo
+			src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY) // MAD JAMS cant last forever yo
 
 
 			observer.started_as_observer = 1
 			close_spawn_windows()
 			var/obj/O = locate("landmark*Observer-Start")
 			to_chat(src, "<span class='notice'>Now teleporting.</span>")
-			observer.loc = O.loc
+			observer.forceMove(O.loc)
 			observer.timeofdeath = world.time // Set the time of death so that the respawn timer works correctly.
 
 			client.prefs.update_preview_icon(1)
@@ -209,6 +214,16 @@
 			src.poll_player(pollid)
 		return
 
+	if(href_list["pollresult"])
+
+		if(!config.poll_results_url)
+			return
+		if(alert("This will open the results page in your browser. Are you sure?",,"Yes","No")=="No")
+			return
+		var/pollid = href_list["pollresult"]
+		var/link = "[config.poll_results_url]/[pollid]"
+		src << link(link)
+
 	if(href_list["votepollid"] && href_list["votetype"])
 		var/pollid = text2num(href_list["votepollid"])
 		var/votetype = href_list["votetype"]
@@ -252,10 +267,14 @@
 
 /mob/new_player/proc/IsJobAvailable(rank)
 	var/datum/job/job = job_master.GetJob(rank)
-	if(!job)	return 0
-	if((job.current_positions >= job.total_positions) && job.total_positions != -1)	return 0
-	if(jobban_isbanned(src,rank))	return 0
-	if(!job.player_old_enough(src.client))	return 0
+	if(!job)
+		return 0
+	if((job.current_positions >= job.total_positions) && job.total_positions != -1)
+		return 0
+	if(jobban_isbanned(src,rank))
+		return 0
+	if(!job.player_old_enough(src.client))
+		return 0
 	// assistant limits
 	if(config.assistantlimit)
 		if(job.title == "Assistant")
@@ -300,12 +319,13 @@
 	job_master.AssignRole(src, rank, 1)
 
 	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
-	if(character.client.prefs.randomslot) character.client.prefs.random_character_sqlite(character, character.ckey)
+	if(character.client.prefs.randomslot)
+		character.client.prefs.random_character_sqlite(character, character.ckey)
 	job_master.EquipRank(character, rank, 1)					//equips the human
 	EquipCustomItems(character)
 
 	// TODO:  Job-specific latejoin overrides.
-	character.loc = pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin)
+	character.forceMove(pick((assistant_latejoin.len > 0 && rank == "Assistant") ? assistant_latejoin : latejoin))
 	//Give them their fucking wheelchair where they spawn instead of inside of the splash screen
 	var/datum/organ/external/left_leg = character.get_organ(LIMB_LEFT_FOOT)
 	var/datum/organ/external/right_leg = character.get_organ(LIMB_RIGHT_FOOT)
@@ -322,12 +342,12 @@
 		if(character.wear_suit)
 			var/obj/item/O = character.wear_suit
 			character.u_equip(O,1)
-			O.loc = character.loc
+			O.forceMove(character.loc)
 			//O.dropped(character)
 		if(character.head)
 			var/obj/item/O = character.head
 			character.u_equip(O,1)
-			O.loc = character.loc
+			O.forceMove(character.loc)
 			//O.dropped(character)
 		character.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/bomberman(character), slot_head)
 		character.equip_to_slot_or_del(new /obj/item/clothing/suit/space/bomberman(character), slot_wear_suit)
@@ -352,6 +372,7 @@
 		if(character.mind.role_alt_title)
 			rank = character.mind.role_alt_title
 		var/datum/speech/speech = announcement_intercom.create_speech("[character.real_name],[rank ? " [rank]," : " visitor," ] has arrived on the station.", transmitter=announcement_intercom)
+		speech.speaker = character
 		speech.name = "Arrivals Announcement Computer"
 		speech.job = "Automated Announcement"
 		speech.as_name = "Arrivals Announcement Computer"
@@ -415,11 +436,10 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 		new_character.setGender(pick(MALE, FEMALE))
 		client.prefs.real_name = random_name(new_character.gender)
 		client.prefs.randomize_appearance_for(new_character)
-		client.prefs.flavor_text = ""
 	else
 		client.prefs.copy_to(new_character)
 
-	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = 1)// MAD JAMS cant last forever yo
+	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY)// MAD JAMS cant last forever yo
 
 
 	if (mind)

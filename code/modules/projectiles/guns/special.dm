@@ -5,7 +5,7 @@
 	icon_state = "portalgun0"
 	item_state = "portalgun0"
 	slot_flags = SLOT_BELT
-	origin_tech = "materials=7;bluespace=6;magnets=5"
+	origin_tech = Tc_MATERIALS + "=7;" + Tc_BLUESPACE + "=6;" + Tc_MAGNETS + "=5"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 	recoil = 0
 	flags = FPRINT
@@ -34,7 +34,8 @@
 	..()
 
 /obj/item/weapon/gun/portalgun/process_chambered()
-	if(in_chamber) return 1
+	if(in_chamber)
+		return 1
 	in_chamber = new/obj/item/projectile/portalgun(src)
 	var/obj/item/projectile/portalgun/P = in_chamber
 	P.icon_state = "portalgun[setting]"

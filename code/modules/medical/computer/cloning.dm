@@ -107,11 +107,9 @@
 	return attack_hand(user)
 
 /obj/machinery/computer/cloning/attack_hand(mob/user as mob)
+	if(..())
+		return 1
 	user.set_machine(src)
-	add_fingerprint(user)
-
-	if(stat & (BROKEN|NOPOWER))
-		return
 
 	updatemodules()
 
@@ -145,7 +143,8 @@
 				dat += "No scanner connected!<br>"
 			else
 				if (src.scanner.occupant)
-					if(scantemp == "Scanner unoccupied") scantemp = "" // Stupid check to remove the text
+					if(scantemp == "Scanner unoccupied")
+						scantemp = "" // Stupid check to remove the text
 
 					dat += "<a href='byond://?src=\ref[src];scan=1'>Scan - [src.scanner.occupant]</a><br>"
 				else
@@ -298,7 +297,7 @@
 				src.temp = "Load successful."
 			if("eject")
 				if (!isnull(src.diskette))
-					src.diskette.loc = src.loc
+					src.diskette.forceMove(src.loc)
 					src.diskette = null
 
 	else if (href_list["save_disk"]) //Save to disk!
@@ -386,33 +385,65 @@
 	return
 
 /obj/machinery/computer/cloning/proc/scan_mob(mob/living/carbon/human/subject as mob)
-	if ((isnull(subject)) || (!(ishuman(subject))) || (!subject.dna) || (istype(subject, /mob/living/carbon/human/manifested)))
-		scantemp = "Error: Unable to locate valid genetic data."
+	if((isnull(subject)) || (!(ishuman(subject))) || (!subject.dna) || (istype(subject, /mob/living/carbon/human/manifested)))
+		scantemp = "Error: Unable to locate valid genetic data." //Something went very wrong here
 		return
-	if (!subject.has_brain())
-		scantemp = "Error: No signs of intelligence detected."
+	if(!subject.has_brain())
+		scantemp = "Error: No signs of intelligence detected." //Self explainatory
 		return
-	if ((M_NOCLONE in subject.mutations) || (subject.suiciding == 1))
-		scantemp = "Error: Mental interface failure." //uncloneable, this guy is done for
-		return
-	if (!subject.client && subject.mind) //this guy ghosted from his corpse, but he can still come back!
-		for(var/mob/dead/observer/ghost in player_list)
-			if(ghost.mind == subject.mind && ghost.client && ghost.can_reenter_corpse)
-				ghost << 'sound/effects/adminhelp.ogg'
-				to_chat(ghost, "<span class='interface'><b><font size = 3>Someone is trying to clone your corpse. Return to your body if you want to be cloned!</b> \
-					(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</font></span>")
-				scantemp = "Error: Subject's brain is not responding to scanning stimuli, subject may be brain dead. Please try again in five seconds."
-				return
-		//we couldn't find a suitable ghost.
+	if(!subject.mind) //This human was never controlled by a player, so they can't be cloned
 		scantemp = "Error: Mental interface failure."
 		return
-	if (!subject.ckey) //checking this only now, since a ghosted player won't have a ckey
-		scantemp = "Error: Mental interface failure." //ideally would never happen but a check never hurts
+
+	if(subject.suiciding) //We cannot clone this guy because he suicided. Believe it or not, some people who suicide don't know about this. Let's tell them what's wrong.
+		scantemp = "Error: Mental interface failure."
+		if(subject.client)
+			to_chat(subject, "<span class='warning'>Someone is trying to clone your corpse, but you may not be revived as you committed suicide.</span>")
+		else
+			var/mob/dead/observer/ghost = get_ghost_from_mind(subject.mind)
+			if(ghost && ghost.client)
+				to_chat(ghost, "<span class='warning'>Someone is trying to clone your corpse, but you may not be revived as you committed suicide.</span>")
 		return
-	else
-		if(!isnull(find_record(subject.ckey)))
-			scantemp = "Subject already in database."
+
+	if(M_NOCLONE in subject.mutations) //We cannot clone this guy because he's a husk, but maybe we can give a more informative message.
+		if(subject.client)
+			scantemp = "Error: Unable to locate valid genetic data. However, mental interface initialized successfully."
+			to_chat(subject, "<span class='interface'><span class='big bold'>Someone is trying to clone your corpse.</span> \
+				You cannot be cloned as your body has been husked. However, your brain may still be used. Your ghost has been displayed as active and inside your body.</span>")
 			return
+		else
+			var/mob/dead/observer/ghost = get_ghost_from_mind(subject.mind)
+			if(ghost && ghost.client && ghost.can_reenter_corpse)
+				scantemp = "Error: Unable to locate valid genetic data. Additionally, subject's brain is not responding to scanning stimuli."
+				ghost << 'sound/effects/adminhelp.ogg'
+				to_chat(ghost, "<span class='interface'><span class='big bold'>Someone is trying to clone your corpse.</span> \
+					You cannot be cloned as your body has been husked. However, your brain may still be used. To show you're still active, return to your body! (Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+				return
+			else
+				scantemp = "Error: Unable to locate valid genetic data. Additionally, mental interface failed to initialize."
+				return
+
+	//There's nothing wrong with the corpse itself past this point
+	if(!subject.client) //There is not a player "in control" of this corpse, maybe they ghosted, maybe they logged out
+		var/mob/dead/observer/ghost = get_ghost_from_mind(subject.mind)
+		if(ghost && ghost.client && ghost.can_reenter_corpse) //Found this guy's ghost, and it still belongs to this corpse. There's nothing preventing this guy from being cloned, except them being ghosted
+			scantemp = "Error: Subject's brain is not responding to scanning stimuli, subject may be brain dead. Please try again in five seconds."
+			ghost << 'sound/effects/adminhelp.ogg'
+			to_chat(ghost, "<span class='interface big'><span class='bold'>Someone is trying to clone your corpse. Return to your body if you want to be cloned!</span> \
+				(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+			return
+		else //No ghost matching this corpse. Guy probably either logged out or was revived by out-of-body means.
+			scantemp = "Error: Mental interface failure."
+			return
+
+	//Past this point, we know for sure the corpse is cloneable and has a ghost inside.
+	if(!subject.ckey) //ideally would never happen but a check never hurts
+		scantemp = "Error: Mental interface failure."
+		return
+	if(!isnull(find_record(subject.ckey)))
+		scantemp = "Subject already in database." //duh
+		return
+
 
 	subject.dna.check_integrity()
 	var/datum/organ/internal/brain/Brain = subject.internal_organs_by_name["brain"]
@@ -459,6 +490,7 @@
 	return selected_record
 
 /obj/machinery/computer/cloning/update_icon()
+	..()
 	overlays = 0
 	if(!(stat & (NOPOWER | BROKEN)))
 		if(scanner && scanner.occupant)

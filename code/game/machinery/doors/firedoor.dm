@@ -30,17 +30,20 @@ var/global/list/alert_overlays_global = list()
 				T = get_turf(source)
 
 		var/list/rstats = new /list(stats.len)
-		if(T && istype(T) && T.zone)
-			var/datum/gas_mixture/environment = T.return_air()
-			for(var/i=1;i<=stats.len;i++)
-				rstats[i] = environment.vars[stats[i]]
-		else if(istype(T, /turf/simulated))
-			rstats = null // Exclude zone (wall, door, etc).
-		else if(istype(T, /turf))
-			// Should still work.  (/turf/return_air())
-			var/datum/gas_mixture/environment = T.return_air()
-			for(var/i=1;i<=stats.len;i++)
-				rstats[i] = environment.vars[stats[i]]
+		if(!source.Adjacent(T)) //Stop reading air contents through windows asshole
+			rstats = null
+		else
+			if(T && istype(T) && T.zone)
+				var/datum/gas_mixture/environment = T.return_air()
+				for(var/i=1;i<=stats.len;i++)
+					rstats[i] = environment.vars[stats[i]]
+			else if(istype(T, /turf/simulated))
+				rstats = null // Exclude zone (wall, door, etc).
+			else if(istype(T, /turf))
+				// Should still work.  (/turf/return_air())
+				var/datum/gas_mixture/environment = T.return_air()
+				for(var/i=1;i<=stats.len;i++)
+					rstats[i] = environment.vars[stats[i]]
 		temps[direction] = rstats
 	return temps
 
@@ -53,8 +56,6 @@ var/global/list/alert_overlays_global = list()
 #define FIREDOOR_ALERT_COLD     2
 // Not used #define FIREDOOR_ALERT_LOWPRESS 4
 
-#define FIREDOOR_CLOSED_MOD	0.8
-
 /obj/machinery/door/firedoor
 	name = "\improper Emergency Shutter"
 	desc = "Emergency air-tight shutter, capable of sealing off breached areas."
@@ -63,8 +64,9 @@ var/global/list/alert_overlays_global = list()
 	req_one_access = list(access_atmospherics, access_engine_equip)
 	opacity = 0
 	density = 0
-	layer = DOOR_LAYER - 0.2
-	base_layer = DOOR_LAYER - 0.2
+	layer = BELOW_TABLE_LAYER
+	open_layer = BELOW_TABLE_LAYER
+	closed_layer = ABOVE_DOOR_LAYER
 
 	dir = 2
 
@@ -187,7 +189,6 @@ var/global/list/alert_overlays_global = list()
 			attack_hand(M)
 	return 0
 
-
 /obj/machinery/door/firedoor/power_change()
 	if(powered(ENVIRON))
 		stat &= ~NOPOWER
@@ -214,6 +215,9 @@ var/global/list/alert_overlays_global = list()
 
 /obj/machinery/door/firedoor/attack_hand(mob/user as mob)
 	return attackby(null, user)
+
+/obj/machinery/door/firedoor/attack_alien(mob/living/carbon/alien/humanoid/user)
+	force_open(user)
 
 /obj/machinery/door/firedoor/attackby(obj/item/weapon/C as obj, mob/user as mob)
 	add_fingerprint(user)
@@ -315,7 +319,7 @@ var/global/list/alert_overlays_global = list()
 		return
 	..()
 	latetoggle()
-	layer = base_layer
+	layer = open_layer
 	var/area/A = get_area_master(src)
 	ASSERT(istype(A)) // This worries me.
 	var/alarmed = A.doors_down || A.fire
@@ -328,14 +332,14 @@ var/global/list/alert_overlays_global = list()
 	var/alarmed = A.doors_down || A.fire
 
 	if( blocked )
-		user.visible_message("<span class='attack'>\The [istype(user.loc,/obj/mecha) ? "[user.loc.name]" : "[user]"] pries at \the [src] with \a [C], but \the [src] is welded in place!</span>",\
+		user.visible_message("<span class='attack'>\The [istype(user.loc,/obj/mecha) ? "[user.loc.name]" : "[user]"] pries at \the [src][istype(C) ? " with \a [C]" : ""], but \the [src] is welded in place!</span>",\
 		"You try to pry \the [src] [density ? "open" : "closed"], but it is welded in place!",\
 		"You hear someone struggle and metal straining.")
 		return
 
 	//thank you Tigercat2000
-	user.visible_message("<span class='attack'>\The [istype(user.loc,/obj/mecha) ? "[user.loc.name]" : "[user]"] forces \the [src] [density ? "open" : "closed"] with \a [C]!</span>",\
-		"You force \the [src] [density ? "open" : "closed"] with \the [C]!",\
+	user.visible_message("<span class='attack'>\The [istype(user.loc,/obj/mecha) ? "[user.loc.name]" : "[user]"] forces \the [src] [density ? "open" : "closed"][istype(C) ? " with \a [C]" : ""]!</span>",\
+		"You force \the [src] [density ? "open" : "closed"][istype(C) ? " with \the [C]" : ""]!",\
 		"You hear metal strain, and a door [density ? "open" : "close"].")
 
 	if(density)
@@ -352,16 +356,7 @@ var/global/list/alert_overlays_global = list()
 		return
 	..()
 	latetoggle()
-	layer = base_layer + FIREDOOR_CLOSED_MOD
-
-/obj/machinery/door/firedoor/door_animate(animation)
-	switch(animation)
-		if("opening")
-			flick("door_opening", src)
-		if("closing")
-			flick("door_closing", src)
-	return
-
+	layer = closed_layer
 
 /obj/machinery/door/firedoor/update_icon()
 	overlays.len = 0
@@ -396,8 +391,21 @@ var/global/list/alert_overlays_global = list()
 	if(density)
 		var/changed = 0
 		lockdown=0
+
 		// Pressure alerts
-		pdiff = getOPressureDifferential(src.loc)
+		if(flags & ON_BORDER) //For border firelocks, we only need to check front and back, don't check the sides
+			var/turf/T1 = get_step(loc,dir)
+			var/turf/T2
+			if(locate(/obj/machinery/door/airlock) in get_turf(src)) //If this firelock is in the same tile as an airlock, we want to check the OTHER SIDE of the airlock, not the airlock turf itself.
+				T2 = get_step(loc,turn(dir, 180))
+			else
+				T2 = get_turf(src)
+
+			pdiff = getPressureDifferentialFromTurfList(list(T1, T2))
+
+		else
+			pdiff = getOPressureDifferential(src.loc)
+
 		if(pdiff >= FIREDOOR_MAX_PRESSURE_DIFF)
 			lockdown = 1
 			if(!pdiff_alert)
@@ -457,7 +465,7 @@ var/global/list/alert_overlays_global = list()
 	flags = ON_BORDER
 
 /obj/machinery/door/firedoor/border_only/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return 1
 	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
 		return !density
@@ -469,14 +477,15 @@ var/global/list/alert_overlays_global = list()
 
 
 /obj/machinery/door/firedoor/border_only/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return 1
 	if(flags & ON_BORDER)
 		if(target) //Are we doing a manual check to see
 			if(get_dir(loc, target) == dir)
 				return !density
 		else if(mover.dir == dir) //Or are we using move code
-			if(density)	mover.Bump(src)
+			if(density)
+				mover.Bump(src)
 			return !density
 	return 1
 

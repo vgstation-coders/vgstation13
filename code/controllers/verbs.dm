@@ -6,7 +6,8 @@
 	set name = "Restart Controller"
 	set desc = "Restart one of the various periodic loop controllers for the game (be careful!)"
 
-	if(!holder)	return
+	if(!holder)
+		return
 	usr = null
 	src = null
 	switch(controller)

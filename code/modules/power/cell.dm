@@ -42,9 +42,11 @@
 		explode()
 		return 0
 
-	if(maxcharge < amount)	return 0
+	if(maxcharge < amount)
+		return 0
 	var/power_used = min(maxcharge-charge,amount)
-	if(crit_fail)	return 0
+	if(crit_fail)
+		return 0
 	if(!prob(reliability))
 		minor_fault++
 		if(prob(minor_fault))
@@ -116,9 +118,8 @@
 		rigged = 1 //broken batterys are dangerous
 
 /obj/item/weapon/cell/emp_act(severity)
-	charge -= 1000 / severity
-	if (charge < 0)
-		charge = 0
+	var/powerloss = round(16 * sqrt(maxcharge) / severity, 50) //at severity 1, ~500 for 1000 power cells, ~2750 for 30,000 power cells
+	charge = max(charge - powerloss, 0)
 	if(reliability != 100 && prob(50/severity))
 		reliability -= 10 / severity
 	..()

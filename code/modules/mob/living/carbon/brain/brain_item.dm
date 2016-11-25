@@ -9,7 +9,7 @@
 	throwforce = 1.0
 	throw_speed = 3
 	throw_range = 5
-	origin_tech = "biotech=3"
+	origin_tech = Tc_BIOTECH + "=3"
 	attack_verb = list("attacks", "slaps", "whacks")
 	prosthetic_name = "cyberbrain"
 	prosthetic_icon = "brain-prosthetic"
@@ -40,15 +40,16 @@
 
 /obj/item/organ/brain/examine(mob/user)
 	..()
-	if(brainmob && brainmob.client)//if thar be a brain inside... the brain.
-		if(mind_can_reenter(brainmob.mind))// This checks if the ghost can re-enter (ghost.can_reenter_corpse)
-			to_chat(user, "<span class='deadsay'>This one seems unresponsive.</span>")// Should probably make this more realistic,
-
-			                                                                    //  but this message ties it in with MMI errors.
-		else
+	if(brainmob)
+		if(brainmob.client)
 			to_chat(user, "<span class='notice'>You can feel the small spark of life still left in this one.</span>")
-	else
-		to_chat(user, "<span class='deadsay'>This one seems particularly lifeless. Perhaps it will regain some of its luster later..</span>")
+			return
+		var/mob/dead/observer/ghost = get_ghost_from_mind(brainmob.mind)
+		if(ghost && ghost.client && ghost.can_reenter_corpse)
+			to_chat(user, "<span class='deadsay'>It seems particularly lifeless, but not yet gone. Perhaps it will regain some of its luster later...</span>")
+			return
+		to_chat(user, "<span class='deadsay'>This one seems unresponsive.</span>")// Should probably make this more realistic, but this message ties it in with MMI errors.
+		return
 
 /obj/item/organ/brain/removed(var/mob/living/target,var/mob/living/user)
 
@@ -70,3 +71,9 @@
 			brainmob.mind.transfer_to(target)
 		else
 			target.key = brainmob.key
+
+/obj/item/organ/brain/ash/removed(var/mob/living/target,var/mob/living/user)
+	..()
+	visible_message("<span class = 'sinister'>\The [src] suddenly turns to ash, unable to exist detached from its host.</span>")
+	new /obj/effect/decal/cleanable/ash(loc)
+	qdel(src)

@@ -14,7 +14,7 @@
 	desc = "A suit that protects against fire and heat."
 	icon_state = "fire"
 	item_state = "fire_suit"
-	origin_tech = "materials=2;engineering=1"
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=1"
 	w_class = W_CLASS_LARGE//bulky item
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.50
@@ -127,7 +127,7 @@
 /obj/item/clothing/head/radiation
 	name = "radiation hood"
 	icon_state = "rad"
-	desc = "A hood with radiation protective properties. Label: Made with lead, do not eat insulation"
+	desc = "A hood with radiation protective properties. Label: Made with lead, do not eat insulation."
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 60, rad = 100)

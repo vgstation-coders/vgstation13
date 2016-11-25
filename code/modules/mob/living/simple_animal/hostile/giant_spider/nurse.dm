@@ -11,7 +11,6 @@
 	melee_damage_upper = 10
 	poison_per_bite = 10
 	poison_type = STOXIN
-	speed=2.5
 	var/fed = 0
 	var/atom/cocoon_target
 
@@ -24,7 +23,8 @@
 			stop_automated_movement = 0
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	if(istype(loc,/obj/item/device/mobcapsule)) //Dont bother trying to do shit while inside of a capsule, stops self-web spinning
 		return
 	..()
@@ -141,19 +141,19 @@
 										large_cocoon = 1
 										fed++
 										src.visible_message("<span class='warning'>\the [src] sticks a proboscis into \the [cocoon_target] and sucks a viscous substance out.</span>")
-										M.loc = C
+										M.forceMove(C)
 										C.pixel_x = M.pixel_x
 										C.pixel_y = M.pixel_y
 										break
 									for(var/obj/item/I in C.loc)
-										I.loc = C
+										I.forceMove(C)
 									for(var/obj/structure/S in C.loc)
 										if(!S.anchored)
-											S.loc = C
+											S.forceMove(C)
 											large_cocoon = 1
 									for(var/obj/machinery/M in C.loc)
 										if(!M.anchored)
-											M.loc = C
+											M.forceMove(C)
 											large_cocoon = 1
 									if(large_cocoon)
 										C.icon_state = pick("cocoon_large1","cocoon_large2","cocoon_large3")
@@ -172,7 +172,7 @@
 	icon_state = "spider_queen1"
 	icon_living = "spider_queen1"
 	icon_dead = "spider_queen_dead"
-	pixel_x = -16
+	pixel_x = -16 * PIXEL_MULTIPLIER
 	maxHealth = 500
 	health = 500
 	melee_damage_lower = 30
@@ -188,5 +188,6 @@
 	damage_type = BRUTE
 
 /obj/item/projectile/web/Bump(atom/A)
-	new /obj/effect/spider/stickyweb(src.loc)
+	if(!(locate(/obj/effect/spider/stickyweb) in get_turf(src)))
+		new /obj/effect/spider/stickyweb(get_turf(src))
 	qdel(src)

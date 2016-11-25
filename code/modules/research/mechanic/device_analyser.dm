@@ -18,7 +18,7 @@
 	item_state = "electronic"
 	starting_materials = null
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "magnets=3;engineering=4;materials=4;programming=3"
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=4;" + Tc_PROGRAMMING + "=3"
 
 	mech_flags = MECH_SCAN_FAIL
 
@@ -65,7 +65,7 @@
 	desc = "A suspicious-looking device anaylzer. A thorough examination reveals that it lacks the required Nanotrasen logo, and that the safety features have been disabled."
 	syndi_filter = 0
 	access_avoidance = 1 //we aren't forced to have the access for a machine - perfect for traitors
-	origin_tech = "magnets=3;engineering=4;materials=4;programming=3;syndicate=3"
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_ENGINEERING + "=4;" + Tc_MATERIALS + "=4;" + Tc_PROGRAMMING + "=3;" + Tc_SYNDICATE + "=3"
 
 /obj/item/device/device_analyser/advanced
 	name = "advanced device analyzer"
@@ -113,6 +113,6 @@
 		return 0
 
 	if(src.syndi_filter)
-		if((techlist && techlist["syndicate"]) || (O.mech_flags & MECH_SCAN_ILLEGAL))
+		if((techlist && techlist[Tc_SYNDICATE]) || (O.mech_flags & MECH_SCAN_ILLEGAL))
 			return -1 //special negative return case
 	return 1

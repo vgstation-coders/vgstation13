@@ -12,16 +12,16 @@
 //	)
 
 
-/obj/machinery/singularity/
+/obj/machinery/singularity
 	name = "gravitational singularity" //Lower case
 	desc = "The destructive, murderous Lord Singuloth, patron saint of Engineering. They harness its power to run the station's lighting and arcades."
 	icon = 'icons/obj/singularity.dmi'
 	icon_state = "singularity_s1"
 	anchored = 1
 	density = 1
-	layer = 6
+	layer = SINGULARITY_LAYER
+	plane = EFFECTS_PLANE
 	luminosity = 6
-	unacidable = 1 //Don't comment this out.
 	use_power = 0
 
 	var/current_size = 1
@@ -154,8 +154,8 @@
 			current_size = 3
 			icon = 'icons/effects/96x96.dmi'
 			icon_state = "singularity_s3"
-			pixel_x = -32
-			pixel_y = -32
+			pixel_x = -32 * PIXEL_MULTIPLIER
+			pixel_y = -32 * PIXEL_MULTIPLIER
 			grav_pull = 6
 			consume_range = 1
 			dissipate_delay = 5
@@ -173,8 +173,8 @@
 				current_size = 5
 				icon = 'icons/effects/160x160.dmi'
 				icon_state = "singularity_s5"
-				pixel_x = -64
-				pixel_y = -64
+				pixel_x = -64 * PIXEL_MULTIPLIER
+				pixel_y = -64 * PIXEL_MULTIPLIER
 				grav_pull = 8
 				consume_range = 2
 				dissipate_delay = 4
@@ -192,8 +192,8 @@
 				current_size = 7
 				icon = 'icons/effects/224x224.dmi'
 				icon_state = "singularity_s7"
-				pixel_x = -96
-				pixel_y = -96
+				pixel_x = -96 * PIXEL_MULTIPLIER
+				pixel_y = -96 * PIXEL_MULTIPLIER
 				grav_pull = 10
 				consume_range = 3
 				dissipate_delay = 10
@@ -210,8 +210,8 @@
 			current_size = 9
 			icon = 'icons/effects/288x288.dmi'
 			icon_state = "singularity_s9"
-			pixel_x = -128
-			pixel_y = -128
+			pixel_x = -128 * PIXEL_MULTIPLIER
+			pixel_y = -128 * PIXEL_MULTIPLIER
 			grav_pull = 10
 			consume_range = 4
 			dissipate = 0 //It cant go smaller due to energy loss.
@@ -231,8 +231,8 @@
 			current_size = 11
 			icon = 'icons/effects/352x352.dmi'
 			icon_state = "singularity_s11" //Uh, whoever drew that, you know that black holes are supposed to look dark right? What's this, the clown's singulo?
-			pixel_x = -160
-			pixel_y = -160
+			pixel_x = -160 * PIXEL_MULTIPLIER
+			pixel_y = -160 * PIXEL_MULTIPLIER
 			grav_pull = 16
 			consume_range = 5
 			dissipate = 0 //It cant go smaller due to e loss
@@ -574,3 +574,5 @@
 
 /obj/machinery/singularity/bite_act()
 
+/obj/machinery/singularity/acidable()
+	return 0

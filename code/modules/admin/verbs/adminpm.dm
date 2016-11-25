@@ -5,7 +5,8 @@
 	if(!holder)
 		to_chat(src, "<font color='red'>Error: Admin-PM-Context: Only administrators may use this command.</font>")
 		return
-	if( !ismob(M) || !M.client )	return
+	if( !ismob(M) || !M.client )
+		return
 	cmd_admin_pm(M.client,null)
 	feedback_add_details("admin_verb","APMM") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
@@ -41,8 +42,10 @@
 		return
 
 	if(!istype(C,/client))
-		if(holder)	to_chat(src, "<font color='red'>Error: Private-Message: Client not found.</font>")
-		else		adminhelp(msg)	//admin we are replying to left. adminhelp instead
+		if(holder)
+			to_chat(src, "<font color='red'>Error: Private-Message: Client not found.</font>")
+		else
+			adminhelp(msg)	//admin we are replying to left. adminhelp instead
 		return
 
 	/*if(C && C.last_pm_recieved + config.simultaneous_pm_warning_timeout > world.time && holder)
@@ -61,8 +64,10 @@
 			return
 
 		if(!C)
-			if(holder)	to_chat(src, "<font color='red'>Error: Admin-PM: Client not found.</font>")
-			else		adminhelp(msg)	//admin we are replying to has vanished, adminhelp instead
+			if(holder)
+				to_chat(src, "<font color='red'>Error: Admin-PM: Client not found.</font>")
+			else
+				adminhelp(msg)	//admin we are replying to has vanished, adminhelp instead
 			return
 
 	if (src.handle_spam_prevention(msg,MUTE_ADMINHELP))
@@ -71,7 +76,8 @@
 	//clean the message if it's not sent by a high-rank admin
 	if(!check_rights(R_SERVER|R_DEBUG,0))
 		msg = sanitize(copytext(msg,1,MAX_MESSAGE_LEN))
-		if(!msg)	return
+		if(!msg)
+			return
 
 	var/recieve_color = "purple"
 	var/send_pm_type = " "

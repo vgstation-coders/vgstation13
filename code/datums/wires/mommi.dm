@@ -52,6 +52,8 @@
 			R.SetLockdown(!R.lockcharge) // Toggle
 
 /datum/wires/robot/mommi/CanUse(var/mob/living/L)
+	if(!..())
+		return 0
 	var/mob/living/silicon/robot/mommi/R = holder
 	if(R.wiresexposed)
 		return 1

@@ -31,11 +31,13 @@
 		visible_message("<span class='warning'><B>[M]</B> [M.attacktext] \the [src] !</span>")
 		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
 		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
+
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		var/dam_zone = pick(LIMB_CHEST, LIMB_LEFT_HAND, LIMB_RIGHT_HAND, LIMB_LEFT_LEG, LIMB_RIGHT_LEG)
 		if(M.zone_sel && M.zone_sel.selecting)
 			dam_zone = M.zone_sel.selecting
 		var/datum/organ/external/affecting = ran_zone(dam_zone)
+
 		apply_damage(damage,M.melee_damage_type, affecting)
 		updatehealth()
 
@@ -79,8 +81,9 @@
 
 /mob/living/carbon/gib()
 	dropBorers(1)
-	drop_stomach_contents()
-	src.visible_message("<span class='warning'>Something bursts from \the [src]'s stomach!</span>")
+	if(stomach_contents && stomach_contents.len)
+		drop_stomach_contents()
+		visible_message("<span class='warning'>Something bursts from \the [src]'s stomach!</span>")
 	. = ..()
 
 /mob/living/carbon/proc/share_contact_diseases(var/mob/M)
@@ -92,7 +95,8 @@
 			contract_disease(D, 0, 1, CONTACT_HANDS)
 
 /mob/living/carbon/attack_hand(mob/M as mob)
-	if(!istype(M, /mob/living/carbon)) return
+	if(!istype(M, /mob/living/carbon))
+		return
 	if (hasorgans(M))
 		var/datum/organ/external/temp = find_organ_by_grasp_index(active_hand)
 
@@ -104,7 +108,8 @@
 
 
 /mob/living/carbon/attack_paw(mob/M as mob)
-	if(!istype(M, /mob/living/carbon)) return
+	if(!istype(M, /mob/living/carbon))
+		return
 	share_contact_diseases(M)
 	return
 
@@ -118,14 +123,14 @@
 		heal_overall_damage(damage/2, damage/2)
 		Jitter(10)
 		Stun(5)
-		Weaken(5)
+		Knockdown(5)
 		//It would be cool if someone added an animation of some electrical shit going through the body
 	else
 		if(take_overall_damage(0, damage, used_weapon = "[source]") == 0) // godmode
 			return 0
 		Jitter(20)
 		Stun(10)
-		Weaken(10)
+		Knockdown(10)
 
 	visible_message( \
 		"<span class='warning'>[src] was shocked by the [source]!</span>", \
@@ -136,8 +141,8 @@
 		"<span class='warning'>You hear a policeman whistling!</span>"
 	)
 
-	//if(src.stunned < shock_damage)	src.stunned = shock_damage
-	//if(src.weakened < 20*siemens_coeff)	src.weakened = 20*siemens_coeff
+	//if(src.stunned < shock_damage)	src.SetStunned(shock_damage)
+	//if(src.knockdown < 20*siemens_coeff)	src.SetKnockdown(20*siemens_coeff)
 
 	var/datum/effect/effect/system/spark_spread/SparkSpread = new
 	SparkSpread.set_up(5, 1, loc)
@@ -223,7 +228,7 @@
 				src.resting = 0
 			AdjustParalysis(-3)
 			AdjustStunned(-3)
-			AdjustWeakened(-3)
+			AdjustKnockdown(-3)
 			playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 			M.visible_message( \
 				"<span class='notice'>[M] shakes [src] trying to wake [t_him] up!</span>", \
@@ -286,7 +291,8 @@
 		throw_icon.icon_state = "act_throw_off"
 
 /mob/living/carbon/proc/throw_mode_on()
-	if(gcDestroyed) return
+	if(gcDestroyed)
+		return
 	in_throw_mode = 1
 	if(throw_icon)
 		throw_icon.icon_state = "act_throw_on"
@@ -303,13 +309,15 @@
 		to_chat(src, "<span class='warning'>You can't do that now!</span>")
 		return
 
-	if(target.type == /obj/screen) return
+	if(target.type == /obj/screen)
+		return
 
 	var/atom/movable/item = src.get_active_hand()
 	if(what)
 		item=what
 
-	if(!item) return
+	if(!item)
+		return
 
 	if (istype(item, /obj/item/offhand))
 		var/obj/item/offhand/offhand = item
@@ -337,7 +345,8 @@
 				else
 					M.LAssailant = usr
 				returnToPool(G)
-	if(!item) return //Grab processing has a chance of returning null
+	if(!item)
+		return //Grab processing has a chance of returning null
 
 	var/obj/item/I = item
 	if(istype(I) && I.cant_drop > 0)
@@ -352,16 +361,7 @@
 		src.visible_message("<span class='warning'>[src] has thrown [item].</span>", \
 			drugged_message = "<span class='warning'>[item] escapes from [src]'s grasp and flies away!</span>")
 
-		if((istype(src.loc, /turf/space)) || (src.areaMaster && (src.areaMaster.has_gravity == 0)))
-			var/mob/space_obj=src
-			// If we're being held, make the guy holding us move.
-			if(istype(loc,/obj/item/weapon/holder))
-				var/obj/item/weapon/holder/Ho=loc
-				// Who holds the holder?
-				if(ismob(Ho.loc))
-					space_obj=Ho.loc
-			space_obj.inertia_dir = get_dir(target, src)
-			step(space_obj, inertia_dir)
+		src.apply_inertia(get_dir(target, src))
 
 
 /*
@@ -391,7 +391,8 @@
 	return 1
 
 /mob/living/carbon/restrained()
-	if(timestopped) return 1 //under effects of time magick
+	if(timestopped)
+		return 1 //under effects of time magick
 	if (handcuffed)
 		return 1
 	return
@@ -532,7 +533,6 @@
 			var/mob/living/simple_animal/borer/B = I
 			if(B.hostlimb == host_region)
 				return B
-
 	return 0
 
 /mob/proc/get_brain_worms()
@@ -579,7 +579,7 @@
 
 	stop_pulling()
 	Stun(stun_amount)
-	Weaken(weaken_amount)
+	Knockdown(weaken_amount)
 
 	playsound(get_turf(src), 'sound/misc/slip.ogg', 50, 1, -3)
 
@@ -587,7 +587,7 @@
 
 /mob/living/carbon/proc/transferImplantsTo(mob/living/carbon/newmob)
 	for(var/obj/item/weapon/implant/I in src)
-		I.loc = newmob
+		I.forceMove(newmob)
 		I.implanted = 1
 		I.imp_in = newmob
 		if(istype(newmob, /mob/living/carbon/human))
@@ -595,12 +595,13 @@
 			if(!I.part) //implanted as a nonhuman, won't have one.
 				I.part = /datum/organ/external/chest
 			for (var/datum/organ/external/affected in H.organs)
-				if(!istype(affected, I.part)) continue
+				if(!istype(affected, I.part))
+					continue
 				affected.implants += I
 
 /mob/living/carbon/proc/dropBorers(var/gibbed = null)
-	var/mob/living/simple_animal/borer/B = has_brain_worms()
-	if(B)
+	var/list/borer_list = get_brain_worms()
+	for(var/mob/living/simple_animal/borer/B in borer_list)
 		B.detach()
 		if(gibbed)
 			to_chat(B, "<span class='danger'>As your host is violently destroyed, so are you!</span>")
@@ -610,12 +611,17 @@
 			to_chat(B, "<span class='notice'>You're forcefully popped out of your host!</span>")
 
 /mob/living/carbon/proc/transferBorers(mob/living/target)
-	var/mob/living/simple_animal/borer/B = has_brain_worms()
-	if(B)
+	var/list/borer_list = get_brain_worms()
+	for(var/mob/living/simple_animal/borer/B in borer_list)
+		var/currenthostlimb = B.hostlimb
 		B.detach()
 		if(iscarbon(target))
+			if(!ishuman(target))
+				if(currenthostlimb != LIMB_HEAD)
+					to_chat(B, "<span class='notice'>You're forcefully popped out of your host!</span>")
+					return
 			var/mob/living/carbon/C = target
-			B.perform_infestation(C)
+			B.perform_infestation(C, currenthostlimb)
 		else
 			to_chat(B, "<span class='notice'>You're forcefully popped out of your host!</span>")
 
@@ -623,9 +629,9 @@
 	if(!target)
 		target = get_turf(src)
 
-	var/mob/living/simple_animal/borer/B = src.has_brain_worms()
+	var/list/borer_list = get_brain_worms()
 	for(var/mob/M in src)//mobs, all of them
-		if(M == B)
+		if(M in borer_list)
 			continue
 		if(M in src.stomach_contents)
 			src.stomach_contents.Remove(M)

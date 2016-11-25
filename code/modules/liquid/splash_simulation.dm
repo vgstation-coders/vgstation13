@@ -33,10 +33,13 @@ client/proc/splash()
 	set category = "Debug"
 
 	var/volume = input("Volume?","Volume?", 0 ) as num
-	if(!isnum(volume)) return
-	if(volume <= LIQUID_TRANSFER_THRESHOLD) return
+	if(!isnum(volume))
+		return
+	if(volume <= LIQUID_TRANSFER_THRESHOLD)
+		return
 	var/turf/T = get_turf(src.mob)
-	if(!isturf(T)) return
+	if(!isturf(T))
+		return
 	trigger_splash(T, volume)
 
 proc/trigger_splash(turf/epicenter as turf, volume as num)

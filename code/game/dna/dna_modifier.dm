@@ -137,7 +137,7 @@
 		to_chat(usr, "<span class='notice'> <B>Subject cannot have abiotic items on.</B></span>")
 		return*/
 	usr.stop_pulling()
-	usr.loc = src
+	usr.forceMove(src)
 	usr.reset_view()
 	src.occupant = usr
 	src.icon_state = "scanner_1"
@@ -247,7 +247,7 @@
 	return ..()
 
 /obj/machinery/dna_scannernew/proc/put_in(var/mob/M)
-	M.loc = src
+	M.forceMove(src)
 	M.reset_view()
 	src.occupant = M
 	src.icon_state = "scanner_1"
@@ -258,20 +258,21 @@
 		if(C)
 			C.update_icon()
 			if(!M.client && M.mind)
-				for(var/mob/dead/observer/ghost in player_list)
-					if(ghost.mind == M.mind)
-						if(ghost.client && ghost.can_reenter_corpse)
-							ghost << 'sound/effects/adminhelp.ogg'
-							to_chat(ghost, "<span class='interface'><b><font size = 3>Your corpse has been placed into a cloning scanner. Return to your body if you want to be resurrected/cloned!</b> \
-								(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</font></span>")
-						else
-							ghost.canclone = M
-						break
+				var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
+				if(ghost)
+					if(ghost.client && ghost.can_reenter_corpse)
+						ghost << 'sound/effects/adminhelp.ogg'
+						to_chat(ghost, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be resurrected/cloned!</span> \
+							(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
+				break
 			break
 	return
 
 /obj/machinery/dna_scannernew/proc/go_out(var/exit = src.loc)
-	if ((!(occupant) || locked))
+	if (!occupant)
+		return 0
+	if(locked)
+		visible_message("Can't eject occupants while \the [src] is locked.")
 		return 0
 	occupant.forceMove(exit)
 	occupant.reset_view()
@@ -289,6 +290,19 @@
 			C.update_icon()
 
 	return 1
+
+/obj/machinery/dna_scannernew/proc/contains_husk()
+	if(occupant && (M_HUSK in occupant.mutations))
+		return 1
+	return 0
+
+/obj/machinery/dna_scannernew/on_login(var/mob/M)
+	if(M.mind && !M.client && locate(/obj/machinery/computer/cloning) in range(src, 1)) //!M.client = mob has ghosted out of their body
+		var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
+		if(ghost && ghost.client)
+			ghost << 'sound/effects/adminhelp.ogg'
+			to_chat(ghost, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be resurrected/cloned!</span> \
+				(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[src];reentercorpse=1'>click here!</a>)</span>")
 
 /obj/machinery/dna_scannernew/ex_act(severity)
 	//This is by far the oldest code I have ever seen, please appreciate how it's preserved in comments for distant posterity. Have some perspective of where we came from.
@@ -317,7 +331,7 @@
 		if(3.0)
 			if (prob(25))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.forceMove(src.loc)
 					ex_act(severity)
 					//Foreach goto(181)
 				//SN src = null
@@ -421,9 +435,11 @@
 
 /obj/machinery/computer/scan_consolenew/proc/setInjectorBlock(var/obj/item/weapon/dnainjector/I, var/blk, var/datum/dna2/record/buffer)
 	var/pos = findtext(blk,":")
-	if(!pos) return 0
+	if(!pos)
+		return 0
 	var/id = text2num(copytext(blk,1,pos))
-	if(!id) return 0
+	if(!id)
+		return 0
 	I.block = id
 	I.buf = buffer
 	return 1
@@ -596,6 +612,9 @@
 		return 1 // return 1 forces an update to all Nano uis attached to src
 
 	if (href_list["pulseRadiation"])
+		if(connected.contains_husk())
+			to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+			return 1
 		irradiating = src.radiation_duration
 		var/lock_state = src.connected.locked
 		src.connected.locked = 1//lock it
@@ -694,6 +713,9 @@
 		return 1 // return 1 forces an update to all Nano uis attached to src
 
 	if (href_list["pulseUIRadiation"])
+		if(connected.contains_husk())
+			to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+			return 1
 		var/block = src.connected.occupant.dna.GetUISubBlock(src.selected_ui_block,src.selected_ui_subblock)
 
 		irradiating = src.radiation_duration
@@ -750,6 +772,9 @@
 		return 1 // return 1 forces an update to all Nano uis attached to src
 
 	if (href_list["pulseSERadiation"])
+		if(connected.contains_husk())
+			to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+			return 1
 		var/block = src.connected.occupant.dna.GetSESubBlock(src.selected_se_block,src.selected_se_subblock)
 		//var/original_block=block
 		//testing("Irradiating SE block [src.selected_se_block]:[src.selected_se_subblock] ([block])...")
@@ -794,7 +819,7 @@
 	if(href_list["ejectBeaker"])
 		if(connected.beaker)
 			var/obj/item/weapon/reagent_containers/glass/B = connected.beaker
-			B.loc = connected.loc
+			B.forceMove(connected.loc)
 			connected.beaker = null
 		return 1
 
@@ -844,7 +869,7 @@
 		if (bufferOption == "ejectDisk")
 			if (!src.disk)
 				return
-			src.disk.loc = get_turf(src)
+			src.disk.forceMove(get_turf(src))
 			src.disk = null
 			return 1
 
@@ -858,6 +883,9 @@
 			return 0 // Not a valid buffer id
 
 		if (bufferOption == "saveUI")
+			if(connected.contains_husk())
+				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+				return 1
 			if(src.connected.occupant && src.connected.occupant.dna)
 				var/datum/dna2/record/databuf=new
 				databuf.types = DNA2_BUF_UI // DNA2_BUF_UE
@@ -869,6 +897,9 @@
 			return 1
 
 		if (bufferOption == "saveUIAndUE")
+			if(connected.contains_husk())
+				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+				return 1
 			if(src.connected.occupant && src.connected.occupant.dna)
 				var/datum/dna2/record/databuf=new
 				databuf.types = DNA2_BUF_UI|DNA2_BUF_UE
@@ -880,6 +911,9 @@
 			return 1
 
 		if (bufferOption == "saveSE")
+			if(connected.contains_husk())
+				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+				return 1
 			if(src.connected.occupant && src.connected.occupant.dna)
 				var/datum/dna2/record/databuf=new
 				databuf.types = DNA2_BUF_SE
@@ -902,6 +936,9 @@
 			return 1
 
 		if (bufferOption == "transfer")
+			if(connected.contains_husk())
+				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+				return 1
 			if (!src.connected.occupant || (M_NOCLONE in src.connected.occupant.mutations) || !src.connected.occupant.dna)
 				return
 
@@ -953,7 +990,7 @@
 					I.buf = buf
 				waiting_for_user_input=0
 				if(success)
-					I.loc = src.loc
+					I.forceMove(src.loc)
 					I.name += " ([buf.name])"
 					src.injector_ready = 0
 					spawn(connected.injector_cooldown)

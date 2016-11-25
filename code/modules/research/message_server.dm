@@ -278,7 +278,8 @@ var/obj/machinery/blackbox_recorder/blackbox
 
 //This proc is only to be called at round end.
 /obj/machinery/blackbox_recorder/proc/save_all_data_to_sql()
-	if(!feedback) return
+	if(!feedback)
+		return
 
 	//#warning Blackbox recording disabled.  Please remove warning once this has been determined to be the problem.
 	//return
@@ -287,7 +288,8 @@ var/obj/machinery/blackbox_recorder/blackbox
 	log_startup_progress("Storing Black Box data...")
 	round_end_data_gathering() //round_end time logging and some other data processing
 	establish_db_connection()
-	if(!dbcon.IsConnected()) return
+	if(!dbcon.IsConnected())
+		return
 	var/round_id
 
 	var/nqueries = 0
@@ -332,58 +334,68 @@ proc/sql_sanitize_text(var/text)
 	return text
 
 proc/feedback_set(var/variable,var/value)
-	if(!blackbox) return
+	if(!blackbox)
+		return
 
 	variable = sql_sanitize_text(variable)
 
 	var/datum/feedback_variable/FV = blackbox.find_feedback_datum(variable)
 
-	if(!FV) return
+	if(!FV)
+		return
 
 	FV.set_value(value)
 
 proc/feedback_inc(var/variable,var/value)
-	if(!blackbox) return
+	if(!blackbox)
+		return
 
 	variable = sql_sanitize_text(variable)
 
 	var/datum/feedback_variable/FV = blackbox.find_feedback_datum(variable)
 
-	if(!FV) return
+	if(!FV)
+		return
 
 	FV.inc(value)
 
 proc/feedback_dec(var/variable,var/value)
-	if(!blackbox) return
+	if(!blackbox)
+		return
 
 	variable = sql_sanitize_text(variable)
 
 	var/datum/feedback_variable/FV = blackbox.find_feedback_datum(variable)
 
-	if(!FV) return
+	if(!FV)
+		return
 
 	FV.dec(value)
 
 proc/feedback_set_details(var/variable,var/details)
-	if(!blackbox) return
+	if(!blackbox)
+		return
 
 	variable = sql_sanitize_text(variable)
 	details = sql_sanitize_text(details)
 
 	var/datum/feedback_variable/FV = blackbox.find_feedback_datum(variable)
 
-	if(!FV) return
+	if(!FV)
+		return
 
 	FV.set_details(details)
 
 proc/feedback_add_details(var/variable,var/details)
-	if(!blackbox) return
+	if(!blackbox)
+		return
 
 	variable = sql_sanitize_text(variable)
 	details = sql_sanitize_text(details)
 
 	var/datum/feedback_variable/FV = blackbox.find_feedback_datum(variable)
 
-	if(!FV) return
+	if(!FV)
+		return
 
 	FV.add_details(details)

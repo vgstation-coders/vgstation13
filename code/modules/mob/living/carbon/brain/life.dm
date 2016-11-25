@@ -1,7 +1,8 @@
 /mob/living/carbon/brain/Life()
 	set invisibility = 0
 	//set background = 1
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
 	..()
 
@@ -92,7 +93,8 @@
 		return //TODO: DEFERRED
 
 	proc/handle_temperature_damage(body_part, exposed_temperature, exposed_intensity)
-		if(status_flags & GODMODE) return
+		if(status_flags & GODMODE)
+			return
 
 		if(exposed_temperature > bodytemperature)
 			var/discomfort = min( abs(exposed_temperature - bodytemperature)*(exposed_intensity)/2000000, 1.0)
@@ -110,7 +112,8 @@
 	proc/handle_chemicals_in_body()
 
 
-		if(reagents) reagents.metabolize(src)
+		if(reagents)
+			reagents.metabolize(src)
 
 		confused = max(0, confused - 1)
 		// decrement dizziness counter, clamped to 0
@@ -194,8 +197,8 @@
 			if(stunned)
 				AdjustStunned(-1)
 
-			if(weakened)
-				weakened = max(weakened-1,0)	//before you get mad Rockdtben: I done this so update_canmove isn't called multiple times
+			if(knockdown)
+				knockdown = max(knockdown-1,0)	//before you get mad Rockdtben: I done this so update_canmove isn't called multiple times
 
 			if(stuttering)
 				stuttering = max(stuttering-1, 0)
@@ -212,15 +215,11 @@
 
 
 		if (stat == 2 || (M_XRAY in src.mutations))
-			sight |= SEE_TURFS
-			sight |= SEE_MOBS
-			sight |= SEE_OBJS
+			change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			see_in_dark = 8
 			see_invisible = SEE_INVISIBLE_LEVEL_TWO
 		else if (stat != 2)
-			sight &= ~SEE_TURFS
-			sight &= ~SEE_MOBS
-			sight &= ~SEE_OBJS
+			change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			see_in_dark = 2
 			see_invisible = SEE_INVISIBLE_LIVING
 

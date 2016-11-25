@@ -2,7 +2,7 @@
 	name = "flashbang"
 	icon_state = "flashbang"
 	item_state = "flashbang"
-	origin_tech = "materials=2;combat=1"
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_COMBAT + "=1"
 	var/banglet = 0
 
 /obj/item/weapon/grenade/flashbang/prime()
@@ -45,7 +45,7 @@
 	if(eye_safety < 1)
 		M.flash_eyes(visual = 1, affect_silicon = 1)
 		M.Stun(10)
-		M.Weaken(10)
+		M.Knockdown(10)
 
 //Now applying sound
 	if(!ear_safety)
@@ -58,10 +58,10 @@
 	if((get_dist(M, T) <= 2 || src.loc == M.loc || src.loc == M))
 		if(ear_safety > 0)
 			M.Stun(2)
-			M.Weaken(2)
+			M.Knockdown(2)
 		else
 			M.Stun(10)
-			M.Weaken(10)
+			M.Knockdown(10)
 			if ((prob(14) || (M == src.loc && prob(70))))
 				M.ear_damage += rand(1, 10)
 			else
@@ -71,13 +71,13 @@
 	else if(get_dist(M, T) <= 5)
 		if(!ear_safety)
 			M.Stun(8)
-			M.Weaken(8)
+			M.Knockdown(8)
 			M.ear_damage += rand(0, 3)
 			M.ear_deaf = max(M.ear_deaf,10)
 
 	else if(!ear_safety)
 		M.Stun(4)
-		M.Weaken(4)
+		M.Knockdown(4)
 		M.ear_damage += rand(0, 1)
 		M.ear_deaf = max(M.ear_deaf,5)
 

@@ -34,7 +34,8 @@
 /obj/machinery/processor/RefreshParts()
 	var/manipcount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/manipulator)) manipcount += SP.rating
+		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
+			manipcount += SP.rating
 	time_coeff = 2/manipcount
 
 /datum/food_processor_process
@@ -102,7 +103,7 @@
 				var/mob/living/carbon/slime/S = what
 				var/C = S.cores
 				if(S.stat != DEAD)
-					S.loc = loc
+					S.forceMove(loc)
 					S.visible_message("<span class='notice'>[C] crawls free of the processor!</span>")
 					return
 				for(var/i = 1, i <= C, i++)
@@ -116,29 +117,13 @@
 			process(loc, what)
 				var/mob/living/carbon/monkey/O = what
 				if (O.client) //grief-proof
-					O.loc = loc
+					O.forceMove(loc)
 					O.visible_message("<span class='notice'>[O] suddenly jumps out of [src]!</span>", \
 							"You jump out from the processor", \
 							"You hear a slimy sound")
 					return
 				var/obj/item/weapon/reagent_containers/glass/bucket/bucket_of_blood = new(loc)
-				var/datum/reagent/blood/B = new()
-				B.holder = bucket_of_blood
-				B.volume = 70
-				//set reagent data
-				B.data["donor"] = O
-
-				for(var/datum/disease/D in O.viruses)
-					if(D.spread_type != SPECIAL)
-						B.data["viruses"] += D.Copy()
-
-				B.data["blood_DNA"] = copytext(O.dna.unique_enzymes,1,0)
-				if(O.resistances&&O.resistances.len)
-					B.data["resistances"] = O.resistances.Copy()
-				bucket_of_blood.reagents.reagent_list += B
-				bucket_of_blood.reagents.update_total()
-				bucket_of_blood.on_reagent_change()
-				//bucket_of_blood.reagents.handle_reactions() //blood doesn't react
+				O.take_blood(bucket_of_blood, 70)
 				..()
 
 			input = /mob/living/carbon/monkey
@@ -172,7 +157,7 @@
 					for(var/turf/T in orange(loc,4))
 						throwzone += T
 					for(var/obj/I in target.contents)
-						I.loc = loc
+						I.forceMove(loc)
 						I.throw_at(pick(throwzone),rand(2,5),0)
 					hgibs(loc, target.viruses, target.dna, target.species.flesh_color, target.species.blood_color)
 					qdel(target)
@@ -182,7 +167,7 @@
 						sleep(2)
 					..()
 				else
-					target.loc = loc
+					target.forceMove(loc)
 					target.visible_message("<span class='danger'>The processor's safety protocols won't allow it to cut something that looks human!</span>")
 			input = /mob/living/carbon/human
 			output = null
@@ -227,7 +212,7 @@
 	else
 		if(O.loc == user)
 			user.drop_item(O)
-		what.loc = src
+		what.forceMove(src)
 	return
 
 /obj/machinery/processor/attack_hand(var/mob/user as mob)

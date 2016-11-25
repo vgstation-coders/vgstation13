@@ -1,3 +1,5 @@
+#define VALUE_GENERATED_NUMBER "Generated number"
+#define VALUE_UPPER_LIMIT "Maximum generated value or amount of pulsed assemblies"
 //////////////////////////Random number generator circuit////////////////////////
 // * When pulsed, randomly picks n assemblies connected to it and sends a pulse to them. Also generates a random number from 0 to n.
 
@@ -10,7 +12,7 @@
 	starting_materials = list(MAT_IRON = 100, MAT_GLASS = 25)
 	w_type = RECYK_ELECTRONIC
 
-	origin_tech = "programming=1"
+	origin_tech = Tc_PROGRAMMING + "=1"
 
 	wires = WIRE_PULSE | WIRE_RECEIVE
 
@@ -19,11 +21,13 @@
 	var/output_number = 1 //How many assemblies are randomly chosen
 	var/last_value = 0
 
-	accessible_values = list("Generated number" = "last_value;number",\
-		"Upper limit" = "output_number;number")
+	accessible_values = list(\
+		VALUE_GENERATED_NUMBER = "last_value;"+VT_NUMBER,\
+		VALUE_UPPER_LIMIT = "output_number;"+VT_NUMBER)
 
 /obj/item/device/assembly/randomizer/activate() //Simple stuff - when pulsed, emit a pulse. The assembly frame will handle the next part
-	if(!..()) return 0
+	if(!..())
+		return 0
 
 	last_value = rand(0, output_number)
 	pulse()
@@ -38,7 +42,8 @@
 	to_chat(user, "<span class='info'>Number of outputs set to [output_number].</span>")
 
 /obj/item/device/assembly/randomizer/send_pulses_to_list(var/list/L) //The assembly frame will give us a list of devices to forward a pulse to.
-	if(!L || !L.len) return
+	if(!L || !L.len)
+		return
 
 	var/list/AS = L.Copy() //Copy the list, since we're going to remove stuff from it
 
@@ -48,4 +53,8 @@
 		AS.Remove(A)
 		A.pulsed()
 
-		if(!AS.len) break
+		if(!AS.len)
+			break
+
+#undef VALUE_GENERATED_NUMBER
+#undef VALUE_UPPER_LIMIT

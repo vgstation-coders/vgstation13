@@ -1,7 +1,10 @@
+var/global/list/falltempoverlays = list()
+
 
 /spell/aoe_turf/fall
 	name = "Time Stop"
-	desc = "This spell stops time for "
+	desc = "This spell temporarily stops time for everybody around you, except for you. The spell lasts 3 seconds, and upgrading its power can further increase the duration."
+	abbreviation = "MS"
 
 	spell_flags = NEEDSCLOTHES
 
@@ -22,28 +25,38 @@
 	var/the_world_chance = 30
 	var/sleeptime = 30
 
+#define duration_increase_per_level 10
+
 /spell/aoe_turf/fall/empower_spell()
 	if(!can_improve(Sp_POWER))
 		return 0
 	spell_levels[Sp_POWER]++
 	var/temp = ""
 	range++
-	sleeptime += 10
+	sleeptime += duration_increase_per_level
 	switch(level_max[Sp_POWER] - spell_levels[Sp_POWER])
 		if(2)
 			temp = "Your control over time strengthens, you can now stop time for [sleeptime/10] second\s and in a radius of [range*2] meter\s."
 
 	return temp
 
+/spell/aoe_turf/fall/get_upgrade_info(upgrade_type, level)
+	if(upgrade_type == Sp_POWER)
+		return "Increase the spell's duration by [duration_increase_per_level/10] second\s and radius by 2 meters."
+	return ..()
+
+#undef duration_increase_per_level
+
 /spell/aoe_turf/fall/New()
 	..()
 	buildimage()
 
 /spell/aoe_turf/fall/proc/buildimage()
-	aoe_underlay = image(icon = 'icons/effects/640x640.dmi', icon_state = "fall", layer = 2.1)
+	aoe_underlay = image(icon = 'icons/effects/640x640.dmi', icon_state = "fall", layer = DECAL_LAYER)
+	aoe_underlay.plane = ABOVE_TURF_PLANE
 	aoe_underlay.transform /= 50
-	aoe_underlay.pixel_x = -304
-	aoe_underlay.pixel_y = -304
+	aoe_underlay.pixel_x = -304 * PIXEL_MULTIPLIER
+	aoe_underlay.pixel_y = -304 * PIXEL_MULTIPLIER
 	aoe_underlay.mouse_opacity = 0
 /proc/CircleCoords(var/c_x, var/c_y, var/r)
 	. = list()
@@ -66,11 +79,14 @@
 		return
 	var/list/targets = choose_targets(user)
 	if(targets && targets.len)
-		if(prob(the_world_chance)) invocation = "ZA WARUDO"
+		if(prob(the_world_chance))
+			invocation = "ZA WARUDO"
 		invocation(user, targets)
 		take_charge(user, skipcharge)
 
-		before_cast(targets) //applies any overlays and effects
+		targets = before_cast(targets, user)
+		if(!targets.len)
+			return
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
 		if(prob(critfailchance))
 			critfail(targets, user)
@@ -79,10 +95,10 @@
 		after_cast(targets) //generates the sparks, smoke, target messages etc.
 		invocation = initial(invocation)
 
-/spell/aoe_turf/fall/cast(list/targets)
-	var/turf/ourturf = get_turf(usr)
+/spell/aoe_turf/fall/cast(list/targets, mob/user)
+	var/turf/ourturf = get_turf(user)
 
-	var/list/potentials = circlerangeturfs(usr, range)
+	var/list/potentials = circlerangeturfs(user, range)
 	if(istype(potentials) && potentials.len)
 		targets = potentials
 	/*spawn(120)
@@ -97,55 +113,33 @@
 			if(C.mob)
 				C.mob.see_fall()
 
+	INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = targets))
+
 		//animate(aoe_underlay, transform = null, time = 2)
 	var/oursound = (invocation == "ZA WARUDO" ? 'sound/effects/theworld.ogg' :'sound/effects/fall.ogg')
-	playsound(usr, oursound, 100, 0, 0, 0, 0)
+	playsound(user, oursound, 100, 0, 0, 0, 0)
 
 	sleepfor = world.time + sleeptime
 	for(var/turf/T in targets)
-//		to_chat(world, "Starting [T]")
 		oureffects += getFromPool(/obj/effect/stop/sleeping, T, sleepfor, usr:mind, src, invocation == "ZA WARUDO")
 		for(var/atom/movable/everything in T)
-//			to_chat(world, "[T] doing [everything]")
 			if(isliving(everything))
-//				to_chat(world, "[everything] is living")
 				var/mob/living/L = everything
-				if(L == holder) continue
-//				to_chat(world, "[everything] is not holder")
-//				to_chat(world, "paralyzing [everything]")
+				if(L == holder)
+					continue
 				affected += L
 				invertcolor(L)
 				spawn() recursive_timestop(L)
-				//L.Paralyse(5)
-				//L.update_canmove()
-//				to_chat(world, "done")
 				L.playsound_local(L, invocation == "ZA WARUDO" ? 'sound/effects/theworld2.ogg' : 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
-//			to_chat(world, "checking for color invertion")
 			else
 				spawn() recursive_timestop(everything)
 				if(everything.ignoreinvert)
-//					to_chat(world, "[everything] is ignoring inverts.")
 					continue
-//				to_chat(world, "Inverting [everything] [everything.type] [everything.forceinvertredraw ? "forcing redraw" : ""]")
 				invertcolor(everything)
-//				to_chat(world, "Done")
 				affected += everything
 			everything.timestopped = 1
-//		to_chat(world, "inverting [T]")
 		invertcolor(T)
 		T.timestopped = 1
-//		to_chat(world, "Done")
-		/*var/icon/I = T.tempoverlay
-
-		if(!istype(I))
-			I = icon(T.icon, T.icon_state, T.dir)
-			I.MapColors(-1,0,0, 0,-1,0, 0,0,-1, 1,1,1)
-		//else
-			//if(T.icon_state != initial(T.icon_state))
-				//I = icon(I, T.icon_state, T.dir)
-		T.tempoverlay = I
-		T.overlays += I*/
-
 
 		affected += T
 	return
@@ -156,8 +150,11 @@
 
 	while (processing_list.len)
 		var/atom/A = processing_list[1]
+
 		affected |= A
-		A.timestopped = 1
+
+		if(A != holder)
+			A.timestopped = 1
 
 		for (var/atom/B in A)
 			if (!processed_list[B])
@@ -174,14 +171,11 @@
 		returnToPool(S)
 		oureffects -= S
 	for(var/atom/everything in affected)
-		if(!istype(everything)) continue
-		everything.appearance = everything.tempoverlay
-		everything.tempoverlay = null
+		everything.appearance = falltempoverlays[everything]
+		falltempoverlays -= everything
 		everything.ignoreinvert = initial(everything.ignoreinvert)
 		everything.timestopped = 0
 	affected.len = 0
-
-	return
 
 /mob/var/image/fallimage
 
@@ -195,12 +189,13 @@
 	else if(T && T_mob && (T.z == T_mob.z) && (get_dist(T,T_mob) <= 15))// &&!(T in view(T_mob)))
 		var/matrix/original
 		if(!fallimage)
-			fallimage = image(icon = 'icons/effects/640x640.dmi', icon_state = "fall", layer = 2.1)
+			fallimage = image(icon = 'icons/effects/640x640.dmi', icon_state = "fall", layer = DECAL_LAYER)
+			fallimage.plane = ABOVE_TURF_PLANE
 			original = fallimage.transform
 			fallimage.transform /= 50
 			fallimage.mouse_opacity = 0
-		var/new_x = 32 * (T.x - T_mob.x) - 304
-		var/new_y = 32 * (T.y - T_mob.y) - 304
+		var/new_x = WORLD_ICON_SIZE * (T.x - T_mob.x) - (9.5*WORLD_ICON_SIZE)
+		var/new_y = WORLD_ICON_SIZE * (T.y - T_mob.y) - (9.4*WORLD_ICON_SIZE)
 		fallimage.pixel_x = new_x
 		fallimage.pixel_y = new_y
 		fallimage.loc = T_mob
@@ -210,8 +205,11 @@
 
 /proc/invertcolor(atom/A)
 //	to_chat(world, "invert color start")
-	if(A.ignoreinvert) return
-	A.tempoverlay = A.appearance
+	if(A.ignoreinvert)
+		return
+	if(!falltempoverlays[A])
+		falltempoverlays[A] = A.appearance
+
 	A.color=	  list(-1,0,0,
 						0,-1,0,
 						0,0,-1,

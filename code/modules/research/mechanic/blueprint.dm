@@ -26,5 +26,5 @@
 	if(stored_design) //if it doesn't have a source (like a printer), a blueprint can have no design
 		name = "[build_type == FLATPACKER ? "machine" : "item"] " + name + " ([printed_design.name])"
 
-	pixel_x = rand(-3, 3)
-	pixel_y = rand(-5, 6)
+	pixel_x = rand(-3, 3) * PIXEL_MULTIPLIER
+	pixel_y = rand(-5, 6) * PIXEL_MULTIPLIER

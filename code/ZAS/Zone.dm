@@ -105,7 +105,8 @@ Class Procs:
 	#endif
 
 /zone/proc/rebuild()
-	if(invalid) return //Short circuit for explosions where rebuild is called many times over.
+	if(invalid)
+		return //Short circuit for explosions where rebuild is called many times over.
 	c_invalidate()
 	for(var/turf/simulated/T in contents)
 		//T.dbg(invalid_zone)
@@ -134,12 +135,14 @@ Class Procs:
 	to_chat(M, "Simulated: [contents.len] ([air.group_multiplier])")
 //	to_chat(M, "Unsimulated: [unsimulated_contents.len]")
 //	to_chat(M, "Edges: [edges.len]")
-	if(invalid) to_chat(M, "Invalid!")
+	if(invalid)
+		to_chat(M, "Invalid!")
 	var/zone_edges = 0
 	var/space_edges = 0
 	var/space_coefficient = 0
 	for(var/connection_edge/E in edges)
-		if(E.type == /connection_edge/zone) zone_edges++
+		if(E.type == /connection_edge/zone)
+			zone_edges++
 		else
 			space_edges++
 			space_coefficient += E.coefficient

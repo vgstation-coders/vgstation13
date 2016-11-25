@@ -21,24 +21,27 @@
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/chem_dispenser/scp_294/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
-	if(stat & (BROKEN|NOPOWER)) return
-	if((user.stat && !isobserver(user)) || user.restrained()) return
-	if(!chemical_reagents_list || !chemical_reagents_list.len) return
+	if(stat & (BROKEN|NOPOWER))
+		return
+	if((user.stat && !isobserver(user)) || user.restrained())
+		return
+	if(!chemical_reagents_list || !chemical_reagents_list.len)
+		return
 	// this is the data which will be sent to the ui
 	var/data[0]
-	data["isBeakerLoaded"] = beaker ? 1 : 0
+	data["isBeakerLoaded"] = container ? 1 : 0
 
-	var beakerContents[0]
-	var beakerCurrentVolume = 0
-	if(beaker && beaker.reagents && beaker.reagents.reagent_list.len)
-		for(var/datum/reagent/R in beaker.reagents.reagent_list)
-			beakerContents.Add(list(list("name" = R.name, "volume" = R.volume))) // list in a list because Byond merges the first list...
-			beakerCurrentVolume += R.volume
-	data["beakerContents"] = beakerContents
+	var containerContents[0]
+	var containerCurrentVolume = 0
+	if(container && container.reagents && container.reagents.reagent_list.len)
+		for(var/datum/reagent/R in container.reagents.reagent_list)
+			containerContents.Add(list(list("name" = R.name, "volume" = R.volume))) // list in a list because Byond merges the first list...
+			containerCurrentVolume += R.volume
+	data["beakerContents"] = containerContents
 
-	if (beaker)
-		data["beakerCurrentVolume"] = beakerCurrentVolume
-		data["beakerMaxVolume"] = beaker.volume
+	if (container)
+		data["beakerCurrentVolume"] = containerCurrentVolume
+		data["beakerMaxVolume"] = container.volume
 	else
 		data["beakerCurrentVolume"] = null
 		data["beakerMaxVolume"] = null
@@ -59,17 +62,17 @@
 		return 0 // don't update UIs attached to this object
 
 	if(href_list["ejectBeaker"])
-		if(beaker)
+		if(container)
 			detach()
 
 	if(href_list["input"])
-		if(beaker)
+		if(container)
 			var/input_reagent = input("Enter the name of any liquid", "Input") as text
 			if (input_reagent in prohibited_reagents)
 				say("OUT OF RANGE")
 				return
 			else
-				var/obj/item/weapon/reagent_containers/glass/X = src.beaker
+				var/obj/item/weapon/reagent_containers/glass/X = src.container
 				var/datum/reagents/U = X.reagents
 				if(!U)
 					if(!X.gcDestroyed)

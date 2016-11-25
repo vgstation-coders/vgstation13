@@ -1,13 +1,14 @@
 /spell/targeted/equip_item/frenchcurse
 	name = "French Curse"
 	desc = "This curse will silence your target for a very long time."
+	abbreviation = "FC"
 
 	school = "evocation"
 	charge_max = 300
 	invocation = "FU'K Y'U D'NY"
 	invocation_type = SpI_SHOUT
 	range = 1
-	spell_flags = 0 //SELECTABLE hinders you here, since the spell has a range of 1 and only works on adjacent guys. Having the TARGETTED flag here makes it easy for your target to run away from you!
+	spell_flags = WAIT_FOR_CLICK //SELECTABLE hinders you here, since the spell has a range of 1 and only works on adjacent guys. Having the TARGETTED flag here makes it easy for your target to run away from you!
 	cooldown_min = 50
 
 	sparks_spread = 1
@@ -19,7 +20,7 @@
 
 /spell/targeted/equip_item/frenchcurse/New()
 	..()
-	equipped_summons = list("[slot_wear_mask]" = /obj/item/clothing/mask/gas/mime,
+	equipped_summons = list("[slot_wear_mask]" = /obj/item/clothing/mask/gas/mime/stickymagic,
 							"[slot_w_uniform]" = /obj/item/clothing/under/mime)
 
 /spell/targeted/equip_item/frenchcurse/cast(list/targets, mob/user = usr)
@@ -33,7 +34,6 @@
 
 /spell/targeted/equip_item/frenchcurse/summon_item(var/newtype)
 	var/obj/item/new_item = new newtype
-	new_item.unacidable = 1
 	new_item.canremove = 0
 	if(istype(new_item, /obj/item/clothing/mask/gas/mime))
 		var/obj/item/clothing/mask/gas/mime/M = new_item

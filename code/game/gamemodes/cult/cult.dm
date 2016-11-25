@@ -9,8 +9,10 @@
 	return istype(M) && M.mind && ticker && ticker.mode && (M.mind in ticker.mode.cult)
 
 /proc/is_convertable_to_cult(datum/mind/mind)
-	if(!istype(mind))	return 0
-	if(istype(mind.current, /mob/living/carbon/human) && (mind.assigned_role == "Chaplain"))	return 0
+	if(!istype(mind))
+		return 0
+	if(istype(mind.current, /mob/living/carbon/human) && (mind.assigned_role == "Chaplain"))
+		return 0
 	for(var/obj/item/weapon/implant/loyalty/L in mind.current)
 		if(L && (L.imp_in == mind.current))//Checks to see if the person contains an implant, then checks that the implant is actually inside of them
 			return 0
@@ -40,7 +42,7 @@
 	recommended_enemies = 4
 
 	uplink_welcome = "Nar-Sie Uplink Console:"//what?
-	uplink_uses = 10//whaaaat?
+	uplink_uses = 20//whaaaat?
 
 	var/datum/mind/sacrifice_target = null
 	var/finished = 0
@@ -76,6 +78,8 @@
 	var/escaped_shuttle = 0
 	var/escaped_pod = 0
 	var/survivors = 0
+
+	can_be_mixed = TRUE
 
 /datum/game_mode/cult/announce()
 	to_chat(world, "<B>The current game mode is - Cult!</B>")
@@ -145,7 +149,7 @@
 			spilltarget = 100 + rand(0,player_list.len * 3)
 			explanation = "We must prepare this place for the Geometer of Blood's coming. Spill blood and gibs over [spilltarget] floor tiles."
 		if("sacrifice")
-			explanation = "We need to sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role], for his blood is the key that will lead our master to this realm. You will need 3 cultists around a Sacrifice rune (Hell Blood Join) to perform the ritual."
+			explanation = "We need to sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role=="MODE" ? (sacrifice_target.special_role) : (sacrifice_target.assigned_role)], for his blood is the key that will lead our master to this realm. You will need 3 cultists around a Sacrifice rune (Hell Blood Join) to perform the ritual."
 
 	for(var/datum/mind/cult_mind in cult)
 		equip_cultist(cult_mind.current)
@@ -155,7 +159,7 @@
 		var/wikiroute = role_wiki[ROLE_CULTIST]
 		to_chat(cult_mind.current, "<span class='sinister'>You are a member of the cult!</span> <span class='info'><a HREF='?src=\ref[cult_mind.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 		to_chat(cult_mind.current, "<span class='sinister'>You can now speak and understand the forgotten tongue of Nar-Sie.</span>")
-		cult_mind.current.add_language("Cult")
+		cult_mind.current.add_language(LANGUAGE_CULT)
 		//memoize_cult_objectives(cult_mind)
 
 
@@ -212,7 +216,7 @@
 				spilltarget = 100 + rand(0,player_list.len * 3)
 				explanation = "We must prepare this place for the Geometer of Blood's coming. Spread blood and gibs over [spilltarget] of the Station's floor tiles."
 			if("sacrifice")
-				explanation = "We need to sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role], for his blood is the key that will lead our master to this realm. You will need 3 cultists around a Sacrifice rune (Hell Blood Join) to perform the ritual."
+				explanation = "We need to sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role=="MODE" ? (sacrifice_target.special_role) : (sacrifice_target.assigned_role)], for his blood is the key that will lead our master to this realm. You will need 3 cultists around a Sacrifice rune (Hell Blood Join) to perform the ritual."
 
 		for(var/datum/mind/cult_mind in cult)
 			to_chat(cult_mind.current, "<span class='sinister'>You and your acolytes have completed your task, but this place requires yet more preparation!</span>")
@@ -269,7 +273,8 @@
 
 	if(!mixed)
 		spawn (rand(waittime_l, waittime_h))
-			if(!mixed) send_intercept()
+			if(!mixed)
+				send_intercept()
 		..()
 
 /datum/game_mode/cult/proc/pick_objective()
@@ -364,7 +369,7 @@
 		if("bloodspill")
 			explanation = "We must prepare this place for the Geometer of Blood's coming. Spill blood and gibs over [spilltarget] floor tiles."
 		if("sacrifice")
-			explanation = "We need to sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role], for his blood is the key that will lead our master to this realm. You will need 3 cultists around a Sacrifice rune (Hell Blood Join) to perform the ritual."
+			explanation = "We need to sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role=="MODE" ? (sacrifice_target.special_role) : (sacrifice_target.assigned_role)], for his blood is the key that will lead our master to this realm. You will need 3 cultists around a Sacrifice rune (Hell Blood Join) to perform the ritual."
 		if("eldergod")
 			explanation = "Summon Nar-Sie via the use of the Tear Reality rune (Hell Join Self). You will need 9 cultists standing on and around the rune to summon Him."
 	to_chat(cult_mind.current, "<B>Objective #[current_objective]</B>: [explanation]")
@@ -444,7 +449,7 @@
 		cult -= cult_mind
 		to_chat(cult_mind.current, "<span class='danger'><FONT size = 3>An unfamiliar white light flashes through your mind, cleansing the taint of the dark-one and removing all of the memories of your time as his servant, except the one who converted you, with it.</FONT></span>")
 		to_chat(cult_mind.current, "<span class='danger'>You find yourself unable to mouth the words of the forgotten...</span>")
-		cult_mind.current.remove_language("Cult")
+		cult_mind.current.remove_language(LANGUAGE_CULT)
 		cult_mind.memory = ""
 
 		if(mixed)
@@ -488,14 +493,16 @@
 					var/imageloc = cult_mind.current
 					if(istype(cult_mind.current.loc,/obj/mecha))
 						imageloc = cult_mind.current.loc
-					var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "cult", layer = 13)
+					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "cult")
+					I.plane = CULT_ANTAG_HUD_PLANE
 					cultist.current.client.images += I
-			if(cult_mind.current)
+			if(cult_mind.current && cultist.current)
 				if(cult_mind.current.client)
 					var/imageloc = cultist.current
 					if(istype(cultist.current.loc,/obj/mecha))
 						imageloc = cultist.current.loc
-					var/image/J = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "cult", layer = 13)
+					var/image/J = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "cult")
+					J.plane = CULT_ANTAG_HUD_PLANE
 					cult_mind.current.client.images += J
 
 
@@ -600,13 +607,13 @@
 				if("sacrifice")//sacrifice a high value target
 					if(sacrifice_target)
 						if(sacrifice_target in sacrificed)
-							explanation = "Sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role]. <font color='green'><B>Success!</B></font>"
+							explanation = "Sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role=="MODE" ? (sacrifice_target.special_role) : (sacrifice_target.assigned_role)]. <font color='green'><B>Success!</B></font>"
 							feedback_add_details("cult_objective","cult_sacrifice|SUCCESS")
 						else if(sacrifice_target && sacrifice_target.current)
-							explanation = "Sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role]. <font color='red'>Fail.</font>"
+							explanation = "Sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role=="MODE" ? (sacrifice_target.special_role) : (sacrifice_target.assigned_role)]. <font color='red'>Fail.</font>"
 							feedback_add_details("cult_objective","cult_sacrifice|FAIL")
 						else
-							explanation = "Sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role]. <font color='red'>Fail (Gibbed).</font>"
+							explanation = "Sacrifice [sacrifice_target.name], the [sacrifice_target.assigned_role=="MODE" ? (sacrifice_target.special_role) : (sacrifice_target.assigned_role)]. <font color='red'>Fail (Gibbed).</font>"
 							feedback_add_details("cult_objective","cult_sacrifice|FAIL|GIBBED")
 
 				if("eldergod")//summon narsie

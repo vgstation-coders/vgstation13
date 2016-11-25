@@ -83,7 +83,7 @@ The "dust" will damage the hull of the station causin minor hull breaches.
 		var/goal = locate(endx, endy, 1)
 		src.x = startx
 		src.y = starty
-		src.z = 1
+		src.z = map.zMainStation
 		spawn(0)
 			walk_towards(src, goal, 1)
 		return

@@ -9,6 +9,7 @@
 /obj/item/weapon/reagent_containers/food/condiment
 	name = "condiment container"
 	desc = "Just your average condiment container."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/drinkingglass.dmi', "right_hand" = 'icons/mob/in-hand/right/drinkingglass.dmi')
 	icon = 'icons/obj/food.dmi'
 	icon_state = "emptycondiment"
 	item_state = null
@@ -79,7 +80,8 @@
 	return
 
 /obj/item/weapon/reagent_containers/food/condiment/afterattack(obj/target, mob/user , flag)
-	if(!flag || ismob(target)) return 0
+	if(!flag || ismob(target))
+		return 0
 	if(istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
 
 		if(!target.reagents.total_volume) //Nothing in the dispenser
@@ -108,103 +110,85 @@
 
 	if(reagents.reagent_list.len > 0)
 
+		item_state = null
 		switch(reagents.get_master_reagent_id())
 
 			if(KETCHUP)
 				name = KETCHUP
 				desc = "You feel more American already."
 				icon_state = KETCHUP
-				item_state = null
 			if(CAPSAICIN)
 				name = "hotsauce"
 				desc = "You can almost TASTE the stomach ulcers now!"
 				icon_state = "hotsauce"
-				item_state = null
 			if(ENZYME)
 				name = "universal enzyme"
 				desc = "Used in cooking various dishes."
 				icon_state = ENZYME
-				item_state = null
 			if(FLOUR)
 				name = "flour sack"
 				desc = "A big bag of flour. Good for baking!"
 				icon_state = FLOUR
-				item_state = null
 			if(MILK)
 				name = "space milk"
 				desc = "It's milk. White and nutritious goodness!"
 				icon_state = MILK
-				item_state = "carton"
 			if(SOYMILK)
 				name = "soy milk"
 				desc = "It's soy milk. White and nutritious goodness!"
 				icon_state = SOYMILK
-				item_state = "carton"
 			if(RICE)
 				name = "rice sack"
 				desc = "A taste of Asia in the kitchen."
 				icon_state = RICE
-				item_state = null
 			if(SOYSAUCE)
 				name = "soy sauce"
 				desc = "A salty soy-based flavoring."
 				icon_state = SOYSAUCE
-				item_state = null
 			if(FROSTOIL)
 				name = "coldsauce"
 				desc = "Leaves the tongue numb in its passage."
 				icon_state = "coldsauce"
-				item_state = null
 			if(SODIUMCHLORIDE)
 				name = "salt shaker"
 				desc = "Salt. From space oceans, presumably."
 				icon_state = "saltshakersmall"
-				item_state = null
 			if(BLACKPEPPER)
 				name = "pepper mill"
 				desc = "Often used to flavor food or make people sneeze."
 				icon_state = "peppermillsmall"
-				item_state = null
 			if(CORNOIL)
 				name = "corn oil"
 				desc = "A delicious oil used in cooking. Made from corn."
 				icon_state = CORNOIL
-				item_state = null
 			if(SUGAR)
 				name = SUGAR
 				desc = "Tasty space sugar!"
 				icon_state = SUGAR
-				item_state = null
 			if(CHEFSPECIAL)
 				name = "\improper Chef Excellence's Special Sauce"
-				desc = "A potent sauce distilled from the toxin glands of 1000 Space Carp."
+				desc = "A potent sauce distilled from the toxin glands of 1000 Space Carp with an extra touch of LSD, because why not?"
 				icon_state = "emptycondiment"
-				item_state = null
 			if(VINEGAR)
 				name = "malt vinegar bottle"
 				desc = "Perfect for fish and chips!"
 				icon_state = "vinegar_container"
-				item_state = null
 			if("honey")
 				name = "honey pot"
 				desc = "Sweet and healthy!"
 				icon_state = "honey"
-				item_state = null
 			if(CINNAMON)
 				name = "cinnamon shaker"
 				desc = "A spice, obtained from the bark of cinnamomum trees."
 				icon_state = CINNAMON
-				item_state = null
 			if(GRAVY)
 				name = "gravy boat"
 				desc = "Too small to set sail on."
 				icon_state = GRAVY
-				item_state = null
 			else
 				name = "misc condiment bottle"
 				desc = "Just your average condiment container."
 				icon_state = "emptycondiment"
-				item_state = null
 
 				if(reagents.reagent_list.len == 1)
 					desc = "Looks like it is [reagents.get_master_reagent_name()], but you are not sure."
@@ -215,7 +199,10 @@
 		icon_state = "emptycondiment"
 		name = "condiment bottle"
 		desc = "An empty condiment bottle."
-		return
+
+	if(iscarbon(loc))
+		var/mob/living/carbon/M = loc
+		M.update_inv_hands()
 
 //Specific condiment bottle entities for mapping and potentially spawning (these are NOT used for any above procs)
 
@@ -233,12 +220,101 @@
 		if(reagents.get_reagent_amount(ENZYME) < 50)
 			reagents.add_reagent(ENZYME, 2)
 
+/obj/item/weapon/reagent_containers/food/condiment/ketchup
+	name = "ketchup"
+	desc = "You feel more American already."
+
+/obj/item/weapon/reagent_containers/food/condiment/ketchup/New()
+	..()
+	reagents.add_reagent(KETCHUP, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/hotsauce
+	name = "hotsauce"
+	desc = "You can almost TASTE the stomach ulcers now!"
+
+/obj/item/weapon/reagent_containers/food/condiment/hotsauce/New()
+	..()
+	reagents.add_reagent(CAPSAICIN, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/flour
+	name = "flour sack"
+	desc = "A big bag of flour. Good for baking!"
+
+/obj/item/weapon/reagent_containers/food/condiment/flour/New()
+	..()
+	reagents.add_reagent(FLOUR, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/spacemilk
+	name = "space milk"
+	desc = "It's milk. White and nutritious goodness!"
+
+/obj/item/weapon/reagent_containers/food/condiment/spacemilk/New()
+	..()
+	reagents.add_reagent(MILK, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/soymilk
+	name = "soy milk"
+	desc = "It's soy milk. White and nutritious goodness!"
+
+/obj/item/weapon/reagent_containers/food/condiment/soymilk/New()
+	..()
+	reagents.add_reagent(SOYMILK, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/rice
+	name = "rice sack"
+	desc = "A taste of Asia in the kitchen."
+
+/obj/item/weapon/reagent_containers/food/condiment/rice/New()
+	..()
+	reagents.add_reagent(RICE, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/soysauce
+	name = "soy sauce"
+	desc = "A salty soy-based flavoring."
+
+/obj/item/weapon/reagent_containers/food/condiment/soysauce/New()
+	..()
+	reagents.add_reagent(SOYSAUCE, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/coldsauce
+	name = "coldsauce"
+	desc = "Leaves the tongue numb in its passage."
+
+/obj/item/weapon/reagent_containers/food/condiment/coldsauce/New()
+	..()
+	reagents.add_reagent(FROSTOIL, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/cornoil
+	name = "corn oil"
+	desc = "A delicious oil used in cooking. Made from corn."
+
+/obj/item/weapon/reagent_containers/food/condiment/cornoil/New()
+	..()
+	reagents.add_reagent(CORNOIL, 50)
+
 /obj/item/weapon/reagent_containers/food/condiment/sugar
+	name = "sugar"
 	desc = "Tasty space sugar!"
 
 /obj/item/weapon/reagent_containers/food/condiment/sugar/New()
 	..()
 	reagents.add_reagent(SUGAR, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/honey
+	name = "honey pot"
+	desc = "Sweet and healthy!"
+
+/obj/item/weapon/reagent_containers/food/condiment/honey/New()
+	..()
+	reagents.add_reagent("honey", 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/cinnamon
+	name = "cinnamon shaker"
+	desc = "A spice, obtained from the bark of cinnamomum trees."
+
+/obj/item/weapon/reagent_containers/food/condiment/cinnamon/New()
+	..()
+	reagents.add_reagent(CINNAMON, 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/saltshaker
 	name = "salt shaker"

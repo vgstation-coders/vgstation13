@@ -278,6 +278,10 @@ RESPAWN_AS_MOMMI
 
 RENDERS_URL http://ss13.pomf.se/img/map-renders
 
+##POLL_RESULTS_URL
+##Uncomment to add a "Results" button to the player polls, linking to the page where that poll's results are. [poll_results_url]/[pollid]
+#POLL_RESULTS_URL http://ss13.moe/index.php/poll
+
 ## MOMMI_STATIC
 ## Uncomment to enable scrambling the image of mobs for MoMMIs
 #MOMMI_STATIC
@@ -308,3 +312,7 @@ SKIP_MINIMAP_GENERATION
 ## ENABLE_WAGES
 ## Comment out to disable wages being enabled by default.
 ENABLE_WAGES
+
+# HTTP URL to send Discord messages to.
+# DISCORD_URL
+# DISCORD_PASSWORD

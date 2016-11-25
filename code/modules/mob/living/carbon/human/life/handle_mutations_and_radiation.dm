@@ -18,7 +18,7 @@
 		//Whoever wrote those next two blocks of code obviously never heard of mathematical helpers
 		if(radiation > 100)
 			radiation = 100
-			Weaken(10)
+			Knockdown(10)
 			to_chat(src, "<span class='warning'>You feel weak.</span>")
 			emote("collapse")
 
@@ -51,7 +51,7 @@
 					adjustToxLoss(1)
 					if(prob(5))
 						radiation -= 5
-						Weaken(3)
+						Knockdown(3)
 						to_chat(src, "<span class='warning'>You feel weak.</span>")
 						emote("collapse")
 					updatehealth()
@@ -71,4 +71,5 @@
 
 			if(damage && organs.len)
 				var/datum/organ/external/O = pick(organs)
-				if(istype(O)) O.add_autopsy_data("Radiation Poisoning", damage)
+				if(istype(O))
+					O.add_autopsy_data("Radiation Poisoning", damage)

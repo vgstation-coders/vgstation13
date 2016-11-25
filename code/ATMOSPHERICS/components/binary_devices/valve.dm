@@ -35,7 +35,8 @@
 /obj/machinery/atmospherics/binary/valve/proc/open()
 
 
-	if(open) return 0
+	if(open)
+		return 0
 
 	open = 1
 	update_icon()
@@ -80,9 +81,6 @@
 /obj/machinery/atmospherics/binary/valve/attack_ai(mob/user as mob)
 	return
 
-/obj/machinery/atmospherics/binary/valve/attack_paw(mob/user as mob)
-	return attack_hand(user)
-
 /obj/machinery/atmospherics/binary/valve/attack_hand(mob/user as mob)
 	if(isobserver(user) && !canGhostWrite(user,src,"toggles"))
 		to_chat(user, "<span class='warning'>Nope.</span>")
@@ -111,6 +109,9 @@
 		close()
 		open()
 		openDuringInit = 0
+
+	else
+		update_icon()
 
 /obj/machinery/atmospherics/binary/valve/digital		// can be controlled by AI
 	name = "digital valve"
@@ -215,11 +216,3 @@
 			state_changed=1
 	if(state_changed)
 		investigation_log(I_ATMOS,"was [(state ? "opened (side)" : "closed (straight) ")] by a signal")
-
-
-// Just for digital valves.
-/obj/machinery/atmospherics/binary/valve/digital/attackby(var/obj/item/W as obj, var/mob/user as mob)
-	if(src.frequency && iswrench(W))
-		to_chat(user, "<span class='warning'>You cannot unwrench this [src], it's digitally connected to another device.</span>")
-		return 1
-	return ..() 	// Pass to the method below (does stuff ALL valves should do)

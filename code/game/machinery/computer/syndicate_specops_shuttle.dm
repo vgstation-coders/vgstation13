@@ -57,7 +57,8 @@ var/syndicate_elite_shuttle_timeleft = 0
 	syndicate_elite_shuttle_moving_to_mothership = 0
 
 	syndicate_elite_shuttle_at_station = 1
-	if (syndicate_elite_shuttle_moving_to_station || syndicate_elite_shuttle_moving_to_mothership) return
+	if (syndicate_elite_shuttle_moving_to_station || syndicate_elite_shuttle_moving_to_mothership)
+		return
 
 	if (!syndicate_elite_can_move())
 		to_chat(usr, "<span class='warning'>The Syndicate Elite shuttle is unable to leave.</span>")
@@ -172,8 +173,10 @@ var/syndicate_elite_shuttle_timeleft = 0
 		to_chat(M, "<span class='warning'>You have arrived to [station_name]. Commence operation!</span>")
 
 /proc/syndicate_elite_can_move()
-	if(syndicate_elite_shuttle_moving_to_station || syndicate_elite_shuttle_moving_to_mothership) return 0
-	else return 1
+	if(syndicate_elite_shuttle_moving_to_station || syndicate_elite_shuttle_moving_to_mothership)
+		return 0
+	else
+		return 1
 
 /obj/machinery/computer/syndicate_elite_shuttle/attack_ai(var/mob/user as mob)
 	src.add_hiddenprint(user)
@@ -219,13 +222,15 @@ var/syndicate_elite_shuttle_timeleft = 0
 	usr.set_machine(src)
 
 	if (href_list["sendtodock"])
-		if(!syndicate_elite_shuttle_at_station|| syndicate_elite_shuttle_moving_to_station || syndicate_elite_shuttle_moving_to_mothership) return
+		if(!syndicate_elite_shuttle_at_station|| syndicate_elite_shuttle_moving_to_station || syndicate_elite_shuttle_moving_to_mothership)
+			return
 
 		to_chat(usr, "<span class='notice'>The Syndicate will not allow the Elite Squad shuttle to return.</span>")
 		return
 
 	else if (href_list["sendtostation"])
-		if(syndicate_elite_shuttle_at_station || syndicate_elite_shuttle_moving_to_station || syndicate_elite_shuttle_moving_to_mothership) return
+		if(syndicate_elite_shuttle_at_station || syndicate_elite_shuttle_moving_to_station || syndicate_elite_shuttle_moving_to_mothership)
+			return
 
 		if (!specops_can_move())
 			to_chat(usr, "<span class='warning'>The Syndicate Elite shuttle is unable to leave.</span>")

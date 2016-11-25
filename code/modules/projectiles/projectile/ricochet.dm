@@ -5,7 +5,7 @@
 	damage_type = BURN
 	flag = "laser"
 	kill_count = 100
-	layer = 13
+	layer = PROJECTILE_LAYER
 	damage = 30
 	icon = 'icons/obj/projectiles_experimental.dmi'
 	icon_state = "ricochet_head"
@@ -144,7 +144,7 @@
 		return
 
 	var/turf/newspawn = locate(T1.x + X_spawn, T1.y + Y_spawn, z)
-	src.loc = newspawn
+	src.forceMove(newspawn)
 
 	update_icon()
 	..()
@@ -208,13 +208,13 @@
 	if(A)
 		switch(get_dir(src,A))
 			if(NORTH)
-				impact.pixel_y = 16
+				impact.pixel_y = WORLD_ICON_SIZE/2
 			if(SOUTH)
-				impact.pixel_y = -16
+				impact.pixel_y = -WORLD_ICON_SIZE/2
 			if(EAST)
-				impact.pixel_x = 16
+				impact.pixel_x = WORLD_ICON_SIZE/2
 			if(WEST)
-				impact.pixel_x = -16
+				impact.pixel_x = -WORLD_ICON_SIZE/2
 	impact.icon_state = "ricochet_hit"
 	playsound(impact, 'sound/weapons/pierce.ogg', 30, 1)
 
@@ -225,7 +225,8 @@
 		OnDeath()
 
 /obj/item/projectile/ricochet/Bump(atom/A as mob|obj|turf|area)
-	if(bumped)	return 0
+	if(bumped)
+		return 0
 	bumped = 1
 
 	if(A)
@@ -356,9 +357,11 @@
 	icon_state = "ricochet"
 	opacity = 0
 	density = 0
-	unacidable = 1
 	anchored = 1
-	layer = 12
+	layer = BELOW_PROJECTILE_LAYER
+
+/obj/structure/ricochet_trail/acidable()
+	return 0
 
 /obj/structure/ricochet_trail/New()
 	. = ..()
@@ -371,9 +374,11 @@
 	icon_state = "ricochet_bounce"
 	opacity = 0
 	density = 0
-	unacidable = 1
 	anchored = 1
-	layer = 14
+	layer = ABOVE_PROJECTILE_LAYER
+
+/obj/structure/ricochet_bump/acidable()
+	return 0
 
 /obj/structure/ricochet_bump/New()
 	. = ..()

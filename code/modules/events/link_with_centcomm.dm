@@ -10,9 +10,9 @@
 proc/link_to_centcomm()
 	if(!map.linked_to_centcomm)
 		map.linked_to_centcomm = 1
-		command_alert("A link to Central Command has been established on [station_name()].","Link Established")
+		command_alert(/datum/command_alert/command_link_restored)
 
 proc/unlink_from_centcomm()
 	if(map.linked_to_centcomm)
-		command_alert("This is an automated announcement. The link with central command has been lost. Repeat: The link with central command has been lost. Attempting to re-establish communications in T-10.","Automated announcement",1,alert='sound/AI/loss.ogg')
+		command_alert(/datum/command_alert/command_link_lost)
 		map.linked_to_centcomm = 0

@@ -6,7 +6,7 @@
 	icon_state = "Light1"
 	anchored = 1
 	density = 0
-	layer = 5
+	plane = ABOVE_HUMAN_PLANE
 	pass_flags = PASSTABLE | PASSGRILLE
 
 	// Vars used by vines with seed data.
@@ -35,28 +35,40 @@
 	..()
 
 /obj/effect/plantsegment/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (!W || !user || !W.type) return
+	if (!W || !user || !W.type)
+		return
 	switch(W.type) //This is absolutely terrible AND copypasted from biomass (or other way around)
-		if(/obj/item/weapon/circular_saw) qdel(src)
-		if(/obj/item/weapon/kitchen/utensil/knife) qdel(src)
-		if(/obj/item/weapon/fireaxe) qdel(src)
-		if(/obj/item/weapon/hatchet) qdel(src)
-		if(/obj/item/weapon/melee/energy) qdel(src)
-		if(/obj/item/weapon/pickaxe/plasmacutter) qdel(src)
+		if(/obj/item/weapon/circular_saw)
+			qdel(src)
+		if(/obj/item/weapon/kitchen/utensil/knife)
+			qdel(src)
+		if(/obj/item/weapon/fireaxe)
+			qdel(src)
+		if(/obj/item/weapon/hatchet)
+			qdel(src)
+		if(/obj/item/weapon/melee/energy)
+			qdel(src)
+		if(/obj/item/weapon/pickaxe/plasmacutter)
+			qdel(src)
 
 		// Less effective weapons
 		if(/obj/item/weapon/wirecutters)
-			if(prob(25)) qdel(src)
+			if(prob(25))
+				qdel(src)
 		if(/obj/item/weapon/shard)
-			if(prob(25)) qdel(src)
+			if(prob(25))
+				qdel(src)
 
 		// Weapons with subtypes
 		else
-			if(istype(W, /obj/item/weapon/melee/energy/sword)) qdel(src)
-			else if(istype(W, /obj/item/weapon/scalpel)) qdel(src)
+			if(istype(W, /obj/item/weapon/melee/energy/sword))
+				qdel(src)
+			else if(istype(W, /obj/item/weapon/scalpel))
+				qdel(src)
 			else if(istype(W, /obj/item/weapon/weldingtool))
 				var/obj/item/weapon/weldingtool/WT = W
-				if(WT.remove_fuel(0, user)) qdel(src)
+				if(WT.remove_fuel(0, user))
+					qdel(src)
 			else
 				manual_unbuckle(user)
 				return
@@ -113,8 +125,8 @@
 			energy = 2
 			return
 
-		src.opacity = 1
-		layer = 5
+		opacity = 1
+		plane = ABOVE_HUMAN_PLANE
 	else if(!limited_growth)
 		src.icon_state = pick("Hvy1", "Hvy2", "Hvy3")
 		energy = 2
@@ -175,7 +187,8 @@
 						H.reagents.add_reagent(rid,injecting)
 
 /obj/effect/plantsegment/proc/update()
-	if(!seed) return
+	if(!seed)
+		return
 
 	// Update bioluminescence.
 	if(seed.biolum)
@@ -256,11 +269,13 @@
 
 /obj/effect/plantsegment/proc/die()
 	if(seed && harvest)
-		if(rand(5))seed.harvest(src,1)
+		if(rand(5))
+			seed.harvest(src,1)
 		qdel(src)
 
 /obj/effect/plantsegment/proc/life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
 
 
@@ -272,7 +287,8 @@
 
 	var/turf/T = loc
 	var/datum/gas_mixture/environment
-	if(T) environment = T.return_air()
+	if(T)
+		environment = T.return_air()
 
 	if(!environment)
 		return
@@ -385,7 +401,8 @@
 
 		SV.life()
 
-		if(!SV) continue
+		if(!SV)
+			continue
 
 		if(SV.energy < 2) //If tile isn't fully grown
 			var/chance

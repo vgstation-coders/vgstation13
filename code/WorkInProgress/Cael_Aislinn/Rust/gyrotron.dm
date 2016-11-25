@@ -5,7 +5,7 @@
 	anchored = 0
 	state = 0
 	density = 1
-	layer = 4
+	plane = ABOVE_HUMAN_PLANE
 	machine_flags = MULTITOOL_MENU | WRENCHMOVE | WELD_FIXED | FIXED2WORK
 
 	var/frequency = 1

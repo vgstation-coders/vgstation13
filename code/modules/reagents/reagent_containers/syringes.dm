@@ -33,7 +33,8 @@
 	                            /obj/item/weapon/storage/fancy/cigarettes,
 	                            /obj/item/weapon/implantcase/chem,
 	                            /obj/item/weapon/reagent_containers/pill/time_release,
-	                            /obj/item/clothing/mask/facehugger/lamarr)
+	                            /obj/item/clothing/mask/facehugger/lamarr,
+	                            /obj/item/asteroid/hivelord_core)
 
 /obj/item/weapon/reagent_containers/syringe/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] appears to be injecting an air bubble using a [src.name]! It looks like \he's trying to commit suicide.</span>")
@@ -71,7 +72,8 @@
 	if(proximity_flag == 0) // not adjacent
 		return
 
-	if(!target.reagents) return
+	if(!target.reagents)
+		return
 
 	if(mode == SYRINGE_BROKEN)
 		to_chat(user, "<span class='warning'>\The [src] is broken!</span>")
@@ -193,9 +195,12 @@
 		to_chat(user, "<span class='warning'>\The [src] is empty.</span>")
 		return
 
-	if (istype(target, /obj/item/clothing/mask/facehugger/lamarr) && !user.is_holding_item(target))
-		to_chat(user, "<span class='warning'>\The [target] is squirming around too much. She needs to be held still.</span>")
-		return
+	if (istype(target, /obj/item/clothing/mask/facehugger/lamarr))
+		var/obj/item/clothing/mask/facehugger/lamarr/L = target
+		if(!user.is_holding_item(target))
+			if(L.stat != DEAD)
+				to_chat(user, "<span class='warning'>\The [target] is squirming around too much. She needs to be held still.</span>")
+				return
 
 	// TODO Remove snowflake
 	if (!ismob(target) && !target.is_open_container() && !is_type_in_list(target, injectable_types))
@@ -226,19 +231,14 @@
 			add_attacklogs(user, target, "injected", object = src, addition = "Reagents: [reagent_names]", admin_warn = TRUE)
 
 	// Handle transfers and mob reactions
-	var/list/bad_reagents = reagents.get_bad_reagent_names() // Used for logging
 	var/tx_amount = min(amount_per_transfer_from_this, reagents.total_volume)
 	if (ismob(target))
 		// TODO Every reagent reacts with the full volume instead of being scaled accordingly
 		// TODO which is pretty irrelevant now but should be fixed
 		reagents.reaction(target, INGEST)
 
-	tx_amount = reagents.trans_to(target, tx_amount)
+	tx_amount = reagents.trans_to(target, tx_amount, log_transfer = TRUE, whodunnit = user)
 	to_chat(user, "<span class='notice'>You inject [tx_amount] units of the solution. The syringe now contains [reagents.total_volume] units.</span>")
-
-	// Log transfers of 'bad things' (/vg/)
-	if (tx_amount > 0 && isobj(target) && target:log_reagents && bad_reagents && bad_reagents.len > 0)
-		log_reagents(user, src, target, tx_amount, bad_reagents)
 
 	if (src.is_empty())
 		mode = SYRINGE_DRAW

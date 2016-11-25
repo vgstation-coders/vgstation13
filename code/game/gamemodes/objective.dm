@@ -44,7 +44,7 @@ var/list/potential_theft_objectives=list(
 /datum/objective/assassinate/find_target()
 	..()
 	if(target && target.current)
-		explanation_text = "Assassinate [target.current.real_name], the [target.assigned_role]."
+		explanation_text = "Assassinate [target.current.real_name], the [target.assigned_role=="MODE" ? (target.special_role) : (target.assigned_role)]."
 	else
 		explanation_text = "Free Objective"
 	return target
@@ -90,7 +90,7 @@ var/list/potential_theft_objectives=list(
 		if(target.current.stat == DEAD || !ishuman(target.current) || !target.current.ckey)
 			return 1
 		var/turf/T = get_turf(target.current)
-		if(T && (T.z != 1))			//If they leave the station they count as dead for this
+		if(T && (T.z != map.zMainStation))			//If they leave the station they count as dead for this
 			return 2
 		return 0
 	return 1
@@ -124,7 +124,7 @@ var/list/potential_theft_objectives=list(
 			if(target in ticker.mode:head_revolutionaries)
 				return 1
 		var/turf/T = get_turf(target.current)
-		if(T && (T.z != 1))			//If they leave the station they count as dead for this
+		if(T && (T.z != map.zMainStation))			//If they leave the station they count as dead for this
 			rval = 2
 		return 0
 	return rval
@@ -174,7 +174,8 @@ var/list/potential_theft_objectives=list(
 	return target
 
 /datum/objective/anti_revolution/brig/check_completion()
-	if(blocked) return 0
+	if(blocked)
+		return 0
 	if(already_completed)
 		return 1
 
@@ -204,14 +205,16 @@ var/list/potential_theft_objectives=list(
 	return target
 
 /datum/objective/anti_revolution/demote/check_completion()
-	if(blocked) return 0
+	if(blocked)
+		return 0
 	if(target && target.current && istype(target,/mob/living/carbon/human))
 		var/obj/item/weapon/card/id/I = target.current:wear_id
 		if(istype(I, /obj/item/device/pda))
 			var/obj/item/device/pda/P = I
 			I = P.id
 
-		if(!istype(I)) return 1
+		if(!istype(I))
+			return 1
 
 		if(I.assignment == "Assistant")
 			return 1
@@ -238,7 +241,8 @@ var/list/potential_theft_objectives=list(
 	return target
 
 /datum/objective/debrain/check_completion()
-	if(blocked) return 0
+	if(blocked)
+		return 0
 	if(!target)//If it's a free objective.
 		return 1
 	if( !owner.current || owner.current.stat==DEAD )//If you're otherwise dead.
@@ -270,7 +274,8 @@ var/list/potential_theft_objectives=list(
 	return target
 
 /datum/objective/protect/check_completion()
-	if(blocked) return 0
+	if(blocked)
+		return 0
 	if(!target)			//If it's a free objective.
 		return 1
 	if(target.current)
@@ -283,7 +288,8 @@ var/list/potential_theft_objectives=list(
 	explanation_text = "Hijack the emergency shuttle by escaping without any organic life-forms other than yourself."
 
 /datum/objective/hijack/check_completion()
-	if(blocked) return 0
+	if(blocked)
+		return 0
 	if(!owner.current || owner.current.stat)
 		return 0
 	if(emergency_shuttle.location<2)
@@ -291,13 +297,14 @@ var/list/potential_theft_objectives=list(
 	if(issilicon(owner.current))
 		return 0
 	var/area/shuttle = locate(/area/shuttle/escape/centcom)
-	var/list/protected_mobs = list(/mob/living/silicon/ai, /mob/living/silicon/pai)
+	var/list/protected_mobs = list(/mob/living/silicon/ai, /mob/living/silicon/pai, /mob/living/simple_animal/borer)
 	// Implemented in response to 21/12/2013 player vote,  .
 	// Comment this if you want Borgs and MoMMIs counted.
 	// TODO: Check if borgs are subverted. Best I can think of is a fuzzy check for strings used in syndie laws. BYOND can't do regex, sadly. - N3X
 	protected_mobs += list(/mob/living/silicon/robot, /mob/living/silicon/robot/mommi)
 	for(var/mob/living/player in player_list)
-		if(player.type in protected_mobs)	continue
+		if(player.type in protected_mobs)
+			continue
 		if (player.mind && (player.mind != owner))
 			if(player.stat != DEAD)			//they're not dead!
 				if(get_turf(player) in shuttle)
@@ -308,7 +315,8 @@ var/list/potential_theft_objectives=list(
 	explanation_text = "Do not allow any organic lifeforms to escape on the shuttle alive."
 
 /datum/objective/block/check_completion()
-	if(blocked) return 0
+	if(blocked)
+		return 0
 	if(!istype(owner.current, /mob/living/silicon))
 		return 0
 	if(emergency_shuttle.location<2)
@@ -316,9 +324,10 @@ var/list/potential_theft_objectives=list(
 	if(!owner.current)
 		return 0
 	var/area/shuttle = locate(/area/shuttle/escape/centcom)
-	var/protected_mobs[] = list(/mob/living/silicon/ai, /mob/living/silicon/pai, /mob/living/silicon/robot, /mob/living/silicon/robot/mommi)
+	var/protected_mobs[] = list(/mob/living/silicon/ai, /mob/living/silicon/pai, /mob/living/silicon/robot, /mob/living/silicon/robot/mommi, /mob/living/simple_animal/borer)
 	for(var/mob/living/player in player_list)
-		if(player.type in protected_mobs)	continue
+		if(player.type in protected_mobs)
+			continue
 		if (player.mind)
 			if (player.stat != 2)
 				if (get_turf(player) in shuttle)
@@ -329,7 +338,8 @@ var/list/potential_theft_objectives=list(
 	explanation_text = "Do not allow anyone to escape the station.  Only allow the shuttle to be called when everyone is dead and your story is the only one left."
 
 /datum/objective/silence/check_completion()
-	if(blocked) return 0
+	if(blocked)
+		return 0
 	if(emergency_shuttle.location<2)
 		return 0
 
@@ -339,7 +349,8 @@ var/list/potential_theft_objectives=list(
 		if(player.mind)
 			if(player.stat != DEAD)
 				var/turf/T = get_turf(player)
-				if(!T)	continue
+				if(!T)
+					continue
 				switch(T.loc.type)
 					if(/area/shuttle/escape/centcom, /area/shuttle/escape_pod1/centcom, /area/shuttle/escape_pod2/centcom, /area/shuttle/escape_pod3/centcom, /area/shuttle/escape_pod5/centcom)
 						return 0
@@ -349,7 +360,8 @@ var/list/potential_theft_objectives=list(
 	explanation_text = "Escape on the shuttle or an escape pod alive and free."
 
 /datum/objective/escape/check_completion()
-	if(blocked) return 0
+	if(blocked)
+		return 0
 	if(issilicon(owner.current))
 		return 0
 	if(isbrain(owner.current) || isborer(owner.current))
@@ -401,7 +413,8 @@ var/list/potential_theft_objectives=list(
 	explanation_text = "Stay alive until the end."
 
 /datum/objective/survive/check_completion()
-	if(blocked) return 0
+	if(blocked)
+		return 0
 	if(!owner.current || owner.current.stat == DEAD || isbrain(owner.current) || isborer(owner.current || issilicon(owner.current)))
 		return 0		//Brains no longer win survive objectives. --NEO
 	return 1
@@ -410,7 +423,8 @@ var/list/potential_theft_objectives=list(
 	explanation_text = "Remain functional until the end."
 
 /datum/objective/siliconsurvive/check_completion()
-	if(blocked) return 0
+	if(blocked)
+		return 0
 	if(!owner.current || owner.current.stat == DEAD || !issilicon(owner.current))
 		return 0
 	return 1
@@ -420,7 +434,8 @@ var/list/potential_theft_objectives=list(
 	var/already_completed=0
 
 /datum/objective/multiply/check_completion()
-	if(blocked) return 0
+	if(blocked)
+		return 0
 	if(already_completed)
 		return 1
 	if(!owner.current)
@@ -455,7 +470,8 @@ var/list/potential_theft_objectives=list(
 	return target
 
 /datum/objective/brig/check_completion()
-	if(blocked) return 0
+	if(blocked)
+		return 0
 	if(already_completed)
 		return 1
 
@@ -491,7 +507,8 @@ var/list/potential_theft_objectives=list(
 	return target
 
 /datum/objective/harm/check_completion()
-	if(blocked) return 0
+	if(blocked)
+		return 0
 	if(already_completed)
 		return 1
 
@@ -554,16 +571,19 @@ var/list/potential_theft_objectives=list(
 /datum/objective/steal/proc/select_target()
 	var/list/possible_items_all = potential_theft_objectives[target_category]+"custom"
 	var/new_target = input("Select target:", "Objective target", null) as null|anything in possible_items_all
-	if (!new_target) return
+	if (!new_target)
+		return
 	if (new_target == "custom")
 		var/datum/theft_objective/O=new
 		O.typepath = input("Select type:","Type") as null|anything in typesof(/obj/item)
-		if (!O.typepath) return
+		if (!O.typepath)
+			return
 		var/tmp_obj = new O.typepath
 		var/custom_name = tmp_obj:name
 		qdel(tmp_obj)
 		O.name = copytext(sanitize(input("Enter target name:", "Objective target", custom_name) as text|null),1,MAX_NAME_LEN)
-		if (!O.name) return
+		if (!O.name)
+			return
 		steal_target = O
 		explanation_text = format_explanation()
 	else
@@ -572,8 +592,10 @@ var/list/potential_theft_objectives=list(
 	return steal_target
 
 /datum/objective/steal/check_completion()
-	if(blocked) return 0
-	if(!steal_target) return 1 // Free Objective
+	if(blocked)
+		return 0
+	if(!steal_target)
+		return 1 // Free Objective
 	return steal_target.check_completion(owner)
 
 /datum/objective/capture/proc/gen_amount_goal()
@@ -583,7 +605,8 @@ var/list/potential_theft_objectives=list(
 
 
 /datum/objective/capture/check_completion()//Basically runs through all the mobs in the area to determine how much they are worth.
-	if(blocked) return 0
+	if(blocked)
+		return 0
 	var/captured_amount = 0
 	var/area/centcom/holding/A = locate()
 	for(var/mob/living/carbon/human/M in A)//Humans.
@@ -620,7 +643,8 @@ var/list/potential_theft_objectives=list(
 	return target_amount
 
 /datum/objective/blood/check_completion()
-	if(blocked) return 0
+	if(blocked)
+		return 0
 	if(owner && owner.vampire && owner.vampire.bloodtotal && owner.vampire.bloodtotal >= target_amount)
 		return 1
 	else
@@ -644,7 +668,8 @@ var/list/potential_theft_objectives=list(
 	return target_amount
 
 /datum/objective/absorb/check_completion()
-	if(blocked) return 0
+	if(blocked)
+		return 0
 	if(owner && owner.changeling && owner.changeling.absorbed_dna && (owner.changeling.absorbedcount >= target_amount))
 		return 1
 	else
@@ -715,6 +740,8 @@ var/list/potential_theft_objectives=list(
 	explanation_text = "Minimise casualties."
 
 /datum/objective/minimize_casualties/check_completion()
-	if(blocked) return 0
-	if(owner.kills.len>5) return 0
+	if(blocked)
+		return 0
+	if(owner.kills.len>5)
+		return 0
 	return 1

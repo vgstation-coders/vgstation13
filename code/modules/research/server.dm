@@ -38,7 +38,8 @@
 	heat_gen /= max(1, tot_rating)
 
 /obj/machinery/r_n_d/server/initialize()
-	if(!files) files = new /datum/research(src)
+	if(!files)
+		files = new /datum/research(src)
 	var/list/temp_list
 	if(!id_with_upload.len)
 		temp_list = list()
@@ -257,7 +258,8 @@
 				dat += {"[S.name] ||
 					<A href='?src=\ref[src];access=[S.server_id]'> Access Rights</A> |
 					<A href='?src=\ref[src];data=[S.server_id]'>Data Management</A>"}
-				if(badmin) dat += " | <A href='?src=\ref[src];transfer=[S.server_id]'>Server-to-Server Transfer</A>"
+				if(badmin)
+					dat += " | <A href='?src=\ref[src];transfer=[S.server_id]'>Server-to-Server Transfer</A>"
 				dat += "<BR>"
 
 		if(1) //Access rights menu
@@ -317,7 +319,7 @@
 				getFromPool(/obj/item/weapon/shard, loc)
 				var/obj/item/weapon/circuitboard/rdservercontrol/M = new /obj/item/weapon/circuitboard/rdservercontrol( A )
 				for (var/obj/C in src)
-					C.loc = src.loc
+					C.forceMove(src.loc)
 				A.circuit = M
 				A.state = 3
 				A.icon_state = "3"
@@ -328,7 +330,7 @@
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 				var/obj/item/weapon/circuitboard/rdservercontrol/M = new /obj/item/weapon/circuitboard/rdservercontrol( A )
 				for (var/obj/C in src)
-					C.loc = src.loc
+					C.forceMove(src.loc)
 				A.circuit = M
 				A.state = 4
 				A.icon_state = "4"

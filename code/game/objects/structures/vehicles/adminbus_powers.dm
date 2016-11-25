@@ -72,12 +72,12 @@
 				var/mob/living/simple_animal/hostile/retaliate/clown/M = new /mob/living/simple_animal/hostile/retaliate/clown(T)
 				M.faction = "adminbus mob"
 				spawned_mobs += M
-				T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',"#FFC0FF", anim_plane = PLANE_EFFECTS)
+				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',"#FFC0FF", anim_plane = EFFECTS_PLANE)
 			if(2)
 				var/mob/living/simple_animal/hostile/carp/M = new /mob/living/simple_animal/hostile/carp(T)
 				M.faction = "adminbus mob"
 				spawned_mobs += M
-				T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',"#C70AF5", anim_plane = PLANE_EFFECTS)
+				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',"#C70AF5", anim_plane = EFFECTS_PLANE)
 			if(3)
 				if(prob(10))
 					var/mob/living/simple_animal/hostile/humanoid/russian/M = new /mob/living/simple_animal/hostile/humanoid/russian(T)
@@ -87,22 +87,22 @@
 					var/mob/living/simple_animal/hostile/bear/M = new /mob/living/simple_animal/hostile/bear(T)
 					M.faction = "adminbus mob"
 					spawned_mobs += M
-				T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',"#454545", anim_plane = PLANE_EFFECTS)
+				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',"#454545", anim_plane = EFFECTS_PLANE)
 			if(4)
 				var/mob/living/simple_animal/hostile/tree/M = new /mob/living/simple_animal/hostile/tree(T)
 				M.faction = "adminbus mob"
 				spawned_mobs += M
-				T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',"#232B2C", anim_plane = PLANE_EFFECTS)
+				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',"#232B2C", anim_plane = EFFECTS_PLANE)
 			if(5)
 				var/mob/living/simple_animal/hostile/giant_spider/M = new /mob/living/simple_animal/hostile/giant_spider(T)
 				M.faction = "adminbus mob"
 				spawned_mobs += M
-				T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',"#3B2D1C", anim_plane = PLANE_EFFECTS)
+				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',"#3B2D1C", anim_plane = EFFECTS_PLANE)
 			if(6)
 				var/mob/living/simple_animal/hostile/alien/queen/large/M = new /mob/living/simple_animal/hostile/alien/queen/large(T)
 				M.faction = "adminbus mob"
 				spawned_mobs += M
-				T.turf_animation('icons/effects/96x96.dmi',"beamin",-16,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',"#525288", anim_plane = PLANE_EFFECTS)
+				T.turf_animation('icons/effects/96x96.dmi',"beamin",-16,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',"#525288", anim_plane = EFFECTS_PLANE)
 		sleep(5)
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/remove_mobs(mob/bususer)
@@ -111,12 +111,12 @@
 	flick("icon_delmobs-push",bususer.gui_icons.adminbus_delmobs)
 
 	for(var/mob/M in spawned_mobs)
-		var/xoffset = -32
+		var/xoffset = -WORLD_ICON_SIZE
 		if(istype(M,/mob/living/simple_animal/hostile/alien/queen/large))
-			xoffset = -16
+			xoffset = -WORLD_ICON_SIZE/2
 		var/turf/T = get_turf(M)
 		if(T)
-			T.turf_animation('icons/effects/96x96.dmi',"beamin",xoffset,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = PLANE_EFFECTS)
+			T.turf_animation('icons/effects/96x96.dmi',"beamin",xoffset,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = EFFECTS_PLANE)
 		qdel(M)
 	spawned_mobs.len = 0
 
@@ -211,7 +211,8 @@
 
 	if(lightpower == roadlights)
 		return
-
+	var/image/roadlights_image = image(icon,"roadlights", ABOVE_LIGHTING_LAYER)
+	roadlights_image.plane = LIGHTING_PLANE
 	switch(lightpower)
 		if(0)
 			bususer.gui_icons.adminbus_roadlights_0.icon_state = "icon_lights_0-on"
@@ -219,7 +220,7 @@
 			bususer.gui_icons.adminbus_roadlights_2.icon_state = "icon_lights_2-off"
 			lightsource.set_light(0)
 			if(roadlights == 1 || roadlights == 2)
-				overlays -= image(icon,"roadlights", LIGHTING_LAYER + 1)
+				overlays["roadlights"] = null
 			roadlights = 0
 		if(1)
 			bususer.gui_icons.adminbus_roadlights_0.icon_state = "icon_lights_0-off"
@@ -227,7 +228,7 @@
 			bususer.gui_icons.adminbus_roadlights_2.icon_state = "icon_lights_2-off"
 			lightsource.set_light(2)
 			if(roadlights == 0)
-				overlays += image(icon,"roadlights", LIGHTING_LAYER + 1)
+				overlays["roadlights"] = roadlights_image
 			roadlights = 1
 		if(2)
 			bususer.gui_icons.adminbus_roadlights_0.icon_state = "icon_lights_0-off"
@@ -235,7 +236,7 @@
 			bususer.gui_icons.adminbus_roadlights_2.icon_state = "icon_lights_2-on"
 			lightsource.set_light(3)
 			if(roadlights == 0)
-				overlays += image(icon,"roadlights", LIGHTING_LAYER + 1)
+				overlays["roadlights"] = roadlights_image
 			roadlights = 2
 
 	update_lightsource()
@@ -532,8 +533,8 @@
 	bususer.gui_icons.adminbus_tele.icon_state = "icon_teleport"
 	warp.icon_state = ""
 	forceMove(T2)
-	T1.turf_animation('icons/effects/160x160.dmi',"busteleport",-64,-32,MOB_LAYER+1,'sound/effects/busteleport.ogg', anim_plane = PLANE_EFFECTS)
-	T2.turf_animation('icons/effects/160x160.dmi',"busteleport",-64,-32,MOB_LAYER+1,'sound/effects/busteleport.ogg', anim_plane = PLANE_EFFECTS)
+	T1.turf_animation('icons/effects/160x160.dmi',"busteleport",-WORLD_ICON_SIZE*2,-WORLD_ICON_SIZE,MOB_LAYER+1,'sound/effects/busteleport.ogg', anim_plane = EFFECTS_PLANE)
+	T2.turf_animation('icons/effects/160x160.dmi',"busteleport",-WORLD_ICON_SIZE*2,-WORLD_ICON_SIZE,MOB_LAYER+1,'sound/effects/busteleport.ogg', anim_plane = EFFECTS_PLANE)
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/Sendto_Thunderdome_Obs(mob/bususer)
 
@@ -551,7 +552,7 @@
 
 	var/turf/T = get_turf(src)
 	if(T)
-		T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = PLANE_EFFECTS)
+		T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = EFFECTS_PLANE)
 
 	for(var/i=passengers.len;i>0;i--)
 		var/atom/A = passengers[i]
@@ -563,10 +564,10 @@
 			for(var/obj/item/I in M)
 				M.u_equip(I)
 				if(I)
-					I.loc = M.loc
-					I.layer = initial(I.layer)
+					I.forceMove(M.loc)
+					I.reset_plane_and_layer()
 					I.dropped(M)
-					I.z = 2
+					I.z = map.zCentcomm
 					I.y = 68
 					I.x = (thunderdomefightercount % 15) + 121
 
@@ -586,7 +587,7 @@
 
 		var/turf/TD = get_turf(A)
 		if(TD)
-			TD.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = PLANE_EFFECTS)
+			TD.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = EFFECTS_PLANE)
 
 		sleep(1)
 
@@ -606,7 +607,7 @@
 
 	var/turf/T = get_turf(src)
 	if(T)
-		T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = PLANE_EFFECTS)
+		T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = EFFECTS_PLANE)
 
 	var/alternate = 1
 
@@ -637,7 +638,7 @@
 
 	var/turf/T = get_turf(src)
 	if(T)
-		T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = PLANE_EFFECTS)
+		T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = EFFECTS_PLANE)
 
 	for(var/i=passengers.len;i>0;i--)
 		var/atom/A = passengers[i]
@@ -661,7 +662,7 @@
 
 	var/turf/T = get_turf(src)
 	if(T)
-		T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = PLANE_EFFECTS)
+		T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = EFFECTS_PLANE)
 
 	for(var/i=passengers.len;i>0;i--)
 		var/atom/A = passengers[i]
@@ -696,11 +697,10 @@
 					continue
 			M.u_equip(I)
 			if(I)
-				I.loc = M.loc
-				I.layer = initial(I.layer)
-				I.plane = initial(I.plane)
+				I.forceMove(M.loc)
+				I.reset_plane_and_layer()
 				I.dropped(M)
-				I.loc = pack
+				I.forceMove(pack)
 
 		var/obj/item/weapon/card/id/thunderdome/ident = null
 
@@ -732,13 +732,13 @@
 					if(K.uniform)
 						olduniform = K.uniform
 						K.uniform = null
-						olduniform.loc = pack
+						olduniform.forceMove(pack)
 					K.uniform = JS
-					K.uniform.loc = K
+					K.uniform.forceMove(K)
 					if(K.hat)
 						oldhat = K.hat
 						K.hat = null
-						oldhat.loc = pack
+						oldhat.forceMove(pack)
 					K.put_in_hands(ident)
 					K.put_in_hands(new /obj/item/weapon/storage/belt/thunderdome/green(K))
 					K.regenerate_icons()
@@ -759,13 +759,13 @@
 					if(K.uniform)
 						olduniform = K.uniform
 						K.uniform = null
-						olduniform.loc = pack
+						olduniform.forceMove(pack)
 					K.uniform = JS
-					K.uniform.loc = K
+					K.uniform.forceMove(K)
 					if(K.hat)
 						oldhat = K.hat
 						K.hat = null
-						oldhat.loc = pack
+						oldhat.forceMove(pack)
 					K.put_in_hands(ident)
 					K.put_in_hands(new /obj/item/weapon/storage/belt/thunderdome/red(K))
 					K.regenerate_icons()
@@ -775,9 +775,9 @@
 
 		switch(team)
 			if("Green")
-				M.loc = pick(tdome1)
+				M.forceMove(pick(tdome1))
 			if("Red")
-				M.loc = pick(tdome2)
+				M.forceMove(pick(tdome2))
 
 		to_chat(M, "<span class='danger'>You have been chosen to fight for the [team] Team. [pick(\
 		"The wheel of fate is turning!",\
@@ -798,13 +798,13 @@
 
 		switch(team)
 			if("Green")
-				B.loc = pick(tdome1)
+				B.forceMove(pick(tdome1))
 			if("Red")
-				B.loc = pick(tdome2)
+				B.forceMove(pick(tdome2))
 
 	var/turf/T = get_turf(A)
 	if(T)
-		T.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', "#00FF00", anim_plane = PLANE_EFFECTS)
+		T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', "#00FF00", anim_plane = EFFECTS_PLANE)
 
 	sleep(1)
 
@@ -817,13 +817,13 @@
 
 /obj/item/packobelongings/New()
 	..()
-	src.pixel_x = rand(-5.0, 5)
-	src.pixel_y = rand(-5.0, 5)
+	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
 /obj/item/packobelongings/attack_self(mob/user as mob)
 	var/turf/T = get_turf(user)
 	for(var/obj/O in src)
-		O.loc = T
+		O.forceMove(T)
 	qdel(src)
 
 /obj/item/packobelongings/green
@@ -850,7 +850,7 @@
 
 	var/turf/T1 = get_turf(src)
 	if(T1)
-		T1.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = PLANE_EFFECTS)
+		T1.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = EFFECTS_PLANE)
 
 	for(var/mob/M in passengers)
 		freed(M)
@@ -858,7 +858,7 @@
 
 		var/turf/T2 = get_turf(M)
 		if(T2)
-			T2.turf_animation('icons/effects/96x96.dmi',"beamin",-32,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = PLANE_EFFECTS)
+			T2.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg', anim_plane = EFFECTS_PLANE)
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/Make_Antag(mob/bususer)
 
@@ -902,8 +902,10 @@
 			Delay_Antag(M, delay)
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/Delay_Antag(var/mob/M,var/delay=100)
-	if(!M.mind)	return
-	if(!ishuman(M) && !ismonkey(M))	return
+	if(!M.mind)
+		return
+	if(!ishuman(M) && !ismonkey(M))
+		return
 
 	to_chat(M, "<span class='rose'>You feel like you forgot something important!</span>")
 
@@ -975,7 +977,7 @@
 	qdel(lightsource)
 
 	var/turf/T = get_turf(src)
-	T.turf_animation('icons/effects/160x160.dmi',"busteleport",-64,-32,MOB_LAYER+1,'sound/effects/busteleport.ogg', anim_plane = PLANE_EFFECTS)
+	T.turf_animation('icons/effects/160x160.dmi',"busteleport",-WORLD_ICON_SIZE*2,-WORLD_ICON_SIZE,MOB_LAYER+1,'sound/effects/busteleport.ogg', anim_plane = EFFECTS_PLANE)
 
 	if(locked_atoms.len)
 		var/mob/living/M = locked_atoms[1]

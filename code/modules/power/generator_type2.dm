@@ -78,12 +78,14 @@
 
 /obj/machinery/power/generator/type2/attack_ai(mob/user)
 	src.add_hiddenprint(user)
-	if(stat & (BROKEN|NOPOWER)) return
+	if(stat & (BROKEN|NOPOWER))
+		return
 	interact(user)
 
 /obj/machinery/power/generator/type2/attack_hand(mob/user)
 	add_fingerprint(user)
-	if(stat & (BROKEN|NOPOWER)) return
+	if(stat & (BROKEN|NOPOWER))
+		return
 	interact(user)
 
 /obj/machinery/power/generator/type2/proc/get_loop_state(var/loop_name,var/loop_dir,var/obj/machinery/atmospherics/unary/generator_input/loop)

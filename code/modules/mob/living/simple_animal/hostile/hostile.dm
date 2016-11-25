@@ -35,8 +35,13 @@
 	friends = list()
 
 /mob/living/simple_animal/hostile/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	. = ..()
+	//Cooldowns
+	if(ranged)
+		ranged_cooldown--
+
 	if(istype(loc, /obj/item/device/mobcapsule))
 		return 0
 	if(!.)
@@ -68,9 +73,6 @@
 				if(!(flags & INVULNERABLE))
 					AttackTarget()
 					DestroySurroundings()
-
-		if(ranged)
-			ranged_cooldown--
 
 //////////////HOSTILE MOB TARGETTING AND AGGRESSION////////////
 
@@ -146,7 +148,7 @@
 			if(ishuman(L))
 				var/mob/living/carbon/human/H = L
 				if(H.dna)
-					if((H.dna.mutantrace == "slime") || (isgolem(H)) || (H.dna.mutantrace == "adamantine") || (H.dna.mutantrace=="coalgolem"))
+					if((H.dna.mutantrace == "slime") || (isgolem(H)))
 						return 0
 		//IF WE ARE MOBS SPAWNED BY THE ADMINBUS THEN WE DON'T ATTACK TEST DUMMIES OR IAN (wait what? man that's snowflaky as fuck)
 		if((istype(L,/mob/living/simple_animal/corgi/Ian) || istype(L,/mob/living/carbon/human/dummy)) && (faction == "adminbus mob"))
@@ -276,19 +278,23 @@
 		src.friends |= H.friends
 
 /mob/living/simple_animal/hostile/proc/OpenFire(var/atom/ttarget)
+	set waitfor = 0
+
 	var/target_turf = get_turf(ttarget)
 	if(rapid)
-		spawn(1)
-			TryToShoot(target_turf)
-		spawn(4)
-			TryToShoot(target_turf)
-		spawn(6)
-			TryToShoot(target_turf)
+		sleep(1)
+		TryToShoot(target_turf, ttarget)
+		sleep(3)
+		TryToShoot(target_turf, ttarget)
+		sleep(3)
+		TryToShoot(target_turf, ttarget)
 	else
-		TryToShoot(target_turf)
-	return
+		TryToShoot(target_turf, ttarget)
 
-/mob/living/simple_animal/hostile/proc/TryToShoot(var/atom/target_turf)
+/mob/living/simple_animal/hostile/proc/TryToShoot(var/atom/target_turf, atom/target)
+	if(!target)
+		target = src.target
+
 	if(Shoot(target_turf, src.loc, src))
 		ranged_cooldown = ranged_cooldown_cap
 		if(ranged_message)
@@ -302,8 +308,8 @@
 	if(!istype(target, /turf))
 		return 0
 
-	//Friendly Fire check
-	if(!friendly_fire)
+	//Friendly Fire check (don't bother if the mob is controlled by a player)
+	if(!friendly_fire && !ckey)
 		var/obj/item/projectile/friendlyCheck/fC = getFromPool(/obj/item/projectile/friendlyCheck,user.loc)
 		fC.current = target
 		var/turf/T = get_turf(user)
@@ -348,12 +354,18 @@
 /mob/living/simple_animal/hostile/proc/DestroySurroundings()
 	if(environment_smash)
 		EscapeConfinement()
-		for(var/dir in cardinal)
+		var/list/smash_dirs = list(0)
+		if(!target || !CanAttack(target))
+			smash_dirs |= alldirs //if no target, attack everywhere
+		else
+			var/targdir = get_dir(src, target)
+			smash_dirs |= widen_dir(targdir) //otherwise smash towards the target
+		for(var/dir in smash_dirs)
 			var/turf/T = get_step(src, dir)
-			if(istype(T, /turf/simulated/wall))
+			if(istype(T, /turf/simulated/wall) && Adjacent(T))
 				T.attack_animal(src)
 			for(var/atom/A in T)
-				if(istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack))
+				if((istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack)) && Adjacent(A))
 					A.attack_animal(src)
 	return
 
@@ -370,3 +382,16 @@
 		return 1
 	else
 		return 0
+
+//Let players use mobs' ranged attacks
+/mob/living/simple_animal/hostile/Stat()
+	..()
+
+	if(ranged && statpanel("Status"))
+		stat(null, "Ranged Attack: [ranged_cooldown <= 0 ? "READY" : "[100 - round((ranged_cooldown / ranged_cooldown_cap) * 100)]%"]")
+
+/mob/living/simple_animal/hostile/RangedAttack(atom/A, params)
+	if(ranged && ranged_cooldown <= 0)
+		OpenFire(A)
+
+	return ..()

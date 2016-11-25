@@ -6,13 +6,15 @@
 		to_chat(usr, "<span class='warning'>Speech is currently admin-disabled.</span>")
 		return
 
-	if(!mob)	return
+	if(!mob)
+		return
 	if(IsGuestKey(key))
 		to_chat(src, "Guests may not use OOC.")
 		return
 
 	msg = copytext(sanitize(msg), 1, MAX_MESSAGE_LEN)
-	if(!msg)	return
+	if(!msg)
+		return
 
 	if(!(prefs.toggles & CHAT_OOC))
 		to_chat(src, "<span class='warning'>You have OOC muted.</span>")
@@ -39,6 +41,9 @@
 			message_admins("[key_name_admin(src)] has attempted to advertise in OOC: [msg]")
 			return
 		*/
+		if((copytext(msg, 1, 2) in list(".",";",":","#")) || (findtext(lowertext(copytext(msg, 1, 5)), "say")))
+			if(alert("Your message \"[msg]\" looks like it was meant for in game communication, say it in OOC?", "Meant for OOC?", "No", "Yes") != "Yes")
+				return
 	log_ooc("[mob.name]/[key] (@[mob.x],[mob.y],[mob.z]): [msg]")
 
 	var/display_colour = config.default_ooc_color
@@ -97,13 +102,15 @@
 		to_chat(usr, "<span class='warning'>Speech is currently admin-disabled.</span>")
 		return
 
-	if(!mob)	return
+	if(!mob)
+		return
 	if(IsGuestKey(key))
 		to_chat(src, "Guests may not use OOC.")
 		return
 
 	msg = copytext(sanitize(msg), 1, MAX_MESSAGE_LEN)
-	if(!msg)	return
+	if(!msg)
+		return
 
 	if(!(prefs.toggles & CHAT_LOOC))
 		to_chat(src, "<span class='warning'>You have LOOC muted.</span>")
@@ -130,6 +137,9 @@
 			message_admins("[key_name_admin(src)] has attempted to advertise in LOOC: [msg]")
 			return
 		*/
+		if((copytext(msg, 1, 2) in list(".",";",":","#")) || (findtext(lowertext(copytext(msg, 1, 5)), "say")))
+			if(alert("Your message \"[msg]\" looks like it was meant for in game communication, say it in LOOC?", "Meant for LOOC?", "No", "Yes") != "Yes")
+				return
 	log_ooc("(LOCAL) [mob.name]/[key] (@[mob.x],[mob.y],[mob.z]): [msg]")
 	var/list/heard
 	var/mob/living/silicon/ai/AI
@@ -139,7 +149,8 @@
 		AI = src.mob
 		heard = get_hearers_in_view(7, (istype(AI.eyeobj) ? AI.eyeobj : AI)) //if it doesn't have an eye somehow give it just the AI mob itself
 	for(var/mob/M in heard)
-		if(AI == M) continue
+		if(AI == M)
+			continue
 		if(!M.client)
 			continue
 		var/client/C = M.client

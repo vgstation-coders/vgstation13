@@ -254,7 +254,8 @@
 				human_job = HM.subjectjob
 				break
 		var/lastname_index = findtext(human_name, " ")
-		if(lastname_index) human_name = copytext(human_name,lastname_index+1)
+		if(lastname_index)
+			human_name = copytext(human_name,lastname_index+1)
 		var/obj/item/weapon/reagent_containers/food/snacks/human/HB = ..(container)
 		HB.name = human_name+HB.name
 		HB.job = human_job
@@ -488,9 +489,9 @@
 
 /datum/recipe/fortunecookie/make_food(var/obj/container)
 	var/obj/item/weapon/paper/paper = locate() in container
-	paper.loc = null //prevent deletion
+	paper.forceMove(null) //prevent deletion
 	var/obj/item/weapon/reagent_containers/food/snacks/fortunecookie/being_cooked = ..(container)
-	paper.loc = being_cooked
+	paper.forceMove(being_cooked)
 	being_cooked.trash = paper
 	return being_cooked
 
@@ -498,7 +499,8 @@
 	. = ..()
 	if(.)
 		var/obj/item/weapon/paper/paper = locate() in container
-		if(!paper.info) . = 0
+		if(!paper.info)
+			. = 0
 	return
 
 /datum/recipe/boiledrice
@@ -722,6 +724,24 @@
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/buchedenoel
+
+/datum/recipe/popoutcake
+	reagents = list("milk" = 15, "flour" = 45)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/stack/sheet/cardboard,
+		/obj/item/stack/sheet/cardboard,
+		/obj/item/stack/sheet/cardboard,
+		/obj/item/stack/sheet/cardboard,
+		/obj/item/stack/sheet/cardboard,
+		/obj/item/stack/sheet/cardboard
+		)
+	result = /obj/structure/popout_cake
 
 // Pies ////////////////////////////////////////////////////////
 
@@ -1439,6 +1459,11 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chicken_fillet
 
+/datum/recipe/crab_sticks
+	reagents = list(SODIUMCHLORIDE = 1, SUGAR = 1)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat)
+	result = /obj/item/weapon/reagent_containers/food/snacks/crab_sticks
+
 /datum/recipe/gigapuddi
 	reagents = list(MILK = 15)
 	items = list(
@@ -1623,6 +1648,8 @@
 /datum/recipe/potentham
 	reagents = list(PLASMA = 10)
 	items = list(
+
+		/obj/item/weapon/reagent_containers/food/snacks/meat/box,
 		/obj/item/weapon/aiModule/core/asimov,
 		/obj/item/robot_parts/head,
 		/obj/item/weapon/handcuffs

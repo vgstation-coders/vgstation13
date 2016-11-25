@@ -59,7 +59,7 @@
 	singular_name = "gauze length"
 	desc = "Some sterile gauze to wrap around bloody stumps."
 	icon_state = "brutepack"
-	origin_tech = "biotech=1"
+	origin_tech = Tc_BIOTECH + "=1"
 
 /obj/item/stack/medical/bruise_pack/bandaid
 	name = "small bandage"
@@ -96,7 +96,7 @@
 										"<span class='notice'>You place a bandaid over \the [W.desc] on [M]'s [affecting.display_name].</span>")
 				use(1)
 		else
-			if(can_operate(H))        //Checks if mob is lying down on table for surgery
+			if(can_operate(H, user))        //Checks if mob is lying down on table for surgery
 				if(do_surgery(H,user,src))
 					return
 			else
@@ -108,7 +108,7 @@
 	gender = PLURAL
 	singular_name = "ointment"
 	icon_state = "ointment"
-	origin_tech = "biotech=1"
+	origin_tech = Tc_BIOTECH + "=1"
 
 /obj/item/stack/medical/ointment/attack(mob/living/carbon/M as mob, mob/user as mob)
 	if(..())
@@ -127,7 +127,7 @@
 										"<span class='notice'>You salve the wounds on [M]'s [affecting.display_name].</span>" )
 				use(1)
 		else
-			if(can_operate(H))        //Checks if mob is lying down on table for surgery
+			if(can_operate(H, user))        //Checks if mob is lying down on table for surgery
 				if(do_surgery(H,user,src))
 					return
 			else
@@ -156,7 +156,7 @@
 	desc = "An advanced trauma kit for severe injuries."
 	icon_state = "traumakit"
 	heal_brute = 10
-	origin_tech = "biotech=2"
+	origin_tech = Tc_BIOTECH + "=2"
 
 /obj/item/stack/medical/advanced/bruise_pack/attack(mob/living/carbon/M as mob, mob/user as mob)
 	if(..())
@@ -187,7 +187,7 @@
 				affecting.heal_damage(rand(heal_brute, heal_brute + 5), 0)
 				use(1)
 		else
-			if(can_operate(H))        //Checks if mob is lying down on table for surgery
+			if(can_operate(H, user))        //Checks if mob is lying down on table for surgery
 				if(do_surgery(H,user,src))
 					return
 			else
@@ -199,7 +199,7 @@
 	desc = "An advanced treatment kit for severe burns."
 	icon_state = "burnkit"
 	heal_burn = 10
-	origin_tech = "biotech=2"
+	origin_tech = Tc_BIOTECH + "=2"
 
 
 /obj/item/stack/medical/advanced/ointment/attack(mob/living/carbon/M as mob, mob/user as mob)
@@ -220,7 +220,7 @@
 				affecting.heal_damage(0, rand(heal_burn, heal_burn + 5))
 				use(1)
 		else
-			if(can_operate(H))        //Checks if mob is lying down on table for surgery
+			if(can_operate(H, user))        //Checks if mob is lying down on table for surgery
 				if(do_surgery(H,user,src))
 					return
 			else

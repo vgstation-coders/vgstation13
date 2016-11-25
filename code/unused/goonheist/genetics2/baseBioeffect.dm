@@ -85,7 +85,8 @@ var/const/effectTypePower = 3
 		return ..()
 
 	proc/sequenceCorrect()
-		if(blockList.len != blockListCurr.len) return 0 //Things went completely and entirely wrong and everything is broken HALP. Some dickwad probably messed with the global sequence.
+		if(blockList.len != blockListCurr.len)
+			return 0 //Things went completely and entirely wrong and everything is broken HALP. Some dickwad probably messed with the global sequence.
 		for(var/i=0, i < blockList.len, i++)
 			var/datum/basepair/correct = blockList[i+1]
 			var/datum/basepair/current = blockListCurr[i+1]
@@ -139,10 +140,14 @@ var/const/effectTypePower = 3
 			else
 				var/difficulty = round((owner.lockedDiff ** owner.lockedChars.len) / owner.lockedTries)
 				switch(difficulty)
-					if(11 to 20) diff = 2
-					if(21 to 30) diff = 3
-					if(31 to 50) diff = 4
-					if(51 to INFINITY) diff = 5
+					if(11 to 20)
+						diff = 2
+					if(21 to 30)
+						diff = 3
+					if(31 to 50)
+						diff = 4
+					if(51 to INFINITY)
+						diff = 5
 
 			bp.bpp1 = "Unk[diff]"
 			bp.bpp2 = "Unk[diff]"

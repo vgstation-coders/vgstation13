@@ -66,13 +66,17 @@
 		switch(alert("Are you sure? The exosuit will enter maintenance mode.","Transmit Beacon Lockdown Code","Yes","No"))
 			if ("Yes")
 				MT.lockdown()
+				log_game("[key_name_admin(usr)] locked down [M] via exosuit control console.")
 			if ("No")
 				to_chat(usr, "You have second thoughts.")
 	if(href_list["shock"])
 		switch(alert("Are you sure? This cannot be undone.","Transmit Beacon Self-Destruct Code","Yes","No"))
 			if ("Yes")
 				var/obj/item/mecha_parts/mecha_tracking/MT = filter.getObj("shock")
+				var/obj/mecha/M = MT.in_mecha()
 				MT.shock()
+				message_admins("[key_name_admin(usr)] detonated \a [MT] in [M] via exosuit control console.")
+				log_game("[key_name_admin(usr)] detonated \a [MT] in [M] via exosuit control console.")
 			if ("No")
 				to_chat(usr, "You have second thoughts.")
 	if(href_list["get_log"])
@@ -91,7 +95,7 @@
 	desc = "Device used to transmit exosuit data."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "motion2"
-	origin_tech = "programming=2;magnets=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MAGNETS + "=2"
 	var/lockdown = 0
 
 /obj/item/mecha_parts/mecha_tracking/proc/get_mecha_info()
@@ -106,9 +110,9 @@
 						<b>Pilot:</b> [M.occupant||"None"]<br>
 						<b>Location:</b> [get_area(M)||"Unknown"]<br>
 						<b>Active equipment:</b> [M.selected||"None"]"}
-	if(istype(M, /obj/mecha/working/ripley))
-		var/obj/mecha/working/ripley/RM = M
-		answer += "<b> Used cargo space:</b> [RM.cargo.len/RM.cargo_capacity*100]%<br>"
+	if(istype(M, /obj/mecha/working))
+		var/obj/mecha/working/WM = M
+		answer += "<b> Used cargo space:</b> [WM.cargo.len/WM.cargo_capacity*100]%<br>"
 
 	return answer
 

@@ -32,7 +32,8 @@
 	return wielding.unwield(user)
 
 /obj/item/offhand/preattack(atom/target, mob/user, proximity_flag, click_parameters)
-	if(!proximity_flag) return
+	if(!proximity_flag)
+		return
 	if(istype(target, /obj/item/weapon/storage)) //we place automatically
 		return
 	if(wielding)
@@ -81,7 +82,8 @@
 		return (BRUTELOSS)
 
 /obj/item/weapon/fireaxe/afterattack(atom/A as mob|obj|turf|area, mob/user as mob, proximity)
-	if(!proximity) return
+	if(!proximity)
+		return
 	..()
 	if(A && wielded && (istype(A,/obj/structure/window))) //destroys windows and grilles in one hit
 		user.delayNextAttack(8)
@@ -110,7 +112,7 @@
 	throw_range = 5
 	w_class = W_CLASS_SMALL
 	flags = FPRINT | TWOHANDABLE
-	origin_tech = "magnets=3;syndicate=4"
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 /obj/item/weapon/dualsaber/update_wield(mob/user)
@@ -154,7 +156,7 @@
 	throw_range = 5
 	w_class = W_CLASS_SMALL
 	flags = FPRINT | TWOHANDABLE
-	origin_tech = "magnets=3;syndicate=4"
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 /obj/item/weapon/dualsaber/bananabunch/update_wield(mob/user)
@@ -208,7 +210,7 @@
 	sharpness = 2
 	w_class = W_CLASS_LARGE
 	flags = FPRINT | TWOHANDABLE
-	origin_tech = "magnets=4;combat=5"
+	origin_tech = Tc_MAGNETS + "=4;" + Tc_COMBAT + "=5"
 
 /obj/item/weapon/katana/hfrequency/update_wield(mob/user)
 	..()
@@ -248,7 +250,8 @@
 	item_state = "[base_state][wielded ? 1 : 0]"
 
 	force = base_force
-	if(wielded) force += 8
+	if(wielded)
+		force += 8
 
 	if(user)
 		user.update_inv_hands()

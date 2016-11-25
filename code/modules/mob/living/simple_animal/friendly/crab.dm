@@ -16,12 +16,14 @@
 	stop_automated_movement = 1
 	friendly = "pinches"
 	size = SIZE_TINY
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat
 
 	var/obj/item/inventory_head
 	var/obj/item/inventory_mask
 
 /mob/living/simple_animal/crab/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	..()
 	//CRAB movement
 	if(!ckey && !stat)

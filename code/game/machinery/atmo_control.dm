@@ -139,10 +139,12 @@
 	src.updateUsrDialog()
 
 /obj/machinery/computer/general_air_control/receive_signal(datum/signal/signal)
-	if(!signal || signal.encryption) return
+	if(!signal || signal.encryption)
+		return
 
 	var/id_tag = signal.data["tag"]
-	if(!id_tag || !sensors || !sensors.Find(id_tag)) return
+	if(!id_tag || !sensors || !sensors.Find(id_tag))
+		return
 
 	sensor_information[id_tag] = signal.data
 
@@ -252,7 +254,8 @@ font-weight:bold;
 
 /obj/machinery/computer/general_air_control/multitool_topic(var/mob/user,var/list/href_list,var/obj/O)
 	. = ..()
-	if(.) return .
+	if(.)
+		return .
 	if("add_sensor" in href_list)
 
 		// Make a list of all available sensors on the same frequency
@@ -472,7 +475,8 @@ font-weight:bold;
 
 
 /obj/machinery/computer/general_air_control/large_tank_control/receive_signal(datum/signal/signal)
-	if(!signal || signal.encryption) return
+	if(!signal || signal.encryption)
+		return
 
 	var/id_tag = signal.data["tag"]
 
@@ -632,7 +636,8 @@ font-weight:bold;
 	return output
 
 /obj/machinery/computer/general_air_control/fuel_injection/receive_signal(datum/signal/signal)
-	if(!signal || signal.encryption) return
+	if(!signal || signal.encryption)
+		return
 
 	var/id_tag = signal.data["tag"]
 

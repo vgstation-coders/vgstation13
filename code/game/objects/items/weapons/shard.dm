@@ -25,14 +25,14 @@
 	src.icon_state = pick("large", "medium", "small")
 	switch(src.icon_state)
 		if("small")
-			src.pixel_x = rand(-12, 12)
-			src.pixel_y = rand(-12, 12)
+			src.pixel_x = rand(-12, 12) * PIXEL_MULTIPLIER
+			src.pixel_y = rand(-12, 12) * PIXEL_MULTIPLIER
 		if("medium")
-			src.pixel_x = rand(-8, 8)
-			src.pixel_y = rand(-8, 8)
+			src.pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
+			src.pixel_y = rand(-8, 8) * PIXEL_MULTIPLIER
 		if("large")
-			src.pixel_x = rand(-5, 5)
-			src.pixel_y = rand(-5, 5)
+			src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
+			src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 		else
 	..()
 	return
@@ -118,7 +118,7 @@
 							return
 
 						if(!(H.species && (H.species.flags & NO_PAIN)))
-							H.Weaken(3)
+							H.Knockdown(3)
 						if(affecting.take_damage(5, 0))
 							H.UpdateDamageIcon()
 						H.updatehealth()

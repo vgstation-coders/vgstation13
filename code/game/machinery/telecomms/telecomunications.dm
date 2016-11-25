@@ -1,4 +1,4 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:32
+
 
 /*
 	Hello, friends, this is Doohl from sexylands. You may be wondering what this
@@ -630,7 +630,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	diary << msg
 	diary << rawcode
 
-	investigation_log("ntsl", "[msg]<br /><pre>[rawcode]</pre>")
+	investigation_log(I_NTSL, "[msg]<br /><pre>[rawcode]</pre>")
 
 	if (length(rawcode)) // Let's not bother the admins for empty code.
 		message_admins("[msg] ([formatJumpTo(mob)])", 0, 1)
@@ -668,10 +668,3 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	var/name = "data packet (#)"
 	var/garbage_collector = 1 // if set to 0, will not be garbage collected
 	var/input_type = "Speech File"
-
-
-
-
-
-
-

@@ -38,6 +38,7 @@
 	var/toxin_dmg = 0
 
 /obj/effect/landmark/corpse/New()
+	AddToProfiler()
 	if(ticker)
 		initialize()
 
@@ -91,7 +92,8 @@
 	if(src.corpseuniform)
 		var/list/L = src.corpseuniform
 
-		if(istype(L)) src.corpseuniform = pick(L)
+		if(istype(L))
+			src.corpseuniform = pick(L)
 
 		var/obj/item/clothing/under/U = new src.corpseuniform(M)
 
@@ -103,68 +105,79 @@
 	if(src.corpsesuit)
 		var/list/L = src.corpsesuit
 
-		if(istype(L)) src.corpsesuit = pick(L)
+		if(istype(L))
+			src.corpsesuit = pick(L)
 		M.equip_to_slot_or_del(new src.corpsesuit(M), slot_wear_suit)
 
 	if(src.corpseshoes)
 		var/list/L = src.corpseshoes
 
-		if(istype(L)) src.corpseshoes = pick(L)
+		if(istype(L))
+			src.corpseshoes = pick(L)
 		M.equip_to_slot_or_del(new src.corpseshoes(M), slot_shoes)
 
 	if(src.corpsegloves)
 		var/list/L = src.corpsegloves
 
-		if(istype(L)) src.corpsegloves = pick(L)
+		if(istype(L))
+			src.corpsegloves = pick(L)
 		M.equip_to_slot_or_del(new src.corpsegloves(M), slot_gloves)
 
 	if(src.corpseradio)
 		var/list/L = src.corpseradio
 
-		if(istype(L)) src.corpseradio = pick(L)
+		if(istype(L))
+			src.corpseradio = pick(L)
 		M.equip_to_slot_or_del(new src.corpseradio(M), slot_ears)
 
 	if(src.corpseglasses)
 		var/list/L = src.corpseglasses
 
-		if(istype(L)) src.corpseglasses = pick(L)
+		if(istype(L))
+			src.corpseglasses = pick(L)
 		M.equip_to_slot_or_del(new src.corpseglasses(M), slot_glasses)
 
 	if(src.corpsemask)
 		var/list/L = src.corpsemask
 
-		if(istype(L)) src.corpsemask = pick(L)
+		if(istype(L))
+			src.corpsemask = pick(L)
 		M.equip_to_slot_or_del(new src.corpsemask(M), slot_wear_mask)
 
 	if(src.corpsehelmet)
 		var/list/L = src.corpsehelmet
 
-		if(istype(L)) src.corpsehelmet = pick(L)
+		if(istype(L))
+			src.corpsehelmet = pick(L)
 
 		M.equip_to_slot_or_del(new src.corpsehelmet(M), slot_head)
 
 	if(src.corpsebelt)
 		var/list/L = src.corpsebelt
 
-		if(istype(L)) src.corpsebelt = pick(L)
+		if(istype(L))
+			src.corpsebelt = pick(L)
 		M.equip_to_slot_or_del(new src.corpsebelt(M), slot_belt)
 
 	if(src.corpsepocket1)
 		var/list/L = src.corpsepocket1
 
-		if(istype(L)) src.corpsepocket1 = pick(L)
+		if(istype(L))
+			src.corpsepocket1 = pick(L)
 		M.equip_to_slot_or_del(new src.corpsepocket1(M), slot_r_store)
 
 	if(src.corpsepocket2)
 		var/list/L = src.corpsepocket2
 
-		if(istype(L)) src.corpsepocket2 = pick(L)
+		if(istype(L))
+			src.corpsepocket2 = pick(L)
 		M.equip_to_slot_or_del(new src.corpsepocket2(M), slot_l_store)
 
 	if(src.corpseback)
 		var/list/L = src.corpseback
 
-		if(istype(L)) src.corpseback = pick(L)
+		if(istype(L))
+			src.corpseback = pick(L)
 
 		M.equip_to_slot_or_del(new src.corpseback(M), slot_back)
 
@@ -390,6 +403,83 @@
 
 /obj/effect/landmark/corpse/russian/ranged
 	corpsehelmet = /obj/item/clothing/head/ushanka
+
+//////////////////Admin Use//////////////////////////////
+
+/obj/effect/landmark/corpse/ertleader
+	name = "Emergency Response Organizer"
+	corpseuniform = /obj/item/clothing/under/rank/centcom/captain
+	corpsesuit = /obj/item/clothing/suit/armor/swat/officer
+	corpseglasses = /obj/item/clothing/glasses/sunglasses/sechud
+	corpsehelmet = /obj/item/clothing/head/beret/centcom/captain
+	corpseshoes = /obj/item/clothing/shoes/centcom
+	corpsebelt = /obj/item/weapon/storage/belt/security
+
+/obj/effect/landmark/corpse/centcom
+	name = "Central Commander Green"
+	corpseuniform = /obj/item/clothing/under/rank/centcom_commander
+	corpseglasses = /obj/item/clothing/glasses/sunglasses/sechud
+	corpsemask = /obj/item/clothing/mask/cigarette/cigar/cohiba
+	corpsehelmet = /obj/item/clothing/head/centhat
+	corpsegloves = /obj/item/clothing/gloves/combat
+	corpseshoes = /obj/item/clothing/shoes/combat
+	corpsepocket1 = /obj/item/weapon/storage/fancy/matchbox
+	corpsebelt = /obj/item/weapon/storage/belt/security
+
+/obj/effect/landmark/corpse/creed
+	name = "Major Creed"
+	corpseuniform = /obj/item/clothing/under/darkred
+	corpsesuit = /obj/item/clothing/suit/armor/hos/jensen
+	corpseglasses = /obj/item/clothing/glasses/thermal/eyepatch
+	corpsemask = /obj/item/clothing/mask/cigarette/cigar/cohiba
+	corpsehelmet = /obj/item/clothing/head/helmet/tactical/HoS/dermal
+	corpsegloves = /obj/item/clothing/gloves/combat
+	corpseshoes = /obj/item/clothing/shoes/combat
+	corpsepocket1 = /obj/item/weapon/storage/fancy/matchbox
+	corpsebelt = /obj/item/weapon/storage/belt/security
+
+/obj/effect/landmark/corpse/batman
+	name = "Batman"
+	corpseuniform = /obj/item/clothing/under/batmansuit
+	corpsesuit = /obj/item/clothing/suit/armor/bulletproof
+	corpseglasses = /obj/item/clothing/glasses/thermal/jensen
+	corpsemask = /obj/item/clothing/mask/gas/swat
+	corpsehelmet = /obj/item/clothing/head/batman
+	corpsegloves = /obj/item/clothing/gloves/batmangloves
+	corpseshoes = /obj/item/clothing/shoes/jackboots/batmanboots
+	corpsebelt = /obj/item/weapon/storage/belt/security/batmanbelt
+
+/obj/effect/landmark/corpse/doomguy
+	name = "Doomguy"
+	corpseuniform = /obj/item/clothing/under/doomguy
+	corpsesuit = /obj/item/clothing/suit/armor/doomguy
+	corpseglasses = /obj/item/clothing/glasses/thermal/jensen
+	corpsehelmet = /obj/item/clothing/head/helmet/doomguy
+	corpsegloves = /obj/item/clothing/gloves/doomguy
+	corpseshoes = /obj/item/clothing/shoes/combat
+	corpsebelt = /obj/item/weapon/storage/belt/security/doomguy
+
+/obj/effect/landmark/corpse/dredd
+	name = "Judge Dredd"
+	corpseuniform = /obj/item/clothing/under/darkred
+	corpsesuit = /obj/item/clothing/suit/armor/xcomsquaddie/dredd
+	corpseglasses = /obj/item/clothing/glasses/hud/security
+	corpsemask = /obj/item/clothing/mask/gas/swat
+	corpsehelmet = /obj/item/clothing/head/helmet/dredd
+	corpsegloves = /obj/item/clothing/gloves/combat
+	corpseshoes = /obj/item/clothing/shoes/combat
+	corpsebelt = /obj/item/weapon/storage/belt/security
+
+/obj/effect/landmark/corpse/jensen
+	name = "Agent Jensen"
+	corpseuniform = /obj/item/clothing/under/acj
+	corpsesuit = /obj/item/clothing/suit/armor/hos/jensen
+	corpseglasses = /obj/item/clothing/glasses/hud/security/jensenshades
+	corpsehelmet = /obj/item/clothing/head/helmet/tactical/HoS/dermal
+	corpsegloves = /obj/item/clothing/gloves/combat
+	corpseshoes = /obj/item/clothing/shoes/combat
+	corpsebelt = /obj/item/weapon/storage/belt/security
+
 
 //////////////////Misc Corpses///////////////////////////
 

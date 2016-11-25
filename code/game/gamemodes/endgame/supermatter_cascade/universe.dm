@@ -73,20 +73,10 @@
 	tcheck(80,1)
 	if(!endgame_exits.len)
 		message_admins("<span class='warning'><font size=7>SOMEBODY DIDNT PUT ENDGAME EXITS FOR THIS FUCKING MAP: [map.nameLong]</span></font>")
-	else new /obj/machinery/singularity/narsie/large/exit(pick(endgame_exits))
+	else
+		new /obj/machinery/singularity/narsie/large/exit(pick(endgame_exits))
 	spawn(rand(30,60) SECONDS)
-		var/txt = {"
-There's been a galaxy-wide electromagnetic pulse.  All of our systems are heavily damaged and many personnel are dead or dying. We are seeing increasing indications of the universe itself beginning to unravel.
-
-[station_name()], you are the only facility nearby a bluespace rift, which is near your research outpost.  You are hereby directed to enter the rift using all means necessary, quite possibly as the last humans alive.
-
-You have five minutes before the universe collapses. Good l\[\[###!!!-
-
-AUTOMATED ALERT: Link to [command_name()] lost.
-
-The access requirements on the Asteroid Shuttles' consoles have now been revoked.
-"}
-		command_alert(txt,"SUPERMATTER CASCADE DETECTED")
+		command_alert(/datum/command_alert/supermatter_cascade)
 
 		for(var/obj/machinery/computer/shuttle_control/C in machines)
 			if(istype(C.shuttle,/datum/shuttle/mining) || istype(C.shuttle,/datum/shuttle/research))
@@ -150,7 +140,8 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	var/count = 0
 	for(var/turf/T in turfs)
 		count++
-		if(!(count % 50000)) sleep(world.tick_lag)
+		if(!(count % 50000))
+			sleep(world.tick_lag)
 		if(istype(T, /turf/space))
 			T.overlays += image(icon = T.icon, icon_state = "end01")
 		else
@@ -190,7 +181,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 		if(!istype(M.current,/mob/living))
 			continue
 		if(M.current.stat!=2)
-			M.current.Weaken(10)
+			M.current.Knockdown(10)
 			M.current.flash_eyes(visual = 1)
 		tcheck(80,1)
 
@@ -235,7 +226,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 				cult.memoize_cult_objectives(M)
 			to_chat(M.current, "<span class='danger'><FONT size = 3>Nar-Sie loses interest in this plane. You are no longer a cultist.</FONT></span>")
 			to_chat(M.current, "<span class='danger'>You find yourself unable to mouth the words of the forgotten...</span>")
-			M.current.remove_language("Cult")
+			M.current.remove_language(LANGUAGE_CULT)
 			M.memory = ""
 
 		if(M in ticker.mode.wizards)
@@ -243,6 +234,13 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 			M.special_role = null
 			M.current.spellremove(M.current, config.feature_object_spell_system? "object":"verb")
 			to_chat(M.current, "<span class='danger'><FONT size = 3>Your powers ebb and you feel weak. You are no longer a wizard.</FONT></span>")
+			ticker.mode.update_wizard_icons_removed(M)
+
+		if(M in ticker.mode.apprentices)
+			ticker.mode.apprentices -= M
+			M.special_role = null
+			M.current.spellremove(M.current, config.feature_object_spell_system? "object":"verb")
+			to_chat(M.current, "<span class='danger'><FONT size = 3>What little magic you have leaves you. You are no longer a wizard's apprentice.</FONT></span>")
 			ticker.mode.update_wizard_icons_removed(M)
 
 		if(M in ticker.mode.changelings)
@@ -286,16 +284,9 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 			M.special_role = null
 			var/mob/living/silicon/ai/A = M.current
 
-			A.verbs.Remove(/mob/living/silicon/ai/proc/choose_modules,
-			/datum/game_mode/malfunction/proc/takeover,
-			/datum/game_mode/malfunction/proc/ai_win)
-
-			A.malf_picker.remove_verbs(A)
-
+			A.remove_malf_spells()
 
 			A.laws = new base_law_type
-			qdel(A.malf_picker)
-			A.malf_picker = null
 			A.show_laws()
 			A.icon_state = "ai"
 

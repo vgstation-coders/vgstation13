@@ -188,7 +188,7 @@
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "beaker"
 	starting_materials = list(MAT_GLASS = 500)
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	w_class = W_CLASS_TINY
 	var/has_divider = 0
 	var/list/chambers = list(
@@ -646,7 +646,7 @@
 	starting_materials = list(MAT_IRON = 150)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "materials=1;engineering=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 	var/metal_assembly = 0
 

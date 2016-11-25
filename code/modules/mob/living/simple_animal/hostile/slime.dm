@@ -54,7 +54,8 @@
 	qdel(src)
 
 /mob/living/simple_animal/hostile/slime/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	..()
 	if(bodytemperature < 273.15)
 		calm()

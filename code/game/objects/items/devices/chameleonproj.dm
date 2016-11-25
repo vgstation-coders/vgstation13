@@ -9,7 +9,7 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_SMALL
-	origin_tech = "syndicate=4;magnets=4"
+	origin_tech = Tc_SYNDICATE + "=4;" + Tc_MAGNETS + "=4"
 	var/cham_proj_scan = 1 //Scanning function starts on
 	var/can_use = 1
 	var/obj/effect/dummy/chameleon/active_dummy = null
@@ -105,12 +105,12 @@
 
 /obj/item/device/chameleon/proc/eject_all()
 	for(var/atom/movable/A in active_dummy)
-		A.loc = active_dummy.loc
+		A.forceMove(active_dummy.loc)
 		if(ismob(A))
 			var/mob/M = A
 			M.reset_view(null)
 			M.layer = MOB_LAYER //Reset the mob's layer
-			M.plane = PLANE_MOB
+			M.plane = MOB_PLANE
 
 /obj/effect/dummy/chameleon
 	name = ""
@@ -127,9 +127,9 @@
 	icon_state = new_iconstate
 	overlays = new_overlays
 	dir = O.dir
-	M.loc = src
+	M.forceMove(src)
 	M.layer = OBJ_LAYER //Needed for some things, notably lockers
-	M.plane = PLANE_OBJ
+	M.plane = OBJ_PLANE
 	master = C
 	master.active_dummy = src
 
@@ -155,7 +155,8 @@
 	master.disrupt()
 
 /obj/effect/dummy/chameleon/relaymove(var/mob/user, direction)
-	if(istype(loc, /turf/space)) return //No magical space movement!
+	if(istype(loc, /turf/space))
+		return //No magical space movement!
 
 	if(can_move)
 		can_move = 0

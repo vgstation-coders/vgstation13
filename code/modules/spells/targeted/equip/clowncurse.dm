@@ -1,13 +1,14 @@
 /spell/targeted/equip_item/clowncurse
 	name = "The Clown Curse"
 	desc = "A curse that will turn its victim into a miserable clown."
+	abbreviation = "CC"
 
 	school = "evocation"
 	charge_max = 300
 	invocation = "L' C'MMEDIA E F'NITA!"
 	invocation_type = SpI_SHOUT
 	range = 1
-	spell_flags = 0 //SELECTABLE hinders you here, since the spell has a range of 1 and only works on adjacent guys. Having the TARGETTED flag here makes it easy for your target to run away from you!
+	spell_flags = WAIT_FOR_CLICK //SELECTABLE hinders you here, since the spell has a range of 1 and only works on adjacent guys. Having the TARGETTED flag here makes it easy for your target to run away from you!
 
 	cooldown_min = 50
 
@@ -20,9 +21,9 @@
 
 /spell/targeted/equip_item/clowncurse/New()
 	..()
-	equipped_summons = list("[slot_wear_mask]" = /obj/item/clothing/mask/gas/clown_hat,
+	equipped_summons = list("[slot_wear_mask]" = /obj/item/clothing/mask/gas/clown_hat/stickymagic,
 							"[slot_w_uniform]" = /obj/item/clothing/under/rank/clown,
-							"[slot_shoes]" = /obj/item/clothing/shoes/clown_shoes)
+							"[slot_shoes]" = /obj/item/clothing/shoes/clown_shoes/stickymagic)
 
 /spell/targeted/equip_item/clowncurse/cast(list/targets, mob/user = usr)
 	..()
@@ -34,7 +35,6 @@
 
 /spell/targeted/equip_item/clowncurse/summon_item(var/newtype)
 	var/obj/item/new_item = new newtype
-	new_item.unacidable = 1
 	new_item.canremove = 0
 	if(istype(new_item, /obj/item/clothing/mask))
 		var/obj/item/clothing/mask/M = new_item

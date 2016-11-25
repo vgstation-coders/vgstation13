@@ -10,7 +10,7 @@
 	announce=0
 	narnar=0
 
-	layer = LIGHTING_LAYER + 2 // ITS SO BRIGHT
+	layer = SUPER_PORTAL_LAYER
 
 	consume_range = 6
 
@@ -25,7 +25,7 @@
 	for(var/mob/M in player_list)
 		if(M.client)
 			M.see_rift(src)
-	eat()
+	consume()
 
 /obj/machinery/singularity/narsie/large/exit/acquire(var/mob/food)
 	return
@@ -37,7 +37,7 @@
 		if(L.locked_to && istype(L.locked_to,/obj/structure/bed/))
 			var/turf/O = L.locked_to
 			do_teleport(O, pick(endgame_safespawns))
-			L.loc = O.loc
+			L.forceMove(O.loc)
 		else
 			do_teleport(L, pick(endgame_safespawns)) //dead-on precision
 
@@ -59,7 +59,7 @@
 				continue
 
 			if (dist > consume_range && canPull(AM))
-				
+
 				if (101 == AM.invisibility)
 					continue
 

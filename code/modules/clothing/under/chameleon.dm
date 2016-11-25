@@ -5,8 +5,9 @@
 	item_state = "bl_suit"
 	_color = "black"
 	desc = "It's a plain jumpsuit. It seems to have a small dial on the wrist."
-	origin_tech = "syndicate=3"
+	origin_tech = Tc_SYNDICATE + "=3"
 	siemens_coefficient = 0.8
+	species_fit = list(GREY_SHAPED)
 	var/list/clothing_choices = list()
 
 	New()

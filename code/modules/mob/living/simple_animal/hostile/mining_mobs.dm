@@ -110,12 +110,20 @@
 		if(3.0)
 			adjustBruteLoss(110)
 
-/mob/living/simple_animal/hostile/asteroid/basilisk/Die()
+obj/item/asteroid/basilisk_hide
+	name = "basilisk crystals"
+	desc = "You shouldn't ever see this."
+	icon = 'icons/obj/mining.dmi'
+	icon_state = "Diamond ore"
+
+obj/item/asteroid/basilisk_hide/New()
 	var/counter
 	for(counter=0, counter<2, counter++)
 		var/obj/item/weapon/ore/diamond/D = new /obj/item/weapon/ore/diamond(src.loc)
-		D.layer = 4.1
+		D.plane = MOB_PLANE
+		D.layer = MOB_LAYER + 0.001
 	..()
+	qdel(src)
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub
 	name = "goldgrub"
@@ -254,8 +262,31 @@
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/Die()
 	mouse_opacity = 1
-	new /obj/item/asteroid/hivelord_core(src.loc)
 	..()
+	update_icons()
+
+/mob/living/simple_animal/hostile/asteroid/hivelord/update_icons()
+	.=..()
+
+	if(stat == DEAD && butchering_drops)
+		icon_state = "[icon_dead][has_core() ? "" : "_nocore"]"
+
+/mob/living/simple_animal/hostile/asteroid/hivelord/Aggro()
+	..()
+	if(butchering_drops)
+		icon_state = "[icon_aggro][has_core() ? "" : "_nocore"]"
+
+/mob/living/simple_animal/hostile/asteroid/hivelord/LoseAggro()
+	..()
+	if(butchering_drops)
+		icon_state = "[icon_living][has_core() ? "" : "_nocore"]"
+
+/mob/living/simple_animal/hostile/asteroid/hivelord/proc/has_core()
+	if(butchering_drops)
+		var/datum/butchering_product/hivelord_core/core = locate(/datum/butchering_product/hivelord_core) in butchering_drops
+		if(istype(core))
+			return core.amount
+	return 1
 
 /obj/item/asteroid/hivelord_core
 	name = "hivelord remains"
@@ -263,11 +294,38 @@
 	icon = 'icons/obj/food.dmi'
 	icon_state = "boiledrorocore"
 	var/inert = 0
+	var/time_left = 1200 //deciseconds
+	var/last_process
 
 /obj/item/asteroid/hivelord_core/New()
-	spawn(1200)
+	..()
+	create_reagents(5)
+	last_process = world.time
+	processing_objects.Add(src)
+
+/obj/item/asteroid/hivelord_core/Destroy()
+	processing_objects.Remove(src)
+	..()
+
+/obj/item/asteroid/hivelord_core/process()
+	if(reagents && reagents.has_reagent(FROSTOIL, 5))
+		playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
+		desc = "All that remains of a hivelord, it seems to be what allows it to break pieces of itself off without being hurt. It is covered in a thin coat of frost."
+		processing_objects.Remove(src)
+		return
+
+	if(time_left <= 0)
 		inert = 1
 		desc = "The remains of a hivelord that have become useless, having been left alone too long after being harvested."
+		processing_objects.Remove(src)
+		return
+
+	if(loc && (istype(loc, /obj/structure/closet/crate/freezer) || istype(loc, /obj/structure/closet/secure_closet/freezer)))
+		last_process = world.time
+		return
+
+	time_left -= world.time - last_process
+	last_process = world.time
 
 /obj/item/asteroid/hivelord_core/attack(mob/living/M as mob, mob/living/user as mob)
 	if (iscarbon(M) && user.a_intent != I_HURT)
@@ -376,10 +434,12 @@
 
 	size = SIZE_BIG
 
-/mob/living/simple_animal/hostile/asteroid/goliath/OpenFire()
-	visible_message("<span class='warning'>The [src.name] digs its tentacles under [target.name]!</span>")
+/mob/living/simple_animal/hostile/asteroid/goliath/OpenFire(atom/ttarget)
+	if(istype(ttarget))
+		visible_message("<span class='warning'>\The [src] digs its tentacles under \the [ttarget]!</span>")
+
 	playsound(loc, 'sound/weapons/whip.ogg', 50, 1, -1)
-	var/tturf = get_turf(target)
+	var/tturf = get_turf(ttarget)
 	new /obj/effect/goliath_tentacle/original(tturf)
 	ranged_cooldown = ranged_cooldown_cap
 	return
@@ -416,7 +476,7 @@
 
 /obj/effect/goliath_tentacle/proc/Trip()
 	for(var/mob/living/M in src.loc)
-		M.Weaken(5)
+		M.Knockdown(5)
 		visible_message("<span class='warning'>The [src.name] knocks [M.name] down!</span>")
 
 	qdel(src)
@@ -433,7 +493,6 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "goliath_hide"
 	w_class = W_CLASS_MEDIUM
-	layer = 4
 
 /obj/item/asteroid/goliath_hide/afterattack(atom/target, mob/user, proximity_flag)
 	if(proximity_flag)

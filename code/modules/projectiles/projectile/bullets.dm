@@ -67,8 +67,15 @@
 	weaken = 0
 	superspeed = 1
 
+/obj/item/projectile/bullet/midbullet/assault
+	damage = 20
+	stun = 0
+	weaken = 0
+
 /obj/item/projectile/bullet/midbullet2
 	damage = 25
+	stun = 0
+	weaken = 0
 
 /obj/item/projectile/bullet/midbullet/bouncebullet
 	bounce_type = PROJREACT_WALLS|PROJREACT_WINDOWS
@@ -78,6 +85,24 @@
 	damage = 30
 	stun = 0
 	weaken = 0
+
+/obj/item/projectile/bullet/fourtyfive //secgun ammo!
+	damage = 15
+	stun = 2 //stopping power
+	weaken = 2
+	penetration = 2
+
+/obj/item/projectile/bullet/fourtyfive/practice
+	damage = 2
+	stun = 1
+	weaken = 1
+	embed = 0
+
+/obj/item/projectile/bullet/fourtyfive/rubber
+	damage = 8
+	stun = 5
+	weaken = 5
+	embed = 0
 
 /obj/item/projectile/bullet/suffocationbullet//How does this even work?
 	name = "CO2 bullet"
@@ -118,7 +143,7 @@
 	damage_type = BRUTE
 	flag = "bullet"
 	kill_count = 100
-	layer = 13
+	layer = PROJECTILE_LAYER
 	damage = 40
 	icon = 'icons/obj/projectiles_experimental.dmi'
 	icon_state = "spur_high"
@@ -197,7 +222,7 @@
 		var/image/impact = image('icons/obj/projectiles_impacts.dmi',loc,impact_icon)
 		impact.pixel_x = PixelX
 		impact.pixel_y = PixelY
-		impact.layer = 13
+		impact.layer = PROJECTILE_LAYER
 		T.overlays += impact
 		spawn(3)
 			T.overlays -= impact
@@ -217,7 +242,7 @@
 		if(loc)
 			var/turf/T = loc
 			var/image/impact = image('icons/obj/projectiles_impacts.dmi',loc,"spur_2")
-			impact.layer = 13
+			impact.layer = PROJECTILE_LAYER
 			T.overlays += impact
 			spawn(3)
 				T.overlays -= impact
@@ -272,7 +297,7 @@
 				M.playsound_local(starting, 'sound/weapons/hecate_fire_far.ogg', 25, 1)
 	for (var/mob/living/carbon/human/H in range(src,1))
 		if(!H.earprot())
-			H.Weaken(2)
+			H.Knockdown(2)
 			H.Stun(2)
 			H.ear_damage += rand(3, 5)
 			H.ear_deaf = max(H.ear_deaf,15)
@@ -321,7 +346,7 @@
 		visible_message("<span class='warning'>\the [M.name] is hit by \the [src.name] in the [parse_zone(def_zone)]!</span>")
 		M.bullet_act(src, def_zone)
 		admin_warn(M)
-		BEE.loc = M.loc
+		BEE.forceMove(M.loc)
 		BEE.target = M
 	else
 		BEE.newTarget()
@@ -342,7 +367,8 @@
 	if(istype(atarget, /mob/living) && damage == 200)
 		var/mob/living/M = atarget
 		M.gib()
-	else ..()
+	else
+		..()
 
 /obj/item/projectile/bullet/APS/OnFired()
 	..()
@@ -719,7 +745,7 @@
 			var/turf/targloc = pick(possible_turfs)
 			B.original = targloc
 			var/turf/curloc = get_turf(src)
-			B.loc = get_turf(src)
+			B.forceMove(get_turf(src))
 			B.starting = starting
 			B.shot_from = shot_from
 			B.silenced = silenced
@@ -731,3 +757,18 @@
 			spawn()
 				B.process()
 	..()
+
+/obj/item/projectile/bullet/invisible
+	name = "invisible bullet"
+	icon_state = null
+	damage = 25
+	fire_sound = null
+
+/obj/item/projectile/bullet/invisible/on_hit(var/atom/target, var/blocked = 0) //silence the target for a few seconds on hit
+	if (..(target, blocked))
+		var/mob/living/L = target
+		if(!L.silent || (L.silent && L.silent < 5))
+			L.silent = 5
+		return 1
+	return 0
+

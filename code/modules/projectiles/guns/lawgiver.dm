@@ -10,7 +10,7 @@
 	icon_state = "lawgiver"
 	item_state = "lawgiver"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	origin_tech = "combat=5;materials=5;engineering=5"
+	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=5;" + Tc_ENGINEERING + "=5"
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 1000)
 	w_type = RECYK_METAL
@@ -150,7 +150,7 @@
 /obj/item/weapon/gun/lawgiver/proc/RemoveMag(var/mob/user)
 	if(magazine)
 		var/obj/item/ammo_storage/magazine/lawgiver/L = magazine
-		L.loc = get_turf(src.loc)
+		L.forceMove(get_turf(src.loc))
 		if(user)
 			user.put_in_hands(L)
 			to_chat(user, "<span class='notice'>You pull the magazine out of \the [src].</span>")
@@ -304,8 +304,10 @@
 		switch(firing_mode)
 			if(STUN)
 				if(L.stuncharge >= 20)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					in_chamber = new projectile_type(src)
 					L.stuncharge -= 20
 					return 1
@@ -313,8 +315,10 @@
 					return 0
 			if(LASER)
 				if(L.lasercharge >= 20)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					in_chamber = new projectile_type(src)
 					L.lasercharge -= 20
 					return 1
@@ -322,8 +326,10 @@
 					return 0
 			if(RAPID)
 				if(L.rapid_ammo_count >= 1)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					in_chamber = new projectile_type(src)
 					L.rapid_ammo_count -= 1
 					return 1
@@ -331,8 +337,10 @@
 					return 0
 			if(FLARE)
 				if(L.flare_ammo_count >= 1)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					in_chamber = new projectile_type(src)
 					L.flare_ammo_count -= 1
 					return 1
@@ -340,8 +348,10 @@
 					return 0
 			if(RICOCHET)
 				if(L.ricochet_ammo_count >= 1)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					in_chamber = new projectile_type(src)
 					L.ricochet_ammo_count -= 1
 					return 1
@@ -357,36 +367,46 @@
 		switch(firing_mode)
 			if(STUN)
 				if(L.stuncharge >= 20)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					return 1
 				else
 					return 0
 			if(LASER)
 				if(L.lasercharge >= 20)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					return 1
 				else
 					return 0
 			if(RAPID)
 				if(L.rapid_ammo_count >= 1)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					return 1
 				else
 					return 0
 			if(FLARE)
 				if(L.flare_ammo_count >= 1)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					return 1
 				else
 					return 0
 			if(RICOCHET)
 				if(L.ricochet_ammo_count >= 1)
-					if(in_chamber)	return 1
-					if(!projectile_type)	return 0
+					if(in_chamber)
+						return 1
+					if(!projectile_type)
+						return 0
 					return 1
 				else
 					return 0
@@ -425,12 +445,14 @@
 		return 0
 
 /obj/item/weapon/gun/lawgiver/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
-	if(flag)	return //we're placing gun on a table or in backpack
+	if(flag)
+		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
 		to_chat(user, "<span class='warning'>A label sticks the trigger to the trigger guard!</span>")//Such a new feature, the player might not know what's wrong if it doesn't tell them.
 
 		return
-	if(istype(A, /obj/machinery/recharger) && istype(src, /obj/item/weapon/gun/energy))	return//Shouldnt flag take care of this?
+	if(istype(A, /obj/machinery/recharger) && istype(src, /obj/item/weapon/gun/energy))
+		return//Shouldnt flag take care of this?
 
 	if(dna_profile)
 		if(dna_profile != user.dna.unique_enzymes)

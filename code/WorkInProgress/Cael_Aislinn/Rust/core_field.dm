@@ -21,7 +21,7 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 	var/obj/machinery/power/rust_core/owned_core
 	var/list/dormant_reactant_quantities = new
 
-	layer = 3.1
+	layer = ABOVE_OBJ_LAYER
 
 	var/energy = 0
 	var/mega_energy = 0
@@ -275,24 +275,24 @@ Deuterium-tritium fusion: 4.5 x 10^7 K
 			size = 3
 			icon = 'icons/effects/96x96.dmi'
 			icon_state = "emfield_s3"
-			pixel_x = -32
-			pixel_y = -32
+			pixel_x = -32 * PIXEL_MULTIPLIER
+			pixel_y = -32 * PIXEL_MULTIPLIER
 			//
 			changed = 3
 		if(5)
 			size = 5
 			icon = 'icons/effects/160x160.dmi'
 			icon_state = "emfield_s5"
-			pixel_x = -64
-			pixel_y = -64
+			pixel_x = -64 * PIXEL_MULTIPLIER
+			pixel_y = -64 * PIXEL_MULTIPLIER
 			//
 			changed = 5
 		if(7)
 			size = 7
 			icon = 'icons/effects/224x224.dmi'
 			icon_state = "emfield_s7"
-			pixel_x = -96
-			pixel_y = -96
+			pixel_x = -96 * PIXEL_MULTIPLIER
+			pixel_y = -96 * PIXEL_MULTIPLIER
 			//
 			changed = 7
 

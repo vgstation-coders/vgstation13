@@ -18,9 +18,11 @@
 	//Get our potential maps
 	//testing("starting in [root]")
 	for(var/potential in flist(root))
-		if(copytext(potential,-1,0 != "/")) continue // Not a directory, ignore it.
+		if(copytext(potential,-1,0 != "/"))
+			continue // Not a directory, ignore it.
 		//testing("Inside [root + potential]")
-		if(!recursion_limit) break
+		if(!recursion_limit)
+			break
 		//our current working directory
 		var/path = root + potential
 		//The DMB that has the map we want.
@@ -34,9 +36,12 @@
 			if(copytext(binaries,-15,0 == "playercount.txt"))
 				var/list/lines = file2list(path+binaries)
 				for(var/line in lines)
-					if(findtext(line,"max")) max = text2num(copytext(line,5,0))
-					else if(findtext(line,"min")) min = text2num(copytext(line,5,0))
-					else warning("Our file had excessive lines, skipping.")
+					if(findtext(line,"max"))
+						max = text2num(copytext(line,5,0))
+					else if(findtext(line,"min"))
+						min = text2num(copytext(line,5,0))
+					else
+						warning("Our file had excessive lines, skipping.")
 				if(!isnull(min) && !isnull(max))
 					if((min != -1) && clients.len < min)
 						skipping = 1
@@ -98,7 +103,7 @@
 	It is just a timer that only permits a download every [FTPDELAY] ticks.
 	This can be changed by modifying FTPDELAY's value above.
 
-	PLEASE USE RESPONSIBLY, Some log files canr each sizes of 4MB!	*/
+	PLEASE USE RESPONSIBLY, Some log files can reach sizes of 4MB!	*/
 /client/proc/file_spam_check()
 	var/time_to_wait = fileaccess_timer - world.time
 	if(time_to_wait > 0)

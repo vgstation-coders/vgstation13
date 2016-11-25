@@ -72,11 +72,12 @@
 			//put in a rock sliver
 			var/obj/item/weapon/rocksliver/R = new()
 			R.geological_data = geo_data
-			R.loc = filled_bag
+			R.forceMove(filled_bag)
 
 			//update the sample bag
 			filled_bag.icon_state = "evidence"
 			var/image/I = image("icon"=R, "layer"=FLOAT_LAYER)
+			I.plane = FLOAT_PLANE
 			filled_bag.underlays += I
 			filled_bag.w_class = W_CLASS_TINY
 
@@ -92,7 +93,7 @@
 			var/mob/M = src.loc
 			success = M.put_in_inactive_hand(filled_bag)
 		if(!success)
-			filled_bag.loc = get_turf(src)
+			filled_bag.forceMove(get_turf(src))
 		filled_bag = null
 		icon_state = "sampler0"
 	else

@@ -2,11 +2,13 @@
 	set category = "Admin"
 	set name = "Permissions Panel"
 	set desc = "Edit admin permissions"
-	if(!check_rights(R_PERMISSIONS))	return
+	if(!check_rights(R_PERMISSIONS))
+		return
 	usr.client.holder.edit_admin_permissions()
 
 /datum/admins/proc/edit_admin_permissions()
-	if(!check_rights(R_PERMISSIONS))	return
+	if(!check_rights(R_PERMISSIONS))
+		return
 
 	var/output = {"<!DOCTYPE html>
 <html>
@@ -25,10 +27,12 @@
 
 	for(var/adm_ckey in admin_datums)
 		var/datum/admins/D = admin_datums[adm_ckey]
-		if(!D)	continue
+		if(!D)
+			continue
 		var/rank = D.rank ? D.rank : "*none*"
 		var/rights = rights2text(D.rights," ")
-		if(!rights)	rights = "*none*"
+		if(!rights)
+			rights = "*none*"
 		output += {"<tr>
 <td style='text-align:right;'>[adm_ckey] <a class='small' href='?src=\ref[src];editrights=remove;ckey=[adm_ckey]'>\[-\]</a></td>
 <td><a href='?src=\ref[src];editrights=rank;ckey=[adm_ckey]'>[rank]</a></td>
@@ -51,7 +55,8 @@
 	usr << browse(output,"window=editrights;size=600x500")
 
 /datum/admins/proc/log_admin_rank_modification(var/adm_ckey, var/new_rank)
-	if(config.admin_legacy_system)	return
+	if(config.admin_legacy_system)
+		return
 
 	if(!usr.client)
 		return
@@ -101,7 +106,8 @@
 			to_chat(usr, "<span class='notice'>Admin rank changed.</span>")
 
 /datum/admins/proc/log_admin_permission_modification(var/adm_ckey, var/new_permission)
-	if(config.admin_legacy_system)	return
+	if(config.admin_legacy_system)
+		return
 
 	if(!usr.client)
 		return

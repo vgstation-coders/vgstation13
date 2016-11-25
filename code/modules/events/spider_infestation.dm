@@ -12,13 +12,13 @@
 	sent_spiders_to_station = 0
 
 /datum/event/spider_infestation/announce()
-	command_alert("Unidentified lifesigns detected coming aboard [station_name()]. Secure any exterior access, including ducting and ventilation.", "Lifesign Alert",alert='sound/AI/aliens.ogg')
+	command_alert(/datum/command_alert/xenomorphs)
 
 
 /datum/event/spider_infestation/start()
 	var/list/vents = list()
 	for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in atmos_machines)
-		if(temp_vent.loc.z == 1 && !temp_vent.welded && temp_vent.network)
+		if(temp_vent.loc.z == map.zMainStation && !temp_vent.welded && temp_vent.network)
 			if(temp_vent.network.normal_members.len > 50)
 				vents += temp_vent
 

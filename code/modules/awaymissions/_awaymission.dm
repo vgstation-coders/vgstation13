@@ -51,7 +51,8 @@ Example of the second method:
 		zLevel = accessable_z_levels[z]
 
 	for(var/obj/effect/landmark/L in objects) //Add all landmarks to away destinations. Also set the away mission's location for admins to jump to
-		if(L.name != "awaystart") continue
+		if(L.name != "awaystart")
+			continue
 
 		awaydestinations.Add(L)
 
@@ -131,7 +132,8 @@ var/static/list/away_mission_subtypes = typesof(/datum/map_element/away_mission)
 		potentialRandomZlevels.Remove(T)
 
 	var/list/Lines = file2list("maps/RandomZLevels/fileList.txt")
-	if(!Lines.len)	return
+	if(!Lines.len)
+		return
 	for (var/t in Lines)
 		if (!t)
 			continue
@@ -168,12 +170,14 @@ var/static/list/away_mission_subtypes = typesof(/datum/map_element/away_mission)
 
 	if(!include_unrandom)
 		for(var/datum/map_element/away_mission/AM in potentialRandomZlevels)
-			if(!AM.generate_randomly) potentialRandomZlevels.Remove(AM)
+			if(!AM.generate_randomly)
+				potentialRandomZlevels.Remove(AM)
 
 	return potentialRandomZlevels
 
 /proc/createRandomZlevel(override = 0, var/datum/map_element/away_mission/AM, var/messages = null)
-	if(!messages) messages = world
+	if(!messages)
+		messages = world
 
 	if(existing_away_missions.len && !override)	//crude, but it saves another var!
 		return

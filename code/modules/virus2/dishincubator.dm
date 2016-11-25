@@ -1,4 +1,5 @@
 #define FED_PING_DELAY 40
+#define INCUBATOR_MAX_SIZE 100
 
 /obj/machinery/disease2/incubator
 	name = "Pathogenic incubator"
@@ -43,9 +44,11 @@
 	var/scancount = 0
 	var/lasercount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module)) scancount += SP.rating-1
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser)) lasercount += SP.rating-1
-	mutatechance = initial(mutatechance) + scancount
+		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
+			scancount += SP.rating-1
+		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+			lasercount += SP.rating-1
+	mutatechance = initial(mutatechance) * max(1, scancount)
 	growthrate = initial(growthrate) + lasercount
 
 /obj/machinery/disease2/incubator/attackby(var/obj/B as obj, var/mob/user as mob)
@@ -82,9 +85,11 @@
 					src.updateUsrDialog()
 
 /obj/machinery/disease2/incubator/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 
-	if(usr) usr.set_machine(src)
+	if(usr)
+		usr.set_machine(src)
 
 	if (href_list["ejectchem"])
 		if(beaker)
@@ -102,7 +107,7 @@
 			icon_state = "incubator"
 	if (href_list["ejectdish"])
 		if(dish)
-			dish.loc = src.loc
+			dish.forceMove(src.loc)
 			dish = null
 	if (href_list["rad"])
 		radiation += 10
@@ -175,8 +180,8 @@
 			icon_state = "incubator"
 		if(foodsupply)
 			foodsupply -= 1
-			dish.growth += growthrate
-			if(dish.growth >= 100)
+			dish.growth = min(growthrate + dish.growth, INCUBATOR_MAX_SIZE)
+			if(dish.growth >= INCUBATOR_MAX_SIZE)
 				if(icon_state != "incubator_fed")
 					icon_state = "incubator_fed"
 				if(last_notice + FED_PING_DELAY < world.time)
@@ -210,3 +215,5 @@
 			toxins += 1
 
 	src.updateUsrDialog()
+
+#undef INCUBATOR_MAX_SIZE

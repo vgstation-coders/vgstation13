@@ -16,6 +16,7 @@
 	name = "body bag kit"
 	desc = "A kit specifically designed to fit bodybags."
 	icon_state = "bodybags" //Consider respriting this to a kit some day
+	fits_max_w_class = 3
 	max_combined_w_class = 21
 	can_only_hold = list("/obj/item/bodybag") //Needed due to the last two variables, figures
 
@@ -43,7 +44,8 @@
 /obj/structure/closet/body_bag/attackby(W as obj, mob/user as mob)
 	if(istype(W,/obj/item/stack/sheet/metal))
 		var/obj/item/stack/sheet/metal/S = W
-		if(S.amount<5) return
+		if(S.amount<5)
+			return
 		S.use(5)
 		new /obj/structure/morgue(src.loc)
 		qdel(src)
@@ -76,9 +78,12 @@
 /obj/structure/closet/body_bag/MouseDrop(over_object, src_location, over_location)
 	..()
 	if((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
-		if(!ishuman(usr) || usr.incapacitated() || usr.lying) return
-		if(opened)	return 0
-		if(contents.len)	return 0
+		if(!ishuman(usr) || usr.incapacitated() || usr.lying)
+			return
+		if(opened)
+			return 0
+		if(contents.len)
+			return 0
 		visible_message("[usr] folds up the [src.name]")
 		new/obj/item/bodybag(get_turf(src))
 		spawn(0)
@@ -127,6 +132,7 @@
 
 /obj/structure/closet/body_bag/cryobag/MouseDrop(over_object, src_location, over_location)
 	if((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
-		if(!ishuman(usr) || usr.incapacitated() || usr.lying) return
+		if(!ishuman(usr) || usr.incapacitated() || usr.lying)
+			return
 		to_chat(usr, "<span class='warning'>You can't fold that up anymore.</span>")
 	..()

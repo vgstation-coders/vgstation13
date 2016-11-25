@@ -134,7 +134,8 @@
 			chosenobjectives += objective
 			total_weight += objective.points
 			theftobjectives -= objective
-		else switch(selectobj)
+		else
+			switch(selectobj)
 			if(1 to steal_range)
 				if(!theftobjectives.len)
 					continue
@@ -430,11 +431,13 @@ datum
 			check_completion()
 				if(target && target.current)
 					if(target.current.stat == 2)
-						if(config.require_heads_alive) return 0
+						if(config.require_heads_alive)
+							return 0
 					else
 						if(!target.current.handcuffed)
 							return 0
-				else if(config.require_heads_alive) return 0
+				else if(config.require_heads_alive)
+					return 0
 				return 1
 
 			find_target_by_role(var/role)
@@ -603,8 +606,10 @@ datum
 				check_completion()
 					var/list/all_items = owner.current.get_contents()
 					for(var/obj/item/I in all_items)
-						if(!istype(I, steal_target))	continue//If it's not actually that item.
-						if(I:air_contents:toxins) return 1 //If they got one with plasma
+						if(!istype(I, steal_target))
+							continue//If it's not actually that item.
+						if(I:air_contents:toxins)
+							return 1 //If they got one with plasma
 					return 0
 
 
@@ -928,7 +933,8 @@ datum
 					var/target_amount = 10
 					var/found_amount = 0.0//Always starts as zero.
 					for(var/obj/item/I in owner.current.get_contents())
-						if(!istype(I, steal_target))	continue//If it's not actually that item.
+						if(!istype(I, steal_target))
+							continue//If it's not actually that item.
 						found_amount += I:amount
 					return found_amount>=target_amount
 
@@ -957,7 +963,8 @@ datum
 					var/target_amount = 50
 					var/found_amount = 0.0//Always starts as zero.
 					for(var/obj/item/I in owner.current.get_contents())
-						if(!istype(I, steal_target))	continue//If it's not actually that item.
+						if(!istype(I, steal_target))
+							continue//If it's not actually that item.
 						found_amount += I:amount
 					return found_amount>=target_amount
 
@@ -986,7 +993,8 @@ datum
 					var/target_amount = 25
 					var/found_amount = 0.0//Always starts as zero.
 					for(var/obj/item/I in owner.current.get_contents())
-						if(!istype(I, steal_target))	continue//If it's not actually that item.
+						if(!istype(I, steal_target))
+							continue//If it's not actually that item.
 						found_amount += I:amount
 					return found_amount>=target_amount
 
@@ -1231,7 +1239,8 @@ datum
 				var/area/shuttle = locate(/area/shuttle/escape/centcom)
 				var/protected_mobs[] = list(/mob/living/silicon/ai, /mob/living/silicon/pai, /mob/living/silicon/robot)
 				for(var/mob/living/player in player_list)
-					if(player.type in protected_mobs)	continue
+					if(player.type in protected_mobs)
+						continue
 					if (player.mind)
 						if (player.stat != 2)
 							if (get_turf(player) in shuttle)
@@ -1343,9 +1352,11 @@ datum
 					return 0
 				var/list/all_items = owner.current.get_contents()
 				for(var/obj/item/device/mmi/mmi in all_items)
-					if(mmi.brainmob&&mmi.brainmob.mind==target)	return 1
+					if(mmi.brainmob&&mmi.brainmob.mind==target)
+						return 1
 				for(var/obj/item/organ/brain/brain in all_items)
-					if(brain.brainmob&&brain.brainmob.mind==target)	return 1
+					if(brain.brainmob&&brain.brainmob.mind==target)
+						return 1
 				return 0
 
 		mutiny
@@ -1372,7 +1383,7 @@ datum
 					var/turf/T = get_turf(target.current)
 					if(target.current.stat == 2)
 						return 1
-					else if((T) && (T.z != 1))//If they leave the station they count as dead for this
+					else if((T) && (T.z != map.zMainStation))//If they leave the station they count as dead for this
 						return 2
 					else
 						return 0

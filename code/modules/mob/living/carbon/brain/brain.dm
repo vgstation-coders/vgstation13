@@ -1,4 +1,4 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:32
+
 
 /mob/living/carbon/brain
 	var/obj/item/container = null
@@ -30,11 +30,13 @@
 	if(in_contents_of(/obj/mecha))
 		canmove = 1
 		use_me = 1 //If it can move, let it emote
-	else							canmove = 0
+	else
+		canmove = 0
 	return canmove
 
 /mob/living/carbon/brain/say_understands(var/atom/movable/other)//Goddamn is this hackish, but this say code is so odd
-	if(other) other = other.GetSource()
+	if(other)
+		other = other.GetSource()
 	if (istype(other, /mob/living/silicon/ai))
 		if(!(container && istype(container, /obj/item/device/mmi)))
 			return 0

@@ -4,7 +4,7 @@
 	name = "Circuit Design (Atmosphere Alert)"
 	desc = "Allows for the construction of circuit boards used to build an atmosphere alert console.."
 	id = "atmosalerts"
-	req_tech = list("programming" = 2)
+	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -14,7 +14,7 @@
 	name = "Circuit Design (Atmospheric General Monitor)"
 	desc = "Allows for the construction of circuit boards used to build an Atmospheric General Monitor."
 	id = "air_management"
-	req_tech = list("programming" = 2)
+	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -24,7 +24,7 @@
 	name = "Circuit Design (Atmospherics Automation Console)"
 	desc = "Allows for the construction of circuit boards used to build an Atmospherics Automation Console"
 	id = "atmos_automation"
-	req_tech = list("programming" = 3)
+	req_tech = list(Tc_PROGRAMMING = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -34,7 +34,7 @@
 	name = "Circuit Design (Atmospheric Tank Control)"
 	desc = "Allows for the construction of circuit boards used to build an Atmospheric Tank Control."
 	id = "large_tank_control"
-	req_tech = list("programming" = 2)
+	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -45,7 +45,7 @@
 	name = "Circuit Design (General Alert Console)"
 	desc = "Allows for the construction of circuit boards used to build a General Alert console."
 	id = "general_alert"
-	req_tech = list("programming" = 2)
+	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	build_path = /obj/item/weapon/circuitboard/general_alert
@@ -55,7 +55,7 @@
 	name = "Circuit Design (Power Monitor)"
 	desc = "Allows for the construction of circuit boards used to build a new power monitor"
 	id = "powermonitor"
-	req_tech = list("programming" = 2)
+	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -65,7 +65,7 @@
 	name = "Circuit Design (Solar Control)"
 	desc = "Allows for the construction of circuit boards used to build a solar control console"
 	id = "solarcontrol"
-	req_tech = list("programming" = 2, "powerstorage" = 2)
+	req_tech = list(Tc_PROGRAMMING = 2, Tc_POWERSTORAGE = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -77,7 +77,7 @@
 	name = "Circuit Design (Telecommunications Monitoring Console)"
 	desc = "Allows for the construction of circuit boards used to build a telecommunications monitor."
 	id = "comm_monitor"
-	req_tech = list("programming" = 3)
+	req_tech = list(Tc_PROGRAMMING = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -87,7 +87,7 @@
 	name = "Circuit Design (Telecommunications Server Monitoring Console)"
 	desc = "Allows for the construction of circuit boards used to build a telecommunication server browser and monitor."
 	id = "comm_server"
-	req_tech = list("programming" = 3)
+	req_tech = list(Tc_PROGRAMMING = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -97,7 +97,7 @@
 	name = "Circuit Design (Telecommunications Traffic Control Console)"
 	desc = "Allows for the construction of circuit boards used to build a telecommunications traffic control console."
 	id = "traffic_control"
-	req_tech = list("programming" = 5)
+	req_tech = list(Tc_PROGRAMMING = 5)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -107,7 +107,7 @@
 	name = "Circuit Design (Messaging Monitor Console)"
 	desc = "Allows for the construction of circuit boards used to build a messaging monitor console."
 	id = "message_monitor"
-	req_tech = list("programming" = 5)
+	req_tech = list(Tc_PROGRAMMING = 5)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -119,7 +119,7 @@
 	name = "Circuit Design (R-UST Mk. 7 gyrotron controller)"
 	desc = "Allows for the construction of circuit boards used to build a gyrotron control console for the R-UST Mk. 7 fusion engine."
 	id = "rust_gyrotron_control"
-	req_tech = list("programming" = 4, "engineering" = 4)
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
@@ -129,7 +129,7 @@
 	name = "Circuit Design (R-UST Mk. 7 fuel controller)"
 	desc = "Allows for the construction of circuit boards used to build a fuel injector control console for the R-UST Mk. 7 fusion engine."
 	id = "rust_fuel_control"
-	req_tech = list("programming" = 4, "engineering" = 4)
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
@@ -139,7 +139,7 @@
 	name = "Circuit Design (R-UST Mk. 7 core monitor)"
 	desc = "Allows for the construction of circuit boards used to build a core monitoring console for the R-UST Mk. 7 fusion engine."
 	id = "rust_core_monitor"
-	req_tech = list("programming" = 4, "engineering" = 4)
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
@@ -149,7 +149,7 @@
 	name = "Circuit Design (R-UST Mk. 7 core controller)"
 	desc = "Allows for the construction of circuit boards used to build a core control console for the R-UST Mk. 7 fusion engine."
 	id = "rust_core_control"
-	req_tech = list("programming" = 4, "engineering" = 4)
+	req_tech = list(Tc_PROGRAMMING = 4, Tc_ENGINEERING = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"

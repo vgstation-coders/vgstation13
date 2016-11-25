@@ -31,7 +31,8 @@
 	times = list()
 	synced = list()
 	for(var/obj/machinery/mass_driver/M in mass_drivers)
-		if(M.z != src.z)	continue
+		if(M.z != src.z)
+			continue
 		for(var/ident_tag in id_tags)
 			if((M.id_tag == ident_tag) && !(ident_tag in synced))
 				synced += ident_tag
@@ -47,7 +48,8 @@
 				loopings[ident_tag] = default_loop
 				break
 	for(var/obj/machinery/door/poddoor/M in poddoors)
-		if(M.z != src.z)	continue
+		if(M.z != src.z)
+			continue
 		for(var/ident_tag in id_tags)
 			if((M.id_tag == ident_tag) && !(ident_tag in synced) && !(ident_tag in door_only_tags))
 				door_only_tags += ident_tag
@@ -57,7 +59,8 @@
 
 /obj/machinery/computer/pod/proc/solo_sync(var/ident_tag)
 	for(var/obj/machinery/mass_driver/M in mass_drivers)
-		if(M.z != src.z)	continue
+		if(M.z != src.z)
+			continue
 		if((M.id_tag == ident_tag) && !(ident_tag in synced))
 			synced += ident_tag
 			timings += ident_tag
@@ -73,7 +76,8 @@
 			break
 	if(!(ident_tag in synced))
 		for(var/obj/machinery/door/poddoor/M in poddoors)
-			if(M.z != src.z)	continue
+			if(M.z != src.z)
+				continue
 			if((M.id_tag == ident_tag) && !(ident_tag in synced) && !(ident_tag in door_only_tags))
 				door_only_tags += ident_tag
 				break
@@ -86,7 +90,8 @@
 		return
 	var/anydriver = 0
 	for(var/obj/machinery/mass_driver/M in mass_drivers)
-		if(M.z != src.z)	continue
+		if(M.z != src.z)
+			continue
 		if(M.id_tag == ident_tag)
 			anydriver = 1
 	if(!anydriver)
@@ -97,7 +102,8 @@
 		flick("mass_drivers_timing", src)
 
 	for(var/obj/machinery/door/poddoor/M in poddoors)
-		if(M.z != src.z)	continue
+		if(M.z != src.z)
+			continue
 		if(M.id_tag == ident_tag)
 			spawn()
 				M.open()
@@ -105,13 +111,15 @@
 
 
 	for(var/obj/machinery/mass_driver/M in mass_drivers)
-		if(M.z != src.z)	continue
+		if(M.z != src.z)
+			continue
 		if(M.id_tag == ident_tag)
 			M.drive()
 
 	sleep(50)
 	for(var/obj/machinery/door/poddoor/M in poddoors)
-		if(M.z != src.z)	continue
+		if(M.z != src.z)
+			continue
 		if(M.id_tag == ident_tag)
 			spawn()
 				M.close()
@@ -260,7 +268,8 @@
 		if(href_list["door"])
 			var/ident_tag = href_list["driver"]
 			for(var/obj/machinery/door/poddoor/M in poddoors)
-				if(M.z != src.z)	continue
+				if(M.z != src.z)
+					continue
 				if(M.id_tag == ident_tag)
 					spawn()
 						if(M.density)
@@ -312,7 +321,8 @@
 		return
 	var/anydriver = 0
 	for(var/obj/machinery/mass_driver/M in mass_drivers)
-		if(M.z != src.z)	continue
+		if(M.z != src.z)
+			continue
 		if(M.id_tag == ident_tag)
 			anydriver = 1
 	if(!anydriver)
@@ -324,33 +334,38 @@
 
 	if(teleporter_dest)
 		for(var/obj/structure/deathsquad_tele/D in world)
-			if(D.z != src.z)	continue
+			if(D.z != src.z)
+				continue
 			if(D.id_tag == ident_tag)
 				D.icon_state = "tele1"
 				D.ztarget = teleporter_dest
 				D.density = 1
 
 	for(var/obj/machinery/door/poddoor/M in poddoors)
-		if(M.z != src.z)	continue
+		if(M.z != src.z)
+			continue
 		if(M.id_tag == ident_tag)
 			spawn()
 				M.open()
 	sleep(20)
 
 	for(var/obj/machinery/mass_driver/M in mass_drivers)
-		if(M.z != src.z)	continue
+		if(M.z != src.z)
+			continue
 		if(M.id_tag == ident_tag)
 			M.drive()
 
 	sleep(50)
 	for(var/obj/machinery/door/poddoor/M in poddoors)
-		if(M.z != src.z)	continue
+		if(M.z != src.z)
+			continue
 		if(M.id_tag == ident_tag)
 			spawn()
 				M.close()
 
 	for(var/obj/structure/deathsquad_tele/D in world)
-		if(D.z != src.z)	continue
+		if(D.z != src.z)
+			continue
 		if(D.id_tag == ident_tag)
 			D.icon_state = "tele0"
 			D.density = 0
@@ -368,7 +383,8 @@
 
 
 /obj/structure/deathsquad_tele/Bumped(var/atom/movable/AM)
-	if(!ztarget)	return ..()
+	if(!ztarget)
+		return ..()
 	var/y = AM.y
 	spawn()
 		AM.z = ztarget

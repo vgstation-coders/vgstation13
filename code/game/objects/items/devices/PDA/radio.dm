@@ -19,7 +19,8 @@
 //	to_chat(world, "Post: [freq]: [key]=[value], [key2]=[value2]")
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
 
-	if(!frequency) return
+	if(!frequency)
+		return
 
 	var/datum/signal/signal = getFromPool(/datum/signal)
 	signal.source = src
@@ -175,7 +176,8 @@
 	..()
 	var/obj/item/device/pda/PDA = src.hostpda
 	var/cmd = "command"
-	if(active) cmd = "command [active.suffix]"
+	if(active)
+		cmd = "command [active.suffix]"
 
 	switch(href_list["op"])
 

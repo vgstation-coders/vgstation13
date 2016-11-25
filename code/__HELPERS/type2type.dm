@@ -53,7 +53,8 @@ proc/tg_jointext(list/list, glue = ",")
 //Case Sensitive!
 /proc/splittextEx(text, delimiter="\n")
 	var/delim_len = length(delimiter)
-	if(delim_len < 1) return list(text)
+	if(delim_len < 1)
+		return list(text)
 	. = list()
 	var/last_found = 1
 	var/found
@@ -116,41 +117,65 @@ proc/tg_jointext(list/list, glue = ",")
 //Converts an angle (degrees) into an ss13 direction
 /proc/angle2dir(var/degree)
 	degree = ((degree+22.5)%365)
-	if(degree < 45)		return NORTH
-	if(degree < 90)		return NORTHEAST
-	if(degree < 135)	return EAST
-	if(degree < 180)	return SOUTHEAST
-	if(degree < 225)	return SOUTH
-	if(degree < 270)	return SOUTHWEST
-	if(degree < 315)	return WEST
+	if(degree < 45)
+		return NORTH
+	if(degree < 90)
+		return NORTHEAST
+	if(degree < 135)
+		return EAST
+	if(degree < 180)
+		return SOUTHEAST
+	if(degree < 225)
+		return SOUTH
+	if(degree < 270)
+		return SOUTHWEST
+	if(degree < 315)
+		return WEST
 	return NORTH|WEST
 
 //returns the north-zero clockwise angle in degrees, given a direction
 
 /proc/dir2angle(var/D)
 	switch(D)
-		if(NORTH)		return 0
-		if(SOUTH)		return 180
-		if(EAST)		return 90
-		if(WEST)		return 270
-		if(NORTHEAST)	return 45
-		if(SOUTHEAST)	return 135
-		if(NORTHWEST)	return 315
-		if(SOUTHWEST)	return 225
-		else			return null
+		if(NORTH)
+			return 0
+		if(SOUTH)
+			return 180
+		if(EAST)
+			return 90
+		if(WEST)
+			return 270
+		if(NORTHEAST)
+			return 45
+		if(SOUTHEAST)
+			return 135
+		if(NORTHWEST)
+			return 315
+		if(SOUTHWEST)
+			return 225
+		else
+			return null
 
 //returns the east-zero counter-clockwise angle in degrees, given a direction
 
 /proc/dir2angle_t(const/D)
 	switch(D)
-		if(EAST)		return 0
-		if(NORTHEAST)	return 45
-		if(NORTH)		return 90
-		if(NORTHWEST)	return 135
-		if(WEST)		return 180
-		if(SOUTHWEST)	return 225
-		if(SOUTH)		return 270
-		if(SOUTHEAST)	return 315
+		if(EAST)
+			return 0
+		if(NORTHEAST)
+			return 45
+		if(NORTH)
+			return 90
+		if(NORTHWEST)
+			return 135
+		if(WEST)
+			return 180
+		if(SOUTHWEST)
+			return 225
+		if(SOUTH)
+			return 270
+		if(SOUTHEAST)
+			return 315
 
 //Returns the angle in english
 /proc/angle2text(var/degree)
@@ -159,35 +184,59 @@ proc/tg_jointext(list/list, glue = ",")
 //Converts a blend_mode constant to one acceptable to icon.Blend()
 /proc/blendMode2iconMode(blend_mode)
 	switch(blend_mode)
-		if(BLEND_MULTIPLY) return ICON_MULTIPLY
-		if(BLEND_ADD)      return ICON_ADD
-		if(BLEND_SUBTRACT) return ICON_SUBTRACT
-		else               return ICON_OVERLAY
+		if(BLEND_MULTIPLY)
+			return ICON_MULTIPLY
+		if(BLEND_ADD)
+			return ICON_ADD
+		if(BLEND_SUBTRACT)
+			return ICON_SUBTRACT
+		else
+			return ICON_OVERLAY
 
 //Converts a rights bitfield into a string
 /proc/rights2text(rights,seperator="")
-	if(rights & R_BUILDMODE)	. += "[seperator]+BUILDMODE"
-	if(rights & R_ADMIN)		. += "[seperator]+ADMIN"
-	if(rights & R_BAN)			. += "[seperator]+BAN"
-	if(rights & R_FUN)			. += "[seperator]+FUN"
-	if(rights & R_SERVER)		. += "[seperator]+SERVER"
-	if(rights & R_DEBUG)		. += "[seperator]+DEBUG"
-	if(rights & R_POSSESS)		. += "[seperator]+POSSESS"
-	if(rights & R_PERMISSIONS)	. += "[seperator]+PERMISSIONS"
-	if(rights & R_STEALTH)		. += "[seperator]+STEALTH"
-	if(rights & R_REJUVINATE)	. += "[seperator]+REJUVINATE"
-	if(rights & R_VAREDIT)		. += "[seperator]+VAREDIT"
-	if(rights & R_SOUNDS)		. += "[seperator]+SOUND"
-	if(rights & R_SPAWN)		. += "[seperator]+SPAWN"
-	if(rights & R_MOD)			. += "[seperator]+MODERATOR"
-	if(rights & R_ADMINBUS)		. += "[seperator]+ADMINBUS"
+	if(rights & R_BUILDMODE)
+		. += "[seperator]+BUILDMODE"
+	if(rights & R_ADMIN)
+		. += "[seperator]+ADMIN"
+	if(rights & R_BAN)
+		. += "[seperator]+BAN"
+	if(rights & R_FUN)
+		. += "[seperator]+FUN"
+	if(rights & R_SERVER)
+		. += "[seperator]+SERVER"
+	if(rights & R_DEBUG)
+		. += "[seperator]+DEBUG"
+	if(rights & R_POSSESS)
+		. += "[seperator]+POSSESS"
+	if(rights & R_PERMISSIONS)
+		. += "[seperator]+PERMISSIONS"
+	if(rights & R_POLLING)
+		. += "[seperator]+POLLING"
+	if(rights & R_STEALTH)
+		. += "[seperator]+STEALTH"
+	if(rights & R_REJUVINATE)
+		. += "[seperator]+REJUVINATE"
+	if(rights & R_VAREDIT)
+		. += "[seperator]+VAREDIT"
+	if(rights & R_SOUNDS)
+		. += "[seperator]+SOUND"
+	if(rights & R_SPAWN)
+		. += "[seperator]+SPAWN"
+	if(rights & R_MOD)
+		. += "[seperator]+MODERATOR"
+	if(rights & R_ADMINBUS)
+		. += "[seperator]+ADMINBUS"
 	return .
 
 /proc/ui_style2icon(ui_style)
 	switch(ui_style)
-		if("old")		return 'icons/mob/screen1_old.dmi'
-		if("Orange")	return 'icons/mob/screen1_Orange.dmi'
-		else			return 'icons/mob/screen1_Midnight.dmi'
+		if("old")
+			return 'icons/mob/screen1_old.dmi'
+		if("Orange")
+			return 'icons/mob/screen1_Orange.dmi'
+		else
+			return 'icons/mob/screen1_Midnight.dmi'
 
 /proc/num2septext(var/theNum, var/sigFig = 7,var/sep=",") // default sigFig (1,000,000)
 	var/finalNum = num2text(theNum, sigFig)

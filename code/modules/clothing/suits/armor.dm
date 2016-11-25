@@ -29,6 +29,11 @@
 	icon_state = "warden_jacket"
 	item_state = "armor"
 
+/obj/item/clothing/suit/armor/vest/neorussian
+	name = "neo-Russian vest"
+	desc = "The narkotiki camo pattern will come useful for botany raids."
+	icon_state = "nr_vest"
+	item_state = "nr_vest"
 
 /obj/item/clothing/suit/armor/riot
 	name = "Riot Suit"
@@ -114,6 +119,17 @@
 	blood_overlay_type = "armor"
 	armor = list(melee = 10, bullet = 10, laser = 80, energy = 50, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0
+	var/basereflectchance = 60
+
+/obj/item/clothing/suit/armor/laserproof/become_defective()
+	if(!defective)
+		..()
+		if(prob(75))
+			basereflectchance -= rand(basereflectchance/3, basereflectchance)
+		if(prob(50))
+			slowdown++
+		if(prob(50))
+			slowdown++
 
 /obj/item/clothing/suit/armor/swat/officer
 	name = "officer jacket"
@@ -164,24 +180,32 @@
 	return
 
 /obj/item/clothing/suit/armor/reactive/on_block(damage, attack_text)
-	if(!prob(35)) return 0 //35% chance
+	if(!prob(35))
+		return 0 //35% chance
 
 	var/mob/living/carbon/human/L = loc
-	if(!istype(L)) return 0 //Not living mob
+	if(!istype(L))
+		return 0 //Not living mob
 	if(L.wear_suit != src) //Not worn
 		return 0 //Don't do anything
 
 	var/list/turfs = new/list()
 
 	for(var/turf/T in orange(6, loc))
-		if(istype(T,/turf/space)) continue
-		if(T.density) continue
-		if(T.x>world.maxx-6 || T.x<6)	continue
-		if(T.y>world.maxy-6 || T.y<6)	continue
+		if(istype(T,/turf/space))
+			continue
+		if(T.density)
+			continue
+		if(T.x>world.maxx-6 || T.x<6)
+			continue
+		if(T.y>world.maxy-6 || T.y<6)
+			continue
 		turfs += T
-	if(!turfs.len) turfs += pick(/turf in orange(6))
+	if(!turfs.len)
+		turfs += pick(/turf in orange(6))
 	var/turf/picked = pick(turfs)
-	if(!isturf(picked)) return
+	if(!isturf(picked))
+		return
 
 	L.visible_message("<span class='danger'>The reactive teleport system flings [L] clear of [attack_text]!</span>", "<span class='notice'>The reactive teleport system flings you clear of [attack_text].</span>")
 
@@ -199,18 +223,6 @@
 
 
 //All of the armor below is mostly unused
-
-
-/obj/item/clothing/suit/armor/centcomm
-	name = "Cent. Com. armor"
-	desc = "A suit that protects against some damage."
-	icon_state = "centcom"
-	item_state = "centcom"
-	w_class = W_CLASS_LARGE//bulky item
-	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
-	allowed = list(/obj/item/weapon/gun/energy,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
-	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-	siemens_coefficient = 0
 
 /obj/item/clothing/suit/armor/heavy
 	name = "heavy armor"

@@ -206,7 +206,8 @@
 			. += "<td style='width:14%' valign='top'>"
 			for(var/A in get_region_accesses(i))
 				var/access_name = get_access_desc(A)
-				if(!access_name) continue
+				if(!access_name)
+					continue
 				var/checked = ""//((D && (D.req_access.Find(A)) || (D.req_one_access.Find(A)))) || (!D && (selected_access.Find(A))) ? " checked" : ""
 				if(istype(D))
 					if(D.req_access.Find(A) || D.req_one_access.Find(A))
@@ -399,8 +400,10 @@
 /datum/selection_schematic/airlock_schematic/clicked(var/mob/user)
 	if(master:selected == src)
 		master:selected_name = copytext(sanitize(input(usr,"What would you like to name this airlock?","Input a name",name) as text|null),1,MAX_NAME_LEN)
-		if(capitalize(master:selected_name) == master:selected_name) master:selected_name = "\improper[master:selected_name]"
-	else master.selected = src
+		if(capitalize(master:selected_name) == master:selected_name)
+			master:selected_name = "\improper[master:selected_name]"
+	else
+		master.selected = src
 // Schematics for schematics, I know, but it's OOP!
 /datum/selection_schematic/airlock_schematic
 	name			= "airlock"						//Name of the airlock for the tooltip.

@@ -21,7 +21,7 @@
 		new /obj/item/clothing/head/hardhat/white(src)
 		new /obj/item/clothing/head/welding(src)
 		new /obj/item/clothing/gloves/yellow(src)
-		new /obj/item/clothing/shoes/brown(src)
+		new /obj/item/clothing/shoes/workboots(src)
 		new /obj/item/weapon/cartridge/ce(src)
 		new /obj/item/device/radio/headset/heads/ce(src)
 		new /obj/item/weapon/storage/toolbox/mechanical(src)
@@ -111,7 +111,7 @@
 		else
 			new /obj/item/weapon/storage/backpack/satchel_eng(src)
 		new /obj/item/clothing/under/rank/engineer(src)
-		new /obj/item/clothing/shoes/orange(src)
+		new /obj/item/clothing/shoes/workboots(src)
 		new /obj/item/weapon/storage/toolbox/mechanical(src)
 //		new /obj/item/weapon/cartridge/engineering(src)
 		new /obj/item/device/radio/headset/headset_eng(src)
@@ -142,7 +142,7 @@
 		else
 			new /obj/item/weapon/storage/backpack/satchel_norm(src)
 		new /obj/item/clothing/under/rank/atmospheric_technician(src)
-		new /obj/item/clothing/shoes/black(src)
+		new /obj/item/clothing/shoes/workboots(src)
 		new /obj/item/weapon/storage/toolbox/mechanical(src)
 		new /obj/item/weapon/extinguisher/foam(src)
 		// new /obj/item/weapon/cartridge/engineering(src)
@@ -177,7 +177,7 @@
 		else
 			new /obj/item/weapon/storage/backpack/satchel_eng(src)
 		new /obj/item/clothing/under/rank/mechanic(src)
-		new /obj/item/clothing/shoes/white(src)
+		new /obj/item/clothing/shoes/workboots(src)
 		new /obj/item/weapon/storage/toolbox/mechanical(src)
 		//new /obj/item/device/component_exchanger(src)
 		new /obj/item/device/radio/headset/headset_engsci(src)

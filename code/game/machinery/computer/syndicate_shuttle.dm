@@ -20,10 +20,13 @@
 	icon_state = "syndishuttle"
 
 /obj/machinery/computer/syndicate_station/proc/syndicate_move_to(area/destination as area)
-	if(moving)	return
-	if(lastMove + SYNDICATE_SHUTTLE_COOLDOWN > world.time)	return
+	if(moving)
+		return
+	if(lastMove + SYNDICATE_SHUTTLE_COOLDOWN > world.time)
+		return
 	var/area/dest_location = locate(destination)
-	if(curr_location == dest_location)	return
+	if(curr_location == dest_location)
+		return
 
 	moving = 1
 	lastMove = world.time
@@ -79,7 +82,8 @@
 	return
 
 /obj/machinery/computer/syndicate_station/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 	var/mob/user = usr
 
 	user.set_machine(src)

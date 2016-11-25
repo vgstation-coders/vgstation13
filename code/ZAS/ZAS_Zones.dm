@@ -350,8 +350,10 @@ proc/ShareRatio(datum/gas_mixture/A, datum/gas_mixture/B, connecting_tiles)
 	A.update_values()
 	B.update_values()
 
-	if(A.compare(B)) return 1
-	else return 0
+	if(A.compare(B))
+		return 1
+	else
+		return 0
 
 proc/ShareSpace(datum/gas_mixture/A, list/unsimulated_tiles, dbg_output)
 	//A modified version of ShareRatio for spacing gas at the same rate as if it were going into a large airless room.

@@ -152,7 +152,7 @@
 		affected.owner.custom_pain("You feel something rip in your [affected.display_name]!", 1)
 	user.drop_item()
 	affected.hidden = tool
-	tool.loc = target
+	tool.forceMove(target)
 
 	if(istype(tool, /obj/item/weapon/implant))
 		var/obj/item/weapon/implant/disobj = tool
@@ -222,7 +222,7 @@
 					target.release_control()
 				worm.detach()
 
-			obj.loc = get_turf(target)
+			obj.forceMove(get_turf(target))
 			if(istype(obj,/obj/item/weapon/implant))
 				var/obj/item/weapon/implant/imp = obj
 				imp.imp_in = null
@@ -235,7 +235,7 @@
 	else if (affected.hidden)
 		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
 		"<span class='notice'>You take something out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
-		affected.hidden.loc = get_turf(target)
+		affected.hidden.forceMove(get_turf(target))
 		if(!affected.hidden.blood_DNA)
 			affected.hidden.blood_DNA = list()
 		affected.hidden.blood_DNA[target.dna.unique_enzymes] = target.dna.b_type

@@ -29,7 +29,7 @@
 	var/recommended_enemies = 0
 	var/newscaster_announcements = null
 	var/uplink_welcome = "Syndicate Uplink Console:"
-	var/uplink_uses = 10
+	var/uplink_uses = 20
 	var/mixed = 0 // denotes whether its apart of a mixed mode or not
 	var/list/datum/mind/necromancer = list() //Those who use a necromancy staff OR soulstone a shade/construct
 	var/list/datum/mind/risen = list() // Those risen by necromancy or soulstone
@@ -39,6 +39,7 @@
 	var/list/datum/mind/deathsquad = list()
 	var/list/datum/mind/ert = list()
 	var/rage = 0
+	var/can_be_mixed = FALSE
 
 /datum/game_mode/proc/announce() //to be calles when round starts
 	to_chat(world, "<B>Notice</B>: [src] did not define announce()")
@@ -164,6 +165,7 @@
 		feedback_set("escaped_on_pod_5",escaped_on_pod_5)
 
 	send2mainirc("A round of [src.name] has ended - [surviving_total] survivors, [ghosts] ghosts.")
+	send2maindiscord("A round of **[name]** has ended - **[surviving_total]** survivors, **[ghosts]** ghosts.")
 
 	return 0
 
@@ -196,9 +198,10 @@
 			// If they're a traitor or likewise, give them extra TC in exchange.
 			var/obj/item/device/uplink/hidden/suplink = man.mind.find_syndicate_uplink()
 			if(suplink)
-				var/extra = 4
+				var/extra = 8
 				suplink.uses += extra
-				if(man.mind) man.mind.total_TC += extra
+				if(man.mind)
+					man.mind.total_TC += extra
 				to_chat(man, "<span class='warning'>We have received notice that enemy intelligence suspects you to be linked with us. We have thus invested significant resources to increase your uplink's capacity.</span>")
 			else
 				// Give them a warning!
@@ -226,7 +229,7 @@
 			comm.messagetitle.Add("[command_name()] Status Summary")
 			comm.messagetext.Add(intercepttext)
 
-	command_alert("Summary downloaded and printed out at all communications consoles.", "Enemy communication intercept.")
+	command_alert(/datum/command_alert/enemy_comms_interception)
 /*	for(var/mob/M in player_list)
 		if(!istype(M,/mob/new_player))
 			M << sound('sound/AI/intercept.ogg')
@@ -361,6 +364,13 @@
 			heads += player.mind
 	return heads
 
+/datum/game_mode/proc/get_assigned_head_roles()
+	var/list/roles = list()
+	for(var/mob/player in mob_list)
+		if(player.mind && (player.mind.assigned_role in command_positions))
+			roles += player.mind.assigned_role
+	return roles
+
 /*/datum/game_mode/New()
 	newscaster_announcements = pick(newscaster_standard_feeds)*/
 
@@ -429,7 +439,8 @@ proc/get_nt_opposed()
 				dudes += man
 			else if(man.client.prefs.nanotrasen_relation == "Skeptical" && prob(50))
 				dudes += man
-	if(dudes.len == 0) return null
+	if(dudes.len == 0)
+		return null
 	return pick(dudes)
 
 

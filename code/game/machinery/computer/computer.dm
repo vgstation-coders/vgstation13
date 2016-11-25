@@ -38,7 +38,8 @@
 	return 1
 
 /obj/machinery/computer/emp_act(severity)
-	if(prob(20/severity)) set_broken()
+	if(prob(20/severity))
+		set_broken()
 	..()
 
 
@@ -102,13 +103,14 @@
 							"You begin to unscrew the monitor...")
 	if (do_after(user, src, 20) && (circuit || CC))
 		var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-		if(!CC) CC = new circuit( A )
+		if(!CC)
+			CC = new circuit( A )
 		else
-			CC.loc = A
+			CC.forceMove(A)
 		A.circuit = CC
 		A.anchored = 1
 		for (var/obj/C in src)
-			C.loc = src.loc
+			C.forceMove(src.loc)
 		if (src.stat & BROKEN)
 			to_chat(user, "<span class='notice'>[bicon(src)] The broken glass falls out.</span>")
 			getFromPool(/obj/item/weapon/shard, loc)

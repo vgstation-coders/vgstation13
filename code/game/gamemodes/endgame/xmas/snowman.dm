@@ -35,7 +35,8 @@
 	var/obj/item/carrot = null
 
 /mob/living/simple_animal/hostile/retaliate/snowman/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
 	..()
 	if(!ckey && !stat)
@@ -58,9 +59,9 @@
 		new /obj/item/stack/sheet/snow(T, 1)
 		new /obj/item/stack/sheet/snow(T, 1)
 		if(hat)
-			hat.loc = T
+			hat.forceMove(T)
 		if(carrot)
-			carrot.loc = T
+			carrot.forceMove(T)
 		qdel(src)
 
 	else if(fire_alert)
@@ -86,7 +87,7 @@
 
 	else if(istype(W,/obj/item/clothing/head/))
 		if(hat)
-			hat.loc = get_turf(src)
+			hat.forceMove(get_turf(src))
 			overlays -= image('icons/mob/head.dmi', hat.icon_state)
 			hat = null
 		else
@@ -96,7 +97,8 @@
 
 			overlays += image('icons/mob/head.dmi', hat.icon_state)
 
-	else	..()
+	else
+		..()
 
 /obj/item/projectile/snowball
 	name = "flying snowball"

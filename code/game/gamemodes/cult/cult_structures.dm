@@ -95,7 +95,6 @@
 	icon = 'icons/obj/cult.dmi'
 	icon_state = "hole"
 	density = 1
-	unacidable = 1
 	anchored = 1.0
 	var/spawnable = null
 
@@ -147,8 +146,10 @@
 			return
 
 
-		if(iscultist(M)) return
-		if(!ishuman(M) && !isrobot(M)) return
+		if(iscultist(M))
+			return
+		if(!ishuman(M) && !isrobot(M))
+			return
 
 		M.monkeyizing = 1
 		M.canmove = 0
@@ -171,7 +172,7 @@
 					qdel(W)
 					continue
 				W.layer = initial(W.layer)
-				W.loc = M.loc
+				W.forceMove(M.loc)
 				W.dropped(M)
 
 		var/mob/living/new_mob = new /mob/living/simple_animal/hostile/retaliate/cluwne(A.loc)

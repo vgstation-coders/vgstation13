@@ -97,7 +97,8 @@
 	interact(user)
 
 /obj/machinery/shield_gen/attack_ghost(mob/user)
-	if(isAdminGhost(user)) src.attack_hand(user)
+	if(isAdminGhost(user))
+		src.attack_hand(user)
 	return
 
 /obj/machinery/shield_gen/interact(mob/user)
@@ -183,8 +184,10 @@
 		average_field_strength = 0
 
 /obj/machinery/shield_gen/Topic(href, href_list[])
-	if(!isAI(usr) && usr.z != z) return 1
-	if(..()) return 1
+	if(!isAI(usr) && usr.z != z)
+		return 1
+	if(..())
+		return 1
 	if( href_list["close"] )
 		usr << browse(null, "window=shield_generator")
 		usr.unset_machine()

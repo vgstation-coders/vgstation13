@@ -4,7 +4,6 @@
 	gender = PLURAL
 	density = 0
 	anchored = 1
-	layer = 2
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "shards"
 
@@ -15,7 +14,6 @@
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "ash"
 	anchored = 1
-	layer = TURF_LAYER
 
 /obj/effect/decal/cleanable/ash/attack_hand(mob/user as mob)
 	user.visible_message("<span class='notice'>[user] wipes away \the [src].</span>")
@@ -27,7 +25,6 @@
 	gender = PLURAL
 	density = 0
 	anchored = 1
-	layer = 2
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "dirt"
 
@@ -37,7 +34,6 @@
 	gender = PLURAL
 	density = 0
 	anchored = 1
-	layer = 2
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "flour"
 
@@ -47,7 +43,6 @@
 	gender = PLURAL
 	density = 0
 	anchored = 1
-	layer = 2
 	luminosity = 1
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "greenglow"
@@ -57,7 +52,7 @@
 	desc = "Somebody should remove that."
 	density = 0
 	anchored = 1
-	layer = 3
+	plane = ABOVE_HUMAN_PLANE
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "cobweb1"
 
@@ -66,7 +61,8 @@
 	desc = "It looks like a melted... something."
 	density = 0
 	anchored = 1
-	layer = 3
+	layer = OBJ_LAYER
+	plane = OBJ_PLANE
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "molten"
 
@@ -75,7 +71,7 @@
 	desc = "Somebody should remove that."
 	density = 0
 	anchored = 1
-	layer = 3
+	plane = ABOVE_HUMAN_PLANE
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "cobweb2"
 
@@ -86,7 +82,6 @@
 	gender = PLURAL
 	density = 0
 	anchored = 1
-	layer = 2
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "vomit_1"
 
@@ -132,7 +127,6 @@
 	desc = "It's red."
 	density = 0
 	anchored = 1
-	layer = 2
 	icon = 'icons/effects/tomatodecal.dmi'
 	random_icon_states = list("tomato_floor1", "tomato_floor2", "tomato_floor3")
 
@@ -141,7 +135,6 @@
 	desc = "Some kind of fruit smear."
 	density = 0
 	anchored = 1
-	layer = 2
 	icon = 'icons/effects/tomatodecal.dmi'
 	random_icon_states = list("fruit_smudge1", "fruit_smudge2", "fruit_smudge3")
 	icon_state = "fruit_smudge1"
@@ -151,7 +144,6 @@
 	desc = "Seems like this one won't hatch."
 	density = 0
 	anchored = 1
-	layer = 2
 	icon = 'icons/effects/tomatodecal.dmi'
 	random_icon_states = list("smashed_egg1", "smashed_egg2", "smashed_egg3")
 
@@ -160,7 +152,6 @@
 	desc = "It's pie cream from a cream pie."
 	density = 0
 	anchored = 1
-	layer = 2
 	icon = 'icons/effects/tomatodecal.dmi'
 	random_icon_states = list("smashed_pie")
 
@@ -169,7 +160,6 @@
 	desc = "Now how are you gonna sweep it back up, smartass?"
 	density = 0
 	anchored = 1
-	layer = 2
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "sand"
 	gender = PLURAL
@@ -180,7 +170,6 @@
 	desc = "This burnt-out campfire reminds you of someone."
 	anchored = 1
 	density = 0
-	layer = 2
 	icon = 'icons/obj/atmos.dmi'
 	icon_state = "campfire_burnt"
 
@@ -191,12 +180,11 @@
 	icon = 'icons/effects/tomatodecal.dmi'
 	icon_state = "clay_fragments"
 	anchored = 0
-	layer=2
 
 /obj/effect/decal/cleanable/clay_fragments/New()
 	..()
-	pixel_x = rand (-3,3)
-	pixel_y = rand (-3,3)
+	pixel_x = rand (-3,3) * PIXEL_MULTIPLIER
+	pixel_y = rand (-3,3) * PIXEL_MULTIPLIER
 
 /obj/effect/decal/cleanable/soot
 	name = "soot"
@@ -205,7 +193,6 @@
 	icon = 'icons/effects/tile_effects.dmi'
 	icon_state = "tile_soot"
 	anchored = 1
-	layer=2
 	mouse_opacity = 0
 
 
@@ -219,7 +206,6 @@
 	gender = PLURAL
 	density = 0
 	anchored = 1
-	layer = 2
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "lspaceclutter"
 

@@ -22,7 +22,8 @@
 	var/tmp/last_print = 0 //When was the last printing, works as a cooldown to prevent paperspam
 
 /obj/item/device/analyzer/plant_analyzer/afterattack(obj/target, mob/user, flag)
-	if(!flag) return
+	if(!flag)
+		return
 
 	var/datum/seed/grown_seed
 	var/datum/reagents/grown_reagents
@@ -220,7 +221,8 @@
 	set category = "Object"
 	set src in usr
 
-	if (!usr || usr.isUnconscious() || usr.restrained() || !Adjacent(usr)) return
+	if (!usr || usr.isUnconscious() || usr.restrained() || !Adjacent(usr))
+		return
 	print_report(usr)
 
 /obj/item/device/analyzer/plant_analyzer/Topic(href, href_list)
@@ -375,8 +377,8 @@
 /obj/item/weapon/reagent_containers/glass/fertilizer/New()
 	..()
 
-	src.pixel_x = rand(-5.0, 5)
-	src.pixel_y = rand(-5.0, 5)
+	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
 	if(fertilizer)
 		reagents.add_reagent(fertilizer,10)
@@ -410,7 +412,7 @@
 	throw_speed = 4
 	throw_range = 4
 	sharpness = 1.2
-	origin_tech = "materials=2;combat=1"
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_COMBAT + "=1"
 	attack_verb = list("chops", "tears", "cuts")
 
 /obj/item/weapon/hatchet/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
@@ -437,11 +439,12 @@
 	w_class = W_CLASS_LARGE
 	flags = FPRINT
 	slot_flags = SLOT_BACK
-	origin_tech = "materials=2;combat=2"
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_COMBAT + "=2"
 	attack_verb = list("chops", "slices", "cuts", "reaps")
 
 /obj/item/weapon/scythe/afterattack(atom/A, mob/user as mob, proximity)
-	if(!proximity) return
+	if(!proximity)
+		return
 	if(istype(A, /obj/effect/plantsegment) || istype(A, /turf/simulated/floor))
 		for(var/obj/effect/plantsegment/B in range(user,1))
 			B.take_damage(src)

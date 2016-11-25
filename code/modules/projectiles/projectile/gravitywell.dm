@@ -20,7 +20,7 @@
 
 	if(isliving(A))
 		var/mob/living/M = A
-		M.Weaken(5)
+		M.Knockdown(5)
 
 	forceMove(get_step(loc,dir))
 
@@ -47,7 +47,7 @@
 	return
 
 /obj/item/projectile/gravitywell/singularity_act(var/current_size,var/obj/machinery/singularity/S)
-	src.loc = S.loc
+	src.forceMove(S.loc)
 	spawnGravityWell()
 	return
 
@@ -55,11 +55,10 @@
 	name = "gravity well"
 	icon = 'icons/effects/160x160.dmi'
 	icon_state = "gravitywell_shadow"
-	pixel_x = -64
-	pixel_y = -64
-	unacidable = 1
+	pixel_x = -64 * PIXEL_MULTIPLIER
+	pixel_y = -64 * PIXEL_MULTIPLIER
 	density = 0
-	layer = 2.1
+	layer = DECAL_LAYER
 	anchored = 1
 	alpha = 255
 	mouse_opacity = 0
@@ -128,11 +127,11 @@
 	name = "gravity well"
 	icon = 'icons/effects/160x160.dmi'
 	icon_state = "gravitywell_white"
-	pixel_x = -64
-	pixel_y = -64
-	unacidable = 1
+	pixel_x = -64 * PIXEL_MULTIPLIER
+	pixel_y = -64 * PIXEL_MULTIPLIER
 	density = 0
-	layer = 30
+	plane = EFFECTS_PLANE
+	layer = GRAVITYGRID_LAYER
 	anchored = 1
 	color = "green"
 	alpha = 0
@@ -148,7 +147,7 @@
 /obj/effect/overlay/gravitygrid/proc/LevelUp()
 	if(!GG)
 		GG = new(loc)
-		GG.layer = layer-1
+		GG.layer = layer-0.0001
 		GG.size = size+2
 		GG.alpha = 255
 		GG.transform *= size/5

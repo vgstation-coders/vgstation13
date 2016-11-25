@@ -25,8 +25,8 @@
 	if(buildstage)
 		processing_objects.Add(src)
 	else
-		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? 28 : -28)
-		pixel_y = (ndir & 3)? (ndir ==1 ? 28 : -28) : 0
+		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER)
+		pixel_y = (ndir & 3)? (ndir ==1 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER) : 0
 		dir=ndir
 		b_stat=1
 		on = 0
@@ -85,7 +85,8 @@
 					update_icon()
 					processing_objects.Remove(src)
 				return 1
-			else return ..()
+			else
+				return ..()
 		if(2)
 			if(isscrewdriver(W))
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)

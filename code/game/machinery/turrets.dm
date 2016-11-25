@@ -9,7 +9,6 @@
 	var/raised = 0
 	var/enabled = 1
 	anchored = 1
-	layer = 3
 	invisibility = INVISIBILITY_LEVEL_TWO
 	density = 1
 	var/faction = null //No shooting our buddies!
@@ -51,7 +50,7 @@
 	icon = 'icons/obj/turrets.dmi'
 	icon_state = "turretCover"
 	anchored = 1
-	layer = 3.5
+	layer = TURRET_COVER_LAYER
 	density = 0
 	var/obj/machinery/turret/host = null
 
@@ -254,7 +253,8 @@
 			flick("popup", src.cover)
 			src.cover.icon_state = "openTurretCover"
 		spawn(10)
-			if (popping==1) popping = 0
+			if (popping==1)
+				popping = 0
 
 /obj/machinery/turret/proc/popDown()
 	if ((!isPopping()) || src.popping==1)
@@ -271,7 +271,8 @@
 /obj/machinery/turret/bullet_act(var/obj/item/projectile/Proj)
 	src.health -= Proj.damage
 	..()
-	if(prob(45) && Proj.damage > 0) src.spark_system.start()
+	if(prob(45) && Proj.damage > 0)
+		src.spark_system.start()
 
 	if (src.health <= 0)
 		src.die()
@@ -357,7 +358,8 @@
 	return
 
 /obj/machinery/turretid/attackby(obj/item/weapon/W, mob/user)
-	if(stat & BROKEN) return
+	if(stat & BROKEN)
+		return
 	if (istype(user, /mob/living/silicon))
 		return src.attack_hand(user)
 
@@ -417,7 +419,8 @@
 
 
 /obj/machinery/turret/attack_animal(mob/living/simple_animal/M as mob)
-	if(M.melee_damage_upper == 0)	return
+	if(M.melee_damage_upper == 0)
+		return
 	if(!(stat & BROKEN))
 		visible_message("<span class='danger'>[M] [M.attacktext] [src]!</span>")
 		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name]</font>")
@@ -633,7 +636,8 @@
 		return
 	src.dir = get_dir(src,target)
 	spawn	for(var/i=1 to min(projectiles, projectiles_per_shot))
-		if(!src || !target) break
+		if(!src || !target)
+			break
 		var/turf/curloc = get_turf(src)
 		var/turf/targloc = get_turf(target)
 		if (!targloc || !curloc)

@@ -17,6 +17,14 @@ obj/machinery/atmospherics/trinary
 
 	var/activity_log = ""
 
+/obj/machinery/atmospherics/trinary/update_planes_and_layers()
+	if (level == LEVEL_BELOW_FLOOR)
+		layer = TRINARY_PIPE_LAYER
+	else
+		layer = EXPOSED_BINARY_PIPE_LAYER
+
+	layer = PIPING_LAYER(layer, piping_layer)
+
 /obj/machinery/atmospherics/trinary/update_icon(var/adjacent_procd)
 	var/node_list = list(node1,node2,node3)
 	..(adjacent_procd,node_list)
@@ -54,7 +62,8 @@ obj/machinery/atmospherics/trinary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	if (pipe.pipename)
 		name = pipe.pipename
 	var/turf/T = loc
-	level = T.intact ? 2 : 1
+	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
+	update_planes_and_layers()
 	initialize()
 	build_network()
 	if (node1)
@@ -107,7 +116,8 @@ obj/machinery/atmospherics/trinary/Destroy()
 	..()
 
 obj/machinery/atmospherics/trinary/initialize()
-	if(node1 && node2 && node3) return
+	if(node1 && node2 && node3)
+		return
 
 	//mirrored pipes face the same way and have their nodes in the same place
 	//The 1 and 3 nodes are reversed, however.
@@ -198,7 +208,7 @@ obj/machinery/atmospherics/trinary/disconnect(obj/machinery/atmospherics/referen
 			returnToPool(network3)
 		node3 = null
 
-	return null
+	return ..()
 
 /obj/machinery/atmospherics/trinary/unassign_network(datum/pipe_network/reference)
 	if(network1 == reference)

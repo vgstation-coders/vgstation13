@@ -15,7 +15,7 @@
 	starting_materials = list(MAT_IRON = 500)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "combat=1;plasmatech=1"
+	origin_tech = Tc_COMBAT + "=1;" + Tc_PLASMATECH + "=1"
 	ejectshell = 0
 	caliber = null
 	ammo_type = null
@@ -134,17 +134,18 @@
 		flamethrower_window(user)
 
 /obj/item/weapon/gun/projectile/flamethrower/attackby(obj/item/W as obj, mob/user as mob)
-	if(user.stat || user.restrained() || user.lying)	return
+	if(user.stat || user.restrained() || user.lying)
+		return
 	if(iswrench(W) && !status)//Taking this apart
 		var/turf/T = get_turf(src)
 		if(weldtool)
-			weldtool.loc = T
+			weldtool.forceMove(T)
 			weldtool = null
 		if(igniter)
-			igniter.loc = T
+			igniter.forceMove(T)
 			igniter = null
 		if(ptank)
-			ptank.loc = T
+			ptank.forceMove(T)
 			ptank = null
 		getFromPool(/obj/item/stack/rods, T)
 		qdel(src)
@@ -158,8 +159,10 @@
 
 	if(isigniter(W))
 		var/obj/item/device/assembly/igniter/I = W
-		if(I.secured)	return
-		if(igniter)		return
+		if(I.secured)
+			return
+		if(igniter)
+			return
 		if(user.drop_item(I, src))
 			igniter = I
 			update_icon()
@@ -186,7 +189,8 @@
 
 
 /obj/item/weapon/gun/projectile/flamethrower/attack_self(mob/user as mob)
-	if(user.stat || user.restrained() || user.lying)	return
+	if(user.stat || user.restrained() || user.lying)
+		return
 	window_open = 1
 	flamethrower_window(user)
 	return
@@ -204,10 +208,12 @@
 		usr.unset_machine()
 		window_open = 0
 		return
-	if(usr.stat || usr.restrained() || usr.lying)	return
+	if(usr.stat || usr.restrained() || usr.lying)
+		return
 	usr.set_machine(src)
 	if(href_list["light"])
-		if(!status)	return
+		if(!status)
+			return
 		lit = !lit
 		if(lit)
 			processing_objects.Add(src)

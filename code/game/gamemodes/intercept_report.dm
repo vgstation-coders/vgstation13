@@ -94,8 +94,10 @@
 /datum/intercept_text/proc/pick_mob()
 	var/list/dudes = list()
 	for(var/mob/living/carbon/human/man in player_list)
-		if (!man.mind) continue
-		if (man.mind.assigned_role=="MODE") continue
+		if (!man.mind)
+			continue
+		if (man.mind.assigned_role=="MODE")
+			continue
 		dudes += man
 	if(dudes.len==0)
 		return null
@@ -124,7 +126,8 @@
 	var/name_2 = pick(src.org_names_2)
 
 	var/mob/living/carbon/human/H = get_suspect()
-	if(!H) return
+	if(!H)
+		return
 
 	var/fingerprints = num2text(md5(H.dna.uni_identity))
 	var/traitor_name = H.real_name
@@ -148,7 +151,8 @@
 
 	var/prob_right_dude = rand(1, 100)
 	var/mob/living/carbon/human/H = get_suspect()
-	if(!H) return
+	if(!H)
+		return
 	var/traitor_job = H.mind.assigned_role
 
 
@@ -163,7 +167,8 @@
 
 	var/prob_right_dude = rand(1, 100)
 	var/mob/living/carbon/human/H = get_suspect()
-	if(!H) return
+	if(!H)
+		return
 	var/traitor_job = H.mind.assigned_role
 
 

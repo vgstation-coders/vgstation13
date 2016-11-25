@@ -136,7 +136,7 @@ Feel free to do whatever with this if you think it lacks.
 		return
 
 	if(storedpda)
-		storedpda.loc = get_turf(src.loc)
+		storedpda.forceMove(get_turf(src.loc))
 		storedpda = null
 		update_icon()
 	else

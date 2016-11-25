@@ -7,7 +7,7 @@
 	item_state = "brown"
 	permeability_coefficient = 0.05
 	flags = NOSLIP
-	origin_tech = "syndicate=3"
+	origin_tech = Tc_SYNDICATE + "=3"
 	var/list/clothing_choices = list()
 	siemens_coefficient = 0.8
 	species_fit = list(VOX_SHAPED)
@@ -74,7 +74,7 @@
 
 /obj/item/clothing/shoes/combat //Basically SWAT shoes combined with galoshes.
 	name = "combat boots"
-	desc = "When you REALLY want to turn up the heat"
+	desc = "When you REALLY want to turn up the heat."
 	icon_state = "swat"
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 25, bomb = 50, bio = 10, rad = 0)
 	flags = NOSLIP
@@ -122,6 +122,7 @@
 	item_state = "clown_shoes"
 	slowdown = SHOES_SLOWDOWN+1
 	_color = "clown"
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
 
 	var/step_sound = "clownstep"
 	var/footstep = 1	//used for squeeks whilst walking
@@ -197,7 +198,7 @@
 				H.sleeping = 0
 				H.stuttering += 20
 				H.ear_deaf += 30
-				H.Weaken(3) //Copied from honkerblast 5000
+				H.Knockdown(3) //Copied from honkerblast 5000
 				if(prob(30))
 					H.Stun(10)
 					H.Paralyse(4)
@@ -237,6 +238,29 @@
 			step_sound = sound_list[pick(sound_list)]
 	..()
 
+/obj/item/clothing/shoes/clown_shoes/stickymagic
+	canremove = 0
+	wizard_garb = 1
+
+/obj/item/clothing/shoes/clown_shoes/stickymagic/acidable()
+	return 0
+
+/obj/item/clothing/shoes/clown_shoes/slippy
+	canremove = 0
+	var/lube_chance = 10
+
+/obj/item/clothing/shoes/clown_shoes/slippy/step_action() //The honkpocalypse is here
+	..()
+	if(ishuman(loc) && prob(lube_chance))
+		var/mob/living/carbon/human/mob = loc
+		if(istype(mob.loc,/turf/simulated))
+			var/turf/simulated/T = mob.loc
+			T.wet(800, TURF_WET_LUBE)
+
+/obj/item/clothing/shoes/clown_shoes/slippy/dropped(mob/user as mob)
+	canremove = 1
+	..()
+
 #undef CLOWNSHOES_RANDOM_SOUND
 
 /obj/item/clothing/shoes/jackboots
@@ -249,6 +273,7 @@
 	species_fit = list(VOX_SHAPED)
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	bonus_kick_damage = 3
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots
 
 /obj/item/clothing/shoes/jackboots/knifeholster/New() //This one comes with preloaded knife holster
 	..()
@@ -257,6 +282,12 @@
 /obj/item/clothing/shoes/jackboots/batmanboots
 	name = "batboots"
 	desc = "Criminal stomping boots for fighting crime and looking good."
+
+/obj/item/clothing/shoes/jackboots/neorussian
+	name = "neo-Russian boots"
+	desc = "Tovarish, no one will realize you stepped on a pile of shit if your pair already looks like shit."
+	icon_state = "nr_boots"
+	item_state = "nr_boots"
 
 /obj/item/clothing/shoes/cult
 	name = "boots"
@@ -273,7 +304,7 @@
 
 /obj/item/clothing/shoes/cyborg
 	name = "cyborg boots"
-	desc = "Shoes for a cyborg costume"
+	desc = "Shoes for a cyborg costume."
 	icon_state = "boots"
 
 /obj/item/clothing/shoes/slippers
@@ -302,14 +333,14 @@
 
 /obj/item/clothing/shoes/simonshoes
 	name = "Simon's Shoes"
-	desc = "Simon's Shoes"
+	desc = "Simon's Shoes."
 	icon_state = "simonshoes"
 	item_state = "simonshoes"
 	species_fit = list(VOX_SHAPED)
 
 /obj/item/clothing/shoes/kneesocks
 	name = "kneesocks"
-	desc = "A pair of girly knee-high socks"
+	desc = "A pair of girly knee-high socks."
 	icon_state = "kneesock"
 	item_state = "kneesock"
 
@@ -321,7 +352,7 @@
 
 /obj/item/clothing/shoes/aviatorboots
 	name = "Aviator Boots"
-	desc = "Boots suitable for just about any occasion"
+	desc = "Boots suitable for just about any occasion."
 	icon_state = "aviator_boots"
 	item_state = "aviator_boots"
 	species_restricted = list("exclude",VOX_SHAPED)
@@ -361,3 +392,11 @@
 	desc = ""
 	icon_state = "doom"
 	item_state = "doom"
+
+/obj/item/clothing/shoes/workboots
+	name = "Workboots"
+	desc = "Thick-soled boots for industrial work environments."
+	icon_state = "workboots"
+	item_state = "workboots"
+	species_fit = list(VOX_SHAPED)
+	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots

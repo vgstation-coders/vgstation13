@@ -149,7 +149,7 @@
 			A.circuit = M
 			A.anchored = 1
 			for (var/obj/C in src)
-				C.loc = src.loc
+				C.forceMove(src.loc)
 			if (src.stat & BROKEN)
 				user.show_message("<span class=\"info\">The broken glass falls out.</span>")
 				new /obj/item/weapon/shard( src.loc )

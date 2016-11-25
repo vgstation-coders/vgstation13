@@ -1,7 +1,9 @@
 /spell/aoe_turf/conjure/forcewall
 	name = "Forcewall"
 	desc = "Create a wall of pure energy at your location."
-	summon_type = list(/obj/effect/forcefield)
+	abbreviation = "FW"
+
+	summon_type = list(/obj/effect/forcefield/wizard)
 	duration = 300
 	charge_max = 100
 	spell_flags = 0
@@ -32,8 +34,7 @@
 	anchored = 1.0
 	opacity = 0
 	density = 1
-	unacidable = 1
-	plane = PLANE_OBJ
+	invisibility = 100
 
 /obj/effect/forcefield/bullet_act(var/obj/item/projectile/Proj, var/def_zone)
 	var/turf/T = get_turf(src.loc)
@@ -42,11 +43,20 @@
 			Proj.on_hit(M,M.bullet_act(Proj, def_zone))
 	return
 
+/obj/effect/forcefield/wizard
+	invisibility = 0
+
 /obj/effect/forcefield/mime
 	icon_state = "empty"
 	name = "invisible wall"
 	desc = "You have a bad feeling about this."
+	invisibility = 0
 
+/obj/effect/forcefield/mime/Cross(atom/movable/mover, turf/target, height = 0)
+	if(istype(mover, /obj/item/projectile/bullet/invisible))
+		return 1
+	..()
+	
 /obj/effect/forcefield/cultify()
 	new /obj/effect/forcefield/cult(get_turf(src))
 	qdel(src)

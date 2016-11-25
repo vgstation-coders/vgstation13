@@ -4,8 +4,9 @@
 /obj/item/weapon/reagent_containers/food/drinks
 	name = "drink"
 	desc = "yummy"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/drinkingglass.dmi', "right_hand" = 'icons/mob/in-hand/right/drinkingglass.dmi')
 	icon = 'icons/obj/drinks.dmi'
-	icon_state = null
+	icon_state = "glassbottle"
 	flags = FPRINT  | OPENCONTAINER
 	var/gulp_size = 5 //This is now officially broken ... need to think of a nice way to fix it.
 	possible_transfer_amounts = list(5, 10, 25)
@@ -61,7 +62,7 @@
 		if(!M) //This really shouldn't be checked here, but sure
 			return
 
-		force = 15 //Smashing bottles over someoen's head hurts. //todo: check that this isn't overwriting anything it shouldn't be
+		force = 15 //Smashing bottles over someoen's head hurts. //todo: check that this isn't overwriting anything it shouldn't be //It was
 
 		var/datum/organ/external/affecting = user.zone_sel.selecting //Find what the player is aiming at
 
@@ -105,8 +106,10 @@
 
 			//Display an attack message.
 			for(var/mob/O in viewers(user, null))
-				if(M != user) O.show_message(text("<span class='danger'>[M] has been hit over the head with a [smashtext][src.name], by [user]!</span>"), 1)
-				else O.show_message(text("<span class='danger'>[M] hits \himself with a [smashtext][src.name] on the head!</span>"), 1)
+				if(M != user)
+					O.show_message(text("<span class='danger'>[M] has been hit over the head with a [smashtext][src.name], by [user]!</span>"), 1)
+				else
+					O.show_message(text("<span class='danger'>[M] hits \himself with a [smashtext][src.name] on the head!</span>"), 1)
 			//Weaken the target for the duration that we calculated and divide it by 5.
 			if(armor_duration)
 				M.apply_effect(min(armor_duration, 10) , WEAKEN) // Never weaken more than a flash!
@@ -114,8 +117,10 @@
 		else
 			//Default attack message and don't weaken the target.
 			for(var/mob/O in viewers(user, null))
-				if(M != user) O.show_message(text("<span class='danger'>[M] has been attacked with a [smashtext][src.name], by [user]!</span>"), 1)
-				else O.show_message(text("<span class='danger'>[M] has attacked himself with a [smashtext][src.name]!</span>"), 1)
+				if(M != user)
+					O.show_message(text("<span class='danger'>[M] has been attacked with a [smashtext][src.name], by [user]!</span>"), 1)
+				else
+					O.show_message(text("<span class='danger'>[M] has attacked himself with a [smashtext][src.name]!</span>"), 1)
 
 		//Attack logs
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has attacked [M.name] ([M.ckey]) with a bottle!</font>")
@@ -174,6 +179,7 @@
 				if(H.species.chem_flags & NO_DRINK)
 					reagents.reaction(get_turf(H), TOUCH)
 					H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
+					reagents.remove_any(gulp_size)
 					return 0
 
 			reagents.reaction(M, INGEST)
@@ -263,6 +269,7 @@
 			if(H.species.chem_flags & NO_DRINK)
 				reagents.reaction(get_turf(H), TOUCH)
 				H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
+				reagents.remove_any(gulp_size)
 				return 0
 
 		reagents.reaction(user, INGEST)
@@ -283,7 +290,6 @@
 	desc = "A golden cup"
 	name = "golden cup"
 	icon_state = "golden_cup"
-	item_state = "" //nope :(
 	w_class = W_CLASS_LARGE
 	force = 14
 	throwforce = 10
@@ -306,37 +312,34 @@
 	name = "space milk"
 	desc = "It's milk. White and nutritious goodness!"
 	icon_state = "milk"
-	item_state = "carton"
 	vending_cat = "dairy products"
 /obj/item/weapon/reagent_containers/food/drinks/milk/New()
 	..()
 	reagents.add_reagent(MILK, 50)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/flour
 	name = "flour sack"
 	desc = "A big bag of flour. Good for baking!"
 	icon = 'icons/obj/food.dmi'
 	icon_state = "flour"
-	item_state = "flour"
 /obj/item/weapon/reagent_containers/food/drinks/flour/New()
 	..()
 	reagents.add_reagent(FLOUR, 50)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/soymilk
 	name = "soy milk"
 	desc = "It's soy milk. White and nutritious goodness!"
 	icon_state = "soymilk"
-	item_state = "carton"
 	vending_cat = "dairy products"//it's not a dairy product but oh come on who cares
 /obj/item/weapon/reagent_containers/food/drinks/soymilk/New()
 	..()
 	reagents.add_reagent(SOYMILK, 50)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 
 /obj/item/weapon/reagent_containers/food/drinks/coffee
@@ -346,13 +349,13 @@
 /obj/item/weapon/reagent_containers/food/drinks/coffee/New()
 	..()
 	reagents.add_reagent(COFFEE, 30)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/tea
 	name = "Tea"
 	icon_state = "tea"
-	item_state = "coffee"
+	item_state = "mug_empty"
 /obj/item/weapon/reagent_containers/food/drinks/tea/New()
 	..()
 	switch(pick(1,2,3))
@@ -368,8 +371,8 @@
 			name = "Hippie Farms Eco-Tea"
 			desc = "Remember when the station was powered by solar panels instead of raping space for its plasma, then creating an engine of destruction? Hippie Farms remembers, maaaan."
 			reagents.add_reagent(GREENTEA, 30)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/ice
 	name = "Ice Cup"
@@ -378,19 +381,19 @@
 /obj/item/weapon/reagent_containers/food/drinks/ice/New()
 	..()
 	reagents.add_reagent(ICE, 30)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/h_chocolate
 	name = "Dutch Hot Coco"
 	desc = "Made in Space South America."
 	icon_state = "tea"
-	item_state = "coffee"
+	item_state = "mug_empty"
 /obj/item/weapon/reagent_containers/food/drinks/h_chocolate/New()
 	..()
 	reagents.add_reagent(HOT_COCO, 30)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen
 	name = "Cup Ramen"
@@ -399,8 +402,8 @@
 /obj/item/weapon/reagent_containers/food/drinks/dry_ramen/New()
 	..()
 	reagents.add_reagent(DRY_RAMEN, 30)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/groans
 	name = "Groans Soda"
@@ -438,8 +441,8 @@
 			icon_state += "_doubledew"
 			reagents.add_reagent(DISCOUNT, 20)
 	reagents.add_reagent(DISCOUNT, 10)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/filk
 	name = "Filk"
@@ -466,8 +469,8 @@
 			name = "Filk: Pure Filk Edition"
 			reagents.add_reagent(DISCOUNT, 20)
 	reagents.add_reagent(DISCOUNT, 10)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/grifeo
 	name = "Grifeo"
@@ -495,8 +498,8 @@
 			name = "Grifeo: Pure"
 			reagents.add_reagent(DISCOUNT, 20)
 	reagents.add_reagent(DISCOUNT, 10)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/groansbanned
 	name = "Groans: Banned Edition"
@@ -521,8 +524,8 @@
 			name = "Groans Banned Soda: Quadruple Dan"
 			reagents.add_reagent(DISCOUNT, 40)
 	reagents.add_reagent(DISCOUNT, 10)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/mannsdrink
 	name = "Mann's Drink"
@@ -532,8 +535,8 @@
 	..()
 	reagents.add_reagent(DISCOUNT, 30)
 	reagents.add_reagent(WATER, 20)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/groans
 	name = "Groan-o-matic 9000"
@@ -558,8 +561,8 @@
 	reagents.add_reagent(DISCOUNT, 10)
 	reagents.add_reagent(GLOWINGRAMEN, 8)
 	reagents.add_reagent(TOXICWASTE, 8)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/discount_ramen
 	name = "\improper Discount Dan's Noodle Soup"
@@ -575,8 +578,8 @@
 	reagents.add_reagent(GREENRAMEN, 4)
 	reagents.add_reagent(GLOWINGRAMEN, 4)
 	reagents.add_reagent(DEEPFRIEDRAMEN, 4)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/discount_ramen/attack_self(mob/user as mob)
 	to_chat(user, "You pull the tab, you feel the drink heat up in your hands, and its horrible fumes hits your nose like a ton of bricks. You drop the soup in disgust.")
@@ -598,22 +601,21 @@
 /obj/item/weapon/reagent_containers/food/drinks/beer/New()
 	..()
 	reagents.add_reagent(BEER, 30)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/ale
 	name = "Magm-Ale"
 	desc = "A true dorf's drink of choice."
 	icon_state = "alebottle"
-	item_state = "beer"
 	vending_cat = "fermented"
 	molotov = -1 //can become a molotov
 	isGlass = 1
 /obj/item/weapon/reagent_containers/food/drinks/ale/New()
 	..()
 	reagents.add_reagent(ALE, 30)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans
 	vending_cat = "carbonated drinks"
@@ -651,8 +653,8 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola/New()
 	..()
 	reagents.add_reagent(COLA, 30)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/tonic
 	name = "T-Borg's Tonic Water"
@@ -677,8 +679,8 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/lemon_lime/New()
 	..()
 	reagents.add_reagent(LEMON_LIME, 30)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up
 	name = "Space-Up"
@@ -687,8 +689,8 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_up/New()
 	..()
 	reagents.add_reagent(SPACE_UP, 30)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/starkist
 	name = "Star-kist"
@@ -698,8 +700,8 @@
 	..()
 	reagents.add_reagent(COLA, 15)
 	reagents.add_reagent(ORANGEJUICE, 15)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind
 	name = "Space Mountain Wind"
@@ -708,8 +710,8 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind/New()
 	..()
 	reagents.add_reagent(SPACEMOUNTAINWIND, 30)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/thirteenloko
 	name = "Thirteen Loko"
@@ -718,8 +720,8 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/thirteenloko/New()
 	..()
 	reagents.add_reagent(THIRTEENLOKO, 30)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb
 	name = "Dr. Gibb"
@@ -728,8 +730,8 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/dr_gibb/New()
 	..()
 	reagents.add_reagent(DR_GIBB, 30)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka
 	name = "Nuka Cola"
@@ -738,8 +740,8 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/nuka/New()
 	..()
 	reagents.add_reagent(NUKA_COLA, 30)
-	src.pixel_x = rand(-10, 10)
-	src.pixel_y = rand(-10, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum
 	name = "Nuka Cola Quantum"
@@ -748,8 +750,8 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/quantum/New()
 	..()
 	reagents.add_reagent(QUANTUM, 30)
-	src.pixel_x = rand(-10, 10)
-	src.pixel_y = rand(-10, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink
 	name = "Brawndo"
@@ -758,8 +760,8 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/sportdrink/New()
 	..()
 	reagents.add_reagent(SPORTDRINK, 30)
-	src.pixel_x = rand(-10, 10)
-	src.pixel_y = rand(-10, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/coloring
 	name = "Vial of Food Coloring"
@@ -770,8 +772,8 @@
 /obj/item/weapon/reagent_containers/food/drinks/coloring/New()
 	..()
 	reagents.add_reagent(BLACKCOLOR, 25)
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/drinks/sillycup
 	name = "Paper Cup"
@@ -781,8 +783,9 @@
 	volume = 10
 /obj/item/weapon/reagent_containers/food/drinks/sillycup/New()
 	..()
-	src.pixel_x = rand(-10.0, 10)
-	src.pixel_y = rand(-10.0, 10)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
 /obj/item/weapon/reagent_containers/food/drinks/sillycup/on_reagent_change()
 	if(reagents.total_volume)
 		icon_state = "water_cup"
@@ -794,18 +797,18 @@
 //	icon states.
 
 /obj/item/weapon/reagent_containers/food/drinks/shaker
-	name = "Shaker"
+	name = "\improper Shaker"
 	desc = "A metal shaker to mix drinks in."
 	icon_state = "shaker"
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	amount_per_transfer_from_this = 10
 	volume = 100
 
 /obj/item/weapon/reagent_containers/food/drinks/thermos
-	name = "Thermos"
+	name = "\improper Thermos"
 	desc = "A metal flask which insulates its contents from temperature - keeping hot beverages hot, and cold ones cold."
-	icon_state = "shaker"
-	origin_tech = "materials=1"
+	icon_state = "vacuumflask"
+	origin_tech = Tc_MATERIALS + "=1"
 	amount_per_transfer_from_this = 10
 	volume = 100
 
@@ -814,11 +817,54 @@
 	var/new_reagent = pick(COFFEE, HOT_COCO, ICECOFFEE, TEA, ICETEA, WATER, ICE, ICED_BEER)
 	reagents.add_reagent(new_reagent, rand(50,100))
 
+/obj/item/weapon/reagent_containers/food/drinks/plastic
+	name = "plastic bottle"
+	desc = "Remember to recycle."
+	icon_state = "plasticbottle"
+	origin_tech = Tc_MATERIALS + "=1"
+	melt_temperature = MELTPOINT_PLASTIC
+	starting_materials = list(MAT_PLASTIC = 500)
+	volume = 100
+	amount_per_transfer_from_this = 10
+
+/obj/item/weapon/reagent_containers/food/drinks/plastic/water
+	name = "water bottle"
+	desc = "Chemically enhanced mineral water."
+	icon_state = "waterbottle"
+
+/obj/item/weapon/reagent_containers/food/drinks/plastic/water/New()
+	..()
+	reagents.add_reagent(WATER, volume)
+
+/obj/item/weapon/reagent_containers/food/drinks/plastic/water/small
+	name = "small water bottle"
+	icon_state = "waterbottle_small"
+	volume = 50
+	amount_per_transfer_from_this = 5
+
+/obj/item/weapon/reagent_containers/food/drinks/plastic/sodawater
+	name = "soda water bottle"
+	desc = "Good ole carbonated water."
+	icon_state = "sodawaterbottle"
+
+/obj/item/weapon/reagent_containers/food/drinks/plastic/sodawater/New()
+	..()
+	reagents.add_reagent(SODAWATER, volume)
+
+/obj/item/weapon/reagent_containers/food/drinks/plastic/cola
+	name = "space cola bottle"
+	desc = "During hard times, place your trust in mega corporations, and their sponsored drinks."
+	icon_state = "colaplasticbottle"
+
+/obj/item/weapon/reagent_containers/food/drinks/plastic/cola/New()
+	..()
+	reagents.add_reagent(COLA, volume)
+
 /obj/item/weapon/reagent_containers/food/drinks/flask
 	name = "Captain's Flask"
 	desc = "A metal flask belonging to the captain."
 	icon_state = "flask"
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	volume = 60
 
 /obj/item/weapon/reagent_containers/food/drinks/flask/detflask
@@ -1033,7 +1079,6 @@
 	name = "Orange Juice"
 	desc = "Full of vitamins and deliciousness!"
 	icon_state = "orangejuice"
-	item_state = "carton"
 	vending_cat = "fruit juices"
 	starting_materials = null
 
@@ -1045,7 +1090,6 @@
 	name = "Milk Cream"
 	desc = "It's cream. Made from milk. What else did you think you'd find in there?"
 	icon_state = "cream"
-	item_state = "carton"
 	vending_cat = "dairy products"
 	starting_materials = null
 
@@ -1057,7 +1101,6 @@
 	name = "Tomato Juice"
 	desc = "Well, at least it LOOKS like tomato juice. You can't tell with all that redness."
 	icon_state = "tomatojuice"
-	item_state = "carton"
 	vending_cat = "fruit juices"
 	starting_materials = null
 
@@ -1070,7 +1113,6 @@
 	name = "Lime Juice"
 	desc = "Sweet-sour goodness."
 	icon_state = "limejuice"
-	item_state = "carton"
 	vending_cat = "fruit juices"
 	starting_materials = null
 
@@ -1095,14 +1137,13 @@
 	user.drop_item(force_drop = 1)
 	var/obj/item/weapon/broken_bottle/B = new /obj/item/weapon/broken_bottle(user.loc)
 	B.icon_state = src.icon_state
-	//B.force = src.force //Who thought this was a good idea? It makes bottles broken by throwing deal no damage and bottles smashed over someone's head continue to deal a ton.
 	B.name = src.smashname
 
 	if(istype(src, /obj/item/weapon/reagent_containers/food/drinks/drinkingglass))  //for drinking glasses
 		B.icon_state = "glass_empty"
 
 	if(prob(33))
-		getFromPool(/obj/item/weapon/shard, get_turf(M)) // Create a glass shard at the target's location!
+		getFromPool(/obj/item/weapon/shard, get_turf(M || src)) // Create a glass shard at the target's location! Or
 
 	var/icon/I = new('icons/obj/drinks.dmi', B.icon_state)
 	I.Blend(B.broken_outline, ICON_OVERLAY, rand(5), 1)
@@ -1140,7 +1181,6 @@
 
 		//create new broken bottle
 		var/obj/item/weapon/broken_bottle/B = new /obj/item/weapon/broken_bottle(loc)
-		B.force = src.force
 		B.name = src.smashname
 		B.icon_state = src.icon_state
 
@@ -1216,11 +1256,11 @@
 	var/image/Im
 	if(molotov == 1)
 		Im = image('icons/obj/grenade.dmi', icon_state = "molotov_rag")
-		Im.pixel_y += src.bottleheight-23 //since the molotov rag and fire are placed one pixel above the mouth of the bottle, and start out at a height of 23 (for beer and ale)
+		Im.pixel_y += src.bottleheight-23 * PIXEL_MULTIPLIER //since the molotov rag and fire are placed one pixel above the mouth of the bottle, and start out at a height of 23 (for beer and ale)
 		overlays += Im
 	if(molotov == 1 && lit)
 		Im = image('icons/obj/grenade.dmi', icon_state = "molotov_fire")
-		Im.pixel_y += src.bottleheight-23
+		Im.pixel_y += src.bottleheight-23 * PIXEL_MULTIPLIER
 		overlays += Im
 	else
 		item_state = initial(item_state)
@@ -1240,7 +1280,7 @@
 
 
 //todo: can light cigarettes with
-//todo: is force = 15 overwriting the force?
+//todo: is force = 15 overwriting the force? //Yes, of broken bottles, but that's been fixed now
 
 ////////  Could be expanded upon:
 //  make it work with more chemicals and reagents, more like a chem grenade

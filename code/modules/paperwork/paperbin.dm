@@ -15,6 +15,7 @@
 
 
 /obj/item/weapon/paper_bin/ashify()
+	var/ashtype = ashtype()
 	new ashtype(src.loc)
 	papers=0
 	amount=0
@@ -29,7 +30,7 @@
 			if(istype(over_object,/obj/screen/inventory)) //We're being dragged into the user's UI...
 				var/obj/screen/inventory/OI = over_object
 
-				if(OI.hand_index)
+				if(OI.hand_index && usr.put_in_hand_check(src, OI.hand_index))
 					usr.u_equip(src, 0)
 					usr.put_in_hand(OI.hand_index, src)
 					src.add_fingerprint(usr)
@@ -62,7 +63,7 @@
 					P.rigged = 1
 					P.updateinfolinks()
 		update_icon()
-		P.loc = user.loc
+		P.forceMove(user.loc)
 		user.put_in_hands(P)
 		to_chat(user, "<span class='notice'>You take [P] out of the [src].</span>")
 	else

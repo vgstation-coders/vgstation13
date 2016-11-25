@@ -11,7 +11,7 @@
  */
 /obj/item/stack
 	gender = PLURAL
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	var/list/datum/stack_recipe/recipes
 	var/singular_name
 	var/irregular_plural //"Teeth", for example. Without this, you'd see "There are 30 tooths in the stack."
@@ -31,13 +31,14 @@
 /obj/item/stack/Destroy()
 	if (usr && usr.machine==src)
 		usr << browse(null, "window=stack")
-	src.loc = null
+	src.forceMove(null)
 	..()
 
 /obj/item/stack/examine(mob/user)
 	..()
 	var/be = "are"
-	if(amount == 1) be = "is"
+	if(amount == 1)
+		be = "is"
 
 	to_chat(user, "<span class='info'>There [be] [src.amount] [CORRECT_STACK_NAME(src)][amount == 1 ? " in" : "s in"] the stack.</span>")
 
@@ -122,14 +123,16 @@
 		list_recipes(usr, text2num(href_list["sublist"]))
 
 	if (href_list["make"])
-		if (src.amount < 1) returnToPool(src) //Never should happen
+		if (src.amount < 1)
+			returnToPool(src) //Never should happen
 		var/list/recipes_list = recipes
 		if (href_list["sublist"])
 			var/datum/stack_recipe_list/srl = recipes_list[text2num(href_list["sublist"])]
 			recipes_list = srl.recipes
 		var/datum/stack_recipe/R = recipes_list[text2num(href_list["make"])]
 		var/multiplier = text2num(href_list["multiplier"])
-		if (!multiplier) multiplier = 1
+		if (!multiplier)
+			multiplier = 1
 		if (src.amount < R.req_amount*multiplier)
 			if (R.req_amount*multiplier>1)
 				to_chat(usr, "<span class='warning'>You haven't got enough [src] to build \the [R.req_amount*multiplier] [R.title]\s!</span>")
@@ -198,7 +201,8 @@
 				var/mob/living/silicon/robot/R=usr
 				if(R.module)
 					R.module.modules -= src
-				if(R.module_active == src) R.module_active = null
+				if(R.module_active == src)
+					R.module_active = null
 				if(R.module_state_1 == src)
 					R.uneq_module(R.module_state_1)
 					R.module_state_1 = null
@@ -240,7 +244,8 @@
 		gender = PLURAL
 
 /obj/item/stack/proc/can_stack_with(obj/item/other_stack)
-	if(ispath(other_stack)) return (src.type == other_stack)
+	if(ispath(other_stack))
+		return (src.type == other_stack)
 
 	return (src.type == other_stack.type)
 
@@ -340,7 +345,8 @@
 	return ..()
 
 /obj/item/stack/restock()
-	if(!restock_amount) return //Do not restock this stack type
+	if(!restock_amount)
+		return //Do not restock this stack type
 	if(amount < max_amount)
 		amount += restock_amount
 	if(amount > max_amount)

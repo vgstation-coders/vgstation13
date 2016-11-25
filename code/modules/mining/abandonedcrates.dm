@@ -65,5 +65,7 @@ var/global/list/valid_abandoned_crate_types = typesof(/obj/structure/closet/crat
 				to_chat(user, "<span class='notice'>* Last access attempt lower than expected code.</span>")
 			else
 				to_chat(user, "<span class='notice'>* Last access attempt higher than expected code.</span>")
-		else ..()
-	else ..()
+		else
+			..()
+	else
+		..()

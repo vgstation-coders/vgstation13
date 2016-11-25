@@ -32,12 +32,18 @@ proc/hex2num(hex)
 			if("1","2","3","4","5","6","7","8","9")
 				num += text2num(char) * (16 ** power)
 
-			if("A","a") num += 10 * (16 ** power)
-			if("B","b") num += 11 * (16 ** power)
-			if("C","c") num += 12 * (16 ** power)
-			if("D","d") num += 13 * (16 ** power)
-			if("E","e") num += 14 * (16 ** power)
-			if("F","f") num += 15 * (16 ** power)
+			if("A","a")
+				num += 10 * (16 ** power)
+			if("B","b")
+				num += 11 * (16 ** power)
+			if("C","c")
+				num += 12 * (16 ** power)
+			if("D","d")
+				num += 13 * (16 ** power)
+			if("E","e")
+				num += 14 * (16 ** power)
+			if("F","f")
+				num += 15 * (16 ** power)
 
 			else
 				CRASH("hex2num given non-hexadecimal string (user error)")
@@ -58,7 +64,8 @@ proc/num2hex(num, placeholder=2)
 		CRASH("num2hex not given a numeric argument (user error)")
 		return
 
-	if(!num) return("0") //no computation necessary
+	if(!num)
+		return("0") //no computation necessary
 
 	var/hex = ""
 
@@ -69,14 +76,21 @@ proc/num2hex(num, placeholder=2)
 		var/val = round( num / (16 ** power) )
 		num -= val * (16 ** power)
 		switch(val)
-			if(0,1,2,3,4,5,6,7,8,9) hex += "[val]"
+			if(0,1,2,3,4,5,6,7,8,9)
+				hex += "[val]"
 
-			if(10) hex += "A"
-			if(11) hex += "B"
-			if(12) hex += "C"
-			if(13) hex += "D"
-			if(14) hex += "E"
-			if(15) hex += "F"
+			if(10)
+				hex += "A"
+			if(11)
+				hex += "B"
+			if(12)
+				hex += "C"
+			if(13)
+				hex += "D"
+			if(14)
+				hex += "E"
+			if(15)
+				hex += "F"
 
 	while(lentext(hex) < placeholder) hex = "0[hex]"
 

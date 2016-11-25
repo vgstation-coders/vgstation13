@@ -17,7 +17,7 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
 	caliber = list("rpg" = 1)
-	origin_tech = "combat=4;materials=2;syndicate=2"
+	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=2"
 	ammo_type = "/obj/item/ammo_casing/rocket_rpg"
 	attack_verb = list("strikes", "hits", "bashes")
 	gun_flags = 0
@@ -59,7 +59,7 @@
 	icon = 'icons/obj/gun_experimental.dmi'
 	icon_state = "nikita"
 	item_state = null
-	origin_tech = "materials=5;combat=6;programming=4"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_COMBAT + "=6;" + Tc_PROGRAMMING + "=4"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 	recoil = 1
 	flags = FPRINT
@@ -116,5 +116,5 @@
 
 /obj/item/ammo_casing/rocket_rpg/nikita/New()
 	..()
-	pixel_x = rand(-10.0, 10)
-	pixel_y = rand(-10.0, 10)
+	pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER

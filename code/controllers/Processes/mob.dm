@@ -15,7 +15,8 @@
 	if (mob_list)
 		for(var/atom/m in mob_list)
 			if(m)
-				if(m.timestopped) continue
+				if(m.timestopped)
+					continue
 				m:Life()
 				scheck()
 				continue

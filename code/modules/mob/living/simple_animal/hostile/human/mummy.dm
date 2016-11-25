@@ -99,7 +99,8 @@
 
 /mob/living/simple_animal/hostile/humanoid/mummy/priest/Shoot()
 	var/mob/living/L = target
-	if(L.isUnconscious()) return
+	if(L.isUnconscious())
+		return
 
 	switch(rand(0,3))
 		if(0) //damage
@@ -109,7 +110,8 @@
 			L.adjustBruteLoss(dmg)
 		if(1) //deaf
 			var/mob/living/carbon/human/H = L
-			if(!istype(H)) return
+			if(!istype(H))
+				return
 
 			H.ear_damage += rand(1, 3)
 
@@ -122,13 +124,15 @@
 			to_chat(L, "<span class='userdanger'>A flash blinds you for a moment!</span>")
 
 			var/mob/living/carbon/human/H = L
-			if(!istype(H)) return
+			if(!istype(H))
+				return
 
 			var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 			E.damage += rand(5,15)
 		if(3) //hallucinations + brain damage
 			var/mob/living/carbon/human/H = L
-			if(!istype(H)) return
+			if(!istype(H))
+				return
 
 			to_chat(L, "<span class='userdanger'>Your mind feels weak.</span>")
 			H.adjustBrainLoss(rand(1,12))
@@ -190,7 +194,8 @@
 		return ..()
 
 	var/mob/living/L = target
-	if(L.isUnconscious()) return
+	if(L.isUnconscious())
+		return
 
 	switch(rand(0,3))
 		if(0) //damage
@@ -200,7 +205,8 @@
 			L.adjustBruteLoss(dmg)
 		if(1) //deaf
 			var/mob/living/carbon/human/H = L
-			if(!istype(H)) return
+			if(!istype(H))
+				return
 
 			H.ear_damage += rand(3, 6)
 
@@ -213,13 +219,15 @@
 			to_chat(L, "<span class='userdanger'>A flash blinds you!</span>")
 
 			var/mob/living/carbon/human/H = L
-			if(!istype(H)) return
+			if(!istype(H))
+				return
 
 			var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 			E.damage += rand(15,30)
 		if(3) //hallucinations + brain damage
 			var/mob/living/carbon/human/H = L
-			if(!istype(H)) return
+			if(!istype(H))
+				return
 
 			to_chat(L, "<span class='userdanger'>Your mind is crumbling.</span>")
 			H.adjustBrainLoss(rand(6,24))

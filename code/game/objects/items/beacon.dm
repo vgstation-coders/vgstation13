@@ -8,7 +8,7 @@ var/global/list/obj/item/beacon/beacons = list()
 	item_state = "signaler"
 	var/code = "electronic"
 	var/frequency = 1459
-	origin_tech = "bluespace=1"
+	origin_tech = Tc_BLUESPACE + "=1"
 	flags = FPRINT
 
 /obj/item/beacon/New()
@@ -24,7 +24,7 @@ var/global/list/obj/item/beacon/beacons = list()
 	var/newfreq = input(user, "Input a new frequency for the beacon", "Frequency", null) as num
 	if(!newfreq)
 		return
-	frequency = sanitize_frequency(format_frequency(newfreq))
+	frequency = format_frequency(sanitize_frequency(newfreq))
 
 /obj/item/beacon/verb/alter_signal(t as text)
 	set name = "Alter Beacon's Signal"
@@ -43,7 +43,7 @@ var/global/list/obj/item/beacon/beacons = list()
 /obj/item/beacon/syndicate
 	name = "suspicious beacon"
 	desc = "A label on it reads: <i>Activate to have a singularity beacon teleported to your location</i>."
-	origin_tech = "bluespace=1;syndicate=7"
+	origin_tech = Tc_BLUESPACE + "=1;" + Tc_SYNDICATE + "=7"
 
 /obj/item/beacon/syndicate/attack_self(mob/user as mob)
 	if(user)
@@ -58,7 +58,7 @@ var/global/list/obj/item/beacon/beacons = list()
 	name = "Bluespace Gigabeacon"
 	desc = "A device that draws power from bluespace and creates a permanent tracking beacon."
 	level = 1		// underfloor
-	layer = 2.5
+	layer = BELOW_OBJ_LAYER
 	anchored = 1
 
 /obj/item/beacon/bluespace_beacon/New()

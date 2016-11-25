@@ -90,8 +90,10 @@
 			if(D.id_tag == src.id_tag)
 				spawn(0)
 				if(D)
-					if(D.density)	D.open()
-					else			D.close()
+					if(D.density)
+						D.open()
+					else
+						D.close()
 					return
 				if(specialfunctions & IDSCAN)
 					D.aiDisabledIdScanner = !D.aiDisabledIdScanner
@@ -125,10 +127,6 @@
 		icon_state = "doorctrl-p"
 	else
 		icon_state = "doorctrl0"
-
-/obj/machinery/door_control/change_area(oldarea, newarea)
-	..()
-	name = replacetext(name,oldarea,newarea)
 
 /obj/machinery/driver_button/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
@@ -202,7 +200,3 @@
 
 	icon_state = "launcherbtt"
 	active = 0
-
-/obj/machinery/driver_button/change_area(oldarea, newarea)
-	..()
-	name = replacetext(name,oldarea,newarea)

@@ -16,7 +16,7 @@ var/global/list/image/fluidtrack_cache=list()
 
 /datum/fluidtrack
 	var/direction=0
-	var/basecolor="#A10808"
+	var/basecolor=DEFAULT_BLOOD
 	var/wet=0
 	var/fresh=1
 	var/crusty=0
@@ -80,7 +80,7 @@ var/global/list/image/fluidtrack_cache=list()
 		"128"=0
 	)
 
-/obj/effect/decal/cleanable/blood/tracks/proc/AddTracks(var/list/DNA, var/comingdir, var/goingdir, var/bloodcolor="#A10808")
+/obj/effect/decal/cleanable/blood/tracks/proc/AddTracks(var/list/DNA, var/comingdir, var/goingdir, var/bloodcolor=DEFAULT_BLOOD)
 	var/updated=0
 	// Shift our goingdir 4 spaces to the left so it's in the GOING bitblock.
 	var/realgoing=goingdir<<4
@@ -201,10 +201,10 @@ var/global/list/image/fluidtrack_cache=list()
 		var/icon/add = icon('icons/effects/fluidtracks.dmi', state, truedir)
 		add.SwapColor("#FFFFFF",track.basecolor)
 		overlays += add
-		if(track.basecolor == "#FF0000"||track.basecolor == "#A10808") // no dirty dumb vox scum allowed
-			plane = PLANE_NOIR_BLOOD
+		if(track.basecolor == "#FF0000"||track.basecolor == DEFAULT_BLOOD) // no dirty dumb vox scum allowed
+			plane = NOIR_BLOOD_PLANE
 		else
-			plane = PLANE_TURF
+			plane = ABOVE_TURF_PLANE
 		track.fresh=0
 		stack[stack_idx]=track
 
@@ -217,11 +217,27 @@ var/global/list/image/fluidtrack_cache=list()
 	coming_state = "human1"
 	going_state  = "human2"
 	amount = 0
-	plane = PLANE_NOIR_BLOOD
+	plane = NOIR_BLOOD_PLANE
 
 /obj/effect/decal/cleanable/blood/tracks/footprints/vox
 	coming_state = "claw1"
 	going_state  = "claw2"
+
+/obj/effect/decal/cleanable/blood/tracks/footprints/magboots
+	coming_state = "magboots1"
+	going_state  = "magboots2"
+
+/obj/effect/decal/cleanable/blood/tracks/footprints/boots
+	coming_state = "boots1"
+	going_state  = "boots2"
+
+/obj/effect/decal/cleanable/blood/tracks/footprints/clown //Fun Fact: This footprint is way longer than the regular one and thus is spaced differently, making it the only evenly-spaced footprint type.
+	coming_state = "clown1"
+	going_state  = "clown2"
+
+/obj/effect/decal/cleanable/blood/tracks/footprints/catbeast
+	coming_state = "catbeast1"
+	going_state  = "catbeast2"
 
 /obj/effect/decal/cleanable/blood/tracks/wheels
 	name = "wet tracks"

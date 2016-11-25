@@ -34,8 +34,10 @@
 #define MAX_ITEM_DEPTH	3 //how far we can recurse before we can't get an item
 
 /mob/proc/ClickOn( var/atom/A, var/params )
-	if(!click_delayer) click_delayer = new
-	if(timestopped) return 0 //under effects of time magick
+	if(!click_delayer)
+		click_delayer = new
+	if(timestopped)
+		return 0 //under effects of time magick
 
 	if(click_delayer.blocked())
 		return
@@ -93,8 +95,12 @@
 
 		return
 
-	if(!isturf(loc) && !is_holder_of(src, A)) // Can't touch anything from inside a locker/sleeper etc, unless it's inside our inventory.
-		return
+	if(!isturf(loc) && !is_holder_of(src, A))
+		if(loc == A) //Can attack_hand our holder (a locked closet, for example) from inside, but can't hit it with a tool
+			if(W)
+				return
+		else
+			return
 
 	// Allows you to click on a box's contents, if that box is on the ground, but no deeper than that
 	if(A.Adjacent(src, MAX_ITEM_DEPTH)) // see adjacent.dm
@@ -160,7 +166,8 @@
 	animals lunging, etc.
 */
 /mob/proc/RangedAttack(var/atom/A, var/params)
-	if(!mutations || !mutations.len) return
+	if(!mutations || !mutations.len)
+		return
 	if((M_LASER in mutations) && a_intent == I_HURT)
 		LaserEyes(A) // moved into a proc below
 	else if(M_TK in mutations)
@@ -311,6 +318,7 @@
 		else if(A.pixel_x < -16)
 			change_dir(WEST)
 
+		Facing()
 		return
 
 	if(abs(dx) < abs(dy))
@@ -323,3 +331,5 @@
 			change_dir(EAST)
 		else
 			change_dir(WEST)
+
+	Facing()

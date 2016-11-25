@@ -2,6 +2,7 @@
 #define GC_COLLECTION_TIMEOUT (30 SECONDS)
 #define GC_FORCE_DEL_PER_TICK 60
 //#define GC_DEBUG
+//#define GC_FINDREF
 
 var/datum/garbage_collector/garbageCollector
 var/soft_dels = 0
@@ -40,11 +41,16 @@ var/soft_dels = 0
 
 	queue["\ref[D]"] = world.timeofday
 
+#ifdef GC_FINDREF
+world/loop_checks = 0
+#endif
+
 /datum/garbage_collector/proc/process()
 	var/remainingCollectionPerTick = GC_COLLECTIONS_PER_TICK
 	var/remainingForceDelPerTick = GC_FORCE_DEL_PER_TICK
 	var/collectionTimeScope = world.timeofday - GC_COLLECTION_TIMEOUT
-	if(narsie_cometh) return //don't even fucking bother, its over.
+	if(narsie_cometh)
+		return //don't even fucking bother, its over.
 	while(queue.len && --remainingCollectionPerTick >= 0)
 		var/refID = queue[1]
 		var/destroyedAtTime = queue[refID]
@@ -59,6 +65,28 @@ var/soft_dels = 0
 				continue
 			if(remainingForceDelPerTick <= 0)
 				break
+
+			#ifdef GC_FINDREF
+			to_chat(world, "picnic! searching [locate(D)]")
+			if(istype(D, /atom/movable))
+				var/atom/movable/A = D
+				testing("GC: Searching references for [A] | [A.type]")
+				if(A.loc != null)
+					testing("GC: [A] | [A.type] is located in [A.loc] instead of null")
+				if(A.contents.len)
+					testing("GC: [A] | [A.type] has contents:")
+					for(var/atom/B in A.contents)
+						testing("[B] | [B.type]")
+			var/found = 0
+			for(var/atom/R in world)
+				found += LookForRefs(R, D)
+			for(var/datum/R)
+				found += LookForRefs(R, D)
+			for(var/A in _all_globals)
+				found += LookForListRefs(readglobal(A), D, null, A)
+			to_chat(world, "we found [found]")
+			#endif
+
 
 			#ifdef GC_DEBUG
 			WARNING("gc process force delete [D.type]")
@@ -147,50 +175,34 @@ var/soft_dels = 0
 	log_admin("[key_name(usr)] turned qdel [garbageCollector.del_everything ? "off" : "on"].")
 	message_admins("<span class='notice'>[key_name(usr)] turned qdel [garbageCollector.del_everything ? "off" : "on"].</span>", 1)
 
-/*/client/var/running_find_references
 
-/atom/verb/find_references()
-	set category = "Debug"
-	set name = "Find References"
-	set background = 1
-	set src in world
 
-	if(!usr || !usr.client)
-		return
+#ifdef GC_FINDREF
+/datum/garbage_collector/proc/LookForRefs(var/datum/D, var/datum/targ)
+	. = 0
+	for(var/V in D.vars)
+		if(V == "contents")
+			continue
+		if(istype(D.vars[V], /datum))
+			var/datum/A = D.vars[V]
+			if(A == targ)
+				testing("GC: [A] | [A.type] referenced by [D] | [D.type], var [V]")
+				. += 1
+		else if(islist(D.vars[V]))
+			. += LookForListRefs(D.vars[V], targ, D, V)
 
-	if(usr.client.running_find_references)
-		testing("CANCELLED search for references to a [usr.client.running_find_references].")
-		usr.client.running_find_references = null
-		return
+/datum/garbage_collector/proc/LookForListRefs(var/list/L, var/datum/targ, var/datum/D, var/V)
+	. = 0
+	for(var/F in L)
+		if(istype(F, /datum))
+			var/datum/A = F
+			if(A == targ)
+				testing("GC: [A] | [A.type] referenced by [D? "[D] | [D.type]" : "global list"], list [V]")
+				. += 1
+		if(islist(F))
+			. += LookForListRefs(F, targ, D, "[F] in list [V]")
+#endif
 
-	if(alert("Running this will create a lot of lag until it finishes.  You can cancel it by running it again.  Would you like to begin the search?", "Find References", "Yes", "No") == "No")
-		return
-	qdel(src)
-	// Remove this object from the list of things to be auto-deleted.
-	if(garbageCollector)
-		garbageCollector.queue -= "\ref[src]"
-
-	usr.client.running_find_references = type
-	testing("Beginning search for references to a [type].")
-	var/list/things = list()
-	for(var/client/thing)
-		things += thing
-	for(var/datum/thing)
-		things += thing
-	for(var/atom/thing)
-		things += thing
-	for(var/event/thing)
-		things += thing
-	testing("Collected list of things in search for references to a [type]. ([things.len] Thing\s)")
-	for(var/datum/thing in things)
-		if(!usr.client.running_find_references) return
-		for(var/varname in thing.vars)
-			var/variable = thing.vars[varname]
-			if(variable == src)
-				testing("Found [src.type] \ref[src] in [thing.type]'s [varname] var.")
-			else if(islist(variable))
-				if(src in variable)
-					testing("Found [src.type] \ref[src] in [thing.type]'s [varname] list var.")
-	testing("Completed search for references to a [type].")
-	usr.client.running_find_references = null
-*/
+#ifdef GC_FINDREF
+#undef GC_FINDREF
+#endif

@@ -2,7 +2,7 @@
 	name = "HUD"
 	desc = "A heads-up display that provides important info in (almost) real time."
 	flags = 0 //doesn't protect eyes because it's a monocle, duh
-	origin_tech = "magnets=3;biotech=2"
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_BIOTECH + "=2"
 	min_harm_label = 3
 	harm_label_examine = list("<span class='info'>A tiny label is on the lens.</span>","<span class='warning'>A label covers the lens!</span>")
 	var/list/icon/current = list() //the current hud icons
@@ -18,6 +18,7 @@
 	name = "Health Scanner HUD"
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their health status."
 	icon_state = "healthhud"
+	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/glasses/hud/health/process_hud(var/mob/M)
 	if(harm_labeled < min_harm_label)

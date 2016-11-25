@@ -51,7 +51,6 @@
 	var/raised = 0
 	var/enabled = 1
 	anchored = 1
-	layer = 3
 	invisibility = 2
 	density = 1
 	var/health = 18
@@ -201,7 +200,8 @@
 			flick("popup", src.cover)
 			src.cover.icon_state = "openTurretCover"
 		spawn(10)
-			if (popping==1) popping = 0
+			if (popping==1)
+				popping = 0
 
 /obj/machinery/meteor_battery/proc/popDown()
 	if ((!isPopping()) || src.popping==1)
@@ -217,7 +217,8 @@
 /obj/machinery/meteor_battery/bullet_act(var/obj/item/projectile/Proj)
 	src.health -= Proj.damage
 	..()
-	if(prob(45) && Proj.damage > 0) src.spark_system.start()
+	if(prob(45) && Proj.damage > 0)
+		src.spark_system.start()
 	if (src.health <= 0)
 		src.die()
 	return

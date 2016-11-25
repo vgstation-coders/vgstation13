@@ -8,6 +8,8 @@
 /mob/living/carbon/proc/give_item(mob/living/carbon/user)
 
 
+	if(!istype(user))
+		return
 	if(src.stat == 2 || user.stat == 2 || src.client == null)
 		return
 	if(src.handcuffed)

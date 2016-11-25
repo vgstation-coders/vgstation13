@@ -16,7 +16,8 @@
 	var/newtag = sanitize(input("Set camera tag") as null|text)
 	if(newtag)
 		c_tag = newtag
-		if(user.mind) network = "\ref[user.mind]"
+		if(user.mind)
+			network = "\ref[user.mind]"
 
 /obj/item/device/camera_bug/afterattack(atom/A, mob/user)
 	if(!c_tag || c_tag == "")

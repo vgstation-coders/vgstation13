@@ -212,11 +212,11 @@ var/global/list/virusDB = list()
 
 /datum/disease2/disease/proc/get_info()
 	var/r = "GNAv2 based virus lifeform - [name()], #[add_zero("[uniqueID]", 4)]"
-	r += "<BR>Infection rate : [infectionchance * 10]"
+	r += "<BR>Infection rate : [infectionchance]"
 	r += "<BR>Spread form : [spreadtype]"
-	r += "<BR>Progress Speed : [stageprob * 10]"
+	r += "<BR>Progress Speed : [stageprob]"
 	for(var/datum/disease2/effectholder/E in effects)
-		r += "<BR>Effect:[E.effect.name]. Strength : [E.multiplier * 8]. Verosity : [E.chance * 15]. Type : [5-E.stage]."
+		r += "<BR>Effect:[E.effect.name]. Strength : [E.multiplier]. Verosity : [E.chance]. Type : [5-E.stage]."
 
 	r += "<BR>Antigen pattern: [antigens2string(antigen)]"
 	return r
@@ -239,7 +239,8 @@ proc/virus2_lesser_infection()
 	for(var/mob/living/carbon/human/G in player_list)
 		if(G.client && G.stat != DEAD)
 			candidates += G
-	if(!candidates.len)	return
+	if(!candidates.len)
+		return
 
 	candidates = shuffle(candidates)
 
@@ -251,7 +252,8 @@ proc/virus2_greater_infection()
 	for(var/mob/living/carbon/human/G in player_list)
 		if(G.client && G.stat != DEAD)
 			candidates += G
-	if(!candidates.len)	return
+	if(!candidates.len)
+		return
 
 	candidates = shuffle(candidates)
 

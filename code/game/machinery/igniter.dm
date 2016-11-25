@@ -73,10 +73,11 @@ var/global/list/igniters = list()
 					"[user] disassembles \the [src].", \
 					"<span class='notice'>You have disassembled \the [src].</span>", \
 					"You hear welding.")
-				src.assembly.loc=src.loc
+				src.assembly.forceMove(src.loc)
 				qdel(src)
 				return
-		else:
+		else
+			:
 			to_chat(user, "<span class='warning'>You need more welder fuel to do that.</span>")
 			return 1
 

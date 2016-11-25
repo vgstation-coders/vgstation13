@@ -8,7 +8,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
-	origin_tech = "materials=1;engineering=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	starting_materials = list(MAT_IRON = 2000)
 	w_type = RECYK_ELECTRONIC
 	var/cell = null
@@ -72,7 +72,7 @@
 	M.flash_eyes(visual = 1)
 
 	if(issilicon(M))
-		M.Weaken(rand(5, 10))
+		M.Knockdown(rand(5, 10))
 		M.visible_message("<span class='warning'>[M]'s sensors are overloaded by the flash of light!</span>","<span class='warning'>Your sensors are overloaded by the flash of light!</span>")
 
 	if(ishuman(M))

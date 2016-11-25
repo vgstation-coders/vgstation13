@@ -1,19 +1,24 @@
+#define VALUE_RECORDING "Recording activation message"
+#define VALUE_ACTIVATION_MESSAGE "Activation message"
+#define VALUE_MUTED "Muted"
+
 /obj/item/device/assembly/voice
 	name = "voice analyzer"
 	desc = "A small electronic device able to record a voice sample, and send a signal when that sample is repeated."
 	icon_state = "voice"
 	starting_materials = list(MAT_IRON = 500, MAT_GLASS = 50)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "magnets=1"
+	origin_tech = Tc_MAGNETS + "=1"
 	flags = HEAR
 
 	var/listening = 0
 	var/recorded = "" //the activation message
 	var/muted = 0 //If 1, the voice analyzer won't say ANYTHING ever
 
-	accessible_values = list("Recording activation message" = "listening;number",\
-		"Activation message" = "recorded;text",\
-		"Muted" = "muted;num")
+	accessible_values = list(\
+		VALUE_RECORDING = "listening;"+VT_NUMBER,\
+		VALUE_ACTIVATION_MESSAGE = "recorded;"+VT_NUMBER,\
+		VALUE_MUTED = "muted;"+VT_NUMBER)
 
 /obj/item/device/assembly/voice/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(!speech.speaker || speech.speaker == src)
@@ -23,7 +28,7 @@
 		listening = 0
 		say("Activation message is '[html_encode(speech.message)]'.")
 	else
-		if(findtext(speech.message, recorded))
+		if(!recorded || findtext(speech.message, recorded))
 			if(istype(speech.speaker, /obj/item/device/assembly) || istype(speech.speaker, /obj/item/device/assembly_frame))
 				playsound(get_turf(src), 'sound/machines/buzz-sigh.ogg', 25, 1)
 			else
@@ -47,7 +52,8 @@
 			say("[listening ? "Now" : "No longer"] recording input.")
 
 /obj/item/device/assembly/voice/attack_self(mob/user)
-	if(!user)	return 0
+	if(!user)
+		return 0
 	activate()
 	return 1
 
@@ -59,6 +65,11 @@
 	listening = 0
 
 /obj/item/device/assembly/voice/say()
-	if(muted) return //Don't say anything if muted
+	if(muted)
+		return //Don't say anything if muted
 
 	. = ..()
+
+#undef VALUE_RECORDING
+#undef VALUE_ACTIVATION_MESSAGE
+#undef VALUE_MUTED

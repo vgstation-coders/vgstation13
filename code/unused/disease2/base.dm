@@ -15,10 +15,14 @@
 				if(istype(M, /mob/living/carbon/human))
 					if(M:gloves)
 						score += 5
-					if(istype(M:wear_suit, /obj/item/clothing/suit/space)) score += 10
-					if(istype(M:wear_suit, /obj/item/clothing/suit/bio_suit)) score += 10
-					if(istype(M:head, /obj/item/clothing/head/helmet/space)) score += 5
-					if(istype(M:head, /obj/item/clothing/head/bio_hood)) score += 5
+					if(istype(M:wear_suit, /obj/item/clothing/suit/space))
+						score += 10
+					if(istype(M:wear_suit, /obj/item/clothing/suit/bio_suit))
+						score += 10
+					if(istype(M:head, /obj/item/clothing/head/helmet/space))
+						score += 5
+					if(istype(M:head, /obj/item/clothing/head/bio_hood))
+						score += 5
 				if(M.wear_mask)
 					score += 5
 					if((istype(M:wear_mask, /obj/item/clothing/mask) || istype(M:wear_mask, /obj/item/clothing/mask/surgical)) && !M.internal)

@@ -109,9 +109,9 @@
 
 	var/mob/living/simple_animal/hostile/viscerator/flying_skull/FS = new(get_turf(src))
 	FS.pixel_x = src.pixel_x
-	FS.pixel_y = src.pixel_y - 4 //The skull item sprite is slightly lower
+	FS.pixel_y = src.pixel_y - 4 * PIXEL_MULTIPLIER //The skull item sprite is slightly lower
 
-	animate(FS, pixel_y = src.pixel_y + 8, time = 7, easing = SINE_EASING)
+	animate(FS, pixel_y = src.pixel_y + 8 * PIXEL_MULTIPLIER, time = 7, easing = SINE_EASING)
 	qdel(src)
 
 /obj/effect/landmark/corpse/mummy/rafid
@@ -154,7 +154,8 @@
 		T.ChangeTurf(/turf/unsimulated/floor)
 		playsound(T, 'sound/effects/stonedoor_openclose.ogg', 100, 1)
 
-	if(!C) return
+	if(!C)
+		return
 	to_chat(C, "<span class='danger'>You were sacrificed to Riniel, ruler of the Underworld.</span>")
 
 /obj/structure/sacrificial_altar/attack_hand(mob/user)
@@ -162,8 +163,10 @@
 	var/mob/living/victim
 
 	for(var/mob/living/L in get_turf(src))
-		if(ishuman(L) && !L.lying) continue
-		if(L == user) continue
+		if(ishuman(L) && !L.lying)
+			continue
+		if(L == user)
+			continue
 
 		victim = L
 		mob_amount++
@@ -198,7 +201,8 @@
 	name = "Chamber of Madness"
 
 /obj/machinery/door/mineral/sandstone/tomb/open()
-	if(!unlocked) return
+	if(!unlocked)
+		return
 
 	..()
 
@@ -292,8 +296,8 @@
 	opacity = 0
 	density = 0
 
-	layer = MOB_LAYER + 0.1
-	plane = PLANE_MOB
+	plane = ABOVE_HUMAN_PLANE
+
 	autoignition_temperature = AUTOIGNITION_WOOD // TODO:  Special ash subtype that looks like charred table legs.
 	fire_fuel = 5
 

@@ -1,7 +1,7 @@
 /obj/machinery/atmospherics/unary
 	dir = SOUTH
 	initialize_directions = SOUTH
-	layer = 2.45 // Cable says we're at 2.45, so we're at 2.45.  (old: TURF_LAYER+0.1)
+	layer = UNARY_PIPE_LAYER
 
 	var/datum/gas_mixture/air_contents
 	var/obj/machinery/atmospherics/node
@@ -15,9 +15,18 @@
 	air_contents.temperature = T0C
 	air_contents.volume = starting_volume
 
+/obj/machinery/atmospherics/unary/update_planes_and_layers()
+	if (level == LEVEL_BELOW_FLOOR)
+		layer = UNARY_PIPE_LAYER
+	else
+		layer = EXPOSED_UNARY_PIPE_LAYER
+
+	layer = PIPING_LAYER(layer, piping_layer)
+
 /obj/machinery/atmospherics/unary/update_icon(var/adjacent_procd,node_list)
 	node_list = list(node)
 	..(adjacent_procd,node_list)
+
 
 /obj/machinery/atmospherics/unary/buildFrom(var/mob/usr,var/obj/item/pipe/pipe)
 	dir = pipe.dir
@@ -25,7 +34,8 @@
 	if (pipe.pipename)
 		name = pipe.pipename
 	var/turf/T = loc
-	level = T.intact ? 2 : 1
+	level = T.intact ? LEVEL_ABOVE_FLOOR : LEVEL_BELOW_FLOOR
+	update_planes_and_layers()
 	initialize()
 	build_network()
 	if (node)
@@ -51,7 +61,8 @@
 	..()
 
 /obj/machinery/atmospherics/unary/initialize()
-	if(node) return
+	if(node)
+		return
 	var/node_connect = dir
 	for(var/obj/machinery/atmospherics/target in get_step(src,node_connect))
 		if(target.initialize_directions & get_dir(target,src))
@@ -93,7 +104,7 @@
 		if(network)
 			returnToPool(network)
 		node = null
-	return null
+	return ..()
 
 /obj/machinery/atmospherics/unary/unassign_network(datum/pipe_network/reference)
 	if(network == reference)

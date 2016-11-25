@@ -22,7 +22,8 @@
 	if(!exploded && percent >= 10)
 		explosion(get_turf(src), 1, 2, 3, 5)//Should likely be larger but this works fine for now I guess
 		exploded=1
-	if(src) qdel(src)
+	if(src)
+		qdel(src)
 
 /obj/item/weapon/am_containment/ex_act(severity)
 	switch(severity)

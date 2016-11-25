@@ -12,7 +12,7 @@
 		to_chat(A, "<br>")
 
 	if(prob(30))	//most of the time, we don't want an announcement, so as to allow AIs to fake blackouts.
-		command_alert(alert)
+		command_alert(/datum/command_alert/comms_blackout)
 
 
 /datum/event/communications_blackout/start()

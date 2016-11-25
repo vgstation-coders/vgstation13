@@ -1,3 +1,5 @@
+#define VALUE_MESSAGE "Message"
+
 /obj/item/device/assembly/speaker
 	name = "speaker"
 	var/real_name = "speaker" //speakers can be renamed with a pen
@@ -6,18 +8,19 @@
 	item_state = "speaker"
 	starting_materials = list(MAT_IRON = 800, MAT_GLASS = 100)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "magnets=1"
+	origin_tech = Tc_MAGNETS + "=1"
 
 	var/message = "Thank you for using NanoSpeaker!"
 
-	accessible_values = list("Message" = "message;text")
+	accessible_values = list(VALUE_MESSAGE = "message;"+VT_TEXT)
 
 /obj/item/device/assembly/speaker/activate()
 	src.say(message)
 
 /obj/item/device/assembly/speaker/attack_self(mob/user as mob)
 	var/new_msg = sanitize(input(user,"Enter new message for the [src]","NanoSpeaker Settings",message))
-	if(!Adjacent(user)) return
+	if(!Adjacent(user))
+		return
 
 	message = new_msg
 
@@ -50,3 +53,5 @@
 	for(var/mob/O in hearers(location, null)) //to all living
 		O.show_message("<span class='game say'><span class='name'>[src]</span> beeps, \"[msg]\"",2)
 */
+
+#undef VALUE_MESSAGE

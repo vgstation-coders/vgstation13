@@ -46,8 +46,9 @@ var/global/list/status_displays = list() //This list contains both normal status
 
 	var/spookymode=0 // Ghosts.
 
-	maptext_height = 26
-	maptext_width = 32
+	maptext_height = 26*PIXEL_MULTIPLIER
+	maptext_width = WORLD_ICON_SIZE
+	layer = ABOVE_WINDOW_LAYER
 
 // new display
 // register for radio system
@@ -74,8 +75,10 @@ var/global/list/status_displays = list() //This list contains both normal status
 	update()
 
 /obj/machinery/status_display/attack_ai(mob/user)
-	if(spookymode)	return
-	if(user.stat)	return
+	if(spookymode)
+		return
+	if(user.stat)
+		return
 
 	if(isAI(user)) //This allows AIs to load any image into the status displays
 		//Some fluff
@@ -259,8 +262,8 @@ var/global/list/status_displays = list() //This list contains both normal status
 			if(supply_display)
 				mode = 4
 
-/obj/machinery/status_display/spook()
-	if(..())
+/obj/machinery/status_display/spook(mob/dead/observer/ghost)
+	if(..(ghost, TRUE))
 		spookymode = 1
 
 #undef MODE_BLANK
@@ -355,8 +358,10 @@ var/global/list/status_display_images = list(
 	status_displays -= src
 
 /obj/machinery/ai_status_display/attack_ai(mob/user)
-	if(spookymode)	return
-	if(user.stat)	return
+	if(spookymode)
+		return
+	if(user.stat)
+		return
 
 	if(isAI(user)) //This allows AIs to load any image into the status displays
 		var/mob/living/silicon/ai/A = user
@@ -414,8 +419,9 @@ var/global/list/status_display_images = list(
 		overlays.len = 0
 	overlays += image('icons/obj/status_display.dmi', icon_state=picture_state)
 
-/obj/machinery/ai_status_display/spook()
-	spookymode = 1
+/obj/machinery/ai_status_display/spook(mob/dead/observer/ghost)
+	if(..(ghost, TRUE))
+		spookymode = 1
 
 #undef MODE_BLANK
 #undef MODE_EMOTION

@@ -3,7 +3,7 @@
 	desc = "Allows for the construction of illegal upgrades for cyborgs"
 	id = "borg_syndicate_module"
 	build_type = MECHFAB
-	req_tech = list("combat" = 4, "syndicate" = 3)
+	req_tech = list(Tc_COMBAT = 4, Tc_SYNDICATE = 3)
 	build_path = /obj/item/borg/upgrade/syndicate
 	category = "Robotic_Upgrade_Modules"
 	materials = list(MAT_IRON=10000,MAT_GLASS=15000,MAT_DIAMOND = 10000)
@@ -13,7 +13,7 @@
 	desc = "Used to give an engineering cyborg more materials."
 	id = "borg_engineer_module"
 	build_type = MECHFAB
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_path = /obj/item/borg/upgrade/engineering
 	category = "Robotic_Upgrade_Modules"
 	materials = list(MAT_IRON=10000,MAT_GLASS=10000,MAT_PLASMA=5000)
@@ -22,7 +22,7 @@
 	name = "medical module board"
 	desc = "Used to give a medical cyborg surgery tools."
 	id = "medical_module_surgery"
-	req_tech = list("biotech" = 3, "engineering" = 3)
+	req_tech = list(Tc_BIOTECH = 3, Tc_ENGINEERING = 3)
 	build_type = MECHFAB
 	materials = list(MAT_IRON = 80000, MAT_GLASS = 20000)
 	build_path = /obj/item/borg/upgrade/medical/surgery
@@ -32,7 +32,7 @@
 	name = "service module board"
 	desc = "Used to give a service cyborg cooking tools."
 	id = "borg_service_module"
-	req_tech = list("biotech" = 2, "engineering" = 3, "programming" = 2)
+	req_tech = list(Tc_BIOTECH = 2, Tc_ENGINEERING = 3, Tc_PROGRAMMING = 2)
 	build_type = MECHFAB
 	materials = list(MAT_IRON = 60000, MAT_GLASS = 10000)
 	build_path = /obj/item/borg/upgrade/service
@@ -42,7 +42,7 @@
 	name = "cyborg reset module"
 	desc = "Used to reset cyborgs to their default module."
 	id = "borg_reset_board"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/borg/upgrade/reset
 	category = "Robotic_Upgrade_Modules"
@@ -52,7 +52,7 @@
 	name = "cyborg rename module"
 	desc = "Used to rename cyborgs."
 	id = "borg_rename_board"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/borg/upgrade/rename
 	category = "Robotic_Upgrade_Modules"
@@ -62,7 +62,7 @@
 	name = "cyborg restart module"
 	desc = "Used to restart cyborgs."
 	id = "borg_restart_board"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/borg/upgrade/restart
 	category = "Robotic_Upgrade_Modules"
@@ -72,7 +72,7 @@
 	name = "cyborg VTEC module"
 	desc = "Used to upgrade a borg's speed."
 	id = "borg_vtec_board"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/borg/upgrade/vtec
 	category = "Robotic_Upgrade_Modules"
@@ -82,7 +82,7 @@
 	name = "cyborg taser cooling module"
 	desc = "Used to upgrade cyborg taser cooling."
 	id = "borg_tasercooler_board"
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/borg/upgrade/tasercooler
 	category = "Robotic_Upgrade_Modules"
@@ -92,7 +92,7 @@
 	name = "cyborg jetpack module"
 	desc = "Used to give cyborgs a jetpack."
 	id = "borg_jetpack_board"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/borg/upgrade/jetpack
 	category = "Robotic_Upgrade_Modules"

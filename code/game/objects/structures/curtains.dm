@@ -1,17 +1,13 @@
-#define SHOWER_OPEN_LAYER OBJ_LAYER + 0.4
-#define SHOWER_CLOSED_LAYER MOB_LAYER + 0.2
-
 /obj/structure/curtain
 	name = "curtain"
 	icon = 'icons/obj/curtain.dmi'
 	icon_state = "closed"
-	layer = SHOWER_OPEN_LAYER
 	opacity = 1
 	density = 0
+	plane = ABOVE_HUMAN_PLANE
 
 /obj/structure/curtain/open
 	icon_state = "open"
-	layer = SHOWER_CLOSED_LAYER
 	opacity = 0
 
 /obj/structure/curtain/bullet_act(obj/item/projectile/P, def_zone)
@@ -30,10 +26,10 @@
 	opacity = !opacity
 	if(opacity)
 		icon_state = "closed"
-		layer = SHOWER_CLOSED_LAYER
+		layer = CLOSED_CURTAIN_LAYER
 	else
 		icon_state = "open"
-		layer = SHOWER_OPEN_LAYER
+		layer = OPEN_CURTAIN_LAYER
 
 /obj/structure/curtain/attackby(obj/item/W, mob/user)
 	if(iswirecutter(W))

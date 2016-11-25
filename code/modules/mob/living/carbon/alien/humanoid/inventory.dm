@@ -1,9 +1,11 @@
 /mob/living/carbon/alien/humanoid/equip_to_slot(obj/item/W as obj, slot, redraw_mob = 1)
-	if(!slot) return
-	if(!istype(W)) return
+	if(!slot)
+		return
+	if(!istype(W))
+		return
 
 	if(src.is_holding_item(W))
-		src.u_equip(W)
+		src.u_equip(W, 0)
 
 	switch(slot)
 		if(slot_head)
@@ -22,11 +24,11 @@
 			to_chat(usr, "<span class='warning'>You are trying to equip this item to an unsupported inventory slot. How the heck did you manage that? Stop it...</span>")
 			return
 
-	W.layer = 20
-	W.plane = PLANE_HUD
+	W.hud_layerise()
 	W.equipped(src, slot)
 	W.forceMove(src)
-	if(client) client.screen |= W
+	if(client)
+		client.screen |= W
 
 // Return the item currently in the slot ID
 /mob/living/carbon/alien/humanoid/get_item_by_slot(slot_id)
@@ -43,7 +45,8 @@
 
 //unequip
 /mob/living/carbon/alien/humanoid/u_equip(obj/item/W as obj, dropped = 1)
-	if(!W) return 0
+	if(!W)
+		return 0
 	var/success = 0
 	var/index = is_holding_item(W)
 	if(index)
@@ -72,13 +75,12 @@
 	if(success)
 		if (client)
 			client.screen -= W
-		W.forceMove(loc)
-		W.unequipped()
+		W.unequipped(src)
 		if(dropped)
+			W.forceMove(loc)
 			W.dropped(src)
 		if(W)
-			W.layer = initial(W.layer)
-			W.plane = initial(W.plane)
+			W.reset_plane_and_layer()
 	return 1
 
 //Literally copypasted /mob/proc/attack_ui(slot, hand_index) while replacing attack_hand with attack_alien

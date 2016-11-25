@@ -26,8 +26,8 @@
 	New()
 		..()
 
-		pixel_x = ((src.dir & 3)? (0) : (src.dir == 4 ? 32 : -32))
-		pixel_y = ((src.dir & 3)? (src.dir ==1 ? 32 : -32) : (0))
+		pixel_x = ((src.dir & 3)? (0) : (src.dir == 4 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE))
+		pixel_y = ((src.dir & 3)? (src.dir ==1 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE) : (0))
 
 		spawn(20)
 			for(var/obj/machinery/door/window/brigdoor/M in all_doors)
@@ -53,7 +53,8 @@
 // if it's less than 0, open door, reset timer
 // update the door_timer window and the icon
 	process()
-		if(stat & (NOPOWER|BROKEN))	return
+		if(stat & (NOPOWER|BROKEN))
+			return
 		if(src.timing)
 			if(world.time > src.releasetime)
 				src.timer_end() // open doors, reset timer, clear status screen
@@ -75,32 +76,40 @@
 // open/closedoor checks if door_timer has power, if so it checks if the
 // linked door is open/closed (by density) then opens it/closes it.
 	proc/timer_start()
-		if(stat & (NOPOWER|BROKEN))	return 0
+		if(stat & (NOPOWER|BROKEN))
+			return 0
 
 		for(var/obj/machinery/door/window/brigdoor/door in targets)
-			if(door.density)	continue
+			if(door.density)
+				continue
 			spawn(0)
 				door.close()
 
 		for(var/obj/structure/closet/secure_closet/brig/C in targets)
-			if(C.broken)	continue
-			if(C.opened && !C.close())	continue
+			if(C.broken)
+				continue
+			if(C.opened && !C.close())
+				continue
 			C.locked = 1
 			C.icon_state = C.icon_locked
 		return 1
 
 
 	proc/timer_end()
-		if(stat & (NOPOWER|BROKEN))	return 0
+		if(stat & (NOPOWER|BROKEN))
+			return 0
 
 		for(var/obj/machinery/door/window/brigdoor/door in targets)
-			if(!door.density)	continue
+			if(!door.density)
+				continue
 			spawn(0)
 				door.open()
 
 		for(var/obj/structure/closet/secure_closet/brig/C in targets)
-			if(C.broken)	continue
-			if(C.opened)	continue
+			if(C.broken)
+				continue
+			if(C.opened)
+				continue
 			C.locked = 0
 			C.icon_state = C.icon_closed
 
@@ -252,8 +261,8 @@
 			if(char == " ")
 				continue
 			var/image/ID = image('icons/obj/status_display.dmi', icon_state=char)
-			ID.pixel_x = -(d-1)*5 + px
-			ID.pixel_y = py
+			ID.pixel_x = (-(d-1)*5 + px) * PIXEL_MULTIPLIER
+			ID.pixel_y = py * PIXEL_MULTIPLIER
 			I.overlays += ID
 		return I
 
@@ -262,39 +271,39 @@
 	name = "Cell 1"
 	id_tag = "Cell 1"
 	dir = 2
-	pixel_y = -32
+	pixel_y = -WORLD_ICON_SIZE
 
 
 /obj/machinery/door_timer/cell_2
 	name = "Cell 2"
 	id_tag = "Cell 2"
 	dir = 2
-	pixel_y = -32
+	pixel_y = -WORLD_ICON_SIZE
 
 
 /obj/machinery/door_timer/cell_3
 	name = "Cell 3"
 	id_tag = "Cell 3"
 	dir = 2
-	pixel_y = -32
+	pixel_y = -WORLD_ICON_SIZE
 
 
 /obj/machinery/door_timer/cell_4
 	name = "Cell 4"
 	id_tag = "Cell 4"
 	dir = 2
-	pixel_y = -32
+	pixel_y = -WORLD_ICON_SIZE
 
 
 /obj/machinery/door_timer/cell_5
 	name = "Cell 5"
 	id_tag = "Cell 5"
 	dir = 2
-	pixel_y = -32
+	pixel_y = -WORLD_ICON_SIZE
 
 
 /obj/machinery/door_timer/cell_6
 	name = "Cell 6"
 	id_tag = "Cell 6"
 	dir = 4
-	pixel_x = 32
+	pixel_x = WORLD_ICON_SIZE

@@ -2,7 +2,7 @@
 	name = "Exosuit Structure (Ripley chassis)"
 	desc = "Used to build a Ripley chassis."
 	id = "ripley_chassis"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/chassis/ripley
 	category = "Ripley"
@@ -12,7 +12,7 @@
 	name = "Exosuit Structure (Ripley torso)"
 	desc = "Used to build a Ripley torso."
 	id = "ripley_torso"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/ripley_torso
 	category = "Ripley"
@@ -22,7 +22,7 @@
 	name = "Exosuit Structure (Ripley left arm)"
 	desc = "Used to build a Ripley left arm."
 	id = "ripley_larm"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/ripley_left_arm
 	category = "Ripley"
@@ -32,7 +32,7 @@
 	name = "Exosuit Structure (Ripley right arm)"
 	desc = "Used to build a Ripley right arm."
 	id = "ripley_rarm"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/ripley_right_arm
 	category = "Ripley"
@@ -42,7 +42,7 @@
 	name = "Exosuit Structure (Ripley left leg)"
 	desc = "Used to build a Ripley left leg."
 	id = "ripley_lleg"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/ripley_left_leg
 	category = "Ripley"
@@ -52,7 +52,7 @@
 	name = "Exosuit Structure (Ripley right leg)"
 	desc = "Used to build a Ripley right leg."
 	id = "ripley_rleg"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/ripley_right_leg
 	category = "Ripley"

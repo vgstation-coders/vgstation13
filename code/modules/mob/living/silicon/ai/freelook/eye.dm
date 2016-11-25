@@ -9,7 +9,8 @@
 
 	var/list/visibleCameraChunks = list()
 	var/mob/living/silicon/ai/ai = null
-
+	var/high_res = 0
+	flags = HEAR_ALWAYS
 
 // Use this when setting the aiEye's location.
 // It will also stream the chunk that the new loc is in.
@@ -25,9 +26,7 @@
 		cameranet.visibility(src)
 		if(ai.client && ai.client.eye != src) // Set the eye to us and give the AI the sight & visibility flags it needs.
 			ai.client.eye = src
-			ai.sight |= SEE_TURFS
-			ai.sight |= SEE_MOBS
-			ai.sight |= SEE_OBJS
+			ai.change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			ai.see_in_dark = 8
 			ai.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 
@@ -39,8 +38,16 @@
 /mob/camera/aiEye/Move()
 	return 0
 
-//An AI eyeobj mob cant have a virtualhearer to hear with unless it gets one from a malf module
+/mob/camera/aiEye/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A) //proc for eye seeing visible messages from atom A, only possible with the high_res camera module
+	if(!high_res)
+		return
+	if(ai && cameranet.checkCameraVis(A)) //check it's actually in view of a camera
+		ai.show_message( message, 1, blind_message, 2)
+
+//An AI eyeobj mob cant hear unless it updates high_res with a Malf Module
 /mob/camera/aiEye/Hear(var/datum/speech/speech, var/rendered_speech="")
+	if(!high_res)
+		return
 	if(speech.frequency) //HOW CAN IT POSSIBLY READ LIPS THROUGH RADIOS
 		return
 
@@ -50,7 +57,7 @@
 			var/mob/living/carbon/human/H = speech.speaker
 			if(H.check_body_part_coverage(MOUTH)) //OR MASKS
 				return
-		ai.Hear(args) //He can only read the lips of mobs, I cant think of objects using lips
+		ai.Hear(speech, rendered_speech) //He can only read the lips of mobs, I cant think of objects using lips
 
 
 // AI MOVEMENT
@@ -70,7 +77,7 @@
 	eyeobj.ai = src
 	eyeobj.name = "[src.name] (AI Eye)" // Give it a name
 	spawn(5)
-		eyeobj.loc = src.loc
+		eyeobj.forceMove(src.loc)
 
 /mob/living/silicon/ai/Destroy()
 	eyeobj.ai = null
@@ -150,7 +157,7 @@
 
 	if(client && client.eye) // Reset these things so the AI can't view through walls and stuff.
 		client.eye = src
-		sight &= ~(SEE_TURFS | SEE_MOBS | SEE_OBJS)
+		change_sight(removing = SEE_TURFS | SEE_MOBS | SEE_OBJS)
 		see_in_dark = 0
 		see_invisible = SEE_INVISIBLE_LIVING
 

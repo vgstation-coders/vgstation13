@@ -3,7 +3,6 @@
 
 /obj/effect/tracker
 	name = "tracker"
-	unacidable = 1
 	w_type=NOT_RECYCLABLE
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "soul2"
@@ -19,8 +18,8 @@
 
 /obj/effect/tracker/New()
 	. = ..()
-	absolute_X = (x * 32)
-	absolute_Y = (y * 32)
+	absolute_X = (x * WORLD_ICON_SIZE)
+	absolute_Y = (y * WORLD_ICON_SIZE)
 
 	spawn(1)
 		process_step()
@@ -41,8 +40,8 @@
 		returnToPool(src)
 		return
 
-	var/target_absolute_X = target.x * 32
-	var/target_absolute_Y = target.y * 32
+	var/target_absolute_X = target.x * WORLD_ICON_SIZE
+	var/target_absolute_Y = target.y * WORLD_ICON_SIZE
 
 	var/dx = target_absolute_X - absolute_X
 	var/dy = target_absolute_Y - absolute_Y
@@ -71,8 +70,8 @@
 
 	speed += acceleration
 
-	x = absolute_X/32
-	y = absolute_Y/32
+	x = absolute_X/WORLD_ICON_SIZE
+	y = absolute_Y/WORLD_ICON_SIZE
 	update_icon()
 
 	sleep(refresh)
@@ -80,8 +79,8 @@
 
 
 /obj/effect/tracker/update_icon()
-	pixel_x = absolute_X % 32
-	pixel_y = absolute_Y % 32
+	pixel_x = absolute_X % WORLD_ICON_SIZE
+	pixel_y = absolute_Y % WORLD_ICON_SIZE
 
 /obj/effect/tracker/cultify()
 	return

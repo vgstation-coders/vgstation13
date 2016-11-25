@@ -12,7 +12,7 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
 	caliber = list("shotgun" = 1, "flare" = 1) //flare shells are still shells
-	origin_tech = "combat=4;materials=2"
+	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
 	var/recentpump = 0 // to prevent spammage
 	var/pumped = 0
@@ -25,7 +25,8 @@
 		return 0
 
 /obj/item/weapon/gun/projectile/shotgun/pump/attack_self(mob/living/user as mob)
-	if(recentpump)	return
+	if(recentpump)
+		return
 	pump(user)
 	recentpump = 1
 	spawn(10)
@@ -37,7 +38,7 @@
 		return 1
 	else if(current_shell && current_shell.BB)
 		in_chamber = current_shell.BB //Load projectile into chamber.
-		current_shell.BB.loc = src //Set projectile loc to gun.
+		current_shell.BB.forceMove(src) //Set projectile loc to gun.
 		current_shell.BB = null
 		current_shell.update_icon()
 		return 1
@@ -47,7 +48,7 @@
 	playsound(M, 'sound/weapons/shotgunpump.ogg', 60, 1)
 	pumped = 0
 	if(current_shell)//We have a shell in the chamber
-		current_shell.loc = get_turf(src)//Eject casing
+		current_shell.forceMove(get_turf(src))//Eject casing
 		current_shell = null
 		if(in_chamber)
 			in_chamber = null
@@ -65,7 +66,7 @@
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	max_shells = 8
-	origin_tech = "combat=5;materials=2"
+	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/shotgun"
 
 //this is largely hacky and bad :(	-Pete
@@ -82,7 +83,7 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
 	caliber = list("shotgun" = 1, "flare" = 1)
-	origin_tech = "combat=3;materials=1"
+	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=1"
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/process_chambered()
@@ -95,7 +96,7 @@
 	loaded += AC //Put it in at the end - because it hasn't been ejected yet
 	if(AC.BB)
 		in_chamber = AC.BB //Load projectile into chamber.
-		AC.BB.loc = src //Set projectile loc to gun.
+		AC.BB.forceMove(src) //Set projectile loc to gun.
 		AC.BB = null
 		AC.update_icon()
 		return 1
@@ -106,10 +107,14 @@
 		to_chat(user, "<span class='notice'>\The [src] is empty.</span>")
 		return
 
-	for(var/obj/item/ammo_casing/shotgun/shell in src)	//This feels like a hack.	//don't code at 3:30am kids!!
-		if(shell in loaded)
-			loaded -= shell
-		shell.loc = get_turf(src.loc)
+	var/i = 0
+	for(var/obj/item/ammo_casing/shotgun/loaded_shell in src) //This feels like a hack. don't code at 3:30am kids!!
+		loaded_shell.forceMove(get_turf(src))
+		loaded_shell.pixel_x = min(-3 + (i*4),15) * PIXEL_MULTIPLIER
+		loaded_shell.pixel_y = min( 3 - (i*4),15) * PIXEL_MULTIPLIER
+		if(loaded_shell in loaded)
+			loaded -= loaded_shell
+		i++
 
 	to_chat(user, "<span class='notice'>You break \the [src].</span>")
 	update_icon()
@@ -138,3 +143,12 @@
 			if(istype(user, /mob/living/carbon/human) && src.loc == user)
 				var/mob/living/carbon/human/H = user
 				H.update_inv_hands()
+
+/obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff
+	name = "sawn-off shotgun"
+	desc = "Omar's coming!"
+	icon_state = "sawnshotgun"
+	item_state = "sawnshotgun"
+	w_class = W_CLASS_MEDIUM
+	slot_flags = SLOT_BELT
+	ammo_type = "/obj/item/ammo_casing/shotgun/buckshot"

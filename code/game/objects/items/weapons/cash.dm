@@ -96,8 +96,8 @@ var/global/list/moneytypes = list(
 	//Up to 100 items per stack.
 	overlays = 0
 	var/stacksize=round(amount/2.5)
-	pixel_x = rand(-7, 7)
-	pixel_y = rand(-14, 14)
+	pixel_x = rand(-7, 7) * PIXEL_MULTIPLIER
+	pixel_y = rand(-14, 14) * PIXEL_MULTIPLIER
 	if(stacksize)
 		// 0 = single
 		// 1 = 1/4 stack
@@ -125,6 +125,9 @@ var/global/list/moneytypes = list(
 		if(collected)
 			update_icon()
 			to_chat(user, "<span class='notice'>You add [collected] [src.name][amount > 1 ? "s":""] to your stack of cash.</span>")
+
+/obj/item/weapon/spacecash/proc/get_total()//I can't believe this didn't exist here already.
+	return worth * amount
 
 /obj/item/weapon/spacecash/c10
 	icon_state = "cash10"
@@ -161,4 +164,4 @@ var/global/list/moneytypes = list(
 /proc/count_cash(var/list/cash)
 	. = 0
 	for(var/obj/item/weapon/spacecash/C in cash)
-		. += C.amount * C.worth
+		. += C.get_total()

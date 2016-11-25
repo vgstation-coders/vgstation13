@@ -32,21 +32,21 @@
 /obj/item/weapon/ore/uranium
 	name = "Uranium ore"
 	icon_state = "Uranium ore"
-	origin_tech = "materials=5"
+	origin_tech = MATERIALS + "=5"
 	material=MAT_URANIUM
 	melt_temperature = 1070+T0C
 
 /obj/item/weapon/ore/iron
 	name = "Iron ore"
 	icon_state = "Iron ore"
-	origin_tech = "materials=1"
+	origin_tech = MATERIALS + "=1"
 	material=MAT_IRON
 	melt_temperature = MELTPOINT_STEEL
 
 /obj/item/weapon/ore/glass
 	name = "Sand"
 	icon_state = "Glass ore"
-	origin_tech = "materials=1"
+	origin_tech = MATERIALS + "=1"
 	material=MAT_GLASS
 	melt_temperature = MELTPOINT_GLASS
 
@@ -61,34 +61,34 @@
 /obj/item/weapon/ore/plasma
 	name = "Plasma ore"
 	icon_state = "Plasma ore"
-	origin_tech = "materials=2"
+	origin_tech = MATERIALS + "=2"
 	material=MAT_PLASMA
 	melt_temperature = MELTPOINT_STEEL+500
 
 /obj/item/weapon/ore/silver
 	name = "Silver ore"
 	icon_state = "Silver ore"
-	origin_tech = "materials=3"
+	origin_tech = MATERIALS + "=3"
 	material=MAT_SILVER
 	melt_temperature = 961+T0C
 
 /obj/item/weapon/ore/gold
 	name = "Gold ore"
 	icon_state = "Gold ore"
-	origin_tech = "materials=4"
+	origin_tech = MATERIALS + "=4"
 	material=MAT_GOLD
 	melt_temperature = 1064+T0C
 
 /obj/item/weapon/ore/diamond
 	name = "Diamond ore"
 	icon_state = "Diamond ore"
-	origin_tech = "materials=6"
+	origin_tech = MATERIALS + "=6"
 	material=MAT_DIAMOND
 
 /obj/item/weapon/ore/clown
 	name = "Bananium ore"
 	icon_state = "Clown ore"
-	origin_tech = "materials=4"
+	origin_tech = MATERIALS + "=4"
 	material=MAT_CLOWN
 	melt_temperature = MELTPOINT_GLASS
 
@@ -96,7 +96,7 @@
 	name = "Phazite"
 	desc = "What the fuck?"
 	icon_state = "Phazon ore"
-	origin_tech = "materials=7"
+	origin_tech = MATERIALS + "=7"
 	material=MAT_PHAZON
 	melt_temperature = MELTPOINT_GLASS
 
@@ -268,7 +268,7 @@
 		var/turf/bombturf = get_turf(src)
 		var/area/A = get_area(bombturf)
 		var/notify_admins = 0
-		if(z != 5)//Only annoy the admins ingame if we're triggered off the mining zlevel
+		if(z != map.zAsteroid)//Only annoy the admins ingame if we're triggered off the mining zlevel
 			notify_admins = 1
 		if(notify_admins)
 			if(triggered_by_explosive)

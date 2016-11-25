@@ -7,7 +7,7 @@
 	icon_state = "core"
 	flags = FPRINT
 	siemens_coefficient = 1
-	origin_tech = "materials=4;plasmatech=3;bluespace=2;engineering=3"
+	origin_tech = Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=3;" + Tc_BLUESPACE + "=2;" + Tc_ENGINEERING + "=3"
 
 /obj/item/pod_parts/pod_frame
 	name = "Space Pod Frame"
@@ -73,7 +73,7 @@
 		for(var/obj/item/pod_parts/pod_frame/F in linkedparts)
 			if(1 == turn(F.dir, -F.link_angle)) //if the part links north during construction, as the bottom left part always does
 				//log_admin("Repositioning")
-				pod.loc = F.loc
+				pod.forceMove(F.loc)
 			qdel(F)
 	if(iswrench(O))
 		to_chat(user, "<span class='notice'>You [!anchored ? "secure \the [src] in place."  : "remove the securing bolts."]</span>")

@@ -43,15 +43,17 @@
 		G.use(1)
 		if (!G && !RG && replace)
 			if(isMoMMI(user))
-				RG.loc=get_turf(user)
+				RG.forceMove(get_turf(user))
 			else
 				user.put_in_hands(RG)
 	else
 		return ..()
 
 /obj/item/stack/sheet/glass/proc/construct_window(mob/user as mob)
-	if(!user || !src)	return 0
-	if(!istype(user.loc,/turf)) return 0
+	if(!user || !src)
+		return 0
+	if(!istype(user.loc,/turf))
+		return 0
 	if(!user.IsAdvancedToolUser())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 0
@@ -60,8 +62,10 @@
 	if(windoor) //TODO: Find way to merge this if-else clause and lower duplication
 		switch(input(title, "Would you like full tile glass a one direction glass pane or a windoor?") in list("One Direction", "Full Window", "Windoor", "Cancel"))
 			if("One Direction")
-				if(!src)	return 1
-				if(src.loc != user)	return 1
+				if(!src)
+					return 1
+				if(src.loc != user)
+					return 1
 				var/list/directions = new/list(cardinal)
 				var/i = 0
 				for (var/obj/structure/window/win in user.loc)
@@ -90,8 +94,10 @@
 				W.anchored = 0
 				src.use(1)
 			if("Full Window")
-				if(!src)	return 1
-				if(src.loc != user)	return 1
+				if(!src)
+					return 1
+				if(src.loc != user)
+					return 1
 				if(src.amount < 2)
 					to_chat(user, "<span class='warning'>You need more glass to do that.</span>")
 					return 1
@@ -140,8 +146,10 @@
 	else
 		switch(alert(title, "Would you like full tile glass or one direction?", "One Direction", "Full Window", "Cancel", null))
 			if("One Direction")
-				if(!src)	return 1
-				if(src.loc != user)	return 1
+				if(!src)
+					return 1
+				if(src.loc != user)
+					return 1
 				var/list/directions = new/list(cardinal)
 				var/i = 0
 				for (var/obj/structure/window/win in user.loc)
@@ -170,8 +178,10 @@
 				W.anchored = 0
 				src.use(1)
 			if("Full Window")
-				if(!src)	return 1
-				if(src.loc != user)	return 1
+				if(!src)
+					return 1
+				if(src.loc != user)
+					return 1
 				if(src.amount < 2)
 					to_chat(user, "<span class='warning'>You need more glass to do that.</span>")
 					return 1
@@ -197,7 +207,7 @@
 	singular_name = "glass sheet"
 	icon_state = "sheet-glass"
 	starting_materials = list(MAT_GLASS = 3750)
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	rglass = /obj/item/stack/sheet/glass/rglass
 
 /obj/item/stack/sheet/glass/glass/cyborg
@@ -233,7 +243,7 @@
 	created_window = /obj/structure/window/reinforced
 	full_window = /obj/structure/window/full/reinforced
 	windoor = /obj/structure/windoor_assembly/
-	origin_tech = "materials=2"
+	origin_tech = Tc_MATERIALS + "=2"
 	reinforced = 1
 	glass_quality = 1
 	shealth = 10
@@ -252,7 +262,7 @@
 	icon_state = "sheet-plasmaglass"
 	sname = "plasma"
 	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PLASMA = CC_PER_SHEET_MISC)
-	origin_tech = "materials=3;plasmatech=2"
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_PLASMATECH + "=2"
 	created_window = /obj/structure/window/plasma
 	full_window = /obj/structure/window/full/plasma
 	rglass = /obj/item/stack/sheet/glass/plasmarglass
@@ -273,7 +283,7 @@
 	sname = "plasma_ref"
 	starting_materials = list(MAT_IRON = 1875, MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PLASMA = CC_PER_SHEET_MISC)
 	melt_temperature = MELTPOINT_STEEL+500 // I guess...?
-	origin_tech = "materials=4;plasmatech=2"
+	origin_tech = Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=2"
 	created_window = /obj/structure/window/reinforced/plasma
 	full_window = /obj/structure/window/full/reinforced/plasma
 	windoor = /obj/structure/windoor_assembly/plasma

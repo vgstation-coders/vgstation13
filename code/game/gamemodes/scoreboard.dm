@@ -1,6 +1,8 @@
 /datum/controller/gameticker/proc/scoreboard(var/completions)
 
 
+	completions += mode.completion_text
+
 	//Calls auto_declare_completion_* for all modes
 	for(var/handler in typesof(/datum/game_mode/proc))
 		if(findtext("[handler]","auto_declare_completion_"))
@@ -48,7 +50,8 @@
 	for(var/mob/living/player in player_list)
 		if(player.stat != DEAD)
 			var/turf/T = get_turf(player)
-			if(!T) continue
+			if(!T)
+				continue
 
 			if(istype(T.loc, /area/shuttle/escape/centcom) || istype(T.loc, /area/shuttle/escape_pod1/centcom) || istype(T.loc, /area/shuttle/escape_pod2/centcom) || istype(T.loc, /area/shuttle/escape_pod3/centcom) || istype(T.loc, /area/shuttle/escape_pod5/centcom))
 				score["escapees"]++
@@ -62,7 +65,10 @@
 
 
 				for(var/obj/item/weapon/card/id/C1 in get_contents_in_object(player, /obj/item/weapon/card/id))
-					cashscore += C1.GetBalance()
+					cashscore += C1.GetBalance() //From bank account
+
+					if(istype(C1.virtual_wallet))
+						cashscore += C1.virtual_wallet.money
 
 				for(var/obj/item/weapon/spacecash/C2 in get_contents_in_object(player, /obj/item/weapon/spacecash))
 					cashscore += (C2.amount * C2.worth)
@@ -102,7 +108,8 @@
 
 		score["disc"] = 1
 		for(var/obj/item/weapon/disk/nuclear/A in world)
-			if(A.loc != /mob/living/carbon) continue
+			if(A.loc != /mob/living/carbon)
+				continue
 			var/turf/location = get_turf(A.loc)
 			var/area/bad_zone1 = locate(/area)
 			var/area/bad_zone2 = locate(/area/syndicate_station)
@@ -113,7 +120,7 @@
 				score["disc"] = 0
 			if(location in bad_zone3)
 				score["disc"] = 0
-			if(A.loc.z != 1)
+			if(A.loc.z != map.zMainStation)
 				score["disc"] = 0
 
 		if(score["nuked"])
@@ -425,8 +432,10 @@
 	<U>THE WEIRD</U><BR>"}
 /*	<B>Final Station Budget:</B> $[num2text(totalfunds,50)]<BR>"}
 	var/profit = totalfunds - 100000
-	if (profit > 0) dat += "<B>Station Profit:</B> +[num2text(profit,50)]<BR>"
-	else if (profit < 0) dat += "<B>Station Deficit:</B> [num2text(profit,50)]<BR>"}*/
+	if (profit > 0)
+		dat += "<B>Station Profit:</B> +[num2text(profit,50)]<BR>"
+	else if (profit < 0)
+		dat += "<B>Station Deficit:</B> [num2text(profit,50)]<BR>"}*/
 	dat += {"<B>Food Eaten:</b> [score["foodeaten"]]<BR>
 	<B>Times a Clown was Abused:</B> [score["clownabuse"]]<BR>
 	<B>Number of Explosions This Shift:</B> [score["explosions"]]<BR>
@@ -449,24 +458,42 @@
 	score["rating"] = "A Rating"
 
 	switch(score["crewscore"])
-		if(-INFINITY to -50000) score["rating"] = "Even the Singularity Deserves Better"
-		if(-49999 to -5000) score["rating"] = "Singularity Fodder"
-		if(-4999 to -1000) score["rating"] = "You're All Fired"
-		if(-999 to -500) score["rating"] = "A Waste of Perfectly Good Oxygen"
-		if(-499 to -250) score["rating"] = "A Wretched Heap of Scum and Incompetence"
-		if(-249 to -100) score["rating"] = "Outclassed by Lab Monkeys"
-		if(-99 to -21) score["rating"] = "The Undesirables"
-		if(-20 to -1) score["rating"] = "Not So Good"
-		if(0) score["rating"] = "Nothing of Value"
-		if(1 to 20) score["rating"] = "Ambivalently Average"
-		if(21 to 99) score["rating"] = "Not Bad, but Not Good"
-		if(100 to 249) score["rating"] = "Skillful Servants of Science"
-		if(250 to 499) score["rating"] = "Best of a Good Bunch"
-		if(500 to 999) score["rating"] = "Lean Mean Machine Thirteen"
-		if(1000 to 4999) score["rating"] = "Promotions for Everyone"
-		if(5000 to 9999) score["rating"] = "Ambassadors of Discovery"
-		if(10000 to 49999) score["rating"] = "The Pride of Science Itself"
-		if(50000 to INFINITY) score["rating"] = "Nanotrasen's Finest"
+		if(-INFINITY to -50000)
+			score["rating"] = "Even the Singularity Deserves Better"
+		if(-49999 to -5000)
+			score["rating"] = "Singularity Fodder"
+		if(-4999 to -1000)
+			score["rating"] = "You're All Fired"
+		if(-999 to -500)
+			score["rating"] = "A Waste of Perfectly Good Oxygen"
+		if(-499 to -250)
+			score["rating"] = "A Wretched Heap of Scum and Incompetence"
+		if(-249 to -100)
+			score["rating"] = "Outclassed by Lab Monkeys"
+		if(-99 to -21)
+			score["rating"] = "The Undesirables"
+		if(-20 to -1)
+			score["rating"] = "Not So Good"
+		if(0)
+			score["rating"] = "Nothing of Value"
+		if(1 to 20)
+			score["rating"] = "Ambivalently Average"
+		if(21 to 99)
+			score["rating"] = "Not Bad, but Not Good"
+		if(100 to 249)
+			score["rating"] = "Skillful Servants of Science"
+		if(250 to 499)
+			score["rating"] = "Best of a Good Bunch"
+		if(500 to 999)
+			score["rating"] = "Lean Mean Machine Thirteen"
+		if(1000 to 4999)
+			score["rating"] = "Promotions for Everyone"
+		if(5000 to 9999)
+			score["rating"] = "Ambassadors of Discovery"
+		if(10000 to 49999)
+			score["rating"] = "The Pride of Science Itself"
+		if(50000 to INFINITY)
+			score["rating"] = "Nanotrasen's Finest"
 	dat += "<B><U>RATING:</U></B> [score["rating"]]"
 
 	for(var/i = 1; i <= end_icons.len; i++)

@@ -1,3 +1,6 @@
+#define VALUE_COUNTER "Counter"
+#define VALUE_LIMIT "Limit"
+
 //////////////////////////Addition circuit////////////////////////
 // * When pulsed, increase counter by 1. When counter reaches a specified value, reset it to 0 and emit a pulse.
 
@@ -9,18 +12,20 @@
 	starting_materials = list(MAT_IRON = 100, MAT_GLASS = 25)
 	w_type = RECYK_ELECTRONIC
 
-	origin_tech = "programming=1"
+	origin_tech = Tc_PROGRAMMING + "=1"
 
 	wires = WIRE_PULSE | WIRE_RECEIVE
 
 	var/pulse_counter = 0
 	var/limit = 1 //When the pulse counter reaches this value, emit a signal.
 
-	accessible_values = list("Counter" = "pulse_counter;number",\
-		"Limit" = "limit;number")
+	accessible_values = list(\
+		VALUE_COUNTER = "pulse_counter;"+VT_NUMBER,\
+		VALUE_LIMIT = "limit;"+VT_NUMBER)
 
 /obj/item/device/assembly/addition/activate()
-	if(!..()) return 0
+	if(!..())
+		return 0
 
 	if(++pulse_counter >= limit)
 		pulse_counter = 0
@@ -50,7 +55,8 @@
 	return
 
 /obj/item/device/assembly/addition/Topic(href, href_list)
-	if(..()) return
+	if(..())
+		return
 
 	if(href_list["sub_counter"])
 		pulse_counter = max(pulse_counter - text2num(href_list["sub_counter"]), 0)
@@ -69,3 +75,6 @@
 #undef sub_counter_href
 #undef add_limit_href
 #undef sub_limit_href
+
+#undef VALUE_COUNTER
+#undef VALUE_LIMIT

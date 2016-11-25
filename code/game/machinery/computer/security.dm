@@ -231,7 +231,7 @@ What a mess.*/
 					if(istype(usr,/mob/living/carbon/human) && !usr.get_active_hand())
 						usr.put_in_hands(scan)
 					else
-						scan.loc = get_turf(src)
+						scan.forceMove(get_turf(src))
 					scan = null
 				else
 					var/obj/item/I = usr.get_active_hand()

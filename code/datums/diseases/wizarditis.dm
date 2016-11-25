@@ -62,24 +62,21 @@ STI KALY - blind
 				if(H.head)
 					H.drop_from_inventory(H.head)
 				H.head = new /obj/item/clothing/head/wizard(H)
-				H.head.layer = 20
-				H.shoes.plane = PLANE_HUD
+				H.head.hud_layerise()
 			return
 		if(prob(chance))
 			if(!istype(H.wear_suit, /obj/item/clothing/suit/wizrobe))
 				if(H.wear_suit)
 					H.drop_from_inventory(H.wear_suit)
 				H.wear_suit = new /obj/item/clothing/suit/wizrobe(H)
-				H.wear_suit.layer = 20
-				H.shoes.plane = PLANE_HUD
+				H.wear_suit.hud_layerise()
 			return
 		if(prob(chance))
 			if(!istype(H.shoes, /obj/item/clothing/shoes/sandal))
 				if(H.shoes)
 					H.drop_from_inventory(H.shoes)
 				H.shoes = new /obj/item/clothing/shoes/sandal(H)
-				H.shoes.layer = 20
-				H.shoes.plane = PLANE_HUD
+				H.hud_layerise()
 			return
 	else
 		var/mob/living/carbon/H = affected_mob
@@ -95,7 +92,8 @@ STI KALY - blind
 /datum/disease/wizarditis/proc/teleport()
 	var/list/theareas = new/list()
 	for(var/area/AR in orange(80, affected_mob))
-		if(theareas.Find(AR) || isspace(AR)) continue
+		if(theareas.Find(AR) || isspace(AR))
+			continue
 		theareas += AR
 
 	if(!theareas)
@@ -105,8 +103,10 @@ STI KALY - blind
 
 	var/list/L = list()
 	for(var/turf/T in get_area_turfs(thearea.type))
-		if(T.z != affected_mob.z) continue
-		if(T.name == "space") continue
+		if(T.z != affected_mob.z)
+			continue
+		if(T.name == "space")
+			continue
 		if(!T.density)
 			var/clear = 1
 			for(var/obj/O in T)
@@ -120,6 +120,6 @@ STI KALY - blind
 		return
 
 	affected_mob.say("SCYAR NILA [uppertext(thearea.name)]!")
-	affected_mob.loc = pick(L)
+	affected_mob.forceMove(pick(L))
 
 	return

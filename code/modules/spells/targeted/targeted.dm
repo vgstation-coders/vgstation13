@@ -11,7 +11,7 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 	var/target_ignore_prev = 1 //only important if max_targets > 1, affects if the spell can be cast multiple times at one person from one cast
 
 
-	var/amt_weakened = 0
+	var/amt_knockdown = 0
 	var/amt_paralysis = 0
 	var/amt_stunned = 0
 
@@ -32,6 +32,12 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 	var/list/compatible_mobs = list()
 	var/believed_name
 
+/spell/targeted/is_valid_target(var/target, mob/user, list/options)
+	if(!(spell_flags & INCLUDEUSER) && target == user)
+		return 0
+	if(!(range == GLOBALCAST) && !(range == SELFCAST && target == user) && (options && !(target in options))) //Shouldn't be necessary but a good check in case of overrides
+		return 0
+	return !compatible_mobs.len || is_type_in_list(target, compatible_mobs)
 
 /spell/targeted/choose_targets(mob/user = usr)
 	if(mind_affecting && tinfoil_check(user))
@@ -54,12 +60,12 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 			var/mob/temp_target = user.mind.heard_before[target_name]
 			believed_name = target_name
 			targets += temp_target
-		else if((range == 0 || range == -1) && spell_flags & INCLUDEUSER)
+		else if((range == 0 || range == SELFCAST) && (spell_flags & INCLUDEUSER))
 			targets += user
 		else
 			var/list/possible_targets = list()
 			var/list/starting_targets
-			if(range == -2)
+			if(range == GLOBALCAST)
 				starting_targets = living_mob_list
 			else
 				starting_targets = view_or_range(range, holder, selection_type)
@@ -68,7 +74,8 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 				if(!(spell_flags & INCLUDEUSER) && M == user)
 					continue
 				if(compatible_mobs && compatible_mobs.len)
-					if(!is_type_in_list(M, compatible_mobs)) continue
+					if(!is_type_in_list(M, compatible_mobs))
+						continue
 				if(compatible_mobs && compatible_mobs.len && !is_type_in_list(M, compatible_mobs))
 					continue
 				if(mind_affecting)
@@ -151,10 +158,10 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 	target.adjustToxLoss(amt_dam_tox)
 	target.adjustOxyLoss(amt_dam_oxy)
 	//disabling
-	target.Weaken(amt_weakened)
+	target.Knockdown(amt_knockdown)
 	target.Paralyse(amt_paralysis)
 	target.Stun(amt_stunned)
-	if(amt_weakened || amt_paralysis || amt_stunned)
+	if(amt_knockdown || amt_paralysis || amt_stunned)
 		target.unlock_from()
 	target.eye_blind += amt_eye_blind
 	target.eye_blurry += amt_eye_blurry
@@ -163,7 +170,8 @@ Targeted spells have two useful flags: INCLUDEUSER and SELECTABLE. These are exp
 	target.stuttering += amt_stuttering
 
 /spell/targeted/proc/tinfoil_check(mob/living/carbon/human/user)
-	if(!istype(user)) return 0
+	if(!istype(user))
+		return 0
 
 	if(user.head && istype(user.head,/obj/item/clothing/head/tinfoil))
 		return 1

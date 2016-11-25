@@ -10,11 +10,9 @@
 	icon = 'icons/obj/bus.dmi'
 	icon_state = "adminbus"
 	can_spacemove=1
-	layer = FLY_LAYER+1
-	plane = PLANE_EFFECTS
-	pixel_x = -32
-	pixel_y = -32
-	unacidable = 1
+	plane = ABOVE_HUMAN_PLANE
+	pixel_x = -WORLD_ICON_SIZE
+	pixel_y = -WORLD_ICON_SIZE
 	var/can_move=1
 	var/list/passengers = list()
 	var/unloading = 0
@@ -36,9 +34,9 @@
 /obj/structure/bed/chair/vehicle/adminbus/New()
 	..()
 	var/turf/T = get_turf(src)
-	T.turf_animation('icons/effects/160x160.dmi',"busteleport",-64,-32,MOB_LAYER+1,'sound/effects/busteleport.ogg',anim_plane = PLANE_EFFECTS)
+	T.turf_animation('icons/effects/160x160.dmi',"busteleport",-64,-WORLD_ICON_SIZE,MOB_LAYER+1,'sound/effects/busteleport.ogg',anim_plane = EFFECTS_PLANE)
 	var/image/underbus = image(icon,"underbus",MOB_LAYER-1)
-	underbus.plane = PLANE_OBJ
+	underbus.plane = OBJ_PLANE
 	overlays += underbus
 	overlays += image(icon,"ad")
 	src.dir = EAST
@@ -47,7 +45,7 @@
 	update_lightsource()
 	warp = new/obj/structure/teleportwarp(src.loc)
 	busjuke = new/obj/machinery/media/jukebox/superjuke/adminbus(src.loc)
-	busjuke.plane = PLANE_EFFECTS
+	busjuke.plane = ABOVE_HUMAN_PLANE
 	busjuke.dir = EAST
 
 //Don't want the layer to change.
@@ -59,31 +57,31 @@
 		if(iscorgi(occupant))//Hail Ian
 			switch(dir)
 				if(SOUTH)
-					occupant.pixel_x = 6
-					occupant.pixel_y = -4
+					occupant.pixel_x = 6 * PIXEL_MULTIPLIER
+					occupant.pixel_y = -4 * PIXEL_MULTIPLIER
 				if(WEST)
-					occupant.pixel_x = -16
-					occupant.pixel_y = 9
+					occupant.pixel_x = -16 * PIXEL_MULTIPLIER
+					occupant.pixel_y = 9 * PIXEL_MULTIPLIER
 				if(NORTH)
 					occupant.pixel_x = 0
 					occupant.pixel_y = 0
 				if(EAST)
-					occupant.pixel_x = 16
-					occupant.pixel_y = 9
+					occupant.pixel_x = 16 * PIXEL_MULTIPLIER
+					occupant.pixel_y = 9 * PIXEL_MULTIPLIER
 		else
 			switch(dir)
 				if(SOUTH)
-					occupant.pixel_x = 7
-					occupant.pixel_y = -12
+					occupant.pixel_x = 7 * PIXEL_MULTIPLIER
+					occupant.pixel_y = -12 * PIXEL_MULTIPLIER
 				if(WEST)
-					occupant.pixel_x = -25
-					occupant.pixel_y = 1
+					occupant.pixel_x = -25 * PIXEL_MULTIPLIER
+					occupant.pixel_y = 1 * PIXEL_MULTIPLIER
 				if(NORTH)
 					occupant.pixel_x = 0
 					occupant.pixel_y = 0
 				if(EAST)
-					occupant.pixel_x = 25
-					occupant.pixel_y = 1
+					occupant.pixel_x = 25 * PIXEL_MULTIPLIER
+					occupant.pixel_y = 1 * PIXEL_MULTIPLIER
 
 	for(var/i=1;i<=passengers.len;i++)
 		var/atom/A = passengers[i]
@@ -93,59 +91,59 @@
 				if(1,5,9,13)
 					switch(dir)
 						if(SOUTH)
-							L.pixel_x = -6
+							L.pixel_x = -6 * PIXEL_MULTIPLIER
 							L.pixel_y = 0
 						if(WEST)
-							L.pixel_x = -13
-							L.pixel_y = 4
+							L.pixel_x = -13 * PIXEL_MULTIPLIER
+							L.pixel_y = 4 * PIXEL_MULTIPLIER
 						if(NORTH)
-							L.pixel_x = -6
+							L.pixel_x = -6 * PIXEL_MULTIPLIER
 							L.pixel_y = 0
 						if(EAST)
-							L.pixel_x = 12
-							L.pixel_y = 4
+							L.pixel_x = 12 * PIXEL_MULTIPLIER
+							L.pixel_y = 4 * PIXEL_MULTIPLIER
 				if(2,6,10,14)
 					switch(dir)
 						if(SOUTH)
-							L.pixel_x = 6
+							L.pixel_x = 6 * PIXEL_MULTIPLIER
 							L.pixel_y = 0
 						if(WEST)
-							L.pixel_x = -1
-							L.pixel_y = 4
+							L.pixel_x = -1 * PIXEL_MULTIPLIER
+							L.pixel_y = 4 * PIXEL_MULTIPLIER
 						if(NORTH)
-							L.pixel_x = 6
+							L.pixel_x = 6 * PIXEL_MULTIPLIER
 							L.pixel_y = 0
 						if(EAST)
-							L.pixel_x = 1
-							L.pixel_y = 4
+							L.pixel_x = 1 * PIXEL_MULTIPLIER
+							L.pixel_y = 4 * PIXEL_MULTIPLIER
 				if(3,7,11,15)
 					switch(dir)
 						if(SOUTH)
-							L.pixel_x = -3
-							L.pixel_y = 8
+							L.pixel_x = -3 * PIXEL_MULTIPLIER
+							L.pixel_y = 8 * PIXEL_MULTIPLIER
 						if(WEST)
-							L.pixel_x = 11
-							L.pixel_y = 4
+							L.pixel_x = 11 * PIXEL_MULTIPLIER
+							L.pixel_y = 4 * PIXEL_MULTIPLIER
 						if(NORTH)
-							L.pixel_x = -3
-							L.pixel_y = 8
+							L.pixel_x = -3 * PIXEL_MULTIPLIER
+							L.pixel_y = 8 * PIXEL_MULTIPLIER
 						if(EAST)
-							L.pixel_x = -11
-							L.pixel_y = 4
+							L.pixel_x = -11 * PIXEL_MULTIPLIER
+							L.pixel_y = 4 * PIXEL_MULTIPLIER
 				if(4,8,12,16)
 					switch(dir)
 						if(SOUTH)
-							L.pixel_x = 7
-							L.pixel_y = -12
+							L.pixel_x = 7 * PIXEL_MULTIPLIER
+							L.pixel_y = -12 * PIXEL_MULTIPLIER
 						if(WEST)
-							L.pixel_x = 22
-							L.pixel_y = 4
+							L.pixel_x = 22 * PIXEL_MULTIPLIER
+							L.pixel_y = 4 * PIXEL_MULTIPLIER
 						if(NORTH)
-							L.pixel_x = -3
-							L.pixel_y = 8
+							L.pixel_x = -3 * PIXEL_MULTIPLIER
+							L.pixel_y = 8 * PIXEL_MULTIPLIER
 						if(EAST)
-							L.pixel_x = -22
-							L.pixel_y = 4
+							L.pixel_x = -22 * PIXEL_MULTIPLIER
+							L.pixel_y = 4 * PIXEL_MULTIPLIER
 			L.dir = dir
 
 /obj/structure/bed/chair/vehicle/adminbus/Move()
@@ -238,7 +236,7 @@
 				if(L.locked_to)
 					L.locked_to = 0
 				L.Stun(5)
-				L.Weaken(5)
+				L.Knockdown(5)
 				L.apply_effect(STUTTER, 5)
 				playsound(src, pick(hit_sound), 50, 0, 0)
 		if(3)
@@ -373,13 +371,15 @@
 					return
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/add_HUD(var/mob/M)
-	if(!M || !(M.hud_used))	return
+	if(!M || !(M.hud_used))
+		return
 
 	M.hud_used.adminbus_hud()
 	update_rearview()
 
 /obj/structure/bed/chair/vehicle/adminbus/proc/remove_HUD(var/mob/M)
-	if(!M || !(M.hud_used))	return
+	if(!M || !(M.hud_used))
+		return
 
 	M.hud_used.remove_adminbus_hud()
 
@@ -429,10 +429,11 @@
 	desc = "Who knows what these chains can hold..."
 	icon = 'icons/obj/singulo_chain.dmi'
 	icon_state = "chain"
-	pixel_x = -32
-	pixel_y = -32
+	pixel_x = -WORLD_ICON_SIZE
+	pixel_y = -WORLD_ICON_SIZE
 	density = 0
-	layer = 6.9
+	plane = EFFECTS_PLANE
+	layer = ABOVE_SINGULO_LAYER
 	var/max_distance = 7
 	var/obj/structure/bed/chair/vehicle/adminbus/abus = null
 	var/dropped = 0
@@ -441,9 +442,9 @@
 	name = "admin claw"
 	icon = 'icons/effects/96x96.dmi'
 	icon_state = "singulo_catcher"
-	pixel_x = -32
-	pixel_y = -32
-	layer = 7
+	pixel_x = -WORLD_ICON_SIZE
+	pixel_y = -WORLD_ICON_SIZE
+	layer = ABOVE_SINGULO_LAYER+0.1
 
 /obj/structure/hookshot/claw/proc/hook_throw(var/toward)
 	max_distance--
@@ -516,8 +517,8 @@
 	desc = "Admins are above all logic"
 	icon = 'icons/obj/singulo_chain.dmi'
 	icon_state = "chain"
-	pixel_x = -32
-	pixel_y = -32
+	pixel_x = -WORLD_ICON_SIZE
+	pixel_y = -WORLD_ICON_SIZE
 	density = 0
 	var/obj/structure/singulo_chain/child = null
 
@@ -531,7 +532,7 @@
 /obj/structure/singulo_chain/proc/move_child(var/turf/parent)
 	var/turf/T = get_turf(src)
 	if(parent)//I don't see how this could be null but a sanity check won't hurt
-		src.loc = parent
+		src.forceMove(parent)
 	if(child)
 		if(get_dist(src,child) > 1)
 			child.move_child(T)
@@ -542,11 +543,11 @@
 /obj/structure/singulo_chain/anchor/move_child(var/turf/parent)
 	var/turf/T = get_turf(src)
 	if(parent)
-		src.loc = parent
+		src.forceMove(parent)
 	else
 		dir = get_dir(T,src)
 	if(target)
-		target.loc = src.loc
+		target.forceMove(src.loc)
 
 /obj/structure/singulo_chain/cultify()
 	return
@@ -587,10 +588,8 @@
 	desc = "The bus is about to jump..."
 	icon = 'icons/effects/160x160.dmi'
 	icon_state = ""
-	pixel_x = -64
-	pixel_y = -64
-	layer = MOB_LAYER-1
-	plane = PLANE_OBJ
+	pixel_x = -WORLD_ICON_SIZE*2
+	pixel_y = -WORLD_ICON_SIZE*2
 	anchored = 1
 	density = 0
 	mouse_opacity = 0
@@ -624,3 +623,6 @@
 		var/obj/structure/bed/chair/vehicle/adminbus/bus = owner
 		bus.remove_HUD(M)
 		M.flags &= ~INVULNERABLE
+
+/obj/structure/bed/chair/vehicle/adminbus/acidable()
+	return 0

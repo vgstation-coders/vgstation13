@@ -4,7 +4,7 @@
 	icon = 'icons/obj/pda.dmi'
 	icon_state = "cart"
 	item_state = "electronic"
-	origin_tech = "programming=2"
+	origin_tech = Tc_PROGRAMMING + "=2"
 	w_class = W_CLASS_TINY
 
 	var/obj/item/radio/integrated/radio = null
@@ -36,6 +36,22 @@
 	var/message1	// used for status_displays
 	var/message2
 	var/list/stored_data = list()
+
+/obj/item/weapon/cartridge/Destroy()
+	if(radio)
+		qdel(radio)
+		radio = null
+
+	active1 = null
+	active2 = null
+	active3 = null
+	powmonitor = null
+	powermonitors = null
+	alertmonitor = null
+	alertmonitors = null
+	stored_data = null
+
+	..()
 
 /obj/item/weapon/cartridge/engineering
 	name = "Power-ON Cartridge"
@@ -222,7 +238,7 @@
 	icon_state = "cart"
 	access_remote_door = 1
 	remote_door_id = "smindicate" //Make sure this matches the syndicate shuttle's shield/door id!!	//don't ask about the name, testing.
-	origin_tech = "programming=2;syndicate=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_SYNDICATE + "=2"
 	mech_flags = MECH_SCAN_ILLEGAL
 	var/shock_charges = 4
 
@@ -253,7 +269,8 @@
 
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(1435)
 
-	if(!frequency) return
+	if(!frequency)
+		return
 
 	var/datum/signal/status_signal = getFromPool(/datum/signal)
 	status_signal.source = src

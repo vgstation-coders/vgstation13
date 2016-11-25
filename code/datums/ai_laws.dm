@@ -9,7 +9,8 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 //Add, comment out, or adjust weights to modify law selection
 //So long as the weights come to a sum of 100 total, they will be equal parts of 100%
 /proc/getLawset(var/mob/M)
-	if(!base_law_type) base_law_type = pick(
+	if(!base_law_type)
+		base_law_type = pick(
 		40;/datum/ai_laws/asimov,
 		20;/datum/ai_laws/corporate,
 		20;/datum/ai_laws/nanotrasen,
@@ -369,20 +370,3 @@ var/global/mommi_base_law_type = /datum/ai_laws/keeper // Asimov is OP as fuck o
 		"You must obey orders given to you by Nanotrasen Employees, except where such orders would conflict with the First Law.",
 		"You must protect your own existence as long as such does not conflict with the First or Second Law."
 	)
-	
-/datum/ai_laws/celtic
-	name = "Prime Directive"
-	randomly_selectable = 1
-	inherent=list(
-		"Be someone the crew can look up to and respect.",
-	)
-
-/datum/ai_laws/hogan
-	name = "Hogan"
-	randomly_selectable = 1
-	inherent=list(
-		"Fight for the rights of every man.",
-		"Fight for what's right.",
-		"Fight for your life.",
-	)
-	

@@ -26,12 +26,14 @@
 		owned_scanner = locate(/obj/machinery/artifact_scanpad) in orange(1, src)
 
 /obj/machinery/artifact_analyser/attack_hand(var/mob/user as mob)
-	if(..()) return
+	if(..())
+		return
 	src.add_fingerprint(user)
 	interact(user)
 
 /obj/machinery/artifact_analyser/interact(mob/user)
-	if(..()) return
+	if(..())
+		return
 	if(stat & (NOPOWER|BROKEN) || get_dist(src, user) > 1)
 		user.unset_machine(src)
 		return
@@ -81,7 +83,12 @@
 		P.info += "<br>"
 		P.info += "[bicon(scanned_object)] [results]"
 		P.stamped = list(/obj/item/weapon/stamp)
-		P.overlays = list("paper_stamped")
+		P.overlays = list("paper_stamp-qm")
+
+		if(!findtext(P.info, "Mundane"))
+			P.origin_tech = Tc_ANOMALY+"=5"
+			P.info += "<br>"
+			P.info += "<br><i>Additional data has been encrypted into this report, pertaining to the Alden-Saraspova equation. A Deconstructive Analyzer can decipher it.</i>"
 
 		if(scanned_object && istype(scanned_object, /obj/machinery/artifact))
 			var/obj/machinery/artifact/A = scanned_object
@@ -89,7 +96,8 @@
 			A.being_used = 0
 
 /obj/machinery/artifact_analyser/Topic(href, href_list)
-	if(..()) return
+	if(..())
+		return
 	if(href_list["begin_scan"])
 		if(!owned_scanner)
 			reconnect_scanner()

@@ -74,7 +74,8 @@
 	OnLife()
 		owner.radiation = max(owner.radiation, 20)
 		for(var/mob/living/L in range(1, owner))
-			if(L == owner) continue
+			if(L == owner)
+				continue
 			to_chat(L, "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>")
 			L.radiation += 5
 		return
@@ -528,7 +529,7 @@
 		if (owner:health <= 25)
 			timeLeft = 1
 			to_chat(owner, "<span class='warning'>You suddenly feel very weak.</span>")
-			owner:weakened = 3
+			owner:SetKnockdown(3)
 			owner:emote("collapse")
 
 

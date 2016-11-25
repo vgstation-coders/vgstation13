@@ -29,7 +29,7 @@
 			if(keyslot)
 				var/turf/T = get_turf(user)
 				if(T)
-					keyslot.loc = T
+					keyslot.forceMove(T)
 					keyslot = null
 
 			recalculateChannels()
@@ -116,5 +116,5 @@
 	name = "AI Integrated Radio"
 
 /obj/item/device/radio/borg/ai/New()
-	keyslot = new /obj/item/device/encryptionkey/heads/captain
+	keyslot = new /obj/item/device/encryptionkey/ai
 	..()

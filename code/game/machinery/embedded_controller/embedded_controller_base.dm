@@ -23,8 +23,8 @@
 		//src.tdir = dir		// to fix Vars bug
 		//dir = SOUTH
 
-		pixel_x = (dir & 3)? 0 : (dir == 4 ? 24 : -24)
-		pixel_y = (dir & 3)? (dir ==1 ? 24 : -24) : 0
+		pixel_x = (dir & 3)? 0 : (dir == 4 ? 24 * PIXEL_MULTIPLIER: -24 * PIXEL_MULTIPLIER)
+		pixel_y = (dir & 3)? (dir ==1 ? 24 * PIXEL_MULTIPLIER: -24 * PIXEL_MULTIPLIER) : 0
 
 		build=0
 		stat |= MAINT
@@ -47,7 +47,7 @@
 					return 1
 				if(istype(W, /obj/item/weapon/circuitboard))
 					var/obj/item/weapon/circuitboard/C=W
-					if(C.board_type!="embedded controller")
+					if(C.board_type!= EMBEDDED_CONTROLLER)
 						to_chat(user, "<span class='warning'>You cannot install this type of board into an embedded controller.</span>")
 						return
 					to_chat(usr, "You begin to insert \the [C] into \the [src].")
@@ -68,7 +68,7 @@
 						update_icon()
 						var/obj/item/weapon/circuitboard/C
 						if(_circuitboard)
-							_circuitboard.loc=get_turf(src)
+							_circuitboard.forceMove(get_turf(src))
 							C=_circuitboard
 							_circuitboard=null
 						else
@@ -121,7 +121,8 @@
 	return 0
 
 /obj/machinery/embedded_controller/receive_signal(datum/signal/signal, receive_method, receive_param)
-	if(!signal || signal.encryption) return
+	if(!signal || signal.encryption)
+		return
 
 	if(program)
 		program.receive_signal(signal, receive_method, receive_param)
@@ -136,7 +137,8 @@
 
 
 /obj/machinery/embedded_controller/attack_ai(mob/user as mob)
-	if(build<2) return 1
+	if(build<2)
+		return 1
 	src.ui_interact(user)
 
 /obj/machinery/embedded_controller/attack_paw(mob/user as mob)
@@ -147,7 +149,8 @@
 	if(!user.dexterity_check())
 		to_chat(user, "You do not have the dexterity to use this.")
 		return
-	if(build<2) return 1
+	if(build<2)
+		return 1
 	src.ui_interact(user)
 
 /obj/machinery/embedded_controller/ui_interact()
@@ -171,7 +174,9 @@
 
 	var/frequency = 1449 //seems to be the frequency used for all the controllers on /vg/ so why not make it default
 	var/datum/radio_frequency/radio_connection
-	unacidable = 1
+
+/obj/machinery/embedded_controller/radio/acidable()
+	return 0
 
 /obj/machinery/embedded_controller/radio/initialize()
 	set_frequency(frequency)

@@ -47,7 +47,8 @@
 	if(I)
 		var/t_state = I.item_state
 		var/t_inhand_states = I.inhand_states[get_direction_by_index(index)]
-		if(!t_state)	t_state = I.icon_state
+		if(!t_state)
+			t_state = I.icon_state
 
 		var/image/hand_image = image("icon" = src.icon, "icon_state" = "hand_[index]")
 		hand_image.overlays += image("icon" = t_inhand_states, "icon_state" = t_state, "pixel_x" = pixelx, "pixel_y" = pixely)
@@ -60,19 +61,22 @@
 	else
 		item_overlays[HAT_LAYER + index]	= null
 
-	if(update_icons)		update_icons()
+	if(update_icons)
+		update_icons()
 
 
 /mob/living/carbon/martian/update_inv_head(var/update_icons=1)
 	if(!head)
 		item_overlays[HAT_LAYER] = null
 
-		if(update_icons) update_icons()
+		if(update_icons)
+			update_icons()
 		return
 	else
 		item_overlays[HAT_LAYER] = image("icon" = ((head.icon_override) ? head.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[head.icon_state]", "pixel_y" = 5)
 
-		if(update_icons) update_icons()
+		if(update_icons)
+			update_icons()
 
 		if(client)
 			client.screen |= head

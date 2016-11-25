@@ -8,6 +8,7 @@
 
 	var/list/possible_traitors
 	var/num_players = 0
+	can_be_mixed = TRUE
 
 /datum/game_mode/traitor/autotraitor/announce()
 	..()
@@ -57,11 +58,10 @@
 
 	for(var/i = 0, i < num_traitors, i++)
 		var/datum/mind/traitor = pick(possible_traitors)
+		possible_traitors -= traitor
 		if(traitor.special_role)
-			possible_traitors.Remove(traitor)
 			continue
 		traitors += traitor
-		possible_traitors.Remove(traitor)
 
 	for(var/datum/mind/traitor in traitors)
 		if(!traitor || !istype(traitor))
@@ -81,7 +81,8 @@
 
 
 /datum/game_mode/traitor/autotraitor/post_setup()
-	if(!mixed) ..()
+	if(!mixed)
+		..()
 	abandon_allowed = 1
 	traitorcheckloop()
 
@@ -209,5 +210,3 @@
 				//message_admins("New traitor roll failed.  No new traitor.")
 	//else
 		//message_admins("Late Joiner does not have Be Syndicate")
-
-

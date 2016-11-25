@@ -236,8 +236,10 @@
 
 
 /obj/item/toy/crossbow/afterattack(atom/target as mob|obj|turf|area, mob/user as mob, flag)
-	if(!isturf(target.loc) || target == user) return
-	if(flag) return
+	if(!isturf(target.loc) || target == user)
+		return
+	if(flag)
+		return
 
 	if (locate (/obj/structure/table, src.loc))
 		return
@@ -251,12 +253,15 @@
 
 		for(var/i=0, i<6, i++)
 			if (D)
-				if(D.loc == trg) break
+				if(D.loc == trg)
+					break
 				step_towards(D,trg)
 
 				for(var/mob/living/M in D.loc)
-					if(!istype(M,/mob/living)) continue
-					if(M == user) continue
+					if(!istype(M,/mob/living))
+						continue
+					if(M == user)
+						continue
 					for(var/mob/O in viewers(world.view, D))
 						O.show_message(text("<span class = 'danger'>[] was hit by the foam dart!</span>", M), 1)
 					new /obj/item/toy/ammo/crossbow(M.loc)
@@ -265,7 +270,8 @@
 					return
 
 				for(var/atom/A in D.loc)
-					if(A == user) continue
+					if(A == user)
+						continue
 					if(A.density)
 						new /obj/item/toy/ammo/crossbow(A.loc)
 						qdel(D)
@@ -281,7 +287,7 @@
 
 		return
 	else if (bullets == 0)
-		user.Weaken(5)
+		user.Knockdown(5)
 		for(var/mob/O in viewers(world.view, user))
 			O.show_message(text("<span class = 'danger'>[] realizes they are out of ammo and starts scrounging for some!<span>", user), 1)
 
@@ -303,8 +309,9 @@
 		src.bullets--
 	else if (M.lying && src.bullets == 0)
 		for(var/mob/O in viewers(M, null))
-			if (O.client)	O.show_message(text("<span class = 'danger'><B>[] casually lines up a shot with []'s head, pulls the trigger, then realizes they are out of ammo and drops to the floor in search of some!</B></span>", user, M), 1, "<span class = 'danger'>You hear someone fall</span>", 2)
-		user.Weaken(5)
+			if (O.client)
+				O.show_message(text("<span class = 'danger'><B>[] casually lines up a shot with []'s head, pulls the trigger, then realizes they are out of ammo and drops to the floor in search of some!</B></span>", user, M), 1, "<span class = 'danger'>You hear someone fall</span>", 2)
+		user.Knockdown(5)
 	return
 
 /obj/item/toy/ammo/crossbow
@@ -420,7 +427,7 @@
 	icon_state = "crayonred"
 	w_class = W_CLASS_TINY
 	attack_verb = list("attacks", "colours", "colors")//teehee
-	var/colour = "#A10808" //RGB
+	var/colour = DEFAULT_BLOOD //RGB
 	var/shadeColour = "#220000" //RGB
 	var/uses = 30 //0 for unlimited uses
 	var/instant = 0
@@ -517,7 +524,7 @@
 	icon_state = "sunflower"
 	item_state = "sunflower"
 	var/empty = 0
-	flags = 0
+	flags = OPENCONTAINER
 
 /obj/item/toy/waterflower/New()
 	. = ..()
@@ -527,7 +534,7 @@
 /obj/item/toy/waterflower/attack(mob/living/carbon/human/M as mob, mob/user as mob)
 	return
 
-/obj/item/toy/waterflower/afterattack(atom/A as mob|obj, mob/user as mob)
+/obj/item/toy/waterflower/afterattack(atom/A as mob|obj, mob/user as mob, proximity_flag)
 
 	if (istype(A, /obj/item/weapon/storage/backpack ) || istype(A, /obj/structure/bed/chair/vehicle/clowncart))
 		return
@@ -535,7 +542,7 @@
 	else if (locate (/obj/structure/table, src.loc))
 		return
 
-	else if (istype(A, /obj/structure/reagent_dispensers/watertank) && get_dist(src,A) <= 1)
+	else if (istype(A, /obj/structure/reagent_dispensers) && proximity_flag)
 		A.reagents.trans_to(src, 10)
 		to_chat(user, "<span class = 'notice'>You refill your flower!</span>")
 		return
@@ -554,6 +561,8 @@
 		D.icon = 'icons/obj/chemical.dmi'
 		D.icon_state = "chempuff"
 		D.create_reagents(5)
+		reagents.log_bad_reagents(user, src)
+		user.investigation_log(I_CHEMS, "sprayed 1u from \a [src] ([type]) containing [reagents.get_reagent_ids(1)] towards [A] ([A.x], [A.y], [A.z]).")
 		src.reagents.trans_to(D, 1)
 		playsound(get_turf(src), 'sound/effects/spray3.ogg', 50, 1, -6)
 
@@ -564,7 +573,7 @@
 				for(var/atom/T in get_turf(D))
 					D.reagents.reaction(T)
 					if(ismob(T) && T:client)
-						to_chat(T:client, "<span class = 'danger'>[user] has sprayed you with water!</span>")
+						to_chat(T:client, "<span class = 'danger'>[user] has sprayed you with \the [src]!</span>")
 				sleep(4)
 			qdel(D)
 			D = null

@@ -39,7 +39,7 @@
 
 				user.show_message("<span class='warning'>You implanted the implant into [M].</span>")
 				if(src.imp.implanted(M, user))
-					src.imp.loc = M
+					src.imp.forceMove(M)
 					src.imp.imp_in = M
 					src.imp.implanted = 1
 					if (ishuman(M))
@@ -122,7 +122,8 @@
 	if(!istype(M))
 		return
 	var/obj/item/weapon/implant/compressed/c = imp
-	if (!c)	return
+	if (!c)
+		return
 	if (c.scanned == null)
 		to_chat(user, "Please scan an object with the implanter first.")
 		return
@@ -144,5 +145,5 @@
 			user.u_equip(I,0)
 			user.update_icons()	//update our overlays
 		c.scanned = I
-		c.scanned.loc = c
+		c.scanned.forceMove(c)
 		update()

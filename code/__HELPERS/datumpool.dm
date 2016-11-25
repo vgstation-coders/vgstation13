@@ -47,7 +47,7 @@
 	else
 		if(istype(O, /atom/movable) && B.len) // B.len check so we don't OoB.
 			var/atom/movable/AM = O
-			AM.loc = B[1]
+			AM.forceMove(B[1], FALSE, TRUE)
 
 		if(B && B.len)
 			O.New(arglist(B))

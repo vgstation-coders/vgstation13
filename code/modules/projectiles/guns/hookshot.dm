@@ -1,11 +1,11 @@
 /obj/item/weapon/gun/hookshot	//-by Deity Link
 	name = "hookshot"
-	desc = "Used to create tethers! It's a very experimental device, recently developped by Nanotrasen."
+	desc = "Used to create tethers! It's a very experimental device, recently developed by Nanotrasen."
 	icon = 'icons/obj/gun_experimental.dmi'
 	icon_state = "hookshot"
 	item_state = "hookshot"
 	slot_flags = SLOT_BELT
-	origin_tech = "materials=2;engineering=3;magnets=2"
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=3;" + Tc_MAGNETS + "=2"
 	mech_flags = null // So it can be scanned by the Device Analyser
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 	recoil = 0
@@ -76,7 +76,7 @@
 				HC.shot_from = src
 				links["[i]"] = HC
 			else
-				HC.loc = src
+				HC.forceMove(src)
 		panic = 0
 
 	if(!hook && !rewinding && !clockwerk && !check_tether())//if there is no projectile already, and we aren't currently rewinding the chain, or reeling in toward a target,
@@ -88,7 +88,8 @@
 	return 0
 
 /obj/item/weapon/gun/hookshot/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)//clicking anywhere reels the target to the player.
-	if(flag)	return //we're placing gun on a table or in backpack
+	if(flag)
+		return //we're placing gun on a table or in backpack
 	if(check_tether())
 		if(istype(chain_datum.extremity_B,/mob/living/carbon))
 			var/mob/living/carbon/C = chain_datum.extremity_B
@@ -160,7 +161,7 @@
 			if(!HC0)
 				cancel_chain()
 				return
-			HC.loc = HC0.loc
+			HC.forceMove(HC0.loc)
 			HC.pixel_x = HC0.pixel_x
 			HC.pixel_y = HC0.pixel_y
 		sleep(pause)
@@ -171,7 +172,7 @@
 	for(var/j = 1; j <= maxlength; j++)
 		var/obj/effect/overlay/hookchain/HC = links["[j]"]
 		if(HC)
-			HC.loc = src
+			HC.forceMove(src)
 		else
 			HC = new(src)
 			HC.shot_from = src
@@ -198,7 +199,7 @@
 			clockwerk = 0
 			rewind_chain()
 			return
-		HC.loc = src
+		HC.forceMove(src)
 		sleep(1)
 	clockwerk = 0
 	update_icon()
@@ -265,7 +266,7 @@
 
 		if(istype(C2))
 			var/turf/T = C1.loc
-			C1.loc = extremity_A.loc
+			C1.forceMove(extremity_A.loc)
 			C2.follow(C1,T)
 			C2.extremity_A = extremity_A
 			C2.update_overlays(C1)
@@ -278,7 +279,7 @@
 			else
 				var/turf/U = C1.loc
 				if(U && U.Enter(C2,C2.loc))//if we cannot pull the target through the turf, we just let him go.
-					C2.loc = C1.loc
+					C2.forceMove(C1.loc)
 				else
 					extremity_B.tether = null
 					extremity_B = null
@@ -323,13 +324,11 @@
 
 /obj/effect/overlay/chain/update_icon()
 	overlays.len = 0
-	var/image/chain_img
-	if(extremity_A && (loc != extremity_A.loc))
-		chain_img = image(icon,src,"chain",MOB_LAYER-0.1,get_dir(src,extremity_A))
-	if(extremity_B && (loc != extremity_B.loc))
-		chain_img = image(icon,src,"chain",MOB_LAYER-0.1,get_dir(src,extremity_B))
-	chain_img.plane = PLANE_OBJ
-	overlays += chain_img
+	for(var/atom/movable/extremity in list(extremity_A,extremity_B))
+		if(extremity && (loc != extremity.loc))
+			var/image/chain_img = image(icon,src,"chain",dir=get_dir(src,extremity))
+			chain_img.plane = OBJ_PLANE
+			overlays += chain_img
 
 /obj/effect/overlay/chain/proc/update_overlays(var/obj/effect/overlay/chain/C)
 	var/obj/effect/overlay/chain/C1 = extremity_A

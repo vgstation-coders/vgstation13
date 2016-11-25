@@ -14,7 +14,7 @@
 	starting_materials = list(MAT_GLASS = 1000)
 	w_type = RECYK_GLASS
 	melt_temperature = MELTPOINT_GLASS
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 
 /obj/item/weapon/reagent_containers/glass/bottle/New(loc,altvol=30)
 	volume = altvol
@@ -67,12 +67,18 @@
 
 		var/percent = round((reagents.total_volume / volume) * 100)
 		switch(percent) //Percentages are pretty fucked so here comes the decimal rollercoaster with halfway rounding
-			if(0 to 24)		filling.icon_state = "[icon_state]5"
-			if(25 to 41) 	filling.icon_state = "[icon_state]10"
-			if(42 to 58)	filling.icon_state = "[icon_state]15"
-			if(59 to 74)	filling.icon_state = "[icon_state]20"
-			if(75 to 91)	filling.icon_state = "[icon_state]25"
-			if(92 to INFINITY)	filling.icon_state = "[icon_state]30"
+			if(0 to 24)
+				filling.icon_state = "[icon_state]5"
+			if(25 to 41)
+				filling.icon_state = "[icon_state]10"
+			if(42 to 58)
+				filling.icon_state = "[icon_state]15"
+			if(59 to 74)
+				filling.icon_state = "[icon_state]20"
+			if(75 to 91)
+				filling.icon_state = "[icon_state]25"
+			if(92 to INFINITY)
+				filling.icon_state = "[icon_state]30"
 
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
 		overlays += filling
@@ -294,7 +300,7 @@
 		var/datum/disease/F = new /datum/disease/fake_gbs(0)
 		var/list/data = list("viruses"= list(F))
 		reagents.add_reagent(BLOOD, 20, data)
-		
+
 /obj/item/weapon/reagent_containers/glass/bottle/chickenpox
 	name = "Chickenpox culture bottle"
 	desc = "A small bottle. Contains activated chickenpox in a vox-blood medium."
@@ -305,7 +311,7 @@
 		var/datum/disease/F = new /datum/disease2/effect/chickenpox(0)
 		var/list/data = list("viruses"= list(F))
 		reagents.add_reagent(BLOOD, 20, data)
-		
+
 /*
 /obj/item/weapon/reagent_containers/glass/bottle/rhumba_beat
 	name = "Rhumba Beat culture bottle"
@@ -398,3 +404,11 @@
 	New()
 		..()
 		reagents.add_reagent(BICARODYNE, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/sacid
+	name = "Sulphuric Acid Bottle"
+	desc = "A small bottle. Contains a small amount of Sulphuric Acid."
+	icon = 'icons/obj/chemical.dmi'
+	New()
+		..()
+		reagents.add_reagent(SACID, 30)

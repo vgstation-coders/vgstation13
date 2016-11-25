@@ -34,7 +34,7 @@
 	charge_max = 50
 
 	invocation_type = SpI_NONE
-	range = -2
+	range = GLOBALCAST
 	max_targets = 1
 	spell_flags = SELECTABLE | INCLUDEUSER | TALKED_BEFORE
 
@@ -115,7 +115,7 @@
 	charge_max = 50
 
 	invocation_type = SpI_NONE
-	range = -2 //the world
+	range = GLOBALCAST //the world
 	max_targets = 1
 	selection_type = "view"
 	spell_flags = SELECTABLE|TALKED_BEFORE
@@ -133,7 +133,7 @@
 	var/say = stripped_input(user, "What do you wish to say?", "Project Mind")
 
 	if(!say)
-		return
+		return 1
 
 	for(var/T in targets)
 		var/mob/living/carbon/human/target = T
@@ -147,6 +147,8 @@
 		else
 			target.show_message("<span class='notice'>You hear a voice that seems to echo around the room: [say]</span>")
 		user.show_message("<span class='notice'>You project your mind towards [believed_name]: [say]</span>")
+		log_admin("[key_name(user)] projects his mind towards (believed:[believed_name]/actual:[key_name(target)]: [say]</span>")
+		message_admins("[key_name(user)] projects his mind towards (believed:[believed_name]/actual:[key_name(target)]: [say]</span>")
 		for(var/mob/dead/observer/G in dead_mob_list)
 			G.show_message("<i>Telepathic message from <b>[user]</b> to <b>[target]</b>: [say]</i>")
 
@@ -284,14 +286,15 @@
 		return 0
 
 	OnMobLife(var/mob/living/carbon/human/M)
-		if(!istype(M)) return
+		if(!istype(M))
+			return
 		if(M.health <= 25 && M_HULK in M.mutations)
 			M.mutations.Remove(M_HULK)
 			M.dna.SetSEState(HULKBLOCK,0)
 			M.update_mutations()		//update our mutation overlays
 			M.update_body()
 			to_chat(M, "<span class='warning'>You suddenly feel very weak.</span>")
-			M.Weaken(3)
+			M.Knockdown(3)
 			M.emote("collapse")
 */
 /datum/dna/gene/basic/xray

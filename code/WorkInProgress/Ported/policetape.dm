@@ -78,12 +78,14 @@
 		var/dir
 		if (start.x == end.x)
 			var/d = end.y-start.y
-			if(d) d = d/abs(d)
+			if(d)
+				d = d/abs(d)
 			end = get_turf(locate(end.x,end.y+d,end.z))
 			dir = "v"
 		else
 			var/d = end.x-start.x
-			if(d) d = d/abs(d)
+			if(d)
+				d = d/abs(d)
 			end = get_turf(locate(end.x+d,end.y,end.z))
 			dir = "h"
 
@@ -132,7 +134,7 @@
 
 		var/atom/tape = new tape_type(turf)
 		tape.icon_state = "[icon_base]_door"
-		tape.layer = 3.2
+		tape.layer = ABOVE_DOOR_LAYER
 
 		to_chat(user, "<span class='notice'>You placed [src].</span>")
 
@@ -142,7 +144,7 @@
 		for(var/atom/A in T) //Check to see if there's anything solid on the tape's turf (it's possible to build on it)
 			if(A.density)
 				return
-		M:loc = T
+		M:forceMove(T)
 
 /obj/item/tape/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 	if(!density)

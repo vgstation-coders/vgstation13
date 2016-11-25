@@ -41,8 +41,7 @@
 	R.overlays += stampoverlay
 	R.stamps += "<HR><i>This paper has been stamped by the EFTPOS device.</i>"
 	var/obj/item/delivery/D = new(R.loc)
-	R.loc = D
-	D.wrapped = R
+	R.forceMove(D)
 	D.name = "small parcel - 'EFTPOS access code'"
 
 /obj/item/device/eftpos/proc/reconnect_database()

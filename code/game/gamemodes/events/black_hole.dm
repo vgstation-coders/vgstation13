@@ -4,7 +4,6 @@
 	desc = "FUCK FUCK FUCK AAAHHH"
 	icon_state = "bhole3"
 	opacity = 1
-	unacidable = 1
 	density = 0
 	anchored = 1
 
@@ -71,7 +70,8 @@
 /obj/effect/bhole/proc/affect_coord(var/x, var/y, var/ex_act_force, var/pull_chance, var/turf_removal_chance)
 	//Get turf at coordinate
 	var/turf/T = locate(x, y, z)
-	if(isnull(T))	return
+	if(isnull(T))
+		return
 
 	//Pulling and/or ex_act-ing movable atoms in that turf
 	if( prob(pull_chance) )

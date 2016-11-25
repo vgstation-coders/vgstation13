@@ -74,11 +74,12 @@
 
 	if (istype(W, /obj/item/weapon/gun/projectile/flamethrower))
 		var/obj/item/weapon/gun/projectile/flamethrower/F = W
-		if ((!F.status)||(F.ptank))	return
+		if ((!F.status)||(F.ptank))
+			return
 		src.master = F
 		F.ptank = src
 		user.before_take_item(src)
-		src.loc = F
+		src.forceMove(F)
 	return
 
 /obj/item/weapon/tank/plasma/plasmaman
@@ -122,6 +123,7 @@
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_SMALL
 	volume = 2
+	distribute_pressure = ONE_ATMOSPHERE*O2STANDARD
 
 /obj/item/weapon/tank/emergency_nitrogen/New()
 	. = ..()

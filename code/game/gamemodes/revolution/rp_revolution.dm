@@ -9,7 +9,7 @@
 	recommended_enemies = 3
 
 	uplink_welcome = "Revolutionary Uplink Console:"
-	uplink_uses = 5
+	uplink_uses = 10
 
 	newscaster_announcements = /datum/news_announcement/revolution_inciting_event
 
@@ -75,7 +75,8 @@
 
 	modePlayer += head_revolutionaries
 	spawn (rand(waittime_l, waittime_h))
-		if(!mixed) send_intercept()
+		if(!mixed)
+			send_intercept()
 
 /datum/game_mode/revolution/rp_revolution/greet_revolutionary(var/datum/mind/rev_mind, var/you_are=1)
 	var/obj_count = 1
@@ -124,7 +125,7 @@
 			//       probably wanna export this stuff into a separate function for use by both
 			//       revs and heads
 			//assume that only carbon mobs can become rev heads for now
-			if(!rev_mind.current:handcuffed && T && T.z == 1)
+			if(!rev_mind.current:handcuffed && T && T.z == map.zMainStation)
 				return 0
 	return 1
 

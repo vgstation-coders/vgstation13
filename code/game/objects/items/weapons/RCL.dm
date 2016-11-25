@@ -15,11 +15,12 @@
 	w_class = W_CLASS_MEDIUM
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
-	origin_tech = "engineering=2;materials=4"
+	origin_tech = Tc_ENGINEERING + "=2;" + Tc_MATERIALS + "=4"
 	var/max_amount = 90
 	var/active = 0
 	var/obj/structure/cable/last = null
 	var/obj/item/stack/cable_coil/loaded = null
+	var/targetMoveKey = null
 
 /obj/item/weapon/rcl/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W,/obj/item/stack/cable_coil))
@@ -32,7 +33,8 @@
 		update_icon()
 		to_chat(user, "<span class='notice'>You add the cables to the [src]. It now contains [loaded.amount].</span>")
 	else if(isscrewdriver(W))
-		if(!loaded) return
+		if(!loaded)
+			return
 		to_chat(user, "<span class='notice'>You loosen the securing screws on the side, allowing you to lower the guiding edge and retrieve the wires.</span>")
 		while(loaded.amount>30) //There are only two kinds of situations: "nodiff" (60,90), or "diff" (31-59, 61-89)
 			var/diff = loaded.amount % 30
@@ -43,7 +45,7 @@
 				loaded.use(30)
 				getFromPool(/obj/item/stack/cable_coil,user.loc,30)
 		loaded.max_amount = initial(loaded.max_amount)
-		loaded.loc = user.loc
+		loaded.forceMove(user.loc)
 		user.put_in_hands(loaded)
 		loaded = null
 		update_icon()
@@ -59,6 +61,8 @@
 	qdel(loaded)
 	loaded = null
 	last = null
+	active = 0
+	set_move_event()
 	..()
 
 /obj/item/weapon/rcl/update_icon()
@@ -86,18 +90,36 @@
 		to_chat(user, "<span class='notice'>The last of the cables unreel from \the [src].</span>")
 		returnToPool(loaded)
 		loaded = null
+		active = 0
 		return 1
 	return 0
 
 /obj/item/weapon/rcl/dropped(mob/wearer as mob)
 	..()
 	active = 0
+	set_move_event(wearer)
+
+/obj/item/weapon/rcl/proc/set_move_event(mob/user)
+	if(user)
+		if(active)
+			trigger(user)
+			targetMoveKey = user.on_moved.Add(src, "holder_moved")
+			return
+		user.on_moved.Remove(targetMoveKey)
+	targetMoveKey = null
 
 /obj/item/weapon/rcl/attack_self(mob/user as mob)
 	active = !active
-	to_chat(user, "<span class='notice'>You turn the [src] [active ? "on" : "off"].<span>")
+	to_chat(user, "<span class='notice'>You turn \the [src] [active ? "on" : "off"].<span>")
+	set_move_event(user)
+
+/obj/item/weapon/rcl/proc/holder_moved(var/list/args)
+	var/event/E = args["event"]
+	if(!targetMoveKey)
+		E.handlers.Remove("\ref[src]:holder_moved")
+		return
 	if(active)
-		trigger(user)
+		trigger(E.holder)
 
 /obj/item/weapon/rcl/proc/trigger(mob/user as mob)
 	if(!loaded)
@@ -112,8 +134,16 @@
 				last = null
 				return
 			loaded.cable_join(last,user)
-			if(is_empty(user)) return //If we've run out, display message and exit
+			if(is_empty(user))
+				return //If we've run out, display message and exit
 		else
 			last = null
 	last = loaded.turf_place(get_turf(src.loc),user,turn(user.dir,180))
 	is_empty(user) //If we've run out, display message
+
+/obj/item/weapon/rcl/pre_loaded/New() //Comes preloaded with cable, for testing stuff
+	..()
+	loaded = new()
+	loaded.max_amount = max_amount
+	loaded.amount = max_amount
+	update_icon()

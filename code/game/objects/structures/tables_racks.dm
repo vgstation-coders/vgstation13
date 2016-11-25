@@ -18,7 +18,7 @@
 	icon_state = "table"
 	density = 1
 	anchored = 1.0
-	layer = 2.8
+	layer = TABLE_LAYER
 	throwpass = 1	//You can throw objects over this, despite it's density.")
 	var/parts = /obj/item/weapon/table_parts
 	var/icon/clicked
@@ -254,7 +254,8 @@
 /obj/structure/table/kick_act()
 	..()
 
-	if(!usr) return
+	if(!usr)
+		return
 	do_flip()
 
 /obj/structure/table/glass/kick_act()
@@ -295,7 +296,8 @@
 	return
 
 /obj/structure/table/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0)) return 1
+	if(air_group || (height==0))
+		return 1
 	if(istype(mover,/obj/item/projectile))
 		return (check_cover(mover,target))
 	if(ismob(mover))
@@ -311,10 +313,8 @@
 			return 1
 	return 0
 
-/obj/structure/table/Bumped(atom/AM)
-	if (istype(AM, /obj/structure/bed/chair/vehicle/wizmobile))
-		destroy()
-	return ..()
+/obj/structure/table/bumped_by_firebird(obj/structure/stool/bed/chair/vehicle/wizmobile/W)
+	destroy()
 
 //checks if projectile 'P' from turf 'from' can hit whatever is behind the table. Returns 1 if it can, 0 if bullet stops.
 /obj/structure/table/proc/check_cover(obj/item/projectile/P, turf/from)
@@ -351,7 +351,8 @@
 			if(get_dir(loc, target) == dir)
 				return !density
 		else if(mover.dir == dir) //Or are we using move code
-			if(density)	mover.Bump(src)
+			if(density)
+				mover.Bump(src)
 			return !density
 	return 1
 
@@ -365,7 +366,8 @@
 
 
 /obj/structure/table/attackby(obj/item/W as obj, mob/user as mob, params)
-	if (!W) return
+	if (!W)
+		return
 
 	var/list/params_list = params2list(params)
 
@@ -376,7 +378,8 @@
 			if (G.state < GRAB_AGGRESSIVE)
 				if(user.a_intent == I_HURT)
 					G.affecting.forceMove(loc)
-					if (prob(15))	M.Weaken(5)
+					if (prob(15))
+						M.Knockdown(5)
 					M.apply_damage(8,def_zone = LIMB_HEAD)
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
 					playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
@@ -385,7 +388,7 @@
 					return
 			else
 				G.affecting.forceMove(loc)
-				G.affecting.Weaken(5)
+				G.affecting.Knockdown(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
 			returnToPool(W)
 			return
@@ -404,7 +407,7 @@
 			var/clamp_y = clicked.Height() / 2
 			W.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
 			W.pixel_y = Clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)
-	return
+			return 1
 
 /obj/structure/table/proc/straight_table_check(var/direction)
 	var/obj/structure/table/T
@@ -493,7 +496,7 @@
 
 	dir = direction
 	if(dir != NORTH)
-		layer = 5
+		plane = ABOVE_HUMAN_PLANE
 	flipped = 1
 	flags |= ON_BORDER
 	for(var/D in list(turn(direction, 90), turn(direction, -90)))
@@ -509,8 +512,7 @@
 	verbs -=/obj/structure/table/proc/do_put
 	verbs +=/obj/structure/table/verb/do_flip
 
-	layer = initial(layer)
-	plane = initial(plane)
+	reset_plane_and_layer()
 	flipped = 0
 	flags &= ~ON_BORDER
 	for(var/D in list(turn(dir, 90), turn(dir, -90)))
@@ -592,14 +594,16 @@
 				to_chat(user, "<span class='notice'>Now weakening the reinforced table.</span>")
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 				if (do_after(user, src, 50))
-					if(!src || !WT.isOn()) return
+					if(!src || !WT.isOn())
+						return
 					to_chat(user, "<span class='notice'>Table weakened.</span>")
 					src.status = 1
 			else
 				to_chat(user, "<span class='notice'>Now strengthening the reinforced table.</span>")
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 				if (do_after(user, src, 50))
-					if(!src || !WT.isOn()) return
+					if(!src || !WT.isOn())
+						return
 					to_chat(user, "<span class='notice'>Table strengthened.</span>")
 					src.status = 2
 			return
@@ -624,7 +628,8 @@
 			var/mob/living/M = G.affecting
 			if (G.state < GRAB_AGGRESSIVE)
 				if(user.a_intent == I_HURT)
-					if (prob(15))	M.Weaken(5)
+					if (prob(15))
+						M.Knockdown(5)
 					M.apply_damage(15,def_zone = LIMB_HEAD)
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
 					playsound(get_turf(src), 'sound/weapons/tablehit1.ogg', 50, 1)
@@ -637,7 +642,7 @@
 					return
 			else
 				G.affecting.forceMove(loc)
-				G.affecting.Weaken(5)
+				G.affecting.Knockdown(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
 			returnToPool(W)
 
@@ -712,15 +717,14 @@
 		return
 
 /obj/structure/rack/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0)) return 1
+	if(air_group || (height==0))
+		return 1
 	if(istype(mover) && mover.checkpass(PASSTABLE))
 		return 1
 	return !density
 
-/obj/structure/rack/Bumped(atom/AM)
-	if (istype(AM, /obj/structure/bed/chair/vehicle/wizmobile))
-		destroy()
-	return ..()
+/obj/structure/rack/bumped_by_firebird(obj/structure/stool/bed/chair/vehicle/wizmobile/W)
+	destroy()
 
 /obj/structure/rack/MouseDrop_T(obj/O as obj, mob/user as mob)
 	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
@@ -741,17 +745,17 @@
 		if(W.loc == src.loc)
 			switch(offset_step)
 				if(1)
-					W.pixel_x = -3
-					W.pixel_y = 3
+					W.pixel_x = -3 * PIXEL_MULTIPLIER
+					W.pixel_y = 3 * PIXEL_MULTIPLIER
 				if(2)
 					W.pixel_x = 0
 					W.pixel_y = 0
 				if(3)
-					W.pixel_x = 3
-					W.pixel_y = -3
+					W.pixel_x = 3 * PIXEL_MULTIPLIER
+					W.pixel_y = -3 * PIXEL_MULTIPLIER
 					offset_step = 0
 			offset_step++
-	return 1
+			return 1
 
 /obj/structure/table/attack_hand(mob/user)
 	if(M_HULK in user.mutations)

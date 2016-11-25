@@ -52,7 +52,7 @@
 		for(var/i = 1 to stacked.len)
 			var/image/stack_image = stacked[stacked[i]] //because it's an assoc list
 			overlays -= stack_image
-			stack_image.pixel_y = 4*i
+			stack_image.pixel_y = 4*i * PIXEL_MULTIPLIER
 			overlays += stack_image
 
 /obj/structure/closet/crate/flatpack/attackby(var/atom/A, mob/user)
@@ -74,7 +74,7 @@
 				instructions.name = "instructions ([machine.name])"
 				instructions.info = inst_list["instructions"]
 				if(inst_list["misprint"])
-					instructions.overlays += image(icon = icon, icon_state = "paper_stamped_denied")
+					instructions.overlays += image(icon = icon, icon_state = "paper_stamp-deny")
 					instructions.name = "misprinted " + instructions.name
 				instructions.update_icon()
 */
@@ -88,10 +88,10 @@
 		return
 
 /obj/structure/closet/crate/flatpack/proc/Finalize()
-	machine.loc = get_turf(src)
+	machine.forceMove(get_turf(src))
 	machine.RefreshParts()
 	for(var/atom/movable/AM in src)
-		AM.loc = get_turf(src)
+		AM.forceMove(get_turf(src))
 	qdel(src)
 
 /obj/structure/closet/crate/flatpack/attack_hand(mob/user, params)
@@ -157,13 +157,13 @@
 	if(!flatpack)
 		return
 
-	flatpack.loc = src
+	flatpack.forceMove(src)
 
 	var/image/flatimage = image(flatpack.icon, icon_state = flatpack.icon_state)
 
 	stacked.Add(list("\ref[flatpack]" = flatimage))
 
-	flatimage.pixel_y = stacked.len * FLATPACK_HEIGHT //the height of the icon
+	flatimage.pixel_y = stacked.len * FLATPACK_HEIGHT * PIXEL_MULTIPLIER //the height of the icon
 	overlays += flatimage
 
 	if(flatpack.stacked.len) //if it's got stacks of its own

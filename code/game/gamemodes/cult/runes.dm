@@ -5,7 +5,7 @@
 	if(istype(target,/obj/item/weapon/nullrod))
 		var/turf/T = get_turf(target)
 		nullblock = 1
-		T.turf_animation('icons/effects/96x96.dmi',"nullding",-32,-32,MOB_LAYER+1,'sound/piano/Ab7.ogg',anim_plane = PLANE_EFFECTS)
+		T.turf_animation('icons/effects/96x96.dmi',"nullding",-WORLD_ICON_SIZE,-WORLD_ICON_SIZE,MOB_LAYER+1,'sound/instruments/piano/Ab7.ogg',anim_plane = EFFECTS_PLANE)
 		return 1
 	else if(target.contents)
 		for(var/atom/A in target.contents)
@@ -18,7 +18,7 @@
 	c_animation.density = 0
 	c_animation.anchored = 1
 	c_animation.icon = 'icons/effects/effects.dmi'
-	c_animation.layer = 5
+	c_animation.plane = EFFECTS_LAYER
 	c_animation.master = src.loc
 	c_animation.icon_state = "[animation_icon]"
 	flick("cultification",c_animation)
@@ -38,7 +38,7 @@
 	for(var/obj/effect/rune/R in rune_list)
 		if(R == src)
 			continue
-		if(R.word1 == cultwords["travel"] && R.word2 == cultwords["self"] && R.word3 == key && R.z != 2)
+		if(R.word1 == cultwords["travel"] && R.word2 == cultwords["self"] && R.word3 == key && R.z != map.zCentcomm)
 			index++
 			allrunesloc.len = index
 			allrunesloc[index] = R.loc
@@ -64,7 +64,7 @@
 		if(istype(src,/obj/effect/rune))
 			invocation("rune_teleport")
 
-		user.loc = allrunesloc[rand(1,index)]
+		user.forceMove(allrunesloc[rand(1,index)])
 		return
 	if(istype(src,/obj/effect/rune))
 		return	fizzle() //Use friggin manuals, Dorf, your list was of zero length.
@@ -126,14 +126,14 @@
 
 		for(var/obj/O in src.loc)//sending the items on the rune to the other rune
 			if(!O.anchored)
-				O.loc = IP.loc
+				O.forceMove(IP.loc)
 		for(var/mob/M in src.loc)
-			M.loc = IP.loc
+			M.forceMove(IP.loc)
 
 		for(var/obj/O in swapping)//bringing the items previously marked from the other rune to our rune
-			O.loc = src.loc
+			O.forceMove(src.loc)
 		for(var/mob/M in swapping)
-			M.loc = src.loc
+			M.forceMove(src.loc)
 
 		swapping = 0
 		return
@@ -195,7 +195,7 @@
 			to_chat(M, "<span class='sinister'>Your blood pulses. Your head throbs. The world goes red. All at once you are aware of a horrible, horrible truth. The veil of reality has been ripped away and in the festering wound left behind something sinister takes root.</span>")
 			to_chat(M, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
 			to_chat(M, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
-			M.add_language("Cult")
+			M.add_language(LANGUAGE_CULT)
 			log_admin("[usr]([ckey(usr.key)]) has converted [M] ([ckey(M.key)]) to the cult at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[M.loc.x];Y=[M.loc.y];Z=[M.loc.z]'>([M.loc.x], [M.loc.y], [M.loc.z])</a>")
 			stat_collection.cult.converted++
 			if(M.client)
@@ -210,7 +210,7 @@
 				M.Sleeping(300)//putting them to sleep for 5 minutes.
 				to_chat(usr, "<span class='danger'>The ritual didn't work! Looks like this person just isn't suited to be part of our cult.</span>")
 				to_chat(usr, "<span class='notice'>It appears that the ritual at least put the target to sleep. Try to figure a way to deal with them before they wake up.</span>")
-			else if(M.weakened)
+			else if(M.knockdown)
 				to_chat(usr, "<span class='danger'>The ritual didn't work, either something is disrupting it, or this person just isn't suited to be part of our cult.</span>")
 				to_chat(usr, "<span class='danger'>You have to restrain him before the talisman's effects wear off!</span>")
 			to_chat(M, "<span class='sinister'>Your blood pulses. Your head throbs. The world goes red. All at once you are aware of a horrible, horrible truth. The veil of reality has been ripped away and in the festering wound left behind something sinister takes root.</span>")
@@ -496,8 +496,10 @@
 
 	var/mob/dead/observer/ghost
 	for(var/mob/dead/observer/O in loc)
-		if(!O.client)	continue
-		if(O.mind && O.mind.current && O.mind.current.stat != DEAD)	continue
+		if(!O.client)
+			continue
+		if(O.mind && O.mind.current && O.mind.current.stat != DEAD)
+			continue
 		ghost = O
 		break
 
@@ -590,8 +592,10 @@
 		return this_rune.fizzle()
 	var/mob/dead/observer/ghost
 	for(var/mob/dead/observer/O in this_rune.loc)
-		if(!O.client)	continue
-		if(O.mind && O.mind.current && O.mind.current.stat != DEAD)	continue
+		if(!O.client)
+			continue
+		if(O.mind && O.mind.current && O.mind.current.stat != DEAD)
+			continue
 		ghost = O
 		break
 	if(!ghost)
@@ -613,7 +617,7 @@
 	"<span class='warning'>You hear liquid flowing.</span>")
 
 	animation = new(D.loc)
-	animation.layer = usr.layer + 1
+	animation.plane = EFFECTS_PLANE
 	animation.icon_state = "blank"
 	animation.icon = 'icons/mob/mob.dmi'
 	animation.master = this_rune
@@ -648,7 +652,7 @@
 	to_chat(D, "<span class='sinister'>Assist your new compatriots in their dark dealings. Their goal is yours, and yours is theirs. You serve the Dark One above all else. Bring It back.</span>")
 	to_chat(D, "<span class='sinister'>You can now speak and understand the forgotten tongue of the occult.</span>")
 
-	D.add_language("Cult")
+	D.add_language(LANGUAGE_CULT)
 
 
 	var/mob/living/user = usr
@@ -666,12 +670,15 @@
 
 /obj/effect/rune/proc/talisman()//only tome, communicate, hide, reveal, emp, teleport, deafen, blind, stun and armor runes can be imbued
 	var/obj/item/weapon/paper/newtalisman
+	var/papers[] = new()
+	for(var/obj/item/weapon/paper/O in src.loc)
+		papers += O
 	var/unsuitable_newtalisman = 0
-	for(var/obj/item/weapon/paper/P in src.loc)
-		if(!P.info)
+	for(var/obj/item/weapon/paper/P in papers)
+		if(!(P.info || istype(P, /obj/item/weapon/paper/talisman)))
 			newtalisman = P
 			break
-		else
+		else if(P.info && papers.len == 1)
 			unsuitable_newtalisman = 1
 	if (!newtalisman)
 		if (unsuitable_newtalisman)
@@ -1122,7 +1129,7 @@
 			return fizzle()
 		var/turf/T = get_turf(cultist)
 		T.turf_animation('icons/effects/effects.dmi',"rune_teleport")
-		cultist.loc = src.loc
+		cultist.forceMove(src.loc)
 		cultist.lying = 1
 		cultist.regenerate_icons()
 		to_chat(T, visible_message("<span class='warning'>[cultist] suddenly disappears in a flash of red light!</span>"))
@@ -1281,13 +1288,13 @@
 				C.flash_eyes(visual = 1)
 				if(C.stuttering < 1 && (!(M_HULK in C.mutations)))
 					C.stuttering = 1
-				C.Weaken(1)
+				C.Knockdown(1)
 				C.Stun(1)
 				C.visible_message("<span class='warning'>The rune explodes in a bright flash.</span>")
 
 			else if(issilicon(L))
 				var/mob/living/silicon/S = L
-				S.Weaken(5)
+				S.Knockdown(5)
 				S.visible_message("<span class='warning'>BZZZT... The rune has exploded in a bright flash.</span>")
 	qdel(src)
 	return
@@ -1299,10 +1306,14 @@
 	if(!istype(src,/obj/effect/rune))
 		usr.whisper("Sa tatha najin")
 		if(ishuman(user))
+			var/mob/living/carbon/human/P = user
 			usr.visible_message("<span class='warning'> In flash of red light, a set of armor appears on [usr]...</span>", \
 			"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor.</span>")
 			var/datum/game_mode/cult/mode_ticker = ticker.mode
-			if((istype(mode_ticker) && mode_ticker.narsie_condition_cleared) || (universe.name == "Hell Rising"))
+			if(isplasmaman(P))
+				P.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(P), slot_head)
+				P.equip_to_slot_or_del(new /obj/item/clothing/suit/space/plasmaman/cultist(P), slot_wear_suit)
+			else if((istype(mode_ticker) && mode_ticker.narsie_condition_cleared) || (universe.name == "Hell Rising"))
 				user.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/cult(user), slot_head)
 				user.equip_to_slot_or_del(new /obj/item/clothing/suit/space/cult(user), slot_wear_suit)
 			else
@@ -1327,10 +1338,14 @@
 		for(var/mob/living/M in src.loc)
 			if(iscultist(M))
 				if(ishuman(M))
+					var/mob/living/carbon/human/P = user
 					M.visible_message("<span class='warning'> In flash of red light, and a set of armor appears on [M]...</span>", \
 					"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor.</span>")
 					var/datum/game_mode/cult/mode_ticker = ticker.mode
-					if((istype(mode_ticker) && mode_ticker.narsie_condition_cleared) || (universe.name == "Hell Rising"))
+					if(isplasmaman(P))
+						P.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(P), slot_head)
+						P.equip_to_slot_or_del(new /obj/item/clothing/suit/space/plasmaman/cultist(P), slot_wear_suit)
+					else if((istype(mode_ticker) && mode_ticker.narsie_condition_cleared) || (universe.name == "Hell Rising"))
 						M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/cult(M), slot_head)
 						M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/cult(M), slot_wear_suit)
 					else

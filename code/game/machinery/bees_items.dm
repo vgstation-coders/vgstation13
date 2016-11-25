@@ -25,7 +25,8 @@
 /obj/item/weapon/bee_net/afterattack(atom/A as mob|obj|turf|area, mob/living/user)
 	if(get_dist(A,user) > 1)
 		return
-	if(istype(A,/obj/machinery/apiary))	return
+	if(istype(A,/obj/machinery/apiary))
+		return
 	var/turf/T = get_turf(A)
 	var/caught = 0
 	for(var/mob/living/simple_animal/bee/B in T)
@@ -101,8 +102,8 @@
 
 /obj/item/beezeez/New()
 	. = ..()
-	pixel_x = rand(-5.0, 5)
-	pixel_y = rand(-5.0, 5)
+	pixel_x = rand(-5.0, 5) * PIXEL_MULTIPLIER
+	pixel_y = rand(-5.0, 5) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycomb
 	name = "honeycomb"

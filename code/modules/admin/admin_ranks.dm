@@ -11,37 +11,61 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 
 	//process each line seperately
 	for(var/line in Lines)
-		if(!length(line))				continue
-		if(copytext(line,1,2) == "#")	continue
+		if(!length(line))
+			continue
+		if(copytext(line,1,2) == "#")
+			continue
 
 		var/list/List = splittext(line,"+")
-		if(!List.len)					continue
+		if(!List.len)
+			continue
 
 		var/rank = ckeyEx(List[1])
 		switch(rank)
-			if(null,"")		continue
-			if("Removed")	continue				//Reserved
+			if(null,"")
+				continue
+			if("Removed")
+				continue				//Reserved
 
 		var/rights = 0
 		for(var/i=2, i<=List.len, i++)
 			switch(ckey(List[i]))
-				if("@","prev")					rights |= previous_rights
-				if("buildmode","build")			rights |= R_BUILDMODE
-				if("admin")						rights |= R_ADMIN
-				if("ban")						rights |= R_BAN
-				if("fun")						rights |= R_FUN
-				if("server")					rights |= R_SERVER
-				if("debug")						rights |= R_DEBUG
-				if("permissions","rights")		rights |= R_PERMISSIONS
-				if("possess")					rights |= R_POSSESS
-				if("stealth")					rights |= R_STEALTH
-				if("rejuv","rejuvinate")		rights |= R_REJUVINATE
-				if("varedit")					rights |= R_VAREDIT
-				if("everything","host","all")	rights |= R_HOST
-				if("sound","sounds")			rights |= R_SOUNDS
-				if("spawn","create")			rights |= R_SPAWN
-				if("mod")						rights |= R_MOD
-				if("adminbus","bus")			rights |= R_ADMINBUS
+				if("@","prev")
+					rights |= previous_rights
+				if("buildmode","build")
+					rights |= R_BUILDMODE
+				if("admin")
+					rights |= R_ADMIN
+				if("ban")
+					rights |= R_BAN
+				if("fun")
+					rights |= R_FUN
+				if("server")
+					rights |= R_SERVER
+				if("debug")
+					rights |= R_DEBUG
+				if("permissions","rights")
+					rights |= R_PERMISSIONS
+				if("polling", "poll")
+					rights |= R_POLLING
+				if("possess")
+					rights |= R_POSSESS
+				if("stealth")
+					rights |= R_STEALTH
+				if("rejuv","rejuvinate")
+					rights |= R_REJUVINATE
+				if("varedit")
+					rights |= R_VAREDIT
+				if("everything","host","all")
+					rights |= R_HOST
+				if("sound","sounds")
+					rights |= R_SOUNDS
+				if("spawn","create")
+					rights |= R_SPAWN
+				if("mod")
+					rights |= R_MOD
+				if("adminbus","bus")
+					rights |= R_ADMINBUS
 
 		admin_ranks[rank] = rights
 		previous_rights = rights
@@ -70,16 +94,20 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 
 		//process each line seperately
 		for(var/line in Lines)
-			if(!length(line))				continue
-			if(copytext(line,1,2) == "#")	continue
+			if(!length(line))
+				continue
+			if(copytext(line,1,2) == "#")
+				continue
 
 			//Split the line at every "-"
 			var/list/List = splittext(line, "-")
-			if(!List.len)					continue
+			if(!List.len)
+				continue
 
 			//ckey is before the first "-"
 			var/ckey = ckey(List[1])
-			if(!ckey)						continue
+			if(!ckey)
+				continue
 
 			//rank follows the first "-"
 			var/rank = ""
@@ -111,10 +139,12 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 		while(query.NextRow())
 			var/ckey = query.item[1]
 			var/rank = query.item[2]
-			if(rank == "Removed")	continue	//This person was de-adminned. They are only in the admin list for archive purposes.
+			if(rank == "Removed")
+				continue	//This person was de-adminned. They are only in the admin list for archive purposes.
 
 			var/rights = query.item[4]
-			if(istext(rights))	rights = text2num(rights)
+			if(istext(rights))
+				rights = text2num(rights)
 			var/datum/admins/D = new /datum/admins(rank, rights, ckey)
 
 			//find the client for a ckey if they are connected and associate them with the new admin datum
@@ -131,7 +161,8 @@ var/list/admin_ranks = list()								//list of all ranks with associated rights
 	for(var/ckey in admin_datums)
 		var/rank
 		var/datum/admins/D = admin_datums[ckey]
-		if(D)	rank = D.rank
+		if(D)
+			rank = D.rank
 		msg += "\t[ckey] - [rank]\n"
 	testing(msg)
 	#endif

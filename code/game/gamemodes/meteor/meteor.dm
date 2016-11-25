@@ -13,7 +13,7 @@
 	required_players_secret = 20
 
 	uplink_welcome = "EVIL METEOR Uplink Console:"
-	uplink_uses = 10
+	uplink_uses = 20
 
 /datum/game_mode/meteor/announce()
 	to_chat(world, "<B>The current game mode is - Meteor!</B>")
@@ -38,7 +38,7 @@
 
 	spawn(meteor_announce_delay)
 
-		meteor_universal_state()
+		SetUniversalState(/datum/universal_state/meteor_storm, 1, 1)
 
 /datum/universal_state/meteor_storm
 	name = "Meteor Storm"
@@ -61,24 +61,6 @@
 	var/meteor_wave_size_l = 150 //Lower interval to meteor wave size
 	var/meteor_wave_size_h = 200 //Higher interval to meteor wave size
 
-//We want a ton of extra variables to allow us to do fancy things with it
-//We can't inherit directly because of a host of reasons, all good I assure you
-/proc/meteor_universal_state(var/on_exit = 1, var/extra_delay = 100, var/supply_delay = 100, var/shuttle_mult = 3, var/delay = 0, var/size_l = 150, var/size_h = 200)
-
-	if(on_exit)
-		universe.OnExit()
-
-	var/datum/universal_state/meteor_storm/meteor_storm = new /datum/universal_state/meteor_storm
-
-	meteor_storm.meteor_extra_announce_delay = extra_delay
-	meteor_storm.supply_delay = supply_delay
-	meteor_storm.meteor_shuttle_multiplier = shuttle_mult
-	meteor_storm.meteor_delay = delay
-	meteor_storm.meteor_wave_size_l = size_l
-	meteor_storm.meteor_wave_size_h = size_h
-
-	meteor_storm.OnEnter()
-
 /datum/universal_state/meteor_storm/OnShuttleCall(var/mob/user)
 	if(user)
 		to_chat(user, "<span class='sinister'>You hear an automatic dispatch from Nanotrasen. It states that Centcomm is being shielded due to an incoming meteor storm and that regular shuttle service has been interrupted.</span>")
@@ -95,12 +77,10 @@
 
 	sleep(20) //Two seconds for warning to play
 
-	if(prob(70)) //Slighty off-scale
-		command_alert("A meteor storm has been detected in proximity of [station_name()] and is expected to strike within [round((rand(meteor_delay - 600, meteor_delay + 600))/600)] minutes. A backup emergency shuttle is being dispatched and emergency gear should be teleported into your station's Bar area in [supply_delay/10] seconds.", \
-		"Space Weather Automated Announcements", alert = 'sound/AI/meteorround.ogg')
-	else //Oh boy
-		command_alert("A meteor storm has been detected in proximity of [station_name()] and is expected to strike within [round((rand(meteor_delay - 1800, meteor_delay + 1800))/600)] minutes. A backup emergency shuttle is being dispatched and emergency gear should be teleported into your station's Bar area in [supply_delay/10] seconds.", \
-		"Space Weather Automated Announcements", alert = 'sound/AI/meteorround.ogg')
+	var/datum/command_alert/meteor_round/CA = new()
+	CA.meteor_delay = meteor_delay
+	CA.supply_delay = supply_delay
+	command_alert(CA)
 
 	message_admins("Meteor Storm announcement given. Meteors will arrive in approximately [round(meteor_delay/600)] minutes. Shuttle will take [10*meteor_shuttle_multiplier] minutes to arrive and supplies are about to be dispatched in the Bar.")
 
@@ -118,12 +98,19 @@
 
 		spawn(meteor_delay)
 			meteors_allowed = 1
+			check_meteor_storm()
 
-/datum/universal_state/meteor_storm/process()
-	if(meteors_allowed)
-		var/meteors_in_wave = rand(meteor_wave_size_l, meteor_wave_size_h)
-		meteor_wave(meteors_in_wave, 3)
-	return
+//This proc needs to be called every time meteors_allowed is set to 1, aka when starting the mayhem. Obviously, do not call it in repeating procs
+/datum/universal_state/meteor_storm/proc/check_meteor_storm()
+
+	if(!meteors_allowed)
+		return
+
+	spawn()
+		while(meteors_allowed && src == global.universe)
+			var/meteors_in_wave = rand(meteor_wave_size_l, meteor_wave_size_h)
+			meteor_wave(meteors_in_wave, 3)
+			sleep(10)
 
 //Important note : This will only fire if the Meteors gamemode was fired
 /datum/game_mode/meteor/declare_completion()

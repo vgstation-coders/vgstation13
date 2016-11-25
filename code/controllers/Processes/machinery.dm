@@ -10,13 +10,15 @@ var/global/list/machines = list()
 	//#ifdef PROFILE_MACHINES
 	//machine_profiling.len = 0
 	//#endif
-	if(!machines || !machines.len) return
+	if(!machines || !machines.len)
+		return
 	for(var/i = 1 to machines.len)
 		if(i > machines.len)
 			break
 		var/obj/machinery/M = machines[i]
 		if(istype(M) && !M.gcDestroyed)
-			if(M.timestopped) continue
+			if(M.timestopped)
+				continue
 			#ifdef PROFILE_MACHINES
 			var/time_start = world.timeofday
 			#endif
@@ -45,4 +47,5 @@ var/global/list/machines = list()
 				M.inMachineList = 0
 			if(!machines.Remove(M))
 				machines.Cut(i,i+1)
-		if(!(i%20)) scheck()
+		if(!(i%20))
+			scheck()

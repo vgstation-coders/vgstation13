@@ -14,7 +14,8 @@
 
 /obj/effect/trap/Crossed(atom/movable/AM)
 	..()
-	if(activated) return
+	if(activated)
+		return
 
 	if(can_activate(AM))
 		activated = 1

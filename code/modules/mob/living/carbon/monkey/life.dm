@@ -1,4 +1,4 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:32
+
 
 /mob/living/carbon/monkey
 	var/oxygen_alert = 0
@@ -13,9 +13,11 @@
 /mob/living/carbon/monkey/Life()
 	set invisibility = 0
 	//set background = 1
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
-	if (monkeyizing)	return
+	if (monkeyizing)
+		return
 	if (update_muts)
 		update_muts=0
 		domutcheck(src,null,MUTCHK_FORCED)
@@ -131,7 +133,7 @@
 	if ((M_HULK in mutations) && health <= 25)
 		mutations.Remove(M_HULK)
 		to_chat(src, "<span class='warning'>You suddenly feel very weak.</span>")
-		Weaken(3)
+		Knockdown(3)
 		emote("collapse")
 		if(reagents.has_reagent(CREATINE))
 			var/datum/reagent/creatine/C = reagents.get_reagent(CREATINE)
@@ -151,7 +153,7 @@
 
 		if (radiation > 100)
 			radiation = 100
-			Weaken(10)
+			Knockdown(10)
 			to_chat(src, "<span class='warning'>You feel weak.</span>")
 			emote("collapse")
 
@@ -167,7 +169,7 @@
 				adjustToxLoss(1)
 				if(prob(5))
 					radiation -= 5
-					Weaken(3)
+					Knockdown(3)
 					to_chat(src, "<span class='warning'>You feel weak.</span>")
 					emote("collapse")
 				updatehealth()
@@ -202,7 +204,8 @@
 	return 0
 
 /mob/living/carbon/monkey/proc/handle_virus_updates()
-	if(status_flags & GODMODE)	return 0	//godmode
+	if(status_flags & GODMODE)
+		return 0	//godmode
 	if(bodytemperature > 406)
 		for(var/datum/disease/D in viruses)
 			D.cure()
@@ -219,7 +222,8 @@
 		else
 			V.activate(src)
 		// activate may have deleted the virus
-		if(!V) continue
+		if(!V)
+			continue
 
 		// check if we're immune
 		if(V.antigen & src.antibodies)
@@ -232,9 +236,11 @@
 		return
 
 	if(reagents)
-		if(reagents.has_reagent(LEXORIN)) return
+		if(reagents.has_reagent(LEXORIN))
+			return
 
-	if(!loc) return //probably ought to make a proper fix for this, but :effort: --NeoFite
+	if(!loc)
+		return //probably ought to make a proper fix for this, but :effort: --NeoFite
 
 	var/datum/gas_mixture/environment = loc.return_air()
 	var/datum/gas_mixture/breath
@@ -491,7 +497,8 @@
 	return
 
 /mob/living/carbon/monkey/proc/handle_temperature_damage(body_part, exposed_temperature, exposed_intensity)
-	if(status_flags & GODMODE) return
+	if(status_flags & GODMODE)
+		return
 	var/discomfort = min( abs(exposed_temperature - bodytemperature)*(exposed_intensity)/2000000, 1.0)
 	//adjustFireLoss(2.5*discomfort)
 
@@ -509,7 +516,7 @@
 		if(isturf(loc)) //else, there's considered to be no light
 			var/turf/T = loc
 			if(T.dynamic_lighting)
-				light_amount = T.get_lumcount(0.5)
+				light_amount = T.get_lumcount() * 10
 			else
 				light_amount = 5
 		nutrition += light_amount
@@ -522,7 +529,8 @@
 			adjustToxLoss(-1)
 			adjustOxyLoss(-1)
 	burn_calories(HUNGER_FACTOR,1)
-	if(reagents) reagents.metabolize(src,alien)
+	if(reagents)
+		reagents.metabolize(src,alien)
 
 	if (drowsyness > 0)
 		drowsyness = max(0, drowsyness - 1)
@@ -618,8 +626,8 @@
 		if(stunned)
 			AdjustStunned(-1)
 
-		if(weakened)
-			weakened = max(weakened-1,0)	//before you get mad Rockdtben: I done this so update_canmove isn't called multiple times
+		if(knockdown)
+			knockdown = max(knockdown-1,0)	//before you get mad Rockdtben: I done this so update_canmove isn't called multiple times
 
 		if(stuttering)
 			stuttering = max(stuttering-1, 0)
@@ -634,15 +642,11 @@
 
 /mob/living/carbon/monkey/proc/handle_regular_hud_updates()
 	if (stat == 2 || (M_XRAY in mutations))
-		sight |= SEE_TURFS
-		sight |= SEE_MOBS
-		sight |= SEE_OBJS
+		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 8
 		see_invisible = SEE_INVISIBLE_LEVEL_TWO
 	else if (stat != 2)
-		sight &= ~SEE_TURFS
-		sight &= ~SEE_MOBS
-		sight &= ~SEE_OBJS
+		change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 2
 		see_invisible = SEE_INVISIBLE_LIVING
 
@@ -673,9 +677,12 @@
 	update_pull_icon()
 
 
-	if (toxin)	toxin.icon_state = "tox[toxins_alert ? 1 : 0]"
-	if (oxygen) oxygen.icon_state = "oxy[oxygen_alert ? 1 : 0]"
-	if (fire) fire.icon_state = "fire[fire_alert ? 2 : 0]"
+	if (toxin)
+		toxin.icon_state = "tox[toxins_alert ? 1 : 0]"
+	if (oxygen)
+		oxygen.icon_state = "oxy[oxygen_alert ? 1 : 0]"
+	if (fire)
+		fire.icon_state = "fire[fire_alert ? 2 : 0]"
 	//NOTE: the alerts dont reset when youre out of danger. dont blame me,
 	//blame the person who coded them. Temporary fix added.
 

@@ -1,4 +1,5 @@
 var/bomb_set
+var/obj/item/weapon/disk/nuclear/nukedisk
 
 /obj/machinery/nuclearbomb
 	name = "\improper Nuclear Fission Explosive"
@@ -49,7 +50,8 @@ var/bomb_set
 				if(istype(O,/obj/item/weapon/weldingtool))
 
 					var/obj/item/weapon/weldingtool/WT = O
-					if(!WT.isOn()) return
+					if(!WT.isOn())
+						return
 					if (WT.get_fuel() < 5) // uses up 5 fuel.
 						to_chat(user, "<span class='warning'>You need more fuel to complete this task.</span>")
 						return
@@ -57,7 +59,8 @@ var/bomb_set
 					user.visible_message("[user] starts cutting loose the anchoring bolt covers on [src].", "You start cutting loose the anchoring bolt covers with [O]...")
 
 					if(do_after(user, src, 40))
-						if(!src || !user || !WT.remove_fuel(5, user)) return
+						if(!src || !user || !WT.remove_fuel(5, user))
+							return
 						user.visible_message("[user] cuts through the bolt covers on [src].", "You cut through the bolt cover.")
 						removal_stage = 1
 				return
@@ -67,7 +70,8 @@ var/bomb_set
 					user.visible_message("[user] starts forcing open the bolt covers on [src].", "You start forcing open the anchoring bolt covers with [O]...")
 
 					if(do_after(user,  src, 15))
-						if(!src || !user) return
+						if(!src || !user)
+							return
 						user.visible_message("[user] forces open the bolt covers on [src].", "You force open the bolt covers.")
 						removal_stage = 2
 				return
@@ -76,7 +80,8 @@ var/bomb_set
 				if(istype(O,/obj/item/weapon/weldingtool))
 
 					var/obj/item/weapon/weldingtool/WT = O
-					if(!WT.isOn()) return
+					if(!WT.isOn())
+						return
 					if (WT.get_fuel() < 5) // uses up 5 fuel.
 						to_chat(user, "<span class='notice'>You need more fuel to complete this task.</span>")
 						return
@@ -84,7 +89,8 @@ var/bomb_set
 					user.visible_message("[user] starts cutting apart the anchoring system sealant on [src].", "You start cutting apart the anchoring system's sealant with [O]...")
 
 					if(do_after(user, src, 40))
-						if(!src || !user || !WT.remove_fuel(5, user)) return
+						if(!src || !user || !WT.remove_fuel(5, user))
+							return
 						user.visible_message("[user] cuts apart the anchoring system sealant on [src].", "You cut apart the anchoring system's sealant.")
 						removal_stage = 3
 				return
@@ -95,7 +101,8 @@ var/bomb_set
 					user.visible_message("[user] begins unwrenching the anchoring bolts on [src].", "You begin unwrenching the anchoring bolts...")
 
 					if(do_after(user, src, 50))
-						if(!src || !user) return
+						if(!src || !user)
+							return
 						user.visible_message("[user] unwrenches the anchoring bolts on [src].", "You unwrench the anchoring bolts.")
 						removal_stage = 4
 				return
@@ -106,7 +113,8 @@ var/bomb_set
 					user.visible_message("[user] begins lifting [src] off of the anchors.", "You begin lifting the device off the anchors...")
 
 					if(do_after(user, src, 80))
-						if(!src || !user) return
+						if(!src || !user)
+							return
 						user.visible_message("[user] crowbars [src] off of the anchors. It can now be moved.", "You jam the crowbar under the nuclear device and lift it off its anchors. You can now move it!")
 						anchored = 0
 						removal_stage = 5
@@ -159,7 +167,8 @@ var/bomb_set
 	set name = "Make Deployable"
 	set src in oview(1)
 
-	if (!usr || usr.lying || usr.isUnconscious()) return
+	if (!usr || usr.lying || usr.isUnconscious())
+		return
 	if (!usr.dexterity_check())
 		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
@@ -172,7 +181,8 @@ var/bomb_set
 		src.deployable = 1
 
 /obj/machinery/nuclearbomb/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 	if (!usr.canmove || usr.stat || usr.restrained())
 		return
 	if (!usr.dexterity_check())
@@ -182,7 +192,7 @@ var/bomb_set
 		usr.set_machine(src)
 		if (href_list["auth"])
 			if (src.auth)
-				src.auth.loc = src.loc
+				src.auth.forceMove(src.loc)
 				src.yes_code = 0
 				src.auth = null
 			else
@@ -285,8 +295,8 @@ var/bomb_set
 
 	var/off_station = 0
 	var/turf/bomb_location = get_turf(src)
-	if( bomb_location && (bomb_location.z == 1) )
-		if( (bomb_location.x < (128-NUKERANGE)) || (bomb_location.x > (128+NUKERANGE)) || (bomb_location.y < (128-NUKERANGE)) || (bomb_location.y > (128+NUKERANGE)) )
+	if( bomb_location && (bomb_location.z == map.zMainStation) )
+		if( (bomb_location.x < (world.maxx/2-NUKERANGE)) || (bomb_location.x > (world.maxx/2+NUKERANGE)) || (bomb_location.y < (world.maxy-NUKERANGE)) || (bomb_location.y > (world.maxy+NUKERANGE)) )
 			off_station = 1
 	else
 		off_station = 2
@@ -305,7 +315,7 @@ var/bomb_set
 				var/datum/game_mode/nuclear/GM = ticker.mode
 				GM.nukes_left --
 			else
-				to_chat(world, "<B>The station was destoyed by the nuclear blast!</B>")
+				to_chat(world, "<B>The station was destroyed by the nuclear blast!</B>")
 
 			ticker.mode.station_was_nuked = (off_station<2)	//offstation==1 is a draw. the station becomes irradiated and needs to be evacuated.
 															//kinda shit but I couldn't  get permission to do what I wanted to do.
@@ -338,15 +348,15 @@ var/bomb_set
 	item_state = "card-id"
 	w_class = W_CLASS_TINY
 	var/respawned = 0
-	var/watched_by = list()
+
+/obj/item/weapon/disk/nuclear/New()
+	..()
+	if(!nukedisk)
+		nukedisk = src
 
 /obj/item/weapon/disk/nuclear/Destroy()
 	..()
 	replace_disk()
-	for(var/obj/item/weapon/pinpointer/pinpointers in watched_by)
-		if(pinpointers.the_disk == src)
-			pinpointers.the_disk = null
-	watched_by = null
 
 /**
  * NOTE: Don't change it to Destroy().
@@ -356,11 +366,11 @@ var/bomb_set
 	..()
 
 /obj/item/weapon/disk/nuclear/proc/replace_disk()
-	if(blobstart.len > 0 && !respawned)
+	if(blobstart.len > 0 && !respawned && (nukedisk == src))
 		var/picked_turf = get_turf(pick(blobstart))
 		var/picked_area = formatLocation(picked_turf)
 		var/log_message = "[type] has been destroyed. Creating one at"
 		log_game("[log_message] [picked_area]")
 		message_admins("[log_message] [formatJumpTo(picked_turf, picked_area)]")
-		new /obj/item/weapon/disk/nuclear(picked_turf)
+		nukedisk = new /obj/item/weapon/disk/nuclear(picked_turf)
 		respawned = 1

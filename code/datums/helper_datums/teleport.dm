@@ -126,6 +126,7 @@
 		if(teleatom.Move(destturf))
 			playSpecials(destturf,effectout,soundout)
 
+	teleatom.reset_inertia() //Prevent things from drifting immediately after getting teleported to space
 	destarea.Entered(teleatom)
 
 	return 1
@@ -183,7 +184,7 @@
 			teleatom.visible_message("<span class='danger'>The [teleatom] bounces off of the portal!</span>")
 		return 0
 
-	if(destination.z == 2) //centcomm z-level
+	if(destination.z == map.zCentcomm) //centcomm z-level
 		if(istype(teleatom, /obj/mecha) && (universe.name != "Supermatter Cascade"))
 			var/obj/mecha/MM = teleatom
 			to_chat(MM.occupant, "<span class='danger'>The mech would not survive the jump to a location so far away!</span>")//seriously though, why? who wrote that?
@@ -193,21 +194,24 @@
 			teleatom.visible_message("<span class='danger'>The Bag of Holding bounces off of the portal!</span>")
 			return 0
 
-	if(istype(teleatom,/obj/item/clothing/head/tinfoil))
+	var/datum/zLevel/L = get_z_level(destination)
+	if (L.teleJammed)
 		return 0
 
-	if(istype(teleatom,/mob/living/carbon/human)) //Tinfoil hats resist teleportation, but only when worn
-		var/mob/living/carbon/human/H = teleatom
-		if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil))
-			to_chat(H, "<span class'info'>Your headgear has 'foiled' a teleport!</span>")
-			return 0
+	for (var/mob/M in recursive_type_check(teleatom, /mob))
+		if(istype(M,/mob/living/carbon/human)) //Tinfoil hats resist teleportation, but only when worn
+			var/mob/living/carbon/human/H = M
+			if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil))
+				to_chat(H, "<span class'info'>Your headgear has 'foiled' a teleport!</span>")
+				return 0
 
-	if(destination.z > 7) //Away mission z-levels
+		if(istype(M, /mob/living))
+			var/mob/living/MM = M
+			if(MM.locked_to_z != 0 && destination.z != MM.locked_to_z)
+				MM.visible_message("<span class='danger'>\The [teleatom] bounces off the portal!</span>", "<span class='warning'>You're unable to go to that destination!</span>")
+				return 0
+
+	if(!isemptylist(recursive_type_check(teleatom, /obj/item/clothing/head/tinfoil)))
 		return 0
 
-	if(istype(teleatom, /mob/living))
-		var/mob/living/MM = teleatom
-		if(MM.locked_to_z != 0 && destination.z != MM.locked_to_z)
-			MM.visible_message("<span class='danger'>[MM] bounces off the portal!</span>","<span class='warning'>You're unable to go to that destination!</span>")
-			return 0
 	return 1

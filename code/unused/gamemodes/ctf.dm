@@ -62,7 +62,7 @@
 					M.wear_id = W
 					M.wear_id.layer = 20
 					if(R)
-						M.loc = R.loc
+						M.forceMove(R.loc)
 					else
 						to_chat(world, "No red team spawn point detected")
 					M.client.team = "Red"
@@ -102,7 +102,7 @@
 					M.wear_id = W
 					M.wear_id.layer = 20
 					if(G)
-						M.loc = G.loc
+						M.forceMove(G.loc)
 					else
 						to_chat(world, "No green team spawn point detected")
 					M.client.team = "Green"

@@ -74,7 +74,8 @@ var/prison_shuttle_timeleft = 0
 			if (!prison_can_move())
 				to_chat(usr, "<span class='warning'>The prison shuttle is unable to leave.</span>")
 				return
-			if(!prison_shuttle_at_station|| prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison) return
+			if(!prison_shuttle_at_station|| prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison)
+				return
 			post_signal("prison")
 			to_chat(usr, "<span class='notice'>The prison shuttle has been called and will arrive in [(PRISON_MOVETIME/10)] seconds.</span>")
 			src.temp += "Shuttle sent.<BR><BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
@@ -88,7 +89,8 @@ var/prison_shuttle_timeleft = 0
 			if (!prison_can_move())
 				to_chat(usr, "<span class='warning'>The prison shuttle is unable to leave.</span>")
 				return
-			if(prison_shuttle_at_station || prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison) return
+			if(prison_shuttle_at_station || prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison)
+				return
 			post_signal("prison")
 			to_chat(usr, "<span class='notice'>The prison shuttle has been called and will arrive in [(PRISON_MOVETIME/10)] seconds.</span>")
 			src.temp += "Shuttle sent.<BR><BR><A href='?src=\ref[src];mainmenu=1'>OK</A>"
@@ -107,14 +109,17 @@ var/prison_shuttle_timeleft = 0
 
 
 	proc/prison_can_move()
-		if(prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison) return 0
-		else return 1
+		if(prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison)
+			return 0
+		else
+			return 1
 
 
 	proc/prison_break()
 		switch(prison_break)
 			if (0)
-				if(!prison_shuttle_at_station || prison_shuttle_moving_to_prison) return
+				if(!prison_shuttle_at_station || prison_shuttle_moving_to_prison)
+					return
 
 				prison_shuttle_moving_to_prison = 1
 				prison_shuttle_at_station = prison_shuttle_at_station
@@ -130,7 +135,8 @@ var/prison_shuttle_timeleft = 0
 
 	proc/post_signal(var/command)
 		var/datum/radio_frequency/frequency = radio_controller.return_frequency(1311)
-		if(!frequency) return
+		if(!frequency)
+			return
 		var/datum/signal/status_signal = getFromPool(/datum/signal)
 		status_signal.source = src
 		status_signal.transmission_method = 1
@@ -155,7 +161,8 @@ var/prison_shuttle_timeleft = 0
 
 			if(0)
 				prison_shuttle_at_station = 1
-				if (prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison) return
+				if (prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison)
+					return
 
 				if (!prison_can_move())
 					to_chat(usr, "<span class='warning'>The prison shuttle is unable to leave.</span>")
@@ -185,7 +192,8 @@ var/prison_shuttle_timeleft = 0
 
 			if(1)
 				prison_shuttle_at_station = 0
-				if (prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison) return
+				if (prison_shuttle_moving_to_station || prison_shuttle_moving_to_prison)
+					return
 
 				if (!prison_can_move())
 					to_chat(usr, "<span class='warning'>The prison shuttle is unable to leave.</span>")

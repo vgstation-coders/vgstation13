@@ -1,4 +1,4 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:32
+
 
 //TODO: Make these simple_animals
 
@@ -18,6 +18,8 @@ var/const/MAX_ACTIVE_TIME = 400
 	flags = FPRINT  | MASKINTERNALS | PROXMOVE
 	throw_range = 5
 	health = 5
+	plane = ABOVE_OBJ_PLANE
+	layer = FACEHUGGER_LAYER
 	var/real = 1 //Facehuggers are real, toys are not.
 
 	var/stat = CONSCIOUS //UNCONSCIOUS is the idle state in this case
@@ -46,7 +48,8 @@ var/const/MAX_ACTIVE_TIME = 400
 	followtarget()
 
 /obj/item/clothing/mask/facehugger/proc/findtarget()
-	if(!real) return
+	if(!real)
+		return
 	for(var/mob/living/carbon/T in hearers(src,4))
 		if(!ishuman(T) && !ismonkey(T))
 			continue
@@ -59,7 +62,8 @@ var/const/MAX_ACTIVE_TIME = 400
 
 
 /obj/item/clothing/mask/facehugger/proc/followtarget()
-	if(!real) return // Why are you trying to path stupid toy
+	if(!real)
+		return // Why are you trying to path stupid toy
 	if(!target || target.stat == DEAD || target.stat == UNCONSCIOUS || target.status_flags & XENO_HOST)
 		findtarget()
 		return
@@ -138,7 +142,7 @@ var/const/MAX_ACTIVE_TIME = 400
 		if(real) // Lamarr still tries to couple with heads, but toys won't
 			processing_objects.Add(src)
 
-	else
+	else if(!sterile)
 		qdel(src)
 
 /obj/item/clothing/mask/facehugger/examine(mob/user)
@@ -154,13 +158,15 @@ var/const/MAX_ACTIVE_TIME = 400
 		to_chat(user, "<span class='danger'>It looks like \the [src]'s proboscis has been removed.</span>")
 	return
 
-/obj/item/clothing/mask/facehugger/attackby()
-	Die()
-	return
+/obj/item/clothing/mask/facehugger/attackby(obj/item/weapon/W)
+	if(W.force)
+		health -= W.force
+		healthcheck()
 
 /obj/item/clothing/mask/facehugger/bullet_act(var/obj/item/projectile/Proj)
-	health -= Proj.damage
-	return
+	if(Proj.damage)
+		health -= Proj.damage
+		healthcheck()
 
 /obj/item/clothing/mask/facehugger/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature > 300)
@@ -240,7 +246,7 @@ var/const/MAX_ACTIVE_TIME = 400
 			if(istype(mouth_protection, /obj/item/clothing/head/helmet/space/rig))
 				rng = 15
 			if(prob(rng)) // Temporary balance change, all mouth-covering hats will be more effective
-				H.visible_message("<span class='danger'>\The [src] smashes against [H]'s [mouth_protection], and rips it off in the process!</span>")
+				H.visible_message("<span class='danger'>\The [src] smashes against [H]'s \the [mouth_protection], and rips it off in the process!</span>")
 				H.drop_from_inventory(mouth_protection)
 				GoIdle(15)
 				return
@@ -267,14 +273,15 @@ var/const/MAX_ACTIVE_TIME = 400
 
 			target.visible_message("<span class='danger'>\The [src] tears \the [W] off of [target]'s face!</span>")
 
-		src.loc = target
+		src.forceMove(target)
 		target.equip_to_slot(src, slot_wear_mask)
 		target.update_inv_wear_mask()
 
-		if(!sterile) L.Paralyse((preggers/10)+10) //something like 25 ticks = 20 seconds with the default settings
+		if(!sterile)
+			L.Paralyse((preggers/10)+10) //something like 25 ticks = 20 seconds with the default settings
 	else if (iscorgi(M))
 		var/mob/living/simple_animal/corgi/C = M
-		src.loc = C
+		src.forceMove(C)
 		C.facehugger = src
 		C.wear_mask = src
 		//C.regenerate_icons()
@@ -305,7 +312,7 @@ var/const/MAX_ACTIVE_TIME = 400
 
 		if(iscorgi(target))
 			var/mob/living/simple_animal/corgi/C = target
-			src.loc = get_turf(C)
+			src.forceMove(get_turf(C))
 			C.facehugger = null
 	else
 		target.visible_message("<span class='danger'>\The [src] violates [target]'s face !</span>")
@@ -359,3 +366,6 @@ var/const/MAX_ACTIVE_TIME = 400
 	if(C && (istype(C.wear_mask, /obj/item/clothing/mask/facehugger) || C.status_flags & XENO_HOST))
 		return 0
 	return 1
+
+/obj/item/clothing/mask/facehugger/acidable()
+	return 0

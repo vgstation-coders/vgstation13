@@ -11,8 +11,6 @@ var/global/mulebot_count = 0
 	desc = "A Multiple Utility Load Effector bot."
 	icon_state = "mulebot0"
 	icon_initial = "mulebot"
-	layer = MOB_LAYER
-	plane = PLANE_MOB
 	density = 1
 	anchored = 1
 	animate_movement=1
@@ -66,7 +64,7 @@ var/global/mulebot_count = 0
 	var/list/can_load = list()
 
 	var/bloodiness = 0		// count of bloodiness
-	var/currentBloodColor = "#A10808"
+	var/currentBloodColor = DEFAULT_BLOOD
 
 /obj/machinery/bot/mulebot/New()
 	..()
@@ -436,16 +434,17 @@ var/global/mulebot_count = 0
 	if(istype(crate))
 		crate.close()
 
-	C.loc = src.loc
+	C.forceMove(src.loc)
 	sleep(2)
-	if(C.loc != src.loc) //To prevent you from going onto more thano ne bot.
+	if(C.loc != src.loc) //To prevent you from going onto more than one bot.
 		return
-	C.loc = src
+	C.forceMove(src)
 	load = C
 
-	C.pixel_y += 9
+	C.pixel_y += 9 * PIXEL_MULTIPLIER
 	if(C.layer < layer)
 		C.layer = layer + 0.1
+	C.plane = plane
 	overlays += C
 
 	if(ismob(C))
@@ -467,9 +466,9 @@ var/global/mulebot_count = 0
 	mode = 1
 	overlays.len = 0
 
-	load.loc = src.loc
-	load.pixel_y -= 9
-	load.layer = initial(load.layer)
+	load.forceMove(src.loc)
+	load.pixel_y -= 9 * PIXEL_MULTIPLIER
+	load.reset_plane_and_layer()
 	if(ismob(load))
 		var/mob/M = load
 		if(M.client)
@@ -483,7 +482,7 @@ var/global/mulebot_count = 0
 		if(Cross(load,T))//Can't get off onto anything that wouldn't let you pass normally
 			step(load, dirn)
 		else
-			load.loc = src.loc//Drops you right there, so you shouldn't be able to get yourself stuck
+			load.forceMove(src.loc)//Drops you right there, so you shouldn't be able to get yourself stuck
 
 	load = null
 
@@ -492,10 +491,11 @@ var/global/mulebot_count = 0
 	// with items dropping as mobs are loaded
 
 	for(var/atom/movable/AM in src)
-		if(AM == cell || AM == botcard) continue
+		if(AM == cell || AM == botcard)
+			continue
 
-		AM.loc = src.loc
-		AM.layer = initial(AM.layer)
+		AM.forceMove(src.loc)
+		AM.reset_plane_and_layer()
 		AM.pixel_y = initial(AM.pixel_y)
 		if(ismob(AM))
 			var/mob/M = AM
@@ -532,7 +532,8 @@ var/global/mulebot_count = 0
 			if(3)
 				process_bot()
 
-	if(refresh) updateDialog()
+	if(refresh)
+		updateDialog()
 
 /obj/machinery/bot/mulebot/proc/process_bot()
 //	to_chat(if(mode) world, "Mode: [mode]")
@@ -576,7 +577,8 @@ var/global/mulebot_count = 0
 						bloodiness--
 
 					var/moved = step_towards(src, next)	// attempt to move
-					if(cell) cell.use(1)
+					if(cell)
+						cell.use(1)
 					if(moved)	// successful move
 //						to_chat(world, "Successful move.")
 						blockcount = 0
@@ -737,7 +739,7 @@ var/global/mulebot_count = 0
 				src.visible_message("<span class='warning'>[src] knocks over [M]!</span>")
 				M.stop_pulling()
 				M.Stun(8)
-				M.Weaken(5)
+				M.Knockdown(5)
 				M.lying = 1
 	..()
 
@@ -856,7 +858,8 @@ var/global/mulebot_count = 0
 
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
 
-	if(!frequency) return
+	if(!frequency)
+		return
 
 
 
@@ -907,7 +910,7 @@ var/global/mulebot_count = 0
 	new /obj/item/stack/rods(Tsec)
 	new /obj/item/stack/cable_coil/cut(Tsec)
 	if (cell)
-		cell.loc = Tsec
+		cell.forceMove(Tsec)
 		cell.update_icon()
 		cell = null
 

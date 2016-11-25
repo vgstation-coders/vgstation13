@@ -32,7 +32,7 @@
 	else if(iswirecutter(W))
 		if(cell)
 			cell.updateicon()
-			cell.loc = get_turf(src.loc)
+			cell.forceMove(get_turf(src.loc))
 			cell = null
 			to_chat(user, "<span class='notice'>You cut the cell away from [src].</span>")
 			update_icon()

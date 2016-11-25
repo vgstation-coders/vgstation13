@@ -33,7 +33,7 @@ obj/machinery/recharger/defibcharger/wallcharger/attack_hand(mob/user as mob)
 
 	if(charging)
 		charging.update_icon()
-		charging.loc = loc
+		charging.forceMove(loc)
 		charging = null
 		use_power = 1
 		update_icon()

@@ -135,6 +135,11 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 	name = "Hidden Uplink."
 	desc = "There is something wrong if you're examining this."
 
+/obj/item/device/uplink/hidden/Destroy()
+	var/obj/item/I = loc
+	I.hidden_uplink = null
+	..()
+
 /obj/item/device/uplink/hidden/Topic(href, href_list)
 	..()
 	if(href_list["lock"])
@@ -200,4 +205,4 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 /obj/item/device/radio/headset/uplink/New()
 	..()
 	hidden_uplink = new(src)
-	hidden_uplink.uses = 10
+	hidden_uplink.uses = 20

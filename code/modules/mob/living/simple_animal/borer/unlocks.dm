@@ -509,7 +509,8 @@
 	set category = "Alien"
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.taste_blood()
 
 //////////Chest Verbs///////////////////

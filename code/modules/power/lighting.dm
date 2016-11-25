@@ -15,7 +15,8 @@
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "tube-construct-stage1"
 	anchored = 1
-	layer = 5
+	plane = LIGHTING_PLANE
+	layer = LIGHTBULB_LAYER
 	var/stage = 1
 	var/fixture_type = "tube"
 	var/sheets_refunded = 2
@@ -84,6 +85,7 @@
 	to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
 
 	H.apply_damage(rand(1,2), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
+	return SPECIAL_ATTACK_FAILED
 
 
 /obj/machinery/light_construct/small
@@ -92,7 +94,8 @@
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "bulb-construct-stage1"
 	anchored = 1
-	layer = 5
+	plane = LIGHTING_PLANE
+	layer = LIGHTBULB_LAYER
 	stage = 1
 	fixture_type = "bulb"
 	sheets_refunded = 1
@@ -107,7 +110,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	icon_state = "ltube1"
 	desc = "A lighting fixture."
 	anchored = 1
-	layer = 5  					// They were appearing under mobs which is a little weird - Ostaf
+	plane = LIGHTING_PLANE
+	layer = LIGHTBULB_LAYER
 	use_power = 2
 	idle_power_usage = 2
 	active_power_usage = 20
@@ -137,8 +141,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	holomap = TRUE
 	auto_holomap = TRUE
 
-/obj/machinery/light/spook()
-	if(..())
+/obj/machinery/light/spook(mob/dead/observer/ghost)
+	if(..(ghost, TRUE))
 		flicker()
 
 // the smaller bulb light fixture
@@ -157,7 +161,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
 
 	H.apply_damage(rand(1,2), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
-
+	return SPECIAL_ATTACK_FAILED
 
 /obj/machinery/light/small
 	icon_state = "lbulb1"
@@ -281,13 +285,13 @@ var/global/list/obj/machinery/light/alllights = list()
 	..()
 	switch(status)
 		if(LIGHT_OK)
-			to_chat(user, "<span class='info'>[desc] It is turned [on? "on" : "off"].</span>")
+			to_chat(user, "<span class='info'>It is turned [on? "on" : "off"].</span>")
 		if(LIGHT_EMPTY)
-			to_chat(user, "<span class='info'>[desc] The [fitting] has been removed.</span>")
+			to_chat(user, "<span class='info'>The [fitting] has been removed.</span>")
 		if(LIGHT_BURNED)
-			to_chat(user, "<span class='info'>[desc] The [fitting] is burnt out.</span>")
+			to_chat(user, "<span class='info'>The [fitting] is burnt out.</span>")
 		if(LIGHT_BROKEN)
-			to_chat(user, "<span class='info'>[desc] The [fitting] has been smashed.</span>")
+			to_chat(user, "<span class='info'>The [fitting] has been smashed.</span>")
 
 
 // attack with item - insert light (if right type), otherwise try to break the light
@@ -403,12 +407,14 @@ var/global/list/obj/machinery/light/alllights = list()
 	return areaMaster.lightswitch && areaMaster.power_light
 
 /obj/machinery/light/proc/flicker(var/amount = rand(10, 20))
-	if(flickering) return
+	if(flickering)
+		return
 	flickering = 1
 	spawn(0)
 		if(on && status == LIGHT_OK)
 			for(var/i = 0; i < amount; i++)
-				if(status != LIGHT_OK) break
+				if(status != LIGHT_OK)
+					break
 				on = !on
 				update(0)
 				sleep(rand(5, 15))
@@ -419,9 +425,11 @@ var/global/list/obj/machinery/light/alllights = list()
 		update(0)
 
 /obj/machinery/light/attack_ghost(mob/user)
-	if(blessed) return
+	if(blessed)
+		return
 	src.add_hiddenprint(user)
 	src.flicker(1)
+	investigation_log(I_GHOST, "|| was made to flicker by [key_name(user)][user.locked_to ? ", who was haunting [user.locked_to]" : ""]")
 	return
 
 // ai attack - make lights flicker, because why not
@@ -452,7 +460,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	return
 
 /obj/machinery/light/attack_animal(mob/living/simple_animal/M)
-	if(M.melee_damage_upper == 0)	return
+	if(M.melee_damage_upper == 0)
+		return
 	if(status == LIGHT_EMPTY||status == LIGHT_BROKEN)
 		to_chat(M, "<span class='warning'>That object is useless to you.</span>")
 		return
@@ -468,7 +477,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	if(isobserver(user))
 		return
 
-	if(!Adjacent(user)) return
+	if(!Adjacent(user))
+		return
 
 	add_fingerprint(user)
 

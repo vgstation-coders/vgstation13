@@ -1,3 +1,6 @@
+#define VALUE_CODE "Code (1 to 100)"
+#define VALUE_FREQUENCY "Frequency (whole numbers such as 1457)"
+
 /obj/item/device/assembly/signaler
 	name = "remote signaling device"
 	short_name = "signaler"
@@ -7,7 +10,7 @@
 	item_state = "signaler"
 	starting_materials = list(MAT_IRON = 1000, MAT_GLASS = 200)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "magnets=1"
+	origin_tech = Tc_MAGNETS + "=1"
 	wires = WIRE_RECEIVE | WIRE_PULSE | WIRE_RADIO_PULSE | WIRE_RADIO_RECEIVE
 
 	secured = 1
@@ -19,8 +22,9 @@
 	var/datum/radio_frequency/radio_connection
 	var/deadman = 0
 
-	accessible_values = list("Code (1 to 100)" = "code;number;1;100",\
-		"Frequency" = "frequency;number")
+	accessible_values = list(\
+		VALUE_CODE = "code;"+VT_NUMBER+";1;100",\
+		VALUE_FREQUENCY = "frequency;"+VT_NUMBER)
 
 /obj/item/device/assembly/signaler/New()
 	..()
@@ -49,7 +53,8 @@
 			qdel(src)
 
 /obj/item/device/assembly/signaler/activate()
-	if(cooldown > 0)	return 0
+	if(cooldown > 0)
+		return 0
 	cooldown = 2
 	spawn(10)
 		process_cooldown()
@@ -122,10 +127,13 @@
 		attack_self(usr)
 
 /obj/item/device/assembly/signaler/proc/signal()
-	if(!radio_connection) return
+	if(!radio_connection)
+		return
 
-	if(!(frequency in (MINIMUM_FREQUENCY to MAXIMUM_FREQUENCY))) return
-	if(!code in (1 to 100)) return
+	if(!(frequency in (MINIMUM_FREQUENCY to MAXIMUM_FREQUENCY)))
+		return
+	if(!code in (1 to 100))
+		return
 
 	var/datum/signal/signal = getFromPool(/datum/signal)
 	signal.source = src
@@ -144,11 +152,14 @@
 	return
 /*
 	for(var/obj/item/device/assembly/signaler/S in world)
-		if(!S)	continue
-		if(S == src)	continue
+		if(!S)
+			continue
+		if(S == src)
+			continue
 		if((S.frequency == src.frequency) && (S.code == src.code))
 			spawn(0)
-				if(S)	S.pulse(0)
+				if(S)
+					S.pulse(0)
 	return 0*/
 
 
@@ -160,9 +171,12 @@
 
 
 /obj/item/device/assembly/signaler/receive_signal(datum/signal/signal)
-	if(!signal)	return 0
-	if(signal.encryption != code)	return 0
-	if(!(src.wires & WIRE_RADIO_RECEIVE))	return 0
+	if(!signal)
+		return 0
+	if(signal.encryption != code)
+		return 0
+	if(!(src.wires & WIRE_RADIO_RECEIVE))
+		return 0
 	pulse(1)
 
 	if(!holder)
@@ -190,7 +204,8 @@
 /obj/item/device/assembly/signaler/process()
 	if(loc)
 		var/atom/A = loc
-		if(A.timestopped) return
+		if(A.timestopped)
+			return
 	if(!deadman)
 		processing_objects.Remove(src)
 	var/mob/M = src.loc
@@ -234,13 +249,13 @@
 	..()
 	switch(w_dir)
 		if(NORTH)
-			pixel_y = 25
+			pixel_y = 25 * PIXEL_MULTIPLIER
 		if(SOUTH)
-			pixel_y = -25
+			pixel_y = -25 * PIXEL_MULTIPLIER
 		if(EAST)
-			pixel_x = 25
+			pixel_x = 25 * PIXEL_MULTIPLIER
 		if(WEST)
-			pixel_x = -25
+			pixel_x = -25 * PIXEL_MULTIPLIER
 
 /obj/item/device/assembly/signaler/signaler_button/attack_hand(mob/user)
 	if(!activated)

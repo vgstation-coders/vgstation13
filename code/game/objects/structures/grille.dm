@@ -8,7 +8,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	pressure_resistance = 5*ONE_ATMOSPHERE
-	layer = 2.9
+	layer = BELOW_OBJ_LAYER
 	explosion_resistance = 5
 	var/health = 20 //Relatively "strong" since it's hard to dismantle via brute force
 	var/broken = 0
@@ -127,6 +127,9 @@
 		else
 			return !density
 
+/obj/structure/grille/projectile_check() //handled by the projectile's grillepasschance in Cross()
+	return
+
 /obj/structure/grille/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
 		return
@@ -217,7 +220,7 @@
 		return 0
 	if(!prob(prb)) //If the probability roll failed, don't go further
 		return 0
-	if(!in_range(src, user)) //To prevent TK and mech users from getting shocked
+	if(!Adjacent(user)) //To prevent TK and mech users from getting shocked
 		return 0
 	//Process the shocking via powernet, our job is done here
 	var/turf/T = get_turf(src)

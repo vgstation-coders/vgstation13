@@ -15,7 +15,8 @@
 	anchored = 1
 	opacity = 0
 	density = 0
-	layer = 3.5
+	layer = ABOVE_WINDOW_LAYER
+
 
 /obj/structure/sign/ex_act(severity)
 	switch(severity)
@@ -47,7 +48,8 @@
 		S.sign_state = icon_state
 		qdel(src)
 		return
-	else ..()
+	else
+		..()
 
 /obj/item/sign
 	name = "sign"
@@ -59,25 +61,28 @@
 /obj/item/sign/attackby(obj/item/tool as obj, mob/user as mob)	//construction
 	if(isscrewdriver(tool) && isturf(user.loc))
 		var/direction = input("In which direction?", "Select direction.") in list("North", "East", "South", "West", "Cancel")
-		if(direction == "Cancel" || src.loc == null) return // We can get qdel'd if someone spams screwdrivers on signs before responding to the prompt.
+		if(direction == "Cancel" || src.loc == null)
+			return // We can get qdel'd if someone spams screwdrivers on signs before responding to the prompt.
 		var/obj/structure/sign/S = new(user.loc)
 		switch(direction)
 			if("North")
-				S.pixel_y = 32
+				S.pixel_y = WORLD_ICON_SIZE
 			if("East")
-				S.pixel_x = 32
+				S.pixel_x = WORLD_ICON_SIZE
 			if("South")
-				S.pixel_y = -32
+				S.pixel_y = -WORLD_ICON_SIZE
 			if("West")
-				S.pixel_x = -32
-			else return
+				S.pixel_x = -WORLD_ICON_SIZE
+			else
+				return
 		S.name = name
 		S.desc = desc
 		S.icon_state = sign_state
 		to_chat(user, "You fasten \the [S] with your [tool].")
 		qdel(src)
 		return
-	else ..()
+	else
+		..()
 
 /obj/structure/sign/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>")
@@ -237,3 +242,53 @@
 	name = "CRIME DOES NOT PAY"
 	desc = "A warning sign which suggests that you reconsider your poor life choices."
 	icon_state = "crime"
+
+/obj/structure/sign/chinese
+	name = "incomprehensible sign"
+	desc = "A sign written using traditional chinese characters. A native Sol Common speaker might understand it."
+
+/obj/structure/sign/chinese/restricted_area
+	icon_state = "CH_restricted_area"
+
+/obj/structure/sign/chinese/caution
+	icon_state = "CH_caution"
+
+/obj/structure/sign/chinese/danger
+	icon_state = "CH_danger"
+
+/obj/structure/sign/chinese/electrical_equipment
+	icon_state = "CH_electrical_equipment"
+
+/obj/structure/sign/chinese/access_restricted
+	icon_state = "CH_access_restricted"
+
+/obj/structure/sign/chinese/notice
+	icon_state = "CH_notice"
+
+/obj/structure/sign/chinese/security
+	icon_state = "CH_security"
+
+/obj/structure/sign/chinese/engineering
+	icon_state = "CH_engineering"
+
+/obj/structure/sign/chinese/science
+	icon_state = "CH_science"
+
+/obj/structure/sign/chinese/medbay
+	icon_state = "CH_medbay"
+
+/obj/structure/sign/chinese/evacuation
+	icon_state = "CH_evacuation"
+
+/obj/structure/sign/russian
+	name = "incomprehensible sign"
+	desc = "A sign written in russian."
+
+/obj/structure/sign/russian/electrical_danger
+	icon_state = "RU_electrical_danger"
+
+/obj/structure/sign/russian/caution
+	icon_state = "RU_caution"
+
+/obj/structure/sign/russian/staff_only
+	icon_state = "RU_staff_only"

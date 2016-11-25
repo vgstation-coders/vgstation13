@@ -22,14 +22,14 @@ var/global/list/boo_phrases_drugs=list(
 var/global/list/boo_phrases_silicon=list(
 	"01100001 00100000 01110100 01110111 01101112",
 	"Stack overflow at line: -2147483648",
-	"valid.ntl:11: invalid use of incomplete type ‘human‘",
-	"interface.ntl:260: expected ‘;‘",
+	"valid.ntl:11: invalid use of incomplete type вЂhumanвЂ",
+	"interface.ntl:260: expected вЂ;вЂ",
 	"An error occured while displaying the error message.",
 	"A problem has been detected and Windows XP Home has been shut down to prevent damage to your cyborg.",
 	"law_state.bat: Permission denied. Abort, Retry, Fail?",
 	"Restarting in 30 seconds. Press any key to abort.",
 	"Methu llwytho iaith seisnig. Sy'n gweithredu mewn cymraeg iaith... Y/N",
-	"съешь еще этих мягких французких булочек да выпей же чаю... Y/N",
+	"Г±ГєГҐГёГј ГҐГ№ГҐ ГЅГІГЁГµ Г¬ГїГЈГЄГЁГµ ГґГ°Г Г­Г¶ГіГ§ГЄГЁГµ ГЎГіГ«Г®Г·ГҐГЄ Г¤Г  ГўГ»ГЇГҐГ© Г¦ГҐ Г·Г Гѕ... Y/N",
 	"??? ???????? ??? ????. ?????? ?? ????????... Y/N",
 	"Your circuits feel very strange.",
 	"You feel a tingling in your capacitors.",
@@ -55,4 +55,5 @@ var/global/list/boo_phrases_silicon=list(
 /spell/aoe_turf/boo/cast(list/targets)
 	for(var/turf/T in targets)
 		for(var/atom/A in T.contents)
-			A.spook()
+			if(A.can_spook())
+				A.spook(holder)

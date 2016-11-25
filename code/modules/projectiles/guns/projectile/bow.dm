@@ -32,7 +32,7 @@
 	if(throwforce == 15) // The rod has been superheated - we don't want it to be useable when removed from the bow.
 		to_chat(user, "[src] shatters into a scattering of overstressed metal shards as it leaves the crossbow.")
 		var/obj/item/weapon/shard/shrapnel/S = new()
-		S.loc = get_turf(src)
+		S.forceMove(get_turf(src))
 		qdel(src)
 
 /obj/item/weapon/crossbow
@@ -72,7 +72,7 @@
 			R.use(1)
 			arrow = new /obj/item/weapon/arrow/rod(src)
 			arrow.fingerprintslast = src.fingerprintslast
-			arrow.loc = src
+			arrow.forceMove(src)
 			icon_state = "crossbow-nocked"
 			user.visible_message("[user] haphazardly jams [arrow] into [src].","You jam [arrow] into [src].")
 			if(cell)
@@ -103,7 +103,7 @@
 	else if(isscrewdriver(W))
 		if(cell)
 			var/obj/item/C = cell
-			C.loc = get_turf(user)
+			C.forceMove(get_turf(user))
 			cell = null
 			to_chat(user, "<span class='notice'>You jimmy [cell] out of [src] with [W].</span>")
 		else
@@ -117,7 +117,7 @@
 		if(arrow)
 			user.visible_message("[user] relaxes the tension on [src]'s string and removes [arrow].","You relax the tension on [src]'s string and remove [arrow].")
 			var/obj/item/weapon/arrow/A = arrow
-			A.loc = get_turf(src)
+			A.forceMove(get_turf(src))
 			A.removed(user)
 			arrow = null
 		else
@@ -197,7 +197,7 @@
 	user.visible_message("<span class='danger'>[user] releases [src] and sends [arrow] streaking toward [target]!</span>","<span class='danger'>You release [src] and send [arrow] streaking toward [target]!</span>")
 
 	var/obj/item/weapon/arrow/A = arrow
-	A.loc = get_turf(user)
+	A.forceMove(get_turf(user))
 	A.throw_at(target,10,tension*release_speed)
 	arrow = null
 	tension = 0
@@ -206,7 +206,7 @@
 /obj/item/weapon/crossbow/dropped(mob/user)
 	if(arrow)
 		var/obj/item/weapon/arrow/A = arrow
-		A.loc = get_turf(src)
+		A.forceMove(get_turf(src))
 		A.removed(user)
 		arrow = null
 		tension = 0

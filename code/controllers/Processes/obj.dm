@@ -16,7 +16,8 @@ var/global/list/processing_objects = list()
 	if(processing_objects)
 		for(var/atom/o in processing_objects)
 			if(o)
-				if(o.timestopped) continue
+				if(o.timestopped)
+					continue
 				o:process()
 				scheck()
 				continue

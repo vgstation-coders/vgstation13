@@ -30,11 +30,15 @@
 /obj/structure/dispenser/update_icon()
 	overlays.len = 0
 	switch(oxygentanks)
-		if(1 to 3)	overlays += image(icon = icon, icon_state = "oxygen-[oxygentanks]")
-		if(4 to INFINITY) overlays += image(icon = icon, icon_state = "oxygen-4")
+		if(1 to 3)
+			overlays += image(icon = icon, icon_state = "oxygen-[oxygentanks]")
+		if(4 to INFINITY)
+			overlays += image(icon = icon, icon_state = "oxygen-4")
 	switch(plasmatanks)
-		if(1 to 4)	overlays += image(icon = icon, icon_state = "plasma-[plasmatanks]")
-		if(5 to INFINITY) overlays += image(icon = icon, icon_state = "plasma-5")
+		if(1 to 4)
+			overlays += image(icon = icon, icon_state = "plasma-[plasmatanks]")
+		if(5 to INFINITY)
+			overlays += image(icon = icon, icon_state = "plasma-5")
 
 
 /obj/structure/dispenser/attack_robot(mob/user as mob)
@@ -98,7 +102,7 @@
 					oxytanks.Remove(O)
 				else
 					O = new /obj/item/weapon/tank/oxygen(loc)
-				O.loc = loc
+				O.forceMove(loc)
 				to_chat(usr, "<span class='notice'>You take [O] out of [src].</span>")
 				oxygentanks--
 				update_icon()
@@ -110,7 +114,7 @@
 					platanks.Remove(P)
 				else
 					P = new /obj/item/weapon/tank/plasma(loc)
-				P.loc = loc
+				P.forceMove(loc)
 				to_chat(usr, "<span class='notice'>You take [P] out of [src].</span>")
 				plasmatanks--
 				update_icon()

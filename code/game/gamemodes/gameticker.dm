@@ -182,11 +182,13 @@ var/global/datum/controller/gameticker/ticker
 		for(var/obj/effect/landmark/spacepod/random/SS in landmarks_list)
 			if(istype(SS))
 				L += SS
-		var/obj/effect/landmark/spacepod/random/S = pick(L)
-		new /obj/spacepod/random(S.loc)
-		for(var/obj in L)
-			if(istype(obj, /obj/effect/landmark/spacepod/random))
-				qdel(obj)
+		if(L.len)
+			var/obj/effect/landmark/spacepod/random/S = pick(L)
+			new /obj/spacepod/random(S.loc)
+			for(var/obj in L)
+				if(istype(obj, /obj/effect/landmark/spacepod/random))
+					qdel(obj)
+
 		stat_collection.death_stats = list() // Get rid of the corpses that spawn on startup.
 		to_chat(world, "<FONT color='blue'><B>Enjoy the game!</B></FONT>")
 //		world << sound('sound/AI/welcome.ogg')// Skie //Out with the old, in with the new. - N3X15
@@ -214,6 +216,7 @@ var/global/datum/controller/gameticker/ticker
 
 	if(0 == admins.len)
 		send2adminirc("Round has started with no admins online.")
+		send2admindiscord("**Round has started with no admins online.**", TRUE)
 
 	/*
 	supply_shuttle.process() 		//Start the supply shuttle regenerating points -- TLE
@@ -239,7 +242,8 @@ var/global/datum/controller/gameticker/ticker
 
 	//Plus it provides an easy way to make cinematics for other events. Just use this as a template :)
 /datum/controller/gameticker/proc/station_explosion_cinematic(var/station_missed=0, var/override = null)
-	if( cinematic )	return	//already a cinematic in progress!
+	if( cinematic )
+		return	//already a cinematic in progress!
 
 	for (var/datum/html_interface/hi in html_interfaces)
 		hi.closeAll()
@@ -248,8 +252,7 @@ var/global/datum/controller/gameticker/ticker
 	cinematic = new(src)
 	cinematic.icon = 'icons/effects/station_explosion.dmi'
 	cinematic.icon_state = "station_intact"
-	cinematic.layer = 20
-	cinematic.plane = PLANE_HUD
+	cinematic.plane = HUD_PLANE
 	cinematic.mouse_opacity = 0
 	cinematic.screen_loc = "1,0"
 
@@ -323,7 +326,7 @@ var/global/datum/controller/gameticker/ticker
 			for(var/mob/living/M in living_mob_list)
 				if(M)
 					var/turf/T = get_turf(M)
-					if(T && T.z == 1)
+					if(T && T.z == map.zMainStation)
 						M.death()//No mercy
 	//If its actually the end of the round, wait for it to end.
 	//Otherwise if its a verb it will continue on afterwards.

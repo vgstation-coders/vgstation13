@@ -113,7 +113,7 @@
 			qdel(W)
 			W = null
 		if(EQUIP_FAILACTION_DROP)
-			W.loc=get_turf(src) // I think.
+			W.forceMove(get_turf(src)) // I think.
 	return null
 
 /mob/living/carbon/human/proc/is_on_ears(var/typepath)
@@ -206,10 +206,11 @@
 			return 1
 
 /mob/living/carbon/human/u_equip(obj/item/W as obj, dropped = 1)
-	if(!W)	return 0
+	if(!W)
+		return 0
 
 	var/success
-
+	var/slot = null
 	var/index = is_holding_item(W)
 	if(index)
 		held_items[index] = null
@@ -220,6 +221,7 @@
 			u_equip(s_store, 1)
 		success = 1
 		wear_suit = null
+		slot = slot_wear_suit
 		update_inv_wear_suit()
 	else if (W == w_uniform)
 		if (r_store)
@@ -232,34 +234,42 @@
 			u_equip(belt, 1)
 		w_uniform = null
 		success = 1
+		slot = slot_w_uniform
 		update_inv_w_uniform()
 	else if (W == gloves)
 		gloves = null
 		success = 1
+		slot = slot_gloves
 		update_inv_gloves()
 	else if (W == glasses)
 		glasses = null
 		success = 1
+		slot = slot_glasses
 		update_inv_glasses()
 	else if (W == head)
 		head = null
 		success = 1
+		slot = slot_head
 		update_inv_head()
 	else if(W == ears)
 		ears = null
 		success = 1
+		slot = slot_ears
 		update_inv_ears()
 	else if (W == shoes)
 		shoes = null
 		success = 1
+		slot = slot_shoes
 		update_inv_shoes()
 	else if (W == belt)
 		belt = null
 		success = 1
+		slot = slot_belt
 		update_inv_belt()
 	else if (W == wear_mask)
 		wear_mask = null
 		success = 1
+		slot = slot_wear_mask
 		if(internal)
 			if(internals)
 				internals.icon_state = "internal0"
@@ -268,32 +278,39 @@
 	else if (W == wear_id)
 		wear_id = null
 		success = 1
+		slot = slot_wear_id
 		update_inv_wear_id()
 	else if (W == r_store)
 		r_store = null
 		success = 1
+		slot = slot_r_store
 		update_inv_pockets()
 	else if (W == l_store)
 		l_store = null
 		success = 1
+		slot = slot_l_store
 		update_inv_pockets()
 	else if (W == s_store)
 		s_store = null
 		success = 1
+		slot = slot_s_store
 		update_inv_s_store()
 	else if (W == back)
 		back = null
 		success = 1
+		slot = slot_back
 		update_inv_back()
 	else if (W == handcuffed)
 		if(handcuffed.on_remove(src)) //If this returns 1, then the unquipping action was interrupted
 			return 0
 		handcuffed = null
 		success = 1
+		slot = slot_handcuffed
 		update_inv_handcuffed()
 	else if (W == legcuffed)
 		legcuffed = null
 		success = 1
+		slot = slot_legcuffed
 		update_inv_legcuffed()
 	else
 		return 0
@@ -304,13 +321,12 @@
 		if (W)
 			if (client)
 				client.screen -= W
-			W.forceMove(loc)
-			W.unequipped()
+			W.unequipped(src, slot)
 			if(dropped)
+				W.forceMove(loc)
 				W.dropped(src)
 			if(W)
-				W.layer = initial(W.layer)
-				W.plane = initial(W.plane)
+				W.reset_plane_and_layer()
 	update_action_buttons()
 	return 1
 
@@ -369,12 +385,15 @@
 //This is an UNSAFE proc. Use mob_can_equip() before calling this one! Or rather use equip_to_slot_if_possible() or advanced_equip_to_slot_if_possible()
 //set redraw_mob to 0 if you don't wish the hud to be updated - if you're doing it manually in your own proc.
 /mob/living/carbon/human/equip_to_slot(obj/item/W as obj, slot, redraw_mob = 1)
-	if(!slot) return
-	if(!istype(W)) return
-	if(!has_organ_for_slot(slot)) return
+	if(!slot)
+		return
+	if(!istype(W))
+		return
+	if(!has_organ_for_slot(slot))
+		return
 
 	if(src.is_holding_item(W))
-		src.u_equip(W)
+		src.u_equip(W, 0)
 
 	switch(slot)
 		if(slot_back)
@@ -433,7 +452,7 @@
 		if(slot_in_backpack)
 			if(src.get_active_hand() == W)
 				src.u_equip(W,0)
-			W.loc = src.back
+			W.forceMove(src.back)
 			return
 		else
 			to_chat(src, "<span class='warning'>You are trying to equip this item to an unsupported inventory slot. Report this to a coder!</span>")
@@ -441,11 +460,11 @@
 
 	update_hidden_item_icons(W)
 
-	W.layer = 20
-	W.plane = PLANE_HUD
+	W.hud_layerise()
 	W.equipped(src, slot)
 	W.forceMove(src)
-	if(client) client.screen |= W
+	if(client)
+		client.screen |= W
 
 /mob/living/carbon/human/get_multitool(var/active_only=0)
 	if(istype(get_active_hand(),/obj/item/device/multitool))

@@ -1,4 +1,4 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:32
+
 
 //#define DEBUG_LIFE
 //#define PROFILE_LIFE
@@ -107,7 +107,8 @@ var/global/list/organ_damage_overlays = list(
 
 	set invisibility = 0
 	//set background = 1
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	if(monkeyizing)
 		return
 	if(!loc)

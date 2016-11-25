@@ -43,7 +43,8 @@ Obviously, requires DNA2.
 	return 0
 
 /datum/dna/gene/basic/grant_spell/hulk/OnMobLife(var/mob/living/carbon/human/M)
-	if(!istype(M)) return
+	if(!istype(M))
+		return
 	if(M_HULK in M.mutations)
 		var/timeleft=M.hulk_time - world.time
 		if(M.health <= 25 || timeleft <= 0)
@@ -53,13 +54,13 @@ Obviously, requires DNA2.
 			M.update_mutations()		//update our mutation overlays
 			M.update_body()
 			to_chat(M, "<span class='warning'>You suddenly feel very weak.</span>")
-			M.Weaken(3)
+			M.Knockdown(3)
 			M.emote("collapse")
 
 /spell/targeted/genetic/hulk
 	name = "Hulk Out"
 	panel = "Mutant Powers"
-	range = -1
+	range = SELFCAST
 
 	charge_type = Sp_RECHARGE
 	charge_max = HULK_COOLDOWN
@@ -80,7 +81,7 @@ Obviously, requires DNA2.
 /spell/targeted/genetic/hulk/cast(list/targets, mob/user)
 	if (istype(user.loc,/mob))
 		to_chat(usr, "<span class='warning'>You can't hulk out right now!</span>")
-		return
+		return 1
 	for(var/mob/living/carbon/human/M in targets)
 		M.hulk_time = world.time + src.duration
 		M.mutations.Add(M_HULK)
@@ -108,12 +109,12 @@ Obviously, requires DNA2.
 /datum/dna/gene/basic/farsight/activate(var/mob/M)
 	..()
 	if(M.client)
-		M.client.view = max(M.client.view, world.view+1)
+		M.client.changeView(max(M.client.view, world.view+1))
 
 /datum/dna/gene/basic/farsight/deactivate(var/mob/M,var/connected,var/flags)
 	if(..())
 		if(M.client && M.client.view == world.view + 1)
-			M.client.view = world.view
+			M.client.changeView()
 
 /datum/dna/gene/basic/farsight/can_activate(var/mob/M,var/flags)
 	// Can't be big AND small.
@@ -124,7 +125,7 @@ Obviously, requires DNA2.
 // NOIR
 
 /obj/screen/plane_master/noir_master
-	plane = PLANE_NOIR_BLOOD
+	plane = NOIR_BLOOD_PLANE
 	color = list(1,0,0,0,
 				 0,1,0,0,
 				 0,0,1,0,
@@ -133,8 +134,9 @@ Obviously, requires DNA2.
 
 /obj/screen/plane_master/noir_dummy
 	// this avoids a bug which means plane masters which have nothing to control get angry and mess with the other plane masters out of spite
+	alpha = 0
 	appearance_flags = 0
-	plane = PLANE_NOIR_BLOOD
+	plane = NOIR_BLOOD_PLANE
 
 var/noir_master = list(new /obj/screen/plane_master/noir_master(),new /obj/screen/plane_master/noir_dummy())
 

@@ -69,7 +69,8 @@ var/list/forbidden_varedit_object_types = list(
 		if("marked datum")
 			var_value = holder.marked_datum
 
-	if(!var_value) return
+	if(!var_value)
+		return
 
 	return var_value
 
@@ -119,7 +120,8 @@ var/list/forbidden_varedit_object_types = list(
 		if("marked datum")
 			var_value = holder.marked_datum
 
-	if(!var_value) return
+	if(!var_value)
+		return
 
 	switch(alert("Would you like to associate a var with the list entry?",,"Yes","No"))
 		if("Yes")
@@ -129,7 +131,8 @@ var/list/forbidden_varedit_object_types = list(
 			L += var_value
 
 /client/proc/mod_list(var/list/L)
-	if(!check_rights(R_VAREDIT))	return
+	if(!check_rights(R_VAREDIT))
+		return
 
 	if(!istype(L,/list))
 		if(alert("Make a new list?", "Not a List.", "Yes", "No") == "No")
@@ -153,7 +156,8 @@ var/list/forbidden_varedit_object_types = list(
 	var/dir
 
 	if(variable in lockedvars)
-		if(!check_rights(R_DEBUG))	return
+		if(!check_rights(R_DEBUG))
+			return
 
 	if(isnull(variable))
 		to_chat(usr, "Unable to determine variable type.")
@@ -320,7 +324,8 @@ var/list/forbidden_varedit_object_types = list(
 
 
 /client/proc/modify_variables(var/atom/O, var/param_var_name = null, var/autodetect_class = 0)
-	if(!check_rights(R_VAREDIT))	return
+	if(!check_rights(R_VAREDIT))
+		return
 
 	if(holder && !(holder.rights & (R_PERMISSIONS)))
 		for(var/p in forbidden_varedit_object_types)
@@ -338,7 +343,8 @@ var/list/forbidden_varedit_object_types = list(
 			return
 
 		if(param_var_name == "holder" || param_var_name in lockedvars)
-			if(!check_rights(R_DEBUG))	return
+			if(!check_rights(R_DEBUG))
+				return
 
 		variable = param_var_name
 
@@ -367,6 +373,10 @@ var/list/forbidden_varedit_object_types = list(
 				var_value = "[bicon(var_value)]"
 				class = "icon"
 
+			else if(ismatrix(var_value))
+				to_chat(usr, "Variable appears to be <b>MATRIX</b>.")
+				class = "matrix"
+
 			else if(istype(var_value,/atom) || istype(var_value,/datum))
 				to_chat(usr, "Variable appears to be <b>TYPE</b>.")
 				class = "type"
@@ -392,11 +402,13 @@ var/list/forbidden_varedit_object_types = list(
 		names = sortList(names)
 
 		variable = input("Which var?","Var") as null|anything in names
-		if(!variable)	return
+		if(!variable)
+			return
 		var_value = O.vars[variable]
 
 		if(param_var_name == "holder" || variable in lockedvars)
-			if(!check_rights(R_DEBUG))	return
+			if(!check_rights(R_DEBUG))
+				return
 
 	if(!autodetect_class)
 
@@ -422,6 +434,10 @@ var/list/forbidden_varedit_object_types = list(
 			to_chat(usr, "Variable appears to be <b>ICON</b>.")
 			var_value = "[bicon(var_value)]"
 			default = "icon"
+
+		else if(ismatrix(var_value))
+			to_chat(usr, "Variable appears to be <b>MATRIX</b>.")
+			default = "matrix"
 
 		else if(istype(var_value,/atom) || istype(var_value,/datum))
 			to_chat(usr, "Variable appears to be <b>TYPE</b>.")
@@ -465,10 +481,10 @@ var/list/forbidden_varedit_object_types = list(
 
 		if(src.holder && src.holder.marked_datum)
 			class = input("What kind of variable?","Variable Type",default) as null|anything in list("text",
-				"num","type","reference","mob reference", "icon","file","list","edit referenced object","restore to default","marked datum ([holder.marked_datum.type])")
+				"num","type","reference","mob reference", "icon","file","list","matrix","edit referenced object","restore to default","marked datum ([holder.marked_datum.type])")
 		else
 			class = input("What kind of variable?","Variable Type",default) as null|anything in list("text",
-				"num","type","reference","mob reference", "icon","file","list","edit referenced object","restore to default")
+				"num","type","reference","mob reference", "icon","file","list","matrix","edit referenced object","restore to default")
 
 		if(!class)
 			return
@@ -498,27 +514,32 @@ var/list/forbidden_varedit_object_types = list(
 		if("text")
 			if(variable == "light_color")
 				var/var_new = input("Enter new text:","Text",O.vars[variable]) as null|message
-				if(var_new==null) return
+				if(var_new==null)
+					return
 				O.set_light(l_color = var_new)
 			else
 				var/var_new = input("Enter new text:","Text",O.vars[variable]) as null|message
-				if(var_new==null) return
+				if(var_new==null)
+					return
 				O.vars[variable] = var_new
 
 		if("num")
 			if(variable=="light_range")
 				var/var_new = input("Enter new number:","Num",O.vars[variable]) as null|num
-				if(var_new == null) return
+				if(var_new == null)
+					return
 				O.set_light(var_new)
 
 			else if(variable=="light_power")
 				var/var_new = input("Enter new number:","Num",O.vars[variable]) as null|num
-				if(var_new == null) return
+				if(var_new == null)
+					return
 				O.set_light(l_power = var_new)
 
 			else if(variable=="stat")
 				var/var_new = input("Enter new number:","Num",O.vars[variable]) as null|num
-				if(var_new == null) return
+				if(var_new == null)
+					return
 				if((O.vars[variable] == 2) && (var_new < 2))//Bringing the dead back to life
 					if(ismob(O))
 						var/mob/M = O
@@ -529,38 +550,97 @@ var/list/forbidden_varedit_object_types = list(
 				O.vars[variable] = var_new
 			else
 				var/var_new =  input("Enter new number:","Num",O.vars[variable]) as null|num
-				if(var_new==null) return
+				if(var_new==null)
+					return
 				O.vars[variable] = var_new
 
 		if("type")
 			var/var_new = input("Enter type:","Type",O.vars[variable]) as null|anything in typesof(/obj,/mob,/area,/turf)
-			if(var_new==null) return
+			if(var_new==null)
+				return
 			O.vars[variable] = var_new
 
 		if("reference")
 			var/var_new = input("Select reference:","Reference",O.vars[variable]) as null|mob|obj|turf|area in world
-			if(var_new==null) return
+			if(var_new==null)
+				return
 			O.vars[variable] = var_new
 
 		if("mob reference")
 			var/var_new = input("Select reference:","Reference",O.vars[variable]) as null|mob in world
-			if(var_new==null) return
+			if(var_new==null)
+				return
 			O.vars[variable] = var_new
 
 		if("file")
 			var/var_new = input("Pick file:","File",O.vars[variable]) as null|file
-			if(var_new==null) return
+			if(var_new==null)
+				return
 			O.vars[variable] = var_new
 
 		if("icon")
 			var/var_new = input("Pick icon:","Icon",O.vars[variable]) as null|icon
-			if(var_new==null) return
+			if(var_new==null)
+				return
 			O.vars[variable] = var_new
 
 		if("marked datum")
 			O.vars[variable] = holder.marked_datum
 
+		if("matrix")
+			var/matrix/var_new = modify_matrix_menu(O.vars[variable])
+			if (!var_new)
+				return
+
+			O.vars[variable] = var_new
+
 	world.log << "### VarEdit by [src]: [O.type] [variable]=[html_encode("[O.vars[variable]]")]"
 	log_admin("[key_name(src)] modified [original_name]'s [variable] to [O.vars[variable]]")
 	message_admins("[key_name_admin(src)] modified [original_name]'s [variable] to [O.vars[variable]]", 1)
 
+/client/proc/modify_matrix_menu(var/matrix/M = matrix(), var/verbose = TRUE)
+	if (verbose)
+		to_chat(src, "Current matrix: a: [M.a], b: [M.b], c: [M.c], d: [M.d], e: [M.e], f: [M.f].")
+
+	var/input = input("Which action do you want to apply to this matrix?") as null|anything in list("Scale", "Translate", "Turn", "Manual","Reset")
+	if (!input)
+		return
+
+	switch (input)
+		if ("Scale")
+			var/x = input("X scale") as num
+			var/y = input("Y scale") as num
+
+			M.Scale(x, y)
+
+		if ("Translate")
+			var/x = input("X amount") as num
+			var/y = input("Y amount") as num
+
+			M.Translate(x, y)
+
+		if ("Turn")
+			var/angle = input("Angle (clockwise)") as num
+
+			M.Turn(angle)
+
+		if ("Reset")
+			M = matrix()
+
+		if ("Manual")
+			var/list/numbers = splittext(input("Enter the matrix components as a comma separated list.") as text|null, ",")
+			if (!numbers || numbers.len != 6)
+				to_chat(src, "Cancelled or not enough arguments provided.")
+
+			else
+				var/list/newnumbers = list()
+				for (var/number in numbers)
+					number = text2num(number) || 0
+					newnumbers += number
+
+				M = matrix(newnumbers[1], newnumbers[2], newnumbers[3], newnumbers[4], newnumbers[5], newnumbers[6])
+
+	if (verbose)
+		to_chat(src, "New matrix: a: [M.a], b: [M.b], c: [M.c], d: [M.d], e: [M.e], f: [M.f].")
+
+	return M

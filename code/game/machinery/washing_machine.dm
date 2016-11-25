@@ -36,7 +36,8 @@
 /obj/machinery/washing_machine/RefreshParts()
 	var/manipcount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/manipulator)) manipcount += SP.rating
+		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
+			manipcount += SP.rating
 	speed_coefficient = 1/manipcount
 
 /obj/machinery/washing_machine/verb/start()
@@ -238,7 +239,7 @@
 
 	sleep(20)
 	if(wash_state in list(1,3,6) )
-		usr.loc = src.loc
+		usr.forceMove(src.loc)
 
 
 /obj/machinery/washing_machine/update_icon()
@@ -257,7 +258,7 @@
 		if( (wash_state == 1) && hacked)
 			var/obj/item/weapon/grab/G = W
 			if(ishuman(G.assailant) && iscorgi(G.affecting))
-				G.affecting.loc = src
+				G.affecting.forceMove(src)
 				qdel(G)
 				G = null
 				wash_state = 3
@@ -329,13 +330,13 @@
 		if(2)
 			wash_state = 1
 			for(var/atom/movable/O in contents)
-				O.loc = src.loc
+				O.forceMove(src.loc)
 		if(3)
 			wash_state = 4
 		if(4)
 			wash_state = 3
 			for(var/atom/movable/O in contents)
-				O.loc = src.loc
+				O.forceMove(src.loc)
 			crayon = null
 			wash_state = 1
 		if(5)
@@ -349,7 +350,7 @@
 					var/mob/M = locate(/mob,contents)
 					M.gib()
 			for(var/atom/movable/O in contents)
-				O.loc = src.loc
+				O.forceMove(src.loc)
 			crayon = null
 			wash_state = 1
 

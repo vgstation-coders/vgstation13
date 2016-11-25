@@ -4,7 +4,6 @@
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "ed2090"
 	icon_initial = "ed209"
-	layer = 5.0
 	density = 1
 	anchored = 0
 //	weight = 1.0E7
@@ -238,7 +237,7 @@ Auto Patrol: []"},
 		if (!isscrewdriver(W) && (!src.target))
 			if(hasvar(W,"force") && W.force)//If force is defined and non-zero
 				threatlevel = user.assess_threat(src)
-				threatlevel += 6
+				threatlevel += PERP_LEVEL_ARREST_MORE
 				if(threatlevel > 0)
 					src.target = user
 					src.shootAt(user)
@@ -248,7 +247,7 @@ Auto Patrol: []"},
 	..()
 
 	threatlevel = H.assess_threat(src)
-	threatlevel += 6
+	threatlevel += PERP_LEVEL_ARREST_MORE
 
 	if(threatlevel > 0)
 		src.target = H
@@ -258,7 +257,8 @@ Auto Patrol: []"},
 /obj/machinery/bot/ed209/Emag(mob/user as mob)
 	..()
 	if(open && !locked)
-		if(user) to_chat(user, "<span class='warning'>You short out [src]'s target assessment circuits.</span>")
+		if(user)
+			to_chat(user, "<span class='warning'>You short out [src]'s target assessment circuits.</span>")
 		spawn(0)
 			for(var/mob/O in hearers(src, null))
 				O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
@@ -293,9 +293,9 @@ Auto Patrol: []"},
 		if (istype(C, /mob/living/carbon/human))
 			threatlevel = C.assess_threat(src,lasercolor)
 		else if ((istype(C, /mob/living/carbon/monkey)) && (C.client) && (ticker.mode.name == "monkey"))
-			threatlevel = 4
+			threatlevel = PERP_LEVEL_ARREST
 		//src.speak(C.real_name + text(": threat: []", threatlevel))
-		if (threatlevel < 4 )
+		if (threatlevel < PERP_LEVEL_ARREST )
 			continue
 
 		var/dst = get_dist(src, C)
@@ -344,9 +344,9 @@ Auto Patrol: []"},
 						if (M.stuttering < 10 && (!(M_HULK in M.mutations))  /*&& (!istype(M:wear_suit, /obj/item/clothing/suit/judgerobe))*/)
 							M.stuttering = 10
 						M.Stun(10)
-						M.Weaken(10)
+						M.Knockdown(10)
 					else
-						M.Weaken(10)
+						M.Knockdown(10)
 						M.stuttering = 10
 						M.Stun(10)
 					maxstuns--
@@ -381,7 +381,7 @@ Auto Patrol: []"},
 				src.anchored = 0
 				return
 			// see if he got away
-			if ((!Adjacent(target)) || ((src.target:loc != src.target_lastloc) && src.target:weakened < 2))
+			if ((!Adjacent(target)) || ((src.target:loc != src.target_lastloc) && src.target:knockdown < 2))
 				src.anchored = 0
 				mode = SECBOT_HUNT
 				return
@@ -474,7 +474,8 @@ Auto Patrol: []"},
 	if(loc == patrol_target)		// reached target
 		at_patrol_target()
 		return
-	if(!path || !istype(path))  path = list()
+	if(!path || !istype(path))
+		path = list()
 	else if(path.len > 0 && patrol_target)		// valid path
 
 		var/turf/next = path[1]
@@ -654,7 +655,8 @@ Auto Patrol: []"},
 
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
 
-	if(!frequency) return
+	if(!frequency)
+		return
 
 	var/datum/signal/signal = getFromPool(/datum/signal)
 	signal.source = src
@@ -686,7 +688,8 @@ Auto Patrol: []"},
 // given an optional turf to avoid
 /obj/machinery/bot/ed209/proc/calc_path(var/turf/avoid = null)
 	src.path = AStar(src.loc, patrol_target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 120, id=botcard, exclude=avoid)
-	if (!src.path) src.path = list()
+	if (!src.path)
+		src.path = list()
 
 
 // look for a criminal in view of the bot
@@ -709,12 +712,12 @@ Auto Patrol: []"},
 		if (istype(C, /mob/living/carbon/human))
 			src.threatlevel = src.assess_perp(C)
 		else if ((istype(C, /mob/living/carbon/monkey)) && (C.client) && (ticker.mode.name == "monkey"))
-			src.threatlevel = 4
+			src.threatlevel = PERP_LEVEL_ARREST
 
 		if (!src.threatlevel)
 			continue
 
-		else if (src.threatlevel >= 4)
+		else if (src.threatlevel >= PERP_LEVEL_ARREST)
 			src.target = C
 			src.oldtarget_name = C.name
 			src.speak("Level [src.threatlevel] infraction alert!")
@@ -733,67 +736,67 @@ Auto Patrol: []"},
 //Or if they have weapons and aren't security, arrest them.
 //THIS CODE IS COPYPASTED IN secbot.dm AND metaldetector.dm, with slight variations
 /obj/machinery/bot/ed209/proc/assess_perp(mob/living/carbon/human/perp as mob)
-	var/threatcount = 0 //If threat >= 4 at the end, they get arrested
+	var/threatcount = 0 //If threat >= PERP_LEVEL_ARREST at the end, they get arrested
 
-	if(src.emagged == 2) return 10 //Everyone is a criminal!
+	if(src.emagged == 2)
+		return PERP_LEVEL_ARREST + rand(PERP_LEVEL_ARREST, PERP_LEVEL_ARREST*5) //Everyone is a criminal!
 
 	if(!src.allowed(perp)) //cops can do no wrong, unless set to arrest.
 
 		if(weaponscheck && !wpermit(perp))
 			for(var/obj/item/W in perp.held_items)
 				if(check_for_weapons(W))
-					threatcount += 4
+					threatcount += PERP_LEVEL_ARREST
 
 			if(istype(perp.belt, /obj/item/weapon/gun) || istype(perp.belt, /obj/item/weapon/melee))
 				if(!(perp.belt.type in safe_weapons))
-					threatcount += 2
+					threatcount += PERP_LEVEL_ARREST/2
 
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/wizrobe))
-			threatcount += 2
+			threatcount += PERP_LEVEL_ARREST/2
 
 		if(perp.dna && perp.dna.mutantrace && perp.dna.mutantrace != "none")
-			threatcount += 2
-
-		if(!perp.wear_id)
+			threatcount += PERP_LEVEL_ARREST/2
+		var/visible_id = perp.get_visible_id()
+		if(!visible_id)
 			if(idcheck)
-				threatcount += 4
+				threatcount += PERP_LEVEL_ARREST
 			else
-				threatcount += 2
+				threatcount += PERP_LEVEL_ARREST/2
 
 		//Agent cards lower threatlevel.
-		if(perp.wear_id && istype(perp.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
-			threatcount -= 2
+		if(istype(visible_id, /obj/item/weapon/card/id/syndicate))
+			threatcount -= PERP_LEVEL_ARREST/2
 
 	if(src.lasercolor == "b")//Lasertag turrets target the opposing team, how great is that? -Sieve
 		threatcount = 0//They will not, however shoot at people who have guns, because it gets really fucking annoying
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/redtag))
-			threatcount += 4
+			threatcount += PERP_LEVEL_ARREST
 		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/laser/redtag))
-			threatcount += 4
+			threatcount += PERP_LEVEL_ARREST
 		if(istype(perp.belt, /obj/item/weapon/gun/energy/laser/redtag))
-			threatcount += 2
+			threatcount += PERP_LEVEL_ARREST/2
 
 	if(src.lasercolor == "r")
 		threatcount = 0
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/bluetag))
-			threatcount += 4
+			threatcount += PERP_LEVEL_ARREST
 		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/laser/bluetag))
-			threatcount += 4
+			threatcount += PERP_LEVEL_ARREST
 		if(istype(perp.belt, /obj/item/weapon/gun/energy/laser/bluetag))
-			threatcount += 2
+			threatcount += PERP_LEVEL_ARREST/2
 
 	if(src.check_records)
 		for (var/datum/data/record/E in data_core.general)
 			var/perpname = perp.name
-			if(perp.wear_id)
-				var/obj/item/weapon/card/id/id = perp.wear_id.GetID()
-				if(id)
-					perpname = id.registered_name
+			var/obj/item/weapon/card/id/id = perp.get_visible_id()
+			if(id)
+				perpname = id.registered_name
 
 			if(E.fields["name"] == perpname)
 				for (var/datum/data/record/R in data_core.security)
 					if((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*Arrest*"))
-						threatcount = 4
+						threatcount = PERP_LEVEL_ARREST
 						break
 
 	return threatcount
@@ -805,7 +808,7 @@ Auto Patrol: []"},
 			D.open()
 			src.frustration = 0
 	else if ((istype(M, /mob/living/)) && (!src.anchored))
-		src.loc = M:loc
+		src.forceMove(M:loc)
 		src.frustration = 0
 	return
 
@@ -814,7 +817,7 @@ Auto Patrol: []"},
 	spawn(0)
 		if (M)
 			var/turf/T = get_turf(src)
-			M:loc = T
+			M:forceMove(T)
 */
 
 /obj/machinery/bot/ed209/proc/speak(var/message)
@@ -950,8 +953,10 @@ Auto Patrol: []"},
 
 	if(istype(W, /obj/item/weapon/pen))
 		var/t = copytext(stripped_input(user, "Enter new robot name", src.name, src.created_name),1,MAX_NAME_LEN)
-		if(!t)	return
-		if(!in_range(src, usr) && src.loc != usr)	return
+		if(!t)
+			return
+		if(!in_range(src, usr) && src.loc != usr)
+			return
 		created_name = t
 		return
 

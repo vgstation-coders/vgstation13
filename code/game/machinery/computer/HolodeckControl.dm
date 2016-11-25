@@ -1,3 +1,7 @@
+/datum/map_element/dungeon/holodeck
+	name = "holodeck"
+	file_path = "maps/misc/holodeck.dmm"
+
 /obj/machinery/computer/HolodeckControl
 	name = "Holodeck Control Computer"
 	desc = "A computer used to control a nearby holodeck."
@@ -363,7 +367,6 @@
 	icon_state = "table"
 	density = 1
 	anchored = 1.0
-	layer = 2.8
 	throwpass = 1	//You can throw objects over this, despite it's density.
 
 /obj/structure/table/holotable/attack_paw(mob/user as mob)
@@ -384,8 +387,8 @@
 		if(G.state<GRAB_AGGRESSIVE)
 			to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 			return
-		G.affecting.loc = src.loc
-		G.affecting.Weaken(5)
+		G.affecting.forceMove(src.loc)
+		G.affecting.Knockdown(5)
 		visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on the table.</span>")
 		qdel(W)
 		return
@@ -415,7 +418,7 @@
 	icon_state = "rwindow"
 	desc = "A window."
 	density = 1
-	layer = 3.2//Just above doors
+	layer = ABOVE_DOOR_LAYER
 	pressure_resistance = 4*ONE_ATMOSPHERE
 	anchored = 1.0
 	flags = ON_BORDER
@@ -428,7 +431,8 @@
 			if(get_dir(loc, target) == dir)
 				return !density
 		else if(mover.dir == dir) //Or are we using move code
-			if(density)	mover.Bump(src)
+			if(density)
+				mover.Bump(src)
 			return !density
 	return 1
 
@@ -519,7 +523,7 @@
 			return
 
 		G.affecting.forceMove(src.loc)
-		G.affecting.Weaken(5)
+		G.affecting.Knockdown(5)
 		visible_message("<span class='warning'>[G.assailant] dunks [G.affecting] into the [src]!</span>")
 		qdel(W)
 		return
@@ -557,24 +561,25 @@
 	idle_power_usage = 2
 	active_power_usage = 6
 	power_channel = ENVIRON
+	ghost_read = 0
 
 /obj/machinery/readybutton/attack_ai(mob/user as mob)
-	to_chat(user, "The station AI is not to interact with these devices")
-	return
+	if(issilicon(user))
+		to_chat(user, "<span='warning'>The station's silicons are not to interact with these devices.</span>")
+		return
+	..()
 
 /obj/machinery/readybutton/attack_paw(mob/user as mob)
-	to_chat(user, "You are too primitive to use this device")
-	return
+	to_chat(user, "<span='warning'>You are too primitive to use this device.</span>")
 
 /obj/machinery/readybutton/New()
 	..()
 
 /obj/machinery/readybutton/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	to_chat(user, "The device is a solid button, there's nothing you can do with it!")
+	to_chat(user, "<span='warning'>The device is a solid button, there's nothing you can do with it!</span>")
 
 /obj/machinery/readybutton/attack_hand(mob/user as mob)
-	if(user.stat || stat & (NOPOWER|BROKEN))
-		to_chat(user, "This device is not powered.")
+	if(..())
 		return
 
 	currentarea = get_area(src.loc)
@@ -582,7 +587,7 @@
 		qdel(src)
 
 	if(eventstarted)
-		to_chat(usr, "The event has already begun!")
+		to_chat(usr, "<span='notice'>The event has already begun!</span>")
 		return
 
 	ready = !ready

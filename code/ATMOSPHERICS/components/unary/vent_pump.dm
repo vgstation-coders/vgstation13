@@ -1,6 +1,6 @@
 /obj/machinery/atmospherics/unary/vent_pump
 	icon = 'icons/obj/atmospherics/vent_pump.dmi'
-	icon_state = "hoff"
+	icon_state = "base"
 
 	name = "Air Vent"
 	desc = "Has a valve and pump attached to it."
@@ -34,6 +34,10 @@
 
 	starting_volume = 400 // Previously 200
 
+	ex_node_offset = 3
+
+	var/static/image/bezel      = image('icons/obj/atmospherics/vent_pump.dmi', "bezel")
+
 /obj/machinery/atmospherics/unary/vent_pump/on
 	on = 1
 	icon_state = "hout"
@@ -65,22 +69,23 @@
 	air_contents.volume = 1000
 
 /obj/machinery/atmospherics/unary/vent_pump/update_icon()
-	if(welded)
-		icon_state = "hweld"
-		return
-	if(on && !(stat & (NOPOWER|BROKEN)))
-		if(pump_direction)
-			icon_state = "hout"
-		else
-			icon_state = "hin"
-	else
-		icon_state = "hoff"
+	overlays = null
+	icon_state = welded ? "weld" : "base"
+
+	if (on && ~stat & (NOPOWER|BROKEN))
+		overlays += pump_direction ? "out" : "in"
+
 	..()
-	if (istype(loc, /turf/simulated/floor) && node)
-		var/turf/simulated/floor/floor = loc
-		if(floor.floor_tile && node.alpha == 128)
-			underlays.Cut()
-	return
+
+	if (level == 1)
+		bezel.layer = VENT_BEZEL_LAYER
+		bezel.plane = ABOVE_PLATING_PLANE
+
+	else
+		bezel.layer = EXPOSED_PIPE_LAYER
+		bezel.plane = ABOVE_TURF_PLANE
+
+	underlays += bezel
 
 /obj/machinery/atmospherics/unary/vent_pump/process()
 	. = ..()
@@ -99,7 +104,8 @@
 		return
 
 	// New GC does this sometimes
-	if(!loc) return
+	if(!loc)
+		return
 
 	var/datum/gas_mixture/environment = loc.return_air()
 	var/environment_pressure = environment.return_pressure()
@@ -279,7 +285,6 @@
 
 /obj/machinery/atmospherics/unary/vent_pump/hide(var/i) //to make the little pipe section invisible, the icon changes.
 	update_icon()
-	return
 
 /obj/machinery/atmospherics/unary/vent_pump/examine(mob/user)
 	..()
@@ -313,7 +318,8 @@
 		if (WT.remove_fuel(0,user))
 			to_chat(user, "<span class='notice'>Now welding the vent.</span>")
 			if(do_after(user, src, 20))
-				if(!src || !WT.isOn()) return
+				if(!src || !WT.isOn())
+					return
 				playsound(get_turf(src), 'sound/items/Welder2.ogg', 50, 1)
 				if(!welded)
 					user.visible_message("[user] welds the vent shut.", "You weld the vent shut.", "You hear welding.")
@@ -356,11 +362,10 @@
 
 	return ..()
 
-/obj/machinery/atmospherics/unary/vent_pump/change_area(oldarea, newarea)
+/obj/machinery/atmospherics/unary/vent_pump/change_area(var/area/oldarea, var/area/newarea)
 	areaMaster.air_vent_info.Remove(id_tag)
 	areaMaster.air_vent_names.Remove(id_tag)
 	..()
-	name = replacetext(name,newarea,oldarea)
 	area_uid = areaMaster.uid
 	broadcast_status()
 

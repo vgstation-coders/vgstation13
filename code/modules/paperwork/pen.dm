@@ -90,7 +90,8 @@ var/paperwork_library
 	set category = "Debug"
 	set name = "Modify Paperwork Mode"
 
-	if(!check_rights(R_DEBUG)) return
+	if(!check_rights(R_DEBUG))
+		return
 
 	if(!paperwork)
 		paperwork_setup()
@@ -202,7 +203,7 @@ var/paperwork_library
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "pen"
 	item_state = "pen"
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	sharpness = 0.5
 	flags = FPRINT
 	slot_flags = SLOT_BELT | SLOT_EARS
@@ -275,7 +276,7 @@ var/paperwork_library
 	desc = "It's a black ink pen with a sharp point and a carefully engraved \"Waffle Co.\""
 	flags = FPRINT  | OPENCONTAINER
 	slot_flags = SLOT_BELT
-	origin_tech = "materials=2;syndicate=5"
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=5"
 
 
 /obj/item/weapon/pen/sleepypen/New()
@@ -288,7 +289,8 @@ var/paperwork_library
 		return
 	..()
 	if(reagents.total_volume)
-		if(M.reagents) reagents.trans_to(M, 50) //used to be 150
+		if(M.reagents)
+			reagents.trans_to(M, 50) //used to be 150
 	return
 
 
@@ -298,7 +300,7 @@ var/paperwork_library
  /obj/item/weapon/pen/paralysis
 	flags = FPRINT  | OPENCONTAINER
 	slot_flags = SLOT_BELT
-	origin_tech = "materials=2;syndicate=5"
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=5"
 
 
 /obj/item/weapon/pen/paralysis/attack(mob/M as mob, mob/user as mob)
@@ -306,7 +308,8 @@ var/paperwork_library
 		return
 	..()
 	if(reagents.total_volume)
-		if(M.reagents) reagents.trans_to(M, 50)
+		if(M.reagents)
+			reagents.trans_to(M, 50)
 	return
 
 

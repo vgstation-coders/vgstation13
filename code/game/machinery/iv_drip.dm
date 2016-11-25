@@ -24,20 +24,28 @@
 
 			var/percent = round((reagents.total_volume / beaker.volume) * 100)
 			switch(percent)
-				if(0 to 9)		filling.icon_state = "reagent0"
-				if(10 to 24) 	filling.icon_state = "reagent10"
-				if(25 to 49)	filling.icon_state = "reagent25"
-				if(50 to 74)	filling.icon_state = "reagent50"
-				if(75 to 79)	filling.icon_state = "reagent75"
-				if(80 to 90)	filling.icon_state = "reagent80"
-				if(91 to INFINITY)	filling.icon_state = "reagent100"
+				if(0 to 9)
+					filling.icon_state = "reagent0"
+				if(10 to 24)
+					filling.icon_state = "reagent10"
+				if(25 to 49)
+					filling.icon_state = "reagent25"
+				if(50 to 74)
+					filling.icon_state = "reagent50"
+				if(75 to 79)
+					filling.icon_state = "reagent75"
+				if(80 to 90)
+					filling.icon_state = "reagent80"
+				if(91 to INFINITY)
+					filling.icon_state = "reagent100"
 
 			filling.icon += mix_color_from_reagents(reagents.reagent_list)
 			overlays += filling
 
 /obj/machinery/iv_drip/MouseDrop(over_object, src_location, over_location)
 	..()
-	if(isobserver(usr)) return
+	if(isobserver(usr))
+		return
 	if(usr.incapacitated()) // Stop interacting with shit while dead pls
 		return
 	if(isanimal(usr))
@@ -58,7 +66,8 @@
 		src.update_icon()
 
 /obj/machinery/iv_drip/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(isobserver(user)) return
+	if(isobserver(user))
+		return
 	if(user.stat)
 		return
 	if(iswrench(W))
@@ -66,7 +75,7 @@
 		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal,get_turf(src))
 		M.amount = 2
 		if(src.beaker)
-			src.beaker.loc = get_turf(src)
+			src.beaker.forceMove(get_turf(src))
 			src.beaker = null
 		to_chat(user, "<span class='notice'>You dismantle \the [name].</span>")
 		qdel(src)
@@ -78,6 +87,7 @@
 		if(user.drop_item(W, src))
 			src.beaker = W
 			to_chat(user, "You attach \the [W] to \the [src].")
+			investigation_log(I_CHEMS, "was loaded with \a [W] by [key_name(user)], containing [W.reagents.get_reagent_ids(1)]")
 			src.update_icon()
 			return
 	else
@@ -112,28 +122,27 @@
 			amount = min(amount, 4)
 			// If the beaker is full, ping
 			if(amount == 0)
-				if(prob(5)) visible_message("\The [src] pings.")
+				if(prob(5))
+					visible_message("\The [src] pings.")
 				return
 
 			var/mob/living/carbon/human/T = attached
 
-			if(!istype(T)) return
+			if(!istype(T))
+				return
 			if(!T.dna)
 				return
 			if(M_NOCLONE in T.mutations)
 				return
 
 			// If the human is losing too much blood, beep.
-			if(T.vessel.get_reagent_amount(BLOOD) < BLOOD_VOLUME_SAFE) if(prob(5))
-				visible_message("\The [src] beeps loudly.")
+			if(T.vessel.get_reagent_amount(BLOOD) < BLOOD_VOLUME_SAFE)
+				if(prob(5))
+					visible_message("\The [src] beeps loudly.")
 
-			var/datum/reagent/B = T.take_blood(beaker,amount)
+			var/datum/reagent/blood/B = T.take_blood(beaker,amount)
 
-			if (B)
-				beaker.reagents.reagent_list |= B
-				beaker.reagents.update_total()
-				beaker.on_reagent_change()
-				beaker.reagents.handle_reactions()
+			if(B)
 				update_icon()
 
 /obj/machinery/iv_drip/attack_hand(mob/user as mob)
@@ -144,7 +153,7 @@
 		src.attached = null
 		src.update_icon()
 	else if(src.beaker)
-		src.beaker.loc = get_turf(src)
+		src.beaker.forceMove(get_turf(src))
 		src.beaker = null
 		update_icon()
 	else

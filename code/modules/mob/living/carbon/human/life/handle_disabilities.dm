@@ -26,8 +26,8 @@
 				if(2 to 3)
 					say("[prob(50) ? ";" : ""][pick("SHIT", "PISS", "FUCK", "CUNT", "COCKSUCKER", "MOTHERFUCKER", "TITS")]")
 
-			var/x_offset_change = rand(-2,2)
-			var/y_offset_change = rand(-1,1)
+			var/x_offset_change = rand(-2,2) * PIXEL_MULTIPLIER
+			var/y_offset_change = rand(-1,1) * PIXEL_MULTIPLIER
 
 			animate(src, pixel_x = (pixel_x + x_offset_change), pixel_y = (pixel_y + y_offset_change), time = 1)
 			animate(pixel_x = (pixel_x - x_offset_change), pixel_y = (pixel_y - y_offset_change), time = 1)
@@ -69,6 +69,8 @@
 						"SOTP MESING WITH THE ROUNS SHITMAN!!!", \
 						"SKELINGTON IS 4 SHITERS!", \
 						"MOMMSI R THE WURST SCUM!!", \
+						"How do we engiener=", \
+						"try to live freely and automatically good bye", \
 						"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!"))
 				if(3)
 					emote("drool")
@@ -83,14 +85,17 @@
 			if(0 <= rn && rn <= 3)
 				custom_pain("Your head feels numb and painful.")
 		if(getBrainLoss() >= 15)
-			if(4 <= rn && rn <= 6) if(eye_blurry <= 0)
-				to_chat(src, "<span class='warning'>It becomes hard to see for some reason.</span>")
-				eye_blurry = 10
+			if(4 <= rn && rn <= 6)
+				if(eye_blurry <= 0)
+					to_chat(src, "<span class='warning'>It becomes hard to see for some reason.</span>")
+					eye_blurry = 10
 		if(getBrainLoss() >= 35)
-			if(7 <= rn && rn <= 9) if(get_active_hand())
-				to_chat(src, "<span class='warning'>Your hand won't respond properly, you drop what you're holding.</span>")
-				drop_item()
+			if(7 <= rn && rn <= 9)
+				if(get_active_hand())
+					to_chat(src, "<span class='warning'>Your hand won't respond properly, you drop what you're holding.</span>")
+					drop_item()
 		if(getBrainLoss() >= 50)
-			if(10 <= rn && rn <= 12) if(canmove)
-				to_chat(src, "<span class='warning'>Your legs won't respond properly, you fall down.</span>")
-				emote("collapse")
+			if(10 <= rn && rn <= 12)
+				if(canmove)
+					to_chat(src, "<span class='warning'>Your legs won't respond properly, you fall down.</span>")
+					Knockdown(3)

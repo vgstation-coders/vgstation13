@@ -9,6 +9,7 @@
 	opacity = 0
 	glass = 1
 	assembly_type = "obj/structure/door_assembly/multi_tile"
+	animation_delay = 16
 
 /obj/machinery/door/airlock/multi_tile/glass/bump_open(mob/user as mob)
 	if(istype(user,/mob/living/simple_animal/hostile/giant_spider))

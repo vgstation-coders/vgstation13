@@ -10,7 +10,7 @@
 	slot_flags = SLOT_BELT
 	fits_max_w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 20
-	origin_tech = "materials=3;engineering=3"
+	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=3"
 
 	var/obj/item/weapon/tank/tank = null                // Tank of gas for use in firing the cannon.
 	var/obj/item/weapon/storage/tank_container = new()  // Something to hold the tank item so we don't accidentally fire it.
@@ -43,7 +43,7 @@
 
 	if(tank)
 		to_chat(usr, "You twist the valve and pop the tank out of [src].")
-		tank.loc = usr.loc
+		tank.forceMove(usr.loc)
 		tank = null
 		icon_state = "pneumatic"
 		item_state = "pneumatic"
@@ -128,7 +128,8 @@
 
 	var/obj/item/object = contents[1]
 	var/speed = ((fire_pressure*tank.volume)/object.w_class)/force_divisor //projectile speed.
-	if(speed>80) speed = 80 //damage cap.
+	if(speed>80)
+		speed = 80 //damage cap.
 
 	user.visible_message("<span class='danger'>[user] fires [src] and launches [object] at [target]!</span>","<span class='danger'>You fire [src] and launch [object] at [target]!</span>")
 

@@ -54,7 +54,8 @@
 	return
 
 /mob/living/simple_animal/hostile/mimic/proc/environment_disguise(list/L = crate_mimic_disguises)
-	if(!L) return
+	if(!L)
+		return
 	//First, determine the environment we're in
 
 	var/our_area_type = "default"
@@ -146,8 +147,10 @@ var/global/list/crate_mimic_disguises = list(\
 				var/found_alive_mob = 0
 
 				for(var/mob/living/L in view(7,src))
-					if(L == src) continue
-					if(L.stat) continue //Dead bodies don't bother us
+					if(L == src)
+						continue
+					if(L.stat)
+						continue //Dead bodies don't bother us
 
 					found_alive_mob = 1
 					break
@@ -176,7 +179,8 @@ var/global/list/crate_mimic_disguises = list(\
 	..()
 	//Put all loot inside us!
 	for(var/obj/item/I in loc)
-		if(I.anchored || I.density) continue
+		if(I.anchored || I.density)
+			continue
 
 		I.forceMove(src)
 
@@ -219,7 +223,8 @@ var/global/list/crate_mimic_disguises = list(\
 		name = "[initial(name)] mimic"
 
 /mob/living/simple_animal/hostile/mimic/crate/proc/calm_down(change_icon = 1)
-	if(angry > 1) return //If angry is 2, can't calm down!
+	if(angry > 1)
+		return //If angry is 2, can't calm down!
 
 	angry = 0
 	if(change_icon)
@@ -283,7 +288,7 @@ var/global/list/crate_mimic_disguises = list(\
 		if(H in locked)
 			if(prob(20))
 				to_chat(H, "<span class='danger'>You feel very weak!</span>")
-				H.Weaken(3)
+				H.Knockdown(3)
 
 /mob/living/simple_animal/hostile/mimic/crate/chest/LoseTarget()
 	if(target in get_locked(/datum/locking_category/mimic))
@@ -350,7 +355,7 @@ var/global/list/item_mimic_disguises = list(
 				/obj/item/device/aicard, /obj/item/device/analyzer, /obj/item/device/assembly/igniter, /obj/item/device/camera, /obj/item/device/codebreaker, /obj/item/device/device_analyser,\
 				/obj/item/device/flash, /obj/item/device/flashlight, /obj/item/device/hailer, /obj/item/device/material_synth, /obj/item/device/megaphone, /obj/item/device/paicard,\
 				/obj/item/device/pda/clown, /obj/item/device/rcd/matter/engineering, /obj/item/device/radio, /obj/item/device/robotanalyzer, /obj/item/device/soulstone,\
-				/obj/item/device/soundsynth, /obj/item/device/violin, /obj/item/device/wormhole_jaunter, /obj/item/weapon/gun/portalgun, /obj/item/target), //Common items
+				/obj/item/device/soundsynth, /obj/item/device/instrument/violin, /obj/item/device/wormhole_jaunter, /obj/item/weapon/gun/portalgun, /obj/item/target), //Common items
 
 	"medbay" = list(/obj/item/weapon/circular_saw, /obj/item/weapon/melee/defibrillator, /obj/item/weapon/surgicaldrill, /obj/item/weapon/hemostat, /obj/item/weapon/dnainjector/nofail/hulkmut,\
 				/obj/item/weapon/bonesetter, /obj/item/weapon/autopsy_scanner, /obj/item/weapon/FixOVein, /obj/item/stack/medical/ointment, /obj/item/weapon/storage/firstaid,\
@@ -361,7 +366,7 @@ var/global/list/item_mimic_disguises = list(
 	"security" = list(/obj/item/device/chameleon, /obj/item/weapon/card/emag, /obj/item/weapon/gun/energy/taser, /obj/item/weapon/melee/baton, /obj/item/weapon/tome,\
 				/obj/item/weapon/crowbar, /obj/item/weapon/storage/fancy/donut_box, /obj/item/weapon/storage/firstaid, /obj/item/weapon/storage/pneumatic, /obj/item/weapon/gun/gatling,\
 				/obj/item/weapon/handcuffs, /obj/item/weapon/melee/energy/sword/green, /obj/item/clothing/gloves/yellow, /obj/item/weapon/gun/osipr, /obj/item/weapon/gun/energy/staff/animate,\
-				/obj/item/weapon/gun/energy/mindflayer, /obj/item/weapon/gun/energy/lasercannon, /obj/item/weapon/gun/energy/pulse_rifle, /obj/item/weapon/katana/hfrequency,\
+				/obj/item/weapon/gun/energy/mindflayer, /obj/item/weapon/gun/energy/laser/cannon, /obj/item/weapon/gun/energy/pulse_rifle, /obj/item/weapon/katana/hfrequency,\
 				/obj/item/weapon/melee/cultblade, /obj/item/weapon/pickaxe/jackhammer, /obj/item/weapon/tank/plasma, /obj/item/weapon/gibtonite), //Security items and weapons
 
 	"bar" = (existing_typesof(/obj/item/weapon/reagent_containers/food/drinks) - typesof(/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable)),  //All drinks (except for customizable stuff)
@@ -503,21 +508,22 @@ var/global/list/protected_objects = list(
 		time_to_die=world.time+duration
 
 /mob/living/simple_animal/hostile/mimic/copy/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	..()
 
 	spawn()
 		var/amplitude = 2
-		var/pixel_x_diff = rand(-amplitude, amplitude)
-		var/pixel_y_diff = rand(-amplitude, amplitude)
+		var/pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+		var/pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 		animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 		animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
-		pixel_x_diff = rand(-amplitude, amplitude)
-		pixel_y_diff = rand(-amplitude, amplitude)
+		pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+		pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 		animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 		animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
-		pixel_x_diff = rand(-amplitude, amplitude)
-		pixel_y_diff = rand(-amplitude, amplitude)
+		pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+		pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 		animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 		animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
 
@@ -532,7 +538,7 @@ var/global/list/protected_objects = list(
 /mob/living/simple_animal/hostile/mimic/copy/Die()
 
 	for(var/atom/movable/M in src)
-		M.loc = get_turf(src)
+		M.forceMove(get_turf(src))
 	..()
 
 /mob/living/simple_animal/hostile/mimic/copy/ListTargets()
@@ -556,7 +562,7 @@ var/global/list/protected_objects = list(
 
 	if(destroy_original || CheckObject(O))
 
-		O.loc = src
+		O.forceMove(src)
 
 		src.appearance = O.appearance
 		src.icon_living = src.icon_state
@@ -571,16 +577,16 @@ var/global/list/protected_objects = list(
 
 		spawn()
 			var/amplitude = 2
-			var/pixel_x_diff = rand(-amplitude, amplitude)
-			var/pixel_y_diff = rand(-amplitude, amplitude)
+			var/pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+			var/pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 			animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 			animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
-			pixel_x_diff = rand(-amplitude, amplitude)
-			pixel_y_diff = rand(-amplitude, amplitude)
+			pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+			pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 			animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 			animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
-			pixel_x_diff = rand(-amplitude, amplitude)
-			pixel_y_diff = rand(-amplitude, amplitude)
+			pixel_x_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
+			pixel_y_diff = rand(-amplitude, amplitude) * PIXEL_MULTIPLIER
 			animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff , time = 1, loop = -1)
 			animate(pixel_x = pixel_x - pixel_x_diff, pixel_y = pixel_y - pixel_y_diff, time = 1, loop = -1, easing = BOUNCE_EASING)
 
@@ -622,7 +628,7 @@ var/global/list/protected_objects = list(
 		var/mob/living/L = .
 		if(istype(L))
 			if(prob(15))
-				L.Weaken(1)
+				L.Knockdown(1)
 				L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
 
 

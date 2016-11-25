@@ -1,5 +1,6 @@
 /mob/living/carbon/slime/death(gibbed)
-	if(stat == DEAD)	return
+	if(stat == DEAD)
+		return
 	stat = DEAD
 	icon_state = "[colour] baby slime dead"
 
@@ -22,8 +23,6 @@
 				O.show_message("<b>The [name]</b> seizes up and falls limp...", 1) //ded -- Urist
 
 	update_canmove()
-	if(blind)
-		blind.layer = 0
 
 	ticker.mode.check_win()
 

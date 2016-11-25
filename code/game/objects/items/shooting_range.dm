@@ -23,7 +23,7 @@
 		// After target moves, check for nearby stakes. If associated, move to target
 		for(var/obj/structure/target_stake/M in view(3,src))
 			if(M.density == 0 && M.pinned_target == src)
-				M.loc = loc
+				M.forceMove(loc)
 
 		// This may seem a little counter-intuitive but I assure you that's for a purpose.
 		// Stakes are the ones that carry targets, yes, but in the stake code we set
@@ -54,7 +54,7 @@
 				stake.density = 1
 				density = 0
 				layer = OBJ_LAYER
-				plane = PLANE_OBJ
+				plane = OBJ_PLANE
 
 				loc = user.loc
 				if(ishuman(user))
@@ -62,7 +62,7 @@
 						user.put_in_hands(src)
 						to_chat(user, "You take the target out of the stake.")
 				else
-					src.loc = get_turf(user)
+					src.forceMove(get_turf(user))
 					to_chat(user, "You take the target out of the stake.")
 
 				stake.pinned_target = null
@@ -105,7 +105,7 @@
 		bmark.pixel_x = p_x
 		bmark.pixel_y = p_y
 		bmark.icon = 'icons/effects/effects.dmi'
-		bmark.layer = 3.5
+		bmark.layer = ABOVE_OBJ_LAYER
 		bmark.icon_state = "scorch"
 
 		if(decaltype == 1)
@@ -163,7 +163,8 @@
 	var/b2y2 = 0
 
 	New(var/obj/item/target/Target, var/pixel_x = 0, var/pixel_y = 0)
-		if(!Target) return
+		if(!Target)
+			return
 
 		// Randomize the first box
 		b1x1 = pixel_x - pick(1,1,1,1,2,2,3,3,4)

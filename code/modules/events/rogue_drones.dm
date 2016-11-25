@@ -24,14 +24,7 @@
 			D.disabled = rand(15, 60)
 
 /datum/event/rogue_drone/announce()
-	var/msg
-	if(prob(33))
-		msg = "A combat drone wing operating out of the NMV Icarus has failed to return from a sweep of this sector, if any are sighted approach with caution."
-	else if(prob(50))
-		msg = "Contact has been lost with a combat drone wing operating out of the NMV Icarus. If any are sighted in the area, approach with caution."
-	else
-		msg = "Unidentified hackers have targeted a combat drone wing deployed from the NMV Icarus. If any are sighted in the area, approach with caution."
-	command_alert(msg, "Rogue drone alert")
+	command_alert(/datum/command_alert/rogue_drone)
 
 /datum/event/rogue_drone/tick()
 	return
@@ -44,13 +37,13 @@
 			var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
 			sparks.set_up(3, 0, locc)
 			sparks.start()
-		D.z = 2
+		D.z = map.zCentcomm
 		D.has_loot = 0
 
 		qdel(D) // Drone deletion handles removal from drones list
 		num_recovered++
 
 	if(num_recovered > drones_list.len * 0.75)
-		command_alert("Icarus drone control reports the malfunctioning wing has been recovered safely.", "Rogue drone alert")
+		command_alert(/datum/command_alert/drones_recovered)
 	else
-		command_alert("Icarus drone control registers disappointment at the loss of the drones, but the survivors have been recovered.", "Rogue drone alert")
+		command_alert(/datum/command_alert/drones_recovered/failure)

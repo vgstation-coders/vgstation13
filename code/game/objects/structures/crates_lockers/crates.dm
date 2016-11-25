@@ -1,4 +1,4 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:32
+
 
 /obj/structure/closet/crate
 	name = "crate"
@@ -32,7 +32,7 @@
 	var/sound_effect_open = 'sound/machines/click.ogg'
 	var/sound_effect_close = 'sound/machines/click.ogg'
 
-	starting_materials = list(MAT_PLASTIC = 10*CC_PER_SHEET_METAL) // Recipe calls for 10 sheets.
+	starting_materials = list(MAT_PLASTIC = 10*CC_PER_SHEET_MISC) // Recipe calls for 10 sheets.
 
 /obj/structure/closet/crate/internals
 	desc = "A internals crate."
@@ -119,7 +119,8 @@
 
 	return_air()
 		var/datum/gas_mixture/gas = (..())
-		if(!gas)	return null
+		if(!gas)
+			return null
 		var/datum/gas_mixture/newgas = new/datum/gas_mixture()
 		newgas.oxygen = gas.oxygen
 		newgas.carbon_dioxide = gas.carbon_dioxide
@@ -127,7 +128,8 @@
 		newgas.toxins = gas.toxins
 		newgas.volume = gas.volume
 		newgas.temperature = gas.temperature
-		if(newgas.temperature <= target_temp)	return
+		if(newgas.temperature <= target_temp)
+			return
 
 		if((newgas.temperature - cooling_power) > target_temp)
 			newgas.temperature -= cooling_power
@@ -219,12 +221,12 @@
 			continue
 		if(!S.anchored)
 			found = 1
-			S.loc = src
+			S.forceMove(src)
 			break
 	if(!found)
 		for(var/obj/machinery/M in src.loc)
 			if(!M.anchored)
-				M.loc = src
+				M.forceMove(src)
 				break
 	..()
 
@@ -265,12 +267,12 @@
 			continue
 		if(!S.anchored)
 			found = 1
-			S.loc = src
+			S.forceMove(src)
 			break
 	if(!found)
 		for(var/obj/machinery/M in src.loc)
 			if(!M.anchored)
-				M.loc = src
+				M.forceMove(src)
 				break
 	..()
 
@@ -362,8 +364,10 @@
 	new /obj/item/clothing/head/radiation(src)
 
 /obj/structure/closet/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0 || wall_mounted)) return 1
-	if(istype(mover, /obj/structure/closet/crate)) return 0
+	if(air_group || (height==0 || wall_mounted))
+		return 1
+	if(istype(mover, /obj/structure/closet/crate))
+		return 0
 	return (!density)
 
 /obj/structure/closet/crate/open()

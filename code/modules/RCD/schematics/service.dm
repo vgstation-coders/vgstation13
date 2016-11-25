@@ -3,14 +3,17 @@
 	energy_cost	= 1
 	var/spawn_type
 	category	= "Service"
+	var/override_icon_state // Used for things like cigarettes which only have an existing icon state set on update_icon
 
 /datum/rcd_schematic/rsf/New()
 	if(!spawn_type)
 		return 0
-	var/atom/A = getFromPool(spawn_type)
-	icon = A.icon
-	icon_state = A.icon_state
-	returnToPool(A)
+	var/obj/thingtospawn = spawn_type
+	icon = initial(thingtospawn.icon)
+	if(override_icon_state)
+		icon_state = override_icon_state
+	else
+		icon_state = initial(thingtospawn.icon_state)
 	..()
 
 /datum/rcd_schematic/rsf/attack(var/atom/A, var/mob/user)
@@ -80,6 +83,7 @@
 /datum/rcd_schematic/rsf/cigar
 	name		= "Cigar"
 	spawn_type	= /obj/item/clothing/mask/cigarette/cigar
+	override_icon_state = "cigaron"
 
 /datum/rcd_schematic/rsf/cigarettes
 	name		= "Cigarette Packet"

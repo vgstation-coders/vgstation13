@@ -127,12 +127,12 @@
 	else
 		visible_message("[user] places [L] into \the [src].")
 
-	L.loc = src
+	L.forceMove(src)
 	L.reset_view()
 	src.occupant = L
 	update_icon()
 	for(var/obj/OO in src)
-		OO.loc = src.loc
+		OO.forceMove(src.loc)
 		//Foreach goto(154)
 	src.add_fingerprint(user)
 	if(!(stat & (BROKEN|NOPOWER)))
@@ -200,7 +200,7 @@
 	if(usr.locked_to)
 		return
 	usr.pulling = null
-	usr.loc = src
+	usr.forceMove(src)
 	usr.reset_view()
 	src.occupant = usr
 	update_icon()
@@ -267,7 +267,7 @@
 		to_chat(user, "<span class='notice'>Subject cannot have abiotic items on.</span>")
 		return*/
 	var/mob/M = G.affecting
-	M.loc = src
+	M.forceMove(src)
 	M.reset_view()
 	src.occupant = M
 	update_icon()
@@ -281,21 +281,21 @@
 	switch(severity)
 		if(1.0)
 			for(var/atom/movable/A as mob|obj in src)
-				A.loc = src.loc
+				A.forceMove(src.loc)
 				ex_act(severity)
 			qdel(src)
 			return
 		if(2.0)
 			if(prob(50))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.forceMove(src.loc)
 					ex_act(severity)
 				qdel(src)
 				return
 		if(3.0)
 			if(prob(25))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.forceMove(src.loc)
 					ex_act(severity)
 				qdel(src)
 				return
@@ -305,7 +305,7 @@
 /obj/machinery/bodyscanner/blob_act()
 	if(prob(50))
 		for(var/atom/movable/A as mob|obj in src)
-			A.loc = src.loc
+			A.forceMove(src.loc)
 		qdel(src)
 
 
@@ -515,7 +515,8 @@
 
 	if(connected.scanning>2)
 		for(var/datum/reagent/R in occ["all_chems"])
-			if(R.id == BLOOD || R.id == INAPROVALINE || R.id == STOXIN || R.id == DERMALINE || R.id == BICARIDINE || R.id == DEXALIN) continue //no repeats
+			if(R.id == BLOOD || R.id == INAPROVALINE || R.id == STOXIN || R.id == DERMALINE || R.id == BICARIDINE || R.id == DEXALIN)
+				continue //no repeats
 			else
 				dat += text("<font color='black'>Detected</font> <font color='blue'>[R.volume]</font> <font color='black'>units of</font> <font color='blue'>[R.name]</font><BR>")
 	for(var/datum/disease/D in occ["tg_diseases_list"])

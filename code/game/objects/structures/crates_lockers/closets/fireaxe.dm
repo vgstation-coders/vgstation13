@@ -13,7 +13,9 @@
 	var/hitstaken = 0
 	var/smashed = 0
 	locked = 1
-	layer = TURF_LAYER + 0.1 //The sprite is fucking huge, so render it under all other mounted items so it doesn't cover any of them.
+	plane = ABOVE_TURF_PLANE
+	layer = FIREAXE_LOCKER_LAYER
+
 
 /obj/structure/closet/fireaxecabinet/empty
 	fireaxe = null
@@ -23,8 +25,8 @@
 /obj/structure/closet/fireaxecabinet/New(loc, var/ndir)
 	..()
 	if(ndir)
-		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? 32 : -32) //Stolen from one of several near-identical other things
-		pixel_y = (ndir & 3)? (ndir == 1 ? 32 : -32) : 0 //Stolen from one of several near-identical other things
+		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE) //Stolen from one of several near-identical other things
+		pixel_y = (ndir & 3)? (ndir == 1 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE) : 0 //Stolen from one of several near-identical other things
 		dir = ndir
 	update_icon()
 
@@ -257,5 +259,5 @@
 /obj/structure/closet/fireaxecabinet/Destroy()
 	if(fireaxe)
 		visible_message("<span class='notice'>The fireaxe noisily ricochets off the ground as it slides out of \the [src].</span>")
-		fireaxe.loc = get_turf(src) //Save the axe from destruction
+		fireaxe.forceMove(get_turf(src)) //Save the axe from destruction
 	..()

@@ -29,14 +29,16 @@
 	)
 
 /obj/machinery/power/treadmill/New()
-	if(anchored) connect_to_network()
+	if(anchored)
+		connect_to_network()
 	RefreshParts()
 	..()
 
 /obj/machinery/power/treadmill/RefreshParts()
 	var/calc = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/capacitor)) calc+=SP.rating
+		if(istype(SP, /obj/item/weapon/stock_parts/capacitor))
+			calc+=SP.rating
 	power_efficiency = calc/4 //Possible results 1, 2, and 3 -- basically, what tier we have
 
 /obj/machinery/power/treadmill/examine(mob/user as mob)
@@ -49,8 +51,10 @@
 	add_avail(tick_power)
 
 /obj/machinery/power/treadmill/proc/powerwalk(atom/movable/AM as mob)
-	if(!ismob(AM)) return //Can't walk on a treadmill if you aren't animated
-	if(get_turf(AM) != loc) return //Can't bump from the outside
+	if(!ismob(AM))
+		return //Can't walk on a treadmill if you aren't animated
+	if(get_turf(AM) != loc)
+		return //Can't bump from the outside
 	var/mob/living/runner = AM
 	var/cached_temp = runner.bodytemperature
 	if(runner.burn_calories(HUNGER_FACTOR*2))
@@ -60,7 +64,8 @@
 		if(runner.reagents) //Sanity
 			for(var/datum/reagent/R in runner.reagents.reagent_list)
 				calc *= R.sport
-		if(M_HULK in runner.mutations) calc *= 5
+		if(M_HULK in runner.mutations)
+			calc *= 5
 		count_power += calc
 		if(emagged && ishuman(runner))
 			runner.bodytemperature += 1
@@ -75,7 +80,8 @@
 						runner.apply_damage(5, BRUTE, LIMB_LEFT_LEG)
 						runner.apply_damage(5, BRUTE, LIMB_RIGHT_LEG)
 				runner.bodytemperature = max(T0C + 100,cached_temp)
-	else to_chat(runner,"<span class='warning'>You're exhausted! You can't run anymore!</span>")
+	else
+		to_chat(runner,"<span class='warning'>You're exhausted! You can't run anymore!</span>")
 
 /obj/machinery/power/treadmill/Uncross(var/atom/movable/mover, var/turf/target)
 	if(istype(mover) && mover.checkpass(PASSGLASS))
@@ -93,15 +99,18 @@
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
 	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
-		if(air_group) return 1
+		if(air_group)
+			return 1
 		return 0
 	else
 		return 1
 
 /obj/machinery/power/treadmill/wrenchAnchor(mob/user)
 	..()
-	if(anchored) connect_to_network()
-	else disconnect_from_network()
+	if(anchored)
+		connect_to_network()
+	else
+		disconnect_from_network()
 
 /obj/machinery/power/treadmill/emag()
 	..()

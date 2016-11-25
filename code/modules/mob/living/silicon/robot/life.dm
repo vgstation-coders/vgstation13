@@ -1,7 +1,8 @@
 /mob/living/silicon/robot/Life()
 	set invisibility = 0
 	//set background = 1
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
 	if (src.monkeyizing)
 		return
@@ -29,7 +30,7 @@
 
 //	SetStunned(min(stunned, 30))
 	SetParalysis(min(paralysis, 30))
-//	SetWeakened(min(weakened, 20))
+//	SetKnockdown(min(knockdown, 20))
 	sleeping = 0
 	adjustBruteLoss(0)
 	adjustToxLoss(0)
@@ -79,18 +80,18 @@
 		src.sleeping--
 
 	if(src.resting)
-		Weaken(5)
+		Knockdown(5)
 
 	if(health <= 0 && src.stat != 2) //die only once
 		death()
 
 	if (src.stat != 2) //Alive.
-		if (src.paralysis || src.stunned || src.weakened) //Stunned etc.
+		if (src.paralysis || src.stunned || src.knockdown) //Stunned etc.
 			src.stat = 1
 			if (src.stunned > 0)
 				AdjustStunned(-1)
-			if (src.weakened > 0)
-				AdjustWeakened(-1)
+			if (src.knockdown > 0)
+				AdjustKnockdown(-1)
 			if (src.paralysis > 0)
 				AdjustParalysis(-1)
 				src.blinded = 1
@@ -104,13 +105,15 @@
 		src.blinded = 1
 		src.stat = 2
 
-	if (src.stuttering) src.stuttering--
+	if (src.stuttering)
+		src.stuttering--
 
 	if (src.eye_blind)
 		src.eye_blind--
 		src.blinded = 1
 
-	if (src.ear_deaf > 0) src.ear_deaf--
+	if (src.ear_deaf > 0)
+		src.ear_deaf--
 	if (src.ear_damage < 25)
 		src.ear_damage -= 0.05
 		src.ear_damage = max(src.ear_damage, 0)
@@ -144,61 +147,41 @@
 	return 1
 
 /mob/living/silicon/robot/proc/handle_sensor_modes()
-	src.sight &= ~SEE_MOBS
-	src.sight &= ~SEE_TURFS
-	src.sight &= ~SEE_OBJS
-	src.sight &= ~BLIND
+	change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS|BLIND)
+	if(client)
+		client.color = initial(client.color)
 	src.see_in_dark = 8
 	src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 	if (src.stat == DEAD)
-		sight |= (SEE_TURFS|SEE_MOBS|SEE_OBJS)
+		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		src.see_in_dark = 8
 		src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 	else
 		if (M_XRAY in mutations || src.sight_mode & BORGXRAY)
-			sight |= (SEE_TURFS|SEE_MOBS|SEE_OBJS)
+			change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			src.see_in_dark = 8
 			src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 		if ((src.sight_mode & BORGTHERM) || sensor_mode == THERMAL_VISION)
-			src.sight |= SEE_MOBS
+			change_sight(adding = SEE_MOBS)
 			src.see_in_dark = 4
 			src.see_invisible = SEE_INVISIBLE_MINIMUM
 		if (sensor_mode == NIGHT)
 			see_invisible = SEE_INVISIBLE_MINIMUM
 			see_in_dark = 8
+			if(client)
+				client.color = list(0.33,0.33,0.33,0,
+									0.33,0.33,0.33,0,
+				 					0.33,0.33,0.33,0,
+				 					0,0,0,1,
+				 					-0.2,0,-0.2,0)
 		if ((src.sight_mode & BORGMESON) || (sensor_mode == MESON_VISION))
-			src.sight |= SEE_TURFS
+			change_sight(adding = SEE_TURFS)
 			src.see_in_dark = 8
 			see_invisible = SEE_INVISIBLE_MINIMUM
 
 
 /mob/living/silicon/robot/proc/handle_regular_hud_updates()
 	handle_sensor_modes()
-	/*if (src.stat == 2 || M_XRAY in mutations || src.sight_mode & BORGXRAY)
-		src.sight |= SEE_TURFS
-		src.sight |= SEE_MOBS
-		src.sight |= SEE_OBJS
-		src.see_in_dark = 8
-		src.see_invisible = SEE_INVISIBLE_MINIMUM
-	else if ((src.sight_mode & BORGMESON  || sensor_mode == MESON_VISION) && src.sight_mode & BORGTHERM)
-		src.sight |= SEE_TURFS
-		src.sight |= SEE_MOBS
-		src.see_in_dark = 8
-		see_invisible = SEE_INVISIBLE_MINIMUM
-	else if (src.sight_mode & BORGMESON  || sensor_mode == MESON_VISION)
-		src.sight |= SEE_TURFS
-		src.see_in_dark = 8
-		see_invisible = SEE_INVISIBLE_MINIMUM
-	else if (src.sight_mode & BORGTHERM)
-		src.sight |= SEE_MOBS
-		src.see_in_dark = 8
-		src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
-	else if (src.stat != 2)
-		src.sight &= ~SEE_MOBS
-		src.sight &= ~SEE_TURFS
-		src.sight &= ~SEE_OBJS
-		src.see_in_dark = 8
-		src.see_invisible = SEE_INVISIBLE_LEVEL_TWO*/
 
 	regular_hud_updates() //Handles MED/SEC HUDs for borgs.
 	switch(sensor_mode)
@@ -206,12 +189,6 @@
 			process_sec_hud(src, 1)
 		if (MED_HUD)
 			process_med_hud(src)
-
-	/*switch(sensor_mode)
-		if (SEC_HUD)
-			process_sec_hud(src, 1)
-		if (MED_HUD)
-			process_med_hud(src)*/
 
 	if (src.healths)
 		if (src.stat != 2)
@@ -365,6 +342,8 @@
 //Robots on fire
 
 /mob/living/silicon/robot/update_canmove()
-	if(paralysis || stunned || weakened || locked_to || lockcharge) canmove = 0
-	else canmove = 1
+	if(paralysis || stunned || knockdown || locked_to || lockcharge)
+		canmove = 0
+	else
+		canmove = 1
 	return canmove

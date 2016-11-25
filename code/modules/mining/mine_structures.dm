@@ -18,7 +18,8 @@
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "hanginglantern1"
 	anchored = 1
-	layer = 5
+	plane = LIGHTING_PLANE
+	layer = LIGHTBULB_LAYER
 	var/tmp/flickering = 0 //SPOOK
 	var/obj/item/device/flashlight/lantern/lantern = null
 	var/start_with_lantern = 1
@@ -144,8 +145,8 @@
 	usr.visible_message("<span class='notice'>[usr] toggles \the [lantern] hanging on \the [src] [lantern.on ? "on":"off"].</span>", \
 						"<span class='notice'>You toggle \the [lantern] hanging on \the [src] [lantern.on ? "on":"off"].</span>")
 
-/obj/structure/hanging_lantern/spook()
-	if(..())
+/obj/structure/hanging_lantern/spook(mob/dead/observer/ghost)
+	if(..(ghost, TRUE))
 		flicker()
 
 /obj/structure/hanging_lantern/Destroy()

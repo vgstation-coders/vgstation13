@@ -99,18 +99,18 @@
 	. = ..()
 
 /obj/machinery/power/supermatter/proc/explode()
-	var/turf/turff = get_turf(src)
+	if(!istype(universe,/datum/universal_state/supermatter_cascade))
+		var/turf/turff = get_turf(src)
+		new /turf/unsimulated/wall/supermatter(turff)
+		SetUniversalState(/datum/universal_state/supermatter_cascade)
+		explosion(turff, explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
+		empulse(turff, 100, 200, 1)
 	qdel(src)
-	new /turf/unsimulated/wall/supermatter(turff)
-	SetUniversalState(/datum/universal_state/supermatter_cascade)
-	explosion(turff, explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
-	empulse(turff, 100, 200, 1)
 
 /obj/machinery/power/supermatter/shard/explode()
 	explosion(get_turf(src), explosion_power, explosion_power * 2, explosion_power * 3, explosion_power * 4, 1)
 	empulse(get_turf(src), 100, 200, 1)
 	qdel(src)
-	return
 
 /obj/machinery/power/supermatter/ex_act(severity)
 	switch(severity)
@@ -168,6 +168,7 @@
 		var/list/audio_sounds = list('sound/AI/supermatter_integrity_before.ogg')
 		var/play_alert = 0
 		var/audio_offset = 0
+		var/current_zlevel = L.z
 		if((world.timeofday - lastwarning) / 10 >= WARNING_DELAY)
 			var/warning=""
 			var/offset = 0
@@ -193,16 +194,14 @@
 			speech.name = "Supermatter [short_name] Monitor"
 			speech.job = "Automated Announcement"
 			speech.as_name = "Supermatter [short_name] Monitor"
-			Broadcast_Message(speech, level = list(0,1))
+			Broadcast_Message(speech, level = list(current_zlevel))
 			returnToPool(speech)
 
 			lastwarning = world.timeofday - offset
 
 		if(play_alert && (world.timeofday - lastaudiowarning) / 10 >= AUDIO_WARNING_DELAY)
 			for(var/sf in audio_sounds)
-				var/sound/voice = sound(sf, wait = 1, channel = VOX_CHANNEL)
-				voice.status = SOUND_STREAM
-				world << voice
+				play_vox_sound(sf,current_zlevel,null)
 			lastaudiowarning = world.timeofday - audio_offset
 
 		if(damage > explosion_point)
@@ -220,7 +219,8 @@
 	if(frequency)
 		var/datum/radio_frequency/radio_connection = radio_controller.return_frequency(frequency)
 
-		if(!radio_connection) return
+		if(!radio_connection)
+			return
 
 		var/datum/signal/signal = getFromPool(/datum/signal)
 		signal.source = src
@@ -329,7 +329,6 @@
 		power += Proj.damage * config_bullet_energy
 	else
 		damage += Proj.damage * config_bullet_energy
-	return 0
 
 
 /obj/machinery/power/supermatter/attack_paw(mob/user as mob)
@@ -376,16 +375,18 @@
 	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
 		if(get_dist(R, src) <= 15) // Better than using orange() every process
 			R.receive_pulse(power)
-	return
 
 /obj/machinery/power/supermatter/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	. = ..()
 	if(.)
 		return .
 
-	user.visible_message("<span class=\"warning\">\The [user] touches \a [W] to \the [src] as a silence fills the room...</span>",\
-		"<span class=\"danger\">You touch \the [W] to \the [src] when everything suddenly goes silent.\"</span>\n<span class=\"notice\">\The [W] flashes into dust as you flinch away from \the [src].</span>",\
-		"<span class=\"warning\">Everything suddenly goes silent.</span>")
+	if(issilicon(user))
+		return attack_hand(user)
+
+	user.visible_message("<span class='warning'>\The [user] touches \a [W] to \the [src] as a silence fills the room...</span>",\
+		"<span class='danger'>You touch \the [W] to \the [src] when everything suddenly goes silent.</span>\n<span class='notice'>\The [W] flashes into dust as you flinch away from \the [src].</span>",\
+		"<span class='warning'>Everything suddenly goes silent.</span>")
 
 	playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
 

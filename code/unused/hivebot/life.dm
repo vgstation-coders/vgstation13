@@ -1,7 +1,8 @@
 /mob/living/silicon/hivebot/Life()
 	set invisibility = 0
 	set background = 1
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
 	if (src.monkeyizing)
 		return
@@ -31,7 +32,7 @@
 
 			stunned = max(min(stunned, 10),0)
 			paralysis = max(min(paralysis, 1), 0)
-			weakened = max(min(weakened, 15), 0)
+			knockdown = max(min(knockdown, 15), 0)
 			sleeping = max(min(sleeping, 1), 0)
 			setToxLoss(0)
 			setOxyLoss(0)
@@ -63,8 +64,10 @@
 				src.stat = 1
 
 		update_canmove()
-			if(incapacitated()) canmove = 0
-			else canmove = 1
+			if(incapacitated())
+				canmove = 0
+			else
+				canmove = 1
 
 
 		handle_regular_status_updates()
@@ -80,8 +83,8 @@
 					if (src.stunned > 0)
 						src.stunned--
 						src.stat = 0
-					if (src.weakened > 0)
-						src.weakened--
+					if (src.knockdown > 0)
+						src.knockdown--
 						src.lying = 0
 						src.stat = 0
 					if (src.paralysis > 0)
@@ -183,12 +186,11 @@
 			src.client.screen -= src.hud_used.druggy
 			src.client.screen -= src.hud_used.vimpaired
 
-			if ((src.blind && src.stat != 2))
+			if ((src.stat != DEAD))
 				if ((src.blinded))
-					src.blind.layer = 18
+					overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
 				else
-					src.blind.layer = 0
-
+					clear_fullscreen("blind")
 					if (src.disabilities & 1)
 						src.client.screen += src.hud_used.vimpaired
 

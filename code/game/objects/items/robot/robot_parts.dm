@@ -120,7 +120,7 @@
 	..()
 	if(istype(W, /obj/item/stack/sheet/metal) && !l_arm && !r_arm && !l_leg && !r_leg && !chest && !head)
 		var/obj/item/weapon/ed209_assembly/B = new /obj/item/weapon/ed209_assembly
-		B.loc = get_turf(src)
+		B.forceMove(get_turf(src))
 		to_chat(user, "You armed the robot frame")
 		W:use(1)
 		if (user.get_inactive_hand()==src)
@@ -128,31 +128,36 @@
 			user.put_in_inactive_hand(B)
 		qdel(src)
 	if(istype(W, /obj/item/robot_parts/l_leg))
-		if(src.l_leg)	return
+		if(src.l_leg)
+			return
 		if(user.drop_item(W, src))
 			src.l_leg = W
 			src.updateicon()
 
 	if(istype(W, /obj/item/robot_parts/r_leg))
-		if(src.r_leg)	return
+		if(src.r_leg)
+			return
 		if(user.drop_item(W, src))
 			src.r_leg = W
 			src.updateicon()
 
 	if(istype(W, /obj/item/robot_parts/l_arm))
-		if(src.l_arm)	return
+		if(src.l_arm)
+			return
 		if(user.drop_item(W, src))
 			src.l_arm = W
 			src.updateicon()
 
 	if(istype(W, /obj/item/robot_parts/r_arm))
-		if(src.r_arm)	return
+		if(src.r_arm)
+			return
 		if(user.drop_item(W, src))
 			src.r_arm = W
 			src.updateicon()
 
 	if(istype(W, /obj/item/robot_parts/chest))
-		if(src.chest)	return
+		if(src.chest)
+			return
 		if(W:wires && W:cell)
 			if(user.drop_item(W, src))
 				src.chest = W
@@ -163,7 +168,8 @@
 			to_chat(user, "<span class='notice'>You need to attach a cell to it first!</span>")
 
 	if(istype(W, /obj/item/robot_parts/head))
-		if(src.head)	return
+		if(src.head)
+			return
 		if(W:flash2 && W:flash1)
 			if(user.drop_item(W, src))
 				src.head = W
@@ -206,10 +212,11 @@
 			for(var/P in M.mommi_assembly_parts) //Let's give back all those mommi creation components
 				for(var/obj/item/L in M.contents)
 					if(L == P)
-						L.loc = T
+						L.forceMove(T)
 						M.contents -= L
 
-			if(!O)	return
+			if(!O)
+				return
 
 			O.mmi = W
 			O.invisibility = 0
@@ -224,8 +231,8 @@
 			O.job = "Cyborg"
 
 			O.cell = chest.cell
-			O.cell.loc = O
-			W.loc = O //Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
+			O.cell.forceMove(O)
+			W.forceMove(O) //Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
 
 			// Since we "magically" installed a cell, we also have to update the correct component.
 			if(O.cell)

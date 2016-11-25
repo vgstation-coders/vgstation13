@@ -224,7 +224,7 @@ var/global/list/autolathe_recipes_hidden = list( \
 		stack.use(amount)
 	else
 		usr.before_take_item(O)
-		O.loc = src
+		O.forceMove(src)
 	icon_state = "autolathe"
 	busy = 1
 	use_power(max(1000, (m_amt+g_amt)*amount/10))
@@ -286,7 +286,8 @@ var/global/list/autolathe_recipes_hidden = list( \
 
 			var/multiplier = text2num(href_list["multiplier"])
 
-			if(!multiplier) multiplier = 1
+			if(!multiplier)
+				multiplier = 1
 			var/max_multiplier = 1
 
 			if(istype(template, /obj/item/stack)) // stacks are the only items which can have a multiplier higher than 1 -walter0o
@@ -320,7 +321,8 @@ var/global/list/autolathe_recipes_hidden = list( \
 							var/obj/new_item
 							if(istype(template, /obj/item/stack/sheet/metal))
 								new_item = getFromPool(/obj/item/stack/sheet/metal, T)
-							else new_item = new template.type(T)
+							else
+								new_item = new template.type(T)
 							if (multiplier>1)
 								var/obj/item/stack/S = new_item
 								S.amount = multiplier

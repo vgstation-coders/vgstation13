@@ -10,7 +10,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	w_class = W_CLASS_TINY
-	origin_tech = "materials=1;biotech=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	var/list/datum/autopsy_data_scanner/wdata = list()
 	var/list/datum/autopsy_data_scanner/chemtraces = list()
 	var/target_name = null
@@ -39,7 +39,8 @@
 		return W
 
 /obj/item/weapon/autopsy_scanner/proc/add_data(var/datum/organ/external/O)
-	if(!O.autopsy_data.len && !O.trace_chemicals.len) return
+	if(!O.autopsy_data.len && !O.trace_chemicals.len)
+		return
 
 	for(var/V in O.autopsy_data)
 		var/datum/autopsy_data/W = O.autopsy_data[V]
@@ -103,8 +104,10 @@
 
 			var/wname = W.pretend_weapon
 
-			if(wname in weapon_chances) weapon_chances[wname] += W.damage
-			else weapon_chances[wname] = max(W.damage, 1)
+			if(wname in weapon_chances)
+				weapon_chances[wname] += W.damage
+			else
+				weapon_chances[wname] = max(W.damage, 1)
 			total_score+=W.damage
 
 
@@ -128,7 +131,8 @@
 			if(30 to 1000)
 				damage_desc = "<font color='red'>severe</font>"
 
-		if(!total_score) total_score = D.organs_scanned.len
+		if(!total_score)
+			total_score = D.organs_scanned.len
 
 		scan_data += "<b>Weapon #[n]</b><br>"
 		if(damaging_weapon)
@@ -168,7 +172,7 @@
 	if(!istype(M))
 		return
 
-	if(!can_operate(M))
+	if(!can_operate(M, user))
 		return
 
 	if(target_name != M.name)

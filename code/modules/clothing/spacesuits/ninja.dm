@@ -1,5 +1,5 @@
 /obj/item/clothing/suit/space/jetstream
-	desc = "It appears to be Jetstream Sam's suit"
+	desc = "It appears to be Jetstream Sam's suit."
 	name = "Jetstream Sam's suit"
 	icon_state = "jetstream"
 	item_state = "jetstream"

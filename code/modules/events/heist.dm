@@ -77,7 +77,7 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 		if(index > raider_spawn.len)
 			index = 1
 
-		raider.current.loc = raider_spawn[index]
+		raider.current.forceMove(raider_spawn[index])
 		index++
 
 		var/mob/living/carbon/human/vox = raider.current
@@ -85,10 +85,9 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 		vox.s_tone = random_skin_tone("Vox")
 		vox.dna.mutantrace = "vox"
 		vox.set_species("Vox")
-		vox.generate_name()
+		vox.fully_replace_character_name(vox.real_name, vox.generate_name())
 		//vox.languages = HUMAN // Removing language from chargen.
-		vox.flavor_text = ""
-		vox.add_language("Vox-pidgin")
+		vox.add_language(LANGUAGE_VOX)
 		vox.remove_language(LANGUAGE_GALACTIC_COMMON)
 		vox.h_style = "Short Vox Quills"
 		vox.f_style = "Shaved"
@@ -109,7 +108,8 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 		return 0
 
 	for(var/datum/mind/M in raiders)
-		if(!M || !M.current) continue
+		if(!M || !M.current)
+			continue
 		if (get_area(M.current) != locate(/area/shuttle/vox/station))
 			return 0
 	return 1
@@ -118,7 +118,8 @@ var/global/list/datum/mind/raiders = list()  //Antags.
 	if(raiders.len == 0)
 		return 0
 	for(var/datum/mind/raider in raiders)
-		if(!raider || !raider.current) continue
+		if(!raider || !raider.current)
+			continue
 		if(raider.current)
 			if(istype(raider.current,/mob/living/carbon/human) && raider.current.stat != 2)
 				return 1
@@ -184,7 +185,8 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 
 
 	//No objectives, go straight to the feedback.
-	if(!(raid_objectives.len)) return ..()
+	if(!(raid_objectives.len))
+		return ..()
 
 	var/win_type = "Major"
 	var/win_group = "Crew"
@@ -194,7 +196,8 @@ Use :V to voxtalk, :H to talk on your encrypted channel, and <b>don't forget to 
 
 	//Decrease success for failed objectives.
 	for(var/datum/objective/O in raid_objectives)
-		if(!(O.check_completion())) success--
+		if(!(O.check_completion()))
+			success--
 
 	//Set result by objectives.
 	if(success == raid_objectives.len)

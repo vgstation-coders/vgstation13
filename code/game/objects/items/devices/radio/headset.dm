@@ -29,7 +29,7 @@
 	return -1
 
 /obj/item/device/radio/headset/syndicate
-	origin_tech = "syndicate=3"
+	origin_tech = Tc_SYNDICATE + "=3"
 /obj/item/device/radio/headset/syndicate/New()
 	..()
 	qdel(keyslot1)
@@ -38,7 +38,7 @@
 	recalculateChannels()
 
 /obj/item/device/radio/headset/binary
-	origin_tech = "syndicate=3"
+	origin_tech = Tc_SYNDICATE + "=3"
 /obj/item/device/radio/headset/binary/New()
 	..()
 	qdel(keyslot1)
@@ -227,7 +227,7 @@
 
 /obj/item/device/radio/headset/headset_earmuffs
 	name = "headset earmuffs"
-	desc = "Protective earmuffs for sound technicians that allow one to speak on radio channels. To access service, use :d. For engineering, use :e."
+	desc = "Protective earmuffs for sound technicians that allow one to speak on radio channels."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "headset_earmuffs"
 	item_state = "earmuffs"
@@ -276,7 +276,7 @@
 			if(keyslot1)
 				var/turf/T = get_turf(user)
 				if(T)
-					keyslot1.loc = T
+					keyslot1.forceMove(T)
 					keyslot1 = null
 
 
@@ -284,7 +284,7 @@
 			if(keyslot2)
 				var/turf/T = get_turf(user)
 				if(T)
-					keyslot2.loc = T
+					keyslot2.forceMove(T)
 					keyslot2 = null
 
 			recalculateChannels()

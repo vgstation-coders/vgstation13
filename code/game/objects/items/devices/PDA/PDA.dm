@@ -8,6 +8,10 @@
 #define SCANMODE_ATMOS		5
 #define SCANMODE_DEVICE		6
 
+#define PDA_MINIMAP_WIDTH	256
+#define PDA_MINIMAP_OFFSET_X	8
+#define PDA_MINIMAP_OFFSET_Y	233
+
 //The advanced pea-green monochrome lcd of tomorrow.
 
 var/global/list/obj/item/device/pda/PDAs = list()
@@ -62,7 +66,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 	var/list/incoming_transactions = list()
 
-	var/list/currentevents1 = list("The Prime Minister of Space Australia has announced today a new policy to hand out fake dollar bills to the poor.",
+	var/global/list/currentevents1 = list("The Prime Minister of Space Australia has announced today a new policy to hand out fake dollar bills to the poor.",
 		"The President of Space America issued a press release today stating that he is not in fact, a Tajaran in disguise.",
 		"The Prime Minister of Space England is in hot water today after he announced that space tea would now be made with 20% more nuclear waste.",
 		"The Czar of the Space Soviet Union has issued a press release stating 'Spess Amerikans suck cocks!' we're working on a translation.",
@@ -84,7 +88,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		"The Czar of Space Russia has accused the President of Space America of being a dirty catbeast. The President wiggled his trademark ears and said that if he was a Tajaran, the Czar was a space shark. The President is being treated for bite wounds.",
 		"The 'Universes Largest Oven' has been completed today in Space Germany. Prime Minister Adole Himmler has invited Space Isreal to see the oven first at its grand opening."
 		)
-	var/list/currentevents2 = list("CEO Discount Dan has been sued. Again.",
+	var/global/list/currentevents2 = list("CEO Discount Dan has been sued. Again.",
 		"Nanotrasen has inducted a new policy wherein clowns will be spanked for stealing milk.",
 		"Discount Dan's has created a new line of Discountu Danu food product for Space Japan. The food is comprised of Space Carp on rice. More at ten.",
 		"Discount Dan's has come under fire for their new 'Horsemeat Lasagna'",
@@ -106,7 +110,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		"Discount Dan has come under fire today after trying to hug a plasmaman whilst smoking a cigar. He is being treated for 3rd degree burns at the moment, and we at the newsroom wish him luck.",
 		"Nanotrasen's treasurer Shlomo Goldburginstein died today in a tragic cooking incident with NT Officer Gass Judenraigh."
 		)
-	var/list/currentevents3 = list("Border patrol around Space America has tightened today after a wave of Tajarans yiffed their way across. We have reports of over 2000 molested Space Americans. More to come at seven.",
+	var/global/list/currentevents3 = list("Border patrol around Space America has tightened today after a wave of Tajarans yiffed their way across. We have reports of over 2000 molested Space Americans. More to come at seven.",
 		"Tajarans continue to protest in their 'Trillion Fur March' today. We have reports that the Space American army is giving a KOS order on all non-humans in the area.",
 		"Read the all new book by known Plasmaman rights activist Spookler Boney, 'AGHGHHGHGH KILL ME IT BURNS AGHHHHHHH'",
 		"Read the all new book by the worlds most renown skeleton Johnny Hips, 'It aint easy, being bony.'",
@@ -123,7 +127,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		"Supermatter researchers today have reported that the substance is highly volatile and could possibly rip apart the universe in large quantities. Discount Dan has been reported as ordering over 1000 pounds of supermatter shards.",
 		"Scientists working at the BPRF have discovered a pocket universe comprised fully of dead clown souls today. 40 scientists are being treated for madness."
 		)
-	var/list/history = list("Adolf Hitler's cyborg body was lain to rest after the ending of WW4.",
+	var/global/list/history = list("Adolf Hitler's cyborg body was lain to rest after the ending of WW4.",
 		"World War Buttbot began, the following war claimed the asses of over 500000 young gentlemen.",
 		"The 54th President of the United States of Space America was shot in the dick. He succumbed to his injuries after medbay threw him in cryo for an entire day.",
 		"The first great zombie apocalypse began on Venus.",
@@ -139,7 +143,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		"Everyone in the universe said 'Dave sucks.' at the same time. The cause of this event was unknown, but over 200000 men named Dave were murdered.",
 		"A cult religion following the belief god was a chicken was created.",
 		)
-	var/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, you have $1.19. You also have the largest amount of money in coins without being able to make change for a dollar.",
+	var/global/list/facts = list("If you have 3 quarters, 4 dimes, and 4 pennies, you have $1.19. You also have the largest amount of money in coins without being able to make change for a dollar.",
 		"The numbers '172' can be found on the back of the U.S. $5 dollar bill in the bushes at the base of the Lincoln Memorial.",
 		"President Kennedy was the fastest random speaker in the world with upwards of 350 words per minute.",
 		"In the average lifetime, a person will walk the equivalent of 5 times around the equator.",
@@ -704,7 +708,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 						dat += {"<li><a href='byond://?src=\ref[src];choice=46'><img src=pda_cuffs.png> Security Bot Access</a></li>
 							</ul>"}
-					else	dat += "</ul>"
+					else
+						dat += "</ul>"
 					if(cartridge.access_quartermaster)
 
 						dat += {"<h4>Quartermaster Functions:</h4>
@@ -768,8 +773,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 				if (!toff)
 					for (var/obj/item/device/pda/P in sortNames(get_viewable_pdas()))
-						if (P == src)	continue
-						if(P.hidden) continue
+						if (P == src)
+							continue
+						if(P.hidden)
+							continue
 						dat += "<li><a href='byond://?src=\ref[src];choice=Message;target=\ref[P]'>[P]</a>"
 						if (id && !istype(P,/obj/item/device/pda/ai))
 							dat += " (<a href='byond://?src=\ref[src];choice=transferFunds;target=\ref[P]'><img src=pda_money.png>*Send Money*</a>)"
@@ -968,9 +975,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						<img src="pda_minimap_[map.nameShort].png" style="position: relative; top: 0; left: 0;"/>
 						"}
 						if(T.z == map.zMainStation)
-							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + 247]px; left: [T.x-8]px;"/>"}
+							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [T.x + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
 						for(var/datum/minimap_marker/mkr in app.markers)
-							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + 247]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation]-8]px;"/>"}
+							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation] + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
 						dat += {"</div>"}
 
 					else
@@ -979,9 +986,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						<img src="pda_minimap_bg_notfound.png" style="position: relative; top: 0; left: 0;"/>
 						"}
 						if(T.z == map.zMainStation)
-							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + 247]px; left: [T.x-8]px;"/>"}
+							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [T.x + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
 						for(var/datum/minimap_marker/mkr in app.markers)
-							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + 247]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation]-8]px;"/>"}
+							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation] + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
 						dat += {"</div>"}
 
 /*
@@ -1354,7 +1361,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					var/turf/T = loc
 					if(ismob(T))
 						T = T.loc
-					cartridge.loc = T
+					cartridge.forceMove(T)
 					scanmode = SCANMODE_NONE
 					if (cartridge.radio)
 						cartridge.radio.hostpda = null
@@ -1441,14 +1448,14 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if("x")
 						var/new_x = input("Please input desired X coordinate.", "Station Map App", app.markx) as num
 						var/x_validate=new_x+WORLD_X_OFFSET[map.zMainStation]
-						if(x_validate < 1 || x_validate > 255)
+						if(x_validate < (world.maxx/2 - PDA_MINIMAP_WIDTH/2) || x_validate > (world.maxx/2 + PDA_MINIMAP_WIDTH/2))
 							to_chat(usr, "<span class='caution'>Error: Invalid X coordinate.</span>")
 						else
 							app.markx = new_x
 					if("y")
 						var/new_y = input("Please input desired Y coordinate.", "Station Map App", app.marky) as num
 						var/y_validate=new_y+WORLD_Y_OFFSET[map.zMainStation]
-						if(y_validate < 1 || y_validate > 255)
+						if(y_validate < (world.maxy/2 - PDA_MINIMAP_WIDTH/2) || y_validate > (world.maxy/2 + PDA_MINIMAP_WIDTH/2))
 							to_chat(usr, "<span class='caution'>Error: Invalid Y coordinate.</span>")
 						else
 							app.marky = new_y
@@ -1797,8 +1804,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						if(M.id_tag == cartridge.remote_door_id)
 							if(M.density)
 								M.open()
+								to_chat(U, "<span class='notice'>The shuttle's outer airlock is now open!</span>")
 							else
 								M.close()
+								to_chat(U, "<span class='notice'>The shuttle's outer airlock is now closed!</span>")
 
 			if("Detonate")//Detonate PDA
 				if(istype(cartridge, /obj/item/weapon/cartridge/syndicate))
@@ -1847,7 +1856,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if("2")		// Eject pAI device
 						var/turf/T = get_turf(src.loc)
 						if(T)
-							pai.loc = T
+							pai.forceMove(T)
 
 //LINK FUNCTIONS===================================
 
@@ -1894,7 +1903,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		playsound(U, 'sound/machines/twobeep.ogg', 50, 1)
 
 	for (var/mob/O in hearers(3, U))
-		if(!silent) O.show_message(text("[bicon(src)] *[src.ttone]*"))
+		if(!silent)
+			O.show_message(text("[bicon(src)] *[src.ttone]*"))
 
 	var/mob/living/L = null
 	if(src.loc && isliving(src.loc))
@@ -1954,7 +1964,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			M.put_in_hands(id)
 			to_chat(usr, "<span class='notice'>You remove the ID from the [name].</span>")
 		else
-			id.loc = get_turf(src)
+			id.forceMove(get_turf(src))
 		id = null
 
 /obj/item/device/pda/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P)
@@ -2025,7 +2035,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		if (!P.silent)
 			playsound(P.loc, 'sound/machines/twobeep.ogg', 50, 1)
 		for (var/mob/O in hearers(3, P.loc))
-			if(!P.silent) O.show_message(text("[bicon(P)] *[P.ttone]*"))
+			if(!P.silent)
+				O.show_message(text("[bicon(P)] *[P.ttone]*"))
 		//Search for holder of the PDA.
 		var/mob/living/L = null
 		if(P.loc && isliving(P.loc))
@@ -2083,7 +2094,7 @@ obj/item/device/pda/CtrlClick()
 					M.put_in_hands(O)
 					to_chat(usr, "<span class='notice'>You remove \the [O] from \the [src].</span>")
 					return
-			O.loc = get_turf(src)
+			O.forceMove(get_turf(src))
 		else
 			to_chat(usr, "<span class='notice'>This PDA does not have a pen in it.</span>")
 	else
@@ -2256,7 +2267,8 @@ obj/item/device/pda/AltClick()
 					return dev_analys.preattack(A, user, 1)
 
 /obj/item/device/pda/proc/explode() //This needs tuning.
-	if(!src.detonate) return
+	if(!src.detonate)
+		return
 	var/turf/T = get_turf(src.loc)
 
 	if (ismob(loc))
@@ -2273,17 +2285,40 @@ obj/item/device/pda/AltClick()
 
 /obj/item/device/pda/Destroy()
 	PDAs -= src
+
 	if (src.id)
-		src.id.loc = get_turf(src.loc)
+		src.id.forceMove(get_turf(src.loc))
+		id = null
+
 	if(src.pai)
-		src.pai.loc = get_turf(src.loc)
+		src.pai.forceMove(get_turf(src.loc))
+		pai = null
+
+	if(cartridge)
+		qdel(cartridge)
+		cartridge = null
+
+	if(atmos_analys)
+		qdel(atmos_analys)
+		atmos_analys = null
+
+	if(dev_analys)
+		qdel(dev_analys)
+		dev_analys = null
+
+	for(var/A in applications)
+		qdel(A)
+
+	for(var/obj/A in src) //Clear out any items that may still be left inside ie pens
+		qdel(A)
 	..()
 
 /obj/item/device/pda/Del()
 	var/loop_count = 0
 	while(null in PDAs)
 		PDAs.Remove(null)
-		if(loop_count > 10) break
+		if(loop_count > 10)
+			break
 		loop_count++
 	PDAs -= src
 	..()
@@ -2361,6 +2396,9 @@ obj/item/device/pda/AltClick()
 	. = list()
 	// Returns a list of PDAs which can be viewed from another PDA/message monitor.
 	for(var/obj/item/device/pda/P in PDAs)
-		if(!P.owner || P.toff || P.hidden) continue
+		if(!P.owner || P.toff || P.hidden)
+			continue
 		. += P
 	return .
+
+#undef PDA_MINIMAP_WIDTH

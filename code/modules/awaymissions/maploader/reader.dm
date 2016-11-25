@@ -20,7 +20,7 @@ var/global/dmm_suite/preloader/_preloader = null
  * A list of all atoms created
  *
  */
-/dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num)
+/dmm_suite/load_map(var/dmm_file as file, var/z_offset as num, var/x_offset as num, var/y_offset as num, var/datum/map_element/map_element as null)
 	if(!z_offset)//what z_level we are creating the map on
 		z_offset = world.maxz+1
 
@@ -36,7 +36,8 @@ var/global/dmm_suite/preloader/_preloader = null
 	///////////////////////////////////////////////////////////////////////////////////////
 	var/list/grid_models = list()
 	var/key_len = length(copytext(tfile,2,findtext(tfile,quote,2,0)))//the length of the model key (e.g "aa" or "aba")
-	if(!key_len) key_len = 1
+	if(!key_len)
+		key_len = 1
 
 	//proceed line by line
 	for(lpos=1; lpos<tfile_len; lpos=findtext(tfile,"\n",lpos,0)+1)
@@ -90,6 +91,8 @@ var/global/dmm_suite/preloader/_preloader = null
 				xcrd++
 				var/model_key = copytext(grid_line,mpos,mpos+key_len)
 				spawned_atoms += parse_grid(grid_models[model_key],xcrd,ycrd,zcrd+z_offset)
+			if(map_element)
+				map_element.width = xcrd - x_offset
 
 			//reached end of current map
 			if(gpos+x_depth+1>z_depth)
@@ -98,6 +101,10 @@ var/global/dmm_suite/preloader/_preloader = null
 			ycrd--
 
 			sleep(-1)
+
+		if(map_element)
+			map_element.height = y_depth
+			map_element.location = locate(x_offset + 1, y_offset + 1, z_offset) //Set location to the upper left corner
 
 		//reached End Of File
 		if(findtext(tfile,quote+"}",zpos,0)+2==tfile_len)
@@ -190,6 +197,16 @@ var/global/dmm_suite/preloader/_preloader = null
 
 	if(_preloader && instance)
 		_preloader.load(instance)
+
+	//The areas list doesn't contain areas without objects by default
+	//We have to add it manually
+	if(!areas.Find(instance))
+		var/area/A = instance
+
+		if(istype(A))
+			areas.Add(instance)
+			A.addSorted()
+
 
 	members.Remove(members[index])
 

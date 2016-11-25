@@ -15,7 +15,7 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	recommended_enemies = 4
 
 	uplink_welcome = "Syndicate Uplink Console:"
-	uplink_uses = 10
+	uplink_uses = 20
 
 	var/const/prob_int_murder_target = 50 // intercept names the assassination target half the time
 	var/const/prob_right_murder_target_l = 25 // lower bound on probability of naming right assassination target
@@ -38,6 +38,8 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 
 	var/changeling_amount = 4
+
+	can_be_mixed = TRUE
 
 /datum/game_mode/changeling/announce()
 	to_chat(world, "<B>The current game mode is - Changeling!</B>")
@@ -67,12 +69,12 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 
 	if(possible_changelings.len>0)
 		for(var/i = 0, i < changeling_amount, i++)
-			if(!possible_changelings.len) break
+			if(!possible_changelings.len)
+				break
 			var/datum/mind/changeling = pick(possible_changelings)
-			if(changeling.special_role)
-				possible_changelings.Remove(changeling)
-				continue
 			possible_changelings -= changeling
+			if(changeling.special_role)
+				continue
 			changelings += changeling
 			modePlayer += changelings
 		log_admin("Starting a round of changeling with [changelings.len] changelings.")
@@ -97,7 +99,8 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 		greet_changeling(changeling)
 	if(!mixed)
 		spawn (rand(waittime_l, waittime_h))
-			if(!mixed) send_intercept()
+			if(!mixed)
+				send_intercept()
 		..()
 	return
 
@@ -177,7 +180,8 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 	return 0*/
 
 /datum/game_mode/proc/grant_changeling_powers(mob/living/carbon/changeling_mob)
-	if(!istype(changeling_mob))	return
+	if(!istype(changeling_mob))
+		return
 	changeling_mob.make_changeling()
 
 /datum/game_mode/proc/auto_declare_completion_changeling()
@@ -267,8 +271,10 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 /datum/changeling/New(var/gender=FEMALE)
 	..()
 	var/honorific
-	if(gender == FEMALE)	honorific = "Ms."
-	else					honorific = "Mr."
+	if(gender == FEMALE)
+		honorific = "Ms."
+	else
+		honorific = "Mr."
 	if(possible_changeling_IDs.len)
 		changelingID = pick(possible_changeling_IDs)
 		possible_changeling_IDs -= changelingID

@@ -47,8 +47,8 @@
 
 /obj/item/weapon/capsule/New()
 	..()
-	pixel_x = rand(-10,10)
-	pixel_y = rand(-10,10)
+	pixel_x = rand(-10,10) * PIXEL_MULTIPLIER
+	pixel_y = rand(-10,10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/capsule/ex_act()
 	qdel(src)

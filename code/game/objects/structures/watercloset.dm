@@ -55,7 +55,7 @@
 			if(ishuman(user))
 				user.put_in_hands(I)
 			else
-				I.loc = get_turf(src)
+				I.forceMove(get_turf(src))
 			to_chat(user, "<span class='notice'>You find \an [I] in the cistern.</span>")
 			w_items -= I.w_class
 			return
@@ -74,7 +74,8 @@
 		return
 	if(open && cistern && state == NORODS && istype(I,/obj/item/stack/rods)) //State = 0 if no rods
 		var/obj/item/stack/rods/R = I
-		if(R.amount < 2) return
+		if(R.amount < 2)
+			return
 		to_chat(user, "<span class='notice'>You add the rods to the toilet, creating flood avenues.</span>")
 		R.use(2)
 		state = RODSADDED //State 0 -> 1
@@ -190,7 +191,6 @@
 	var/obj/effect/mist/mymist = null
 	var/ismist = 0 //Needs a var so we can make it linger~
 	var/watertemp = "cool" //Freezing, normal, or boiling
-	var/mobpresent = 0 //True if there is a mob on the shower's loc, this is to ease process()
 	var/obj/item/weapon/reagent_containers/glass/beaker/water/watersource = null
 
 	machine_flags = SCREWTOGGLE
@@ -208,8 +208,7 @@
 	name = "mist"
 	icon = 'icons/obj/watercloset.dmi'
 	icon_state = "mist"
-	layer = MOB_LAYER + 1
-	plane = PLANE_EFFECTS
+	plane = ABOVE_HUMAN_PLANE
 	anchored = 1
 	mouse_opacity = 0
 
@@ -279,8 +278,8 @@
 		returnToPool(mymist)
 
 	if(on)
-		var/image/water = image('icons/obj/watercloset.dmi', src, "water", MOB_LAYER + 1, dir)
-		water.plane = PLANE_EFFECTS
+		var/image/water = image('icons/obj/watercloset.dmi', src, "water", BELOW_OBJ_LAYER, dir)
+		water.plane = ABOVE_HUMAN_PLANE
 		overlays += water
 		if(watertemp == "freezing") //No mist if the water is really cold
 			return
@@ -303,13 +302,6 @@
 /obj/machinery/shower/Crossed(atom/movable/O)
 	..()
 	wash(O)
-	if(ismob(O))
-		mobpresent++
-
-/obj/machinery/shower/Uncrossed(atom/movable/O)
-	if(ismob(O))
-		mobpresent--
-	..()
 
 //Yes, showers are super powerful as far as washing goes
 //Shower cleaning has been nerfed (no, really). 75 % chance to clean everything on each tick
@@ -414,14 +406,14 @@
 		return
 
 	//Note : Remember process() rechecks this, so the mix/max procs slowly increase/decrease body temperature
-	//Every second under the shower adjusts body temperature by 0.5°C. Water conducts heat pretty efficiently in real life too
-	if(watertemp == "freezing cold") //Down to 0°C, Nanotrasen waterworks are perfect and never fluctuate even slightly below that
+	//Every second under the shower adjusts body temperature by 0.5 degree Celsius. Water conducts heat pretty efficiently in real life too
+	if(watertemp == "freezing cold") //Down to 0 degree Celsius, Nanotrasen waterworks are perfect and never fluctuate even slightly below that
 		C.bodytemperature = max(T0C, C.bodytemperature - 0.5)
 		return
-	if(watertemp == "searing hot") //Up to 60°c, upper limit for common water boilers
+	if(watertemp == "searing hot") //Up to 60 degree Celsius, upper limit for common water boilers
 		C.bodytemperature = min(T0C + 60, C.bodytemperature + 0.5)
 		return
-	if(watertemp == "cool") //Adjusts towards "perfect" body temperature, 37.5°C. Actual showers tend to average at 40°C, but it's the future
+	if(watertemp == "cool") //Adjusts towards "perfect" body temperature, 37.5 degree Celsius. Actual showers tend to average at 40 degree Celsius, but it's the future
 		if(C.bodytemperature > T0C + 37.5) //Cooling down
 			C.bodytemperature = max(T0C + 37.5, C.bodytemperature - 0.5)
 			return
@@ -475,7 +467,8 @@
 	sleep(40)
 	busy = 0
 
-	if(!Adjacent(M)) return		//Person has moved away from the sink
+	if(!Adjacent(M))
+		return		//Person has moved away from the sink
 
 	M.clean_blood()
 	if(ishuman(M))
@@ -484,7 +477,8 @@
 		V.show_message("<span class='notice'>[M] washes their hands using \the [src].</span>")
 
 /obj/structure/sink/mop_act(obj/item/weapon/mop/M, mob/user)
-	if(busy) return 1
+	if(busy)
+		return 1
 	user.visible_message("<span class='notice'>[user] puts \the [M] underneath the running water.","<span class='notice'>You put \the [M] underneath the running water.</span>")
 	busy = 1
 	sleep(40)
@@ -509,7 +503,8 @@
 	if(anchored == 0)
 		return
 
-	if(istype(O, /obj/item/weapon/mop)) return
+	if(istype(O, /obj/item/weapon/mop))
+		return
 
 	if (istype(O, /obj/item/weapon/reagent_containers))
 		var/obj/item/weapon/reagent_containers/RG = O
@@ -530,7 +525,7 @@
 			flick("baton_active", src)
 			user.Stun(10)
 			user.stuttering = 10
-			user.Weaken(10)
+			user.Knockdown(10)
 			if(isrobot(user))
 				var/mob/living/silicon/robot/R = user
 				R.cell.charge -= 20

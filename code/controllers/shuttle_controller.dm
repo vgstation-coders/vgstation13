@@ -38,7 +38,8 @@ datum/shuttle_controller
 	// otherwise if outgoing, switch to incoming
 
 datum/shuttle_controller/proc/incall(coeff = 1)
-	if(shutdown) return
+	if(shutdown)
+		return
 	if((!universe.OnShuttleCall(null) || deny_shuttle) && alert == 1) //crew transfer shuttle does not gets recalled by gamemode
 		return
 	if(endtime)
@@ -56,7 +57,8 @@ datum/shuttle_controller/proc/incall(coeff = 1)
 				A.readyalert()
 
 datum/shuttle_controller/proc/shuttlealert(var/X)
-	if(shutdown) return
+	if(shutdown)
+		return
 	alert = X
 
 
@@ -67,8 +69,10 @@ datum/shuttle_controller/proc/force_shutdown()
 
 
 datum/shuttle_controller/proc/recall()
-	if(shutdown) return
-	if(!can_recall)	return
+	if(shutdown)
+		return
+	if(!can_recall)
+		return
 	if(direction == 1)
 		var/timeleft = timeleft()
 		if(alert == 0)
@@ -124,6 +128,10 @@ datum/shuttle_controller/proc/move_pod(var/start_type,var/end_type,var/direction
 	var/area/start_location=locate(start_type)
 	var/area/end_location=locate(end_type)
 
+	for(var/obj/structure/shuttle/engine/propulsion/P in start_location)
+		spawn()
+			P.shoot_exhaust()
+
 	start_location.move_contents_to(end_location, null, direction)
 
 	for(var/obj/machinery/door/D in all_doors)
@@ -143,7 +151,7 @@ datum/shuttle_controller/proc/move_pod(var/start_type,var/end_type,var/direction
 					shake_camera(M, 10, 2) // unlocked_to, HOLY SHIT SHAKE THE ROOM
 		if(istype(M, /mob/living/carbon))
 			if(!M.locked_to)
-				M.Weaken(5)
+				M.Knockdown(5)
 
 
 datum/shuttle_controller/emergency_shuttle
@@ -185,6 +193,9 @@ datum/shuttle_controller/emergency_shuttle/process()
 
 			/* --- Shuttle is in transit to Central Command from SS13 --- */
 			if(direction == 2)
+				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
+					spawn()
+						P.shoot_exhaust(backward = 3)
 				if(timeleft>0)
 					return 0
 
@@ -243,6 +254,7 @@ datum/shuttle_controller/emergency_shuttle/process()
 
 				settimeleft(SHUTTLELEAVETIME)
 				send2mainirc("The Emergency Shuttle has docked with the station.")
+				send2maindiscord("The **Emergency Shuttle** has docked with the station.")
 				captain_announce("The Emergency Shuttle has docked with the station. You have [round(timeleft()/60,1)] minutes to board the Emergency Shuttle.")
 				world << sound('sound/AI/shuttledock.ogg')
 
@@ -260,6 +272,9 @@ datum/shuttle_controller/emergency_shuttle/process()
 					spawn(0)
 						D.close()
 						D.locked = 1
+				for(var/obj/structure/shuttle/engine/propulsion/P in shuttle.linked_area)
+					spawn()
+						P.shoot_exhaust(backward = 3)
 
 			if(timeleft>0)
 				return 0
@@ -288,6 +303,11 @@ datum/shuttle_controller/emergency_shuttle/process()
 				if(shuttle && istype(shuttle,/datum/shuttle/escape))
 					var/datum/shuttle/escape/E = shuttle
 					E.close_all_doors()
+
+					for(var/obj/structure/shuttle/engine/propulsion/P in E.linked_area)
+						spawn()
+							P.shoot_exhaust(backward = 3)
+
 					if(!E.move_to_dock(E.transit_port, 0, turn(E.dir,180))) //Throw everything backwards
 						message_admins("WARNING: THE EMERGENCY SHUTTLE FAILED TO FIND TRANSIT! PANIC PANIC PANIC")
 				else
@@ -308,8 +328,8 @@ datum/shuttle_controller/emergency_shuttle/process()
 					for(var/client/C in clients)
 						spawn
 							vote.interface.sendAssets(C)
-					
-				
+
+
 				return 1
 
 		else
@@ -330,8 +350,8 @@ datum/shuttle_controller/emergency_shuttle/process()
 
 /obj/effect/bgstar/New()
 	. = ..()
-	pixel_x += rand(-2, 30)
-	pixel_y += rand(-2, 30)
+	pixel_x += rand(-2, 30) * PIXEL_MULTIPLIER
+	pixel_y += rand(-2, 30) * PIXEL_MULTIPLIER
 	icon_state = "star" + pick("1", "1", "1", "2", "3", "4")
 	speed = rand(2, 5)
 
@@ -362,4 +382,3 @@ datum/shuttle_controller/emergency_shuttle/process()
 			S.direction = spawndir
 			spawn()
 				S.startmove()
-

@@ -2,15 +2,24 @@
 	holder_type = /obj/machinery/vending
 	wire_count = 4
 
+/datum/wires/vending/New()
+	wire_names=list(
+		"[VENDING_WIRE_THROW]" 		= "Firing",
+		"[VENDING_WIRE_CONTRABAND]" = "Contraband",
+		"[VENDING_WIRE_ELECTRIFY]" 	= "Shock",
+		"[VENDING_WIRE_IDSCAN]" 	= "ID Scan"
+	)
+	..()
+
 var/const/VENDING_WIRE_THROW = 1
 var/const/VENDING_WIRE_CONTRABAND = 2
 var/const/VENDING_WIRE_ELECTRIFY = 4
 var/const/VENDING_WIRE_IDSCAN = 8
 
 /datum/wires/vending/CanUse(var/mob/living/L)
-	var/obj/machinery/vending/V = holder
-	if(L.lying || L.incapacitated())
+	if(!..())
 		return 0
+	var/obj/machinery/vending/V = holder
 	if(!istype(L, /mob/living/silicon))
 		if(V.seconds_electrified)
 			if(V.shock(L, 100))

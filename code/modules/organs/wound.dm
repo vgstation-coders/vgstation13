@@ -93,7 +93,8 @@
 // checks whether the wound has been appropriately treated
 // always returns 1 for wounds that don't need to be treated
 /datum/wound/proc/is_treated()
-	if(!needs_treatment) return 1
+	if(!needs_treatment)
+		return 1
 
 	if(damage_type == BRUISE || damage_type == CUT)
 		return bandaged

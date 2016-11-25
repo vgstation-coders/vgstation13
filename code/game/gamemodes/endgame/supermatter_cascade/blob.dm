@@ -6,7 +6,8 @@
 
 	//luminosity = 5
 	//light_color="#0066FF"
-	layer = LIGHTING_LAYER + 1
+	layer = SUPERMATTER_WALL_LAYER
+	plane = LIGHTING_PLANE
 
 	var/next_check=0
 	var/list/avail_dirs = list(NORTH,SOUTH,EAST,WEST)
@@ -23,7 +24,8 @@
 
 /turf/unsimulated/wall/supermatter/process()
 	// Only check infrequently.
-	if(next_check>world.time) return
+	if(next_check>world.time)
+		return
 
 	// No more available directions? Shut down process().
 	if(avail_dirs.len==0)

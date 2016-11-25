@@ -17,7 +17,8 @@ datum/event/viral_infection/start()
 			continue
 		if(G.client && G.stat != DEAD)
 			candidates += G
-	if(!candidates.len)	return
+	if(!candidates.len)
+		return
 	candidates = shuffle(candidates)//Incorporating Donkie's list shuffle
 
 	while(severity > 0 && candidates.len)

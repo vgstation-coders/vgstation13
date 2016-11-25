@@ -300,7 +300,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		list("seed-kudzu",              "kudzu",				4),
 		))
 
-	if (change_packet) packet_icon = plant_icons[1]
+	if (change_packet)
+		packet_icon = plant_icons[1]
 	plant_icon = plant_icons[2]
 	growth_stages = plant_icons[3]
 
@@ -309,7 +310,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 //Mutates a specific trait/set of traits. Used by the Bioballistic Delivery System.
 /datum/seed/proc/apply_gene(var/datum/plantgene/gene, var/mode)
 
-	if(!gene || !gene.values || immutable > 0) return
+	if(!gene || !gene.values || immutable > 0)
+		return
 
 	switch(gene.genetype)
 		if(GENE_PHYTOCHEMISTRY)
@@ -328,7 +330,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 					if(isnull(gene_chem[i]))
 						chems[rid][i] = 0
 						gene_chem[i] = 0
-					if(!chems[rid][i]) continue
+					if(!chems[rid][i])
+						continue
 
 					if(chems[rid][i])
 						chems[rid][i] = max(1,round((gene_chem[i] + chems[rid][i])/2))
@@ -450,7 +453,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 //Returns a list of the desired trait values.
 /datum/seed/proc/get_gene(var/genetype)
-	if(!genetype) return 0
+	if(!genetype)
+		return 0
 
 	var/datum/plantgene/P = new()
 	P.genetype = genetype
@@ -589,7 +593,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		if(istype(H))
 			if(!H.check_body_part_coverage(HANDS))
 				for(var/assblast in list(LIMB_RIGHT_HAND, LIMB_LEFT_HAND))
-					if(stung) continue
+					if(stung)
+						continue
 					var/datum/organ/external/affecting = H.get_organ(assblast)
 					if(affecting && affecting.is_existing() && affecting.is_usable() && affecting.is_organic())
 						stung = 1
@@ -637,7 +642,8 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 // is set to a new datum copied from the original. This datum won't actually
 // be put into the global datum list until the product is harvested, though.
 /datum/seed/proc/diverge(var/modified)
-	if(immutable > 0) return
+	if(immutable > 0)
+		return
 
 	//Set up some basic information.
 	var/datum/seed/new_seed = new /datum/seed()
@@ -647,11 +653,16 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	new_seed.large = large
 
 	//Copy over everything else.
-	if(products)       new_seed.products = products.Copy()
-	if(mutants)        new_seed.mutants = mutants.Copy()
-	if(chems)          new_seed.chems = chems.Copy()
-	if(consume_gasses) new_seed.consume_gasses = consume_gasses.Copy()
-	if(exude_gasses)   new_seed.exude_gasses = exude_gasses.Copy()
+	if(products)
+		new_seed.products = products.Copy()
+	if(mutants)
+		new_seed.mutants = mutants.Copy()
+	if(chems)
+		new_seed.chems = chems.Copy()
+	if(consume_gasses)
+		new_seed.consume_gasses = consume_gasses.Copy()
+	if(exude_gasses)
+		new_seed.exude_gasses = exude_gasses.Copy()
 
 	if(modified != -1)
 		new_seed.seed_name = "[(roundstart ? "[(modified ? "modified" : "mutant")] " : "")][seed_name]"

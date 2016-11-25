@@ -229,6 +229,9 @@ nanoui is used to open and update nano browser uis
 					"autoUpdateContent" = auto_update_content,
 					"showMap" = show_map,
 					"mapZLevel" = map_z_level,
+					"mapName" = map.nameShort,
+					"worldmaxx" = world.maxx,
+					"worldmaxy" = world.maxy,
 					"user" = list("name" = user.name),
 					"map_dir" = map.map_dir // Map datum holds the folder for the nanoui station images.
 			)
@@ -508,10 +511,11 @@ nanoui is used to open and update nano browser uis
 		map_update = 1
 
 	if(href_list["zlevel"])
-		var/newz = input("Choose Z-Level to view.","Z-Levels",1) as null|anything in list(1,3,4,5,6)
+		var/listed_zlevels = list(map.zMainStation, map.zTCommSat, map.zDerelict, map.zAsteroid, map.zDeepSpace)
+		var/newz = input("Choose Z-Level to view.","Z-Levels",1) as null|anything in listed_zlevels
 		if(!newz || isnull(newz))
 			return 0
-		if(newz < 1 || newz > 6 || newz == 2)
+		if(!(newz in listed_zlevels))
 			to_chat(usr, "<span class='danger'>Unable to establish a connection</span>")
 			return 0
 		if(newz != map_z_level)
@@ -546,4 +550,3 @@ nanoui is used to open and update nano browser uis
   */
 /datum/nanoui/proc/update(var/force_open = 0)
 	src_object.ui_interact(user, ui_key, src, force_open)
-

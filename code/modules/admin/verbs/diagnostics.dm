@@ -83,7 +83,8 @@
 /client/proc/fix_next_move()
 	set category = "Debug"
 	set name = "Unfreeze Everyone"
-	if(!usr.client.holder) return
+	if(!usr.client.holder)
+		return
 
 	_fix_delayers("move")
 	_fix_delayers("click")
@@ -137,7 +138,8 @@
 	set name = "Reload Admins"
 	set category = "Debug"
 
-	if(!check_rights(R_SERVER))	return
+	if(!check_rights(R_SERVER))
+		return
 
 	message_admins("[usr] manually reloaded admins")
 	load_admins()
@@ -161,7 +163,7 @@
 		if (!group.group_processing)
 			dead_groups += group
 	var/datum/air_group/dest_group = pick(dead_groups)
-	usr.loc = pick(dest_group.members)
+	usr.forceMove(pick(dest_group.members))
 	feedback_add_details("admin_verb","JDAG") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
 	*/

@@ -32,8 +32,8 @@ var/global/list/wizard_cards_normal = list(
 #define CARD_FLIP		"flip"
 
 /datum/context_click/wizard_card/return_clicked_id(x_pos, y_pos)
-	if(14 <= x_pos && x_pos <= 19)
-		if(7 <= y_pos && y_pos <= 20)
+	if(28 <= x_pos && x_pos <= 38)
+		if(14 <= y_pos && y_pos <= 40)
 			return CARD_PORTRAIT
 	return CARD_FLIP
 
@@ -252,6 +252,7 @@ var/global/list/wizard_cards_normal = list(
 	icon_state = "cardpack"
 	name = "Wizard Card Pack"
 	storage_slots = 50
+	fits_max_w_class = 3
 	max_combined_w_class = 200
 	w_class = W_CLASS_TINY
 	can_only_hold = list("/obj/item/toy/wizard_card","/obj/item/weapon/reagent_containers/food/snacks/chocofrog")

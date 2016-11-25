@@ -60,13 +60,16 @@
 	var/image/bomb_icon = image('icons/obj/weaponsmithing.dmi', src, "nothing")
 	bomb_icon.appearance = bomb_appearance
 	bomb_icon.layer = src.layer
-	bomb_icon.pixel_x = 2
-	bomb_icon.pixel_y = 9
+	bomb_icon.pixel_x = 2 * PIXEL_MULTIPLIER
+	bomb_icon.pixel_y = 9 * PIXEL_MULTIPLIER
 
 	overlays += bomb_icon
 
 /obj/item/weapon/gun/projectile/blastcannon/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/device/transfer_valve))
+		if(bomb)
+			to_chat(user, "<span class='warning'>There's already a [bomb.name] attached to \the [src]!</span>")
+			return
 		var/obj/item/device/transfer_valve/T = W
 		if(!T.tank_one || !T.tank_two)
 			to_chat(user, "<span class='warning'>Nothing's going to happen if there[!T.tank_one && !T.tank_two ? " aren't any tanks" : "'s only one tank"] attached to \the [W]!</span>")

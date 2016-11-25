@@ -4,7 +4,7 @@
 	name = "\improper SmartFridge"
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "smartfridge"
-	layer = 2.9
+	layer = BELOW_OBJ_LAYER
 	density = 1
 	anchored = 1
 	use_power = 1
@@ -23,7 +23,8 @@
 									/obj/item/weapon/grown,
 									/obj/item/seeds/,
 									/obj/item/weapon/reagent_containers/food/snacks/meat,
-									/obj/item/weapon/reagent_containers/food/snacks/egg)
+									/obj/item/weapon/reagent_containers/food/snacks/egg,
+									/obj/item/weapon/reagent_containers/food/condiment)
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL
 
@@ -229,12 +230,10 @@
 			if(!user.drop_item(O, src))
 				return 1
 
-			var/sanitized_name = sanitize(O.name, list("\"" = "", "'" = "", "+" = "plus", ";" = "", "^" = "", "&" = "", "<" = "", ">" = ""))
-			O.name = sanitized_name
-			if(item_quants[sanitized_name])
-				item_quants[sanitized_name]++
+			if(item_quants[O.name])
+				item_quants[O.name]++
 			else
-				item_quants[sanitized_name] = 1
+				item_quants[O.name] = 1
 			user.visible_message("<span class='notice'>[user] has added \the [O] to \the [src].", \
 								 "<span class='notice'>You add \the [O] to \the [src].")
 
@@ -248,12 +247,10 @@
 					return 1
 				else
 					bag.remove_from_storage(G,src)
-					var/sanitized_name = sanitize(G.name, list("\"" = "", "'" = "", "+" = "plus", ";" = "", "^" = "", "&" = "", "<" = "", ">" = ""))
-					G.name = sanitized_name
-					if(item_quants[sanitized_name])
-						item_quants[sanitized_name]++
+					if(item_quants[G.name])
+						item_quants[G.name]++
 					else
-						item_quants[sanitized_name] = 1
+						item_quants[G.name] = 1
 					objects_loaded++
 		if(objects_loaded)
 
@@ -265,8 +262,8 @@
 	else if(istype(O, /obj/item/weapon/paper) && user.drop_item(O, src.loc))
 		var/list/params_list = params2list(params)
 		if(O.loc == src.loc && params_list.len)
-			var/clamp_x = 16
-			var/clamp_y = 16
+			var/clamp_x = WORLD_ICON_SIZE/2
+			var/clamp_y = WORLD_ICON_SIZE/2
 			O.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
 			O.pixel_y = Clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)
 			to_chat(user, "<span class='notice'>You hang \the [O.name] on the fridge.</span>")
@@ -303,18 +300,19 @@
 		for (var/O in item_quants)
 			if(item_quants[O] > 0)
 				var/N = item_quants[O]
+				var/escaped_name = url_encode(O) //This is necessary to contain special characters in Topic() links, otherwise, BYOND sees "Dex+" and drops the +.
 
 				dat += {"<FONT color = 'blue'><B>[capitalize(O)]</B>:
 					[N] </font>
-					<a href='byond://?src=\ref[src];vend=[O];amount=1'>Vend</A> "}
+					<a href='byond://?src=\ref[src];vend=[escaped_name];amount=1'>Vend</A> "}
 				if(N > 5)
-					dat += "(<a href='byond://?src=\ref[src];vend=[O];amount=5'>x5</A>)"
+					dat += "(<a href='byond://?src=\ref[src];vend=[escaped_name];amount=5'>x5</A>)"
 					if(N > 10)
-						dat += "(<a href='byond://?src=\ref[src];vend=[O];amount=10'>x10</A>)"
+						dat += "(<a href='byond://?src=\ref[src];vend=[escaped_name];amount=10'>x10</A>)"
 						if(N > 25)
-							dat += "(<a href='byond://?src=\ref[src];vend=[O];amount=25'>x25</A>)"
+							dat += "(<a href='byond://?src=\ref[src];vend=[escaped_name];amount=25'>x25</A>)"
 				if(N > 1)
-					dat += "(<a href='?src=\ref[src];vend=[O];amount=[N]'>All</A>)"
+					dat += "(<a href='?src=\ref[src];vend=[escaped_name];amount=[N]'>All</A>)"
 				dat += "<br>"
 
 		dat += "</TT>"
@@ -338,10 +336,9 @@
 	var/i = amount
 	for(var/obj/O in contents)
 		if(O.name == N)
-			O.loc = src.loc
+			O.forceMove(src.loc)
 			i--
 			if(i <= 0)
 				break
 
 	src.updateUsrDialog()
-	return

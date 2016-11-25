@@ -51,7 +51,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
-	origin_tech = "magnets=3;materials=2"
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_MATERIALS + "=2"
 
 	var/obj/item/weapon/storage/box/lights/supply = null //Takes bulbs from here to replace
 	var/obj/item/weapon/storage/box/lights/waste = null //Places replaced bulbs here
@@ -473,7 +473,8 @@
 	return 1
 
 /obj/item/device/lightreplacer/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 
 	if(href_list["eject"])
 		switch(href_list["eject"])
@@ -483,9 +484,10 @@
 					usr.put_in_hands(supply)
 					usr.visible_message("[usr] removes \the [supply] from \the [src].", "You remove \the [src]'s supply container, \the [supply].")
 				else
-					supply.loc = get_turf(src)
+					supply.forceMove(get_turf(src))
 				supply = null
-				if(usr) attack_self(usr)
+				if(usr)
+					attack_self(usr)
 				return 1
 
 			if("waste")
@@ -493,9 +495,10 @@
 					usr.put_in_hands(waste)
 					usr.visible_message("[usr] removes \the [waste] from \the [src].", "You remove \the [src]'s waste container, \the [waste].")
 				else
-					waste.loc = get_turf(src)
+					waste.forceMove(get_turf(src))
 				waste = null
-				if(usr) attack_self(usr)
+				if(usr)
+					attack_self(usr)
 				return 1
 
 	if(href_list["build"])
@@ -506,7 +509,8 @@
 			L = new light_path
 			light_types_glass[light_type] = L.starting_materials[MAT_GLASS]
 		if(!use_glass(light_types_glass[light_type] * prod_eff))
-			if(usr) to_chat(usr, "<span class='warning'>\The [src] doesn't have enough glass to make that!</span>")
+			if(usr)
+				to_chat(usr, "<span class='warning'>\The [src] doesn't have enough glass to make that!</span>")
 			if(L)
 				qdel(L)
 				L = null
@@ -515,37 +519,45 @@
 			L = new light_path
 		L.switchcount = prod_quality
 		if(!insert_if_possible(L))
-			L.loc = get_turf(src)
-			if(usr) to_chat(usr, "<span class='notice'>\The [src] successfully fabricates \a [L], but it drops it on the floor.</span>")
-		else if(usr) to_chat(usr, "<span class='notice'>\The [src] successfully fabricates \a [L].</span>")
-		if(usr) attack_self(usr)
+			L.forceMove(get_turf(src))
+			if(usr)
+				to_chat(usr, "<span class='notice'>\The [src] successfully fabricates \a [L], but it drops it on the floor.</span>")
+		else if(usr)
+			to_chat(usr, "<span class='notice'>\The [src] successfully fabricates \a [L].</span>")
+		if(usr)
+			attack_self(usr)
 		return 1
 
 	if(href_list["dump"])
 		if(!supply)
-			if(usr) to_chat(usr, "<span class='warning'>\The [src] doesn't have a supply container!</span>")
+			if(usr)
+				to_chat(usr, "<span class='warning'>\The [src] doesn't have a supply container!</span>")
 			return 1
 		if(!waste)
-			if(usr) to_chat(usr, "<span class='warning'>\The [src] doesn't have a waste container!</span>")
+			if(usr)
+				to_chat(usr, "<span class='warning'>\The [src] doesn't have a waste container!</span>")
 			return 1
 		var/list/dumplist = splittext(href_list["dump"], ", ")
 		for(var/lightref in dumplist)
 			var/obj/item/weapon/light/L = locate(lightref)
 			if(L.loc == supply)
 				supply.remove_from_storage(L, waste)
-		if(usr) attack_self(usr)
+		if(usr)
+			attack_self(usr)
 		return 1
 
 	if(href_list["swap"])
 		var/swapholder = waste
 		waste = supply
 		supply = swapholder
-		if(usr) attack_self(usr)
+		if(usr)
+			attack_self(usr)
 		return 1
 
 	if(href_list["fold"])
 		if(cardboard_stor <= 0)
-			if(usr) to_chat(usr, "<span class='warning'>\The [src] is out of cardboard!</span>")
+			if(usr)
+				to_chat(usr, "<span class='warning'>\The [src] is out of cardboard!</span>")
 			return 1
 		switch(href_list["fold"])
 			if("supply")
@@ -566,7 +578,8 @@
 					return 1
 
 /obj/item/device/lightreplacer/borg/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 
 	if(href_list["recycle"])
 		if(waste)
@@ -583,7 +596,8 @@
 					qdel(L)
 					L = null
 			add_glass(recycledglass, force_fill = 2)
-			if(usr) attack_self(usr)
+			if(usr)
+				attack_self(usr)
 			return 1
 
 /obj/item/device/lightreplacer/borg/restock()

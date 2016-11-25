@@ -14,6 +14,8 @@ obj/machinery/atmospherics/trinary/mixer
 
 	//node 3 is the outlet, nodes 1 & 2 are intakes
 
+	ex_node_offset = 5
+
 obj/machinery/atmospherics/trinary/mixer/update_icon()
 	if(stat & NOPOWER)
 		icon_state = "intact_off"
@@ -28,6 +30,7 @@ obj/machinery/atmospherics/trinary/mixer/power_change()
 	var/old_stat = stat
 	..()
 	if(old_stat != stat)
+		on = !on
 		update_icon()
 
 obj/machinery/atmospherics/trinary/mixer/New()
@@ -62,7 +65,8 @@ obj/machinery/atmospherics/trinary/mixer/process()
 	var/air2_moles = air2.total_moles()
 
 	if((air1_moles < transfer_moles1) || (air2_moles < transfer_moles2))
-		if(!transfer_moles1 || !transfer_moles2) return
+		if(!transfer_moles1 || !transfer_moles2)
+			return
 		var/ratio = min(air1_moles/transfer_moles1, air2_moles/transfer_moles2)
 
 		transfer_moles1 *= ratio
@@ -121,7 +125,8 @@ obj/machinery/atmospherics/trinary/mixer/attack_hand(user as mob)
 	return
 
 obj/machinery/atmospherics/trinary/mixer/Topic(href,href_list)
-	if(..()) return
+	if(..())
+		return
 	if(href_list["power"])
 		on = !on
 	if(href_list["set_press"])

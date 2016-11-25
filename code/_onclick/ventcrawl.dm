@@ -12,7 +12,7 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 
 // Vent crawling whitelisted items, whoo
 /mob/living
-	var/canEnterVentWith = "/obj/item/weapon/implant=0&/obj/item/clothing/mask/facehugger=0&/obj/item/device/radio/borg=0&/obj/machinery/camera=0&/mob/living/simple_animal/borer=0"
+	var/canEnterVentWith = "/obj/item/weapon/implant=0&/obj/item/clothing/mask/facehugger=0&/obj/item/device/radio/borg=0&/obj/machinery/camera=0&/mob/living/simple_animal/borer=0&/obj/item/verbs=0"
 
 /mob/living/AltClickOn(var/atom/A)
 	if(is_type_in_list(A,ventcrawl_machinery) && src.can_ventcrawl())
@@ -182,8 +182,8 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 	for(var/datum/pipeline/pipeline in network.line_members)
 		for(var/obj/machinery/atmospherics/A in (pipeline.members || pipeline.edges))
 			if(!A.pipe_image)
-				A.pipe_image = image(A, A.loc, layer = 20, dir = A.dir) //the 20 puts it above Byond's darkness (not its opacity view)
-				A.pipe_image.plane = PLANE_LIGHTING
+				A.pipe_image = image(A, A.loc, layer = BELOW_PROJECTILE_LAYER, dir = A.dir) //the 20 puts it above Byond's darkness (not its opacity view)
+				A.pipe_image.plane = EFFECTS_PLANE
 			pipes_shown += A.pipe_image
 			client.images += A.pipe_image
 

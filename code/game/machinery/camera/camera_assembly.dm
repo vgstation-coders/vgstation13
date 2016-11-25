@@ -96,14 +96,12 @@
 
 				state = 4
 				var/obj/machinery/camera/C = new(src.loc)
-				src.loc = C
+				src.forceMove(C)
 				C.assembly = src
 
 				C.auto_turn()
 
 				C.network = tempnetwork
-
-				C.c_tag = "[get_area_name(src)] ([rand(1, 999)]"
 
 				for(var/i = 5; i >= 0; i -= 1)
 					var/direct = input(user, "Direction?", "Assembling Camera", null) in list("LEAVE IT", "NORTH", "EAST", "SOUTH", "WEST" )
@@ -133,7 +131,8 @@
 			s.use(1)
 			upgrades += new /obj/item/stack/sheet/mineral/plasma
 		else
-			if(!user.drop_item(W, src)) return
+			if(!user.drop_item(W, src))
+				return
 			upgrades += W
 		to_chat(user, "You attach the [W] into the assembly inner circuits.")
 		return
@@ -144,7 +143,7 @@
 		if(U)
 			to_chat(user, "You unattach \the [U] from the assembly.")
 			playsound(get_turf(src), 'sound/items/Crowbar.ogg', 50, 1)
-			U.loc = get_turf(src)
+			U.forceMove(get_turf(src))
 			upgrades -= U
 		return
 

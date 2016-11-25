@@ -1,7 +1,7 @@
 /obj/effect/decal/cleanable
 	var/list/random_icon_states = list()
 	var/targeted_by = null	//Used so cleanbots can claim a mess.
-	mouse_opacity = 1 //N3X made this 0, which made it impossible to click things, and in the current 510 version right-click things.
+	mouse_opacity = 0 //N3X made this 0, which made it impossible to click things, and in the current 510 version right-click things.
 	w_type = NOT_RECYCLABLE
 	anchored = 1
 
@@ -11,7 +11,7 @@
 	var/transfers_dna=0
 	var/list/viruses = list()
 	blood_DNA = list()
-	var/basecolor="#A10808" // Color when wet.
+	var/basecolor=DEFAULT_BLOOD // Color when wet.
 	var/list/datum/disease2/disease/virus2 = list()
 	var/list/absorbs_types=list() // Types to aggregate.
 

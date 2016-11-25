@@ -23,24 +23,23 @@
 /datum/robot_component/proc/uninstall()
 
 /datum/robot_component/proc/destroy()
-	if(wrapped)
-		qdel (wrapped)
-		wrapped = null
-
-
-	wrapped = new/obj/item/broken_device
+	var/obj/item/broken_device/G = new/obj/item/broken_device
+	G.component = wrapped.type // the broken component now "remembers" the component it used to be, now it's scrap. This is used to fix the scrap into the component it was.
+	wrapped = G
 
 	// The thing itself isn't there anymore, but some fried remains are.
 	installed = -1
 	uninstall()
 
 /datum/robot_component/proc/take_damage(brute, electronics, sharp)
-	if(installed != 1) return
+	if(installed != 1)
+		return
 
 	brute_damage += brute
 	electronics_damage += electronics
 
-	if(brute_damage + electronics_damage >= max_damage) destroy()
+	if(brute_damage + electronics_damage >= max_damage)
+		destroy()
 
 /datum/robot_component/proc/heal_damage(brute, electronics)
 	if(installed != 1)
@@ -128,10 +127,13 @@
 	name = "broken component"
 	icon = 'icons/robot_component.dmi'
 	icon_state = "broken"
+	var/component = null //This remembers which component was it before breaking, so it can be fixed later (i.e nanopaste)
 
 /obj/item/robot_parts/robot_component
 	icon = 'icons/robot_component.dmi'
 	icon_state = "working"
+	var/brute_damage = 0
+	var/electronics_damage = 0
 
 /obj/item/robot_parts/robot_component/binary_communication_device
 	name = "binary communication device"
@@ -157,6 +159,15 @@
 	name = "radio"
 	icon_state = "radio"
 
+/obj/item/broken_device/attackby(var/obj/item/weapon/W, var/mob/user)
+	if(istype(W, /obj/item/stack/nanopaste))
+		if(do_after(user,src,30))
+			var/obj/item/stack/nanopaste/C = W
+			new src.component (src.loc)
+			to_chat(user, "<span class='notice'>You fix the broken component.</span>")
+			C.use(1)
+			qdel(src)
+
 //
 //Robotic Component Analyser, basically a health analyser for robots
 //
@@ -174,7 +185,7 @@
 	throw_range = 10
 	starting_materials = list(MAT_IRON = 200)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "magnets=3;engineering=3"
+	origin_tech = Tc_MAGNETS + "=3;" + Tc_ENGINEERING + "=3"
 	var/mode = 1;
 
 /obj/item/device/robotanalyzer/attack(mob/living/M as mob, mob/living/user as mob)

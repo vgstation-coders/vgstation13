@@ -49,8 +49,8 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	if(param_color)
 		_color = param_color
 
-	pixel_x = rand(-2,2)
-	pixel_y = rand(-2,2)
+	pixel_x = rand(-2,2) * PIXEL_MULTIPLIER
+	pixel_y = rand(-2,2) * PIXEL_MULTIPLIER
 	update_icon()
 
 ///////////////////////////////////
@@ -277,8 +277,8 @@ var/global/list/datum/stack_recipe/cable_recipes = list ( \
 	..(loc)
 	if(!amount)
 		src.amount = rand(1, 2)
-	pixel_x = rand(-2, 2)
-	pixel_y = rand(-2, 2)
+	pixel_x = rand(-2, 2) * PIXEL_MULTIPLIER
+	pixel_y = rand(-2, 2) * PIXEL_MULTIPLIER
 	update_icon()
 
 /obj/item/stack/cable_coil/yellow

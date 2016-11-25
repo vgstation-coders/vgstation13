@@ -12,7 +12,8 @@
 	var/allow_upgrade = 1
 	var/last_upgrade = 0
 
-	layer = 21
+	layer = HUD_ABOVE_ITEM_LAYER
+	plane = HUD_PLANE
 	abstract = 1
 	item_state = "nothing"
 	w_class = W_CLASS_HUGE
@@ -33,8 +34,10 @@
 	hud.master = src
 
 /obj/item/weapon/grab/preattack()
-	if(!assailant || !affecting) return 1 //Cancel attack
-	if(!assailant.Adjacent(affecting)) return 1 //Cancel attack is assailant isn't near affected mob
+	if(!assailant || !affecting)
+		return 1 //Cancel attack
+	if(!assailant.Adjacent(affecting))
+		return 1 //Cancel attack is assailant isn't near affected mob
 
 	return ..()
 
@@ -55,7 +58,8 @@
 
 
 /obj/item/weapon/grab/process()
-	if(!confirm()) return
+	if(!confirm())
+		return
 
 	if(!assailant)
 		affecting = null
@@ -73,13 +77,15 @@
 		allow_upgrade = 1
 
 		for(var/obj/item/weapon/grab/G in assailant.held_items)
-			if(G == src) continue
+			if(G == src)
+				continue
 			if(G.affecting != affecting)
 				allow_upgrade = 0
 
 		if(state == GRAB_AGGRESSIVE)
 			for(var/obj/item/weapon/grab/G in affecting.grabbed_by)
-				if(G == src) continue
+				if(G == src)
+					continue
 				if(G.state == GRAB_AGGRESSIVE)
 					allow_upgrade = 0
 		if(allow_upgrade)
@@ -88,7 +94,7 @@
 			hud.icon_state = "!reinforce"
 	else
 		if(!affecting.locked_to)
-			affecting.loc = assailant.loc
+			affecting.forceMove(assailant.loc)
 
 	if(state >= GRAB_NECK)
 	//	affecting.Stun(5)	//It will hamper your voice, being choked and all.
@@ -97,7 +103,7 @@
 			L.adjustOxyLoss(1)
 
 	if(state >= GRAB_KILL)
-		affecting.Weaken(5)	//Should keep you down unless you get help.
+		affecting.Knockdown(5)	//Should keep you down unless you get help.
 		affecting.losebreath = min(affecting.losebreath + 2, 3)
 
 /obj/item/weapon/grab/attack_self()
@@ -109,7 +115,7 @@
 
 
 /obj/item/weapon/grab/proc/s_click(obj/screen/S)
-	if(!affecting || !assailant || timeDestroyed)
+	if(!affecting || !assailant || gcDestroyed)
 		return
 	if(assailant.attack_delayer.blocked())
 		return
@@ -149,7 +155,7 @@
 			state = GRAB_NECK
 			icon_state = "grabbed+1"
 			if(!affecting.locked_to)
-				affecting.loc = assailant.loc
+				affecting.forceMove(assailant.loc)
 			affecting.attack_log += "\[[time_stamp()]\] <font color='orange'>Has had their neck grabbed by [assailant.name] ([assailant.ckey])</font>"
 			assailant.attack_log += "\[[time_stamp()]\] <font color='red'>Grabbed the neck of [affecting.name] ([affecting.ckey])</font>"
 			log_attack("<font color='red'>[assailant.name] ([assailant.ckey]) grabbed the neck of [affecting.name] ([affecting.ckey])</font>")
@@ -227,12 +233,14 @@
 			user.visible_message("<span class='danger'>[user] is attempting to devour [affecting]!</span>", \
 				drugged_message="<span class='danger'>[user] is attempting to kiss [affecting]! Ew!</span>")
 			if(istype(user, /mob/living/carbon/alien/humanoid/hunter))
-				if(!do_mob(user, affecting)) return
+				if(!do_mob(user, affecting))
+					return
 			else
-				if(!do_mob(user, affecting, 100)) return
+				if(!do_mob(user, affecting, 100))
+					return
 			user.visible_message("<span class='danger'>[user] devours [affecting]!</span>", \
 				drugged_message="<span class='danger'>[affecting] vanishes in disgust.</span>")
-			affecting.loc = user
+			affecting.forceMove(user)
 			attacker.stomach_contents.Add(affecting)
 			returnToPool(src)
 
@@ -252,3 +260,8 @@
 		returnToPool(hud)
 	hud = null
 	..()
+
+/mob/proc/grab_check(mob/victim)
+	if(victim == src || victim.anchored || lying)
+		return 1
+	return 0

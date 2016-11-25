@@ -36,7 +36,8 @@
 
 
 /datum/preferences/proc/load_path(ckey,filename="preferences.sav")
-	if(!ckey)	return
+	if(!ckey)
+		return
 	path = "data/player_saves/[copytext(ckey,1,2)]/[ckey]/[filename]"
 	savefile_version = SAVEFILE_VERSION_MAX
 
@@ -89,6 +90,7 @@
 	special_popup	=	text2num(preference_list_client["special"])
 	randomslot		=	text2num(preference_list_client["randomslot"])
 	usenanoui		=	text2num(preference_list_client["usenanoui"])
+	tooltips		=	text2num(preference_list_client["tooltips"])
 	progress_bars	=	text2num(preference_list_client["progress_bars"])
 	space_parallax	=	text2num(preference_list_client["space_parallax"])
 	space_dust		=	text2num(preference_list_client["space_dust"])
@@ -115,10 +117,13 @@
 
 
 /datum/preferences/proc/load_preferences()
-	if(!path)				return 0
-	if(!fexists(path))		return 0
+	if(!path)
+		return 0
+	if(!fexists(path))
+		return 0
 	var/savefile/S = new /savefile(path)
-	if(!S)					return 0
+	if(!S)
+		return 0
 	S.cd = "/"
 
 	S["version"] >> savefile_version
@@ -171,15 +176,15 @@
 	check.Add("SELECT ckey FROM client WHERE ckey = ?", ckey)
 	if(check.Execute(db))
 		if(!check.NextRow())
-			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special, usenanoui, progress_bars, space_parallax, space_dust, parallax_speed) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",\
-			ckey, ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, progress_bars, space_parallax, space_dust, parallax_speed)
+			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",\
+			ckey, ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed)
 			if(!q.Execute(db))
 				message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 		else
-			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,usewmp=?,special=?,usenanoui=?,progress_bars=?,space_parallax=?,space_dust=?,parallax_speed=? WHERE ckey = ?",\
-			ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, progress_bars, space_parallax, space_dust, parallax_speed, ckey)
+			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,usewmp=?,special=?,usenanoui=?,tooltips=?,progress_bars=?,space_parallax=?,space_dust=?,parallax_speed=? WHERE ckey = ?",\
+			ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, ckey)
 			if(!q.Execute(db))
 				message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
@@ -193,9 +198,11 @@
 	return 1
 
 /datum/preferences/proc/save_preferences()
-	if(!path)				return 0
+	if(!path)
+		return 0
 	var/savefile/S = new /savefile(path)
-	if(!S)					return 0
+	if(!S)
+		return 0
 	S.cd = "/"
 
 	S["version"] << savefile_version
@@ -220,9 +227,11 @@
 
 //saving volume changes
 /datum/preferences/proc/save_volume()
-	if(!path)				return 0
+	if(!path)
+		return 0
 	var/savefile/S = new /savefile(path)
-	if(!S)					return 0
+	if(!S)
+		return 0
 	S.cd = "/"
 
 	S["volume"] << volume
@@ -271,7 +280,6 @@ SELECT
     players.age,
     players.species,
     players.language,
-    players.flavor_text,
     players.med_record,
     players.sec_record,
     players.gen_record,
@@ -360,7 +368,6 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	age 				= text2num(preference_list["age"])
 	species				= preference_list["species"]
 	language			= preference_list["language"]
-	flavor_text			= preference_list["flavor_text"]
 	med_record			= preference_list["med_record"]
 	sec_record			= preference_list["sec_record"]
 	gen_record			= preference_list["gen_record"]
@@ -416,10 +423,14 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	metadata			= sanitize_text(metadata, initial(metadata))
 	real_name			= reject_bad_name(real_name)
 
-	if(isnull(species)) species = "Human"
-	if(isnull(language)) language = "None"
-	if(isnull(nanotrasen_relation)) nanotrasen_relation = initial(nanotrasen_relation)
-	if(!real_name) real_name = random_name(gender,species)
+	if(isnull(species))
+		species = "Human"
+	if(isnull(language))
+		language = "None"
+	if(isnull(nanotrasen_relation))
+		nanotrasen_relation = initial(nanotrasen_relation)
+	if(!real_name)
+		real_name = random_name(gender,species)
 	be_random_name	= sanitize_integer(be_random_name, 0, 1, initial(be_random_name))
 	gender			= sanitize_gender(gender)
 	age				= sanitize_integer(age, AGE_MIN, AGE_MAX, initial(age))
@@ -455,22 +466,29 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	job_engsec_med = sanitize_integer(job_engsec_med, 0, 65535, initial(job_engsec_med))
 	job_engsec_low = sanitize_integer(job_engsec_low, 0, 65535, initial(job_engsec_low))
 
+	for(var/role_id in special_roles)
+		roles[role_id]=0
 	q = new
 	q.Add("SELECT role, preference FROM client_roles WHERE ckey=? AND slot=?", ckey, slot)
 	if(q.Execute(db))
 		while(q.NextRow())
 			var/list/row = q.GetRowData()
-			roles[row["role"]] = text2num(row["preference"]) | ROLEPREF_PERSIST
+			roles[row["role"]] = text2num(row["preference"])
 	else
 		message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 		WARNING("[__LINE__]: datum/preferences/load_save_sqlite has returned")
 		return 0
 
-	if(!skills) skills = list()
-	if(!used_skillpoints) used_skillpoints= 0
-	if(isnull(disabilities)) disabilities = 0
-	if(!player_alt_titles) player_alt_titles = new()
-	if(!organ_data) src.organ_data = list()
+	if(!skills)
+		skills = list()
+	if(!used_skillpoints)
+		used_skillpoints= 0
+	if(isnull(disabilities))
+		disabilities = 0
+	if(!player_alt_titles)
+		player_alt_titles = new()
+	if(!organ_data)
+		src.organ_data = list()
 
 	if(user)
 		to_chat(user, "Sucessfully loaded [real_name].")
@@ -480,7 +498,8 @@ AND players.player_slot = ? ;"}, ckey, slot)
 
 /datum/preferences/proc/load_save(dir)
 	var/savefile/S = new /savefile(path)
-	if(!S) return 0
+	if(!S)
+		return 0
 	S.cd = dir
 
 	//Character
@@ -521,7 +540,6 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	S["job_engsec_low"]		>> job_engsec_low
 
 	//Miscellaneous
-	S["flavor_text"]		>> flavor_text
 	S["med_record"]			>> med_record
 	S["sec_record"]			>> sec_record
 	S["gen_record"]			>> gen_record
@@ -539,10 +557,14 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	//Sanitize
 	metadata		= sanitize_text(metadata, initial(metadata))
 	real_name		= reject_bad_name(real_name)
-	if(isnull(species)) species = "Human"
-	if(isnull(language)) language = "None"
-	if(isnull(nanotrasen_relation)) nanotrasen_relation = initial(nanotrasen_relation)
-	if(!real_name) real_name = random_name(gender,species)
+	if(isnull(species))
+		species = "Human"
+	if(isnull(language))
+		language = "None"
+	if(isnull(nanotrasen_relation))
+		nanotrasen_relation = initial(nanotrasen_relation)
+	if(!real_name)
+		real_name = random_name(gender,species)
 	be_random_name	= sanitize_integer(be_random_name, 0, 1, initial(be_random_name))
 	gender			= sanitize_gender(gender)
 	age				= sanitize_integer(age, AGE_MIN, AGE_MAX, initial(age))
@@ -572,11 +594,16 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	job_engsec_med = sanitize_integer(job_engsec_med, 0, 65535, initial(job_engsec_med))
 	job_engsec_low = sanitize_integer(job_engsec_low, 0, 65535, initial(job_engsec_low))
 
-	if(!skills) skills = list()
-	if(!used_skillpoints) used_skillpoints= 0
-	if(isnull(disabilities)) disabilities = 0
-	if(!player_alt_titles) player_alt_titles = new()
-	if(!organ_data) src.organ_data = list()
+	if(!skills)
+		skills = list()
+	if(!used_skillpoints)
+		used_skillpoints= 0
+	if(isnull(disabilities))
+		disabilities = 0
+	if(!player_alt_titles)
+		player_alt_titles = new()
+	if(!organ_data)
+		src.organ_data = list()
 	//if(!skin_style) skin_style = "Default"
 
 
@@ -596,16 +623,20 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	return 1
 
 /datum/preferences/proc/random_character()
-	if(!path)				return 0
-	if(!fexists(path))		return 0
+	if(!path)
+		return 0
+	if(!fexists(path))
+		return 0
 	var/savefile/S = new /savefile(path)
-	if(!S)					return 0
+	if(!S)
+		return 0
 	var/list/saves = list()
 	var/name
 	for(var/i=1, i<=MAX_SAVE_SLOTS, i++)
 		S.cd = "/character[i]"
 		S["real_name"] >> name
-		if(!name) continue
+		if(!name)
+			continue
 		saves.Add(S.cd)
 
 	if(!saves.len)
@@ -616,12 +647,16 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	return 1
 
 /datum/preferences/proc/load_character(slot)
-	if(!path)				return 0
-	if(!fexists(path))		return 0
+	if(!path)
+		return 0
+	if(!fexists(path))
+		return 0
 	var/savefile/S = new /savefile(path)
-	if(!S)					return 0
+	if(!S)
+		return 0
 	S.cd = "/"
-	if(!slot)	slot = default_slot
+	if(!slot)
+		slot = default_slot
 	slot = sanitize_integer(slot, 1, MAX_SAVE_SLOTS, initial(default_slot))
 	if(slot != default_slot)
 		default_slot = slot
@@ -648,18 +683,18 @@ AND players.player_slot = ? ;"}, ckey, slot)
 
 	check.Add("SELECT player_ckey FROM players WHERE player_ckey = ? AND player_slot = ?", ckey, slot)
 	if(check.Execute(db))
-		if(!check.NextRow())          //1           2           3         4         5           6      7   8       9        10          11         12         13         14                15           16
-			q.Add("INSERT INTO players (player_ckey,player_slot,ooc_notes,real_name,random_name,gender,age,species,language,flavor_text,med_record,sec_record,gen_record,player_alt_titles,disabilities,nanotrasen_relation) \
-				   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-				                        ckey,       slot,       metadata, real_name, be_random_name, gender, age, species, language, flavor_text, med_record, sec_record, gen_record, altTitles, disabilities, nanotrasen_relation)
+		if(!check.NextRow())          //1           2           3         4         5           6      7   8       9        10          11         12         13               14          15
+			q.Add("INSERT INTO players (player_ckey,player_slot,ooc_notes,real_name,random_name,gender,age,species,language,med_record,sec_record,gen_record,player_alt_titles,disabilities,nanotrasen_relation) \
+				   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+				                        ckey,       slot,       metadata, real_name, be_random_name, gender, age, species, language, med_record, sec_record, gen_record, altTitles, disabilities, nanotrasen_relation)
 			if(!q.Execute(db))
 				message_admins("Error #:[q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 			to_chat(user, "Created Character")
 		else
-			q.Add("UPDATE players SET ooc_notes=?,real_name=?,random_name=?,gender=?,age=?,species=?,language=?,flavor_text=?,med_record=?,sec_record=?,gen_record=?,player_alt_titles=?,disabilities=?,nanotrasen_relation=? WHERE player_ckey = ? AND player_slot = ?",\
-									  metadata, real_name, be_random_name, gender, age, species, language, flavor_text, med_record, sec_record, gen_record, altTitles, disabilities, nanotrasen_relation, ckey, slot)
+			q.Add("UPDATE players SET ooc_notes=?,real_name=?,random_name=?,gender=?,age=?,species=?,language=?,med_record=?,sec_record=?,gen_record=?,player_alt_titles=?,disabilities=?,nanotrasen_relation=? WHERE player_ckey = ? AND player_slot = ?",\
+									  metadata, real_name, be_random_name, gender, age, species, language, med_record, sec_record, gen_record, altTitles, disabilities, nanotrasen_relation, ckey, slot)
 			if(!q.Execute(db))
 				message_admins("Error #:[q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
@@ -751,11 +786,11 @@ AND players.player_slot = ? ;"}, ckey, slot)
 		return 0
 
 	for(var/role_id in roles)
-		if(!(roles[role_id] & ROLEPREF_PERSIST))
+		if(!(roles[role_id] & ROLEPREF_SAVE))
 			continue
 		q = new
-		q.Add("INSERT INTO client_roles (ckey, slot, role, preference) VALUES (?,?,?,?)", ckey, slot, role_id, (roles[role_id] & ROLEPREF_SAVEMASK))
-		//testing("INSERT INTO client_roles (ckey, slot, role, preference) VALUES ('[ckey]',[slot],'[role_id]',[roles[role_id] & ROLEPREF_SAVEMASK])")
+		q.Add("INSERT INTO client_roles (ckey, slot, role, preference) VALUES (?,?,?,?)", ckey, slot, role_id, (roles[role_id] & ROLEPREF_VALMASK))
+		//testing("INSERT INTO client_roles (ckey, slot, role, preference) VALUES ('[ckey]',[slot],'[role_id]',[roles[role_id] & ROLEPREF_VALMASK])")
 		if(!q.Execute(db)) // This never triggers on error, for some reason.
 			message_admins("Error #: [q.Error()] - [q.ErrorMsg()]")
 			WARNING("Error #:[q.Error()] - [q.ErrorMsg()]")
@@ -767,9 +802,11 @@ AND players.player_slot = ? ;"}, ckey, slot)
 /datum/preferences/proc/save_character()
 
 
-	if(!path)				return 0
+	if(!path)
+		return 0
 	var/savefile/S = new /savefile(path)
-	if(!S)					return 0
+	if(!S)
+		return 0
 	S.cd = "/character[default_slot]"
 
 	//Character + misc
@@ -780,7 +817,6 @@ AND players.player_slot = ? ;"}, ckey, slot)
 	S["age"]                   << age
 	S["species"]               << species
 	S["language"]              << language
-	S["flavor_text"]           << flavor_text
 	S["med_record"]            << med_record
 	S["sec_record"]            << sec_record
 	S["gen_record"]            << gen_record

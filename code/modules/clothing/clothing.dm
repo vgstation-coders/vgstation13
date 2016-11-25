@@ -12,6 +12,12 @@
 
 	var/list/obj/item/clothing/accessory/accessories = list()
 
+/obj/item/clothing/Destroy()
+	for(var/obj/item/clothing/accessory/A in accessories)
+		accessories.Remove(A)
+		qdel(A)
+	..()
+
 /obj/item/clothing/examine(mob/user)
 	..()
 	for(var/obj/item/clothing/accessory/A in accessories)
@@ -91,7 +97,8 @@
 			return 1
 
 /obj/item/clothing/proc/remove_accessory(mob/user, var/obj/item/clothing/accessory/accessory)
-	if(!accessory || !(accessory in accessories)) return
+	if(!accessory || !(accessory in accessories))
+		return
 
 	accessory.on_removed(user)
 	accessories.Remove(accessory)
@@ -104,9 +111,11 @@
 	set name = "Remove Accessory"
 	set category = "Object"
 	set src in usr
-	if(usr.incapacitated()) return
+	if(usr.incapacitated())
+		return
 
-	if(!accessories.len) return
+	if(!accessories.len)
+		return
 	var/obj/item/clothing/accessory/A
 	if(accessories.len > 1)
 		A = input("Select an accessory to remove from [src]") as anything in accessories
@@ -128,7 +137,8 @@
 /obj/item/clothing/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
 
 	. = ..() //Default return value. If 1, item can be equipped. If 0, it can't be.
-	if(!.) return //Default return value is 0 - don't check for species
+	if(!.)
+		return //Default return value is 0 - don't check for species
 
 	if(species_restricted && istype(M,/mob/living/carbon/human) && (slot != slot_l_store && slot != slot_r_store))
 
@@ -140,7 +150,8 @@
 			exclusive = 1
 
 		var/datum/species/base_species = H.species
-		if(!base_species) return
+		if(!base_species)
+			return
 
 		var/base_species_can_wear = 1 //If the body's main species can wear this
 
@@ -199,6 +210,12 @@
 			if(I)
 				I.stripped(stripper)
 
+/obj/item/clothing/become_defective()
+	if(!defective)
+		..()
+		for(var/A in armor)
+			armor[A] -= rand(armor[A]/3, armor[A])
+
 //Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears
 	name = "ears"
@@ -207,7 +224,8 @@
 	slot_flags = SLOT_EARS
 
 /obj/item/clothing/ears/attack_hand(mob/user as mob)
-	if (!user) return
+	if (!user)
+		return
 
 	if (src.loc != user || !istype(user,/mob/living/carbon/human))
 		..()
@@ -487,8 +505,14 @@ BLIND     // can't see anything
 			mode = "Its vital tracker and tracking beacon appear to be enabled."
 	to_chat(user, "<span class='info'>" + mode + "</span>")
 
+
+/obj/item/clothing/under/ui_action_click()
+	for(var/obj/item/clothing/accessory/holomap_chip/HC in accessories)
+		HC.togglemap()
+
 /obj/item/clothing/under/proc/set_sensors(mob/user as mob)
-	if(user.incapacitated()) return
+	if(user.incapacitated())
+		return
 	if(has_sensor >= 2)
 		to_chat(user, "<span class='warning'>The controls are locked.</span>")
 		return 0

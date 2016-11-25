@@ -11,6 +11,8 @@
 	var/obj/item/weapon/toppaper	//The topmost piece of paper.
 	flags = FPRINT
 	slot_flags = SLOT_BELT
+	autoignition_temperature = AUTOIGNITION_WOOD
+	fire_fuel = 3
 
 /obj/item/weapon/clipboard/New()
 	. = ..()
@@ -22,10 +24,10 @@
 		if(!(istype(over_object, /obj/screen/inventory) ))
 			return ..()
 
-		if(!M.incapacitated())
+		if(!M.incapacitated() && Adjacent(usr))
 			var/obj/screen/inventory/OI = over_object
 
-			if(OI.hand_index)
+			if(OI.hand_index && M.put_in_hand_check(src, OI.hand_index))
 				M.u_equip(src, 0)
 				M.put_in_hand(OI.hand_index, src)
 				src.add_fingerprint(usr)
@@ -36,9 +38,13 @@
 	if(toppaper)
 		overlays += toppaper.icon_state
 		overlays += toppaper.overlays
+	else
+		var/obj/item/weapon/photo/Ph = locate(/obj/item/weapon/photo) in src
+		if(Ph)
+			overlays += image(Ph.icon)
 	if(haspen)
-		overlays += image(icon = icon, icon_state = "clipboard_pen")
-	overlays += image(icon = icon, icon_state = "clipboard_over")
+		overlays += image(icon, "clipboard_pen")
+	overlays += image(icon, "clipboard_over")
 	return
 
 /obj/item/weapon/clipboard/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -68,7 +74,7 @@
 	for(var/obj/item/weapon/paper/P in src)
 		if(P==toppaper)
 			continue
-		dat += "<A href='?src=\ref[src];remove=\ref[P]'>Remove</A> - <A href='?src=\ref[src];read=\ref[P]'>[P.name]</A><BR>"
+		dat += "<A href='?src=\ref[src];remove=\ref[P]'>Remove</A> - <A href='?src=\ref[src];top=\ref[P]'>Move to Top</A> - <A href='?src=\ref[src];read=\ref[P]'>[P.name]</A><BR>"
 	for(var/obj/item/weapon/photo/Ph in src)
 		dat += "<A href='?src=\ref[src];remove=\ref[Ph]'>Remove</A> - <A href='?src=\ref[src];look=\ref[Ph]'>[Ph.name]</A><BR>"
 
@@ -86,7 +92,7 @@
 
 		if(href_list["pen"])
 			if(haspen)
-				haspen.loc = usr.loc
+				haspen.forceMove(usr.loc)
 				usr.put_in_hands(haspen)
 				haspen = null
 
@@ -114,7 +120,7 @@
 				admin_log.Add(message)
 				return
 			if(P)
-				P.loc = usr.loc
+				P.forceMove(usr.loc)
 				usr.put_in_hands(P)
 				if(P == toppaper)
 					toppaper = null

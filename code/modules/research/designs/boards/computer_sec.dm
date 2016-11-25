@@ -4,7 +4,7 @@
 	name = "Circuit Design (Security Cameras)"
 	desc = "Allows for the construction of circuit boards used to build security camera computers."
 	id = "seccamera"
-	req_tech = list("programming" = 2)
+	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -14,7 +14,7 @@
 	name = "Circuit Design (Advanced Security Cameras)"
 	desc = "Allows for the construction of circuit boards used to build advanced security camera computers."
 	id = "advseccamera"
-	req_tech = list("programming" = 4)
+	req_tech = list(Tc_PROGRAMMING = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -24,7 +24,7 @@
 	name = "Circuit Design (Security Records Console)"
 	desc = "Allows for the construction of circuit boards used to build a security records console."
 	id = "secdata"
-	req_tech = list("programming" = 2)
+	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
@@ -34,7 +34,7 @@
 	name = "Circuit Design (Prisoner Management Console)"
 	desc = "Allows for the construction of circuit boards used to build a prisoner management console."
 	id = "prisonmanage"
-	req_tech = list("programming" = 2)
+	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"

@@ -68,7 +68,8 @@
 		icon_state = "stickyweb2"
 
 /obj/effect/spider/stickyweb/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0)) return 1
+	if(air_group || (height==0))
+		return 1
 	if(istype(mover, /mob/living/simple_animal/hostile/giant_spider))
 		return 1
 	else if(istype(mover, /mob/living))
@@ -86,8 +87,8 @@
 	var/amount_grown = 0
 	New()
 		..()
-		pixel_x = rand(3,-3)
-		pixel_y = rand(3,-3)
+		pixel_x = rand(3,-3) * PIXEL_MULTIPLIER
+		pixel_y = rand(3,-3) * PIXEL_MULTIPLIER
 		processing_objects.Add(src)
 	Destroy()
 		processing_objects.Remove(src)
@@ -107,7 +108,7 @@
 	desc = "It never stays still for long."
 	icon_state = "spiderling"
 	anchored = 0
-	layer = 2.7
+	layer = HIDING_MOB_PLANE
 	health = 3
 	var/amount_grown = 0
 	var/obj/machinery/atmospherics/unary/vent_pump/entry_vent
@@ -123,7 +124,7 @@
 
 /obj/effect/spider/spiderling/Bump(atom/user)
 	if(istype(user, /obj/structure/table))
-		src.loc = user.loc
+		src.forceMove(user.loc)
 	else
 		..()
 
@@ -155,7 +156,7 @@
 /obj/effect/spider/cocoon/Destroy()
 	src.visible_message("<span class='warning'>\the [src] splits open.</span>")
 	for(var/atom/movable/A in contents)
-		A.loc = src.loc
+		A.forceMove(src.loc)
 	..()
 
 #undef SPIDERWEB_BRUTE_DIVISOR

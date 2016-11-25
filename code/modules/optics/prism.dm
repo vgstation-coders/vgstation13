@@ -95,7 +95,8 @@ var/list/obj/machinery/prism/prism_list = list()
 /obj/machinery/prism/proc/update_beams(var/obj/effect/beam/emitter/touching_beam)
 	overlays.len = 0
 	//testing("Beam count: [beams.len]")
-	if(get_dir(src, touching_beam) == dir) return 0 //Make no change for beams touching us on our emission side.
+	if(get_dir(src, touching_beam) == dir)
+		return 0 //Make no change for beams touching us on our emission side.
 	if(!beams)
 		if(loc || !gcDestroyed)
 			beams = list()

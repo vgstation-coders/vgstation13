@@ -8,7 +8,7 @@
 	icon_state = "stage1"
 	anchored = 1
 	density = 0
-	layer = 5
+	plane = ABOVE_HUMAN_PLANE
 	pass_flags = PASSTABLE | PASSGRILLE
 	var/energy = 0
 	var/obj/effect/biomass_controller/master = null
@@ -38,7 +38,8 @@
 			qdel(src)
 		if(/obj/item/weapon/melee/energy)
 			qdel(src)
-		if(/obj/item/weapon/pickaxe/plasmacutter) qdel(src)
+		if(/obj/item/weapon/pickaxe/plasmacutter)
+			qdel(src)
 
 		// less effective weapons
 		if(/obj/item/weapon/wirecutters)

@@ -5,7 +5,7 @@
 	name = "fuel rod assembly"
 	var/list/rod_quantities
 	var/percent_depleted = 1
-	layer = 3.1
+	layer = ABOVE_OBJ_LAYER
 
 /obj/item/weapon/fuel_assembly/New()
 	. = ..()

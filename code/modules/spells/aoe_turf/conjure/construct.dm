@@ -29,10 +29,14 @@
 	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
 	invocation = "none"
 	invocation_type = SpI_NONE
-	range = 0
+	range = 3
 	summon_type = list(/turf/simulated/floor/engine/cult)
 
 	hud_state = "const_floor"
+	cast_sound = 'sound/items/welder.ogg'
+
+/spell/aoe_turf/conjure/floor/choose_targets(mob/user = usr)
+	return list(get_turf(user))
 
 /spell/aoe_turf/conjure/floor/conjure_animation(var/atom/movable/overlay/animation, var/turf/target)
 	animation.icon_state = "cultfloor"
@@ -49,10 +53,14 @@
 	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
 	invocation = "none"
 	invocation_type = SpI_NONE
-	range = 0
+	range = 3
 	summon_type = list(/turf/simulated/wall/cult)
 
 	hud_state = "const_wall"
+	cast_sound = 'sound/items/welder.ogg'
+
+/spell/aoe_turf/conjure/wall/choose_targets(mob/user = usr)
+	return list(get_turf(user))
 
 /spell/aoe_turf/conjure/wall/conjure_animation(var/atom/movable/overlay/animation, var/turf/target)
 	animation.icon_state = "cultwall"
@@ -71,6 +79,7 @@
 	invocation_type = SpI_NONE
 	range = 0
 	cast_delay = 50
+	cast_sound = 'sound/items/welder.ogg'
 
 	summon_type = list(/turf/simulated/wall/r_wall)
 
@@ -101,6 +110,7 @@
 
 	summon_type = list(/obj/structure/cult/pylon)
 
+	cast_sound = 'sound/items/welder.ogg'
 	hud_state = "const_pylon"
 
 /spell/aoe_turf/conjure/pylon/cast(list/targets)
@@ -134,6 +144,7 @@
 	icon_state = "m_shield_cult"
 	light_color = LIGHT_COLOR_RED
 	luminosity = 2
+	invisibility = 0
 
 /obj/effect/forcefield/cult/cultify()
 	return

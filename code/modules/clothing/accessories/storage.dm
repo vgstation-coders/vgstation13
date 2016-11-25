@@ -68,6 +68,13 @@
 	icon_state = "webbing"
 	_color = "webbing"
 
+/obj/item/clothing/accessory/storage/webbing/paramed
+	name = "paramedic webbing"
+	desc = "Sturdy mess of synthcotton belts and buckles. Made to be worn by medical personnel"
+	icon_state = "vest_white"
+	_color = "vest_white"
+	slots = 4
+
 /obj/item/clothing/accessory/storage/black_vest
 	name = "black webbing vest"
 	desc = "Robust black synthcotton vest with lots of pockets to hold whatever you need, but cannot hold in hands."
@@ -84,11 +91,11 @@
 
 /obj/item/clothing/accessory/storage/bandolier
 	name = "bandolier"
-	desc = "A bandolier designed to hold up to eight shotgun shells."
+	desc = "A bandolier designed with eight pouches for diffrent ammunition types."
 	icon_state = "bandolier"
 	_color = "bandolier"
 	slots = 8
-	can_only_hold = list("/obj/item/ammo_casing/shotgun")
+	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/weapon/rcd_ammo", "/obj/item/weapon/grenade")
 
 /obj/item/clothing/accessory/storage/knifeharness
 	name = "decorated harness"
@@ -97,6 +104,12 @@
 	_color = "unathiharness2"
 	slots = 2
 	can_only_hold = list("/obj/item/weapon/hatchet", "/obj/item/weapon/kitchen/utensil/knife")
+
+/obj/item/clothing/accessory/storage/neorussian
+	name = "neo-Russian webbing"
+	desc = "These pouches can hold all kinds of rockets, grenades, magazines, and beverages."
+	icon_state = "nr_rig"
+	_color = "nr_rig"
 
 /obj/item/clothing/accessory/storage/knifeharness/attackby(var/obj/item/O as obj, mob/user as mob)
 	..()
@@ -107,7 +120,8 @@
 	for(var/obj/item/I in hold)
 		if(istype(I,/obj/item/weapon/hatchet/unathiknife))
 			count++
-	if(count>2) count = 2
+	if(count>2)
+		count = 2
 	item_state = "unathiharness[count]"
 	icon_state = item_state
 	_color = item_state

@@ -36,8 +36,8 @@
 		icon_state = "fuel_compressor1"
 
 	//20% easier to read than apc code
-	pixel_x = (dir & 3)? 0 : (dir == 4 ? 32 : -32)
-	pixel_y = (dir & 3)? (dir ==1 ? 32 : -32) : 0
+	pixel_x = (dir & 3)? 0 : (dir == 4 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE)
+	pixel_y = (dir & 3)? (dir ==1 ? WORLD_ICON_SIZE : -WORLD_ICON_SIZE) : 0
 
 /obj/machinery/rust_fuel_compressor/attackby(obj/item/W, mob/user)
 
@@ -138,7 +138,8 @@
 		to_chat(user, "You start welding the compressor frame...")
 		playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 		if(do_after(user, src, 50))
-			if(!src || !WT.remove_fuel(3, user)) return
+			if(!src || !WT.remove_fuel(3, user))
+				return
 			new /obj/item/mounted/frame/rust_fuel_assembly_port(loc)
 			user.visible_message(\
 				"<span class='warning'>[src] has been cut away from the wall by [user.name].</span>",\

@@ -101,7 +101,8 @@ var/global/list/all_graffitis = list(
 #define FONT_SIZE "6pt"
 #define FONT_NAME "Comic Sans MS"
 /obj/item/toy/crayon/afterattack(atom/target, mob/user as mob, proximity)
-	if(!proximity) return
+	if(!proximity)
+		return
 
 	if(istype(target, /turf/simulated))
 		var/drawtype = input("Choose what you'd like to draw.", "Crayon scribbles") in list("graffiti","rune","letter","text")
@@ -125,7 +126,8 @@ var/global/list/all_graffitis = list(
 							)
 				preference = input("Choose the graffiti.", "Crayon scribbles") as null|anything in graffitis
 
-				if(!preference) return
+				if(!preference)
+					return
 
 				drawtype=graffitis[preference]
 				to_chat(user, "You start drawing graffiti on \the [target].")
@@ -143,7 +145,8 @@ var/global/list/all_graffitis = list(
 				drawtime = 4 * letter_amount //10 letters = 4 seconds
 
 				alignment = input("Select vertical text alignment (your text is \"[preference]\")", "Crayon scribbles") as null|anything in list("middle", "bottom", "top")
-				if(!alignment) return
+				if(!alignment)
+					return
 
 				if(user.client)
 					var/image/I = image(icon = null) //Create an empty image. You can't just do "image()" for some reason, at least one argument is needed
@@ -165,7 +168,8 @@ var/global/list/all_graffitis = list(
 
 				to_chat(user, "You start writing \"[preference]\" on \the [target].")
 
-		if(!user.Adjacent(target)) return
+		if(!user.Adjacent(target))
+			return
 		if(target.density && !cardinal.Find(get_dir(user, target))) //Drawing on a wall and not standing in a cardinal direction - don't draw
 			to_chat(user, "<span class='warning'>You can't reach \the [target] from here!</span>")
 			return
@@ -189,8 +193,8 @@ var/global/list/all_graffitis = list(
 
 				var/angle = dir2angle_t(get_dir(C, target))
 
-				C.pixel_x = 32 * cos(angle)
-				C.pixel_y = 32 * sin(angle) //Offset the graffiti to make it appear on the wall
+				C.pixel_x = WORLD_ICON_SIZE * cos(angle)
+				C.pixel_y = WORLD_ICON_SIZE * sin(angle) //Offset the graffiti to make it appear on the wall
 				C.on_wall = target
 
 			to_chat(user, "You finish drawing.")

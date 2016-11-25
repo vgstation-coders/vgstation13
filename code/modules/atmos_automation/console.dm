@@ -31,7 +31,8 @@
 	..()
 
 /obj/machinery/computer/general_air_control/atmos_automation/receive_signal(datum/signal/signal)
-	if(!signal || signal.encryption) return
+	if(!signal || signal.encryption)
+		return
 
 	var/id_tag = signal.data["tag"]
 	if(!id_tag)
@@ -167,9 +168,11 @@
 
 	if(href_list["label"])
 		var/datum/automation/A=locate(href_list["label"])
-		if(!A) return 1
+		if(!A)
+			return 1
 		var/nl=input(usr, "Please enter a label for this automation task.") as text|null
-		if(!nl) return 1
+		if(!nl)
+			return 1
 		nl	= copytext(sanitize(nl), 1, 50)
 		A.label=nl
 		updateUsrDialog()
@@ -179,11 +182,13 @@
 		if(href_list["reset"]=="*")
 			investigation_log(I_ATMOS,"had all automations reset by [key_name(usr)]")
 			for(var/datum/automation/A in automations)
-				if(!A) continue
+				if(!A)
+					continue
 				A.OnReset()
 		else
 			var/datum/automation/A=locate(href_list["reset"])
-			if(!A) return 1
+			if(!A)
+				return 1
 			A.OnReset()
 			investigation_log(I_ATMOS,"had the [A.name]/[A.desc] automation reset by [key_name(usr)]")
 		updateUsrDialog()
@@ -193,14 +198,17 @@
 		if(href_list["remove"]=="*")
 			investigation_log(I_ATMOS,"had all automations removed by [key_name(usr)]")
 			var/confirm=alert("Are you sure you want to remove ALL automations?","Automations","Yes","No")
-			if(confirm == "No") return 0
+			if(confirm == "No")
+				return 0
 			for(var/datum/automation/A in automations)
-				if(!A) continue
+				if(!A)
+					continue
 				A.OnRemove()
 				automations.Remove(A)
 		else
 			var/datum/automation/A=locate(href_list["remove"])
-			if(!A) return 1
+			if(!A)
+				return 1
 			A.OnRemove()
 			automations.Remove(A)
 			investigation_log(I_ATMOS,"had the [A.name]/[A.desc] automation removed by [key_name(usr)]")
@@ -209,7 +217,8 @@
 
 	if(href_list["read"])
 		var/code = input("Input exported AAC code.","Automations","") as message|null
-		if(!code || (!issilicon(usr) && !Adjacent(usr))) return 0
+		if(!code || (!issilicon(usr) && !Adjacent(usr)))
+			return 0
 		try // To prevent invalid JSON causing runtimes.
 			ReadCode(code)
 		catch

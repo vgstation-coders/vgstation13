@@ -4,7 +4,7 @@
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "mahoguny"
 	item_state = "mahoguny"
-	origin_tech = "combat=5;biotech=6"
+	origin_tech = Tc_COMBAT + "=5;" + Tc_BIOTECH + "=6"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	recoil = 1
 	slot_flags = SLOT_BELT
@@ -23,7 +23,8 @@
 	to_chat(user, "<span class='info'>It has [current_ammo] round\s remaining.</span>")
 
 /obj/item/weapon/gun/mahoguny/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
-	if(flag)	return //we're placing gun on a table or in backpack
+	if(flag)
+		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
 		to_chat(user, "<span class='warning'>A label sticks the trigger to the trigger guard!</span>")//Such a new feature, the player might not know what's wrong if it doesn't tell them.
 
@@ -50,7 +51,8 @@
 				..(newturf,user,params,reflex,struggle)
 
 /obj/item/weapon/gun/mahoguny/process_chambered()
-	if(in_chamber) return 1
+	if(in_chamber)
+		return 1
 	return 0
 
 /obj/item/weapon/gun/mahoguny/attackby(obj/item/W, mob/user)

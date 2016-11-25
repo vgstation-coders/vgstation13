@@ -3,7 +3,7 @@
 	mymob.gui_icons.adminbus_bg.icon = 'icons/adminbus/fullscreen.dmi'
 	mymob.gui_icons.adminbus_bg.icon_state = "HUD"
 	mymob.gui_icons.adminbus_bg.name = "HUD"
-	mymob.gui_icons.adminbus_bg.layer = 19
+	mymob.gui_icons.adminbus_bg.layer = HUD_BASE_LAYER
 	mymob.gui_icons.adminbus_bg.screen_loc = ui_adminbus_bg
 
 	mymob.gui_icons.adminbus_delete = getFromPool(/obj/screen/adminbus)
@@ -252,7 +252,7 @@
 		var/obj/screen/adminbus/S = getFromPool(/obj/screen/adminbus)
 		S.icon = 'icons/adminbus/32x32.dmi'
 		S.icon_state = ""
-		S.screen_loc = "[12-round(i/2)]:[16*((i-1)%2)],14:16"
+		S.screen_loc = "[12-round(i/2)]:[WORLD_ICON_SIZE/2*((i-1)%2)],14:[WORLD_ICON_SIZE/2]"
 		mymob.gui_icons.rearviews[i] = S
 
 	for(var/i=1;i<=16;i++)

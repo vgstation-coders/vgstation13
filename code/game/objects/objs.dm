@@ -1,9 +1,8 @@
-var/global/list/reagents_to_log = list(FUEL  =  "welder fuel", PLASMA=  PLASMA, PACID =  "polytrinic acid", SACID =  "sulphuric acid", AMUTATIONTOXIN = "slime mutation toxin")
+var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXIN, MINDBREAKER, SPIRITBREAKER, CYANIDE, IMPEDREZENE, LUBE)
 /obj
 	var/origin_tech = null	//Used by R&D to determine what research bonuses it grants.
 	var/reliability = 100	//Used by SOME devices to determine how reliable they are.
 	var/crit_fail = 0
-	var/unacidable = 0 //universal "unacidabliness" var, here so you can use it in any obj.
 	animate_movement = 2
 	var/throwforce = 1
 	var/siemens_coefficient = 0 // for electrical admittance/conductance (electrocution checks and shit) - 0 is not conductive, 1 is conductive - this is a range, not binary
@@ -15,7 +14,7 @@ var/global/list/reagents_to_log = list(FUEL  =  "welder fuel", PLASMA=  PLASMA, 
 
 	var/damtype = "brute"
 	var/force = 0
-	
+
 	//Should we alert about reagents that should be logged?
 	var/log_reagents = 1
 
@@ -26,7 +25,9 @@ var/global/list/reagents_to_log = list(FUEL  =  "welder fuel", PLASMA=  PLASMA, 
 
 	var/holomap = FALSE // Whether we should be on the holomap.
 	var/auto_holomap = FALSE // Whether we automatically soft-add ourselves to the holomap in New(), make sure this is false is something does it manually.
-	plane = PLANE_OBJ
+	plane = OBJ_PLANE
+
+	var/defective = 0
 
 /obj/New()
 	..()
@@ -65,13 +66,13 @@ var/global/list/reagents_to_log = list(FUEL  =  "welder fuel", PLASMA=  PLASMA, 
 
 /obj/proc/cultify()
 	qdel(src)
-	
+
 /obj/proc/wrenchable()
 	return 0
-	
+
 /obj/proc/can_wrench_shuttle()
 	return 0
-	
+
 /obj/proc/is_sharp()
 	return sharpness
 
@@ -116,7 +117,7 @@ var/global/list/reagents_to_log = list(FUEL  =  "welder fuel", PLASMA=  PLASMA, 
 	if(in_use)
 		var/is_in_use = 0
 		if(_using && _using.len)
-			var/list/nearby = viewers(1, src)
+			var/list/nearby = viewers(1, src) + loc //List of nearby things includes the location - allows you to call this proc on items and such
 			for(var/mob/M in _using) // Only check things actually messing with us.
 				if (!M || !M.client || M.machine != src)
 					_using.Remove(M)
@@ -179,7 +180,8 @@ var/global/list/reagents_to_log = list(FUEL  =  "welder fuel", PLASMA=  PLASMA, 
 		if(current_size >= STAGE_FIVE)
 			anchored = 0
 			step_towards(src, S)
-	else step_towards(src, S)
+	else
+		step_towards(src, S)
 
 /obj/proc/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return "<b>NO MULTITOOL_MENU!</b>"
@@ -306,9 +308,9 @@ a {
 		machine._using += src
 		machine.in_use = 1
 
-/obj/proc/wrenchAnchor(var/mob/user) //proc to wrench an object that can be secured
+/obj/proc/wrenchAnchor(var/mob/user, var/time_to_wrench=30) //proc to wrench an object that can be secured
 	for(var/obj/other in loc) //ensure multiple things aren't anchored in one place
-		if(other.anchored == 1 && other.density == 1 && density && !anchored)
+		if(other.anchored == 1 && other.density == 1 && density && !anchored && !(other.flags & ON_BORDER))
 			to_chat(user, "\The [other] is already anchored in this location.")
 			return -1
 	if(!anchored)
@@ -322,7 +324,7 @@ a {
 	user.visible_message(	"[user] begins to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.",
 							"You begin to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.")
 	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
-	if(do_after(user, src, 30))
+	if(do_after(user, src, time_to_wrench))
 		anchored = !anchored
 		user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
 								"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
@@ -350,21 +352,49 @@ a {
 
 /obj/proc/verb_pickup(mob/living/user)
 	return 0
-	
+
 /obj/proc/can_quick_store(var/obj/item/I) //proc used to check that the current object can store another through quick equip
 	return 0
-	
+
 /obj/proc/quick_store(var/obj/item/I) //proc used to handle quick storing
 	return 0
 
 /**
- * If a mob logouts/logins in side of an object you can use this proc.
+ * Called when a mob inside this obj's contents logs out.
  */
-/obj/proc/on_log()
-	if (isobj(loc))
+/obj/proc/on_logout(var/mob/M)
+	if(isobj(loc))
 		var/obj/location = loc
-		location.on_log()
+		location.on_logout(M)
+
+/**
+ * Called when a mob inside this obj's contents logs in.
+ */
+/obj/proc/on_login(var/mob/M)
+	if(isobj(loc))
+		var/obj/location = loc
+		location.on_login(M)
 
 // Dummy to give items special techlist for the purposes of the Device Analyser, in case you'd ever need them to give them different tech levels depending on special checks.
 /obj/proc/give_tech_list()
 	return null
+
+/obj/acidable()
+	return !(flags & INVULNERABLE)
+
+/obj/proc/t_scanner_expose()
+	if (level != LEVEL_BELOW_FLOOR)
+		return
+
+	if (invisibility == 101)
+		invisibility = 0
+
+		spawn(1 SECONDS)
+			var/turf/U = loc
+			if(istype(U) && U.intact)
+				invisibility = 101
+
+/obj/proc/become_defective()
+	if(!defective)
+		defective = 1
+		desc += "\nIt doesn't look to be in the best shape."

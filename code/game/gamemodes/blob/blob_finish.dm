@@ -2,6 +2,7 @@
 	if(!declared)//No blobs have been spawned yet
 		return 0
 	if(blobwincount <= blobs.len)//Blob took over
+		stat_collection.blobblob.blob_wins = 1
 		return 1
 	if(!blob_cores.len) // blob is dead
 		return 1

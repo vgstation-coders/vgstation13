@@ -31,7 +31,7 @@ var/global/datum/shuttle/transport/transport_shuttle = new(starting_area = /area
 	cant_leave_zlevel = list() //Bus
 
 	cooldown = 0
-	pre_flight_delay = 0
+	pre_flight_delay = 10
 	transit_delay = 0
 
 	stable = 1
@@ -71,7 +71,7 @@ var/global/datum/shuttle/admin/admin_shuttle = new(starting_area = /area/shuttle
 	cant_leave_zlevel = list() //Bus
 
 	cooldown = 0
-	pre_flight_delay = 0
+	pre_flight_delay = 10
 	transit_delay = 0
 
 	stable = 1

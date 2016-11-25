@@ -19,10 +19,11 @@
 	throwforce				= 5.0
 	throw_range				= 15
 	throw_speed				= 3
+	attack_delay			= 5
 	starting_materials		= list(MAT_IRON = 50, MAT_GLASS = 20)
 	w_type					= RECYK_ELECTRONIC
 	melt_temperature		= MELTPOINT_SILICON
-	origin_tech				= "magnets=1;engineering=1"
+	origin_tech				= Tc_MAGNETS + "=1;" + Tc_ENGINEERING + "=1"
 	// VG: We dun changed dis so we can link simple machines. - N3X
 	var/obj/machinery/buffer // simple machine buffer for device linkage
 	var/clone				= 0 // If this is on cloning will happen, this is handled in machinery code.
@@ -95,19 +96,25 @@
 	return
 
 /obj/item/device/multitool/ai_detect/proc/findItem(pathToFind,atom/thingToSearch)
-	if(locate(pathToFind) in thingToSearch.contents) return 1
+	if(locate(pathToFind) in thingToSearch.contents)
+		return 1
 	for(var/mob/living/carbon/mob in thingToSearch)
-		if(.(pathToFind,mob)) return 1
+		if(.(pathToFind,mob))
+			return 1
 	return 0
 
 /obj/item/device/multitool/ai_detect/proc/findComponent(pathToFind,atom/thingToSearch)
-	if(locate(pathToFind) in thingToSearch.contents) return 1
+	if(locate(pathToFind) in thingToSearch.contents)
+		return 1
 	for(var/obj/item/device/assembly_holder/assembly in thingToSearch)
-		if(.(pathToFind,assembly)) return 1
+		if(.(pathToFind,assembly))
+			return 1
 	for(var/obj/item/device/transfer_valve/valve in thingToSearch)
-		if(.(pathToFind,valve)) return 1
+		if(.(pathToFind,valve))
+			return 1
 	for(var/mob/living/carbon/mob in thingToSearch)
-		if(.(pathToFind,mob)) return 1
+		if(.(pathToFind,mob))
+			return 1
 	return 0
 
 obj/item/device/multitool/ai_detect/update_icon()
@@ -120,17 +127,24 @@ obj/item/device/multitool/ai_detect/update_icon()
 			src.icon_state = "[initial(src.icon_state)]_yellow"
 		else if(src.detected & DETECT_ANALYZER)
 			src.icon_state = "[initial(src.icon_state)]_blue"
-	else src.icon_state = initial(src.icon_state)
+	else
+		src.icon_state = initial(src.icon_state)
 	return
 
 obj/item/device/multitool/ai_detect/examine(mob/user)
 	..()
 	if(src.detected)
 		user << "<span class='info'>The screen displays:</span>"
-		if(DETECT_AI) 		to_chat(user, "<span class='info'>AI detected</span>")
-		if(DETECT_PAI)  	to_chat(user, "<span class='info'>pAI detected></span>")
-		if(DETECT_RECORDER)	to_chat(user, "<span class='info'>Tape recorder detected</span>")
-		if(DETECT_ANALYZER)	to_chat(user, "<span class='info'>Voice analyzer detected</span>")
+		if(detected & DETECT_AI)
+			to_chat(user, "<span class='info'>AI detected</span>")
+		if(detected & DETECT_PAI)
+			to_chat(user, "<span class='info'>pAI detected</span>")
+		if(detected & DETECT_RECORDER)
+			to_chat(user, "<span class='info'>Tape recorder detected</span>")
+		if(detected & DETECT_ANALYZER)
+			to_chat(user, "<span class='info'>Voice analyzer detected</span>")
+	else
+		to_chat(user, "<span class='info'>The screen is not displaying anything.</span>")
 
 ////////////////////////////////////////////////////////////////////////
 #undef DETECT_TICKER_PERIOD

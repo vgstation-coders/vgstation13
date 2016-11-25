@@ -68,8 +68,8 @@ atom/movable/Move() //Hackish
 						H.apply_damage(0.5*damage, BRUTE, "r_leg")
 						H.apply_damage(0.5*damage, BRUTE, "l_arm")
 						H.apply_damage(0.5*damage, BRUTE, "r_arm")
-						H:weakened = max(H:weakened,2)
-						H:updatehealth()
+						H.SetKnockdown(max(H.knockdown,2))
+						H.updatehealth()
 		return ..()
 
 	attackby()
@@ -78,7 +78,8 @@ atom/movable/Move() //Hackish
 	proc/set_up() //Update the overlays to make the openspace turf show what's down a level
 		if(!overlay_references)
 			overlay_references = list()
-		if(!floorbelow) return
+		if(!floorbelow)
+			return
 		overlays += floorbelow
 		for(var/obj/o in floorbelow)
 			var/image/o_img = image(o, dir=o.dir, layer = TURF_LAYER+0.05*o.layer)

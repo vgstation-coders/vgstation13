@@ -95,7 +95,8 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 
 
 /obj/machinery/keycard_auth/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 	if(busy)
 		to_chat(usr, "This device is busy.")
 		return
@@ -125,7 +126,8 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 /obj/machinery/keycard_auth/proc/broadcast_request()
 	icon_state = "auth_on"
 	for(var/obj/machinery/keycard_auth/KA in authenticators)
-		if(KA == src) continue
+		if(KA == src)
+			continue
 		KA.reset()
 		spawn()
 			KA.receive_request(src)

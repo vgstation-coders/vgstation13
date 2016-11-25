@@ -10,7 +10,7 @@ var/list/obj/machinery/flasher/flashers = list()
 	var/range = 2 //this is roughly the size of brig cell
 	var/disable = 0
 	var/last_flash = 0 //Don't want it getting spammed like regular flashes
-	var/strength = 10 //How weakened targets are when flashed.
+	var/strength = 10 //How knocked down targets are when flashed.
 	var/base_state = "mflash"
 	anchored = 1
 	ghost_read=0
@@ -80,11 +80,13 @@ var/list/obj/machinery/flasher/flashers = list()
 	playsound(get_turf(src), 'sound/weapons/flash.ogg', 100, 1)
 	src.last_flash = world.time
 	use_power(1000)
-	if(harm_labeled >= min_harm_label)	return //Still "flashes," so power is used and the noise is made, etc., but it doesn't actually flash anyone.
+	if(harm_labeled >= min_harm_label)
+		return //Still "flashes," so power is used and the noise is made, etc., but it doesn't actually flash anyone.
 	flick("[base_state]_flash", src)
 
 	for (var/mob/O in viewers(src, null))
-		if(isobserver(O)) continue
+		if(isobserver(O))
+			continue
 		if (get_dist(src, O) > src.range)
 			continue
 
@@ -96,9 +98,9 @@ var/list/obj/machinery/flasher/flashers = list()
 		if(istype(O, /mob/living/carbon))
 			var/mob/living/carbon/C = O
 			if(C.eyecheck() <= 0) // Identical to handheld flash safety check
-				C.Weaken(strength)
+				C.Knockdown(strength)
 		else
-			O.Weaken(strength)
+			O.Knockdown(strength)
 
 
 /obj/machinery/flasher/emp_act(severity)

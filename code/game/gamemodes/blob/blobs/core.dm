@@ -6,16 +6,16 @@
 	maxhealth = 200
 	fire_resist = 2
 	custom_process=1
+	destroy_sound = "sound/effects/blobkill.ogg"
 	var/overmind_get_delay = 0 // we don't want to constantly try to find an overmind, do it every 30 seconds
 	var/resource_delay = 0
 	var/last_resource_collection
 	var/point_rate = 2
 	var/mob/camera/blob/creator = null
-	layer = 7
+	layer = BLOB_CORE_LAYER
 	var/core_warning_delay = 0
 	var/previous_health = 200
 
-	layer_new = 7
 	icon_new = "core"
 	icon_classic = "blob_core"
 
@@ -67,16 +67,11 @@
 			to_chat(overmind,"<span class='danger'>YOUR CORE IS UNDER ATTACK!</span> <b><a href='?src=\ref[overmind];blobjump=\ref[loc]'>(JUMP)</a></b>")
 
 	previous_health = health
-
-	if(health <= 0)
-		dying = 1
-		playsound(get_turf(src), 'sound/effects/blobkill.ogg', 50, 1)
-		Delete()
-		return
-	return
+	..()
 
 /obj/effect/blob/core/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
 	if(!overmind)
 		create_overmind()
@@ -180,6 +175,8 @@
 
 
 
+		stat_collection.blobblob.spawned_blob_players++
+
 		if(istype(ticker.mode, /datum/game_mode/blob))
 			var/datum/game_mode/blob/mode = ticker.mode
 			mode.infected_crew += B.mind
@@ -190,12 +187,13 @@
 	if(blob_looks[looks] == 64)
 		spawn(1)
 			overlays.len = 0
+			underlays.len = 0
 
-			overlays += image(icon,"roots", layer = 3)
+			underlays += image(icon,"roots")
 
 			if(!spawning)
 				for(var/obj/effect/blob/B in orange(src,1))
-					overlays += image(icon,"coreconnect",dir = get_dir(src,B), layer = layer+0.1)
+					overlays += image(icon,"coreconnect",dir = get_dir(src,B))
 			if(spawnend)
 				spawn(10)
 					update_icon()

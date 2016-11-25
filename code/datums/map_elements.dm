@@ -9,7 +9,10 @@ var/list/datum/map_element/map_elements = list()
 
 	var/file_path = "maps/randomvaults/new.dmm"
 
-	var/turf/location //A random turf from the map element. Used for jumping to
+	var/turf/location //Lower left turf of the map element
+
+	var/width //Width of the map element, in turfs
+	var/height //Height of the map element, in turfs
 
 /datum/map_element/proc/pre_load() //Called before loading the element
 	return
@@ -17,15 +20,29 @@ var/list/datum/map_element/map_elements = list()
 /datum/map_element/proc/initialize(list/objects) //Called after loading the element. The "objects" list contains all spawned atoms
 	map_elements.Add(src)
 
-	if(objects.len)
+	if(!location && objects.len)
 		location = locate(/turf) in objects
 
+	//Build powernets
+	for(var/obj/structure/cable/C in objects)
+		if(C.powernet)
+			continue
+		
+		C.rebuild_from()
+
 /datum/map_element/proc/load(x, y, z)
-	var/file = file(file_path)
-	if(isfile(file))
-		pre_load()
-		var/list/L = maploader.load_map(file, z, x, y)
-		initialize(L)
+	pre_load()
+
+	if(file_path)
+		var/file = file(file_path)
+		if(isfile(file))
+			var/list/L = maploader.load_map(file, z, x, y, src)
+			initialize(L)
+			return 1
+	else //No file specified - empty map element
+		//These variables are usually set by the map loader. Here we have to set them manually
+		location = locate(x+1, y+1, z) //Location is always lower left corner
+		initialize(list()) //Initialize with an empty list
 		return 1
 
 	return 0

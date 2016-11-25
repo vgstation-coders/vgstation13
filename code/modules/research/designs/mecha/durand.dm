@@ -2,7 +2,7 @@
 	name = "Exosuit Structure (Durand chassis)"
 	desc = "Used to build a Durand chassis."
 	id = "durand_chassis"
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/chassis/durand
 	category = "Durand"
@@ -12,7 +12,7 @@
 	name = "Exosuit Structure (Durand torso)"
 	desc = "Used to build a Durand torso."
 	id = "durand_torso"
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/durand_torso
 	category = "Durand"
@@ -22,7 +22,7 @@
 	name = "Exosuit Structure (Durand left arm)"
 	desc = "Used to build a Durand left arm."
 	id = "durand_larm"
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/durand_left_arm
 	category = "Durand"
@@ -32,7 +32,7 @@
 	name = "Exosuit Structure (Durand right arm)"
 	desc = "Used to build a Durand right arm."
 	id = "durand_rarm"
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/durand_right_arm
 	category = "Durand"
@@ -42,7 +42,7 @@
 	name = "Exosuit Structure (Durand left leg)"
 	desc = "Used to build a Durand left leg."
 	id = "durand_lleg"
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/durand_left_leg
 	category = "Durand"
@@ -52,7 +52,7 @@
 	name = "Exosuit Structure (Durand right leg)"
 	desc = "Used to build a Durand right leg."
 	id = "durand_rleg"
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/durand_right_leg
 	category = "Durand"
@@ -62,7 +62,7 @@
 	name = "Exosuit Structure (Durand head)"
 	desc = "Used to build a Durand head."
 	id = "durand_head"
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/durand_head
 	category = "Durand"
@@ -72,7 +72,7 @@
 	name = "Exosuit Structure (Durand plates)"
 	desc = "Used to build Durand armor plates."
 	id = "durand_armor"
-	req_tech = list("combat" = 1)
+	req_tech = list(Tc_COMBAT = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/mecha_parts/part/durand_armour
 	category = "Durand"

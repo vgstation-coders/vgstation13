@@ -69,7 +69,8 @@ your object, but it will pass through the HTML interface first allowing intercep
 mob/var/datum/html_interface/hi
 
 mob/verb/test()
-	if (!hi) hi = new/datum/html_interface(src, "[src.key]")
+	if (!hi)
+		hi = new/datum/html_interface(src, "[src.key]")
 
 	hi.updateLayout("<div id=\"content\"></div>")
 	hi.updateContent("content", "<p>Head of Security Announcement: WHY"</p>)
@@ -145,7 +146,8 @@ mob/verb/test()
 		"on-close"    = "byond://?src=\ref[src]&html_interface_action=onclose"
 	)
 
-	if (hclient.client.hi_last_pos) params["pos"] = "[hclient.client.hi_last_pos]"
+	if (hclient.client.hi_last_pos)
+		params["pos"] = "[hclient.client.hi_last_pos]"
 
 	winset(hclient.client, "browser_\ref[src]", list2params(params))
 
@@ -173,19 +175,22 @@ mob/verb/test()
 	for (var/client in src.clients)
 		hclient = src._getClient(src.clients[client])
 
-		if (hclient && hclient.active) src._renderTitle(src.clients[client], ignore_cache)
+		if (hclient && hclient.active)
+			src._renderTitle(src.clients[client], ignore_cache)
 
 /datum/html_interface/proc/executeJavaScript(jscript, datum/html_interface_client/hclient = null)
 	if (hclient)
 		hclient = getClient(hclient)
 
 		if (istype(hclient))
-			if (hclient.is_loaded) hclient.client << output(list2params(list(jscript)), "browser_\ref[src].browser:eval")
+			if (hclient.is_loaded)
+				hclient.client << output(list2params(list(jscript)), "browser_\ref[src].browser:eval")
 	else
 		for (var/client in src.clients) if(src.clients[client]) src.executeJavaScript(jscript, src.clients[client])
 
 /datum/html_interface/proc/callJavaScript(func, list/arguments, datum/html_interface_client/hclient = null)
-	if (!arguments) arguments = new/list()
+	if (!arguments)
+		arguments = new/list()
 	if (hclient)
 		hclient = getClient(hclient)
 
@@ -204,7 +209,8 @@ mob/verb/test()
 	for (var/client in src.clients)
 		hclient = src._getClient(src.clients[client])
 
-		if (hclient && hclient.active) src._renderLayout(hclient)
+		if (hclient && hclient.active)
+			src._renderLayout(hclient)
 
 /datum/html_interface/proc/updateContent(id, content, ignore_cache = FALSE)
 	src.content_elements[id] = content
@@ -248,30 +254,38 @@ mob/verb/test()
 		if (src.clients)
 			src.clients.Remove(hclient.client)
 
-			if (!src.clients.len) src.clients = null
+			if (!src.clients.len)
+				src.clients = null
 
 		hclient.client.hi_last_pos = winget(hclient.client, "browser_\ref[src]" ,"pos")
 
 		winshow(hclient.client, "browser_\ref[src]", FALSE)
 		winset(hclient.client, "browser_\ref[src]", "parent=none")
 
-		if (hascall(src.ref, "hiOnHide")) call(src.ref, "hiOnHide")(hclient)
+		if (hascall(src.ref, "hiOnHide"))
+			call(src.ref, "hiOnHide")(hclient)
 
 // Convert a /mob to /client, and /client to /datum/html_interface_client
 /datum/html_interface/proc/getClient(client, create_if_not_exist = FALSE)
-	if (istype(client, /datum/html_interface_client)) return src._getClient(client)
+	if (istype(client, /datum/html_interface_client))
+		return src._getClient(client)
 	else if (ismob(client))
 		var/mob/mob = client
 		client      = mob.client
 
 	if (istype(client, /client))
 		if (create_if_not_exist && (!src.clients || !(client in src.clients)))
-			if (!src.clients)             src.clients = new/list()
-			if (!(client in src.clients)) src.clients[client] = new/datum/html_interface_client(client)
+			if (!src.clients)
+				src.clients = new/list()
+			if (!(client in src.clients))
+				src.clients[client] = new/datum/html_interface_client(client)
 
-		if (src.clients && (client in src.clients)) return src._getClient(src.clients[client])
-		else                                        return null
-	else                                            return null
+		if (src.clients && (client in src.clients))
+			return src._getClient(src.clients[client])
+		else
+			return null
+	else
+		return null
 
 /datum/html_interface/proc/enableFor(datum/html_interface_client/hclient)
 	hclient.active = TRUE
@@ -289,7 +303,8 @@ mob/verb/test()
 			hclient = _getClient(clients[key])
 
 			if (hclient)
-				if (hclient.active) return TRUE
+				if (hclient.active)
+					return TRUE
 			else
 				clients.Remove(key)
 
@@ -309,9 +324,11 @@ mob/verb/test()
 			var/res = hclient.client.inactivity <= 6000 && (hascall(src.ref, "hiIsValidClient") ? call(src.ref, "hiIsValidClient")(hclient, src) : TRUE)
 
 			if (res)
-				if (!hclient.active) src.enableFor(hclient)
+				if (!hclient.active)
+					src.enableFor(hclient)
 			else
-				if (hclient.active)  src.disableFor(hclient)
+				if (hclient.active)
+					src.disableFor(hclient)
 
 			return hclient
 		else
@@ -371,4 +388,5 @@ mob/verb/test()
 
 				if ("onclose")
 					src.hide(hclient)
-		else if (src.ref) src.ref.Topic(href, href_list, hclient, src)
+		else if (src.ref)
+			src.ref.Topic(href, href_list, hclient, src)

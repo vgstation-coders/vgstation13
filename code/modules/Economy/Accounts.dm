@@ -98,7 +98,6 @@ var/global/list/all_money_accounts = list()
 		var/obj/item/delivery/P = new /obj/item/delivery(source_db.loc)
 
 		var/obj/item/weapon/paper/R = new /obj/item/weapon/paper(P)
-		P.wrapped = R
 		R.name = "Account information: [M.owner_name]"
 
 		R.info = {"<b>Account details (confidential)</b><br><hr><br>
@@ -147,8 +146,8 @@ var/global/list/all_money_accounts = list()
 /obj/machinery/account_database
 	name = "Accounts database"
 	desc = "Holds transaction logs, account data and all kinds of other financial records."
-	icon = 'icons/obj/virology.dmi'
-	icon_state = "analyser"
+	icon = 'icons/obj/stationobjs.dmi'
+	icon_state = "account_db"
 	density = 1
 	req_one_access = list(access_hop, access_captain)
 	var/receipt_num
@@ -305,7 +304,8 @@ var/global/list/all_money_accounts = list()
 	return
 
 /obj/machinery/account_database/Topic(var/href, var/href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 	if(href_list["toggle_activated"])
 		activated = !activated
 
@@ -332,7 +332,7 @@ var/global/list/all_money_accounts = list()
 					creating_new_account = 0
 			if("insert_card")
 				if(held_card)
-					held_card.loc = src.loc
+					held_card.forceMove(src.loc)
 					if(ishuman(usr) && !usr.get_active_hand())
 						usr.put_in_hands(held_card)
 					held_card = null

@@ -14,7 +14,7 @@
 	starting_materials = list(MAT_IRON = 750)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "powerstorage=3;syndicate=5"
+	origin_tech = Tc_POWERSTORAGE + "=3;" + Tc_SYNDICATE + "=5"
 	var/drain_rate = 600000		// amount of power to drain per tick
 	var/power_drained = 0 		// has drained this much power
 	var/max_power = 1e8		// maximum power that can be drained before exploding
@@ -38,7 +38,8 @@
 						mode = 1
 						to_chat(user, "You attach the device to the cable.")
 						for(var/mob/M in viewers(user))
-							if(M == user) continue
+							if(M == user)
+								continue
 							to_chat(M, "[user] attaches the power sink to the cable.")
 						return
 				else
@@ -53,7 +54,8 @@
 				attached.attached = null
 				attached = null
 				for(var/mob/M in viewers(user))
-					if(M == user) continue
+					if(M == user)
+						continue
 					to_chat(M, "[user] detaches the power sink from the cable.")
 				set_light(0)
 				icon_state = "powersink0"
@@ -83,7 +85,8 @@
 			if(1)
 				to_chat(user, "You activate the device!")
 				for(var/mob/M in viewers(user))
-					if(M == user) continue
+					if(M == user)
+						continue
 					to_chat(M, "[user] activates the power sink!")
 				mode = 2
 				icon_state = "powersink1"
@@ -93,7 +96,8 @@
 			if(2)  //This switch option wasn't originally included. It exists now. --NeoFite
 				to_chat(user, "You deactivate the device!")
 				for(var/mob/M in viewers(user))
-					if(M == user) continue
+					if(M == user)
+						continue
 					to_chat(M, "[user] deactivates the power sink!")
 				mode = 1
 				set_light(0)

@@ -7,7 +7,6 @@
 	icon_state = "Contain_F"
 	anchored = 1
 	density = 0
-	unacidable = 1
 	use_power = 0
 	luminosity = 4
 
@@ -77,3 +76,6 @@
 	FG1 = master1
 	FG2 = master2
 	return 1
+
+/obj/machinery/containment_field/acidable()
+	return 0

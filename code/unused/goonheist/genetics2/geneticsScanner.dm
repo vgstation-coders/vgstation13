@@ -497,8 +497,10 @@ var/list/genescanner_addresses = list()
 			var/d_style_r = null
 
 			var/gender = ""
-			if(target_mob.gender == "male") gender = "m"
-			else gender = "f"
+			if(target_mob.gender == "male")
+				gender = "m"
+			else
+				gender = "f"
 
 			src.preview_icon = new /icon('human.dmi', "body_[gender]_s")
 

@@ -136,8 +136,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 /obj/machinery/newscaster/New(var/loc, var/ndir, var/building = 1)
 	buildstage = building
 	if(!buildstage) //Already placed newscasters via mapping will not be affected by this
-		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? 28 : -28)
-		pixel_y = (ndir & 3)? (ndir == 1 ? 28 : -28) : 0
+		pixel_x = (ndir & 3)? 0 : (ndir == 4 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER)
+		pixel_y = (ndir & 3)? (ndir == 1 ? 28 * PIXEL_MULTIPLIER: -28 * PIXEL_MULTIPLIER) : 0
 		dir = ndir
 	allCasters += src
 	for(var/obj/machinery/newscaster/NEWSCASTER in allCasters) // Let's give it an appropriate unit number
@@ -359,7 +359,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					else
 						active_num--
 
-				dat += {"Network currently serves a total of [total_num] Feed channels, [active_num] of which are active, and a total of [message_num] Feed Stories." //TODO: CONTINU
+				dat += {"Network currently serves a total of [total_num] Feed channels, [active_num] of which are active, and a total of [message_num] Feed Stories.
 					<BR><BR><B>Liquid Paper remaining:</B> [(src.paper_remaining) *100 ] cm^3
 					<BR><BR><A href='?src=\ref[src];print_paper=[0]'>Print Paper</A>
 					<BR><A href='?src=\ref[src];setScreen=[NEWSCASTER_MENU]'>Cancel</A>"}
@@ -607,7 +607,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			src.updateUsrDialog()
 
 		else if(href_list["upload_photo"])
-			if(!isAI(usr)) return
+			if(!isAI(usr))
+				return
 			if(photo)
 				EjectPhoto()
 				src.updateUsrDialog()
@@ -981,10 +982,11 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		photo = P
 
 /obj/machinery/newscaster/proc/EjectPhoto(mob/user as mob)
-	if(!photo) return
+	if(!photo)
+		return
 	if(istype(photo,/obj/item/weapon/photo))
 		var/obj/item/weapon/photo/P = photo
-		P.loc = src.loc
+		P.forceMove(src.loc)
 
 		photo = null
 	else if(istype(photo,/datum/picture))
@@ -1225,7 +1227,7 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		NEWSPAPER.news_content += FC
 	if(news_network.wanted_issue)
 		NEWSPAPER.important_message = news_network.wanted_issue
-	NEWSPAPER.loc = get_turf(src)
+	NEWSPAPER.forceMove(get_turf(src))
 	src.paper_remaining--
 	return
 

@@ -29,6 +29,11 @@
 	flags = FPRINT
 	siemens_coefficient = 0.9
 
+/obj/item/clothing/head/that/armored
+	name = "armored top-hat"
+	desc = "It's an amish looking top hat. This one looks sturdier."
+	armor = list(melee = 35, bullet = 15, laser = 30, energy = 5, bomb = 10, bio = 0, rad = 0)
+
 /obj/item/clothing/head/redcoat
 	name = "redcoat's hat"
 	icon_state = "redcoat"
@@ -51,7 +56,7 @@
 
 /obj/item/clothing/head/hasturhood
 	name = "hastur's hood"
-	desc = "It's unspeakably stylish"
+	desc = "It's unspeakably stylish."
 	icon_state = "hasturhood"
 	flags = FPRINT
 	body_parts_covered = EARS|HEAD
@@ -79,14 +84,6 @@
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD
 	item_state="cueball"
-
-/obj/item/clothing/head/that
-	name = "sturdy top-hat"
-	desc = "It's an amish looking armored top hat."
-	icon_state = "tophat"
-	item_state = "that"
-	flags = FPRINT
-
 
 /obj/item/clothing/head/greenbandana
 	name = "green bandana"
@@ -198,7 +195,8 @@
 	flags = FPRINT
 
 /obj/item/clothing/head/fedora/OnMobLife(var/mob/living/carbon/human/wearer)
-	if(!istype(wearer)) return
+	if(!istype(wearer))
+		return
 	if(wearer.head == src)
 		if(prob(1))
 			to_chat(wearer, "<span class=\"warning\">You feel positively euphoric!</span>")
@@ -207,9 +205,19 @@
 /obj/item/clothing/head/fedora/verb/tip_fedora()
 	set name = "Tip Fedora"
 	set category = "Object"
-	set desc = "Show that CIS SCUM who's boss."
+	set desc = "Show that CIS SCUM who's boss." //I'm pretty sure you're mincing memes here, but whatever
 
-	usr.visible_message("[usr] tips his fedora.", "You tip your fedora.")
+	usr.visible_message("[usr] tips \his fedora.", "You tip your fedora.")
+
+/obj/item/clothing/head/fedora/white
+	name = "white fedora"
+	icon_state = "fedora_white"
+	desc = "A great white hat ruined by being within fifty yards of you."
+
+/obj/item/clothing/head/fedora/brown
+	name = "brown fedora"
+	icon_state = "fedora_brown"
+	desc = "Don't you even think about losing it."
 
 /obj/item/clothing/head/fez
 	name = "\improper fez"
@@ -365,13 +373,13 @@
 
 /obj/item/clothing/head/christmas/santahat/red
 	name = "red santa hat"
-	desc = "Not quite as magical as the real thing, but it flops over one ear and itches your head just the same"
+	desc = "Not quite as magical as the real thing, but it flops over one ear and itches your head just the same."
 	icon_state = "santahatred"
 	item_state = "santahatred"
 
 /obj/item/clothing/head/christmas/santahat/green
 	name = "green santa hat"
-	desc = "Not quite as magical as the real thing, but it flops over one ear and itches your head just the same"
+	desc = "Not quite as magical as the real thing, but it flops over one ear and itches your head just the same."
 	icon_state = "santahatgreen"
 	item_state = "santahatgreen"
 
@@ -402,3 +410,15 @@
 	icon_state = "mummy"
 	item_state = "mummy"
 	_color = "mummy"
+
+/obj/item/clothing/head/dunce_cap
+	name = "dunce cap"
+	desc = "A conical paper hat which used to be used as a punishment in schools. Misbehaving children had to wear it while standing in a corner. The writing on it says \"DUNCE\"."
+	icon_state = "duncecap"
+	item_state = "duncecap"
+
+/obj/item/clothing/head/snake
+	name = "snake head"
+	desc = "Reenact acts of violence against reptiles, or sneak into a swamp unnoticed."
+	icon_state = "snakehead"
+	item_state = "snakehead"

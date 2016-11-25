@@ -15,7 +15,6 @@
 	using.icon = 'icons/mob/screen1_robot.dmi'	// Pick the base icon
 	using.icon_state = "radio"	// Pick the icon state
 	using.screen_loc = ui_movi	// Set the location
-	using.layer = 20			// Set the z layer
 	src.adding += using			// Place using in our adding list
 
 	// Module select
@@ -25,7 +24,6 @@
 	using.icon = 'icons/mob/screen1_robot.dmi'
 	using.icon_state = "inv1"
 	using.screen_loc = ui_inv2
-	using.layer = 20
 	src.adding += using			// Place using in our adding list
 	M.inv_tool = using			// Save this using as our MoMMI's inv_sight
 
@@ -35,7 +33,6 @@
 	using.icon = 'icons/mob/screen1_robot.dmi'
 	using.icon_state = "sight"
 	using.screen_loc = ui_mommi_sight
-	using.layer = 20
 	src.adding += using
 	M.sensor = using
 	// End of module select
@@ -47,7 +44,7 @@
 	inv_box.icon_state = "hair"
 	inv_box.screen_loc = ui_mommi_hats
 	inv_box.slot_id = slot_head
-	inv_box.layer = 19
+	inv_box.layer = HUD_BASE_LAYER
 	src.adding += inv_box
 
 
@@ -58,7 +55,6 @@
 	using.icon = 'icons/mob/screen1_robot.dmi'
 	using.icon_state = (mymob.a_intent == I_HURT ? "harm" : mymob.a_intent)
 	using.screen_loc = ui_acti
-	using.layer = 20
 	src.adding += using
 	action_intent = using
 
@@ -89,7 +85,7 @@
 	using.icon = 'icons/mob/screen1_robot.dmi'
 	using.icon_state = "panel"
 	using.screen_loc = ui_borg_panel
-	using.layer = 19
+	using.layer = HUD_BASE_LAYER
 	src.adding += using
 
 	//Robot Module Hud
@@ -97,7 +93,7 @@
 	using.dir = SOUTHWEST
 	using.icon = 'icons/mob/screen1.dmi'
 	using.icon_state = "block"
-	using.layer = 19
+	using.layer = HUD_BASE_LAYER
 	src.adding += using
 	M.robot_modules_background = using
 

@@ -31,7 +31,6 @@
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "farmbot0"
 	icon_initial = "farmbot"
-	layer = 5.0
 	density = 1
 	anchored = 0
 	health = 50
@@ -161,7 +160,7 @@
 	else if (href_list["eject"] )
 		flick("[src.icon_initial]_hatch",src)
 		for (var/obj/item/weapon/reagent_containers/glass/fertilizer/fert in contents)
-			fert.loc = get_turf(src)
+			fert.forceMove(get_turf(src))
 
 	src.updateUsrDialog()
 	return
@@ -190,7 +189,8 @@
 
 /obj/machinery/bot/farmbot/Emag(mob/user as mob)
 	..()
-	if(user) to_chat(user, "<span class='warning'>You short out [src]'s plant identifier circuits.</span>")
+	if(user)
+		to_chat(user, "<span class='warning'>You short out [src]'s plant identifier circuits.</span>")
 	spawn(0)
 		for(var/mob/O in hearers(src, null))
 			O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
@@ -214,11 +214,11 @@
 	new /obj/item/device/analyzer/plant_analyzer(Tsec)
 
 	if ( tank )
-		tank.loc = Tsec
+		tank.forceMove(Tsec)
 
 	for ( var/obj/item/weapon/reagent_containers/glass/fertilizer/fert in contents )
 		if ( prob(50) )
-			fert.loc = Tsec
+			fert.forceMove(Tsec)
 
 	if (prob(50))
 		new /obj/item/robot_parts/l_arm(Tsec)
@@ -400,7 +400,7 @@
 
 	if ( emagged ) // Warning, hungry humans detected: throw fertilizer at them
 		spawn(0)
-			fert.loc = src.loc
+			fert.forceMove(src.loc)
 			fert.throw_at(target, 16, 3)
 		src.visible_message("<span class='danger'>[src] launches [fert.name] at [target.name]!</span>")
 		flick("[src.icon_initial]_broke", src)
@@ -541,10 +541,9 @@
 
 	var/obj/item/weapon/farmbot_arm_assembly/A = new /obj/item/weapon/farmbot_arm_assembly
 
-	A.loc = src.loc
-	A.layer = 20
+	A.forceMove(src.loc)
 	to_chat(user, "You add the robot arm to the [src]")
-	src.loc = A //Place the water tank into the assembly, it will be needed for the finished bot
+	src.forceMove(A) //Place the water tank into the assembly, it will be needed for the finished bot
 
 	qdel(S)
 	S = null
@@ -577,9 +576,9 @@
 		to_chat(user, "You complete the Farmbot! Beep boop.")
 		var/obj/machinery/bot/farmbot/S = new /obj/machinery/bot/farmbot
 		for ( var/obj/structure/reagent_dispensers/watertank/wTank in src.contents )
-			wTank.loc = S
+			wTank.forceMove(S)
 			S.tank = wTank
-		S.loc = get_turf(src)
+		S.forceMove(get_turf(src))
 		S.name = src.created_name
 		qdel(W)
 		W = null

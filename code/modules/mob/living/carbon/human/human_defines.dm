@@ -81,3 +81,4 @@
 
 	fire_dmi = 'icons/mob/OnFire.dmi'
 	fire_sprite = "Standing"
+	plane = HUMAN_PLANE

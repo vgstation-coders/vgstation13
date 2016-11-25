@@ -17,6 +17,8 @@
 
 var/global/global_playlists = list()
 /proc/load_juke_playlists()
+	if(!config.media_base_url)
+		return
 	for(var/playlist_id in list("bar", "jazz", "rock", "muzak", "emagged", "endgame", "clockwork", "vidyaone", "vidyatwo", "vidyathree", "vidyafour"))
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
 		testing("Updating playlist from [url]...")
@@ -46,6 +48,8 @@ var/global/global_playlists = list()
 			global_playlists["[playlist_id]"] = playlist.Copy()
 
 /obj/machinery/media/jukebox/proc/retrieve_playlist(var/playlistid = playlist_id)
+	if(!config.media_base_url)
+		return
 	playlist_id = playlistid
 	if(global_playlists["[playlistid]"])
 		var/list/temp = global_playlists["[playlistid]"]
@@ -266,9 +270,12 @@ var/global/list/loopModeNames=list(
 		t += " | <a href=\"?src=\ref[src];screen=[JUKEBOX_SCREEN_SETTINGS]\">Settings</a>"
 	t += "</div>"
 	switch(screen)
-		if(JUKEBOX_SCREEN_MAIN)     t += ScreenMain(user)
-		if(JUKEBOX_SCREEN_PAYMENT)  t += ScreenPayment(user)
-		if(JUKEBOX_SCREEN_SETTINGS) t += ScreenSettings(user)
+		if(JUKEBOX_SCREEN_MAIN)
+			t += ScreenMain(user)
+		if(JUKEBOX_SCREEN_PAYMENT)
+			t += ScreenPayment(user)
+		if(JUKEBOX_SCREEN_SETTINGS)
+			t += ScreenSettings(user)
 
 	user.set_machine(src)
 	var/datum/browser/popup = new (user,"jukebox",name,420,700)
@@ -298,8 +305,10 @@ var/global/list/loopModeNames=list(
 			if(!playlist.len)
 				playlist=null
 				process()
-				if(!playlist || !playlist.len) return
-			else if(current_song > playlist.len) current_song = playlist.len
+				if(!playlist || !playlist.len)
+					return
+			else if(current_song > playlist.len)
+				current_song = playlist.len
 			var/datum/song_info/song=playlist[current_song]
 			t += "<b>Current song:</b> [song.artist] - [song.title]<br />"
 		if(next_song)
@@ -315,9 +324,11 @@ var/global/list/loopModeNames=list(
 		for(i = 1,i <= playlist.len,i++)
 			var/datum/song_info/song=playlist[i]
 			t += "<tr><th>#[i]</th><td>"
-			if(can_change) t += "<A href='?src=\ref[src];song=[i]' class='nobg'>"
+			if(can_change)
+				t += "<A href='?src=\ref[src];song=[i]' class='nobg'>"
 			t += song.displaytitle()
-			if(can_change) t += "</A>"
+			if(can_change)
+				t += "</A>"
 			t += "</td><td>[song.album]</td></tr>"
 		t += "</table>"
 	t = jointext(t,"")
@@ -473,7 +484,8 @@ var/global/list/loopModeNames=list(
 	if(isobserver(usr) && !isAdminGhost(usr))
 		to_chat(usr, "<span class='warning'>You can't push buttons when your fingers go right through them, dummy.</span>")
 		return
-	if(..()) return 1
+	if(..())
+		return 1
 	if(emagged)
 		to_chat(usr, "<span class='warning'>You touch the bluescreened menu. Nothing happens. You feel dumber.</span>")
 		return
@@ -721,10 +733,9 @@ var/global/list/loopModeNames=list(
 	icon_state = ""
 	light_color = LIGHT_COLOR_BLUE
 	luminosity = 0
-	layer = FLY_LAYER+1
-	plane = PLANE_EFFECTS
-	pixel_x = -32
-	pixel_y = -32
+	plane = EFFECTS_PLANE
+	pixel_x = -WORLD_ICON_SIZE
+	pixel_y = -WORLD_ICON_SIZE
 
 	var/datum/browser/popup = null
 	req_access = list()

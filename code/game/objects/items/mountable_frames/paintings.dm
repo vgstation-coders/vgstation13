@@ -19,6 +19,11 @@ var/global/list/available_paintings = list(
 	"bland",
 	"Blu",
 	"Kate",
+	"jmwt0",
+	"jmwt1",
+	"jmwt2",
+	"jmwt3",
+	"jmwt4",
 
 	)
 	//The following paintings either appear under certain conditions or have to be varedited by admins
@@ -45,8 +50,8 @@ var/global/list/available_paintings = list(
 
 /obj/item/mounted/frame/painting/New()
 	..()
-	pixel_x = rand(-6,6)
-	pixel_y = rand(-6,6)
+	pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
+	pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
 
 	if(!paint)
 		paint = pick(available_paintings)
@@ -124,6 +129,21 @@ var/global/list/available_paintings = list(
 		if("Kate")
 			name = "\improper Cindy Kate"
 			desc = "Through the carnage and bloodshed she's gunning for you, champ."
+		if("jmwt0")
+			name = "\improper Self-portrait"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1799"
+		if("jmwt1")
+			name = "\improper Snow Storm - Steam-Boat off a Harbour's"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1842"
+		if("jmwt2")
+			name = "\improper Zurich"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1842"
+		if("jmwt3")
+			name = "\improper The fighting Temeraire"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1838"
+		if("jmwt4")
+			name = "\improper Snow Storm - Steam-Boat off a Harbour's"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1817"
 		if("daddy")
 			name = "\improper I <3 Daddy!"
 			desc = "'Nanotrasen respects the right for all associates and their families to be able to express their individuality though many media. However, soliciting Nanotrasen related merchandise without proper warrant is strictly prohibited. Luckily for you, you can now own your very own contraband Nanotrasen merch without the threat of *REDACTED*!'"
@@ -153,13 +173,13 @@ var/global/list/available_paintings = list(
 
 	var/pDir = get_dir(user,on_wall)
 	if(pDir & NORTH)
-		P.pixel_y = 32
+		P.pixel_y = WORLD_ICON_SIZE
 	if(pDir & SOUTH)
-		P.pixel_y = -32
+		P.pixel_y = -WORLD_ICON_SIZE
 	if(pDir & EAST)
-		P.pixel_x = 32
+		P.pixel_x = WORLD_ICON_SIZE
 	if(pDir & WEST)
-		P.pixel_x = -32
+		P.pixel_x = -WORLD_ICON_SIZE
 
 	playsound(on_wall, 'sound/items/Deconstruct.ogg', 25, 1)
 
@@ -261,6 +281,21 @@ var/global/list/available_paintings = list(
 		if("Kate")
 			name = "\improper Cindy Kate"
 			desc = "Through the carnage and bloodshed she's gunning for you, champ."
+		if("jmwt0")
+			name = "\improper Self-portrait"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1799"
+		if("jmwt1")
+			name = "\improper Snow Storm - Steam-Boat off a Harbour's"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1842"
+		if("jmwt2")
+			name = "\improper Zurich"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1842"
+		if("jmwt3")
+			name = "\improper The fighting Temeraire"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1838"
+		if("jmwt4")
+			name = "\improper Snow Storm - Steam-Boat off a Harbour's"
+			desc = "Under the painting is a small plaque. It reads: Joseph Mallord William Turner - 1817"
 		if("daddy")
 			name = "\improper I <3 Daddy!"
 			desc = "'Nanotrasen respects the right for all associates and their families to be able to express their individuality though many media. However, soliciting Nanotrasen related merchandise without proper warrant is strictly prohibited. Luckily for you, you can now own your very own contraband Nanotrasen merch without the threat of *REDACTED*!'"
@@ -293,6 +328,7 @@ var/global/list/available_paintings = list(
 	to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
 
 	H.apply_damage(rand(1,2), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
+	return SPECIAL_ATTACK_FAILED
 
 
 /obj/structure/painting/cultify()

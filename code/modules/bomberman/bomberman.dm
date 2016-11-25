@@ -262,7 +262,7 @@ var/global/list/bombermangear = list()
 	icon_state = "explosion_core"
 	density = 0
 	anchored = 1
-	layer = LIGHTING_LAYER + 1
+	plane = EFFECTS_PLANE
 	var/destroy_environnement = 0
 	var/hurt_players = 0
 
@@ -311,15 +311,15 @@ obj/structure/bomberflame/Destroy()
 
 	for(var/obj/item/weapon/bomberman/dispenser in T)
 		dispenser.lost()
-		T.turf_animation('icons/obj/bomberman.dmi',"dispenser_break",0,0,MOB_LAYER-0.1,'sound/bomberman/bombed.ogg',anim_plane = PLANE_MOB)
+		T.turf_animation('icons/obj/bomberman.dmi',"dispenser_break",0,0,MOB_LAYER-0.1,'sound/bomberman/bombed.ogg',anim_plane = MOB_PLANE)
 
 	for(var/mob/living/L in T)
 		for(var/obj/item/weapon/bomberman/dispenser in L)
 			L.u_equip(dispenser,1)
-			dispenser.loc = L.loc
+			dispenser.forceMove(L.loc)
 			//dispenser.dropped(C)
 			dispenser.lost()
-			T.turf_animation('icons/obj/bomberman.dmi',"dispenser_break",0,0,MOB_LAYER-0.1,'sound/bomberman/bombed.ogg',anim_plane = PLANE_MOB)
+			T.turf_animation('icons/obj/bomberman.dmi',"dispenser_break",0,0,MOB_LAYER-0.1,'sound/bomberman/bombed.ogg',anim_plane = MOB_PLANE)
 
 	if(hurt_players)
 		for(var/mob/living/L in T)
@@ -628,8 +628,8 @@ obj/structure/bomberflame/Destroy()
 					var/mob/living/L_self = src.loc
 					var/turf/T_self = get_turf(L_self)
 					var/turf/T_other = get_turf(L_other)
-					L_self.loc = T_other
-					L_other.loc = T_self
+					L_self.forceMove(T_other)
+					L_other.forceMove(T_self)
 					playsound(T_self, 'sound/bomberman/disease.ogg', 50, 1)
 					playsound(T_other, 'sound/bomberman/disease.ogg', 50, 1)
 					qdel(src)
@@ -744,9 +744,12 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	var/counting = 0
 
 /datum/bomberman_arena/New(var/turf/a_center=null, var/size="",mob/user)
-	if(!a_center)	return
-	if(!size)	return
-	if(!user)	return
+	if(!a_center)
+		return
+	if(!size)
+		return
+	if(!user)
+		return
 	center = a_center
 	name += " #[rand(1,999)]"
 	open(size,user)
@@ -923,8 +926,8 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		pencil.x = x
 		pencil.y = y+h
 		T = pencil.loc
-		T.maptext = name
-		T.maptext_width = 256
+		T.maptext = "name"
+		T.maptext_width = 256*PIXEL_MULTIPLIER
 		//T.maptext_y = 20
 
 		qdel(pencil)	//RIP sweet prince
@@ -1089,8 +1092,10 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	return
 
 /datum/bomberman_arena/proc/end()
-	if(tools.len > 1)	return
-	if(status == ARENA_ENDGAME)	return
+	if(tools.len > 1)
+		return
+	if(status == ARENA_ENDGAME)
+		return
 	status = ARENA_ENDGAME
 	var/mob/living/winner = null
 	for(var/obj/item/weapon/bomberman/W in tools)
@@ -1395,7 +1400,8 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	spawnpoint = null
 
 /obj/structure/planner/spawnpoint/attack_ghost(mob/user)
-	if(arena.status != ARENA_AVAILABLE)	return
+	if(arena.status != ARENA_AVAILABLE)
+		return
 
 	if(spawnpoint.availability)
 		if(!(user.client in never_gladiators) && !(user.client in ready_gladiators))
@@ -1425,9 +1431,9 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		var/second = currentcount%10
 		var/image/I1 = new('icons/obj/centcomm_stuff.dmi',src,"[first]",30)
 		var/image/I2 = new('icons/obj/centcomm_stuff.dmi',src,"[second]",30)
-		I1.pixel_x += 10
-		I2.pixel_x += 17
-		I1.pixel_y -= 11
-		I2.pixel_y -= 11
+		I1.pixel_x += 10 * PIXEL_MULTIPLIER
+		I2.pixel_x += 17 * PIXEL_MULTIPLIER
+		I1.pixel_y -= 11 * PIXEL_MULTIPLIER
+		I2.pixel_y -= 11 * PIXEL_MULTIPLIER
 		overlays += I1
 		overlays += I2

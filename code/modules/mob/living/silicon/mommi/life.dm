@@ -1,7 +1,8 @@
 /mob/living/silicon/robot/mommi/Life()
 	set invisibility = 0
 	//set background = 1
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
 	if (src.monkeyizing)
 		return
@@ -30,7 +31,7 @@
 
 //	SetStunned(min(stunned, 30))
 	SetParalysis(min(paralysis, 30))
-//	SetWeakened(min(weakened, 20))
+//	SetKnockdown(min(knockdown, 20))
 	sleeping = 0
 	adjustBruteLoss(0)
 	adjustToxLoss(0)
@@ -68,25 +69,26 @@
 
 	health = maxHealth - (getOxyLoss() + getFireLoss() + getBruteLoss())
 
-	if(getOxyLoss() > 50) Paralyse(3)
+	if(getOxyLoss() > 50)
+		Paralyse(3)
 
 	if(src.sleeping)
 		Paralyse(3)
 		src.sleeping--
 
 	if(src.resting)
-		Weaken(5)
+		Knockdown(5)
 
 	if(health <= 0 && src.stat != 2) //die only once
 		gib()
 
 	if (src.stat != 2) //Alive.
-		if (src.paralysis || src.stunned || src.weakened) //Stunned etc.
+		if (src.paralysis || src.stunned || src.knockdown) //Stunned etc.
 			src.stat = 1
 			if (src.stunned > 0)
 				AdjustStunned(-1)
-			if (src.weakened > 0)
-				AdjustWeakened(-1)
+			if (src.knockdown > 0)
+				AdjustKnockdown(-1)
 			if (src.paralysis > 0)
 				AdjustParalysis(-1)
 				src.blinded = 1
@@ -100,13 +102,15 @@
 		src.blinded = 1
 		src.stat = 2
 
-	if (src.stuttering) src.stuttering--
+	if (src.stuttering)
+		src.stuttering--
 
 	if (src.eye_blind)
 		src.eye_blind--
 		src.blinded = 1
 
-	if (src.ear_deaf > 0) src.ear_deaf--
+	if (src.ear_deaf > 0)
+		src.ear_deaf--
 	if (src.ear_damage < 25)
 		src.ear_damage -= 0.05
 		src.ear_damage = max(src.ear_damage, 0)
@@ -256,7 +260,7 @@
 		src.head_state:screen_loc = ui_monkey_mask
 
 /mob/living/silicon/robot/mommi/update_canmove()
-	canmove = !(paralysis || stunned || weakened || locked_to || lockcharge || anchored)
+	canmove = !(paralysis || stunned || knockdown || locked_to || lockcharge || anchored)
 	return canmove
 
 #undef MOMMI_LOW_POWER

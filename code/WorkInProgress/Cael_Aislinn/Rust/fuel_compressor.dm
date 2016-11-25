@@ -7,7 +7,7 @@ var/const/max_assembly_amount = 300
 	var/list/new_assembly_quantities = list("Deuterium" = 150,"Tritium" = 150,"Rodinium-6" = 0,"Stravium-7" = 0, "Pergium" = 0, "Dilithium" = 0)
 	var/compressed_matter = 0
 	anchored = 1
-	layer = 2.9
+	layer = BELOW_OBJ_LAYER
 
 	var/opened = 1 //0=closed, 1=opened
 	var/locked = 0
@@ -59,7 +59,8 @@ var/const/max_assembly_amount = 300
 	//var/coverlocked
 
 /obj/machinery/rust_fuel_compressor/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 	if( href_list["close"] )
 		usr << browse(null, "window=fuelcomp")
 		usr.machine = null
@@ -101,7 +102,7 @@ var/const/max_assembly_amount = 300
 			compressed_matter = old_matter
 			to_chat(usr, "<span class='warning'>[bicon(src)] [src] flashes red: \'Out of matter.\'</span>")
 		else
-			F.loc = src.loc//get_step(get_turf(src), src.dir)
+			F.forceMove(src.loc)//get_step(get_turf(src), src.dir)
 			F.percent_depleted = 0
 			if(compressed_matter < 0.034)
 				compressed_matter = 0

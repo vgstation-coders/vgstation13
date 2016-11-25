@@ -4,26 +4,28 @@
 	icon = 'icons/effects/fire.dmi'
 	icon_state = "1"
 	density = 0
-	unacidable = 1
 	anchored = 1.0
 	w_type=NOT_RECYCLABLE
 	var/fire_damage = 0
 	var/blast_age = 1
+	var/duration = 10 //1/10ths of a second
+	var/spread = 1
+	var/spread_start = 100
+	var/spread_chance = 20
 
-
-/obj/effect/fire_blast/New(turf/T, var/damage = 0, var/current_step = 0, var/age = 1, var/pressure = 0, var/blast_temperature = 0)
+/obj/effect/fire_blast/New(turf/T, var/damage = 0, var/current_step = 0, var/age = 1, var/pressure = 0, var/blast_temperature = 0, var/fire_duration)
 	..(T)
 	icon_state = "[rand(1,3)]"
 
 	blast_age = age
+	if(fire_duration)
+		duration = fire_duration
 
 	if(damage)
 		fire_damage = damage
 	set_light(3)
 
-	var/spread_start = 100
 	pressure = round(pressure)
-	var/spread_chance = 20
 	var/adjusted_fire_damage = fire_damage
 
 	switch(pressure)
@@ -51,7 +53,7 @@
 			adjusted_fire_damage = fire_damage * 0.25
 
 	spawn()
-		if(current_step >= spread_start && blast_age < 4)
+		if(spread && current_step >= spread_start && blast_age < 4)
 			var/turf/TS = get_turf(src)
 			for(var/turf/TU in range(1, TS))
 				if(TU != get_turf(src))
@@ -65,20 +67,27 @@
 							if(D.density)
 								obstructed = 1
 					if(prob(spread_chance) && TS.Adjacent(TU) && !TU.density && !tilehasfire && !obstructed)
-						new /obj/effect/fire_blast(TU, fire_damage, current_step, blast_age+1, pressure, blast_temperature)
+						new type(TU, fire_damage, current_step, blast_age+1, pressure, blast_temperature, duration)
 				sleep(1)
 
 	spawn()
-		for(var/i = 1; i <= 5; i++)
+		for(var/i = 1; i <= (duration * 0.5); i++)
 			for(var/mob/living/L in get_turf(src))
-				if(!istype(L, /mob/living/silicon)) //Silicons are immune to fire
-					if(!istype(L, /mob/living/carbon/human))
-						L.adjustFireLoss(adjusted_fire_damage * 2) //Deals double damage to non-human mobs
-					else
-						L.adjustFireLoss(adjusted_fire_damage)
-					if(!L.on_fire)
-						L.adjust_fire_stacks(0.5)
-						L.IgniteMob()
+				if(issilicon(L))
+					continue
+
+				if(!L.on_fire)
+					L.adjust_fire_stacks(0.5)
+					L.IgniteMob()
+
+				if(L.mutations.Find(M_RESIST_HEAT)) //Heat resistance protects you from damage, but you still get set on fire
+					continue
+
+				if(!istype(L, /mob/living/carbon/human))
+					L.adjustFireLoss(adjusted_fire_damage * 2) //Deals double damage to non-human mobs
+				else
+					L.adjustFireLoss(adjusted_fire_damage)
+
 			for(var/obj/O in T)
 				if(istype(O, /obj/structure/reagent_dispensers/fueltank))
 					var/obj/structure/reagent_dispensers/fueltank/F = O
@@ -98,14 +107,20 @@
 
 		qdel(src)
 
+/obj/effect/fire_blast/blue
+	icon = 'icons/effects/fireblue.dmi'
+
+/obj/effect/fire_blast/blue/New(T, var/damage = 0, var/current_step = 0, var/age = 1, var/pressure = 0, var/blast_temperature = 0, var/fire_duration)
+	..(T, damage, current_step, age, pressure, blast_temperature, fire_duration)
+	spread_start = 0
+	spread_chance = 30
+
 /obj/effect/gas_puff
 	name = "gas puff"
 	desc = "A small puff of gas."
 	icon = 'icons/effects/plasma.dmi'
 	icon_state = null
 	density = 0
-	unacidable = 1
-	anchored = 1.0
 	w_type=NOT_RECYCLABLE
 
 /obj/effect/gas_puff/New(turf/T, var/datum/gas_mixture/stored_gas = null, var/type_of_gas)

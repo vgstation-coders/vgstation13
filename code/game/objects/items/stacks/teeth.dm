@@ -14,11 +14,12 @@
 
 /obj/item/stack/teeth/New(loc, amount)
 	.=..()
-	pixel_x = rand(-24,24)
-	pixel_y = rand(-24,24)
+	pixel_x = rand(-24,24) * PIXEL_MULTIPLIER
+	pixel_y = rand(-24,24) * PIXEL_MULTIPLIER
 
 /obj/item/stack/teeth/can_stack_with(obj/item/other_stack)
-	if(!istype(other_stack)) return 0
+	if(!istype(other_stack))
+		return 0
 
 	if(src.type == other_stack.type)
 		var/obj/item/stack/teeth/T = other_stack
@@ -60,7 +61,8 @@
 		src.singular_name = original_teeth.name
 
 /obj/item/stack/teeth/proc/update_name(mob/parent)
-	if(!parent) return
+	if(!parent)
+		return
 
 	if(isliving(parent))
 		var/mob/living/L = parent

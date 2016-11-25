@@ -20,7 +20,7 @@
 	throwforce = 14.0
 	flags = FPRINT
 	siemens_coefficient = 1
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	melt_temperature = MELTPOINT_STEEL
 
 /obj/item/stack/sheet/metal/resetVariables()
@@ -71,7 +71,7 @@
 	throwforce = 15.0
 	flags = FPRINT
 	siemens_coefficient = 1
-	origin_tech = "materials=2"
+	origin_tech = Tc_MATERIALS + "=2"
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL+500
 
@@ -87,7 +87,7 @@
 	desc = "One can only guess that this is a bunch of wood."
 	singular_name = "wood plank"
 	icon_state = "sheet-wood"
-	origin_tech = "materials=1;biotech=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	autoignition_temperature=AUTOIGNITION_WOOD
 	sheettype = "wood"
 	w_type = RECYK_WOOD
@@ -118,7 +118,7 @@
 	desc = "This roll of cloth is made from only the finest chemicals and bunny rabbits."
 	singular_name = "cloth roll"
 	icon_state = "sheet-cloth"
-	origin_tech = "materials=2"
+	origin_tech = Tc_MATERIALS + "=2"
 
 /*
  * Cardboard
@@ -129,7 +129,7 @@
 	singular_name = "cardboard sheet"
 	icon_state = "sheet-card"
 	flags = FPRINT
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
 
@@ -152,7 +152,7 @@ var/global/list/datum/stack_recipe/charcoal_recipes = list ()
 	singular_name = "charcoal sheet"
 	icon_state = "sheet-charcoal"
 	flags = FPRINT
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	autoignition_temperature=AUTOIGNITION_WOOD
 
 /obj/item/stack/sheet/charcoal/New(var/loc, var/amount=null)

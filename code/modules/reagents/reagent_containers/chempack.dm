@@ -32,7 +32,7 @@
 	slot_flags = SLOT_BACK
 	throwforce = 3
 	w_class = W_CLASS_LARGE
-	origin_tech = "bluespace=3;materials=3;engineering=5"
+	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=5"
 	var/safety = 0
 	var/primed = 0
 	var/stage = 0
@@ -91,13 +91,20 @@
 
 		var/percent = round((reagents.total_volume / volume) * 100)
 		switch(percent)
-			if(0 to 9)		filling.icon_state = "[initial(icon_state)]-10"
-			if(10 to 24) 	filling.icon_state = "[initial(icon_state)]10"
-			if(25 to 49)	filling.icon_state = "[initial(icon_state)]25"
-			if(50 to 74)	filling.icon_state = "[initial(icon_state)]50"
-			if(75 to 79)	filling.icon_state = "[initial(icon_state)]75"
-			if(80 to 90)	filling.icon_state = "[initial(icon_state)]80"
-			if(91 to INFINITY)	filling.icon_state = "[initial(icon_state)]100"
+			if(0 to 9)
+				filling.icon_state = "[initial(icon_state)]-10"
+			if(10 to 24)
+				filling.icon_state = "[initial(icon_state)]10"
+			if(25 to 49)
+				filling.icon_state = "[initial(icon_state)]25"
+			if(50 to 74)
+				filling.icon_state = "[initial(icon_state)]50"
+			if(75 to 79)
+				filling.icon_state = "[initial(icon_state)]75"
+			if(80 to 90)
+				filling.icon_state = "[initial(icon_state)]80"
+			if(91 to INFINITY)
+				filling.icon_state = "[initial(icon_state)]100"
 
 		filling.icon += mix_color_from_reagents(reagents.reagent_list)
 		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
@@ -213,9 +220,9 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 				if (iscrowbar(W) && src.beaker && auxiliary)
 					var/obj/item/weapon/reagent_containers/glass/B = beaker
 					if ((user.get_inactive_hand() == src) || (user.back == src))
-						B.loc = user.loc
+						B.forceMove(user.loc)
 					else
-						B.loc = loc
+						B.forceMove(loc)
 					beaker = null
 					to_chat(user, "You pry the beaker out of \the [src].")
 					if(user.wear_mask && istype(user.wear_mask, /obj/item/clothing/mask/chemmask))

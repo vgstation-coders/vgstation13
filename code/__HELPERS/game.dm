@@ -35,7 +35,7 @@
 	return 0
 
 /proc/in_range(atom/source, mob/user)
-	if(source.Adjacent(user))
+	if(user.Adjacent(source))
 		return 1
 	else if(istype(user) && user.mutations && user.mutations.len)
 		if((M_TK in user.mutations) && (get_dist(user,source) < tk_maxrange))
@@ -118,7 +118,8 @@
 	var/rsq = radius * (radius+0.5)
 
 	for(var/turf/T in range(radius, centerturf))
-		if(!T) continue
+		if(!T)
+			continue
 		var/dx = T.x - centerturf.x
 		var/dy = T.y - centerturf.y
 		if(dx*dx + dy*dy <= rsq)
@@ -258,7 +259,7 @@ var/list/DummyCache = list()
 		D = new /obj/item/weapon/dummy( srcturf )
 	else
 		DummyCache.Remove(D)
-		D.loc = srcturf
+		D.forceMove(srcturf)
 
 	D.flags=initial(D.flags)
 	D.pass_flags=initial(D.pass_flags)
@@ -272,7 +273,7 @@ var/list/DummyCache = list()
 	for(var/obj/border_obstacle in srcturf)
 		if(border_obstacle.flags & ON_BORDER)
 			if(!border_obstacle.Uncross(D, targetturf))
-				D.loc = null
+				D.forceMove(null)
 				DummyCache.Add(D)
 				return 0
 
@@ -280,11 +281,11 @@ var/list/DummyCache = list()
 	for(var/obj/border_obstacle in targetturf)
 		if((border_obstacle.flags & ON_BORDER) && (target != border_obstacle))
 			if(!border_obstacle.Cross(D, srcturf, 1, 0))
-				D.loc = null
+				D.forceMove(null)
 				DummyCache.Add(D)
 				return 0
 
-	D.loc = null
+	D.forceMove(null)
 	DummyCache.Add(D)
 	return 1
 
@@ -330,7 +331,8 @@ var/list/DummyCache = list()
 				. += G.client
 
 /proc/ScreenText(obj/O, maptext="", screen_loc="CENTER-7,CENTER-7", maptext_height=480, maptext_width=480)
-	if(!isobj(O))	O = new /obj/screen/text()
+	if(!isobj(O))
+		O = new /obj/screen/text()
 	O.maptext = maptext
 	O.maptext_height = maptext_height
 	O.maptext_width = maptext_width
@@ -338,8 +340,10 @@ var/list/DummyCache = list()
 	return O
 
 /proc/Show2Group4Delay(obj/O, list/group, delay=0)
-	if(!isobj(O))	return
-	if(!group)	group = clients
+	if(!isobj(O))
+		return
+	if(!group)
+		group = clients
 	for(var/client/C in group)
 		C.screen += O
 	if(delay)

@@ -700,7 +700,7 @@
 		..()
 
 /obj/item/weapon/dnainjector/nofail/anticlumsy
-	name = "DNA-Injector (Anti-Clumy)"
+	name = "DNA-Injector (Anti-Clumsy)"
 	desc = "Cleans up confusion."
 	datatype = DNA2_BUF_SE
 	value = 0x001

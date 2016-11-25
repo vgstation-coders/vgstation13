@@ -39,19 +39,19 @@
 	return
 
 /obj/structure/closet/walllocker/emerglocker/north
-	pixel_y = 32
+	pixel_y = WORLD_ICON_SIZE
 	dir = SOUTH
 
 /obj/structure/closet/walllocker/emerglocker/south
-	pixel_y = -32
+	pixel_y = -WORLD_ICON_SIZE
 	dir = NORTH
 
 /obj/structure/closet/walllocker/emerglocker/west
-	pixel_x = -32
+	pixel_x = -WORLD_ICON_SIZE
 	dir = WEST
 
 /obj/structure/closet/walllocker/emerglocker/east
-	pixel_x = 32
+	pixel_x = WORLD_ICON_SIZE
 	dir = EAST
 
 /obj/structure/closet/walllocker/defiblocker
@@ -68,14 +68,15 @@
 	defib = new /obj/item/weapon/melee/defibrillator(src)
 
 /obj/structure/closet/walllocker/defiblocker/attack_hand(mob/user as mob)
-	if(istype(user, /mob/living/silicon/ai)) return
+	if(istype(user, /mob/living/silicon/ai))
+		return
 	if(istype(user, /mob/living/silicon/robot))
 		if(!defib)
 			to_chat(usr, "<span class='notice'>It's empty.</span>")
 			return
 		else
 			to_chat(usr, "<span class='notice'>You pull out an emergency defibrillator from \the [src].</span>")
-			defib.loc = get_turf(src)
+			defib.forceMove(get_turf(src))
 			defib = null
 			update_icon()
 	if(!defib)
@@ -110,17 +111,17 @@
 		icon_state = icon_opened
 
 /obj/structure/closet/walllocker/defiblocker/north
-	pixel_y = 32
+	pixel_y = WORLD_ICON_SIZE
 	dir = SOUTH
 
 /obj/structure/closet/walllocker/defiblocker/south
-	pixel_y = -32
+	pixel_y = -WORLD_ICON_SIZE
 	dir = NORTH
 
 /obj/structure/closet/walllocker/defiblocker/west
-	pixel_x = -32
+	pixel_x = -WORLD_ICON_SIZE
 	dir = WEST
 
 /obj/structure/closet/walllocker/defiblocker/east
-	pixel_x = 32
+	pixel_x = WORLD_ICON_SIZE
 	dir = EAST

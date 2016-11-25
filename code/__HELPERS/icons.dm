@@ -2,7 +2,8 @@ proc
 	getIconMask(atom/A)//By yours truly. Creates a dynamic mask for a mob/whatever. /N
 		var/icon/alpha_mask = new(A.icon,A.icon_state)//So we want the default icon and icon state of A.
 		for(var/I in A.overlays)//For every image in overlays. var/image/I will not work, don't try it.
-			if(I:layer>A.layer)	continue//If layer is greater than what we need, skip it.
+			if(I:layer>A.layer)
+				continue//If layer is greater than what we need, skip it.
 			var/icon/image_overlay = new(I:icon,I:icon_state)//Blend only works with icon objects.
 			//Also, icons cannot directly set icon_state. Slower than changing variables but whatever.
 			alpha_mask.Blend(image_overlay,ICON_OR)//OR so they are lumped together in a nice overlay.
@@ -18,10 +19,14 @@ proc
 	for(var/i=0,i<5,i++)//And now we add it as overlays. It's faster than creating an icon and then merging it.
 		var/image/I = image("icon" = opacity_icon, "icon_state" = A.icon_state, "layer" = layer+0.8)//So it's above other stuff but below weapons and the like.
 		switch(i)//Now to determine offset so the result is somewhat blurred.
-			if(1)	I.pixel_x--
-			if(2)	I.pixel_x++
-			if(3)	I.pixel_y--
-			if(4)	I.pixel_y++
+			if(1)
+				I.pixel_x--
+			if(2)
+				I.pixel_x++
+			if(3)
+				I.pixel_y--
+			if(4)
+				I.pixel_y++
 		overlays += I//And finally add the overlay.
 
 /proc/getHologramIcon(icon/A, safety=1)//If safety is on, a new icon is not created.
@@ -62,10 +67,10 @@ proc
 			letter = lowertext(letter)
 
 	var/image/text_image = new(loc = A)
-	text_image.maptext = "<font size = 4><b>[letter]</b></font>"
+	text_image.maptext = "<font size = 8><b>[letter]</b></font>"
 	text_image.color = AverageColor(atom_icon)
-	text_image.pixel_x = 6
-	text_image.pixel_y = 5
+	text_image.pixel_x = 6*PIXEL_MULTIPLIER
+	text_image.pixel_y = 5*PIXEL_MULTIPLIER
 	del(atom_icon)
 	return text_image
 
@@ -80,8 +85,10 @@ proc
 	return composite
 
 proc/adjust_brightness(var/color, var/value)
-	if (!color) return "#FFFFFF"
-	if (!value) return color
+	if (!color)
+		return "#FFFFFF"
+	if (!value)
+		return color
 
 	var/list/RGB = ReadRGB(color)
 	RGB[1] = Clamp(RGB[1]+value,0,255)

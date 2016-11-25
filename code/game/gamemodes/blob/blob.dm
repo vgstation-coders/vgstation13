@@ -100,7 +100,7 @@ You must kill it all while minimizing the damage to the station."})
 			if(directory[ckey(blob.key)])
 				blob_client = directory[ckey(blob.key)]
 				location = get_turf(C)
-				if(location.z != 1 || istype(location, /turf/space))
+				if(location.z != map.zMainStation || istype(location, /turf/space))
 					location = null
 				qdel(C)
 
@@ -139,7 +139,8 @@ You must kill it all while minimizing the damage to the station."})
 
 		sleep(wait_time)
 
-		if(!mixed) send_intercept(0)
+		if(!mixed)
+			send_intercept(0)
 
 		sleep(100)
 
@@ -172,19 +173,20 @@ You must kill it all while minimizing the damage to the station."})
 			return
 
 		if (1)
-			command_alert("Biohazard outbreak alert status upgraded to level 9.  [station_name()] is now locked down, under Directive 7-10, until further notice.", "Directive 7-10 Initiated",1,alert='sound/AI/blob_confirmed.ogg')
+			command_alert(/datum/command_alert/biohazard_station_lockdown)
 			for(var/mob/M in player_list)
 				var/T = M.loc
 				if((istype(T, /turf/space)) || ((istype(T, /turf)) && (M.z!=1)))
 					pre_escapees += M
-			if(!mixed) send_intercept(1)
+			if(!mixed)
+				send_intercept(1)
 			outbreak = 1
 
 			research_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice." //LOCKDOWN THESE SHUTTLES
 			mining_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice."
 		if (2)
-			command_alert("Biohazard outbreak containment status reaching critical mass, total quarantine failure is now possibile. As such, Directive 7-12 has now been authorized for [station_name()].", "Final Measure",1)
+			command_alert(/datum/command_alert/biohazard_station_nuke)
 			for(var/mob/camera/blob/B in player_list)
 				to_chat(B, "<span class='blob'>The beings intend to eliminate you with a final suicidal attack, you must stop them quickly or consume the station before this occurs!</span>")
-			if(!mixed) send_intercept(2)
-	return
+			if(!mixed)
+				send_intercept(2)

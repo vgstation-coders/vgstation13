@@ -124,7 +124,7 @@ For the main html chat area
 
 /datum/chatOutput/proc/ehjax_send(var/client/C = owner, var/window = "browseroutput", var/data)
 	if(islist(data))
-		data = list2json(data)
+		data = json_encode(data)
 	C << output("[data]", "[window]:ehjaxCallback")
 
 //Sends client connection details to the chat to handle and save
@@ -183,7 +183,8 @@ For the main html chat area
 // exporting it as text, and then parsing the base64 from that.
 // (This relies on byond automatically storing icons in savefiles as base64)
 /proc/icon2base64(var/icon/icon, var/iconKey = "misc")
-	if (!isicon(icon)) return 0
+	if (!isicon(icon))
+		return 0
 
 	iconCache[iconKey] << icon
 	var/iconData = iconCache.ExportText(iconKey)
@@ -228,7 +229,8 @@ For the main html chat area
 
 	//Otherwise, we're good to throw it at the user
 	else if (istext(message))
-		if (istext(target)) return
+		if (istext(target))
+			return
 
 		//Some macros remain in the string even after parsing and fuck up the eventual output
 		if (findtext(message, "\improper"))
@@ -257,4 +259,5 @@ For the main html chat area
 
 		message = replacetext(message, "\n", "<br>")
 
-		target << output(url_encode(message), "browseroutput:output")
+		// url_encode it TWICE, this way any UTF-8 characters are able to be decoded by the Javascript.
+		target << output(url_encode(url_encode(message)), "browseroutput:output")

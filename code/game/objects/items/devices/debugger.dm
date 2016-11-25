@@ -20,7 +20,7 @@
 	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 20)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_SILICON
-	origin_tech = "magnets=1;engineering=1"
+	origin_tech = Tc_MAGNETS + "=1;" + Tc_ENGINEERING + "=1"
 	var/obj/machinery/telecomms/buffer // simple machine buffer for device linkage
 
 /obj/item/device/debugger/is_used_on(obj/O, mob/user)

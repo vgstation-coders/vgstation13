@@ -396,7 +396,7 @@
 "hF" = (/obj/machinery/door/unpowered/shuttle,/turf/simulated/floor{icon_state = "white"},/area/awaymission/spacebattle/cruiser)
 "hG" = (/mob/living/simple_animal/hostile/syndicate/melee,/turf/simulated/floor{icon_state = "white"},/area/awaymission/spacebattle/cruiser)
 "hH" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/firstaid/regular,/turf/simulated/floor{icon_state = "white"},/area/awaymission/spacebattle/cruiser)
-"hI" = (/obj/structure/table/woodentable,/obj/item/device/violin,/turf/simulated/floor/wood,/area/awaymission/spacebattle/cruiser)
+"hI" = (/obj/structure/table/woodentable,/obj/item/device/instrument/violin,/turf/simulated/floor/wood,/area/awaymission/spacebattle/cruiser)
 "hJ" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/engine,/area/awaymission/spacebattle/cruiser)
 "hK" = (/turf/space,/turf/simulated/shuttle/wall{dir = 4; icon_state = "diagonalWall3"},/area/awaymission/spacebattle/syndicate7)
 "hL" = (/turf/simulated/shuttle/wall{tag = "icon-swall14"; icon_state = "swall14"; dir = 2},/area/awaymission/spacebattle/cruiser)

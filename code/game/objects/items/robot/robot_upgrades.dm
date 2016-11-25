@@ -3,6 +3,8 @@
 
 #define FAILED_TO_ADD 1
 
+/obj/item/borg/upgrade/var/vtec_bonus = 0.25
+
 /obj/item/borg/upgrade
 	name = "A borg upgrade module."
 	desc = "Protected by FRM."
@@ -69,20 +71,18 @@
 	if(..())
 		return FAILED_TO_ADD
 
-	R.uneq_all()
+	if (/obj/item/borg/upgrade/vtec in R.module.upgrades)
+		R.movement_speed_modifier -= vtec_bonus
+
+	qdel(R.module)
 	if(R.hands)
 		R.hands.icon_state = "nomod"
 	R.icon_state = "robot"
 	R.base_icon = "robot"
-	R.module.remove_languages(R)
-	qdel(R.module)
-	R.module = null
 	R.camera.network.Remove(list("Engineering","Medical","MINE"))
 	R.updatename("Default")
 	R.status_flags |= CANPUSH
 	R.updateicon()
-	R.luminosity = 0 //flashlight fix
-	R.resurrect()
 
 /obj/item/borg/upgrade/rename
 	name = "robot reclassification board"
@@ -121,23 +121,20 @@
 				R.key = ghost.key
 
 	R.stat = CONSCIOUS
-
+	R.resurrect()
 
 /obj/item/borg/upgrade/vtec
 	name = "robotic VTEC Module"
 	desc = "Used to kick in a robot's VTEC systems, increasing their speed."
 	icon_state = "cyborg_upgrade2"
-	multi_upgrades = 1
 	add_to_mommis = 1
 
 /obj/item/borg/upgrade/vtec/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 
-	if(R.speed == -1)
-		return FAILED_TO_ADD
 	if(..())
 		return FAILED_TO_ADD
 
-	R.speed--
+	R.movement_speed_modifier += vtec_bonus
 
 
 /obj/item/borg/upgrade/tasercooler
@@ -171,8 +168,8 @@
 		T.recharge_time = max(2 , T.recharge_time - 4)
 
 /obj/item/borg/upgrade/jetpack
-	name = "mining robot jetpack"
-	desc = "A carbon dioxide jetpack suitable for low-gravity mining operations."
+	name = "utility robot jetpack"
+	desc = "A carbon dioxide jetpack suitable for low-gravity operations."
 	icon_state = "cyborg_upgrade3"
 	required_module = list(/obj/item/weapon/robot_module/miner,/obj/item/weapon/robot_module/engineering)
 	modules_to_add = list(/obj/item/weapon/tank/jetpack/carbondioxide)

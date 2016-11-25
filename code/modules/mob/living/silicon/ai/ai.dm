@@ -34,14 +34,12 @@ var/list/ai_list = list()
 	var/icon/holo_icon//Default is assigned when AI is created.
 	var/obj/item/device/pda/ai/aiPDA = null
 	var/obj/item/device/multitool/aiMulti = null
+	var/obj/item/device/station_map/station_holomap = null
 	var/custom_sprite = 0 //For our custom sprites
 	var/obj/item/device/camera/ai_camera/aicamera = null
 //Hud stuff
 
 	//MALFUNCTION
-	var/datum/module_picker/malf_picker
-	var/processing_time = 100
-	var/list/datum/AI_Module/current_modules = list()
 	var/ai_flags = 0
 
 	var/control_disabled = 0 // Set to 1 to stop AI from interacting via Click() -- TLE
@@ -72,7 +70,7 @@ var/list/ai_list = list()
 				pickedName = null
 	add_language(LANGUAGE_GALACTIC_COMMON, 1)
 	add_language(LANGUAGE_UNATHI, 1)
-	add_language(LANGUAGE_SIIK_TAJR, 1)
+	add_language(LANGUAGE_CATBEAST, 1)
 	add_language(LANGUAGE_SKRELLIAN, 1)
 	add_language(LANGUAGE_ROOTSPEAK, 1)
 	add_language(LANGUAGE_GUTTER, 1)
@@ -80,6 +78,7 @@ var/list/ai_list = list()
 	add_language(LANGUAGE_GREY, 1)
 	add_language(LANGUAGE_MONKEY, 1)
 	add_language(LANGUAGE_VOX, 1)
+	add_language(LANGUAGE_GOLEM, 1)
 	add_language(LANGUAGE_TRADEBAND, 1)
 	add_language(LANGUAGE_MOUSE, 1)
 	add_language(LANGUAGE_HUMAN, 1)
@@ -99,8 +98,10 @@ var/list/ai_list = list()
 	proc_holder_list = new()
 
 	//Determine the AI's lawset
-	if(L && istype(L,/datum/ai_laws)) src.laws = L
-	else src.laws = getLawset(src)
+	if(L && istype(L,/datum/ai_laws))
+		src.laws = L
+	else
+		src.laws = getLawset(src)
 
 	verbs += /mob/living/silicon/ai/proc/show_laws_verb
 
@@ -109,9 +110,10 @@ var/list/ai_list = list()
 	aiPDA.ownjob = "AI"
 	aiPDA.name = name + " (" + aiPDA.ownjob + ")"
 
+	station_holomap = new(src)
+
 	aiMulti = new(src)
 	aicamera = new/obj/item/device/camera/ai_camera(src)
-
 	if (istype(loc, /turf))
 		verbs.Add(/mob/living/silicon/ai/proc/ai_network_change, \
 		/mob/living/silicon/ai/proc/ai_statuschange, \
@@ -143,8 +145,8 @@ var/list/ai_list = list()
 /mob/living/silicon/ai/verb/radio_interact()
 	set category = "AI Commands"
 	set name = "Radio Configuration"
-	if(stat || aiRestorePowerRoutine) return
-	radio.recalculateChannels()
+	if(stat || aiRestorePowerRoutine)
+		return
 	radio.attack_self(usr)
 
 /mob/living/silicon/ai/verb/rename_photo() //This is horrible but will do for now
@@ -167,7 +169,8 @@ var/list/ai_list = list()
 			selection = q
 			break
 
-	if(!selection) return
+	if(!selection)
+		return
 	var/choice = input(usr, "Would you like to rename or delete [selection.fields["name"]]?", "Photo Modification") in list("Rename","Delete","Cancel")
 	switch(choice)
 		if("Cancel")
@@ -208,43 +211,78 @@ var/list/ai_list = list()
 		//if(icon_state == initial(icon_state))
 	var/icontype = ""
 	/* Nuked your hidden shit.*/
-	if (custom_sprite == 1) icontype = ("Custom")//automagically selects custom sprite if one is available
+	if (custom_sprite == 1)
+		icontype = ("Custom")//automagically selects custom sprite if one is available
 	else icontype = input("Select an icon!", "AI", null, null) as null|anything in list("Monochrome", "Blue", "Inverted", "Text", "Smiley", "Angry", "Dorf", "Matrix", "Bliss", "Firewall", "Green", "Red", "Broken Output", "Triumvirate", "Triumvirate Static", "Searif", "Ravensdale", "Serithi", "Static", "Wasp", "Robert House", "Red October", "Fabulous", "Girl", "Girl Malf", "Boy", "Boy Malf", "Four-Leaf", "Yes Man", "Hourglass", "Patriot", "Pirate", "Royal")
 	switch(icontype)
-		if("Custom") icon_state = "[src.ckey]-ai"
-		if("Clown") icon_state = "ai-clown2"
-		if("Monochrome") icon_state = "ai-mono"
-		if("Inverted") icon_state = "ai-u"
-		if("Firewall") icon_state = "ai-magma"
-		if("Green") icon_state = "ai-wierd"
-		if("Red") icon_state = "ai-malf"
-		if("Broken Output") icon_state = "ai-static"
-		if("Text") icon_state = "ai-text"
-		if("Smiley") icon_state = "ai-smiley"
-		if("Matrix") icon_state = "ai-matrix"
-		if("Angry") icon_state = "ai-angryface"
-		if("Dorf") icon_state = "ai-dorf"
-		if("Bliss") icon_state = "ai-bliss"
-		if("Triumvirate") icon_state = "ai-triumvirate"
-		if("Triumvirate Static") icon_state = "ai-triumvirate-malf"
-		if("Searif") icon_state = "ai-searif"
-		if("Ravensdale") icon_state = "ai-ravensdale"
-		if("Serithi") icon_state = "ai-serithi"
-		if("Static") icon_state = "ai-fuzz"
-		if("Wasp") icon_state = "ai-wasp"
-		if("Robert House") icon_state = "ai-president"
-		if("Red October") icon_state = "ai-soviet"
-		if("Girl") icon_state = "ai-girl"
-		if("Girl Malf") icon_state = "ai-girl-malf"
-		if("Boy") icon_state = "ai-boy"
-		if("Boy Malf") icon_state = "ai-boy-malf"
-		if("Fabulous") icon_state = "ai-fabulous"
-		if("Four-Leaf") icon_state = "ai-4chan"
-		if("Yes Man") icon_state = "yes-man"
-		if("Hourglass") icon_state = "ai-hourglass"
-		if("Patriot") icon_state = "ai-patriot"
-		if("Pirate") icon_state = "ai-pirate"
-		if("Royal") icon_state = "ai-royal"
+		if("Custom")
+			icon_state = "[src.ckey]-ai"
+		if("Clown")
+			icon_state = "ai-clown2"
+		if("Monochrome")
+			icon_state = "ai-mono"
+		if("Inverted")
+			icon_state = "ai-u"
+		if("Firewall")
+			icon_state = "ai-magma"
+		if("Green")
+			icon_state = "ai-wierd"
+		if("Red")
+			icon_state = "ai-malf"
+		if("Broken Output")
+			icon_state = "ai-static"
+		if("Text")
+			icon_state = "ai-text"
+		if("Smiley")
+			icon_state = "ai-smiley"
+		if("Matrix")
+			icon_state = "ai-matrix"
+		if("Angry")
+			icon_state = "ai-angryface"
+		if("Dorf")
+			icon_state = "ai-dorf"
+		if("Bliss")
+			icon_state = "ai-bliss"
+		if("Triumvirate")
+			icon_state = "ai-triumvirate"
+		if("Triumvirate Static")
+			icon_state = "ai-triumvirate-malf"
+		if("Searif")
+			icon_state = "ai-searif"
+		if("Ravensdale")
+			icon_state = "ai-ravensdale"
+		if("Serithi")
+			icon_state = "ai-serithi"
+		if("Static")
+			icon_state = "ai-fuzz"
+		if("Wasp")
+			icon_state = "ai-wasp"
+		if("Robert House")
+			icon_state = "ai-president"
+		if("Red October")
+			icon_state = "ai-soviet"
+		if("Girl")
+			icon_state = "ai-girl"
+		if("Girl Malf")
+			icon_state = "ai-girl-malf"
+		if("Boy")
+			icon_state = "ai-boy"
+		if("Boy Malf")
+			icon_state = "ai-boy-malf"
+		if("Fabulous")
+			icon_state = "ai-fabulous"
+		if("Four-Leaf")
+			icon_state = "ai-4chan"
+		if("Yes Man")
+			icon_state = "yes-man"
+		if("Hourglass")
+			icon_state = "ai-hourglass"
+		if("Patriot")
+			icon_state = "ai-patriot"
+		if("Pirate")
+			icon_state = "ai-pirate"
+		if("Royal")
+			icon_state = "ai-royal"
 		else icon_state = "ai"
 	//else
 //			to_chat(usr, "You can only change your display once!")
@@ -260,7 +298,11 @@ var/list/ai_list = list()
 				if (malf.apcs >= 3)
 					stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
 
-
+/mob/proc/remove_malf_spells()
+	for(var/spell/S in spell_list)
+		if(S.panel == MALFUNCTION)
+			remove_spell(S)
+			
 /mob/living/silicon/ai/proc/ai_alerts()
 
 
@@ -354,7 +396,8 @@ var/list/ai_list = list()
 	return 0
 
 /mob/living/silicon/ai/restrained()
-	if(timestopped) return 1 //under effects of time magick
+	if(timestopped)
+		return 1 //under effects of time magick
 	return 0
 
 /mob/living/silicon/ai/emp_act(severity)
@@ -428,16 +471,20 @@ var/list/ai_list = list()
 	if (href_list["lawc"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
 		var/L = text2num(href_list["lawc"])
 		switch(lawcheck[L+1])
-			if ("Yes") lawcheck[L+1] = "No"
-			if ("No") lawcheck[L+1] = "Yes"
+			if ("Yes")
+				lawcheck[L+1] = "No"
+			if ("No")
+				lawcheck[L+1] = "Yes"
 //		to_chat(src, text ("Switching Law [L]'s report status to []", lawcheck[L+1]))
 		checklaws()
 
 	if (href_list["lawi"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
 		var/L = text2num(href_list["lawi"])
 		switch(ioncheck[L])
-			if ("Yes") ioncheck[L] = "No"
-			if ("No") ioncheck[L] = "Yes"
+			if ("Yes")
+				ioncheck[L] = "No"
+			if ("No")
+				ioncheck[L] = "Yes"
 //		to_chat(src, text ("Switching Law [L]'s report status to []", lawcheck[L+1]))
 		checklaws()
 
@@ -591,7 +638,8 @@ var/list/ai_list = list()
 			queueAlarm(text("--- [] alarm detected in []! (No Camera)", class, A.name), class)
 	else
 		queueAlarm(text("--- [] alarm detected in []! (No Camera)", class, A.name), class)
-	if (viewalerts) ai_alerts()
+	if (viewalerts)
+		ai_alerts()
 	return 1
 
 /mob/living/silicon/ai/cancelAlarm(var/class, area/A as area, obj/origin)
@@ -608,7 +656,8 @@ var/list/ai_list = list()
 				L -= I
 	if (cleared)
 		queueAlarm(text("--- [] alarm in [] has been cleared.", class, A.name), class, 0)
-		if (viewalerts) ai_alerts()
+		if (viewalerts)
+			ai_alerts()
 	return !cleared
 
 /mob/living/silicon/ai/cancel_camera()
@@ -657,13 +706,6 @@ var/list/ai_list = list()
 				break
 		to_chat(src, "<span class='notice'>Switched to [network] camera network.</span>")
 //End of code by Mord_Sith
-
-
-/mob/living/silicon/ai/proc/choose_modules()
-	set category = "Malfunction"
-	set name = "Choose Module"
-
-	malf_picker.use(src)
 
 /mob/living/silicon/ai/proc/ai_statuschange()
 	set category = "AI Commands"
@@ -756,14 +798,26 @@ var/list/ai_list = list()
 
 	return
 
-/mob/living/silicon/ai/proc/corereturn()
-	set category = "Malfunction"
-	set name = "Return to Main Core"
-
-	var/obj/machinery/power/apc/apc = src.loc
-	if(!istype(apc))
-		to_chat(src, "<span class='notice'>You are already in your Main Core.</span>")
-		return
+/spell/aoe_turf/corereturn
+	name = "Return to Core"
+	panel = MALFUNCTION
+	charge_type = Sp_CHARGES
+	charge_max = 1
+	hud_state = "unshunt"
+	override_base = "grey"
+	
+/spell/aoe_turf/corereturn/before_target(mob/user)
+	if(istype(user.loc, /obj/machinery/power/apc))
+		return 0
+	else
+		to_chat(user, "<span class='notice'>You are already in your Main Core.</span>")
+		return 1
+		
+/spell/aoe_turf/corereturn/choose_targets(mob/user = usr)
+	return list(user.loc)
+	
+/spell/aoe_turf/corereturn/cast(var/list/targets, mob/user)
+	var/obj/machinery/power/apc/apc = targets[1]
 	apc.malfvacate()
 
 //Toggles the luminosity and applies it by re-entereing the camera.
@@ -789,6 +843,15 @@ var/list/ai_list = list()
 
 	to_chat(src, "Camera lights activated.")
 	return
+
+/mob/living/silicon/ai/verb/toggle_station_map()
+	set name = "Toggle Station Holomap"
+	set desc = "Toggle station holomap on your screen"
+	set category = "AI Commands"
+	if(isUnconscious())
+		return
+
+	station_holomap.toggleHolomap(src,1)
 
 //AI_CAMERA_LUMINOSITY
 

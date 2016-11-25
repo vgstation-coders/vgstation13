@@ -70,7 +70,8 @@
 /obj/machinery/atmospherics/trinary/tvalve/proc/go_to_side()
 
 
-	if(state) return 0
+	if(state)
+		return 0
 
 	state = 1
 	update_icon()
@@ -120,9 +121,6 @@
 
 /obj/machinery/atmospherics/trinary/tvalve/attack_ai(mob/user as mob)
 	return
-
-/obj/machinery/atmospherics/trinary/tvalve/attack_paw(mob/user as mob)
-	return attack_hand(user)
 
 /obj/machinery/atmospherics/trinary/tvalve/attack_hand(mob/user as mob)
 	if(isobserver(user) && !canGhostWrite(user,src,"toggles"))

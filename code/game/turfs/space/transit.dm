@@ -1,11 +1,17 @@
 /turf/space/transit
-	plane = PLANE_TURF
 	var/pushdirection // push things that get caught in the transit tile this direction
+	plane = TURF_PLANE
 
 /turf/space/transit/New()
 	if(loc)
 		var/area/A = loc
 		A.area_turfs += src
+
+	update_icon()
+
+/turf/space/transit/update_icon()
+	icon_state = ""
+
 	var/dira=""
 	var/i=0
 	switch(pushdirection)

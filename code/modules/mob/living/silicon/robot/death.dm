@@ -33,7 +33,8 @@
 
 
 /mob/living/silicon/robot/death(gibbed)
-	if(stat == DEAD)	return
+	if(stat == DEAD)
+		return
 	if(!gibbed)
 		emote("deathgasp")
 	stat = DEAD
@@ -48,8 +49,7 @@
 			RC.upgrade_finished = -1
 		RC.go_out()
 
-	if(blind)	blind.layer = 0
-	sight |= SEE_TURFS|SEE_MOBS|SEE_OBJS
+	change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 	see_in_dark = 8
 	see_invisible = SEE_INVISIBLE_LEVEL_TWO
 	updateicon()

@@ -9,7 +9,7 @@
 	icon_state = "bush1"
 	density = 1
 	anchored = 1
-	layer = 3.2
+	layer = ABOVE_OBJ_LAYER
 	var/indestructable = 0
 	var/stump = 0
 
@@ -20,10 +20,10 @@
 /obj/structure/bush/Bumped(M as mob)
 	if (istype(M, /mob/living/simple_animal))
 		var/mob/living/simple_animal/A = M
-		A.loc = get_turf(src)
+		A.forceMove(get_turf(src))
 	else if (istype(M, /mob/living/carbon/monkey))
 		var/mob/living/carbon/monkey/A = M
-		A.loc = get_turf(src)
+		A.forceMove(get_turf(src))
 
 /obj/structure/bush/attackby(var/obj/I as obj, var/mob/user as mob)
 	//hatchets can clear away undergrowth

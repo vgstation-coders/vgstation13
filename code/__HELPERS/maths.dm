@@ -137,7 +137,8 @@ proc/arctan(x)
  * http://i.imgur.com/8Pu0x7M.png
  */
 /proc/unmix(x, a, b, min = 0, max = 1)
-	if(a==b) return 1
+	if(a==b)
+		return 1
 	return Clamp( (b - x)/(b - a), min, max )
 
 /proc/Mean(...)
@@ -168,10 +169,12 @@ proc/arctan(x)
 	. = list()
 	var/d		= b*b - 4 * a * c
 	var/bottom  = 2 * a
-	if(d < 0) return
+	if(d < 0)
+		return
 	var/root = sqrt(d)
 	. += (-b + root) / bottom
-	if(!d) return
+	if(!d)
+		return
 	. += (-b - root) / bottom
 
 /*

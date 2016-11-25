@@ -7,6 +7,7 @@
 
 /obj/item/stack/tile
 	var/material
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/sheets_n_ores.dmi', "right_hand" = 'icons/mob/in-hand/right/sheets_n_ores.dmi')
 
 /obj/item/stack/tile/proc/adjust_slowdown(mob/living/L, current_slowdown)
 	return current_slowdown
@@ -50,7 +51,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	max_amount = 60
-	origin_tech = "biotech=1"
+	origin_tech = Tc_BIOTECH + "=1"
 
 	material = "grass"
 
@@ -58,9 +59,9 @@
  * Wood
  */
 /obj/item/stack/tile/wood
-	name = "wood floor tile"
-	singular_name = "wood floor tile"
-	desc = "an easy to fit wood floor tile"
+	name = "wooden floor tile"
+	singular_name = "wooden floor tile"
+	desc = "an easy to fit wooden floor tile"
 	icon_state = "tile-wood"
 	w_class = W_CLASS_MEDIUM
 	force = 1.0
@@ -96,6 +97,17 @@
 				S.build(T)
 				if(T.canBuildPlating(S) == BUILD_SUCCESS)
 					qdel(L)
+
+/obj/item/stack/tile/wood/attackby(var/obj/item/weapon/W, var/mob/user)
+	if(iswrench(W))
+		if(use(4))
+			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
+			drop_stack(/obj/item/stack/sheet/wood, get_turf(user), 1, user)
+		else
+			to_chat(user, "<span class='warning'>You need at least 4 [src]\s to get a wooden plank back!</span>")
+		return
+
+	. = ..()
 
 /*
  * Carpets

@@ -25,7 +25,8 @@
 
 // Clone of list[]
 /proc/n_listpos(var/list/L, var/pos, var/value)
-	if(!istype(L, /list)) return
+	if(!istype(L, /list))
+		return
 	if(isnum(pos))
 		if(!value)
 			if(L.len >= pos && !(pos > L.len))
@@ -41,7 +42,8 @@
 
 // Clone of list.Copy()
 /proc/n_listcopy(var/list/L, var/start, var/end)
-	if(!istype(L, /list)) return
+	if(!istype(L, /list))
+		return
 	return L.Copy(start, end)
 
 // Clone of list.Add()
@@ -74,18 +76,21 @@
 
 // Clone of list.len = 0
 /proc/n_listcut(var/list/L, var/start, var/end)
-	if(!istype(L, /list)) return
+	if(!istype(L, /list))
+		return
 	return L.Cut(start, end)
 
 // Clone of list.Swap()
 /proc/n_listswap(var/list/L, var/firstindex, var/secondindex)
-	if(!istype(L, /list)) return
+	if(!istype(L, /list))
+		return
 	if(L.len >= secondindex && L.len >= firstindex)
 		return L.Swap(firstindex, secondindex)
 
 // Clone of list.Insert()
 /proc/n_listinsert(var/list/L, var/index, var/element)
-	if(!istype(L, /list)) return
+	if(!istype(L, /list))
+		return
 	return L.Insert(index, element)
 
 // --- Miscellaneous functions ---

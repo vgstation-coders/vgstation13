@@ -34,14 +34,16 @@
 		for(var/image/I in overlays_lying)
 			overlays += I
 	else
-		if(m_intent == "run")		icon_state = "alien[caste]_running"
+		if(m_intent == "run")
+			icon_state = "alien[caste]_running"
 		else						icon_state = "alien[caste]_s"
 		for(var/image/I in overlays_standing)
 			overlays += I
 
 /mob/living/carbon/alien/humanoid/regenerate_icons()
 	..()
-	if (monkeyizing)	return
+	if (monkeyizing)
+		return
 
 	update_inv_head(0)
 	update_inv_wear_suit(0)
@@ -62,7 +64,8 @@
 /mob/living/carbon/alien/humanoid/update_inv_wear_suit(var/update_icons=1)
 	if(wear_suit)
 		var/t_state = wear_suit.item_state
-		if(!t_state)	t_state = wear_suit.icon_state
+		if(!t_state)
+			t_state = wear_suit.icon_state
 		//var/image/lying		= image("icon" = ((wear_suit.icon_override) ? wear_suit.icon_override : 'icons/mob/suit.dmi'), "icon_state" = "[t_state]")
 		var/image/standing	= image("icon" = ((wear_suit.icon_override) ? wear_suit.icon_override : 'icons/mob/suit.dmi'), "icon_state" = "[t_state]")
 
@@ -83,13 +86,15 @@
 	else
 		//overlays_lying[X_SUIT_LAYER]	= null
 		overlays_standing[X_SUIT_LAYER]	= null
-	if(update_icons)	update_icons()
+	if(update_icons)
+		update_icons()
 
 
 /mob/living/carbon/alien/humanoid/update_inv_head(var/update_icons=1)
 	if (head)
 		var/t_state = head.item_state
-		if(!t_state)	t_state = head.icon_state
+		if(!t_state)
+			t_state = head.icon_state
 		var/image/lying		= image(((head.icon_override) ? head.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[t_state]")
 		var/image/standing	= image(((head.icon_override) ? head.icon_override : 'icons/mob/head.dmi'), "icon_state" = "[t_state]")
 		if(head.blood_DNA && head.blood_DNA.len)
@@ -101,13 +106,17 @@
 	else
 		overlays_lying[X_HEAD_LAYER]	= null
 		overlays_standing[X_HEAD_LAYER]	= null
-	if(update_icons)	update_icons()
+	if(update_icons)
+		update_icons()
 
 
 /mob/living/carbon/alien/humanoid/update_inv_pockets(var/update_icons=1)
-	if(l_store)		l_store.screen_loc = ui_storage1
-	if(r_store)		r_store.screen_loc = ui_storage2
-	if(update_icons)	update_icons()
+	if(l_store)
+		l_store.screen_loc = ui_storage1
+	if(r_store)
+		r_store.screen_loc = ui_storage2
+	if(update_icons)
+		update_icons()
 
 /mob/living/carbon/alien/humanoid/update_inv_hand(index, var/update_icons = 1)
 	switch(index)
@@ -123,12 +132,14 @@
 	if(I)
 		var/t_state = I.item_state
 		var/t_inhand_state = I.inhand_states["right_hand"]
-		if(!t_state)	t_state = I.icon_state
+		if(!t_state)
+			t_state = I.icon_state
 		I.screen_loc = ui_rhand
 		overlays_standing[X_R_HAND_LAYER]	= image("icon" = t_inhand_state, "icon_state" = t_state)
 	else
 		overlays_standing[X_R_HAND_LAYER]	= null
-	if(update_icons)	update_icons()
+	if(update_icons)
+		update_icons()
 
 /mob/living/carbon/alien/humanoid/update_inv_l_hand(var/update_icons=1)
 	overlays -= overlays_standing[X_L_HAND_LAYER]
@@ -137,12 +148,14 @@
 	if(I)
 		var/t_state = I.item_state
 		var/t_inhand_state = I.inhand_states["left_hand"] //this is a file
-		if(!t_state)	t_state = I.icon_state
+		if(!t_state)
+			t_state = I.icon_state
 		I.screen_loc = ui_lhand
 		overlays_standing[X_L_HAND_LAYER]	= image("icon" = t_inhand_state, "icon_state" = t_state)
 	else
 		overlays_standing[X_L_HAND_LAYER]	= null
-	if(update_icons)	update_icons()
+	if(update_icons)
+		update_icons()
 
 //Call when target overlay should be added/removed
 /mob/living/carbon/alien/humanoid/update_targeted(var/update_icons=1)
@@ -154,7 +167,8 @@
 	if (!targeted_by)
 		overlays_lying[TARGETED_LAYER]		= null
 		overlays_standing[TARGETED_LAYER]	= null
-	if(update_icons)		update_icons()
+	if(update_icons)
+		update_icons()
 
 
 /mob/living/carbon/alien/humanoid/update_fire()

@@ -62,7 +62,8 @@
 
 /mob/living/simple_animal/hostile/carp/give_birth()
 	spawn(rand(100,200))
-		if(!src) return
+		if(!src)
+			return
 
 		src.death(0)
 
@@ -87,7 +88,8 @@
 		emote("nashes at [.]")
 
 /mob/living/simple_animal/hostile/carp/AttackingTarget()
-	if(!target) return
+	if(!target)
+		return
 
 	if(pheromones_act == PHEROMONES_FOLLOW && target.reagents && target.reagents.has_reagent(CARPPHEROMONES))
 		return	//This might be a bit hacky. The purpose of this is to prevent carps who are attracted to pheromones from attacking
@@ -97,7 +99,7 @@
 	var/mob/living/carbon/L = .
 	if(istype(L))
 		if(prob(15))
-			L.Weaken(3)
+			L.Knockdown(3)
 			L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
 
 /mob/living/simple_animal/hostile/carp/baby
@@ -130,14 +132,15 @@
 	if(isliving(target))
 		var/mob/living/L = target
 
-		if(!L.meat_type) return
+		if(!L.meat_type)
+			return
 
 		increase_growth_stage(1)
 
 /mob/living/simple_animal/hostile/carp/baby/attackby(obj/W, mob/user)
 	..()
 
-	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks))
+	if(!isDead() && istype(W, /obj/item/weapon/reagent_containers/food/snacks))
 		var/obj/item/weapon/reagent_containers/food/snacks/F = W
 
 		if((F.food_flags & FOOD_MEAT) && (growth_stage < req_growth_to_grow_up)) //Any meaty dish goes!
@@ -149,8 +152,8 @@
 				if(!friends.Find(user))
 					friends.Add(user)
 					to_chat(user, "<span class='info'>You have gained \the [src]'s trust.</span>")
-					var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2",MOB_LAYER+1)
-					heart.plane = PLANE_EFFECTS
+					var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+					heart.plane = ABOVE_HUMAN_PLANE
 					flick_overlay(heart, list(user.client), 20)
 
 			if(F.reagents)
@@ -166,7 +169,8 @@
 	return 1
 
 /mob/living/simple_animal/hostile/carp/baby/proc/increase_growth_stage(by = 1)
-	if(growth_stage >= req_growth_to_grow_up) return
+	if(growth_stage >= req_growth_to_grow_up)
+		return
 
 	growth_stage += by
 
@@ -193,7 +197,6 @@
 
 /mob/living/simple_animal/hostile/carp/holocarp/Die()
 	qdel(src)
-	return
 
 #undef PHEROMONES_NO_EFFECT
 #undef PHEROMONES_NEUTRAL

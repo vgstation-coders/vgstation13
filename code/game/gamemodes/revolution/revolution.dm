@@ -7,6 +7,12 @@
 // If the rev icons start going wrong for some reason, ticker.mode:update_all_rev_icons() can be called to correct them.
 // If the game somtimes isn't registering a win properly, then ticker.mode.check_win() isn't being called somewhere.
 
+#define ADD_REVOLUTIONARY_FAIL_IS_COMMAND -1
+#define ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED -2
+#define ADD_REVOLUTIONARY_FAIL_IS_IMPLANTED -3
+#define ADD_REVOLUTIONARY_FAIL_IS_REV -4
+
+
 /datum/game_mode
 	var/list/datum/mind/head_revolutionaries = list()
 	var/list/datum/mind/revolutionaries = list()
@@ -22,11 +28,12 @@
 
 
 	uplink_welcome = "Revolutionary Uplink Console:"
-	uplink_uses = 10
+	uplink_uses = 20
 
 	var/finished = 0
 	var/checkwin_counter = 0
 	var/max_headrevs = 3
+	var/minimum_heads = 2
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
 ///////////////////////////
@@ -64,9 +71,18 @@
 		possible_headrevs -= lenin
 		head_revolutionaries += lenin
 
-	if((head_revolutionaries.len==0)||(!head_check))
-		log_admin("Failed to set-up a round of revolution. Couldn't find any heads of staffs or any volunteers to be head revolutionaries.")
-		message_admins("Failed to set-up a round of revolution. Couldn't find any heads of staffs or any volunteers to be head revolutionaries.")
+	// If an admin forces this mode, we set the minimum head count to 1, otherwise check minimum heads
+	if(master_mode=="secret" && secret_force_mode=="secret")
+		if(head_revolutionaries.len==0 || head_check < minimum_heads)
+			log_admin("Failed to set-up a round of revolution. Couldn't find enough heads of staffs or any volunteers to be head revolutionaries.")
+			log_admin("Number of headrevs: [head_revolutionaries.len] Number of heads: [head_check]")
+			message_admins("Failed to set-up a round of revolution. Couldn't find enough heads of staffs or any volunteers to be head revolutionaries.")
+			message_admins("Number of headrevs: [head_revolutionaries.len] Heads of Staff: [get_assigned_head_roles()]")
+			return 0
+
+	else if (head_revolutionaries.len==0 || head_check < 1)
+		log_admin("Failed to setup a round of revolution while secret forced mode: there was not at least one head. Headcount: [head_check]")
+		message_admins("Failed to setup a round of revolution while secret forced mode: there was not at least one head. Headcount: [head_check]")
 		return 0
 
 	log_admin("Starting a round of revolution with [head_revolutionaries.len] head revolutionaries and [head_check] heads of staff.")
@@ -96,7 +112,8 @@
 	if(emergency_shuttle)
 		emergency_shuttle.always_fake_recall = 1
 	spawn (rand(waittime_l, waittime_h))
-		if(!mixed) send_intercept()
+		if(!mixed)
+			send_intercept()
 	..()
 
 
@@ -185,19 +202,19 @@
 ///////////////////////////////////////////////////
 /datum/game_mode/proc/add_revolutionary(datum/mind/rev_mind)
 	if(rev_mind.assigned_role in command_positions)
-		return -1
+		return ADD_REVOLUTIONARY_FAIL_IS_COMMAND
 
 	var/mob/living/carbon/human/H = rev_mind.current
 
 	if(jobban_isbanned(H, "revolutionary"))
-		return -2
+		return ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED
 
 	for(var/obj/item/weapon/implant/loyalty/L in H) // check loyalty implant in the contents
 		if(L.imp_in == H) // a check if it's actually implanted
-			return -3
+			return ADD_REVOLUTIONARY_FAIL_IS_IMPLANTED
 
 	if((rev_mind in revolutionaries) || (rev_mind in head_revolutionaries))
-		return -4
+		return ADD_REVOLUTIONARY_FAIL_IS_REV
 
 	revolutionaries += rev_mind
 	to_chat(rev_mind.current, "<span class='warning'><FONT size = 3> You are now a revolutionary! Help your cause. Do not harm your fellow freedom fighters. You can identify your comrades by the red \"R\" icons, and your leaders by the blue \"R\" icons. Help them kill the heads to win the revolution!</FONT></span>")
@@ -262,14 +279,16 @@
 							var/imageloc = rev.current
 							if(istype(rev.current.loc,/obj/mecha))
 								imageloc = rev.current.loc
-							var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev", layer = 13)
+							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev")
+							I.plane = REV_ANTAG_HUD_PLANE
 							head_rev.current.client.images += I
 					for(var/datum/mind/head_rev_1 in head_revolutionaries)
 						if(head_rev_1.current)
 							var/imageloc = head_rev_1.current
 							if(istype(head_rev_1.current.loc,/obj/mecha))
 								imageloc = head_rev_1.current.loc
-							var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev_head", layer = 13)
+							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev_head")
+							I.plane = REV_ANTAG_HUD_PLANE
 							head_rev.current.client.images += I
 
 		for(var/datum/mind/rev in revolutionaries)
@@ -280,14 +299,16 @@
 							var/imageloc = head_rev.current
 							if(istype(head_rev.current.loc,/obj/mecha))
 								imageloc = head_rev.current.loc
-							var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev_head", layer = 13)
+							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev_head")
+							I.plane = REV_ANTAG_HUD_PLANE
 							rev.current.client.images += I
 					for(var/datum/mind/rev_1 in revolutionaries)
 						if(rev_1.current)
 							var/imageloc = rev_1.current
 							if(istype(rev_1.current.loc,/obj/mecha))
 								imageloc = rev_1.current.loc
-							var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev", layer = 13)
+							var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev")
+							I.plane = REV_ANTAG_HUD_PLANE
 							rev.current.client.images += I
 
 ////////////////////////////////////////////////////
@@ -302,14 +323,16 @@
 					var/imageloc = rev_mind.current
 					if(istype(rev_mind.current.loc,/obj/mecha))
 						imageloc = rev_mind.current.loc
-					var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev", layer = 13)
+					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev")
+					I.plane = REV_ANTAG_HUD_PLANE
 					head_rev_mind.current.client.images += I
 			if(rev_mind.current)
 				if(rev_mind.current.client)
 					var/imageloc = head_rev_mind.current
 					if(istype(head_rev_mind.current.loc,/obj/mecha))
 						imageloc = head_rev_mind.current.loc
-					var/image/J = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev_head", layer = 13)
+					var/image/J = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev_head")
+					J.plane = REV_ANTAG_HUD_PLANE
 					rev_mind.current.client.images += J
 
 		for(var/datum/mind/rev_mind_1 in revolutionaries)
@@ -318,14 +341,16 @@
 					var/imageloc = rev_mind.current
 					if(istype(rev_mind.current.loc,/obj/mecha))
 						imageloc = rev_mind.current.loc
-					var/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev", layer = 13)
+					var/image/I = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev")
+					I.plane = REV_ANTAG_HUD_PLANE
 					rev_mind_1.current.client.images += I
 			if(rev_mind.current)
 				if(rev_mind.current.client)
 					var/imageloc = rev_mind_1.current
 					if(istype(rev_mind_1.current.loc,/obj/mecha))
 						imageloc = rev_mind_1.current.loc
-					var/image/J = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev", layer = 13)
+					var/image/J = image('icons/mob/mob.dmi', loc = imageloc, icon_state = "rev")
+					J.plane = REV_ANTAG_HUD_PLANE
 					rev_mind.current.client.images += J
 
 ///////////////////////////////////

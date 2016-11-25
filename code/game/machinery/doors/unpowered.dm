@@ -29,7 +29,7 @@
 /obj/machinery/door/unpowered/shuttle
 	icon = 'icons/obj/doors/shuttle.dmi'
 	icon_state = "door_closed"
-	animation_delay = 5
+	animation_delay = 14
 
 	explosion_block = 1
 

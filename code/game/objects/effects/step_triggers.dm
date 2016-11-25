@@ -23,6 +23,8 @@
 /* Tosses things in a certain direction */
 
 /obj/effect/step_trigger/thrower
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "arrows"
 	var/direction = SOUTH // the direction of throw
 	var/tiles = 3	// if 0: forever until atom hits a stopper
 	var/immobilize = 1 // if nonzero: prevents mobs from moving while they're being flung
@@ -83,6 +85,19 @@
 			if(immobilize)
 				M.canmove = 1
 
+/obj/effect/step_trigger/thrower/north
+	dir = NORTH
+
+/obj/effect/step_trigger/thrower/east
+	dir = EAST
+
+/obj/effect/step_trigger/thrower/west
+	dir = WEST
+
+/obj/effect/step_trigger/thrower/New()
+	..()
+	direction = dir
+
 /* Stops things thrown by a thrower, doesn't do anything */
 
 /obj/effect/step_trigger/stopper
@@ -118,3 +133,16 @@
 				A.y = rand(teleport_y, teleport_y_offset)
 				A.z = rand(teleport_z, teleport_z_offset)
 
+/obj/effect/step_trigger/teleporter/random/shuttle_transit
+	teleport_x = 25
+	teleport_y = 25
+	teleport_z = 6
+
+	//x and y offsets depend on the map size
+
+	teleport_z_offset = 6
+
+/obj/effect/step_trigger/teleporter/random/shuttle_transit/New()
+	..()
+	teleport_x_offset = world.maxx - 25
+	teleport_y_offset = world.maxy - 25

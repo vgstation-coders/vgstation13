@@ -32,8 +32,10 @@
 	var/bincount = 0
 	var/capcount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/capacitor)) capcount += SP.rating-1
-		if(istype(SP, /obj/item/weapon/stock_parts/matter_bin)) bincount += SP.rating
+		if(istype(SP, /obj/item/weapon/stock_parts/capacitor))
+			capcount += SP.rating-1
+		if(istype(SP, /obj/item/weapon/stock_parts/matter_bin))
+			bincount += SP.rating
 	limit = bincount
 	speed_bonus = round(capcount/2,1)
 
@@ -66,7 +68,8 @@
 	return src.attack_hand(user)
 
 /obj/machinery/egg_incubator/attack_hand(mob/user as mob)
-	if(..()) return 1
+	if(..())
+		return 1
 	user.set_machine(src)
 	interact(user)
 
@@ -87,9 +90,11 @@
 		return E.amount_grown
 
 /obj/machinery/egg_incubator/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 	var/obj/item/weapon/reagent_containers/food/snacks/E = locate(href_list["slot"])
-	if(!istype(E)) return //How did we get here at all?
+	if(!istype(E))
+		return //How did we get here at all?
 	eject(E)
 
 /obj/machinery/egg_incubator/process()
@@ -116,7 +121,8 @@
 	return any_hatch
 
 /obj/machinery/egg_incubator/proc/eject(var/obj/E)
-	if(E.loc != src) return //You can't eject it if it's not here.
+	if(E.loc != src)
+		return //You can't eject it if it's not here.
 	E.forceMove(get_turf(src))
 	src.updateUsrDialog()
 	visible_message("<span class='info'>\The [E] is released from \the [src].</span>")

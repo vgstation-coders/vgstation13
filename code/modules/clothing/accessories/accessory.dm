@@ -3,6 +3,7 @@
 #define STORAGE		2
 #define ARMBAND		4
 #define TIE			8
+#define HOLOMAP		16
 
 /obj/item/clothing/accessory
 	name = "tie"
@@ -11,7 +12,7 @@
 	icon_state = "bluetie"
 	item_state = ""	//no inhands by default
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing_accessories.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing_accessories.dmi')
-	_color = "bluetie"
+	_color = null
 	flags = FPRINT
 	slot_flags = 0
 	w_class = W_CLASS_SMALL
@@ -122,7 +123,7 @@
 	desc = "An outdated medical apparatus for listening to the sounds of the human body. It also makes you look like you know what you're doing."
 	icon_state = "stethoscope"
 	_color = "stethoscope"
-	origin_tech = "biotech=1"
+	origin_tech = Tc_BIOTECH + "=1"
 
 /obj/item/clothing/accessory/stethoscope/attack(mob/living/carbon/human/M, mob/living/user)
 	if(ishuman(M) && isliving(user))
@@ -131,8 +132,10 @@
 			if(body_part)
 				var/their = "their"
 				switch(M.gender)
-					if(MALE)	their = "his"
-					if(FEMALE)	their = "her"
+					if(MALE)
+						their = "his"
+					if(FEMALE)
+						their = "her"
 
 				var/sound = "pulse"
 				var/sound_strength

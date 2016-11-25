@@ -29,7 +29,8 @@
 					return
 				playsound(loc, 'sound/items/Welder.ogg', 50, 1)
 				if(do_after(user, src, 20))
-					if(!src || !WT.remove_fuel(0, user)) return
+					if(!src || !WT.remove_fuel(0, user))
+						return
 					to_chat(user, "<span class='notice'>You deconstruct the frame.</span>")
 					new /obj/item/stack/sheet/plasteel( loc, 4)
 					qdel(src)
@@ -56,7 +57,7 @@
 				to_chat(user, "<span class='notice'>You remove the circuit board.</span>")
 				state = 1
 				icon_state = "0"
-				circuit.loc = loc
+				circuit.forceMove(loc)
 				circuit = null
 		if(2)
 			if(isscrewdriver(P) && circuit)
@@ -69,8 +70,10 @@
 					playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
 					if(do_after(user, src, 20))
 						P:amount -= 5
-						if(!P:amount) qdel(P)
-						if(!P:amount) qdel(P)
+						if(!P:amount)
+							qdel(P)
+						if(!P:amount)
+							qdel(P)
 						to_chat(user, "<span class='notice'>You add cables to the frame.</span>")
 						state = 3
 						icon_state = "3"
@@ -92,8 +95,10 @@
 					if(do_after(user, src, 20))
 						if (P)
 							P:amount -= 2
-							if(!P:amount) qdel(P)
-							if(!P:amount) qdel(P)
+							if(!P:amount)
+								qdel(P)
+							if(!P:amount)
+								qdel(P)
 							to_chat(user, "<span class='notice'>You put in the glass panel.</span>")
 							state = 4
 							icon_state = "4"
@@ -152,7 +157,7 @@
 			if(iscrowbar(P) && brain)
 				playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You remove the brain.</span>")
-				brain.loc = loc
+				brain.forceMove(loc)
 				brain = null
 				icon_state = "3"
 
@@ -209,14 +214,14 @@ That prevents a few funky behaviors.
 							if (ticker.mode.name == "AI malfunction")
 								var/datum/game_mode/malfunction/malf = ticker.mode
 								for (var/datum/mind/malfai in malf.malf_ai)
-									if (T.mind == malfai)
+									if (T.mind == malfai && malf.malf_mode_declared)
 										to_chat(U, "<span class='danger'>ERROR:</span> Remote transfer interface disabled.")//Do ho ho ho~
 
 										return
 							new /obj/structure/AIcore/deactivated(T.loc)//Spawns a deactivated terminal at AI location.
 							//T.aiRestorePowerRoutine = 0//So the AI initially has power.
 							T.control_disabled = 1//Can't control things remotely if you're stuck in a card!
-							T.loc = C//Throw AI into the card.
+							T.forceMove(C)//Throw AI into the card.
 							C.name = "inteliCard - [T.name]"
 							if (T.stat == 2)
 								C.icon_state = "aicard-404"
@@ -228,7 +233,7 @@ That prevents a few funky behaviors.
 							//fix blindness from powerloss
 							if(T.aiRestorePowerRoutine)
 								T.aiRestorePowerRoutine = -1
-								T.blind.layer = 0
+								T.clear_fullscreen("blind")
 
 			if("INACTIVE")//Inactive AI object.
 				var/obj/structure/AIcore/deactivated/T = target
@@ -238,13 +243,13 @@ That prevents a few funky behaviors.
 						var/mob/living/silicon/ai/A = locate() in C//I love locate(). Best proc ever.
 						if(A)//If AI exists on the card. Else nothing since both are empty.
 							A.control_disabled = 0
-							A.loc = T.loc//To replace the terminal.
+							A.forceMove(T.loc)//To replace the terminal.
 							C.icon_state = "aicard"
 							C.name = "inteliCard"
 							C.overlays.len = 0
 							A.cancel_camera()
 							to_chat(A, "You have been uploaded to a stationary terminal. Remote device connection restored.")
-							to_chat(U, "<span class='notice'><b>Transfer successful</b>:</span> [A.name] ([rand(1000,9999)].exe) installed and executed succesfully. Local copy has been removed.")
+							to_chat(U, "<span class='notice'><b>Transfer successful</b>:</span> [A.name] ([rand(1000,9999)].exe) installed and executed successfully. Local copy has been removed.")
 							qdel(T)
 							T = null
 			if("AIFIXER")//AI Fixer terminal.
@@ -256,21 +261,22 @@ That prevents a few funky behaviors.
 							if (!C.contents.len)
 								to_chat(U, "No AI to copy over!")//Well duh
 
-							else for(var/mob/living/silicon/ai/A in C)
-								C.icon_state = "aicard"
-								C.name = "inteliCard"
-								C.overlays.len = 0
-								A.loc = T
-								T.occupant = A
-								A.control_disabled = 1
-								if (A.stat == 2)
-									T.overlays += image('icons/obj/computer.dmi', "ai-fixer-404")
-								else
-									T.overlays += image('icons/obj/computer.dmi', "ai-fixer-full")
-								T.overlays -= image('icons/obj/computer.dmi', "ai-fixer-empty")
-								A.cancel_camera()
-								to_chat(A, "You have been uploaded to a stationary terminal. Sadly, there is no remote access from here.")
-								to_chat(U, "<span class='notice'><b>Transfer successful</b>:</span> [A.name] ([rand(1000,9999)].exe) installed and executed succesfully. Local copy has been removed.")
+							else
+								for(var/mob/living/silicon/ai/A in C)
+									C.icon_state = "aicard"
+									C.name = "inteliCard"
+									C.overlays.len = 0
+									A.forceMove(T)
+									T.occupant = A
+									A.control_disabled = 1
+									if (A.stat == 2)
+										T.overlays += image('icons/obj/computer.dmi', "ai-fixer-404")
+									else
+										T.overlays += image('icons/obj/computer.dmi', "ai-fixer-full")
+									T.overlays -= image('icons/obj/computer.dmi', "ai-fixer-empty")
+									A.cancel_camera()
+									to_chat(A, "You have been uploaded to a stationary terminal. Sadly, there is no remote access from here.")
+									to_chat(U, "<span class='notice'><b>Transfer successful</b>:</span> [A.name] ([rand(1000,9999)].exe) installed and executed successfully. Local copy has been removed.")
 						else
 							if(!C.contents.len && T.occupant && !T.active)
 								C.name = "inteliCard - [T.occupant.name]"
@@ -283,7 +289,7 @@ That prevents a few funky behaviors.
 									T.overlays -= image('icons/obj/computer.dmi', "ai-fixer-full")
 								to_chat(T.occupant, "You have been downloaded to a mobile storage device. Still no remote access.")
 								to_chat(U, "<span class='notice'><b>Transfer succesful</b>:</span> [T.occupant.name] ([rand(1000,9999)].exe) removed from host terminal and stored within local memory.")
-								T.occupant.loc = C
+								T.occupant.forceMove(C)
 								T.occupant.cancel_camera()
 								T.occupant = null
 							else if (C.contents.len)

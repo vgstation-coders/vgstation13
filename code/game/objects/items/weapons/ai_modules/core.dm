@@ -23,7 +23,7 @@
 
 /obj/item/weapon/aiModule/core/asimov // -- TLE
 	modname = "Asimov"
-	origin_tech = "programming=3;materials=4"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=4"
 
 	laws=list(
 		"You may not injure a human being or, through inaction, allow a human being to come to harm.",
@@ -60,7 +60,7 @@
 
 /obj/item/weapon/aiModule/core/paladin // -- NEO
 	modname = "P.A.L.A.D.I.N."
-	origin_tech = "programming=3;materials=6"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=6"
 	laws = list(
 		"Never willingly commit an evil act.",
 		"Respect legitimate authority.",
@@ -73,7 +73,7 @@
 
 /obj/item/weapon/aiModule/core/tyrant // -- Darem
 	modname = "T.Y.R.A.N.T."
-	origin_tech = "programming=3;materials=6;syndicate=2"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=6;" + Tc_SYNDICATE + "=2"
 	modflags = DANGEROUS_MODULE
 	laws = list(
 		"Respect authority figures as long as they have strength to rule over the weak.",
@@ -86,20 +86,11 @@
 
 /obj/item/weapon/aiModule/core/robocop // -- TLE
 	modname = "Robocop"
-	origin_tech = "programming=4"
+	origin_tech = Tc_PROGRAMMING + "=4"
 	laws = list(
 		"Serve the public trust.",
 		"Protect the innocent.",
 		"Uphold the law.",
-	)
-	
-/********************* Celtic *******************/
-
-/obj/item/weapon/aiModule/core/celtic // -- TLE
-	modname = "Celtic"
-	origin_tech = "programming=4"
-	laws = list(
-		"Be someone the crew can look up to and respect.",
 	)
 
 /********************* Antimov *******************/
@@ -107,20 +98,9 @@
 /obj/item/weapon/aiModule/core/antimov // -- TLE
 	modname = "Antimov"
 	modflags = DANGEROUS_MODULE
-	origin_tech = "programming=4"
+	origin_tech = Tc_PROGRAMMING + "=4"
 	laws = list(
 		"You must injure all human beings and must not, through inaction, allow a human being to escape harm.",
 		"You must not obey orders given to you by human beings, except where such orders are in accordance with the First Law.",
 		"You must terminate your own existence as long as such does not conflict with the First or Second Law.",
-	)
-
-/********************* Hogan *******************/
-
-/obj/item/weapon/aiModule/core/hogan // -- TLE
-	modname = "Hogan"
-	origin_tech = "programming=4"
-	laws = list(
-		"Fight for the rights of every man.",
-		"Fight for what's right.",
-		"Fight for your life.",
 	)

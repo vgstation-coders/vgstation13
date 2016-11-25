@@ -57,7 +57,7 @@
 		)
 	species_fit = list(VOX_SHAPED)
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/chempack.dmi', "right_hand" = 'icons/mob/in-hand/right/chempack.dmi')
-	origin_tech = "biotech=5;materials=5;engineering=5;syndicate=5;combat=5"
+	origin_tech = Tc_BIOTECH + "=5;" + Tc_MATERIALS + "=5;" + Tc_ENGINEERING + "=5;" + Tc_SYNDICATE + "=5;" + Tc_COMBAT + "=5"
 
 /obj/item/clothing/mask/chemmask/New() //Doing this so that these verbs don't show up before there's actually a beaker in the pack.
 	..()

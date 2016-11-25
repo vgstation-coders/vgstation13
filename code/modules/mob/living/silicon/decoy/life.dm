@@ -1,9 +1,11 @@
 /mob/living/silicon/decoy/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
 	if (src.stat == 2)
 		return
 	else
+		updatehealth()
 		if (src.health <= config.health_threshold_dead && src.stat != 2)
 			death()
 			return

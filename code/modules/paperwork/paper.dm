@@ -13,7 +13,7 @@
 	w_type = RECYK_WOOD
 	throw_range = 1
 	throw_speed = 1
-	layer = 3.9
+	layer = ABOVE_DOOR_LAYER
 	pressure_resistance = 1
 	attack_verb = list("slaps")
 	autoignition_temperature = AUTOIGNITION_PAPER
@@ -34,8 +34,8 @@
 
 /obj/item/weapon/paper/New()
 	..()
-	pixel_y = rand(-8, 8)
-	pixel_x = rand(-9, 9)
+	pixel_y = rand(-8, 8) * PIXEL_MULTIPLIER
+	pixel_x = rand(-9, 9) * PIXEL_MULTIPLIER
 	spawn(2)
 		update_icon()
 		updateinfolinks()
@@ -47,7 +47,7 @@
 		icon_state += "_words"
 
 /obj/item/weapon/paper/examine(mob/user)
-	if(in_range(user, src))
+	if(user.range_check(src))
 		var/info_2 = ""
 		if(img)
 			user << browse_rsc(img.img, "tmp_photo.png")
@@ -61,6 +61,17 @@
 	else
 		..() //Only show a regular description if it is too far away to read.
 		to_chat(user, "<span class='notice'>It is too far away to read.</span>")
+
+/mob/proc/range_check(paper)
+	return Adjacent(paper)
+
+/mob/dead/range_check(paper)
+	return 1
+
+/mob/living/silicon/ai/range_check(paper)
+	if(ai_flags & HIGHRESCAMS)
+		return 1
+	return ..()
 
 /obj/item/weapon/paper/verb/rename()
 	set name = "Rename paper"
@@ -271,6 +282,10 @@
 
 			update_icon()
 
+			if(istype(loc, /obj/item/weapon/clipboard))
+				var/obj/item/weapon/clipboard/C = loc
+				C.update_icon()
+
 	if(href_list["help"])
 		openhelp(usr)
 
@@ -299,8 +314,8 @@
 		stamps += (stamps=="" ? "<HR>" : "<BR>") + "<i>This [src.name] has been stamped with the [P.name].</i>"
 
 		var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
-		stampoverlay.pixel_x = rand(-2, 2)
-		stampoverlay.pixel_y = rand(-3, 2)
+		stampoverlay.pixel_x = rand(-2, 2) * PIXEL_MULTIPLIER
+		stampoverlay.pixel_y = rand(-3, 2) * PIXEL_MULTIPLIER
 		stampoverlay.icon_state = "paper_[P.icon_state]"
 
 		if(!stamped)
@@ -348,6 +363,7 @@
 		user.visible_message( \
 			"<span class='warning'>[user] holds up the [src.name] and sets it on fire, reducing it to a heap of ashes.</span>", \
 			"<span class='warning'>You hold up the [src.name] and set it on fire, reducing it to a heap of ashes.</span>")
+	var/ashtype = ashtype()
 	new ashtype(get_turf(src)) //not using ashify() since it calls for src.loc rather than get_turf(src), and requires the object to be on fire also
 	qdel(src)
 	return
@@ -367,15 +383,17 @@ var/global/list/paper_folding_results = list ( \
 	set name = "Fold paper"
 	set src in usr
 
-	if (!canfold(usr)) return
-	. = paper_folding_results[(input("What do you want to make the paper into?", "Paper Folding") as null|anything in paper_folding_results)]
-	if (. == null) return
-	if (!canfold(usr)) return //second check in case some chucklefuck moves the paper or falls down while the menu is open
+	if (!canfold(usr))
+		return
+	var/foldtype = paper_folding_results[input("What do you want to make the paper into?", "Paper Folding") as null|anything in paper_folding_results]
+	if (!foldtype)
+		return
+	if (!canfold(usr))
+		return //second check in case some chucklefuck moves the paper or falls down while the menu is open
 
 	usr.drop_item(src, force_drop = 1)	//Drop the original paper to free our hand and call proper inventory handling code
-	var/obj/item/weapon/p_folded/P = new .(get_turf(usr)) 	//Let's make a new item
-	P.unfolded = src										//that unfolds into the original paper
-	src.loc = P												//and also contains it, for good measure.
+	var/obj/item/weapon/p_folded/P = new foldtype(get_turf(src), unfolds_into = src) //Let's make a new item that unfolds into the original paper
+	src.forceMove(P)	//and also contains it, for good measure.
 	usr.put_in_hands(P)
 	P.pixel_y = src.pixel_y
 	P.pixel_x = src.pixel_x
@@ -383,7 +401,7 @@ var/global/list/paper_folding_results = list ( \
 		P.color = "#9A9A9A"
 		P.nano = 1
 	usr.visible_message("<span class='notice'>[usr] folds \the [src.name] into a [P.name].</span>", "<span class='notice'>You fold \the [src.name] into a [P.name].</span>")
-	P.add_fingerprint(usr)
+	transfer_fingerprints(src, P)
 	return
 
 /obj/item/weapon/paper/proc/canfold(mob/user)
@@ -472,3 +490,7 @@ var/global/list/paper_folding_results = list ( \
 /obj/item/weapon/paper/voxresearch/voxresearchescape
 	name = "paper- 'Recent Attack'"
 	info = "We still do not know who were responsible for the recent attack and escape of several test subjects.  The initial investigation points to the Syndicate but we cannot say for sure at this time.  This has violated our contract with REDACTED and REDACTED.  We may have to close the facility. "
+
+/obj/item/weapon/paper/outoforder
+	name = "paper- 'OUT OF ORDER'"
+	info = "<B>OUT OF ORDER</B>"

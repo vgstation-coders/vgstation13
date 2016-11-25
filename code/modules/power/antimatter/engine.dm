@@ -38,7 +38,8 @@
 
 
 /obj/machinery/power/am_engine/injector/attackby(obj/item/weapon/fuel/F, mob/user)
-	if( (stat & BROKEN) || !connected) return
+	if( (stat & BROKEN) || !connected)
+		return
 
 	if(istype(F, /obj/item/weapon/fuel/H))
 		if(injecting)

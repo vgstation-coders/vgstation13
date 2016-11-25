@@ -34,7 +34,7 @@
 				if(calc_carry() + add >= max_carry)
 					break
 
-				I.loc = src
+				I.forceMove(src)
 				carrying.Add(I)
 				overlays += image("icon" = I.icon, "icon_state" = I.icon_state, "layer" = 30 + I.layer)
 				addedSomething = 1
@@ -65,7 +65,7 @@
 		var droppedSomething = 0
 
 		for(var/obj/item/I in carrying)
-			I.loc = dropspot
+			I.forceMove(dropspot)
 			carrying.Remove(I)
 			droppedSomething = 1
 			if(!foundtable && isturf(dropspot))

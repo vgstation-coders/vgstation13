@@ -1,4 +1,4 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:32
+
 
 /* Tools!
  * Note: Multitools are /obj/item/device
@@ -23,7 +23,7 @@
  * Yes, this allows for hyperspeed building stacks, but I wouldn't recommend that, as it doesn't carry over too well when stacks are merged or separated.
  * Might work for borg stack modules, though. Worth looking into.
  */
-/atom
+/atom/movable
 	var/list/construction_delay_mult = null
 	//Formatted as list(Co_CON_SPEED = value, Co_DECON_SPEED = value)
 
@@ -45,11 +45,13 @@
 	starting_materials = list(MAT_IRON = 150)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "materials=1;engineering=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 
 /obj/item/weapon/wrench/attackby(obj/item/weapon/W, mob/user)
 	..()
+	if(user.is_in_modules(src))
+		return
 	if(istype(W, /obj/item/weapon/handcuffs/cable) && !istype(src, /obj/item/weapon/wrench/socket))
 		to_chat(user, "<span class='notice'>You wrap the cable restraint around the top of the wrench.</span>")
 		if(src.loc == user)
@@ -123,11 +125,12 @@
 			item_state = "screwdriver_yellow"
 
 	if (prob(75))
-		src.pixel_y = rand(0, 16)
+		src.pixel_y = rand(0, 16) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/screwdriver/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
-	if(!istype(M))	return ..()
-	if(can_operate(M))
+	if(!istype(M))
+		return ..()
+	if(can_operate(M, user))
 		return ..()
 	if(user.zone_sel.selecting != "eyes" && user.zone_sel.selecting != LIMB_HEAD)
 		return ..()
@@ -140,7 +143,8 @@
 		var/obj/item/stack/cable_coil/C = O
 		var/mob/M = usr
 		if(ishuman(M) && !M.restrained() && !M.stat && !M.paralysis && ! M.stunned)
-			if(!istype(M.loc,/turf)) return
+			if(!istype(M.loc,/turf))
+				return
 			if(C.amount < 10)
 				to_chat(usr, "<span class='warning'>You need at least 10 lengths to make a bolas wire!</span>")
 				return
@@ -176,7 +180,7 @@
 	starting_materials = list(MAT_IRON = 80)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "materials=1;engineering=1"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("pinches", "nips at")
 
 /obj/item/weapon/wirecutters/New()
@@ -222,7 +226,7 @@
 	melt_temperature = MELTPOINT_PLASTIC
 
 	//R&D tech level
-	origin_tech = "engineering=1"
+	origin_tech = Tc_ENGINEERING + "=1"
 
 	//Welding tool specific stuff
 	var/welding = 0 	//Whether or not the welding tool is off(0), on(1) or currently welding(2)
@@ -245,6 +249,8 @@
 	to_chat(user, "It contains [get_fuel()]/[src.max_fuel] units of fuel!")
 
 /obj/item/weapon/weldingtool/attackby(obj/item/W as obj, mob/user as mob)
+	if(user.is_in_modules(src))
+		return
 	if(istype(W,/obj/item/weapon/screwdriver))
 		if(welding)
 			to_chat(user, "<span class='warning'>Stop welding first!</span>")
@@ -261,7 +267,7 @@
 		var/obj/item/stack/rods/R = W
 		R.use(1)
 		var/obj/item/weapon/gun/projectile/flamethrower/F = new/obj/item/weapon/gun/projectile/flamethrower(user.loc)
-		src.loc = F
+		src.forceMove(F)
 		F.weldtool = src
 		if (user.client)
 			user.client.screen -= src
@@ -269,16 +275,15 @@
 		user.u_equip(src,0)
 
 		src.master = F
-		src.layer = initial(src.layer)
+		reset_plane_and_layer()
 		user.u_equip(src,0)
 		if (user.client)
 			user.client.screen -= src
-		src.loc = F
+		src.forceMove(F)
 		src.add_fingerprint(user)
 		return
 
 	..()
-	return
 
 
 /obj/item/weapon/weldingtool/process()
@@ -322,7 +327,8 @@
 
 
 /obj/item/weapon/weldingtool/afterattack(obj/O as obj, mob/user as mob, proximity)
-	if(!proximity) return
+	if(!proximity)
+		return
 	if (istype(O, /obj/structure/reagent_dispensers/fueltank) && get_dist(src,O) <= 1 && !src.welding)
 		O.reagents.trans_to(src, max_fuel)
 		to_chat(user, "<span class='notice'>Welder refueled</span>")
@@ -343,12 +349,10 @@
 			if(isliving(O))
 				var/mob/living/L = O
 				L.IgniteMob()
-	return
 
 
 /obj/item/weapon/weldingtool/attack_self(mob/user as mob)
 	toggle()
-	return
 
 //Returns the amount of fuel in the welder
 /obj/item/weapon/weldingtool/proc/get_fuel()
@@ -419,7 +423,8 @@
 
 //Toggles the welder off and on
 /obj/item/weapon/weldingtool/proc/toggle(var/message = 0)
-	if(!status)	return
+	if(!status)
+		return
 	src.welding = !( src.welding )
 	if (src.welding)
 		if (remove_fuel(1))
@@ -445,7 +450,8 @@
 //Decides whether or not to damage a player's eyes based on what they're wearing as protection
 //Note: This should probably be moved to mob
 /obj/item/weapon/weldingtool/proc/eyecheck(mob/user as mob)
-	if(!iscarbon(user))	return 1
+	if(!iscarbon(user))
+		return 1
 	var/safety = user:eyecheck()
 	if(istype(user, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = user
@@ -490,7 +496,6 @@
 				user.disabilities |= NEARSIGHTED
 				spawn(100)
 					user.disabilities &= ~NEARSIGHTED
-	return
 
 /obj/item/weapon/weldingtool/empty
 	start_fueled = 0
@@ -499,7 +504,7 @@
 	name = "Industrial Welding Tool"
 	max_fuel = 40
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 60)
-	origin_tech = "engineering=2"
+	origin_tech = Tc_ENGINEERING + "=2"
 
 /obj/item/weapon/weldingtool/largetank/empty
 	start_fueled = 0
@@ -509,7 +514,7 @@
 	max_fuel = 80
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 120)
-	origin_tech = "engineering=3"
+	origin_tech = Tc_ENGINEERING + "=3"
 
 /obj/item/weapon/weldingtool/hugetank/empty
 	start_fueled = 0
@@ -519,7 +524,7 @@
 	max_fuel = 40
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 120)
-	origin_tech = "engineering=4;plasmatech=3"
+	origin_tech = Tc_ENGINEERING + "=4;" + Tc_PLASMATECH + "=3"
 	icon_state = "ewelder"
 	var/last_gen = 0
 
@@ -552,7 +557,7 @@
 	starting_materials = list(MAT_IRON = 50)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "engineering=1"
+	origin_tech = Tc_ENGINEERING + "=1"
 	attack_verb = list("attacks", "bashes", "batters", "bludgeons", "whacks")
 
 	suicide_act(mob/user)
@@ -572,11 +577,12 @@
 
 /obj/item/weapon/weldingtool/attack(mob/M as mob, mob/user as mob)
 	if(hasorgans(M))
-		if(can_operate(M))
+		if(can_operate(M, user))
 			if(do_surgery(M, user, src))
 				return
 		var/datum/organ/external/S = M:organs_by_name[user.zone_sel.selecting]
-		if (!S) return
+		if (!S)
+			return
 		if(!(S.status & ORGAN_ROBOT) || user.a_intent != I_HELP)
 			return ..()
 		if(S.brute_dam)
@@ -603,7 +609,7 @@
 	siemens_coefficient = 1
 	w_class = W_CLASS_SMALL
 	w_type = RECYK_MISC
-	origin_tech = "combat=2"
+	origin_tech = Tc_COMBAT + "=2"
 	var/open = 0
 
 	New()
@@ -638,7 +644,7 @@
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 30)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_STEEL
-	origin_tech = "engineering=1"
+	origin_tech = Tc_ENGINEERING + "=1"
 	var/max_fuel = 20 	//The max amount of acid stored
 
 /obj/item/weapon/solder/New()
@@ -698,6 +704,11 @@
 		user.simple_message("<span class='warn'>The tool does not have enough acid!</span>",
 			"<span class='warn'>The tool is too thirsty!</span>")
 		return 0
+
+/obj/item/weapon/solder/pre_fueled/New()
+	. = ..()
+	reagents.add_reagent(SACID, 50)
+	update_icon()
 
 /*
 * Fuel Can

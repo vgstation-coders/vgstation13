@@ -6,7 +6,7 @@ By N3X15
 
 /obj/item/weapon/aiModule/freeform // Slightly more dynamic freeform module -- TLE
 	modname = "Freeform"
-	origin_tech = "programming=4;materials=4"
+	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_MATERIALS + "=4"
 	var/priority=1 // Use LAW_* for forcing to that lawtype.
 	var/allowed_priority_min=15 // Or 0 for no lower limit.
 	var/allowed_priority_max=50 // Or 0 for no upper limit.
@@ -69,7 +69,7 @@ By N3X15
 
 /obj/item/weapon/aiModule/freeform/core
 	modtype = "Core AI Module"
-	origin_tech = "programming=3;materials=6"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=6"
 
 	priority = LAW_INHERENT
 
@@ -78,7 +78,7 @@ By N3X15
 
 /obj/item/weapon/aiModule/freeform/syndicate
 	modtype = "Hacked AI Module"
-	origin_tech = "programming=3;materials=6;syndicate=7"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=6;" + Tc_SYNDICATE + "=7"
 
 	priority = LAW_IONIC
 	modflags = HIDE_SENDER

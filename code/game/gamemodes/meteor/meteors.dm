@@ -250,10 +250,10 @@
 					M.Stun(2)
 				if(0)
 					M.Stun(4)
-					M.Weaken(10)
+					M.Knockdown(10)
 				if(-1)
 					M.Stun(7)
-					M.Weaken(15)
+					M.Knockdown(15)
 
 		if(ear_safety < 2)
 			switch(ear_safety)
@@ -352,15 +352,15 @@
 	name = "Blob"
 	icon = 'icons/obj/meteor_64x64.dmi'
 	icon_state = "meteorblob"
-	pixel_x = -16
-	pixel_y = -16
+	pixel_x = -16 * PIXEL_MULTIPLIER
+	pixel_y = -16 * PIXEL_MULTIPLIER
 
 /obj/item/projectile/meteor/blob/Bump(atom/A)
 	if(!loc)
 		return
 
 	if(ismob(A))
-		src.loc = A.loc
+		src.forceMove(A.loc)
 		A.blob_act()
 		return
 
@@ -461,7 +461,8 @@ var/list/blob_candidates = list()
 	var/projectile_type = /obj/item/projectile/meteor
 
 /obj/item/weapon/meteor_gun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
-	if(flag)	return //we're placing gun on a table or in backpack
+	if(flag)
+		return //we're placing gun on a table or in backpack
 
 	user.visible_message(
 		"<span class='warning'>[user] fires the [src]!</span>",

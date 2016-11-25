@@ -6,11 +6,13 @@
 	density = 1
 	opacity = 0
 	anchored = 1
-	unacidable = 1
 	ghost_read = 0
 	ghost_write = 0
 	var/const/max_health = 200
 	var/health = max_health //The shield can only take so much beating (prevents perma-prisons)
+
+/obj/machinery/shield/acidable()
+	return 0
 
 /obj/machinery/shield/New()
 	src.dir = pick(1,2,3,4)
@@ -24,8 +26,10 @@
 	..()
 
 /obj/machinery/shield/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(!height || air_group) return 0
-	else return ..()
+	if(!height || air_group)
+		return 0
+	else
+		return ..()
 
 //Looks like copy/pasted code... I doubt 'need_rebuild' is even used here - Nodrak
 /obj/machinery/shield/proc/update_nearby_tiles()
@@ -40,7 +44,8 @@
 	return 1
 
 /obj/machinery/shield/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(!istype(W)) return
+	if(!istype(W))
+		return
 
 	//Calculate damage
 	var/aforce = W.force
@@ -160,7 +165,8 @@
 
 
 /obj/machinery/shieldgen/proc/shields_up()
-	if(active) return 0 //If it's already turned on, how did this get called?
+	if(active)
+		return 0 //If it's already turned on, how did this get called?
 
 	src.active = 1
 	update_icon()
@@ -171,7 +177,8 @@
 				deployed_shields += new /obj/machinery/shield(target_tile)
 
 /obj/machinery/shieldgen/proc/shields_down()
-	if(!active) return 0 //If it's already off, how did this get called?
+	if(!active)
+		return 0 //If it's already off, how did this get called?
 
 	src.active = 0
 	update_icon()
@@ -270,7 +277,8 @@
 		to_chat(user, "<span class='notice'>You begin to replace the wires.</span>")
 		//if(do_after(user, src, min(60, round( ((maxhealth/health)*10)+(malfunction*10) ))) //Take longer to repair heavier damage
 		if(do_after(user, src, 30))
-			if(!src || !coil) return
+			if(!src || !coil)
+				return
 			coil.use(1)
 			health = max_health
 			malfunction = 0
@@ -333,7 +341,8 @@
 		return
 	var/obj/structure/cable/C = T.get_cable_node()
 	var/datum/powernet/PN
-	if(C)	PN = C.powernet		// find the powernet of the connected cable
+	if(C)
+		PN = C.powernet		// find the powernet of the connected cable
 
 	if(!PN)
 		power = 0
@@ -391,7 +400,7 @@
 //	if(shieldload >= maxshieldload) //there was a loop caused by specifics of process(), so this was needed.
 //		shieldload = maxshieldload
 
-	if(src.active == 1)
+	if(src.active == 1 && power)
 		if(!anchored)
 			src.active = 0
 			return
@@ -404,20 +413,19 @@
 		spawn(4)
 			setup_field(8)
 		src.active = 2
-	if(src.active == 1)
-		if(src.power == 0)
-			src.visible_message("<span class='warning'>The [src.name] shuts down due to lack of power!</span>", \
-				"You hear heavy droning fade out")
-			icon_state = "Shield_Gen"
-			src.active = 0
-			spawn(1)
-				src.cleanup(1)
-			spawn(1)
-				src.cleanup(2)
-			spawn(1)
-				src.cleanup(4)
-			spawn(1)
-				src.cleanup(8)
+	if(!power && active)
+		src.visible_message("<span class='warning'>The [src.name] shuts down due to lack of power!</span>", \
+			"You hear heavy droning fade out")
+		icon_state = "Shield_Gen"
+		src.active = 0
+		spawn(1)
+			src.cleanup(1)
+		spawn(1)
+			src.cleanup(2)
+		spawn(1)
+			src.cleanup(4)
+		spawn(1)
+			src.cleanup(8)
 
 /obj/machinery/shieldwallgen/proc/setup_field(var/NSEW = 0)
 	var/turf/T = src.loc
@@ -460,7 +468,7 @@
 		T = get_step(T2, NSEW)
 		T2 = T
 		var/obj/machinery/shieldwall/CF = new/obj/machinery/shieldwall/(src, G) //(ref to this gen, ref to connected gen)
-		CF.loc = T
+		CF.forceMove(T)
 		CF.dir = field_dir
 
 /obj/machinery/shieldwallgen/wrenchAnchor(mob/user)
@@ -523,12 +531,14 @@
 	icon_state = "shieldwall"
 	anchored = 1
 	density = 1
-	unacidable = 1
 	luminosity = 3
 	var/needs_power = 0
 	var/active = 1
 	var/obj/machinery/shieldwallgen/gen_primary
 	var/obj/machinery/shieldwallgen/gen_secondary
+
+/obj/machinery/shieldwall/acidable()
+	return 0
 
 /obj/machinery/shieldwall/New(var/obj/machinery/shieldwallgen/A, var/obj/machinery/shieldwallgen/B)
 	..()
@@ -598,7 +608,8 @@
 				G.storedpower -= 20
 
 /obj/machinery/shieldwall/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0)) return 1
+	if(air_group || (height==0))
+		return 1
 
 	if(!mover)
 		return

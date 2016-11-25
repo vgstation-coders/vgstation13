@@ -26,9 +26,11 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 	**/
 
 	//clean the input msg
-	if(!msg)	return
+	if(!msg)
+		return
 	msg = sanitize(copytext(msg,1,MAX_MESSAGE_LEN))
-	if(!msg)	return
+	if(!msg)
+		return
 	var/original_msg = msg
 
 	//explode the input msg into a list
@@ -40,7 +42,8 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 	var/list/ckeys = list()
 	for(var/mob/M in mob_list)
 		var/list/indexing = list(M.real_name, M.name)
-		if(M.mind)	indexing += M.mind.name
+		if(M.mind)
+			indexing += M.mind.name
 
 		for(var/string in indexing)
 			var/list/L = splittext(string, " ")
@@ -84,7 +87,8 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 							continue
 			msg += "[original_word] "
 
-	if(!mob)	return						//this doesn't happen
+	if(!mob)
+		return						//this doesn't happen
 
 	var/ref_mob = "\ref[mob]"
 	msg = "\[[time_stamp()]] <span class='notice'><b><font color=red>HELP: </font>[key_name(src, 1)] (<A HREF='?_src_=holder;adminmoreinfo=[ref_mob]'>?</A>) (<A HREF='?_src_=holder;adminplayeropts=[ref_mob]'>PP</A>) (<A HREF='?_src_=vars;Vars=[ref_mob]'>VV</A>) (<A HREF='?_src_=holder;subtlemessage=[ref_mob]'>SM</A>) (<A HREF='?_src_=holder;adminplayerobservejump=[ref_mob]'>JMP</A>) (<A HREF='?_src_=holder;check_antagonist=1'>CA</A>) [ai_found ? " (<A HREF='?_src_=holder;adminchecklaws=[ref_mob]'>CL</A>)" : ""]:</b> [msg]</span>"
@@ -113,9 +117,14 @@ var/list/adminhelp_ignored_words = list("unknown","the","a","an","of","monkey","
 	if(admin_number_present <= 0)
 		if(!admin_number_afk)
 			send2adminirc("HELP [key_name(src)]: [original_msg] - No admins online")
+			send2admindiscord("**Help**: [key_name(src)]: `[replacetext(original_msg, "`", "\\`")]` - **No admins online**", TRUE)
+
 		else
 			send2adminirc("HELP [key_name(src)]: [original_msg] - All admins AFK ([admin_number_afk])")
+			send2admindiscord("**Help**: [key_name(src)]: `[replacetext(original_msg, "`", "\\`")]` - **All admins AFK** ([admin_number_afk])", TRUE)
+
 	else
 		send2adminirc("HELP [key_name(src)]: [original_msg]")
+		send2admindiscord("**Help**: [key_name(src)]: `[replacetext(original_msg, "`", "\\`")]` - **[admin_number_present]** Active admins, **[admin_number_afk]** AFK admins.")
+
 	feedback_add_details("admin_verb","AH") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-	return

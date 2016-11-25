@@ -19,16 +19,27 @@
 	if(name == "alien")
 		name = text("alien ([rand(1, 1000)])")
 	real_name = name
+	add_spells_and_verbs()
 	..()
+
+/mob/living/carbon/alien/humanoid/proc/add_spells_and_verbs()
+	add_spell(new /spell/aoe_turf/alienregurgitate, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/aoe_turf/conjure/alienweeds, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/targeted/alienwhisper, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
+	add_spell(new /spell/targeted/alientransferplasma, "alien_spell_ready", /obj/screen/movable/spell_master/alien)
 
 /mob/living/carbon/alien/humanoid/emp_act(severity)
 	if(flags & INVULNERABLE)
 		return
 
-	if(wear_suit) wear_suit.emp_act(severity)
-	if(head) head.emp_act(severity)
-	if(r_store) r_store.emp_act(severity)
-	if(l_store) l_store.emp_act(severity)
+	if(wear_suit)
+		wear_suit.emp_act(severity)
+	if(head)
+		head.emp_act(severity)
+	if(r_store)
+		r_store.emp_act(severity)
+	if(l_store)
+		l_store.emp_act(severity)
 	..()
 
 /mob/living/carbon/alien/humanoid/ex_act(severity)
@@ -124,7 +135,8 @@
 		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
 		return
 
-	if(M.Victim) return // can't attack while eating!
+	if(M.Victim)
+		return // can't attack while eating!
 
 	if(health > -100)
 		visible_message("<span class='danger'>\The [M] glomps [src]!</span>")
@@ -144,12 +156,18 @@
 			var/power = M.powerlevel + rand(0,3)
 
 			switch(M.powerlevel)
-				if(1 to 2) stunprob = 20
-				if(3 to 4) stunprob = 30
-				if(5 to 6) stunprob = 40
-				if(7 to 8) stunprob = 60
-				if(9) 	   stunprob = 70
-				if(10) 	   stunprob = 95
+				if(1 to 2)
+					stunprob = 20
+				if(3 to 4)
+					stunprob = 30
+				if(5 to 6)
+					stunprob = 40
+				if(7 to 8)
+					stunprob = 60
+				if(9)
+					stunprob = 70
+				if(10)
+					stunprob = 95
 
 			if(prob(stunprob))
 				M.powerlevel -= 3
@@ -157,7 +175,7 @@
 					M.powerlevel = 0
 				visible_message("<span class='danger'>\The [M] has shocked [src]!</span>")
 
-				Weaken(power)
+				Knockdown(power)
 				if(stuttering < power)
 					stuttering = power
 				Stun(power)
@@ -175,15 +193,6 @@
 //using the default attack_animal() in carbon.dm
 
 /mob/living/carbon/alien/humanoid/attack_hand(mob/living/carbon/human/M as mob)
-	if(!ticker)
-		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
-		return
-
-	/*
-	if(istype(loc, /turf) && istype(loc.loc, /area/start))
-		to_chat(M, "No attacking people at spawn, you jackass.")
-		return
-	*/
 
 	..()
 
@@ -194,7 +203,7 @@
 				if(G.cell.charge >= 2500)
 					G.cell.charge -= 2500
 
-					Weaken(5)
+					Knockdown(5)
 					if(stuttering < 5)
 						stuttering = 5
 					Stun(5)
@@ -229,7 +238,7 @@
 				cpr_time = 1
 
 		if(I_GRAB)
-			if(M == src)
+			if(M.grab_check(src))
 				return
 			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M, src)
 
@@ -249,15 +258,15 @@
 				if(M_HULK in M.mutations) //M_HULK SMASH
 					damage += 14
 					spawn(0)
-						Weaken(damage) //Why can a hulk knock an alien out but not knock out a human? Damage is robust enough.
+						Knockdown(damage) //Why can a hulk knock an alien out but not knock out a human? Damage is robust enough.
 						step_away(src, M, 15)
 						sleep(3)
 						step_away(src, M, 15)
 				playsound(loc, "punch", 25, 1, -1)
 				visible_message("<span class='danger'>[M] has punched \the [src] !</span>")
 				if(damage > 9 ||prob(5))//Regular humans have a very small chance of weakening an alien.
-					Weaken(1, 5)
-					visible_message("<span class='danger'>[M] has weakened \the [src] !</span>")
+					Knockdown(1, 5)
+					visible_message("<span class='danger'>[M] has knockdown \the [src] !</span>")
 				adjustBruteLoss(damage)
 				updatehealth()
 			else
@@ -267,7 +276,7 @@
 		if(I_DISARM)
 			if(!lying)
 				if(prob(5)) //Very small chance to push an alien down.
-					Weaken(2)
+					Knockdown(2)
 					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 					visible_message("<span class='danger'>[M] has pushed down \the [src] !</span>")
 				else
@@ -286,15 +295,6 @@ In all, this is a lot like the monkey code. /N
 */
 
 /mob/living/carbon/alien/humanoid/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
-	if(!ticker)
-		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
-		return
-
-	/*
-	if(istype(loc, /turf) && istype(loc.loc, /area/start))
-		to_chat(M, "No attacking people at spawn, you jackass.")
-		return
-	*/
 	..()
 
 	switch(M.a_intent)
@@ -304,7 +304,7 @@ In all, this is a lot like the monkey code. /N
 			resting = 0
 			AdjustParalysis(-3)
 			AdjustStunned(-3)
-			AdjustWeakened(-3)
+			AdjustKnockdown(-3)
 			visible_message("<span class='notice'>[M] nuzzles [src] trying to wake it up !</span>")
 		else
 			if(health > 0)
@@ -319,7 +319,8 @@ In all, this is a lot like the monkey code. /N
 
 
 /mob/living/carbon/alien/humanoid/restrained()
-	if(timestopped) return 1 //under effects of time magick
+	if(timestopped)
+		return 1 //under effects of time magick
 	if (handcuffed)
 		return 1
 	return 0

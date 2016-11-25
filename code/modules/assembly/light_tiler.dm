@@ -1,3 +1,8 @@
+#define VALUE_TURN_ON "Turn light floors on"
+#define VALUE_R "Red color (0 to 255)"
+#define VALUE_G "Green color (0 to 255)"
+#define VALUE_B "Blue color (0 to 255)"
+
 #define MODE_ADDING 1
 #define MODE_DELETING 2
 
@@ -9,15 +14,15 @@
 	icon_state = "light_tiler"
 	starting_materials = list(MAT_IRON = 1500, MAT_GLASS = 200)
 	w_type = RECYK_ELECTRONIC
-	origin_tech = "magnets=2;programming=2"
+	origin_tech = Tc_MAGNETS + "=2;" + Tc_PROGRAMMING + "=2"
 
 	wires = WIRE_RECEIVE
 
-	accessible_values = list(
-		"Turn light floors on" = "set_state;number",\
-		"Red color"   = "color_r;number;0;255",\
-		"Green color" = "color_g;number;0;255",\
-		"Blue color"  = "color_b;number;0;255"
+	accessible_values = list(\
+		VALUE_TURN_ON = "set_state;"+VT_NUMBER,\
+		VALUE_R = "color_r;"+VT_NUMBER+";0;255",\
+		VALUE_G = "color_g;"+VT_NUMBER+";0;255",\
+		VALUE_B = "color_b;"+VT_NUMBER+";0;255"
 	)
 
 	var/list/connected_floors = list()
@@ -37,7 +42,8 @@
 	var/highlighting_connected_floors = 0
 
 /obj/item/device/assembly/light_tile_control/activate()
-	if(!..()) return 0
+	if(!..())
+		return 0
 
 	change_floors()
 
@@ -47,7 +53,8 @@
 		return
 
 	var/turf/simulated/floor/T = A
-	if(!istype(T)) return
+	if(!istype(T))
+		return
 	if(!istype(T.floor_tile, /obj/item/stack/tile/light))
 		to_chat(user, "<span class='notice'>\The [src] is only compactible with light tiles.</span>")
 		return
@@ -85,7 +92,8 @@
 	onclose(user, "\ref[src]")
 
 /obj/item/device/assembly/light_tile_control/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 
 	if(href_list["show_connections"]) //Highlight all connected floors for 10 seconds
 		if(last_used + cooldown_max > world.time)
@@ -93,7 +101,8 @@
 			return
 
 		var/mob/user = usr
-		if(!user || !user.client) return
+		if(!user || !user.client)
+			return
 
 		for(var/turf/T in connected_floors)
 			highlight_turf(T, user)
@@ -193,7 +202,8 @@
 		highlight_turf(T, usr)
 
 /obj/item/device/assembly/light_tile_control/proc/del_turf_from_memory(turf/T)
-	if(!connected_floors.Remove(T)) return //Don't do the next part if the turf isn't in connected_floors
+	if(!connected_floors.Remove(T))
+		return //Don't do the next part if the turf isn't in connected_floors
 
 	if(usr && highlighting_connected_floors)
 		for(var/image/I in image_overlays)
@@ -205,10 +215,15 @@
 
 /obj/item/device/assembly/light_tile_control/proc/highlight_turf(turf/T, mob/user)
 	var/image/tmp_overlay = image('icons/turf/areas.dmi', T, "red", TURF_LAYER+0.01)
-	tmp_overlay.plane = PLANE_OBJ
+	tmp_overlay.plane = OBJ_PLANE
 
 	image_overlays += tmp_overlay
 	user.client.images += tmp_overlay
 
 #undef MODE_ADDING
 #undef MODE_DELETING
+
+#undef VALUE_TURN_ON
+#undef VALUE_R
+#undef VALUE_G
+#undef VALUE_B

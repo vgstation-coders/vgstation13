@@ -1,4 +1,4 @@
-//This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:32
+
 
 var/cultwords = list()
 var/global/runedec = 0
@@ -27,9 +27,8 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 	icon = 'icons/obj/rune.dmi'
 	icon_state = "1"
 	var/visibility = 0
-	unacidable = 1
-	layer = TURF_LAYER
-	plane = PLANE_TURF
+	layer = RUNE_LAYER
+	plane = ABOVE_TURF_PLANE
 
 	var/dead=0 // For cascade and whatnot.
 
@@ -289,7 +288,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				<h3>Create a wall</h3>
 				Invoking this rune solidifies the air above it, creating an an invisible wall. To remove the wall, simply invoke the rune again.
 				<h3>Summon cultist</h3>
-				This rune allows you to summon a fellow cultist to your location. The target cultist must be unhandcuffed ant not buckled to anything. You also need to have 3 people chanting at the rune to succesfully invoke it. Invoking it takes heavy strain on the bodies of all chanting cultists.<br>
+				This rune allows you to summon a fellow cultist to your location. The target cultist must be unhandcuffed ant not buckled to anything. You also need to have 3 people chanting at the rune to successfully invoke it. Invoking it takes heavy strain on the bodies of all chanting cultists.<br>
 				<h3>Free a cultist</h3>
 				This rune unhandcuffs and unbuckles any cultist of your choice, no matter where he is. You need to have 3 people invoking the rune for it to work. Invoking it takes heavy strain on the bodies of all chanting cultists.<br>
 				<h3>Deafen</h3>
@@ -305,7 +304,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 				<h3>See Invisible</h3>
 				When invoked when standing on it, this rune allows the user to see the the world beyond as long as he does not move.<br>
 				<h3>Blood boil</h3>
-				This rune boils the blood all non-cultists in visible range. The damage is enough to instantly critically hurt any person. You need 3 cultists invoking the rune for it to work. This rune is unreliable and may cause unpredicted effect when invoked. It also drains significant amount of your health when succesfully invoked.<br>
+				This rune boils the blood all non-cultists in visible range. The damage is enough to instantly critically hurt any person. You need 3 cultists invoking the rune for it to work. This rune is unreliable and may cause unpredicted effect when invoked. It also drains significant amount of your health when successfully invoked.<br>
 				</body>
 				</html>
 				"}
@@ -542,7 +541,7 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 					R.word1=cultwords["travel"]
 					R.word2=cultwords["self"]
 					R.word3=beacon
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("itemport")
 					var/list/words = list("ire", "ego", "nahlizet", "certum", "veri", "jatkaa", "balaq", "mgar", "karazet", "geeri")
@@ -552,137 +551,137 @@ var/global/list/rune_list = list() // HOLY FUCK WHY ARE WE LOOPING THROUGH THE W
 					R.word1=cultwords["travel"]
 					R.word2=cultwords["other"]
 					R.word3=beacon
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("tome")
 					R.word1=cultwords["see"]
 					R.word2=cultwords["blood"]
 					R.word3=cultwords["hell"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("armor")
 					R.word1=cultwords["hell"]
 					R.word2=cultwords["destroy"]
 					R.word3=cultwords["other"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("convert")
 					R.word1=cultwords["join"]
 					R.word2=cultwords["blood"]
 					R.word3=cultwords["self"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("tear in reality")
 					R.word1=cultwords["hell"]
 					R.word2=cultwords["join"]
 					R.word3=cultwords["self"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("emp")
 					R.word1=cultwords["destroy"]
 					R.word2=cultwords["see"]
 					R.word3=cultwords["technology"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("drain")
 					R.word1=cultwords["travel"]
 					R.word2=cultwords["blood"]
 					R.word3=cultwords["self"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("seer")
 					R.word1=cultwords["see"]
 					R.word2=cultwords["hell"]
 					R.word3=cultwords["join"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("raise")
 					R.word1=cultwords["blood"]
 					R.word2=cultwords["join"]
 					R.word3=cultwords["hell"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("obscure")
 					R.word1=cultwords["hide"]
 					R.word2=cultwords["see"]
 					R.word3=cultwords["blood"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("astral journey")
 					R.word1=cultwords["hell"]
 					R.word2=cultwords["travel"]
 					R.word3=cultwords["self"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("manifest")
 					R.word1=cultwords["blood"]
 					R.word2=cultwords["see"]
 					R.word3=cultwords["travel"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("imbue talisman")
 					R.word1=cultwords["hell"]
 					R.word2=cultwords["technology"]
 					R.word3=cultwords["join"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("sacrifice")
 					R.word1=cultwords["hell"]
 					R.word2=cultwords["blood"]
 					R.word3=cultwords["join"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("reveal")
 					R.word1=cultwords["blood"]
 					R.word2=cultwords["see"]
 					R.word3=cultwords["hide"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("wall")
 					R.word1=cultwords["destroy"]
 					R.word2=cultwords["travel"]
 					R.word3=cultwords["self"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("freedom")
 					R.word1=cultwords["travel"]
 					R.word2=cultwords["technology"]
 					R.word3=cultwords["other"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("cultsummon")
 					R.word1=cultwords["join"]
 					R.word2=cultwords["other"]
 					R.word3=cultwords["self"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("deafen")
 					R.word1=cultwords["hide"]
 					R.word2=cultwords["other"]
 					R.word3=cultwords["see"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("blind")
 					R.word1=cultwords["destroy"]
 					R.word2=cultwords["see"]
 					R.word3=cultwords["other"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("bloodboil")
 					R.word1=cultwords["destroy"]
 					R.word2=cultwords["see"]
 					R.word3=cultwords["blood"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("communicate")
 					R.word1=cultwords["self"]
 					R.word2=cultwords["other"]
 					R.word3=cultwords["technology"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()
 				if("stun")
 					R.word1=cultwords["join"]
 					R.word2=cultwords["hide"]
 					R.word3=cultwords["technology"]
-					R.loc = user.loc
+					R.forceMove(user.loc)
 					R.check_icon()

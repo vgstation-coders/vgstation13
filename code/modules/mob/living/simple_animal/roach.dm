@@ -36,8 +36,7 @@
 	min_n2 = 0
 	max_n2 = 0
 
-	layer = TURF_LAYER + 0.01
-	plane = PLANE_TURF
+	plane = HIDING_MOB_PLANE
 
 	treadmill_speed = 0
 	turns_per_move = 2 //2 life ticks / move
@@ -57,8 +56,8 @@
 /mob/living/simple_animal/cockroach/New()
 	..()
 
-	pixel_x = rand(-20, 20)
-	pixel_y = rand(-20, 20)
+	pixel_x = rand(-20, 20) * PIXEL_MULTIPLIER
+	pixel_y = rand(-20, 20) * PIXEL_MULTIPLIER
 
 	maxHealth = rand(1,6)
 	health = maxHealth
@@ -72,7 +71,7 @@
 		remains.pixel_y = src.pixel_y
 
 		if(flying)
-			animate(remains, pixel_y = pixel_y - 8, 5, 1) //Fall down gracefully
+			animate(remains, pixel_y = pixel_y - 8 * PIXEL_MULTIPLIER, 5, 1) //Fall down gracefully
 
 		playsound(get_turf(src), pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg'), 40, 1) //Splat
 
@@ -85,12 +84,17 @@
 		return ..()
 
 /mob/living/simple_animal/cockroach/Crossed(mob/living/O)
-	if(!istype(O)) return
+	if(!istype(O))
+		return
 
-	if(src.size > O.size - 2) return //Human sized dudes can stomp default-sized cockroaches just fine. For bigger roaches you need bigger dudes
-	if(flying) return
-	if(O.a_intent == I_HELP) return //Must be on harm intent to stomp
-	if(O.isUnconscious()) return
+	if(src.size > O.size - 2)
+		return //Human sized dudes can stomp default-sized cockroaches just fine. For bigger roaches you need bigger dudes
+	if(flying)
+		return
+	if(O.a_intent == I_HELP)
+		return //Must be on harm intent to stomp
+	if(O.isUnconscious())
+		return
 
 	if(prob(15))
 		Die(gore = 1)
@@ -101,7 +105,7 @@
 	//First, check for any food in our new surroundings
 	for(var/obj/item/weapon/reagent_containers/food/F in loc)
 		//If there is food, climb on it (using pixel_x and pixel_y manipulation)
-		animate(src, pixel_x = F.pixel_x + rand(-4,4), pixel_y = F.pixel_y + rand(-4,4), rand(10,20), 1)
+		animate(src, pixel_x = F.pixel_x + rand(-4,4) * PIXEL_MULTIPLIER, pixel_y = F.pixel_y + rand(-4,4) * PIXEL_MULTIPLIER, rand(10,20), 1)
 
 		layer = F.layer + 0.01
 
@@ -148,8 +152,8 @@
 		var/check_dir = get_dir(src, dest)
 
 		//Climb on it!
-		var/new_px = rand(-8,8) + cos(dir2angle(check_dir)) * 32
-		var/new_py = rand(-8,8) + sin(dir2angle(check_dir)) * 32
+		var/new_px = rand(-8,8) * PIXEL_MULTIPLIER + cos(dir2angle(check_dir)) * WORLD_ICON_SIZE
+		var/new_py = rand(-8,8) * PIXEL_MULTIPLIER + sin(dir2angle(check_dir)) * WORLD_ICON_SIZE
 
 		//Modify pixel_x and pixel_y to make it look like the cockroach is on the wall
 		animate(src, pixel_x = new_px, rand(5,15), 1, ELASTIC_EASING)
@@ -158,14 +162,13 @@
 		return
 
 	//No food, trash, walls or anything - just modify our pixel_x and pixel_y
-	animate(src, pixel_x = rand(-20,20), pixel_y = rand(-20,20), (flying ? 5 : 15) , 1) //This animation takes 1.5 seconds, or 0.5 if flying
+	animate(src, pixel_x = rand(-20,20) * PIXEL_MULTIPLIER, pixel_y = rand(-20,20) * PIXEL_MULTIPLIER, (flying ? 5 : 15) , 1) //This animation takes 1.5 seconds, or 0.5 if flying
 
 /mob/living/simple_animal/cockroach/Move()
 	..()
 
 	if(!flying)
-		layer = initial(layer) //Since cucarachas can hide under trash (which modifies their layer), this is kinda necessary
-		plane = initial(plane)
+		reset_plane_and_layer() //Since cucarachas can hide under trash (which modifies their layer), this is kinda necessary
 
 /mob/living/simple_animal/cockroach/adjustBruteLoss() //When receiving damage
 	..()
@@ -185,7 +188,8 @@
 			stop_flying()
 
 /mob/living/simple_animal/cockroach/proc/start_flying(var/anim = 1)
-	if(isUnconscious()) return
+	if(isUnconscious())
+		return
 
 	speed = -4
 	turns_since_move = 5 //Remove any delay
@@ -201,9 +205,10 @@
 	response_disarm = "tries to catch"
 	response_harm   = "swats"
 
-	layer = 4
+	plane = MOB_PLANE
 
-	if(anim) animate(src, pixel_y = pixel_y + 8, 10, 1, ELASTIC_EASING)
+	if(anim)
+		animate(src, pixel_y = pixel_y + 8 * PIXEL_MULTIPLIER, 10, 1, ELASTIC_EASING)
 
 /mob/living/simple_animal/cockroach/proc/stop_flying(var/anim = 1)
 	speed = initial(speed)
@@ -217,10 +222,10 @@
 	response_disarm = initial(response_disarm)
 	response_harm   = initial(response_harm)
 
-	layer = initial(layer)
-	plane = initial(plane)
+	reset_plane_and_layer()
 
-	if(anim) animate(src, pixel_y = pixel_y - 8, 5, 1, ELASTIC_EASING)
+	if(anim)
+		animate(src, pixel_y = pixel_y - 8 * PIXEL_MULTIPLIER, 5, 1, ELASTIC_EASING)
 
 /mob/living/simple_animal/cockroach/proc/lay_eggs()
 	if((cockroach_egg_amount >= max_unhatchable_eggs_in_world) && (animal_count[src.type] >= ANIMAL_CHILD_CAP)) //If roaches can't breed anymore (too many of them), and there are more than 30 eggs in the world, don't create eggs
@@ -229,7 +234,8 @@
 
 	var/obj/item/weapon/reagent_containers/food/snacks/roach_eggs/E = new(get_turf(src))
 
-	E.layer = src.layer //If we're hiding, the eggs are hidden too
+	E.layer = layer //If we're hiding, the eggs are hidden too
+	E.plane = plane
 	E.pixel_x = src.pixel_x
 	E.pixel_y = src.pixel_y
 
@@ -260,7 +266,8 @@
 	return //Survive nuclear blasts
 
 /mob/living/simple_animal/cockroach/reagent_act(id, method, volume)
-	if(isDead()) return
+	if(isDead())
+		return
 
 	.=..()
 
@@ -269,7 +276,8 @@
 			Die(gore = 0)
 
 /mob/living/simple_animal/cockroach/bite_act(mob/living/carbon/human/H)
-	if(size >= H.size) return
+	if(size >= H.size)
+		return
 
 	playsound(get_turf(H),'sound/items/eatfood.ogg', rand(10,50), 1)
 	H.visible_message("<span class='notice'>[H] eats \the [src]!</span>", "<span class='notice'>You eat \the [src]!</span>")

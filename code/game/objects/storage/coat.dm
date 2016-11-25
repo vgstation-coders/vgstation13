@@ -1,7 +1,7 @@
 /obj/item/clothing/suit/storage
 	var/list/can_only_hold = new/list() //List of objects which this item can store (if set, it can't store anything else)
-	var/list/cant_hold = new/list() //List of objects which this item can't store (in effect only if can_only_hold isn't set)
-	var/fits_max_w_class = W_CLASS_SMALL //Max size of objects that this object can store (in effect only if can_only_hold isn't set)
+	var/list/cant_hold = new/list() //List of objects which this item can't store (even if it's in the can_only_hold list)
+	var/fits_max_w_class = W_CLASS_SMALL //Max size of objects that this object can store (in effect even if can_only_hold is set)
 	var/max_combined_w_class = 4 //The sum of the w_classes of all the items in this storage item.
 	var/storage_slots = 2 //The number of storage slots in this container.
 	var/obj/screen/storage/boxes = null
@@ -56,11 +56,10 @@
 /obj/item/clothing/suit/storage/proc/orient_objs(tx, ty, mx, my)
 	var/cx = tx
 	var/cy = ty
-	src.boxes.screen_loc = text("[tx]:,[ty] to [mx],[my]")
+	src.boxes.screen_loc = text("[tx],[ty] to [mx],[my]")
 	for(var/obj/O in src.contents)
 		O.screen_loc = text("[cx],[cy]")
-		O.layer = 20
-		O.plane = PLANE_HUD
+		O.hud_layerise()
 		cx++
 		if (cx > mx)
 			cx = tx
@@ -72,16 +71,15 @@
 /obj/item/clothing/suit/storage/proc/standard_orient_objs(var/rows,var/cols)
 	var/cx = 4
 	var/cy = 2+rows
-	src.boxes.screen_loc = text("4:16,2:16 to [4+cols]:16,[2+rows]:16")
+	src.boxes.screen_loc = text("4:[WORLD_ICON_SIZE/2],2:[WORLD_ICON_SIZE/2] to [4+cols]:[WORLD_ICON_SIZE/2],[2+rows]:[WORLD_ICON_SIZE/2]")
 	for(var/obj/O in src.contents)
-		O.screen_loc = text("[cx]:16,[cy]:16")
-		O.layer = 20
-		O.plane = PLANE_HUD
+		O.screen_loc = text("[cx]:[WORLD_ICON_SIZE/2],[cy]:[WORLD_ICON_SIZE/2]")
+		O.hud_layerise()
 		cx++
 		if (cx > (4+cols))
 			cx = 4
 			cy--
-	src.closer.screen_loc = text("[4+cols+1]:16,2:16")
+	src.closer.screen_loc = text("[4+cols+1]:[WORLD_ICON_SIZE/2],2:[WORLD_ICON_SIZE/2]")
 	return
 
 //This proc determins the size of the inventory to be displayed. Please touch it only if you know what you're doing.
@@ -132,7 +130,7 @@
 			to_chat(user, "<span class='warning'>The [src] cannot hold \the [W].</span>")
 			return
 
-	if (W.w_class > fits_max_w_class && !can_only_hold.len) //fits_max_w_class doesn't matter if there's only a specific list of items you can put in
+	if (W.w_class > fits_max_w_class)
 		to_chat(user, "<span class='warning'>The [W] is too big for \the [src].</span>")
 		return
 
@@ -151,7 +149,7 @@
 
 	user.u_equip(W,1)
 	playsound(get_turf(src), "rustle", 50, 1, -5)
-	W.loc = src
+	W.forceMove(src)
 	if ((user.client && user.s_active != src))
 		user.client.screen -= W
 	src.orient2hud(user)
@@ -165,11 +163,11 @@
 		if (!( istype(over_object, /obj/screen/inventory) ))
 			return ..()
 		playsound(get_turf(src), "rustle", 50, 1, -5)
-		if (M.wear_suit == src && !M.incapacitated())
+		if (M.wear_suit == src && !M.incapacitated() && Adjacent(M))
 			var/obj/screen/inventory/OI = over_object
 
-			if(OI.hand_index)
-				M.u_equip(src, 1)
+			if(OI.hand_index && M.put_in_hand_check(src, OI.hand_index))
+				M.u_equip(src, 0)
 				M.put_in_hand(OI.hand_index, src)
 				M.update_inv_wear_suit()
 				src.add_fingerprint(usr)
@@ -206,11 +204,11 @@
 	boxes.master = src
 	boxes.icon_state = "block"
 	boxes.screen_loc = "7,7 to 10,8"
-	boxes.layer = 19
+	boxes.layer = HUD_BASE_LAYER
 	closer = getFromPool(/obj/screen/close)
 	closer.master = src
 	closer.icon_state = "x"
-	closer.layer = 20
+	closer.layer = HUD_ITEM_LAYER
 	orient2hud()
 
 /obj/item/clothing/suit/emp_act(severity)

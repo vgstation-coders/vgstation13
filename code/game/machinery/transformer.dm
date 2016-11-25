@@ -3,8 +3,7 @@
 	desc = "A large metallic machine with an entrance and an exit. A sign on the side reads 'human goes in, robot comes out'. Human must be lying down and alive. Has to cooldown between each use."
 	icon = 'icons/obj/recycling.dmi'
 	icon_state = "separator-AO1"
-	layer = MOB_LAYER+1 // Overhead
-	plane = PLANE_MOB
+	plane = ABOVE_HUMAN_PLANE
 	anchored = 1
 	density = 1
 	var/transform_dead = 0 //This variable doesn't seem to do anything
@@ -46,13 +45,13 @@
 		var/move_dir = get_dir(loc, AM.loc)
 		var/mob/living/carbon/human/H = AM
 		if((transform_standing || H.lying) && move_dir == EAST)// || move_dir == WEST)
-			AM.loc = src.loc
+			AM.forceMove(src.loc)
 			do_transform(AM)
 	//Shit bugs out if theres too many items on the enter side conveyer
 	else if(istype(AM, /obj/item))
 		var/move_dir = get_dir(loc, AM.loc)
 		if(move_dir == EAST)
-			AM.loc = src.loc
+			AM.forceMove(src.loc)
 
 /obj/machinery/transformer/proc/do_transform(var/mob/living/carbon/human/H)
 	if(stat & (BROKEN|NOPOWER))
@@ -82,7 +81,7 @@
 		R.cell.charge = robot_cell_charge
 
 	 	// So he can't jump out the gate right away.
-		R.weakened = 5
+		R.SetKnockdown(5)
 
 		// /vg/: Force borg module, if needed.
 		R.pick_module(force_borg_module)
@@ -91,7 +90,7 @@
 	spawn(50)
 		playsound(get_turf(src), 'sound/machines/ding.ogg', 50, 0)
 		if(R)
-			R.weakened = 0
+			R.SetKnockdown(0)
 
 	// Activate the cooldown
 	cooldown_time = world.time + cooldown_duration

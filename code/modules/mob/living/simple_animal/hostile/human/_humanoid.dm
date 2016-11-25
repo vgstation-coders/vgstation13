@@ -30,6 +30,11 @@
 	var/obj/effect/landmark/corpse/corpse = /obj/effect/landmark/corpse
 	var/list/items_to_drop = list()
 
+	//A list with icons associated with icon states
+	//The icons are shown on top of the mob, in the order of the list
+	//Example: list('icons/mob/in-hand/right/items_righthand.dmi' = "cultblade")
+	//
+	//Intended for animated items that aren't so easy to add to the base sprite
 	var/list/visible_items = list()
 
 /mob/living/simple_animal/hostile/humanoid/New()
@@ -37,7 +42,7 @@
 
 	for(var/I in visible_items)
 		var/image/new_img = image(I, icon_state = visible_items[I], layer = MOB_LAYER)
-		new_img.plane = PLANE_MOB
+		new_img.plane = MOB_PLANE
 		overlays.Add(new_img)
 
 /mob/living/simple_animal/hostile/humanoid/Die()

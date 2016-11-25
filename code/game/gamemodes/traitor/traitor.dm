@@ -15,7 +15,7 @@
 	var/traitor_name = "traitor"
 
 	uplink_welcome = "Syndicate Uplink Console:"
-	uplink_uses = 10
+	uplink_uses = 20
 
 	var/const/waittime_l = 600 //lower bound on time before intercept arrives (in tenths of seconds)
 	var/const/waittime_h = 1800 //upper bound on time before intercept arrives (in tenths of seconds)
@@ -59,9 +59,11 @@
 		if (!possible_traitors.len)
 			break
 		var/datum/mind/traitor = pick(possible_traitors)
+		possible_traitors -= traitor
+		if(traitor.special_role == "traitor")
+			continue
 		traitors += traitor
 		traitor.special_role = "traitor"
-		possible_traitors.Remove(traitor)
 
 	if(!traitors.len)
 		return 0
@@ -77,7 +79,8 @@
 	modePlayer += traitors
 	if(!mixed)
 		spawn (rand(waittime_l, waittime_h))
-			if(!mixed) send_intercept()
+			if(!mixed)
+				send_intercept()
 		..()
 	return 1
 
@@ -349,7 +352,7 @@
 			to_chat(traitor_mob, "<span class='warning'>Code Phrase: </span>[syndicate_code_phrase]")
 			traitor_mob.mind.store_memory("<b>Code Phrase</b>: [syndicate_code_phrase]")
 		else
-			to_chat(traitor_mob, "Unfortunetly, the Syndicate did not provide you with a code phrase.")
+			to_chat(traitor_mob, "Unfortunately, the Syndicate did not provide you with a code phrase.")
 		if(prob(80))
 			to_chat(traitor_mob, "<span class='warning'>Code Response: </span>[syndicate_code_response]")
 			traitor_mob.mind.store_memory("<b>Code Response</b>: [syndicate_code_response]")

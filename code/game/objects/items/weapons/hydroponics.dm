@@ -105,14 +105,14 @@
 		item_quants[N] -= 1
 		for(var/obj/O in contents)
 			if(O.name == N)
-				O.loc = get_turf(src)
+				O.forceMove(get_turf(src))
 				usr.put_in_hands(O)
 				break
 
 	else if ( href_list["unload"] )
 		item_quants.len = 0
 		for(var/obj/O in contents )
-			O.loc = get_turf(src)
+			O.forceMove(get_turf(src))
 
 	src.updateUsrDialog()
 	return
@@ -147,7 +147,8 @@
 	attack_verb = list("sears", "heats", "whacks", "steams")*/
 
 /*/obj/item/weapon/grown/novaflower/attack(mob/living/carbon/M as mob, mob/user as mob)
-	if(!..()) return
+	if(!..())
+		return
 	if(istype(M, /mob/living))
 		to_chat(M, "<span class='warning'>You are heated by the warmth of the of the [name]!</span>")
 		M.bodytemperature += potency/2 * TEMPERATURE_DAMAGE_COEFFICIENT*/
@@ -194,7 +195,8 @@
 			to_chat(user, "<span class='warning'>You are stunned by the Deathnettle when you try picking it up!</span>")
 
 /obj/item/weapon/grown/deathnettle/attack(mob/living/carbon/M as mob, mob/user as mob)
-	if(!..()) return
+	if(!..())
+		return
 	if(istype(M, /mob/living))
 		to_chat(M, "<span class='warning'>You are stunned by the powerful acid of the Deathnettle!</span>")
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Had the [src.name] used on them by [user.name] ([user.ckey])</font>")
@@ -211,7 +213,7 @@
 		M.eye_blurry += force/7
 		if(prob(20))
 			M.Paralyse(force/6)
-			M.Weaken(force/15)
+			M.Knockdown(force/15)
 		M.drop_item()
 
 

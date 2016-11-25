@@ -1,10 +1,12 @@
 /spell/area_teleport
 	name = "Teleport"
 	desc = "This spell teleports you to a type of area of your selection."
+	abbreviation = "TP"
 
 	school = "abjuration"
 	charge_max = 600
 	spell_flags = NEEDSCLOTHES
+	autocast_flags = AUTOCAST_NOTARGET
 	invocation = "SCYAR NILA"
 	invocation_type = SpI_SHOUT
 	cooldown_min = 200 //100 deciseconds reduction per rank
@@ -19,8 +21,8 @@
 
 	hud_state = "wiz_tele"
 
-/spell/area_teleport/before_cast()
-	return
+/spell/area_teleport/before_cast(list/targets, user)
+	return targets
 
 /spell/area_teleport/choose_targets()
 	var/A = null
@@ -66,7 +68,7 @@
 			break
 
 	if(!success)
-		user.loc = pick(L)
+		user.forceMove(pick(L))
 
 /spell/area_teleport/after_cast()
 	return

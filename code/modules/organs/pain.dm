@@ -8,7 +8,8 @@ mob/var/next_pain_time = 0
 // partname is the name of a body part
 // amount is a num from 1 to 100
 mob/living/carbon/proc/pain(var/partname, var/amount, var/force, var/burning = 0)
-	if(stat >= 2) return
+	if(stat >= 2)
+		return
 	if(reagents.has_reagent(PARACETAMOL))
 		return
 	if(reagents.has_reagent(TRAMADOL))
@@ -51,9 +52,11 @@ mob/living/carbon/proc/pain(var/partname, var/amount, var/force, var/burning = 0
 // message is the custom message to be displayed
 // flash_strength is 0 for weak pain flash, 1 for strong pain flash
 mob/living/carbon/human/proc/custom_pain(var/message, var/flash_strength)
-	if(stat >= 1) return
+	if(stat >= 1)
+		return
 
-	if(species && species.flags & NO_PAIN) return
+	if(species && species.flags & NO_PAIN)
+		return
 
 	if(reagents.has_reagent(TRAMADOL))
 		return
@@ -74,9 +77,11 @@ mob/living/carbon/human/proc/custom_pain(var/message, var/flash_strength)
 mob/living/carbon/human/proc/handle_pain()
 	// not when sleeping
 
-	if(species && species.flags & NO_PAIN) return
+	if(species && species.flags & NO_PAIN)
+		return
 
-	if(stat >= 2) return
+	if(stat >= 2)
+		return
 	if(reagents.has_reagent(TRAMADOL))
 		return
 	if(reagents.has_reagent(OXYCODONE))
@@ -87,8 +92,10 @@ mob/living/carbon/human/proc/handle_pain()
 	var/datum/organ/external/damaged_organ = null
 	for(var/datum/organ/external/E in organs)
 		// amputated limbs don't cause pain
-		if(E.amputated) continue
-		if(E.status & ORGAN_DEAD) continue
+		if(E.amputated)
+			continue
+		if(E.status & ORGAN_DEAD)
+			continue
 		var/dam = E.get_damage()
 		// make the choice of the organ depend on damage,
 		// but also sometimes use one of the less damaged ones
@@ -100,9 +107,10 @@ mob/living/carbon/human/proc/handle_pain()
 
 	// Damage to internal organs hurts a lot.
 	for(var/datum/organ/internal/I in internal_organs)
-		if(I.damage > 2) if(prob(2))
-			var/datum/organ/external/parent = get_organ(I.parent_organ)
-			src.custom_pain("You feel a sharp pain in your [parent.display_name]", 1)
+		if(I.damage > 2)
+			if(prob(2))
+				var/datum/organ/external/parent = get_organ(I.parent_organ)
+				src.custom_pain("You feel a sharp pain in your [parent.display_name]", 1)
 
 	var/toxDamageMessage = null
 	var/toxMessageProb = 1

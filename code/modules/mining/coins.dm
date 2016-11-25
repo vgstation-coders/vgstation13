@@ -115,4 +115,5 @@
 		overlays = list()
 		string_attached = null
 		to_chat(user, "<span class='notice'>You detach the string from the coin.</span>")
-	else ..()
+	else
+		..()

@@ -2,38 +2,26 @@ var/global/list/del_profiling = list()
 var/global/list/gdel_profiling = list()
 var/global/list/ghdel_profiling = list()
 /atom
-	layer = 2
 
 	var/ghost_read  = 1 // All ghosts can read
 	var/ghost_write = 0 // Only aghosts can write
 	var/blessed=0 // Chaplain did his thing. (set by bless() proc, which is called by holywater)
 
-	var/level = 2
 	var/flags = FPRINT
 	var/list/fingerprints
 	var/list/fingerprintshidden
 	var/fingerprintslast = null
 	var/list/blood_DNA
 	var/blood_color
-	var/pass_flags = 0
-	var/throwpass = 0
 	var/germ_level = 0 // The higher the germ level, the more germ on the atom.
-	var/pressure_resistance = ONE_ATMOSPHERE
 	var/penetration_dampening = 5 //drains some of a projectile's penetration power whenever it goes through the atom
 
 	///Chemistry.
 	var/datum/reagents/reagents = null
 
-	//Material datums - the fun way of doing things in a laggy manner
-	var/datum/materials/materials = null
-	var/list/starting_materials //starting set of mats - used in New(), you can set this to an empty list to have the datum be generated but not filled
-
 	//var/chem_is_open_container = 0
 	// replaced by OPENCONTAINER flags and atom/proc/is_open_container()
 	///Chemistry.
-
-	//Detective Work, used for the duplicate data points kept in the scanners
-	var/list/original_atom
 
 	var/list/beams
 
@@ -42,8 +30,7 @@ var/global/list/ghdel_profiling = list()
 	// On Destroy()
 	var/event/on_destroyed
 
-	// When this object moves. (args: loc)
-	var/event/on_moved
+
 
 	var/labeled //Stupid and ugly way to do it, but the alternative would probably require rewriting everywhere a name is read.
 	var/min_harm_label = 0 //Minimum langth of harm-label to be effective. 0 means it cannot be harm-labeled. If any label should work, set this to 1 or 2.
@@ -52,15 +39,15 @@ var/global/list/ghdel_profiling = list()
 	//var/harm_label_icon_state //Makes sense to have this, but I can't sprite. May be added later.
 	var/list/last_beamchecks // timings for beam checks.
 	var/ignoreinvert = 0
-	var/forceinvertredraw = 0
-	var/tempoverlay
 	var/timestopped
 
 	appearance_flags = TILE_BOUND
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
-	if(!last_beamchecks) last_beamchecks = list()
-	if(!beams) beams = list()
+	if(!last_beamchecks)
+		last_beamchecks = list()
+	if(!beams)
+		beams = list()
 	if(!(B in beams))
 		beams.Add(B)
 	return 1
@@ -80,12 +67,12 @@ var/global/list/ghdel_profiling = list()
 
 	switch(xy)
 		if(1)
-			src.pixel_x += rand(-intensity, intensity)
+			src.pixel_x += rand(-intensity, intensity) * PIXEL_MULTIPLIER
 		if(2)
-			src.pixel_y += rand(-intensity, intensity)
+			src.pixel_y += rand(-intensity, intensity) * PIXEL_MULTIPLIER
 		if(3)
-			src.pixel_x += rand(-intensity, intensity)
-			src.pixel_y += rand(-intensity, intensity)
+			src.pixel_x += rand(-intensity, intensity) * PIXEL_MULTIPLIER
+			src.pixel_y += rand(-intensity, intensity) * PIXEL_MULTIPLIER
 
 	spawn(2)
 	src.pixel_x = old_pixel_x
@@ -95,11 +82,11 @@ var/global/list/ghdel_profiling = list()
 // throw_impact is called multiple times when an item is thrown: see /atom/movable/proc/hit_check at atoms_movable.dm
 // Do NOT delete an item as part of it's throw_impact unless you've checked the hit_atom is a turf, as that's effectively the last time throw_impact is called in a single throw.
 // Otherwise, shit will runtime in the subsequent throw_impact calls.
-/atom/proc/throw_impact(atom/hit_atom, var/speed, user)
+/atom/proc/throw_impact(atom/hit_atom, var/speed, mob/user)
 	if(istype(hit_atom,/mob/living))
 		var/mob/living/M = hit_atom
 		M.hitby(src,speed,src.dir)
-		log_attack("<font color='red'>[hit_atom] ([M ? M.ckey : "what"]) was hit by [src] thrown by ([src.fingerprintslast])</font>")
+		log_attack("<font color='red'>[hit_atom] ([M ? M.ckey : "what"]) was hit by [src] thrown by [user] ([user ? user.ckey : "what"])</font>")
 
 	else if(isobj(hit_atom))
 		var/obj/O = hit_atom
@@ -140,19 +127,14 @@ var/global/list/ghdel_profiling = list()
 		qdel(reagents)
 		reagents = null
 
-	if(materials)
-		returnToPool(materials)
-
 	// Idea by ChuckTheSheep to make the object even more unreferencable.
 	invisibility = 101
 	INVOKE_EVENT(on_destroyed, list()) // No args.
-	if(on_moved)
-		on_moved.holder = null
-		on_moved = null
 	if(on_destroyed)
 		on_destroyed.holder = null
 		on_destroyed = null
-	if(istype(beams, /list) && beams.len) beams.len = 0
+	if(istype(beams, /list) && beams.len)
+		beams.len = 0
 	/*if(istype(beams) && beams.len)
 		for(var/obj/effect/beam/B in beams)
 			if(B && B.target == src)
@@ -164,12 +146,7 @@ var/global/list/ghdel_profiling = list()
 
 /atom/New()
 	on_destroyed = new("owner"=src)
-	on_moved = new("owner"=src)
 	. = ..()
-	if(starting_materials)
-		materials = getFromPool(/datum/materials, src)
-		for(var/matID in starting_materials)
-			materials.addAmount(matID, starting_materials[matID])
 	AddToProfiler()
 
 /atom/proc/assume_air(datum/gas_mixture/giver)
@@ -194,6 +171,9 @@ var/global/list/ghdel_profiling = list()
 
 /atom/proc/Bumped(AM as mob|obj)
 	return
+
+/atom/proc/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/wizmobile/W)
+	return Bumped(W)
 
 // Convenience proc to see if a container is open for chemistry handling
 // returns true if open
@@ -243,6 +223,9 @@ var/global/list/ghdel_profiling = list()
 
 /atom/proc/projectile_check()
 	return
+
+//Override this to have source respond differently to visible_messages said by an atom A
+/atom/proc/on_see(var/message, var/blind_message, var/drugged_message, var/blind_drugged_message, atom/A)
 
 /*
  *	atom/proc/search_contents_for(path,list/filter_path=null)
@@ -318,39 +301,42 @@ its easier to just keep the beam vertical.
 		var/Angle=round(Get_Angle(src,BeamTarget))
 		var/icon/I=new(icon,icon_state)
 		I.Turn(Angle)
-		var/DX=(32*BeamTarget.x+BeamTarget.pixel_x)-(32*x+pixel_x)
-		var/DY=(32*BeamTarget.y+BeamTarget.pixel_y)-(32*y+pixel_y)
+		var/DX=(WORLD_ICON_SIZE*BeamTarget.x+BeamTarget.pixel_x)-(WORLD_ICON_SIZE*x+pixel_x)
+		var/DY=(WORLD_ICON_SIZE*BeamTarget.y+BeamTarget.pixel_y)-(WORLD_ICON_SIZE*y+pixel_y)
 		var/N=0
 		var/length=round(sqrt((DX)**2+(DY)**2))
-		for(N,N<length,N+=32)
+		for(N,N<length,N+=WORLD_ICON_SIZE)
 			var/obj/effect/overlay/beam/X=getFromPool(/obj/effect/overlay/beam,loc)
 			X.BeamSource=src
-			if(N+32>length)
+			if(N+WORLD_ICON_SIZE>length)
 				var/icon/II=new(icon,icon_state)
-				II.DrawBox(null,1,(length-N),32,32)
+				II.DrawBox(null,1,(length-N),WORLD_ICON_SIZE,WORLD_ICON_SIZE)
 				II.Turn(Angle)
 				X.icon=II
-			else X.icon=I
-			var/Pixel_x=round(sin(Angle)+32*sin(Angle)*(N+16)/32)
-			var/Pixel_y=round(cos(Angle)+32*cos(Angle)*(N+16)/32)
-			if(DX==0) Pixel_x=0
-			if(DY==0) Pixel_y=0
-			if(Pixel_x>32)
-				for(var/a=0, a<=Pixel_x,a+=32)
+			else
+				X.icon=I
+			var/Pixel_x=round(sin(Angle)+WORLD_ICON_SIZE*sin(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
+			var/Pixel_y=round(cos(Angle)+WORLD_ICON_SIZE*cos(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
+			if(DX==0)
+				Pixel_x=0
+			if(DY==0)
+				Pixel_y=0
+			if(Pixel_x>WORLD_ICON_SIZE)
+				for(var/a=0, a<=Pixel_x,a+=WORLD_ICON_SIZE)
 					X.x++
-					Pixel_x-=32
-			if(Pixel_x<-32)
-				for(var/a=0, a>=Pixel_x,a-=32)
+					Pixel_x-=WORLD_ICON_SIZE
+			if(Pixel_x<-WORLD_ICON_SIZE)
+				for(var/a=0, a>=Pixel_x,a-=WORLD_ICON_SIZE)
 					X.x--
-					Pixel_x+=32
-			if(Pixel_y>32)
-				for(var/a=0, a<=Pixel_y,a+=32)
+					Pixel_x+=WORLD_ICON_SIZE
+			if(Pixel_y>WORLD_ICON_SIZE)
+				for(var/a=0, a<=Pixel_y,a+=WORLD_ICON_SIZE)
 					X.y++
-					Pixel_y-=32
-			if(Pixel_y<-32)
-				for(var/a=0, a>=Pixel_y,a-=32)
+					Pixel_y-=WORLD_ICON_SIZE
+			if(Pixel_y<-WORLD_ICON_SIZE)
+				for(var/a=0, a>=Pixel_y,a-=WORLD_ICON_SIZE)
 					X.y--
-					Pixel_y+=32
+					Pixel_y+=WORLD_ICON_SIZE
 			X.pixel_x=Pixel_x
 			X.pixel_y=Pixel_y
 			var/turf/TT = get_turf(X.loc)
@@ -438,6 +424,9 @@ its easier to just keep the beam vertical.
 
 /atom/proc/mech_drill_act(var/severity, var/child=null)
 	return ex_act(severity, child)
+
+/atom/proc/can_mech_drill()
+	return acidable()
 
 /atom/proc/blob_act(destroy = 0)
 	//DEBUG to_chat(pick(player_list),"blob_act() on [src] ([src.type])")
@@ -555,8 +544,10 @@ its easier to just keep the beam vertical.
 	return
 */
 /atom/proc/add_hiddenprint(mob/living/M as mob)
-	if(isnull(M)) return
-	if(isnull(M.key)) return
+	if(isnull(M))
+		return
+	if(isnull(M.key))
+		return
 	if (!( src.flags ) & FPRINT)
 		return
 	if (ishuman(M))
@@ -580,9 +571,12 @@ its easier to just keep the beam vertical.
 	return
 
 /atom/proc/add_fingerprint(mob/living/M as mob)
-	if(isnull(M)) return
-	if(isAI(M)) return
-	if(isnull(M.key)) return
+	if(isnull(M))
+		return
+	if(isAI(M))
+		return
+	if(isnull(M.key))
+		return
 	if (!( src.flags ) & FPRINT)
 		return
 	if (ishuman(M))
@@ -670,7 +664,7 @@ its easier to just keep the beam vertical.
 	if(!M)//if the blood is of non-human source
 		if(!blood_DNA || !istype(blood_DNA, /list))
 			blood_DNA = list()
-		blood_color = "#A10808"
+		blood_color = DEFAULT_BLOOD
 		return 1
 	if (!( istype(M, /mob/living/carbon/human) ))
 		return 0
@@ -682,7 +676,7 @@ its easier to just keep the beam vertical.
 		return 0
 	if(!blood_DNA || !istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.
 		blood_DNA = list()
-	blood_color = "#A10808"
+	blood_color = DEFAULT_BLOOD
 	if (M.species)
 		blood_color = M.species.blood_color
 	//adding blood to humans
@@ -721,7 +715,8 @@ its easier to just keep the beam vertical.
 
 
 /atom/proc/get_global_map_pos()
-	if(!islist(global_map) || isemptylist(global_map)) return
+	if(!islist(global_map) || isemptylist(global_map))
+		return
 	var/cur_x = null
 	var/cur_y = null
 	var/list/y_arr = null
@@ -736,7 +731,7 @@ its easier to just keep the beam vertical.
 	else
 		return 0
 
-/atom/proc/checkpass(passflag)
+/atom/movable/proc/checkpass(passflag)
 	return pass_flags&passflag
 
 /datum/proc/setGender(gend = FEMALE)
@@ -752,27 +747,56 @@ its easier to just keep the beam vertical.
 /mob/living/carbon/human/setGender(gend = FEMALE)
 	if(gend == PLURAL || gend == NEUTER || (gend != FEMALE && gend != MALE))
 		CRASH("SOMEBODY SET A BAD GENDER ON [src] [gend]")
-	var/old_gender = src.gender
+	// var/old_gender = src.gender
 	src.gender = gend
-	testing("Set [src]'s gender to [gend], old gender [old_gender] previous gender [prev_gender]")
+	// testing("Set [src]'s gender to [gend], old gender [old_gender] previous gender [prev_gender]")
 
 /atom/proc/mop_act(obj/item/weapon/mop/M, mob/user)
 	return 0
 
 /atom/proc/change_area(var/area/oldarea, var/area/newarea)
-	if(istype(oldarea))
-		oldarea = "[oldarea.name]"
-	if(istype(newarea))
-		newarea = "[newarea.name]"
+	change_area_name(oldarea.name, newarea.name)
+
+/atom/proc/change_area_name(var/oldname, var/newname)
+	name = replacetext(name,oldname,newname)
 
 //Called in /spell/aoe_turf/boo/cast() (code/modules/mob/dead/observer/spells.dm)
-/atom/proc/spook()
-	if(blessed)
+/atom/proc/spook(mob/dead/observer/ghost, var/log_this = FALSE)
+	if(!can_spook())
 		return 0
+	if(log_this)
+		investigation_log(I_GHOST, "|| was Boo!'d by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 	return 1
+
+/atom/proc/can_spook()
+	return !blessed
 
 //Called on holy_water's reaction_obj()
 /atom/proc/bless()
 	blessed = 1
 
 /atom/proc/update_icon()
+
+/atom/proc/acidable()
+	return 0
+
+/atom/proc/holomapAlwaysDraw()
+	return 1
+
+/atom/proc/get_inaccuracy(var/atom/target, var/spread, var/obj/mecha/chassis)
+	var/turf/curloc = get_turf(src)
+	var/turf/targloc = get_turf(target)
+	var/list/turf/shot_spread = list()
+	for(var/turf/T in trange(min(spread, max(0, get_dist(curloc, targloc)-1)), targloc))
+		if(chassis)
+			var/dir_to_targ = get_dir(chassis, T)
+			if(dir_to_targ && !(dir_to_targ & chassis.dir))
+				continue
+		shot_spread += T
+	var/turf/newtarget = pick(shot_spread)
+	if(newtarget == targloc)
+		return target
+	return newtarget
+
+/atom/proc/animationBolt(var/mob/firer)
+	return

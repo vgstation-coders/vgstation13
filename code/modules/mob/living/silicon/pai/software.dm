@@ -225,7 +225,8 @@
 				var/mob/living/M = src.loc
 				var/count = 0
 				while(!istype(M, /mob/living))
-					if(!M || !M.loc) return 0 //For a runtime where M ends up in nullspace (similar to bluespace but less colourful)
+					if(!M || !M.loc)
+						return 0 //For a runtime where M ends up in nullspace (similar to bluespace but less colourful)
 					M = M.loc
 					count++
 					if(count >= 6)
@@ -306,7 +307,8 @@
 					else
 						F = new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(get_turf(src))
 				var/mob/M = get_holder_of_type(src, /mob)
-				if(M) M.put_in_hands(F)
+				if(M)
+					M.put_in_hands(F)
 				playsound(get_turf(src.loc), 'sound/machines/foodsynth.ogg', 50, 1)
 		if("flashlight")
 			if(href_list["toggle"])
@@ -702,7 +704,8 @@ Target Machine: "}
 	dat += "<ul>"
 	if(!pda.toff)
 		for (var/obj/item/device/pda/P in sortNames(PDAs))
-			if (!P.owner||P.toff||P == src.pda||P.hidden)	continue
+			if (!P.owner||P.toff||P == src.pda||P.hidden)
+				continue
 
 			dat += {"<li><a href='byond://?src=\ref[src];software=pdamessage;target=\ref[P]'>[P]</a>
 				</li>"}

@@ -48,6 +48,7 @@ var/list/department_radio_keys = list(
 	  ":g" = "changeling",	"#g" = "changeling",	".g" = "changeling",
 	  ":x" = "cultchat",	"#x" = "cultchat",		".x" = "cultchat",
 	  ":y" = "ancientchat",	"#y" = "ancientchat",	".y" = "ancientchat",
+	  ":p" = "AI Private",	"#p" = "AI Private",	".p" = "AI Private",
 
 	  ":R" = "right ear",	"#R" = "right ear",		".R" = "right ear", "!R" = "fake right ear",
 	  ":L" = "left ear",	"#L" = "left ear",		".L" = "left ear",  "!L" = "fake left ear",
@@ -68,6 +69,7 @@ var/list/department_radio_keys = list(
 	  ":G" = "changeling",	"#G" = "changeling",	".G" = "changeling",
 	  ":X" = "cultchat",	"#X" = "cultchat",		".X" = "cultchat",
 	  ":Y" = "ancientchat",	"#Y" = "ancientchat", 	".Y" = "ancientchat",
+	  ":P" = "AI Private",	"#P" = "AI Private",	".P" = "AI Private",
 
 	  //kinda localization -- rastaf0
 	  //same keys as above, but on russian keyboard layout. This file uses cp1251 as encoding.
@@ -96,26 +98,32 @@ var/list/department_radio_keys = list(
 	return default_language
 
 /mob/living/hivecheck()
-	if (isalien(src)) return 1
-	if (!ishuman(src)) return
+	if (isalien(src))
+		return 1
+	if (!ishuman(src))
+		return
 	var/mob/living/carbon/human/H = src
 	if (H.ears)
 		var/obj/item/device/radio/headset/dongle
 		if(istype(H.ears,/obj/item/device/radio/headset))
 			dongle = H.ears
-		if(!istype(dongle)) return
-		if(dongle.translate_hive) return 1
+		if(!istype(dongle))
+			return
+		if(dongle.translate_hive)
+			return 1
 
 
 // /vg/edit: Added forced_by for handling braindamage messages and meme stuff
 /mob/living/say(var/message, bubble_type)
 	say_testing(src, "/mob/living/say(\"[message]\", [bubble_type]")
-	if(timestopped) return //under the effects of time magick
+	if(timestopped)
+		return //under the effects of time magick
 	message = trim(copytext(message, 1, MAX_MESSAGE_LEN))
 	message = capitalize(message)
 
 	say_testing(src, "Say start, message=[message]")
-	if(!message) return
+	if(!message)
+		return
 
 	var/message_mode = get_message_mode(message)
 	if(silent)
@@ -237,7 +245,8 @@ var/list/department_radio_keys = list(
 
 /mob/living/send_speech(var/datum/speech/speech, var/message_range=7, var/bubble_type) // what is bubble type?
 	say_testing(src, "/mob/living/send_speech() start, msg = [speech.message]; message_range = [message_range]; language = [speech.language ? speech.language.name : "None"]; speaker = [speech.speaker];")
-	if(isnull(message_range)) message_range = 7
+	if(isnull(message_range))
+		message_range = 7
 
 	var/list/listeners = get_hearers_in_view(message_range, speech.speaker) | observers
 
@@ -384,7 +393,8 @@ var/list/department_radio_keys = list(
 		return 1
 
 /mob/living/construct_chat_check(var/setting = 0) //setting: 0 is to speak over general into cultchat, 1 is to speak over channel into cultchat, 2 is to hear cultchat
-	if(!mind) return
+	if(!mind)
+		return
 
 	if(setting == 0) //overridden for constructs
 		return
@@ -411,7 +421,7 @@ var/list/department_radio_keys = list(
 			speech_bubble_recipients.Add(M.client)
 	spawn(0)
 		var/image/speech_bubble = image('icons/mob/talk.dmi', get_holder_at_turf_level(src), "h[bubble_type][say_test(message)]",MOB_LAYER+1)
-		speech_bubble.plane = PLANE_BASE
+		speech_bubble.plane = BASE_PLANE
 		speech_bubble.appearance_flags = RESET_COLOR
 		flick_overlay(speech_bubble, speech_bubble_recipients, 30)
 
@@ -419,7 +429,8 @@ var/list/department_radio_keys = list(
 	if(client)
 		client.images += speech_bubble
 		spawn(30)
-			if(client) client.images -= speech_bubble
+			if(client)
+				client.images -= speech_bubble
 
 /obj/effect/speech_bubble
 	var/mob/parent

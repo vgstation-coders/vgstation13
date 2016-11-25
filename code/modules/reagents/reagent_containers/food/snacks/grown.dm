@@ -16,8 +16,8 @@
 		if(!isnull(newpotency))
 			potency = newpotency
 		..()
-		src.pixel_x = rand(-5.0, 5)
-		src.pixel_y = rand(-5.0, 5)
+		src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
+		src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/New()
 	..()
@@ -63,7 +63,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/throw_impact(atom/hit_atom)
 	..()
-	if(!seed || !src) return
+	if(!seed || !src)
+		return
 	//if(seed.stinging)   			//we do NOT want to transfer reagents on throw, as it would mean plantbags full of throwable chloral injectors
 	//	stinging_apply_reagents(M)  //plus all sorts of nasty stuff like throw_impact not targeting a specific bodypart to check for protection.
 
@@ -107,8 +108,10 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/Crossed(var/mob/living/carbon/M)
 	..()
-	if(!seed) return
-	if(!istype(M)) return
+	if(!seed)
+		return
+	if(!istype(M))
+		return
 	if(!M.on_foot())
 		return
 	if(seed.thorny || seed.stinging)
@@ -120,7 +123,7 @@
 					if(thorns_apply_damage(M, affecting))
 						to_chat(H, "<span class='danger'>You step on \the [src]'s sharp thorns!</span>")
 						if(H.species && !(H.species.flags & NO_PAIN))
-							H.Weaken(3)
+							H.Knockdown(3)
 					if(stinging_apply_reagents(M))
 						to_chat(H, "<span class='danger'>You step on \the [src]'s stingers!</span>")
 						potency -= rand(1,(potency/3)+1)
@@ -131,7 +134,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pickup(mob/user)
 	..()
-	if(!seed) return
+	if(!seed)
+		return
 	if(seed.thorny || seed.stinging)
 		var/mob/living/carbon/human/H = user
 		if(!istype(H))
@@ -150,7 +154,7 @@
 				if(H.species && !(H.species.flags & NO_PAIN))
 					H.drop_item(src)
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/On_Consume(var/mob/living/carbon/human/H)
+/obj/item/weapon/reagent_containers/food/snacks/grown/after_consume(var/mob/living/carbon/human/H)
 	if(seed.thorny && istype(H))
 		var/datum/organ/external/affecting = H.get_organ(LIMB_HEAD)
 		if(affecting)
@@ -161,13 +165,19 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/examine(mob/user)
 	..()
-	if(!seed) return
+	if(!seed)
+		return
 	var/traits = ""
-	if(seed.stinging) traits += "<span class='alert'>It's covered in tiny stingers.</span> "
-	if(seed.thorny) traits += "<span class='alert'>It's covered in sharp thorns.</span> "
-	if(seed.juicy == 2) traits += "It looks ripe and excessively juicy. "
-	if(seed.teleporting) traits += "It seems to be spatially unstable. "
-	if(traits) to_chat(user, traits)
+	if(seed.stinging)
+		traits += "<span class='alert'>It's covered in tiny stingers.</span> "
+	if(seed.thorny)
+		traits += "<span class='alert'>It's covered in sharp thorns.</span> "
+	if(seed.juicy == 2)
+		traits += "It looks ripe and excessively juicy. "
+	if(seed.teleporting)
+		traits += "It seems to be spatially unstable. "
+	if(traits)
+		to_chat(user, traits)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/splat_decal(turf/T)
 	var/obj/effect/decal/cleanable/S = getFromPool(seed.splat_type,T)
@@ -181,14 +191,6 @@
 	if(seed.biolum && seed.biolum_colour)
 		S.set_light(1, l_color = seed.biolum_colour)
 	return 1
-
-/obj/item/weapon/reagent_containers/food/snacks/grown/proc/splat_reagent_reaction(turf/T)
-	if(src.reagents.total_volume > 0)
-		src.reagents.reaction(T)
-		for(var/atom/A in T)
-			src.reagents.reaction(A)
-		return 1
-	return 0
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/thorns_apply_damage(mob/living/carbon/human/H, datum/organ/external/affecting)
 	if(!seed.thorny || !affecting)
@@ -205,10 +207,18 @@
 		return 0
 	if(!seed.chems || !seed.chems.len)
 		return 0
+
+	var/list/thingsweinjected = list()
 	var/injecting = Clamp(1, 3, potency/10)
+
 	for(var/rid in seed.chems) //Only transfer reagents that the plant naturally produces, no injecting chloral into your nettles.
 		reagents.trans_id_to(H,rid,injecting)
+		thingsweinjected += "[injecting]u of [rid]"
 		. = 1
+
+	if(. && fingerprintshidden && fingerprintshidden.len)
+		H.investigation_log(I_CHEMS, "was stung by \a [src], transfering [english_list(thingsweinjected)] - all touchers: [english_list(src.fingerprintshidden)]")
+
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/do_fruit_teleport(atom/hit_atom, mob/M, var/potency)	//Does this need logging?
 	var/datum/zLevel/L = get_z_level(src)
@@ -383,8 +393,6 @@
 /obj/item/weapon/reagent_containers/food/snacks/grown/glowberries
 	name = "bunch of glow-berries"
 	desc = "Nutritious!"
-	var/light_on = 1
-	var/brightness_on = 2 //luminosity when on
 	filling_color = "#D3FF9E"
 	icon_state = "glowberrypile"
 	plantname = "glowberries"
@@ -792,7 +800,7 @@
 	plantname = "woodapple"
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pitcher
-	name = "slipping pitcher"
+	name = "pitcher plant" //results in "slippery pitcher plant"
 	desc = "A fragile, but slippery exotic plant from tropical climates. Powerful digestive acid contained within dissolves prey."
 	icon_state = "pitcher"
 	filling_color = "7E8507"
@@ -824,6 +832,8 @@
 	pop(M)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/vaporsac/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W, /obj/item/device/analyzer/plant_analyzer))
+		return
 	pop(user)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/vaporsac/proc/pop(mob/popper)
@@ -832,7 +842,7 @@
 	for(var/mob/living/carbon/C in view(1))
 		if(C.CheckSlip() < 1)
 			continue
-		C.Weaken(5)
+		C.Knockdown(5)
 	playsound(get_turf(src), 'sound/effects/bang.ogg', 10, 1)
 	qdel(src)
 

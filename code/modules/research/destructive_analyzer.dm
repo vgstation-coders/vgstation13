@@ -89,14 +89,14 @@ Note: Must be placed within 3 tiles of the R&D Console
 			spawn(10)
 				icon_state = "d_analyzer_l"
 				busy = 0
-	return
+	return 1
 
 /obj/machinery/r_n_d/destructive_analyzer/attack_hand(mob/user as mob)
 	if (..(user))
 		return
 	if (loaded_item && !panel_open && !busy)
 		to_chat(user, "<span class='notice'>You remove the [loaded_item.name] from the [src].</span>")
-		loaded_item.loc = src.loc
+		loaded_item.forceMove(src.loc)
 		loaded_item = null
 		icon_state = "d_analyzer"
 
@@ -111,4 +111,4 @@ Note: Must be placed within 3 tiles of the R&D Console
 	icon_state = "d20"
 	g_amt = 5000
 	m_amt = 5000
-	origin_tech = "materials=5;plasmatech=5;syndicate=5;programming=9"*/
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_PLASMATECH + "=5;" + Tc_SYNDICATE + "=5;" + Tc_PROGRAMMING + "=9"*/

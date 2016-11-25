@@ -3,6 +3,15 @@
 #define VALUE_VARIABLE_MIN  3 //Minimum possible number value
 #define VALUE_VARIABLE_MAX  4 //Maximum possible number value
 
+#define VT_NUMBER "number" //Number values, for example 1, 4, -15
+#define VT_TEXT "text" //Text values, for example "hello", "help"
+#define VT_POINTER "pointer" //Pointers to other assemblies - the value is dynamic. If the variable contains an assembly, returns the assembly's position in the assembly frame. Writing to them is possible
+
+#define VALUE_IS_NUMBER(value_parameters) (value_parameters[VALUE_VARIABLE_TYPE] == VT_NUMBER || value_parameters[VALUE_VARIABLE_TYPE] == VT_POINTER)
+#define VALUE_IS_POINTER(value_parameters)(value_parameters[VALUE_VARIABLE_TYPE] == VT_POINTER)
+
+#define MAX_TEXT_VALUE_LEN 200
+
 var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't give two different types of assembly the same short_name
 
 /obj/item/device/assembly
@@ -20,7 +29,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 	throwforce = 2
 	throw_speed = 3
 	throw_range = 10
-	origin_tech = "magnets=1"
+	origin_tech = Tc_MAGNETS + "=1"
 
 	var/show_status = 1 //in order to prevent the signaler button in signaler.dm from saying "... is ready!" when examined
 	var/secured = 1
@@ -85,37 +94,94 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 	return "The trigger assembly looks broken!"
 
 /obj/item/device/assembly/proc/send_pulses_to_list(var/list/L) //Send pulse to all assemblies in list.
-	if(!L || !L.len) return
+	if(!L || !L.len)
+		return
 
 	for(var/obj/item/device/assembly/A in L)
 		A.pulsed()
 
 /obj/item/device/assembly/proc/get_value(var/value) //Get the assembly's value (to be used with various circuits). value = an element from the accessible_values list!
-	if(!value in accessible_values) return
+	if(!accessible_values.Find(value))
+		return
 
 	var/list/L = params2list(accessible_values[value])
+
 	var/var_to_grab = L[VALUE_VARIABLE_NAME]
+
+	if(VALUE_IS_POINTER(L))
+		//Pointers return the refered assembly's index
+		var/obj/item/device/assembly/AS = vars[var_to_grab]
+		if(istype(AS))
+			var/obj/item/device/assembly_frame/AF = loc
+			if(!istype(AF))
+				return
+
+			return AF.assemblies.Find(AS)
 
 	return vars[var_to_grab]
 
 /obj/item/device/assembly/proc/write_to_value(var/value, var/new_value) //Attempt to write to assembly's value. This handles value's type (num/text), whether writing is possible, etc.
-	if(!value in accessible_values) return
+	set waitfor = 0
+
+	if(!accessible_values.Find(value))
+		return
 
 	var/list/L = params2list(accessible_values[value])
 
-	if(L[VALUE_VARIABLE_TYPE] == "number")
+	var/var_to_change = L[VALUE_VARIABLE_NAME]
+	if(var_to_change == "null")
+		return
+
+	if(L[VALUE_VARIABLE_TYPE] == VT_NUMBER)
 		if(!isnum(new_value)) //Attempted to write a non-number to a number var - abort!
 			return
 
 		if(L.len >= VALUE_VARIABLE_MAX)
 			new_value = Clamp(new_value, text2num(L[VALUE_VARIABLE_MIN]), text2num(L[VALUE_VARIABLE_MAX]))
-	else
+
+	else if(L[VALUE_VARIABLE_TYPE] == VT_POINTER)
+		//When importing assembly frames, assemblies can't connect to stuff with a higher index (because it's not loaded yet)
+		//The sleep below ensures that pointers are handled after everything is loaded
+		sleep()
+
+		//POINTERS
+		//Variables that refer to other assemblies in the assembly frame
+		//They contain the assembly's index (as a number)
+		//Writing another number to them causes the reference to update
+		//Writing 0 causes the currently connected assembly to disconnect
+
+		if(!isnum(new_value)) //Pointers are numbers
+			return
+
+		var/obj/item/device/assembly_frame/AF = loc
+		if(!istype(AF))
+			return
+		if(AF.assemblies.len < new_value)
+			return
+
+		var/obj/item/device/assembly/AS = null //New assembly to connect. If it's null, disconnect the old assembly without connecting anything new
+		if(new_value != 0)
+			AS = AF.assemblies[new_value]
+			if(!istype(AS))
+				return
+			if(AS == src)
+				return
+
+		var/obj/item/device/assembly/current = vars[var_to_change]
+		if(current)
+			AF.disconnect_assembly_from(src, current)
+
+			if(AS)
+				AF.start_new_connection(src, AS)
+
+		new_value = AS
+	else //Text
 		if(!istext(new_value))  //Attempted to write a non-string to a string var - convert the non-string into a string and continue
 			new_value = "[new_value]"
 
-	//text values can accept either numbers or text, so don't check for that
+		new_value = strip_html(new_value, MAX_TEXT_VALUE_LEN)
 
-	var/var_to_change = L[VALUE_VARIABLE_NAME]
+	//text values can accept either numbers or text, so don't check for that
 
 	set_value(var_to_change, new_value)
 
@@ -132,7 +198,8 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 
 /obj/item/device/assembly/process_cooldown()
 	cooldown--
-	if(cooldown <= 0)	return 0
+	if(cooldown <= 0)
+		return 0
 	spawn(10)
 		process_cooldown()
 	return 1
@@ -180,7 +247,8 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 
 
 /obj/item/device/assembly/activate()
-	if(!secured || (cooldown > 0))	return 0
+	if(!secured || (cooldown > 0))
+		return 0
 	cooldown = 2
 	spawn(10)
 		process_cooldown()
@@ -231,7 +299,8 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 			to_chat(user, "<span class='info'>\The [src] can be attached!</span>")
 
 /obj/item/device/assembly/attack_self(mob/user as mob)
-	if(!user)	return 0
+	if(!user)
+		return 0
 	user.set_machine(src)
 	interact(user)
 	return 1
@@ -264,15 +333,18 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 
 	Process_cooldown()
 		cooldown--
-		if(cooldown <= 0)	return 0
+		if(cooldown <= 0)
+			return 0
 		spawn(10)
 			Process_cooldown()
 		return 1
 
 
 	Attach_Holder(var/obj/H, var/mob/user)
-		if(!H)	return 0
-		if(!H.IsAssemblyHolder())	return 0
+		if(!H)
+			return 0
+		if(!H.IsAssemblyHolder())
+			return 0
 		//Remember to have it set its loc somewhere in here
 
 

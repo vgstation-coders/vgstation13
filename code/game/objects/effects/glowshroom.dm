@@ -7,7 +7,7 @@
 	density = 0
 	icon = 'icons/obj/lighting.dmi'
 	icon_state = "glowshroomf"
-	layer = 2.1
+	layer = BELOW_OBJ_LAYER
 	var/endurance = 30
 	var/potency = 30
 	var/delay = 1200
@@ -28,13 +28,13 @@
 	if(!floor)
 		switch(dir) //offset to make it be on the wall rather than on the floor
 			if(NORTH)
-				pixel_y = 32
+				pixel_y = WORLD_ICON_SIZE
 			if(SOUTH)
-				pixel_y = -32
+				pixel_y = -WORLD_ICON_SIZE
 			if(EAST)
-				pixel_x = 32
+				pixel_x = WORLD_ICON_SIZE
 			if(WEST)
-				pixel_x = -32
+				pixel_x = -WORLD_ICON_SIZE
 		icon_state = "glowshroom[rand(1,3)]"
 	else //if on the floor, glowshroom on-floor sprite
 		icon_state = "glowshroomf"

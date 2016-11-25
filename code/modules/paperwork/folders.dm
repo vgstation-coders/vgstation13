@@ -78,7 +78,7 @@
 				admin_log.Add(message)
 				return
 			if(P)
-				P.loc = usr.loc
+				P.forceMove(usr.loc)
 				usr.put_in_hands(P)
 
 		if(href_list["read"])

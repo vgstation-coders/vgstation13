@@ -1,5 +1,6 @@
 /datum/admins/proc/EconomyPanel(action, hrefs)
-    if(!check_rights(R_FUN))	return
+    if(!check_rights(R_FUN))
+        return
 
     var/dat= "<head><title>Economy Tools</title></head>"
     var/datum/money_account/detailed_account_view

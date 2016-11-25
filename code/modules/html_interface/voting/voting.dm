@@ -177,7 +177,8 @@ var/global/datum/controller/vote/vote = new()
 
 		text += "<b>[weighted ? "Random Weighted " : ""]Vote Result: [.] with [choices[.]] vote\s[weighted? " and a [round(100*choices[.]/total_votes)]% chance of winning" : null]</b>"
 		for(var/choice in choices)
-			if(. == choice) continue
+			if(. == choice)
+				continue
 			text += "<br>\t [choice] had [choices[choice] != null ? choices[choice] : "0"] vote[(weighted&&choices[choice])? " and a [round(100*choices[choice]/total_votes)]% chance of winning" : null]\s"
 	else
 		text += "<b>Vote Result: Inconclusive - No Votes!</b>"
@@ -217,7 +218,8 @@ var/global/datum/controller/vote/vote = new()
 	if(restart)
 		to_chat(world, "World restarting due to vote...")
 		feedback_set_details("end_error","restart vote")
-		if(blackbox)	blackbox.save_all_data_to_sql()
+		if(blackbox)
+			blackbox.save_all_data_to_sql()
 		CallHook("Reboot",list())
 		sleep(50)
 		log_game("Rebooting due to restart vote")
@@ -260,10 +262,12 @@ var/global/datum/controller/vote/vote = new()
 				choices.Add("Initiate Crew Transfer", "Continue The Round")
 			if("custom")
 				question = html_encode(input(usr,"What is the vote for?") as text|null)
-				if(!question)	return 0
+				if(!question)
+					return 0
 				for(var/i=1,i<=10,i++)
 					var/option = capitalize(html_encode(input(usr,"Please enter an option or hit cancel to finish") as text|null))
-					if(!option || mode || !usr.client)	break
+					if(!option || mode || !usr.client)
+						break
 					choices.Add(option)
 			if("map")
 				question = "What should the next map be?"
@@ -380,11 +384,13 @@ var/global/datum/controller/vote/vote = new()
 		for(var/i = 1; i <= choices.len; i++)
 			choices_list[++choices_list.len] = list(i, choices[i], (!isnull(choices[choices[i]]) ? choices[choices[i]] : 0))
 	data = choices_list
-	if(refresh && interface) updateFor()
+	if(refresh && interface)
+		updateFor()
 
 
 /datum/controller/vote/Topic(href,href_list[],hsrc)
-	if(!usr || !usr.client)	return	//not necessary but meh...just in-case somebody does something stupid
+	if(!usr || !usr.client)
+		return	//not necessary but meh...just in-case somebody does something stupid
 	switch(href_list["vote"])
 		if("cancel")
 			if(usr.client.holder)
@@ -419,5 +425,7 @@ var/global/datum/controller/vote/vote = new()
 	set category = "OOC"
 	set name = "Vote"
 	if(vote)
-		if(!vote.initialized) to_chat(usr, "<span class='info'>The voting controller isn't fully initialized yet.</span>")
-		else vote.interact(usr.client)
+		if(!vote.initialized)
+			to_chat(usr, "<span class='info'>The voting controller isn't fully initialized yet.</span>")
+		else
+			vote.interact(usr.client)

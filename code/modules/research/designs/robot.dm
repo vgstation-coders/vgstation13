@@ -2,7 +2,7 @@
 	name = "Cyborg Component (Robot endoskeleton)"
 	desc = "Used to build a Robot endoskeleton."
 	id = "robot_chassis"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/robot_parts/robot_suit
 	category = "Robot"
@@ -12,7 +12,7 @@
 	name = "Cyborg Component (Robot torso)"
 	desc = "Used to build a Robot torso."
 	id = "robot_torso"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/robot_parts/chest
 	category = "Robot"
@@ -22,7 +22,7 @@
 	name = "Cyborg Component (Robot left arm)"
 	desc = "Used to build a Robot left arm."
 	id = "robot_larm"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/robot_parts/l_arm
 	category = "Robot"
@@ -32,7 +32,7 @@
 	name = "Cyborg Component (Robot right arm)"
 	desc = "Used to build a Robot right arm."
 	id = "robot_rarm"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/robot_parts/r_arm
 	category = "Robot"
@@ -42,7 +42,7 @@
 	name = "Cyborg Component (Robot left leg)"
 	desc = "Used to build a Robot left leg."
 	id = "robot_lleg"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/robot_parts/l_leg
 	category = "Robot"
@@ -52,7 +52,7 @@
 	name = "Cyborg Component (Robot right leg)"
 	desc = "Used to build a Robot right leg."
 	id = "robot_rleg"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/robot_parts/r_leg
 	category = "Robot"
@@ -62,7 +62,7 @@
 	name = "Cyborg Component (Robot head)"
 	desc = "Used to build a Robot head."
 	id = "robot_head"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/robot_parts/head
 	category = "Robot"
@@ -72,7 +72,7 @@
 	name = "Cyborg Component (Binary Communication Device)"
 	desc = "Used to build a binary communication device."
 	id = "robot_bin_comms"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/robot_parts/robot_component/binary_communication_device
 	category = "Robot_Part"
@@ -82,7 +82,7 @@
 	name = "Cyborg Component (Radio)"
 	desc = "Used to build a radio."
 	id = "robot_radio"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/robot_parts/robot_component/radio
 	category = "Robot_Part"
@@ -92,7 +92,7 @@
 	name = "Cyborg Component (Actuator)"
 	desc = "Used to build an actuator."
 	id = "robot_actuator"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/robot_parts/robot_component/actuator
 	category = "Robot_Part"
@@ -102,7 +102,7 @@
 	name = "Cyborg Component (Diagnosis Unit)"
 	desc = "Used to build a diagnosis unit."
 	id = "robot_diagnosis_unit"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/robot_parts/robot_component/diagnosis_unit
 	category = "Robot_Part"
@@ -112,7 +112,7 @@
 	name = "Cyborg Component (Camera)"
 	desc = "Used to build a diagnosis unit."
 	id = "robot_camera"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/robot_parts/robot_component/camera
 	category = "Robot_Part"
@@ -122,7 +122,7 @@
 	name = "Cyborg Component (Armor)"
 	desc = "Used to build cyborg armor."
 	id = "robot_armour"
-	req_tech = list("engineering" = 1)
+	req_tech = list(Tc_ENGINEERING = 1)
 	build_type = MECHFAB
 	build_path = /obj/item/robot_parts/robot_component/armour
 	category = "Robot_Part"

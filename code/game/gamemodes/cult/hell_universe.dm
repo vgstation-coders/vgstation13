@@ -53,6 +53,7 @@ In short:
 	tcheck(80,1)
 	suspend_alert = 1
 
+	convert_all_parallax()
 	//separated into separate procs for profiling
 	AreaSet()
 	tcheck(80,1)
@@ -107,11 +108,12 @@ In short:
 	var/count = 0
 	for(var/turf/T in turfs)
 		count++
-		if(!(count % 50000)) sleep(world.tick_lag)
+		if(!(count % 50000))
+			sleep(world.tick_lag)
 		if(istype(T, /turf/space))
 			T.overlays += image(icon = T.icon, icon_state = "hell01")
 		else
-			if(!T.holy && prob(1))
+			if(!T.holy && prob(1) && T.z != CENTCOMM_Z)
 				new /obj/effect/gateway/active/cult(T)
 			T.underlays += "hell01"
 		tcheck(85,1)
@@ -145,5 +147,18 @@ In short:
 /datum/universal_state/hell/proc/KillMobs()
 	for(var/mob/living/simple_animal/M in mob_list)
 		if(M && !M.client)
-			M.stat = DEAD
+			M.Die()
 		tcheck(80,1)
+
+/datum/universal_state/hell/proc/convert_all_parallax()
+	for(var/client/C in clients)
+		var/obj/screen/plane_master/parallax_spacemaster/PS = locate() in C.screen
+		if(PS)
+			convert_parallax(PS)
+
+/datum/universal_state/hell/convert_parallax(obj/screen/plane_master/parallax_spacemaster/PS)
+	PS.color = list(
+	0,0,0,0,
+	0,0,0,0,
+	0,0,0,0,
+	1,0,0,1)

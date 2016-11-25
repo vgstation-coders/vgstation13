@@ -31,7 +31,8 @@
 		update()
 
 /obj/item/organ/Del()
-	if(!robotic) processing_objects -= src
+	if(!robotic)
+		processing_objects -= src
 	..()
 
 /obj/item/organ/process()
@@ -55,7 +56,8 @@
 
 /obj/item/organ/proc/die()
 	name = "dead [initial(name)]"
-	if(dead_icon) icon_state = dead_icon
+	if(dead_icon)
+		icon_state = dead_icon
 	health = 0
 	processing_objects -= src
 	//TODO: Grey out the icon state.
@@ -288,9 +290,12 @@
 	// Pass over the blood.
 	reagents.trans_to(O, reagents.total_volume)
 
-	if(fingerprints) O.fingerprints = fingerprints.Copy()
-	if(fingerprintshidden) O.fingerprintshidden = fingerprintshidden.Copy()
-	if(fingerprintslast) O.fingerprintslast = fingerprintslast
+	if(fingerprints)
+		O.fingerprints = fingerprints.Copy()
+	if(fingerprintshidden)
+		O.fingerprintshidden = fingerprintshidden.Copy()
+	if(fingerprintslast)
+		O.fingerprintslast = fingerprintslast
 
 	user.put_in_active_hand(O)
 	qdel(src)

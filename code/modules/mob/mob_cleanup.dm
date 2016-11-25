@@ -42,7 +42,8 @@ Put (mob/proc)s here that are in dire need of a code cleanup.
 			if(mob_type && istype(src, mob_type))
 				fail = 0
 				break
-		if(fail) return
+		if(fail)
+			return
 
 	if(skip_this == 1)
 //		to_chat(world, "infectin")
@@ -74,7 +75,8 @@ Put (mob/proc)s here that are in dire need of a code cleanup.
 					clothing_areas[Covers] += Clothing
 
 */
-	if(prob(15/virus.permeability_mod)) return //the power of immunity compels this disease! but then you forgot resistances
+	if(prob(15/virus.permeability_mod))
+		return //the power of immunity compels this disease! but then you forgot resistances
 //	to_chat(world, "past prob()")
 	var/obj/item/clothing/Cl = null
 	var/passed = 1
@@ -171,11 +173,16 @@ Put (mob/proc)s here that are in dire need of a code cleanup.
 /*
 	var/score = 0
 	if(istype(src, /mob/living/carbon/human))
-		if(src:gloves) score += 5
-		if(istype(src:wear_suit, /obj/item/clothing/suit/space)) score += 10
-		if(istype(src:wear_suit, /obj/item/clothing/suit/bio_suit)) score += 10
-		if(istype(src:head, /obj/item/clothing/head/helmet/space)) score += 5
-		if(istype(src:head, /obj/item/clothing/head/bio_hood)) score += 5
+		if(src:gloves)
+			score += 5
+		if(istype(src:wear_suit, /obj/item/clothing/suit/space))
+			score += 10
+		if(istype(src:wear_suit, /obj/item/clothing/suit/bio_suit))
+			score += 10
+		if(istype(src:head, /obj/item/clothing/head/helmet/space))
+			score += 5
+		if(istype(src:head, /obj/item/clothing/head/bio_hood))
+			score += 5
 	if(wear_mask)
 		score += 5
 		if((istype(src:wear_mask, /obj/item/clothing/mask) || istype(src:wear_mask, /obj/item/clothing/mask/surgical)) && !internal)
@@ -194,7 +201,8 @@ Put (mob/proc)s here that are in dire need of a code cleanup.
 		return
 	else if(prob(15))
 		return
-	else*/
+	else
+		*/
 
 		var/datum/disease/v = new virus.type(1, virus, 0)
 		src.viruses += v

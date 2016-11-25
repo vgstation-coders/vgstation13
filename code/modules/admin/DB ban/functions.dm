@@ -2,7 +2,8 @@
 /datum/admins/proc/DB_ban_record(var/bantype, var/mob/banned_mob, var/duration = -1, var/reason, var/job = "", var/rounds = 0, var/banckey = null)
 
 
-	if(!check_rights(R_BAN))	return
+	if(!check_rights(R_BAN))
+		return
 
 	establish_db_connection()
 	if(!dbcon.IsConnected())
@@ -36,9 +37,12 @@
 		if(BANTYPE_OOC_TEMP)
 			bantype_str = "OOC_TEMPBAN"
 			bantype_pass = 1
-	if( !bantype_pass ) return
-	if( !istext(reason) ) return
-	if( !isnum(duration) ) return
+	if( !bantype_pass )
+		return
+	if( !istext(reason) )
+		return
+	if( !isnum(duration) )
+		return
 
 	var/ckey
 	var/computerid
@@ -109,7 +113,8 @@
 datum/admins/proc/DB_ban_unban(var/ckey, var/bantype, var/job = "")
 
 
-	if(!check_rights(R_BAN))	return
+	if(!check_rights(R_BAN))
+		return
 
 	var/bantype_str
 	if(bantype)
@@ -133,7 +138,8 @@ datum/admins/proc/DB_ban_unban(var/ckey, var/bantype, var/job = "")
 			if(BANTYPE_ANY_FULLBAN)
 				bantype_str = "ANY"
 				bantype_pass = 1
-		if( !bantype_pass ) return
+		if( !bantype_pass )
+			return
 
 	var/bantype_sql
 	if(bantype_str == "ANY")
@@ -177,7 +183,8 @@ datum/admins/proc/DB_ban_unban(var/ckey, var/bantype, var/job = "")
 datum/admins/proc/DB_ban_edit(var/banid = null, var/param = null)
 
 
-	if(!check_rights(R_BAN))	return
+	if(!check_rights(R_BAN))
+		return
 
 	if(!isnum(banid) || !istext(param))
 		to_chat(usr, "Cancelled")
@@ -238,7 +245,8 @@ datum/admins/proc/DB_ban_edit(var/banid = null, var/param = null)
 datum/admins/proc/DB_ban_unban_by_id(var/id)
 
 
-	if(!check_rights(R_BAN))	return
+	if(!check_rights(R_BAN))
+		return
 
 	var/sql = "SELECT ckey FROM erro_ban WHERE id = [id]"
 
@@ -297,7 +305,8 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 	if(!usr.client)
 		return
 
-	if(!check_rights(R_BAN))	return
+	if(!check_rights(R_BAN))
+		return
 
 	establish_db_connection()
 	if(!dbcon.IsConnected())

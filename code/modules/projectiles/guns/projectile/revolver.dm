@@ -4,7 +4,7 @@
 	icon_state = "detective"
 	max_shells = 6
 	caliber = list("38" = 1, "357" = 1)
-	origin_tech = "combat=2;materials=2"
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/c38"
 	var/perfect = 0
 
@@ -27,7 +27,8 @@
 		set desc = "Click to rename your gun. If you're the detective."
 
 		var/mob/M = usr
-		if(!M.mind)	return 0
+		if(!M.mind)
+			return 0
 		if(!M.mind.assigned_role == "Detective")
 			to_chat(M, "<span class='notice'>You don't feel cool enough to name this gun, chump.</span>")
 			return 0
@@ -87,7 +88,7 @@
 	name = "mateba"
 	desc = "When you absolutely, positively need a 10mm hole in the other guy. Uses .357 ammo."	//>10mm hole >.357
 	icon_state = "mateba"
-	origin_tech = "combat=2;materials=2"
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 
 
 // A gun to play Russian Roulette!
@@ -98,7 +99,7 @@
 	name = "russian revolver"
 	desc = "A Russian made revolver. Uses .357 ammo. It has six slots for ammo."
 	max_shells = 6
-	origin_tech = "combat=2;materials=2"
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	fire_delay = 1
 
 /obj/item/weapon/gun/projectile/russian/New()
@@ -112,7 +113,8 @@
 
 /obj/item/weapon/gun/projectile/russian/attackby(var/obj/item/A as obj, mob/user as mob)
 
-	if(!A) return
+	if(!A)
+		return
 
 	var/num_loaded = 0
 	if(istype(A, /obj/item/ammo_casing)) //loading rounds one by one
@@ -122,7 +124,7 @@
 			return
 		if(caliber[AC.caliber])
 			user.drop_item(AC)
-			AC.loc = src
+			AC.forceMove(src)
 			loaded += AC
 			loaded -= null //ensure that the list constantly has 6 entries
 			num_loaded++
@@ -134,7 +136,7 @@
 				to_chat(user, "<span class='warning'>It's already full of ammo.</span>")
 				return
 			if(caliber[AC.caliber] && getAmmo() < max_shells)
-				AC.loc = src
+				AC.forceMove(src)
 				AM.stored_ammo -= AC
 				loaded += AC
 				loaded -= null //same here
@@ -185,7 +187,7 @@
 				return
 			if(AC.BB)
 				in_chamber = AC.BB //Load projectile into chamber.
-				AC.BB.loc = src //Set projectile loc to gun.
+				AC.BB.forceMove(src) //Set projectile loc to gun.
 				AC.BB = null //Empty casings
 				AC.update_icon()
 			if(!in_chamber)
@@ -219,12 +221,14 @@
 	AC.forceMove(src) //get back in there you
 
 /obj/item/weapon/gun/projectile/russian/force_removeMag()
+	if(usr.incapacitated())
+		return
 	if(getAmmo() > 0)
 		for(var/obj/item/ammo_casing/AC in loaded)
 			AC.forceMove(get_turf(src))
 			loaded -= AC
 			loaded += null
-	src.loc.visible_message("<span class='warning'>[src] empties onto the ground!</span>")
+	visible_message("<span class='warning'>[src] empties onto the ground!</span>")
 
 
 /obj/item/weapon/gun/projectile/russian/empty/New()

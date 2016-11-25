@@ -189,7 +189,7 @@ Class Procs:
 /*
 	if(component_parts)
 		for(var/atom/movable/AM in component_parts)
-			AM.loc = loc
+			AM.forceMove(loc)
 			component_parts -= AM
 */
 	component_parts = null
@@ -376,7 +376,7 @@ Class Procs:
 			return 1
 		var/turf/T = get_turf(usr)
 		if(!isAI(usr) && T.z != z)
-			if(usr.z != 2)
+			if(usr.z != map.zCentcomm)
 				to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
 				return 1
 		if ((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
@@ -387,8 +387,7 @@ Class Procs:
 	src.add_fingerprint(usr)
 	src.add_hiddenprint(usr)
 
-	handle_multitool_topic(href,href_list,usr)
-	return 0
+	return handle_multitool_topic(href,href_list,usr)
 
 /obj/machinery/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
@@ -570,7 +569,7 @@ Class Procs:
 		else
 			to_chat(user, "<span class='warning'>\The [src]'s maintenance panel must be closed first!</span>")
 			return -1 //we return -1 rather than 0 for the if(..()) checks
-		
+
 	if(isscrewdriver(O) && machine_flags & SCREWTOGGLE)
 		return togglePanelOpen(O, user)
 
@@ -599,16 +598,21 @@ Class Procs:
 
 	if(istype(O, /obj/item/weapon/storage/bag/gadgets/part_replacer))
 		return exchange_parts(user, O)
-		
+
 /obj/machinery/proc/wirejack(var/mob/living/silicon/pai/P)
 	if(!(machine_flags & WIREJACK))
 		return 0
 	if(!P.hackloop(src))
 		return 0
 	return 1
-
+	
+/obj/machinery/proc/can_overload(mob/user) //used for AI machine overload
+	return(src in machines)
+	
 /obj/machinery/proc/shock(mob/user, prb, var/siemenspassed = -1)
 	if(stat & (BROKEN|NOPOWER))		// unpowered, no shock
+		return 0
+	if(!user.Adjacent(src))
 		return 0
 	if(!prob(prb))
 		return 0
@@ -633,7 +637,8 @@ Class Procs:
 
 // Hook for html_interface module to unset the active machine when the window is closed by the player.
 /obj/machinery/proc/hiOnHide(datum/html_interface_client/hclient)
-	if (hclient.client.mob && hclient.client.mob.machine == src) hclient.client.mob.unset_machine()
+	if (hclient.client.mob && hclient.client.mob.machine == src)
+		hclient.client.mob.unset_machine()
 
 /obj/machinery/proc/alert_noise(var/notice_state = "ping")
 	switch(notice_state)
@@ -649,10 +654,10 @@ Class Procs:
 
 /obj/machinery/proc/check_rebuild()
 	return
-	
+
 /obj/machinery/wrenchable()
 	return (machine_flags & WRENCHMOVE)
-	
+
 /obj/machinery/can_wrench_shuttle()
 	return (machine_flags & SHUTTLEWRENCH)
 
@@ -675,7 +680,7 @@ Class Procs:
 							W.handle_item_insertion(A, 1)
 							component_parts -= A
 							component_parts += B
-							B.loc = null
+							B.forceMove(null)
 							to_chat(user, "<span class='notice'>[A.name] replaced with [B.name].</span>")
 							shouldplaysound = 1 //Only play the sound when parts are actually replaced!
 							break
@@ -688,7 +693,7 @@ Class Procs:
 			W.play_rped_sound()
 		return 1
 	return 0
-	
+
 
 /obj/machinery/kick_act(mob/living/carbon/human/H)
 	playsound(get_turf(src), 'sound/effects/grillehit.ogg', 50, 1) //Zth: I couldn't find a proper sound, please replace it
@@ -708,7 +713,8 @@ Class Procs:
 			spawn()
 				sleep(3)
 				for(var/i = 2 to strength)
-					if(!Move(get_step(loc, kick_dir))) break
+					if(!Move(get_step(loc, kick_dir)))
+						break
 					sleep(3)
 	else
 		src.shake(1, 3) //1 means x movement, 3 means intensity

@@ -7,7 +7,6 @@
 	desc = "It's a g-g-g-g-ghooooost!" //jinkies!
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "ghost1"
-	layer = 8
 	stat = DEAD
 	density = 0
 	lockflags = 0 //Neither dense when locking or dense when locked to something
@@ -19,7 +18,8 @@
 	universal_understand = 1
 	universal_speak = 1
 	//languages = ALL
-	plane = PLANE_LIGHTING
+	plane = LIGHTING_PLANE
+	layer = GHOST_LAYER
 	// For Aghosts dicking with telecoms equipment.
 	var/obj/item/device/multitool/ghostMulti = null
 
@@ -33,13 +33,12 @@
 	var/has_enabled_antagHUD = 0
 	var/medHUD = 0
 	var/antagHUD = 0
-	var/atom/movable/following = null
-	var/mob/canclone = null
 	incorporeal_move = INCORPOREAL_GHOST
 	var/movespeed = 0.75
+	var/lastchairspin
 
 /mob/dead/observer/New(var/mob/body=null, var/flags=1)
-	sight |= SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF
+	change_sight(adding = SEE_TURFS | SEE_MOBS | SEE_OBJS | SEE_SELF)
 	see_invisible = SEE_INVISIBLE_OBSERVER
 	see_in_dark = 100
 	verbs += /mob/dead/observer/proc/dead_tele
@@ -56,7 +55,8 @@
 	if(ismob(body))
 		T = get_turf(body)				//Where is the body located?
 		attack_log = body.attack_log	//preserve our attack logs by copying them to our ghost
-		if(!istype(attack_log, /list)) attack_log = list()
+		if(!istype(attack_log, /list))
+			attack_log = list()
 		// NEW SPOOKY BAY GHOST ICONS
 		//////////////
 
@@ -97,7 +97,8 @@
 
 		mind = body.mind	//we don't transfer the mind but we keep a reference to it.
 
-	if(!T)	T = pick(latejoin)			//Safety in case we cannot find the body's position
+	if(!T)
+		T = pick(latejoin)			//Safety in case we cannot find the body's position
 	loc = T
 
 	if(!name)							//To prevent nameless ghosts
@@ -109,9 +110,7 @@
 
 /mob/dead/observer/Destroy()
 	..()
-	following = null
 	ghostMulti = null
-	canclone = null
 	observers.Remove(src)
 
 /mob/dead/observer/hasFullAccess()
@@ -156,11 +155,14 @@ Works together with spawning an observer, noted above.
 */
 
 /mob/dead/observer/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
 	..()
-	if(!loc) return
-	if(!client) return 0
+	if(!loc)
+		return
+	if(!client)
+		return 0
 
 
 	if(client.images.len)
@@ -216,7 +218,8 @@ Works together with spawning an observer, noted above.
 		var/foundVirus = 0
 		if(patient && patient.virus2 && patient.virus2.len)
 			foundVirus = 1
-		if(!C) return
+		if(!C)
+			return
 		holder = patient.hud_list[HEALTH_HUD]
 		if(holder)
 			if(patient.stat == 2)
@@ -304,7 +307,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		ghostize(1)
 	else
 		var/response = alert(src, "Are you -sure- you want to ghost?\n(You are alive. If you ghost, you will not be able to re-enter your current body!  You can't change your mind so choose wisely!)","Are you sure you want to ghost?","Ghost","Stay in body")
-		if(response != "Ghost")	return	//didn't want to ghost after-all
+		if(response != "Ghost")
+			return	//didn't want to ghost after-all
 		resting = 1
 		if(client && key)
 			var/mob/dead/observer/ghost = ghostize(0)						//0 parameter is so we can never re-enter our body, "Charlie, you can never come baaaack~" :3
@@ -381,7 +385,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 /mob/dead/observer/verb/reenter_corpse()
 	set category = "Ghost"
 	set name = "Re-enter Corpse"
-	if(!client)	return
+	if(!client)
+		return
 	if(!(mind && mind.current && can_reenter_corpse))
 		to_chat(src, "<span class='warning'>You have no body.</span>")
 		return
@@ -428,7 +433,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return
 	if(config.antag_hud_restricted && !M.has_enabled_antagHUD &&!client.holder)
 		var/response = alert(src, "If you turn this on, you will not be able to take any part in the round.","Are you sure you want to turn this feature on?","Yes","No")
-		if(response == "No") return
+		if(response == "No")
+			return
 		M.can_reenter_corpse = 0
 	if(!M.has_enabled_antagHUD && !client.holder)
 		M.has_enabled_antagHUD = 1
@@ -453,7 +459,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	var/A
 	A = input("Area to jump to", "BOOYEA", A) as null|anything in ghostteleportlocs
 	var/area/thearea = ghostteleportlocs[A]
-	if(!thearea)	return
+	if(!thearea)
+		return
 
 	if(thearea && thearea.anti_ethereal && !isAdminGhost(usr))
 		to_chat(usr, "<span class='sinister'>As you are about to arrive, a strange dark form grabs you and sends you back where you came from.</span>")
@@ -478,7 +485,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		else
 			to_chat(usr, "No area available.")
 
-	usr.loc = pick(L)
+	usr.forceMove(pick(L))
 	if(locked_to)
 		manual_stop_follow(locked_to)
 
@@ -558,7 +565,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			var/turf/T = get_turf(M) //Turf of the destination mob
 
 			if(T && isturf(T))	//Make sure the turf exists, then move the source to that destination.
-				A.loc = T
+				A.forceMove(T)
 				if(locked_to)
 					manual_stop_follow(locked_to)
 			else
@@ -570,7 +577,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set name = "Boo!"
 	set desc= "Scare your crew members because of boredom!"
 
-	if(bootime > world.time) return
+	if(bootime > world.time)
+		return
 	bootime = world.time + 600
 	var/obj/machinery/light/L = locate(/obj/machinery/light) in view(1, src)
 	if(L)
@@ -591,7 +599,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set name = "Analyze Air"
 	set category = "Ghost"
 
-	if(!istype(usr, /mob/dead/observer)) return
+	if(!istype(usr, /mob/dead/observer))
+		return
 
 	// Shamelessly copied from the Gas Analyzers
 	if (!( istype(usr.loc, /turf) ))
@@ -664,7 +673,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return
 
 	var/response = alert(src, "Are you -sure- you want to become a mouse?","Are you sure you want to squeek?","Squeek!","Nope!")
-	if(response != "Squeek!") return  //Hit the wrong key...again.
+	if(response != "Squeek!")
+		return  //Hit the wrong key...again.
 
 
 	//find a viable mouse candidate
@@ -745,7 +755,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	if(!choice || choice.amount == 0 || !(src.Adjacent(choice)))
 		return
 
-	var/doodle_color = (choice.basecolor) ? choice.basecolor : "#A10808"
+	var/doodle_color = (choice.basecolor) ? choice.basecolor : DEFAULT_BLOOD
 
 	var/num_doodles = 0
 	for (var/obj/effect/decal/cleanable/blood/writing/W in T)
@@ -782,9 +792,11 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	// Toggle alpha
 	if(alpha == 127)
 		alpha = 0
+		mouse_opacity = 0
 		to_chat(src, "<span class='warning'>Sprite hidden.</span>")
 	else
 		alpha = 127
+		mouse_opacity = 1
 		to_chat(src, "<span class='info'>Sprite shown.</span>")
 
 
@@ -840,7 +852,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	var/datum/bomberman_arena/arena_target = input("Which arena do you wish to reach?", "Arena Search Panel") in arenas
 	to_chat(usr, "Reached [arena_target]")
 
-	usr.loc = arena_target.center
+	usr.forceMove(arena_target.center)
 	to_chat(usr, "Remember to enable darkness to be able to see the spawns. Click on a green spawn between rounds to register on it.")
 
 /mob/dead/observer/Topic(href, href_list)
@@ -874,16 +886,15 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 				if(!T)
 					to_chat(A, "<span class='warning'>Target not in a turf.</span>")
 					return
-				// Why.
-				//if(!client)
-				//	to_chat(A, "<span class='warning'>Target doesn't have a client.</span>")
-				//	return
+				if(locked_to)
+					manual_stop_follow(locked_to)
 				forceMove(T)
-			following = null
 
 	if(href_list["jumptoarenacood"])
 		var/datum/bomberman_arena/targetarena = locate(href_list["targetarena"])
-		usr.loc = targetarena.center
+		if(locked_to)
+			manual_stop_follow(locked_to)
+		usr.forceMove(targetarena.center)
 		to_chat(usr, "Remember to enable darkness to be able to see the spawns. Click on a green spawn between rounds to register on it.")
 
 	..()

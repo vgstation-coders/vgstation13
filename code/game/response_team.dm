@@ -50,12 +50,13 @@ client/verb/JoinResponseTeam()
 			to_chat(usr, "<font color=red><b>You are jobbanned from the emergency reponse team!")
 			return
 
-		if(response_team_members.len > 5) to_chat(usr, "The emergency response team is already full!")
+		if(response_team_members.len > 5)
+			to_chat(usr, "The emergency response team is already full!")
 
 
 		for (var/obj/effect/landmark/L in landmarks_list) if (L.name == "ERT")
 			L.name = null//Reserving the place.
-			var/new_name = input(usr, "Pick a name","Name") as null|text
+			var/new_name = copytext(sanitize(input(usr, "Pick a name","Name") as null|text), 1, MAX_MESSAGE_LEN)
 			if(!new_name)//Somebody changed his mind, place is available again.
 				L.name = "ERT"
 				return
@@ -75,7 +76,7 @@ client/verb/JoinResponseTeam()
 
 			ticker.mode.ert += new_commando.mind
 
-			message_admins("[new_commando]/[usr.key] has joined the Emergency Response Team.")
+			message_admins("[key_name(usr)] has joined the Emergency Response Team.")
 			return
 
 	else
@@ -87,11 +88,14 @@ proc/percentage_dead()
 	var/deadcount = 0
 	for(var/mob/living/carbon/human/H in mob_list)
 		if(H.client) // Monkeys and mice don't have a client, amirite?
-			if(H.stat == 2) deadcount++
+			if(H.stat == 2)
+				deadcount++
 			total++
 
-	if(total == 0) return 0
-	else return round(100 * deadcount / total)
+	if(total == 0)
+		return 0
+	else
+		return round(100 * deadcount / total)
 
 // counts the number of antagonists in %
 proc/percentage_antagonists()
@@ -102,8 +106,10 @@ proc/percentage_antagonists()
 			antagonists++
 		total++
 
-	if(total == 0) return 0
-	else return round(100 * antagonists / total)
+	if(total == 0)
+		return 0
+	else
+		return round(100 * antagonists / total)
 
 // Increments the ERT chance automatically, so that the later it is in the round,
 // the more likely an ERT is to be able to be called.
@@ -131,15 +137,16 @@ proc/trigger_armed_response_team(var/force = 0)
 	send_team_chance += percentage_antagonists() // the more antagonists, the higher the chance
 	send_team_chance = min(send_team_chance, 100)
 
-	if(force) send_team_chance = 100
+	if(force)
+		send_team_chance = 100
 
 	// there's only a certain chance a team will be sent
 	if(!prob(send_team_chance))
-		command_alert("It would appear that an emergency response team was requested for [station_name()]. Unfortunately, we were unable to send one at this time.", "Central Command")
+		command_alert(/datum/command_alert/ert_fail)
 		can_call_ert = 0 // Only one call per round, ladies.
 		return
 
-	command_alert("It would appear that an emergency response team was requested for [station_name()]. We will prepare and send one as soon as possible.", "Central Command")
+	command_alert(/datum/command_alert/ert_success)
 
 	can_call_ert = 0 // Only one call per round, gentleman.
 	send_emergency_team = 1
@@ -155,7 +162,7 @@ proc/trigger_armed_response_team(var/force = 0)
 	P.name = "Emergency Nuclear Code, and ERT Orders"
 	for (var/obj/effect/landmark/A in landmarks_list)
 		if (A.name == "nukecode")
-			P.loc = A.loc
+			P.forceMove(A.loc)
 			qdel(A)
 			A = null
 			continue
@@ -276,7 +283,7 @@ proc/trigger_armed_response_team(var/force = 0)
 	M.mind.special_role = "Response Team"
 	if(!(M.mind in ticker.minds))
 		ticker.minds += M.mind//Adds them to regular mind list.
-	M.loc = spawn_location
+	M.forceMove(spawn_location)
 	M.equip_strike_team(leader_selected)
 	return M
 
@@ -328,6 +335,9 @@ proc/trigger_armed_response_team(var/force = 0)
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(src)
 	L.imp_in = src
 	L.implanted = 1
+	var/datum/organ/external/affected = get_organ(LIMB_HEAD)
+	affected.implants += L
+	L.part = affected
 
 	return 1
 

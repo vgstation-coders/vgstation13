@@ -7,20 +7,6 @@
 /proc/SAFE_CRASH(var/msg)
 	CRASH(msg)
 
-/proc/Get_Angle(atom/movable/start,atom/movable/end)//For beams.
-	if(!start || !end) return 0
-	var/dy
-	var/dx
-	dy=(32*end.y+end.pixel_y)-(32*start.y+start.pixel_y)
-	dx=(32*end.x+end.pixel_x)-(32*start.x+start.pixel_x)
-	if(!dy)
-		return (dx>=0)?90:270
-	.=arctan(dx/dy)
-	if(dy<0)
-		.+=180
-	else if(dx<0)
-		.+=360
-
 //Returns location. Returns null if no location was found.
 /proc/get_teleport_loc(turf/location,mob/target,distance = 1, density = 0, errorx = 0, errory = 0, eoffsetx = 0, eoffsety = 0)
 /*
@@ -98,19 +84,27 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 			//Now to find a box from center location and make that our destination.
 			for(var/turf/T in block(locate(center.x+b1xerror,center.y+b1yerror,location.z), locate(center.x+b2xerror,center.y+b2yerror,location.z) ))
-				if(density&&T.density)	continue//If density was specified.
-				if(T.x>world.maxx || T.x<1)	continue//Don't want them to teleport off the map.
-				if(T.y>world.maxy || T.y<1)	continue
+				if(density&&T.density)
+					continue//If density was specified.
+				if(T.x>world.maxx || T.x<1)
+					continue//Don't want them to teleport off the map.
+				if(T.y>world.maxy || T.y<1)
+					continue
 				destination_list += T
 			if(destination_list.len)
 				destination = pick(destination_list)
-			else	return
+			else
+				return
 
 		else//Same deal here.
-			if(density&&destination.density)	return
-			if(destination.x>world.maxx || destination.x<1)	return
-			if(destination.y>world.maxy || destination.y<1)	return
-	else	return
+			if(density&&destination.density)
+				return
+			if(destination.x>world.maxx || destination.x<1)
+				return
+			if(destination.y>world.maxy || destination.y<1)
+				return
+	else
+		return
 
 	return destination
 
@@ -345,8 +339,10 @@ Turf and target are seperate in case you want to teleport some distance from a t
 /proc/select_active_ai(var/mob/user)
 	var/list/ais = active_ais()
 	if(ais.len)
-		if(user)	. = input(usr,"AI signals detected:", "AI selection") in ais
-		else		. = pick(ais)
+		if(user)
+			. = input(usr,"AI signals detected:", "AI selection") in ais
+		else
+			. = pick(ais)
 	return .
 
 /proc/get_sorted_mobs()
@@ -475,12 +471,13 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	var/M = E/(SPEED_OF_LIGHT_SQ)
 	return M
 
-/proc/key_name(var/whom, var/include_link = null, var/include_name = 1)
+/proc/key_name(var/whom, var/include_link = null, var/include_name = TRUE, var/more_info = FALSE)
 	var/mob/M
 	var/client/C
 	var/key
 
-	if(!whom)	return "*null*"
+	if(!whom)
+		return "*null*"
 	if(istype(whom, /client))
 		C = whom
 		M = C.mob
@@ -507,8 +504,10 @@ Turf and target are seperate in case you want to teleport some distance from a t
 			. += key
 
 		if(include_link)
-			if(C)	. += "</a>"
-			else	. += " (DC)"
+			if(C)
+				. += "</a>"
+			else
+				. += " (DC)"
 	else
 		. += "*no key*"
 
@@ -518,11 +517,14 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		else if(M.name)
 			. += "/([M.name])"
 
-	return .
+	if(more_info && M)
+		. += "(<A HREF='?_src_=holder;adminplayeropts=\ref[M]'>PP</A>) (<A HREF='?_src_=holder;adminmoreinfo=\ref[M]'>?</A>)"
 
 /proc/key_name_admin(var/whom, var/include_name = 1)
 	return key_name(whom, 1, include_name)
 
+/proc/key_name_and_info(var/whom)
+	return key_name(whom, more_info = TRUE)
 
 // Registers the on-close verb for a browse window (client/verb/.windowclose)
 // this will be called when the close-button of a window is pressed.
@@ -539,7 +541,8 @@ Turf and target are seperate in case you want to teleport some distance from a t
 // Otherwise, the user mob's machine var will be reset directly.
 //
 /proc/onclose(mob/user, windowid, var/atom/ref=null)
-	if(!user.client) return
+	if(!user.client)
+		return
 	var/param = "null"
 	if(ref)
 		param = "\ref[ref]"
@@ -644,10 +647,13 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	var/steps = 0
 
 	while(current != target_turf)
-		if(steps > length) return 0
-		if(current.opacity) return 0
+		if(steps > length)
+			return 0
+		if(current.opacity)
+			return 0
 		for(var/atom/A in current)
-			if(A.opacity) return 0
+			if(A.opacity)
+				return 0
 		current = get_step_towards(current, target_turf)
 		steps++
 
@@ -655,7 +661,8 @@ proc/GaussRandRound(var/sigma,var/roundto)
 
 /proc/is_blocked_turf(var/turf/T)
 	var/cant_pass = 0
-	if(T.density) cant_pass = 1
+	if(T.density)
+		cant_pass = 1
 	for(var/atom/A in T)
 		if(A.density)//&&A.anchored
 			cant_pass = 1
@@ -684,13 +691,17 @@ proc/GaussRandRound(var/sigma,var/roundto)
 			turf_last2 = get_step(turf_last2,dir_alt2)
 			breakpoint++
 
-		if(!free_tile) return get_step(ref, base_dir)
-		else return get_step_towards(ref,free_tile)
+		if(!free_tile)
+			return get_step(ref, base_dir)
+		else
+			return get_step_towards(ref,free_tile)
 
-	else return get_step(ref, base_dir)
+	else
+		return get_step(ref, base_dir)
 
 /proc/do_mob(var/mob/user , var/mob/target, var/delay = 30, var/numticks = 10) //This is quite an ugly solution but i refuse to use the old request system.
-	if(!user || !target) return 0
+	if(!user || !target)
+		return 0
 	var/user_loc = user.loc
 	var/target_loc = target.loc
 	var/holding = user.get_active_hand()
@@ -699,9 +710,9 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	if(user && user.client && user.client.prefs.progress_bars)
 		if(!progbar)
 			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
-			progbar.plane = PLANE_HUD
-			progbar.layer = 21
-			progbar.pixel_z = 32
+			progbar.plane = HUD_PLANE
+			progbar.layer = HUD_ABOVE_ITEM_LAYER
+			progbar.pixel_z = WORLD_ICON_SIZE
 		//if(!barbar)
 			//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = user, "icon_state" = "none")
 			//barbar.pixel_y = 36
@@ -716,28 +727,38 @@ proc/GaussRandRound(var/sigma,var/roundto)
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
-					if(user && user.client) user.client.images -= progbar
-					if(progbar) progbar.loc = null
+					if(user && user.client)
+						user.client.images -= progbar
+					if(progbar)
+						progbar.loc = null
 			return 0
 		if ( user.loc != user_loc || target.loc != target_loc || user.get_active_hand() != holding || user.isStunned())
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
-					if(user && user.client) user.client.images -= progbar
-					if(progbar) progbar.loc = null
+					if(user && user.client)
+						user.client.images -= progbar
+					if(progbar)
+						progbar.loc = null
 			return 0
-	if(user && user.client) user.client.images -= progbar
-	if(progbar) progbar.loc = null
+	if(user && user.client)
+		user.client.images -= progbar
+	if(progbar)
+		progbar.loc = null
 	return 1
 
-/proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE)
+/proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE)
 	if(!user || isnull(user))
 		return 0
 	if(numticks == 0)
 		return 0
 
 	var/delayfraction = round(delay/numticks)
-	var/Location = user.loc
+	var/Location
+	if(use_user_turf)	//When this is true, do_after() will check whether the user's turf has changed, rather than the user's loc.
+		Location = get_turf(user)
+	else
+		Location = user.loc
 	var/holding = user.get_active_hand()
 	var/target_location = target.loc
 	var/image/progbar
@@ -745,9 +766,9 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	if(user && user.client && user.client.prefs.progress_bars && target)
 		if(!progbar)
 			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
-			progbar.pixel_z = 32
-			progbar.plane = PLANE_HUD
-			progbar.layer = 21
+			progbar.pixel_z = WORLD_ICON_SIZE
+			progbar.plane = HUD_PLANE
+			progbar.layer = HUD_ABOVE_ITEM_LAYER
 			progbar.appearance_flags = RESET_COLOR
 		//if(!barbar)
 			//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "none")
@@ -757,9 +778,9 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		if(user && user.client && user.client.prefs.progress_bars && target)
 			if(!progbar)
 				progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
-				progbar.pixel_z = 32
-				progbar.plane = PLANE_HUD
-				progbar.layer = 21
+				progbar.pixel_z = WORLD_ICON_SIZE
+				progbar.plane = HUD_PLANE
+				progbar.layer = HUD_ABOVE_ITEM_LAYER
 				progbar.appearance_flags = RESET_COLOR
 			//oldstate = progbar.icon_state
 			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
@@ -767,29 +788,42 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		sleep(delayfraction)
 		//if(user.client && progbar.icon_state != oldstate)
 			//user.client.images.Remove(progbar)
-		if(!user || user.isStunned() || !(user.loc == Location) || !(target.loc == target_location))
+		var/user_loc_to_check
+		if(use_user_turf)
+			user_loc_to_check = get_turf(user)
+		else
+			user_loc_to_check = user.loc
+		if(!user || user.isStunned() || !(user_loc_to_check == Location) || !(target.loc == target_location))
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
-					if(user && user.client) user.client.images -= progbar
-					if(progbar) progbar.loc = null
+					if(user && user.client)
+						user.client.images -= progbar
+					if(progbar)
+						progbar.loc = null
 			return 0
 		if(needhand && !(user.get_active_hand() == holding))	//Sometimes you don't want the user to have to keep their active hand
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
-					if(user && user.client) user.client.images -= progbar
-					if(progbar) progbar.loc = null
+					if(user && user.client)
+						user.client.images -= progbar
+					if(progbar)
+						progbar.loc = null
 			return 0
-	if(user && user.client) user.client.images -= progbar
-	if(progbar) progbar.loc = null
+	if(user && user.client)
+		user.client.images -= progbar
+	if(progbar)
+		progbar.loc = null
 	return 1
 
 //Takes: Anything that could possibly have variables and a varname to check.
 //Returns: 1 if found, 0 if not.
 /proc/hasvar(var/datum/A, var/varname)
-	if(A.vars.Find(lowertext(varname))) return 1
-	else return 0
+	if(A.vars.Find(lowertext(varname)))
+		return 1
+	else
+		return 0
 
 //Returns sortedAreas list if populated
 //else populates the list first before returning it
@@ -806,22 +840,27 @@ proc/GaussRandRound(var/sigma,var/roundto)
 //Takes: Area type as text string or as typepath OR an instance of the area.
 //Returns: A list of all areas of that type in the world.
 /proc/get_areas(var/areatype)
-	if(!areatype) return null
-	if(istext(areatype)) areatype = text2path(areatype)
+	if(!areatype)
+		return null
+	if(istext(areatype))
+		areatype = text2path(areatype)
 	if(isarea(areatype))
 		var/area/areatemp = areatype
 		areatype = areatemp.type
 
 	var/list/theareas = new/list()
 	for(var/area/N in areas)
-		if(istype(N, areatype)) theareas += N
+		if(istype(N, areatype))
+			theareas += N
 	return theareas
 
 //Takes: Area type as text string or as typepath OR an instance of the area.
 //Returns: A list of all turfs in areas of that type of that type in the world.
 /proc/get_area_turfs(var/areatype)
-	if(!areatype) return null
-	if(istext(areatype)) areatype = text2path(areatype)
+	if(!areatype)
+		return null
+	if(istext(areatype))
+		areatype = text2path(areatype)
 	if(isarea(areatype))
 		var/area/areatemp = areatype
 		areatype = areatemp.type
@@ -838,8 +877,10 @@ proc/GaussRandRound(var/sigma,var/roundto)
 //Takes: Area type as text string or as typepath OR an instance of the area.
 //Returns: A list of all atoms	(objs, turfs, mobs) in areas of that type of that type in the world.
 /proc/get_area_all_atoms(var/areatype)
-	if(!areatype) return null
-	if(istext(areatype)) areatype = text2path(areatype)
+	if(!areatype)
+		return null
+	if(istext(areatype))
+		areatype = text2path(areatype)
 	if(isarea(areatype))
 		var/area/areatemp = areatype
 		areatype = areatemp.type
@@ -901,7 +942,8 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 	//       Movement based on lower left corner. Tiles that do not fit
 	//		 into the new area will not be moved.
 
-	if(!A || !src) return 0
+	if(!A || !src)
+		return 0
 
 	var/list/turfs_src = get_area_turfs(src.type)
 	var/list/turfs_trg = get_area_turfs(A.type)
@@ -909,14 +951,18 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 	var/src_min_x = 0
 	var/src_min_y = 0
 	for (var/turf/T in turfs_src)
-		if(T.x < src_min_x || !src_min_x) src_min_x	= T.x
-		if(T.y < src_min_y || !src_min_y) src_min_y	= T.y
+		if(T.x < src_min_x || !src_min_x)
+			src_min_x	= T.x
+		if(T.y < src_min_y || !src_min_y)
+			src_min_y	= T.y
 
 	var/trg_min_x = 0
 	var/trg_min_y = 0
 	for (var/turf/T in turfs_trg)
-		if(T.x < trg_min_x || !trg_min_x) trg_min_x	= T.x
-		if(T.y < trg_min_y || !trg_min_y) trg_min_y	= T.y
+		if(T.x < trg_min_x || !trg_min_x)
+			trg_min_x	= T.x
+		if(T.y < trg_min_y || !trg_min_y)
+			trg_min_y	= T.y
 
 	var/list/refined_src = new/list()
 	for(var/turf/T in turfs_src)
@@ -936,8 +982,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 	var/list/toupdate = new/list()
 
-	var/copiedobjs = list()
-
+	var/list/copiedobjs = list()
 
 	moving:
 		for (var/turf/T in refined_src)
@@ -977,7 +1022,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 
 					for(var/obj/O in newobjs)
-						O.loc = X
+						O.forceMove(X)
 
 					for(var/mob/M in T)
 
@@ -989,7 +1034,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 						newmobs += DuplicateObject(M , 1)
 
 					for(var/mob/M in newmobs)
-						M.loc = X
+						M.forceMove(X)
 
 					copiedobjs += newobjs
 					copiedobjs += newmobs
@@ -1029,17 +1074,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 	for(var/obj/O in doors)
 		O:update_nearby_tiles()
 
-
-
-
 	return copiedobjs
-
-
-
-proc/get_cardinal_dir(atom/A, atom/B)
-	var/dx = abs(B.x - A.x)
-	var/dy = abs(B.y - A.y)
-	return get_dir(A, B) & (rand() * (dx+dy) < dy ? 3 : 12)
 
 //chances are 1:value. anyprob(1) will always return true
 proc/anyprob(value)
@@ -1157,30 +1192,18 @@ var/global/list/common_tools = list(
 	)
 
 //check if mob is lying down on something we can operate him on.
-/proc/can_operate(mob/living/carbon/M)
-	return (ishuman(M) && M.lying && \
-	locate(/obj/machinery/optable, M.loc) || \
-	(locate(/obj/structure/bed/roller, M.loc) && prob(75)) || \
-	(locate(/obj/structure/table/, M.loc) && prob(66)))
-
-/proc/reverse_direction(var/dir)
-	switch(dir)
-		if(NORTH)
-			return SOUTH
-		if(NORTHEAST)
-			return SOUTHWEST
-		if(EAST)
-			return WEST
-		if(SOUTHEAST)
-			return NORTHWEST
-		if(SOUTH)
-			return NORTH
-		if(SOUTHWEST)
-			return NORTHEAST
-		if(WEST)
-			return EAST
-		if(NORTHWEST)
-			return SOUTHEAST
+/proc/can_operate(mob/living/carbon/M, mob/U)
+	if(U == M)
+		return 0
+	if(ishuman(M) && M.lying)
+		if(locate(/obj/machinery/optable,M.loc))
+			return 1
+		if(locate(/obj/structure/bed/roller, M.loc) && prob(75))
+			return 1
+		var/obj/structure/table/T = locate(/obj/structure/table/, M.loc)
+		if(T && !T.flipped && prob(66))
+			return 1
+	return 0
 
 /*
 Checks if that loc and dir has a item on the wall
@@ -1205,16 +1228,16 @@ var/list/WALLITEMS = list(
 				//Some stuff doesn't use dir properly, so we need to check pixel instead
 				switch(dir)
 					if(SOUTH)
-						if(O.pixel_y > 10)
+						if(O.pixel_y > 10*PIXEL_MULTIPLIER)
 							return 1
 					if(NORTH)
-						if(O.pixel_y < -10)
+						if(O.pixel_y < -10*PIXEL_MULTIPLIER)
 							return 1
 					if(WEST)
-						if(O.pixel_x > 10)
+						if(O.pixel_x > 10*PIXEL_MULTIPLIER)
 							return 1
 					if(EAST)
-						if(O.pixel_x < -10)
+						if(O.pixel_x < -10*PIXEL_MULTIPLIER)
 							return 1
 
 
@@ -1222,13 +1245,9 @@ var/list/WALLITEMS = list(
 	for(var/obj/O in get_step(loc, dir))
 		for(var/item in WALLITEMS)
 			if(istype(O, text2path(item)))
-				if(abs(O.pixel_x) <= 10 && abs(O.pixel_y) <=10)
+				if(abs(O.pixel_x) <= 10*PIXEL_MULTIPLIER && abs(O.pixel_y) <=10*PIXEL_MULTIPLIER)
 					return 1
 	return 0
-
-
-proc/get_angle(atom/a, atom/b)
-    return Atan2(b.y - a.y, b.x - a.x)
 
 proc/rotate_icon(file, state, step = 1, aa = FALSE)
 	var icon/base = icon(file, state)
@@ -1245,23 +1264,30 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 	var icon{result = icon(base); temp}
 
 	for(var/angle in 0 to 360 step step)
-		if(angle == 0  ) continue
-		if(angle == 360)   continue
+		if(angle == 0  )
+			continue
+		if(angle == 360)
+			continue
 		temp = icon(base)
-		if(aa) temp.Scale(w2, h2)
+		if(aa)
+			temp.Scale(w2, h2)
 		temp.Turn(angle)
-		if(aa) temp.Scale(w,   h)
+		if(aa)
+			temp.Scale(w,   h)
 		result.Insert(temp, "[angle]")
 
 	return result
 
 /proc/has_edge(obj/O as obj)
-	if (!O) return 0
-	if(O.edge) return 1
+	if (!O)
+		return 0
+	if(O.edge)
+		return 1
 	return 0
 
 /proc/get_distant_turf(var/turf/T,var/direction,var/distance)
-	if(!T || !direction || !distance)	return
+	if(!T || !direction || !distance)
+		return
 
 	var/dest_x = T.x
 	var/dest_y = T.y
@@ -1285,12 +1311,12 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 	if(!center)
 		return
 
-	dview_mob.loc = center
+	dview_mob.forceMove(center)
 
 	dview_mob.see_invisible = invis_flags
 
 	. = view(range, dview_mob)
-	dview_mob.loc = null
+	dview_mob.forceMove(null)
 
 /mob/dview
 	invisibility = 101
@@ -1311,54 +1337,6 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 		z = A.z
 
 	. = map.zLevels[z]
-
-/proc/get_dir_cardinal(var/atom/T1,var/atom/T2)
-	if(!T1 || !T2)
-		return null
-
-	var/direc = get_dir(T1,T2)
-
-	if(direc in cardinal)
-		return direc
-
-	switch(direc)
-		if(NORTHEAST)
-			if((T2.x - T1.x) > (T2.y - T1.y))
-				return EAST
-			else
-				return NORTH
-		if(SOUTHEAST)
-			if((T2.x - T1.x) > ((T2.y - T1.y)*-1))
-				return EAST
-			else
-				return SOUTH
-		if(NORTHWEST)
-			if(((T2.x - T1.x)*-1) > (T2.y - T1.y))
-				return WEST
-			else
-				return NORTH
-		if(SOUTHWEST)
-			if((T2.x - T1.x) > (T2.y - T1.y))
-				return WEST
-			else
-				return SOUTH
-		else
-			return null
-
-/proc/adjustAngle(angle)
-	angle = round(angle) + 45
-	if(angle > 180)
-		angle -= 180
-	else
-		angle += 180
-	if(!angle)
-		angle = 1
-	/*if(angle < 0)
-		//angle = (round(abs(get_angle(A, user))) + 45) - 90
-		angle = round(angle) + 45 + 180
-	else
-		angle = round(angle) + 45*/
-	return angle
 
 /proc/print_runtime(exception/e)
 	world.log << "[time_stamp()] Runtime detected\n[e] at [e.file]:[e.line]\n [e.desc]"
@@ -1578,3 +1556,12 @@ Game Mode config tags:
 	for(var/mob/M in mobs)
 		if(M.client)
 			. += M.client
+
+
+// A standard proc for generic output to the msay window, Not useful for things that have their own prefs settings (prayers for instance)
+/proc/output_to_msay(msg)
+	for(var/client/C in admins)
+		if(C.prefs.special_popup)
+			C << output("\[[time_stamp()]] [msg]", "window1.msay_output")
+		else
+			to_chat(C, msg)

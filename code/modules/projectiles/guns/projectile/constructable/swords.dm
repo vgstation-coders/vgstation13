@@ -79,6 +79,31 @@
 	icon_state = "venom_sword"
 	var/beaker = null
 	var/obj/item/weapon/reagent_containers/hypospray/HY = null
+	var/max_beaker_volume = 500 //The maximum volume a beaker can have and still be placed into the sword
+	var/min_inject_amount = 5
+	var/max_inject_amount = 20
+	var/inject_amount = 20 //The amount of reagents injected from the beaker each hit
+
+/obj/item/weapon/sword/venom/verb/set_inject_amount()
+	set name = "Set injection amount"
+	set category = "Object"
+	set src in range(0)
+	if(usr.incapacitated())
+		return
+	var/N = input("Injection amount:","[src]") as null|num
+	if (N)
+		if(usr.incapacitated() || !(usr in range(src,0)))
+			return
+		inject_amount = Clamp(N, min_inject_amount, max_inject_amount)
+		to_chat(usr, "<span class='notice'>\The [src] will now inject [inject_amount] units each hit.</span>")
+
+/obj/item/weapon/sword/venom/examine(mob/user)
+	..()
+	if(beaker)
+		to_chat(user, "[bicon(beaker)] There is \a [beaker] in \the [src]'s beaker port.")
+		var/obj/item/weapon/reagent_containers/glass/beaker/B = beaker
+		B.show_list_of_reagents(user)
+	to_chat(user, "<span class='info'>\The [src] is set to inject [inject_amount] units each hit.</span>")
 
 /obj/item/weapon/sword/venom/Destroy()
 	if(beaker)
@@ -151,7 +176,8 @@
 		if(beaker)
 			to_chat(user, "<span class='notice'>There is already a beaker in \the [src]'s beaker port.</span>")
 			return
-		if(!(W.type == /obj/item/weapon/reagent_containers/glass/beaker || W.type == /obj/item/weapon/reagent_containers/glass/beaker/noreact))
+		var/obj/item/weapon/reagent_containers/glass/beaker/B = W
+		if(B.volume > max_beaker_volume)
 			to_chat(user, "<span class='warning'>That beaker is too large to fit into \the [src]'s beaker port.</span>")
 			return
 		if(!user.drop_item(W, src))
@@ -207,7 +233,7 @@
 		else
 			M.LAssailant = user
 
-		B.reagents.trans_to(M, 5)
+		B.reagents.trans_to(M, inject_amount)
 
 	if(!B.reagents.total_volume)
 		update_color()

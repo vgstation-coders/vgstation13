@@ -17,8 +17,8 @@ var/list/beam_master = list()
 	invisibility = 101
 	animate_movement = 2
 	linear_movement = 1
-	layer = 13
-	plane = PLANE_LIGHTING
+	layer = PROJECTILE_LAYER
+	plane = LIGHTING_PLANE
 	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
 	damage = 30
 	damage_type = BURN
@@ -88,7 +88,6 @@ var/list/beam_master = list()
 			reference = bresenham_step(dist_y,dist_x,dy,dx,lastposition,target_dir,reference)
 
 	cleanup(reference)
-	return
 
 /obj/item/projectile/beam/bresenham_step(var/distA, var/distB, var/dA, var/dB, var/lastposition, var/target_dir, var/reference)
 	var/first = 1
@@ -135,6 +134,8 @@ var/list/beam_master = list()
 				I.transform = turn(I.transform, target_angle+45)
 				I.pixel_x = PixelX
 				I.pixel_y = PixelY
+				I.plane = EFFECTS_PLANE
+				I.layer = PROJECTILE_LAYER
 				beam_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"] = I //And cache it!
 
 			//Finally add the overlay
@@ -157,6 +158,8 @@ var/list/beam_master = list()
 			//If the icon has not been added yet
 			if( !("[icon_state][target_dir]" in beam_master) )
 				var/image/I = image(icon,icon_state,10,target_dir) //Generate it.
+				I.plane = EFFECTS_PLANE
+				I.layer = PROJECTILE_LAYER
 				beam_master["[icon_state][target_dir]"] = I //And cache it!
 
 			//Finally add the overlay
@@ -264,9 +267,11 @@ var/list/beam_master = list()
 					cleanedup = 1
 			sleep(2)
 
-		else sleep(1)
+		else
+			sleep(1)
 
-	if(cleanedup) sleep(2)
+	if(cleanedup)
+		sleep(2)
 	var/list/turf_master = beam_master[reference]
 
 	for(var/laser_state in turf_master)
@@ -297,7 +302,7 @@ var/list/beam_master = list()
 	stutter = 50
 	eyeblur = 50
 	var/tang = 0
-	layer = 13
+	layer = PROJECTILE_LAYER
 	var/turf/last = null
 	kill_count = 12
 
@@ -329,69 +334,71 @@ var/list/beam_master = list()
 	I.Turn(Angle+45)
 	Istart.Turn(Angle+45)
 	Iend.Turn(Angle+45)
-	var/DX=(32*curr.x+curr.pixel_x)-(32*firer.x+firer.pixel_x)
-	var/DY=(32*curr.y+curr.pixel_y)-(32*firer.y+firer.pixel_y)
+	var/DX=(WORLD_ICON_SIZE*curr.x+curr.pixel_x)-(WORLD_ICON_SIZE*firer.x+firer.pixel_x)
+	var/DY=(WORLD_ICON_SIZE*curr.y+curr.pixel_y)-(WORLD_ICON_SIZE*firer.y+firer.pixel_y)
 	var/N=0
 	var/length=round(sqrt((DX)**2+(DY)**2))
 	var/count = 0
 	var/turf/T = get_turf(src)
 	var/list/ouroverlays = list()
 
-	spawn() for(N,N<length,N+=32)
+	spawn() for(N,N<length,N+=WORLD_ICON_SIZE)
 		if(count >= kill_count)
 			break
 		count++
 		var/obj/effect/overlay/beam/persist/X=getFromPool(/obj/effect/overlay/beam/persist,T)
 		X.BeamSource=src
 		ouroverlays += X
-		if((N+64>length) && (N+32<=length))
+		if((N+WORLD_ICON_SIZE*2>length) && (N+WORLD_ICON_SIZE<=length))
 			X.icon=Iend
 		else if(N==0)
 			X.icon=Istart
-		else if(N+32>length)
+		else if(N+WORLD_ICON_SIZE>length)
 			X.icon=null
 		else
 			X.icon=I
 
-		var/Pixel_x=round(sin(Angle)+32*sin(Angle)*(N+16)/32)
-		var/Pixel_y=round(cos(Angle)+32*cos(Angle)*(N+16)/32)
-		if(DX==0) Pixel_x=0
-		if(DY==0) Pixel_y=0
-		if(Pixel_x>32)
-			for(var/a=0, a<=Pixel_x,a+=32)
+		var/Pixel_x=round(sin(Angle)+WORLD_ICON_SIZE*sin(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE/2)
+		var/Pixel_y=round(cos(Angle)+WORLD_ICON_SIZE*cos(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
+		if(DX==0)
+			Pixel_x=0
+		if(DY==0)
+			Pixel_y=0
+		if(Pixel_x>WORLD_ICON_SIZE)
+			for(var/a=0, a<=Pixel_x,a+=WORLD_ICON_SIZE)
 				X.x++
-				Pixel_x-=32
-		if(Pixel_x<-32)
-			for(var/a=0, a>=Pixel_x,a-=32)
+				Pixel_x-=WORLD_ICON_SIZE
+		if(Pixel_x<-WORLD_ICON_SIZE)
+			for(var/a=0, a>=Pixel_x,a-=WORLD_ICON_SIZE)
 				X.x--
-				Pixel_x+=32
-		if(Pixel_y>32)
-			for(var/a=0, a<=Pixel_y,a+=32)
+				Pixel_x+=WORLD_ICON_SIZE
+		if(Pixel_y>WORLD_ICON_SIZE)
+			for(var/a=0, a<=Pixel_y,a+=WORLD_ICON_SIZE)
 				X.y++
-				Pixel_y-=32
-		if(Pixel_y<-32)
-			for(var/a=0, a>=Pixel_y,a-=32)
+				Pixel_y-=WORLD_ICON_SIZE
+		if(Pixel_y<-WORLD_ICON_SIZE)
+			for(var/a=0, a>=Pixel_y,a-=WORLD_ICON_SIZE)
 				X.y--
-				Pixel_y+=32
+				Pixel_y+=WORLD_ICON_SIZE
 
 		//Now that we've calculated the total offset in pixels, we move each beam parts to their closest corresponding turfs
 		var/x_increm = 0
 		var/y_increm = 0
 
-		while(Pixel_x >= 32 || Pixel_x <= -32)
+		while(Pixel_x >= WORLD_ICON_SIZE || Pixel_x <= -WORLD_ICON_SIZE)
 			if(Pixel_x > 0)
-				Pixel_x -= 32
+				Pixel_x -= WORLD_ICON_SIZE
 				x_increm++
 			else
-				Pixel_x += 32
+				Pixel_x += WORLD_ICON_SIZE
 				x_increm--
 
-		while(Pixel_y >= 32 || Pixel_y <= -32)
+		while(Pixel_y >= WORLD_ICON_SIZE || Pixel_y <= -WORLD_ICON_SIZE)
 			if(Pixel_y > 0)
-				Pixel_y -= 32
+				Pixel_y -= WORLD_ICON_SIZE
 				y_increm++
 			else
-				Pixel_y += 32
+				Pixel_y += WORLD_ICON_SIZE
 				y_increm--
 
 		X.x += x_increm
@@ -498,7 +505,7 @@ var/list/beam_master = list()
 
 		//del(src)
 		returnToPool(src)
-	return
+
 /*cleanup(reference) //Waits .3 seconds then removes the overlay.
 //	to_chat(world, "setting invisibility")
 	sleep(50)
@@ -541,9 +548,15 @@ var/list/beam_master = list()
 
 /obj/item/projectile/beam/lightlaser
 	name = "light laser"
-	icon_state = "light laser"
 	damage = 25
 
+/obj/item/projectile/beam/weaklaser
+	name = "weak laser"
+	damage = 15
+
+/obj/item/projectile/beam/veryweaklaser
+	name = "very weak laser"
+	damage = 5
 
 /obj/item/projectile/beam/heavylaser
 	name = "heavy laser"
@@ -589,7 +602,7 @@ var/list/beam_master = list()
 		if(istype(target, /mob/living/carbon/human))
 			var/mob/living/carbon/human/M = target
 			if(istype(M.wear_suit, /obj/item/clothing/suit/redtag))
-				M.Weaken(5)
+				M.Knockdown(5)
 		return 1
 
 /obj/item/projectile/beam/lasertag/red
@@ -604,7 +617,7 @@ var/list/beam_master = list()
 		if(istype(target, /mob/living/carbon/human))
 			var/mob/living/carbon/human/M = target
 			if(istype(M.wear_suit, /obj/item/clothing/suit/bluetag))
-				M.Weaken(5)
+				M.Knockdown(5)
 		return 1
 
 /obj/item/projectile/beam/lasertag/omni//A laser tag bolt that stuns EVERYONE
@@ -619,7 +632,7 @@ var/list/beam_master = list()
 		if(istype(target, /mob/living/carbon/human))
 			var/mob/living/carbon/human/M = target
 			if((istype(M.wear_suit, /obj/item/clothing/suit/bluetag))||(istype(M.wear_suit, /obj/item/clothing/suit/redtag)))
-				M.Weaken(5)
+				M.Knockdown(5)
 		return 1
 
 /obj/item/projectile/beam/bison
@@ -627,7 +640,7 @@ var/list/beam_master = list()
 	damage_type = BURN
 	flag = "laser"
 	kill_count = 100
-	layer = 13
+	layer = PROJECTILE_LAYER
 	damage = 15
 	icon = 'icons/obj/lightning.dmi'
 	icon_state = "heatray"
@@ -744,14 +757,13 @@ var/list/beam_master = list()
 						draw_ray(target)
 						Bump(original)
 
-	return
-
 /obj/item/projectile/beam/bison/bullet_die()
 	draw_ray(loc)
 	..()
 
 /obj/item/projectile/beam/bison/proc/draw_ray(var/turf/lastloc)
-	if(drawn) return
+	if(drawn)
+		return
 	drawn = 1
 	var/atom/curr = lastloc
 	if(!firer)
@@ -763,8 +775,8 @@ var/list/beam_master = list()
 	I.Turn(Angle+45)
 	Istart.Turn(Angle+45)
 	Iend.Turn(Angle+45)
-	var/DX=(32*curr.x+curr.pixel_x)-(32*firer.x+firer.pixel_x)
-	var/DY=(32*curr.y+curr.pixel_y)-(32*firer.y+firer.pixel_y)
+	var/DX=(WORLD_ICON_SIZE*curr.x+curr.pixel_x)-(WORLD_ICON_SIZE*firer.x+firer.pixel_x)
+	var/DY=(WORLD_ICON_SIZE*curr.y+curr.pixel_y)-(WORLD_ICON_SIZE*firer.y+firer.pixel_y)
 	var/N=0
 	var/length=round(sqrt((DX)**2+(DY)**2))
 	var/count = 0
@@ -773,62 +785,64 @@ var/list/beam_master = list()
 	var/increment = timer_total/max(1,round(length/32))
 	var/current_timer = 5
 
-	for(N,N<(length+16),N+=32)
+	for(N,N<(length+16),N+=WORLD_ICON_SIZE)
 		if(count >= kill_count)
 			break
 		count++
 		var/obj/effect/overlay/beam/X=getFromPool(/obj/effect/overlay/beam,T,current_timer,1)
 		X.BeamSource=src
 		current_timer += increment
-		if((N+64>(length+16)) && (N+32<=(length+16)))
+		if((N+64>(length+16)) && (N+WORLD_ICON_SIZE<=(length+16)))
 			X.icon=Iend
 		else if(N==0)
 			X.icon=Istart
-		else if(N+32>(length+16))
+		else if(N+WORLD_ICON_SIZE>(length+16))
 			X.icon=null
 		else
 			X.icon=I
 
 
-		var/Pixel_x=round(sin(Angle)+32*sin(Angle)*(N+16)/32)
-		var/Pixel_y=round(cos(Angle)+32*cos(Angle)*(N+16)/32)
-		if(DX==0) Pixel_x=0
-		if(DY==0) Pixel_y=0
-		if(Pixel_x>32)
-			for(var/a=0, a<=Pixel_x,a+=32)
+		var/Pixel_x=round(sin(Angle)+WORLD_ICON_SIZE*sin(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
+		var/Pixel_y=round(cos(Angle)+WORLD_ICON_SIZE*cos(Angle)*(N+WORLD_ICON_SIZE/2)/WORLD_ICON_SIZE)
+		if(DX==0)
+			Pixel_x=0
+		if(DY==0)
+			Pixel_y=0
+		if(Pixel_x>WORLD_ICON_SIZE)
+			for(var/a=0, a<=Pixel_x,a+=WORLD_ICON_SIZE)
 				X.x++
-				Pixel_x-=32
-		if(Pixel_x<-32)
-			for(var/a=0, a>=Pixel_x,a-=32)
+				Pixel_x-=WORLD_ICON_SIZE
+		if(Pixel_x<-WORLD_ICON_SIZE)
+			for(var/a=0, a>=Pixel_x,a-=WORLD_ICON_SIZE)
 				X.x--
-				Pixel_x+=32
-		if(Pixel_y>32)
-			for(var/a=0, a<=Pixel_y,a+=32)
+				Pixel_x+=WORLD_ICON_SIZE
+		if(Pixel_y>WORLD_ICON_SIZE)
+			for(var/a=0, a<=Pixel_y,a+=WORLD_ICON_SIZE)
 				X.y++
-				Pixel_y-=32
-		if(Pixel_y<-32)
-			for(var/a=0, a>=Pixel_y,a-=32)
+				Pixel_y-=WORLD_ICON_SIZE
+		if(Pixel_y<-WORLD_ICON_SIZE)
+			for(var/a=0, a>=Pixel_y,a-=WORLD_ICON_SIZE)
 				X.y--
-				Pixel_y+=32
+				Pixel_y+=WORLD_ICON_SIZE
 
 		//Now that we've calculated the total offset in pixels, we move each beam parts to their closest corresponding turfs
 		var/x_increm = 0
 		var/y_increm = 0
 
-		while(Pixel_x >= 32 || Pixel_x <= -32)
+		while(Pixel_x >= WORLD_ICON_SIZE || Pixel_x <= -WORLD_ICON_SIZE)
 			if(Pixel_x > 0)
-				Pixel_x -= 32
+				Pixel_x -= WORLD_ICON_SIZE
 				x_increm++
 			else
-				Pixel_x += 32
+				Pixel_x += WORLD_ICON_SIZE
 				x_increm--
 
-		while(Pixel_y >= 32 || Pixel_y <= -32)
+		while(Pixel_y >= WORLD_ICON_SIZE || Pixel_y <= -WORLD_ICON_SIZE)
 			if(Pixel_y > 0)
-				Pixel_y -= 32
+				Pixel_y -= WORLD_ICON_SIZE
 				y_increm++
 			else
-				Pixel_y += 32
+				Pixel_y += WORLD_ICON_SIZE
 				y_increm--
 
 		X.x += x_increm
@@ -838,8 +852,6 @@ var/list/beam_master = list()
 		var/turf/TT = get_turf(X.loc)
 		if(TT == firer.loc)
 			continue
-
-	return
 
 /obj/item/projectile/beam/bison/Bump(atom/A as mob|obj|turf|area)
 	//Heat Rays go through mobs
@@ -869,3 +881,10 @@ var/list/beam_master = list()
 		return 1
 	else
 		return ..()
+
+//Used by the pain mirror spell
+//Damage type and damage done varies
+/obj/item/projectile/beam/pain
+	name = "bolt of pain"
+	pass_flags = PASSALL //Go through everything
+	icon_state = "pain"

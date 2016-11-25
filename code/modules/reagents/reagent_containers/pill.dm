@@ -53,12 +53,7 @@
 		return
 
 	var/target_was_empty = (target.reagents.total_volume == 0)
-	var/list/bad_reagents = reagents.get_bad_reagent_names()
-	var/tx_amount = reagents.trans_to(target, reagents.total_volume)
-
-	// Log transfers of 'bad 'things' (/vg/)
-	if (tx_amount > 0 && target.log_reagents && bad_reagents && bad_reagents.len > 0)
-		log_reagents(user, src, target, tx_amount, bad_reagents)
+	var/tx_amount = reagents.trans_to(target, reagents.total_volume, log_transfer = TRUE, whodunnit = user)
 
 	// Show messages
 	if (tx_amount > 0)
@@ -73,8 +68,10 @@
 
 //OOP, HO!
 /obj/item/weapon/reagent_containers/pill/proc/injest(mob/M as mob)
-	if(!reagents) return
-	if(!M) return
+	if(!reagents)
+		return
+	if(!M)
+		return
 	if (!src.is_empty())
 		reagents.reaction(M, INGEST)
 		reagents.trans_to(M, reagents.total_volume)
@@ -88,7 +85,7 @@
 /obj/item/weapon/reagent_containers/pill/creatine
 	name = "Creatine Suicide Pill (50 units)"
 	desc = "WILL ALSO KILL YOU VIOLENTLY."
-	icon_state = "pill5"
+	icon_state = "pill5" //bright red oblong with stripe
 
 	New()
 		..()
@@ -97,7 +94,7 @@
 /obj/item/weapon/reagent_containers/pill/antitox
 	name = "Anti-toxins pill"
 	desc = "Neutralizes many common toxins."
-	icon_state = "pill17"
+	icon_state = "pill14" //green round plain
 
 	New()
 		..()
@@ -106,7 +103,7 @@
 /obj/item/weapon/reagent_containers/pill/tox
 	name = "Toxins pill"
 	desc = "Highly toxic."
-	icon_state = "pill5"
+	icon_state = "pill5" //bright red oblong with stripe
 
 	New()
 		..()
@@ -115,7 +112,7 @@
 /obj/item/weapon/reagent_containers/pill/cyanide
 	name = "Cyanide pill"
 	desc = "Don't swallow this."
-	icon_state = "pill5"
+	icon_state = "pill5" //bright red oblong with stripe
 
 	New()
 		..()
@@ -124,7 +121,7 @@
 /obj/item/weapon/reagent_containers/pill/adminordrazine
 	name = "Adminordrazine pill"
 	desc = "It's magic. We don't have to explain it."
-	icon_state = "pill16"
+	icon_state = "pill6" //cyan-brown oblong
 
 	New()
 		..()
@@ -133,7 +130,7 @@
 /obj/item/weapon/reagent_containers/pill/stox
 	name = "Sleeping pill"
 	desc = "Commonly used to treat insomnia."
-	icon_state = "pill8"
+	icon_state = "pill11" //light blue round
 
 	New()
 		..()
@@ -142,7 +139,7 @@
 /obj/item/weapon/reagent_containers/pill/kelotane
 	name = "Kelotane pill"
 	desc = "Used to treat burns."
-	icon_state = "pill11"
+	icon_state = "pill12" //yellow round
 
 	New()
 		..()
@@ -151,36 +148,25 @@
 /obj/item/weapon/reagent_containers/pill/tramadol
 	name = "Tramadol pill"
 	desc = "A simple painkiller."
-	icon_state = "pill8"
+	icon_state = "pill11" //light blue round
 
 	New()
 		..()
 		reagents.add_reagent(TRAMADOL, 15)
 
-
-/obj/item/weapon/reagent_containers/pill/methylphenidate
-	name = "Methylphenidate pill"
-	desc = "Improves the ability to concentrate."
-	icon_state = "pill8"
-
-	New()
-		..()
-		reagents.add_reagent("methylphenidate", 15)
-
 /obj/item/weapon/reagent_containers/pill/citalopram
 	name = "Citalopram pill"
 	desc = "Mild anti-depressant."
-	icon_state = "pill8"
+	icon_state = "pill11" //light blue round
 
 	New()
 		..()
 		reagents.add_reagent(CITALOPRAM, 15)
 
-
 /obj/item/weapon/reagent_containers/pill/inaprovaline
 	name = "Inaprovaline pill"
 	desc = "Used to stabilize patients."
-	icon_state = "pill20"
+	icon_state = "pill9" //magenta/yellow oblong
 
 	New()
 		..()
@@ -189,7 +175,7 @@
 /obj/item/weapon/reagent_containers/pill/dexalin
 	name = "Dexalin pill"
 	desc = "Used to treat oxygen deprivation."
-	icon_state = "pill16"
+	icon_state = "pill19" //dark blue/blue round
 
 	New()
 		..()
@@ -198,7 +184,7 @@
 /obj/item/weapon/reagent_containers/pill/bicaridine
 	name = "Bicaridine pill"
 	desc = "Used to treat physical injuries."
-	icon_state = "pill18"
+	icon_state = "pill15" //red round
 
 	New()
 		..()
@@ -207,7 +193,7 @@
 /obj/item/weapon/reagent_containers/pill/happy
 	name = "Happy pill"
 	desc = "Happy happy joy joy!"
-	icon_state = "pill18"
+	icon_state = "pill7" //grey oblong
 
 	New()
 		..()
@@ -217,7 +203,7 @@
 /obj/item/weapon/reagent_containers/pill/zoom
 	name = "Zoom pill"
 	desc = "Zoooom!"
-	icon_state = "pill18"
+	icon_state = "pill7" //grey oblong
 
 	New()
 		..()
@@ -229,15 +215,15 @@
 	name = "Hyperzine pill"
 	desc = "Gotta go fast!"
 
-	icon_state = "pill18"
+	icon_state = "pill7" //grey oblong
 	New()
 		..()
 		reagents.add_reagent(HYPERZINE, 10)
 
 /obj/item/weapon/reagent_containers/pill/creatine_safe
 	name = "Creatine Pill (26 units)"
-	desc = "Become the boss of this Gym"
-	icon_state = "pill5"
+	desc = "Become the boss of this Gym."
+	icon_state = "pill5" //bright red oblong with stripe
 
 	New()
 		..()
@@ -246,7 +232,7 @@
 /obj/item/weapon/reagent_containers/pill/creatine_supplement
 	name = "Creatine Supplement (5 units)"
 	desc = "Maintain those massive gains!"
-	icon_state = "pill6"
+	icon_state = "pill6" //cyan/brown oblong
 
 	New()
 		..()
@@ -265,12 +251,14 @@
 /obj/item/weapon/reagent_containers/pill/time_release
 	name = "time release pill"
 	desc = "A pill which will not be metabolized until all of the sugar inside metabolizes. By extension, the chemicals inside do not react with one another until entering the body. Unlike other pills, it is specially designed to be compatible with droppers and syringes."
-	icon_state = "pill18"
+	icon_state = "pill7" //grey oblong
 	flags = FPRINT | NOREACT
 
 /obj/item/weapon/reagent_containers/pill/time_release/injest(mob/M as mob)
-	if(!reagents) return
-	if(!M) return
+	if(!reagents)
+		return
+	if(!M)
+		return
 	var/timer = round(reagents.get_reagent_amount(SUGAR),1)
 	forceMove(M)
 	spawn(timer*30)

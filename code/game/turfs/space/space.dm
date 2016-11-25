@@ -39,8 +39,10 @@
 		return BUILD_FAILURE
 	else if (src.y >= (world.maxy - TRANSITIONEDGE || src.y <= TRANSITIONEDGE ))
 		return BUILD_FAILURE
+	else if(locate(/obj/structure/catwalk) in contents)
+		return BUILD_FAILURE
 	else if(!(locate(/obj/structure/lattice) in contents) && !(istype(material,/obj/item/stack/sheet/wood)))
-		return 1
+		return BUILD_SUCCESS
 	return BUILD_FAILURE
 
 /turf/space/canBuildPlating(var/material)
@@ -51,12 +53,6 @@
 	else if((locate(/obj/structure/lattice) in contents) && !(istype(material,/obj/item/stack/tile/wood)))
 		return 1
 	return BUILD_FAILURE
-
-// Ported from unstable r355
-
-/turf/space/Entered(atom/movable/A as mob|obj)
-	..()
-	inertial_drift(A)
 
 /turf/space/proc/Sandbox_Spacemove(atom/movable/A as mob|obj)
 	var/cur_x
@@ -69,7 +65,8 @@
 	if(src.x <= 1)
 
 		var/list/cur_pos = src.get_global_map_pos()
-		if(!cur_pos) return
+		if(!cur_pos)
+			return
 		cur_x = cur_pos["x"]
 		cur_y = cur_pos["y"]
 		next_x = (--cur_x||global_map.len)
@@ -95,7 +92,8 @@
 			return
 
 		var/list/cur_pos = src.get_global_map_pos()
-		if(!cur_pos) return
+		if(!cur_pos)
+			return
 		cur_x = cur_pos["x"]
 		cur_y = cur_pos["y"]
 		next_x = (++cur_x > global_map.len ? 1 : cur_x)
@@ -120,7 +118,8 @@
 			A = null
 			return
 		var/list/cur_pos = src.get_global_map_pos()
-		if(!cur_pos) return
+		if(!cur_pos)
+			return
 		cur_x = cur_pos["x"]
 		cur_y = cur_pos["y"]
 		y_arr = global_map[cur_x]
@@ -146,7 +145,8 @@
 			A = null
 			return
 		var/list/cur_pos = src.get_global_map_pos()
-		if(!cur_pos) return
+		if(!cur_pos)
+			return
 		cur_x = cur_pos["x"]
 		cur_y = cur_pos["y"]
 		y_arr = global_map[cur_x]
@@ -180,6 +180,10 @@
 	name = "the void"
 	icon_state = "void"
 	desc = "The final final frontier."
+	plane = PLANE_ABOVE_PARALLAX
 
 /turf/space/void/New()
 	return
+
+/turf/space/has_gravity()
+	return 0

@@ -85,12 +85,14 @@
 		panic_attack(M)
 
 /mob/living/simple_animal/bee/kick_act(mob/living/carbon/human/H)
-	if(prob(10)) ..()
+	if(prob(10))
+		..()
 
 	panic_attack(H)
 
 /mob/living/simple_animal/bee/bite_act(mob/living/carbon/human/H)
-	if(prob(10)) ..()
+	if(prob(10))
+		..()
 
 	panic_attack(H)
 
@@ -126,7 +128,8 @@
 	target = pick(neabyMobs)
 
 /mob/living/simple_animal/bee/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 
 	..()
 	if(stat != DEAD) //If we're alive, see if we can be calmed down.
@@ -233,7 +236,7 @@
 					src.icon_state = "bees[B.strength]"
 					var/turf/simulated/floor/T = get_turf(get_step(src, pick(1,2,4,8)))
 					if(T.Enter(src, get_turf(src)))
-						src.loc = T
+						src.forceMove(T)
 				break
 
 		if(target)
@@ -268,7 +271,7 @@
 					else
 						my_hydrotray = null
 
-		animate(src, pixel_x = rand(-12,12), pixel_y = rand(-12,12), time = 10, easing = SINE_EASING)
+		animate(src, pixel_x = rand(-12,12) * PIXEL_MULTIPLIER, pixel_y = rand(-12,12) * PIXEL_MULTIPLIER, time = 10, easing = SINE_EASING)
 
 	/*
 	if(!parent && prob(10))

@@ -4,7 +4,7 @@
 	icon = 'icons/obj/gun_experimental.dmi'
 	icon_state = "hecate"
 	item_state = null
-	origin_tech = "materials=5;combat=6"
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_COMBAT + "=6"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 	recoil = 2
 	slot_flags = SLOT_BACK
@@ -39,13 +39,13 @@
 			user.regenerate_icons()
 			var/client/C = user.client
 			backup_view = C.view
-			C.view = C.view * 2
+			C.changeView(C.view * 2)
 	else
 		inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 		if(user && user.client)
 			user.regenerate_icons()
 			var/client/C = user.client
-			C.view = backup_view
+			C.changeView(backup_view)
 
 /obj/item/weapon/gun/projectile/hecate/attack_self(mob/user)
 	if(wielded)

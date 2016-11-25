@@ -4,7 +4,7 @@
 	icon = 'icons/obj/gun_experimental.dmi'
 	icon_state = "minigun"
 	item_state = "minigun0"
-	origin_tech = "materials=4;combat=6"
+	origin_tech = Tc_MATERIALS + "=4;" + Tc_COMBAT + "=6"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
 	recoil = 1
 	slot_flags = null
@@ -23,7 +23,8 @@
 	to_chat(user, "<span class='info'>Has [current_shells] round\s remaining.</span>")
 
 /obj/item/weapon/gun/gatling/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
-	if(flag)	return //we're placing gun on a table or in backpack
+	if(flag)
+		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
 		to_chat(user, "<span class='warning'>A label sticks the trigger to the trigger guard!</span>")//Such a new feature, the player might not know what's wrong if it doesn't tell them.
 
@@ -52,7 +53,8 @@
 		slowdown = 0
 
 /obj/item/weapon/gun/gatling/process_chambered()
-	if(in_chamber) return 1
+	if(in_chamber)
+		return 1
 	if(current_shells)
 		current_shells--
 		update_icon()
@@ -93,8 +95,8 @@
 
 /obj/item/ammo_casing_gatling/New()
 	..()
-	pixel_x = rand(-10.0, 10)
-	pixel_y = rand(-10.0, 10)
+	pixel_x = rand(-10.0, 10) * PIXEL_MULTIPLIER
+	pixel_y = rand(-10.0, 10) * PIXEL_MULTIPLIER
 	dir = pick(cardinal)
 
 /obj/item/weapon/gun/gatling/beegun
@@ -102,7 +104,7 @@
 	desc = "The apocalypse hasn't even begun!"//I'm not even sorry
 	icon_state = "beegun"
 	item_state = "beegun0"
-	origin_tech = "materials=4;combat=6;biotech=5"
+	origin_tech = Tc_MATERIALS + "=4;" + Tc_COMBAT + "=6;" + Tc_BIOTECH + "=5"
 	recoil = 0
 
 /obj/item/weapon/gun/gatling/beegun/update_wield(mob/user)
@@ -113,7 +115,8 @@
 		slowdown = 0
 
 /obj/item/weapon/gun/gatling/beegun/process_chambered()
-	if(in_chamber) return 1
+	if(in_chamber)
+		return 1
 	if(current_shells)
 		current_shells--
 		update_icon()

@@ -20,6 +20,13 @@
 
 	machine_flags = MULTITOOL_MENU
 
+/obj/machinery/atmospherics/unary/outlet_injector/acid_proof
+	name = "Acid-Proof Air Injector"
+	desc = "Has a valve and pump attached to it. This one has an acid proof coating."
+
+/obj/machinery/atmospherics/unary/outlet_injector/acid_proof/acidable()
+	return 0
+
 /obj/machinery/atmospherics/unary/outlet_injector/update_icon()
 	if(node)
 		if(on && !(stat & NOPOWER))
@@ -30,11 +37,7 @@
 		icon_state = "exposed"
 		on = 0
 	..()
-	if (istype(loc, /turf/simulated/floor) && node)
-		var/turf/simulated/floor/floor = loc
-		if(floor.floor_tile && node.alpha == 128)
-			underlays.Cut()
-	return
+
 
 /obj/machinery/atmospherics/unary/outlet_injector/power_change()
 	var/old_stat = stat

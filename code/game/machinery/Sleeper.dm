@@ -212,7 +212,8 @@
 			t = get_step(get_turf(src), EAST)
 			// generate_console(get_step(get_turf(src), EAST))
 
-		if(no_console) return
+		if(no_console)
+			return
 
 		ASSERT(t)
 		var/obj/machinery/sleep_console/c = locate() in t.contents
@@ -260,12 +261,11 @@
 		T += SP.rating
 	switch(T)
 		if(0 to 5)
-			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
+			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", KELOTANE = "Kelotane", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
 		if(6 to 8)
-			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", PHALANXIMINE = "Phalanximine")
+			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine")
 		else
-			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", PHALANXIMINE = "Phalanximine", SPACEACILLIN = "Spaceacillin")
-
+			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN = "Soporific", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine" , ALKYSINE = "Alkysine" , TRAMADOL = "Tramadol" , PEPTOBISMOL  = "Peptobismol")
 
 /obj/machinery/sleeper/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
 	if(!ismob(O)) //mobs only
@@ -312,7 +312,7 @@
 	to_chat(L, "<span class='notice'><b>You feel an anaesthetising air surround you. You go numb as your senses turn inward.</b></span>")
 	connected.process()
 	for(var/obj/OO in src)
-		OO.loc = src.loc
+		OO.forceMove(src.loc)
 	src.add_fingerprint(user)
 	if(user.pulling == L)
 		user.stop_pulling()
@@ -368,7 +368,7 @@
 /obj/machinery/sleeper/blob_act()
 	if(prob(75))
 		for(var/atom/movable/A as mob|obj in src)
-			A.loc = src.loc
+			A.forceMove(src.loc)
 			A.blob_act()
 		qdel(src)
 	return
@@ -402,7 +402,8 @@
 	if(!istype(W, /obj/item/weapon/grab))
 		return ..()
 	var/obj/item/weapon/grab/G = W
-	if(!(ismob(G.affecting)) || G.affecting.locked_to) return
+	if(!(ismob(G.affecting)) || G.affecting.locked_to)
+		return
 	if(src.occupant)
 		to_chat(user, "<span class='notice'><B>The sleeper is already occupied!</B></span>")
 		return
@@ -424,7 +425,7 @@
 	to_chat(M, "<span class='notice'><b>You feel an anaesthetising air surround you. You go numb as your senses turn inward.</b></span>")
 	connected.process()
 	for(var/obj/O in src)
-		O.loc = src.loc
+		O.forceMove(src.loc)
 	src.add_fingerprint(user)
 	qdel(G)
 	if(!(stat & (BROKEN|NOPOWER)))
@@ -439,21 +440,21 @@
 	switch(severity)
 		if(1.0)
 			for(var/atom/movable/A as mob|obj in src)
-				A.loc = src.loc
+				A.forceMove(src.loc)
 				ex_act(severity)
 			qdel(src)
 			return
 		if(2.0)
 			if(prob(50))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.forceMove(src.loc)
 					ex_act(severity)
 				qdel(src)
 				return
 		if(3.0)
 			if(prob(25))
 				for(var/atom/movable/A as mob|obj in src)
-					A.loc = src.loc
+					A.forceMove(src.loc)
 					ex_act(severity)
 				qdel(src)
 				return
@@ -476,10 +477,10 @@
 			M.adjustOxyLoss(-12)
 		M.updatehealth()
 	M.AdjustParalysis(-4)
-	M.AdjustWeakened(-4)
+	M.AdjustKnockdown(-4)
 	M.AdjustStunned(-4)
 	M.Paralyse(1)
-	M.Weaken(1)
+	M.Knockdown(1)
 	M.Stun(1)
 	if (M:reagents.get_reagent_amount(INAPROVALINE) < 5)
 		M:reagents.add_reagent(INAPROVALINE, 5)
@@ -586,7 +587,7 @@
 		if(usr.locked_to)
 			return
 		usr.stop_pulling()
-		usr.loc = src
+		usr.forceMove(src)
 		usr.reset_view()
 		src.occupant = usr
 		connected.process()
@@ -737,7 +738,8 @@
 				if (src.connected.occupant)
 					if ((locate(/obj/item/weapon/disk/nuclear) in get_contents_in_object(connected.occupant)) && href_list["cook"] != "Thermoregulate" )
 						to_chat(usr, "<span class='danger'>Even with the safety features turned off, \the [src] refuses to cook something inside of it!</span>")
-					else connected.cook(href_list["cook"])
+					else
+						connected.cook(href_list["cook"])
 	if (href_list["refresh"])
 		src.updateUsrDialog()
 	if(href_list["auto"])

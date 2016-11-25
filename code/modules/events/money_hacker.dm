@@ -10,7 +10,7 @@
 /datum/event/money_hacker/setup()
 	if(all_money_accounts.len)
 		for(var/obj/machinery/account_database/DB in account_DBs)
-			if( DB.z == 1 && !(DB.stat&NOPOWER) && DB.activated )
+			if( DB.z == map.zMainStation && !(DB.stat&NOPOWER) && DB.activated )
 				affected_db = DB
 				break
 	if(affected_db)
@@ -36,7 +36,8 @@
 
 	var/pass = 0
 	for(var/obj/machinery/message_server/MS in message_servers)
-		if(!MS.active) continue
+		if(!MS.active)
+			continue
 		// /obj/machinery/message_server/proc/send_rc_message(var/recipient = "",var/sender = "",var/message = "",var/stamp = "", var/id_auth = "", var/priority = 1)
 		MS.send_rc_message("Engineering/Security/Bridge", my_department, message, "", "", 2)
 		pass = 1
@@ -92,7 +93,8 @@
 
 		var/pass = 0
 		for(var/obj/machinery/message_server/MS in message_servers)
-			if(!MS.active) continue
+			if(!MS.active)
+				continue
 			// /obj/machinery/message_server/proc/send_rc_message(var/recipient = "",var/sender = "",var/message = "",var/stamp = "", var/id_auth = "", var/priority = 1)
 			MS.send_rc_message("Engineering/Security/Bridge", my_department, message, "", "", 2)
 			pass = 1

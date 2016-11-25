@@ -34,7 +34,7 @@
 	throw_speed = 4
 	throw_range = 20
 	m_amt = 100
-	origin_tech = "magnets=2;syndicate=3"*/
+	origin_tech = Tc_MAGNETS + "=2;" + Tc_SYNDICATE + "=3"*/
 
 /obj/item/weapon/rsp
 	name = "\improper Rapid-Seed-Producer (RSP)"
@@ -112,7 +112,7 @@
 	name = "cane"
 	desc = "A cane used by a true gentlemen. Or a clown."
 	icon = 'icons/obj/weapons.dmi'
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	icon_state = "cane"
 	item_state = "stick"
 	flags = FPRINT
@@ -166,7 +166,7 @@
 	siemens_coefficient = 1
 	throwforce = 0
 	w_class = W_CLASS_MEDIUM
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	var/breakouttime = 300	//Deciseconds = 30s = 0.5 minute
 
 /obj/item/weapon/legcuffs/bolas
@@ -181,7 +181,7 @@
 	throwforce = 2
 	w_class = W_CLASS_SMALL
 	w_type = RECYK_METAL
-	origin_tech = "materials=1"
+	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("lashes", "bludgeons", "whips")
 	force = 4
 	breakouttime = 50 //10 seconds
@@ -197,7 +197,8 @@
 	return(OXYLOSS)
 
 /obj/item/weapon/legcuffs/bolas/throw_at(var/atom/A, throw_range, throw_speed)
-	if(!throw_range) return //divide by zero, also you throw like a girl
+	if(!throw_range)
+		return //divide by zero, also you throw like a girl
 	if(usr && !istype(thrown_from, /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas)) //if there is a user, but not a mech
 		if(istype(usr, /mob/living/carbon/human)) //if the user is human
 			var/mob/living/carbon/human/H = usr
@@ -240,9 +241,9 @@
 					step(H, H.dir)
 					H.visible_message("<span class='warning'>[H] was tripped by the bolas!</span>","<span class='warning'>Your legs have been tangled!</span>");
 					H.Stun(2) //used instead of setting damage in vars to avoid non-human targets being affected
-					H.Weaken(4)
+					H.Knockdown(4)
 					H.legcuffed = src //applies legcuff properties inherited through legcuffs
-					src.loc = H
+					src.forceMove(H)
 					H.update_inv_legcuffed()
 					if(!H.legcuffed) //in case it didn't happen, we need a safety net
 						throw_failed()
@@ -314,10 +315,10 @@
 	if(prob(20))
 		src.visible_message("<span class='rose'>\The [src] falls to pieces on impact!</span>")
 		if(weight1)
-			weight1.loc = src.loc
+			weight1.forceMove(src.loc)
 			weight1 = null
 		if(weight2)
-			weight2.loc = src.loc
+			weight2.forceMove(src.loc)
 			weight2 = null
 		update_icon(src)
 
@@ -347,10 +348,10 @@
 			else
 				user.show_message("<span class='notice'>You cut off [weight1] [weight2 ? "and [weight2]" : ""].</span>") //you remove the items currently attached
 				if(weight1)
-					weight1.loc = get_turf(usr)
+					weight1.forceMove(get_turf(usr))
 					weight1 = null
 				if(weight2)
-					weight2.loc = get_turf(usr)
+					weight2.forceMove(get_turf(usr))
 					weight2 = null
 				playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
 				update_icon()
@@ -437,7 +438,7 @@
 				return
 	if(isscrewdriver(I))
 		if(IED)
-			IED.loc = get_turf(src.loc)
+			IED.forceMove(get_turf(src.loc))
 			IED = null
 			to_chat(user, "<span class='notice'>You remove the IED from the [src].</span>")
 			return
@@ -468,7 +469,7 @@
 				if(H.m_intent == "run")
 					armed = 0
 					H.legcuffed = src
-					src.loc = H
+					src.forceMove(H)
 					H.update_inv_legcuffed()
 
 					feedback_add_details("handcuffs","B") //Yes, I know they're legcuffs. Don't change this, no need for an extra variable. The "B" is used to tell them apart.
@@ -499,7 +500,7 @@
 	throwforce = 15
 	w_class = W_CLASS_MEDIUM
 	w_type = RECYK_METAL
-	origin_tech = "combat=5"
+	origin_tech = Tc_COMBAT + "=5"
 	attack_verb = list("rams", "bludgeons")
 	force = 15
 	throw_speed = 1
@@ -611,7 +612,7 @@
 	icon = 'icons/obj/radio.dmi'
 	icon_state = "radio"
 	var/temp = null
-	var/uses = 4.0
+	var/uses = 8.0
 	var/selfdestruct = 0.0
 	var/traitor_frequency = 0.0
 	var/obj/item/device/radio/origradio = null
@@ -626,7 +627,7 @@
 	starting_materials = list(MAT_IRON = 100)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature=MELTPOINT_SILICON
-	origin_tech = "magnets=1"
+	origin_tech = Tc_MAGNETS + "=1"
 
 /obj/item/weapon/staff
 	name = "wizards staff"
@@ -656,18 +657,18 @@
 	attack_verb = wielded ? list("rams into", "charges at") : list("bludgeons", "whacks", "cleans", "dusts")
 	if(user)
 		user.update_inv_hands()
-		if(user.mind in ticker.mode.wizards)
+		if(iswizard(user) || isapprentice(user))
 			user.flying = wielded ? 1 : 0
 			if(wielded)
 				to_chat(user, "<span class='notice'>You hold \the [src] between your legs.</span>")
 				user.say("QUID 'ITCH")
-				animate(user, pixel_y = pixel_y + 10 , time = 10, loop = 1, easing = SINE_EASING)
+				animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER , time = 10, loop = 1, easing = SINE_EASING)
 			else
-				animate(user, pixel_y = pixel_y + 10 , time = 1, loop = 1)
+				animate(user, pixel_y = pixel_y + 10 * PIXEL_MULTIPLIER , time = 1, loop = 1)
 				animate(user, pixel_y = pixel_y, time = 10, loop = 1, easing = SINE_EASING)
 				animate(user)
 				if(user.lying)//aka. if they have just been stunned
-					user.pixel_y -= 6
+					user.pixel_y -= 6 * PIXEL_MULTIPLIER
 		else
 			if(wielded)
 				to_chat(user, "<span class='notice'>You hold \the [src] between your legs.</span>")
@@ -796,6 +797,12 @@
 	icon_state = "power_mod"
 	desc = "Heavy-duty switching circuits for power control."
 
+/obj/item/weapon/circuitboard/station_map
+	icon = 'icons/obj/module.dmi'
+	name = "holomap module"
+	icon_state = "card_mod"
+	desc = "Holographic circuits for station holomaps."
+
 /obj/item/weapon/module/id_auth
 	name = "\improper ID authentication module"
 	icon_state = "id_mod"
@@ -819,7 +826,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	w_class = W_CLASS_TINY
-	origin_tech = "biotech=2"
+	origin_tech = Tc_BIOTECH + "=2"
 
 /*
 /obj/item/weapon/cigarpacket
@@ -847,7 +854,7 @@
 	icon = 'icons/obj/stock_parts.dmi'
 	icon_state = "capacitor"
 	desc = "A debug item for research."
-	origin_tech = "materials=8;programming=8;magnets=8;powerstorage=8;bluespace=8;combat=8;biotech=8;syndicate=8"
+	origin_tech = Tc_MATERIALS + "=8;" + Tc_PROGRAMMING + "=8;" + Tc_MAGNETS + "=8;" + Tc_POWERSTORAGE + "=8;" + Tc_BLUESPACE + "=8;" + Tc_COMBAT + "=8;" + Tc_BIOTECH + "=8;" + Tc_SYNDICATE + "=8"
 */
 
 /obj/item/weapon/ectoplasm
@@ -903,14 +910,18 @@ proc
         var icon{result = icon(base); temp}
 
         for(var/angle in 0 to 360 step step)
-            if(angle == 0  ) continue
-            if(angle == 360)   continue
+            if(angle == 0  )
+            	continue
+            if(angle == 360)
+            	continue
 
             temp = icon(base)
 
-            if(aa) temp.Scale(w2, h2)
+            if(aa)
+            	temp.Scale(w2, h2)
             temp.Turn(angle)
-            if(aa) temp.Scale(w,   h)
+            if(aa)
+            	temp.Scale(w,   h)
 
             result.Insert(temp, "[angle]")
 

@@ -60,14 +60,14 @@
 				break
 			testing("Replaced ID!")
 		else if(istype(M.back,/obj/item/weapon/storage) && M.back:contents.len < M.back:storage_slots) // Try to place it in something on the mob's back
-			Item.loc = M.back
+			Item.forceMove(M.back)
 			ok = 1
 			testing("Added to [M.back.name]!")
 			to_chat(M, "<span class='notice'>Your [Item.name] has been added to your [M.back.name].</span>")
 		else
 			for(var/obj/item/weapon/storage/S in M.contents) // Try to place it in any item that can store stuff, on the mob.
 				if (S.contents.len < S.storage_slots)
-					Item.loc = S
+					Item.forceMove(S)
 					ok = 1
 					testing("Added to [S]!")
 					to_chat(M, "<span class='notice'>Your [Item.name] has been added to your [S.name].</span>")
@@ -76,7 +76,7 @@
 		//skip:
 		if (ok == 0) // Finally, since everything else failed, place it on the ground
 			testing("Plopped onto the ground!")
-			Item.loc = get_turf(M.loc)
+			Item.forceMove(get_turf(M.loc))
 
 		HackProperties(Item,propadjust)
 
@@ -176,17 +176,17 @@
 						ok = M.equip_if_possible(I, slot_wear_id, 0)	//if 1, last argument deletes on fail
 						break
 				else if(istype(M.back,/obj/item/weapon/storage) && M.back:contents.len < M.back:storage_slots) // Try to place it in something on the mob's back
-					Item.loc = M.back
+					Item.forceMove(M.back)
 					ok = 1
 
 				else
 					for(var/obj/item/weapon/storage/S in M.contents) // Try to place it in any item that can store stuff, on the mob.
 						if (S.contents.len < S.storage_slots)
-							Item.loc = S
+							Item.forceMove(S)
 							ok = 1
 							break
 
 				skip:
 				if (ok == 0) // Finally, since everything else failed, place it on the ground
-					Item.loc = get_turf(M.loc)
+					Item.forceMove(get_turf(M.loc))
 */

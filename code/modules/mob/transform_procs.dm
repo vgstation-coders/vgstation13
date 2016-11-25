@@ -1,51 +1,65 @@
-/mob/living/carbon/human/proc/monkeyize()
-	if (monkeyizing)
-		return
+#define MONKEY_ANIM_TIME 22
+
+// A standardized proc for turning a mob into a monkey
+// ignore_primitive will force the mob to specifically become a monkey and not its primitive type
+// returns the monkey mob
+/mob/living/carbon/human/proc/monkeyize(var/ignore_primitive = 0)
+	if(monkeyizing)
+		return 0
+	monkeyizing = 1
+	if(isturf(loc)) // no need to do animations if we're inside something
+		canmove = 0
+		icon = null
+		overlays.len = 0
+		invisibility = 101
+		delayNextAttack(50)
+		var/atom/movable/overlay/animation = new(loc)
+		animation.icon_state = "blank"
+		animation.icon = 'icons/mob/mob.dmi'
+		animation.master = src
+		flick("h2monkey", animation)
+		sleep(MONKEY_ANIM_TIME)
+		animation.master = null
+		qdel(animation)
 
 	for(var/obj/item/W in src)
-		if (W==w_uniform) // will be torn
-			continue
-		drop_from_inventory(W)
-	regenerate_icons()
-	dropBorers()
-	monkeyizing = 1
-	canmove = 0
-	delayNextAttack(50)
-	icon = null
-	invisibility = 101
+		u_equip(W, 1)
+	for(var/obj/O in src)
+		qdel(O)
 
-	for(var/t in organs)
-		qdel(t)
-	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "h2monkey", sleeptime = 15)
-	sleep(33)
-
-	if(!species.primitive) //If the creature in question has no primitive set, this is going to be messy.
-		gib()
-		return
-
-	var/mob/living/carbon/monkey/O = null
-
-	O = new species.primitive(get_turf(src))
-
-	O.dna = dna.Clone()
-	O.dna.SetSEState(MONKEYBLOCK,1)
-	O.dna.SetSEValueRange(MONKEYBLOCK,0xDAC, 0xFFF)
-	O.loc = loc
-	O.viruses = viruses
-	viruses = list()
-	for(var/datum/disease/D in O.viruses)
-		D.affected_mob = O
-
-	if (client)
-		client.mob = O
+	var/mob/living/Mo
+	if(ignore_primitive)
+		Mo = new /mob/living/carbon/monkey(loc)
+	else
+		if(!species.primitive)
+			dropBorers()
+			gib()
+			return 0
+		Mo = new species.primitive(loc)
+	Mo.dna = dna.Clone()
+	if(!Mo.dna.GetSEState(MONKEYBLOCK)) // make sure our copied dna has the right monkey blocks
+		Mo.dna.SetSEState(MONKEYBLOCK,1)
+		Mo.dna.SetSEValueRange(MONKEYBLOCK, 0xDAC, 0xFFF)
+	transferImplantsTo(Mo)
+	transferBorers(Mo)
+	Mo.suiciding = suiciding
+	Mo.take_overall_damage(getBruteLoss(), getFireLoss())
+	Mo.setToxLoss(getToxLoss())
+	Mo.setOxyLoss(getOxyLoss())
+	Mo.stat = stat
+	Mo.delayNextAttack(0)
+	Mo.a_intent = a_intent
 	if(mind)
-		mind.transfer_to(O)
+		mind.transfer_to(Mo)
 
-	to_chat(O, "<B>You are now [O]. </B>")
+	for(var/datum/disease/D in viruses)
+		Mo.viruses += D
+		D.affected_mob = Mo
+		viruses -= D
 
+	monkeyizing = 0
 	qdel(src)
-
-	return O
+	return Mo
 
 /mob/living/carbon/human/proc/Cluwneize()
 	if (monkeyizing)
@@ -79,11 +93,11 @@
 		qdel(src)
 	return new_mob
 
-/mob/new_player/AIize()
+/mob/new_player/AIize(var/spawn_here = 0, var/del_mob = 1)
 	spawning = 1
 	return ..()
 
-/mob/living/carbon/human/AIize()
+/mob/living/carbon/human/AIize(var/spawn_here = 0, var/del_mob = 1)
 	if (monkeyizing)
 		return
 	for(var/t in organs)
@@ -91,7 +105,7 @@
 
 	return ..()
 
-/mob/living/carbon/AIize()
+/mob/living/carbon/AIize(var/spawn_here = 0, var/del_mob = 1)
 	if (monkeyizing)
 		return
 	for(var/obj/item/W in src)
@@ -104,9 +118,9 @@
 	delayNextAttack(50)
 	return ..()
 
-/mob/proc/AIize()
+/mob/proc/AIize(var/spawn_here = 0, var/del_mob = 1)
 	if(client)
-		src << sound(null, repeat = 0, wait = 0, volume = 85, channel = 1)// stop the jams for AIs
+		src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY)// stop the jams for AIs
 
 	var/mob/living/silicon/ai/O = new (get_turf(src), base_law_type,,1)//No MMI but safety is in effect.
 	O.invisibility = 0
@@ -119,27 +133,29 @@
 		O.key = key
 
 	var/obj/loc_landmark
-	for(var/obj/effect/landmark/start/sloc in landmarks_list)
-		if (sloc.name != "AI")
-			continue
-		if (locate(/mob/living) in sloc.loc)
-			continue
-		loc_landmark = sloc
-	if (!loc_landmark)
-		for(var/obj/effect/landmark/tripai in landmarks_list)
-			if (tripai.name == "tripai")
-				if(locate(/mob/living) in tripai.loc)
-					continue
-				loc_landmark = tripai
-	if (!loc_landmark)
-		to_chat(O, "Oh god sorry we can't find an unoccupied AI spawn location, so we're spawning you on top of someone.")
-		for(var/obj/effect/landmark/start/sloc in landmarks_list)
-			if (sloc.name == "AI")
-				loc_landmark = sloc
 
-	O.loc = loc_landmark.loc
-	for (var/obj/item/device/radio/intercom/comm in O.loc)
-		comm.ai += O
+	if(!spawn_here)
+		for(var/obj/effect/landmark/start/sloc in landmarks_list)
+			if (sloc.name != "AI")
+				continue
+			if (locate(/mob/living) in sloc.loc)
+				continue
+			loc_landmark = sloc
+		if (!loc_landmark)
+			for(var/obj/effect/landmark/tripai in landmarks_list)
+				if (tripai.name == "tripai")
+					if(locate(/mob/living) in tripai.loc)
+						continue
+					loc_landmark = tripai
+		if (!loc_landmark)
+			to_chat(O, "Oh god sorry we can't find an unoccupied AI spawn location, so we're spawning you on top of someone.")
+			for(var/obj/effect/landmark/start/sloc in landmarks_list)
+				if (sloc.name == "AI")
+					loc_landmark = sloc
+
+		O.forceMove(loc_landmark.loc)
+		for (var/obj/item/device/radio/intercom/comm in O.loc)
+			comm.ai += O
 
 	to_chat(O, "<B>You are playing the station's AI. The AI cannot move, but can interact with many objects while viewing them (through cameras).</B>")
 	to_chat(O, "<B>To look at other parts of the station, click on yourself to get a camera menu.</B>")
@@ -162,7 +178,8 @@
 
 	O.rename_self("ai",1)
 	. = O
-	qdel(src)
+	if(del_mob)
+		qdel(src)
 
 
 //human -> robot
@@ -203,7 +220,7 @@
 	else
 		O.key = key
 
-	O.loc = loc
+	O.forceMove(loc)
 	O.job = "Cyborg"
 
 	O.mmi = new /obj/item/device/mmi(O)
@@ -252,7 +269,7 @@
 	else
 		O.key = key
 
-	O.loc = loc
+	O.forceMove(loc)
 	O.job = "Cyborg"
 
 	O.mmi = new /obj/item/device/mmi(O)
@@ -303,7 +320,6 @@
 		return
 	for(var/obj/item/W in src)
 		drop_from_inventory(W)
-	dropBorers()
 	regenerate_icons()
 	monkeyizing = 1
 	canmove = 0
@@ -314,6 +330,7 @@
 		qdel(t)
 
 	var/mob/living/carbon/slime/new_slime
+	transferBorers(new_slime)
 	if(reproduce)
 		var/number = pick(14;2,3,4)	//reproduce (has a small chance of producing 3 or 4 offspring)
 		var/list/babies = list()
@@ -467,5 +484,4 @@
 	//Not in here? Must be untested!
 	return 0
 
-
-
+#undef MONKEY_ANIM_TIME

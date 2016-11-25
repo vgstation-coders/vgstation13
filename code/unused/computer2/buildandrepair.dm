@@ -49,7 +49,7 @@
 				src.icon_state = "1"
 				src.mainboard = P
 				user.drop_item()
-				P.loc = src
+				P.forceMove(src)
 			if(istype(P, /obj/item/weapon/screwdriver) && mainboard)
 				playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You screw the mainboard into place.</span>")
@@ -60,7 +60,7 @@
 				to_chat(user, "<span class='notice'>You remove the mainboard.</span>")
 				src.state = 1
 				src.icon_state = "0"
-				mainboard.loc = src.loc
+				mainboard.forceMove(src.loc)
 				src.mainboard = null
 		if(2)
 			if(istype(P, /obj/item/weapon/screwdriver) && mainboard && (!peripherals.len))
@@ -73,7 +73,7 @@
 				if(src.peripherals.len < 3)
 					user.drop_item()
 					src.peripherals.Add(P)
-					P.loc = src
+					P.forceMove(src)
 					to_chat(user, "<span class='notice'>You add [P] to the frame.</span>")
 				else
 					to_chat(user, "<span class='warning'>There is no more room for peripheral cards.</span>")
@@ -82,7 +82,7 @@
 				playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You remove the peripheral boards.</span>")
 				for(var/obj/item/weapon/peripheral/W in src.peripherals)
-					W.loc = src.loc
+					W.forceMove(src.loc)
 					src.peripherals.Remove(W)
 
 			if(istype(P, /obj/item/weapon/cable_coil))
@@ -90,7 +90,8 @@
 					playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
 					if(do_after(user, src, 20))
 						P:amount -= 5
-						if(!P:amount) del(P)
+						if(!P:amount)
+							del(P)
 						to_chat(user, "<span class='notice'>You add cables to the frame.</span>")
 						src.state = 3
 						src.icon_state = "3"
@@ -103,19 +104,19 @@
 				var/obj/item/weapon/cable_coil/A = new /obj/item/weapon/cable_coil( src.loc )
 				A.amount = 5
 				if(src.hd)
-					src.hd.loc = src.loc
+					src.hd.forceMove(src.loc)
 					src.hd = null
 
 			if(istype(P, /obj/item/weapon/disk/data/fixed_disk) && !src.hd)
 				user.drop_item()
 				src.hd = P
-				P.loc = src
+				P.forceMove(src)
 				to_chat(user, "<span class='notice'>You connect the drive to the cabling.</span>")
 
 			if(istype(P, /obj/item/weapon/crowbar) && src.hd)
 				playsound(src.loc, 'sound/items/Crowbar.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You remove the hard drive.</span>")
-				src.hd.loc = src.loc
+				src.hd.forceMove(src.loc)
 				src.hd = null
 
 			if(istype(P, /obj/item/stack/sheet/glass/glass))
@@ -139,13 +140,14 @@
 				var/obj/machinery/computer2/C= new /obj/machinery/computer2( src.loc )
 				C.setup_drive_size = 0
 				C.icon_state = src.created_icon_state
-				if(mainboard.created_name) C.name = mainboard.created_name
+				if(mainboard.created_name)
+					C.name = mainboard.created_name
 				del(mainboard)
 				if(hd)
 					C.hd = hd
-					hd.loc = C
+					hd.forceMove(C)
 				for(var/obj/item/weapon/peripheral/W in src.peripherals)
-					W.loc = C
+					W.forceMove(C)
 					W.host = C
 					C.peripherals.Add(W)
 				del(src)

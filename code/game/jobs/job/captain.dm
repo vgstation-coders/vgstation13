@@ -13,16 +13,22 @@
 	minimal_access = list() 	//See get_access()
 	minimal_player_age = 14
 
+	species_whitelist = list("Human")
+
 	pdaslot=slot_l_store
 	pdatype=/obj/item/device/pda/captain
 
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		H.equip_or_collect(new /obj/item/device/radio/headset/heads/captain(H), slot_ears)
 		switch(H.backbag)
-			if(2) H.equip_or_collect(new /obj/item/weapon/storage/backpack/captain(H), slot_back)
-			if(3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_cap(H), slot_back)
-			if(4) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+			if(2)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/captain(H), slot_back)
+			if(3)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_cap(H), slot_back)
+			if(4)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		var/obj/item/clothing/under/U = new /obj/item/clothing/under/rank/captain(H)
 		U.attach_accessory(new /obj/item/clothing/accessory/medal/gold/captain)
@@ -63,6 +69,9 @@
 	idtype = /obj/item/weapon/card/id/silver
 	req_admin_notify = 1
 	minimal_player_age = 10
+
+	species_whitelist = list("Human")
+
 	access = list(access_security, access_sec_doors, access_brig, access_court, access_weapons, access_forensics_lockers,
 			            access_medical, access_engine, access_change_ids, access_ai_upload, access_eva, access_heads,
 			            access_all_personal_lockers, access_maint_tunnels, access_bar, access_janitor, access_construction, access_morgue,
@@ -79,12 +88,16 @@
 	pdaslot=slot_l_store
 	pdatype=/obj/item/device/pda/heads/hop
 	equip(var/mob/living/carbon/human/H)
-		if(!H)	return 0
+		if(!H)
+			return 0
 		H.equip_or_collect(new /obj/item/device/radio/headset/heads/hop(H), slot_ears)
 		switch(H.backbag)
-			if(2) H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
-			if(3) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
-			if(4) H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+			if(2)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack(H), slot_back)
+			if(3)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
+			if(4)
+				H.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/clothing/under/rank/head_of_personnel(H), slot_w_uniform)
 		H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)

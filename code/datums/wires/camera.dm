@@ -5,6 +5,17 @@
 	holder_type = /obj/machinery/camera
 	wire_count = 6
 
+/datum/wires/camera/New()
+	wire_names=list(
+		"[CAMERA_WIRE_FOCUS]" 		= "Focus",
+		"[CAMERA_WIRE_POWER]" 		= "Power",
+		"[CAMERA_WIRE_LIGHT]" 		= "Camera Lights",
+		"[CAMERA_WIRE_ALARM]" 		= "Alarm",
+		"[CAMERA_WIRE_NOTHING1]" 	= "Nothing 1",
+		"[CAMERA_WIRE_NOTHING2]" 	= "Nothing 2"
+	)
+	..()
+
 /datum/wires/camera/GetInteractWindow()
 
 	. = ..()
@@ -16,6 +27,8 @@
 	return .
 
 /datum/wires/camera/CanUse(var/mob/living/L)
+	if(!..())
+		return 0
 	var/obj/machinery/camera/C = holder
 	if(!C.panel_open)
 		return 0

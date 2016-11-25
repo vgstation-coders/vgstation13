@@ -89,15 +89,17 @@
 	if(istype(H) && !H.shoes)
 		to_chat(H, "<span class='danger'>You step on the D4!</span>")
 		H.apply_damage(4,BRUTE,(pick(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)))
-		H.Weaken(3)
+		H.Knockdown(3)
 
 /obj/item/weapon/dice/update_icon()
 	overlays.len = 0
 	overlays += image(icon = icon, icon_state = "[src.icon_state][src.result]")
 
 /obj/item/weapon/dice/d20/e20/diceroll(mob/user as mob, thrown)
-	if(!istype(user)) return 0
-	if(triggered) return
+	if(!istype(user))
+		return 0
+	if(triggered)
+		return
 	..()
 	message_admins("[key_name(user)] has [thrown? "used" : "thrown"] an explosive dice and rolled a [result]")
 	log_game("[key_name(user)] has [thrown? "used" : "thrown"] an explosive dice and rolled a [result]")
@@ -284,7 +286,7 @@
 					genemutcheck(user,NOBREATHBLOCK,null,MUTCHK_FORCED)
 					genemutcheck(user,FIREBLOCK,null,MUTCHK_FORCED)
 					user.update_mutations()
-					to_chat(user, "<span class=danger><B>You have been rewarded hanesomely with rare minerals and powers! </span></B>")
+					to_chat(user, "<span class=danger><B>You have been rewarded handsomely with rare minerals and powers! </span></B>")
 
 			if(prob(15))
 				deactivated = 1

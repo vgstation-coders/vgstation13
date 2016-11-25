@@ -23,4 +23,4 @@
 	icon_state = "button_tong"
 
 /obj/item/device/remote_button/tong/on_press(mob/user)
-	playsound(get_turf(holder), 'sound/piano/Cn4.ogg', 25, 1)
+	playsound(get_turf(holder), 'sound/instruments/piano/Cn4.ogg', 25, 1)

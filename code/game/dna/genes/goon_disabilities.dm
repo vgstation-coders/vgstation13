@@ -45,7 +45,8 @@
 	OnMobLife(var/mob/owner)
 		owner.radiation = max(owner.radiation, 20)
 		for(var/mob/living/L in range(1, owner))
-			if(L == owner) continue
+			if(L == owner)
+				continue
 			to_chat(L, "<span class='warning'>You are enveloped by a soft green glow emanating from [owner].</span>")
 			L.radiation += 5
 		return
@@ -67,10 +68,12 @@
 	mutation = M_OBESITY
 
 	can_activate(var/mob/M, var/flags)
-		if(!ishuman(M)) return 0
+		if(!ishuman(M))
+			return 0
 
 		var/mob/living/carbon/human/H = M
-		if(H.species && !(H.species.flags & CAN_BE_FAT)) return 0
+		if(H.species && !(H.species.flags & CAN_BE_FAT))
+			return 0
 
 		return 1
 
@@ -358,7 +361,7 @@
 
 	spell_flags = INCLUDEUSER
 	invocation_type = SpI_NONE
-	range = -1
+	range = SELFCAST
 	max_targets = 1
 	selection_type = "range"
 	compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
@@ -400,7 +403,7 @@
 
 	spell_flags = INCLUDEUSER | STATALLOWED
 	invocation_type = SpI_NONE
-	range = -1
+	range = SELFCAST
 	max_targets = 1
 	selection_type = "range"
 

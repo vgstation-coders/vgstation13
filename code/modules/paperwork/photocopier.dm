@@ -80,7 +80,8 @@
 			spawn()
 				copying = 1
 				for(var/i = 0, i < copies, i++)
-					if(!copying) break
+					if(!copying)
+						break
 					if(toner > 0)
 						var/obj/item/weapon/paper/paper_type = copy.type
 						var/obj/item/weapon/paper/c = new paper_type(loc)
@@ -106,7 +107,8 @@
 			spawn()
 				copying = 1
 				for(var/i = 0, i < copies, i++)
-					if(!copying) break
+					if(!copying)
+						break
 					if(toner >= 5)  //Was set to = 0, but if there was say 3 toner left and this ran, you would get -2 which would be weird for ink
 						var/obj/item/weapon/photo/p = new /obj/item/weapon/photo (loc)
 						var/icon/I = icon(photocopy.icon, photocopy.icon_state)
@@ -129,8 +131,8 @@
 						p.name = photocopy.name
 						p.desc = photocopy.desc
 						p.scribble = photocopy.scribble
-						p.pixel_x = rand(-10, 10)
-						p.pixel_y = rand(-10, 10)
+						p.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+						p.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 						p.blueprints = photocopy.blueprints //a copy of a picture is still good enough for the syndicate
 						p.info = photocopy.info
 
@@ -143,7 +145,8 @@
 			spawn()
 				copying = 1
 				for(var/i = 0, i < copies, i++)
-					if(!copying) break
+					if(!copying)
+						break
 					var/icon/temp_img
 					if(ishuman(ass) && (ass.get_item_by_slot(slot_w_uniform) || ass.get_item_by_slot(slot_wear_suit)))
 						to_chat(usr, "<span class='notice'>You feel kind of silly copying [ass == usr ? "your" : ass][ass == usr ? "" : "\'s"] ass with [ass == usr ? "your" : "their"] clothes on.</span>")
@@ -161,8 +164,8 @@
 							break
 						var/obj/item/weapon/photo/p = new /obj/item/weapon/photo (loc)
 						p.desc = "You see [ass]'s ass on the photo."
-						p.pixel_x = rand(-10, 10)
-						p.pixel_y = rand(-10, 10)
+						p.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+						p.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 						p.img = temp_img
 						var/icon/small_img = icon(temp_img) //Icon() is needed or else temp_img will be rescaled too >.>
 						var/icon/ic = icon('icons/obj/items.dmi',"photo")
@@ -179,19 +182,19 @@
 		copying = 0
 		if(copy)
 			if(!istype(usr,/mob/living/silicon/ai)) //surprised this check didn't exist before, putting stuff in AI's hand is bad
-				copy.loc = usr.loc
+				copy.forceMove(usr.loc)
 				usr.put_in_hands(copy)
 			else
-				copy.loc = src.loc
+				copy.forceMove(src.loc)
 			to_chat(usr, "<span class='notice'>You take [copy] out of [src].</span>")
 			copy = null
 			updateUsrDialog()
 		else if(photocopy)
 			if(!istype(usr,/mob/living/silicon/ai)) //same with this one, wtf
-				photocopy.loc = usr.loc
+				photocopy.forceMove(usr.loc)
 				usr.put_in_hands(photocopy)
 			else
-				photocopy.loc = src.loc
+				photocopy.forceMove(src.loc)
 			to_chat(usr, "<span class='notice'>You take [photocopy] out of [src].</span>")
 			photocopy = null
 			updateUsrDialog()
@@ -221,7 +224,8 @@
 				to_chat(usr, "<span class='warning'>Must wait for current print job to finish.</span>")
 				return
 			copying = 0
-		if(!istype(usr,/mob/living/silicon/ai)) return
+		if(!istype(usr,/mob/living/silicon/ai))
+			return
 		if(toner >= 5)
 			var/list/nametemp = list()
 			var/find
@@ -244,8 +248,8 @@
 			p.img = img
 			p.desc = selection.fields["desc"]
 			p.blueprints = selection.fields["blueprints"]
-			p.pixel_x = rand(-10, 10)
-			p.pixel_y = rand(-10, 10)
+			p.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+			p.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 			toner -= 5	 //AI prints color pictures only, thus they can do it more efficiently
 			sleep(15)
 		updateUsrDialog()
@@ -302,15 +306,16 @@
 		var/obj/item/weapon/grab/G = O
 		if(ismob(G.affecting) && G.affecting != ass)
 			var/mob/GM = G.affecting
-			if(GM.locked_to) return
+			if(GM.locked_to)
+				return
 			visible_message("<span class='warning'>[usr] drags [GM.name] onto the photocopier!</span>")
 			GM.forceMove(get_turf(src))
 			ass = GM
 			if(photocopy)
-				photocopy.loc = src.loc
+				photocopy.forceMove(src.loc)
 				photocopy = null
 			else if(copy)
-				copy.loc = src.loc
+				copy.forceMove(src.loc)
 				copy = null
 			updateUsrDialog()
 	else if(isscrewdriver(O))
@@ -337,7 +342,7 @@
 				for(var/obj/I in component_parts)
 					if(I.reliability != 100 && crit_fail)
 						I.crit_fail = 1
-					I.loc = src.loc
+					I.forceMove(src.loc)
 				qdel(src)
 				return 1
 	return
@@ -380,17 +385,19 @@
 	if(target == user && !(user.incapacitated()))
 		visible_message("<span class='warning'>[usr] jumps onto the photocopier!</span>")
 	else if(target != user && !user.incapacitated())
-		if(target.anchored) return
-		if(!ishuman(user) && !ismonkey(user)) return
+		if(target.anchored)
+			return
+		if(!ishuman(user) && !ismonkey(user))
+			return
 		visible_message("<span class='warning'>[usr] drags [target.name] onto the photocopier!</span>")
 	target.forceMove(get_turf(src))
 	ass = target
 	if(photocopy)
-		photocopy.loc = src.loc
+		photocopy.forceMove(src.loc)
 		visible_message("<span class='notice'>[photocopy] is shoved out of the way by [ass]!</span>")
 		photocopy = null
 	else if(copy)
-		copy.loc = src.loc
+		copy.forceMove(src.loc)
 		visible_message("<span class='notice'>[copy] is shoved out of the way by [ass]!</span>")
 		copy = null
 	updateUsrDialog()
@@ -442,6 +449,7 @@
 	return 0
 
 /obj/machinery/photocopier/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0)) return 1
+	if(air_group || (height==0))
+		return 1
 
 	return (!mover.density || !density || mover.pass_flags)

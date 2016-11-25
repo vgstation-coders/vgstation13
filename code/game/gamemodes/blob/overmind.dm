@@ -11,7 +11,7 @@
 	pass_flags = PASSBLOB
 	faction = "blob"
 
-	layer = 15
+	plane = BASE_PLANE
 
 	var/obj/effect/blob/core/blob_core = null // The blob overmind's core
 	var/blob_points = 0
@@ -78,9 +78,9 @@
 	if(blob_core && hud_used)
 		var/matrix/M = matrix()
 		M.Scale(1,blob_core.health/blob_core.maxhealth)
-		var/total_offset = 60 + (100*(blob_core.health/blob_core.maxhealth))
+		var/total_offset = (60 + (100*(blob_core.health/blob_core.maxhealth))) * PIXEL_MULTIPLIER
 		hud_used.mymob.gui_icons.blob_healthbar.transform = M
-		hud_used.mymob.gui_icons.blob_healthbar.screen_loc = "EAST:14,CENTER-[8-round(total_offset/32)]:[total_offset%32]"
+		hud_used.mymob.gui_icons.blob_healthbar.screen_loc = "EAST:[14*PIXEL_MULTIPLIER],CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
 		hud_used.mymob.gui_icons.blob_coverRIGHT.maptext = "[blob_core.health]"
 
 		var/severity = 0
@@ -111,16 +111,17 @@
 /mob/camera/blob/proc/add_points(var/points)
 	if(points != 0)
 		blob_points = Clamp(blob_points + points, 0, max_blob_points)
+		stat_collection.blobblob.res_generated += points
 
 	//Updating the HUD
 	if(hud_used)
 		var/matrix/M = matrix()
 		M.Scale(1,blob_points/max_blob_points)
-		var/total_offset = 60 + (100*(blob_points/max_blob_points))
+		var/total_offset = (60 + (100*(blob_points/max_blob_points))) * PIXEL_MULTIPLIER
 		hud_used.mymob.gui_icons.blob_powerbar.transform = M
-		hud_used.mymob.gui_icons.blob_powerbar.screen_loc = "WEST:0,CENTER-[8-round(total_offset/32)]:[total_offset%32]"
+		hud_used.mymob.gui_icons.blob_powerbar.screen_loc = "WEST,CENTER-[8-round(total_offset/WORLD_ICON_SIZE)]:[total_offset%WORLD_ICON_SIZE]"
 		hud_used.mymob.gui_icons.blob_coverLEFT.maptext = "[blob_points]"
-		hud_used.mymob.gui_icons.blob_coverLEFT.maptext_x = 4
+		hud_used.mymob.gui_icons.blob_coverLEFT.maptext_x = 4*PIXEL_MULTIPLIER
 		if(blob_points >= 100)
 			hud_used.mymob.gui_icons.blob_coverLEFT.maptext_x = 1
 

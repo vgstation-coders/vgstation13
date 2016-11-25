@@ -20,7 +20,6 @@
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "cleanbot0"
 	icon_initial = "cleanbot"
-	layer = 5.0
 	density = 0
 	anchored = 0
 	//weight = 1.0E7
@@ -165,7 +164,8 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 /obj/machinery/bot/cleanbot/Emag(mob/user as mob)
 	..()
 	if(open && !locked)
-		if(user) to_chat(user, "<span class='notice'>The [src] buzzes and beeps.</span>")
+		if(user)
+			to_chat(user, "<span class='notice'>The [src] buzzes and beeps.</span>")
 		src.oddbutton = 1
 		src.screwloose = 1
 
@@ -192,8 +192,10 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 		src.oldtarget = get_turf(gib)
 	if(!src.target || src.target == null)
 		for (var/turf/T in view(7,src))
-			if(target) break
-			if(istype(T,/turf/space)) continue
+			if(target)
+				break
+			if(istype(T,/turf/space))
+				continue
 			for(var/obj/effect/decal/cleanable/sickfilth in T.contents)
 				if(sickfilth && !(is_type_in_list(sickfilth, blacklisted_targets)))
 					if(!T.targetted_by && T!=oldtarget)
@@ -212,7 +214,8 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 		if (!patrol_path || patrol_path.len < 1)
 			var/datum/radio_frequency/frequency = radio_controller.return_frequency(beacon_freq)
 
-			if(!frequency) return
+			if(!frequency)
+				return
 
 			closest_dist = 9999
 			closest_loc = null
@@ -237,9 +240,11 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 		path = new()
 	if(target && path.len == 0)
 		spawn(0)
-			if(!src || !target) return
+			if(!src || !target)
+				return
 			src.path = AStar(src.loc, src.target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance_cardinal, 0, 30)
-			if (!path) path = list()
+			if (!path)
+				path = list()
 			if(src.path.len == 0)
 				src.oldtarget = src.target
 				target.targetted_by = null

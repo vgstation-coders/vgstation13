@@ -29,19 +29,21 @@ code\game\\dna\genes\goon_powers.dm
 
 /spell/targeted/genetic/blind
 	name = "Blind"
+	desc = "Temporarily blind a single person."
+	abbreviation = "BD"
 	disabilities = 1
 	duration = 300
 
 	charge_max = 300
 
-	spell_flags = 0
+	spell_flags = WAIT_FOR_CLICK
 	invocation = "STI KALY"
 	invocation_type = SpI_WHISPER
 	message = "<span class='danger'>Your eyes cry out in pain!</span>"
 	cooldown_min = 50
 
 	range = 7
-	max_targets = 0
+	max_targets = 1
 
 	amt_eye_blind = 10
 	amt_eye_blurry = 20
@@ -51,10 +53,11 @@ code\game\\dna\genes\goon_powers.dm
 /spell/targeted/genetic/mutate
 	name = "Mutate"
 	desc = "This spell causes you to turn into a hulk and gain laser vision for a short while."
+	abbreviation = "MU"
 
 	school = "transmutation"
 	charge_max = 400
-	spell_flags = Z2NOCAST | NEEDSCLOTHES | INCLUDEUSER
+	spell_flags = NEEDSCLOTHES | INCLUDEUSER
 	invocation = "BIRUZ BENNAR"
 	invocation_type = SpI_SHOUT
 	message = "<span class='notice'>You feel strong! You feel a pressure building behind your eyes!</span>"

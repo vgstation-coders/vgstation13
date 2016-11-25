@@ -8,7 +8,7 @@
 	var/heated = 0		//whether the bunsen has been on long enough to let stuff react
 	var/obj/item/weapon/reagent_containers/held_container
 	var/heat_time = 50
-	pixel_y = 15
+	pixel_y = 15 * PIXEL_MULTIPLIER
 	ghost_read = 0
 
 /obj/machinery/bunsen_burner/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -33,7 +33,7 @@
 	if(held_container)
 		underlays = null
 		to_chat(user, "<span class='notice'>You remove the [held_container] from the [src].</span>")
-		held_container.loc = src.loc
+		held_container.forceMove(src.loc)
 		held_container.attack_hand(user)
 		held_container = null
 	else

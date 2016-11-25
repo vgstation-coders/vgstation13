@@ -13,7 +13,7 @@
 	else
 		loc = locate(1,1,1)
 
-	sight |= SEE_TURFS
+	change_sight(adding = SEE_TURFS)
 	player_list |= src
 
 /*

@@ -47,13 +47,14 @@
 	I.pixel_x = 0		//then remove it so it'll stay within the evidence bag
 	I.pixel_y = 0
 	var/image/img = image("icon"=I, "layer"=FLOAT_LAYER)	//take a snapshot. (necessary to stop the underlays appearing under our inventory-HUD slots ~Carn
+	img.plane = FLOAT_PLANE
 	I.pixel_x = xx		//and then return it
 	I.pixel_y = yy
 	overlays += img
 	overlays += image(icon = icon, icon_state = "evidence")	//should look nicer for transparent stuff. not really that important, but hey.
 
 	desc = "An evidence bag containing [I]. [I.desc]"
-	I.loc = src
+	I.forceMove(src)
 	w_class = I.w_class
 	return
 
@@ -64,6 +65,7 @@
 		user.visible_message("[user] takes [I] out of [src]", "You take [I] out of [src].",\
 		"You hear someone rustle around in a plastic bag, and remove something.")
 		overlays.len = 0	//remove the overlays
+		underlays.len = 0	//and the underlays (due to xenoarch's core sampler)
 		user.put_in_hands(I)
 		w_class = W_CLASS_TINY
 		icon_state = "evidenceobj"

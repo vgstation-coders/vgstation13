@@ -32,7 +32,7 @@ var/global/num_vending_terminals = 1
 	icon = 'icons/obj/vending.dmi'
 	icon_state = "empty"
 	var/obj/structure/vendomatpack/pack = null
-	layer = 2.9
+	layer = BELOW_OBJ_LAYER
 	anchored = 1
 	density = 1
 	var/health = 100
@@ -130,7 +130,8 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/RefreshParts()
 	var/manipcount = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/manipulator)) manipcount += SP.rating
+		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
+			manipcount += SP.rating
 	shoot_chance = manipcount * 3
 
 /obj/machinery/vending/Destroy()
@@ -247,9 +248,11 @@ var/global/num_vending_terminals = 1
 		if(1.0)
 			malfunction()
 		if(2.0)
-			if(prob(50)) malfunction()
+			if(prob(50))
+				malfunction()
 		if(3.0)
-			if(prob(25)) malfunction()
+			if(prob(25))
+				malfunction()
 
 /obj/machinery/vending/proc/build_inventory(var/list/productlist,hidden=0,req_coin=0)
 	for(var/typepath in productlist)
@@ -352,7 +355,7 @@ var/global/num_vending_terminals = 1
 		var/obj/item/stack/sheet/cardboard/C = W
 		if(C.amount>=4)
 			C.use(4)
-			to_chat(user, "<span class='notice'>You slot some cardboard into the machine into [src].</span>")
+			to_chat(user, "<span class='notice'>You slot some cardboard into \the [src].</span>")
 			cardboard = 1
 			src.updateUsrDialog()
 	if(iswiretool(W))
@@ -394,6 +397,10 @@ var/global/num_vending_terminals = 1
 			if(bag.contents.len > 0)
 				to_chat(user, "<span class='notice'>Some items are refused.</span>")
 			src.updateUsrDialog()
+	
+	else if(istype(W, /obj/item/weapon/spacecash))
+		var/obj/item/weapon/spacecash/C = W
+		pay_with_cash(C, user)
 	else
 		if(is_type_in_list(W, allowed_inputs))
 			if(user.drop_item(W, src))
@@ -414,8 +421,39 @@ var/global/num_vending_terminals = 1
 
 //H.wear_id
 
+/**
+ *  Receive payment with cashmoney.
+ *
+ *  usr is the mob who gets the change.
+ */
+/obj/machinery/vending/proc/pay_with_cash(var/obj/item/weapon/spacecash/cashmoney, mob/user)
+	if(!currently_vending) 
+		return
+	if(currently_vending.price > cashmoney.get_total())
+		// This is not a status display message, since it's something the character
+		// themselves is meant to see BEFORE putting the money in
+		to_chat(user, "[bicon(cashmoney)] <span class='warning'>That is not enough money.</span>")
+		return 0
+
+	// Bills (banknotes) cannot really have worth different than face value,
+	// so we have to eat the bill and spit out change in a bundle
+	// This is really dirty, but there's no superclass for all bills, so we
+	// just assume that all spacecash that's not something else is a bill
+
+	visible_message("<span class='info'>[usr] inserts a credit chip into [src].</span>")
+	var/left = cashmoney.get_total() - currently_vending.price
+	qdel(cashmoney)
+
+	if(left)
+		dispense_cash(left, src.loc)
+
+	src.vend(src.currently_vending, usr)
+	currently_vending = null
+	return 1
+
 /obj/machinery/vending/scan_card(var/obj/item/weapon/card/I)
-	if(!currently_vending) return
+	if(!currently_vending)
+		return
 	if (istype(I, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/C = I
 		visible_message("<span class='info'>[usr] swipes a card through [src].</span>")
@@ -571,7 +609,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/attack_hand(mob/living/user as mob)
 	if(user.lying || user.incapacitated())
 		return 0
-		
+
 	if(M_TK in user.mutations && user.a_intent == "hurt" && iscarbon(user))
 		if(!Adjacent(user))
 			to_chat(user, "<span class='danger'>You slam the [src] with your mind!</span>")
@@ -580,7 +618,7 @@ var/global/num_vending_terminals = 1
 
 	if(stat & (BROKEN|NOPOWER))
 		return
-		
+
 	if(seconds_electrified > 0)
 		if(shock(user, 100))
 			return
@@ -1019,6 +1057,12 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/assembly/signaler = 4,
 		/obj/item/weapon/wirecutters = 1,
 		/obj/item/weapon/cartridge/signal = 4,
+		/obj/item/weapon/stock_parts/manipulator = 5,
+		/obj/item/weapon/stock_parts/micro_laser = 3,
+		/obj/item/weapon/stock_parts/matter_bin = 5,
+		/obj/item/weapon/stock_parts/scanning_module = 3,
+		/obj/item/weapon/stock_parts/capacitor = 2,
+		/obj/item/weapon/stock_parts/console_screen = 4,
 		)
 	contraband = list(
 		/obj/item/device/flashlight = 5,
@@ -1331,8 +1375,8 @@ var/global/num_vending_terminals = 1
 	// offset 32 pixels in direction of dir
 	// this allows the NanoMed to be embedded in a wall, yet still inside an area
 	dir = ndir
-	pixel_x = (dir & 3)? 0 : (dir == 4 ? 30 : -30)
-	pixel_y = (dir & 3)? (dir ==1 ? 30 : -30) : 0
+	pixel_x = (dir & 3)? 0 : (dir == 4 ? 30 * PIXEL_MULTIPLIER: -30 * PIXEL_MULTIPLIER)
+	pixel_y = (dir & 3)? (dir ==1 ? 30 * PIXEL_MULTIPLIER: -30 * PIXEL_MULTIPLIER) : 0
 
 /obj/machinery/wallmed_frame/update_icon()
 	icon_state = "wallmed_frame[build]"
@@ -1371,7 +1415,7 @@ var/global/num_vending_terminals = 1
 					update_icon()
 					var/obj/item/weapon/circuitboard/C
 					if(_circuitboard)
-						_circuitboard.loc=get_turf(src)
+						_circuitboard.forceMove(get_turf(src))
 						C=_circuitboard
 						_circuitboard=null
 					else
@@ -1572,9 +1616,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/toy/waterflower = 1,
 		)
 
-	allowed_inputs = list(
-		/obj/item/seeds,
-		)
 	pack = /obj/structure/vendomatpack/hydroseeds
 
 /obj/machinery/vending/voxseeds
@@ -1600,10 +1641,6 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/weapon/storage/box/boxen = 1
-		)
-
-	allowed_inputs = list(
-		/obj/item/seeds,
 		)
 
 /obj/machinery/vending/magivend
@@ -1685,10 +1722,17 @@ var/global/num_vending_terminals = 1
 	product_slogans = "BODA: We sell drink.;BODA: Drink today.;BODA: We're better then Comrade Dan."
 	product_ads = "For Tsar and Country.;Have you fulfilled your nutrition quota today?;Very nice!;We are simple people, for this is all we eat.;If there is a person, there is a problem. If there is no person, then there is no problem."
 	products = list(
-		/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/soda = 30,
+		/obj/item/weapon/reagent_containers/food/drinks/plastic/water = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/plastic/water/small = 20,
+		/obj/item/weapon/reagent_containers/food/drinks/plastic/sodawater = 8,
 		)
 	contraband = list(
-		/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/cola = 20,
+		/obj/item/weapon/reagent_containers/food/drinks/plastic/cola = 20,
+		)
+	prices = list(
+		/obj/item/weapon/reagent_containers/food/drinks/plastic/water = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/plastic/water/small = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/plastic/sodawater = 15,
 		)
 
 	pack = /obj/structure/vendomatpack/sovietsoda
@@ -1740,7 +1784,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/cell/high = 10,
 		/obj/item/weapon/reagent_containers/glass/fuelcan = 5,
 		/obj/item/weapon/stock_parts/capacitor = 10,
-		/obj/item/device/holomap = 2
+		/obj/item/device/holomap = 2,
+		/obj/item/weapon/reagent_containers/glass/bottle/sacid = 3,
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
@@ -2063,6 +2108,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/shoes/purple = 10,
 		/obj/item/clothing/shoes/red = 10,
 		/obj/item/clothing/shoes/white = 10,
+		/obj/item/clothing/shoes/workboots = 10,
 		)
 	contraband = list(
 		/obj/item/clothing/shoes/jackboots = 5,
@@ -2109,11 +2155,11 @@ var/global/num_vending_terminals = 1
 		src.build_inventory(contraband, 1)
 		emagged = 1
 		overlays = 0
-		var/image/dangerlay = image(icon,"[icon_state]-dangermode", LIGHTING_LAYER + 1)
+		var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
+		dangerlay.plane = LIGHTING_PLANE
 		overlays_vending[2] = dangerlay
 		update_icon()
 		return 1
-	return
 
 //NaziVend++
 /obj/machinery/vending/nazivend/DANGERMODE
@@ -2139,7 +2185,8 @@ var/global/num_vending_terminals = 1
 	..()
 	emagged = 1
 	overlays = 0
-	var/image/dangerlay = image(icon,"[icon_state]-dangermode", LIGHTING_LAYER + 1)
+	var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
+	dangerlay.plane = LIGHTING_PLANE
 	overlays_vending[2] = dangerlay
 	update_icon()
 
@@ -2182,7 +2229,8 @@ var/global/num_vending_terminals = 1
 		src.build_inventory(contraband, 1)
 		emagged = 1
 		overlays = 0
-		var/image/dangerlay = image(icon,"[icon_state]-dangermode", LIGHTING_LAYER + 1)
+		var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
+		dangerlay.plane = LIGHTING_PLANE
 		overlays_vending[2] = dangerlay
 		update_icon()
 		return 1
@@ -2215,14 +2263,15 @@ var/global/num_vending_terminals = 1
 	..()
 	emagged = 1
 	overlays = 0
-	var/image/dangerlay = image(icon,"[icon_state]-dangermode", LIGHTING_LAYER + 1)
+	var/image/dangerlay = image(icon,"[icon_state]-dangermode", ABOVE_LIGHTING_LAYER)
+	dangerlay.plane = LIGHTING_PLANE
 	overlays_vending[2] = dangerlay
 	update_icon()
 
 /obj/machinery/vending/discount
 	name = "Discount Dan's"
 	desc = "A snack machine owned by the infamous 'Discount Dan' franchise."
-	product_slogans = "Discount Dan, he's the man!;There 'aint nothing better in this world then a bite of mystery.;Don't listen to those other machines, buy my product!;Quantity over Quality!;Don't listen to those eggheads at the CDC, buy now!;Discount Dan's: We're good for you! Nope, couldn't say it with a straight face.;Discount Dan's: Only the best quality produ-*BZZT*"
+	product_slogans = "Discount Dan, he's the man!;There 'aint nothing better in this world than a bite of mystery.;Don't listen to those other machines, buy my product!;Quantity over Quality!;Don't listen to those eggheads at the CDC, buy now!;Discount Dan's: We're good for you! Nope, couldn't say it with a straight face.;Discount Dan's: Only the best quality produ-*BZZT*"
 	product_ads = "Discount Dan(tm) is not responsible for any damages caused by misuse of his product."
 	vend_reply = "No refunds."
 	icon_state = DISCOUNT

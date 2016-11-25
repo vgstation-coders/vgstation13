@@ -13,8 +13,6 @@
 		if(3.0)
 			if(prob(20))
 				new/obj/effect/decal/cleanable/soot(src)
-			return
-	return
 
 /turf/unsimulated/floor/attack_paw(user as mob)
 	return src.attack_hand(user)
@@ -23,8 +21,8 @@
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 		name = "engraved floor"
 		icon_state = "cult"
-		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1,anim_plane = PLANE_OBJ)
-	return
+		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1,anim_plane = OBJ_PLANE)
+
 
 /turf/unsimulated/floor/grass
 	icon_state = "grass1"
@@ -32,3 +30,33 @@
 /turf/unsimulated/floor/grass/New()
 	..()
 	icon_state = "grass[rand(1,4)]"
+
+/turf/unsimulated/floor/mars
+	name = "surface"
+	icon_state = "ironsand1"
+
+	carbon_dioxide = MOLES_CO2MARS
+	nitrogen = MOLES_N2MARS
+	oxygen = 0
+	temperature = T20C
+
+/turf/unsimulated/floor/mars/New()
+	..()
+
+	if(prob(30))
+		icon_state = "ironsand[rand(1,15)]"
+
+/turf/unsimulated/floor/mars/air
+	carbon_dioxide = 0
+	oxygen = MOLES_O2STANDARD
+	nitrogen = MOLES_N2STANDARD
+	temperature = T20C
+
+/turf/unsimulated/floor/mars/border
+	icon_state = "magenta" //Makes it visible while mapping
+	density = 1
+
+/turf/unsimulated/floor/mars/border/New()
+	icon_state = "ironsand1"
+
+	..()

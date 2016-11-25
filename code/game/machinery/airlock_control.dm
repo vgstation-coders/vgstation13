@@ -10,9 +10,11 @@ obj/machinery/door/airlock
 
 
 obj/machinery/door/airlock/receive_signal(datum/signal/signal)
-	if(!signal || signal.encryption) return
+	if(!signal || signal.encryption)
+		return
 
-	if(id_tag != signal.data["tag"] || !signal.data["command"]) return
+	if(id_tag != signal.data["tag"] || !signal.data["command"])
+		return
 
 	switch(signal.data["command"])
 		if("open")
@@ -72,12 +74,14 @@ obj/machinery/door/airlock/proc/send_status()
 
 obj/machinery/door/airlock/open(surpress_send)
 	. = ..()
-	if(!surpress_send) send_status()
+	if(!surpress_send)
+		send_status()
 
 
 obj/machinery/door/airlock/close(surpress_send)
 	. = ..()
-	if(!surpress_send) send_status()
+	if(!surpress_send)
+		send_status()
 
 
 obj/machinery/door/airlock/Bumped(atom/AM)
@@ -211,8 +215,8 @@ obj/machinery/airlock_sensor/airlock_exterior
 		//src.tdir = dir		// to fix Vars bug
 		//dir = SOUTH
 
-		pixel_x = (dir & 3)? 0 : (dir == 4 ? 24 : -24)
-		pixel_y = (dir & 3)? (dir ==1 ? 24 : -24) : 0
+		pixel_x = (dir & 3)? 0 : (dir == 4 ? 24 * PIXEL_MULTIPLIER : -24 * PIXEL_MULTIPLIER)
+		pixel_y = (dir & 3)? (dir ==1 ? 24 * PIXEL_MULTIPLIER: -24* PIXEL_MULTIPLIER) : 0
 
 		//build=0
 		//stat |= MAINT
@@ -291,8 +295,8 @@ obj/machinery/access_button
 		//src.tdir = dir		// to fix Vars bug
 		//dir = SOUTH
 
-		pixel_x = (dir & 3)? 0 : (dir == 4 ? 24 : -24)
-		pixel_y = (dir & 3)? (dir ==1 ? 24 : -24) : 0
+		pixel_x = (dir & 3)? 0 : (dir == 4 ? 24 * PIXEL_MULTIPLIER : -24 * PIXEL_MULTIPLIER)
+		pixel_y = (dir & 3)? (dir ==1 ? 24 * PIXEL_MULTIPLIER : -24 * PIXEL_MULTIPLIER) : 0
 
 		//build=0
 		//stat |= MAINT

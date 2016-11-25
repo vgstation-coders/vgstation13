@@ -23,14 +23,14 @@
 	icon = 'icons/obj/module.dmi'
 	icon_state = "id_mod"
 	item_state = "circuitboard"
-	origin_tech = "programming=2"
+	origin_tech = Tc_PROGRAMMING + "=2"
 	starting_materials = list(MAT_GLASS = 2000) // Recycle glass only
 	w_type = RECYK_ELECTRONIC
 
 	var/id_tag = null
 	var/frequency = null
 	var/build_path = null
-	var/board_type = "computer"
+	var/board_type = COMPUTER
 	var/list/req_components = null
 	var/powernet = null
 	var/list/records = null
@@ -40,7 +40,7 @@
 /obj/item/weapon/circuitboard/message_monitor
 	name = "Circuit board (Message Monitor)"
 	build_path = "/obj/machinery/computer/message_monitor"
-	origin_tech = "programming=3"
+	origin_tech = Tc_PROGRAMMING + "=3"
 /obj/item/weapon/circuitboard/security
 	name = "Circuit board (Security)"
 	build_path = "/obj/machinery/computer/security"
@@ -49,31 +49,31 @@
 	build_path = "/obj/machinery/computer/security/engineering"
 /obj/item/weapon/circuitboard/aicore
 	name = "Circuit board (AI core)"
-	origin_tech = "programming=4;biotech=2"
-	board_type = "other"
+	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_BIOTECH + "=2"
+	board_type = OTHER
 /obj/item/weapon/circuitboard/aiupload
 	name = "Circuit board (AI Upload)"
 	build_path = "/obj/machinery/computer/aiupload"
-	origin_tech = "programming=4"
+	origin_tech = Tc_PROGRAMMING + "=4"
 /obj/item/weapon/circuitboard/borgupload
 	name = "Circuit board (Cyborg Upload)"
 	build_path = "/obj/machinery/computer/borgupload"
-	origin_tech = "programming=4"
+	origin_tech = Tc_PROGRAMMING + "=4"
 /obj/item/weapon/circuitboard/med_data
 	name = "Circuit board (Medical Records)"
 	build_path = "/obj/machinery/computer/med_data"
 /obj/item/weapon/circuitboard/pandemic
 	name = "Circuit board (PanD.E.M.I.C. 2200)"
 	build_path = "/obj/machinery/computer/pandemic"
-	origin_tech = "programming=2;biotech=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=2"
 /obj/item/weapon/circuitboard/scan_consolenew
 	name = "Circuit board (DNA Machine)"
 	build_path = "/obj/machinery/computer/scan_consolenew"
-	origin_tech = "programming=2;biotech=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=2"
 /obj/item/weapon/circuitboard/communications
 	name = "Circuit board (Communications)"
 	build_path = "/obj/machinery/computer/communications"
-	origin_tech = "programming=2;magnets=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MAGNETS + "=2"
 /obj/item/weapon/circuitboard/card
 	name = "Circuit board (ID Computer)"
 	build_path = "/obj/machinery/computer/card"
@@ -86,7 +86,7 @@
 /obj/item/weapon/circuitboard/teleporter
 	name = "Circuit board (Teleporter)"
 	build_path = "/obj/machinery/computer/teleporter"
-	origin_tech = "programming=2;bluespace=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BLUESPACE + "=2"
 /obj/item/weapon/circuitboard/secure_data
 	name = "Circuit board (Security Records)"
 	build_path = "/obj/machinery/computer/secure_data"
@@ -120,15 +120,15 @@
 /obj/item/weapon/circuitboard/robotics
 	name = "Circuit board (Robotics Control)"
 	build_path = "/obj/machinery/computer/robotics"
-	origin_tech = "programming=3"
+	origin_tech = Tc_PROGRAMMING + "=3"
 /obj/item/weapon/circuitboard/cloning
 	name = "Circuit board (Cloning Console)"
 	build_path = "/obj/machinery/computer/cloning"
-	origin_tech = "programming=3;biotech=3"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=3"
 /obj/item/weapon/circuitboard/arcade
 	name = "Circuit board (Arcade)"
 	build_path = "/obj/machinery/computer/arcade"
-	origin_tech = "programming=1"
+	origin_tech = Tc_PROGRAMMING + "=1"
 	var/list/game_data = list()
 /obj/item/weapon/circuitboard/turbine_control
 	name = "Circuit board (Turbine control)"
@@ -136,7 +136,7 @@
 /obj/item/weapon/circuitboard/solar_control
 	name = "Circuit board (Solar Control)"  //name fixed 250810
 	build_path = "/obj/machinery/power/solar/control"
-	origin_tech = "programming=2;powerstorage=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_POWERSTORAGE + "=2"
 /obj/item/weapon/circuitboard/powermonitor
 	name = "Circuit board (Power Monitor)"  //name fixed 250810
 	build_path = "/obj/machinery/power/monitor"
@@ -178,40 +178,40 @@
 /obj/item/weapon/circuitboard/crew
 	name = "Circuit board (Crew monitoring computer)"
 	build_path = "/obj/machinery/computer/crew"
-	origin_tech = "programming=3;biotech=2;magnets=2"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=2;" + Tc_MAGNETS + "=2"
 /obj/item/weapon/circuitboard/mech_bay_power_console
 	name = "Circuit board (Mech Bay Power Control Console)"
 	build_path = "/obj/machinery/computer/mech_bay_power_console"
-	origin_tech = "programming=2;powerstorage=3"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_POWERSTORAGE + "=3"
 /obj/item/weapon/circuitboard/ordercomp
 	name = "Circuit board (Supply ordering console)"
 	build_path = "/obj/machinery/computer/ordercomp"
-	origin_tech = "programming=2"
+	origin_tech = Tc_PROGRAMMING + "=2"
 /obj/item/weapon/circuitboard/supplycomp
 	name = "Circuit board (Supply shuttle console)"
 	build_path = "/obj/machinery/computer/supplycomp"
-	origin_tech = "programming=3"
+	origin_tech = Tc_PROGRAMMING + "=3"
 	var/contraband_enabled = 0
 /obj/item/weapon/circuitboard/operating
 	name = "Circuit board (Operating Computer)"
 	build_path = "/obj/machinery/computer/operating"
-	origin_tech = "programming=2;biotech=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=2"
 /obj/item/weapon/circuitboard/mining
 	name = "Circuit board (Outpost Status Display)"
 	build_path = "/obj/machinery/computer/security/mining"
-	origin_tech = "programming=2"
+	origin_tech = Tc_PROGRAMMING + "=2"
 /obj/item/weapon/circuitboard/comm_monitor
 	name = "Circuit board (Telecommunications Monitor)"
 	build_path = "/obj/machinery/computer/telecomms/monitor"
-	origin_tech = "programming=3"
+	origin_tech = Tc_PROGRAMMING + "=3"
 /obj/item/weapon/circuitboard/comm_server
 	name = "Circuit board (Telecommunications Server Monitor)"
 	build_path = "/obj/machinery/computer/telecomms/server"
-	origin_tech = "programming=3"
+	origin_tech = Tc_PROGRAMMING + "=3"
 /obj/item/weapon/circuitboard/comm_traffic
 	name = "Circuitboard (Telecommunications Traffic Control)"
 	build_path = "/obj/machinery/computer/telecomms/traffic"
-	origin_tech = "programming=3"
+	origin_tech = Tc_PROGRAMMING + "=3"
 
 /obj/item/weapon/circuitboard/curefab
 	name = "Circuit board (Cure fab)"
@@ -219,55 +219,55 @@
 /obj/item/weapon/circuitboard/splicer
 	name = "Circuit board (Disease Splicer)"
 	build_path = "/obj/machinery/computer/diseasesplicer"
-	origin_tech = "programming=3;biotech=4"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=4"
 
 /obj/item/weapon/circuitboard/shuttle_control
 	name = "Circuit board (Shuttle Control)"
 	build_path = "/obj/machinery/computer/shuttle_control"
-	origin_tech = "programming=3;engineering=2"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2"
 
 /obj/item/weapon/circuitboard/HolodeckControl // Not going to let people get this, but it's just here for future
 	name = "Circuit board (Holodeck Control)"
 	build_path = "/obj/machinery/computer/HolodeckControl"
-	origin_tech = "programming=4"
+	origin_tech = Tc_PROGRAMMING + "=4"
 /obj/item/weapon/circuitboard/aifixer
 	name = "Circuit board (AI Integrity Restorer)"
 	build_path = "/obj/machinery/computer/aifixer"
-	origin_tech = "programming=3;biotech=2"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=2"
 /obj/item/weapon/circuitboard/area_atmos
 	name = "Circuit board (Area Air Control)"
 	build_path = "/obj/machinery/computer/area_atmos"
-	origin_tech = "programming=2"
+	origin_tech = Tc_PROGRAMMING + "=2"
 /obj/item/weapon/circuitboard/prison_shuttle
 	name = "Circuit board (Prison Shuttle)"
 	build_path = "/obj/machinery/computer/prison_shuttle"
-	origin_tech = "programming=2"
+	origin_tech = Tc_PROGRAMMING + "=2"
 /obj/item/weapon/circuitboard/bhangmeter
 	name = "Circuit board (Bhangmeter)"
 	build_path = "/obj/machinery/computer/bhangmeter"
-	origin_tech = "programming=2"
+	origin_tech = Tc_PROGRAMMING + "=2"
 /obj/item/weapon/circuitboard/telesci_computer
 	name = "Circuit board (Telepad Control Console)"
 	build_path = "/obj/machinery/computer/telescience"
-	origin_tech = "programming=3;bluespace=2"
+	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BLUESPACE + "=2"
 /obj/item/weapon/circuitboard/forensic_computer
 	name = "Circuit board (Forensics Console)"
 	build_path = "/obj/machinery/computer/forensic_scanning"
-	origin_tech = "programming=2"
+	origin_tech = Tc_PROGRAMMING + "=2"
 /obj/item/weapon/circuitboard/pda_terminal
 	name = "Circuit board (PDA Terminal)"
 	build_path = "/obj/machinery/computer/pda_terminal"
-	origin_tech = "programming=2"
+	origin_tech = Tc_PROGRAMMING + "=2"
 
 /obj/item/weapon/circuitboard/smeltcomp
 	name = "Circuit board (Ore Processing Console)"
 	build_path = "/obj/machinery/computer/smelting"
-	origin_tech = "programming=2;materials=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
 
 /obj/item/weapon/circuitboard/stacking_machine_console
 	name = "Circuit board (Stacking Machine Console)"
 	build_path = "/obj/machinery/computer/stacking_unit"
-	origin_tech = "programming=2;materials=2"
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
 
 /obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
 	if(issolder(I))
@@ -311,12 +311,8 @@
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)
 		if(0)
-			if(iswrench(P))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-				if(do_after(user, src, 5) && state == 0)
-					to_chat(user, "<span class='notice'>You wrench the frame into place.</span>")
-					src.anchored = 1
-					src.state = 1
+			if(iswrench(P) && wrenchAnchor(user))
+				src.state = 1
 				return 1
 			if(iswelder(P))
 				var/obj/item/weapon/weldingtool/WT = P
@@ -325,7 +321,8 @@
 					return 1
 				playsound(get_turf(src), 'sound/items/Welder.ogg', 50, 1)
 				if(do_after(user, src, 10) && state == 0)
-					if(!src || !WT.isOn()) return
+					if(!src || !WT.isOn())
+						return
 					to_chat(user, "<span class='notice'>You deconstruct the frame.</span>")
 					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, src.loc)
 					M.amount = 5
@@ -333,17 +330,14 @@
 					qdel(src)
 				return 1
 		if(1)
-			if(iswrench(P))
-				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-				if(do_after(user, src, 20) && state == 1)
-					to_chat(user, "<span class='notice'>You unfasten the frame.</span>")
-					src.anchored = 0
-					src.state = 0
+			if(iswrench(P) && wrenchAnchor(user))
+				src.state = 0
 				return 1
 			if(istype(P, /obj/item/weapon/circuitboard) && !circuit)
 				var/obj/item/weapon/circuitboard/B = P
-				if(B.board_type == "computer")
-					if(!user.drop_item(B, src)) return
+				if(B.board_type == COMPUTER)
+					if(!user.drop_item(B, src))
+						return
 
 					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 					to_chat(user, "<span class='notice'>You place the circuit board inside the frame.</span>")
@@ -363,7 +357,7 @@
 				to_chat(user, "<span class='notice'>You remove the circuit board.</span>")
 				src.state = 1
 				src.icon_state = "0"
-				circuit.loc = src.loc
+				circuit.forceMove(src.loc)
 				src.circuit = null
 				return 1
 		if(2)
@@ -422,10 +416,14 @@
 				playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You connect the monitor.</span>")
 				var/B = new src.circuit.build_path ( src.loc )
-				if(circuit.powernet) B:powernet = circuit.powernet
-				if(circuit.id_tag) B:id_tag = circuit.id_tag
-				if(circuit.records) B:records = circuit.records
-				if(circuit.frequency) B:frequency = circuit.frequency
+				if(circuit.powernet)
+					B:powernet = circuit.powernet
+				if(circuit.id_tag)
+					B:id_tag = circuit.id_tag
+				if(circuit.records)
+					B:records = circuit.records
+				if(circuit.frequency)
+					B:frequency = circuit.frequency
 				if(istype(circuit,/obj/item/weapon/circuitboard/supplycomp))
 					var/obj/machinery/computer/supplycomp/SC = B
 					var/obj/item/weapon/circuitboard/supplycomp/C = circuit
@@ -437,3 +435,6 @@
 				qdel(src)
 				return 1
 	return 0
+
+/obj/structure/computerframe/can_wrench_shuttle()
+	return 1

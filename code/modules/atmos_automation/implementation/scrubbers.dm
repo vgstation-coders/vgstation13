@@ -75,7 +75,8 @@
 	return  "Set Scrubber <a href=\"?src=\ref[src];set_scrubber=1\">[fmtString(scrubber)]</a> power to <a href=\"?src=\ref[src];set_power=1\">[state ? "on" : "off"]</a>."
 
 /datum/automation/set_scrubber_power/Topic(href,href_list)
-	if(..()) return
+	if(..())
+		return
 	if(href_list["set_power"])
 		state = !state
 		parent.updateUsrDialog()

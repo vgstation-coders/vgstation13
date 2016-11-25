@@ -1,5 +1,6 @@
 /spell/targeted/projectile/magic_missile
 	name = "Magic Missile"
+	abbreviation = "MM"
 	desc = "This spell fires several, slow moving, magic projectiles at nearby targets."
 
 	school = "evocation"
@@ -18,7 +19,7 @@
 
 	hud_state = "wiz_mm"
 
-	amt_weakened = 3
+	amt_knockdown = 3
 	amt_stunned = 3
 
 	amt_dam_fire = 10

@@ -1,8 +1,7 @@
 /turf
 	icon = 'icons/turf/floors.dmi'
-	level = 1.0
-	plane = PLANE_TURF
-
+	plane = TURF_PLANE
+	layer = TURF_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD
 	luminosity = 0
 
 	//for floors, use is_plating(), is_plasteel_floor() and is_light_floor()
@@ -22,7 +21,6 @@
 	var/temperature = T20C
 
 	var/blocks_air = 0
-	var/icon_old = null
 
 	//associated PathNode in the A* algorithm
 	var/PathNode/PNode = null
@@ -30,8 +28,7 @@
 	// Bot shit
 	var/targetted_by=null
 
-	// Decal shit.
-	var/list/decals
+	var/list/turfdecals
 
 	// Flick animation shit
 	var/atom/movable/overlay/c_animation = null
@@ -41,9 +38,6 @@
 
 	// holy water
 	var/holy = 0
-
-	// wizard sleep spell probably better way to do this
-	var/sleeping = 0
 
 	// left by bullets that went all the way through
 	var/bullet_marks = 0
@@ -62,7 +56,6 @@
 	//See code/datums/shuttle.dm @ 544
 	var/preserve_underlay = 0
 
-	forceinvertredraw = 1
 
 	// This is the placed to store data for the holomap.
 	var/list/image/holomap_data
@@ -97,10 +90,6 @@
 		return ..()
 	return ..()
 
-/turf/Click()
-	if(!isAI(usr))
-		..()
-
 /turf/ex_act(severity)
 	return 0
 
@@ -130,24 +119,21 @@
 		return
 	//THIS IS OLD TURF ENTERED CODE
 	var/loopsanity = 100
-	if(ismob(A))
-		if(A.areaMaster && A.areaMaster.has_gravity == 0)
-			inertial_drift(A)
-	/*
-		if(A.flags & NOGRAV)
-			inertial_drift(A)
-	*/
 
-		else if(!istype(src, /turf/space))
-			A:inertia_dir = 0
+	if(!src.has_gravity())
+		inertial_drift(A)
+	else
+		A.inertia_dir = 0
+
 	..()
 	var/objects = 0
 	if(A && A.flags & PROXMOVE)
 		for(var/atom/Obj as mob|obj|turf|area in range(1))
-			if(objects > loopsanity)	break
+			if(objects > loopsanity)
+				break
 			objects++
-			spawn( 0 )
-				if ((A && Obj) && Obj.flags & PROXMOVE)
+			if(Obj.flags & PROXMOVE)
+				spawn( 0 )
 					Obj.HasProximity(A, 1)
 	// THIS IS NOW TRANSIT STUFF
 	if ((!(A) || src != A.loc))
@@ -158,7 +144,8 @@
 
 		// Okay, so let's make it so that people can travel z levels but not nuke disks!
 		// if(ticker.mode.name == "nuclear emergency")	return
-		if(A.z > 6) return
+		if(A.z > 6)
+			return
 		if (A.x <= TRANSITIONEDGE || A.x >= (world.maxx - TRANSITIONEDGE - 1) || A.y <= TRANSITIONEDGE || A.y >= (world.maxy - TRANSITIONEDGE - 1))
 
 			var/list/contents_brought = list()
@@ -171,8 +158,8 @@
 
 			var/locked_to_current_z = 0//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
 
-			for(var/obj/item/weapon/disk/nuclear in contents_brought)
-				locked_to_current_z = 1
+			for(var/obj/item/weapon/disk/nuclear/nuclear in contents_brought)
+				locked_to_current_z = map.zMainStation
 				break
 
 			//Check if it's a mob pulling an object
@@ -190,7 +177,7 @@
 			for(var/mob/living/silicon/robot/mommi in contents_brought)
 				if(mommi.locked_to_z != 0)
 					if(src.z == mommi.locked_to_z)
-						locked_to_current_z = 1
+						locked_to_current_z = map.zMainStation
 					else
 						to_chat(mommi, "<span class='warning'>You find your way back.</span>")
 						move_to_z = mommi.locked_to_z
@@ -228,7 +215,7 @@
 
 			spawn (0)
 				if(was_pulling && MOB) //Carry the object they were pulling over when they transition
-					was_pulling.loc = MOB.loc
+					was_pulling.forceMove(MOB.loc)
 					MOB.pulling = was_pulling
 					was_pulling.pulledby = MOB
 				if ((A && A.loc))
@@ -256,53 +243,23 @@
 	return 0
 
 /turf/proc/inertial_drift(atom/movable/A as mob|obj)
-	if(!(A.last_move))	return
-	if(istype(A, /obj/spacepod) && src.x > 2 && src.x < (world.maxx - 1) && src.y > 2 && src.y < (world.maxy-1))
-		var/obj/spacepod/SP = A
-		if(SP.Process_Spacemove(1))
-			SP.inertia_dir = 0
-			return
-		spawn(5)
-			if((SP && (SP.loc == src)))
-				if(SP.inertia_dir)
-					SP.Move(get_step(SP, SP.inertia_dir), SP.inertia_dir)
-					return
-	if(istype(A, /obj/structure/bed/chair/vehicle/) && src.x > 2 && src.x < (world.maxx - 1) && src.y > 2 && src.y < (world.maxy-1))
-		var/obj/structure/bed/chair/vehicle/JC = A //A bomb!
-		if(JC.Process_Spacemove(1))
-			JC.inertia_dir = 0
-			return
-		spawn(5)
-			if((JC && (JC.loc == src)))
-				if(JC.inertia_dir)
-					step(JC, JC.inertia_dir)
-					return
-				JC.inertia_dir = JC.last_move
-				step(JC, JC.inertia_dir)
-	if((istype(A, /mob/) && src.x > 2 && src.x < (world.maxx - 1) && src.y > 2 && src.y < (world.maxy-1)))
-		var/mob/M = A
-		if(M.Process_Spacemove(1))
-			M.inertia_dir  = 0
-			return
-		spawn(5)
-			if((M && !(M.anchored) && !(M.pulledby) && (M.loc == src)))
-				var/mob/living/carbon/carbons = M
-				if(istype(carbons))
-					carbons.update_minimap() //Should this even be here, oh well whatever
-				if(M.inertia_dir)
-					step(M, M.inertia_dir)
-					return
-				M.inertia_dir = M.last_move
-				step(M, M.inertia_dir)
+	if(!(A.last_move))
+		return
+
+	if(src.x > 2 && src.x < (world.maxx - 1) && src.y > 2 && src.y < (world.maxy - 1))
+		A.process_inertia(src)
+
 	return
 
 /turf/proc/levelupdate()
+	update_holomap_planes()
 	for(var/obj/O in src)
 		if(O.level == 1)
 			O.hide(src.intact)
 
 // override for space turfs, since they should never hide anything
 /turf/space/levelupdate()
+	update_holomap_planes()
 	for(var/obj/O in src)
 		if(O.level == 1)
 			O.hide(0)
@@ -345,13 +302,6 @@
 
 	var/datum/gas_mixture/env
 
-	if (!lighting_corners_initialised && global.lighting_corners_initialised)
-		for (var/i = 1 to 4)
-			if (corners[i]) // Already have a corner on this direction.
-				continue
-
-			corners[i] = new/datum/lighting_corner(src, LIGHTING_CORNER_DIAGONAL[i])
-
 	var/old_opacity = opacity
 	var/old_dynamic_lighting = dynamic_lighting
 	var/old_affecting_lights = affecting_lights
@@ -361,7 +311,8 @@
 	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
 
-	if(connections) connections.erase_all()
+	if(connections)
+		connections.erase_all()
 
 	if(istype(src,/turf/simulated))
 		//Yeah, we're just going to rebuild the whole thing.
@@ -369,7 +320,8 @@
 		//the zone will only really do heavy lifting once.
 		var/turf/simulated/S = src
 		env = S.air //Get the air before the change
-		if(S.zone) S.zone.rebuild()
+		if(S.zone)
+			S.zone.rebuild()
 	if(istype(src,/turf/simulated/floor))
 		var/turf/simulated/floor/F = src
 		if(F.floor_tile)
@@ -420,7 +372,6 @@
 
 		. = W
 
-	lighting_corners_initialised = TRUE
 	recalc_atom_opacity()
 	lighting_overlay = old_lighting_overlay
 	affecting_lights = old_affecting_lights
@@ -433,23 +384,24 @@
 		else
 			lighting_clear_overlay()
 
-	holomap_data = old_holomap // Holomap persists through everything.
+	holomap_data = old_holomap // Holomap persists through everything...
+	update_holomap_planes() // But we might need to recalculate it.
 
 /turf/proc/AddDecal(const/image/decal)
-	if(!decals)
-		decals = new
+	if(!turfdecals)
+		turfdecals = new
 
-	decals += decal
+	turfdecals += decal
 	overlays += decal
 
 /turf/proc/ClearDecals()
-	if(!decals)
+	if(!turfdecals)
 		return
 
-	for(var/image/decal in decals)
+	for(var/image/decal in turfdecals)
 		overlays -= decal
 
-	decals = 0
+	turfdecals.len = 0
 
 
 //Commented out by SkyMarshal 5/10/13 - If you are patching up space, it should be vacuum.
@@ -518,7 +470,8 @@
 /turf/proc/kill_creatures(mob/U = null)//Will kill people/creatures and damage mechs./N
 //Useful to batch-add creatures to the list.
 	for(var/mob/living/M in src)
-		if(M==U)	continue//Will not harm U. Since null != M, can be excluded to kill everyone.
+		if(M==U)
+			continue//Will not harm U. Since null != M, can be excluded to kill everyone.
 		spawn(0)
 			M.gib()
 	for(var/obj/mecha/M in src)//Mecha are not gibbed but are damaged.
@@ -623,7 +576,8 @@
 //  possible. It results in more efficient (CPU-wise) pathing
 //  for bots and anything else that only moves in cardinal dirs.
 /turf/proc/Distance_cardinal(turf/T)
-	if(!src || !T) return 0
+	if(!src || !T)
+		return 0
 	return abs(src.x - T.x) + abs(src.y - T.y)
 
 ////////////////////////////////////////////////////
@@ -681,6 +635,7 @@
 		new powerup(src)
 
 // Holomap stuff!
+#define PLANE_FOR (intact ? ABOVE_TURF_PLANE : ABOVE_PLATING_PLANE)
 /turf/proc/add_holomap(var/atom/movable/AM)
 	var/image/I = new
 	I.appearance = AM.appearance
@@ -688,6 +643,11 @@
 	I.loc = src
 	I.dir = AM.dir
 	I.alpha = 128
+	// Since holomaps are overlays of the turf
+	// This'll make them always be just above the turf and not block interaction.
+	I.plane = PLANE_FOR
+	// When I said above turfs I mean it.
+	I.layer = HOLOMAP_LAYER
 
 	if (!holomap_data)
 		holomap_data = list()
@@ -698,7 +658,32 @@
 	if (!ticker || ticker.current_state != GAME_STATE_PLAYING)
 		add_holomap(AM)
 
+// Goddamnit BYOND.
+// So for some reason, I incurred a rendering issue with the usage of FLOAT_PLANE for the holomap plane.
+//   (For some reason the existance of underlays prevented the main icon and overlays to render)
+//   (Yes, removing every underlay with VV instantly fixed the overlays and main icon)
+//   (Yes, I tried to reproduce it outside SS13, but got nothing)
+// So now I need to render the overlays at the plane above the turf (ABOVE_TURF_PLANE and ABOVE_PLATING_PLANE)
+// And as you probably already guessed, the plane required changes based on the turf type.
+// So this helper does that.
+/turf/proc/update_holomap_planes()
+	var/the_plane = PLANE_FOR
+	for (var/image/I in holomap_data)
+		I.plane = the_plane
+
+#undef PLANE_FOR
+
 // Return -1 to make movement instant for the mob
 // Return high values to make movement slower
 /turf/proc/adjust_slowdown(mob/living/L, base_slowdown)
 	return base_slowdown
+
+/turf/proc/has_gravity(mob/M)
+	if(istype(M) && M.CheckSlip() == -1) //Wearing magboots - good enough
+		return 1
+
+	var/area/A = loc
+	if(istype(A))
+		return A.has_gravity
+
+	return 1

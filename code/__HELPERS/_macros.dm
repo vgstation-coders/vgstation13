@@ -37,7 +37,7 @@
 
 #define islarva(A) istype(A, /mob/living/carbon/alien/larva)
 
-#define isslime(A) istype(A, /mob/living/carbon/slime)
+#define isslime(A) (istype(A, /mob/living/carbon/slime) || istype(A, /mob/living/simple_animal/slime))
 
 #define isslimeadult(A) istype(A, /mob/living/carbon/slime/adult)
 
@@ -133,6 +133,10 @@
 
 #define isatom(A) (istype(A, /atom))
 
+#define isatommovable(A) (istype(A, /atom/movable))
+
+#define ismatrix(A) (istype(A, /matrix))
+
 //Macros for antags
 
 #define isvampire(H) ((H.mind in ticker.mode.vampires) || H.mind.vampire)
@@ -155,6 +159,8 @@
 
 #define iswizard(H) (H.mind in ticker.mode.wizards)
 
+#define isapprentice(H) (H.mind in ticker.mode.apprentices)
+
 #define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || H.mind in ticker.mode.infected_monkeys)
 
 #define isdeathsquad(H) (H.mind in ticker.mode.deathsquads)
@@ -165,7 +171,15 @@
 #define isspace(A) (A.type == /area)
 
 //This one returns the "space" area
-#define get_space_area (get_area(locate(1,1,2))) //xd
+//#define get_space_area (get_area(locate(1,1,2))) //xd
+proc/get_space_area()
+	//global.space_area is defined in code/game/areas/areas.dm, and set when the space area is created
+	if(!global.space_area)
+		var/area/new_space_area = new /area
+
+		global.space_area = new_space_area
+
+	return global.space_area
 
 //1 line helper procs compressed into defines.
 #define Clamp(x, y, z) 	(x <= y ? y : (x >= z ? z : x))
@@ -181,7 +195,7 @@
 #define tcheck(CPU,TOSLEEP)	if(world.cpu > CPU) sleep(calculateticks(TOSLEEP)) //Shorthand of checking and then sleeping a process based on world CPU
 
 #define FOR_DVIEW(type, range, center, invis_flags) \
-	dview_mob.loc = center; \
+	dview_mob.forceMove(center);           \
 	dview_mob.see_invisible = invis_flags; \
 	for(type in view(range, dview_mob))
 
@@ -197,3 +211,6 @@
 
 //Helper macro for eggs, called in process() of all fertilized eggs. If it returns 0, the egg will no longer be able to hatch
 #define is_in_valid_nest(egg) (isturf(egg.loc))
+
+
+#define CHECK_TICK if(world.tick_usage > 90) sleep(world.tick_lag)

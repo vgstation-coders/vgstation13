@@ -26,10 +26,14 @@
 
 /obj/item/clothing/head/wizard/magus
 	name = "Magus Helm"
-	desc = "A mysterious helmet that hums with an unearthly power"
+	desc = "A mysterious helmet that hums with an unearthly power."
 	icon_state = "magus"
 	item_state = "magus"
 	siemens_coefficient = 0.8
+
+/obj/item/clothing/head/wizard/magus/fake
+	desc = "A mysterious helmet."
+	wizard_garb = 0
 
 /obj/item/clothing/head/wizard/clown
 	name = "purple wizard hat"
@@ -37,6 +41,10 @@
 	icon_state = "wizhatclown"
 	item_state = "wizhatclown" // cheating
 	siemens_coefficient = 0.8
+
+/obj/item/clothing/head/wizard/clown/fake
+	desc = "Strange-looking purple hat-wear that most certainly doesn't belong to a real magic user."
+	wizard_garb = 0
 
 /obj/item/clothing/head/wizard/amp
 	name = "psychic amplifier"
@@ -50,6 +58,10 @@
 	icon_state = "necromancer"
 	item_state = "necrohood"
 	siemens_coefficient = 0.8
+
+/obj/item/clothing/head/wizard/necro/fake
+	desc = "An elegant hood woven with child labor somewhere in Space China."
+	wizard_garb = 0
 
 /obj/item/clothing/head/wizard/magician
 	name = "Magical Tophat"
@@ -86,19 +98,19 @@
 
 /obj/item/clothing/suit/wizrobe/magusblue
 	name = "Magus Robe"
-	desc = "A set of armoured robes that seem to radiate a dark power"
+	desc = "A set of armoured robes that seem to radiate a dark power."
 	icon_state = "magusblue"
 	item_state = "magusblue"
 
 /obj/item/clothing/suit/wizrobe/magusred
 	name = "Magus Robe"
-	desc = "A set of armoured robes that seem to radiate a dark power"
+	desc = "A set of armoured robes that seem to radiate a dark power."
 	icon_state = "magusred"
 	item_state = "magusred"
 
 /obj/item/clothing/suit/wizrobe/clown
 	name = "Clown Robe"
-	desc = "A set of armoured robes that seem to radiate a dark power.  That, and bad fashion decisions."
+	desc = "A set of armoured robes that seem to radiate a dark power. That, and bad fashion decisions."
 	icon_state = "wizzclown"
 	item_state = "clownwizrobe"
 

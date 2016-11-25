@@ -30,7 +30,8 @@
 	..()
 
 /mob/living/simple_animal/hostile/retaliate/goat/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	. = ..()
 	if(.)
 		//chance to go crazy and start wacking stuff
@@ -128,7 +129,8 @@
 		..()
 
 /mob/living/simple_animal/cow/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	. = ..()
 	if(stat == CONSCIOUS)
 		if(udder && prob(5))
@@ -137,7 +139,7 @@
 /mob/living/simple_animal/cow/attack_hand(mob/living/carbon/M as mob)
 	if(!stat && M.a_intent == I_DISARM && icon_state != icon_dead)
 		M.visible_message("<span class='warning'>[M] tips over [src].</span>","<span class='notice'>You tip over [src].</span>")
-		Weaken(30)
+		Knockdown(30)
 		icon_state = icon_dead
 		spawn(rand(20,50))
 			if(!stat && M)
@@ -176,11 +178,12 @@
 
 /mob/living/simple_animal/chick/New()
 	..()
-	pixel_x = rand(-6, 6)
-	pixel_y = rand(0, 10)
+	pixel_x = rand(-6, 6) * PIXEL_MULTIPLIER
+	pixel_y = rand(0, 10) * PIXEL_MULTIPLIER
 
 /mob/living/simple_animal/chick/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	. =..()
 	if(!.)
 		return
@@ -224,8 +227,8 @@
 	icon_living = "chicken_[body_color]"
 	icon_dead = "chicken_[body_color]_dead"
 	..() //call this after icons to generate the proper static overlays
-	pixel_x = rand(-6, 6)
-	pixel_y = rand(0, 10)
+	pixel_x = rand(-6, 6) * PIXEL_MULTIPLIER
+	pixel_y = rand(0, 10) * PIXEL_MULTIPLIER
 
 /mob/living/simple_animal/chicken/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat)) //feedin' dem chickens
@@ -247,7 +250,8 @@
 		..()
 
 /mob/living/simple_animal/chicken/Life()
-	if(timestopped) return 0 //under effects of time magick
+	if(timestopped)
+		return 0 //under effects of time magick
 	. =..()
 	if(!.)
 		return
@@ -255,8 +259,8 @@
 		visible_message("[src] [pick("lays an egg.","squats down and croons.","begins making a huge racket.","begins clucking raucously.")]")
 		eggsleft--
 		var/obj/item/weapon/reagent_containers/food/snacks/egg/E = new(get_turf(src))
-		E.pixel_x = rand(-6,6)
-		E.pixel_y = rand(-6,6)
+		E.pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
+		E.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
 		if(animal_count[src.type] < ANIMAL_CHILD_CAP && prob(10))
 			processing_objects.Add(E)
 
@@ -291,6 +295,7 @@
 /mob/living/simple_animal/hostile/retaliate/box/proc/updatefat()
 	if(size<SIZE_BIG)
 		size++
+		meat_amount = size
 		fat = 0
 	update_icon()
 
@@ -312,17 +317,20 @@
 /mob/living/simple_animal/hostile/retaliate/box/CanAttack(atom/A)
 	if(ishuman(A))
 		var/mob/living/carbon/human/H = A
-		if(isvox(H)) return 0 //Won't attack Vox
-	else ..()
+		if(isvox(H))
+			return 0 //Won't attack Vox
+	else
+		..()
 
 /mob/living/simple_animal/hostile/retaliate/box/Life()
-	. = ..()
+	if(!..())
+		return 0
 	if(size<SIZE_BIG)
 		fat += rand(2)
 	if(fat>BOX_GROWTH_BAR)
 		updatefat()
 
-/mob/living/simple_animal/hostile/retaliate/box/death()
+/mob/living/simple_animal/hostile/retaliate/box/Die()
 	..()
 	playsound(src, 'sound/effects/box_scream.ogg', 100, 1)
 
@@ -336,4 +344,5 @@
 			user.visible_message("<span class='notice'>[user] feeds [O] to [name].</span>","<span class='notice'>You feed [O] to [name].</span>")
 			qdel(O)
 			fat += rand(15,25)
-	else ..()
+	else
+		..()

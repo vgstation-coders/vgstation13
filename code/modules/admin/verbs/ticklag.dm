@@ -3,7 +3,8 @@
 	set name = "Set Ticklag"
 	set desc = "Sets a new tick lag. Recommend you don't mess with this too much! The standard value has been .55 for some time"
 
-	if(!check_rights(R_DEBUG))	return
+	if(!check_rights(R_DEBUG))
+		return
 
 	var/newtick = input("Sets a new tick lag. Please don't mess with this too much! The standard value has been .55 for some time","Lag of Tick", world.tick_lag) as num|null
 	if(!newtick)

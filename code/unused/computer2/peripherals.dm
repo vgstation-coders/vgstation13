@@ -181,7 +181,7 @@
 	attack_self(mob/user as mob)
 		if(authid)
 			to_chat(user, "The card falls out.")
-			src.authid.loc = get_turf(user)
+			src.authid.forceMove(get_turf(user))
 			src.authid = null
 
 		return
@@ -196,7 +196,7 @@
 		switch(command)
 			if("eject card")
 				if(src.authid)
-					src.authid.loc = src.host.loc
+					src.authid.forceMove(src.host.loc)
 					src.authid = null
 			if("add card access")
 				var/new_access = signal.data["access"]

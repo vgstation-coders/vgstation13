@@ -9,7 +9,7 @@
 	icon_state = "gokart0"
 	//nick = "TRUE POWER"
 	keytype = /obj/item/key/gokart
-	overrideghostspin = 0
+	noghostspin = 0
 
 /obj/structure/bed/chair/vehicle/gokart/unlock_atom(var/atom/movable/AM)
 	. = ..()
@@ -29,13 +29,13 @@
 	switch(dir)
 		if(SOUTH)
 			occupant.pixel_x = 0
-			occupant.pixel_y = 7
+			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
 		if(WEST)
-			occupant.pixel_x = 4
-			occupant.pixel_y = 7
+			occupant.pixel_x = 4 * PIXEL_MULTIPLIER
+			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
 		if(NORTH)
 			occupant.pixel_x = 0
-			occupant.pixel_y = 4
+			occupant.pixel_y = 4 * PIXEL_MULTIPLIER
 		if(EAST)
-			occupant.pixel_x = -4
-			occupant.pixel_y = 7
+			occupant.pixel_x = -4 * PIXEL_MULTIPLIER
+			occupant.pixel_y = 7 * PIXEL_MULTIPLIER

@@ -49,7 +49,7 @@
 						 "You rip the larva out of [target]'s ribcage!")
 
 	for(var/obj/item/alien_embryo/A in target)
-		A.loc = A.loc.loc
+		A.forceMove(A.loc.loc)
 
 
 //////////////////////////////////////////////////////////////////

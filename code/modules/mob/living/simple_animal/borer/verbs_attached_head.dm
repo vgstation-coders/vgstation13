@@ -11,7 +11,8 @@
 	message = capitalize(message)
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.borer_speak(message)
 
 /* Disabled for now.
@@ -21,7 +22,8 @@
 	set desc = "Fully connect to the brain of your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.bond_brain()
 
 /obj/item/verbs/borer/attached_head/verb/kill_host()
@@ -30,7 +32,8 @@
 	set desc = "Give the host massive brain damage, killing them nearly instantly."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.kill_host()
 
 /obj/item/verbs/borer/attached_head/verb/damage_brain()
@@ -39,7 +42,8 @@
 	set desc = "Give the host a bit of brain damage.  Can be healed with alkysine."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.damage_brain()
 */
 
@@ -49,7 +53,8 @@
 	set desc = "Upgrade yourself or your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.evolve()
 
 /obj/item/verbs/borer/attached_head/verb/secrete_chemicals()
@@ -58,7 +63,8 @@
 	set desc = "Push some chemicals into your host's bloodstream."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.secrete_chemicals()
 
 /obj/item/verbs/borer/attached_head/verb/abandon_host()
@@ -67,7 +73,8 @@
 	set desc = "Slither out of your host."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.abandon_host()
 
 /obj/item/verbs/borer/attached_head/verb/analyze_host()
@@ -76,5 +83,6 @@
 	set desc = "Check your host for damage."
 
 	var/mob/living/simple_animal/borer/B=loc
-	if(!istype(B)) return
+	if(!istype(B))
+		return
 	B.analyze_host()

@@ -19,9 +19,7 @@
 	fire_temp_threshold = 100 //Wooden barricades REALLY don't like fire
 	fire_volume_mod = 10 //They REALLY DON'T
 
-/obj/structure/window/barricade/examine(mob/user)
-
-	..()
+/obj/structure/window/barricade/examine_health(mob/user)
 	//Switch most likely can't take inequalities, so here's that if block
 	if(health >= initial(health)) //Sanity
 		to_chat(user, "It's in perfect shape, not even a scratch.")
@@ -130,7 +128,7 @@
 	icon_state = "barricade_full"
 	health = 150
 	sheetamount = 3
-	layer = 3.21 //Just above windows (for window barricades) and other barricades
+	layer = ABOVE_DOOR_LAYER
 
 //Basically the barricade version of full windows, and inherits the former rather than the later
 /obj/structure/window/barricade/full/New(loc)

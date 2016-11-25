@@ -102,16 +102,20 @@
 	switch(failtype)
 		if(1)
 			src.aorigin = "Failed to Identify"
-			if (prob(20)) src.aorigin = pick(src.allorigins)
+			if (prob(20))
+				src.aorigin = pick(src.allorigins)
 		if(2)
 			src.atrigger = "Failed to Identify"
-			if (prob(20)) src.atrigger = pick(src.alltriggers)
+			if (prob(20))
+				src.atrigger = pick(src.alltriggers)
 		if(3)
 			src.aeffect1 = "Failed to Identify"
-			if (prob(20)) src.aeffect1 = pick(src.alleffects)
+			if (prob(20))
+				src.aeffect1 = pick(src.alleffects)
 		if(4)
 			src.aeffect2 = "Failed to Identify"
-			if (prob(20)) src.aeffect2 = pick(src.allranges)
+			if (prob(20))
+				src.aeffect2 = pick(src.allranges)
 
 /obj/machinery/artifact_analyser/proc/AA_Analyse()
 	if(!cur_artifact)
@@ -141,66 +145,101 @@
 		if(src.aeffect2 == cur_artifact.my_effect.effectmode)
 			range_correct = 1
 
-	if (src.accuO > 100) src.accuO = 100
-	if (src.accuT > 100) src.accuT = 100
-	if (src.accuE1 > 100) src.accuE1 = 100
-	if (src.accuE2 > 100) src.accuE2 = 100
+	if (src.accuO > 100)
+		src.accuO = 100
+	if (src.accuT > 100)
+		src.accuT = 100
+	if (src.accuE1 > 100)
+		src.accuE1 = 100
+	if (src.accuE2 > 100)
+		src.accuE2 = 100
 	// Roll to generate report
 	if (prob(accuO) || origin_correct)
 		switch(cur_artifact.origin)
-			if("ancient") src.aorigin = "Ancient Robots"
-			if("martian") src.aorigin = "Martian"
-			if("wizard") src.aorigin = "Wizard Federation"
-			if("eldritch") src.aorigin = "Extradimensional"
-			if("precursor") src.aorigin = "Precursor"
-			else src.aorigin = "Unknown Origin"
+			if("ancient")
+				src.aorigin = "Ancient Robots"
+			if("martian")
+				src.aorigin = "Martian"
+			if("wizard")
+				src.aorigin = "Wizard Federation"
+			if("eldritch")
+				src.aorigin = "Extradimensional"
+			if("precursor")
+				src.aorigin = "Precursor"
+			else
+				src.aorigin = "Unknown Origin"
 		origin_bonuses[cur_artifact.origin] += 10
 	else
 		AA_FailedAnalysis(1)
 		origin_bonuses[cur_artifact.origin] += 5
 	if (prob(accuT) || trigger_correct)
 		switch(cur_artifact.my_effect.trigger)
-			if("touch") src.atrigger = "Contact with Living Organism"
-			if("force") src.atrigger = "Heavy Impact"
-			if("energy") src.atrigger = "Contact with Energy Source"
+			if("touch")
+				src.atrigger = "Contact with Living Organism"
+			if("force")
+				src.atrigger = "Heavy Impact"
+			if("energy")
+				src.atrigger = "Contact with Energy Source"
 			if("chemical")
 				switch(cur_artifact.my_effect.triggerX)
-					if("hydrogen") src.atrigger = "Contact with Hydrogen"
-					if("corrosive") src.atrigger = "Contact with Corrosive Substance"
-					if("volatile") src.atrigger = "Contact with Volatile Substance"
-					if("toxin") src.atrigger = "Contact with Toxins"
-			if("heat") src.atrigger = "Exposure to Heat"
-			else src.atrigger = "Unknown Trigger"
+					if("hydrogen")
+						src.atrigger = "Contact with Hydrogen"
+					if("corrosive")
+						src.atrigger = "Contact with Corrosive Substance"
+					if("volatile")
+						src.atrigger = "Contact with Volatile Substance"
+					if("toxin")
+						src.atrigger = "Contact with Toxins"
+			if("heat")
+				src.atrigger = "Exposure to Heat"
+			else
+				src.atrigger = "Unknown Trigger"
 		trigger_bonuses[cur_artifact.origin] += 5
 	else
 		AA_FailedAnalysis(2)
 		trigger_bonuses[cur_artifact.origin] += 1
 	if (prob(accuE1) || function_correct)
 		switch(cur_artifact.my_effect.effecttype)
-			if("healing")  src.aeffect1 = "Healing Device"
-			if("injure") src.aeffect1 = "Anti-biological Weapon"
+			if("healing")
+				src.aeffect1 = "Healing Device"
+			if("injure")
+				src.aeffect1 = "Anti-biological Weapon"
 			// if("stun") src.aeffect1 = "Non-lethal Stunning Trap"
-			if("roboheal") src.aeffect1 = "Mechanoid Repair Module"
-			if("robohurt") src.aeffect1 = "Mechanoid Deconstruction Device"
-			if("cellcharge") src.aeffect1 = "Power Generator"
-			if("celldrain") src.aeffect1 = "Power Drain"
-			if("planthelper") src.aeffect1 = "Agriculture Regulator"
-			if("forcefield") src.aeffect1 = "Shield Generator"
-			if("teleport") src.aeffect1 = "Space-Time Displacer"
-			else src.aeffect1 = "Unknown Effect"
+			if("roboheal")
+				src.aeffect1 = "Mechanoid Repair Module"
+			if("robohurt")
+				src.aeffect1 = "Mechanoid Deconstruction Device"
+			if("cellcharge")
+				src.aeffect1 = "Power Generator"
+			if("celldrain")
+				src.aeffect1 = "Power Drain"
+			if("planthelper")
+				src.aeffect1 = "Agriculture Regulator"
+			if("forcefield")
+				src.aeffect1 = "Shield Generator"
+			if("teleport")
+				src.aeffect1 = "Space-Time Displacer"
+			else
+				src.aeffect1 = "Unknown Effect"
 		function_bonuses[cur_artifact.origin] += 5
 	else
 		AA_FailedAnalysis(3)
 		function_bonuses[cur_artifact.origin] += 1
 	if (prob(accuE2) || range_correct)
 		switch(cur_artifact.my_effect.effectmode)
-			if("aura") src.aeffect2 = "Constant Short-Range Energy Field"
+			if("aura")
+				src.aeffect2 = "Constant Short-Range Energy Field"
 			if("pulse")
-				if(cur_artifact.my_effect.aurarange > 7) src.aeffect2 = "Long Range Energy Pulses"
-				else src.aeffect2 = "Medium Range Energy Pulses"
-			if("worldpulse") src.aeffect2 = "Extreme Range Energy Pulses"
-			if("contact") src.aeffect2 = "Requires contact with subject"
-			else src.aeffect2 = "Unknown Range"
+				if(cur_artifact.my_effect.aurarange > 7)
+					src.aeffect2 = "Long Range Energy Pulses"
+				else
+					src.aeffect2 = "Medium Range Energy Pulses"
+			if("worldpulse")
+				src.aeffect2 = "Extreme Range Energy Pulses"
+			if("contact")
+				src.aeffect2 = "Requires contact with subject"
+			else
+				src.aeffect2 = "Unknown Range"
 		range_bonuses[cur_artifact.origin] += 5
 	else
 		AA_FailedAnalysis(4)
@@ -212,7 +251,8 @@
 	cur_artifact.my_effect.artifact_id = cur_artifact.display_id
 
 /obj/machinery/artifact_analyser/Topic(href, href_list)
-	if(..()) return 1
+	if(..())
+		return 1
 	if(href_list["analyse"])
 		if(owned_pad)
 			var/turf/pad_turf = get_turf(owned_pad)
@@ -232,7 +272,8 @@
 					var/time = rand(30,50) + max(0, 300 - scan_num * 10)
 					/*for(var/i = artifact_research.starting_tier, i <= artifact_research.max_tiers, i++)
 						for(var/datum/artiresearch/R in artifact_research.researched_items[i])
-							if (R.bonustype == "analyser") time -= R.bonusTime*/
+							if (R.bonustype == "analyser")
+								time -= R.bonusTime*/
 					time *= 10
 					var/message = "<b>[src]</b> states, \"Commencing analysis.\""
 					src.visible_message(message, message)
