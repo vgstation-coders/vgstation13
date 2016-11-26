@@ -161,6 +161,9 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 	if (N)
 		fill_amount = N
 
+/obj/item/weapon/reagent_containers/chempack/attack()
+	return
+
 /obj/item/weapon/reagent_containers/chempack/afterattack(atom/A as obj, mob/user as mob, var/adjacency_flag)
 	if (istype(A, /obj/structure/reagent_dispensers) && adjacency_flag)
 		var/tx_amount = transfer_sub(A, src, fill_amount, user)
