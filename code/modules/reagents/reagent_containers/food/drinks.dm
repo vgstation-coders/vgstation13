@@ -250,34 +250,12 @@
 	else
 		to_chat(user, "<span class='info'>\The [src] is full!</span>")
 
-/obj/item/weapon/reagent_containers/food/drinks/proc/imbibe(mob/user) //Drink the liquid within
-
-
-	to_chat(user, "<span  class='notice'>You swallow a gulp of \the [src].[lit ? " It's hot!" : ""]</span>")
-	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
-
+/obj/item/weapon/reagent_containers/food/drinks/imbibe(mob/user) //Drink the liquid within
 	if(lit)
 		user.bodytemperature += 3 * TEMPERATURE_DAMAGE_COEFFICIENT//only the first gulp will be hot.
 		lit = 0
 
-	if(isrobot(user))
-		reagents.remove_any(gulp_size)
-		return 1
-	if(reagents.total_volume)
-		if (ishuman(user))
-			var/mob/living/carbon/human/H = user
-			if(H.species.chem_flags & NO_DRINK)
-				reagents.reaction(get_turf(H), TOUCH)
-				H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
-				reagents.remove_any(gulp_size)
-				return 0
-
-		reagents.reaction(user, INGEST)
-		spawn(5)
-			reagents.trans_to(user, gulp_size)
-
-	update_brightness()
-	return 1
+	..()
 
 /obj/item/weapon/reagent_containers/food/drinks/New()
 	..()

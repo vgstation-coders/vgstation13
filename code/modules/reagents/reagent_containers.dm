@@ -80,7 +80,64 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	return
 
 /obj/item/weapon/reagent_containers/attack(mob/M as mob, mob/user as mob, def_zone)
-	return
+	//If harm intent, splash it on em, else try to feed em it
+
+	if(!M.reagents)
+		return
+
+	if(!is_open_container())
+		to_chat(user, "<span class='warning'>You can't, \the [src] is closed.</span>")//Added this here and elsewhere to prevent drinking, etc. from closed drink containers. - Hinaichigo
+		return
+
+	if(!src.reagents.total_volume)
+		to_chat(user, "<span class='warning'>\The [src] is empty.<span>")
+		return 0
+
+	if(user.a_intent != I_HELP)
+		if(src.reagents)
+			transfer(M, user, splashable_units = -1)
+			playsound(get_turf(M), 'sound/effects/slosh.ogg', 25, 1)
+			return 1
+
+
+	else if(M == user)
+		imbibe(user)
+		return 1
+
+	else if(ishuman(M))
+		user.visible_message("<span class='danger'>[user] attempts to feed [M] \the [src].</span>", "<span class='danger'>You attempt to feed [M] \the [src].</span>")
+
+		var/drink_delay = 30*(amount_per_transfer_from_this/5) //So normal = 1
+		if(!do_mob(user, M, drink_delay))
+			return 1
+
+		user.visible_message("<span class='danger'>[user] feeds [M] \the [src].</span>", "<span class='danger'>You feed [M] \the [src].</span>")
+
+		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been fed [src.name] by [user.name] ([user.ckey]) Reagents: [reagentlist(src)]</font>")
+		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Fed [M.name] by [M.name] ([M.ckey]) Reagents: [reagentlist(src)]</font>")
+		log_attack("<font color='red'>[user.name] ([user.ckey]) fed [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
+
+		if(!iscarbon(user))
+			M.LAssailant = null
+		else
+			M.LAssailant = user
+
+		if(reagents.total_volume)
+			if (ishuman(M))
+				var/mob/living/carbon/human/H = M
+				if(H.species.chem_flags & NO_DRINK)
+					reagents.reaction(get_turf(H), TOUCH)
+					H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
+					playsound(get_turf(M), 'sound/effects/slosh.ogg', 25, 1)
+					reagents.remove_any(amount_per_transfer_from_this)
+					return 1
+
+			reagents.reaction(M, INGEST)
+			spawn(5)
+				reagents.trans_to(M, amount_per_transfer_from_this)
+
+			return 0
+
 
 // this prevented pills, food, and other things from being picked up by bags.
 // possibly intentional, but removing it allows us to not duplicate functionality.
@@ -294,3 +351,25 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 /obj/item/weapon/reagent_containers/proc/fits_in_iv_drip()
 	return 0
+
+/obj/item/weapon/reagent_containers/proc/imbibe(mob/user) //Drink the liquid within
+	to_chat(user, "<span  class='notice'>You swallow a gulp of \the [src].</span>")
+	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
+
+	if(isrobot(user))
+		reagents.remove_any(amount_per_transfer_from_this)
+		return 1
+	if(reagents.total_volume)
+		if (ishuman(user))
+			var/mob/living/carbon/human/H = user
+			if(H.species.chem_flags & NO_DRINK)
+				reagents.reaction(get_turf(H), TOUCH)
+				H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
+				reagents.remove_any(amount_per_transfer_from_this)
+				return 0
+
+		reagents.reaction(user, INGEST)
+		spawn(5)
+			reagents.trans_to(user, amount_per_transfer_from_this)
+
+	return 1
