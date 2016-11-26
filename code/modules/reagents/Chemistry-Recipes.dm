@@ -2690,6 +2690,7 @@
 	id = GREYTEA
 	result = GREYTEA
 	required_reagents = list(WATER = 5, FUEL = 5)
+	result_amount = 10
 
 /datum/chemical_reaction/citalopram
 	name = "Citalopram"
