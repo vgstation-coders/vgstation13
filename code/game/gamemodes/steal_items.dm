@@ -67,31 +67,32 @@
 /datum/theft_objective/traitor/hand_tele
 	name = "a hand teleporter"
 	typepath = /obj/item/weapon/hand_tele
-	protected_jobs = list("Captain")
+	protected_jobs = list("Captain", "Research Director", "Head of Personnel")
 
 /datum/theft_objective/traitor/rcd
 	name = "an RCD"
 	typepath = /obj/item/device/rcd/matter/engineering
-	protected_jobs = list("Chief Engineer")
+	protected_jobs = list("Chief Engineer", "Atmospherics Technician", "Station Engineer")
 
 /datum/theft_objective/traitor/rpd
 	name = "an RPD"
 	typepath = /obj/item/device/rcd/rpd
-	protected_jobs = list("Chief Engineer", "Atmospherics Technician")
+	protected_jobs = list("Chief Engineer", "Atmospherics Technician", "Station Engineer")//engineers have atmos access.
 
 /datum/theft_objective/traitor/jetpack
 	name = "a jetpack"
 	typepath = /obj/item/weapon/tank/jetpack
+	protected_jobs = list("Chief Engineer", "Captain", "Trader", "Atmospherics Technician", "Station Engineer", "Shaft Miner")
 
 /datum/theft_objective/traitor/cap_jumpsuit
 	name = "the captain's jumpsuit"
 	typepath = /obj/item/clothing/under/rank/captain
-	protected_jobs = list("Captain")
+	protected_jobs = list("Captain", "Head of Personnel")
 
 /datum/theft_objective/traitor/ai
 	name = "a functional AI"
 	typepath = /obj/item/device/aicard
-
+	protected_jobs = list("Captain", "Research Director", "Head of Personnel", "Chief Engineer")
 
 /datum/theft_objective/traitor/magboots
 	name = "a pair of advanced magboots"
@@ -116,31 +117,32 @@
 /datum/theft_objective/traitor/corgi
 	name = "a piece of corgi meat"
 	typepath = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/corgi
+	protected_jobs = list("Captain", "Head of Personnel") //Really HoP? Your own dog?
 
 /datum/theft_objective/traitor/rd_jumpsuit
 	name = "the research director's jumpsuit"
 	typepath = /obj/item/clothing/under/rank/research_director
-	protected_jobs = list("Research Director")
+	protected_jobs = list("Captain", "Research Director", "Head of Personnel")
 
 /datum/theft_objective/traitor/ce_jumpsuit
 	name = "the chief engineer's jumpsuit"
 	typepath = /obj/item/clothing/under/rank/chief_engineer
-	protected_jobs = list("Chief Engineer")
+	protected_jobs = list("Captain", "Chief Engineer", "Head of Personnel")
 
 /datum/theft_objective/traitor/cmo_jumpsuit
 	name = "the chief medical officer's jumpsuit"
 	typepath = /obj/item/clothing/under/rank/chief_medical_officer
-	protected_jobs = list("Chief Medical Officer")
+	protected_jobs = list("Captain", "Chief Medical Officer", "Head of Personnel")
 
 /datum/theft_objective/traitor/hos_jumpsuit
 	name = "the head of security's jumpsuit"
 	typepath = /obj/item/clothing/under/rank/head_of_security
-	protected_jobs = list("Head of Security")
+	protected_jobs = list("Captain", "Head of Security", "Head of Personnel")
 
 /datum/theft_objective/traitor/hop_jumpsuit
 	name = "the head of personnel's jumpsuit"
 	typepath = /obj/item/clothing/under/rank/head_of_personnel
-	protected_jobs = list("Head of Personnel")
+	protected_jobs = list("Captain", "Head of Personnel")
 
 /datum/theft_objective/traitor/hypospray
 	name = "a hypospray"
@@ -155,7 +157,28 @@
 /datum/theft_objective/traitor/ablative
 	name = "an ablative armor vest"
 	typepath = /obj/item/clothing/suit/armor/laserproof
-	protected_jobs = list("Head of Security", "Warden")
+	protected_jobs = list("Captain", "Head of Security", "Warden")
+
+/datum/theft_objective/traitor/telebaton
+	name = "a telescopic baton"
+	typepath = /obj/item/weapon/melee/telebaton
+	protected_jobs = list("Captain", "Head of Security")
+
+/datum/theft_objective/traitor/planningframe
+	name = "the law planning frame"
+	typepath = /obj/item/weapon/planning_frame
+	protected_jobs = list("Captain", "Research Director", "Chief Engineer", "Head of Personnel")
+
+/datum/theft_objective/traitor/belt
+	name = "the chief engineer's advanced toolbelt"
+	typepath = /obj/item/weapon/storage/belt/utility/chief
+	protected_jobs = list("Captain", "Chief Engineer")
+
+/datum/theft_objective/traitor/ttv
+	name = "a tank transfer valve"
+	typepath = /obj/item/device/transfer_valve
+	protected_jobs = list("Research Director", "Scientist")
+
 
 /datum/theft_objective/number
 	var/min=0
@@ -189,9 +212,11 @@
 		var/found_amount = 0
 		for(var/obj/I in all_items) //Check for items
 			if(istype(I, typepath))
+			
 				//Stealing the cheap autoinjector doesn't count
 				if(istype(I, /obj/item/weapon/reagent_containers/hypospray/autoinjector))
 					continue
+
 				if(istype(I,/obj/item/device/aicard))
 					var/obj/item/device/aicard/C = I
 					if(!C.contents.len)
@@ -218,6 +243,7 @@
 	typepath = /obj/item/weapon/tank
 	min=28
 	max=28
+	protected_jobs = list("Research Director", "Scientist")
 
 /datum/theft_objective/number/traitor/plasma_gas/getAmountStolen(var/obj/item/I)
 	return I:air_contents:toxins
