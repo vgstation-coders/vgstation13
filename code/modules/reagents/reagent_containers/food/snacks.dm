@@ -337,6 +337,8 @@
 				to_chat(N, ("<span class='notice'>You nibble away at \the [src].</span>"))
 			N.health = min(N.health + 1, N.maxHealth)
 
+/obj/item/weapon/reagent_containers/food/snacks/fits_in_iv_drip()
+	return 1
 
 ////////////////////////////////////////////////////////////////////////////////
 /// FOOD END
