@@ -269,6 +269,67 @@
 	build_path = "/obj/machinery/computer/stacking_unit"
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
 
+/obj/item/weapon/circuitboard/unusable_communication_relay
+ 	name = "Circuit Board (Communications relay)"
+ 	build_path = "/obj/machinery/computer/unusable_communication_relay"
+ 	origin_tech = Tc_PROGRAMMING + "=2"
+
+/obj/item/weapon/circuitboard/unusable_shuttle_control_1
+ 	name = "Circuit Board (Shuttle Control)"
+ 	build_path = "/obj/machinery/computer/unusable_shuttle_control_1"
+ 	origin_tech = Tc_PROGRAMMING + "=2"
+
+/obj/item/weapon/circuitboard/unusable_shuttle_control_2
+ 	name = "Circuit Board (Shuttle Control)"
+ 	build_path = "/obj/machinery/computer/unusable_shuttle_control_2"
+ 	origin_tech = Tc_PROGRAMMING + "=2"
+
+/obj/item/weapon/circuitboard/whiteship_console_1
+ 	name = "Circuit Board (Starmap)"
+ 	build_path = "/obj/machinery/computer/whiteship_console_1"
+ 	origin_tech = Tc_PROGRAMMING + "=2"
+
+/obj/item/weapon/circuitboard/whiteship_console_2
+	name = "Circuit Board (Engine Control)"
+	build_path = "/obj/machinery/computer/whiteship_console_2"
+	origin_tech = Tc_PROGRAMMING + "=2"
+
+/obj/item/weapon/circuitboard/unusable_shuttle_engine_control
+	name = "Circuit Board (Engine Control)"
+	build_path = "/obj/machinery/computer/unusable_shuttle_engine_control"
+	origin_tech = Tc_PROGRAMMING + "=2"
+
+/obj/item/weapon/circuitboard/unusable_communication_relay
+	name = "Circuit Board (Communications relay)"
+	build_path = "/obj/machinery/computer/unusable_communication_relay"
+	origin_tech = Tc_PROGRAMMING + "=2"
+
+/obj/item/weapon/circuitboard/unusable_shuttle_control_1
+	name = "Circuit Board (Shuttle Control)"
+	build_path = "/obj/machinery/computer/unusable_shuttle_control_1"
+	origin_tech = Tc_PROGRAMMING + "=2"
+
+/obj/item/weapon/circuitboard/unusable_shuttle_control_2
+	name = "Circuit Board (Shuttle Control)"
+	build_path = "/obj/machinery/computer/unusable_shuttle_control_2"
+	origin_tech = Tc_PROGRAMMING + "=2"
+
+/obj/item/weapon/circuitboard/whiteship_console_1
+	name = "Circuit Board (Starmap)"
+	build_path = "/obj/machinery/computer/whiteship_console_1"
+	origin_tech = Tc_PROGRAMMING + "=2"
+
+/obj/item/weapon/circuitboard/whiteship_console_2
+	name = "Circuit Board (Engine Control)"
+	build_path = "/obj/machinery/computer/whiteship_console_2"
+	origin_tech = Tc_PROGRAMMING + "=2"
+
+/obj/item/weapon/circuitboard/unusable_shuttle_engine_control
+	name = "Circuit Board (Engine Control)"
+	build_path = "/obj/machinery/computer/unusable_shuttle_engine_control"
+	origin_tech = Tc_PROGRAMMING + "=2"
+
+
 /obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
 	if(issolder(I))
 		var/obj/item/weapon/solder/S = I
