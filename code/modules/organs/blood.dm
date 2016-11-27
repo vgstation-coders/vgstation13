@@ -11,21 +11,24 @@ var/const/BLOOD_VOLUME_OKAY = 336
 var/const/BLOOD_VOLUME_BAD = 224
 var/const/BLOOD_VOLUME_SURVIVE = 122
 
-/mob/living/carbon/human/var/datum/reagents/vessel	//Container for blood and BLOOD ONLY. Do not transfer other chems here.
+/mob/living/carbon/var/datum/reagents/vessel	//Container for blood and BLOOD ONLY. Do not transfer other chems here.
 /mob/living/carbon/human/var/var/pale = 0			//Should affect how mob sprite is drawn, but currently doesn't.
 
 //Initializes blood vessels
-/mob/living/carbon/human/proc/make_blood()
-	if(vessel)
+/mob/living/carbon/proc/make_blood()
+	if (vessel)
 		return
 
 	vessel = new/datum/reagents(600)
 	vessel.my_atom = src
+	vessel.add_reagent(BLOOD,560)
 
+/mob/living/carbon/human/make_blood()
 	if(species && species.flags & NO_BLOOD) //We want the var for safety but we can do without the actual blood.
 		return
 
-	vessel.add_reagent(BLOOD,560)
+	..()
+
 	spawn(1)
 		fixblood()
 
@@ -240,9 +243,12 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	vessel.remove_reagent(BLOOD,amount) // Removes blood if human
 
 /mob/living/carbon/monkey/take_blood(obj/item/weapon/reagent_containers/container, var/amount)
-	if(!isDead())
-		adjustOxyLoss(amount)
-		. = ..()
+
+	if(vessel.get_reagent_amount(BLOOD) < amount)
+		return null
+
+	. = ..()
+	vessel.remove_reagent(BLOOD,amount)
 
 //Transfers blood from container ot vessels
 /mob/living/carbon/proc/inject_blood(obj/item/weapon/reagent_containers/container, var/amount)
