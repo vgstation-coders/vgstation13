@@ -588,6 +588,7 @@ var/list/uplink_items = list()
 	item = /obj/item/beacon/syndicate
 	cost = 14
 
+/*
 /datum/uplink_item/device_tools/syndicate_bomb
 	name = "Syndicate Bomb"
 	desc = "The Syndicate bomb is a fearsome device capable of massive destruction. It has an adjustable timer, \
@@ -608,6 +609,7 @@ var/list/uplink_items = list()
 	item = /obj/item/device/syndicatedetonator
 	cost = 3
 	gamemodes = list("nuclear emergency")
+*/
 
 /datum/uplink_item/device_tools/pdapinpointer
 	name = "PDA Pinpointer"
