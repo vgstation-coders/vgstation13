@@ -3,7 +3,7 @@ var/global/datum/shuttle/research/research_shuttle = new(starting_area = /area/s
 /datum/shuttle/research
 	name = "research shuttle"
 	can_link_to_computer = LINK_FREE
-	req_access = list(access_research)
+	req_access = list(access_science)
 
 /datum/shuttle/research/initialize()
 	.=..()

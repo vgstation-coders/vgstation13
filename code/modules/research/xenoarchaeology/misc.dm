@@ -171,4 +171,4 @@ proc/SetupXenoarch()
 
 /obj/machinery/alarm/isolation
 	name = "Isolation room air control"
-	req_access = list(access_research)
+	req_access = list(access_science)

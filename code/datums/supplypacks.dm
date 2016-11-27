@@ -1472,7 +1472,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/scisec
 	containername = "RnD Stock Parts Crate"
-	access = access_research
+	access = access_science
 	group = "Science"
 
 /datum/supply_packs/research_nanotrasen
@@ -1484,7 +1484,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 80
 	containertype = /obj/structure/closet/crate/secure/scisec
 	containername = "RnD Experimental Crate"
-	access = access_research
+	access = access_science
 	group = "Science"
 
 /datum/supply_packs/robotics
@@ -1511,7 +1511,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 50
 	containertype = /obj/structure/largecrate
 	containername = "suspension field generator crate"
-	access = access_research
+	access = access_science
 	group = "Science"
 
 /datum/supply_packs/excavation_gear
@@ -1530,7 +1530,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/scisec
 	containername = "excavation equipment"
-	access = access_research
+	access = access_science
 	group = "Science"
 
 /datum/supply_packs/plasma
