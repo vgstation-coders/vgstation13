@@ -20,9 +20,9 @@
 				new /obj/item/weapon/soap/syndie(src)
 
 
-			if("screwed")//13+13+10+4=33
-				new /obj/item/beacon/syndicate/bomb(src)
-				new /obj/item/beacon/syndicate/bomb(src)
+			if("screwed")//10+10+10+4=27?
+				new /obj/effect/spawner/newbomb/timer/syndicate(src)
+				new /obj/effect/spawner/newbomb/timer/syndicate(src)
 				new /obj/item/device/powersink(src)
 				new /obj/item/clothing/suit/space/syndicate(src)
 				new /obj/item/clothing/head/helmet/space/syndicate(src)
