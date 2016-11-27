@@ -123,18 +123,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 			M.LAssailant = user
 
 		if(reagents.total_volume)
-			if (ishuman(M))
-				var/mob/living/carbon/human/H = M
-				if(H.species.chem_flags & NO_DRINK)
-					reagents.reaction(get_turf(H), TOUCH)
-					H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
-					playsound(get_turf(M), 'sound/effects/slosh.ogg', 25, 1)
-					reagents.remove_any(amount_per_transfer_from_this)
-					return 1
-
-			reagents.reaction(M, INGEST)
-			spawn(5)
-				reagents.trans_to(M, amount_per_transfer_from_this)
+			imbibe(M)
 
 			return 0
 
@@ -358,16 +347,21 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		reagents.remove_any(amount_per_transfer_from_this)
 		return 1
 	if(reagents.total_volume)
-		if (ishuman(user))
-			var/mob/living/carbon/human/H = user
-			if(H.species.chem_flags & NO_DRINK)
-				reagents.reaction(get_turf(H), TOUCH)
-				H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
-				reagents.remove_any(amount_per_transfer_from_this)
-				return 0
+		if(can_drink(user))
+			reagents.reaction(user, INGEST)
+			spawn(5)
+				reagents.trans_to(user, amount_per_transfer_from_this)
 
-		reagents.reaction(user, INGEST)
-		spawn(5)
-			reagents.trans_to(user, amount_per_transfer_from_this)
+	return 1
+
+/obj/item/weapon/reagent_containers/proc/can_drink(mob/user)
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(H.species.chem_flags & NO_DRINK)
+			reagents.reaction(get_turf(H), TOUCH)
+			H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
+			reagents.remove_any(amount_per_transfer_from_this)
+			return 0
+
 
 	return 1
