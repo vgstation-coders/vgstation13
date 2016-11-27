@@ -6,7 +6,7 @@
 /var/const/access_forensics_lockers= 4
 /var/const/access_medical = 5
 /var/const/access_morgue = 6
-/var/const/access_tox = 7			// Research and Development
+/var/const/access_rnd = 7			// Research and Development
 /var/const/access_tox_storage = 8	// Toxins mixing and storage
 /var/const/access_genetics = 9
 /var/const/access_engine = 10		// Power Engines
@@ -46,7 +46,7 @@
 /var/const/access_mime = 44
 /var/const/access_surgery = 45
 /var/const/access_theatre = 46
-/var/const/access_research = 47		// Research Division hallway
+/var/const/access_science = 47		// Research Division hallway
 /var/const/access_mining = 48
 /var/const/access_mining_office = 49 //not in use
 /var/const/access_mailsorting = 50	// Cargo Office
@@ -227,13 +227,13 @@
 /proc/get_all_accesses()
 	return list(access_shop, access_security, access_sec_doors, access_brig, access_armory, access_forensics_lockers, access_court,
 	            access_medical, access_genetics, access_morgue, access_rd,
-	            access_tox, access_tox_storage, access_chemistry, access_engine, access_engine_equip, access_maint_tunnels,
+	            access_rnd, access_tox_storage, access_chemistry, access_engine, access_engine_equip, access_maint_tunnels,
 	            access_external_airlocks, access_change_ids, access_ai_upload,
 	            access_teleporter, access_eva, access_heads, access_captain, access_all_personal_lockers,
 	            access_tech_storage, access_chapel_office, access_atmospherics, access_kitchen,
 	            access_bar, access_janitor, access_crematorium, access_robotics, access_cargo, access_construction,
 	            access_hydroponics, access_library, access_lawyer, access_virology, access_psychiatrist, access_cmo, access_qm, access_clown, access_mime, access_surgery,
-	            access_theatre, access_research, access_mining, access_mailsorting,access_weapons,
+	            access_theatre, access_science, access_mining, access_mailsorting,access_weapons,
 	            access_heads_vault, access_mining_station, access_xenobiology, access_ce, access_hop, access_hos, access_RC_announce,
 	            access_keycard_auth, access_tcomsat, access_gateway, /*vg paramedic*/, access_paramedic, access_mechanic, access_taxi)
 
@@ -251,7 +251,7 @@
 		access_security, access_sec_doors, access_brig, access_armory,		//sec
 		access_medical, access_genetics, access_surgery, access_paramedic,	//med
 		access_atmospherics, access_engine,	access_tech_storage,			//engi
-		access_robotics, access_research,									//sci
+		access_robotics, access_science,									//sci
 		access_external_airlocks, access_teleporter, access_eva,			//entering/leaving the station
 		access_maint_tunnels,
 		access_tcomsat, access_gateway,										//why not
@@ -266,7 +266,7 @@
 		if(2) //medbay
 			return list(access_medical, access_genetics, access_morgue, access_chemistry, access_paramedic, access_virology, access_surgery, access_cmo)
 		if(3) //research
-			return list(access_research, access_tox, access_tox_storage, access_robotics, access_mechanic, access_xenobiology, access_rd)
+			return list(access_science, access_rnd, access_tox_storage, access_robotics, access_mechanic, access_xenobiology, access_rd)
 		if(4) //engineering and maintenance
 			return list(access_construction, access_maint_tunnels, access_engine, access_engine_equip, access_external_airlocks, access_tech_storage, access_mechanic, access_atmospherics, access_ce)
 		if(5) //command
@@ -318,7 +318,7 @@
 			return "Genetics Lab"
 		if(access_morgue)
 			return "Morgue"
-		if(access_tox)
+		if(access_rnd)
 			return "R&D Lab"
 		if(access_tox_storage)
 			return "Toxins Lab"
@@ -394,7 +394,7 @@
 			return "Theatre"
 		if(access_manufacturing)
 			return "Manufacturing"
-		if(access_research)
+		if(access_science)
 			return "Science"
 		if(access_mining)
 			return "Mining"

@@ -11,11 +11,11 @@
 	req_admin_notify = 1
 	access = list(access_weapons, access_security, access_sec_doors, access_brig, access_armory, access_court,
 			            access_forensics_lockers, access_morgue, access_maint_tunnels, access_all_personal_lockers,
-			            access_research, access_engine, access_mining, access_medical, access_construction, access_mailsorting,
+			            access_science, access_engine, access_mining, access_medical, access_construction, access_mailsorting,
 			            access_heads, access_hos, access_RC_announce, access_keycard_auth, access_gateway, access_eva)
 	minimal_access = list(access_weapons, access_security, access_sec_doors, access_brig, access_armory, access_court,
 			            access_forensics_lockers, access_morgue, access_maint_tunnels, access_all_personal_lockers,
-			            access_research, access_engine, access_mining, access_medical, access_construction, access_mailsorting,
+			            access_science, access_engine, access_mining, access_medical, access_construction, access_mailsorting,
 			            access_heads, access_hos, access_RC_announce, access_keycard_auth, access_gateway)
 	minimal_player_age = 14
 

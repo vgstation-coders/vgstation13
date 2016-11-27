@@ -182,7 +182,7 @@
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/energy/temperature
 	locked = 1
-	req_lock_access = list(access_tox, access_robotics, access_rd)
+	req_lock_access = list(access_rnd, access_robotics, access_rd)
 
 /datum/design/large_grenade
 	name = "Large Grenade"

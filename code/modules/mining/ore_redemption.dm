@@ -14,7 +14,7 @@
 		access_mining_station,
 		access_chemistry,
 		access_bar,
-		access_research,
+		access_science,
 		access_ce,
 		access_virology
 	)
