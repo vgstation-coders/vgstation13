@@ -107,6 +107,9 @@
 	else
 		src.name = "[src.base_name] ([src.label_text])"
 
+/obj/item/weapon/reagent_containers/glass/fits_in_iv_drip()
+	return 1
+
 /obj/item/weapon/reagent_containers/glass/beaker
 	name = "beaker"
 	desc = "A beaker. Can hold up to 50 units."
