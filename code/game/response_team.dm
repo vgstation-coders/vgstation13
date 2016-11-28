@@ -30,17 +30,18 @@ var/can_call_ert
 		switch(alert("The station is not in red alert. Do you still want to dispatch a response team?",,"Yes","No"))
 			if("No")
 				return
+	var/ert_reason = stripped_input(usr, "Please give a reason for calling the ERT.", "ERT Reason")
 	if(send_emergency_team)
 		to_chat(usr, "<span class='warning'>Looks like somebody beat you to it!</span>")
 		return
 
-	message_admins("[key_name_admin(usr)] is dispatching an Emergency Response Team.", 1)
-	log_admin("[key_name(usr)] used Dispatch Response Team.")
-	trigger_armed_response_team(1)
+	message_admins("[key_name_admin(usr)] is dispatching an Emergency Response Team. Reason given: [ert_reason]")
+	log_admin("[key_name(usr)] used Dispatch Response Team. Reason given is: [ert_reason]")
+	trigger_armed_response_team(1,ert_reason)
 
 
 client/verb/JoinResponseTeam()
-	set category = "IC"
+	set category = "OOC"
 
 	if(istype(usr,/mob/dead/observer) || istype(usr,/mob/new_player))
 		if(!send_emergency_team)
@@ -64,6 +65,7 @@ client/verb/JoinResponseTeam()
 			var/mob/living/carbon/human/new_commando = create_response_team(L.loc, leader_selected, new_name)
 			qdel(L)
 			L = null
+			message_admins("[key_name(usr)] has joined the Emergency Response Team.")
 			new_commando.mind.key = usr.key
 			new_commando.key = usr.key
 
@@ -73,10 +75,10 @@ client/verb/JoinResponseTeam()
 				to_chat(new_commando, "<b>As member of the Emergency Response Team, you answer only to your leader and CentComm officials.</b>")
 			else
 				to_chat(new_commando, "<b>As leader of the Emergency Response Team, you answer only to CentComm, and have authority to override the Captain where it is necessary to achieve your mission goals. It is recommended that you attempt to cooperate with the captain where possible, however.")
+			if(ticker.mode.ert_reason)
+				to_chat(new_commando, "<b>The communication from the station indicated that the reason you were called is '[ticker.mode.ert_reason]'.")
 
 			ticker.mode.ert += new_commando.mind
-
-			message_admins("[key_name(usr)] has joined the Emergency Response Team.")
 			return
 
 	else
@@ -126,7 +128,7 @@ proc/increment_ert_chance()
 		sleep(600 * 3) // Minute * Number of Minutes
 
 
-proc/trigger_armed_response_team(var/force = 0)
+proc/trigger_armed_response_team(var/force = 0, var/reason)
 	if(!can_call_ert && !force)
 		return
 	if(send_emergency_team)
@@ -147,6 +149,13 @@ proc/trigger_armed_response_team(var/force = 0)
 		return
 
 	command_alert(/datum/command_alert/ert_success)
+	if(reason)
+		ticker.mode.ert_reason = reason
+	for(var/mob/M in player_list)
+		if(istype(M, /mob/dead/observer))
+			to_chat(M, "<span class='interface big'><span class='bold'>An Emergency Response Team has been called! Consider joining up:</span> \
+				(Verbs -> OOC -> JoinResponseTeam, or <a href='?src=\ref[M];joinresponseteam=1'>click here.</a>)</span>")
+
 
 	can_call_ert = 0 // Only one call per round, gentleman.
 	send_emergency_team = 1
@@ -320,6 +329,9 @@ proc/trigger_armed_response_team(var/force = 0)
 	equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/security(src), slot_back)
 	equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival/engineer(src), slot_in_backpack)
 	equip_to_slot_or_del(new /obj/item/weapon/storage/firstaid/regular(src), slot_in_backpack)
+
+	if(leader_selected)
+		equip_to_slot_or_del(new /obj/item/weapon/card/shuttle_pass/ERT(src), slot_in_backpack)
 
 	var/obj/item/weapon/card/id/W = new(src)
 	W.assignment = "Emergency Responder[leader_selected ? " Leader" : ""]"
