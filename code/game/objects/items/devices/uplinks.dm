@@ -17,7 +17,7 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 
 /obj/item/device/uplink/New()
 	..()
-	while(ticker)
+	if(ticker)
 		initialize()
 		return
 
