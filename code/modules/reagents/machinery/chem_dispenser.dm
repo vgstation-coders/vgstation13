@@ -52,7 +52,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	)
 
 	RefreshParts()
-	dispensable_reagents = sortList(dispensable_reagents)
+	if(dispensable_reagents)
+		dispensable_reagents = sortList(dispensable_reagents)
 
 /obj/machinery/chem_dispenser/RefreshParts()
 	var/T = 0
