@@ -459,14 +459,15 @@
 	if(!istype(P))
 		return
 
-	if(shuttle && shuttle.type == P.allowed_shuttle)
-		if(user.drop_item(P, src))
+	if(user.drop_item(P, src))
+		if(shuttle && shuttle.type == P.allowed_shuttle)
 			if(shuttle.travel_to(P.destination, src, user))
 				to_chat(usr, "<span class='info'>You insert \the [P] into \the [src].</span>")
 				qdel(P)
-			else
-				to_chat(usr, "<span class='info'>You insert \the [P] into \the [src], but it is rejected.</span>")
-				user.put_in_hands(P)
+				return
+		else
+			to_chat(usr, "<span class='info'>You insert \the [P] into \the [src], but it is rejected.</span>")
+			user.put_in_hands(P)
 
 /obj/machinery/computer/shuttle_control/bullet_act(var/obj/item/projectile/Proj)
 	visible_message("[Proj] ricochets off [src]!")
