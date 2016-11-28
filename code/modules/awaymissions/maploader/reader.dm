@@ -194,6 +194,7 @@ var/global/dmm_suite/preloader/_preloader = null
 
 	if(!isspace(instance)) //Space is the default area and contains every loaded turf by default
 		instance.contents.Add(locate(xcrd,ycrd,zcrd))
+		spawned_atoms |= instance
 
 	if(_preloader && instance)
 		_preloader.load(instance)

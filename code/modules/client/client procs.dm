@@ -439,3 +439,8 @@
 		winset(usr, "mainwindow.mainvsplit", "right=mapwindow;left=rpane;splitter=[newsplit]")
 	else
 		winset(usr, "mainwindow.mainvsplit", "right=rpane;left=mapwindow;splitter=[newsplit]")
+
+/proc/get_client_by_ckey(ckey)
+	for(var/client/C in clients)
+		if(C.ckey == ckey)
+			return C

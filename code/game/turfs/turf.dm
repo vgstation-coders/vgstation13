@@ -60,7 +60,7 @@
 	// This is the placed to store data for the holomap.
 	var/list/image/holomap_data
 
-
+	var/datum/map_element/map_element
 
 /turf/examine(mob/user)
 	..()
@@ -687,3 +687,8 @@
 		return A.has_gravity
 
 	return 1
+
+/turf/spawned_by_map_element(datum/map_element/ME, list/objects)
+	.=..()
+
+	map_element = ME
