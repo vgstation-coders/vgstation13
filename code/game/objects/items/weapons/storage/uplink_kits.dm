@@ -236,7 +236,7 @@
 	return
 
 /obj/item/weapon/storage/box/syndie_kit/hardsuit
-	name = "Boxed Blood Red Suit and Helmet"
+	name = "box (blood red suit and helmet)"
 
 /obj/item/weapon/storage/box/syndie_kit/hardsuit/New()
 	..()

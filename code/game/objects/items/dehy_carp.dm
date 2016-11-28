@@ -24,9 +24,9 @@
 
 // Attack self
 /obj/item/toy/carpplushie/dehy_carp/attack_self(mob/user)
-	src.add_fingerprint(user)	// Anyone can add their fingerprints to it with this
+	add_fingerprint(user)	// Anyone can add their fingerprints to it with this
 	if(!owned)
-		to_chat(user, "<span class='notice'>[src] stares up at you with friendly eyes.</span>")
+		to_chat(user, "<span class='notice'>\The [src] stares up at you with friendly eyes.</span>")
 		owner = user
 		owned = 1
 	return ..()
@@ -36,15 +36,14 @@
 	if(!proximity)
 		return
 	if(istype(O,/obj/structure/sink))
-		to_chat(user, "<span class='notice'>You place [src] under a stream of water...</span>")
-		user.drop_item()
-		loc = get_turf(O)
+		to_chat(user, "<span class='notice'>You place \the [src] under a stream of water...</span>")
+		user.drop_item(get_turf(O))
 		return Swell()
 	..()
 
 /obj/item/toy/carpplushie/dehy_carp/proc/Swell()
 	desc = "It's growing!"
-	visible_message("<span class='notice'>[src] swells up!</span>")
+	visible_message("<span class='notice'>\The [src] swells up!</span>")
 
 	// Animation
 	icon = 'icons/mob/animal.dmi'

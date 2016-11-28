@@ -11,9 +11,7 @@ var/const/WIRE_ACTIVATE = 16	// Will start a bombs timer if pulsed, will hint if
 
 /datum/wires/syndicatebomb/CanUse(var/mob/living/L)
 	var/obj/machinery/syndicatebomb/P = holder
-	if(P.open_panel)
-		return 1
-	return 0
+	return P.open_panel
 
 /datum/wires/syndicatebomb/UpdatePulsed(var/index)
 	var/obj/machinery/syndicatebomb/P = holder

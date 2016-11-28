@@ -91,8 +91,7 @@ var/global/list/obj/item/beacon/beacons = list()
 
 /obj/item/beacon/syndicate/bomb/attack_self(mob/user as mob)
 	if(user)
-		to_chat(user, "\blue Locked In")
+		to_chat(user, "<font color = 'blue'>Locked In</font>")
 		new /obj/machinery/syndicatebomb( user.loc )
 		playsound(src, 'sound/effects/pop.ogg', 100, 1, 1)
 		qdel(src)
-	return

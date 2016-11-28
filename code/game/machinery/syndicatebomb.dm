@@ -17,21 +17,19 @@
 	var/beepsound = 'sound/items/timer.ogg'
 
 /obj/machinery/syndicatebomb/process()
-	if(active && !defused && (timer > 0)) 	//Tick Tock
+	if(active && !defused && timer > 0) 	//Tick Tock
 		var/volume = (timer <= 20 ? 40 : 10) // Tick louder when the bomb is closer to being detonated.
 		playsound(loc, beepsound, volume, 0)
 		timer = max(timer - 2,0) // 2 seconds per process()
-	if(active && !defused && (timer <= 0))	//Boom
+	if(active && !defused && timer <= 0)	//Boom
 		active = 0
 		timer = 120
 		update_icon()
 		if(payload in src)
 			payload.detonate()
-		return
 	if(!active || defused)					//Counter terrorists win
 		if(defused && payload in src)
 			payload.defuse()
-		return
 
 /obj/machinery/syndicatebomb/New()
 	wires 	= new(src)
@@ -41,7 +39,7 @@
 
 
 /obj/machinery/syndicatebomb/examine(mob/user)
-	..(user)
+	..()
 	to_chat(user, "A digital display on it reads \"[timer]\".")
 
 /obj/machinery/syndicatebomb/update_icon()
@@ -90,11 +88,11 @@
 	else if(istype(I, /obj/item/weapon/bombcore))
 		if(!payload)
 			payload = I
-			to_chat(user, "<span class='notice'>You place [payload] into [src].</span>")
+			to_chat(user, "<span class='notice'>You place [payload] into \the [src].</span>")
 			user.drop_item()
 			payload.loc = src
 		else
-			to_chat(user, "<span class='notice'>[payload] is already loaded into [src], you'll have to remove it first.</span>")
+			to_chat(user, "<span class='notice'>[payload] is already loaded into \the [src], you'll have to remove it first.</span>")
 	else
 		..()
 
@@ -113,7 +111,7 @@
 				settings(user)
 				return
 		else if(anchored)
-			to_chat(user, "<span class='notice'>The bomb is bolted to the floor!</span>")
+			to_chat(user, "<span class='notice'>\The [src] is bolted to the floor!</span>")
 			return
 
 /obj/machinery/syndicatebomb/proc/settings(var/mob/user)
@@ -121,14 +119,14 @@
 	newtime = Clamp(newtime, 120, 60000)
 	if(in_range(src, user) && isliving(user)) //No running off and setting bombs from across the station
 		timer = newtime
-		src.loc.visible_message("<span class='notice'>\icon[src] timer set for [timer] seconds.</span>")
+		loc.visible_message("<span class='notice'>[bicon(src)] timer set for [timer] seconds.</span>")
 	if(alert(user,"Would you like to start the countdown now?",,"Yes","No") == "Yes" && in_range(src, user) && isliving(user))
 		if(defused || active)
 			if(defused)
-				src.loc.visible_message("<span class='notice'>\icon[src] Device error: User intervention required.</span>")
+				loc.visible_message("<span class='notice'>[bicon(src)] Device error: User intervention required.</span>")
 			return
 		else
-			src.loc.visible_message("<span class='danger'>\icon[src] [timer] seconds until detonation, please clear the area.</span>")
+			loc.visible_message("<span class='danger'>[bicon(src)] [timer] seconds until detonation, please clear the area.</span>")
 			playsound(loc, 'sound/machines/click.ogg', 30, 1)
 			active = 1
 			update_icon()
@@ -138,8 +136,8 @@
 			var/area/A = get_area(bombturf)
 			if(payload && !istype(payload, /obj/item/weapon/bombcore/training))
 				message_admins("[key_name(user)]<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A> has primed a [name] ([payload]) for detonation at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name] (JMP)</a>.")
-				log_game("[key_name(user)] has primed a [name] ([payload]) for detonation at [A.name]([bombturf.x],[bombturf.y],[bombturf.z])")
-				payload.adminlog = "The [src.name] that [key_name(user)] had primed detonated!"
+				log_game("[key_name(user)] has primed \a [name] ([payload]) for detonation at [A.name]([bombturf.x],[bombturf.y],[bombturf.z])")
+				payload.adminlog = "\The [name] that [key_name(user)] had primed detonated!"
 
 /obj/machinery/syndicatebomb/proc/isWireCut(var/index)
 	return wires.IsIndexCut(index)
@@ -215,20 +213,20 @@
 		holder.updateDialog()
 
 /obj/item/weapon/bombcore/training/detonate()
-	var/obj/machinery/syndicatebomb/holder = src.loc
+	var/obj/machinery/syndicatebomb/holder = loc
 	if(istype(holder))
 		attempts++
-		holder.loc.visible_message("<span class='danger'>\icon[holder] Alert: Bomb has detonated. Your score is now [defusals] for [attempts]. Resetting wires...</span>")
+		holder.loc.visible_message("<span class='danger'>[bicon(holder)] Alert: Bomb has detonated. Your score is now [defusals] for [attempts]. Resetting wires...</span>")
 		reset()
 	else
 		qdel(src)
 
 /obj/item/weapon/bombcore/training/defuse()
-	var/obj/machinery/syndicatebomb/holder = src.loc
+	var/obj/machinery/syndicatebomb/holder = loc
 	if(istype(holder))
 		attempts++
 		defusals++
-		holder.loc.visible_message("<span class='notice'>\icon[holder] Alert: Bomb has been defused. Your score is now [defusals] for [attempts]! Resetting wires...</span>")
+		holder.loc.visible_message("<span class='notice'>[bicon(holder)] Alert: Bomb has been defused. Your score is now [defusals] for [attempts]! Resetting wires...</span>")
 		sleep(50)	//Just in case someone is trying to remove the bomb core this gives them a little window to crowbar it out
 		if(istype(holder))
 			reset()
@@ -239,7 +237,7 @@
 	origin_tech = null
 
 /obj/item/weapon/bombcore/badmin/defuse() //because we wouldn't want them being harvested by players
-	var/obj/machinery/syndicatebomb/B = src.loc
+	var/obj/machinery/syndicatebomb/B = loc
 	qdel(B)
 	qdel(src)
 
@@ -248,13 +246,13 @@
 	var/amt_summon = 1
 
 /obj/item/weapon/bombcore/badmin/summon/detonate()
-	var/obj/machinery/syndicatebomb/B = src.loc
+	var/obj/machinery/syndicatebomb/B = loc
 	for(var/i = 0; i < amt_summon; i++)
 		var/atom/movable/X = new summon_path
 		X.loc = get_turf(src)
 		if(prob(50))
 			for(var/j = 1, j <= rand(1, 3), j++)
-				step(X, pick(NORTH,SOUTH,EAST,WEST))
+				step_rand(X)
 	qdel(B)
 	qdel(src)
 

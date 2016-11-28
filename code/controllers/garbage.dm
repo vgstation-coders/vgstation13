@@ -153,11 +153,7 @@ world/loop_checks = 0
 
 // Returns 1 if the object has been queued for deletion.
 /proc/qdeleted(var/datum/D)
-	if(!istype(D))
-		return 0
-	if(!isnull(D.gcDestroyed))
-		return 1
-	return 0
+	return istype(D) && !isnull(D.gcDestroyed)
 
 /datum/controller
 	var/processing = 0
