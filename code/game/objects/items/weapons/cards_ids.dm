@@ -94,7 +94,7 @@
 	if(disable_tuning)
 		return
 
-	while(ticker)
+	if(ticker)
 		initialize()
 		return
 
