@@ -1,6 +1,0 @@
-author: Unid
-
-delete-after: True
-
-changes: 
-- rscadd: "Added a simple maze generator. Admins may use it by loading the /datum/map_element/customizable/maze map element"
