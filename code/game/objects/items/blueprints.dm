@@ -142,11 +142,10 @@ move an amendment</a> to the drawing.</p>
 	var/area/oldarea = get_area(usr)
 	newarea.name = str
 	newarea.tag = "[newarea.type]/[md5(str)]"
-	newarea.contents.Add(turfs)
+
 	for(var/turf/T in turfs)
-		T.change_area(oldarea,newarea)
-		for(var/atom/allthings in T.contents)
-			allthings.change_area(oldarea,newarea)
+		T.set_area(newarea)
+
 	newarea.addSorted()
 
 	ghostteleportlocs[newarea.name] = newarea
