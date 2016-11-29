@@ -4,14 +4,14 @@ This is not related to actual functional consoles in any way */
 
 /obj/machinery/computer/unusable_communication_relay
     name = "Communications Relay"
-    desc = "A code locked console that you do not know how to use. Probably doesnt do anything interesting."
+    desc = "A code locked console that you do not know how to use. Probably doesn't do anything of interest."
     icon_state = "comm"
     circuit = "/obj/item/weapon/circuitboard/unusable_communication_relay"
 
     light_color = LIGHT_COLOR_BLUE
 
 /obj/machinery/computer/unusable_communication_relay/attack_ai(var/mob/user as mob)
-        to_chat(user, "The systems firewall prevents you from accessing it.")
+        to_chat(user, "<span class='warning'>The systems firewall prevents you from accessing it.</span>")
 
 /obj/machinery/computer/unusable_communication_relay/attack_paw(var/mob/user as mob)
 
@@ -27,14 +27,14 @@ This is not related to actual functional consoles in any way */
 
 /obj/machinery/computer/unusable_shuttle_control_1 /*fluff shuttle console 1 */
     name = "Shuttle Control"
-    desc = "A code locked console that controls the ship. Doesnt look like you will be flying the ship anytime soon."
+    desc = "A code locked console that controls the ship. Doesn't look like you will be flying the ship anytime soon."
     icon_state = "shuttle"
     circuit = "/obj/item/weapon/circuitboard/unusable_shuttle_control_1"
 
     light_color = LIGHT_COLOR_CYAN
 
 /obj/machinery/computer/unusable_shuttle_control_1/attack_ai(var/mob/user as mob)
-        to_chat(user, "The systems firewall prevents you from accessing it.")
+        to_chat(user, "<span class='warning'>The systems firewall prevents you from accessing it.</span>")
 
 /obj/machinery/computer/unusable_shuttle_control_1/attack_paw(var/mob/user as mob)
 
@@ -56,7 +56,7 @@ This is not related to actual functional consoles in any way */
     light_color = LIGHT_COLOR_RED
 
 /obj/machinery/computer/unusable_shuttle_control_2/attack_ai(var/mob/user as mob)
-        to_chat(user, "The systems firewall prevents you from accessing it.")
+        to_chat(user, "<span class='warning'>The systems firewall prevents you from accessing it.</span>")
 
 /obj/machinery/computer/unusable_shuttle_control_2/attack_paw(var/mob/user as mob)
 
@@ -79,7 +79,7 @@ This is not related to actual functional consoles in any way */
     light_color = LIGHT_COLOR_RED
 
 /obj/machinery/computer/unusable_shuttle_engine_control/attack_ai(var/mob/user as mob)
-        to_chat(user, "The systems firewall prevents you from accessing it.")
+        to_chat(user, "<span class='warning'>The systems firewall prevents you from accessing it.</span>")
 
 /obj/machinery/computer/unusable_shuttle_engine_control/attack_paw(var/mob/user as mob)
 
@@ -97,14 +97,14 @@ This is not related to actual functional consoles in any way */
 
 /obj/machinery/computer/whiteship_console_1  /*console 1*/
     name = "Starmap"
-    desc = "A console with a map of the local area. Just by looking at this thing you can tell it is years out of date and is too old to be used effectivly"
+    desc = "A console with a map of the local area. Just by looking at this thing you can tell it is years out of date and is too old to be used."
     icon_state = "comm_serv"
     circuit = "/obj/item/weapon/circuitboard/whiteship_console_1"
 
     light_color = LIGHT_COLOR_GREEN
 
 /obj/machinery/computer/whiteship_console_1/attack_ai(var/mob/user as mob)
-        to_chat(user, "The console is so old that it cannot be remotely controlled by silicons.")
+        to_chat(user, "<span class='warning'>This console is so old that it cannot be remotely controlled by silicons.</span>")
 
 /obj/machinery/computer/whiteship_console_1/attack_paw(var/mob/user as mob)
 
@@ -127,7 +127,7 @@ This is not related to actual functional consoles in any way */
     light_color = LIGHT_COLOR_BLUE
 
 /obj/machinery/computer/whiteship_console_2/attack_ai(var/mob/user as mob)
-        to_chat(user, "The console is so old that it cannot be remotely controlled by silicons.")
+        to_chat(user, "<span class='warning'>This console is so old that it cannot be remotely controlled by silicons.</span>")
 
 /obj/machinery/computer/whiteship_console_2/attack_paw(var/mob/user as mob)
 
