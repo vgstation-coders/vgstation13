@@ -7,6 +7,7 @@ var/list/holomap_cache = list()
 	desc = "A device meant to be attached on a jumpsuit, granting a certain degree of situational awareness."
 	icon_state = "holochip"
 	accessory_exclusion = HOLOMAP
+	starting_materials = null
 
 	var/destroyed = 0
 

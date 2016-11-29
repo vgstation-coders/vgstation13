@@ -9,7 +9,7 @@
 	permeability_coefficient = 0.50
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	can_flip = 1
-
+	starting_materials = PLASTIC_MASK_COMPONENTS
 
 
 /obj/item/clothing/mask/breath/medical

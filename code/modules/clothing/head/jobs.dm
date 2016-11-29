@@ -8,6 +8,7 @@
 	desc = "The commander in chef's head wear."
 	flags = FPRINT
 	siemens_coefficient = 0.9
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 //Captain: This probably shouldn't be space-worthy
 /obj/item/clothing/head/caphat
@@ -37,6 +38,7 @@
 	flags = FPRINT
 	body_parts_covered = EARS|HEAD
 	siemens_coefficient = 0.9
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 //Chaplain
 /obj/item/clothing/head/nun_hood
@@ -46,6 +48,7 @@
 	flags = FPRINT
 	body_parts_covered = EARS|HEAD
 	siemens_coefficient = 0.9
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 //Mime
 /obj/item/clothing/head/beret
@@ -54,6 +57,7 @@
 	icon_state = "beret"
 	flags = FPRINT
 	siemens_coefficient = 0.9
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 //Security
 /obj/item/clothing/head/beret/sec
@@ -69,6 +73,7 @@
 	icon_state = "surgcap_blue"
 	flags = FPRINT
 	body_parts_covered = EARS|HEAD
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/surgery/purple
 	desc = "A cap surgeons wear during operations. Keeps their hair from tickling your internal organs. This one is deep purple."

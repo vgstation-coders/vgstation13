@@ -87,6 +87,7 @@
 	species_fit = list(VOX_SHAPED)
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
+	starting_materials = CLOTH_GLOVES_COMPONENTS
 
 /obj/item/clothing/gloves/black/hos
 	_color = "hosred"			//Exists for washing machines. Is not different from black gloves in any way.
@@ -111,6 +112,7 @@
 	item_state = "orange"
 	_color = "orange"
 	species_fit = list(VOX_SHAPED)
+	starting_materials = CLOTH_GLOVES_COMPONENTS
 
 /obj/item/clothing/gloves/red
 	name = "red gloves"
@@ -119,6 +121,7 @@
 	item_state = "red"
 	_color = "red"
 	species_fit = list(VOX_SHAPED)
+	starting_materials = CLOTH_GLOVES_COMPONENTS
 
 /obj/item/clothing/gloves/red/redcoat
 	_color = "redcoat"		//Exists for washing machines. Is not different from red gloves in any way.
@@ -130,6 +133,7 @@
 	item_state = "rainbow"
 	_color = "rainbow"
 	species_fit = list(VOX_SHAPED)
+	starting_materials = CLOTH_GLOVES_COMPONENTS
 
 /obj/item/clothing/gloves/rainbow/clown
 	_color = "clown"
@@ -141,6 +145,7 @@
 	item_state = "blue"
 	_color = "blue"
 	species_fit = list(VOX_SHAPED)
+	starting_materials = CLOTH_GLOVES_COMPONENTS
 
 /obj/item/clothing/gloves/purple
 	name = "purple gloves"
@@ -149,6 +154,7 @@
 	item_state = "purple"
 	_color = "purple"
 	species_fit = list(VOX_SHAPED)
+	starting_materials = CLOTH_GLOVES_COMPONENTS
 
 /obj/item/clothing/gloves/green
 	name = "green gloves"
@@ -157,6 +163,7 @@
 	item_state = "green"
 	_color = "green"
 	species_fit = list(VOX_SHAPED)
+	starting_materials = CLOTH_GLOVES_COMPONENTS
 
 /obj/item/clothing/gloves/white
 	name = "white gloves"
@@ -165,12 +172,13 @@
 	item_state = "white"
 	_color = "mime"
 	species_fit = list(VOX_SHAPED)
-	
-/obj/item/clothing/gloves/white/advanced //mime traitor gloves, spawn in a silent hand gun with two shots 
+	starting_materials = CLOTH_GLOVES_COMPONENTS
+
+/obj/item/clothing/gloves/white/advanced //mime traitor gloves, spawn in a silent hand gun with two shots
 	action_button_name = "Prime Gun/Lower Aim"
 	var/obj/item/weapon/gun/projectile/handgun/current_gun = null
 	var/charging = FALSE
-	
+
 /obj/item/clothing/gloves/white/advanced/attack_self(mob/user)
 	var/mob/living/carbon/human/M = user
 	if(!istype(M))
@@ -196,7 +204,7 @@
 			to_chat(M, "<span class = 'warning'> Your hand is full! </span>")
 	else
 		to_chat(M, "<span class ='warning'>You need to regain your focus before channeling another gun!</span>")
-			
+
 /obj/item/clothing/gloves/white/stunglove // For Clown Planet's mimes. - N3X
 	New()
 		..()
@@ -209,6 +217,7 @@
 	item_state = "gray"
 	_color = "grey"
 	species_fit = list(VOX_SHAPED)
+	starting_materials = CLOTH_GLOVES_COMPONENTS
 
 /obj/item/clothing/gloves/light_brown
 	name = "light brown gloves"
@@ -217,6 +226,7 @@
 	item_state = "lightbrown"
 	_color = "light brown"
 	species_fit = list(VOX_SHAPED)
+	starting_materials = CLOTH_GLOVES_COMPONENTS
 
 /obj/item/clothing/gloves/brown
 	name = "brown gloves"
@@ -225,6 +235,7 @@
 	item_state = "brown"
 	_color="brown"
 	species_fit = list(VOX_SHAPED)
+	starting_materials = CLOTH_GLOVES_COMPONENTS
 
 /obj/item/clothing/gloves/brown/cargo
 	_color = "cargo" 		//Exists for washing machines. Is not different from brown gloves in any way.

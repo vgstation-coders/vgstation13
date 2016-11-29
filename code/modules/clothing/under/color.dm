@@ -1,3 +1,6 @@
+/obj/item/clothing/under/color
+	starting_materials = CLOTH_CLOTHING_COMPONENTS
+
 /obj/item/clothing/under/color/black
 	name = "black jumpsuit"
 	icon_state = "black"
@@ -104,6 +107,7 @@
 	_color = "lightblue"
 	flags = FPRINT  | ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
+	starting_materials = CLOTH_CLOTHING_COMPONENTS
 
 /obj/item/clothing/under/aqua
 	name = "aqua jumpsuit"
@@ -111,6 +115,7 @@
 	_color = "aqua"
 	flags = FPRINT  | ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
+	starting_materials = CLOTH_CLOTHING_COMPONENTS
 
 /obj/item/clothing/under/purple
 	name = "purple jumpsuit"
@@ -119,6 +124,7 @@
 	_color = "purple"
 	flags = FPRINT  | ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
+	starting_materials = CLOTH_CLOTHING_COMPONENTS
 
 /obj/item/clothing/under/lightpurple
 	name = "lightpurple jumpsuit"
@@ -126,6 +132,7 @@
 	_color = "lightpurple"
 	flags = FPRINT  | ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
+	starting_materials = CLOTH_CLOTHING_COMPONENTS
 
 /obj/item/clothing/under/lightgreen
 	name = "lightgreen jumpsuit"
@@ -133,6 +140,7 @@
 	_color = "lightgreen"
 	flags = FPRINT  | ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
+	starting_materials = CLOTH_CLOTHING_COMPONENTS
 
 /obj/item/clothing/under/lightbrown
 	name = "lightbrown jumpsuit"
@@ -140,6 +148,7 @@
 	_color = "lightbrown"
 	flags = FPRINT  | ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
+	starting_materials = CLOTH_CLOTHING_COMPONENTS
 
 /obj/item/clothing/under/brown
 	name = "brown jumpsuit"
@@ -147,6 +156,7 @@
 	_color = "brown"
 	flags = FPRINT  | ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
+	starting_materials = CLOTH_CLOTHING_COMPONENTS
 
 /obj/item/clothing/under/yellowgreen
 	name = "yellowgreen jumpsuit"
@@ -154,6 +164,7 @@
 	_color = "yellowgreen"
 	flags = FPRINT  | ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
+	starting_materials = CLOTH_CLOTHING_COMPONENTS
 
 /obj/item/clothing/under/darkblue
 	name = "darkblue jumpsuit"
@@ -161,6 +172,7 @@
 	_color = "darkblue"
 	flags = FPRINT  | ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
+	starting_materials = CLOTH_CLOTHING_COMPONENTS
 
 /obj/item/clothing/under/lightred
 	name = "lightred jumpsuit"
@@ -168,6 +180,7 @@
 	_color = "lightred"
 	flags = FPRINT  | ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
+	starting_materials = CLOTH_CLOTHING_COMPONENTS
 
 /obj/item/clothing/under/darkred
 	name = "darkred jumpsuit"
@@ -175,6 +188,7 @@
 	_color = "darkred"
 	flags = FPRINT  | ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
+	starting_materials = CLOTH_CLOTHING_COMPONENTS
 
 /obj/item/clothing/under/blackpants
 	name = "black pants"
@@ -182,6 +196,7 @@
 	_color = "blpants"
 	flags = FPRINT  | ONESIZEFITSALL
 	gender = PLURAL
+	starting_materials = CLOTH_PANTS_COMPONENTS
 
 /obj/item/clothing/under/redpants
 	name = "red pants"
@@ -189,6 +204,7 @@
 	_color = "rpants"
 	flags = FPRINT  | ONESIZEFITSALL
 	gender = PLURAL
+	starting_materials = CLOTH_PANTS_COMPONENTS
 
 /obj/item/clothing/under/bluepants
 	name = "blue pants"
@@ -196,6 +212,7 @@
 	_color = "bpants"
 	flags = FPRINT  | ONESIZEFITSALL
 	gender = PLURAL
+	starting_materials = CLOTH_PANTS_COMPONENTS
 
 /obj/item/clothing/under/greypants
 	name = "grey pants"
@@ -203,3 +220,4 @@
 	_color = "gpants"
 	flags = FPRINT  | ONESIZEFITSALL
 	gender = PLURAL
+	starting_materials = CLOTH_PANTS_COMPONENTS

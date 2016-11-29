@@ -808,6 +808,8 @@ SEE_PIXELS	256
 #define MAT_CLOWN		"$clown"
 #define MAT_PLASTIC		"$plastic"
 #define MAT_CARDBOARD   "$cardboard"
+#define MAT_CLOTH		"$cloth"
+#define MAT_LEATHER		"$leather"
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first

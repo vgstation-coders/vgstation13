@@ -4,7 +4,6 @@
 	name = "\improper CentComm. hat"
 	icon_state = "centcom"
 	desc = "It's good to be emperor."
-	flags = FPRINT
 	item_state = "centhat"
 	siemens_coefficient = 0.9
 
@@ -13,7 +12,6 @@
 	icon_state = "hairflower"
 	desc = "Smells nice."
 	item_state = "hairflower"
-	flags = FPRINT
 
 /obj/item/clothing/head/powdered_wig
 	name = "powdered wig"
@@ -26,7 +24,6 @@
 	desc = "It's an amish looking hat."
 	icon_state = "tophat"
 	item_state = "that"
-	flags = FPRINT
 	siemens_coefficient = 0.9
 
 /obj/item/clothing/head/that/armored
@@ -38,44 +35,44 @@
 	name = "redcoat's hat"
 	icon_state = "redcoat"
 	desc = "<i>'I guess it's a redhead.'</i>"
-	flags = FPRINT
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/mailman
 	name = "mailman's hat"
 	icon_state = "mailman"
 	desc = "<i>'Right-on-time'</i> mail service head wear."
-	flags = FPRINT
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/plaguedoctorhat
 	name = "plague doctor's hat"
 	desc = "These were once used by Plague doctors. They're pretty much useless."
 	icon_state = "plaguedoctor"
-	flags = FPRINT
 	permeability_coefficient = 0.01
 	siemens_coefficient = 0.9
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/hasturhood
 	name = "hastur's hood"
 	desc = "It's unspeakably stylish."
 	icon_state = "hasturhood"
-	flags = FPRINT
 	body_parts_covered = EARS|HEAD
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/nursehat
 	name = "nurse's hat"
 	desc = "It allows quick identification of trained medical personnel."
 	icon_state = "nursehat"
-	flags = FPRINT
 	siemens_coefficient = 0.9
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/syndicatefake
 	name = "red space-helmet replica"
 	icon_state = "syndicate"
 	item_state = "syndicate"
 	desc = "A plastic replica of a syndicate agent's space helmet, you'll look just like a real murderous syndicate agent in this! This is a toy, it is not made for use in space!"
-	flags = FPRINT
 	body_parts_covered = FULL_HEAD
 	siemens_coefficient = 2.0
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/cueball
 	name = "cueball helmet"
@@ -84,6 +81,7 @@
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD
 	item_state="cueball"
+	starting_materials = METAL_HAT_COMPONENTS
 
 /obj/item/clothing/head/greenbandana
 	name = "green bandana"
@@ -91,6 +89,7 @@
 	icon_state = "greenbandana"
 	item_state = "greenbandana"
 	flags = FPRINT
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/cardborg
 	name = "cardborg helmet"
@@ -130,7 +129,6 @@
 	name = "rabbit ears"
 	desc = "Wearing these makes you looks useless, and only good for your sex appeal."
 	icon_state = "bunny"
-	flags = FPRINT
 
 /obj/item/clothing/head/flatcap
 	name = "flat cap"
@@ -138,24 +136,28 @@
 	icon_state = "flat_cap"
 	item_state = "detective"
 	siemens_coefficient = 0.9
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/pirate
 	name = "pirate hat"
 	desc = "Yarr."
 	icon_state = "pirate"
 	item_state = "pirate"
+	starting_materials = LEATHER_HAT_COMPONENTS
 
 /obj/item/clothing/head/hgpiratecap
 	name = "pirate hat"
 	desc = "Yarr."
 	icon_state = "hgpiratecap"
 	item_state = "hgpiratecap"
+	starting_materials = LEATHER_HAT_COMPONENTS
 
 /obj/item/clothing/head/bandana
 	name = "pirate bandana"
 	desc = "Yarr."
 	icon_state = "bandana"
 	item_state = "bandana"
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 //stylish bs12 hats
 
@@ -164,35 +166,35 @@
 	icon_state = "bowler_hat"
 	item_state = "bowler_hat"
 	desc = "For that industrial age look."
-	flags = FPRINT
+	starting_materials = LEATHER_HAT_COMPONENTS
 
 /obj/item/clothing/head/beaverhat
 	name = "beaver hat"
 	icon_state = "beaver_hat"
 	item_state = "beaver_hat"
 	desc = "Like a top hat, but made of beavers."
-	flags = FPRINT
+	starting_materials = LEATHER_HAT_COMPONENTS
 
 /obj/item/clothing/head/boaterhat
 	name = "boater hat"
 	icon_state = "boater_hat"
 	item_state = "boater_hat"
 	desc = "Goes well with celery."
-	flags = FPRINT
+	starting_materials = LEATHER_HAT_COMPONENTS
 
 /obj/item/clothing/head/squatter_hat
 	name = "slav squatter hat"
 	icon_state = "squatter_hat"
 	item_state = "squatter_hat"
 	desc = "Cyka blyat."
-	flags = FPRINT
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/fedora
 	name = "\improper fedora"
 	icon_state = "fedora"
 	item_state = "fedora"
 	desc = "A great hat ruined by being within fifty yards of you."
-	flags = FPRINT
+	starting_materials = LEATHER_HAT_COMPONENTS
 
 /obj/item/clothing/head/fedora/OnMobLife(var/mob/living/carbon/human/wearer)
 	if(!istype(wearer))
@@ -224,7 +226,7 @@
 	icon_state = "fez"
 	item_state = "fez"
 	desc = "Put it on your monkey, make lots of cash money."
-	flags = FPRINT
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 //end bs12 hats
 
@@ -242,7 +244,6 @@
 	desc = "Bkaw!"
 	icon_state = "chickenhead"
 	item_state = "chickensuit"
-	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD
 	siemens_coefficient = 2.0
 
@@ -251,7 +252,6 @@
 	desc = "Not as fuzzy as the real thing."
 	icon_state = "bearpelt"
 	item_state = "bearpelt"
-	flags = FPRINT
 	body_parts_covered = EARS|HEAD
 	siemens_coefficient = 2.0
 
@@ -302,60 +302,56 @@
 	desc = "A symbol of discipline, honor, and lots and lots of removal of some type of skewered food."
 	icon_state = "russobluecamohat"
 	item_state = "russobluecamohat"
-	flags = FPRINT
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/russofurhat
 	name = "russian fur hat"
 	desc = "Russian winter got you down? Maybe your enemy, but not you!"
 	icon_state = "russofurhat"
 	item_state = "russofurhat"
-	flags = FPRINT
+	starting_materials = LEATHER_HAT_COMPONENTS
 
 /obj/item/clothing/head/lordadmiralhat
 	name = "lord admiral's hat"
 	desc = "A hat suitable for any man of high and exalted rank."
 	icon_state = "lordadmiralhat"
 	item_state = "lordadmiralhat"
+	starting_materials = LEATHER_HAT_COMPONENTS
 
 /obj/item/clothing/head/jesterhat
 	name = "jester hat"
 	desc = "A hat fit for a fool."
 	icon_state = "jesterhat"
 	item_state = "jesterhat"
-	flags = FPRINT
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/libertyhat
 	name = "liberty top hat"
 	desc = "Show everyone just how patriotic you are."
 	icon_state = "libertyhat"
 	item_state = "libertyhat"
-	flags = FPRINT
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/maidhat
 	name = "maid headband"
 	desc = "Do these even do anything besides look cute?"
 	icon_state = "maidhat"
 	item_state = "maidhat"
-	flags = FPRINT
-
-/obj/item/clothing/head/maidhat
-	name = "maid headband"
-	desc = "Do these even do anything besides look cute?"
-	icon_state = "maidhat"
-	item_state = "maidhat"
-	flags = FPRINT
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/mitre
 	name = "mitre"
 	desc = "A funny hat worn by extremely boring people."
 	icon_state = "mitre"
 	item_state = "mitre"
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/clownpiece
 	name = "Clownpiece's jester hat"
 	desc = "A purple polka-dotted jester's hat with yellow pompons."
 	icon_state = "clownpiece"
 	item_state = "clownpiece"
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/headband
 	name = "head band"
@@ -363,13 +359,14 @@
 	icon_state = "headband"
 	item_state = "headband"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/metalgear.dmi', "right_hand" = 'icons/mob/in-hand/right/metalgear.dmi')
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/cowboy
 	name = "cowboy hat"
 	desc = "Pefect for the closet botanist."
 	icon_state = "cowboy"
 	item_state = "cowboy"
-
+	starting_materials = LEATHER_HAT_COMPONENTS
 
 /obj/item/clothing/head/christmas/santahat/red
 	name = "red santa hat"
@@ -388,13 +385,13 @@
 	icon_state = "xmashat"
 	item_state = "xmashat"
 	desc = "A crappy paper hat that you are REQUIRED to wear."
-	flags = FPRINT
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 
 /obj/item/clothing/head/pajamahat
 	name = "pajama hat"
 	desc = "This looks pretty damn comfortable."
 	heat_conductivity = INS_HELMET_HEAT_CONDUCTIVITY
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/pajamahat/red
 	icon_state = "pajamahat_red"
@@ -410,6 +407,7 @@
 	icon_state = "mummy"
 	item_state = "mummy"
 	_color = "mummy"
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/dunce_cap
 	name = "dunce cap"

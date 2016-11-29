@@ -9,6 +9,7 @@
 	_color = "director"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
 	flags = FPRINT  | ONESIZEFITSALL
+	starting_materials = null //indestructible
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/scientist
@@ -100,6 +101,7 @@
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
 	flags = FPRINT  | ONESIZEFITSALL
+	starting_materials = null //indestructible
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/geneticist

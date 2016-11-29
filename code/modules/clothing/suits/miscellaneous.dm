@@ -41,6 +41,7 @@
 	flags = FPRINT
 	species_fit = list(VOX_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	starting_materials = LEATHER_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/hgpirate
 	name = "pirate captain coat"
@@ -49,6 +50,7 @@
 	flags = FPRINT
 	species_fit = list(VOX_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	starting_materials = LEATHER_SUIT_COMPONENTS
 
 
 /obj/item/clothing/suit/cyborg_suit
@@ -65,6 +67,7 @@
 	desc = "A Nazi great coat."
 	icon_state = "nazi"//broken on mob, item fine
 	flags = FPRINT
+	starting_materials = LEATHER_SUIT_COMPONENTS
 
 
 /obj/item/clothing/suit/johnny_coat
@@ -73,6 +76,7 @@
 	icon_state = "johnny"//broken on mob, item fine
 	item_state = "johnny"
 	flags = FPRINT
+	starting_materials = LEATHER_SUIT_COMPONENTS
 
 
 /obj/item/clothing/suit/justice
@@ -81,6 +85,7 @@
 	icon_state = "justice"
 	flags = FPRINT
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	starting_materials = LEATHER_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/judgerobe
 	name = "judge's robe"
@@ -89,6 +94,7 @@
 	item_state = "judge"
 	flags = FPRINT  | ONESIZEFITSALL
 	allowed = list(/obj/item/weapon/storage/fancy/cigarettes,/obj/item/weapon/spacecash)
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 
 /obj/item/clothing/suit/wcoat
@@ -98,6 +104,7 @@
 	item_state = "wcoat"
 	blood_overlay_type = "armor"
 	body_parts_covered = FULL_TORSO
+	starting_materials = CLOTH_APRON_COMPONENTS
 
 
 /obj/item/clothing/suit/apron/overalls
@@ -106,6 +113,7 @@
 	icon_state = "overalls"
 	item_state = "overalls"
 	body_parts_covered = FULL_TORSO|LEGS
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 
 /obj/item/clothing/suit/syndicatefake
@@ -125,6 +133,7 @@
 	icon_state = "hastur"
 	item_state = "hastur"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/imperium_monk
 	name = "Imperium monk"
@@ -132,6 +141,7 @@
 	icon_state = "imperium_monk"
 	item_state = "imperium_monk"
 	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 
 /obj/item/clothing/suit/chickensuit
@@ -156,6 +166,7 @@
 	desc = "This is a nice holiday my son."
 	icon_state = "holidaypriest"
 	item_state = "holidaypriest"
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 
 /obj/item/clothing/suit/cardborg
@@ -183,6 +194,7 @@
 	desc = "A worn out, curiously comfortable t-shirt with a picture of Ian. You wouldn't go so far as to say it feels like being hugged when you wear it but it's pretty close. Good for sleeping in."
 	icon_state = "ianshirt"
 	body_parts_covered = ARMS|FULL_TORSO
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 //Blue suit jacket toggle
 /obj/item/clothing/suit/suit/verb/toggle()
@@ -212,19 +224,19 @@
 	name = "leather coat"
 	desc = "A long, thick black leather coat."
 	icon_state = "leathercoat"//broken completely
-	flags = FPRINT
+	starting_materials = LEATHER_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/browncoat
 	name = "brown leather coat"
 	desc = "A long, brown leather coat."
 	icon_state = "browncoat"//broken completely
-	flags = FPRINT
+	starting_materials = LEATHER_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/neocoat
 	name = "black coat"
 	desc = "A flowing, black coat."
 	icon_state = "neocoat"//broken completely
-	flags = FPRINT
+	starting_materials = LEATHER_SUIT_COMPONENTS
 
 //actual suits
 
@@ -232,9 +244,12 @@
 	name = "cream suit"
 	desc = "A cream coloured, genteel suit."
 	icon_state = "creamsuit"//broken completely
-	flags = FPRINT
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 //stripper
+
+/obj/item/clothing/under/stripper
+	starting_materials = CLOTH_BIKINI_COMPONENTS
 
 /obj/item/clothing/under/stripper/stripper_pink
 	name = "pink swimsuit"
@@ -284,6 +299,7 @@
 /obj/item/clothing/under/swimsuit
 	siemens_coefficient = 1
 	body_parts_covered = 0
+	starting_materials = CLOTH_BIKINI_COMPONENTS
 
 /obj/item/clothing/under/swimsuit/black
 	name = "black swimsuit"
@@ -326,24 +342,28 @@
 	icon_state = "simonjacket"
 	species_fit = list(VOX_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/kaminacape
 	name = "Kamina's Cape"
 	desc = "Don't believe in yourself, dumbass. Believe in me. Believe in the Kamina who believes in you."
 	icon_state = "kaminacape"
 	body_parts_covered = 0
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/officercoat
 	name = "Officer's Coat"
 	desc = "Ein Mantel gemacht, um die Juden zu bestrafen."
 	icon_state = "officersuit"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/soldiercoat
 	name = "Soldier's Coat"
 	desc = "Und das heiﬂt: Erika."
 	icon_state = "soldiersuit"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/russofurcoat
 	name = "russian fur coat"
@@ -351,18 +371,21 @@
 	icon_state = "russofurcoat"
 	allowed = list(/obj/item/weapon/gun)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/doshjacket
 	name = "Plasterer's Jacket"
 	desc = "Perfect for doing up the house."
 	icon_state = "doshjacket"
 	body_parts_covered = FULL_TORSO|ARMS
+	starting_materials = LEATHER_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/lordadmiral
 	name = "Lord Admiral's Coat"
 	desc = "You'll be the Ruler of the King's Navy in no time."
 	icon_state = "lordadmiral"
 	allowed = list (/obj/item/weapon/gun)
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/raincoat
 	name = "Raincoat"
@@ -375,12 +398,14 @@
 	name = "Crazed Jester's Robe"
 	desc = "Do I look like a waiter?"
 	icon_state = "kefkarobe"
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/libertycoat
 	name = "Liberty Coat"
 	desc = "Smells faintly of freedom."
 	icon_state = "libertycoat"
 	body_parts_covered = FULL_TORSO|ARMS
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/storage/draculacoat
 	name = "Vampire Coat"
@@ -390,18 +415,21 @@
 	cant_hold = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
 	armor = list(melee = 30, bullet = 20, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	species_fit = list(GREY_SHAPED)
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/maidapron
 	name = "Apron"
 	desc = "Simple white apron."
 	icon_state = "maidapron"
 	body_parts_covered = FULL_TORSO
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/clownpiece
 	name = "small fairy wings"
 	desc = "Some small and translucid insect-like wings."
 	icon_state = "clownpiece"
 	body_parts_covered = 0
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/clownpiece/flying
 	name = "small fairy wings"
@@ -445,6 +473,7 @@
 	body_parts_covered = FULL_TORSO|ARMS
 	icon_state = "cjumper-red"
 	species_fit = list(GREY_SHAPED)
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/jumper/christmas/red
 	desc = "Made by professional knitting nanas to truly fit the festive mood. This one has a tasteful red colour to it, and a festive Fir tree."
@@ -472,6 +501,7 @@
 	desc = "First developed by NASA in 1964 for the US space program!"
 	heat_conductivity = 0 // Good luck losing heat in this!
 	slowdown = 10
+	starting_materials = list(MAT_CLOTH = 20000)
 	var/bearpelt = 0
 
 /obj/item/clothing/suit/spaceblanket/attackby(obj/item/W,mob/user)

@@ -104,6 +104,7 @@
 	_color = "unathiharness2"
 	slots = 2
 	can_only_hold = list("/obj/item/weapon/hatchet", "/obj/item/weapon/kitchen/utensil/knife")
+	starting_materials = list(MAT_LEATHER = 250)
 
 /obj/item/clothing/accessory/storage/neorussian
 	name = "neo-Russian webbing"

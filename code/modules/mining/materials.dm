@@ -225,6 +225,24 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	cointype=null
 	cc_per_sheet = CC_PER_SHEET_METAL
 
+/datum/material/cloth
+	name = "Cloth"
+	id = MAT_CLOTH
+	value = 1
+	oretype = null
+	sheettype = /obj/item/stack/sheet/cloth
+	cointype = null
+	cc_per_sheet = 1000
+
+/datum/material/leather
+	name = "Leather"
+	id = MAT_LEATHER
+	value = 1
+	oretype = null
+	sheettype = /obj/item/stack/sheet/leather
+	cointype = null
+	cc_per_sheet = 1000
+
 /* //Commented out to save save space in menus listing materials until they are used
 /datum/material/pharosium
 	name="Pharosium"

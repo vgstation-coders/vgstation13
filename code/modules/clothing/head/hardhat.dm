@@ -11,6 +11,7 @@
 	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)
 	action_button_name = "Toggle Helmet Light"
 	siemens_coefficient = 0.9
+	starting_materials = METAL_HAT_COMPONENTS
 
 /obj/item/clothing/head/hardhat/attack_self(mob/user)
 	on = !on

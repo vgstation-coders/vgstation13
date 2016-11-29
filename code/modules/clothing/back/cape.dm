@@ -4,3 +4,4 @@
 	icon = 'icons/obj/clothing/capes.dmi'
 	icon_state = "magiccape"
 	item_state = "magiccape"
+	starting_materials = list(MAT_CLOTH = 4000)

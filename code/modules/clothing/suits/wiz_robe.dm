@@ -4,7 +4,7 @@
 	icon_state = "wizard"
 	//Not given any special protective value since the magic robes are full-body protection --NEO
 	siemens_coefficient = 0.8
-
+	starting_materials = CLOTH_HAT_COMPONENTS
 	wizard_garb = 1
 
 /obj/item/clothing/head/wizard/red
@@ -81,7 +81,7 @@
 	armor = list(melee = 30, bullet = 20, laser = 20,energy = 20, bomb = 20, bio = 20, rad = 20)
 	allowed = list(/obj/item/weapon/teleportation_scroll)
 	siemens_coefficient = 0.8
-
+	starting_materials = CLOTH_SUIT_COMPONENTS
 	wizard_garb = 1
 
 /obj/item/clothing/suit/wizrobe/red

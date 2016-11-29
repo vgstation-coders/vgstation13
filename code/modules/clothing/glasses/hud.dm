@@ -19,6 +19,7 @@
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their health status."
 	icon_state = "healthhud"
 	species_fit = list(GREY_SHAPED)
+	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 200)
 
 /obj/item/clothing/glasses/hud/health/process_hud(var/mob/M)
 	if(harm_labeled < min_harm_label)
@@ -29,6 +30,7 @@
 	name = "Security HUD"
 	desc = "A heads-up display that scans the humanoid carbon lifeforms in view and provides accurate data about their ID status and security records."
 	icon_state = "securityhud"
+	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 200)
 
 /obj/item/clothing/glasses/hud/security/jensenshades
 	name = "Augmented shades"
