@@ -11,7 +11,7 @@ This is not related to actual functional consoles in any way */
     light_color = LIGHT_COLOR_BLUE
 
 /obj/machinery/computer/unusable_communication_relay/attack_ai(var/mob/user as mob)
-        to_chat(user, "<span class='warning'>The systems firewall prevents you from accessing it.</span>")
+        to_chat(user, "<span class='warning'>The system's firewall prevents you from accessing it.</span>")
 
 /obj/machinery/computer/unusable_communication_relay/attack_paw(var/mob/user as mob)
 
@@ -34,7 +34,7 @@ This is not related to actual functional consoles in any way */
     light_color = LIGHT_COLOR_CYAN
 
 /obj/machinery/computer/unusable_shuttle_control_1/attack_ai(var/mob/user as mob)
-        to_chat(user, "<span class='warning'>The systems firewall prevents you from accessing it.</span>")
+        to_chat(user, "<span class='warning'>The system's firewall prevents you from accessing it.</span>")
 
 /obj/machinery/computer/unusable_shuttle_control_1/attack_paw(var/mob/user as mob)
 
@@ -56,7 +56,7 @@ This is not related to actual functional consoles in any way */
     light_color = LIGHT_COLOR_RED
 
 /obj/machinery/computer/unusable_shuttle_control_2/attack_ai(var/mob/user as mob)
-        to_chat(user, "<span class='warning'>The systems firewall prevents you from accessing it.</span>")
+        to_chat(user, "<span class='warning'>The system's firewall prevents you from accessing it.</span>")
 
 /obj/machinery/computer/unusable_shuttle_control_2/attack_paw(var/mob/user as mob)
 
@@ -72,14 +72,14 @@ This is not related to actual functional consoles in any way */
 
 /obj/machinery/computer/unusable_shuttle_engine_control /*fluff shuttle console 3 */
     name = "Engine Control"
-    desc = "A code locked console that controls the ship's engines and power systems."
+    desc = "A code locked console that controls the ship's engines and power system's."
     icon_state = "airtunnel01"
     circuit = "/obj/item/weapon/circuitboard/unusable_shuttle_engine_control"
 
     light_color = LIGHT_COLOR_RED
 
 /obj/machinery/computer/unusable_shuttle_engine_control/attack_ai(var/mob/user as mob)
-        to_chat(user, "<span class='warning'>The systems firewall prevents you from accessing it.</span>")
+        to_chat(user, "<span class='warning'>The system's firewall prevents you from accessing it.</span>")
 
 /obj/machinery/computer/unusable_shuttle_engine_control/attack_paw(var/mob/user as mob)
 
