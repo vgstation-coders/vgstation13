@@ -160,8 +160,8 @@ proc/trigger_armed_response_team(var/force = 0, var/reason)
 	can_call_ert = 0 // Only one call per round, gentleman.
 	send_emergency_team = 1
 
-	sleep(600 * 5)
-	send_emergency_team = 0 // Can no longer join the ERT.
+	spawn(600 * 5)
+		send_emergency_team = 0 // Can no longer join the ERT.
 
 	var/nuke_code
 	for(var/obj/machinery/nuclearbomb/nuke in machines)

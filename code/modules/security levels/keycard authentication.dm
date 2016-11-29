@@ -111,7 +111,10 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 	if(href_list["triggerevent"])
 		if(href_list["triggerevent"] == "Emergency Response Team")
 			ert_reason = stripped_input(usr, "Please input the reason for calling an Emergency Response Team. This may be all the briefing they get before arriving at the station.", "Response Team Justification", ert_reason)
-			if(!ert_reason || !Adjacent(usr) || usr.incapacitated())
+			if(!ert_reason)
+				to_chat(usr, "<span class='warning'>You are required to give a reason to call an ERT.</span>")
+				return
+			if(!Adjacent(usr) || usr.incapacitated())
 				return
 		event = href_list["triggerevent"]
 		screen = 2
@@ -145,8 +148,8 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 	if(confirmed)
 		confirmed = 0
 		trigger_event(event)
-		log_game("[key_name(event_triggered_by)] triggered and [key_name(event_confirmed_by)] confirmed event [event]")
-		message_admins("[key_name(event_triggered_by)] triggered and [key_name(event_confirmed_by)] confirmed event [event]", 1)
+		log_game("[key_name(event_triggered_by)] triggered and [key_name(event_confirmed_by)] confirmed event [event][event=="Emergency Response Team"?". ERT reason given was '[ert_reason]'":""]")
+		message_admins("[key_name(event_triggered_by)] triggered and [key_name(event_confirmed_by)] confirmed event [event][event=="Emergency Response Team"?". ERT reason given was '[ert_reason]'":""]", 1)
 	reset()
 
 /obj/machinery/keycard_auth/proc/receive_request(var/obj/machinery/keycard_auth/source)

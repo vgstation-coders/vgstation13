@@ -204,7 +204,10 @@ var/shuttle_call/shuttle_calls[0]
 			if(response != "Yes")
 				return
 			var/ert_reason = stripped_input(usr, "Please input the reason for calling an Emergency Response Team. This may be all the information they get before arriving at the station.", "Response Team Justification")
-			if(!ert_reason || !Adjacent(usr) || usr.incapacitated())
+			if(!ert_reason)
+				to_chat(usr, "<span class='warning'>You are required to give a reason to call an ERT.</span>")
+				return
+			if(!Adjacent(usr) || usr.incapacitated())
 				return
 			trigger_armed_response_team(1,ert_reason)
 			log_game("[key_name(usr)] has called an ERT with reason: [ert_reason]")
