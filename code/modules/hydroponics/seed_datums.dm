@@ -605,7 +605,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 							else
 								H.adjustBruteLoss(5+carnivorous*5)
 							to_chat(H, "<span class='danger'>You are prickled by the sharp thorns on \the [seed_name]!</span>")
-							if(H.species && !(H.species.flags & NO_PAIN))
+							if(H.feels_pain())
 								success = 0
 						if(stinging)
 							if(chems && chems.len)

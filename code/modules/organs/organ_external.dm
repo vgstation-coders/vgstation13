@@ -763,7 +763,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	"<span class='danger'>Something feels like it shattered in your [display_name]!</span>", \
 	"<span class='danger'>You hear a sickening crack.</span>")
 
-	if(owner.species && !(owner.species.flags & NO_PAIN))
+	if(owner.feels_pain())
 		owner.emote("scream", , , 1)
 
 	status |= ORGAN_BROKEN
@@ -911,7 +911,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(is_broken() && !istype(c_hand,/obj/item/tk_grab))
 		owner.drop_item(c_hand)
 		var/emote_scream = pick("screams in pain and", "lets out a sharp cry and", "cries out and")
-		owner.emote("me", 1, "[(owner.species && owner.species.flags & NO_PAIN) ? "" : emote_scream ] drops what they were holding in their [hand_name]!")
+		owner.emote("me", 1, "[owner.feels_pain() ? emote_scream : ""] drops what they were holding in their [hand_name]!")
 	if(is_malfunctioning())
 		// owner.u_equip(c_hand, 1)
 		owner.emote("me", 1, "drops what they were holding, their [hand_name] malfunctioning!")

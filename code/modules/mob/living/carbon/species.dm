@@ -275,7 +275,7 @@ var/global/list/whitelisted_species = list("Human")
 		"eyes" =     /datum/organ/internal/eyes
 		)
 	flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | NO_BLOOD
-	
+
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
 	H.dust()
 
@@ -802,6 +802,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	can_be_hypothermic = 0
 	has_sweat_glands = 0
+	default_mutations = list(M_STONE_SKIN)
 
 	chem_flags = NO_INJECT
 

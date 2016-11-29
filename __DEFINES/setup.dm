@@ -473,6 +473,8 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_CLAWS			10	// Deal extra damage with punches (but without gloves), can butcher animals without tools
 #define M_BEAK			11	// Can buther animals without tools
 #define M_TALONS		12  // Bonus kick damage
+#define M_STONE_SKIN	13  // hard skin
+
 //#define HEAL			12 	// (Not implemented) healing people with hands
 //#define SHADOW		13 	// (Not implemented) shadow teleportation (create in/out portals anywhere) (25%)
 //#define SCREAM		14 	// (Not implemented) supersonic screaming (25%)
