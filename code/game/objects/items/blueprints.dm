@@ -139,7 +139,6 @@ move an amendment</a> to the drawing.</p>
 		to_chat(usr, "<span class='warning'>Name too long.</span>")
 		return
 	var/area/station/custom/newarea = new
-	var/area/oldarea = get_area(usr)
 	newarea.name = str
 	newarea.tag = "[newarea.type]/[md5(str)]"
 
