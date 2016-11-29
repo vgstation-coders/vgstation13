@@ -465,9 +465,8 @@
 				to_chat(usr, "<span class='info'>You insert \the [P] into \the [src].</span>")
 				qdel(P)
 				return
-		else
-			to_chat(usr, "<span class='info'>You insert \the [P] into \the [src], but it is rejected.</span>")
-			user.put_in_hands(P)
+		to_chat(usr, "<span class='info'>You insert \the [P] into \the [src], but it is rejected.</span>")
+		user.put_in_hands(P)
 
 /obj/machinery/computer/shuttle_control/bullet_act(var/obj/item/projectile/Proj)
 	visible_message("[Proj] ricochets off [src]!")
