@@ -275,7 +275,7 @@ var/global/list/whitelisted_species = list("Human")
 		"eyes" =     /datum/organ/internal/eyes
 		)
 	flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | NO_BLOOD
-	
+
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
 	H.dust()
 
@@ -767,6 +767,16 @@ var/global/list/whitelisted_species = list("Human")
 	burn_mod = 2.5 //treeeeees
 
 	move_speed_mod = 7
+
+	has_organ = list(
+		"heart" =    /datum/organ/internal/heart,
+		"lungs" =    /datum/organ/internal/lungs,
+		"liver" =    /datum/organ/internal/liver/diona,
+		"kidneys" =  /datum/organ/internal/kidney,
+		"brain" =    /datum/organ/internal/brain,
+		"appendix" = /datum/organ/internal/appendix,
+		"eyes" =     /datum/organ/internal/eyes
+		)
 
 /datum/species/golem
 	name = "Golem"
