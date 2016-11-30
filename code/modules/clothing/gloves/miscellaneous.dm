@@ -173,3 +173,8 @@
 	desc = "For these tense combat situations when you just have to pick your nose."
 	icon_state = "nr_fgloves"
 	item_state = "nr_fgloves"
+
+/obj/item/clothing/gloves/hand_wraps
+	name = "hand wraps"
+	desc = "Some pieces of cloth wrapped around your hands."
+	icon_state = "hand_wraps"

@@ -6,7 +6,7 @@
 	species_fit = list(VOX_SHAPED)
 	bonus_knockout = 1 //Increase knockout chance from 1/12 to 1/6
 
-	starting_materials = list(MAT_LEATHER = 2000)
+	starting_materials = LEATHER_GLOVES_COMPONENTS
 
 /obj/item/clothing/gloves/boxing/dexterity_check()
 	return 0 //Wearing boxing gloves makes you less dexterious (so, for example, you can't use computers)

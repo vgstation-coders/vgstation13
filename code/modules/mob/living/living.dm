@@ -1348,9 +1348,8 @@ default behaviour is:
 		else
 			speed_mod = 0.0
 
-		if(M_CLAWS in H.mutations)
-			if(!istype(H.gloves))
-				speed_mod += 0.25
+		if(H.can_use_claws())
+			speed_mod += 0.25
 		if(M_BEAK in H.mutations)
 			if(istype(H.wear_mask))
 				var/obj/item/clothing/mask/M = H.wear_mask
@@ -1473,3 +1472,9 @@ default behaviour is:
 		spawn(25)
 			clear_fullscreen("flash", 25)
 		return 1
+
+/mob/living/proc/can_use_claws()
+	if(!mutations.Find(M_CLAWS))
+		return FALSE
+
+	return TRUE

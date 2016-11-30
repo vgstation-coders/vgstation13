@@ -28,7 +28,7 @@
 		accessory.emp_act(severity)
 	..()
 
-/obj/item/clothing/attackby(obj/item/I, mob/user)
+/obj/item/clothing/attackby(obj/item/I, mob/living/user)
 	if(istype(I, /obj/item/clothing/accessory))
 		var/obj/item/clothing/accessory/A = I
 		if(check_accessory_overlap(A))
@@ -49,7 +49,63 @@
 		if(accessory.attackby(I, user))
 			return 1
 
+	if(I.is_sharp())
+		if(!src.can_cut())
+			to_chat(user, "<span class='notice'>You are unable to cut \the [src] up.</span>")
+			return
+		if(!isturf(loc) && !user.is_holding_item(src))
+			to_chat(user, "<span class='notice'>kYou must either hold \the [src] in your hands or put it on the floor to cut it up.</span>")
+			return
+
+		var/txt_materials = ""
+		var/list/mats = materials.getMaterialDatums()
+		for(var/datum/material/M in mats)
+			if(M.cuttable)
+				txt_materials += lowertext("[M.name]")
+				if(mats.Find(M) < mats.len-1)
+					txt_materials += ", "
+				else if(mats.Find(M) == mats.len-1)
+					txt_materials += " and "
+
+		var/base_time = 8 SECONDS
+		var/speed_mod = I.is_sharp()
+		if(user.can_use_claws())
+			speed_mod += 0.5
+
+		user.visible_message("<span class='notice'>\The [user] starts cutting \the [src] with \the [I]!</span>",\
+		"<span class='info'>You start cutting \the [src] into [txt_materials] with \the [I]. This will take about [round(base_time / speed_mod)] seconds.</span>")
+		if(do_after(user, src, round(base_time/speed_mod)))
+			if(!isturf(loc) && !user.is_holding_item(src))
+				return
+			user.drop_item(src, force_drop = 1)
+			remove_accessories()
+
+			if(materials.getSheetAmount(MAT_CLOTH))
+				var/rag_amount = rand(1, materials.getSheetAmount(MAT_CLOTH))
+				if(speed_mod >= 1.0)
+					rag_amount = max(rag_amount - 8, 0)
+
+				if(rag_amount)
+					to_chat(user, "<span class='info'>You were unable to cut \the [src] precisely enough, and some of the material was torn apart!</span>")
+					for(var/i = 0 to rag_amount)
+						materials.removeSheetAmount(MAT_CLOTH, 1)
+						getFromPool(/obj/item/weapon/reagent_containers/glass/rag, get_turf(src))
+
+			materials.makeSheets(get_turf(src))
+			qdel(src)
+			return
+
 	..()
+
+/obj/item/clothing/proc/can_cut()
+	if(!materials)
+		return FALSE
+	var/list/L = materials.getMaterialDatums()
+	for(var/datum/material/M in L)
+		if(M.cuttable = FALSE)
+			return FALSE
+
+	return TRUE
 
 /obj/item/clothing/attack_hand(mob/user)
 	if(accessories.len && src.loc == user)
@@ -106,6 +162,10 @@
 		var/mob/living/carbon/human/H = user
 		H.update_inv_by_slot(slot_flags)
 	update_verbs()
+
+/obj/item/clothing/proc/remove_accessories(mob/user)
+	for(var/obj/item/clothing/accessory/A in accessories)
+		remove_accessory(user, A)
 
 /obj/item/clothing/verb/removeaccessory()
 	set name = "Remove Accessory"

@@ -111,7 +111,7 @@
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	armor = list(melee = 65, bullet = 30, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	siemens_coefficient = 0.6
-	starting_materials = LEATHER_SUIT_MATERIALS
+	starting_materials = LEATHER_SUIT_COMPONENTS
 
 //Jensen cosplay gear
 /obj/item/clothing/under/rank/head_of_security/jensen

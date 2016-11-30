@@ -91,6 +91,13 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 		return
 	addAmount(mat_id,-amount)
 
+/datum/materials/proc/removeSheetAmount(mat_id, amount)
+	if(!(mat_id in storage))
+		return
+
+	var/datum/material/mat = getMaterial(mat_id)
+	removeAmount(mat_id, amount * mat.cc_per_sheet)
+
 /datum/materials/proc/getAmount(var/mat_id)
 	if(!(mat_id in storage))
 		warning("getAmount(): Unknown material [mat_id]!")
@@ -98,12 +105,26 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 
 	return storage[mat_id]
 
+/datum/materials/proc/getSheetAmount(mat_id)
+	if(!(mat_id in storage))
+		return 0
+
+	var/datum/material/mat = getMaterial(mat_id)
+	return Floor(storage[mat_id] / mat.cc_per_sheet)
+
 /datum/materials/proc/getMaterial(var/mat_id)
 	if(!(mat_id in material_list))
 		warning("getMaterial(): Unknown material [mat_id]!")
 		return 0
 
 	return material_list[mat_id]
+
+/datum/materials/proc/getMaterialDatums()
+	var/list/L = list()
+	for(var/mat_id in storage)
+		L.Add(material_list[mat_id])
+
+	return
 
 /datum/materials/proc/makeSheets(var/atom/loc)
 	for (var/id in storage)
@@ -127,6 +148,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	var/sheettype=null
 	var/cointype=null
 	var/value=0
+
+	var/cuttable = FALSE
 
 /datum/material/New()
 	if(processed_name=="")
@@ -224,6 +247,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/cardboard
 	cointype=null
 	cc_per_sheet = CC_PER_SHEET_METAL
+	cuttable = TRUE
 
 /datum/material/cloth
 	name = "Cloth"
@@ -233,6 +257,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype = /obj/item/stack/sheet/cloth
 	cointype = null
 	cc_per_sheet = 1000
+	cuttable = TRUE
 
 /datum/material/leather
 	name = "Leather"
@@ -242,6 +267,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype = /obj/item/stack/sheet/leather
 	cointype = null
 	cc_per_sheet = 1000
+	cuttable = TRUE
 
 /* //Commented out to save save space in menus listing materials until they are used
 /datum/material/pharosium

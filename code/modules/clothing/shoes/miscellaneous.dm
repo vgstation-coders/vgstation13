@@ -427,3 +427,8 @@
 	species_fit = list(VOX_SHAPED)
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots
 	starting_materials = COMBAT_SHOES_COMPONENTS
+
+/obj/item/clothing/shoes/foot_wraps
+	name = "foot wraps"
+	desc = "Some pieces of clothing wrapped around your feet. Much better than walking barefoot."
+	icon_state = "foot_wraps"

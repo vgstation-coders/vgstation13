@@ -120,6 +120,60 @@
 	icon_state = "sheet-cloth"
 	origin_tech = Tc_MATERIALS + "=2"
 
+/obj/item/stack/sheet/cloth/New()
+	recipes = cloth_recipes
+	return ..()
+
+/obj/item/stack/sheet/cloth/attack(mob/living/carbon/human/M, mob/user)
+	if(!istype(M))
+		return ..()
+	if(user.a_intent != I_HELP)
+		return ..()
+
+	var/datum/organ/external/affecting = M.get_organ(user.zone_sel.selecting)
+
+	if(affecting.open == 0)
+		var/success = FALSE
+		for(var/datum/wound/W in affecting.wounds)
+			if(W.internal)
+				continue
+			if(!W.bleeding())
+				continue
+			if(W.damage_type != CUT)
+				continue
+
+			success = TRUE
+
+		if(!success)
+			to_chat(user, "<span class='notice'>You don't see any bleeding on \the [M]'s [affecting.display_name].</span>")
+			return
+
+		user.visible_message("<span class='notice'>\The [user] starts wrapping up the bleeding wound on \the [M]'s [affecting.display_name].</span>",
+		"<span class='info'>You start wrapping up \the [M]'s [affecting.display_name] to stop the bleeding. This will take about 6 seconds.</span>")
+		if(do_after(user, M, 6 SECONDS) && use(1))
+			success = FALSE
+			for(var/datum/wound/W in affecting.wounds)
+				if(W.internal)
+					continue
+				if(!W.bleeding())
+					continue
+				if(W.damage_type != CUT)
+					continue
+				success = TRUE
+
+				W.bandaged = 1
+				user.visible_message("<span class='notice'>[user] wraps up \the [W.desc] on [M]'s [affecting.display_name] with \the [src], stopping the bleeding.</span>", \
+								"<span class='notice'>You wrap up \the [W.desc] on [M]'s [affecting.display_name] with \the [src], stopping the bleeding.</span>")
+
+			if(!success)
+				to_chat(user, "<span class='info'>It seems like the bleeding stopped by itself while you were applying \the [src] to the wound.</span>")
+		else
+			to_chat(user, "<span class='notice'>You were interrupted while wrapping \the [M]'s bleeding wound.</span>")
+	else
+		if(can_operate(M, user))        //Checks if mob is lying down on table for surgery
+			do_surgery(M,user,src)
+
+
 /*
  * Cardboard
  */

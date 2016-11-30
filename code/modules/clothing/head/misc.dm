@@ -420,3 +420,8 @@
 	desc = "Reenact acts of violence against reptiles, or sneak into a swamp unnoticed."
 	icon_state = "snakehead"
 	item_state = "snakehead"
+
+/obj/item/clothing/head/turban
+	name = "turban"
+	desc = "A long piece of cloth wrapped around the head."
+	icon_state = "turban"

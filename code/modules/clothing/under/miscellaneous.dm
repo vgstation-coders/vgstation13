@@ -765,3 +765,10 @@
 	_color = "vox-skelesuit"
 	species_restricted = list(VOX_SHAPED)
 	species_fit = list(VOX_SHAPED)
+
+/obj/item/clothing/under/toga
+	name = "toga"
+	desc = "A large piece of cloth worn over the body. While not very fancy, it's comfortable no matter your size and shape."
+	icon_state = "toga"
+	_color = "toga"
+	flags = ONESIZEFITSALL

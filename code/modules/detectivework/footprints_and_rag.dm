@@ -23,6 +23,13 @@
 	possible_transfer_amounts = list(5)
 	volume = 5
 	can_be_placed_into = null
+	starting_materials = list(MAT_CLOTH = 500)
+
+/obj/item/weapon/reagent_containers/glass/rag/New()
+	..()
+
+	pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
 /obj/item/weapon/reagent_containers/glass/rag/attack_self(mob/user as mob)
 	return
