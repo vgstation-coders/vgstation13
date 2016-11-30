@@ -1,6 +1,8 @@
 // the SMES
 // stores power
 
+var/list/smes_list = list()
+
 /obj/machinery/power/battery/smes
 	name = "power storage unit"
 	desc = "A high-capacity superconducting magnetic energy storage (SMES) unit."
@@ -30,12 +32,17 @@
 		/obj/item/weapon/stock_parts/console_screen
 	)
 
-
+	smes_list |= src
 
 	RefreshParts()
 
 	if(ticker)
 		initialize()
+
+
+/obj/machinery/power/battery/smes/Destroy()
+	smes_list -= src
+	..()
 
 /obj/machinery/power/battery/smes/initialize()
 	..()

@@ -14,7 +14,7 @@
 	sleep(2)
 	new /obj/item/weapon/tank/jetpack/oxygen(src)
 	new /obj/item/clothing/mask/gas/syndicate(src)
-	new /obj/item/clothing/under/syndicate(src)
+	new /obj/item/clothing/under/syndicate/holomap(src)
 	new /obj/item/clothing/head/helmet/space/rig/syndi(src)
 	new /obj/item/clothing/suit/space/rig/syndi(src)
 	new /obj/item/weapon/crowbar/red(src)

@@ -1543,11 +1543,13 @@ var/proccalls = 1
 #define DEFAULT FONT SIZE 4
 
 //Holomap filters
-#define HOLOMAP_FILTER_DEATHSQUAD		1
-#define HOLOMAP_FILTER_ERT				2
-#define HOLOMAP_FILTER_NUKEOPS			3
-#define HOLOMAP_FILTER_ELITESYNDICATE	4
-#define HOLOMAP_FILTER_VOX				5
+#define HOLOMAP_FILTER_DEATHSQUAD				1
+#define HOLOMAP_FILTER_ERT						2
+#define HOLOMAP_FILTER_NUKEOPS					4
+#define HOLOMAP_FILTER_ELITESYNDICATE			8
+#define HOLOMAP_FILTER_VOX						16
+#define HOLOMAP_FILTER_STATIONMAP				32
+#define HOLOMAP_FILTER_STATIONMAP_STRATEGIC		64//features markers over the captain's office, the armory, the SMES
 
 #define HOLOMAP_AREACOLOR_COMMAND		"#447FC299"
 #define HOLOMAP_AREACOLOR_SECURITY		"#AE121299"
@@ -1560,6 +1562,7 @@ var/proccalls = 1
 #define HOLOMAP_AREACOLOR_ESCAPE		"#FF0000CC"
 
 #define HOLOMAP_EXTRA_STATIONMAP				"stationmapformatted"
+#define HOLOMAP_EXTRA_STATIONMAP_STRATEGIC		"stationmapstrategic"
 #define HOLOMAP_EXTRA_STATIONMAPAREAS			"stationareas"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH		"stationmapsmallnorth"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_SOUTH		"stationmapsmallsouth"

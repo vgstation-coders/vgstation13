@@ -45,6 +45,7 @@ var/list/station_holomaps = list()
 /obj/machinery/station_map/Destroy()
 	station_holomaps -= src
 	stopWatching()
+	holomap_datum = null
 	..()
 
 /obj/machinery/station_map/crowbarDestroy(mob/user)
@@ -285,6 +286,7 @@ var/list/station_holomaps = list()
 
 /obj/item/device/station_map/Destroy()
 	stopWatching()
+	holomap_datum = null
 	..()
 
 /obj/item/device/station_map/dropped(mob/user)
@@ -328,4 +330,94 @@ var/list/station_holomaps = list()
 	legend = image('icons/effects/64x64.dmi', "notfound")
 	legend.pixel_x = 7*WORLD_ICON_SIZE
 	legend.pixel_y = 7*WORLD_ICON_SIZE
+	station_map.overlays |= legend
+
+/obj/machinery/station_map/strategic
+	name = "strategic station holomap"
+	density = 1
+	machine_flags = null
+	icon = 'icons/obj/stationobjs_64x64.dmi'
+	pixel_x = -1*WORLD_ICON_SIZE/2
+	pixel_y = -1*WORLD_ICON_SIZE/2
+
+	var/list/watching_mobs = list()
+	var/list/watcher_maps = list()
+
+/obj/machinery/station_map/strategic/New()
+	..()
+	holomap_datum = new /datum/station_holomap/strategic()
+	original_zLevel = map.zMainStation
+	if(ticker && holomaps_initialized)
+		initialize()
+
+/obj/machinery/station_map/strategic/initialize()
+	holomap_datum.initialize_holomap()
+
+	small_station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[map.zMainStation]"])
+	small_station_map.plane = LIGHTING_PLANE
+	small_station_map.layer = ABOVE_LIGHTING_LAYER
+
+	update_icon()
+
+/obj/machinery/station_map/strategic/attack_hand(var/mob/user)
+	if(isliving(user) && anchored && !(stat & (NOPOWER|BROKEN)))
+		if(user in watching_mobs)
+			stopWatching(user)
+		else
+			if(user.hud_used && user.hud_used.holomap_obj)
+				if(!("\ref[user]" in watcher_maps))
+					watcher_maps["\ref[user]"] = image(holomap_datum.station_map)
+				var/image/I = watcher_maps["\ref[user]"]
+				I.loc = user.hud_used.holomap_obj
+				I.alpha = 0
+				animate(watcher_maps["\ref[user]"], alpha = 255, time = 5, easing = LINEAR_EASING)
+				watching_mobs |= user
+				user.client.images |= watcher_maps["\ref[user]"]
+				user.callOnFace["\ref[src]"] = "checkPosition"
+				to_chat(user, "<span class='notice'>An hologram of the station appears before your eyes.</span>")
+
+
+/obj/machinery/station_map/strategic/checkPosition()
+	for(var/mob/M in watching_mobs)
+		if(get_dist(src,M) > 1)
+			stopWatching(M)
+
+/obj/machinery/station_map/strategic/stopWatching(var/mob/user)
+	if(!user)
+		for(var/mob/M in watching_mobs)
+			if(M.client)
+				spawn(5)//we give it time to fade out
+					M.client.images -= watcher_maps["\ref[M]"]
+				M.callOnFace -= "\ref[src]"
+				animate(watcher_maps["\ref[M]"], alpha = 0, time = 5, easing = LINEAR_EASING)
+
+		watching_mobs = list()
+	else
+		if(user.client)
+			spawn(5)//we give it time to fade out
+				if(!(user in watching_mobs))
+					user.client.images -= watcher_maps["\ref[user]"]
+					watcher_maps -= "\ref[user]"
+			user.callOnFace -= "\ref[src]"
+			animate(watcher_maps["\ref[user]"], alpha = 0, time = 5, easing = LINEAR_EASING)
+
+			watching_mobs -= user
+
+/obj/machinery/station_map/strategic/update_icon()
+	overlays.len = 0
+	if(!(stat & (NOPOWER|BROKEN)))
+		if(!small_station_map)
+			small_station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[map.zMainStation]"])
+			small_station_map.plane = LIGHTING_PLANE
+			small_station_map.layer = ABOVE_LIGHTING_LAYER
+		small_station_map.icon = extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH+"_[map.zMainStation]"]
+		small_station_map.pixel_x = WORLD_ICON_SIZE/2
+		small_station_map.pixel_y = 5*PIXEL_MULTIPLIER+WORLD_ICON_SIZE/2
+		overlays |= small_station_map
+
+/datum/station_holomap/strategic/initialize_holomap(var/turf/T, var/isAI=null, var/mob/user=null)
+	station_map = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP_STRATEGIC])
+	legend = image('icons/effects/64x64.dmi', "strategic")
+	legend.pixel_x = 3*WORLD_ICON_SIZE
+	legend.pixel_y = 3*WORLD_ICON_SIZE
 	station_map.overlays |= legend

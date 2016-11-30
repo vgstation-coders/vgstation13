@@ -1,6 +1,15 @@
 #define HOLOMAP_OBSTACLE	"#FFFFFFDD"
 #define HOLOMAP_PATH		"#66666699"
 
+/datum/holomap_marker
+	var/x
+	var/y
+	var/z
+	var/pixel_x = -8
+	var/pixel_y = -8
+	var/filter
+	var/id
+	var/icon = 'icons/holomap_markers.dmi'
 
 /proc/generateHoloMinimaps()
 	var/list/filters = list(
@@ -12,11 +21,11 @@
 		)
 
 	for (var/f in filters)
-		centcommMiniMaps |= f
 		generateCentcommMinimap(f)
 
 	for (var/z = 1 to world.maxz)
 		holoMiniMaps |= z
+		generateMarkers(z)
 		generateHoloMinimap(z)
 
 	//Station Holomaps display the map of the Z-Level they were built on.
@@ -29,6 +38,41 @@
 
 	for (var/obj/machinery/station_map/S in station_holomaps)
 		S.initialize()
+
+/proc/generateMarkers(var/ZLevel)
+	//generating specific markers
+	if(ZLevel == map.zMainStation)
+		var/i = 1
+		for(var/obj/machinery/power/battery/smes/S in smes_list)
+			var/datum/holomap_marker/newMarker = new()
+			newMarker.id = "smes"
+			newMarker.filter = HOLOMAP_FILTER_STATIONMAP_STRATEGIC
+			newMarker.x = S.x
+			newMarker.y = S.y
+			newMarker.z = S.z
+			holomap_markers["smes_[i]"] = newMarker
+			i++
+		if(nukedisk)//Only gives the disk's original position on the map
+			var/datum/holomap_marker/newMarker = new()
+			newMarker.id = "cap"
+			newMarker.filter = HOLOMAP_FILTER_STATIONMAP_STRATEGIC
+			newMarker.x = nukedisk.x
+			newMarker.y = nukedisk.y
+			newMarker.z = nukedisk.z
+			holomap_markers["cap"] = newMarker
+	//generating area markers
+	for(var/area/A in areas)
+		if(A.holomap_marker)
+			var/turf/T = A.getAreaCenter(ZLevel)
+			if(T)
+				var/datum/holomap_marker/newMarker = new()
+				newMarker.id = A.holomap_marker
+				newMarker.filter = A.holomap_filter
+				newMarker.x = T.x
+				newMarker.y = T.y
+				newMarker.z = ZLevel
+				holomap_markers[newMarker.id] = newMarker
+
 
 /proc/generateHoloMinimap(var/zLevel=1)
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
@@ -105,7 +149,7 @@
 					else
 						canvas.DrawBox(HOLOMAP_PATH, i, r)
 
-	centcommMiniMaps[filter] = canvas
+	centcommMiniMaps["[filter]"] = canvas
 
 /proc/generateStationMinimap(var/StationZLevel)
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
@@ -137,15 +181,24 @@
 	big_map.Blend(map_base,ICON_OVERLAY)
 	big_map.Blend(canvas,ICON_OVERLAY)
 
-	for(var/area/A in areas)
-		if(A.holomap_marker && (A.holomap_filter & HOLOMAP_EXTRA_STATIONMAP))
-			var/turf/T = A.getAreaCenter(StationZLevel)
-			if(T)
-				if(map.holomap_offset_x.len >= StationZLevel)
-					big_map.Blend(icon('icons/holomap_markers.dmi',A.holomap_marker), ICON_OVERLAY, T.x-8+map.holomap_offset_x[T.z]	, T.y-8+map.holomap_offset_y[T.z])
-				else
-					big_map.Blend(icon('icons/holomap_markers.dmi',A.holomap_marker), ICON_OVERLAY, T.x-8, T.y-8)
+	if(StationZLevel == map.zMainStation)
+		var/icon/strategic_map = icon(big_map)
 
+		for(var/marker in holomap_markers)
+			var/datum/holomap_marker/holomarker = holomap_markers[marker]
+			if(holomarker.z == StationZLevel && holomarker.filter & HOLOMAP_FILTER_STATIONMAP_STRATEGIC)
+				strategic_map.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8+map.holomap_offset_x[StationZLevel]	, holomarker.y-8+map.holomap_offset_y[StationZLevel])
+
+		extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAP_STRATEGIC
+		extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP_STRATEGIC] = strategic_map
+
+	for(var/marker in holomap_markers)
+		var/datum/holomap_marker/holomarker = holomap_markers[marker]
+		if(holomarker.z == StationZLevel && holomarker.filter & HOLOMAP_FILTER_STATIONMAP)
+			if(map.holomap_offset_x.len >= StationZLevel)
+				big_map.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8+map.holomap_offset_x[StationZLevel]	, holomarker.y-8+map.holomap_offset_y[StationZLevel])
+			else
+				big_map.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8, holomarker.y-8)
 
 	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAP+"_[StationZLevel]"
 	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP+"_[StationZLevel]"] = big_map
