@@ -33,7 +33,7 @@ delete-after: True
 # If you're using characters such as # ' : - or the like in your changelog, surround the entire change with quotes as shown in the second example. These quotes don't show up on the changelog once it's merged and prevent errors.
 # SCREW ANY OF THIS UP AND IT WON'T WORK.
 changes: 
-- rscadd: Most clothing items may now be cut up by hitting them with sharp items. Successfully cutting up an item will produce usable sheets of cloth and rags, or leather. The better the tool, the faster the process takes, and the more sheets of cloth are saved. Cutting up a jumpsuit generally produces 10 rolls of cloth, while cutting up a hat will only produce 1 roll.
+- rscadd: Most clothing items may now be cut up by hitting them with sharp items. Successfully cutting up an item will produce usable sheets of cloth or leather. The better the tool, the faster the process takes, and the more sheets of cloth are saved. Cutting up a jumpsuit generally produces 10 rolls of cloth, while cutting up a hat will only produce 1 roll.
 - rscadd: Head of staff uniforms can't be destroyed.
-- rscadd: "Cloth can now be used to craft the following items: rag (2x per roll), roughspun robes (12), toga (12), foot wraps (4), hand wraps (4), turban (2)."
-- rscadd: Cloth can now be used to stop most wounds from bleeding. Large wounds can't be stopped with cloth. Unlike bandages and bruise packs, applying cloth to wounds takes 6 seconds.
+- rscadd: "Cloth can be used to craft the following items: rag (2x per roll), roughspun robes (12), toga (12), foot wraps (4), hand wraps (4), turban (2)."
+- rscadd: Cloth can be used to stop wounds from bleeding. Unlike bandages and bruise packs, applying cloth to wounds takes 6 seconds.

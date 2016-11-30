@@ -178,3 +178,4 @@
 	name = "hand wraps"
 	desc = "Some pieces of cloth wrapped around your hands."
 	icon_state = "hand_wraps"
+	starting_materials = CLOTH_GLOVES_COMPONENTS

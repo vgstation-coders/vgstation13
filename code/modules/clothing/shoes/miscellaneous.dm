@@ -432,3 +432,4 @@
 	name = "foot wraps"
 	desc = "Some pieces of clothing wrapped around your feet. Much better than walking barefoot."
 	icon_state = "foot_wraps"
+	starting_materials = CLOTH_SHOES_COMPONENTS

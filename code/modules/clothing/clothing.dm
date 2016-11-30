@@ -73,7 +73,7 @@
 			speed_mod += 0.5
 
 		user.visible_message("<span class='notice'>\The [user] starts cutting \the [src] with \the [I]!</span>",\
-		"<span class='info'>You start cutting \the [src] into [txt_materials] with \the [I]. This will take about [round(base_time / speed_mod)] seconds.</span>")
+		"<span class='info'>You start cutting \the [src] into [txt_materials] with \the [I]. This will take about [round(base_time / speed_mod) / 10] seconds.</span>")
 		if(do_after(user, src, round(base_time/speed_mod)))
 			if(!isturf(loc) && !user.is_holding_item(src))
 				return

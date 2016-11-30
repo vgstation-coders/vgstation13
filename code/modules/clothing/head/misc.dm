@@ -425,3 +425,4 @@
 	name = "turban"
 	desc = "A long piece of cloth wrapped around the head."
 	icon_state = "turban"
+	starting_materials = CLOTH_HAT_COMPONENTS

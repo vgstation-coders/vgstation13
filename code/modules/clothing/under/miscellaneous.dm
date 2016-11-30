@@ -771,4 +771,7 @@
 	desc = "A large piece of cloth worn over the body. While not very fancy, it's comfortable no matter your size and shape."
 	icon_state = "toga"
 	_color = "toga"
+	has_sensor = 0
 	flags = ONESIZEFITSALL
+	starting_materials = CLOTH_CLOTHING_COMPONENTS
+	species_fit = list(VOX_SHAPED)
