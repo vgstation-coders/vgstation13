@@ -69,14 +69,17 @@
 	..()
 	var/mob/living/carbon/human/H = owner
 	switch(reagent_id)
-		if(HYPERZINE || SYNAPTIZINE || NUKA_COLA) // these are highly addictive and hallucinogenic drugs for diona - think sensory overload mixed with skooma
-			H.druggy = min(H.druggy + REAGENTS_EFFECT_MULTIPLIER * 5, 15)
-			H.adjustBrainLoss(REAGENTS_EFFECT_MULTIPLIER * 0.2)
-			H.hallucination = min(H.hallucination + REAGENTS_EFFECT_MULTIPLIER * 5, 40) // needs to be above 20 to hallucinate - the higher it is the worse the hallucinations
-			H.dizziness = min(H.dizziness + REAGENTS_EFFECT_MULTIPLIER * 20, 150)
-			if(prob(2))
-				H.confused = min(H.confused + REAGENTS_EFFECT_MULTIPLIER * 5, 2) // this variable is RUTHLESS - do not put it very high PLEASE
-			if(prob(5))
-				H.vomit()
+		if(HYPERZINE || NUKA_COLA) // these are highly addictive and hallucinogenic drugs for diona - think sensory overload mixed with skooma
+			H.druggy = max(min(H.druggy + REAGENTS_EFFECT_MULTIPLIER * 5, 15),H.druggy)
+			H.dizziness = max(min(H.dizziness + REAGENTS_EFFECT_MULTIPLIER * 20, 150),H.dizziness)
 			if(prob(7))
 				H.emote(pick("twitch", "drool", "moan", "giggle"))
+		if(SYNAPTIZINE)
+			H.hallucination = max(30,H.hallucination)
+			H.adjustBrainLoss(REAGENTS_EFFECT_MULTIPLIER * 0.4)
+			H.jitteriness = max(min(H.jitteriness + REAGENTS_EFFECT_MULTIPLIER * 5,100),H.jitteriness)
+			H.dizziness =  max(min(H.dizziness + REAGENTS_EFFECT_MULTIPLIER * 20, 150),H.dizziness)
+			if(prob(5))
+				H.vomit()
+			if(prob(2))
+				H.confused = min(H.confused + REAGENTS_EFFECT_MULTIPLIER * 5, 2) // this variable is RUTHLESS - do not put it very high PLEASE
