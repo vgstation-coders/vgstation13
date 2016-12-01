@@ -1789,9 +1789,11 @@ var/global/num_vending_terminals = 1
 		)
 	contraband = list(
 		/obj/item/weapon/cell/potato = 3,
+		/obj/item/weapon/grenade/chem_grenade/metalfoam = 1,
 		)
 	premium = list(
 		/obj/item/weapon/storage/belt/utility = 3,
+		/obj/item/weapon/grenade/chem_grenade/metalfoam = 3,
 		)
 
 	pack = /obj/structure/vendomatpack/engivend
