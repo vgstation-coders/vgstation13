@@ -250,6 +250,9 @@ var/global/list/whitelisted_species = list("Human")
 /datum/species/proc/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
 	return
 
+/datum/species/proc/can_artifact_revive()
+	return 1
+
 /datum/species/proc/equip(var/mob/living/carbon/human/H)
 
 /datum/species/human
@@ -278,6 +281,9 @@ var/global/list/whitelisted_species = list("Human")
 	
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
 	H.dust()
+
+/datum/species/manifested/can_artifact_revive()
+	return 0
 
 /datum/species/unathi
 	name = "Unathi"
@@ -333,6 +339,9 @@ var/global/list/whitelisted_species = list("Human")
 		speech.message += "  ACK ACK!"
 
 	return ..(speech, H)
+
+/datum/species/skellington/can_artifact_revive()
+	return 0
 
 /datum/species/skellington/skelevox // Science never goes too far, it's the public that's too conservative
 	name = "Skeletal Vox"
@@ -832,6 +841,9 @@ var/global/list/whitelisted_species = list("Human")
 		A.key = H.key
 		H.key = null
 	qdel(H)
+
+/datum/species/golem/can_artifact_revive()
+	return 0
 
 /mob/living/adamantine_dust //serves as the corpse of adamantine golems
 	name = "adamantine dust"

@@ -307,6 +307,7 @@
 #define ICED_BEER		"iced_beer"
 #define CHARCOAL		"charcoal"
 #define SANGRIA			"sangria"
+#define BLOCKIZINE		"blockizine"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
