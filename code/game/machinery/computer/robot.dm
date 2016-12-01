@@ -232,3 +232,8 @@
 			R.self_destruct()
 
 	return
+
+/obj/machinery/computer/robotics/emag(mob/user as mob)
+	..()
+	req_access = list()
+	to_chat(usr, "You disable the console's access requirement.")
