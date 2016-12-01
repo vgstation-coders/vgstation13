@@ -1844,8 +1844,8 @@ var/global/num_vending_terminals = 1
 		)
 	premium = list(
 		/obj/item/clothing/under/rank/chief_engineer = 2,
-		/obj/item/weapon/storage/belt = 2,
-		) //belt is the best belt in the game.
+		/obj/item/weapon/storage/belt/utility = 2,
+		) //belt is the best belt in the game. - update paths dickbags
 	// There was an incorrect entry (cablecoil/power).  I improvised to cablecoil/heavyduty.
 	// Another invalid entry, /obj/item/weapon/circuitry.  I don't even know what that would translate to, removed it.
 	// The original products list wasn't finished.  The ones without given quantities became quantity 5.  -Sayu
