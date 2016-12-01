@@ -233,7 +233,7 @@
 
 	return
 
-/obj/machinery/computer/robotics/emag(mob/user as mob)
+/obj/machinery/computer/robotics/emag(mob/user)
 	..()
 	req_access = list()
-	to_chat(usr, "You disable the console's access requirement.")
+	to_chat(user, "You disable the console's access requirement.")
