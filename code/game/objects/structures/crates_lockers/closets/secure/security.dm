@@ -123,7 +123,8 @@
 		new /obj/item/weapon/storage/belt/security(src)
 		new /obj/item/device/flash(src)
 		new /obj/item/weapon/melee/baton/loaded(src)
-		new /obj/item/weapon/gun/energy/gun(src)
+		new /obj/item/weapon/storage/lockbox/lawgiver
+		new /obj/item/ammo_storage/magazine/lawgiver
 		new /obj/item/clothing/accessory/holster/handgun/waist(src)
 		new /obj/item/weapon/melee/telebaton(src)
 		new /obj/item/device/gps/secure(src)
