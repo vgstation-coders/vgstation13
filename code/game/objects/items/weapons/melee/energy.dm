@@ -37,6 +37,12 @@
 		to_chat(viewers(user), "<span class='danger'>[user] swings the [src.name] towards /his head! It looks like \he's trying to commit suicide.</span>")
 		return (BRUTELOSS|FIRELOSS)
 
+/obj/item/weapon/melee/energy/axe/rusty
+	name = "rusty energy axe"
+	desc = "A rusted energised battle axe."
+	force = 3.0
+	throwforce = 5.0
+	
 /obj/item/weapon/melee/energy/sword
 	name = "energy sword"
 	desc = "May the force be within you."
