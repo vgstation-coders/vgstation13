@@ -201,13 +201,13 @@
 /obj/item/weapon/melee/energy/axe/attack_self(mob/user as mob)
 	src.active = !( src.active )
 	if (src.active)
-		to_chat(user, "<span class='notice'>The axe is now energised.</span>")
+		to_chat(user, "<span class='notice'>\The [src] is now energised.</span>")
 		src.force = 150
 		src.icon_state = "axe1"
 		src.w_class = W_CLASS_HUGE
 		src.sharpness = 1.5
 	else
-		to_chat(user, "<span class='notice'>The axe can now be concealed.</span>")
+		to_chat(user, "<span class='notice'>\The [src] can now be concealed.</span>")
 		src.force = initial(src.force)
 		src.icon_state = initial(src.icon_state)
 		src.w_class = initial(src.w_class)
@@ -218,13 +218,13 @@
 /obj/item/weapon/melee/energy/axe/rusty/attack_self(mob/user as mob)
 	src.active = !( src.active )
 	if (src.active)
-		to_chat(user, "<span class='notice'>The rusty axe is now energised.</span>")
+		to_chat(user, "<span class='notice'>\The [src] is now energised.</span>")
 		src.force = 30
 		src.icon_state = "axe1"
 		src.w_class = W_CLASS_HUGE
 		src.sharpness = 1.5
 	else
-		to_chat(user, "<span class='notice'>The rusty axe can now be concealed.</span>")
+		to_chat(user, "<span class='notice'>\The [src] can now be concealed.</span>")
 		src.force = initial(src.force)
 		src.icon_state = initial(src.icon_state)
 		src.w_class = initial(src.w_class)
