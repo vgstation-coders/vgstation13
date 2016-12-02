@@ -23,6 +23,7 @@
 	desc = "An energised battle axe."
 	icon_state = "axe0"
 	force = 40
+	var/active_force = 150
 	throwforce = 25
 	throw_speed = 1
 	throw_range = 5
@@ -41,6 +42,7 @@
 	name = "rusty energy axe"
 	desc = "A rusted energised battle axe."
 	force = 3
+	active_force = 30
 	throwforce = 5
 	
 /obj/item/weapon/melee/energy/sword

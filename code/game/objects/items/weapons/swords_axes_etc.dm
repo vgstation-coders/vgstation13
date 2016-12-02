@@ -202,7 +202,7 @@
 	src.active = !( src.active )
 	if (src.active)
 		to_chat(user, "<span class='notice'>\The [src] is now energised.</span>")
-		src.force = 150
+		src.force = active_force
 		src.icon_state = "axe1"
 		src.w_class = W_CLASS_HUGE
 		src.sharpness = 1.5
@@ -214,23 +214,6 @@
 		src.sharpness = initial(src.sharpness)
 	src.add_fingerprint(user)
 	return
-	
-/obj/item/weapon/melee/energy/axe/rusty/attack_self(mob/user as mob)
-	src.active = !( src.active )
-	if (src.active)
-		to_chat(user, "<span class='notice'>\The [src] is now energised.</span>")
-		src.force = 30
-		src.icon_state = "axe1"
-		src.w_class = W_CLASS_HUGE
-		src.sharpness = 1.5
-	else
-		to_chat(user, "<span class='notice'>\The [src] can now be concealed.</span>")
-		src.force = initial(src.force)
-		src.icon_state = initial(src.icon_state)
-		src.w_class = initial(src.w_class)
-		src.sharpness = initial(src.sharpness)
-	src.add_fingerprint(user)
-	return	
 	
 /obj/item/weapon/melee/bone_sword
 	name = "bone sword"
