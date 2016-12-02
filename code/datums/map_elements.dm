@@ -24,11 +24,8 @@ var/list/datum/map_element/map_elements = list()
 		location = locate(/turf) in objects
 
 	//Build powernets
-	for(var/obj/structure/cable/C in objects)
-		if(C.powernet)
-			continue
-		
-		C.rebuild_from()
+	for(var/atom/A in objects)
+		A.spawned_by_map_element(src, objects)
 
 /datum/map_element/proc/load(x, y, z)
 	pre_load()
