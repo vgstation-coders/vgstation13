@@ -151,3 +151,34 @@
 
 /proc/_step(Ref, Dir, Speed = 0)
 	return step(Ref, Dir, Speed)
+
+
+/proc/_list_add(var/list/L, ...)
+	if (args.len < 2)
+		return
+
+	L += args.Copy(2)
+
+/proc/_list_copy(var/list/L, var/Start = 1, var/End = 0)
+	return L.Copy(Start, End)
+
+/proc/_list_cut(var/list/L, var/Start = 1, var/End = 0)
+	L.Cut(Start, End)
+
+/proc/_list_find(var/list/L, var/Elem, var/Start = 1, var/End = 0)
+	return L.Find(Elem, Start, End)
+
+/proc/_list_insert(var/list/L, var/Index, var/Item)
+	return L.Insert(Index, Item)
+
+/proc/_list_join(var/list/L, var/Glue, var/Start = 0, var/End = 1)
+	return L.Join(Glue, Start, End)
+
+/proc/_list_remove(var/list/L, ...)
+	if (args.len < 2)
+		return
+
+	L -= args.Copy(2)
+
+/proc/_list_swap(var/list/L, var/Index1, var/Index2)
+	L.Swap(Index1, Index2)
