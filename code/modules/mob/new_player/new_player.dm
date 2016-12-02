@@ -275,6 +275,9 @@
 		return 0
 	if(!job.player_old_enough(src.client))
 		return 0
+	if(job.species_whitelist.len)
+		if(!job.species_whitelist.Find(client.prefs.species))
+			return 0
 	// assistant limits
 	if(config.assistantlimit)
 		if(job.title == "Assistant")

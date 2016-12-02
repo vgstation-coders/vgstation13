@@ -62,6 +62,9 @@
 		else
 			to_chat(user, "<span class='info'>Nothing.</span>")
 
+/obj/item/weapon/reagent_containers/blood/fits_in_iv_drip()
+	return 1
+
 //These should be kept for legacy purposes, probably. At least until they disappear from maps.
 /obj/item/weapon/reagent_containers/blood/APlus
 	blood_type = "A+"

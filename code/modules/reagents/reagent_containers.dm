@@ -291,3 +291,6 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		if(reagents.reagent_list.len)
 			for(var/datum/reagent/R in reagents.reagent_list)
 				to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
+
+/obj/item/weapon/reagent_containers/proc/fits_in_iv_drip()
+	return 0

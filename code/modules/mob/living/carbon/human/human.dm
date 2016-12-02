@@ -1741,3 +1741,10 @@
 
 /mob/living/carbon/human/is_fat()
 	return (M_FAT in mutations) && (species && species.flags & CAN_BE_FAT)
+
+/mob/living/carbon/human/feels_pain()
+	if(!species)
+		return FALSE
+
+	return !(species.flags & NO_PAIN)
+
