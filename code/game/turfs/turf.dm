@@ -687,3 +687,22 @@
 		return A.has_gravity
 
 	return 1
+
+/turf/proc/set_area(area/A)
+	if(ispath(A))
+		var/path = A
+		A = locate(path)
+
+		if(!A)
+			A = new path
+	else if(!isarea(A))
+		return FALSE
+
+	var/area/old_area = loc
+
+	A.contents.Add(src)
+
+	if(old_area)
+		change_area(old_area, A)
+		for(var/atom/AM in contents)
+			AM.change_area(old_area, A)
