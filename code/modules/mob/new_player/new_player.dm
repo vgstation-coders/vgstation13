@@ -60,7 +60,10 @@
 
 	output += "</div>"
 
-	src << browse(output,"window=playersetup;size=210x240;can_close=0")
+	var/datum/browser/popup = new(src, "playersetup", "New Player Options", 210, 280)
+	popup.set_content(output)
+	popup.set_window_options("focus=0;can_close=0;can_minimize=1;can_maximize=0;can_resize=1;titlebar=1;")
+	popup.open()
 	return
 
 /mob/new_player/Stat()
