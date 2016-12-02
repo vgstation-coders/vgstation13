@@ -72,7 +72,7 @@ This is not related to actual functional consoles in any way */
 
 /obj/machinery/computer/unusable_shuttle_engine_control /*fluff shuttle console 3 */
     name = "Engine Control"
-    desc = "A code locked console that controls the ship's engines and power system's."
+    desc = "A code locked console that controls the ship's engines and power systems."
     icon_state = "airtunnel01"
     circuit = "/obj/item/weapon/circuitboard/unusable_shuttle_engine_control"
 
