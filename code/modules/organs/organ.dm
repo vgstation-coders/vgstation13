@@ -161,7 +161,7 @@
 
 	//We risk falling because stuff is broken bad
 	if(stand_broken && !paralysis && !(lying || resting) && prob(5))
-		if(species && species.flags & NO_PAIN)
+		if(feels_pain())
 			emote("scream", , , 1)
 		emote("collapse")
 		Paralyse(10)

@@ -122,7 +122,7 @@
 				if(affecting && affecting.is_organic())
 					if(thorns_apply_damage(M, affecting))
 						to_chat(H, "<span class='danger'>You step on \the [src]'s sharp thorns!</span>")
-						if(H.species && !(H.species.flags & NO_PAIN))
+						if(H.feels_pain())
 							H.Knockdown(3)
 					if(stinging_apply_reagents(M))
 						to_chat(H, "<span class='danger'>You step on \the [src]'s stingers!</span>")
@@ -151,7 +151,7 @@
 		if(thorns_apply_damage(H, affecting))
 			to_chat(H, "<span class='danger'>You are prickled by the sharp thorns on \the [src]!</span>")
 			spawn(3)
-				if(H.species && !(H.species.flags & NO_PAIN))
+				if(H.feels_pain())
 					H.drop_item(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/after_consume(var/mob/living/carbon/human/H)

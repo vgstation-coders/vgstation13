@@ -417,9 +417,6 @@
 					L += get_contents(wrapped)
 		return L
 
-/mob/living/proc/can_inject()
-	return 1
-
 /mob/living/proc/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
 	  return 0 // only carbon liveforms have this proc
 				// now with silicons
@@ -1124,9 +1121,6 @@ Thanks.
 		gib()
 	return
 
-/mob/living/proc/InCritical()
-	return (src.health < 0 && src.health > -95.0 && stat == UNCONSCIOUS)
-
 //mob verbs are a lot faster than object verbs
 //for more info on why this is not atom/pull, see examinate() in mob.dm
 /mob/living/verb/pulled(atom/movable/AM as mob|obj in oview(1))
@@ -1161,30 +1155,6 @@ Thanks.
 	static_overlay = getLetterImage(src)
 	static_overlay.override = 1
 	static_overlays["letter"] = static_overlay
-
-/*one proc, four uses
-swapping: if it's 1, the mobs are trying to switch, if 0, non-passive is pushing passive
-default behaviour is:
- - non-passive mob passes the passive version
- - passive mob checks to see if its mob_bump_flag is in the non-passive's mob_bump_flags
- - if si, the proc returns
-*/
-/mob/living/proc/can_move_mob(var/mob/living/swapped, swapping = 0, passive = 0)
-	if(!swapped)
-		return 1
-	if(!passive)
-		return swapped.can_move_mob(src, swapping, 1)
-	else
-		var/context_flags = 0
-		if(swapping)
-			context_flags = swapped.mob_swap_flags
-		else
-			context_flags = swapped.mob_push_flags
-		if(!mob_bump_flag) //nothing defined, go wild
-			return 1
-		if(mob_bump_flag & context_flags)
-			return 1
-		return 0
 
 /mob/living/Bump(atom/movable/AM as mob|obj)
 	spawn(0)
@@ -1424,14 +1394,6 @@ default behaviour is:
 			gib(meat = 0) //"meat" argument only exists for mob/living/simple_animal/gib()
 		else
 			qdel(src)
-
-/mob/living/proc/get_strength() //Returns a mob's strength. Isn't used in damage calculations, but rather in things like cutting down trees etc.
-	var/strength = 1.0
-
-	strength += (M_HULK in src.mutations)
-	strength += (M_STRONG in src.mutations)
-
-	. = strength
 
 /mob/living/proc/scoop_up(mob/M) //M = mob who scoops us up!
 	if(!holder_type)
