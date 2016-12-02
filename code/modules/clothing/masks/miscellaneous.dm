@@ -9,6 +9,7 @@
 	species_fit = list(VOX_SHAPED)
 	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = MOUTH
+	starting_materials = LEATHER_MASK_COMPONENTS
 
 //Monkeys can not take the muzzle off of themself! Call PETA!
 /obj/item/clothing/mask/muzzle/attack_paw(mob/user as mob)
@@ -30,22 +31,22 @@
 	permeability_coefficient = 0.01
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 25, rad = 0)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	starting_materials = PLASTIC_MASK_COMPONENTS
 
 /obj/item/clothing/mask/fakemoustache
 	name = "fake moustache"
 	desc = "Warning: moustache is fake."
 	icon_state = "fake-moustache"
-	flags = FPRINT
 	body_parts_covered = FACE //totally intentional
 
 //scarves (fit in in mask slot)
 /obj/item/clothing/mask/scarf
-	flags = FPRINT
 	action_button_name = "Toggle Scarf"
 	w_class = W_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
 	can_flip = 1
 	heat_conductivity = INS_MASK_HEAT_CONDUCTIVITY
+	starting_materials = CLOTH_MASK_COMPONENTS
 
 /obj/item/clothing/mask/scarf/blue
 	name = "blue neck scarf"
@@ -76,6 +77,7 @@
 	body_parts_covered = FACE
 	w_class = W_CLASS_SMALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	starting_materials = CLOTH_MASK_COMPONENTS
 
 /obj/item/clothing/mask/neorussian
 	name = "neo-Russian mask"
@@ -83,6 +85,7 @@
 	icon_state = "nr_mask"
 	item_state = "nr_mask"
 	body_parts_covered = FACE
+	starting_materials = CLOTH_MASK_COMPONENTS
 
 /obj/item/clothing/mask/pig
 	name = "pig mask"
@@ -93,6 +96,7 @@
 	body_parts_covered = FACE
 	w_class = W_CLASS_SMALL
 	siemens_coefficient = 0.9
+	starting_materials = PLASTIC_MASK_COMPONENTS
 
 /obj/item/clothing/mask/horsehead
 	name = "horse head mask"
@@ -104,6 +108,7 @@
 	w_class = W_CLASS_SMALL
 	var/voicechange = 0
 	siemens_coefficient = 0.9
+	starting_materials = PLASTIC_MASK_COMPONENTS
 
 /obj/item/clothing/mask/horsehead/treat_mask_speech(var/datum/speech/speech)
 	if(src.voicechange)
@@ -137,6 +142,7 @@
 	action_button_name = "Toggle Bandana"
 	w_class = W_CLASS_TINY
 	can_flip = 1
+	starting_materials = CLOTH_MASK_COMPONENTS
 
 obj/item/clothing/mask/bandana/red
 	name = "red bandana"

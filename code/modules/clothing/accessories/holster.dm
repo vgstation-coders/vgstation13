@@ -7,6 +7,8 @@
 	accessory_exclusion = HOLSTER
 	var/holster_verb_name = "Holster"
 
+	starting_materials = list(MAT_LEATHER = 300, MAT_IRON = 50)
+
 /obj/item/clothing/accessory/holster/proc/can_holster(obj/item/weapon/gun/W)
 	return
 

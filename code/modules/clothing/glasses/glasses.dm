@@ -5,6 +5,7 @@
 	prescription = 1
 	eyeprot = -1
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	starting_materials = list(MAT_IRON = 100, MAT_GLASS = 100)
 
 /obj/item/clothing/glasses/science
 	name = "science goggles"
@@ -12,6 +13,7 @@
 	icon_state = "purple"
 	item_state = "glasses"
 	origin_tech = Tc_MATERIALS + "=1"
+	starting_materials = list(MAT_GLASS = 200)
 
 /obj/item/clothing/glasses/eyepatch
 	name = "eyepatch"
@@ -19,6 +21,7 @@
 	icon_state = "eyepatch"
 	item_state = "eyepatch"
 	min_harm_label = 0
+	starting_materials = list(MAT_CLOTH = 100)
 
 /obj/item/clothing/glasses/monocle
 	name = "monocle"
@@ -28,6 +31,8 @@
 	species_fit = list(VOX_SHAPED)
 	min_harm_label = 3
 	harm_label_examine = list("<span class='info'>A tiny label is on the lens.</span>","<span class='warning'>A label covers the lens!</span>")
+	starting_materials = list(MAT_GLASS = 100, MAT_GOLD = 10)
+
 /obj/item/clothing/glasses/monocle/harm_label_update()
 	return //Can't exactly blind someone by covering one eye.
 
@@ -37,6 +42,7 @@
 	icon_state = "glasses"
 	item_state = "glasses"
 	prescription = 1
+	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 180)
 
 /obj/item/clothing/glasses/regular/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")
@@ -59,6 +65,7 @@
 	desc = "Forest green glasses, like the kind you'd wear when hatching a nasty scheme."
 	icon_state = "gglasses"
 	item_state = "gglasses"
+	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 180)
 
 /obj/item/clothing/glasses/sunglasses
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."
@@ -69,6 +76,7 @@
 	darkness_view = -1
 	eyeprot = 1
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 180)
 
 /obj/item/clothing/glasses/sunglasses/virus
 
@@ -105,6 +113,7 @@
 	name = "red star-shaped sunglasses"
 	desc = "Novelty sunglasses with a fancy silver frame and two red-tinted star-shaped lenses. You should probably stomp on them and get a pair of normal ones."
 	icon_state = "sun_star_silver"
+	starting_materials = list(MAT_IRON = 30, MAT_SILVER = 10, MAT_GLASS = 180)
 
 /obj/item/clothing/glasses/virussunglasses
 	desc = "Strangely ancient technology used to help provide rudimentary eye cover. Enhanced shielding blocks many flashes."
@@ -114,6 +123,7 @@
 	origin_tech = Tc_COMBAT + "=2"
 	darkness_view = -1
 	species_fit = list(VOX_SHAPED)
+	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 180)
 
 /obj/item/clothing/glasses/welding
 	name = "welding goggles"
@@ -125,6 +135,7 @@
 	var/up = 0
 	eyeprot = 3
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	starting_materials = list(MAT_IRON = 300, MAT_GLASS = 300)
 
 /obj/item/clothing/glasses/welding/attack_self()
 	toggle()
@@ -172,6 +183,7 @@
 	eyeprot = 4 //What you can't see can't burn your eyes out
 	species_fit = list(VOX_SHAPED)
 	min_harm_label = 0
+	starting_materials = list(MAT_CLOTH = 200)
 
 /obj/item/clothing/glasses/sunglasses/prescription
 	name = "prescription sunglasses"
@@ -293,6 +305,7 @@
 	icon_state = "simonglasses"
 	item_state = "simonglasses"
 	cover_hair = 1
+	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 180)
 
 /obj/item/clothing/glasses/kaminaglasses
 	name = "Kamina's Glasses"
@@ -300,3 +313,4 @@
 	icon_state = "kaminaglasses"
 	item_state = "kaminaglasses"
 	cover_hair = 1
+	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 180)

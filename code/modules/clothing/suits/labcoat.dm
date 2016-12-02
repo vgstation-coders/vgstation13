@@ -9,7 +9,7 @@
 	allowed = list(/obj/item/device/analyzer,/obj/item/stack/medical,/obj/item/weapon/dnainjector,/obj/item/weapon/reagent_containers/dropper,/obj/item/weapon/reagent_containers/syringe,/obj/item/weapon/reagent_containers/hypospray,/obj/item/device/healthanalyzer,/obj/item/device/flashlight/pen)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 50, rad = 0)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 
 /obj/item/clothing/suit/storage/labcoat/update_icon()

@@ -1,4 +1,4 @@
-#define CORRECT_STACK_NAME(stack) ((stack.irregular_plural && stack.amount > 1) ? stack.irregular_plural : "[stack.singular_name]")
+#define CORRECT_STACK_NAME(stack) ((stack.irregular_plural && stack.amount > 1) ? stack.irregular_plural : "[stack.singular_name][stack.amount > 1 ? "s" : ""]")
 
 /* Stack type objects!
  * Contains:
@@ -92,10 +92,10 @@
 			else
 				title+= "[R.title]"
 			//title+= " ([R.req_amount] [src.singular_name]\s)"
-			title+= " ([R.req_amount] [CORRECT_STACK_NAME(src)]"
+			title+= " ([R.req_amount] [CORRECT_STACK_NAME(src)])"
 
 			if (can_build)
-				t1 += text("<A href='?src=\ref[src];sublist=[recipes_sublist];make=[i]'>[title]</A>)")
+				t1 += text("<A href='?src=\ref[src];sublist=[recipes_sublist];make=[i]'>[title]</A>")
 			else
 				t1 += text("[]", title)
 				continue
@@ -154,7 +154,9 @@
 			var/obj/item/stack/S = O
 			S.update_materials()
 		else
-			O = new R.result_type( usr.loc )
+
+			for(var/i = 1 to R.res_amount * multiplier)
+				O = new R.result_type( usr.loc )
 
 		O.dir = usr.dir
 		if(R.start_unanchored)

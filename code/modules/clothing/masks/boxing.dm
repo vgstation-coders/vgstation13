@@ -8,6 +8,7 @@
 	w_class = W_CLASS_SMALL
 	siemens_coefficient = 3.0
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	starting_materials = LEATHER_MASK_COMPONENTS
 
 /obj/item/clothing/mask/luchador/treat_mask_speech(var/datum/speech/speech)
 	var/message=speech.message

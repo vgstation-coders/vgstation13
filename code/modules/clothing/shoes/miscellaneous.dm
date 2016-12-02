@@ -11,6 +11,7 @@
 	var/list/clothing_choices = list()
 	siemens_coefficient = 0.8
 	species_fit = list(VOX_SHAPED)
+	starting_materials = CLOTH_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/syndigaloshes/New()
 	..()
@@ -57,9 +58,11 @@
 	name = "mime shoes"
 	icon_state = "mime"
 	_color = "mime"
+	starting_materials = CLOTH_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/mime/biker
 	name = "Biker's shoes"
+	starting_materials = LEATHER_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/swat
 	name = "\improper SWAT shoes"
@@ -71,6 +74,7 @@
 	siemens_coefficient = 0.6
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	bonus_kick_damage = 3
+	starting_materials = COMBAT_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/combat //Basically SWAT shoes combined with galoshes.
 	name = "combat boots"
@@ -83,6 +87,7 @@
 	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	bonus_kick_damage = 3
+	starting_materials = COMBAT_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/sandal
 	desc = "A pair of rather plain, wooden sandals."
@@ -100,10 +105,12 @@
 	desc = "A pair of magic, black shoes."
 	name = "magic shoes"
 	icon_state = "black"
+	starting_materials = CLOTH_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/sandal/marisa/leather
 	icon_state = "laceups"
 	item_state = "laceups"
+	starting_materials = LEATHER_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/galoshes
 	desc = "Rubber boots"
@@ -123,6 +130,7 @@
 	slowdown = SHOES_SLOWDOWN+1
 	_color = "clown"
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
+	starting_materials = CLOTH_SHOES_COMPONENTS
 
 	var/step_sound = "clownstep"
 	var/footstep = 1	//used for squeeks whilst walking
@@ -155,6 +163,7 @@
 	icon_state = "superclown"
 	item_state = "superclown"
 	flags = NOSLIP
+	starting_materials = null
 	var/list/sound_list = list(
 		"Clown squeak" = "clownstep",
 		"Bike horn" = 'sound/items/bikehorn.ogg',
@@ -274,6 +283,7 @@
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	bonus_kick_damage = 3
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots
+	starting_materials = COMBAT_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/jackboots/knifeholster/New() //This one comes with preloaded knife holster
 	..()
@@ -282,12 +292,14 @@
 /obj/item/clothing/shoes/jackboots/batmanboots
 	name = "batboots"
 	desc = "Criminal stomping boots for fighting crime and looking good."
+	starting_materials = COMBAT_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/jackboots/neorussian
 	name = "neo-Russian boots"
 	desc = "Tovarish, no one will realize you stepped on a pile of shit if your pair already looks like shit."
 	icon_state = "nr_boots"
 	item_state = "nr_boots"
+	starting_materials = CLOTH_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/cult
 	name = "boots"
@@ -312,24 +324,28 @@
 	desc = "Fluffy!"
 	icon_state = "slippers"
 	item_state = "slippers"
+	starting_materials = CLOTH_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/slippers_worn
 	name = "worn bunny slippers"
 	desc = "Fluffy..."
 	icon_state = "slippers_worn"
 	item_state = "slippers_worn"
+	starting_materials = CLOTH_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/laceup
 	name = "laceup shoes"
 	desc = "The height of fashion, and they're pre-polished!"
 	icon_state = "laceups"
 	species_fit = list(VOX_SHAPED)
+	starting_materials = LEATHER_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/roman
 	name = "roman sandals"
 	desc = "Sandals with buckled leather straps on it."
 	icon_state = "roman"
 	item_state = "roman"
+	starting_materials = LEATHER_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/simonshoes
 	name = "Simon's Shoes"
@@ -337,24 +353,28 @@
 	icon_state = "simonshoes"
 	item_state = "simonshoes"
 	species_fit = list(VOX_SHAPED)
+	starting_materials = CLOTH_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/kneesocks
 	name = "kneesocks"
 	desc = "A pair of girly knee-high socks."
 	icon_state = "kneesock"
 	item_state = "kneesock"
+	starting_materials = CLOTH_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/jestershoes
 	name = "Jester Shoes"
 	desc = "As worn by the clowns of old."
 	icon_state = "jestershoes"
 	item_state = "jestershoes"
+	starting_materials = CLOTH_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/aviatorboots
 	name = "Aviator Boots"
 	desc = "Boots suitable for just about any occasion."
 	icon_state = "aviator_boots"
 	item_state = "aviator_boots"
+	starting_materials = LEATHER_SHOES_COMPONENTS
 	species_restricted = list("exclude",VOX_SHAPED)
 
 /obj/item/clothing/shoes/libertyshoes
@@ -362,36 +382,42 @@
 	desc = "Freedom isn't free, neither were these shoes."
 	icon_state = "libertyshoes"
 	item_state = "libertyshoes"
+	starting_materials = CLOTH_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/megaboots
 	name = "DRN-001 Boots"
 	desc = "Large armored boots, very weak to large spikes."
 	icon_state = "megaboots"
 	item_state = "megaboots"
+	starting_materials = CLOTH_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/protoboots
 	name = "Prototype Boots"
 	desc = "Functionally identical to the DRN-001 model's boots, but in red."
 	icon_state = "protoboots"
 	item_state = "protoboots"
+	starting_materials = CLOTH_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/megaxboots
 	name = "Maverick Hunter boots"
 	desc = "Regardless of how much stronger these boots are than the DRN-001 model's, they're still extremely easy to pierce with a large spike."
 	icon_state = "megaxboots"
 	item_state = "megaxboots"
+	starting_materials = COMBAT_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/joeboots
 	name = "Sniper Boots"
 	desc = "Nearly identical to the Prototype's boots, except in black."
 	icon_state = "joeboots"
 	item_state = "joeboots"
+	starting_materials = CLOTH_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/doomguy
 	name = "Doomguy's boots"
 	desc = ""
 	icon_state = "doom"
 	item_state = "doom"
+	starting_materials = COMBAT_SHOES_COMPONENTS
 
 /obj/item/clothing/shoes/workboots
 	name = "Workboots"
@@ -400,3 +426,10 @@
 	item_state = "workboots"
 	species_fit = list(VOX_SHAPED)
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots
+	starting_materials = COMBAT_SHOES_COMPONENTS
+
+/obj/item/clothing/shoes/foot_wraps
+	name = "foot wraps"
+	desc = "Some pieces of clothing wrapped around your feet. Much better than walking barefoot."
+	icon_state = "foot_wraps"
+	starting_materials = CLOTH_SHOES_COMPONENTS

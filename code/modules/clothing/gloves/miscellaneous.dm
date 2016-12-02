@@ -9,6 +9,7 @@
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(VOX_SHAPED)
+	starting_materials = list(MAT_LEATHER = 1500, MAT_CLOTH = 500)
 
 /obj/item/clothing/gloves/centcom
 	desc = "Regal green gloves, with a nice gold trim. Lordy."
@@ -20,6 +21,7 @@
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
+	starting_materials = list(MAT_LEATHER = 1500, MAT_CLOTH = 500)
 
 /obj/item/clothing/gloves/cyborg
 	desc = "beep boop borp"
@@ -39,6 +41,7 @@
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(VOX_SHAPED)
+	starting_materials = list(MAT_LEATHER = 1900, MAT_IRON = 100)
 
 /obj/item/clothing/gloves/combat //Combined effect of SWAT gloves and insulated gloves
 	desc = "These tactical gloves are somewhat fire and impact resistant."
@@ -50,6 +53,7 @@
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(VOX_SHAPED)
+	starting_materials = list(MAT_LEATHER = 1900, MAT_IRON = 100)
 
 /obj/item/clothing/gloves/latex
 	name = "latex gloves"
@@ -69,6 +73,7 @@
 	permeability_coefficient = 0.9
 	siemens_coefficient = 0.9
 	species_fit = list(VOX_SHAPED)
+	starting_materials = LEATHER_GLOVES_COMPONENTS
 
 /obj/item/clothing/gloves/batmangloves
 	desc = "Used for handling all things bat related."
@@ -77,12 +82,14 @@
 	item_state = "bmgloves"
 	_color = "bmgloves"
 	species_fit = list(VOX_SHAPED)
+	starting_materials = LEATHER_GLOVES_COMPONENTS
 
 /obj/item/clothing/gloves/bikergloves
 	name = "Biker's Gloves"
 	icon_state = "biker-gloves"
 	item_state = "biker-gloves"
 	_color = "bikergloves"
+	starting_materials = LEATHER_GLOVES_COMPONENTS
 
 /obj/item/clothing/gloves/megagloves
 	desc = "Uncomfortably bulky armored gloves."
@@ -90,6 +97,7 @@
 	icon_state = "megagloves"
 	item_state = "megagloves"
 	species_fit = list(VOX_SHAPED)
+	starting_materials = LEATHER_GLOVES_COMPONENTS
 
 /obj/item/clothing/gloves/protogloves
 	desc = "Funcionally identical to the DRN-001 model's, but in red!"
@@ -97,6 +105,7 @@
 	icon_state = "protogloves"
 	item_state = "protogloves"
 	species_fit = list(VOX_SHAPED)
+	starting_materials = LEATHER_GLOVES_COMPONENTS
 
 /obj/item/clothing/gloves/megaxgloves
 	desc = "An upgrade to the DRN-001's gauntlets, retains the uncomfortable armor, but comes with white gloves!"
@@ -104,6 +113,7 @@
 	icon_state = "megaxgloves"
 	item_state = "megaxgloves"
 	species_fit = list(VOX_SHAPED)
+	starting_materials = LEATHER_GLOVES_COMPONENTS
 
 /obj/item/clothing/gloves/joegloves
 	desc = "Large grey gloves, very similar to the Prototype's."
@@ -111,12 +121,14 @@
 	icon_state = "joegloves"
 	item_state = "joegloves"
 	species_fit = list(VOX_SHAPED)
+	starting_materials = LEATHER_GLOVES_COMPONENTS
 
 /obj/item/clothing/gloves/doomguy
 	desc = ""
 	name = "Doomguy's gloves"
 	icon_state = "doom"
 	item_state = "doom"
+	starting_materials = LEATHER_GLOVES_COMPONENTS
 
 /obj/item/clothing/gloves/knuckles
 	desc = "A pair of classic metal knuckles that are designed to increase tissue damage and bone fractures when punching."
@@ -128,6 +140,7 @@
 	bonus_knockout = 2 //Slight knockout chance increase.
 	damage_added = 3 //Add 3 damage to unarmed attacks when worn
 	force = 5 //Deal 5 damage if hit with this item in hand
+	starting_materials = list(MAT_IRON = 800)
 
 /obj/item/clothing/gloves/knuckles/dexterity_check()
 	return 0 //Wearing these knuckles makes you less dexterious (so, for example, you can't use computers)
@@ -160,3 +173,9 @@
 	desc = "For these tense combat situations when you just have to pick your nose."
 	icon_state = "nr_fgloves"
 	item_state = "nr_fgloves"
+
+/obj/item/clothing/gloves/hand_wraps
+	name = "hand wraps"
+	desc = "Some pieces of cloth wrapped around your hands."
+	icon_state = "hand_wraps"
+	starting_materials = CLOTH_GLOVES_COMPONENTS

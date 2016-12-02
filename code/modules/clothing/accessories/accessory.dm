@@ -16,6 +16,9 @@
 	flags = FPRINT
 	slot_flags = 0
 	w_class = W_CLASS_SMALL
+
+	starting_materials = list(MAT_CLOTH = 200)
+
 	var/accessory_exclusion = DECORATION
 	var/obj/item/clothing/attached_to = null
 	var/image/inv_overlay
@@ -124,6 +127,7 @@
 	icon_state = "stethoscope"
 	_color = "stethoscope"
 	origin_tech = Tc_BIOTECH + "=1"
+	starting_materials = list(MAT_IRON = 100)
 
 /obj/item/clothing/accessory/stethoscope/attack(mob/living/carbon/human/M, mob/living/user)
 	if(ishuman(M) && isliving(user))
@@ -167,6 +171,7 @@
 	desc = "A bronze medal."
 	icon_state = "bronze"
 	_color = "bronze"
+	starting_materials = null
 
 /obj/item/clothing/accessory/medal/can_attach_to(obj/item/clothing/C)
 	if(istype(C))
@@ -190,6 +195,7 @@
 	desc = "A silver medal."
 	icon_state = "silver"
 	_color = "silver"
+	starting_materials = list(MAT_SILVER = 80)
 
 /obj/item/clothing/accessory/medal/silver/valor
 	name = "medal of valor"
@@ -204,6 +210,7 @@
 	desc = "A prestigious golden medal."
 	icon_state = "gold"
 	_color = "gold"
+	starting_materials = list(MAT_GOLD = 80)
 
 /obj/item/clothing/accessory/medal/gold/captain
 	name = "medal of captaincy"
@@ -226,6 +233,7 @@
 	icon_state = "holobadge"
 	_color = "holobadge"
 	slot_flags = SLOT_BELT
+	starting_materials = list(MAT_IRON = 50)
 
 	var/emagged = 0 //Emagging removes Sec check.
 	var/stored_name = null

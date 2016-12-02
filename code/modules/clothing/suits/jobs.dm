@@ -22,6 +22,7 @@
 	body_parts_covered = FULL_TORSO
 	allowed = list (/obj/item/weapon/reagent_containers/spray/plantbgone,/obj/item/device/analyzer/plant_analyzer,/obj/item/seeds,/obj/item/weapon/reagent_containers/glass/fertilizer,/obj/item/weapon/wirecutters/clippers,/obj/item/weapon/minihoe)
 	species_fit = list(VOX_SHAPED)
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 //Captain
 /obj/item/clothing/suit/captunic
@@ -31,6 +32,7 @@
 	item_state = "bio_suit"
 	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS
 	species_fit = list(VOX_SHAPED)
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/storage/capjacket
 	name = "captain's uniform jacket"
@@ -41,6 +43,7 @@
 	species_fit = list(VOX_SHAPED)
 	max_combined_w_class = 6
 	storage_slots = 3
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 //Chaplain
 /obj/item/clothing/suit/chaplain_hoodie
@@ -50,6 +53,7 @@
 	item_state = "chaplain_hoodie"
 	species_fit = list(VOX_SHAPED)
 	body_parts_covered = FULL_TORSO|LEGS|ARMS|IGNORE_INV
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 
 //Chaplain
@@ -60,6 +64,7 @@
 	item_state = "nun"
 	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS
 	species_fit = list(VOX_SHAPED)
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 //Chef
 /obj/item/clothing/suit/chef
@@ -72,6 +77,7 @@
 	body_parts_covered = FULL_TORSO|ARMS
 	allowed = list (/obj/item/weapon/kitchen/utensil/knife/large,/obj/item/weapon/kitchen/utensil/knife/large/butch)
 	species_fit = list(VOX_SHAPED)
+	starting_materials = CLOTH_APRON_COMPONENTS
 
 //Chef
 /obj/item/clothing/suit/chef/classic
@@ -95,6 +101,7 @@
 	flags = ONESIZEFITSALL
 	armor = list(melee = 50, bullet = 10, laser = 25, energy = 10, bomb = 0, bio = 0, rad = 0)
 	species_fit = list(VOX_SHAPED)
+	starting_materials = LEATHER_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/storage/det_suit/noir
 	desc = "Ah, your trusty coat. There's a few tears here and there, giving it a more timely look. Or at least, that's what you told yourself when you found out gettin' it repaired would set you back 200 credits."
@@ -108,6 +115,7 @@
 	item_state = "det_suit"
 	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy,/obj/item/weapon/gun/projectile,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/device/detective_scanner,/obj/item/device/taperecorder)
 	armor = list(melee = 10, bullet = 10, laser = 15, energy = 10, bomb = 0, bio = 0, rad = 0)
+	starting_materials = LEATHER_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/storage/forensics/red
 	name = "red jacket"
@@ -138,6 +146,7 @@
 	icon_state = "suitjacket_blue_open"
 	item_state = "suitjacket_blue_open"
 	blood_overlay_type = "coat"
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 /obj/item/clothing/suit/storage/lawyer/purpjacket
 	name = "Purple Suit Jacket"
@@ -145,6 +154,7 @@
 	icon_state = "suitjacket_purp"
 	item_state = "suitjacket_purp"
 	blood_overlay_type = "coat"
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 //Internal Affairs
 /obj/item/clothing/suit/storage/internalaffairs
@@ -153,6 +163,7 @@
 	icon_state = "ia_jacket_open"
 	item_state = "ia_jacket"
 	blood_overlay_type = "coat"
+	starting_materials = CLOTH_SUIT_COMPONENTS
 
 	verb/toggle()
 		set name = "Toggle Coat Buttons"
@@ -220,3 +231,4 @@
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy,/obj/item/weapon/gun/projectile,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/storage/fancy/cigarettes,/obj/item/weapon/lighter,/obj/item/device/detective_scanner,/obj/item/device/taperecorder)
 	armor = list(melee = 50, bullet = 10, laser = 25, energy = 10, bomb = 0, bio = 0, rad = 0)
+	starting_materials = LEATHER_SUIT_COMPONENTS

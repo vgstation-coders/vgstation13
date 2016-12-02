@@ -241,3 +241,13 @@ var/global/list/datum/stack_recipe/cardboard_recipes = list (
 	new/datum/stack_recipe("eggbox",			/obj/item/weapon/storage/fancy/egg_box/empty			),
 	new/datum/stack_recipe("paper bin",			/obj/item/weapon/paper_bin/empty						),
 	)
+
+var/list/datum/stack_recipe/cloth_recipes = list (
+	new/datum/stack_recipe("rag",				/obj/item/weapon/reagent_containers/glass/rag,		1, 2),
+	null,
+	new/datum/stack_recipe("roughspun robes",	/obj/item/clothing/suit/unathi/robe,				12,	time = 120),
+	new/datum/stack_recipe("toga", /obj/item/clothing/under/toga,									12,	time = 120),
+	new/datum/stack_recipe("foot wraps", /obj/item/clothing/shoes/foot_wraps,						4,	time = 40),
+	new/datum/stack_recipe("hand wraps", /obj/item/clothing/gloves/hand_wraps,						4,	time = 40),
+	new/datum/stack_recipe("turban", /obj/item/clothing/head/turban,								2,	time = 60),
+	)

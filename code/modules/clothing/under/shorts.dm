@@ -4,6 +4,7 @@
 	gender = PLURAL
 	flags = FPRINT  | ONESIZEFITSALL
 	body_parts_covered = LEGS
+	starting_materials = CLOTH_PANTS_COMPONENTS
 
 /obj/item/clothing/under/shorts/red
 	icon_state = "redshorts"

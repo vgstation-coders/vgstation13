@@ -7,6 +7,7 @@
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.9
+	starting_materials = CLOTH_CLOTHING_COMPONENTS
 
 //We want our sensors to be off, sensors are not tactical
 /obj/item/clothing/under/syndicate/New()
@@ -32,3 +33,4 @@
 	_color = "tactifool"
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 	siemens_coefficient = 1
+	starting_materials = CLOTH_CLOTHING_COMPONENTS

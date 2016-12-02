@@ -1741,3 +1741,12 @@
 
 /mob/living/carbon/human/is_fat()
 	return (M_FAT in mutations) && (species && species.flags & CAN_BE_FAT)
+
+/mob/living/carbon/human/can_use_claws()
+	if(!..())
+		return FALSE
+
+	if(istype(gloves))
+		return FALSE
+
+	return TRUE

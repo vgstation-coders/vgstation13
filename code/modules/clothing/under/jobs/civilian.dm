@@ -1,4 +1,6 @@
 //Alphabetical order of civilian jobs.
+/obj/item/clothing/under/rank
+	starting_materials = CLOTH_CLOTHING_COMPONENTS
 
 /obj/item/clothing/under/rank/bartender
 	desc = "It looks like it could use some more flair."
@@ -17,6 +19,7 @@
 	item_state = "caparmor"
 	_color = "captain"
 	flags = FPRINT  | ONESIZEFITSALL
+	starting_materials = null //indestructible
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 
@@ -76,6 +79,7 @@
 	item_state = "b_suit"
 	_color = "hop"
 	flags = FPRINT  | ONESIZEFITSALL
+	starting_materials = null //indestructible
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 

@@ -4,6 +4,7 @@
 /obj/item/clothing/head/collectable
 	name = "collectable hat"
 	desc = "A rare collectable hat."
+	starting_materials = CLOTH_HAT_COMPONENTS
 
 /obj/item/clothing/head/collectable/petehat
 	name = "ultra rare Pete's hat!"
@@ -20,6 +21,7 @@
 	desc = "Hiss hiss hiss!"
 	icon_state = "xenos"
 	item_state = "xenos_helm"
+	starting_materials = LEATHER_HAT_COMPONENTS
 
 /obj/item/clothing/head/collectable/chef
 	name = "collectable chef's hat"

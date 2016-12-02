@@ -109,7 +109,11 @@
 	icon_state = "sheet-leather"
 	origin_tech = Tc_MATERIALS + "=2"
 
-
+/*
+/obj/item/stack/sheet/leather/New()
+	recipes = leather_recipes
+	return ..()
+*/
 
 //Step one - dehairing.
 
