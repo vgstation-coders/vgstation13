@@ -187,7 +187,10 @@
 		for(var/marker in holomap_markers)
 			var/datum/holomap_marker/holomarker = holomap_markers[marker]
 			if(holomarker.z == StationZLevel && holomarker.filter & HOLOMAP_FILTER_STATIONMAP_STRATEGIC)
-				strategic_map.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8+map.holomap_offset_x[StationZLevel]	, holomarker.y-8+map.holomap_offset_y[StationZLevel])
+				if(map.holomap_offset_x.len >= StationZLevel)
+					strategic_map.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8+map.holomap_offset_x[StationZLevel]	, holomarker.y-8+map.holomap_offset_y[StationZLevel])
+				else
+					strategic_map.Blend(icon(holomarker.icon,holomarker.id), ICON_OVERLAY, holomarker.x-8, holomarker.y-8)
 
 		extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAP_STRATEGIC
 		extraMiniMaps[HOLOMAP_EXTRA_STATIONMAP_STRATEGIC] = strategic_map
