@@ -204,6 +204,7 @@
  */
 /obj/item/weapon/weldingtool
 	name = "welding tool"
+	desc = "Ensure the switch is safely in the off position before refueling."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "welder"
 	hitsound = 'sound/weapons/toolhit.ogg'
@@ -509,6 +510,7 @@
 
 /obj/item/weapon/weldingtool/largetank
 	name = "Industrial Welding Tool"
+	desc = "The cutting edge between portability and tank size."
 	icon_state = "welder_large"
 	max_fuel = 40
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 60)
@@ -526,13 +528,14 @@
 
 /obj/item/weapon/weldingtool/hugetank
 	name = "Upgraded Welding Tool"
+	desc = "A large tank for a large job."
 	icon_state = "welder_larger"
 	max_fuel = 80
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 120)
 	origin_tech = Tc_ENGINEERING + "=3"
 
-/obj/item/weapon/weldingtool/hugetank/update_icon()
+/obj/item/weapon/weldingtool/largetank/update_icon()
 	..()
 	if(src.welding)
 		src.icon_state = "welder_larger1"
@@ -540,6 +543,26 @@
 		src.icon_state = "welder_larger"
 /obj/item/weapon/weldingtool/hugetank/empty
 	start_fueled = 0
+
+/obj/item/weapon/weldingtool/gatling
+	name = "Gatling Welder"
+	desc = "Engineering Dakka."
+	icon_state = "welder_gatling"
+	max_fuel = 160
+	w_class = W_CLASS_HUGE
+	starting_materials = list(MAT_IRON = 18750, MAT_GLASS = 18750)
+	origin_tech = Tc_ENGINEERING + "=4"
+
+/obj/item/weapon/weldingtool/gatling/update_icon()
+	..()
+	if(src.welding)
+		src.icon_state = "welder_gatling1"
+	else
+		src.icon_state = "welder_gatling"
+
+/obj/item/weapon/weldingtool/gatling/empty
+	start_fueled = 0
+
 
 /obj/item/weapon/weldingtool/experimental
 	name = "Experimental Welding Tool"
