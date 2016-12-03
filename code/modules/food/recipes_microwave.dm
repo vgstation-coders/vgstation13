@@ -1492,7 +1492,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/bruschetta
 
 /datum/recipe/pannacotta
-	reagents = list(MILKCREAM = 10)
+	reagents = list(CREAM = 10)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
 				/obj/item/weapon/reagent_containers/food/snacks/gelatin,
 				/obj/item/weapon/reagent_containers/food/snacks/yogurt
@@ -1500,7 +1500,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/pannacotta
 
 /datum/recipe/yogurt
-	reagents = list(MILKCREAM = 10, SUGAR = 5)
+	reagents = list(CREAM = 10, VIRUSFOOD = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes)
 	result = /obj/item/weapon/reagent_containers/food/snacks/yogurt
 

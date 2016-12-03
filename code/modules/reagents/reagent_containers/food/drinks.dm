@@ -324,7 +324,6 @@
 	name = "flour sack"
 	desc = "A big bag of flour. Good for baking!"
 	icon = 'icons/obj/food_condiment.dmi'
-	icon = 'icons/obj/food.dmi'
 	icon_state = "flour"
 /obj/item/weapon/reagent_containers/food/drinks/flour/New()
 	..()

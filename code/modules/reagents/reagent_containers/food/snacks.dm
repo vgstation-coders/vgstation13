@@ -4491,7 +4491,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/chilaquiles
 	name = "chilaquiles"
 	desc = "The salsa-equivalent of nachos."
-	icon_state = "chiliconcarne"
+	icon_state = "chilaquiles"
 	bitesize = 1
 	New()
 		..()
@@ -4526,6 +4526,93 @@
 		..()
 		reagents.add_reagent(NUTRIMENT,4)
 
+/obj/item/weapon/reagent_containers/food/snacks/chickensalad
+	name = "chicken salad"
+	desc = "Evokes the question: do you ruin chicken by putting it in a salad, or improve a salad by adding chicken?"
+	icon_state = "chickensalad"
+	bitesize = 4
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,12)
+
+/obj/item/weapon/reagent_containers/food/snacks/grapesalad
+	name = "grape salad"
+	desc = "Member Kingston? Member uncapped bombs? Member beardbeard? Member Goonleak? Member the vore raid? Member split departmental access? I member!"
+	icon_state = "grapesalad"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,4)
+
+/obj/item/weapon/reagent_containers/food/snacks/orzosalad
+	name = "orzo salad"
+	desc = "A minty, exotic salad originating in Space Greece. Makes you feel slippery enough to escape denbts."
+	icon_state = "orzosalad"
+	bitesize = 4
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,2)
+		reagents.add_reagent(LUBE,14)
+
+/obj/item/weapon/reagent_containers/food/snacks/mexicansalad
+	name = "mexican salad"
+	desc = "A favorite of the janitorial staff, who often consider this a native dish. Viva Space Mexico!"
+	icon_state = "mexicansalad"
+	bitesize = 3
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,6)
+
+/obj/item/weapon/reagent_containers/food/snacks/gazpacho
+	name = "gazpacho"
+	desc = "A cool, refreshing soup originating in Space Spain's desert homeworld."
+	icon_state = "gazpacho"
+	bitesize = 4
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,12)
+		reagents.add_reagent(FROSTOIL,6)
+
+/obj/item/weapon/reagent_containers/food/snacks/bruschetta
+	name = "bruschetta"
+	desc = "This dish's name probably originates from 'to roast over coals'. You can blame the hippies for banning coal use when the crew complains it isn't authentic."
+	icon_state = "bruschetta"
+	bitesize = 1
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,3)
+
+/obj/item/weapon/reagent_containers/food/snacks/gelatin
+	name = "gelatin"
+	desc = "Made from real teeth!"
+	icon_state = "gelatin"
+	bitesize = 1
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,1)
+		reagents.add_reagent(WATER,9)
+
+/obj/item/weapon/reagent_containers/food/snacks/yogurt
+	name = "yogurt"
+	desc = "Who knew bacteria could be so helpful?"
+	icon_state = "yoghurt"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,2)
+		reagents.add_reagent(SUGAR,2)
+		reagents.add_reagent(MILK,2)
+
+/obj/item/weapon/reagent_containers/food/snacks/pannacotta
+	name = "panna cotta"
+	desc = "Among the most fashionable of fine desserts. A dish fit for a captain."
+	icon_state = "pannacotta"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(SUGAR,10)
+		reagents.add_reagent(OXYCODONE,2)
+
 /obj/item/weapon/reagent_containers/food/snacks/hauntedjam
 	name = "haunted jam"
 	desc = "I woke up one morning to find that the entire city had been covered in a three-foot layer of man-eating jam."
@@ -4535,6 +4622,9 @@
 		..()
 		reagents.add_reagent(HELL_RAMEN,8) //This should be enough to at least seriously wound, if not kill, someone.
 
-/obj/item/weapon/reagent_containers/food/snacks/hauntedjam/spook()
+/obj/item/weapon/reagent_containers/food/snacks/hauntedjam/spook(mob/dead/observer/O)
+	if(!..()) //Check that they can spook
+		return
 	visible_message("<span class='warning'>\The [src] rattles maliciously!</span>")
-	forceMove(get_step(src, pick(cardinal))) //Move in a random direction
+	if(loc.Adjacent(get_turf(O))) //Two reasons. First, prevent distance spooking. Second, don't move through border objects (windows)
+		Move(get_turf(O))

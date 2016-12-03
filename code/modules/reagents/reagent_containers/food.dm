@@ -69,6 +69,7 @@
 /obj/item/weapon/reagent_containers/food/dipping_sauce/hummus
 	name = "hummus"
 	desc = "The name 'hummus' literally means 'chickpeas', but this variant on the dip has gained popularity in New Mecca, on Helion Prime."
+	icon_state = "hummus"
 	dip_message = "God is good!"
 
 /obj/item/weapon/chipbasket
