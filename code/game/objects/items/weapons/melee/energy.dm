@@ -22,8 +22,9 @@
 	name = "energy axe"
 	desc = "An energised battle axe."
 	icon_state = "axe0"
-	force = 40.0
-	throwforce = 25.0
+	force = 40
+	var/active_force = 150
+	throwforce = 25
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_MEDIUM
@@ -37,14 +38,21 @@
 		to_chat(viewers(user), "<span class='danger'>[user] swings the [src.name] towards /his head! It looks like \he's trying to commit suicide.</span>")
 		return (BRUTELOSS|FIRELOSS)
 
+/obj/item/weapon/melee/energy/axe/rusty
+	name = "rusty energy axe"
+	desc = "A rusted energised battle axe."
+	force = 3
+	active_force = 30
+	throwforce = 5
+	
 /obj/item/weapon/melee/energy/sword
 	name = "energy sword"
 	desc = "May the force be within you."
 	icon_state = "sword0"
 	var/base_state = "sword"
 	var/active_state = ""
-	force = 3.0
-	throwforce = 5.0
+	force = 3
+	throwforce = 5
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_SMALL
@@ -130,8 +138,8 @@
 	base_state = "bsword0"
 	active_state = "bsword1"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	force = 3.0
-	throwforce = 5.0
+	force = 3
+	throwforce = 5
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_SMALL
