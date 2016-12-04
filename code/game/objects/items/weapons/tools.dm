@@ -500,10 +500,8 @@
 
 /obj/item/weapon/weldingtool/update_icon()
 	..()
-	if(src.welding)
-		src.icon_state = "welder1"
-	else
-		src.icon_state = "welder"
+	icon_state = "[initial(icon_state)][welding ? "1" : ""]"
+	
 
 /obj/item/weapon/weldingtool/empty
 	start_fueled = 0
@@ -518,10 +516,7 @@
 
 /obj/item/weapon/weldingtool/largetank/update_icon()
 	..()
-	if(src.welding)
-		src.icon_state = "welder_large1"
-	else
-		src.icon_state = "welder_large"
+	icon_state = "[initial(icon_state)][welding ? "1" : ""]"
 
 /obj/item/weapon/weldingtool/largetank/empty
 	start_fueled = 0
@@ -537,10 +532,8 @@
 
 /obj/item/weapon/weldingtool/largetank/update_icon()
 	..()
-	if(src.welding)
-		src.icon_state = "welder_larger1"
-	else
-		src.icon_state = "welder_larger"
+	icon_state = "[initial(icon_state)][welding ? "1" : ""]"
+	
 /obj/item/weapon/weldingtool/hugetank/empty
 	start_fueled = 0
 
@@ -555,10 +548,7 @@
 
 /obj/item/weapon/weldingtool/gatling/update_icon()
 	..()
-	if(src.welding)
-		src.icon_state = "welder_gatling1"
-	else
-		src.icon_state = "welder_gatling"
+	icon_state = "[initial(icon_state)][welding ? "1" : ""]"
 
 /obj/item/weapon/weldingtool/gatling/empty
 	start_fueled = 0
