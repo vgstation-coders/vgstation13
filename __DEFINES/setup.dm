@@ -139,7 +139,6 @@ var/global/disable_vents     = 0
 // Factor of how fast mob nutrition decreases
 #define HUNGER_FACTOR 0.15  // Please remember when editing this that it will also affect hypothermia.
 
-
 #define MINIMUM_AIR_RATIO_TO_SUSPEND 0.05
 	//Minimum ratio of air that must move to/from a tile to suspend group processing
 #define MINIMUM_AIR_TO_SUSPEND MOLES_CELLSTANDARD*MINIMUM_AIR_RATIO_TO_SUSPEND

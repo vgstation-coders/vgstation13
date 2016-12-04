@@ -311,6 +311,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/milk
 	name = "space milk"
 	desc = "It's milk. White and nutritious goodness!"
+	icon = 'icons/obj/food_condiment.dmi'
 	icon_state = "milk"
 	vending_cat = "dairy products"
 /obj/item/weapon/reagent_containers/food/drinks/milk/New()
@@ -322,7 +323,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/flour
 	name = "flour sack"
 	desc = "A big bag of flour. Good for baking!"
-	icon = 'icons/obj/food.dmi'
+	icon = 'icons/obj/food_condiment.dmi'
 	icon_state = "flour"
 /obj/item/weapon/reagent_containers/food/drinks/flour/New()
 	..()
@@ -333,6 +334,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/soymilk
 	name = "soy milk"
 	desc = "It's soy milk. White and nutritious goodness!"
+	icon = 'icons/obj/food_condiment.dmi'
 	icon_state = "soymilk"
 	vending_cat = "dairy products"//it's not a dairy product but oh come on who cares
 /obj/item/weapon/reagent_containers/food/drinks/soymilk/New()

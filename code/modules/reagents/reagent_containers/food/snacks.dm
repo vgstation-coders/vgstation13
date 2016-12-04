@@ -3,7 +3,6 @@
 /obj/item/weapon/reagent_containers/food/snacks
 	name = "snack"
 	desc = "yummy"
-	icon = 'icons/obj/food.dmi'
 	icon_state = null
 	log_reagents = 1
 
@@ -2862,7 +2861,7 @@
 /obj/item/pizzabox
 	name = "pizza box"
 	desc = "A box suited for pizzas."
-	icon = 'icons/obj/food.dmi'
+	icon = 'icons/obj/food_container.dmi'
 	icon_state = "pizzabox1"
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
@@ -3255,7 +3254,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/cereal
 	name = "box of cereal"
 	desc = "A box of cereal."
-	icon = 'icons/obj/food.dmi'
+	icon = 'icons/obj/food_custom.dmi'
 	icon_state = "cereal_box"
 	bitesize = 2
 	New()
@@ -3264,7 +3263,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/deepfryholder
 	name = "Deep Fried Foods Holder Obj"
-	icon = 'icons/obj/food.dmi'
+	icon = 'icons/obj/food_custom.dmi'
 	icon_state = "deepfried_holder_icon"
 	bitesize = 2
 	deepfried = 1
@@ -3613,7 +3612,7 @@
 		..()
 		reagents.add_reagent(NUTRIMENT, 8)
 		reagents.add_reagent(CINNAMON, 5)
-		reagents.add_reagent("honey", 6)
+		reagents.add_reagent(HONEY, 6)
 		bitesize = 3
 	food_flags = FOOD_SWEET | FOOD_ANIMAL
 
@@ -4374,3 +4373,258 @@
 	New()
 		..()
 		reagents.add_reagent(NUTRIMENT,3)
+
+/obj/item/weapon/reagent_containers/food/snacks/threebeanburrito
+	name = "three bean burrito"
+	desc = "Beans, beans a magical fruit."
+	icon_state = "danburrito"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,5)
+
+/obj/item/weapon/reagent_containers/food/snacks/midnightsnack
+	name = "midnight snack"
+	desc = "Perfect for those occasions when engineering doesn't set up power."
+	icon_state = "midnightsnack"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,2)
+		set_light(2)
+
+/obj/item/weapon/reagent_containers/food/snacks/primordialsoup
+	name = "primordial soup"
+	desc = "From a soup just like this, a sentient race could one day emerge. Better eat it to be safe."
+	icon_state = "primordialsoup"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,8)
+
+/obj/item/weapon/reagent_containers/food/snacks/starrynightsalad
+	name = "starry night salad"
+	desc = "Eating too much of this salad may cause you to want to cut off your own ear."
+	icon_state = "starrynight"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,4)
+		reagents.add_reagent(INACUSIATE,1)
+
+/obj/item/weapon/reagent_containers/food/snacks/fruitsalad
+	name = "fruit salad"
+	desc = "Popular among cargo technicians who break into fruit crates."
+	icon_state = "fruitsalad"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,4)
+
+/obj/item/weapon/reagent_containers/food/snacks/spicycoldnoodles
+	name = "spicy cold noodles"
+	desc = "A noodle dish in the style popular in Space China."
+	icon_state = "spicycoldnoodles"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,5)
+
+/obj/item/weapon/reagent_containers/food/snacks/chinesecoldsalad
+	name = "chinese cold salad"
+	desc = "A whirlwind of strong flavors, served chilled. Found its origins in the old Terran nation-state of China before the rise of Space China."
+	icon_state = "chinesecoldsalad"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,8)
+		reagents.add_reagent(FROSTOIL,2)
+
+/obj/item/weapon/reagent_containers/food/snacks/honeycitruschicken
+	name = "honey citrus chicken"
+	desc = "The strong, tangy flavor of the orange and soy sauce highlights the smooth, thick taste of the honey. This fusion dish is one of the highlights of Terran cuisine."
+	icon_state = "honeycitruschicken"
+	bitesize = 4
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,8)
+		reagents.add_reagent(HONEY,4)
+		reagents.add_reagent(SUGAR,4)
+
+/obj/item/weapon/reagent_containers/food/snacks/pimiento
+	name = "pimiento"
+	desc = "A vital component in the caviar of the South."
+	icon_state = "pimiento"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(SUGAR,1)
+
+/obj/item/weapon/reagent_containers/food/snacks/confederatespirit
+	name = "confederate spirit"
+	desc = "Even in space, where a north/south orientation is meaningless, the South will rise again."
+	icon_state = "confederatespirit"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,8)
+
+/obj/item/weapon/reagent_containers/food/snacks/fishtacosupreme
+	name = "fish taco supreme"
+	desc = "There may be more fish in the sea, but there's only one kind of fish in the stars."
+	icon_state = "fishtacosupreme"
+	bitesize = 3
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,6)
+
+/obj/item/weapon/reagent_containers/food/snacks/chiliconcarne
+	name = "chili con carne"
+	desc = "This dish became exceedingly rare after Space Texas seceeded from our plane of reality."
+	icon_state = "chiliconcarne"
+	bitesize = 3
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,10)
+		reagents.add_reagent(CAPSAICIN,2)
+
+/obj/item/weapon/reagent_containers/food/snacks/chilaquiles
+	name = "chilaquiles"
+	desc = "The salsa-equivalent of nachos."
+	icon_state = "chilaquiles"
+	bitesize = 1
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,8)
+
+/obj/item/weapon/reagent_containers/food/snacks/quiche
+	name = "quiche"
+	desc = "The queechay has a long history of being mispronounced. Just a taste makes you feel more cerebral and cultured!"
+	icon_state = "quiche"
+	bitesize = 4
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,8)
+		reagents.add_reagent(METHYLIN,5)
+
+/obj/item/weapon/reagent_containers/food/snacks/minestrone
+	name = "minestrone"
+	desc = "It's a me, minestrone."
+	icon_state = "minestrone"
+	bitesize = 4
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,8)
+		reagents.add_reagent(IMIDAZOLINE,2)
+
+/obj/item/weapon/reagent_containers/food/snacks/poissoncru
+	name = "poisson cru"
+	desc = "The national dish of Tonga, a country that you had previously never heard about."
+	icon_state = "poissoncru"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,4)
+
+/obj/item/weapon/reagent_containers/food/snacks/chickensalad
+	name = "chicken salad"
+	desc = "Evokes the question: do you ruin chicken by putting it in a salad, or improve a salad by adding chicken?"
+	icon_state = "chickensalad"
+	bitesize = 4
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,12)
+
+/obj/item/weapon/reagent_containers/food/snacks/grapesalad
+	name = "grape salad"
+	desc = "Member Kingston? Member uncapped bombs? Member beardbeard? Member Goonleak? Member the vore raid? Member split departmental access? I member!"
+	icon_state = "grapesalad"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,4)
+
+/obj/item/weapon/reagent_containers/food/snacks/orzosalad
+	name = "orzo salad"
+	desc = "A minty, exotic salad originating in Space Greece. Makes you feel slippery enough to escape denbts."
+	icon_state = "orzosalad"
+	bitesize = 4
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,2)
+		reagents.add_reagent(LUBE,14)
+
+/obj/item/weapon/reagent_containers/food/snacks/mexicansalad
+	name = "mexican salad"
+	desc = "A favorite of the janitorial staff, who often consider this a native dish. Viva Space Mexico!"
+	icon_state = "mexicansalad"
+	bitesize = 3
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,6)
+
+/obj/item/weapon/reagent_containers/food/snacks/gazpacho
+	name = "gazpacho"
+	desc = "A cool, refreshing soup originating in Space Spain's desert homeworld."
+	icon_state = "gazpacho"
+	bitesize = 4
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,12)
+		reagents.add_reagent(FROSTOIL,6)
+
+/obj/item/weapon/reagent_containers/food/snacks/bruschetta
+	name = "bruschetta"
+	desc = "This dish's name probably originates from 'to roast over coals'. You can blame the hippies for banning coal use when the crew complains it isn't authentic."
+	icon_state = "bruschetta"
+	bitesize = 1
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,3)
+
+/obj/item/weapon/reagent_containers/food/snacks/gelatin
+	name = "gelatin"
+	desc = "Made from real teeth!"
+	icon_state = "gelatin"
+	bitesize = 1
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,1)
+		reagents.add_reagent(WATER,9)
+
+/obj/item/weapon/reagent_containers/food/snacks/yogurt
+	name = "yogurt"
+	desc = "Who knew bacteria could be so helpful?"
+	icon_state = "yoghurt"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(NUTRIMENT,2)
+		reagents.add_reagent(SUGAR,2)
+		reagents.add_reagent(MILK,2)
+
+/obj/item/weapon/reagent_containers/food/snacks/pannacotta
+	name = "panna cotta"
+	desc = "Among the most fashionable of fine desserts. A dish fit for a captain."
+	icon_state = "pannacotta"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(SUGAR,10)
+		reagents.add_reagent(OXYCODONE,2)
+
+/obj/item/weapon/reagent_containers/food/snacks/hauntedjam
+	name = "haunted jam"
+	desc = "I woke up one morning to find that the entire city had been covered in a three-foot layer of man-eating jam."
+	icon_state = "ghostjam"
+	bitesize = 2
+	New()
+		..()
+		reagents.add_reagent(HELL_RAMEN,8) //This should be enough to at least seriously wound, if not kill, someone.
+
+/obj/item/weapon/reagent_containers/food/snacks/hauntedjam/spook(mob/dead/observer/O)
+	if(!..()) //Check that they can spook
+		return
+	visible_message("<span class='warning'>\The [src] rattles maliciously!</span>")
+	if(loc.Adjacent(get_turf(O))) //Two reasons. First, prevent distance spooking. Second, don't move through border objects (windows)
+		Move(get_turf(O))

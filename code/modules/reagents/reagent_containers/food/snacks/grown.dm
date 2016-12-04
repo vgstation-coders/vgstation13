@@ -679,6 +679,22 @@
 	filling_color = "#66CEED"
 	plantname = "icechili"
 
+/obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper
+	name = "ghost pepper"
+	desc = "This pepper is hainted. And pretty spicy, too."
+	icon_state = "ghostpepper"
+	potency = 20
+	filling_color = "#66CEED"
+	plantname = "ghostpepper"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper/spook()
+	visible_message("<span class='warning'>A specter takes a bite of \the [src] from beyond the grave!</span>")
+	playsound(get_turf(src),'sound/items/eatfood.ogg', rand(10,50), 1)
+	bitecount++
+	reagents.remove_any(bitesize)
+	if(!reagents.total_volume)
+		qdel(src)
+
 /obj/item/weapon/reagent_containers/food/snacks/grown/carrot
 	name = "carrot"
 	desc = "It's good for the eyes!"
