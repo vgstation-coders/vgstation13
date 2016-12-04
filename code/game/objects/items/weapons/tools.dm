@@ -500,7 +500,7 @@
 
 /obj/item/weapon/weldingtool/update_icon()
 	..()
-	icon_state = "[initial(icon_state)][welding ? "1" : ""]"
+	icon_state = "[initial(icon_state)][welding ? "1" : ""]" //Ternary operator.  a ? b : c.  If a is true, then the value of the statement is b, otherwise it is c.
 	
 
 /obj/item/weapon/weldingtool/empty
