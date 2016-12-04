@@ -514,10 +514,6 @@
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 60)
 	origin_tech = Tc_ENGINEERING + "=2"
 
-/obj/item/weapon/weldingtool/largetank/update_icon()
-	..()
-	icon_state = "[initial(icon_state)][welding ? "1" : ""]"
-
 /obj/item/weapon/weldingtool/largetank/empty
 	start_fueled = 0
 
@@ -529,10 +525,6 @@
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 120)
 	origin_tech = Tc_ENGINEERING + "=3"
-
-/obj/item/weapon/weldingtool/largetank/update_icon()
-	..()
-	icon_state = "[initial(icon_state)][welding ? "1" : ""]"
 	
 /obj/item/weapon/weldingtool/hugetank/empty
 	start_fueled = 0
@@ -545,10 +537,6 @@
 	w_class = W_CLASS_HUGE
 	starting_materials = list(MAT_IRON = 18750, MAT_GLASS = 18750)
 	origin_tech = Tc_ENGINEERING + "=4"
-
-/obj/item/weapon/weldingtool/gatling/update_icon()
-	..()
-	icon_state = "[initial(icon_state)][welding ? "1" : ""]"
 
 /obj/item/weapon/weldingtool/gatling/empty
 	start_fueled = 0
