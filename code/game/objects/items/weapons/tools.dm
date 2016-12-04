@@ -545,7 +545,7 @@
 	start_fueled = 0
 
 /obj/item/weapon/weldingtool/gatling
-	name = "Gatling Welder"
+	name = "gatling welder"
 	desc = "Engineering Dakka."
 	icon_state = "welder_gatling"
 	max_fuel = 160
