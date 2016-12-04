@@ -20,7 +20,7 @@
 				new /obj/item/weapon/soap/syndie(src)
 
 
-			if("screwed")//6?+6?+10+4=26
+			if("screwed")//10+10+10+4=27?
 				new /obj/effect/spawner/newbomb/timer/syndicate(src)
 				new /obj/effect/spawner/newbomb/timer/syndicate(src)
 				new /obj/item/device/powersink(src)
@@ -233,4 +233,13 @@
 	..()
 	new /obj/item/weapon/reagent_containers/glass/bottle/antisocial(src)
 	new /obj/item/weapon/reagent_containers/syringe(src)
+	return
+
+/obj/item/weapon/storage/box/syndie_kit/hardsuit
+	name = "box (blood red suit and helmet)"
+
+/obj/item/weapon/storage/box/syndie_kit/hardsuit/New()
+	..()
+	new /obj/item/clothing/suit/space/rig/syndi(src)
+	new /obj/item/clothing/head/helmet/space/rig/syndi(src)
 	return

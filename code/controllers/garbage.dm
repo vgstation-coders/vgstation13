@@ -151,6 +151,10 @@ world/loop_checks = 0
 
 		garbageCollector.addTrash(D)
 
+// Returns 1 if the object has been queued for deletion.
+/proc/qdeleted(var/datum/D)
+	return istype(D) && !isnull(D.gcDestroyed)
+
 /datum/controller
 	var/processing = 0
 	var/iteration = 0

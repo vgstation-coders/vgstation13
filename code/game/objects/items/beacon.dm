@@ -84,3 +84,14 @@ var/global/list/obj/item/beacon/beacons = list()
 /obj/item/beacon/bluespace_beacon/singularity_pull()
 	return
 
+/obj/item/beacon/syndicate/bomb
+	name = "suspicious beacon"
+	desc = "A label on it reads: <i>Warning: Activating this device will send a high-ordinance explosive to your location</i>."
+	origin_tech = Tc_BLUESPACE + "=1;" + Tc_SYNDICATE + "=7"
+
+/obj/item/beacon/syndicate/bomb/attack_self(mob/user as mob)
+	if(user)
+		to_chat(user, "<font color = 'blue'>Locked In</font>")
+		new /obj/machinery/syndicatebomb( user.loc )
+		playsound(src, 'sound/effects/pop.ogg', 100, 1, 1)
+		qdel(src)
