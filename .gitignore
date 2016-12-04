@@ -14,10 +14,6 @@ info.json
 # Compiled Python doohickies
 *.pyc
 
-#ignore any files in config/, except those in subdirectories.
-/config/*
-!/config/*/*
-
 # OpenBYOND-generated crap
 /dmis
 /interface-indented
