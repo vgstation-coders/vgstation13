@@ -252,7 +252,7 @@
 	R.set_frequency(radio_freq)
 	synd_mob.equip_to_slot_or_del(R, slot_ears)
 
-	synd_mob.equip_to_slot_or_del(new /obj/item/clothing/under/syndicate(synd_mob), slot_w_uniform)
+	synd_mob.equip_to_slot_or_del(new /obj/item/clothing/under/syndicate/holomap(synd_mob), slot_w_uniform)
 	synd_mob.equip_to_slot_or_del(new /obj/item/clothing/shoes/combat(synd_mob), slot_shoes)
 	if(!istype(synd_mob.species, /datum/species/plasmaman))
 		synd_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/armor/bulletproof(synd_mob), slot_wear_suit)
