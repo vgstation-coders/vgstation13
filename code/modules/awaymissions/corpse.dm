@@ -427,7 +427,7 @@
 	corpsebelt = /obj/item/weapon/storage/belt/security
 
 /obj/effect/landmark/corpse/creed
-	name = "Major Creed"
+	name = "Creed Officer"
 	corpseuniform = /obj/item/clothing/under/darkred
 	corpsesuit = /obj/item/clothing/suit/armor/hos/jensen
 	corpseglasses = /obj/item/clothing/glasses/thermal/eyepatch
