@@ -912,6 +912,8 @@ proc/process_adminbus_teleport_locs()
 	music = "signal"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
+	holomap_marker = "bridge"
+	holomap_filter = HOLOMAP_FILTER_ERT
 
 /area/bridge/meeting_room
 	name = "\improper Heads of Staff Meeting Room"
@@ -924,6 +926,8 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "captain"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
 	jammed=1
+	holomap_marker = "cap"
+	holomap_filter = HOLOMAP_FILTER_ERT
 
 /area/crew_quarters/heads
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
