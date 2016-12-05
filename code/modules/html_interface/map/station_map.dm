@@ -168,13 +168,13 @@
 	var/icon/big_map = icon('icons/480x480.dmi', "stationmap")
 	var/icon/small_map = icon('icons/480x480.dmi', "blank")
 	var/icon/map_base = icon(holoMiniMaps[StationZLevel])
-
+/*
 	var/icon/map_with_areas = icon(holoMiniMaps[StationZLevel])
 	map_with_areas = icon(holoMiniMaps[StationZLevel])
 	map_with_areas.Blend(canvas,ICON_OVERLAY)
-
+*/
 	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAPAREAS+"_[StationZLevel]"
-	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[StationZLevel]"] = map_with_areas
+	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[StationZLevel]"] = canvas
 
 	map_base.Blend("#79ff79",ICON_MULTIPLY)
 
