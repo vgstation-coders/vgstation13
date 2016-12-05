@@ -58,7 +58,7 @@
 
 
 	if (src.health <= 0)
-		visible_message("<span class='notice'>The [src] dissipates</span>")
+		visible_message("<span class='notice'>The [src] dissapates</span>")
 		qdel(src)
 		return
 
@@ -66,7 +66,7 @@
 	spawn(20) if(src) opacity = 0
 
 	if(src.health <= 0)
-		visible_message("<span class='notice'>The [src] dissipates</span>")
+		visible_message("<span class='notice'>The [src] dissapates</span>")
 		qdel(src)
 		return
 
@@ -77,7 +77,7 @@
 	health -= Proj.damage
 	..()
 	if(health <=0)
-		visible_message("<span class='notice'>The [src] dissipates</span>")
+		visible_message("<span class='notice'>The [src] dissapates</span>")
 		qdel(src)
 		return
 	opacity = 1
