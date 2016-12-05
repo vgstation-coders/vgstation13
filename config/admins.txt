@@ -5,12 +5,12 @@
 # Ranks can be anything defined in admin_ranks.txt           ~Carn   #
 ######################################################################
 
-Fidelius = Host
-MattDuskson = Host
-PromethTK11 = Trial Admin
-AurumCU = Game Admin
-Hessica = Game Admin
-SirBedrydant = Game Admin
-Shincry = Trial Admin
-Morthem = Trial Admin
-ShaiHuludRider = Trial Admin
+Fidelius - Host
+MattDuskson - Host
+PromethTK11 - Trial Admin
+AurumCU - Game Admin
+Hessica - Game Admin
+SirBedrydant - Game Admin
+Shincry - Trial Admin
+Morthem - Trial Admin
+ShaiHuludRider - Trial Admin
