@@ -13,7 +13,7 @@ var/list/holomap_cache = list()
 	//Holomap stuff
 	var/mob/living/carbon/human/activator = null
 	var/list/holomap_images = list()
-	var/marker_prefix = "erts"
+	var/marker_prefix = "ert"
 	var/holomap_color = null
 	var/holomap_filter = HOLOMAP_FILTER_ERT
 
@@ -32,6 +32,25 @@ var/list/holomap_cache = list()
 	marker_prefix = "op"
 	holomap_filter = HOLOMAP_FILTER_NUKEOPS
 	holomap_color = "#13B40B"
+
+
+/obj/item/clothing/accessory/holomap_chip/ert
+	name = "emergency response team holomap chip"
+	icon_state = "holochip_ert"
+	marker_prefix = "ert"
+	holomap_filter = HOLOMAP_FILTER_ERT
+	holomap_color = "#5FFF28"
+
+	var/list/prefix_update = list(
+		/obj/item/clothing/head/helmet/space/ert/commander,
+		"ertc",
+		/obj/item/clothing/head/helmet/space/ert/security,
+		"erts",
+		/obj/item/clothing/head/helmet/space/ert/engineer,
+		"erte",
+		/obj/item/clothing/head/helmet/space/ert/medical,
+		"ertm",
+		)
 
 
 /obj/item/clothing/accessory/holomap_chip/New()
@@ -133,6 +152,11 @@ var/list/holomap_cache = list()
 
 		if(!(holomap_bgmap in holomap_cache))
 			holomap_cache[holomap_bgmap] = image(centcommMiniMaps["[holomap_filter]"])
+	else if(T.z == map.zMainStation && holomap_filter == HOLOMAP_FILTER_ERT)
+		holomap_bgmap = "background_\ref[src]_[T.z]"
+
+		if(!(holomap_bgmap in holomap_cache))
+			holomap_cache[holomap_bgmap] = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[map.zMainStation]"])
 	else
 		holomap_bgmap = "background_\ref[src]_[T.z]"
 
@@ -195,12 +219,14 @@ var/list/holomap_cache = list()
 		else
 			continue
 
+		HC.update_marker()
+
 		if(mob_indicator != HOLOMAP_ERROR)
 
-			var/holomap_marker = "marker_\ref[src]_\ref[HC]_[mob_indicator]"
+			var/holomap_marker = "marker_\ref[src]_\ref[HC]_[HC.marker_prefix]_[mob_indicator]"
 
 			if(!(holomap_marker in holomap_cache))
-				holomap_cache[holomap_marker] = image('icons/holomap_markers.dmi',"[marker_prefix][mob_indicator]")
+				holomap_cache[holomap_marker] = image('icons/holomap_markers.dmi',"[HC.marker_prefix][mob_indicator]")
 
 			var/image/I = holomap_cache[holomap_marker]
 			I.plane = HUD_PLANE
@@ -221,7 +247,64 @@ var/list/holomap_cache = list()
 			animate(alpha = 255, time = 2, easing = SINE_EASING)
 			holomap_images += I
 
+	//Additional things we might want to track
+	extra_update()
+
 	activator.client.images |= holomap_images
+
+/obj/item/clothing/accessory/holomap_chip/proc/extra_update()
+	return
+
+/obj/item/clothing/accessory/holomap_chip/deathsquad/extra_update()
+	var/turf/T = get_turf(src)
+	for(var/obj/mecha/combat/marauder/maraud in mechas_list)
+		if(!istype(maraud,/obj/mecha/combat/marauder/series) && !istype(maraud,/obj/mecha/combat/marauder/mauler) && (T.z == maraud.z))//ignore custom-built and syndicate ones
+			var/i = 0
+			if(maraud.occupant)
+				i++
+
+			var/holomap_marker = "marker_\ref[src]_\ref[maraud]_[i]"
+
+			if(!(holomap_marker in holomap_cache))
+				var/pref = "mar"
+				if (istype(maraud,/obj/mecha/combat/marauder/seraph))
+					pref = "ser"
+				holomap_cache[holomap_marker] = image('icons/holomap_markers.dmi',"[pref][i]")
+
+			var/image/I = holomap_cache[holomap_marker]
+			I.plane = HUD_PLANE
+			I.loc = activator.hud_used.holomap_obj
+
+			if(maraud.occupant)
+				I.layer = HUD_ABOVE_ITEM_LAYER
+			else
+				I.layer = HUD_ITEM_LAYER
+
+			if(!I.pixel_x || !I.pixel_y)
+				I.pixel_x = maraud.x - T.x + activator.client.view*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32)
+				I.pixel_y = maraud.y - T.y + activator.client.view*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32)
+
+			animate(I,alpha = 255, pixel_x = maraud.x - T.x + activator.client.view*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32), pixel_y = maraud.y - T.y + activator.client.view*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32), time = 5, loop = -1, easing = LINEAR_EASING)
+			animate(alpha = 255, time = 8, loop = -1, easing = SINE_EASING)
+			animate(alpha = 0, time = 5, easing = SINE_EASING)
+			animate(alpha = 255, time = 2, easing = SINE_EASING)
+			holomap_images += I
+
+
+/obj/item/clothing/accessory/holomap_chip/proc/update_marker()
+	return
+
+/obj/item/clothing/accessory/holomap_chip/ert/update_marker()
+	marker_prefix = "ert"
+	var/obj/item/clothing/under/U = attached_to
+	if(U && ishuman(U.loc))
+		var/mob/living/carbon/human/H = U.loc
+		var/obj/item/helmet = H.get_item_by_slot(slot_head)
+		if(helmet)
+			for(var/j=1;j<=prefix_update.len;j++)
+				if(helmet.type == prefix_update[j])
+					marker_prefix = prefix_update[j+1]
+					break
 
 #undef HOLOMAP_ERROR
 #undef HOLOMAP_YOU

@@ -54,12 +54,12 @@
 			i++
 		if(nukedisk)//Only gives the disk's original position on the map
 			var/datum/holomap_marker/newMarker = new()
-			newMarker.id = "cap"
+			newMarker.id = "diskspawn"
 			newMarker.filter = HOLOMAP_FILTER_STATIONMAP_STRATEGIC
 			newMarker.x = nukedisk.x
 			newMarker.y = nukedisk.y
 			newMarker.z = nukedisk.z
-			holomap_markers["cap"] = newMarker
+			holomap_markers["diskspawn"] = newMarker
 	//generating area markers
 	for(var/area/A in areas)
 		if(A.holomap_marker)
@@ -165,12 +165,16 @@
 					else
 						canvas.DrawBox(areaToPaint.holomap_color, i, r)
 
-	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAPAREAS+"_[StationZLevel]"
-	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[StationZLevel]"] = canvas
-
 	var/icon/big_map = icon('icons/480x480.dmi', "stationmap")
 	var/icon/small_map = icon('icons/480x480.dmi', "blank")
 	var/icon/map_base = icon(holoMiniMaps[StationZLevel])
+
+	var/icon/map_with_areas = icon(holoMiniMaps[StationZLevel])
+	map_with_areas = icon(holoMiniMaps[StationZLevel])
+	map_with_areas.Blend(canvas,ICON_OVERLAY)
+
+	extraMiniMaps |= HOLOMAP_EXTRA_STATIONMAPAREAS+"_[StationZLevel]"
+	extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[StationZLevel]"] = map_with_areas
 
 	map_base.Blend("#79ff79",ICON_MULTIPLY)
 
