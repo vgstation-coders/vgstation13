@@ -42,6 +42,7 @@
 
 	playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 	src.visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
+	M.do_attack_animation(src)
 
 	for(var/datum/disease/D in M.viruses)
 		if(D.spread == "Bite")
@@ -105,6 +106,7 @@
 
 	playsound(loc, "punch", 30, 1, -1)
 	visible_message("<span class='danger'>[M] [attack_verb] \the [src]!</span>", "<span class='userdanger'>[M] [attack_verb] you!</span>")
+	M.do_attack_animation(src)
 
 	if(M.size != size) //The bigger the kicker, the more damage
 		damage = max(damage + (rand(1,5) * (1 + M.size - size)), 0)
@@ -266,6 +268,7 @@
 			return 1
 
 		if(I_HURT)
+			M.do_attack_animation(src)
 			M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.species.attack_verb != "punches" ? "Slashed" : "Punched"] [src.name] ([src.ckey])</font>")
 			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.species.attack_verb == "slashes" ? "slashed" : "punched"] by [M.name] ([M.ckey])</font>")
 			if(!iscarbon(M))

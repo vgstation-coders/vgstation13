@@ -1435,3 +1435,25 @@ Thanks.
 		spawn(25)
 			clear_fullscreen("flash", 25)
 		return 1
+
+/mob/living/proc/do_attack_animation(atom/A)
+	if(A == src)
+		return
+	var/pixel_x_diff = 0
+	var/pixel_y_diff = 0
+	var/final_pixel_x = pixel_x
+	var/final_pixel_y = pixel_y
+
+	var/direction = get_dir(src, A)
+	if(direction & NORTH)
+		pixel_y_diff = 5
+	else if(direction & SOUTH)
+		pixel_y_diff = -5
+
+	if(direction & EAST)
+		pixel_x_diff = 5
+	else if(direction & WEST)
+		pixel_x_diff = -5
+
+	animate(src, pixel_x = pixel_x + pixel_x_diff, pixel_y = pixel_y + pixel_y_diff, time = 2)
+	animate(pixel_x = final_pixel_x, pixel_y = final_pixel_y, time = 2)

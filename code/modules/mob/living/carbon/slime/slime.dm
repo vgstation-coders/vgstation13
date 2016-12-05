@@ -315,6 +315,7 @@
 	if(Victim)
 		return // can't attack while eating!
 
+	M.do_attack_animation(src)
 	if (health > -100)
 
 		for(var/mob/O in viewers(src, null))
@@ -342,6 +343,7 @@
 	if(M.melee_damage_upper == 0)
 		M.emote("[M.friendly] [src]")
 	else
+		M.do_attack_animation(src)
 		if(M.attack_sound)
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))
@@ -370,6 +372,7 @@
 		if (I_HELP)
 			help_shake_act(M)
 		else
+			M.do_attack_animation(src)
 			if (istype(wear_mask, /obj/item/clothing/mask/muzzle))
 				return
 			if (health > 0)
@@ -495,7 +498,7 @@
 					O.show_message(text("<span class='warning'>[] has grabbed [] passively!</span>", M, src), 1)
 
 		else
-
+			M.do_attack_animation(src)
 			var/damage = rand(1, 9)
 
 			attacked += 10
@@ -546,7 +549,7 @@
 					O.show_message(text("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>"), 1)
 
 		if (I_HURT)
-
+			M.do_attack_animation(src)
 			if ((prob(95) && health > 0))
 				attacked += 10
 				playsound(loc, 'sound/weapons/slice.ogg', 25, 1, -1)
@@ -585,6 +588,7 @@
 				O.show_message(text("<span class='warning'>[] has grabbed [name] passively!</span>", M), 1)
 
 		if (I_DISARM)
+			M.do_attack_animation(src)
 			playsound(loc, 'sound/weapons/pierce.ogg', 25, 1, -1)
 			var/damage = 5
 			attacked += 10

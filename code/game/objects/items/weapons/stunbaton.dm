@@ -119,7 +119,7 @@
 
 	add_fingerprint(user)
 
-/obj/item/weapon/melee/baton/attack(mob/M, mob/user)
+/obj/item/weapon/melee/baton/attack(mob/M, mob/living/user)
 	if(status && (M_CLUMSY in user.mutations) && prob(50))
 		user.simple_message("<span class='danger'>You accidentally hit yourself with [src]!</span>",
 			"<span class='danger'>The [name] goes mad!</span>")
@@ -137,6 +137,7 @@
 
 	var/hit = 1
 	if(user.a_intent == I_HURT)
+		user.do_attack_animation(src)
 		hit = ..()
 		if(hit)
 			playsound(loc, "swing_hit", 50, 1, -1)
@@ -148,6 +149,7 @@
 			return
 
 	if(status && hit)
+		user.do_attack_animation(src)
 		if(hit == -1)
 			//Copypasted from human/attacked_by()
 			var/target_zone = get_zone_with_miss_chance(user.zone_sel.selecting, L)

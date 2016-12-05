@@ -43,10 +43,11 @@
 
 	return 1
 
-/obj/machinery/shield/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/shield/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	if(!istype(W))
 		return
 
+	user.do_attack_animation(src)
 	//Calculate damage
 	var/aforce = W.force
 	if(W.damtype == BRUTE || W.damtype == BURN)
@@ -57,7 +58,7 @@
 
 
 	if (src.health <= 0)
-		visible_message("<span class='notice'>The [src] dissapates</span>")
+		visible_message("<span class='notice'>The [src] dissipates</span>")
 		qdel(src)
 		return
 
@@ -65,7 +66,7 @@
 	spawn(20) if(src) opacity = 0
 
 	if(src.health <= 0)
-		visible_message("<span class='notice'>The [src] dissapates</span>")
+		visible_message("<span class='notice'>The [src] dissipates</span>")
 		qdel(src)
 		return
 
@@ -76,7 +77,7 @@
 	health -= Proj.damage
 	..()
 	if(health <=0)
-		visible_message("<span class='notice'>The [src] dissapates</span>")
+		visible_message("<span class='notice'>The [src] dissipates</span>")
 		qdel(src)
 		return
 	opacity = 1

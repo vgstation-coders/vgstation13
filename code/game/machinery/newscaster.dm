@@ -906,7 +906,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			src.updateUsrDialog()
 
 
-/obj/machinery/newscaster/attackby(obj/item/I as obj, mob/user as mob)
+/obj/machinery/newscaster/attackby(obj/item/I as obj, mob/living/user as mob)
 	switch(buildstage)
 		if(0)
 			if(iscrowbar(I))
@@ -947,6 +947,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 			else
 				if(istype(I, /obj/item/weapon) )
+					user.do_attack_animation(src)
 					var/obj/item/weapon/W = I
 					if(W.force <15)
 						visible_message("[user.name] hits the [src] with the [W] with no visible effect." )
