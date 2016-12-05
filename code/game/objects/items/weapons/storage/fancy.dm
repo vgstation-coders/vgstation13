@@ -83,7 +83,7 @@
  */
 
 /obj/item/weapon/storage/fancy/egg_box
-	icon = 'icons/obj/food.dmi'
+	icon = 'icons/obj/food_container.dmi'
 	icon_state = "eggbox"
 	icon_type = "egg"
 	name = "egg box"
