@@ -93,6 +93,15 @@
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 	return
 
+/obj/item/weapon/storage/box/survival/ert/New()
+	..()
+	contents = list()
+	sleep(1)
+	new /obj/item/clothing/mask/gas/ert(src)
+	new /obj/item/weapon/tank/emergency_oxygen/double(src)
+	new /obj/item/stack/medical/bruise_pack/bandaid(src)
+	return
+
 /obj/item/weapon/storage/box/gloves
 	name = "box of latex gloves"
 	desc = "Contains white gloves."
