@@ -501,6 +501,8 @@ turf/simulated/floor/update_icon()
 		return 0
 
 	if(iscrowbar(C) && (!(is_plating())))
+		if (user.a_intent != I_HELP) //We assume the user is fighting
+			return
 		if(broken || burnt)
 			to_chat(user, "<span class='warning'>You remove the broken plating.</span>")
 		else
