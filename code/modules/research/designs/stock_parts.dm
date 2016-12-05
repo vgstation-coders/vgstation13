@@ -129,7 +129,7 @@
 	id = "pico_mani"
 	req_tech = list(Tc_MATERIALS = 5, Tc_PROGRAMMING = 2)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 30)
+	materials = list(MAT_IRON = 30, MAT_URANIUM = 10, MAT_SILVER = 20)
 	reliability_base = 73
 	category = "Stock Parts"
 	build_path = /obj/item/weapon/stock_parts/manipulator/nano/pico
