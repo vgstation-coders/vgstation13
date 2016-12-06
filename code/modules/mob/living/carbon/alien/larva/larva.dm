@@ -122,10 +122,9 @@
 		if(I_HELP)
 			help_shake_act(M)
 		else
-			if(istype(M.wear_mask, /obj/item/clothing/mask/muzzle))
+			if(istype(wear_mask, /obj/item/clothing/mask/muzzle))
 				return
 			if(health > 0)
-				M.do_attack_animation(src)
 				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 				visible_message("<span class='danger'>\The [M] has bit \the [src] !</span>")
 				adjustBruteLoss(rand(1, 3))
@@ -142,7 +141,7 @@
 		return // can't attack while eating!
 
 	if(health > -100)
-		M.do_attack_animation(src)
+
 		for(var/mob/O in viewers(src, null))
 			visible_message("<span class='danger'>\The [M] glomps \the [src]!</span>")
 
@@ -210,7 +209,6 @@
 			visible_message("<span class='warning'>[M] has grabbed \the [src] passively !</span>")
 
 		else
-			M.do_attack_animation(src)
 			var/damage = rand(1, 9)
 			if(prob(90))
 				if(M_HULK in M.mutations)
@@ -256,7 +254,6 @@
 
 		else
 			if(health > 0)
-				M.do_attack_animation(src)
 				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 				var/damage = rand(1, 3)
 				for(var/mob/O in viewers(src, null))

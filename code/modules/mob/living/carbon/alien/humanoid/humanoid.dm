@@ -123,7 +123,6 @@
 			if(istype(wear_mask, /obj/item/clothing/mask/muzzle))
 				return
 			if(health > 0)
-				M.do_attack_animation(src)
 				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 				visible_message("<span class='danger'>\The [M] has bit \the [src]!</span>")
 				adjustBruteLoss(rand(1, 3))
@@ -140,7 +139,6 @@
 		return // can't attack while eating!
 
 	if(health > -100)
-		M.do_attack_animation(src)
 		visible_message("<span class='danger'>\The [M] glomps [src]!</span>")
 		add_logs(M, src, "glomped on", 0)
 
@@ -255,7 +253,6 @@
 			visible_message("<span class='warning'>[M] has grabbed \the [src] passively!</span>")
 
 		if(I_HURT)
-			M.do_attack_animation(src)
 			var/damage = rand(1, 9)
 			if(prob(90))
 				if(M_HULK in M.mutations) //M_HULK SMASH
@@ -278,7 +275,6 @@
 
 		if(I_DISARM)
 			if(!lying)
-				M.do_attack_animation(src)
 				if(prob(5)) //Very small chance to push an alien down.
 					Knockdown(2)
 					playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
@@ -312,7 +308,6 @@ In all, this is a lot like the monkey code. /N
 			visible_message("<span class='notice'>[M] nuzzles [src] trying to wake it up !</span>")
 		else
 			if(health > 0)
-				M.do_attack_animation(src)
 				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 				var/damage = rand(1, 3)
 				visible_message("<span class='danger'>\The [M] has bit [src]!</span>")

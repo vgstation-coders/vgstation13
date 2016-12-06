@@ -1,4 +1,4 @@
-/mob/living/carbon/human/attack_paw(mob/living/M as mob)
+/mob/living/carbon/human/attack_paw(mob/M as mob)
 	..()
 	//M.delayNextAttack(10)
 	if (M.a_intent == I_HELP)
@@ -7,7 +7,6 @@
 		if (istype(wear_mask, /obj/item/clothing/mask/muzzle))
 			return
 
-		M.do_attack_animation(src)
 		if(istype(M, /mob/living/carbon/monkey))
 			var/mob/living/carbon/monkey/Mo = M
 			src.visible_message("<span class='danger'>[Mo.name] [Mo.attack_text] [name]!</span>")

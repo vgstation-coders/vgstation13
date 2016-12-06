@@ -117,7 +117,6 @@
 		if(M.melee_damage_upper <= 0)
 			M.emote("[M.friendly] \the <EM>[src]</EM>")
 		else
-			M.do_attack_animation(src)
 			if(M.attack_sound)
 				playsound(loc, M.attack_sound, 50, 1, 1)
 			M.visible_message("<span class='attack'>\The <EM>[M]</EM> [M.attacktext] \the <EM>[src]</EM>!</span>")
@@ -125,10 +124,9 @@
 			var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 			adjustBruteLoss(damage)
 
-/mob/living/simple_animal/construct/attackby(var/obj/item/O as obj, var/mob/living/user as mob)
+/mob/living/simple_animal/construct/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	user.delayNextAttack(8)
 	if(O.force)
-		user.do_attack_animation(src)
 		var/damage = O.force
 		if (O.damtype == HALLOSS)
 			damage = 0
