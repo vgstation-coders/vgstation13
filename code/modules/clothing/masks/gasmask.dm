@@ -72,7 +72,7 @@
 	canstage = 0
 
 /obj/item/clothing/mask/gas/ert
-	name = "antique gas mask"
+	name = "\improper antique gas mask"
 	desc = "A face-covering mask that can be connected to an air supply."
 	icon_state = "ert"
 	siemens_coefficient = 0.7
