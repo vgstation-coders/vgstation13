@@ -588,7 +588,7 @@
 /obj/effect/rune/proc/manifest()
 	var/obj/effect/rune/this_rune = src
 	src = null
-	if(usr.loc!=this_rune.loc)
+	if(usr.loc != this_rune.loc || istype(usr,/mob/living/carbon/human/manifested))
 		return this_rune.fizzle()
 	var/mob/dead/observer/ghost
 	for(var/mob/dead/observer/O in this_rune.loc)
