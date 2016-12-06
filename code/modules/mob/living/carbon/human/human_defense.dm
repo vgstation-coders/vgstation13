@@ -191,6 +191,7 @@ emp_act
 	var/hit_area = affecting.display_name
 
 	if((user != src) && check_shields(I.force, "the [I.name]"))
+		user.do_attack_animation(src)
 		return 0
 
 	if(istype(I,/obj/item/weapon/card/emag))

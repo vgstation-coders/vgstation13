@@ -315,9 +315,8 @@
 	if(Victim)
 		return // can't attack while eating!
 
-	M.do_attack_animation(src)
 	if (health > -100)
-
+		M.do_attack_animation(src)
 		for(var/mob/O in viewers(src, null))
 			if ((O.client && !( O.blinded )))
 				O.show_message(text("<span class='danger'>The [M.name] has glomped []!</span>", src), 1)
@@ -372,10 +371,10 @@
 		if (I_HELP)
 			help_shake_act(M)
 		else
-			M.do_attack_animation(src)
 			if (istype(wear_mask, /obj/item/clothing/mask/muzzle))
 				return
 			if (health > 0)
+				M.do_attack_animation(src)
 				attacked += 10
 				//playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 				for(var/mob/O in viewers(src, null))

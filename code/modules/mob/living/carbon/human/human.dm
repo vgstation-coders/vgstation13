@@ -254,6 +254,7 @@
 			dam_zone = M.zone_sel.selecting
 
 		if(check_shields(damage)) //Shield check
+			M.do_attack_animation(src)
 			return
 
 		var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))

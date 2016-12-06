@@ -162,6 +162,7 @@
 	..()
 
 	if((M != src) && check_shields(0, M.name))
+		M.do_attack_animation(src)
 		visible_message("<span class='danger'>[M] attempts to touch [src]!</span>")
 		return 0
 
