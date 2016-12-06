@@ -144,10 +144,10 @@
 /obj/structure/mirror/attack_slime(mob/living/user as mob)
 	if(!isslimeadult(user))
 		return
+	user.do_attack_animation(src)
 	if(shattered)
 		playsound(get_turf(src), 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		return
-	user.do_attack_animation(src)
 	user.visible_message("<span class='danger'>[user] smashes [src]!</span>")
 	shatter()
 

@@ -137,7 +137,8 @@
 
 	var/hit = 1
 	if(user.a_intent == I_HURT)
-		user.do_attack_animation(src)
+		if(!status)
+			user.do_attack_animation(src)
 		hit = ..()
 		if(hit)
 			playsound(loc, "swing_hit", 50, 1, -1)
