@@ -501,7 +501,7 @@
 /obj/item/weapon/weldingtool/update_icon()
 	..()
 	icon_state = "[initial(icon_state)][welding ? "1" : ""]" //Ternary operator.
-	
+
 
 /obj/item/weapon/weldingtool/empty
 	start_fueled = 0
@@ -525,7 +525,7 @@
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 120)
 	origin_tech = Tc_ENGINEERING + "=3"
-	
+
 /obj/item/weapon/weldingtool/hugetank/empty
 	start_fueled = 0
 
