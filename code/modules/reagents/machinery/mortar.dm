@@ -1,7 +1,7 @@
 /obj/item/weapon/reagent_containers/glass/mortar
 	name = "mortar"
 	desc = "This is a reinforced bowl, used for crushing stuff into reagents."
-	icon = 'icons/obj/chemical.dmi'
+	icon = 'icons/obj/food.dmi'
 	icon_state = "mortar"
 	flags = FPRINT  | OPENCONTAINER
 	volume = 50

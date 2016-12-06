@@ -112,14 +112,14 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycomb/New()
 	. = ..()
-	reagents.add_reagent(HONEY,10)
+	reagents.add_reagent("honey",10)
 	reagents.add_reagent(NUTRIMENT, 0.5)
 	reagents.add_reagent(SUGAR, 2)
 	bitesize = 2
 
 /datum/reagent/honey
 	name = "Honey"
-	id = HONEY
+	id = "honey"
 	description = "A golden yellow syrup, loaded with sugary sweetness."
 	color = "#FEAE00"
 	alpha = 200

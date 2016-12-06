@@ -1053,19 +1053,9 @@
 		/obj/item/weapon/reagent_containers/food/snacks/badrecipe,
 		/obj/item/weapon/reagent_containers/food/snacks/tofu,
 		/obj/item/weapon/reagent_containers/food/snacks/egg,
-		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge
+		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/mysterysoup
-
-/datum/recipe/primordialsoup
-	reagents = list(WATER = 10)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/goldapple,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/bloodtomato
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/primordialsoup
 
 // Sandwiches //////////////////////////////////////////////////
 
@@ -1178,6 +1168,8 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/meatballspaghetti
 
+// Salad ///////////////////////////////////////////////////////
+
 /datum/recipe/spesslaw
 	reagents = list(WATER = 5)
 	items = list(
@@ -1188,16 +1180,6 @@
 		/obj/item/weapon/reagent_containers/food/snacks/faggot,
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/spesslaw
-
-/datum/recipe/coldnoodles
-	reagents = list (SOYSAUCE = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper,
-		/obj/item/weapon/reagent_containers/food/snacks/spaghetti
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/spicycoldnoodles
-
-// Salad ///////////////////////////////////////////////////////
 
 /datum/recipe/herbsalad
 	items = list(
@@ -1237,89 +1219,6 @@
 	var/obj/item/weapon/reagent_containers/food/snacks/validsalad/being_cooked = ..(container)
 	being_cooked.reagents.del_reagent(TOXIN)
 	return being_cooked
-
-/datum/recipe/midnightsnack
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/glowberries
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/midnightsnack
-
-/datum/recipe/starrynight
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/moonflower,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/starrynightsalad
-
-/datum/recipe/chinesecoldsalad
-	reagents = list (VINEGAR = 5, SOYSAUCE = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/chinesecoldsalad
-
-/datum/recipe/confederatespirit
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/watermelonslice,
-		/obj/item/weapon/reagent_containers/food/snacks/watermelonslice,
-		/obj/item/weapon/reagent_containers/food/snacks/pimiento,
-		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/kudzupod
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/confederatespirit
-
-/datum/recipe/fruitsalad
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
-		/obj/item/weapon/reagent_containers/food/snacks/watermelonslice,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/orange
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/fruitsalad
-
-/datum/recipe/chickensalad
-	reagents = list (VINEGAR = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken,
-		/obj/item/weapon/reagent_containers/food/snacks/boiledegg
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/chickensalad
-
-/datum/recipe/grapesalad
-	reagents = list (SUGAR = 10)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes,
-		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/grapesalad
-
-/datum/recipe/orzosalad
-	reagents = list (RICE = 10)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/bluetomato,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/lemon,
-		/obj/item/weapon/reagent_containers/food/snacks/mint
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/orzosalad
-
-/datum/recipe/mexicansalad
-	reagents = list (LIMEJUICE = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
-		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		/obj/item/weapon/reagent_containers/food/snacks/pimiento,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/cabbage
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/mexicansalad
-
 // Curry ///////////////////////////////////////////////////////
 
 /datum/recipe/curry
@@ -1409,105 +1308,8 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/chips/cookable/xeno
 
-/datum/recipe/tortillachips
-	reagents = list (FLOUR = 20, CORNOIL = 10, SODIUMCHLORIDE = 10)
-	result = /obj/item/weapon/chipbasket
-
-/datum/recipe/queso
-	reagents = list(BLACKPEPPER = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/chili
-		)
-	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/queso
-
-/datum/recipe/guacamole
-	reagents = list(LIMEJUICE = 10, SODIUMCHLORIDE = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper
-		)
-	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/guacamole
-
-/datum/recipe/salsa
-	reagents = list(LIMEJUICE = 10)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/garlic
-		)
-	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/salsa
-
-/datum/recipe/hummus
-	reagents = list(LEMONJUICE = 10, HONEY = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans
-		)
-	result = /obj/item/weapon/reagent_containers/food/dipping_sauce/hummus
-
 
 // Misc ////////////////////////////////////////////////////////
-
-/datum/recipe/chiliconcarne
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
-				/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
-				/obj/item/weapon/reagent_containers/food/snacks/grown/chili,
-				/obj/item/weapon/reagent_containers/food/snacks/meat)
-	result = /obj/item/weapon/reagent_containers/food/snacks/chiliconcarne
-
-/datum/recipe/chilaquiles
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/tortillachip,
-				/obj/item/weapon/reagent_containers/food/snacks/tortillachip,
-				/obj/item/weapon/reagent_containers/food/snacks/tortillachip,
-				/obj/item/weapon/reagent_containers/food/snacks/tortillachip,
-				/obj/item/weapon/reagent_containers/food/snacks/cheesewedge,
-				/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
-				/obj/item/weapon/reagent_containers/food/dipping_sauce/salsa)
-	result = /obj/item/weapon/reagent_containers/food/snacks/chilaquiles
-
-/datum/recipe/quiche
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/bluetomato,
-				/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
-				/obj/item/weapon/reagent_containers/food/snacks/egg,
-				/obj/item/weapon/reagent_containers/food/snacks/cheesewedge)
-	result = /obj/item/weapon/reagent_containers/food/snacks/quiche
-
-/datum/recipe/minestrone
-	reagents = list(WATER = 10)
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
-				/obj/item/weapon/reagent_containers/food/snacks/grown/carrot,
-				/obj/item/weapon/reagent_containers/food/snacks/spaghetti)
-	result = /obj/item/weapon/reagent_containers/food/snacks/minestrone
-
-/datum/recipe/gazpacho
-	reagents = list(VINEGAR = 10, SODIUMCHLORIDE = 2)
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
-				/obj/item/weapon/reagent_containers/food/snacks/grown/bluetomato)
-	result = /obj/item/weapon/reagent_containers/food/snacks/gazpacho
-
-/datum/recipe/bruschetta
-	reagents = list(SODIUMCHLORIDE = 2, FLOUR = 10)
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
-				/obj/item/weapon/reagent_containers/food/snacks/grown/garlic,
-				/obj/item/weapon/reagent_containers/food/snacks/cheesewedge)
-	result = /obj/item/weapon/reagent_containers/food/snacks/bruschetta
-
-/datum/recipe/pannacotta
-	reagents = list(CREAM = 10)
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/grapes,
-				/obj/item/weapon/reagent_containers/food/snacks/gelatin,
-				/obj/item/weapon/reagent_containers/food/snacks/yogurt
-				)
-	result = /obj/item/weapon/reagent_containers/food/snacks/pannacotta
-
-/datum/recipe/yogurt
-	reagents = list(CREAM = 10, VIRUSFOOD = 5)
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/greengrapes)
-	result = /obj/item/weapon/reagent_containers/food/snacks/yogurt
-
-/datum/recipe/gelatin
-	reagents = list(WATER = 10)
-	items = list(/obj/item/stack/teeth)
-	result = /obj/item/weapon/reagent_containers/food/snacks/gelatin
 
 /datum/recipe/ramen
 	reagents = list(FLOUR = 5)
@@ -1597,23 +1399,6 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/fishfingers
 
-/datum/recipe/fishtacosupreme
-	reagents = list(FLOUR = 10)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/tomato,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/fishtacosupreme
-
-/datum/recipe/poissoncru
-	reagents = list(LIMEJUICE = 10)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/poissoncru
-
 /datum/recipe/sashimi
 	reagents = list(SOYSAUCE = 5)
 	items = list(
@@ -1679,12 +1464,6 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat)
 	result = /obj/item/weapon/reagent_containers/food/snacks/crab_sticks
 
-/datum/recipe/honeycitruschicken
-	reagents = list(SOYSAUCE = 5, HONEY = 10)
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken,
-			/obj/item/weapon/reagent_containers/food/snacks/grown/orange)
-	result = /obj/item/weapon/reagent_containers/food/snacks/honeycitruschicken
-
 /datum/recipe/gigapuddi
 	reagents = list(MILK = 15)
 	items = list(
@@ -1737,7 +1516,7 @@
 	result = /obj/item/weapon/reagent_containers/food/snacks/flan
 
 /datum/recipe/honeyflan
-	reagents = list(MILK = 5,CINNAMON = 5,HONEY = 5)
+	reagents = list(MILK = 5,CINNAMON = 5,"honey" = 5)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/egg
 		)
@@ -1842,10 +1621,6 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/chocolatebar)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sundae
 
-/datum/recipe/icecreamsandwich
-	items = list(/obj/item/weapon/reagent_containers/food/snacks/icecream,/obj/item/weapon/reagent_containers/food/snacks/chocolatebar)
-	result = /obj/item/weapon/reagent_containers/food/snacks/icecreamsandwich
-
 /datum/recipe/potatosalad
 	reagents = list(WATER = 10, MILK = 10, SODIUMCHLORIDE = 1, BLACKPEPPER = 1)
 	items = list(
@@ -1920,31 +1695,6 @@
 	for(var/i = 1 to 6)
 		new /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje(get_turf(src))
 	qdel(src)
-
-/datum/recipe/pimiento
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/chili
-		)
-	result = /obj/item/weapon/reagent_containers/food/snacks/pimiento
-
-/datum/recipe/burrito
-	reagents = list(FLOUR = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/koibeans,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/soybeans,
-		/obj/item/weapon/reagent_containers/food/snacks/beans
-	)
-	result = /obj/item/weapon/reagent_containers/food/snacks/threebeanburrito
-
-/datum/recipe/hauntedjam
-	reagents = list(SUGAR = 5, VINEGAR = 5)
-	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper
-	)
-	result = /obj/item/weapon/reagent_containers/food/snacks/hauntedjam
 
 ///Vox Food///
 /datum/recipe/gravyboat

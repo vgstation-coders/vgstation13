@@ -38,7 +38,6 @@
 
 	var/list/datum/mind/deathsquad = list()
 	var/list/datum/mind/ert = list()
-	var/ert_reason
 	var/rage = 0
 	var/can_be_mixed = FALSE
 

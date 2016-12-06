@@ -14,7 +14,6 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 	var/obj/machinery/keycard_auth/event_source
 	var/mob/event_triggered_by
 	var/mob/event_confirmed_by
-	var/ert_reason
 	//1 = select event
 	//2 = authenticate
 	anchored = 1.0
@@ -81,21 +80,17 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 
 		dat += {"Select an event to trigger:<ul>
 			<li><A href='?src=\ref[src];triggerevent=Red alert'>Red alert</A></li>"}
-		if((get_security_level() in list("red", "delta")))
-			dat += "<li><A href='?src=\ref[src];triggerevent=Emergency Response Team'>Emergency Response Team</A></li>"
+		//dat += "<li><A href='?src=\ref[src];triggerevent=Emergency Response Team'>Emergency Response Team</A></li>" Not yet
 
 		dat += {"<li><A href='?src=\ref[src];triggerevent=Grant Emergency Maintenance Access'>Grant Emergency Maintenance Access</A></li>
 			<li><A href='?src=\ref[src];triggerevent=Revoke Emergency Maintenance Access'>Revoke Emergency Maintenance Access</A></li>
 			</ul>"}
-		user << browse(dat, "window=keycard_auth;size=500x300")
+		user << browse(dat, "window=keycard_auth;size=500x250")
 	if(screen == 2)
 
-		dat += "Please swipe your card to authorize the following event: <b>[event]</b>"
-		if(event == "Emergency Response Team")
-			dat += "<p>Given reason for ERT request: '[ert_reason]'"
-
-		dat += "<p><A href='?src=\ref[src];reset=1'>Back</A>"
-		user << browse(dat, "window=keycard_auth;size=500x300")
+		dat += {"Please swipe your card to authorize the following event: <b>[event]</b>
+			<p><A href='?src=\ref[src];reset=1'>Back</A>"}
+		user << browse(dat, "window=keycard_auth;size=500x250")
 	return
 
 
@@ -109,13 +104,6 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 		to_chat(usr, "This device is without power.")
 		return
 	if(href_list["triggerevent"])
-		if(href_list["triggerevent"] == "Emergency Response Team")
-			ert_reason = stripped_input(usr, "Please input the reason for calling an Emergency Response Team. This may be all the briefing they get before arriving at the station.", "Response Team Justification", ert_reason)
-			if(!ert_reason)
-				to_chat(usr, "<span class='warning'>You are required to give a reason to call an ERT.</span>")
-				return
-			if(!Adjacent(usr) || usr.incapacitated())
-				return
 		event = href_list["triggerevent"]
 		screen = 2
 	if(href_list["reset"])
@@ -148,8 +136,8 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 	if(confirmed)
 		confirmed = 0
 		trigger_event(event)
-		log_game("[key_name(event_triggered_by)] triggered and [key_name(event_confirmed_by)] confirmed event [event][event=="Emergency Response Team"?". ERT reason given was '[ert_reason]'":""]")
-		message_admins("[key_name(event_triggered_by)] triggered and [key_name(event_confirmed_by)] confirmed event [event][event=="Emergency Response Team"?". ERT reason given was '[ert_reason]'":""]", 1)
+		log_game("[key_name(event_triggered_by)] triggered and [key_name(event_confirmed_by)] confirmed event [event]")
+		message_admins("[key_name(event_triggered_by)] triggered and [key_name(event_confirmed_by)] confirmed event [event]", 1)
 	reset()
 
 /obj/machinery/keycard_auth/proc/receive_request(var/obj/machinery/keycard_auth/source)
@@ -179,7 +167,7 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 			revoke_maint_all_access()
 			feedback_inc("alert_keycard_auth_maintRevoke",1)
 		if("Emergency Response Team")
-			trigger_armed_response_team(1,ert_reason)
+			trigger_armed_response_team(1)
 			feedback_inc("alert_keycard_auth_ert",1)
 
 var/global/maint_all_access = 0
