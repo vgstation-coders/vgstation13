@@ -1010,7 +1010,6 @@
 					O.show_message(text("<span class='attack'>[] has grabbed [] passively!</span>", M, src), 1)
 
 		if (I_HURT)
-			M.do_attack_animation(src)
 			var/damage = rand(10, 20)
 			if (prob(90))
 				/*
@@ -1036,7 +1035,6 @@
 
 		if (I_DISARM)
 			if(!(lying))
-				M.do_attack_animation(src)
 				if (rand(1,100) <= 85)
 					Stun(7)
 					step(src,get_dir(M,src))
@@ -1064,7 +1062,6 @@
 
 	if (health > -100)
 
-		M.do_attack_animation(src)
 		for(var/mob/O in viewers(src, null))
 			if ((O.client && !( O.blinded )))
 				O.show_message(text("<span class='danger'>The [M.name] glomps []!</span>", src), 1)
@@ -1125,7 +1122,6 @@
 	if(M.melee_damage_upper == 0)
 		M.emote("[M.friendly] [src]")
 	else
-		M.do_attack_animation(src)
 		if(M.attack_sound)
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))

@@ -74,7 +74,6 @@
 /obj/machinery/bot/attack_alien(var/mob/living/carbon/alien/user as mob)
 	if(flags & INVULNERABLE)
 		return
-	user.do_attack_animation(src)
 	src.health -= rand(15,30)*brute_dam_coeff
 	src.visible_message("<span class='danger'>[user] has slashed [src]!</span>")
 	playsound(get_turf(src), 'sound/weapons/slice.ogg', 25, 1, -1)
@@ -90,7 +89,6 @@
 		return
 	if(M.melee_damage_upper == 0)
 		return
-	M.do_attack_animation(src)
 	src.health -= M.melee_damage_upper
 	src.visible_message("<span class='danger'>[M] has [M.attacktext] [src]!</span>")
 	add_logs(M, src, "attacked", admin=0)
@@ -117,7 +115,7 @@
 			huduser.show_message(declare_message,1)
 
 
-/obj/machinery/bot/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
+/obj/machinery/bot/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(flags & INVULNERABLE)
 		return
 	if(!locked && (isscrewdriver(W) || iscrowbar(W)))
@@ -136,7 +134,6 @@
 		Emag(user)
 	else
 		if(hasvar(W,"force") && hasvar(W,"damtype"))
-			user.do_attack_animation(src)
 			switch(W.damtype)
 				if("fire")
 					src.health -= W.force * fire_dam_coeff

@@ -907,10 +907,9 @@ steam.start() -- spawns the effect
 	attack_hand(user)
 	return
 
-/obj/structure/foamedmetal/attack_hand(var/mob/living/user)
+/obj/structure/foamedmetal/attack_hand(var/mob/user)
 	user.delayNextAttack(10)
 	if ((M_HULK in user.mutations) || (prob(75 - metal*25)))
-		user.do_attack_animation(src)
 		user.visible_message("<span class='warning'>[user] smashes through \the [src].</span>","<span class='notice'>You smash through \the [src].</span>")
 		qdel(src)
 	else
@@ -923,8 +922,7 @@ steam.start() -- spawns the effect
 	if(prob(75 - metal*25))
 		qdel(src)
 
-/obj/structure/foamedmetal/attackby(var/obj/item/I, var/mob/living/user)
-	user.do_attack_animation(src)
+/obj/structure/foamedmetal/attackby(var/obj/item/I, var/mob/user)
 	user.delayNextAttack(10)
 	if (istype(I, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = I
@@ -974,23 +972,21 @@ steam.start() -- spawns the effect
 	icon_plating = "foamedmetal"
 	can_exist_under_lattice = 1
 
-/turf/simulated/floor/foamedmetal/attack_hand(mob/living/user as mob)
+/turf/simulated/floor/foamedmetal/attack_hand(mob/user as mob)
 	user.delayNextAttack(10)
 	if ((M_HULK in user.mutations) || (prob(50)))
-		user.do_attack_animation(src)
 		user.visible_message("<span class='warning'>[user] smashes through \the [src].</span>","<span class='notice'>You smash through \the [src].</span>")
 		src.ChangeTurf(get_base_turf(src.z))
 	else
 		to_chat(user, "<span class='notice'>You hit \the [src] but bounce off it.</span>")
 
-/turf/simulated/floor/foamedmetal/attackby(obj/item/C as obj, mob/living/user as mob)
+/turf/simulated/floor/foamedmetal/attackby(obj/item/C as obj, mob/user as mob)
 	if(!(locate(/obj/structure/lattice) in contents))
 		if(istype(C, /obj/item/stack/rods))
 			return
 	else if(istype(C, /obj/item/stack/tile))
 		return
 	user.delayNextAttack(10)
-	user.do_attack_animation(src)
 	if (istype(C, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = C
 		G.affecting.forceMove(src.loc)
