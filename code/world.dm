@@ -374,10 +374,7 @@ var/savefile/panicfile
 		s += "<b>[config.server_name]</b> &#8212; "
 
 
-	s += {"<b>[station_name()]</b>"
-		(
-		
-		)"}
+	s += {"<b>[station_name()]</b>""}
 	var/list/features = list()
 
 	if(ticker)
