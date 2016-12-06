@@ -12,14 +12,16 @@
 /atom/proc/attackby(obj/item/W, mob/user)
 	return
 
-/atom/movable/attackby(obj/item/W, mob/user)
+/atom/movable/attackby(obj/item/W, mob/living/user)
+	user.do_attack_animation(src)
 	if(W && !(W.flags&NOBLUDGEON))
 		visible_message("<span class='danger'>[src] has been hit by [user] with [W].</span>")
 
-/mob/living/attackby(obj/item/I, mob/user, var/no_delay = 0, var/originator = null)
+/mob/living/attackby(obj/item/I, mob/living/user, var/no_delay = 0, var/originator = null)
 	if(!no_delay)
 		user.delayNextAttack(10)
 	if(istype(I) && ismob(user))
+		user.do_attack_animation(src)
 		if(originator)
 			I.attack(src, user, null, originator)
 		else

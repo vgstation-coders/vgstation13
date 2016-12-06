@@ -348,6 +348,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(M.melee_damage_upper == 0)
 		M.emote("[M.friendly] [src]")
 	else
+		M.do_attack_animation(src)
 		M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.attacktext] [src.name] ([src.ckey])</font>")
 		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.attacktext] by [M.name] ([M.ckey])</font>")
 		if(M.attack_sound)
@@ -405,6 +406,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			visible_message("<span class='warning'>[M] has grabbed [src] passively!</span>")
 
 		if(I_HURT, I_DISARM)
+			M.do_attack_animation(src)
 			adjustBruteLoss(harm_intent_damage)
 
 			visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
@@ -455,6 +457,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 					O.show_message(text("<span class='warning'>[] has grabbed [] passively!</span>", M, src), 1)
 
 		if(I_HURT, I_DISARM)
+			M.do_attack_animation(src)
 			var/damage = rand(15, 30)
 			visible_message("<span class='danger'>[M] has slashed at [src]!</span>")
 			adjustBruteLoss(damage)
@@ -469,7 +472,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 
 		else
-
+			L.do_attack_animation(src)
 			var/damage = rand(5, 10)
 			visible_message("<span class='danger'>[L] bites [src]!</span>")
 
@@ -502,7 +505,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	return
 
 
-/mob/living/simple_animal/attackby(var/obj/item/O as obj, var/mob/user as mob)  //Marker -Agouri
+/mob/living/simple_animal/attackby(var/obj/item/O as obj, var/mob/living/user as mob)  //Marker -Agouri
 	if(istype(O, /obj/item/stack/medical))
 		user.delayNextAttack(4)
 		if(stat != DEAD)
@@ -522,6 +525,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				return 1
 	else
 		user.delayNextAttack(8)
+		user.do_attack_animation(src)
 		if(O.force)
 			var/damage = O.force
 			if (O.damtype == HALLOSS)
