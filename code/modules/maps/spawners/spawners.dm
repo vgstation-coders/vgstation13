@@ -1039,7 +1039,7 @@
 		/obj/item/weapon/card/id/captains_spare,
 		/obj/item/weapon/melee/energy/axe/rusty,
 		/obj/item/voucher/free_item,
-		/obj/item/clothing/accessory/holster/,
+		/obj/item/clothing/accessory/holster,
 		/obj/item/weapon/gun/projectile/russian,
 		/obj/item/weapon/gun/mahoguny,
 		/obj/item/weapon/gun/stickybomb,
@@ -1048,7 +1048,9 @@
 		/obj/item/clothing/head/collectable/petehat,
 		/obj/item/clothing/head/helmet/tactical/HoS/dermal,
 		/obj/item/clothing/under/chameleon,
-		/obj/item/clothing/gloves/anchor_arms
+		/obj/item/clothing/gloves/anchor_arms,
+		/obj/item/clothing/suit/space/rig/soviet/complete,
+		/obj/item/clothing/suit/space/rig/nazi/complete
 		)
 
 /obj/map/spawner/safe/medical
@@ -1100,13 +1102,15 @@
 	/obj/item/clothing/under/sexyclown,
 	/obj/item/clothing/suit/armor/laserproof,
 	/obj/item/voucher/free_item,
-	/obj/item/clothing/accessory/holster/,
+	/obj/item/clothing/accessory/holster,
 	/obj/item/clothing/head/helmet/siren,
 	/obj/item/clothing/glasses/scanner/night,
 	/obj/item/clothing/head/collectable/petehat,
 	/obj/item/clothing/head/helmet/tactical/HoS/dermal,
 	/obj/item/clothing/under/chameleon,
-	/obj/item/clothing/gloves/anchor_arms
+	/obj/item/clothing/gloves/anchor_arms,
+	/obj/item/clothing/suit/space/rig/soviet/complete,
+	/obj/item/clothing/suit/space/rig/nazi/complete
 )
 
 /obj/map/spawner/safe/medal
