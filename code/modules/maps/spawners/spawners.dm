@@ -1069,7 +1069,7 @@
 	/obj/item/weapon/gun/projectile/deagle/gold,
 	/obj/item/weapon/bikehorn,
 	/obj/item/weapon/storage/box/emps,
-	/obj/item/weapon/gun/projectile/automatic/mini_uzi
+	/obj/item/weapon/gun/projectile/automatic/mini_uzi,
 	/obj/item/weapon/melee/energy/axe/rusty
 )
 
