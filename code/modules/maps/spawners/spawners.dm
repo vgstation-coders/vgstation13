@@ -1001,9 +1001,9 @@
 		/obj/item/weapon/storage/box/handcuffs,
 		)
 
-		
+
 // Safe /////////////////////////////////////////////////////
-//Does not come with a safe.  
+//Does not come with a safe.
 /obj/map/spawner/safe/any
 	name = "safe spawner"
 	icon_state = "safe_any"
@@ -1036,7 +1036,7 @@
 		/obj/item/weapon/reagent_containers/glass/bottle/frostoil,
 		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
 		/obj/item/weapon/storage/pill_bottle/nanobot,
-		/obj/item/weapon/card/id/captains_spare
+		/obj/item/weapon/card/id/captains_spare,
 		/obj/item/weapon/melee/energy/axe/rusty
 		)
 
@@ -1050,8 +1050,8 @@
 	/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
 	/obj/item/weapon/storage/pill_bottle/nanobot
 )
-	
-	
+
+
 /obj/map/spawner/safe/food
 	name = "safe food spawner"
 	icon_state = "safe_medical"
