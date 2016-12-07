@@ -1000,3 +1000,100 @@
 		/obj/item/weapon/storage/firstaid/regular,
 		/obj/item/weapon/storage/box/handcuffs,
 		)
+
+		
+// Safe /////////////////////////////////////////////////////
+//Does not come with a safe.  
+/obj/map/spawner/safe/any
+	name = "safe spawner"
+	icon_state = "safe_any"
+	to_spawn = list(
+		/obj/item/weapon/storage/pill_bottle/creatine,
+		/obj/item/weapon/storage/firstaid/adv,
+		/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
+		/obj/item/weapon/shield/energy,
+		/obj/item/weapon/reagent_containers/glass/bottle/random,
+		/obj/item/clothing/accessory/storage/webbing,
+		/obj/item/weapon/gun/energy/gun/nuclear,
+		/obj/item/weapon/gun/projectile/mateba,
+		/obj/item/weapon/gun/projectile/deagle/gold,
+		/obj/item/clothing/accessory/medal,
+		/obj/item/clothing/accessory/medal/conduct,
+		/obj/item/clothing/accessory/medal/bronze_heart,
+		/obj/item/clothing/accessory/medal/nobel_science,
+		/obj/item/clothing/accessory/medal/silver,
+		/obj/item/clothing/accessory/medal/silver/valor,
+		/obj/item/clothing/accessory/medal/silver/security,
+		/obj/item/clothing/accessory/medal/gold,
+		/obj/item/clothing/accessory/medal/gold/captain,
+		/obj/item/clothing/accessory/medal/gold/heroism,
+		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped,
+		/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
+		/obj/item/weapon/bikehorn,
+		/obj/item/weapon/storage/box/emps,
+		/obj/item/weapon/gun/projectile/automatic/mini_uzi,
+		/obj/item/clothing/suit/armor/laserproof,
+		/obj/item/weapon/reagent_containers/glass/bottle/frostoil,
+		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
+		/obj/item/weapon/storage/pill_bottle/nanobot,
+		/obj/item/weapon/card/id/captains_spare
+		/obj/item/weapon/melee/energy/axe/rusty
+		)
+
+/obj/map/spawner/safe/medical
+	name = "safe medical spawner"
+	icon_state = "safe_medical"
+	to_spawn = list(/obj/item/weapon/storage/pill_bottle/creatine,
+	/obj/item/weapon/storage/firstaid/adv,
+	/obj/item/weapon/reagent_containers/glass/bottle/random,
+	/obj/item/weapon/reagent_containers/glass/bottle/frostoil,
+	/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
+	/obj/item/weapon/storage/pill_bottle/nanobot
+)
+	
+	
+/obj/map/spawner/safe/food
+	name = "safe food spawner"
+	icon_state = "safe_medical"
+	to_spawn = list(/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
+	/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped,
+	/obj/item/weapon/reagent_containers/food/snacks/no_raisin
+)
+
+/obj/map/spawner/safe/weapon
+	name = "safe weapon spawner"
+	icon_state = "safe_weapon"
+	to_spawn = list(/obj/item/weapon/shield/energy,
+	/obj/item/weapon/gun/energy/gun/nuclear,
+	/obj/item/weapon/gun/projectile/mateba,
+	/obj/item/weapon/gun/projectile/deagle/gold,
+	/obj/item/weapon/bikehorn,
+	/obj/item/weapon/storage/box/emps,
+	/obj/item/weapon/gun/projectile/automatic/mini_uzi
+	/obj/item/weapon/melee/energy/axe/rusty
+)
+
+/obj/map/spawner/safe/clothing
+	name = "safe clothing spawner"
+	icon_state = "safe_clothing"
+	to_spawn = list(/obj/item/weapon/shield/energy,
+	/obj/item/clothing/accessory/storage/webbing,
+	/obj/item/clothing/under/sexyclown,
+	/obj/item/clothing/suit/armor/laserproof
+)
+
+/obj/map/spawner/safe/medal
+	name = "safe medal spawner"
+	icon_state = "safe_medal"
+	to_spawn = list(/obj/item/clothing/accessory/medal,
+	/obj/item/clothing/accessory/medal/conduct,
+	/obj/item/clothing/accessory/medal/bronze_heart,
+	/obj/item/clothing/accessory/medal/nobel_science,
+	/obj/item/clothing/accessory/medal/silver,
+	/obj/item/clothing/accessory/medal/silver/valor,
+	/obj/item/clothing/accessory/medal/silver/security,
+	/obj/item/clothing/accessory/medal/gold,
+	/obj/item/clothing/accessory/medal/gold/captain,
+	/obj/item/clothing/accessory/medal/gold/heroism
+)
+
