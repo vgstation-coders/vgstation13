@@ -1009,11 +1009,18 @@
 	icon_state = "safe_any"
 	to_spawn = list(
 		/obj/item/weapon/storage/pill_bottle/creatine,
+		/obj/item/weapon/storage/pill_bottle/nanobot,
+		/obj/item/weapon/reagent_containers/glass/bottle/frostoil,
+		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
 		/obj/item/weapon/storage/firstaid/adv,
+		/obj/item/weapon/gun/syringe/rapidsyringe,
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
 		/obj/item/weapon/shield/energy,
 		/obj/item/weapon/reagent_containers/glass/bottle/random,
-		/obj/item/clothing/accessory/storage/webbing,
+		/obj/item/weapon/gun/projectile/russian,
+		/obj/item/weapon/bikehorn,
+		/obj/item/weapon/storage/box/emps,
+		/obj/item/weapon/card/id/captains_spare,
 		/obj/item/clothing/accessory/medal,
 		/obj/item/clothing/accessory/medal/conduct,
 		/obj/item/clothing/accessory/medal/bronze_heart,
@@ -1024,18 +1031,9 @@
 		/obj/item/clothing/accessory/medal/gold,
 		/obj/item/clothing/accessory/medal/gold/captain,
 		/obj/item/clothing/accessory/medal/gold/heroism,
-		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped,
-		/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
-		/obj/item/weapon/bikehorn,
-		/obj/item/weapon/storage/box/emps,
+		/obj/item/clothing/accessory/storage/webbing,
 		/obj/item/clothing/suit/armor/laserproof,
-		/obj/item/weapon/reagent_containers/glass/bottle/frostoil,
-		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
-		/obj/item/weapon/storage/pill_bottle/nanobot,
-		/obj/item/weapon/card/id/captains_spare,
-		/obj/item/voucher/free_item,
 		/obj/item/clothing/accessory/holster,
-		/obj/item/weapon/gun/projectile/russian,
 		/obj/item/clothing/glasses/scanner/night,
 		/obj/item/clothing/head/collectable/petehat,
 		/obj/item/clothing/head/helmet/tactical/HoS/dermal,
@@ -1043,7 +1041,16 @@
 		/obj/item/clothing/gloves/anchor_arms,
 		/obj/item/complete/rig/soviet,
 		/obj/item/complete/rig/nazi,
-		)
+		/obj/item/weapon/reagent_containers/food/snacks/superbiteburger,
+		/obj/item/weapon/reagent_containers/food/snacks/roburger,
+		/obj/item/weapon/reagent_containers/food/snacks/mommispaghetti,
+		/obj/item/weapon/reagent_containers/food/snacks/yellowcake,
+		/obj/item/weapon/reagent_containers/food/snacks/muffin/bluespace,
+		/obj/item/weapon/reagent_containers/food/snacks/potentham,
+		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped,
+		/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
+		/obj/item/voucher/free_item
+)
 
 /obj/map/spawner/safe/medical
 	name = "safe medical spawner"
@@ -1054,6 +1061,7 @@
 	/obj/item/weapon/reagent_containers/glass/bottle/frostoil,
 	/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
 	/obj/item/weapon/storage/pill_bottle/nanobot,
+	/obj/item/weapon/gun/syringe/rapidsyringe,
 	/obj/item/voucher/free_item
 )
 
@@ -1062,10 +1070,16 @@
 	name = "safe food spawner"
 	icon_state = "safe_food"
 	to_spawn = list(/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
+	/obj/item/voucher/free_item,
+	/obj/item/voucher/free_item/hot_drink,
 	/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped,
 	/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
-	/obj/item/voucher/free_item,
-	/obj/item/voucher/free_item/hot_drink
+	/obj/item/weapon/reagent_containers/food/snacks/superbiteburger,
+	/obj/item/weapon/reagent_containers/food/snacks/roburger,
+	/obj/item/weapon/reagent_containers/food/snacks/mommispaghetti,
+	/obj/item/weapon/reagent_containers/food/snacks/yellowcake,
+	/obj/item/weapon/reagent_containers/food/snacks/muffin/bluespace,
+	/obj/item/weapon/reagent_containers/food/snacks/potentham
 )
 
 /obj/map/spawner/safe/weapon
