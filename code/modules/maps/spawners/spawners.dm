@@ -1038,7 +1038,17 @@
 		/obj/item/weapon/storage/pill_bottle/nanobot,
 		/obj/item/weapon/card/id/captains_spare,
 		/obj/item/weapon/melee/energy/axe/rusty,
-		/obj/item/voucher/free_item
+		/obj/item/voucher/free_item,
+		/obj/item/clothing/accessory/holster/,
+		/obj/item/weapon/gun/projectile/russian,
+		/obj/item/weapon/gun/mahoguny,
+		/obj/item/weapon/gun/stickybomb,
+		/obj/item/clothing/head/helmet/siren,
+		/obj/item/clothing/glasses/scanner/night,
+		/obj/item/clothing/head/collectable/petehat,
+		/obj/item/clothing/head/helmet/tactical/HoS/dermal,
+		/obj/item/clothing/under/chameleon,
+		/obj/item/clothing/gloves/anchor_arms
 		)
 
 /obj/map/spawner/safe/medical
@@ -1050,18 +1060,18 @@
 	/obj/item/weapon/reagent_containers/glass/bottle/frostoil,
 	/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
 	/obj/item/weapon/storage/pill_bottle/nanobot,
-	/obj/item/voucher/free_item,
-	/obj/item/voucher/free_item/hot_drink
+	/obj/item/voucher/free_item
 )
 
 
 /obj/map/spawner/safe/food
 	name = "safe food spawner"
-	icon_state = "safe_medical"
+	icon_state = "safe_food"
 	to_spawn = list(/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
 	/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped,
 	/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
-	/obj/item/voucher/free_item
+	/obj/item/voucher/free_item,
+	/obj/item/voucher/free_item/hot_drink
 )
 
 /obj/map/spawner/safe/weapon
@@ -1075,7 +1085,11 @@
 	/obj/item/weapon/storage/box/emps,
 	/obj/item/weapon/gun/projectile/automatic/mini_uzi,
 	/obj/item/weapon/melee/energy/axe/rusty,
-	/obj/item/voucher/free_item
+	/obj/item/voucher/free_item,
+	/obj/item/weapon/gun/projectile/russian,
+	/obj/item/weapon/gun/mahoguny,
+	/obj/item/weapon/gun/stickybomb,
+	/obj/item/weapon/gun/siren
 )
 
 /obj/map/spawner/safe/clothing
@@ -1085,7 +1099,14 @@
 	/obj/item/clothing/accessory/storage/webbing,
 	/obj/item/clothing/under/sexyclown,
 	/obj/item/clothing/suit/armor/laserproof,
-	/obj/item/voucher/free_item
+	/obj/item/voucher/free_item,
+	/obj/item/clothing/accessory/holster/,
+	/obj/item/clothing/head/helmet/siren,
+	/obj/item/clothing/glasses/scanner/night,
+	/obj/item/clothing/head/collectable/petehat,
+	/obj/item/clothing/head/helmet/tactical/HoS/dermal,
+	/obj/item/clothing/under/chameleon,
+	/obj/item/clothing/gloves/anchor_arms
 )
 
 /obj/map/spawner/safe/medal
