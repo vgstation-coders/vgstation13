@@ -3,6 +3,7 @@
 
 /area/engine
 	icon_state = "engine"
+	shuttle_can_crush = FALSE
 
 	fore
 		name = "\improper Fore"
