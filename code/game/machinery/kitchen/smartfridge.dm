@@ -1,5 +1,4 @@
-/* SmartFridge.  Much todo
-*/
+#define MAX_SHELVES 5
 /obj/machinery/smartfridge
 	name = "\improper SmartFridge"
 	icon = 'icons/obj/vending.dmi'
@@ -13,10 +12,7 @@
 	flags = NOREACT
 	var/icon_on = "smartfridge"
 	var/icon_off = "smartfridge-off"
-	var/item_quants = list()
-	//var/ispowered = 1 //starts powered
-	//var/isbroken = 0
-	//OBSOLETE: That's what the BROKEN and NOPOWER stat bitflags are for
+	var/list/datum/fridge_pile/piles = list()
 	var/opened = 0.0
 
 	var/list/accepted_types = list(	/obj/item/weapon/reagent_containers/food/snacks/grown,
@@ -36,6 +32,28 @@
 		else
 			set_light(0)
 
+/datum/fridge_pile
+	var/name = ""
+	var/obj/machinery/smartfridge/fridge
+	var/amount = 1
+	var/shelf = 1
+
+/datum/fridge_pile/New(var/name, var/fridge, var/amount)
+	src.name = name
+	src.fridge = fridge
+	src.amount = amount
+
+/datum/fridge_pile/Destroy()
+	fridge.piles -= src.name
+	fridge = null
+
+/datum/fridge_pile/proc/addAmount(var/amt)
+	amount += amt
+
+/datum/fridge_pile/proc/removeAmount(var/amt)
+	amount -= amt
+	if(amount <= 0)
+		qdel(src)
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -230,10 +248,11 @@
 			if(!user.drop_item(O, src))
 				return 1
 
-			if(item_quants[O.name])
-				item_quants[O.name]++
+			var/datum/fridge_pile/thisPile = piles[O.name]
+			if(istype(thisPile))
+				thisPile.addAmount(1)
 			else
-				item_quants[O.name] = 1
+				piles[O.name] = new/datum/fridge_pile(O.name, src, 1)
 			user.visible_message("<span class='notice'>[user] has added \the [O] to \the [src].", \
 								 "<span class='notice'>You add \the [O] to \the [src].")
 
@@ -247,10 +266,11 @@
 					return 1
 				else
 					bag.remove_from_storage(G,src)
-					if(item_quants[G.name])
-						item_quants[G.name]++
+					var/datum/fridge_pile/thisPile = piles[G.name]
+					if(istype(thisPile))
+						thisPile.addAmount(1)
 					else
-						item_quants[G.name] = 1
+						piles[G.name] = new/datum/fridge_pile(G.name, src, 1)
 					objects_loaded++
 		if(objects_loaded)
 
@@ -270,7 +290,7 @@
 	else
 		to_chat(user, "<span class='notice'>\The [src] smartly refuses [O].</span>")
 		return 1
-	item_quants = sortList(item_quants)
+	piles = sortList(piles)
 	updateUsrDialog()
 	return 1
 
@@ -297,23 +317,50 @@
 	if (contents.len == 0)
 		dat += "<font color = 'red'>No product loaded!</font>"
 	else
-		for (var/O in item_quants)
-			if(item_quants[O] > 0)
-				var/N = item_quants[O]
-				var/escaped_name = url_encode(O) //This is necessary to contain special characters in Topic() links, otherwise, BYOND sees "Dex+" and drops the +.
+		var/list/shelves[MAX_SHELVES]
+		for(var/i = 1 to MAX_SHELVES)
+			shelves[i] = list()
 
-				dat += {"<FONT color = 'blue'><B>[capitalize(O)]</B>:
-					[N] </font>
-					<a href='byond://?src=\ref[src];vend=[escaped_name];amount=1'>Vend</A> "}
-				if(N > 5)
-					dat += "(<a href='byond://?src=\ref[src];vend=[escaped_name];amount=5'>x5</A>)"
-					if(N > 10)
-						dat += "(<a href='byond://?src=\ref[src];vend=[escaped_name];amount=10'>x10</A>)"
-						if(N > 25)
-							dat += "(<a href='byond://?src=\ref[src];vend=[escaped_name];amount=25'>x25</A>)"
-				if(N > 1)
-					dat += "(<a href='?src=\ref[src];vend=[escaped_name];amount=[N]'>All</A>)"
-				dat += "<br>"
+		for(var/key in piles)
+			var/datum/fridge_pile/P = piles[key]
+			shelves[P.shelf] += P
+
+		var/shelfcounter = 1
+		for(var/list/shelf in shelves)
+			if(shelfcounter != 1)
+				dat += "<hr>"
+
+			var/pilecounter = 1
+			for(var/datum/fridge_pile/P in shelf)
+				var/escaped_name = url_encode(P.name) //This is necessary to contain special characters in Topic() links, otherwise, BYOND sees "Dex+" and drops the +.
+				var/color = "#f2f2f2"
+				if(pilecounter % 2 == 0)
+					color = "#e6e6e6"
+				dat += "<div style='background-color: [color];'>"
+
+				dat += "<FONT color = 'blue'><B>[capitalize(P.name)]</B>: [P.amount] </font>"
+				dat += "<a href='byond://?src=\ref[src];pile=[escaped_name];amount=1'>Vend</A> "
+				if(P.amount > 5)
+					dat += "(<a href='byond://?src=\ref[src];pile=[escaped_name];amount=5'>x5</A>)"
+					if(P.amount > 10)
+						dat += "(<a href='byond://?src=\ref[src];pile=[escaped_name];amount=10'>x10</A>)"
+						if(P.amount > 25)
+							dat += "(<a href='byond://?src=\ref[src];pile=[escaped_name];amount=25'>x25</A>)"
+				if(P.amount > 1)
+					dat += "(<a href='?src=\ref[src];pile=[escaped_name];amount=[P.amount]'>All</A>)"
+
+				dat += "<span style='position:absolute;right:10px'>"
+				if(P.shelf > 1)
+					dat += "<a href='?src=\ref[src];pile=[escaped_name];shelf=up'>&#8743;</A>"
+				if(P.shelf < MAX_SHELVES)
+					dat += "<a href='?src=\ref[src];pile=[escaped_name];shelf=down'>&#8744;</A>"
+				dat += "</span>"
+
+				dat += "</div>"
+
+				pilecounter++
+			shelfcounter++
+
 
 		dat += "</TT>"
 	user << browse("<HEAD><TITLE>[src] Supplies</TITLE></HEAD><TT>[dat]</TT>", "window=smartfridge")
@@ -325,20 +372,30 @@
 		return
 	usr.set_machine(src)
 
-	var/N = href_list["vend"]
-	var/amount = text2num(href_list["amount"])
+	var/N = href_list["pile"]
+	if(href_list["amount"])
+		var/amount = text2num(href_list["amount"])
+		var/datum/fridge_pile/thisPile = piles[N]
+		if(!istype(thisPile)) // Sanity check, there are probably ways to press the button when it shouldn't be possible.
+			return
 
-	if(item_quants[N] <= 0) // Sanity check, there are probably ways to press the button when it shouldn't be possible.
-		return
+		thisPile.removeAmount(amount)
 
-	item_quants[N] = max(item_quants[N] - amount, 0)
+		var/i = amount
+		for(var/obj/O in contents)
+			if(O.name == N)
+				O.forceMove(src.loc)
+				i--
+				if(i <= 0)
+					break
 
-	var/i = amount
-	for(var/obj/O in contents)
-		if(O.name == N)
-			O.forceMove(src.loc)
-			i--
-			if(i <= 0)
-				break
+	else if(href_list["shelf"])
+		var/datum/fridge_pile/thisPile = piles[N]
+		if(href_list["shelf"] == "up" && thisPile.shelf > 1)
+			thisPile.shelf -= 1
+		else if(href_list["shelf"] == "down" && thisPile.shelf < MAX_SHELVES)
+			thisPile.shelf += 1
 
 	src.updateUsrDialog()
+
+#undef MAX_SHELVES
