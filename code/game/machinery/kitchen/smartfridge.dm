@@ -14,6 +14,7 @@
 	var/icon_off = "smartfridge-off"
 	var/list/datum/fridge_pile/piles = list()
 	var/opened = 0.0
+	var/display_miniicons = FALSE
 
 	var/list/accepted_types = list(	/obj/item/weapon/reagent_containers/food/snacks/grown,
 									/obj/item/weapon/grown,
@@ -37,11 +38,13 @@
 	var/obj/machinery/smartfridge/fridge
 	var/amount = 1
 	var/shelf = 1
+	var/mini_icon
 
-/datum/fridge_pile/New(var/name, var/fridge, var/amount)
+/datum/fridge_pile/New(var/name, var/fridge, var/amount, var/mini_icon)
 	src.name = name
 	src.fridge = fridge
 	src.amount = amount
+	src.mini_icon = mini_icon
 
 /datum/fridge_pile/Destroy()
 	fridge.piles -= src.name
@@ -227,6 +230,11 @@
 		if(!(stat & BROKEN))
 			icon_state = icon_off
 
+/obj/machinery/smartfridge/kick_act()
+	display_miniicons = !display_miniicons
+	src.updateUsrDialog()
+	..()
+
 
 /*******************
 *   Item Adding
@@ -252,7 +260,7 @@
 			if(istype(thisPile))
 				thisPile.addAmount(1)
 			else
-				piles[O.name] = new/datum/fridge_pile(O.name, src, 1)
+				piles[O.name] = new/datum/fridge_pile(O.name, src, 1, bicon(O))
 			user.visible_message("<span class='notice'>[user] has added \the [O] to \the [src].", \
 								 "<span class='notice'>You add \the [O] to \the [src].")
 
@@ -270,7 +278,7 @@
 					if(istype(thisPile))
 						thisPile.addAmount(1)
 					else
-						piles[G.name] = new/datum/fridge_pile(G.name, src, 1)
+						piles[G.name] = new/datum/fridge_pile(G.name, src, 1, bicon(G))
 					objects_loaded++
 		if(objects_loaded)
 
@@ -338,6 +346,9 @@
 					color = "#e6e6e6"
 				dat += "<div style='background-color: [color];'>"
 
+				if(display_miniicons)
+					dat += "[P.mini_icon]"
+
 				dat += "<FONT color = 'blue'><B>[capitalize(P.name)]</B>: [P.amount] </font>"
 				dat += "<a href='byond://?src=\ref[src];pile=[escaped_name];amount=1'>Vend</A> "
 				if(P.amount > 5)
@@ -349,11 +360,9 @@
 				if(P.amount > 1)
 					dat += "(<a href='?src=\ref[src];pile=[escaped_name];amount=[P.amount]'>All</A>)"
 
-				dat += "<span style='position:absolute;right:10px'>"
-				if(P.shelf > 1)
-					dat += "<a href='?src=\ref[src];pile=[escaped_name];shelf=up'>&#8743;</A>"
-				if(P.shelf < MAX_SHELVES)
-					dat += "<a href='?src=\ref[src];pile=[escaped_name];shelf=down'>&#8744;</A>"
+				dat += "<span style='position:absolute;right:10px;background-color: [color];'>"
+				dat += P.shelf > 1 ? "<a href='?src=\ref[src];pile=[escaped_name];shelf=up'>&#8743;</A>" : "&nbsp"
+				dat += P.shelf < MAX_SHELVES ? "<a href='?src=\ref[src];pile=[escaped_name];shelf=down'>&#8744;</A>" : "&nbsp"
 				dat += "</span>"
 
 				dat += "</div>"
