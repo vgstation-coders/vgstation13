@@ -1,4 +1,7 @@
 #define MAX_SHELVES 5
+#define MINIICONS_OFF 0
+#define MINIICONS_ON 1
+#define MINIICONS_UNCROPPED 2
 /obj/machinery/smartfridge
 	name = "\improper SmartFridge"
 	icon = 'icons/obj/vending.dmi'
@@ -320,10 +323,58 @@
 	if(stat & NOPOWER)
 		return
 
-	var/dat = "<TT><b>Select an item:</b><br>"
+	var/dat = list()
+
+	//I don't know/don't care enough to convert this into a proper browser popup. Cry for help or just plain lazy? You decide!
+	dat += {"
+	<style>
+		.fridgeIcon img{
+			/* 64x64 futureproofing! */
+			width: 32px;
+			height: 32px;
+			-ms-interpolation-mode: nearest-neighbor;
+		}
+
+		.cropped img{
+			/* 32x32 is a little too big for the fridge menu, and most of it is empty space for small icons, so we're going to crop some out */
+			margin-top: -8px; margin-bottom: -5px;
+		}
+
+		table {
+		    border-collapse: collapse;
+		    width: 100%;
+		}
+
+		/* Oh wouldn't things be so easy if this shit just worked in IE7?
+		tr:nth-child(even){background-color: #e6e6e6}
+		tr:nth-child(odd){background-color: #f2f2f2;}
+		*/
+
+		.pileName {
+			width: 100%;
+			vertical-align: middle;
+		}
+
+		.shelfButton {
+			vertical-align: bottom;
+		}
+	</style>
+	"}
+
+	if (contents.len != 0)
+		var/imagedesc
+		switch(display_miniicons)
+			if(MINIICONS_ON)
+				imagedesc = "On"
+			if(MINIICONS_UNCROPPED)
+				imagedesc = "Uncropped"
+			if(MINIICONS_OFF)
+				imagedesc = "Off"
+		dat += "<span style='position:absolute;right:2.5%;'><TT>Images: <a href='byond://?src=\ref[src];display_miniicons=1;'>[imagedesc]</A></TT></span>"
+	dat += "<TT><b>Select an item:</b></TT>"
 
 	if (contents.len == 0)
-		dat += "<font color = 'red'>No product loaded!</font>"
+		dat += "<font color = 'red'> No product loaded!</font>"
 	else
 		var/list/shelves[MAX_SHELVES]
 		for(var/i = 1 to MAX_SHELVES)
@@ -335,20 +386,19 @@
 
 		var/shelfcounter = 1
 		for(var/list/shelf in shelves)
+			var/pilecounter = 1
+
 			if(shelfcounter != 1)
 				dat += "<hr>"
+			dat += "<table>"
 
-			var/pilecounter = 1
 			for(var/datum/fridge_pile/P in shelf)
 				var/escaped_name = url_encode(P.name) //This is necessary to contain special characters in Topic() links, otherwise, BYOND sees "Dex+" and drops the +.
-				var/color = "#f2f2f2"
-				if(pilecounter % 2 == 0)
-					color = "#e6e6e6"
-				dat += "<div style='background-color: [color];'>"
-
+				var/color = pilecounter % 2 == 0 ? "#e6e6e6" : "#f2f2f2"
+				dat += "<tr style='background-color:[color]'>"
 				if(display_miniicons)
-					dat += "[P.mini_icon]"
-
+					dat += "<td class='fridgeIcon [display_miniicons == MINIICONS_UNCROPPED ? "" : "cropped"]'>[P.mini_icon]</td>"
+				dat += "<td class='pileName'><TT>"
 				dat += "<FONT color = 'blue'><B>[capitalize(P.name)]</B>: [P.amount] </font>"
 				dat += "<a href='byond://?src=\ref[src];pile=[escaped_name];amount=1'>Vend</A> "
 				if(P.amount > 5)
@@ -359,19 +409,20 @@
 							dat += "(<a href='byond://?src=\ref[src];pile=[escaped_name];amount=25'>x25</A>)"
 				if(P.amount > 1)
 					dat += "(<a href='?src=\ref[src];pile=[escaped_name];amount=[P.amount]'>All</A>)"
+				dat += "</TT></td>"
 
-				dat += "<span style='position:absolute;right:10px;background-color: [color];'>"
+				dat += "<td class='shelfButton'><TT>"
 				dat += P.shelf > 1 ? "<a href='?src=\ref[src];pile=[escaped_name];shelf=up'>&#8743;</A>" : "&nbsp"
 				dat += P.shelf < MAX_SHELVES ? "<a href='?src=\ref[src];pile=[escaped_name];shelf=down'>&#8744;</A>" : "&nbsp"
-				dat += "</span>"
+				dat += "</TT></td>"
 
-				dat += "</div>"
-
+				dat += "</tr>"
 				pilecounter++
+
+			dat += "</table>"
 			shelfcounter++
 
-
-		dat += "</TT>"
+	dat = jointext(dat,"") //Optimize BYOND's shittiness by making "dat" actually a list of strings and join it all together afterwards! Yes, I'm serious, this is actually a big deal
 	user << browse("<HEAD><TITLE>[src] Supplies</TITLE></HEAD><TT>[dat]</TT>", "window=smartfridge")
 	onclose(user, "smartfridge")
 	return
@@ -405,6 +456,18 @@
 		else if(href_list["shelf"] == "down" && thisPile.shelf < MAX_SHELVES)
 			thisPile.shelf += 1
 
+	else if(href_list["display_miniicons"])
+		switch(display_miniicons)
+			if(MINIICONS_ON)
+				display_miniicons = MINIICONS_UNCROPPED
+			if(MINIICONS_UNCROPPED)
+				display_miniicons = MINIICONS_OFF
+			if(MINIICONS_OFF)
+				display_miniicons = MINIICONS_ON
+
 	src.updateUsrDialog()
 
 #undef MAX_SHELVES
+#undef MINIICONS_ON
+#undef MINIICONS_OFF
+#undef MINIICONS_UNCROPPED
