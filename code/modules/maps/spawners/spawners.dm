@@ -1014,9 +1014,6 @@
 		/obj/item/weapon/shield/energy,
 		/obj/item/weapon/reagent_containers/glass/bottle/random,
 		/obj/item/clothing/accessory/storage/webbing,
-		/obj/item/weapon/gun/energy/gun/nuclear,
-		/obj/item/weapon/gun/projectile/mateba,
-		/obj/item/weapon/gun/projectile/deagle/gold,
 		/obj/item/clothing/accessory/medal,
 		/obj/item/clothing/accessory/medal/conduct,
 		/obj/item/clothing/accessory/medal/bronze_heart,
@@ -1031,26 +1028,21 @@
 		/obj/item/weapon/reagent_containers/food/snacks/no_raisin,
 		/obj/item/weapon/bikehorn,
 		/obj/item/weapon/storage/box/emps,
-		/obj/item/weapon/gun/projectile/automatic/mini_uzi,
 		/obj/item/clothing/suit/armor/laserproof,
 		/obj/item/weapon/reagent_containers/glass/bottle/frostoil,
 		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
 		/obj/item/weapon/storage/pill_bottle/nanobot,
 		/obj/item/weapon/card/id/captains_spare,
-		/obj/item/weapon/melee/energy/axe/rusty,
 		/obj/item/voucher/free_item,
 		/obj/item/clothing/accessory/holster,
 		/obj/item/weapon/gun/projectile/russian,
-		/obj/item/weapon/gun/mahoguny,
-		/obj/item/weapon/gun/stickybomb,
-		/obj/item/clothing/head/helmet/siren,
 		/obj/item/clothing/glasses/scanner/night,
 		/obj/item/clothing/head/collectable/petehat,
 		/obj/item/clothing/head/helmet/tactical/HoS/dermal,
 		/obj/item/clothing/under/chameleon,
 		/obj/item/clothing/gloves/anchor_arms,
 		/obj/item/complete/rig/soviet,
-		/obj/item/complete/rig/nazi
+		/obj/item/complete/rig/nazi,
 		)
 
 /obj/map/spawner/safe/medical
@@ -1110,7 +1102,8 @@
 	/obj/item/clothing/under/chameleon,
 	/obj/item/clothing/gloves/anchor_arms,
 	/obj/item/complete/rig/soviet,
-	/obj/item/complete/rig/nazi
+	/obj/item/complete/rig/nazi,
+	/obj/item/complete/outfit/dredd
 )
 
 /obj/map/spawner/safe/medal
@@ -1128,3 +1121,7 @@
 	/obj/item/clothing/accessory/medal/gold/heroism
 )
 
+/obj/map/spawner/safe/test
+	name = "safe test"
+	icon_state = "safe_test"
+	to_spawn = list(/obj/item/complete/outfit/dredd)
