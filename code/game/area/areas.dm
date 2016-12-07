@@ -14,6 +14,7 @@ var/area/space_area
 	plane = BASE_PLANE
 	layer = AREA_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD
 	var/base_turf_type = null
+	var/shuttle_can_crush = TRUE
 
 /area/New()
 	area_turfs = list()
