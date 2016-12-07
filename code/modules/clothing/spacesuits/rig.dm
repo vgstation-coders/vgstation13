@@ -233,14 +233,6 @@
 /obj/item/clothing/suit/space/rig/wizard/acidable()
 	return 0
 
-/obj/item/clothing/suit/space/rig/wizard/complete/New()	//Use to spawn a complete gemsuit set all at once
-	..()
-	new /obj/item/clothing/head/helmet/space/rig/wizard(loc)
-	new /obj/item/clothing/suit/space/rig/wizard(loc)
-	new /obj/item/clothing/gloves/purple(loc)
-	new /obj/item/clothing/shoes/sandal(loc)
-	qdel(src)
-
 //Medical Rig
 /obj/item/clothing/head/helmet/space/rig/medical
 	name = "medical hardsuit helmet"
@@ -375,12 +367,6 @@
 	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 
-/obj/item/clothing/suit/space/rig/nazi/complete/New()
-	..()
-	new /obj/item/clothing/head/helmet/space/rig/nazi(loc)
-	new /obj/item/clothing/suit/space/rig/nazi(loc)
-	qdel(src)
-
 /obj/item/clothing/head/helmet/space/rig/soviet
 	name = "soviet hardhelmet"
 	desc = "Crafted with the pride of the proletariat. The vengeful gaze of the visor roots out all fascists and capitalists."
@@ -404,13 +390,6 @@
 	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	
-/obj/item/clothing/suit/space/rig/soviet/complete/New()
-	..()
-	new /obj/item/clothing/head/helmet/space/rig/soviet(loc)
-	new /obj/item/clothing/suit/space/rig/soviet(loc)
-	qdel(src)
-
-
 //Death squad rig
 /obj/item/clothing/head/helmet/space/rig/deathsquad
 	name = "deathsquad helmet"
