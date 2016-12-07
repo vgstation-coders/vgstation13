@@ -315,7 +315,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	for(var/mob/M in player_list)
 		if(istype(M, /mob/new_player))
 			continue
-		if(istype(M,/mob/dead/observer)  && (M.client && (M.client.prefs.toggles & CHAT_GHOSTEARS || get_turf(src) in view(M))))
+		if(istype(M,/mob/dead/observer)  && (M.client && M.client.prefs.toggles & CHAT_GHOSTEARS || (get_turf(src) in view(M))))
 			var/controls = "<a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>Follow</a>"
 			if(M.client.holder)
 				controls+= " | <A HREF='?_src_=holder;adminmoreinfo=\ref[src]'>?</A>"
