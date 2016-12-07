@@ -1049,8 +1049,8 @@
 		/obj/item/clothing/head/helmet/tactical/HoS/dermal,
 		/obj/item/clothing/under/chameleon,
 		/obj/item/clothing/gloves/anchor_arms,
-		/obj/item/clothing/suit/space/rig/soviet/complete,
-		/obj/item/clothing/suit/space/rig/nazi/complete
+		/obj/item/complete/rig/soviet,
+		/obj/item/complete/rig/nazi
 		)
 
 /obj/map/spawner/safe/medical
@@ -1109,8 +1109,8 @@
 	/obj/item/clothing/head/helmet/tactical/HoS/dermal,
 	/obj/item/clothing/under/chameleon,
 	/obj/item/clothing/gloves/anchor_arms,
-	/obj/item/clothing/suit/space/rig/soviet/complete,
-	/obj/item/clothing/suit/space/rig/nazi/complete
+	/obj/item/complete/rig/soviet,
+	/obj/item/complete/rig/nazi
 )
 
 /obj/map/spawner/safe/medal

@@ -206,7 +206,7 @@ obj/structure/safe/ex_act(severity)
 		/obj/item/weapon/gun/energy/staff,
 		/obj/item/weapon/gun/energy/staff/animate,
 		/obj/item/weapon/gun/energy/staff/focus,
-		/obj/item/clothing/suit/space/rig/wizard/complete
+		/obj/item/complete/rig/wizard
 		)
 
 /obj/structure/safe/floor/wizard/New()
