@@ -13,7 +13,7 @@ var/list/holomap_cache = list()
 	//Holomap stuff
 	var/mob/living/carbon/human/activator = null
 	var/list/holomap_images = list()
-	var/marker_prefix = "erts"
+	var/marker_prefix = "ert"
 	var/holomap_color = null
 	var/holomap_filter = HOLOMAP_FILTER_ERT
 
@@ -32,6 +32,21 @@ var/list/holomap_cache = list()
 	marker_prefix = "op"
 	holomap_filter = HOLOMAP_FILTER_NUKEOPS
 	holomap_color = "#13B40B"
+
+
+/obj/item/clothing/accessory/holomap_chip/ert
+	name = "emergency response team holomap chip"
+	icon_state = "holochip_ert"
+	marker_prefix = "ert"
+	holomap_filter = HOLOMAP_FILTER_ERT
+	holomap_color = "#5FFF28"
+
+	var/list/prefix_update = list(
+		"/obj/item/clothing/head/helmet/space/ert/commander" = "ertc",
+		"/obj/item/clothing/head/helmet/space/ert/security" = "erts",
+		"/obj/item/clothing/head/helmet/space/ert/engineer" = "erte",
+		"/obj/item/clothing/head/helmet/space/ert/medical" = "ertm",
+		)
 
 
 /obj/item/clothing/accessory/holomap_chip/New()
@@ -195,12 +210,14 @@ var/list/holomap_cache = list()
 		else
 			continue
 
+		HC.update_marker()
+
 		if(mob_indicator != HOLOMAP_ERROR)
 
-			var/holomap_marker = "marker_\ref[src]_\ref[HC]_[mob_indicator]"
+			var/holomap_marker = "marker_\ref[src]_\ref[HC]_[HC.marker_prefix]_[mob_indicator]"
 
 			if(!(holomap_marker in holomap_cache))
-				holomap_cache[holomap_marker] = image('icons/holomap_markers.dmi',"[marker_prefix][mob_indicator]")
+				holomap_cache[holomap_marker] = image('icons/holomap_markers.dmi',"[HC.marker_prefix][mob_indicator]")
 
 			var/image/I = holomap_cache[holomap_marker]
 			I.plane = HUD_PLANE
@@ -211,17 +228,103 @@ var/list/holomap_cache = list()
 			I.loc = activator.hud_used.holomap_obj
 
 			//if a new marker is created, we immediately set its offset instead of letting animate() take care of it, so it doesn't slide accross the screen.
-			if(!I.pixel_x || !I.pixel_y)
-				I.pixel_x = TU.x - T.x + activator.client.view*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32)
-				I.pixel_y = TU.y - T.y + activator.client.view*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32)
 
-			animate(I,alpha = 255, pixel_x = TU.x - T.x + activator.client.view*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32), pixel_y = TU.y - T.y + activator.client.view*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32), time = 5, loop = -1, easing = LINEAR_EASING)
-			animate(alpha = 255, time = 8, loop = -1, easing = SINE_EASING)
-			animate(alpha = 0, time = 5, easing = SINE_EASING)
-			animate(alpha = 255, time = 2, easing = SINE_EASING)
+			handle_marker(I,T,TU)
+
 			holomap_images += I
 
+	//Additional things we might want to track
+	extra_update()
+
 	activator.client.images |= holomap_images
+
+/obj/item/clothing/accessory/holomap_chip/proc/extra_update()
+	return
+
+/obj/item/clothing/accessory/holomap_chip/deathsquad/extra_update()
+	var/turf/T = get_turf(src)
+	for(var/obj/mecha/combat/marauder/maraud in mechas_list)
+		if(!istype(maraud,/obj/mecha/combat/marauder/series) && !istype(maraud,/obj/mecha/combat/marauder/mauler) && (T.z == maraud.z))//ignore custom-built and syndicate ones
+			var/holomap_marker = "marker_\ref[src]_\ref[maraud]_[maraud.occupant ? 1 : 0]"
+
+			if(!(holomap_marker in holomap_cache))
+				var/pref = "mar"
+				if (istype(maraud,/obj/mecha/combat/marauder/seraph))
+					pref = "ser"
+				holomap_cache[holomap_marker] = image('icons/holomap_markers.dmi',"[pref][maraud.occupant ? 1 : 0]")
+
+			var/image/I = holomap_cache[holomap_marker]
+			I.plane = HUD_PLANE
+			I.loc = activator.hud_used.holomap_obj
+
+			if(maraud.occupant)
+				I.layer = HUD_ABOVE_ITEM_LAYER
+			else
+				I.layer = HUD_ITEM_LAYER
+
+			handle_marker(I,T,get_turf(maraud))
+
+			holomap_images += I
+
+/obj/item/clothing/accessory/holomap_chip/ert/extra_update()
+	var/turf/T = get_turf(src)
+	if(T.z == map.zMainStation)
+		var/image/bgmap
+		var/holomap_bgmap = "background_\ref[src]_[T.z]_areas"
+		if(!(holomap_bgmap in holomap_cache))
+			holomap_cache[holomap_bgmap] = image(extraMiniMaps[HOLOMAP_EXTRA_STATIONMAPAREAS+"_[map.zMainStation]"])
+
+		bgmap = holomap_cache[holomap_bgmap]
+		bgmap.plane = HUD_PLANE
+		bgmap.layer = HUD_BASE_LAYER
+		bgmap.alpha = 127
+		bgmap.loc = activator.hud_used.holomap_obj
+		bgmap.overlays.len = 0
+
+		if(!bgmap.pixel_x)
+			bgmap.pixel_x = -1*T.x + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32)
+		if(!bgmap.pixel_y)
+			bgmap.pixel_y = -1*T.y + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32)
+
+		for(var/marker in holomap_markers)
+			var/datum/holomap_marker/holomarker = holomap_markers[marker]
+			if(holomarker.z == T.z && holomarker.filter & holomap_filter)
+				var/image/markerImage = image(holomarker.icon,holomarker.id)
+				markerImage.plane = FLOAT_PLANE
+				markerImage.layer = FLOAT_LAYER
+				if(map.holomap_offset_x.len >= T.z)
+					markerImage.pixel_x = holomarker.x+holomarker.pixel_x+map.holomap_offset_x[T.z]
+					markerImage.pixel_y = holomarker.y+holomarker.pixel_y+map.holomap_offset_y[T.z]
+				else
+					markerImage.pixel_x = holomarker.x+holomarker.pixel_x
+					markerImage.pixel_y = holomarker.y+holomarker.pixel_y
+				markerImage.appearance_flags = RESET_COLOR
+				bgmap.overlays += markerImage
+
+		animate(bgmap,pixel_x = -1*T.x + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32), pixel_y = -1*T.y + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
+		holomap_images += bgmap
+
+/obj/item/clothing/accessory/holomap_chip/proc/update_marker()
+	return
+
+/obj/item/clothing/accessory/holomap_chip/ert/update_marker()
+	marker_prefix = "ert"
+	var/obj/item/clothing/under/U = attached_to
+	if(U && ishuman(U.loc))
+		var/mob/living/carbon/human/H = U.loc
+		var/obj/item/helmet = H.get_item_by_slot(slot_head)
+		if(helmet && "[helmet.type]" in prefix_update)
+			marker_prefix = prefix_update["[helmet.type]"]
+
+/obj/item/clothing/accessory/holomap_chip/proc/handle_marker(var/image/I,var/turf/T,var/turf/TU)
+	//if a new marker is created, we immediately set its offset instead of letting animate() take care of it, so it doesn't slide accross the screen.
+	if(!I.pixel_x || !I.pixel_y)
+		I.pixel_x = TU.x - T.x + activator.client.view*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32)
+		I.pixel_y = TU.y - T.y + activator.client.view*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32)
+	animate(I,alpha = 255, pixel_x = TU.x - T.x + activator.client.view*WORLD_ICON_SIZE + 8*(WORLD_ICON_SIZE/32), pixel_y = TU.y - T.y + activator.client.view*WORLD_ICON_SIZE + 9*(WORLD_ICON_SIZE/32), time = 5, loop = -1, easing = LINEAR_EASING)
+	animate(alpha = 255, time = 8, loop = -1, easing = SINE_EASING)
+	animate(alpha = 0, time = 5, easing = SINE_EASING)
+	animate(alpha = 255, time = 2, easing = SINE_EASING)
 
 #undef HOLOMAP_ERROR
 #undef HOLOMAP_YOU

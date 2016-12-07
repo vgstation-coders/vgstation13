@@ -71,6 +71,16 @@
 	can_flip = 0
 	canstage = 0
 
+/obj/item/clothing/mask/gas/ert
+	name = "antique gas mask"
+	desc = "A face-covering mask that can be connected to an air supply."
+	icon_state = "ert"
+	siemens_coefficient = 0.7
+	species_fit = list(VOX_SHAPED)
+	w_class = W_CLASS_SMALL
+	can_flip = 0
+	canstage = 0
+
 /obj/item/clothing/mask/gas/syndicate
 	name = "syndicate mask"
 	desc = "A close-fitting tactical mask that can be connected to an air supply."
