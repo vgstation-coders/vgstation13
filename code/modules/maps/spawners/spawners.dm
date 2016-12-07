@@ -1005,7 +1005,7 @@
 // Safe /////////////////////////////////////////////////////
 //Does not come with a safe.
 /obj/map/spawner/safe/any
-	name = "safe spawner"
+	name = "safe any spawner "
 	icon_state = "safe_any"
 	to_spawn = list(
 		/obj/item/weapon/storage/pill_bottle/creatine,
@@ -1017,6 +1017,7 @@
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
 		/obj/item/weapon/shield/energy,
 		/obj/item/weapon/reagent_containers/glass/bottle/random,
+		/obj/item/weapon/dnainjector/nofail/randompower,
 		/obj/item/weapon/gun/projectile/russian,
 		/obj/item/weapon/bikehorn,
 		/obj/item/weapon/storage/box/emps,
@@ -1056,11 +1057,12 @@
 	name = "safe medical spawner"
 	icon_state = "safe_medical"
 	to_spawn = list(/obj/item/weapon/storage/pill_bottle/creatine,
+	/obj/item/weapon/storage/pill_bottle/nanobot,
 	/obj/item/weapon/storage/firstaid/adv,
 	/obj/item/weapon/reagent_containers/glass/bottle/random,
 	/obj/item/weapon/reagent_containers/glass/bottle/frostoil,
 	/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
-	/obj/item/weapon/storage/pill_bottle/nanobot,
+	/obj/item/weapon/dnainjector/nofail/randompower,
 	/obj/item/weapon/gun/syringe/rapidsyringe,
 	/obj/item/voucher/free_item
 )
