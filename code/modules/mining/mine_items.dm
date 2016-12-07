@@ -732,7 +732,7 @@ proc/move_mining_shuttle()
 			var/mname = sanitize(input("Choose a name for your friend.", "Name your friend", contained_mob.name) as text|null)
 			if(mname)
 				contained_mob.name = mname
-				to_chat(user, "<span class='notice'>Renaming successful, say hello to [contained_mob]</span>")
+				to_chat(user, "<span class='notice'>Renaming successful, say hello to [contained_mob]!</span>")
 				name = "lazarus capsule - [mname]"
 	..()
 
@@ -747,8 +747,6 @@ proc/move_mining_shuttle()
 			tripped = 1
 
 /obj/item/device/mobcapsule/proc/insert(var/atom/movable/AM, mob/user)
-
-
 	if(contained_mob)
 		return -1
 
