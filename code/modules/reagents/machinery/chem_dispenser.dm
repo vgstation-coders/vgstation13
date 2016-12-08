@@ -243,11 +243,8 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		var/obj/item/weapon/reagent_containers/B = container
 		B.forceMove(loc)
 		if(istype(container, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
-			var/mob/living/silicon/robot/R = container:holder:loc
-			if(R.module_state_1 == container || R.module_state_2 == container || R.module_state_3 == container)
-				container.forceMove(R)
-			else
-				container.forceMove(container:holder)
+			var/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/borgbeak = container
+			borgbeak.return_to_modules()
 		container = null
 		return 1
 
