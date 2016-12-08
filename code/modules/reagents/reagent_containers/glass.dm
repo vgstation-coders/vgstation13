@@ -15,8 +15,6 @@
 	volume = 50
 	flags = FPRINT  | OPENCONTAINER
 
-	var/label_text = ""
-
 	//This is absolutely terrible
 	// TODO To remove this, return 1 on every attackby() that handles reagent_containers.
 	var/list/can_be_placed_into = list(
@@ -91,21 +89,7 @@
 
 /obj/item/weapon/reagent_containers/glass/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
-		var/tmp_label = sanitize(input(user, "Enter a label for [src.name]","Label",src.label_text))
-		if (!Adjacent(user) || user.stat)
-			return
-		if(length(tmp_label) > 10)
-			to_chat(user, "<span class='warning'>The label can be at most 10 characters long.</span>")
-		else
-			to_chat(user, "<span class='notice'>You set the label to \"[tmp_label]\".</span>")
-			src.label_text = tmp_label
-			src.update_name_label()
-
-/obj/item/weapon/reagent_containers/glass/proc/update_name_label()
-	if(src.label_text == "")
-		src.name = src.base_name
-	else
-		src.name = "[src.base_name] ([src.label_text])"
+		set_tiny_label(user)
 
 /obj/item/weapon/reagent_containers/glass/fits_in_iv_drip()
 	return 1
