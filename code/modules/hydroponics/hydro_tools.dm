@@ -412,6 +412,7 @@
 	throw_speed = 4
 	throw_range = 4
 	sharpness = 1.2
+	sharpness_flags = SHARP_BLADE | CHOPWOOD
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_COMBAT + "=1"
 	attack_verb = list("chops", "tears", "cuts")
 
@@ -436,6 +437,7 @@
 	throw_speed = 1
 	throw_range = 3
 	sharpness = 1.0
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	w_class = W_CLASS_LARGE
 	flags = FPRINT
 	slot_flags = SLOT_BACK

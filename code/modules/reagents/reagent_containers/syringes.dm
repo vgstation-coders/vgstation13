@@ -16,6 +16,7 @@
 	icon_state = "0"
 	amount_per_transfer_from_this = 5
 	sharpness = 1
+	sharpness_flags = SHARP_TIP
 	possible_transfer_amounts = null //list(5,10,15)
 	volume = 15
 	starting_materials = list(MAT_GLASS = 1000)

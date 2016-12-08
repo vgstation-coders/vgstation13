@@ -205,6 +205,7 @@ var/paperwork_library
 	item_state = "pen"
 	origin_tech = Tc_MATERIALS + "=1"
 	sharpness = 0.5
+	sharpness_flags = SHARP_TIP
 	flags = FPRINT
 	slot_flags = SLOT_BELT | SLOT_EARS
 	throwforce = 0

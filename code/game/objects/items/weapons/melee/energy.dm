@@ -1,6 +1,7 @@
 /obj/item/weapon/melee/energy
 	var/active = 0
 	sharpness = 1.5 //very very sharp
+	sharpness_flags = SHARP_BLADE | HOT_EDGE
 	heat_production = 3500
 
 /obj/item/weapon/melee/energy/suicide_act(mob/user)
@@ -44,13 +45,14 @@
 	force = 3
 	active_force = 30
 	throwforce = 5
-	
+
 /obj/item/weapon/melee/energy/sword
 	name = "energy sword"
 	desc = "May the force be within you."
 	icon_state = "sword0"
 	var/base_state = "sword"
 	var/active_state = ""
+	sharpness_flags = 0 //starts inactive
 	force = 3
 	throwforce = 5
 	throw_speed = 1
@@ -67,6 +69,7 @@
 	force = 30
 	w_class = W_CLASS_LARGE
 	sharpness = 1.5
+	sharpness_flags = SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD
 	hitsound = "sound/weapons/blade1.ogg"
 	update_icon()
 
@@ -103,7 +106,8 @@
 	if (active)
 		force = 30
 		w_class = W_CLASS_LARGE
-		sharpness = 1.5
+		sharpness = initial(sharpness)
+		sharpness_flags = initial(sharpness_flags)
 		hitsound = "sound/weapons/blade1.ogg"
 		playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
 		to_chat(user, "<span class='notice'> [src] is now active.</span>")
@@ -111,6 +115,7 @@
 		force = 3
 		w_class = W_CLASS_SMALL
 		sharpness = 0
+		sharpness_flags = 0
 		playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
 		hitsound = "sound/weapons/empty.ogg"
 		to_chat(user, "<span class='notice'> [src] can now be concealed.</span>")
@@ -185,4 +190,3 @@
 	..()
 	_color = null
 	update_icon()
-
