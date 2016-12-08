@@ -521,7 +521,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pumpkin/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
-	if(W.is_sharp() >= 1)
+	if(W.sharpness_flags & SHARP_BLADE)
 		user.visible_message("<span class='notice'>[user] carves a face into \the [src] with \the [W]!</span>", "<span class='notice'>You carve a face into \the [src] with \the [W]!</span>")
 		new /obj/item/clothing/head/pumpkinhead(get_turf(src)) //Don't move it
 		qdel(src)

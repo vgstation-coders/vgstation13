@@ -238,6 +238,8 @@
 	name = "spear"
 	desc = "A haphazardly-constructed yet still deadly weapon of ancient design."
 	force = 10
+	sharpness = 0.8
+	sharpness_flags = SHARP_TIP | INSULATED_EDGE
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_BACK
 	throwforce = 15

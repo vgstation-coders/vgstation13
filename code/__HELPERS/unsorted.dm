@@ -1278,13 +1278,6 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 
 	return result
 
-/proc/has_edge(obj/O as obj)
-	if (!O)
-		return 0
-	if(O.edge)
-		return 1
-	return 0
-
 /proc/get_distant_turf(var/turf/T,var/direction,var/distance)
 	if(!T || !direction || !distance)
 		return
