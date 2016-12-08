@@ -6,8 +6,7 @@
 	school = "transmutation"
 	charge_max = 300
 	spell_flags = Z2NOCAST | NEEDSCLOTHES | INCLUDEUSER
-	invocation = "Rah'dee K'Alari"
-	invocation_type = SpI_SHOUT
+	invocation_type = SpI_NONE
 	range = SELFCAST
 	max_targets = 1
 	cooldown_min = 100 //50 deciseconds reduction per rank
