@@ -173,7 +173,7 @@
 		//adjustToxLoss(Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))	//Limit amount of damage toxin exposure can do per second
 		if(max_pp_mask)
 			if(H.wear_mask)
-				if(H.wear_mask.flags & BLOCK_GAS_SMOKE_EFFECT)
+				if(H.wear_mask.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
 					if(pp > max_pp_mask)
 						ratio = (pp/max_pp_mask) * reagent_mult
 					else

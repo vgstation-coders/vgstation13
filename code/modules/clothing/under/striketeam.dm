@@ -6,7 +6,7 @@
 	icon_state = "deathsquad"
 	item_state = "deathsquad"
 	_color = "deathsquad"
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 
 
 /obj/item/clothing/under/deathsquad/New()

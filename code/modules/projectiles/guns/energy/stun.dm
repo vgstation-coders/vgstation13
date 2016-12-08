@@ -94,6 +94,7 @@
 	desc = "A weapon favored by many of the syndicates stealth specialists."
 	icon_state = "crossbow"
 	w_class = W_CLASS_SMALL
+	flags = FPRINT | NO_STORAGE_MSG
 	item_state = "crossbow"
 	starting_materials = list(MAT_IRON = 2000)
 	w_type = RECYK_ELECTRONIC
@@ -156,5 +157,3 @@
 		to_chat(M, "<span class='warning'>\The [src] fizzles.</span>")
 		return 0
 	return ..()
-
-

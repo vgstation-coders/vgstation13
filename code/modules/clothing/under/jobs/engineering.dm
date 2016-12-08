@@ -6,7 +6,7 @@
 	item_state = "g_suit"
 	_color = "chief"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 10)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/atmospheric_technician
@@ -15,7 +15,7 @@
 	icon_state = "atmos"
 	item_state = "atmos_suit"
 	_color = "atmos"
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/engineer
@@ -25,7 +25,7 @@
 	item_state = "engi_suit"
 	_color = "engine"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 10)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/maintenance_tech
@@ -35,7 +35,7 @@
 	item_state = "mainttech"
 	_color = "mainttech"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 10)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/engine_tech
@@ -45,7 +45,7 @@
 	item_state = "engine_tech"
 	_color = "engine_tech"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 10)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/electrician
@@ -55,7 +55,7 @@
 	item_state = "electrician"
 	_color = "electrician"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 10, bomb = 0, bio = 0, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/roboticist
@@ -64,7 +64,7 @@
 	icon_state = "robotics"
 	item_state = "robotics"
 	_color = "robotics"
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/mechatronic
@@ -73,7 +73,7 @@
 	icon_state = "mechatron"
 	item_state = "mechatron"
 	_color = "mechatron"
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/biomechanical
@@ -82,7 +82,7 @@
 	icon_state = "biomech"
 	item_state = "biomech"
 	_color = "biomech"
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/mechanic
@@ -91,5 +91,5 @@
 	icon_state = "mechanic"
 	item_state = "mechanic"
 	_color = "mechanic"
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)

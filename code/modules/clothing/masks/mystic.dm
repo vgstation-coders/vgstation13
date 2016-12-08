@@ -3,7 +3,7 @@
 	desc = "<span class=warning>\"I'm happy! I'M HAPPY! SEE! I SAID I'M HAPPY PLEASE DON'T\"<span>"
 	icon_state = "happiest"
 	item_state = "happiest"
-	flags = FPRINT|MASKINTERNALS
+	clothing_flags = MASKINTERNALS
 	body_parts_covered = FACE
 	w_class = W_CLASS_SMALL
 	siemens_coefficient = 3.0

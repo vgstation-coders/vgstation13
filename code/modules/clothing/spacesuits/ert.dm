@@ -6,7 +6,7 @@
 	armor = list(melee = 50, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 100, rad = 60)
 	siemens_coefficient = 0.6
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
-	flags = FPRINT  | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 	var/obj/machinery/camera/camera
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
@@ -36,7 +36,7 @@
 	w_class = W_CLASS_LARGE
 	slowdown = 1
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 100, rad = 60)
-	flags = FPRINT  | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/weapon/crowbar, \
 	/obj/item/weapon/screwdriver, /obj/item/weapon/weldingtool, /obj/item/weapon/wirecutters, /obj/item/weapon/wrench, /obj/item/device/multitool, \

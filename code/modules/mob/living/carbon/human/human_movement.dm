@@ -150,6 +150,6 @@
 
 /mob/living/carbon/human/CheckSlip()
 	. = ..()
-	if(. && shoes && shoes.flags & NOSLIP)
+	if(. && shoes && shoes.clothing_flags & NOSLIP)
 		. = (istype(shoes, /obj/item/clothing/shoes/magboots) ? -1 : 0)
 	return .

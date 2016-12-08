@@ -762,9 +762,9 @@ var/list/slot_equipment_priority = list( \
 			if(slot_w_uniform)
 				if( !(slot_flags & SLOT_ICLOTHING) )
 					return 0
-				if((M_FAT in H.mutations) && (H.species && H.species.flags & CAN_BE_FAT) && !(flags & ONESIZEFITSALL))
+				if((M_FAT in H.mutations) && (H.species && H.species.flags & CAN_BE_FAT) && !(clothing_flags & ONESIZEFITSALL))
 					return 0
-//				if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+//				if(H.species.flags & IS_BULKY && !(clothing_flags & ONESIZEFITSALL))
 //					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
 //					return 0
 				if(H.w_uniform)

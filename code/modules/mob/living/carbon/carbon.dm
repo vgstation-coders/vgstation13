@@ -358,8 +358,9 @@
 	//actually throw it!
 	if (item)
 		item.forceMove(get_turf(src))
-		src.visible_message("<span class='warning'>[src] has thrown [item].</span>", \
-			drugged_message = "<span class='warning'>[item] escapes from [src]'s grasp and flies away!</span>")
+		if(!(item.flags & NO_THROW_MSG))
+			src.visible_message("<span class='warning'>[src] has thrown [item].</span>", \
+				drugged_message = "<span class='warning'>[item] escapes from [src]'s grasp and flies away!</span>")
 
 		src.apply_inertia(get_dir(target, src))
 

@@ -4,13 +4,10 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 	var/contaminated = 0
 
 /obj/item/proc/can_contaminate()
-	// clothing and backpacks can be contaminated.
-	if(flags & PLASMAGUARD)
-		return 0
-	else if(istype(src, /obj/item/weapon/storage/backpack))
-		return 0 // cannot be washed :(
-	else if(istype(src, /obj/item/clothing))
-		return 1
+	return FALSE
+
+/obj/item/clothing/can_contaminate()
+	return !(clothing_flags & PLASMAGUARD)
 
 /obj/item/proc/contaminate()
 	// do a contamination overlay?
@@ -97,7 +94,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 	//Checks if the head is adequately sealed.
 	if(head)
 		if(zas_settings.Get(/datum/ZAS_Setting/PLASMAGUARD_ONLY))
-			if(head.flags & PLASMAGUARD)
+			if(head.clothing_flags & PLASMAGUARD)
 				return 1
 		else if(check_body_part_coverage(EYES))
 			return 1
@@ -107,7 +104,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 	//Checks if the suit is adequately sealed.
 	if(wear_suit)
 		if(zas_settings.Get(/datum/ZAS_Setting/PLASMAGUARD_ONLY))
-			if(wear_suit.flags & PLASMAGUARD)
+			if(wear_suit.clothing_flags & PLASMAGUARD)
 				return 1
 		else
 			if(is_slot_hidden(wear_suit.body_parts_covered,HIDEJUMPSUIT))

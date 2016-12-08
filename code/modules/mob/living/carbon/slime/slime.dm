@@ -1086,7 +1086,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	permeability_coefficient = 0.50
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS|HEAD
 	slowdown = 1.0
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
@@ -1099,7 +1099,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	icon_state = "golem"
 	item_state = null
 	canremove = 0
-	flags = NOSLIP
+	clothing_flags = NOSLIP
 	slowdown = SHOES_SLOWDOWN+1
 
 /obj/item/clothing/mask/gas/golem

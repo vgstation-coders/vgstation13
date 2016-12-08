@@ -484,7 +484,7 @@ var/area/space_area
 		for(var/mob/living/carbon/human/H in A)
 			if(istype(get_turf(H), /turf/space)) //You can't fall on space
 				continue
-			if(istype(H.shoes, /obj/item/clothing/shoes/magboots) && (H.shoes.flags & NOSLIP))
+			if(istype(H.shoes, /obj/item/clothing/shoes/magboots) && (H.shoes.clothing_flags & NOSLIP))
 				continue
 			if(H.locked_to) //Locked to something, anything
 				continue
