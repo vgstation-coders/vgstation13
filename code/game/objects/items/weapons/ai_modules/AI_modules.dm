@@ -79,7 +79,7 @@ Refactored AI modules by N3X15
 			to_chat(target, "[senderName] has uploaded a change to the laws you must follow, using \a [name]. From now on: ")
 		targetName="[fmtSubject(M)])"
 	var/time = time2text(world.realtime,"hh:mm:ss")
-	var/log_entry = "[fmtSubject(sender)]) used [src.name] on [targetName]"
+	var/log_entry = "[fmtSubject(sender)]) used [src.name] on [targetName] ([formatJumpTo(sender, "JMP")])"
 	lawchanges.Add("[time] : [log_entry]")
 	message_admins(log_entry)
 	log_game(log_entry)

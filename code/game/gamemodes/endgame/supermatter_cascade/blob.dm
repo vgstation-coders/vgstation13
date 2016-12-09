@@ -123,3 +123,6 @@
 
 /turf/unsimulated/wall/supermatter/singularity_act()
 	return
+
+/turf/unsimulated/wall/supermatter/no_spread
+	avail_dirs = list()

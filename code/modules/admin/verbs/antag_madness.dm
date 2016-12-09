@@ -147,7 +147,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			M.equip_to_slot_or_del(new/obj/item/weapon/storage/belt/utility/complete, slot_belt)
 			M.equip_to_slot_or_del(new/obj/item/weapon/tank/oxygen, slot_s_store)
 			var/obj/item/device/radio/uplink/U = new/obj/item/device/radio/uplink(M)
-			U.hidden_uplink.uses = 40
+			U.hidden_uplink.uses = 80
 			M.equip_to_slot_or_del(U, slot_l_store)
 
 			M.regenerate_icons()
@@ -399,7 +399,7 @@ client/proc/antag_madness(var/mob/M in mob_list)
 			M.equip_to_slot_or_del(new /obj/item/weapon/pinpointer/nukeop(M), slot_r_store)
 			M.equip_to_slot_or_del(new /obj/item/weapon/tank/oxygen, slot_s_store)
 			var/obj/item/device/radio/uplink/U = new/obj/item/device/radio/uplink(M)
-			U.hidden_uplink.uses = 40
+			U.hidden_uplink.uses = 80
 			M.equip_to_slot_or_del(U, slot_l_store)
 			M.regenerate_icons()
 

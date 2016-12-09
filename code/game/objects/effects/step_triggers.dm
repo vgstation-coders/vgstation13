@@ -23,6 +23,8 @@
 /* Tosses things in a certain direction */
 
 /obj/effect/step_trigger/thrower
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "arrows"
 	var/direction = SOUTH // the direction of throw
 	var/tiles = 3	// if 0: forever until atom hits a stopper
 	var/immobilize = 1 // if nonzero: prevents mobs from moving while they're being flung
@@ -82,6 +84,19 @@
 			var/mob/M = AM
 			if(immobilize)
 				M.canmove = 1
+
+/obj/effect/step_trigger/thrower/north
+	dir = NORTH
+
+/obj/effect/step_trigger/thrower/east
+	dir = EAST
+
+/obj/effect/step_trigger/thrower/west
+	dir = WEST
+
+/obj/effect/step_trigger/thrower/New()
+	..()
+	direction = dir
 
 /* Stops things thrown by a thrower, doesn't do anything */
 

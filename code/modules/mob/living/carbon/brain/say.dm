@@ -1,6 +1,6 @@
 /mob/living/carbon/brain/say(var/message)
 
-	if(!(container && (istype(container, /obj/item/device/mmi))))
+	if(brain_dead_chat())
 		return say_dead(message) // he's dead. Let him speak to the dead.
 	else
 		if(prob(emp_damage*4))

@@ -81,6 +81,10 @@
 	. = ..()
 	air_contents.adjust((6 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
 
+/obj/item/weapon/tank/jetpack/oxygen/nukeops
+	desc = "A tank of compressed oxygen for use as propulsion in zero-gravity areas. This one is unusually heavy."
+	volume = 105 //please keep this restricted to actual nuke ops, it might trigger bomb autism if used in transfer valves
+
 /obj/item/weapon/tank/jetpack/nitrogen
 	name = "Jetpack (Nitrogen)"
 	desc = "A tank of compressed nitrogen for use as propulsion in zero-gravity areas. Use with caution."

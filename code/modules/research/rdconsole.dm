@@ -65,7 +65,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	)
 	var/autorefresh = 1 //Prevents the window from being updated while queueing items
 
-	req_access = list(access_tox)	//Data and setting manipulation requires scientist access.
+	req_access = list(access_rnd)	//Data and setting manipulation requires scientist access.
 
 	starting_materials = list()
 
@@ -1003,7 +1003,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 /obj/machinery/computer/rdconsole/mommi
 	name = "MoMMI R&D Console"
 	id = 3
-	req_access = list(access_tox)
+	req_access = list(access_rnd)
 	circuit = "/obj/item/weapon/circuitboard/rdconsole/mommi"
 
 /obj/machinery/computer/rdconsole/robotics
@@ -1023,7 +1023,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 /obj/machinery/computer/rdconsole/core
 	name = "Core R&D Console"
 	id = 1
-	req_access = list(access_tox)
+	req_access = list(access_rnd)
 	circuit = "/obj/item/weapon/circuitboard/rdconsole"
 
 /obj/machinery/computer/rdconsole/pod

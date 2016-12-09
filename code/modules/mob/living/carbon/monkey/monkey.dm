@@ -1,5 +1,6 @@
 /mob/living/carbon/monkey
 	name = "monkey"
+	real_name = "randomgen" //To stop Pun Pun becoming generic. Give your subtype a real_name matching its name.
 	voice_name = "monkey"
 	//speak_emote = list("chimpers")
 	icon_state = "monkey1"
@@ -35,62 +36,12 @@
 	var/update_muts = 1                        // Monkey gene must be set at start.
 	var/alien = 0								//Used for reagent metabolism.
 
-/mob/living/carbon/monkey/Destroy()
-	..()
-	uniform = null
-	hat = null
-	glasses = null
-
-/mob/living/carbon/monkey/abiotic()
-	for(var/obj/item/I in held_items)
-		if(I.abstract)
-			continue
-
-		return 1
-
-	return (wear_mask || back || uniform || hat)
-
-/mob/living/carbon/monkey/tajara
-	name = "farwa"
-	voice_name = "farwa"
-	speak_emote = list("mews")
-	icon_state = "tajkey1"
-	uni_append = list(0x0A0,0xE00) // 0A0E00
-	species_type = /mob/living/carbon/monkey/tajara
-	languagetoadd = LANGUAGE_CATBEAST
-
-/mob/living/carbon/monkey/skrell
-	name = "neaera"
-	voice_name = "neaera"
-	speak_emote = list("squicks")
-	icon_state = "skrellkey1"
-	uni_append = list(0x01C,0xC92) // 01CC92
-	species_type = /mob/living/carbon/monkey/skrell
-	languagetoadd = LANGUAGE_SKRELLIAN
-
-/mob/living/carbon/monkey/unathi
-	name = "stok"
-	voice_name = "stok"
-	speak_emote = list("hisses")
-	icon_state = "stokkey1"
-	uni_append = list(0x044,0xC5D) // 044C5D
-	canWearClothes = 0
-	species_type = /mob/living/carbon/monkey/unathi
-	languagetoadd = LANGUAGE_UNATHI
-
-/mob/living/carbon/monkey/grey
-	name = "greyling"
-	voice_name = "greyling"
-	icon_state = "grey"
-	canWearGlasses = 0
-	languagetoadd = LANGUAGE_GREY
-
 /mob/living/carbon/monkey/New()
 	var/datum/reagents/R = new/datum/reagents(1000)
 	reagents = R
 	R.my_atom = src
 
-	if(name == initial(name)) //To stop Pun-Pun becoming generic.
+	if(real_name == "randomgen") //To stop Pun Pun becoming generic.
 		name = "[name] ([rand(1, 1000)])"
 		real_name = name
 
@@ -129,23 +80,83 @@
 	update_icons()
 	return
 
-/mob/living/carbon/monkey/unathi/New()
-
+/mob/living/carbon/monkey/Destroy()
 	..()
-	dna.mutantrace = "lizard"
-	greaterform = "Unathi"
+	uniform = null
+	hat = null
+	glasses = null
 
-/mob/living/carbon/monkey/skrell/New()
+/mob/living/carbon/monkey/abiotic()
+	for(var/obj/item/I in held_items)
+		if(I.abstract)
+			continue
 
+		return 1
+
+	return (wear_mask || back || uniform || hat)
+
+/mob/living/carbon/monkey/punpun
+	name = "Pun Pun"
+	real_name = "Pun Pun"
+
+/mob/living/carbon/monkey/punpun/New()
+	var/obj/item/clothing/monkeyclothes/suit = new /obj/item/clothing/monkeyclothes
+	equip_to_slot(suit, slot_w_uniform)
 	..()
-	dna.mutantrace = "skrell"
-	greaterform = "Skrell"
+
+/mob/living/carbon/monkey/tajara
+	name = "farwa"
+	voice_name = "farwa"
+	speak_emote = list("mews")
+	icon_state = "tajkey1"
+	uni_append = list(0x0A0,0xE00) // 0A0E00
+	species_type = /mob/living/carbon/monkey/tajara
+	languagetoadd = LANGUAGE_CATBEAST
+	greaterform = "Tajaran"
 
 /mob/living/carbon/monkey/tajara/New()
 
 	..()
 	dna.mutantrace = "tajaran"
-	greaterform = "Tajaran"
+
+/mob/living/carbon/monkey/skrell
+	name = "neaera"
+	voice_name = "neaera"
+	speak_emote = list("squicks")
+	icon_state = "skrellkey1"
+	uni_append = list(0x01C,0xC92) // 01CC92
+	species_type = /mob/living/carbon/monkey/skrell
+	languagetoadd = LANGUAGE_SKRELLIAN
+	greaterform = "Skrell"
+
+/mob/living/carbon/monkey/skrell/New()
+
+	..()
+	dna.mutantrace = "skrell"
+
+/mob/living/carbon/monkey/unathi
+	name = "stok"
+	voice_name = "stok"
+	speak_emote = list("hisses")
+	icon_state = "stokkey1"
+	uni_append = list(0x044,0xC5D) // 044C5D
+	canWearClothes = 0
+	species_type = /mob/living/carbon/monkey/unathi
+	languagetoadd = LANGUAGE_UNATHI
+	greaterform = "Unathi"
+
+/mob/living/carbon/monkey/unathi/New()
+
+	..()
+	dna.mutantrace = "lizard"
+
+/mob/living/carbon/monkey/grey
+	name = "greyling"
+	voice_name = "greyling"
+	icon_state = "grey"
+	canWearGlasses = 0
+	languagetoadd = LANGUAGE_GREY
+	greaterform = "Grey"
 
 
 ///mob/living/carbon/monkey/diona/New()

@@ -283,5 +283,6 @@ obj/item/device/mmi/Destroy()
 	to_chat(user, "<span class='info'>*---------*</span>")
 
 /obj/item/device/mmi/OnMobDeath(var/mob/living/carbon/brain/B)
-	icon_state = "mmi_dead"
-	visible_message(message = "<span class='danger'>[B]'s MMI flatlines!</span>", blind_message = "<span class='warning'>You hear something flatline.</span>")
+	if(istype(B))
+		icon_state = "mmi_dead"
+		visible_message(message = "<span class='danger'>[B]'s MMI flatlines!</span>", blind_message = "<span class='warning'>You hear something flatline.</span>")

@@ -98,7 +98,7 @@
 		if(id)
 			break
 	return id
-	
+
 /mob/living/carbon/martian/can_wield()
 	return 1
 
@@ -120,7 +120,7 @@
 			if(client)
 				client.screen -= W
 			W.forceMove(loc)
-			W.unequipped()
+			W.unequipped(src)
 			if(dropped)
 				W.dropped(src)
 			if(W)

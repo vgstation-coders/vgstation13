@@ -10,7 +10,7 @@
 	recommended_enemies = 1
 
 	uplink_welcome = "Crazy AI Uplink Console:"
-	uplink_uses = 10
+	uplink_uses = 20
 
 	var/const/waittime_l = 600
 	var/const/waittime_h = 1800 // started at 1800
@@ -174,7 +174,7 @@ You should now be able to use your Explode spell to interface with the nuclear f
 	charge_max = 1
 	hud_state = "systemtakeover"
 	override_base = "grey"
-	
+
 /spell/aoe_turf/takeover/before_target(mob/user)
 	if (!istype(ticker.mode,/datum/game_mode/malfunction))
 		to_chat(usr, "<span class='warning'>You cannot begin a takeover in this round type!</span>")
@@ -188,7 +188,7 @@ You should now be able to use your Explode spell to interface with the nuclear f
 
 	if (alert(usr, "Are you sure you wish to initiate the takeover? The station hostile runtime detection software is bound to alert everyone. You have hacked [ticker.mode:apcs] APCs.", "Takeover:", "Yes", "No") != "Yes")
 		return 1
-		
+
 /spell/aoe_turf/takeover/cast(var/list/targets, mob/user)
 	command_alert(/datum/command_alert/malf_announce)
 	set_security_level("delta")
@@ -198,7 +198,7 @@ You should now be able to use your Explode spell to interface with the nuclear f
 		for(var/spell/S in AI_mind.current.spell_list)
 			if(istype(S,type))
 				AI_mind.current.remove_spell(S)
-				
+
 /spell/aoe_turf/ai_win
 	name = "Explode"
 	panel = MALFUNCTION
@@ -207,7 +207,7 @@ You should now be able to use your Explode spell to interface with the nuclear f
 	charge_max = 1
 	hud_state = "radiation"
 	override_base = "grey"
-	
+
 /spell/aoe_turf/ai_win/before_target(mob/user)
 	if(!ticker.mode:station_captured)
 		to_chat(usr, "<span class='warning'>You are unable to access the self-destruct system as you don't control the station yet.</span>")
@@ -220,12 +220,12 @@ You should now be able to use your Explode spell to interface with the nuclear f
 	if(!ticker.mode:to_nuke_or_not_to_nuke) //Takeover IS completed, but 60s timer passed.
 		to_chat(usr, "<span class='warning'>Cannot interface, it seems a neutralization signal was sent!</span>")
 		return 1
-		
+
 /spell/aoe_turf/ai_win/cast(var/list/targets, mob/user)
 	if(istype(ticker.mode, /datum/game_mode/malfunction))
 		var/datum/game_mode/malfunction/G = ticker.mode
 		G.ai_win()
-	
+
 /datum/game_mode/malfunction/proc/ai_win()
 	to_chat(usr, "<span class='danger'>Detonation signal sent!</span>")
 	ticker.mode:to_nuke_or_not_to_nuke = 0

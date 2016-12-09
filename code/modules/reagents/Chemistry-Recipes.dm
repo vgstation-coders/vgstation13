@@ -2640,7 +2640,7 @@
 	name = "Tonio"
 	id = TONIO
 	result = TONIO
-	required_reagents = list(COFFEE = 5, LIMEJUICE = 1, TOMATOJUICE = 1, LEMONJUICE = 1, WATERMELONJUICE = 1, "honey" = 1)
+	required_reagents = list(COFFEE = 5, LIMEJUICE = 1, TOMATOJUICE = 1, LEMONJUICE = 1, WATERMELONJUICE = 1, HONEY = 1)
 	result_amount = 10
 
 /datum/chemical_reaction/doppio
@@ -2654,7 +2654,7 @@
 	name = "Passione"
 	id = PASSIONE
 	result = PASSIONE
-	required_reagents = list(CAPPUCCINO = 5, GOLD = 1, "honey" =5)
+	required_reagents = list(CAPPUCCINO = 5, GOLD = 1, HONEY =5)
 	result_amount = 10
 
 /datum/chemical_reaction/seccoffee
@@ -2690,6 +2690,7 @@
 	id = GREYTEA
 	result = GREYTEA
 	required_reagents = list(WATER = 5, FUEL = 5)
+	result_amount = 10
 
 /datum/chemical_reaction/citalopram
 	name = "Citalopram"

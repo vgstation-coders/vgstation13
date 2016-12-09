@@ -16,6 +16,14 @@
 /obj/item/clothing/under/syndicate/combat
 	name = "combat turtleneck"
 
+/obj/item/clothing/under/syndicate/holomap
+	name = "tactical holosuit"
+	desc = "It's been fitted with some holographic localization devices. A measure the Syndicate judged necessary to improve teamwork among operatives."
+
+/obj/item/clothing/under/syndicate/holomap/New()
+	..()
+	attach_accessory(new/obj/item/clothing/accessory/holomap_chip/operative(src))
+
 /obj/item/clothing/under/syndicate/tacticool
 	name = "\improper Tacticool turtleneck"
 	desc = "Just looking at it makes you want to buy an SKS, go into the woods, and -operate-."

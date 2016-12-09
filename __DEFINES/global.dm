@@ -349,4 +349,6 @@ var/list/holoMiniMaps = list()
 var/list/centcommMiniMaps = list()
 var/list/extraMiniMaps = list()
 
+var/list/holomap_markers = list()
+
 var/holomaps_initialized = 0

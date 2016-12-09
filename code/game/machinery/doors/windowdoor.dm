@@ -19,6 +19,7 @@
 	soundeffect = 'sound/machines/windowdoor.ogg'
 	var/shard = /obj/item/weapon/shard
 	penetration_dampening = 2
+	animation_delay = 7
 
 /obj/machinery/door/window/New()
 	..()
@@ -108,7 +109,7 @@
 	flick(text("[]opening", src.base_state), src)
 	playsound(get_turf(src), soundeffect, 100, 1)
 	src.icon_state = text("[]open", src.base_state)
-	sleep(10)
+	sleep(animation_delay)
 
 	explosion_resistance = 0
 	src.density = 0
@@ -133,7 +134,7 @@
 //		SetOpacity(1)	//TODO: why is this here? Opaque windoors? ~Carn
 	update_nearby_tiles()
 
-	sleep(10)
+	sleep(animation_delay)
 
 	src.operating = 0
 	return 1

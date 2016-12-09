@@ -148,6 +148,8 @@
 
 /mob/living/silicon/robot/proc/handle_sensor_modes()
 	change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS|BLIND)
+	if(client)
+		client.color = initial(client.color)
 	src.see_in_dark = 8
 	src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 	if (src.stat == DEAD)
@@ -166,6 +168,12 @@
 		if (sensor_mode == NIGHT)
 			see_invisible = SEE_INVISIBLE_MINIMUM
 			see_in_dark = 8
+			if(client)
+				client.color = list(0.33,0.33,0.33,0,
+									0.33,0.33,0.33,0,
+				 					0.33,0.33,0.33,0,
+				 					0,0,0,1,
+				 					-0.2,0,-0.2,0)
 		if ((src.sight_mode & BORGMESON) || (sensor_mode == MESON_VISION))
 			change_sight(adding = SEE_TURFS)
 			src.see_in_dark = 8

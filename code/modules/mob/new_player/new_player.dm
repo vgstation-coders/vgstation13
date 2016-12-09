@@ -60,7 +60,10 @@
 
 	output += "</div>"
 
-	src << browse(output,"window=playersetup;size=210x240;can_close=0")
+	var/datum/browser/popup = new(src, "playersetup", "New Player Options", 210, 280)
+	popup.set_content(output)
+	popup.set_window_options("focus=0;can_close=0;can_minimize=1;can_maximize=0;can_resize=1;titlebar=1;")
+	popup.open()
 	return
 
 /mob/new_player/Stat()
@@ -275,6 +278,9 @@
 		return 0
 	if(!job.player_old_enough(src.client))
 		return 0
+	if(job.species_whitelist.len)
+		if(!job.species_whitelist.Find(client.prefs.species))
+			return 0
 	// assistant limits
 	if(config.assistantlimit)
 		if(job.title == "Assistant")

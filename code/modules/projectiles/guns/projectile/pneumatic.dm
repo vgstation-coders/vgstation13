@@ -1,3 +1,6 @@
+#define PNEUMATIC_SPEED_CAP 40
+#define PNEUMATIC_SPEED_DIVISOR 400
+
 /obj/item/weapon/storage/pneumatic
 	name = "pneumatic cannon"
 	desc = "A launcher powered by compressed air."
@@ -19,9 +22,6 @@
 	var/minimum_tank_pressure = 10                      // Minimum pressure to fire the gun.
 	var/cooldown = 0                                    // Whether or not we're cooling down.
 	var/cooldown_time = 30                              // Time between shots.
-	var/force_divisor = 400                             // Force equates to speed. Speed/5 equates to a damage multiplier for whoever you hit.
-	                                                    // For reference, a fully pressurized oxy tank at 50% gas release firing a health
-	                                                    // analyzer with a force_divisor of 10 hit with a damage multiplier of 3000+.
 
 /obj/item/weapon/storage/pneumatic/verb/set_pressure() //set amount of tank pressure.
 
@@ -115,6 +115,12 @@
 
 	add_fingerprint(user)
 
+	if(istype(user, /mob/living))
+		var/mob/living/M = user
+		if ((M_CLUMSY in M.mutations) && prob(50))
+			to_chat(M, "<span class='danger'>[src] blows up in your face.</span>")
+			target = M
+
 	var/turf/curloc = get_turf(user)
 	var/turf/targloc = get_turf(target)
 	if (!istype(targloc) || !istype(curloc))
@@ -127,17 +133,19 @@
 		return 0
 
 	var/obj/item/object = contents[1]
-	var/speed = ((fire_pressure*tank.volume)/object.w_class)/force_divisor //projectile speed.
-	if(speed>80)
-		speed = 80 //damage cap.
+	var/speed = min(PNEUMATIC_SPEED_CAP,((fire_pressure*tank.volume)/object.w_class)/PNEUMATIC_SPEED_DIVISOR)
+	//For reference in pseudo-code, Damage on mobs = (projectile.throwforce * ( throwing_speed / 5))
 
 	user.visible_message("<span class='danger'>[user] fires [src] and launches [object] at [target]!</span>","<span class='danger'>You fire [src] and launch [object] at [target]!</span>")
 
 	src.remove_from_storage(object,user.loc)
 	object.throw_at(target,10,speed)
 
+	//if we're throwing food and the target doesn't have its mouth covered, it takes a bite.
 	if(istype(object,/obj/item/weapon/reagent_containers/food/snacks) && ishuman(target) && object.Adjacent(target))
-		object.attack(target,target) //This way it is instant
+		var/mob/living/carbon/human/victim = target
+		if(!victim.check_body_part_coverage(MOUTH))
+			object.attack(target,target)
 
 	var/lost_gas_amount = tank.air_contents.total_moles*(pressure_setting/100)
 	var/datum/gas_mixture/removed = tank.air_contents.remove(lost_gas_amount)
@@ -147,3 +155,6 @@
 	spawn(cooldown_time)
 		cooldown = 0
 		to_chat(user, "[src]'s gauge informs you it's ready to be fired again.")
+
+#undef PNEUMATIC_SPEED_CAP
+#undef PNEUMATIC_SPEED_DIVISOR

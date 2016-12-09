@@ -307,7 +307,7 @@
 	return
 
 // called after an item is unequipped or stripped
-/obj/item/proc/unequipped(mob/user)
+/obj/item/proc/unequipped(mob/user, var/from_slot = null)
 	return
 
 //the mob M is attempting to equip this item into the slot passed through as 'slot'. Return 1 if it can do this and 0 if it can't.

@@ -747,14 +747,18 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		progbar.loc = null
 	return 1
 
-/proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE)
+/proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE)
 	if(!user || isnull(user))
 		return 0
 	if(numticks == 0)
 		return 0
 
 	var/delayfraction = round(delay/numticks)
-	var/Location = user.loc
+	var/Location
+	if(use_user_turf)	//When this is true, do_after() will check whether the user's turf has changed, rather than the user's loc.
+		Location = get_turf(user)
+	else
+		Location = user.loc
 	var/holding = user.get_active_hand()
 	var/target_location = target.loc
 	var/image/progbar
@@ -784,7 +788,12 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		sleep(delayfraction)
 		//if(user.client && progbar.icon_state != oldstate)
 			//user.client.images.Remove(progbar)
-		if(!user || user.isStunned() || !(user.loc == Location) || !(target.loc == target_location))
+		var/user_loc_to_check
+		if(use_user_turf)
+			user_loc_to_check = get_turf(user)
+		else
+			user_loc_to_check = user.loc
+		if(!user || user.isStunned() || !(user_loc_to_check == Location) || !(target.loc == target_location))
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)

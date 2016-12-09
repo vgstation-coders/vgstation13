@@ -139,7 +139,6 @@ var/global/disable_vents     = 0
 // Factor of how fast mob nutrition decreases
 #define HUNGER_FACTOR 0.15  // Please remember when editing this that it will also affect hypothermia.
 
-
 #define MINIMUM_AIR_RATIO_TO_SUSPEND 0.05
 	//Minimum ratio of air that must move to/from a tile to suspend group processing
 #define MINIMUM_AIR_TO_SUSPEND MOLES_CELLSTANDARD*MINIMUM_AIR_RATIO_TO_SUSPEND
@@ -473,6 +472,8 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_CLAWS			10	// Deal extra damage with punches (but without gloves), can butcher animals without tools
 #define M_BEAK			11	// Can buther animals without tools
 #define M_TALONS		12  // Bonus kick damage
+#define M_STONE_SKIN	13  // hard skin
+
 //#define HEAL			12 	// (Not implemented) healing people with hands
 //#define SHADOW		13 	// (Not implemented) shadow teleportation (create in/out portals anywhere) (25%)
 //#define SCREAM		14 	// (Not implemented) supersonic screaming (25%)
@@ -1543,11 +1544,13 @@ var/proccalls = 1
 #define DEFAULT FONT SIZE 4
 
 //Holomap filters
-#define HOLOMAP_FILTER_DEATHSQUAD		1
-#define HOLOMAP_FILTER_ERT				2
-#define HOLOMAP_FILTER_NUKEOPS			3
-#define HOLOMAP_FILTER_ELITESYNDICATE	4
-#define HOLOMAP_FILTER_VOX				5
+#define HOLOMAP_FILTER_DEATHSQUAD				1
+#define HOLOMAP_FILTER_ERT						2
+#define HOLOMAP_FILTER_NUKEOPS					4
+#define HOLOMAP_FILTER_ELITESYNDICATE			8
+#define HOLOMAP_FILTER_VOX						16
+#define HOLOMAP_FILTER_STATIONMAP				32
+#define HOLOMAP_FILTER_STATIONMAP_STRATEGIC		64//features markers over the captain's office, the armory, the SMES
 
 #define HOLOMAP_AREACOLOR_COMMAND		"#447FC299"
 #define HOLOMAP_AREACOLOR_SECURITY		"#AE121299"
@@ -1560,6 +1563,7 @@ var/proccalls = 1
 #define HOLOMAP_AREACOLOR_ESCAPE		"#FF0000CC"
 
 #define HOLOMAP_EXTRA_STATIONMAP				"stationmapformatted"
+#define HOLOMAP_EXTRA_STATIONMAP_STRATEGIC		"stationmapstrategic"
 #define HOLOMAP_EXTRA_STATIONMAPAREAS			"stationareas"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_NORTH		"stationmapsmallnorth"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_SOUTH		"stationmapsmallsouth"

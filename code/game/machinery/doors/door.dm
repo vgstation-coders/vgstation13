@@ -43,7 +43,7 @@ var/list/all_doors = list()
 	var/prefix = null
 
 	// TODO: refactor to best :(
-	var/animation_delay = 12
+	var/animation_delay = 10
 	var/animation_delay_2 = null
 
 	// turf animation
@@ -183,8 +183,6 @@ var/list/all_doors = list()
 		if ("closing")
 			flick("[prefix]door_closing", src)
 
-	sleep(animation_delay)
-
 /obj/machinery/door/update_icon()
 	if(!density)
 		icon_state = "[prefix]door_open"
@@ -204,9 +202,9 @@ var/list/all_doors = list()
 	if(!operating)
 		operating = 1
 
-	door_animate("opening")
 	set_opacity(0)
-	sleep(10)
+	door_animate("opening")
+	sleep(animation_delay)
 	layer = open_layer
 	density = 0
 	explosion_resistance = 0
@@ -230,11 +228,12 @@ var/list/all_doors = list()
 	if (density || operating || jammed)
 		return
 	operating = 1
-	door_animate("closing")
 
 	layer = closed_layer
 
 	density = 1
+	door_animate("closing")
+	sleep(animation_delay)
 	update_icon()
 
 	if (!glass)

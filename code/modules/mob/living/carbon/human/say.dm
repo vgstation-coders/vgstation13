@@ -46,7 +46,13 @@
 					temp_message[H] = "HONK"
 					pick_list -= H //Make sure that you dont HONK the same word twice
 				speech.message = jointext(temp_message, " ")
-
+	if(virus2.len)
+		for(var/ID in virus2)
+			var/datum/disease2/disease/V = virus2[ID]
+			for(var/datum/disease2/effectholder/EFH in V.effects)
+				var/datum/disease2/effect/effect = EFH.effect
+				if(effect.affect_voice && effect.affect_voice_active)
+					effect.affect_mob_voice(speech)
 	..(speech)
 	if(dna)
 		species.handle_speech(speech,src)

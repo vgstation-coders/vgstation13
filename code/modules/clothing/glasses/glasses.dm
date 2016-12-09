@@ -13,17 +13,6 @@
 	item_state = "glasses"
 	origin_tech = Tc_MATERIALS + "=1"
 
-/obj/item/clothing/glasses/night
-	name = "night vision goggles"
-	desc = "You can totally see in the dark now!."
-	icon_state = "night"
-	item_state = "glasses"
-	origin_tech = Tc_MAGNETS + "=2"
-	see_invisible = SEE_INVISIBLE_OBSERVER_NOLIGHTING
-	see_in_dark = 8
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-	eyeprot = -1
-
 /obj/item/clothing/glasses/eyepatch
 	name = "eyepatch"
 	desc = "Yarr."
@@ -80,6 +69,17 @@
 	darkness_view = -1
 	eyeprot = 1
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+
+/obj/item/clothing/glasses/sunglasses/virus
+
+/obj/item/clothing/glasses/sunglasses/virus/dropped(mob/user as mob)
+	canremove = 1
+	..()
+
+/obj/item/clothing/glasses/sunglasses/virus/equipped(var/mob/user, var/slot)
+	if (slot == slot_glasses)
+		canremove = 0
+	..()
 
 /obj/item/clothing/glasses/sunglasses/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")

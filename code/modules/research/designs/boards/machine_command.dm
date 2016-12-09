@@ -10,7 +10,7 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/aicore
 	locked = 1
-	req_lock_access = list(access_tox, access_robotics, access_rd)
+	req_lock_access = list(access_rnd, access_robotics, access_rd)
 
 /datum/design/pdapainter
 	name = "PDA Painter Board"

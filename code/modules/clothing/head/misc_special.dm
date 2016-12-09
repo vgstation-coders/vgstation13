@@ -182,6 +182,9 @@
 		mob.Blend(earbit, ICON_OVERLAY)
 		mob2.Blend(earbit2, ICON_OVERLAY)
 
+/obj/item/clothing/head/kitty/cursed
+	canremove = 0
+
 /obj/item/clothing/head/butt
 	name = "butt"
 	desc = "So many butts, so little time."

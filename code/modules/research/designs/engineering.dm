@@ -62,13 +62,13 @@
 
 /datum/design/night_vision_goggles
 	name = "Night Vision Goggles"
-	desc = "You can totally see in the dark now!."
+	desc = "You can totally see in the dark now!"
 	id = "night_vision_goggles"
 	req_tech = list(Tc_MATERIALS = 5, Tc_ENGINEERING = 4)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 700, MAT_GLASS = 2000, MAT_GOLD = 100)
 	category = "Engineering"
-	build_path = /obj/item/clothing/glasses/night
+	build_path = /obj/item/clothing/glasses/scanner/night
 
 /datum/design/device_analyser
 	name = "Device Analyser"

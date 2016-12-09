@@ -81,8 +81,9 @@
 
 /mob/living/carbon/gib()
 	dropBorers(1)
-	drop_stomach_contents()
-	src.visible_message("<span class='warning'>Something bursts from \the [src]'s stomach!</span>")
+	if(stomach_contents && stomach_contents.len)
+		drop_stomach_contents()
+		visible_message("<span class='warning'>Something bursts from \the [src]'s stomach!</span>")
 	. = ..()
 
 /mob/living/carbon/proc/share_contact_diseases(var/mob/M)

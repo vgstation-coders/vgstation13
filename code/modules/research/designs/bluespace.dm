@@ -83,3 +83,23 @@
 	materials = list (MAT_IRON = 800, MAT_GLASS = 200)
 	category = "Bluespace"
 	build_path = /obj/item/device/gps/science
+
+/datum/design/rcs_device
+	name = "Rapid Crate Sender"
+	desc = "Use this to send crates and closets to cargo telepads."
+	id = "rcs_device"
+	req_tech = list(Tc_BLUESPACE = 3, Tc_MATERIALS = 3)
+	build_type = PROTOLATHE
+	materials = list (MAT_IRON = 20000, MAT_GLASS = 5000)
+	category = "Bluespace"
+	build_path = /obj/item/weapon/rcs
+
+/datum/design/rcs_telepad
+	name = "RCS Telepad Kit"
+	desc = "Use this to create a telepad for use with the Rapid Crate Sender."
+	id = "rcs_telepad"
+	req_tech = list(Tc_BLUESPACE = 3, Tc_MAGNETS = 2)
+	build_type = PROTOLATHE
+	materials = list (MAT_IRON = 4000, MAT_GLASS = 2000)
+	category = "Bluespace"
+	build_path = /obj/item/device/telepad_beacon

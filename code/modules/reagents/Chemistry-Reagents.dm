@@ -198,7 +198,7 @@
 /datum/reagent/slimejelly/on_mob_life(var/mob/living/M, var/alien)
 	if(..())
 		return 1
-	if(M.dna.mutantrace != "slime" || !isslime(M))
+	if(M.dna.mutantrace != "slime" && !isslime(M))
 		if(prob(10))
 			to_chat(M, "<span class='warning'>Your insides are burning!</span>")
 			M.adjustToxLoss(rand(20, 60) * REM)
@@ -2818,6 +2818,14 @@
 	reagent_state = LIQUID
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#731008" //rgb: 115, 16, 8
+
+/datum/reagent/dipping_sauce
+	name = "Dipping Sauce"
+	id = DIPPING_SAUCE
+	description = "Adds extra, delicious texture to a snack."
+	reagent_state = SOLID
+	nutriment_factor = 3 * REAGENTS_METABOLISM
+	color = "#33cc33" //rgb: 51, 204, 51
 
 /datum/reagent/capsaicin
 	name = "Capsaicin Oil"

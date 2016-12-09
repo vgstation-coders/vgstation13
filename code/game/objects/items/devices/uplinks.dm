@@ -17,6 +17,11 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 
 /obj/item/device/uplink/New()
 	..()
+	if(ticker)
+		initialize()
+		return
+
+/obj/item/device/uplink/initialize()
 	welcome = ticker.mode.uplink_welcome
 	uses = ticker.mode.uplink_uses
 
@@ -205,4 +210,4 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 /obj/item/device/radio/headset/uplink/New()
 	..()
 	hidden_uplink = new(src)
-	hidden_uplink.uses = 10
+	hidden_uplink.uses = 20

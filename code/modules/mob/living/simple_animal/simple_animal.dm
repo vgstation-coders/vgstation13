@@ -688,7 +688,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		maxHealth = initial(maxHealth)
 		maxHealth -= (initial(maxHealth) / meat_amount) * meat_taken
 	health = maxHealth
-	..()
+	..(0)
 
 /mob/living/simple_animal/proc/make_babies() // <3 <3 <3
 	if(gender != FEMALE || stat || !scan_ready || !childtype || !species_type)

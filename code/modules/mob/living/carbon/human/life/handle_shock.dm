@@ -4,7 +4,7 @@
 	..()
 	if(status_flags & GODMODE)
 		return 0 //Godmode
-	if(analgesic || (species && species.flags & NO_PAIN))
+	if(analgesic || !feels_pain())
 		return //Analgesic avoids all traumatic shock temporarily
 
 	if(health < config.health_threshold_softcrit) //Going under the crit threshold makes you immediately collapse

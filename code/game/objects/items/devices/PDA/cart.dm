@@ -236,11 +236,14 @@
 /obj/item/weapon/cartridge/syndicate
 	name = "Detomatix Cartridge"
 	icon_state = "cart"
-	access_remote_door = 1
-	remote_door_id = "smindicate" //Make sure this matches the syndicate shuttle's shield/door id!!	//don't ask about the name, testing.
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_SYNDICATE + "=2"
 	mech_flags = MECH_SCAN_ILLEGAL
 	var/shock_charges = 4
+
+/obj/item/weapon/cartridge/syndicatedoor
+	name = "Doorman Cartridge"
+	access_remote_door = 1
+	remote_door_id = "smindicate" //Make sure this matches the syndicate shuttle's shield/door id!!
 
 /obj/item/weapon/cartridge/proc/unlock()
 	if (!istype(loc, /obj/item/device/pda))

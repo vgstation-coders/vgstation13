@@ -122,7 +122,7 @@
 				if(affecting && affecting.is_organic())
 					if(thorns_apply_damage(M, affecting))
 						to_chat(H, "<span class='danger'>You step on \the [src]'s sharp thorns!</span>")
-						if(H.species && !(H.species.flags & NO_PAIN))
+						if(H.feels_pain())
 							H.Knockdown(3)
 					if(stinging_apply_reagents(M))
 						to_chat(H, "<span class='danger'>You step on \the [src]'s stingers!</span>")
@@ -151,7 +151,7 @@
 		if(thorns_apply_damage(H, affecting))
 			to_chat(H, "<span class='danger'>You are prickled by the sharp thorns on \the [src]!</span>")
 			spawn(3)
-				if(H.species && !(H.species.flags & NO_PAIN))
+				if(H.feels_pain())
 					H.drop_item(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/after_consume(var/mob/living/carbon/human/H)
@@ -678,6 +678,22 @@
 	potency = 20
 	filling_color = "#66CEED"
 	plantname = "icechili"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper
+	name = "ghost pepper"
+	desc = "This pepper is hainted. And pretty spicy, too."
+	icon_state = "ghostpepper"
+	potency = 20
+	filling_color = "#66CEED"
+	plantname = "ghostpepper"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/ghostpepper/spook()
+	visible_message("<span class='warning'>A specter takes a bite of \the [src] from beyond the grave!</span>")
+	playsound(get_turf(src),'sound/items/eatfood.ogg', rand(10,50), 1)
+	bitecount++
+	reagents.remove_any(bitesize)
+	if(!reagents.total_volume)
+		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/carrot
 	name = "carrot"

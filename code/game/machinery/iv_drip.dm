@@ -80,16 +80,20 @@
 		to_chat(user, "<span class='notice'>You dismantle \the [name].</span>")
 		qdel(src)
 	if (istype(W, /obj/item/weapon/reagent_containers))
-		if(!isnull(src.beaker))
-			to_chat(user, "There is already a reagent container loaded!")
-			return
+		var/obj/item/weapon/reagent_containers/R = W
+		if(R.fits_in_iv_drip())
+			if(!isnull(src.beaker))
+				to_chat(user, "There is already a reagent container loaded!")
+				return
 
-		if(user.drop_item(W, src))
-			src.beaker = W
-			to_chat(user, "You attach \the [W] to \the [src].")
-			investigation_log(I_CHEMS, "was loaded with \a [W] by [key_name(user)], containing [W.reagents.get_reagent_ids(1)]")
-			src.update_icon()
-			return
+			if(user.drop_item(R, src))
+				src.beaker = R
+				to_chat(user, "You attach \the [R] to \the [src].")
+				investigation_log(I_CHEMS, "was loaded with \a [R] by [key_name(user)], containing [R.reagents.get_reagent_ids(1)]")
+				src.update_icon()
+				return
+		else
+			to_chat(user, "<span class='warning'>\The [R] doesn't fit on \the [src].</span>")
 	else
 		return ..()
 

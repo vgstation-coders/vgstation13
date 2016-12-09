@@ -10,7 +10,7 @@
 	category = "Console Boards"
 	build_path = /obj/item/weapon/circuitboard/aiupload
 	locked = 1
-	req_lock_access = list(access_tox, access_robotics, access_rd)
+	req_lock_access = list(access_rnd, access_robotics, access_rd)
 
 /datum/design/borgupload
 	name = "Circuit Design (Cyborg Upload)"
@@ -22,7 +22,7 @@
 	category = "Console Boards"
 	build_path = /obj/item/weapon/circuitboard/borgupload
 	locked = 1
-	req_lock_access = list(access_tox, access_robotics, access_rd)
+	req_lock_access = list(access_rnd, access_robotics, access_rd)
 
 /datum/design/comconsole
 	name = "Circuit Design (Communications)"

@@ -56,6 +56,32 @@
 	destination = null
 	header = "ERROR"
 
+/obj/item/weapon/card/shuttle_pass
+	name = "shuttle pass"
+	desc = "A one-use shuttle activation pass, for limited access to high-security transportation."
+	icon_state = "data"
+	item_state = "card-id"
+	var/obj/docking_port/destination/destination
+	var/allowed_shuttle
+
+/obj/item/weapon/card/shuttle_pass/New()
+	..()
+	if(ticker)
+		initialize()
+
+/obj/item/weapon/card/shuttle_pass/initialize()
+	if(ispath(destination))
+		spawn()
+			destination = locate(destination) in all_docking_ports
+
+/obj/item/weapon/card/shuttle_pass/Destroy()
+	destination = null
+
+/obj/item/weapon/card/shuttle_pass/ERT
+	name = "\improper ERT shuttle pass"
+	destination = /obj/docking_port/destination/transport/station
+	allowed_shuttle = /datum/shuttle/transport
+
 #define MAX_SHUTTLE_NAME_LEN
 
 /obj/machinery/computer/shuttle_control
@@ -120,9 +146,12 @@
 
 	return "[span_s][name][span_e]"
 
-/obj/machinery/computer/shuttle_control/attackby(obj/item/weapon/disk/shuttle_coords/SC, mob/user)
-	if(istype(SC))
-		insert_disk(SC, user)
+/obj/machinery/computer/shuttle_control/attackby(obj/item/O, mob/user)
+	if(istype(O, /obj/item/weapon/disk/shuttle_coords))
+		insert_disk(O, user)
+
+	if(istype(O, /obj/item/weapon/card/shuttle_pass))
+		use_pass(O, user)
 
 	return ..()
 
@@ -425,6 +454,19 @@
 		disk = SC
 		to_chat(usr, "<span class='info'>You insert \the [SC] into \the [src].</span>")
 		src.updateUsrDialog()
+
+/obj/machinery/computer/shuttle_control/proc/use_pass(obj/item/weapon/card/shuttle_pass/P, mob/user)
+	if(!istype(P))
+		return
+
+	if(user.drop_item(P, src))
+		if(shuttle && shuttle.type == P.allowed_shuttle)
+			if(shuttle.travel_to(P.destination, src, user))
+				to_chat(user, "<span class='info'>You insert \the [P] into \the [src].</span>")
+				qdel(P)
+				return
+		to_chat(user, "<span class='info'>You insert \the [P] into \the [src], but it is rejected.</span>")
+		user.put_in_hands(P)
 
 /obj/machinery/computer/shuttle_control/bullet_act(var/obj/item/projectile/Proj)
 	visible_message("[Proj] ricochets off [src]!")

@@ -170,14 +170,19 @@
 	canstage = 0
 	//TODO species_fit = list("Vox")
 
-/obj/item/clothing/mask/gas/virusclown_hat //why isn't this just a subtype of clown_hat???????
-	name = "clown wig and mask"
-	desc = "A true prankster's facial attire. A clown is incomplete without his wig and mask."
-	icon_state = "clown"
-	item_state = "clown_hat"
-	species_fit = list(VOX_SHAPED)
-	can_flip = 0
-	canstage = 0
+/obj/item/clothing/mask/gas/clown_hat/virus //why isn't this just a subtype of clown_hat??????? //Is now
+	desc = "A true prankster's facial attire. A clown is incomplete without his wig and mask. <span class = 'notice'>On second look, it looks like it's coming out of the wearers skin!</span>"
+
+/obj/item/clothing/mask/gas/clown_hat/virus/dropped(mob/user as mob)
+	canremove = 1
+	..()
+
+/obj/item/clothing/mask/gas/clown_hat/virus/equipped(var/mob/user, var/slot)
+	if (slot == slot_wear_mask)
+		canremove = 0
+		can_flip = 0
+	..()
+
 
 /obj/item/clothing/mask/gas/sexyclown
 	name = "sexy-clown wig and mask"

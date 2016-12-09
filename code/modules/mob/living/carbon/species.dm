@@ -250,9 +250,6 @@ var/global/list/whitelisted_species = list("Human")
 /datum/species/proc/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
 	return
 
-/datum/species/proc/can_artifact_revive()
-	return 1
-
 /datum/species/proc/equip(var/mob/living/carbon/human/H)
 
 /datum/species/human
@@ -268,11 +265,19 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/r_def_manifested.dmi'
 	known_languages = list(LANGUAGE_HUMAN)
 	primitive = /mob/living/carbon/monkey
-
+	has_organ = list(
+		"heart" =    /datum/organ/internal/heart,
+		"lungs" =    /datum/organ/internal/lungs,
+		"liver" =    /datum/organ/internal/liver,
+		"kidneys" =  /datum/organ/internal/kidney,
+		"brain" =    /datum/organ/internal/brain/ash,
+		"appendix" = /datum/organ/internal/appendix,
+		"eyes" =     /datum/organ/internal/eyes
+		)
 	flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | NO_BLOOD
 
-/datum/species/manifested/can_artifact_revive()
-	return 0
+/datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
+	H.dust()
 
 /datum/species/unathi
 	name = "Unathi"
@@ -328,9 +333,6 @@ var/global/list/whitelisted_species = list("Human")
 		speech.message += "  ACK ACK!"
 
 	return ..(speech, H)
-
-/datum/species/skellington/can_artifact_revive()
-	return 0
 
 /datum/species/skellington/skelevox // Science never goes too far, it's the public that's too conservative
 	name = "Skeletal Vox"
@@ -726,6 +728,15 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/vox/updatespeciescolor(var/mob/living/carbon/human/H)
 	switch(H.s_tone)
+		if(6)
+			icobase = 'icons/mob/human_races/vox/r_voxemrl.dmi'
+			deform = 'icons/mob/human_races/vox/r_def_voxemrl.dmi'
+		if(5)
+			icobase = 'icons/mob/human_races/vox/r_voxazu.dmi'
+			deform = 'icons/mob/human_races/vox/r_def_voxazu.dmi'
+		if(4)
+			icobase = 'icons/mob/human_races/vox/r_voxlgrn.dmi'
+			deform = 'icons/mob/human_races/vox/r_def_voxlgrn.dmi'
 		if(3)
 			icobase = 'icons/mob/human_races/vox/r_voxgry.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_voxgry.dmi'
@@ -800,6 +811,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	can_be_hypothermic = 0
 	has_sweat_glands = 0
+	default_mutations = list(M_STONE_SKIN)
 
 	chem_flags = NO_INJECT
 
@@ -830,9 +842,6 @@ var/global/list/whitelisted_species = list("Human")
 		A.key = H.key
 		H.key = null
 	qdel(H)
-
-/datum/species/golem/can_artifact_revive()
-	return 0
 
 /mob/living/adamantine_dust //serves as the corpse of adamantine golems
 	name = "adamantine dust"

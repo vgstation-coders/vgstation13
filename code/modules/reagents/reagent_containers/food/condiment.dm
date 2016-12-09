@@ -10,7 +10,7 @@
 	name = "condiment container"
 	desc = "Just your average condiment container."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/drinkingglass.dmi', "right_hand" = 'icons/mob/in-hand/right/drinkingglass.dmi')
-	icon = 'icons/obj/food.dmi'
+	icon = 'icons/obj/food_condiment.dmi'
 	icon_state = "emptycondiment"
 	item_state = null
 	flags = FPRINT  | OPENCONTAINER
@@ -173,10 +173,12 @@
 				name = "malt vinegar bottle"
 				desc = "Perfect for fish and chips!"
 				icon_state = "vinegar_container"
-			if("honey")
+				item_state = null
+			if(HONEY)
 				name = "honey pot"
 				desc = "Sweet and healthy!"
-				icon_state = "honey"
+				icon_state = HONEY
+				item_state = null
 			if(CINNAMON)
 				name = "cinnamon shaker"
 				desc = "A spice, obtained from the bark of cinnamomum trees."
@@ -368,7 +370,7 @@
 	name = "exotic bottle"
 	desc = "If you can see this label, something is wrong."
 	//~9% chance of anything but special sauce, which is .09 chance
-	var/global/list/possible_exotic_condiments = list(ENZYME=10,BLACKPEPPER=10,VINEGAR=10,SODIUMCHLORIDE=10,CINNAMON=10,CHEFSPECIAL=1,FROSTOIL=10,SOYSAUCE=10,CAPSAICIN=10,"honey"=10,KETCHUP=10,COCO=10)
+	var/global/list/possible_exotic_condiments = list(ENZYME=10,BLACKPEPPER=10,VINEGAR=10,SODIUMCHLORIDE=10,CINNAMON=10,CHEFSPECIAL=1,FROSTOIL=10,SOYSAUCE=10,CAPSAICIN=10,HONEY=10,KETCHUP=10,COCO=10)
 
 /obj/item/weapon/reagent_containers/food/condiment/exotic/New()
 	..()

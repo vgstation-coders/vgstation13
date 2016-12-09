@@ -64,14 +64,17 @@
 
 				user.visible_message("<span class='warning'>[user] has forced [our_mob] onto the spike, killing it instantly!</span>")
 
+				add_attacklogs(user, our_mob, "meatspiked", admin_warn = FALSE)
+
 				our_mob.death(0)
 				our_mob.ghostize()
 
 				our_mob.forceMove(src)
 				if(iscarbon(our_mob))
 					var/mob/living/carbon/C = our_mob
-					C.drop_stomach_contents()
-					user.visible_message("<span class='warning'>\The [C]'s stomach contents drop to the ground!</span>")
+					if(C.stomach_contents && C.stomach_contents.len)
+						C.drop_stomach_contents()
+						user.visible_message("<span class='warning'>\The [C]'s stomach contents drop to the ground!</span>")
 
 				returnToPool(G)
 				return

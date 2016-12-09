@@ -71,7 +71,7 @@
 /obj/item/trash/bowl
 	name = "bowl"
 	desc = "An empty bowl. Put some food in it to start making a soup."
-	icon = 'icons/obj/food.dmi'
+	icon = 'icons/obj/food_custom.dmi'
 	icon_state = "soup"
 
 /obj/item/trash/bowl/attackby(obj/item/I,mob/user,params)
@@ -95,6 +95,7 @@
 // Customizable Foods //////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/snacks/customizable
+	icon = 'icons/obj/food_custom.dmi'
 	trash = /obj/item/trash/plate
 	bitesize = 2
 

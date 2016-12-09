@@ -273,6 +273,12 @@
 
 	log_game("[usr ? key_name(usr) : "Something"] sent [name] ([type]) to [D.areaname]")
 
+	if(get_pre_flight_delay())
+		spawn(max(1,get_pre_flight_delay()-5))
+			for(var/obj/structure/shuttle/engine/propulsion/P in linked_area)
+				spawn()
+					P.shoot_exhaust()
+
 	spawn(get_pre_flight_delay())
 		//If moving to another zlevel, check for items which can't leave the zlevel (nuke disk, primarily)
 		if(linked_port.z != D.z)
@@ -314,6 +320,10 @@
 	if(transit_port && get_transit_delay())
 		if(use_transit == TRANSIT_ALWAYS || (use_transit == TRANSIT_ACROSS_Z_LEVELS && (linked_area.z != destination_port.z)))
 			move_to_dock(transit_port)
+			spawn(max(1,get_transit_delay()-5))
+				for(var/obj/structure/shuttle/engine/propulsion/P in linked_area)
+					spawn()
+						P.shoot_exhaust()
 			sleep(get_transit_delay())
 
 	if(destination_port)
@@ -550,7 +560,7 @@
 		if(!A)
 			message_admins("<span class='notice'>WARNING: Unable to find an area at [new_coords.x_pos];[new_coords.y_pos];[new_center.z]. [src.name] ([src.type]) will not be moved.")
 			return
-		if(!destroy_everything && !(A.type in list(/area, /area/station/custom)) && !istype(A, /area/random_vault) && !istype(A, /area/vault)) //Breaking blueprint areas and space is fine, breaking the station is not. Breaking randomly generated vaults is fine, in case they spawn in a bad spot!
+		if(!destroy_everything && !A.shuttle_can_crush) //Breaking blueprint areas and space is fine, breaking the station is not. Breaking randomly generated vaults is fine, in case they spawn in a bad spot!
 			message_admins("<span class='notice'>WARNING: [src.name] ([src.type]) attempted to destroy [A] ([A.type]).</span> If you want [src.name] to be able to move freely and destroy areas, change its \"destroy_everything\" variable to 1.")
 			return
 		//If any of the new turfs are in the moved shuttle's current area, EMERGENCY ABORT (this leads to the shuttle destroying itself & potentially gibbing everybody inside)

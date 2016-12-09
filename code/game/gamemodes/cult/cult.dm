@@ -42,7 +42,7 @@
 	recommended_enemies = 4
 
 	uplink_welcome = "Nar-Sie Uplink Console:"//what?
-	uplink_uses = 10//whaaaat?
+	uplink_uses = 20//whaaaat?
 
 	var/datum/mind/sacrifice_target = null
 	var/finished = 0

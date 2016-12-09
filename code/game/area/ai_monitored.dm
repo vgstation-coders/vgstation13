@@ -1,6 +1,7 @@
 /area/ai_monitored
 	name = "AI Monitored Area"
 	var/obj/machinery/camera/motioncamera = null
+	shuttle_can_crush = FALSE
 
 
 /area/ai_monitored/New()

@@ -612,7 +612,7 @@
 	icon = 'icons/obj/radio.dmi'
 	icon_state = "radio"
 	var/temp = null
-	var/uses = 4.0
+	var/uses = 8.0
 	var/selfdestruct = 0.0
 	var/traitor_frequency = 0.0
 	var/obj/item/device/radio/origradio = null

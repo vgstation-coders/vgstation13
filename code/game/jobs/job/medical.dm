@@ -164,8 +164,8 @@
 	supervisors = "the chief medical officer and research director"
 	selection_color = "#ffeef0"
 	idtype = /obj/item/weapon/card/id/medical
-	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_research, access_eva)
-	minimal_access = list(access_medical, access_morgue, access_genetics, access_research)
+	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_science, access_eva)
+	minimal_access = list(access_medical, access_morgue, access_genetics, access_science)
 
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/geneticist

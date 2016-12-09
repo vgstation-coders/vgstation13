@@ -34,7 +34,7 @@
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
 			manipcount += SP.rating
-	general_process_time = initial(general_process_time) / manipcount
+	general_process_time = round((initial(general_process_time) / manipcount))
 
 /obj/machinery/centrifuge/attackby(var/obj/item/weapon/reagent_containers/glass/beaker/vial/I, var/mob/user as mob)
 	if(!istype(I))

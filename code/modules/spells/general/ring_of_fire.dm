@@ -75,8 +75,7 @@
 	..()
 
 	for(var/turf/T in locations)
-		var/obj/effect/fire_blast/ring_of_fire/F = new /obj/effect/fire_blast/ring_of_fire(T)
-		F.duration = duration
+		var/obj/effect/fire_blast/ring_of_fire/F = new /obj/effect/fire_blast/ring_of_fire(T, fire_duration = duration)
 
 		var/lock_id = "\ref[F]"
 		add_lock_cat(/datum/locking_category/ring_of_fire, lock_id)

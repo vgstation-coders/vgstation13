@@ -15,8 +15,7 @@ var/list/poddoors = list()
 	var/id_tag = 1.0
 
 	prefix = "r_"
-	animation_delay = 18
-	animation_delay_2 = 5
+	animation_delay = 5
 
 	var/closedicon = "pdoor1"
 	var/openicon = "pdoor0"
@@ -69,7 +68,7 @@ var/list/poddoors = list()
 			flick(openingicon, src)
 			src.icon_state = openicon
 			src.set_opacity(0)
-			sleep(15)
+			sleep(animation_delay)
 			src.density = 0
 			src.operating = 0
 			return
@@ -85,7 +84,7 @@ var/list/poddoors = list()
 	flick(openingicon, src)
 	src.icon_state = openicon
 	src.set_opacity(0)
-	sleep(10)
+	sleep(animation_delay)
 	layer = open_layer
 	src.density = 0
 	update_nearby_tiles()
@@ -108,7 +107,7 @@ var/list/poddoors = list()
 	src.set_opacity(initial(opacity))
 	update_nearby_tiles()
 
-	sleep(10)
+	sleep(animation_delay)
 	src.operating = 0
 	return
 

@@ -12,6 +12,7 @@
 
 /mob/living/carbon/u_equip(obj/item/W as obj, dropped = 1)
 	var/success = 0
+	var/slot = null
 	if(!W)
 		return 0
 	else if (W == handcuffed)
@@ -19,10 +20,12 @@
 			return 0
 		handcuffed = null
 		success = 1
+		slot = slot_handcuffed
 		update_inv_handcuffed()
 	else if (W == legcuffed)
 		legcuffed = null
 		success = 1
+		slot = slot_legcuffed
 		update_inv_legcuffed()
 	else
 		..()
@@ -30,7 +33,7 @@
 		if (W)
 			if (client)
 				client.screen -= W
-			W.unequipped()
+			W.unequipped(src, slot)
 			if(dropped)
 				W.forceMove(loc)
 				W.dropped(src)

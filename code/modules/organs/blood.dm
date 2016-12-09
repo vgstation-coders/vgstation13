@@ -242,7 +242,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 /mob/living/carbon/monkey/take_blood(obj/item/weapon/reagent_containers/container, var/amount)
 	if(!isDead())
 		adjustOxyLoss(amount)
-		. = ..()
+	. = ..()
 
 //Transfers blood from container ot vessels
 /mob/living/carbon/proc/inject_blood(obj/item/weapon/reagent_containers/container, var/amount)
@@ -324,14 +324,8 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
 	if(istype(source,/mob/living/carbon/human))
 		var/mob/living/carbon/human/M = source
 		var/datum/reagent/blood/is_there_blood = M.get_blood(M.vessel)
-		if(!is_there_blood && M.dna && M.species)
-			is_there_blood = new /datum/reagent/blood()
-			is_there_blood.data["blood_DNA"] = M.dna.unique_enzymes
-			is_there_blood.data["blood_type"] = M.dna.b_type
-			is_there_blood.data["blood_colour"] = M.species.blood_color
-			if (!is_there_blood.data["virus2"])
-				is_there_blood.data["virus2"] = list()
-			is_there_blood.data["virus2"] |= virus_copylist(M.virus2)
+		if(!is_there_blood)
+			return //If there is no blood in the mob's blood vessel, there's no reason to make any sort of splatter.
 
 		source = is_there_blood
 

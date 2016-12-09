@@ -130,6 +130,8 @@
 #define FLOUR 			"flour"
 #define RICE 			"rice"
 #define CHERRYJELLY 			"cherryjelly"
+#define HONEY			"honey"
+#define DIPPING_SAUCE	"dippingsauce"
 #define DISCOUNT 			"discount"
 #define IRRADIATEDBEANS 			"irradiatedbeans"
 #define TOXICWASTE 			"toxicwaste"

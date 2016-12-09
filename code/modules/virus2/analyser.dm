@@ -35,8 +35,8 @@
 			scancount += SP.rating-1
 		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
 			lasercount += SP.rating-1
-	minimum_growth = initial(minimum_growth) - (scancount * 3)
-	process_time = initial(process_time) - lasercount
+	minimum_growth = round((initial(minimum_growth) - (scancount * 3)))
+	process_time = round((initial(process_time) - lasercount))
 
 /obj/machinery/disease2/diseaseanalyser/attackby(var/obj/I as obj, var/mob/user as mob)
 	..()

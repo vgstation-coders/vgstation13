@@ -13,7 +13,7 @@ var/global/list/mixed_allowed = list(
 	var/list/datum/game_mode/modes // 3 game modes in 1
 	var/list/datum/mind/picked_antags
 	uplink_welcome = "Syndicate Uplink Console:"
-	uplink_uses = 10
+	uplink_uses = 20
 
 	required_players = 20
 	required_players_secret = 25

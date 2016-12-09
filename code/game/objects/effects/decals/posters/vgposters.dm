@@ -18,3 +18,8 @@
 	name = "Nuclear Device Informational"
 	desc = "This poster depicts an image of an old style nuclear explosive device, as well as some helpful information on what to do if one has been set. It suggests lying on the floor and crying."
 	icon_state="vgposter4"
+	
+/datum/poster/vg_5//44
+	name = "High Effect Engineering"
+	desc = "There are 3 shards and a singularity.  The shards are singing.  The engineers are crying."
+	icon_state="vgposter5"

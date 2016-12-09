@@ -49,8 +49,8 @@
 
 ///TELEPAD CALLER///
 /obj/item/device/telepad_beacon
-	name = "telepad beacon"
-	desc = "Use to warp in a cargo telepad."
+	name = "telepad kit"
+	desc = "Use to build a cargo telepad."
 	icon = 'icons/obj/radio.dmi'
 	icon_state = "beacon"
 	item_state = "signaler"
@@ -70,7 +70,7 @@
 ///HANDHELD TELEPAD USER///
 /obj/item/weapon/rcs
 	name = "rapid-crate-sender (RCS)"
-	desc = "Use this to send crates and closets to cargo telepads."
+	desc = "Use this to send crates to cargo telepads."
 	icon = 'icons/obj/telescience.dmi'
 	icon_state = "rcs"
 	flags = FPRINT
@@ -84,6 +84,7 @@
 	var/emagged = FALSE
 	var/send_cost = 1500
 	var/tmp/teleporting = FALSE
+	starting_materials	= list(MAT_IRON = 50000)
 
 /obj/item/weapon/rcs/New()
 	..()

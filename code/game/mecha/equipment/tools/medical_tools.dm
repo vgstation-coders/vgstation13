@@ -1,5 +1,5 @@
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper
-	name = "Mounted Sleeper"
+	name = "\improper Mounted Sleeper"
 	desc = "Mounted Sleeper. (Can be attached to: Medical Exosuits)"
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "sleeper_0"
@@ -240,7 +240,7 @@
 
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer //why the fuck is this under medical_tools?
-	name = "Cable Layer"
+	name = "\improper Cable Layer"
 	icon_state = "mecha_wire"
 	var/datum/event/event
 	var/turf/old_turf
@@ -386,7 +386,7 @@
 	return 1
 
 /obj/item/mecha_parts/mecha_equipment/tool/syringe_gun
-	name = "Exosuit-Mounted Syringe Gun"
+	name = "\improper Exosuit-Mounted Syringe Gun"
 	desc = "Exosuit-mounted chem synthesizer with syringe gun. Reagents inside are held in stasis, so no reactions will occur. (Can be attached to: Medical Exosuits)"
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "syringegun"
