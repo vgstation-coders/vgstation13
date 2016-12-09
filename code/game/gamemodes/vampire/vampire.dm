@@ -606,7 +606,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 			if(findtextEx(P.explanation_text,"You have been Enthralled by"))
 				headvamp = P.target //can't think of any better way to find them
 				enthralled_mind.objectives -= P
-	var/ref = "\ref[head]"
+	var/ref = "\ref[headvamp]"
 	if(ref in thralls)
 		thralls[ref] -= enthralled_mind
 	enthralled -= enthralled_mind
