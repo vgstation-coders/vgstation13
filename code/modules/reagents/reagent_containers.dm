@@ -113,15 +113,10 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 		user.visible_message("<span class='danger'>[user] feeds [M] \the [src].</span>", "<span class='danger'>You feed [M] \the [src].</span>")
 
-		add_attacklogs(user, M, "force-fed", src, "amount:[amount_per_transfer_from_this], container containing [reagentlist(src)]")
+		add_attacklogs(user, M, "force-fed", src, "amount:[amount_per_transfer_from_this], container containing [reagentlist(src)]", adminwarn = FALSE)
 		/*M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been fed [src.name] by [user.name] ([user.ckey]) Reagents: [reagentlist(src)]</font>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Fed [M.name] by [M.name] ([M.ckey]) Reagents: [reagentlist(src)]</font>")
 		log_attack("<font color='red'>[user.name] ([user.ckey]) fed [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")*/
-
-		if(!iscarbon(user))
-			M.LAssailant = null
-		else
-			M.LAssailant = user
 
 		if(reagents.total_volume)
 			imbibe(M)
