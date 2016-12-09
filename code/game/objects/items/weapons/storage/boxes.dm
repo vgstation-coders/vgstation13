@@ -57,8 +57,8 @@
 
 /obj/item/weapon/storage/box/surveillance/New()
 	..()
-	contents = list()
-	sleep(1)
+	for(var/atom/A in src)
+		qdel(A)
 	for(var/i = 1 to 5)
 		new /obj/item/device/camera_bug(src)
 
@@ -68,30 +68,33 @@
 
 /obj/item/weapon/storage/box/survival/New()
 	..()
-	contents = list()
-	sleep(1)
 	new /obj/item/clothing/mask/breath(src)
 	new /obj/item/weapon/tank/emergency_oxygen(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
-	return
 
 /obj/item/weapon/storage/box/survival/vox/New()
 	..()
-	contents = list()
-	sleep(1)
+	for(var/atom/A in src)
+		qdel(A)
 	new /obj/item/clothing/mask/breath/vox(src)
 	new /obj/item/weapon/tank/emergency_nitrogen(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
-	return
 
 /obj/item/weapon/storage/box/survival/engineer/New()
 	..()
-	contents = list()
-	sleep(1)
+	for(var/atom/A in src)
+		qdel(A)
 	new /obj/item/clothing/mask/breath(src)
 	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
-	return
+
+/obj/item/weapon/storage/box/survival/ert/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	new /obj/item/clothing/mask/gas/ert(src)
+	new /obj/item/weapon/tank/emergency_oxygen/double(src)
+	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 
 /obj/item/weapon/storage/box/gloves
 	name = "box of latex gloves"
