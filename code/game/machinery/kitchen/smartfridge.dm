@@ -233,12 +233,6 @@
 		if(!(stat & BROKEN))
 			icon_state = icon_off
 
-/obj/machinery/smartfridge/kick_act()
-	display_miniicons = !display_miniicons
-	src.updateUsrDialog()
-	..()
-
-
 /*******************
 *   Item Adding
 ********************/
