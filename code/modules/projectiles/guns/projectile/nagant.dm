@@ -22,7 +22,7 @@
 	gun_flags = 0
 
 /obj/item/weapon/gun/projectile/nagant/isHandgun()
-		return 0
+	return FALSE
 
 /obj/item/weapon/gun/projectile/nagant/attack_self(mob/living/user as mob)
 	if(recentpump)
@@ -86,6 +86,9 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	w_class = W_CLASS_MEDIUM
 	slot_flags = SLOT_BELT
+
+/obj/item/weapon/gun/projectile/nagant/obrez/isHandgun()
+	return TRUE //WHY NOT
 
 /obj/item/weapon/gun/projectile/nagant/obrez/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
 	if(current_shell && current_shell.BB)

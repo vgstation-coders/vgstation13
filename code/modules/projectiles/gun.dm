@@ -86,7 +86,7 @@
 		Fire(A,user,params, "struggle" = struggle) //Otherwise, fire normally.
 
 /obj/item/weapon/gun/proc/isHandgun()
-	return 1
+	return FALSE //Make this proc return TRUE for handgun-shaped weapons (or in general, small enough weapons I guess)
 
 /obj/item/weapon/gun/proc/can_Fire(mob/user, var/display_message = 0)
 	var/firing_dexterity = 1

@@ -23,7 +23,7 @@
 	gun_flags = 0
 
 /obj/item/weapon/gun/projectile/rocketlauncher/isHandgun()
-	return 0
+	return FALSE
 
 /obj/item/weapon/gun/projectile/rocketlauncher/update_icon()
 	if(!getAmmo())
