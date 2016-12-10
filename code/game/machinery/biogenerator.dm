@@ -101,6 +101,12 @@
 	id="belt"
 	name="Utility Belt"
 	result=/obj/item/weapon/storage/belt/utility
+	
+/datum/biogen_recipe/leather/belt/slim
+	cost=300
+	id="slim-belt"
+	name="Slim Belt"
+	result=/obj/item/weapon/storage/belt/slim
 
 /datum/biogen_recipe/leather/moneybag
 	cost=300
