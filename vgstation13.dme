@@ -300,6 +300,7 @@
 #include "code\game\gamemodes\setupgame.dm"
 #include "code\game\gamemodes\steal_items.dm"
 #include "code\game\gamemodes\autotraitor\autotraitor.dm"
+#include "code\game\gamemodes\blob\_blob_defines.dm"
 #include "code\game\gamemodes\blob\blob.dm"
 #include "code\game\gamemodes\blob\blob_finish.dm"
 #include "code\game\gamemodes\blob\blob_report.dm"

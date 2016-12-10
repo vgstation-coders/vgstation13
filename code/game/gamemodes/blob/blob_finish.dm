@@ -44,7 +44,7 @@ datum/game_mode/proc/auto_declare_completion_blob()
 		if(blob_mode.infected_crew.len)
 			text += "<FONT size = 2><B>The blob[(blob_mode.infected_crew.len > 1 ? "s were" : " was")]:</B></FONT>"
 
-			var/icon/logo = icon('icons/mob/blob.dmi', "blob_core")
+			var/icon/logo = icon('icons/mob/blob/blob.dmi', "blob_core")
 			end_icons += logo
 			var/tempstate = end_icons.len
 			for(var/datum/mind/blob in blob_mode.infected_crew)
