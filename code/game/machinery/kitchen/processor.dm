@@ -60,7 +60,7 @@
 				if(M.poisonsacs)
 					M.poisonsacs.forceMove(loc)
 					M.poisonsacs = null
-					M.desc = "An excellent [src]!"
+					M.desc = "An excellent [M.name]!"
 					M.reagents.del_reagent(TOXIN)
 					M.reagents.del_reagent(CARPOTOXIN)
 				what.forceMove(loc)
