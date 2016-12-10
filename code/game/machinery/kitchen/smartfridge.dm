@@ -1,4 +1,4 @@
-#define MAX_SHELVES 5
+#define MAX_SHELVES 4
 #define MINIICONS_OFF 0
 #define MINIICONS_ON 1
 #define MINIICONS_UNCROPPED 2
