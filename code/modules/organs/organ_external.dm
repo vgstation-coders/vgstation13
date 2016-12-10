@@ -513,7 +513,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 			//overdose of bicaridine begins healing IB
 			if(owner.reagents.get_reagent_amount(BICARIDINE) >= 30)
-				W.damage = max(0, W.damage - 0.2)
+				W.heal_damage(0.2, TRUE)
 
 		// slow healing
 		var/heal_amt = 0
