@@ -167,8 +167,8 @@
 	name = "Gatling Welder"
 	desc = "Engineering Dakka."
 	id = "welder_gatling"
-	req_tech = list(Tc_ENGINEERING = 6, Tc_BLUESPACE = 2)
+	req_tech = list(Tc_ENGINEERING = 5, Tc_BLUESPACE = 2)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 37500, MAT_GLASS = 18750)
-	build_path = /obj/item/weapon/weldingtool/gatling
+	materials = list(MAT_IRON = 18750, MAT_GLASS = 9375)
+	build_path = /obj/item/weapon/weldingtool/gatling/empty
 	category = "Engineering"
