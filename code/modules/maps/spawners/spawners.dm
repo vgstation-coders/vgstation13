@@ -1137,8 +1137,3 @@
 	/obj/item/clothing/accessory/medal/gold/captain,
 	/obj/item/clothing/accessory/medal/gold/heroism
 )
-
-/obj/map/spawner/safe/test
-	name = "safe test"
-	icon_state = "safe_test"
-	to_spawn = list(/obj/item/complete/outfit/dredd)
