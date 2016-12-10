@@ -221,6 +221,9 @@
 		if(!isnull(src.reagent_glass))
 			to_chat(user, "<span class='notice'>There is already a beaker loaded.</span>")
 			return
+		if(W.w_class > W_CLASS_SMALL)
+			to_chat(user, "<span class='warning'>\The [W] is too big to fit.</span>")
+			return
 
 		if(user.drop_item(W, src))
 			src.reagent_glass = W
