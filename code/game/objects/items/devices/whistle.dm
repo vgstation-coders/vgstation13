@@ -85,6 +85,7 @@
 	// ~ visible message ~ //
 	for(var/mob/living/M in suspects)
 		M.show_message("<span class='userdanger'>[bicon(src)][say_your_thing()]</span>", MESSAGE_HEAR)
+		add_logs(user, M, "security-hailed", 1)
 	var/who = suspects.len <= 3 ? english_list(suspects) : "everyone"
 	user.visible_message("<span class='danger'>[user] hails for [who] to halt!</span>", \
 						"<span class='warning'>You hail for [who] to halt!</span>", \
