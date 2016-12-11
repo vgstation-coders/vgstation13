@@ -182,12 +182,13 @@
 			qdel(F)
 
 /mob/living/simple_animal/hostile/wolf/adjustBruteLoss(var/damage)
-	anger()
-	if(pack_alpha == src && alpha_challenge == 0)//We are the alpha and not challenging others
-		var/list/can_see = view(src, vision_range)
-		for(var/mob/living/simple_animal/hostile/wolf/potential_pack in can_see)
-			if(potential_pack.pack_alpha == src) //Part of our pack
-				potential_pack.anger(1) //RIP
+	if(!isDead())
+		anger()
+		if(pack_alpha == src && alpha_challenge == 0)//We are the alpha and not challenging others
+			var/list/can_see = view(src, vision_range)
+			for(var/mob/living/simple_animal/hostile/wolf/potential_pack in can_see)
+				if(potential_pack.pack_alpha == src) //Part of our pack
+					potential_pack.anger(1) //RIP
 	..()
 
 /mob/living/simple_animal/hostile/wolf/proc/anger(var/anger_override = 0)

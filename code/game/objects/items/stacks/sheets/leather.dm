@@ -83,6 +83,42 @@
 	icon_state = "weed_extract"
 	origin_tech = ""
 
+/obj/item/stack/sheet/animalhide/deer
+	name = "deer hide"
+	desc = "The skin of a dead deer."
+	singular_name = "deer hide piece"
+	icon_state = "sheet_deer"
+	origin_tech = ""
+
+/obj/item/deer_head
+	name = "deer head"
+	desc = "Not something you want to find in your bed in the morning."
+	icon = 'icons/obj/butchering_products.dmi'
+	icon_state = "deer_head"
+	origin_tech = ""
+
+/obj/item/deer_head/attackby(obj/item/W, mob/user)
+	.=..()
+
+	if(W.is_sharp() >= 1.2) //Actually sharp things are this sharp, yes
+		user.visible_message("<span class='notice'>[user] finishes butchering \the [src].</span>", \
+		"<span class='notice'>You slice the antlers off \the [src], oh god why is everything falling apart!?.</span>")
+		new /obj/item/antlers(get_turf(src))
+		new /obj/effect/gibspawner/generic(get_turf(src))
+		qdel(src)
+
+/obj/item/antlers
+	name = "deer antlers"
+	desc = "A bit horny"
+	icon = 'icons/obj/butchering_products.dmi'
+	icon_state = "antlers"
+
+/obj/item/bear_hands
+	name = "bear hands"
+	desc = "Puns omitted but viable"
+	icon = 'icons/obj/butchering_products.dmi'
+	icon_state = "bear_hands"
+
 /obj/item/stack/sheet/hairlesshide
 	name = "hairless hide"
 	desc = "This hide was stripped of it's hair, but still needs tanning."
@@ -109,7 +145,9 @@
 	icon_state = "sheet-leather"
 	origin_tech = Tc_MATERIALS + "=2"
 
-
+/obj/item/stack/sheet/leather/New(var/loc, var/amount=null)
+	recipes = leather_recipes
+	..()
 
 //Step one - dehairing.
 
