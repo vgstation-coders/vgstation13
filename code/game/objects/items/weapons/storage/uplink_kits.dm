@@ -234,3 +234,16 @@
 	new /obj/item/weapon/reagent_containers/glass/bottle/antisocial(src)
 	new /obj/item/weapon/reagent_containers/syringe(src)
 	return
+
+/obj/item/weapon/storage/box/syndie_kit/smokebombs
+	name = "snap pop box"
+	desc = "Eight wrappers of fun! Ages 8 and up. Not suitable for children."
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "spbox"
+	storage_slots = 8
+	can_only_hold = list("/obj/item/toy/snappop")
+
+/obj/item/weapon/storage/box/syndie_kit/smokebombs/New()
+	..()
+	for(var/i=1; i <= storage_slots; i++)
+		new /obj/item/toy/snappop/smokebomb(src)
