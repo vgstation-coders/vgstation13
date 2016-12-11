@@ -2,6 +2,7 @@
 	name = "Luchador Mask"
 	desc = "Worn by robust fighters, flying high to defeat their foes!"
 	icon_state = "luchag"
+	item_state = "luchag"
 	clothing_flags = MASKINTERNALS
 	body_parts_covered = HEAD|EARS|EYES
 	w_class = W_CLASS_SMALL
