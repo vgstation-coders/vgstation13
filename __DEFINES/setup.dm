@@ -1279,6 +1279,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define Sp_RECHARGE	1
 #define Sp_CHARGES	2
 #define Sp_HOLDVAR	4
+#define Sp_GRADUAL	8
 
 //spell range
 #define SELFCAST -1
@@ -1359,6 +1360,7 @@ var/proccalls = 1
 #define ORE_PROCESSING_ALLOY 2
 
 //SOUND CHANNELS
+#define CHANNEL_GRUE				1021	//only ever used to allow the ambient grue sound to be made to stop playing
 #define CHANNEL_LOBBY				1022
 #define CHANNEL_AMBIENCE			1023
 #define CHANNEL_ADMINMUSIC			1024
