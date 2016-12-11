@@ -1006,7 +1006,7 @@
 //Does not come with a safe.
 /obj/map/spawner/safe/any
 	name = "safe any spawner "
-	icon_state = "safe_any"
+	icon_state = "safe"
 	to_spawn = list(
 		/obj/item/weapon/storage/pill_bottle/creatine,
 		/obj/item/weapon/storage/pill_bottle/nanobot,
@@ -1056,7 +1056,7 @@
 
 /obj/map/spawner/safe/medical
 	name = "safe medical spawner"
-	icon_state = "safe_medical"
+	icon_state = "safe"
 	to_spawn = list(/obj/item/weapon/storage/pill_bottle/creatine,
 	/obj/item/weapon/storage/pill_bottle/nanobot,
 	/obj/item/weapon/storage/firstaid/adv,
@@ -1071,7 +1071,7 @@
 
 /obj/map/spawner/safe/food
 	name = "safe food spawner"
-	icon_state = "safe_food"
+	icon_state = "safe"
 	to_spawn = list(/obj/item/weapon/reagent_containers/food/drinks/bottle/vodka,
 	/obj/item/voucher/free_item,
 	/obj/item/voucher/free_item/hot_drink,
@@ -1087,7 +1087,7 @@
 
 /obj/map/spawner/safe/weapon
 	name = "safe weapon spawner"
-	icon_state = "safe_weapon"
+	icon_state = "safe"
 	to_spawn = list(/obj/item/weapon/shield/energy,
 	/obj/item/weapon/gun/energy/gun/nuclear,
 	/obj/item/weapon/gun/projectile/mateba,
@@ -1105,7 +1105,7 @@
 
 /obj/map/spawner/safe/clothing
 	name = "safe clothing spawner"
-	icon_state = "safe_clothing"
+	icon_state = "safe"
 	to_spawn = list(/obj/item/weapon/shield/energy,
 	/obj/item/clothing/accessory/storage/webbing,
 	/obj/item/clothing/under/sexyclown,
@@ -1125,7 +1125,7 @@
 
 /obj/map/spawner/safe/medal
 	name = "safe medal spawner"
-	icon_state = "safe_medal"
+	icon_state = "safe"
 	to_spawn = list(/obj/item/clothing/accessory/medal,
 	/obj/item/clothing/accessory/medal/conduct,
 	/obj/item/clothing/accessory/medal/bronze_heart,
