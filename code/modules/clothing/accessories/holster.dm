@@ -177,15 +177,28 @@
 
 /obj/item/clothing/accessory/holster/knife/update_icon()
 	if(holstered)
-		icon_state = "[initial(icon_state)]_1"
-		_color = "[initial(_color)]_1"
+		if(holstered.icon_state in list("skinningknife", "tacknife"))
+			icon_state = "[initial(icon_state)]_[holstered.icon_state]"
+			_color = "[initial(_color)]_[holstered.icon_state]"
+		else
+			icon_state = "[initial(icon_state)]_tacknife"
+			_color = "[initial(_color)]_tacknife"
 	else
-		icon_state = "[initial(icon_state)]_0"
-		_color = "[initial(_color)]_0"
+		icon_state = "[initial(icon_state)]_empty"
+		_color = "[initial(_color)]_empty"
 	..()
+
+/obj/item/clothing/accessory/holster/knife/boot/preloaded
+	var/knife_type
 
 /obj/item/clothing/accessory/holster/knife/boot/preloaded/New()
 	..()
 	if(!holstered)
-		holstered = new /obj/item/weapon/kitchen/utensil/knife/tactical(src)
+		holstered = new knife_type(src)
 		update_icon()
+
+/obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical
+	knife_type = /obj/item/weapon/kitchen/utensil/knife/tactical
+
+/obj/item/clothing/accessory/holster/knife/boot/preloaded/skinning
+	knife_type = /obj/item/weapon/kitchen/utensil/knife/skinning
