@@ -204,7 +204,6 @@
  */
 /obj/item/weapon/weldingtool
 	name = "welding tool"
-	desc = "Ensure the switch is safely in the off position before refueling."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "welder"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
@@ -295,7 +294,7 @@
 			if(src.icon_state != "welder") //Check that the sprite is correct, if it isnt, it means toggle() was not called
 				src.force = 3
 				src.damtype = "brute"
-				update_icon()
+				src.icon_state = "welder"
 				src.hitsound = "sound/weapons/toolhit.ogg"
 				src.welding = 0
 			processing_objects.Remove(src)
@@ -305,7 +304,7 @@
 			if(src.icon_state != "welder1") //Check that the sprite is correct, if it isnt, it means toggle() was not called
 				src.force = 15
 				src.damtype = "fire"
-				update_icon()
+				src.icon_state = "welder1"
 				src.hitsound = "sound/weapons/welderattack.ogg"
 			if(prob(5))
 				remove_fuel(1)
@@ -401,7 +400,7 @@
 			to_chat(usr, "<span class='notice'>\The [src] switches on.</span>")
 			src.force = 15
 			src.damtype = "fire"
-			update_icon()
+			src.icon_state = "welder1"
 			processing_objects.Add(src)
 		else
 			to_chat(usr, "<span class='notice'>Need more fuel!</span>")
@@ -412,7 +411,7 @@
 		to_chat(usr, "<span class='notice'>\The [src] switches off.</span>")
 		src.force = 3
 		src.damtype = "brute"
-		update_icon()
+		src.icon_state = "welder"
 		src.welding = 0
 
 //Turns off the welder if there is no more fuel (does this really need to be its own proc?)
@@ -433,7 +432,7 @@
 			to_chat(usr, "<span class='notice'>You switch the [src] on.</span>")
 			src.force = 15
 			src.damtype = "fire"
-			update_icon()
+			src.icon_state = "welder1"
 			processing_objects.Add(src)
 		else
 			to_chat(usr, "<span class='notice'>Need more fuel!</span>")
@@ -446,7 +445,7 @@
 			to_chat(usr, "<span class='notice'>\The [src] shuts off!</span>")
 		src.force = 3
 		src.damtype = "brute"
-		update_icon()
+		src.icon_state = "welder"
 		src.welding = 0
 
 //Decides whether or not to damage a player's eyes based on what they're wearing as protection
@@ -499,18 +498,11 @@
 				spawn(100)
 					user.disabilities &= ~NEARSIGHTED
 
-/obj/item/weapon/weldingtool/update_icon()
-	..()
-	icon_state = "[initial(icon_state)][welding ? "1" : ""]" //Ternary operator.
-
-
 /obj/item/weapon/weldingtool/empty
 	start_fueled = 0
 
 /obj/item/weapon/weldingtool/largetank
 	name = "Industrial Welding Tool"
-	desc = "The cutting edge between portability and tank size."
-	icon_state = "welder_large"
 	max_fuel = 40
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 60)
 	origin_tech = Tc_ENGINEERING + "=2"
@@ -520,8 +512,6 @@
 
 /obj/item/weapon/weldingtool/hugetank
 	name = "Upgraded Welding Tool"
-	desc = "A large tank for a large job."
-	icon_state = "welder_larger"
 	max_fuel = 80
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 120)
@@ -529,19 +519,6 @@
 
 /obj/item/weapon/weldingtool/hugetank/empty
 	start_fueled = 0
-
-/obj/item/weapon/weldingtool/gatling
-	name = "gatling welder"
-	desc = "Engineering Dakka."
-	icon_state = "welder_gatling"
-	max_fuel = 160
-	w_class = W_CLASS_HUGE
-	starting_materials = list(MAT_IRON = 18750, MAT_GLASS = 18750)
-	origin_tech = Tc_ENGINEERING + "=4"
-
-/obj/item/weapon/weldingtool/gatling/empty
-	start_fueled = 0
-
 
 /obj/item/weapon/weldingtool/experimental
 	name = "Experimental Welding Tool"
