@@ -290,7 +290,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Arts and Crafts crate"
 	group = "Supplies"
 
-/datum/supply_packs/artscrafts
+/datum/supply_packs/marbleblock
 	name = "Marble Block crate"
 	contains = list(/obj/structure/block)
 	cost = 50
