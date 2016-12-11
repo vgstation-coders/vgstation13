@@ -1,7 +1,0 @@
-author: Unid
-
-delete-after: True
-
-changes: 
-- tweak: Increased movement speed of arcane golems (now they move as fast as basilisks)
-- tweak: Arcane golems now have a melee attack that they will use against any enemies that come close to them, dealing 15-25 damage. Arcane golems are still forced to follow their master, which means they will never chase anybody.
