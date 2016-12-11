@@ -535,7 +535,7 @@
 	desc = "Engineering Dakka."
 	icon_state = "welder_gatling"
 	max_fuel = 160
-	w_class = W_CLASS_HUGE
+	w_class = W_CLASS_LARGE
 	starting_materials = list(MAT_IRON = 18750, MAT_GLASS = 18750)
 	origin_tech = Tc_ENGINEERING + "=4"
 
