@@ -175,14 +175,14 @@
 /obj/item/clothing/accessory/holster/knife/boot/can_attach_to(obj/item/clothing/C)
 	return istype(C, /obj/item/clothing/shoes)
 
-/obj/item/clothing/accessory/holster/knife/update_icon()
+/obj/item/clothing/accessory/holster/knife/boot/update_icon()
 	if(holstered)
-		if(holstered.icon_state in list("skinningknife", "tacknife"))
+		if(holstered.icon_state in list("skinningknife", "tacknife", "knife", "smallknife", "fork"))
 			icon_state = "[initial(icon_state)]_[holstered.icon_state]"
 			_color = "[initial(_color)]_[holstered.icon_state]"
 		else
-			icon_state = "[initial(icon_state)]_tacknife"
-			_color = "[initial(_color)]_tacknife"
+			icon_state = "[initial(icon_state)]_knife"
+			_color = "[initial(_color)]_knife"
 	else
 		icon_state = "[initial(icon_state)]_empty"
 		_color = "[initial(_color)]_empty"
