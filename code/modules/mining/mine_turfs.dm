@@ -295,7 +295,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 				var/obj/structure/boulder/B
 				if(artifact_find)
-					if(P.excavation_amount < 100)
+					if(excavation_level > 0)
 
 						B = getFromPool(/obj/structure/boulder, src)
 						if(artifact_find)
