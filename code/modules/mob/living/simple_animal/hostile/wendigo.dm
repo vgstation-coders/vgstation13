@@ -109,7 +109,7 @@
 
 	speed = 1
 
-/mob/living/simple_animal/hostile/wendigo/human/death()
+/mob/living/simple_animal/hostile/wendigo/human/Die()
 	flick("wendigo_dying",src)
 	..()
 

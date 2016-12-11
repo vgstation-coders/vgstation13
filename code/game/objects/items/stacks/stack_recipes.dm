@@ -250,4 +250,18 @@ var/list/datum/stack_recipe/cardboard_recipes = list (
 ======================================================================== */
 var/list/datum/stack_recipe/leather_recipes = list (
 	new/datum/stack_recipe("Bullwhip",	/obj/item/weapon/bullwhip,	10,	time = 100,),
-	)
+	new/datum/stack_recipe("rugby ball",		/obj/item/toy/ball/rugby,						3,time = 10,on_floor = 1),
+	new/datum/stack_recipe("leather armor",		/obj/item/clothing/suit/leather,				6,time = 15,on_floor = 1),
+	new/datum/stack_recipe("leather helmet",	/obj/item/clothing/head/leather,				3,time = 15,on_floor = 1),
+	new/datum/stack_recipe("botanist gloves",	/obj/item/clothing/gloves/botanic_leather,		3,time = 10,on_floor = 1),
+	new/datum/stack_recipe("leather shoes",		/obj/item/clothing/shoes/leather,				2,time = 10,on_floor = 1),
+	new/datum/stack_recipe("leather wallet",	/obj/item/weapon/storage/wallet,				1,time = 10),
+	new/datum/stack_recipe("leather satchel",	/obj/item/weapon/storage/backpack/satchel,		4,time = 10,on_floor = 1),
+	new/datum/stack_recipe("plant bag",			/obj/item/weapon/storage/bag/plants,			3,time = 10,on_floor = 1),
+	new/datum/stack_recipe("mining satchel",	/obj/item/weapon/storage/bag/ore,				3,time = 10,on_floor = 1),
+	new/datum/stack_recipe("gadget bag",		/obj/item/weapon/storage/bag/gadgets,			3,time = 10,on_floor = 1),
+	new/datum/stack_recipe("boot knife holster",/obj/item/clothing/accessory/holster/knife/boot,3,time = 10),
+	new/datum/stack_recipe("handgun holster",	/obj/item/clothing/accessory/holster/handgun,	3,time = 10),
+	new/datum/stack_recipe("handgun holster",	/obj/item/weapon/storage/belt/utility,			3,time = 10),
+
+)
