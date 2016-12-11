@@ -163,7 +163,7 @@
 		/obj/item/weapon/wirecutters))
 
 /obj/item/clothing/accessory/holster/knife/unholster_message(mob/user)
-	user.visible_message("<span class='warning'>[user] pulls \a [holstered] from it's holster!</span>", \
+	user.visible_message("<span class='warning'>[user] pulls \a [holstered] from its holster!</span>", \
 	"<span class='warning'>You draw your [holstered.name]!</span>")
 
 /obj/item/clothing/accessory/holster/knife/boot
