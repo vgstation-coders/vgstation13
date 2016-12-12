@@ -364,14 +364,19 @@ var/list/holomap_cache = list()
 		holomap_images += bgmap
 
 /obj/item/clothing/accessory/holomap_chip/proc/update_marker()
+	marker_prefix = base_prefix
 	if (prefix_update.len > 0)
-		marker_prefix = base_prefix
 		var/obj/item/clothing/under/U = attached_to
 		if(U && ishuman(U.loc))
 			var/mob/living/carbon/human/H = U.loc
 			var/obj/item/helmet = H.get_item_by_slot(slot_head)
 			if(helmet && "[helmet.type]" in prefix_update)
 				marker_prefix = prefix_update["[helmet.type]"]
+
+/obj/item/clothing/accessory/holomap_chip/raider/update_marker()
+	..()
+	if(rand(100) > 90)
+		marker_prefix = "chick[pick("a","b","c")]"
 
 /obj/item/clothing/accessory/holomap_chip/proc/handle_marker(var/image/I,var/turf/T,var/turf/TU)
 	//if a new marker is created, we immediately set its offset instead of letting animate() take care of it, so it doesn't slide accross the screen.
