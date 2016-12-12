@@ -319,43 +319,9 @@
 
 	var/dat = list()
 
-	//I don't know/don't care enough to convert this into a proper browser popup. Cry for help or just plain lazy? You decide!
-	dat += {"
-	<style>
-		.fridgeIcon img{
-			/* 64x64 futureproofing! */
-			width: 32px;
-			height: 32px;
-			-ms-interpolation-mode: nearest-neighbor;
-		}
-
-		.cropped img{
-			/* 32x32 is a little too big for the fridge menu, and most of it is empty space for small icons, so we're going to crop some out */
-			margin-top: -8px; margin-bottom: -5px;
-		}
-
-		table {
-		    border-collapse: collapse;
-		    width: 100%;
-		}
-
-		/* Oh wouldn't things be so easy if this shit just worked in IE7?
-		tr:nth-child(even){background-color: #e6e6e6}
-		tr:nth-child(odd){background-color: #f2f2f2;}
-		*/
-
-		.pileName {
-			width: 100%;
-			vertical-align: middle;
-		}
-
-		.shelfButton {
-			vertical-align: bottom;
-		}
-	</style>
-	"}
-
-	if (contents.len != 0)
+	if(contents.len == 0)
+		dat += "<font color = 'red'><TT>No product loaded!</TT></font>"
+	else
 		var/imagedesc
 		switch(display_miniicons)
 			if(MINIICONS_ON)
@@ -365,11 +331,9 @@
 			if(MINIICONS_OFF)
 				imagedesc = "Off"
 		dat += "<span style='position:absolute;right:2.5%;'><TT>Images: <a href='byond://?src=\ref[src];display_miniicons=1;'>[imagedesc]</A></TT></span>"
-	dat += "<TT><b>Select an item:</b></TT>"
 
-	if (contents.len == 0)
-		dat += "<font color = 'red'> No product loaded!</font>"
-	else
+		dat += "<TT><b>Select an item:</b></TT>"
+
 		var/list/shelves[MAX_SHELVES]
 		for(var/i = 1 to MAX_SHELVES)
 			shelves[i] = list()
@@ -417,9 +381,11 @@
 			shelfcounter++
 
 	dat = jointext(dat,"") //Optimize BYOND's shittiness by making "dat" actually a list of strings and join it all together afterwards! Yes, I'm serious, this is actually a big deal
-	user << browse("<HEAD><TITLE>[src] Supplies</TITLE></HEAD><TT>[dat]</TT>", "window=smartfridge")
-	onclose(user, "smartfridge")
-	return
+
+	var/datum/browser/clean/popup = new(user, "smartfridge", "[src] Supplies", 400, 450)
+	popup.add_stylesheet("common", 'html/browser/smartfridge.css') //Completely fucking nuke common.css, because clean.css doesn't clean shit.
+	popup.set_content(dat)
+	popup.open()
 
 /obj/machinery/smartfridge/Topic(href, href_list)
 	if(..())
