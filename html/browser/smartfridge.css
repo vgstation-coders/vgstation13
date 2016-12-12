@@ -1,7 +1,3 @@
-html, body {
-    font-size: medium;
-}
-
 .fridgeIcon img{
 	/* 64x64 futureproofing! */
 	width: 32px;

@@ -382,7 +382,7 @@
 
 	dat = jointext(dat,"") //Optimize BYOND's shittiness by making "dat" actually a list of strings and join it all together afterwards! Yes, I'm serious, this is actually a big deal
 
-	var/datum/browser/clean/popup = new(user, "smartfridge", "[src] Supplies", 400, 450)
+	var/datum/browser/clean/popup = new(user, "smartfridge", "[src] Supplies", 450, 500)
 	popup.add_stylesheet("common", 'html/browser/smartfridge.css') //Completely fucking nuke common.css, because clean.css doesn't clean shit.
 	popup.set_content(dat)
 	popup.open()
