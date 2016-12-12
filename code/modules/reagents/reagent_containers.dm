@@ -10,6 +10,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	var/amount_per_transfer_from_this = 5
 	var/possible_transfer_amounts = list(5,10,15,25,30)
 	var/volume = 30
+	var/amount_per_imbibe = 5
 
 /obj/item/weapon/reagent_containers/verb/set_APTFT() //set amount_per_transfer_from_this
 	set name = "Set transfer amount"
@@ -107,13 +108,12 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	else if(ishuman(M))
 		user.visible_message("<span class='danger'>[user] attempts to feed [M] \the [src].</span>", "<span class='danger'>You attempt to feed [M] \the [src].</span>")
 
-		var/drink_delay = 30*(amount_per_transfer_from_this/5) //So normal = 1
-		if(!do_mob(user, M, drink_delay))
+		if(!do_mob(user, M, 30))
 			return 1
 
 		user.visible_message("<span class='danger'>[user] feeds [M] \the [src].</span>", "<span class='danger'>You feed [M] \the [src].</span>")
 
-		add_attacklogs(user, M, "force-fed", src, "amount:[amount_per_transfer_from_this], container containing [reagentlist(src)]", adminwarn = FALSE)
+		add_attacklogs(user, M, "force-fed", src, "amount:[amount_per_imbibe], container containing [reagentlist(src)]", adminwarn = FALSE)
 		/*M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been fed [src.name] by [user.name] ([user.ckey]) Reagents: [reagentlist(src)]</font>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Fed [M.name] by [M.name] ([M.ckey]) Reagents: [reagentlist(src)]</font>")
 		log_attack("<font color='red'>[user.name] ([user.ckey]) fed [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")*/
@@ -342,13 +342,13 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
 
 	if(isrobot(user))
-		reagents.remove_any(amount_per_transfer_from_this)
+		reagents.remove_any(amount_per_imbibe)
 		return 1
 	if(reagents.total_volume)
 		if(can_drink(user))
 			reagents.reaction(user, INGEST)
 			spawn(5)
-				reagents.trans_to(user, amount_per_transfer_from_this)
+				reagents.trans_to(user, amount_per_imbibe)
 
 	return 1
 
@@ -358,7 +358,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		if(H.species.chem_flags & NO_DRINK)
 			reagents.reaction(get_turf(H), TOUCH)
 			H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")
-			reagents.remove_any(amount_per_transfer_from_this)
+			reagents.remove_any(amount_per_imbibe)
 			return 0
 
 
