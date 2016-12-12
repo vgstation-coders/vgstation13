@@ -21,7 +21,7 @@
 
 	var/list/accepted_types = list(	/obj/item/weapon/reagent_containers/food/snacks/grown,
 									/obj/item/weapon/grown,
-									/obj/item/seeds/,
+									/obj/item/seeds,
 									/obj/item/weapon/reagent_containers/food/snacks/meat,
 									/obj/item/weapon/reagent_containers/food/snacks/egg,
 									/obj/item/weapon/reagent_containers/food/condiment)
@@ -59,7 +59,7 @@
 /datum/fridge_pile/proc/removeAmount(var/amt)
 	amount -= amt
 	if(amount <= 0)
-		qdel(src)
+		returnToPool(src)
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -81,6 +81,11 @@
 	)
 
 	RefreshParts()
+
+/obj/machinery/smartfridge/Destroy()
+	for(var/key in piles)
+		returnToPool(piles[key])
+	..()
 
 /obj/machinery/smartfridge/proc/accept_check(var/obj/item/O as obj, var/mob/user as mob)
 	for(var/ac_type in accepted_types)
@@ -257,7 +262,7 @@
 			if(istype(thisPile))
 				thisPile.addAmount(1)
 			else
-				piles[O.name] = new/datum/fridge_pile(O.name, src, 1, bicon(O))
+				piles[O.name] = getFromPool(/datum/fridge_pile, O.name, src, 1, bicon(O))
 			user.visible_message("<span class='notice'>[user] has added \the [O] to \the [src].", \
 								 "<span class='notice'>You add \the [O] to \the [src].")
 
@@ -330,7 +335,7 @@
 				imagedesc = "Uncropped"
 			if(MINIICONS_OFF)
 				imagedesc = "Off"
-		dat += "<span style='position:absolute;right:2.5%;'><TT>Images: <a href='byond://?src=\ref[src];display_miniicons=1;'>[imagedesc]</A></TT></span>"
+		dat += "<span class='imageToggleButton'><TT>Images: <a href='byond://?src=\ref[src];display_miniicons=1;'>[imagedesc]</A></TT></span>"
 
 		dat += "<TT><b>Select an item:</b></TT>"
 

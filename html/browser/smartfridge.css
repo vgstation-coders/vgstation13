@@ -20,6 +20,11 @@ tr:nth-child(even){background-color: #e6e6e6}
 tr:nth-child(odd){background-color: #f2f2f2;}
 */
 
+.imageToggleButton {
+	position:absolute;
+	right:2.5%;
+}
+
 .pileName {
 	width: 100%;
 	vertical-align: middle;
