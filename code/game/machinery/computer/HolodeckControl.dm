@@ -428,9 +428,6 @@
 		return 1
 	return 0
 
-/obj/item/weapon/holo/esword/attack(target as mob, mob/user as mob)
-	..() //uhh
-
 /obj/item/weapon/holo/esword/New()
 	AddToProfiler()
 	_color = pick("red","blue","green","purple")
