@@ -12,10 +12,10 @@
 
 	var/list/mobs_to_flash_and_bang = get_all_mobs_in_dview(flashbang_turf, ignore_types = list(/mob/living/carbon/brain, /mob/living/silicon/ai))
 
-	if(ismob(loc)) //Holding a flashbang while it goes off is a bad idea.
-		var/mob/M = loc
-		bang(flashbang_turf, M, TRUE)
-		mobs_to_flash_and_bang -= M
+	var/mob/living/holder = get_holder_of_type(src, /mob/living)
+	if(holder) //Holding a flashbang while it goes off is a bad idea.
+		bang(flashbang_turf, holder, TRUE)
+		mobs_to_flash_and_bang -= holder
 	update_mob()
 
 	for(var/mob/living/M in mobs_to_flash_and_bang)
