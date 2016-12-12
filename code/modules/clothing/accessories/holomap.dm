@@ -375,7 +375,7 @@ var/list/holomap_cache = list()
 
 /obj/item/clothing/accessory/holomap_chip/raider/update_marker()
 	..()
-	if(rand(100) > 90)
+	if(prob(10))
 		marker_prefix = "chick[pick("a","b","c")]"
 
 /obj/item/clothing/accessory/holomap_chip/proc/handle_marker(var/image/I,var/turf/T,var/turf/TU)
