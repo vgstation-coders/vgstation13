@@ -318,7 +318,7 @@
 					return
 
 				while(count--)
-					var/obj/item/weapon/reagent_containers/glass/bottle/P = new/obj/item/weapon/reagent_containers/glass/bottle(src.loc,max_bottle_size)
+					var/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable/P = new/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable/(src.loc,max_bottle_size)
 					P.name = "[name] bottle"
 					P.pixel_x = rand(-7, 7) * PIXEL_MULTIPLIER//random position
 					P.pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
