@@ -47,8 +47,8 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 /datum/shuttle/vox/after_flight()
 	.=..()
 
-	if("skipjack" in holomap_markers)
-		var/datum/holomap_marker/updateMarker = holomap_markers["skipjack"]
+	if(HOLOMAP_MARKER_SKIPJACK in holomap_markers)
+		var/datum/holomap_marker/updateMarker = holomap_markers[HOLOMAP_MARKER_SKIPJACK]
 		updateMarker.x = current_port.x
 		updateMarker.y = current_port.y
 		updateMarker.z = current_port.z
@@ -72,7 +72,7 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 	.=..()
 
 	var/datum/holomap_marker/newMarker = new()
-	newMarker.id = "skipjack"
+	newMarker.id = HOLOMAP_MARKER_SKIPJACK
 	newMarker.icon = 'icons/holomap_markers_32x32.dmi'
 	newMarker.filter = HOLOMAP_FILTER_VOX
 	newMarker.x = x
@@ -81,7 +81,7 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 	newMarker.pixel_x = -16
 	newMarker.pixel_y = -25
 
-	holomap_markers["skipjack"] = newMarker
+	holomap_markers[HOLOMAP_MARKER_SKIPJACK] = newMarker
 
 //code/game/objects/structures/docking_port.dm
 

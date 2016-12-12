@@ -45,21 +45,21 @@
 		var/i = 1
 		for(var/obj/machinery/power/battery/smes/S in smes_list)
 			var/datum/holomap_marker/newMarker = new()
-			newMarker.id = "smes"
+			newMarker.id = HOLOMAP_MARKER_SMES
 			newMarker.filter = HOLOMAP_FILTER_STATIONMAP_STRATEGIC
 			newMarker.x = S.x
 			newMarker.y = S.y
 			newMarker.z = S.z
-			holomap_markers["smes_[i]"] = newMarker
+			holomap_markers[HOLOMAP_MARKER_SMES+"_[i]"] = newMarker
 			i++
 		if(nukedisk)//Only gives the disk's original position on the map
 			var/datum/holomap_marker/newMarker = new()
-			newMarker.id = "diskspawn"
+			newMarker.id = HOLOMAP_MARKER_DISK
 			newMarker.filter = HOLOMAP_FILTER_STATIONMAP_STRATEGIC
 			newMarker.x = nukedisk.x
 			newMarker.y = nukedisk.y
 			newMarker.z = nukedisk.z
-			holomap_markers["diskspawn"] = newMarker
+			holomap_markers[HOLOMAP_MARKER_DISK] = newMarker
 	//generating area markers
 	for(var/area/A in areas)
 		if(A.holomap_marker)
