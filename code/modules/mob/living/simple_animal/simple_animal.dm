@@ -772,6 +772,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	spawn(rand(minRegenTime, maxRegenTime)) //Don't want it being predictable
 		if(src) //Gibbed, incinerated, etc.
 			revive(0)
-			visible_message("<span class='warning'>[src] appears to wake from the dead, having healed all wounds.</span>")
+			visible_message("<span class='warning'>\the [src] appears to wake from the dead, having healed all wounds.</span>")
 
 /datum/locking_category/simple_animal
