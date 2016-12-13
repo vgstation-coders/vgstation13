@@ -418,20 +418,6 @@
 				to_chat(user, "You insert [O].")
 	return
 
-/obj/machinery/computer/scan_consolenew/ex_act(severity)
-	switch(severity)
-		if(1.0)
-			qdel(src)
-			return
-		if(2.0)
-			if (prob(50))
-				qdel(src)
-				return
-
-/obj/machinery/computer/scan_consolenew/blob_act()
-	if(prob(75))
-		qdel(src)
-
 /obj/machinery/computer/scan_consolenew/New()
 	..()
 	for(var/i=1;i<=3;i++)
@@ -450,6 +436,20 @@
 	for(var/datum/block_label/label in labels)
 		returnToPool(label)
 	..()
+
+/obj/machinery/computer/scan_consolenew/ex_act(severity)
+	switch(severity)
+		if(1.0)
+			qdel(src)
+			return
+		if(2.0)
+			if (prob(50))
+				qdel(src)
+				return
+
+/obj/machinery/computer/scan_consolenew/blob_act()
+	if(prob(75))
+		qdel(src)
 
 /obj/machinery/computer/scan_consolenew/proc/findScanner()
 	for(dir in list(NORTH,EAST,SOUTH,WEST))
@@ -474,6 +474,12 @@
 	I.buf = buffer
 	return 1
 
+/obj/machinery/computer/scan_consolenew/proc/ejectDisk()
+	if (!disk)
+		return
+	disk.forceMove(get_turf(src))
+	disk = null
+
 /obj/machinery/computer/scan_consolenew/process()
 	if (connected && connected.occupant)
 		use_power = 2
@@ -493,6 +499,12 @@
 			connected = findScanner() //lets get that machine
 			connected.connected = src
 		ui_interact(user)
+
+/obj/machinery/computer/scan_consolenew/AltClick()
+	if(disk)
+		ejectDisk()
+	else
+		..()
 
  /**
   * The ui_interact proc is used to open and update Nano UIs
@@ -898,10 +910,7 @@
 			return 1
 
 		if (bufferOption == "ejectDisk")
-			if (!src.disk)
-				return
-			src.disk.forceMove(get_turf(src))
-			src.disk = null
+			ejectDisk()
 			return 1
 
 		// All bufferOptions from here on require a bufferId
