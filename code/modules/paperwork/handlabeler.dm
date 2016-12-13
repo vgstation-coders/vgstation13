@@ -143,6 +143,8 @@
 	set name = "Remove label"
 	set src in view(1)
 	set category = "Object"
+	if(usr.incapacitated())
+		return
 	remove_label()
 	to_chat(usr, "<span class='notice'>You remove the label.</span>")
 
