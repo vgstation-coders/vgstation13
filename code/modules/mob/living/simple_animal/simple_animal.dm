@@ -768,11 +768,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				adjustBruteLoss(volume * 0.5)
 
 /mob/living/simple_animal/proc/delayedRegen()
-	set waitfor = 0
 	isRegenerating = 1
-	sleep(rand(minRegenTime, maxRegenTime)) //Don't want it being predictable
-	src.resurrect()
-	src.revive()
-	visible_message("<span class='warning'>[src] appears to wake from the dead, having healed all wounds.</span>")
+	spawn(rand(minRegenTime, maxRegenTime)) //Don't want it being predictable
+		if(src) //Gibbed, incinerated, etc.
+			revive(0)
+			visible_message("<span class='warning'>[src] appears to wake from the dead, having healed all wounds.</span>")
 
 /datum/locking_category/simple_animal
