@@ -66,7 +66,7 @@ var/href_logfile = null
 var/station_name = null
 var/game_version = "veegee"
 var/changelog_hash = ""
-var/game_year = 2525 //(text2num(time2text(world.realtime, "YYYY")) + 544)
+var/game_year = 1778 //(text2num(time2text(world.realtime, "YYYY")) + 544)
 
 var/going = 1.0
 var/master_mode = "extended"//"extended"
