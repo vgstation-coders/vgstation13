@@ -210,6 +210,7 @@ NanoBaseHelpers = function ()
 				var block = 1;
                 var subblock = 1;
 				var html;
+				// For some reason, the FIRST block index number (the black "1") is copypasted here and drawn separately. It was like that when I found it, I swear.
 				if (paramKey.toUpperCase() == 'SE')
 					{
 						html = '<div class="dnaBlock"><div class="link linkActive dnaBlockNumber" data-href="' + NanoUtility.generateHref({'changeBlockLabel' : block}) + '" title="'+blockLabels[block-1]["name"]+'" style="background:'+blockLabels[0]["color"]+'">1</div>';
@@ -218,6 +219,7 @@ NanoBaseHelpers = function ()
 					{
 						html = '<div class="dnaBlock"><div class="link dnaBlockNumber">1</div>';
 					}
+				// And then all the actual block contents (i.e. DAC, starting from 1) and the rest of the block index numbers (starting from 2) are drawn in this loop.
                 for (index in characters)
                 {
 					if (!characters.hasOwnProperty(index) || typeof characters[index] === 'object')
