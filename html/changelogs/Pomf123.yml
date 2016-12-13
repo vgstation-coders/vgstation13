@@ -1,2 +1,2 @@
 author: Pomf123
-changes: []
+changes:- bugfix: Fixed OOC bans not loading properly resulting in OOC banned people still being able to talk in OOC the rounds after being banned.

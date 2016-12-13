@@ -81,6 +81,7 @@ var/savefile/panicfile
 	if(config.usealienwhitelist)
 		load_alienwhitelist()
 	jobban_loadbanfile()
+	oocban_loadbanfile()
 	jobban_updatelegacybans()
 	appearance_loadbanfile()
 	LoadBans()
