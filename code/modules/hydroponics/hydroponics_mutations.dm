@@ -317,7 +317,7 @@
 			if(seed.harvest_repeat)
 				visible_message("<span class='notice'>\The [seed.display_name] roots deep and sprouts a bevy of new stalks!</span>")
 			else
-				visible_message("<span class='notice'>\The [seed.display_name] wilts away some of it's roots...</span>")
+				visible_message("<span class='notice'>\The [seed.display_name] wilts away some of its roots...</span>")
 
 		if("trait_biolum")
 			seed.biolum = !seed.biolum
@@ -425,7 +425,7 @@
 			if(seed.thorny)
 				visible_message("<span class='notice'>\The [seed.display_name] spontaneously develops mean-looking thorns!</span>")
 			else
-				visible_message("<span class='notice'>\The [seed.display_name] sheds it's thorns away...</span>")
+				visible_message("<span class='notice'>\The [seed.display_name] sheds its thorns away...</span>")
 
 		if("trait_stinging")
 			seed.stinging = !seed.stinging
