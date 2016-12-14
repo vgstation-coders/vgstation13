@@ -1,4 +1,4 @@
-/mob/proc/add_spell(var/spell/spell_to_add, var/spell_base = "wiz_spell_ready", var/master_type = /obj/screen/movable/spell_master)
+/mob/proc/add_spell(var/spell/spell_to_add, var/spell_base = "wiz_spell_ready", var/master_type = /obj/screen/movable/spell_master, var/iswizard = FALSE)
 	if(ispath(spell_to_add, /spell))
 		spell_to_add = new spell_to_add
 
@@ -12,6 +12,10 @@
 				spell_list.Add(spell_to_add)
 				spell_master.add_spell(spell_to_add)
 				spell_to_add.on_added(src)
+				if(mind && iswizard)
+					if(!mind.wizard_spells)
+						mind.wizard_spells = list()
+					mind.wizard_spells += spell_to_add
 				return 1
 
 	var/obj/screen/movable/spell_master/new_spell_master = getFromPool(master_type) //we're here because either we didn't find our type, or we have no spell masters to attach to
@@ -24,6 +28,10 @@
 	spell_masters.Add(new_spell_master)
 	spell_list.Add(spell_to_add)
 	spell_to_add.on_added(src)
+	if(mind && iswizard)
+		if(!mind.wizard_spells)
+			mind.wizard_spells = list()
+		mind.wizard_spells += spell_to_add
 	return 1
 
 /mob/proc/cast_spell(spell/spell_to_cast, list/targets)

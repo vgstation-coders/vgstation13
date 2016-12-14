@@ -37,7 +37,7 @@
 	..()
 
 	if(istype(H))
-		H.add_spell(new /spell/aoe_turf/conjure/construct)
+		H.add_spell(new /spell/aoe_turf/conjure/construct, iswizard = TRUE)
 		H.add_language(LANGUAGE_CULT)
 
 /datum/spellbook_artifact/armor
