@@ -64,9 +64,9 @@ var/diaryofmeanpeople = null
 var/admin_diary = null
 var/href_logfile = null
 var/station_name = null
-var/game_version = "veegee"
+var/game_version = "neotokyo"
 var/changelog_hash = ""
-var/game_year = (text2num(time2text(world.realtime, "YYYY")) + 544)
+var/game_year = "20XX"
 
 var/going = 1.0
 var/master_mode = "extended"//"extended"
