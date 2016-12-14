@@ -49,13 +49,13 @@ Used In File(s): /code/game/machinery/alarm.dm
 			{{:helper.string("<div class='statusValue {0}'>{1}%</div>",helper.dangerToClass(data.air.danger.co2),helper.precisionRound(data.air.contents.co2,2))}}
 		</div>
 		<div class="line">
-			<div class="statusLabel">Toxins:</div>
+			<div class="statusLabel">Plasma:</div>
 			{{:helper.displayBar(data.air.contents.plasma, 0, 100, helper.dangerToClass(data.air.danger.plasma))}}
 			{{:helper.string("<div class='statusValue {0}'>{1}%</div>",helper.dangerToClass(data.air.danger.plasma),helper.precisionRound(data.air.contents.plasma,2))}}
 		</div>
 		{{if data.air.danger.other>0}}
 		<div class="line">
-			<div class="statusLabel">Other:</div>
+			<div class="statusLabel">Nitrous Oxide:</div>
 			{{:helper.displayBar(data.air.contents.other, 0, 100, helper.dangerToClass(data.air.danger.other))}}
 			{{:helper.string("<div class='statusValue {0}'>{1}%</div>",helper.dangerToClass(data.air.danger.other),helper.precisionRound(data.air.contents.other,2))}}
 		</div>
@@ -255,9 +255,15 @@ Used In File(s): /code/game/machinery/alarm.dm
 						{{/for}}
 					</tr>
 					<tr>
-						<th>Toxins</th>
+						<th>Plasma</th>
 						{{for data.sensors.plasma}}
 							<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'command':'set_threshold','env':'plasma','var':index+1})}}</td>
+						{{/for}}
+					</tr>
+					<tr>
+						<th>N<sub>2</sub>O</th>
+						{{for data.sensors.other}}
+							<td>{{:helper.link(value >= 0 ? helper.precisionRound(value,4) : "OFF",null,{'command':'set_threshold','env':'other','var':index+1})}}</td>
 						{{/for}}
 					</tr>
 					<tr>
