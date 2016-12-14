@@ -51,14 +51,15 @@
 	target.bruteloss = 0
 	target.fireloss = 0
 	for(var/datum/organ/external/O in target.organs)
-		if(O.destspawn)
+		if(O.destspawn || O.is_robotic())
 			continue
 		O.rejuvenate()
 		O.number_wounds = 0
 		O.wounds = list()
 	target.heal_overall_damage(1000, 1000)
-	target.reagents.clear_reagents()
-	target.vessel.add_reagent(BLOOD,560)
+	if(target.reagents)
+		target.reagents.clear_reagents()
+	target.restore_blood()
 	target.bodytemperature = 310
 	target.traumatic_shock = 0
 	target.stat = UNCONSCIOUS

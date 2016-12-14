@@ -9,7 +9,7 @@
 /datum/artifact_effect/timestop/New()
 	..()
 	effect = pick(EFFECT_TOUCH, EFFECT_PULSE)
-	caster = new(src)
+	caster = new
 	caster.invisibility = 101
 	caster.density = 0
 	caster.anchored = 1
@@ -46,4 +46,4 @@
 /datum/artifact_effect/timestop/proc/stop_time()
 	caster.forceMove(get_turf(holder))
 	fall.perform(caster, skipcharge = 1)
-	caster.forceMove(holder)
+	caster.forceMove(null)
