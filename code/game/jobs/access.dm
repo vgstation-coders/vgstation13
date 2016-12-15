@@ -436,7 +436,7 @@
 		if(access_taxi)
 			return "Taxi Shuttle"
 		if(access_mechanic)
-			return "Workshop"
+			return "Mechanics Workshop"
 
 
 /proc/get_centcom_access_desc(A)
