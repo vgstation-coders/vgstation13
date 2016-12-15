@@ -10,25 +10,35 @@
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MAGNETS + "=2"
 	modifystate = "energystun"
 
-	var/mode = 0 //0 = stun, 1 = kill
 
+	var/mode = 0 //0 = stun, 1 = kill
 
 	attack_self(mob/living/user as mob)
 		switch(mode)
 			if(0)
+
 				mode = 1
 				charge_cost = 100
 				fire_sound = 'sound/weapons/Laser.ogg'
 				to_chat(user, "<span class='warning'>[src.name] is now set to kill.</span>")
 				projectile_type = "/obj/item/projectile/beam"
 				modifystate = "energykill"
+				if (power_supply.charge > 0)
+					playsound(user,'sound/weapons/egun_toggle_laser.ogg',70,0,-5)
+				else
+					playsound(user,'sound/weapons/egun_toggle_noammo.ogg',73,0,-5)
 			if(1)
+
 				mode = 0
 				charge_cost = 100
 				fire_sound = 'sound/weapons/Taser.ogg'
 				to_chat(user, "<span class='warning'>[src.name] is now set to stun.</span>")
 				projectile_type = "/obj/item/projectile/energy/electrode"
 				modifystate = "energystun"
+				if (power_supply.charge > 0)
+					playsound(user,'sound/weapons/egun_toggle_taser.ogg',70,0,-5)
+				else
+					playsound(user,'sound/weapons/egun_toggle_noammo.ogg',73,0,-5)
 		update_icon()
 
 
