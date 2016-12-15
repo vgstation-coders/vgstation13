@@ -1,5 +1,3 @@
-/obj/item/clothing/shoes/proc/step_action() //this was made to rewrite clown shoes squeaking
-
 /obj/item/clothing/shoes/syndigaloshes
 	desc = "A pair of brown shoes. They seem to have extra grip."
 	name = "brown shoes"
@@ -51,6 +49,7 @@
 	icon_state = A.icon_state
 	item_state = A.item_state
 	_color = A._color
+	step_sound = A.step_sound
 	usr.update_inv_w_uniform()	//so our overlays update.
 
 /obj/item/clothing/shoes/mime
@@ -124,8 +123,7 @@
 	_color = "clown"
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/clown
 
-	var/step_sound = "clownstep"
-	var/footstep = 1	//used for squeeks whilst walking
+	step_sound = "clownstep"
 
 /obj/item/clothing/shoes/clown_shoes/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -133,19 +131,6 @@
 		new /mob/living/simple_animal/hostile/retaliate/cluwne/goblin(get_turf(src))
 		qdel(W)
 		qdel(src)
-
-/obj/item/clothing/shoes/clown_shoes/step_action()
-	if(ishuman(loc))
-		var/mob/living/carbon/human/H = loc
-
-		if(H.m_intent == "run")
-			if(footstep > 1)
-				footstep = 0
-				playsound(H, step_sound, 50, 1) // this will get annoying very fast.
-			else
-				footstep++
-		else
-			playsound(H, step_sound, 20, 1)
 
 #define CLOWNSHOES_RANDOM_SOUND "random sound"
 
