@@ -40,12 +40,16 @@
 	..()
 
 /obj/item/clothing/suit/storage/MouseDrop(atom/over_object)
-	if(ishuman(usr))
-		var/mob/living/carbon/human/M = usr
+	if(ishuman(usr) || ismonkey(usr))
+		var/mob/M = usr
 		if (!( istype(over_object, /obj/screen/inventory) ))
 			return ..()
+
+		if(!(src.loc == usr) || (src.loc && src.loc.loc == usr))
+			return
+
 		playsound(get_turf(src), "rustle", 50, 1, -5)
-		if (M.wear_suit == src && !M.incapacitated() && Adjacent(M))
+		if (!M.incapacitated())
 			var/obj/screen/inventory/OI = over_object
 
 			if(OI.hand_index && M.put_in_hand_check(src, OI.hand_index))
@@ -56,4 +60,3 @@
 			return
 
 		usr.attack_hand(src)
-	return
