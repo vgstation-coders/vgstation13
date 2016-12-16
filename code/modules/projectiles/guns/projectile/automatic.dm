@@ -15,7 +15,6 @@
 	var/burst_count = 3
 	var/burstfiring = 0
 	load_method = 2
-	mag_drop_sound = 'sound/weapons/smg_empty_alarm.ogg'
 	mag_type = "/obj/item/ammo_storage/magazine/smg9mm"
 
 /obj/item/weapon/gun/projectile/automatic/isHandgun()
@@ -108,6 +107,7 @@
 	ammo_type = "/obj/item/ammo_casing/a12mm"
 	mag_type = "/obj/item/ammo_storage/magazine/a12mm/ops"
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
+	mag_drop_sound = 'sound/weapons/smg_empty_alarm.ogg'
 	load_method = 2
 
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
