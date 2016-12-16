@@ -15,6 +15,7 @@
 	var/burst_count = 3
 	var/burstfiring = 0
 	load_method = 2
+	mag_drop_sound = 'sound/weapons/smg_empty_alarm.ogg'
 	mag_type = "/obj/item/ammo_storage/magazine/smg9mm"
 
 /obj/item/weapon/gun/projectile/automatic/isHandgun()
