@@ -48,7 +48,19 @@
 
 	mymob.client.screen += list(mymob.fire, mymob.healths, mymob.pullin, mymob.oxygen, mymob.toxin)
 
-/datum/hud/proc/brain_hud(ui_style = 'icons/mob/screen1_Midnight.dmi')
+/datum/hud/proc/brain_hud()
+	var/obj/screen/using
+	using = getFromPool(/obj/screen)
+	using.name = "act_intent"
+	using.dir = SOUTHWEST
+	using.icon = 'icons/mob/screen1_robot.dmi'
+	using.icon_state = (mymob.a_intent == I_HURT ? "harm" : mymob.a_intent)
+	using.screen_loc = ui_acti
+	action_intent = using
+
+	mymob.client.reset_screen()
+
+	mymob.client.screen += list(using)
 
 /datum/hud/proc/slime_hud()
 
