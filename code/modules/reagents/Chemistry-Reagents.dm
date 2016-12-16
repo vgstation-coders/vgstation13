@@ -435,6 +435,14 @@
 		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/cube = O
 		if(!cube.wrapped)
 			cube.Expand()
+	else if(istype(O,/obj/machinery/space_heater/campfire))
+		var/obj/machinery/space_heater/campfire/campfire = O
+		campfire.snuff()
+	else if(O.on_fire) // For extinguishing objects on fire
+		O.extinguish()
+	else if(O.molten) // Molten shit.
+		O.molten=0
+		O.solidify()
 
 /datum/reagent/water/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
 	..()
