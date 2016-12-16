@@ -12,3 +12,8 @@
 			return 1
 
 	return ..()
+
+/mob/living/carbon/monkey/can_read()
+	if(dexterity_check())
+		return TRUE
+	return ..()
