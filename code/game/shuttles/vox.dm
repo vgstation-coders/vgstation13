@@ -52,7 +52,7 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 		updateMarker.x = current_port.x
 		updateMarker.y = current_port.y
 		updateMarker.z = current_port.z
-		updateMarker.pixel_y = -6
+		updateMarker.offset_y = -6
 
 	if(current_port == dock_home)
 		returned_home = 1	//If the round type is heist, this will cause the round to end
@@ -78,8 +78,8 @@ var/global/datum/shuttle/vox/vox_shuttle = new(starting_area=/area/shuttle/vox/s
 	newMarker.x = x
 	newMarker.y = y
 	newMarker.z = z
-	newMarker.pixel_x = -16
-	newMarker.pixel_y = -25
+	newMarker.offset_x = -16
+	newMarker.offset_y = -25
 
 	holomap_markers[HOLOMAP_MARKER_SKIPJACK] = newMarker
 

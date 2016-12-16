@@ -205,11 +205,11 @@ var/list/holomap_cache = list()
 			markerImage.plane = FLOAT_PLANE
 			markerImage.layer = FLOAT_LAYER
 			if(map.holomap_offset_x.len >= T.z)
-				markerImage.pixel_x = holomarker.x+holomarker.pixel_x+map.holomap_offset_x[T.z]
-				markerImage.pixel_y = holomarker.y+holomarker.pixel_y+map.holomap_offset_y[T.z]
+				markerImage.pixel_x = holomarker.x+holomarker.offset_x+map.holomap_offset_x[T.z]
+				markerImage.pixel_y = holomarker.y+holomarker.offset_y+map.holomap_offset_y[T.z]
 			else
-				markerImage.pixel_x = holomarker.x+holomarker.pixel_x
-				markerImage.pixel_y = holomarker.y+holomarker.pixel_y
+				markerImage.pixel_x = holomarker.x+holomarker.offset_x
+				markerImage.pixel_y = holomarker.y+holomarker.offset_y
 			markerImage.appearance_flags = RESET_COLOR
 			bgmap.overlays += markerImage
 
@@ -348,11 +348,11 @@ var/list/holomap_cache = list()
 				markerImage.plane = FLOAT_PLANE
 				markerImage.layer = FLOAT_LAYER
 				if(map.holomap_offset_x.len >= T.z)
-					markerImage.pixel_x = holomarker.x+holomarker.pixel_x+map.holomap_offset_x[T.z]
-					markerImage.pixel_y = holomarker.y+holomarker.pixel_y+map.holomap_offset_y[T.z]
+					markerImage.pixel_x = holomarker.x+holomarker.offset_x+map.holomap_offset_x[T.z]
+					markerImage.pixel_y = holomarker.y+holomarker.offset_y+map.holomap_offset_y[T.z]
 				else
-					markerImage.pixel_x = holomarker.x+holomarker.pixel_x
-					markerImage.pixel_y = holomarker.y+holomarker.pixel_y
+					markerImage.pixel_x = holomarker.x+holomarker.offset_x
+					markerImage.pixel_y = holomarker.y+holomarker.offset_y
 				markerImage.appearance_flags = RESET_COLOR
 				bgmap.overlays += markerImage
 

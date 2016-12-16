@@ -5,8 +5,8 @@
 	var/x
 	var/y
 	var/z
-	var/pixel_x = -8
-	var/pixel_y = -8
+	var/offset_x = -8
+	var/offset_y = -8
 	var/filter
 	var/id
 	var/icon = 'icons/holomap_markers.dmi'

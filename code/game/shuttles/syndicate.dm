@@ -44,7 +44,7 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 		updateMarker.x = current_port.x
 		updateMarker.y = current_port.y
 		updateMarker.z = current_port.z
-		updateMarker.pixel_y = -5
+		updateMarker.offset_y = -5
 
 /obj/machinery/computer/shuttle_control/syndicate
 	icon_state = "syndishuttle"
@@ -67,8 +67,8 @@ var/global/datum/shuttle/syndicate/syndicate_shuttle = new(starting_area = /area
 	newMarker.x = x
 	newMarker.y = y
 	newMarker.z = z
-	newMarker.pixel_x = -16
-	newMarker.pixel_y = -25
+	newMarker.offset_x = -16
+	newMarker.offset_y = -25
 
 	holomap_markers[HOLOMAP_MARKER_SYNDISHUTTLE] = newMarker
 
