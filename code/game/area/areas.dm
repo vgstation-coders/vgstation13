@@ -414,6 +414,9 @@ var/area/space_area
 	// /vg/ - EVENTS!
 	CallHook("MobAreaChange", list("mob" = M, "new" = Obj.areaMaster, "old" = oldArea))
 
+	for(var/mob/mob_in_obj in Obj.contents)
+		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = Obj.areaMaster, "old" = oldArea))
+
 	if(isnull(M.client))
 		return
 
