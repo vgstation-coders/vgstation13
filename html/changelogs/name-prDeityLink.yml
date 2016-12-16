@@ -1,0 +1,16 @@
+author: Deity Link
+delete-after: True
+changes: 
+  - tweak: Reworked the Temperature Gun. Explanations <a href="https://cloud.githubusercontent.com/assets/7573912/4605468/84cf561c-51e3-11e4-9912-fea92231110e.png">here</a>.
+  - tweak: Temperatures below 50K now deal 301 tox damage per tick to slimes instead of 200 per tick. Killing them instantly (since slimes die at -100 health).
+  - bugfix: Fixed a runtime error caused by a missing sanity check in the Corgi UI.
+  - tweak: Syndicate Energy Crossbows now spawn at R&D inside a lockbox.
+  - rscadd: Added a Corgi UI
+  - rscadd: Added a Shade UI
+  - tweak: When player controlled, simple_animals don't randomly move around or speak
+  - tweak: Reworked some of the corgi code, player-controlled corgi can now eat food, chase their tail.
+  - imageadd: Added a sprite for the Latex Glove boxes
+  - bugfix: Lockboxes that had their openned/closed state changed by an EMP now properly update their sprite
+  - rscadd: Added a Construct UI
+  - imageadd: Added a new sprite for the Juggernaut's Shield spell.
+  - rscadd: Constructs' red "eyes" now glow in the dark, like the MoMMis' eyes
