@@ -902,7 +902,7 @@ var/global/list/whitelisted_species = list("Human")
 	can_be_hypothermic = 0
 	has_mutant_race = 0
 
-	spells = list(/spell/racial/swallow_light)
+	spells = list(/spell/swallow_light,/spell/shatter_lights)
 
 	has_organ = list(
 		"heart" =    /datum/organ/internal/heart,
