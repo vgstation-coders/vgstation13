@@ -104,7 +104,11 @@
 
 	if(state >= GRAB_KILL)
 		affecting.Knockdown(5)	//Should keep you down unless you get help.
-		affecting.losebreath = min(affecting.losebreath + 2, 3)
+		affecting.losebreath = min(affecting.losebreath + 1, 3) //builds up to 3 over a few seconds
+		affecting.stuttering = max(affecting.stuttering, 6)
+		if(isliving(affecting) && affecting.losebreath >= 3) //if you've been choked for a few seconds
+			var/mob/living/L = affecting
+			L.silent = max(L.silent, 2)
 
 /obj/item/weapon/grab/attack_self()
 	. = ..()
