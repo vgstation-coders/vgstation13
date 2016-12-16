@@ -1,0 +1,4 @@
+author: coldcola
+delete-after: True
+changes:
+- bugfix: Posibrains/MMIs no longer trick you into thinking they're cuffable

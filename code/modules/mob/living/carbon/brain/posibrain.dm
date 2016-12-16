@@ -168,7 +168,6 @@
 /obj/item/device/mmi/posibrain/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(try_handling_mommi_construction(O,user))
 		return
-	..()
 
 /obj/item/device/mmi/posibrain/attack_ghost(var/mob/dead/observer/O)
 	if(searching)
