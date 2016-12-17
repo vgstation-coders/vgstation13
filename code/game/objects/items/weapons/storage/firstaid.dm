@@ -288,3 +288,12 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
 		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
 		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
+
+/obj/item/weapon/storage/pill_bottle/nanobot
+	name = "Experimental Medication"
+	desc = "Hazardous.  Warranty voided if consumed."
+
+	/obj/item/weapon/storage/pill_bottle/nanobot/New()
+		..()
+		for (var/x = 1 to 5)
+			new /obj/item/weapon/reagent_containers/pill/nanobot(src)

@@ -289,3 +289,12 @@
 	Neutral: Corn Oil, Ryetalyn, Tonio, Space Drugs
 	Bad: Mutagen, Polytrinic Acid, Lexorin, Zombie Powder
 	*/
+
+/obj/item/weapon/reagent_containers/pill/nanobot
+	name = "nanobot pill"
+	desc = "Experimental medication."
+	icon_state = "pill7" //grey oblong
+
+/obj/item/weapon/reagent_containers/pill/nanobot/New()
+	..()
+	reagents.add_reagent(NANOBOTS, 1)
