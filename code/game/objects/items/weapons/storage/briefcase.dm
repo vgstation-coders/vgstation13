@@ -66,6 +66,17 @@
 
 	return
 
+/obj/item/weapon/storage/briefcase/moneybriefcase
+	empty = 1
+
+
+/obj/item/weapon/storage/briefcase/moneybriefcase/New()
+    ..()
+    for(var/slots in 1 to storage_slots)
+        var/obj/item/weapon/spacecash/money = new /obj/item/weapon/spacecash/c1000(src)
+        money.amount = 10
+        contents += money
+
 /obj/item/weapon/storage/briefcase/false_bottomed
 	name = "briefcase"
 	desc = "It's made of AUTHENTIC faux-leather and has a price-tag still attached. This one feels a bit heavier than normal for how much fits in it."

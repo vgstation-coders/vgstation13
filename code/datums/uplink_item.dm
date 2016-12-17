@@ -483,6 +483,12 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/storage/box/syndie_kit/smokebombs
 	cost = 3
 
+/datum/uplink_item/stealthy_tools/moneybriefcase
+ 	name = "Operation Funding"
+ 	desc = "A briefcase containing seventy thousand credits, to be used at your own discretion."
+ 	item = /obj/item/weapon/storage/briefcase/moneybriefcase
+ 	cost = 1
+
 
 // DEVICE AND TOOLS
 
