@@ -40,7 +40,6 @@
 		return W
 
 /obj/item/weapon/autopsy_scanner/proc/add_data(var/datum/organ/external/O)
-
 	if(istype(O,/datum/organ/external/chest))
 		var/mob/living/carbon/human/H = O.owner
 		if(H)
@@ -57,6 +56,7 @@
 						advanced_butchery += " \a [tool_name][H.advanced_butchery.len > 2 ? "," : ""]"
 					else
 						advanced_butchery += " and \a [tool_name]."
+
 	if(!O.autopsy_data.len && !O.trace_chemicals.len)
 		return
 
