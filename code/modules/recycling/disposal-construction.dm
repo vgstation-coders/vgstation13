@@ -19,7 +19,14 @@
 	var/dpdir = 0	// directions as disposalpipe
 	var/base_state = "pipe-s"
 
-	// update iconstate and dpdir due to dir and type
+/obj/structure/disposalconstruct/examine(mob/user)
+	..()
+	if(anchored)
+		to_chat(user, "<span class='info'>It's bolted down to the floor plating.</span>")
+	else
+		to_chat(user, "<span class='info'>It has been detached from the floor plating.</span>")
+
+// update iconstate and dpdir due to dir and type
 /obj/structure/disposalconstruct/proc/update()
 	var/flip = turn(dir, 180)
 	var/left = turn(dir, 90)
@@ -173,8 +180,22 @@
 			nicetype = "pipe"
 			ispipe = 1
 
+	//This bit is the only one about DETACHING the pipe, so it doesn't need all the checks below.
+	if(anchored && iswrench(I))
+		anchored = 0
+		if(ispipe)
+			level = 2
+			density = 0
+		else
+			density = 1
+		to_chat(user, "You detach the [nicetype] from the underfloor.")
+		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+		update()
+		return
+
+	//Starting from here, we are ATTACHING the thing to the floor, so let's make sure nothing wierd is going on.
 	var/turf/T = src.loc
-	if(T.intact)
+	if(T.intact) //t-ray scanner or bins/chutes lets people bonk these through the floor tiling
 		to_chat(user, "You can only attach the [nicetype] if the floor plating is removed.")
 		return
 
@@ -198,24 +219,14 @@
 				to_chat(user, "There is already a [nicetype] at that location.")
 				return
 
-
-	if(iswrench(I))
-		if(anchored)
-			anchored = 0
-			if(ispipe)
-				level = 2
-				density = 0
-			else
-				density = 1
-			to_chat(user, "You detach the [nicetype] from the underfloor.")
+	if(!anchored && iswrench(I))
+		anchored = 1
+		if(ispipe)
+			level = 1 // We don't want disposal bins to disappear under the floors
+			density = 0
 		else
-			anchored = 1
-			if(ispipe)
-				level = 1 // We don't want disposal bins to disappear under the floors
-				density = 0
-			else
-				density = 1 // We don't want disposal bins or outlets to go density 0
-			to_chat(user, "You attach the [nicetype] to the underfloor.")
+			density = 1 // We don't want disposal bins or outlets to go density 0
+		to_chat(user, "You attach the [nicetype] to the underfloor.")
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
 		update()
 
