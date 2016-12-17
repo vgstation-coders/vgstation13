@@ -39,6 +39,8 @@
 	for(var/obj/structure/table/T in src.loc)
 		if(T != src)
 			qdel(T)
+	if(flipped)
+		flip(dir)
 	update_icon()
 	update_adjacent()
 
@@ -521,7 +523,6 @@
 	return 1
 
 /obj/structure/table/flipped
-	icon_state = "tableflip0"
 	flipped = 1
 
 /*
