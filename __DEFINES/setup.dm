@@ -972,12 +972,13 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 
 #define RAD_ABSORB 2048
 #define REQUIRE_LIGHT 4096
+#define PLASMA_IMMUNE 8192
 
-#define CAN_BE_FAT 8192 // /vg/
+#define CAN_BE_FAT 16384 // /vg/
 
-#define IS_BULKY 16384 //can't wear exosuits, gloves, masks, or hardsuits
+#define IS_BULKY 32768 //can't wear exosuits, gloves, masks, or hardsuits
 
-#define NO_SKIN 32768
+#define NO_SKIN 65536 //Is there a limit to how high flag defines can go?
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\

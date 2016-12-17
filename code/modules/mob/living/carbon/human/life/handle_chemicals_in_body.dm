@@ -22,14 +22,13 @@
 
 	var/total_plasmaloss = 0
 	for(var/obj/item/I in src)
-		if(I.contaminated)
+		if(I.contaminated && !(species.flags & PLASMA_IMMUNE))
 			total_plasmaloss += zas_settings.Get(/datum/ZAS_Setting/CONTAMINATION_LOSS)
 		I.OnMobLife(src)
+	adjustToxLoss(total_plasmaloss)
+
 	if(status_flags & GODMODE)
 		return 0 //Godmode
-	if(species.name=="Plasmaman")
-		return 0 //Plasmaman shouldn't be hurt by plasma contaminated clothes
-	adjustToxLoss(total_plasmaloss)
 
 	if(species.flags & REQUIRE_LIGHT)
 		var/light_amount = 0 //How much light there is in the place, affects receiving nutrition and healing
@@ -83,7 +82,7 @@
 				update_inv_wear_suit()
 
 	//Nutrition decrease
-	if(stat != 2)
+	if(stat != DEAD)
 		var/reduce_nutrition_by = HUNGER_FACTOR
 		if(sleeping)
 			reduce_nutrition_by *= 0.75 //Reduce hunger factor by 25%
