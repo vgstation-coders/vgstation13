@@ -30,13 +30,13 @@
 
 	icon_state = pick("ointment","firefirstaid")
 
-	new /obj/item/device/healthanalyzer( src )
-	new /obj/item/weapon/reagent_containers/hypospray/autoinjector( src )
-	new /obj/item/stack/medical/ointment( src )
-	new /obj/item/stack/medical/ointment( src )
-	new /obj/item/weapon/reagent_containers/pill/kelotane( src )
-	new /obj/item/weapon/reagent_containers/pill/kelotane( src )
-	new /obj/item/weapon/reagent_containers/pill/kelotane( src ) //Replaced ointment with these since they actually work --Errorage
+	new /obj/item/device/healthanalyzer(src)
+	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
+	new /obj/item/stack/medical/ointment(src)
+	new /obj/item/stack/medical/ointment(src)
+	new /obj/item/weapon/reagent_containers/pill/kelotane(src)
+	new /obj/item/weapon/reagent_containers/pill/kelotane(src)
+	new /obj/item/weapon/reagent_containers/pill/kelotane(src)
 	return
 
 
@@ -53,7 +53,7 @@
 	new /obj/item/stack/medical/ointment(src)
 	new /obj/item/stack/medical/ointment(src)
 	new /obj/item/device/healthanalyzer(src)
-	new /obj/item/weapon/reagent_containers/hypospray/autoinjector( src )
+	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
 	return
 
 /obj/item/weapon/storage/firstaid/toxin
@@ -69,13 +69,13 @@
 
 	icon_state = pick("antitoxin","antitoxfirstaid","antitoxfirstaid2","antitoxfirstaid3")
 
-	new /obj/item/weapon/reagent_containers/syringe/antitoxin( src )
-	new /obj/item/weapon/reagent_containers/syringe/antitoxin( src )
-	new /obj/item/weapon/reagent_containers/syringe/antitoxin( src )
-	new /obj/item/weapon/reagent_containers/pill/antitox( src )
-	new /obj/item/weapon/reagent_containers/pill/antitox( src )
-	new /obj/item/weapon/reagent_containers/pill/antitox( src )
-	new /obj/item/device/healthanalyzer( src )
+	new /obj/item/weapon/reagent_containers/syringe/antitoxin(src)
+	new /obj/item/weapon/reagent_containers/syringe/antitoxin(src)
+	new /obj/item/weapon/reagent_containers/syringe/antitoxin(src)
+	new /obj/item/weapon/reagent_containers/pill/antitox(src)
+	new /obj/item/weapon/reagent_containers/pill/antitox(src)
+	new /obj/item/weapon/reagent_containers/pill/antitox(src)
+	new /obj/item/device/healthanalyzer(src)
 	return
 
 /obj/item/weapon/storage/firstaid/o2
@@ -88,13 +88,11 @@
 	..()
 	if (empty)
 		return
-	new /obj/item/weapon/reagent_containers/pill/dexalin( src )
-	new /obj/item/weapon/reagent_containers/pill/dexalin( src )
-	new /obj/item/weapon/reagent_containers/pill/dexalin( src )
-	new /obj/item/weapon/reagent_containers/pill/dexalin( src )
-	new /obj/item/weapon/reagent_containers/hypospray/autoinjector( src )
-	new /obj/item/weapon/reagent_containers/syringe/inaprovaline( src )
-	new /obj/item/device/healthanalyzer( src )
+	for (var/x = 1 to 4)
+		new /obj/item/weapon/reagent_containers/pill/dexalin(src)
+	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
+	new /obj/item/weapon/reagent_containers/syringe/inaprovaline(src)
+	new /obj/item/device/healthanalyzer(src)
 	return
 
 /obj/item/weapon/storage/firstaid/adv
@@ -107,7 +105,7 @@
 	..()
 	if (empty)
 		return
-	new /obj/item/weapon/reagent_containers/hypospray/autoinjector( src )
+	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
 	new /obj/item/stack/medical/advanced/bruise_pack(src)
 	new /obj/item/stack/medical/advanced/bruise_pack(src)
 	new /obj/item/stack/medical/advanced/bruise_pack(src)
@@ -207,27 +205,19 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 /obj/item/weapon/storage/pill_bottle/kelotane/New()
 	..()
-	new /obj/item/weapon/reagent_containers/pill/kelotane( src )
-	new /obj/item/weapon/reagent_containers/pill/kelotane( src )
-	new /obj/item/weapon/reagent_containers/pill/kelotane( src )
-	new /obj/item/weapon/reagent_containers/pill/kelotane( src )
-	new /obj/item/weapon/reagent_containers/pill/kelotane( src )
-	new /obj/item/weapon/reagent_containers/pill/kelotane( src )
-	new /obj/item/weapon/reagent_containers/pill/kelotane( src )
-
+	for (var/x = 1 to 7)
+		new /obj/item/weapon/reagent_containers/pill/kelotane(src)
+	
+	
 /obj/item/weapon/storage/pill_bottle/antitox
 	name = "Pill bottle (Anti-toxin)"
 	desc = "Contains pills used to counter toxins."
 
 /obj/item/weapon/storage/pill_bottle/antitox/New()
 	..()
-	new /obj/item/weapon/reagent_containers/pill/antitox( src )
-	new /obj/item/weapon/reagent_containers/pill/antitox( src )
-	new /obj/item/weapon/reagent_containers/pill/antitox( src )
-	new /obj/item/weapon/reagent_containers/pill/antitox( src )
-	new /obj/item/weapon/reagent_containers/pill/antitox( src )
-	new /obj/item/weapon/reagent_containers/pill/antitox( src )
-	new /obj/item/weapon/reagent_containers/pill/antitox( src )
+	for (var/x = 1 to 7)
+		new /obj/item/weapon/reagent_containers/pill/antitox(src)
+	
 
 /obj/item/weapon/storage/pill_bottle/inaprovaline
 	name = "Pill bottle (inaprovaline)"
@@ -235,59 +225,49 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 /obj/item/weapon/storage/pill_bottle/inaprovaline/New()
 	..()
-	new /obj/item/weapon/reagent_containers/pill/inaprovaline( src )
-	new /obj/item/weapon/reagent_containers/pill/inaprovaline( src )
-	new /obj/item/weapon/reagent_containers/pill/inaprovaline( src )
-	new /obj/item/weapon/reagent_containers/pill/inaprovaline( src )
-	new /obj/item/weapon/reagent_containers/pill/inaprovaline( src )
-	new /obj/item/weapon/reagent_containers/pill/inaprovaline( src )
-	new /obj/item/weapon/reagent_containers/pill/inaprovaline( src )
-
-
+	for (var/x = 1 to 7)
+		new /obj/item/weapon/reagent_containers/pill/inaprovaline(src)
+	
+	
 /obj/item/weapon/storage/pill_bottle/dice
 	name = "bag of dice"
 	desc = "Contains all the luck you'll ever need."
 	icon = 'icons/obj/dice.dmi'
 	icon_state = "dicebag"
 
-
 /obj/item/weapon/storage/pill_bottle/dice/New()
 	..()
 	overlays -= colour_overlay
 	colour_overlay = null
-	new /obj/item/weapon/dice/d4( src )
-	new /obj/item/weapon/dice( src )
-	new /obj/item/weapon/dice/d8( src )
-	new /obj/item/weapon/dice/d10( src )
-	new /obj/item/weapon/dice/d00( src )
-	new /obj/item/weapon/dice/d12( src )
-	new /obj/item/weapon/dice/d20( src )
+	new /obj/item/weapon/dice/d4(src)
+	new /obj/item/weapon/dice(src)
+	new /obj/item/weapon/dice/d8(src)
+	new /obj/item/weapon/dice/d10(src)
+	new /obj/item/weapon/dice/d00(src)
+	new /obj/item/weapon/dice/d12(src)
+	new /obj/item/weapon/dice/d20(src)
 
+	
 /obj/item/weapon/storage/pill_bottle/hyperzine
 	name = "Pill bottle (hyperzine)"
 	desc = "Contains pills used to keep you active."
 
 /obj/item/weapon/storage/pill_bottle/hyperzine/New()
 	..()
-	new /obj/item/weapon/reagent_containers/pill/hyperzine( src )
-	new /obj/item/weapon/reagent_containers/pill/hyperzine( src )
-	new /obj/item/weapon/reagent_containers/pill/hyperzine( src )
-	new /obj/item/weapon/reagent_containers/pill/hyperzine( src )
-	new /obj/item/weapon/reagent_containers/pill/hyperzine( src )
-	new /obj/item/weapon/reagent_containers/pill/hyperzine( src )
+	for (var/x = 1 to 6)
+		new /obj/item/weapon/reagent_containers/pill/hyperzine(src)
 
+		
 /obj/item/weapon/storage/pill_bottle/creatine
 	name = "Workout Supplements"
 	desc = "Because working out is far too much effort."
 
 /obj/item/weapon/storage/pill_bottle/creatine/New()
-		..()
-		new /obj/item/weapon/reagent_containers/pill/creatine_safe( src )
-		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
-		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
-		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
-		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
-		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
+	..()
+	new /obj/item/weapon/reagent_containers/pill/creatine_safe(src)
+	for (var/x = 1 to 5)
+		new /obj/item/weapon/reagent_containers/pill/creatine_supplement (src)
+	
 
 /obj/item/weapon/storage/pill_bottle/nanobot
 	name = "Experimental Medication"
