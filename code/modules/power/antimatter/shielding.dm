@@ -48,7 +48,6 @@ proc/cardinalrange(var/center)
 		return 0//Already have one
 	control_unit = AMC
 	return control_unit.add_shielding(src,1)
-	return 1
 
 /obj/machinery/am_shielding/Destroy()
 	if(control_unit)
