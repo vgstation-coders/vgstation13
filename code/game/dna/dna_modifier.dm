@@ -50,6 +50,7 @@
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 	var/injector_cooldown = 300 //Used by attachment
 	machine_flags = SCREWTOGGLE | CROWDESTROY
+	var/obj/machinery/computer/connected
 
 	light_color = LIGHT_COLOR_CYAN
 	use_auto_lights = 1
@@ -106,6 +107,15 @@
 /obj/machinery/dna_scannernew/Destroy()
 
 	go_out() //Eject everything
+
+	if(connected)
+		if(istype(connected,/obj/machinery/computer/cloning))
+			var/obj/machinery/computer/cloning/C = connected
+			C.scanner = null
+		else if(istype(connected,/obj/machinery/computer/scan_consolenew))
+			var/obj/machinery/computer/scan_consolenew/C = connected
+			C.connected = null
+		connected = null
 
 	. = ..()
 
@@ -381,6 +391,17 @@
 
 	light_color = LIGHT_COLOR_BLUE
 
+/obj/machinery/computer/scan_consolenew/Destroy()
+	if(connected.connected == src)
+		connected.connected = null
+	connected = null
+	labels.Cut()
+	buffers.Cut()
+	if(disk)
+		qdel(disk)
+		disk = null
+	..()
+
 /datum/block_label
 	var/name = ""
 	var/color = "#1c1c1c"
@@ -416,6 +437,7 @@
 		labels[i] = new /datum/block_label
 	spawn(5)
 		connected = findScanner()
+		connected.connected = src
 		spawn(250)
 			src.injector_ready = 1
 		return
@@ -473,6 +495,7 @@
 	if(!..())
 		if(!connected)
 			connected = findScanner() //lets get that machine
+			connected.connected = src
 		ui_interact(user)
 
  /**
