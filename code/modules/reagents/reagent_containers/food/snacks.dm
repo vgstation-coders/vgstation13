@@ -445,11 +445,11 @@
 	reagents.add_reagent(SUGAR, 5)
 	reagents.add_reagent(COCO, 5)
 
-	attack_self(mob/user)
-		if(wrapped)
-			Unwrap(user)
-		else
-			..()
+/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/attack_self(mob/user)
+	if(wrapped)
+		Unwrap(user)
+	else
+		..()
 
 /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/proc/Unwrap(mob/user)
 		icon_state = "chocolatebarunwrapped"
@@ -883,9 +883,9 @@
 		reagents.add_reagent(BLOOD, 4, data)
 */
 
-		reagents.add_reagent(NUTRIMENT, 6)
-		reagents.add_reagent(HONKSERUM, 6)
-		bitesize = 2
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(HONKSERUM, 6)
+	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/mimeburger
 	name = "mime burger"
@@ -1217,7 +1217,7 @@
 	desc = "Best raisins in the universe. Not sure why."
 	trash = /obj/item/trash/raisins
 
-	/obj/item/weapon/reagent_containers/food/snacks/no_raisin/New()
+/obj/item/weapon/reagent_containers/food/snacks/no_raisin/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
 
@@ -1272,7 +1272,7 @@
 	icon_state = "syndi_cakes"
 	desc = "An extremely moist snack cake that tastes just as good after being nuked."
 	trash = /obj/item/trash/syndi_cakes
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/syndicake/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 4)
@@ -1352,7 +1352,7 @@
 	name = "Loaded Baked Potato"
 	desc = "Totally baked."
 	icon_state = "loadedbakedpotato"
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/loadedbakedpotato/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
@@ -1416,7 +1416,7 @@
 	name = "Burned mess"
 	desc = "Someone should be demoted from chef for this."
 	icon_state = "badrecipe"
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/badrecipe/New()
 	..()
 	reagents.add_reagent(TOXIN, 1)
@@ -1481,7 +1481,7 @@
 	desc = "It's all twisted up!"
 	icon_state = "poppypretzel"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/poppypretzel/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
@@ -1634,7 +1634,7 @@
 	desc = "A five alarm Texan Chili!"
 	icon_state = "hotchili"
 	trash = /obj/item/trash/snack_bowl
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/hotchili/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
