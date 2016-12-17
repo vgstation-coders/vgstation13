@@ -1190,3 +1190,35 @@
 	New()
 		block = REMOTETALKBLOCK
 		..()
+
+/obj/item/weapon/dnainjector/nofail/randompower/New(newloc)
+    var/type = pick(/obj/item/weapon/dnainjector/nofail/hulkmut,
+        /obj/item/weapon/dnainjector/nofail/xraymut,
+        /obj/item/weapon/dnainjector/nofail/firemut,
+        /obj/item/weapon/dnainjector/nofail/telemut,
+        /obj/item/weapon/dnainjector/nofail/nobreath,
+        /obj/item/weapon/dnainjector/nofail/remoteview,
+        /obj/item/weapon/dnainjector/nofail/regenerate,
+        /obj/item/weapon/dnainjector/nofail/runfast,
+        /obj/item/weapon/dnainjector/nofail/morph,
+        /obj/item/weapon/dnainjector/nofail/cold,
+        /obj/item/weapon/dnainjector/nofail/noprints,
+        /obj/item/weapon/dnainjector/nofail/insulation,
+        /obj/item/weapon/dnainjector/nofail/midgit,
+        /obj/item/weapon/dnainjector/nofail/sober,
+        /obj/item/weapon/dnainjector/nofail/psychic_resist,
+        /obj/item/weapon/dnainjector/nofail/chameleon,
+        /obj/item/weapon/dnainjector/nofail/cryo,
+        /obj/item/weapon/dnainjector/nofail/mattereater,
+        /obj/item/weapon/dnainjector/nofail/jumpy,
+        /obj/item/weapon/dnainjector/nofail/polymorph,
+        /obj/item/weapon/dnainjector/nofail/empath,
+        /obj/item/weapon/dnainjector/nofail/superfart,
+        /obj/item/weapon/dnainjector/nofail/epimut,
+        /obj/item/weapon/dnainjector/nofail/strong,
+        /obj/item/weapon/dnainjector/nofail/immolate,
+        /obj/item/weapon/dnainjector/nofail/melt,
+        /obj/item/weapon/dnainjector/nofail/farsightmut,
+        /obj/item/weapon/dnainjector/nofail/remotesay)    
+    new type(loc)
+    qdel(src)

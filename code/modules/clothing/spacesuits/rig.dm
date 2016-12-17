@@ -233,14 +233,6 @@
 /obj/item/clothing/suit/space/rig/wizard/acidable()
 	return 0
 
-/obj/item/clothing/suit/space/rig/wizard/complete/New()	//Use to spawn a complete gemsuit set all at once
-	..()
-	new /obj/item/clothing/head/helmet/space/rig/wizard(loc)
-	new /obj/item/clothing/suit/space/rig/wizard(loc)
-	new /obj/item/clothing/gloves/purple(loc)
-	new /obj/item/clothing/shoes/sandal(loc)
-	qdel(src)
-
 //Medical Rig
 /obj/item/clothing/head/helmet/space/rig/medical
 	name = "medical hardsuit helmet"
@@ -397,8 +389,7 @@
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
 	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
-
-
+	
 //Death squad rig
 /obj/item/clothing/head/helmet/space/rig/deathsquad
 	name = "deathsquad helmet"
