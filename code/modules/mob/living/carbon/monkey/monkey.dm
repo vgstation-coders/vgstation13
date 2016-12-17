@@ -239,13 +239,14 @@
 			armorscore = uniform.armor[type]
 	return armorscore
 
-/mob/living/carbon/monkey/attack_paw(mob/M as mob)
+/mob/living/carbon/monkey/attack_paw(mob/living/M as mob)
 	..()
 
 	if (M.a_intent == I_HELP)
 		help_shake_act(M)
 	else
 		if ((M.a_intent == I_HURT && !( istype(wear_mask, /obj/item/clothing/mask/muzzle) )))
+			M.do_attack_animation(src)
 			if ((prob(75) && health > 0))
 				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
 				if(istype(M, /mob/living/carbon/monkey))
@@ -309,6 +310,7 @@
 		help_shake_act(M)
 	else
 		if (M.a_intent == I_HURT)
+			M.do_attack_animation(src)
 			if ((prob(75) && health > 0))
 				for(var/mob/O in viewers(src, null))
 					if ((O.client && !( O.blinded )))
@@ -385,6 +387,7 @@
 					O.show_message(text("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>"), 1)
 
 		if (I_HURT)
+			M.do_attack_animation(src)
 			if ((prob(95) && health > 0))
 				playsound(loc, 'sound/weapons/slice.ogg', 25, 1, -1)
 				var/damage = rand(15, 30)
@@ -424,6 +427,7 @@
 				O.show_message(text("<span class='warning'>[] has grabbed [name] passively!</span>", M), 1)
 
 		if (I_DISARM)
+			M.do_attack_animation(src)
 			playsound(loc, 'sound/weapons/pierce.ogg', 25, 1, -1)
 			var/damage = 5
 			if(prob(95))
@@ -451,7 +455,7 @@
 		return // can't attack while eating!
 
 	if (health > -100)
-
+		M.do_attack_animation(src)
 		for(var/mob/O in viewers(src, null))
 			if ((O.client && !( O.blinded )))
 				O.show_message(text("<span class='danger'>The [M.name] glomps []!</span>", src), 1)

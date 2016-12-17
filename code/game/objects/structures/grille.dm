@@ -65,7 +65,8 @@
 /obj/structure/grille/attack_paw(mob/user as mob)
 	attack_hand(user)
 
-/obj/structure/grille/attack_hand(mob/user as mob)
+/obj/structure/grille/attack_hand(mob/living/user as mob)
+	user.do_attack_animation(src)
 	var/humanverb = pick(list("kick", "slam", "elbow")) //Only verbs with a third person "s", thank you
 	user.delayNextAttack(8)
 	user.visible_message("<span class='warning'>[user] [humanverb]s \the [src].</span>", \
@@ -78,9 +79,10 @@
 	healthcheck(hitsound = 1)
 	shock(user, 100) //If there's power running in the grille, allow the attack but grill the user
 
-/obj/structure/grille/attack_alien(mob/user as mob)
+/obj/structure/grille/attack_alien(mob/living/user as mob)
 	if(istype(user, /mob/living/carbon/alien/larva))
 		return
+	user.do_attack_animation(src)
 	var/alienverb = pick(list("slam", "rip", "claw")) //See above
 	user.delayNextAttack(8)
 	user.visible_message("<span class='warning'>[user] [alienverb]s \the [src].</span>", \
@@ -90,9 +92,10 @@
 	healthcheck(hitsound = 1)
 	shock(user, 75) //Ditto above
 
-/obj/structure/grille/attack_slime(mob/user as mob)
+/obj/structure/grille/attack_slime(mob/living/user as mob)
 	if(!istype(user, /mob/living/carbon/slime/adult))
 		return
+	user.do_attack_animation(src)
 	user.delayNextAttack(8)
 	user.visible_message("<span class='warning'>[user] smashes against \the [src].</span>", \
 						 "<span class='warning'>You smash against \the [src].</span>", \
@@ -103,6 +106,7 @@
 	return
 
 /obj/structure/grille/attack_animal(var/mob/living/simple_animal/M as mob)
+	M.do_attack_animation(src)
 	M.delayNextAttack(8)
 	if(M.melee_damage_upper == 0)
 		return
@@ -137,7 +141,7 @@
 	healthcheck(hitsound = 1)
 	return 0
 
-/obj/structure/grille/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/grille/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 	user.delayNextAttack(8)
 	if(iswirecutter(W))
 		if(!shock(user, 100)) //Prevent user from doing it if he gets shocked
@@ -198,6 +202,7 @@
 			"<span class='notice'>You place \a [WD] on \the [src].</span>")
 		return
 
+	user.do_attack_animation(src)
 	if(istype(W, /obj/item/weapon/fireaxe)) //Fireaxes instantly kill grilles
 		health = 0
 		healthcheck()

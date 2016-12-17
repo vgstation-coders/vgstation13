@@ -1,6 +1,7 @@
 /mob/living/carbon/human/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
 	//M.delayNextAttack(10)
 	if(check_shields(0, M.name))
+		M.do_attack_animation(src)
 		visible_message("<span class='danger'>[M] attempted to touch [src]!</span>")
 		return 0
 
@@ -24,6 +25,7 @@
 			visible_message(text("<span class='warning'>[] has grabbed [] passively!</span>", M, src))
 
 		if(I_HURT)
+			M.do_attack_animation(src)
 			if (w_uniform)
 				w_uniform.add_fingerprint(M)
 			var/damage = rand(15, 30)
@@ -44,6 +46,7 @@
 			updatehealth()
 
 		if(I_DISARM)
+			M.do_attack_animation(src)
 			if (prob(80))
 				playsound(loc, 'sound/weapons/pierce.ogg', 25, 1, -1)
 				Knockdown(rand(3,4))
