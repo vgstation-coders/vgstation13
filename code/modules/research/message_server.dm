@@ -59,6 +59,7 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 	var/list/datum/data_pda_msg/pda_msgs = list()
 	var/list/datum/data_rc_msg/rc_msgs = list()
 	var/active = 1
+	var/manualdisable = FALSE
 	var/decryptkey = "password"
 
 /obj/machinery/message_server/New()
@@ -84,9 +85,10 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 /obj/machinery/message_server/process()
 	//if(decryptkey == "password")
 	//	decryptkey = generateKey()
-	if(active && (stat & (BROKEN|NOPOWER)))
-		active = 0
-		return
+	if(manualdisable || stat & (BROKEN|NOPOWER))
+		active = FALSE
+	else
+		active = TRUE
 	update_icon()
 	return
 
@@ -101,15 +103,15 @@ var/global/list/obj/machinery/message_server/message_servers = list()
 		return 0
 //	to_chat(user, "<span class='notice'>There seem to be some parts missing from this server. They should arrive on the station in a few days, give or take a few CentCom delays.</span>")
 	to_chat(user, "You toggle PDA message passing from [active ? "On" : "Off"] to [active ? "Off" : "On"]")
-	active = !active
+	manualdisable = !manualdisable
 	update_icon()
 
 	return
 
 /obj/machinery/message_server/update_icon()
-	if((stat & (BROKEN|NOPOWER)))
+	if(stat & (BROKEN|NOPOWER))
 		icon_state = "server-nopower"
-	else if (!active)
+	else if (manualdisable)
 		icon_state = "server-off"
 	else
 		icon_state = "server-on"
