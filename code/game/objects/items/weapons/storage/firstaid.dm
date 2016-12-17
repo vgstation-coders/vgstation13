@@ -57,7 +57,7 @@
 	return
 
 /obj/item/weapon/storage/firstaid/toxin
-	name = "toxin first aid"
+	name = "toxin first-aid kit"
 	desc = "Used to treat when you have a high amount of toxins in your body."
 	icon_state = "antitoxin"
 	item_state = "firstaid-toxin"
@@ -79,7 +79,7 @@
 	return
 
 /obj/item/weapon/storage/firstaid/o2
-	name = "oxygen deprivation first aid"
+	name = "oxygen deprivation first-aid kit"
 	desc = "A box full of oxygen goodies."
 	icon_state = "o2"
 	item_state = "firstaid-oxy"
@@ -113,6 +113,27 @@
 	new /obj/item/stack/medical/advanced/ointment(src)
 	new /obj/item/stack/medical/splint(src)
 	return
+
+/obj/item/weapon/storage/firstaid/internalbleed
+	name = "internal bleeding first-aid kit"
+	desc = "Used to stabilize patients suffering from internal bleeding."
+	icon_state = "internalbleedfirstaid"
+	item_state = "firstaid-internalbleed"
+
+
+/obj/item/weapon/storage/firstaid/internalbleed/New()
+	..()
+	if (empty)
+		return
+	new /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector(src)
+	new /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector(src)
+	new /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector(src)
+	new /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector(src)
+	new /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector(src)
+	new /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector(src)
+	new /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector(src)
+	return
+
 /*
  * Pill Bottles
  */
