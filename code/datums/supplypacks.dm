@@ -551,7 +551,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/vox_supply
 	name = "Vox Resupply Crate"
-	contains = list(/obj/item/clothing/suit/space/vox/civ,
+	contains = list(/obj/item/clothing/suit/space/vox/civ/eva,
 					/obj/item/clothing/head/helmet/space/vox/civ,
 					/obj/item/weapon/tank/nitrogen,
 					/obj/item/clothing/mask/breath/vox)

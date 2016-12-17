@@ -98,7 +98,7 @@
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_SMALL
-	force = 4.0
+	force = 4
 	distribute_pressure = ONE_ATMOSPHERE*O2STANDARD
 	volume = 2 //Tiny. Real life equivalents only have 21 breaths of oxygen in them. They're EMERGENCY tanks anyway -errorage (dangercon 2011)
 
@@ -116,19 +116,6 @@
 	icon_state = "emergency_double"
 	volume = 10
 
-/obj/item/weapon/tank/emergency_nitrogen
-	name = "emergency nitrogen tank"
-	desc = "Used for emergencies. Not useful unless you only breathe nitrogen."
-	icon_state = "emergency_nitrogen"
-	slot_flags = SLOT_BELT
-	w_class = W_CLASS_SMALL
-	volume = 2
-	distribute_pressure = ONE_ATMOSPHERE*O2STANDARD
-
-/obj/item/weapon/tank/emergency_nitrogen/New()
-	. = ..()
-	air_contents.adjust(, , (3 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))
-
 /*
  * Nitrogen
  */
@@ -141,3 +128,16 @@
 /obj/item/weapon/tank/nitrogen/New()
 	. = ..()
 	air_contents.adjust(, , (3 * ONE_ATMOSPHERE) * 70 / (R_IDEAL_GAS_EQUATION * T20C))
+
+/obj/item/weapon/tank/emergency_nitrogen
+	name = "emergency nitrogen tank"
+	desc = "Used for emergencies. Not useful unless you only breathe nitrogen."
+	icon_state = "emergency_nitrogen"
+	slot_flags = SLOT_BELT
+	w_class = W_CLASS_SMALL
+	volume = 2
+	distribute_pressure = ONE_ATMOSPHERE*O2STANDARD
+
+/obj/item/weapon/tank/emergency_nitrogen/New()
+	. = ..()
+	air_contents.adjust(, , (3 * ONE_ATMOSPHERE) * volume / (R_IDEAL_GAS_EQUATION * T20C))

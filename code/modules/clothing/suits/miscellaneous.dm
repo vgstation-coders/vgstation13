@@ -490,3 +490,9 @@
 	heat_conductivity = 0
 	slowdown = 5
 	bearpelt = 1
+
+/obj/item/clothing/suit/tank_harness
+	name = "tank harness"
+	desc = "A lightweight harness used for storing gas tanks."
+	icon_state = "tank_harness"
+	allowed = list(/obj/item/weapon/tank)

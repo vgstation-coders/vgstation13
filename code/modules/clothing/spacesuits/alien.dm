@@ -161,13 +161,42 @@
 // Vox Casual
 // Civvie
 /obj/item/clothing/suit/space/vox/civ
-	name = "vox assistant pressure suit"
+	name = "Vox EVA Suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers."
 	icon_state = "vox-civ-assistant"
 	item_state = "vox-pressure-normal"
 	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 25)
 	pressure_resistance = 5 * ONE_ATMOSPHERE
+
+/obj/item/clothing/suit/space/vox/civ/eva
+	var/list/clothing_choices = list()
+
+
+/obj/item/clothing/suit/space/vox/civ/eva/New()
+	..()
+	var/blocked = list(/obj/item/clothing/suit/space/vox/civ/eva)
+	//to prevent an infinite loop
+	for(var/U in typesof(/obj/item/clothing/suit/space/vox/civ)-(/obj/item/clothing/suit/space/vox/civ))
+		var/obj/item/clothing/suit/space/vox/civ/V = new U
+		src.clothing_choices += V
+	for(var/U in typesof(/obj/item/clothing/suit/space/vox/civ)-blocked)
+		var/obj/item/clothing/suit/space/vox/civ/V = new U
+		src.clothing_choices += V
+
+/obj/item/clothing/suit/space/vox/civ/eva/verb/change()
+	set name = "Change Color"
+	set category = "Object"
+	set src in usr
+
+	var/obj/item/clothing/suit/space/vox/civ/A
+	A = input("Select Colour to change it to", "BOOYEA", A) in clothing_choices
+	if(!A)
+		return
+
+	icon_state = A.icon_state
+	item_state = A.item_state
+	usr.update_inv_wear_suit()	//so our overlays update.
 
 /obj/item/clothing/head/helmet/space/vox/civ
 	name = "vox assistant pressure helmet"
@@ -180,224 +209,79 @@
 	eyeprot = 0
 
 /obj/item/clothing/suit/space/vox/civ/bartender
-	name = "vox bartender pressure suit"
 	icon_state = "vox-civ-bartender"
 
 /obj/item/clothing/head/helmet/space/vox/civ/bartender
-	name = "vox bartender pressure helmet"
 	icon_state = "vox-civ-bartender"
 
 /obj/item/clothing/suit/space/vox/civ/chef
-	name = "vox chef pressure suit"
 	icon_state = "vox-civ-chef"
 
 /obj/item/clothing/head/helmet/space/vox/civ/chef
-	name = "vox chef pressure helmet"
 	icon_state = "vox-civ-chef"
 
 /obj/item/clothing/suit/space/vox/civ/botanist
-	name = "vox botanist pressure suit"
 	icon_state = "vox-civ-botanist"
 
 /obj/item/clothing/head/helmet/space/vox/civ/botanist
-	name = "vox botanist pressure helmet"
 	icon_state = "vox-civ-botanist"
 
 /obj/item/clothing/suit/space/vox/civ/janitor
-	name = "vox janitor pressure suit"
 	icon_state = "vox-civ-janitor"
 
 /obj/item/clothing/head/helmet/space/vox/civ/janitor
-	name = "vox janitor pressure helmet"
 	icon_state = "vox-civ-janitor"
 
 /obj/item/clothing/suit/space/vox/civ/cargo
-	name = "vox cargo pressure suit"
 	icon_state = "vox-civ-cargo"
 
 /obj/item/clothing/head/helmet/space/vox/civ/cargo
-	name = "vox cargo pressure helmet"
 	icon_state = "vox-civ-cargo"
 
 /obj/item/clothing/suit/space/vox/civ/librarian
-	name = "vox librarian pressure suit"
 	icon_state = "vox-civ-librarian"
 
 /obj/item/clothing/head/helmet/space/vox/civ/librarian
-	name = "vox librarian pressure helmet"
 	icon_state = "vox-civ-librarian"
 
 /obj/item/clothing/suit/space/vox/civ/chaplain
-	name = "vox chaplain pressure suit"
 	icon_state = "vox-civ-chaplain"
 
 /obj/item/clothing/head/helmet/space/vox/civ/chaplain
-	name = "vox chaplain pressure helmet"
 	icon_state = "vox-civ-chaplain"
 
-//Engineering
-/obj/item/clothing/suit/space/vox/civ/engineer
-	name = "vox engineer pressure suit"
-	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one comes with more radiation protection."
-	icon_state = "vox-civ-engineer"
-	item_state = "vox-pressure-engineer"
-	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 50)
-	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	pressure_resistance = 200 * ONE_ATMOSPHERE
-
-/obj/item/clothing/head/helmet/space/vox/civ/engineer
-	name = "vox engineer pressure helmet"
-	icon_state = "vox-civ-engineer"
-	item_state = "vox-pressure-engineer"
-	desc = "A very alien-looking helmet for vox crewmembers. This one comes with more radiation protection."
-	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 50)
-	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	pressure_resistance = 200 * ONE_ATMOSPHERE
-	eyeprot = 3
-
-/obj/item/clothing/suit/space/vox/civ/engineer/atmos
-	name = "vox atmos pressure suit"
-	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. Has some heat protection."
-	icon_state = "vox-civ-atmos"
-	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 10)
-	flags = FPRINT  | PLASMAGUARD
-	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-
-/obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos
-	name = "vox atmos pressure helmet"
-	icon_state = "vox-civ-atmos"
-	desc = "A very alien-looking helmet for vox crewmembers. Has some heat protection."
-	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 10)
-	flags = FPRINT  | PLASMAGUARD
-	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
-
-/obj/item/clothing/suit/space/vox/civ/engineer/ce
-	name = "vox chief engineer pressure suit"
-	desc = "A more advanced pressure suit made for vox crewmembers. Has some radiation and heat protection."
-	icon_state = "vox-civ-ce"
-	armor = list(melee = 10, bullet = 5, laser = 10, energy = 5, bomb = 10, bio = 100, rad = 50)
-	flags = FPRINT  | PLASMAGUARD
-	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-
-/obj/item/clothing/head/helmet/space/vox/civ/engineer/ce
-	name = "vox chief engineer pressure helmet"
-	icon_state = "vox-civ-ce"
-	desc = "A very alien-looking helmet for vox crewmembers. Has some radiation and heat protection."
-	flags = FPRINT  | PLASMAGUARD
-	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
-
-//Science
-/obj/item/clothing/suit/space/vox/civ/science
-	name = "vox science pressure suit"
-	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for SCIENCE!"
-	icon_state = "vox-civ-science"
-	item_state = "vox-pressure-science"
-	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 10, bio = 100, rad = 25)
-
-/obj/item/clothing/head/helmet/space/vox/civ/science
-	name = "vox science pressure helmet"
-	icon_state = "vox-civ-science"
-	item_state = "vox-pressure-science"
-	desc = "A very alien-looking helmet for vox crewmembers. This one is for SCIENCE!"
-	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 10, bio = 100, rad = 25)
-	eyeprot = 0
-
-/obj/item/clothing/suit/space/vox/civ/science/rd
-	name = "vox research director pressure suit"
-	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for the head of SCIENCE!"
-	icon_state = "vox-civ-rd"
-	item_state = "vox-pressure-science"
-
-/obj/item/clothing/head/helmet/space/vox/civ/science/rd
-	name = "vox research director pressure helmet"
-	icon_state = "vox-civ-rd"
-	item_state = "vox-pressure-science"
-	desc = "A very alien-looking helmet for vox crewmembers. This one is for head of SCIENCE!"
-
-
 //Med/Sci
-/obj/item/clothing/suit/space/vox/civ/medical
-	name = "vox medical pressure suit"
-	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for medical personnel."
-	icon_state = "vox-civ-medical"
-	item_state = "vox-pressure-medical"
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
-	pressure_resistance = 40 * ONE_ATMOSPHERE
-
-/obj/item/clothing/head/helmet/space/vox/civ/medical
-	name = "vox medical pressure helmet"
-	icon_state = "vox-civ-medical"
-	item_state = "vox-pressure-medical"
-	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for medical personnel."
-	pressure_resistance = 40 * ONE_ATMOSPHERE
-	eyeprot = 0
-
-/obj/item/clothing/suit/space/vox/civ/medical/virologist
-	name = "vox virologist pressure suit"
+/obj/item/clothing/suit/space/vox/civ/virologist
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for virologists."
 	icon_state = "vox-civ-virologist"
 
-/obj/item/clothing/head/helmet/space/vox/civ/medical/virologist
-	name = "vox virologist pressure helmet"
+/obj/item/clothing/head/helmet/space/vox/civ/virologist
 	icon_state = "vox-civ-virologist"
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for virologists."
 
-/obj/item/clothing/suit/space/vox/civ/medical/chemist
-	name = "vox chemist pressure suit"
+/obj/item/clothing/suit/space/vox/civ/chemist
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for chemists."
 	icon_state = "vox-civ-chemist"
 
-/obj/item/clothing/head/helmet/space/vox/civ/medical/chemist
-	name = "vox chemist pressure helmet"
+/obj/item/clothing/head/helmet/space/vox/civ/chemist
 	icon_state = "vox-civ-chemist"
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for chemists."
 
-/obj/item/clothing/suit/space/vox/civ/medical/geneticist
-	name = "vox geneticist pressure suit"
+/obj/item/clothing/suit/space/vox/civ/geneticist
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for geneticists."
 	icon_state = "vox-civ-geneticist"
 
-/obj/item/clothing/head/helmet/space/vox/civ/medical/geneticist
-	name = "vox geneticist pressure helmet"
+/obj/item/clothing/head/helmet/space/vox/civ/geneticist
 	icon_state = "vox-civ-geneticist"
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for geneticists."
 
-/obj/item/clothing/suit/space/vox/civ/medical/paramedic
-	name = "vox paramedic pressure suit"
-	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for paramedics."
-	icon_state = "vox-civ-paramedic"
-
-/obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic
-	name = "vox paramedic pressure helmet"
-	icon_state = "vox-civ-paramedic"
-	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for paramedics."
-
-/obj/item/clothing/suit/space/vox/civ/medical/cmo
-	name = "vox cmo pressure suit"
+/obj/item/clothing/suit/space/vox/civ/cmo
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for the CMO."
 	icon_state = "vox-civ-cmo"
 
-/obj/item/clothing/head/helmet/space/vox/civ/medical/cmo
-	name = "vox cmo pressure helmet"
+/obj/item/clothing/head/helmet/space/vox/civ/cmo
 	icon_state = "vox-civ-cmo"
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for the CMO."
-
-//Security
-/obj/item/clothing/suit/space/vox/civ/security
-	name = "vox security pressure suit"
-	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for security aligned vox."
-	icon_state = "vox-civ-security"
-	item_state = "vox-pressure-security"
-	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
-	allowed = list(/obj/item/weapon/tank/nitrogen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/baton)
-	pressure_resistance = 40 * ONE_ATMOSPHERE
-
-/obj/item/clothing/head/helmet/space/vox/civ/security
-	name = "vox security pressure helmet"
-	icon_state = "vox-civ-security"
-	item_state = "vox-pressure-security"
-	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for security aligned vox."
-	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 //Old Vox Suits
 /*
