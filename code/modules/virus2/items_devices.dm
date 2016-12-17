@@ -55,8 +55,9 @@
 		qdel (src)
 		
 /obj/item/weapon/virusdish/throw_impact(atom/hit_atom)
-	visible_message("<span class='danger'>The virus dish shatters on impact!</span>")
+	..()
 	if(isturf(hit_atom))
+		visible_message("<span class='danger'>The virus dish shatters on impact!</span>")
 		if(virus2.infectionchance > 0)
 			for(var/mob/living/carbon/target in view(1, get_turf(src)))
 				if(airborne_can_reach(get_turf(src), get_turf(target)))
