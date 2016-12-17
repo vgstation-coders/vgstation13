@@ -295,6 +295,6 @@
 	desc = "Experimental medication."
 	icon_state = "pill7" //grey oblong
 
-	/obj/item/weapon/reagent_containers/pill/nanobot/New()
-		..()
-		reagents.add_reagent(NANOBOTS, 1)
+/obj/item/weapon/reagent_containers/pill/nanobot/New()
+	..()
+	reagents.add_reagent(NANOBOTS, 1)

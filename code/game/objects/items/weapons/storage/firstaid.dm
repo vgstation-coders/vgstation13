@@ -293,7 +293,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	name = "Experimental Medication"
 	desc = "Hazardous.  Warranty voided if consumed."
 
-	New()
+	/obj/item/weapon/storage/pill_bottle/nanobot/New()
 		..()
 		new /obj/item/weapon/reagent_containers/pill/nanobot( src )
 		new /obj/item/weapon/reagent_containers/pill/nanobot( src )

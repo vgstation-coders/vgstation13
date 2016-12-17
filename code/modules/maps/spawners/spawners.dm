@@ -1137,5 +1137,3 @@
 	/obj/item/clothing/accessory/medal/gold/captain,
 	/obj/item/clothing/accessory/medal/gold/heroism
 )
-
-//test commit
