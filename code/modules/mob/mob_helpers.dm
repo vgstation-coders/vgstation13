@@ -494,6 +494,3 @@ proc/is_blind(A)
 
 /mob/proc/get_survive_objective()
 	return new /datum/objective/survive
-
-/mob/proc/has_hands()
-	return held_items.len
