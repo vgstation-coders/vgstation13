@@ -297,4 +297,3 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 		..()
 		for (var/x = 1 to 5)
 			new /obj/item/weapon/reagent_containers/pill/nanobot(src)
->>>>>>> Bleeding-Edge
