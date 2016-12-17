@@ -166,17 +166,16 @@
 /mob/living/silicon/robot/mommi/proc/unequip_head()
 	// If there is a hat on the MoMMI's head
 	if(head_state)
-		// Select the MoMMI's claw
-		select_module(INV_SLOT_TOOL)
-
-		// Put the hat in the MoMMI's claw
-		put_in_active_hand(head_state)
-
 		// Remove the head_state icon from the client's screen
 		if (client)
 			client.screen -= head_state
 
-		// Delete the hat from the head
+		head_state.forceMove(loc)
+		head_state.dropped(src)
+		head_state.unequipped(src, slot_head)
+		head_state.reset_plane_and_layer()
+
+		// Delete the hat's reference
 		head_state = null
 
 		// Update the MoMMI's head inventory icons
