@@ -55,13 +55,14 @@
 		qdel (src)
 		
 /obj/item/weapon/virusdish/throw_impact(atom/hit_atom)
-	to_chat(user, "The dish shatters on impact!")
-	if(virus2.infectionchance > 0)
-		for(var/mob/living/carbon/target in view(1, get_turf(src)))
-			if(airborne_can_reach(get_turf(src), get_turf(target)))
-				if(get_infection_chance(target))
-					infect_virus2(target,src.virus2, notes="([src] attacked by [key_name(user)])")
-	qdel (src)
+	visible_message("<span class='danger'>The virus dish shatters on impact!</span>")
+	if(isturf(hit_atom))
+		if(virus2.infectionchance > 0)
+			for(var/mob/living/carbon/target in view(1, get_turf(src)))
+				if(airborne_can_reach(get_turf(src), get_turf(target)))
+					if(get_infection_chance(target))
+						infect_virus2(target,src.virus2, notes="([src] attacked by [key_name(user)])")
+		qdel (src)
 
 
 /obj/item/weapon/virusdish/examine(mob/user)
