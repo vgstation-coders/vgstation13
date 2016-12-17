@@ -66,17 +66,24 @@
 	max_duration = 90
 
 /datum/surgery_step/internal/fix_organ/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-
-	if (!hasorgans(target))
+	if(!hasorgans(target))
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	var/is_organ_damaged = 0
+	var/has_valid_damaged_organ = 0
+	var/has_invalid_damaged_organ = 0
 	for(var/datum/organ/internal/I in affected.internal_organs)
 		if(I.damage > 0)
-			is_organ_damaged = 1
+			if(I.robotic >= 2)
+				has_invalid_damaged_organ = 1
+			else
+				has_valid_damaged_organ = 1
 			break
-	return ..() && is_organ_damaged
+	if(..())
+		if(!has_valid_damaged_organ && has_invalid_damaged_organ)
+			to_chat(user, "<span class='warning'>You cannot fix robotic organs with this tool.</span>")
+			return
+		return has_valid_damaged_organ
 
 /datum/surgery_step/internal/fix_organ/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/tool_name = "\the [tool]"
@@ -225,17 +232,24 @@
 	max_duration = 90
 
 /datum/surgery_step/internal/fix_organ_robotic/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-
-	if (!hasorgans(target))
+	if(!hasorgans(target))
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	var/is_organ_damaged = 0
+	var/has_valid_damaged_organ = 0
+	var/has_invalid_damaged_organ = 0
 	for(var/datum/organ/internal/I in affected.internal_organs)
-		if(I.damage > 0 && I.robotic >= 2)
-			is_organ_damaged = 1
+		if(I.damage > 0)
+			if(I.robotic < 2)
+				has_invalid_damaged_organ = 1
+			else
+				has_valid_damaged_organ = 1
 			break
-	return ..() && is_organ_damaged
+	if(..())
+		if(!has_valid_damaged_organ && has_invalid_damaged_organ)
+			to_chat(user, "<span class='warning'>You cannot fix organic organs with this tool.</span>")
+			return
+		return has_valid_damaged_organ
 
 /datum/surgery_step/internal/fix_organ_robotic/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
