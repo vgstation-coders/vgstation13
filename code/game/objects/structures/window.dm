@@ -449,10 +449,13 @@
 	if(brokenup) //If the instruction we were sent clearly states we're breaking the window, not deleting it !
 		if(loc)
 			playsound(get_turf(src), "shatter", 70, 1)
-		getFromPool(shardtype, loc, sheetamount)
-		if(reinforced)
-			getFromPool(/obj/item/stack/rods, loc, sheetamount)
+		spawnBrokenPieces()
 	..()
+
+/obj/structure/window/proc/spawnBrokenPieces()
+	getFromPool(shardtype, loc, sheetamount)
+	if(reinforced)
+		getFromPool(/obj/item/stack/rods, loc, sheetamount)
 
 /obj/structure/window/Move()
 
