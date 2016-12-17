@@ -94,6 +94,36 @@
 			return
 		..()
 
+/obj/item/weapon/melee/baton/attackby(var/obj/item/I, mob/user as mob)
+	..()
+	if(istype(I, /obj/item/weapon/bikehorn))
+
+		if(istype(src, /obj/item/weapon/melee/baton/cattleprod))
+			return
+
+		user.visible_message("<span class='notice'>[user] starts jamming \a [src] into the mouth of \a [I].</span>",\
+		"<span class='info'>You do your best to jam \the [src] into the mouth of \the [I].</span>")
+
+		if(do_after(user, src, 5 SECONDS))
+			if(!I || !src)
+				return
+
+			if(!user.drop_item(I))
+				to_chat(user, "<span class='warning'>You fail to push \the [I] hard enough, and it falls off \the [src].</span>")
+				return
+
+			user.drop_item(src, force_drop = 1)
+
+			var/obj/item/weapon/bikehorn/baton/H = new /obj/item/weapon/bikehorn/baton
+
+			user.put_in_hands(H)
+			user.visible_message("<span class='notice'>[user] jams \a [src] into the mouth of \a [I].</span>",\
+			"<span class='notice'>You jam \the [src] into the mouth of \the [I]. Honk!</span>")
+
+			qdel(I)
+			I = null
+			qdel(src)
+
 /obj/item/weapon/melee/baton/attack_self(mob/user)
 	if(status && (M_CLUMSY in user.mutations) && prob(50))
 		user.simple_message("<span class='warning'>You grab the [src] on the wrong side.</span>",
