@@ -291,7 +291,7 @@
 	*/
 
 /obj/item/weapon/reagent_containers/pill/nanobot
-	name = "Nanobot pill"
+	name = "nanobot pill"
 	desc = "Experimental medication."
 	icon_state = "pill7" //grey oblong
 
