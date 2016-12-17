@@ -287,7 +287,7 @@ var/global/list/damage_icon_parts = list()
 
 
 //HAIR OVERLAY
-/mob/living/carbon/human/proc/update_hair(var/update_icons=1)
+/mob/living/carbon/human/update_hair(var/update_icons=1)
 	//Reset our hair
 
 	overlays -= obj_overlays[HAIR_LAYER]
