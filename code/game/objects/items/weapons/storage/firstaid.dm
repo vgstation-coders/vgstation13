@@ -281,10 +281,20 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	desc = "Because working out is far too much effort."
 
 /obj/item/weapon/storage/pill_bottle/creatine/New()
-	..()
-	new /obj/item/weapon/reagent_containers/pill/creatine_safe( src )
-	new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
-	new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
-	new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
-	new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
-	new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
+		..()
+		new /obj/item/weapon/reagent_containers/pill/creatine_safe( src )
+		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
+		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
+		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
+		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
+		new /obj/item/weapon/reagent_containers/pill/creatine_supplement ( src )
+
+/obj/item/weapon/storage/pill_bottle/nanobot
+	name = "Experimental Medication"
+	desc = "Hazardous.  Warranty voided if consumed."
+
+	/obj/item/weapon/storage/pill_bottle/nanobot/New()
+		..()
+		for (var/x = 1 to 5)
+			new /obj/item/weapon/reagent_containers/pill/nanobot(src)
+>>>>>>> Bleeding-Edge
