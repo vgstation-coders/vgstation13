@@ -445,22 +445,10 @@
 	return 1
 
 /obj/machinery/computer/scan_consolenew/process()
-	if (stat & (BROKEN | NOPOWER | MAINT | EMPED))
-		use_power = 0
-		return
-
 	if (connected && connected.occupant)
 		use_power = 2
 	else
 		use_power = 1
-
-/*
-	if(stat & (NOPOWER|BROKEN))
-		return
-	if (!( src.status )) //remove this
-		return
-	return
-*/
 
 /obj/machinery/computer/scan_consolenew/attack_paw(user as mob)
 	ui_interact(user)
