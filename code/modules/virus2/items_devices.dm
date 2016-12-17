@@ -45,14 +45,24 @@
 	if(istype(W,/obj/item/weapon/hand_labeler) || istype(W,/obj/item/weapon/reagent_containers/syringe))
 		return
 	..()
-	if(prob(50))
-		to_chat(user, "The dish shatters")
+	if(mob.a_intent == I_HURT)
+		to_chat(user, "The dish shatters!")
 		if(virus2.infectionchance > 0)
 			for(var/mob/living/carbon/target in view(1, get_turf(src)))
 				if(airborne_can_reach(get_turf(src), get_turf(target)))
 					if(get_infection_chance(target))
 						infect_virus2(target,src.virus2, notes="([src] attacked by [key_name(user)])")
 		qdel (src)
+		
+/obj/item/weapon/virusdish/throw_impact(atom/hit_atom)
+	to_chat(user, "The dish shatters on impact!")
+	if(virus2.infectionchance > 0)
+		for(var/mob/living/carbon/target in view(1, get_turf(src)))
+			if(airborne_can_reach(get_turf(src), get_turf(target)))
+				if(get_infection_chance(target))
+					infect_virus2(target,src.virus2, notes="([src] attacked by [key_name(user)])")
+	qdel (src)
+
 
 /obj/item/weapon/virusdish/examine(mob/user)
 	..()
