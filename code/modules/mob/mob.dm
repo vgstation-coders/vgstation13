@@ -670,7 +670,7 @@ var/list/slot_equipment_priority = list( \
 			if(slot_wear_mask)
 				if( !(slot_flags & SLOT_MASK) )
 					return 0
-//				if(H.species.flags & IS_BULKY)
+//				if(H.species.anatomy_flags & IS_BULKY)
 //					to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your thick head!</span>")
 //					return 0
 				if(H.wear_mask)
@@ -688,7 +688,7 @@ var/list/slot_equipment_priority = list( \
 			if(slot_wear_suit)
 				if( !(slot_flags & SLOT_OCLOTHING) )
 					return 0
-//				if(H.species.flags & IS_BULKY)
+//				if(H.species.anatomy_flags & IS_BULKY)
 //					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
 //					return 0
 				if(H.wear_suit)
@@ -700,7 +700,7 @@ var/list/slot_equipment_priority = list( \
 			if(slot_gloves)
 				if( !(slot_flags & SLOT_GLOVES) )
 					return 0
-//				if(H.species.flags & IS_BULKY)
+//				if(H.species.anatomy_flags & IS_BULKY)
 //					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky fingers!</span>")
 //					return 0
 				if(H.gloves)
@@ -712,7 +712,7 @@ var/list/slot_equipment_priority = list( \
 			if(slot_shoes)
 				if( !(slot_flags & SLOT_FEET) )
 					return 0
-//				if(H.species.flags & IS_BULKY)
+//				if(H.species.anatomy_flags & IS_BULKY)
 //					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky feet!</span>")
 //					return 0
 				if(H.shoes)
@@ -764,9 +764,9 @@ var/list/slot_equipment_priority = list( \
 			if(slot_w_uniform)
 				if( !(slot_flags & SLOT_ICLOTHING) )
 					return 0
-				if((M_FAT in H.mutations) && (H.species && H.species.flags & CAN_BE_FAT) && !(clothing_flags & ONESIZEFITSALL))
+				if((M_FAT in H.mutations) && (H.species && H.species.anatomy_flags & CAN_BE_FAT) && !(clothing_flags & ONESIZEFITSALL))
 					return 0
-//				if(H.species.flags & IS_BULKY && !(clothing_flags & ONESIZEFITSALL))
+//				if(H.species.anatomy_flags & IS_BULKY && !(clothing_flags & ONESIZEFITSALL))
 //					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
 //					return 0
 				if(H.w_uniform)

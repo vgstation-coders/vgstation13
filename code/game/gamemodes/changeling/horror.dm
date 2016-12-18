@@ -4,7 +4,8 @@
 	deform = 'icons/mob/human_races/r_horror.dmi'  // TODO: Need deform.
 	known_languages = list(LANGUAGE_CLATTER)
 	attack_verb = "smashes"
-	flags = NO_BREATHE /*| NON_GENDERED*/ | NO_PAIN
+	flags = NO_BREATHE /*| NON_GENDERED*/ | NO_PAIN | HYPOTHERMIA_IMMUNE
+	anatomy_flags = HAS_SWEAT_GLANDS
 	pressure_resistance = 30 * ONE_ATMOSPHERE /*No longer will our ascent be foiled by depressurization!*/
 	//h_style = null
 
@@ -31,7 +32,6 @@
 
 	throw_mult = 1.5 // +0.5 for hulk
 	fireloss_mult = 2 // double the damage, half the fun
-	can_be_hypothermic = 0
 
 	override_icon = 'icons/mob/horror.dmi'
 	has_mutant_race = 0

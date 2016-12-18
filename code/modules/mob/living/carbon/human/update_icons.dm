@@ -116,7 +116,7 @@ Please contact me on #coderbus IRC. ~Carn x
 /mob/living/carbon/human/proc/species_override_icon()
 	//overlays.len = 0
 	icon = species.override_icon
-	icon_state = "[lowertext(species.name)]_[gender][ (species.flags & CAN_BE_FAT ? (mutations & M_FAT) ? "_fat" : "" : "") ]"
+	icon_state = "[lowertext(species.name)]_[gender][ (species.anatomy_flags & CAN_BE_FAT ? (mutations & M_FAT) ? "_fat" : "" : "") ]"
 	//temporary fix for having mutations on top of overriden icons for like muton, horror, etc
 	overlays -= obj_overlays[MUTANTRACE_LAYER]
 
@@ -188,7 +188,7 @@ var/global/list/damage_icon_parts = list()
 	var/necrosis_color_mod = rgb(10,50,0)
 
 	var/husk = (M_HUSK in src.mutations)  //100% unnecessary -Agouri	//nope, do you really want to iterate through src.mutations repeatedly? -Pete
-	var/fat = (M_FAT in src.mutations) && (species && species.flags & CAN_BE_FAT)
+	var/fat = (M_FAT in src.mutations) && (species && species.anatomy_flags & CAN_BE_FAT)
 	var/hulk = (M_HULK in src.mutations) && !ishorrorform(src) && !isgrue(src) && mind.special_role != HIGHLANDER // Part of the species.
 	var/skeleton = (SKELETON in src.mutations)
 
@@ -250,7 +250,7 @@ var/global/list/damage_icon_parts = list()
 				stand_icon.Blend(temp, ICON_OVERLAY)
 
 	//Skin tone
-	if(!skeleton && !husk && !hulk && (species.flags & HAS_SKIN_TONE))
+	if(!skeleton && !husk && !hulk && (species.anatomy_flags & HAS_SKIN_TONE))
 		if(s_tone >= 0)
 			stand_icon.Blend(rgb(s_tone, s_tone, s_tone), ICON_ADD)
 		else
@@ -271,11 +271,11 @@ var/global/list/damage_icon_parts = list()
 			stand_icon.Blend(eyes, ICON_OVERLAY)
 
 		//Mouth	(lipstick!)
-		if(lip_style && (species && species.flags & HAS_LIPS))	//skeletons are allowed to wear lipstick no matter what you think, agouri.
+		if(lip_style && (species && species.anatomy_flags & HAS_LIPS))	//skeletons are allowed to wear lipstick no matter what you think, agouri.
 			stand_icon.Blend(new/icon('icons/mob/human_face.dmi', "lips_[lip_style]_s"), ICON_OVERLAY)
 
 	//Underwear
-	if(underwear >0 && underwear < 12 && species.flags & HAS_UNDERWEAR)
+	if(underwear >0 && underwear < 12 && species.anatomy_flags & HAS_UNDERWEAR)
 		if(!fat && !skeleton)
 			stand_icon.Blend(new /icon('icons/mob/human.dmi', "underwear[underwear]_[g]_s"), ICON_OVERLAY)
 
@@ -503,7 +503,7 @@ var/global/list/damage_icon_parts = list()
 			t_color = icon_state
 		var/image/standing	= image("icon_state" = "[t_color]_s")
 
-		if(((M_FAT in mutations) && (species.flags & CAN_BE_FAT)) || species.flags & IS_BULKY)
+		if(((M_FAT in mutations) && (species.anatomy_flags & CAN_BE_FAT)) || species.anatomy_flags & IS_BULKY)
 			if(w_uniform.clothing_flags&ONESIZEFITSALL)
 				standing.icon	= 'icons/mob/uniform_fat.dmi'
 			else
@@ -876,7 +876,7 @@ var/global/list/damage_icon_parts = list()
 		var/obj/Overlays/O = obj_overlays[SUIT_LAYER]
 		O.overlays.len = 0
 		var/image/standing	= image("icon" = ((wear_suit.icon_override) ? wear_suit.icon_override : 'icons/mob/suit.dmi'), "icon_state" = "[wear_suit.icon_state]")
-		if((((M_FAT in mutations) && (species.flags & CAN_BE_FAT)) || (species.flags & IS_BULKY)) && !(wear_suit.icon_override))
+		if((((M_FAT in mutations) && (species.anatomy_flags & CAN_BE_FAT)) || (species.anatomy_flags & IS_BULKY)) && !(wear_suit.icon_override))
 			if(wear_suit.clothing_flags&ONESIZEFITSALL)
 				standing.icon	= 'icons/mob/suit_fat.dmi'
 			else
@@ -1102,7 +1102,7 @@ var/global/list/damage_icon_parts = list()
 /mob/living/carbon/human/proc/update_tail_showing(var/update_icons=1)
 	//overlays_standing[TAIL_LAYER] = null
 	overlays -= obj_overlays[TAIL_LAYER]
-	if(species && species.tail && species.flags & HAS_TAIL)
+	if(species && species.tail && species.anatomy_flags & HAS_TAIL)
 		if(!wear_suit || !is_slot_hidden(wear_suit.body_parts_covered,HIDEJUMPSUIT))
 			var/obj/Overlays/O = obj_overlays[TAIL_LAYER]
 			O.icon = 'icons/effects/species.dmi'

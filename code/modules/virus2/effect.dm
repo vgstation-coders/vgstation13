@@ -138,7 +138,7 @@
 
 /datum/disease2/effect/itching/activate(var/mob/living/carbon/mob)
 	var/mob/living/carbon/human/H = mob
-	if (istype(H) && H.species && H.species.flags & NO_SKIN)
+	if (istype(H) && H.species && H.species.anatomy_flags & NO_SKIN)
 		to_chat(mob, "<span class='warning'>Your bones itch!</span>")
 	else
 		to_chat(mob, "<span class='warning'>Your skin itches!</span>")

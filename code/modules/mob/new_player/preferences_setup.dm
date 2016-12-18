@@ -186,7 +186,7 @@
 		icobase = 'icons/mob/human_races/r_human.dmi'
 
 	var/fat=""
-	if(disabilities&DISABILITY_FLAG_FAT && current_species.flags & CAN_BE_FAT)
+	if(disabilities&DISABILITY_FLAG_FAT && current_species.anatomy_flags & CAN_BE_FAT)
 		fat="_fat"
 	preview_icon = new /icon(icobase, "torso_[g][fat]")
 	preview_icon.Blend(new /icon(icobase, "groin_[g]"), ICON_OVERLAY)
@@ -212,7 +212,7 @@
 		preview_icon.Blend(temp, ICON_OVERLAY)
 
 	// Skin tone
-	if(current_species && (current_species.flags & HAS_SKIN_TONE))
+	if(current_species && (current_species.anatomy_flags & HAS_SKIN_TONE))
 		if (s_tone >= 0)
 			preview_icon.Blend(rgb(s_tone, s_tone, s_tone), ICON_ADD)
 		else

@@ -25,7 +25,7 @@
 
 	var/total_plasmaloss = 0
 	for(var/obj/item/I in src)
-		if(I.contaminated && !(species.is_plasma_immune))
+		if(I.contaminated && !(species.flags & PLASMA_IMMUNE))
 			total_plasmaloss += zas_settings.Get(/datum/ZAS_Setting/CONTAMINATION_LOSS)
 		I.OnMobLife(src)
 	adjustToxLoss(total_plasmaloss)
@@ -63,7 +63,7 @@
 			heal_overall_damage(1,1)
 
 	//The fucking M_FAT mutation is the greatest shit ever. It makes everyone so hot and bothered.
-	if(species.flags & CAN_BE_FAT)
+	if(species.anatomy_flags & CAN_BE_FAT)
 		if(M_FAT in mutations)
 			if(overeatduration < 100)
 				to_chat(src, "<span class='notice'>You feel fit again!</span>")
