@@ -129,7 +129,8 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 						continue
 				C.images += holder
 
-mob/proc/handle_glasses_vision_updates(var/obj/item/clothing/glasses/G) //Unsure of where to put this, but since most of it is HUDs it seemed fitting.
+//Unsure of where to put this, but since most of it is HUDs it seemed fitting to go here.
+/mob/proc/handle_glasses_vision_updates(var/obj/item/clothing/glasses/G)
 	if(istype(G))
 		if(G.see_in_dark)
 			see_in_dark = max(see_in_dark, G.see_in_dark)
