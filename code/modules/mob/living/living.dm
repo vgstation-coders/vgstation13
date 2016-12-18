@@ -641,7 +641,7 @@ Thanks.
 
 	var/turf/T = loc
 
-	var/t7 = 1
+	var/t7 = 1 //What the FUCK is this variable?
 	if (restrained())
 		for(var/mob/living/M in range(src, 1))
 			if ((M.pulling == src && M.stat == 0 && !( M.restrained() )))
