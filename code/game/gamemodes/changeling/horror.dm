@@ -33,39 +33,5 @@
 	fireloss_mult = 2 // double the damage, half the fun
 	can_be_hypothermic = 0
 
-	abilities = list(
-		/client/proc/changeling_force_airlock
-	)
-
 	override_icon = 'icons/mob/horror.dmi'
 	has_mutant_race = 0
-
-/client/proc/changeling_force_airlock()
-	set category = "Changeling"
-	set name = "Force Airlock"
-	set desc = "We will attempt to force open an airlock in front of us."
-
-	var/mob/living/carbon/human/H = src //This proc gets added to a mob's verbs list, as such this is correct.
-	if(!istype(H))
-		return
-
-	if(H.stat || !H.mind.changeling || H.species.name != "Horror")
-		return
-
-	var/turf/T = get_step(H,H.dir)
-	if(!T)
-		return
-	for(var/obj/machinery/door/D in T)
-		if(D.density)
-			D.visible_message("<span class='warning'>\The [D]'s motors whine as several great tendrils begin trying to force it open!</span>")
-			if(do_after(H, D, 50) && prob(50))
-				D.open(1)
-				D.visible_message("<span class='warning'>[H.name] forces \the [D] open!</span>")
-
-				// Open firedoors, too.
-				for(var/obj/machinery/door/firedoor/FD in D.loc)
-					if(FD && FD.density)
-						FD.open(1)
-			else
-				to_chat(usr, "<span class='warning'>You fail to open \the [D].</span>")
-			return

@@ -1089,13 +1089,7 @@ About the new airlock wires panel:
 					return //If they moved, cancel us out
 				playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
 			src.visible_message("<span class='warning'>[user] broke down the door!</span>", "<span class='warning'>You broke the door!</span>")
-			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
-			operating = -1
-			var/obj/structure/door_assembly/DA = revert(user,user.dir)
-			DA.anchored = 0
-			DA.state = 0 //Completely smash the door here; reduce it to its lowest state, eject electronics smoked
-			DA.update_state()
-			qdel(src)
+			bashed_in(user)
 		return
 
 	if (iswelder(I))
@@ -1120,7 +1114,7 @@ About the new airlock wires panel:
 	else if (iswiretool(I))
 		if (!operating && panel_open)
 			wires.Interact(user)
-	else if(iscrowbar(I) || istype(I, /obj/item/weapon/fireaxe) )
+	else if (iscrowbar(I) || istype(I, /obj/item/weapon/fireaxe))
 		if(src.busy)
 			return
 		src.busy = 1
@@ -1149,7 +1143,7 @@ About the new airlock wires panel:
 					if(F.wielded)
 						spawn(0)	open(1)
 					else
-						to_chat(user, "<span class='warning'>You need to be wielding the Fire axe to do that.</span>")
+						to_chat(user, "<span class='warning'>You need to be wielding \the [F] to do that.</span>")
 				else
 					spawn(0)	open(1)
 			else
@@ -1158,7 +1152,7 @@ About the new airlock wires panel:
 					if(F.wielded)
 						spawn(0)	close(1)
 					else
-						to_chat(user, "<span class='warning'>You need to be wielding the Fire axe to do that.</span>")
+						to_chat(user, "<span class='warning'>You need to be wielding \the [F] to do that.</span>")
 				else
 					spawn(0)	close(1)
 		src.busy = 0
@@ -1174,6 +1168,15 @@ About the new airlock wires panel:
 		..(I, user)
 
 	return
+
+/obj/machinery/door/airlock/proc/bashed_in(var/mob/user)
+	playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 50, 1)
+	operating = -1
+	var/obj/structure/door_assembly/DA = revert(user,user.dir)
+	DA.anchored = 0
+	DA.state = 0 //Completely smash the door here; reduce it to its lowest state, eject electronics smoked
+	DA.update_state()
+	qdel(src)
 
 /obj/machinery/door/airlock/proc/revert(mob/user as mob, var/direction)
 	var/obj/structure/door_assembly/DA = new assembly_type(loc)
@@ -1209,7 +1212,9 @@ About the new airlock wires panel:
 		A.icon_state = "door_electronics_smoked"
 		operating = 0
 	if(direction)
-		A.throw_at(get_edge_target_turf(src, direction),10,4)
+		var/turf/T = get_edge_target_turf(src, direction)
+		A.throw_at(T,3,4)
+		DA.throw_at(T,1,2)
 	return DA //Returns the new assembly
 
 /obj/machinery/door/airlock/plasma/attackby(obj/C, mob/user)
