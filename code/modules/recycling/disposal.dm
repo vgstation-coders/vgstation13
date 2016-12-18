@@ -107,7 +107,7 @@
 				to_chat(user, "You start slicing the floorweld off the disposal unit.")
 
 				if(do_after(user, src,20))
-					if(!src || !W.isOn())
+					if(gcDestroyed || !W.isOn())
 						return
 					to_chat(user, "You sliced the floorweld off the disposal unit.")
 					var/obj/structure/disposalconstruct/C = new (src.loc)
@@ -896,7 +896,7 @@
 			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
 			to_chat(user, "You start slicing the disposal pipe.")
 			if(do_after(user, src, 3 SECONDS))
-				if(!src || !W.isOn())
+				if(gcDestroyed || !W.isOn())
 					return
 				welded()
 		else
@@ -1390,7 +1390,7 @@
 			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
 			to_chat(user, "You start slicing the disposal pipe.")
 			if(do_after(user, src, 3 SECONDS))
-				if(!src || !W.isOn())
+				if(gcDestroyed || !W.isOn())
 					return
 				welded()
 		else
@@ -1533,8 +1533,8 @@
 		if(W.remove_fuel(0,user))
 			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
 			to_chat(user, "You start slicing the floorweld off the disposal outlet.")
-			if(do_after(user, src,20))
-				if(!src || !W.isOn())
+			if(do_after(user, src, 20))
+				if(gcDestroyed || !W.isOn())
 					return
 				to_chat(user, "You sliced the floorweld off the disposal outlet.")
 				var/obj/structure/disposalconstruct/C = new (src.loc)

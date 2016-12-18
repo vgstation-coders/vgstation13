@@ -24,7 +24,7 @@
 	if(anchored)
 		to_chat(user, "<span class='info'>It's bolted down to the floor plating.</span>")
 	else
-		to_chat(user, "<span class='info'>It has been detached from the floor plating.</span>")
+		to_chat(user, "<span class='info'>It's currently detached from the floor plating.</span>")
 
 // update iconstate and dpdir due to dir and type
 /obj/structure/disposalconstruct/proc/update()
@@ -237,7 +237,7 @@
 				playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
 				to_chat(user, "Welding the [nicetype] in place.")
 				if(do_after(user, src, 20))
-					if(!src || !W.isOn())
+					if(gcDestroyed || !W.isOn())
 						return
 					to_chat(user, "The [nicetype] has been welded in place!")
 					update() // TODO: Make this neat
