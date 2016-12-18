@@ -3162,7 +3162,7 @@
 	desc = "Something seems to be wrong with this, you can't quite figure what. Maybe it's his moustache."
 	icon_state = "notasandwich"
 	
-/obj/item/weapon/reagent_containers/food/snacks/notasandwich.New()
+/obj/item/weapon/reagent_containers/food/snacks/notasandwich/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
