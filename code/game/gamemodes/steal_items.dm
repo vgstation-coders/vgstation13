@@ -21,6 +21,14 @@
 		var/obj/item/weapon/storage/S=O
 		L += S.return_inv()
 
+	else if(istype(O,/obj/item/clothing/accessory/storage))
+		var/obj/item/clothing/accessory/storage/S=O
+		L += S.hold.return_inv()
+
+	else if(istype(O,/obj/item/clothing/suit/storage))
+		var/obj/item/clothing/suit/storage/S=O
+		L += S.hold.return_inv()
+
 	else if(istype(O,/obj/item/weapon/gift))
 		var/obj/item/weapon/gift/G = O
 		L += G.gift
@@ -30,9 +38,8 @@
 	else if(istype(O,/obj/item/delivery))
 		var/obj/item/delivery/D = O
 		for(var/atom/movable/wrapped in D) //Under normal circumstances, there will be only one thing in it, but not all circumstances are normal
-			L += wrapped
-			if(istype(wrapped, /obj/item/weapon/storage)) //this should never happen
-				L += get_contents(wrapped)
+			L += get_contents(wrapped)
+
 	return L
 
 /datum/theft_objective/proc/check_completion(datum/mind/owner)
@@ -212,7 +219,7 @@
 		var/found_amount = 0
 		for(var/obj/I in all_items) //Check for items
 			if(istype(I, typepath))
-			
+
 				//Stealing the cheap autoinjector doesn't count
 				if(istype(I, /obj/item/weapon/reagent_containers/hypospray/autoinjector))
 					continue
