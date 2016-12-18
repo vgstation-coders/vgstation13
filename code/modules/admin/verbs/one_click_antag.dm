@@ -294,11 +294,10 @@ client/proc/one_click_antag()
 
 
 
-
-
 /datum/admins/proc/makeAliens()
-	alien_infestation(3)
-	return 1
+	return alien_infestation(3)
+
+
 /datum/admins/proc/makeDeathsquad()
 	var/list/mob/dead/observer/candidates = list()
 	var/mob/dead/observer/theghost = null
