@@ -306,7 +306,8 @@ LOOK FOR SURGERY.DM*/
 /obj/item/weapon/cautery/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is burning \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
 	return (BRUTELOSS)
-is_hot()
+
+/obj/item/weapon/cautery/is_hot()
 	return 1
 
 /*
