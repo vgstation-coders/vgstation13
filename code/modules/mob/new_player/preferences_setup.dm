@@ -138,32 +138,19 @@
 			clothes_s.Blend(new /icon('icons/mob/back.dmi', "satchel"), ICON_OVERLAY)
 	return clothes_s
 
-/datum/preferences/proc/valid_hairstyles(var/gender_restricted = TRUE)
+/proc/valid_sprite_accessories(var/gender_restriction, var/species_restriction, var/from_list)
 	. = list()
-	for(var/hairstyle in hair_styles_list)
-		var/datum/sprite_accessory/S = hair_styles_list[hairstyle]
-		if(!(species in S.species_allowed))
+	for(var/key in from_list)
+		var/datum/sprite_accessory/S = from_list[key]
+		if(species_restriction && !(species_restriction in S.species_allowed))
 			continue
-		if(gender_restricted)
-			if(gender == MALE && S.gender == FEMALE)
+		if(gender_restriction)
+			if(gender_restriction == MALE && S.gender == FEMALE)
 				continue
-			if(gender == FEMALE && S.gender == MALE)
+			if(gender_restriction == FEMALE && S.gender == MALE)
 				continue
 
-		.[hairstyle] = hair_styles_list[hairstyle]
-
-/datum/preferences/proc/valid_facialhairstyles()
-	. = list()
-	for(var/facialhairstyle in facial_hair_styles_list)
-		var/datum/sprite_accessory/S = facial_hair_styles_list[facialhairstyle]
-		if(!(species in S.species_allowed))
-			continue
-		if(gender == MALE && S.gender == FEMALE)
-			continue
-		if(gender == FEMALE && S.gender == MALE)
-			continue
-
-		.[facialhairstyle] = facial_hair_styles_list[facialhairstyle]
+		.[key] = from_list[key]
 
 /datum/preferences/proc/update_preview_icon(var/for_observer=0)		//seriously. This is horrendous.
 	preview_icon_front = null

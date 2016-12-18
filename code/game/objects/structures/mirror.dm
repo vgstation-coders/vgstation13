@@ -39,39 +39,24 @@
 		//this is largely copypasted from there.
 
 		//handle facial hair (if necessary)
-		if(H.gender == MALE)
-			var/list/species_facial_hair = list()
-			if(H.species)
-				for(var/i in facial_hair_styles_list)
-					var/datum/sprite_accessory/facial_hair/tmp_facial = facial_hair_styles_list[i]
-					if(H.species.name in tmp_facial.species_allowed)
-						species_facial_hair += i
-			else
-				species_facial_hair = facial_hair_styles_list
-
+		var/list/species_facial_hair = valid_sprite_accessories(H.gender, (H.species.name || null), facial_hair_styles_list)
+		if(species_facial_hair.len)
 			var/new_style = input(user, "Select a facial hair style", "Grooming")  as null|anything in species_facial_hair
 			if(userloc != H.loc)
 				return	//no tele-grooming
 			if(new_style)
 				H.f_style = new_style
+				H.update_hair()
 
 		//handle normal hair
-		var/list/species_hair = list()
-		if(H.species)
-			for(var/i in hair_styles_list)
-				var/datum/sprite_accessory/hair/tmp_hair = hair_styles_list[i]
-				if(H.species.name in tmp_hair.species_allowed)
-					species_hair += i
-		else
-			species_hair = hair_styles_list
-
-		var/new_style = input(user, "Select a hair style", "Grooming")  as null|anything in species_hair
-		if(userloc != H.loc)
-			return	//no tele-grooming
-		if(new_style)
-			H.h_style = new_style
-
-		H.update_hair()
+		var/list/species_hair = valid_sprite_accessories(null, (H.species.name || null), hair_styles_list) //gender intentionally left null so speshul snowflakes can cross-hairdress
+		if(species_hair.len)
+			var/new_style = input(user, "Select a hair style", "Grooming")  as null|anything in species_hair
+			if(userloc != H.loc)
+				return	//no tele-grooming
+			if(new_style)
+				H.h_style = new_style
+				H.update_hair()
 
 
 /obj/structure/mirror/proc/shatter()
