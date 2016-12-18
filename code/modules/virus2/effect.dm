@@ -940,6 +940,8 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 			honkers.lube_chance = 0
 			honkers.canremove = 1
 
+/*
+Commented out on request. Kept as an example of how to use affect_mob_voice
 /datum/disease2/effect/hangman
 	name = "Hanging Man's Syndrome"
 	stage = 2
@@ -953,7 +955,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 		affect_voice_active = 1
 		triggered = 1
 
-/datum/disease2/effect/hangman/affect_mob_voice(var/datum/speech/speech)
+/datum/disease2/effect/hangman/affect_mob_voice(var/datum/speech/speech) //Treat is as the exact same as mask's affect_voice
 	var/message=speech.message
 	message = replacetext(message, "a", "_")
 	message = replacetext(message, "A", "_")
@@ -967,117 +969,4 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	message = replacetext(message, "U", "_")
 
 	speech.message = message
-
-
-/datum/disease2/effect/anime_hair
-	name = "Pro-tagonista Syndrome"
-	stage = 3
-	var/triggered = 0
-	var/given_katana = 0
-	affect_voice = 1
-	maxm = 4
-
-/datum/disease2/effect/anime_hair/activate(var/mob/living/carbon/mob,var/multiplier)
-	if(ishuman(mob))
-		var/mob/living/carbon/human/affected = mob
-		if(!triggered)
-			var/list/hair_colors = list("pink","red","green","blue","purple")
-			var/hair_color = pick(hair_colors)
-
-			switch(hair_color)
-				if("pink")
-					affected.b_hair = 153
-					affected.g_hair = 102
-					affected.r_hair = 255
-				if("red")
-					affected.b_hair = 0
-					affected.g_hair = 0
-					affected.r_hair = 255
-				if("green")
-					affected.b_hair = 0
-					affected.g_hair = 255
-					affected.r_hair = 0
-				if("blue")
-					affected.b_hair = 255
-					affected.g_hair = 0
-					affected.r_hair = 0
-				if("purple")
-					affected.b_hair = 102
-					affected.g_hair = 0
-					affected.r_hair = 102
-			affected.update_hair()
-			triggered = 1
-
-		if(multiplier)
-			if(multiplier >= 1.5)
-				//Give them schoolgirl outfits /obj/item/clothing/under/schoolgirl
-				var/obj/item/clothing/under/schoolgirl/schoolgirl = new /obj/item/clothing/under/schoolgirl
-				schoolgirl.canremove = 0
-				if(affected.w_uniform && !istype(affected.w_uniform, /obj/item/clothing/under/schoolgirl))
-					affected.u_equip(affected.w_uniform,1)
-					affected.equip_to_slot(schoolgirl, slot_w_uniform)
-				if(!affected.w_uniform)
-					affected.equip_to_slot(schoolgirl, slot_w_uniform)
-			if(multiplier >= 1.8)
-				//Kneesocks /obj/item/clothing/shoes/kneesocks
-				var/obj/item/clothing/shoes/kneesocks/kneesock = new /obj/item/clothing/shoes/kneesocks
-				kneesock.canremove = 0
-				if(affected.shoes && !istype(affected.shoes, /obj/item/clothing/shoes/kneesocks))
-					affected.u_equip(affected.shoes,1)
-					affected.equip_to_slot(kneesock, slot_shoes)
-				if(!affected.w_uniform)
-					affected.equip_to_slot(kneesock, slot_shoes)
-
-			if(multiplier >= 2)
-				if(multiplier >=2.3)
-					//Cursed, pure evil cat ears that should not have been created
-					var/obj/item/clothing/head/kitty/cursed/kitty_c = new /obj/item/clothing/head/kitty/cursed
-					if(affected.head && !istype(affected.head, /obj/item/clothing/head/kitty/cursed))
-						affected.u_equip(affected.head,1)
-						affected.equip_to_slot(kitty_c, slot_head)
-					if(!affected.head)
-						affected.equip_to_slot(kitty_c, slot_head)
-				else
-					//Regular cat ears /obj/item/clothing/head/kitty
-					var/obj/item/clothing/head/kitty/kitty = new /obj/item/clothing/head/kitty
-					if(affected.head && !istype(affected.head, /obj/item/clothing/head/kitty))
-						affected.u_equip(affected.head,1)
-						affected.equip_to_slot(kitty, slot_head)
-					if(!affected.head)
-						affected.equip_to_slot(kitty, slot_head)
-				affect_voice_active = 1
-
-			if(multiplier >= 2.5 && !given_katana)
-				if(multiplier >= 3)
-					//REAL katana /obj/item/weapon/katana
-					var/obj/item/weapon/katana/real_katana = new /obj/item/weapon/katana
-					affected.put_in_hands(real_katana)
-				else
-					//Toy katana /obj/item/toy/katana
-					var/obj/item/toy/katana/fake_katana = new /obj/item/toy/katana
-					affected.put_in_hands(fake_katana)
-				given_katana = 1
-
-datum/disease2/effect/anime_hair/deactivate(var/mob/living/carbon/mob)
-	to_chat(mob, "<span class = 'notice'>You no longer feel quite like the main character. </span>")
-	var/mob/living/carbon/human/affected = mob
-	if(affected.shoes && istype(affected.shoes, /obj/item/clothing/shoes/kneesocks))
-		affected.shoes.canremove = 1
-	if(affected.w_uniform && istype(affected.w_uniform, /obj/item/clothing/under/schoolgirl))
-		affected.w_uniform.canremove = 1
-
-/datum/disease2/effect/anime_hair/affect_mob_voice(var/datum/speech/speech)
-	var/message=speech.message
-
-	if(prob(20))
-		message += pick(" Nyaa", "  nya", "  Nyaa~", "~")
-
-	speech.message = message
-
-/datum/disease2/effect/spyndrome
-	name = "Gyroscopic Manipulation Syndrome"
-	stage = 1
-
-/datum/disease2/effect/spyndrome/activate(var/mob/living/carbon/mob,var/multiplier)
-	if (mob.reagents.get_reagent_amount(GYRO) < 1)
-		mob.reagents.add_reagent(GYRO, 1)
+*/
