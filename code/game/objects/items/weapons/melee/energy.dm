@@ -34,9 +34,9 @@
 	attack_verb = list("attacks", "chops", "cleaves", "tears", "cuts")
 
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] swings the [src.name] towards /his head! It looks like \he's trying to commit suicide.</span>")
-		return (BRUTELOSS|FIRELOSS)
+/obj/item/weapon/melee/energy/axe/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] swings the [src.name] towards /his head! It looks like \he's trying to commit suicide.</span>")
+	return (BRUTELOSS|FIRELOSS)
 
 /obj/item/weapon/melee/energy/axe/rusty
 	name = "rusty energy axe"

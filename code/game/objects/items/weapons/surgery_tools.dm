@@ -25,9 +25,9 @@
 	w_class = W_CLASS_TINY
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is pulling \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
-		return (BRUTELOSS)
+/obj/item/weapon/retractor/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is pulling \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
+	return (BRUTELOSS)
 
 /obj/item/weapon/retractor/manager
 	name = "surgical incision manager"
@@ -160,9 +160,9 @@ LOOK FOR SURGERY.DM*/
 	attack_verb = list("attacks", "pinches")
 
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is pulling \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
-		return (BRUTELOSS)
+/obj/item/weapon/hemostat/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is pulling \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
+	return (BRUTELOSS)
 
 
 /*
@@ -303,11 +303,11 @@ LOOK FOR SURGERY.DM*/
 	attack_verb = list("burns")
 
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is burning \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
-		return (BRUTELOSS)
-	is_hot()
-		return 1
+/obj/item/weapon/cautery/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is burning \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
+	return (BRUTELOSS)
+is_hot()
+	return 1
 
 /*
 /obj/item/weapon/cautery/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
@@ -405,10 +405,10 @@ LOOK FOR SURGERY.DM*/
 
 
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), pick("<span class='danger'>[user] is pressing the [src.name] to \his temple and activating it! It looks like \he's trying to commit suicide.</span>", \
-							"<span class='danger'>[user] is pressing [src.name] to \his chest and activating it! It looks like \he's trying to commit suicide.</span>"))
-		return (BRUTELOSS)
+/obj/item/weapon/surgicaldrill/suicide_act(mob/user)
+	to_chat(viewers(user), pick("<span class='danger'>[user] is pressing the [src.name] to \his temple and activating it! It looks like \he's trying to commit suicide.</span>", \
+						"<span class='danger'>[user] is pressing [src.name] to \his chest and activating it! It looks like \he's trying to commit suicide.</span>"))
+	return (BRUTELOSS)
 
 /*
  * Scalpel
@@ -434,11 +434,11 @@ LOOK FOR SURGERY.DM*/
 
 
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-							"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
-							"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
-		return (BRUTELOSS)
+/obj/item/weapon/scalpel/suicide_act(mob/user)
+	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
+						"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
+						"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
+	return (BRUTELOSS)
 
 /*
 /obj/item/weapon/scalpel/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
@@ -733,9 +733,9 @@ LOOK FOR SURGERY.DM*/
 	attack_verb = list("attacks", "slashes", "saws", "cuts")
 
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is sawing \his head in two with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
-		return (BRUTELOSS)
+/obj/item/weapon/circular_saw/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is sawing \his head in two with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
+	return (BRUTELOSS)
 
 
 /*
@@ -899,10 +899,10 @@ LOOK FOR SURGERY.DM*/
 	throwforce = 1.0
 	w_class = W_CLASS_TINY
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is eating the [src.name]! It looks like \he's  trying to commit suicide!</span>")//Don't eat glue kids.
+/obj/item/weapon/bonegel/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is eating the [src.name]! It looks like \he's  trying to commit suicide!</span>")//Don't eat glue kids.
 
-		return (TOXLOSS)
+	return (TOXLOSS)
 
 
 /obj/item/weapon/FixOVein

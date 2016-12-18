@@ -233,9 +233,9 @@
 	cant_drop = 1
 	var/mob/living/simple_animal/borer/parent_borer = null
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit suicide.</span>")
-		return(BRUTELOSS)
+/obj/item/weapon/melee/bone_sword/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	return(BRUTELOSS)
 
 /obj/item/weapon/melee/bone_sword/New(turf/T, var/p_borer = null)
 	..(T)

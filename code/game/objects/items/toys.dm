@@ -116,9 +116,9 @@
 	icon = 'icons/obj/singularity.dmi'
 	icon_state = "singularity_s1"
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class = 'danger'><b>[user] is putting \his head into \the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
-		return (BRUTELOSS|TOXLOSS|OXYLOSS)
+/obj/item/toy/spinningtoy/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class = 'danger'><b>[user] is putting \his head into \the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
+	return (BRUTELOSS|TOXLOSS|OXYLOSS)
 
 
 /*
@@ -677,9 +677,9 @@
 	icon_state = "gooncode"
 	w_class = W_CLASS_TINY
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's  trying to re-add poo!</span>")
-		return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
+/obj/item/toy/gooncode/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's  trying to re-add poo!</span>")
+	return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
 
 
 /obj/item/toy/minimeteor
