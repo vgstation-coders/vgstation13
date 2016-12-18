@@ -43,10 +43,12 @@
 /datum/disease2/effectholder/proc/majormutate()
 	getrandomeffect(2)
 
+
 ////////////////////////////////////////////////////////////////
 ////////////////////////EFFECTS/////////////////////////////////
 ////////////////////////////////////////////////////////////////
 // Use two newlines between each effect, and one newline between each effect's methods.
+
 
 /datum/disease2/effect
 	var/chance_maxm = 50
@@ -59,6 +61,7 @@
 	proc/activate(var/mob/living/carbon/mob,var/multiplier)
 	proc/deactivate(var/mob/living/carbon/mob)
 	proc/affect_mob_voice(var/datum/speech/speech) //Called by /mob/living/carbon/human/treat_speech
+
 
 ////////////////////////SPECIAL/////////////////////////////////
 
