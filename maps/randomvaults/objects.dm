@@ -81,6 +81,10 @@
 /area/vault/AIsat
 	requires_power = 1
 
+/area/vault/taxi_engi
+	name = "\improper Engineering"
+	requires_power = 1
+	
 /area/vault/ejectedengine
 	requires_power = 1
 
