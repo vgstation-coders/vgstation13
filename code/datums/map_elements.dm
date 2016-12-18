@@ -27,7 +27,7 @@ var/list/datum/map_element/map_elements = list()
 	for(var/obj/structure/cable/C in objects)
 		if(C.powernet)
 			continue
-		
+
 		C.rebuild_from()
 
 /datum/map_element/proc/load(x, y, z)
@@ -38,7 +38,7 @@ var/list/datum/map_element/map_elements = list()
 		if(isfile(file))
 			var/list/L = maploader.load_map(file, z, x, y, src)
 			initialize(L)
-			return 1
+			return L
 	else //No file specified - empty map element
 		//These variables are usually set by the map loader. Here we have to set them manually
 		location = locate(x+1, y+1, z) //Location is always lower left corner
@@ -46,3 +46,12 @@ var/list/datum/map_element/map_elements = list()
 		return 1
 
 	return 0
+
+//Returns a list with two numbers
+//First number is width, second number is height
+/datum/map_element/proc/get_dimensions()
+	var/file = file(file_path)
+	if(isfile(file))
+		return maploader.get_map_dimensions(file)
+
+	return list(width, height)
