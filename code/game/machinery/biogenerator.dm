@@ -101,7 +101,7 @@
 	id="belt"
 	name="Utility Belt"
 	result=/obj/item/weapon/storage/belt/utility
-	
+
 /datum/biogen_recipe/leather/belt/slim
 	cost=300
 	id="slim-belt"
@@ -268,7 +268,7 @@
 	var/tmp/list/recipes[0]
 	var/tmp/list/recipe_categories[0]
 
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 
 	light_color = LIGHT_COLOR_CYAN
 	light_range_on = 3
@@ -407,7 +407,11 @@
 				if (beaker)
 
 					dat += {"<A href='?src=\ref[src];action=activate'>Activate Biogenerator!</A><BR>
-						<A href='?src=\ref[src];action=detach'>Detach Container</A><BR><BR>"}
+						<A href='?src=\ref[src];action=detach'>Detach Container</A><BR>"}
+
+					if(has_produce_loaded())
+						dat += "<A href='?src=\ref[src];action=eject'>Eject Produce</A><BR>"
+					dat += "<BR>"
 
 					for(var/cat in recipe_categories)
 						dat += "<h2>[cat]</h2><ul>"
@@ -500,6 +504,13 @@
 	update_icon()
 	return 1
 
+/obj/machinery/biogenerator/proc/has_produce_loaded()
+	return locate(/obj/item/weapon/reagent_containers/food/snacks/grown/) in contents
+
+/obj/machinery/biogenerator/proc/eject_produce()
+	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/G in contents)
+		G.forceMove(get_turf(src))
+
 /obj/machinery/biogenerator/Topic(href, href_list)
 
 	if(..())
@@ -517,6 +528,8 @@
 				beaker.forceMove(src.loc)
 				beaker = null
 				update_icon()
+		if("eject")
+			eject_produce()
 		if("create")
 			create_product(href_list["item"],text2num(href_list["num"]))
 		if("menu")
