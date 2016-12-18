@@ -1,0 +1,96 @@
+"aa" = (/turf/space,/area/vault/meteorlogical)
+"ab" = (/turf/space,/area)
+"ac" = (/turf/unsimulated/mineral/random,/area/vault/meteorlogical)
+"ad" = (/obj/item/stack/sheet/animalhide/xeno,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
+"ae" = (/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
+"af" = (/obj/item/weapon/ore/glass,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
+"ag" = (/obj/item/stack/teeth,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
+"ah" = (/turf/unsimulated/floor/asteroid,/area)
+"ai" = (/obj/structure/hanging_lantern,/obj/item/stack/teeth,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
+"aj" = (/obj/structure/hanging_lantern,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
+"ak" = (/turf/simulated/wall/invulnerable,/area/vault/meteorlogical)
+"al" = (/obj/structure/table,/obj/machinery/microwave,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"am" = (/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"an" = (/obj/structure/closet/syndicate/personal,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"ao" = (/obj/structure/table,/obj/machinery/cell_charger,/obj/machinery/light{dir = 1},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"ap" = (/obj/structure/table,/obj/item/clothing/glasses/scanner/night{pixel_y = -4},/obj/item/clothing/glasses/scanner/night{pixel_y = -2},/obj/item/clothing/glasses/scanner/night{pixel_y = 2},/obj/item/clothing/glasses/scanner/night{pixel_y = 6},/obj/item/clothing/glasses/scanner/night{pixel_y = 10},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"aq" = (/obj/structure/table,/obj/item/device/assembly/prox_sensor{pixel_x = -8; pixel_y = 6},/obj/item/device/assembly/prox_sensor{pixel_x = -4; pixel_y = 6},/obj/item/device/assembly/signaler{pixel_x = -8},/obj/item/device/assembly/signaler{pixel_x = -4; pixel_y = 0},/obj/item/device/assembly/prox_sensor{pixel_x = 0; pixel_y = 6},/obj/item/device/assembly/signaler{pixel_x = 0; pixel_y = 0},/obj/item/device/assembly/signaler{pixel_x = 4; pixel_y = 0},/obj/item/stack/cable_coil,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"ar" = (/obj/machinery/mech_bay_recharge_port,/obj/structure/cable{icon_state = "0-2"; d2 = 2},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"as" = (/obj/machinery/mech_bay_recharge_floor,/obj/machinery/light{dir = 1},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"at" = (/obj/machinery/computer/mech_bay_power_console,/obj/structure/cable{icon_state = "0-2"; d2 = 2},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"au" = (/obj/structure/table/glass,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"av" = (/obj/machinery/computer/security,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"aw" = (/obj/machinery/computer/crew{name = "Syndie crew monitoring computer"; track_special_role = "Syndicate"},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"ax" = (/obj/structure/table,/obj/item/weapon/storage/box/donkpockets{pixel_x = 3; pixel_y = 3},/obj/machinery/light{dir = 8},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"ay" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/syndicate,/obj/item/weapon/storage/belt/slim,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"az" = (/obj/structure/bed/chair/comfy/black,/turf/simulated/floor/carpet,/area/vault/meteorlogical)
+"aA" = (/obj/structure/bed/chair/office/light{dir = 1},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"aB" = (/obj/structure/bed/chair/comfy/black{dir = 4},/turf/simulated/floor/carpet,/area/vault/meteorlogical)
+"aC" = (/obj/structure/table/reinforced,/obj/machinery/station_map/strategic,/turf/simulated/floor/carpet,/area/vault/meteorlogical)
+"aD" = (/obj/structure/bed/chair/comfy/black{dir = 8},/turf/simulated/floor/carpet,/area/vault/meteorlogical)
+"aE" = (/obj/machinery/vending/snack,/obj/machinery/light{dir = 4},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"aF" = (/obj/machinery/light,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"aG" = (/turf/simulated/floor/carpet,/area/vault/meteorlogical)
+"aH" = (/obj/structure/bed,/obj/structure/curtain/open/bed,/obj/item/weapon/bedsheet/red,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"aI" = (/turf/simulated/wall/r_wall,/area/vault/meteorlogical)
+"aJ" = (/turf/unsimulated/mineral/random,/area)
+"aK" = (/obj/structure/flora/pottedplant/random,/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
+"aL" = (/obj/structure/rack,/obj/item/clothing/mask/breath,/obj/item/clothing/shoes/magboots,/obj/item/weapon/storage/belt/archaeology,/obj/item/clothing/suit/space/anomaly,/obj/item/clothing/head/helmet/space/anomaly,/obj/machinery/light/small{dir = 1},/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
+"aM" = (/obj/structure/table/woodentable,/obj/item/weapon/paper_bin{pixel_x = -4; pixel_y = 1},/obj/item/weapon/pen/sleepypen{pixel_x = 6; pixel_y = 8},/obj/item/weapon/pen/red{pixel_x = 8; pixel_y = 8},/turf/simulated/floor/carpet,/area/vault/meteorlogical)
+"aN" = (/obj/structure/table/woodentable,/obj/item/weapon/folder/yellow{pixel_x = -5},/obj/item/weapon/folder/red{pixel_x = -7; pixel_y = 7},/obj/item/weapon/reagent_containers/food/drinks/plastic/cola{pixel_x = 5; pixel_y = 10},/obj/item/device/core_sampler,/turf/simulated/floor/carpet,/area/vault/meteorlogical)
+"aO" = (/obj/structure/filingcabinet/filingcabinet,/obj/item/voucher/free_item,/turf/simulated/floor/carpet,/area/vault/meteorlogical)
+"aP" = (/obj/item/weapon/gun/energy/gun/nuclear,/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
+"aQ" = (/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
+"aR" = (/obj/machinery/computer/bhangmeter,/turf/simulated/floor/carpet,/area/vault/meteorlogical)
+"aS" = (/obj/structure/bed/chair/office/light{dir = 1},/turf/simulated/floor/carpet,/area/vault/meteorlogical)
+"aT" = (/obj/machinery/vending/discount,/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
+"aU" = (/obj/item/trash/oldempirebar,/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
+"aV" = (/obj/machinery/light/small,/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
+"aW" = (/obj/machinery/door/mineral/wood,/turf/simulated/floor/wood,/area/vault/meteorlogical)
+"aX" = (/obj/structure/falserwall,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"aY" = (/obj/machinery/door/airlock/external{req_access_txt = "150"},/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
+"aZ" = (/obj/structure/grille,/obj/structure/window/full,/obj/structure/window,/obj/structure/window{dir = 8},/obj/structure/window{dir = 1},/obj/structure/window{dir = 4},/turf/simulated/floor/plating,/area/vault/meteorlogical)
+"ba" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/meteorlogical)
+"bb" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/meteorlogical)
+"bc" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/obj/structure/window/full/reinforced,/turf/simulated/floor/plating,/area/vault/meteorlogical)
+"bd" = (/turf/simulated/floor/wood,/area/vault/meteorlogical)
+"be" = (/obj/structure/table/woodentable,/obj/item/clothing/head/collectable/paper,/obj/item/device/flashlight/lamp{pixel_x = -5; pixel_y = 12},/turf/simulated/floor/wood,/area/vault/meteorlogical)
+"bf" = (/obj/structure/flora/pottedplant/random,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"bg" = (/turf/simulated/floor/plating,/area/vault/meteorlogical)
+"bh" = (/obj/machinery/door/airlock/external{req_access_txt = "150"},/turf/simulated/floor/plating,/area/vault/meteorlogical)
+"bi" = (/turf/unsimulated/floor/asteroid/plating,/area/vault/meteorlogical)
+"bj" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/full/reinforced,/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/vault/meteorlogical)
+"bk" = (/obj/structure/bed,/obj/structure/curtain/open/bed,/obj/item/weapon/bedsheet/rd,/turf/simulated/floor/wood,/area/vault/meteorlogical)
+"bl" = (/obj/structure/closet/cabinet,/obj/item/weapon/reagent_containers/food/drinks/groans,/obj/item/weapon/reagent_containers/food/drinks/groans,/obj/item/weapon/reagent_containers/food/drinks/groans,/obj/item/clothing/under/dress/dress_yellow,/turf/simulated/floor/wood,/area/vault/meteorlogical)
+"bm" = (/obj/structure/hanging_lantern{dir = 8},/turf/unsimulated/floor/asteroid/plating,/area/vault/meteorlogical)
+"bn" = (/obj/machinery/floodlight,/turf/unsimulated/floor/asteroid/plating,/area/vault/meteorlogical)
+"bo" = (/obj/structure/closet/secure_closet/excavation,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
+"bp" = (/obj/structure/hanging_lantern{dir = 1},/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
+
+(1,1,1) = {"
+aaaaaaaaababaaaaacaaaaaaaaaaaaaaaaaaaaaaaaaaababab
+aaaaabababababacacaaaaaaacacacacacacacacacabababaa
+aaaaaaacacacabacacacacacacacacacacacacacacaaacabaa
+aaaaabacacacacacacacadaeaeaeafaeafacacacacaaacabaa
+aaababacacacacacacacagaeaeaeaeafaeacacacacacababaa
+abahahacacacacacacagaiaeaeaeaeajaeacacacacacababaa
+abaeacacacakakakakakakakakakakakakakakacacacacabaa
+aaaeaeacacakalamanaoapaqarasatauavawakacacacacabab
+ababaeacacakaxamamamamayamazamamamaAakacacacacacac
+ababaeacacakamamamamamayaBaCaDamamaEakacacacacaeae
+aaabacacacakamamamamamaFamaGamamamamakacacaeacabab
+aaabacacacakamakakakakakakakakakakaHakacacaeaeabaa
+aaaaaeacacakamakaIaIaIaIaIaIaIaIaIakakacacacababaa
+aaaJaeaeacakamakaIaKaLaMaNaOaIaIaIaPakacacacaaaaaa
+ahabaeacacakamakaIaQaQaRaSaGaTaIaIaIakacacacabaaab
+ababacacacakamakaIaUaQaQaQaQaQaVaWaIaIacacacababab
+ababacacacakamamaXaYaZaIbabbbcaIbdbeaIacacacacabab
+abaaaeacacakbfakaIbgbgbhbibibibjbkblaIacacacaaaaab
+aaacaeacacakakakaIaIaIaIbmbibnaIaIaIaIacacacaaaaaa
+abahacaeacacacacacacacacbobiaeacacacacacacacaaaaaa
+ababaeaeacacacacacacacacacaeaeacacacacacacacaaaaaa
+ababacacaeacacbpacacacacacababacacacababacaaacabab
+aaaaaeacabacacaeaeaeaeacacababababacacabababacabab
+aaabaaaaabaeaaaaaeahabahacababacacacacabacabacacaa
+ababaaabababaaabababaaaaabababaeababababaaaaacaeaa
+"}
