@@ -68,10 +68,9 @@ What is the naming convention for planes or layers?
 	FLOAT_PLANE = -32767
 */
 
-#define BELOW_TURF_PLANE 		-22 		// objects that are below turfs. Useful for asteroid smoothing or other such magic.
-	// todo: use this for asteroids to make them be faster
+#define PLATING_PLANE 			-22
 
-#define PLATING_PLANE 			-21
+#define BELOW_TURF_PLANE 		-21 		// objects that are below turfs but above platings. Useful for asteroid smoothing or other such magic.
 
 
 #define ABOVE_PLATING_PLANE		-20
@@ -198,7 +197,7 @@ What is the naming convention for planes or layers?
 	#define SUPER_PORTAL_LAYER		6
 	#define NARSIE_GLOW 			7
 
-#define BASE_PLANE 				0		// Not for anything, but this is the default.
+#define BASE_PLANE 				0		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
 	#define AREA_LAYER_MEME_NAME_BECAUSE_CELT_IS_A_FUCKING_RETARD 999
 
 #define STATIC_PLANE 			2		// For AI's static.

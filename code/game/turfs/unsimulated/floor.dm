@@ -2,6 +2,7 @@
 	name = "floor"
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "Floor3"
+	plane = PLATING_PLANE
 
 /turf/unsimulated/floor/ex_act(severity)
 	switch(severity)
