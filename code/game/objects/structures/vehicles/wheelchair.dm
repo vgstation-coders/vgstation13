@@ -139,7 +139,9 @@
 /obj/structure/bed/chair/vehicle/wheelchair/handle_layer()
 	if(dir == NORTH)
 		plane = ABOVE_HUMAN_PLANE
+		layer = VEHICLE_LAYER
 	else
+		layer = OBJ_LAYER
 		plane = OBJ_PLANE
 
 /obj/structure/bed/chair/vehicle/wheelchair/check_key(var/mob/user)
