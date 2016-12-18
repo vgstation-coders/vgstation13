@@ -164,6 +164,11 @@
 		if(stored_doors.len < max_doors)
 			stored_doors += new /obj/item/inflatable/door(src)
 
+/obj/item/weapon/inflatable_dispenser/Destroy()
+	stored_walls = null
+	stored_doors = null
+	..()
+
 /obj/item/weapon/inflatable_dispenser/robot
 	w_class = W_CLASS_HUGE
 	max_walls = 10
