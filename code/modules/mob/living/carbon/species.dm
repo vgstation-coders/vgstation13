@@ -134,6 +134,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/can_be_hypothermic = 1
 	var/has_sweat_glands = 1
 	var/move_speed_multiplier = 1	//This is a multiplier, and can make the mob either faster or slower.
+	var/is_plasma_immune = 0
 
 /datum/species/New()
 	..()

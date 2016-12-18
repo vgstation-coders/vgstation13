@@ -22,7 +22,7 @@
 
 	var/total_plasmaloss = 0
 	for(var/obj/item/I in src)
-		if(I.contaminated && !(species.flags & PLASMA_IMMUNE))
+		if(I.contaminated && !(species.is_plasma_immune))
 			total_plasmaloss += zas_settings.Get(/datum/ZAS_Setting/CONTAMINATION_LOSS)
 		I.OnMobLife(src)
 	adjustToxLoss(total_plasmaloss)
