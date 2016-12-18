@@ -1339,10 +1339,8 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 
 //We kinda do things our own way and don't really use NOPOWER or such, so we need different sanity
 /obj/machinery/power/apc/shock(mob/user, prb, var/siemenspassed = -1)
-	if(shorted)
-		return
-	if(!cell && !charging)
-		return
+	if(shorted || (!cell && !charging))
+		return FALSE
 	return ..()
 
 #undef APC_UPDATE_ICON_COOLDOWN
