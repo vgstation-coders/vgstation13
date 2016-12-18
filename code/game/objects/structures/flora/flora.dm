@@ -67,7 +67,7 @@
 	..()
 
 	if(istype(W, /obj/item/weapon))
-		if(W.sharpness_flags & CHOPWOOD || W.sharpness_flags & SERRATED_BLADE)
+		if(W.sharpness_flags & (CHOPWOOD|SERRATED_BLADE))
 			health -= (user.get_strength() * W.force)
 			playsound(loc, 'sound/effects/woodcuttingshort.ogg', 50, 1)
 		else

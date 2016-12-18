@@ -181,7 +181,6 @@
 	force = 2
 	throwforce = 1
 	sharpness = 0.8
-	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	melt_temperature = MELTPOINT_PLASTIC
 
 /*
@@ -195,7 +194,6 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1.5
-	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	force = 10.0
 	w_class = W_CLASS_MEDIUM
 	throwforce = 6.0
