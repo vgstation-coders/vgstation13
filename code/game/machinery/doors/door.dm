@@ -176,8 +176,8 @@ var/list/all_doors = list()
 	denied()
 
 /obj/machinery/door/proc/horror_force(var/mob/living/carbon/human/H) //H is for HORROR, BABY!
-	if(!(ishorrorform(H)))
-		return
+	if(!ishorrorform(H))
+		return FALSE
 
 	playsound(H.loc, 'sound/effects/horrorforce2.ogg', 80)
 	visible_message("<span class='danger'>\The [src]'s motors whine as several great tendrils begin trying to force it open!</span>")
