@@ -1,16 +1,3 @@
-/* Surgery Tools
- * Contains:
- *		Retractor
- *		Hemostat
- *		Cautery
- *		Surgical Drill
- *		Scalpel
- *		Circular Saw
- */
-
-/*
- * Retractor
- */
 /obj/item/weapon/retractor
 	name = "retractor"
 	desc = "Retracts stuff."
@@ -42,11 +29,7 @@
 	..()
 	icon_state = "incisionmanager_off"
 
-
-
-/*
- * Hemostat
- */
+	
 /obj/item/weapon/hemostat
 	name = "hemostat"
 	desc = "You think you have seen this before."
@@ -67,10 +50,6 @@
 		return (BRUTELOSS)
 
 
-
-/*
- * Cautery
- */
 /obj/item/weapon/cautery
 	name = "cautery"
 	desc = "This stops bleeding."
@@ -85,7 +64,6 @@
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("burns")
 
-
 	suicide_act(mob/user)
 		to_chat(viewers(user), "<span class='danger'>[user] is burning \his eyes out with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
 		return (BRUTELOSS)
@@ -93,10 +71,6 @@
 		return 1
 
 
-
-/*
- * Surgical Drill
- */
 /obj/item/weapon/surgicaldrill
 	name = "surgical drill"
 	desc = "You can drill using this item. You dig?"
@@ -113,16 +87,12 @@
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("drills")
 
-
-
 	suicide_act(mob/user)
 		to_chat(viewers(user), pick("<span class='danger'>[user] is pressing the [src.name] to \his temple and activating it! It looks like \he's trying to commit suicide.</span>", \
 							"<span class='danger'>[user] is pressing [src.name] to \his chest and activating it! It looks like \he's trying to commit suicide.</span>"))
 		return (BRUTELOSS)
 
-/*
- * Scalpel
- */
+
 /obj/item/weapon/scalpel
 	name = "scalpel"
 	desc = "Cut, cut, and once more cut."
@@ -142,8 +112,6 @@
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
-
-
 	suicide_act(mob/user)
 		to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
 							"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
@@ -151,12 +119,6 @@
 		return (BRUTELOSS)
 
 
-
-/*
-
- * Researchable Scalpels
-
-*/
 /obj/item/weapon/scalpel/laser
 	heat_production = 0
 	damtype = "fire"
@@ -196,9 +158,7 @@
 	..()
 	icon_state = "scalpel_laser2_off"
 
-/*
- * Circular Saw
- */
+
 /obj/item/weapon/circular_saw
 	name = "circular saw"
 	desc = "For heavy duty cutting."
@@ -224,7 +184,6 @@
 		return (BRUTELOSS)
 
 
-//misc, formerly from code/defines/weapons.dm
 /obj/item/weapon/bonegel
 	name = "bone gel"
 	icon = 'icons/obj/surgery.dmi'
@@ -263,9 +222,7 @@
 	throw_range = 5
 	attack_verb = list("attacks", "hits", "bludgeons")
 
-/*
- * Cyborg Hand
- */
+
 /obj/item/weapon/revivalprod
 	name = "revival prod"
 	desc = "A revival prod used to awaken sleeping patients."
