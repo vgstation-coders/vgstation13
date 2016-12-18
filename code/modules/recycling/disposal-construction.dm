@@ -153,12 +153,34 @@
 		if(11, 12)
 			return /obj/structure/disposalpipe/wrapsortjunction
 
+/obj/structure/disposalconstruct/proc/is_disposal_or_outlet()
+	return ptype>=6 && ptype <= 8
 
+/obj/structure/disposalconstruct/proc/lacks_trunk()
+	if(is_disposal_or_outlet())
+		if(locate(/obj/structure/disposalpipe/trunk/) in loc)
+			return FALSE
+		else
+			return TRUE
 
-	// attackby item
-	// wrench: (un)anchor
-	// weldingtool: convert to real pipe
+/obj/structure/disposalconstruct/proc/competing_pipe()
+	if(!is_disposal_or_outlet())
+		for(var/obj/structure/disposalpipe/CP in loc)
+			update()
+			var/pdir = CP.dpdir
+			if(istype(CP, /obj/structure/disposalpipe/broken))
+				pdir = CP.dir
+			if(pdir & dpdir)
+				return TRUE
 
+/obj/structure/disposalconstruct/proc/is_under_floorplating()
+	var/turf/T = src.loc
+	if(istype(T) && T.intact) //t-ray scanner or bins/chutes lets people bonk these through the floor tiling
+		return TRUE
+
+// attackby item
+// wrench: (un)anchor
+// weldingtool: convert to real pipe
 /obj/structure/disposalconstruct/attackby(var/obj/item/I, var/mob/user)
 	var/nicetype = "pipe"
 	var/ispipe = 0 // Indicates if we should change the level of this pipe
@@ -180,58 +202,52 @@
 			nicetype = "pipe"
 			ispipe = 1
 
-	//This bit is the only one about DETACHING the pipe, so it doesn't need all the checks below.
-	if(anchored && iswrench(I))
-		anchored = 0
-		if(ispipe)
-			level = 2
-			density = 0
-		else
-			density = 1
-		to_chat(user, "You detach the [nicetype] from the underfloor.")
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
-		update()
-		return
-
-	//Starting from here, we are ATTACHING the thing to the floor, so let's make sure nothing wierd is going on.
-	var/turf/T = src.loc
-	if(T.intact) //t-ray scanner or bins/chutes lets people bonk these through the floor tiling
-		to_chat(user, "You can only attach the [nicetype] if the floor plating is removed.")
-		return
-
-	var/obj/structure/disposalpipe/CP = locate() in T
-	if(ptype>=6 && ptype <= 8) // Disposal or outlet
-		if(CP) // There's something there
-			if(!istype(CP,/obj/structure/disposalpipe/trunk) && !anchored)
-				to_chat(user, "The [nicetype] requires a trunk underneath it in order to work.")
-				return
-		else // Nothing under, fuck.
-			if(!anchored)
-				to_chat(user, "The [nicetype] requires a trunk underneath it in order to work.")
-				return
-	else
-		if(CP)
+	if(iswrench(I))
+		if(anchored) //This the only part where we're DETACHING the pipe, so it doesn't really need to check anything.
+			anchored = 0
+			if(ispipe)
+				level = 2
+				density = 0
+			else
+				density = 1
+			to_chat(user, "You detach the [nicetype] from the underfloor.")
+			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
 			update()
-			var/pdir = CP.dpdir
-			if(istype(CP, /obj/structure/disposalpipe/broken))
-				pdir = CP.dir
-			if(pdir & dpdir)
+			return
+		else
+			if(is_under_floorplating())
+				to_chat(user, "You can only bolt down the [nicetype] if the floor tiling is removed.")
+				return
+			if(lacks_trunk())
+				to_chat(user, "The [nicetype] requires a trunk underneath it in order to work.")
+				return
+			if(competing_pipe())
 				to_chat(user, "There is already a [nicetype] at that location.")
 				return
-
-	if(!anchored && iswrench(I))
-		anchored = 1
-		if(ispipe)
-			level = 1 // We don't want disposal bins to disappear under the floors
-			density = 0
-		else
-			density = 1 // We don't want disposal bins or outlets to go density 0
-		to_chat(user, "You attach the [nicetype] to the underfloor.")
-		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
-		update()
+			anchored = 1
+			if(ispipe)
+				level = 1 // We don't want disposal bins to disappear under the floors
+				density = 0
+			else
+				density = 1 // We don't want disposal bins or outlets to go density 0
+			to_chat(user, "You attach the [nicetype] to the underfloor.")
+			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
+			update()
 
 	else if(iswelder(I))
-		if(anchored)
+		if(!anchored)
+			to_chat(user, "You need to attach it to the plating first!")
+			return
+		else
+			if(is_under_floorplating())
+				to_chat(user, "You can't weld the [nicetype] in place with the tiling in the way.")
+				return
+			if(lacks_trunk())
+				to_chat(user, "The [nicetype] requires a trunk underneath it in order to work.")
+				return
+			if(competing_pipe())
+				to_chat(user, "There is already a [nicetype] at that location.")
+				return
 			var/obj/item/weapon/weldingtool/W = I
 			if(W.remove_fuel(0,user))
 				playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
@@ -270,7 +286,7 @@
 						var/obj/structure/disposaloutlet/P = new /obj/structure/disposaloutlet(src.loc)
 						src.transfer_fingerprints_to(P)
 						P.dir = dir
-						var/obj/structure/disposalpipe/trunk/Trunk = CP
+						var/obj/structure/disposalpipe/trunk/Trunk = locate() in loc
 						Trunk.linked = P
 
 					else if(ptype==8) // Disposal outlet
@@ -284,6 +300,3 @@
 			else
 				to_chat(user, "You need more welding fuel to complete this task.")
 				return
-		else
-			to_chat(user, "You need to attach it to the plating first!")
-			return
