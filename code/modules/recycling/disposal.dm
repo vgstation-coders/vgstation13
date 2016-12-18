@@ -107,7 +107,7 @@
 				to_chat(user, "You start slicing the floorweld off the disposal unit.")
 
 				if(do_after(user, src,20))
-					if(!src || !W.isOn())
+					if(gcDestroyed || !W.isOn())
 						return
 					to_chat(user, "You sliced the floorweld off the disposal unit.")
 					var/obj/structure/disposalconstruct/C = new (src.loc)
@@ -884,27 +884,21 @@
 //weldingtool: unfasten and convert to obj/disposalconstruct
 
 /obj/structure/disposalpipe/attackby(var/obj/item/I, var/mob/user)
-
 	var/turf/T = src.loc
-	if(T.intact)
+	if(T.intact) 	//has a floortile attached
 		return		// prevent interaction with T-scanner revealed pipes
+
 	src.add_fingerprint(user)
 	if(istype(I, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/W = I
 
 		if(W.remove_fuel(0,user))
 			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
-			// check if anything changed over 2 seconds
-			var/turf/uloc = user.loc
-			var/atom/wloc = W.loc
-			to_chat(user, "Slicing the disposal pipe.")
-			sleep(30)
-			if(!W.isOn())
-				return
-			if(user.loc == uloc && wloc == W.loc)
+			to_chat(user, "You start slicing the disposal pipe.")
+			if(do_after(user, src, 3 SECONDS))
+				if(gcDestroyed || !W.isOn())
+					return
 				welded()
-			else
-				to_chat(user, "You must stay still while welding the pipe.")
 		else
 			to_chat(user, "You need more welding fuel to cut the pipe.")
 			return
@@ -1394,17 +1388,11 @@
 
 		if(W.remove_fuel(0,user))
 			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
-			// check if anything changed over 2 seconds
-			var/turf/uloc = user.loc
-			var/atom/wloc = W.loc
-			to_chat(user, "Slicing the disposal pipe.")
-			sleep(30)
-			if(!W.isOn())
-				return
-			if(user.loc == uloc && wloc == W.loc)
+			to_chat(user, "You start slicing the disposal pipe.")
+			if(do_after(user, src, 3 SECONDS))
+				if(gcDestroyed || !W.isOn())
+					return
 				welded()
-			else
-				to_chat(user, "You must stay still while welding the pipe.")
 		else
 			to_chat(user, "You need more welding fuel to cut the pipe.")
 			return
@@ -1545,8 +1533,8 @@
 		if(W.remove_fuel(0,user))
 			playsound(get_turf(src), 'sound/items/Welder2.ogg', 100, 1)
 			to_chat(user, "You start slicing the floorweld off the disposal outlet.")
-			if(do_after(user, src,20))
-				if(!src || !W.isOn())
+			if(do_after(user, src, 20))
+				if(gcDestroyed || !W.isOn())
 					return
 				to_chat(user, "You sliced the floorweld off the disposal outlet.")
 				var/obj/structure/disposalconstruct/C = new (src.loc)
