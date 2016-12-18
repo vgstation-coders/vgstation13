@@ -407,6 +407,9 @@ var/area/space_area
 	var/area/oldArea = Obj.areaMaster
 	Obj.areaMaster = src
 
+	for(var/mob/mob_in_obj in Obj.contents)
+		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = Obj.areaMaster, "old" = oldArea))
+
 	var/mob/M = Obj
 
 	if(M && istype(M))
