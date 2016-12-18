@@ -67,7 +67,6 @@
 	dish.analysed = 1
 	if (D.virus2.addToDB())
 		say("Added new pathogen to database.")
-	PrintPaper(dish)
 	dish.forceMove(src.loc)
 	dish = null
 	icon_state = "analyser"
