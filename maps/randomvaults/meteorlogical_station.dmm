@@ -40,7 +40,7 @@
 "aN" = (/turf/simulated/wall/r_wall,/area/vault/meteorlogical)
 "aO" = (/turf/unsimulated/mineral/random,/area)
 "aP" = (/obj/structure/flora/pottedplant/random,/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
-"aQ" = (/obj/structure/rack,/obj/item/clothing/mask/breath,/obj/item/clothing/shoes/magboots,/obj/item/weapon/storage/belt/archaeology,/obj/item/clothing/suit/space/anomaly,/obj/item/clothing/head/helmet/space/anomaly,/obj/machinery/light/small{dir = 1},/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
+"aQ" = (/obj/structure/rack,/obj/item/clothing/mask/breath,/obj/item/clothing/shoes/magboots,/obj/item/weapon/storage/belt/archaeology,/obj/machinery/light/small{dir = 1},/obj/item/clothing/suit/space/syndicate/orange,/obj/item/clothing/head/helmet/space/syndicate/orange,/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
 "aR" = (/obj/structure/table/woodentable,/obj/item/weapon/paper_bin{pixel_x = -4; pixel_y = 1},/obj/item/weapon/pen/sleepypen{pixel_x = 6; pixel_y = 8},/obj/item/weapon/pen/red{pixel_x = 8; pixel_y = 8},/turf/simulated/floor/carpet,/area/vault/meteorlogical)
 "aS" = (/obj/structure/table/woodentable,/obj/item/weapon/folder/yellow{pixel_x = -5},/obj/item/weapon/folder/red{pixel_x = -7; pixel_y = 7},/obj/item/weapon/reagent_containers/food/drinks/plastic/cola{pixel_x = 5; pixel_y = 10},/obj/item/device/core_sampler,/turf/simulated/floor/carpet,/area/vault/meteorlogical)
 "aT" = (/obj/structure/filingcabinet/filingcabinet,/obj/item/voucher/free_item/hot_drink,/turf/simulated/floor/carpet,/area/vault/meteorlogical)
