@@ -584,9 +584,9 @@
 	origin_tech = Tc_ENGINEERING + "=1"
 	attack_verb = list("attacks", "bashes", "batters", "bludgeons", "whacks")
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
-		return (BRUTELOSS)
+/obj/item/weapon/crowbar/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
+	return (BRUTELOSS)
 
 /obj/item/weapon/crowbar/red
 	desc = "Rise and shine."
@@ -594,9 +594,9 @@
 	icon_state = "red_crowbar"
 	item_state = "crowbar_red"
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for half life three!</span>")
-		return (BRUTELOSS)
+/obj/item/weapon/crowbar/red/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for half life three!</span>")
+	return (BRUTELOSS)
 
 
 /obj/item/weapon/weldingtool/attack(mob/M as mob, mob/user as mob)
