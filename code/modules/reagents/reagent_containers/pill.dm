@@ -13,10 +13,10 @@
 //	starting_materials = list(MAT_IRON = 5) //What?
 	w_type = RECYK_METAL
 
-	New()
-		..()
-		if(!icon_state)
-			icon_state = "pill[rand(1,20)]"
+/obj/item/weapon/reagent_containers/pill/New()
+	..()
+	if(!icon_state)
+		icon_state = "pill[rand(1,20)]"
 
 /obj/item/weapon/reagent_containers/pill/attack_self(mob/user as mob)
 
@@ -87,156 +87,156 @@
 	desc = "WILL ALSO KILL YOU VIOLENTLY."
 	icon_state = "pill5" //bright red oblong with stripe
 
-	New()
-		..()
-		reagents.add_reagent(CREATINE, 50)
+/obj/item/weapon/reagent_containers/pill/creatine/New()
+	..()
+	reagents.add_reagent(CREATINE, 50)
 
 /obj/item/weapon/reagent_containers/pill/antitox
 	name = "Anti-toxins pill"
 	desc = "Neutralizes many common toxins."
 	icon_state = "pill14" //green round plain
 
-	New()
-		..()
-		reagents.add_reagent(ANTI_TOXIN, 25)
+/obj/item/weapon/reagent_containers/pill/antitox/New()
+	..()
+	reagents.add_reagent(ANTI_TOXIN, 25)
 
 /obj/item/weapon/reagent_containers/pill/tox
 	name = "Toxins pill"
 	desc = "Highly toxic."
 	icon_state = "pill5" //bright red oblong with stripe
 
-	New()
-		..()
-		reagents.add_reagent(TOXIN, 50)
+/obj/item/weapon/reagent_containers/pill/tox/New()
+	..()
+	reagents.add_reagent(TOXIN, 50)
 
 /obj/item/weapon/reagent_containers/pill/cyanide
 	name = "Cyanide pill"
 	desc = "Don't swallow this."
 	icon_state = "pill5" //bright red oblong with stripe
 
-	New()
-		..()
-		reagents.add_reagent(CYANIDE, 50)
+/obj/item/weapon/reagent_containers/pill/cyanide/New()
+	..()
+	reagents.add_reagent(CYANIDE, 50)
 
 /obj/item/weapon/reagent_containers/pill/adminordrazine
 	name = "Adminordrazine pill"
 	desc = "It's magic. We don't have to explain it."
 	icon_state = "pill6" //cyan-brown oblong
 
-	New()
-		..()
-		reagents.add_reagent(ADMINORDRAZINE, 50)
+/obj/item/weapon/reagent_containers/pill/adminordrazine/New()
+	..()
+	reagents.add_reagent(ADMINORDRAZINE, 50)
 
 /obj/item/weapon/reagent_containers/pill/stox
 	name = "Sleeping pill"
 	desc = "Commonly used to treat insomnia."
 	icon_state = "pill11" //light blue round
 
-	New()
-		..()
-		reagents.add_reagent(STOXIN, 30)
+/obj/item/weapon/reagent_containers/pill/stox/New()
+	..()
+	reagents.add_reagent(STOXIN, 30)
 
 /obj/item/weapon/reagent_containers/pill/kelotane
 	name = "Kelotane pill"
 	desc = "Used to treat burns."
 	icon_state = "pill12" //yellow round
 
-	New()
-		..()
-		reagents.add_reagent(KELOTANE, 30)
+/obj/item/weapon/reagent_containers/pill/kelotane/New()
+	..()
+	reagents.add_reagent(KELOTANE, 30)
 
 /obj/item/weapon/reagent_containers/pill/tramadol
 	name = "Tramadol pill"
 	desc = "A simple painkiller."
 	icon_state = "pill11" //light blue round
 
-	New()
-		..()
-		reagents.add_reagent(TRAMADOL, 15)
+/obj/item/weapon/reagent_containers/pill/tramadol/New()
+	..()
+	reagents.add_reagent(TRAMADOL, 15)
 
 /obj/item/weapon/reagent_containers/pill/citalopram
 	name = "Citalopram pill"
 	desc = "Mild anti-depressant."
 	icon_state = "pill11" //light blue round
 
-	New()
-		..()
-		reagents.add_reagent(CITALOPRAM, 15)
+/obj/item/weapon/reagent_containers/pill/citalopram/New()
+	..()
+	reagents.add_reagent(CITALOPRAM, 15)
 
 /obj/item/weapon/reagent_containers/pill/inaprovaline
 	name = "Inaprovaline pill"
 	desc = "Used to stabilize patients."
 	icon_state = "pill9" //magenta/yellow oblong
 
-	New()
-		..()
-		reagents.add_reagent(INAPROVALINE, 30)
+/obj/item/weapon/reagent_containers/pill/inaprovaline/New()
+	..()
+	reagents.add_reagent(INAPROVALINE, 30)
 
 /obj/item/weapon/reagent_containers/pill/dexalin
 	name = "Dexalin pill"
 	desc = "Used to treat oxygen deprivation."
 	icon_state = "pill19" //dark blue/blue round
 
-	New()
-		..()
-		reagents.add_reagent(DEXALIN, 30)
+/obj/item/weapon/reagent_containers/pill/dexalin/New()
+	..()
+	reagents.add_reagent(DEXALIN, 30)
 
 /obj/item/weapon/reagent_containers/pill/bicaridine
 	name = "Bicaridine pill"
 	desc = "Used to treat physical injuries."
 	icon_state = "pill15" //red round
 
-	New()
-		..()
-		reagents.add_reagent(BICARIDINE, 30)
+/obj/item/weapon/reagent_containers/pill/bicaridine/New()
+	..()
+	reagents.add_reagent(BICARIDINE, 30)
 
 /obj/item/weapon/reagent_containers/pill/happy
 	name = "Happy pill"
 	desc = "Happy happy joy joy!"
 	icon_state = "pill7" //grey oblong
 
-	New()
-		..()
-		reagents.add_reagent(SPACE_DRUGS, 15)
-		reagents.add_reagent(SUGAR, 15)
+/obj/item/weapon/reagent_containers/pill/happy/New()
+	..()
+	reagents.add_reagent(SPACE_DRUGS, 15)
+	reagents.add_reagent(SUGAR, 15)
 
 /obj/item/weapon/reagent_containers/pill/zoom
 	name = "Zoom pill"
 	desc = "Zoooom!"
 	icon_state = "pill7" //grey oblong
 
-	New()
-		..()
-		reagents.add_reagent(IMPEDREZENE, 10)
-		reagents.add_reagent(SYNAPTIZINE, 1)
-		reagents.add_reagent(HYPERZINE, 10)
+/obj/item/weapon/reagent_containers/pill/zoom/New()
+	..()
+	reagents.add_reagent(IMPEDREZENE, 10)
+	reagents.add_reagent(SYNAPTIZINE, 1)
+	reagents.add_reagent(HYPERZINE, 10)
 
 /obj/item/weapon/reagent_containers/pill/hyperzine
 	name = "Hyperzine pill"
 	desc = "Gotta go fast!"
 
 	icon_state = "pill7" //grey oblong
-	New()
-		..()
-		reagents.add_reagent(HYPERZINE, 10)
+/obj/item/weapon/reagent_containers/pill/hyperzine/New()
+	..()
+	reagents.add_reagent(HYPERZINE, 10)
 
 /obj/item/weapon/reagent_containers/pill/creatine_safe
 	name = "Creatine Pill (26 units)"
 	desc = "Become the boss of this Gym."
 	icon_state = "pill5" //bright red oblong with stripe
 
-	New()
-		..()
-		reagents.add_reagent(CREATINE, 26)
+/obj/item/weapon/reagent_containers/pill/creatine_safe/New()
+	..()
+	reagents.add_reagent(CREATINE, 26)
 
 /obj/item/weapon/reagent_containers/pill/creatine_supplement
 	name = "Creatine Supplement (5 units)"
 	desc = "Maintain those massive gains!"
 	icon_state = "pill6" //cyan/brown oblong
 
-	New()
-		..()
-		reagents.add_reagent(CREATINE, 5)
+/obj/item/weapon/reagent_containers/pill/creatine_supplement/New()
+	..()
+	reagents.add_reagent(CREATINE, 5)
 
 
 /obj/item/weapon/storage/pill_bottle/time_release
@@ -289,3 +289,12 @@
 	Neutral: Corn Oil, Ryetalyn, Tonio, Space Drugs
 	Bad: Mutagen, Polytrinic Acid, Lexorin, Zombie Powder
 	*/
+
+/obj/item/weapon/reagent_containers/pill/nanobot
+	name = "nanobot pill"
+	desc = "Experimental medication."
+	icon_state = "pill7" //grey oblong
+
+/obj/item/weapon/reagent_containers/pill/nanobot/New()
+	..()
+	reagents.add_reagent(NANOBOTS, 1)

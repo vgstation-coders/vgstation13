@@ -12,9 +12,9 @@
 	light_color = GLOW_GREEN
 	w_class = W_CLASS_SMALL
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is breaking open the [src.name] and eating the liquid inside! It looks like \he's  trying to commit suicide!</span>")
-		return (TOXLOSS)
+/obj/item/weapon/glowstick/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is breaking open the [src.name] and eating the liquid inside! It looks like \he's  trying to commit suicide!</span>")
+	return (TOXLOSS)
 
 
 /obj/item/weapon/glowstick/New()

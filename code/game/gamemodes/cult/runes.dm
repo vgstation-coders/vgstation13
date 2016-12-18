@@ -13,12 +13,14 @@
 	return 0
 
 /obj/effect/rune/proc/invocation(var/animation_icon)
+	if(c_animation) // if you've more than one, it won't go away
+		return
 	c_animation = new /atom/movable/overlay(src.loc)
 	c_animation.name = "cultification"
 	c_animation.density = 0
 	c_animation.anchored = 1
 	c_animation.icon = 'icons/effects/effects.dmi'
-	c_animation.plane = EFFECTS_LAYER
+	c_animation.plane = EFFECTS_PLANE
 	c_animation.master = src.loc
 	c_animation.icon_state = "[animation_icon]"
 	flick("cultification",c_animation)
