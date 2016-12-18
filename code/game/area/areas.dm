@@ -493,6 +493,7 @@ var/area/space_area
 	areaapc = apctoset
 
 /area/proc/remove_apc(var/obj/machinery/power/apc/apctoremove)
+	poweralert(1, apctoremove) //CANCEL THE POWER ALERT PLEASE
 	if(areaapc == apctoremove)
 		areaapc = null
 
