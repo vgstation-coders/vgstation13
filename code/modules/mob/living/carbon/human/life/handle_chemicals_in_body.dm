@@ -20,15 +20,15 @@
 					alien = IS_PLASMA
 		reagents.metabolize(src,alien)
 
+	if(status_flags & GODMODE)
+		return 0 //Godmode. This causes jittering and other variables to never go down but whatever.
+
 	var/total_plasmaloss = 0
 	for(var/obj/item/I in src)
 		if(I.contaminated && !(species.is_plasma_immune))
 			total_plasmaloss += zas_settings.Get(/datum/ZAS_Setting/CONTAMINATION_LOSS)
 		I.OnMobLife(src)
 	adjustToxLoss(total_plasmaloss)
-
-	if(status_flags & GODMODE)
-		return 0 //Godmode
 
 	if(species.flags & REQUIRE_LIGHT)
 		var/light_amount = 0 //How much light there is in the place, affects receiving nutrition and healing
