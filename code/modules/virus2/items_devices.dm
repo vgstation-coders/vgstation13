@@ -45,7 +45,7 @@
 	..()
 	if(istype(W,/obj/item/weapon/hand_labeler) || istype(W,/obj/item/weapon/reagent_containers/syringe))
 		return
-	if(mob.a_intent == I_HURT)
+	if(user.a_intent == I_HURT)
 		shatter(user)
 
 /obj/item/weapon/virusdish/throw_impact(atom/hit_atom, var/speed, mob/user)
