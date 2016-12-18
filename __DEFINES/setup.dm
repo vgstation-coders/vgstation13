@@ -1570,4 +1570,9 @@ var/proccalls = 1
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_EAST		"stationmapsmalleast"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_WEST		"stationmapsmallwest"
 
+#define HOLOMAP_MARKER_SMES				"smes"
+#define HOLOMAP_MARKER_DISK				"diskspawn"
+#define HOLOMAP_MARKER_SKIPJACK			"skipjack"
+#define HOLOMAP_MARKER_SYNDISHUTTLE		"syndishuttle"
+
 #define DEFAULT_BLOOD "#A10808"
