@@ -4,7 +4,6 @@
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "cloning"
 	circuit = "/obj/item/weapon/circuitboard/cloning"
-	var/list/links = list() //list of machines connected to this cloning console.
 	req_access = list(access_heads) //Only used for record deletion right now.
 	var/obj/machinery/dna_scannernew/scanner = null //Linked scanner. For scanning.
 	//var/obj/machinery/species_modifier/species_mod = null //linked Species Modifier. For handling species.
@@ -27,8 +26,24 @@
 		return
 	return
 
+/obj/machinery/computer/cloning/Destroy()
+	if(pod1)
+		pod1.connected = null
+		pod1 = null
+	if(scanner)
+		scanner.connected = null
+		scanner = null
+	if(diskette)
+		qdel(diskette)
+		diskette = null
+	records.Cut()
+	active_record = null
+
+	..()
+
 /obj/machinery/computer/cloning/initialize()
-	src.pod1 = findcloner()
+	pod1 = findcloner()
+	pod1.connected = src
 
 /obj/machinery/computer/cloning/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	return ""
@@ -37,24 +52,20 @@
 	return (istype(O,/obj/machinery/cloning) && get_dist(src,O) < CLONEPODRANGE)
 
 /obj/machinery/computer/cloning/isLinkedWith(var/obj/O)
-	return O != null && O in links
+	return O != null && (O == pod1 || O == scanner)
 
-/obj/machinery/computer/cloning/getLink(var/idx)
-	return (idx >= 1 && idx <= links.len) ? links[idx] : null
+///obj/machinery/computer/cloning/getLink(var/idx) - abandoned orphan code that never worked anyway
+//	return (idx >= 1 && idx <= links.len) ? links[idx] : null
 
 /obj/machinery/computer/cloning/linkWith(var/mob/user, var/obj/O, var/link/context)
 	if(istype(O, /obj/machinery/cloning/clonepod))
 		pod1 = O
+		pod1.connected = src
 		return 1
-/*	if(istype(O, /obj/machinery/cloning/species_modifier))
-		species_mod = O
-		return 1
-*/
 
 /obj/machinery/computer/cloning/proc/updatemodules()
-	src.scanner = findscanner()
-	if (!isnull(src.pod1))
-		src.pod1.connected = src // Some variable the pod needs
+	scanner = findscanner()
+	scanner.connected = src
 
 /obj/machinery/computer/cloning/proc/findscanner()
 	var/obj/machinery/dna_scannernew/scannerf = null
@@ -77,7 +88,6 @@
 	for (pod_found in orange(src, CLONEPODRANGE))
 		if(pod_found.connected)
 			continue
-		pod_found.connected = src
 		return pod_found
 
 #undef CLONEPODRANGE

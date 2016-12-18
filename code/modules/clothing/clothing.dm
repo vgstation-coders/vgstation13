@@ -410,7 +410,7 @@ BLIND     // can't see anything
 	return
 
 /obj/item/clothing/shoes/clean_blood()
-	..()
+	. = ..()
 	track_blood = 0
 
 //Suit

@@ -41,7 +41,7 @@
 	if(!usr.incapacitated())
 		if(src.up)
 			src.up = !src.up
-			src.body_parts_covered |= FACE
+			src.body_parts_covered = FACE
 			eyeprot = 3
 			icon_state = initial(icon_state)
 			to_chat(usr, "You flip the [src] down to protect your eyes.")
@@ -54,6 +54,7 @@
 		usr.update_inv_head()	//so our mob-overlays update
 		usr.update_inv_wear_mask()
 		usr.update_inv_glasses()
+		usr.update_hair()
 		usr.update_inv_ears()
 
 

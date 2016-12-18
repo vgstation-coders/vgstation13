@@ -10,11 +10,11 @@
 	icon = 'icons/fuckstat.dmi'
 	icon_state = "fuckstat"
 
-	Click()
-		var/mob/M = usr
-		if(!istype(M))
-			return
-		M.stat_fucked = !M.stat_fucked
+/obj/screen/fuckstat/Click()
+	var/mob/M = usr
+	if(!istype(M))
+		return
+	M.stat_fucked = !M.stat_fucked
 
 var/global/obj/screen/fuckstat/FUCK = new
 /mob/recycle(var/datum/materials)
@@ -247,10 +247,10 @@ var/global/obj/screen/fuckstat/FUCK = new
 		living_mob_list += src
 
 	store_position()
-	on_spellcast=new("owner"=src)
-	on_uattack = new("owner"=src)
-	on_logout = new("owner"=src)
-	on_damaged= new("owner"=src)
+	on_spellcast = new(owner = src)
+	on_uattack = new(owner = src)
+	on_logout = new(owner = src)
+	on_damaged = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
@@ -855,14 +855,8 @@ var/list/slot_equipment_priority = list( \
 			client.perspective = EYE_PERSPECTIVE
 			client.eye = A
 		else
-			if (isturf(loc))
-				client.eye = client.mob
-				client.perspective = MOB_PERSPECTIVE
-			else
-				client.perspective = EYE_PERSPECTIVE
-				client.eye = loc
-	return
-
+			client.eye = client.mob
+			client.perspective = MOB_PERSPECTIVE
 
 /mob/proc/show_inv(mob/user as mob)
 	user.set_machine(src)
@@ -895,7 +889,7 @@ var/list/slot_equipment_priority = list( \
 			return L.container
 	else
 		if (!( L ))
-			L = new /obj/effect/list_container/mobl( null )
+			L = new /obj/effect/list_container/mobl(null)
 			L.container += src
 			L.master = src
 
@@ -908,7 +902,7 @@ var/list/slot_equipment_priority = list( \
 					G.affecting.ret_grab(L, 1)
 		if (!( flag ))
 			if (L.master == src)
-				var/list/temp = list(  )
+				var/list/temp = list()
 				temp += L.container
 				L.forceMove(null)
 				return temp
