@@ -78,13 +78,27 @@
 
 	playsound(get_turf(user), 'sound/weapons/flash.ogg', 100, 1)
 
+	if(isrobot(user))
+		spawn(0)
+			var/atom/movable/overlay/animation = new(get_turf(user))
+			animation.layer = user.layer + 1
+			animation.icon_state = "blank"
+			animation.icon = 'icons/mob/mob.dmi'
+			animation.master = user
+			flick("blspell", animation)
+			sleep(5)
+			qdel(animation)
+
 	var/flashfail = (harm_labeled >= min_harm_label) //Flashfail is always true if the device has been successfully harm-labeled.
 
 	if(iscarbon(M))
 		var/mob/living/carbon/Subject = M
-		var/safe = Subject.eyecheck()
+		if(!flashfail && Subject.eyecheck())
+			flashfail = TRUE
 
-		if(safe <= 0)
+		if(flashfail)
+			user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
+		else
 			Subject.Knockdown(10)
 			Subject.flash_eyes(visual = 1, affect_silicon = 1)
 
@@ -114,32 +128,14 @@
 								to_chat(user, "<span class='warning'>Something seems to be blocking the flash!</span>")
 					else
 						to_chat(user, "<span class='warning'>This mind is so vacant that it is not susceptible to influence!</span>")
-		else
-			flashfail = TRUE
 	else if(issilicon(M))
-		M.Knockdown(rand(5, 10))
-	else
-		flashfail = TRUE
-
-	if(isrobot(user))
-		spawn(0)
-			var/atom/movable/overlay/animation = new(get_turf(user))
-			animation.layer = user.layer + 1
-			animation.icon_state = "blank"
-			animation.icon = 'icons/mob/mob.dmi'
-			animation.master = user
-			flick("blspell", animation)
-			sleep(5)
-			qdel(animation)
-
-	if(!flashfail)
-		M.flash_eyes(affect_silicon = 1)
-
-		if(!issilicon(M))
-			user.visible_message("<span class='disarm'>[user] blinds [M] with the flash!</span>")
+		if(flashfail)
+			user.visible_message("<span class='notice'>[user] fails to overload [M]'s sensors with the flash!</span>")
 		else
+			M.Knockdown(rand(5, 10))
+			M.flash_eyes(affect_silicon = 1)
 			user.visible_message("<span class='warning'>[user] overloads [M]'s sensors with the flash!</span>")
-	else
+	else //simple_animal maybe?
 		user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
 
 /obj/item/device/flash/attack_self(mob/living/carbon/user as mob, flag = 0, emp = 0)
