@@ -36,43 +36,37 @@
 /area/random_vault/v9
 /area/random_vault/v10
 
-/proc/generate_vaults()
-	var/area/space = get_space_area()
+/proc/get_map_element_objects(base_type = /datum/map_element/vault)
+	var/list/list_of_vaults = typesof(base_type) - base_type
 
-	var/list/list_of_vault_spawners = shuffle(typesof(/area/random_vault) - /area/random_vault)
-	var/list/list_of_vaults = typesof(/datum/map_element/vault) - /datum/map_element/vault
+	for(var/V in list_of_vaults) //Turn list of paths into list of objects
+		list_of_vaults.Add(new V)
+		list_of_vaults.Remove(V)
 
-	for(var/vault_path in list_of_vaults) //Turn a list of paths into a list of objects
-		list_of_vaults.Add(new vault_path)
-		list_of_vaults.Remove(vault_path)
+	//Compare all objects with the map and remove non-compactible ones
+	for(var/datum/map_element/vault/V in list_of_vaults)
+		//See code/modules/randomMaps/dungeons.dm
+		if(V.require_dungeons && !dungeon_area)
+			list_of_vaults.Remove(V)
+			continue
 
-	//Start processing the list of vaults
-
-	if(map.only_spawn_map_exclusive_vaults) //If the map spawns only map-exclusive vaults - remove all vaults that aren't exclusive to this map
-		for(var/datum/map_element/vault/V in list_of_vaults)
-
-			if(V.exclusive_to_maps.Find(map.nameShort) || V.exclusive_to_maps.Find(map.nameLong))
+		if(map.only_spawn_map_exclusive_vaults || V.exclusive_to_maps.len) //Remove this vault if it isn't exclusive to this map
+			if(!V.exclusive_to_maps.Find(map.nameShort) && !V.exclusive_to_maps.Find(map.nameLong))
+				list_of_vaults.Remove(V)
 				continue
 
-			list_of_vaults.Remove(V)
-	else //Map spawns all vaults - remove all vaults that are exclusive to other maps
-		for(var/datum/map_element/vault/V in list_of_vaults)
-
-			if(V.exclusive_to_maps.len)
-				if(!V.exclusive_to_maps.Find(map.nameShort) && !V.exclusive_to_maps.Find(map.nameLong))
-					list_of_vaults.Remove(V)
-
-	for(var/datum/map_element/vault/V in list_of_vaults) //Remove all vaults that can't spawn on this map
 		if(V.map_blacklist.len)
 			if(V.map_blacklist.Find(map.nameShort) || V.map_blacklist.Find(map.nameLong))
 				list_of_vaults.Remove(V)
 				continue
 
-		//See code/modules/randomMaps/dungeons.dm
-		if(V.require_dungeons)
-			if(!dungeon_area)
-				list_of_vaults.Remove(V)
-				continue
+	return list_of_vaults
+
+/proc/generate_vaults()
+	var/area/space = get_space_area()
+
+	var/list/list_of_vault_spawners = shuffle(typesof(/area/random_vault) - /area/random_vault)
+	var/list/list_of_vaults = get_map_element_objects()
 
 	var/failures = 0
 	var/successes = 0
@@ -121,3 +115,70 @@
 			TURF.change_area(A, space)
 
 	message_admins("<span class='info'>Loaded [successes] vaults successfully, [failures] failures.</span>")
+
+
+//Proc that populates a single area with many vaults, randomly
+//A is the area OR a list of turfs where the placement happens
+//map_element_objects is a list of vaults that have to be placed. Defaults to subtypes of /datum/map_element/vault (meaning all vaults are spawned)
+//amount is number of vaults placed. If -1, it will place as many vaults as it can
+
+//NOTE: Vaults may be placed partially outside of the area. Only the lower left corner is guaranteed to be in the area
+
+/proc/populate_area_with_vaults(area/A, list/map_element_objects, amount = -1)
+	var/list/area_turfs
+
+	if(ispath(A, /area))
+		A = locate(A)
+	if(isarea(A))
+		area_turfs = A.get_turfs()
+	else if(istype(A, /list))
+		area_turfs = A
+	ASSERT(area_turfs)
+
+	if(!map_element_objects)
+		map_element_objects = get_map_element_objects()
+
+	message_admins("<span class='info'>Populating an area with [map_element_objects.len] vaults.")
+
+	var/list/spawned = list()
+
+	while(map_element_objects.len)
+		var/datum/map_element/ME = pick(map_element_objects)
+		map_element_objects.Remove(ME)
+
+		if(!istype(ME))
+			continue
+
+		var/list/dimensions = ME.get_dimensions() //List with the element's width and height
+		var/new_width = dimensions[1]
+		var/new_height = dimensions[2]
+
+		var/list/valid_spawn_points = area_turfs.Copy()
+
+		for(var/datum/map_element/conflict in spawned)
+			if(!valid_spawn_points.len)
+				break
+			if(!isturf(conflict.location))
+				continue
+
+			var/turf/T = conflict.location
+			var/x1 = max(1, T.x - new_width - 1)
+			var/y1 = max(1, T.y - new_height- 1)
+			var/turf/t1 = locate(x1, y1, T.z)
+			var/turf/t2 = locate(T.x + conflict.width, T.y + conflict.height, T.z)
+
+			valid_spawn_points.Remove(block(t1, t2))
+
+		if(!valid_spawn_points.len)
+			continue
+
+		var/turf/new_spawn_point = pick(valid_spawn_points)
+		var/vault_x = new_spawn_point.x
+		var/vault_y = new_spawn_point.y
+		var/vault_z = new_spawn_point.z
+
+		if(ME.load(vault_x, vault_y, vault_z))
+			spawned.Add(ME)
+			message_admins("<span class='info'>Loaded [ME.file_path]: [formatJumpTo(locate(vault_x, vault_y, vault_z))].")
+		else
+			message_admins("<span class='danger'>Can't find [ME.file_path]!</span>")
