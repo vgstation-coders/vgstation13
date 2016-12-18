@@ -70,20 +70,20 @@
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	var/has_valid_damaged_organ = 0
-	var/has_invalid_damaged_organ = 0
+	var/has_damaged_organic_organ = 0
+	var/has_damaged_robot_organ = 0
 	for(var/datum/organ/internal/I in affected.internal_organs)
 		if(I.damage > 0)
 			if(I.robotic >= 2)
-				has_invalid_damaged_organ = 1
+				has_damaged_robot_organ = 1
 			else
-				has_valid_damaged_organ = 1
+				has_damaged_organic_organ = 1
 			break
 	if(..())
-		if(!has_valid_damaged_organ && has_invalid_damaged_organ)
+		if(!has_damaged_organic_organ && has_damaged_robot_organ)
 			to_chat(user, "<span class='warning'>You cannot fix robotic organs with this tool.</span>")
 			return
-		return has_valid_damaged_organ
+		return has_damaged_organic_organ
 
 /datum/surgery_step/internal/fix_organ/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/tool_name = "\the [tool]"
@@ -236,20 +236,20 @@
 		return
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 
-	var/has_valid_damaged_organ = 0
-	var/has_invalid_damaged_organ = 0
+	var/has_damaged_organic_organ = 0
+	var/has_damaged_robot_organ = 0
 	for(var/datum/organ/internal/I in affected.internal_organs)
 		if(I.damage > 0)
-			if(I.robotic < 2)
-				has_invalid_damaged_organ = 1
+			if(I.robotic >= 2)
+				has_damaged_robot_organ = 1
 			else
-				has_valid_damaged_organ = 1
+				has_damaged_organic_organ = 1
 			break
 	if(..())
-		if(!has_valid_damaged_organ && has_invalid_damaged_organ)
+		if(!has_damaged_robot_organ && has_damaged_organic_organ)
 			to_chat(user, "<span class='warning'>You cannot fix organic organs with this tool.</span>")
 			return
-		return has_valid_damaged_organ
+		return has_damaged_robot_organ
 
 /datum/surgery_step/internal/fix_organ_robotic/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
