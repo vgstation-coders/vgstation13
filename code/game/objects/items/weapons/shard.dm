@@ -103,7 +103,7 @@
 		if(AM.locked_to) //Mob is locked to something, so it's not actually stepping on the glass
 			playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1) //Make noise
 			return //Stop here
-		if(AM.flying) //We don't check for lying because it's intended to hurt
+		if(AM.flying) //We don't check for lying yet because it's intended to hurt
 			return
 		else //Stepping on the glass
 			playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
@@ -116,7 +116,7 @@
 					if(affecting.is_organic())
 						danger = TRUE
 
-						if(H.feels_pain())
+						if(!H.lying && H.feels_pain())
 							H.Knockdown(3)
 						if(affecting.take_damage(5, 0))
 							H.UpdateDamageIcon()
