@@ -107,6 +107,7 @@
 	TLV["nitrogen"] =		list(-1, -1,  -1,  -1) // Partial pressure, kpa
 	TLV["carbon_dioxide"] = list(-1.0, -1.0, 5, 10) // Partial pressure, kpa
 	TLV["plasma"] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
+	TLV["n2o"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
 	TLV["other"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
 	TLV["pressure"] =		list(ONE_ATMOSPHERE*0.80,ONE_ATMOSPHERE*0.90,ONE_ATMOSPHERE*1.10,ONE_ATMOSPHERE*1.20) /* kpa */
 	TLV["temperature"] =	list(T0C-30, T0C, T0C+40, T0C+70) // K
@@ -119,6 +120,7 @@
 			TLV["oxygen"] =			list(-1.0, -1.0,-1.0,-1.0)
 			TLV["carbon_dioxide"] = list(-1.0, -1.0,   5,  10) // Partial pressure, kpa
 			TLV["plasma"] =			list(-1.0, -1.0, 0.2, 0.5) // Partial pressure, kpa
+			TLV["n2o"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
 			TLV["other"] =			list(-1.0, -1.0, 0.5, 1.0) // Partial pressure, kpa
 			TLV["pressure"] =		list(0,ONE_ATMOSPHERE*0.10,ONE_ATMOSPHERE*1.40,ONE_ATMOSPHERE*1.60) /* kpa */
 			TLV["temperature"] =	list(20, 40, 140, 160) // K
@@ -273,9 +275,13 @@
 
 	var/partial_pressure = R_IDEAL_GAS_EQUATION*environment.temperature/environment.volume
 	var/environment_pressure = environment.return_pressure()
+	var/n2o_moles = 0.0
 	var/other_moles = 0.0
 	for(var/datum/gas/G in environment.trace_gases)
-		other_moles+=G.moles
+		if(istype(G, /datum/gas/sleeping_agent))
+			n2o_moles+=G.moles
+		else
+			other_moles+=G.moles
 
 	var/pressure_dangerlevel = get_danger_level(environment_pressure, TLV["pressure"])
 	var/oxygen_dangerlevel = get_danger_level(environment.oxygen*partial_pressure, TLV["oxygen"])
@@ -283,6 +289,7 @@
 	var/co2_dangerlevel = get_danger_level(environment.carbon_dioxide*partial_pressure, TLV["carbon_dioxide"])
 	var/plasma_dangerlevel = get_danger_level(environment.toxins*partial_pressure, TLV["plasma"])
 	var/temperature_dangerlevel = get_danger_level(environment.temperature, TLV["temperature"])
+	var/n2o_dangerlevel = get_danger_level(n2o_moles*partial_pressure, TLV["n2o"])
 	var/other_dangerlevel = get_danger_level(other_moles*partial_pressure, TLV["other"])
 
 	return max(
@@ -291,6 +298,7 @@
 		co2_dangerlevel,
 		nitrogen_dangerlevel,
 		plasma_dangerlevel,
+		n2o_dangerlevel,
 		other_dangerlevel,
 		temperature_dangerlevel
 		)
@@ -527,10 +535,16 @@
 	var/plasma_percent = round(environment.toxins / total * 100, 2)
 
 	current_settings = TLV["other"]
+	var/n2o_moles = 0.0
 	var/other_moles = 0.0
 	for(var/datum/gas/G in environment.trace_gases)
-		other_moles+=G.moles
+		if(istype(G, /datum/gas/sleeping_agent))
+			n2o_moles+=G.moles
+		else
+			other_moles+=G.moles
 	var/other_dangerlevel = get_danger_level(other_moles*partial_pressure, current_settings)
+	current_settings = TLV["n2o"]
+	var/n2o_dangerlevel = get_danger_level(n2o_moles*partial_pressure, current_settings)
 
 	current_settings = TLV["temperature"]
 	var/temperature_dangerlevel = get_danger_level(environment.temperature, current_settings)
@@ -546,6 +560,7 @@
 	percentages["nitrogen"]=nitrogen_percent
 	percentages["co2"]=co2_percent
 	percentages["plasma"]=plasma_percent
+	percentages["n2o"]=n2o_moles
 	percentages["other"]=other_moles
 	data["contents"]=percentages
 
@@ -556,6 +571,7 @@
 	danger["nitrogen"]=nitrogen_dangerlevel
 	danger["co2"]=co2_dangerlevel
 	danger["plasma"]=plasma_dangerlevel
+	danger["n2o"]=n2o_dangerlevel
 	danger["other"]=other_dangerlevel
 	danger["overall"]=max(pressure_dangerlevel,oxygen_dangerlevel,nitrogen_dangerlevel,co2_dangerlevel,plasma_dangerlevel,other_dangerlevel,temperature_dangerlevel)
 	data["danger"]=danger
