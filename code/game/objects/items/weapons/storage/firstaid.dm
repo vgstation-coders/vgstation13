@@ -88,7 +88,7 @@
 	..()
 	if (empty)
 		return
-	for (var/x = 1 to 4)
+	for (var/i = 1 to 4)
 		new /obj/item/weapon/reagent_containers/pill/dexalin(src)
 	new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
 	new /obj/item/weapon/reagent_containers/syringe/inaprovaline(src)
@@ -205,7 +205,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 /obj/item/weapon/storage/pill_bottle/kelotane/New()
 	..()
-	for (var/x = 1 to 7)
+	for (var/i = 1 to 7)
 		new /obj/item/weapon/reagent_containers/pill/kelotane(src)
 	
 	
@@ -215,7 +215,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 /obj/item/weapon/storage/pill_bottle/antitox/New()
 	..()
-	for (var/x = 1 to 7)
+	for (var/i = 1 to 7)
 		new /obj/item/weapon/reagent_containers/pill/antitox(src)
 	
 
@@ -225,7 +225,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 /obj/item/weapon/storage/pill_bottle/inaprovaline/New()
 	..()
-	for (var/x = 1 to 7)
+	for (var/i = 1 to 7)
 		new /obj/item/weapon/reagent_containers/pill/inaprovaline(src)
 	
 	
@@ -254,7 +254,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 /obj/item/weapon/storage/pill_bottle/hyperzine/New()
 	..()
-	for (var/x = 1 to 6)
+	for (var/i = 1 to 6)
 		new /obj/item/weapon/reagent_containers/pill/hyperzine(src)
 
 		
@@ -265,7 +265,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 /obj/item/weapon/storage/pill_bottle/creatine/New()
 	..()
 	new /obj/item/weapon/reagent_containers/pill/creatine_safe(src)
-	for (var/x = 1 to 5)
+	for (var/i = 1 to 5)
 		new /obj/item/weapon/reagent_containers/pill/creatine_supplement (src)
 	
 
@@ -275,5 +275,5 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 
 	/obj/item/weapon/storage/pill_bottle/nanobot/New()
 		..()
-		for (var/x = 1 to 5)
+		for (var/i = 1 to 5)
 			new /obj/item/weapon/reagent_containers/pill/nanobot(src)
