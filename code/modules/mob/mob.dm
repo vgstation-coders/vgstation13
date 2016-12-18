@@ -855,14 +855,8 @@ var/list/slot_equipment_priority = list( \
 			client.perspective = EYE_PERSPECTIVE
 			client.eye = A
 		else
-			if (isturf(loc))
-				client.eye = client.mob
-				client.perspective = MOB_PERSPECTIVE
-			else
-				client.perspective = EYE_PERSPECTIVE
-				client.eye = loc
-	return
-
+			client.eye = client.mob
+			client.perspective = MOB_PERSPECTIVE
 
 /mob/proc/show_inv(mob/user as mob)
 	user.set_machine(src)
