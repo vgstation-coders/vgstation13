@@ -244,7 +244,8 @@
 /mob/living/silicon/pai/ClickOn(var/atom/A, var/params)
 	if(istype(A,/obj) && card.loc == A)
 		var/obj/O = A
-		O.attack_integrated_pai(src)
+		if(O.integratedpai == src)
+			O.attack_integrated_pai(src)
 	if(istype(A,/obj/machinery)||(istype(A,/mob)&&secHUD))
 		A.attack_pai(src)
 

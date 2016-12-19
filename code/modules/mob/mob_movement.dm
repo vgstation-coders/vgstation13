@@ -88,6 +88,12 @@
 							return
 						else
 							to_chat(usr, "<span class='warning'>Your host has nothing to drop in [H.gender == FEMALE ? "her" : "his"] [H.get_index_limb_name(OE.grasp_id)].</span>")
+			else if(ispAI(usr))
+				var/mob/living/silicon/pai/P = usr
+				if(istype(P.card.loc, /obj))
+					var/obj/O = P.card.loc
+					if(O.integratedpai == P)
+						O.attack_integrated_pai(P)
 			else
 				to_chat(usr, "<span class='warning'>This mob type cannot drop items.</span>")
 
