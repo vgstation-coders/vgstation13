@@ -682,6 +682,7 @@
 #include "code\game\objects\items\mountable_frames\sound_system.dm"
 #include "code\game\objects\items\mountable_frames\station_map.dm"
 #include "code\game\objects\items\mountable_frames\wallmed.dm"
+#include "code\game\objects\items\mountable_frames\wreath.dm"
 #include "code\game\objects\items\mountable_frames\posters\poster.dm"
 #include "code\game\objects\items\robot\robot_items.dm"
 #include "code\game\objects\items\robot\robot_parts.dm"
