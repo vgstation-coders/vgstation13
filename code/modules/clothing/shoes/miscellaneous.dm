@@ -115,7 +115,7 @@
 	species_fit = list(VOX_SHAPED)
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 
-/obj/item/clothing/shoes/galoshes/vault/broken
+/obj/item/clothing/shoes/galoshes/broken
 	name = "ruined galoshes"
 	desc = "The grip treading is broken off."
 	icon_state = "galoshes_ruined"
