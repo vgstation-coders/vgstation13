@@ -18,7 +18,7 @@
 
 
 //#define SPAWN_ALL_VAULTS //Uncomment to spawn every hecking vault in the game
-#define SPAWN_MAX_VAULTS //Uncomment to spawn as many vaults as the code supports
+//#define SPAWN_MAX_VAULTS //Uncomment to spawn as many vaults as the code supports
 
 #ifdef SPAWN_MAX_VAULTS
 #warning Spawning maximum amount of vaults!
