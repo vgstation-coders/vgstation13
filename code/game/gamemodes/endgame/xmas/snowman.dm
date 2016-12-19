@@ -119,5 +119,5 @@
 			if(C.bodytemperature >= SNOWBALL_MINIMALTEMP)
 				C.bodytemperature -= 5
 
-/mob/living/simple_animal/hostile/retaliate/snowman/dead
-	health = 0
+/mob/living/simple_animal/hostile/retaliate/snowman/dead/Life()
+	return 0
