@@ -85,7 +85,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/obj/screen/spell/connected_button
 	var/currently_channeled = 0
-	var/gradual_casting = 0 //equals 1 while a Sp_GRADUAL spell is actively being cast
+	var/gradual_casting = FALSE //equals TRUE while a Sp_GRADUAL spell is actively being cast
 
 ///////////////////////
 ///SETUP AND PROCESS///
@@ -103,7 +103,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			if(gradual_casting)
 				if(charge_counter <= 0)
 					charge_counter = 0
-					gradual_casting = 0
+					gradual_casting = FALSE
 					stop_casting(null, holder)
 				else
 					charge_counter--
@@ -140,7 +140,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return
 	if(cast_check(1, user))
 		if(gradual_casting)
-			gradual_casting = 0
+			gradual_casting = FALSE
 			stop_casting(targets, user)
 			return
 	if(!cast_check(skipcharge, user))
@@ -422,7 +422,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			else
 				adjust_var(user, holder_var_type, holder_var_amount)
 		if(charge_type & Sp_GRADUAL)
-			gradual_casting = 1
+			gradual_casting = TRUE
 			charge_counter -= 1
 			process()
 

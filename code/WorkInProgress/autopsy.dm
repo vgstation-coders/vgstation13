@@ -43,7 +43,7 @@
 	if(istype(O,/datum/organ/external/chest))
 		var/mob/living/carbon/human/H = O.owner
 		if(H)
-			if(H.advanced_butchery.len)
+			if(H.advanced_butchery && H.advanced_butchery.len)
 				advanced_butchery = "\The [target_name] seems to have been butchered with"
 				for(var/i = 1, i <= H.advanced_butchery.len, i++)
 					var/tool_name = H.advanced_butchery[i]

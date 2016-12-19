@@ -1396,6 +1396,8 @@ Thanks.
 	src.meat_taken++
 	src.being_butchered = 0
 	if(tool_name)
+		if(!advanced_butchery)
+			advanced_butchery = new()
 		advanced_butchery.Add(tool_name)
 
 	if(src.meat_taken < src.meat_amount)
