@@ -8,7 +8,8 @@
 
 /obj/structure/snow
 	name = "snow"
-	layer = BELOW_OBJ_LAYER
+	layer = SNOW_LAYER
+	plane = ABOVE_TURF_PLANE
 	icon = 'icons/turf/snow.dmi'
 	icon_state = "snow"
 	alpha = 230
