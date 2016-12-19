@@ -82,9 +82,43 @@
 	requires_power = 1
 
 /area/vault/taxi_engi
-	name = "\improper Engineering"
+	name = "\improper Destroyed Engineering"
 	requires_power = 1
-	
+
+/area/vault/taxi_engi/engineering
+	name = "\improper Taxi Engineering"
+
+/area/vault/taxi_engi/atmos
+	name = "\improper Taxi Atmospherics"
+	icon_state = "atmos"
+
+/area/vault/taxi_engi/mechanics
+	name = "\improper Taxi Mechanics"
+	icon_state = "mechanics"
+
+/area/vault/taxi_engi/storage
+	name = "\improper Taxi Storage"
+
+/area/vault/taxi_engi/secure_storage
+	name = "\improper Taxi Storage"
+	icon_state = "engine_storage"
+
+/area/vault/taxi_engi/engine
+	name = "\improper Taxi Engine Room"
+	icon_state = "engine_control"
+
+/area/vault/taxi_engi/CE_office
+	name = "\improper Taxi Chief Engineer Office"
+	icon_state = "head_quarters"
+
+/area/vault/taxi_engi/podbay
+	name = "\improper Taxi Podbay"
+	icon_state = "pod"
+
+/area/vault/taxi_engi/lobby
+	name = "\improper Taxi Lobby"
+	icon_state = "engine_lobby"
+
 /area/vault/ejectedengine
 	requires_power = 1
 
@@ -260,6 +294,9 @@
 /obj/machinery/power/apc/no_alerts/vault_listening/initialize()
 	. = ..()
 	name = "\improper Listening Outpost APC"
+
+/obj/machinery/power/apc/no_alerts/vault_taxi/initialize()
+	. = ..()
 
 /obj/machinery/power/battery/smes/vault_listening
 	chargelevel = 30000
