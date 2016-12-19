@@ -340,6 +340,8 @@ var/global/list/alert_overlays_global = list()
 	return TRUE
 
 /obj/machinery/door/firedoor/horror_force(var/mob/living/carbon/human/H)
+	if(!ishorrorform(H))
+		return FALSE
 	return force_open(H)
 
 /obj/machinery/door/firedoor/close()
