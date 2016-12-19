@@ -86,37 +86,37 @@
 	requires_power = 1
 
 /area/vault/taxi_engi/engineering
-	name = "\improper Taxi Engineering"
+	name = "\improper Engineering"
 
 /area/vault/taxi_engi/atmos
-	name = "\improper Taxi Atmospherics"
+	name = "\improper Atmospherics"
 	icon_state = "atmos"
 
 /area/vault/taxi_engi/mechanics
-	name = "\improper Taxi Mechanics"
+	name = "\improper Mechanics"
 	icon_state = "mechanics"
 
 /area/vault/taxi_engi/storage
-	name = "\improper Taxi Storage"
+	name = "\improper Storage"
 
 /area/vault/taxi_engi/secure_storage
-	name = "\improper Taxi Storage"
+	name = "\improper Storage"
 	icon_state = "engine_storage"
 
 /area/vault/taxi_engi/engine
-	name = "\improper Taxi Engine Room"
+	name = "\improper Engine Room"
 	icon_state = "engine_control"
 
 /area/vault/taxi_engi/CE_office
-	name = "\improper Taxi Chief Engineer Office"
+	name = "\improper Chief Engineer Office"
 	icon_state = "head_quarters"
 
 /area/vault/taxi_engi/podbay
-	name = "\improper Taxi Podbay"
+	name = "\improper Podbay"
 	icon_state = "pod"
 
 /area/vault/taxi_engi/lobby
-	name = "\improper Taxi Lobby"
+	name = "\improper Lobby"
 	icon_state = "engine_lobby"
 
 /area/vault/ejectedengine

@@ -154,7 +154,7 @@
 "cX" = (/obj/effect/decal/cleanable/cobweb2,/turf/simulated/floor/plating,/area/vault/taxi_engi/engine)
 "cY" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/item/weapon/shard,/turf/simulated/floor/plating,/area/vault/taxi_engi/engine)
 "cZ" = (/obj/effect/decal/remains/robot{icon_state = "gib7"},/turf/space,/area)
-"da" = (/obj/item/clothing/shoes/galoshes,/obj/effect/decal/remains/human,/turf/simulated/floor/plating{icon_state = "platingdmg1"},/area/vault/taxi_engi/lobby)
+"da" = (/obj/effect/decal/remains/human,/obj/item/clothing/shoes/galoshes/vault/broken,/turf/simulated/floor/plating{icon_state = "platingdmg1"},/area/vault/taxi_engi/lobby)
 "db" = (/obj/structure/lattice,/obj/item/weapon/mop,/turf/space,/area/vault/taxi_engi/lobby)
 "dc" = (/obj/structure/closet/crate,/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/floor/damaged,/area/vault/taxi_engi/lobby)
 "dd" = (/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/grille,/obj/structure/disposalpipe/segment{dir = 4},/turf/simulated/floor/plating,/area/vault/taxi_engi/lobby)

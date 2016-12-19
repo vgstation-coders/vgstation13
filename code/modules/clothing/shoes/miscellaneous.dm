@@ -117,7 +117,8 @@
 
 /obj/item/clothing/shoes/galoshes/vault/broken
 	name = "ruined galoshes"
-	desc = "Ruined rubber boots"
+	desc = "The grip treading is broken off."
+	icon_state = "galoshes_ruined"
 	flags = null
 
 /obj/item/clothing/shoes/clown_shoes
