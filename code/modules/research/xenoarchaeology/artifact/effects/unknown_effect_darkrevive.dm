@@ -41,35 +41,38 @@
 		return
 
 	target.visible_message("<span class='warning'>[target] shudders, and starts breathing.</span>")
-
-	target.resurrect()
-	target.timeofdeath = 0
-	target.tod = null
-
-	target.toxloss = 0
-	target.oxyloss = 0
-	target.bruteloss = 0
-	target.fireloss = 0
-	for(var/datum/organ/external/O in target.organs)
-		if(O.destspawn || O.is_robotic())
-			continue
-		O.rejuvenate()
-		O.number_wounds = 0
-		O.wounds = list()
-	target.heal_overall_damage(1000, 1000)
-	if(target.reagents)
-		target.reagents.clear_reagents()
-	target.restore_blood()
-	target.bodytemperature = 310
-	target.traumatic_shock = 0
-	target.stat = UNCONSCIOUS
-	target.regenerate_icons()
-	target.flash_eyes(visual = 1)
-	target.apply_effect(10, EYE_BLUR)
-	target.apply_effect(10, WEAKEN)
-	target.update_canmove()
+	target.limitedrevive()
 
 	to_chat(user, "<span_class='sinister'>You feel drained...</span>")
 	user.mutations |= M_NOCLONE
 	user.dna.mutantrace = "shadow"
 	user.update_mutantrace()
+
+/mob/living/carbon/human/proc/limitedrevive()
+
+	resurrect()
+	timeofdeath = 0
+	tod = null
+
+	toxloss = 0
+	oxyloss = 0
+	bruteloss = 0
+	fireloss = 0
+	for(var/datum/organ/external/O in organs)
+		if(O.destspawn || O.is_robotic())
+			continue
+		O.rejuvenate()
+		O.number_wounds = 0
+		O.wounds = list()
+	heal_overall_damage(1000, 1000)
+	if(reagents)
+		reagents.clear_reagents()
+	restore_blood()
+	bodytemperature = 310
+	traumatic_shock = 0
+	stat = UNCONSCIOUS
+	regenerate_icons()
+	flash_eyes(visual = 1)
+	apply_effect(10, EYE_BLUR)
+	apply_effect(10, WEAKEN)
+	update_canmove()

@@ -12,7 +12,7 @@
 
 /datum/artifact_effect/reagentblock/DoEffectTouch(var/mob/living/user)
 	var/weakness = GetAnomalySusceptibility(user)
-	if(ishuman(user) && prob(weakness * 100))
+	if(iscarbon(user) && prob(weakness * 100))
 		if(user.reagents.has_reagent(BLOCKIZINE))
 			var/datum/reagent/existingblock = user.reagents.get_reagent(BLOCKIZINE)
 			existingblock.data = world.time+duration
@@ -21,22 +21,22 @@
 
 /datum/artifact_effect/reagentblock/DoEffectAura()
 	if(holder)
-		for(var/mob/living/carbon/human/H in range(effectrange,holder))
-			var/weakness = GetAnomalySusceptibility(H)
+		for(var/mob/living/carbon/C in range(effectrange,holder))
+			var/weakness = GetAnomalySusceptibility(C)
 			if(prob(weakness * 100))
-				if(H.reagents.has_reagent(BLOCKIZINE))
-					var/datum/reagent/existingblock = H.reagents.get_reagent(BLOCKIZINE)
+				if(C.reagents.has_reagent(BLOCKIZINE))
+					var/datum/reagent/existingblock = C.reagents.get_reagent(BLOCKIZINE)
 					existingblock.data = world.time+duration
 				else
-					H.reagents.add_reagent(BLOCKIZINE,30,world.time+duration)
+					C.reagents.add_reagent(BLOCKIZINE,30,world.time+duration)
 
 /datum/artifact_effect/reagentblock/DoEffectPulse()
 	if(holder)
-		for(var/mob/living/carbon/human/H in range(effectrange,holder))
-			var/weakness = GetAnomalySusceptibility(H)
+		for(var/mob/living/carbon/C in range(effectrange,holder))
+			var/weakness = GetAnomalySusceptibility(C)
 			if(prob(weakness * 100))
-				if(H.reagents.has_reagent(BLOCKIZINE))
-					var/datum/reagent/existingblock = H.reagents.get_reagent(BLOCKIZINE)
+				if(C.reagents.has_reagent(BLOCKIZINE))
+					var/datum/reagent/existingblock = C.reagents.get_reagent(BLOCKIZINE)
 					existingblock.data = world.time+duration
 				else
-					H.reagents.add_reagent(BLOCKIZINE,30,world.time+duration)
+					C.reagents.add_reagent(BLOCKIZINE,30,world.time+duration)
