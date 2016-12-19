@@ -1082,7 +1082,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		flick("entertainment_arena",E)
 
 	for(var/mob/dead/observer/O in observers)
-		to_chat(O, "<b>A round has began in <A HREF='?src=\ref[O];jumptoarenacood=1;X=[center.x];Y=[center.y];Z=[center.z]'>[name]</A>!</b>")
+		to_chat(O, "<b>A round has begun in <A HREF='?src=\ref[O];jumptoarenacood=1;X=[center.x];Y=[center.y];Z=[center.z]'>[name]</A>!</b>")
 
 	sleep(40)
 
