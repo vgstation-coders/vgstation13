@@ -449,7 +449,7 @@
 /mob/living/simple_animal/corgi/Ian/santa/New()
 	..()
 
-	inventory_head = new/obj/item/clothing/head/christmas/santahat/red(loc)
+	inventory_head = new/obj/item/clothing/head/christmas/santahat/red(src)
 	regenerate_icons()
 
 /mob/living/simple_animal/corgi/Ian/Life()
