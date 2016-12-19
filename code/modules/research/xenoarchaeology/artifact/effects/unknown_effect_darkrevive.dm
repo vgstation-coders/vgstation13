@@ -47,32 +47,3 @@
 	user.mutations |= M_NOCLONE
 	user.dna.mutantrace = "shadow"
 	user.update_mutantrace()
-
-/mob/living/carbon/human/proc/limitedrevive()
-
-	resurrect()
-	timeofdeath = 0
-	tod = null
-
-	toxloss = 0
-	oxyloss = 0
-	bruteloss = 0
-	fireloss = 0
-	for(var/datum/organ/external/O in organs)
-		if(O.destspawn || O.is_robotic())
-			continue
-		O.rejuvenate()
-		O.number_wounds = 0
-		O.wounds = list()
-	heal_overall_damage(1000, 1000)
-	if(reagents)
-		reagents.clear_reagents()
-	restore_blood()
-	bodytemperature = 310
-	traumatic_shock = 0
-	stat = UNCONSCIOUS
-	regenerate_icons()
-	flash_eyes(visual = 1)
-	apply_effect(10, EYE_BLUR)
-	apply_effect(10, WEAKEN)
-	update_canmove()
