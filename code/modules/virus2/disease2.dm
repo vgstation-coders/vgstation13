@@ -216,7 +216,7 @@ var/global/list/virusDB = list()
 	r += "<BR>Spread form : [spreadtype]"
 	r += "<BR>Progress Speed : [stageprob]"
 	for(var/datum/disease2/effectholder/E in effects)
-		r += "<BR>Effect:[E.effect.name]. Strength : [E.multiplier]. Verosity : [E.chance]. Type : [5-E.stage]."
+		r += "<BR>Effect:[E.effect.name]. Strength : [E.multiplier]. Verosity : [E.chance]. Type : [E.stage]."
 
 	r += "<BR>Antigen pattern: [antigens2string(antigen)]"
 	return r
