@@ -29,11 +29,15 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 	var/defective = 0
 
+	var/can_take_pai = FALSE
+	var/obj/item/device/paicard/integratedpai = null
+
 /obj/New()
 	..()
 	if (auto_holomap && isturf(loc))
 		var/turf/T = loc
 		T.soft_add_holomap(src)
+	verbs -= /obj/verb/remove_pai
 
 /obj/Destroy()
 	for(var/mob/user in _using)
@@ -45,6 +49,48 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	..()
 
 /obj/item/proc/is_used_on(obj/O, mob/user)
+
+/obj/proc/install_pai(obj/item/device/paicard/P as obj)
+	if(!P || !istype(P))
+		return 0
+	P.forceMove(src)
+	integratedpai = P
+	verbs += /obj/verb/remove_pai
+
+/obj/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(can_take_pai && istype(W, /obj/item/device/paicard))
+		if(user.drop_item(W))
+			to_chat(user, "You insert \the [W] into a slot in \the [src].")
+			install_pai(W)
+			playsound(src, 'sound/misc/cartridge_in.ogg', 25)
+
+/obj/proc/attack_integrated_pai(mob/user as mob)
+	return
+
+/obj/verb/remove_pai()
+	set name = "Remove pAI"
+	set category = "Object"
+	set src in range(1)
+
+	var/mob/living/carbon/human/H = usr
+	if(!istype(H))
+		to_chat(usr, "You don't have the dexterity to do this!")
+		return
+	if (H.stat == DEAD)
+		to_chat(H, "You can't do that while you're dead!")
+		return
+	else if (H.stat == UNCONSCIOUS)
+		to_chat(H, "You must be conscious to do this!")
+		return
+	else if (H.handcuffed)
+		to_chat(H, "You can't do that while you're restrained!")
+		return
+
+	to_chat(H, "You eject \the [integratedpai] from \the [src].")
+	integratedpai.forceMove(loc)
+	integratedpai = null
+	playsound(src, 'sound/misc/cartridge_out.ogg', 25)
+	verbs -= /obj/verb/remove_pai
 
 /obj/recycle(var/datum/materials/rec)
 	if(..())
