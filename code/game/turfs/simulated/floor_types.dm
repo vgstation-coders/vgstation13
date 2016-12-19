@@ -361,7 +361,9 @@
 	name = "concrete"
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "concrete"
-
+	
+/turf/simulated/floor/plating/snow/cold	
+	temperature = 273
 /turf/simulated/floor/plating/snow/ex_act(severity)
 	return
 
