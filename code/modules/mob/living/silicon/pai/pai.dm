@@ -242,10 +242,33 @@
 	src:cameraFollow = null
 
 /mob/living/silicon/pai/ClickOn(var/atom/A, var/params)
-	if(istype(A,/obj) && card.loc == A)
-		var/obj/O = A
-		if(O.integratedpai == src)
-			O.attack_integrated_pai(src)
+	var/list/modifiers = params2list(params)
+	if(modifiers["middle"])
+		MiddleClickOn(A)
+		return
+	if(modifiers["shift"])
+		ShiftClickOn(A)
+		return
+	if(modifiers["alt"]) // alt and alt-gr (rightalt)
+		AltClickOn(A)
+		return
+	if(modifiers["ctrl"])
+		CtrlClickOn(A)
+		return
+
+	if(istype(card.loc, /obj))
+		var/obj/O = card.loc
+		if(O.integratedpai == card)
+			if(O == A)
+				O.attack_integrated_pai(src)
+				return
+			else
+				O.on_integrated_pai_click(src, A)
+				return
+	if(istype(A,/obj/machinery)||(istype(A,/mob)&&secHUD))
+		A.attack_pai(src)
+
+/mob/living/silicon/pai/CtrlClickOn(var/atom/A)
 	if(istype(A,/obj/machinery)||(istype(A,/mob)&&secHUD))
 		A.attack_pai(src)
 

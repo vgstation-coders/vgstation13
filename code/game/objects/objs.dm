@@ -64,8 +64,12 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			install_pai(W)
 			playsound(src, 'sound/misc/cartridge_in.ogg', 25)
 
-/obj/proc/attack_integrated_pai(mob/user)
+/obj/proc/attack_integrated_pai(mob/living/silicon/pai/user)
 	return
+
+/obj/proc/on_integrated_pai_click(mob/living/silicon/pai/user, var/atom/A)
+	if(istype(A,/obj/machinery)||(istype(A,/mob)&&user.secHUD))
+		A.attack_pai(user)
 
 /obj/verb/remove_pai()
 	set name = "Remove pAI"
