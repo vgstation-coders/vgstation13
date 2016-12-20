@@ -150,7 +150,7 @@
 
 /obj/machinery/computer/general_air_control/atmos_automation/Topic(href,href_list)
 	if(..())
-		return
+		return 1
 	if(href_list["on"])
 		on = !on
 		updateUsrDialog()
