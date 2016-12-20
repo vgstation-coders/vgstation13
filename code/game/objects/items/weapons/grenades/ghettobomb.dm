@@ -32,7 +32,7 @@
 	det_time = 50
 	var/ammo_type = "/obj/item/ammo_casing/c38"
 	var/list/shrapnel_list = new()
-	var/max_shrapnel = 10
+	var/max_shrapnel = 8
 	var/current_shrapnel = 0
 
 
@@ -145,6 +145,7 @@
 						shrapnel_projectile.process()
 
 			else
+				target =pick(trange(6, src.loc))
 				shrapnel.forceMove(src.loc)
 				shrapnel.throw_at(target,100,10)
 
