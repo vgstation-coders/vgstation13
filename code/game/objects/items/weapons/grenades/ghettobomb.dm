@@ -183,7 +183,7 @@
 	shrapnel_list.Add(new /obj/item/weapon/shard(src))
 	shrapnel_list.Add(new /obj/item/weapon/shard(src))
 	shrapnel_list.Add(new /obj/item/weapon/shard(src))
-	shrapnel_list.Add(new /obj/item/weapon/shard(src))
+	current_shrapnel = 8
 
 /obj/item/weapon/grenade/iedcasing/preassembled/New()
     ..()
