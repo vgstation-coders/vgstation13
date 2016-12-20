@@ -29,9 +29,9 @@ proc/get_infection_chance(var/mob/living/carbon/M, var/vector = "Airborne")
 //	log_debug("[M]'s resistance to [vector] viruses: [score]")
 
 	if(prob((min(score, 100) - 100) ** 2 / 100))
-		return 0
+		return 1
 //	log_debug("Infection got through")
-	return 1
+	return 0
 
 //Checks if table-passing table can reach target (5 tile radius)
 proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
