@@ -30,7 +30,10 @@
 	var/assembled = 0
 	active = 1
 	det_time = 50
-
+	var/ammo_type = "/obj/item/ammo_casing/c38"
+	var/list/shrapnel_list = new()
+	var/max_shrapnel = 10
+	var/current_shrapnel = 0
 
 
 /obj/item/weapon/grenade/iedcasing/afterattack(atom/target, mob/user , flag) //Filling up the can
@@ -61,7 +64,34 @@
 			name = "improvised explosive"
 			active = 0
 			det_time = rand(30,80)
+	else
+		if(assembled == 2 && current_shrapnel < max_shrapnel )
+			if(I.is_shrapnel && I.w_class == W_CLASS_TINY || I.w_class == W_CLASS_TINY || I.is_shrapnel)
+				if(user.drop_item(I, src))
+					shrapnel_list.Add(I)
+					I.forceMove(src)
+					to_chat(user, "<span  class='notice'>You add the [I] to the improvised explosive.</span>")
+					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
+					current_shrapnel++
 
+/*
+/obj/item/weapon/grenade/iedcasing/verb/remove_shrapnel()
+
+	set name = "Remove shrapnel"
+	set category = "Object"
+
+	if(assembled == 2 && shrapnel_list.len > 0)
+
+		var/i
+		to_chat(usr, "<span  class='notice'>You remove all the shrapnel from the improvised explosive.</span>")
+		current_shrapnel = 0
+		for(i=1, i<=shrapnel_list.len, i++)
+
+			var/obj/item/shrapnel = shrapnel_list[i]
+			shrapnel.forceMove(getTurf(src))
+			shrapnel_list.Remove(shrapnel_list[i])
+
+*/
 /obj/item/weapon/grenade/iedcasing/attack_self(mob/user as mob) //Activating the IED
 	if(!active)
 		if(clown_check(user))
@@ -85,6 +115,38 @@
 /obj/item/weapon/grenade/iedcasing/prime() //Blowing that can up
 	update_mob()
 	explosion(get_turf(src.loc),-1,0,2)
+	if(shrapnel_list.len > 0)
+		var/i
+		var/atom/target
+		var/list/bodyparts = list("head","chest","groin","l_arm","r_arm","l_hand","r_hand","l_leg","r_leg","l_foot","r_foot")
+		for(i=1, i<=shrapnel_list.len, i++)
+			var/obj/item/shrapnel = shrapnel_list[i]
+			if(shrapnel.is_shrapnel)
+
+				var/amount = shrapnel.shrapnel_amount
+
+				while(amount > 0)
+					amount = amount - 1
+					target =pick(trange(6, src.loc))
+					var/obj/item/projectile/bullet/shrapnel_projectile = new shrapnel.shrapnel_type(src) //obj/item/projectile/bullet/shrapnel
+					shrapnel_projectile.forceMove(src.loc)
+					shrapnel_projectile.original = target
+					shrapnel_projectile.starting = src.loc
+					shrapnel_projectile.shot_from = src
+					shrapnel_projectile.current = src.loc
+					shrapnel_projectile.OnFired()
+					shrapnel_projectile.yo = target.loc.y - src.loc.y
+					shrapnel_projectile.xo = target.loc.x - src.loc.x
+					shrapnel_projectile.def_zone = bodyparts[rand(1,bodyparts.len)]
+					qdel(shrapnel)
+
+					if(shrapnel_projectile)
+
+						shrapnel_projectile.process()
+
+			else
+				shrapnel.forceMove(src.loc)
+				shrapnel.throw_at(target,100,10)
 
 	if(istype(loc, /obj/item/weapon/legcuffs/beartrap))
 		var/obj/item/weapon/legcuffs/beartrap/boomtrap = loc
@@ -109,6 +171,18 @@
     desc = "A weak, improvised explosive."
     assembled = 2
     active = 0
+
+/obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel
+//	var/list/shrapnel_list = new()
+	var/please_work = "obj/item/toy/crayon/red"
+
+/obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel/New()
+	..()
+	shrapnel_list.Add(new /obj/item/weapon/shard(src))
+	shrapnel_list.Add(new /obj/item/weapon/shard(src))
+	shrapnel_list.Add(new /obj/item/weapon/shard(src))
+	shrapnel_list.Add(new /obj/item/weapon/shard(src))
+	shrapnel_list.Add(new /obj/item/weapon/shard(src))
 
 /obj/item/weapon/grenade/iedcasing/preassembled/New()
     ..()

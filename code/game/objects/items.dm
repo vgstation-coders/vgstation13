@@ -8,7 +8,6 @@
 	var/r_speed = 1.0
 	var/health = null
 	var/hitsound = null
-
 	var/w_class = W_CLASS_MEDIUM
 	var/attack_delay = 10 //Delay between attacking with this item, in 1/10s of a second (default = 1 second)
 
@@ -53,6 +52,10 @@
 
 	var/vending_cat = null// subcategory for vending machines.
 	var/list/dynamic_overlay[0] //For items which need to slightly alter their on-mob appearance while being worn.
+
+	var/is_shrapnel = 0
+	var/shrapnel_amount = 0
+	var/shrapnel_type = ""
 
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - src.heat_conductivity)
