@@ -64,15 +64,20 @@
 			active = 0
 			det_time = rand(30,80)
 	else
-		if(assembled == 2 && current_shrapnel < max_shrapnel )
-			if(I.is_shrapnel && I.w_class == W_CLASS_TINY || I.w_class == W_CLASS_TINY || I.is_shrapnel)
-				if(user.drop_item(I, src))
-					shrapnel_list.Add(I)
-					to_chat(user, "<span  class='notice'>You add the [I] to the improvised explosive.</span>")
-					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
-					current_shrapnel++
+		if(assembled == 2)
+			if((current_shrapnel + I.shrapnel_size)<= max_shrapnel )
+				if(I.shrapnel_amount > 0|| I.w_class == W_CLASS_TINY)
+					if(user.drop_item(I, src))
+						shrapnel_list.Add(I)
+						to_chat(user, "<span  class='notice'>You add the [I] to the improvised explosive.</span>")
+						playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
+						current_shrapnel = current_shrapnel + I.shrapnel_size
+			else
+				to_chat(user, "<span  class='notice'>There is no room for the [I] in the improvised explosive!.</span>")
 
-/*
+
+
+
 /obj/item/weapon/grenade/iedcasing/verb/remove_shrapnel()
 
 	set name = "Remove shrapnel"
@@ -80,16 +85,15 @@
 
 	if(assembled == 2 && shrapnel_list.len > 0)
 
-		var/i
+
 		to_chat(usr, "<span  class='notice'>You remove all the shrapnel from the improvised explosive.</span>")
 		current_shrapnel = 0
-		for(i=1, i<=shrapnel_list.len, i++)
+		for(var/obj/item/shrapnel in shrapnel_list)
 
-			var/obj/item/shrapnel = shrapnel_list[i]
-			shrapnel.forceMove(getTurf(src))
-			shrapnel_list.Remove(shrapnel_list[i])
+			shrapnel.forceMove(get_turf(src))
+			shrapnel_list.Remove(shrapnel)
+			current_shrapnel = current_shrapnel - shrapnel.shrapnel_size
 
-*/
 /obj/item/weapon/grenade/iedcasing/attack_self(mob/user as mob) //Activating the IED
 	if(!active)
 		if(clown_check(user))
@@ -114,27 +118,26 @@
 	update_mob()
 	explosion(get_turf(src.loc),-1,0,2)
 	if(shrapnel_list.len > 0)
-		var/i
 		var/atom/target
+		var/atom/curloc = get_turf(src)
 		var/list/bodyparts = list("head","chest","groin","l_arm","r_arm","l_hand","r_hand","l_leg","r_leg","l_foot","r_foot")
-		for(i=1, i<=shrapnel_list.len, i++)
-			var/obj/item/shrapnel = shrapnel_list[i]
-			if(shrapnel.is_shrapnel)
+		for(var/obj/item/shrapnel in shrapnel_list)
+			if(shrapnel.shrapnel_amount >0)
 
 				var/amount = shrapnel.shrapnel_amount
 
 				while(amount > 0)
 					amount--
-					target =pick(trange(6, src.loc))
+					target =pick(trange(6, curloc))
 					var/obj/item/projectile/bullet/shrapnel_projectile = new shrapnel.shrapnel_type(src) //obj/item/projectile/bullet/shrapnel
-					shrapnel_projectile.forceMove(src.loc)
+					shrapnel_projectile.forceMove(curloc)
 					shrapnel_projectile.original = target
-					shrapnel_projectile.starting = src.loc
+					shrapnel_projectile.starting = curloc
 					shrapnel_projectile.shot_from = src
-					shrapnel_projectile.current = src.loc
+					shrapnel_projectile.current = curloc
 					shrapnel_projectile.OnFired()
-					shrapnel_projectile.yo = target.loc.y - src.loc.y
-					shrapnel_projectile.xo = target.loc.x - src.loc.x
+					shrapnel_projectile.yo = target.loc.y - curloc.y
+					shrapnel_projectile.xo = target.loc.x - curloc.x
 					shrapnel_projectile.def_zone = bodyparts[rand(1,bodyparts.len)]
 					qdel(shrapnel)
 
@@ -143,8 +146,8 @@
 						shrapnel_projectile.process()
 
 			else
-				target =pick(trange(6, src.loc))
-				shrapnel.forceMove(src.loc)
+				target =pick(trange(6, curloc))
+				shrapnel.forceMove(curloc)
 				shrapnel.throw_at(target,100,10)
 
 	if(istype(loc, /obj/item/weapon/legcuffs/beartrap))

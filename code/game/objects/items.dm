@@ -53,9 +53,9 @@
 	var/vending_cat = null// subcategory for vending machines.
 	var/list/dynamic_overlay[0] //For items which need to slightly alter their on-mob appearance while being worn.
 
-	var/is_shrapnel = 0
-	var/shrapnel_amount = 0
+	var/shrapnel_amount = 0 // How many pieces of shrapnel it disintegrates into. This variable also decides it the item disintegrates or not!
 	var/shrapnel_type = ""
+	var/shrapnel_size = 1
 
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - src.heat_conductivity)
