@@ -29,7 +29,7 @@ proc/get_infection_chance(var/mob/living/carbon/M, var/vector = "Airborne")
 //	log_debug("[M]'s resistance to [vector] viruses: [score]")
 
 	if(prob((min(score, 100) - 100) ** 2 / 100))
-		//	log_debug("Infection got through")
+	//	log_debug("Infection got through")
 		return 1
 	return 0
 
