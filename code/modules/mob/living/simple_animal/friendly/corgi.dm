@@ -352,7 +352,7 @@
 			desc = "Spooky!"
 			valid = 1
 
-		if(/obj/item/clothing/head/helmet/space/santahat)
+		if(/obj/item/clothing/head/helmet/space/santahat, /obj/item/clothing/head/christmas/santahat/red)
 			name = "Santa's Corgi Helper"
 			emote_hear = list("barks christmas songs", "yaps merrily")
 			emote_see = list("looks for presents", "checks his list")
@@ -443,6 +443,18 @@
 	response_disarm = "bops"
 	response_harm   = "kicks"
 	spin_emotes = list("dances around","chases his tail")
+
+/mob/living/simple_animal/corgi/Ian/santa
+	name = "Santa's Corgi Helper"
+	emote_hear = list("barks christmas songs", "yaps merrily")
+	emote_see = list("looks for presents", "checks his list")
+	desc = "He's very fond of milk and cookies."
+
+/mob/living/simple_animal/corgi/Ian/santa/New()
+	..()
+
+	inventory_head = new/obj/item/clothing/head/christmas/santahat/red(src)
+	regenerate_icons()
 
 /mob/living/simple_animal/corgi/Ian/Life()
 	if(timestopped)
