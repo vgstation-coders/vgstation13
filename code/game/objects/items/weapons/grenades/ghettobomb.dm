@@ -71,7 +71,7 @@
 						shrapnel_list.Add(I)
 						to_chat(user, "<span  class='notice'>You add the [I] to the improvised explosive.</span>")
 						playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
-						current_shrapnel = current_shrapnel + I.shrapnel_size
+						current_shrapnel =+ I.shrapnel_size
 			else
 				to_chat(user, "<span  class='notice'>There is no room for the [I] in the improvised explosive!.</span>")
 
@@ -92,7 +92,7 @@
 
 			shrapnel.forceMove(get_turf(src))
 			shrapnel_list.Remove(shrapnel)
-			current_shrapnel = current_shrapnel - shrapnel.shrapnel_size
+		current_shrapnel = 0
 
 /obj/item/weapon/grenade/iedcasing/attack_self(mob/user as mob) //Activating the IED
 	if(!active)
