@@ -38,6 +38,10 @@
 						0,0.5,0.5,0,\
 						0,0.5,0.5,0,\
 						0,0.0,0.0,1,)
+	held_items = list()
+
+/mob/living/simple_animal/corgi/has_hand_check()
+	return 1 // can pull things with his mouth
 
 /mob/living/simple_animal/corgi/Life()
 	if(timestopped)

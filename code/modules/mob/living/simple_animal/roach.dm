@@ -52,6 +52,7 @@
 	var/const/egg_laying_chance = 75
 
 	var/const/max_unhatchable_eggs_in_world = 30
+	held_items = list()
 
 /mob/living/simple_animal/cockroach/New()
 	..()

@@ -48,6 +48,7 @@
 
 	var/pheromones_act = PHEROMONES_NEUTRAL //This variable determines how carps act to pheromones. Big carps won't attack the source,
 	//baby carps follow the source and holocarps don't give a shit
+	held_items = list()
 
 /mob/living/simple_animal/hostile/carp/New()
 	.=..()
