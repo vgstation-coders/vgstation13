@@ -108,7 +108,7 @@
 	if(!istype(I) || istype(I, /obj/item/weapon/inflatable_dispenser))
 		return
 
-	if((I.damtype == BRUTE || I.damtype == BURN) && I.is_sharp())
+	if((I.damtype == BRUTE && I.is_sharp()) || I.damtype == BURN)
 		..()
 		take_damage(I.force)
 	else
