@@ -30,7 +30,6 @@
 	var/assembled = 0
 	active = 1
 	det_time = 50
-	var/ammo_type = "/obj/item/ammo_casing/c38"
 	var/list/shrapnel_list = new()
 	var/max_shrapnel = 8
 	var/current_shrapnel = 0
