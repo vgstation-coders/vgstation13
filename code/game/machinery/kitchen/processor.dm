@@ -216,7 +216,7 @@
 	return
 
 /obj/machinery/processor/attack_hand(var/mob/user as mob)
-	if(!ishuman(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
+	if(!ishuman(user) && !isrobot(user)) //No ghosts or mice
 		return
 	if (src.stat != 0) //NOPOWER etc
 		return
