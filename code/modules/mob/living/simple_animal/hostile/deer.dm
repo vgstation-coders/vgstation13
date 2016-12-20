@@ -50,28 +50,20 @@ Have them evaluate mobs in their vicinity
 		var/spook_prob = 30
 
 		if(H.m_intent == "run") //Don't run while stalking deer
-			spook_prob += 70
-		if(H.wear_suit)
-			if(istype(H.wear_suit, /obj/item/clothing/suit/leather/deer))
-				visible_message("Has leather suit of deer on")
-				spook_prob -= 10
-		if(H.head)
-			if(istype(H.head, /obj/item/clothing/head/leather/deer/horned))
-				visible_message("Has horned helmet on")
-				spook_prob -= 20
-		if(H.is_holding_item(/obj/item/weapon/reagent_containers/food/snacks/grown/apple))
-			visible_message("Apple!")
+			spook_prob = 70
+		if(istype (H:wear_suit, /obj/item/clothing/suit/leather/deer))
 			spook_prob -= 10
-		if(H.is_holding_item(/obj/item/weapon/reagent_containers/food/snacks/grown/goldapple)) //Why isn't it just a subtype?
-			visible_message("Gold apple!")
-			spook_prob -= 20
-		if(spook_prob <= 0)
-			return 0
-			visible_message("Deer is not spooked, with probability of [spook_prob]")
+		if(istype(H:head, /obj/item/clothing/head/leather/deer))
+			spook_prob -= 10
+			if(istype (H:head, /obj/item/clothing/head/leather/deer/horned))
+				spook_prob -= 10
+		for(var/obj/item/I in H.held_items)
+			if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/grown/apple))
+				spook_prob -= 10
+			if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/grown/goldapple))
+				spook_prob -= 20
 		if(prob(spook_prob))
-			visible_message("Deer spooked with probability of [spook_prob]")
 			return 1
-
 	else
 		if(!istype(target, /mob/living/simple_animal/hostile/deer))
 			return 1

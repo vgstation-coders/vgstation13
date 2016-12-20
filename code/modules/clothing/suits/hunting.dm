@@ -28,6 +28,10 @@
 				new/obj/item/clothing/suit/leather/deer(get_turf(src))
 				user.drop_item(src, force_drop = 1)
 				qdel(src)
+			if(istype (S, /obj/item/stack/sheet/animalhide/xeno))
+				new/obj/item/clothing/suit/leather/xeno(get_turf(src))
+				user.drop_item(src, force_drop = 1)
+				qdel(src)
 
 
 /obj/item/clothing/suit/leather/corgi
@@ -41,3 +45,13 @@
 	desc = "Coated in deer hide, smells just as bad as you'd think."
 	icon_state = "suit_leather_deer"
 	item_state = "suit_leather_deer"
+
+/obj/item/clothing/suit/leather/xeno
+	name = "xeno-hide suit"
+	desc = "Like the aftermath of the bad end of 101 dalmations, but with more xenomorph."
+	icon_state = "suit_leather_xeno"
+	item_state = "suit_leather_xeno"
+	armor = list(melee = 40, bullet = 25, laser = 30, energy = 25, bomb = 15, bio = 20, rad = 20)
+
+/obj/item/clothing/suit/leather/xeno/acidable()
+	return 0

@@ -201,7 +201,7 @@ var/global/list/available_paintings = list(
 /obj/item/mounted/frame/painting/blank/attackby(obj/W, mob/user)
 	if(istype(W, /obj/item/weapon/holder/animal/carp))
 		var/obj/item/weapon/holder/animal/carp/C = W
-		if(C.stored_mob.stat == DEAD)
+		if(C.stored_mob.stat != DEAD)
 			to_chat(user, "<span class = 'warning'>\The [C.stored_mob] squirms and resists!</span>")
 			return
 		else

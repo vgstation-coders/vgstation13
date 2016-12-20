@@ -196,6 +196,19 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 		R.use(1)
 		qdel(src)
 
+	else if(istype(I, /obj/item/xenos_claw))
+		var/obj/item/weapon/spear/xeno/P = new /obj/item/weapon/spear/xeno
+		to_chat(user, "You fasten \the [I] to \the [src].")
+
+		user.before_take_item(I)
+		user.before_take_item(src)
+
+		user.put_in_hands(P)
+
+		qdel(I)
+		I =  null
+		qdel(src)
+
 /obj/item/weapon/kitchen/utensil/knife/tactical
 	name = "tactical knife"
 	desc = "It makes you run faster."
