@@ -188,6 +188,10 @@
 	desc = "Next to the extremely long list of names and job titles, there is a drawing of a little child. The child appears to be retarded. Beneath the image, someone has scratched the word \"PACKETS\""
 	icon_state = "kiddieplaque"
 
+/obj/structure/sign/kiddieplaque/dmca
+	name = "\improper Story plaque"
+	desc = "A small plaque telling the story of an autistic child.\nIt details how the child cuts some pieces of the teacher's cheese for his sandwich, and then takes away everyone else's sandwiches when they also use the cut cheese.\nThe story ends with him crying in a corner after the other children falsely tell his parents that he inappropriately touched a dog.\nThere is also a picture of some broken forks."
+
 /obj/structure/sign/atmosplaque
 	name = "\improper FEA Atmospherics Division plaque"
 	desc = "This plaque commemorates the fall of the Atmos FEA division. For all the charred, dizzy, and brittle men who have died in its hands."
