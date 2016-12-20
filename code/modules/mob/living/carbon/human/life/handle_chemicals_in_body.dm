@@ -45,7 +45,9 @@
 				nutrition = 500
 			if(light_amount >= 3) //If there's enough light, heal
 				adjustBruteLoss(-(light_amount))
-				adjustToxLoss(-(light_amount))
+				var/datum/organ/internal/liver/liver = internal_organs_by_name["liver"]
+				if(liver)
+					adjustToxLoss(-(light_amount))
 				adjustOxyLoss(-(light_amount))
 				//TODO: heal wounds, heal broken limbs.
 

@@ -132,6 +132,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/move_speed_mod = 0 //Higher value is slower, lower is faster.
 	var/can_be_hypothermic = 1
 	var/has_sweat_glands = 1
+	var/movement_speed_modifier = 1
 
 /datum/species/New()
 	..()
@@ -747,6 +748,8 @@ var/global/list/whitelisted_species = list("Human")
 			icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 			deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
 
+#define MOVE_SPEED_PENALTY_DIONA 0.6
+
 /datum/species/diona
 	name = "Diona"
 	icobase = 'icons/mob/human_races/r_plant.dmi'
@@ -775,7 +778,16 @@ var/global/list/whitelisted_species = list("Human")
 	has_mutant_race = 0
 	burn_mod = 2.5 //treeeeees
 
-	move_speed_mod = 7
+	move_speed_mod = 7*MOVE_SPEED_PENALTY_DIONA
+
+	has_organ = list(
+		"liver" =    /datum/organ/internal/liver/diona,
+		"brain" =    /datum/organ/internal/brain,
+		"eyes" =     /datum/organ/internal/eyes
+		)
+	movement_speed_modifier = MOVE_SPEED_PENALTY_DIONA
+
+#undef MOVE_SPEED_PENALTY_DIONA
 
 /datum/species/golem
 	name = "Golem"

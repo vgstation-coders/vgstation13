@@ -333,6 +333,9 @@
 		//We are now going to move
 		var/old_dir = mob.dir
 		move_delay = max(move_delay,1)
+		var/mob/living/carbon/human/H = mob
+		if(istype(H) && H.species)
+			move_delay *= (1/H.species.movement_speed_modifier)
 		if(mob.movement_speed_modifier)
 			move_delay *= (1/mob.movement_speed_modifier)
 		mob.delayNextMove(move_delay)

@@ -61,3 +61,25 @@
 	if(reagent_id in reagent_efficiencies)
 		reagent_efficiency = reagent_efficiencies[reagent_id]
 	H.reagents.remove_reagent(reagent_id, metabolism * efficiency * reagent_efficiency)
+
+/datum/organ/internal/liver/diona
+	name = "filtration xylem"
+
+/datum/organ/internal/liver/diona/metabolize_reagent(var/reagent_id, var/metabolism)
+	..()
+	var/mob/living/carbon/human/H = owner
+	switch(reagent_id)
+		if(HYPERZINE || NUKA_COLA) // these are highly addictive and hallucinogenic drugs for diona - think sensory overload mixed with skooma
+			H.druggy = max(min(H.druggy + REAGENTS_EFFECT_MULTIPLIER * 5, 15),H.druggy)
+			H.dizziness = max(min(H.dizziness + REAGENTS_EFFECT_MULTIPLIER * 20, 150),H.dizziness)
+			if(prob(7))
+				H.emote(pick("twitch", "drool", "moan", "giggle"))
+		if(SYNAPTIZINE)
+			H.hallucination = max(30,H.hallucination)
+			H.adjustBrainLoss(REAGENTS_EFFECT_MULTIPLIER * 0.4)
+			H.jitteriness = max(min(H.jitteriness + REAGENTS_EFFECT_MULTIPLIER * 5,100),H.jitteriness)
+			H.dizziness =  max(min(H.dizziness + REAGENTS_EFFECT_MULTIPLIER * 20, 150),H.dizziness)
+			if(prob(5))
+				H.vomit()
+			if(prob(2))
+				H.confused = min(H.confused + REAGENTS_EFFECT_MULTIPLIER * 5, 2) // this variable is RUTHLESS - do not put it very high PLEASE
