@@ -122,7 +122,12 @@
 					else if(src.connected.occupant.health < 0 && href_list["chemical"] != INAPROVALINE)
 						to_chat(usr, "<span class='danger'>This person is not in good enough condition for sleepers to be effective! Use another means of treatment, such as cryogenics!</span>")
 					else
-						src.connected.inject_chemical(usr,href_list["chemical"],text2num(href_list["amount"]))
+						if(href_list["chemical"] in connected.available_options)
+							connected.inject_chemical(usr,href_list["chemical"],text2num(href_list["amount"]))
+						else
+							to_chat(usr,"<span class='notice'>That's odd. You could've sworn [href_list["chemical"]] was there a minute ago!")
+							message_admins("<span class='warning'>ERROR: [key_name(usr)] tried to inject a chemical ([href_list["chemical"]]) from \the [src] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>) which they shouldn't have - possible href exploit detected?</span>")
+							log_game("[usr] tried to inject [href_list["chemical"]] from \the [src] which was not in its available options")
 		if (href_list["wakeup"])
 			connected.wakeup(usr)
 		if (href_list["toggle_autoeject"])
