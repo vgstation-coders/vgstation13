@@ -641,6 +641,11 @@
 
 
 /mob/living/carbon/monkey/proc/handle_regular_hud_updates()
+	if(!client)
+		return
+
+	regular_hud_updates()
+
 	if (stat == 2 || (M_XRAY in mutations))
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 8
@@ -649,6 +654,10 @@
 		change_sight(removing = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 2
 		see_invisible = SEE_INVISIBLE_LIVING
+
+		if(glasses)
+			handle_glasses_vision_updates(glasses)
+
 
 	if (healths)
 		if (stat != 2)
