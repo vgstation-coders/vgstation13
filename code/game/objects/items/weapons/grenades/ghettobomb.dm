@@ -68,7 +68,6 @@
 			if(I.is_shrapnel && I.w_class == W_CLASS_TINY || I.w_class == W_CLASS_TINY || I.is_shrapnel)
 				if(user.drop_item(I, src))
 					shrapnel_list.Add(I)
-					I.forceMove(src)
 					to_chat(user, "<span  class='notice'>You add the [I] to the improvised explosive.</span>")
 					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
 					current_shrapnel++
@@ -125,7 +124,7 @@
 				var/amount = shrapnel.shrapnel_amount
 
 				while(amount > 0)
-					amount = amount - 1
+					amount--
 					target =pick(trange(6, src.loc))
 					var/obj/item/projectile/bullet/shrapnel_projectile = new shrapnel.shrapnel_type(src) //obj/item/projectile/bullet/shrapnel
 					shrapnel_projectile.forceMove(src.loc)
@@ -173,8 +172,7 @@
     active = 0
 
 /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel
-//	var/list/shrapnel_list = new()
-	var/please_work = "obj/item/toy/crayon/red"
+	name = "shrapnel loaded improvised explosive"
 
 /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel/New()
 	..()

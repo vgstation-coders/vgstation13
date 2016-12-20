@@ -21,7 +21,7 @@
 	attack_verb = list("stabs", "slashes", "slices", "cuts")
 	var/glass = /obj/item/stack/sheet/glass/glass
 	is_shrapnel = 1
-	shrapnel_amount = 5
+	shrapnel_amount = 3
 	shrapnel_type = "/obj/item/projectile/bullet/shrapnel"
 
 /obj/item/weapon/shard/New()

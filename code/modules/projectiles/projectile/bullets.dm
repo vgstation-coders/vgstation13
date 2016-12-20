@@ -26,7 +26,7 @@
 /obj/item/projectile/bullet/shrapnel
 
 	name = "shrapnel"
-	damage = 55
+	damage = 35
 	damage_type = BRUTE
 	weaken = 1
 	stun = 1
@@ -34,7 +34,7 @@
 /obj/item/projectile/bullet/shrapnel/small
 
 	name = "small shrapnel"
-	damage = 35
+	damage = 20
 
 /obj/item/projectile/bullet/weakbullet
 	name = "weak bullet"
