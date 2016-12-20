@@ -28,6 +28,10 @@
 				new/obj/item/clothing/head/leather/deer(get_turf(src))
 				user.drop_item(src, force_drop = 1)
 				qdel(src)
+			if(istype (S, /obj/item/stack/sheet/animalhide/xeno))
+				new/obj/item/clothing/head/leather/xeno(get_turf(src))
+				user.drop_item(src, force_drop = 1)
+				qdel(src)
 
 /obj/item/clothing/head/leather/corgi
 	name = "corgi pelt hat"
@@ -52,8 +56,18 @@
 		qdel(src)
 
 /obj/item/clothing/head/leather/deer/horned
-	name = "horned deer-pelt head cover"
+	name = "horned deer pelt head cover"
 	desc = "Made to help you blend in and stalk deer. Perfect for headbutting people with."
 	icon_state = "helmet_leather_deer"
 	item_state = "helmet_leather_deer"
 	armor = list(melee = 35, bullet = 10, laser = 20, energy = 10, bomb = 25, bio = 0, rad = 0)
+
+/obj/item/clothing/head/leather/xeno
+	name = "xeno-hide helmet"
+	desc = "A brutal attempt at using a brutal combatant as armor."
+	icon_state = "helmet_leather_xeno"
+	item_state = "helmet_leather_xeno"
+	armor = list(melee = 40, bullet = 25, laser = 30, energy = 25, bomb = 15, bio = 20, rad = 20)
+
+/obj/item/clothing/head/leather/xeno/acidable()
+	return 0
