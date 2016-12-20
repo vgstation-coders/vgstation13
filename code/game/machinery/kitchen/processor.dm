@@ -216,8 +216,6 @@
 	return
 
 /obj/machinery/processor/attack_hand(var/mob/user as mob)
-	if(!ishuman(user) && !isrobot(user)) //No ghosts or mice
-		return
 	if (src.stat != 0) //NOPOWER etc
 		return
 	if(!anchored)
@@ -246,6 +244,9 @@
 	src.visible_message("<span class='notice'>[src] is done.</span>", \
 		"You hear [src] stop")
 
+/obj/machinery/processor/attack_hand(mob/user as mob)		
+	user.examination(src)		
+		
 /obj/machinery/processor/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
 	if(!ishuman(user) && !isrobot(user)) //No ghosts or mice
 		return 
