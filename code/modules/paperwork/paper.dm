@@ -41,6 +41,22 @@
 		updateinfolinks()
 		return
 
+/obj/item/weapon/paper/proc/show_text(var/mob/user, var/links = FALSE, var/starred = FALSE)
+	var/info_text = links ? info_links : info
+	var/info_image = ""
+
+	if(!user.can_read())
+		starred = TRUE
+
+	if(starred)
+		info_text = stars(info_text)
+
+	if(img)
+		user << browse_rsc(img.img, "tmp_photo.png")
+		info_image = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br><a href='?src=\ref[src];picture=1'>Remove</a><br>"
+	user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_image][info_text][stamps]</BODY></HTML>", "window=[name]")
+	onclose(user, "[name]")
+
 /obj/item/weapon/paper/update_icon()
 	icon_state=initial(icon_state)
 	if(info)
@@ -48,16 +64,7 @@
 
 /obj/item/weapon/paper/examine(mob/user)
 	if(user.range_check(src))
-		var/info_2 = ""
-		if(img)
-			user << browse_rsc(img.img, "tmp_photo.png")
-			info_2 = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br><a href='?src=\ref[src];picture=1'>Remove</a><br>"
-		if(!(istype(user, /mob/living/carbon/human) || istype(user, /mob/dead/observer) || istype(user, /mob/living/silicon)))
-			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_2][stars(info)][stamps]</BODY></HTML>", "window=[name]")
-			onclose(user, "[name]")
-		else
-			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_2][info][stamps]</BODY></HTML>", "window=[name]")
-			onclose(user, "[name]")
+		show_text(user)
 	else
 		..() //Only show a regular description if it is too far away to read.
 		to_chat(user, "<span class='notice'>It is too far away to read.</span>")
@@ -110,11 +117,9 @@
 	else //cyborg or AI not seeing through a camera
 		dist = get_dist(src, user)
 	if(dist < 2 || (istype(user) && (user.ai_flags & HIGHRESCAMS)))
-		usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info][stamps]</BODY></HTML>", "window=[name]")
-		onclose(usr, "[name]")
+		show_text(user)
 	else
-		usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[stars(info)][stamps]</BODY></HTML>", "window=[name]")
-		onclose(usr, "[name]")
+		show_text(user, starred = TRUE)
 	return
 
 /obj/item/weapon/paper/proc/addtofield(var/id, var/text, var/links = 0)
@@ -230,7 +235,6 @@
 		\[tnr\] - \[/tnr\] : <span style=\"font-family:Times New Roman\">Times New Roman</span>
 	</BODY></HTML>"}, "window=paper_help")
 
-
 /obj/item/weapon/paper/Topic(href, href_list)
 	..()
 	if(!usr || (usr.stat || usr.restrained()))
@@ -278,7 +282,7 @@
 				info += t // Oh, he wants to edit to the end of the file, let him.
 				updateinfolinks()
 
-			usr << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_links][stamps]</BODY></HTML>", "window=[name]") // Update the window
+			show_text(usr, links = TRUE)
 
 			update_icon()
 
@@ -300,7 +304,7 @@
 		if ( istype(P, /obj/item/weapon/pen/robopen) && P:mode == 2 )
 			P:RenamePaper(user,src)
 		else
-			user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_links][stamps]</BODY></HTML>", "window=[name]")
+			show_text(user, links = TRUE)
 		//openhelp(user)
 		return
 

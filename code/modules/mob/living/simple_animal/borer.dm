@@ -91,6 +91,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	var/static/list/name_prefixes = list("Primary","Secondary","Tertiary","Quaternary","Quinary","Senary","Septenary","Octonary","Nonary","Denary")
 	var/name_prefix_index = 1
+	held_items = list()
 
 /mob/living/simple_animal/borer/New(var/loc, var/egg_prefix_index = 1)
 	..(loc)
@@ -351,9 +352,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		return host.eyecheck()
 	else
 		return ..()
-
-/mob/living/simple_animal/borer/start_pulling(var/atom/movable/AM)
-	to_chat(src, "<span class='warning'>You are too small to pull anything.</span>")
 
 // VERBS!
 /mob/living/simple_animal/borer/proc/borer_speak(var/message)

@@ -1602,10 +1602,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 			if("eggChose")
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
-				app.game_state = 1
-				app.game_tick(usr)
-				app.petname = copytext(sanitize(input(usr, "What name for your new pet?", "Name your new pet", "[app.petname]") as null|text),1,MAX_NAME_LEN)
-				app.last_spoken = ""
+				app.petname = copytext(sanitize(input(usr, "What do you want to name your new pet?", "Name your new pet", "[app.petname]") as null|text),1,MAX_NAME_LEN)
+				if(app.petname && (alert(usr, "[app.petname] will be your pet's new name - are you sure?", "Confirm Pet's name: ", "Yes", "No") != "Yes"))
+					app.game_state = 1
+					app.game_tick(usr)
+					app.last_spoken = ""
 
 			if("eggHatch")
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications

@@ -283,6 +283,17 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/eclair
 
+/datum/recipe/eclair_big
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/eclair,
+		/obj/item/weapon/reagent_containers/food/snacks/eclair,
+		/obj/item/weapon/reagent_containers/food/snacks/eclair,
+		/obj/item/weapon/reagent_containers/food/snacks/eclair,
+		/obj/item/weapon/reagent_containers/food/snacks/eclair,
+		/obj/item/weapon/reagent_containers/food/snacks/eclair,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/eclair/big
+
 /datum/recipe/waffles
 	reagents = list(FLOUR = 10)
 	items = list(

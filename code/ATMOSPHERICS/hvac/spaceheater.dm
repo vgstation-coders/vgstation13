@@ -171,6 +171,10 @@
 	on = 1
 	update_icon()
 
+/obj/machinery/space_heater/campfire/proc/snuff()
+	cell.charge = 0
+	process()
+
 /obj/machinery/space_heater/togglePanelOpen(var/obj/toggleitem, mob/user)
 	..()
 	update_icon()

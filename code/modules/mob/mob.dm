@@ -936,9 +936,16 @@ var/list/slot_equipment_priority = list( \
 
 	return 1
 
+/mob/proc/has_hand_check()
+	return held_items.len
+
 //this and stop_pulling really ought to be /mob/living procs
 /mob/proc/start_pulling(var/atom/movable/AM)
 	if ( !AM || !src || src==AM || !isturf(AM.loc) )	//if there's no person pulling OR the person is pulling themself OR the object being pulled is inside something: abort!
+		return
+
+	if(!has_hand_check())
+		to_chat(src,"<span class='notice'>You don't have any hands to pull with!</span>")
 		return
 
 	var/atom/movable/P = AM

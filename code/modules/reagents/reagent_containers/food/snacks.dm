@@ -2034,7 +2034,7 @@
 	desc = "Even non-vegetarians will LOVE this!"
 	icon_state = "stewedsoymeat"
 	trash = /obj/item/trash/plate
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/stewedsoymeat/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
@@ -2097,7 +2097,7 @@
 	name = "Spicy Eggplant Sushi Rolls"
 	desc = "Eggplant rolls are an example of Asian Fusion as eggplants were introduced from mainland Asia to Japan. This dish is Earth Fusion, originating after the introduction of the chili from the Americas to Japan. Fusion HA!"
 	icon_state = "eggplantsushi"
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/eggplantsushi/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 4)
@@ -2109,7 +2109,7 @@
 	desc = "Spaghetti and crushed tomatoes. Just like your abusive father used to make!"
 	icon_state = "pastatomato"
 	trash = /obj/item/trash/plate
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/pastatomato/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
@@ -2121,7 +2121,7 @@
 	desc = "You probably shouldn't try this, you always hear people talking about how bad it is..."
 	icon_state = "copypasta"
 	trash = /obj/item/trash/plate
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/copypasta/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 12)
@@ -2144,7 +2144,7 @@
 	name = "Spesslaw"
 	desc = "A lawyers favourite"
 	icon_state = "spesslaw"
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/spesslaw/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
@@ -2154,7 +2154,7 @@
 	name = "Poppy Pretzel"
 	desc = "A large soft pretzel full of POP!"
 	icon_state = "poppypretzel"
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/poppypretzel/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
@@ -2235,7 +2235,7 @@
 	name = "Two Bread"
 	desc = "It is very bitter and winy."
 	icon_state = "twobread"
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/twobread/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
@@ -2246,7 +2246,7 @@
 	desc = "You wish you had some peanut butter to go with this..."
 	icon_state = "jellysandwich"
 	trash = /obj/item/trash/plate
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/jellysandwich/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
@@ -2263,7 +2263,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/jellysandwich/cherry/New()
 	..()
 	reagents.add_reagent(CHERRYJELLY, 5)
-	
+
 /*
 /obj/item/weapon/reagent_containers/food/snacks/boiledslimecore
 	name = "Boiled slime Core"
@@ -2343,7 +2343,7 @@
 	desc = "A tasty salad with apples on top."
 	icon_state = "herbsalad"
 	trash = /obj/item/trash/snack_bowl
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/herbsalad/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 8)
@@ -2960,7 +2960,7 @@
 
 /obj/item/pizzabox/update_icon()
 
-	overlays = list()
+	overlays.Cut()
 
 	// Set appropriate description
 	if( open && pizza )
@@ -2985,9 +2985,13 @@
 		else
 			icon_state = "pizzabox_open"
 
-		if( pizza )
-			var/image/pizzaimg = image("food.dmi", icon_state = pizza.icon_state)
+		if(pizza)
+			var/image/pizzaimg = new()
+			pizzaimg.appearance = pizza.appearance
 			pizzaimg.pixel_y = -3 * PIXEL_MULTIPLIER
+			pizzaimg.pixel_x = 0
+			pizzaimg.plane = FLOAT_PLANE
+			pizzaimg.layer = FLOAT_LAYER
 			overlays += pizzaimg
 
 		return
@@ -3200,7 +3204,7 @@
 	name = "not-a-sandwich"
 	desc = "Something seems to be wrong with this, you can't quite figure what. Maybe it's his moustache."
 	icon_state = "notasandwich"
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/notasandwich/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
@@ -3321,7 +3325,7 @@
 	desc = "Delicious ice cream."
 	icon_state = "icecream_cone"
 	volume = 500
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/icecream/icecreamcone/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
@@ -3347,7 +3351,7 @@
 	icon = 'icons/obj/food_custom.dmi'
 	icon_state = "cereal_box"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/cereal/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
@@ -3358,7 +3362,7 @@
 	icon_state = "deepfried_holder_icon"
 	bitesize = 2
 	deepfried = 1
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/deepfryholder/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,deepFriedNutriment)
@@ -3424,7 +3428,7 @@
 	icon = 'icons/obj/food_ingredients.dmi'
 	icon_state = "bun"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/bun/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 4)
@@ -3577,7 +3581,7 @@
 	desc = "Commander Riker's What-The-Crisps"
 	icon_state = "chips"
 	trash = /obj/item/trash/chips
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/chips/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
@@ -3692,7 +3696,7 @@
 	icon_state = "flan"
 	trash = /obj/item/trash/plate
 	food_flags = FOOD_SWEET | FOOD_ANIMAL
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/flan/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 10)
@@ -4018,7 +4022,7 @@
 	name = "Risotto"
 	desc = "For the gentleman's wino, this is an offer one cannot refuse."
 	icon_state = "risotto"
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/risotto/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 4)
@@ -4161,7 +4165,7 @@
 	desc = "I'm sorry Dave, but I am afraid I can't let you eat that."
 	icon_state = "potentham"
 	volume = 1
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/potentham/New()
 	..()
 	reagents.add_reagent(HAMSERUM, 1)
@@ -4234,11 +4238,23 @@
 	desc = "Plus doux que ses lèvres."
 	icon_state = "eclair"
 	bitesize = 5
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/eclair/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 	reagents.add_reagent(CREAM, 2)
+
+/obj/item/weapon/reagent_containers/food/snacks/eclair/big
+	name = "massive eclair"
+	desc = "Plus fort que ses hanches."
+	icon_state = "eclair_big"
+	bitesize = 30
+	w_class = 5
+
+/obj/item/weapon/reagent_containers/food/snacks/eclair/big/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 27)
+	reagents.add_reagent(CREAM, 18)
 
 /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje
 	name = "IJzerkoekje"
@@ -4260,7 +4276,7 @@
 	var/switching = 0
 	var/current_path = null
 	var/counter = 1
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/New()
 	..()
 	reagents.add_reagent(NOTHING, 20)
@@ -4344,7 +4360,7 @@
 	desc = "Mushroom gravy poured thickly over more mushrooms. Rich in flavor and in pocket."
 	icon_state = "voxmush"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/mushnslush/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
@@ -4355,7 +4371,7 @@
 	desc = "Tastes like white lightning made from pure sugar. Wham!"
 	icon_state = "voxjam"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/woodapplejam/New()
 	..()
 	eatverb = pick("slurp","sip","suck","inhale",DRINK)
@@ -4367,7 +4383,7 @@
 	desc = "Tastes like chalk, but birds like it for some reason."
 	icon_state = "voxpie"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/pie/breadfruit/New()
 	..()
 	reagents.clear_reagents()
@@ -4378,7 +4394,7 @@
 	desc = "The sweet juices inside the woodapple quickferment under heat, producing this party favorite."
 	icon_state = "candiedwoodapple"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/candiedwoodapple/New()
 	..()
 	reagents.add_reagent(SUGAR, 4)
@@ -4412,7 +4428,7 @@
 	desc = "Also called tarte flambee, literally 'flame cake'. Ancient French and German people once tried not fighting and the result was a pie that is loaded with garlic, burned, and flat."
 	icon_state = "flammkuchen"
 	bitesize = 4
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/flammkuchen/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 30)
@@ -4434,7 +4450,7 @@
 	desc = "Offered as a gesture of Vox goodwill." //"Goodwill"
 	icon_state = "welcomepie"
 	bitesize = 4
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/pie/welcomepie/New()
 	..()
 	reagents.add_reagent(SACID,6)
@@ -4445,7 +4461,7 @@
 	desc = "Literally meaning 'pitcher plant rice'. After carefully cleansing and steaming the pitcher plant, it is stuffed with steamed rice. The carnivorous plant is rich with minerals from fauna it has consumed."
 	icon_state = "zhulongcaofan"
 	bitesize = 3
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,6)
@@ -4456,7 +4472,7 @@
 	desc = "A heavenly aroma surrounds this meat."
 	icon_state = "bacon"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/bacon/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,6)
@@ -4466,7 +4482,7 @@
 	desc = "Delicious, gravy-covered meat that will melt-in-your-beak. Or mouth."
 	icon_state = "porktenderloin"
 	bitesize = 4
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/porktenderloin/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,10) //Competitive with chicken buckets
@@ -4476,7 +4492,7 @@
 	desc = "A burger which uses a sack-shaped plant as a 'bun'. Any sufficiently poor Vox is indistinguishable from a hobo."
 	icon_state = "hoboburger"
 	bitesize = 4
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/hoboburger/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,14) //Competitive with big bite burger
@@ -4486,7 +4502,7 @@
 	desc = "Makes your insides burn with flavor! With this in your stomach, you won't want to stop moving any time soon."
 	icon_state = "sweetsourpork"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/sweetandsourpork/New()
 	..()
 	//3 nutriment inherited from the meat
@@ -4498,7 +4514,7 @@
 	desc = "This food represents a highly efficient use of station resources. The Corporate AI's favorite!"
 	icon_state = "monkeycubewrap"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/reclaimed/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,3)
@@ -4518,7 +4534,7 @@
 	desc = "Most stews vanish, but this one does so before you eat it."
 	icon_state = "vanishingstew"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/vanishingstew/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,3)
@@ -4528,7 +4544,7 @@
 	desc = "Beans, beans a magical fruit."
 	icon_state = "danburrito"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/threebeanburrito/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,5)
@@ -4538,7 +4554,7 @@
 	desc = "Perfect for those occasions when engineering doesn't set up power."
 	icon_state = "midnightsnack"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/midnightsnack/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,2)
@@ -4549,7 +4565,7 @@
 	desc = "From a soup just like this, a sentient race could one day emerge. Better eat it to be safe."
 	icon_state = "primordialsoup"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/primordialsoup/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,8)
@@ -4559,7 +4575,7 @@
 	desc = "Eating too much of this salad may cause you to want to cut off your own ear."
 	icon_state = "starrynight"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/starrynightsalad/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,4)
@@ -4570,7 +4586,7 @@
 	desc = "Popular among cargo technicians who break into fruit crates."
 	icon_state = "fruitsalad"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/fruitsalad/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,4)
@@ -4580,7 +4596,7 @@
 	desc = "A noodle dish in the style popular in Space China."
 	icon_state = "spicycoldnoodles"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/spicycoldnoodles/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,5)
@@ -4590,7 +4606,7 @@
 	desc = "A whirlwind of strong flavors, served chilled. Found its origins in the old Terran nation-state of China before the rise of Space China."
 	icon_state = "chinesecoldsalad"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/chinesecoldsalad/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,8)
@@ -4613,7 +4629,7 @@
 	desc = "A vital component in the caviar of the South."
 	icon_state = "pimiento"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/pimiento/New()
 	..()
 	reagents.add_reagent(SUGAR,1)
@@ -4623,7 +4639,7 @@
 	desc = "Even in space, where a north/south orientation is meaningless, the South will rise again."
 	icon_state = "confederatespirit"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/confederatespirit/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,8)
@@ -4633,7 +4649,7 @@
 	desc = "There may be more fish in the sea, but there's only one kind of fish in the stars."
 	icon_state = "fishtacosupreme"
 	bitesize = 3
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/fishtacosupreme/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,6)
@@ -4643,7 +4659,7 @@
 	desc = "This dish became exceedingly rare after Space Texas seceeded from our plane of reality."
 	icon_state = "chiliconcarne"
 	bitesize = 3
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/chiliconcarne/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,10)
@@ -4654,7 +4670,7 @@
 	desc = "The salsa-equivalent of nachos."
 	icon_state = "chilaquiles"
 	bitesize = 1
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/chilaquiles/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,8)
@@ -4686,7 +4702,7 @@
 	desc = "The national dish of Tonga, a country that you had previously never heard about."
 	icon_state = "poissoncru"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/poissoncru/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,4)
@@ -4696,7 +4712,7 @@
 	desc = "Evokes the question: do you ruin chicken by putting it in a salad, or improve a salad by adding chicken?"
 	icon_state = "chickensalad"
 	bitesize = 4
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/chickensalad/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,12)
@@ -4706,7 +4722,7 @@
 	desc = "Member Kingston? Member uncapped bombs? Member beardbeard? Member Goonleak? Member the vore raid? Member split departmental access? I member!"
 	icon_state = "grapesalad"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/grapesalad/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,4)
@@ -4716,7 +4732,7 @@
 	desc = "A minty, exotic salad originating in Space Greece. Makes you feel slippery enough to escape denbts."
 	icon_state = "orzosalad"
 	bitesize = 4
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/orzosalad/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,2)
@@ -4727,7 +4743,7 @@
 	desc = "A favorite of the janitorial staff, who often consider this a native dish. Viva Space Mexico!"
 	icon_state = "mexicansalad"
 	bitesize = 3
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/mexicansalad/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,6)
@@ -4748,7 +4764,7 @@
 	desc = "This dish's name probably originates from 'to roast over coals'. You can blame the hippies for banning coal use when the crew complains it isn't authentic."
 	icon_state = "bruschetta"
 	bitesize = 1
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/bruschetta/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,3)
@@ -4758,7 +4774,7 @@
 	desc = "Made from real teeth!"
 	icon_state = "gelatin"
 	bitesize = 1
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/gelatin/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,1)
@@ -4769,7 +4785,7 @@
 	desc = "Who knew bacteria could be so helpful?"
 	icon_state = "yoghurt"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/yogurt/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,2)
@@ -4781,7 +4797,7 @@
 	desc = "Among the most fashionable of fine desserts. A dish fit for a captain."
 	icon_state = "pannacotta"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/pannacotta/New()
 	..()
 	reagents.add_reagent(SUGAR,10)
@@ -4792,7 +4808,7 @@
 	desc = "I woke up one morning to find that the entire city had been covered in a three-foot layer of man-eating jam."
 	icon_state = "ghostjam"
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/hauntedjam/New()
 	..()
 	reagents.add_reagent(HELL_RAMEN,8) //This should be enough to at least seriously wound, if not kill, someone.

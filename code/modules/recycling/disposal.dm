@@ -81,6 +81,10 @@
 	if(stat & BROKEN || !I || !user)
 		return
 
+	if(!user.has_hand_check())
+		to_chat(user, "<span class='warning'>You don't have any hands!</span>")
+		return
+
 	src.add_fingerprint(user)
 	if(mode<=0) // It's off
 		if(isscrewdriver(I))
