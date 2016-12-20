@@ -63,6 +63,7 @@ var/global/list/spider_types = typesof(/mob/living/simple_animal/hostile/giant_s
 	min_n2 = 0
 	max_n2 = 0
 	minbodytemp = 0
+	held_items = list()
 
 /mob/living/simple_animal/hostile/giant_spider/update_icons()
 	.=..()

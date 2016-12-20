@@ -37,6 +37,7 @@
 	minbodytemp = 0
 
 	faction = "forest"
+	held_items = list()
 
 /mob/living/simple_animal/hostile/tree/FindTarget()
 	. = ..()

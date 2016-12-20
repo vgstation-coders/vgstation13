@@ -1,4 +1,4 @@
-/mob/living/simple_animal/hostile/asteroid/
+/mob/living/simple_animal/hostile/asteroid
 	vision_range = 2
 	min_oxy = 0
 	max_oxy = 0
@@ -20,6 +20,7 @@
 	a_intent = I_HURT
 	var/throw_message = "bounces off of"
 	var/icon_aggro = null // for swapping to when we get aggressive
+	held_items = list()
 
 /mob/living/simple_animal/hostile/asteroid/Aggro()
 	..()

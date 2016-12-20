@@ -31,6 +31,7 @@
 	minbodytemp = 0
 
 	supernatural = 1
+	held_items = list()
 
 /mob/living/simple_animal/hostile/creature/cult/CanAttack(var/atom/the_target)
 	//IF WE ARE CULT MONSTERS (those who spawn after Nar-Sie has risen) THEN WE DON'T ATTACK CULTISTS
