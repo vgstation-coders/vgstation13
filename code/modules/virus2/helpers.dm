@@ -1,7 +1,7 @@
 //Returns 1 if mob can be infected, 0 otherwise. Checks his clothing.
 proc/get_infection_chance(var/mob/living/carbon/M, var/vector = "Airborne")
 	var/score = 0 // full protection at 100, none at 0, quadratic in between: 
-				  // having more protection helps less if you already have lots of it
+                  // having more protection helps less if you already have lots of it
 	if (!istype(M))
 		return 0
 
