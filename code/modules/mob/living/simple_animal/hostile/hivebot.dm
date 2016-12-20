@@ -33,14 +33,14 @@
 
 /mob/living/simple_animal/hostile/hivebot/range
 	name = "Ranged Hivebot"
-	desc = "A biggish robot, this one has a gun!"
+	desc = "A biggish robot. This one has a gun!"
 	ranged = 1
 	retreat_distance = 5
 	minimum_distance = 5
 
 /mob/living/simple_animal/hostile/hivebot/rapid
 	name = "Rapidfire Hivebot"
-	desc = "A biggish robot, this one has an automatic submachine gun!"
+	desc = "A biggish robot. This one has an automatic submachine gun!"
 	ranged = 1
 	rapid = 1
 	retreat_distance = 5
