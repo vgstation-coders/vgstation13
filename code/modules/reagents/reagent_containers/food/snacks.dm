@@ -2921,7 +2921,7 @@
 
 /obj/item/pizzabox/update_icon()
 
-	overlays = list()
+	overlays.Cut()
 
 	// Set appropriate description
 	if( open && pizza )
@@ -2946,9 +2946,13 @@
 		else
 			icon_state = "pizzabox_open"
 
-		if( pizza )
-			var/image/pizzaimg = image("food.dmi", icon_state = pizza.icon_state)
+		if(pizza)
+			var/image/pizzaimg = new()
+			pizzaimg.appearance = pizza.appearance
 			pizzaimg.pixel_y = -3 * PIXEL_MULTIPLIER
+			pizzaimg.pixel_x = 0
+			pizzaimg.plane = FLOAT_PLANE
+			pizzaimg.layer = FLOAT_LAYER
 			overlays += pizzaimg
 
 		return
