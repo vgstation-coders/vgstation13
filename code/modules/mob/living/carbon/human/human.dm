@@ -236,15 +236,15 @@
 	if(M.melee_damage_upper == 0)
 		M.emote("[M.friendly] [src]")
 	else
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.attacktext] [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.attacktext] by [M.name] ([M.ckey])</font>")
+
 		if(!iscarbon(M))
 			LAssailant = null
 		else
 			LAssailant = M
 		if(M.attack_sound)
 			playsound(loc, M.attack_sound, 50, 1, 1)
-		add_logs(M, src, "attacked", admin=0)
+
+		add_logs(M, src, "attacked", admin = M.ckey ? TRUE : FALSE) //Only add this to the server logs if they're controlled by a player.
 
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		var/dam_zone = pick(organs_by_name)
@@ -1747,4 +1747,3 @@
 		return FALSE
 
 	return !(species.flags & NO_PAIN)
-
