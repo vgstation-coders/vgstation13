@@ -157,7 +157,7 @@
 		var/vault_y = new_spawn_point.y
 		var/vault_z = new_spawn_point.z
 
-		if(population_density = POPULATION_SCARCE)
+		if(population_density == POPULATION_SCARCE)
 			valid_spawn_points.Remove(block(new_spawn_point, locate(vault_x - MAX_VAULT_WIDTH, vault_y - MAX_VAULT_HEIGHT, vault_z)))
 
 		if(ME.load(vault_x, vault_y, vault_z))
