@@ -50,21 +50,21 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/item/proc/is_used_on(obj/O, mob/user)
 
-/obj/proc/install_pai(obj/item/device/paicard/P as obj)
+/obj/proc/install_pai(obj/item/device/paicard/P)
 	if(!P || !istype(P))
 		return 0
 	P.forceMove(src)
 	integratedpai = P
 	verbs += /obj/verb/remove_pai
 
-/obj/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/attackby(obj/item/weapon/W, mob/user)
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
 		if(user.drop_item(W))
 			to_chat(user, "You insert \the [W] into a slot in \the [src].")
 			install_pai(W)
 			playsound(src, 'sound/misc/cartridge_in.ogg', 25)
 
-/obj/proc/attack_integrated_pai(mob/user as mob)
+/obj/proc/attack_integrated_pai(mob/user)
 	return
 
 /obj/verb/remove_pai()
@@ -72,21 +72,17 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	set category = "Object"
 	set src in range(1)
 
-	var/mob/living/carbon/human/H = usr
-	if(!istype(H))
+	var/mob/M = usr
+	if(!M.Adjacent(src))
+		return
+	if(!M.dexterity_check())
 		to_chat(usr, "You don't have the dexterity to do this!")
 		return
-	if (H.stat == DEAD)
-		to_chat(H, "You can't do that while you're dead!")
-		return
-	else if (H.stat == UNCONSCIOUS)
-		to_chat(H, "You must be conscious to do this!")
-		return
-	else if (H.handcuffed)
-		to_chat(H, "You can't do that while you're restrained!")
+	if(M.incapacitated())
+		to_chat(M, "You can't do that while you're incapacitated!")
 		return
 
-	to_chat(H, "You eject \the [integratedpai] from \the [src].")
+	to_chat(M, "You eject \the [integratedpai] from \the [src].")
 	integratedpai.forceMove(loc)
 	integratedpai = null
 	playsound(src, 'sound/misc/cartridge_out.ogg', 25)
