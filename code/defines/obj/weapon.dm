@@ -386,6 +386,7 @@
 	name = "bear trap"
 	throw_speed = 2
 	throw_range = 1
+	layer = OPEN_DOOR_LAYER
 	icon_state = "beartrap0"
 	desc = "A trap used to catch bears and other legged creatures."
 	var/armed = 0
