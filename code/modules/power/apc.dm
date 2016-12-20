@@ -377,7 +377,7 @@
 		update_icon()
 
 //attack with an item - open/close cover, insert cell, or (un)lock interface
-/obj/machinery/power/apc/attackby(obj/item/W, mob/user)
+/obj/machinery/power/apc/attackby(obj/item/W, mob/living/user)
 	if (istype(user, /mob/living/silicon) && get_dist(src,user)>1)
 		return src.attack_hand(user)
 	src.add_fingerprint(user)
@@ -593,6 +593,7 @@
 	else
 		// The extra crowbar thing fixes MoMMIs not being able to remove APCs.
 		// They can just pop them off with a crowbar.
+		user.do_attack_animation(src)
 		if (	((stat & BROKEN) || malfhack) \
 				&& !opened \
 				&& ( \
@@ -653,6 +654,7 @@
 /obj/machinery/power/apc/attack_alien(mob/living/carbon/alien/humanoid/user)
 	if(!user)
 		return
+	user.do_attack_animation(src)
 	user.delayNextAttack(8)
 	user.visible_message("<span class='warning'>[user.name] slashes at the [src.name]!</span>", "<span class='notice'>You slash at the [src.name]!</span>")
 	playsound(get_turf(src), 'sound/weapons/slash.ogg', 100, 1)

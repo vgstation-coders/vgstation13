@@ -191,6 +191,7 @@ emp_act
 	var/hit_area = affecting.display_name
 
 	if((user != src) && check_shields(I.force, "the [I.name]"))
+		user.do_attack_animation(src)
 		return 0
 
 	if(istype(I,/obj/item/weapon/card/emag))
@@ -204,6 +205,7 @@ emp_act
 			affecting.sabotaged = 1
 		return 0
 
+	user.do_attack_animation(src)
 	if(istype(I.attack_verb, /list) && I.attack_verb.len && !(I.flags & NOBLUDGEON))
 		visible_message("<span class='danger'>[user] [pick(I.attack_verb)] [src] in the [hit_area] with \the [I.name]!</span>", \
 			"<span class='userdanger'>[user] [pick(I.attack_verb)] you in the [hit_area] with \the [I.name]!</span>")

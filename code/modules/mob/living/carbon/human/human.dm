@@ -236,6 +236,7 @@
 	if(M.melee_damage_upper == 0)
 		M.emote("[M.friendly] [src]")
 	else
+		M.do_attack_animation(src)
 		M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.attacktext] [src.name] ([src.ckey])</font>")
 		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.attacktext] by [M.name] ([M.ckey])</font>")
 		if(!iscarbon(M))
@@ -253,6 +254,7 @@
 			dam_zone = M.zone_sel.selecting
 
 		if(check_shields(damage)) //Shield check
+			M.do_attack_animation(src)
 			return
 
 		var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
@@ -276,6 +278,7 @@
 
 	if (health > -100)
 
+		M.do_attack_animation(src)
 		for(var/mob/O in viewers(src, null))
 			if ((O.client && !( O.blinded )))
 				O.show_message(text("<span class='danger'>The [M.name] glomps []!</span>", src), 1)
