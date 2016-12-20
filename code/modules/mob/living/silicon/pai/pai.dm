@@ -242,6 +242,8 @@
 	src:cameraFollow = null
 
 /mob/living/silicon/pai/ClickOn(var/atom/A, var/params)
+	if(incapacitated())
+		return
 	var/list/modifiers = params2list(params)
 	if(modifiers["middle"])
 		MiddleClickOn(A)
@@ -278,6 +280,8 @@
 
 	if(ispAI(src))
 		var/mob/living/silicon/pai/P = src
+		if(P.incapacitated())
+			return
 		if(istype(P.card.loc, /obj))
 			var/obj/O = P.card.loc
 			if(O.integratedpai == P.card)
@@ -291,6 +295,8 @@
 
 	if(ispAI(src))
 		var/mob/living/silicon/pai/P = src
+		if(P.incapacitated())
+			return
 		if(istype(P.card.loc, /obj))
 			var/obj/O = P.card.loc
 			if(O.integratedpai == P.card)
@@ -302,6 +308,8 @@
 
 	if(ispAI(src))
 		var/mob/living/silicon/pai/P = src
+		if(P.incapacitated())
+			return
 		if(istype(P.card.loc, /obj))
 			var/obj/O = P.card.loc
 			if(O.integratedpai == P.card)

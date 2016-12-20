@@ -31,10 +31,11 @@
 	var/obj/pai_container = null
 	if(ispAI(usr))
 		var/mob/living/silicon/pai/P = usr
-		if(istype(P.card.loc, /obj))
-			pai_container = P.card.loc
-			if(pai_container.integratedpai == P.card)
-				pai_override = P
+		if(!P.incapacitated())
+			if(istype(P.card.loc, /obj))
+				pai_container = P.card.loc
+				if(pai_container.integratedpai == P.card)
+					pai_override = P
 	switch(keypress)
 		if(NORTHEAST)
 			if(pai_override)
