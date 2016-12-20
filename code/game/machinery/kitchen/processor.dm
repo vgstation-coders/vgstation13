@@ -216,6 +216,8 @@
 	return
 
 /obj/machinery/processor/attack_hand(var/mob/user as mob)
+	if(!ishuman(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
+		return
 	if (src.stat != 0) //NOPOWER etc
 		return
 	if(!anchored)
@@ -245,4 +247,7 @@
 		"You hear [src] stop")
 
 /obj/machinery/processor/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
+	if(!ishuman(user) && !isrobot(user)) //No ghosts or mice
+		return 
+		
 	attackby(O,user)
