@@ -150,6 +150,9 @@ var/global/ingredientLimit = 10
 		. = ..()
 
 /obj/machinery/cooking/attackby(obj/item/I,mob/user)
+	if(stat & (NOPOWER | BROKEN))
+		to_chat(user, "<span class='warning'> The powers off, it's no good. </span>")
+		return
 	if(src.active)
 		to_chat(user, "<span class='warning'>[src.name] is currently busy.</span>")
 		return
@@ -293,7 +296,9 @@ var/global/ingredientLimit = 10
 	icon_state = "mixer_off"
 	icon_state_on = "mixer_on"
 	cookSound = 'sound/machines/juicer.ogg'
-
+	use_power = 1
+	idle_power_usage = 5
+	active_power_usage = 100
 
 /obj/machinery/cooking/candy/validateIngredient(var/obj/item/I)
 	. = ..()
@@ -321,7 +326,10 @@ var/global/ingredientLimit = 10
 	icon_state = "still_off"
 	icon_state_on = "still_on"
 	cookSound = 'sound/machines/juicer.ogg'
-
+	use_power = 1
+	idle_power_usage = 5
+	active_power_usage = 100
+	
 /obj/machinery/cooking/still/validateIngredient(var/obj/item/I)
 	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/grown))
 		. = "valid"
@@ -340,7 +348,10 @@ var/global/ingredientLimit = 10
 	icon_state = "cereal_off"
 	icon_state_on = "cereal_on"
 	foodChoices = null
-
+	use_power = 1
+	idle_power_usage = 5
+	active_power_usage = 100
+	
 /obj/machinery/cooking/cerealmaker/validateIngredient(var/obj/item/I)
 	. = ..()
 	if((. == "valid") && (!foodNesting))
@@ -388,7 +399,10 @@ var/global/ingredientLimit = 10
 	recursive_ingredients = 1
 	cks_max_volume = 400
 	cooks_in_reagents = 1
-
+	use_power = 1
+	idle_power_usage = 5
+	active_power_usage = 100
+	
 /obj/machinery/cooking/deepfryer/initialize()
 	..()
 	reagents.add_reagent(CORNOIL, 300)
@@ -472,7 +486,9 @@ var/global/ingredientLimit = 10
 	foodChoices = null
 	cookTime = 210
 	recursive_ingredients = 1
-
+	use_power = 1
+	idle_power_usage = 5
+	active_power_usage = 100
 	cooks_in_reagents = 1
 
 /obj/machinery/cooking/grill/validateIngredient(var/obj/item/I)
