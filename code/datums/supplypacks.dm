@@ -1347,6 +1347,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "\improper RCS Telepad Crate"
 	group = "Engineering"
 
+/datum/supply_packs/inflatables
+	name = "Inflatable Structures Pack"
+	contains = list (/obj/item/weapon/storage/box/inflatables,
+					 /obj/item/weapon/storage/box/inflatables,
+					 /obj/item/weapon/storage/box/inflatables)
+	cost = 15
+	containertype = /obj/structure/closet/crate/engi
+	containername = "inflatable structures crate"
+	group = "Engineering"
 
 //////MEDICAL//////
 

@@ -111,6 +111,8 @@
 	new /obj/item/clothing/suit/storage/paramedic(src)
 	new /obj/item/clothing/suit/storage/paramedic(src)
 	new /obj/item/clothing/suit/storage/paramedic(src)
+	new /obj/item/weapon/storage/box/inflatables(src)
+	new /obj/item/weapon/storage/box/inflatables(src)
 	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
 	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
 	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
