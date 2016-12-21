@@ -114,7 +114,8 @@
 		"/obj/item/device/lightreplacer",
 		"/obj/item/device/device_analyser",
 		"/obj/item/weapon/rcl",
-		"/obj/item/device/silicate_sprayer"
+		"/obj/item/device/silicate_sprayer",
+		"/obj/item/weapon/inflatable_dispenser"
 		)
 
 /obj/item/weapon/storage/belt/utility/chief/full/New() //This is mostly for testing I guess
