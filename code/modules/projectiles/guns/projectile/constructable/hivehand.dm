@@ -17,6 +17,7 @@
 	empty_sound = 'sound/weapons/hivehand_empty.ogg'
 	cant_drop = 1
 	sharpness = 1
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	hitsound = "sound/weapons/bloodyslice.ogg"
 	attack_verb = list("claws", "rends", "slashes")
 	mech_flags = MECH_SCAN_ILLEGAL

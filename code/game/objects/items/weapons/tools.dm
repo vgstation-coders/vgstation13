@@ -82,6 +82,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1
+	sharpness_flags = SHARP_TIP
 	slot_flags = SLOT_BELT
 	force = 5.0
 	w_class = W_CLASS_TINY
@@ -172,6 +173,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	slot_flags = SLOT_BELT
 	force = 6.0
 	throw_speed = 2
@@ -220,6 +222,7 @@
 	throw_range = 5
 	w_class = W_CLASS_SMALL
 	sharpness = 0.8
+	sharpness_flags = INSULATED_EDGE | HOT_EDGE // A gas flame is pretty insulated, is it?
 	heat_production = 3800
 
 	//Cost to make in the autolathe
@@ -663,6 +666,7 @@
 	slot_flags = SLOT_BELT
 	force = 3.0
 	sharpness = 1
+	sharpness_flags = SHARP_TIP | HOT_EDGE
 	throwforce = 5.0
 	throw_speed = 1
 	throw_range = 5

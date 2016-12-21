@@ -47,7 +47,7 @@
 	return
 
 /obj/item/latexballon/attackby(obj/item/W as obj, mob/user as mob)
-	if (W.sharpness)
+	if (W.sharpness_flags & (SHARP_BLADE|SHARP_TIP|HOT_EDGE))
 		burst()
 	if(istype(W, /obj/item/latexballon) && !istype(src, /obj/item/latexballon/pair))
 		var/obj/item/latexballon/L = W

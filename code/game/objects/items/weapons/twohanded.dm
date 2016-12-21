@@ -65,6 +65,7 @@
 	desc = "Truly, the weapon of a madman. Who would think to fight fire with an axe?"
 	w_class = W_CLASS_LARGE
 	sharpness = 1.2
+	sharpness_flags = SHARP_BLADE | CHOPWOOD
 	force = 10
 	slot_flags = SLOT_BACK
 	attack_verb = list("attacks", "chops", "cleaves", "tears", "cuts")
@@ -208,6 +209,7 @@
 	throw_speed = 5
 	throw_range = 10
 	sharpness = 2
+	sharpness_flags = SHARP_TIP | SHARP_BLADE | CHOPWOOD
 	w_class = W_CLASS_LARGE
 	flags = FPRINT | TWOHANDABLE
 	origin_tech = Tc_MAGNETS + "=4;" + Tc_COMBAT + "=5"
@@ -236,6 +238,8 @@
 	name = "spear"
 	desc = "A haphazardly-constructed yet still deadly weapon of ancient design."
 	force = 10
+	sharpness = 0.8
+	sharpness_flags = SHARP_TIP | INSULATED_EDGE
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_BACK
 	throwforce = 15

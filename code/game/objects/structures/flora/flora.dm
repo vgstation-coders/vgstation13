@@ -67,14 +67,11 @@
 	..()
 
 	if(istype(W, /obj/item/weapon))
-		if(W.is_sharp() >= 1.2) //As sharp as a knife
-			if(W.w_class <= W_CLASS_SMALL) //Big enough to use to cut down trees
-				health -= (user.get_strength() * W.force)
-				playsound(loc, 'sound/effects/woodcuttingshort.ogg', 50, 1)
-			else
-				to_chat(user, "<span class='info'>\The [W] doesn't appear to be big enough to cut into \the [src]. Try something bigger.</span>")
+		if(W.sharpness_flags & (CHOPWOOD|SERRATED_BLADE))
+			health -= (user.get_strength() * W.force)
+			playsound(loc, 'sound/effects/woodcuttingshort.ogg', 50, 1)
 		else
-			to_chat(user, "<span class='info'>\The [W] doesn't appear to be sharp enough to cut into \the [src]. Try something sharper.</span>")
+			to_chat(user, "<span class='info'>\The [W] doesn't appear to be suitable to cut into \the [src]. Try something sturdier.</span>")
 
 	update_health()
 
