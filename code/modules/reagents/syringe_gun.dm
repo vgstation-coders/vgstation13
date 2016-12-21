@@ -18,6 +18,9 @@
 	..()
 	to_chat(user, "<span class='info'>[syringes.len] / [max_syringes] syringes.</span>")
 
+/obj/item/weapon/gun/syringe/isHandgun()
+	return FALSE
+
 /obj/item/weapon/gun/syringe/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/reagent_containers/syringe))
 		var/obj/item/weapon/reagent_containers/syringe/S = I

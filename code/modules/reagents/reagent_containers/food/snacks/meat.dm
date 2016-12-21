@@ -37,6 +37,18 @@
 	var/subjectname = ""
 	var/subjectjob = null
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/human/after_consume(var/mob/user, var/datum/reagents/reagentreference)
+	if(!user)
+		return
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(isgrue(H))
+			H.adjustOxyLoss(-50)
+			H.heal_organ_damage(50, 0)
+			H.heal_organ_damage(0, 50)
+			H.adjustToxLoss(-50)
+	..()
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken
 	name = "chicken meat"
 	desc = "This better be delicious."

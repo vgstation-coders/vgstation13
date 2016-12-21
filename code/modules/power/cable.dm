@@ -485,3 +485,11 @@ By design, d1 is the smallest direction and d2 is the highest
 
 		if(PN.is_empty()) // can happen with machines made nodeless when smoothing cables
 			returnToPool(PN) //powernets do not get qdelled
+
+/obj/structure/cable/spawned_by_map_element(datum/map_element/ME, list/objects)
+	.=..()
+
+	if(powernet)
+		return
+
+	rebuild_from()

@@ -7,8 +7,9 @@
 	var/total_burn	= 0
 	var/total_brute	= 0
 	for(var/datum/organ/external/O in organs)	//hardcoded to streamline things a bit
-		total_brute	+= O.brute_dam
-		total_burn	+= O.burn_dam
+		if(O.is_organic() && O.is_existing())
+			total_brute	+= O.brute_dam
+			total_burn	+= O.burn_dam
 	health = maxHealth - getOxyLoss() - getToxLoss() - getCloneLoss() - total_burn - total_brute
 	//TODO: fix husking
 	if( ((maxHealth - total_burn) < config.health_threshold_dead) && stat == DEAD) //100 only being used as the magic human max health number, feel free to change it if you add a var for it -- Urist
@@ -80,7 +81,7 @@
 		var/datum/organ/external/O = get_organ(organ_name)
 
 		if(amount > 0)
-			O.take_damage(amount, 0, sharp=damage_source.is_sharp(), edge=has_edge(damage_source), used_weapon=damage_source)
+			O.take_damage(amount, 0, sharp=damage_source.is_sharp(), edge=damage_source.sharpness_flags & SHARP_BLADE, used_weapon=damage_source)
 		else
 			//if you don't want to heal robot organs, they you will have to check that yourself before using this proc.
 			O.heal_damage(-amount, 0, internal=0, robo_repair=(O.status & ORGAN_ROBOT))
@@ -97,7 +98,7 @@
 		var/datum/organ/external/O = get_organ(organ_name)
 
 		if(amount > 0)
-			O.take_damage(0, amount, sharp=damage_source.is_sharp(), edge=has_edge(damage_source), used_weapon=damage_source)
+			O.take_damage(0, amount, sharp=damage_source.is_sharp(), edge=damage_source.sharpness_flags & SHARP_BLADE, used_weapon=damage_source)
 		else
 			//if you don't want to heal robot organs, they you will have to check that yourself before using this proc.
 			O.heal_damage(0, -amount, internal=0, robo_repair=(O.status & ORGAN_ROBOT))
@@ -169,6 +170,8 @@
 /mob/living/carbon/human/proc/get_damageable_organs()
 	var/list/datum/organ/external/parts = list()
 	for(var/datum/organ/external/O in organs)
+		if(!O.is_existing())
+			continue
 		if(O.brute_dam + O.burn_dam < O.max_damage)
 			parts += O
 	return parts

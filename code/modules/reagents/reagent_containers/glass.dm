@@ -305,8 +305,8 @@
 	w_type = RECYK_METAL
 	w_class = W_CLASS_MEDIUM
 	amount_per_transfer_from_this = 20
-	possible_transfer_amounts = list(10,20,30,50,70)
-	volume = 70
+	possible_transfer_amounts = list(10,20,25,30,50,100,150)
+	volume = 150
 	flags = FPRINT | OPENCONTAINER
 	slot_flags = SLOT_HEAD
 

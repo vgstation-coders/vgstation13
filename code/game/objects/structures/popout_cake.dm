@@ -76,7 +76,7 @@
 	return attack_hand(user)
 
 /obj/structure/popout_cake/attackby(obj/item/W, mob/user)
-	if(W.is_sharp())
+	if(W.sharpness_flags & SHARP_BLADE)
 		user.visible_message("<span class='notice'>[user] starts cutting a slice from \the [src].</span>")
 
 		spawn() //So that the proc can return 1, delaying the next attack

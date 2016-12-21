@@ -1602,10 +1602,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 			if("eggChose")
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
-				app.game_state = 1
-				app.game_tick(usr)
-				app.petname = copytext(sanitize(input(usr, "What name for your new pet?", "Name your new pet", "[app.petname]") as null|text),1,MAX_NAME_LEN)
-				app.last_spoken = ""
+				app.petname = copytext(sanitize(input(usr, "What do you want to name your new pet?", "Name your new pet", "[app.petname]") as null|text),1,MAX_NAME_LEN)
+				if(app.petname && (alert(usr, "[app.petname] will be your pet's new name - are you sure?", "Confirm Pet's name: ", "Yes", "No") == "Yes"))
+					app.game_state = 1
+					app.game_tick(usr)
+					app.last_spoken = ""
 
 			if("eggHatch")
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
@@ -1814,37 +1815,45 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			if("Detonate")//Detonate PDA
 				if(istype(cartridge, /obj/item/weapon/cartridge/syndicate))
 					var/obj/item/device/pda/P = locate(href_list["target"])
-					if(!isnull(P))
-						if (!P.toff && cartridge:shock_charges > 0)
-							cartridge:shock_charges--
-
-							var/difficulty = 0
-
-							if(P.cartridge)
-								difficulty += P.cartridge.access_medical
-								difficulty += P.cartridge.access_security
-								difficulty += P.cartridge.access_engine
-								difficulty += P.cartridge.access_clown
-								difficulty += P.cartridge.access_janitor
-								difficulty += P.cartridge.access_manifest * 2
-							else
-								difficulty += 2
-
-							if(prob(difficulty * 12) || (P.hidden_uplink))
-								U.show_message("<span class='warning'>An error flashes on your [src].</span>", 1)
-							else if (prob(difficulty * 3))
-								U.show_message("<span class='warning'>Energy feeds back into your [src]!</span>", 1)
-								U << browse(null, "window=pda")
-								explode()
-								log_admin("[key_name(U)] just attempted to blow up [P] with the Detomatix cartridge but failed, blowing themselves up")
-								message_admins("[key_name_admin(U)] just attempted to blow up [P] with the Detomatix cartridge but failed, blowing themselves up", 1)
-							else
-								U.show_message("<span class='notice'>Success!</span>", 1)
-								log_admin("[key_name(U)] just attempted to blow up [P] with the Detomatix cartridge and succeded")
-								message_admins("[key_name_admin(U)] just attempted to blow up [P] with the Detomatix cartridge and succeded", 1)
-								P.explode()
-					else
+					if(isnull(P))
 						to_chat(U, "PDA not found.")
+					else
+						var/pass = FALSE
+						for (var/obj/machinery/message_server/MS in message_servers)
+							if(MS.active)
+								pass = TRUE
+								break
+						if(!pass)
+							to_chat(U, "<span class='notice'>ERROR: Messaging server is not responding.</span>")
+						else
+							if (!P.toff && cartridge:shock_charges > 0)
+								cartridge:shock_charges--
+
+								var/difficulty = 0
+
+								if(P.cartridge)
+									difficulty += P.cartridge.access_medical
+									difficulty += P.cartridge.access_security
+									difficulty += P.cartridge.access_engine
+									difficulty += P.cartridge.access_clown
+									difficulty += P.cartridge.access_janitor
+									difficulty += P.cartridge.access_manifest * 2
+								else
+									difficulty += 2
+
+								if(prob(difficulty * 12) || (P.hidden_uplink))
+									U.show_message("<span class='warning'>An error flashes on your [src].</span>", 1)
+								else if (prob(difficulty * 3))
+									U.show_message("<span class='warning'>Energy feeds back into your [src]!</span>", 1)
+									U << browse(null, "window=pda")
+									explode()
+									log_admin("[key_name(U)] just attempted to blow up [P] with the Detomatix cartridge but failed, blowing themselves up")
+									message_admins("[key_name_admin(U)] just attempted to blow up [P] with the Detomatix cartridge but failed, blowing themselves up", 1)
+								else
+									U.show_message("<span class='notice'>Success!</span>", 1)
+									log_admin("[key_name(U)] just attempted to blow up [P] with the Detomatix cartridge and succeded")
+									message_admins("[key_name_admin(U)] just attempted to blow up [P] with the Detomatix cartridge and succeded", 1)
+									P.explode()
 				else
 					U.unset_machine()
 					U << browse(null, "window=pda")

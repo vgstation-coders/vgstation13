@@ -1025,7 +1025,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/instrument/recorder,
 					/obj/item/device/instrument/harmonica,
 					/obj/structure/piano/xylophone,
-					/obj/structure/piano/random)
+					/obj/structure/piano/random,
+					/obj/item/device/instrument/bikehorn)
 	name = "Random instrument"
 	cost = 50
 	containertype = /obj/structure/closet/crate
@@ -1043,7 +1044,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/instrument/harmonica,
 					/obj/structure/piano/xylophone,
 					/obj/structure/piano/minimoog,
-					/obj/structure/piano)
+					/obj/structure/piano,
+					/obj/item/device/instrument/bikehorn)
 	name = "Big band instrument collection"
 	cost = 500
 	containertype = /obj/structure/largecrate
@@ -1345,6 +1347,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "\improper RCS Telepad Crate"
 	group = "Engineering"
 
+/datum/supply_packs/inflatables
+	name = "Inflatable Structures Pack"
+	contains = list (/obj/item/weapon/storage/box/inflatables,
+					 /obj/item/weapon/storage/box/inflatables,
+					 /obj/item/weapon/storage/box/inflatables)
+	cost = 15
+	containertype = /obj/structure/closet/crate/engi
+	containername = "inflatable structures crate"
+	group = "Engineering"
 
 //////MEDICAL//////
 

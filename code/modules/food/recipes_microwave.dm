@@ -283,6 +283,17 @@
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/eclair
 
+/datum/recipe/eclair_big
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/eclair,
+		/obj/item/weapon/reagent_containers/food/snacks/eclair,
+		/obj/item/weapon/reagent_containers/food/snacks/eclair,
+		/obj/item/weapon/reagent_containers/food/snacks/eclair,
+		/obj/item/weapon/reagent_containers/food/snacks/eclair,
+		/obj/item/weapon/reagent_containers/food/snacks/eclair,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/eclair/big
+
 /datum/recipe/waffles
 	reagents = list(FLOUR = 10)
 	items = list(
@@ -311,6 +322,23 @@
 	reagents = list(FLOUR = 5, SUGAR = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
 	result = /obj/item/weapon/reagent_containers/food/snacks/sugarcookie
+
+/datum/recipe/gingerbread_man
+	reagents = list(FLOUR = 5, SUGAR = 5, WATER = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
+	result = /obj/item/weapon/reagent_containers/food/snacks/gingerbread_man
+
+/datum/recipe/livinggingerbread_man
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/gingerbread_man,
+		/obj/item/slime_extract/grey
+		)
+	result = /mob/living/simple_animal/hostile/gingerbread
+
+/datum/recipe/candy_cane
+	reagents = list(SUGAR = 5, WATER = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
+	result = /obj/item/weapon/reagent_containers/food/snacks/candy_cane
 
 /datum/recipe/muffin
 	reagents = list(MILK = 5, FLOUR = 5)
@@ -743,6 +771,26 @@
 		)
 	result = /obj/structure/popout_cake
 
+/datum/recipe/fruitcake
+	reagents = list(MILK = 5, FLOUR = 15)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries,
+		/obj/item/weapon/reagent_containers/food/snacks/grown/orange,
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake
+
+/datum/recipe/christmascake
+	reagents = list(SUGAR = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/egg,
+		/obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake/christmascake
+
 // Pies ////////////////////////////////////////////////////////
 
 /datum/recipe/pie
@@ -810,6 +858,15 @@
 	reagents = list(FLOUR = 10)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit)
 	result = /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie
+
+
+/datum/recipe/mincepie
+	reagents = list(FLOUR = 10)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries,
+		/obj/item/weapon/reagent_containers/food/snacks/meat
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/pie/mincepie
 
 // Kebabs //////////////////////////////////////////////////////
 

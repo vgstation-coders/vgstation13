@@ -297,6 +297,14 @@ var/MAX_EXPLOSION_RANGE = 14
 #define ALL ~0
 #define NONE 0
 
+//sharpness flags
+#define SHARP_TIP 		1 // Has a pointy-stabby end, such as a syringe or a knife tip.
+#define SHARP_BLADE		2 // Has a blade long and thin enough to slice something with.
+#define SERRATED_BLADE	4 // Has saw-like teeth to cut through harder materials, however messily. The serrated edge may not necessarily be sharp!
+#define CHOPWOOD		8 // Kind of an abstract one: The implement is suitable to chop wood with. Essentially a saw or something big enough.
+#define INSULATED_EDGE 	16 // One of the edges of this thing is insulated, even though the rest of it isn't.
+#define HOT_EDGE 		32 // The blade of this thing can produce enough heat to melt through things, even if not sharp.
+
 //flags for pass_flags
 #define PASSTABLE	1
 #define PASSGLASS	2
@@ -1279,6 +1287,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define Sp_RECHARGE	1
 #define Sp_CHARGES	2
 #define Sp_HOLDVAR	4
+#define Sp_GRADUAL	8
 
 //spell range
 #define SELFCAST -1
@@ -1359,6 +1368,7 @@ var/proccalls = 1
 #define ORE_PROCESSING_ALLOY 2
 
 //SOUND CHANNELS
+#define CHANNEL_GRUE				1021	//only ever used to allow the ambient grue sound to be made to stop playing
 #define CHANNEL_LOBBY				1022
 #define CHANNEL_AMBIENCE			1023
 #define CHANNEL_ADMINMUSIC			1024
@@ -1569,5 +1579,10 @@ var/proccalls = 1
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_SOUTH		"stationmapsmallsouth"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_EAST		"stationmapsmalleast"
 #define HOLOMAP_EXTRA_STATIONMAPSMALL_WEST		"stationmapsmallwest"
+
+#define HOLOMAP_MARKER_SMES				"smes"
+#define HOLOMAP_MARKER_DISK				"diskspawn"
+#define HOLOMAP_MARKER_SKIPJACK			"skipjack"
+#define HOLOMAP_MARKER_SYNDISHUTTLE		"syndishuttle"
 
 #define DEFAULT_BLOOD "#A10808"

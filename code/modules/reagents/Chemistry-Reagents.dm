@@ -435,6 +435,14 @@
 		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/cube = O
 		if(!cube.wrapped)
 			cube.Expand()
+	else if(istype(O,/obj/machinery/space_heater/campfire))
+		var/obj/machinery/space_heater/campfire/campfire = O
+		campfire.snuff()
+	else if(O.on_fire) // For extinguishing objects on fire
+		O.extinguish()
+	else if(O.molten) // Molten shit.
+		O.molten=0
+		O.solidify()
 
 /datum/reagent/water/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
 	..()
@@ -4597,21 +4605,19 @@
 	if(..())
 		return 1
 
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		H.nutrition += nutriment_factor
-		if(H.getOxyLoss() && prob(50))
-			H.adjustOxyLoss(-2)
-		if(H.getBruteLoss() && prob(60))
-			H.heal_organ_damage(2, 0)
-		if(H.getFireLoss() && prob(50))
-			H.heal_organ_damage(0, 2)
-		if(H.getToxLoss() && prob(50))
-			H.adjustToxLoss(-2)
-		if(H.dizziness != 0)
-			H.dizziness = max(0, H.dizziness - 15)
-		if(H.confused != 0)
-			H.confused = max(0, H.confused - 5)
+	M.nutrition += nutriment_factor
+	if(M.getOxyLoss() && prob(50))
+		M.adjustOxyLoss(-2)
+	if(M.getBruteLoss() && prob(60))
+		M.heal_organ_damage(2, 0)
+	if(M.getFireLoss() && prob(50))
+		M.heal_organ_damage(0, 2)
+	if(M.getToxLoss() && prob(50))
+		M.adjustToxLoss(-2)
+	if(M.dizziness != 0)
+		M.dizziness = max(0, M.dizziness - 15)
+	if(M.confused != 0)
+		M.confused = max(0, M.confused - 5)
 
 /datum/reagent/ethanol/deadrum/changelingsting
 	name = "Changeling Sting"

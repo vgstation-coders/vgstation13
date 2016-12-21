@@ -208,3 +208,4 @@
 	desc = "This piece of equipment can double as a pillow, a bowl, an emergency toilet, and sometimes as a helmet."
 	icon_state = "nr_helmet"
 	item_state = "nr_helmet"
+	body_parts_covered = EARS|HEAD

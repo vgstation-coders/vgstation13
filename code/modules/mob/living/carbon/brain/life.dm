@@ -245,7 +245,7 @@
 
 		update_pull_icon()
 		if (client)
-			clear_fullscreens()
+//			clear_fullscreens()
 
 			if(src.eye_blind || blinded)
 				overlay_fullscreen("blind", /obj/screen/fullscreen/blind)

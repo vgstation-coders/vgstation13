@@ -294,6 +294,7 @@
 	secondary_buckle_overlay.appearance_flags = RESET_COLOR
 	..()
 	overlays += buckle_overlay
+	handle_layer()
 
 
 /obj/structure/bed/chair/comfy/couch/turn/handle_layer() // makes sure mobs arent buried under certain chair sprites

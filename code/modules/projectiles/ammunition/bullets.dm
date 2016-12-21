@@ -97,8 +97,8 @@
 			overlays += icon('icons/obj/ammo.dmi', "emptyshell")
 
 /obj/item/ammo_casing/shotgun/blank
-	name = "shotgun shell"
-	desc = "A blank shell."
+	name = "blank shell"
+	desc = "A blank shell.  Does not contain any projectile material."
 	icon_state = "blshell"
 	projectile_type = ""
 	starting_materials = list(MAT_IRON = 250)

@@ -132,7 +132,7 @@
 /obj/item/verbs/changeling/proc/changeling_horror_form()
 	set category = "Changeling"
 	set name = "Horror Form (30)"
-	set desc = "This costly evolution allows us to transform into an all-consuming abomination. We are extremely strong, to the point that we can force airlocks open and devour humans whole, and immune to stuns."
+	set desc = "This costly evolution allows us to transform into an all-consuming abomination. We are extremely strong, to the point that we can force airlocks open and devour humans whole, and are immune to stuns."
 
 	var/mob/M = loc
 	if(!istype(M))
@@ -231,7 +231,7 @@
 		return
 
 	var/mob/living/carbon/human/H = src
-	if(deny_horror && istype(H) && H.species && H.species.name == "Horror")
+	if(deny_horror && ishorrorform(H))
 		to_chat(src, "<span class='warning'>You are not permitted to taint our purity.  You cannot do this as a Horror.</span>")
 		return
 

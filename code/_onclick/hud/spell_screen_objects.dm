@@ -33,13 +33,13 @@
 		return
 
 	return ..()
-	
-/obj/screen/movable/spell_master/MouseEntered(location,control,params)	
+
+/obj/screen/movable/spell_master/MouseEntered(location,control,params)
 	openToolTip(usr,src,params,title = name,content = "Click and drag while closed to move this around the screen")
-	
+
 /obj/screen/movable/spell_master/MouseExited()
 	closeToolTip(usr)
-	
+
 /obj/screen/movable/spell_master/Click()
 	if(!spell_objects.len)
 		returnToPool(src)
@@ -159,14 +159,23 @@
 
 	screen_loc = ui_alien_master
 	length = 9
-	
+
 /obj/screen/movable/spell_master/malf
 	name = "Malfunction Modules"
 	icon_state = "grey_spell_ready"
-	
+
 	open_state = "malf_open"
 	closed_state = "malf_closed"
-	
+
+	screen_loc = ui_alien_master
+
+/obj/screen/movable/spell_master/racial
+	name = "Racial Abilities"
+	icon_state = "racial_spell_ready"
+
+	open_state = "genetics_open"
+	closed_state = "genetics_closed"
+
 	screen_loc = ui_alien_master
 
 //////////////ACTUAL SPELLS//////////////
@@ -184,7 +193,7 @@
 
 	var/icon/last_charged_icon
 	var/channeling_image
-	
+
 /obj/screen/spell/MouseEntered(location,control,params)
 	if(!spell)
 		return
@@ -205,10 +214,10 @@
 		if(SELFCAST)
 			dat += "<br>Range: Self"
 	openToolTip(usr,src,params,title = name,content = dat)
-	
+
 /obj/screen/spell/MouseExited()
 	closeToolTip(usr)
-	
+
 /obj/screen/spell/Destroy()
 	..()
 	spell = null
@@ -232,7 +241,7 @@
 
 	overlays -= spell.hud_state
 
-	if((spell.charge_type & Sp_RECHARGE) || (spell.charge_type & Sp_CHARGES))
+	if((spell.charge_type & Sp_RECHARGE) || (spell.charge_type & Sp_CHARGES) || (spell.charge_type & Sp_GRADUAL))
 		if(spell.charge_counter < spell.charge_max)
 			icon_state = "[spell_base]_spell_base"
 			if(spell.charge_counter > 0)

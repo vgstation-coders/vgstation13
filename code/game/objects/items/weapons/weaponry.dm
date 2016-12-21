@@ -52,6 +52,7 @@
 	throwforce = 10
 	w_class = W_CLASS_MEDIUM
 	sharpness = 1.2
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 
@@ -84,6 +85,7 @@
 	throwforce = 10
 	w_class = W_CLASS_MEDIUM
 	sharpness = 1.2
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 /obj/item/weapon/katana/suicide_act(mob/user)
@@ -100,6 +102,7 @@
 /obj/item/weapon/harpoon
 	name = "harpoon"
 	sharpness = 1.2
+	sharpness_flags = SHARP_TIP
 	desc = "Tharr she blows!"
 	icon_state = "harpoon"
 	item_state = "harpoon"
@@ -201,6 +204,14 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	item_state = "knife"
 	force = 10
 
+/obj/item/weapon/kitchen/utensil/knife/skinning
+	name = "skinning knife"
+	desc = "Stalwart Goliath butchering edge. This, my friend, is a tool with a purpose."
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "skinningknife"
+	item_state = "skinningknife"
+	force = 10
+
 obj/item/weapon/banhammer/admin
 	desc = "A banhammer specifically reserved for admins. Legends tell of a weapon that destroys the target to the utmost capacity."
 	throwforce = 999
@@ -219,6 +230,7 @@ obj/item/weapon/banhammer/admin
 	throwforce = 0
 	w_class = 5
 	sharpness = 0
+	sharpness_flags = 0
 	attack_verb = list("bludgeons", "smashes", "pummels", "crushes", "slams")
 	mech_flags = MECH_SCAN_ILLEGAL
 	cant_drop = 1

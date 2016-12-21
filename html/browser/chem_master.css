@@ -1,0 +1,27 @@
+.li{
+	padding: 0px 0px 4px;
+}
+
+.pillIconWrapper{
+	display: inline-block;
+	padding:0px 4px 0px 4px;
+	margin:0 2px 2px 0;
+}
+
+.pillIcon {
+	/* The pill image will be enlarged to 64x64, the box that contains it will remain 32x32 though. Essentially cropping it out. */
+    width: 32px;
+    height: 32px;
+	/* Since we can't really crop shit we're just hiding the rest */
+    overflow: hidden;
+}
+
+.pillIcon img {
+	/* Blow it up baby */
+    width: 64px;
+    height: 64px;
+	/* "Center" it, since we can only crop out the top-left  */
+    margin: -16px -16px -16px -16px;
+	/* Remove antialias to prevent cataracts */
+	-ms-interpolation-mode: nearest-neighbor;
+}

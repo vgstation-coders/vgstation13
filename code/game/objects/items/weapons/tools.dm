@@ -82,6 +82,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1
+	sharpness_flags = SHARP_TIP
 	slot_flags = SLOT_BELT
 	force = 5.0
 	w_class = W_CLASS_TINY
@@ -172,6 +173,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	slot_flags = SLOT_BELT
 	force = 6.0
 	throw_speed = 2
@@ -220,6 +222,7 @@
 	throw_range = 5
 	w_class = W_CLASS_SMALL
 	sharpness = 0.8
+	sharpness_flags = INSULATED_EDGE | HOT_EDGE // A gas flame is pretty insulated, is it?
 	heat_production = 3800
 
 	//Cost to make in the autolathe
@@ -354,7 +357,7 @@
 
 
 /obj/item/weapon/weldingtool/attack_self(mob/user as mob)
-	toggle()
+	toggle(user)
 
 //Returns the amount of fuel in the welder
 /obj/item/weapon/weldingtool/proc/get_fuel()
@@ -418,32 +421,34 @@
 //Turns off the welder if there is no more fuel (does this really need to be its own proc?)
 /obj/item/weapon/weldingtool/proc/check_fuel()
 	if((get_fuel() <= 0) && welding)
-		toggle(1)
+		toggle()
 		return 0
 	return 1
 
 
 //Toggles the welder off and on
-/obj/item/weapon/weldingtool/proc/toggle(var/message = 0)
+/obj/item/weapon/weldingtool/proc/toggle(var/mob/user)
 	if(!status)
 		return
 	src.welding = !( src.welding )
 	if (src.welding)
 		if (remove_fuel(1))
-			to_chat(usr, "<span class='notice'>You switch the [src] on.</span>")
+			if(user && istype(user))
+				to_chat(user, "<span class='notice'>You switch the [src] on.</span>")
 			src.force = 15
 			src.damtype = "fire"
 			update_icon()
 			processing_objects.Add(src)
 		else
-			to_chat(usr, "<span class='notice'>Need more fuel!</span>")
+			if(user && istype(user))
+				to_chat(user, "<span class='notice'>Need more fuel!</span>")
 			src.welding = 0
 			return
 	else
-		if(!message)
+		if(user && istype(user))
 			to_chat(usr, "<span class='notice'>You switch the [src] off.</span>")
 		else
-			to_chat(usr, "<span class='notice'>\The [src] shuts off!</span>")
+			visible_message("<span class='notice'>\The [src] shuts off!</span>")
 		src.force = 3
 		src.damtype = "brute"
 		update_icon()
@@ -661,6 +666,7 @@
 	slot_flags = SLOT_BELT
 	force = 3.0
 	sharpness = 1
+	sharpness_flags = SHARP_TIP | HOT_EDGE
 	throwforce = 5.0
 	throw_speed = 1
 	throw_range = 5

@@ -120,9 +120,8 @@
 		adult.add_language(L.name)
 
 	adult.regenerate_icons()
-	adult.name = src.name
-	adult.real_name = src.real_name
 	src.mind.transfer_to(adult)
+	adult.fully_replace_character_name(newname = src.real_name)
 	src.drop_all()
 	qdel(src)
 
@@ -133,6 +132,11 @@
 		if(speaking && speaking.name == LANGUAGE_GALACTIC_COMMON)
 			if(donors.len >= 2) // They have sucked down some blood.
 				return 1
+	return ..()
+
+/mob/living/carbon/monkey/diona/can_read()
+	if(donors.len >= 2) // They have sucked down some blood.
+		return TRUE
 	return ..()
 
 /mob/living/carbon/monkey/diona/verb/steal_blood()

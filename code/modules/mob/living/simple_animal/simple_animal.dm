@@ -348,14 +348,13 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	if(M.melee_damage_upper == 0)
 		M.emote("[M.friendly] [src]")
 	else
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.attacktext] [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.attacktext] by [M.name] ([M.ckey])</font>")
 		if(M.attack_sound)
 			playsound(loc, M.attack_sound, 50, 1, 1)
 
 		visible_message("<span class='warning'><B>\The [M]</B> [M.attacktext] \the [src]!</span>")
 
-		add_logs(M, src, "attacked", admin=0)
+		add_logs(M, src, "attacked", admin = M.ckey ? TRUE : FALSE) //Only add this to the server logs if they're controlled by a player.
+
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		if(M.melee_damage_type == "BRAIN") //because brain damage is apparently not a proper damage type like all the others
 			adjustBrainLoss(damage)
@@ -514,7 +513,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		else
 			to_chat(user, "<span class='notice'>This [src] is dead, medical items won't bring it back to life.</span>")
 	else if((meat_type || butchering_drops) && (stat == DEAD))	//if the animal has a meat, and if it is dead.
-		if(O.is_sharp())
+		if(O.sharpness_flags & SHARP_BLADE)
 			if(user.a_intent != I_HELP)
 				to_chat(user, "<span class='info'>You must be on <b>help</b> intent to do this!</span>")
 			else

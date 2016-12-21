@@ -257,6 +257,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 	if(flags & HEAR_ALWAYS)
 		getFromPool(/mob/virtualhearer, src)
 
+	update_colour(0,1)
+
 /mob/Del()
 	if(flags & HEAR_ALWAYS)
 		for(var/mob/virtualhearer/VH in virtualhearers)
@@ -855,14 +857,8 @@ var/list/slot_equipment_priority = list( \
 			client.perspective = EYE_PERSPECTIVE
 			client.eye = A
 		else
-			if (isturf(loc))
-				client.eye = client.mob
-				client.perspective = MOB_PERSPECTIVE
-			else
-				client.perspective = EYE_PERSPECTIVE
-				client.eye = loc
-	return
-
+			client.eye = client.mob
+			client.perspective = MOB_PERSPECTIVE
 
 /mob/proc/show_inv(mob/user as mob)
 	user.set_machine(src)
@@ -942,9 +938,16 @@ var/list/slot_equipment_priority = list( \
 
 	return 1
 
+/mob/proc/has_hand_check()
+	return held_items.len
+
 //this and stop_pulling really ought to be /mob/living procs
 /mob/proc/start_pulling(var/atom/movable/AM)
 	if ( !AM || !src || src==AM || !isturf(AM.loc) )	//if there's no person pulling OR the person is pulling themself OR the object being pulled is inside something: abort!
+		return
+
+	if(!has_hand_check())
+		to_chat(src,"<span class='notice'>You don't have any hands to pull with!</span>")
 		return
 
 	var/atom/movable/P = AM
@@ -1419,7 +1422,7 @@ var/list/slot_equipment_priority = list( \
 					statpanel(S.panel,"Required [S.holder_var_type]: [S.holder_var_amount]",S.connected_button)
 				else if(charge_type & Sp_CHARGES)
 					statpanel(S.panel,"[S.charge_max? "[S.charge_counter]/[S.charge_max] charges" : "Free"]",S.connected_button)
-				else if(charge_type & Sp_RECHARGE)
+				else if(charge_type & Sp_RECHARGE || charge_type & Sp_GRADUAL)
 					statpanel(S.panel,"[S.charge_max? "[S.charge_counter/10.0]/[S.charge_max/10] seconds" : "Free"]",S.connected_button)
 	sleep(world.tick_lag * 2)
 

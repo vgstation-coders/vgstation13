@@ -405,6 +405,19 @@ BLIND     // can't see anything
 	permeability_coefficient = 0.50
 	slowdown = SHOES_SLOWDOWN
 	species_restricted = list("exclude","Unathi","Tajaran","Muton")
+	var/step_sound = ""
+	var/stepstaken = 1
+
+/obj/item/clothing/shoes/proc/step_action()
+	stepstaken++
+	if(step_sound != "" && ishuman(loc))
+		var/mob/living/carbon/human/H = loc
+		switch(H.m_intent)
+			if("run")
+				if(stepstaken % 2 == 1)
+					playsound(H, step_sound, 50, 1) // this will NEVER GET ANNOYING!
+			if("walk")
+				playsound(H, step_sound, 20, 1)		
 
 /obj/item/clothing/shoes/proc/on_kick(mob/living/user, mob/living/victim)
 	return

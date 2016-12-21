@@ -53,6 +53,7 @@ var/list/blob_looks
 	var/fire_resist = 1
 	pixel_x = -WORLD_ICON_SIZE/2
 	pixel_y = -WORLD_ICON_SIZE/2
+	layer = BLOB_BASE_LAYER
 	plane = BLOB_PLANE
 	var/spawning = 2
 	var/dying = 0
@@ -275,6 +276,8 @@ var/list/blob_looks
 			icon = 'icons/mob/blob/blob_honkscape.dmi'
 		if("AME")
 			icon = 'icons/mob/blob/blob_AME.dmi'
+		if("AME_new")
+			icon = 'icons/mob/blob/blob_AME_64x64.dmi'
 		//<----------------------------------------------------------------------------DEAR SPRITERS, THIS IS WHERE YOU ADD YOUR NEW BLOB DMIs
 		/*EXAMPLES
 		if("fleshy")
@@ -292,6 +295,7 @@ var/list/blob_looks_admin = list(//Options available to admins
 	"adminbus" = adminblob_size,
 	"clownscape" = 32,
 	"AME" = 32,
+	"AME_new" = 64,
 	)
 
 var/list/blob_looks_player = list(//Options available to players
@@ -382,6 +386,7 @@ var/list/blob_looks_player = list(//Options available to players
 		B.density = initial(B.density)
 		if(icon_size == 64)
 			spawn(1)
+				B.dir = get_dir(loc,T)
 				B.forceMove(T)
 				B.aftermove()
 				if(B.spawning > 1)
@@ -404,7 +409,8 @@ var/list/blob_looks_player = list(//Options available to players
 	if("[type]" == "/obj/effect/blob/core")
 		new type(src.loc, 200, null, 1, M, newlook = looks)
 	else
-		new type(src.loc, newlook = looks)
+		var/obj/effect/blob/B = new type(src.loc, newlook = looks)
+		B.dir = dir
 	spawning = 1//so we don't show red severed connections
 	manual_remove = 1
 	Delete()
@@ -424,6 +430,7 @@ var/list/blob_looks_player = list(//Options available to players
 /obj/effect/blob/normal
 	luminosity = 2
 	health = 21
+	layer = BLOB_BASE_LAYER
 
 /obj/effect/blob/normal/Delete()
 	..()

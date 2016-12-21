@@ -15,3 +15,4 @@
 	response_harm   = "stomps on"
 
 	size = SIZE_TINY
+	held_items = list()

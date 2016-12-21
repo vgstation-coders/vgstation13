@@ -5,8 +5,11 @@ var/list/holomap_cache = list()
 /obj/item/clothing/accessory/holomap_chip
 	name = "holomap chip"
 	desc = "A device meant to be attached on a jumpsuit, granting a certain degree of situational awareness."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing_accessories.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing_accessories.dmi')
 	icon_state = "holochip"
+	item_state = null
 	accessory_exclusion = HOLOMAP
+	w_class = W_CLASS_TINY
 
 	var/destroyed = 0
 
@@ -14,9 +17,11 @@ var/list/holomap_cache = list()
 	var/mob/living/carbon/human/activator = null
 	var/list/holomap_images = list()
 	var/marker_prefix = "ert"
+	var/base_prefix = "ert"
 	var/holomap_color = null
 	var/holomap_filter = HOLOMAP_FILTER_ERT
 
+	var/list/prefix_update = list()
 
 /obj/item/clothing/accessory/holomap_chip/deathsquad
 	name = "deathsquad holomap chip"
@@ -41,7 +46,7 @@ var/list/holomap_cache = list()
 	holomap_filter = HOLOMAP_FILTER_ERT
 	holomap_color = "#5FFF28"
 
-	var/list/prefix_update = list(
+	prefix_update = list(
 		"/obj/item/clothing/head/helmet/space/ert/commander" = "ertc",
 		"/obj/item/clothing/head/helmet/space/ert/security" = "erts",
 		"/obj/item/clothing/head/helmet/space/ert/engineer" = "erte",
@@ -49,9 +54,34 @@ var/list/holomap_cache = list()
 		)
 
 
+/obj/item/clothing/accessory/holomap_chip/elite
+	name = "elite syndicate strike team holomap chip"
+	icon_state = "holochip_syndi"
+	marker_prefix = "syndi"
+	holomap_filter = HOLOMAP_FILTER_ELITESYNDICATE
+	holomap_color = "#E30000"
+
+	prefix_update = list(
+		"/obj/item/clothing/head/helmet/space/syndicate/black/red" = "syndileader",
+		)
+
+
+/obj/item/clothing/accessory/holomap_chip/raider
+	name = "nuclear operative holomap chip"
+	icon_state = "holochip_raid"
+	marker_prefix = "raid"
+	holomap_filter = HOLOMAP_FILTER_VOX
+	holomap_color = "#3BCCCC"
+
+	prefix_update = list(
+		"/obj/item/clothing/head/helmet/space/vox/pressure" = "raidpress",
+		)
+
+
 /obj/item/clothing/accessory/holomap_chip/New()
 	..()
 	holomap_chips += src
+	base_prefix = marker_prefix
 
 
 /obj/item/clothing/accessory/holomap_chip/Destroy()
@@ -175,15 +205,18 @@ var/list/holomap_cache = list()
 			markerImage.plane = FLOAT_PLANE
 			markerImage.layer = FLOAT_LAYER
 			if(map.holomap_offset_x.len >= T.z)
-				markerImage.pixel_x = holomarker.x+holomarker.pixel_x+map.holomap_offset_x[T.z]
-				markerImage.pixel_y = holomarker.y+holomarker.pixel_y+map.holomap_offset_y[T.z]
+				markerImage.pixel_x = holomarker.x+holomarker.offset_x+map.holomap_offset_x[T.z]
+				markerImage.pixel_y = holomarker.y+holomarker.offset_y+map.holomap_offset_y[T.z]
 			else
-				markerImage.pixel_x = holomarker.x+holomarker.pixel_x
-				markerImage.pixel_y = holomarker.y+holomarker.pixel_y
+				markerImage.pixel_x = holomarker.x+holomarker.offset_x
+				markerImage.pixel_y = holomarker.y+holomarker.offset_y
 			markerImage.appearance_flags = RESET_COLOR
 			bgmap.overlays += markerImage
 
-	animate(bgmap,pixel_x = -1*T.x + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32), pixel_y = -1*T.y + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
+	if(map.holomap_offset_x.len >= T.z)
+		animate(bgmap,pixel_x = -1*T.x - map.holomap_offset_x[T.z] + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32), pixel_y = -1*T.y - map.holomap_offset_y[T.z] + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
+	else
+		animate(bgmap,pixel_x = -1*T.x + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32), pixel_y = -1*T.y + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
 	holomap_images += bgmap
 
 	for(var/obj/item/clothing/accessory/holomap_chip/HC in holomap_chips)
@@ -266,6 +299,28 @@ var/list/holomap_cache = list()
 
 			holomap_images += I
 
+/obj/item/clothing/accessory/holomap_chip/elite/extra_update()
+	var/turf/T = get_turf(src)
+	for(var/obj/mecha/combat/marauder/mauler/maul in mechas_list)
+		if(T.z == maul.z)
+			var/holomap_marker = "marker_\ref[src]_\ref[maul]_[maul.occupant ? 1 : 0]"
+
+			if(!(holomap_marker in holomap_cache))
+				holomap_cache[holomap_marker] = image('icons/holomap_markers.dmi',"mau[maul.occupant ? 1 : 0]")
+
+			var/image/I = holomap_cache[holomap_marker]
+			I.plane = HUD_PLANE
+			I.loc = activator.hud_used.holomap_obj
+
+			if(maul.occupant)
+				I.layer = HUD_ABOVE_ITEM_LAYER
+			else
+				I.layer = HUD_ITEM_LAYER
+
+			handle_marker(I,T,get_turf(maul))
+
+			holomap_images += I
+
 /obj/item/clothing/accessory/holomap_chip/ert/extra_update()
 	var/turf/T = get_turf(src)
 	if(T.z == map.zMainStation)
@@ -293,28 +348,35 @@ var/list/holomap_cache = list()
 				markerImage.plane = FLOAT_PLANE
 				markerImage.layer = FLOAT_LAYER
 				if(map.holomap_offset_x.len >= T.z)
-					markerImage.pixel_x = holomarker.x+holomarker.pixel_x+map.holomap_offset_x[T.z]
-					markerImage.pixel_y = holomarker.y+holomarker.pixel_y+map.holomap_offset_y[T.z]
+					markerImage.pixel_x = holomarker.x+holomarker.offset_x+map.holomap_offset_x[T.z]
+					markerImage.pixel_y = holomarker.y+holomarker.offset_y+map.holomap_offset_y[T.z]
 				else
-					markerImage.pixel_x = holomarker.x+holomarker.pixel_x
-					markerImage.pixel_y = holomarker.y+holomarker.pixel_y
+					markerImage.pixel_x = holomarker.x+holomarker.offset_x
+					markerImage.pixel_y = holomarker.y+holomarker.offset_y
 				markerImage.appearance_flags = RESET_COLOR
 				bgmap.overlays += markerImage
 
-		animate(bgmap,pixel_x = -1*T.x + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32), pixel_y = -1*T.y + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
+		if(map.holomap_offset_x.len >= T.z)
+			animate(bgmap,pixel_x = -1*T.x - map.holomap_offset_x[T.z] + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32), pixel_y = -1*T.y - map.holomap_offset_y[T.z] + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
+		else
+			animate(bgmap,pixel_x = -1*T.x + activator.client.view*WORLD_ICON_SIZE + 16*(WORLD_ICON_SIZE/32), pixel_y = -1*T.y + activator.client.view*WORLD_ICON_SIZE + 17*(WORLD_ICON_SIZE/32), time = 5, easing = LINEAR_EASING)
+
 		holomap_images += bgmap
 
 /obj/item/clothing/accessory/holomap_chip/proc/update_marker()
-	return
+	marker_prefix = base_prefix
+	if (prefix_update.len > 0)
+		var/obj/item/clothing/under/U = attached_to
+		if(U && ishuman(U.loc))
+			var/mob/living/carbon/human/H = U.loc
+			var/obj/item/helmet = H.get_item_by_slot(slot_head)
+			if(helmet && "[helmet.type]" in prefix_update)
+				marker_prefix = prefix_update["[helmet.type]"]
 
-/obj/item/clothing/accessory/holomap_chip/ert/update_marker()
-	marker_prefix = "ert"
-	var/obj/item/clothing/under/U = attached_to
-	if(U && ishuman(U.loc))
-		var/mob/living/carbon/human/H = U.loc
-		var/obj/item/helmet = H.get_item_by_slot(slot_head)
-		if(helmet && "[helmet.type]" in prefix_update)
-			marker_prefix = prefix_update["[helmet.type]"]
+/obj/item/clothing/accessory/holomap_chip/raider/update_marker()
+	..()
+	if(prob(10))
+		marker_prefix = "chick[pick("a","b","c")]"
 
 /obj/item/clothing/accessory/holomap_chip/proc/handle_marker(var/image/I,var/turf/T,var/turf/TU)
 	//if a new marker is created, we immediately set its offset instead of letting animate() take care of it, so it doesn't slide accross the screen.
