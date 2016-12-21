@@ -486,3 +486,9 @@
 	desc = "Strike the asteroid!"
 	icon_state = "alecustom"
 	initReagent = ALE
+
+/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/degreaser
+	name = "engine degreaser"
+	desc = "Engines, full speed!"
+	icon_state = "vodkacustom"
+	initReagent = ETHANOL
