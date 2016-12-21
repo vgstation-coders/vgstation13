@@ -20,7 +20,7 @@
 					return
 			if (stat)
 				return
-			if(!(message))
+			if(!message)
 				return
 			else
 				return custom_emote(1, message)
@@ -35,7 +35,7 @@
 		if ("glare")
 			var/M = null
 			if (param)
-				for (var/mob/A in view(null, null))
+				for (var/mob/A in view())
 					if (param == A.name)
 						M = A
 						break
@@ -50,7 +50,7 @@
 		if ("stare")
 			var/M = null
 			if (param)
-				for (var/mob/A in view(null, null))
+				for (var/mob/A in view())
 					if (param == A.name)
 						M = A
 						break
@@ -61,11 +61,12 @@
 				message = "<B>[src]</B> stares at [param]."
 			else
 				message = "<B>[src]</B> stares."
+			m_type = VISIBLE
 
 		if ("look")
 			var/M = null
 			if (param)
-				for (var/mob/A in view(null, null))
+				for (var/mob/A in view())
 					if (param == A.name)
 						M = A
 						break
@@ -82,7 +83,7 @@
 		if("beep")
 			var/M = null
 			if(param)
-				for (var/mob/A in view(null, null))
+				for (var/mob/A in view())
 					if (param == A.name)
 						M = A
 						break
@@ -99,7 +100,7 @@
 		if("ping")
 			var/M = null
 			if(param)
-				for (var/mob/A in view(null, null))
+				for (var/mob/A in view())
 					if (param == A.name)
 						M = A
 						break
@@ -116,7 +117,7 @@
 		if("buzz")
 			var/M = null
 			if(param)
-				for (var/mob/A in view(null, null))
+				for (var/mob/A in view())
 					if (param == A.name)
 						M = A
 						break
@@ -153,11 +154,10 @@
 		else
 			to_chat(src, "<span class='notice'>Unusable emote '[act]'. Say *help for a list.</span>")
 
-	if ((message && src.stat == 0))
-		if (m_type & 1)
+	if (message && !isUnconscious())
+		if (m_type & VISIBLE)
 			for(var/mob/O in viewers(src, null))
 				O.show_message(message, m_type)
 		else
 			for(var/mob/O in hearers(src, null))
 				O.show_message(message, m_type)
-	return
