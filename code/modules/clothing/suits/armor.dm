@@ -290,11 +290,10 @@
 	heat_conductivity = 1
 	cold_speed_protection = 0
 
-/obj/item/clothing/suit/armor/ice/on_mob_life(var/mob/living/M)
-	if(!..())
-		return 0
-	M.bodytemperature = max(M.bodytemperature-2.0 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
-	if(prob(1))
-		M.emote("shiver")
-	if(M.reagents && M.reagents.has_reagent(LEPORAZINE))	//No escaping winter's curse
-		M.bodytemperature = max(M.bodytemperature-200 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
+/obj/item/clothing/suit/armor/ice/OnMobLife(var/mob/holder)
+	if(is_worn(holder))
+		holder.bodytemperature = max(holder.bodytemperature-2 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
+		if(prob(1))
+			holder.emote("shiver")
+		if(holder.reagents && holder.reagents.has_reagent(LEPORAZINE))	//No escaping winter's curse
+			holder.bodytemperature = max(holder.bodytemperature-200 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)

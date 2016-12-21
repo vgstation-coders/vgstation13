@@ -1067,3 +1067,65 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/animationBolt(var/mob/firer)
 	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)
+
+/obj/item/proc/is_worn(mob/user)
+	var/mob/living/carbon/monkey/M
+	var/mob/living/carbon/human/H
+	if(istype(user, /mob/living/carbon/monkey))
+		M = user
+	if(istype(user, /mob/living/carbon/human))
+		H = user
+	if(!(H || M))
+		return 0
+	if(H)
+		if(slot_flags & SLOT_OCLOTHING)
+			if(H.wear_suit == src)
+				return 1
+		if(slot_flags & SLOT_GLOVES)
+			if(H.gloves == src)
+				return 1
+		if(slot_flags & SLOT_EARS)
+			if(H.ears == src)
+				return 1
+		if(slot_flags & SLOT_FEET)
+			if(H.shoes == src)
+				return 1
+		if(slot_flags & SLOT_ID)
+			if(H.wear_id == src)
+				return 1
+		if(slot_flags & SLOT_BELT)
+			if(H.belt == src)
+				return 1
+		if(slot_flags & SLOT_ICLOTHING)
+			if(H.w_uniform == src)
+				return 1
+		if(slot_flags & SLOT_EYES)
+			if(H.glasses == src)
+				return 1
+		if(slot_flags & SLOT_MASK)
+			if(H.wear_mask == src)
+				return 1
+		if(slot_flags & SLOT_HEAD)
+			if(H.head == src)
+				return 1
+		if(slot_flags & SLOT_BACK)
+			if(H.back == src)
+				return 1
+	else
+		if(slot_flags & SLOT_ICLOTHING)
+			if(M.uniform == src)
+				return 1
+		if(slot_flags & SLOT_EYES)
+			if(M.glasses == src)
+				return 1
+		if(slot_flags & SLOT_MASK)
+			if(M.wear_mask == src)
+				return 1
+		if(slot_flags & SLOT_HEAD)
+			if(M.hat == src)
+				return 1
+		if(slot_flags & SLOT_BACK)
+			if(M.back == src)
+				return 1
+
+
