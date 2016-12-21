@@ -1,6 +1,6 @@
 /mob/living/simple_animal/hostile/gingerbread
 	name = "gingerbread man"
-	desc = "Once upon a time somebody get really hungry, so prayed to the gods to be able to bake a large piece of gingerbread\n This is the result."
+	desc = "Once upon a time somebody got really hungry, so they prayed to the gods to be able to bake a large piece of gingerbread...\n This is the result."
 	icon_state = "gingerbreadman"
 	icon_living = "gingerbreadman"
 	icon_dead = "gingerbreadman_dead"
@@ -31,4 +31,3 @@
 	max_n2 = 0
 	minbodytemp = 0
 	speed = 4
-
