@@ -88,6 +88,7 @@ Used In File(s): code\game\dna\dna_modifier.dm
 			{{:helper.link('Irradiate Block', 'radiation', {'pulseUIRadiation' : 1}, !data.occupant.isViableSubject ? 'disabled' : null)}}
 		</div>
 	</div>
+
 {{else data.selectedMenuKey == 'se'}}
 	<h3>Modify Structural Enzymes</h3>
     {{:helper.displayDNABlocks(data.occupant.structuralEnzymes, data.selectedSEBlock, data.selectedSESubBlock, data.dnaBlockSize, 'SE', data.block_labels)}}
@@ -97,6 +98,17 @@ Used In File(s): code\game\dna\dna_modifier.dm
 			{{:helper.link('Irradiate Block', 'radiation', {'pulseSERadiation' : 1}, !data.occupant.isViableSubject ? 'disabled' : null)}}
 		</div>
 	</div>
+	{{if !data.hasDisk}}
+		<div class="item">
+			<span class="highlight">Label auto-backup: </span> <span class="average">DISABLED - No disk!</span>
+		</div>
+	{{else data.isDiskProtected}}
+		<div class="item">
+			<span class="highlight">Label auto-backup: </span> <span class="average">DISABLED - Disk is read-only!</span>
+		</div>
+	{{else}}
+	{{/if}}
+	
 {{else data.selectedMenuKey == 'buffer'}}
 	<h3>Transfer Buffers</h3>
 	{{for data.buffers}}
