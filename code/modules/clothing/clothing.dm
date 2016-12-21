@@ -216,6 +216,12 @@
 		for(var/A in armor)
 			armor[A] -= rand(armor[A]/3, armor[A])
 
+/obj/item/clothing/proc/on_mob_life(var/mob/living/M)
+	set waitfor = 0
+	. = 1
+	if(!M)
+		return 0
+
 //Ears: headsets, earmuffs and tiny objects
 /obj/item/clothing/ears
 	name = "ears"

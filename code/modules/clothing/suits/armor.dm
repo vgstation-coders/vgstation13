@@ -278,3 +278,23 @@
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	slowdown = 0
 	armor = list(melee = 50, bullet = 30, laser = 20, energy = 20, bomb = 30, bio = 0, rad = 0)
+
+/obj/item/clothing/suit/armor/ice
+	name = "ice armor"
+	desc = "A cool-looking suit of armor made of solid ice."
+	icon_state = "ice_armor"
+	item_state = "ice_armor"
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	armor = list(melee = 80, bullet = 50, laser = 0, energy = 10, bomb = 40, bio = 0, rad = 0)
+	siemens_coefficient = 0
+	heat_conductivity = 1
+	cold_speed_protection = 0
+
+/obj/item/clothing/suit/armor/ice/on_mob_life(var/mob/living/M)
+	if(!..())
+		return 0
+	M.bodytemperature = max(M.bodytemperature-2.0 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
+	if(prob(1))
+		M.emote("shiver")
+	if(M.reagents && M.reagents.has_reagent(LEPORAZINE))	//No escaping winter's curse
+		M.bodytemperature = max(M.bodytemperature-200 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)

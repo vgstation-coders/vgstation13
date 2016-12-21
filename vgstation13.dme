@@ -1381,6 +1381,7 @@
 #include "code\modules\mob\living\carbon\human\life\handle_breath.dm"
 #include "code\modules\mob\living\carbon\human\life\handle_changeling.dm"
 #include "code\modules\mob\living\carbon\human\life\handle_chemicals_in_body.dm"
+#include "code\modules\mob\living\carbon\human\life\handle_clothing.dm"
 #include "code\modules\mob\living\carbon\human\life\handle_disabilities.dm"
 #include "code\modules\mob\living\carbon\human\life\handle_environment.dm"
 #include "code\modules\mob\living\carbon\human\life\handle_equipment.dm"
