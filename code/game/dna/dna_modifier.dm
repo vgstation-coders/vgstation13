@@ -395,7 +395,8 @@
 	if(connected.connected == src)
 		connected.connected = null
 	connected = null
-	labels.Cut()
+	for(var/datum/block_label/label in labels)
+		returnToPool(label)
 	buffers.Cut()
 	if(disk)
 		qdel(disk)
@@ -431,11 +432,6 @@
 			src.injector_ready = 1
 		return
 	return
-
-/obj/machinery/computer/scan_consolenew/Destroy()
-	for(var/datum/block_label/label in labels)
-		returnToPool(label)
-	..()
 
 /obj/machinery/computer/scan_consolenew/ex_act(severity)
 	switch(severity)
