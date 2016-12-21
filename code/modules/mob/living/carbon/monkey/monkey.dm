@@ -115,8 +115,8 @@
 	greaterform = "Tajaran"
 
 /mob/living/carbon/monkey/tajara/New()
-
 	..()
+	add_language(LANGUAGE_MOUSE)
 	dna.mutantrace = "tajaran"
 
 /mob/living/carbon/monkey/skrell
@@ -130,7 +130,6 @@
 	greaterform = "Skrell"
 
 /mob/living/carbon/monkey/skrell/New()
-
 	..()
 	dna.mutantrace = "skrell"
 
@@ -146,7 +145,6 @@
 	greaterform = "Unathi"
 
 /mob/living/carbon/monkey/unathi/New()
-
 	..()
 	dna.mutantrace = "lizard"
 
