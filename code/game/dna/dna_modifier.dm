@@ -395,7 +395,8 @@
 	if(connected.connected == src)
 		connected.connected = null
 	connected = null
-	labels.Cut()
+	for(var/datum/block_label/label in labels)
+		returnToPool(label)
 	buffers.Cut()
 	if(disk)
 		qdel(disk)
@@ -405,6 +406,9 @@
 /datum/block_label
 	var/name = ""
 	var/color = "#1c1c1c"
+/datum/block_label/proc/overwriteLabel(var/datum/block_label/L)
+	L.name = src.name
+	L.color = src.color
 
 /obj/machinery/computer/scan_consolenew/attackby(obj/O as obj, mob/user as mob)
 	..()
@@ -413,6 +417,20 @@
 			if (user.drop_item(O, src))
 				disk = O
 				to_chat(user, "You insert [O].")
+	return
+
+/obj/machinery/computer/scan_consolenew/New()
+	..()
+	for(var/i=1;i<=3;i++)
+		buffers[i] = getFromPool(/datum/dna2/record)
+	for(var/i=1;i<=DNA_SE_LENGTH;i++)
+		labels[i] = getFromPool(/datum/block_label)
+	spawn(5)
+		connected = findScanner()
+		connected.connected = src
+		spawn(250)
+			src.injector_ready = 1
+		return
 	return
 
 /obj/machinery/computer/scan_consolenew/ex_act(severity)
@@ -428,20 +446,6 @@
 /obj/machinery/computer/scan_consolenew/blob_act()
 	if(prob(75))
 		qdel(src)
-
-/obj/machinery/computer/scan_consolenew/New()
-	..()
-	for(var/i=1;i<=3;i++)
-		buffers[i] = new /datum/dna2/record
-	for(var/i=1;i<=DNA_SE_LENGTH;i++)
-		labels[i] = new /datum/block_label
-	spawn(5)
-		connected = findScanner()
-		connected.connected = src
-		spawn(250)
-			src.injector_ready = 1
-		return
-	return
 
 /obj/machinery/computer/scan_consolenew/proc/findScanner()
 	for(dir in list(NORTH,EAST,SOUTH,WEST))
@@ -466,6 +470,12 @@
 	I.buf = buffer
 	return 1
 
+/obj/machinery/computer/scan_consolenew/proc/ejectDisk()
+	if (!disk)
+		return
+	disk.forceMove(get_turf(src))
+	disk = null
+
 /obj/machinery/computer/scan_consolenew/process()
 	if (connected && connected.occupant)
 		use_power = 2
@@ -485,6 +495,12 @@
 			connected = findScanner() //lets get that machine
 			connected.connected = src
 		ui_interact(user)
+
+/obj/machinery/computer/scan_consolenew/AltClick()
+	if(disk)
+		ejectDisk()
+	else
+		..()
 
  /**
   * The ui_interact proc is used to open and update Nano UIs
@@ -515,6 +531,7 @@
 	data["isInjectorReady"] = injector_ready
 
 	data["hasDisk"] = disk ? 1 : 0
+	data["isDiskProtected"] = disk && disk.read_only
 
 	var/diskData[0]
 	if (!disk || !disk.buf)
@@ -847,16 +864,27 @@
 			return
 		if(newcolor)
 			label.color = newcolor
+		if(disk && !disk.read_only) //autobackup!
+			for(var/i=1;i<=DNA_SE_LENGTH;i++)
+				var/datum/block_label/L = labels[i]
+				L.overwriteLabel(disk.labels[i])
 		return 1
 
 	if(href_list["copyLabelsFromDisk"])
 		if(disk)
-			labels = disk.labels.Copy()
+			for(var/i=1;i<=DNA_SE_LENGTH;i++)
+				var/datum/block_label/L = disk.labels[i]
+				L.overwriteLabel(labels[i])
 		return 1
 
 	if(href_list["copyLabelsToDisk"])
 		if(disk)
-			disk.labels = labels.Copy()
+			if(disk.read_only)
+				to_chat(usr, "<span class='warning'>The disk's write-protect tab is set to read-only.</span>")
+				return
+			for(var/i=1;i<=DNA_SE_LENGTH;i++)
+				var/datum/block_label/L = labels[i]
+				L.overwriteLabel(disk.labels[i])
 		return 1
 
 	if(href_list["ejectOccupant"])
@@ -878,10 +906,7 @@
 			return 1
 
 		if (bufferOption == "ejectDisk")
-			if (!src.disk)
-				return
-			src.disk.forceMove(get_turf(src))
-			src.disk = null
+			ejectDisk()
 			return 1
 
 		// All bufferOptions from here on require a bufferId
