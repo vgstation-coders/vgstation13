@@ -162,6 +162,33 @@
 			return s_store
 	return null
 
+// Return the item currently in the slot denoted by the slot flag
+/mob/living/carbon/human/get_item_by_flag(slot_flag)
+	switch(slot_flag)
+		if(SLOT_BACK)
+			return back
+		if(SLOT_MASK)
+			return wear_mask
+		if(SLOT_BELT)
+			return belt
+		if(SLOT_ID)
+			return wear_id
+		if(SLOT_EARS)
+			return ears
+		if(SLOT_EYES)
+			return glasses
+		if(SLOT_GLOVES)
+			return gloves
+		if(SLOT_HEAD)
+			return head
+		if(SLOT_FEET)
+			return shoes
+		if(SLOT_OCLOTHING)
+			return wear_suit
+		if(SLOT_ICLOTHING)
+			return w_uniform
+	return null
+
 /mob/living/carbon/human/has_organ(name)
 
 	var/datum/organ/external/O = organs_by_name[name]
