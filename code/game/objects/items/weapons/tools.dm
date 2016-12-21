@@ -354,7 +354,7 @@
 
 
 /obj/item/weapon/weldingtool/attack_self(mob/user as mob)
-	toggle()
+	toggle(user)
 
 //Returns the amount of fuel in the welder
 /obj/item/weapon/weldingtool/proc/get_fuel()
@@ -418,32 +418,34 @@
 //Turns off the welder if there is no more fuel (does this really need to be its own proc?)
 /obj/item/weapon/weldingtool/proc/check_fuel()
 	if((get_fuel() <= 0) && welding)
-		toggle(1)
+		toggle()
 		return 0
 	return 1
 
 
 //Toggles the welder off and on
-/obj/item/weapon/weldingtool/proc/toggle(var/message = 0)
+/obj/item/weapon/weldingtool/proc/toggle(var/mob/user)
 	if(!status)
 		return
 	src.welding = !( src.welding )
 	if (src.welding)
 		if (remove_fuel(1))
-			to_chat(usr, "<span class='notice'>You switch the [src] on.</span>")
+			if(user && istype(user))
+				to_chat(user, "<span class='notice'>You switch the [src] on.</span>")
 			src.force = 15
 			src.damtype = "fire"
 			update_icon()
 			processing_objects.Add(src)
 		else
-			to_chat(usr, "<span class='notice'>Need more fuel!</span>")
+			if(user && istype(user))
+				to_chat(user, "<span class='notice'>Need more fuel!</span>")
 			src.welding = 0
 			return
 	else
-		if(!message)
+		if(user && istype(user))
 			to_chat(usr, "<span class='notice'>You switch the [src] off.</span>")
 		else
-			to_chat(usr, "<span class='notice'>\The [src] shuts off!</span>")
+			visible_message("<span class='notice'>\The [src] shuts off!</span>")
 		src.force = 3
 		src.damtype = "brute"
 		update_icon()
@@ -584,9 +586,9 @@
 	origin_tech = Tc_ENGINEERING + "=1"
 	attack_verb = list("attacks", "bashes", "batters", "bludgeons", "whacks")
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
-		return (BRUTELOSS)
+/obj/item/weapon/crowbar/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
+	return (BRUTELOSS)
 
 /obj/item/weapon/crowbar/red
 	desc = "Rise and shine."
@@ -594,9 +596,9 @@
 	icon_state = "red_crowbar"
 	item_state = "crowbar_red"
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for half life three!</span>")
-		return (BRUTELOSS)
+/obj/item/weapon/crowbar/red/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for half life three!</span>")
+	return (BRUTELOSS)
 
 
 /obj/item/weapon/weldingtool/attack(mob/M as mob, mob/user as mob)

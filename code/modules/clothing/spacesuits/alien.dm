@@ -60,6 +60,7 @@
 	icon_state = "vox-carapace"
 	item_state = "vox-carapace"
 	desc = "A glowing visor, perhaps stolen from a depressed Cylon."
+	eyeprot = 3
 
 /obj/item/clothing/suit/space/vox/carapace
 	name = "alien carapace armour"
@@ -72,6 +73,7 @@
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
 	desc = "A smoothly contoured, matte-black alien helmet."
+	eyeprot = 3
 
 /obj/item/clothing/suit/space/vox/stealth
 	name = "alien stealth suit"
@@ -398,6 +400,7 @@
 	item_state = "vox-pressure-security"
 	desc = "A very alien-looking helmet for Nanotrasen-hired Vox. This one is for security aligned vox."
 	pressure_resistance = 40 * ONE_ATMOSPHERE
+	eyeprot = 3
 
 //Old Vox Suits
 /*

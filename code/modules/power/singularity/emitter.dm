@@ -298,6 +298,7 @@
 	flags = 0
 	damage = 30
 	damage_type = BURN
+	plane = EFFECTS_PLANE
 
 	var/base_state = "emitter"
 	var/power = 1

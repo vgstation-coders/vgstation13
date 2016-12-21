@@ -193,3 +193,6 @@
 	//		return 1
 	//	return 0
 	return ..()
+
+/mob/living/carbon/human/can_read()
+	return TRUE //no brain damage checks for now

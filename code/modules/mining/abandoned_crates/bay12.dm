@@ -28,7 +28,9 @@
 	New()
 		..()
 		for(var/i = 0, i < 3, i++)
-			new/obj/machinery/portable_atmospherics/hydroponics(src)
+			var/obj/machinery/portable_atmospherics/hydroponics/tray = new(src)
+			tray.anchored = FALSE
+			
 /obj/structure/closet/crate/secure/loot/bay_06
 	New()
 		..()

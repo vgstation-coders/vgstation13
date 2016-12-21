@@ -300,3 +300,9 @@
 /mob/living/carbon/alien/larva/reset_layer()
 	if(stat == DEAD)
 		plane = MOB_PLANE
+
+/mob/living/carbon/alien/larva/proc/transfer_personality(var/client/candidate)
+	ckey = candidate.ckey
+	src << sound('sound/voice/alienspawn.ogg')
+	if(src.mind)
+		src.mind.assigned_role = "Alien"

@@ -62,23 +62,17 @@
 	update_items()
 	return 1
 
-//Attemps to remove an object on a mob.  Will not move it to another area or such, just removes from the mob.
-/mob/living/silicon/robot/mommi/remove_from_mob(var/obj/O)
-	src.u_equip(O,0)
-	if (src.client)
-		src.client.screen -= O
-	O.reset_plane_and_layer()
-	O.screen_loc = null
-	return 1
-
 /mob/living/silicon/robot/mommi/u_equip(W as obj)
 	if (W == tool_state)
 		if(module_active==tool_state)
-			module_active=null
-		unequip_tool()
+			module_active = null
+		tool_state = null
+		inv_tool.icon_state="inv1"
 	else if (W == head_state)
-		unequip_head()
-
+		// Delete the hat's reference
+		head_state = null
+		// Update the MoMMI's head inventory icons
+		update_inv_head()
 
 // Override the default /mob version since we only have one hand slot.
 /mob/living/silicon/robot/mommi/put_in_active_hand(var/obj/item/W)
@@ -102,27 +96,25 @@
 	return 0
 
 /mob/living/silicon/robot/mommi/drop_item(var/obj/item/to_drop, var/atom/Target, force_drop = 0)
-	if(tool_state)
+	if(!Target)
+		Target = src.loc
+	if(!istype(to_drop))
+		to_drop = tool_state
+	if(to_drop)
 		//var/obj/item/found = locate(tool_state) in src.module.modules
-		if(is_in_modules(tool_state))
-			if((tool_state in contents) && (tool_state in src.module.modules))
+		if(is_in_modules(to_drop))
+			if((to_drop in contents) && (to_drop in src.module.modules))
 				to_chat(src, "<span class='warning'>This item cannot be dropped.</span>")
 				return 0
 		if(client)
-			client.screen -= tool_state
-		contents -= tool_state
-		var/obj/item/TS = tool_state
-		if(!Target)
-			Target = src.loc
+			client.screen -= to_drop
 
-		TS.forceMove(Target)
+		to_drop.forceMove(Target)
 
-		//this all should be using remove_from_mob() but I couldn't easily get it to work for some reason so for now it continues to be copypasted ass
-		TS.dropped(src)
-		TS.layer=initial(TS.layer)
-		tool_state = null
-		module_active=null
-		inv_tool.icon_state="inv1"
+		//this all should be using remove_from_mob() but I couldn't get it to work for some reason so for now it continues to be copypasted ass
+		to_drop.dropped(src)
+
+		u_equip(to_drop)
 		update_items()
 		return 1
 	return 0
@@ -166,21 +158,8 @@
 /mob/living/silicon/robot/mommi/proc/unequip_head()
 	// If there is a hat on the MoMMI's head
 	if(head_state)
-		// Select the MoMMI's claw
-		select_module(INV_SLOT_TOOL)
+		drop_item(head_state)
 
-		// Put the hat in the MoMMI's claw
-		put_in_active_hand(head_state)
-
-		// Remove the head_state icon from the client's screen
-		if (client)
-			client.screen -= head_state
-
-		// Delete the hat from the head
-		head_state = null
-
-		// Update the MoMMI's head inventory icons
-		update_inv_head()
 
 /mob/living/silicon/robot/mommi/proc/unequip_tool()
 	if(tool_state)

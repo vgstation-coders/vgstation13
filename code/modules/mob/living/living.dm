@@ -402,9 +402,9 @@
 		for(var/obj/item/weapon/storage/S in src.contents)	//Check for storage items
 			L += get_contents(S)
 		for(var/obj/item/clothing/suit/storage/S in src.contents)//Check for labcoats and jackets
-			L += get_contents(S)
+			L += get_contents(S.hold)
 		for(var/obj/item/clothing/accessory/storage/S in src.contents)//Check for holsters
-			L += get_contents(S)
+			L += get_contents(S.hold)
 		for(var/obj/item/weapon/gift/G in src.contents) //Check for gift-wrapped items
 			L += G.gift
 			if(istype(G.gift, /obj/item/weapon/storage))
@@ -641,7 +641,7 @@ Thanks.
 
 	var/turf/T = loc
 
-	var/t7 = 1
+	var/t7 = 1 //What the FUCK is this variable?
 	if (restrained())
 		for(var/mob/living/M in range(src, 1))
 			if ((M.pulling == src && M.stat == 0 && !( M.restrained() )))
@@ -1305,11 +1305,14 @@ Thanks.
 	var/obj/item/tool = null	//The tool that is used for butchering
 	var/speed_mod = 1.0			//The higher it is, the faster you butcher
 	var/butchering_time = 20 * size //2 seconds for tiny animals, 4 for small ones, 6 for normal sized ones (+ humans), 8 for big guys and 10 for biggest guys
+	var/tool_name = null
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 
 		tool = H.get_active_hand()
+		if(tool)
+			tool_name = tool.name
 		if(tool)
 			speed_mod = tool.is_sharp()
 			if(!speed_mod)
@@ -1318,16 +1321,27 @@ Thanks.
 		else
 			speed_mod = 0.0
 
-		if(M_CLAWS in H.mutations)
-			if(!istype(H.gloves))
-				speed_mod += 0.25
 		if(M_BEAK in H.mutations)
 			if(istype(H.wear_mask))
 				var/obj/item/clothing/mask/M = H.wear_mask
 				if(!(M.body_parts_covered & MOUTH)) //If our mask doesn't cover mouth, we can use our beak to help us while butchering
 					speed_mod += 0.25
+					if(!tool_name)
+						tool_name = "beak"
 			else
 				speed_mod += 0.25
+				if(!tool_name)
+					tool_name = "beak"
+
+		if(M_CLAWS in H.mutations)
+			if(!istype(H.gloves))
+				speed_mod += 0.25
+				if(!tool_name)
+					tool_name = "claws"
+
+		if(isgrue(H))
+			tool_name = "grue"
+			speed_mod += 0.5
 	else
 		speed_mod = 0.5
 
@@ -1381,6 +1395,10 @@ Thanks.
 	src.drop_meat(get_turf(src))
 	src.meat_taken++
 	src.being_butchered = 0
+	if(tool_name)
+		if(!advanced_butchery)
+			advanced_butchery = new()
+		advanced_butchery.Add(tool_name)
 
 	if(src.meat_taken < src.meat_amount)
 		to_chat(user, "<span class='info'>You cut a chunk of meat out of \the [src].</span>")

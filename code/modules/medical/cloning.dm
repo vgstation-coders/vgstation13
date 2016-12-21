@@ -25,6 +25,8 @@
 	var/time_coeff = 1 //Upgraded via part upgrading
 	var/resource_efficiency = 1
 	var/id_tag = "clone_pod"
+	var/obj/machinery/computer/cloning/cloning_computer = null
+
 
 	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | MULTITOOL_MENU
 
@@ -354,7 +356,9 @@
 	return..()
 
 /obj/machinery/cloning/clonepod/Destroy()
-
+	if(connected.pod1 == src)
+		connected.pod1 = null
+	connected = null
 	go_out() //Eject everything
 
 	. = ..()

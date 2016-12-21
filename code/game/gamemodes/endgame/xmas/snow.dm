@@ -8,7 +8,8 @@
 
 /obj/structure/snow
 	name = "snow"
-	layer = BELOW_OBJ_LAYER
+	layer = SNOW_LAYER
+	plane = ABOVE_TURF_PLANE
 	icon = 'icons/turf/snow.dmi'
 	icon_state = "snow"
 	alpha = 230
@@ -328,6 +329,7 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 	density = 1.0
 	health = 50.0
 	var/maxhealth = 50.0
+	materialtype = /obj/item/stack/sheet/snow
 
 /obj/structure/window/barricade/snow/attackby(obj/item/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/stack/sheet/snow))
@@ -340,7 +342,6 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 				return
 		else
 			return
-		return
 	else
 		switch(W.damtype)
 			if("fire")

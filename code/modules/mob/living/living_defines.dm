@@ -71,6 +71,8 @@
 	var/obj/screen/schematics_background
 	var/shown_schematics_background = 0
 
+	var/list/advanced_butchery //Includes a list of the tools used to butcher the mob, detectable via autopsy scanner rather than examine.
+
 /mob/living/proc/unsubLife(datum/sub)
 	while("\ref[sub]" in callOnLife)
 		callOnLife -= "\ref[sub]"

@@ -40,6 +40,7 @@
 
 	var/atom/copied_object = /obj/structure/closet/crate
 	var/angry = 0
+	held_items = list()
 
 /mob/living/simple_animal/hostile/mimic/New()
 	.=..()

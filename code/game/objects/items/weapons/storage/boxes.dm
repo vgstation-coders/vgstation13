@@ -497,6 +497,36 @@
 	for(var/i=1; i <= storage_slots; i++)
 		new /obj/item/device/label_roll(src)
 
+/obj/item/weapon/storage/box/labels
+	name = "label roll box"
+	desc = "A box of refill rolls for a hand labeler."
+	icon_state = "labels"
+
+/obj/item/weapon/storage/box/labels/New()
+	..()
+	for(var/i=1; i <= storage_slots; i++)
+		new /obj/item/device/label_roll(src)
+
+/obj/item/weapon/storage/box/wreath/wreath_bow
+	name = "wreath (bow) box"
+	desc = "Just add hands for Christmas."
+	icon_state = "wreath_bow"
+
+/obj/item/weapon/storage/box/wreath/wreath_bow/New()
+	..()
+	for(var/i=1; i <= storage_slots; i++)
+		new /obj/item/mounted/frame/wreath/wreath_bow(src)
+
+/obj/item/weapon/storage/box/wreath/wreath_nobow
+	name = "wreath (holly) box"
+	desc = "Emergency Christmas supplies."
+	icon_state = "wreath_nobow"
+
+/obj/item/weapon/storage/box/wreath/wreath_nobow/New()
+	..()
+	for(var/i=1; i <= storage_slots; i++)
+		new /obj/item/mounted/frame/wreath/wreath_nobow(src)
+
 /obj/item/weapon/storage/box/snappops
 	name = "snap pop box"
 	desc = "Eight wrappers of fun! Ages 8 and up. Not suitable for children."

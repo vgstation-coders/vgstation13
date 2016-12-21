@@ -12,6 +12,7 @@
 	icon_state = "wood0"
 	walltype = "wood"
 	mineral = "wood"
+	girder_type = /obj/structure/girder/wood
 
 /turf/simulated/wall/mineral/brick
 	name = "brick wall"

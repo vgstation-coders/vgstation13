@@ -86,9 +86,9 @@
 	sharpness = 1.2
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>")
-		return(BRUTELOSS)
+/obj/item/weapon/katana/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>")
+	return(BRUTELOSS)
 
 /obj/item/weapon/katana/IsShield()
 		return 1
@@ -224,9 +224,9 @@ obj/item/weapon/banhammer/admin
 	cant_drop = 1
 	var/mob/living/simple_animal/borer/parent_borer = null
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is smashing his face with \the [src.name]! It looks like \he's trying to commit suicide.</span>")
-		return(BRUTELOSS)
+/obj/item/weapon/melee/bone_hammer/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is smashing his face with \the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	return(BRUTELOSS)
 
 /obj/item/weapon/melee/bone_hammer/afterattack(null, mob/living/user as mob|obj, null, null, null)
 	user.delayNextAttack(50) //five times the regular attack delay

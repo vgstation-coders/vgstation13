@@ -29,6 +29,7 @@
 	maxbodytemp = 323 // Above 50 Degrees Celcius
 	var/turns_since_scan = 0
 	var/mob/living/simple_animal/mouse/movement_target=null
+	held_items = list()
 
 //RUNTIME IS ALIVE! SQUEEEEEEEE~
 /mob/living/simple_animal/cat/Runtime

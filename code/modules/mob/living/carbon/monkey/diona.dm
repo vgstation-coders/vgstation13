@@ -135,6 +135,11 @@
 				return 1
 	return ..()
 
+/mob/living/carbon/monkey/diona/can_read()
+	if(donors.len >= 2) // They have sucked down some blood.
+		return TRUE
+	return ..()
+
 /mob/living/carbon/monkey/diona/verb/steal_blood()
 	set category = "Diona"
 	set name = "Take Blood Sample"

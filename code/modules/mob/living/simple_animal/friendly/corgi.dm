@@ -38,6 +38,10 @@
 						0,0.5,0.5,0,\
 						0,0.5,0.5,0,\
 						0,0.0,0.0,1,)
+	held_items = list()
+
+/mob/living/simple_animal/corgi/has_hand_check()
+	return 1 // can pull things with his mouth
 
 /mob/living/simple_animal/corgi/Life()
 	if(timestopped)
@@ -256,7 +260,7 @@
 				/obj/item/clothing/head/hardhat, /obj/item/clothing/head/collectable/hardhat,/obj/item/clothing/head/hardhat/white, /obj/item/weapon/paper )
 			valid = 1
 
-		if(/obj/item/clothing/head/helmet/tactical/sec)
+		if(/obj/item/clothing/head/helmet/tactical/sec,/obj/item/clothing/head/helmet/tactical/sec/preattached)
 			name = "Sergeant [real_name]"
 			desc = "The ever-loyal, the ever-vigilant."
 			valid = 1
@@ -348,7 +352,7 @@
 			desc = "Spooky!"
 			valid = 1
 
-		if(/obj/item/clothing/head/helmet/space/santahat)
+		if(/obj/item/clothing/head/helmet/space/santahat, /obj/item/clothing/head/christmas/santahat/red)
 			name = "Santa's Corgi Helper"
 			emote_hear = list("barks christmas songs", "yaps merrily")
 			emote_see = list("looks for presents", "checks his list")
@@ -439,6 +443,18 @@
 	response_disarm = "bops"
 	response_harm   = "kicks"
 	spin_emotes = list("dances around","chases his tail")
+
+/mob/living/simple_animal/corgi/Ian/santa
+	name = "Santa's Corgi Helper"
+	emote_hear = list("barks christmas songs", "yaps merrily")
+	emote_see = list("looks for presents", "checks his list")
+	desc = "He's very fond of milk and cookies."
+
+/mob/living/simple_animal/corgi/Ian/santa/New()
+	..()
+
+	inventory_head = new/obj/item/clothing/head/christmas/santahat/red(src)
+	regenerate_icons()
 
 /mob/living/simple_animal/corgi/Ian/Life()
 	if(timestopped)

@@ -189,7 +189,7 @@ var/global/list/damage_icon_parts = list()
 
 	var/husk = (M_HUSK in src.mutations)  //100% unnecessary -Agouri	//nope, do you really want to iterate through src.mutations repeatedly? -Pete
 	var/fat = (M_FAT in src.mutations) && (species && species.flags & CAN_BE_FAT)
-	var/hulk = (M_HULK in src.mutations) && species.name != "Horror" // Part of the species.
+	var/hulk = (M_HULK in src.mutations) && !ishorrorform(src) && !isgrue(src) && mind.special_role != HIGHLANDER // Part of the species.
 	var/skeleton = (SKELETON in src.mutations)
 
 	var/g = "m"
@@ -353,31 +353,9 @@ var/global/list/damage_icon_parts = list()
 	O.underlays.len = 0
 
 	var/add_image = 0
-	var/g = "m"
-	if(gender == FEMALE)
-		g = "f"
 	// DNA2 - Drawing underlays.
-	var/hulk = 0
-	for(var/gene_type in active_genes)
-		var/datum/dna/gene/gene = dna_genes[gene_type]
-		if(!gene.block)
-			continue
-		if(gene.name == "Hulk")
-			hulk = 1
-		var/underlay=gene.OnDrawUnderlays(src,g,fat)
-		if(underlay)
-			//standing.underlays += underlay
-			O.underlays += underlay
-			add_image = 1
 	for(var/mut in mutations)
 		switch(mut)
-			if(M_HULK)
-				if(!hulk)
-					if(fat)
-						standing.underlays	+= "hulk_[fat]_s"
-					else
-						standing.underlays	+= "hulk_[g]_s"
-					add_image = 1
 			/*if(M_RESIST_COLD)
 				standing.underlays	+= "fire[fat]_s"
 				add_image = 1
