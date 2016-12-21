@@ -416,7 +416,7 @@
 	name = "candy corn"
 	desc = "It's a handful of candy corn. Can be stored in a detective's hat."
 	icon_state = "candy_corn"
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/candy_corn/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 4)
@@ -428,18 +428,18 @@
 	desc = "It's a classic striped candy cane."
 	icon = 'icons/obj/food_seasonal.dmi'
 	icon_state = "candycane"
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/candy_cane/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 4)
 	reagents.add_reagent(SUGAR, 2)
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/cookie
 	name = "cookie"
 	desc = "COOKIE!!!"
 	icon_state = "COOKIE!!!"
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/cookie/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 5)
@@ -450,13 +450,13 @@
 	desc = "A holiday treat made with sugar and love."
 	icon = 'icons/obj/food_seasonal.dmi'
 	icon_state = "gingerbread"
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/gingerbread_man/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 4)
 	reagents.add_reagent(SUGAR, 2)
 	bitesize = 2
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/chocolatebar
 	name = "chocolate bar"
 	desc = "Such, sweet, fattening food."
@@ -2229,8 +2229,8 @@
 	..()
 	reagents.clear_reagents()
 	reagents.add_reagent(NUTRIMENT, 8)
-	bitesize = 3	
-	
+	bitesize = 3
+
 /obj/item/weapon/reagent_containers/food/snacks/twobread
 	name = "Two Bread"
 	desc = "It is very bitter and winy."
@@ -3801,12 +3801,11 @@
 	bitesize = 2
 	food_flags = FOOD_SWEET | FOOD_ANIMAL
 
-	
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake
-	name = "christmas cake"
+	name = "fruitcake"
 	desc = "A hefty fruitcake that could double as a hammer in a pinch."
 	icon = 'icons/obj/food_seasonal.dmi'
-	icon_state = "christmasfruitcake"
+	icon_state = "fruitcake"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/fruitcakeslice
 	slices_num = 5
 	w_class = W_CLASS_MEDIUM
@@ -3825,7 +3824,21 @@
 	bitesize = 2
 	food_flags = FOOD_SWEET
 
-	
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake/christmascake
+	name = "\improper Christmas cake"
+	desc = "A hefty fruitcake covered in royal icing."
+	icon_state = "christmascake"
+	slice_path = /obj/item/weapon/reagent_containers/food/snacks/fruitcakeslice/christmascakeslice
+
+/obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake/christmascake/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10)
+
+/obj/item/weapon/reagent_containers/food/snacks/fruitcakeslice/christmascakeslice
+	name = "\improper Christmas cake slice"
+	desc = "Sweet and fruity."
+	icon_state = "christmascakeslice"
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pumpkinbread
 	name = "Pumpkin Bread"
 	desc = "A loaf of pumpkin bread."
@@ -3835,7 +3848,7 @@
 	w_class = W_CLASS_MEDIUM
 
 
-	
+
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/pumpkinbread/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 15)
