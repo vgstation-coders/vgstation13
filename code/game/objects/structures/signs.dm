@@ -292,3 +292,8 @@
 
 /obj/structure/sign/russian/staff_only
 	icon_state = "RU_staff_only"
+
+/obj/structure/sign/snow
+	name = "WARNING: SUB-ZERO TEMPERATURE AHEAD"
+	desc = "A warning sign which reads 'WARNING: SUB-ZERO TEMPERATURE AHEAD'"
+	icon_state = "cold"

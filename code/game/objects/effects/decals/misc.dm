@@ -21,6 +21,8 @@
 	anchored = 1
 	mouse_opacity = 0
 	w_type = NOT_RECYCLABLE
+	var/mob/pointer
+	var/atom/target
 
 
 /obj/effect/decal/snow

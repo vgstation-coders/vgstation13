@@ -317,7 +317,6 @@
 
 	if(success)
 		update_hidden_item_icons(W)
-
 		if (W)
 			if (client)
 				client.screen -= W

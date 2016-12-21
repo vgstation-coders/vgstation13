@@ -9,6 +9,7 @@ var/global/last_tick_duration = 0
 var/global/air_processing_killed = 0
 var/global/pipe_processing_killed = 0
 
+
 #ifdef PROFILE_MACHINES
 // /type = time this tick
 var/list/machine_profiling=list()
@@ -130,6 +131,8 @@ datum/controller/game_controller/proc/setup()
 			//make_dorf_secret()
 		//else
 		make_mining_asteroid_secret()
+
+	procedurally_generate()
 
 	//if(config.socket_talk)
 	//	keepalive()
@@ -507,3 +510,55 @@ datum/controller/game_controller/recover()		//Mostly a placeholder for now.
 				else
 					msg += "\t [varname] = [varval]\n"
 	world.log << msg
+
+
+/datum/controller/game_controller/proc/procedurally_generate()
+	var/total_time
+	var/watch
+	var/gen_total = 0
+	for(var/datum/zLevel/current_zlevel in map.zLevels)
+		if(current_zlevel.procedurally_generate)
+			var/list_of_turfs = list() // what turfs to consider for radial generating on
+			var/list_of_options = list() // what to radial generate on them, in terms of percentage chance
+			var/chance 			 // around about how many you want to have spawned on a z-level.
+			var/rmap_name
+			switch(current_zlevel.procedurally_generate)
+				if(SNOW_PROCEDURAL_GENERATION)
+					list_of_turfs = snow_turfs
+					list_of_options = list(new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest(mapspawned = 0) = 47,
+										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest/large(mapspawned = 0) = 10,
+										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest/dense(mapspawned = 0) = 15,
+										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_forest/large/dense(mapspawned = 0) = 5,
+										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_grass(mapspawned = 0) = 15,
+										   new /obj/procedural_generator/radial_gen/movable/snow_nature/snow_grass/large(mapspawned = 0) = 5,
+										   new /obj/procedural_generator/cellular_automata/ice(mapspawned = 0) = 3)
+					chance = 1250 // make sure all items which have a chance of being spawned have the CANT_LOCK_TO_AT_ALL_EVEN_CONCIEVABLY flag in lockflags or the game will run out of lists
+					rmap_name = "snow"
+				if(SNOWMINE_PROCEDURAL_GENERATION)
+					return // not coded yet
+
+			log_startup_progress("Procedurally generating a [rmap_name] map on z level: [current_zlevel.name]")
+
+			var/count = 0
+			var/procedural_gen_z = 0
+			watch = start_watch()
+			for(var/turf/T in list_of_turfs["[current_zlevel.z]"])
+				count++
+				if(!(count % 50000))
+					sleep(world.tick_lag)
+				if(rand(1,world.maxy*world.maxx) <= chance)
+					var/obj/procedural_generator/procedural_gen_type = pickweight(list_of_options)
+					procedural_gen_type.deploy_generator(T)
+					procedural_gen_z++
+			var/time = stop_watch(watch)
+			log_startup_progress("Finished procedurally generating z:[current_zlevel.z]([current_zlevel.name]) with [procedural_gen_z] radial generators in [time]s")
+			total_time += time
+			sleep(world.tick_lag)
+			gen_total += procedural_gen_z
+			for(var/obj/procedural_generator/pgen in list_of_options)
+				if(pgen.pooled)
+					returnToPool(pgen)
+				else
+					qdel(pgen)
+
+	log_startup_progress("Finished procedurally generating the entire map with [gen_total] procedural generators in [total_time]s")

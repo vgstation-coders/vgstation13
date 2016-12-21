@@ -1,3 +1,14 @@
+/obj/structure/flora
+	lockflags = CANT_LOCK_TO_AT_ALL_EVEN_CONCIEVABLY
+	var/shovelaway = 1
+
+/obj/structure/flora/attackby(var/obj/item/weapon/W, var/mob/user)
+	if(shovelaway && istype(W, /obj/item/weapon/pickaxe/shovel))
+		to_chat(user,"<span class='notice'>You clear away \the [src]</span>")
+		qdel(src)
+		return
+	..()
+
 //trees
 /obj/structure/flora/tree
 	name = "tree"
@@ -8,7 +19,7 @@
 	plane = ABOVE_HUMAN_PLANE
 	icon = 'icons/obj/flora/deadtrees.dmi'
 	icon_state = "tree_1"
-
+	shovelaway = 0
 	pixel_x = -WORLD_ICON_SIZE/2
 
 	var/health = 100
@@ -72,9 +83,9 @@
 				health -= (user.get_strength() * W.force)
 				playsound(loc, 'sound/effects/woodcuttingshort.ogg', 50, 1)
 			else
-				to_chat(user, "<span class='info'>\The [W] doesn't appear to be big enough to cut into \the [src]. Try something bigger.</span>")
+				to_chat(user, "<span class='info'>\The [W] doesn't appear to be big enough to cut into \the [src].</span>")
 		else
-			to_chat(user, "<span class='info'>\The [W] doesn't appear to be sharp enough to cut into \the [src]. Try something sharper.</span>")
+			to_chat(user, "<span class='info'>\The [W] doesn't appear to be sharp enough to cut into \the [src].</span>")
 
 	update_health()
 
@@ -134,6 +145,7 @@
 /obj/structure/flora/tree/pine/New()
 	..()
 	icon_state = "pine_[rand(1, 3)]"
+	update_shadow()
 
 /obj/structure/flora/tree/pine/xmas
 	name = "xmas tree"
@@ -165,7 +177,7 @@
 	icon_state = "pine_stump"
 
 //grass
-/obj/structure/flora/grass
+/obj/structure/flora/grass/
 	name = "grass"
 	icon = 'icons/obj/flora/snowflora.dmi'
 	anchored = 1
@@ -202,6 +214,7 @@
 //bushes
 /obj/structure/flora/bush
 	name = "bush"
+	desc = "It's amazing what can grow out here."
 	icon = 'icons/obj/flora/snowflora.dmi'
 	icon_state = "snowbush1"
 	anchored = 1

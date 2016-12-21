@@ -83,7 +83,7 @@
 		for(var/WorldY = startY, WorldY <= endY, WorldY++)
 
 			var/atom/Turf = locate(WorldX, WorldY, currentZ)
-			if(Turf.type == /turf/space)
+			if(Turf.type == get_base_turf(currentZ))
 				continue
 			var/icon/TurfIcon = new(Turf.icon, Turf.icon_state, Turf, 1, 0)
 			TurfIcon.Scale(NANOMAP_ICON_SIZE, NANOMAP_ICON_SIZE)

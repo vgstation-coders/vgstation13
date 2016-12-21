@@ -175,3 +175,26 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 	desc = "I know what you're thinking, but this isn't from a mimic."
 	icon_state = "rottenmeat"
 	var/amount_cloned = 0
+/obj/item/weapon/reagent_containers/food/snacks/meat/rabbit
+	name = "rabbit meat"
+	desc = "A slice of rabbit"
+
+	New()
+		..()
+		reagents.add_reagent("hyperzine", rand(0,3))
+
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/wendigo
+	name = "strange meat"
+	desc = "Doesn't look very appetizing, but if you're considerably hungry..."
+	icon_state = "wendigo_meat"
+
+	New()
+		..()
+		reagents.add_reagent("nutriment", rand(10,25))
+		src.bitesize = 30
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/consume(mob/living/carbon/eater, messages = 0)
+	..()
+	if(ishuman(eater))
+		eater.contract_disease(new /datum/disease/wendigo_transformation)
