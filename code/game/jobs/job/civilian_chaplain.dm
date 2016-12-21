@@ -321,7 +321,7 @@
 			if("communism", "socialism")
 				B.name = "The Communist Manifesto"
 				J = "Komrade"
-				deity_name = "Karl Max"
+				deity_name = "Karl Marx"
 				H.equip_or_collect(new /obj/item/clothing/head/russofurhat(H), slot_head)
 				H.equip_or_collect(new /obj/item/clothing/suit/russofurcoat(H), slot_wear_suit)
 			if("capitalism", "free market", "liberalism", "money")
