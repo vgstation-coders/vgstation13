@@ -175,7 +175,6 @@ var/global/list/accessable_z_levels = list()
 /datum/zLevel/mining
 	name = "mining"
 
-
 /datum/zLevel/mining/snow
 	base_turf = /turf/snow
 	procedurally_generate = SNOWMINE_PROCEDURAL_GENERATION

@@ -64,6 +64,11 @@ var/datum/controller/gameticker/ticker
 		"sound/music/dawsonschristian.ogg",
 		"sound/music/carmenmirandasghost.ogg",
 		))
+	if(map.base_turf == /turf/snow)
+		oursong = file(pick(
+		"sound/music/xmas/scape_santa",
+		"sound/music/xmas/carolofthebells",
+		))
 	login_music = fcopy_rsc(oursong)
 
 	do

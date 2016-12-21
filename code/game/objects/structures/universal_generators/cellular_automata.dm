@@ -145,12 +145,6 @@ here is an example of what it might look like:
 	ca_wall = /turf/snow
 	iterations = 6
 
-/obj/procedural_generator/cellular_automata/ice/large/New()
-	mapgrid_width  = world.maxx
-	mapgrid_height = world.maxy
-	percent_area_walls = 70
-	..()
-
 /obj/procedural_generator/cellular_automata/ice/makefloor(var/turf/snow/T)
 	if(T.snowballs)
 		T.clear_contents(list(type))
