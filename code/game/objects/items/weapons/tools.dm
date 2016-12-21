@@ -666,7 +666,7 @@
 	slot_flags = SLOT_BELT
 	force = 3.0
 	sharpness = 1
-	sharpness_flags = HOT_EDGE
+	sharpness_flags = SHARP_TIP | HOT_EDGE
 	throwforce = 5.0
 	throw_speed = 1
 	throw_range = 5

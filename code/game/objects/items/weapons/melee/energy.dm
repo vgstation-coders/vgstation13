@@ -1,6 +1,7 @@
 /obj/item/weapon/melee/energy
 	var/active = 0
 	sharpness = 1.5 //very very sharp
+	var/sharpness_on = 1.5 //so badmins can VV this!
 	sharpness_flags = SHARP_BLADE | HOT_EDGE
 	heat_production = 3500
 
@@ -68,7 +69,7 @@
 	active = 1
 	force = 30
 	w_class = W_CLASS_LARGE
-	sharpness = 1.5
+	sharpness = sharpness_on
 	sharpness_flags = SHARP_TIP | SHARP_BLADE | INSULATED_EDGE | HOT_EDGE | CHOPWOOD
 	hitsound = "sound/weapons/blade1.ogg"
 	update_icon()
@@ -106,7 +107,7 @@
 	if (active)
 		force = 30
 		w_class = W_CLASS_LARGE
-		sharpness = initial(sharpness)
+		sharpness = sharpness_on
 		sharpness_flags = initial(sharpness_flags)
 		hitsound = "sound/weapons/blade1.ogg"
 		playsound(user, 'sound/weapons/saberon.ogg', 50, 1)

@@ -230,7 +230,7 @@
 	throwforce = 0
 	w_class = 5
 	sharpness = 1.5
-	sharpness_flags = SHARP_BLADE
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	mech_flags = MECH_SCAN_ILLEGAL
 	cant_drop = 1
