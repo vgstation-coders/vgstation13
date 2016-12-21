@@ -22,6 +22,9 @@
 
 	var/gun_flags = EMPTYCASINGS	//Yay, flags
 
+/obj/item/weapon/gun/projectile/isHandgun() //fffuuuuuuck non-abstract base types
+	return TRUE
+
 /obj/item/weapon/gun/projectile/New()
 	..()
 	if(mag_type && load_method == 2)

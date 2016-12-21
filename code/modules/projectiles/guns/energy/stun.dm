@@ -9,6 +9,9 @@
 	projectile_type = "/obj/item/projectile/energy/electrode"
 	cell_type = "/obj/item/weapon/cell/crap"
 
+/obj/item/weapon/gun/energy/taser/isHandgun()
+	return TRUE
+
 /obj/item/weapon/gun/energy/taser/cyborg
 	name = "taser gun"
 	desc = "A small, low capacity gun used for non-lethal takedowns."
@@ -66,6 +69,9 @@
 	projectile_type = "/obj/item/projectile/energy/electrode"
 	cell_type = "/obj/item/weapon/cell"
 
+/obj/item/weapon/gun/energy/stunrevolver/isHandgun()
+	return TRUE
+
 /obj/item/weapon/gun/energy/stunrevolver/failure_check(var/mob/living/carbon/human/M)
 	if(prob(15))
 		fire_delay += 2
@@ -104,6 +110,8 @@
 	cell_type = "/obj/item/weapon/cell/crap"
 	var/charge_tick = 0
 
+/obj/item/weapon/gun/energy/crossbow/isHandgun()
+	return TRUE
 
 /obj/item/weapon/gun/energy/crossbow/New()
 	..()

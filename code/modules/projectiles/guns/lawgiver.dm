@@ -27,6 +27,9 @@
 	var/damage_multiplier = 1
 	var/has_played_alert = 0
 
+/obj/item/weapon/gun/lawgiver/isHandgun()
+	return TRUE
+
 /obj/item/weapon/gun/lawgiver/New()
 	..()
 	if(istype(src, /obj/item/weapon/gun/lawgiver/demolition))

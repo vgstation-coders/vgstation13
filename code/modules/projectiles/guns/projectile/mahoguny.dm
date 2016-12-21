@@ -15,9 +15,6 @@
 	var/max_ammo = 10
 	var/current_ammo = 10
 
-/obj/item/weapon/gun/mahoguny/isHandgun()
-	return 0
-
 /obj/item/weapon/gun/mahoguny/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>It has [current_ammo] round\s remaining.</span>")

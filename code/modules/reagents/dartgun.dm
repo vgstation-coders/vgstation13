@@ -34,6 +34,9 @@
 	var/container_type = /obj/item/weapon/reagent_containers/glass/beaker
 	var/list/starting_chems = null
 
+/obj/item/weapon/gun/dartgun/isHandgun()
+	return TRUE
+
 /obj/item/weapon/gun/dartgun/update_icon()
 
 	if(!cartridge)
