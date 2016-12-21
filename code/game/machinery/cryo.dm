@@ -335,6 +335,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if(beaker)
 			to_chat(user, "<span class='warning'>A beaker is already loaded into the machine.</span>")
 			return
+		if(G.w_class > W_CLASS_SMALL)
+			to_chat(user, "<span class='warning'>\The [G] is too big to fit.</span>")
+			return
 		if(user.drop_item(G, src))
 			beaker =  G
 			user.visible_message("[user] adds \a [G] to \the [src]!", "You add \a [G] to \the [src]!")

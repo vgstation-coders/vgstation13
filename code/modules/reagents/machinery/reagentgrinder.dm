@@ -145,6 +145,9 @@
 		if (panel_open)
 			to_chat(user, "You can't load a beaker while the maintenance panel is open.")
 			return 0
+		if (O.w_class > W_CLASS_SMALL)
+			to_chat(user, "<span class='warning'>\The [O] is too big to fit.</span>")
+			return 0
 		else
 			if(!user.drop_item(O, src))
 				to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")

@@ -43,6 +43,9 @@
 			return
 	else if(is_type_in_list(W, allowed_containers))
 		var/obj/item/weapon/reagent_containers/glass/G = W
+		if(G.w_class > W_CLASS_SMALL)
+			to_chat(user, "<span class='warning'>\The [G] is too big to fit.</span>")
+			return
 		if(G.reagents.reagent_list.len > 1)
 			to_chat(user, "<span class='warning'>That mixture is too complex!</span>")
 			return

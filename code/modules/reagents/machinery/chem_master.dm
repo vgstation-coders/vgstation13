@@ -119,9 +119,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		return 1
 
 	else if(istype(B, /obj/item/weapon/reagent_containers/glass))
-
 		if(src.beaker)
 			to_chat(user, "<span class='warning'>There already is a beaker loaded in the machine.</span>")
+			return
+		if(B.w_class > W_CLASS_SMALL)
+			to_chat(user, "<span class='warning'>\The [B] is too big to fit.</span>")
 			return
 		if(!user.drop_item(B, src))
 			to_chat(user, "<span class='warning'>You can't let go of \the [B]!</span>")

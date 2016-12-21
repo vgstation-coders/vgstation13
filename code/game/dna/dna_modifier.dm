@@ -231,6 +231,9 @@
 
 /obj/machinery/dna_scannernew/attackby(var/obj/item/weapon/item as obj, var/mob/user as mob)
 	if(istype(item, /obj/item/weapon/reagent_containers/glass))
+		if(item.w_class > W_CLASS_SMALL)
+			to_chat(user, "<span class='warning'>\The [item] is too big to fit.</span>")
+			return
 		if(beaker)
 			to_chat(user, "<span class='warning'>A beaker is already loaded into the machine.</span>")
 			return
