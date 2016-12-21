@@ -59,9 +59,9 @@
 		if(memorybank)
 			dat += "<A href='?src=\ref[src];splice=1'>"
 			if(analysed)
-				dat += "[memorybank.effect.name] ([5-memorybank.effect.stage])"
+				dat += "[memorybank.effect.name] ([memorybank.effect.stage])"
 			else
-				dat += "Unknown DNA strand ([5-memorybank.effect.stage])"
+				dat += "Unknown DNA strand ([memorybank.effect.stage])"
 			dat += "</a>"
 
 			dat += "<BR><A href='?src=\ref[src];disk=1'>Burn DNA Sequence to data storage disk</a>"
@@ -77,7 +77,7 @@
 						dat += "<BR><A href='?src=\ref[src];grab=\ref[e]'> DNA strand"
 						if(dish.analysed)
 							dat += ": [e.effect.name]"
-						dat += " (5-[e.effect.stage])</a>"
+						dat += " ([e.effect.stage])</a>"
 				else
 					dat += "<BR>Insufficent cells to attempt gene splicing."
 			else
@@ -111,9 +111,9 @@
 		if(!burning)
 			var/obj/item/weapon/diseasedisk/d = new /obj/item/weapon/diseasedisk(src.loc)
 			if(analysed)
-				d.name = "[memorybank.effect.name] GNA disk (Stage: [5-memorybank.effect.stage])"
+				d.name = "[memorybank.effect.name] GNA disk (Stage: [memorybank.effect.stage])"
 			else
-				d.name = "Unknown GNA disk (Stage: [5-memorybank.effect.stage])"
+				d.name = "Unknown GNA disk (Stage: [memorybank.effect.stage])"
 			d.effect = memorybank
 			alert_noise("ping")
 
