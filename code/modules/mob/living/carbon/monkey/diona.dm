@@ -120,9 +120,8 @@
 		adult.add_language(L.name)
 
 	adult.regenerate_icons()
-	adult.name = src.name
-	adult.real_name = src.real_name
 	src.mind.transfer_to(adult)
+	adult.fully_replace_character_name(newname = src.real_name)
 	src.drop_all()
 	qdel(src)
 
