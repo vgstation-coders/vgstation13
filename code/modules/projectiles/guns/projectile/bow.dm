@@ -9,6 +9,7 @@
 	throwforce = 8
 	w_class = W_CLASS_MEDIUM
 	sharpness = 1
+	sharpness_flags = SHARP_TIP
 
 /obj/item/weapon/arrow/proc/removed() //Helper for metal rods falling apart.
 	return

@@ -52,6 +52,7 @@
 	throwforce = 10
 	w_class = W_CLASS_MEDIUM
 	sharpness = 1.2
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 
@@ -84,6 +85,7 @@
 	throwforce = 10
 	w_class = W_CLASS_MEDIUM
 	sharpness = 1.2
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 /obj/item/weapon/katana/suicide_act(mob/user)
@@ -100,6 +102,7 @@
 /obj/item/weapon/harpoon
 	name = "harpoon"
 	sharpness = 1.2
+	sharpness_flags = SHARP_TIP
 	desc = "Tharr she blows!"
 	icon_state = "harpoon"
 	item_state = "harpoon"
@@ -232,6 +235,7 @@ obj/item/weapon/banhammer/admin
 	throwforce = 0
 	w_class = 5
 	sharpness = 0
+	sharpness_flags = 0
 	attack_verb = list("bludgeons", "smashes", "pummels", "crushes", "slams")
 	mech_flags = MECH_SCAN_ILLEGAL
 	cant_drop = 1

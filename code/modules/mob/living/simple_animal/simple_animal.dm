@@ -513,7 +513,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		else
 			to_chat(user, "<span class='notice'>This [src] is dead, medical items won't bring it back to life.</span>")
 	else if((meat_type || butchering_drops) && (stat == DEAD))	//if the animal has a meat, and if it is dead.
-		if(O.is_sharp())
+		if(O.sharpness_flags & SHARP_BLADE)
 			if(user.a_intent != I_HELP)
 				to_chat(user, "<span class='info'>You must be on <b>help</b> intent to do this!</span>")
 			else

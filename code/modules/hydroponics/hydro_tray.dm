@@ -367,7 +367,7 @@
 			component_parts.len = 0
 			qdel(src)
 
-	else if(O.is_sharp() && harvest)
+	else if((O.sharpness_flags & (SHARP_BLADE|SERRATED_BLADE)) && harvest)
 		attack_hand(user)
 
 	else

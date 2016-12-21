@@ -206,15 +206,17 @@
 		src.icon_state = "axe1"
 		src.w_class = W_CLASS_HUGE
 		src.sharpness = 1.5
+		src.sharpness_flags = SHARP_BLADE | HOT_EDGE
 	else
 		to_chat(user, "<span class='notice'>\The [src] can now be concealed.</span>")
 		src.force = initial(src.force)
 		src.icon_state = initial(src.icon_state)
 		src.w_class = initial(src.w_class)
 		src.sharpness = initial(src.sharpness)
+		src.sharpness_flags = initial(src.sharpness_flags)
 	src.add_fingerprint(user)
 	return
-	
+
 /obj/item/weapon/melee/bone_sword
 	name = "bone sword"
 	desc = "A somewhat gruesome blade that appears to be made of solid bone."
@@ -228,6 +230,7 @@
 	throwforce = 0
 	w_class = 5
 	sharpness = 1.5
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	mech_flags = MECH_SCAN_ILLEGAL
 	cant_drop = 1

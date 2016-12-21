@@ -103,6 +103,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1.5
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	force = 10.0
 	w_class = W_CLASS_TINY
 	throwforce = 5.0
@@ -123,6 +124,7 @@
 /obj/item/weapon/scalpel/laser
 	heat_production = 0
 	damtype = "fire"
+	sharpness_flags = SHARP_TIP | SHARP_BLADE | HOT_EDGE
 	var/cauterymode = 0 //1 = cautery enabled
 
 /obj/item/weapon/scalpel/laser/attack_self(mob/user)
@@ -130,10 +132,12 @@
 		to_chat(user, "You disable the blade and switch to the scalpel's cautery tool.")
 		heat_production = 1600
 		sharpness = 0
+		sharpness_flags = 0
 	else
 		to_chat(user, "You return the scalpel to cutting mode.")
 		heat_production = 0
 		sharpness = initial(sharpness)
+		sharpness_flags = initial(sharpness_flags)
 	cauterymode = !cauterymode
 
 /obj/item/weapon/scalpel/laser/tier1
@@ -169,6 +173,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1
+	sharpness_flags = SHARP_BLADE | SERRATED_BLADE | CHOPWOOD
 	force = 15.0
 	w_class = W_CLASS_MEDIUM
 	throwforce = 9.0

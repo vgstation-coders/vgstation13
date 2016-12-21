@@ -925,6 +925,7 @@
 	throw_speed = 3
 	throw_range = 5
 	sharpness = 0.8 //same as glass shards
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	w_class = W_CLASS_TINY
 	item_state = "beer"
 	attack_verb = list("stabs", "slashes", "attacks")
