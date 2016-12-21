@@ -339,14 +339,19 @@
 			//Can't clone without someone to clone.  Or a pod.  Or if the pod is busy. Or full of gibs.
 			if(!pod1 || !canLink(pod1)) //If the pod exists BUT it's too far away from the console
 				temp = "Error: No Clonepod detected."
+				return
 			else if(pod1.occupant)
 				temp = "Error: Clonepod is currently occupied."
+				return
 			else if(pod1.biomass < CLONE_BIOMASS)
 				temp = "Error: Not enough biomass."
+				return
 			else if(pod1.mess)
 				temp = "Error: Clonepod malfunction."
+				return
 			else if(!config.revival_cloning)
 				temp = "Error: Unable to initiate cloning cycle."
+				return
 
 			var/success = pod1.growclone(C)
 			if(success)
@@ -356,7 +361,7 @@
 				C = null
 				menu = 1
 			else
-
+				//if growclone() failed, we can't clone the guy, so what is this even DOING here?
 				var/mob/selected = find_dead_player("[C.ckey]")
 				if(!selected)
 					temp = "Initiating cloning cycle...<br>Error: Post-initialisation failed. Cloning cycle aborted."
