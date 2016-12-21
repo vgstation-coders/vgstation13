@@ -26,15 +26,23 @@
 /obj/item/projectile/bullet/shrapnel
 
 	name = "shrapnel"
-	damage = 35
+	damage = 45
 	damage_type = BRUTE
 	weaken = 1
-	stun = 1
+	stun = 5
 
 /obj/item/projectile/bullet/shrapnel/small
 
 	name = "small shrapnel"
-	damage = 20
+	damage = 25
+
+/obj/item/projectile/bullet/shrapnel/small/plasma
+
+	name = "small plasma shrapnel"
+	damage_type = TOX
+	color = "#BF5FFF"¨
+	damage = 35
+
 
 /obj/item/projectile/bullet/weakbullet
 	name = "weak bullet"
