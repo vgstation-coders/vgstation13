@@ -289,9 +289,17 @@
 	siemens_coefficient = 0
 	heat_conductivity = 1
 	cold_speed_protection = 0
+	health = 100
 
 /obj/item/clothing/suit/armor/ice/OnMobLife(var/mob/holder)
 	if(is_worn(holder))
+		if(health <= 0)
+			to_chat(holder, "\The [src] melts away into nothing.")
+			qdel(src)
+			return
+		if(holder.on_fire)
+			to_chat(holder, "<span class='warning'>Your [src.name] is melting!</span>")
+			health -= 10
 		holder.bodytemperature = max(holder.bodytemperature-2 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
 		if(prob(1))
 			holder.emote("shiver")
