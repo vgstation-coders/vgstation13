@@ -271,7 +271,7 @@
 
 /obj/item/clothing/shoes/jackboots/knifeholster/New() //This one comes with preloaded knife holster
 	..()
-	attach_accessory(new /obj/item/clothing/accessory/holster/knife/boot/preloaded)
+	attach_accessory(new /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical)
 
 /obj/item/clothing/shoes/jackboots/batmanboots
 	name = "batboots"

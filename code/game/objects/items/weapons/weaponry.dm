@@ -217,6 +217,14 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	item_state = "knife"
 	force = 10
 
+/obj/item/weapon/kitchen/utensil/knife/skinning
+	name = "skinning knife"
+	desc = "Stalwart Goliath butchering edge. This, my friend, is a tool with a purpose."
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "skinningknife"
+	item_state = "skinningknife"
+	force = 10
+
 obj/item/weapon/banhammer/admin
 	desc = "A banhammer specifically reserved for admins. Legends tell of a weapon that destroys the target to the utmost capacity."
 	throwforce = 999
