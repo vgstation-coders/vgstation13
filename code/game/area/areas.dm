@@ -503,7 +503,7 @@ var/area/space_area
 /area/proc/get_turfs()
 	var/list/L = list()
 	for(var/turf/T in contents)
-		L |= T
+		L += T
 
 	return L
 
