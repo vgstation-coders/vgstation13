@@ -384,7 +384,7 @@ var/global/list/available_paintings = list(
 
 
 /obj/structure/painting/cultify()
-	if(icon_state = "deer")
+	if(icon_state == "deer")
 		var/obj/structure/painting/deer_flesh/N = new(loc)
 		N.pixel_x = pixel_x
 		N.pixel_y = pixel_y

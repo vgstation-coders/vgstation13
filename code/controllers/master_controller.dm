@@ -512,7 +512,7 @@ datum/controller/game_controller/recover()		//Mostly a placeholder for now.
 	world.log << msg
 
 
-datum/controller/game_controller/proc/procedurally_generate()
+/datum/controller/game_controller/proc/procedurally_generate()
 	var/total_time
 	var/watch
 	var/gen_total = 0

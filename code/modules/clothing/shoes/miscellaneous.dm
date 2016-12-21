@@ -1,5 +1,3 @@
-/obj/item/clothing/shoes/proc/step_action() //this was made to rewrite clown shoes squeaking
-
 /obj/item/clothing/shoes/proc/prevent_snow_slip()
 	return 0
 
