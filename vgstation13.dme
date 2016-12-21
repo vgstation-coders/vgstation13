@@ -1316,6 +1316,7 @@
 #include "code\modules\mob\living\carbon\give.dm"
 #include "code\modules\mob\living\carbon\internals.dm"
 #include "code\modules\mob\living\carbon\inventory.dm"
+#include "code\modules\mob\living\carbon\racial_spells.dm"
 #include "code\modules\mob\living\carbon\shock.dm"
 #include "code\modules\mob\living\carbon\species.dm"
 #include "code\modules\mob\living\carbon\stripping.dm"
