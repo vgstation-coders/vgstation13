@@ -276,6 +276,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 		if(src.container)
 			to_chat(user, "\A [src.container] is already loaded into the machine.")
 			return
+		if(D.w_class > W_CLASS_SMALL)
+			to_chat(user, "<span class='warning'>\The [D] is too big to fit.</span>")
+			return
 		else if(!panel_open)
 			if(!user.drop_item(D, src))
 				to_chat(user, "<span class='warning'>You can't let go of \the [D]!</span>")

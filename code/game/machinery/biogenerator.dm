@@ -334,9 +334,11 @@
 		return 1
 	else if(istype(O, /obj/item/weapon/reagent_containers/glass))
 		if(beaker)
-			to_chat(user, "<span class='warning'>The biogenerator already occuped.</span>")
+			to_chat(user, "<span class='warning'>The biogenerator is already occupied.</span>")
 		else if(panel_open)
 			to_chat(user, "<span class='rose'>The biogenerator's maintenance panel must be closed first.</span>")
+		else if(O.w_class > W_CLASS_SMALL)
+			to_chat(user, "<span class='warning'>\The [O] is too big to fit.</span>")
 		else
 			if(user.drop_item(O, src))
 				beaker = O

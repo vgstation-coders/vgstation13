@@ -281,7 +281,7 @@
 	return
 
 
-/obj/machinery/computer/pandemic/attackby(var/obj/I as obj, var/mob/user as mob)
+/obj/machinery/computer/pandemic/attackby(var/obj/item/I as obj, var/mob/user as mob)
 	if(..())
 		return 1
 	else if(istype(I, /obj/item/weapon/reagent_containers/glass))
@@ -289,6 +289,9 @@
 			return
 		if(src.beaker)
 			to_chat(user, "A beaker is already loaded into the machine.")
+			return
+		if(I.w_class > W_CLASS_SMALL)
+			to_chat(user, "<span class='warning'>\The [I] is too big to fit.</span>")
 			return
 		if(!user.drop_item(I, src))
 			to_chat(user, "<span class='warning'>You can't let go of \the [I]!</span>")
