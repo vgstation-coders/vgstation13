@@ -31,7 +31,7 @@
 /datum/map/active/New()
 	.=..()
 
-	research_shuttle.name = "Asteroid Shuttle" //There is only one shuttle on taxi - the asteroid shuttle
+	research_shuttle.name = "mine cage" //There is only one "shuttle" on taxi - the mine cage
 	research_shuttle.req_access = list() //It's shared by miners and researchers, so remove access requirements
 
 ////////////////////////////////////////////////////////////////
