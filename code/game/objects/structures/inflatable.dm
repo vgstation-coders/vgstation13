@@ -232,7 +232,4 @@
 	busy = 0
 
 /obj/structure/inflatable/door/update_icon()
-	if(is_open)
-		icon_state = "door_open"
-	else
-		icon_state = "door_closed"
+	icon_state = "door_[is_open ? "open" : "closed"]"
