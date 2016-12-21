@@ -3802,7 +3802,7 @@
 	food_flags = FOOD_SWEET | FOOD_ANIMAL
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/fruitcake
-	name = "christmas cake"
+	name = "fruitcake"
 	desc = "A hefty fruitcake that could double as a hammer in a pinch."
 	icon = 'icons/obj/food_seasonal.dmi'
 	icon_state = "fruitcake"
