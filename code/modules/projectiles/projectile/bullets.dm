@@ -40,7 +40,7 @@
 
 	name = "small plasma shrapnel"
 	damage_type = TOX
-	color = "#BF5FFF"¨
+	color = "#BF5FFF"
 	damage = 35
 
 
