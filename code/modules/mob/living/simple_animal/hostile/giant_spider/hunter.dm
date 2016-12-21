@@ -29,3 +29,6 @@
 				target = null
 			busy = 0
 			stop_automated_movement = 0
+
+/mob/living/simple_animal/hostile/giant_spider/hunter/dead
+	health = 0
