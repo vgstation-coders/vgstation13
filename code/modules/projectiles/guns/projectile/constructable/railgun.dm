@@ -28,6 +28,9 @@
 	var/percentage = 100
 	var/strength = 0
 
+/obj/item/weapon/gun/projectile/railgun/isHandgun()
+	return FALSE
+
 /obj/item/weapon/gun/projectile/railgun/Destroy()
 	if(capacitor)
 		qdel(capacitor)

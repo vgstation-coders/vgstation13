@@ -16,7 +16,7 @@
 	var/max_reagents = 50
 
 /obj/item/weapon/gun/siren/isHandgun()
-	return 0
+	return FALSE
 
 /obj/item/weapon/gun/siren/New()
 	..()
