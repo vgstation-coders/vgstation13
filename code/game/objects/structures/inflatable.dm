@@ -7,6 +7,7 @@
 	starting_materials = list(MAT_PLASTIC = 1.5*CC_PER_SHEET_MISC)
 
 	var/deploy_path = null
+	var/tmp/inflating = FALSE
 
 /obj/item/inflatable/attack_self(mob/user)
 	if(!deploy_path)
@@ -14,16 +15,28 @@
 	if(!istype(user.loc, /turf))
 		return
 
+	add_fingerprint(user)
 	if(user.drop_item(src))
-		inflate(user)
+		inflating = TRUE
+		anchored = 1
+		to_chat(user, "<span class='notice'>You pull the inflation cord on \the [src].</span>")
+		spawn(10)
+			if(isturf(loc))
+				inflate()
 
-/obj/item/inflatable/proc/inflate(var/mob/user)
+/obj/item/inflatable/attack_paw(mob/user)
+	return attack_hand(user)
+
+/obj/item/inflatable/attack_hand(mob/user)
+	if(inflating)
+		return
+	..()
+
+/obj/item/inflatable/proc/inflate()
 	playsound(loc, 'sound/items/zip.ogg', 75, 1)
 	var/obj/structure/inflatable/R = new deploy_path(get_turf(src))
 	transfer_fingerprints_to(R)
-	if(user)
-		to_chat(user, "<span class='notice'>You inflate \the [src].</span>")
-		R.add_fingerprint(user)
+	visible_message("<span class='notice'>\The [src] inflates.</span>")
 	qdel(src)
 
 /obj/item/inflatable/attackby(var/obj/item/I, var/mob/user)

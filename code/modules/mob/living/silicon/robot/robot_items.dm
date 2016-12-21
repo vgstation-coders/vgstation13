@@ -233,25 +233,28 @@
 		I.deflate(0,5)
 		return 1
 	if(A.type in allowed_types)
-		if(istype(A, /obj/item/inflatable/wall))
+		var/obj/item/inflatable/I = A
+		if(I.inflating)
+			return 0
+		if(istype(I, /obj/item/inflatable/wall))
 			if(stored_walls.len >= max_walls)
 				to_chat(user, "\The [src] can't hold more walls.")
 				return 0
-			stored_walls += A
-		else if(istype(A, /obj/item/inflatable/door))
+			stored_walls += I
+		else if(istype(I, /obj/item/inflatable/door))
 			if(stored_doors.len >= max_doors)
 				to_chat(usr, "\The [src] can't hold more doors.")
 				return 0
-			stored_doors += A
-		if(istype(A.loc, /obj/item/weapon/storage))
-			var/obj/item/weapon/storage/S = A.loc
-			S.remove_from_storage(A,src)
-		else if(istype(A.loc, /mob))
-			var/mob/M = A.loc
-			if(!M.drop_item(A,src))
-				to_chat(user, "<span class='notice'>You can't let go of \the [A]!</span>")
-				stored_doors -= A
-				stored_walls -= A
+			stored_doors += I
+		if(istype(I.loc, /obj/item/weapon/storage))
+			var/obj/item/weapon/storage/S = I.loc
+			S.remove_from_storage(I,src)
+		else if(istype(I.loc, /mob))
+			var/mob/M = I.loc
+			if(!M.drop_item(I,src))
+				to_chat(user, "<span class='notice'>You can't let go of \the [I]!</span>")
+				stored_doors -= I
+				stored_walls -= I
 				return 0
 		user.delayNextAttack(8)
 		visible_message("\The [user] picks up \the [A] with \the [src]!")
