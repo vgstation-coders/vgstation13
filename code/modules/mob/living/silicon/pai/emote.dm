@@ -131,16 +131,22 @@
 			m_type = VISIBLE
 
 		if("law")
-			message = "<B>[src]</B> shows its legal authorization barcode."
+			if (software.Find(SOFT_SS))
+				message = "<B>[src]</B> shows its legal authorization barcode."
 
-			playsound(get_turf(src), 'sound/voice/biamthelaw.ogg', 50, 0)
-			m_type = VISIBLE
+				playsound(get_turf(src), 'sound/voice/biamthelaw.ogg', 50, 0)
+				m_type = VISIBLE
+			else
+				to_chat(src, "You don't have the right software to be THE LAW.")
 
 		if("halt")
-			message = "<B>[src]</B>'s speakers skreech, \"Halt! Security!\"."
+			if (software.Find(SOFT_SS))
+				message = "<B>[src]</B>'s speakers skreech, \"Halt! Security!\"."
 
-			playsound(get_turf(src), 'sound/voice/halt.ogg', 50, 0)
-			m_type = HEARABLE
+				playsound(get_turf(src), 'sound/voice/halt.ogg', 50, 0)
+				m_type = HEARABLE
+			else
+				to_chat(src, "You have no Security software.")
 
 		if ("help")
 			to_chat(src, "deathgasp, glare-(none)/mob, stare-(none)/mob, look, beep, ping, buzz, law, halt")
