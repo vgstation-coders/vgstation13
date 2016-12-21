@@ -114,14 +114,20 @@
 	item_state = "laceups"
 
 /obj/item/clothing/shoes/galoshes
-	desc = "Rubber boots"
 	name = "galoshes"
+	desc = "Rubber boots"
 	icon_state = "galoshes"
 	permeability_coefficient = 0.05
 	flags = NOSLIP
 	slowdown = SHOES_SLOWDOWN+1
 	species_fit = list(VOX_SHAPED)
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
+
+/obj/item/clothing/shoes/galoshes/broken
+	name = "ruined galoshes"
+	desc = "The grip treading is broken off."
+	icon_state = "galoshes_ruined"
+	flags = null
 
 /obj/item/clothing/shoes/clown_shoes
 	desc = "The prankster's standard-issue clowning shoes. Damn they're huge!"
