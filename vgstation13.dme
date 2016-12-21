@@ -1465,6 +1465,7 @@
 #include "code\modules\mob\living\silicon\mommi\soviet_mommi.dm"
 #include "code\modules\mob\living\silicon\mommi\update_icons.dm"
 #include "code\modules\mob\living\silicon\pai\death.dm"
+#include "code\modules\mob\living\silicon\pai\emote.dm"
 #include "code\modules\mob\living\silicon\pai\examine.dm"
 #include "code\modules\mob\living\silicon\pai\life.dm"
 #include "code\modules\mob\living\silicon\pai\pai.dm"
