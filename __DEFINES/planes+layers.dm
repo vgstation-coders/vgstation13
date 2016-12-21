@@ -173,6 +173,7 @@ What is the naming convention for planes or layers?
 
 #define BLOB_PLANE 				-3			// For Blobs, which are above humans.
 
+	#define BLOB_BASE_LAYER			0
 	#define BLOB_SHIELD_LAYER		1
 	#define BLOB_RESOURCE_LAYER		2
 	#define BLOB_FACTORY_LAYER		3
