@@ -327,11 +327,7 @@
 
 //Single Use Spellbooks//
 /obj/item/weapon/spellbook/proc/add_spell(var/spell/spell_to_add,var/mob/user)
-	if(user.mind)
-		if(!user.mind.wizard_spells)
-			user.mind.wizard_spells = list()
-		user.mind.wizard_spells += spell_to_add
-	user.add_spell(spell_to_add)
+	user.add_spell(spell_to_add, iswizard = TRUE)
 
 /obj/item/weapon/spellbook/oneuse
 	var/spell = /spell/targeted/projectile/magic_missile //just a placeholder to avoid runtimes if someone spawned the generic
