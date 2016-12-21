@@ -1352,7 +1352,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					 /obj/item/weapon/storage/box/inflatables)
 	cost = 15
 	containertype = /obj/structure/closet/crate/engi
-	containername = "Inflatable Structures Crate"
+	containername = "inflatable structures crate"
 	group = "Engineering"
 
 //////MEDICAL//////
