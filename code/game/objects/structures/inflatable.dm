@@ -23,6 +23,9 @@
 		spawn(10)
 			if(isturf(loc))
 				inflate()
+			else
+				inflating = FALSE
+				anchored = 0
 
 /obj/item/inflatable/attack_paw(mob/user)
 	return attack_hand(user)
