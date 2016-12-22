@@ -503,6 +503,7 @@
  */
  /obj/item/toy/snappop/smokebomb
  	origin_tech = Tc_COMBAT + "=1;" + Tc_SYNDICATE + "=1"
+	flags = FPRINT | NO_THROW_MSG
 
 /obj/item/toy/snappop/smokebomb/pop()
 	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread

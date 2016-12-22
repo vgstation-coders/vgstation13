@@ -30,7 +30,7 @@
 	icon_state = "santa"
 	item_state = "santa"
 	slowdown = 0
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	allowed = list(/obj/item) //for stuffing exta special presents
 
 

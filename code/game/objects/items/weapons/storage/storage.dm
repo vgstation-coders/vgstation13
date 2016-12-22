@@ -334,9 +334,9 @@
 				if (M == usr)
 					to_chat(usr, "<span class='notice'>You put \the [W] into \the [src].</span>")
 				else if (M in range(1)) //If someone is standing close enough, they can tell what it is...
-					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>", MESSAGE_SEE)
-				else if (W && W.w_class >= W_CLASS_MEDIUM) //Otherwise they can only see large or normal items from a distance...
-					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>", MESSAGE_SEE)
+					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
+				else if (W.w_class >= W_CLASS_MEDIUM) //Otherwise they can only see large or normal items from a distance...
+					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
 
 		src.orient2hud(usr)
 		if(usr.s_active)

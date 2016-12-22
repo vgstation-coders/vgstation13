@@ -15,7 +15,7 @@
 	item_state = "r_suit"
 	_color = "warden"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
@@ -26,7 +26,7 @@
 	item_state = "r_suit"
 	_color = "secred"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
@@ -46,7 +46,7 @@
 	item_state = "dispatch"
 	_color = "dispatch"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
 
 /obj/item/clothing/under/rank/security2
@@ -56,7 +56,7 @@
 	item_state = "r_suit"
 	_color = "redshirt2"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
 	species_fit = list(GREY_SHAPED)
 
@@ -70,7 +70,7 @@
 	item_state = "det"
 	_color = "detective"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
@@ -98,7 +98,7 @@
 	item_state = "r_suit"
 	_color = "hosred"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.8
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 

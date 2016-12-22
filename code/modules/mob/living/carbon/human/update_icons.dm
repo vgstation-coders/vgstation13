@@ -504,7 +504,7 @@ var/global/list/damage_icon_parts = list()
 		var/image/standing	= image("icon_state" = "[t_color]_s")
 
 		if(((M_FAT in mutations) && (species.flags & CAN_BE_FAT)) || species.flags & IS_BULKY)
-			if(w_uniform.flags&ONESIZEFITSALL)
+			if(w_uniform.clothing_flags&ONESIZEFITSALL)
 				standing.icon	= 'icons/mob/uniform_fat.dmi'
 			else
 				to_chat(src, "<span class='warning'>You burst out of \the [w_uniform]!</span>")
@@ -877,7 +877,7 @@ var/global/list/damage_icon_parts = list()
 		O.overlays.len = 0
 		var/image/standing	= image("icon" = ((wear_suit.icon_override) ? wear_suit.icon_override : 'icons/mob/suit.dmi'), "icon_state" = "[wear_suit.icon_state]")
 		if((((M_FAT in mutations) && (species.flags & CAN_BE_FAT)) || (species.flags & IS_BULKY)) && !(wear_suit.icon_override))
-			if(wear_suit.flags&ONESIZEFITSALL)
+			if(wear_suit.clothing_flags&ONESIZEFITSALL)
 				standing.icon	= 'icons/mob/suit_fat.dmi'
 			else
 				to_chat(src, "<span class='warning'>You burst out of \the [wear_suit]!</span>")
