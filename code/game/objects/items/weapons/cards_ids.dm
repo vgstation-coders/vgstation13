@@ -542,7 +542,7 @@
 	name = "Research ID"
 	registered_name = "Scientist"
 	icon_state = "research"
-	desc = "Pinnacle of name technology."
+	desc = "The pinnacle of name technology."
 	access = list(access_science, access_rnd, access_tox_storage, access_robotics, access_xenobiology, access_rd)
 
 /obj/item/weapon/card/id/supply
@@ -563,7 +563,7 @@
 	name = "Head of Security ID"
 	registered_name = "HoS"
 	icon_state = "HoS"
-	desc = "An ID awarded to only the most robust shits in the buisness."
+	desc = "An ID awarded to only the most robust shits in the business."
 	access = list(access_security, access_sec_doors, access_brig, access_armory, access_court, access_forensics_lockers, access_morgue, access_maint_tunnels, access_all_personal_lockers, access_science, access_engine, access_mining, access_medical, access_construction, access_mailsorting, access_heads, access_hos, access_RC_announce, access_keycard_auth, access_gateway)
 
 /obj/item/weapon/card/id/cmo
