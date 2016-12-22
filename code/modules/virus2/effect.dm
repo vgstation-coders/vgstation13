@@ -1,36 +1,3 @@
-/datum/disease2/effectholder
-	var/name = "Holder"
-	var/datum/disease2/effect/effect
-	var/chance = 0 //Chance in percentage each tick
-	var/multiplier = 1 //The chance the effects are WORSE
-	var/stage = 0
-	var/datum/disease2/disease/virus
-
-/datum/disease2/effectholder/New(var/datum/disease2/disease/D)
-	virus=D
-	effect = new /datum/disease2/effect(D)
-
-/datum/disease2/effectholder/proc/getrandomeffect(var/badness = 1)
-	if(effect)
-		virus.log += "<br />[timestamp()] Effect [effect.name] [effect.chance]% is now "
-	else
-		virus.log += "<br />[timestamp()] Added effect "
-	var/list/datum/disease2/effect/list = list()
-	for(var/e in (typesof(/datum/disease2/effect) - /datum/disease2/effect))
-		var/datum/disease2/effect/f = new e
-		if (f.badness > badness)	//we don't want such strong effects
-			continue
-		if(f.stage == src.stage)
-			list += f
-	effect = pick(list)
-	chance = rand(1,6)
-	effect.chance = chance
-	virus.log += "[effect.name] [effect.chance]%:"
-
-/datum/disease2/effectholder/proc/majormutate()
-	getrandomeffect(2)
-
-
 ////////////////////////////////////////////////////////////////
 ////////////////////////EFFECTS/////////////////////////////////
 ////////////////////////////////////////////////////////////////

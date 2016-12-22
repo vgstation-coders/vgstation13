@@ -8,7 +8,7 @@ var/global/list/disease2_list = list()
 	var/dead = 0
 	var/clicks = 0
 	var/uniqueID = 0
-	var/list/datum/disease2/effectholder/effects = list()
+	var/list/datum/disease2/effect/effects = list()
 	var/antigen = 0 // 16 bits describing the antigens, when one bit is set, a cure with that bit can dock here
 	var/max_stage = 4
 
@@ -21,15 +21,22 @@ var/global/list/disease2_list = list()
 	disease2_list["[uniqueID]"] = src
 	..()
 
+/datum/disease2/proc/add_effect(var/badness = 1, var/stage = 0)
+	var/list/datum/disease2/effect/list = list()
+	for(var/e in typesof(/datum/disease2/effect))
+		var/datum/disease2/effect/f = new e
+		if(f.stage == stage && f.badness <= badness)
+			list += f
+	effect = pick(list)
+	effect.chance = rand(1,6)
+	virus.log += "<br />[timestamp()] Added effect [effect.name] [effect.chance]%:"
+
 /datum/disease2/disease/proc/makerandom(var/greater=0)
 	for(var/i=1 ; i <= max_stage ; i++ )
-		var/datum/disease2/effectholder/holder = new /datum/disease2/effectholder(src)
-		holder.stage = i
 		if(greater)
-			holder.getrandomeffect(2)
+			add_effect(2, i)
 		else
-			holder.getrandomeffect()
-		effects += holder
+			add_effect(1, i)
 	uniqueID = rand(0,10000)
 	disease2_list["[uniqueID]"] = src
 	infectionchance = rand(60,90)
@@ -47,16 +54,15 @@ var/global/list/disease2_list = list()
 		return // return if isn't proper mob type
 	var/datum/disease2/disease/D = new /datum/disease2/disease("custom_disease") //set base name
 	for(var/i = 1; i <= D.max_stage; i++)  // run through this loop until everything is set
-		var/datum/disease2/effect/symptom = input(C, "Choose a symptom to add ([5-i] remaining)", "Choose a Symptom") in ((typesof(/datum/disease2/effect) - /datum/disease2/effect)) // choose a symptom from the list of them
-		var/datum/disease2/effectholder/holder = new /datum/disease2/effectholder(infectedMob) // create the infectedMob as a holder for it.
-		holder.stage = i // set the stage of this holder equal to i.
-		var/datum/disease2/effect/f = new symptom // initalize the new symptom
-		holder.effect = f // assign the new symptom to the holder
-		holder.chance = input(C, "Choose chance", "Chance") as num // set the chance of the symptom that can occur
-		if(holder.chance > 100 || holder.chance < 0)
+		var/datum/disease2/effect/symptom = input(C, "Choose a symptom to add ([5-i] remaining)", "Choose a Symptom") in (typesof(/datum/disease2/effect))
+			// choose a symptom from the list of them
+		var/datum/disease2/effect/e = new symptom(D)
+		e.chance = input(C, "Choose chance", "Chance") as num 
+			// set the chance of the symptom that can occur
+		if(e.chance > 100 || e.chance < 0)
 			return 0
-		D.log += "[f.name] [holder.chance]%<br>"
-		D.effects += holder // add the holder to the disease
+		D.log += "Added [e.name] at [e.chance]% chance<br>"
+		D.effects += e // add the holder to the disease
 
 	disease2_list -= D.uniqueID
 	D.uniqueID = rand(0, 10000)
@@ -118,9 +124,9 @@ var/global/list/disease2_list = list()
 			clicks = 0
 
 	//Do nasty effects
-	for(var/datum/disease2/effectholder/e in effects)
-		if (e.effect.can_run_effect(stage))
-			e.effect.run_effect(mob)
+	for(var/datum/disease2/effect/e in effects)
+		if (e.can_run_effect(stage))
+			e.run_effect(mob)
 
 	//Short airborne spread
 	if(src.spreadtype == "Airborne")
@@ -133,21 +139,23 @@ var/global/list/disease2_list = list()
 	clicks+=speed
 
 /datum/disease2/disease/proc/cure(var/mob/living/carbon/mob)
-	for(var/datum/disease2/effectholder/e in effects)
-		e.effect.deactivate(mob)
+	for(var/datum/disease2/effect/e in effects)
+		e.disable_effect(mob)
 	mob.virus2.Remove("[uniqueID]")
 
 /datum/disease2/disease/proc/minormutate()
 	//uniqueID = rand(0,10000)
-	var/datum/disease2/effectholder/holder = pick(effects)
-	holder.effect.minormutate()
+	var/datum/disease2/effect/e = pick(effects)
+	e.minormutate()
 	infectionchance = min(50,infectionchance + rand(0,10))
 	log += "<br />[timestamp()] Infection chance now [infectionchance]%"
 
 /datum/disease2/disease/proc/majormutate()
 	uniqueID = rand(0,10000)
-	var/datum/disease2/effectholder/holder = pick(effects)
-	holder.majormutate()
+	var/datum/disease2/effect/e = pick(effects)
+	add_effect(2, e.stage)
+	log += "<br />[timestamp()] Removed effect [e.name] [e.chance]%."
+	effects -= e
 	if (prob(5))
 		antigen = text2num(pick(ANTIGENS))
 		antigen |= text2num(pick(ANTIGENS))
@@ -163,24 +171,23 @@ var/global/list/disease2_list = list()
 	disease.speed = speed
 	disease.stage = stage
 	disease.clicks = clicks
-	for(var/datum/disease2/effectholder/holder in effects)
-		var/datum/disease2/effectholder/newholder = new /datum/disease2/effectholder(disease)
-		newholder.effect = new holder.effect.type
-		newholder.chance = holder.chance
-		newholder.multiplier = holder.multiplier
-		newholder.stage = holder.stage
-		disease.effects += newholder
+	for(var/datum/disease2/effect/e in effects)
+		var/datum/disease2/effect/new_e = new e(disease)
+		new_e.chance = e.chance
+		new_e.multiplier = e.multiplier
+		new_e.stage = e.stage
+		disease.effects += new_e
 	return disease
 
 /datum/disease2/disease/proc/issame(var/datum/disease2/disease/disease)
 	var/list/types = list()
 	var/list/types2 = list()
-	for(var/datum/disease2/effectholder/d in effects)
-		types += d.effect.type
+	for(var/datum/disease2/effect/e in effects)
+		types += e.type
 	var/equal = 1
 
-	for(var/datum/disease2/effectholder/d in disease.effects)
-		types2 += d.effect.type
+	for(var/datum/disease2/effect/e in disease.effects)
+		types2 += e.type
 
 	for(var/type in types)
 		if(!(type in types2))
@@ -214,8 +221,8 @@ var/global/list/virusDB = list()
 	r += "<BR>Infection rate : [infectionchance]"
 	r += "<BR>Spread form : [spreadtype]"
 	r += "<BR>Progress Speed : [stageprob]"
-	for(var/datum/disease2/effectholder/E in effects)
-		r += "<BR>Effect:[E.effect.name]. Strength : [E.multiplier]. Verosity : [E.chance]. Type : [E.stage]."
+	for(var/datum/disease2/effect/e in effects)
+		r += "<BR>Effect:[e.name]. Strength : [e.multiplier]. Verosity : [e.chance]. Type : [e.stage]."
 
 	r += "<BR>Antigen pattern: [antigens2string(antigen)]"
 	return r
