@@ -166,9 +166,7 @@ var/global/list/disease2_list = list()
 		var/datum/disease2/effectholder/newholder = new /datum/disease2/effectholder(disease)
 		newholder.effect = new holder.effect.type
 		newholder.chance = holder.chance
-		newholder.cure = holder.cure
 		newholder.multiplier = holder.multiplier
-		newholder.happensonce = holder.happensonce
 		newholder.stage = holder.stage
 		disease.effects += newholder
 	return disease
