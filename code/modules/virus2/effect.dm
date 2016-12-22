@@ -2,8 +2,6 @@
 	var/name = "Holder"
 	var/datum/disease2/effect/effect
 	var/chance = 0 //Chance in percentage each tick
-	var/cure = "" //Type of cure it requires
-	var/happensonce = 0
 	var/multiplier = 1 //The chance the effects are WORSE
 	var/stage = 0
 	var/datum/disease2/disease/virus
@@ -12,10 +10,7 @@
 	virus=D
 
 /datum/disease2/effectholder/proc/runeffect(var/mob/living/carbon/human/mob,var/stage)
-	if(happensonce > -1 && effect.stage <= stage && prob(effect.chance))
-		effect.activate(mob)
-		if(happensonce == 1)
-			happensonce = -1
+	effect.runeffect(mob, stage)
 
 /datum/disease2/effectholder/proc/getrandomeffect(var/badness = 1)
 	if(effect)
@@ -60,6 +55,8 @@
 	var/chance = 3
 	var/max_multiplier = 1
 	var/multiplier = 1 //The chance the effects are WORSE
+	var/maxcount = -1 // Maximum number of times the effect should activate; if -1, always activate
+	var/count = 0
 	var/badness = 1
 	var/affect_voice = 0
 	var/affect_voice_active = 0
@@ -67,6 +64,10 @@
 	proc/deactivate(var/mob/living/carbon/mob)
 	proc/affect_mob_voice(var/datum/speech/speech) //Called by /mob/living/carbon/human/treat_speech
 
+/datum/disease2/effect/proc/runeffect(var/mob/living/carbon/human/mob, var/activestage)
+	if((count > maxcount || maxcount == -1) && stage <= activestage && prob(chance))
+		activate(mob)
+		count += 1
 
 ////////////////////////SPECIAL/////////////////////////////////
 
