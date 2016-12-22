@@ -249,7 +249,7 @@
 
 /obj/item/clothing/ears/earmuffs
 	name = "earmuffs"
-	desc = "Protects your hearing from loud noises, and quiet ones as well."
+	desc = "Protects your hearing from both loud and quiet noises."
 	icon_state = "earmuffs"
 	item_state = "earmuffs"
 	slot_flags = SLOT_EARS
@@ -417,7 +417,7 @@ BLIND     // can't see anything
 				if(stepstaken % 2 == 1)
 					playsound(H, step_sound, 50, 1) // this will NEVER GET ANNOYING!
 			if("walk")
-				playsound(H, step_sound, 20, 1)		
+				playsound(H, step_sound, 20, 1)
 
 /obj/item/clothing/shoes/proc/on_kick(mob/living/user, mob/living/victim)
 	return

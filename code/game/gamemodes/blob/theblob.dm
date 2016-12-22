@@ -41,7 +41,7 @@ var/list/blob_looks
 	icon = 'icons/mob/blob/blob_64x64.dmi'
 	icon_state = "center"
 	luminosity = 2
-	desc = "Some blob creature thingy"
+	desc = "A part of a blob."
 	density = 0 //Necessary for spore pathfinding
 	opacity = 0
 	anchored = 1
