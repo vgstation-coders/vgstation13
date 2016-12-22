@@ -9,7 +9,7 @@
  * Security
  */
 /obj/item/clothing/under/rank/warden
-	desc = "A jumpsuit made of strong material, providing better protection. It has the word \"WARDEN\" written on the shoulders."
+	desc = "A jumpsuit made of strong material, providing robust protection. It has the word \"WARDEN\" written on the shoulders."
 	name = "warden's jumpsuit"
 	icon_state = "warden"
 	item_state = "r_suit"
@@ -21,7 +21,7 @@
 
 /obj/item/clothing/under/rank/security
 	name = "security officer's jumpsuit"
-	desc = "A jumpsuit made of strong material, providing better protection."
+	desc = "A jumpsuit made of strong material, providing robust protection."
 	icon_state = "security"
 	item_state = "r_suit"
 	_color = "secred"
@@ -51,7 +51,7 @@
 
 /obj/item/clothing/under/rank/security2
 	name = "security officer's uniform"
-	desc = "A jumpsuit made of strong material, providing better protection."
+	desc = "A jumpsuit made of strong material, providing robust protection."
 	icon_state = "redshirt2"
 	item_state = "r_suit"
 	_color = "redshirt2"
