@@ -214,6 +214,14 @@
 	icon_state = "plant-26"
 	layer = FLY_LAYER
 	plane = ABOVE_HUMAN_PLANE
+	var/icon/clicked
+
+/obj/structure/flora/pottedplant/New()
+	..()
+	update_icon()
+
+/obj/structure/flora/pottedplant/update_icon()
+	clicked = new/icon(src.icon, src.icon_state, src.dir)
 
 /obj/structure/flora/pottedplant/Destroy()
 	for(var/I in contents)
@@ -221,21 +229,57 @@
 
 	return ..()
 
-/obj/structure/flora/pottedplant/attackby(var/obj/item/I, var/mob/user)
+/obj/structure/flora/pottedplant/attackby(var/obj/item/I, var/mob/user, params)
 	if(!I)
+		return
+	if(istype(I, /obj/item/ornament))
+		hang_ornament(I, user, params)
 		return
 	if(I.w_class > W_CLASS_SMALL)
 		to_chat(user, "That item is too big.")
 		return
 	if(contents.len)
-		to_chat(user, "There is already something in the pot.")
-	else
-		if(user.drop_item(I, src))
-			user.visible_message("<span class='notice'>[user] stuffs something into the pot.</span>", "You stuff \the [I] into the [src].")
+		var/filled = FALSE
+		for(var/i = 1, i <= contents.len, i++)
+			if(!istype(contents[i], /obj/item/ornament))
+				filled = TRUE
+		if(filled)
+			to_chat(user, "There is already something in the pot.")
+			return
+	if(user.drop_item(I, src))
+		user.visible_message("<span class='notice'>[user] stuffs something into the pot.</span>", "You stuff \the [I] into the [src].")
+
+/obj/structure/flora/pottedplant/proc/hang_ornament(var/obj/item/I, var/mob/user, params)
+	var/list/params_list = params2list(params)
+	if(user.drop_item(I, src))
+		if(I.loc == src && params_list.len)
+			var/image/O
+			if(istype(I, /obj/item/ornament/teardrop))
+				O = image('icons/obj/teardrop_ornaments.dmi', src, "[I.icon_state]_small")
+			else
+				O = image('icons/obj/ball_ornaments.dmi', src, "[I.icon_state]_small")
+
+			var/clamp_x = clicked.Width() / 2
+			var/clamp_y = clicked.Height() / 2
+			O.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
+			O.pixel_y = Clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)-5
+			overlays += O
+			to_chat(user, "You hang \the [I] on \the [src].")
+			return 1
 
 /obj/structure/flora/pottedplant/attack_hand(mob/user)
 	if(contents.len)
-		var/obj/item/I = contents[1]
+		var/count = 1
+		var/obj/item/I = contents[count]
+		while(istype(I, /obj/item/ornament))
+			count++
+			if(count > contents.len)	//pot is emptied of non-ornament items
+				user.visible_message("<span class='notice'>[user] plucks \the [I] off \the [src].</span>", "You take \the [I] off \the [src].")
+				I.forceMove(loc)
+				user.put_in_active_hand(I)
+				overlays -= overlays[overlays.len]
+				return
+			I = contents[count]
 		user.visible_message("<span class='notice'>[user] retrieves something from the pot.</span>", "You retrieve \the [I] from the [src].")
 		I.forceMove(loc)
 		user.put_in_active_hand(I)
