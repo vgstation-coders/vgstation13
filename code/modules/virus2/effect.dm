@@ -12,14 +12,14 @@
 	virus=D
 
 /datum/disease2/effectholder/proc/runeffect(var/mob/living/carbon/human/mob,var/stage)
-	if(happensonce > -1 && effect.stage <= stage && prob(chance))
+	if(happensonce > -1 && effect.stage <= stage && prob(effect.chance))
 		effect.activate(mob)
 		if(happensonce == 1)
 			happensonce = -1
 
 /datum/disease2/effectholder/proc/getrandomeffect(var/badness = 1)
 	if(effect)
-		virus.log += "<br />[timestamp()] Effect [effect.name] [chance]% is now "
+		virus.log += "<br />[timestamp()] Effect [effect.name] [effect.chance]% is now "
 	else
 		virus.log += "<br />[timestamp()] Added effect "
 	var/list/datum/disease2/effect/list = list()
@@ -31,12 +31,14 @@
 			list += f
 	effect = pick(list)
 	chance = rand(1,6)
-	virus.log += "[effect.name] [chance]%:"
+	effect.chance = chance
+	virus.log += "[effect.name] [effect.chance]%:"
 
 /datum/disease2/effectholder/proc/minormutate()
 	switch(pick(1,2,3,4,5))
 		if(1)
 			chance = rand(0,effect.max_chance)
+			effect.chance = chance
 		if(2)
 			multiplier = rand(1,effect.max_multiplier)
 			effect.multiplier = multiplier
@@ -52,9 +54,10 @@
 
 
 /datum/disease2/effect
-	var/max_chance = 50
 	var/name = "Blanking effect"
 	var/stage = 4
+	var/max_chance = 50
+	var/chance = 3
 	var/max_multiplier = 1
 	var/multiplier = 1 //The chance the effects are WORSE
 	var/badness = 1
