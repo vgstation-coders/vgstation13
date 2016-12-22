@@ -58,7 +58,7 @@
 			return
 
 		var/obj/item/clothing/under/A
-		A = input("Select color to change to.", "BOOYEA", A) in clothing_choices
+		A = input("Select the jumpsuit's new appearance.", "BOOYEA", A) in clothing_choices
 		if(!A)
 			return
 
