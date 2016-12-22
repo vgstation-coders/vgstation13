@@ -31,6 +31,7 @@
 	weaken = 1
 	stun = 5
 
+
 /obj/item/projectile/bullet/shrapnel/small
 
 	name = "small shrapnel"

@@ -130,32 +130,21 @@
 	if(shrapnel_list.len > 0)
 		var/atom/target
 		var/atom/curloc = get_turf(src)
-		var/list/possbile_targets= trange(6, curloc)
+		var/list/possbile_targets= trange(8, curloc)
 
 		var/list/bodyparts = list("head","chest","groin","l_arm","r_arm","l_hand","r_hand","l_leg","r_leg","l_foot","r_foot")
 		for(var/obj/item/shrapnel in shrapnel_list)
 			if(shrapnel.shrapnel_amount >0)
-
 				var/amount = shrapnel.shrapnel_amount
-
 				while(amount > 0)
 					amount--
 					target =pick(possbile_targets)
 					var/obj/item/projectile/bullet/shrapnel_projectile = new shrapnel.shrapnel_type(src) //obj/item/projectile/bullet/shrapnel
 					shrapnel_projectile.forceMove(curloc)
-					shrapnel_projectile.original = target
-					shrapnel_projectile.starting = curloc
-					shrapnel_projectile.shot_from = src
-					shrapnel_projectile.current = curloc
-					shrapnel_projectile.OnFired()
-					shrapnel_projectile.yo = target.loc.y - curloc.y
-					shrapnel_projectile.xo = target.loc.x - curloc.x
-					shrapnel_projectile.def_zone = bodyparts[rand(1,bodyparts.len)]
+					shrapnel_projectile.launch_at(target,bodyparts[rand(1,bodyparts.len)],curloc,src)
 					qdel(shrapnel)
 
-					if(shrapnel_projectile)
 
-						shrapnel_projectile.process()
 
 			else
 				target =pick(possbile_targets)
