@@ -1706,7 +1706,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 15
 	containertype = /obj/structure/closet/crate/secure/hydrosec
 	containername = "Exotic Seeds crate"
-	access = access_hydroponics
+	access = list(access_hydroponics, access_science)
 	group = "Hydroponics"
 
 /datum/supply_packs/bee_keeper
