@@ -181,7 +181,7 @@
 
 /obj/item/weapon/storage/box/flashbangs
 	name = "box of flashbangs (WARNING)"
-	desc = "<span class="userdanger">WARNING: These devices are extremely dangerous and can cause blindness or deafness in repeated use.</span>"
+	desc = "<span class='userdanger'>WARNING: These devices are extremely dangerous and can cause blindness or deafness in repeated use.</span>"
 	icon_state = "flashbang"
 
 /obj/item/weapon/storage/box/flashbangs/New()
@@ -337,7 +337,7 @@
 
 /obj/item/weapon/storage/box/donkpockets
 	name = "box of donk-pockets"
-	desc = "<span class="notice">Instructions: Heat in microwave. Product will cool if not eaten within seven minutes.</span>"
+	desc = "<span class='notice'>Instructions: Heat in microwave. Product will cool if not eaten within seven minutes.</span>"
 	icon_state = "donk_kit"
 	var/pocket_amount = 6
 
