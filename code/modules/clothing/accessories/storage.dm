@@ -67,6 +67,7 @@
 	desc = "Sturdy mess of synthcotton belts and buckles, ready to share your burden."
 	icon_state = "webbing"
 	_color = "webbing"
+	origin_tech = Tc_MATERIALS + "=2"
 
 /obj/item/clothing/accessory/storage/webbing/paramed
 	name = "paramedic webbing"

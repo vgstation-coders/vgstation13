@@ -161,6 +161,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	src.modules += new /obj/item/weapon/surgicaldrill(src)
 	src.modules += new /obj/item/weapon/revivalprod(src)
 	src.modules += new /obj/item/weapon/crowbar(src)
+	src.modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
 	src.emag = new /obj/item/weapon/reagent_containers/spray(src)
 	sensor_augs = list("Medical", "Disable")
 
@@ -226,6 +227,7 @@ obj/item/weapon/robot_module/proc/fix_modules() //call this proc to enable click
 	src.modules += new /obj/item/device/material_synth/robot(src)
 	src.modules += new /obj/item/device/silicate_sprayer(src)
 	src.modules += new /obj/item/device/holomap(src)
+	src.modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
 	sensor_augs = list("Mesons", "Disable")
 
 	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil(src)

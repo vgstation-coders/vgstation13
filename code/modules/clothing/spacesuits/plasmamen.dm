@@ -10,7 +10,7 @@
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_restricted = list("Plasmaman")
-	flags = FPRINT  | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 	pressure_resistance = 40 * ONE_ATMOSPHERE //we can't change, so some resistance is needed
 
 	icon_state = "plasmaman_suit"
@@ -31,7 +31,7 @@
 /obj/item/clothing/head/helmet/space/plasmaman
 	name = "plasmaman helmet"
 	desc = "A special containment helmet designed to protect a plasmaman's volatile body from outside exposure and quickly extinguish it in emergencies."
-	flags = FPRINT | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	species_restricted = list("Plasmaman")
 	eyeprot = 0

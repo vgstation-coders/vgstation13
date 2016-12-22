@@ -613,3 +613,20 @@
 		new /obj/item/weapon/light/tube/he(src)
 	for(var/i = 0; i < 7; i++)
 		new /obj/item/weapon/light/bulb/he(src)
+
+/obj/item/weapon/storage/box/inflatables
+	name = "inflatable barrier box"
+	desc = "Contains inflatable walls and doors. Specially designed for space-efficient packing of deflated structures."
+	icon_state = "inf_box"
+	can_only_hold = list(
+		"/obj/item/inflatable/door",
+		"/obj/item/inflatable/wall")
+	fits_max_w_class = W_CLASS_MEDIUM
+	max_combined_w_class = 21
+
+/obj/item/weapon/storage/box/inflatables/New()
+	..()
+	for(var/i = 1 to 3)
+		new /obj/item/inflatable/door(src)
+	for(var/i = 1 to 4)
+		new /obj/item/inflatable/wall(src)

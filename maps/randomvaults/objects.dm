@@ -107,6 +107,44 @@
 /area/vault/AIsat
 	requires_power = 1
 
+/area/vault/taxi_engi
+	name = "\improper Destroyed Engineering"
+	requires_power = 1
+
+/area/vault/taxi_engi/engineering
+	name = "\improper Engineering"
+
+/area/vault/taxi_engi/atmos
+	name = "\improper Atmospherics"
+	icon_state = "atmos"
+
+/area/vault/taxi_engi/mechanics
+	name = "\improper Mechanics"
+	icon_state = "mechanics"
+
+/area/vault/taxi_engi/storage
+	name = "\improper Storage"
+
+/area/vault/taxi_engi/secure_storage
+	name = "\improper Storage"
+	icon_state = "engine_storage"
+
+/area/vault/taxi_engi/engine
+	name = "\improper Engine Room"
+	icon_state = "engine_control"
+
+/area/vault/taxi_engi/CE_office
+	name = "\improper Chief Engineer Office"
+	icon_state = "head_quarters"
+
+/area/vault/taxi_engi/podbay
+	name = "\improper Podbay"
+	icon_state = "pod"
+
+/area/vault/taxi_engi/lobby
+	name = "\improper Lobby"
+	icon_state = "engine_lobby"
+
 /area/vault/ejectedengine
 	requires_power = 1
 
@@ -139,6 +177,9 @@
 /area/vault/droneship/New()
 	..()
 	pod_code = "[rand(10000, 99999.0)]"
+
+/area/vault/meteorlogical
+	name = "\improper Meteorlogical Station"
 
 /obj/machinery/door/poddoor/droneship
 	name = "\improper OSIPR Pod-Door"
@@ -282,6 +323,9 @@
 /obj/machinery/power/apc/no_alerts/vault_listening/initialize()
 	. = ..()
 	name = "\improper Listening Outpost APC"
+
+/obj/machinery/power/apc/no_alerts/vault_taxi/initialize()
+	. = ..()
 
 /obj/machinery/power/battery/smes/vault_listening
 	chargelevel = 30000

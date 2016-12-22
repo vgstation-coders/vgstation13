@@ -3,7 +3,7 @@
 	name = "breath mask"
 	icon_state = "breath"
 	item_state = "breath"
-	flags = FPRINT | MASKINTERNALS
+	clothing_flags = MASKINTERNALS
 	w_class = W_CLASS_SMALL
 	gas_transfer_coefficient = 0.10
 	permeability_coefficient = 0.50

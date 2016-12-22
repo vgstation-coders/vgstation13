@@ -296,7 +296,7 @@
 	if(internal)
 		if (!contents.Find(internal))
 			internal = null
-		if (!wear_mask || !(wear_mask.flags|MASKINTERNALS) )
+		if (!wear_mask || !(wear_mask.clothing_flags|MASKINTERNALS) )
 			internal = null
 		if(internal)
 			if (internals)
@@ -376,7 +376,7 @@
 		var/ratio = (breath.toxins/safe_toxins_max) * 10
 		//adjustToxLoss(Clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))	//Limit amount of damage toxin exposure can do per second
 		if(wear_mask)
-			if(wear_mask.flags & BLOCK_GAS_SMOKE_EFFECT)
+			if(wear_mask.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
 				if(breath.toxins > safe_toxins_mask)
 					ratio = (breath.toxins/safe_toxins_mask) * 10
 				else

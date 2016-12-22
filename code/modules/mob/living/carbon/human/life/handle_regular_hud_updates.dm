@@ -142,8 +142,8 @@
 							if(ruptured)
 								healths.overlays.Add(organ_damage_overlays["[e.name]_max"])
 								continue
-						var/total_damage = e.brute_dam + e.burn_dam
-						if(e.status & ORGAN_BROKEN)
+						var/total_damage = e.get_damage()
+						if(!e.is_existing())
 							healths.overlays.Add(organ_damage_overlays["[e.name]_gone"])
 						else
 							switch(total_damage)

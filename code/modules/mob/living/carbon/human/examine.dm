@@ -235,7 +235,7 @@
 	var/list/is_bleeding = list()
 	for(var/datum/organ/external/temp in organs)
 		if(temp)
-			if(temp.status & ORGAN_DESTROYED)
+			if(!temp.is_existing())
 				is_destroyed["[temp.display_name]"] = 1
 				wound_flavor_text["[temp.display_name]"] = "<span class='danger'>[t_He] is missing [t_his] [temp.display_name].</span>\n"
 				continue
