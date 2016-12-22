@@ -36,9 +36,9 @@
 /datum/disease2/effectholder/proc/minormutate()
 	switch(pick(1,2,3,4,5))
 		if(1)
-			chance = rand(0,effect.chance_maxm)
+			chance = rand(0,effect.max_chance)
 		if(2)
-			multiplier = rand(1,effect.maxm)
+			multiplier = rand(1,effect.max_multiplier)
 
 /datum/disease2/effectholder/proc/majormutate()
 	getrandomeffect(2)
@@ -51,10 +51,10 @@
 
 
 /datum/disease2/effect
-	var/chance_maxm = 50
+	var/max_chance = 50
 	var/name = "Blanking effect"
 	var/stage = 4
-	var/maxm = 1
+	var/max_multiplier = 1
 	var/badness = 1
 	var/affect_voice = 0
 	var/affect_voice_active = 0
@@ -130,7 +130,7 @@
 /datum/disease2/effect/radian
 	name = "Radian's Syndrome"
 	stage = 4
-	maxm = 3
+	max_multiplier = 3
 
 /datum/disease2/effect/radian/activate(var/mob/living/carbon/mob,var/multiplier)
 	mob.radiation += (2*multiplier)
@@ -482,7 +482,7 @@
 /datum/disease2/effect/toxins
 	name = "Hyperacidity"
 	stage = 3
-	maxm = 3
+	max_multiplier = 3
 
 /datum/disease2/effect/toxins/activate(var/mob/living/carbon/mob,var/multiplier)
 	mob.adjustToxLoss((2*multiplier))
@@ -491,7 +491,7 @@
 /datum/disease2/effect/shakey
 	name = "World Shaking Syndrome"
 	stage = 3
-	maxm = 3
+	max_multiplier = 3
 
 /datum/disease2/effect/shakey/activate(var/mob/living/carbon/mob,var/multiplier)
 	shake_camera(mob,5*multiplier)
@@ -681,7 +681,7 @@ var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/mon
 	var/triggered = 0
 	var/given_katana = 0
 	affect_voice = 1
-	maxm = 4
+	max_multiplier = 4
 
 /datum/disease2/effect/anime_hair/activate(var/mob/living/carbon/mob,var/multiplier)
 	if(ishuman(mob))
@@ -784,7 +784,7 @@ datum/disease2/effect/anime_hair/deactivate(var/mob/living/carbon/mob)
 /datum/disease2/effect/lubefoot
 	name = "Self-lubricating Footstep Syndrome"
 	stage = 3
-	maxm = 9.5 //Potential for 95% lube chance per step
+	max_multiplier = 9.5 //Potential for 95% lube chance per step
 	var/triggered
 
 /datum/disease2/effect/lubefoot/activate(var/mob/living/carbon/mob,var/multiplier)
