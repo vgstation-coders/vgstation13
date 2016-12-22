@@ -178,6 +178,9 @@
 	..()
 	pod_code = "[rand(10000, 99999.0)]"
 
+/area/vault/meteorlogical
+	name = "\improper Meteorlogical Station"
+
 /obj/machinery/door/poddoor/droneship
 	name = "\improper OSIPR Pod-Door"
 	id_tag = "denied"
