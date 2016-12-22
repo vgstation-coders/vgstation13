@@ -1495,9 +1495,21 @@
 /datum/reagent/vaporsalt
 	name = "Vapor Salts"
 	id = VAPORSALT
-	description = "A strange mineral found in alien plantlife that behaves strangely in the presence of certain gasses in liquid form."
+	description = "A strange mineral found in alien plantlife that has been observed to vaporize some liquids."
 	reagent_state = LIQUID
 	color = "#BDE5F2"
+
+
+/datum/reagent/vaporsalt/reaction_turf(var/turf/simulated/T, var/volume)
+
+	if(..())
+		return 1
+
+	if(T.wet)
+		T.dry(TURF_WET_LUBE) //Cleans water or lube
+		var/obj/effect/effect/smoke/S = new /obj/effect/effect/smoke(T)
+		S.time_to_live = 10 //unusually short smoke
+		//We don't need to start up the system because we only want to smoke one tile.
 
 /datum/reagent/iron
 	name = "Iron"
