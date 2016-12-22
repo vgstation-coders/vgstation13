@@ -44,7 +44,7 @@
 
 
 /obj/machinery/power/apc
-	desc = "A control terminal for the area electrical systems."
+	desc = "A control terminal for the area's electrical systems."
 	icon_state = "apc0"
 	anchored = 1
 	use_power = 0

@@ -32,6 +32,7 @@
 		to_chat(user, "It has most of its planks broken and is somewhat unstable.")
 	else
 		to_chat(user, "It has only one or two planks still in shape and is unstable.")
+		
 //Allows us to quickly check if we should break the barricade, can handle not having an user
 //Sound is technically deprecated, but barricades should really have a build sound
 /obj/structure/window/barricade/healthcheck(var/mob/M, var/sound = 1)
