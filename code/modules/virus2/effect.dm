@@ -27,15 +27,6 @@
 	effect.chance = chance
 	virus.log += "[effect.name] [effect.chance]%:"
 
-/datum/disease2/effectholder/proc/minormutate()
-	switch(pick(1,2,3,4,5))
-		if(1)
-			chance = rand(0,effect.max_chance)
-			effect.chance = chance
-		if(2)
-			multiplier = rand(1,effect.max_multiplier)
-			effect.multiplier = multiplier
-
 /datum/disease2/effectholder/proc/majormutate()
 	getrandomeffect(2)
 
@@ -101,6 +92,13 @@
 /datum/disease2/effect/proc/disable_effect(var/mob/living/carbon/human/mob)
 	if (count > 0)
 		deactivate(mob)
+
+/datum/disease2/effect/proc/minormutate()
+	switch(pick(1,2,3,4,5))
+		if(1)
+			chance = rand(0, max_chance)
+		if(2)
+			multiplier = rand(1, max_multiplier)
 
 ////////////////////////SPECIAL/////////////////////////////////
 

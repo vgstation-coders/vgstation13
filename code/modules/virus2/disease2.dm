@@ -140,7 +140,7 @@ var/global/list/disease2_list = list()
 /datum/disease2/disease/proc/minormutate()
 	//uniqueID = rand(0,10000)
 	var/datum/disease2/effectholder/holder = pick(effects)
-	holder.minormutate()
+	holder.effect.minormutate()
 	infectionchance = min(50,infectionchance + rand(0,10))
 	log += "<br />[timestamp()] Infection chance now [infectionchance]%"
 
