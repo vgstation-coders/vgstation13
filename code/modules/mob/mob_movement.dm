@@ -27,18 +27,36 @@
 
 /client/proc/treat_hotkeys(var/keypress)
 	keypress = turn(keypress, dir)
+	var/mob/living/silicon/pai/pai_override = null
+	var/obj/pai_container = null
+	if(ispAI(usr))
+		var/mob/living/silicon/pai/P = usr
+		if(!P.incapacitated())
+			if(istype(P.card.loc, /obj))
+				pai_container = P.card.loc
+				if(pai_container.integratedpai == P.card)
+					pai_override = P
 	switch(keypress)
 		if(NORTHEAST)
+			if(pai_override)
+				pai_container.swapkey_integrated_pai(pai_override)
+				return
 			swap_hand()
 		if(SOUTHEAST)
 			attack_self()
 		if(SOUTHWEST)
+			if(pai_override)
+				pai_container.throwkey_integrated_pai(pai_override)
+				return
 			if(iscarbon(usr))
 				var/mob/living/carbon/C = usr
 				C.toggle_throw_mode()
 			else
 				to_chat(usr, "<span class='warning'>This mob type cannot throw items.</span>")
 		if(NORTHWEST)
+			if(pai_override)
+				pai_container.dropkey_integrated_pai(pai_override)
+				return
 			if(mob.remove_spell_channeling()) //Interrupt to remove spell channeling on dropping
 				to_chat(usr, "<span class='notice'>You cease waiting to use your power")
 				return

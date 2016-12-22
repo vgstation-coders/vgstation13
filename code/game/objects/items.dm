@@ -253,7 +253,7 @@
 // Due to storage type consolidation this should get used more now.
 // I have cleaned it up a little, but it could probably use more.  -Sayu
 /obj/item/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	return
+	return ..()
 
 /obj/item/proc/talk_into(var/datum/speech/speech, var/channel=null)
 	return
