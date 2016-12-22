@@ -29,7 +29,7 @@
 	damage = 45
 	damage_type = BRUTE
 	weaken = 1
-	stun = 5
+	stun = 3
 
 
 /obj/item/projectile/bullet/shrapnel/small
