@@ -2084,7 +2084,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 obj/item/device/pda/CtrlClick()
 	if ( can_use(usr) ) // Checks that the PDA is in our inventory. This will be checked by the proc anyways, but we don't want to generate an error message if not.
-		verb_remove_id(usr)
+		verb_remove_pen(usr)
 		return
 	return ..()
 
