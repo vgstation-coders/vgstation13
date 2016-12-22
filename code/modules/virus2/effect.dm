@@ -10,8 +10,9 @@
 	virus=D
 	effect = new /datum/disease2/effect(D)
 
-/datum/disease2/effectholder/proc/runeffect(var/mob/living/carbon/human/mob,var/stage)
-	effect.runeffect(mob, stage)
+/datum/disease2/effectholder/proc/runeffect(var/mob/living/carbon/human/mob, var/active_stage)
+	if (effect.can_run_effect(active_stage))
+		effect.run_effect(mob)
 
 /datum/disease2/effectholder/proc/getrandomeffect(var/badness = 1)
 	if(effect)
@@ -50,29 +51,60 @@
 
 
 /datum/disease2/effect
-	var/name = "Blanking effect"
+	var/name = "Example syndrome"
+		// Try to have a self-descriptive name, eg. "Hearing Loss", "Toxin Sublimation".
+		// Failing that, call it "X syndrome". It's important that effect names are consistent.
 	var/stage = -1
-	var/max_chance = 50
-	var/chance = 3
-	var/max_multiplier = 1
-	var/multiplier = 1 //The chance the effects are WORSE
-	var/maxcount = -1 // Maximum number of times the effect should activate; if -1, always activate
-	var/count = 0
+		// Diseases start at stage 1. They slowly and cumulatively proceed their way up.
+		// Try to keep more severe effects in the later stages.
 	var/badness = 1
+		// How damaging the virus is. Higher values are worse.
+
+	var/chance = 3
+		// Under normal conditions, the percentage chance per tick to activate. 
+	var/max_chance = 50	
+		// Maximum percentage chance per tick.
+
+	var/multiplier = 1
+		// How strong the effects are. Use this in activate().
+	var/max_multiplier = 1
+		// Maximum multiplier.
+
+	var/count = 0
+		// How many times the effect has activated so far.
+	var/max_count = -1 
+		// How many times the effect should be allowed to activate. If -1, always activate.
+
 	var/affect_voice = 0
 	var/affect_voice_active = 0
+		// Read through Hanging Man's / Pro-tagonista syndrome to know how to use these.
+
 	var/datum/disease2/disease/virus
+		// Parent virus. Plans to generalize these are underway.
+
 	proc/activate(var/mob/living/carbon/mob)
+		// The actual guts of the effect. Has a prob(chance)% to get called per tick.
 	proc/deactivate(var/mob/living/carbon/mob)
-	proc/affect_mob_voice(var/datum/speech/speech) //Called by /mob/living/carbon/human/treat_speech
+		// If activation makes any permanent changes to the effect, this is where you undo them.
+		// Will not get called if the virus has never been activated.
+	proc/affect_mob_voice(var/datum/speech/speech) 
+		// Called by /mob/living/carbon/human/treat_speech
 
 /datum/disease2/effect/New(var/datum/disease2/disease/D)
 	virus=D
 
-/datum/disease2/effect/proc/runeffect(var/mob/living/carbon/human/mob, var/activestage)
-	if((count > maxcount || maxcount == -1) && stage <= activestage && prob(chance))
-		activate(mob)
-		count += 1
+/datum/disease2/effect/proc/can_run_effect(var/active_stage = -1)
+	if((count > max_count || max_count == -1) && (stage <= active_stage || active_stage == -1) && prob(chance))
+		return 1
+	return 0
+
+/datum/disease2/effect/proc/run_effect(var/mob/living/carbon/human/mob)
+	activate(mob)
+	count += 1
+
+/datum/disease2/effect/proc/disable_effect(var/mob/living/carbon/human/mob)
+	if (count > 0)
+		deactivate(mob)
 
 ////////////////////////SPECIAL/////////////////////////////////
 
