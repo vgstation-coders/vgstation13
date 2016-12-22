@@ -3437,7 +3437,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/sliceable/buchedenoel
 	name = "\improper Buche de Noel"
-	desc = "Merry Christmas"
+	desc = "Merry Christmas!"
 	icon_state = "buche"
 	slice_path = /obj/item/weapon/reagent_containers/food/snacks/bucheslice
 	slices_num = 5
@@ -3454,7 +3454,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/bucheslice
 	name = "\improper Buche de Noel slice"
-	desc = "A slice of winter magic"
+	desc = "A slice of winter magic."
 	icon_state = "buche_slice"
 	trash = /obj/item/trash/plate
 	bitesize = 2

@@ -1,6 +1,6 @@
 obj/machinery/recharger/defibcharger/wallcharger // obj/machinery/recharger/defibcharger define doesn't exist, don't bother trying to look for it
 	name = "defibrillator recharger"
-	desc = "A special wall mounted recharger meant for emergency defibrillators"
+	desc = "A special wall-mounted recharger used to recharge defibrillators."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "wrecharger0"
 	anchored = 1

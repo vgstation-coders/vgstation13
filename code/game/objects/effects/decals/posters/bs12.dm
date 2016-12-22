@@ -97,7 +97,7 @@
 /datum/poster/bay_20
 	icon_state="bsposter20"
 	name = "Skrell Twilight"
-	desc = "This poster depicts a mysteriously inscrutable, alien scene. Numerous Skrell can be seen conversing amidst great, crystalline towers rising above crashing waves"
+	desc = "This poster depicts a mysteriously inscrutable, alien scene. Numerous Skrell can be seen conversing amidst great, crystalline towers rising above crashing waves."
 
 /datum/poster/bay_21
 	icon_state="bsposter21"
@@ -107,7 +107,7 @@
 /datum/poster/bay_22
 	icon_state="bsposter22"
 	name = "Looking for a career with excitement?"
-	desc = "A recruitment poster starring a dark haired woman with glasses and a purple shirt that has \"Got Brains? Got Talent? Not afraid of electric flying monsters that want to suck the soul out of you? Then Xenobiology could use someone like you!\" written on the bottom."
+	desc = "A recruitment poster starring a dark haired woman with glasses and a purple shirt that has \"Got Brains? Got Talent? Not afraid of electric monsters that want to suck the soul out of you? Then Xenobiology could use someone like you!\" written on the bottom."
 
 /datum/poster/bay_23
 	icon_state="bsposter23"
