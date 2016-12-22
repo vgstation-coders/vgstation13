@@ -165,7 +165,7 @@
 		if(locked_atoms.len)
 			return 0
 
-		visible_message("[usr] collapses \the [src.name]")
+		visible_message("[usr] collapses \the [src.name].")
 
 		new/obj/item/roller(get_turf(src))
 

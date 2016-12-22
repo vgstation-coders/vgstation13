@@ -13,7 +13,7 @@
  */
 /obj/structure/table
 	name = "table"
-	desc = "A square piece of metal standing on four metal legs. It can not move."
+	desc = "A square piece of metal standing on four metal legs. It cannot move."
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "table"
 	density = 1

@@ -53,15 +53,15 @@
 		to_chat(user, "It appears to be completely loose and movable.")
 	//switch most likely can't take inequalities, so here's that if block
 	if(health >= initial(health)) //Sanity
-		to_chat(user, "It's in perfect shape, not even a scratch.")
+		to_chat(user, "It's in perfect shape without a single scratch.")
 	else if(health >= 0.8*initial(health))
 		to_chat(user, "It has a few scratches and a small impact.")
 	else if(health >= 0.5*initial(health))
-		to_chat(user, "It has a few impacts and some cracks running from them.")
+		to_chat(user, "It has a few impacts with some cracks running from them.")
 	else if(health >= 0.2*initial(health))
-		to_chat(user, "It's covered in impact marks and most of the outer sheet is crackled.")
+		to_chat(user, "It's covered in impact marks and most of the outer layer is cracked.")
 	else
-		to_chat(user, "It's completely crackled over multiple layers, it's a miracle it's even standing.")
+		to_chat(user, "It's cracked over multiple layers and has many impact marks.")
 	if(reinforced) //Normal windows can be loose or not, reinforced windows are more complex
 		switch(d_state)
 			if(WINDOWSECURE)
