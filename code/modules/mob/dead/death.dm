@@ -4,6 +4,8 @@
 /mob/dead/gib()		//ghosts can't be gibbed.
 	return
 
+
+
 /mob/dead/cultify()
 	if(icon_state != "ghost-narsie")
 		icon = 'icons/mob/mob.dmi'
@@ -38,3 +40,5 @@
 
 /mob/dead/blob_act()
 	return
+
+/mob/dead/held_items = list()
