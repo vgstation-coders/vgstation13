@@ -10,10 +10,6 @@
 	virus=D
 	effect = new /datum/disease2/effect(D)
 
-/datum/disease2/effectholder/proc/runeffect(var/mob/living/carbon/human/mob, var/active_stage)
-	if (effect.can_run_effect(active_stage))
-		effect.run_effect(mob)
-
 /datum/disease2/effectholder/proc/getrandomeffect(var/badness = 1)
 	if(effect)
 		virus.log += "<br />[timestamp()] Effect [effect.name] [effect.chance]% is now "

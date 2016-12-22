@@ -119,7 +119,8 @@ var/global/list/disease2_list = list()
 
 	//Do nasty effects
 	for(var/datum/disease2/effectholder/e in effects)
-		e.runeffect(mob,stage)
+		if (e.effect.can_run_effect(stage))
+			e.effect.run_effect(mob)
 
 	//Short airborne spread
 	if(src.spreadtype == "Airborne")
