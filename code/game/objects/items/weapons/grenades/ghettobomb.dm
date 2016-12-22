@@ -64,17 +64,8 @@
 			active = 0
 			det_time = rand(30,80)
 	else
-		if(assembled == 2)
-			if((current_shrapnel + I.shrapnel_size)<= max_shrapnel )
-				if(I.shrapnel_amount > 0|| I.w_class == W_CLASS_TINY)
-					if(user.drop_item(I, src))
-						shrapnel_list.Add(I)
-						to_chat(user, "<span  class='notice'>You add the [I] to the improvised explosive.</span>")
-						playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
-						current_shrapnel += I.shrapnel_size
-			else
-				to_chat(user, "<span  class='notice'>There is no room for the [I] in the improvised explosive!.</span>")
 
+		AddShrapnel(I,user)
 
 
 
@@ -114,12 +105,33 @@
 			spawn(det_time)
 				prime()
 
+
+/obj/item/weapon/grenade/iedcasing/proc/AddShrapnel(var/obj/item/I, mob/user as mob)
+
+	if(assembled == 2)
+		if((current_shrapnel + I.shrapnel_size)<= max_shrapnel )
+			if(I.shrapnel_amount > 0|| I.w_class == W_CLASS_TINY)
+				shrapnel_list.Add(I)
+				current_shrapnel += I.shrapnel_size
+				if(user.drop_item(I, src))
+					to_chat(user, "<span  class='notice'>You add \the [I] to the improvised explosive.</span>")
+					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
+				else
+					I.forceMove(src)
+
+	else
+		if(user)
+			to_chat(user, "<span  class='notice'>There is no room for \the [I] in the improvised explosive!.</span>")
+
+
 /obj/item/weapon/grenade/iedcasing/prime() //Blowing that can up
 	update_mob()
 	explosion(get_turf(src.loc),-1,0,2)
 	if(shrapnel_list.len > 0)
 		var/atom/target
 		var/atom/curloc = get_turf(src)
+		var/list/possbile_targets= trange(6, curloc)
+
 		var/list/bodyparts = list("head","chest","groin","l_arm","r_arm","l_hand","r_hand","l_leg","r_leg","l_foot","r_foot")
 		for(var/obj/item/shrapnel in shrapnel_list)
 			if(shrapnel.shrapnel_amount >0)
@@ -128,7 +140,7 @@
 
 				while(amount > 0)
 					amount--
-					target =pick(trange(6, curloc))
+					target =pick(possbile_targets)
 					var/obj/item/projectile/bullet/shrapnel_projectile = new shrapnel.shrapnel_type(src) //obj/item/projectile/bullet/shrapnel
 					shrapnel_projectile.forceMove(curloc)
 					shrapnel_projectile.original = target
@@ -146,7 +158,7 @@
 						shrapnel_projectile.process()
 
 			else
-				target =pick(trange(6, curloc))
+				target =pick(possbile_targets)
 				shrapnel.forceMove(curloc)
 				shrapnel.throw_at(target,100,10)
 
@@ -179,11 +191,9 @@
 
 /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel/New()
 	..()
-	shrapnel_list.Add(new /obj/item/weapon/shard(src))
-	shrapnel_list.Add(new /obj/item/weapon/shard(src))
-	shrapnel_list.Add(new /obj/item/weapon/shard(src))
-	shrapnel_list.Add(new /obj/item/weapon/shard(src))
-	current_shrapnel = 8
+	for(var/i = 1, i<=4,i++)
+		AddShrapnel(new /obj/item/weapon/shard(src), null)
+
 
 /obj/item/weapon/grenade/iedcasing/preassembled/New()
     ..()
