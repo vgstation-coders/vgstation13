@@ -32,7 +32,7 @@
 
 /obj/item/clothing/under/rank/security/sneaksuit
 	name = "sneaking suit"
-	desc = "It's made of a strong material developed by the Soviet Union centuries ago, allows for robust protection."
+	desc = "It's made of a strong material developed by the Soviet Union centuries ago which provides robust protection."
 	icon_state = "sneakingsuit"
 	item_state = "sneakingsuit"
 	_color = "sneakingsuit"
