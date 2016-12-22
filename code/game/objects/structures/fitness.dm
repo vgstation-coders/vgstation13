@@ -1,6 +1,6 @@
 /obj/structure/punching_bag
 	name = "punching bag"
-	desc = "A punching bag. Can you get to speed level 4???"
+	desc = "A punching bag. Can you get to speed level 4?"
 	icon = 'icons/obj/fitness.dmi'
 	icon_state = "punchingbag"
 	anchored = 1
@@ -71,7 +71,7 @@
 
 /obj/structure/weightlifter
 	name = "Weight Machine"
-	desc = "Just looking at this thing makes you feel tired."
+	desc = "A machine that allows for effective weight training. Just looking at this thing makes you feel tired."
 	icon = 'icons/obj/fitness.dmi'
 	icon_state = "fitnessweight"
 	density = 1
