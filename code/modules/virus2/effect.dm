@@ -8,6 +8,7 @@
 
 /datum/disease2/effectholder/New(var/datum/disease2/disease/D)
 	virus=D
+	effect = new /datum/disease2/effect(D)
 
 /datum/disease2/effectholder/proc/runeffect(var/mob/living/carbon/human/mob,var/stage)
 	effect.runeffect(mob, stage)
@@ -50,7 +51,7 @@
 
 /datum/disease2/effect
 	var/name = "Blanking effect"
-	var/stage = 4
+	var/stage = -1
 	var/max_chance = 50
 	var/chance = 3
 	var/max_multiplier = 1
@@ -60,9 +61,13 @@
 	var/badness = 1
 	var/affect_voice = 0
 	var/affect_voice_active = 0
+	var/datum/disease2/disease/virus
 	proc/activate(var/mob/living/carbon/mob)
 	proc/deactivate(var/mob/living/carbon/mob)
 	proc/affect_mob_voice(var/datum/speech/speech) //Called by /mob/living/carbon/human/treat_speech
+
+/datum/disease2/effect/New(var/datum/disease2/disease/D)
+	virus=D
 
 /datum/disease2/effect/proc/runeffect(var/mob/living/carbon/human/mob, var/activestage)
 	if((count > maxcount || maxcount == -1) && stage <= activestage && prob(chance))
