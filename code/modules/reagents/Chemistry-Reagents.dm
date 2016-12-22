@@ -2453,7 +2453,7 @@
 	color = "#3E3959" //rgb: 62, 57, 89
 
 
-//Great healing powers. Metabolizes quickly and rapidly heals all damage types.
+//Great healing powers. Metabolizes extremely slowly, but gets used up when it heals damage.
 //Dangerous in amounts over 5 units, healing that occurs while over 5 units adds to a counter. That counter affects gib chance. Guaranteed gib over 20 units.
 /datum/reagent/mednanobots
 	name = "Medical Nanobots"
@@ -2461,7 +2461,7 @@
 	description = "Microscopic robots intended for use in humans. Configured for rapid healing upon infiltration into the body."
 	reagent_state = LIQUID
 	color = "#593948" //rgb: 89, 57, 72
-	custom_metabolism = 0.5
+	custom_metabolism = 0.005
 	var/spawning_horror = 0
 	var/percent_machine = 0
 
@@ -2471,25 +2471,18 @@
 		return 1
 
 	switch(volume)
-		if(0.5 to 5)
+		if(0.1 to 5)
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(H.species.name != "Diona")
-					if(H.getOxyLoss()>0 && prob(100))
+					if(H.getOxyLoss()>0 || H.getBruteLoss()>0 || H.getToxLoss()>0 || H.getFireLoss()>0 || H.getCloneLoss()>0)
 						if(holder.has_reagent("mednanobots"))
-							H.adjustOxyLoss(-7)
-					if(H.getBruteLoss()>0 && prob(100))
-						if(holder.has_reagent("mednanobots"))
-							H.heal_organ_damage(7, 0)
-					if(H.getFireLoss()>0 && prob(100))
-						if(holder.has_reagent("mednanobots"))
-							H.heal_organ_damage(0, 7)
-					if(H.getToxLoss()>0 && prob(100))
-						if(holder.has_reagent("mednanobots"))
-							H.adjustToxLoss(-7)
-					if(H.getCloneLoss()>0 && prob(100))
-						if(holder.has_reagent("mednanobots"))
-							H.adjustCloneLoss(-7)
+							H.adjustOxyLoss(-5)
+							H.heal_organ_damage(5, 5)
+							H.adjustToxLoss(-5)
+							H.adjustCloneLoss(-5)
+							holder.remove_reagent("mednanobots", 10/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
+					if(percent_machine>5)
 						if(holder.has_reagent("mednanobots"))
 							percent_machine-=1
 							if(prob(20))
@@ -2507,37 +2500,13 @@
 			if(ishuman(M))
 				var/mob/living/carbon/human/H = M
 				if(H.species.name != "Diona")
-					if(H.getOxyLoss()>0 && prob(100))
+					if(H.getOxyLoss()>0 || H.getBruteLoss()>0 || H.getToxLoss()>0 || H.getFireLoss()>0 || H.getCloneLoss()>0)
 						if(holder.has_reagent("mednanobots"))
-							H.adjustOxyLoss(-7)
-							percent_machine +=1/2
-							if(prob(20))
-								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
-							else
-					if(H.getBruteLoss()>0 && prob(100))
-						if(holder.has_reagent("mednanobots"))
-							H.heal_organ_damage(7, 0)
-							percent_machine +=1/2
-							if(prob(20))
-								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
-							else
-					if(H.getFireLoss()>0 && prob(100))
-						if(holder.has_reagent("mednanobots"))
-							H.heal_organ_damage(0, 7)
-							percent_machine +=1/2
-							if(prob(20))
-								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
-							else
-					if(H.getToxLoss()>0 && prob(100))
-						if(holder.has_reagent("mednanobots"))
-							H.adjustToxLoss(-7)
-							percent_machine +=1/2
-							if(prob(20))
-								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
-							else
-					if(H.getCloneLoss()>0 && prob(100))
-						if(holder.has_reagent("mednanobots"))
-							H.adjustCloneLoss(-7)
+							H.adjustOxyLoss(-5)
+							H.heal_organ_damage(5, 5)
+							H.adjustToxLoss(-5)
+							H.adjustCloneLoss(-5)
+							holder.remove_reagent("mednanobots", 10/40)  //The number/40 means that every time it heals, it uses up number/40ths of a unit, meaning each unit heals 40 damage
 							percent_machine +=1/2
 							if(prob(20))
 								to_chat(H, pick("<span class='warning'>Something shifts inside you...</span>", "<span class='warning'>You feel different, somehow...</span>"))
