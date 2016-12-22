@@ -6,7 +6,7 @@
 
 /datum/design/smes
 	name = "Circuit Design (SMES) "
-	desc = "Allows for the construction of circuit boards used to build the Superconducting Magnetic Energy Storage Units."
+	desc = "Allows for the construction of circuit boards used to build Superconducting Magnetic Energy Storage Units."
 	id="smes"
 	req_tech = list(Tc_POWERSTORAGE = 4, Tc_ENGINEERING = 4, Tc_PROGRAMMING = 4)
 	build_type = IMPRINTER
