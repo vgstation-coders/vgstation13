@@ -4,7 +4,7 @@
 
 /obj/item/weapon/melee/defibrillator
 	name = "emergency defibrillator"
-	desc = "Used to restore fibrilating patients, and somehow bring them back from the dead too."
+	desc = "Used to restore fibrillating patients."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "defib_full"
 	item_state = "defib"

@@ -77,7 +77,7 @@
 //Dispensers
 /obj/structure/reagent_dispensers/watertank
 	name = "watertank"
-	desc = "A watertank"
+	desc = "A storage tank containing water."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "watertank"
 	amount_per_transfer_from_this = 10
@@ -88,7 +88,7 @@
 
 /obj/structure/reagent_dispensers/fueltank
 	name = "fueltank"
-	desc = "A fueltank"
+	desc = "A storage tank containing welding fuel."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "weldtank"
 	amount_per_transfer_from_this = 10
