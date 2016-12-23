@@ -451,14 +451,11 @@
 /datum/disease2/effect/babel
 	name = "Babel Syndrome"
 	stage = 4
+	max_count = 1
 
 	var/list/original_languages = list()
-	var/has_been_triggered = 0
 
 /datum/disease2/effect/babel/activate(var/mob/living/carbon/mob)
-	if(has_been_triggered)
-		return
-	has_been_triggered = 1
 	if(mob.languages.len <= 1)
 		to_chat(mob, "You realize your knowledge of language is just fine, and that you were panicking over nothing.")
 		return
@@ -485,7 +482,6 @@
 			mob.add_language(forgotten)
 
 		to_chat(mob, "Suddenly, your knowledge of languages comes back to you.")
-	..()
 
 
 ////////////////////////STAGE 3/////////////////////////////////
