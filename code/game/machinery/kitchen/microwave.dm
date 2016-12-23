@@ -231,7 +231,7 @@
 			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/meat)) //any meat
 				items_measures[display_name] = "slab of meat"
 				items_measures_p[display_name] = "slabs of meat"
-			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat))
+			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet))
 				items_measures[display_name] = "fillet of meat"
 				items_measures_p[display_name] = "fillets of meat"
 			if (istype(O,/obj/item/weapon/reagent_containers/food/snacks/egg))

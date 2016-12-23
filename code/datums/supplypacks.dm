@@ -962,7 +962,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat,
-					/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/imitation,
+					/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp/imitation,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg,
@@ -1097,6 +1097,23 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 500
 	containertype = /obj/structure/largecrate
 	containername = "big band musical instruments crate"
+	group = "Hospitality"
+
+/datum/supply_packs/fishing_supplies
+	name = "Fishing supplies"
+	contains = list(/obj/item/weapon/fishingrod,
+					/obj/item/weapon/fishingrod,
+					/obj/item/weapon/fishingrod,
+					/obj/item/weapon/fishingrod,
+					/obj/item/device/bluespace_pond_container,
+					/obj/item/device/bluespace_pond_container,
+					/obj/item/device/bluespace_pond_container,
+					/obj/item/device/bluespace_pond_container,
+					/obj/item/weapon/storage/bag/plasticbag/baitbag,
+					/obj/item/weapon/storage/bag/food)
+	cost = 100
+	containertype = /obj/structure/closet/crate
+	containername = "Fishing supplies crate"
 	group = "Hospitality"
 
 //////ENGINEERING//////

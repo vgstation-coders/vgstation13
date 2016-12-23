@@ -561,7 +561,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger,
 		/obj/item/weapon/reagent_containers/food/snacks/boiledegg,
 		/obj/item/weapon/reagent_containers/food/snacks/brainburger,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat,
+		/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp,
 		/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers,
 		/obj/item/weapon/reagent_containers/food/snacks/chips,
 		/obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped,

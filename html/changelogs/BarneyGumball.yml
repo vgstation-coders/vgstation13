@@ -1,2 +1,7 @@
 author: BarneyGumball
-changes: []
+changes: 
+- rscadd: Fishing rods and bait have been added.  Use them on deep water and bluespace ponds to try and catch the elusive Rainbow Trout.
+- rscadd: Bluespace Ponds are a new piece of machinery that allows access to water from anywhere on the station.
+- rscadd: The new fishing supply crate comes with nearly everything you need to started.
+- rscadd: Some carp recipes have a new version that uses normal fish fillets to cook.  Original carp recipes untouched.
+- rscadd: Clownfish are a new type of mob that can be caught with special bait.
