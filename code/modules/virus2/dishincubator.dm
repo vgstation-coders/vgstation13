@@ -175,15 +175,15 @@
 		if(!powered(EQUIP))
 			on = 0
 			icon_state = "incubator"
+		if(dish.growth >= INCUBATOR_MAX_SIZE)
+			if(icon_state != "incubator_fed")
+				icon_state = "incubator_fed"
+			if(last_notice + FED_PING_DELAY < world.time)
+				last_notice = world.time
+				alert_noise("ping")
 		if(foodsupply && dish && dish.virus2)
 			foodsupply -= 1
 			dish.growth = min(growthrate + dish.growth, INCUBATOR_MAX_SIZE)
-			if(dish.growth >= INCUBATOR_MAX_SIZE)
-				if(icon_state != "incubator_fed")
-					icon_state = "incubator_fed"
-				if(last_notice + FED_PING_DELAY < world.time)
-					last_notice = world.time
-					alert_noise("ping")
 		if(radiation && dish && dish.virus2)
 			if(radiation > 50 & prob(mutatechance))
 				dish.virus2.log += "<br />[timestamp()] MAJORMUTATE (incubator rads)"
