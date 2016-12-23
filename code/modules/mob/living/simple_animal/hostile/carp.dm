@@ -11,7 +11,7 @@
 	icon_gib = "carp_gib"
 	speak_chance = 0
 	turns_per_move = 5
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp
 	response_help = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm = "hits"
@@ -198,6 +198,19 @@
 
 /mob/living/simple_animal/hostile/carp/holocarp/Die()
 	qdel(src)
+
+/mob/living/simple_animal/hostile/carp/clown
+	name = "clownfish"
+	desc = "A hilarious, fang-bearing creature that resembles a fish."
+	icon_state = "clarp"
+	icon_living = "clarp"
+	icon_dead = "clarp_dead"
+	icon_gib = "clarp_gib"
+	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp/clown
+	can_breed = 0
+	attacktext = "honks"
+	attack_sound = 'sound/items/bikehorn.ogg'
+	pheromones_act = PHEROMONES_FOLLOW
 
 #undef PHEROMONES_NO_EFFECT
 #undef PHEROMONES_NEUTRAL

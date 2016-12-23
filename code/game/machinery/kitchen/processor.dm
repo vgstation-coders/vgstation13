@@ -72,7 +72,7 @@
 		input = /obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat
 
 	poison/carpmeat
-		input = /obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat
+		input = /obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp
 
 	meat
 		input = /obj/item/weapon/reagent_containers/food/snacks/meat
