@@ -1069,23 +1069,14 @@ var/global/list/image/blood_overlays = list()
 	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)
 
 /obj/item/proc/is_worn(mob/user)
-	var/mob/living/carbon/monkey/M
-	var/mob/living/carbon/human/H
-	if(istype(user, /mob/living/carbon/monkey))
-		M = user
-	if(istype(user, /mob/living/carbon/human))
-		H = user
-	if(!(H || M))
+	var/mob/living/carbon/monkey/Mo = user
+	var/mob/living/carbon/human/H = user
+
+	if(!istype(H) && !istype(Mo))
 		return FALSE
-	if(H)
-		for(var/bit = 0 to 15)
-			bit = 1 << bit
-			if(bit & slot_flags)
-				if(H.get_item_by_flag(bit) == src)
-					return TRUE
-	else
-		for(var/bit = 0 to 15)
-			bit = 1 << bit
-			if(bit & slot_flags)
-				if(M.get_item_by_flag(bit) == src)
-					return TRUE
+	var/mob/M = user
+	for(var/bit = 0 to 15)
+		bit = 1 << bit
+		if(bit & slot_flags)
+			if(M.get_item_by_flag(bit) == src)
+				return TRUE
