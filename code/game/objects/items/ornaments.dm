@@ -158,3 +158,8 @@
 	name = "gold teardrop ornament"
 	desc = "A teardrop-shaped glass ornament with a brilliant gold color. Best paired with silver teardrop ornaments."
 	icon_state = "gold_teardrop_ornament"
+
+/obj/item/ornament/topper
+	name = "star topper"
+	desc = "A star-shaped tree topper. Appropriate for a Christmas in space."
+	icon_state = "star_topper"

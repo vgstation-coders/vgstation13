@@ -640,7 +640,11 @@
 
 /obj/item/weapon/storage/box/ornaments/New()
 	..()
-	for(var/i = 1 to 7)
+	for(var/i = 1 to 6)
+		new /obj/item/ornament(src)
+	if(prob(10))
+		new /obj/item/ornament/topper(src)
+	else
 		new /obj/item/ornament(src)
 
 /obj/item/weapon/storage/box/ornaments/teardrop_ornaments

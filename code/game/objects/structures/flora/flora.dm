@@ -19,6 +19,13 @@
 */
 /obj/structure/flora/proc/hang_ornament(var/obj/item/I, var/mob/user, params)
 	var/list/params_list = params2list(params)
+	if(!istype(I, /obj/item/ornament))
+		return
+	if(istype(I, /obj/item/ornament/topper))
+		for(var/i = 1 to contents.len)
+			if(istype(contents[i], /obj/item/ornament/topper))
+				to_chat(user, "Having more than one topper on a tree would look silly!")
+				return
 	if(user.drop_item(I, src))
 		if(I.loc == src && params_list.len)
 			var/image/O
