@@ -170,12 +170,12 @@
 	onclose(user, "dish_incubator")
 
 /obj/machinery/disease2/incubator/process()
-	if(dish && on && dish.virus2)
+	if(on)
 		use_power(50,EQUIP)
 		if(!powered(EQUIP))
 			on = 0
 			icon_state = "incubator"
-		if(foodsupply)
+		if(foodsupply && dish && dish.virus2)
 			foodsupply -= 1
 			dish.growth = min(growthrate + dish.growth, INCUBATOR_MAX_SIZE)
 			if(dish.growth >= INCUBATOR_MAX_SIZE)
@@ -184,7 +184,7 @@
 				if(last_notice + FED_PING_DELAY < world.time)
 					last_notice = world.time
 					alert_noise("ping")
-		if(radiation)
+		if(radiation && dish && dish.virus2)
 			if(radiation > 50 & prob(mutatechance))
 				dish.virus2.log += "<br />[timestamp()] MAJORMUTATE (incubator rads)"
 				dish.virus2.majormutate()
@@ -197,12 +197,11 @@
 			else if(prob(mutatechance))
 				dish.virus2.minormutate()
 			radiation -= 1
-		if(toxins && prob(5))
+		if(toxins && prob(5) && dish && dish.virus2)
 			dish.virus2.infectionchance -= 1
-		if(toxins > 50)
+		if(toxins > 50 && dish && dish.virus2)
 			dish.virus2 = null
-	else if(!dish)
-		on = 0
+	else
 		icon_state = "incubator"
 
 	if(beaker)
