@@ -4,39 +4,37 @@
 	icon = 'icons/obj/ball_ornaments.dmi'
 	icon_state = "white_ball_ornament"
 	w_class = 2
+	var/list/ornaments_list = list("red" = /obj/item/ornament/red,
+								"blue" = /obj/item/ornament/blue,
+								"green" = /obj/item/ornament/green,
+								"purple" = /obj/item/ornament/purple,
+								"orange" = /obj/item/ornament/orange,
+								"yellow" = /obj/item/ornament/gold,
+								"rainbow" = /obj/item/ornament/magenta,
+								"gray" = /obj/item/ornament/silver)
 
 /obj/item/ornament/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if(istype(src, /obj/item/ornament/teardrop))
-		return
 	if(istype(W, /obj/item/toy/crayon) || istype(W, /obj/item/weapon/pen))
 		var/obj/item/ornament/O
+		var/type_to_spawn
 		var/color_string = null
 		if(istype(W, /obj/item/toy/crayon))
 			var/obj/item/toy/crayon/C = W
 			switch(C.colourName)
-				if("red")
-					O = new /obj/item/ornament/red(get_turf(src))
-				if("blue")
-					O = new /obj/item/ornament/blue(get_turf(src))
-				if("green")
-					O = new /obj/item/ornament/green(get_turf(src))
-				if("purple")
-					O = new /obj/item/ornament/purple(get_turf(src))
-				if("orange")
-					O = new /obj/item/ornament/orange(get_turf(src))
 				if("yellow")
-					O = new /obj/item/ornament/gold(get_turf(src))
 					color_string = "gold"
 				if("rainbow")
-					O = new /obj/item/ornament/magenta(get_turf(src))
 					color_string = "a deep pink"
-				else
+				if("mime")
 					return
+			type_to_spawn = ornaments_list[C.colourName]
+			O = new type_to_spawn(get_turf(src))
 			if(!color_string)
 				color_string = C.colourName
 		else
-			O = new /obj/item/ornament/silver(get_turf(src))
+			type_to_spawn = ornaments_list["gray"]
+			O = new type_to_spawn(get_turf(src))
 		if(O)
 			O.canremove = canremove
 			O.cant_drop = cant_drop
@@ -48,6 +46,15 @@
 				to_chat(user, "You color \the [src] [color_string].")
 			else
 				to_chat(user, "You lightly shade \the [src] with \the [W] until it appears silver.")
+
+/obj/item/ornament/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if (!proximity_flag)
+		return 0
+	if(istype(target, /obj/structure/flora))
+		var/obj/structure/flora/F = target
+		F.hang_ornament(src, user, click_parameters)
+		return 1
+	return ..()
 
 /obj/item/ornament/throw_impact(atom/hit_atom)
 	..()
@@ -103,48 +110,14 @@
 	desc = "A teardrop-shaped glass ornament. The long point on the end is reminiscent of an icicle."
 	icon = 'icons/obj/teardrop_ornaments.dmi'
 	icon_state = "white_teardrop_ornament"
-
-/obj/item/ornament/teardrop/attackby(obj/item/weapon/W, mob/user)
-	..()
-	if(istype(W, /obj/item/toy/crayon) || istype(W, /obj/item/weapon/pen))
-		var/obj/item/ornament/teardrop/O
-		var/color_string = null
-		if(istype(W, /obj/item/toy/crayon))
-			var/obj/item/toy/crayon/C = W
-			switch(C.colourName)
-				if("red")
-					O = new /obj/item/ornament/teardrop/red(get_turf(src))
-				if("blue")
-					O = new /obj/item/ornament/teardrop/blue(get_turf(src))
-				if("green")
-					O = new /obj/item/ornament/teardrop/green(get_turf(src))
-				if("purple")
-					O = new /obj/item/ornament/teardrop/purple(get_turf(src))
-				if("orange")
-					O = new /obj/item/ornament/teardrop/orange(get_turf(src))
-				if("yellow")
-					O = new /obj/item/ornament/teardrop/gold(get_turf(src))
-					color_string = "gold"
-				if("rainbow")
-					O = new /obj/item/ornament/teardrop/magenta(get_turf(src))
-					color_string = "a deep pink"
-				else
-					return
-			if(!color_string)
-				color_string = C.colourName
-		else
-			O = new /obj/item/ornament/teardrop/silver(get_turf(src))
-		if(O)
-			O.canremove = canremove
-			O.cant_drop = cant_drop
-			if(loc == user)
-				user.drop_item(src, force_drop = 1)
-				user.put_in_hands(O)
-			qdel(src)
-			if(color_string)
-				to_chat(user, "You color \the [src] [color_string].")
-			else
-				to_chat(user, "You lightly shade \the [src] with \the [W] until it appears silver.")
+	ornaments_list = list("red" = /obj/item/ornament/teardrop/red,
+						"blue" = /obj/item/ornament/teardrop/blue,
+						"green" = /obj/item/ornament/teardrop/green,
+						"purple" = /obj/item/ornament/teardrop/purple,
+						"orange" = /obj/item/ornament/teardrop/orange,
+						"yellow" = /obj/item/ornament/teardrop/gold,
+						"rainbow" = /obj/item/ornament/teardrop/magenta,
+						"gray" = /obj/item/ornament/teardrop/silver)
 
 /obj/item/ornament/teardrop/red
 	name = "red teardrop ornament"
