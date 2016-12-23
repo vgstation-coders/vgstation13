@@ -1105,10 +1105,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/fishingrod,
 					/obj/item/weapon/fishingrod,
 					/obj/item/weapon/fishingrod,
-					/obj/item/device/bluespace_pond_container,
-					/obj/item/device/bluespace_pond_container,
-					/obj/item/device/bluespace_pond_container,
-					/obj/item/device/bluespace_pond_container,
+//					/obj/item/device/bluespace_pond_container,
+//					/obj/item/device/bluespace_pond_container,
+//					/obj/item/device/bluespace_pond_container,
+//					/obj/item/device/bluespace_pond_container,
 					/obj/item/weapon/storage/bag/plasticbag/baitbag,
 					/obj/item/weapon/storage/bag/food)
 	cost = 100
