@@ -74,11 +74,9 @@
 	name = "Blank GNA disk"
 	icon = 'icons/obj/cloning.dmi'
 	icon_state = "datadisk0"
-	var/datum/disease2/effectholder/effect = null
+	var/datum/disease2/effect/effect = null
 	var/stage = 1
 
 /obj/item/weapon/diseasedisk/premade/New()
 	name = "Blank GNA disk (stage: [stage])"
-	effect = new /datum/disease2/effectholder
-	effect.effect = new /datum/disease2/effect/invisible
-	effect.stage = stage
+	effect = new /datum/disease2/effect
