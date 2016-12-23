@@ -130,24 +130,25 @@
 	if(shrapnel_list.len > 0)
 		var/atom/target
 		var/atom/curloc = get_turf(src)
-		var/list/possbile_targets= trange(8, curloc)
+		var/list/possible_targets= new()
 
 		var/list/bodyparts = list("head","chest","groin","l_arm","r_arm","l_hand","r_hand","l_leg","r_leg","l_foot","r_foot")
 		for(var/obj/item/shrapnel in shrapnel_list)
 			if(shrapnel.shrapnel_amount >0)
 				var/amount = shrapnel.shrapnel_amount
+				possible_targets = trange(6, curloc)
 				while(amount > 0)
 					amount--
-					target =pick(possbile_targets)
-					var/obj/item/projectile/bullet/shrapnel_projectile = new shrapnel.shrapnel_type(src) //obj/item/projectile/bullet/shrapnel
+					target =pick(possible_targets)
+					var/obj/item/projectile/bullet/shrapnel_projectile = new shrapnel.shrapnel_type(src)
 					shrapnel_projectile.forceMove(curloc)
+					shrapnel_projectile.kill_count = rand(6,10)//killcount=max squares traveled before the projectile is deleted. Limits shrapnel range
 					shrapnel_projectile.launch_at(target,bodyparts[rand(1,bodyparts.len)],curloc,src)
 					qdel(shrapnel)
 
-
-
 			else
-				target =pick(possbile_targets)
+				possible_targets = trange(9, curloc)
+				target =pick(possible_targets)
 				shrapnel.forceMove(curloc)
 				shrapnel.throw_at(target,100,10)
 
