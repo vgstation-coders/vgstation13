@@ -284,15 +284,16 @@ var/global/list/snow_turfs = list()
 	plane = PLATING_PLANE
 	var/isedge
 
-/obj/glacier/New()
+/obj/glacier/New(var/icon_update_later = 0)
 	var/turf/snow/T = loc
 	if(!istype(T))
 		qdel(src)
 		return
 	..()
 	T.snowballs = SNOWBALLS_ICE
-	relativewall()
-	relativewall_neighbours()
+	if(icon_update_later)
+		relativewall()
+		relativewall_neighbours()
 
 /obj/glacier/relativewall()
 	overlays.Cut()

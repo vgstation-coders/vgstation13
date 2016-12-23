@@ -54,7 +54,7 @@ here is an example of what it might look like:
 	var/turf/ca_floor
 	var/mapgrid_width = 40
 	var/mapgrid_height = 21
-	var/percent_area_walls = 40
+	var/percent_area_walls = 45
 	var/iterations = 5
 	var/watch
 
@@ -143,9 +143,15 @@ here is an example of what it might look like:
 /obj/procedural_generator/cellular_automata/ice
 	name = "glacier lake"
 	ca_wall = /turf/snow
-	iterations = 6
+	var/list/list_of_glaciers = list()
 
 /obj/procedural_generator/cellular_automata/ice/makefloor(var/turf/snow/T)
 	if(T.snowballs)
 		T.clear_contents(list(type))
-		new /obj/glacier(T)
+		var/obj/glacier/G = new /obj/glacier(T,icon_update_later = 1)
+		list_of_glaciers += G
+
+/obj/procedural_generator/cellular_automata/ice/apply_mapgrid_to_turfs(var/list/mapgrid,var/turf/bottomleft)
+	..()
+	for(var/obj/glacier/G in list_of_glaciers)
+		G.relativewall()

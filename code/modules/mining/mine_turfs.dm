@@ -25,6 +25,10 @@
 	var/scan_state = null //Holder for the image we display when we're pinged by a mining scanner
 	var/busy = 0 //Used for a bunch of do_after actions, because we can walk into the rock to trigger them
 	var/mined_type = /turf/unsimulated/floor/asteroid //Holds the turf that appears when the mineral is destroyed
+	var/icon_state_n = "rock_side_n"
+	var/icon_state_s = "rock_side_s"
+	var/icon_state_e = "rock_side_e"
+	var/icon_state_w = "rock_side_w"
 
 turf/unsimulated/mineral/air
 	oxygen = MOLES_O2STANDARD
@@ -38,6 +42,10 @@ turf/unsimulated/mineral/air
 /turf/unsimulated/mineral/snow
 	icon_state = "snow_rock"
 	mined_type = /turf/snow/permafrost
+	icon_state_n = "snow_rock_side_n"
+	icon_state_s = "snow_rock_side_s"
+	icon_state_e = "snow_rock_side_e"
+	icon_state_w = "snow_rock_side_w"
 
 /turf/unsimulated/mineral/Destroy()
 	return
@@ -62,25 +70,25 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		var/image/I = image('icons/turf/walls.dmi')
 		I.plane = ABOVE_TURF_PLANE
 		var/turf/T
-		if((istype(get_step(src, NORTH), /turf/simulated/floor)) || (istype(get_step(src, NORTH), /turf/space)) || (istype(get_step(src, NORTH), /turf/simulated/shuttle/floor)))
+		if((istype(get_step(src, NORTH), /turf/simulated/floor)) || (istype(get_step(src, NORTH), /turf/space)) || (istype(get_step(src, NORTH), /turf/simulated/shuttle/floor) || (istype(get_step(src, NORTH), /turf/snow)) ))
 			T = get_step(src, NORTH)
 			if (T)
-				I.icon_state = "rock_side_s"
+				I.icon_state = icon_state_s
 				T.overlays += I
-		if((istype(get_step(src, SOUTH), /turf/simulated/floor)) || (istype(get_step(src, SOUTH), /turf/space)) || (istype(get_step(src, SOUTH), /turf/simulated/shuttle/floor)))
+		if((istype(get_step(src, SOUTH), /turf/simulated/floor)) || (istype(get_step(src, SOUTH), /turf/space)) || (istype(get_step(src, SOUTH), /turf/simulated/shuttle/floor) || (istype(get_step(src, SOUTH), /turf/snow)) ))
 			T = get_step(src, SOUTH)
 			if (T)
-				I.icon_state = "rock_side_n"
+				I.icon_state = icon_state_n
 				T.overlays += I
-		if((istype(get_step(src, EAST), /turf/simulated/floor)) || (istype(get_step(src, EAST), /turf/space)) || (istype(get_step(src, EAST), /turf/simulated/shuttle/floor)))
+		if((istype(get_step(src, EAST), /turf/simulated/floor)) || (istype(get_step(src, EAST), /turf/space)) || (istype(get_step(src, EAST), /turf/simulated/shuttle/floor) || (istype(get_step(src, EAST), /turf/snow)) ))
 			T = get_step(src, EAST)
 			if (T)
-				I.icon_state = "rock_side_w"
+				I.icon_state = icon_state_w
 				T.overlays += I
-		if((istype(get_step(src, WEST), /turf/simulated/floor)) || (istype(get_step(src, WEST), /turf/space)) || (istype(get_step(src, WEST), /turf/simulated/shuttle/floor)))
+		if((istype(get_step(src, WEST), /turf/simulated/floor)) || (istype(get_step(src, WEST), /turf/space)) || (istype(get_step(src, WEST), /turf/simulated/shuttle/floor)  || (istype(get_step(src, WEST), /turf/snow)) ))
 			T = get_step(src, WEST)
 			if (T)
-				I.icon_state = "rock_side_e"
+				I.icon_state = icon_state_e
 				T.overlays += I
 		update_ore_overlays()
 	/*
