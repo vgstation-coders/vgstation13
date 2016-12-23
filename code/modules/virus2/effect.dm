@@ -44,6 +44,7 @@
 	proc/affect_mob_voice(var/datum/speech/speech) 
 		// Called by /mob/living/carbon/human/treat_speech
 
+// Most of the stuff below shouldn't be changed when you make a new effect.
 /datum/disease2/effect/New(var/datum/disease2/disease/D)
 	virus=D
 
