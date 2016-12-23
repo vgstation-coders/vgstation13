@@ -1,0 +1,11 @@
+author: Kurfurst
+delete-after: True
+
+changes: 
+- tweak: Changed the shortcut to make the grinder grind from alt+click to ctrl+click. Eject remains alt+click.
+- rscadd: You can now alt+click to change transfer amounts on any reagent dispenser (welding tank, water tank, pepper spray, etc.) that has alterante transfer amounts.
+- rscadd: Granted the water cooler alternate transfer amounts.
+- rscadd: Alt+click on the biogenerator to eject the contained produce. Ctrl+click to grind.
+- tweak: Alt+click on microwave changed to eject ingredients.
+- rscadd: Ctrl+click on microwave to cook.
+- rscadd: The microwave can now have reagent disposal disabled, so that ejecting will not waste any resources. As a general reminder, you can safely remove reagents from the microwave with a baster.
