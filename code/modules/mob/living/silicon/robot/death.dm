@@ -27,6 +27,7 @@
 	new /obj/effect/decal/remains/robot(loc)
 	if(mmi)
 		qdel(mmi)	//Delete the MMI first so that it won't go popping out.
+		mmi = null
 
 	dead_mob_list -= src
 	qdel(src)

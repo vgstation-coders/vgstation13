@@ -50,13 +50,15 @@ var/list/freqtoname = list(
 	"1345" = "Response Team",
 )
 
-/atom/movable/proc/say(message, var/datum/language/speaking, var/atom/movable/radio=src) //so we can force nonmobs to speak a certain language
+/atom/movable/proc/say(message, var/datum/language/speaking, var/atom/movable/radio=src, var/class) //so we can force nonmobs to speak a certain language
 	if(!can_speak())
 		return
 	if(message == "" || !message)
 		return
 	var/datum/speech/speech = create_speech(message, null, radio)
 	speech.language=speaking
+	if(class)
+		speech.message_classes.Add(class)
 	send_speech(speech, world.view)
 	returnToPool(speech)
 

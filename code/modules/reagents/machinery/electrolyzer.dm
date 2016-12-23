@@ -43,6 +43,9 @@
 			return
 	else if(is_type_in_list(W, allowed_containers))
 		var/obj/item/weapon/reagent_containers/glass/G = W
+		if(G.w_class > W_CLASS_SMALL)
+			to_chat(user, "<span class='warning'>\The [G] is too big to fit.</span>")
+			return
 		if(G.reagents.reagent_list.len > 1)
 			to_chat(user, "<span class='warning'>That mixture is too complex!</span>")
 			return
@@ -98,13 +101,15 @@
 		if(C.charge<30*total_reactions)
 			total_reactions = round(C.charge/30) //In the case that we don't have ENOUGH charge, this will react us as often as we can
 		C.charge -= (30*total_reactions)
-		active.reagents.remove_reagent(unreaction.result,total_reactions*unreaction.result_amount) //This moves over the reactive bulk, and leaves behind the amount too small to react
+		var/amount_to_electrolyze = total_reactions*unreaction.result_amount
+		active.reagents.remove_reagent(unreaction.result,amount_to_electrolyze) //This moves over the reactive bulk, and leaves behind the amount too small to react
 		for(var/E in unreaction.required_reagents)
 			if(primary)
 				active.reagents.add_reagent(E, unreaction.required_reagents[E]*total_reactions) //Put component amount * reaction count back in primary
 				primary = 0
 			else
 				empty.reagents.add_reagent(E, unreaction.required_reagents[E]*total_reactions)
+		investigation_log(I_CHEMS, "was used by [key_name(user)] to electrolyze [amount_to_electrolyze]u of [unreaction.result].")
 		to_chat(user, "<span class='warning'>The system electrolyzes!</span>")
 		spark_system.start()
 	else

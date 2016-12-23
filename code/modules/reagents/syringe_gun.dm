@@ -1,6 +1,3 @@
-
-
-
 /obj/item/weapon/gun/syringe
 	name = "syringe gun"
 	desc = "A spring loaded rifle designed to fit syringes, designed to incapacitate unruly patients from a distance."
@@ -21,6 +18,9 @@
 	..()
 	to_chat(user, "<span class='info'>[syringes.len] / [max_syringes] syringes.</span>")
 
+/obj/item/weapon/gun/syringe/isHandgun()
+	return FALSE
+
 /obj/item/weapon/gun/syringe/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/reagent_containers/syringe))
 		var/obj/item/weapon/reagent_containers/syringe/S = I
@@ -30,6 +30,7 @@
 					syringes += I
 					to_chat(user, "<span class='notice'>You put the syringe in [src].</span>")
 					to_chat(user, "<span class='notice'>[syringes.len] / [max_syringes] syringes.</span>")
+					investigation_log(I_CHEMS, "was loaded with \a [I] by [key_name(user)], containing [I.reagents.get_reagent_ids(1)]")
 			else
 				to_chat(user, "<span class='warning'>[src] cannot hold more syringes.</span>")
 		else

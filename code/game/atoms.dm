@@ -432,7 +432,7 @@ its easier to just keep the beam vertical.
 	//DEBUG to_chat(pick(player_list),"blob_act() on [src] ([src.type])")
 	if(flags & INVULNERABLE)
 		return
-	anim(target = loc, a_icon = 'icons/mob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
+	anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
 	return
 
 /*
@@ -799,4 +799,8 @@ its easier to just keep the beam vertical.
 	return newtarget
 
 /atom/proc/animationBolt(var/mob/firer)
+	return
+
+//Called when loaded by the map loader
+/atom/proc/spawned_by_map_element(datum/map_element/ME, list/objects)
 	return

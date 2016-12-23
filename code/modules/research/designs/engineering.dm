@@ -99,7 +99,7 @@
 	id = "rped"
 	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4, Tc_PROGRAMMING = 2)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_GOLD = 200, MAT_SILVER = 200)
+	materials = list(MAT_IRON = 60000, MAT_GLASS = 30000)
 	build_path = /obj/item/weapon/storage/bag/gadgets/part_replacer
 	category = "Engineering"
 
@@ -161,4 +161,14 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 500, MAT_GLASS = 100)
 	build_path = /obj/item/device/t_scanner/advanced
+	category = "Engineering"
+
+/datum/design/welder_gatling
+	name = "Gatling Welder"
+	desc = "Engineering Dakka."
+	id = "welder_gatling"
+	req_tech = list(Tc_ENGINEERING = 5, Tc_BLUESPACE = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 18750, MAT_GLASS = 9375)
+	build_path = /obj/item/weapon/weldingtool/gatling/empty
 	category = "Engineering"

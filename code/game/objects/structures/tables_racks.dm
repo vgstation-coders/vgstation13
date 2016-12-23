@@ -39,6 +39,8 @@
 	for(var/obj/structure/table/T in src.loc)
 		if(T != src)
 			qdel(T)
+	if(flipped)
+		flip(dir)
 	update_icon()
 	update_adjacent()
 
@@ -60,19 +62,15 @@
 	return 0
 
 /obj/structure/table/proc/destroy()
-	new parts(loc)
-	density = 0
-	qdel(src)
-
-/obj/structure/rack/proc/destroy()
-	new parts(loc)
+	if(parts)
+		new parts(loc)
 	density = 0
 	qdel(src)
 
 /obj/structure/table/proc/can_disassemble()
 	return 1
 
-/obj/structure/table/update_icon()
+/obj/structure/table/update_icon() //MWAHAHAHAHAAAAAH!!! WELCOME TO MAGIC NUMBER HELL!!!
 	spawn(2) //So it properly updates when deleting
 
 		if(flipped)
@@ -525,7 +523,6 @@
 	return 1
 
 /obj/structure/table/flipped
-	icon_state = "tableflip0"
 	flipped = 1
 
 /*
@@ -673,10 +670,19 @@
 	density = 1
 	flags = FPRINT
 	anchored = 1.0
-	throwpass = 1	//You can throw objects over this, despite it's density.
+	throwpass = 1	//You can throw objects over this, despite its density.
 	var/parts = /obj/item/weapon/rack_parts
 	var/offset_step = 0
 	var/health = 20
+
+/obj/structure/rack/proc/destroy(var/dropParts = TRUE)
+	if(parts && dropParts)
+		new parts(loc)
+	density = 0
+	qdel(src)
+
+/obj/structure/rack/proc/can_disassemble()
+	return TRUE
 
 /obj/structure/rack/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
@@ -687,20 +693,24 @@
 /obj/structure/rack/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			qdel(src)
+			destroy(FALSE)
 		if(2.0)
-			qdel(src)
 			if(prob(50))
-				new /obj/item/weapon/rack_parts(src.loc)
+				destroy(TRUE)
+			else
+				destroy(FALSE)
 		if(3.0)
 			if(prob(25))
-				qdel(src)
-				new /obj/item/weapon/rack_parts(src.loc)
+				destroy(TRUE)
+			else
+				destroy(FALSE)
 
 /obj/structure/rack/proc/checkhealth()
 	if(health <= 0)
-		new /obj/item/weapon/rack_parts(loc)
-		qdel(src)
+		destroy()
+
+/obj/structure/rack/proc/spawnParts()
+	new /obj/item/weapon/rack_parts(loc)
 
 /obj/structure/rack/kick_act()
 	health -= 5
@@ -708,13 +718,10 @@
 	..()
 
 /obj/structure/rack/blob_act()
-	if(prob(75))
-		del(src)
-		return
-	else if(prob(50))
-		new /obj/item/weapon/rack_parts(src.loc)
-		del(src)
-		return
+	if(prob(50))
+		destroy(TRUE)
+	else
+		destroy(FALSE)
 
 /obj/structure/rack/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
@@ -735,10 +742,9 @@
 	return
 
 /obj/structure/rack/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (iswrench(W))
-		new /obj/item/weapon/rack_parts( src.loc )
+	if(iswrench(W) && can_disassemble())
 		playsound(get_turf(src), 'sound/items/Ratchet.ogg', 50, 1)
-		del(src)
+		destroy(TRUE)
 		return
 
 	if(user.drop_item(W, src.loc))

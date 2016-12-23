@@ -21,6 +21,7 @@
 
 	var/const/randomize_on_creation = 1
 	var/const/log_type = /obj/item/weapon/grown/log/tree
+	var/holo = FALSE
 
 /obj/structure/flora/tree/New()
 	..()
@@ -66,14 +67,11 @@
 	..()
 
 	if(istype(W, /obj/item/weapon))
-		if(W.is_sharp() >= 1.2) //As sharp as a knife
-			if(W.w_class <= W_CLASS_SMALL) //Big enough to use to cut down trees
-				health -= (user.get_strength() * W.force)
-				playsound(loc, 'sound/effects/woodcuttingshort.ogg', 50, 1)
-			else
-				to_chat(user, "<span class='info'>\The [W] doesn't appear to be big enough to cut into \the [src]. Try something bigger.</span>")
+		if(W.sharpness_flags & (CHOPWOOD|SERRATED_BLADE))
+			health -= (user.get_strength() * W.force)
+			playsound(loc, 'sound/effects/woodcuttingshort.ogg', 50, 1)
 		else
-			to_chat(user, "<span class='info'>\The [W] doesn't appear to be sharp enough to cut into \the [src]. Try something sharper.</span>")
+			to_chat(user, "<span class='info'>\The [W] doesn't appear to be suitable to cut into \the [src]. Try something sturdier.</span>")
 
 	update_health()
 
@@ -90,19 +88,20 @@
 
 	qdel(src)
 
-	spawn()
-		while(height > 0)
-			if(!current_turf)
-				break //If the turf in which to spawn a log doesn't exist, stop the thing
+	if(!holo)
+		spawn()
+			while(height > 0)
+				if(!current_turf)
+					break //If the turf in which to spawn a log doesn't exist, stop the thing
 
-			var/obj/item/I = new log_type(our_turf) //Spawn a log and throw it at the "current_turf"
-			I.throw_at(current_turf, 10, 10)
+				var/obj/item/I = new log_type(our_turf) //Spawn a log and throw it at the "current_turf"
+				I.throw_at(current_turf, 10, 10)
 
-			current_turf = get_step(current_turf, falling_dir)
+				current_turf = get_step(current_turf, falling_dir)
 
-			height--
+				height--
 
-			sleep(1)
+				sleep(1)
 
 /obj/structure/flora/tree/proc/update_health()
 	if(health < 40 && !falling_dir)
@@ -138,6 +137,9 @@
 	icon = 'icons/obj/flora/pinetrees.dmi'
 	icon_state = "pine_c"
 
+/obj/structure/flora/tree/pine/xmas/holo
+	holo = TRUE
+
 /obj/structure/flora/tree/pine/xmas/New()
 	..()
 	icon_state = "pine_c"
@@ -146,6 +148,9 @@
 	name = "dead tree"
 	icon = 'icons/obj/flora/deadtrees.dmi'
 	icon_state = "tree_1"
+
+/obj/structure/flora/tree/dead/holo
+	holo = TRUE
 
 /obj/structure/flora/tree/dead/New()
 	..()

@@ -25,7 +25,7 @@
 	blob_cores += src
 	processing_objects.Add(src)
 	creator = C
-	if((blob_looks[looks] == 64) && !no_morph)
+	if((icon_size == 64) && !no_morph)
 		if(new_overmind)
 			flick("core_spawn",src)
 		else
@@ -86,8 +86,8 @@
 
 	if(!spawning)//no expanding on the first Life() tick
 
-		if(blob_looks[looks] == 64)
-			anim(target = loc, a_icon = icon, flick_anim = "corepulse", sleeptime = 15, lay = 12, offX = -16, offY = -16, alph = 200)
+		if(icon_size == 64)
+		//	anim(target = loc, a_icon = icon, flick_anim = "corepulse", sleeptime = 15, lay = 12, offX = -16, offY = -16, alph = 200)
 			for(var/mob/M in viewers(src))
 				M.playsound_local(loc, adminblob_beat, 50, 0, null, FALLOFF_SOUNDS, 0)
 
@@ -157,8 +157,8 @@
 
 			B.verbs += /mob/camera/blob/proc/create_core
 			spawn()
-				var/can_choose_from = blob_looks - "adminbus"
-				var/chosen = input(B,"Select a blob looks", "Blob Looks", blob_looks[1]) as null|anything in can_choose_from
+				var/can_choose_from = blob_looks_player
+				var/chosen = input(B,"Select a blob looks", "Blob Looks", blob_looks_player[1]) as null|anything in can_choose_from
 				if(chosen)
 					for(var/obj/effect/blob/nearby_blob in range(src,5))
 						nearby_blob.looks = chosen
@@ -184,7 +184,7 @@
 	return 0
 
 /obj/effect/blob/core/update_icon(var/spawnend = 0)
-	if(blob_looks[looks] == 64)
+	if(icon_size == 64)
 		spawn(1)
 			overlays.len = 0
 			underlays.len = 0

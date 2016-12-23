@@ -259,7 +259,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	data["beakerLabel"] = null
 	data["beakerVolume"] = 0
 	if(beaker)
-		data["beakerLabel"] = beaker.label_text ? beaker.label_text : null
+		data["beakerLabel"] = beaker.labeled ? beaker.labeled : null
 		if (beaker.reagents && beaker.reagents.reagent_list.len)
 			for(var/datum/reagent/R in beaker.reagents.reagent_list)
 				data["beakerVolume"] += R.volume
@@ -334,6 +334,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(istype(G, /obj/item/weapon/reagent_containers/glass))
 		if(beaker)
 			to_chat(user, "<span class='warning'>A beaker is already loaded into the machine.</span>")
+			return
+		if(G.w_class > W_CLASS_SMALL)
+			to_chat(user, "<span class='warning'>\The [G] is too big to fit.</span>")
 			return
 		if(user.drop_item(G, src))
 			beaker =  G

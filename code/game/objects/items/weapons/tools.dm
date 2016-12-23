@@ -82,6 +82,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1
+	sharpness_flags = SHARP_TIP
 	slot_flags = SLOT_BELT
 	force = 5.0
 	w_class = W_CLASS_TINY
@@ -172,6 +173,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	slot_flags = SLOT_BELT
 	force = 6.0
 	throw_speed = 2
@@ -204,8 +206,10 @@
  */
 /obj/item/weapon/weldingtool
 	name = "welding tool"
+	desc = "Ensure the switch is safely in the off position before refueling."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "welder"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	hitsound = 'sound/weapons/toolhit.ogg'
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -218,6 +222,7 @@
 	throw_range = 5
 	w_class = W_CLASS_SMALL
 	sharpness = 0.8
+	sharpness_flags = INSULATED_EDGE | HOT_EDGE // A gas flame is pretty insulated, is it?
 	heat_production = 3800
 
 	//Cost to make in the autolathe
@@ -293,7 +298,7 @@
 			if(src.icon_state != "welder") //Check that the sprite is correct, if it isnt, it means toggle() was not called
 				src.force = 3
 				src.damtype = "brute"
-				src.icon_state = "welder"
+				update_icon()
 				src.hitsound = "sound/weapons/toolhit.ogg"
 				src.welding = 0
 			processing_objects.Remove(src)
@@ -303,7 +308,7 @@
 			if(src.icon_state != "welder1") //Check that the sprite is correct, if it isnt, it means toggle() was not called
 				src.force = 15
 				src.damtype = "fire"
-				src.icon_state = "welder1"
+				update_icon()
 				src.hitsound = "sound/weapons/welderattack.ogg"
 			if(prob(5))
 				remove_fuel(1)
@@ -352,7 +357,7 @@
 
 
 /obj/item/weapon/weldingtool/attack_self(mob/user as mob)
-	toggle()
+	toggle(user)
 
 //Returns the amount of fuel in the welder
 /obj/item/weapon/weldingtool/proc/get_fuel()
@@ -399,7 +404,7 @@
 			to_chat(usr, "<span class='notice'>\The [src] switches on.</span>")
 			src.force = 15
 			src.damtype = "fire"
-			src.icon_state = "welder1"
+			update_icon()
 			processing_objects.Add(src)
 		else
 			to_chat(usr, "<span class='notice'>Need more fuel!</span>")
@@ -410,41 +415,43 @@
 		to_chat(usr, "<span class='notice'>\The [src] switches off.</span>")
 		src.force = 3
 		src.damtype = "brute"
-		src.icon_state = "welder"
+		update_icon()
 		src.welding = 0
 
 //Turns off the welder if there is no more fuel (does this really need to be its own proc?)
 /obj/item/weapon/weldingtool/proc/check_fuel()
 	if((get_fuel() <= 0) && welding)
-		toggle(1)
+		toggle()
 		return 0
 	return 1
 
 
 //Toggles the welder off and on
-/obj/item/weapon/weldingtool/proc/toggle(var/message = 0)
+/obj/item/weapon/weldingtool/proc/toggle(var/mob/user)
 	if(!status)
 		return
 	src.welding = !( src.welding )
 	if (src.welding)
 		if (remove_fuel(1))
-			to_chat(usr, "<span class='notice'>You switch the [src] on.</span>")
+			if(user && istype(user))
+				to_chat(user, "<span class='notice'>You switch the [src] on.</span>")
 			src.force = 15
 			src.damtype = "fire"
-			src.icon_state = "welder1"
+			update_icon()
 			processing_objects.Add(src)
 		else
-			to_chat(usr, "<span class='notice'>Need more fuel!</span>")
+			if(user && istype(user))
+				to_chat(user, "<span class='notice'>Need more fuel!</span>")
 			src.welding = 0
 			return
 	else
-		if(!message)
+		if(user && istype(user))
 			to_chat(usr, "<span class='notice'>You switch the [src] off.</span>")
 		else
-			to_chat(usr, "<span class='notice'>\The [src] shuts off!</span>")
+			visible_message("<span class='notice'>\The [src] shuts off!</span>")
 		src.force = 3
 		src.damtype = "brute"
-		src.icon_state = "welder"
+		update_icon()
 		src.welding = 0
 
 //Decides whether or not to damage a player's eyes based on what they're wearing as protection
@@ -497,11 +504,18 @@
 				spawn(100)
 					user.disabilities &= ~NEARSIGHTED
 
+/obj/item/weapon/weldingtool/update_icon()
+	..()
+	icon_state = "[initial(icon_state)][welding ? "1" : ""]" //Ternary operator.
+
+
 /obj/item/weapon/weldingtool/empty
 	start_fueled = 0
 
 /obj/item/weapon/weldingtool/largetank
 	name = "Industrial Welding Tool"
+	desc = "The cutting edge between portability and tank size."
+	icon_state = "welder_large"
 	max_fuel = 40
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 60)
 	origin_tech = Tc_ENGINEERING + "=2"
@@ -511,6 +525,8 @@
 
 /obj/item/weapon/weldingtool/hugetank
 	name = "Upgraded Welding Tool"
+	desc = "A large tank for a large job."
+	icon_state = "welder_larger"
 	max_fuel = 80
 	w_class = W_CLASS_MEDIUM
 	starting_materials = list(MAT_IRON = 70, MAT_GLASS = 120)
@@ -518,6 +534,19 @@
 
 /obj/item/weapon/weldingtool/hugetank/empty
 	start_fueled = 0
+
+/obj/item/weapon/weldingtool/gatling
+	name = "gatling welder"
+	desc = "Engineering Dakka."
+	icon_state = "welder_gatling"
+	max_fuel = 160
+	w_class = W_CLASS_LARGE
+	starting_materials = list(MAT_IRON = 18750, MAT_GLASS = 18750)
+	origin_tech = Tc_ENGINEERING + "=4"
+
+/obj/item/weapon/weldingtool/gatling/empty
+	start_fueled = 0
+
 
 /obj/item/weapon/weldingtool/experimental
 	name = "Experimental Welding Tool"
@@ -560,9 +589,9 @@
 	origin_tech = Tc_ENGINEERING + "=1"
 	attack_verb = list("attacks", "bashes", "batters", "bludgeons", "whacks")
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
-		return (BRUTELOSS)
+/obj/item/weapon/crowbar/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
+	return (BRUTELOSS)
 
 /obj/item/weapon/crowbar/red
 	desc = "Rise and shine."
@@ -570,9 +599,9 @@
 	icon_state = "red_crowbar"
 	item_state = "crowbar_red"
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for half life three!</span>")
-		return (BRUTELOSS)
+/obj/item/weapon/crowbar/red/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his head in with the [src.name]! It looks like \he's done waiting for half life three!</span>")
+	return (BRUTELOSS)
 
 
 /obj/item/weapon/weldingtool/attack(mob/M as mob, mob/user as mob)
@@ -637,6 +666,7 @@
 	slot_flags = SLOT_BELT
 	force = 3.0
 	sharpness = 1
+	sharpness_flags = SHARP_TIP | HOT_EDGE
 	throwforce = 5.0
 	throw_speed = 1
 	throw_range = 5

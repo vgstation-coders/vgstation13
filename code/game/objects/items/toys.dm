@@ -116,9 +116,9 @@
 	icon = 'icons/obj/singularity.dmi'
 	icon_state = "singularity_s1"
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class = 'danger'><b>[user] is putting \his head into \the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
-		return (BRUTELOSS|TOXLOSS|OXYLOSS)
+/obj/item/toy/spinningtoy/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class = 'danger'><b>[user] is putting \his head into \the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
+	return (BRUTELOSS|TOXLOSS|OXYLOSS)
 
 
 /*
@@ -447,39 +447,6 @@
 	user.visible_message("<span class = 'danger'><b>[user] is jamming \the [src.name] up \his nose and into \his brain. It looks like \he's trying to commit suicide.</b></span>")
 	return (BRUTELOSS|OXYLOSS)
 
-
-
-
-/*
- * Snap pops viral shit
- */
-/obj/item/toy/snappop/virus
-	name = "unstable goo"
-	desc = "Your palm is oozing this stuff!"
-	icon = 'icons/mob/slimes.dmi'
-	icon_state = "red slime extract"
-	throwforce = 30.0
-	throw_speed = 10
-	throw_range = 30
-	w_class = W_CLASS_TINY
-
-
-/obj/item/toy/snappop/virus/throw_impact(atom/hit_atom)
-	..()
-	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(3, 1, src)
-	s.start()
-	new /obj/effect/decal/cleanable/ash(src.loc)
-	src.visible_message("<span class = 'danger'>\The [src.name] explodes!</span>","</span class = 'danger'>You hear a bang!</span>")
-
-
-	playsound(src, 'sound/effects/snap.ogg', 50, 1)
-	qdel(src)
-
-
-
-
-
 /*
  * Snap pops
  */
@@ -492,27 +459,64 @@
 
 /obj/item/toy/snappop/throw_impact(atom/hit_atom)
 	..()
+	pop()
+
+/obj/item/toy/snappop/Crossed(var/mob/living/M)
+	if(istype(M) && M.size > SIZE_SMALL) //i guess carp and shit shouldn't set them off
+		if(M.m_intent == "run" && M.on_foot())
+			to_chat(M, "<span class = 'warning'>You step on \the [src.name]!</span>")
+			pop()
+
+/obj/item/toy/snappop/proc/pop()
 	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-	s.set_up(3, 1, src)
+	s.set_up(2, 0, src)
 	s.start()
 	new /obj/effect/decal/cleanable/ash(src.loc)
 	src.visible_message("<span class = 'danger'>\The [src.name] explodes!</span>","<span class = 'danger'>You hear a snap!</span>")
 	playsound(src, 'sound/effects/snap.ogg', 50, 1)
 	qdel(src)
 
-/obj/item/toy/snappop/Crossed(H as mob|obj)
-	if((ishuman(H))) //i guess carp and shit shouldn't set them off
-		var/mob/living/carbon/M = H
-		if(M.m_intent == "run")
-			to_chat(M, "<span class = 'warning'>You step on \the [src.name]!</span>")
+/*
+ * From the virus symptom
+ */
+/obj/item/toy/snappop/virus
+	name = "unstable goo"
+	desc = "Your palm is oozing this stuff!"
+	icon = 'icons/mob/slimes.dmi'
+	icon_state = "red slime extract"
+	throwforce = 30.0
+	throw_speed = 10
+	throw_range = 30
+	w_class = W_CLASS_TINY
 
-			var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-			s.set_up(2, 0, src)
-			s.start()
-			new /obj/effect/decal/cleanable/ash(src.loc)
-			src.visible_message("<span class = 'danger'>\The [src.name] explodes!</span>","<span class = 'danger'>You hear a snap!</span>")
-			playsound(src, 'sound/effects/snap.ogg', 50, 1)
-			qdel(src)
+/obj/item/toy/snappop/virus/pop()
+	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+	s.set_up(3, 1, src)
+	s.start()
+	new /obj/effect/decal/cleanable/ash(src.loc)
+	src.visible_message("<span class = 'danger'>\The [src.name] explodes!</span>","</span class = 'danger'>You hear a bang!</span>")
+	playsound(src, 'sound/effects/snap.ogg', 50, 1)
+	qdel(src)
+
+/*
+ * Syndie stealthy smokebombs!
+ */
+ /obj/item/toy/snappop/smokebomb
+ 	origin_tech = Tc_COMBAT + "=1;" + Tc_SYNDICATE + "=1"
+	flags = FPRINT | NO_THROW_MSG
+
+/obj/item/toy/snappop/smokebomb/pop()
+	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
+	s.set_up(2, 0, src)
+	s.start()
+	playsound(src, 'sound/effects/snap.ogg', 50, 1)
+	for(var/turf/T in trange(1, get_turf(src))) //Cause smoke in all 9 turfs around us, like the wizard smoke spell
+		if(T.density) //no wallsmoke pls
+			continue
+		var/datum/effect/effect/system/smoke_spread/bad/smoke = new /datum/effect/effect/system/smoke_spread/bad()
+		smoke.set_up(5, 0, T)
+		smoke.start()
+	qdel(src)
 
 /*
  * Water flower
@@ -674,9 +678,9 @@
 	icon_state = "gooncode"
 	w_class = W_CLASS_TINY
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's  trying to re-add poo!</span>")
-		return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
+/obj/item/toy/gooncode/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's  trying to re-add poo!</span>")
+	return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
 
 
 /obj/item/toy/minimeteor

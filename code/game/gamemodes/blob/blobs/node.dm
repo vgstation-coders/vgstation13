@@ -18,7 +18,7 @@
 	processing_objects.Add(src)
 	..(loc, newlook)
 
-	if((blob_looks[looks] == 64) && !no_morph)
+	if((icon_size == 64) && !no_morph)
 		flick("morph_node",src)
 
 /obj/effect/blob/node/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
@@ -30,6 +30,8 @@
 		to_chat(overmind,"<span class='warning'>A node blob that you had created has been destroyed.</span> <b><a href='?src=\ref[overmind];blobjump=\ref[loc]'>(JUMP)</a></b>")
 		overmind.special_blobs -= src
 		overmind.update_specialblobs()
+	if(overmind)
+		overmind.max_blob_points -= BLOBNDPOINTINC
 	processing_objects.Remove(src)
 	..()
 
@@ -37,8 +39,8 @@
 	if(timestopped)
 		return 0 //under effects of time magick
 
-	if(blob_looks[looks] == 64)
-		anim(target = loc, a_icon = icon, flick_anim = "nodepulse", sleeptime = 15, lay = 12, offX = -16, offY = -16, alph = 150)
+	if(icon_size == 64)
+	//	anim(target = loc, a_icon = icon, flick_anim = "nodepulse", sleeptime = 15, lay = 12, offX = -16, offY = -16, alph = 150)
 		for(var/mob/M in viewers(src))
 			M.playsound_local(loc, adminblob_beat, 50, 0, null, FALLOFF_SOUNDS, 0)
 
@@ -53,7 +55,7 @@
 	return 0
 
 /obj/effect/blob/node/update_icon(var/spawnend = 0)
-	if(blob_looks[looks] == 64)
+	if(icon_size == 64)
 		spawn(1)
 			overlays.len = 0
 			underlays.len = 0

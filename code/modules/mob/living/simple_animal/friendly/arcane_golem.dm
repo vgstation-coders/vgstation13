@@ -1,4 +1,4 @@
-/mob/living/simple_animal/arcane_golem
+/mob/living/simple_animal/hostile/arcane_golem
 	name = "arcane golem"
 	desc = "A soulless construct forged by a wizard. It's linked to its master's magic powers, and it casts spells simultaneously with them. If one of them dies, the other's spellcasting abilities will be affected."
 
@@ -15,6 +15,15 @@
 	speak_emote = list("vocalizes")
 
 	speak_chance = 0.25
+	move_to_delay = 20
+
+	melee_damage_lower = 15
+	melee_damage_upper = 25
+	attacktext = "smashes its gauntlet into"
+	attack_sound = 'sound/weapons/heavysmash.ogg'
+
+	aggro_vision_range = 2
+	idle_vision_range = 2
 
 	var/spell/aoe_turf/conjure/arcane_golem/master_spell
 
@@ -28,16 +37,33 @@
 	max_n2 = 0
 	heat_damage_per_tick = 0
 	cold_damage_per_tick = 0
+	stop_automated_movement = 1
 
 
-/mob/living/simple_animal/arcane_golem/Destroy()
+/mob/living/simple_animal/hostile/arcane_golem/Destroy()
 	..()
 
 	if(master_spell)
 		master_spell.golems.Remove(src)
 		master_spell = null
 
-/mob/living/simple_animal/arcane_golem/Life()
+/mob/living/simple_animal/hostile/arcane_golem/MoveToTarget()
+	//This proc has been slightly modified to prevent the golem from chasing its targets
+	//It will follow the master, and attack enemies when the opportunity arises
+	stop_automated_movement = 1
+	if(!target || !CanAttack(target))
+		LoseTarget()
+		return
+
+	if(isturf(loc))
+		var/target_distance = get_dist(src,target)
+		if(ranged)//We ranged? Shoot at em
+			if(target_distance >= 2 && ranged_cooldown <= 0)//But make sure they're a tile away at least, and our range attack is off cooldown
+				OpenFire(target)
+		if(target.Adjacent(src))	//If they're next to us, attack
+			AttackingTarget()
+
+/mob/living/simple_animal/hostile/arcane_golem/Life()
 	..()
 
 	if(!master_spell)
@@ -56,13 +82,10 @@
 
 		//Alive - follow the master
 		if(!isDead())
-			//Don't wander around if wizard is nearby - follow him instead
-			if(step_to(src, master, 2))
-				wander = FALSE
-			else
-				wander = TRUE
+			if(canmove)
+				Goto(master, move_to_delay)
 
-/mob/living/simple_animal/arcane_golem/Die()
+/mob/living/simple_animal/hostile/arcane_golem/Die()
 	..()
 
 	//Punish the master by putting all of his spells on cooldown
@@ -79,4 +102,5 @@
 						S.charge_counter = 0
 
 	visible_message("<span class='warning'>\The <b>[src]</b> shatters into pieces!</span>")
+	new /obj/item/weapon/ectoplasm (src.loc)
 	qdel(src)

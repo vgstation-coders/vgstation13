@@ -15,6 +15,7 @@
 	opacity = 1 //Wood isn't transparent, the last time I checked
 	health = 60 //Fairly strong
 	var/busy = 0 //Oh god fucking do_after's
+	var/materialtype = /obj/item/stack/sheet/wood
 
 	fire_temp_threshold = 100 //Wooden barricades REALLY don't like fire
 	fire_volume_mod = 10 //They REALLY DON'T
@@ -105,7 +106,7 @@
 /obj/structure/window/barricade/Destroy()
 
 	density = 0 //Sanity while we do the rest
-	getFromPool(/obj/item/stack/sheet/wood, loc, sheetamount)
+	getFromPool(materialtype, loc, sheetamount)
 
 	..()
 

@@ -170,7 +170,28 @@ var/list/all_doors = list()
 		else
 			return open()
 
+	if(horror_force(user))
+		return
+
 	denied()
+
+/obj/machinery/door/proc/horror_force(var/mob/living/carbon/human/H) //H is for HORROR, BABY!
+	if(!ishorrorform(H))
+		return FALSE
+
+	playsound(H.loc, 'sound/effects/horrorforce2.ogg', 80)
+	visible_message("<span class='danger'>\The [src]'s motors whine as several great tendrils begin trying to force it open!</span>")
+	if(do_after(H, src, 32))
+		open(1)
+		visible_message("<span class='danger'>[H.name] forces \the [src] open!</span>")
+
+		// Open firedoors, too.
+		for(var/obj/machinery/door/firedoor/FD in loc)
+			FD.open(1)
+	else
+		to_chat(H, "<span class='warning'>You fail to open \the [src].</span>")
+
+	return TRUE
 
 /obj/machinery/door/blob_act()
 	if(prob(BLOB_PROBABILITY))

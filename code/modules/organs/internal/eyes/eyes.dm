@@ -41,6 +41,15 @@
 						0,0.0,0.0,1,)
 	removed_type = /obj/item/organ/eyes/vox
 
+/datum/organ/internal/eyes/grue
+	name = "monstrous eyes"
+	see_in_dark=8
+	colourmatrix = list(-1, 0, 0,
+						 0,-1, 0,
+						 0, 0,-1,
+						 1, 1, 1)
+	removed_type = /obj/item/organ/eyes/grue
+
 ///////////////
 // BIONIC EYES
 ///////////////

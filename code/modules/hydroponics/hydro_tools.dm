@@ -70,12 +70,12 @@
 	dat += "<h2>General Data</h2>"
 
 	dat += "<table>"
-	dat += "<tr><td><b>Endurance</b></td><td>[grown_seed.endurance]</td></tr>"
-	dat += "<tr><td><b>Yield</b></td><td>[grown_seed.yield]</td></tr>"
-	dat += "<tr><td><b>Lifespan</b></td><td>[grown_seed.lifespan]</td></tr>"
-	dat += "<tr><td><b>Maturation time</b></td><td>[grown_seed.maturation]</td></tr>"
-	dat += "<tr><td><b>Production time</b></td><td>[grown_seed.production]</td></tr>"
-	dat += "<tr><td><b>Potency</b></td><td>[grown_seed.potency]</td></tr>"
+	dat += "<tr><td><b>Endurance</b></td><td>[round(grown_seed.endurance, 0.01)]</td></tr>"
+	dat += "<tr><td><b>Yield</b></td><td>[round(grown_seed.yield, 0.01)]</td></tr>"
+	dat += "<tr><td><b>Lifespan</b></td><td>[round(grown_seed.lifespan, 0.01)]</td></tr>"
+	dat += "<tr><td><b>Maturation time</b></td><td>[round(grown_seed.maturation, 0.01)]</td></tr>"
+	dat += "<tr><td><b>Production time</b></td><td>[round(grown_seed.production, 0.01)]</td></tr>"
+	dat += "<tr><td><b>Potency</b></td><td>[round(grown_seed.potency, 0.01)]</td></tr>"
 	dat += "</table>"
 
 	if(grown_reagents && grown_reagents.reagent_list && grown_reagents.reagent_list.len)
@@ -195,9 +195,9 @@
 
 	switch(grown_seed.juicy)
 		if(1)
-			dat += "<br>It's fruit is soft-skinned and abudantly juicy."
+			dat += "<br>Its fruit is soft-skinned and abudantly juicy."
 		if(2)
-			dat	+= "<br>It's fruit is excesively soft and juicy."
+			dat	+= "<br>Its fruit is excesively soft and juicy."
 
 	if(grown_seed.biolum)
 		dat += "<br>It is [grown_seed.biolum_colour ? "<font color='[grown_seed.biolum_colour]'>bio-luminescent</font>" : "bio-luminescent"]."
@@ -258,7 +258,7 @@
 /obj/item/weapon/plantspray
 	icon = 'icons/obj/hydroponics.dmi'
 	item_state = "spray"
-	flags = FPRINT | NOBLUDGEON
+	flags = FPRINT | NO_ATTACK_MSG
 	slot_flags = SLOT_BELT
 	throwforce = 4
 	w_class = W_CLASS_SMALL
@@ -310,7 +310,7 @@
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "hoe"
 	item_state = "hoe"
-	flags = FPRINT  | NOBLUDGEON
+	flags = FPRINT  | NO_ATTACK_MSG
 	siemens_coefficient = 1
 	force = 5.0
 	throwforce = 7.0
@@ -412,6 +412,7 @@
 	throw_speed = 4
 	throw_range = 4
 	sharpness = 1.2
+	sharpness_flags = SHARP_BLADE | CHOPWOOD
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_COMBAT + "=1"
 	attack_verb = list("chops", "tears", "cuts")
 
@@ -436,6 +437,7 @@
 	throw_speed = 1
 	throw_range = 3
 	sharpness = 1.0
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	w_class = W_CLASS_LARGE
 	flags = FPRINT
 	slot_flags = SLOT_BACK

@@ -1,4 +1,7 @@
 #define MAX_PILL_SPRITE 20 //Max icon state of the pill sprites
+var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white", "oblong cyan", "oblong darkred", "oblong orange-striped", "oblong lightblue-drab", \
+"oblong white", "oblong white-striped", "oblong purple-yellow", "round white", "round lightblue", "round yellow", "round purple", "round lightgreen", "round red", \
+"round green-purple", "round yellow-purple", "round red-yellow", "round blue-cyan", "round green")
 
 /obj/machinery/chem_master
 	name = "\improper ChemMaster 3000"
@@ -116,9 +119,11 @@
 		return 1
 
 	else if(istype(B, /obj/item/weapon/reagent_containers/glass))
-
 		if(src.beaker)
 			to_chat(user, "<span class='warning'>There already is a beaker loaded in the machine.</span>")
+			return
+		if(B.w_class > W_CLASS_SMALL)
+			to_chat(user, "<span class='warning'>\The [B] is too big to fit.</span>")
 			return
 		if(!user.drop_item(B, src))
 			to_chat(user, "<span class='warning'>You can't let go of \the [B]!</span>")
@@ -296,7 +301,7 @@
 					if(loaded_pill_bottle.contents.len < loaded_pill_bottle.storage_slots)
 						P.forceMove(loaded_pill_bottle)
 				if(count == 0) //only do this ONCE
-					logged_message += "[P.reagents.get_reagent_ids(1)]"
+					logged_message += "[P.reagents.get_reagent_ids(1)]. Icon: [pillIcon2Name[text2num(pillsprite)]]"
 
 			investigation_log(I_CHEMS, logged_message)
 
@@ -318,7 +323,7 @@
 					return
 
 				while(count--)
-					var/obj/item/weapon/reagent_containers/glass/bottle/P = new/obj/item/weapon/reagent_containers/glass/bottle(src.loc,max_bottle_size)
+					var/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable/P = new/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable/(src.loc,max_bottle_size)
 					P.name = "[name] bottle"
 					P.pixel_x = rand(-7, 7) * PIXEL_MULTIPLIER//random position
 					P.pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
@@ -449,9 +454,9 @@
 			//dat += {"<a href=\"?src=\ref[src]&change_pill=1\"><img src=\"pill[pillsprite].png\" /></a><a href=\"?src=\ref[src]&change_bottle=1\"><img src=\"bottle[bottlesprite].png\" /></a><BR>"}
 			//dat += {"<a href=\"?src=\ref[src]&change_pill=1\"><img src=\"pill[pillsprite].png\" /></a><BR>"}
 
-			dat += {"<div class="li" style="padding: 0px 0px 4px;"></div>"}
+			dat += {"<div class="li"></div>"}
 			for(var/i = 1 to MAX_PILL_SPRITE)
-				dat += {"<a href="?src=\ref[src]&pill_sprite=[i]" style="display: inline-block; padding:0px 4px 0px 4px; margin:0 2px 2px 0; [i == text2num(pillsprite) ? "background: #2f943c;" : ""]"> <!--Yes we are setting the style here because I suck at CSS and I have no shame-->
+				dat += {"<a href="?src=\ref[src]&pill_sprite=[i]" class="pillIconWrapper[i == text2num(pillsprite) ? " linkOnMinimal" : ""]">
 							<div class="pillIcon">
 								[pill_icon_cache[i]]
 							</div>
@@ -468,6 +473,7 @@
 			dat += "<A href='?src=\ref[src];createbottle=1'>Create bottle (50 units max)</A>"
 	dat = jointext(dat,"")
 	var/datum/browser/popup = new(user, "[windowtype]", "[name]", 575, 500, src)
+	popup.add_stylesheet("chemmaster", 'html/browser/chem_master.css')
 	popup.set_content(dat)
 	popup.open()
 	onclose(user, "[windowtype]")

@@ -70,9 +70,6 @@
 		if(istype(master, /obj/item/weapon/storage))
 			var/obj/item/weapon/storage/S = master
 			S.close(usr)
-		else if(istype(master,/obj/item/clothing/suit/storage))
-			var/obj/item/clothing/suit/storage/S = master
-			S.close(usr)
 		else if(istype(master, /obj/item/device/rcd))
 			var/obj/item/device/rcd/rcd = master
 			rcd.show_default(usr)
@@ -719,50 +716,32 @@
 				A.toggle_lights(usr,2)
 
 /obj/screen/specialblob/Click()
-	switch(name)
-		if("Spawn Blob")
-			if(isovermind(usr))
-				var/mob/camera/blob/overmind = usr
+	if(isovermind(usr))
+		var/mob/camera/blob/overmind = usr
+		switch(name)
+			if("Spawn Blob")
 				overmind.expand_blob_power()
-		if("Spawn Strong Blob")
-			if(isovermind(usr))
-				var/mob/camera/blob/overmind = usr
+			if("Spawn Strong Blob")
 				overmind.create_shield_power()
-		if("Spawn Resource Blob")
-			if(isovermind(usr))
-				var/mob/camera/blob/overmind = usr
+			if("Spawn Resource Blob")
 				overmind.create_resource()
-		if("Spawn Factory Blob")
-			if(isovermind(usr))
-				var/mob/camera/blob/overmind = usr
+			if("Spawn Factory Blob")
 				overmind.create_factory()
-		if("Spawn Node Blob")
-			if(isovermind(usr))
-				var/mob/camera/blob/overmind = usr
+			if("Spawn Node Blob")
 				overmind.create_node()
-		if("Spawn Blob Core")
-			if(isovermind(usr))
-				var/mob/camera/blob/overmind = usr
+			if("Spawn Blob Core")
 				overmind.create_core()
-		if("Call Overminds")
-			if(isovermind(usr))
-				var/mob/camera/blob/overmind = usr
+			if("Call Overminds")
 				overmind.callblobs()
-		if("Rally Spores")
-			if(isovermind(usr))
-				var/mob/camera/blob/overmind = usr
+			if("Rally Spores")
 				overmind.rally_spores_power()
-		if("Psionic Message")
-			if(isovermind(usr))
-				var/mob/camera/blob/overmind = usr
+			if("Psionic Message")
 				var/message = input(overmind,"Send a message to the crew.","Psionic Message") as null|text
 				if(message)
 					overmind.telepathy(message)
-		if("Jump to Blob")
-			if(isovermind(usr) && linked_blob)
-				var/mob/camera/blob/overmind = usr
+			if("Jump to Blob")
 				overmind.forceMove(linked_blob.loc)
-	return 1
+		return 1
 
 /obj/screen/inventory/Click()
 	// At this point in client Click() code we have passed the 1/10 sec check and little else

@@ -191,6 +191,7 @@ var/global/floorIsLava = 0
 				<A href='?src=\ref[src];simplemake=ian;mob=\ref[M]'>Ian</A> |
 				<A href='?src=\ref[src];simplemake=crab;mob=\ref[M]'>Crab</A> |
 				<A href='?src=\ref[src];simplemake=coffee;mob=\ref[M]'>Coffee</A>
+				<A href='?src=\ref[src];simplemake=blob;mob=\ref[M]'>BLOB</A>
 				<br>\[ Silicon: <A href='?src=\ref[src];simplemake=ai;mob=\ref[M]'>AI</A>, |
 				<A href='?src=\ref[src];simplemake=robot;mob=\ref[M]'>Cyborg</A> \]
 				<br>\[ Alien: <A href='?src=\ref[src];simplemake=drone;mob=\ref[M]'>Drone</A>,

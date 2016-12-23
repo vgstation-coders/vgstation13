@@ -5,6 +5,10 @@
 	set name = "Set Default Language"
 	set category = "IC"
 
+	if(!(language in languages))
+		to_chat(src, "<span class='warning'>You try mouthing a few words to yourself before realizing you have no idea how to speak [language]. Idiot.</span>")
+		return
+
 	if(language)
 		to_chat(src, "<span class='notice'>You will now speak [language] if you do not specify a language when speaking.</span>")
 	else

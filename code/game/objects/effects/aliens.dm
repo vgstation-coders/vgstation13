@@ -41,6 +41,8 @@
 	icon_state = "resinmembrane"
 	opacity = 0
 	health = 120
+	plane = ABOVE_HUMAN_PLANE
+	layer = ABOVE_OBJ_LAYER
 
 /obj/effect/alien/resin/New()
 	..()

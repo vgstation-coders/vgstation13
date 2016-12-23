@@ -17,7 +17,7 @@
 
 /obj/effect/blob/factory/New(loc,newlook = "new")
 	..()
-	if(blob_looks[looks] == 64)
+	if(icon_size == 64)
 		flick("morph_factory",src)
 		spore_delay = world.time + (2 SECONDS)
 
@@ -28,7 +28,7 @@
 		return 0
 	spore_delay = world.time + (40 SECONDS) // 30 seconds
 
-	if(blob_looks[looks] == 64)
+	if(icon_size == 64)
 		flick("factorypulse",src)
 		anim(target = loc, a_icon = icon, flick_anim = "sporepulse", sleeptime = 15, lay = 7.2, offX = -16, offY = -16, alph = 220)
 		spawn(10)
@@ -51,7 +51,7 @@
 	..()
 
 /obj/effect/blob/factory/update_icon(var/spawnend = 0)
-	if(blob_looks[looks] == 64)
+	if(icon_size == 64)
 		spawn(1)
 			overlays.len = 0
 			underlays.len = 0
@@ -72,7 +72,7 @@
 /mob/living/simple_animal/hostile/blobspore
 	name = "Blob Spore"
 	desc = "A form of blob antibodies that attack foreign entities."
-	icon = 'icons/mob/blob.dmi'
+	icon = 'icons/mob/blob/blob.dmi'
 	icon_state = "blobpod"
 	icon_living = "blobpod"
 	pass_flags = PASSBLOB
@@ -97,6 +97,7 @@
 	if(istype(linked_node))
 		factory = linked_node
 		factory.spores += src
+		icon = factory.icon
 	..()
 
 /mob/living/simple_animal/hostile/blobspore/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)

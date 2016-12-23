@@ -1060,8 +1060,8 @@ var/list/admin_verbs_mod = list(
 	set category = "Fun"
 
 	var/to_choose_from = list("ADMINBUS (custom DMI upload)")
-	to_choose_from += blob_looks - "adminbus"
-	var/chosen = input("This will change the looks of every blob currently in the world.", "Blob Looks", blob_looks[1]) as null|anything in to_choose_from
+	to_choose_from += blob_looks_admin
+	var/chosen = input("This will change the looks of every blob currently in the world.", "Blob Looks", blob_looks_admin[1]) as null|anything in to_choose_from
 
 	if(!chosen)
 		return
@@ -1077,7 +1077,7 @@ var/list/admin_verbs_mod = list(
 		else
 			adminblob_beat = 'sound/effects/blob_pulse.ogg'
 
-		blob_looks["adminbus"] = adminblob_size
+		blob_looks_admin["adminbus"] = adminblob_size
 		chosen = "adminbus"
 	else
 		adminblob_icon = null

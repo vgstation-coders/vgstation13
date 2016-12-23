@@ -7,9 +7,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/throwforce = 1
 	var/siemens_coefficient = 0 // for electrical admittance/conductance (electrocution checks and shit) - 0 is not conductive, 1 is conductive - this is a range, not binary
 	var/sharpness = 0 //not a binary - rough guide is 0.8 cutting, 1 cutting well, 1.2 specifically sharp (knives, etc) 1.5 really sharp (scalpels, e-weapons)
+	var/sharpness_flags = 0 //Describe in which way this thing is sharp. Shouldn't sharpness be exclusive to obj/item?
 	var/heat_production = 0
 
-	var/edge = 0
 	var/in_use = 0 // If we have a user using us, this will be set on. We will check if the user has stopped using us, and thus stop updating and LAGGING EVERYTHING!
 
 	var/damtype = "brute"
@@ -29,11 +29,15 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 	var/defective = 0
 
+	var/can_take_pai = FALSE
+	var/obj/item/device/paicard/integratedpai = null
+
 /obj/New()
 	..()
 	if (auto_holomap && isturf(loc))
 		var/turf/T = loc
 		T.soft_add_holomap(src)
+	verbs -= /obj/verb/remove_pai
 
 /obj/Destroy()
 	for(var/mob/user in _using)
@@ -45,6 +49,78 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	..()
 
 /obj/item/proc/is_used_on(obj/O, mob/user)
+
+/obj/proc/install_pai(obj/item/device/paicard/P)
+	if(!P || !istype(P))
+		return 0
+	P.forceMove(src)
+	integratedpai = P
+	verbs += /obj/verb/remove_pai
+
+/obj/attackby(obj/item/weapon/W, mob/user)
+	if(can_take_pai && istype(W, /obj/item/device/paicard))
+		if(user.drop_item(W))
+			to_chat(user, "You insert \the [W] into a slot in \the [src].")
+			install_pai(W)
+			playsound(src, 'sound/misc/cartridge_in.ogg', 25)
+
+/obj/proc/attack_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI clicks on the object, or uses the attack_self() hotkey
+	return
+
+/obj/proc/swapkey_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the swap_hand() hotkey
+	return
+
+/obj/proc/throwkey_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the toggle_throw_mode() hotkey
+	return
+
+/obj/proc/dropkey_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the drop hotkey
+	return
+
+/obj/proc/equipkey_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the equip hotkey
+	return
+
+/obj/proc/intentright_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the cycle-intent-right hotkey
+	return
+
+/obj/proc/intentleft_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the cycle-intent-left hotkey
+	return
+
+/obj/proc/intenthelp_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the help intent hotkey
+	return
+
+/obj/proc/intentdisarm_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the disarm intent hotkey
+	return
+
+/obj/proc/intentgrab_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the grab intent hotkey
+	return
+
+/obj/proc/intenthurt_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the hurt intent hotkey
+	return
+
+/obj/proc/on_integrated_pai_click(mob/living/silicon/pai/user, var/atom/A)
+	if(istype(A,/obj/machinery)||(istype(A,/mob)&&user.secHUD))
+		A.attack_pai(user)
+
+/obj/verb/remove_pai()
+	set name = "Remove pAI"
+	set category = "Object"
+	set src in range(1)
+
+	var/mob/M = usr
+	if(!M.Adjacent(src))
+		return
+	if(!M.dexterity_check())
+		to_chat(usr, "You don't have the dexterity to do this!")
+		return
+	if(M.incapacitated())
+		to_chat(M, "You can't do that while you're incapacitated!")
+		return
+
+	to_chat(M, "You eject \the [integratedpai] from \the [src].")
+	integratedpai.forceMove(loc)
+	integratedpai = null
+	playsound(src, 'sound/misc/cartridge_out.ogg', 25)
+	verbs -= /obj/verb/remove_pai
 
 /obj/recycle(var/datum/materials/rec)
 	if(..())

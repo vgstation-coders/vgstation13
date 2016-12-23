@@ -57,8 +57,8 @@
 
 /obj/item/weapon/storage/box/surveillance/New()
 	..()
-	contents = list()
-	sleep(1)
+	for(var/atom/A in src)
+		qdel(A)
 	for(var/i = 1 to 5)
 		new /obj/item/device/camera_bug(src)
 
@@ -68,30 +68,33 @@
 
 /obj/item/weapon/storage/box/survival/New()
 	..()
-	contents = list()
-	sleep(1)
 	new /obj/item/clothing/mask/breath(src)
 	new /obj/item/weapon/tank/emergency_oxygen(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
-	return
 
 /obj/item/weapon/storage/box/survival/vox/New()
 	..()
-	contents = list()
-	sleep(1)
+	for(var/atom/A in src)
+		qdel(A)
 	new /obj/item/clothing/mask/breath/vox(src)
 	new /obj/item/weapon/tank/emergency_nitrogen(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
-	return
 
 /obj/item/weapon/storage/box/survival/engineer/New()
 	..()
-	contents = list()
-	sleep(1)
+	for(var/atom/A in src)
+		qdel(A)
 	new /obj/item/clothing/mask/breath(src)
 	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
-	return
+
+/obj/item/weapon/storage/box/survival/ert/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	new /obj/item/clothing/mask/gas/ert(src)
+	new /obj/item/weapon/tank/emergency_oxygen/double(src)
+	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 
 /obj/item/weapon/storage/box/gloves
 	name = "box of latex gloves"
@@ -494,6 +497,36 @@
 	for(var/i=1; i <= storage_slots; i++)
 		new /obj/item/device/label_roll(src)
 
+/obj/item/weapon/storage/box/labels
+	name = "label roll box"
+	desc = "A box of refill rolls for a hand labeler."
+	icon_state = "labels"
+
+/obj/item/weapon/storage/box/labels/New()
+	..()
+	for(var/i=1; i <= storage_slots; i++)
+		new /obj/item/device/label_roll(src)
+
+/obj/item/weapon/storage/box/wreath/wreath_bow
+	name = "wreath (bow) box"
+	desc = "Just add hands for Christmas."
+	icon_state = "wreath_bow"
+
+/obj/item/weapon/storage/box/wreath/wreath_bow/New()
+	..()
+	for(var/i=1; i <= storage_slots; i++)
+		new /obj/item/mounted/frame/wreath/wreath_bow(src)
+
+/obj/item/weapon/storage/box/wreath/wreath_nobow
+	name = "wreath (holly) box"
+	desc = "Emergency Christmas supplies."
+	icon_state = "wreath_nobow"
+
+/obj/item/weapon/storage/box/wreath/wreath_nobow/New()
+	..()
+	for(var/i=1; i <= storage_slots; i++)
+		new /obj/item/mounted/frame/wreath/wreath_nobow(src)
+
 /obj/item/weapon/storage/box/snappops
 	name = "snap pop box"
 	desc = "Eight wrappers of fun! Ages 8 and up. Not suitable for children."
@@ -580,3 +613,20 @@
 		new /obj/item/weapon/light/tube/he(src)
 	for(var/i = 0; i < 7; i++)
 		new /obj/item/weapon/light/bulb/he(src)
+
+/obj/item/weapon/storage/box/inflatables
+	name = "inflatable barrier box"
+	desc = "Contains inflatable walls and doors. Specially designed for space-efficient packing of deflated structures."
+	icon_state = "inf_box"
+	can_only_hold = list(
+		"/obj/item/inflatable/door",
+		"/obj/item/inflatable/wall")
+	fits_max_w_class = W_CLASS_MEDIUM
+	max_combined_w_class = 21
+
+/obj/item/weapon/storage/box/inflatables/New()
+	..()
+	for(var/i = 1 to 3)
+		new /obj/item/inflatable/door(src)
+	for(var/i = 1 to 4)
+		new /obj/item/inflatable/wall(src)

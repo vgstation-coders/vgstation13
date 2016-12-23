@@ -1,6 +1,5 @@
 /mob/living/carbon/monkey
 	name = "monkey"
-	real_name = "randomgen" //To stop Pun Pun becoming generic. Give your subtype a real_name matching its name.
 	voice_name = "monkey"
 	//speak_emote = list("chimpers")
 	icon_state = "monkey1"
@@ -13,6 +12,7 @@
 	treadmill_speed = 0.8 //Slow apes!
 	var/attack_text = "bites"
 	var/languagetoadd = LANGUAGE_MONKEY
+	var/namenumbers = TRUE
 
 	mob_bump_flag = MONKEY
 	mob_swap_flags = MONKEY|SLIME|SIMPLE_ANIMAL
@@ -41,9 +41,9 @@
 	reagents = R
 	R.my_atom = src
 
-	if(real_name == "randomgen") //To stop Pun Pun becoming generic.
+	if(namenumbers)
 		name = "[name] ([rand(1, 1000)])"
-		real_name = name
+	real_name = name
 
 	if (!(dna))
 		if(gender == NEUTER)
@@ -97,7 +97,7 @@
 
 /mob/living/carbon/monkey/punpun
 	name = "Pun Pun"
-	real_name = "Pun Pun"
+	namenumbers = FALSE
 
 /mob/living/carbon/monkey/punpun/New()
 	var/obj/item/clothing/monkeyclothes/suit = new /obj/item/clothing/monkeyclothes
@@ -115,8 +115,8 @@
 	greaterform = "Tajaran"
 
 /mob/living/carbon/monkey/tajara/New()
-
 	..()
+	add_language(LANGUAGE_MOUSE)
 	dna.mutantrace = "tajaran"
 
 /mob/living/carbon/monkey/skrell
@@ -130,7 +130,6 @@
 	greaterform = "Skrell"
 
 /mob/living/carbon/monkey/skrell/New()
-
 	..()
 	dna.mutantrace = "skrell"
 
@@ -146,7 +145,6 @@
 	greaterform = "Unathi"
 
 /mob/living/carbon/monkey/unathi/New()
-
 	..()
 	dna.mutantrace = "lizard"
 

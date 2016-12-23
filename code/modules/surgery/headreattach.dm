@@ -224,17 +224,16 @@
 
 	affected.cancer_stage = B.cancer_stage
 
-	var/datum/organ/internal/brain/copied
 	if(B.organ_data)
+		var/datum/organ/internal/brain/copied
 		var/datum/organ/internal/I = B.organ_data
 		copied = I.Copy()
-	else
-		copied = new
-	copied.owner = target
-	target.internal_organs_by_name["brain"] = copied
-	target.internal_organs += copied
+		copied.owner = target
+		target.internal_organs_by_name["brain"] = copied
+		target.internal_organs += copied
+		affected.internal_organs += copied
+
 	target.decapitated = null
-	affected.internal_organs += copied
 
 	user.u_equip(B,1)
 	qdel(B)

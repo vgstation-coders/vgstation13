@@ -60,7 +60,8 @@
 	// This is the placed to store data for the holomap.
 	var/list/image/holomap_data
 
-
+	// Map element which spawned this turf
+	var/datum/map_element/map_element
 
 /turf/examine(mob/user)
 	..()
@@ -706,3 +707,8 @@
 		change_area(old_area, A)
 		for(var/atom/AM in contents)
 			AM.change_area(old_area, A)
+
+/turf/spawned_by_map_element(datum/map_element/ME, list/objects)
+	.=..()
+
+	src.map_element = ME

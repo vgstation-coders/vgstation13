@@ -385,7 +385,7 @@
 
 /obj/structure/mannequin/proc/canEquip(var/mob/user, var/item_slot, var/obj/item/itemToCheck)
 	if((fat && ((item_slot == SLOT_MANNEQUIN_ICLOTHING) || (item_slot == SLOT_MANNEQUIN_OCLOTHING))) || ((species.flags & IS_BULKY) && ((item_slot == SLOT_MANNEQUIN_ICLOTHING) || (item_slot == SLOT_MANNEQUIN_OCLOTHING) || (item_slot == SLOT_MANNEQUIN_FEET) || (item_slot == SLOT_MANNEQUIN_GLOVES) || (item_slot == SLOT_MANNEQUIN_MASK))))
-		if(!(itemToCheck.flags & ONESIZEFITSALL))
+		if(!(itemToCheck.clothing_flags & ONESIZEFITSALL))
 			if(user)
 				to_chat(user, "<span class='warning'>\The [src] is too large for \the [itemToCheck]</span>")
 			return 0
@@ -458,7 +458,7 @@
 				if(clothToUpdate._color)
 					t_state = clothToUpdate._color
 				if(fat || species.flags & IS_BULKY)
-					if(clothToUpdate.flags&ONESIZEFITSALL)
+					if(clothToUpdate.clothing_flags&ONESIZEFITSALL)
 						I = image(slotIcon[MANNEQUIN_ICONS_FAT], "[t_state]_s")
 				else if(primitive)
 					t_state = clothToUpdate.item_state

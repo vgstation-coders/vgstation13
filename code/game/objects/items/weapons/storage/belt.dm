@@ -114,7 +114,8 @@
 		"/obj/item/device/lightreplacer",
 		"/obj/item/device/device_analyser",
 		"/obj/item/weapon/rcl",
-		"/obj/item/device/silicate_sprayer"
+		"/obj/item/device/silicate_sprayer",
+		"/obj/item/weapon/inflatable_dispenser"
 		)
 
 /obj/item/weapon/storage/belt/utility/chief/full/New() //This is mostly for testing I guess
@@ -163,6 +164,11 @@
 		"/obj/item/weapon/switchtool/surgery"
 	)
 
+/obj/item/weapon/storage/belt/slim
+	name = "slim-belt" 
+	desc = "Grey belt that holds less and matches certain jumpsuits.  It looks like it can fit in a backpack."
+	icon_state = "greybelt"
+	item_state = "grey"
 
 /obj/item/weapon/storage/belt/security
 	name = "security belt"

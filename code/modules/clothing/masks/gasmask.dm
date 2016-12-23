@@ -2,7 +2,7 @@
 	name = "gas mask"
 	desc = "A face-covering mask that can be connected to an air supply."
 	icon_state = "gas_alt"
-	flags = FPRINT  | BLOCK_GAS_SMOKE_EFFECT | MASKINTERNALS
+	clothing_flags = BLOCK_GAS_SMOKE_EFFECT | MASKINTERNALS
 	w_class = W_CLASS_MEDIUM
 	can_flip = 1
 	action_button_name = "Toggle Mask"
@@ -68,6 +68,16 @@
 	icon_state = "swat"
 	siemens_coefficient = 0.7
 	species_fit = list(VOX_SHAPED)
+	can_flip = 0
+	canstage = 0
+
+/obj/item/clothing/mask/gas/ert
+	name = "antique gas mask"
+	desc = "A face-covering mask that can be connected to an air supply."
+	icon_state = "ert"
+	siemens_coefficient = 0.7
+	species_fit = list(VOX_SHAPED)
+	w_class = W_CLASS_SMALL
 	can_flip = 0
 	canstage = 0
 

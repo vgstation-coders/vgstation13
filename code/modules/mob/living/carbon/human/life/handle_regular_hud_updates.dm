@@ -121,33 +121,7 @@
 
 
 		if(glasses)
-			var/obj/item/clothing/glasses/G = glasses
-			if(istype(G))
-				if(G.see_in_dark)
-					see_in_dark = max(see_in_dark, G.see_in_dark)
-				see_in_dark += G.darkness_view
-				if(G.vision_flags) //MESONS
-					change_sight(adding = G.vision_flags)
-					if(!druggy)
-						see_invisible = SEE_INVISIBLE_MINIMUM
-				if(G.see_invisible)
-					see_invisible = G.see_invisible
-
-			/* HUD shit goes here, as long as it doesn't modify sight flags
-			 * The purpose of this is to stop xray and w/e from preventing you from using huds -- Love, Doohl
-			 */
-
-			if(istype(glasses, /obj/item/clothing/glasses/sunglasses/sechud))
-				var/obj/item/clothing/glasses/sunglasses/sechud/O = glasses
-				if(O.hud)
-					O.hud.process_hud(src)
-				if(!druggy)
-					see_invisible = SEE_INVISIBLE_LIVING
-			else if(istype(glasses, /obj/item/clothing/glasses/hud))
-				var/obj/item/clothing/glasses/hud/O = glasses
-				O.process_hud(src)
-				if(!druggy)
-					see_invisible = SEE_INVISIBLE_LIVING
+			handle_glasses_vision_updates(glasses)
 
 		else if(!seer)
 			see_invisible = SEE_INVISIBLE_LIVING
@@ -168,8 +142,8 @@
 							if(ruptured)
 								healths.overlays.Add(organ_damage_overlays["[e.name]_max"])
 								continue
-						var/total_damage = e.brute_dam + e.burn_dam
-						if(e.status & ORGAN_BROKEN)
+						var/total_damage = e.get_damage()
+						if(!e.is_existing())
 							healths.overlays.Add(organ_damage_overlays["[e.name]_gone"])
 						else
 							switch(total_damage)

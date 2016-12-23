@@ -248,12 +248,6 @@
 	New()
 		block=SMALLSIZEBLOCK
 
-	can_activate(var/mob/M,var/flags)
-		// Can't be big and small.
-		if(M_HULK in M.mutations)
-			return 0
-		return ..(M,flags)
-
 	activate(var/mob/M, var/connected, var/flags)
 		..(M,connected,flags)
 		M.pass_flags |= PASSTABLE

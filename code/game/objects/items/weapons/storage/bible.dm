@@ -54,10 +54,6 @@
 
 	log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [M.name] ([M.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
 
-	if(!user.dexterity_check())
-		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
-		return 1
-
 	if(!chaplain) //The user is not a Chaplain. BLASPHEMY !
 		//Using the Bible as a member of the occult will get you smithed, aka holy cleansing fire. You'd have to be stupid to remotely consider it
 		if(isvampire(user)) //Vampire trying to use it
@@ -128,7 +124,7 @@
 			return 1 //Don't heal the mob
 
 		if(H.mind && H.mind.special_role == "VampThrall")
-			ticker.mode.remove_vampire_mind(H.mind, H.mind)
+			ticker.mode.remove_thrall(H.mind)
 			H.visible_message("<span class='notice'>[H] suddenly becomes calm and collected again, \his eyes clear up.</span>",
 			"<span class='notice'>Your blood cools down and you are inhabited by a sensation of untold calmness.</span>")
 			return 1 //That's it, game over
