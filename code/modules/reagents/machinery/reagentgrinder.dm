@@ -289,10 +289,13 @@
 
 /obj/machinery/reagentgrinder/AltClick()
 	if(!usr.incapacitated() && Adjacent(usr) && beaker && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()) && !inuse)
-		if(holdingitems.len)
-			grind()
-		else
-			detach()
+		detach()
+		return
+	return ..()
+
+/obj/machinery/reagentgrinder/CtrlClick()
+	if(!usr.incapacitated() && Adjacent(usr) && usr.dexterity_check() && !inuse && holdingitems.len)
+		grind() //Checks for beaker and power/broken internally
 		return
 	return ..()
 
