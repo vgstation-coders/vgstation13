@@ -1,8 +1,6 @@
-////////////////////////////////////////////////////////////////
-////////////////////////EFFECTS/////////////////////////////////
-////////////////////////////////////////////////////////////////
-// Use two newlines between each effect, and one newline between each effect's methods.
-
+// Make sure to use two newlines between each effect and one newline between each method.
+// Fully read through the example effect below to get an idea of what attributes and procs are available.
+// Babel Syndrome provides a good example of the usage of affect_voice, affect_mob_voice, etc. 
 
 /datum/disease2/effect
 	var/name = "Example syndrome"
@@ -75,46 +73,654 @@
 	return new_e
 
 
-////////////////////////SPECIAL/////////////////////////////////
+////////////////////////STAGE 1/////////////////////////////////
 
 
-/*/datum/disease2/effect/alien
-	name = "Unidentified Foreign Body"
-	stage = 4
-	activate(var/mob/living/carbon/mob)
-		to_chat(mob, "<span class='warning'>You feel something tearing its way out of your stomach...</span>")
-		mob.adjustToxLoss(10)
-		mob.updatehealth()
-		if(prob(40))
-			if(mob.client)
-				mob.client.mob = new/mob/living/carbon/alien/larva(mob.loc)
-			else
-				new/mob/living/carbon/alien/larva(mob.loc)
-			var/datum/disease2/disease/D = mob:virus2
-			mob:gib()
-			del D*/
+/datum/disease2/effect/invisible
+	name = "Waiting Syndrome"
+	stage = 1
+
+/datum/disease2/effect/invisible/activate(var/mob/living/carbon/mob)
+		return
 
 
-/datum/disease2/effect/spaceadapt
-	name = "Space Adaptation Effect"
-	stage = 5
+/datum/disease2/effect/sneeze
+	name = "Coldingtons Effect"
+	stage = 1
 
-/datum/disease2/effect/spaceadapt/activate(var/mob/living/carbon/mob)
+/datum/disease2/effect/sneeze/activate(var/mob/living/carbon/mob)
+	mob.say("*sneeze")
+	if (prob(50))
+		var/obj/effect/decal/cleanable/mucus/M= locate(/obj/effect/decal/cleanable/mucus) in get_turf(mob)
+		if(M==null)
+			M = new(get_turf(mob))
+		else
+			if(M.dry)
+				M.dry=0
+		M.virus2 |= virus_copylist(mob.virus2)
+
+
+/datum/disease2/effect/gunck
+	name = "Flemmingtons"
+	stage = 1
+
+/datum/disease2/effect/gunck/activate(var/mob/living/carbon/mob)
+	to_chat(mob, "<span class = 'notice'> Mucous runs down the back of your throat.</span>")
+
+
+/datum/disease2/effect/drool
+	name = "Saliva Effect"
+	stage = 1
+
+/datum/disease2/effect/drool/activate(var/mob/living/carbon/mob)
+	mob.say("*drool")
+
+
+/datum/disease2/effect/twitch
+	name = "Twitcher"
+	stage = 1
+
+/datum/disease2/effect/twitch/activate(var/mob/living/carbon/mob)
+	mob.say("*twitch")
+
+
+/datum/disease2/effect/headache
+	name = "Headache"
+	stage = 1
+
+/datum/disease2/effect/headache/activate(var/mob/living/carbon/mob)
+	to_chat(mob, "<span class = 'notice'>Your head hurts a bit</span>")
+
+
+/datum/disease2/effect/itching
+	name = "Itching"
+	stage = 1
+
+/datum/disease2/effect/itching/activate(var/mob/living/carbon/mob)
 	var/mob/living/carbon/human/H = mob
-	if (mob.reagents.get_reagent_amount(DEXALINP) < 10)
-		mob.reagents.add_reagent(DEXALINP, 4)
-	if (mob.reagents.get_reagent_amount(LEPORAZINE) < 10)
-		mob.reagents.add_reagent(LEPORAZINE, 4)
-	if (mob.reagents.get_reagent_amount(BICARIDINE) < 10)
-		mob.reagents.add_reagent(BICARIDINE, 4)
-	if (mob.reagents.get_reagent_amount(DERMALINE) < 10)
-		mob.reagents.add_reagent(DERMALINE, 4)
-	mob.emote("me",1,"exhales slowly.")
+	if (istype(H) && H.species && H.species.flags & NO_SKIN)
+		to_chat(mob, "<span class='warning'>Your bones itch!</span>")
+	else
+		to_chat(mob, "<span class='warning'>Your skin itches!</span>")
 
-	if(ishuman(H))
-		var/datum/organ/external/chest/chest = H.get_organ(LIMB_CHEST)
-		for(var/datum/organ/internal/I in chest.internal_organs)
-			I.damage = 0
+
+/datum/disease2/effect/drained
+	name = "Drained Feeling"
+	stage = 1
+
+/datum/disease2/effect/drained/activate(var/mob/living/carbon/mob)
+	to_chat(mob, "<span class='warning'>You feel drained.</span>")
+
+
+/datum/disease2/effect/eyewater
+	name = "Watery Eyes"
+	stage = 1
+
+/datum/disease2/effect/eyewater/activate(var/mob/living/carbon/mob)
+	to_chat(mob, "<SPAN CLASS='warning'>Your eyes sting and water!</SPAN>")
+
+
+/datum/disease2/effect/wheeze
+	name = "Wheezing"
+	stage = 1
+
+/datum/disease2/effect/wheeze/activate(var/mob/living/carbon/mob)
+	mob.emote("me",1,"wheezes.")
+
+
+/datum/disease2/effect/optimistic
+	name = "Full Glass Syndrome"
+	stage = 1
+
+/datum/disease2/effect/optimistic/activate(var/mob/living/carbon/mob)
+	to_chat(mob, "<span class = 'notice'>You feel optimistic!</span>")
+	if (mob.reagents.get_reagent_amount(TRICORDRAZINE) < 1)
+		mob.reagents.add_reagent(TRICORDRAZINE, 1)
+
+
+/datum/disease2/effect/spyndrome
+	name = "Gyroscopic Manipulation Syndrome"
+	stage = 1
+
+/datum/disease2/effect/spyndrome/activate(var/mob/living/carbon/mob)
+	if (mob.reagents.get_reagent_amount(GYRO) < 1)
+		mob.reagents.add_reagent(GYRO, 1)
+
+
+////////////////////////STAGE 2/////////////////////////////////
+
+
+/datum/disease2/effect/scream
+	name = "Loudness Syndrome"
+	stage = 2
+	
+/datum/disease2/effect/scream/activate(var/mob/living/carbon/mob)
+	mob.emote("scream",,, 1)
+
+
+/datum/disease2/effect/drowsness
+	name = "Automated Sleeping Syndrome"
+	stage = 2
+	
+/datum/disease2/effect/drowsness/activate(var/mob/living/carbon/mob)
+	mob.drowsyness += 10
+
+
+/datum/disease2/effect/sleepy
+	name = "Resting Syndrome"
+	stage = 2
+
+/datum/disease2/effect/sleepy/activate(var/mob/living/carbon/mob)
+	mob.say("*collapse")
+
+
+/datum/disease2/effect/blind
+	name = "Blackout Syndrome"
+	stage = 2
+
+/datum/disease2/effect/blind/activate(var/mob/living/carbon/mob)
+	mob.eye_blind = max(mob.eye_blind, 4)
+
+
+/datum/disease2/effect/cough
+	name = "Anima Syndrome"
+	stage = 2
+
+/datum/disease2/effect/cough/activate(var/mob/living/carbon/mob)
+	mob.say("*cough")
+	for(var/mob/living/carbon/M in oview(2,mob))
+		mob.spread_disease_to(M)
+
+
+/datum/disease2/effect/hungry
+	name = "Appetiser Effect"
+	stage = 2
+
+/datum/disease2/effect/hungry/activate(var/mob/living/carbon/mob)
+	mob.nutrition = max(0, mob.nutrition - 200)
+
+
+/datum/disease2/effect/fridge
+	name = "Refridgerator Syndrome"
+	stage = 2
+
+/datum/disease2/effect/fridge/activate(var/mob/living/carbon/mob)
+	mob.say("*shiver")
+
+
+/datum/disease2/effect/hair
+	name = "Hair Loss"
+	stage = 2
+
+/datum/disease2/effect/hair/activate(var/mob/living/carbon/mob)
+	if(istype(mob, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = mob
+		if(H.species.name == "Human" && !(H.h_style == "Bald") && !(H.h_style == "Balding Hair"))
+			to_chat(H, "<span class='danger'>Your hair starts to fall out in clumps...</span>")
+			spawn(50)
+				H.h_style = "Balding Hair"
+				H.update_hair()
+
+
+/datum/disease2/effect/stimulant
+	name = "Adrenaline Extra"
+	stage = 2
+
+/datum/disease2/effect/stimulant/activate(var/mob/living/carbon/mob)
+	to_chat(mob, "<span class='notice'>You feel a rush of energy inside you!</span>")
+	if (mob.reagents.get_reagent_amount(HYPERZINE) < 10)
+		mob.reagents.add_reagent(HYPERZINE, 4)
+	if (prob(30))
+		mob.jitteriness += 10
+
+
+/datum/disease2/effect/drunk
+	name = "Glasgow Syndrome"
+	stage = 2
+
+/datum/disease2/effect/drunk/activate(var/mob/living/carbon/mob)
+	to_chat(mob, "<span class='notice'>You feel like you had one hell of a party!</span>")
+	if (mob.reagents.get_reagent_amount(ETHANOL) < 325)
+		mob.reagents.add_reagent(ETHANOL, 5*multiplier)
+
+
+/datum/disease2/effect/gaben
+	name = "Gaben Syndrome"
+	stage = 2
+
+/datum/disease2/effect/gaben/activate(var/mob/living/carbon/mob)
+	to_chat(mob, "<span class='notice'>Your clothing fits a little tighter!!</span>")
+	if (prob(10))
+		mob.reagents.add_reagent(NUTRIMENT, 1000)
+		mob.overeatduration = 1000
+
+
+/datum/disease2/effect/beard
+	name = "Bearding"
+	stage = 2
+
+/datum/disease2/effect/beard/activate(var/mob/living/carbon/mob)
+	if(istype(mob, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = mob
+		if(H.species.name == "Human" && !(H.f_style == "Full Beard"))
+			to_chat(H, "<span class='warning'>Your chin and neck itch!.</span>")
+			spawn(50)
+				H.f_style = "Full Beard"
+				H.update_hair()
+
+
+/datum/disease2/effect/bloodynose
+	name = "Intranasal Hemorrhage"
+	stage = 2
+
+/datum/disease2/effect/bloodynose/activate(var/mob/living/carbon/mob)
+	if (prob(30))
+		var/obj/effect/decal/cleanable/blood/D= locate(/obj/effect/decal/cleanable/blood) in get_turf(mob)
+		if(D==null)
+			D = getFromPool(/obj/effect/decal/cleanable/blood, get_turf(mob))
+			D.New(D.loc)
+
+		D.virus2 |= virus_copylist(mob.virus2)
+
+
+/datum/disease2/effect/viralsputum
+	name = "Respiratory Putrification"
+	stage = 2
+
+/datum/disease2/effect/viralsputum/activate(var/mob/living/carbon/mob)
+
+	if (prob(30))
+		mob.say("*cough")
+		var/obj/effect/decal/cleanable/blood/viralsputum/D= locate(/obj/effect/decal/cleanable/blood/viralsputum) in get_turf(mob)
+		if(!D)
+			D = getFromPool(/obj/effect/decal/cleanable/blood/viralsputum, get_turf(mob))
+			D.New(D.loc)
+
+		D.virus2 |= virus_copylist(mob.virus2)
+
+
+/datum/disease2/effect/lantern
+	name = "Lantern Syndrome"
+	stage = 2
+
+/datum/disease2/effect/lantern/activate(var/mob/living/carbon/mob)
+	mob.set_light(4)
+	to_chat(mob, "<span class = 'notice'>You are glowing!</span>")
+
+
+/datum/disease2/effect/hangman
+	name = "Hanging Man's Syndrome"
+	stage = 2
+	var/triggered = 0
+	affect_voice = 1
+
+/datum/disease2/effect/hangman/activate(var/mob/living/carbon/mob)
+//Add filters to change a,A,e,E,i,I,o,O,u,U to _
+	if(!triggered)
+		to_chat(mob, "<span class='warning'>Y__ f__l _ b_t str_ng _p.</span>")
+		affect_voice_active = 1
+		triggered = 1
+
+/datum/disease2/effect/hangman/affect_mob_voice(var/datum/speech/speech)
+	var/message=speech.message
+	message = replacetext(message, "a", "_")
+	message = replacetext(message, "A", "_")
+	message = replacetext(message, "e", "_")
+	message = replacetext(message, "E", "_")
+	message = replacetext(message, "i", "_")
+	message = replacetext(message, "I", "_")
+	message = replacetext(message, "o", "_")
+	message = replacetext(message, "O", "_")
+	message = replacetext(message, "u", "_")
+	message = replacetext(message, "U", "_")
+
+	speech.message = message
+
+
+////////////////////////STAGE 3/////////////////////////////////
+
+
+/datum/disease2/effect/toxins
+	name = "Hyperacidity"
+	stage = 3
+	max_multiplier = 3
+
+/datum/disease2/effect/toxins/activate(var/mob/living/carbon/mob)
+	mob.adjustToxLoss((2*multiplier))
+
+
+/datum/disease2/effect/shakey
+	name = "World Shaking Syndrome"
+	stage = 3
+	max_multiplier = 3
+
+/datum/disease2/effect/shakey/activate(var/mob/living/carbon/mob)
+	shake_camera(mob,5*multiplier)
+
+
+/datum/disease2/effect/telepathic
+	name = "Telepathy Syndrome"
+	stage = 3
+
+/datum/disease2/effect/telepathic/activate(var/mob/living/carbon/mob)
+	mob.dna.check_integrity()
+	mob.dna.SetSEState(REMOTETALKBLOCK,1)
+	domutcheck(mob, null)
+
+
+/datum/disease2/effect/mind
+	name = "Lazy Mind Syndrome"
+	stage = 3
+
+/datum/disease2/effect/mind/activate(var/mob/living/carbon/mob)
+	if(istype(mob, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = mob
+		var/datum/organ/internal/brain/B = H.internal_organs_by_name["brain"]
+		if (B && B.damage < B.min_broken_damage)
+			B.take_damage(5)
+	else
+		mob.setBrainLoss(50)
+
+
+/datum/disease2/effect/hallucinations
+	name = "Hallucinational Syndrome"
+	stage = 3
+
+/datum/disease2/effect/hallucinations/activate(var/mob/living/carbon/mob)
+	mob.hallucination += 25
+
+
+/datum/disease2/effect/deaf
+	name = "Hard of Hearing Syndrome"
+	stage = 3
+	
+/datum/disease2/effect/deaf/activate(var/mob/living/carbon/mob)
+	mob.ear_deaf = 5
+
+
+/datum/disease2/effect/giggle
+	name = "Uncontrolled Laughter Effect"
+	stage = 3
+
+/datum/disease2/effect/giggle/activate(var/mob/living/carbon/mob)
+	mob.say("*giggle")
+
+
+/datum/disease2/effect/chickenpox
+	name = "Chicken Pox"
+	stage = 3
+
+/datum/disease2/effect/chickenpox/activate(var/mob/living/carbon/mob)
+	if (prob(30))
+		mob.say(pick("BAWWWK!", "BAAAWWK!", "CLUCK!", "CLUUUCK!", "BAAAAWWWK!"))
+	if (prob(15))
+		mob.emote("me",1,"vomits up a chicken egg!")
+		playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
+		new /obj/item/weapon/reagent_containers/food/snacks/egg(get_turf(mob))
+
+
+/datum/disease2/effect/confusion
+	name = "Topographical Cretinism"
+	stage = 3
+
+/datum/disease2/effect/confusion/activate(var/mob/living/carbon/mob)
+	to_chat(mob, "<span class='notice'>You have trouble telling right and left apart all of a sudden.</span>")
+	mob.confused += 10
+
+
+/datum/disease2/effect/mutation
+	name = "DNA Degradation"
+	stage = 3
+
+/datum/disease2/effect/mutation/activate(var/mob/living/carbon/mob)
+	mob.apply_damage(2, CLONE)
+
+
+/datum/disease2/effect/groan
+	name = "Groaning Syndrome"
+	stage = 3
+
+/datum/disease2/effect/groan/activate(var/mob/living/carbon/mob)
+	mob.say("*groan")
+
+
+/datum/disease2/effect/sweat
+	name = "Hyper-perspiration Effect"
+	stage = 3
+
+/datum/disease2/effect/sweat/activate(var/mob/living/carbon/mob)
+	if(prob(30))
+		mob.emote("me",1,"is sweating profusely!")
+
+		if(istype(mob.loc,/turf/simulated))
+			var/turf/simulated/T = mob.loc
+			T.wet(800, TURF_WET_WATER)
+
+
+/datum/disease2/effect/elvis
+	name = "Elvisism"
+	stage = 3
+
+/datum/disease2/effect/elvis/activate(var/mob/living/carbon/mob)
+	if(!istype(mob))
+		return
+
+	var/mob/living/carbon/human/H = mob
+	var/obj/item/clothing/glasses/sunglasses/virus/virussunglasses = new /obj/item/clothing/glasses/sunglasses/virus
+	if(H.glasses && !istype(H.glasses, /obj/item/clothing/glasses/sunglasses/virus))
+		mob.u_equip(H.glasses,1)
+		mob.equip_to_slot(virussunglasses, slot_glasses)
+	if(!slot_glasses)
+		mob.equip_to_slot(virussunglasses, slot_glasses)
+	mob.confused += 10
+
+	if(pick(0,1))
+		mob.say(pick("Uh HUH!", "Thank you, Thank you very much...", "I ain't nothin' but a hound dog!", "Swing low, sweet chariot!"))
+	else
+		mob.emote("me",1,pick("curls his lip!", "gyrates his hips!", "thrusts his hips!"))
+
+	if(istype(H))
+
+		if(H.species.name == "Human" && !(H.f_style == "Pompadour"))
+			spawn(50)
+				H.h_style = "Pompadour"
+				H.update_hair()
+
+		if(H.species.name == "Human" && !(H.f_style == "Elvis Sideburns"))
+			spawn(50)
+				H.f_style = "Elvis Sideburns"
+				H.update_hair()
+
+/datum/disease2/effect/elvis/deactivate(var/mob/living/carbon/mob)
+	if(ishuman(mob))
+		if(mob:glasses && istype(mob:glasses, /obj/item/clothing/glasses/sunglasses/virus))
+			mob:glasses.canremove = 1
+			mob.u_equip(mob:glasses,1)
+
+
+/datum/disease2/effect/pthroat
+	name = "Pierrot's Throat"
+	stage = 3
+
+/datum/disease2/effect/pthroat/activate(var/mob/living/carbon/mob)
+	//
+	var/obj/item/clothing/mask/gas/clown_hat/virus/virusclown_hat = new /obj/item/clothing/mask/gas/clown_hat/virus
+	if(mob.wear_mask && !istype(mob.wear_mask, /obj/item/clothing/mask/gas/clown_hat/virus))
+		mob.u_equip(mob.wear_mask,1)
+		mob.equip_to_slot(virusclown_hat, slot_wear_mask)
+	if(!mob.wear_mask)
+		mob.equip_to_slot(virusclown_hat, slot_wear_mask)
+	mob.reagents.add_reagent(PSILOCYBIN, 20)
+	mob.say(pick("HONK!", "Honk!", "Honk.", "Honk?", "Honk!!", "Honk?!", "Honk..."))
+
+
+var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
+
+/datum/disease2/effect/horsethroat
+	name = "Horse Throat"
+	stage = 3
+
+/datum/disease2/effect/horsethroat/activate(var/mob/living/carbon/mob)
+
+
+	if(!(mob.type in compatible_mobs))
+		return
+
+
+	var/obj/item/clothing/mask/horsehead/magic/magichead = new /obj/item/clothing/mask/horsehead/magic
+	if(mob.wear_mask && !istype(mob.wear_mask, /obj/item/clothing/mask/horsehead/magic))
+		mob.u_equip(mob.wear_mask,1)
+		mob.equip_to_slot(magichead, slot_wear_mask)
+	if(!mob.wear_mask)
+		mob.equip_to_slot(magichead, slot_wear_mask)
+	to_chat(mob, "<span class='warning'>You feel a little horse!</span>")
+
+
+/datum/disease2/effect/anime_hair
+	name = "Pro-tagonista Syndrome"
+	stage = 3
+	var/triggered = 0
+	var/given_katana = 0
+	affect_voice = 1
+	max_multiplier = 4
+
+/datum/disease2/effect/anime_hair/activate(var/mob/living/carbon/mob)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/affected = mob
+		if(!triggered)
+			var/list/hair_colors = list("pink","red","green","blue","purple")
+			var/hair_color = pick(hair_colors)
+
+			switch(hair_color)
+				if("pink")
+					affected.b_hair = 153
+					affected.g_hair = 102
+					affected.r_hair = 255
+				if("red")
+					affected.b_hair = 0
+					affected.g_hair = 0
+					affected.r_hair = 255
+				if("green")
+					affected.b_hair = 0
+					affected.g_hair = 255
+					affected.r_hair = 0
+				if("blue")
+					affected.b_hair = 255
+					affected.g_hair = 0
+					affected.r_hair = 0
+				if("purple")
+					affected.b_hair = 102
+					affected.g_hair = 0
+					affected.r_hair = 102
+			affected.update_hair()
+			triggered = 1
+
+		if(multiplier)
+			if(multiplier >= 1.5)
+				//Give them schoolgirl outfits /obj/item/clothing/under/schoolgirl
+				var/obj/item/clothing/under/schoolgirl/schoolgirl = new /obj/item/clothing/under/schoolgirl
+				schoolgirl.canremove = 0
+				if(affected.w_uniform && !istype(affected.w_uniform, /obj/item/clothing/under/schoolgirl))
+					affected.u_equip(affected.w_uniform,1)
+					affected.equip_to_slot(schoolgirl, slot_w_uniform)
+				if(!affected.w_uniform)
+					affected.equip_to_slot(schoolgirl, slot_w_uniform)
+			if(multiplier >= 1.8)
+				//Kneesocks /obj/item/clothing/shoes/kneesocks
+				var/obj/item/clothing/shoes/kneesocks/kneesock = new /obj/item/clothing/shoes/kneesocks
+				kneesock.canremove = 0
+				if(affected.shoes && !istype(affected.shoes, /obj/item/clothing/shoes/kneesocks))
+					affected.u_equip(affected.shoes,1)
+					affected.equip_to_slot(kneesock, slot_shoes)
+				if(!affected.w_uniform)
+					affected.equip_to_slot(kneesock, slot_shoes)
+
+			if(multiplier >= 2)
+				if(multiplier >=2.3)
+					//Cursed, pure evil cat ears that should not have been created
+					var/obj/item/clothing/head/kitty/cursed/kitty_c = new /obj/item/clothing/head/kitty/cursed
+					if(affected.head && !istype(affected.head, /obj/item/clothing/head/kitty/cursed))
+						affected.u_equip(affected.head,1)
+						affected.equip_to_slot(kitty_c, slot_head)
+					if(!affected.head)
+						affected.equip_to_slot(kitty_c, slot_head)
+				else
+					//Regular cat ears /obj/item/clothing/head/kitty
+					var/obj/item/clothing/head/kitty/kitty = new /obj/item/clothing/head/kitty
+					if(affected.head && !istype(affected.head, /obj/item/clothing/head/kitty))
+						affected.u_equip(affected.head,1)
+						affected.equip_to_slot(kitty, slot_head)
+					if(!affected.head)
+						affected.equip_to_slot(kitty, slot_head)
+				affect_voice_active = 1
+
+			if(multiplier >= 2.5 && !given_katana)
+				if(multiplier >= 3)
+					//REAL katana /obj/item/weapon/katana
+					var/obj/item/weapon/katana/real_katana = new /obj/item/weapon/katana
+					affected.put_in_hands(real_katana)
+				else
+					//Toy katana /obj/item/toy/katana
+					var/obj/item/toy/katana/fake_katana = new /obj/item/toy/katana
+					affected.put_in_hands(fake_katana)
+				given_katana = 1
+
+datum/disease2/effect/anime_hair/deactivate(var/mob/living/carbon/mob)
+	to_chat(mob, "<span class = 'notice'>You no longer feel quite like the main character. </span>")
+	var/mob/living/carbon/human/affected = mob
+	if(affected.shoes && istype(affected.shoes, /obj/item/clothing/shoes/kneesocks))
+		affected.shoes.canremove = 1
+	if(affected.w_uniform && istype(affected.w_uniform, /obj/item/clothing/under/schoolgirl))
+		affected.w_uniform.canremove = 1
+
+/datum/disease2/effect/anime_hair/affect_mob_voice(var/datum/speech/speech)
+	var/message=speech.message
+
+	if(prob(20))
+		message += pick(" Nyaa", "  nya", "  Nyaa~", "~")
+
+	speech.message = message
+
+
+/datum/disease2/effect/lubefoot
+	name = "Self-lubricating Footstep Syndrome"
+	stage = 3
+	max_multiplier = 9.5 //Potential for 95% lube chance per step
+	var/triggered
+
+/datum/disease2/effect/lubefoot/activate(var/mob/living/carbon/mob)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/affected = mob
+		if(multiplier > 1.5 && !triggered)
+			to_chat(affected, "You feel slightly more inept than usual.")
+			affected.dna.check_integrity()
+			affected.dna.SetSEState(CLUMSYBLOCK,1)
+			domutcheck(mob, null)
+			triggered = 1
+		var/obj/item/clothing/shoes/clown_shoes/slippy/honkers = new /obj/item/clothing/shoes/clown_shoes/slippy
+		if(affected.shoes && !istype(affected.shoes, /obj/item/clothing/shoes/clown_shoes))//Clown shoes may save you
+			affected.u_equip(affected.shoes,1)
+			affected.equip_to_slot(honkers, slot_shoes)
+		else if(affected.shoes && istype(affected.shoes, /obj/item/clothing/shoes/clown_shoes/slippy))
+			var/obj/item/clothing/shoes/clown_shoes/slippy/worn_honkers = affected.shoes
+			if(worn_honkers.lube_chance < 10*multiplier)
+				worn_honkers.lube_chance = 10*multiplier
+		if(!affected.shoes)
+			affected.equip_to_slot(honkers, slot_shoes)
+
+		honkers.lube_chance = 10*multiplier
+	if(prob(15))
+		to_chat(mob, "Your feet feel slippy!")
+
+datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/affected = mob
+
+		if(affected.shoes && istype(affected.shoes, /obj/item/clothing/shoes/clown_shoes/slippy))
+			var/obj/item/clothing/shoes/clown_shoes/slippy/honkers = affected.shoes
+			to_chat(mob, "Your shoes now don't feel quite as slippery")
+			honkers.lube_chance = 0
+			honkers.canremove = 1
 
 
 ////////////////////////STAGE 4/////////////////////////////////
@@ -484,651 +1090,43 @@
 		to_chat(mob, "Suddenly, your knowledge of languages comes back to you.")
 
 
-////////////////////////STAGE 3/////////////////////////////////
+////////////////////////SPECIAL/////////////////////////////////
 
 
-/datum/disease2/effect/toxins
-	name = "Hyperacidity"
-	stage = 3
-	max_multiplier = 3
-
-/datum/disease2/effect/toxins/activate(var/mob/living/carbon/mob)
-	mob.adjustToxLoss((2*multiplier))
-
-
-/datum/disease2/effect/shakey
-	name = "World Shaking Syndrome"
-	stage = 3
-	max_multiplier = 3
-
-/datum/disease2/effect/shakey/activate(var/mob/living/carbon/mob)
-	shake_camera(mob,5*multiplier)
-
-
-/datum/disease2/effect/telepathic
-	name = "Telepathy Syndrome"
-	stage = 3
-
-/datum/disease2/effect/telepathic/activate(var/mob/living/carbon/mob)
-	mob.dna.check_integrity()
-	mob.dna.SetSEState(REMOTETALKBLOCK,1)
-	domutcheck(mob, null)
+/*/datum/disease2/effect/alien
+	name = "Unidentified Foreign Body"
+	stage = 4
+	activate(var/mob/living/carbon/mob)
+		to_chat(mob, "<span class='warning'>You feel something tearing its way out of your stomach...</span>")
+		mob.adjustToxLoss(10)
+		mob.updatehealth()
+		if(prob(40))
+			if(mob.client)
+				mob.client.mob = new/mob/living/carbon/alien/larva(mob.loc)
+			else
+				new/mob/living/carbon/alien/larva(mob.loc)
+			var/datum/disease2/disease/D = mob:virus2
+			mob:gib()
+			del D*/
 
 
-/datum/disease2/effect/mind
-	name = "Lazy Mind Syndrome"
-	stage = 3
+/datum/disease2/effect/spaceadapt
+	name = "Space Adaptation Effect"
+	stage = 5
 
-/datum/disease2/effect/mind/activate(var/mob/living/carbon/mob)
-	if(istype(mob, /mob/living/carbon/human))
-		var/mob/living/carbon/human/H = mob
-		var/datum/organ/internal/brain/B = H.internal_organs_by_name["brain"]
-		if (B && B.damage < B.min_broken_damage)
-			B.take_damage(5)
-	else
-		mob.setBrainLoss(50)
-
-
-/datum/disease2/effect/hallucinations
-	name = "Hallucinational Syndrome"
-	stage = 3
-
-/datum/disease2/effect/hallucinations/activate(var/mob/living/carbon/mob)
-	mob.hallucination += 25
-
-
-/datum/disease2/effect/deaf
-	name = "Hard of Hearing Syndrome"
-	stage = 3
-	
-/datum/disease2/effect/deaf/activate(var/mob/living/carbon/mob)
-	mob.ear_deaf = 5
-
-
-/datum/disease2/effect/giggle
-	name = "Uncontrolled Laughter Effect"
-	stage = 3
-
-/datum/disease2/effect/giggle/activate(var/mob/living/carbon/mob)
-	mob.say("*giggle")
-
-
-/datum/disease2/effect/chickenpox
-	name = "Chicken Pox"
-	stage = 3
-
-/datum/disease2/effect/chickenpox/activate(var/mob/living/carbon/mob)
-	if (prob(30))
-		mob.say(pick("BAWWWK!", "BAAAWWK!", "CLUCK!", "CLUUUCK!", "BAAAAWWWK!"))
-	if (prob(15))
-		mob.emote("me",1,"vomits up a chicken egg!")
-		playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
-		new /obj/item/weapon/reagent_containers/food/snacks/egg(get_turf(mob))
-
-
-/datum/disease2/effect/confusion
-	name = "Topographical Cretinism"
-	stage = 3
-
-/datum/disease2/effect/confusion/activate(var/mob/living/carbon/mob)
-	to_chat(mob, "<span class='notice'>You have trouble telling right and left apart all of a sudden.</span>")
-	mob.confused += 10
-
-
-/datum/disease2/effect/mutation
-	name = "DNA Degradation"
-	stage = 3
-
-/datum/disease2/effect/mutation/activate(var/mob/living/carbon/mob)
-	mob.apply_damage(2, CLONE)
-
-
-/datum/disease2/effect/groan
-	name = "Groaning Syndrome"
-	stage = 3
-
-/datum/disease2/effect/groan/activate(var/mob/living/carbon/mob)
-	mob.say("*groan")
-
-
-/datum/disease2/effect/sweat
-	name = "Hyper-perspiration Effect"
-	stage = 3
-
-/datum/disease2/effect/sweat/activate(var/mob/living/carbon/mob)
-	if(prob(30))
-		mob.emote("me",1,"is sweating profusely!")
-
-		if(istype(mob.loc,/turf/simulated))
-			var/turf/simulated/T = mob.loc
-			T.wet(800, TURF_WET_WATER)
-
-
-/datum/disease2/effect/elvis
-	name = "Elvisism"
-	stage = 3
-
-/datum/disease2/effect/elvis/activate(var/mob/living/carbon/mob)
-	if(!istype(mob))
-		return
-
+/datum/disease2/effect/spaceadapt/activate(var/mob/living/carbon/mob)
 	var/mob/living/carbon/human/H = mob
-	var/obj/item/clothing/glasses/sunglasses/virus/virussunglasses = new /obj/item/clothing/glasses/sunglasses/virus
-	if(H.glasses && !istype(H.glasses, /obj/item/clothing/glasses/sunglasses/virus))
-		mob.u_equip(H.glasses,1)
-		mob.equip_to_slot(virussunglasses, slot_glasses)
-	if(!slot_glasses)
-		mob.equip_to_slot(virussunglasses, slot_glasses)
-	mob.confused += 10
-
-	if(pick(0,1))
-		mob.say(pick("Uh HUH!", "Thank you, Thank you very much...", "I ain't nothin' but a hound dog!", "Swing low, sweet chariot!"))
-	else
-		mob.emote("me",1,pick("curls his lip!", "gyrates his hips!", "thrusts his hips!"))
-
-	if(istype(H))
-
-		if(H.species.name == "Human" && !(H.f_style == "Pompadour"))
-			spawn(50)
-				H.h_style = "Pompadour"
-				H.update_hair()
-
-		if(H.species.name == "Human" && !(H.f_style == "Elvis Sideburns"))
-			spawn(50)
-				H.f_style = "Elvis Sideburns"
-				H.update_hair()
-
-/datum/disease2/effect/elvis/deactivate(var/mob/living/carbon/mob)
-	if(ishuman(mob))
-		if(mob:glasses && istype(mob:glasses, /obj/item/clothing/glasses/sunglasses/virus))
-			mob:glasses.canremove = 1
-			mob.u_equip(mob:glasses,1)
-
-
-/datum/disease2/effect/pthroat
-	name = "Pierrot's Throat"
-	stage = 3
-
-/datum/disease2/effect/pthroat/activate(var/mob/living/carbon/mob)
-	//
-	var/obj/item/clothing/mask/gas/clown_hat/virus/virusclown_hat = new /obj/item/clothing/mask/gas/clown_hat/virus
-	if(mob.wear_mask && !istype(mob.wear_mask, /obj/item/clothing/mask/gas/clown_hat/virus))
-		mob.u_equip(mob.wear_mask,1)
-		mob.equip_to_slot(virusclown_hat, slot_wear_mask)
-	if(!mob.wear_mask)
-		mob.equip_to_slot(virusclown_hat, slot_wear_mask)
-	mob.reagents.add_reagent(PSILOCYBIN, 20)
-	mob.say(pick("HONK!", "Honk!", "Honk.", "Honk?", "Honk!!", "Honk?!", "Honk..."))
-
-
-var/list/compatible_mobs = list(/mob/living/carbon/human, /mob/living/carbon/monkey)
-
-/datum/disease2/effect/horsethroat
-	name = "Horse Throat"
-	stage = 3
-
-/datum/disease2/effect/horsethroat/activate(var/mob/living/carbon/mob)
-
-
-	if(!(mob.type in compatible_mobs))
-		return
-
-
-	var/obj/item/clothing/mask/horsehead/magic/magichead = new /obj/item/clothing/mask/horsehead/magic
-	if(mob.wear_mask && !istype(mob.wear_mask, /obj/item/clothing/mask/horsehead/magic))
-		mob.u_equip(mob.wear_mask,1)
-		mob.equip_to_slot(magichead, slot_wear_mask)
-	if(!mob.wear_mask)
-		mob.equip_to_slot(magichead, slot_wear_mask)
-	to_chat(mob, "<span class='warning'>You feel a little horse!</span>")
-
-
-/datum/disease2/effect/anime_hair
-	name = "Pro-tagonista Syndrome"
-	stage = 3
-	var/triggered = 0
-	var/given_katana = 0
-	affect_voice = 1
-	max_multiplier = 4
-
-/datum/disease2/effect/anime_hair/activate(var/mob/living/carbon/mob)
-	if(ishuman(mob))
-		var/mob/living/carbon/human/affected = mob
-		if(!triggered)
-			var/list/hair_colors = list("pink","red","green","blue","purple")
-			var/hair_color = pick(hair_colors)
-
-			switch(hair_color)
-				if("pink")
-					affected.b_hair = 153
-					affected.g_hair = 102
-					affected.r_hair = 255
-				if("red")
-					affected.b_hair = 0
-					affected.g_hair = 0
-					affected.r_hair = 255
-				if("green")
-					affected.b_hair = 0
-					affected.g_hair = 255
-					affected.r_hair = 0
-				if("blue")
-					affected.b_hair = 255
-					affected.g_hair = 0
-					affected.r_hair = 0
-				if("purple")
-					affected.b_hair = 102
-					affected.g_hair = 0
-					affected.r_hair = 102
-			affected.update_hair()
-			triggered = 1
-
-		if(multiplier)
-			if(multiplier >= 1.5)
-				//Give them schoolgirl outfits /obj/item/clothing/under/schoolgirl
-				var/obj/item/clothing/under/schoolgirl/schoolgirl = new /obj/item/clothing/under/schoolgirl
-				schoolgirl.canremove = 0
-				if(affected.w_uniform && !istype(affected.w_uniform, /obj/item/clothing/under/schoolgirl))
-					affected.u_equip(affected.w_uniform,1)
-					affected.equip_to_slot(schoolgirl, slot_w_uniform)
-				if(!affected.w_uniform)
-					affected.equip_to_slot(schoolgirl, slot_w_uniform)
-			if(multiplier >= 1.8)
-				//Kneesocks /obj/item/clothing/shoes/kneesocks
-				var/obj/item/clothing/shoes/kneesocks/kneesock = new /obj/item/clothing/shoes/kneesocks
-				kneesock.canremove = 0
-				if(affected.shoes && !istype(affected.shoes, /obj/item/clothing/shoes/kneesocks))
-					affected.u_equip(affected.shoes,1)
-					affected.equip_to_slot(kneesock, slot_shoes)
-				if(!affected.w_uniform)
-					affected.equip_to_slot(kneesock, slot_shoes)
-
-			if(multiplier >= 2)
-				if(multiplier >=2.3)
-					//Cursed, pure evil cat ears that should not have been created
-					var/obj/item/clothing/head/kitty/cursed/kitty_c = new /obj/item/clothing/head/kitty/cursed
-					if(affected.head && !istype(affected.head, /obj/item/clothing/head/kitty/cursed))
-						affected.u_equip(affected.head,1)
-						affected.equip_to_slot(kitty_c, slot_head)
-					if(!affected.head)
-						affected.equip_to_slot(kitty_c, slot_head)
-				else
-					//Regular cat ears /obj/item/clothing/head/kitty
-					var/obj/item/clothing/head/kitty/kitty = new /obj/item/clothing/head/kitty
-					if(affected.head && !istype(affected.head, /obj/item/clothing/head/kitty))
-						affected.u_equip(affected.head,1)
-						affected.equip_to_slot(kitty, slot_head)
-					if(!affected.head)
-						affected.equip_to_slot(kitty, slot_head)
-				affect_voice_active = 1
-
-			if(multiplier >= 2.5 && !given_katana)
-				if(multiplier >= 3)
-					//REAL katana /obj/item/weapon/katana
-					var/obj/item/weapon/katana/real_katana = new /obj/item/weapon/katana
-					affected.put_in_hands(real_katana)
-				else
-					//Toy katana /obj/item/toy/katana
-					var/obj/item/toy/katana/fake_katana = new /obj/item/toy/katana
-					affected.put_in_hands(fake_katana)
-				given_katana = 1
-
-datum/disease2/effect/anime_hair/deactivate(var/mob/living/carbon/mob)
-	to_chat(mob, "<span class = 'notice'>You no longer feel quite like the main character. </span>")
-	var/mob/living/carbon/human/affected = mob
-	if(affected.shoes && istype(affected.shoes, /obj/item/clothing/shoes/kneesocks))
-		affected.shoes.canremove = 1
-	if(affected.w_uniform && istype(affected.w_uniform, /obj/item/clothing/under/schoolgirl))
-		affected.w_uniform.canremove = 1
-
-/datum/disease2/effect/anime_hair/affect_mob_voice(var/datum/speech/speech)
-	var/message=speech.message
-
-	if(prob(20))
-		message += pick(" Nyaa", "  nya", "  Nyaa~", "~")
-
-	speech.message = message
-
-
-/datum/disease2/effect/lubefoot
-	name = "Self-lubricating Footstep Syndrome"
-	stage = 3
-	max_multiplier = 9.5 //Potential for 95% lube chance per step
-	var/triggered
-
-/datum/disease2/effect/lubefoot/activate(var/mob/living/carbon/mob)
-	if(ishuman(mob))
-		var/mob/living/carbon/human/affected = mob
-		if(multiplier > 1.5 && !triggered)
-			to_chat(affected, "You feel slightly more inept than usual.")
-			affected.dna.check_integrity()
-			affected.dna.SetSEState(CLUMSYBLOCK,1)
-			domutcheck(mob, null)
-			triggered = 1
-		var/obj/item/clothing/shoes/clown_shoes/slippy/honkers = new /obj/item/clothing/shoes/clown_shoes/slippy
-		if(affected.shoes && !istype(affected.shoes, /obj/item/clothing/shoes/clown_shoes))//Clown shoes may save you
-			affected.u_equip(affected.shoes,1)
-			affected.equip_to_slot(honkers, slot_shoes)
-		else if(affected.shoes && istype(affected.shoes, /obj/item/clothing/shoes/clown_shoes/slippy))
-			var/obj/item/clothing/shoes/clown_shoes/slippy/worn_honkers = affected.shoes
-			if(worn_honkers.lube_chance < 10*multiplier)
-				worn_honkers.lube_chance = 10*multiplier
-		if(!affected.shoes)
-			affected.equip_to_slot(honkers, slot_shoes)
-
-		honkers.lube_chance = 10*multiplier
-	if(prob(15))
-		to_chat(mob, "Your feet feel slippy!")
-
-datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
-	if(ishuman(mob))
-		var/mob/living/carbon/human/affected = mob
-
-		if(affected.shoes && istype(affected.shoes, /obj/item/clothing/shoes/clown_shoes/slippy))
-			var/obj/item/clothing/shoes/clown_shoes/slippy/honkers = affected.shoes
-			to_chat(mob, "Your shoes now don't feel quite as slippery")
-			honkers.lube_chance = 0
-			honkers.canremove = 1
-
-
-////////////////////////STAGE 2/////////////////////////////////
-
-
-/datum/disease2/effect/scream
-	name = "Loudness Syndrome"
-	stage = 2
-	
-/datum/disease2/effect/scream/activate(var/mob/living/carbon/mob)
-	mob.emote("scream",,, 1)
-
-
-/datum/disease2/effect/drowsness
-	name = "Automated Sleeping Syndrome"
-	stage = 2
-	
-/datum/disease2/effect/drowsness/activate(var/mob/living/carbon/mob)
-	mob.drowsyness += 10
-
-
-/datum/disease2/effect/sleepy
-	name = "Resting Syndrome"
-	stage = 2
-
-/datum/disease2/effect/sleepy/activate(var/mob/living/carbon/mob)
-	mob.say("*collapse")
-
-
-/datum/disease2/effect/blind
-	name = "Blackout Syndrome"
-	stage = 2
-
-/datum/disease2/effect/blind/activate(var/mob/living/carbon/mob)
-	mob.eye_blind = max(mob.eye_blind, 4)
-
-
-/datum/disease2/effect/cough
-	name = "Anima Syndrome"
-	stage = 2
-
-/datum/disease2/effect/cough/activate(var/mob/living/carbon/mob)
-	mob.say("*cough")
-	for(var/mob/living/carbon/M in oview(2,mob))
-		mob.spread_disease_to(M)
-
-
-/datum/disease2/effect/hungry
-	name = "Appetiser Effect"
-	stage = 2
-
-/datum/disease2/effect/hungry/activate(var/mob/living/carbon/mob)
-	mob.nutrition = max(0, mob.nutrition - 200)
-
-
-/datum/disease2/effect/fridge
-	name = "Refridgerator Syndrome"
-	stage = 2
-
-/datum/disease2/effect/fridge/activate(var/mob/living/carbon/mob)
-	mob.say("*shiver")
-
-
-/datum/disease2/effect/hair
-	name = "Hair Loss"
-	stage = 2
-
-/datum/disease2/effect/hair/activate(var/mob/living/carbon/mob)
-	if(istype(mob, /mob/living/carbon/human))
-		var/mob/living/carbon/human/H = mob
-		if(H.species.name == "Human" && !(H.h_style == "Bald") && !(H.h_style == "Balding Hair"))
-			to_chat(H, "<span class='danger'>Your hair starts to fall out in clumps...</span>")
-			spawn(50)
-				H.h_style = "Balding Hair"
-				H.update_hair()
-
-
-/datum/disease2/effect/stimulant
-	name = "Adrenaline Extra"
-	stage = 2
-
-/datum/disease2/effect/stimulant/activate(var/mob/living/carbon/mob)
-	to_chat(mob, "<span class='notice'>You feel a rush of energy inside you!</span>")
-	if (mob.reagents.get_reagent_amount(HYPERZINE) < 10)
-		mob.reagents.add_reagent(HYPERZINE, 4)
-	if (prob(30))
-		mob.jitteriness += 10
-
-
-/datum/disease2/effect/drunk
-	name = "Glasgow Syndrome"
-	stage = 2
-
-/datum/disease2/effect/drunk/activate(var/mob/living/carbon/mob)
-	to_chat(mob, "<span class='notice'>You feel like you had one hell of a party!</span>")
-	if (mob.reagents.get_reagent_amount(ETHANOL) < 325)
-		mob.reagents.add_reagent(ETHANOL, 5*multiplier)
-
-
-/datum/disease2/effect/gaben
-	name = "Gaben Syndrome"
-	stage = 2
-
-/datum/disease2/effect/gaben/activate(var/mob/living/carbon/mob)
-	to_chat(mob, "<span class='notice'>Your clothing fits a little tighter!!</span>")
-	if (prob(10))
-		mob.reagents.add_reagent(NUTRIMENT, 1000)
-		mob.overeatduration = 1000
-
-
-/datum/disease2/effect/beard
-	name = "Bearding"
-	stage = 2
-
-/datum/disease2/effect/beard/activate(var/mob/living/carbon/mob)
-	if(istype(mob, /mob/living/carbon/human))
-		var/mob/living/carbon/human/H = mob
-		if(H.species.name == "Human" && !(H.f_style == "Full Beard"))
-			to_chat(H, "<span class='warning'>Your chin and neck itch!.</span>")
-			spawn(50)
-				H.f_style = "Full Beard"
-				H.update_hair()
-
-
-/datum/disease2/effect/bloodynose
-	name = "Intranasal Hemorrhage"
-	stage = 2
-
-/datum/disease2/effect/bloodynose/activate(var/mob/living/carbon/mob)
-	if (prob(30))
-		var/obj/effect/decal/cleanable/blood/D= locate(/obj/effect/decal/cleanable/blood) in get_turf(mob)
-		if(D==null)
-			D = getFromPool(/obj/effect/decal/cleanable/blood, get_turf(mob))
-			D.New(D.loc)
-
-		D.virus2 |= virus_copylist(mob.virus2)
-
-
-/datum/disease2/effect/viralsputum
-	name = "Respiratory Putrification"
-	stage = 2
-
-/datum/disease2/effect/viralsputum/activate(var/mob/living/carbon/mob)
-
-	if (prob(30))
-		mob.say("*cough")
-		var/obj/effect/decal/cleanable/blood/viralsputum/D= locate(/obj/effect/decal/cleanable/blood/viralsputum) in get_turf(mob)
-		if(!D)
-			D = getFromPool(/obj/effect/decal/cleanable/blood/viralsputum, get_turf(mob))
-			D.New(D.loc)
-
-		D.virus2 |= virus_copylist(mob.virus2)
-
-
-/datum/disease2/effect/lantern
-	name = "Lantern Syndrome"
-	stage = 2
-
-/datum/disease2/effect/lantern/activate(var/mob/living/carbon/mob)
-	mob.set_light(4)
-	to_chat(mob, "<span class = 'notice'>You are glowing!</span>")
-
-
-/datum/disease2/effect/hangman
-	name = "Hanging Man's Syndrome"
-	stage = 2
-	var/triggered = 0
-	affect_voice = 1
-
-/datum/disease2/effect/hangman/activate(var/mob/living/carbon/mob)
-//Add filters to change a,A,e,E,i,I,o,O,u,U to _
-	if(!triggered)
-		to_chat(mob, "<span class='warning'>Y__ f__l _ b_t str_ng _p.</span>")
-		affect_voice_active = 1
-		triggered = 1
-
-/datum/disease2/effect/hangman/affect_mob_voice(var/datum/speech/speech)
-	var/message=speech.message
-	message = replacetext(message, "a", "_")
-	message = replacetext(message, "A", "_")
-	message = replacetext(message, "e", "_")
-	message = replacetext(message, "E", "_")
-	message = replacetext(message, "i", "_")
-	message = replacetext(message, "I", "_")
-	message = replacetext(message, "o", "_")
-	message = replacetext(message, "O", "_")
-	message = replacetext(message, "u", "_")
-	message = replacetext(message, "U", "_")
-
-	speech.message = message
-
-
-////////////////////////STAGE 1/////////////////////////////////
-
-
-/datum/disease2/effect/invisible
-	name = "Waiting Syndrome"
-	stage = 1
-
-/datum/disease2/effect/invisible/activate(var/mob/living/carbon/mob)
-		return
-
-
-/datum/disease2/effect/sneeze
-	name = "Coldingtons Effect"
-	stage = 1
-
-/datum/disease2/effect/sneeze/activate(var/mob/living/carbon/mob)
-	mob.say("*sneeze")
-	if (prob(50))
-		var/obj/effect/decal/cleanable/mucus/M= locate(/obj/effect/decal/cleanable/mucus) in get_turf(mob)
-		if(M==null)
-			M = new(get_turf(mob))
-		else
-			if(M.dry)
-				M.dry=0
-		M.virus2 |= virus_copylist(mob.virus2)
-
-
-/datum/disease2/effect/gunck
-	name = "Flemmingtons"
-	stage = 1
-
-/datum/disease2/effect/gunck/activate(var/mob/living/carbon/mob)
-	to_chat(mob, "<span class = 'notice'> Mucous runs down the back of your throat.</span>")
-
-
-/datum/disease2/effect/drool
-	name = "Saliva Effect"
-	stage = 1
-
-/datum/disease2/effect/drool/activate(var/mob/living/carbon/mob)
-	mob.say("*drool")
-
-
-/datum/disease2/effect/twitch
-	name = "Twitcher"
-	stage = 1
-
-/datum/disease2/effect/twitch/activate(var/mob/living/carbon/mob)
-	mob.say("*twitch")
-
-
-/datum/disease2/effect/headache
-	name = "Headache"
-	stage = 1
-
-/datum/disease2/effect/headache/activate(var/mob/living/carbon/mob)
-	to_chat(mob, "<span class = 'notice'>Your head hurts a bit</span>")
-
-
-/datum/disease2/effect/itching
-	name = "Itching"
-	stage = 1
-
-/datum/disease2/effect/itching/activate(var/mob/living/carbon/mob)
-	var/mob/living/carbon/human/H = mob
-	if (istype(H) && H.species && H.species.flags & NO_SKIN)
-		to_chat(mob, "<span class='warning'>Your bones itch!</span>")
-	else
-		to_chat(mob, "<span class='warning'>Your skin itches!</span>")
-
-
-/datum/disease2/effect/drained
-	name = "Drained Feeling"
-	stage = 1
-
-/datum/disease2/effect/drained/activate(var/mob/living/carbon/mob)
-	to_chat(mob, "<span class='warning'>You feel drained.</span>")
-
-
-/datum/disease2/effect/eyewater
-	name = "Watery Eyes"
-	stage = 1
-
-/datum/disease2/effect/eyewater/activate(var/mob/living/carbon/mob)
-	to_chat(mob, "<SPAN CLASS='warning'>Your eyes sting and water!</SPAN>")
-
-
-/datum/disease2/effect/wheeze
-	name = "Wheezing"
-	stage = 1
-
-/datum/disease2/effect/wheeze/activate(var/mob/living/carbon/mob)
-	mob.emote("me",1,"wheezes.")
-
-
-/datum/disease2/effect/optimistic
-	name = "Full Glass Syndrome"
-	stage = 1
-
-/datum/disease2/effect/optimistic/activate(var/mob/living/carbon/mob)
-	to_chat(mob, "<span class = 'notice'>You feel optimistic!</span>")
-	if (mob.reagents.get_reagent_amount(TRICORDRAZINE) < 1)
-		mob.reagents.add_reagent(TRICORDRAZINE, 1)
-
-
-/datum/disease2/effect/spyndrome
-	name = "Gyroscopic Manipulation Syndrome"
-	stage = 1
-
-/datum/disease2/effect/spyndrome/activate(var/mob/living/carbon/mob)
-	if (mob.reagents.get_reagent_amount(GYRO) < 1)
-		mob.reagents.add_reagent(GYRO, 1)
+	if (mob.reagents.get_reagent_amount(DEXALINP) < 10)
+		mob.reagents.add_reagent(DEXALINP, 4)
+	if (mob.reagents.get_reagent_amount(LEPORAZINE) < 10)
+		mob.reagents.add_reagent(LEPORAZINE, 4)
+	if (mob.reagents.get_reagent_amount(BICARIDINE) < 10)
+		mob.reagents.add_reagent(BICARIDINE, 4)
+	if (mob.reagents.get_reagent_amount(DERMALINE) < 10)
+		mob.reagents.add_reagent(DERMALINE, 4)
+	mob.emote("me",1,"exhales slowly.")
+
+	if(ishuman(H))
+		var/datum/organ/external/chest/chest = H.get_organ(LIMB_CHEST)
+		for(var/datum/organ/internal/I in chest.internal_organs)
+			I.damage = 0
