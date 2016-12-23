@@ -21,15 +21,16 @@ var/global/list/disease2_list = list()
 	disease2_list["[uniqueID]"] = src
 	..()
 
-/datum/disease2/proc/add_effect(var/badness = 1, var/stage = 0)
+/datum/disease2/disease/proc/add_effect(var/badness = 1, var/stage = 0)
 	var/list/datum/disease2/effect/list = list()
 	for(var/e in typesof(/datum/disease2/effect))
 		var/datum/disease2/effect/f = new e
 		if(f.stage == stage && f.badness <= badness)
 			list += f
-	effect = pick(list)
-	effect.chance = rand(1,6)
-	virus.log += "<br />[timestamp()] Added effect [effect.name] [effect.chance]%:"
+	var/datum/disease2/effect/e = pick(list)
+	e.chance = rand(1,6)
+	effects += e
+	log += "<br />[timestamp()] Added effect [e.name] [e.chance]%:"
 
 /datum/disease2/disease/proc/makerandom(var/greater=0)
 	for(var/i=1 ; i <= max_stage ; i++ )

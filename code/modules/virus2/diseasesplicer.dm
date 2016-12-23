@@ -151,7 +151,7 @@
 				var/old_e=e.name
 				if(e.stage == memorybank.stage)
 					e = memorybank
-					dish.virus2.log += "<br />[timestamp()] [e.effect.name] spliced in by [key_name(usr)] (replaces [old_e])"
+					dish.virus2.log += "<br />[timestamp()] [e.name] spliced in by [key_name(usr)] (replaces [old_e])"
 
 			splicing = 10
 //			dish.virus2.spreadtype = "Blood"
