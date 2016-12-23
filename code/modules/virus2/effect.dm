@@ -68,8 +68,7 @@
 			multiplier = rand(1, max_multiplier)
 
 /datum/disease2/effect/proc/getcopy(var/datum/disease2/disease/disease)
-	var/type_e = type(src)
-	var/datum/disease2/effect/new_e = new type_e(disease)
+	var/datum/disease2/effect/new_e = new type(disease)
 	new_e.chance = chance
 	new_e.multiplier = multiplier
 	return new_e

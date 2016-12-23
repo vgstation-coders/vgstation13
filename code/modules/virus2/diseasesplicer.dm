@@ -150,7 +150,7 @@
 			for(var/datum/disease2/effect/e in dish.virus2.effects)
 				var/old_e=e.name
 				if(e.stage == memorybank.stage)
-					e = memorybank
+					e = memorybank.getcopy(dish.virus2)
 					dish.virus2.log += "<br />[timestamp()] [e.name] spliced in by [key_name(usr)] (replaces [old_e])"
 
 			splicing = 10
