@@ -173,12 +173,7 @@ var/global/list/disease2_list = list()
 	disease.stage = stage
 	disease.clicks = clicks
 	for(var/datum/disease2/effect/e in effects)
-		var/datum/disease2/effect/new_e = new e
-		new_e.virus = disease
-		new_e.chance = e.chance
-		new_e.multiplier = e.multiplier
-		new_e.stage = e.stage
-		disease.effects += new_e
+		disease.effects += e.getcopy(disease)
 	return disease
 
 /datum/disease2/disease/proc/issame(var/datum/disease2/disease/disease)
