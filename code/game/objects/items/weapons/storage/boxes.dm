@@ -630,3 +630,31 @@
 		new /obj/item/inflatable/door(src)
 	for(var/i = 1 to 4)
 		new /obj/item/inflatable/wall(src)
+
+/obj/item/weapon/storage/box/ornaments
+	name = "box of ornaments"
+	desc = "A box of seven glass Christmas ornaments. Color not included."
+	icon_state = "ornament_box"
+	foldable = null
+	starting_materials = list(MAT_GLASS = 2500)		//needed for autolathe production
+
+/obj/item/weapon/storage/box/ornaments/New()
+	..()
+	for(var/i = 1 to 6)
+		new /obj/item/ornament(src)
+	if(prob(10))
+		new /obj/item/ornament/topper(src)
+	else
+		new /obj/item/ornament(src)
+
+/obj/item/weapon/storage/box/ornaments/teardrop_ornaments
+	name = "box of teardrop ornaments"
+	desc = "A box of seven teardrop-shaped glass Christmas ornaments. Color not included."
+	icon_state = "teardrop_ornament_box"
+
+/obj/item/weapon/storage/box/ornaments/teardrop_ornaments/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to 7)
+		new /obj/item/ornament/teardrop(src)

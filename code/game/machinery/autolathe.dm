@@ -116,6 +116,8 @@
 		new /obj/item/weapon/camera_assembly(), \
 		new /obj/item/stack/sheet/glass/rglass(), \
 		new /obj/item/stack/rods(), \
+		new /obj/item/weapon/storage/box/ornaments(), \
+		new /obj/item/weapon/storage/box/ornaments/teardrop_ornaments(), \
 		),
 		"Hidden_Items" = list(
 		new /obj/item/weapon/gun/projectile/flamethrower/full(), \
