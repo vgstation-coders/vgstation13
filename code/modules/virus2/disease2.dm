@@ -21,7 +21,7 @@ var/global/list/disease2_list = list()
 	disease2_list["[uniqueID]"] = src
 	..()
 
-/datum/disease2/disease/proc/add_effect(var/badness = 1, var/stage = 0)
+/datum/disease2/disease/proc/add_random_effect(var/badness = 1, var/stage = 0)
 	var/list/datum/disease2/effect/list = list()
 	for(var/e in typesof(/datum/disease2/effect))
 		var/datum/disease2/effect/f = new e
@@ -30,14 +30,16 @@ var/global/list/disease2_list = list()
 	var/datum/disease2/effect/e = pick(list)
 	e.chance = rand(1,6)
 	effects += e
-	log += "<br />[timestamp()] Added effect [e.name] [e.chance]%:"
+	return e
 
 /datum/disease2/disease/proc/makerandom(var/greater=0)
 	for(var/i=1 ; i <= max_stage ; i++ )
 		if(greater)
-			add_effect(2, i)
+			var/datum/disease2/effect/e = add_random_effect(2, i)
+			log += "<br />[timestamp()] Added effect [e.name] [e.chance]%."
 		else
-			add_effect(1, i)
+			var/datum/disease2/effect/e = add_random_effect(1, i)
+			log += "<br />[timestamp()] Added effect [e.name] [e.chance]%."
 	uniqueID = rand(0,10000)
 	disease2_list["[uniqueID]"] = src
 	infectionchance = rand(60,90)
@@ -63,7 +65,7 @@ var/global/list/disease2_list = list()
 		if(e.chance > 100 || e.chance < 0)
 			return 0
 		D.log += "Added [e.name] at [e.chance]% chance<br>"
-		D.effects += e // add the holder to the disease
+		D.effects += e
 
 	disease2_list -= D.uniqueID
 	D.uniqueID = rand(0, 10000)
@@ -154,9 +156,9 @@ var/global/list/disease2_list = list()
 /datum/disease2/disease/proc/majormutate()
 	uniqueID = rand(0,10000)
 	var/datum/disease2/effect/e = pick(effects)
-	add_effect(2, e.stage)
-	log += "<br />[timestamp()] Removed effect [e.name] [e.chance]%."
 	effects -= e
+	var/datum/disease2/effect/f = add_random_effect(2, e.stage)
+	log += "<br />[timestamp()] Mutated effect [e.name] [e.chance]% into [f.name] [f.chance]%."
 	if (prob(5))
 		antigen = text2num(pick(ANTIGENS))
 		antigen |= text2num(pick(ANTIGENS))
