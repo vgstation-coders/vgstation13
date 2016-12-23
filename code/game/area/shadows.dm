@@ -37,8 +37,10 @@
 	underlays += shadow
 
 /obj/structure/flora/tree/pine/apply_shadow()
+	shadow.alpha = 255		// this is handled by a planemaster using KEEP_TOGETHER
 	shadow.pixel_y = -74*PIXEL_MULTIPLIER
 	shadow.pixel_x = 16*PIXEL_MULTIPLIER
+	shadow.plane = SNOW_SHADOW_PLANE
 	underlays += shadow
 
 /obj/shadow

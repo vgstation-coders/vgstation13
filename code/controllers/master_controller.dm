@@ -544,7 +544,6 @@ datum/controller/game_controller/recover()		//Mostly a placeholder for now.
 				var/turf/T = pick(current_zlevel_list)
 				var/obj/procedural_generator/procedural_gen_type = pickweight(list_of_options)
 				procedural_gen_type.deploy_generator(T)
-				log_startup_progress("generated a procgen at [T.x] [T.y] [T.z], [i]/[generator_num]")
 			var/time = stop_watch(watch)
 			log_startup_progress("Finished procedurally generating z:[current_zlevel.z]([current_zlevel.name]) with [generator_num] radial generators in [time]s")
 			total_time += time
