@@ -95,8 +95,6 @@
 		if(beaker)
 			beaker.forceMove(src.loc)
 			beaker = null
-	if(!dish)
-		return
 	if (href_list["power"])
 		on = !on
 		if(on)
@@ -129,8 +127,7 @@
 				var/datum/disease2/disease/D = dish.virus2.getcopy()
 				D.log += "<br />[timestamp()] Injected into blood via [src] by [key_name(usr)]"
 				var/list/virus = list("[dish.virus2.uniqueID]" = D)
-				B.data["virus2"] = virus
-
+				B.data["virus2"] += virus
 				say("Injection complete.")
 	src.add_fingerprint(usr)
 	src.updateUsrDialog()
