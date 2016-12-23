@@ -1,4 +1,4 @@
-/var/global/list/validartifactprojectiles = list(
+/var/list/validartifactprojectiles = list(
 	/obj/item/projectile/beam,
 	/obj/item/projectile/beam/retro,
 	/obj/item/projectile/beam/practice,
@@ -9,6 +9,7 @@
 	/obj/item/projectile/beam/pulse,
 	/obj/item/projectile/beam/lasertag/omni,
 	/obj/item/projectile/beam/bison,
+	/obj/item/projectile/beam/mindflayer,
 	/obj/item/projectile/energy/electrode,
 	/obj/item/projectile/energy/declone,
 	/obj/item/projectile/energy/bolt/large,
