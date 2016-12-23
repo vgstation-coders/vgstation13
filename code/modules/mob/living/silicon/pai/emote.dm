@@ -29,7 +29,7 @@
 			return custom_emote(m_type, message)
 
 		if ("deathgasp")
-			message = "<B>[src]</B> shudders violently for a moment, then becomes motionless, its eyes slowly darkening."
+			message = "<span class='notice'>[src] flashes a message across its screen, \"Wiping core files. Please acquire a new personality to continue using pAI device functions.\"</span>"
 			m_type = VISIBLE
 
 		if ("glare")
