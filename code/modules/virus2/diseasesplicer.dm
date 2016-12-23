@@ -147,10 +147,10 @@
 
 	else if(href_list["splice"])
 		if(dish)
-			for(var/datum/disease2/effect/e in dish.virus2.effects)
+			for(var/x = 1 to dish.virus2.effects.len)
+				var/datum/disease2/effect/e = dish.virus2.effects[x]
 				if(e.stage == memorybank.stage)
-					dish.virus2.effects -= e
-					dish.virus2.effects += memorybank.getcopy(dish.virus2)
+					dish.virus2.effects[x] = memorybank.getcopy(dish.virus2)
 					dish.virus2.log += "<br />[timestamp()] [memorybank.name] spliced in by [key_name(usr)] (replaces [e.name])"
 
 			splicing = 10
