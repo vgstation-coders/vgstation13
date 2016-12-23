@@ -17,7 +17,7 @@
 	var/possible_transfer_amounts = list(10,25,50,100)
 
 /obj/structure/reagent_dispensers/AltClick(mob/user)
-	if(user.Adjacent(get_turf(src)) && possible_transfer_amounts)
+	if(!user.incapacitated() && user.Adjacent(get_turf(src)) && possible_transfer_amounts)
 		set_APTFT()
 		return
 	return ..()
