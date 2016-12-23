@@ -435,7 +435,7 @@
 	return ffuu
 
 /obj/machinery/microwave/CtrlClick(mob/user)
-    if(!user.incapacitated() && Adjacent(user) && user.dexterity_check())
+    if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && anchored)
         cook() //Cook checks for power, brokenness, and contents internally
         return
     return ..()

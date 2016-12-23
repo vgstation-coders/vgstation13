@@ -336,7 +336,7 @@
 	return ..()
 
 /obj/machinery/biogenerator/CtrlClick(mob/user)
-	if(!user.incapacitated() && Adjacent(user) && beaker && user.dexterity_check())
+	if(!user.incapacitated() && Adjacent(user) && beaker && user.dexterity_check() && anchored)
 		activate() //This proc already internally checks if the machine is in use, broken, out of power
 		return
 	return ..()

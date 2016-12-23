@@ -287,14 +287,14 @@
 	beaker = null
 	update_icon()
 
-/obj/machinery/reagentgrinder/AltClick()
-	if(!usr.incapacitated() && Adjacent(usr) && beaker && !(stat & (NOPOWER|BROKEN) && usr.dexterity_check()) && !inuse)
+/obj/machinery/reagentgrinder/AltClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user) && beaker && !(stat & (NOPOWER|BROKEN) && user.dexterity_check()) && !inuse)
 		detach()
 		return
 	return ..()
 
-/obj/machinery/reagentgrinder/CtrlClick()
-	if(!usr.incapacitated() && Adjacent(usr) && usr.dexterity_check() && !inuse && holdingitems.len)
+/obj/machinery/reagentgrinder/CtrlClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && !inuse && holdingitems.len && anchored)
 		grind() //Checks for beaker and power/broken internally
 		return
 	return ..()
