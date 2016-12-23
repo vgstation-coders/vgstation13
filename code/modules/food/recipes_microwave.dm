@@ -1727,7 +1727,7 @@
 	reagents = list(LIMEJUICE = 10)
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/icepepper,
-		/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat
+		/obj/item/weapon/reagent_containers/food/snacks/meat/fish_fillet/carp
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/poissoncru
 
