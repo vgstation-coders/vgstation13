@@ -173,7 +173,8 @@ var/global/list/disease2_list = list()
 	disease.stage = stage
 	disease.clicks = clicks
 	for(var/datum/disease2/effect/e in effects)
-		var/datum/disease2/effect/new_e = new e(disease)
+		var/datum/disease2/effect/new_e = new e
+		new_e.virus = disease
 		new_e.chance = e.chance
 		new_e.multiplier = e.multiplier
 		new_e.stage = e.stage
