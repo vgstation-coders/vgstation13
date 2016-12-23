@@ -1508,6 +1508,7 @@
 		to_chat(src, "<i>[pick(boo_phrases)]</i>")
 	else
 		to_chat(src, "<b><font color='[pick("red","orange","yellow","green","blue")]'>[pick(boo_phrases_drugs)]</font></b>")
+	reagents.add_reagent(ECTOPLASM, 1)
 
 // Makes all robotic limbs organic.
 /mob/living/carbon/human/proc/make_robot_limbs_organic()

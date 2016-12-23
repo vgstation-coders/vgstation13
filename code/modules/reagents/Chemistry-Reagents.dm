@@ -3629,6 +3629,26 @@
 	color = "#D9C0E7" //rgb: 217, 192, 231
 	custom_metabolism = 0.1
 
+/datum/reagent/ectoplasm	//This chem also slows external bleeding by 30% and internal bleeding by 70%
+	name = "Ectoplasm"
+	id = ECTOPLASM
+	description = "Concentrated ghostly essence."
+	reagent_state = LIQUID
+	color = "#02E816" //rgb: 2, 232, 22 (does not support alpha channels - yet!)
+	alpha = 140
+
+/datum/reagent/ectoplasm/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	M.adjustOxyLoss(-2 * REM)
+
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.shock_stage--
+		H.traumatic_shock--
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////DRINKS BELOW, Beer is up there though, along with cola. Cap'n Pete's Cuban Spiced Rum//////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
