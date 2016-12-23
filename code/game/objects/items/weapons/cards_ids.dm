@@ -542,7 +542,7 @@
 	name = "Research ID"
 	registered_name = "Scientist"
 	icon_state = "research"
-	desc = "Pinnacle of name technology."
+	desc = "The pinnacle of name technology."
 	access = list(access_science, access_rnd, access_tox_storage, access_robotics, access_xenobiology, access_rd)
 
 /obj/item/weapon/card/id/supply
@@ -563,21 +563,21 @@
 	name = "Head of Security ID"
 	registered_name = "HoS"
 	icon_state = "HoS"
-	desc = "An ID awarded to only the most robust shits in the buisness."
+	desc = "An ID awarded to only the most robust shits in the business."
 	access = list(access_security, access_sec_doors, access_brig, access_armory, access_court, access_forensics_lockers, access_morgue, access_maint_tunnels, access_all_personal_lockers, access_science, access_engine, access_mining, access_medical, access_construction, access_mailsorting, access_heads, access_hos, access_RC_announce, access_keycard_auth, access_gateway)
 
 /obj/item/weapon/card/id/cmo
 	name = "Chief Medical Officer ID"
 	registered_name = "CMO"
 	icon_state = "CMO"
-	desc = "It gives off the faint smell of chloral, mixed with a backdraft of shittery."
+	desc = "It gives off the faint smell of chloral hydrate, mixed with a backdraft of equipment abuse."
 	access = list(access_medical, access_morgue, access_genetics, access_heads, access_chemistry, access_virology, access_cmo, access_surgery, access_RC_announce, access_keycard_auth, access_sec_doors, access_paramedic, access_maint_tunnels)
 
 /obj/item/weapon/card/id/rd
 	name = "Research Director ID"
 	registered_name = "RD"
 	icon_state = "RD"
-	desc = "If you put your ear to the card, you can faintly hear screaming, glomping, and mechs. What the fuck."
+	desc = "If you put your ear to the card, you can faintly hear screaming, glomping, and mechs. What the fuck?"
 	access = list(access_rd, access_heads, access_rnd, access_genetics, access_morgue, access_tox_storage, access_teleporter, access_sec_doors, access_science, access_robotics, access_xenobiology, access_ai_upload, access_RC_announce, access_keycard_auth, access_tcomsat, access_gateway)
 
 /obj/item/weapon/card/id/ce
@@ -591,7 +591,7 @@
 	name = "Pink ID"
 	registered_name = "HONK!"
 	icon_state = "clown"
-	desc = "Even looking at the card strikes you with deep fear."
+	desc = "Just looking at the card strikes you with deep fear."
 	access = list(access_clown, access_theatre, access_maint_tunnels)
 
 /obj/item/weapon/card/id/mime
@@ -606,18 +606,18 @@
 	registered_name = "Red Team Fighter"
 	assignment = "Red Team Fighter"
 	icon_state = "TDred"
-	desc = "This ID card is given to those who fought inside the thunderdome for the Red Team. Not many have lived to see one of those, even fewer lived to keep it."
+	desc = "This ID card is given to those who fought inside the thunderdome for the Red Team. Not many have lived to see one of these, and even fewer lived to keep them."
 
 /obj/item/weapon/card/id/thunderdome/green
 	name = "Thunderdome Green ID"
 	registered_name = "Green Team Fighter"
 	assignment = "Green Team Fighter"
 	icon_state = "TDgreen"
-	desc = "This ID card is given to those who fought inside the thunderdome for the Green Team. Not many have lived to see one of those, even fewer lived to keep it."
+	desc = "This ID card is given to those who fought inside the thunderdome for the Green Team. Not many have lived to see one of these, and even fewer lived to keep them."
 
 /obj/item/weapon/card/id/vox
 	name = "traveler's ID"
-	desc = "A traveler's ID card, required to legally travel in human-controlled territories. It's very worn out and the photo is almost unrecognizable."
+	desc = "A traveler's ID card, required to legally travel in human-controlled territories. It shows signs of wear and the photo is almost unrecognizable."
 	registered_name = "traveler"
 	assignment = "visitor"
 	icon_state = "trader"

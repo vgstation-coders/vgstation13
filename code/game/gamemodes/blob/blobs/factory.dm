@@ -1,7 +1,7 @@
 /obj/effect/blob/factory
 	name = "factory blob"
 	icon_state = "factory"
-	desc = "Some antibodies-producing blob creature thingy"
+	desc = "A part of a blob. It makes the sound of organic tissue being torn."
 	health = 100
 	maxhealth = 100
 	fire_resist = 2

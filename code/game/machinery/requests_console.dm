@@ -7,7 +7,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 
 /obj/machinery/requests_console
 	name = "requests console"
-	desc = "A console intended to send requests to diferent departments on the station."
+	desc = "A console intended to send requests to various departments on the station."
 	anchored = 1
 	icon = 'icons/obj/terminals.dmi'
 	icon_state = "req_comp0"

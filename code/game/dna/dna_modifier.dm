@@ -37,7 +37,7 @@
 /////////////////////////// DNA MACHINES
 /obj/machinery/dna_scannernew
 	name = "\improper DNA modifier"
-	desc = "It scans DNA structures."
+	desc = "A machine that scans the DNA structures of an organism for use with adjacent machinery. Can modify an organism's DNA as well as perform other functions with the use of a console."
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "scanner_0"
 	density = 1
@@ -100,7 +100,7 @@
 
 /obj/machinery/dna_scannernew/crowbarDestroy(mob/user)
 	if(occupant)
-		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupado.</span>")
+		to_chat(user, "<span class='warning'>\the [src] is occupied.</span>")
 		return
 	return ..()
 
@@ -134,7 +134,7 @@
 	if(usr.incapacitated() || usr.lying) //are you cuffed, dying, lying, stunned or other
 		return
 	if (!ishuman(usr) && !ismonkey(usr)) //Make sure they're a mob that has dna
-		to_chat(usr, "<span class='notice'> Try as you might, you can not climb up into the scanner.</span>")
+		to_chat(usr, "<span class='notice'>You cannot enter \the [src].</span>")
 		return
 	if (istype(usr, /mob/living/carbon/human/manifested))
 		to_chat(usr, "<span class='notice'> For some reason, the scanner is unable to read your genes.</span>")//to prevent a loophole that allows cultist to turn manifested ghosts into normal humans
@@ -275,7 +275,7 @@
 				if(ghost)
 					if(ghost.client && ghost.can_reenter_corpse)
 						ghost << 'sound/effects/adminhelp.ogg'
-						to_chat(ghost, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be resurrected/cloned!</span> \
+						to_chat(ghost, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
 							(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 				break
 			break
@@ -314,7 +314,7 @@
 		var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
 		if(ghost && ghost.client)
 			ghost << 'sound/effects/adminhelp.ogg'
-			to_chat(ghost, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be resurrected/cloned!</span> \
+			to_chat(ghost, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
 				(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[src];reentercorpse=1'>click here!</a>)</span>")
 
 /obj/machinery/dna_scannernew/ex_act(severity)
@@ -360,7 +360,7 @@
 
 /obj/machinery/computer/scan_consolenew
 	name = "DNA Modifier Access Console"
-	desc = "Scans DNA."
+	desc = "Uses a DNA modifier to manipulate DNA via radiation as well as perform other functions."
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "dna"
 	density = 1
@@ -644,7 +644,7 @@
 
 	if (href_list["pulseRadiation"])
 		if(connected.contains_husk())
-			to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+			to_chat(usr, "<span class='notice'>The organism inside does not have DNA.</span>")
 			return 1
 		irradiating = src.radiation_duration
 		var/lock_state = src.connected.locked
@@ -745,7 +745,7 @@
 
 	if (href_list["pulseUIRadiation"])
 		if(connected.contains_husk())
-			to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+			to_chat(usr, "<span class='notice'>The organism inside does not have DNA.</span>")
 			return 1
 		var/block = src.connected.occupant.dna.GetUISubBlock(src.selected_ui_block,src.selected_ui_subblock)
 
@@ -804,7 +804,7 @@
 
 	if (href_list["pulseSERadiation"])
 		if(connected.contains_husk())
-			to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+			to_chat(usr, "<span class='notice'>The organism inside does not have DNA.</span>")
 			return 1
 		var/block = src.connected.occupant.dna.GetSESubBlock(src.selected_se_block,src.selected_se_subblock)
 		//var/original_block=block
@@ -923,7 +923,7 @@
 
 		if (bufferOption == "saveUI")
 			if(connected.contains_husk())
-				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+				to_chat(usr, "<span class='notice'>The organism inside does not have DNA.</span>")
 				return 1
 			if(src.connected.occupant && src.connected.occupant.dna)
 				var/datum/dna2/record/databuf=new
@@ -937,7 +937,7 @@
 
 		if (bufferOption == "saveUIAndUE")
 			if(connected.contains_husk())
-				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+				to_chat(usr, "<span class='notice'>The organism inside does not have DNA.</span>")
 				return 1
 			if(src.connected.occupant && src.connected.occupant.dna)
 				var/datum/dna2/record/databuf=new
@@ -951,7 +951,7 @@
 
 		if (bufferOption == "saveSE")
 			if(connected.contains_husk())
-				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+				to_chat(usr, "<span class='notice'>The organism inside does not have DNA.</span>")
 				return 1
 			if(src.connected.occupant && src.connected.occupant.dna)
 				var/datum/dna2/record/databuf=new
@@ -976,7 +976,7 @@
 
 		if (bufferOption == "transfer")
 			if(connected.contains_husk())
-				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+				to_chat(usr, "<span class='notice'>The organism inside does not have DNA.</span>")
 				return 1
 			if (!src.connected.occupant || (M_NOCLONE in src.connected.occupant.mutations) || !src.connected.occupant.dna)
 				return

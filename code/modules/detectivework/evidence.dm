@@ -84,7 +84,7 @@ obj/item/weapon/evidencebag/attackby(obj/item/weapon/W as obj, mob/living/user a
 
 /obj/item/weapon/storage/box/evidence
 	name = "evidence bag box"
-	desc = "A box claiming to contain evidence bags."
+	desc = "A box containing evidence bags."
 	New()
 		new /obj/item/weapon/evidencebag(src)
 		new /obj/item/weapon/evidencebag(src)

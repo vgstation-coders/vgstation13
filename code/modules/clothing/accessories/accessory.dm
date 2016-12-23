@@ -279,7 +279,7 @@
 
 /obj/item/weapon/storage/box/holobadge
 	name = "holobadge box"
-	desc = "A box claiming to contain holobadges."
+	desc = "A box containing holobadges."
 
 /obj/item/weapon/storage/box/holobadge/New()
 	new /obj/item/clothing/accessory/holobadge(src)

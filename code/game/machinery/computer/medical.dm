@@ -515,7 +515,7 @@
 
 /obj/machinery/computer/med_data/laptop
 	name = "Medical Laptop"
-	desc = "Cheap Nanotrasen Laptop."
+	desc = "A cheap laptop connected to the medical records."
 	icon_state = "medlaptop"
 
 	machine_flags = 0

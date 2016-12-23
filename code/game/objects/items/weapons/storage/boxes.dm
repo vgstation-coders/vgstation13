@@ -48,7 +48,7 @@
 
 /obj/item/weapon/storage/box/surveillance
 	name = "\improper DromedaryCo packet"
-	desc = "A packet of six imported DromedaryCo cancer sticks. A label on the packaging reads, \"Wouldn't a slow death make a change?\""
+	desc = "A packet of six imported DromedaryCo cigarettes. A label on the packaging reads: \"Wouldn't a slow death make a change?\""
 	icon = 'icons/obj/cigarettes.dmi'
 	icon_state = "Dpacket"
 	item_state = "Dpacket"
@@ -98,7 +98,7 @@
 
 /obj/item/weapon/storage/box/gloves
 	name = "box of latex gloves"
-	desc = "Contains white gloves."
+	desc = "A box containing white latex gloves. gloves."
 	icon_state = "latex"
 
 /obj/item/weapon/storage/box/gloves/New()
@@ -108,7 +108,7 @@
 
 /obj/item/weapon/storage/box/bgloves
 	name = "box of black gloves"
-	desc = "Contains black gloves."
+	desc = "A box containing black gloves."
 	icon_state = "bgloves"
 
 /obj/item/weapon/storage/box/bgloves/New()
@@ -118,7 +118,7 @@
 
 /obj/item/weapon/storage/box/sunglasses
 	name = "box of sunglasses"
-	desc = "Contains sunglasses."
+	desc = "A box containing sunglasses."
 	icon_state = "sunglass"
 
 /obj/item/weapon/storage/box/sunglasses/New()
@@ -128,7 +128,7 @@
 
 /obj/item/weapon/storage/box/masks
 	name = "sterile masks"
-	desc = "This box contains masks of sterility."
+	desc = "This box contains sterile masks."
 	icon_state = "sterile"
 
 /obj/item/weapon/storage/box/masks/New()
@@ -139,7 +139,7 @@
 
 /obj/item/weapon/storage/box/syringes
 	name = "syringes"
-	desc = "A biohazard alert warning is printed on the box"
+	desc = "A box containing syringes. A reminder label warns of syringes becoming potential biohazards when not properly sanitized."
 	icon_state = "syringe"
 
 /obj/item/weapon/storage/box/syringes/New()
@@ -181,7 +181,7 @@
 
 /obj/item/weapon/storage/box/flashbangs
 	name = "box of flashbangs (WARNING)"
-	desc = "<B>WARNING: These devices are extremely dangerous and can cause blindness or deafness in repeated use.</B>"
+	desc = "<span class='userdanger'>WARNING: These devices are extremely dangerous and can cause blindness or deafness in repeated use.</span>"
 	icon_state = "flashbang"
 
 /obj/item/weapon/storage/box/flashbangs/New()
@@ -209,7 +209,7 @@
 
 /obj/item/weapon/storage/box/emps
 	name = "emp grenades"
-	desc = "A box with 5 emp grenades."
+	desc = "A box containing emp grenades."
 	icon_state = "flashbang"
 
 /obj/item/weapon/storage/box/emps/New()
@@ -219,7 +219,7 @@
 
 /obj/item/weapon/storage/box/wind
 	name = "wind grenades"
-	desc = "A box containing 3 wind grenades"
+	desc = "A box containing wind grenades."
 	icon_state = "flashbang"
 
 /obj/item/weapon/storage/box/wind/New()
@@ -229,7 +229,7 @@
 
 /obj/item/weapon/storage/box/foam
 	name = "metal foam grenades"
-	desc = "A box containing 7 metal foam grenades"
+	desc = "A box containing metal foam grenades."
 	icon_state = "metalfoam"
 
 /obj/item/weapon/storage/box/foam/New()
@@ -327,7 +327,7 @@
 
 /obj/item/weapon/storage/box/cups
 	name = "box of paper cups"
-	desc = "It has pictures of paper cups on the front."
+	desc = "It has a picture of a paper cup on the front."
 
 /obj/item/weapon/storage/box/cups/New()
 	..()
@@ -337,7 +337,7 @@
 
 /obj/item/weapon/storage/box/donkpockets
 	name = "box of donk-pockets"
-	desc = "<B>Instructions:</B> <I>Heat in microwave. Product will cool if not eaten within seven minutes.</I>"
+	desc = "<span class='notice'>Instructions: Heat in microwave. Product will cool if not eaten within seven minutes.</span>"
 	icon_state = "donk_kit"
 	var/pocket_amount = 6
 
@@ -394,7 +394,7 @@
 
 /obj/item/weapon/storage/box/ids
 	name = "spare IDs"
-	desc = "Has so many empty IDs."
+	desc = "Contains blank identification cards."
 	icon_state = "id"
 
 /obj/item/weapon/storage/box/ids/New()
@@ -425,7 +425,7 @@
 
 /obj/item/weapon/storage/box/mousetraps
 	name = "box of Pest-B-Gon Mousetraps"
-	desc = "<span class='danger'>WARNING:</span> <I>Keep out of reach of children</I>."
+	desc = "<span class='userdanger'>WARNING: Keep out of reach of children.</span>"
 	icon_state = "mousetraps"
 
 /obj/item/weapon/storage/box/mousetraps/New()

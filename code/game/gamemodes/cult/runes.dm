@@ -614,7 +614,7 @@
 	D.canmove = 0
 	var/atom/movable/overlay/animation = null
 
-	usr.visible_message("<span class='warning'> A shape forms in the center of the rune. A shape of... a man.<BR>The world feels blury as your soul permeates this temporary body.</span>", \
+	usr.visible_message("<span class='warning'> A shape forms in the center of the rune. A shape of... a man.<BR>The world feels blurry as your soul permeates this temporary body.</span>", \
 	"<span class='warning'> A shape forms in the center of the rune. A shape of... a man.</span>", \
 	"<span class='warning'>You hear liquid flowing.</span>")
 
@@ -1309,7 +1309,7 @@
 		usr.whisper("Sa tatha najin")
 		if(ishuman(user))
 			var/mob/living/carbon/human/P = user
-			usr.visible_message("<span class='warning'> In flash of red light, a set of armor appears on [usr]...</span>", \
+			usr.visible_message("<span class='warning'> In flash of red light, a set of armor appears on [usr].</span>", \
 			"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor.</span>")
 			var/datum/game_mode/cult/mode_ticker = ticker.mode
 			if(isplasmaman(P))
