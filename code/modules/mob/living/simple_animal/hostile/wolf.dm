@@ -145,11 +145,14 @@
 			if(hunger_status < WELLFED)
 				visible_message("<span class = 'notice'>\The [src] starts to take a bite out of \the [target].</span>")
 				stop_automated_movement = 1
-				if(do_after(src, target, 50, needhand = FALSE))
-					playsound(get_turf(src), 'sound/weapons/bite.ogg', 50, 1)
-					var/damage = rand(melee_damage_lower, melee_damage_upper)
-					mob_target.adjustBruteLoss(damage)
-					nutrition += (damage*3)
+				var/target_loc = mob_target.loc
+				var/self_loc = src.loc
+				spawn(50)
+					if(mob_target.loc == target_loc && self_loc == src.loc) //Not moved
+						playsound(get_turf(src), 'sound/weapons/bite.ogg', 50, 1)
+						var/damage = rand(melee_damage_lower, melee_damage_upper)
+						mob_target.adjustBruteLoss(damage)
+						nutrition += (damage*3)
 					return
 			return
 	. =..()

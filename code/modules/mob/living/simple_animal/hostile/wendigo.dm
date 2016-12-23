@@ -11,7 +11,6 @@
 #define HUMEVOLV 1
 #define EVOLEVOLV 3
 
-
 /mob/living/simple_animal/hostile/wendigo
 	name = "wendigo"
 	desc = "Thought to be just a cautionary tale, now moreso than ever."
@@ -55,20 +54,24 @@
 		if(mob_target.isDead() && !istype(mob_target, /mob/dead/observer))
 			visible_message("<span class = 'notice'>\The [src] starts to take a bite out of \the [target].</span>")
 			stop_automated_movement = 1
-			if(do_after(src, mob_target, 50, needhand = FALSE))
-				playsound(get_turf(src), 'sound/weapons/bite.ogg', 50, 1)
-				var/damage = rand(melee_damage_lower, melee_damage_upper)
-				mob_target.adjustBruteLoss(damage)
-				if(health < maxHealth)
-					health = min(maxHealth,(health+damage))
-
-				if(ishuman(mob_target))
+			var/target_loc = mob_target.loc
+			var/self_loc = src.loc
+			spawn(50)
+				if(mob_target.loc == target_loc && self_loc == src.loc) //Not moved
+					playsound(get_turf(src), 'sound/weapons/bite.ogg', 50, 1)
+					var/damage = rand(melee_damage_lower, melee_damage_upper)
+					mob_target.adjustBruteLoss(damage)
+					if(health < maxHealth)
+						health = min(maxHealth,(health+damage))
 					if(mob_target.health < -400)
 						visible_message("<span class = 'warning'>\The [src] is trying to eat \The [mob_target]!</span>","<span class = 'warning'>You hear crunching.</span>")
-						if(do_after(src, mob_target, 50, needhand = FALSE))
-							consumes += 1
-							names += mob_target.real_name
-							qdel(mob_target)
+						spawn(50)
+							if(mob_target.loc == target_loc && self_loc == src.loc)
+								if(ishuman(mob_target))
+									consumes += 1
+									names += mob_target.real_name
+								qdel(mob_target)
+
 
 			return
 	. =..()
@@ -133,18 +136,25 @@
 
 /mob/living/simple_animal/hostile/wendigo/evolved/check_evolve()
 	if(consumes > EVOLEVOLV)
-		var/number_of_alpha
-		for(var/mob/living/simple_animal/hostile/wendigo/alpha/A in world)
-			var/datum/zLevel/L = get_z_level(A)
-			if(istype(L,/datum/zLevel/centcomm))
-				continue //Damn it admins
-			if(A.isDead())
-				continue
-			number_of_alpha += 1
-		if(!number_of_alpha)
+		if(wendigo_alpha)
+			var/alpha_count = 0
+			for(var/mob/living/simple_animal/hostile/wendigo/alpha/A in wendigo_alpha)
+				var/datum/zLevel/L = get_z_level(A)
+				if(istype(L,/datum/zLevel/centcomm))
+					continue
+				else
+					if(A.isDead())
+						continue
+					alpha_count += 1
+
+			if(alpha_count)
+				return
+
 			var/mob/living/simple_animal/hostile/wendigo/alpha/new_wendigo = new /mob/living/simple_animal/hostile/wendigo/alpha(src.loc)
 			new_wendigo.names = names
 			qdel(src)
+
+var/list/wendigo_alpha = list()
 
 /mob/living/simple_animal/hostile/wendigo/alpha
 	desc = "You can't help but feel that, no matter what, you should have brought a bigger gun."
@@ -167,6 +177,14 @@
 	var/punch_throw_chance = 25
 	var/punch_throw_speed = 1
 	var/punch_throw_range = 10
+
+/mob/living/simple_animal/hostile/wendigo/alpha/New()
+	..()
+	wendigo_alpha += src
+
+/mob/living/simple_animal/hostile/wendigo/alpha/Die()
+	..()
+	wendigo_alpha -= src
 
 /mob/living/simple_animal/hostile/wendigo/alpha/Life()
 	..()
