@@ -457,7 +457,7 @@
 
 /datum/disease2/effect/babel/activate(var/mob/living/carbon/mob)
 	if(mob.languages.len <= 1)
-		to_chat(mob, "You realize your knowledge of language is just fine, and that you were panicking over nothing.")
+		to_chat(mob, "Your knowledge of language is just fine.")
 		return
 
 	for(var/datum/language/L in mob.languages)
