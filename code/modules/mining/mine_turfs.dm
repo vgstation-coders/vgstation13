@@ -28,7 +28,7 @@
 
 /turf/unsimulated/mineral/proc/return_icon_state(var/direction)
 	var/icon_modifier = "rock_"
-	if(mined_type = /turf/snow)
+	if(mined_type == /turf/snow)
 		icon_modifier = "snow_rock_"
 	switch(direction)
 		if(NORTH)
