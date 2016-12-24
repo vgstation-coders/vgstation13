@@ -348,8 +348,8 @@
 	else
 		to_chat(user, "<span class='warning'>You can't aim the gun properly from this location!</span>")
 
-/obj/item/weapon/gun/check_pai_can_fire(mob/living/silicon/pai/user)	//for various restrictions on when pAIs can fire a gun into which they're integrated
-	if(get_holder_of_type(user, /obj/structure/disposalpipe) || get_holder_of_type(user, /obj/machinery/atmospherics/pipe)	//can't fire the gun from inside pipes or disposal pipes
+/obj/item/weapon/gun/proc/check_pai_can_fire(mob/living/silicon/pai/user)	//for various restrictions on when pAIs can fire a gun into which they're integrated
+	if(get_holder_of_type(user, /obj/structure/disposalpipe) || get_holder_of_type(user, /obj/machinery/atmospherics/pipe))	//can't fire the gun from inside pipes or disposal pipes
 		return TRUE
 	else
 		return FALSE
