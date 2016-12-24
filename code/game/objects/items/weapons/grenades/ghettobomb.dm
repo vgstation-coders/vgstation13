@@ -148,26 +148,35 @@
 	if(shrapnel_list.len > 0)
 		var/atom/target
 		var/atom/curloc = get_turf(src)
-		var/list/possible_targets= new()
+		var/list/possible_targets= trange(7, curloc)
 		var/list/bodyparts = list("head","chest","groin","l_arm","r_arm","l_hand","r_hand","l_leg","r_leg","l_foot","r_foot")
 		for(var/obj/item/shrapnel in shrapnel_list)
-			if(shrapnel.shrapnel_amount >0)
-				var/amount = shrapnel.shrapnel_amount
-				possible_targets = trange(6, curloc)
-				while(amount > 0)
-					amount--
-					target =pick(possible_targets)
-					var/obj/item/projectile/bullet/shrapnel_projectile = new shrapnel.shrapnel_type(src)
-					shrapnel_projectile.forceMove(curloc)
-					shrapnel_projectile.kill_count = rand(6,10)//killcount=max squares traveled before the projectile is deleted. Limits shrapnel range
-					shrapnel_projectile.launch_at(target,bodyparts[rand(1,bodyparts.len)],curloc,src)
-					qdel(shrapnel)
-
-			else
-				possible_targets = trange(9, curloc)
+			if(istype(shrapnel, /obj/item/ammo_casing))// If the shrapnel is a bullet casing it will be fired
+				var/obj/item/ammo_casing/shrapnel_bullet = shrapnel //shitcode but otherwise BB is undefined var
+				var/obj/item/projectile/shrapnel_projectile = null
 				target =pick(possible_targets)
-				shrapnel.forceMove(curloc)
-				shrapnel.throw_at(target,9,10)
+				if(shrapnel_bullet.BB)
+					shrapnel_projectile = shrapnel_bullet.BB
+				else
+					shrapnel_projectile = new /obj/item/projectile/bullet/shrapnel/small
+				shrapnel_projectile.forceMove(curloc)
+				shrapnel_projectile.launch_at(target,bodyparts[rand(1,bodyparts.len)],curloc,src)
+				qdel(shrapnel) // the casing is disintegrated in the explosion
+			else // elif doesnt work even though its in the dm ref
+				if(shrapnel.shrapnel_amount >0)
+					var/amount = shrapnel.shrapnel_amount
+					while(amount > 0)
+						amount--
+						target =pick(possible_targets)
+						var/obj/item/projectile/bullet/shrapnel_projectile = new shrapnel.shrapnel_type(src)
+						shrapnel_projectile.forceMove(curloc)
+						shrapnel_projectile.kill_count = rand(6,10)//killcount=max squares traveled before the projectile is deleted. Limits shrapnel range
+						shrapnel_projectile.launch_at(target,bodyparts[rand(1,bodyparts.len)],curloc,src)
+						qdel(shrapnel)
+				else
+					target =pick(possible_targets)
+					shrapnel.forceMove(curloc)
+					shrapnel.throw_at(target,9,10)
 
 /obj/item/weapon/grenade/iedcasing/examine(mob/user)
 	..()
