@@ -34,5 +34,6 @@
 	research_shuttle.name = "mine cage" //There is only one "shuttle" on taxi - the mine cage
 	research_shuttle.req_access = list() //It's shared by miners and researchers, so remove access requirements
 
+
 ////////////////////////////////////////////////////////////////
 #include "taxioutpost.dmm"

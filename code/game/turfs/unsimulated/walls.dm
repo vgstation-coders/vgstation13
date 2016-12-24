@@ -22,6 +22,9 @@
 	icon_state = "rock"
 	canSmoothWith = null
 
+/turf/unsimulated/wall/rock/underground
+	icon_state = "cave_wall"
+
 /turf/unsimulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
 	if (!user.dexterity_check())
