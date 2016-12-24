@@ -53,6 +53,10 @@ turf/unsimulated/mineral/air
 	icon_state = "snow_rock"
 	mined_type = /turf/snow/permafrost
 
+/turf/unsimulated/mineral/underground
+	icon_state = "cave_wall"
+	mined_type = /turf/unsimulated/floor/asteroid/underground
+
 /turf/unsimulated/mineral/Destroy()
 	return
 
@@ -635,6 +639,17 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 						if(WEST)
 							src.overlays += image('icons/turf/walls.dmi', "snow_rock_side_w", layer=6)
 
+				else if(M.mined_type == /turf/unsimulated/floor/asteroid/underground)
+					switch(dir)
+						if(NORTH)
+							src.overlays += image('icons/turf/walls.dmi', "cave_wall_S")
+						if(SOUTH)
+							src.overlays += image('icons/turf/walls.dmi', "cave_wall_N", layer=6)
+						if(EAST)
+							src.overlays += image('icons/turf/walls.dmi', "cave_wall_W", layer=6)
+						if(WEST)
+							src.overlays += image('icons/turf/walls.dmi', "cave_wall_E", layer=6)
+
 				else
 					switch(dir)
 						if(NORTH)
@@ -726,9 +741,17 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	icon_state = "snow_rock"
 	mined_type = /turf/snow/permafrost
 
+/turf/unsimulated/mineral/random/underground
+	icon_state = "cave_wall"
+	mined_type = /turf/unsimulated/floor/asteroid/underground
+
 /turf/unsimulated/mineral/random/snow/New()
 	..()
 	icon_state = pick("snow_rock","snow_rock1","snow_rock2","snow_rock3","snow_rock4")
+
+/turf/unsimulated/mineral/random/underground/New()
+	..()
+	icon_state = "cave_wall"
 
 
 /turf/unsimulated/mineral/random/high_chance
@@ -762,9 +785,17 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	icon_state = "snow_rock"
 	mined_type = /turf/snow/permafrost
 
+/turf/unsimulated/mineral/random/high_chance/underground
+	icon_state = "cave_wall"
+	mined_type = /turf/unsimulated/floor/asteroid/underground
+
 /turf/unsimulated/mineral/random/high_chance/snow/New()
 	..()
 	icon_state = pick("snow_rock","snow_rock1","snow_rock2","snow_rock3","snow_rock4")
+
+/turf/unsimulated/mineral/random/high_chance/underground/New()
+	..()
+	icon_state = "cave_wall"
 
 /turf/unsimulated/mineral/random/high_chance_clown
 	icon_state = "rock(clown)"
@@ -799,9 +830,17 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	icon_state = "snow_rock"
 	mined_type = /turf/snow/permafrost
 
+/turf/unsimulated/mineral/random/high_chance_clown/underground
+	icon_state = "cave_wall"
+	mined_type = /turf/unsimulated/floor/asteroid/underground
+
 /turf/unsimulated/mineral/random/high_chance_clown/snow/New()
 	..()
 	icon_state = pick("snow_rock","snow_rock1","snow_rock2","snow_rock3","snow_rock4")
+
+/turf/unsimulated/mineral/random/high_chance_clown/underground/New()
+	..()
+	icon_state = "cave_wall"
 
 /turf/unsimulated/mineral/random/Destroy()
 	return
@@ -1303,6 +1342,17 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 						if(WEST)
 							src.overlays += image('icons/turf/walls.dmi', "snow_rock_side_w", layer=6)
 
+				else if(M.mined_type == /turf/unsimulated/floor/asteroid/underground)
+					switch(dir)
+						if(NORTH)
+							src.overlays += image('icons/turf/walls.dmi', "cave_wall_S")
+						if(SOUTH)
+							src.overlays += image('icons/turf/walls.dmi', "cave_wall_N", layer=6)
+						if(EAST)
+							src.overlays += image('icons/turf/walls.dmi', "cave_wall_W", layer=6)
+						if(WEST)
+							src.overlays += image('icons/turf/walls.dmi', "cave_wall_E", layer=6)
+
 				else
 					switch(dir)
 						if(NORTH)
@@ -1341,3 +1391,52 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		A = get_step(src, SOUTH)
 		A.updateMineralOverlays()
 	src.updateMineralOverlays()
+
+/turf/unsimulated/floor/asteroid/underground
+	temperature = 123.15
+	oxygen = MOLES_O2STANDARD_ARCTIC
+	nitrogen = MOLES_N2STANDARD_ARCTIC
+	dug = 1
+	icon_state = "cavefl_1"
+
+/turf/unsimulated/floor/asteroid/underground/New()
+	..()
+	icon_state = pick("cavefl_1","cavefl_2","cavefl_3","cavefl_4")
+/turf/unsimulated/floor/asteroid/underground/updateMineralOverlays()
+	src.overlays.len = 0
+	spawn(1)
+		for(var/dir in cardinal)
+			if(istype(get_step(src,dir), /turf/unsimulated/mineral))
+				var/turf/unsimulated/mineral/M = get_step(src,dir)
+				if(M.mined_type == /turf/snow/permafrost)
+					switch(dir)
+						if(NORTH)
+							src.overlays += image('icons/turf/walls.dmi', "snow_rock_side_n")
+						if(SOUTH)
+							src.overlays += image('icons/turf/walls.dmi', "snow_rock_side_s", layer=6)
+						if(EAST)
+							src.overlays += image('icons/turf/walls.dmi', "snow_rock_side_e", layer=6)
+						if(WEST)
+							src.overlays += image('icons/turf/walls.dmi', "snow_rock_side_w", layer=6)
+
+				else if(M.mined_type == /turf/unsimulated/floor/asteroid/underground)
+					switch(dir)
+						if(NORTH)
+							src.overlays += image('icons/turf/walls.dmi', "cave_wall_S")
+						if(SOUTH)
+							src.overlays += image('icons/turf/walls.dmi', "cave_wall_N", layer=6)
+						if(EAST)
+							src.overlays += image('icons/turf/walls.dmi', "cave_wall_W", layer=6)
+						if(WEST)
+							src.overlays += image('icons/turf/walls.dmi', "cave_wall_E", layer=6)
+
+				else
+					switch(dir)
+						if(NORTH)
+							src.overlays += image('icons/turf/walls.dmi', "rock_side_n")
+						if(SOUTH)
+							src.overlays += image('icons/turf/walls.dmi', "rock_side_s", layer=6)
+						if(EAST)
+							src.overlays += image('icons/turf/walls.dmi', "rock_side_e", layer=6)
+						if(WEST)
+							src.overlays += image('icons/turf/walls.dmi', "rock_side_w", layer=6)
