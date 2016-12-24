@@ -686,7 +686,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/gun/energy/laser/smart)
 	cost = 60
 	containertype = /obj/structure/closet/crate/secure/weapon
-	containername = "Smart laser gun crate"
+	containername = "smart laser gun crate"
 	access = access_armory
 	group = "Security"
 
