@@ -65,7 +65,7 @@ var/datum/controller/gameticker/ticker
 		"sound/music/carmenmirandasghost.ogg",
 		))
 	if(map.base_turf == /turf/snow)
-		var/path = "sound/music/xmas"
+		var/path = "sound/music/xmas/"
 		var/list/filenames = flist(path)
 		for(var/filename in filenames)
 			if(copytext(filename, length(filename)) == "/")

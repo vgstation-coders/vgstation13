@@ -63,6 +63,10 @@
 	drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, 1, user)
 	qdel(src)
 
+/obj/item/weapon/ore/glass/cave
+	name = "cave sand"
+	icon_state = "cavesand"
+
 /obj/item/weapon/ore/plasma
 	name = "Plasma ore"
 	icon_state = "Plasma ore"

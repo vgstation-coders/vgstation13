@@ -176,8 +176,9 @@ var/global/list/accessable_z_levels = list()
 	name = "mining"
 
 /datum/zLevel/mining/snow
-	base_turf = /turf/snow
+	base_turf = /turf/unsimulated/floor/asteroid/underground
 	procedurally_generate = SNOWMINE_PROCEDURAL_GENERATION
+	movementJammed = 1
 
 //Currently experimental, contains nothing worthy of interest
 /datum/zLevel/desert
