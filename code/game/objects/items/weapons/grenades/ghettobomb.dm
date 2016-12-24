@@ -127,11 +127,28 @@
 /obj/item/weapon/grenade/iedcasing/prime() //Blowing that can up
 	update_mob()
 	explosion(get_turf(src.loc),-1,0,2)
+	process_shrapnel()
+
+	if(istype(loc, /obj/item/weapon/legcuffs/beartrap))
+		var/obj/item/weapon/legcuffs/beartrap/boomtrap = loc
+		if(istype(boomtrap.loc, /mob/living/carbon/human))
+			var/mob/living/carbon/human/H = loc.loc
+			if(H.legcuffed == boomtrap)
+				var/datum/organ/external/leg = H.get_organ("[pick("l","r")]_leg") //Either left or right leg
+				if(leg && !(leg.status & ORGAN_DESTROYED))
+					leg.droplimb(1,0)
+
+				qdel(H.legcuffed)
+				H.legcuffed = null
+	qdel(src)
+
+
+/obj/item/weapon/grenade/iedcasing/proc/process_shrapnel()
+
 	if(shrapnel_list.len > 0)
 		var/atom/target
 		var/atom/curloc = get_turf(src)
 		var/list/possible_targets= new()
-
 		var/list/bodyparts = list("head","chest","groin","l_arm","r_arm","l_hand","r_hand","l_leg","r_leg","l_foot","r_foot")
 		for(var/obj/item/shrapnel in shrapnel_list)
 			if(shrapnel.shrapnel_amount >0)
@@ -150,20 +167,7 @@
 				possible_targets = trange(9, curloc)
 				target =pick(possible_targets)
 				shrapnel.forceMove(curloc)
-				shrapnel.throw_at(target,100,10)
-
-	if(istype(loc, /obj/item/weapon/legcuffs/beartrap))
-		var/obj/item/weapon/legcuffs/beartrap/boomtrap = loc
-		if(istype(boomtrap.loc, /mob/living/carbon/human))
-			var/mob/living/carbon/human/H = loc.loc
-			if(H.legcuffed == boomtrap)
-				var/datum/organ/external/leg = H.get_organ("[pick("l","r")]_leg") //Either left or right leg
-				if(leg && !(leg.status & ORGAN_DESTROYED))
-					leg.droplimb(1,0)
-
-				qdel(H.legcuffed)
-				H.legcuffed = null
-	qdel(src)
+				shrapnel.throw_at(target,9,10)
 
 /obj/item/weapon/grenade/iedcasing/examine(mob/user)
 	..()
