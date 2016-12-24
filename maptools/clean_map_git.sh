@@ -10,6 +10,7 @@ MAPFILES=(
 	$MAPROOT"metaclub.dmm"
 	$MAPROOT"busstation.dmm"
 	$MAPROOT"bagelstation.dmm"
+	$MAPROOT"taxioutpost.dmm"
 )
 for MAPFILE in "${MAPFILES[@]}"
 do

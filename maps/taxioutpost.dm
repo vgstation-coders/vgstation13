@@ -35,4 +35,4 @@
 	research_shuttle.req_access = list() //It's shared by miners and researchers, so remove access requirements
 
 ////////////////////////////////////////////////////////////////
-#include "snowtaxi.dmm"
+#include "taxioutpost.dmm"
