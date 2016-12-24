@@ -33,6 +33,7 @@
 	desc = "The narkotiki camo pattern will come useful for botany raids."
 	icon_state = "nr_vest"
 	item_state = "nr_vest"
+	heat_conductivity = INS_ARMOUR_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/suit/armor/riot
 	name = "Riot Suit"

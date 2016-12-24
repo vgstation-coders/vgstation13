@@ -88,6 +88,7 @@
 	icon_state = "nr_mask"
 	item_state = "nr_mask"
 	body_parts_covered = FACE
+	heat_conductivity = INS_MASK_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/mask/pig
 	name = "pig mask"
