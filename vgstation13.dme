@@ -2076,7 +2076,6 @@
 #include "interface\web\interface.dms"
 #include "maprendering\maprendering.dm"
 #include "maps\_map.dm"
-#include "maps\snowtaxi.dm"
 #include "maps\defficiency\areas.dm"
 #include "maps\defficiency\pipes.dm"
 #include "maps\randomvaults\dance_revolution.dm"
