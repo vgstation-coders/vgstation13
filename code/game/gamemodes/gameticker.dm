@@ -63,11 +63,14 @@ var/global/datum/controller/gameticker/ticker
 		"sound/music/starman.ogg",
 		))
 	if(map.base_turf == /turf/snow)
-		oursong = file(pick(
-		"sound/music/xmas/scape_santa",
-		"sound/music/xmas/carolofthebells",
-		))
-	login_music = fcopy_rsc(oursong)
+		var/path = "sound/music/xmas"
+		var/list/filenames = flist(path)
+		for(var/filename in filenames)
+			if(copytext(filename, length(filename)) == "/")
+				filenames -= filename
+		login_music = file("[path][pick(filenames)]")
+	else
+		login_music = fcopy_rsc(oursong)
 	// Wait for MC to get its shit together
 	while(!master_controller.initialized)
 		sleep(1) // Don't thrash the poor CPU
