@@ -68,7 +68,7 @@ var/global/datum/controller/gameticker/ticker
 		for(var/filename in filenames)
 			if(copytext(filename, length(filename)) == "/")
 				filenames -= filename
-		login_music = file("[path][pick(filenames)]")
+		oursong = file("[path][pick(filenames)]")
 
 	login_music = fcopy_rsc(oursong)
 	// Wait for MC to get its shit together
