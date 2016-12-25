@@ -386,7 +386,7 @@
 			if(1)
 				steps = 1
 			if(3)
-				steps = 3 //Yes this is right
+				steps = 2
 			if(5)
 				steps = 3
 			if(7)
