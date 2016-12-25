@@ -534,6 +534,7 @@ datum/controller/game_controller/recover()		//Mostly a placeholder for now.
 					chance = 1250 // make sure all items which have a chance of being spawned have the CANT_LOCK_TO_AT_ALL_EVEN_CONCIEVABLY flag in lockflags or the game will run out of lists
 					rmap_name = "snow"
 				if(SNOWMINE_PROCEDURAL_GENERATION)
+					return
 //					list_of_turfs = mineral_turfs_underground
 //					list_of_options = list(new /obj/procedural_generator/cellular_automata/spider_cave(mapspawed = 0) = 100)
 //					chance = 60
