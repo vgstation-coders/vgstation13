@@ -49,6 +49,8 @@
 
 	// When this object moves. (args: loc)
 	var/event/on_moved
+	var/obj/shadow/shadow
+
 
 /atom/movable/New()
 	. = ..()
@@ -60,11 +62,11 @@
 		materials = getFromPool(/datum/materials, src)
 		for(var/matID in starting_materials)
 			materials.addAmount(matID, starting_materials[matID])
-
-	locked_atoms            = list()
-	locking_categories      = list()
-	locking_categories_name = list()
-	on_moved = new("owner"=src)
+	if(!(lockflags & CANT_LOCK_TO_AT_ALL_EVEN_CONCIEVABLY))
+		locked_atoms            = list()
+		locking_categories      = list()
+		locking_categories_name = list()
+		on_moved = new("owner"=src)
 
 /atom/movable/Destroy()
 	gcDestroyed = "Bye, world!"
@@ -670,7 +672,7 @@
 
 /atom/movable/proc/process_inertia(turf/start)
 	set waitfor = 0
-	if(Process_Spacemove(1))
+	if(Process_Spacemove(1) && !start.slippy_by_default())
 		inertia_dir  = 0
 		return
 

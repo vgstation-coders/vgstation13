@@ -209,3 +209,4 @@
 	icon_state = "nr_helmet"
 	item_state = "nr_helmet"
 	body_parts_covered = EARS|HEAD
+	heat_conductivity = INS_HELMET_HEAT_CONDUCTIVITY

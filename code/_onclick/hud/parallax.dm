@@ -29,6 +29,11 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 	screen_loc = "CENTER,CENTER"
 	globalscreen = 1
 
+/obj/screen/plane_master/snow
+	appearance_flags = PLANE_MASTER | KEEP_TOGETHER
+	alpha = 80
+	plane = SNOW_SHADOW_PLANE
+
 /obj/screen/plane_master/parallax_master
 	plane = PLANE_SPACE_PARALLAX
 	blend_mode = BLEND_MULTIPLY

@@ -219,6 +219,9 @@
 	if(!tooltips)
 		tooltips = new /datum/tooltip(src)
 
+	if(map.base_turf == /turf/snow)
+		snow = new()
+
 	//////////////
 	//DISCONNECT//
 	//////////////

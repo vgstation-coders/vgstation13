@@ -135,7 +135,8 @@
 			objects++
 			if(Obj.flags & PROXMOVE)
 				spawn( 0 )
-					Obj.HasProximity(A, 1)
+					if(Obj && A)
+						Obj.HasProximity(A, 1)
 	// THIS IS NOW TRANSIT STUFF
 	if ((!(A) || src != A.loc))
 		return
@@ -243,6 +244,9 @@
 /turf/proc/return_siding_icon_state()		//used for grass floors, which have siding.
 	return 0
 
+/turf/proc/slippy_by_default()
+	return 0
+
 /turf/proc/inertial_drift(atom/movable/A as mob|obj)
 	if(!(A.last_move))
 		return
@@ -260,6 +264,13 @@
 
 // override for space turfs, since they should never hide anything
 /turf/space/levelupdate()
+	update_holomap_planes()
+	for(var/obj/O in src)
+		if(O.level == 1)
+			O.hide(0)
+
+// override for snow turfs, since they should never hide anything
+/turf/snow/levelupdate()
 	update_holomap_planes()
 	for(var/obj/O in src)
 		if(O.level == 1)
