@@ -537,6 +537,7 @@ datum/controller/game_controller/recover()		//Mostly a placeholder for now.
 					list_of_turfs = mineral_turfs_underground
 					list_of_options = list(new /obj/procedural_generator/cellular_automata/spider_cave(mapspawed = 0) = 100)
 					chance = 60
+					continue
 
 			log_startup_progress("Procedurally generating a [rmap_name] map on z level: [current_zlevel.name]")
 			watch = start_watch()

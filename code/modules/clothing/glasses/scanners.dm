@@ -135,6 +135,9 @@
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/glasses/scanner/meson/enable(var/mob/C)
+	if(C.z == map.zAsteroid && map.base_turf == /turf/snow)
+		to_chat(C,"<span class='warning'>The mesons flicker on and off with a fizzle. They don't appear to work underground.</span>")
+		return
 	eyeprot = 2
 	vision_flags |= SEE_TURFS
 	see_invisible |= SEE_INVISIBLE_MINIMUM
