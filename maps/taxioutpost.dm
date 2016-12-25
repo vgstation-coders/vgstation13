@@ -27,6 +27,7 @@
 		/datum/zLevel/mining/snow,
 		)
 	enabled_jobs = list(/datum/job/trader)
+	dorf = 1
 
 /datum/map/active/New()
 	.=..()

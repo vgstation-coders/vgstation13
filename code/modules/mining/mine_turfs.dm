@@ -352,7 +352,7 @@ var/list/accepted_types = list(/turf/simulated/floor, /turf/space, /turf/simulat
 		return attack_hand(user)
 
 /turf/unsimulated/mineral/proc/DropMineral()
-	if(!mineral)
+	if(!mineral || !mineral.ore)
 		return
 
 	var/obj/item/weapon/ore/O = new mineral.ore (src)

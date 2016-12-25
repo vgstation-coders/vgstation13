@@ -6,6 +6,12 @@
 /atom/movable/proc/has_shadow()
 	return density // If something has density, we can assume it's A) not on the ground and B) large enough to cast a shadow. Bit of a hacky way to do it, but better than writing an exception for everything
 
+
+/mob/living/carbon/has_shadow()
+	if(lying)
+		return 0
+	. = ..()
+
 /obj/structure/closet/has_shadow()
 	return 1
 
@@ -22,6 +28,7 @@
 	shadow.alpha = SHADOW_ALPHA
 	shadow.color = "#000000"
 	shadow.appearance_flags = KEEP_TOGETHER
+	shadow.mouse_opacity = 0
 
 
 	var/matrix/M = matrix()
@@ -47,3 +54,4 @@
 	plane = ABOVE_HUMAN_PLANE
 	layer = SHADOW_LAYER
 	density = 0
+
