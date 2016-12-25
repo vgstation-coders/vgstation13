@@ -382,7 +382,7 @@
 		return 0
 	var/steps = 0
 	if(!step)
-		steps = round_up(current_size/2)
+		steps = Ceiling(current_size/2)
 	else
 		steps = step
 	var/list/turfs = list()
