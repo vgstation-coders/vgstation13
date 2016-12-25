@@ -388,6 +388,15 @@ var/global/list/watt_suffixes = list("W", "KW", "MW", "GW", "TW", "PW", "EW", "Z
 		i++
 	return "[format_num(number)] [watt_suffixes[i]]"
 
+//Returns 1 if [text] ends with [suffix]
+//Example: text_ends_with("Woody got wood", "dy got wood") returns 1
+//         text_ends_with("Woody got wood", "d") returns 1
+//         text_ends_with("Woody got wood", "Wood") returns 0
+proc/text_ends_with(text, suffix)
+	if(length(suffix) > length(text))
+		return FALSE
+
+	return (copytext(text, length(text) - length(suffix) + 1) == suffix)
 
 // Custom algorithm since stackoverflow is full of complete garbage and even the MS algorithm sucks.
 // Uses recursion, in places.
