@@ -241,3 +241,8 @@ proc/arctan(x)
 	var/mult = input/scale
 	var/trinum = (sqrt(8 * mult + 1) - 1 ) / 2
 	return trinum * scale
+
+/proc/round_up(num)
+	if(round(num) != num)
+		return round(num+1)
+	return num

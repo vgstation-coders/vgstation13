@@ -382,19 +382,7 @@
 		return 0
 	var/steps = 0
 	if(!step)
-		switch(current_size)
-			if(1)
-				steps = 1
-			if(3)
-				steps = 2
-			if(5)
-				steps = 3
-			if(7)
-				steps = 4
-			if(9)
-				steps = 5
-			if(11)
-				steps = 6
+		steps = round_up(current_size/2)
 	else
 		steps = step
 	var/list/turfs = list()
