@@ -155,24 +155,6 @@
 	*/
 	..()
 
-	if(M.gloves && istype(M.gloves,/obj/item/clothing/gloves))
-		var/obj/item/clothing/gloves/G = M.gloves
-		if(G.cell)
-			if(M.a_intent == I_HURT)//Stungloves. Any contact will stun the alien.
-				if(G.cell.charge >= 2500)
-					G.cell.use(2500)
-
-					Knockdown(5)
-					if(stuttering < 5)
-						stuttering = 5
-					Stun(5)
-
-					visible_message("<span class='danger'>\The [src] has been touched with the stun gloves by [M] !</span>")
-					return
-				else
-					to_chat(M, "<span class='warning'>Not enough charge !</span>")
-					return
-
 	switch(M.a_intent)
 
 		if(I_HELP)
