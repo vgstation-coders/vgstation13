@@ -1,4 +1,4 @@
-/obj/item/clothing/accessory/shoe
+/*/obj/item/clothing/accessory/shoe
 
 /obj/item/clothing/accessory/can_attach_to(obj/item/clothing/shoes/C)
 	return istype(C)
@@ -18,3 +18,4 @@
 
 /obj/item/clothing/accessory/shoe/spikes/prevent_snow_slip()
 	return 1
+*/
