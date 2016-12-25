@@ -24,10 +24,7 @@
 	return
 
 /mob/living/proc/disarm_mob(mob/living/target)
-	src.attack_log += "\[[time_stamp()]\] <font color='red'>Disarmed [target.name] ([target.ckey])</font>"
-	target.attack_log += "\[[time_stamp()]\] <font color='orange'>Has been disarmed by [src.name] ([src.ckey])</font>"
-
-	log_attack("[src.name] ([src.ckey]) disarmed [target.name] ([target.ckey])")
+	return
 
 /mob/living/proc/disarmed_by(mob/living/disarmer)
 	return

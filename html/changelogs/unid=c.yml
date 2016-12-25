@@ -29,4 +29,4 @@ delete-after: True
 changes: 
 - experiment: Changed a lot of combat code. In practice, nothing should change. If something does, and it's for the worse, please report it.
 - tweak: Aliens can now grab other aliens.
-- tweak: Monkeys can now disarm and grab other monkeys.
+- tweak: Monkeys can now grab other monkeys.
