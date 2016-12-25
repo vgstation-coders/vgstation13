@@ -854,7 +854,7 @@ proc/move_mining_shuttle()
 		else
 			for(M in L)
 				var/turf/T = get_turf(M)
-				var/image/I = image('icons/turf/mine_overlays.dmi', loc = T, icon_state = M.scan_state, layer = UNDER_HUD_LAYER)
+				var/image/I = image('icons/turf/walls.dmi', loc = T, icon_state = M.scan_state, layer = UNDER_HUD_LAYER)
 				I.plane = HUD_PLANE
 				C.images += I
 				spawn(30)

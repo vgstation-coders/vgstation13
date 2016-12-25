@@ -1,12 +1,3 @@
-/obj/item/clothing/shoes/proc/prevent_snow_slip()
-	return 0
-
-/obj/item/clothing/shoes/proc/prevent_snow_slow()
-	return 0
-
-/obj/item/clothing/shoes/proc/allow_ski()
-	return 0
-
 /obj/item/clothing/shoes/syndigaloshes
 	desc = "A pair of brown shoes. They seem to have extra grip." //change line ~346 in code/datums/uplink_item.dm if you remove the second sentence
 	name = "brown shoes"
@@ -288,7 +279,6 @@
 	desc = "Tovarish, no one will realize you stepped on a pile of shit if your pair already looks like shit."
 	icon_state = "nr_boots"
 	item_state = "nr_boots"
-	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/shoes/cult
 	name = "boots"
@@ -400,13 +390,4 @@
 	icon_state = "workboots"
 	item_state = "workboots"
 	species_fit = list(VOX_SHAPED)
-	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots
-
-/obj/item/clothing/shoes/winterboots
-	name = "Winter boots"
-	desc = "Boots lined with 'synthetic' animal fur."
-	icon_state = "winterboots"
-	item_state = "winterboots"
-	species_fit = list(VOX_SHAPED)
-	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots

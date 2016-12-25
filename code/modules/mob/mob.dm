@@ -925,19 +925,13 @@ var/list/slot_equipment_priority = list( \
 	if(istype(A, /obj/effect/decal/point))
 		return 0
 
-	if(istype(A, /mob/living/simple_animal))
-		var/mob/living/simple_animal/pointed_at_mob = A
-		pointed_at_mob.pointed_at(src)
-
 	var/tile = get_turf(A)
 
 	if(!tile)
 		return 0
 
-	var/obj/effect/decal/point/point = new/obj/effect/decal/point(tile)
+	var/obj/point = new/obj/effect/decal/point(tile)
 	point.invisibility = invisibility
-	point.pointer = src
-	point.target = A
 	spawn(20)
 		if(point)
 			qdel(point)

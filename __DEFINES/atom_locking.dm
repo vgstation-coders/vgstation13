@@ -6,4 +6,3 @@
 
 // Flags for atom.lockflags
 #define DENSE_WHEN_LOCKED            1
-#define CANT_LOCK_TO_AT_ALL_EVEN_CONCIEVABLY		 2

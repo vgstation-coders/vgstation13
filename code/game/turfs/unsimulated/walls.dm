@@ -22,9 +22,6 @@
 	icon_state = "rock"
 	canSmoothWith = null
 
-/turf/unsimulated/wall/rock/underground
-	icon_state = "cave_wall"
-
 /turf/unsimulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
 	if (!user.dexterity_check())
@@ -39,26 +36,20 @@
 		bullet_marks = 0
 		icon = initial(icon)
 
-/turf/unsimulated/wall/splashscreen
+turf/unsimulated/wall/splashscreen
 	name = "Space Station 13"
 	icon = null
 	icon_state = null
 	plane = EFFECTS_PLANE
 	canSmoothWith = null
 
-/turf/unsimulated/wall/splashscreen/New()
-	var/path = "icons/splashworks/"
-	var/list/filenames = flist(path)
-	for(var/filename in filenames)
-		if(copytext(filename, length(filename)) == "/")
-			filenames -= filename
-	icon = file("[path][pick(filenames)]")
-
-/turf/unsimulated/wall/splashscreen/snowmap
-	icon = 'icons/snowstation.gif' // not in the splashworks file so it doesn't appear in other cases
-
-/turf/unsimulated/wall/splashscreen/snowmap/New()
-	return
+	New()
+		var/path = "icons/splashworks/"
+		var/list/filenames = flist(path)
+		for(var/filename in filenames)
+			if(copytext(filename, length(filename)) == "/")
+				filenames -= filename
+		icon = file("[path][pick(filenames)]")
 
 /turf/unsimulated/wall/other
 	icon_state = "r_wall"

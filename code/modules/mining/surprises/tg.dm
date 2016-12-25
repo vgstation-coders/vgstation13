@@ -6,7 +6,7 @@
 	walltypes = list(
 		/turf/simulated/wall/r_wall=2,
 		/turf/simulated/wall=2,
-		/turf/simulated/floor/asteroid=1
+		/turf/unsimulated/mineral/random/high_chance=1
 	)
 	floortypes = list(
 		/turf/simulated/floor=1,
@@ -37,7 +37,7 @@
 	name = "Hidden Temple"
 	walltypes = list(
 		/turf/simulated/wall/cult=3,
-		/turf/simulated/floor/asteroid=1
+		/turf/unsimulated/mineral/random/high_chance=1
 	)
 	floortypes = list(
 		/turf/simulated/floor/engine/cult=1
@@ -67,7 +67,7 @@
 	name = "Hidden Den"
 	walltypes = list(
 		/turf/simulated/wall/mineral/plasma=3,
-		/turf/simulated/floor/asteroid=1
+		/turf/unsimulated/mineral/random/high_chance=1
 	)
 	floortypes = list(
 		/turf/simulated/floor/wood=1
@@ -99,10 +99,10 @@
 	name="Cave-In"
 
 	walltypes = list(
-		/turf/simulated/floor/asteroid=1
+		/turf/unsimulated/mineral/random/high_chance=1
 	)
 	floortypes = list(
-		/turf/simulated/floor/asteroid=1
+		/turf/unsimulated/floor/asteroid=1
 	)
 	spawntypes = list(
 		/obj/mecha/working/ripley/mining=1,

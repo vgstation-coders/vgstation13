@@ -114,29 +114,22 @@
 /obj/item/clothing/head/ushanka
 	name = "ushanka"
 	desc = "Perfect for winter in Siberia, da?"
-	icon_state = "ushanka"
-	item_state = "ushanka"
+	icon_state = "ushankadown"
+	item_state = "ushankadown"
 	body_parts_covered = EARS|HEAD
-	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/head/ushanka/attack_self(mob/user as mob)
-	var/initial_icon_state = initial(icon_state)
-	if(icon_state == initial_icon_state)
-		icon_state = "[initial_icon_state]up"
-		item_state = "[initial_icon_state]up"
+	if(src.icon_state == "ushankadown")
+		src.icon_state = "ushankaup"
+		src.item_state = "ushankaup"
 		body_parts_covered = HEAD
-		to_chat(user, "You raise the ear flaps on \the [src].")
+		to_chat(user, "You raise the ear flaps on the ushanka.")
 	else
-		icon_state = initial_icon_state
-		item_state = initial_icon_state
-		to_chat(user, "You lower the ear flaps on \the [src].")
+		src.icon_state = "ushankadown"
+		src.item_state = "ushankadown"
+		to_chat(user, "You lower the ear flaps on the ushanka.")
 		body_parts_covered = EARS|HEAD
 
-/obj/item/clothing/head/ushanka/security
-	name = "security ushanka"
-	desc = "Davai, tovarish. Let us catch the capitalist greyshirt, and show him why it is that we proudly wear red!"
-	icon_state = "ushankared"
-	item_state = "ushankared"
 /*
  * Pumpkin head
  */

@@ -43,8 +43,6 @@
 	hud_used = new /datum/hud(src)
 	gui_icons = new /datum/ui_icons(src)
 	client.screen += catcher //Catcher of clicks
-	if(client.snow)
-		client.screen += client.snow
 
 	regular_hud_updates()
 

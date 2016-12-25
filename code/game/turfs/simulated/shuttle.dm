@@ -101,5 +101,3 @@
 		icon_state = "cult"
 		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1, anim_plane = OBJ_PLANE)
 	return
-
-/turf/simulated/shuttle/floor/mine_cage

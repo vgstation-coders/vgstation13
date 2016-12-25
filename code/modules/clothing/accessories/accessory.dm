@@ -67,17 +67,6 @@
 	inv_overlay = null
 	return ..()
 
-
-/obj/item/clothing/accessory/proc/prevent_snow_slip()
-	return 0
-
-/obj/item/clothing/accessory/proc/prevent_snow_slow()
-	return 0
-
-/obj/item/clothing/accessory/proc/allow_ski()
-	return 0
-
-
 //Defining this at item level to prevent CASTING HELL
 /obj/item/proc/generate_accessory_overlays()
 	return

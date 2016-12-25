@@ -157,7 +157,6 @@ var/savefile/panicfile
 		setup_shuttles()
 
 		stat_collection.artifacts_discovered = 0 // Because artifacts during generation get counted otherwise!
-		master_controller.procedurally_generate()
 
 	for(var/plugin_type in typesof(/plugin))
 		var/plugin/P = new plugin_type()

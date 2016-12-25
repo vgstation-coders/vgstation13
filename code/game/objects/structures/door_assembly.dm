@@ -79,10 +79,6 @@
 	airlock_type = "/external"
 	glass = -1
 
-/obj/structure/door_assembly/door_assembly_ext/snow
-	base_icon_state = "sext"
-	airlock_type =  "/external/snow"
-
 /obj/structure/door_assembly/door_assembly_fre
 	base_icon_state = "fre"
 	base_name = "Freezer Airlock"

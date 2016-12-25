@@ -15,7 +15,7 @@
 	if(forceburn && ticker && ticker.hardcore_mode)
 		forceburn = 0
 	if(nutrition - amount > 0 || forceburn)
-		var/heatmodifier = 0.7*(100/BODYTEMP_COLD_DIVISOR)
+		var/heatmodifier = 0.7
 		nutrition = max(nutrition - amount,0)
 		if((M_FAT in mutations))
 			heatmodifier = heatmodifier*2
