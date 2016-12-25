@@ -61,3 +61,19 @@
 
 	playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 	visible_message("<span class='danger'>[src] attempted to disarm [target]!</span>")
+
+/mob/living/carbon/human/get_unarmed_verb()
+	if(species)
+		return species.attack_verb
+	return ..()
+
+/mob/living/carbon/human/unarmed_attacked(mob/living/attacker, damage, damage_type, zone)
+	if(ishuman(attacker) && w_uniform)
+		w_uniform.add_fingerprint(attacker)
+
+	if(zone == "mouth")
+		var/chance = 0.5 * damage
+		if(attacker.mutations.Find(M_HULK))
+			chance += 50
+		if(prob(chance))
+			knock_out_teeth(attacker)

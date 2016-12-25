@@ -499,27 +499,7 @@
 			visible_message("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>")
 
 		if (I_HURT)
-
-			if ((prob(95) && health > 0))
-				attacked += 10
-				playsound(loc, 'sound/weapons/slice.ogg', 25, 1, -1)
-				var/damage = rand(15, 30)
-				if (damage >= 25)
-					damage = rand(20, 40)
-					for(var/mob/O in viewers(src, null))
-						if ((O.client && !( O.blinded )))
-							O.show_message(text("<span class='danger'>[] has attacked [name]!</span>", M), 1)
-				else
-					for(var/mob/O in viewers(src, null))
-						if ((O.client && !( O.blinded )))
-							O.show_message(text("<span class='danger'>[] has wounded [name]!</span>", M), 1)
-				adjustBruteLoss(damage)
-				updatehealth()
-			else
-				playsound(loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>[] has attempted to lunge at [name]!</span>", M), 1)
+			M.unarmed_attack_mob(src)
 
 		if (I_GRAB)
 			M.grab_mob(src)
@@ -529,36 +509,22 @@
 			var/damage = 5
 			attacked += 10
 
-			if(prob(95))
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>[] has tackled [name]!</span>", M), 1)
+			visible_message("<span class='danger'>[M] has tackled [src]!</span>")
 
-				if(Victim)
-					Victim = null
-					anchored = 0
-					if(prob(80) && !client)
-						Discipline++
-						if(!istype(src, /mob/living/carbon/slime))
-							if(Discipline == 1)
-								attacked = 0
+			if(Victim)
+				Victim = null
+				anchored = 0
+				if(prob(80) && !client)
+					Discipline++
 
-				spawn()
-					SStun = 1
-					sleep(rand(5,20))
-					SStun = 0
+			SStun = 1
+			spawn(rand(5,20))
+				SStun = 0
 
-				spawn(0)
+			step_away(src,M,15)
+			spawn(3)
+				step_away(src,M,15)
 
-					step_away(src,M,15)
-					sleep(3)
-					step_away(src,M,15)
-
-			else
-				drop_item()
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>[] has disarmed [name]!</span>", M), 1)
 			adjustBruteLoss(damage)
 			updatehealth()
 	return

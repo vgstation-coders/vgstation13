@@ -343,21 +343,7 @@
 			visible_message("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>")
 
 		if (I_HURT)
-			if ((prob(95) && health > 0))
-				playsound(loc, 'sound/weapons/slice.ogg', 25, 1, -1)
-				var/damage = rand(15, 30)
-				if (damage >= 25)
-					damage = rand(20, 40)
-					if (paralysis < 15)
-						Paralyse(rand(10, 15))
-					visible_message("<span class='danger'>[M] has wounded [name]!</span>")
-				else
-					visible_message("<span class='danger'>[M] has slashed [name]!</span>")
-				adjustBruteLoss(damage)
-				updatehealth()
-			else
-				playsound(loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
-				visible_message("<span class='danger'>[M] has attempted to lunge at [name]!</span>")
+			return M.unarmed_attack_mob(src)
 
 		if (I_GRAB)
 			return M.grab_mob(src)

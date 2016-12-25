@@ -980,16 +980,8 @@
 				to_chat(usr, "You unlock your cover.")
 
 /mob/living/silicon/robot/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
-	if (!ticker)
-		to_chat(M, "You cannot attack people before the game has started.")
-		return
-
-	if (istype(loc, /turf) && istype(loc.loc, /area/start))
-		to_chat(M, "No attacking people at spawn, you jackass.")
-		return
 
 	switch(M.a_intent)
-
 		if (I_HELP)
 			visible_message("<span class='notice'>[M] caresses [src]'s plating with its scythe like arm.</span>")
 
@@ -997,28 +989,9 @@
 			M.grab_mob(src)
 
 		if (I_HURT)
-			var/damage = rand(10, 20)
-			if (prob(90))
-				/*
-				if (M.class == "combat")
-					damage += 15
-					if(prob(20))
-						knockdown = max(knockdown,4)
-						stunned = max(stunned,4)
-				What is this?*/
-
-				playsound(loc, 'sound/weapons/slash.ogg', 25, 1, -1)
-				for(var/mob/O in viewers(src, null))
-					O.show_message(text("<span class='danger'>[] has slashed at []!</span>", M, src), 1)
+			if(M.unarmed_attack_mob(src))
 				if(prob(8))
 					flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
-				adjustBruteLoss(damage)
-				updatehealth()
-			else
-				playsound(loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>[] took a swipe at []!</span>", M, src), 1)
 
 		if (I_DISARM)
 			if(!(lying))
@@ -1027,14 +1000,10 @@
 					step(src,get_dir(M,src))
 					spawn(5) step(src,get_dir(M,src))
 					playsound(loc, 'sound/weapons/pierce.ogg', 50, 1, -1)
-					for(var/mob/O in viewers(src, null))
-						if ((O.client && !( O.blinded )))
-							O.show_message(text("<span class='danger'>[] has forced back []!</span>", M, src), 1)
+					visible_message("<span class='danger'>[M] has forced back [src]!</span>")
 				else
 					playsound(loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
-					for(var/mob/O in viewers(src, null))
-						if ((O.client && !( O.blinded )))
-							O.show_message(text("<span class='danger'>[] attempted to force back []!</span>", M, src), 1)
+					visible_message("<span class='danger'>[M] attempted to force back [src]!</span>")
 	return
 
 

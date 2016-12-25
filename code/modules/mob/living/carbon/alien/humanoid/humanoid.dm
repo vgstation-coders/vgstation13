@@ -277,34 +277,6 @@
 						visible_message("<span class='danger'>[M] has attempted to disarm \the [src] !</span>")
 	return
 
-/*Code for aliens attacking aliens. Because aliens act on a hivemind, I don't see them as very aggressive with each other.
-As such, they can either help or harm other aliens. Help works like the human help command while harm is a simple nibble.
-In all, this is a lot like the monkey code. /N
-*/
-
-/mob/living/carbon/alien/humanoid/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
-	..()
-
-	switch(M.a_intent)
-
-		if(I_HELP)
-			sleeping = max(0,sleeping-5)
-			resting = 0
-			AdjustParalysis(-3)
-			AdjustStunned(-3)
-			AdjustKnockdown(-3)
-			visible_message("<span class='notice'>[M] nuzzles [src] trying to wake it up !</span>")
-		else
-			if(health > 0)
-				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
-				var/damage = rand(1, 3)
-				visible_message("<span class='danger'>\The [M] has bit [src]!</span>")
-				adjustBruteLoss(damage)
-				updatehealth()
-			else
-				to_chat(M, "<span class='alien'>[name] is too injured for that.</span>")
-	return
-
 
 /mob/living/carbon/alien/humanoid/restrained()
 	if(timestopped)

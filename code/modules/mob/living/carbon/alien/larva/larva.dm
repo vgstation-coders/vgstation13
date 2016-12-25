@@ -219,41 +219,6 @@
 				visible_message("<span class='danger'>[M] has attempted to punch \the [src] !</span>")
 	return
 
-/mob/living/carbon/alien/larva/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
-	if(!ticker)
-		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
-		return
-
-	/*
-	if(istype(loc, /turf) && istype(loc.loc, /area/start))
-		to_chat(M, "<span class='warning'>No attacking people at spawn, you jackass.</span>")
-		return
-	*/
-	..()
-
-	switch(M.a_intent)
-
-		if(I_HELP)
-			sleeping = max(0,sleeping-5)
-			resting = 0
-			AdjustParalysis(-3)
-			AdjustStunned(-3)
-			AdjustKnockdown(-3)
-			visible_message("<span class='notice'>[M.name] nuzzles [src] trying to wake it up !</span>")
-
-		else
-			if(health > 0)
-				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
-				var/damage = rand(1, 3)
-				for(var/mob/O in viewers(src, null))
-					if((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>[M.name] has bit []!</span>", src), 1)
-				adjustBruteLoss(damage)
-				updatehealth()
-			else
-				to_chat(M, "<span class='alien'>[name] is too injured for that.</span>")
-	return
-
 /mob/living/carbon/alien/larva/restrained()
 	if(timestopped)
 		return 1 //under effects of time magick

@@ -415,19 +415,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	switch(M.a_intent)
 
 		if (I_HELP)
-
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message(text("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>"), 1)
+			visible_message("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>")
 		if (I_GRAB)
 			M.grab_mob(src)
-
 		if(I_HURT, I_DISARM)
-			var/damage = rand(15, 30)
-			visible_message("<span class='danger'>[M] has slashed at [src]!</span>")
-			adjustBruteLoss(damage)
-
-	return
+			M.unarmed_attack_mob(src)
 
 /mob/living/simple_animal/attack_larva(mob/living/carbon/alien/larva/L as mob)
 

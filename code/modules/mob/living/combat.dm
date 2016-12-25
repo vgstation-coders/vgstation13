@@ -47,3 +47,43 @@
 		visible_message("<span class='danger'>[src] has broken [target]'s grip on [target.pulling]!</span>")
 		target.stop_pulling()
 		return TRUE
+
+/mob/living/proc/get_unarmed_damage(mob/living/victim)
+	return rand(0,10)
+
+/mob/living/proc/get_unarmed_verb(mob/living/victim)
+	return "hit"
+
+/mob/living/proc/get_unarmed_hit_sound(mob/living/victim)
+	return "punch"
+
+/mob/living/proc/get_unarmed_miss_sound(mob/living/victim)
+	return 'sound/weapons/punchmiss.ogg'
+
+/mob/living/proc/unarmed_attack_mob(mob/living/target)
+	var/damage = get_unarmed_damage(target)
+
+	if(!damage)
+		playsound(loc, get_unarmed_miss_sound(target), 25, 1, -1)
+		visible_message("<span class='danger'>[src] has missed [target]!</span>")
+		return
+
+	var/zone = ran_zone(zone_sel.selecting)
+	var/datum/organ/external/affecting = target.get_organ(zone)
+	var/armor_block = target.run_armor_check(affecting, "melee")
+	var/attack_verb = get_unarmed_verb(target)
+
+	playsound(loc, get_unarmed_hit_sound(target), 25, 1, -1)
+	visible_message("<span class='danger'>[src] has [attack_verb] [target]!</span>")
+
+	var/damage_done = target.apply_damage(damage, BRUTE, affecting, armor_block)
+	target.unarmed_attacked(src, damage, BRUTE, zone)
+	after_unarmed_attack(target, damage, BRUTE, affecting, armor_block)
+
+	return damage_done
+
+/mob/living/proc/after_unarmed_attack(mob/living/target, damage, damage_type, organ, armor)
+	return
+
+/mob/living/proc/unarmed_attacked(mob/living/attacker, damage, damage_type, zone)
+	return
