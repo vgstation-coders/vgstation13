@@ -233,8 +233,6 @@
 /obj/item/weapon/fishingrod/proc/other_pull(var/fish_strength)
 	var/pullamount = calculate_pull(Clamp(fish_strength, 20, 60))
 	fishstage += pullamount
-	to_chat(world, "pullamount is [pullamount]")
-	to_chat(world, "<span class='warning'>rodtension is [rodtension]")
 
 // calculates whether to reel the fish in or not, and by how much we are reeling in
 /obj/item/weapon/fishingrod/proc/calculate_pull(var/fish_strength)
