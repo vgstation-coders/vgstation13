@@ -192,7 +192,7 @@
 
 //using the default attack_animal() in carbon.dm
 
-/mob/living/carbon/alien/humanoid/attack_hand(mob/living/carbon/human/M as mob)
+/mob/living/carbon/alien/humanoid/attack_hand(mob/living/carbon/human/M)
 
 	..()
 
@@ -238,19 +238,7 @@
 				cpr_time = 1
 
 		if(I_GRAB)
-			if(M.grab_check(src))
-				return
-			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M, src)
-
-			M.put_in_active_hand(G)
-
-			grabbed_by += G
-			G.synch()
-
-			LAssailant = M
-
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-			visible_message("<span class='warning'>[M] has grabbed \the [src] passively!</span>")
+			return M.grab_mob(src)
 
 		if(I_HURT)
 			var/damage = rand(1, 9)

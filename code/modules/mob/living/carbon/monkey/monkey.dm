@@ -303,14 +303,13 @@
 					to_chat(M, "<span class='warning'>Not enough charge! </span>")
 					return
 
-	if (M.a_intent == I_HELP)
-		help_shake_act(M)
-	else
-		if (M.a_intent == I_HURT)
+	switch(M.a_intent)
+		if(I_HELP)
+			help_shake_act(M)
+
+		if(I_HURT)
 			if ((prob(75) && health > 0))
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>[] has punched [name]!</span>", M), 1)
+				visible_message("<span class='danger'>[M] has punched [name]!</span>")
 
 				playsound(loc, "punch", 25, 1, -1)
 				var/damage = rand(5, 10)
@@ -322,65 +321,26 @@
 					damage = rand(10, 15)
 					if (paralysis < 5)
 						Paralyse(rand(10, 15))
-						spawn( 0 )
-							for(var/mob/O in viewers(src, null))
-								if ((O.client && !( O.blinded )))
-									O.show_message(text("<span class='danger'>[] has knocked out [name]!</span>", M), 1)
-							return
+
+						visible_message("<span class='danger'>[M] has knocked out [name]!</span>")
+
 				adjustBruteLoss(damage)
 				updatehealth()
 			else
 				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>[] has attempted to punch [name]!</span>", M), 1)
-		else
-			if (M.a_intent == I_GRAB)
-				if (M.grab_check(src))
-					return
+				visible_message("<span class='danger'>[M] has attempted to punch [name]!</span>")
 
-				var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
+		if(I_GRAB)
+			M.grab_mob(src)
 
-				M.put_in_active_hand(G)
-
-				grabbed_by += G
-				G.synch()
-
-				LAssailant = M
-
-				playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-				for(var/mob/O in viewers(src, null))
-					O.show_message(text("<span class='warning'>[] has grabbed [name] passively!</span>", M), 1)
-			else
-				if (!( paralysis ))
-					if (prob(25))
-						Paralyse(2)
-						playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-						for(var/mob/O in viewers(src, null))
-							if ((O.client && !( O.blinded )))
-								O.show_message(text("<span class='danger'>[] has pushed down [name]!</span>", M), 1)
-					else
-						drop_item()
-						playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-						for(var/mob/O in viewers(src, null))
-							if ((O.client && !( O.blinded )))
-								O.show_message(text("<span class='danger'>[] has disarmed [name]!</span>", M), 1)
+		if(I_DISARM)
+			M.disarm_mob(src)
 	return
 
 /mob/living/carbon/monkey/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
-	if (!ticker)
-		to_chat(M, "You cannot attack people before the game has started.")
-		return
-
-	if (istype(loc, /turf) && istype(loc.loc, /area/start))
-		to_chat(M, "No attacking people at spawn, you jackass.")
-		return
-
 	switch(M.a_intent)
 		if (I_HELP)
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message(text("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>"), 1)
+			visible_message("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>")
 
 		if (I_HURT)
 			if ((prob(95) && health > 0))
@@ -390,53 +350,20 @@
 					damage = rand(20, 40)
 					if (paralysis < 15)
 						Paralyse(rand(10, 15))
-					for(var/mob/O in viewers(src, null))
-						if ((O.client && !( O.blinded )))
-							O.show_message(text("<span class='danger'>[] has wounded [name]!</span>", M), 1)
+					visible_message("<span class='danger'>[M] has wounded [name]!</span>")
 				else
-					for(var/mob/O in viewers(src, null))
-						if ((O.client && !( O.blinded )))
-							O.show_message(text("<span class='danger'>[] has slashed [name]!</span>", M), 1)
+					visible_message("<span class='danger'>[M] has slashed [name]!</span>")
 				adjustBruteLoss(damage)
 				updatehealth()
 			else
 				playsound(loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>[] has attempted to lunge at [name]!</span>", M), 1)
+				visible_message("<span class='danger'>[M] has attempted to lunge at [name]!</span>")
 
 		if (I_GRAB)
-			if (M.grab_check(src))
-				return
-			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
-
-			M.put_in_active_hand(G)
-
-			grabbed_by += G
-			G.synch()
-
-			LAssailant = M
-
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-			for(var/mob/O in viewers(src, null))
-				O.show_message(text("<span class='warning'>[] has grabbed [name] passively!</span>", M), 1)
+			return M.grab_mob(src)
 
 		if (I_DISARM)
-			playsound(loc, 'sound/weapons/pierce.ogg', 25, 1, -1)
-			var/damage = 5
-			if(prob(95))
-				Knockdown(15)
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>[] has tackled down [name]!</span>", M), 1)
-			else
-				drop_item()
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>[] has disarmed [name]!</span>", M), 1)
-			adjustBruteLoss(damage)
-			updatehealth()
-	return
+			return M.disarm_mob(src)
 
 //using the default attack_animal() in carbon.dm
 

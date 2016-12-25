@@ -991,23 +991,10 @@
 	switch(M.a_intent)
 
 		if (I_HELP)
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message(text("<span class='notice'>[M] caresses [src]'s plating with its scythe like arm.</span>"), 1)
+			visible_message("<span class='notice'>[M] caresses [src]'s plating with its scythe like arm.</span>")
 
 		if (I_GRAB)
-			if (M.grab_check(src))
-				return
-			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
-
-			M.put_in_active_hand(G)
-
-			grabbed_by += G
-			G.synch()
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message(text("<span class='attack'>[] has grabbed [] passively!</span>", M, src), 1)
+			M.grab_mob(src)
 
 		if (I_HURT)
 			var/damage = rand(10, 20)

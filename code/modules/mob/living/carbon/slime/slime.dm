@@ -348,7 +348,7 @@
 			O.show_message("<span class='warning'><B>[M]</B> [M.attacktext] [src]!</span>", 1)
 
 		add_logs(M, src, "attacked", admin = M.ckey ? TRUE : FALSE) //Only add this to the server logs if they're controlled by a player.
-		
+
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		adjustBruteLoss(damage)
 		updatehealth()
@@ -398,15 +398,11 @@
 	if(Victim)
 		if(Victim == M)
 			if(prob(60))
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message("<span class='warning'>[M] attempts to wrestle \the [name] off!</span>", 1)
+				visible_message("<span class='warning'>[M] attempts to wrestle \the [name] off!</span>")
 				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 
 			else
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message("<span class='warning'>[M] manages to wrestle \the [name] off!</span>", 1)
+				visible_message("<span class='warning'>[M] manages to wrestle \the [name] off!</span>")
 				playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 
 				if(prob(90) && !client)
@@ -457,43 +453,13 @@
 			return
 
 
-
-
-	if(M.gloves && istype(M.gloves,/obj/item/clothing/gloves))
-		var/obj/item/clothing/gloves/G = M.gloves
-		if(G.cell)
-			if(M.a_intent == I_HURT)//Stungloves. Any contact will stun the alien.
-				if(G.cell.charge >= 2500)
-					G.cell.use(2500)
-					for(var/mob/O in viewers(src, null))
-						if ((O.client && !( O.blinded )))
-							O.show_message("<span class='danger'>[src] has been touched with the stun gloves by [M]!</span>", 1, "<span class='warning'>You hear someone fall.</span>", 2)
-					return
-				else
-					to_chat(M, "<span class='warning'>Not enough charge! </span>")
-					return
-
 	switch(M.a_intent)
 
 		if (I_HELP)
 			help_shake_act(M)
 
 		if (I_GRAB)
-			if (M.grab_check(src))
-				return
-			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
-
-			M.put_in_active_hand(G)
-
-			grabbed_by += G
-			G.synch()
-
-			LAssailant = M
-
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message(text("<span class='warning'>[] has grabbed [] passively!</span>", M, src), 1)
+			M.grab_mob(src)
 
 		else
 
@@ -516,35 +482,21 @@
 
 
 				playsound(loc, "punch", 25, 1, -1)
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>[] has punched []!</span>", M, src), 1)
+				visible_message("<span class='danger'>[M] has punched [src]!</span>")
 
 				adjustBruteLoss(damage)
 				updatehealth()
 			else
 				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>[] has attempted to punch []!</span>", M, src), 1)
+				visible_message("<span class='danger'>[M] has attempted to punch [src]!</span>")
 	return
 
 
 
 /mob/living/carbon/slime/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
-	if (!ticker)
-		to_chat(M, "You cannot attack people before the game has started.")
-		return
-
-	if (istype(loc, /turf) && istype(loc.loc, /area/start))
-		to_chat(M, "No attacking people at spawn, you jackass.")
-		return
-
 	switch(M.a_intent)
 		if (I_HELP)
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message(text("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>"), 1)
+			visible_message("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>")
 
 		if (I_HURT)
 
@@ -570,20 +522,7 @@
 						O.show_message(text("<span class='danger'>[] has attempted to lunge at [name]!</span>", M), 1)
 
 		if (I_GRAB)
-			if (M.grab_check(src))
-				return
-			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
-
-			M.put_in_active_hand(G)
-
-			grabbed_by += G
-			G.synch()
-
-			LAssailant = M
-
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-			for(var/mob/O in viewers(src, null))
-				O.show_message(text("<span class='warning'>[] has grabbed [name] passively!</span>", M), 1)
+			M.grab_mob(src)
 
 		if (I_DISARM)
 			playsound(loc, 'sound/weapons/pierce.ogg', 25, 1, -1)

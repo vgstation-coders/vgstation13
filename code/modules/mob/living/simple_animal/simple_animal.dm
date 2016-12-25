@@ -387,21 +387,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 						O.show_message("<span class='notice'>[M] [response_help] [src].</span>")
 
 		if(I_GRAB)
-			if (M.grab_check(src))
-				return
-			if (!(status_flags & CANPUSH))
-				return
-
-			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
-
-			M.put_in_active_hand(G)
-
-			grabbed_by += G
-			G.synch()
-			G.affecting = src
-			LAssailant = M
-
-			visible_message("<span class='warning'>[M] has grabbed [src] passively!</span>")
+			M.grab_mob(src)
 
 		if(I_HURT, I_DISARM)
 			adjustBruteLoss(harm_intent_damage)
@@ -434,24 +420,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 				if ((O.client && !( O.blinded )))
 					O.show_message(text("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>"), 1)
 		if (I_GRAB)
-			if(M.grab_check(src))
-				return
-			if(!(status_flags & CANPUSH))
-				return
-
-			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
-
-			M.put_in_active_hand(G)
-
-			grabbed_by += G
-			G.synch()
-			G.affecting = src
-			LAssailant = M
-
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message(text("<span class='warning'>[] has grabbed [] passively!</span>", M, src), 1)
+			M.grab_mob(src)
 
 		if(I_HURT, I_DISARM)
 			var/damage = rand(15, 30)

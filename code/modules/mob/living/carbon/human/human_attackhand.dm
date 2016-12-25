@@ -146,7 +146,7 @@
 		LAssailant = M
 	log_attack("[M.name] ([M.ckey]) kicked by [src.name] ([src.ckey])")
 
-/mob/living/carbon/human/attack_hand(mob/living/carbon/human/M as mob)
+/mob/living/carbon/human/attack_hand(mob/living/carbon/human/M)
 	//M.delayNextAttack(10)
 	if (istype(loc, /turf) && istype(loc.loc, /area/start))
 		to_chat(M, "No attacking people at spawn, you jackass.")
@@ -246,24 +246,7 @@
 
 
 		if(I_GRAB)
-			if(M.grab_check(src))
-				return 0
-			if(w_uniform)
-				w_uniform.add_fingerprint(M)
-
-			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
-			if(locked_to)
-				to_chat(M, "<span class='notice'>You cannot grab [src], \he is buckled in!</span>")
-			if(!G)	//the grab will delete itself in New if affecting is anchored
-				return
-			M.put_in_active_hand(G)
-			grabbed_by += G
-			G.synch()
-			LAssailant = M
-
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-			visible_message("<span class='warning'>[M] grabs [src] passively!</span>")
-			return 1
+			return M.grab_mob(src)
 
 		if(I_HURT)
 			M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.species.attack_verb != "punches" ? "Slashed" : "Punched"] [src.name] ([src.ckey])</font>")
@@ -342,70 +325,7 @@
 
 
 		if(I_DISARM)
-			M.attack_log += text("\[[time_stamp()]\] <font color='red'>Disarmed [src.name] ([src.ckey])</font>")
-			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been disarmed by [M.name] ([M.ckey])</font>")
-
-			log_attack("[M.name] ([M.ckey]) disarmed [src.name] ([src.ckey])")
-
-			if(w_uniform)
-				w_uniform.add_fingerprint(M)
-			var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
-
-			for(var/obj/item/weapon/gun/G in held_items)
-				var/index = is_holding_item(G)
-				var/chance = (index == active_hand ? 40 : 20)
-
-				if (prob(chance))
-					visible_message("<spawn class=danger>[G], held by [src], goes off during struggle!")
-					var/list/turfs = list()
-					for(var/turf/T in view())
-						turfs += T
-					var/turf/target = pick(turfs)
-					return G.afterattack(target,src, "struggle" = 1)
-
-			var/randn = rand(1, 100)
-			if (randn <= 25)
-				apply_effect(4, WEAKEN, run_armor_check(affecting, "melee"))
-				playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-				visible_message("<span class='danger'>[M] has pushed [src]!</span>")
-				M.attack_log += text("\[[time_stamp()]\] <font color='red'>Pushed [src.name] ([src.ckey])</font>")
-				src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been pushed by [M.name] ([M.ckey])</font>")
-				if(!iscarbon(M))
-					LAssailant = null
-				else
-					LAssailant = M
-
-				log_attack("[M.name] ([M.ckey]) pushed [src.name] ([src.ckey])")
-				return
-
-			var/talked = 0	// BubbleWrap
-
-			if(randn <= 60)
-				//BubbleWrap: Disarming breaks a pull
-				if(pulling)
-					visible_message("<span class='danger'>[M] has broken [src]'s grip on [pulling]!</span>")
-					talked = 1
-					stop_pulling()
-
-				//BubbleWrap: Disarming also breaks a grab - this will also stop someone being choked, won't it?
-				for(var/obj/item/weapon/grab/G in held_items)
-					if(G.affecting)
-						visible_message("<span class='danger'>[M] has broken [src]'s grip on [G.affecting]!</span>")
-						talked = 1
-					spawn(1)
-						qdel(G)
-						G = null
-				//End BubbleWrap
-
-				if(!talked)	//BubbleWrap
-					drop_item()
-					visible_message("<span class='danger'>[M] has disarmed [src]!</span>")
-				playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-				return
-
-
-			playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-			visible_message("<span class='danger'>[M] attempted to disarm [src]!</span>")
+			return M.disarm_mob(src)
 	return
 
 /mob/living/carbon/human/proc/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, inrange, params)
