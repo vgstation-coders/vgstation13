@@ -154,11 +154,11 @@
 			if(istype(shrapnel, /obj/item/ammo_casing))// If the shrapnel is a bullet casing it will be fired
 				var/obj/item/ammo_casing/shrapnel_bullet = shrapnel //shitcode but otherwise BB is undefined var
 				var/obj/item/projectile/shrapnel_projectile = null
-				target =pick(possible_targets)
+				target=pick(possible_targets)
 				if(shrapnel_bullet.BB)
 					shrapnel_projectile = shrapnel_bullet.BB
 				else
-					shrapnel_projectile = new /obj/item/projectile/bullet/shrapnel/small
+					shrapnel_projectile = new /obj/item/projectile/bullet/shrapnel/small(src)
 				shrapnel_projectile.forceMove(curloc)
 				shrapnel_projectile.launch_at(target,bodyparts[rand(1,bodyparts.len)],curloc,src)
 				qdel(shrapnel) // the casing is disintegrated in the explosion
