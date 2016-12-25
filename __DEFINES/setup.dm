@@ -1205,13 +1205,13 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define SHOES_LAYER				6
 #define GLOVES_LAYER			7
 #define EARS_LAYER				8
-#define SUIT_LAYER				9
-#define GLASSES_LAYER			10
-#define BELT_LAYER				11		//Possible make this an overlay of somethign required to wear a belt?
-#define SUIT_STORE_LAYER		12
-#define HAIR_LAYER				13		//TODO: make part of head layer?
-#define GLASSES_OVER_HAIR_LAYER	14
-#define FACEMASK_LAYER			15
+#define FACEMASK_LAYER			9
+#define SUIT_LAYER				10
+#define GLASSES_LAYER			11
+#define BELT_LAYER				12		//Possible make this an overlay of somethign required to wear a belt?
+#define SUIT_STORE_LAYER		13
+#define HAIR_LAYER				14		//TODO: make part of head layer?
+#define GLASSES_OVER_HAIR_LAYER	15
 #define HEAD_LAYER				16
 #define BACK_LAYER				17		//Back should be above head so that headgear doesn't hides backpack when facing north
 #define ID_LAYER				18		//IDs should be visible above suits and backpacks
