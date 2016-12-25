@@ -47,10 +47,10 @@
 
 	if(randn <= 60)
 		//Disarming breaks pulls
-		talked |= target.break_pulls()
+		talked |= break_pulls(target)
 
 		//Disarming also breaks a grab - this will also stop someone being choked, won't it?
-		talked |= target.break_grabs()
+		talked |= break_grabs(target)
 
 		if(!talked)
 			target.drop_item()

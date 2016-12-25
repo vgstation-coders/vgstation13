@@ -11,8 +11,8 @@
 	else if (prob(80))
 		playsound(loc, 'sound/weapons/slash.ogg', 25, 1, -1)
 		target.drop_item()
-		target.break_pulls()
-		target.break_grabs()
+		break_pulls(target)
+		break_grabs(target)
 		visible_message("<span class='danger'>[src] has disarmed [target]!</span>")
 	else
 		playsound(loc, 'sound/weapons/slashmiss.ogg', 50, 1, -1)
