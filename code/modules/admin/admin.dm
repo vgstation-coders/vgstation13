@@ -1248,9 +1248,17 @@ var/global/floorIsLava = 0
 
 	var/list/matches = new()
 
-	for(var/path in typesof(/atom))
-		if(findtext("[path]", object))
-			matches += path
+	if(text_ends_with(object, ".")) //Path ends with a dot - DO NOT include subtypes
+		object = copytext(object, 1, length(object)) //Remove the dot
+
+		for(var/path in typesof(/atom))
+			if(text_ends_with("[path]", object))
+				matches += path
+	else //Include subtypes
+		for(var/path in typesof(/atom))
+			if(findtext("[path]", object))
+				matches += path
+
 
 	if(matches.len==0)
 		return
