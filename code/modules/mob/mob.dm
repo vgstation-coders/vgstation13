@@ -527,6 +527,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 /mob/proc/get_item_by_slot(slot_id)
 	return null
 
+/mob/proc/get_item_by_flag(slot_flag)
+	return null
 
 /mob/proc/restrained()
 	if(timestopped)
