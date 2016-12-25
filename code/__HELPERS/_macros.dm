@@ -174,8 +174,6 @@
 
 #define isspace(A) (A.type == /area)
 
-#define issnow(A) (isspace(A) && map.base_turf == /turf/snow)	// I'm sorry
-
 //This one returns the "space" area
 //#define get_space_area (get_area(locate(1,1,2))) //xd
 proc/get_space_area()

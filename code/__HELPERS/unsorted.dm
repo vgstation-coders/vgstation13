@@ -1349,6 +1349,15 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 			return 1
 	return 0
 
+//Checks if there are any atoms in the turf that aren't system-only (currently only lighting overlays count)
+//Returns 1 is there's something, 0 if it finds nothing
+/turf/proc/has_contents()
+	if(!contents.len)
+		return 0
+	for(var/atom/A in contents)
+		if(!istype(A, /atom/movable/lighting_overlay))
+			return 0
+	return 1
 
 //This helper uses the method shown above to clear up the tile's contents, if any, ignoring the lighting overlays (technically all systems contents)
 //Includes an exception list if you don't want to delete some stuff

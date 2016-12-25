@@ -63,8 +63,6 @@
 	return list_of_vaults
 
 /proc/generate_vaults()
-	if(map && map.dorf) // TODO: LATER
-		return
 	var/area/space = get_space_area()
 
 	var/list/list_of_vaults = get_map_element_objects()
@@ -75,7 +73,6 @@
 	#warning Spawning ALL vaults!
 	vault_number = list_of_vaults.len
 	#endif
-
 
 	message_admins("<span class='info'>Spawning [vault_number] vaults in space!</span>")
 

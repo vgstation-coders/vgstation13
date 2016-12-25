@@ -37,9 +37,6 @@
 	dump_contents()
 	..()
 
-/obj/structure/closet/proc/canweld()
-	return 1
-
 /obj/structure/closet/alter_health()
 	return get_turf(src)
 
@@ -284,7 +281,7 @@
 		if(istype(W,/obj/item/tk_grab))
 			return 0
 
-		if(istype(W, /obj/item/weapon/weldingtool) && canweld())
+		if(istype(W, /obj/item/weapon/weldingtool))
 			var/obj/item/weapon/weldingtool/WT = W
 			if(!WT.remove_fuel(0,user))
 				to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
@@ -299,7 +296,7 @@
 
 	else if(istype(W, /obj/item/stack/package_wrap))
 		return
-	else if(istype(W, /obj/item/weapon/weldingtool) && canweld())
+	else if(istype(W, /obj/item/weapon/weldingtool))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(!WT.remove_fuel(0,user))
 			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")

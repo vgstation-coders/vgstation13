@@ -407,11 +407,6 @@ var/area/space_area
 	var/area/oldArea = Obj.areaMaster
 	Obj.areaMaster = src
 
-	if(issnow(src))
-		Obj.update_shadow()
-	else if(istype(oldArea) && issnow(oldArea))
-		Obj.underlays -= Obj.shadow
-
 	for(var/mob/mob_in_obj in Obj.contents)
 		CallHook("MobAreaChange", list("mob" = mob_in_obj, "new" = Obj.areaMaster, "old" = oldArea))
 

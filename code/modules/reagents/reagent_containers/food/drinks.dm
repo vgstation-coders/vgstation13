@@ -819,13 +819,6 @@
 	var/new_reagent = pick(COFFEE, HOT_COCO, ICECOFFEE, TEA, ICETEA, WATER, ICE, ICED_BEER)
 	reagents.add_reagent(new_reagent, rand(50,100))
 
-
-/obj/item/weapon/reagent_containers/food/drinks/thermos/full_hot_only/New()
-	..()
-	var/new_reagent = pick(COFFEE, HOT_COCO, TEA, CAFE_LATTE)
-	reagents.add_reagent(new_reagent, rand(50,100))
-
-
 /obj/item/weapon/reagent_containers/food/drinks/plastic
 	name = "plastic bottle"
 	desc = "Remember to recycle."

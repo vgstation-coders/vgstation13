@@ -270,14 +270,3 @@
 
 	force = 16
 	throwforce = 25
-
-/obj/item/weapon/spear/xeno
-	name = "claw-tipped spear"
-	desc = "A hunters weapon. The claw of a xenomorph afixed onto a makeshift staff."
-	icon_state = "spear_claw"
-	base_state = "spear_claw"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-
-	force = 18
-	base_force = 18
-	throwforce = 25

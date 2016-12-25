@@ -93,11 +93,6 @@
 	return
 
 /obj/machinery/power/solar/panel/proc/update_solar_exposure()
-	var/turf/T = get_turf(src)
-	if(istype(T,/turf/snow && T.luminosity))
-		sunfrac = 1
-		return
-
 	if(!sun)
 		return
 

@@ -568,14 +568,8 @@
 				return 1
 	return 0
 
-#define SLIPTYPE_DEFAULT 1
-#define SLIPTYPE_ICE 2
-/mob/living/carbon/CheckSlip(var/sliptype = SLIPTYPE_DEFAULT)
-	switch(sliptype)
-		if(SLIPTYPE_DEFAULT)
-			return !locked_to && !lying && !unslippable
-		if(SLIPTYPE_ICE)
-			return !locked_to && !unslippable
+/mob/living/carbon/CheckSlip()
+	return !locked_to && !lying && !unslippable
 
 /mob/living/carbon/proc/Slip(stun_amount, weaken_amount, slip_on_walking = 0)
 	if(!slip_on_walking && m_intent == "walk")

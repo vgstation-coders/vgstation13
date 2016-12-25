@@ -23,23 +23,3 @@
 	icon_state = "boxingyellow"
 	item_state = "boxingyellow"
 	species_fit = list(VOX_SHAPED)
-
-/obj/item/clothing/gloves/boxing/attackby(obj/W, mob/user)
-	..()
-
-	if(istype(W, /obj/item/bear_hands))
-		visible_message("\the [user] attaches \the [W] to \the [src]")
-		new/obj/item/clothing/gloves/boxing/bear(get_turf(src))
-		user.drop_item(W, force_drop = 1)
-		user.drop_item(src, force_drop = 1)
-		qdel(W)
-		qdel(src)
-
-/obj/item/clothing/gloves/boxing/bear
-	name = "bear gauntlets"
-	desc = "Time to get things done with your bear hands."
-	icon_state = "bear_gloves"
-	item_state = "bear_gloves"
-
-	damage_added = 5
-	origin_tech = Tc_COMBAT + "=2;"

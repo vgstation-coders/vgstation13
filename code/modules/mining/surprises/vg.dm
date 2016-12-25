@@ -87,11 +87,11 @@
 /mining_surprise/alien_nest
 	name="Hidden Nest"
 	floortypes = list(
-		/turf/simulated/floor/asteroid=100
+		/turf/unsimulated/floor/asteroid=100
 	)
 
 	walltypes = list(
-		/turf/simulated/floor/asteroid=1
+		/turf/unsimulated/mineral/random/high_chance=1
 	)
 
 	spawntypes = list(
