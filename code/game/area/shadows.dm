@@ -16,13 +16,13 @@
 	return 1
 
 /atom/movable/proc/update_shadow()
-	if(!has_shadow())
-		return
-
 	if(shadow)
 		underlays -= shadow
 	else
 		shadow = new
+
+	if(!has_shadow())
+		return
 
 	shadow.appearance = appearance
 	shadow.alpha = SHADOW_ALPHA
