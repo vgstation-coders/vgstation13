@@ -283,6 +283,7 @@ var/global/list/snow_turfs = list()
 	density = 0
 	plane = PLATING_PLANE
 	var/isedge
+	var/hole = 0
 
 /obj/glacier/New(var/icon_update_later = 0)
 	var/turf/snow/T = loc
@@ -320,6 +321,9 @@ var/global/list/snow_turfs = list()
 	if(edgenum && !isedge)
 		icon_state = "edge[edgenum]-[edgesnum]"
 
+	if(hole)
+		overlays += image(icon,"hole_overlay")
+
 /obj/glacier/relativewall_neighbours()
 	..()
 	for(var/direction in diagonal)
@@ -329,3 +333,12 @@ var/global/list/snow_turfs = list()
 		for(var/atom/A in adj_tile)
 			if(isSmoothableNeighbor(A))
 				A.relativewall()
+
+/obj/glacier/can_fish()
+	return hole
+
+/obj/glacier/attackby(var/obj/item/W, mob/user)
+	to_chat(user,"<span class='notice'>you smash a hole in the ice with \the [W]</span>") // todo: better
+	hole = TRUE
+	relativewall()
+	..()

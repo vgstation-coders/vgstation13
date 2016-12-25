@@ -87,6 +87,8 @@
 
 	var/destroy_everything = 0
 
+	var/disable_mesons = 0
+
 /datum/shuttle/New(var/area/starting_area)
 	.=..()
 
@@ -436,6 +438,12 @@
 
 		if(istype(AM,/mob/living))
 			var/mob/living/M = AM
+
+			if(istype(AM,/mob/living/carbon/human) && disable_mesons)
+				var/mob/living/carbon/human/H = AM
+				if(istype(H.glasses,/obj/item/clothing/glasses/scanner/meson))
+					var/obj/item/clothing/glasses/scanner/meson/mesons = H.glasses
+					mesons.disable(H)
 
 			if(!M.locked_to)
 				shake_camera(M, 10, 1) // unbuckled, HOLY SHIT SHAKE THE ROOM

@@ -42,6 +42,16 @@
 		/mob/living/simple_animal/hostile/carp/clown = 100,
 		)
 
+
+/atom/proc/can_fish()
+	return FALSE
+
+/obj/machinery/bluespace_pond/can_fish()
+	return TRUE
+
+/turf/unsimulated/beach/water/deep/can_fish()
+	return TRUE
+
 // -----------------------------
 //         Fishing Rod
 // -----------------------------
@@ -71,10 +81,6 @@
 	var/obj/item/weapon/hookeditem
 	var/fishstage = 50 // when fishstage hits 0, we catch the fish, if it goes above 100, we lose the fish
 	var/rodtension = 0 // if tension hits MAX_LINE_TENSION the line snaps, pulling power is based on tension scaling from 0=no pulling  and  (MAX_LINE_TENSION - 1)=strongest pull
-	var/list/fishables = list( //list of atoms that can be fished
-		/obj/machinery/bluespace_pond,
-		/turf/unsimulated/beach/water/deep,
-		)
 	var/list/bait_types = list( // The types of bait this rod is able to use
 		/datum/bait_type/standard_bait,
 		/datum/bait_type/clown,
@@ -94,12 +100,7 @@
 	var/turf/A_turf = get_turf(A)
 	if(!A_turf)
 		return 1 // item is in nullspace
-	var/can_fish = FALSE
-	for(var/F in fishables)
-		if(istype(A, F))
-			can_fish = TRUE
-			break
-	if(!can_fish)
+	if(!A.can_fish())
 		return 1
 	var/datum/bait_type/bait_fish = find_bait(hookeditem)
 	if(bait_fish)

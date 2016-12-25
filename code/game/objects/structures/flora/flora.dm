@@ -199,7 +199,8 @@
 /obj/structure/flora/tree/pine/New()
 	..()
 	icon_state = "pine_[rand(1, 3)]"
-	update_shadow()
+	if(map.base_turf == /turf/snow)
+		update_shadow()
 
 /obj/structure/flora/tree/pine/xmas
 	name = "xmas tree"

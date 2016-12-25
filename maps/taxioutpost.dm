@@ -1,5 +1,5 @@
 //**************************************************************
-// Map Datum -- Snow Taxistation
+// Map Datum -- Snow Taxi Outpost
 //**************************************************************
 
 /datum/map/active
@@ -32,6 +32,7 @@
 	.=..()
 
 	research_shuttle.name = "mine cage" //There is only one "shuttle" on taxi - the mine cage
+	research_shuttle.disable_mesons = 1 // no mesons for you
 	research_shuttle.req_access = list() //It's shared by miners and researchers, so remove access requirements
 
 
