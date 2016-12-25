@@ -353,35 +353,18 @@
 		adjustBruteLoss(damage)
 		updatehealth()
 
-/mob/living/carbon/slime/attack_paw(mob/living/carbon/monkey/M as mob)
+/mob/living/carbon/slime/attack_paw(mob/living/carbon/monkey/M)
 	if(!(istype(M, /mob/living/carbon/monkey)))
 		return//Fix for aliens receiving double messages when attacking other aliens.
 
-	if (!ticker)
-		to_chat(M, "You cannot attack people before the game has started.")
-		return
-
-	if (istype(loc, /turf) && istype(loc.loc, /area/start))
-		to_chat(M, "No attacking people at spawn, you jackass.")
-		return
 	..()
 
 	switch(M.a_intent)
 
-		if (I_HELP)
+		if(I_HELP)
 			help_shake_act(M)
 		else
-			if (istype(wear_mask, /obj/item/clothing/mask/muzzle))
-				return
-			if (health > 0)
-				attacked += 10
-				//playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>[M.name] has attacked [src]!</span>"), 1)
-				adjustBruteLoss(rand(1, 3))
-				updatehealth()
-	return
+			M.unarmed_attack_mob(src)
 
 
 /mob/living/carbon/slime/attack_hand(mob/living/carbon/human/M as mob)

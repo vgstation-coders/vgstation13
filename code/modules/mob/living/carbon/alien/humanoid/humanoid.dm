@@ -100,19 +100,10 @@
 
 	return
 
-/mob/living/carbon/alien/humanoid/attack_paw(mob/living/carbon/monkey/M as mob)
+/mob/living/carbon/alien/humanoid/attack_paw(mob/living/carbon/monkey/M)
 	if(!ismonkey(M))
 		return//Fix for aliens receiving double messages when attacking other aliens.
 
-	if(!ticker)
-		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
-		return
-
-	/*
-	if (istype(loc, /turf) && istype(loc.loc, /area/start))
-		to_chat(M, "No attacking people at spawn, you jackass.")
-		return
-	*/
 	..()
 
 	switch(M.a_intent)
@@ -120,13 +111,7 @@
 		if(I_HELP)
 			help_shake_act(M)
 		else
-			if(istype(wear_mask, /obj/item/clothing/mask/muzzle))
-				return
-			if(health > 0)
-				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
-				visible_message("<span class='danger'>\The [M] has bit \the [src]!</span>")
-				adjustBruteLoss(rand(1, 3))
-				updatehealth()
+			M.unarmed_attack_mob(src)
 	return
 
 

@@ -16,5 +16,3 @@
 
 		if(I_DISARM)
 			return M.disarm_mob(src)
-
-	return

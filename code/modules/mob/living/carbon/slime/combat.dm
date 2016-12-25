@@ -1,4 +1,5 @@
 /mob/living/carbon/slime/unarmed_attacked(mob/living/attacker, damage, damage_type, zone)
 	.=..()
 
-	attacked += 10
+	if(health > 10)
+		attacked += 10

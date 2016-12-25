@@ -106,13 +106,6 @@
 	share_contact_diseases(M)
 	return
 
-
-/mob/living/carbon/attack_paw(mob/M as mob)
-	if(!istype(M, /mob/living/carbon))
-		return
-	share_contact_diseases(M)
-	return
-
 /mob/living/carbon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
 	var/damage = shock_damage * siemens_coeff
 

@@ -10,7 +10,7 @@
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey
 	species_type = /mob/living/carbon/monkey
 	treadmill_speed = 0.8 //Slow apes!
-	var/attack_text = "bites"
+	var/attack_text = "bit"
 	var/languagetoadd = LANGUAGE_MONKEY
 	var/namenumbers = TRUE
 
@@ -237,30 +237,18 @@
 			armorscore = uniform.armor[type]
 	return armorscore
 
-/mob/living/carbon/monkey/attack_paw(mob/M as mob)
+/mob/living/carbon/monkey/attack_paw(mob/living/M)
 	..()
 
-	if (M.a_intent == I_HELP)
-		help_shake_act(M)
-	else
-		if ((M.a_intent == I_HURT && !( istype(wear_mask, /obj/item/clothing/mask/muzzle) )))
-			if ((prob(75) && health > 0))
-				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
-				if(istype(M, /mob/living/carbon/monkey))
-					var/mob/living/carbon/monkey/Mo = M
-					src.visible_message("<span class='danger'>[Mo.name] [Mo.attack_text] [name]!</span>")
-				else
-					src.visible_message("<span class='danger'>[M.name] bites [name]!</span>")
-				var/damage = rand(1, 5)
-				adjustBruteLoss(damage)
-				health = 100 - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss()
-				for(var/datum/disease/D in M.viruses)
-					if(D.spread == "Bite")
-						contract_disease(D,1,0)
-			else
-				for(var/mob/O in viewers(src, null))
-					O.show_message("<span class='danger'>[M.name] lunges towards [name], but misses!</span>", 1)
-	return
+	switch(M.a_intent)
+		if(I_HELP)
+			help_shake_act(M)
+		if(I_HURT)
+			M.unarmed_attack_mob(src)
+		if(I_DISARM)
+			M.disarm_mob(src)
+		if(I_GRAB)
+			M.grab_mob(src)
 
 
 /mob/living/carbon/monkey/proc/defense(var/power, var/def_zone)
