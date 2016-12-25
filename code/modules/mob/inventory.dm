@@ -339,7 +339,7 @@
 	update_icons()
 
 
-/mob/proc/u_equip(var/obj/item/W as obj, dropped = 1)
+/mob/proc/u_equip(var/obj/item/W as obj, dropped = 1, var/slot = null)
 	if(!W)
 		return 0
 	var/success = 0
