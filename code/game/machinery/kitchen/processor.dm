@@ -248,7 +248,7 @@
 	user.examination(src)
 
 /obj/machinery/processor/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if(incapacitated())
+	if(usr.incapacitated())
 		return
 
 	attackby(O,user)
