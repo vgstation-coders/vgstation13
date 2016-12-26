@@ -19,6 +19,9 @@
 
 	return rand(15, 40)
 
+/mob/living/carbon/slime/get_unarmed_hit_sound()
+	return 'sound/weapons/welderattack.ogg'
+
 /mob/living/carbon/slime/get_unarmed_damage_zone(mob/living/victim)
 	return zone_sel.selecting
 
