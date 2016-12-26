@@ -10,7 +10,7 @@
 	var/looking_for_personality = 0
 	var/mob/living/silicon/pai/pai
 	var/last_ping_time = 0
-	var/ping_cooldown = 50
+	var/ping_cooldown = 5 SECONDS
 
 /obj/item/device/paicard/New()
 	..()
