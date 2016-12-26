@@ -23,6 +23,7 @@
 		/obj/item/weapon/gun/energy/kinetic_accelerator = 10,
 		/obj/item/weapon/tank/jetpack/carbondioxide = 3,
 		/obj/item/weapon/gun/hookshot = 3,
+		/obj/item/weapon/lazarus_injector/advanced = 4,
 		)
 	prices = list(
 		/obj/item/toy/canary = 100,
@@ -42,6 +43,7 @@
 		/obj/item/weapon/gun/energy/kinetic_accelerator = 1000,
 		/obj/item/weapon/tank/jetpack/carbondioxide = 2000,
 		/obj/item/weapon/gun/hookshot = 3000,
+		/obj/item/weapon/lazarus_injector/advanced = 3000,
 		)
 
 	pack = /obj/structure/vendomatpack/mining
