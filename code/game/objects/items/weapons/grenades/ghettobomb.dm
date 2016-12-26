@@ -119,9 +119,9 @@
 				else
 					I.forceMove(src)
 
-	else
-		if(user)
-			to_chat(user, "<span  class='notice'>There is no room for \the [I] in the improvised explosive!.</span>")
+		else
+			if(user)
+				to_chat(user, "<span  class='notice'>There is no room for \the [I] in the improvised explosive!.</span>")
 
 
 /obj/item/weapon/grenade/iedcasing/prime() //Blowing that can up
