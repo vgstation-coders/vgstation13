@@ -32,7 +32,10 @@
 
 /obj/item/ammo_casing/get_shrapnel_projectile()
 	if(BB)
-		return BB
+
+		var/obj/item/projectile/bullet_bill = BB
+		BB = null
+		return bullet_bill
 	..()
 
 
