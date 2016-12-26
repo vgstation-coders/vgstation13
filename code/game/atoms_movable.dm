@@ -246,7 +246,7 @@
 /atom/movable/proc/lock_atom(var/atom/movable/AM, var/datum/locking_category/category = /datum/locking_category)
 	locking_init()
 	if (AM in locked_atoms || AM.locked_to || !istype(AM))
-		return 0
+		return FALSE
 
 	category = get_lock_cat(category)
 	if (!category) // String category which didn't exist.
@@ -257,25 +257,24 @@
 	locked_atoms[AM] = category
 	category.lock(AM)
 
-	return 1
+	return TRUE
 
 /atom/movable/proc/unlock_atom(var/atom/movable/AM)
-	locking_init()
-	if (!locked_atoms.Find(AM))
-		return
+	if (!locked_atoms || !locked_atoms.Find(AM))
+		return FALSE
 
 	var/datum/locking_category/category = locked_atoms[AM]
 	locked_atoms    -= AM
 	AM.locked_to     = null
 	category.unlock(AM)
 
-	return 1
+	return TRUE
 
 /atom/movable/proc/unlock_from()
 	if(!locked_to)
-		return 0
+		return FALSE
 
-	locked_to.unlock_atom(src)
+	return locked_to.unlock_atom(src)
 
 // Proc for adding an unique locking category with a certain ID.
 /atom/movable/proc/add_lock_cat(var/type, var/id)
@@ -303,12 +302,12 @@
 // Returns the locking category for a locked atom.
 // Returns null if the object is not locked to this.
 /atom/movable/proc/get_lock_cat_for(var/atom/movable/AM)
-	locking_init()
-	return locked_atoms[AM]
+	return locked_atoms && locked_atoms[AM]
 
 // Returns a list (yes, always a list!) of things locked to this category.
 /atom/movable/proc/get_locked(var/category, var/subtypes = FALSE)
-	locking_init()
+	if (!locked_atoms) // Uninitialized
+		return list()
 
 	if (!category)
 		return locked_atoms
