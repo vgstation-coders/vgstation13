@@ -26,6 +26,9 @@
 	siemens_coefficient = 1
 	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("attacks", "stabs", "pokes")
+	shrapnel_amount = 1
+	shrapnel_size = 2
+	shrapnel_type = "/obj/item/projectile/bullet/shrapnel"
 
 /obj/item/weapon/kitchen/utensil/New()
 	. = ..()
@@ -57,7 +60,6 @@
 	desc = "Pointy."
 	icon_state = "fork"
 	sharpness = 0.6
-	sharpness_flags = SHARP_TIP
 	var/loaded_food_name
 	var/image/loaded_food
 	melt_temperature = MELTPOINT_STEEL
@@ -157,7 +159,6 @@
 	force = 10.0
 	throwforce = 10.0
 	sharpness = 1.2
-	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	melt_temperature = MELTPOINT_STEEL
 
 /obj/item/weapon/kitchen/utensil/knife/suicide_act(mob/user)
@@ -204,6 +205,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+	shrapnel_amount = 0
 
 /obj/item/weapon/kitchen/utensil/knife/large/attackby(obj/item/weapon/W, mob/user)
 	..()
@@ -248,7 +250,6 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1.2
-	sharpness_flags = SHARP_BLADE
 	force = 15.0
 	w_class = W_CLASS_SMALL
 	throwforce = 8.0

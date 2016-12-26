@@ -49,6 +49,9 @@
 
 	var/list/attack_verb // used in attack() to say how something was attacked "[x] [z.attack_verb] [y] with [z]". Present tense.
 
+	var/shrapnel_amount = 0 // How many pieces of shrapnel it disintegrates into.
+	var/shrapnel_type = null
+	var/shrapnel_size = 1
 
 
 	var/vending_cat = null// subcategory for vending machines.
@@ -1080,3 +1083,8 @@ var/global/list/image/blood_overlays = list()
 		if(bit & slot_flags)
 			if(M.get_item_by_flag(bit) == src)
 				return TRUE
+/obj/item/proc/get_shrapnel_projectile()
+	if(shrapnel_type)
+		return new shrapnel_type(src)
+	else
+		return 0
