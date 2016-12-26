@@ -124,3 +124,10 @@
 	H.internal = H.get_item_by_slot(tank_slot)
 	if (H.internals)
 		H.internals.icon_state = "internal1"
+
+/datum/species/plasmaman/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
+	if(!isplasmaman(H))
+		return
+	for(var/obj/item/I in H)
+		I.forceMove(H.loc)
+	H.dust()

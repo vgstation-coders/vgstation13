@@ -239,6 +239,8 @@
 			else
 				if(isgolem(src))
 					msg = "<B>[src]</B> crumbles into dust..."
+				else if(isplasmaman(src))
+					msg = "<B>[src]</B> is reduced to ashes..."
 				else
 					msg = "<B>[src]</B> seizes up and falls limp, \his eyes dead and lifeless..."
 			m_type = VISIBLE
