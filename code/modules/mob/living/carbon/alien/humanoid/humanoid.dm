@@ -187,47 +187,14 @@
 			if(health >= config.health_threshold_crit)
 				help_shake_act(M)
 				return 1
-			else
-				if(M.check_body_part_coverage(MOUTH))
-					to_chat(M, "<span class='notice'><B>Remove your [M.get_body_part_coverage(MOUTH)]!</B></span>")
-					return 0
-
-				if (!cpr_time)
-					return 0
-
-				M.visible_message("<span class='danger'>\The [M] is trying perform CPR on \the [src]!</span>")
-
-				cpr_time = 0
-				if(do_after(M, src, 3 SECONDS))
-					adjustOxyLoss(-min(getOxyLoss(), 7))
-					M.visible_message("<span class='danger'>\The [M] performs CPR on \the [src]!</span>")
-					to_chat(src, "<span class='notice'>You feel a breath of fresh air enter your lungs. It feels good.</span>")
-					to_chat(M, "<span class='warning'>Repeat at least every 7 seconds.</span>")
-				cpr_time = 1
+			else if(ishuman(M))
+				M.perform_cpr(src)
 
 		if(I_GRAB)
 			return M.grab_mob(src)
 
 		if(I_HURT)
-			var/damage = rand(1, 9)
-			if(prob(90))
-				if(M_HULK in M.mutations) //M_HULK SMASH
-					damage += 14
-					spawn(0)
-						Knockdown(damage) //Why can a hulk knock an alien out but not knock out a human? Damage is robust enough.
-						step_away(src, M, 15)
-						sleep(3)
-						step_away(src, M, 15)
-				playsound(loc, "punch", 25, 1, -1)
-				visible_message("<span class='danger'>[M] has punched \the [src] !</span>")
-				if(damage > 9 ||prob(5))//Regular humans have a very small chance of weakening an alien.
-					Knockdown(1, 5)
-					visible_message("<span class='danger'>[M] has knockdown \the [src] !</span>")
-				adjustBruteLoss(damage)
-				updatehealth()
-			else
-				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-				visible_message("<span class='danger'>[M] has attempted to punch \the [src] !</span>")
+			return M.unarmed_attack_mob(src)
 
 		if(I_DISARM)
 			if(!lying)

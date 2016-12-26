@@ -390,9 +390,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			M.grab_mob(src)
 
 		if(I_HURT, I_DISARM)
-			adjustBruteLoss(harm_intent_damage)
+			M.unarmed_attack_mob(src)
+			//adjustBruteLoss(harm_intent_damage)
 
-			visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
+			//visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
 
 	return
 

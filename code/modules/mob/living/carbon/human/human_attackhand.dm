@@ -164,33 +164,9 @@
 		return 0
 
 
-	if(M.gloves)
-		if(istype(M.gloves , /obj/item/clothing/gloves/boxing/hologlove))
-			var/damage = rand(0, 9)
-			if(!damage)
-				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-				visible_message("<span class='danger'>[M] attempts to punch [src]!</span>")
-				return 0
-			var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
-			var/armor_block = run_armor_check(affecting, "melee")
-
-			if(M_HULK in M.mutations)
-				damage += 5
-
-			playsound(loc, "punch", 25, 1, -1)
-
-			visible_message("<span class='danger'>[M] punches [src]!</span>")
-
-			apply_damage(damage, HALLOSS, affecting, armor_block)
-			if(damage >= 9)
-				visible_message("<span class='danger'>[M] weakens [src]!</span>")
-				apply_effect(4, WEAKEN, armor_block)
-
-			return
-	else
-		if(istype(M,/mob/living/carbon))
-//			log_debug("No gloves, [M] is truing to infect [src]")
-			M.spread_disease_to(src, "Contact")
+	if(istype(M,/mob/living/carbon))
+//		log_debug("No gloves, [M] is truing to infect [src]")
+		M.spread_disease_to(src, "Contact")
 
 
 	switch(M.a_intent)
@@ -198,107 +174,14 @@
 			if(health >= config.health_threshold_crit)
 				help_shake_act(M)
 				return 1
-//			if(M.health < -75)	return 0
-
-			if(M.check_body_part_coverage(MOUTH))
-				to_chat(M, "<span class='notice'><B>Remove your [M.get_body_part_coverage(MOUTH)]!</B></span>")
-				return 0
-			if(src.check_body_part_coverage(MOUTH))
-				to_chat(M, "<span class='notice'><B>Remove their [src.get_body_part_coverage(MOUTH)]!</B></span>")
-				return 0
-
-			if (!cpr_time)
-				return 0
-
-			M.visible_message("<span class='danger'>\The [M] is trying perform CPR on \the [src]!</span>")
-
-			cpr_time = 0
-			if(do_after(M, src, 3 SECONDS))
-				adjustOxyLoss(-min(getOxyLoss(), 7))
-				M.visible_message("<span class='danger'>\The [M] performs CPR on \the [src]!</span>")
-				to_chat(src, "<span class='notice'>You feel a breath of fresh air enter your lungs. It feels good.</span>")
-				to_chat(M, "<span class='warning'>Repeat at least every 7 seconds.</span>")
-			cpr_time = 1
-
+			else if(ishuman(M))
+				M.perform_cpr(src)
 
 		if(I_GRAB)
 			return M.grab_mob(src)
 
 		if(I_HURT)
-			M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.species.attack_verb != "punches" ? "Slashed" : "Punched"] [src.name] ([src.ckey])</font>")
-			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.species.attack_verb == "slashes" ? "slashed" : "punched"] by [M.name] ([M.ckey])</font>")
-			if(!iscarbon(M))
-				LAssailant = null
-			else
-				LAssailant = M
-
-			log_attack("[M.name] ([M.ckey]) [M.species.attack_verb] [src.name] ([src.ckey])")
-
-
-			var/damage = rand(0, M.species.max_hurt_damage)//BS12 EDIT // edited again by Iamgoofball to fix species attacks
-
-			if(!damage)
-				if(M.species.attack_verb == "punches")
-					playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-				else
-					playsound(loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
-
-				visible_message("<span class='danger'>[M] [M.species.attack_verb] towards [src], but misses!</span>")
-				return 0
-
-
-			var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
-			var/armor_block = run_armor_check(affecting, "melee")
-
-			if(M_HULK in M.mutations)
-				damage += 5
-
-			var/knockout = damage
-
-			if((M_CLAWS in M.mutations) && !istype(M.gloves))
-				damage += 3 //Claws mutation + no gloves (doesn't affect weaken chance)
-
-			if(istype(M.gloves)) //Attacker has gloves
-				var/obj/item/clothing/gloves/G = M.gloves
-				damage += G.damage_added //Increase damage by the gloves' damage modifier
-				knockout += G.bonus_knockout //Increase knockout chance by the gloves' knockout modifier
-
-			if(M.species.attack_verb == "punches")
-				playsound(loc, "punch", 25, 1, -1)
-			else
-				playsound(loc, 'sound/weapons/slice.ogg', 25, 1, -1)
-
-			visible_message("<span class='danger'>[M] [M.species.attack_verb] [src]!</span>")
-
-			if((knockout >= M.species.max_hurt_damage) && prob(50))
-				visible_message("<span class='danger'>[M] has knocked down [src]!</span>")
-				apply_effect(2, WEAKEN, armor_block)
-
-			if(M.species.punch_damage)
-				damage += M.species.punch_damage
-
-			apply_damage(damage, BRUTE, affecting, armor_block)
-
-			// Horror form can punch people so hard they learn how to fly.
-			if(M.species.punch_throw_range && prob(25))
-				visible_message("<span class='danger'>[src] is thrown by the force of the assault!</span>")
-				var/turf/T = get_turf(src)
-				var/turf/target
-				if(istype(T, /turf/space)) // if ended in space, then range is unlimited
-					target = get_edge_target_turf(T, M.dir)
-				else						// otherwise limit to 10 tiles
-					target = get_ranged_target_turf(T, M.dir, M.species.punch_throw_range)
-				src.throw_at(target,100,M.species.punch_throw_speed)
-
-			if(ishuman(M))
-				var/mob/living/carbon/human/H = M
-				if(H.zone_sel && H.zone_sel.selecting == "mouth")
-					var/chance = 0.5 * damage
-					if(M_HULK in H.mutations)
-						chance += 50
-					if(prob(chance))
-						knock_out_teeth(H)
-
+			return M.unarmed_attack_mob(src)
 
 		if(I_DISARM)
 			return M.disarm_mob(src)

@@ -57,6 +57,9 @@
 /mob/living/proc/get_unarmed_miss_sound(mob/living/victim)
 	return 'sound/weapons/punchmiss.ogg'
 
+/mob/living/proc/get_unarmed_damage_type(mob/living/victim)
+	return BRUTE
+
 /mob/living/proc/unarmed_attack_mob(mob/living/target)
 	var/damage = get_unarmed_damage(target)
 
@@ -68,14 +71,15 @@
 	var/zone = ran_zone(zone_sel.selecting)
 	var/datum/organ/external/affecting = target.get_organ(zone)
 	var/armor_block = target.run_armor_check(affecting, "melee")
+	var/damage_type = get_unarmed_damage_type(target)
 	var/attack_verb = get_unarmed_verb(target)
 
 	playsound(loc, get_unarmed_hit_sound(target), 25, 1, -1)
 	visible_message("<span class='danger'>[src] has [attack_verb] [target]!</span>")
 
-	var/damage_done = target.apply_damage(damage, BRUTE, affecting, armor_block)
-	target.unarmed_attacked(src, damage, BRUTE, zone)
-	after_unarmed_attack(target, damage, BRUTE, affecting, armor_block)
+	var/damage_done = target.apply_damage(damage, damage_type, affecting, armor_block)
+	target.unarmed_attacked(src, damage, damage_type, zone)
+	after_unarmed_attack(target, damage, damage_type, affecting, armor_block)
 
 	return damage_done
 

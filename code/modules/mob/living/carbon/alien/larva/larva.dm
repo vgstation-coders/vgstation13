@@ -164,26 +164,7 @@
 			M.grab_mob(src)
 
 		else
-			var/damage = rand(1, 9)
-			if(prob(90))
-				if(M_HULK in M.mutations)
-					damage += 5
-					spawn(0)
-						Paralyse(1)
-						step_away(src,M,15)
-						sleep(3)
-						step_away(src,M,15)
-				playsound(loc, "punch", 25, 1, -1)
-				visible_message("<span class='danger'>[M] has punched \the [src] !</span>")
-				if(damage > 4.9)
-					Knockdown(rand(10,15))
-					visible_message("<span class='danger'>[M] has knocked down \the [src] !</span>")
-				adjustBruteLoss(damage)
-				updatehealth()
-			else
-				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-				visible_message("<span class='danger'>[M] has attempted to punch \the [src] !</span>")
-	return
+			M.unarmed_attack_mob(src)
 
 /mob/living/carbon/alien/larva/restrained()
 	if(timestopped)

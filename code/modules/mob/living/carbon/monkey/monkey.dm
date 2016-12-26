@@ -270,27 +270,7 @@
 			help_shake_act(M)
 
 		if(I_HURT)
-			if ((prob(75) && health > 0))
-				visible_message("<span class='danger'>[M] has punched [name]!</span>")
-
-				playsound(loc, "punch", 25, 1, -1)
-				var/damage = rand(5, 10)
-				var/dam_zone = ""
-				if(M.zone_sel && M.zone_sel.selecting)
-					dam_zone = M.zone_sel.selecting
-				damage = defense(damage,dam_zone)
-				if ((damage > 5) && prob(40))
-					damage = rand(10, 15)
-					if (paralysis < 5)
-						Paralyse(rand(10, 15))
-
-						visible_message("<span class='danger'>[M] has knocked out [name]!</span>")
-
-				adjustBruteLoss(damage)
-				updatehealth()
-			else
-				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-				visible_message("<span class='danger'>[M] has attempted to punch [name]!</span>")
+			M.unarmed_attack_mob(src)
 
 		if(I_GRAB)
 			M.grab_mob(src)
