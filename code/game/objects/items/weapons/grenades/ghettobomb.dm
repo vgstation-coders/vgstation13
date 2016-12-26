@@ -78,7 +78,6 @@
 
 
 		to_chat(usr, "<span  class='notice'>You remove all the shrapnel from the improvised explosive.</span>")
-		current_shrapnel = 0
 		for(var/obj/item/shrapnel in shrapnel_list)
 
 			shrapnel.forceMove(get_turf(src))
