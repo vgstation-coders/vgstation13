@@ -119,8 +119,7 @@
 				else
 					I.forceMove(src)
 
-	else
-		if(user)
+		else if(user)
 			to_chat(user, "<span  class='notice'>There is no room for \the [I] in the improvised explosive!.</span>")
 
 
