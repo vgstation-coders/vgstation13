@@ -121,13 +121,6 @@
 
 	return base_chance
 
-/mob/living/carbon/human/unarmed_attack_mob(mob/living/target)
-	var/dmg_done = ..()
-
-	add_logs(src, target, "punched ([dmg_done]dmg)", admin = src.ckey ? TRUE : FALSE) //Only add this to the server logs if attacker is controlled by player
-
-	return dmg_done
-
 /mob/living/carbon/human/after_unarmed_attack(mob/living/target, damage, damage_type, organ, armor)
 	var/knockout_chance = get_knockout_chance(target)
 
