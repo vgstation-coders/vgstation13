@@ -31,6 +31,11 @@
 	weaken = 1
 	stun = 3
 
+/obj/item/projectile/bullet/shrapnel/New()
+	..()
+	kill_count = rand(6,10)
+
+
 
 /obj/item/projectile/bullet/shrapnel/small
 
