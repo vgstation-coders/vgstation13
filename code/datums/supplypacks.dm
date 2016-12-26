@@ -1134,7 +1134,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/machinery/power/emitter)
 	cost = 10
 	containertype = /obj/structure/closet/crate/secure/engisec
-	containername = "rmitter crate"
+	containername = "emitter crate"
 	access = access_ce
 	group = "Engineering"
 
@@ -1319,7 +1319,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Mark I Thermoelectric Generator"
 	cost = 75
 	containertype = /obj/structure/closet/crate/secure/large
-	containername = "\improper Mk1 TEG crate"
+	containername = "mk1 TEG crate"
 	group = "Engineering"
 	access = access_engine
 
