@@ -22,9 +22,6 @@
 /mob/living/carbon/slime/get_unarmed_hit_sound()
 	return 'sound/weapons/welderattack.ogg'
 
-/mob/living/carbon/slime/get_unarmed_damage_zone(mob/living/victim)
-	return zone_sel.selecting
-
 /mob/living/carbon/slime/proc/get_stun_chance()
 	switch(powerlevel)
 		if(1 to 2)

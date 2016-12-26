@@ -61,6 +61,9 @@
 	return BRUTE
 
 /mob/living/proc/get_unarmed_damage_zone(mob/living/victim)
+	if(zone_sel)
+		return zone_sel.selecting
+
 	return pick(LIMB_CHEST, LIMB_LEFT_HAND, LIMB_RIGHT_HAND, LIMB_LEFT_ARM, LIMB_RIGHT_ARM, LIMB_LEFT_LEG, LIMB_RIGHT_LEG, LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT, LIMB_HEAD)
 
 /mob/living/proc/unarmed_attack_mob(mob/living/target)

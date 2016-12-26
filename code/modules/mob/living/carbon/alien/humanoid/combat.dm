@@ -1,6 +1,3 @@
-/mob/living/carbon/alien/get_unarmed_damage_zone(mob/living/victim)
-	return zone_sel.selecting
-
 /mob/living/carbon/alien/humanoid/disarm_mob(mob/living/target)
 	if(target.disarmed_by(src))
 		return

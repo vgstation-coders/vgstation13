@@ -5,9 +5,6 @@
 #define show_combat_stat(x) null << x
 #endif
 
-/mob/living/carbon/human/get_unarmed_damage_zone(mob/living/victim)
-	return zone_sel.selecting
-
 /mob/living/carbon/human/grabbed_by(mob/living/grabber)
 	if(ishuman(grabber) && w_uniform)
 		w_uniform.add_fingerprint(grabber)
