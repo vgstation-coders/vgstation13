@@ -47,7 +47,7 @@
 	virus=D
 
 /datum/disease2/effect/proc/can_run_effect(var/active_stage = -1)
-	if((count > max_count || max_count == -1) && (stage <= active_stage || active_stage == -1) && prob(chance))
+	if((count < max_count || max_count == -1) && (stage <= active_stage || active_stage == -1) && prob(chance))
 		return 1
 	return 0
 
