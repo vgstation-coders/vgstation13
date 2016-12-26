@@ -160,27 +160,6 @@
 					shrapnel_projectile.forceMove(curloc)
 					shrapnel_projectile.launch_at(target,bodyparts[rand(1,bodyparts.len)],curloc,src)
 				qdel(shrapnel)
-			/*if(istype(shrapnel, /obj/item/ammo_casing))// If the shrapnel is a bullet casing it will be fired
-				var/obj/item/ammo_casing/shrapnel_bullet = shrapnel //shitcode but otherwise BB is undefined var
-				var/obj/item/projectile/shrapnel_projectile = null
-				target=pick(possible_targets)
-				if(shrapnel_bullet.BB)
-					shrapnel_projectile = shrapnel_bullet.BB
-				else
-					shrapnel_projectile = new /obj/item/projectile/bullet/shrapnel/small(src)
-				shrapnel_projectile.forceMove(curloc)
-				shrapnel_projectile.launch_at(target,bodyparts[rand(1,bodyparts.len)],curloc,src)
-				qdel(shrapnel) // the casing is disintegrated in the explosion
-			else if(shrapnel.shrapnel_amount >0)
-				var/amount = shrapnel.shrapnel_amount
-				while(amount > 0)
-					amount--
-					target =pick(possible_targets)
-					var/obj/item/projectile/bullet/shrapnel_projectile = new shrapnel.shrapnel_type(src)
-					shrapnel_projectile.forceMove(curloc)
-					shrapnel_projectile.kill_count = rand(6,10)//killcount=max squares traveled before the projectile is deleted. Limits shrapnel range
-					shrapnel_projectile.launch_at(target,bodyparts[rand(1,bodyparts.len)],curloc,src)
-					qdel(shrapnel)*/
 			else
 				target =pick(possible_targets)
 				shrapnel.forceMove(curloc)
