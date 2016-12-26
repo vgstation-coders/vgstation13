@@ -63,8 +63,8 @@
 	update_icon()
 
 	if(is_mature() && special_cooldown())
-		if(is_locking(/datum/locking_category/plantsegment))
-			var/mob/V = get_locked(/datum/locking_category/plantsegment)[1]
+		if(is_locking_type(/mob, /datum/locking_category/plantsegment))
+			var/mob/V = locate(/mob) in get_locked(/datum/locking_category/plantsegment)
 			if(istype(V, /mob/living/carbon/human))
 				do_chem_inject(V)
 				do_carnivorous_bite(V, seed.potency)

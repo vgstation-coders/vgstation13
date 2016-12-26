@@ -43,6 +43,7 @@
 	var/movement_delay = 0 //Speed of the vehicle decreases as this value increases. Anything above 6 is slow, 1 is fast and 0 is very fast
 
 	var/mob/occupant
+	lock_type = /datum/locking_category/buckle/chair/vehicle
 
 /obj/structure/bed/chair/vehicle/proc/getMovementDelay()
 	return movement_delay

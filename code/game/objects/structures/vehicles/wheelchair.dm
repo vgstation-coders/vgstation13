@@ -169,8 +169,7 @@
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people/examine(mob/user)
 	..()
 
-	var/list/L = get_locked(is_locking(/datum/locking_category/buckle/chair/vehicle))
-	if(L.len > 9)
+	if(is_locking(/datum/locking_category/buckle/chair/vehicle) > 9)
 		to_chat(user, "<b>WHAT THE FUCK</b>")
 
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people/can_buckle(mob/M, mob/user)

@@ -319,23 +319,18 @@
 			if (istype(C, category))
 				. += C.locked
 
+		return
+
 	if (locking_categories_name.Find(category))
 		var/datum/locking_category/C = locking_categories_name[category]
 		return C.locked
 
 	return list()
 
-// Returns true if we have any locked atoms in this category.
-// If this returns TRUE, it means that get_locked with the same parameters will return a list with at least a size of 1.
+// Returns the amount of things locked to this category.
+// The length of get_locked() with the same arguments will always be equal to this.
 /atom/movable/proc/is_locking(var/category, var/subtypes = FALSE)
-	if (subtypes)
-		for (var/datum/locking_category/C in locking_categories)
-			if (istype(C, category) && C.locked.len)
-				return TRUE
-
-		return FALSE
-
-	var/list/atom/movable/locked = get_locked(category)
+	var/list/atom/movable/locked = get_locked(category, subtypes)
 	return locked.len
 
 // Checks if this atom is locking anything of a specific type, if category is not provided, search all categories.

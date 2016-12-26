@@ -226,8 +226,7 @@
 	if (contents.Find(checked))
 		return TRUE
 
-	var/list/locked = get_locked(/datum/locking_category/cage)
-	return locked.Find(checked)
+	return checked in get_locked(/datum/locking_category/cage)
 
 #undef C_OPENED
 #undef C_CLOSED
