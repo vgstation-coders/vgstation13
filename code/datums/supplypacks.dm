@@ -16,6 +16,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	var/containertype = null
 	var/containername = null
 	var/access = null
+	var/access_one = null
 	var/hidden = 0 //Emaggable
 	var/contraband = 0 //Hackable via tools
 	var/group = "Supplies"
@@ -1718,7 +1719,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 15
 	containertype = /obj/structure/closet/crate/secure/hydrosec
 	containername = "Exotic Seeds crate"
-	access = access_hydroponics
+	access_one = list(access_hydroponics, access_science)
 	group = "Hydroponics"
 
 /datum/supply_packs/bee_keeper
