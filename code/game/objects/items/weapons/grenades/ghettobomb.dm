@@ -113,7 +113,7 @@
 			if(I.shrapnel_amount > 0|| I.w_class == W_CLASS_TINY)
 				shrapnel_list.Add(I)
 				current_shrapnel += I.shrapnel_size
-				if(user.drop_item(I, src))
+				if(user && user.drop_item(I, src))
 					to_chat(user, "<span  class='notice'>You add \the [I] to the improvised explosive.</span>")
 					playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
 				else
@@ -162,21 +162,20 @@
 				shrapnel_projectile.forceMove(curloc)
 				shrapnel_projectile.launch_at(target,bodyparts[rand(1,bodyparts.len)],curloc,src)
 				qdel(shrapnel) // the casing is disintegrated in the explosion
-			else // elif doesnt work even though its in the dm ref
-				if(shrapnel.shrapnel_amount >0)
-					var/amount = shrapnel.shrapnel_amount
-					while(amount > 0)
-						amount--
-						target =pick(possible_targets)
-						var/obj/item/projectile/bullet/shrapnel_projectile = new shrapnel.shrapnel_type(src)
-						shrapnel_projectile.forceMove(curloc)
-						shrapnel_projectile.kill_count = rand(6,10)//killcount=max squares traveled before the projectile is deleted. Limits shrapnel range
-						shrapnel_projectile.launch_at(target,bodyparts[rand(1,bodyparts.len)],curloc,src)
-						qdel(shrapnel)
-				else
+			else if(shrapnel.shrapnel_amount >0)
+				var/amount = shrapnel.shrapnel_amount
+				while(amount > 0)
+					amount--
 					target =pick(possible_targets)
-					shrapnel.forceMove(curloc)
-					shrapnel.throw_at(target,9,10)
+					var/obj/item/projectile/bullet/shrapnel_projectile = new shrapnel.shrapnel_type(src)
+					shrapnel_projectile.forceMove(curloc)
+					shrapnel_projectile.kill_count = rand(6,10)//killcount=max squares traveled before the projectile is deleted. Limits shrapnel range
+					shrapnel_projectile.launch_at(target,bodyparts[rand(1,bodyparts.len)],curloc,src)
+					qdel(shrapnel)
+			else
+				target =pick(possible_targets)
+				shrapnel.forceMove(curloc)
+				shrapnel.throw_at(target,9,10)
 
 /obj/item/weapon/grenade/iedcasing/examine(mob/user)
 	..()
