@@ -540,21 +540,7 @@ var/list/ai_list = list()
 					flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
 
 /mob/living/silicon/ai/attack_animal(mob/living/simple_animal/M as mob)
-	if(!istype(M))
-		return
-	if(M.melee_damage_upper == 0)
-		M.emote("[M.friendly] [src]")
-	else
-		if(M.attack_sound)
-			playsound(loc, M.attack_sound, 50, 1, 1)
-		for(var/mob/O in viewers(src, null))
-			O.show_message("<span class='warning'><B>[M]</B> [M.attacktext] [src]!</span>", 1)
-
-		add_logs(M, src, "attacked", admin = M.ckey ? TRUE : FALSE) //Only add this to the server logs if they're controlled by a player.
-
-		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-		adjustBruteLoss(damage)
-		updatehealth()
+	M.unarmed_attack_mob(src)
 
 /mob/living/silicon/ai/reset_view(atom/A)
 	if (camera_light_on)

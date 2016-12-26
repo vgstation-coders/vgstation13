@@ -197,12 +197,7 @@
 	..()
 
 	if(statpanel("Status"))
-		if(istype(src, /mob/living/carbon/slime/adult))
-			stat(null, "Health: [round((health / 200) * 100)]%")
-		else
-			stat(null, "Health: [round((health / 150) * 100)]%")
-
-
+		stat(null, "Health: [round((health / maxHealth) * 100)]%")
 
 		if(istype(src,/mob/living/carbon/slime/adult))
 			stat(null, "Nutrition: [nutrition]/1200")
@@ -307,51 +302,12 @@
 /mob/living/carbon/slime/attack_ui(slot)
 	return
 
-/mob/living/carbon/slime/attack_slime(mob/living/carbon/slime/M as mob)
-	if (!ticker)
-		to_chat(M, "You cannot attack people before the game has started.")
-		return
-
-	if(Victim)
-		return // can't attack while eating!
-
-	if (health > -100)
-
-		for(var/mob/O in viewers(src, null))
-			if ((O.client && !( O.blinded )))
-				O.show_message(text("<span class='danger'>The [M.name] has glomped []!</span>", src), 1)
-		add_logs(M, src, "glomped on", 0)
-
-		var/damage = rand(1, 3)
-		attacked += 5
-
-		if(istype(src, /mob/living/carbon/slime/adult))
-			damage = rand(1, 6)
-		else
-			damage = rand(1, 3)
-
-		adjustBruteLoss(damage)
+/mob/living/carbon/slime/attack_slime(mob/living/carbon/slime/M)
+	M.unarmed_attack_mob(src)
 
 
-		updatehealth()
-
-	return
-
-
-/mob/living/carbon/slime/attack_animal(mob/living/simple_animal/M as mob)
-	if(M.melee_damage_upper == 0)
-		M.emote("[M.friendly] [src]")
-	else
-		if(M.attack_sound)
-			playsound(loc, M.attack_sound, 50, 1, 1)
-		for(var/mob/O in viewers(src, null))
-			O.show_message("<span class='warning'><B>[M]</B> [M.attacktext] [src]!</span>", 1)
-
-		add_logs(M, src, "attacked", admin = M.ckey ? TRUE : FALSE) //Only add this to the server logs if they're controlled by a player.
-
-		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-		adjustBruteLoss(damage)
-		updatehealth()
+/mob/living/carbon/slime/attack_animal(mob/living/simple_animal/M)
+	M.unarmed_attack_mob(src)
 
 /mob/living/carbon/slime/attack_paw(mob/living/carbon/monkey/M)
 	if(!(istype(M, /mob/living/carbon/monkey)))
@@ -397,15 +353,11 @@
 
 		else
 			if(prob(30))
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message("<span class='warning'>[M] attempts to wrestle \the [name] off of [Victim]!</span>", 1)
+				visible_message("<span class='warning'>[M] attempts to wrestle \the [name] off of [Victim]!</span>")
 				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 
 			else
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message("<span class='warning'>[M] manages to wrestle \the [name] off of [Victim]!</span>", 1)
+				visible_message("<span class='warning'>[M] manages to wrestle \the [name] off of [Victim]!</span>")
 				playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 
 				if(prob(80) && !client)

@@ -116,43 +116,11 @@
 	return
 
 
-/mob/living/carbon/alien/larva/attack_slime(mob/living/carbon/slime/M as mob)
-	if(!ticker)
-		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
-		return
+/mob/living/carbon/alien/larva/attack_slime(mob/living/carbon/slime/M)
+	M.unarmed_attack_mob(src)
 
-	if(M.Victim)
-		return // can't attack while eating!
+/mob/living/carbon/alien/larva/attack_hand(mob/living/carbon/human/M)
 
-	if(health > -100)
-
-		for(var/mob/O in viewers(src, null))
-			visible_message("<span class='danger'>\The [M] glomps \the [src]!</span>")
-
-		add_logs(M, src, "glomped on", 0)
-
-		var/damage = rand(1, 3)
-
-		if(istype(src, /mob/living/carbon/slime/adult))
-			damage = rand(20, 40)
-		else
-			damage = rand(5, 35)
-
-		adjustBruteLoss(damage)
-
-		updatehealth()
-	return
-
-/mob/living/carbon/alien/larva/attack_hand(mob/living/carbon/human/M as mob)
-	if(!ticker)
-		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
-		return
-
-	/*
-	if(istype(loc, /turf) && istype(loc.loc, /area/start))
-		to_chat(M, "<span class='warning'>No attacking people at spawn, you jackass.</span>")
-		return
-	*/
 	..()
 
 	switch(M.a_intent)

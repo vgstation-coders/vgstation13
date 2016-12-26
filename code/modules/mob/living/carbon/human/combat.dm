@@ -5,6 +5,9 @@
 #define show_combat_stat(x) null << x
 #endif
 
+/mob/living/carbon/human/get_unarmed_damage_zone(mob/living/victim)
+	return zone_sel.selecting
+
 /mob/living/carbon/human/grabbed_by(mob/living/grabber)
 	if(ishuman(grabber) && w_uniform)
 		w_uniform.add_fingerprint(grabber)
@@ -121,11 +124,7 @@
 /mob/living/carbon/human/unarmed_attack_mob(mob/living/target)
 	var/dmg_done = ..()
 
-	src.attack_log += text("\[[time_stamp()]\] <font color='red'>Punched [target.name] ([target.ckey]) for [dmg_done] damage</font>")
-	target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been punched by [src.name] ([src.ckey]) for [dmg_done] damage</font>")
-	target.LAssailant = src
-
-	log_attack("[src.name] ([src.ckey]) punched [src.name] ([src.ckey]) for [dmg_done] damage")
+	add_logs(src, target, "punched ([dmg_done]dmg)", admin = src.ckey ? TRUE : FALSE) //Only add this to the server logs if attacker is controlled by player
 
 	return dmg_done
 

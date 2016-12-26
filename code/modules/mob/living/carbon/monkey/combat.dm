@@ -1,3 +1,6 @@
+/mob/living/carbon/monkey/get_unarmed_damage_zone(mob/living/victim)
+	return zone_sel.selecting
+
 /mob/living/carbon/monkey/get_unarmed_verb()
 	return attack_text
 
