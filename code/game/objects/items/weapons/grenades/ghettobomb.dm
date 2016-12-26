@@ -65,7 +65,7 @@
 			det_time = rand(30,80)
 	else
 
-		AddShrapnel(I,user)
+		add_shrapnel(I,user)
 
 
 
@@ -106,7 +106,7 @@
 				prime()
 
 
-/obj/item/weapon/grenade/iedcasing/proc/AddShrapnel(var/obj/item/I, mob/user as mob)
+/obj/item/weapon/grenade/iedcasing/proc/add_shrapnel(var/obj/item/I, mob/user as mob)
 
 	if(assembled == 2)
 		if((current_shrapnel + I.shrapnel_size)<= max_shrapnel )
@@ -181,7 +181,7 @@
 /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel/New()
 	..()
 	for(var/i = 1, i<=4,i++)
-		AddShrapnel(new /obj/item/weapon/shard(src), null)
+		add_shrapnel(new /obj/item/weapon/shard(src), null)
 
 
 /obj/item/weapon/grenade/iedcasing/preassembled/New()
