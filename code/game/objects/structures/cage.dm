@@ -223,7 +223,7 @@
 			to_chat(victim, "<span class='notice'>You suddenly find yourself locked in a cage!</span>")
 
 /obj/structure/cage/proc/mob_is_inside(mob/checked)
-	return ((contents.Find(checked)) || (locked_atoms.Find(checked)))
+	return ((contents.Find(checked)) || (ISREALLIST(locked_atoms) && locked_atoms.Find(checked)))
 
 #undef C_OPENED
 #undef C_CLOSED

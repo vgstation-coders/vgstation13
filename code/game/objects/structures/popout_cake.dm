@@ -43,6 +43,7 @@
 	var/string_pulled = 0
 
 /obj/structure/popout_cake/Destroy()
+
 	for(var/mob/living/L in locked_atoms + contents) //Release all mobs inside
 		relaymove(L, NORTH)
 
@@ -138,7 +139,7 @@
 	if(!istype(L))
 		return
 
-	if(locked_atoms.Find(L))
+	if(ISREALLIST(locked_atoms) && locked_atoms.Find(L))
 		unlock_atom(L)
 	else if(contents.Find(L))
 		L.forceMove(get_turf(src))

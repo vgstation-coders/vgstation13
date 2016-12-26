@@ -63,7 +63,7 @@
 		return
 	if(!A.powered(EQUIP))
 		return
-	if(locked_atoms.len)
+	if(ISREALLIST(locked_atoms))
 		A.use_power(EQUIP, 5000)
 		var/light = A.power_light
 		A.updateicon()

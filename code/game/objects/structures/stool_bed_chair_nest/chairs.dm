@@ -166,7 +166,7 @@
 
 /obj/structure/bed/chair/comfy/update_icon()
 	..()
-	if(locked_atoms.len)
+	if(ISREALLIST(locked_atoms))
 		overlays += buckle_overlay
 		if(secondary_buckle_overlay)
 			overlays += secondary_buckle_overlay
@@ -195,7 +195,7 @@
 	return ..()
 
 /obj/structure/bed/chair/comfy/attack_hand(var/mob/user)
-	if(locked_atoms.len)
+	if(ISREALLIST(locked_atoms))
 		return ..()
 
 	for (var/obj/item/I in src)
@@ -240,7 +240,7 @@
 
 /obj/structure/bed/chair/office/update_icon()
 	..()
-	if(locked_atoms.len)
+	if(ISREALLIST(locked_atoms))
 		overlays += buckle_overlay
 	else
 		overlays -= buckle_overlay
@@ -249,7 +249,7 @@
 
 
 /obj/structure/bed/chair/office/handle_layer() // Fixes layer problem when and office chair is buckled and facing north
-	if(dir == NORTH && !locked_atoms.len)
+	if(dir == NORTH && !ISREALLIST(locked_atoms))
 		layer = CHAIR_ARMREST_LAYER
 		plane = ABOVE_HUMAN_PLANE
 	else

@@ -16,6 +16,7 @@
 	if (!AM)
 		return
 
+	LAZYINITLIST(locked)
 	locked += AM
 
 	if (ismob(AM))
@@ -81,7 +82,7 @@
 
 	// Okay so now we have to loop through ALL of the owner's locked atoms and their categories to see if the owner still needs to be dense.
 	var/found = FALSE
-	if (flags & DENSE_WHEN_LOCKING || AM.lockflags & DENSE_WHEN_LOCKED)
+	if ((flags & DENSE_WHEN_LOCKING || AM.lockflags & DENSE_WHEN_LOCKED) && ISREALLIST(owner.locked_atoms))
 		for (var/atom/movable/candidate in owner.locked_atoms)
 			if (candidate.lockflags & DENSE_WHEN_LOCKED)
 				found = TRUE
@@ -102,9 +103,9 @@
 	AM.pixel_x -= pixel_x_offset * PIXEL_MULTIPLIER
 	AM.pixel_y -= pixel_y_offset * PIXEL_MULTIPLIER
 
-/datum/locking_category/New(var/atom/new_owner)
-	locked = list()
+	UNSETEMPTY(locked)
 
+/datum/locking_category/New(var/atom/new_owner)
 	owner  = new_owner
 
 	..()
@@ -115,4 +116,3 @@
 
 /datum/locking_category/resetVariables()
 	..()
-	locked = list()

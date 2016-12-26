@@ -18,7 +18,7 @@
 	var/last_act = 0
 	var/datum/geosample/geologic_data
 	var/excavation_level = 0
-	var/list/finds = list()//no longer null to prevent those pesky runtime errors
+	var/list/finds
 //	var/next_rock = 0
 	var/archaeo_overlay = ""
 	var/excav_overlay = ""
@@ -74,87 +74,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			if (T)
 				I.icon_state = "rock_side_e"
 				T.overlays += I
-	/*
-	if (mineralName && mineralAmt && spread && spreadChance)
-		for(var/trydir in list(1,2,4,8))
-			if(prob(spreadChance))
-				if(istype(get_step(src, trydir), /turf/unsimulated/mineral/random))
-					var/turf/unsimulated/mineral/T = get_step(src, trydir)
-					var/turf/unsimulated/mineral/M = new src.type(T)
-					//keep any digsite data as constant as possible
-					if(T.finds.len && !M.finds.len)
-						M.finds = T.finds
-						if(T.archaeo_overlay)
-							M.overlays += archaeo_overlay
-
-
-	//---- Xenoarchaeology BEGIN
-
-	//put into spawn so that digsite data can be preserved over the turf replacements via spreading mineral veins
-	spawn(0)
-		if(mineralAmt > 0 && !excavation_minerals.len)
-			for(var/i=0, i<mineralAmt, i++)
-				excavation_minerals.Add(rand(5,95))
-			excavation_minerals = insertion_sort_numeric_list_descending(excavation_minerals)
-
-		if(!finds.len && prob(XENOARCH_SPAWN_CHANCE))
-			//create a new archaeological deposit
-			var/digsite = get_random_digsite_type()
-
-			var/list/turfs_to_process = list(src)
-			var/list/processed_turfs = list()
-			while(turfs_to_process.len)
-				var/turf/unsimulated/mineral/M = turfs_to_process[1]
-				for(var/turf/unsimulated/mineral/T in orange(1, M))
-					if(T.finds.len)
-						continue
-					if(T in processed_turfs)
-						continue
-					if(prob(XENOARCH_SPREAD_CHANCE))
-						turfs_to_process.Add(T)
-
-				turfs_to_process.Remove(M)
-				processed_turfs.Add(M)
-				if(!M.finds.len)
-					if(prob(50))
-						M.finds.Add(new/datum/find(digsite, rand(5,95)))
-					else if(prob(75))
-						M.finds.Add(new/datum/find(digsite, rand(5,45)))
-						M.finds.Add(new/datum/find(digsite, rand(55,95)))
-					else
-						M.finds.Add(new/datum/find(digsite, rand(5,30)))
-						M.finds.Add(new/datum/find(digsite, rand(35,75)))
-						M.finds.Add(new/datum/find(digsite, rand(75,95)))
-
-					//sometimes a find will be close enough to the surface to show
-					var/datum/find/F = M.finds[1]
-					if(F.excavation_required <= F.view_range)
-						archaeo_overlay = "overlay_archaeo[rand(1,3)]"
-						M.overlays += archaeo_overlay
-
-			//dont create artifact machinery in animal or plant digsites, or if we already have one
-			if(!artifact_find && digsite != 1 && digsite != 2 && prob(ARTIFACT_SPAWN_CHANCE))
-				artifact_find = new()
-				artifact_spawning_turfs.Add(src)
-
-		if(!src.geological_data)
-			src.geological_data = new/datum/geosample(src)
-		src.geological_data.UpdateTurf(src)
-
-		//for excavated turfs placeable in the map editor
-		/*if(excavation_level > 0)
-			if(excavation_level < 25)
-				src.overlays += image('icons/obj/xenoarchaeology.dmi', "overlay_excv1_[rand(1,3)]")
-			else if(excavation_level < 50)
-				src.overlays += image('icons/obj/xenoarchaeology.dmi', "overlay_excv2_[rand(1,3)]")
-			else if(excavation_level < 75)
-				src.overlays += image('icons/obj/xenoarchaeology.dmi', "overlay_excv3_[rand(1,3)]")
-			else
-				src.overlays += image('icons/obj/xenoarchaeology.dmi', "overlay_excv4_[rand(1,3)]")
-			desc = "It appears to be partially excavated."*/
-
-	return
-	*/
 
 /turf/unsimulated/mineral/ex_act(severity)
 	switch(severity)
@@ -263,7 +182,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 		var/fail_message = ""
 		//handle any archaeological finds we might uncover
-		if(finds && finds.len)
+		if(ISREALLIST(finds))
 			var/datum/find/F = finds[1]
 
 			if(excavation_level + P.excavation_amount > F.excavation_required)
@@ -275,6 +194,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				excavate_find(5, finds[1])
 			else if(prob(50))
 				finds.Remove(finds[1])
+				UNSETEMPTY(finds)
 				if(prob(50))
 					artifact_debris()
 
@@ -283,7 +203,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		if(do_after(user, src, P.digspeed) && user)
 			busy = 0
 
-			if(finds && finds.len)
+			if(ISREALLIST(finds))
 				var/datum/find/F = finds[1]
 				if(round(excavation_level + P.excavation_amount) == F.excavation_required)
 
@@ -332,7 +252,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 								polarstar = 2
 				return
 
-			if(finds && finds.len)
+			if(ISREALLIST(finds))
 				var/I = rand(1,100)
 				if(I == 1)
 					switch(polarstar)
@@ -347,7 +267,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 			excavation_level += P.excavation_amount
 
-			if(!archaeo_overlay && finds && finds.len)
+			if(!archaeo_overlay && ISREALLIST(finds))
 				var/datum/find/F = finds[1]
 				if(F.excavation_required <= excavation_level + F.view_range)
 					archaeo_overlay = "overlay_archaeo[rand(1,3)]"
@@ -458,6 +378,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				X = null
 
 	finds.Remove(F)
+	UNSETEMPTY(finds)
 
 /turf/unsimulated/mineral/proc/artifact_debris(var/severity = 0)
 	if(severity)
@@ -627,7 +548,10 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 /turf/unsimulated/mineral/random
 	name = "Mineral deposit"
-	var/mineralSpawnChanceList = list(
+	var/mineralChance = 10  //means 10% chance of this plot changing to a mineral deposit
+
+/turf/unsimulated/mineral/random/proc/return_mineral_spawn_chance_list()
+	return list(
 		"Iron"      = 50,
 		"Plasma"    = 25,
 		"Uranium"   = 5,
@@ -636,29 +560,12 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		"Gibtonite" = 5,
 		"Diamond"   = 1,
 		"Cave"      = 1,
-		/*
-		"Pharosium"  = 5,
-		"Char"  = 5,
-		"Claretine"  = 5,
-		"Bohrum"  = 5,
-		"Syreline"  = 5,
-		"Erebite"  = 5,
-		"Uqill"  = 5,
-		"Telecrystal"  = 5,
-		"Mauxite"  = 5,
-		"Cobryl"  = 5,
-		"Cerenkite"  = 5,
-		"Molitz"  = 5,
-		"Cytine"  = 5
-		*/
 	)
-	//Currently, Adamantine won't spawn as it has no uses. -Durandan
-	var/mineralChance = 10  //means 10% chance of this plot changing to a mineral deposit
 
 /turf/unsimulated/mineral/random/New()
 	icon_state = "rock"
 	if (prob(mineralChance) && !mineral)
-		var/mineral_name = pickweight(mineralSpawnChanceList) //temp mineral name
+		var/mineral_name = pickweight(return_mineral_spawn_chance_list())
 
 		if(!name_to_mineral)
 			SetupMinerals()
@@ -675,54 +582,27 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 /turf/unsimulated/mineral/random/high_chance
 	icon_state = "rock(high)"
 	mineralChance = 25
-	mineralSpawnChanceList = list(
+
+/turf/unsimulated/mineral/random/high_chance/return_mineral_spawn_chance_list()
+	return list(
 		"Uranium" = 10,
 		"Iron"    = 30,
 		"Diamond" = 2,
 		"Gold"    = 10,
 		"Silver"  = 10,
 		"Plasma"  = 25,
-		/*
-		"Pharosium"  = 5,
-		"Char"  = 5,
-		"Claretine"  = 5,
-		"Bohrum"  = 5,
-		"Syreline"  = 5,
-		"Erebite"  = 5,
-		"Uqill"  = 5,
-		"Telecrystal"  = 5,
-		"Mauxite"  = 5,
-		"Cobryl"  = 5,
-		"Cerenkite"  = 5,
-		"Molitz"  = 5,
-		"Cytine"  = 5
-		*/
 	)
 
 /turf/unsimulated/mineral/random/high_chance_clown
 	icon_state = "rock(clown)"
 	mineralChance = 40
-	mineralSpawnChanceList = list(
+
+/turf/unsimulated/mineral/random/high_chance_clown/return_mineral_spawn_chance_list()
+	return list(
 		"Uranium" = 10,
-		//"Iron"    = 10,
 		"Diamond" = 2,
 		"Gold"    = 5,
 		"Silver"  = 5,
-		/*
-		"Pharosium"  = 1,
-		"Char"  = 1,
-		"Claretine"  = 1,
-		"Bohrum"  = 1,
-		"Syreline"  = 1,
-		"Erebite"  = 1,
-		"Uqill"  = 1,
-		"Telecrystal"  = 1,
-		"Mauxite"  = 1,
-		"Cobryl"  = 1,
-		"Cerenkite"  = 1,
-		"Molitz"  = 1,
-		"Cytine"  = 1,
-		*/
 		"Plasma"  = 25,
 		"Clown"   = 15,
 		"Phazon"  = 10

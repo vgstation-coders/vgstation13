@@ -52,7 +52,7 @@
 	buckle_mob(M, user)
 
 /obj/structure/bed/proc/manual_unbuckle(mob/user as mob)
-	if(!locked_atoms.len)
+	if(!ISREALLIST(locked_atoms))
 		return
 
 	if(user.size <= SIZE_TINY)
@@ -162,7 +162,7 @@
 		if(!ishuman(usr) || usr.incapacitated() || usr.lying)
 			return
 
-		if(locked_atoms.len)
+		if(ISREALLIST(locked_atoms))
 			return 0
 
 		visible_message("[usr] collapses \the [src.name].")

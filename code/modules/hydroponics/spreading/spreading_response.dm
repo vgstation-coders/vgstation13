@@ -113,7 +113,7 @@
 
 /obj/effect/plantsegment/proc/manual_unbuckle(mob/user as mob)
 	var/list/atom/movable/locked = get_locked(/datum/locking_category/plantsegment)
-	if(locked && locked.len)
+	if(ISREALLIST(locked))
 		var/mob/M = locked[1]
 		if(!user || !istype(user))
 			user = M //Since the event sytem can't hot-potato arguments, for now, assume if noone's trying to free you, then you're trying to free yourself.

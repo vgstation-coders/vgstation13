@@ -280,7 +280,7 @@ var/global/list/crate_mimic_disguises = list(\
 	if(can_grab && istype(target, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = target
 		var/list/atom/movable/locked = get_locked(/datum/locking_category/mimic)
-		if(!locked.len) //Eating nobody
+		if(ISREALLIST(locked)) //Eating nobody
 			if(prob(60))
 				lock_atom(H, /datum/locking_category/mimic)
 				visible_message("<span class='danger'>\The [src] grabs \the [H] with its tongue!")
@@ -322,7 +322,7 @@ var/global/list/crate_mimic_disguises = list(\
 
 /mob/living/simple_animal/hostile/mimic/crate/chest/attackby(obj/item/W, mob/user)
 	var/list/atom/movable/locked = get_locked(/datum/locking_category/mimic)
-	if (angry && locked.len && W.is_sharp())
+	if (angry && ISREALLIST(locked) && W.is_sharp())
 		user.visible_message("<span class='danger'>[user] slashes at \the [src]'s tongue!</span>")
 
 		for(var/atom/M in locked)

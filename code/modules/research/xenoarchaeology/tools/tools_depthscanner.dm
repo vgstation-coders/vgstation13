@@ -28,7 +28,7 @@
 	user.visible_message("<span class='notice'>[user] scans [A], the air around them humming gently.</span>")
 	if(istype(A,/turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = A
-		if(M.finds.len || M.artifact_find)
+		if(ISREALLIST(M.finds) || M.artifact_find)
 
 			//create a new scanlog entry
 			var/datum/depth_scan/D = new()
@@ -38,7 +38,7 @@
 			D.material = M.mineral ? M.mineral.display_name : "Rock"
 
 			//find the first artifact and store it
-			if(M.finds.len)
+			if(ISREALLIST(M.finds))
 				var/datum/find/F = M.finds[1]
 				D.depth = F.excavation_required * 2		//0-100% and 0-200cm
 				D.clearance = F.clearance_range * 2
