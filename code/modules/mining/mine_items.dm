@@ -709,6 +709,57 @@ proc/move_mining_shuttle()
 	if(!loaded)
 		to_chat(user, "<span class='info'>\The [src] is empty.</span>")
 
+/obj/item/weapon/lazarus_injector/advanced
+	name = "Advanced lazarus injector"
+	desc = "A lazarus injector further enhanced with a nanomachine solution. Allows for the complete regeneration of lesser beings"
+	icon_state = "adv_lazarus_hypo"
+
+/obj/item/weapon/lazarus_injector/advanced/update_icon()
+	..()
+	if(loaded)
+		icon_state = "adv_lazarus_hypo"
+	else
+		icon_state = "adv_lazarus_empty"
+
+/obj/item/weapon/lazarus_injector/advanced/afterattack(atom/target, mob/user, proximity_flag)
+	if(!loaded)
+		return
+	if(istype(target, /mob/living) && proximity_flag)
+		if(istype(target, /mob/living/simple_animal))
+			var/mob/living/simple_animal/M = target
+
+			if(M.stat == DEAD)
+
+				M.faction = "lazarus \ref[user]"
+				M.revive()
+				if(istype(target, /mob/living/simple_animal/hostile))
+					var/mob/living/simple_animal/hostile/H = M
+					H.friends += user
+
+					log_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector.")
+					H.attack_log += "\[[time_stamp()]\] Revived by <b>[key_name(user)]</b> with a lazarus injector."
+					user.attack_log += "\[[time_stamp()]\] Revived hostile mob <b>[H]</b> with a lazarus injector."
+					msg_admin_attack("[key_name(user)] has revived hostile mob [H] with a lazarus injector. (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+
+				loaded = 0
+				user.visible_message("<span class='warning'>[user] injects [M] with \the [src], reviving it.</span>", \
+				"<span class='notice'>You inject [M] with \the [src], reviving it.</span>")
+				playsound(src,'sound/effects/refill.ogg',50,1)
+				update_icon()
+				return
+			else
+				to_chat(user, "<span class='warning'>\The [src] is only effective on the dead.</span>")
+				return
+		else
+			to_chat(user, "<span class='warning'>\The [src] is only effective on lesser beings.</span>")
+			return
+
+/obj/item/weapon/lazarus_injector/advanced/examine(mob/user)
+	..()
+	if(!loaded)
+		to_chat(user, "<span class='info'>\The [src] is empty.</span>")
+
+
 /*********************Mob Capsule*************************/
 
 /obj/item/device/mobcapsule
