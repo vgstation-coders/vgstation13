@@ -117,7 +117,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return
 
 	to_chat(M, "You eject \the [integratedpai] from \the [src].")
-	integratedpai.forceMove(loc)
+	integratedpai.forceMove(get_turf(src))
+	M.put_in_hands(integratedpai)
 	integratedpai = null
 	playsound(src, 'sound/misc/cartridge_out.ogg', 25)
 	verbs -= /obj/verb/remove_pai
