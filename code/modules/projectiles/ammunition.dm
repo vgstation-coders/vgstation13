@@ -22,6 +22,7 @@
 		BB = new projectile_type(src)
 	update_icon()
 
+
 /obj/item/ammo_casing/update_icon()
 	pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
