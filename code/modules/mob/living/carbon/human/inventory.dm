@@ -232,12 +232,10 @@
 		if(slot_in_backpack)
 			return 1
 
-/mob/living/carbon/human/u_equip(obj/item/W as obj, dropped = 1)
+/mob/living/carbon/human/u_equip(obj/item/W as obj, dropped = 1, var/slot = null)
 	if(!W)
 		return 0
-
 	var/success
-	var/slot = null
 	var/index = is_holding_item(W)
 	if(index)
 		held_items[index] = null
@@ -402,10 +400,10 @@
 						return
 					else
 						equip_to_slot(W, slot, redraw_mob)
-						u_equip(wearing,0)
+						u_equip(wearing,0,slot)
 						put_in_active_hand(wearing)
 					if(s_store && !s_store.mob_can_equip(src, slot_s_store, 1))
-						u_equip(s_store,1)
+						u_equip(s_store,1,slot)
 	return 1
 
 

@@ -322,6 +322,48 @@
 	..()
 	icon_state = "plant-[rand(1,26)]"
 
+/obj/structure/flora/pottedplant/claypot
+	name = "clay pot"
+	desc = "Plants placed in those stop aging, but cannot be retrieved either."
+	icon = 'icons/obj/hydroponics2.dmi'
+	icon_state = "claypot"
+	anchored = 0
+	density = 0
+	var/plant_name = ""
+
+/obj/structure/flora/pottedplant/claypot/examine(mob/user)
+	..()
+	if(plant_name)
+		to_chat(user, "<span class='info'>You can see [plant_name] planted in it.</span>")
+
+/obj/structure/flora/pottedplant/claypot/attackby(var/obj/item/O,var/mob/user)
+	if(istype(O,/obj/item/weapon/wrench))
+		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+		if(do_after(user, src, 30))
+			anchored = !anchored
+			user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"].</span>",
+									"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
+									"<span class='notice'>You hear a ratchet.</span>")
+	else if(plant_name && istype(O,/obj/item/weapon/pickaxe/shovel))
+		to_chat(user, "<span class='notice'>[bicon(src)] You start removing the [plant_name] from \the [src].</span>")
+		if(do_after(user, src, 30))
+			playsound(loc, 'sound/items/shovel.ogg', 50, 1)
+			user.visible_message(	"<span class='notice'>[user] removes the [plant_name] from \the [src].</span>",
+									"<span class='notice'>[bicon(src)] You remove the [plant_name] from \the [src].</span>",
+									"<span class='notice'>You hear some digging.</span>")
+			for(var/atom/movable/I in contents)
+				I.forceMove(loc)
+			var/obj/item/claypot/C = new(loc)
+			transfer_fingerprints(src, C)
+			qdel(src)
+
+	else if(istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown) || istype(O,/obj/item/weapon/grown))
+		to_chat(user, "<span class='warning'>There is already a plant in \the [src]</span>")
+
+	else
+		..()
+
+
 //newbushes
 
 /obj/structure/flora/ausbushes

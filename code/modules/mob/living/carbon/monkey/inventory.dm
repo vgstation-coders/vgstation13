@@ -87,9 +87,8 @@
 		handcuffed,
 		legcuffed)
 
-/mob/living/carbon/monkey/u_equip(obj/item/W as obj, dropped = 1)
+/mob/living/carbon/monkey/u_equip(obj/item/W as obj, dropped = 1, var/slot = null)
 	var/success = 0
-	var/slot = null
 	if(!W)
 		return 0
 
