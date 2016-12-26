@@ -248,7 +248,7 @@
 	user.examination(src)
 
 /obj/machinery/processor/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if(!user.has_hand_check()) //No ghosts
+	if(incapacitated())
 		return
 
 	attackby(O,user)

@@ -40,5 +40,4 @@
 
 /mob/dead/blob_act()
 	return
-
-/mob/dead/held_items = list()
+	
