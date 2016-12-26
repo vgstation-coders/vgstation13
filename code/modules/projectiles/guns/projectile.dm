@@ -19,6 +19,7 @@
 	var/obj/item/ammo_storage/magazine/stored_magazine = null
 	var/obj/item/ammo_casing/chambered = null
 	var/mag_type = ""
+	var/mag_drop_sound ='sound/weapons/magdrop_1.ogg'
 
 	var/gun_flags = EMPTYCASINGS	//Yay, flags
 
@@ -228,7 +229,8 @@
 	..()
 	if(!chambered && stored_magazine && !stored_magazine.ammo_count() && gun_flags &AUTOMAGDROP) //auto_mag_drop decides whether or not the mag is dropped once it empties
 		RemoveMag(user)
-		playsound(user, 'sound/weapons/smg_empty_alarm.ogg', 40, 1)
+		if(mag_drop_sound)
+			playsound(user, mag_drop_sound, 40, 1)
 	return
 
 /obj/item/weapon/gun/projectile/examine(mob/user)
