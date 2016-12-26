@@ -53,6 +53,11 @@
 	var/vending_cat = null// subcategory for vending machines.
 	var/list/dynamic_overlay[0] //For items which need to slightly alter their on-mob appearance while being worn.
 
+	var/shrapnel_amount = 0 // How many pieces of shrapnel it disintegrates into.
+	var/shrapnel_type = null
+	var/shrapnel_size = 1
+
+
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - src.heat_conductivity)
 
@@ -1066,3 +1071,9 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/animationBolt(var/mob/firer)
 	new /mob/living/simple_animal/hostile/mimic/copy(loc, src, firer, duration=SPELL_ANIMATION_TTL)
+
+/obj/item/proc/get_shrapnel_projectile()
+	if(shrapnel_type)
+		return new shrapnel_type(src)
+	else
+		return 0

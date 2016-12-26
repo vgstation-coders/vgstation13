@@ -26,6 +26,9 @@
 	siemens_coefficient = 1
 	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("attacks", "stabs", "pokes")
+	shrapnel_amount = 1
+	shrapnel_size = 2
+	shrapnel_type = "/obj/item/projectile/bullet/shrapnel"
 
 /obj/item/weapon/kitchen/utensil/New()
 	. = ..()
@@ -202,6 +205,7 @@
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
+	shrapnel_amount = 0
 
 /obj/item/weapon/kitchen/utensil/knife/large/attackby(obj/item/weapon/W, mob/user)
 	..()
