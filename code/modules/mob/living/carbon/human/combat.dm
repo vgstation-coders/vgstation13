@@ -1,4 +1,4 @@
-#define COMBAT_STATS
+//#define COMBAT_STATS
 #ifdef COMBAT_STATS
 #define show_combat_stat(x) to_chat(usr, "[x]")
 #else
