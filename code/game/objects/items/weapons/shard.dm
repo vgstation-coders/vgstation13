@@ -20,6 +20,9 @@
 	siemens_coefficient = 0 //no conduct
 	attack_verb = list("stabs", "slashes", "slices", "cuts")
 	var/glass = /obj/item/stack/sheet/glass/glass
+	shrapnel_amount = 3
+	shrapnel_type = "/obj/item/projectile/bullet/shrapnel/small"
+	shrapnel_size = 2
 
 /obj/item/weapon/shard/New()
 
@@ -46,6 +49,7 @@
 	icon_state = "plasmalarge"
 	item_state = "shard-plasglass"
 	glass = /obj/item/stack/sheet/glass/plasmaglass
+	shrapnel_type = "/obj/item/projectile/bullet/shrapnel/small/plasma"
 
 /obj/item/weapon/shard/plasma/New()
 	..()
