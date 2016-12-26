@@ -36,7 +36,8 @@
 		var/obj/item/projectile/bullet_bill = BB
 		BB = null
 		return bullet_bill
-	..()
+	else
+		return new shrapnel_type(src)
 
 
 //Boxes of ammo
