@@ -101,7 +101,6 @@
 	var/canmove = 1
 	var/candrop = 1
 	var/lastpuke = 0
-	var/hiping = 0			//high ping movement
 
 	var/size = SIZE_NORMAL
 	//SIZE_TINY for tiny animals like mice and borers

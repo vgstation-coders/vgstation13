@@ -1147,16 +1147,6 @@ var/list/slot_equipment_priority = list( \
 					<iframe src='http://ss13.moe/issues/?ckey=[ckey(key)]&address=[world.internet_address]:[world.port]' style='border:none' width='480' height='480' scroll=no></iframe>"}
 	src << browse(dat, "window=github;size=480x480")
 
-/client/verb/hiping()
-	set name = "High Ping Movement"
-	set category = "Object"
-	if (mob.hiping)
-		mob.hiping = 0
-		to_chat(usr, "<span class='notice'>High ping movement toggled off!</span>")
-	else
-		mob.hiping = 1
-		to_chat(usr, "<span class='notice'>High ping movement toggled on!</span>")
-
 /client/verb/changes()
 	set name = "Changelog"
 	set category = "OOC"
