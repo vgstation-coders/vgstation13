@@ -70,3 +70,8 @@ turf/unsimulated/wall/splashscreen
 
 /turf/unsimulated/wall/cult/cultify()
 	return
+
+/turf/unsimulated/wall/ice
+	name = "blue ice wall"
+	desc = "The incredible compressive forces that formed this sturdy ice wall gave it a blue color."
+	icon_state = "ice"

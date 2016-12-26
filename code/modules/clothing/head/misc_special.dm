@@ -7,6 +7,7 @@
  *		Kitty ears
  *		Butt
  *		Tinfoil Hat
+ *		Celtic Crown
  */
 
 /*
@@ -213,3 +214,30 @@
 	icon_state = "foilhat"
 	item_state = "paper"
 	siemens_coefficient = 2
+
+/obj/item/clothing/head/celtic
+	name = "\improper Celtic crown"
+	desc = "According to legend, Celtic kings would use crowns like this one to shield their subjects from harsh winters back on Earth."
+	icon_state = "celtic_crown"
+	wizard_garb = 1
+
+/obj/item/clothing/head/celtic/equipped(M as mob, head)
+	if(istype(M, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = M
+		if(H.head != src)
+			return
+		H.species.cold_level_1 = -1
+		H.species.cold_level_2 = -1
+		H.species.cold_level_3 = -1
+		H.species.can_be_hypothermic = 0
+		H.faction = "frost"
+
+/obj/item/clothing/head/celtic/unequipped(mob/user, var/from_slot = null)
+	if(from_slot == slot_head)
+		if(istype(user, /mob/living/carbon/human))
+			var/mob/living/carbon/human/H = user
+			H.species.cold_level_1 = initial(H.species.cold_level_1)
+			H.species.cold_level_2 = initial(H.species.cold_level_2)
+			H.species.cold_level_3 = initial(H.species.cold_level_3)
+			H.species.can_be_hypothermic = initial(H.species.can_be_hypothermic)
+			H.faction = initial(H.faction)
