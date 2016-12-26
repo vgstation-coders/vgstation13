@@ -125,7 +125,7 @@
 			return 0
 	return 1
 
-/obj/item/weapon/gun/proc/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)//TODO: go over this
+/obj/item/weapon/gun/proc/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)//TODO: go over this
 	//Exclude lasertag guns from the M_CLUMSY check.
 	if(clumsy_check)
 		if(istype(user, /mob/living))
@@ -144,6 +144,8 @@
 	var/atom/originaltarget = target
 
 	var/turf/curloc = user.loc
+	if(use_shooter_turf)
+		curloc = get_turf(user)
 	var/turf/targloc = get_turf(target)
 	if (!istype(targloc) || !istype(curloc))
 		return
@@ -339,3 +341,15 @@
 			return ..() //Allows a player to choose to melee instead of shoot, by being on help intent.
 	else
 		return ..() //Pistolwhippin'
+
+/obj/item/weapon/gun/on_integrated_pai_click(mob/living/silicon/pai/user, var/atom/A)	//to allow any gun to be pAI-compatible, on a basic level, just by varediting
+	if(check_pai_can_fire(user))
+		Fire(A,user,use_shooter_turf = TRUE)
+	else
+		to_chat(user, "<span class='warning'>You can't aim the gun properly from this location!</span>")
+
+/obj/item/weapon/gun/proc/check_pai_can_fire(mob/living/silicon/pai/user)	//for various restrictions on when pAIs can fire a gun into which they're integrated
+	if(get_holder_of_type(user, /obj/structure/disposalpipe) || get_holder_of_type(user, /obj/machinery/atmospherics/pipe))	//can't fire the gun from inside pipes or disposal pipes
+		return TRUE
+	else
+		return FALSE

@@ -678,6 +678,18 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = access_security
 	group = "Security"
 
+/datum/supply_packs/smartlaser
+	name = "Smart laser gun crate"
+	contains = list(/obj/item/weapon/gun/energy/laser/smart,
+					/obj/item/weapon/gun/energy/laser/smart,
+					/obj/item/weapon/gun/energy/laser/smart,
+					/obj/item/weapon/gun/energy/laser/smart)
+	cost = 60
+	containertype = /obj/structure/closet/crate/secure/weapon
+	containername = "smart laser gun crate"
+	access = access_armory
+	group = "Security"
+
 /datum/supply_packs/eweapons
 	name = "Incendiary weapons crate"
 	contains = list(/obj/item/weapon/gun/projectile/flamethrower/full,

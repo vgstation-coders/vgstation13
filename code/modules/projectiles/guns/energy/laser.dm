@@ -456,3 +456,9 @@
 	charge_cost = 25
 	fire_sound = 'sound/weapons/mmlbuster.ogg'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/megabusters.dmi', "right_hand" = 'icons/mob/in-hand/right/megabusters.dmi')
+
+/obj/item/weapon/gun/energy/laser/smart
+	name = "smart laser gun"
+	desc = "An upgraded model of the basic laser gun. There seems to be some sort of slot in the handle."
+	can_take_pai = TRUE
+	origin_tech = Tc_COMBAT + "=3;" + Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=4"
