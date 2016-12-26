@@ -834,7 +834,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Security"
 
 /datum/supply_packs/fourtyfive
-	name = ".45 Security Pistol crate"
+	name = "\improper .45 Security Pistol crate"
 	contains = list(/obj/item/weapon/gun/projectile/sec,
 					/obj/item/weapon/gun/projectile/sec)
 	cost = 200
@@ -851,7 +851,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/ammo_storage/magazine/c45)
 	cost = 50
 	containertype = /obj/structure/closet/crate/secure/gear
-	containername = ".45 pistol lethal ammo crate"
+	containername = "\improper .45 pistol lethal ammo crate"
 	access = access_armory
 	group = "Security"
 
@@ -863,7 +863,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/ammo_storage/magazine/c45/practice)
 	cost = 10
 	containertype = /obj/structure/closet/crate/secure/gear
-	containername = ".45 pistol Practice Ammo"
+	containername = "\improper .45 pistol practice ammo crate"
 	access = access_security
 	group = "Security"
 
@@ -875,7 +875,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/ammo_storage/magazine/c45/rubber)
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure/gear
-	containername = ".45 pistol Rubber Ammo"
+	containername = "\improper .45 pistol rubber ammo crate"
 	access = access_security
 	group = "Security"
 
