@@ -83,4 +83,7 @@
 			L.apply_effects(5,5,0,0,5,0,0,armorblock)
 
 		else
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Unsuccessfully stungloved [L.name] ([L.ckey])</font>")
+			L.attack_log += text("\[[time_stamp()]\] <font color='orange'>Victim of an unsuccessful stunglove by [user.name] ([user.ckey])</font>")
+			log_attack("<font color='red'>[user] ([user.ckey]) unsuccessfully stungloved [L.name] ([L.ckey])</font>")
 			to_chat(user, "<span class='warning'>Not enough charge!</span>")
