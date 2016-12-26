@@ -59,6 +59,7 @@
 	name = "fork"
 	desc = "Pointy."
 	icon_state = "fork"
+	sharpness_flags = SHARP_TIP
 	sharpness = 0.6
 	var/loaded_food_name
 	var/image/loaded_food
@@ -159,6 +160,7 @@
 	force = 10.0
 	throwforce = 10.0
 	sharpness = 1.2
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	melt_temperature = MELTPOINT_STEEL
 
 /obj/item/weapon/kitchen/utensil/knife/suicide_act(mob/user)
@@ -250,6 +252,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	sharpness = 1.2
+	sharpness_flags = SHARP_BLADE
 	force = 15.0
 	w_class = W_CLASS_SMALL
 	throwforce = 8.0

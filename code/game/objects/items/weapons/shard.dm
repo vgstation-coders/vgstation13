@@ -7,11 +7,13 @@
 	icon = 'icons/obj/shards.dmi'
 	icon_state = "large"
 	sharpness = 0.8
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	desc = "Could probably be used as ... a throwing weapon?"
 	w_class = W_CLASS_TINY
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	force = 5.0
 	throwforce = 15.0
+	
 	item_state = "shard-glassnew"
 	starting_materials = list(MAT_GLASS = 3750)
 	w_type = RECYK_GLASS
@@ -107,7 +109,7 @@
 		if(AM.locked_to) //Mob is locked to something, so it's not actually stepping on the glass
 			playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1) //Make noise
 			return //Stop here
-		if(AM.flying) //We don't check for lying because it's intended to hurt
+		if(AM.flying) //We don't check for lying yet because it's intended to hurt
 			return
 		else //Stepping on the glass
 			playsound(get_turf(src), 'sound/effects/glass_step.ogg', 50, 1)
@@ -120,7 +122,7 @@
 					if(affecting.is_organic())
 						danger = TRUE
 
-						if(H.feels_pain())
+						if(!H.lying && H.feels_pain())
 							H.Knockdown(3)
 						if(affecting.take_damage(5, 0))
 							H.UpdateDamageIcon()
