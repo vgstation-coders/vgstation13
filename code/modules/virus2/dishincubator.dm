@@ -175,32 +175,33 @@
 		if(!powered(EQUIP))
 			on = 0
 			icon_state = "incubator"
-		if(dish && dish.growth >= INCUBATOR_MAX_SIZE)
-			if(icon_state != "incubator_fed")
-				icon_state = "incubator_fed"
-			if(last_notice + FED_PING_DELAY < world.time)
-				last_notice = world.time
-				alert_noise("ping")
-		if(dish && dish.virus2 && foodsupply)
-			foodsupply -= 1
-			dish.growth = min(growthrate + dish.growth, INCUBATOR_MAX_SIZE)
-		if(dish && dish.virus2 && radiation
-			if(radiation > 50 & prob(mutatechance))
-				dish.virus2.log += "<br />[timestamp()] MAJORMUTATE (incubator rads)"
-				dish.virus2.majormutate()
-				if(dish.info)
-					dish.info = "OUTDATED : [dish.info]"
-					dish.analysed = 0
-				alert_noise("beep")
-				flick("incubator_mut", src)
+		if (dish && dish.virus2)
+			if(dish.growth >= INCUBATOR_MAX_SIZE)
+				if(icon_state != "incubator_fed")
+					icon_state = "incubator_fed"
+				if(last_notice + FED_PING_DELAY < world.time)
+					last_notice = world.time
+					alert_noise("ping")
+			if(foodsupply)
+				foodsupply -= 1
+				dish.growth = min(growthrate + dish.growth, INCUBATOR_MAX_SIZE)
+			if(radiation)
+				if(radiation > 50 & prob(mutatechance))
+					dish.virus2.log += "<br />[timestamp()] MAJORMUTATE (incubator rads)"
+					dish.virus2.majormutate()
+					if(dish.info)
+						dish.info = "OUTDATED : [dish.info]"
+						dish.analysed = 0
+					alert_noise("beep")
+					flick("incubator_mut", src)
 
-			else if(prob(mutatechance))
-				dish.virus2.minormutate()
-			radiation -= 1
-		if(dish && dish.virus2 && toxins && prob(5))
-			dish.virus2.infectionchance -= 1
-		if(dish && dish.virus2 && toxins > 50)
-			dish.virus2 = null
+				else if(prob(mutatechance))
+					dish.virus2.minormutate()
+				radiation -= 1
+			if(toxins && prob(5))
+				dish.virus2.infectionchance -= 1
+			if(toxins > 50)
+				dish.virus2 = null
 	else
 		icon_state = "incubator"
 
