@@ -63,14 +63,14 @@
 		return
 	if(!A.powered(EQUIP))
 		return
-	if(locked_atoms.len)
+	if(is_locking(/datum/locking_category/buckle, subtypes=TRUE))
 		A.use_power(EQUIP, 5000)
 		var/light = A.power_light
 		A.updateicon()
 
 		flick("echair1", src)
 
-		var/mob/living/M = locked_atoms[1]
+		var/mob/living/M = get_locked(/datum/locking_category/buckle, subtypes=TRUE)[1]
 		M.Stun(60)
 		M.Jitter(60)
 		visible_message("<span class='danger'>The electric chair went off!</span>", "<span class='danger'>You hear a deep sharp shock!</span>")
