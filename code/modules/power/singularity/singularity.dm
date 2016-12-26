@@ -18,7 +18,7 @@
 	icon = 'icons/obj/singularity.dmi'
 	icon_state = "singularity_s1"
 	anchored = 1
-	density = 1
+	density = 0
 	layer = SINGULARITY_LAYER
 	plane = EFFECTS_PLANE
 	luminosity = 6
@@ -91,6 +91,10 @@
 /obj/machinery/singularity/Bumped(atom/A)
 	consume(A)
 
+/obj/machinery/singularity/Crossed(atom/movable/A)
+	to_chat(world, "[src] crossed by \the [A]")
+	consume(A)
+
 /obj/machinery/singularity/process()
 	eat()
 	dissipate()
@@ -141,6 +145,10 @@
 			icon_state = "singularity_s1"
 			pixel_x = 0
 			pixel_y = 0
+			bound_width = WORLD_ICON_SIZE
+			bound_x = 0
+			bound_height = WORLD_ICON_SIZE
+			bound_y = 0
 			grav_pull = 4
 			consume_range = 0
 			dissipate_delay = 10
@@ -156,6 +164,10 @@
 			icon_state = "singularity_s3"
 			pixel_x = -32 * PIXEL_MULTIPLIER
 			pixel_y = -32 * PIXEL_MULTIPLIER
+			bound_width = 3 * WORLD_ICON_SIZE
+			bound_x = -WORLD_ICON_SIZE
+			bound_height = 3 * WORLD_ICON_SIZE
+			bound_y = -WORLD_ICON_SIZE
 			grav_pull = 6
 			consume_range = 1
 			dissipate_delay = 5
@@ -175,6 +187,10 @@
 				icon_state = "singularity_s5"
 				pixel_x = -64 * PIXEL_MULTIPLIER
 				pixel_y = -64 * PIXEL_MULTIPLIER
+				bound_width = 5 * WORLD_ICON_SIZE
+				bound_x = -2 * WORLD_ICON_SIZE
+				bound_height = 5 * WORLD_ICON_SIZE
+				bound_y = -2 * WORLD_ICON_SIZE
 				grav_pull = 8
 				consume_range = 2
 				dissipate_delay = 4
@@ -194,6 +210,10 @@
 				icon_state = "singularity_s7"
 				pixel_x = -96 * PIXEL_MULTIPLIER
 				pixel_y = -96 * PIXEL_MULTIPLIER
+				bound_width = 7 * WORLD_ICON_SIZE
+				bound_x = -3 * WORLD_ICON_SIZE
+				bound_height = 7 * WORLD_ICON_SIZE
+				bound_y = -3 * WORLD_ICON_SIZE
 				grav_pull = 10
 				consume_range = 3
 				dissipate_delay = 10
@@ -212,6 +232,10 @@
 			icon_state = "singularity_s9"
 			pixel_x = -128 * PIXEL_MULTIPLIER
 			pixel_y = -128 * PIXEL_MULTIPLIER
+			bound_width = 9 * WORLD_ICON_SIZE
+			bound_x = -4 * WORLD_ICON_SIZE
+			bound_height = 9 * WORLD_ICON_SIZE
+			bound_y = -4 * WORLD_ICON_SIZE
 			grav_pull = 10
 			consume_range = 4
 			dissipate = 0 //It cant go smaller due to energy loss.
@@ -233,6 +257,10 @@
 			icon_state = "singularity_s11" //Uh, whoever drew that, you know that black holes are supposed to look dark right? What's this, the clown's singulo?
 			pixel_x = -160 * PIXEL_MULTIPLIER
 			pixel_y = -160 * PIXEL_MULTIPLIER
+			bound_width = 11 * WORLD_ICON_SIZE
+			bound_x = -5 * WORLD_ICON_SIZE
+			bound_height = 11 * WORLD_ICON_SIZE
+			bound_y = -5 * WORLD_ICON_SIZE
 			grav_pull = 16
 			consume_range = 5
 			dissipate = 0 //It cant go smaller due to e loss
