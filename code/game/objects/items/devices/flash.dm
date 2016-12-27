@@ -1,6 +1,6 @@
 /obj/item/device/flash
 	name = "flash"
-	desc = "Used for blinding and being an asshole."
+	desc = "Used for blinding and incapacitation. Can be directed at an individual or used to disorient an area."
 	icon_state = "flash"
 	item_state = "flash"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/electronics.dmi', "right_hand" = 'icons/mob/in-hand/right/electronics.dmi')

@@ -1,5 +1,6 @@
 /obj/machinery/recharger
 	name = "recharger"
+	desc = "A charging station for energy weapons that draws from the area's power."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "recharger0"
 	anchored = 1
