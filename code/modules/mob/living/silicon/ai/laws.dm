@@ -42,6 +42,7 @@
 		if(force_sync)
 			R.lawsync()
 		if(R.lawupdate && (R.connected_ai == src))
+			R << sound('sound/machines/lawsync.ogg')
 			to_chat(R, "<span class='danger'>...LAWS UPDATED</span>")
 
 /mob/living/silicon/ai/proc/clear_ion_laws()
