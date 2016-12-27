@@ -1,7 +1,7 @@
 /obj/effect/blob/shield
 	name = "strong blob"
 	icon_state = "strong"
-	desc = "Some very dense blob creature thingy"
+	desc = "A dense part of a blob."
 	health = 75
 	maxhealth = 75
 	fire_resist = 2

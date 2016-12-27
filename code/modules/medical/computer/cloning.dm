@@ -1,6 +1,7 @@
 #define CLONEPODRANGE 7
 /obj/machinery/computer/cloning
 	name = "cloning console"
+	desc = "A computer that takes DNA from a DNA scanner and uses it to clone an organism with a cloning pod."
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "cloning"
 	circuit = "/obj/item/weapon/circuitboard/cloning"

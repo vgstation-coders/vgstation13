@@ -329,6 +329,18 @@
 	speed_coefficient = 2/manipcount
 	biomass_coefficient = 3*lasercount
 
+/obj/machinery/biogenerator/AltClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check())
+		eject_produce()
+		return
+	return ..()
+
+/obj/machinery/biogenerator/CtrlClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user) && beaker && user.dexterity_check() && anchored)
+		activate() //This proc already internally checks if the machine is in use, broken, out of power
+		return
+	return ..()
+
 /obj/machinery/biogenerator/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(..())
 		return 1

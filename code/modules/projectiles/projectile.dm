@@ -710,3 +710,15 @@ var/list/impact_master = list()
 
 /obj/item/projectile/acidable()
 	return 0
+
+/obj/item/projectile/proc/launch_at(var/atom/target,var/tar_zone = "chest",var/atom/curloc = get_turf(src),var/from = null) // doot doot shitcode alert
+	original = target
+	starting = curloc
+	shot_from = from
+	current = curloc
+	OnFired()
+	yo = target.loc.y - curloc.y
+	xo = target.loc.x - curloc.x
+	def_zone = tar_zone
+	spawn()
+		process()

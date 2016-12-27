@@ -1,5 +1,5 @@
 /obj/item/clothing/shoes/syndigaloshes
-	desc = "A pair of brown shoes. They seem to have extra grip."
+	desc = "A pair of brown shoes. They seem to have extra grip." //change line ~346 in code/datums/uplink_item.dm if you remove the second sentence
 	name = "brown shoes"
 	icon_state = "brown"
 	item_state = "brown"

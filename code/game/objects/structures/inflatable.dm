@@ -21,7 +21,7 @@
 		anchored = 1
 		to_chat(user, "<span class='notice'>You pull the inflation cord on \the [src].</span>")
 		spawn(10)
-			if(isturf(loc))
+			if(can_inflate())
 				inflate()
 			else
 				inflating = FALSE
@@ -34,6 +34,15 @@
 	if(inflating)
 		return
 	..()
+
+/obj/item/inflatable/proc/can_inflate(var/location)
+	if(!location)
+		location = loc
+	if(!isturf(location))
+		return 0
+	if(locate(/obj/structure/inflatable) in get_turf(location))
+		return 0
+	return 1
 
 /obj/item/inflatable/proc/inflate()
 	playsound(loc, 'sound/items/zip.ogg', 75, 1)

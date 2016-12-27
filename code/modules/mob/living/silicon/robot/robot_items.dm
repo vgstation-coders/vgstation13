@@ -212,6 +212,8 @@
 			return
 
 		I = stored_walls[1]
+		if(!I.can_inflate(T))
+			return
 		stored_walls -= I
 
 	if(mode == MODE_DOOR)
@@ -220,6 +222,8 @@
 			return
 
 		I = stored_doors[1]
+		if(!I.can_inflate(T))
+			return
 		stored_doors -= I
 
 	I.forceMove(T)

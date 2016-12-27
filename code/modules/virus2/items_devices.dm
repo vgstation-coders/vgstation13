@@ -46,6 +46,7 @@
 	if(istype(W,/obj/item/weapon/hand_labeler) || istype(W,/obj/item/weapon/reagent_containers/syringe))
 		return
 	if(user.a_intent == I_HURT)
+		visible_message("<span class='danger'>The virus dish is smashed to bits!</span>")
 		shatter(user)
 
 /obj/item/weapon/virusdish/throw_impact(atom/hit_atom, var/speed, mob/user)
@@ -74,11 +75,9 @@
 	name = "Blank GNA disk"
 	icon = 'icons/obj/cloning.dmi'
 	icon_state = "datadisk0"
-	var/datum/disease2/effectholder/effect = null
+	var/datum/disease2/effect/effect = null
 	var/stage = 1
 
 /obj/item/weapon/diseasedisk/premade/New()
 	name = "Blank GNA disk (stage: [stage])"
-	effect = new /datum/disease2/effectholder
-	effect.effect = new /datum/disease2/effect/invisible
-	effect.stage = stage
+	effect = new /datum/disease2/effect

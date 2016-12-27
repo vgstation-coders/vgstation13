@@ -368,7 +368,7 @@
 
 /obj/structure/table/holotable/wood
 	name = "table"
-	desc = "A square piece of wood standing on four wooden legs. It can not move."
+	desc = "A square piece of wood standing on four wooden legs. It cannot move."
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "woodtable"
 

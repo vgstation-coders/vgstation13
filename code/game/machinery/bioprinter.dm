@@ -2,7 +2,7 @@
 
 /obj/machinery/bioprinter
 	name = "bioprinter"
-	desc = "It's a machine that grows replacement organs using meat and metal."
+	desc = "A machine that grows replacement organs using meat and metal."
 	icon = 'icons/obj/surgery.dmi'
 
 	icon_state = "bioprinter"
@@ -53,7 +53,7 @@
 
 /obj/machinery/bioprinter/prosthetics
 	name = "prosthetics fabricator"
-	desc = "It's a machine that prints prosthetic organs."
+	desc = "A machine that prints prosthetic organs."
 	prints_prosthetics = 1
 
 /obj/machinery/bioprinter/attack_hand(mob/user)

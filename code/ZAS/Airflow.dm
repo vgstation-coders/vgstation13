@@ -273,11 +273,15 @@ proc/AirflowSpace(zone/A)
 
 /atom/movable/proc/GotoAirflowDest(n)
 	last_airflow = world.time
+	if(pulledby)
+		return
 	if(airflow_dest == loc)
 		return
 	if(ismob(src))
 		var/mob/M = src
 		if(M.status_flags & GODMODE || (flags & INVULNERABLE))
+			return
+		if(M.grabbed_by.len)
 			return
 		if(istype(src, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = src
@@ -333,11 +337,15 @@ proc/AirflowSpace(zone/A)
 
 
 /atom/movable/proc/RepelAirflowDest(n)
+	if(pulledby)
+		return
 	if(airflow_dest == loc)
 		step_away(src,loc)
 	if(ismob(src))
 		var/mob/M = src
 		if(M.status_flags & GODMODE || (flags & INVULNERABLE))
+			return
+		if(M.grabbed_by.len)
 			return
 		if(istype(src, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = src

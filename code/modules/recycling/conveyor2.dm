@@ -9,7 +9,7 @@
 	icon_state = "conveyor0"
 	name = "conveyor belt"
 	desc = "A conveyor belt.\
-	<br><span class='info'>It looks like it can be pried into a different direction using a crowbar but cannot be moved without welding it apart.</span>"
+	<br><span class='info'>It can be pried into a different direction using a crowbar, but cannot be moved without welding it apart.</span>"
 	anchored = 1
 
 	var/operating = 0	// 1 if running forward, -1 if backwards, 0 if off
