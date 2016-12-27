@@ -1,6 +1,6 @@
 /obj/structure/closet/secure_closet/medical1
 	name = "Medicine Closet"
-	desc = "Filled with medical junk."
+	desc = "A closet containing medical supplies."
 	icon_state = "medical1"
 	icon_closed = "medical"
 	icon_locked = "medical1"

@@ -166,6 +166,7 @@
 /obj/machinery/alarm/proc/first_run()
 	area_uid = areaMaster.uid
 	name = "[areaMaster.name] Air Alarm"
+	desc = "An alarm used to control the area's atmospherics systems."
 
 	// breathable air according to human/Life()
 	/*
