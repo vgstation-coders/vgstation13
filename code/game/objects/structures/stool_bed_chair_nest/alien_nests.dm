@@ -17,7 +17,7 @@
 	..()
 
 /obj/structure/bed/nest/manual_unbuckle(mob/user as mob)
-	if(locked_atoms.len)
+	if(ISREALLIST(locked_atoms))
 		var/mob/M = locked_atoms[1]
 		if(M != user)
 			M.visible_message(\
@@ -39,7 +39,7 @@
 		src.add_fingerprint(user)
 
 /obj/structure/bed/nest/buckle_mob(mob/M as mob, mob/user as mob)
-	if (locked_atoms.len || !ismob(M) || (get_dist(src, user) > 1) || (M.loc != src.loc) || user.restrained() || user.stat || M.locked_to || istype(user, /mob/living/silicon/pai) )
+	if (ISREALLIST(locked_atoms) || !ismob(M) || (get_dist(src, user) > 1) || (M.loc != src.loc) || user.restrained() || user.stat || M.locked_to || istype(user, /mob/living/silicon/pai) )
 		return
 
 	if(ishuman(M) && M.client && !M.lying)
@@ -90,7 +90,7 @@
 		qdel(src)
 
 /obj/structure/bed/nest/proc/stabilize()
-	if(!locked_atoms || !locked_atoms.len)
+	if(!ISREALLIST(locked_atoms))
 		return
 
 	var/mob/M = locked_atoms[1]
@@ -101,7 +101,7 @@
 		return
 
 	spawn(15)
-		if(!gcDestroyed && locked_atoms.len)
+		if(!gcDestroyed && ISREALLIST(locked_atoms))
 			stabilize()
 
 /obj/structure/bed/nest/acidable()

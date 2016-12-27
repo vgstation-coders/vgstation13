@@ -139,7 +139,7 @@
 
 	if(prob(seed ? seed.potency : 25))
 		var/list/atom/movable/locked = get_locked(/datum/locking_category/plantsegment)
-		if(!locked.len)
+		if(ISREALLIST(locked))
 			var/mob/living/carbon/V //= locate() in src.loc
 			for(var/mob/living/carbon/C in src.loc)
 				if(C.stat != DEAD)

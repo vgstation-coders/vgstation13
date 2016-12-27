@@ -144,7 +144,7 @@ var/list/nest_locations = list()
 	var/smallest_distance = 555
 	var/best_nest
 	for(var/obj/structure/bed/nest/N in nest_locations)
-		if((N.z == src.z) && (N.locked_atoms.len == 0))
+		if((N.z == src.z) && (!ISREALLIST(N.locked_atoms)))
 			var/dist = get_dist(src,N)
 			if(dist < smallest_distance)
 				smallest_distance = dist

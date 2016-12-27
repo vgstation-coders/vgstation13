@@ -415,7 +415,7 @@
 
 	if(istype(AM, /obj/structure/bed)) //This is only necessary because of rollerbeds and swivel chairs.
 		var/obj/structure/bed/B = AM
-		if(B.locked_atoms.len)
+		if(ISREALLIST(B.locked_atoms))
 			return 0
 
 	AM.forceMove(src)

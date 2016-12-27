@@ -60,7 +60,7 @@
 	if(!nick)
 		nick=name
 	set_keys()
-		
+
 /obj/structure/bed/chair/vehicle/proc/set_keys()
 	if(keytype && !vin)
 		mykey = new keytype(src.loc)
@@ -267,7 +267,7 @@
 	unlock_atom(occupant)
 
 /obj/structure/bed/chair/vehicle/Bump(var/atom/movable/obstacle)
-	if(obstacle == src || (locked_atoms.len && obstacle == locked_atoms[1]))
+	if(obstacle == src || (ISREALLIST(locked_atoms) && obstacle == locked_atoms[1]))
 		return
 
 	if(istype(obstacle, /obj/structure))// || istype(obstacle, /mob/living)

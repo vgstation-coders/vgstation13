@@ -117,7 +117,7 @@
 		// /vg/ vehicles
 		else if( istype(T, /obj/structure/bed/chair/vehicle) )
 			var/obj/structure/bed/chair/vehicle/V = T
-			if(V.locked_atoms.len)
+			if(ISREALLIST(V.locked_atoms))
 				return 1
 		else if(istype(T,/mob/living/simple_animal))
 			var/mob/living/simple_animal/A = T

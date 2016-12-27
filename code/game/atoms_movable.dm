@@ -61,9 +61,6 @@
 		for(var/matID in starting_materials)
 			materials.addAmount(matID, starting_materials[matID])
 
-	locked_atoms            = list()
-	locking_categories      = list()
-	locking_categories_name = list()
 	on_moved = new("owner"=src)
 
 /atom/movable/Destroy()
@@ -85,16 +82,18 @@
 	if (un_opaque)
 		un_opaque.recalc_atom_opacity()
 
-	for (var/atom/movable/AM in locked_atoms)
-		unlock_atom(AM)
+	if(ISREALLIST(locked_atoms))
+		for (var/atom/movable/AM in locked_atoms)
+			unlock_atom(AM)
 
 	if (locked_to)
 		locked_to.unlock_atom(src)
 
-	for (var/datum/locking_category/category in locking_categories)
-		qdel(category)
+	if(ISREALLIST(locking_categories))
+		for (var/datum/locking_category/category in locking_categories)
+			qdel(category)
 
-	locking_categories      = null
+		locking_categories      = null
 	locking_categories_name = null
 
 	if((flags & HEAR) && !ismob(src))
@@ -256,19 +255,21 @@
 
 	AM.locked_to = src
 
+	LAZYINITLIST(locked_atoms)
 	locked_atoms[AM] = category
 	category.lock(AM)
 
 	return 1
 
 /atom/movable/proc/unlock_atom(var/atom/movable/AM)
-	if (!locked_atoms.Find(AM))
+	if (ISREALLIST(locked_atoms) && !locked_atoms.Find(AM))
 		return
 
 	var/datum/locking_category/category = locked_atoms[AM]
 	locked_atoms    -= AM
 	AM.locked_to     = null
 	category.unlock(AM)
+	UNSETEMPTY(locked_atoms)
 
 	return 1
 
@@ -280,6 +281,8 @@
 
 // Proc for adding an unique locking category with a certain ID.
 /atom/movable/proc/add_lock_cat(var/type, var/id)
+	LAZYINITLIST(locking_categories_name)
+	LAZYINITLIST(locking_categories)
 	if(locking_categories_name.Find(id))
 		return locking_categories_name[id]
 
@@ -289,6 +292,8 @@
 	locking_categories += C
 
 /atom/movable/proc/get_lock_cat(var/category = /datum/locking_category)
+	LAZYINITLIST(locking_categories_name)
+	LAZYINITLIST(locking_categories)
 	. = locking_categories_name[category]
 
 	if (!.)
@@ -303,6 +308,8 @@
 	if (!category)
 		return locked_atoms
 
+	LAZYINITLIST(locking_categories_name)
+
 	if (locking_categories_name.Find(category))
 		var/datum/locking_category/C = locking_categories_name[category]
 		return C.locked
@@ -311,7 +318,7 @@
 
 /atom/movable/proc/is_locking(var/category) // Returns true if we have any locked atoms in this category.
 	var/list/atom/movable/locked = get_locked(category)
-	return locked && locked.len
+	return ISREALLIST(locked)
 
 /atom/movable/proc/recycle(var/datum/materials/rec)
 	if(materials)

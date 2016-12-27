@@ -63,7 +63,7 @@
 	update_icon()
 
 	if(is_mature() && special_cooldown())
-		if(locked_atoms && locked_atoms.len)
+		if(ISREALLIST(locked_atoms))
 			var/mob/V = locked_atoms[1]
 			if(istype(V, /mob/living/carbon/human))
 				do_chem_inject(V)
@@ -110,7 +110,7 @@
 	// We shouldn't have spawned if the controller doesn't exist.
 	check_health()
 	// Keep processing us until we've done all there is for us to do in life.
-	if(neighbors.len || health != max_health || !harvest || locked_atoms.len)
+	if(neighbors.len || health != max_health || !harvest || ISREALLIST(locked_atoms))
 		plant_controller.add_plant(src)
 
 /obj/effect/plantsegment/proc/die_off()

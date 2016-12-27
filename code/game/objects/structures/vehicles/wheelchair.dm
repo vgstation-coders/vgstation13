@@ -169,7 +169,7 @@
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people/examine(mob/user)
 	..()
 
-	if(locked_atoms.len > 9)
+	if(ISREALLIST(locked_atoms) && locked_atoms.len > 9)
 		to_chat(user, "<b>WHAT THE FUCK</b>")
 
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people/can_buckle(mob/M, mob/user)

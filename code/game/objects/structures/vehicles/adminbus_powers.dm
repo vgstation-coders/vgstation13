@@ -331,7 +331,7 @@
 
 	var/distributed = 0
 
-	if(locked_atoms.len)
+	if(ISREALLIST(locked_atoms))
 		var/mob/living/M = locked_atoms[1]
 		if(iscarbon(M))
 			for(var/i = 1 to M.held_items.len)
@@ -393,7 +393,7 @@
 
 	var/distributed = 0
 
-	if(locked_atoms.len)
+	if(ISREALLIST(locked_atoms))
 		var/mob/living/M = locked_atoms[1]
 		if(iscarbon(M))
 			var/obj/item/weapon/gun/energy/laser/admin/L = new /obj/item/weapon/gun/energy/laser/admin(M)
