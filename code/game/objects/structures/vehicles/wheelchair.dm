@@ -18,7 +18,7 @@
 /obj/structure/bed/chair/vehicle/wheelchair/New()
 	. = ..()
 	wheel_overlay = image("icons/obj/objects.dmi", "[icon_state]_overlay", MOB_LAYER + 0.1)
-	wheel_overlay = MOB_PLANE
+	wheel_overlay.plane = MOB_PLANE
 
 /obj/structure/bed/chair/vehicle/wheelchair/attackby(obj/item/weapon/W, mob/user)
 	if(occupant)
