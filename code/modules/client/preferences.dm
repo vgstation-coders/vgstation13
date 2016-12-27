@@ -103,6 +103,7 @@ var/const/MAX_SAVE_SLOTS = 8
 	var/parallax_speed = 2
 	var/special_popup = 0
 	var/tooltips = 1
+	var/stumble = 0						//whether the player pauses after their first step
 	//character preferences
 	var/real_name						//our character's name
 	var/be_random_name = 0				//whether we are a random name every round
@@ -324,6 +325,8 @@ var/const/MAX_SAVE_SLOTS = 8
 	<a href='?_src_=prefs;preference=nanoui'><b>[(usenanoui) ? "NanoUI" : "HTML"]</b></a><br>
 	<b>Progress Bars:</b>
 	<a href='?_src_=prefs;preference=progbar'><b>[(progress_bars) ? "Yes" : "No"]</b></a><br>
+	<b>Pause after first step:</b>
+	<a href='?_src_=prefs;preference=stumble'><b>[(stumble) ? "Yes" : "No"]</b></a><br>
   </div>
   <div id="rightDiv" style="width:50%;height:100%;float:right;">
 	<b>Randomized Character Slot:</b>
@@ -1511,6 +1514,8 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					tooltips = !tooltips
 				if("progbar")
 					progress_bars = !progress_bars
+				if("stumble")
+					stumble = !stumble
 
 				if("ghost_deadchat")
 					toggles ^= CHAT_DEAD

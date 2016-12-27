@@ -390,6 +390,9 @@
 			step_rand(mob)
 			mob.last_movement=world.time
 		else
+			if (prefs.stumble && ((world.time - mob.last_movement) > 5 && move_delay < 2))
+				mob.delayNextMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
+			//	to_chat(src, "<span class='notice'>First Step</span>")
 			step(mob, dir)
 			mob.last_movement=world.time
 
