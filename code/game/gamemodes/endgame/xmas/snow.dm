@@ -595,7 +595,11 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 
 /obj/structure/snow_flora/tree/pine/xmas/New()
 	..()
-	icon_state = "pine_c"
+	icon_state = "pine_c" //Why?
+	spawn_presents()
+
+
+/obj/structure/snow_flora/tree/pine/xmas/proc/spawn_presents()
 	for(var/turf/simulated/floor/T in orange(1,src))
 		var/blocked = 0
 		for(var/atom/A in T)
@@ -606,6 +610,16 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 
 		for(var/i=1,i<=rand(1,3),i++)
 			call(/obj/item/weapon/winter_gift/proc/pick_a_gift)(T,5)
+
+/obj/structure/snow_flora/tree/pine/xmas/spess
+	name = "christmas tree"
+	desc = "Wishing you a very happy spessmas, from all those at centcomm and beyond."
+	icon_state = "spessmastree"
+
+/obj/structure/snow_flora/tree/pine/xmas/spess
+	..()
+	icon_state = "spessmastree"
+	spawn_presents()
 
 #undef SNOWCOVERING_FULL
 #undef SNOWCOVERING_MEDIUM
