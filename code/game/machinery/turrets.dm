@@ -117,7 +117,7 @@
 		// /vg/ vehicles
 		else if( istype(T, /obj/structure/bed/chair/vehicle) )
 			var/obj/structure/bed/chair/vehicle/V = T
-			if(V.locked_atoms.len)
+			if(V.is_locking_type(/mob/living))
 				return 1
 		else if(istype(T,/mob/living/simple_animal))
 			var/mob/living/simple_animal/A = T
@@ -146,7 +146,7 @@
 
 	// /vg/ vehicles
 	for(var/obj/structure/bed/chair/vehicle/V in protected_area.turretTargets)
-		if(V.locked_atoms.len)
+		if(V.is_locking_type(/mob/living))
 			new_targets += V
 
 	if(new_targets.len)

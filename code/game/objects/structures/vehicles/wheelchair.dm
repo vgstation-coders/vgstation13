@@ -169,7 +169,7 @@
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people/examine(mob/user)
 	..()
 
-	if(locked_atoms.len > 9)
+	if(is_locking(/datum/locking_category/buckle/chair/vehicle) > 9)
 		to_chat(user, "<b>WHAT THE FUCK</b>")
 
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people/can_buckle(mob/M, mob/user)
@@ -180,7 +180,7 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people/update_mob()
 	var/i = 0
-	for(var/mob/living/L in locked_atoms)
+	for(var/mob/living/L in get_locked(/datum/locking_category/buckle/chair/vehicle))
 		L.pixel_x = 0
 		L.pixel_y = 3 * PIXEL_MULTIPLIER + (i * 6 * PIXEL_MULTIPLIER) //Stack people on top of each other!
 

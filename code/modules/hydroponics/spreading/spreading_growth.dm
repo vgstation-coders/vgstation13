@@ -63,8 +63,8 @@
 	update_icon()
 
 	if(is_mature() && special_cooldown())
-		if(locked_atoms && locked_atoms.len)
-			var/mob/V = locked_atoms[1]
+		if(is_locking_type(/mob, /datum/locking_category/plantsegment))
+			var/mob/V = locate(/mob) in get_locked(/datum/locking_category/plantsegment)
 			if(istype(V, /mob/living/carbon/human))
 				do_chem_inject(V)
 				do_carnivorous_bite(V, seed.potency)
@@ -110,7 +110,7 @@
 	// We shouldn't have spawned if the controller doesn't exist.
 	check_health()
 	// Keep processing us until we've done all there is for us to do in life.
-	if(neighbors.len || health != max_health || !harvest || locked_atoms.len)
+	if(neighbors.len || health != max_health || !harvest || is_locking(/datum/locking_category/plantsegment))
 		plant_controller.add_plant(src)
 
 /obj/effect/plantsegment/proc/die_off()
