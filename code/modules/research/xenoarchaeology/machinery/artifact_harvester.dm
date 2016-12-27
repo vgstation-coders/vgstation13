@@ -179,8 +179,13 @@
 						var/datum/artifact_effect/E = new effecttype(inserted_battery)
 
 						//duplicate it's unique settings
-						for(var/varname in list("chargelevelmax","artifact_id","effect","effectrange","trigger"))
+						for(var/varname in list("chargelevelmax","artifact_id","effect","effectrange","effect_type","trigger"))
 							E.vars[varname] = cur_artifact.my_effect.vars[varname]
+
+						//duplicate any effect-specific settings
+						if(cur_artifact.my_effect.copy_for_battery && cur_artifact.my_effect.copy_for_battery.len)
+							for(var/varname in cur_artifact.my_effect.copy_for_battery)
+								E.vars[varname] = cur_artifact.my_effect.vars[varname]
 
 						//copy the new datum into the battery
 						inserted_battery.battery_effect = E
