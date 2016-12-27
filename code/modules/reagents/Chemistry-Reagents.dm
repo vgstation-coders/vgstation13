@@ -5313,3 +5313,25 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		var/mob/living/carbon/human/H = M
 		if(H.species.name == "Vox")
 			M.adjustToxLoss(-4 * REM) //chicken and gravy just go together
+
+/datum/reagent/blockizine
+	name = "Blockizine"
+	id = BLOCKIZINE
+	description = "Some type of material that preferentially binds to all possible chemical receptors in the body, but without any direct negative effects."
+	reagent_state = LIQUID
+	custom_metabolism = 0
+	color = "#B0B0B0"
+
+/datum/reagent/blockizine/on_mob_life(var/mob/living/carbon/human/H)
+	if(..())
+		return 1
+	if(!data)
+		data = world.time+3000
+	if(world.time > data)
+		holder.del_reagent(BLOCKIZINE,volume) //needs to be del_reagent, because metabolism is 0
+		return
+
+	if(istype(H) && volume >= 25)
+		holder.isolate_reagent(BLOCKIZINE)
+		volume = holder.maximum_volume
+		holder.update_total()

@@ -89,7 +89,7 @@ var/list/all_doors = list()
 		var/obj/structure/bed/chair/vehicle/vehicle = AM
 
 		if (density)
-			if (vehicle.locked_atoms.len && !operating && allowed(vehicle.locked_atoms[1]))
+			if (vehicle.is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && !operating && allowed(vehicle.get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
 				if(istype(vehicle, /obj/structure/bed/chair/vehicle/wizmobile))
 					vehicle.forceMove(get_step(vehicle,vehicle.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
 				open()

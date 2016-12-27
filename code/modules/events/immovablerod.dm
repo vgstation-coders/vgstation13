@@ -49,7 +49,6 @@
 	throwforce = 100
 	density = 1
 	anchored = 1
-	locked_atoms = list()
 	grillepasschance = 0
 	mouse_opacity = 1
 

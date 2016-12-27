@@ -1,18 +1,3 @@
-/*/obj/effect/plantsegment/HasProximity(var/mob/living/M)
-
-	if(!istype(M) || !Adjacent(M))
-		return
-
-	if(!is_mature() || limited_growth)
-		return
-
-	if(!(locked_atoms && locked_atoms.len) && !M.locked_to && !M.anchored && (M.size <= SIZE_SMALL || prob(round(seed.potency/6))) )
-		//wait a tick for the Entered() proc that called HasProximity() to finish (and thus the moving animation),
-		//so we don't appear to teleport from two tiles away when moving into a turf adjacent to vines.
-		spawn(1)
-			if(M && !M.locked_to)
-				entangle_mob(M)*/
-
 /obj/effect/plantsegment/proc/special_cooldown()
 	return world.time >= last_special + max(3 SECONDS, 100-seed.potency)
 

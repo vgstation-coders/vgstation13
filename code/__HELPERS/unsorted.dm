@@ -1558,3 +1558,30 @@ Game Mode config tags:
 			C << output("\[[time_stamp()]] [msg]", "window1.msay_output")
 		else
 			to_chat(C, msg)
+
+/proc/generic_projectile_fire(var/atom/target, var/atom/source, var/obj/item/projectile/projectile, var/shot_sound)
+	var/turf/T = get_turf(source)
+	var/turf/U = get_turf(target)
+	if (!T || !U)
+		return
+	var/obj/item/projectile/A
+	A = new projectile(T)
+	var/fire_sound
+	if(shot_sound)
+		fire_sound = shot_sound
+	else
+		fire_sound = A.fire_sound
+
+	A.original = target
+	A.target = U
+	A.shot_from = source
+	if(istype(source, /mob))
+		A.firer = source
+	A.current = T
+	A.starting = T
+	A.yo = U.y - T.y
+	A.xo = U.x - T.x
+	playsound(T, fire_sound, 50, 1)
+	A.OnFired()
+	spawn()
+		A.process()

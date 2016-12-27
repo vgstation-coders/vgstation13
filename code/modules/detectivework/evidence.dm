@@ -85,6 +85,7 @@ obj/item/weapon/evidencebag/attackby(obj/item/weapon/W as obj, mob/living/user a
 /obj/item/weapon/storage/box/evidence
 	name = "evidence bag box"
 	desc = "A box containing evidence bags."
+	icon_state = "evidencebox"
 	New()
 		new /obj/item/weapon/evidencebag(src)
 		new /obj/item/weapon/evidencebag(src)

@@ -1021,6 +1021,11 @@ var/global/list/image/blood_overlays = list()
 	if(flags & INVULNERABLE)
 		return
 	spawn(0) //this is needed or multiple items will be thrown sequentially and not simultaneously
+		if(anchored)
+			if(current_size >= STAGE_FIVE)
+				anchored = 0
+			else
+				return
 		if(current_size >= STAGE_FOUR)
 			//throw_at(S, 14, 3)
 			step_towards(src,S)
