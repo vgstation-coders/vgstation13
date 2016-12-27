@@ -7,7 +7,7 @@
 	icon_state = "fire_extinguisher0"
 	item_state = "fire_extinguisher"
 	hitsound = 'sound/weapons/smash.ogg'
-	flags = FPRINT
+	flags = FPRINT | OPENCONTAINER
 	siemens_coefficient = 1
 	throwforce = 10
 	w_class = W_CLASS_MEDIUM
@@ -21,6 +21,7 @@
 	var/max_water = 50
 	var/last_use = 1.0
 	var/safety = 1
+	var/nozzle_state = 0
 	var/sprite_name = "fire_extinguisher"
 
 /obj/item/weapon/extinguisher/New()
@@ -86,18 +87,11 @@
 	if(user.stat || user.restrained() || user.lying)
 		return
 	if (iswrench(W))
-		if(!is_open_container())
-			user.visible_message("[user] begins to unwrench the fill cap on \the [src].","<span class='notice'>You begin to unwrench the fill cap on \the [src].</span>")
-			if(do_after(user, src, 25))
-				user.visible_message("[user] removes the fill cap on \the [src].","<span class='notice'>You remove the fill cap on \the [src].</span>")
-				playsound(get_turf(src),'sound/items/Ratchet.ogg', 100, 1)
-				flags |= OPENCONTAINER
-		else
-			user.visible_message("[user] begins to seal the fill cap on \the [src].","<span class='notice'>You begin to seal the fill cap on \the [src].</span>")
-			if(do_after(user, src, 25))
-				user.visible_message("[user] fastens the fill cap on \the [src].","<span class='notice'>You fasten the fill cap on \the [src].</span>")
-				playsound(get_turf(src),'sound/items/Ratchet.ogg', 100, 1)
-				flags &= ~OPENCONTAINER
+		user.visible_message("[user] begins to [nozzle_state ? "" : "un"]wrench the fill cap on \the [src].","<span class='notice'>You begin to [nozzle_state ? "" : "un"]wrench the fill cap on \the [src].</span>")
+		if(do_after(user, src, 25))
+			user.visible_message("[user] [nozzle_state ? "attaches" : "removes"] the fill cap on \the [src].","<span class='notice'>You [nozzle_state ? "attach" : "remove"] the fill cap on \the [src].</span>")
+			playsound(get_turf(src),'sound/items/Ratchet.ogg', 100, 1)
+			nozzle_state = !nozzle_state
 		return
 
 	if (istype(W, /obj/item) && !is_open_container() && !istype(src, /obj/item/weapon/extinguisher/foam) && !istype(W, /obj/item/weapon/evidencebag))
