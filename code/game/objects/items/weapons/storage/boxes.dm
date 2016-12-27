@@ -65,6 +65,7 @@
 /obj/item/weapon/storage/box/survival
 	name = "survival equipment box"
 	desc = "Makes braving the hazards of space a little bit easier."
+	icon_state = "box_emergency"
 
 /obj/item/weapon/storage/box/survival/New()
 	..()
@@ -74,6 +75,8 @@
 
 /obj/item/weapon/storage/box/survival/vox/New()
 	..()
+	icon_state = "box_vox"
+	
 	for(var/atom/A in src)
 		qdel(A)
 	new /obj/item/clothing/mask/breath/vox(src)
@@ -82,6 +85,8 @@
 
 /obj/item/weapon/storage/box/survival/engineer/New()
 	..()
+	icon_state = "box_eva"
+	
 	for(var/atom/A in src)
 		qdel(A)
 	new /obj/item/clothing/mask/breath(src)
@@ -90,6 +95,8 @@
 
 /obj/item/weapon/storage/box/survival/ert/New()
 	..()
+	icon_state = "box_ERT"
+	
 	for(var/atom/A in src)
 		qdel(A)
 	new /obj/item/clothing/mask/gas/ert(src)
