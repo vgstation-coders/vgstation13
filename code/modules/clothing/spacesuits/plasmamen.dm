@@ -179,12 +179,14 @@
 	icon_state = "plasmamanMiner_suit"
 	armor = list(melee = 30, bullet = 5, laser = 15,energy = 5, bomb = 30, bio = 100, rad = 20)
 	slowdown = 2
+	goliath_reinforce = TRUE
 
 /obj/item/clothing/head/helmet/space/plasmaman/miner
 	name = "plasmaman miner helmet"
 	icon_state = "plasmamanMiner_helmet0"
 	base_state = "plasmamanMiner_helmet"
 	armor = list(melee = 30, bullet = 5, laser = 15,energy = 5, bomb = 30, bio = 100, rad = 20)
+	goliath_reinforce = TRUE
 
 
 // MEDSCI
