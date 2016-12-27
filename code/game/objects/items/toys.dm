@@ -116,9 +116,9 @@
 	icon = 'icons/obj/singularity.dmi'
 	icon_state = "singularity_s1"
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class = 'danger'><b>[user] is putting \his head into \the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
-		return (BRUTELOSS|TOXLOSS|OXYLOSS)
+/obj/item/toy/spinningtoy/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class = 'danger'><b>[user] is putting \his head into \the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
+	return (BRUTELOSS|TOXLOSS|OXYLOSS)
 
 
 /*
@@ -503,6 +503,7 @@
  */
  /obj/item/toy/snappop/smokebomb
  	origin_tech = Tc_COMBAT + "=1;" + Tc_SYNDICATE + "=1"
+	flags = FPRINT | NO_THROW_MSG
 
 /obj/item/toy/snappop/smokebomb/pop()
 	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
@@ -677,9 +678,9 @@
 	icon_state = "gooncode"
 	w_class = W_CLASS_TINY
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's  trying to re-add poo!</span>")
-		return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
+/obj/item/toy/gooncode/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's  trying to re-add poo!</span>")
+	return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
 
 
 /obj/item/toy/minimeteor

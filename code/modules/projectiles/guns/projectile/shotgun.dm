@@ -21,8 +21,8 @@
 
 	gun_flags = 0
 
-/obj/item/weapon/gun/projectile/shotgun/pump/isHandgun()
-		return 0
+/obj/item/weapon/gun/projectile/shotgun/isHandgun()
+	return FALSE
 
 /obj/item/weapon/gun/projectile/shotgun/pump/attack_self(mob/living/user as mob)
 	if(recentpump)

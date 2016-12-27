@@ -621,7 +621,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 		if(istype(user, /mob/living/carbon))
 			var/mob/living/carbon/M = user
 			for(var/obj/item/I in M.held_items)
-				if(I.is_sharp())
+				if(I.sharpness_flags & (SHARP_BLADE|SERRATED_BLADE))
 					success = 1
 					break
 

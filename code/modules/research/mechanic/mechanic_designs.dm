@@ -11,7 +11,7 @@
 /datum/design/mechanic_design/New(var/obj/O) //sets the name, type, design, origin_tech, and circuit, all by itself
 	if(!istype(O))
 		return
-	name = O.name
+	name = initial(O.name)
 	desc = initial(O.desc) //we use initial because some things edit the description
 	build_path = O.type
 	design_list += src //puts us in the design list to be found later, possibly

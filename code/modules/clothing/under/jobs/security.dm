@@ -9,30 +9,30 @@
  * Security
  */
 /obj/item/clothing/under/rank/warden
-	desc = "It's made of a slightly sturdier material than standard jumpsuits, to allow for more robust protection. It has the word \"Warden\" written on the shoulders."
+	desc = "A jumpsuit made of strong material, providing robust protection. It has the word \"WARDEN\" written on the shoulders."
 	name = "warden's jumpsuit"
 	icon_state = "warden"
 	item_state = "r_suit"
 	_color = "warden"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/security
 	name = "security officer's jumpsuit"
-	desc = "It's made of a slightly sturdier material than standard jumpsuits, to allow for robust protection."
+	desc = "A jumpsuit made of strong material, providing robust protection."
 	icon_state = "security"
 	item_state = "r_suit"
 	_color = "secred"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/security/sneaksuit
 	name = "sneaking suit"
-	desc = "It's made of a slightly sturdier material developed by the Soviet Union centuries ago, allows for robust protection."
+	desc = "It's made of a strong material developed by the Soviet Union centuries ago which provides robust protection."
 	icon_state = "sneakingsuit"
 	item_state = "sneakingsuit"
 	_color = "sneakingsuit"
@@ -46,17 +46,17 @@
 	item_state = "dispatch"
 	_color = "dispatch"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
 
 /obj/item/clothing/under/rank/security2
 	name = "security officer's uniform"
-	desc = "It's made of a slightly sturdier material, to allow for robust protection."
+	desc = "A jumpsuit made of strong material, providing robust protection."
 	icon_state = "redshirt2"
 	item_state = "r_suit"
 	_color = "redshirt2"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
 	species_fit = list(GREY_SHAPED)
 
@@ -70,7 +70,7 @@
 	item_state = "det"
 	_color = "detective"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
@@ -98,13 +98,13 @@
 	item_state = "r_suit"
 	_color = "hosred"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.8
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/suit/armor/hos
 	name = "armored coat"
-	desc = "A greatcoat enchanced with a special alloy for some protection and style."
+	desc = "A greatcoat enhanced with a special alloy for protection and style."
 	icon_state = "hos"
 	item_state = "hos"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
@@ -123,7 +123,7 @@
 
 /obj/item/clothing/suit/armor/hos/jensen
 	name = "armored trenchcoat"
-	desc = "A trenchcoat augmented with a special alloy for some protection and style."
+	desc = "A trenchcoat augmented with a special alloy for protection and style."
 	icon_state = "jensencoat"
 	item_state = "jensencoat"
 	siemens_coefficient = 0.6

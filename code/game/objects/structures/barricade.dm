@@ -15,6 +15,7 @@
 	opacity = 1 //Wood isn't transparent, the last time I checked
 	health = 60 //Fairly strong
 	var/busy = 0 //Oh god fucking do_after's
+	var/materialtype = /obj/item/stack/sheet/wood
 
 	fire_temp_threshold = 100 //Wooden barricades REALLY don't like fire
 	fire_volume_mod = 10 //They REALLY DON'T
@@ -22,16 +23,16 @@
 /obj/structure/window/barricade/examine_health(mob/user)
 	//Switch most likely can't take inequalities, so here's that if block
 	if(health >= initial(health)) //Sanity
-		to_chat(user, "It's in perfect shape, not even a scratch.")
+		to_chat(user, "It's in perfect shape without a single scratch.")
 	else if(health >= 0.8*initial(health))
-		to_chat(user, "It has a few splinters and a plank is broken.")
+		to_chat(user, "It has a few splinters and a broken plank.")
 	else if(health >= 0.5*initial(health))
 		to_chat(user, "It has a fair amount of splinters and broken planks.")
 	else if(health >= 0.2*initial(health))
-		to_chat(user, "It has most of its planks broken, you can barely tell how much weight the support beams are bearing.")
+		to_chat(user, "It has most of its planks broken and is somewhat unstable.")
 	else
-		to_chat(user, "It has only one or two planks still in shape, it's a miracle it's even standing.")
-
+		to_chat(user, "It has only one or two planks still in shape and is unstable.")
+		
 //Allows us to quickly check if we should break the barricade, can handle not having an user
 //Sound is technically deprecated, but barricades should really have a build sound
 /obj/structure/window/barricade/healthcheck(var/mob/M, var/sound = 1)
@@ -105,7 +106,7 @@
 /obj/structure/window/barricade/Destroy()
 
 	density = 0 //Sanity while we do the rest
-	getFromPool(/obj/item/stack/sheet/wood, loc, sheetamount)
+	getFromPool(materialtype, loc, sheetamount)
 
 	..()
 

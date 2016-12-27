@@ -18,7 +18,7 @@
 	mag_type = "/obj/item/ammo_storage/magazine/smg9mm"
 
 /obj/item/weapon/gun/projectile/automatic/isHandgun()
-	return 0
+	return FALSE
 
 /obj/item/weapon/gun/projectile/automatic/verb/ToggleFire()
 	set name = "Toggle Burstfire"
@@ -91,7 +91,7 @@
 	mag_type = "/obj/item/ammo_storage/magazine/uzi45"
 
 /obj/item/weapon/gun/projectile/automatic/mini_uzi/isHandgun()
-	return 1
+	return TRUE
 
 /obj/item/weapon/gun/projectile/automatic/c20r
 	name = "\improper C-20r SMG"
@@ -107,6 +107,7 @@
 	ammo_type = "/obj/item/ammo_casing/a12mm"
 	mag_type = "/obj/item/ammo_storage/magazine/a12mm/ops"
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
+	mag_drop_sound = 'sound/weapons/smg_empty_alarm.ogg'
 	load_method = 2
 
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS

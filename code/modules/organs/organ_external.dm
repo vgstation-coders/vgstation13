@@ -633,6 +633,15 @@ Note that amputating the affected organ does in fact remove the infection from t
 		src.status &= ~ORGAN_SPLINTED
 		src.status &= ~ORGAN_DEAD
 
+		//No limb, no damage
+		brute_dam = 0
+		burn_dam = 0
+		perma_injury = 0
+		for(var/datum/wound/W in wounds)
+			wounds -= W
+			number_wounds -= W.amount
+			returnToPool(W)
+
 		//If any organs are attached to this, destroy them
 		for(var/datum/organ/external/O in children)
 			O.droplimb(1)

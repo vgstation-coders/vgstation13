@@ -115,7 +115,7 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
-	flags = FPRINT  | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 
 /obj/item/clothing/suit/space/rig/elite
 	icon_state = "rig-white"
@@ -125,7 +125,7 @@
 	desc = "An advanced suit that protects against hazardous, low pressure environments. Shines with a high polish."
 	item_state = "ce_hardsuit"
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	flags = FPRINT  | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 
 
 //Mining rig
@@ -233,14 +233,6 @@
 /obj/item/clothing/suit/space/rig/wizard/acidable()
 	return 0
 
-/obj/item/clothing/suit/space/rig/wizard/complete/New()	//Use to spawn a complete gemsuit set all at once
-	..()
-	new /obj/item/clothing/head/helmet/space/rig/wizard(loc)
-	new /obj/item/clothing/suit/space/rig/wizard(loc)
-	new /obj/item/clothing/gloves/purple(loc)
-	new /obj/item/clothing/shoes/sandal(loc)
-	qdel(src)
-
 //Medical Rig
 /obj/item/clothing/head/helmet/space/rig/medical
 	name = "medical hardsuit helmet"
@@ -311,7 +303,7 @@
 	_color = "atmos"
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
-	flags = FPRINT  | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 	armor = list(melee = 40, bullet = 0, laser = 0, energy = 0, bomb = 25, bio = 100, rad = 0)
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 
@@ -321,7 +313,7 @@
 	name = "atmos hardsuit"
 	item_state = "atmos_hardsuit"
 	species_restricted = list("exclude",VOX_SHAPED)
-	flags = FPRINT  |  PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 	species_fit = list(GREY_SHAPED)
 	armor = list(melee = 40, bullet = 0, laser = 0, energy = 0, bomb = 25, bio = 100, rad = 0)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
@@ -397,8 +389,7 @@
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
 	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
-
-
+	
 //Death squad rig
 /obj/item/clothing/head/helmet/space/rig/deathsquad
 	name = "deathsquad helmet"
@@ -411,7 +402,7 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	_color = "deathsquad"
-	flags = FPRINT | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 
 /obj/item/clothing/suit/space/rig/deathsquad
 	name = "deathsquad suit"
@@ -424,7 +415,7 @@
 	siemens_coefficient = 0.5
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
-	flags = FPRINT | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 
 
 //Knight armour rigs
@@ -439,7 +430,7 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	_color = "knight"
-	flags = FPRINT | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 
 /obj/item/clothing/suit/space/rig/knight
 	name = "Space-Knight armour"
@@ -453,7 +444,7 @@
 	siemens_coefficient = 0.5
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
-	flags = FPRINT | PLASMAGUARD
+	clothing_flags = PLASMAGUARD
 
 /obj/item/clothing/head/helmet/space/rig/knight/black
 	name = "Black Knight's helm"

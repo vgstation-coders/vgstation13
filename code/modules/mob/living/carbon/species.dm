@@ -93,6 +93,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/chem_flags = 0 //how we handle chemicals and eating/drinking i guess
 
 	var/list/abilities = list()	// For species-derived or admin-given powers
+	var/list/spells = list()	// Because spells are the hip new thing to replace verbs
 
 	var/blood_color = DEFAULT_BLOOD //Red.
 	var/flesh_color = "#FFC896" //Pink.
@@ -132,6 +133,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/move_speed_mod = 0 //Higher value is slower, lower is faster.
 	var/can_be_hypothermic = 1
 	var/has_sweat_glands = 1
+	var/move_speed_multiplier = 1	//This is a multiplier, and can make the mob either faster or slower.
 
 /datum/species/New()
 	..()
@@ -250,6 +252,9 @@ var/global/list/whitelisted_species = list("Human")
 /datum/species/proc/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
 	return
 
+/datum/species/proc/can_artifact_revive()
+	return 1
+
 /datum/species/proc/equip(var/mob/living/carbon/human/H)
 
 /datum/species/human
@@ -278,6 +283,9 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
 	H.dust()
+
+/datum/species/manifested/can_artifact_revive()
+	return 0
 
 /datum/species/unathi
 	name = "Unathi"
@@ -333,6 +341,9 @@ var/global/list/whitelisted_species = list("Human")
 		speech.message += "  ACK ACK!"
 
 	return ..(speech, H)
+
+/datum/species/skellington/can_artifact_revive()
+	return 0
 
 /datum/species/skellington/skelevox // Science never goes too far, it's the public that's too conservative
 	name = "Skeletal Vox"
@@ -763,9 +774,9 @@ var/global/list/whitelisted_species = list("Human")
 	cold_level_2 = -1
 	cold_level_3 = -1
 
-	heat_level_1 = 2000
-	heat_level_2 = 3000
-	heat_level_3 = 4000
+	heat_level_1 = T0C + 50
+	heat_level_2 = T0C + 75
+	heat_level_3 = T0C + 100
 
 	flags = IS_WHITELISTED | NO_BREATHE | REQUIRE_LIGHT | NO_SCAN | IS_PLANT | RAD_ABSORB | NO_BLOOD | IS_SLOW | NO_PAIN
 
@@ -843,6 +854,9 @@ var/global/list/whitelisted_species = list("Human")
 		H.key = null
 	qdel(H)
 
+/datum/species/golem/can_artifact_revive()
+	return 0
+
 /mob/living/adamantine_dust //serves as the corpse of adamantine golems
 	name = "adamantine dust"
 	desc = "The remains of an adamantine golem."
@@ -883,3 +897,34 @@ var/global/list/whitelisted_species = list("Human")
 					qdel(src)
 		else
 			to_chat(user, "<span class='warning'>The used extract doesn't have any effect on \the [src].</span>")
+
+/datum/species/grue
+	name = "Grue"
+	icobase = 'icons/mob/human_races/r_grue.dmi'		// Normal icon set.
+	deform = 'icons/mob/human_races/r_def_grue.dmi'	// Mutated icon set.
+	eyes = "grue_eyes_s"
+	attack_verb = "claws"
+	flags = HAS_LIPS | NO_PAIN | IS_WHITELISTED
+	punch_damage = 7
+	darksight = 8
+	default_mutations=list(M_HULK,M_CLAWS,M_TALONS)
+	burn_mod = 2
+	brute_mod = 2
+	move_speed_multiplier = 2
+	can_be_hypothermic = 0
+	has_mutant_race = 0
+
+	spells = list(/spell/swallow_light,/spell/shatter_lights)
+
+	has_organ = list(
+		"heart" =    /datum/organ/internal/heart,
+		"lungs" =    /datum/organ/internal/lungs,
+		"liver" =    /datum/organ/internal/liver,
+		"kidneys" =  /datum/organ/internal/kidney,
+		"brain" =    /datum/organ/internal/brain,
+		"appendix" = /datum/organ/internal/appendix,
+		"eyes" =     /datum/organ/internal/eyes/grue
+	)
+
+/datum/species/grue/makeName()
+	return "grue"

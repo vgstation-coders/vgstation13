@@ -27,6 +27,9 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	charge_cost = 100 // holds less "ammo" then the rifle variant.
 
+/obj/item/weapon/gun/energy/laser/pistol/isHandgun()
+	return TRUE
+
 /obj/item/weapon/gun/energy/laser/rifle
 	name = "laser rifle"
 	desc = "A laser rifle issued to high ranking members of a certain shadow corporation."
@@ -111,13 +114,16 @@
 
 /obj/item/weapon/gun/energy/laser/blaster/update_icon()
 
-obj/item/weapon/gun/energy/laser/retro
+/obj/item/weapon/gun/energy/laser/retro
 	name ="retro laser"
 	icon_state = "retro"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	desc = "An older model of the basic lasergun, no longer used by Nanotrasen's security or military forces. Nevertheless, it is still quite deadly and easy to maintain, making it a favorite amongst pirates and other outlaws."
 	projectile_type = /obj/item/projectile/beam/retro
+
+/obj/item/weapon/gun/energy/laser/retro/isHandgun()
+	return TRUE
 
 /obj/item/weapon/gun/energy/laser/captain
 	icon_state = "caplaser"
@@ -129,6 +135,8 @@ obj/item/weapon/gun/energy/laser/retro
 	var/charge_tick = 0
 	projectile_type = "/obj/item/projectile/beam/captain"
 
+/obj/item/weapon/gun/energy/laser/captain/isHandgun()
+	return TRUE
 
 /obj/item/weapon/gun/energy/laser/captain/New()
 	..()
@@ -213,9 +221,6 @@ obj/item/weapon/gun/energy/laser/retro
 
 	fire_delay = 2
 
-	isHandgun()
-		return 0
-
 /obj/item/weapon/gun/energy/laser/cannon/empty/New()
 	..()
 
@@ -295,6 +300,9 @@ obj/item/weapon/gun/energy/laser/retro
 	projectile_type = /obj/item/projectile/energy/plasma/pistol
 	charge_cost = 100
 
+/obj/item/weapon/gun/energy/plasma/pistol/isHandgun()
+	return TRUE
+
 /obj/item/weapon/gun/energy/plasma/light
 	name = "plasma rifle"
 	desc = "A state of the art rifle utilizing plasma in a uranium-235 lined core to output radiating bolts of energy."
@@ -344,6 +352,9 @@ obj/item/weapon/gun/energy/laser/retro
 	clumsy_check = 0
 	var/charge_tick = 0
 
+/obj/item/weapon/gun/energy/laser/bluetag/isHandgun()
+	return TRUE
+
 /obj/item/weapon/gun/energy/laser/bluetag/special_check(var/mob/living/carbon/human/M)
 	if(ishuman(M))
 		if(istype(M.wear_suit, /obj/item/clothing/suit/bluetag))
@@ -385,6 +396,9 @@ obj/item/weapon/gun/energy/laser/retro
 	mech_flags = null // So it can be scanned by the Device Analyser
 	clumsy_check = 0
 	var/charge_tick = 0
+
+/obj/item/weapon/gun/energy/laser/redtag/isHandgun()
+	return TRUE
 
 /obj/item/weapon/gun/energy/laser/redtag/special_check(var/mob/living/carbon/human/M)
 	if(ishuman(M))
@@ -442,3 +456,9 @@ obj/item/weapon/gun/energy/laser/retro
 	charge_cost = 25
 	fire_sound = 'sound/weapons/mmlbuster.ogg'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/megabusters.dmi', "right_hand" = 'icons/mob/in-hand/right/megabusters.dmi')
+
+/obj/item/weapon/gun/energy/laser/smart
+	name = "smart laser gun"
+	desc = "An upgraded model of the basic laser gun. There seems to be some sort of slot in the handle."
+	can_take_pai = TRUE
+	origin_tech = Tc_COMBAT + "=3;" + Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=4"

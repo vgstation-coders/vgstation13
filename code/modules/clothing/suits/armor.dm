@@ -14,7 +14,7 @@
 	icon_state = "armor"
 	item_state = "armor"
 	blood_overlay_type = "armor"
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/armor/vest/security
@@ -144,7 +144,7 @@
 	icon_state = "detective-armor"
 	item_state = "armor"
 	blood_overlay_type = "armor"
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 
 
@@ -158,7 +158,7 @@
 	item_state = "reactiveoff"
 	blood_overlay_type = "armor"
 	slowdown = 1
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/armor/reactive/IsShield()
@@ -278,3 +278,30 @@
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	slowdown = 0
 	armor = list(melee = 50, bullet = 30, laser = 20, energy = 20, bomb = 30, bio = 0, rad = 0)
+
+/obj/item/clothing/suit/armor/ice
+	name = "ice armor"
+	desc = "A cool-looking suit of armor made of solid ice."
+	icon_state = "ice_armor"
+	item_state = "ice_armor"
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	armor = list(melee = 80, bullet = 50, laser = 0, energy = 10, bomb = 40, bio = 0, rad = 0)
+	siemens_coefficient = 0
+	heat_conductivity = 1
+	cold_speed_protection = 0
+	health = 100
+
+/obj/item/clothing/suit/armor/ice/OnMobLife(var/mob/holder)
+	if(is_worn(holder))
+		if(health <= 0)
+			to_chat(holder, "\The [src] melts away into nothing.")
+			qdel(src)
+			return
+		if(holder.on_fire)
+			to_chat(holder, "<span class='warning'>Your [src.name] is melting!</span>")
+			health -= 10
+		holder.bodytemperature = max(holder.bodytemperature-2 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
+		if(prob(1))
+			holder.emote("shiver")
+		if(holder.reagents && holder.reagents.has_reagent(LEPORAZINE))	//No escaping winter's curse
+			holder.bodytemperature = max(holder.bodytemperature-200 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)

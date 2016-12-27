@@ -44,7 +44,7 @@
 
 
 /obj/machinery/power/apc
-	desc = "A control terminal for the area electrical systems."
+	desc = "A control terminal for the area's electrical systems."
 	icon_state = "apc0"
 	anchored = 1
 	use_power = 0
@@ -603,7 +603,7 @@
 			opened = 2
 			user.visible_message("<span class='warning'>The APC cover was knocked down with the [W.name] by [user.name]!</span>", \
 				"<span class='warning'>You knock down the APC cover with your [W.name]!</span>", \
-				"You hear bang")
+				"You hear a loud bang.") //"you hear bang" is so bad I have to leave a comment to immortalize it
 			update_icon()
 		else
 			if (istype(user, /mob/living/silicon))
@@ -1336,5 +1336,11 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 		update_icon()
 		return 1
 	return 0
+
+//We kinda do things our own way and don't really use NOPOWER or such, so we need different sanity
+/obj/machinery/power/apc/shock(mob/user, prb, var/siemenspassed = -1)
+	if(shorted || (!cell && !charging))
+		return FALSE
+	return ..()
 
 #undef APC_UPDATE_ICON_COOLDOWN

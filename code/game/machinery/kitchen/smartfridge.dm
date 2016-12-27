@@ -1,5 +1,7 @@
-/* SmartFridge.  Much todo
-*/
+#define MAX_SHELVES 4
+#define MINIICONS_OFF 0
+#define MINIICONS_ON 1
+#define MINIICONS_UNCROPPED 2
 /obj/machinery/smartfridge
 	name = "\improper SmartFridge"
 	icon = 'icons/obj/vending.dmi'
@@ -13,15 +15,13 @@
 	flags = NOREACT
 	var/icon_on = "smartfridge"
 	var/icon_off = "smartfridge-off"
-	var/item_quants = list()
-	//var/ispowered = 1 //starts powered
-	//var/isbroken = 0
-	//OBSOLETE: That's what the BROKEN and NOPOWER stat bitflags are for
+	var/list/datum/fridge_pile/piles = list()
 	var/opened = 0.0
+	var/display_miniicons = FALSE
 
 	var/list/accepted_types = list(	/obj/item/weapon/reagent_containers/food/snacks/grown,
 									/obj/item/weapon/grown,
-									/obj/item/seeds/,
+									/obj/item/seeds,
 									/obj/item/weapon/reagent_containers/food/snacks/meat,
 									/obj/item/weapon/reagent_containers/food/snacks/egg,
 									/obj/item/weapon/reagent_containers/food/condiment)
@@ -36,6 +36,30 @@
 		else
 			set_light(0)
 
+/datum/fridge_pile
+	var/name = ""
+	var/obj/machinery/smartfridge/fridge
+	var/amount = 1
+	var/shelf = 1
+	var/mini_icon
+
+/datum/fridge_pile/New(var/name, var/fridge, var/amount, var/mini_icon)
+	src.name = name
+	src.fridge = fridge
+	src.amount = amount
+	src.mini_icon = mini_icon
+
+/datum/fridge_pile/Destroy()
+	fridge.piles -= src.name
+	fridge = null
+
+/datum/fridge_pile/proc/addAmount(var/amt)
+	amount += amt
+
+/datum/fridge_pile/proc/removeAmount(var/amt)
+	amount -= amt
+	if(amount <= 0)
+		returnToPool(src)
 
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
@@ -57,6 +81,11 @@
 	)
 
 	RefreshParts()
+
+/obj/machinery/smartfridge/Destroy()
+	for(var/key in piles)
+		returnToPool(piles[key])
+	..()
 
 /obj/machinery/smartfridge/proc/accept_check(var/obj/item/O as obj, var/mob/user as mob)
 	for(var/ac_type in accepted_types)
@@ -209,7 +238,6 @@
 		if(!(stat & BROKEN))
 			icon_state = icon_off
 
-
 /*******************
 *   Item Adding
 ********************/
@@ -230,10 +258,11 @@
 			if(!user.drop_item(O, src))
 				return 1
 
-			if(item_quants[O.name])
-				item_quants[O.name]++
+			var/datum/fridge_pile/thisPile = piles[O.name]
+			if(istype(thisPile))
+				thisPile.addAmount(1)
 			else
-				item_quants[O.name] = 1
+				piles[O.name] = getFromPool(/datum/fridge_pile, O.name, src, 1, bicon(O))
 			user.visible_message("<span class='notice'>[user] has added \the [O] to \the [src].", \
 								 "<span class='notice'>You add \the [O] to \the [src].")
 
@@ -247,10 +276,11 @@
 					return 1
 				else
 					bag.remove_from_storage(G,src)
-					if(item_quants[G.name])
-						item_quants[G.name]++
+					var/datum/fridge_pile/thisPile = piles[G.name]
+					if(istype(thisPile))
+						thisPile.addAmount(1)
 					else
-						item_quants[G.name] = 1
+						piles[G.name] = new/datum/fridge_pile(G.name, src, 1, bicon(G))
 					objects_loaded++
 		if(objects_loaded)
 
@@ -270,7 +300,7 @@
 	else
 		to_chat(user, "<span class='notice'>\The [src] smartly refuses [O].</span>")
 		return 1
-	item_quants = sortList(item_quants)
+	piles = sortList(piles)
 	updateUsrDialog()
 	return 1
 
@@ -292,53 +322,117 @@
 	if(stat & NOPOWER)
 		return
 
-	var/dat = "<TT><b>Select an item:</b><br>"
+	var/dat = list()
 
-	if (contents.len == 0)
-		dat += "<font color = 'red'>No product loaded!</font>"
+	if(contents.len == 0)
+		dat += "<font color = 'red'><TT>No product loaded!</TT></font>"
 	else
-		for (var/O in item_quants)
-			if(item_quants[O] > 0)
-				var/N = item_quants[O]
-				var/escaped_name = url_encode(O) //This is necessary to contain special characters in Topic() links, otherwise, BYOND sees "Dex+" and drops the +.
+		var/imagedesc
+		switch(display_miniicons)
+			if(MINIICONS_ON)
+				imagedesc = "On"
+			if(MINIICONS_UNCROPPED)
+				imagedesc = "Uncropped"
+			if(MINIICONS_OFF)
+				imagedesc = "Off"
+		dat += "<span class='imageToggleButton'><TT>Images: <a href='byond://?src=\ref[src];display_miniicons=1;'>[imagedesc]</A></TT></span>"
 
-				dat += {"<FONT color = 'blue'><B>[capitalize(O)]</B>:
-					[N] </font>
-					<a href='byond://?src=\ref[src];vend=[escaped_name];amount=1'>Vend</A> "}
-				if(N > 5)
-					dat += "(<a href='byond://?src=\ref[src];vend=[escaped_name];amount=5'>x5</A>)"
-					if(N > 10)
-						dat += "(<a href='byond://?src=\ref[src];vend=[escaped_name];amount=10'>x10</A>)"
-						if(N > 25)
-							dat += "(<a href='byond://?src=\ref[src];vend=[escaped_name];amount=25'>x25</A>)"
-				if(N > 1)
-					dat += "(<a href='?src=\ref[src];vend=[escaped_name];amount=[N]'>All</A>)"
-				dat += "<br>"
+		dat += "<TT><b>Select an item:</b></TT>"
 
-		dat += "</TT>"
-	user << browse("<HEAD><TITLE>[src] Supplies</TITLE></HEAD><TT>[dat]</TT>", "window=smartfridge")
-	onclose(user, "smartfridge")
-	return
+		var/list/shelves[MAX_SHELVES]
+		for(var/i = 1 to MAX_SHELVES)
+			shelves[i] = list()
+
+		for(var/key in piles)
+			var/datum/fridge_pile/P = piles[key]
+			shelves[P.shelf] += P
+
+		var/shelfcounter = 1
+		for(var/list/shelf in shelves)
+			var/pilecounter = 1
+
+			if(shelfcounter != 1)
+				dat += "<hr>"
+			dat += "<table>"
+
+			for(var/datum/fridge_pile/P in shelf)
+				var/escaped_name = url_encode(P.name) //This is necessary to contain special characters in Topic() links, otherwise, BYOND sees "Dex+" and drops the +.
+				var/color = pilecounter % 2 == 0 ? "#e6e6e6" : "#f2f2f2"
+				dat += "<tr style='background-color:[color]'>"
+				if(display_miniicons)
+					dat += "<td class='fridgeIcon [display_miniicons == MINIICONS_UNCROPPED ? "" : "cropped"]'>[P.mini_icon]</td>"
+				dat += "<td class='pileName'><TT>"
+				dat += "<FONT color = 'blue'><B>[capitalize(P.name)]</B>: [P.amount] </font>"
+				dat += "<a href='byond://?src=\ref[src];pile=[escaped_name];amount=1'>Vend</A> "
+				if(P.amount > 5)
+					dat += "(<a href='byond://?src=\ref[src];pile=[escaped_name];amount=5'>x5</A>)"
+					if(P.amount > 10)
+						dat += "(<a href='byond://?src=\ref[src];pile=[escaped_name];amount=10'>x10</A>)"
+						if(P.amount > 25)
+							dat += "(<a href='byond://?src=\ref[src];pile=[escaped_name];amount=25'>x25</A>)"
+				if(P.amount > 1)
+					dat += "(<a href='?src=\ref[src];pile=[escaped_name];amount=[P.amount]'>All</A>)"
+				dat += "</TT></td>"
+
+				dat += "<td class='shelfButton'><TT>"
+				dat += P.shelf > 1 ? "<a href='?src=\ref[src];pile=[escaped_name];shelf=up'>&#8743;</A>" : "&nbsp"
+				dat += P.shelf < MAX_SHELVES ? "<a href='?src=\ref[src];pile=[escaped_name];shelf=down'>&#8744;</A>" : "&nbsp"
+				dat += "</TT></td>"
+
+				dat += "</tr>"
+				pilecounter++
+
+			dat += "</table>"
+			shelfcounter++
+
+	dat = jointext(dat,"") //Optimize BYOND's shittiness by making "dat" actually a list of strings and join it all together afterwards! Yes, I'm serious, this is actually a big deal
+
+	var/datum/browser/clean/popup = new(user, "smartfridge", "[src] Supplies", 450, 500)
+	popup.add_stylesheet("common", 'html/browser/smartfridge.css') //Completely fucking nuke common.css, because clean.css doesn't clean shit.
+	popup.set_content(dat)
+	popup.open()
 
 /obj/machinery/smartfridge/Topic(href, href_list)
 	if(..())
 		return
 	usr.set_machine(src)
 
-	var/N = href_list["vend"]
-	var/amount = text2num(href_list["amount"])
+	var/N = href_list["pile"]
+	if(href_list["amount"])
+		var/amount = text2num(href_list["amount"])
+		var/datum/fridge_pile/thisPile = piles[N]
+		if(!istype(thisPile)) // Sanity check, there are probably ways to press the button when it shouldn't be possible.
+			return
 
-	if(item_quants[N] <= 0) // Sanity check, there are probably ways to press the button when it shouldn't be possible.
-		return
+		thisPile.removeAmount(amount)
 
-	item_quants[N] = max(item_quants[N] - amount, 0)
+		var/i = amount
+		for(var/obj/O in contents)
+			if(O.name == N)
+				O.forceMove(src.loc)
+				i--
+				if(i <= 0)
+					break
 
-	var/i = amount
-	for(var/obj/O in contents)
-		if(O.name == N)
-			O.forceMove(src.loc)
-			i--
-			if(i <= 0)
-				break
+	else if(href_list["shelf"])
+		var/datum/fridge_pile/thisPile = piles[N]
+		if(href_list["shelf"] == "up" && thisPile.shelf > 1)
+			thisPile.shelf -= 1
+		else if(href_list["shelf"] == "down" && thisPile.shelf < MAX_SHELVES)
+			thisPile.shelf += 1
+
+	else if(href_list["display_miniicons"])
+		switch(display_miniicons)
+			if(MINIICONS_ON)
+				display_miniicons = MINIICONS_UNCROPPED
+			if(MINIICONS_UNCROPPED)
+				display_miniicons = MINIICONS_OFF
+			if(MINIICONS_OFF)
+				display_miniicons = MINIICONS_ON
 
 	src.updateUsrDialog()
+
+#undef MAX_SHELVES
+#undef MINIICONS_ON
+#undef MINIICONS_OFF
+#undef MINIICONS_UNCROPPED

@@ -20,6 +20,7 @@
 
 	var/obj/item/inventory_head
 	var/obj/item/inventory_mask
+	held_items = list()
 
 /mob/living/simple_animal/crab/Life()
 	if(timestopped)

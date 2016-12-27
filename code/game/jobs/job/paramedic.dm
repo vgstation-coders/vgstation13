@@ -28,6 +28,7 @@
 		H.equip_or_collect(new /obj/item/clothing/mask/cigarette(H), slot_wear_mask)
 		H.equip_or_collect(new /obj/item/clothing/head/soft/paramedic(H), slot_head)
 		H.equip_or_collect(new /obj/item/device/flashlight/pen(H), slot_s_store)
+		H.equip_or_collect(new /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector(H), slot_l_store)
 		if(H.backbag == 1)
 			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
 			H.put_in_hand(GRASP_LEFT_HAND, new /obj/item/device/healthanalyzer(H))

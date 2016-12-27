@@ -17,7 +17,7 @@
 	var/sheet_type = /obj/item/stack/sheet/metal
 	var/sheet_amt = 1
 
-	var/lock_type = /datum/locking_category/bed
+	var/lock_type = /datum/locking_category/buckle/bed
 
 /obj/structure/bed/alien
 	name = "resting contraption"
@@ -52,14 +52,14 @@
 	buckle_mob(M, user)
 
 /obj/structure/bed/proc/manual_unbuckle(mob/user as mob)
-	if(!locked_atoms.len)
+	if(!is_locking(lock_type))
 		return
 
 	if(user.size <= SIZE_TINY)
 		to_chat(user, "<span class='warning'>You are too small to do that.</span>")
 		return
 
-	var/mob/M = locked_atoms[1]
+	var/mob/M = get_locked(lock_type)[1]
 	if(M != user)
 		M.visible_message(\
 			"<span class='notice'>[M] was unbuckled by [user]!</span>",\
@@ -128,7 +128,7 @@
 	anchored = 0
 
 	lockflags = DENSE_WHEN_LOCKED
-	lock_type = /datum/locking_category/bed/roller
+	lock_type = /datum/locking_category/buckle/bed/roller
 
 /obj/item/roller
 	name = "roller bed"
@@ -162,10 +162,10 @@
 		if(!ishuman(usr) || usr.incapacitated() || usr.lying)
 			return
 
-		if(locked_atoms.len)
+		if(is_locking(lock_type))
 			return 0
 
-		visible_message("[usr] collapses \the [src.name]")
+		visible_message("[usr] collapses \the [src.name].")
 
 		new/obj/item/roller(get_turf(src))
 
@@ -181,9 +181,9 @@
 	. = ..()
 
 
-/datum/locking_category/bed
+/datum/locking_category/buckle/bed
 	flags = LOCKED_SHOULD_LIE
 
-/datum/locking_category/bed/roller
+/datum/locking_category/buckle/bed/roller
 	pixel_y_offset = 6 * PIXEL_MULTIPLIER
 	flags = DENSE_WHEN_LOCKING | LOCKED_SHOULD_LIE

@@ -10,10 +10,11 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/school = "evocation" //not relevant at now, but may be important later if there are changes to how spells work. the ones I used for now will probably be changed... maybe spell presets? lacking flexibility but with some other benefit?
 
-	var/charge_type = Sp_RECHARGE //can be recharge or charges, see charge_max and charge_counter descriptions; can also be based on the holder's vars now, use "holder_var" for that
+	var/charge_type = Sp_RECHARGE //can be recharge or charges, see charge_max and charge_counter descriptions; can also be based on the holder's vars now, use "holder_var" for that; can ALSO be made to gradually drain the charge with Sp_GRADUAL
 
 	var/charge_max = 100 //recharge time in deciseconds if charge_type = Sp_RECHARGE or starting charges if charge_type = Sp_CHARGES
 	var/charge_counter = 0 //can only cast spells if it equals recharge, ++ each decisecond if charge_type = Sp_RECHARGE or -- each cast if charge_type = Sp_CHARGES
+	var/minimum_charge = 0 //if set, the minimum charge_counter necessary to cast Sp_GRADUAL spells
 	var/still_recharging_msg = "<span class='notice'>The spell is still recharging.</span>"
 
 	var/silenced = 0 //not a binary (though it seems that it is at the moment) - the length of time we can't cast this for, set by the spell_master silence_spells()
@@ -84,6 +85,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/obj/screen/spell/connected_button
 	var/currently_channeled = 0
+	var/gradual_casting = FALSE //equals TRUE while a Sp_GRADUAL spell is actively being cast
 
 ///////////////////////
 ///SETUP AND PROCESS///
@@ -98,7 +100,15 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /spell/proc/process()
 	spawn while(charge_counter < charge_max)
 		if(holder && !holder.timestopped)
-			charge_counter++
+			if(gradual_casting)
+				if(charge_counter <= 0)
+					charge_counter = 0
+					gradual_casting = FALSE
+					stop_casting(null, holder)
+				else
+					charge_counter--
+			else
+				charge_counter++
 		sleep(1)
 	return
 
@@ -128,6 +138,11 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	if(!targets && (spell_flags & WAIT_FOR_CLICK))
 		channel_spell(user, skipcharge)
 		return
+	if(cast_check(1, user))
+		if(gradual_casting)
+			gradual_casting = FALSE
+			stop_casting(targets, user)
+			return
 	if(!cast_check(skipcharge, user))
 		return
 	if(cast_delay && !spell_do_after(user, cast_delay))
@@ -219,6 +234,9 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	return
 
 /spell/proc/cast(list/targets, mob/user) //the actual meat of the spell
+	return
+
+/spell/proc/stop_casting(list/targets, mob/user)
 	return
 
 /spell/proc/critfail(list/targets, mob/user) //the wizman has fucked up somehow
@@ -380,6 +398,10 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 				if(user.vars[holder_var_type] < holder_var_amount)
 					to_chat(user, holder_var_recharging_msg())
 					return 0
+		if(charge_type & Sp_GRADUAL)
+			if(charge_counter < minimum_charge)
+				to_chat(user, still_recharging_msg)
+				return 0
 	return 1
 
 /spell/proc/holder_var_recharging_msg()
@@ -399,6 +421,10 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 				adjust_var(special_var_holder, holder_var_type, holder_var_amount)
 			else
 				adjust_var(user, holder_var_type, holder_var_amount)
+		if(charge_type & Sp_GRADUAL)
+			gradual_casting = TRUE
+			charge_counter -= 1
+			process()
 
 
 /spell/proc/invocation(mob/user = usr, var/list/targets) //spelling the spell out and setting it on recharge/reducing charges amount

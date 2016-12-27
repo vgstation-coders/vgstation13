@@ -7,8 +7,9 @@
 	var/total_burn	= 0
 	var/total_brute	= 0
 	for(var/datum/organ/external/O in organs)	//hardcoded to streamline things a bit
-		total_brute	+= O.brute_dam
-		total_burn	+= O.burn_dam
+		if(O.is_organic() && O.is_existing())
+			total_brute	+= O.brute_dam
+			total_burn	+= O.burn_dam
 	health = maxHealth - getOxyLoss() - getToxLoss() - getCloneLoss() - total_burn - total_brute
 	//TODO: fix husking
 	if( ((maxHealth - total_burn) < config.health_threshold_dead) && stat == DEAD) //100 only being used as the magic human max health number, feel free to change it if you add a var for it -- Urist
@@ -80,7 +81,7 @@
 		var/datum/organ/external/O = get_organ(organ_name)
 
 		if(amount > 0)
-			O.take_damage(amount, 0, sharp=damage_source.is_sharp(), edge=has_edge(damage_source), used_weapon=damage_source)
+			O.take_damage(amount, 0, sharp=damage_source.is_sharp(), edge=damage_source.sharpness_flags & SHARP_BLADE, used_weapon=damage_source)
 		else
 			//if you don't want to heal robot organs, they you will have to check that yourself before using this proc.
 			O.heal_damage(-amount, 0, internal=0, robo_repair=(O.status & ORGAN_ROBOT))
@@ -97,7 +98,7 @@
 		var/datum/organ/external/O = get_organ(organ_name)
 
 		if(amount > 0)
-			O.take_damage(0, amount, sharp=damage_source.is_sharp(), edge=has_edge(damage_source), used_weapon=damage_source)
+			O.take_damage(0, amount, sharp=damage_source.is_sharp(), edge=damage_source.sharpness_flags & SHARP_BLADE, used_weapon=damage_source)
 		else
 			//if you don't want to heal robot organs, they you will have to check that yourself before using this proc.
 			O.heal_damage(0, -amount, internal=0, robo_repair=(O.status & ORGAN_ROBOT))
@@ -169,6 +170,8 @@
 /mob/living/carbon/human/proc/get_damageable_organs()
 	var/list/datum/organ/external/parts = list()
 	for(var/datum/organ/external/O in organs)
+		if(!O.is_existing())
+			continue
 		if(O.brute_dam + O.burn_dam < O.max_damage)
 			parts += O
 	return parts
@@ -397,3 +400,31 @@ This function restores all organs.
 
 	if(picked_organ)
 		picked_organ.cancer_stage += stage //This can pick a limb which already has cancer, in which case it will add to it
+
+/mob/living/carbon/human/proc/limitedrevive()
+	resurrect()
+	timeofdeath = 0
+	tod = null
+
+	toxloss = 0
+	oxyloss = 0
+	bruteloss = 0
+	fireloss = 0
+	for(var/datum/organ/external/O in organs)
+		if(O.destspawn || O.is_robotic())
+			continue
+		O.rejuvenate()
+		O.number_wounds = 0
+		O.wounds = list()
+	heal_overall_damage(1000, 1000)
+	if(reagents)
+		reagents.clear_reagents()
+	restore_blood()
+	bodytemperature = 310
+	traumatic_shock = 0
+	stat = UNCONSCIOUS
+	regenerate_icons()
+	flash_eyes(visual = 1)
+	apply_effect(10, EYE_BLUR)
+	apply_effect(10, WEAKEN)
+	update_canmove()

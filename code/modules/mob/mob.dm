@@ -10,11 +10,11 @@
 	icon = 'icons/fuckstat.dmi'
 	icon_state = "fuckstat"
 
-	Click()
-		var/mob/M = usr
-		if(!istype(M))
-			return
-		M.stat_fucked = !M.stat_fucked
+/obj/screen/fuckstat/Click()
+	var/mob/M = usr
+	if(!istype(M))
+		return
+	M.stat_fucked = !M.stat_fucked
 
 var/global/obj/screen/fuckstat/FUCK = new
 /mob/recycle(var/datum/materials)
@@ -247,15 +247,17 @@ var/global/obj/screen/fuckstat/FUCK = new
 		living_mob_list += src
 
 	store_position()
-	on_spellcast=new("owner"=src)
-	on_uattack = new("owner"=src)
-	on_logout = new("owner"=src)
-	on_damaged= new("owner"=src)
+	on_spellcast = new(owner = src)
+	on_uattack = new(owner = src)
+	on_logout = new(owner = src)
+	on_damaged = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
 	if(flags & HEAR_ALWAYS)
 		getFromPool(/mob/virtualhearer, src)
+
+	update_colour(0,1)
 
 /mob/Del()
 	if(flags & HEAR_ALWAYS)
@@ -525,6 +527,8 @@ var/global/obj/screen/fuckstat/FUCK = new
 /mob/proc/get_item_by_slot(slot_id)
 	return null
 
+/mob/proc/get_item_by_flag(slot_flag)
+	return null
 
 /mob/proc/restrained()
 	if(timestopped)
@@ -760,9 +764,9 @@ var/list/slot_equipment_priority = list( \
 			if(slot_w_uniform)
 				if( !(slot_flags & SLOT_ICLOTHING) )
 					return 0
-				if((M_FAT in H.mutations) && (H.species && H.species.flags & CAN_BE_FAT) && !(flags & ONESIZEFITSALL))
+				if((M_FAT in H.mutations) && (H.species && H.species.flags & CAN_BE_FAT) && !(clothing_flags & ONESIZEFITSALL))
 					return 0
-//				if(H.species.flags & IS_BULKY && !(flags & ONESIZEFITSALL))
+//				if(H.species.flags & IS_BULKY && !(clothing_flags & ONESIZEFITSALL))
 //					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
 //					return 0
 				if(H.w_uniform)
@@ -855,14 +859,8 @@ var/list/slot_equipment_priority = list( \
 			client.perspective = EYE_PERSPECTIVE
 			client.eye = A
 		else
-			if (isturf(loc))
-				client.eye = client.mob
-				client.perspective = MOB_PERSPECTIVE
-			else
-				client.perspective = EYE_PERSPECTIVE
-				client.eye = loc
-	return
-
+			client.eye = client.mob
+			client.perspective = MOB_PERSPECTIVE
 
 /mob/proc/show_inv(mob/user as mob)
 	user.set_machine(src)
@@ -895,7 +893,7 @@ var/list/slot_equipment_priority = list( \
 			return L.container
 	else
 		if (!( L ))
-			L = new /obj/effect/list_container/mobl( null )
+			L = new /obj/effect/list_container/mobl(null)
 			L.container += src
 			L.master = src
 
@@ -908,7 +906,7 @@ var/list/slot_equipment_priority = list( \
 					G.affecting.ret_grab(L, 1)
 		if (!( flag ))
 			if (L.master == src)
-				var/list/temp = list(  )
+				var/list/temp = list()
 				temp += L.container
 				L.forceMove(null)
 				return temp
@@ -942,9 +940,16 @@ var/list/slot_equipment_priority = list( \
 
 	return 1
 
+/mob/proc/has_hand_check()
+	return held_items.len
+
 //this and stop_pulling really ought to be /mob/living procs
 /mob/proc/start_pulling(var/atom/movable/AM)
 	if ( !AM || !src || src==AM || !isturf(AM.loc) )	//if there's no person pulling OR the person is pulling themself OR the object being pulled is inside something: abort!
+		return
+
+	if(!has_hand_check())
+		to_chat(src,"<span class='notice'>You don't have any hands to pull with!</span>")
 		return
 
 	var/atom/movable/P = AM
@@ -1419,7 +1424,7 @@ var/list/slot_equipment_priority = list( \
 					statpanel(S.panel,"Required [S.holder_var_type]: [S.holder_var_amount]",S.connected_button)
 				else if(charge_type & Sp_CHARGES)
 					statpanel(S.panel,"[S.charge_max? "[S.charge_counter]/[S.charge_max] charges" : "Free"]",S.connected_button)
-				else if(charge_type & Sp_RECHARGE)
+				else if(charge_type & Sp_RECHARGE || charge_type & Sp_GRADUAL)
 					statpanel(S.panel,"[S.charge_max? "[S.charge_counter/10.0]/[S.charge_max/10] seconds" : "Free"]",S.connected_button)
 	sleep(world.tick_lag * 2)
 
@@ -1445,8 +1450,8 @@ var/list/slot_equipment_priority = list( \
 //Updates canmove, lying and icons. Could perhaps do with a rename but I can't think of anything to describe it.
 /mob/proc/update_canmove()
 	if (locked_to)
-		var/datum/locking_category/category = locked_to.locked_atoms[src]
-		if (category && category.flags ^ LOCKED_CAN_LIE_AND_STAND)
+		var/datum/locking_category/category = locked_to.get_lock_cat_for(src)
+		if (category && ~category.flags & LOCKED_CAN_LIE_AND_STAND)
 			canmove = 0
 			lying = (category.flags & LOCKED_SHOULD_LIE) ? TRUE : FALSE //A lying value that !=1 will break this
 

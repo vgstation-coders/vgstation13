@@ -3,7 +3,7 @@
 
 /obj/item/weapon/grab
 	name = "grab"
-	flags = NOBLUDGEON
+	flags = NO_ATTACK_MSG
 	var/obj/screen/grab/hud = null
 	var/mob/affecting = null
 	var/mob/assailant = null
@@ -104,7 +104,11 @@
 
 	if(state >= GRAB_KILL)
 		affecting.Knockdown(5)	//Should keep you down unless you get help.
-		affecting.losebreath = min(affecting.losebreath + 2, 3)
+		affecting.losebreath = min(affecting.losebreath + 1, 3) //builds up to 3 over a few seconds
+		affecting.stuttering = max(affecting.stuttering, 6)
+		if(isliving(affecting) && affecting.losebreath >= 3) //if you've been choked for a few seconds
+			var/mob/living/L = affecting
+			L.silent = max(L.silent, 2)
 
 /obj/item/weapon/grab/attack_self()
 	. = ..()
@@ -225,7 +229,16 @@
 		return
 
 	if(M == assailant && state >= GRAB_AGGRESSIVE)
-		if( (ishuman(user) && (M_FAT in user.mutations) && ismonkey(affecting) ) || ( isalien(user) && iscarbon(affecting) ) )
+		var/can_eat = FALSE
+		if(ishuman(user) && (M_FAT in user.mutations) && ismonkey(affecting))
+			can_eat = TRUE
+		else if(isalien(user) && iscarbon(affecting))
+			can_eat = TRUE
+		else if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			if(ishorrorform(H) && iscarbon(affecting))
+				can_eat = TRUE
+		if(can_eat)
 			var/mob/living/carbon/attacker = user
 			if(locate(/mob) in attacker.stomach_contents)
 				to_chat(attacker, "<span class='warning'>You already have something in your stomach.</span>")

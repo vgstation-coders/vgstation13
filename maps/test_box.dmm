@@ -5088,7 +5088,7 @@
 "bTR" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 10},/turf/simulated/floor,/area/medical/sleeper)
 "bTS" = (/obj/structure/bed/roller,/obj/machinery/atmospherics/unary/vent_pump{dir = 8; on = 1},/turf/simulated/floor{dir = 4; icon_state = "whiteblue"},/area/medical/medbay)
 "bTT" = (/obj/structure/table,/obj/item/device/radio/headset/headset_medsci,/obj/item/device/flashlight/pen{pixel_x = 4; pixel_y = 3},/obj/item/device/flashlight/pen{pixel_x = 4; pixel_y = 3},/turf/simulated/floor{icon_state = "white"},/area/medical/genetics)
-"bTU" = (/obj/structure/table,/obj/item/weapon/storage/box/disks{pixel_x = 2; pixel_y = 2},/obj/item/weapon/storage/box/rxglasses,/turf/simulated/floor{icon_state = "white"},/area/medical/genetics)
+"bTU" = (/obj/structure/table,/obj/item/weapon/storage/box/rxglasses,/obj/item/weapon/storage/box/disks{pixel_x = 2; pixel_y = 2},/turf/simulated/floor{icon_state = "white"},/area/medical/genetics)
 "bTV" = (/turf/simulated/wall/r_wall,/area/maintenance/asmaint)
 "bTW" = (/turf/simulated/wall,/area/maintenance/asmaint)
 "bTX" = (/obj/machinery/r_n_d/server/robotics,/turf/simulated/floor/bluegrid{name = "Server Base"; nitrogen = 500; oxygen = 0; temperature = 80},/area/science/server)

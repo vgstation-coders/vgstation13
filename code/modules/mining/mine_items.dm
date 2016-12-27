@@ -146,7 +146,7 @@ proc/move_mining_shuttle()
 				to_chat(usr, "<span class='notice'>The nuclear disk is too precious for Nanotrasen to send it to an Asteroid.</span>")
 				return
 		if (!mining_shuttle_moving)
-			to_chat(usr, "<span class='notice'>Shuttle recieved message and will be sent shortly.</span>")
+			to_chat(usr, "<span class='notice'>Shuttle received message and will be sent shortly.</span>")
 			move_mining_shuttle()
 		else
 			to_chat(usr, "<span class='notice'>Shuttle is already moving.</span>")
@@ -189,6 +189,7 @@ proc/move_mining_shuttle()
 	item_state = "pickaxe"
 	w_class = W_CLASS_LARGE
 	sharpness = 0.6
+	sharpness_flags = SHARP_TIP
 	starting_materials = list(MAT_IRON = 3750) //one sheet, but where can you make them?
 	w_type = RECYK_METAL
 	var/digspeed = 40 //moving the delay to an item var so R&D can make improved picks. --NEO
@@ -240,6 +241,7 @@ proc/move_mining_shuttle()
 	heat_production = 3800
 	digspeed = 20 //Can slice though normal walls, all girders, or be used in reinforced wall deconstruction/ light thermite on fire
 	sharpness = 1.0
+	sharpness_flags = SHARP_BLADE | HOT_EDGE | INSULATED_EDGE
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=3;" + Tc_ENGINEERING + "=3"
 	desc = "A rock cutter that uses bursts of hot plasma. You could use it to cut limbs off of xenos! Or, you know, mine stuff."
 	diggables = DIG_ROCKS | DIG_WALLS
@@ -297,6 +299,7 @@ proc/move_mining_shuttle()
 	item_state = "shovel"
 	w_class = W_CLASS_MEDIUM
 	sharpness = 0.5
+	sharpness_flags = SHARP_BLADE
 	w_type = RECYK_MISC
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	attack_verb = list("bashes", "bludgeons", "thrashes", "whacks")
@@ -660,6 +663,7 @@ proc/move_mining_shuttle()
 	throw_speed = 3
 	throw_range = 5
 	var/loaded = 1
+	var/refreshes_drops = FALSE
 
 /obj/item/weapon/lazarus_injector/update_icon()
 	..()
@@ -678,7 +682,7 @@ proc/move_mining_shuttle()
 			if(M.stat == DEAD)
 
 				M.faction = "lazarus \ref[user]"
-				M.revive(refreshbutcher = 0)
+				M.revive(refreshbutcher = refreshes_drops)
 				if(istype(target, /mob/living/simple_animal/hostile))
 					var/mob/living/simple_animal/hostile/H = M
 					H.friends += user
@@ -705,6 +709,19 @@ proc/move_mining_shuttle()
 	..()
 	if(!loaded)
 		to_chat(user, "<span class='info'>\The [src] is empty.</span>")
+
+/obj/item/weapon/lazarus_injector/advanced
+	name = "advanced lazarus injector"
+	desc = "A lazarus injector further enhanced with a nanomachine solution. Allows for the complete regeneration of lesser beings."
+	icon_state = "adv_lazarus_hypo"
+	refreshes_drops = TRUE
+
+/obj/item/weapon/lazarus_injector/advanced/update_icon()
+	..()
+	if(loaded)
+		icon_state = "adv_lazarus_hypo"
+	else
+		icon_state = "adv_lazarus_empty"
 
 /*********************Mob Capsule*************************/
 

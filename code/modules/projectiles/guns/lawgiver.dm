@@ -27,6 +27,9 @@
 	var/damage_multiplier = 1
 	var/has_played_alert = 0
 
+/obj/item/weapon/gun/lawgiver/isHandgun()
+	return TRUE
+
 /obj/item/weapon/gun/lawgiver/New()
 	..()
 	if(istype(src, /obj/item/weapon/gun/lawgiver/demolition))
@@ -127,9 +130,9 @@
 /obj/item/weapon/gun/lawgiver/proc/self_destruct(mob/user)
 	var/req_access = list(access_security)
 	if(can_access(user.GetAccess(),req_access))
-		say("ERROR: DNA PROFILE DOES NOT MATCH")
+		say("ERROR: DNA PROFILE DOES NOT MATCH.")
 		return
-	say("UNAUTHORIZED ACCESS DETECTED")
+	say("UNAUTHORIZED ACCESS DETECTED.")
 	explosion(user, -1, 0, 2)
 	qdel(src)
 
@@ -171,14 +174,14 @@
 				projectile_type = "/obj/item/projectile/energy/electrode"
 				fire_delay = 0
 				sleep(3)
-				say("STUN")
+				say("STUN.")
 			else if((findtext(speech.message, "laser")) || (findtext(speech.message, "lethal")) || (findtext(speech.message, "beam")))
 				firing_mode = LASER
 				fire_sound = 'sound/weapons/Laser.ogg'
 				projectile_type = "/obj/item/projectile/beam"
 				fire_delay = 5
 				sleep(3)
-				say("LASER")
+				say("LASER.")
 			else if((findtext(speech.message, "rapid")) || (findtext(speech.message, "automatic")))
 				firing_mode = RAPID
 				fire_sound = 'sound/weapons/Gunshot_c20.ogg'
@@ -186,7 +189,7 @@
 				fire_delay = 0
 				recoil = 1
 				sleep(3)
-				say("RAPID FIRE")
+				say("RAPID FIRE.")
 			else if((findtext(speech.message, "flare")) || (findtext(speech.message, "incendiary")))
 				firing_mode = FLARE
 				fire_sound = 'sound/weapons/shotgun.ogg'
@@ -194,7 +197,7 @@
 				fire_delay = 5
 				recoil = 1
 				sleep(3)
-				say("FLARE")
+				say("FLARE.")
 			else if((findtext(speech.message, "ricochet")) || (findtext(speech.message, "bounce")))
 				firing_mode = RICOCHET
 				fire_sound = 'sound/weapons/gatling_fire.ogg'
@@ -202,7 +205,7 @@
 				fire_delay = 5
 				recoil = 1
 				sleep(3)
-				say("RICOCHET")
+				say("RICOCHET.")
 			update_icon()
 
 /obj/item/weapon/gun/lawgiver/process_chambered()
@@ -258,7 +261,7 @@
 		else
 			user.visible_message("<span class = 'warning'>[user] pulls the trigger.</span>")
 			click_empty(user)
-			say("PLEASE REGISTER A DNA SAMPLE")
+			say("PLEASE REGISTER A DNA SAMPLE.")
 			return
 		if (chamber_round())
 			user.visible_message("<span class = 'warning'>[user] pulls the trigger.</span>")
@@ -460,7 +463,7 @@
 			return
 	else
 		click_empty(user)
-		say("PLEASE REGISTER A DNA SAMPLE")
+		say("PLEASE REGISTER A DNA SAMPLE.")
 		return
 
 	if(in_chamber)
@@ -527,14 +530,14 @@
 				projectile_type = "/obj/item/projectile/energy/electrode"
 				fire_delay = 0
 				sleep(3)
-				say("STUN")
+				say("STUN.")
 			else if((findtext(speech.message, "laser")) || (findtext(speech.message, "lethal")) || (findtext(speech.message, "beam")))
 				firing_mode = LASER
 				fire_sound = 'sound/weapons/lasercannonfire.ogg'
 				projectile_type = "/obj/item/projectile/beam/heavylaser"
 				fire_delay = 5
 				sleep(3)
-				say("LASER")
+				say("LASER.")
 			else if((findtext(speech.message, "rapid")) || (findtext(speech.message, "automatic")))
 				firing_mode = RAPID
 				fire_sound = 'sound/weapons/Gunshot_c20.ogg'
@@ -542,7 +545,7 @@
 				fire_delay = 0
 				recoil = 1
 				sleep(3)
-				say("RAPID FIRE")
+				say("RAPID FIRE.")
 			else if((findtext(speech.message, "hi ex")) || (findtext(speech.message, "hi-ex")) || (findtext(speech.message, "explosive")) || (findtext(speech.message, "rocket")))
 				firing_mode = FLARE
 				fire_sound = 'sound/weapons/elecfire.ogg'
@@ -550,7 +553,7 @@
 				fire_delay = 5
 				recoil = 1
 				sleep(3)
-				say("HI-EX")
+				say("HIGH EXPLOSIVE.")
 			else if((findtext(speech.message, "ricochet")) || (findtext(speech.message, "bounce")))
 				firing_mode = RICOCHET
 				fire_sound = 'sound/weapons/gatling_fire.ogg'
@@ -558,7 +561,7 @@
 				fire_delay = 5
 				recoil = 1
 				sleep(3)
-				say("RICOCHET")
+				say("RICOCHET.")
 			update_icon()
 
 /obj/item/weapon/gun/lawgiver/demolition/check_mag_type(obj/item/I, mob/user)

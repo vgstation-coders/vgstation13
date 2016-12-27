@@ -43,7 +43,7 @@
 	var/string_pulled = 0
 
 /obj/structure/popout_cake/Destroy()
-	for(var/mob/living/L in locked_atoms + contents) //Release all mobs inside
+	for(var/mob/living/L in get_locked(/datum/locking_category/popout_cake) + contents) //Release all mobs inside
 		relaymove(L, NORTH)
 
 	..()
@@ -76,7 +76,7 @@
 	return attack_hand(user)
 
 /obj/structure/popout_cake/attackby(obj/item/W, mob/user)
-	if(W.is_sharp())
+	if(W.sharpness_flags & SHARP_BLADE)
 		user.visible_message("<span class='notice'>[user] starts cutting a slice from \the [src].</span>")
 
 		spawn() //So that the proc can return 1, delaying the next attack
@@ -138,7 +138,7 @@
 	if(!istype(L))
 		return
 
-	if(locked_atoms.Find(L))
+	if(L in get_locked(/datum/locking_category/popout_cake))
 		unlock_atom(L)
 	else if(contents.Find(L))
 		L.forceMove(get_turf(src))

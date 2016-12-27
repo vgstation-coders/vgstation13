@@ -618,10 +618,10 @@
 	if(G)
 		stat(null, text("Reinforced Glass Sheets: [G.amount]/50"))
 */
-/mob/living/silicon/robot/proc/show_welder_fuel()
+/mob/living/silicon/robot/proc/show_welding_fuel()
 	var/obj/item/weapon/weldingtool/WT = installed_module(/obj/item/weapon/weldingtool)
 	if(WT)
-		stat(null, text("Welder Fuel: [WT.get_fuel()]/[WT.max_fuel]"))
+		stat(null, text("Welding fuel: [WT.get_fuel()]/[WT.max_fuel]"))
 
 /mob/living/silicon/robot/proc/show_stacks()
 	if(!module)
@@ -640,7 +640,7 @@
 		show_metal_sheets()
 		show_glass_sheets()
 		show_rglass_sheets()*/
-		show_welder_fuel()
+		show_welding_fuel()
 		show_stacks()
 
 
@@ -1126,8 +1126,9 @@
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))
 			O.show_message("<span class='danger'>[M] [M.attacktext] [src]!</span>", 1)
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
+
+		add_logs(M, src, "attacked", admin = M.ckey ? TRUE : FALSE) //Only add this to the server logs if they're controlled by a player.
+
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		adjustBruteLoss(damage)
 		updatehealth()

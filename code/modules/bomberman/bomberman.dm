@@ -664,7 +664,7 @@ obj/structure/bomberflame/Destroy()
 	slowdown = 0
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
 	siemens_coefficient = 0
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
@@ -1082,7 +1082,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		flick("entertainment_arena",E)
 
 	for(var/mob/dead/observer/O in observers)
-		to_chat(O, "<b>A round has began in <A HREF='?src=\ref[O];jumptoarenacood=1;X=[center.x];Y=[center.y];Z=[center.z]'>[name]</A>!</b>")
+		to_chat(O, "<b>A round has begun in <A HREF='?src=\ref[O];jumptoarenacood=1;X=[center.x];Y=[center.y];Z=[center.z]'>[name]</A>!</b>")
 
 	sleep(40)
 

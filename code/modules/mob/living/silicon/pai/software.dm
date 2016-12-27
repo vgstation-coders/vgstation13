@@ -645,6 +645,7 @@ Target Machine: "}
 		dat += {"Available Chemicals:<br>
 		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=tricordrazine'>Tricordrazine</a> <br>
 		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=coffee'>Coffee</a> <br>
+		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=sodiumchloride'>Salt</a> <br>
 		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=paismoke'>Smoke</a> <br>"}
 	else
 		dat += "Charging... [charge]u ready.<br><br>Deploying at 15u."

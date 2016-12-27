@@ -204,10 +204,10 @@ emp_act
 			affecting.sabotaged = 1
 		return 0
 
-	if(istype(I.attack_verb, /list) && I.attack_verb.len)
+	if(istype(I.attack_verb, /list) && I.attack_verb.len && !(I.flags & NO_ATTACK_MSG))
 		visible_message("<span class='danger'>[user] [pick(I.attack_verb)] [src] in the [hit_area] with \the [I.name]!</span>", \
 			"<span class='userdanger'>[user] [pick(I.attack_verb)] you in the [hit_area] with \the [I.name]!</span>")
-	else
+	else if(!(I.flags & NO_ATTACK_MSG))
 		visible_message("<span class='danger'>[user] attacks [src] in the [hit_area] with \the [I.name]!</span>", \
 			"<span class='userdanger'>[user] attacks you in the [hit_area] with \the [I.name]!</span>")
 
@@ -236,7 +236,7 @@ emp_act
 				if(prob(chance))
 					knock_out_teeth(user)
 
-	apply_damage(I.force, I.damtype, affecting, armor , I.is_sharp(), I)
+	apply_damage(I.force, I.damtype, affecting, armor , I.is_sharp(), used_weapon = I)
 
 	var/bloody = 0
 	if(((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && prob(25 + (I.force * 2)))

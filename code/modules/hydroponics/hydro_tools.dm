@@ -70,12 +70,12 @@
 	dat += "<h2>General Data</h2>"
 
 	dat += "<table>"
-	dat += "<tr><td><b>Endurance</b></td><td>[grown_seed.endurance]</td></tr>"
-	dat += "<tr><td><b>Yield</b></td><td>[grown_seed.yield]</td></tr>"
-	dat += "<tr><td><b>Lifespan</b></td><td>[grown_seed.lifespan]</td></tr>"
-	dat += "<tr><td><b>Maturation time</b></td><td>[grown_seed.maturation]</td></tr>"
-	dat += "<tr><td><b>Production time</b></td><td>[grown_seed.production]</td></tr>"
-	dat += "<tr><td><b>Potency</b></td><td>[grown_seed.potency]</td></tr>"
+	dat += "<tr><td><b>Endurance</b></td><td>[round(grown_seed.endurance, 0.01)]</td></tr>"
+	dat += "<tr><td><b>Yield</b></td><td>[round(grown_seed.yield, 0.01)]</td></tr>"
+	dat += "<tr><td><b>Lifespan</b></td><td>[round(grown_seed.lifespan, 0.01)]</td></tr>"
+	dat += "<tr><td><b>Maturation time</b></td><td>[round(grown_seed.maturation, 0.01)]</td></tr>"
+	dat += "<tr><td><b>Production time</b></td><td>[round(grown_seed.production, 0.01)]</td></tr>"
+	dat += "<tr><td><b>Potency</b></td><td>[round(grown_seed.potency, 0.01)]</td></tr>"
 	dat += "</table>"
 
 	if(grown_reagents && grown_reagents.reagent_list && grown_reagents.reagent_list.len)
@@ -195,9 +195,9 @@
 
 	switch(grown_seed.juicy)
 		if(1)
-			dat += "<br>It's fruit is soft-skinned and abudantly juicy."
+			dat += "<br>Its fruit is soft-skinned and abudantly juicy."
 		if(2)
-			dat	+= "<br>It's fruit is excesively soft and juicy."
+			dat	+= "<br>Its fruit is excesively soft and juicy."
 
 	if(grown_seed.biolum)
 		dat += "<br>It is [grown_seed.biolum_colour ? "<font color='[grown_seed.biolum_colour]'>bio-luminescent</font>" : "bio-luminescent"]."
@@ -258,7 +258,7 @@
 /obj/item/weapon/plantspray
 	icon = 'icons/obj/hydroponics.dmi'
 	item_state = "spray"
-	flags = FPRINT | NOBLUDGEON
+	flags = FPRINT | NO_ATTACK_MSG
 	slot_flags = SLOT_BELT
 	throwforce = 4
 	w_class = W_CLASS_SMALL
@@ -310,7 +310,7 @@
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "hoe"
 	item_state = "hoe"
-	flags = FPRINT  | NOBLUDGEON
+	flags = FPRINT  | NO_ATTACK_MSG
 	siemens_coefficient = 1
 	force = 5.0
 	throwforce = 7.0
@@ -412,6 +412,7 @@
 	throw_speed = 4
 	throw_range = 4
 	sharpness = 1.2
+	sharpness_flags = SHARP_BLADE | CHOPWOOD
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_COMBAT + "=1"
 	attack_verb = list("chops", "tears", "cuts")
 
@@ -436,6 +437,7 @@
 	throw_speed = 1
 	throw_range = 3
 	sharpness = 1.0
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	w_class = W_CLASS_LARGE
 	flags = FPRINT
 	slot_flags = SLOT_BACK
@@ -494,45 +496,3 @@
 		new/obj/effect/decal/cleanable/clay_fragments(src.loc)
 		src.visible_message("<span class='warning'>\The [src.name] has been smashed.</span>","<span class='warning'>You hear a crashing sound.</span>")
 		qdel(src)
-
-/obj/structure/claypot
-	name = "clay pot"
-	desc = "Plants placed in those stop aging, but cannot be retrieved either."
-	icon = 'icons/obj/hydroponics2.dmi'
-	icon_state = "claypot"
-	anchored = 0
-	density = 0
-	var/plant_name = ""
-
-/obj/structure/claypot/examine(mob/user)
-	..()
-	if(plant_name)
-		to_chat(user, "<span class='info'>You can see [plant_name] planted in it.</span>")
-
-/obj/structure/claypot/attack_hand(mob/user as mob)
-	to_chat(user, "It's too heavy to pick up while it has a plant in it.")
-
-/obj/structure/claypot/attackby(var/obj/item/O,var/mob/user)
-	if(istype(O,/obj/item/weapon/wrench))
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
-		if(do_after(user, src, 30))
-			anchored = !anchored
-			user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"].</span>",
-									"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
-									"<span class='notice'>You hear a ratchet.</span>")
-	else if(plant_name && istype(O,/obj/item/weapon/pickaxe/shovel))
-		to_chat(user, "<span class='notice'>[bicon(src)] You start removing the [plant_name] from \the [src].</span>")
-		if(do_after(user, src, 30))
-			playsound(loc, 'sound/items/shovel.ogg', 50, 1)
-			user.visible_message(	"<span class='notice'>[user] removes the [plant_name] from \the [src].</span>",
-									"<span class='notice'>[bicon(src)] You remove the [plant_name] from \the [src].</span>",
-									"<span class='notice'>You hear some digging.</span>")
-			var/obj/item/claypot/C = new(loc)
-			transfer_fingerprints(src, C)
-			qdel(src)
-
-	else if(istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown) || istype(O,/obj/item/weapon/grown))
-		to_chat(user, "<span class='warning'>There is already a plant in \the [src]</span>")
-
-	else
-		..()

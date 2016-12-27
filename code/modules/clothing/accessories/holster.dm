@@ -163,7 +163,7 @@
 		/obj/item/weapon/wirecutters))
 
 /obj/item/clothing/accessory/holster/knife/unholster_message(mob/user)
-	user.visible_message("<span class='warning'>[user] pulls \a [holstered] from it's holster!</span>", \
+	user.visible_message("<span class='warning'>[user] pulls \a [holstered] from its holster!</span>", \
 	"<span class='warning'>You draw your [holstered.name]!</span>")
 
 /obj/item/clothing/accessory/holster/knife/boot
@@ -175,17 +175,30 @@
 /obj/item/clothing/accessory/holster/knife/boot/can_attach_to(obj/item/clothing/C)
 	return istype(C, /obj/item/clothing/shoes)
 
-/obj/item/clothing/accessory/holster/knife/update_icon()
+/obj/item/clothing/accessory/holster/knife/boot/update_icon()
 	if(holstered)
-		icon_state = "[initial(icon_state)]_1"
-		_color = "[initial(_color)]_1"
+		if(holstered.icon_state in list("skinningknife", "tacknife", "knife", "smallknife", "fork"))
+			icon_state = "[initial(icon_state)]_[holstered.icon_state]"
+			_color = "[initial(_color)]_[holstered.icon_state]"
+		else
+			icon_state = "[initial(icon_state)]_knife"
+			_color = "[initial(_color)]_knife"
 	else
-		icon_state = "[initial(icon_state)]_0"
-		_color = "[initial(_color)]_0"
+		icon_state = "[initial(icon_state)]_empty"
+		_color = "[initial(_color)]_empty"
 	..()
+
+/obj/item/clothing/accessory/holster/knife/boot/preloaded
+	var/knife_type
 
 /obj/item/clothing/accessory/holster/knife/boot/preloaded/New()
 	..()
 	if(!holstered)
-		holstered = new /obj/item/weapon/kitchen/utensil/knife/tactical(src)
+		holstered = new knife_type(src)
 		update_icon()
+
+/obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical
+	knife_type = /obj/item/weapon/kitchen/utensil/knife/tactical
+
+/obj/item/clothing/accessory/holster/knife/boot/preloaded/skinning
+	knife_type = /obj/item/weapon/kitchen/utensil/knife/skinning

@@ -8,7 +8,7 @@
 	item_state = "g_suit"
 	_color = "director"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/scientist
@@ -19,7 +19,7 @@
 	_color = "toxinswhite"
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 10, bio = 0, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/chemist
@@ -30,7 +30,7 @@
 	_color = "chemistrywhite"
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-	flags = FPRINT | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/pharma
@@ -41,7 +41,7 @@
 	_color = "pharma"
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/under/rank/xenoarch
@@ -52,7 +52,7 @@
 	_color = "xenoarch"
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 10)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/under/rank/plasmares
@@ -63,7 +63,7 @@
 	_color = "plasmares"
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 10, bio = 0, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/under/rank/xenobio
@@ -74,7 +74,7 @@
 	_color = "xenobio"
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/under/rank/anomalist
@@ -85,7 +85,7 @@
 	_color = "anomalist"
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 10)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
 
 /*
@@ -99,7 +99,7 @@
 	_color = "cmo"
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/geneticist
@@ -110,7 +110,7 @@
 	_color = "geneticswhite"
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/virologist
@@ -121,7 +121,7 @@
 	_color = "virologywhite"
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/nursesuit
@@ -132,7 +132,7 @@
 	_color = "nursesuit"
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/nurse
@@ -143,7 +143,7 @@
 	_color = "nurse"
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/orderly
@@ -154,7 +154,7 @@
 	_color = "orderly"
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/medical
@@ -165,7 +165,7 @@
 	_color = "medical"
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/medical/blue
@@ -173,7 +173,7 @@
 	desc = "It's made of a special fiber that provides minor protection against biohazards. This one is in baby blue."
 	icon_state = "scrubsblue"
 	_color = "scrubsblue"
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/medical/green
@@ -181,7 +181,7 @@
 	desc = "It's made of a special fiber that provides minor protection against biohazards. This one is in dark green."
 	icon_state = "scrubsgreen"
 	_color = "scrubsgreen"
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/under/rank/medical/purple
@@ -189,7 +189,7 @@
 	desc = "It's made of a special fiber that provides minor protection against biohazards. This one is in deep purple."
 	icon_state = "scrubspurple"
 	_color = "scrubspurple"
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 //paramedic
@@ -201,7 +201,7 @@
 	_color = "paramedic"
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 10)
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
 
 

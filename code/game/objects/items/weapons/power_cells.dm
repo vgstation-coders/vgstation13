@@ -10,7 +10,7 @@
 	throwforce = 5.0
 	throw_speed = 3
 	throw_range = 5
-	w_class = W_CLASS_MEDIUM
+	w_class = W_CLASS_SMALL
 	var/charge = 0	// note %age conveted to actual charge in New
 	var/maxcharge = 1000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 50)
@@ -21,9 +21,9 @@
 	var/brute_damage = 0 //Used by cyborgs
 	var/electronics_damage = 0 //Used by cyborgs
 
-	suicide_act(mob/user)
-		to_chat(viewers(user), "<span class='danger'>[user] is licking the electrodes of the [src.name]! It looks like \he's trying to commit suicide.</span>")
-		return (FIRELOSS)
+/obj/item/weapon/cell/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is licking the electrodes of the [src.name]! It looks like \he's trying to commit suicide.</span>")
+	return (FIRELOSS)
 
 /obj/item/weapon/cell/crap
 	name = "\improper Nanotrasen brand rechargeable AA battery"

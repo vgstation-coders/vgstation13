@@ -502,7 +502,7 @@ font-weight:bold;
 
 /obj/machinery/computer/general_air_control/large_tank_control/Topic(href, href_list)
 	if(..())
-		return
+		return 1
 
 	add_fingerprint(usr)
 

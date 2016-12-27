@@ -43,6 +43,7 @@
 	var/movement_delay = 0 //Speed of the vehicle decreases as this value increases. Anything above 6 is slow, 1 is fast and 0 is very fast
 
 	var/mob/occupant
+	lock_type = /datum/locking_category/buckle/chair/vehicle
 
 /obj/structure/bed/chair/vehicle/proc/getMovementDelay()
 	return movement_delay
@@ -60,7 +61,7 @@
 	if(!nick)
 		nick=name
 	set_keys()
-		
+
 /obj/structure/bed/chair/vehicle/proc/set_keys()
 	if(keytype && !vin)
 		mykey = new keytype(src.loc)
@@ -165,7 +166,7 @@
 		"<span class='notice'>[M] climbs onto \the [nick]!</span>",\
 		"<span class='notice'>You climb onto \the [nick]!</span>")
 
-	lock_atom(M, /datum/locking_category/chair/vehicle)
+	lock_atom(M, /datum/locking_category/buckle/chair/vehicle)
 
 	add_fingerprint(user)
 
@@ -267,7 +268,7 @@
 	unlock_atom(occupant)
 
 /obj/structure/bed/chair/vehicle/Bump(var/atom/movable/obstacle)
-	if(obstacle == src || (locked_atoms.len && obstacle == locked_atoms[1]))
+	if(obstacle == src || (is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && obstacle == get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
 		return
 
 	if(istype(obstacle, /obj/structure))// || istype(obstacle, /mob/living)
@@ -295,4 +296,4 @@
 
 	update_mob()
 
-/datum/locking_category/chair/vehicle
+/datum/locking_category/buckle/chair/vehicle

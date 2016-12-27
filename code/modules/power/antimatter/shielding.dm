@@ -10,7 +10,7 @@ proc/cardinalrange(var/center)
 
 /obj/machinery/am_shielding
 	name = "antimatter reactor section"
-	desc = "This device was built using a plasma life-form that seems to increase plasma's natural ability to react with neutrinos while reducing the combustibility."
+	desc = "This device was built using a plasma life-form that increases plasma's natural ability to react with neutrinos while reducing the combustibility."
 
 	//icon = 'icons/obj/machines/antimatter.dmi'
 	icon = 'icons/obj/machines/new_ame.dmi'
@@ -21,6 +21,7 @@ proc/cardinalrange(var/center)
 	use_power = 0//Living things generally dont use power
 	idle_power_usage = 0
 	active_power_usage = 0
+	mech_flags = MECH_SCAN_FAIL
 
 	var/obj/machinery/power/am_control_unit/control_unit = null
 	var/processing = 0//To track if we are in the update list or not, we need to be when we are damaged and if we ever
@@ -30,13 +31,33 @@ proc/cardinalrange(var/center)
 	var/dirs=0
 
 
-/obj/machinery/am_shielding/New(loc)
-	..(loc)
+/obj/machinery/am_shielding/New(loc, var/obj/machinery/power/am_control_unit/AMC)
+	..()
+	if(!AMC)
+		WARNING("AME sector somehow created without a parent control unit!")
+		controllerscan()
+		return
+	link_control(AMC)
 	machines -= src
 	power_machines += src
-	spawn(10)
-		controllerscan()
 
+/obj/machinery/am_shielding/proc/link_control(var/obj/machinery/power/am_control_unit/AMC)
+	if(!istype(AMC))
+		return 0
+	if(control_unit && control_unit != AMC)
+		return 0//Already have one
+	control_unit = AMC
+	return control_unit.add_shielding(src,1)
+
+/obj/machinery/am_shielding/Destroy()
+	if(control_unit)
+		control_unit.remove_shielding(src)
+	if(processing)
+		shutdown_core()
+	visible_message("<span class='warning'>The [src.name] melts!</span>")
+	power_machines -= src
+	//Might want to have it leave a mess on the floor but no sprites for now
+	..()
 
 /obj/machinery/am_shielding/proc/controllerscan(var/priorscan = 0)
 	//Make sure we are the only one here
@@ -64,19 +85,6 @@ proc/cardinalrange(var/center)
 			return
 		qdel(src)
 
-
-/obj/machinery/am_shielding/Destroy()
-	if(control_unit)
-		control_unit.remove_shielding(src)
-	if(processing)
-		shutdown_core()
-	visible_message("<span class='warning'>The [src.name] melts!</span>")
-	power_machines -= src
-	//Might want to have it leave a mess on the floor but no sprites for now
-	..()
-	return
-
-
 /obj/machinery/am_shielding/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
 		return 1
@@ -88,7 +96,6 @@ proc/cardinalrange(var/center)
 		. = PROCESS_KILL
 	//TODO: core functions and stability
 	//TODO: think about checking the airmix for plasma and increasing power output
-	return
 
 
 /obj/machinery/am_shielding/emp_act()//Immune due to not really much in the way of electronics.
@@ -117,7 +124,6 @@ proc/cardinalrange(var/center)
 		if(3.0)
 			stability -= 20
 	check_stability()
-	return
 
 
 /obj/machinery/am_shielding/bullet_act(var/obj/item/projectile/Proj)
@@ -168,19 +174,6 @@ proc/cardinalrange(var/center)
 		check_stability()
 	..()
 	return
-
-
-
-//Call this to link a detected shilding unit to the controller
-/obj/machinery/am_shielding/proc/link_control(var/obj/machinery/power/am_control_unit/AMC)
-	if(!istype(AMC))
-		return 0
-	if(control_unit && control_unit != AMC)
-		return 0//Already have one
-	control_unit = AMC
-	control_unit.add_shielding(src,1)
-	return 1
-
 
 //Scans cards for shields or the control unit and if all there it
 /obj/machinery/am_shielding/proc/core_check()
@@ -248,7 +241,24 @@ proc/cardinalrange(var/center)
 
 /obj/item/device/am_shielding_container/attackby(var/obj/item/I, var/mob/user)
 	if(ismultitool(I) && isturf(loc))
-		new/obj/machinery/am_shielding(src.loc)
-		qdel(src)
-		return
+		if(locate(/obj/machinery/am_shielding/) in loc)
+			to_chat(user, "<span class='warning'>[bicon(src)]There is already an antimatter reactor section there.</span>")
+			return
+
+		//Search for shielding first
+		for(var/obj/machinery/am_shielding/AMS in cardinalrange(src))
+			if(AMS.control_unit)
+				new/obj/machinery/am_shielding(src.loc, AMS.control_unit)
+				qdel(src)
+				return
+
+		//No other guys nearby, look for a control unit
+		var/obj/machinery/power/am_control_unit/AMC = locate() in cardinalrange(src)
+		if(AMC && AMC.anchored)
+			new/obj/machinery/am_shielding(src.loc, AMC)
+			qdel(src)
+		else //Stranded & Alone
+			to_chat(user, "<span class='warning'>[bicon(src)]Couldn't connect to an Antimatter Control Unit.</span>")
+			return
+
 	..()

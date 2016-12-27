@@ -415,7 +415,7 @@
 
 	if(istype(AM, /obj/structure/bed)) //This is only necessary because of rollerbeds and swivel chairs.
 		var/obj/structure/bed/B = AM
-		if(B.locked_atoms.len)
+		if(B.is_locking(/datum/locking_category/buckle, subtypes=TRUE))
 			return 0
 
 	AM.forceMove(src)

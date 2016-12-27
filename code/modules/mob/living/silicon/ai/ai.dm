@@ -18,7 +18,7 @@ var/list/ai_list = list()
 	icon_state = "ai"
 	anchored = 1 // -- TLE
 	density = 1
-	status_flags = CANSTUN|CANPARALYSE
+	status_flags = CANSTUN|CANPARALYSE|CANPUSH
 	force_compose = 1
 	size = SIZE_BIG
 
@@ -209,14 +209,9 @@ var/list/ai_list = list()
 				icon = 'icons/mob/custom-synthetic.dmi'
 	*/
 		//if(icon_state == initial(icon_state))
-	var/icontype = ""
 	/* Nuked your hidden shit.*/
-	if (custom_sprite == 1)
-		icontype = ("Custom")//automagically selects custom sprite if one is available
-	else icontype = input("Select an icon!", "AI", null, null) as null|anything in list("Monochrome", "Blue", "Inverted", "Text", "Smiley", "Angry", "Dorf", "Matrix", "Bliss", "Firewall", "Green", "Red", "Broken Output", "Triumvirate", "Triumvirate Static", "Searif", "Ravensdale", "Serithi", "Static", "Wasp", "Robert House", "Red October", "Fabulous", "Girl", "Girl Malf", "Boy", "Boy Malf", "Four-Leaf", "Yes Man", "Hourglass", "Patriot", "Pirate", "Royal")
+	var/icontype = input("Select an icon!", "AI", null, null) as null|anything in list("Monochrome", "Blue", "Inverted", "Text", "Smiley", "Angry", "Dorf", "Matrix", "Bliss", "Firewall", "Green", "Red", "Broken Output", "Triumvirate", "Triumvirate Static", "Searif", "Ravensdale", "Serithi", "Static", "Wasp", "Robert House", "Red October", "Fabulous", "Girl", "Girl Malf", "Boy", "Boy Malf", "Four-Leaf", "Yes Man", "Hourglass", "Patriot", "Pirate", "Royal", "Heartline", "Hades", "Helios", "Syndicat", "Alien", "Too Deep", "Goon", "Database", "Glitchman", "Nanotrasen", "Angel", "Gentoo", "Murica", "President")
 	switch(icontype)
-		if("Custom")
-			icon_state = "[src.ckey]-ai"
 		if("Clown")
 			icon_state = "ai-clown2"
 		if("Monochrome")
@@ -283,6 +278,32 @@ var/list/ai_list = list()
 			icon_state = "ai-pirate"
 		if("Royal")
 			icon_state = "ai-royal"
+		if("Heartline")
+			icon_state = "ai-heartline"
+		if("Hades") 
+			icon_state = "ai-hades"	
+		if("Helios")
+			icon_state = "ai-helios"
+		if("Syndicat")
+			icon_state = "ai-syndicatmeow"
+		if("Too Deep")
+			icon_state = "ai-toodeep"
+		if("Goon")
+			icon_state = "ai-goon"
+		if("Database")
+			icon_state = "ai-database"
+		if("Glitchman")
+			icon_state = "ai-glitchman"
+		if("Nanotrasen")
+			icon_state = "ai-nanotrasen"
+		if("Angel")
+			icon_state = "ai-angel"
+		if("Gentoo")
+			icon_state = "ai-gentoo"
+		if("Murica")
+			icon_state = "ai-murica"
+		if("President")
+			icon_state = "ai-pres"
 		else icon_state = "ai"
 	//else
 //			to_chat(usr, "You can only change your display once!")
@@ -302,7 +323,7 @@ var/list/ai_list = list()
 	for(var/spell/S in spell_list)
 		if(S.panel == MALFUNCTION)
 			remove_spell(S)
-			
+
 /mob/living/silicon/ai/proc/ai_alerts()
 
 
@@ -573,8 +594,9 @@ var/list/ai_list = list()
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))
 			O.show_message("<span class='warning'><B>[M]</B> [M.attacktext] [src]!</span>", 1)
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
+
+		add_logs(M, src, "attacked", admin = M.ckey ? TRUE : FALSE) //Only add this to the server logs if they're controlled by a player.
+
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		adjustBruteLoss(damage)
 		updatehealth()
@@ -805,17 +827,17 @@ var/list/ai_list = list()
 	charge_max = 1
 	hud_state = "unshunt"
 	override_base = "grey"
-	
+
 /spell/aoe_turf/corereturn/before_target(mob/user)
 	if(istype(user.loc, /obj/machinery/power/apc))
 		return 0
 	else
 		to_chat(user, "<span class='notice'>You are already in your Main Core.</span>")
 		return 1
-		
+
 /spell/aoe_turf/corereturn/choose_targets(mob/user = usr)
 	return list(user.loc)
-	
+
 /spell/aoe_turf/corereturn/cast(var/list/targets, mob/user)
 	var/obj/machinery/power/apc/apc = targets[1]
 	apc.malfvacate()

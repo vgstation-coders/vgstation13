@@ -435,6 +435,14 @@
 		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/cube = O
 		if(!cube.wrapped)
 			cube.Expand()
+	else if(istype(O,/obj/machinery/space_heater/campfire))
+		var/obj/machinery/space_heater/campfire/campfire = O
+		campfire.snuff()
+	else if(O.on_fire) // For extinguishing objects on fire
+		O.extinguish()
+	else if(O.molten) // Molten shit.
+		O.molten=0
+		O.solidify()
 
 /datum/reagent/water/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
 	..()
@@ -1487,9 +1495,21 @@
 /datum/reagent/vaporsalt
 	name = "Vapor Salts"
 	id = VAPORSALT
-	description = "A strange mineral found in alien plantlife that behaves strangely in the presence of certain gasses in liquid form."
+	description = "A strange mineral found in alien plantlife that has been observed to vaporize some liquids."
 	reagent_state = LIQUID
 	color = "#BDE5F2"
+
+
+/datum/reagent/vaporsalt/reaction_turf(var/turf/simulated/T, var/volume)
+
+	if(..())
+		return 1
+
+	if(T.wet)
+		T.dry(TURF_WET_LUBE) //Cleans water or lube
+		var/obj/effect/effect/smoke/S = new /obj/effect/effect/smoke(T)
+		S.time_to_live = 10 //unusually short smoke
+		//We don't need to start up the system because we only want to smoke one tile.
 
 /datum/reagent/iron
 	name = "Iron"
@@ -4597,21 +4617,19 @@
 	if(..())
 		return 1
 
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		H.nutrition += nutriment_factor
-		if(H.getOxyLoss() && prob(50))
-			H.adjustOxyLoss(-2)
-		if(H.getBruteLoss() && prob(60))
-			H.heal_organ_damage(2, 0)
-		if(H.getFireLoss() && prob(50))
-			H.heal_organ_damage(0, 2)
-		if(H.getToxLoss() && prob(50))
-			H.adjustToxLoss(-2)
-		if(H.dizziness != 0)
-			H.dizziness = max(0, H.dizziness - 15)
-		if(H.confused != 0)
-			H.confused = max(0, H.confused - 5)
+	M.nutrition += nutriment_factor
+	if(M.getOxyLoss() && prob(50))
+		M.adjustOxyLoss(-2)
+	if(M.getBruteLoss() && prob(60))
+		M.heal_organ_damage(2, 0)
+	if(M.getFireLoss() && prob(50))
+		M.heal_organ_damage(0, 2)
+	if(M.getToxLoss() && prob(50))
+		M.adjustToxLoss(-2)
+	if(M.dizziness != 0)
+		M.dizziness = max(0, M.dizziness - 15)
+	if(M.confused != 0)
+		M.confused = max(0, M.confused - 5)
 
 /datum/reagent/ethanol/deadrum/changelingsting
 	name = "Changeling Sting"
@@ -5295,3 +5313,25 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		var/mob/living/carbon/human/H = M
 		if(H.species.name == "Vox")
 			M.adjustToxLoss(-4 * REM) //chicken and gravy just go together
+
+/datum/reagent/blockizine
+	name = "Blockizine"
+	id = BLOCKIZINE
+	description = "Some type of material that preferentially binds to all possible chemical receptors in the body, but without any direct negative effects."
+	reagent_state = LIQUID
+	custom_metabolism = 0
+	color = "#B0B0B0"
+
+/datum/reagent/blockizine/on_mob_life(var/mob/living/carbon/human/H)
+	if(..())
+		return 1
+	if(!data)
+		data = world.time+3000
+	if(world.time > data)
+		holder.del_reagent(BLOCKIZINE,volume) //needs to be del_reagent, because metabolism is 0
+		return
+
+	if(istype(H) && volume >= 25)
+		holder.isolate_reagent(BLOCKIZINE)
+		volume = holder.maximum_volume
+		holder.update_total()

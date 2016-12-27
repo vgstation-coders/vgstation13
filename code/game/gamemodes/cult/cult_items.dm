@@ -9,6 +9,7 @@
 	force = 30
 	throwforce = 10
 	sharpness = 1.35
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	var/checkcult = 1
 

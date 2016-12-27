@@ -37,7 +37,7 @@
 /////////////////////////// DNA MACHINES
 /obj/machinery/dna_scannernew
 	name = "\improper DNA modifier"
-	desc = "It scans DNA structures."
+	desc = "A machine that scans the DNA structures of an organism for use with adjacent machinery. Can modify an organism's DNA as well as perform other functions with the use of a console."
 	icon = 'icons/obj/Cryogenic2.dmi'
 	icon_state = "scanner_0"
 	density = 1
@@ -50,6 +50,7 @@
 	var/obj/item/weapon/reagent_containers/glass/beaker = null
 	var/injector_cooldown = 300 //Used by attachment
 	machine_flags = SCREWTOGGLE | CROWDESTROY
+	var/obj/machinery/computer/connected
 
 	light_color = LIGHT_COLOR_CYAN
 	use_auto_lights = 1
@@ -99,13 +100,22 @@
 
 /obj/machinery/dna_scannernew/crowbarDestroy(mob/user)
 	if(occupant)
-		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupado.</span>")
+		to_chat(user, "<span class='warning'>\the [src] is occupied.</span>")
 		return
 	return ..()
 
 /obj/machinery/dna_scannernew/Destroy()
 
 	go_out() //Eject everything
+
+	if(connected)
+		if(istype(connected,/obj/machinery/computer/cloning))
+			var/obj/machinery/computer/cloning/C = connected
+			C.scanner = null
+		else if(istype(connected,/obj/machinery/computer/scan_consolenew))
+			var/obj/machinery/computer/scan_consolenew/C = connected
+			C.connected = null
+		connected = null
 
 	. = ..()
 
@@ -124,7 +134,7 @@
 	if(usr.incapacitated() || usr.lying) //are you cuffed, dying, lying, stunned or other
 		return
 	if (!ishuman(usr) && !ismonkey(usr)) //Make sure they're a mob that has dna
-		to_chat(usr, "<span class='notice'> Try as you might, you can not climb up into the scanner.</span>")
+		to_chat(usr, "<span class='notice'>You cannot enter \the [src].</span>")
 		return
 	if (istype(usr, /mob/living/carbon/human/manifested))
 		to_chat(usr, "<span class='notice'> For some reason, the scanner is unable to read your genes.</span>")//to prevent a loophole that allows cultist to turn manifested ghosts into normal humans
@@ -221,6 +231,9 @@
 
 /obj/machinery/dna_scannernew/attackby(var/obj/item/weapon/item as obj, var/mob/user as mob)
 	if(istype(item, /obj/item/weapon/reagent_containers/glass))
+		if(item.w_class > W_CLASS_SMALL)
+			to_chat(user, "<span class='warning'>\The [item] is too big to fit.</span>")
+			return
 		if(beaker)
 			to_chat(user, "<span class='warning'>A beaker is already loaded into the machine.</span>")
 			return
@@ -262,7 +275,7 @@
 				if(ghost)
 					if(ghost.client && ghost.can_reenter_corpse)
 						ghost << 'sound/effects/adminhelp.ogg'
-						to_chat(ghost, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be resurrected/cloned!</span> \
+						to_chat(ghost, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
 							(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 				break
 			break
@@ -301,7 +314,7 @@
 		var/mob/dead/observer/ghost = get_ghost_from_mind(M.mind)
 		if(ghost && ghost.client)
 			ghost << 'sound/effects/adminhelp.ogg'
-			to_chat(ghost, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be resurrected/cloned!</span> \
+			to_chat(ghost, "<span class='interface big'><span class='bold'>Your corpse has been placed into a cloning scanner. Return to your body if you want to be cloned!</span> \
 				(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[src];reentercorpse=1'>click here!</a>)</span>")
 
 /obj/machinery/dna_scannernew/ex_act(severity)
@@ -347,7 +360,7 @@
 
 /obj/machinery/computer/scan_consolenew
 	name = "DNA Modifier Access Console"
-	desc = "Scans DNA."
+	desc = "Uses a DNA modifier to manipulate DNA via radiation as well as perform other functions."
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "dna"
 	density = 1
@@ -381,9 +394,24 @@
 
 	light_color = LIGHT_COLOR_BLUE
 
+/obj/machinery/computer/scan_consolenew/Destroy()
+	if(connected.connected == src)
+		connected.connected = null
+	connected = null
+	for(var/datum/block_label/label in labels)
+		returnToPool(label)
+	buffers.Cut()
+	if(disk)
+		qdel(disk)
+		disk = null
+	..()
+
 /datum/block_label
 	var/name = ""
 	var/color = "#1c1c1c"
+/datum/block_label/proc/overwriteLabel(var/datum/block_label/L)
+	L.name = src.name
+	L.color = src.color
 
 /obj/machinery/computer/scan_consolenew/attackby(obj/O as obj, mob/user as mob)
 	..()
@@ -392,6 +420,20 @@
 			if (user.drop_item(O, src))
 				disk = O
 				to_chat(user, "You insert [O].")
+	return
+
+/obj/machinery/computer/scan_consolenew/New()
+	..()
+	for(var/i=1;i<=3;i++)
+		buffers[i] = getFromPool(/datum/dna2/record)
+	for(var/i=1;i<=DNA_SE_LENGTH;i++)
+		labels[i] = getFromPool(/datum/block_label)
+	spawn(5)
+		connected = findScanner()
+		connected.connected = src
+		spawn(250)
+			src.injector_ready = 1
+		return
 	return
 
 /obj/machinery/computer/scan_consolenew/ex_act(severity)
@@ -407,19 +449,6 @@
 /obj/machinery/computer/scan_consolenew/blob_act()
 	if(prob(75))
 		qdel(src)
-
-/obj/machinery/computer/scan_consolenew/New()
-	..()
-	for(var/i=1;i<=3;i++)
-		buffers[i] = new /datum/dna2/record
-	for(var/i=1;i<=DNA_SE_LENGTH;i++)
-		labels[i] = new /datum/block_label
-	spawn(5)
-		connected = findScanner()
-		spawn(250)
-			src.injector_ready = 1
-		return
-	return
 
 /obj/machinery/computer/scan_consolenew/proc/findScanner()
 	for(dir in list(NORTH,EAST,SOUTH,WEST))
@@ -444,23 +473,17 @@
 	I.buf = buffer
 	return 1
 
-/obj/machinery/computer/scan_consolenew/process()
-	if (stat & (BROKEN | NOPOWER | MAINT | EMPED))
-		use_power = 0
+/obj/machinery/computer/scan_consolenew/proc/ejectDisk()
+	if (!disk)
 		return
+	disk.forceMove(get_turf(src))
+	disk = null
 
+/obj/machinery/computer/scan_consolenew/process()
 	if (connected && connected.occupant)
 		use_power = 2
 	else
 		use_power = 1
-
-/*
-	if(stat & (NOPOWER|BROKEN))
-		return
-	if (!( src.status )) //remove this
-		return
-	return
-*/
 
 /obj/machinery/computer/scan_consolenew/attack_paw(user as mob)
 	ui_interact(user)
@@ -473,7 +496,14 @@
 	if(!..())
 		if(!connected)
 			connected = findScanner() //lets get that machine
+			connected.connected = src
 		ui_interact(user)
+
+/obj/machinery/computer/scan_consolenew/AltClick()
+	if(disk)
+		ejectDisk()
+	else
+		..()
 
  /**
   * The ui_interact proc is used to open and update Nano UIs
@@ -504,6 +534,7 @@
 	data["isInjectorReady"] = injector_ready
 
 	data["hasDisk"] = disk ? 1 : 0
+	data["isDiskProtected"] = disk && disk.read_only
 
 	var/diskData[0]
 	if (!disk || !disk.buf)
@@ -569,7 +600,7 @@
 	data["beakerLabel"] = null
 	data["beakerVolume"] = 0
 	if(connected.beaker)
-		data["beakerLabel"] = connected.beaker.label_text ? connected.beaker.label_text : null
+		data["beakerLabel"] = connected.beaker.labeled ? connected.beaker.labeled : null
 		if (connected.beaker.reagents && connected.beaker.reagents.reagent_list.len)
 			for(var/datum/reagent/R in connected.beaker.reagents.reagent_list)
 				data["beakerVolume"] += R.volume
@@ -613,7 +644,7 @@
 
 	if (href_list["pulseRadiation"])
 		if(connected.contains_husk())
-			to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+			to_chat(usr, "<span class='notice'>The organism inside does not have DNA.</span>")
 			return 1
 		irradiating = src.radiation_duration
 		var/lock_state = src.connected.locked
@@ -714,7 +745,7 @@
 
 	if (href_list["pulseUIRadiation"])
 		if(connected.contains_husk())
-			to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+			to_chat(usr, "<span class='notice'>The organism inside does not have DNA.</span>")
 			return 1
 		var/block = src.connected.occupant.dna.GetUISubBlock(src.selected_ui_block,src.selected_ui_subblock)
 
@@ -773,7 +804,7 @@
 
 	if (href_list["pulseSERadiation"])
 		if(connected.contains_husk())
-			to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+			to_chat(usr, "<span class='notice'>The organism inside does not have DNA.</span>")
 			return 1
 		var/block = src.connected.occupant.dna.GetSESubBlock(src.selected_se_block,src.selected_se_subblock)
 		//var/original_block=block
@@ -836,16 +867,27 @@
 			return
 		if(newcolor)
 			label.color = newcolor
+		if(disk && !disk.read_only) //autobackup!
+			for(var/i=1;i<=DNA_SE_LENGTH;i++)
+				var/datum/block_label/L = labels[i]
+				L.overwriteLabel(disk.labels[i])
 		return 1
 
 	if(href_list["copyLabelsFromDisk"])
 		if(disk)
-			labels = disk.labels.Copy()
+			for(var/i=1;i<=DNA_SE_LENGTH;i++)
+				var/datum/block_label/L = disk.labels[i]
+				L.overwriteLabel(labels[i])
 		return 1
 
 	if(href_list["copyLabelsToDisk"])
 		if(disk)
-			disk.labels = labels.Copy()
+			if(disk.read_only)
+				to_chat(usr, "<span class='warning'>The disk's write-protect tab is set to read-only.</span>")
+				return
+			for(var/i=1;i<=DNA_SE_LENGTH;i++)
+				var/datum/block_label/L = labels[i]
+				L.overwriteLabel(disk.labels[i])
 		return 1
 
 	if(href_list["ejectOccupant"])
@@ -867,10 +909,7 @@
 			return 1
 
 		if (bufferOption == "ejectDisk")
-			if (!src.disk)
-				return
-			src.disk.forceMove(get_turf(src))
-			src.disk = null
+			ejectDisk()
 			return 1
 
 		// All bufferOptions from here on require a bufferId
@@ -884,7 +923,7 @@
 
 		if (bufferOption == "saveUI")
 			if(connected.contains_husk())
-				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+				to_chat(usr, "<span class='notice'>The organism inside does not have DNA.</span>")
 				return 1
 			if(src.connected.occupant && src.connected.occupant.dna)
 				var/datum/dna2/record/databuf=new
@@ -898,7 +937,7 @@
 
 		if (bufferOption == "saveUIAndUE")
 			if(connected.contains_husk())
-				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+				to_chat(usr, "<span class='notice'>The organism inside does not have DNA.</span>")
 				return 1
 			if(src.connected.occupant && src.connected.occupant.dna)
 				var/datum/dna2/record/databuf=new
@@ -912,7 +951,7 @@
 
 		if (bufferOption == "saveSE")
 			if(connected.contains_husk())
-				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+				to_chat(usr, "<span class='notice'>The organism inside does not have DNA.</span>")
 				return 1
 			if(src.connected.occupant && src.connected.occupant.dna)
 				var/datum/dna2/record/databuf=new
@@ -937,7 +976,7 @@
 
 		if (bufferOption == "transfer")
 			if(connected.contains_husk())
-				to_chat(usr, "<span class='notice'>You cannot do this to a husked corpse.</span>")
+				to_chat(usr, "<span class='notice'>The organism inside does not have DNA.</span>")
 				return 1
 			if (!src.connected.occupant || (M_NOCLONE in src.connected.occupant.mutations) || !src.connected.occupant.dna)
 				return

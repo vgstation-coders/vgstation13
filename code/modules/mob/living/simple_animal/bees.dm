@@ -37,6 +37,7 @@
 	meat_type = 0
 
 	var/max_hive_dist=5
+	held_items = list()
 
 /mob/living/simple_animal/bee/New(loc, var/obj/machinery/apiary/new_parent)
 	..()

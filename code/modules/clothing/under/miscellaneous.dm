@@ -33,7 +33,7 @@
 	name = "amish suit"
 	icon_state = "sl_suit"
 	_color = "sl_suit"
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/under/sl_suit/armored
@@ -120,7 +120,7 @@
 	desc = "A jumpsuit with owl wings. Photorealistic owl feathers! Twooooo!"
 	icon_state = "owl"
 	_color = "owl"
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED)
 
 /obj/item/clothing/under/johnny

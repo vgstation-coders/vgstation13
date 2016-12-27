@@ -346,8 +346,9 @@
 			playsound(loc, M.attack_sound, 50, 1, 1)
 		for(var/mob/O in viewers(src, null))
 			O.show_message("<span class='warning'><B>[M]</B> [M.attacktext] [src]!</span>", 1)
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
+
+		add_logs(M, src, "attacked", admin = M.ckey ? TRUE : FALSE) //Only add this to the server logs if they're controlled by a player.
+		
 		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
 		adjustBruteLoss(damage)
 		updatehealth()
@@ -1085,7 +1086,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	permeability_coefficient = 0.50
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS|HEAD
 	slowdown = 1.0
-	flags = FPRINT  | ONESIZEFITSALL
+	clothing_flags = ONESIZEFITSALL
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
@@ -1098,7 +1099,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	icon_state = "golem"
 	item_state = null
 	canremove = 0
-	flags = NOSLIP
+	clothing_flags = NOSLIP
 	slowdown = SHOES_SLOWDOWN+1
 
 /obj/item/clothing/mask/gas/golem

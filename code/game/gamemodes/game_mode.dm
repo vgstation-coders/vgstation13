@@ -293,12 +293,6 @@
 		else												// Not enough scrubs, ABORT ABORT ABORT
 			break
 
-	if(candidates.len < recommended_enemies && override_jobbans) //If we still don't have enough people, we're going to start drafting banned people.
-		for(var/mob/new_player/player in players)
-			if (player.client && player.ready)
-				if(jobban_isbanned(player, "Syndicate") || jobban_isbanned(player, role)) //Nodrak/Carn: Antag Job-bans
-					drafted += player.mind
-
 	if(restricted_jobs)
 		for(var/datum/mind/player in drafted)				// Remove people who can't be an antagonist
 			for(var/job in restricted_jobs)

@@ -1,7 +1,7 @@
 /obj/effect/blob/resource
 	name = "resource blob"
 	icon_state = "resource"
-	desc = "Some smoke-producing blob creature thingy"
+	desc = "A part of a blob. It makes a slow, deep breathing sound."
 	health = 30
 	maxhealth = 30
 	fire_resist = 2

@@ -2,7 +2,7 @@
 	name = "gas mask"
 	desc = "A face-covering mask that can be connected to an air supply."
 	icon_state = "gas_alt"
-	flags = FPRINT  | BLOCK_GAS_SMOKE_EFFECT | MASKINTERNALS
+	clothing_flags = BLOCK_GAS_SMOKE_EFFECT | MASKINTERNALS
 	w_class = W_CLASS_MEDIUM
 	can_flip = 1
 	action_button_name = "Toggle Mask"

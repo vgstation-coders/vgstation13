@@ -90,7 +90,7 @@
 
 /obj/item/ashtray/bronze
 	name = "bronze ashtray"
-	desc = "Massive bronze ashtray."
+	desc = "A large ashtray made of bronze."
 	icon_state = "ashtray_br"
 	icon_empty = "ashtray_br"
 	icon_half  = "ashtray_half_br"
@@ -100,7 +100,7 @@
 	health = 72.0
 	starting_materials = list(MAT_IRON = 80)
 	w_type = RECYK_METAL
-	empty_desc = "Massive bronze ashtray."
+	empty_desc = "A large ashtray made of bronze."
 	throwforce = 10.0
 
 	die()
@@ -112,7 +112,7 @@
 
 /obj/item/ashtray/glass
 	name = "glass ashtray"
-	desc = "Glass ashtray. Looks fragile."
+	desc = "An ashtray made of glass."
 	icon_state = "ashtray_gl"
 	icon_empty = "ashtray_gl"
 	icon_half  = "ashtray_half_gl"

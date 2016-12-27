@@ -3,7 +3,7 @@
 var/global/list/cached_icons = list()
 
 /obj/item/weapon/reagent_containers/glass/paint
-	desc = "It's a paint bucket."
+	desc = "A bucket containing paint."
 	name = "paint bucket"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "paint_neutral"
@@ -13,8 +13,8 @@ var/global/list/cached_icons = list()
 	w_class = W_CLASS_MEDIUM
 	melt_temperature = MELTPOINT_STEEL
 	amount_per_transfer_from_this = 10
-	possible_transfer_amounts = list(10,20,30,50,70)
-	volume = 70
+	possible_transfer_amounts = list(10,20,25,30,50,100,150)
+	volume = 150
 	flags = FPRINT | OPENCONTAINER
 	var/paint_type = ""
 
