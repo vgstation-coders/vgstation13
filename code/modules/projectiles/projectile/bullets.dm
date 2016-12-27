@@ -23,6 +23,33 @@
 	damage_type = TOX
 	weaken = 5
 
+/obj/item/projectile/bullet/shrapnel
+
+	name = "shrapnel"
+	damage = 45
+	damage_type = BRUTE
+	weaken = 1
+	stun = 3
+
+/obj/item/projectile/bullet/shrapnel/New()
+	..()
+	kill_count = rand(6,10)
+
+
+
+/obj/item/projectile/bullet/shrapnel/small
+
+	name = "small shrapnel"
+	damage = 25
+
+/obj/item/projectile/bullet/shrapnel/small/plasma
+
+	name = "small plasma shrapnel"
+	damage_type = TOX
+	color = "#BF5FFF"
+	damage = 35
+
+
 /obj/item/projectile/bullet/weakbullet
 	name = "weak bullet"
 	icon_state = "bbshell"
