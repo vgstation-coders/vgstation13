@@ -294,6 +294,8 @@ var/list/ai_list = list()
 			icon_state = "ai-database"
 		if("Glitchman")
 			icon_state = "ai-glitchman"
+		if("Alien")
+			icon_state = "ai-alien"
 		if("Nanotrasen")
 			icon_state = "ai-nanotrasen"
 		if("Angel")
