@@ -51,11 +51,11 @@ Have them evaluate mobs in their vicinity
 
 		if(H.m_intent == "run") //Don't run while stalking deer
 			spook_prob = 70
-		if(H.get_item_by_slot(slot_wear_suit) == /obj/item/clothing/suit/leather/deer)
+		if(istype(H.get_item_by_slot(slot_wear_suit), /obj/item/clothing/suit/leather/deer))
 			spook_prob -= 10
-		if(H.get_item_by_slot(slot_head) == /obj/item/clothing/head/leather/deer)
+		if(istype(H.get_item_by_slot(slot_head), /obj/item/clothing/head/leather/deer))
 			spook_prob -= 10
-			if(H.get_item_by_slot(slot_head) == /obj/item/clothing/head/leather/deer/horned)
+			if(istype(H.get_item_by_slot(slot_head), /obj/item/clothing/head/leather/deer/horned))
 				spook_prob -= 10
 		for(var/obj/item/I in H.held_items)
 			if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/grown/apple))
