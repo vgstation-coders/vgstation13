@@ -415,3 +415,27 @@
 	New()
 		..()
 		reagents.add_reagent(SACID, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/rezadone
+	name = "Rezadone Bottle"
+	desc = "A small bottle. Contains a small amount of Rezadone."
+	icon = 'icons/obj/chemical.dmi'
+	New()
+		..()
+		reagents.add_reagent(REZADONE, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/alkysine
+	name = "Alkysine Bottle"
+	desc = "A small bottle. Contains a small amount of Alkysine."
+	icon = 'icons/obj/chemical.dmi'
+	New()
+		..()
+		reagents.add_reagent(ALKYSINE, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/alkysinesmall
+	name = "Alkysine Bottle"
+	desc = "A small bottle. Contains a small amount of Alkysine."
+	icon = 'icons/obj/chemical.dmi'
+	New()
+		..()
+		reagents.add_reagent(ALKYSINE, 10)
