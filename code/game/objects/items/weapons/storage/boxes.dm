@@ -73,30 +73,33 @@
 	new /obj/item/weapon/tank/emergency_oxygen(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 
-/obj/item/weapon/storage/box/survival/vox/New()
-	..()
+/obj/item/weapon/storage/box/survival/vox
 	icon_state = "box_vox"
 	
+/obj/item/weapon/storage/box/survival/vox/New()
+	..()
 	for(var/atom/A in src)
 		qdel(A)
 	new /obj/item/clothing/mask/breath/vox(src)
 	new /obj/item/weapon/tank/emergency_nitrogen(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 
-/obj/item/weapon/storage/box/survival/engineer/New()
-	..()
+/obj/item/weapon/storage/box/survival/engineer	
 	icon_state = "box_eva"
 	
+/obj/item/weapon/storage/box/survival/engineer/New()
+	..()
 	for(var/atom/A in src)
 		qdel(A)
 	new /obj/item/clothing/mask/breath(src)
 	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 
+/obj/item/weapon/storage/box/survival/ert	
+	icon_state = "box_ERT"	
+	
 /obj/item/weapon/storage/box/survival/ert/New()
 	..()
-	icon_state = "box_ERT"
-	
 	for(var/atom/A in src)
 		qdel(A)
 	new /obj/item/clothing/mask/gas/ert(src)
