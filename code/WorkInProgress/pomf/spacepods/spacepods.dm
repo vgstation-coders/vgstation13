@@ -222,7 +222,7 @@
 		if("pod_synd")
 			desc = "A menacing military space pod with \"Fuck NT\" stenciled onto the side."
 		if("pod_gold")
-			desc = "A civilian space pod with a gold-plated body, it must have cost somebody a pretty penny."
+			desc = "A civilian space pod with a gold-plated body. It looks like it must have cost somebody a pretty penny."
 		if("pod_industrial")
 			desc = "A space pod with signs of wear on the plating. A spaceproof sticker designates it for performing industrial tasks."
 
