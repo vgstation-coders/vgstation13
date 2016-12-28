@@ -53,6 +53,8 @@
 /spell/targeted/bound_object/is_valid_target(var/obj/target)
 	if(!istype(target))
 		return 0
+	if(target.z == CENTCOMM_Z && get_dist(target,holder) >= range)
+		return 0
 	if(target.anchored && !allow_anchored)
 		return 0
 	for(var/J in prohibited)
