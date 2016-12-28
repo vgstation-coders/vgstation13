@@ -23,7 +23,7 @@ var/global/list/virusDB = list()
 
 /datum/disease2/disease/proc/generate_uniqueID()
 	for (var/x = 1 to 5)
-    	uniqueID = rand(...)
+    	uniqueID = rand(1, 10000)
     	if (!disease2_list.Find("[uniqueID]")) // Not a dupe! We'll try five times and then just accept it.
 			disease2_list["[uniqueID]"] = src
         	break
