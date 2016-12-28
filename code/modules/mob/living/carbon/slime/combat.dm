@@ -40,7 +40,7 @@
 			return 10
 
 /mob/living/carbon/slime/unarmed_attack_mob(mob/living/target)
-	if(target.health < -100)
+	if(target.isDead())
 		to_chat(src, "<span class='notice'>\The [target] is already dead.</span>")
 		return
 

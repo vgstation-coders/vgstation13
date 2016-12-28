@@ -27,51 +27,42 @@
 			return G.afterattack(target, src, "struggle" = 1)
 
 /mob/living/carbon/human/disarm_mob(mob/living/target)
-	src.attack_log += text("\[[time_stamp()]\] <font color='red'>Disarmed [target.name] ([target.ckey])</font>")
-	target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been disarmed by [src.name] ([src.ckey])</font>")
+	add_logs(src, target, "disarmed", admin = (src.ckey && target.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
 
-	log_attack("[src.name] ([src.ckey]) disarmed [target.name] ([target.ckey])")
-
-	var/datum/organ/external/affecting = get_organ(ran_zone(zone_sel.selecting))
 	if(target.disarmed_by(src))
 		return
 
-	var/randn = rand(1, 100)
-	if(randn <= 25)
+	var/datum/organ/external/affecting = get_organ(ran_zone(zone_sel.selecting))
+	if(prob(40))
+		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
+		visible_message("<span class='danger'>[src] has attempted to disarm [target]!</span>")
+		return
+
+	if(prob(40)) //40% to push
 		target.apply_effect(4, WEAKEN, run_armor_check(affecting, "melee"))
 		playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 		visible_message("<span class='danger'>[src] has pushed [target]!</span>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='red'>Pushed [target.name] ([target.ckey])</font>")
-		target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been pushed by [src.name] ([src.ckey])</font>")
-
-		target.LAssailant = src
-
-		log_attack("[src.name] ([src.ckey]) pushed [target.name] ([target.ckey])")
+		add_logs(src, target, "pushed", admin = (src.ckey && target.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
 		return
 
 	var/talked = 0
 
-	if(randn <= 60)
-		//Disarming breaks pulls
-		talked |= break_pulls(target)
+	//Disarming breaks pulls
+	talked |= break_pulls(target)
 
-		//Disarming also breaks a grab - this will also stop someone being choked, won't it?
-		talked |= break_grabs(target)
+	//Disarming also breaks a grab - this will also stop someone being choked, won't it?
+	talked |= break_grabs(target)
 
-		if(!talked)
-			target.drop_item()
-			visible_message("<span class='danger'>[src] has disarmed [target]!</span>")
-		playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-		return
+	if(!talked)
+		target.drop_item()
+		visible_message("<span class='danger'>[src] has disarmed [target]!</span>")
+	playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 
 
-	playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-	visible_message("<span class='danger'>[src] has attempted to disarm [target]!</span>")
+
 
 /mob/living/carbon/human/get_unarmed_verb()
-	if(species)
-		return species.attack_verb
-	return ..()
+	return species.attack_verb
 
 /mob/living/carbon/human/get_unarmed_hit_sound()
 	return (species.attack_verb == "punched" ? "punch" : 'sound/weapons/slice.ogg')
