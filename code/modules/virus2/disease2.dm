@@ -148,7 +148,7 @@ var/global/list/disease2_list = list()
 	mob.virus2.Remove("[uniqueID]")
 
 /datum/disease2/disease/proc/minormutate()
-	//uniqueID = rand(0,10000)
+	uniqueID = rand(0,10000)
 	var/datum/disease2/effect/e = pick(effects)
 	e.minormutate()
 	infectionchance = min(50,infectionchance + rand(0,10))
