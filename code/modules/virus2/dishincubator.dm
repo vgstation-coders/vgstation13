@@ -189,7 +189,7 @@
 				if(radiation > 50 & prob(mutatechance))
 					dish.virus2.log += "<br />[timestamp()] MAJORMUTATE (incubator rads)"
 					dish.virus2.majormutate()
-					if(dish.info)
+					if(dish.info && dish.analysed)
 						dish.info = "OUTDATED : [dish.info]"
 						dish.analysed = 0
 					alert_noise("beep")
