@@ -222,7 +222,7 @@
 		if("pod_synd")
 			desc = "A menacing military space pod with \"Fuck NT\" stenciled onto the side."
 		if("pod_gold")
-			desc = "A civilian space pod with a gold-plated body."
+			desc = "A civilian space pod with a gold-plated body, it must have cost somebody a pretty penny."
 		if("pod_industrial")
 			desc = "A space pod with signs of wear on the plating. A spaceproof sticker designates it for performing industrial tasks."
 
@@ -357,7 +357,7 @@
 */
 	for(var/mob/living/carbon/slime/M in range(1,usr))
 		if(M.Victim == usr)
-			to_chat(usr, "You attempt to enter \the [src.name], but [M.name] pulls you back!")
+			to_chat(usr, "You're too busy getting the life sucked out of you by [M.name]")
 			return
 //	to_chat(usr, "You start climbing into [src.name]")
 
@@ -367,7 +367,7 @@
 		if(!src.occupant)
 			moved_inside(usr)
 		else if(src.occupant!=usr)
-			to_chat(usr, "[src.occupant] has already entered the pod.")
+			to_chat(usr, "[src.occupant] was faster. Better luck next time, loser.")
 	else
 		to_chat(usr, "You stop entering the pod.")
 	return

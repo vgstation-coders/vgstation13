@@ -182,7 +182,7 @@
 /obj/item/clothing/suit/space/rig/syndi
 	icon_state = "rig-syndi"
 	name = "blood-red hardsuit"
-	desc = "An advanced suit that protects against injuries during special operations."
+	desc = "An advanced suit that protects against injuries during special operations. A tag on it says \"Property of Gorlex Marauders\"."
 	item_state = "syndie_hardsuit"
 	species_fit = list(GREY_SHAPED)
 	species_fit = list(VOX_SHAPED)
