@@ -994,7 +994,7 @@ Thanks.
 		L.delayNext(DELAY_ALL,100)
 		L.visible_message("<span class='danger'>One of \the [src.loc]'s cells rattles.</span>","<span class='warning'>You press against the lid of \the [src.loc] and attempt to pop it open (this will take about [breakout_time * 60] seconds).</span>")
 		spawn(0)
-			if(do_after(usr,src,breakout_time * 60 * 10)) //minutes * 60seconds * 10deciseconds
+			if(do_after(usr,src,breakout_time MINUTES)) //minutes * 60seconds * 10deciseconds
 				if(src.loc != jailcell || !L || L.stat != CONSCIOUS) //if we're no longer in that mounted cell OR user dead/unconcious
 					return
 
