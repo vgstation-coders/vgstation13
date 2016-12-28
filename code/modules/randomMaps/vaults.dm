@@ -160,7 +160,7 @@
 		if(population_density == POPULATION_SCARCE)
 			var/turf/t1 = locate(vault_x - MAX_VAULT_WIDTH, vault_y - MAX_VAULT_HEIGHT, vault_z)
 			var/turf/t2 = locate(vault_x + new_width, vault_y + new_height, vault_z)
-			valid_spawn_points.Remove(block(t1, y2))
+			valid_spawn_points.Remove(block(t1, t2))
 
 		if(ME.load(vault_x, vault_y, vault_z))
 			spawned.Add(ME)
