@@ -343,7 +343,7 @@
 		if(occupant == usr)
 			move_outside(usr)
 		else
-			to_chat(usr, "<span class='notice'><B>The [src.name] is already occupied!</B></span>")
+			to_chat(usr, "<span class='notice'><B>\The [src.name] is already occupied!</B></span>")
 			return
 
 	if(usr.incapacitated() || usr.lying) //are you cuffed, dying, lying, stunned or other
@@ -357,7 +357,7 @@
 */
 	for(var/mob/living/carbon/slime/M in range(1,usr))
 		if(M.Victim == usr)
-			to_chat(usr, "You attempt to enter the [src.name], but [M.name] pulls you back!")
+			to_chat(usr, "You attempt to enter \the [src.name], but [M.name] pulls you back!")
 			return
 //	to_chat(usr, "You start climbing into [src.name]")
 
