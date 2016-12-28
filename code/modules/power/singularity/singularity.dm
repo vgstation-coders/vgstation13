@@ -92,7 +92,6 @@
 	consume(A)
 
 /obj/machinery/singularity/Crossed(atom/movable/A)
-	to_chat(world, "[src] crossed by \the [A]")
 	consume(A)
 
 /obj/machinery/singularity/process()
@@ -567,14 +566,15 @@
 	explosion(get_turf(src), dist, dist * 2, dist * 4)
 	qdel(src)
 
-/obj/machinery/singularity/singularity_act(var/other_size=0)
+/obj/machinery/singularity/singularity_act(var/other_size=0,var/obj/machinery/singularity/S)
+	if(S == src) //don't eat yourself idiot
+		return
 	if(other_size >= current_size)
 		var/gain = (energy/2)
 		var/dist = max((current_size - 2), 1)
 		explosion(src.loc,(dist),(dist*2),(dist*4))
 		qdel(src)
 		return(gain)
-	return
 
 /obj/machinery/singularity/shuttle_act() //Shuttles can't kill the singularity honk
 	return
@@ -592,3 +592,8 @@
 
 /obj/machinery/singularity/acidable()
 	return 0
+
+/obj/machinery/singularity/Move(newLoc, movedir)
+	if(timestopped)
+		return 0
+	return forceMove(get_step(src,movedir))
