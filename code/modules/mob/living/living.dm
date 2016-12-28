@@ -436,6 +436,9 @@
 		O.emp_act(severity)
 	..()
 
+/mob/living/proc/get_organ(zone)
+	return
+
 /mob/living/proc/get_organ_target()
 	var/t = src.zone_sel.selecting
 	if ((t in list( "eyes", "mouth" )))

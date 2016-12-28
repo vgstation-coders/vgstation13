@@ -23,24 +23,7 @@
 		update_minimap()
 
 /mob/living/carbon/attack_animal(mob/living/simple_animal/M as mob)//humans and slimes have their own
-	if(M.melee_damage_upper == 0)
-		M.emote("[M.friendly] [src]")
-	else
-		if(M.attack_sound)
-			playsound(loc, M.attack_sound, 50, 1, 1)
-		visible_message("<span class='warning'><B>[M]</B> [M.attacktext] \the [src] !</span>")
-
-		add_logs(M, src, "attacked", admin = M.ckey ? TRUE : FALSE) //Only add this to the server logs if they're controlled by a player.
-
-		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-		var/dam_zone = pick(LIMB_CHEST, LIMB_LEFT_HAND, LIMB_RIGHT_HAND, LIMB_LEFT_LEG, LIMB_RIGHT_LEG)
-		if(M.zone_sel && M.zone_sel.selecting)
-			dam_zone = M.zone_sel.selecting
-		var/datum/organ/external/affecting = ran_zone(dam_zone)
-
-		apply_damage(damage,M.melee_damage_type, affecting)
-		updatehealth()
-
+	M.unarmed_attack_mob(src)
 
 /mob/living/carbon/proc/update_minimap()
 	var/obj/item/device/pda/pda_device = machine
@@ -103,13 +86,6 @@
 		if(temp && !temp.is_usable())
 			to_chat(M, "<span class='warning'>You can't use your [temp.display_name]</span>")
 			return
-	share_contact_diseases(M)
-	return
-
-
-/mob/living/carbon/attack_paw(mob/M as mob)
-	if(!istype(M, /mob/living/carbon))
-		return
 	share_contact_diseases(M)
 	return
 

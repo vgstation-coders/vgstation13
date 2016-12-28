@@ -65,9 +65,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/melee_damage_lower = 0
 	var/melee_damage_upper = 0
 	var/melee_damage_type = BRUTE
-	var/attacktext = "attacks"
+	var/attacktext = "attacked"
 	var/attack_sound = null
-	var/friendly = "nuzzles" //If the mob does no damage with it's attack
+	var/friendly = "nuzzled" //If the mob does no damage with it's attack
 	var/environment_smash = 0 //Set to 1 to allow breaking of crates,lockers,racks,tables; 2 for walls; 3 for Rwalls
 
 	var/speed = 0 //LETS SEE IF I CAN SET SPEEDS FOR SIMPLE MOBS WITHOUT DESTROYING EVERYTHING. Higher speed is slower, negative speed is faster
@@ -344,23 +344,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		act = "me"
 	..(act, type, desc)
 
-/mob/living/simple_animal/attack_animal(mob/living/simple_animal/M as mob)
-	if(M.melee_damage_upper == 0)
-		M.emote("[M.friendly] [src]")
-	else
-		if(M.attack_sound)
-			playsound(loc, M.attack_sound, 50, 1, 1)
-
-		visible_message("<span class='warning'><B>\The [M]</B> [M.attacktext] \the [src]!</span>")
-
-		add_logs(M, src, "attacked", admin = M.ckey ? TRUE : FALSE) //Only add this to the server logs if they're controlled by a player.
-
-		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-		if(M.melee_damage_type == "BRAIN") //because brain damage is apparently not a proper damage type like all the others
-			adjustBrainLoss(damage)
-		else
-			adjustBruteLoss(damage,M.melee_damage_type)
-		updatehealth()
+/mob/living/simple_animal/attack_animal(mob/living/simple_animal/M)
+	M.unarmed_attack_mob(src)
 
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
@@ -381,32 +366,17 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	switch(M.a_intent)
 
 		if(I_HELP)
-			if (health > 0)
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message("<span class='notice'>[M] [response_help] [src].</span>")
+			if(health > 0)
+				visible_message("<span class='notice'>[M] [response_help] [src].</span>")
 
 		if(I_GRAB)
-			if (M.grab_check(src))
-				return
-			if (!(status_flags & CANPUSH))
-				return
-
-			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
-
-			M.put_in_active_hand(G)
-
-			grabbed_by += G
-			G.synch()
-			G.affecting = src
-			LAssailant = M
-
-			visible_message("<span class='warning'>[M] has grabbed [src] passively!</span>")
+			M.grab_mob(src)
 
 		if(I_HURT, I_DISARM)
-			adjustBruteLoss(harm_intent_damage)
+			M.unarmed_attack_mob(src)
+			//adjustBruteLoss(harm_intent_damage)
 
-			visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
+			//visible_message("<span class='warning'>[M] [response_harm] [src]!</span>")
 
 	return
 
@@ -429,36 +399,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	switch(M.a_intent)
 
 		if (I_HELP)
-
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message(text("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>"), 1)
+			visible_message("<span class='notice'>[M] caresses [src] with its scythe like arm.</span>")
 		if (I_GRAB)
-			if(M.grab_check(src))
-				return
-			if(!(status_flags & CANPUSH))
-				return
-
-			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
-
-			M.put_in_active_hand(G)
-
-			grabbed_by += G
-			G.synch()
-			G.affecting = src
-			LAssailant = M
-
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message(text("<span class='warning'>[] has grabbed [] passively!</span>", M, src), 1)
-
+			M.grab_mob(src)
 		if(I_HURT, I_DISARM)
-			var/damage = rand(15, 30)
-			visible_message("<span class='danger'>[M] has slashed at [src]!</span>")
-			adjustBruteLoss(damage)
-
-	return
+			M.unarmed_attack_mob(src)
 
 /mob/living/simple_animal/attack_larva(mob/living/carbon/alien/larva/L as mob)
 

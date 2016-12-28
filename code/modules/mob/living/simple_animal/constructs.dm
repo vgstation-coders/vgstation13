@@ -104,7 +104,7 @@
 	to_chat(user, msg)
 
 
-/mob/living/simple_animal/construct/attack_animal(mob/living/simple_animal/M as mob)
+/mob/living/simple_animal/construct/attack_animal(mob/living/simple_animal/M)
 	if(istype(M, /mob/living/simple_animal/construct/builder))
 		if(src.health >= src.maxHealth)
 			to_chat(M, "<span class='notice'>[src] has nothing to mend.</span>")
@@ -112,17 +112,7 @@
 		health = min(maxHealth, health + 5) // Constraining health to maxHealth
 		M.visible_message("[M] mends some of \the <EM>[src]'s</EM> wounds.","You mend some of \the <em>[src]'s</em> wounds.")
 	else
-		add_logs(M, src, "attacked", admin = M.ckey ? TRUE : FALSE) //Only add this to the server logs if they're controlled by a player.
-
-		if(M.melee_damage_upper <= 0)
-			M.emote("[M.friendly] \the <EM>[src]</EM>")
-		else
-			if(M.attack_sound)
-				playsound(loc, M.attack_sound, 50, 1, 1)
-			M.visible_message("<span class='attack'>\The <EM>[M]</EM> [M.attacktext] \the <EM>[src]</EM>!</span>")
-			add_logs(M, src, "attacked", admin=1)
-			var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-			adjustBruteLoss(damage)
+		M.unarmed_attack_mob(src)
 
 /mob/living/simple_animal/construct/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	user.delayNextAttack(8)

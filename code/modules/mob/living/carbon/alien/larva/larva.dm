@@ -101,20 +101,10 @@
 
 //using the default attack_animal() in carbon.dm
 
-/mob/living/carbon/alien/larva/attack_paw(mob/living/carbon/monkey/M as mob)
+/mob/living/carbon/alien/larva/attack_paw(mob/living/carbon/monkey/M)
 	if(!(istype(M, /mob/living/carbon/monkey)))
 		return //Fix for aliens receiving double messages when attacking other aliens.
 
-	if(!ticker)
-		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
-		return
-
-/*
-	//MUH SPAWN PROTECTION
-	if(istype(loc, /turf) && istype(loc.loc, /area/start))
-		to_chat(M, "<span class='warning'>No attacking people at spawn, you jackass.</span>")
-		return
-*/
 	..()
 
 	switch(M.a_intent)
@@ -122,72 +112,16 @@
 		if(I_HELP)
 			help_shake_act(M)
 		else
-			if(istype(wear_mask, /obj/item/clothing/mask/muzzle))
-				return
-			if(health > 0)
-				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
-				visible_message("<span class='danger'>\The [M] has bit \the [src] !</span>")
-				adjustBruteLoss(rand(1, 3))
-				updatehealth()
+			M.unarmed_attack_mob(src)
 	return
 
 
-/mob/living/carbon/alien/larva/attack_slime(mob/living/carbon/slime/M as mob)
-	if(!ticker)
-		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
-		return
+/mob/living/carbon/alien/larva/attack_slime(mob/living/carbon/slime/M)
+	M.unarmed_attack_mob(src)
 
-	if(M.Victim)
-		return // can't attack while eating!
+/mob/living/carbon/alien/larva/attack_hand(mob/living/carbon/human/M)
 
-	if(health > -100)
-
-		for(var/mob/O in viewers(src, null))
-			visible_message("<span class='danger'>\The [M] glomps \the [src]!</span>")
-
-		add_logs(M, src, "glomped on", 0)
-
-		var/damage = rand(1, 3)
-
-		if(istype(src, /mob/living/carbon/slime/adult))
-			damage = rand(20, 40)
-		else
-			damage = rand(5, 35)
-
-		adjustBruteLoss(damage)
-
-		updatehealth()
-	return
-
-/mob/living/carbon/alien/larva/attack_hand(mob/living/carbon/human/M as mob)
-	if(!ticker)
-		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
-		return
-
-	/*
-	if(istype(loc, /turf) && istype(loc.loc, /area/start))
-		to_chat(M, "<span class='warning'>No attacking people at spawn, you jackass.</span>")
-		return
-	*/
 	..()
-
-	if(M.gloves && istype(M.gloves,/obj/item/clothing/gloves))
-		var/obj/item/clothing/gloves/G = M.gloves
-		if(G.cell)
-			if(M.a_intent == I_HURT)//Stungloves. Any contact will stun the alien.
-				if(G.cell.charge >= 2500)
-					G.cell.use(2500)
-
-					Knockdown(5)
-					if(stuttering < 5)
-						stuttering = 5
-					Stun(5)
-
-					visible_message("<span class='danger'>\The [src] has been touched with the stun gloves by [M] !</span>")
-					return
-				else
-					to_chat(M, "<span class='warning'>Not enough charge !</span>")
-					return
 
 	switch(M.a_intent)
 
@@ -195,75 +129,10 @@
 			help_shake_act(M)
 
 		if(I_GRAB)
-			if(M.grab_check(src))
-				return
-			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
-
-			M.put_in_active_hand(G)
-			grabbed_by += G
-			G.synch()
-
-			LAssailant = M
-
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-			visible_message("<span class='warning'>[M] has grabbed \the [src] passively !</span>")
+			M.grab_mob(src)
 
 		else
-			var/damage = rand(1, 9)
-			if(prob(90))
-				if(M_HULK in M.mutations)
-					damage += 5
-					spawn(0)
-						Paralyse(1)
-						step_away(src,M,15)
-						sleep(3)
-						step_away(src,M,15)
-				playsound(loc, "punch", 25, 1, -1)
-				visible_message("<span class='danger'>[M] has punched \the [src] !</span>")
-				if(damage > 4.9)
-					Knockdown(rand(10,15))
-					visible_message("<span class='danger'>[M] has knocked down \the [src] !</span>")
-				adjustBruteLoss(damage)
-				updatehealth()
-			else
-				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-				visible_message("<span class='danger'>[M] has attempted to punch \the [src] !</span>")
-	return
-
-/mob/living/carbon/alien/larva/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
-	if(!ticker)
-		to_chat(M, "<span class='warning'>You cannot attack people before the game has started.</span>")
-		return
-
-	/*
-	if(istype(loc, /turf) && istype(loc.loc, /area/start))
-		to_chat(M, "<span class='warning'>No attacking people at spawn, you jackass.</span>")
-		return
-	*/
-	..()
-
-	switch(M.a_intent)
-
-		if(I_HELP)
-			sleeping = max(0,sleeping-5)
-			resting = 0
-			AdjustParalysis(-3)
-			AdjustStunned(-3)
-			AdjustKnockdown(-3)
-			visible_message("<span class='notice'>[M.name] nuzzles [src] trying to wake it up !</span>")
-
-		else
-			if(health > 0)
-				playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
-				var/damage = rand(1, 3)
-				for(var/mob/O in viewers(src, null))
-					if((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>[M.name] has bit []!</span>", src), 1)
-				adjustBruteLoss(damage)
-				updatehealth()
-			else
-				to_chat(M, "<span class='alien'>[name] is too injured for that.</span>")
-	return
+			M.unarmed_attack_mob(src)
 
 /mob/living/carbon/alien/larva/restrained()
 	if(timestopped)

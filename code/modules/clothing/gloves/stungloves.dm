@@ -59,3 +59,31 @@
 	if(ishuman(src.loc))
 		var/mob/living/carbon/human/H = src.loc
 		H.update_inv_gloves()
+
+/obj/item/clothing/gloves/Touch(atom/A, mob/living/user, prox)
+	if(!isliving(A))
+		return
+	if(!cell)
+		return
+
+	var/mob/living/L = A
+	if(user.a_intent == I_HURT)//Stungloves. Any contact will stun the alien.
+		visible_message("<span class='danger'>\The [A] has been touched with the stun gloves by [user]!</span>")
+
+		if(cell.charge >= 2500)
+			cell.charge -= 2500
+
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Stungloved [L.name] ([L.ckey])</font>")
+			L.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been stungloved by [user.name] ([user.ckey])</font>")
+			L.LAssailant = user
+
+			log_attack("<font color='red'>[user] ([user.ckey]) stungloved [L.name] ([L.ckey])</font>")
+
+			var/armorblock = L.run_armor_check(user.zone_sel.selecting, "energy")
+			L.apply_effects(5,5,0,0,5,0,0,armorblock)
+
+		else
+			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Unsuccessfully stungloved [L.name] ([L.ckey])</font>")
+			L.attack_log += text("\[[time_stamp()]\] <font color='orange'>Victim of an unsuccessful stunglove by [user.name] ([user.ckey])</font>")
+			log_attack("<font color='red'>[user] ([user.ckey]) unsuccessfully stungloved [L.name] ([L.ckey])</font>")
+			to_chat(user, "<span class='warning'>Not enough charge!</span>")
