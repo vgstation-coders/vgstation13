@@ -5029,7 +5029,7 @@
 	if(..())
 		return 1
 
-	empulse(get_turf(M), 1, 2, 0)
+	empulse(get_turf(M), 1, 2, 1)
 
 	return
 
