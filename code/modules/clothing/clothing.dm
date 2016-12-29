@@ -11,6 +11,7 @@
 	var/cold_speed_protection = 300 //that cloth allows its wearer to keep walking at normal speed at lower temperatures
 
 	var/list/obj/item/clothing/accessory/accessories = list()
+	var/goliath_reinforce = FALSE
 
 /obj/item/clothing/Destroy()
 	for(var/obj/item/clothing/accessory/A in accessories)
@@ -584,3 +585,5 @@ BLIND     // can't see anything
 	w_class = W_CLASS_SMALL
 	throwforce = 2
 	slot_flags = SLOT_BACK
+	
+

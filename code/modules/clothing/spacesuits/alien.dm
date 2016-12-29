@@ -153,12 +153,14 @@
 	icon_state = "vox-pressure"
 	item_state = "vox-pressure"
 	desc = "A huge, pressurized suit, designed for distinctly nonhuman proportions. It looks unusually cheap, even for Vox."
+	goliath_reinforce = TRUE
 
 /obj/item/clothing/head/helmet/space/vox/civ/trader
 	name = "alien helmet"
 	icon_state = "vox-pressure"
 	item_state = "vox-pressure"
 	desc = "Hey, wasn't this a prop in \'The Abyss\'?"
+	goliath_reinforce = TRUE
 
 // Vox Casual
 // Civvie
