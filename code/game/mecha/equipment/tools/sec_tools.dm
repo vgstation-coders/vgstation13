@@ -1,6 +1,6 @@
 /obj/item/mecha_parts/mecha_equipment/tool/jail
-	name = "mounted jail cell"
-	desc = "A mounted jail cell, capable of holding up to two prisoners. (Can be attached to Gygax)"
+	name = "\improper Mounted Jail Cell"
+	desc = "A Mounted Jail Cell, capable of holding up to two prisoners. (Can be attached to Gygax)"
 	icon_state = "mecha_jail"
 	origin_tech = Tc_BIOTECH + "=2;" + Tc_COMBAT + "=4"
 	energy_drain = 20
@@ -97,15 +97,15 @@
 		return 1
 	return
 
-/obj/item/mecha_parts/mecha_equipment/tool/jail/proc/go_out(var/L)
-	var/mob/living/ejected = cells[L]
+/obj/item/mecha_parts/mecha_equipment/tool/jail/proc/go_out(var/cell)
+	var/mob/living/ejected = cells[cell]
 	if(!ejected)
 		return
 	ejected.forceMove(get_turf(src))
 	occupant_message("[ejected] ejected.")
 	log_message("[ejected] ejected.")
 	ejected.reset_view()
-	cells[L] = null
+	cells[cell] = null
 	ejected = null
 	if(CellFree())
 		set_ready_state(1)
@@ -113,8 +113,8 @@
 		pr_mech_jail.stop()
 	return 1
 
-/obj/item/mecha_parts/mecha_equipment/tool/jail/proc/subdue(var/L)
-	var/mob/living/prisoner = cells[L]
+/obj/item/mecha_parts/mecha_equipment/tool/jail/proc/subdue(var/cell)
+	var/mob/living/prisoner = cells[cell]
 	if(!prisoner)
 		return
 	prisoner.Stun(10)
@@ -170,8 +170,8 @@
 	J.update_equip_info()
 	return
 
-/obj/item/mecha_parts/mecha_equipment/tool/jail/proc/break_out(var/mob/L)
-	if(!istype(L))
+/obj/item/mecha_parts/mecha_equipment/tool/jail/proc/break_out(var/mob/M)
+	if(!istype(M))
 		return
-	L.visible_message("<span class='danger'>\The [L] pops the lid off of \the [src] and climbs out!.</span>","<span class='notice'>You pop the lid off of \the [src] and climb out!</span>")
-	L.forceMove(get_turf(src))
+	M.visible_message("<span class='danger'>\The [M] pops the lid off of \the [src] and climbs out!.</span>","<span class='notice'>You pop the lid off of \the [src] and climb out!</span>")
+	M.forceMove(get_turf(src))
