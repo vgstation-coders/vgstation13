@@ -1,5 +1,7 @@
+#define MAXIMUM_MARKOV_LENGTH 25000
+
 /proc/markov_chain(var/text, var/order = 4, var/length = 250)
-	if(!text || order < 0 || order > 20 || length < 1 || length > 25000)
+	if(!text || order < 0 || order > 20 || length < 1 || length > MAXIMUM_MARKOV_LENGTH)
 		return
 
 	var/table = markov_table(text, order)
