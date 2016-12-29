@@ -313,7 +313,7 @@
 		return
 	else
 		chemicals -= 100
-		empulse(get_turf(src), 1, 2, 0)
+		empulse(get_turf(src), 1, 2, 1)
 
 //////////UTILITY TREE/////////////////////
 /obj/item/verbs/borer/attached_arm/repair_bone/verb/repair_bone()
