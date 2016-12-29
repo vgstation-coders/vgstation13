@@ -148,7 +148,7 @@
 					if(isjusthuman(H)) //Always chow down on humans
 						return the_target
 					else
-						if(H.health > -400)//So we're not chowing down on the same vox all day
+						if(H.health > -(H.maxHealth*MAX_EAT_MULTIPLIER))//So we're not chowing down on the same vox all day
 							return the_target
 						else
 							return 0
@@ -329,7 +329,7 @@
 			return 0 //It ain't dead
 		if(isjusthuman(target)) //Humans are always edible
 			return 1
-		if(target.health > -(target.maxHealth*4)) //So they're not caught eating the same dumb bird all day
+		if(target.health > -(target.maxHealth*MAX_EAT_MULTIPLIER)) //So they're not caught eating the same dumb bird all day
 			return 1
 
 	return 0
