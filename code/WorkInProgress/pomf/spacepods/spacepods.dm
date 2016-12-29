@@ -216,7 +216,7 @@
 		if("pod_civ")
 			desc = "A sleek civilian space pod."
 		if("pod_black")
-			desc = "A space pod painted black."
+			desc = "A plain black space pod without any distinctive markings."
 		if("pod_mil")
 			desc = "A dark grey space pod bearing the Nanotrasen military insignia."
 		if("pod_synd")
@@ -357,11 +357,11 @@
 */
 	for(var/mob/living/carbon/slime/M in range(1,usr))
 		if(M.Victim == usr)
-			to_chat(usr, "You're too busy getting the life sucked out of you by [M.name]!")
+			to_chat(usr, "You're too busy getting the life sucked out of you by \the [M]!")
 			return
 //	to_chat(usr, "You start climbing into [src.name]")
 
-	visible_message("<span class='notice'>[usr] starts to climb into \the [src.name].</span>")
+	visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
 
 	if(enter_after(40,usr))
 		if(!src.occupant)
