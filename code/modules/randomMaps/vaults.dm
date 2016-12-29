@@ -89,7 +89,8 @@
 //A is the area OR a list of turfs where the placement happens
 //map_element_objects is a list of vaults that have to be placed. Defaults to subtypes of /datum/map_element/vault (meaning all vaults are spawned)
 //amount is the maximum amount of vaults placed. If -1, it will place as many vaults as it can
-
+//POPULATION_DENSE is much more expensive and may lag with big areas
+//POPULATION_SCARCE is cheaper but may not do the job as well
 //NOTE: Vaults may be placed partially outside of the area. Only the lower left corner is guaranteed to be in the area
 
 /proc/populate_area_with_vaults(area/A, list/map_element_objects, var/amount = -1, population_density = POPULATION_DENSE)
@@ -138,18 +139,23 @@
 					var/turf/T = conflict.location
 					var/x1 = max(1, T.x - new_width - 1)
 					var/y1 = max(1, T.y - new_height- 1)
-					var/turf/t1 = locate(x1, y1, T.z)
-					var/turf/t2 = locate(T.x + conflict.width, T.y + conflict.height, T.z)
-
+					var/turf/t1 = locate(x1, y1, T.z) //Corner #1: Old vault's coordinates minus new vault's dimensions (width and height)
+					var/turf/t2 = locate(T.x + conflict.width, T.y + conflict.height, T.z) //Corner #2: Old vault's coordinates plus old vault's dimensions
+					
+					//A rectangle defined by corners #1 and #2 is marked as invalid spawn area
 					valid_spawn_points.Remove(block(t1, t2))
 
 			if(POPULATION_SCARCE)
+				//This method is much cheaper but results in less accuracy. Bad spawn areas will be removed later - when the new vault is created
 				valid_spawn_points = area_turfs
 
 		if(!valid_spawn_points.len)
 			if(population_density == POPULATION_SCARCE)
+				//Since POPULATION_SCARCE assumes that every vault is the same size, if we ran out of spawn points we know for sure that we can't create any more vaults
 				message_admins("<span class='info'>Ran out of free space for vaults.</span>")
 				break
+			
+			//POPULATION_DENSE respects every vault's true size, so it's possible that another vault may fit in there - continue trying to place vaults
 			continue
 
 		var/turf/new_spawn_point = pick(valid_spawn_points)
@@ -158,7 +164,9 @@
 		var/vault_z = new_spawn_point.z
 
 		if(population_density == POPULATION_SCARCE)
-			valid_spawn_points.Remove(block(new_spawn_point, locate(vault_x - MAX_VAULT_WIDTH, vault_y - MAX_VAULT_HEIGHT, vault_z)))
+			var/turf/t1 = locate(max(1, vault_x - MAX_VAULT_WIDTH - 1), max(1, vault_y - MAX_VAULT_HEIGHT - 1), vault_z)
+			var/turf/t2 = locate(vault_x + new_width, vault_y + new_height, vault_z)
+			valid_spawn_points.Remove(block(t1, t2))
 
 		if(ME.load(vault_x, vault_y, vault_z))
 			spawned.Add(ME)
