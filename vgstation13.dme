@@ -28,6 +28,7 @@
 #include "code\hub.dm"
 #include "code\names.dm"
 #include "code\world.dm"
+#include "code\__DEFINES\game.dm"
 #include "code\__DEFINES\spell_flags.dm"
 #include "code\__DEFINES\turfs.dm"
 #include "code\__HELPERS\_macros.dm"

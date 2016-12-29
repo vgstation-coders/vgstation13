@@ -98,16 +98,12 @@
 		var/obj/item/clothing/gloves/G = gloves
 		base_chance += G.bonus_knockout
 
-	if(isalien(victim))
-		base_chance *= 0.25
-	else if(ishuman(victim))
-		base_chance *= 1
-	else if(ismonkey(victim))
-		base_chance *= 2
-	else
-		return 0
+	base_chance *= victim.knockout_chance_modifier()
 
 	return base_chance
+
+/mob/living/carbon/human/knockout_chance_modifier()
+	return 1
 
 /mob/living/carbon/human/after_unarmed_attack(mob/living/target, damage, damage_type, organ, armor)
 	var/knockout_chance = get_knockout_chance(target)

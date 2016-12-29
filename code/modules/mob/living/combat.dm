@@ -102,3 +102,8 @@
 
 /mob/living/proc/unarmed_attacked(mob/living/attacker, damage, damage_type, zone)
 	return
+
+//Affects the chance of getting stunned by a punch
+//Chance is multiplied by the returned value
+/mob/living/proc/knockout_chance_modifier()
+	return 0
