@@ -576,6 +576,13 @@ var/global/list/bad_changing_colour_ckeys = list()
 #define SHOCK	8
 #define SAFE	16
 
+//Defines for lighting status, see power/lighting.dm
+#define LIGHT_OK     0
+#define LIGHT_EMPTY  1
+#define LIGHT_BROKEN 2
+#define LIGHT_BURNED 3
+
+
 #define ENGINE_EJECT_Z	3
 
 //metal, glass, rod stacks

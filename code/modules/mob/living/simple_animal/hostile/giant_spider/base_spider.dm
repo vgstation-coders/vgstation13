@@ -101,7 +101,7 @@ var/global/list/spider_types = typesof(/mob/living/simple_animal/hostile/giant_s
 	if(istype(the_target,/obj/machinery/light))
 		var/obj/machinery/light/L = the_target
 		// Not empty or broken
-		return L.status != 1 && L.status != 2
+		return L.status != LIGHT_EMPTY && L.status != LIGHT_BROKEN
 	return ..(the_target)
 
 /mob/living/simple_animal/hostile/giant_spider/proc/CanOpenDoor(var/obj/machinery/door/D)

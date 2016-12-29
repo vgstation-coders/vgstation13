@@ -2,12 +2,12 @@
 //
 // consists of light fixtures (/obj/machinery/light) and light tube/bulb items (/obj/item/weapon/light)
 
-// status values shared between lighting fixtures and items
-#define LIGHT_OK     0
+// status values shared between lighting fixtures and items MOVED TO SETUP.DM
+/*#define LIGHT_OK     0
 #define LIGHT_EMPTY  1
 #define LIGHT_BROKEN 2
 #define LIGHT_BURNED 3
-
+*/
 
 /obj/machinery/light_construct
 	name = "light fixture frame"

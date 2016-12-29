@@ -68,11 +68,12 @@
 	meat_type = null
 /*
 #define EVOLVING 1
-#define MOVING_TO_TARGET 2*/
+#define MOVING_TO_TARGET 2
 #define EATING 3
 #define OPENING_DOOR 4
+#define SMASHING_LIGHT 5*/
 
-//#define SMASHING_LIGHT 5
+#define MAX_EAT_MULTIPLIER 4 //Dead for humans is -maxHealth, uncloneable is -maxHealth * 2
 
 /mob/living/simple_animal/hostile/necro/zombie //Boring ol default zombie
 	name = "zombie"
@@ -134,13 +135,6 @@
 		/obj/machinery/door        // Bust out lights
 	)
 	search_objects = 1
-/*
-/mob/living/simple_animal/hostile/necro/zombie/CanAttack(var/atom/the_target)
-	if(istype(the_target,/obj/machinery/light))
-		var/obj/machinery/light/L = the_target
-		// Not empty or broken
-		return L.status != 1 && L.status != 2
-	return ..(the_target)*/ //Too buggy, gets caught on terrain way too much
 
 /mob/living/simple_animal/hostile/necro/zombie/CanAttack(var/atom/the_target)
 	if(the_target == creator)
@@ -174,7 +168,7 @@
 			return 0
 	if(istype(the_target,/obj/machinery/light))
 		var/obj/machinery/light/L = the_target
-		return L.status != 1 && L.status != 2
+		return L.status != LIGHT_EMPTY && L.status != LIGHT_BROKEN
 
 	return ..(the_target)
 
@@ -335,7 +329,7 @@
 			return 0 //It ain't dead
 		if(isjusthuman(target)) //Humans are always edible
 			return 1
-		if(target.health > -400) //So they're not caught eating the same dumb bird all day
+		if(target.health > -(target.maxHealth*4)) //So they're not caught eating the same dumb bird all day
 			return 1
 
 	return 0
