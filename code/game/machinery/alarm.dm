@@ -40,6 +40,7 @@
 	var/list/air_scrub_info = list()
 
 /obj/machinery/alarm
+	desc = "An alarm used to control the area's atmospherics systems."
 	icon = 'icons/obj/monitors.dmi'
 	icon_state = "alarm0"
 	anchored = 1
@@ -166,7 +167,6 @@
 /obj/machinery/alarm/proc/first_run()
 	area_uid = areaMaster.uid
 	name = "[areaMaster.name] Air Alarm"
-	desc = "An alarm used to control the area's atmospherics systems."
 
 	// breathable air according to human/Life()
 	/*
