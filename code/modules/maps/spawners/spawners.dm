@@ -1177,5 +1177,5 @@
 	/obj/item/weapon/reagent_containers/food/snacks/candiedwoodapple,
 	/obj/item/weapon/reagent_containers/food/snacks/bacon,
 	/obj/item/weapon/reagent_containers/food/snacks/bacon,
-	/obj/item/weapon/reagent_containers/food/snacks/bacon,
+	/obj/item/weapon/reagent_containers/food/snacks/bacon
 )
