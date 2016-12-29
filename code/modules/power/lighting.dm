@@ -2,7 +2,7 @@
 //
 // consists of light fixtures (/obj/machinery/light) and light tube/bulb items (/obj/item/weapon/light)
 
-// status values shared between lighting fixtures and items MOVED TO SETUP.DM
+// status values shared between lighting fixtures and items MOVED TO _DEFINES/lighting.DM
 /*#define LIGHT_OK     0
 #define LIGHT_EMPTY  1
 #define LIGHT_BROKEN 2
