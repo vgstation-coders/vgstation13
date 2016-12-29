@@ -106,7 +106,7 @@
 	name = "cult armor"
 	icon_state = "cult_armour"
 	item_state = "cult_armour"
-	desc = "A bulky suit of armor covered in spikes. It looks space proof."
+	desc = "A bulky suit of armor bristling with spikes. It looks space proof."
 	w_class = W_CLASS_MEDIUM
 	allowed = list(/obj/item/weapon/tome,/obj/item/weapon/melee/cultblade,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
 	slowdown = 0
