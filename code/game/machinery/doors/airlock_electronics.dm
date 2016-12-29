@@ -60,9 +60,9 @@
 		if(isrobot(user))
 			t1 += "<a href='?src=\ref[src];login=1'>Log In</a><hr>"
 		else
-			t1 += "<a href='?src=\ref[src];login=1'>Swipe ID</a><hr>"
+			t1 += "<a href='?src=\ref[src];login=1'>Set access</a><hr>"
 	else
-		t1 += "<a href='?src=\ref[src];logout=1'>Block</a><hr>"
+		t1 += "<a href='?src=\ref[src];logout=1'>Finish</a><hr>"
 
 		t1 += "Access requirement is set to "
 		t1 += one_access ? "<a style='color: green' href='?src=\ref[src];one_access=1'>ONE</a><hr>" : "<a style='color: red' href='?src=\ref[src];one_access=1'>ALL</a><hr>"
@@ -107,6 +107,7 @@
 			src.last_configurator = usr.name
 
 	if(locked)
+		to_chat(usr, "<span class='warning'>Access denied.</span>")
 		return
 
 	if(href_list["logout"])
