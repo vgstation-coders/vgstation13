@@ -3,7 +3,7 @@
 	wander = 0
 	environment_smash = 0
 	faction = "decoy"
-	vision_range = 3	//no point in having the decoy if it aggros before the player sees it
+	vision_range = 5	//no point in having the decoy if it aggros before the player sees it
 	min_oxy = 0
 	max_oxy = 0
 	min_tox = 0
