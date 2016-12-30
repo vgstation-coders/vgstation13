@@ -10,6 +10,8 @@
 	var/path = 0
 	var/obj/item/device/assembly_holder/detonator = null
 	var/list/beakers = new/list()
+	var/list/temp_reagents = new/list()
+	var/reagents_text = ""
 	var/list/allowed_containers = list(/obj/item/weapon/reagent_containers/glass/beaker, /obj/item/weapon/reagent_containers/glass/bottle)
 	var/affected_area = 3
 	var/inserted_cores = 0
@@ -85,6 +87,16 @@
 			path = 1
 			if(beakers.len)
 				to_chat(user, "<span class='notice'>You lock the assembly.</span>")
+				for(var/obj/item/weapon/reagent_containers/glass/G in beakers)
+					if(istype(G, /obj/item/weapon/reagent_containers/glass/beaker) || istype(G, /obj/item/weapon/reagent_containers/glass/bottle))
+						temp_reagents += G.reagents.amount_cache
+						if(reagents_text)
+							reagents_text += " and ([english_list(temp_reagents)])"
+							temp_reagents = null
+						else
+							reagents_text += "([english_list(temp_reagents)])"
+							temp_reagents = null
+				add_gamelogs(user, "constructed a grenade containing [reagents_text]", tp_link=TRUE)
 				name = "grenade"
 			else
 //					to_chat(user, "<span class='warning'>You need to add at least one beaker before locking the assembly.</span>")
