@@ -216,6 +216,13 @@
 	..()
 	holder = _holder
 
+/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/proc/return_to_modules()
+	var/mob/living/silicon/robot/R = holder.loc
+	if(R.module_state_1 == src || R.module_state_2 == src || R.module_state_3 == src)
+		forceMove(R)
+	else
+		forceMove(holder)
+
 /obj/item/weapon/reagent_containers/glass/beaker/noreact
 	name = "stasis beaker"
 	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 50 units."
