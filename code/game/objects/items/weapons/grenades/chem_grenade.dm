@@ -10,8 +10,6 @@
 	var/path = 0
 	var/obj/item/device/assembly_holder/detonator = null
 	var/list/beakers = new/list()
-	var/list/temp_reagents = new/list()
-	var/reagents_text = ""
 	var/list/allowed_containers = list(/obj/item/weapon/reagent_containers/glass/beaker, /obj/item/weapon/reagent_containers/glass/bottle)
 	var/affected_area = 3
 	var/inserted_cores = 0
@@ -87,6 +85,8 @@
 			path = 1
 			if(beakers.len)
 				to_chat(user, "<span class='notice'>You lock the assembly.</span>")
+				var/temp_reagents = new/list()
+				var/reagents_text = ""
 				for(var/obj/item/weapon/reagent_containers/glass/G in beakers)
 					if(istype(G, /obj/item/weapon/reagent_containers/glass/beaker) || istype(G, /obj/item/weapon/reagent_containers/glass/bottle))
 						temp_reagents += G.reagents.amount_cache
@@ -188,8 +188,8 @@
 
 		if(user)
 			log_attack("<font color='red'>[user.name] ([user.ckey]) primed \a [src]</font>")
-			log_admin("ATTACK: [user] ([user.ckey]) primed \a [src]")
-			message_admins("ATTACK: [user] ([user.ckey]) primed \a [src]")
+			log_admin("ATTACK: [user] ([user.ckey]) primed \a [src] at ([user.x],[user.y],[user.z]).")
+			message_admins("ATTACK: [user] ([user.ckey]) primed \a [src] at [formatJumpTo(user.loc)].")
 			primed_by = "[user] ([user.ckey])"
 
 	return
