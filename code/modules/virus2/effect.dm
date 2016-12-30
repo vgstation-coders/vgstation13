@@ -380,21 +380,32 @@
 /datum/disease2/effect/vitreous
 	name = "Vitreous resonance"
 	stage = 2
-	chance = 10
-	max_chance = 50	
+	chance = 25
+	max_chance = 75	
 	max_multiplier = 2
 
 datum/disease2/effect/vitreous/activate(var/mob/living/carbon/mob)
-	// Varying multipliers: first just drop, then shatter, then shatter into a glass shard, 
-	// then launch glass shard, then launch container randomly, then launch at person
-	// TODO: both hands
-	// TODO: special messages for both hands at a time OR one at a time
-	var/obj/item/weapon/reagent_containers/glass/being_held = mob.get_active_hand()
-	if(istype(being_held))
-		to_chat(mob, "<span class='warning'>Your hand resonates with the [being_held.name], shattering it to bits and spilling its contents onto the floor!</span>")
-		being_held.reagents.reaction(get_turf(mob), TOUCH) // Calling this instead of transfer to avoid the splash message
-		playsound(get_turf(mob), 'sound/effects/Glassbr1.ogg', 25, 1)
-		qdel(being_held)
+	if(istype(mob, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = mob
+		var/hand_to_use = pick(GRASP_RIGHT_HAND, GRASP_LEFT_HAND)
+		var/obj/item/weapon/reagent_containers/glass_to_shatter = H.get_held_item_by_index(hand_to_use)
+		var/datum/organ/external/glass_hand = H.find_organ_by_grasp_index(hand_to_use)
+		if (istype(glass_to_shatter, /obj/item/weapon/reagent_containers/glass/) || istype(glass_to_shatter, /obj/item/weapon/reagent_containers/syringe))
+			to_chat(H, "<span class='warning'>Your [glass_hand.display_name] resonates with the glass in the [glass_to_shatter.name], shattering it to bits!</span>")
+			glass_to_shatter.reagents.reaction(get_turf(H), TOUCH)
+			new/obj/effect/decal/cleanable/generic(get_turf(H))
+			playsound(get_turf(H), 'sound/effects/Glassbr1.ogg', 25, 1)
+			spawn(10)
+				if (prob(50 * multiplier))
+					to_chat(H, "<span class='notice'>Your [glass_hand.display_name] deresonates, healing completely!</span>")
+					glass_hand.rejuvenate()
+				else
+					to_chat(H, "<span class='warning'>Your [glass_hand.display_name] deresonates, sustaining burns!</span>")
+					glass_hand.take_damage(0, 30 * multiplier)
+			qdel(glass_to_shatter)
+		else if (prob(1))
+			to_chat(H, "Your [glass_hand.display_name] aches for the cold, smooth feel of container-grade glass...")
+			// So I don't have to deal with actual glass and glass accessories
 
 
 ////////////////////////STAGE 3/////////////////////////////////
