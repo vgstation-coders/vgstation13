@@ -29,12 +29,14 @@ proc/cardinalrange(var/center)
 	var/efficiency = 1//How many cores this core counts for when doing power processing, plasma in the air and stability could affect this
 	var/coredirs = 0
 	var/dirs=0
+	var/mapped=0 //Set to 1 to ignore usual suicide if it doesn't immediately find a control_unit
 
 
 /obj/machinery/am_shielding/New(loc, var/obj/machinery/power/am_control_unit/AMC)
 	..()
 	if(!AMC)
-		WARNING("AME sector somehow created without a parent control unit!")
+		if (!mapped)
+			WARNING("AME sector somehow created without a parent control unit!")
 		controllerscan()
 		return
 	link_control(AMC)
@@ -75,7 +77,7 @@ proc/cardinalrange(var/center)
 		if(AMS && AMS.control_unit && link_control(AMS.control_unit))
 			break
 
-	if(!control_unit)//No other guys nearby, look for a control unit
+	if(!control_unit && !mapped)//No other guys nearby, look for a control unit
 		for(var/obj/machinery/power/am_control_unit/AMC in cardinalrange(src))
 			if(AMC.add_shielding(src))
 				break
