@@ -31,6 +31,9 @@ proc/cardinalrange(var/center)
 	var/dirs=0
 	var/mapped=0 //Set to 1 to ignore usual suicide if it doesn't immediately find a control_unit
 
+// Stupidly easy way to use it in maps
+/obj/machinery/am_shielding/map
+	mapped = 1
 
 /obj/machinery/am_shielding/New(loc, var/obj/machinery/power/am_control_unit/AMC)
 	..()
