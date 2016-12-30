@@ -24,8 +24,7 @@
 /mob/new_player/proc/new_player_panel_proc()
 	var/output = "<div align='center'>"
 
-	output += {"<hr>
-		<p><a href='byond://?src=\ref[src];show_preferences=1'>Setup Character</A></p>"}
+	output += {"<p><a href='byond://?src=\ref[src];show_preferences=1'>Setup Character</A></p>"}
 	if(!ticker || ticker.current_state <= GAME_STATE_PREGAME)
 		if(!ready)
 			output += "<p><a href='byond://?src=\ref[src];ready=1'>Declare Ready</A></p>"
@@ -59,7 +58,7 @@
 
 	output += "</div>"
 
-	var/datum/browser/popup = new(src, "playersetup", "New Player Options", 210, 250)
+	var/datum/browser/popup = new(src, "playersetup", "<div align='center'>New Player Options</div>", 210, 250)
 	popup.set_content(output)
 	popup.set_window_options("focus=0;can_close=0;can_minimize=1;can_maximize=0;can_resize=1;titlebar=1;")
 	popup.open()
