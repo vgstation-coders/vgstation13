@@ -132,7 +132,7 @@
 
 /obj/item/weapon/cloaking_device
 	name = "cloaking device"
-	desc = "A device that completely hides a user."
+	desc = "Use this to become invisible to the human eyesocket."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "shield0"
 	var/active = 0.0
