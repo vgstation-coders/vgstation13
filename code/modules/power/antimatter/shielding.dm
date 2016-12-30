@@ -88,6 +88,15 @@ proc/cardinalrange(var/center)
 				return
 			qdel(src)
 
+// Find surrounding unconnected shielding and add them to our controller
+/obj/machinery/am_shielding/proc/assimilate()
+	if(!control_unit)
+		return // nothing to share :'^(
+	for(var/obj/machinery/am_shielding/neighbor in cardinalrange(src))
+		if(neighbor && !neighbor.control_unit)
+			neighbor.link_control(control_unit)
+			neighbor.assimilate() // recursion is fun, right?
+
 /obj/machinery/am_shielding/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
 		return 1

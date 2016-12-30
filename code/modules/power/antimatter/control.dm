@@ -270,6 +270,7 @@
 			AMS.control_unit = null
 			spawn(10)
 				AMS.controllerscan()
+				AMS.assimilate()
 		linked_shielding = list()
 
 	else
