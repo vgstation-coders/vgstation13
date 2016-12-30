@@ -384,24 +384,24 @@
 	max_chance = 75	
 	max_multiplier = 2
 
-datum/disease2/effect/vitreous/activate(var/mob/living/carbon/mob)
-	if(istype(mob, /mob/living/carbon/human))
-		var/mob/living/carbon/human/H = mob
+/datum/disease2/effect/vitreous/activate(var/mob/living/carbon/human/H)
+	if(istype(H))
 		var/hand_to_use = pick(GRASP_RIGHT_HAND, GRASP_LEFT_HAND)
 		var/obj/item/weapon/reagent_containers/glass_to_shatter = H.get_held_item_by_index(hand_to_use)
 		var/datum/organ/external/glass_hand = H.find_organ_by_grasp_index(hand_to_use)
 		if (istype(glass_to_shatter, /obj/item/weapon/reagent_containers/glass/) || istype(glass_to_shatter, /obj/item/weapon/reagent_containers/syringe))
-			to_chat(H, "<span class='warning'>Your [glass_hand.display_name] resonates with the glass in the [glass_to_shatter.name], shattering it to bits!</span>")
-			glass_to_shatter.reagents.reaction(get_turf(H), TOUCH)
+			to_chat(H, "<span class='warning'>Your [glass_hand.display_name] resonates with the glass in \the [glass_to_shatter], shattering it to bits!</span>")
+			glass_to_shatter.reagents.reaction(H.loc, TOUCH)
 			new/obj/effect/decal/cleanable/generic(get_turf(H))
 			playsound(get_turf(H), 'sound/effects/Glassbr1.ogg', 25, 1)
-			spawn(10)
-				if (prob(50 * multiplier))
-					to_chat(H, "<span class='notice'>Your [glass_hand.display_name] deresonates, healing completely!</span>")
-					glass_hand.rejuvenate()
-				else
-					to_chat(H, "<span class='warning'>Your [glass_hand.display_name] deresonates, sustaining burns!</span>")
-					glass_hand.take_damage(0, 30 * multiplier)
+			spawn(1 SECONDS)
+				if (H && glass_hand)
+					if (prob(50 * multiplier))
+						to_chat(H, "<span class='notice'>Your [glass_hand.display_name] deresonates, healing completely!</span>")
+						glass_hand.rejuvenate()
+					else
+						to_chat(H, "<span class='warning'>Your [glass_hand.display_name] deresonates, sustaining burns!</span>")
+						glass_hand.take_damage(0, 30 * multiplier)
 			qdel(glass_to_shatter)
 		else if (prob(1))
 			to_chat(H, "Your [glass_hand.display_name] aches for the cold, smooth feel of container-grade glass...")
