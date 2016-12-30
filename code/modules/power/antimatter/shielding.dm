@@ -77,15 +77,16 @@ proc/cardinalrange(var/center)
 		if(AMS && AMS.control_unit && link_control(AMS.control_unit))
 			break
 
-	if(!control_unit && !mapped)//No other guys nearby, look for a control unit
+	if(!control_unit)//No other guys nearby, look for a control unit
 		for(var/obj/machinery/power/am_control_unit/AMC in cardinalrange(src))
 			if(AMC.add_shielding(src))
 				break
-		if(!priorscan)
-			sleep(20)
-			controllerscan(1)//Last chance
-			return
-		qdel(src)
+		if(!mapped) // Prevent rescanning and suicide if it's part of the map
+			if(!priorscan)
+				sleep(20)
+				controllerscan(1)//Last chance
+				return
+			qdel(src)
 
 /obj/machinery/am_shielding/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))
