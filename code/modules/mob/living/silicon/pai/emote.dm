@@ -2,12 +2,14 @@
 	if(timestopped)
 		return //under effects of time magick
 	var/param = null
-	if (findtext(act, "-", 1, null))
-		var/t1 = findtext(act, "-", 1, null)
-		param = copytext(act, t1 + 1, length(act) + 1)
-		act = copytext(act, 1, t1)
+	var/regex/reg = regex("(.+?)-(.+)")
+	if(reg.Find(act, 1))
+		param = reg.group[2]
+		act = reg.group[1]
 
-	if(findtext(act,"s",-1) && !findtext(act,"_",-2))//Removes ending s's unless they are prefixed with a '_'
+	var/regex/reg2 = regex("(.*?)s")
+	var/regex/reg3 = regex("(.*?)_(.*)")
+	if(reg2.Find(act, -1) && !reg3.Find(act, -2))//Removes ending s's unless they are prefixed with a '_'
 		act = copytext(act,1,length(act))
 
 	switch(act)
@@ -35,7 +37,8 @@
 		if ("glare")
 			var/M = null
 			if (param)
-				for (var/mob/A in view())
+				var/H = get_holder_at_turf_level(src)
+				for (var/mob/A in view(H))
 					if (param == A.name)
 						M = A
 						break
@@ -50,7 +53,8 @@
 		if ("stare")
 			var/M = null
 			if (param)
-				for (var/mob/A in view())
+				var/H = get_holder_at_turf_level(src)
+				for (var/mob/A in view(H))
 					if (param == A.name)
 						M = A
 						break
@@ -66,7 +70,8 @@
 		if ("look")
 			var/M = null
 			if (param)
-				for (var/mob/A in view())
+				var/H = get_holder_at_turf_level(src)
+				for (var/mob/A in view(H))
 					if (param == A.name)
 						M = A
 						break
@@ -83,7 +88,8 @@
 		if("beep")
 			var/M = null
 			if(param)
-				for (var/mob/A in view())
+				var/H = get_holder_at_turf_level(src)
+				for (var/mob/A in view(H))
 					if (param == A.name)
 						M = A
 						break
@@ -100,7 +106,8 @@
 		if("ping")
 			var/M = null
 			if(param)
-				for (var/mob/A in view())
+				var/H = get_holder_at_turf_level(src)
+				for (var/mob/A in view(H))
 					if (param == A.name)
 						M = A
 						break
@@ -117,7 +124,8 @@
 		if("buzz")
 			var/M = null
 			if(param)
-				for (var/mob/A in view())
+				var/H = get_holder_at_turf_level(src)
+				for (var/mob/A in view(H))
 					if (param == A.name)
 						M = A
 						break
