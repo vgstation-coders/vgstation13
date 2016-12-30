@@ -6,9 +6,6 @@
 	icon_state = "b10"
 
 /obj/item/weapon/dnascrambler/attack(var/mob/living/carbon/human/M, var/mob/living/carbon/human/user)
-	if(!M || !user)
-		return
-
 	if(!istype(M) || !istype(user))
 		return
 
