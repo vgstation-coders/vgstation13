@@ -377,6 +377,26 @@
 	speech.message = message
 
 
+/datum/disease2/effect/vitreous
+	name = "Vitreous resonance"
+	stage = 2
+	chance = 10
+	max_chance = 50	
+	max_multiplier = 2
+
+datum/disease2/effect/vitreous/activate(var/mob/living/carbon/mob)
+	// Varying multipliers: first just drop, then shatter, then shatter into a glass shard, 
+	// then launch glass shard, then launch container randomly, then launch at person
+	// TODO: both hands
+	// TODO: special messages for both hands at a time OR one at a time
+	var/obj/item/weapon/reagent_containers/glass/being_held = mob.get_active_hand()
+	if(istype(being_held))
+		to_chat(mob, "<span class='warning'>Your hand resonates with the [being_held.name], shattering it to bits and spilling its contents onto the floor!</span>")
+		being_held.reagents.reaction(get_turf(mob), TOUCH) // Calling this instead of transfer to avoid the splash message
+		playsound(get_turf(mob), 'sound/effects/Glassbr1.ogg', 25, 1)
+		qdel(being_held)
+
+
 ////////////////////////STAGE 3/////////////////////////////////
 
 
