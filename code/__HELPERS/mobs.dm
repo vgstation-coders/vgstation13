@@ -1,16 +1,7 @@
-proc/random_hair_style(gender, species = "Human")
+/proc/random_hair_style(gender, species = "Human")
 	var/h_style = "Bald"
 
-	var/list/valid_hairstyles = list()
-	for(var/hairstyle in hair_styles_list)
-		var/datum/sprite_accessory/S = hair_styles_list[hairstyle]
-		if(gender == MALE && S.gender == FEMALE)
-			continue
-		if(gender == FEMALE && S.gender == MALE)
-			continue
-		if( !(species in S.species_allowed))
-			continue
-		valid_hairstyles[hairstyle] = hair_styles_list[hairstyle]
+	var/list/valid_hairstyles = valid_sprite_accessories(gender, species, hair_styles_list)
 
 	if(valid_hairstyles.len)
 		h_style = pick(valid_hairstyles)
@@ -37,20 +28,10 @@ proc/random_hair_style(gender, species = "Human")
 			return NORTHWEST
 	return 0
 
-proc/random_facial_hair_style(gender, species = "Human")
+/proc/random_facial_hair_style(gender, species = "Human")
 	var/f_style = "Shaved"
 
-	var/list/valid_facialhairstyles = list()
-	for(var/facialhairstyle in facial_hair_styles_list)
-		var/datum/sprite_accessory/S = facial_hair_styles_list[facialhairstyle]
-		if(gender == MALE && S.gender == FEMALE)
-			continue
-		if(gender == FEMALE && S.gender == MALE)
-			continue
-		if( !(species in S.species_allowed))
-			continue
-
-		valid_facialhairstyles[facialhairstyle] = facial_hair_styles_list[facialhairstyle]
+	var/list/valid_facialhairstyles = valid_sprite_accessories(gender, species, facial_hair_styles_list)
 
 	if(valid_facialhairstyles.len)
 		f_style = pick(valid_facialhairstyles)
