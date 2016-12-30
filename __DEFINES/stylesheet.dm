@@ -31,7 +31,7 @@ em						{font-style: normal;	font-weight: bold;}
 .medradio				{color: #3399CC;}
 .sciradio				{color: #993399;}
 .supradio				{color: #5F4519;}
-.serradio				{color: #006666;}
+.serradio				{color: #C0A17D;}
 .djradio				{color: #663300;}
 .binaryradio			{color: #300050;	font-family: 'Courier New', Courier, monospace;}
 .mommiradio				{color: navy;}
