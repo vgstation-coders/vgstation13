@@ -1,12 +1,12 @@
 "a" = (/turf/space,/area)
-"b" = (/turf/simulated/wall/invulnerable/ice,/area)
-"c" = (/obj/structure/snow_pedestal,/obj/item/clothing/head/celtic,/turf/simulated/floor/plating/snow/ice,/area)
-"d" = (/turf/simulated/floor/plating/snow/ice,/area)
-"e" = (/obj/machinery/door/mineral/transparent/icicle/horizontal,/turf/simulated/floor/plating/snow/ice,/area)
-"f" = (/mob/living/simple_animal/hostile/decoy/snowman/frostgolem/wizard,/turf/simulated/floor/plating/snow,/area)
-"g" = (/turf/simulated/floor/plating/snow,/area)
-"h" = (/mob/living/simple_animal/hostile/decoy/snowman/frostgolem/knight,/turf/simulated/floor/plating/snow,/area)
-"i" = (/mob/living/simple_animal/hostile/humanoid/frostgolem{wander = 0},/turf/simulated/floor/plating/snow/ice,/area)
+"b" = (/turf/simulated/wall/invulnerable/ice,/area/vault/icecomet)
+"c" = (/obj/structure/snow_pedestal,/obj/item/clothing/head/celtic,/turf/simulated/floor/plating/snow/ice,/area/vault/icecomet)
+"d" = (/turf/simulated/floor/plating/snow/ice,/area/vault/icecomet)
+"e" = (/obj/machinery/door/mineral/transparent/icicle/horizontal,/turf/simulated/floor/plating/snow/ice,/area/vault/icecomet)
+"f" = (/mob/living/simple_animal/hostile/decoy/snowman/frostgolem/wizard,/turf/simulated/floor/plating/snow,/area/vault/icecomet)
+"g" = (/turf/simulated/floor/plating/snow,/area/vault/icecomet)
+"h" = (/mob/living/simple_animal/hostile/decoy/snowman/frostgolem/knight,/turf/simulated/floor/plating/snow,/area/vault/icecomet)
+"i" = (/mob/living/simple_animal/hostile/humanoid/frostgolem{wander = 0},/turf/simulated/floor/plating/snow/ice,/area/vault/icecomet)
 
 (1,1,1) = {"
 aaaaaaaaaabbbbbaaaaaaaaaa

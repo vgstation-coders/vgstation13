@@ -181,6 +181,9 @@
 /area/vault/meteorlogical
 	name = "\improper Meteorlogical Station"
 
+/area/vault/icecomet
+	jammed = 2
+
 /obj/machinery/door/poddoor/droneship
 	name = "\improper OSIPR Pod-Door"
 	id_tag = "denied"
