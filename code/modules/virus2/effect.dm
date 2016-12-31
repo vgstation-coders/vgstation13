@@ -1102,7 +1102,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 		if (airborne_can_reach(mob.loc, m.loc))
 			others_count += 1
 	if (others_count > max_multiplier)
-		to_chat(mob, "A friendly sensation in your brain embraces you... it is satisfied with how many are near you - for now.")
+		to_chat(mob, "<span class='notice'>A friendly sensation is satisfied with how many are near you - for now.</span>")
 		mob.adjustBrainLoss(-multiplier)
 		mob.reagents.add_reagent(PARACETAMOL, multiplier) // The hug chemical for kicks
 		if (multiplier < 5)
