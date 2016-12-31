@@ -145,13 +145,7 @@
 			var/mob/living/carbon/human/H = the_target
 			if(H.isDead())
 				if(check_edibility(H))
-					if(isjusthuman(H)) //Always chow down on humans
-						return the_target
-					else
-						if(H.health > -(H.maxHealth*MAX_EAT_MULTIPLIER))//So we're not chowing down on the same vox all day
-							return the_target
-						else
-							return 0
+					return the_target
 				else
 					return 0
 			else
@@ -300,7 +294,7 @@
 	busy = TRUE
 	var/target_loc = D.loc
 	var/self_loc = src.loc
-	spawn(100*time_mult)
+	spawn(10 SECONDS*time_mult)
 		if(D.loc == target_loc && self_loc == src.loc) //Not moved
 			if(can_open_door(D))//Let's see if nobody quickly bolted it
 				if(break_doors == CANPLUS) //Guaranteed
