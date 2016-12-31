@@ -5,7 +5,7 @@
 		attacked += 10
 
 /mob/living/carbon/slime/get_unarmed_verb()
-	return "glomped on"
+	return "glomps on"
 
 /mob/living/carbon/slime/get_unarmed_damage(mob/living/target)
 	if(isslime(target))

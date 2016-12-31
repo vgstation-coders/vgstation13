@@ -26,9 +26,9 @@
 
 /mob/living/carbon/alien/humanoid/get_unarmed_verb(mob/living/target)
 	if(isalien(target))
-		return "bit"
+		return "bites"
 
-	return "slashed at"
+	return "slashes at"
 
 /mob/living/carbon/alien/humanoid/get_unarmed_damage(mob/living/target)
 	if(isalien(target))
