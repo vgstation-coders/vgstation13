@@ -1090,6 +1090,31 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 		to_chat(mob, "Suddenly, your knowledge of languages comes back to you.")
 
 
+/datum/disease2/effect/gregarious
+	name = "Gregarious Impetus"
+	stage = 4
+	max_chance = 25
+	max_multiplier = 2
+
+/datum/disease2/effect/gregarious/activate(var/mob/living/carbon/mob)
+	var/others_count = 0
+	for(var/mob/living/carbon/m in oview(5, mob))
+		if (airborne_can_reach(mob.loc, m.loc))
+			others_count += 1
+	if (others_count > max_multiplier)
+		to_chat(mob, "A friendly sensation in your brain embraces you... it is satisfied with how many are near you - for now.")
+		mob.adjustBrainLoss(-multiplier)
+		mob.reagents.add_reagent(PARACETAMOL, multiplier) // The hug chemical for kicks
+		if (multiplier < 5)
+			multiplier += 0.1
+	else
+		to_chat(mob, "<span class='warning'>A hostile sensation in your brain stings you... it wants more of the living near you.</span>")
+		mob.adjustBrainLoss(multiplier)
+		if (multiplier > 1)
+			multiplier -= 0.05 // Lowering our standards
+
+
+
 ////////////////////////SPECIAL/////////////////////////////////
 
 
