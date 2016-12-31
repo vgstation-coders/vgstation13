@@ -224,7 +224,8 @@
 		return 0
 	if(!AMS_linking && !AMS.link_control(src))
 		return 0
-	linked_shielding.Add(AMS)
+	if(!(AMS in linked_shielding))
+		linked_shielding.Add(AMS)
 	update_shield_icons = 1
 	return 1
 
