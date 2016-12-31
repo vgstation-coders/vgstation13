@@ -126,10 +126,9 @@
 
 /obj/machinery/replicator/interact(mob/user)
 	if(isobserver(user))
-	to_chat(user, "<span class='rose'>Your ghostly hand goes right through!</span>")
-			return
+		to_chat(user, "<span class='rose'>Your ghostly hand goes right through!</span>")
 	if(user.incapacitated())
-			return
+		return
 	var/dat = "The control panel displays an incomprehensible selection of controls, many with unusual markings or text around them.<br>"
 	dat += "<br>"
 	for(var/index=1, index<=construction.len, index++)
