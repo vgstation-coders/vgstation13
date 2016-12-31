@@ -1099,7 +1099,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 /datum/disease2/effect/gregarious/activate(var/mob/living/carbon/mob)
 	var/others_count = 0
 	for(var/mob/living/carbon/m in oview(5, mob))
-		if (airborne_can_reach(mob.loc, m.loc))
+		if (airborne_can_reach(mob.loc, m.loc, 9)) // Apparently mobs physically block airborne viruses
 			others_count += 1
 	if (others_count > max_multiplier)
 		to_chat(mob, "<span class='notice'>A friendly sensation is satisfied with how many are near you - for now.</span>")
