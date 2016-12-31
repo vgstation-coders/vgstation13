@@ -1094,27 +1094,27 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	name = "Gregarious Impetus"
 	stage = 4
 	max_chance = 25
-	max_multiplier = 2
+	max_multiplier = 4
 
 /datum/disease2/effect/gregarious/activate(var/mob/living/carbon/mob)
 	var/others_count = 0
 	for(var/mob/living/carbon/m in oview(5, mob))
 		if (airborne_can_reach(mob.loc, m.loc, 9)) // Apparently mobs physically block airborne viruses
 			others_count += 1
-	if (others_count > max_multiplier)
+	if (others_count >= multiplier)
 		to_chat(mob, "<span class='notice'>A friendly sensation is satisfied with how many are near you - for now.</span>")
 		mob.adjustBrainLoss(-multiplier)
-		mob.reagents.add_reagent(PARACETAMOL, multiplier) // The hug chemical for kicks
-		if (multiplier < 5)
-			multiplier += 0.1
+		mob.reagents.add_reagent(PARACETAMOL, multiplier) // The hug chemical
+		if (multiplier < 4)
+			multiplier += 0.05
 	else
 		to_chat(mob, "<span class='warning'>A hostile sensation in your brain stings you... it wants more of the living near you.</span>")
-		mob.adjustBrainLoss(multiplier)
-		mob.AdjustParalysis(multiplier)
-		mob.AdjustKnockdown(multiplier)
-		mob.AdjustStunned(multiplier)
+		mob.adjustBrainLoss(multiplier / 5)
+		mob.AdjustParalysis(multiplier / 3)
+		mob.AdjustKnockdown(multiplier / 3)
+		mob.AdjustStunned(multiplier / 3)
 		if (multiplier > 1)
-			multiplier -= 0.05 // Lowering our standards
+			multiplier -= 0.1 // Lowering our standards
 
 
 
