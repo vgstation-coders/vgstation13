@@ -7,6 +7,10 @@
 /obj/item/weapon/grenade/empgrenade/prime()
 	..()
 	empulse(src, 4, 10)
-	spawn(5)
+	sleep(60)
+	empulse(src, 4, 10)
+	sleep(120)
+	empulse(src, 4, 10)
+	spawn(10)
 		qdel(src)
 
