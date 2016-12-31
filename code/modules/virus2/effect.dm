@@ -1110,6 +1110,8 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	else
 		to_chat(mob, "<span class='warning'>A hostile sensation in your brain stings you... it wants more of the living near you.</span>")
 		mob.adjustBrainLoss(multiplier)
+		mob.AdjustKnockdown(multiplier)
+		mob.AdjustStunned(multiplier)
 		if (multiplier > 1)
 			multiplier -= 0.05 // Lowering our standards
 
