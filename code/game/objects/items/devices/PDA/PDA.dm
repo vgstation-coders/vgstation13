@@ -1820,7 +1820,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					else
 						var/pass = FALSE
 						for (var/obj/machinery/message_server/MS in message_servers)
-							if(MS.active)
+							if(MS.is_functioning())
 								pass = TRUE
 								break
 						if(!pass)
@@ -2004,7 +2004,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	if(message_servers)
 		for (var/obj/machinery/message_server/MS in message_servers)
 		//PDAs are now dependant on the Message Server.
-			if(MS.active)
+			if(MS.is_functioning())
 				useMS = MS
 				break
 
