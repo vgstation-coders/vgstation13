@@ -261,7 +261,7 @@
 
 /obj/structure/reagent_dispensers/beerkeg
 	name = "beer keg"
-	desc = "A beer keg"
+	desc = "A massive keg containing beer."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "beertankTEMP"
 	amount_per_transfer_from_this = 10
