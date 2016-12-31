@@ -11,4 +11,4 @@
 				visible_message("<span class='warning'>\The [src] catches \the [I]!</span>")
 				throw_mode_off()
 				return 1
-	..()
+	return ..()
