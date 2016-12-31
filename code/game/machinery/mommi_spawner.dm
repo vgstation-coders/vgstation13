@@ -170,6 +170,7 @@
 		M.updatename()
 
 		if(!use_mmi)
+			M.key = user.key
 			qdel(user)
 
 		metal=0
