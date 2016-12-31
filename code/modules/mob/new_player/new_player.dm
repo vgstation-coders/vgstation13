@@ -22,10 +22,9 @@
 
 
 /mob/new_player/proc/new_player_panel_proc()
-	var/output = "<div align='center'><B>New Player Options</B>"
+	var/output = "<div align='center'>"
 
-	output += {"<hr>
-		<p><a href='byond://?src=\ref[src];show_preferences=1'>Setup Character</A></p>"}
+	output += {"<p><a href='byond://?src=\ref[src];show_preferences=1'>Setup Character</A></p>"}
 	if(!ticker || ticker.current_state <= GAME_STATE_PREGAME)
 		if(!ready)
 			output += "<p><a href='byond://?src=\ref[src];ready=1'>Declare Ready</A></p>"
@@ -34,11 +33,10 @@
 
 	else
 		ready = 0 // prevent setup character issues
-		output += {"<a href='byond://?src=\ref[src];manifest=1'>View the Crew Manifest</A><br><br>
+		output += {"<a href='byond://?src=\ref[src];manifest=1'>View the Crew Manifest</A><br>
 			<p><a href='byond://?src=\ref[src];late_join=1'>Join Game!</A></p>"}
 
 	output += "<p><a href='byond://?src=\ref[src];observe=1'>Observe</A></p>"
-
 	if(!IsGuestKey(src.key))
 		establish_db_connection()
 
@@ -60,7 +58,7 @@
 
 	output += "</div>"
 
-	var/datum/browser/popup = new(src, "playersetup", "New Player Options", 210, 280)
+	var/datum/browser/popup = new(src, "playersetup", "<div align='center'>New Player Options</div>", 210, 250)
 	popup.set_content(output)
 	popup.set_window_options("focus=0;can_close=0;can_minimize=1;can_maximize=0;can_resize=1;titlebar=1;")
 	popup.open()
