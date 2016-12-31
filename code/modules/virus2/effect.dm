@@ -386,7 +386,7 @@
 
 /datum/disease2/effect/vitreous/activate(var/mob/living/carbon/human/H)
 	if(istype(H))
-		var/hand_to_use = rand(1, held_items.len)
+		var/hand_to_use = rand(1, H.held_items.len)
 		var/obj/item/weapon/reagent_containers/glass_to_shatter = H.get_held_item_by_index(hand_to_use)
 		var/datum/organ/external/glass_hand = H.find_organ_by_grasp_index(hand_to_use)
 		if (istype(glass_to_shatter, /obj/item/weapon/reagent_containers/glass/) || istype(glass_to_shatter, /obj/item/weapon/reagent_containers/syringe))
