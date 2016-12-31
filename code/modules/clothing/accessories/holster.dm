@@ -116,7 +116,7 @@
 //
 /obj/item/clothing/accessory/holster/handgun
 	name = "shoulder holster"
-	desc = "A handgun holster. Perfect for concealed carry."
+	desc = "A handgun holster that clips to a suit. Perfect for concealed carry."
 	holster_verb_name = "Holster (Handgun)"
 
 /obj/item/clothing/accessory/holster/handgun/can_holster(obj/item/weapon/gun/W)
@@ -140,7 +140,7 @@
 
 /obj/item/clothing/accessory/holster/handgun/waist
 	name = "waistband holster"
-	desc = "A handgun holster. Made of expensive leather."
+	desc = "A handgun holster that clips to a suit. Made of expensive leather."
 	_color = "holster_low"
 
 //
