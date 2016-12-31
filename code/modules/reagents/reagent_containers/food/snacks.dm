@@ -4260,7 +4260,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/eclair/big
 	name = "massive eclair"
 	desc = "Plus fort que ses hanches."
-	icon_state = "eclair_big"
+	icon_state = "big_eclair"
 	bitesize = 30
 	w_class = 5
 
