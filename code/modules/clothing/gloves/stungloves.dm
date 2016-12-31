@@ -1,3 +1,5 @@
+#define STUNGLOVES_CHARGE_COST 2500
+
 /obj/item/clothing/gloves/attackby(obj/item/weapon/W, mob/user)
 	if(istype(src, /obj/item/clothing/gloves/boxing))	//quick fix for stunglove overlay not working nicely with boxing gloves.
 		to_chat(user, "<span class='notice'>That won't work.</span>")//i'm not putting my lips on that!
