@@ -1105,7 +1105,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 		to_chat(mob, "<span class='notice'>A friendly sensation is satisfied with how many are near you - for now.</span>")
 		mob.adjustBrainLoss(-multiplier)
 		mob.reagents.add_reagent(PARACETAMOL, multiplier) // The hug chemical
-		if (multiplier < 4)
+		if (multiplier < max_multiplier)
 			multiplier += 0.05
 	else
 		to_chat(mob, "<span class='warning'>A hostile sensation in your brain stings you... it wants more of the living near you.</span>")
