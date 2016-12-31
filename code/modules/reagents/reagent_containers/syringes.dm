@@ -69,6 +69,9 @@
 /obj/item/weapon/reagent_containers/syringe/attack_paw(var/mob/user)
 	return attack_hand(user)
 
+/obj/item/weapon/reagent_containers/syringe/attack(mob/M as mob, mob/user as mob, def_zone)
+	return //Stop trying to drink from syringes!
+
 /obj/item/weapon/reagent_containers/syringe/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
 	if(proximity_flag == 0) // not adjacent
 		return

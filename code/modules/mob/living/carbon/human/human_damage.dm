@@ -288,7 +288,7 @@ This function restores all organs.
 	return
 
 
-/mob/living/carbon/human/proc/get_organ(var/zone)
+/mob/living/carbon/human/get_organ(var/zone)
 	if(!zone)
 		zone = LIMB_CHEST
 	if (zone in list( "eyes", "mouth" ))
@@ -299,8 +299,7 @@ This function restores all organs.
 
 	//visible_message("Hit debug. [damage] | [damagetype] | [def_zone] | [blocked] | [sharp] | [used_weapon]")
 	if((damagetype != BRUTE) && (damagetype != BURN))
-		..(damage, damagetype, def_zone, blocked, ignore_events = ignore_events)
-		return 1
+		return ..(damage, damagetype, def_zone, blocked, ignore_events = ignore_events)
 
 	if(blocked >= 2)
 		return 0
@@ -341,7 +340,7 @@ This function restores all organs.
 
 	//Embedded projectile code.
 	if(!organ)
-		return
+		return damage
 /*/vg/ EDIT
 	if(istype(used_weapon,/obj/item/weapon))
 		var/obj/item/weapon/W = used_weapon  //Sharp objects will always embed if they do enough damage.
@@ -383,7 +382,7 @@ This function restores all organs.
 				adjust_fire_stacks(0.5) //as seen in ignite code
 				update_icon = 1
 			qdel(F)
-	return 1
+	return damage
 
 //Adds cancer, including stage of cancer and limb
 //Right now cancer is adminbus only. You can inflict it via the full (old) Player Panel and all "prayer types" (includes Centcomm message)

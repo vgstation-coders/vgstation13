@@ -3,7 +3,7 @@
 	icobase = 'icons/mob/human_races/r_horror.dmi'
 	deform = 'icons/mob/human_races/r_horror.dmi'  // TODO: Need deform.
 	known_languages = list(LANGUAGE_CLATTER)
-	attack_verb = "smashes"
+	attack_verb = "smashed"
 	flags = NO_BREATHE /*| NON_GENDERED*/ | NO_PAIN
 	pressure_resistance = 30 * ONE_ATMOSPHERE /*No longer will our ascent be foiled by depressurization!*/
 	//h_style = null

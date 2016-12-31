@@ -86,6 +86,7 @@
 	name = "wooden planks"
 	desc = "One can only guess that this is a bunch of wood."
 	singular_name = "wood plank"
+	irregular_plural = "wooden planks"
 	icon_state = "sheet-wood"
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	autoignition_temperature=AUTOIGNITION_WOOD

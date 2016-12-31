@@ -56,6 +56,7 @@
 		log_admin("[key_name(usr)] has notified [key_name(S)] of a change to their laws.")
 		message_admins("[usr.key] has notified [key_name(S)] of a change to their laws.")
 
+		S << sound('sound/machines/lawsync.ogg')
 		to_chat(S, "____________________________________")
 		to_chat(S, "<span style=\"color:red;font-weight:bold;\">LAW CHANGE NOTICE</span>")
 		if(S.laws)

@@ -28,7 +28,7 @@ var/global/list/disease2_list = list()
 		if(f.stage == stage && f.badness <= badness)
 			list += f
 	var/datum/disease2/effect/e = pick(list)
-	e.chance = rand(1,6)
+	e.chance = rand(1, e.max_chance)
 	return e
 
 /datum/disease2/disease/proc/makerandom(var/greater=0)

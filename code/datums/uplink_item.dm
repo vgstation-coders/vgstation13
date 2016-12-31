@@ -318,7 +318,7 @@ var/list/uplink_items = list()
 //IAA - Internal Affairs Agent
 /datum/uplink_item/jobspecific/briefcase_smg
 	name = "Concealed SMG"
-	desc = "A modified briefcase capable of storing and firing a gun under a false bottom. Starts with an internal SMG and 18 rounds. Use a screwdriver to pry away the false bottom and make modifications."
+	desc = "A modified briefcase capable of storing and firing a gun under a false bottom. Starts with an internal SMG and 18 rounds. Use a screwdriver to pry away the false bottom and make modifications. Distinguishable upon close examination due to the added weight."
 	item = /obj/item/weapon/storage/briefcase/false_bottomed/smg
 	cost = 12
 	job = list("Internal Affairs Agent")
@@ -362,7 +362,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/dangerous/revolver
 	name = "Fully Loaded Revolver"
-	desc = "A traditional handgun which fires .357 rounds. Has 7 chambers. Can down an unarmoured target with two shots."
+	desc = "A traditional handgun which fires .357 rounds. Has 7 chambers. Can down an unarmored target with two shots."
 	item = /obj/item/weapon/gun/projectile
 	cost = 13
 

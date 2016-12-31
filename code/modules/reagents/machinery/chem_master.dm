@@ -371,11 +371,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		beaker.pixel_x = 0 //We fucked with the beaker for overlays, so reset that
 		beaker.pixel_y = 0 //We fucked with the beaker for overlays, so reset that
 		if(istype(beaker, /obj/item/weapon/reagent_containers/glass/beaker/large/cyborg))
-			var/mob/living/silicon/robot/R = beaker:holder:loc
-			if(R.module_state_1 == beaker || R.module_state_2 == beaker || R.module_state_3 == beaker)
-				beaker.forceMove(R)
-			else
-				beaker.forceMove(beaker:holder)
+			var/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/borgbeak = beaker
+			borgbeak.return_to_modules()
 		beaker = null
 		reagents.clear_reagents()
 		update_icon()

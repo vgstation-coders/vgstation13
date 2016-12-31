@@ -138,6 +138,19 @@
 			clothes_s.Blend(new /icon('icons/mob/back.dmi', "satchel"), ICON_OVERLAY)
 	return clothes_s
 
+/proc/valid_sprite_accessories(var/gender_restriction, var/species_restriction, var/from_list)
+	. = list()
+	for(var/key in from_list)
+		var/datum/sprite_accessory/S = from_list[key]
+		if(species_restriction && !(species_restriction in S.species_allowed))
+			continue
+		if(gender_restriction)
+			if(gender_restriction == MALE && S.gender == FEMALE)
+				continue
+			if(gender_restriction == FEMALE && S.gender == MALE)
+				continue
+
+		.[key] = from_list[key]
 
 /datum/preferences/proc/update_preview_icon(var/for_observer=0)		//seriously. This is horrendous.
 	preview_icon_front = null

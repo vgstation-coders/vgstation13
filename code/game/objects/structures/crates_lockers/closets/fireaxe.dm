@@ -34,17 +34,17 @@
 
 	..()
 	if(smashed)
-		to_chat(user, "The protective glass shield has been damaged beyond repair")
+		to_chat(user, "The protective glass shield has been damaged beyond repair.")
 	else if(hitstaken)
-		to_chat(user, "You count [hitstaken] impacts on the protective glass shield")
+		to_chat(user, "There are [hitstaken] impacts on the protective glass shield.")
 	else
-		to_chat(user, "The protective glass shield appears intact")
+		to_chat(user, "The protective glass shield appears intact.")
 	if(!fireaxe)
-		to_chat(user, "The fireaxe is gone from the cabinet")
+		to_chat(user, "The fireaxe is missing from the cabinet.")
 	else
-		to_chat(user, "The fireaxe is still in the cabinet [localopened ? "and up for grabs" : "behind the protective glass"]")
+		to_chat(user, "The fireaxe is still in the cabinet [localopened ? "and up for grabs" : "behind the protective glass"].")
 
-	to_chat(user, "A small [locked ? "red" : "green"] light indicates the cabinet is [locked ? "" : "un"]locked")
+	to_chat(user, "A small [locked ? "red" : "green"] light indicates the cabinet is [locked ? "" : "un"]locked.")
 
 /obj/structure/closet/fireaxecabinet/attackby(var/obj/item/O as obj, var/mob/user as mob)  //Marker -Agouri
 
@@ -56,8 +56,8 @@
 
 	if(isrobot(usr) || src.locked)
 		if(istype(O, /obj/item/device/multitool))
-			visible_message("<span class='notice'>[user] starts fiddling with \the [src]'s locking module</span>", \
-			"<span class='notice'>You start disabling \the [src]'s locking module</span>")
+			visible_message("<span class='notice'>[user] starts fiddling with \the [src]'s locking module.</span>", \
+			"<span class='notice'>You start disabling \the [src]'s locking module.</span>")
 			playsound(user, 'sound/machines/lockreset.ogg', 50, 1)
 			if(do_after(user, src, 50))
 				locked = 0
@@ -80,7 +80,7 @@
 					hitstaken++
 					if(hitstaken == 4) //Slam
 						playsound(user, 'sound/effects/Glassbr3.ogg', 100, 1) //Break cabinet, receive goodies. Cabinet's fucked for life after that.
-						visible_message("<span class='warning'>\The [src]'s protective glass shatters, exposing its content.")
+						visible_message("<span class='warning'>\The [src]'s protective glass shatters, exposing its contents.")
 						smashed = 1
 						locked = 0
 						localopened = 1
@@ -102,7 +102,7 @@
 			update_icon()
 		else
 			if(smashed)
-				to_chat(user, "<span class='warning'>[src]'s protective glass is broken. Cutting hazard right there!</span>")
+				to_chat(user, "<span class='warning'>[src]'s protective glass is broken.</span>")
 				return
 			if(istype(O, /obj/item/device/multitool))
 				if(localopened)
@@ -112,8 +112,8 @@
 						update_icon()
 					return
 				else
-					visible_message("<span class='notice'>[user] starts to fiddle with [src]'s locking module</span>", \
-					"<span class='notice'>You start to re-enable [src]'s locking module</span>")
+					visible_message("<span class='notice'>[user] starts to fiddle with [src]'s locking module.</span>", \
+					"<span class='notice'>You start to re-enable [src]'s locking module.</span>")
 					if(do_after(user, src, 50))
 						locked = 1
 						visible_message("<span class='notice'>[user] re-enables [src]'s locking module.</span>", \

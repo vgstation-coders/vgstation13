@@ -1,5 +1,5 @@
 /obj/structure/closet/syndicate
-	name = "armoury closet"
+	name = "armory closet"
 	desc = "Why is this here?"
 	icon_state = "syndicate"
 	icon_closed = "syndicate"
@@ -137,7 +137,7 @@
 		return
 
 /obj/structure/closet/vox_raiders
-	name = "vox armoury closet"
+	name = "vox armory closet"
 	desc = "Polly wants a gun."
 	icon_state = "syndicate"
 	icon_closed = "syndicate"
@@ -154,7 +154,7 @@
 
 
 /obj/structure/closet/vox_raiders/trader
-	name = "vox armoury closet"
+	name = "vox armory closet"
 	desc = "Polly wants a gun."
 	icon_state = "syndicate"
 	icon_closed = "syndicate"

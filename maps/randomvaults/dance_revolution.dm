@@ -120,8 +120,8 @@
 
 	//Give new task
 
-	if(progress_counter > max_progress*0.8) //last 20% of the game = added difficulty
-		current_instruction = rand(DDR_STAND, DDR_LIE)
+	//if(progress_counter > max_progress*0.8) //last 20% of the game = added difficulty
+	//	current_instruction = rand(DDR_STAND, DDR_LIE)
 
 	current_dir = pick(cardinal - current_dir)
 
