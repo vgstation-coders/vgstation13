@@ -65,9 +65,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/melee_damage_lower = 0
 	var/melee_damage_upper = 0
 	var/melee_damage_type = BRUTE
-	var/attacktext = "attacked"
+	var/attacktext = "attacks"
 	var/attack_sound = null
-	var/friendly = "nuzzled" //If the mob does no damage with it's attack
+	var/friendly = "nuzzles" //If the mob does no damage with it's attack
 	var/environment_smash = 0 //Set to 1 to allow breaking of crates,lockers,racks,tables; 2 for walls; 3 for Rwalls
 
 	var/speed = 0 //LETS SEE IF I CAN SET SPEEDS FOR SIMPLE MOBS WITHOUT DESTROYING EVERYTHING. Higher speed is slower, negative speed is faster
