@@ -1,134 +1,71 @@
 //For lists of words to be used with viruses.
-var/global/list/virus_word_list_1
-var/global/list/virus_word_list_2
+var/global/list/virus_opposite_word_list
 
 /datum/disease2/proc/initialize_word_lists()
-	virus_word_list_1 = list("to",			//1
-								"and",		//2
-								"in",		//3
-								"that",		//4
-								"I",		//5
-								"on",		//6
-								"with",		//7
-								"he",		//8
-								"we",		//9
-								"his",		//10
-								"will",		//11
-								"my",		//12
-								"mine",		//13
-								"one",		//14
-								"all",		//15
-								"would",	//16
-								"there",	//17
-								"their",	//18
-								"what",		//19
-								"up",		//20
-								"go",		//21
-								"when",		//22
-								"no",		//23
-								"him",		//24
-								"take",		//25
-								"into",		//26
-								"good",		//27
-								"some",		//28
-								"could",	//29
-								"them",		//30
-								"see",		//31
-								"now",		//32
-								"look",		//33
-								"over",		//34
-								"think",	//35
-								"back",		//36
-								"after",	//37
-								"how",		//38
-								"first",	//39
-								"new",		//40
-								"most",		//41
-								"help",		//42
-								"hurt",		//43
-								"left",		//44
-								"Medbay",	//45
-								"Science",	//46
-								"borg",		//47
-								"HoS",		//48
-								"QM",		//49
-								"HoP",		//50
-								"plasma",	//51
-								"n2o",		//52
-								"opposite",	//53
-								"Ian",		//54
-								"dog",		//55
-								"chaplain",	//56
-								"rune",		//57
-								"hot",		//58
-								"on fire",	//59
-								"breached",	//60
-								"open",		//61
-								"opened",	//62
-								"bolt",		//63
-								"bolted")	//64
-
-	virus_word_list_2 = list("from",		//1
-								"not",		//2
-								"out",		//3
-								"this",		//4
-								"you",		//5
-								"off",		//6
-								"without",	//7
-								"she",		//8
-								"they",		//9
-								"her",		//10
-								"won't",	//11
-								"your",		//12
-								"yours",	//13
-								"two",		//14
-								"none",		//15
-								"wouldn't",	//16
-								"here",		//17
-								"our",		//18
-								"who",		//19
-								"down",		//20
-								"come",		//21
-								"where",	//22
-								"yes",		//23
-								"her",		//24
-								"give",		//25
-								"out of",	//26
-								"bad",		//27
-								"none",		//28
-								"couldn't",	//29
-								"us",		//30
-								"hear",		//31
-								"later",	//32
-								"listen",	//33
-								"under",	//34
-								"feel",		//35
-								"front",	//36
-								"before",	//37
-								"why",		//38
-								"last",		//39
-								"old",		//40
-								"least",	//41
-								"kill",		//42
-								"heal",		//43
-								"right",	//44
-								"brig",		//45
-								"Cargo",	//46
-								"human",	//47
-								"CMO",		//48
-								"captain",	//49
-								"RD",		//50
-								"oxgyen",	//51
-								"co2",		//52
-								"same",		//53
-								"Runtime",	//54
-								"cat",		//55
-								"cultist",	//56
-								"graffiti",	//57
-								"cold",		//58
-								"freezing",	//59
-								"sealed",	//60
-								"close",	//61
-								"closed",	//62
-								"unbolt",	//63
-								"unbolted")	//64
+	virus_opposite_word_list = list("to"		=	"from",				//1
+									"and"		=	"not",				//2
+									"in"		=	"out",				//3
+									"that"		=	"this",				//4
+									"I"			=	"you",				//5
+									"on"		=	"off",				//6
+									"with"		=	"without",			//7
+									"he"		=	"she",				//8
+									"we"		=	"they",				//9
+									"his"		=	"her",				//10
+									"will"		=	"won't",			//11
+									"my"		=	"your",				//12
+									"mine"		=	"yours",			//13
+									"one"		=	"two",				//14
+									"all"		=	"none",				//15
+									"would"		=	"wouldn't",			//16
+									"there"		=	"here",				//17
+									"their"		=	"our",				//18
+									"what"		=	"who",				//19
+									"up"		=	"down",				//20
+									"go"		=	"come",				//21
+									"when"		=	"where",			//22
+									"no"		=	"yes",				//23
+									"him"		=	"her",				//24
+									"take"		=	"give",				//25
+									"into"		=	"out of",			//26
+									"good"		=	"bad",				//27
+									"some"		=	"none",				//28
+									"could"		=	"couldn't",			//29
+									"them"		=	"us",				//30
+									"see"		=	"hear",				//31
+									"now"		=	"later",			//32
+									"look"		=	"listen",			//33
+									"over"		=	"under",			//34
+									"think"		=	"know",				//35
+									"back"		=	"front",			//36
+									"after"		=	"before",			//37
+									"how"		=	"why",				//38
+									"first"		=	"last",				//39
+									"new"		=	"old",				//40
+									"most"		=	"least",			//41
+									"help"		=	"kill",				//42
+									"hurt"		=	"heal",				//43
+									"left"		=	"right",			//44
+									"Medbay"	=	"brig",				//45
+									"Science"	=	"Cargo",			//46
+									"borg"		=	"human",			//47
+									"HoS"		=	"CMO",				//48
+									"QM"		=	"captain",			//49
+									"HoP"		=	"RD",				//50
+									"plasma"	=	"oxygen",			//51
+									"n2o"		=	"co2",				//52
+									"opposite"	=	"same",				//53
+									"Ian"		=	"Runtime",			//54
+									"dog"		=	"cat",				//55
+									"chaplain"	=	"cultist",			//56
+									"rune"		=	"graffiti",			//57
+									"hot"		=	"cold",				//58
+									"on fire"	=	"freezing",			//59
+									"breached"	=	"sealed",			//60
+									"open"		=	"close",			//61
+									"opened"	=	"closed",			//62
+									"bolt"		=	"unbolt",			//63
+									"bolted"	=	"unbolted",			//64
+									"fore"		=	"aft",				//65
+									"port"		=	"starboard",		//66
+									"should've"	=	"shouldn't have")	//67
