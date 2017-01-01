@@ -166,3 +166,25 @@
 #undef ZOMBIE
 #undef SKELETON
 //#undef FAITHLESS
+
+/obj/item/weapon/cloakingcloak
+	name = "cloak of cloaking"
+	desc = "A silk cloak that will hide you from anything with eyes."
+	icon = 'icons/obj/wizard.dmi'
+	icon_state = "cloakingcloak"
+	w_class = W_CLASS_MEDIUM
+	force = 0
+	flags = FPRINT | TWOHANDABLE
+
+/obj/item/weapon/cloakingcloak/update_wield(mob/user)
+	..()
+	if(user)
+		user.update_inv_hands()
+		if(wielded)
+			user.visible_message("<span class='danger'>\The [user] throws \the [src] over \himself and disappears!</span>","<span class='notice'>You throw \the [src] over yourself and disappear.</span>")
+			user.alpha = 1	//to cloak immediately instead of on the next Life() tick
+			user.alphas["cloakingcloak"] = 1
+		else
+			user.visible_message("<span class='warning'>\The [user] appears out of thin air!</span>","<span class='notice'>You take \the [src] off and become visible again.</span>")
+			user.alpha = initial(user.alpha)
+			user.alphas.len = 0	//TODO: find a way to remove an entry from a list using its index
