@@ -1103,16 +1103,16 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 			others_count += 1
 	if (others_count >= multiplier)
 		to_chat(mob, "<span class='notice'>A friendly sensation is satisfied with how many are near you - for now.</span>")
-		mob.adjustCloneLoss(-multiplier * 2)
+		mob.adjustBrainLoss(-multiplier)
 		mob.reagents.add_reagent(OXYCODONE, multiplier) // ADDICTED TO HAVING FRIENDS
 		if (multiplier < max_multiplier)
 			multiplier += 0.15 // The virus gets greedier
 	else
 		to_chat(mob, "<span class='warning'>A hostile sensation in your brain stings you... it wants more of the living near you.</span>")
-		mob.adjustCloneLoss(multiplier * 2)
-		mob.AdjustParalysis(multiplier / 3)
-		mob.AdjustKnockdown(multiplier / 3)
-		mob.AdjustStunned(multiplier / 3)
+		mob.adjustBrainLoss(multiplier / 2)
+		mob.AdjustParalysis(multiplier) // This practically permaparalyzes you at higher multipliers but
+		mob.AdjustKnockdown(multiplier) // that's your fucking fault for not being near enough people
+		mob.AdjustStunned(multiplier)   // You'll have to wait until the multiplier gets low enough
 		if (multiplier > 1)
 			multiplier -= 0.3 // The virus tempers expectations
 
