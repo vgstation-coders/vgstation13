@@ -74,10 +74,10 @@
 	return ..()
 
 /mob/living/carbon/human/get_unarmed_hit_sound()
-	return (species.attack_verb == "punched" ? "punch" : 'sound/weapons/slice.ogg')
+	return (species.attack_verb == "punches" ? "punch" : 'sound/weapons/slice.ogg')
 
 /mob/living/carbon/human/get_unarmed_miss_sound()
-	return (species.attack_verb == "punched" ? 'sound/weapons/punchmiss.ogg' : 'sound/weapons/slashmiss.ogg')
+	return (species.attack_verb == "punches" ? 'sound/weapons/punchmiss.ogg' : 'sound/weapons/slashmiss.ogg')
 
 /mob/living/carbon/human/get_unarmed_damage_type(mob/living/target)
 	if(ishuman(target) && istype(gloves , /obj/item/clothing/gloves/boxing/hologlove))
