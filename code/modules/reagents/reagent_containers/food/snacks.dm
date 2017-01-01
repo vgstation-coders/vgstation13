@@ -4166,7 +4166,7 @@
 		return 1
 
 	spawn(0)
-		if(((M_CLUMSY in H.mutations)) || prob(25))
+		if((clumsy_check(H)) || prob(25))
 			if(H.drop_item())
 				user.visible_message("<span class='warning'>[src] escapes from [H]'s hands!</span>","<span class='warning'>[src] escapes from your grasp!</span>")
 

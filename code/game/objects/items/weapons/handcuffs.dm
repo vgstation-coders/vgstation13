@@ -29,7 +29,7 @@
 		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	if((M_CLUMSY in user.mutations) && prob(50))
+	if(clumsy_check(user) && prob(50))
 		to_chat(usr, "<span class='warning'>Uh... how do these things work?!</span>")
 		handcuffs_apply(M, user, TRUE)
 		return

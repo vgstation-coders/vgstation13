@@ -62,7 +62,7 @@
 /mob/living/carbon/human/kick_act(mob/living/carbon/human/M)
 	M.delayNextAttack(20) //Kicks are slow
 
-	if((src == M) || ((M_CLUMSY in M.mutations) && prob(20))) //Kicking yourself (or being clumsy) = stun
+	if((src == M) || (M_CLUMSY in M.mutations) && prob(20)) //Kicking yourself (or being clumsy) = stun
 		M.visible_message("<span class='notice'>\The [M] trips while attempting to kick \the [src]!</span>", "<span class='userdanger'>While attempting to kick \the [src], you trip and fall!</span>")
 		M.Knockdown(rand(1,10))
 		return
