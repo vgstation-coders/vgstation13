@@ -78,6 +78,7 @@
 	var/pose
 	var/lawcheck[1]
 	var/ioncheck[1]
+	var/lastvent = 0 //Vent cooldown.
 
 
 /mob/living/silicon/robot/New(loc,var/syndie = 0,var/unfinished = 0,var/startup_sound='sound/voice/liveagain.ogg')

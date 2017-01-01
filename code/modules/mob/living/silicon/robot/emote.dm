@@ -155,6 +155,23 @@
 			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 50, 0)
 			m_type = VISIBLE
 
+		if("scream")
+			var/M = null
+			if(param)
+				for (var/mob/A in view(null, null))
+					if (param == A.name)
+						M = A
+						break
+			if(!M)
+				param = null
+
+			if (param)
+				message = "<B>[src]</B> screams at [param]!"
+			else
+				message = "<B>[src]</B> screams!"
+			playsound(get_turf(src), 'sound/machines/scream.ogg', 20, 0)
+			m_type = HEARABLE
+
 		if("ping")
 			var/M = null
 			if(param)
@@ -207,17 +224,31 @@
 			else
 				to_chat(src, "You are not security.")
 
-		/*
-		if ("fart")
-			var/list/robotfarts = list("makes a farting noise","vents excess methane","shakes violently, then vents methane.")
-			var/robofart = pick(robotfarts)
-			message = "<B>[src]</B> [robofart]."
-			m_type = VISIBLE
-
-		*/
+		if ("vent")
+			if(world.time-lastvent >= 30 SECONDS)
+				var/list/robotfarts = list("vents","shakes violently, then vents")
+				var/robofart = pick(robotfarts)
+				for(var/mob/living/M in view(0))
+					if(M != src && M.loc == src.loc)
+						if(istype(M, /mob/living/carbon/human/vox))
+							visible_message("<span class = 'warning'><b>[src]</b> [robofart] oxygen in <b>[M]</b>'s face!</span>")
+							if (M.internal != null && M.wear_mask && (M.wear_mask.clothing_flags & MASKINTERNALS))
+								continue
+							if(M.reagents)
+								M.reagents.add_reagent(OXYGEN,rand(1,15))
+								src.attack_log += text("\[[time_stamp()]\] <font color='orange'>[src] vented oxygen in [M]'s face.</font>")
+						else
+							visible_message("<span class = 'warning'><b>[src]</b> [robofart] harmless gas in <b>[M]</b>'s face!</span>")
+				message = ("<B>[src]</B> [robofart].")
+				lastvent=world.time
+				playsound(get_turf(src), 'sound/machines/pressurehiss.ogg', 20, 0)
+				m_type = HEARABLE
+			else
+				message = ("<B>[src]</B>'s vents open, and nothing happens.")
+				m_type = VISIBLE
 
 		if ("help")
-			to_chat(src, "salute, bow-(none)/mob, clap, flap, aflap, twitch, twitch_s, nod, deathgasp, glare-(none)/mob, stare-(none)/mob, look, beep, ping, \nbuzz, law, halt")
+			to_chat(src, "salute, bow-(none)/mob, clap, flap, aflap, twitch, twitch_s, nod, deathgasp, glare-(none)/mob, scream-(none)/mob, vent, stare-(none)/mob, look, beep, ping, \nbuzz, law, halt")
 		else
 			to_chat(src, "<span class='notice'>Unusable emote '[act]'. Say *help for a list.</span>")
 
