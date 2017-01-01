@@ -13,8 +13,8 @@
 		// How damaging the virus is. Higher values are worse.
 
 	var/chance = 3
-		// Under normal conditions, the percentage chance per tick to activate.
-	var/max_chance = 6
+		// Under normal conditions, the percentage chance per tick to activate. 
+	var/max_chance = 6	
 		// Maximum percentage chance per tick.
 
 	var/multiplier = 1

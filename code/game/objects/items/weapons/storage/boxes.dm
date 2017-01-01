@@ -65,6 +65,7 @@
 /obj/item/weapon/storage/box/survival
 	name = "survival equipment box"
 	desc = "Makes braving the hazards of space a little bit easier."
+	icon_state = "box_emergency"
 
 /obj/item/weapon/storage/box/survival/New()
 	..()
@@ -72,6 +73,9 @@
 	new /obj/item/weapon/tank/emergency_oxygen(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 
+/obj/item/weapon/storage/box/survival/vox
+	icon_state = "box_vox"
+	
 /obj/item/weapon/storage/box/survival/vox/New()
 	..()
 	for(var/atom/A in src)
@@ -80,6 +84,9 @@
 	new /obj/item/weapon/tank/emergency_nitrogen(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 
+/obj/item/weapon/storage/box/survival/engineer	
+	icon_state = "box_eva"
+	
 /obj/item/weapon/storage/box/survival/engineer/New()
 	..()
 	for(var/atom/A in src)
@@ -88,6 +95,9 @@
 	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 
+/obj/item/weapon/storage/box/survival/ert	
+	icon_state = "box_ERT"	
+	
 /obj/item/weapon/storage/box/survival/ert/New()
 	..()
 	for(var/atom/A in src)

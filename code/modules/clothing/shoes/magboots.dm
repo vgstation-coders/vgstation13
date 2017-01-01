@@ -102,7 +102,7 @@
 //Syndicate
 /obj/item/clothing/shoes/magboots/syndie
 	name = "blood-red magboots"
-	desc = "Reverse-engineered magnetic boots that have a heavy magnetic pull. Property of Gorlex Marauders."
+	desc = "Reverse-engineered red magnetic boots that have a heavy magnetic pull. A tag on it says \"Property of Gorlex Marauders\"."
 	icon_state = "syndiemag0"
 	base_state = "syndiemag"
 	species_fit = list(VOX_SHAPED)

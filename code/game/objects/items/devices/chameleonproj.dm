@@ -1,5 +1,6 @@
 /obj/item/device/chameleon
 	name = "chameleon-projector"
+	desc = "A device that can scan an object's appearance and cloak a user."
 	icon_state = "shield0"
 	flags = FPRINT
 	siemens_coefficient = 1

@@ -216,6 +216,13 @@
 	..()
 	holder = _holder
 
+/obj/item/weapon/reagent_containers/glass/beaker/large/cyborg/proc/return_to_modules()
+	var/mob/living/silicon/robot/R = holder.loc
+	if(R.module_state_1 == src || R.module_state_2 == src || R.module_state_3 == src)
+		forceMove(R)
+	else
+		forceMove(holder)
+
 /obj/item/weapon/reagent_containers/glass/beaker/noreact
 	name = "stasis beaker"
 	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 50 units."
@@ -235,7 +242,7 @@
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace
 	name = "bluespace beaker"
-	desc = "A newly-developed high-capacity beaker, courtesy of bluespace research. Can hold up to 200 units."
+	desc = "A newly-developed high-capacity beaker that uses advances in bluespace research. Can hold up to 200 units."
 	icon_state = "beakerbluespace"
 	starting_materials = list(MAT_GLASS = 2000)
 	volume = 200
@@ -246,7 +253,7 @@
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace/large
 	name = "large bluespace beaker"
-	desc = "A prototype ultra-capacity beaker, courtesy of bluespace research. Can hold up to 300 units."
+	desc = "A prototype ultra-capacity beaker that uses advances in bluespace research. Can hold up to 300 units."
 	icon_state = "beakerbluespacelarge"
 	starting_materials = list(MAT_GLASS = 5000)
 	volume = 300
