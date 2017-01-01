@@ -408,6 +408,68 @@
 			// So I don't have to deal with actual glass and glass accessories
 
 
+/datum/disease2/effect/opposite
+	name = "Opposite Syndrome"
+	stage = 2
+	affect_voice = 1
+	max_count = 1
+
+/datum/disease2/effect/opposite/activate(var/mob/living/carbon/mob,var/multiplier)
+	to_chat(mob, "<span class='warning'>You feel completely fine.</span>")
+	affect_voice_active = 1
+	if(!virus_word_list_1)
+		initialize_word_lists()
+
+/datum/disease2/effect/opposite/affect_mob_voice(var/datum/speech/speech)
+	var/message=speech.message
+	var/list/word_list = splittext(message," ")		//split message into list of words
+	for(var/i = 1 to word_list.len)
+		to_chat(world, word_list[i])
+		var/punct									//take punctuation into account
+		if(findtext(word_list[i], ","))
+			punct = ","
+		if(findtext(word_list[i], "."))
+			punct = "."
+		if(findtext(word_list[i], "!"))
+			punct = "!"
+		if(findtext(word_list[i], "?"))
+			punct = "?"
+		if(findtext(word_list[i], "~"))
+			punct = "~"
+		var/changed = FALSE
+		for(var/x = 1 to virus_word_list_1.len)
+			if(punct && !changed)
+				if(spantext(uppertext(virus_word_list_1[x]),uppertext(word_list[i])) == (spantext(word_list[i],word_list[i]) - 1))	//checks if the word to replace is the same as the word at this position in the list, while accounting for punctuation
+					word_list[i] = virus_word_list_2[x] + punct
+					changed = TRUE
+			else
+				if(uppertext(word_list[i]) == uppertext(virus_word_list_1[x]))		//if the word has no punctuation, it can be compared directly
+					word_list[i] = virus_word_list_2[x]
+					changed = TRUE
+		if(!changed)
+			for(var/y = 1 to virus_word_list_2.len)
+				if(punct && !changed)
+					if(spantext(uppertext(virus_word_list_2[y]),uppertext(word_list[i])) == (spantext(word_list[i],word_list[i]) - 1))
+						word_list[i] = virus_word_list_1[y] + punct
+						changed = TRUE
+				else if(!changed)
+					if(uppertext(word_list[i]) == uppertext(virus_word_list_2[y]))
+						word_list[i] = virus_word_list_1[y]
+	message = ""
+	for(var/z = 1 to word_list.len)
+		if(z == word_list.len)
+			message += word_list[z]
+		else
+			message += "[word_list[z]] "
+
+	speech.message = message
+
+/datum/disease2/effect/opposite/deactivate(var/mob/living/carbon/mob)
+	to_chat(mob, "<span class='warning'>You feel terrible.</span>")
+	affect_voice_active = 0
+	..()
+
+
 ////////////////////////STAGE 3/////////////////////////////////
 
 
