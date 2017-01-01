@@ -75,7 +75,7 @@
 		if(miss_sound)
 			playsound(loc, miss_sound, 25, 1, -1)
 
-		visible_message("<span class='danger'>[src] missed [target]!</span>")
+		visible_message("<span class='danger'>[src] misses [target]!</span>")
 		return
 
 	var/zone = ran_zone(get_unarmed_damage_zone(target))
