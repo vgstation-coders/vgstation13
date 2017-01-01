@@ -235,7 +235,7 @@
 							if (M.internal != null && M.wear_mask && (M.wear_mask.clothing_flags & MASKINTERNALS))
 								continue
 							if(M.reagents)
-								M.reagents.add_reagent(OXYGEN,rand(1,10))
+								M.reagents.add_reagent(OXYGEN,rand(1,2))
 								add_logs(src, M, "vented", admin = M.ckey ? TRUE : FALSE)//Only add this to the server logs if they're controlled by a player.
 						else
 							visible_message("<span class = 'warning'><b>[src]</b> [robofart] harmless gas in <b>[M]</b>'s face!</span>")
