@@ -1104,7 +1104,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	if (others_count >= multiplier)
 		to_chat(mob, "<span class='notice'>A friendly sensation is satisfied with how many are near you - for now.</span>")
 		mob.adjustCloneLoss(-multiplier * 2)
-		mob.reagents.add_reagent(PARACETAMOL, multiplier) // The hug chemical for memes
+		mob.reagents.add_reagent(OXYCODONE, multiplier) // ADDICTED TO HAVING FRIENDS
 		if (multiplier < max_multiplier)
 			multiplier += 0.15 // The virus gets greedier
 	else
