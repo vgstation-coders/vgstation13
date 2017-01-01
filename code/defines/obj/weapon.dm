@@ -202,7 +202,7 @@
 	if(usr && !istype(thrown_from, /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas)) //if there is a user, but not a mech
 		if(istype(usr, /mob/living/carbon/human)) //if the user is human
 			var/mob/living/carbon/human/H = usr
-			if((M_CLUMSY in H.mutations) && prob(50))
+			if(clumsy_check(H) && prob(50))
 				to_chat(H, "<span class='warning'>You smack yourself in the face while swinging the [src]!</span>")
 				H.Stun(2)
 				H.drop_item(src)

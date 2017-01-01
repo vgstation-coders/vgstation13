@@ -160,7 +160,7 @@
 			size = "bulky"
 		if(5.0 to INFINITY)
 			size = "huge"
-	//if ((M_CLUMSY in usr.mutations) && prob(50)) t = "funny-looking"
+	//if (clumsy_check(usr) && prob(50)) t = "funny-looking"
 	var/pronoun
 	if (src.gender == PLURAL)
 		pronoun = "They are"
@@ -901,7 +901,7 @@
 		M.LAssailant = user
 
 	src.add_fingerprint(user)
-	//if((M_CLUMSY in user.mutations) && prob(50))
+	//if(clumsy_check(user) && prob(50))
 	//	M = user
 		/*
 		to_chat(M, "<span class='warning'>You stab yourself in the eye.</span>")
