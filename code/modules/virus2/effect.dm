@@ -14,7 +14,7 @@
 
 	var/chance = 3
 		// Under normal conditions, the percentage chance per tick to activate.
-	var/max_chance = 50
+	var/max_chance = 6
 		// Maximum percentage chance per tick.
 
 	var/multiplier = 1
@@ -1103,18 +1103,18 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 			others_count += 1
 	if (others_count >= multiplier)
 		to_chat(mob, "<span class='notice'>A friendly sensation is satisfied with how many are near you - for now.</span>")
-		mob.adjustCloneLoss(-multiplier / 5)
+		mob.adjustCloneLoss(-multiplier * 2)
 		mob.reagents.add_reagent(PARACETAMOL, multiplier) // The hug chemical for memes
 		if (multiplier < max_multiplier)
-			multiplier += 0.05 // The virus gets greedier
+			multiplier += 0.15 // The virus gets greedier
 	else
 		to_chat(mob, "<span class='warning'>A hostile sensation in your brain stings you... it wants more of the living near you.</span>")
-		mob.adjustCloneLoss(multiplier / 5)
+		mob.adjustCloneLoss(multiplier * 2)
 		mob.AdjustParalysis(multiplier / 3)
 		mob.AdjustKnockdown(multiplier / 3)
 		mob.AdjustStunned(multiplier / 3)
 		if (multiplier > 1)
-			multiplier -= 0.1 // The virus tempers expectations
+			multiplier -= 0.3 // The virus tempers expectations
 
 
 
