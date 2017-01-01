@@ -228,15 +228,15 @@
 			if(world.time-lastvent >= 30 SECONDS)
 				var/list/robotfarts = list("vents","shakes violently, then vents")
 				var/robofart = pick(robotfarts)
-				for(var/mob/living/M in view(0))
-					if(M != src && M.loc == src.loc)
+				for(var/mob/living/M in loc)
+					if(M != src && M.loc == src.loc && M.lying || M.resting)
 						if(istype(M, /mob/living/carbon/human/vox))
 							visible_message("<span class = 'warning'><b>[src]</b> [robofart] oxygen in <b>[M]</b>'s face!</span>")
 							if (M.internal != null && M.wear_mask && (M.wear_mask.clothing_flags & MASKINTERNALS))
 								continue
 							if(M.reagents)
-								M.reagents.add_reagent(OXYGEN,rand(1,15))
-								src.attack_log += text("\[[time_stamp()]\] <font color='orange'>[src] vented oxygen in [M]'s face.</font>")
+								M.reagents.add_reagent(OXYGEN,rand(1,10))
+								add_logs(src, M, "vented", admin = M.ckey ? TRUE : FALSE)//Only add this to the server logs if they're controlled by a player.
 						else
 							visible_message("<span class = 'warning'><b>[src]</b> [robofart] harmless gas in <b>[M]</b>'s face!</span>")
 				message = ("<B>[src]</B> [robofart].")
