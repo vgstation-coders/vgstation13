@@ -187,4 +187,4 @@
 		else
 			user.visible_message("<span class='warning'>\The [user] appears out of thin air!</span>","<span class='notice'>You take \the [src] off and become visible again.</span>")
 			user.alpha = initial(user.alpha)
-			user.alphas.len = 0	//TODO: find a way to remove an entry from a list using its index
+			user.alphas.Remove("cloakingcloak")
