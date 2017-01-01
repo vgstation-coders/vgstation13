@@ -2197,8 +2197,8 @@
 			B.transfer_buttdentity(H)
 			H.op_stage.butt = 4 //No having two butts.
 			to_chat(H, "<span class='warning'>Your ass was just blown off by an unknown force!</span>")
-			log_admin("[key_name(M)] was buttblasted by [src.owner]")
-			message_admins("[key_name(M)] was buttblasted by [src.owner]")
+			log_admin("[key_name(H)] was buttblasted by [src.owner]")
+			message_admins("[key_name(H)] was buttblasted by [src.owner]")
 			playsound(get_turf(H), 'sound/effects/superfart.ogg', 50, 1)
 			H.apply_damage(40, BRUTE, LIMB_GROIN)
 			H.apply_damage(10, BURN, LIMB_GROIN)
