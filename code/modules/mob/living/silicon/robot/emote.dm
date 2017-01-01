@@ -229,7 +229,7 @@
 				var/list/robotfarts = list("vents","shakes violently, then vents")
 				var/robofart = pick(robotfarts)
 				for(var/mob/living/M in loc)
-					if(M != src && M.loc == src.loc && M.lying || M.resting)
+					if(M != src && M.loc == src.loc && (M.lying || M.resting))
 						if(istype(M, /mob/living/carbon/human/vox))
 							visible_message("<span class = 'warning'><b>[src]</b> [robofart] oxygen in <b>[M]</b>'s face!</span>")
 							if (M.internal != null && M.wear_mask && (M.wear_mask.clothing_flags & MASKINTERNALS))
