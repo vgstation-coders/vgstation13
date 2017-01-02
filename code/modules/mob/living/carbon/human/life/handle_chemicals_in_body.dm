@@ -38,7 +38,7 @@
 			light_amount = T.get_lumcount() * 10
 
 		nutrition += light_amount
-		traumatic_shock -= light_amount
+		pain_shock_stage -= light_amount
 
 		if(species.flags & IS_PLANT)
 			if(nutrition > 500)
@@ -102,7 +102,7 @@
 	if(species.flags & REQUIRE_LIGHT)
 		if(nutrition < 200)
 			take_overall_damage(2,0)
-			traumatic_shock++
+			pain_shock_stage++
 
 	if(drowsyness > 0)
 		drowsyness = max(0, drowsyness - 1)

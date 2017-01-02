@@ -420,7 +420,6 @@ This function restores all organs.
 		reagents.clear_reagents()
 	restore_blood()
 	bodytemperature = 310
-	traumatic_shock = 0
 	stat = UNCONSCIOUS
 	regenerate_icons()
 	flash_eyes(visual = 1)

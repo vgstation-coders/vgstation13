@@ -527,7 +527,6 @@ Thanks.
 	remove_jitter()
 	germ_level = 0
 	next_pain_time = 0
-	traumatic_shock = 0
 	radiation = 0
 	nutrition = 400
 	bodytemperature = 310
@@ -555,7 +554,7 @@ Thanks.
 		H.timeofdeath = 0
 		H.vessel.reagent_list = list()
 		H.vessel.add_reagent(BLOOD,560)
-		H.shock_stage = 0
+		H.pain_shock_stage = 0
 		spawn(1)
 			H.fixblood()
 		for(var/organ_name in H.organs_by_name)
