@@ -28,8 +28,8 @@ proc/cardinalrange(var/center)
 	var/stability = 100//If this gets low bad things tend to happen
 	var/efficiency = 1//How many cores this core counts for when doing power processing, plasma in the air and stability could affect this
 	var/coredirs = 0
-	var/dirs=0
-	var/mapped=0 //Set to 1 to ignore usual suicide if it doesn't immediately find a control_unit
+	var/dirs = 0
+	var/mapped = 0 //Set to 1 to ignore usual suicide if it doesn't immediately find a control_unit
 
 // Stupidly easy way to use it in maps
 /obj/machinery/am_shielding/map
