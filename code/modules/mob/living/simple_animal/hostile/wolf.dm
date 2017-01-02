@@ -88,6 +88,13 @@
 
 /mob/living/simple_animal/hostile/wolf/CanAttack(var/atom/the_target)
 	//WE DON'T ATTACK INVULNERABLE MOBS (such as etheral jaunting mobs, or passengers of the adminbus)
+	var/list/target_prox = view(the_target, vision_range)
+	for(var/obj/machinery/space_heater/campfire/fire in target_prox)
+		var/dist = get_dist(the_target, fire)
+		if(dist < (fire.light_range*2))//Just sitting on the edge of the fire
+			alpha_stance = ALPHANONE
+			visible_message("<span class = 'notice'>\The [src] whimpers and runs from \the [fire]</span>")
+			return
 	if(the_target.flags & INVULNERABLE)
 		return 0
 	if(istype(the_target, /mob/dead/observer))
@@ -98,7 +105,7 @@
 		if(the_target == pack_alpha && alpha_stance == ALPHAFOLLOW)
 			return the_target
 		return 0
-	if(ismob(the_target))
+	if(isliving(the_target))
 		var/mob/living/L = the_target
 		if(L == pack_alpha)
 			if(alpha_stance == ALPHAFOLLOW)
@@ -139,7 +146,7 @@
 
 		if(potential_pack.pack_alpha == pack_alpha) //Part of the same pack
 			potential_pack.target = target
-	if(ismob(target))
+	if(isliving(target))
 		var/mob/living/mob_target = target
 		if(mob_target.isDead() && !istype(mob_target, /mob/dead/observer))
 			if(hunger_status < WELLFED)
@@ -172,7 +179,7 @@
 					to_chat(user, "<span class='info'>You have gained \the [src]'s trust.</span>")
 					var/n_name = copytext(sanitize(input(user, "What would you like to name your new friend?", "Wolf Name", null) as text|null), 1, MAX_NAME_LEN)
 					if(n_name && !user.incapacitated())
-						name = "[n_name]"
+						name = n_name
 					var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
 					heart.plane = ABOVE_HUMAN_PLANE
 					flick_overlay(heart, list(user.client), 20)
@@ -184,7 +191,10 @@
 
 /mob/living/simple_animal/hostile/wolf/adjustBruteLoss(var/damage)
 	if(!isDead())
-		anger()
+		if(health <= maxHealth/2 || hunger_status < WELLFED)
+			anger(1)
+		else
+			anger()
 		if(pack_alpha == src && alpha_challenge == 0)//We are the alpha and not challenging others
 			var/list/can_see = view(src, vision_range)
 			for(var/mob/living/simple_animal/hostile/wolf/potential_pack in can_see)
@@ -222,6 +232,12 @@
 		nutrition -= STANDCOST
 		handle_hunger() //Handle hunger
 		var/list/can_see = view(src, vision_range)
+
+		for(var/obj/machinery/space_heater/campfire/fire in can_see)
+			var/dist = get_dist(src, fire)
+			if(dist < fire.light_range*2)
+				walk_away(src,fire,(fire.light_range*2),move_to_delay)
+
 		if(stance == HOSTILE_STANCE_IDLE && !client)
 			//Check if the alpha is still alive
 			if(pack_alpha)
@@ -260,10 +276,11 @@
 				if(ALPHAMOVE)
 					var/turf/target = alpha_target
 					var/dist = get_dist(src, alpha_target)
-					if(dist) //Fucking magic numbers
+					if(dist > 1) //Fucking magic numbers
 						Goto(target, move_to_delay, 1) //Some leway, so there's a 3x3-ish area around the turf, save a pack fighting over a spot
 					else
 						alpha_target = null
+						visible_message("<span class = 'notice'>\The [src] sits down patiently.</span")
 						alpha_stance = ALPHASTAY
 				if(ALPHASTAY)
 					stop_automated_movement = 1
@@ -332,6 +349,9 @@
 	nutrition -= MOVECOST
 
 /mob/living/simple_animal/hostile/wolf/proc/point_listen(var/list/can_see)
+	if(pack_alpha == src)
+		return //Stop us from getting caught in our own pointings
+
 	for(var/obj/effect/decal/point/pointer in can_see)
 		if(pointer == point_last)
 			return
