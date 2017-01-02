@@ -90,6 +90,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/list/default_block_names = list() // Use this instead, using the names from setupgame.dm
 
 	var/flags = 0       // Various specific features.
+	var/anatomy_flags = 0 // Anatomical traits such as not having blood or being bulky.
 	var/chem_flags = 0 //how we handle chemicals and eating/drinking i guess
 
 	var/list/abilities = list()	// For species-derived or admin-given powers
@@ -131,9 +132,8 @@ var/global/list/whitelisted_species = list("Human")
 	var/has_mutant_race = 1
 
 	var/move_speed_mod = 0 //Higher value is slower, lower is faster.
-	var/can_be_hypothermic = 1
-	var/has_sweat_glands = 1
 	var/move_speed_multiplier = 1	//This is a multiplier, and can make the mob either faster or slower.
+
 
 /datum/species/New()
 	..()
@@ -262,7 +262,7 @@ var/global/list/whitelisted_species = list("Human")
 	known_languages = list(LANGUAGE_HUMAN)
 	primitive = /mob/living/carbon/monkey
 
-	flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT
+	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | HAS_SWEAT_GLANDS
 
 /datum/species/manifested
 	name = "Manifested"
@@ -279,7 +279,7 @@ var/global/list/whitelisted_species = list("Human")
 		"appendix" = /datum/organ/internal/appendix,
 		"eyes" =     /datum/organ/internal/eyes
 		)
-	flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | NO_BLOOD
+	anatomy_flags = HAS_SKIN_TONE | HAS_LIPS | HAS_UNDERWEAR | CAN_BE_FAT | NO_BLOOD
 
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
 	H.dust()
@@ -305,8 +305,9 @@ var/global/list/whitelisted_species = list("Human")
 	heat_level_1 = 420 //Default 360 - Higher is better
 	heat_level_2 = 480 //Default 400
 	heat_level_3 = 1100 //Default 1000
-	has_sweat_glands = 0
-	flags = IS_WHITELISTED | HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL
+
+	flags = IS_WHITELISTED
+	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL
 
 	flesh_color = "#34AF10"
 
@@ -319,8 +320,8 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/r_skeleton.dmi'
 	deform = 'icons/mob/human_races/r_skeleton.dmi'  // TODO: Need deform.
 	known_languages = list(LANGUAGE_CLATTER)
-	has_sweat_glands = 0
-	flags = IS_WHITELISTED | HAS_LIPS | NO_BREATHE | NO_BLOOD | NO_SKIN
+	flags = IS_WHITELISTED | NO_BREATHE
+	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD
 
 	chem_flags = NO_DRINK | NO_EAT | NO_INJECT
 
@@ -414,7 +415,8 @@ var/global/list/whitelisted_species = list("Human")
 
 	primitive = /mob/living/carbon/monkey/tajara
 
-	flags = IS_WHITELISTED | HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL
+	flags = IS_WHITELISTED
+	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_TAIL | HAS_SWEAT_GLANDS
 
 	default_mutations=list(M_CLAWS)
 
@@ -482,7 +484,8 @@ var/global/list/whitelisted_species = list("Human")
 
 	primitive = /mob/living/carbon/monkey/grey // TODO
 
-	flags = IS_WHITELISTED | HAS_LIPS | CAN_BE_FAT
+	flags = IS_WHITELISTED
+	anatomy_flags = HAS_LIPS | CAN_BE_FAT | HAS_SWEAT_GLANDS
 
 	// Both must be set or it's only a 45% chance of manifesting.
 	default_mutations=list(M_REMOTE_TALK)
@@ -525,7 +528,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	primitive = /mob/living/carbon/monkey // TODO
 
-	flags = HAS_LIPS
+	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS
 
 	// Both must be set or it's only a 45% chance of manifesting.
 	default_mutations=list(M_STRONG | M_RUN | M_LOUD)
@@ -559,7 +562,8 @@ var/global/list/whitelisted_species = list("Human")
 	known_languages = list(LANGUAGE_SKRELLIAN)
 	primitive = /mob/living/carbon/monkey/skrell
 
-	flags = IS_WHITELISTED | HAS_LIPS | HAS_UNDERWEAR
+	flags = IS_WHITELISTED
+	anatomy_flags = HAS_LIPS | HAS_UNDERWEAR | HAS_SWEAT_GLANDS
 
 	flesh_color = "#8CD7A3"
 
@@ -568,6 +572,8 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 	deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
 	known_languages = list(LANGUAGE_VOX)
+
+	anatomy_flags = HAS_SWEAT_GLANDS
 
 	survival_gear = /obj/item/weapon/storage/box/survival/vox
 
@@ -775,7 +781,8 @@ var/global/list/whitelisted_species = list("Human")
 	heat_level_2 = T0C + 75
 	heat_level_3 = T0C + 100
 
-	flags = IS_WHITELISTED | NO_BREATHE | REQUIRE_LIGHT | NO_SCAN | IS_PLANT | RAD_ABSORB | NO_BLOOD | IS_SLOW | NO_PAIN
+	flags = IS_WHITELISTED | NO_BREATHE | REQUIRE_LIGHT | NO_SCAN | IS_PLANT | RAD_ABSORB | IS_SLOW | NO_PAIN
+	anatomy_flags = NO_BLOOD | HAS_SWEAT_GLANDS
 
 	blood_color = "#004400"
 	flesh_color = "#907E4A"
@@ -790,8 +797,11 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/r_golem.dmi'
 	deform = 'icons/mob/human_races/r_def_golem.dmi'
 	known_languages = list(LANGUAGE_GOLEM)
-	has_sweat_glands = 0
-	flags = HAS_LIPS | NO_BREATHE | NO_BLOOD | NO_SKIN | NO_PAIN | IS_BULKY
+	attack_verb = "punches"
+
+	flags = NO_BREATHE | NO_PAIN | HYPOTHERMIA_IMMUNE
+	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD | IS_BULKY
+
 	uniform_icons = 'icons/mob/uniform_fat.dmi'
 	primitive = /mob/living/carbon/monkey/rock
 
@@ -816,8 +826,6 @@ var/global/list/whitelisted_species = list("Human")
 	has_mutant_race = 0
 	move_speed_mod = 1
 
-	can_be_hypothermic = 0
-	has_sweat_glands = 0
 	default_mutations = list(M_STONE_SKIN)
 
 	chem_flags = NO_INJECT
@@ -900,14 +908,14 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/r_def_grue.dmi'	// Mutated icon set.
 	eyes = "grue_eyes_s"
 	attack_verb = "claws"
-	flags = HAS_LIPS | NO_PAIN | IS_WHITELISTED
+	flags = NO_PAIN | IS_WHITELISTED | HYPOTHERMIA_IMMUNE
+	anatomy_flags = HAS_LIPS
 	punch_damage = 7
 	darksight = 8
 	default_mutations=list(M_HULK,M_CLAWS,M_TALONS)
 	burn_mod = 2
 	brute_mod = 2
 	move_speed_multiplier = 2
-	can_be_hypothermic = 0
 	has_mutant_race = 0
 
 	spells = list(/spell/swallow_light,/spell/shatter_lights)

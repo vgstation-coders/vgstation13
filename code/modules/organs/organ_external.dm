@@ -268,7 +268,7 @@
 
 	//Possibly trigger an internal wound, too.
 	var/local_damage = brute_dam + burn_dam + damage
-	if(damage > 10 && type != BURN && local_damage > 20 && prob(damage) && is_organic() && !(owner.species && owner.species.flags & NO_BLOOD))
+	if(damage > 10 && type != BURN && local_damage > 20 && prob(damage) && is_organic() && !(owner.species && owner.species.anatomy_flags & NO_BLOOD))
 		var/internal_bleeding = 0
 		for(var/datum/wound/Wound in wounds)
 			if(Wound.internal)
@@ -501,7 +501,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 			//Let the GC handle the deletion of the wound
 
 		//Internal wounds get worse over time. Low temperatures (cryo) stop them.
-		if(W.internal && !W.is_treated() && owner.bodytemperature >= 170 && !(owner.species && owner.species.flags & NO_BLOOD))
+		if(W.internal && !W.is_treated() && owner.bodytemperature >= 170 && !(owner.species && owner.species.anatomy_flags & NO_BLOOD))
 			if(!owner.reagents.has_reagent(BICARIDINE) && !owner.reagents.has_reagent(INAPROVALINE) && !owner.reagents.has_reagent(CLOTTING_AGENT) && !owner.reagents.has_reagent(BIOFOAM))	//Bicard, inaprovaline, clotting agent, and biofoam stop internal wounds from growing bigger with time, and also slow bleeding
 				W.open_wound(0.1 * wound_update_accuracy)
 				owner.vessel.remove_reagent(BLOOD, 0.05 * W.damage * wound_update_accuracy)
@@ -557,7 +557,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		else if(W.damage_type == BURN)
 			burn_dam += W.damage
 
-		if(is_organic() && W.bleeding() && !(owner.species.flags & NO_BLOOD))
+		if(is_organic() && W.bleeding() && !(owner.species.anatomy_flags & NO_BLOOD))
 			W.bleed_timer--
 			if(!owner.reagents.has_reagent(CLOTTING_AGENT))
 				status |= ORGAN_BLEEDING
@@ -565,7 +565,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		clamped |= W.clamped
 		number_wounds += W.amount
 
-	if(open && !clamped && is_organic() && !(owner.species.flags & NO_BLOOD)) //Things tend to bleed if they are CUT OPEN
+	if(open && !clamped && is_organic() && !(owner.species.anatomy_flags & NO_BLOOD)) //Things tend to bleed if they are CUT OPEN
 		if(!owner.reagents.has_reagent(CLOTTING_AGENT))
 			status |= ORGAN_BLEEDING
 
@@ -1285,7 +1285,7 @@ obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 	if(base)
 		//Changing limb's skin tone to match owner
 		if(H)
-			if(!H.species || H.species.flags & HAS_SKIN_TONE)
+			if(!H.species || H.species.anatomy_flags & HAS_SKIN_TONE)
 				if(H.s_tone >= 0)
 					base.Blend(rgb(H.s_tone, H.s_tone, H.s_tone), ICON_ADD)
 				else

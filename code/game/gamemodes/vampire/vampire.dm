@@ -387,7 +387,7 @@ You are weak to holy things and starlight. Don't go into space and avoid the Cha
 			to_chat(src, "<span class='warning'>Your fangs have disappeared!</span>")
 			src.mind.vampire.draining = null
 			return 0
-		if(H.species.flags & NO_BLOOD)
+		if(H.species.anatomy_flags & NO_BLOOD)
 			to_chat(src, "<span class='warning'>Not a drop of blood here.</span>")
 			src.mind.vampire.draining = null
 			return 0
