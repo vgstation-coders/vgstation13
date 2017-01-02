@@ -63,7 +63,7 @@ mob/living/carbon/human/proc/custom_pain(var/message, var/flash_strength)
 	next_pain_time = world.time + 100
 
 mob/living/carbon/human/proc/handle_pain()
-	if(sleeping || stat >= DEAD)
+	if(sleeping || stat == DEAD)
 		return
 	if(!feels_pain() || has_painkillers())
 		return
