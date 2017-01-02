@@ -226,7 +226,7 @@
 		H.species.cold_level_1 = -1
 		H.species.cold_level_2 = -1
 		H.species.cold_level_3 = -1
-		H.species.can_be_hypothermic = 0
+		H.species.flags |= HYPOTHERMIA_IMMUNE
 		H.faction = "frost"
 
 /obj/item/clothing/head/celtic/unequipped(mob/living/carbon/human/user, var/from_slot = null)
@@ -234,5 +234,6 @@
 		user.species.cold_level_1 = initial(user.species.cold_level_1)
 		user.species.cold_level_2 = initial(user.species.cold_level_2)
 		user.species.cold_level_3 = initial(user.species.cold_level_3)
-		user.species.can_be_hypothermic = initial(user.species.can_be_hypothermic)
+		if (~initial(user.species.flags) & HYPOTHERMIA_IMMUNE)
+			user.species.flags &= ~HYPOTHERMIA_IMMUNE
 		user.faction = initial(user.faction)
