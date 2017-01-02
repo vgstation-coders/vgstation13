@@ -177,6 +177,7 @@
 				"You hear a ratchet")
 			src.anchored = 1
 			update_shield_icons = 2
+			check_shield_icons()
 			connect_to_network()
 		else if(!linked_shielding.len > 0)
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
