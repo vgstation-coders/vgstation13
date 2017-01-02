@@ -29,7 +29,7 @@
 			if (!organ)
 				continue
 			if((organ.status & ORGAN_DESTROYED) && !organ.amputated)
-				pain_level += 60
+				pain_level += 45
 			else if(organ.status & ORGAN_BROKEN || organ.open)
 				pain_level += 30
 				if(organ.status & ORGAN_SPLINTED)

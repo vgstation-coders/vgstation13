@@ -9,8 +9,7 @@
 		pain_shock_stage = max(pain_shock_stage, 61)
 
 	if(pain_level >= BASE_CARBON_PAIN_RESIST)
-		if(!has_painkillers()) //All painkillers prevent shock from getting worse, at the very least
-			pain_shock_stage += 1
+		pain_shock_stage += 1
 	else if(health < config.health_threshold_softcrit)
 		pain_shock_stage = max(pain_shock_stage, 61)
 	else

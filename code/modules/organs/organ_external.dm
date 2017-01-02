@@ -615,7 +615,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 //Recursive setting of all child organs to amputated
 /datum/organ/external/proc/setAmputatedTree()
 	for(var/datum/organ/external/O in children)
-		O.amputated = amputated
+		O.amputated = 1
 		O.setAmputatedTree()
 
 //Handles dismemberment
@@ -645,6 +645,9 @@ Note that amputating the affected organ does in fact remove the infection from t
 		//If any organs are attached to this, destroy them
 		for(var/datum/organ/external/O in children)
 			O.droplimb(1)
+
+		//If your whole leg is missing, then yes, your foot is considered as "cleanly amputated".
+		setAmputatedTree()
 
 		var/obj/item/weapon/organ/organ //Dropped limb object
 		if(spawn_limb)

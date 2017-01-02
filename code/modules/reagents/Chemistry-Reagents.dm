@@ -1413,7 +1413,7 @@
 	description = "Most commonly know this as Tylenol, but this chemical is a mild, simple painkiller."
 	reagent_state = LIQUID
 	color = "#C855DC"
-	pain_resistance = 50
+	pain_resistance = 60
 	overdose_dam = 0
 	overdose = 0
 
