@@ -370,3 +370,22 @@ obj/item/projectile/kinetic/New()
 	max_range = 9
 	fire_damage = 20
 	fire_duration = 6 //shorter but hotter
+
+/obj/item/projectile/cold
+	name = "bolt of cold"
+	icon_state = "ice_1"
+	damage = 0
+	damage_type = BURN
+	nodamage = 1
+	layer = PROJECTILE_LAYER
+	flag = "energy"
+	fire_sound = 'sound/weapons/radgun.ogg'
+
+/obj/item/projectile/cold/on_hit(var/atom/target, var/blocked = 0)
+	if(istype(target, /mob))
+		var/mob/M = target
+		if(M.flags & INVULNERABLE)
+			return 0
+		M.bodytemperature = max(M.bodytemperature-5 * TEMPERATURE_DAMAGE_COEFFICIENT,T20C)
+		playsound(M, 'sound/effects/freeze.ogg', 100, 1)
+	return 1
