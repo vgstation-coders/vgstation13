@@ -45,6 +45,7 @@
 #include "code\__HELPERS\iteration.dm"
 #include "code\__HELPERS\lists.dm"
 #include "code\__HELPERS\logging.dm"
+#include "code\__HELPERS\markov.dm"
 #include "code\__HELPERS\maths.dm"
 #include "code\__HELPERS\mobs.dm"
 #include "code\__HELPERS\names.dm"
