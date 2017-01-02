@@ -391,20 +391,21 @@
 			alpha_target = target
 
 /mob/living/simple_animal/hostile/wolf/pointed_at(mob/pointer)
-	if(pointer == pack_alpha)
-		switch(alpha_stance)
-			if(ALPHAFOLLOW)
-				alpha_stance = ALPHANONE
-				to_chat(pointer, "<span class ='notice'>\The [src] is no longer following, and looks alert.</span>")
-			if(ALPHANONE)
-				alpha_stance = ALPHASTAY
-				to_chat(pointer, "<span class='notice'>\The [src] is now staying on location.</span>")
-			if(ALPHASTAY)
-				alpha_stance = ALPHANONE
-				stop_automated_movement = 0
-				to_chat(pointer, "<span class='notice'>\The [src] sits up, no longer waiting.</span>")
-	else
-		to_chat(pointer, "<span class='warning'>\The [src] growls.</span>")
+	if(!isDead())
+		if(pointer == pack_alpha)
+			switch(alpha_stance)
+				if(ALPHAFOLLOW)
+					alpha_stance = ALPHANONE
+					to_chat(pointer, "<span class ='notice'>\The [src] is no longer following, and looks alert.</span>")
+				if(ALPHANONE)
+					alpha_stance = ALPHASTAY
+					to_chat(pointer, "<span class='notice'>\The [src] is now staying on location.</span>")
+				if(ALPHASTAY)
+					alpha_stance = ALPHANONE
+					stop_automated_movement = 0
+					to_chat(pointer, "<span class='notice'>\The [src] sits up, no longer waiting.</span>")
+		else
+			to_chat(pointer, "<span class='warning'>\The [src] growls.</span>")
 
 #undef AGGNO
 #undef AGGYES
