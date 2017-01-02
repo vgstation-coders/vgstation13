@@ -225,7 +225,6 @@
 	shutdown.antigen |= text2num(pick(ANTIGENS))
 	shutdown.antigen |= text2num(pick(ANTIGENS))
 	shutdown.spreadtype = "None"
-	shutdown.uniqueID = rand(0,10000)
 	shutdown.effects += O
 	shutdown.speed = 1
 	shutdown.stage = 2
