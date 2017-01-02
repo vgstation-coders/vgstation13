@@ -63,17 +63,17 @@
 
 		if ("clap")
 			if (!src.restrained())
-				message = "<B>[src]</B> claps."
+				message = "<B>[src]</B> clangs it's utility claws together in a crude simulation of applause."
 				m_type = HEARABLE
 		if ("flap")
 			if (!src.restrained())
-				message = "<B>[src]</B> flaps his wings."
-				m_type = HEARABLE
+				message = "<B>[src]</B> flaps it's utility arms as through they were wings."
+				m_type = VISIBLE
 
 		if ("aflap")
 			if (!src.restrained())
-				message = "<B>[src]</B> flaps his wings ANGRILY!"
-				m_type = HEARABLE
+				message = "<B>[src]</B> flaps it's utility arms ANGRILY!"
+				m_type = VISIBLE
 
 		if ("twitch")
 			message = "<B>[src]</B> twitches violently."
@@ -169,7 +169,6 @@
 				message = "<B>[src]</B> screams at [param]!"
 			else
 				message = "<B>[src]</B> screams!"
-			playsound(get_turf(src), 'sound/machines/scream.ogg', 20, 0)
 			m_type = HEARABLE
 
 		if("ping")
@@ -230,14 +229,14 @@
 				for(var/mob/living/carbon/human/M in loc)
 					if(M != src && (M.lying || M.resting))
 						if(isvox(M))
-							visible_message("<span class = 'warning'><b>[src]</b> [robofart] oxygen in <b>[M]</b>'s face!</span>")
-							if (M.internal != null && M.wear_mask && (M.wear_mask.clothing_flags & MASKINTERNALS))
+							visible_message("<span class = 'warning'><b>[src]</b> [robofart] colorless cold gas in <b>[M]</b>'s face!</span>")
+							if (M_NO_BREATH in M.mutations && M.internal != null && M.wear_mask && (M.wear_mask.clothing_flags & MASKINTERNALS))
 								continue
 							if(M.reagents)
-								M.reagents.add_reagent(OXYGEN,rand(1,10))
-								add_logs(src, M, "vented", admin = 1)//Only add this to the server logs if they're controlled by a player.
+								M.reagents.add_reagent(OXYGEN,rand(1,2))
+								add_logs(src, M, "gassed with oxygen", admin = 1)
 						else
-							visible_message("<span class = 'warning'><b>[src]</b> [robofart] harmless gas in <b>[M]</b>'s face!</span>")
+							visible_message("<span class = 'warning'><b>[src]</b> [robofart] harmless lukewarm gas in <b>[M]</b>'s face!</span>")
 				message = ("<B>[src]</B> [robofart].")
 				lastvent=world.time
 				playsound(get_turf(src), 'sound/machines/pressurehiss.ogg', 20, 0)
