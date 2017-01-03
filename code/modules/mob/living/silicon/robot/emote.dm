@@ -63,16 +63,16 @@
 
 		if ("clap")
 			if (!src.restrained())
-				message = "<B>[src]</B> clangs it's utility claws together in a crude simulation of applause."
+				message = "<B>[src]</B> clangs its utility claws together in a crude simulation of applause."
 				m_type = HEARABLE
 		if ("flap")
 			if (!src.restrained())
-				message = "<B>[src]</B> flaps it's utility arms as through they were wings."
+				message = "<B>[src]</B> flaps its utility arms as through they were wings."
 				m_type = VISIBLE
 
 		if ("aflap")
 			if (!src.restrained())
-				message = "<B>[src]</B> flaps it's utility arms ANGRILY!"
+				message = "<B>[src]</B> flaps its utility arms ANGRILY!"
 				m_type = VISIBLE
 
 		if ("twitch")
@@ -230,11 +230,12 @@
 					if(M != src && (M.lying || M.resting))
 						if(isvox(M))
 							visible_message("<span class = 'warning'><b>[src]</b> [robofart] colorless cold gas in <b>[M]</b>'s face!</span>")
-							if (M_NO_BREATH in M.mutations && M.internal != null && M.wear_mask && (M.wear_mask.clothing_flags & MASKINTERNALS))
-								continue
-							if(M.reagents)
-								M.reagents.add_reagent(OXYGEN,rand(1,2))
-								add_logs(src, M, "gassed with oxygen", admin = 1)
+							if (M.wear_mask || (M_NO_BREATH in M.mutations))
+								to_chat(src, "<span class = 'warning'><b>ERROR: Subject <b>[M]</b> seems unaffected.</span>")
+							else
+								if(M.reagents)
+									M.reagents.add_reagent(OXYGEN,rand(1,2))
+									add_logs(src, M, "gassed with oxygen", admin = 1)
 						else
 							visible_message("<span class = 'warning'><b>[src]</b> [robofart] harmless lukewarm gas in <b>[M]</b>'s face!</span>")
 				message = ("<B>[src]</B> [robofart].")
