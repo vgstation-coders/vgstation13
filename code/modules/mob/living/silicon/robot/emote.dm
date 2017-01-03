@@ -67,7 +67,7 @@
 				m_type = HEARABLE
 		if ("flap")
 			if (!src.restrained())
-				message = "<B>[src]</B> flaps its utility arms as through they were wings."
+				message = "<B>[src]</B> flaps its utility arms as though they were wings."
 				m_type = VISIBLE
 
 		if ("aflap")
@@ -166,10 +166,11 @@
 				param = null
 
 			if (param)
-				message = "<B>[src]</B> screams at [param]!"
+				message = "<B>[src]</B> vocalizes loudly at [param]!"
 			else
-				message = "<B>[src]</B> screams!"
-			m_type = HEARABLE
+				message = "<B>[src]</B> vocalizes loudly!"
+			playsound(src, get_sfx("moonbase"),50, 0)
+			m_type = VISIBLE
 
 		if("ping")
 			var/M = null
