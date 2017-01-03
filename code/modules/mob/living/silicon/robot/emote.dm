@@ -63,7 +63,7 @@
 
 		if ("clap")
 			if (!src.restrained())
-				message = "<B>[src]</B> clangs its utility claws together in a crude simulation of applause."
+				message = "<B>[src]</B> clangs its utility arms together in a crude simulation of applause."
 				m_type = HEARABLE
 		if ("flap")
 			if (!src.restrained())
