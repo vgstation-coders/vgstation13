@@ -5,7 +5,7 @@
 "e" = (/turf/simulated/floor/plating/snow/ice,/area/vault/icecomet)
 "f" = (/obj/machinery/door/mineral/transparent/icicle/horizontal,/turf/simulated/floor/plating/snow/ice,/area/vault/icecomet)
 "g" = (/mob/living/simple_animal/hostile/decoy/snowman/frostgolem/wizard,/turf/simulated/floor/plating/snow,/area/vault/icecomet)
-"h" = (/turf/simulated/floor/plating/snow,/area/vault/icecomet)
+"h" = (/obj/structure/snow,/obj/structure/snow,/turf/simulated/floor/plating/snow,/area/vault/icecomet)
 "i" = (/mob/living/simple_animal/hostile/decoy/snowman/frostgolem/knight,/turf/simulated/floor/plating/snow,/area/vault/icecomet)
 "j" = (/mob/living/simple_animal/hostile/humanoid/frostgolem{wander = 0},/turf/simulated/floor/plating/snow/ice,/area/vault/icecomet)
 
