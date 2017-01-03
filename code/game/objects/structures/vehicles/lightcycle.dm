@@ -65,6 +65,7 @@
 	can_spacemove = 1
 	keytype = /obj/item/key/lightcycle
 	layer = FLY_LAYER
+	pass_flags = PASSMOB|PASSDOOR
 	var/obj/item/key/lightcycle/summoning_rod = null
 	var/delay_ribbon = 0
 	var/l_color = "#FFFFFF"
@@ -181,13 +182,6 @@
 	update_mob()
 
 /obj/structure/bed/chair/vehicle/lightcycle/Bump(atom/A)
-	if(istype(A, /mob))
-		var/mob/M = A
-		src.visible_message("<span class='warning'>\The [occupant] knocks over \the [M] with \his [src.name]!</span>")
-		M.Stun(8)
-		M.Knockdown(5)
-		delay_ribbon = 1
-		return
 	if(occupant)
 		occupant.visible_message("<span class=\"warning\">\The [src] crashes into \the [A] and dissolves into nothing as its rider is blown apart!</span>",\
 		"<span class=\"warning\">As you collide with \the [A], you are blown to pieces.</span>")
