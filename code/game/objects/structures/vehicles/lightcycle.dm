@@ -178,10 +178,8 @@
 	if(istype(A, /mob))
 		var/mob/M = A
 		src.visible_message("<span class='warning'>\The [occupant] knocks over \the [M] with \his [src.name]!</span>")
-		M.stop_pulling()
 		M.Stun(8)
 		M.Knockdown(5)
-		M.lying = 1
 		delay_ribbon = 1
 		return
 	if(occupant)
