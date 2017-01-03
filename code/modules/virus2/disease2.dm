@@ -17,22 +17,24 @@ var/global/list/disease2_list = list()
 
 /datum/disease2/disease/New(var/notes="No notes.")
 	uniqueID = rand(0,10000)
+	log_debug("Virus [uniqueID] created with notes: [notes]")
 	log += "<br />[timestamp()] CREATED - [notes]<br>"
 	disease2_list["[uniqueID]"] = src
 	..()
 
-/datum/disease2/disease/proc/new_random_effect(var/badness = 1, var/stage = 0)
+/datum/disease2/disease/proc/new_random_effect(var/max_badness = 1, var/stage = 0)
 	var/list/datum/disease2/effect/list = list()
 	for(var/e in typesof(/datum/disease2/effect))
 		var/datum/disease2/effect/f = new e
-		if(f.stage == stage && f.badness <= badness)
+		if(f.stage == stage && f.badness <= max_badness)
 			list += f
 	var/datum/disease2/effect/e = pick(list)
 	e.chance = rand(1, e.max_chance)
 	return e
 
 /datum/disease2/disease/proc/makerandom(var/greater=0)
-	for(var/i=1 ; i <= max_stage ; i++ )
+	log_debug("Creating random virus with greater=[greater]")
+	for(var/i = 1; i <= max_stage; i++)
 		if(greater)
 			var/datum/disease2/effect/e = new_random_effect(2, i)
 			effects += e
@@ -41,12 +43,14 @@ var/global/list/disease2_list = list()
 			var/datum/disease2/effect/e = new_random_effect(1, i)
 			effects += e
 			log += "<br />[timestamp()] Added effect [e.name] [e.chance]%."
+		log_debug("Added stage [e.stage] effect [e.name] to random virus.")
 	uniqueID = rand(0,10000)
 	disease2_list["[uniqueID]"] = src
 	infectionchance = rand(60,90)
 	antigen |= text2num(pick(ANTIGENS))
 	antigen |= text2num(pick(ANTIGENS))
 	spreadtype = prob(70) ? "Airborne" : prob(20) ? "Blood" :"Contact" //Try for airborne then try for blood.
+	log_debug("Random virus [uniqueID] has antigens [antigens2string(antigen)] and spreadtype [spreadtype].")
 
 /proc/virus2_make_custom(client/C)
 	if(!C.holder || !istype(C))
@@ -61,7 +65,7 @@ var/global/list/disease2_list = list()
 		var/datum/disease2/effect/symptom = input(C, "Choose a symptom to add ([5-i] remaining)", "Choose a Symptom") in (typesof(/datum/disease2/effect))
 			// choose a symptom from the list of them
 		var/datum/disease2/effect/e = new symptom(D)
-		e.chance = input(C, "Choose chance", "Chance") as num 
+		e.chance = input(C, "Choose chance", "Chance") as num
 			// set the chance of the symptom that can occur
 		if(e.chance > 100 || e.chance < 0)
 			return 0
@@ -87,6 +91,7 @@ var/global/list/disease2_list = list()
 /datum/disease2/disease/proc/activate(var/mob/living/carbon/mob)
 	if(dead)
 		cure(mob)
+		log_debug("Cured virus [uniqueID] due to death of host [mob].")
 		return
 
 
@@ -94,6 +99,7 @@ var/global/list/disease2_list = list()
 		return
 	if(stage <= 1 && clicks == 0) 	// with a certain chance, the mob may become immune to the disease before it starts properly
 		if(prob(5))
+			log_debug("[mob] rolled for starting immunity against virus [uniqueID].")
 			mob.antibodies |= antigen // 20% immunity is a good chance IMO, because it allows finding an immune person easily
 /*
 	if(mob.radiation > 50)
@@ -119,11 +125,13 @@ var/global/list/disease2_list = list()
 	//Moving to the next stage
 	if(clicks > stage*100 && prob(10))
 		if(stage == max_stage)
+			log_debug("Virus [uniqueID] in [mob] has advanced past its last stage.")
 			src.cure(mob)
 			mob.antibodies |= src.antigen
 			log += "<br />[timestamp()] STAGEMAX ([stage])"
 		else
 			stage++
+			log_debug("Virus [uniqueID] in [mob] has advanced to stage [stage].")
 			log += "<br />[timestamp()] NEXT STAGE ([stage])"
 			clicks = 0
 
@@ -143,6 +151,7 @@ var/global/list/disease2_list = list()
 	clicks+=speed
 
 /datum/disease2/disease/proc/cure(var/mob/living/carbon/mob)
+	log_debug("Virus [uniqueID] in [mob] has been cured.")
 	for(var/datum/disease2/effect/e in effects)
 		e.disable_effect(mob)
 	mob.virus2.Remove("[uniqueID]")
@@ -152,6 +161,7 @@ var/global/list/disease2_list = list()
 	var/datum/disease2/effect/e = pick(effects)
 	e.minormutate()
 	infectionchance = min(50,infectionchance + rand(0,10))
+	log_debug("Virus [uniqueID] has minor mutated effect [e.name].")
 	log += "<br />[timestamp()] Infection chance now [infectionchance]%"
 
 /datum/disease2/disease/proc/majormutate()
@@ -160,6 +170,7 @@ var/global/list/disease2_list = list()
 	var/datum/disease2/effect/e = effects[i]
 	var/datum/disease2/effect/f = new_random_effect(2, e.stage)
 	effects[i] = f
+	log_debug("Virus [uniqueID] has major mutated [e.name] into [f.name].")
 	log += "<br />[timestamp()] Mutated effect [e.name] [e.chance]% into [f.name] [f.chance]%."
 	if (prob(5))
 		antigen = text2num(pick(ANTIGENS))
