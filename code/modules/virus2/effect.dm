@@ -1,6 +1,6 @@
 // Make sure to use two newlines between each effect and one newline between each method.
 // Fully read through the example effect below to get an idea of what attributes and procs are available.
-// Babel Syndrome provides a good example of the usage of affect_voice, affect_mob_voice, etc. 
+// Babel Syndrome provides a good example of the usage of affect_voice, affect_mob_voice, etc.
 
 /datum/disease2/effect
 	var/name = "Example syndrome"
@@ -13,8 +13,8 @@
 		// How damaging the virus is. Higher values are worse.
 
 	var/chance = 3
-		// Under normal conditions, the percentage chance per tick to activate. 
-	var/max_chance = 6	
+		// Under normal conditions, the percentage chance per tick to activate.
+	var/max_chance = 6
 		// Maximum percentage chance per tick.
 
 	var/multiplier = 1
@@ -24,7 +24,7 @@
 
 	var/count = 0
 		// How many times the effect has activated so far.
-	var/max_count = -1 
+	var/max_count = -1
 		// How many times the effect should be allowed to activate. If -1, always activate.
 
 	var/affect_voice = 0
@@ -39,7 +39,7 @@
 	proc/deactivate(var/mob/living/carbon/mob)
 		// If activation makes any permanent changes to the effect, this is where you undo them.
 		// Will not get called if the virus has never been activated.
-	proc/affect_mob_voice(var/datum/speech/speech) 
+	proc/affect_mob_voice(var/datum/speech/speech)
 		// Called by /mob/living/carbon/human/treat_speech
 
 // Most of the stuff below shouldn't be changed when you make a new effect.
@@ -52,11 +52,13 @@
 	return 0
 
 /datum/disease2/effect/proc/run_effect(var/mob/living/carbon/human/mob)
+	log_debug("Activating effect [name] with count [count] and multiplier [multiplier] on [mob].")
 	activate(mob)
 	count += 1
 
 /datum/disease2/effect/proc/disable_effect(var/mob/living/carbon/human/mob)
 	if (count > 0)
+		log_debug("Deactivating effect [name] with count [count] and multiplier [multiplier] on [mob].")
 		deactivate(mob)
 
 /datum/disease2/effect/proc/minormutate()
@@ -193,7 +195,7 @@
 /datum/disease2/effect/scream
 	name = "Loudness Syndrome"
 	stage = 2
-	
+
 /datum/disease2/effect/scream/activate(var/mob/living/carbon/mob)
 	mob.emote("scream",,, 1)
 
@@ -201,7 +203,7 @@
 /datum/disease2/effect/drowsness
 	name = "Automated Sleeping Syndrome"
 	stage = 2
-	
+
 /datum/disease2/effect/drowsness/activate(var/mob/living/carbon/mob)
 	mob.drowsyness += 10
 
@@ -381,7 +383,7 @@
 	name = "Vitreous resonance"
 	stage = 2
 	chance = 25
-	max_chance = 75	
+	max_chance = 75
 	max_multiplier = 2
 
 /datum/disease2/effect/vitreous/activate(var/mob/living/carbon/human/H)
@@ -464,7 +466,7 @@
 /datum/disease2/effect/deaf
 	name = "Hard of Hearing Syndrome"
 	stage = 3
-	
+
 /datum/disease2/effect/deaf/activate(var/mob/living/carbon/mob)
 	mob.ear_deaf = 5
 
