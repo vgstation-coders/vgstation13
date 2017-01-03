@@ -98,7 +98,7 @@ var/global/list/disease2_list = list()
 		return
 	if(stage <= 1 && clicks == 0) 	// with a certain chance, the mob may become immune to the disease before it starts properly
 		if(prob(5))
-			log_debug("[key_name(mob)] rolled for starting immunity against virus [uniqueID] and received antigens [antigen].")
+			log_debug("[key_name(mob)] rolled for starting immunity against virus [uniqueID] and received antigens [antigens2string(antigen)].")
 			mob.antibodies |= antigen // 20% immunity is a good chance IMO, because it allows finding an immune person easily
 /*
 	if(mob.radiation > 50)
@@ -124,13 +124,13 @@ var/global/list/disease2_list = list()
 	//Moving to the next stage
 	if(clicks > stage*100 && prob(10))
 		if(stage == max_stage)
-			log_debug("Virus [uniqueID] in [key_name(mob)] has advanced past its last stage, giving them antibodies [antigen].")
+			log_debug("Virus [uniqueID] in [key_name(mob)] has advanced past its last stage, giving them antibodies [antigens2string(antigen)].")
 			src.cure(mob)
 			mob.antibodies |= src.antigen
 			log += "<br />[timestamp()] STAGEMAX ([stage])"
 		else
 			stage++
-			log_debug("Virus [uniqueID] in [key_name(mob)] has advanced to stage [stage].")
+			// log_debug("Virus [uniqueID] in [key_name(mob)] has advanced to stage [stage].")
 			log += "<br />[timestamp()] NEXT STAGE ([stage])"
 			clicks = 0
 
@@ -150,7 +150,7 @@ var/global/list/disease2_list = list()
 	clicks+=speed
 
 /datum/disease2/disease/proc/cure(var/mob/living/carbon/mob)
-	log_debug("Virus [uniqueID] in [key_usr(mob)] has been cured and is being removed from their body.")
+	log_debug("Virus [uniqueID] in [key_name(mob)] has been cured and is being removed from their body.")
 	for(var/datum/disease2/effect/e in effects)
 		e.disable_effect(mob)
 	mob.virus2.Remove("[uniqueID]")
