@@ -26,8 +26,7 @@
 
 	//List of weapons that metaldetector will not flash for, also copypasted in secbot.dm and ed209bot.dm
 	var/safe_weapons = list(
-		/obj/item/weapon/gun/energy/laser/bluetag,
-		/obj/item/weapon/gun/energy/laser/redtag,
+		/obj/item/weapon/gun/energy/tag,
 		/obj/item/weapon/gun/energy/laser/practice,
 		/obj/item/weapon/gun/hookshot,
 		/obj/item/weapon/gun/energy/floragun,
@@ -269,5 +268,3 @@
 		overlays.len = 0
 		if(anchored)
 			src.overlays += image(icon = icon, icon_state = "[base_state]-s")
-
-

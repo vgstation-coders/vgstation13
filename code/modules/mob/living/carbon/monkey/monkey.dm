@@ -404,11 +404,11 @@
 	//Lasertag bullshit
 	if(lasercolor)
 		if(lasercolor == "b")//Lasertag turrets target the opposing team, how great is that? -Sieve
-			if(find_held_item_by_type(/obj/item/weapon/gun/energy/laser/redtag))
+			if(find_held_item_by_type(/obj/item/weapon/gun/energy/tag/red))
 				threatcount += 4
 
 		if(lasercolor == "r")
-			if(find_held_item_by_type(/obj/item/weapon/gun/energy/laser/bluetag))
+			if(find_held_item_by_type(/obj/item/weapon/gun/energy/tag/blue))
 				threatcount += 4
 
 		return threatcount

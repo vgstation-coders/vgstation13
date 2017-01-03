@@ -170,7 +170,7 @@
 	if(defective)
 		if(!failure_check(user))
 			return
-	if(!istype(src, /obj/item/weapon/gun/energy/laser/redtag) && !istype(src, /obj/item/weapon/gun/energy/laser/bluetag))
+	if(!istype(src, /obj/item/weapon/gun/energy/tag))
 		log_attack("[user.name] ([user.ckey]) fired \the [src] (proj:[in_chamber.name]) at [originaltarget] [ismob(target) ? "([originaltarget:ckey])" : ""] ([originaltarget.x],[originaltarget.y],[originaltarget.z])[struggle ? " due to being disarmed." :""]" )
 	in_chamber.firer = user
 
