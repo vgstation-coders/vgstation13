@@ -1051,6 +1051,8 @@ var/global/list/damage_icon_parts = list()
 		update_icons()
 
 /mob/living/carbon/human/update_inv_hand(index, var/update_icons = 1)
+	if(!obj_overlays)	//this shouldn't happen, but it does
+		return
 	var/obj/Overlays/hand_layer/O = obj_overlays["[HAND_LAYER]-[index]"]
 	if(!O) //theoretically, should only be done once per hand
 		O = getFromPool(/obj/Overlays/hand_layer)
