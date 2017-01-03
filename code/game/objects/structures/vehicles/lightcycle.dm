@@ -25,8 +25,10 @@
 /obj/item/key/lightcycle/update_icon()
 	if(cycle_active)
 		icon_state = "lightcycle_keys_active"
+		cant_drop = 1
 	else
 		icon_state = "lightcycle_keys_inactive"
+		cant_drop = 0
 
 /obj/item/key/lightcycle/attack_self(mob/user)
 	..()
@@ -91,9 +93,12 @@
 	trigger_movement()
 
 /obj/structure/bed/chair/vehicle/lightcycle/unlock_atom(var/atom/movable/AM)
-	..()
-	update_icon()
-	dismount(AM)
+	to_chat(occupant, "<span class='notice'>You begin dismounting \the [src]...")
+	spawn(5)	//to prevent riders from just getting off the cycle to avoid hitting obstacles
+		if(!gcDestroyed)
+			..()
+			update_icon()
+			dismount(AM)
 
 /obj/structure/bed/chair/vehicle/lightcycle/proc/dismount(mob/user)
 	to_chat(user, "<span class='notice'>As you dismount \the [src], it dissolves into nothing.</span>")
