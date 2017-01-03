@@ -22,9 +22,11 @@ var/global/list/virusDB = list()
 	..()
 
 /datum/disease2/disease/proc/generate_uniqueID()
+	var/original_id = uniqueID
 	for (var/x = 1 to 5)
 		uniqueID = rand(1, 10000)
-		if (!disease2_list.Find("[uniqueID]")) // Not a dupe! We'll try five times and then just accept it.
+		if (!disease2_list.Find("[original_id]")) // Not a dupe! We'll try five times and then just accept it.
+			disease2_list.Remove("[uniqueID]") // just in case we call this proc a lot
 			disease2_list["[uniqueID]"] = src
 			return
 
@@ -67,7 +69,7 @@ var/global/list/virusDB = list()
 		var/datum/disease2/effect/symptom = input(C, "Choose a symptom to add ([5-i] remaining)", "Choose a Symptom") in (typesof(/datum/disease2/effect))
 			// choose a symptom from the list of them
 		var/datum/disease2/effect/e = new symptom(D)
-		e.chance = input(C, "Choose chance", "Chance") as num 
+		e.chance = input(C, "Choose chance", "Chance") as num
 			// set the chance of the symptom that can occur
 		if(e.chance > 100 || e.chance < 0)
 			return 0
