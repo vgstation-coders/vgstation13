@@ -82,6 +82,10 @@
 		else
 			clear_fullscreen("brute")
 			//damageoverlay.overlays += I
+		if(pain_numb)
+			overlay_fullscreen("numb", /obj/screen/fullscreen/numb)
+		else
+			clear_fullscreen("numb")
 	if(stat == DEAD)
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 8

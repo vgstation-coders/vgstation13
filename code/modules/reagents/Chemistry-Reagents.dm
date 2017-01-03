@@ -1485,6 +1485,15 @@
 		var/mob/living/carbon/C = M
 		C.pain_numb = max(5, C.pain_numb)
 		C.pain_shock_stage = max(0, C.pain_shock_stage - 3) //We don't FEEL the shock now, but make it go away quick in case we run out of oxycodone.
+		if(!M.sleeping && prob(2))
+			to_chat(M, pick("<span class='numb'>You feel like you're floating...</span>", \
+							"<span class='numb'>You feel a little lightheaded... but it's okay.</span>", \
+							"<span class='numb'>Your face itches a little bit... and it feels so good to scratch it...</span>", \
+							"<span class='numb'>Your whole body buzzes slightly, but it doesn't seem to bother you...</span>", \
+							"<span class='numb'>You feel a little high of energy, and it makes you smile...</span>", \
+							"<span class='numb'>You nod to yourself... it's nothing, it just feels good to nod a little...</span>", \
+							"<span class='numb'>Hello?... Is there anybody in there?...</span>", \
+							"<span class='numb'>You feel... comfortably numb.</span>"))
 
 /datum/reagent/virus_food
 	name = "Virus Food"
