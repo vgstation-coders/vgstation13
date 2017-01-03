@@ -100,6 +100,7 @@
 		if(on)
 			icon_state = "incubator_on"
 			if(dish && dish.virus2)
+				log_debug("[key_name(usr)] has started incubating [dish.virus2.uniqueID] with [foodsupply] food and [radiation] rads.")
 				dish.virus2.log += "<br />[timestamp()] Incubation starting by [key_name(usr)] {food=[foodsupply],rads=[radiation]}"
 		else
 			icon_state = "incubator"
@@ -125,6 +126,7 @@
 				if (!B.data["virus2"])
 					B.data["virus2"] = list()
 				var/datum/disease2/disease/D = dish.virus2.getcopy()
+				log_debug("[key_name(usr)] injected [dish.virus2.uniqueID] into blood.")
 				D.log += "<br />[timestamp()] Injected into blood via [src] by [key_name(usr)]"
 				var/list/virus = list("[dish.virus2.uniqueID]" = D)
 				B.data["virus2"] += virus
