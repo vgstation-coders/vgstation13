@@ -2183,6 +2183,30 @@
 			M.Knockdown(20)
 			M.stuttering = 20
 
+	else if(href_list["Assplode"])
+		if(!check_rights(R_ADMIN|R_FUN))
+			return
+
+		var/mob/living/carbon/human/H = locate(href_list["Assplode"])
+		if(!ishuman(H))
+			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human")
+			return
+
+		if(H.op_stage.butt != 4) // does the target have an ass
+			var/obj/item/clothing/head/butt/B = new(H.loc)
+			B.transfer_buttdentity(H)
+			H.op_stage.butt = 4 //No having two butts.
+			to_chat(H, "<span class='warning'>Your ass was just blown off by an unknown force!</span>")
+			log_admin("[key_name(H)] was buttblasted by [src.owner]")
+			message_admins("[key_name(H)] was buttblasted by [src.owner]")
+			playsound(get_turf(H), 'sound/effects/superfart.ogg', 50, 1)
+			H.apply_damage(40, BRUTE, LIMB_GROIN)
+			H.apply_damage(10, BURN, LIMB_GROIN)
+			H.Knockdown(8)
+			H.Stun(8)
+		else
+			to_chat(usr, "This target has already lost their butt in some unfortunate circumstance.")
+
 	else if (href_list["PrayerReply"])
 		if(!check_rights(R_ADMIN))
 			return

@@ -33,7 +33,7 @@
 	force = 10
 
 /obj/item/weapon/melee/classic_baton/attack(mob/M as mob, mob/living/user as mob)
-	if ((M_CLUMSY in user.mutations) && prob(50))
+	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>You club yourself over the head.</span>")
 		user.Knockdown(3 * force)
 		if(ishuman(user))
@@ -141,7 +141,7 @@
 
 /obj/item/weapon/melee/telebaton/attack(mob/target as mob, mob/living/user as mob)
 	if(on)
-		if ((M_CLUMSY in user.mutations) && prob(50))
+		if (clumsy_check(user) && prob(50))
 			user.simple_message("<span class='warning'>You club yourself over the head.</span>",
 				"<span class='danger'>The fishing rod goes mad!</span>")
 

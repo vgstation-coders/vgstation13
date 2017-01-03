@@ -49,7 +49,7 @@
 	return rand(0,10)
 
 /mob/living/proc/get_unarmed_verb(mob/living/victim)
-	return "hit"
+	return "hits"
 
 /mob/living/proc/get_unarmed_hit_sound(mob/living/victim)
 	return "punch"
@@ -72,11 +72,11 @@
 	if(miss_sound)
 		playsound(loc, miss_sound, 25, 1, -1)
 
-	visible_message("<span class='danger'>[src] has missed [target]!</span>")
+	visible_message("<span class='danger'>[src] misses [target]!</span>")
 	return TRUE
 
 /mob/living/proc/get_attack_message(mob/living/target, attack_verb)
-	return "<span class='danger'>[src] has [attack_verb] \the [target]!</span>"
+	return "<span class='danger'>[src] [attack_verb] \the [target]!</span>"
 
 /mob/living/proc/unarmed_attack_mob(mob/living/target)
 	var/damage = get_unarmed_damage(target)
@@ -94,6 +94,7 @@
 
 	if(attack_sound)
 		playsound(loc, attack_sound, 25, 1, -1)
+
 	visible_message(get_attack_message(target, attack_verb))
 
 	var/damage_done = target.apply_damage(damage, damage_type, affecting, armor_block)

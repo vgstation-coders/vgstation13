@@ -514,7 +514,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		return
 
 	if(chem.name == BLOOD)
-		if(istype(host, /mob/living/carbon/human) && !(host.species.flags & NO_BLOOD))
+		if(istype(host, /mob/living/carbon/human) && !(host.species.anatomy_flags & NO_BLOOD))
 			host.vessel.add_reagent(chem.name, units)
 		else
 			to_chat(src, "<span class='notice'>Your host seems to be a species that doesn't use blood.<span>")

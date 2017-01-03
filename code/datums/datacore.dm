@@ -155,7 +155,7 @@ proc/get_id_photo(var/mob/living/carbon/human/H)
 		preview_icon.Blend(temp, ICON_OVERLAY)
 
 	// Skin tone
-	if(H.species.flags & HAS_SKIN_TONE)
+	if(H.species.anatomy_flags & HAS_SKIN_TONE)
 		if (H.s_tone >= 0)
 			preview_icon.Blend(rgb(H.s_tone, H.s_tone, H.s_tone), ICON_ADD)
 		else

@@ -183,7 +183,7 @@
 /obj/item/clothing/suit/space/rig/syndi
 	icon_state = "rig-syndi"
 	name = "blood-red hardsuit"
-	desc = "An advanced suit that protects against injuries during special operations. Property of Gorlex Marauders."
+	desc = "An advanced suit that protects against injuries during special operations. A tag on it says \"Property of Gorlex Marauders\"."
 	item_state = "syndie_hardsuit"
 	species_fit = list(GREY_SHAPED)
 	species_fit = list(VOX_SHAPED)
@@ -390,7 +390,7 @@
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
 	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
-	
+
 //Death squad rig
 /obj/item/clothing/head/helmet/space/rig/deathsquad
 	name = "deathsquad helmet"

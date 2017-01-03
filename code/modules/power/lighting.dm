@@ -2,13 +2,6 @@
 //
 // consists of light fixtures (/obj/machinery/light) and light tube/bulb items (/obj/item/weapon/light)
 
-// status values shared between lighting fixtures and items
-#define LIGHT_OK     0
-#define LIGHT_EMPTY  1
-#define LIGHT_BROKEN 2
-#define LIGHT_BURNED 3
-
-
 /obj/machinery/light_construct
 	name = "light fixture frame"
 	desc = "A light fixture under construction."

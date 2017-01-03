@@ -216,15 +216,15 @@
 		if("pod_civ")
 			desc = "A sleek civilian space pod."
 		if("pod_black")
-			desc = "An all black space pod with no insignias."
+			desc = "A plain black space pod without any distinctive markings."
 		if("pod_mil")
-			desc = "A dark grey space pod brandishing the Nanotrasen Military insignia"
+			desc = "A dark grey space pod bearing the Nanotrasen military insignia."
 		if("pod_synd")
-			desc = "A menacing military space pod with Fuck NT stenciled onto the side"
+			desc = "A menacing military space pod with \"Fuck NT\" stenciled onto the side."
 		if("pod_gold")
-			desc = "A civilian space pod with a gold body, must have cost somebody a pretty penny"
+			desc = "A civilian space pod with a gold body. It must have cost somebody a pretty penny."
 		if("pod_industrial")
-			desc = "A rough looking space pod meant for industrial work"
+			desc = "A space pod with signs of wear on the plating. A spaceproof sticker designates it for performing industrial tasks."
 
 /obj/spacepod/verb/toggle_internal_tank()
 	set name = "Toggle internal airtank usage"
@@ -332,7 +332,7 @@
 		inertia_dir = 0 // engage reverse thruster and power down pod
 		occupant.forceMove(exit_loc)
 		occupant = null
-		to_chat(usr, "<span class='notice'>You climb out of the pod</span>")
+		to_chat(usr, "<span class='notice'>You climb out of the pod.</span>")
 
 /obj/spacepod/verb/move_inside()
 	set category = "Object"
@@ -343,7 +343,7 @@
 		if(occupant == usr)
 			move_outside(usr)
 		else
-			to_chat(usr, "<span class='notice'><B>The [src.name] is already occupied!</B></span>")
+			to_chat(usr, "<span class='notice'><B>\The [src] is already occupied!</B></span>")
 			return
 
 	if(usr.incapacitated() || usr.lying) //are you cuffed, dying, lying, stunned or other
@@ -357,17 +357,17 @@
 */
 	for(var/mob/living/carbon/slime/M in range(1,usr))
 		if(M.Victim == usr)
-			to_chat(usr, "You're too busy getting your life sucked out of you.")
+			to_chat(usr, "You're too busy getting the life sucked out of you by \the [M]!")
 			return
 //	to_chat(usr, "You start climbing into [src.name]")
 
-	visible_message("<span class='notice'>[usr] starts to climb into [src.name]</span>")
+	visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
 
 	if(enter_after(40,usr))
 		if(!src.occupant)
 			moved_inside(usr)
 		else if(src.occupant!=usr)
-			to_chat(usr, "[src.occupant] was faster. Try better next time, loser.")
+			to_chat(usr, "[src.occupant] was faster. Better luck next time, loser.")
 	else
 		to_chat(usr, "You stop entering the pod.")
 	return

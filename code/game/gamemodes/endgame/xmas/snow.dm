@@ -390,6 +390,17 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 	else
 		return 0
 
+/////PEDESTAL////
+/obj/structure/snow_pedestal
+	name = "snow pedestal"
+	desc = "A collection of snow formed into a pedestal."
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "snowbarricade"
+	density = 1
+	anchored = 1
+	layer = TABLE_LAYER
+	throwpass = 1
+
 //////TREES//////
 /obj/structure/snow_flora
 	name = "snow_flora"

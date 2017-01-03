@@ -249,6 +249,7 @@
 
 		// Accessing medical records
 		if("medicalsupplement")
+			src.secHUD = 0 // Can't have both of them at the same time
 			src.medHUD = 1
 			if(src.subscreen == 1)
 				var/datum/data/record/record = locate(href_list["med_rec"])
@@ -264,6 +265,7 @@
 						src.medicalActive1 = R
 						src.medicalActive2 = M
 		if("securitysupplement")
+			src.medHUD = 0 // Can't have both of them at the same time
 			src.secHUD = 1
 			if(src.subscreen == 1)
 				var/datum/data/record/record = locate(href_list["sec_rec"])

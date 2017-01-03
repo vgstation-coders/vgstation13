@@ -475,3 +475,8 @@ a {
 	if(!defective)
 		defective = 1
 		desc += "\nIt doesn't look to be in the best shape."
+
+/obj/proc/clumsy_check(var/mob/living/user)
+	if(istype(user))
+		return (M_CLUMSY in user.mutations)
+	return 0
