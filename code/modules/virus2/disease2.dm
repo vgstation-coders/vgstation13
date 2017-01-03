@@ -1,5 +1,4 @@
 var/global/list/disease2_list = list()
-var/global/list/virusDB = list()
 /datum/disease2/disease
 	var/infectionchance = 70
 	var/speed = 1
@@ -17,16 +16,10 @@ var/global/list/virusDB = list()
 	var/logged_virusfood=0
 
 /datum/disease2/disease/New(var/notes="No notes.")
-	generate_uniqueID()
+	uniqueID = rand(0,10000)
 	log += "<br />[timestamp()] CREATED - [notes]<br>"
+	disease2_list["[uniqueID]"] = src
 	..()
-
-/datum/disease2/disease/proc/generate_uniqueID()
-	for (var/x = 1 to 5)
-		uniqueID = rand(1, 10000)
-		if (!disease2_list.Find("[uniqueID]")) // Not a dupe! We'll try five times and then just accept it.
-			disease2_list["[uniqueID]"] = src
-			return
 
 /datum/disease2/disease/proc/new_random_effect(var/badness = 1, var/stage = 0)
 	var/list/datum/disease2/effect/list = list()
@@ -48,7 +41,8 @@ var/global/list/virusDB = list()
 			var/datum/disease2/effect/e = new_random_effect(1, i)
 			effects += e
 			log += "<br />[timestamp()] Added effect [e.name] [e.chance]%."
-	generate_uniqueID()
+	uniqueID = rand(0,10000)
+	disease2_list["[uniqueID]"] = src
 	infectionchance = rand(60,90)
 	antigen |= text2num(pick(ANTIGENS))
 	antigen |= text2num(pick(ANTIGENS))
@@ -74,6 +68,9 @@ var/global/list/virusDB = list()
 		D.log += "Added [e.name] at [e.chance]% chance<br>"
 		D.effects += e
 
+	disease2_list -= D.uniqueID
+	D.uniqueID = rand(0, 10000)
+	disease2_list["[D.uniqueID]"] = D
 	D.infectionchance = input(C, "Choose an infection rate percent", "Infection Rate") as num
 	if(D.infectionchance > 100 || D.infectionchance < 0)
 		return 0
@@ -151,14 +148,14 @@ var/global/list/virusDB = list()
 	mob.virus2.Remove("[uniqueID]")
 
 /datum/disease2/disease/proc/minormutate()
-	generate_uniqueID()
+	//uniqueID = rand(0,10000)
 	var/datum/disease2/effect/e = pick(effects)
 	e.minormutate()
 	infectionchance = min(50,infectionchance + rand(0,10))
 	log += "<br />[timestamp()] Infection chance now [infectionchance]%"
 
 /datum/disease2/disease/proc/majormutate()
-	generate_uniqueID()
+	uniqueID = rand(0,10000)
 	var/i = rand(1, effects.len)
 	var/datum/disease2/effect/e = effects[i]
 	var/datum/disease2/effect/f = new_random_effect(2, e.stage)
@@ -210,6 +207,9 @@ var/global/list/virusDB = list()
 		else
 			testing("Got a NULL disease2 in virus_copylist ([V] is [V.type])!")
 	return res
+
+
+var/global/list/virusDB = list()
 
 /datum/disease2/disease/proc/name()
 	.= "stamm #[add_zero("[uniqueID]", 4)]"
