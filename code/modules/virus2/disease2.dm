@@ -33,24 +33,24 @@ var/global/list/disease2_list = list()
 	return e
 
 /datum/disease2/disease/proc/makerandom(var/greater=0)
-	log_debug("Creating random virus with greater=[greater]")
+	log_debug("Randomizing virus [uniqueID] with greater=[greater]")
 	for(var/i = 1; i <= max_stage; i++)
 		if(greater)
 			var/datum/disease2/effect/e = new_random_effect(2, i)
 			effects += e
 			log += "<br />[timestamp()] Added effect [e.name] [e.chance]%."
+			log_debug("Added stage [e.stage] effect [e.name] to virus [uniqueID].")
 		else
 			var/datum/disease2/effect/e = new_random_effect(1, i)
 			effects += e
 			log += "<br />[timestamp()] Added effect [e.name] [e.chance]%."
-		log_debug("Added stage [e.stage] effect [e.name] to random virus.")
+			log_debug("Added stage [e.stage] effect [e.name] to virus [uniqueID].")
 	uniqueID = rand(0,10000)
 	disease2_list["[uniqueID]"] = src
 	infectionchance = rand(60,90)
 	antigen |= text2num(pick(ANTIGENS))
 	antigen |= text2num(pick(ANTIGENS))
 	spreadtype = prob(70) ? "Airborne" : prob(20) ? "Blood" :"Contact" //Try for airborne then try for blood.
-	log_debug("Random virus [uniqueID] has antigens [antigens2string(antigen)] and spreadtype [spreadtype].")
 
 /proc/virus2_make_custom(client/C)
 	if(!C.holder || !istype(C))
@@ -91,7 +91,6 @@ var/global/list/disease2_list = list()
 /datum/disease2/disease/proc/activate(var/mob/living/carbon/mob)
 	if(dead)
 		cure(mob)
-		log_debug("Cured virus [uniqueID] due to death of host [mob].")
 		return
 
 
@@ -99,7 +98,7 @@ var/global/list/disease2_list = list()
 		return
 	if(stage <= 1 && clicks == 0) 	// with a certain chance, the mob may become immune to the disease before it starts properly
 		if(prob(5))
-			log_debug("[mob] rolled for starting immunity against virus [uniqueID].")
+			log_debug("[key_name(mob)] rolled for starting immunity against virus [uniqueID] and received antigens [antigen].")
 			mob.antibodies |= antigen // 20% immunity is a good chance IMO, because it allows finding an immune person easily
 /*
 	if(mob.radiation > 50)
@@ -125,13 +124,13 @@ var/global/list/disease2_list = list()
 	//Moving to the next stage
 	if(clicks > stage*100 && prob(10))
 		if(stage == max_stage)
-			log_debug("Virus [uniqueID] in [mob] has advanced past its last stage.")
+			log_debug("Virus [uniqueID] in [key_name(mob)] has advanced past its last stage, giving them antibodies [antigen].")
 			src.cure(mob)
 			mob.antibodies |= src.antigen
 			log += "<br />[timestamp()] STAGEMAX ([stage])"
 		else
 			stage++
-			log_debug("Virus [uniqueID] in [mob] has advanced to stage [stage].")
+			log_debug("Virus [uniqueID] in [key_name(mob)] has advanced to stage [stage].")
 			log += "<br />[timestamp()] NEXT STAGE ([stage])"
 			clicks = 0
 
@@ -151,7 +150,7 @@ var/global/list/disease2_list = list()
 	clicks+=speed
 
 /datum/disease2/disease/proc/cure(var/mob/living/carbon/mob)
-	log_debug("Virus [uniqueID] in [mob] has been cured.")
+	log_debug("Virus [uniqueID] in [key_usr(mob)] has been cured and is being removed from their body.")
 	for(var/datum/disease2/effect/e in effects)
 		e.disable_effect(mob)
 	mob.virus2.Remove("[uniqueID]")
@@ -161,7 +160,7 @@ var/global/list/disease2_list = list()
 	var/datum/disease2/effect/e = pick(effects)
 	e.minormutate()
 	infectionchance = min(50,infectionchance + rand(0,10))
-	log_debug("Virus [uniqueID] has minor mutated effect [e.name].")
+	// log_debug("Virus [uniqueID] has minor mutated [e.name].")
 	log += "<br />[timestamp()] Infection chance now [infectionchance]%"
 
 /datum/disease2/disease/proc/majormutate()
