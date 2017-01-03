@@ -32,6 +32,9 @@
 
 /obj/item/key/lightcycle/attack_self(mob/user)
 	..()
+	if(!istype(user, /mob/living/carbon/human))
+		to_chat(user, "\The [src] refuses to break. You don't think you could fit on a light cycle anyway.")
+		return
 	if(cycle_active)
 		summoned_cycle.unlock_atom(user)
 	else
@@ -68,6 +71,16 @@
 	var/lastdir = null
 	var/lastLASTdir = null
 
+/obj/structure/bed/chair/vehicle/lightcycle/Destroy()
+	if(summoning_rod)
+		summoning_rod.icon_state = initial(summoning_rod.icon_state)
+		summoning_rod.summoned_cycle = null
+		summoning_rod.cycle_active = FALSE
+		summoning_rod.update_icon()
+		summoning_rod.paired_to = null
+		summoning_rod = null
+	..()
+
 /obj/structure/bed/chair/vehicle/lightcycle/update_icon()
 	overlays.len = 0
 	if(occupant)
@@ -102,13 +115,6 @@
 
 /obj/structure/bed/chair/vehicle/lightcycle/proc/dismount(mob/user)
 	to_chat(user, "<span class='notice'>As you dismount \the [src], it dissolves into nothing.</span>")
-	if(summoning_rod)
-		summoning_rod.icon_state = initial(summoning_rod.icon_state)
-		summoning_rod.summoned_cycle = null
-		summoning_rod.cycle_active = FALSE
-		summoning_rod.update_icon()
-		summoning_rod.paired_to = null
-		summoning_rod = null
 	qdel(src)
 
 /obj/structure/bed/chair/vehicle/lightcycle/proc/trigger_movement()
@@ -212,6 +218,7 @@
 	icon = 'icons/obj/vehicles.dmi'
 	icon_state = "lightcycle_ribbon"
 	var/l_color = "#FFFFFF"
+	var/erasing = FALSE
 
 /obj/lightribbon/New(turf/T, var/col, var/currdir, var/lastdir)
 	..(T)
@@ -240,3 +247,12 @@
 	if(!(user.locked_to && istype(user.locked_to, /obj/structure/bed/chair/vehicle/lightcycle)))
 		to_chat(user, "\The [src] dissipates as you hit it with \the [W].")
 		qdel(src)
+
+/obj/lightribbon/proc/erase()	//can be called by admins to erase the whole line of ribbon
+	erasing = TRUE
+	for(var/obj/lightribbon/L in orange(1,src))
+		if(L.l_color == l_color)
+			if(!L.erasing)
+				spawn(1)
+					L.erase()
+	qdel(src)
