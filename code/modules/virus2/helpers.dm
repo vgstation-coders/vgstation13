@@ -70,7 +70,7 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 		var/datum/disease2/disease/D = disease.getcopy()
 		D.minormutate()
 //		log_debug("Adding virus")
-	log_debug("[key_name(M)] infected with [disease.uniqueID], forced=[forced], notes=[notes].")
+		log_debug("[key_name(M)] infected with [disease.uniqueID], forced=[forced], notes=[notes].")
 		D.log += "<br />[timestamp()] Infected [key_name(M)] [notes]"
 		M.virus2["[D.uniqueID]"] = D
 		return 1
