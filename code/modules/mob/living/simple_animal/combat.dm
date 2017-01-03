@@ -19,7 +19,7 @@
 
 /mob/living/simple_animal/get_attack_message(mob/living/target, attack_verb)
 	if(attack_verb == friendly)
-		return "<span class='info'>[src] has [attack_verb] \the [target].</span>"
+		return "<span class='info'>[src] [attack_verb] \the [target].</span>" //Different span class (default is 'danger')
 	return ..()
 
 /mob/living/simple_animal/miss_unarmed_attack()
