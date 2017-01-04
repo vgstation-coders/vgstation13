@@ -71,17 +71,6 @@
 							step(H, H.dir)
 							to_chat(H, "<span class='notice'>You tripped over your hair!</span>")
 
-			//A billowing floor-length cloak is a tripping hazard
-			if(H.alphas.len > 0)
-				var/cloak_index = H.find_held_item_by_type(/obj/item/weapon/cloakingcloak)
-				if(cloak_index)
-					var/obj/item/weapon/cloakingcloak/cloak = H.get_held_item_by_index(cloak_index)
-					if(cloak.wielded)
-						if(H.m_intent == "run" && prob(10))
-							if (H.Slip(4, 5))
-								step(H, H.dir)
-								H.visible_message("<span class='warning'>\The [H] trips over \his [cloak.name] and appears out of thin air!</span>","<span class='warning'>You trip over your [cloak.name] and become visible again!</span>")
-
 		//Anything beyond that point will not fire if the mob isn't physically walking here
 		if(!M.on_foot()) //Checks lying, flying and locked.to
 			return ..()
