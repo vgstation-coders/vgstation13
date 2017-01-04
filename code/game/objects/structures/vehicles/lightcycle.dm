@@ -8,8 +8,8 @@
 	var/obj/structure/bed/chair/vehicle/lightcycle/summoned_cycle = null
 	var/l_color = "#FFFFFF"
 
-/obj/item/key/lightcycle/New(turf/T, var/col)
-	..(T)
+/obj/item/key/lightcycle/New(atom/A, var/col)
+	..(A)
 	var/hue = rand(0,360)
 	if(col)
 		var/red = GetRedPart(col)
@@ -214,8 +214,8 @@
 	var/l_color = "#FFFFFF"
 	var/erasing = FALSE
 
-/obj/lightribbon/New(turf/T, var/col, var/currdir, var/lastdir)
-	..(T)
+/obj/lightribbon/New(atom/A, var/col, var/currdir, var/lastdir)
+	..(A)
 	if(currdir)
 		if(!lastdir)
 			dir = currdir
