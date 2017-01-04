@@ -98,7 +98,6 @@
 	desc = "A delicate satin sheet that will render you invisible when you cover yourself with it. It is somewhat cumbersome, and running while underneath it is sure to cause you to trip."
 	abbreviation = "CC"
 	spawned_items = list(/obj/item/weapon/cloakingcloak)
-	price = 2 * Sp_BASE_PRICE
 
 //SUMMON GUNS
 /datum/spellbook_artifact/summon_guns
