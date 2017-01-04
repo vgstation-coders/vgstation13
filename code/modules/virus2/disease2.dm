@@ -106,10 +106,6 @@ var/global/list/disease2_list = list()
 	if(mob.reagents.has_reagent(SPACEACILLIN))
 		return
 
-	// Prevents virus stacks of doom - if you have many viruses, they "take turns" / progress slower / eat each other
-	if(prob(100 - (100 / mob.virus2.len))
-		return
-
 	//Virus food speeds up disease progress
 	if(mob.reagents.has_reagent(VIRUSFOOD))
 		mob.reagents.remove_reagent(VIRUSFOOD,0.1)
@@ -130,6 +126,11 @@ var/global/list/disease2_list = list()
 			stage++
 			log += "<br />[timestamp()] NEXT STAGE ([stage])"
 			clicks = 0
+
+	// This makes it so that <mob> only ever gets affected by the equivalent of one virus so antags don't just stack a bunch
+	if(prob(100 - (100 / mob.virus2.len))
+		return
+
 
 	//Do nasty effects
 	for(var/datum/disease2/effect/e in effects)
