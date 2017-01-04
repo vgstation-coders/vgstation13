@@ -61,7 +61,7 @@ var/global/list/disease2_list = list()
 		var/datum/disease2/effect/symptom = input(C, "Choose a symptom to add ([5-i] remaining)", "Choose a Symptom") in (typesof(/datum/disease2/effect))
 			// choose a symptom from the list of them
 		var/datum/disease2/effect/e = new symptom(D)
-		e.chance = input(C, "Choose chance", "Chance") as num 
+		e.chance = input(C, "Choose chance", "Chance") as num
 			// set the chance of the symptom that can occur
 		if(e.chance > 100 || e.chance < 0)
 			return 0
@@ -104,6 +104,10 @@ var/global/list/disease2_list = list()
 
 	//Space antibiotics stop disease completely (temporary)
 	if(mob.reagents.has_reagent(SPACEACILLIN))
+		return
+
+	// Prevents virus stacks of doom - if you have many viruses, they "take turns" / progress slower / eat each other
+	if(prob(100 - (100 / mob.virus2.len))
 		return
 
 	//Virus food speeds up disease progress
