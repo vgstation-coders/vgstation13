@@ -721,3 +721,13 @@
 	..()
 	for(var/i = 1 to 7)
 		new /obj/item/weapon/grenade/chronogrenade(src)
+
+/obj/item/weapon/storage/box/balloons
+	name = "box of balloons"
+	desc = "A box containing seven balloons of various colors."
+	icon_state = "balloon_box"
+
+/obj/item/weapon/storage/box/balloons/New()
+	..()
+	for(var/i = 1 to 7)
+		new /obj/item/toy/balloon(src)

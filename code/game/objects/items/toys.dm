@@ -25,21 +25,22 @@
 /*
  * Balloons
  */
-/obj/item/toy/balloon
+
+/obj/item/toy/waterballoon
 	name = "water balloon"
 	desc = "A translucent balloon. There's nothing in it."
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "waterballoon-e"
 	item_state = "balloon-empty"
 
-/obj/item/toy/balloon/New()
+/obj/item/toy/waterballoon/New()
 	. = ..()
 	create_reagents(10)
 
-/obj/item/toy/balloon/attack(mob/living/carbon/human/M as mob, mob/user as mob)
+/obj/item/toy/waterballoon/attack(mob/living/carbon/human/M as mob, mob/user as mob)
 	return
 
-/obj/item/toy/balloon/afterattack(atom/A as mob|obj, mob/user as mob)
+/obj/item/toy/waterballoon/afterattack(atom/A as mob|obj, mob/user as mob)
 	if (istype(A, /obj/structure/reagent_dispensers/watertank) && get_dist(src,A) <= 1)
 		A.reagents.trans_to(src, 10)
 		to_chat(user, "<span class = 'notice'>You fill the balloon with the contents of \the [A].</span>")
@@ -47,7 +48,7 @@
 		src.update_icon()
 	return
 
-/obj/item/toy/balloon/attackby(obj/O as obj, mob/user as mob)
+/obj/item/toy/waterballoon/attackby(obj/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers/glass))
 		if(O.reagents)
 			if(O.reagents.total_volume < 1)
@@ -65,7 +66,7 @@
 	src.update_icon()
 	return
 
-/obj/item/toy/balloon/throw_impact(atom/hit_atom)
+/obj/item/toy/waterballoon/throw_impact(atom/hit_atom)
 	if(src.reagents.total_volume >= 1)
 		src.visible_message("<span class = 'danger'>\The [src] bursts!</span>","You hear a pop and a splash.")
 		src.reagents.reaction(get_turf(hit_atom))
@@ -77,7 +78,7 @@
 				qdel(src)
 	return
 
-/obj/item/toy/balloon/update_icon()
+/obj/item/toy/waterballoon/update_icon()
 	if(src.reagents.total_volume >= 1)
 		icon_state = "waterballoon"
 		item_state = "balloon"
@@ -1086,3 +1087,82 @@
 	desc = "Small mechanical canary in a cage, does absolutely nothing of any importance!"
 	icon = 'icons/mob/animal.dmi'
 	icon_state = "canary"
+
+/obj/item/toy/balloon
+	name = "balloon"
+	desc = "A simple balloon."
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "balloon_deflated"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toys.dmi', "right_hand" = 'icons/mob/in-hand/right/toys.dmi')
+	var/col = "#FFFFFF"
+
+/obj/item/toy/balloon/New(turf/T, var/ccol)
+	..(T)
+	if(ccol)
+		col = ccol
+	else
+		col = rgb(rand(0,255),rand(0,255),rand(0,255))
+	icon += col
+	update_icon()
+
+/obj/item/toy/balloon/update_icon()
+	overlays.len = 0
+	var/image/shadow_overlay = image('icons/obj/toy.dmi', src, "[icon_state]_shadow")
+	overlays += shadow_overlay
+
+/obj/item/toy/balloon/attack_self(mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/haslungs = FALSE
+		for(var/I in H.internal_organs)
+			if(istype(I, /datum/organ/internal/lungs))
+				haslungs = TRUE
+		if((H.species && H.species.flags & NO_BREATHE) || !haslungs)
+			to_chat(user, "You can't blow up \the [src] without lungs!")
+			return
+	to_chat(user, "You blow up \the [src].")
+	user.drop_item(src, force_drop = 1)
+	var/obj/item/toy/balloon/inflated/B = new (get_turf(user), col)
+	user.put_in_hands(B)
+	playsound(src, 'sound/misc/balloon_inflate.ogg', 50, 1)
+	qdel(src)
+
+/obj/item/toy/balloon/inflated
+	desc = "An inflated balloon. You have an urge to pop it."
+	icon_state = "balloon"
+
+/obj/item/toy/balloon/inflated/attack_self(mob/user)
+	return
+
+/obj/item/toy/balloon/inflated/attackby(obj/item/weapon/W, mob/user)
+	if(W.sharpness_flags & SHARP_TIP)
+		user.visible_message("<span class='warning'>\The [user] pops \the [src]!</span>","You pop \the [src].")
+		pop()
+		return
+	if(istype(W, /obj/item/stack/cable_coil) && !istype(src,/obj/item/toy/balloon/inflated/string))
+		var/obj/item/stack/cable_coil/C = W
+		C.use(1)
+		to_chat(user, "You tie some of \the [C] around the end of \the [src].")
+		new /obj/item/toy/balloon/inflated/string(get_turf(src), col)
+		qdel(src)
+
+/obj/item/toy/balloon/inflated/proc/pop()
+	playsound(src, 'sound/misc/balloon_pop.ogg', 100, 1)
+	qdel(src)
+
+/obj/item/toy/balloon/inflated/string
+	desc = "An inflated balloon with a string hanging from it. You have an urge to pop it."
+	icon_state = "balloon_with_string"
+
+/obj/item/toy/balloon/inflated/string/update_icon()
+	..()
+	var/image/balleft = image('icons/mob/in-hand/left/toys.dmi', src, "[icon_state]")
+	var/image/balleftshadow = image('icons/mob/in-hand/left/toys.dmi', src, "[icon_state]_shadow")
+	var/image/balright = image('icons/mob/in-hand/right/toys.dmi', src, "[icon_state]")
+	var/image/balrightshadow = image('icons/mob/in-hand/right/toys.dmi', src, "[icon_state]_shadow")
+	balleft.icon += col
+	balright.icon += col
+	balleft.overlays += balleftshadow
+	balright.overlays += balrightshadow
+	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = balleft
+	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = balright
