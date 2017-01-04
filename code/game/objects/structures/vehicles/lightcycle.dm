@@ -18,7 +18,7 @@
 		var/list/hsl = rgb2hsl(red,green,blue)
 		hue = hsl[1]
 	var/list/rgb_list = hsl2rgb(hue, 100, 50)		//only neon colors
-	l_color = "[rgb(rgb_list[1],rgb_list[2],rgb_list[3])]"
+	l_color = rgb(rgb_list[1],rgb_list[2],rgb_list[3])
 	icon += l_color
 	update_icon()
 
@@ -32,7 +32,7 @@
 
 /obj/item/key/lightcycle/attack_self(mob/user)
 	..()
-	if(!istype(user, /mob/living/carbon/human))
+	if(!ishuman(user))
 		to_chat(user, "\The [src] refuses to break. You don't think you could fit on a light cycle anyway.")
 		return
 	if(cycle_active)
