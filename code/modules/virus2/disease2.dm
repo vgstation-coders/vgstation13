@@ -131,7 +131,6 @@ var/global/list/disease2_list = list()
 	if(prob(100 - (100 / mob.virus2.len))
 		return
 
-
 	//Do nasty effects
 	for(var/datum/disease2/effect/e in effects)
 		if (e.can_run_effect(stage))
