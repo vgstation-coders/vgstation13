@@ -1096,8 +1096,8 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toys.dmi', "right_hand" = 'icons/mob/in-hand/right/toys.dmi')
 	var/col = "#FFFFFF"
 
-/obj/item/toy/balloon/New(turf/T, var/ccol)
-	..(T)
+/obj/item/toy/balloon/New(atom/A, var/ccol)
+	..(A)
 	if(ccol)
 		col = ccol
 	else
