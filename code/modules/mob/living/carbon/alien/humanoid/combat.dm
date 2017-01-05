@@ -24,6 +24,9 @@
 /mob/living/carbon/alien/humanoid/get_unarmed_miss_sound()
 	return 'sound/weapons/slashmiss.ogg'
 
+/mob/living/carbon/alien/humanoid/knockout_chance_modifier()
+	return 0.25
+
 /mob/living/carbon/alien/humanoid/get_unarmed_verb(mob/living/target)
 	if(isalien(target))
 		return "bites"

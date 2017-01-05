@@ -1,3 +1,5 @@
+#define STUNGLOVES_CHARGE_COST 2500
+
 /obj/item/clothing/gloves/attackby(obj/item/weapon/W, mob/user)
 	if(istype(src, /obj/item/clothing/gloves/boxing))	//quick fix for stunglove overlay not working nicely with boxing gloves.
 		to_chat(user, "<span class='notice'>That won't work.</span>")//i'm not putting my lips on that!
@@ -70,20 +72,13 @@
 	if(user.a_intent == I_HURT)//Stungloves. Any contact will stun the alien.
 		visible_message("<span class='danger'>\The [A] has been touched with the stun gloves by [user]!</span>")
 
-		if(cell.charge >= 2500)
-			cell.charge -= 2500
+		if(cell.charge >= STUNGLOVES_CHARGE_COST)
+			cell.charge -= STUNGLOVES_CHARGE_COST
 
-			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Stungloved [L.name] ([L.ckey])</font>")
-			L.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been stungloved by [user.name] ([user.ckey])</font>")
-			L.LAssailant = user
-
-			log_attack("<font color='red'>[user] ([user.ckey]) stungloved [L.name] ([L.ckey])</font>")
+			add_logs(user, A, "stungloved", admin = TRUE)
 
 			var/armorblock = L.run_armor_check(user.zone_sel.selecting, "energy")
 			L.apply_effects(5,5,0,0,5,0,0,armorblock)
 
 		else
-			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Unsuccessfully stungloved [L.name] ([L.ckey])</font>")
-			L.attack_log += text("\[[time_stamp()]\] <font color='orange'>Victim of an unsuccessful stunglove by [user.name] ([user.ckey])</font>")
-			log_attack("<font color='red'>[user] ([user.ckey]) unsuccessfully stungloved [L.name] ([L.ckey])</font>")
-			to_chat(user, "<span class='warning'>Not enough charge!</span>")
+			add_logs(user, A, "attempted to stunglove", admin = TRUE)

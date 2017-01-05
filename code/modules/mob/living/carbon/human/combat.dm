@@ -27,51 +27,42 @@
 			return G.afterattack(target, src, "struggle" = 1)
 
 /mob/living/carbon/human/disarm_mob(mob/living/target)
-	src.attack_log += text("\[[time_stamp()]\] <font color='red'>Disarmed [target.name] ([target.ckey])</font>")
-	target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been disarmed by [src.name] ([src.ckey])</font>")
+	add_logs(src, target, "disarmed", admin = (src.ckey && target.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
 
-	log_attack("[src.name] ([src.ckey]) disarmed [target.name] ([target.ckey])")
-
-	var/datum/organ/external/affecting = get_organ(ran_zone(zone_sel.selecting))
 	if(target.disarmed_by(src))
 		return
 
-	var/randn = rand(1, 100)
-	if(randn <= 25)
+	var/datum/organ/external/affecting = get_organ(ran_zone(zone_sel.selecting))
+	if(prob(40)) //40% miss chance
+		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
+		visible_message("<span class='danger'>[src] has attempted to disarm [target]!</span>")
+		return
+
+	if(prob(40)) //True chance of something happening per click is hit_chance*event_chance, so in this case the stun chance is actually 0.6*0.4=24%
 		target.apply_effect(4, WEAKEN, run_armor_check(affecting, "melee"))
 		playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 		visible_message("<span class='danger'>[src] has pushed [target]!</span>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='red'>Pushed [target.name] ([target.ckey])</font>")
-		target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been pushed by [src.name] ([src.ckey])</font>")
-
-		target.LAssailant = src
-
-		log_attack("[src.name] ([src.ckey]) pushed [target.name] ([target.ckey])")
+		add_logs(src, target, "pushed", admin = (src.ckey && target.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
 		return
 
 	var/talked = 0
 
-	if(randn <= 60)
-		//Disarming breaks pulls
-		talked |= break_pulls(target)
+	//Disarming breaks pulls
+	talked |= break_pulls(target)
 
-		//Disarming also breaks a grab - this will also stop someone being choked, won't it?
-		talked |= break_grabs(target)
+	//Disarming also breaks a grab - this will also stop someone being choked, won't it?
+	talked |= break_grabs(target)
 
-		if(!talked)
-			target.drop_item()
-			visible_message("<span class='danger'>[src] has disarmed [target]!</span>")
-		playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-		return
+	if(!talked)
+		target.drop_item()
+		visible_message("<span class='danger'>[src] has disarmed [target]!</span>")
+	playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 
 
-	playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-	visible_message("<span class='danger'>[src] has attempted to disarm [target]!</span>")
+
 
 /mob/living/carbon/human/get_unarmed_verb()
-	if(species)
-		return species.attack_verb
-	return ..()
+	return species.attack_verb
 
 /mob/living/carbon/human/get_unarmed_hit_sound()
 	return (species.attack_verb == "punches" ? "punch" : 'sound/weapons/slice.ogg')
@@ -107,16 +98,12 @@
 		var/obj/item/clothing/gloves/G = gloves
 		base_chance += G.bonus_knockout
 
-	if(isalien(victim))
-		base_chance *= 0.25
-	else if(ishuman(victim))
-		base_chance *= 1
-	else if(ismonkey(victim))
-		base_chance *= 2
-	else
-		return 0
+	base_chance *= victim.knockout_chance_modifier()
 
 	return base_chance
+
+/mob/living/carbon/human/knockout_chance_modifier()
+	return 1
 
 /mob/living/carbon/human/after_unarmed_attack(mob/living/target, damage, damage_type, organ, armor)
 	var/knockout_chance = get_knockout_chance(target)
