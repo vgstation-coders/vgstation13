@@ -467,10 +467,10 @@ var/list/DummyCache = list()
 		if(hue<0)
 			hue += 6
 
-	lgh = round(lgh * 255, 1)
-	sat = round(sat * 255, 1)
+	lgh = round(lgh * 100, 1)
+	sat = round(sat * 100, 1)
 
-	hue = round((hue / 6) * 255, 1)
+	hue = round((hue / 6) * 360, 1)
 
 	return list(
 		hue,
@@ -480,9 +480,9 @@ var/list/DummyCache = list()
 
 /proc/hsl2rgb(var/hue, var/sat, var/lgh)
 
-	hue /= 255
-	sat /= 255
-	lgh /= 255
+	hue /= 360
+	sat /= 100
+	lgh /= 100
 
 	var/red = 0
 	var/grn = 0
