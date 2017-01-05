@@ -215,6 +215,3 @@ proc/get_space_area()
 
 //Helper macro for eggs, called in process() of all fertilized eggs. If it returns 0, the egg will no longer be able to hatch
 #define is_in_valid_nest(egg) (isturf(egg.loc))
-
-
-#define CHECK_TICK if(world.tick_usage > 90) sleep(world.tick_lag)
