@@ -320,7 +320,7 @@
 		/obj/item/device/mmi/radio_enabled,
 		/obj/item/device/reagent_scanner,
 		/obj/item/device/soundsynth,
-		/obj/item/latexballon,
+		/obj/item/toy/balloon/glove,
 		/obj/item/weapon/storage/toolbox/electrical,
 		/obj/item/ammo_storage/magazine/a12mm,
 		/obj/item/ammo_storage/box/c45,
