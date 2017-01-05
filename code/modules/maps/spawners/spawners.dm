@@ -473,7 +473,7 @@
 		/obj/item/taperoll/engineering,
 		/obj/item/taperoll/police,
 		/obj/item/toy/ammo/gun,
-		/obj/item/toy/balloon,
+		/obj/item/toy/waterballoon,
 		/obj/item/toy/crayon/red,
 		/obj/item/toy/crayon/yellow,
 		/obj/item/toy/crayon/blue,

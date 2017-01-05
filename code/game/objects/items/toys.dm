@@ -1196,15 +1196,6 @@
 	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = balleft
 	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = balright
 
-/obj/item/latexballon/New()
-	..()
-	var/obj/item/toy/balloon/B = new(loc)
-	B.name = "latex glove"
-	B.desc = "A latex glove."
-	B.icon = 'icons/obj/items.dmi'
-	B.icon_state = "latexballoon"
-	B.item_state = "lgloves"
-
 /obj/item/toy/balloon/glove
 	name = "latex glove"
 	desc = "A latex glove."
