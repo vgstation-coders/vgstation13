@@ -1,10 +1,12 @@
-// #include, in my DM code?!
-// Wow it's like C!
+#define STAGE_SOURCES  1
+#define STAGE_CORNERS  2
+#define STAGE_OVERLAYS 3
+
 var/datum/subsystem/lighting/SSlighting
 
-var/list/lighting_update_lights    = list()    // List of lighting sources  queued for update.
-var/list/lighting_update_corners   = list()    // List of lighting corners  queued for update.
-var/list/lighting_update_overlays  = list()    // List of lighting overlays queued for update.
+var/list/lighting_update_lights    = list() // List of lighting sources  queued for update.
+var/list/lighting_update_corners   = list() // List of lighting corners  queued for update.
+var/list/lighting_update_overlays  = list() // List of lighting overlays queued for update.
 
 
 /datum/subsystem/lighting
@@ -17,6 +19,8 @@ var/list/lighting_update_overlays  = list()    // List of lighting overlays queu
 	var/list/currentrun_lights
 	var/list/currentrun_corners
 	var/list/currentrun_overlays
+
+	var/resuming_stage = 0
 
 
 /datum/subsystem/lighting/New()
@@ -31,15 +35,17 @@ var/list/lighting_update_overlays  = list()    // List of lighting overlays queu
 
 
 /datum/subsystem/lighting/fire(resumed = FALSE)
+	if (resumed)
+		to_chat(world, "lighting did a RESUME! GASP!")
+
 	if (!resumed)
+		resuming_stage = 0
+
+	if (resuming_stage == 0)
 		currentrun_lights   = lighting_update_lights
-		currentrun_corners  = lighting_update_corners
-		currentrun_overlays = lighting_update_overlays
-
 		lighting_update_lights   = list()
-		lighting_update_corners  = list()
-		lighting_update_overlays = list()
 
+		resuming_stage = STAGE_SOURCES
 
 	while (currentrun_lights.len)
 		var/datum/light_source/L = currentrun_lights[currentrun_lights.len]
@@ -58,8 +64,17 @@ var/list/lighting_update_overlays  = list()    // List of lighting overlays queu
 		L.needs_update = FALSE
 
 		if (MC_TICK_CHECK)
+			to_chat(world, "TICK CHECKED on lights")
 			return
 
+	if (resuming_stage == STAGE_SOURCES)
+		if (currentrun_corners && currentrun_corners.len)
+			to_chat(world, "we still have corners to do, but we're gonna override them?")
+
+		currentrun_corners  = lighting_update_corners
+		lighting_update_corners  = list()
+
+		resuming_stage = STAGE_CORNERS
 
 	while (currentrun_corners.len)
 		var/datum/lighting_corner/C = currentrun_corners[currentrun_corners.len]
@@ -68,8 +83,16 @@ var/list/lighting_update_overlays  = list()    // List of lighting overlays queu
 		C.update_overlays()
 		C.needs_update = FALSE
 		if (MC_TICK_CHECK)
+			to_chat(world, "TICK CHECKED on corners")
 			return
 
+	to_chat(world, "Done with the corners.")
+
+	if (resuming_stage == STAGE_CORNERS)
+		currentrun_overlays = lighting_update_overlays
+		lighting_update_overlays = list()
+
+		resuming_stage = STAGE_OVERLAYS
 
 	while (currentrun_overlays.len)
 		var/atom/movable/lighting_overlay/O = currentrun_overlays[currentrun_overlays.len]
@@ -78,9 +101,17 @@ var/list/lighting_update_overlays  = list()    // List of lighting overlays queu
 		O.update_overlay()
 		O.needs_update = FALSE
 		if (MC_TICK_CHECK)
+			to_chat(world, "TICK CHECKED on overlays")
 			return
+
+	resuming_stage = 0
 
 
 /datum/subsystem/lighting/Recover()
 	initialized = SSlighting.initialized
 	..()
+
+
+#undef STAGE_SOURCES
+#undef STAGE_CORNERS
+#undef STAGE_OVERLAYS

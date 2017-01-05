@@ -133,11 +133,15 @@
 /datum/subsystem/proc/Initialize(start_timeofday)
 	var/time = (world.timeofday - start_timeofday) / 10
 	var/msg = "Initialized [name] subsystem within [time] seconds!"
-	to_chat(world, "<span class='boldannounce'>[msg]</span>")
+	to_chat(world, "<span class='danger'>[msg]</span>")
 	return time
 
 //hook for printing stats to the "MC" statuspanel for admins to see performance and related stats etc.
 /datum/subsystem/proc/stat_entry(msg)
+	if (flags & SS_NO_FIRE)
+		// Prevent init-only subsystems from cluttering everything.
+		return
+
 	if(!statclick)
 		statclick = new/obj/effect/statclick/debug("Initializing...", src)
 
