@@ -31,6 +31,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 	var/can_take_pai = FALSE
 	var/obj/item/device/paicard/integratedpai = null
+	var/datum/delay_controller/pAImove_delayer = new(1, ARBITRARILY_LARGE_NUMBER)
+	var/pAImovement_delay = 0
 
 /obj/New()
 	..()
@@ -96,6 +98,19 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/proc/intenthurt_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the hurt intent hotkey
 	return
+
+/obj/proc/pAImove(mob/living/silicon/pai/user, dir)					//called when integrated pAI attempts to move
+	if(pAImove_delayer.blocked())
+		return 0
+	else
+		delayNextpAIMove(getpAIMovementDelay())
+		return 1
+
+/obj/proc/getpAIMovementDelay()
+	return pAImovement_delay
+
+/obj/proc/delayNextpAIMove(var/delay, var/additive=0)
+	pAImove_delayer.delayNext(delay,additive)
 
 /obj/proc/on_integrated_pai_click(mob/living/silicon/pai/user, var/atom/A)
 	if(istype(A,/obj/machinery)||(istype(A,/mob)&&user.secHUD))
