@@ -21,6 +21,7 @@ var/list/processing_objects = list()
 
 	..()
 
+
 /datum/subsystem/obj/fire(resumed = FALSE)
 	if (!resumed)
 		currentrun = global.processing_objects.Copy()
@@ -32,6 +33,7 @@ var/list/processing_objects = list()
 		if (!o || o.gcDestroyed || o.disposed || o.timestopped)
 			continue
 
-		o.process()
+		// > this fucking proc isn't defined on a global level.
+		o:process()
 		if (MC_TICK_CHECK)
 			return

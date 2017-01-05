@@ -31,9 +31,11 @@ var/datum/controller/failsafe/Failsafe
 		Failsafe.Loop()
 		qdel(Failsafe) //when Loop() returns, we delete ourselves and let the mc recreate us
 
+/*
 /datum/controller/failsafe/Destroy()
 	..()
 	return QDEL_HINT_HARDDEL_NOW
+*/
 
 /datum/controller/failsafe/proc/Loop()
 	while(1)

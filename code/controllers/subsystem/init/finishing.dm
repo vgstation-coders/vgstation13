@@ -1,17 +1,17 @@
-var/datum/subsystem/air/SSair
+var/datum/subsystem/finish/SSfinish
 
 
-/datum/subsystem/air
+/datum/subsystem/finish
 	name = "Finishing Init"
 	init_order = INIT_FINISH
 	flags = SS_NO_FIRE
 
 
-/datum/subsystem/air/New()
-	NEW_SS_GLOBAL(SSair)
+/datum/subsystem/finish/New()
+	NEW_SS_GLOBAL(SSfinish)
 
 
-/datum/subsystem/air/Initialize(timeofday)
+/datum/subsystem/finish/Initialize(timeofday)
 	setup_species()
 	setup_shuttles()
 

@@ -8,7 +8,7 @@ var/datum/subsystem/ticker/SSticker
 
 	var/lastTickerTimeDuration
 	var/lastTickerTime
-
+	var/initialized = FALSE
 
 /datum/subsystem/ticker/New()
 	NEW_SS_GLOBAL(SSticker)
@@ -20,11 +20,11 @@ var/datum/subsystem/ticker/SSticker
 	if (!ticker)
 		ticker = new
 
-	tickerProcess = src
-
 	spawn (0)
 		if (ticker)
 			ticker.pregame()
+
+	initialized = TRUE
 
 	..()
 

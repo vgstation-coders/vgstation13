@@ -4,6 +4,8 @@
 //#define GC_DEBUG
 //#define GC_FINDREF
 
+/datum/var/gcDestroyed
+
 var/datum/garbage_collector/garbageCollector
 var/soft_dels = 0
 

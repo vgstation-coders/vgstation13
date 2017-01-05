@@ -160,7 +160,7 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 #define PARALLAX3_ICON_NUMBER 14
 #define PARALLAX2_ICON_NUMBER 10
 
-/datum/controller/game_controller/proc/create_global_parallax_icons()
+/proc/create_global_parallax_icons()
 	var/list/plane1 = list()
 	var/list/plane2 = list()
 	var/list/plane3 = list()

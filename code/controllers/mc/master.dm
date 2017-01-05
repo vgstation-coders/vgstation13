@@ -52,7 +52,6 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 
 /datum/controller/master/New()
 	// Highlander-style: there can only be one! Kill off the old and replace it with the new.
-	check_for_cleanbot_bug()
 	subsystems = list()
 	if (Master != src)
 		if (istype(Master))
@@ -62,10 +61,12 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 			init_subtypes(/datum/subsystem, subsystems)
 		Master = src
 
+/*
 /datum/controller/master/Destroy()
 	..()
 	// Tell qdel() to Del() this object.
 	return QDEL_HINT_HARDDEL_NOW
+*/
 
 /datum/controller/master/proc/Shutdown()
 	processing = FALSE
@@ -141,7 +142,7 @@ var/CURRENT_TICKLIMIT = TICK_LIMIT_RUNNING
 	sortTim(subsystems, /proc/cmp_subsystem_display)
 	// Set world options.
 	world.sleep_offline = 1
-	world.tick_lag = config.TickLag
+	world.tick_lag = config.Ticklag
 	sleep(1)
 	// Loop.
 	Master.StartProcessing()

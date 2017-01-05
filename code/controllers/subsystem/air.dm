@@ -1,5 +1,7 @@
 var/datum/subsystem/air/SSair
 
+var/air_processing_killed = FALSE
+
 
 /datum/subsystem/air
 	name = "Air"

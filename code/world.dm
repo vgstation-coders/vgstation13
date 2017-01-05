@@ -265,7 +265,7 @@ var/savefile/panicfile
 				fcopy(vote.chosen_map, filename)
 			sleep(60)
 
-	processScheduler.stop()
+	Master.Shutdown()
 	paperwork_stop()
 
 	spawn()

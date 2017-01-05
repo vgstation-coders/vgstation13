@@ -13,4 +13,4 @@ var/list/fast_machines = list()
 
 
 /datum/subsystem/machinery/fast/get_currenrun()
-	return fast_machines.copy()
+	return fast_machines.Copy()

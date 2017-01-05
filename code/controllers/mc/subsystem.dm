@@ -160,6 +160,7 @@
 	flags |= SS_NO_INIT
 
 //this is so the subsystem doesn't rapid fire to make up missed ticks causing more lag
+/*
 /datum/subsystem/vv_edit_var(var_name, var_value)
 	switch (var_name)
 		if ("can_fire")
@@ -168,3 +169,4 @@
 		if ("queued_priority") //editing this breaks things.
 			return 0
 	. = ..()
+*/

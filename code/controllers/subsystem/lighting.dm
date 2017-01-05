@@ -1,3 +1,5 @@
+// #include, in my DM code?!
+// Wow it's like C!
 var/datum/subsystem/lighting/SSlighting
 
 var/list/lighting_update_lights    = list()    // List of lighting sources  queued for update.
