@@ -1094,16 +1094,20 @@
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "balloon_deflated"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toys.dmi', "right_hand" = 'icons/mob/in-hand/right/toys.dmi')
+	w_class = W_CLASS_TINY
+	force = 0
+	throwforce = 0
 	var/col = "#FFFFFF"
 
 /obj/item/toy/balloon/New(atom/A, var/ccol)
 	..(A)
-	if(ccol)
-		col = ccol
-	else
-		col = rgb(rand(0,255),rand(0,255),rand(0,255))
-	icon += col
-	update_icon()
+	if(col)
+		if(ccol)
+			col = ccol
+		else
+			col = rgb(rand(0,255),rand(0,255),rand(0,255))
+		icon += col
+		update_icon()
 
 /obj/item/toy/balloon/update_icon()
 	overlays.len = 0
@@ -1120,26 +1124,41 @@
 		if((H.species && H.species.flags & NO_BREATHE) || !haslungs)
 			to_chat(user, "You can't blow up \the [src] without lungs!")
 			return
-	to_chat(user, "You blow up \the [src].")
-	user.drop_item(src, force_drop = 1)
-	var/obj/item/toy/balloon/inflated/B = new (get_turf(user), col)
-	user.put_in_hands(B)
+	inflate(user)
+
+/obj/item/toy/balloon/proc/inflate(mob/user, datum/gas_mixture/G)
+	var/obj/item/toy/balloon/inflated/B = new(get_turf(src), col)
+	if(user)
+		user.drop_item(src, force_drop = 1)
+		user.put_in_hands(B)
+		to_chat(user, "You blow up \the [src].")
 	playsound(src, 'sound/misc/balloon_inflate.ogg', 50, 1)
+	if(!G)
+		B.air_contents = new /datum/gas_mixture()
+		B.air_contents.volume = 12 //liters
+		B.air_contents.temperature = T20C
+		B.air_contents.carbon_dioxide = 0.5
+	else
+		var/moles = ONE_ATMOSPHERE*12/(R_IDEAL_GAS_EQUATION*G.temperature)
+		B.air_contents = G.remove(moles)
 	qdel(src)
 
 /obj/item/toy/balloon/inflated
 	desc = "An inflated balloon. You have an urge to pop it."
 	icon_state = "balloon"
+	w_class = W_CLASS_MEDIUM
+	var/datum/gas_mixture/air_contents = null
+	var/can_be_strung = TRUE
 
 /obj/item/toy/balloon/inflated/attack_self(mob/user)
 	return
 
 /obj/item/toy/balloon/inflated/attackby(obj/item/weapon/W, mob/user)
-	if(W.sharpness_flags & SHARP_TIP)
+	if(W.sharpness_flags & (SHARP_TIP|HOT_EDGE))
 		user.visible_message("<span class='warning'>\The [user] pops \the [src]!</span>","You pop \the [src].")
 		pop()
 		return
-	if(istype(W, /obj/item/stack/cable_coil) && !istype(src,/obj/item/toy/balloon/inflated/string))
+	if(istype(W, /obj/item/stack/cable_coil) && can_be_strung)
 		var/obj/item/stack/cable_coil/C = W
 		C.use(1)
 		to_chat(user, "You tie some of \the [C] around the end of \the [src].")
@@ -1148,11 +1167,21 @@
 
 /obj/item/toy/balloon/inflated/proc/pop()
 	playsound(src, 'sound/misc/balloon_pop.ogg', 100, 1)
+	if(air_contents)
+		loc.assume_air(air_contents)
 	qdel(src)
+
+/obj/item/toy/balloon/inflated/bullet_act()
+	pop()
+
+/obj/item/toy/balloon/inflated/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(exposed_temperature > T0C+100)
+		pop()
 
 /obj/item/toy/balloon/inflated/string
 	desc = "An inflated balloon with a string hanging from it. You have an urge to pop it."
 	icon_state = "balloon_with_string"
+	can_be_strung = FALSE
 
 /obj/item/toy/balloon/inflated/string/update_icon()
 	..()
@@ -1166,3 +1195,83 @@
 	balright.overlays += balrightshadow
 	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = balleft
 	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = balright
+
+/obj/item/latexballon/New()
+	..()
+	var/obj/item/toy/balloon/B = new(loc)
+	B.name = "latex glove"
+	B.desc = "A latex glove."
+	B.icon = 'icons/obj/items.dmi'
+	B.icon_state = "latexballoon"
+	B.item_state = "lgloves"
+
+/obj/item/toy/balloon/glove
+	name = "latex glove"
+	desc = "A latex glove."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "latexballoon"
+	item_state = "lgloves"
+	col = null
+
+/obj/item/toy/balloon/glove/inflate(mob/user, datum/gas_mixture/G)
+	var/obj/item/toy/balloon/inflated/glove/B = new(get_turf(src), col)
+	if(user)
+		user.drop_item(src, force_drop = 1)
+		user.put_in_hands(B)
+		to_chat(user, "You blow up \the [src].")
+	playsound(src, 'sound/misc/balloon_inflate.ogg', 50, 1)
+	if(!G)
+		B.air_contents = new /datum/gas_mixture()
+		B.air_contents.volume = 12 //liters
+		B.air_contents.temperature = T20C
+		B.air_contents.carbon_dioxide = 0.5
+	else
+		var/moles = ONE_ATMOSPHERE*12/(R_IDEAL_GAS_EQUATION*G.temperature)
+		B.air_contents = G.remove(moles)
+	qdel(src)
+
+/obj/item/toy/balloon/inflated/glove
+	name = "latex glove balloon"
+	desc = "An inflated latex glove."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "latexballoon_blow"
+	item_state = "latexballon"
+	col = null
+	can_be_strung = FALSE
+
+/obj/item/toy/balloon/inflated/glove/attackby(obj/item/W, mob/user)
+	..()
+	if(istype(W, /obj/item/toy/balloon/inflated/glove) && !istype(src, /obj/item/toy/balloon/inflated/glove/pair))
+		var/obj/item/toy/balloon/inflated/glove/B = W
+		if(!air_contents || !B.air_contents)
+			return
+		to_chat(user, "You tie \the [src]s together.")
+		if(W.loc == user)
+			user.drop_item(W, force_drop = 1)
+		var/obj/item/toy/balloon/inflated/glove/pair/BB = new (get_turf(src))
+		BB.air_contents = air_contents
+		BB.air_contents.volume += B.air_contents.volume
+		BB.air_contents.merge(B.air_contents.remove_ratio(1))
+		if(loc == user)
+			user.drop_item(src, force_drop = 1)
+			user.put_in_hands(BB)
+		qdel(W)
+		qdel(src)
+
+/obj/item/toy/balloon/inflated/glove/pair
+	name = "pair of latex glove balloons"
+	desc = "A pair of inflated latex gloves."
+	icon_state = "latexballoon_pair"
+	item_state = "latexballon"
+
+/obj/item/toy/balloon/inflated/glove/pair/attackby(obj/item/W, mob/user)
+	..()
+	if(istype(W, /obj/item/toy/crayon/red))
+		to_chat(user, "You color \the [src] light red using \the [W].")
+		if(src.loc == user)
+			user.drop_item(src, force_drop = 1)
+			var/obj/item/clothing/gloves/anchor_arms/A = new (get_turf(user))
+			user.put_in_hands(A)
+		else
+			new /obj/item/clothing/gloves/anchor_arms(get_turf(src.loc))
+		qdel(src)
