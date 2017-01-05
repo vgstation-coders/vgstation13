@@ -1,5 +1,5 @@
 //For lists of words to be used with viruses.
-var/global/list/virus_opposite_word_list
+var/list/virus_opposite_word_list
 
 /datum/disease2/proc/initialize_word_lists()
 	virus_opposite_word_list = list(
