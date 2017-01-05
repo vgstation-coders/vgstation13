@@ -1141,7 +1141,7 @@
 
 	selection.forceMove(get_turf(src))
 	affected.implants -= selection
-	shock_stage+=10
+	pain_shock_stage+=10
 
 	for(var/obj/item/weapon/O in pinned)
 		if(O == selection)
@@ -1664,5 +1664,8 @@
 /mob/living/carbon/human/feels_pain()
 	if(!species)
 		return FALSE
-
-	return !(species.flags & NO_PAIN)
+	if(species.flags & NO_PAIN)
+		return FALSE
+	if(pain_numb)
+		return FALSE
+	return TRUE
