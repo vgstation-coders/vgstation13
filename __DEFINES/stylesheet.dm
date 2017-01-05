@@ -28,10 +28,10 @@ em						{font-style: normal;	font-weight: bold;}
 .centradio				{color: #5C5C8A;}
 .secradio				{color: #A30000;}
 .engradio				{color: #A66300;}
-.medradio				{color: #008160;}
+.medradio				{color: #3399CC;}
 .sciradio				{color: #993399;}
 .supradio				{color: #5F4519;}
-.serradio				{color: #3399CC;}
+.serradio				{color: #A17A4E;}
 .djradio				{color: #663300;}
 .binaryradio			{color: #300050;	font-family: 'Courier New', Courier, monospace;}
 .mommiradio				{color: navy;}

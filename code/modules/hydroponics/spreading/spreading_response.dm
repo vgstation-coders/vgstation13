@@ -154,7 +154,7 @@
 		to_chat(victim, "<span class='danger'>The vines [pick("wind", "tangle", "tighten")] around you!</span>")
 
 /obj/effect/plantsegment/proc/grab_mob(var/mob/living/victim)
-	if(!victim || victim.locked_to || !seed || seed.spread != 2 || is_locking(/datum/locking_category/plantsegment))
+	if(!victim || victim.locked_to || !Adjacent(victim)|| !seed || seed.spread != 2 || is_locking(/datum/locking_category/plantsegment))
 		return
 
 	var/can_grab = 1

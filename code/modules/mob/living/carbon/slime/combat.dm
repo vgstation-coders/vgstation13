@@ -5,7 +5,7 @@
 		attacked += 10
 
 /mob/living/carbon/slime/get_unarmed_verb()
-	return "glomped on"
+	return "glomps on"
 
 /mob/living/carbon/slime/get_unarmed_damage(mob/living/target)
 	if(isslime(target))
@@ -40,7 +40,7 @@
 			return 10
 
 /mob/living/carbon/slime/unarmed_attack_mob(mob/living/target)
-	if(target.health < -100)
+	if(target.isDead())
 		to_chat(src, "<span class='notice'>\The [target] is already dead.</span>")
 		return
 

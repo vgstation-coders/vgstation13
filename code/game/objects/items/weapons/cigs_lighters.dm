@@ -407,7 +407,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/cigar
 	name = "Premium Cigar"
-	desc = "A brown roll of tobacco and... well, you're not quite sure. This thing's huge!"
+	desc = "A large roll of tobacco and... well, you're not quite sure. This thing's huge!"
 	icon_state = "cigar"
 	overlay_on = "cigarlit"
 	flags = FPRINT

@@ -4166,7 +4166,7 @@
 		return 1
 
 	spawn(0)
-		if(((M_CLUMSY in H.mutations)) || prob(25))
+		if((clumsy_check(H)) || prob(25))
 			if(H.drop_item())
 				user.visible_message("<span class='warning'>[src] escapes from [H]'s hands!</span>","<span class='warning'>[src] escapes from your grasp!</span>")
 
@@ -4260,7 +4260,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/eclair/big
 	name = "massive eclair"
 	desc = "Plus fort que ses hanches."
-	icon_state = "eclair_big"
+	icon_state = "big_eclair"
 	bitesize = 30
 	w_class = 5
 
@@ -4470,7 +4470,7 @@
 	reagents.add_reagent(NUTRIMENT,2)
 
 /obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan
-	name = "zhu l�ng cao f�n"
+	name = "zhu long cao fan"
 	desc = "Literally meaning 'pitcher plant rice'. After carefully cleansing and steaming the pitcher plant, it is stuffed with steamed rice. The carnivorous plant is rich with minerals from fauna it has consumed."
 	icon_state = "zhulongcaofan"
 	bitesize = 3

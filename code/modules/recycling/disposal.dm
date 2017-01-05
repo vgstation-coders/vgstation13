@@ -554,7 +554,7 @@
 		AM.forceMove(src)
 		if(istype(AM, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = AM
-			if(((M_FAT in H.mutations) && (H.species && H.species.flags & CAN_BE_FAT)) || H.species.flags & IS_BULKY)		// is a human and fat?
+			if(((M_FAT in H.mutations) && (H.species && H.species.anatomy_flags & CAN_BE_FAT)) || H.species.anatomy_flags & IS_BULKY)		// is a human and fat?
 				has_fat_guy = 1			// set flag on holder
 		if(istype(AM, /obj/item/delivery/large) && !hasmob)
 			var/obj/item/delivery/large/T = AM

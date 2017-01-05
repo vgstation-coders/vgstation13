@@ -6,9 +6,8 @@
 	known_languages = list(LANGUAGE_CLATTER)
 	attack_verb = "punches"
 
-	//flags = IS_WHITELISTED /*| HAS_LIPS | HAS_TAIL | NO_EAT | NO_BREATHE | NON_GENDERED*/ | NO_BLOOD
-	// These things are just really, really griefy. IS_WHITELISTED removed for now - N3X
-	flags = NO_BLOOD | NO_BREATHE | NO_PAIN
+	flags = NO_BREATHE | NO_PAIN
+	anatomy_flags = NO_BLOOD | HAS_SWEAT_GLANDS
 
 	default_mutations=list(M_NO_BREATH,M_NO_SHOCK,M_RUN)
 

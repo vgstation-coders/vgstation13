@@ -237,3 +237,30 @@
 
 /obj/machinery/door/mineral/resin/acidable()
 	return 0
+
+/obj/machinery/door/mineral/transparent/icicle
+	name = "icicle door"
+	use_power = 0
+	machine_flags = 0
+	icon = 'icons/obj/doors/mineral.dmi'
+	icon_state = "icicledoor_closed"
+	prefix = "icicle"
+	hardness = 0.5
+
+	soundeffect = 'sound/effects/ice_breaking.ogg'
+
+/obj/machinery/door/mineral/transparent/icicle/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
+	if(air_group || (height == 0))
+		return 1
+	else
+		return ..()
+
+/obj/machinery/door/mineral/transparent/icicle/horizontal
+	name = "icicle door"
+	icon_state = "iciclehorizontaldoor_closed"
+	prefix = "iciclehorizontal"
+
+/obj/machinery/door/mineral/transparent/icicle/horizontal/New(location)
+	..()
+	icon_state = "[prefix]door_closed"
+	name = "icicle door"

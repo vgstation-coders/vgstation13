@@ -1,10 +1,10 @@
-# vgstation
+# vgstation ![](https://travis-ci.org/d3athrow/vgstation13.svg?branch=Bleeding-Edge)
 
 [Website](http://ss13.moe) - [Code](https://github.com/d3athrow/vgstation13)
 
-[IRC](irc://irc.rizon.net/vgstation) (irc.rizon.net #vgstation), here is an embedded link to it
+[IRC](irc://irc.rizon.net/vgstation) (irc.rizon.net #vgstation), here is an embedded link to it:  [![Visit our IRC channel](https://kiwiirc.com/buttons/irc.rizon.net/vgstation.png)](https://kiwiirc.com/client/irc.rizon.net/?nick=Newcomer|?&theme=basic#vgstation)
 
-[![Visit our IRC channel](https://kiwiirc.com/buttons/irc.rizon.net/vgstation.png)](https://kiwiirc.com/client/irc.rizon.net/?nick=Newcomer|?&theme=basic#vgstation)
+[Discord Coding Server Invite Link](https://discord.gg/afVXAyq)
 
 ---
 
@@ -23,7 +23,7 @@ When that opens, click repository at the top left and choose 'clone'. You can ei
 
 After you have cloned, make sure you have a remote to the main repository and your own forked repository by making a remote using the links above. By right clicking on your remote to this repo you can 'pull' the most recent version of the code from the main repository.
 
-You can then create new branches of code directly from our Bleeding-Edge branch on your computer. 
+You can then create new branches of code directly from our Bleeding-Edge branch on your computer.
 
 Warning: If you checkout different branches or update the code while Dream Maker is open, this can cause problems when someone adds/removes files or when one of the files changed is currently open.
 

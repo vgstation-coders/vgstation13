@@ -108,7 +108,7 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/droneship
 	file_path = "maps/randomvaults/droneship.dmm"
-	
+
 /datum/map_element/vault/meteorlogical_station
 	file_path = "maps/randomvaults/meteorlogical_station.dmm"
 
@@ -117,3 +117,6 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/lightspeedship
 	file_path = "maps/randomvaults/lightspeedship.dmm"
+
+/datum/map_element/vault/ice_comet
+	file_path = "maps/randomvaults/ice_comet.dmm"

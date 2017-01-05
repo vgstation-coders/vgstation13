@@ -302,7 +302,7 @@
 	if(holder && holder.my_atom)
 		var/mob/living/carbon/human/H = holder.my_atom
 		if(istype(H))
-			if(H.species && H.species.flags & NO_BLOOD)
+			if(H.species && H.species.anatomy_flags & NO_BLOOD)
 				return 0
 	return 1
 
@@ -366,9 +366,7 @@
 
 	//Put out fire
 	if(method == TOUCH)
-		M.adjust_fire_stacks(-(volume / 10))
-		if(M.fire_stacks <= 0)
-			M.ExtinguishMob()
+		M.ExtinguishMob()
 
 	//Water now directly damages slimes instead of being a turf check
 	if(isslime(M))
@@ -5029,7 +5027,7 @@
 	if(..())
 		return 1
 
-	empulse(get_turf(M), 1, 2, 0)
+	empulse(get_turf(M), 1, 2, 1)
 
 	return
 

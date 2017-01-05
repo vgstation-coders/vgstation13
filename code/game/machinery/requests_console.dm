@@ -302,7 +302,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 		if (sending)
 			var/pass = 0
 			for (var/obj/machinery/message_server/MS in message_servers)
-				if(!MS.active)
+				if(!MS.is_functioning())
 					continue
 				MS.send_rc_message(href_list["department"],department,log_msg,msgStamped,msgVerified,priority)
 				pass = 1

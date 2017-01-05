@@ -72,12 +72,7 @@ In all, this is a lot like the monkey code. /N
 	switch(M.a_intent)
 
 		if(I_HELP)
-			sleeping = max(0,sleeping-5)
-			resting = 0
-			AdjustParalysis(-3)
-			AdjustStunned(-3)
-			AdjustKnockdown(-3)
-			visible_message("<span class='notice'>[M] nuzzles [src] trying to wake it up !</span>")
+			help_shake_act(M)
 		if(I_GRAB)
 			M.grab_mob(src)
 		else

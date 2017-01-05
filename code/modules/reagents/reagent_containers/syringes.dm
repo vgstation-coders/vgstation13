@@ -84,7 +84,7 @@
 		return
 
 	if (user.a_intent == I_HURT && ismob(target))
-		if((M_CLUMSY in user.mutations) && prob(50))
+		if(clumsy_check(user) && prob(50))
 			target = user
 
 		if (target != user && !can_stab) // You still can stab yourself if you're clumsy, honk

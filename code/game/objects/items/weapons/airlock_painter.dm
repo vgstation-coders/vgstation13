@@ -1,6 +1,6 @@
 /obj/item/weapon/airlock_painter
 	name = "airlock painter"
-	desc = "An advanced autopainter preprogrammed with several paintjobs for airlocks. Use it on an airlock during or after construction to change the paintjob."
+	desc = "An advanced autopainter pre-programmed with several paintjobs for airlocks. Use it on an airlock during or after construction to change the paintjob."
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "paint sprayer"
 	item_state = "paint sprayer"

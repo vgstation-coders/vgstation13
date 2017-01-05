@@ -966,7 +966,7 @@
 	var/datum/organ/external/head/h = organs_by_name[LIMB_HEAD]
 	h.disfigured = 0
 
-	if(species && !(species.flags & NO_BLOOD))
+	if(species && !(species.anatomy_flags & NO_BLOOD))
 		vessel.add_reagent(BLOOD,560-vessel.total_volume)
 		fixblood()
 
@@ -1659,7 +1659,7 @@
 	..()
 
 /mob/living/carbon/human/is_fat()
-	return (M_FAT in mutations) && (species && species.flags & CAN_BE_FAT)
+	return (M_FAT in mutations) && (species && species.anatomy_flags & CAN_BE_FAT)
 
 /mob/living/carbon/human/feels_pain()
 	if(!species)

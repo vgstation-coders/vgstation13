@@ -28,13 +28,18 @@ proc/cardinalrange(var/center)
 	var/stability = 100//If this gets low bad things tend to happen
 	var/efficiency = 1//How many cores this core counts for when doing power processing, plasma in the air and stability could affect this
 	var/coredirs = 0
-	var/dirs=0
+	var/dirs = 0
+	var/mapped = 0 //Set to 1 to ignore usual suicide if it doesn't immediately find a control_unit
 
+// Stupidly easy way to use it in maps
+/obj/machinery/am_shielding/map
+	mapped = 1
 
 /obj/machinery/am_shielding/New(loc, var/obj/machinery/power/am_control_unit/AMC)
 	..()
 	if(!AMC)
-		WARNING("AME sector somehow created without a parent control unit!")
+		if (!mapped)
+			WARNING("AME sector somehow created without a parent control unit!")
 		controllerscan()
 		return
 	link_control(AMC)
@@ -79,11 +84,21 @@ proc/cardinalrange(var/center)
 		for(var/obj/machinery/power/am_control_unit/AMC in cardinalrange(src))
 			if(AMC.add_shielding(src))
 				break
-		if(!priorscan)
-			sleep(20)
-			controllerscan(1)//Last chance
-			return
-		qdel(src)
+		if(!mapped) // Prevent rescanning and suicide if it's part of the map
+			if(!priorscan)
+				sleep(20)
+				controllerscan(1)//Last chance
+				return
+			qdel(src)
+
+// Find surrounding unconnected shielding and add them to our controller
+/obj/machinery/am_shielding/proc/assimilate()
+	if(!control_unit)
+		return // nothing to share :'^(
+	for(var/obj/machinery/am_shielding/neighbor in cardinalrange(src))
+		if(neighbor && !neighbor.control_unit)
+			neighbor.link_control(control_unit)
+			neighbor.assimilate() // recursion is fun, right?
 
 /obj/machinery/am_shielding/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(air_group || (height==0))

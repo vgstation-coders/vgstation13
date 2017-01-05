@@ -1076,7 +1076,7 @@
 		return
 	src.log_message("[usr] tries to move in.")
 	if (src.occupant)
-		to_chat(usr, "<span class='bnotice'>The [src.name] is already occupied!</span>")
+		to_chat(usr, "<span class='bnotice'>\The [src] is already occupied!</span>")
 		src.log_append_to_last("Permission denied.")
 		return
 /*
@@ -1099,7 +1099,7 @@
 			to_chat(usr, "You're too busy getting your life sucked out of you.")
 			return
 
-	visible_message("<span class='notice'>[usr] starts to climb into [src.name]</span>")
+	visible_message("<span class='notice'>[usr] starts to climb into \the [src].</span>")
 
 
 	if(enter_after(40,usr))

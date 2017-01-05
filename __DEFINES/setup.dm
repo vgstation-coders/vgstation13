@@ -955,29 +955,28 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 	"CREED"
 	)
 
-//Species flags.
-#define NO_BLOOD 1
-#define NO_BREATHE 2
-#define NO_SCAN 4
-#define NO_PAIN 8
+//Generic species flags.
+#define NO_BREATHE 1
+#define NO_SCAN 2
+#define NO_PAIN 4
+#define IS_SLOW 8
+#define IS_PLANT 16
+#define IS_WHITELISTED 32
+#define RAD_ABSORB 64
+#define REQUIRE_LIGHT 128
+#define HYPOTHERMIA_IMMUNE 256
+#define PLASMA_IMMUNE 512
 
-#define HAS_SKIN_TONE 16
-#define HAS_LIPS 32
-#define HAS_UNDERWEAR 64
-#define HAS_TAIL 128
-
-#define IS_SLOW 256
-#define IS_PLANT 512
-#define IS_WHITELISTED 1024
-
-#define RAD_ABSORB 2048
-#define REQUIRE_LIGHT 4096
-
-#define CAN_BE_FAT 8192 // /vg/
-
-#define IS_BULKY 16384 //can't wear exosuits, gloves, masks, or hardsuits
-
-#define NO_SKIN 32768
+//Species anatomical flags.
+#define HAS_SKIN_TONE 1
+#define HAS_LIPS 2
+#define HAS_UNDERWEAR 4
+#define HAS_TAIL 8
+#define CAN_BE_FAT 16
+#define IS_BULKY 32 //can't wear exosuits, gloves, masks, or hardsuits
+#define NO_SKIN 64
+#define NO_BLOOD 128
+#define HAS_SWEAT_GLANDS 256
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\

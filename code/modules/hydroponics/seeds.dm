@@ -598,7 +598,7 @@
 	seed_name = "blood tomato"
 	display_name = "blood tomato plant"
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/bloodtomato)
-	mutants = list("killer")
+	mutants = list("killertomato")
 	packet_icon = "seed-bloodtomato"
 	plant_icon = "bloodtomato"
 	chems = list(NUTRIMENT = list(1,10), BLOOD = list(10,2))
