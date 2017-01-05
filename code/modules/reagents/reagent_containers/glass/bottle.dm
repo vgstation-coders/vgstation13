@@ -420,7 +420,7 @@
 	name = "Rezadone Bottle"
 	desc = "A small bottle. Contains a small amount of Rezadone."
 	icon = 'icons/obj/chemical.dmi'
-	New()
+	/obj/item/weapon/reagent_containers/glass/bottle/rezadone/New()
 		..()
 		reagents.add_reagent(REZADONE, 30)
 
@@ -428,7 +428,7 @@
 	name = "Alkysine Bottle"
 	desc = "A small bottle. Contains a small amount of Alkysine."
 	icon = 'icons/obj/chemical.dmi'
-	New()
+	/obj/item/weapon/reagent_containers/glass/bottle/alkysine/New()
 		..()
 		reagents.add_reagent(ALKYSINE, 30)
 
@@ -436,6 +436,6 @@
 	name = "Alkysine Bottle"
 	desc = "A small bottle. Contains a small amount of Alkysine."
 	icon = 'icons/obj/chemical.dmi'
-	New()
+	/obj/item/weapon/reagent_containers/glass/bottle/alkysinesmall/New()
 		..()
 		reagents.add_reagent(ALKYSINE, 10)
