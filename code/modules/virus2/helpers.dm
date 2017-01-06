@@ -70,6 +70,7 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 		var/datum/disease2/disease/D = disease.getcopy()
 		D.minormutate()
 //		log_debug("Adding virus")
+		log_debug("[key_name(M)] infected with [disease.uniqueID]: forced=[forced], notes=[notes].")
 		D.log += "<br />[timestamp()] Infected [key_name(M)] [notes]"
 		M.virus2["[D.uniqueID]"] = D
 		return 1
@@ -99,7 +100,7 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 //	log_debug("Spreading [vector] diseases from [src] to [victim]")
 	if (virus2.len > 0)
 		for (var/ID in virus2)
-			log_debug("Attempting virus [ID]")
+			// log_debug("Attempting to infect [key_name(victim)] with virus [ID].")
 			var/datum/disease2/disease/V = virus2[ID]
 			if(V.spreadtype != vector)
 				continue
