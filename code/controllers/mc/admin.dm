@@ -45,8 +45,6 @@
 			feedback_add_details("admin_verb","RSupply")
 		if ("Master")
 			new/datum/controller/master()
-			//Master.process()
-			#warn wat
 			feedback_add_details("admin_verb","RMC")
 		if ("Failsafe")
 			new /datum/controller/failsafe()
