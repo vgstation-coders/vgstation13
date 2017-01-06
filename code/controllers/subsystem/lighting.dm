@@ -34,14 +34,11 @@ var/list/lighting_update_overlays  = list() // List of lighting overlays queued 
 	..()
 
 
-/datum/subsystem/lighting/fire(resumed = FALSE)
+/datum/subsystem/lighting/fire(resumed=FALSE)
 	if (resumed)
-		to_chat(world, "lighting did a RESUME! GASP!")
+		//to_chat(world, "lighting did a RESUME! GASP!")
 
-	if (!resumed)
-		resuming_stage = 0
-
-	if (resuming_stage == 0)
+	if (resuming_stage == 0 || !resumed)
 		currentrun_lights   = lighting_update_lights
 		lighting_update_lights   = list()
 
@@ -64,10 +61,9 @@ var/list/lighting_update_overlays  = list() // List of lighting overlays queued 
 		L.needs_update = FALSE
 
 		if (MC_TICK_CHECK)
-			to_chat(world, "TICK CHECKED on lights")
 			return
 
-	if (resuming_stage == STAGE_SOURCES)
+	if (resuming_stage == STAGE_SOURCES || !resumed)
 		if (currentrun_corners && currentrun_corners.len)
 			to_chat(world, "we still have corners to do, but we're gonna override them?")
 
@@ -83,12 +79,9 @@ var/list/lighting_update_overlays  = list() // List of lighting overlays queued 
 		C.update_overlays()
 		C.needs_update = FALSE
 		if (MC_TICK_CHECK)
-			to_chat(world, "TICK CHECKED on corners")
 			return
 
-	to_chat(world, "Done with the corners.")
-
-	if (resuming_stage == STAGE_CORNERS)
+	if (resuming_stage == STAGE_CORNERS || !resumed)
 		currentrun_overlays = lighting_update_overlays
 		lighting_update_overlays = list()
 
@@ -101,7 +94,6 @@ var/list/lighting_update_overlays  = list() // List of lighting overlays queued 
 		O.update_overlay()
 		O.needs_update = FALSE
 		if (MC_TICK_CHECK)
-			to_chat(world, "TICK CHECKED on overlays")
 			return
 
 	resuming_stage = 0

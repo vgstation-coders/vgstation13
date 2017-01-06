@@ -1304,12 +1304,12 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 	if(!center)
 		return
 
-	dview_mob.forceMove(center)
+	dview_mob.loc = center
 
 	dview_mob.see_invisible = invis_flags
 
 	. = view(range, dview_mob)
-	dview_mob.forceMove(null)
+	dview_mob.loc = null
 
 /mob/dview
 	invisibility = 101
@@ -1603,3 +1603,7 @@ Game Mode config tags:
 			//you might be thinking of adding more steps to this, or making it use a loop and a counter var
 			//	not worth it.
 #undef DELTA_CALC
+
+
+/proc/stack_trace(message = "Getting a stack trace.")
+	CRASH(message)
