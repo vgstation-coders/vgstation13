@@ -110,7 +110,7 @@
 		greet_revolutionary(rev_mind)
 	modePlayer += head_revolutionaries
 	if(emergency_shuttle)
-		emergency_shuttle.always_fake_recall = 1
+		emergency_shuttle.always_fake_recall = 0
 	spawn (rand(waittime_l, waittime_h))
 		if(!mixed)
 			send_intercept()
