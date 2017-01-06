@@ -10,7 +10,7 @@
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey
 	species_type = /mob/living/carbon/monkey
 	treadmill_speed = 0.8 //Slow apes!
-	var/attack_text = "bit"
+	var/attack_text = "bites"
 	var/languagetoadd = LANGUAGE_MONKEY
 	var/namenumbers = TRUE
 
@@ -404,11 +404,11 @@
 	//Lasertag bullshit
 	if(lasercolor)
 		if(lasercolor == "b")//Lasertag turrets target the opposing team, how great is that? -Sieve
-			if(find_held_item_by_type(/obj/item/weapon/gun/energy/laser/redtag))
+			if(find_held_item_by_type(/obj/item/weapon/gun/energy/tag/red))
 				threatcount += 4
 
 		if(lasercolor == "r")
-			if(find_held_item_by_type(/obj/item/weapon/gun/energy/laser/bluetag))
+			if(find_held_item_by_type(/obj/item/weapon/gun/energy/tag/blue))
 				threatcount += 4
 
 		return threatcount

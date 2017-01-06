@@ -590,50 +590,40 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/emitter/singularity_pull()
 	return
 
-/obj/item/projectile/beam/lasertag/blue
+////////Laser Tag////////////////////
+/obj/item/projectile/beam/lasertag
 	name = "lasertag beam"
-	icon_state = "bluelaser"
 	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
 	damage = 0
 	damage_type = BURN
 	flag = "laser"
+	icon_state = "bluelaser"
+	var/list/enemy_vest_types = list(/obj/item/clothing/suit/redtag)
 
-	on_hit(var/atom/target, var/blocked = 0)
-		if(istype(target, /mob/living/carbon/human))
-			var/mob/living/carbon/human/M = target
-			if(istype(M.wear_suit, /obj/item/clothing/suit/redtag))
-				M.Knockdown(5)
-		return 1
+/obj/item/projectile/beam/lasertag/on_hit(var/atom/target, var/blocked = 0)
+	if(istype(target, /mob/living/carbon/human))
+		var/mob/living/carbon/human/M = target
+		if(is_type_in_list(M.wear_suit, enemy_vest_types))
+			if(!M.lying) //Kick a man while he's down, will ya
+				var/obj/item/weapon/gun/energy/tag/taggun = shot_from
+				if(istype(taggun))
+					taggun.score()
+			M.Knockdown(5)
+	return 1
+
+/obj/item/projectile/beam/lasertag/blue
+	icon_state = "bluelaser"
+	enemy_vest_types = list(/obj/item/clothing/suit/redtag)
 
 /obj/item/projectile/beam/lasertag/red
-	name = "lasertag beam"
 	icon_state = "laser"
-	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
-	damage = 0
-	damage_type = BURN
-	flag = "laser"
+	enemy_vest_types = list(/obj/item/clothing/suit/bluetag)
 
-	on_hit(var/atom/target, var/blocked = 0)
-		if(istype(target, /mob/living/carbon/human))
-			var/mob/living/carbon/human/M = target
-			if(istype(M.wear_suit, /obj/item/clothing/suit/bluetag))
-				M.Knockdown(5)
-		return 1
-
-/obj/item/projectile/beam/lasertag/omni//A laser tag bolt that stuns EVERYONE
-	name = "lasertag beam"
+/obj/item/projectile/beam/lasertag/omni //A laser tag ray that stuns EVERYONE
 	icon_state = "omnilaser"
-	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
-	damage = 0
-	damage_type = BURN
-	flag = "laser"
+	enemy_vest_types = list(/obj/item/clothing/suit/redtag, /obj/item/clothing/suit/bluetag)
 
-	on_hit(var/atom/target, var/blocked = 0)
-		if(istype(target, /mob/living/carbon/human))
-			var/mob/living/carbon/human/M = target
-			if((istype(M.wear_suit, /obj/item/clothing/suit/bluetag))||(istype(M.wear_suit, /obj/item/clothing/suit/redtag)))
-				M.Knockdown(5)
-		return 1
+
 
 /obj/item/projectile/beam/bison
 	name = "heat ray"

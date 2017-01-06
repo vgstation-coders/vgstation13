@@ -102,7 +102,7 @@
 		if(assailant && assailant.mob && istype(assailant.mob,/mob))
 			M = assailant.mob
 
-		if(speed >= 20)
+		if(speed >= EMBED_THROWING_SPEED)
 			var/obj/item/weapon/W = O
 			var/momentum = speed/2
 

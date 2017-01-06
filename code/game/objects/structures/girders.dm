@@ -4,11 +4,25 @@
 	density = 1
 	var/state = 0
 	var/material = /obj/item/stack/sheet/metal
+	var/construction_length = 40
 
 /obj/structure/girder/wood
 	icon_state = "girder_wood"
 	name = "wooden girder"
 	material = /obj/item/stack/sheet/wood
+	construction_length = 20
+
+/obj/structure/girder/wood/attackby(var/obj/item/W, var/mob/user)
+	if(W.sharpness_flags & CHOPWOOD)
+		playsound(get_turf(src), 'sound/effects/woodcuttingshort.ogg', 50, 1)
+		user.visible_message("<span class='warning'>[user] smashes through \the [src] with \the [W].</span>", \
+							"<span class='notice'>You smash through \the [src].</span>",\
+							"<span class='warning'>You hear the sound of wood being cut</span>"
+							)
+		qdel(src)
+		getFromPool(material, get_turf(src), 2)
+	else
+		..()
 
 /obj/structure/girder/wood/update_icon()
 	if(anchored)
@@ -25,7 +39,7 @@
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
 				user.visible_message("<span class='notice'>[user] starts disassembling \the [src].</span>", \
 				"<span class='notice'>You start disassembling \the [src].</span>")
-				if(do_after(user, src, 40))
+				if(do_after(user, src, construction_length))
 					user.visible_message("<span class='warning'>[user] dissasembles \the [src].</span>", \
 					"<span class='notice'>You dissasemble \the [src].</span>")
 					getFromPool(material, get_turf(src))
@@ -38,7 +52,7 @@
 				playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
 				user.visible_message("<span class='notice'>[user] starts securing \the [src].</span>", \
 				"<span class='notice'>You start securing \the [src].</span>")
-				if(do_after(user, src, 40))
+				if(do_after(user, src, construction_length))
 					user.visible_message("<span class='notice'>[user] secures \the [src].</span>", \
 					"<span class='notice'>You secure \the [src].</span>")
 					add_hiddenprint(user)
@@ -49,7 +63,7 @@
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 100, 1)
 			user.visible_message("<span class='notice'>[user] starts [anchored ? "un" : ""]securing \the [src].</span>", \
 			"<span class='notice'>You start [anchored ? "un" : ""]securing \the [src].</span>")
-			if(do_after(user, src, 40))
+			if(do_after(user, src, construction_length))
 				anchored = !anchored //Unachor it if anchored, or opposite
 				user.visible_message("<span class='notice'>[user] [anchored ? "" : "un"]secures \the [src].</span>", \
 				"<span class='notice'>You [anchored ? "" : "un"]secure \the [src].</span>")
@@ -74,7 +88,7 @@
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
 		user.visible_message("<span class='warning'>[user] starts unsecuring \the [src]'s internal support struts.</span>", \
 		"<span class='notice'>You start unsecuring \the [src]'s internal support struts.</span>")
-		if(do_after(user, src, 40))
+		if(do_after(user, src, construction_length))
 			user.visible_message("<span class='warning'>[user] unsecures \the [src]'s internal support struts.</span>", \
 			"<span class='notice'>You unsecure \the [src]'s internal support struts.</span>")
 			add_hiddenprint(user)
@@ -86,7 +100,7 @@
 		playsound(get_turf(src), 'sound/items/Screwdriver.ogg', 100, 1)
 		user.visible_message("<span class='notice'>[user] starts securing \the [src]'s internal support struts.</span>", \
 		"<span class='notice'>You start securing \the [src]'s internal support struts.</span>")
-		if(do_after(user, src, 40))
+		if(do_after(user, src, construction_length))
 			user.visible_message("<span class='notice'>[user] secures \the [src]'s internal support struts.</span>", \
 			"<span class='notice'>You secure \the [src]'s internal support struts.</span>")
 			add_hiddenprint(user)
@@ -98,7 +112,7 @@
 		playsound(get_turf(src), 'sound/items/Wirecutter.ogg', 100, 1)
 		user.visible_message("<span class='warning'>[user] starts removing \the [src]'s internal support struts.</span>", \
 		"<span class='notice'>You start removing \the [src]'s internal support struts.</span>")
-		if(do_after(user, src, 40))
+		if(do_after(user, src, construction_length))
 			user.visible_message("<span class='warning'>[user] removes \the [src]'s internal support struts.</span>", \
 			"<span class='notice'>You remove \the [src]'s internal support struts.</span>")
 			add_hiddenprint(user)
@@ -114,7 +128,7 @@
 			return
 		user.visible_message("<span class='notice'>[user] starts inserting internal support struts into \the [src.]</span>", \
 		"<span class='notice'>You start inserting internal support struts into \the [src].</span>")
-		if(do_after(user, src,40))
+		if(do_after(user, src,construction_length))
 			var/obj/item/stack/rods/O = W
 			if(O.amount < 2) //In case our user is trying to be tricky
 				to_chat(user, "<span class='warning'>You need more rods to finish the support struts.</span>")
@@ -131,7 +145,7 @@
 		playsound(get_turf(src), 'sound/items/Crowbar.ogg', 100, 1)
 		user.visible_message("<span class='warning'>[user] starts dislodging \the [src].</span>", \
 		"<span class='notice'>You start dislodging \the [src].</span>")
-		if(do_after(user, src, 40))
+		if(do_after(user, src, construction_length))
 			user.visible_message("<span class='warning'>[user] dislodges \the [src].</span>", \
 			"<span class='notice'>You dislodge \the [src].</span>")
 			add_hiddenprint(user)
@@ -167,7 +181,7 @@
 						return ..() // ?
 					user.visible_message("<span class='notice'>[user] starts installing plating to \the [src].</span>", \
 					"<span class='notice'>You start installing plating to \the [src].</span>")
-					if(do_after(user, src, 40))
+					if(do_after(user, src, construction_length))
 						if(S.amount < 2) //User being tricky
 							return
 						S.use(2)
@@ -255,7 +269,7 @@
 					return ..()
 				user.visible_message("<span class='notice'>[user] starts installing plating to \the [src].</span>", \
 				"<span class='notice'>You start installing plating to \the [src].</span>")
-				if(do_after(user, src,40))
+				if(do_after(user, src,construction_length))
 					if(S.amount < 2) //Don't be tricky now
 						return
 					S.use(2)

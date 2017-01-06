@@ -196,10 +196,11 @@ For the main html chat area
 		return
 
 	if (isicon(obj))
-		if (!bicon_cache["\ref[obj]"]) // Doesn't exist yet, make it.
+		//Icons get pooled constantly, references are no good here.
+		/*if (!bicon_cache["\ref[obj]"]) // Doesn't exist yet, make it.
 			bicon_cache["\ref[obj]"] = icon2base64(obj)
-
-		return "<img class='icon misc' src='data:image/png;base64,[bicon_cache["\ref[obj]"]]'>"
+		return "<img class='icon misc' src='data:image/png;base64,[bicon_cache["\ref[obj]"]]'>"*/
+		return "<img class='icon misc' src='data:image/png;base64,[icon2base64(obj)]'>"
 
 	// Either an atom or somebody fucked up and is gonna get a runtime, which I'm fine with.
 	var/atom/A = obj
@@ -217,6 +218,17 @@ For the main html chat area
 //Aliases for bicon
 /proc/bi(obj)
 	bicon(obj)
+
+//Costlier version of bicon() that uses getFlatIcon() to account for overlays, underlays, etc. Use with extreme moderation, ESPECIALLY on mobs.
+/proc/costly_bicon(var/obj)
+	if (!obj)
+		return
+
+	if (isicon(obj))
+		return bicon(obj)
+
+	var/icon/I = getFlatIcon(obj)
+	return bicon(I)
 
 /proc/to_chat(target, message)
 	//Ok so I did my best but I accept that some calls to this will be for shit like sound and images

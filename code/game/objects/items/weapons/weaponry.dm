@@ -243,8 +243,8 @@ obj/item/weapon/banhammer/admin
 /obj/item/weapon/melee/bone_hammer/afterattack(null, mob/living/user as mob|obj, null, null, null)
 	user.delayNextAttack(50) //five times the regular attack delay
 
-/obj/item/weapon/melee/bone_hammer/New(turf/T, var/p_borer = null)
-	..(T)
+/obj/item/weapon/melee/bone_hammer/New(atom/A, var/p_borer = null)
+	..(A)
 	if(istype(p_borer, /mob/living/simple_animal/borer))
 		parent_borer = p_borer
 	if(!parent_borer)

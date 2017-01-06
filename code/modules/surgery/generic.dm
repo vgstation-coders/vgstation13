@@ -44,7 +44,7 @@
 
 /datum/surgery_step/generic/cut_with_laser/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())
-		if(target.species && (target.species.flags & NO_SKIN))
+		if(target.species && (target.species.anatomy_flags & NO_SKIN))
 			to_chat(user, "<span class='info'>[target] has no skin!</span>")
 			return 0
 		var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -93,7 +93,7 @@
 
 /datum/surgery_step/generic/incision_manager/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())
-		if(target.species && (target.species.flags & NO_SKIN))
+		if(target.species && (target.species.anatomy_flags & NO_SKIN))
 			to_chat(user, "<span class='info'>[target] has no skin!</span>")
 			return 0
 
@@ -151,7 +151,7 @@
 
 /datum/surgery_step/generic/cut_open/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	. = ..()
-	if(target.species && (target.species.flags & NO_SKIN))
+	if(target.species && (target.species.anatomy_flags & NO_SKIN))
 		to_chat(user, "<span class='info'>[target] has no skin!</span>")
 		return 0
 
@@ -196,7 +196,7 @@
 
 /datum/surgery_step/generic/clamp_bleeders/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())
-		if(target.species && (target.species.flags & NO_BLOOD))
+		if(target.species && (target.species.anatomy_flags & NO_BLOOD))
 			to_chat(user, "<span class='info'>[target] has no vessels to clamp!</span>")
 			return 0
 
@@ -238,7 +238,7 @@
 
 /datum/surgery_step/generic/retract_skin/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())
-		if(target.species && (target.species.flags & NO_SKIN))
+		if(target.species && (target.species.anatomy_flags & NO_SKIN))
 			to_chat(user, "<span class='info'>[target] has no skin!</span>")
 			return 0
 
@@ -308,7 +308,7 @@
 
 /datum/surgery_step/generic/cauterize/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())
-		if(target.species && (target.species.flags & NO_SKIN))
+		if(target.species && (target.species.anatomy_flags & NO_SKIN))
 			to_chat(user, "<span class='info'>[target] has no skin!</span>")
 			return 0
 

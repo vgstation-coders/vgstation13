@@ -527,7 +527,6 @@ Thanks.
 	remove_jitter()
 	germ_level = 0
 	next_pain_time = 0
-	traumatic_shock = 0
 	radiation = 0
 	nutrition = 400
 	bodytemperature = 310
@@ -555,7 +554,7 @@ Thanks.
 		H.timeofdeath = 0
 		H.vessel.reagent_list = list()
 		H.vessel.add_reagent(BLOOD,560)
-		H.shock_stage = 0
+		H.pain_shock_stage = 0
 		spawn(1)
 			H.fixblood()
 		for(var/organ_name in H.organs_by_name)
@@ -1232,11 +1231,11 @@ Thanks.
 			var/mob/living/carbon/human/H = null
 			if(ishuman(tmob))
 				H = tmob
-			if(H && ((M_FAT in H.mutations) || (H && H.species && H.species.flags & IS_BULKY)))
+			if(H && ((M_FAT in H.mutations) || (H && H.species && H.species.anatomy_flags & IS_BULKY)))
 				var/mob/living/carbon/human/U = null
 				if(ishuman(src))
 					U = src
-				if(prob(40) && !(U && ((M_FAT in U.mutations) || (U && U.species && U.species.flags & IS_BULKY))))
+				if(prob(40) && !(U && ((M_FAT in U.mutations) || (U && U.species && U.species.anatomy_flags & IS_BULKY))))
 					to_chat(src, "<span class='danger'>You fail to push [tmob]'s fat ass out of the way.</span>")
 					now_pushing = 0
 					return

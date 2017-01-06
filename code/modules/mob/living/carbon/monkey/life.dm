@@ -520,7 +520,7 @@
 			else
 				light_amount = 5
 		nutrition += light_amount
-		traumatic_shock -= light_amount
+		pain_shock_stage -= light_amount
 
 		if(nutrition > 500)
 			nutrition = 500

@@ -966,7 +966,7 @@
 	var/datum/organ/external/head/h = organs_by_name[LIMB_HEAD]
 	h.disfigured = 0
 
-	if(species && !(species.flags & NO_BLOOD))
+	if(species && !(species.anatomy_flags & NO_BLOOD))
 		vessel.add_reagent(BLOOD,560-vessel.total_volume)
 		fixblood()
 
@@ -1141,7 +1141,7 @@
 
 	selection.forceMove(get_turf(src))
 	affected.implants -= selection
-	shock_stage+=10
+	pain_shock_stage+=10
 
 	for(var/obj/item/weapon/O in pinned)
 		if(O == selection)
@@ -1389,16 +1389,16 @@
 		if(lasercolor == "b")//Lasertag turrets target the opposing team.
 			if(istype(wear_suit, /obj/item/clothing/suit/redtag))
 				threatcount += 4
-			if(find_held_item_by_type(/obj/item/weapon/gun/energy/laser/redtag))
+			if(find_held_item_by_type(/obj/item/weapon/gun/energy/tag/red))
 				threatcount += 4
-			if(istype(belt, /obj/item/weapon/gun/energy/laser/redtag))
+			if(istype(belt, /obj/item/weapon/gun/energy/tag/red))
 				threatcount += 2
 		if(lasercolor == "r")
 			if(istype(wear_suit, /obj/item/clothing/suit/bluetag))
 				threatcount += 4
-			if(find_held_item_by_type(/obj/item/weapon/gun/energy/laser/bluetag))
+			if(find_held_item_by_type(/obj/item/weapon/gun/energy/tag/blue))
 				threatcount += 4
-			if(istype(belt, /obj/item/weapon/gun/energy/laser/bluetag))
+			if(istype(belt, /obj/item/weapon/gun/energy/tag/blue))
 				threatcount += 2
 		return threatcount
 	//Check for ID
@@ -1659,10 +1659,13 @@
 	..()
 
 /mob/living/carbon/human/is_fat()
-	return (M_FAT in mutations) && (species && species.flags & CAN_BE_FAT)
+	return (M_FAT in mutations) && (species && species.anatomy_flags & CAN_BE_FAT)
 
 /mob/living/carbon/human/feels_pain()
 	if(!species)
 		return FALSE
-
-	return !(species.flags & NO_PAIN)
+	if(species.flags & NO_PAIN)
+		return FALSE
+	if(pain_numb)
+		return FALSE
+	return TRUE

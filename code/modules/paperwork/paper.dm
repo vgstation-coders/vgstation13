@@ -85,7 +85,7 @@
 	set category = "Object"
 	set src in usr
 
-	if((M_CLUMSY in usr.mutations) && prob(50))
+	if(clumsy_check(usr) && prob(50))
 		to_chat(usr, "<span class='warning'>You cut yourself on [src].</span>")
 		return
 	var/n_name = copytext(sanitize(input(usr, "What would you like to label [src]?", "Paper Labelling", null)  as text), 1, MAX_NAME_LEN)
@@ -352,7 +352,7 @@
 			var/obj/item/clothing/gloves/G = H.gloves
 			if(G.max_heat_protection_temperature)
 				prot = (G.max_heat_protection_temperature > src.autoignition_temperature)
-		if(!prot && (M_CLUMSY in H.mutations) && prob(50)) //only fail if human
+		if(!prot && clumsy_check(H) && prob(50)) //only fail if human
 			H.apply_damage(10,BURN,(pick(LIMB_LEFT_HAND, LIMB_RIGHT_HAND)))
 			user.drop_hands()
 			user.visible_message( \

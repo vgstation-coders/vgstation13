@@ -856,13 +856,26 @@
 		/mob/living/simple_animal/hostile/giant_spider/nurse,
 		/mob/living/simple_animal/hostile/giant_spider/hunter,
 		)
-
+/obj/map/spawner/mobs/wolf
+	name = "wolf spawner"
+	icon_state = "mob_wolf"
+	amount = 7
+	to_spawn = list(
+		/mob/living/simple_animal/hostile/wolf,
+		/mob/living/simple_animal/hostile/wolf,
+		/mob/living/simple_animal/hostile/wolf,
+		/mob/living/simple_animal/hostile/wolf,
+		/mob/living/simple_animal/hostile/wolf/alpha,
+		/mob/living/simple_animal/hostile/wolf/alpha,
+		)
 /obj/map/spawner/mobs/humanoid/wiz
 	name = "wizard spawner"
 	icon_state = "mob_wiz"
 	amount = 2
 	chance = 50
 	to_spawn = list(/mob/living/simple_animal/hostile/humanoid/wizard)
+
+
 
 
 // Robutts /////////////////////////////////////////////////////
@@ -1136,4 +1149,46 @@
 	/obj/item/clothing/accessory/medal/gold,
 	/obj/item/clothing/accessory/medal/gold/captain,
 	/obj/item/clothing/accessory/medal/gold/heroism
+)
+//Food spawners////////////////////////////////////
+/obj/map/spawner/food/voxfood //spawns food for the vox raiders
+	name = "vox food spawner"
+	icon_state = "food"
+	amount = 7
+	jiggle = 5
+	to_spawn = list (/obj/item/weapon/reagent_containers/food/snacks/hoboburger,
+	/obj/item/weapon/reagent_containers/food/snacks/hoboburger,
+	/obj/item/weapon/reagent_containers/food/snacks/sweetandsourpork,
+	/obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan,
+	/obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan,
+	/obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan,
+	/obj/item/weapon/reagent_containers/food/snacks/porktenderloin,
+	/obj/item/weapon/reagent_containers/food/snacks/voxstew,
+	/obj/item/weapon/reagent_containers/food/snacks/woodapplejam,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/sweetandsourpork,
+	/obj/item/weapon/reagent_containers/food/snacks/sundayroast,
+	/obj/item/weapon/reagent_containers/food/snacks/pie/breadfruit,
+	/obj/item/weapon/reagent_containers/food/snacks/pie/breadfruit,
+	/obj/item/weapon/reagent_containers/food/snacks/garlicbread,
+	/obj/item/weapon/reagent_containers/food/snacks/garlicbread,
+	/obj/item/weapon/reagent_containers/food/snacks/mushnslush,
+	/obj/item/weapon/reagent_containers/food/snacks/candiedwoodapple,
+	/obj/item/weapon/reagent_containers/food/snacks/bacon,
+	/obj/item/weapon/reagent_containers/food/snacks/bacon,
+	/obj/item/weapon/reagent_containers/food/snacks/bacon
 )

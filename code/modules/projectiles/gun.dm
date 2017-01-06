@@ -130,7 +130,7 @@
 	if(clumsy_check)
 		if(istype(user, /mob/living))
 			var/mob/living/M = user
-			if ((M_CLUMSY in M.mutations) && prob(50))
+			if (clumsy_check(M) && prob(50))
 				to_chat(M, "<span class='danger'>[src] blows up in your face.</span>")
 				M.take_organ_damage(0,20)
 				M.drop_item(src, force_drop = 1)
@@ -170,7 +170,7 @@
 	if(defective)
 		if(!failure_check(user))
 			return
-	if(!istype(src, /obj/item/weapon/gun/energy/laser/redtag) && !istype(src, /obj/item/weapon/gun/energy/laser/bluetag))
+	if(!istype(src, /obj/item/weapon/gun/energy/tag))
 		log_attack("[user.name] ([user.ckey]) fired \the [src] (proj:[in_chamber.name]) at [originaltarget] [ismob(target) ? "([originaltarget:ckey])" : ""] ([originaltarget.x],[originaltarget.y],[originaltarget.z])[struggle ? " due to being disarmed." :""]" )
 	in_chamber.firer = user
 

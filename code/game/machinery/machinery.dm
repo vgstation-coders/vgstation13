@@ -550,6 +550,7 @@ Class Procs:
 	return emag_cost
 
 /obj/machinery/attackby(var/obj/O, var/mob/user)
+	..()
 	if(istype(O, /obj/item/weapon/card/emag) && machine_flags & EMAGGABLE)
 		var/obj/item/weapon/card/emag/E = O
 		if(E.canUse(user,src))
@@ -605,10 +606,10 @@ Class Procs:
 	if(!P.hackloop(src))
 		return 0
 	return 1
-	
+
 /obj/machinery/proc/can_overload(mob/user) //used for AI machine overload
 	return(src in machines)
-	
+
 /obj/machinery/proc/shock(mob/user, prb, var/siemenspassed = -1)
 	if(stat & (BROKEN|NOPOWER))		// unpowered, no shock
 		return 0

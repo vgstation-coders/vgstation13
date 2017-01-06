@@ -1,0 +1,38 @@
+"a" = (/turf/space,/area)
+"b" = (/turf/simulated/wall/invulnerable/ice,/area/vault/icecomet)
+"c" = (/obj/structure/snow_pedestal{light_power = 5; light_range = 10},/obj/item/clothing/head/celtic,/turf/simulated/floor/plating/snow/ice,/area/vault/icecomet)
+"d" = (/turf/simulated/floor/plating/snow/ice{light_power = 5; light_range = 10},/area/vault/icecomet)
+"e" = (/turf/simulated/floor/plating/snow/ice,/area/vault/icecomet)
+"f" = (/obj/machinery/door/mineral/transparent/icicle/horizontal,/turf/simulated/floor/plating/snow/ice,/area/vault/icecomet)
+"g" = (/mob/living/simple_animal/hostile/decoy/snowman/frostgolem/wizard,/turf/simulated/floor/plating/snow,/area/vault/icecomet)
+"h" = (/obj/structure/snow,/obj/structure/snow,/turf/simulated/floor/plating/snow,/area/vault/icecomet)
+"i" = (/mob/living/simple_animal/hostile/decoy/snowman/frostgolem/knight,/turf/simulated/floor/plating/snow,/area/vault/icecomet)
+"j" = (/mob/living/simple_animal/hostile/humanoid/frostgolem{wander = 0},/turf/simulated/floor/plating/snow/ice,/area/vault/icecomet)
+
+(1,1,1) = {"
+aaaaaaaaaabbbbbaaaaaaaaaa
+aaaaaaaabbbbcbbbbaaaaaaaa
+aaaaaaabbdebfbedbbaaaaaaa
+aaaaaabbgheeeeehgbbaaaaaa
+aaaaaabihhheeehhhibaaaaaa
+aaaaaabhhhhhehhhhhbaaaaaa
+aaaaaabihhhhehhhhibaaaaaa
+aaaaaabbhhheeehhhbbaaaaaa
+aaaaaaabhheeeeehhbaaaaaaa
+aaaaaaabbeeeeeeebbaaaaaaa
+aaaaaaabbbbbfbbbbbaaaaaaa
+aaaaaaaabbjeeejbbaaaaaaaa
+aaaaaaaabbheeehbbaaaaaaaa
+aaaaaaaabbhhehhbbaaaaaaaa
+aaaaaaaaabhhehhbaaaaaaaaa
+aaaaaaaaabhhehhbaaaaaaaaa
+aaaaaaaaabhhehhbaaaaaaaaa
+aaaaaaaaabbhehbbaaaaaaaaa
+aaaaaaaaaabhehbaaaaaaaaaa
+aaaaaaaaaabhehbaaaaaaaaaa
+aaaaaaaaaabeeebaaaaaaaaaa
+aaaaaaaaaabbebbaaaaaaaaaa
+aaaaaaaaaaabebaaaaaaaaaaa
+aaaaaaaaaaabebaaaaaaaaaaa
+aaaaaaaaaaabfbaaaaaaaaaaa
+"}

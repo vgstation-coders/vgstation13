@@ -70,3 +70,4 @@ turf/unsimulated/wall/splashscreen
 
 /turf/unsimulated/wall/cult/cultify()
 	return
+

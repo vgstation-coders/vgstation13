@@ -182,6 +182,10 @@
 		if(1 to JITTER_MEDIUM)
 			msg += "<span class='warning'>[t_He] [t_is] twitching ever so slightly.</span>\n"
 
+	if(getOxyLoss() > 30 && !skipface)
+		msg += "<span class='info'>[t_He] [t_has] a bluish discoloration to their skin.</span>\n"
+	if(getToxLoss() > 30 && !skipface)
+		msg += "<span class='warning'>[t_He] looks sickly.</span>\n"
 	//splints
 	for(var/organ in list(LIMB_LEFT_LEG,LIMB_RIGHT_LEG,LIMB_LEFT_ARM,LIMB_RIGHT_ARM))
 		var/datum/organ/external/o = get_organ(organ)

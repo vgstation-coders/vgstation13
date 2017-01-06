@@ -60,7 +60,7 @@
 
 /obj/item/weapon/firbang/afterattack(atom/target as mob|obj|turf|area, mob/user as mob)
 	if (user.get_active_hand() == src)
-		if ((M_CLUMSY in usr.mutations) && prob(50))
+		if (clumsy_check(usr) && prob(50))
 			to_chat(user, "<span class='warning'>Huh? How does this thing work?!</span>")
 			src.state = 1
 			src.icon_state = "flashbang1"
@@ -108,7 +108,7 @@
 
 /obj/item/weapon/firbang/attack_self(mob/user as mob)
 	if (!src.state)
-		if (M_CLUMSY in user.mutations)
+		if clumsy_check(user)
 			to_chat(user, "<span class='warning'>Huh? How does this thing work?!</span>")
 			spawn( 5 )
 				prime()

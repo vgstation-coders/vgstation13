@@ -37,6 +37,8 @@
 	else
 		clear_fullscreen("crit")
 		if(oxyloss)
+			if(pain_numb)
+				oxyloss = max((oxyloss - 20) / 2, 0) //Make the damage appear smaller than it really is
 			var/severity = 0
 			switch(oxyloss)
 				if(10 to 20)
@@ -60,6 +62,8 @@
 		var/hurtdamage = src.getBruteLoss() + src.getFireLoss() + damageoverlaytemp
 		damageoverlaytemp = 0 // We do this so we can detect if someone hits us or not.
 		if(hurtdamage)
+			if(pain_numb)
+				hurtdamage = max((hurtdamage - 20) / 2, 0) //Make the damage appear smaller than it really is
 			var/severity = 0
 			switch(hurtdamage)
 				if(5 to 15)
@@ -78,6 +82,10 @@
 		else
 			clear_fullscreen("brute")
 			//damageoverlay.overlays += I
+		if(pain_numb)
+			overlay_fullscreen("numb", /obj/screen/fullscreen/numb)
+		else
+			clear_fullscreen("numb")
 	if(stat == DEAD)
 		change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		see_in_dark = 8
@@ -129,8 +137,8 @@
 
 		if(healths)
 			healths.overlays.len = 0
-			if (analgesic)
-				healths.icon_state = "health_health_numb"
+			if (pain_numb)
+				healths.icon_state = "health_numb"
 			else
 				var/ruptured = is_lung_ruptured()
 				if(hal_screwyhud)
@@ -160,7 +168,6 @@
 						healths.icon_state = "health7"
 					else
 						switch(health - halloss)
-						//switch(100 - ((species && species.flags & NO_PAIN) ? 0 : traumatic_shock))
 							if(100 to INFINITY)
 								healths.icon_state = "health0"
 							if(80 to 100)
