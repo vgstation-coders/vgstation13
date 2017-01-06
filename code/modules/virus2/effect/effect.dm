@@ -413,12 +413,13 @@
 	stage = 2
 	affect_voice = 1
 	max_count = 1
+	var/list/virus_opposite_word_list
 
 /datum/disease2/effect/opposite/activate(var/mob/living/carbon/mob,var/multiplier)
 	to_chat(mob, "<span class='warning'>You feel completely fine.</span>")
 	affect_voice_active = 1
 	if(!virus_opposite_word_list)
-		initialize_word_lists()
+		initialize_word_list()
 
 /datum/disease2/effect/opposite/affect_mob_voice(var/datum/speech/speech)
 	var/message=speech.message

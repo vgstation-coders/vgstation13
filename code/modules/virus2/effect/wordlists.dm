@@ -1,7 +1,6 @@
 //For lists of words to be used with viruses.
-var/list/virus_opposite_word_list
 
-/datum/disease2/proc/initialize_word_lists()
+/datum/disease2/effect/opposite/proc/initialize_word_list()
 	virus_opposite_word_list = list(
 	"to"		=	"from",
 	"and"		=	"not",
