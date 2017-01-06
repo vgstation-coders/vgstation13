@@ -240,8 +240,8 @@
 	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(BRUTELOSS)
 
-/obj/item/weapon/melee/bone_sword/New(turf/T, var/p_borer = null)
-	..(T)
+/obj/item/weapon/melee/bone_sword/New(atom/A, var/p_borer = null)
+	..(A)
 	if(istype(p_borer, /mob/living/simple_animal/borer))
 		parent_borer = p_borer
 	if(!parent_borer)
