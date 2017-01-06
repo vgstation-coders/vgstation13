@@ -39,12 +39,10 @@ var/global/list/disease2_list = list()
 			var/datum/disease2/effect/e = new_random_effect(2, i)
 			effects += e
 			log += "<br />[timestamp()] Added effect [e.name] [e.chance]%."
-			log_debug("Added stage [e.stage] effect [e.name] to virus [uniqueID].")
 		else
 			var/datum/disease2/effect/e = new_random_effect(1, i)
 			effects += e
 			log += "<br />[timestamp()] Added effect [e.name] [e.chance]%."
-			log_debug("Added stage [e.stage] effect [e.name] to virus [uniqueID].")
 	uniqueID = rand(0,10000)
 	disease2_list["[uniqueID]"] = src
 	infectionchance = rand(60,90)
