@@ -1,6 +1,6 @@
 // Make sure to use two newlines between each effect and one newline between each method.
 // Fully read through the example effect below to get an idea of what attributes and procs are available.
-// Babel Syndrome provides a good example of the usage of affect_voice, affect_mob_voice, etc. 
+// Babel Syndrome provides a good example of the usage of affect_voice, affect_mob_voice, etc.
 
 /datum/disease2/effect
 	var/name = "Example syndrome"
@@ -13,8 +13,8 @@
 		// How damaging the virus is. Higher values are worse.
 
 	var/chance = 3
-		// Under normal conditions, the percentage chance per tick to activate. 
-	var/max_chance = 6	
+		// Under normal conditions, the percentage chance per tick to activate.
+	var/max_chance = 6
 		// Maximum percentage chance per tick.
 
 	var/multiplier = 1
@@ -24,7 +24,7 @@
 
 	var/count = 0
 		// How many times the effect has activated so far.
-	var/max_count = -1 
+	var/max_count = -1
 		// How many times the effect should be allowed to activate. If -1, always activate.
 
 	var/affect_voice = 0
@@ -39,7 +39,7 @@
 	proc/deactivate(var/mob/living/carbon/mob)
 		// If activation makes any permanent changes to the effect, this is where you undo them.
 		// Will not get called if the virus has never been activated.
-	proc/affect_mob_voice(var/datum/speech/speech) 
+	proc/affect_mob_voice(var/datum/speech/speech)
 		// Called by /mob/living/carbon/human/treat_speech
 
 // Most of the stuff below shouldn't be changed when you make a new effect.
@@ -193,7 +193,7 @@
 /datum/disease2/effect/scream
 	name = "Loudness Syndrome"
 	stage = 2
-	
+
 /datum/disease2/effect/scream/activate(var/mob/living/carbon/mob)
 	mob.emote("scream",,, 1)
 
@@ -201,7 +201,7 @@
 /datum/disease2/effect/drowsness
 	name = "Automated Sleeping Syndrome"
 	stage = 2
-	
+
 /datum/disease2/effect/drowsness/activate(var/mob/living/carbon/mob)
 	mob.drowsyness += 10
 
@@ -381,7 +381,7 @@
 	name = "Vitreous resonance"
 	stage = 2
 	chance = 25
-	max_chance = 75	
+	max_chance = 75
 	max_multiplier = 2
 
 /datum/disease2/effect/vitreous/activate(var/mob/living/carbon/human/H)
@@ -406,6 +406,58 @@
 		else if (prob(1))
 			to_chat(H, "Your [glass_hand.display_name] aches for the cold, smooth feel of container-grade glass...")
 			// So I don't have to deal with actual glass and glass accessories
+
+
+/datum/disease2/effect/opposite
+	name = "Opposite Syndrome"
+	stage = 2
+	affect_voice = 1
+	max_count = 1
+	var/list/virus_opposite_word_list
+
+/datum/disease2/effect/opposite/activate(var/mob/living/carbon/mob,var/multiplier)
+	to_chat(mob, "<span class='warning'>You feel completely fine.</span>")
+	affect_voice_active = 1
+	if(!virus_opposite_word_list)
+		initialize_word_list()
+
+/datum/disease2/effect/opposite/affect_mob_voice(var/datum/speech/speech)
+	var/message=speech.message
+	var/list/word_list = splittext(message," ")		//split message into list of words
+	for(var/i = 1 to word_list.len)
+		var/punct = ""								//take punctuation into account
+		if(findtext(word_list[i], ",", -1))
+			punct = ","
+		if(findtext(word_list[i], ".", -1))
+			punct = "."
+		if(findtext(word_list[i], "!", -1))
+			punct = "!"
+		if(findtext(word_list[i], "?", -1))
+			punct = "?"
+		if(findtext(word_list[i], "~", -1))
+			punct = "~"
+		for(var/x in virus_opposite_word_list)
+			var/word = word_list[i]
+			if(punct)
+				word = copytext(word_list[i], 1, length(word_list[i]))
+			if(uppertext(word) == uppertext(x))
+				word_list[i] = virus_opposite_word_list[x] + punct
+			else if(uppertext(word) == uppertext(virus_opposite_word_list[x]))
+				word_list[i] = x + punct
+
+	message = ""
+	for(var/z = 1 to word_list.len)
+		if(z == word_list.len)
+			message += word_list[z]
+		else
+			message += "[word_list[z]] "
+
+	speech.message = message
+
+/datum/disease2/effect/opposite/deactivate(var/mob/living/carbon/mob)
+	to_chat(mob, "<span class='warning'>You feel terrible.</span>")
+	affect_voice_active = 0
+	..()
 
 
 ////////////////////////STAGE 3/////////////////////////////////
@@ -464,7 +516,7 @@
 /datum/disease2/effect/deaf
 	name = "Hard of Hearing Syndrome"
 	stage = 3
-	
+
 /datum/disease2/effect/deaf/activate(var/mob/living/carbon/mob)
 	mob.ear_deaf = 5
 
@@ -1119,6 +1171,34 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 			mob.add_language(forgotten)
 
 		to_chat(mob, "Suddenly, your knowledge of languages comes back to you.")
+
+
+/datum/disease2/effect/gregarious
+	name = "Gregarious Impetus"
+	stage = 4
+	max_chance = 25
+	max_multiplier = 4
+
+/datum/disease2/effect/gregarious/activate(var/mob/living/carbon/mob)
+	var/others_count = 0
+	for(var/mob/living/carbon/m in oview(5, mob))
+		if (airborne_can_reach(mob.loc, m.loc, 9)) // Apparently mobs physically block airborne viruses
+			others_count += 1
+	if (others_count >= multiplier)
+		to_chat(mob, "<span class='notice'>A friendly sensation is satisfied with how many are near you - for now.</span>")
+		mob.adjustBrainLoss(-multiplier)
+		mob.reagents.add_reagent(OXYCODONE, multiplier) // ADDICTED TO HAVING FRIENDS
+		if (multiplier < max_multiplier)
+			multiplier += 0.15 // The virus gets greedier
+	else
+		to_chat(mob, "<span class='warning'>A hostile sensation in your brain stings you... it wants more of the living near you.</span>")
+		mob.adjustBrainLoss(multiplier / 2)
+		mob.AdjustParalysis(multiplier) // This practically permaparalyzes you at higher multipliers but
+		mob.AdjustKnockdown(multiplier) // that's your fucking fault for not being near enough people
+		mob.AdjustStunned(multiplier)   // You'll have to wait until the multiplier gets low enough
+		if (multiplier > 1)
+			multiplier -= 0.3 // The virus tempers expectations
+
 
 
 ////////////////////////SPECIAL/////////////////////////////////

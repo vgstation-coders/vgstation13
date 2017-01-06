@@ -66,17 +66,24 @@
 
 	return pick(LIMB_CHEST, LIMB_LEFT_HAND, LIMB_RIGHT_HAND, LIMB_LEFT_ARM, LIMB_RIGHT_ARM, LIMB_LEFT_LEG, LIMB_RIGHT_LEG, LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT, LIMB_HEAD)
 
+/mob/living/proc/miss_unarmed_attack(mob/living/target)
+	var/miss_sound = get_unarmed_miss_sound(target)
+
+	if(miss_sound)
+		playsound(loc, miss_sound, 25, 1, -1)
+
+	visible_message("<span class='danger'>[src] misses [target]!</span>")
+	return TRUE
+
+/mob/living/proc/get_attack_message(mob/living/target, attack_verb)
+	return "<span class='danger'>[src] [attack_verb] \the [target]!</span>"
+
 /mob/living/proc/unarmed_attack_mob(mob/living/target)
 	var/damage = get_unarmed_damage(target)
 
 	if(!damage)
-		var/miss_sound = get_unarmed_miss_sound(target)
-
-		if(miss_sound)
-			playsound(loc, miss_sound, 25, 1, -1)
-
-		visible_message("<span class='danger'>[src] misses [target]!</span>")
-		return
+		if(miss_unarmed_attack(target))
+			return
 
 	var/zone = ran_zone(get_unarmed_damage_zone(target))
 	var/datum/organ/external/affecting = target.get_organ(zone)
@@ -87,8 +94,8 @@
 
 	if(attack_sound)
 		playsound(loc, attack_sound, 25, 1, -1)
-	target.visible_message("<span class='danger'>[src] [attack_verb] [target]!</span>",\
-	"<span class='userdanger'>[src] [attack_verb] you!</span>")
+
+	visible_message(get_attack_message(target, attack_verb))
 
 	var/damage_done = target.apply_damage(damage, damage_type, affecting, armor_block)
 	target.unarmed_attacked(src, damage, damage_type, zone)
@@ -103,3 +110,8 @@
 
 /mob/living/proc/unarmed_attacked(mob/living/attacker, damage, damage_type, zone)
 	return
+
+//Affects the chance of getting stunned by a punch
+//Chance is multiplied by the returned value
+/mob/living/proc/knockout_chance_modifier()
+	return 0

@@ -80,6 +80,10 @@
 	icon_state = "oxydamageoverlay"
 	layer = DAMAGE_LAYER
 
+/obj/screen/fullscreen/numb
+	icon_state = "numboverlay"
+	layer = DAMAGE_LAYER
+
 /obj/screen/fullscreen/crit
 	icon_state = "passage"
 	layer = CRIT_LAYER

@@ -1141,7 +1141,7 @@
 
 	selection.forceMove(get_turf(src))
 	affected.implants -= selection
-	shock_stage+=10
+	pain_shock_stage+=10
 
 	for(var/obj/item/weapon/O in pinned)
 		if(O == selection)
@@ -1389,16 +1389,16 @@
 		if(lasercolor == "b")//Lasertag turrets target the opposing team.
 			if(istype(wear_suit, /obj/item/clothing/suit/redtag))
 				threatcount += 4
-			if(find_held_item_by_type(/obj/item/weapon/gun/energy/laser/redtag))
+			if(find_held_item_by_type(/obj/item/weapon/gun/energy/tag/red))
 				threatcount += 4
-			if(istype(belt, /obj/item/weapon/gun/energy/laser/redtag))
+			if(istype(belt, /obj/item/weapon/gun/energy/tag/red))
 				threatcount += 2
 		if(lasercolor == "r")
 			if(istype(wear_suit, /obj/item/clothing/suit/bluetag))
 				threatcount += 4
-			if(find_held_item_by_type(/obj/item/weapon/gun/energy/laser/bluetag))
+			if(find_held_item_by_type(/obj/item/weapon/gun/energy/tag/blue))
 				threatcount += 4
-			if(istype(belt, /obj/item/weapon/gun/energy/laser/bluetag))
+			if(istype(belt, /obj/item/weapon/gun/energy/tag/blue))
 				threatcount += 2
 		return threatcount
 	//Check for ID
@@ -1664,5 +1664,8 @@
 /mob/living/carbon/human/feels_pain()
 	if(!species)
 		return FALSE
-
-	return !(species.flags & NO_PAIN)
+	if(species.flags & NO_PAIN)
+		return FALSE
+	if(pain_numb)
+		return FALSE
+	return TRUE

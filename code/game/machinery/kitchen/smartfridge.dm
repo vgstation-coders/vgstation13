@@ -262,7 +262,7 @@
 			if(istype(thisPile))
 				thisPile.addAmount(1)
 			else
-				piles[O.name] = getFromPool(/datum/fridge_pile, O.name, src, 1, bicon(O))
+				piles[O.name] = getFromPool(/datum/fridge_pile, O.name, src, 1, costly_bicon(O))
 			user.visible_message("<span class='notice'>[user] has added \the [O] to \the [src].", \
 								 "<span class='notice'>You add \the [O] to \the [src].")
 
@@ -280,7 +280,7 @@
 					if(istype(thisPile))
 						thisPile.addAmount(1)
 					else
-						piles[G.name] = new/datum/fridge_pile(G.name, src, 1, bicon(G))
+						piles[G.name] = new/datum/fridge_pile(G.name, src, 1, costly_bicon(G))
 					objects_loaded++
 		if(objects_loaded)
 

@@ -218,8 +218,8 @@
 	cant_drop = 1
 	var/mob/living/simple_animal/borer/parent_borer = null
 
-/obj/item/weapon/shield/riot/bone/New(turf/T, var/p_borer = null)
-	..(T)
+/obj/item/weapon/shield/riot/bone/New(atom/A, var/p_borer = null)
+	..(A)
 	if(istype(p_borer, /mob/living/simple_animal/borer))
 		parent_borer = p_borer
 	if(!parent_borer)

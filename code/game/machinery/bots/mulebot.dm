@@ -18,6 +18,7 @@ var/global/mulebot_count = 0
 	maxhealth = 150
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
+	can_take_pai = TRUE
 	var/atom/movable/load = null		// the loaded crate (usually)
 	var/beacon_freq = 1400
 	var/control_freq = 1447
@@ -491,7 +492,7 @@ var/global/mulebot_count = 0
 	// with items dropping as mobs are loaded
 
 	for(var/atom/movable/AM in src)
-		if(AM == cell || AM == botcard)
+		if(AM == cell || AM == botcard || AM == integratedpai)
 			continue
 
 		AM.forceMove(src.loc)
@@ -922,3 +923,32 @@ var/global/mulebot_count = 0
 	O.New(O.loc)
 	unload(0)
 	qdel(src)
+
+/obj/machinery/bot/mulebot/getpAIMovementDelay()
+	return ((wires.Motor1() ? 1 : 0) + (wires.Motor2() ? 2 : 0) - 1) * 2
+
+/obj/machinery/bot/mulebot/pAImove(mob/living/silicon/pai/user, dir)
+	if(getpAIMovementDelay() < 0)
+		to_chat(user, "There seems to be something wrong with the motor. Have a technician check the wires.")
+		return
+	if(!..())
+		return
+	if(!on)
+		to_chat(user, "You can't move \the [src] while it's turned off.")
+		return
+	var/turf/T = loc
+	if(!T.has_gravity())
+		return
+	step(src, dir)
+
+/obj/machinery/bot/mulebot/on_integrated_pai_click(mob/living/silicon/pai/user, var/atom/movable/A)
+	if(!istype(A) || !Adjacent(A) || A.anchored)
+		return
+	load(A)
+	if(load)
+		to_chat(user, "You load \the [A] onto \the [src].")
+
+/obj/machinery/bot/mulebot/attack_integrated_pai(mob/living/silicon/pai/user)
+	if(load)
+		to_chat(user, "You unload \the [load].")
+		unload()

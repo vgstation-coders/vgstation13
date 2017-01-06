@@ -314,6 +314,13 @@
 					if("left")
 						O.intentleft_integrated_pai(P)
 
+/mob/living/silicon/pai/relaymove(dir)
+	if(incapacitated())
+		return
+	if(istype(card.loc, /obj))
+		var/obj/O = card.loc
+		if(O.integratedpai == card)
+			O.pAImove(src, dir)
 
 /atom/proc/attack_pai(mob/user as mob)
 	return

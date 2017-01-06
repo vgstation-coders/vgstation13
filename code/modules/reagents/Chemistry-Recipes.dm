@@ -173,7 +173,7 @@
 	id = OXYCODONE
 	result = OXYCODONE
 	required_reagents = list(ETHANOL = 1, TRAMADOL = 1, PLASMA = 1)
-	result_amount = 1
+	result_amount = 3
 
 ///datum/chemical_reaction/cyanide
 //	name = "Cyanide"

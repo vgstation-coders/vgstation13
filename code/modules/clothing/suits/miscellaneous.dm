@@ -17,7 +17,7 @@
 	blood_overlay_type = "armor"
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_MAGNETS + "=2"
 	body_parts_covered = FULL_TORSO
-	allowed = list (/obj/item/weapon/gun/energy/laser/bluetag)
+	allowed = list (/obj/item/weapon/gun/energy/tag/blue)
 	siemens_coefficient = 3.0
 
 /obj/item/clothing/suit/redtag
@@ -28,7 +28,7 @@
 	blood_overlay_type = "armor"
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_MAGNETS + "=2"
 	body_parts_covered = FULL_TORSO
-	allowed = list (/obj/item/weapon/gun/energy/laser/redtag)
+	allowed = list (/obj/item/weapon/gun/energy/tag/red)
 	siemens_coefficient = 3.0
 
 /*

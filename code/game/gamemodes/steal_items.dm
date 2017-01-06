@@ -76,20 +76,15 @@
 	typepath = /obj/item/weapon/hand_tele
 	protected_jobs = list("Captain", "Research Director", "Head of Personnel")
 
-/datum/theft_objective/traitor/rcd
-	name = "an RCD"
-	typepath = /obj/item/device/rcd/matter/engineering
-	protected_jobs = list("Chief Engineer", "Atmospherics Technician", "Station Engineer")
+/datum/theft_objective/traitor/cap_hardsuit
+	name = "the captain's full-body armor" //technically only the bodypiece, which is the hardest one to conceal anyways
+	typepath = /obj/item/clothing/suit/armor/captain
+	protected_jobs = list("Captain")
 
-/datum/theft_objective/traitor/rpd
-	name = "an RPD"
-	typepath = /obj/item/device/rcd/rpd
-	protected_jobs = list("Chief Engineer", "Atmospherics Technician", "Station Engineer")//engineers have atmos access.
-
-/datum/theft_objective/traitor/jetpack
-	name = "a jetpack"
-	typepath = /obj/item/weapon/tank/jetpack
-	protected_jobs = list("Chief Engineer", "Captain", "Trader", "Atmospherics Technician", "Station Engineer", "Shaft Miner")
+/datum/theft_objective/traitor/cap_stamp
+	name = "the captain's rubber stamp"
+	typepath = /obj/item/weapon/stamp/captain
+	protected_jobs = list("Captain")
 
 /datum/theft_objective/traitor/cap_jumpsuit
 	name = "the captain's jumpsuit"
