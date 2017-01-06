@@ -56,8 +56,7 @@
 
 	//List of weapons that secbots will not arrest for, also copypasted in ed209.dm and metaldetector.dm
 	var/list/safe_weapons = list(
-		/obj/item/weapon/gun/energy/laser/bluetag,
-		/obj/item/weapon/gun/energy/laser/redtag,
+		/obj/item/weapon/gun/energy/tag,
 		/obj/item/weapon/gun/energy/laser/practice,
 		/obj/item/weapon/gun/hookshot,
 		/obj/item/weapon/gun/energy/floragun,
