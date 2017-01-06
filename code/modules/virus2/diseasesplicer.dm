@@ -151,6 +151,7 @@
 				var/datum/disease2/effect/e = dish.virus2.effects[x]
 				if(e.stage == memorybank.stage)
 					dish.virus2.effects[x] = memorybank.getcopy(dish.virus2)
+					log_debug("Virus [dish.virus2.uniqueID] had [memorybank.name] spliced into to replace [e.name] by [key_name(usr)].")
 					dish.virus2.log += "<br />[timestamp()] [memorybank.name] spliced in by [key_name(usr)] (replaces [e.name])"
 
 			splicing = 10
