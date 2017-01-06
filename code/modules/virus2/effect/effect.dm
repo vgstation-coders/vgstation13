@@ -408,6 +408,58 @@
 			// So I don't have to deal with actual glass and glass accessories
 
 
+/datum/disease2/effect/opposite
+	name = "Opposite Syndrome"
+	stage = 2
+	affect_voice = 1
+	max_count = 1
+	var/list/virus_opposite_word_list
+
+/datum/disease2/effect/opposite/activate(var/mob/living/carbon/mob,var/multiplier)
+	to_chat(mob, "<span class='warning'>You feel completely fine.</span>")
+	affect_voice_active = 1
+	if(!virus_opposite_word_list)
+		initialize_word_list()
+
+/datum/disease2/effect/opposite/affect_mob_voice(var/datum/speech/speech)
+	var/message=speech.message
+	var/list/word_list = splittext(message," ")		//split message into list of words
+	for(var/i = 1 to word_list.len)
+		var/punct = ""								//take punctuation into account
+		if(findtext(word_list[i], ",", -1))
+			punct = ","
+		if(findtext(word_list[i], ".", -1))
+			punct = "."
+		if(findtext(word_list[i], "!", -1))
+			punct = "!"
+		if(findtext(word_list[i], "?", -1))
+			punct = "?"
+		if(findtext(word_list[i], "~", -1))
+			punct = "~"
+		for(var/x in virus_opposite_word_list)
+			var/word = word_list[i]
+			if(punct)
+				word = copytext(word_list[i], 1, length(word_list[i]))
+			if(uppertext(word) == uppertext(x))
+				word_list[i] = virus_opposite_word_list[x] + punct
+			else if(uppertext(word) == uppertext(virus_opposite_word_list[x]))
+				word_list[i] = x + punct
+
+	message = ""
+	for(var/z = 1 to word_list.len)
+		if(z == word_list.len)
+			message += word_list[z]
+		else
+			message += "[word_list[z]] "
+
+	speech.message = message
+
+/datum/disease2/effect/opposite/deactivate(var/mob/living/carbon/mob)
+	to_chat(mob, "<span class='warning'>You feel terrible.</span>")
+	affect_voice_active = 0
+	..()
+
+
 ////////////////////////STAGE 3/////////////////////////////////
 
 
