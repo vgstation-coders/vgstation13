@@ -52,13 +52,11 @@
 	return 0
 
 /datum/disease2/effect/proc/run_effect(var/mob/living/carbon/human/mob)
-	// log_debug("Activating effect [name] with count [count] and multiplier [multiplier] on [mob].")
 	activate(mob)
 	count += 1
 
 /datum/disease2/effect/proc/disable_effect(var/mob/living/carbon/human/mob)
 	if (count > 0)
-		// log_debug("Deactivating effect [name] with count [count] and multiplier [multiplier] on [mob].")
 		deactivate(mob)
 
 /datum/disease2/effect/proc/minormutate()

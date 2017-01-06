@@ -124,13 +124,12 @@ var/global/list/disease2_list = list()
 	//Moving to the next stage
 	if(clicks > stage*100 && prob(10))
 		if(stage == max_stage)
-			log_debug("Virus [uniqueID] in [key_name(mob)] has advanced past its last stage, giving them antibodies [antigens2string(antigen)].")
+			log_debug("Virus [uniqueID] in [key_name(mob)] has advanced past its last stage, giving them antigens [antigens2string(antigen)].")
 			src.cure(mob)
 			mob.antibodies |= src.antigen
 			log += "<br />[timestamp()] STAGEMAX ([stage])"
 		else
 			stage++
-			// log_debug("Virus [uniqueID] in [key_name(mob)] has advanced to stage [stage].")
 			log += "<br />[timestamp()] NEXT STAGE ([stage])"
 			clicks = 0
 
@@ -160,7 +159,6 @@ var/global/list/disease2_list = list()
 	var/datum/disease2/effect/e = pick(effects)
 	e.minormutate()
 	infectionchance = min(50,infectionchance + rand(0,10))
-	// log_debug("Virus [uniqueID] has minor mutated [e.name].")
 	log += "<br />[timestamp()] Infection chance now [infectionchance]%"
 
 /datum/disease2/disease/proc/majormutate()
