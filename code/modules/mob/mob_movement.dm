@@ -270,6 +270,11 @@
 	if(isAI(mob))
 		return AIMove(loc,dir,mob)
 
+	if(ispAI(mob))
+		var/mob/living/silicon/pai/P = mob
+		P.relaymove(dir)
+		return
+
 	if(mob.monkeyizing)
 		return//This is sota the goto stop mobs from moving var
 
