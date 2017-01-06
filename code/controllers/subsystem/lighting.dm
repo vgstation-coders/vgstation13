@@ -35,9 +35,6 @@ var/list/lighting_update_overlays  = list() // List of lighting overlays queued 
 
 
 /datum/subsystem/lighting/fire(resumed=FALSE)
-	if (resumed)
-		//to_chat(world, "lighting did a RESUME! GASP!")
-
 	if (resuming_stage == 0 || !resumed)
 		currentrun_lights   = lighting_update_lights
 		lighting_update_lights   = list()
