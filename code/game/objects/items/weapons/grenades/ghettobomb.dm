@@ -167,6 +167,10 @@
 	..()
 	if(assembled == 3)
 		to_chat(user, "<span class='info'>You can't tell when it will explode!</span>")//Stops you from checking the time to detonation unlike regular grenades
+		if(current_shrapnel) // indenting this prevents one check if the ied is not assembled
+			to_chat(user, "<span class='info'>Someone stuck shrapnel onto the improvised explosive.</span>")
+
+
 
 /obj/item/weapon/grenade/iedcasing/preassembled
     name = "improvised explosive"
