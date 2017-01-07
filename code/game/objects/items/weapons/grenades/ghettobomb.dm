@@ -167,7 +167,7 @@
 	..()
 	if(assembled == 3)
 		to_chat(user, "<span class='info'>You can't tell when it will explode!</span>")//Stops you from checking the time to detonation unlike regular grenades
-		if(current_shrapnel) // indenting this prevents one check if the ied is not assembled
+		if(current_shrapnel && get_dist(get_turf(user),get_turf(src)) <=1) // indenting this prevents one check if the ied is not assembled
 			to_chat(user, "<span class='info'>Someone stuck shrapnel onto the improvised explosive.</span>")
 
 
