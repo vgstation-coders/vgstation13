@@ -166,3 +166,39 @@
 #undef ZOMBIE
 #undef SKELETON
 //#undef FAITHLESS
+
+#define CLOAKINGCLOAK "cloakingcloak"
+
+/obj/item/weapon/cloakingcloak
+	name = "cloak of cloaking"
+	desc = "A silk cloak that will hide you from anything with eyes."
+	icon = 'icons/obj/wizard.dmi'
+	icon_state = "cloakingcloak"
+	w_class = W_CLASS_MEDIUM
+	force = 0
+	flags = FPRINT | TWOHANDABLE
+	var/event_key
+
+/obj/item/weapon/cloakingcloak/proc/mob_moved(var/list/event_args, var/mob/holder)
+	if(iscarbon(holder) && wielded)
+		var/mob/living/carbon/C = holder
+		if(C.m_intent == "run" && prob(10))
+			if(C.Slip(4, 5))
+				step(C, C.dir)
+				C.visible_message("<span class='warning'>\The [C] trips over \his [name] and appears out of thin air!</span>","<span class='warning'>You trip over your [name] and become visible again!</span>")
+
+/obj/item/weapon/cloakingcloak/update_wield(mob/user)
+	..()
+	if(user)
+		user.update_inv_hands()
+		if(wielded)
+			user.visible_message("<span class='danger'>\The [user] throws \the [src] over \himself and disappears!</span>","<span class='notice'>You throw \the [src] over yourself and disappear.</span>")
+			event_key = user.on_moved.Add(src, "mob_moved")
+			user.alpha = 1	//to cloak immediately instead of on the next Life() tick
+			user.alphas[CLOAKINGCLOAK] = 1
+		else
+			user.visible_message("<span class='warning'>\The [user] appears out of thin air!</span>","<span class='notice'>You take \the [src] off and become visible again.</span>")
+			user.on_moved.Remove(event_key)
+			event_key = null
+			user.alpha = initial(user.alpha)
+			user.alphas.Remove(CLOAKINGCLOAK)

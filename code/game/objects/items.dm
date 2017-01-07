@@ -848,9 +848,9 @@
 	if(flags & MUSTTWOHAND && src in user)
 		user.drop_from_inventory(src)
 	if(istype(wielded))
+		wielded.wielding = null
 		user.u_equip(wielded,1)
 		if(wielded)
-			wielded.wielding = null
 			returnToPool(wielded)
 			wielded = null
 	update_wield(user)
