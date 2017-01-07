@@ -1098,12 +1098,13 @@
 	force = 0
 	throwforce = 0
 	var/col = "#FFFFFF"
+	var/inflated_type = /obj/item/toy/balloon/inflated
 
-/obj/item/toy/balloon/New(atom/A, var/ccol)
+/obj/item/toy/balloon/New(atom/A, var/chosen_col)
 	..(A)
 	if(col)
-		if(ccol)
-			col = ccol
+		if(chosen_col)
+			col = chosen_col
 		else
 			col = rgb(rand(0,255),rand(0,255),rand(0,255))
 		icon += col
@@ -1127,7 +1128,7 @@
 	inflate(user)
 
 /obj/item/toy/balloon/proc/inflate(mob/user, datum/gas_mixture/G)
-	var/obj/item/toy/balloon/inflated/B = new(get_turf(src), col)
+	var/obj/item/toy/balloon/inflated/B = new inflated_type(get_turf(src), col)
 	if(user)
 		user.drop_item(src, force_drop = 1)
 		user.put_in_hands(B)
@@ -1203,23 +1204,7 @@
 	icon_state = "latexballoon"
 	item_state = "lgloves"
 	col = null
-
-/obj/item/toy/balloon/glove/inflate(mob/user, datum/gas_mixture/G)
-	var/obj/item/toy/balloon/inflated/glove/B = new(get_turf(src), col)
-	if(user)
-		user.drop_item(src, force_drop = 1)
-		user.put_in_hands(B)
-		to_chat(user, "You blow up \the [src].")
-	playsound(src, 'sound/misc/balloon_inflate.ogg', 50, 1)
-	if(!G)
-		B.air_contents = new /datum/gas_mixture()
-		B.air_contents.volume = 12 //liters
-		B.air_contents.temperature = T20C
-		B.air_contents.carbon_dioxide = 0.5
-	else
-		var/moles = ONE_ATMOSPHERE*12/(R_IDEAL_GAS_EQUATION*G.temperature)
-		B.air_contents = G.remove(moles)
-	qdel(src)
+	inflated_type = /obj/item/toy/balloon/inflated/glove
 
 /obj/item/toy/balloon/inflated/glove
 	name = "latex glove balloon"
