@@ -131,6 +131,10 @@ var/global/list/disease2_list = list()
 			log += "<br />[timestamp()] NEXT STAGE ([stage])"
 			clicks = 0
 
+	// This makes it so that <mob> only ever gets affected by the equivalent of one virus so antags don't just stack a bunch
+	if(prob(100 - (100 / mob.virus2.len)))
+		return
+
 	//Do nasty effects
 	for(var/datum/disease2/effect/e in effects)
 		if (e.can_run_effect(stage))
