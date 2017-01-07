@@ -165,7 +165,7 @@
 	)
 
 /obj/item/weapon/storage/belt/slim
-	name = "slim-belt" 
+	name = "slim-belt"
 	desc = "Grey belt that holds less and matches certain jumpsuits.  It looks like it can fit in a backpack."
 	icon_state = "greybelt"
 	item_state = "grey"
@@ -188,6 +188,7 @@
 		"/obj/item/ammo_storage",
 		"/obj/item/weapon/reagent_containers/food/snacks/donut/normal",
 		"/obj/item/weapon/reagent_containers/food/snacks/donut/jelly",
+		"/obj/item/weapon/storage/fancy/cigarettes",
 		"/obj/item/weapon/melee/baton",
 		"/obj/item/weapon/gun/energy/taser",
 		"/obj/item/weapon/lighter/zippo",
