@@ -376,15 +376,11 @@
 	//Greys treat water like acid
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(H.species.name == "Grey")
+		if(isgrey(H))
 			if(method == TOUCH)
 
-				if(H.wear_mask)
-					to_chat(H, "<span class='warning'>Your mask protects you from the water!</span>")
-					return
-
-				if(H.head)
-					to_chat(H, "<span class='warning'>Your helmet protects you from the water!</span>")
+				if(H.check_body_part_coverage(EYES|MOUTH))
+					to_chat(H, "<span class='warning'>Your face is protected from a splash of water!</span>")
 					return
 
 				if(M.acidable())
