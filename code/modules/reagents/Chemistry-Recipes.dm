@@ -606,12 +606,67 @@
 	name = "Solid Plasma"
 	id = "solidplasma"
 	result = null
-	required_reagents = list(IRON = 5, FROSTOIL = 5, PLASMA = 20)
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, PLASMA = 20)
 	result_amount = 1
 
 /datum/chemical_reaction/plasmasolidification/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
 	new /obj/item/stack/sheet/mineral/plasma(location)
+
+/datum/chemical_reaction/ironsolidification
+	name = "Solid Metal"
+	id = "solidmetal"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, IRON = 20)
+	result_amount = 1
+
+/datum/chemical_reaction/ironsolidification/on_reaction(var/datum/reagents/holder, var/created_volume)
+	var/location = get_turf(holder.my_atom)
+	new /obj/item/stack/sheet/metal(location)
+
+/datum/chemical_reaction/silversolidification
+	name = "Solid Silver"
+	id = "solidsilver"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, SILVER = 20)
+	result_amount = 1
+
+/datum/chemical_reaction/silversolidification/on_reaction(var/datum/reagents/holder, var/created_volume)
+	var/location = get_turf(holder.my_atom)
+	new /obj/item/stack/sheet/mineral/silver(location)
+
+/datum/chemical_reaction/goldsolidification
+	name = "Solid Gold"
+	id = "solidgold"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, GOLD = 20)
+	result_amount = 1
+
+/datum/chemical_reaction/goldsolidification/on_reaction(var/datum/reagents/holder, var/created_volume)
+	var/location = get_turf(holder.my_atom)
+	new /obj/item/stack/sheet/mineral/gold(location)
+
+/datum/chemical_reaction/uraniumsolidification
+	name = "Solid Uranium"
+	id = "soliduranium"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, URANIUM = 20)
+	result_amount = 1
+
+/datum/chemical_reaction/uraniumsolidification/on_reaction(var/datum/reagents/holder, var/created_volume)
+	var/location = get_turf(holder.my_atom)
+	new /obj/item/stack/sheet/mineral/uranium(location)
+
+/datum/chemical_reaction/plasteelsolidification
+	name = "Solid Plasteel"
+	id = "solidplasteel"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 5, CAPSAICIN = 5, PLASMA = 10, IRON = 10)
+	result_amount = 1
+
+/datum/chemical_reaction/plasteelsolidification/on_reaction(var/datum/reagents/holder, var/created_volume)
+	var/location = get_turf(holder.my_atom)
+	new /obj/item/stack/sheet/plasteel(location)
 
 /datum/chemical_reaction/plastication
 	name = "Plastic"
