@@ -51,6 +51,8 @@
 	var/conventional_firearm = 1	//Used to determine whether, when examined, an /obj/item/weapon/gun/projectile will display the amount of rounds remaining.
 	var/jammed = 0
 
+	var/projectile_color = null
+
 /obj/item/weapon/gun/proc/ready_to_fire()
 	if(world.time >= last_fired + fire_delay)
 		last_fired = world.time
@@ -239,7 +241,8 @@
 	in_chamber.yo = targloc.y - curloc.y
 	in_chamber.xo = targloc.x - curloc.x
 	in_chamber.inaccurate = (istype(user.locked_to, /obj/structure/bed/chair/vehicle))
-
+	if(projectile_color)
+		in_chamber.apply_projectile_color(projectile_color)
 	if(params)
 		var/list/mouse_control = params2list(params)
 		if(mouse_control["icon-x"])
