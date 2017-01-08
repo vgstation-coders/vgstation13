@@ -31,7 +31,8 @@
 	normal_members = list()
 	line_members = list()
 
-/datum/pipe_network/proc/process()
+/datum/pipe_network/process()
+	set waitfor = FALSE
 	//Equalize gases amongst pipe if called for
 	if(update)
 		update = 0

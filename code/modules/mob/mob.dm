@@ -1331,6 +1331,17 @@ var/list/slot_equipment_priority = list( \
 			stat("CPU:", "[world.cpu]")
 			stat("Instances:", "[world.contents.len]")
 			stat(null)
+			if (garbageCollector)
+				stat("Garbage collector:", "Online")
+				stat("qdel:", garbageCollector.del_everything ? "off" : "on")
+				stat("on queue:", garbageCollector.queue.len)
+				stat("total delete:", garbageCollector.dels_count)
+				stat("soft delete:", soft_dels)
+				stat("hard delete:", garbageCollector.hard_dels)
+			else
+				stat("Garbage collector:", "Shit")
+
+			stat(null)
 			if(Master)
 				Master.stat_entry()
 			else
