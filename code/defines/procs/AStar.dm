@@ -215,7 +215,7 @@ proc/AStar(start,end,adjacent,dist,maxnodes,maxnodedepth = 30,mintargetdist,minn
 			else //is already in open list, check if it's a better way from the current turf
 				if(newg < T.PNode.g)
 					T.PNode.prevNode = cur
-					T.PNode.g = (newg * L.len / 9)
+					T.PNode.g = newg
 					T.PNode.calc_f()
 					open.ReSort(T.PNode)//reorder the changed element in the list
 
