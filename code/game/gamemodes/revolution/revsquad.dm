@@ -154,10 +154,10 @@
 		// Hard type check for standard encryption key
 		if(fancylisteningdevice.keyslot1.type == /obj/item/device/encryptionkey)
 			fancylisteningdevice.keyslot1 = new /obj/item/device/encryptionkey/syndicate
-			recalculateChannels()
+			fancylisteningdevice.recalculateChannels()
 		else if(fancylisteningdevice.keyslot2.type == /obj/item/device/encryptionkey)
 			fancylisteningdevice.keyslot2 = new /obj/item/device/encryptionkey/syndicate
-			recalculateChannels()
+			fancylisteningdevice.recalculateChannels()
 
 	var/obj/item/T = get_revsquad_item(H)
 
