@@ -149,14 +149,14 @@
 	//Upgrade their standard encryption key to a shiny new Syndicate one! Thanks glorious benefactors
 	var/obj/item/I = H.get_item_by_slot(slot_ears)
 	if(istype(I, /obj/item/device/radio/headset))
-		var/obj/item/device/radio/headset/set = I
+		var/obj/item/device/radio/headset/fancylisteningdevice = I
 
 		// Hard type check for standard encryption key
-		if(set.keyslot1.type == /obj/item/device/encryptionkey)
-			set.keyslot1 = new /obj/item/device/encryptionkey/syndicate
+		if(fancylisteningdevice.keyslot1.type == /obj/item/device/encryptionkey)
+			fancylisteningdevice.keyslot1 = new /obj/item/device/encryptionkey/syndicate
 			recalculateChannels()
-		else if(set.keyslot2.type == /obj/item/device/encryptionkey)
-			set.keyslot2 = new /obj/item/device/encryptionkey/syndicate
+		else if(fancylisteningdevice.keyslot2.type == /obj/item/device/encryptionkey)
+			fancylisteningdevice.keyslot2 = new /obj/item/device/encryptionkey/syndicate
 			recalculateChannels()
 
 	var/obj/item/T = get_revsquad_item(H)
