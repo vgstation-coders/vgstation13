@@ -147,18 +147,16 @@
 		return
 
 	//Upgrade their standard encryption key to a shiny new Syndicate one! Thanks glorious benefactors
-	if(istype(mob.ears, /obj/item/device/radio/headset)) {
+	if(istype(mob.ears, /obj/item/device/radio/headset))
 		var/obj/item/device/radio/headset/set = mob.ears
 
 		// Hard type check for standard encryption key
-		if(set.keyslot1.type == /obj/item/device/encryptionkey/) {
+		if(set.keyslot1.type == /obj/item/device/encryptionkey/)
 			set.keyslot1 = new /obj/item/device/encryptionkey/syndicate
 			recalculateChannels()
-		} else if(set.keyslot2.type == /obj/item/device/encryptionkey/) {
+		else if(set.keyslot2.type == /obj/item/device/encryptionkey/)
 			set.keyslot2 = new /obj/item/device/encryptionkey/syndicate
 			recalculateChannels()
-		}
-	}
 
 	var/obj/item/T = get_revsquad_item(mob)
 
