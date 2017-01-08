@@ -27,8 +27,8 @@ addons:
       - libstdc++6:i386
 
 install:
-  - pip install --user PyYaml -q $HOME/.pip-cache
-  - pip install --user beautifulsoup4 -q $HOME/.pip-cache
+  - pip install --user PyYaml -q
+  - pip install --user beautifulsoup4 -q
 
 before_script:
   - chmod +x ./dm.sh
