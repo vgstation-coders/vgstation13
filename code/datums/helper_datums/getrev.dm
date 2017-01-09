@@ -77,7 +77,7 @@ var/global/datum/getrev/revdata = new("config/svndir.txt")
 		output = revision
 	return output
 
-/datum/getrev/proc/showInfo()
+proc/showInfo()
 	return {"<html>
 				<head>
 				</head>
@@ -87,7 +87,7 @@ var/global/datum/getrev/revdata = new("config/svndir.txt")
 				</body>
 				<html>"}
 
-proc/return_revision()
+return_revision()
 	var/output =  "Sorry, the revision info is unavailable."
 	output = file2text(".git/refs/heads/Bleeding-Edge")
 	if(!output || output == "")
