@@ -87,14 +87,14 @@ proc/showInfo()
 				</body>
 				<html>"}
 
-return_revision()
+/proc/return_revision()
 	var/output =  "Sorry, the revision info is unavailable."
 	output = file2text(".git/refs/heads/Bleeding-Edge")
 	if(!output || output == "")
 		output = "Unable to load revision info from HEAD"
 	return output
 
-verb/showrevinfo()
+/client/verb/showrevinfo()
 	set category = "OOC"
 	set name = "Show Server Revision"
 	var/output =  "Sorry, the revision info is unavailable."
