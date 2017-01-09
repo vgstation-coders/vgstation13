@@ -958,6 +958,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 								"}
 
 			if (PDA_APP_STATIONMAP)
+				if(user.client)
+					var/datum/asset/simple/C = new/datum/asset/simple/pda_stationmap()
+					send_asset_list(user.client, C.assets)
+
 				var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
 				dat += {"<h4>Station Map Application</h4>"}
 				if(app)

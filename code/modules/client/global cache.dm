@@ -180,7 +180,11 @@
 		"pda_clock.png"			= 'icons/pda_icons/pda_clock.png',
 		"pda_game.png"		= 'icons/pda_icons/pda_game.png',
 		"pda_egg.png"			= 'icons/pda_icons/pda_egg.png',
-		"pda_money.png"				= 'icons/pda_icons/pda_money.png',
+		"pda_money.png"				= 'icons/pda_icons/pda_money.png'
+	)
+
+/datum/asset/simple/pda_stationmap
+	assets = list(
 		"pda_minimap_box.png"	= 'icons/pda_icons/pda_minimap_box.png',
 		"pda_minimap_bg_notfound.png"	= 'icons/pda_icons/pda_minimap_bg_notfound.png',
 		"pda_minimap_deff.png"					= 'icons/pda_icons/pda_minimap_deff.png',
