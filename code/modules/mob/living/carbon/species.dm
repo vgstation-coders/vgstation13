@@ -885,7 +885,7 @@ var/global/list/whitelisted_species = list("Human")
 							(Verbs -> Ghost -> Re-enter corpse, or <a href='?src=\ref[ghost];reentercorpse=1'>click here!</a>)</span>")
 				else
 					anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "reverse-dust-g", sleeptime = 15)
-					var/mob/living/carbon/human/golem/G = new /mob/living/carbon/human/golem
+					var/mob/living/carbon/human/G = new /mob/living/carbon/human/species/golem
 					if(!real_name)
 						real_name = G.species.makeName()
 					to_chat(user, "<span class='notice'>As you press \the [A] into \the [src], it is consumed. [real_name] reconstitutes itself!.</span>")

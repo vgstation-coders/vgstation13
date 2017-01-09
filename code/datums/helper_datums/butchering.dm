@@ -232,12 +232,7 @@ var/global/list/animal_butchering_products = list(
 	/mob/living/simple_animal/hostile/frog				= list(/datum/butchering_product/frog_leg),
 	/mob/living/carbon/monkey							= list(/datum/butchering_product/skin/monkey, TEETH_FEW),
 
-	/mob/living/carbon/human							= list(TEETH_HUMAN),
-	/mob/living/carbon/human/unathi						= list(TEETH_LOTS),
-	/mob/living/carbon/human/skrell						= list(TEETH_LOTS),
-	/mob/living/carbon/human/skellington				= list(TEETH_HUMAN),
-	/mob/living/carbon/human/tajaran					= list(TEETH_HUMAN),
-	/mob/living/carbon/human/dummy						= list(TEETH_HUMAN),
+	/mob/living/carbon/human							= list(TEETH_HUMAN)
 
 )
 

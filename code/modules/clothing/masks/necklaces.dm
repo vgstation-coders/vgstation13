@@ -31,10 +31,11 @@
 	var/animal_name = "teeth"
 	if(animal_type)
 		if(ispath(animal_type, /mob/living/carbon/human))
+			var/mob/living/carbon/human/H = animal_type
 			animal_name = "human teeth"
-			if(animal_type == /mob/living/carbon/human/skellington)
+			if(isskellington(H))
 				animal_name = "skellington teeth"
-			if(animal_type == /mob/living/carbon/human/tajaran)
+			if(iscatbeast(H))
 				animal_name = "tajaran teeth"
 		else
 			animal_name = "[initial(animal_type.name)] teeth"

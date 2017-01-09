@@ -23,51 +23,60 @@
 	underwear = 0
 	..(new_loc, "Manifested")
 
-/mob/living/carbon/human/skrell/New(var/new_loc, delay_ready_dna = 0)
+/mob/living/carbon/human/species //these will spawn a human and manually modify the species of it before deleting themselves. This is so that people stop trying to do istype(H, /mob////diona) rather than species checking
+	species = "Human"
+	h_style = "Bald"
+
+/mob/living/carbon/human/species/New(var/new_loc, delay_ready_dna = 0)
+	var/mob/living/carbon/human/newhuman = new /mob/living/carbon/human(new_loc, species, delay_ready_dna)
+	newhuman.name = name
+	newhuman.real_name = real_name
+	newhuman.h_style = h_style
+	newhuman.update_body()
+	qdel(src)
+	return newhuman
+
+/mob/living/carbon/human/species/skrell
 	h_style = "Skrell Male Tentacles"
-	..(new_loc, "Skrell")
+	species = "Skrell"
 
-/mob/living/carbon/human/tajaran/New(var/new_loc, delay_ready_dna = 0)
+/mob/living/carbon/human/species/tajaran
 	h_style = "Tajaran Ears"
-	..(new_loc, "Tajaran")
+	species = "Tajaran"
 
-/mob/living/carbon/human/unathi/New(var/new_loc, delay_ready_dna = 0)
+/mob/living/carbon/human/species/unathi
 	h_style = "Unathi Horns"
-	..(new_loc, "Unathi")
+	species = "Unathi"
 
-/mob/living/carbon/human/vox/New(var/new_loc, delay_ready_dna = 0)
+/mob/living/carbon/human/species/vox
 	h_style = "Short Vox Quills"
-	..(new_loc, "Vox")
+	species = "Vox"
 
-/mob/living/carbon/human/diona/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
-	..(new_loc, "Diona")
+/mob/living/carbon/human/species/diona
+	species = "Diona"
 
-/mob/living/carbon/human/skellington/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
-	..(new_loc, "Skellington", delay_ready_dna)
+/mob/living/carbon/human/species/skellington
+	species = "Skellington"
 
-/mob/living/carbon/human/skelevox/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
-	..(new_loc, "Skeletal Vox")
+/mob/living/carbon/human/species/skelevox
+	species = "Skeletal Vox"
 
-/mob/living/carbon/human/plasma/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
-	..(new_loc, "Plasmaman")
+/mob/living/carbon/human/species/plasma
+	species = "Plasmaman"
 
-/mob/living/carbon/human/muton/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
-	..(new_loc, "Muton")
+/mob/living/carbon/human/species/muton
+	species = "Muton"
 
-/mob/living/carbon/human/grey/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
-	..(new_loc, "Grey")
+/mob/living/carbon/human/species/grey
+	species = "Grey"
 
-/mob/living/carbon/human/golem/New(var/new_loc, delay_ready_dna = 0)
-	h_style = "Bald"
-	..(new_loc, "Golem")
-	gender = NEUTER
-	meat_type = /obj/item/weapon/ore/diamond
+/mob/living/carbon/human/species/golem
+	species = "Golem"
+
+/mob/living/carbon/human/species/golem/New(var/new_loc, delay_ready_dna = 0)
+	var/mob/living/carbon/human/H = ..(new_loc, delay_ready_dna)
+	H.gender = NEUTER
+	H.meat_type = /obj/item/weapon/ore/diamond
 
 /mob/living/carbon/human/grue/New(var/new_loc, delay_ready_dna = 0)
 	h_style = "Bald"

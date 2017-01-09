@@ -1000,7 +1000,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		if(!ghost)
 			to_chat(user, "The rune fizzles uselessly. There is no spirit nearby.")
 			return
-		var/mob/living/carbon/human/golem/G = new /mob/living/carbon/human/golem
+		var/mob/living/carbon/human/G = new /mob/living/carbon/human/species/golem
 		G.real_name = G.species.makeName()
 		G.forceMove(src.loc) //we use move to get the entering procs - this fixes gravity
 		G.key = ghost.key
