@@ -375,12 +375,13 @@
 /obj/item/weapon/gun/energy/laser/rainbow
 
 	name = "rainbow laser"
-	desc = "A fearsome gun used by clown special forces."
+	desc = "A fearsome gun used by clown special forces. Its design is flawed however as clumsy users find it hard to operate."
 	projectile_type = "/obj/item/projectile/beam/white"
 	var/current_color = 1
 	var/static/list/color_list = list("#FF0000","#FF8C00","#FFFF00","#00FF00","#00BFFF","#0000FF","#9400D3")
 	var/fire_mode = 0 // 1 = laser, 0 = braindamage. Clowns can use it in braindamage mode.
-
+	icon_state = "energy"
+	item_state = "energy"
 /obj/item/weapon/gun/energy/laser/rainbow/attack_self(mob/living/user)
 
 	switch(fire_mode)
