@@ -890,9 +890,11 @@ var/list/beam_master = list()
 
 /obj/item/projectile/beam/rainbow
 	icon_state = "whitelaser"
+
 /obj/item/projectile/beam/rainbow/rainbow/braindamage
 	icon_state = "whitelaser"
 	damage = 5
+
 /obj/item/projectile/beam/rainbow/braindamage/on_hit(var/atom/target, var/blocked = 0)
 	if(ishuman(target))
 		var/mob/living/carbon/human/M = target
