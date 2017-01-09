@@ -375,33 +375,35 @@
 /obj/item/weapon/gun/energy/laser/rainbow
 
 	name = "rainbow laser"
-	desc = "A fearsome gun used by clown special forces"
-	projectile_type = "/obj/item/projectile/beam/rainbow"
+	desc = "A fearsome gun used by clown special forces."
+	projectile_type = "/obj/item/projectile/beam/white"
 	var/current_color = 1
-	var/list/color_list = list("#FF0000","#FF8C00","#FFFF00","#00FF00","#00BFFF","#0000FF","#9400D3")
-	var/fire_mode = 1
+	var/static/list/color_list = list("#FF0000","#FF8C00","#FFFF00","#00FF00","#00BFFF","#0000FF","#9400D3")
+	var/fire_mode = 0 // 1 = laser, 0 = braindamage. Clowns can use it in braindamage mode.
 
-/obj/item/weapon/gun/energy/laser/rainbow/attack_self(mob/living/user as mob)
+/obj/item/weapon/gun/energy/laser/rainbow/attack_self(mob/living/user)
 
 	switch(fire_mode)
 		if(0)
 			fire_mode = 1
-			to_chat(user, "<span class='warning'>The [src.name] is now set to kill.</span>")
-			projectile_type = "/obj/item/projectile/beam/rainbow"
+			to_chat(user, "<span class='warning'>\The [src.name] is now set to kill.</span>")
+			projectile_type = "/obj/item/projectile/beam/white"
 			playsound(user,'sound/weapons/egun_toggle_noammo.ogg',73,0,-5)
 			fire_sound = 'sound/weapons/Laser.ogg'
+			clumsy_check = 1
 		if(1)
 			fire_mode = 0
-			to_chat(user, "<span class='warning'>The [src.name] is now set to mindflay.</span>")
+			to_chat(user, "<span class='warning'>\The [src.name] is now set to mindflay.</span>")
 			projectile_type = "/obj/item/projectile/beam/rainbow/braindamage"
 			playsound(user,'sound/weapons/egun_toggle_noammo.ogg',73,0,-5)
 			fire_sound = 'sound/items/quack.ogg'
+			clumsy_check = 0
 
 
-/obj/item/weapon/gun/energy/laser/rainbow/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+/obj/item/weapon/gun/energy/laser/rainbow/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 
 	projectile_color = color_list[current_color]
-	if(current_color < 7 )
+	if(current_color < color_list.len )
 		current_color+=1
 	else
 		current_color = 1

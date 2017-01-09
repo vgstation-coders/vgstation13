@@ -888,15 +888,16 @@ var/list/beam_master = list()
 	pass_flags = PASSALL //Go through everything
 	icon_state = "pain"
 
-/obj/item/projectile/beam/rainbow
+/obj/item/projectile/beam/white
 	icon_state = "whitelaser"
 
-/obj/item/projectile/beam/rainbow/rainbow/braindamage
-	icon_state = "whitelaser"
+/obj/item/projectile/beam/rainbow/braindamage
 	damage = 5
+	icon_state = "whitelaser"
 
 /obj/item/projectile/beam/rainbow/braindamage/on_hit(var/atom/target, var/blocked = 0)
 	if(ishuman(target))
-		var/mob/living/carbon/human/M = target
-		M.adjustBrainLoss(20)
-		M.hallucination += 20
+		var/mob/living/carbon/human/victim = target
+		if(!(victim.mind && victim.mind.assigned_role == "Clown"))
+			victim.adjustBrainLoss(20)
+			victim.hallucination += 20
