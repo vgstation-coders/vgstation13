@@ -811,7 +811,7 @@
 /obj/item/packobelongings
 	name = "Unknown's belongings"
 	desc = "Full of stuff."
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "belongings"
 	w_class = W_CLASS_MEDIUM
 
