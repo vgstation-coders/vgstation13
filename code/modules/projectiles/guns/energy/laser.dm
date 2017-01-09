@@ -390,14 +390,13 @@
 			projectile_type = "/obj/item/projectile/beam/white"
 			playsound(user,'sound/weapons/egun_toggle_noammo.ogg',73,0,-5)
 			fire_sound = 'sound/weapons/Laser.ogg'
-			clumsy_check = 1
 		if(1)
 			fire_mode = 0
 			to_chat(user, "<span class='warning'>\The [src.name] is now set to mindflay.</span>")
 			projectile_type = "/obj/item/projectile/beam/rainbow/braindamage"
 			playsound(user,'sound/weapons/egun_toggle_noammo.ogg',73,0,-5)
 			fire_sound = 'sound/items/quack.ogg'
-			clumsy_check = 0
+
 
 
 /obj/item/weapon/gun/energy/laser/rainbow/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
