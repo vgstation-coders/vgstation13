@@ -459,6 +459,24 @@
 	affect_voice_active = 0
 	..()
 
+/datum/disease2/effect/butterfly_skin
+	name = "Epidermolysis Bullosa"
+	stage = 2
+	max_count = 1
+
+/datum/disease2/effect/butterfly_skin/activate(var/mob/living/carbon/mob,var/multiplier)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		if(H.species && (H.species.flags & NO_SKIN))	//Can't have fragile skin if you don't have skin at all.
+			max_count = 0
+			count = 0
+			return
+	to_chat(mob, "<span class='warning'>Your skin feels a little fragile.</span>")
+
+/datum/disease2/effect/butterfly_skin/deactivate(var/mob/living/carbon/mob)
+	to_chat(mob, "<span class='notice'>Your skin feels nice and durable again!.</span>")
+	..()
+
 
 ////////////////////////STAGE 3/////////////////////////////////
 
