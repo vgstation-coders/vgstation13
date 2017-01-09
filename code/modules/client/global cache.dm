@@ -156,7 +156,7 @@
 		"pda_back.png"			= 'icons/pda_icons/pda_back.png',
 		"pda_bell.png"			= 'icons/pda_icons/pda_bell.png',
 		"pda_blank.png"		= 'icons/pda_icons/pda_blank.png',
-		"pda_boom"				= 'icons/pda_icons/pda_boom.png',
+		"pda_boom.png"				= 'icons/pda_icons/pda_boom.png',
 		"pda_bucket.png"		= 'icons/pda_icons/pda_bucket.png',
 		"pda_crate.png"			= 'icons/pda_icons/pda_crate.png',
 		"pda_cuffs.png"			= 'icons/pda_icons/pda_cuffs.png',
