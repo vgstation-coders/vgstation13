@@ -9,35 +9,30 @@
 	..()
 	if(istype(AM, /mob/living/carbon) && prob(10))
 		src.spread_disease_to(AM, "Contact")
-	if(has_active_symptom(/datum/disease2/effect/butterfly_skin))
-		if(ishuman(src))
-			var/mob/living/carbon/human/H = src
-			var/datum/organ/external/E = pick(H.organs)
-			while((E.status & ORGAN_ROBOT) || (E.status & ORGAN_PEG))
-				E = pick(H.organs)
-			if(E)
-				to_chat(src, "<span class='warning'>As you bump into \the [AM], some of the skin on your [E.display_name] shears off!</span>")
-				E.take_damage(10)
-		else
-			to_chat(src, "<span class='warning'>As you bump into \the [AM], some of your skin shears off!</span>")
-			apply_damage(10)
+	if(virus2.len)
+		for(var/I in virus2)
+			var/datum/disease2/disease/D = virus2[I]
+			if(D.effects.len)
+				for(var/datum/disease2/effect/E in D.effects)
+					E.on_touch(src, src, AM, BUMP)
+	if(istype(AM, /mob/living/carbon))
+		var/mob/living/carbon/C = AM
+		if(C.virus2.len)
+			for(var/I in C.virus2)
+				var/datum/disease2/disease/D = C.virus2[I]
+				if(D.effects.len)
+					for(var/datum/disease2/effect/E in D.effects)
+						E.on_touch(AM, src, AM, BUMP)
 
 /mob/living/carbon/Bumped(var/atom/movable/AM)
 	..()
-	if(has_active_symptom(/datum/disease2/effect/butterfly_skin))
-		if(ishuman(src))
-			var/mob/living/carbon/human/H = src
-			var/datum/organ/external/E = pick(H.organs)
-			while((E.status & ORGAN_ROBOT) || (E.status & ORGAN_PEG))
-				E = pick(H.organs)
-			if(E)
-				to_chat(src, "<span class='warning'>As \the [AM] bumps into you, some of the skin on your [E.display_name] shears off!</span>")
-				to_chat(AM, "<span class='warning'>As you bump into \the [src], some of the skin on \his [E.display_name] shears off!</span>")
-				E.take_damage(10)
-		else
-			to_chat(src, "<span class='warning'>As \the [AM] bumps into you, some of your skin shears off!</span>")
-			to_chat(AM, "<span class='warning'>As you bump into \the [src], some of \his skin shears off!</span>")
-			apply_damage(10)
+	if(!istype(AM, /mob/living/carbon))
+		if(virus2.len)
+			for(var/I in virus2)
+				var/datum/disease2/disease/D = virus2[I]
+				if(D.effects.len)
+					for(var/datum/disease2/effect/E in D.effects)
+						E.on_touch(src, AM, src, BUMP)
 
 /mob/living/carbon/Move(NewLoc,Dir=0,step_x=0,step_y=0)
 	. = ..()
@@ -115,20 +110,12 @@
 			to_chat(M, "<span class='warning'>You can't use your [temp.display_name]</span>")
 			return
 	share_contact_diseases(M)
-	if(has_active_symptom(/datum/disease2/effect/butterfly_skin))
-		if(ishuman(src))
-			var/mob/living/carbon/human/H = src
-			var/datum/organ/external/E = pick(H.organs)
-			while((E.status & ORGAN_ROBOT) || (E.status & ORGAN_PEG))
-				E = pick(H.organs)
-			if(E)
-				to_chat(src, "<span class='warning'>As \the [M] touches you, some of the skin on your [E.display_name] shears off!</span>")
-				to_chat(M, "<span class='warning'>As you touch \the [src], some of the skin on \his [E.display_name] shears off!</span>")
-				E.take_damage(10)
-		else
-			to_chat(src, "<span class='warning'>As \the [M] touches you, some of your skin shears off!</span>")
-			to_chat(M, "<span class='warning'>As you touch \the [src], some of \his skin shears off!</span>")
-			apply_damage(10)
+	if(virus2.len)
+		for(var/I in virus2)
+			var/datum/disease2/disease/D = virus2[I]
+			if(D.effects.len)
+				for(var/datum/disease2/effect/E in D.effects)
+					E.on_touch(src, M, src, HAND)
 
 /mob/living/carbon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
 	var/damage = shock_damage * siemens_coeff
