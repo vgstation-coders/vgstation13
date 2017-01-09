@@ -668,3 +668,11 @@
 		qdel(A)
 	for(var/i = 1 to 7)
 		new /obj/item/ornament/teardrop(src)
+
+/obj/item/weapon/storage/box/cable
+	name = "box of cable coils"
+
+/obj/item/weapon/storage/box/cable/New()
+	..()
+	for(var/i = 1 to 7)
+		new /obj/item/stack/cable_coil(src)
