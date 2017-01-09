@@ -875,9 +875,9 @@
 	desc = "test lightning"
 	flags = 0
 
-	New()
-		icon = midicon
-		icon_state = "1"
+/obj/item/weapon/lightning/New()
+	icon = midicon
+	icon_state = "1"
 
 /obj/item/weapon/lightning/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params)
 	var/angle = get_angle(A, user)
