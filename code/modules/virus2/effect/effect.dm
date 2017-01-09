@@ -463,7 +463,7 @@
 
 /datum/disease2/effect/butterfly_skin
 	name = "Epidermolysis Bullosa"
-	stage = 1
+	stage = 2
 	max_count = 1
 	var/skip = FALSE
 
