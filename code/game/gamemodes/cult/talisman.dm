@@ -231,7 +231,7 @@
 			continue
 		C.ear_deaf += 30
 		//talismans is weaker.
-		C.show_message("\<span class='warning'>The world around you suddenly becomes quiet.</span>")
+		C.show_message("<span class='warning'>The world around you suddenly becomes quiet.</span>")
 		affected++
 	if(affected)
 		usr.whisper("Sti[pick("'","`")] kaliedir!")
