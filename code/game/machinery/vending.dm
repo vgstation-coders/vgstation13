@@ -362,7 +362,7 @@ var/global/num_vending_terminals = 1
 		if(panel_open)
 			attack_hand(user)
 		return
-	else if(premium.len > 0 && is_type_in_list(W, list(/obj/item/weapon/coin/, /obj/item/weapon/reagent_containers/food/snacks/chococoin)))
+	else if(premium.len > 0 && iscoin(W)))
 		if (isnull(coin))
 			if(user.drop_item(W, src))
 				coin = W
@@ -2378,3 +2378,46 @@ var/global/num_vending_terminals = 1
  		/obj/item/clothing/suit/armor/knight/templar = 5,
 		)
 	pack = /obj/structure/vendomatpack/chapelvend
+
+
+/obj/machinery/vending/trader	// Boxes are defined in trader.dm
+	name = "Jewvend"
+	desc = "Its coin groove has been modified."
+	product_slogans = "Profits."
+	product_ads = "When you charge a customer $100, and he pays you by mistake $200, you have an ethical dilemma — should you tell your partner?"
+	vend_reply = "Money money money!"
+	icon_state = "voxseed"
+	products = list (
+		/obj/item/weapon/storage/fancy/donut_box = 2,
+		)
+
+/obj/machinery/vending/trader/New()
+	..()
+	premium = list(
+		/obj/item/weapon/storage/trader_marauder,
+		/obj/item/weapon/storage/backpack/holding,
+		/obj/item/weapon/reagent_containers/glass/beaker/bluespace,
+		/obj/item/weapon/storage/bluespace_crystal,
+		/obj/item/clothing/shoes/magboots/elite,
+		/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
+		/obj/item/weapon/reagent_containers/glass/bottle/peridaxonsmall,
+		/obj/item/weapon/reagent_containers/glass/bottle/rezadone,
+		/obj/item/weapon/reagent_containers/glass/bottle/nanitessmall,	
+		)
+
+	for(var/random_items = 1 to 5)
+		premium.Remove(pick(premium))
+	src.initialize()
+
+/obj/machinery/vending/trader/attackby(var/obj/item/W, var/mob/user) //This shitcode is needed.
+	if (iscoin(W))
+		if (istype(W, /obj/item/weapon/coin/trader))
+			if (isnull(coin))
+				if(user.drop_item(W, src))
+					coin = W
+					to_chat(user, "<span class='notice'>You insert a coin into [src].</span>")
+					src.updateUsrDialog()
+		else
+			to_chat(user, "<span class='notice'>It doesn't fit.</span>")
+		return
+	..()
