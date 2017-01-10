@@ -71,6 +71,7 @@
 		var/defect = rand(1,10000)
 		var/turf/T = get_turf(src)
 		src.visible_message("<span class='notice'>\The [name] bursts open!</span>")
+		//Adds the chance for a "special" borer to be born
 		if(defect == 666)
 			var/mob/living/simple_animal/borer/defected_borer/B = new (T, child_prefix_index)
 			B.transfer_personality(O.client)
