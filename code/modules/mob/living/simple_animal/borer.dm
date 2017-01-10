@@ -93,14 +93,14 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/name_prefix_index = 1
 	held_items = list()
 
-/mob/living/simple_animal/borer/best_borer
-	name = "Special borer"
-	real_name = "Special borer"
+/mob/living/simple_animal/borer/defected_borer
+	name = "special borer"
+	real_name = "special borer"
 	desc = "A slightly defected, yet incredibly happy little brainslug"
 	speak_emote = list("barks")
 	emote_hear = list("barks")
 	attacktext = "barks at"
-	friendly = "barks at"
+	friendly = "borks at"
 	icon_state = "bestborer"
 	icon_living = "bestborer"
 	icon_dead = "bestborer"
