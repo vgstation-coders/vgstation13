@@ -69,22 +69,17 @@
 	var/mob/dead/observer/O = args["player"]
 	if(O)
 		var/defect = rand(1,10000)
+		var/turf/T = get_turf(src)
+		src.visible_message("<span class='notice'>\The [name] bursts open!</span>")
 		if(defect == 666)
-			var/turf/T = get_turf(src)
-			src.visible_message("<span class='notice'>\The [name] bursts open!</span>")
 			var/mob/living/simple_animal/borer/defected_borer/B = new (T, child_prefix_index)
 			B.transfer_personality(O.client)
-			// Play hatching noise here.
-			playsound(src.loc, 'sound/items/borer_hatch.ogg', 50, 1)
-			qdel(src)
 		else
-			var/turf/T = get_turf(src)
-			src.visible_message("<span class='notice'>\The [name] bursts open!</span>")
 			var/mob/living/simple_animal/borer/B = new (T, child_prefix_index)
 			B.transfer_personality(O.client)
-			// Play hatching noise here.
-			playsound(src.loc, 'sound/items/borer_hatch.ogg', 50, 1)
-			qdel(src)
+		// Play hatching noise here.
+		playsound(src.loc, 'sound/items/borer_hatch.ogg', 50, 1)
+		qdel(src)
 	else
 		src.visible_message("<span class='notice'>\The [name] calms down.</span>")
 		hatching = FALSE
