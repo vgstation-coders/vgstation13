@@ -27,298 +27,298 @@
 
 	var/zsay = new/list()
 
-	New()
-		..()
-		zsay += "braaaaains"
-		zsay += "Mrrrhrrrrrrmmmm"
-		zsay += "BRAIIIIIIIIINSSSSS"
-		zsay += "uuuuuuuuuuuhhhh"
-		zsay += "grrrr-grrrii-gggrii-fffee-rrr"
-		zsay += "UHhuHUhuhhhh"
-		zsay += "thriii-thirriiill--errrr"
-		zsay += "GRRRRRRRRR"
-		zsay += "ahhhaaaarraaghh"
-		zsay += "eeemmmmmmaaarrrrrrraggh"
-		zsay += "AAARRAAAGGGGHHHHHH"
-		zsay += "FFFFEEEEERRAAAAG"
-		zsay += "bbbb-bbb-ainnnnnns"
+/mob/living/carbon/human/zombie/New()
+	..()
+	zsay += "braaaaains"
+	zsay += "Mrrrhrrrrrrmmmm"
+	zsay += "BRAIIIIIIIIINSSSSS"
+	zsay += "uuuuuuuuuuuhhhh"
+	zsay += "grrrr-grrrii-gggrii-fffee-rrr"
+	zsay += "UHhuHUhuhhhh"
+	zsay += "thriii-thirriiill--errrr"
+	zsay += "GRRRRRRRRR"
+	zsay += "ahhhaaaarraaghh"
+	zsay += "eeemmmmmmaaarrrrrrraggh"
+	zsay += "AAARRAAAGGGGHHHHHH"
+	zsay += "FFFFEEEEERRAAAAG"
+	zsay += "bbbb-bbb-ainnnnnns"
 
-		src.contract_disease(new/datum/disease/z_virus)
+	src.contract_disease(new/datum/disease/z_virus)
 
-		src.process()
+	src.process()
 
-	emote(var/act)
-		act = "<B>[src]</B> moans."
-		for (var/mob/O in hearers(src, null))
-			O.show_message(act, 2)
+/mob/living/carbon/human/zombie/emote(var/act)
+	act = "<B>[src]</B> moans."
+	for (var/mob/O in hearers(src, null))
+		O.show_message(act, 2)
 
-	Bumped(AM as mob|obj)
-	//	..()
-		if(istype(AM, /mob/living/carbon/human/zombie))
-			return
-		if(ismob(AM) && (ishuman(AM) || ismonkey(AM)) )
-			src.target = AM
-			set_attack()
-		else if(ismob(AM))
-			spawn(0)
-				var/turf/T = get_turf(src)
-				AM:forceMove(T)
+/mob/living/carbon/human/zombie/Bumped(AM as mob|obj)
+//	..()
+	if(istype(AM, /mob/living/carbon/human/zombie))
+		return
+	if(ismob(AM) && (ishuman(AM) || ismonkey(AM)) )
+		src.target = AM
+		set_attack()
+	else if(ismob(AM))
+		spawn(0)
+			var/turf/T = get_turf(src)
+			AM:forceMove(T)
 
-	Bump(atom/A)
-		if(istype(A, /mob/living/carbon/human/zombie))
-			return
-		if(ismob(A) && (ishuman(A) || ismonkey(A)))
-			src.target = A
-			set_attack()
-		else if(ismob(A))
-			src.forceMove(A:loc)
+/mob/living/carbon/human/zombie/Bump(atom/A)
+	if(istype(A, /mob/living/carbon/human/zombie))
+		return
+	if(ismob(A) && (ishuman(A) || ismonkey(A)))
+		src.target = A
+		set_attack()
+	else if(ismob(A))
+		src.forceMove(A:loc)
 
 
-	proc/set_attack()
-		state = 1
-		if(path_idle.len)
-			path_idle = new/list()
-		trg_idle = null
+/mob/living/carbon/human/zombie/proc/set_attack()
+	state = 1
+	if(path_idle.len)
+		path_idle = new/list()
+	trg_idle = null
 
-	proc/set_idle()
-		state = 2
-		if (path_target.len)
-			path_target = new/list()
-		target = null
-		frustration = 0
+/mob/living/carbon/human/zombie/proc/set_idle()
+	state = 2
+	if (path_target.len)
+		path_target = new/list()
+	target = null
+	frustration = 0
 
-	proc/set_null()
-		state = 0
-		if (path_target.len)
-			path_target = new/list()
-		if (path_idle.len)
-			path_idle = new/list()
-		target = null
-		trg_idle = null
-		frustration = 0
+/mob/living/carbon/human/zombie/proc/set_null()
+	state = 0
+	if (path_target.len)
+		path_target = new/list()
+	if (path_idle.len)
+		path_idle = new/list()
+	target = null
+	trg_idle = null
+	frustration = 0
 
-	proc/process()
-		if(timestopped)
-			sleep(1)
-			continue
-		//set background = 1
-		var/quick_move = 1
-		var/slow_move = 0
+/mob/living/carbon/human/zombie/proc/process()
+	if(timestopped)
+		sleep(1)
+		continue
+	//set background = 1
+	var/quick_move = 1
+	var/slow_move = 0
 
-		if (src.stat == 2)
-			return
+	if (src.stat == 2)
+		return
 
-		if (src.stat > 0 || lying)
-			spawn(cycle_pause)
-				src.process()
-			return
+	if (src.stat > 0 || lying)
+		spawn(cycle_pause)
+			src.process()
+		return
 
-		if(istype(src.shoes, /obj/item/clothing/shoes/orange))
-			var/obj/item/clothing/shoes/orange/Os = src.shoes
-			if(Os.chained)
-				slow_move = 1
-		else if(istype(src.wear_suit, /obj/item/clothing/suit/straight_jacket))
+	if(istype(src.shoes, /obj/item/clothing/shoes/orange))
+		var/obj/item/clothing/shoes/orange/Os = src.shoes
+		if(Os.chained)
 			slow_move = 1
+	else if(istype(src.wear_suit, /obj/item/clothing/suit/straight_jacket))
+		slow_move = 1
 
 
-		else if (!target)
-			if (path_target.len)
-				path_target = new/list()
+	else if (!target)
+		if (path_target.len)
+			path_target = new/list()
 
-			var/last_health = INFINITY
+		var/last_health = INFINITY
 
-			for (var/mob/living/carbon/C in range(viewrange-2,src.loc))
-				if (C.stat == 2 || !can_see(src,C,viewrange) || istype(C, /mob/living/carbon/human/zombie) || istype(C, /mob/living/carbon/monkey))
-					continue
-				if(C.incapacitated())
-					target = C
-					break
-				if(C:health < last_health)
-					last_health = C:health
-					target = C
+		for (var/mob/living/carbon/C in range(viewrange-2,src.loc))
+			if (C.stat == 2 || !can_see(src,C,viewrange) || istype(C, /mob/living/carbon/human/zombie) || istype(C, /mob/living/carbon/monkey))
+				continue
+			if(C.incapacitated())
+				target = C
+				break
+			if(C:health < last_health)
+				last_health = C:health
+				target = C
 
-			if(target)
-				set_attack()
-			else if(state != 2)
-				set_idle()
-				idle()
-
-		else if(target)
-			var/turf/distance = get_dist(src, target)
+		if(target)
 			set_attack()
+		else if(state != 2)
+			set_idle()
+			idle()
 
-			if(can_see(src,target,viewrange))
-				if(distance <= 1 && !istype(src.wear_mask, /obj/item/clothing/mask))
-					if(prob(25))
-						for(var/mob/O in viewers(world.view,src))
-							O.show_message("<span class='danger'>[src] has attempted to bite [src.target]!</span>", 1, "<span class='warning'>You hear struggling.</span>", 2)
-					else
-						for(var/mob/O in viewers(world.view,src))
-							O.show_message("<span class='danger'>[src.target] has been bitten by [src]!</span>", 1, "<span class='warning'>You hear struggling.</span>", 2)
-						var/mob/living/carbon/human/T = target
-						T.bruteloss += rand(1,7)
-						var/datum/organ/external/affecting
-						if(T.organs["head"])
-							affecting = T.organs["head"]
-						affecting.take_damage(rand(1,7), 0)
-						playsound(get_turf(src), 'sound/items/eatfood.ogg', 50, 1)
-						if(prob(25))
-							target.contract_disease(new/datum/disease/z_virus)
-						src.add_blood(src.target)
-						if (prob(33))
-							var/turf/location = src.target.loc
-							if (istype(location, /turf/simulated))
-								location.add_blood(src.target)
-						if (src.wear_mask)
-							src.wear_mask.add_blood(src.target)
-						if (src.head)
-							src.head.add_blood(src.target)
-						if (src.glasses && prob(33))
-							src.glasses.add_blood(src.target)
-						if (src.gloves)
-							src.gloves.add_blood(src.target)
-						if (prob(15))
-							if (src.wear_suit)
-								src.wear_suit.add_blood(src.target)
-							else if (src.w_uniform)
-								src.w_uniform.add_blood(src.target)
-					sleep(5)
-					//target:paralysis = max(target:paralysis, 10)
-				else if(distance <= 1 && !src.handcuffed && !istype(src.wear_suit, /obj/item/clothing/suit/straight_jacket))
-					if(prob(25) && src.equipped())
-						var/obj/item/weapon/A = src.equipped()
-						A.attack(src.target, src)
-					else if(prob(25))
-						for(var/mob/O in viewers(world.view,src))
-							O.show_message("<span class='danger'>[src] has attempted to claw [src.target]!</span>", 1, "<span class='warning'>You hear struggling.</span>", 2)
-					else
-						for(var/mob/O in viewers(world.view,src))
-							O.show_message("<span class='danger'>[src.target] has been clawed by [src]!</span>", 1, "<span class='warning'>You hear struggling.</span>", 2)
-						var/mob/living/carbon/human/T = target
-						T.bruteloss += rand(1,7)
-						var/datum/organ/external/affecting
-						if(T.organs["head"])
-							affecting = T.organs["head"]
-						affecting.take_damage(rand(1,7), 0)
-						if(prob(12.5))
-							target.contract_disease(new/datum/disease/z_virus)
-						src.add_blood(src.target)
-						if (prob(33))
-							var/turf/location = src.target.loc
-							if (istype(location, /turf/simulated))
-								location.add_blood(src.target)
-						if (src.wear_mask)
-							src.wear_mask.add_blood(src.target)
-						if (src.head)
-							src.head.add_blood(src.target)
-						if (src.glasses && prob(33))
-							src.glasses.add_blood(src.target)
-						if (src.gloves)
-							src.gloves.add_blood(src.target)
-						if (prob(15))
-							if (src.wear_suit)
-								src.wear_suit.add_blood(src.target)
-							else if (src.w_uniform)
-								src.w_uniform.add_blood(src.target)
+	else if(target)
+		var/turf/distance = get_dist(src, target)
+		set_attack()
 
+		if(can_see(src,target,viewrange))
+			if(distance <= 1 && !istype(src.wear_mask, /obj/item/clothing/mask))
+				if(prob(25))
+					for(var/mob/O in viewers(world.view,src))
+						O.show_message("<span class='danger'>[src] has attempted to bite [src.target]!</span>", 1, "<span class='warning'>You hear struggling.</span>", 2)
 				else
-					step_towards(src,get_step_towards2(src , target))
+					for(var/mob/O in viewers(world.view,src))
+						O.show_message("<span class='danger'>[src.target] has been bitten by [src]!</span>", 1, "<span class='warning'>You hear struggling.</span>", 2)
+					var/mob/living/carbon/human/T = target
+					T.bruteloss += rand(1,7)
+					var/datum/organ/external/affecting
+					if(T.organs["head"])
+						affecting = T.organs["head"]
+					affecting.take_damage(rand(1,7), 0)
+					playsound(get_turf(src), 'sound/items/eatfood.ogg', 50, 1)
+					if(prob(25))
+						target.contract_disease(new/datum/disease/z_virus)
+					src.add_blood(src.target)
+					if (prob(33))
+						var/turf/location = src.target.loc
+						if (istype(location, /turf/simulated))
+							location.add_blood(src.target)
+					if (src.wear_mask)
+						src.wear_mask.add_blood(src.target)
+					if (src.head)
+						src.head.add_blood(src.target)
+					if (src.glasses && prob(33))
+						src.glasses.add_blood(src.target)
+					if (src.gloves)
+						src.gloves.add_blood(src.target)
+					if (prob(15))
+						if (src.wear_suit)
+							src.wear_suit.add_blood(src.target)
+						else if (src.w_uniform)
+							src.w_uniform.add_blood(src.target)
+				sleep(5)
+				//target:paralysis = max(target:paralysis, 10)
+			else if(distance <= 1 && !src.handcuffed && !istype(src.wear_suit, /obj/item/clothing/suit/straight_jacket))
+				if(prob(25) && src.equipped())
+					var/obj/item/weapon/A = src.equipped()
+					A.attack(src.target, src)
+				else if(prob(25))
+					for(var/mob/O in viewers(world.view,src))
+						O.show_message("<span class='danger'>[src] has attempted to claw [src.target]!</span>", 1, "<span class='warning'>You hear struggling.</span>", 2)
+				else
+					for(var/mob/O in viewers(world.view,src))
+						O.show_message("<span class='danger'>[src.target] has been clawed by [src]!</span>", 1, "<span class='warning'>You hear struggling.</span>", 2)
+					var/mob/living/carbon/human/T = target
+					T.bruteloss += rand(1,7)
+					var/datum/organ/external/affecting
+					if(T.organs["head"])
+						affecting = T.organs["head"]
+					affecting.take_damage(rand(1,7), 0)
+					if(prob(12.5))
+						target.contract_disease(new/datum/disease/z_virus)
+					src.add_blood(src.target)
+					if (prob(33))
+						var/turf/location = src.target.loc
+						if (istype(location, /turf/simulated))
+							location.add_blood(src.target)
+					if (src.wear_mask)
+						src.wear_mask.add_blood(src.target)
+					if (src.head)
+						src.head.add_blood(src.target)
+					if (src.glasses && prob(33))
+						src.glasses.add_blood(src.target)
+					if (src.gloves)
+						src.gloves.add_blood(src.target)
+					if (prob(15))
+						if (src.wear_suit)
+							src.wear_suit.add_blood(src.target)
+						else if (src.w_uniform)
+							src.w_uniform.add_blood(src.target)
+
+			else
+				step_towards(src,get_step_towards2(src , target))
+				set_null()
+				if(!slow_move)
+					spawn(cycle_pause) src.process()
+				else
+					spawn(cycle_pause*2) src.process()
+				return
+
+		else
+			if( !path_target.len )
+
+				path_attack(target)
+				if(!path_target.len)
 					set_null()
 					if(!slow_move)
 						spawn(cycle_pause) src.process()
 					else
 						spawn(cycle_pause*2) src.process()
 					return
-
 			else
-				if( !path_target.len )
+				var/turf/next = path_target[1]
 
+				if(next in range(1,src))
 					path_attack(target)
-					if(!path_target.len)
-						set_null()
-						if(!slow_move)
-							spawn(cycle_pause) src.process()
-						else
-							spawn(cycle_pause*2) src.process()
-						return
+
+				if(!path_target.len)
+					src.frustration += 5
 				else
-					var/turf/next = path_target[1]
+					next = path_target[1]
+					path_target -= next
+					step_towards(src,next)
+					quick_move = 1
 
-					if(next in range(1,src))
-						path_attack(target)
-
-					if(!path_target.len)
-						src.frustration += 5
-					else
-						next = path_target[1]
-						path_target -= next
-						step_towards(src,next)
-						quick_move = 1
-
-			if (get_dist(src, src.target) >= distance)
-				src.frustration++
-			else
-				src.frustration--
-			if(frustration >= 35)
-				set_null()
-
-		if(prob(3) && !src.stat == 2)
-			if(prob(50))
-				src.say(pick(zsay))
-			else
-				src.emote("moan")
-
-		if(slow_move)
-			spawn(cycle_pause*2)
-				src.process()
-		else if(quick_move)
-			spawn(cycle_pause/2)
-				src.process()
+		if (get_dist(src, src.target) >= distance)
+			src.frustration++
 		else
-			spawn(cycle_pause)
-				src.process()
+			src.frustration--
+		if(frustration >= 35)
+			set_null()
 
-
-		for(var/obj/machinery/door/D in oview(1))
-			D.Bumped(src)
-
-
-
-
-	proc/idle()
-		//set background = 1
-		var/quick_move = 0
-
-		if(state != 2 || src.stat == 2 || target)
-			return
-
-		step_rand(src)
-
-		if(prob(3))
-			if(prob(10))
-				src.say(pick(zsay))
-			else
-				src.emote("moan")
-
-		if(quick_move)
-			spawn(cycle_pause/2)
-				idle()
+	if(prob(3) && !src.stat == 2)
+		if(prob(50))
+			src.say(pick(zsay))
 		else
-			spawn(cycle_pause)
-				idle()
+			src.emote("moan")
 
-	proc/path_idle(var/atom/trg)
-		path_idle = AStar(src.loc, get_turf(trg), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 250, null, null)
-		path_idle = reverselist(path_idle)
+	if(slow_move)
+		spawn(cycle_pause*2)
+			src.process()
+	else if(quick_move)
+		spawn(cycle_pause/2)
+			src.process()
+	else
+		spawn(cycle_pause)
+			src.process()
 
-	proc/path_attack(var/atom/trg)
-		target = trg
-		path_target = AStar(src.loc, target.loc, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 250, null, null)
-		path_target = reverselist(path_target)
+
+	for(var/obj/machinery/door/D in oview(1))
+		D.Bumped(src)
 
 
-	proc/healthcheck()
+
+
+/mob/living/carbon/human/zombie/proc/idle()
+	//set background = 1
+	var/quick_move = 0
+
+	if(state != 2 || src.stat == 2 || target)
 		return
+
+	step_rand(src)
+
+	if(prob(3))
+		if(prob(10))
+			src.say(pick(zsay))
+		else
+			src.emote("moan")
+
+	if(quick_move)
+		spawn(cycle_pause/2)
+			idle()
+	else
+		spawn(cycle_pause)
+			idle()
+
+/mob/living/carbon/human/zombie/proc/path_idle(var/atom/trg)
+	path_idle = AStar(src.loc, get_turf(trg), /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 250, null, null)
+	path_idle = reverselist(path_idle)
+
+/mob/living/carbon/human/zombie/proc/path_attack(var/atom/trg)
+	target = trg
+	path_target = AStar(src.loc, target.loc, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 250, null, null)
+	path_target = reverselist(path_target)
+
+
+/mob/living/carbon/human/zombie/proc/healthcheck()
+	return
 
 
 //Zombies!
@@ -448,13 +448,13 @@
 	icon_state = "bottle3"
 	amount_per_transfer_from_this = 5
 
-	New()
-		var/datum/reagents/R = new/datum/reagents(20)
-		reagents = R
-		R.my_atom = src
-		var/datum/disease/F = new /datum/disease/z_virus(0)
-		var/list/data = list("virus"= F)
-		R.add_reagent(BLOOD, 20, data)
+/obj/item/weapon/reagent_containers/glass/bottle/t_virus/New()
+	var/datum/reagents/R = new/datum/reagents(20)
+	reagents = R
+	R.my_atom = src
+	var/datum/disease/F = new /datum/disease/z_virus(0)
+	var/list/data = list("virus"= F)
+	R.add_reagent(BLOOD, 20, data)
 
 ///////////////////////////CURE//////////////////////////////////////////
 
@@ -464,9 +464,9 @@ datum/reagent/zed
 	description = "For treating the Z-Virus."
 	//reagent_state = LIQUID
 
-	on_mob_life(var/mob/M)//no more mr. panacea
-		holder.remove_reagent(src.id, 0.2)
-		return
+datum/reagent/zed/on_mob_life(var/mob/M)//no more mr. panacea
+	holder.remove_reagent(src.id, 0.2)
+	return
 
 
 
@@ -516,15 +516,10 @@ datum/reagent/zed
 	item_state = "firstaid-zed"
 
 /obj/item/weapon/storage/firstaid/zed/New()
-
 	..()
-	new /obj/item/weapon/zedpen( src )
-	new /obj/item/weapon/zedpen( src )
-	new /obj/item/weapon/zedpen( src )
-	new /obj/item/weapon/zedpen( src )
-	new /obj/item/weapon/zedpen( src )
-	new /obj/item/weapon/zedpen( src )
-	new /obj/item/device/healthanalyzer( src )
+	for(var/i = 1 to 6)
+	new /obj/item/weapon/zedpen(src)
+	new /obj/item/device/healthanalyzer(src)
 	return
 
 
