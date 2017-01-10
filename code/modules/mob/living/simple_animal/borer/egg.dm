@@ -68,7 +68,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/recruiter_recruited(var/list/args)
 	var/mob/dead/observer/O = args["player"]
 	if(O)
-		var defect = rand(1,10000)
+		var/defect = rand(1,10000)
 		if(defect == 666)
 			var/turf/T = get_turf(src)
 			src.visible_message("<span class='notice'>\The [name] bursts open!</span>")
