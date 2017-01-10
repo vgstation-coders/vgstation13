@@ -65,7 +65,7 @@
 			continue
 		if(M.invisibility)//cloaked
 			continue
-		if(M.alpha < 1)//fully transparent
+		if(M.alpha <= 1)//fully transparent
 			continue
 		if(M.digitalcamo)
 			continue
@@ -170,7 +170,7 @@
 			if (U.cameraFollow == null)
 				return
 
-			if(target.digitalcamo || target.invisibility || target.alpha < 1)
+			if(target.digitalcamo || target.invisibility || target.alpha <= 1)
 				to_chat(U, "Follow camera mode terminated.")
 				U.cameraFollow = null
 				return
