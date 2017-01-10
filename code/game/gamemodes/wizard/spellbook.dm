@@ -742,20 +742,3 @@
 			sleep(1)
 			I.throw_at(user, 16, 2)
 			counter++
-
-// Spell Book Bundles//
-
-/obj/item/weapon/storage/box/spellbook
-	name = "Spellbook Bundle"
-	desc = "High quality discount spells! This bundle is non-refundable. The end user is solely liable for any damages arising from misuse of these products."
-
-/obj/item/weapon/storage/box/spellbook/New()
-	..()
-	var/list/possible_books = typesof(/obj/item/weapon/spellbook/oneuse)
-	possible_books -= /obj/item/weapon/spellbook/oneuse
-	possible_books -= /obj/item/weapon/spellbook/oneuse/charge
-	for(var/i =1; i <= 7; i++)
-		var/randombook = pick(possible_books)
-		var/book = new randombook(src)
-		src.contents += book
-		possible_books -= randombook

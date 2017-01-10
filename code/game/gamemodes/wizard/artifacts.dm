@@ -75,7 +75,7 @@
 	desc = "Feeling adventurous? Buy this bundle and recieve seven random spellbooks! Who knows what spells you will get? (Warning, each spell book may only be used once! No refunds)."
 	abbreviation = "SB"
 	price = 5 * Sp_BASE_PRICE
-	spawned_items = list(/obj/item/weapon/storage/box/spellbook)
+	spawned_items = list(/obj/item/weapon/storage/box/spellbook/random)
 
 /datum/spellbook_artifact/scrying
 	name = "Scrying Orb"
