@@ -1,10 +1,10 @@
 /datum/subsystem
 	// Metadata; you should define these.
-	var/name = "fire coderbus" // Name of the subsystem.
-	var/init_order = 0         // Order of initialization. Higher numbers are initialized first, lower numbers later. Can be decimal and negative values.
-	var/wait = 20              // Time to wait (in deciseconds) between each call to fire(). Must be a positive integer.
-	var/display_order = 100    // Display affects the order the subsystem is displayed in the MC tab.
-	var/priority = 50          // When mutiple subsystems need to run in the same tick, higher priority subsystems will run first and be given a higher share of the tick before MC_TICK_CHECK triggers a sleep.
+	var/name = "fire ivory tower"              // Name of the subsystem.
+	var/init_order = SS_INIT_UNSPECIFIED       // Order of initialization. Higher numbers are initialized first, lower numbers later. Can be decimal and negative values.
+	var/wait = 20                              // Time to wait (in deciseconds) between each call to fire(). Must be a positive integer.
+	var/display_order = SS_DISPLAY_UNSPECIFIED // Display affects the order the subsystem is displayed in the MC tab.
+	var/priority = SS_PRIORITY_UNSPECIFIED     // When mutiple subsystems need to run in the same tick, higher priority subsystems will run first and be given a higher share of the tick before MC_TICK_CHECK triggers a sleep.
 
 	var/flags = 0              // See MC.dm in __DEFINES Most flags must be set on world start to take full effect. (You can also restart the mc to force them to process again)
 

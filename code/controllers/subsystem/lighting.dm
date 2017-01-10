@@ -10,9 +10,12 @@ var/list/lighting_update_overlays  = list() // List of lighting overlays queued 
 
 
 /datum/subsystem/lighting
-	name = "Lighting"
-	init_order = INIT_LIGHTING
-	wait = LIGHTING_INTERVAL
+	name          = "Lighting"
+	init_order    = SS_INIT_LIGHTING
+	display_order = SS_DISPLAY_LIGHTING
+	wait          = 1
+	priority      = SS_PRIORITY_LIGHTING
+	flags         = SS_TICKER
 
 	var/initialized = FALSE
 
@@ -25,6 +28,10 @@ var/list/lighting_update_overlays  = list() // List of lighting overlays queued 
 
 /datum/subsystem/lighting/New()
 	NEW_SS_GLOBAL(SSlighting)
+
+
+/datum/subsystem/lighting/stat_entry()
+	..("L:[lighting_update_lights.len]|C:[lighting_update_corners.len]|O:[lighting_update_overlays.len]")
 
 
 /datum/subsystem/lighting/Initialize(timeofday)

@@ -2,9 +2,11 @@ var/datum/subsystem/emergency_shuttle/SSemergency_shuttle
 
 
 /datum/subsystem/emergency_shuttle
-	name = "Emergency Shuttle"
-	init_order = INIT_EMERGENCY_SHUTTLE
-	wait = 2 SECONDS
+	name       = "Emergency Shuttle"
+	init_order = SS_INIT_EMERGENCY_SHUTTLE
+	wait       = 2 SECONDS
+	flags      = SS_KEEP_TIMING | SS_NO_TICK_CHECK
+	
 
 
 /datum/subsystem/emergency_shuttle/New()

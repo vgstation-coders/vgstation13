@@ -6,16 +6,23 @@ var/list/cable_list = list() //Index for all cables, so that powernets don't hav
 
 
 /datum/subsystem/power
-	name       = "Power"
-	init_order = INIT_POWER
-	wait       = 17
+	name          = "Power"
+	init_order    = SS_INIT_POWER
+	display_order = SS_DISPLAY_POWER
+	priority      = SS_PRIORITY_POWER
+	wait          = 2 SECONDS
 
 	var/list/currentrun_cables
 	var/list/currentrun_powerents
 	var/list/currentrun_power_machines
 
+
 /datum/subsystem/power/New()
 	NEW_SS_GLOBAL(SSpower)
+
+
+/datum/subsystem/power/stat_entry()
+	..("C:[cable_list.len]|PN:[powernets.len]|PM:[power_machines.len]")
 
 
 /datum/subsystem/power/Initialize(timeofday)

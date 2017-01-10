@@ -2,13 +2,17 @@ var/datum/subsystem/ticker/SSticker
 
 
 /datum/subsystem/ticker
-	name = "Ticker"
-	init_order = INIT_TICKER
-	wait = 2 SECONDS
+	name          = "Ticker"
+	init_order    = SS_INIT_TICKER
+	wait          = 2 SECONDS
+	flags         = SS_KEEP_TIMING
+	priority      = SS_PRIORITY_TICKER
+	display_order = SS_DISPLAY_TICKER
 
 	var/lastTickerTimeDuration
 	var/lastTickerTime
 	var/initialized = FALSE
+
 
 /datum/subsystem/ticker/New()
 	NEW_SS_GLOBAL(SSticker)

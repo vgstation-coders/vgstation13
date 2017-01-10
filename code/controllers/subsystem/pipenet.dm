@@ -6,9 +6,11 @@ var/event/on_pipenet_tick = new
 
 
 /datum/subsystem/pipenet
-	name = "Pipenet"
-	init_order = INIT_OBJECT
-	wait = 2.9 SECONDS
+	name          = "Pipenet"
+	wait          = 2 SECONDS
+	display_order = SS_DISPLAY_PIPENET
+	priority      = SS_PRIORITY_PIPENET
+	init_order    = SS_INIT_PIPENET
 
 	var/list/currentrun_atmos_machines
 	var/list/currentrun_pipenets
@@ -16,6 +18,10 @@ var/event/on_pipenet_tick = new
 
 /datum/subsystem/pipenet/New()
 	NEW_SS_GLOBAL(SSpipenet)
+
+
+/datum/subsystem/pipenet/stat_entry()
+	..("PN:[pipe_networks.len]|AM:[atmos_machines.len]")
 
 
 /datum/subsystem/pipenet/Initialize()

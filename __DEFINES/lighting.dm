@@ -2,7 +2,6 @@
 #define LIGHTING_INTERVAL       5 // frequency, in 1/10ths of a second, of the lighting process
 
 #ifndef LIGHTING_INSTANT_UPDATES
-#define LIGHTING_INTERVAL       5    // Frequency, in 1/10ths of a second, of the lighting process.
 //#include "..\code\controllers\subsystem\lighting.dm"
 //Ok this doesn't work INCLUDE IT YOURSELF.
 #endif

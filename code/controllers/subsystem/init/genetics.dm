@@ -3,7 +3,7 @@ var/datum/subsystem/genetics/SSgenetics
 
 /datum/subsystem/genetics
 	name       = "Genetics"
-	init_order = INIT_GENETICS
+	init_order = SS_INIT_GENETICS
 	flags      = SS_NO_FIRE
 
 

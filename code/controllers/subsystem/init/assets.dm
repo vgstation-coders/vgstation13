@@ -3,7 +3,7 @@ var/datum/subsystem/assets/SSassets
 
 /datum/subsystem/assets
 	name       = "Asset Cache"
-	init_order = INIT_ASSETS
+	init_order = SS_INIT_ASSETS
 	flags      = SS_NO_FIRE
 
 

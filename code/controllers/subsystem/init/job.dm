@@ -2,7 +2,7 @@ var/datum/subsystem/job/SSjob
 
 /datum/subsystem/job
 	name       = "Job"
-	init_order = INIT_JOB
+	init_order = SS_INIT_JOB
 	flags      = SS_NO_FIRE
 
 

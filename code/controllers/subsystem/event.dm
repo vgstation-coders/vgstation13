@@ -4,15 +4,20 @@ var/list/events = list()
 
 
 /datum/subsystem/event
-	name = "Event"
-	wait = 2 SECONDS
-	flags = SS_NO_INIT
+	name     = "Event"
+	wait     = 2 SECONDS
+	flags    = SS_NO_INIT | SS_KEEP_TIMING
+	priority = SS_PRIORITY_EVENT
 
 	var/list/currentrun
 
 
 /datum/subsystem/event/New()
 	NEW_SS_GLOBAL(SSevent)
+
+
+/datum/subsystem/event/stat_entry()
+	..("E:[events.len]")
 
 
 /datum/subsystem/event/fire(resumed = FALSE)

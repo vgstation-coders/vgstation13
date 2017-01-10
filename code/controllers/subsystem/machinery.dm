@@ -4,15 +4,24 @@ var/list/machines = list()
 
 
 /datum/subsystem/machinery
-	name = "Machinery"
-	wait = 2.3 SECONDS
-	flags = SS_NO_INIT
+	name          = "Machinery"
+	wait          = 2 SECONDS
+	flags         = SS_NO_INIT | SS_KEEP_TIMING
+	priority      = SS_PRIORITY_MACHINERY
+	display_order = SS_DISPLAY_MACHINERY
 
 	var/list/currentrun
 
 
 /datum/subsystem/machinery/New()
 	NEW_SS_GLOBAL(SSmachinery)
+
+
+/datum/subsystem/machinery/stat_entry(var/msg)
+	if (msg)
+		return ..()
+
+	..("M:[global.machines.len]")
 
 
 // This is to allow the near identical fast machinery process to use it.

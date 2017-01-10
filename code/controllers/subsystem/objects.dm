@@ -4,9 +4,11 @@ var/list/processing_objects = list()
 
 
 /datum/subsystem/obj
-	name = "Objects"
-	init_order = INIT_OBJECT
-	wait = 2 SECONDS
+	name          = "Objects"
+	init_order    = SS_INIT_OBJECT
+	display_order = SS_DISPLAY_OBJECTS
+	priority      = SS_PRIORITY_OBJECTS
+	wait          = 2 SECONDS
 
 	var/list/currentrun
 
@@ -22,6 +24,10 @@ var/list/processing_objects = list()
 	..()
 
 
+/datum/subsystem/obj/stat_entry()
+	..("P:[processing_objects.len]")
+
+
 /datum/subsystem/obj/fire(resumed = FALSE)
 	if (!resumed)
 		currentrun = global.processing_objects.Copy()
@@ -34,6 +40,7 @@ var/list/processing_objects = list()
 			continue
 
 		// > this fucking proc isn't defined on a global level.
+		// > Which means I can't fucking set waitfor on all of them.
 		o:process()
 		if (MC_TICK_CHECK)
 			return

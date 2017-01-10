@@ -1,9 +1,9 @@
 var/datum/subsystem/more_init/SSmore_init
 
 /datum/subsystem/more_init
-	name = "Random Init Stuff"
-	init_order = INIT_MORE_INIT
-	flags = SS_NO_FIRE
+	name       = "Uncategorized Init"
+	init_order = SS_INIT_MORE_INIT
+	flags      = SS_NO_FIRE
 
 /datum/subsystem/more_init/New()
 	NEW_SS_GLOBAL(SSmore_init)

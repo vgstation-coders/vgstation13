@@ -2,9 +2,9 @@ var/datum/subsystem/minimap/SSminimap
 
 
 /datum/subsystem/minimap
-	name = "Minimap"
-	init_order = INIT_MINIMAP
-	flags = SS_NO_FIRE
+	name       = "Minimap"
+	init_order = SS_INIT_MINIMAP
+	flags      = SS_NO_FIRE
 
 
 /datum/subsystem/minimap/New()

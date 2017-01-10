@@ -2,9 +2,10 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 
 /datum/subsystem/supply_shuttle
-	name = "Supply Shuttle"
-	init_order = INIT_SUPPLY_SHUTTLE
-	wait = 30 SECONDS
+	name       = "Supply Shuttle"
+	init_order = SS_INIT_SUPPLY_SHUTTLE
+	flags      = SS_NO_TICK_CHECK
+	wait       = 30 SECONDS
 
 
 /datum/subsystem/supply_shuttle/New()

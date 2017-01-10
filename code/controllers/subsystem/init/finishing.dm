@@ -2,9 +2,9 @@ var/datum/subsystem/finish/SSfinish
 
 
 /datum/subsystem/finish
-	name = "Finishing Init"
-	init_order = INIT_FINISH
-	flags = SS_NO_FIRE
+	name       = "Finishing Init"
+	init_order = SS_INIT_FINISH
+	flags      = SS_NO_FIRE
 
 
 /datum/subsystem/finish/New()

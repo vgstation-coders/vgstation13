@@ -12,7 +12,7 @@ var/list/html_machines = list() // For checking when we should update a mob base
 /datum/subsystem/html_ui
 	name = "HTMLUI"
 	wait = 1.7 SECONDS
-	flags = SS_NO_INIT
+	flags = SS_NO_INIT | SS_NO_TICK_CHECK | SS_FIRE_IN_LOBBY
 
 	var/list/update = list()
 

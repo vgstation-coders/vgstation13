@@ -1,4 +1,4 @@
-var/datum/controller/gameticker/ticker = new
+var/datum/controller/gameticker/ticker
 
 #define GAME_STATE_PREGAME		1
 #define GAME_STATE_SETTING_UP	2

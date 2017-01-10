@@ -410,6 +410,7 @@
 	return 0
 
 /mob/proc/Life()
+	set waitfor = FALSE
 	if(timestopped)
 		return 0 //under effects of time magick
 	if(spell_masters && spell_masters.len)
@@ -1330,16 +1331,6 @@ var/list/slot_equipment_priority = list( \
 			stat("Location:", "([x], [y], [z])")
 			stat("CPU:", "[world.cpu]")
 			stat("Instances:", "[world.contents.len]")
-			stat(null)
-			if (garbageCollector)
-				stat("Garbage collector:", "Online")
-				stat("qdel:", garbageCollector.del_everything ? "off" : "on")
-				stat("on queue:", garbageCollector.queue.len)
-				stat("total delete:", garbageCollector.dels_count)
-				stat("soft delete:", soft_dels)
-				stat("hard delete:", garbageCollector.hard_dels)
-			else
-				stat("Garbage collector:", "Shit")
 
 			stat(null)
 			if(Master)

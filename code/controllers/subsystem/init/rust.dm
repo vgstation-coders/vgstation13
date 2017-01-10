@@ -3,9 +3,9 @@ var/datum/subsystem/rust/SSrust
 
 
 /datum/subsystem/rust
-	name = "Rust"
-	init_order = INIT_RUST
-	flags = SS_NO_FIRE
+	name       = "Rust"
+	init_order = SS_INIT_RUST
+	flags      = SS_NO_FIRE
 
 	var/list/fusion_reactions
 
@@ -28,8 +28,6 @@ var/datum/subsystem/rust/SSrust
 			fusion_reactions[cur_reaction.secondary_reactant] = list()
 
 		fusion_reactions[cur_reaction.secondary_reactant][cur_reaction.primary_reactant] = cur_reaction
-
-	..()
 
 
 /datum/subsystem/rust/proc/get_fusion_reaction(var/primary_reactant, var/secondary_reactant)

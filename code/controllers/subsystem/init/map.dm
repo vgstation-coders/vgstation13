@@ -5,7 +5,7 @@ var/datum/subsystem/map/SSmap
 
 /datum/subsystem/map
 	name       = "Map"
-	init_order = INIT_MAP
+	init_order = SS_INIT_MAP
 	flags      = SS_NO_FIRE
 
 
