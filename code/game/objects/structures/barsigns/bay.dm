@@ -87,3 +87,28 @@
 /datum/barsign/bay/theredshirt
 	name = "The Redshirt"
 	icon = "theredshirt"
+
+
+/datum/barsign/bay/drunkcarp
+	name = "The Drunk Carp"
+	icon = "drunkcarp"
+
+
+/datum/barsign/bay/singulo
+	name = "The Singulo"
+	icon = "singulo"
+
+
+/datum/barsign/bay/willy
+	name = "Scotch Servin' Willys"
+	icon = "willy"
+
+
+/datum/barsign/bay/harmbaton
+	name = "The Harmbaton"
+	icon = "harmbaton"
+
+
+/datum/barsign/bay/bark
+	name = "The Bark"
+	icon = "bark"
