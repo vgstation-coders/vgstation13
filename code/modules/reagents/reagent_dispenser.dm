@@ -184,6 +184,10 @@
 /obj/structure/reagent_dispensers/fueltank/ex_act()
 	explode()
 
+/obj/structure/reagent_dispensers/fueltank/singularity_act()
+	qdel(src)
+	return  2
+
 /obj/structure/reagent_dispensers/fueltank/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature >= AUTOIGNITION_WELDERFUEL)
 		explode()

@@ -38,15 +38,14 @@
 		var/turf/T = get_turf(src)
 		switch(strength)
 			if(0)
-				A = getFromPool(/obj/effect/accelerated_particle/wide/weak,T)
+				A = getFromPool(/obj/effect/accelerated_particle/wide/weak,T,dir)
 			if(1)
-				A = getFromPool(/obj/effect/accelerated_particle/wide,T)
+				A = getFromPool(/obj/effect/accelerated_particle/wide,T,dir)
 			if(2)
-				A = getFromPool(/obj/effect/accelerated_particle/wide/strong,T)
+				A = getFromPool(/obj/effect/accelerated_particle/wide/strong,T,dir)
 			if(3)
-				A = getFromPool(/obj/effect/accelerated_particle/wide/powerful,T)
+				A = getFromPool(/obj/effect/accelerated_particle/wide/powerful,T,dir)
 		if(A)
-			A.dir = src.dir
 			A.startMove(1)
 			return 1
 	return 0
