@@ -48,7 +48,7 @@
 	track.humans.len = 0
 	track.others.len = 0
 
-	if(usr.stat == 2)
+	if(stat == 2)
 		return list()
 
 	for(var/mob/living/M in mob_list)
@@ -63,9 +63,9 @@
 			continue
 		if(M == usr)
 			continue
-		if(M.invisibility)//cloaked
+		if(see_invisible < M.invisibility) //cloaked
 			continue
-		if(M.alpha <= 1)//fully transparent
+		if(M.alpha <= 1) //fully transparent
 			continue
 		if(M.digitalcamo)
 			continue
@@ -170,7 +170,7 @@
 			if (U.cameraFollow == null)
 				return
 
-			if(target.digitalcamo || target.invisibility || target.alpha <= 1)
+			if(target.digitalcamo || (see_invisible < target.invisibility) || target.alpha <= 1)
 				to_chat(U, "Follow camera mode terminated.")
 				U.cameraFollow = null
 				return
