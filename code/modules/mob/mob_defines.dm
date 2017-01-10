@@ -280,8 +280,6 @@
 	var/list/alphas = list()
 	var/spell_channeling
 
-	var/next_clong=0 // Gets rid of CLONGCLONGCLONGCLONGCLONGCLONGCLONGCLONGCLONGCLONGCLONGCLONGCLONGCLONGCLONGCLONGCLONGCLONGCLONGCLONGCLONG
-
 /mob/resetVariables()
 	..("callOnFace", "pinned", "embedded", "abilities", "grabbed_by", "requests", "mapobjs", "mutations", "spell_list", "viruses", "resistances", "radar_blips", "active_genes", "attack_log", "speak_emote", args)
 	callOnFace = list()
