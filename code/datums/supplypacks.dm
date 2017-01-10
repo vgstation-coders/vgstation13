@@ -1342,7 +1342,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = access_ce
 
 /datum/supply_packs/portable_smes
-	contains = list(/obj/machinery/power/battery/portable)
+	contains = list(/obj/machinery/power/battery/portable,
+						/obj/machinery/power/battery_port)
 	name = "Portable SMES"
 	cost = 70
 	containertype = /obj/structure/closet/crate/secure/engisec
