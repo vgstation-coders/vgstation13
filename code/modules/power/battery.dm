@@ -24,7 +24,7 @@ var/global/list/battery_online =	list(
 
 /obj/machinery/power/battery/update_icon()
 	overlays.len = 0
-	if(stat & (BROKEN | FORCEDISABLE))
+	if(stat & (BROKEN | FORCEDISABLE | EMPED))
 		return
 
 	overlays += battery_online[online + 1]
@@ -86,7 +86,7 @@ var/global/list/battery_online =	list(
 	smes_output_max = initial(smes_output_max) + lasercount*25000
 
 /obj/machinery/power/battery/process()
-	if(stat & (BROKEN | FORCEDISABLE))
+	if(stat & (BROKEN | FORCEDISABLE | EMPED))
 		last_charge = 0
 		return
 
@@ -299,9 +299,9 @@ var/global/list/battery_online =	list(
 
 /obj/machinery/power/battery/emp_act(severity)
 	charge = max(0, charge - 1e6/severity)
-	stat |= FORCEDISABLE
+	stat |= EMPED
 	spawn(100)
-		stat &= ~FORCEDISABLE
+		stat &= ~EMPED
 	..()
 
 /proc/rate_control(var/S, var/V, var/C, var/Min=1, var/Max=5, var/Limit=null)
