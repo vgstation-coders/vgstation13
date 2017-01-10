@@ -362,7 +362,7 @@ var/global/num_vending_terminals = 1
 		if(panel_open)
 			attack_hand(user)
 		return
-	else if(premium.len > 0 && iscoin(W)))
+	else if(premium.len > 0 && iscoin(W))
 		if (isnull(coin))
 			if(user.drop_item(W, src))
 				coin = W
