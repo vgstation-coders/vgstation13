@@ -397,3 +397,4 @@
 	desc = "These shoes seem perfect for sneaking around."
 	icon_state = "rottenshoes"
 	item_state = "rottenshoes"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
