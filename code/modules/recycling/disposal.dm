@@ -646,7 +646,7 @@
 	if (src.loc)
 		for (var/mob/M in hearers(src.loc.loc))
 			if(M.next_clong < world.time)
-				M.next_clong = world.time + (1 SECONDS)
+				M.next_clong = world.time + 10
 				to_chat(M, "<FONT size=[max(0, 5 - get_dist(src, M))]>CLONG, clong!</FONT>")
 
 	playsound(get_turf(src), 'sound/effects/clang.ogg', 50, 0, 0)
