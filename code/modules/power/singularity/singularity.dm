@@ -96,13 +96,13 @@
 
 /obj/machinery/singularity/process()
 	dissipate()
+	check_energy()
 
 	if(current_size >= 3)
 		move()
 		pulse()
 		if(prob(event_chance)) //Chance for it to run a special event TODO: Come up with one or two more that fit.
 			event()
-	check_energy()
 	eat()
 
 /obj/machinery/singularity/attack_ai() //To prevent AIs from gibbing themselves when they click on one.
@@ -136,7 +136,7 @@
 	if(force_size)
 		temp_allowed_size = force_size
 
-	if(temp_allowed_size <= STAGE_FIVE && growing)
+	if(temp_allowed_size <= STAGE_FIVE && growing && is_near_shield())
 		move_away_from_shield()
 
 	switch(temp_allowed_size)
@@ -468,6 +468,12 @@
 			return 0
 	return 1
 
+/obj/machinery/singularity/proc/is_near_shield()
+	for(var/dir in cardinal)
+		if(!check_turfs_in(dir))
+			return 1
+	return 0
+
 /obj/machinery/singularity/proc/move_away_from_shield()
 
 	var/list/dirs_to_try = alldirs.Copy()
@@ -612,7 +618,11 @@
 	..()
 	power_machines -= src
 
-/obj/machinery/singularity/bite_act()
+/obj/machinery/singularity/bite_act(mob/user)
+	consume(user)
+
+/obj/machinery/singularity/kick_act(mob/user)
+	consume(user)
 
 /obj/machinery/singularity/acidable()
 	return 0
