@@ -699,3 +699,10 @@
 	_color = "vox-skelesuit"
 	species_restricted = list(VOX_SHAPED)
 	species_fit = list(VOX_SHAPED)
+
+/obj/item/clothing/under/rottensuit
+	name = "rotten suit"
+	desc = "This suit seems perfect for wearing underneath a disguise."
+	icon_state = "rottensuit"
+	item_state = "rottensuit"
+	_color = "rottensuit"
