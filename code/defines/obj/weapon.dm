@@ -189,7 +189,7 @@
 	throw_range = 10
 	var/dispenser = 0
 	var/throw_sound = 'sound/weapons/whip.ogg'
-	var/trip_prob = 60
+	var/trip_prob = 90
 	var/thrown_from
 
 /obj/item/weapon/legcuffs/bolas/suicide_act(mob/living/user)
@@ -279,7 +279,7 @@
 	icon_state = ""
 	throw_speed = 1
 	throw_range = 6
-	trip_prob = 10
+	trip_prob = 20 //gets updated below in update_icon()
 	var/obj/item/weight1 = null //the two items that are attached to the cable
 	var/obj/item/weight2 = null
 	var/cable_color = ""
@@ -304,10 +304,10 @@
 	else
 		overlays.len = 0
 		if (weight1)
-			trip_prob = 10
+			trip_prob = 20
 			overlays += icon("icons/obj/weapons.dmi", "cbolas_weight1")
 		if (weight2)
-			trip_prob = 30
+			trip_prob = 60
 			overlays += icon("icons/obj/weapons.dmi", "cbolas_weight2")
 		desc = "A poorly made bolas, made out of \a [weight1] and [weight2 ? "\a [weight2]": "missing a second weight"], tied together with cable."
 
