@@ -52,6 +52,7 @@
 	var/spooky=0
 	var/obj/item/weapon/cell/cell
 	var/start_charge = 90				// initial cell charge %
+	var/old_charge = 0					// how much charge did this thing have before a random event knocked it out
 	var/cell_type = 2500				// 0=no cell, 1=regular, 2=high-cap (x5) <- old, now it's just 0=no cell, otherwise dictate cellcapacity by changing this value. 1 used to be 1000, 2 was 2500
 	var/opened = 0                      //0=closed, 1=opened, 2=cover removed
 	var/shorted = 0
@@ -1043,7 +1044,7 @@
 
 /obj/machinery/power/apc/process()
 
-	if(stat & (BROKEN|MAINT))
+	if(stat & (BROKEN|MAINT|FORCEDISABLE))
 		return
 	if(!areaMaster.requires_power)
 		return
