@@ -330,7 +330,7 @@
 // -----------------------------
 
 /obj/item/weapon/storage/bag/gadgets
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "gadget_bag"
 	slot_flags = SLOT_BELT
 	name = "gadget bag"
@@ -358,7 +358,7 @@
 // This used to be /obj/item/weapon/moneybag
 
 /obj/item/weapon/storage/bag/money
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	name = "money bag"
 	icon_state = "moneybag"
 
