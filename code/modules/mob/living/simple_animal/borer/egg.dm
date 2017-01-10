@@ -72,12 +72,9 @@
 		var/turf/T = get_turf(src)
 		src.visible_message("<span class='notice'>\The [name] bursts open!</span>")
 		//Adds the chance for a "special" borer to be born
-		if(defect == 666)
-			var/mob/living/simple_animal/borer/defected_borer/B = new (T, child_prefix_index)
-			B.transfer_personality(O.client)
-		else
-			var/mob/living/simple_animal/borer/B = new (T, child_prefix_index)
-			B.transfer_personality(O.client)
+		var/borer_type = (defect == 666 ? /mob/living/simple_animal/borer/defected_borer : /mob/living/simple_animal/borer)
+		var/mob/living/simple_animal/borer/B = new borer_type(T, child_prefix_index)
+		B.transfer_personality(O.client)
 		// Play hatching noise here.
 		playsound(src.loc, 'sound/items/borer_hatch.ogg', 50, 1)
 		qdel(src)
