@@ -622,27 +622,32 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	if(active_uplink_check(user))
 		return
 
-	var/dat = {"<html><head><title>Personal Data Assistant</title></head><body bgcolor=\"#808000\"><style>a, a:link, a:visited, a:active, a:hover { color: #000000; }img {border-style:none;}</style>
-<a href='byond://?src=\ref[src];choice=Close'><img src=pda_exit.png> Close</a>"}
-	if ((!isnull(cartridge)) && (mode == 0))
-		dat += " | <a href='byond://?src=\ref[src];choice=Eject'><img src=pda_eject.png> Eject [cartridge]</a>"
-	if (mode)
-		dat += " | <a href='byond://?src=\ref[src];choice=Return'><img src=pda_menu.png> Return</a>"
+	if(user.client)
+		var/datum/asset/simple/C = new/datum/asset/simple/pda()
+		send_asset_list(user.client, C.assets)
 
-	dat += {"| <a href='byond://?src=\ref[src];choice=Refresh'><img src=pda_refresh.png> Refresh</a>
+	var/dat = list()
+	dat += {"
+	<html>
+	<head><title>Personal Data Assistant</title></head>
+	<body>
+	<link rel="stylesheet" type="text/css" href="pda.css"/> <!--This stylesheet contains all the PDA icons in base 64!-->
+	"}
+	dat += "<a href='byond://?src=\ref[src];choice=Close'><span class='pda_icon pda_exit'></span> Close</a>"
+	if ((!isnull(cartridge)) && (mode == 0))
+		dat += " | <a href='byond://?src=\ref[src];choice=Eject'><span class='pda_icon pda_eject'></span> Eject [cartridge]</a>"
+	if (mode)
+		dat += " | <a href='byond://?src=\ref[src];choice=Return'><span class='pda_icon pda_menu'></span> Return</a>"
+
+	dat += {"| <a href='byond://?src=\ref[src];choice=Refresh'><span class='pda_icon pda_refresh'></span> Refresh</a>
 		<br>"}
 	if (!owner)
 
 		dat += {"Warning: No owner information entered.  Please swipe card.<br><br>
-			<a href='byond://?src=\ref[src];choice=Refresh'><img src=pda_refresh.png> Retry</a>"}
+			<a href='byond://?src=\ref[src];choice=Refresh'><span class='pda_icon pda_refresh'></span> Retry</a>"}
 	else
 		switch (mode)
 			if (0)
-
-				if(user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
-					var/datum/asset/simple/C = new/datum/asset/simple/pda()
-					send_asset_list(user.client, C.assets)
-
 				dat += {"<h2>PERSONAL DATA ASSISTANT v.1.3</h2>
 					Owner: [owner], [ownjob]<br>"}
 				dat += text("ID: <A href='?src=\ref[src];choice=Authenticate'>[id ? "[id.registered_name], [id.assignment]" : "----------"]")
@@ -653,18 +658,18 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					<br><br>
 					<h4>General Functions</h4>
 					<ul>
-					<li><a href='byond://?src=\ref[src];choice=1'><img src=pda_notes.png> Notekeeper</a></li>
-					<li><a href='byond://?src=\ref[src];choice=2'><img src=pda_mail.png> Messenger</a></li>
-					<li><a href='byond://?src=\ref[src];choice=50'><img src=pda_clock.png> Current Events</a></li>"}
-				//dat += "<li><a href='byond://?src=[src];choice=chatroom'><img src=pda_chatroom.png> Nanotrasen Relay Chat</a></li>"
+					<li><a href='byond://?src=\ref[src];choice=1'><span class='pda_icon pda_notes'></span> Notekeeper</a></li>
+					<li><a href='byond://?src=\ref[src];choice=2'><span class='pda_icon pda_mail'></span> Messenger</a></li>
+					<li><a href='byond://?src=\ref[src];choice=50'><span class='pda_icon pda_clock'></span> Current Events</a></li>"}
+				//dat += "<li><a href='byond://?src=[src];choice=chatroom'><span class='pda_icon pda_chatroom'></span> Nanotrasen Relay Chat</a></li>"
 
-				dat += "<li><a href='byond://?src=\ref[src];choice=41'><img src=pda_notes.png> View Crew Manifest</a></li>"
+				dat += "<li><a href='byond://?src=\ref[src];choice=41'><span class='pda_icon pda_notes'></span> View Crew Manifest</a></li>"
 
 				if (cartridge)
 					if (cartridge.access_clown)
-						dat += "<li><a href='byond://?src=\ref[src];choice=Honk'><img src=pda_honk.png> Honk Synthesizer</a></li>"
+						dat += "<li><a href='byond://?src=\ref[src];choice=Honk'><span class='pda_icon pda_honk'></span> Honk Synthesizer</a></li>"
 					if(cartridge.access_status_display)
-						dat += "<li><a href='byond://?src=\ref[src];choice=42'><img src=pda_status.png> Set Status Display</a></li>"
+						dat += "<li><a href='byond://?src=\ref[src];choice=42'><span class='pda_icon pda_status'></span> Set Status Display</a></li>"
 
 				dat += "</ul>"
 				dat += {"<h4>Applications</h4>"}
@@ -675,40 +680,40 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					dat += {"<ul>"}
 					for(var/datum/pda_app/app in applications)
 						if(app.menu)
-							dat += {"<li><a href='byond://?src=\ref[src];choice=[app.menu]'>[app.icon ? "<img src=[app.icon].png> " : ""][app.name]</a></li>"}
+							dat += {"<li><a href='byond://?src=\ref[src];choice=[app.menu]'>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</a></li>"}
 						else
-							dat += {"<li>[app.icon ? "<img src=[app.icon].png> " : ""][app.name]</li>"}
+							dat += {"<li>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</li>"}
 					dat += {"</ul>"}
 
 				if (cartridge)
 					if (cartridge.access_engine || cartridge.access_atmos)
 						dat += {"<h4>Engineering Functions</h4>
 							<ul>
-							<li><a href='byond://?src=\ref[src];choice=43'><img src=pda_power.png> Power Monitor</a></li>
-							<li><a href='byond://?src=\ref[src];choice=53'><img src=pda_alert.png> Alert Monitor</a></li>
+							<li><a href='byond://?src=\ref[src];choice=43'><span class='pda_icon pda_power'></span> Power Monitor</a></li>
+							<li><a href='byond://?src=\ref[src];choice=53'><span class='pda_icon pda_alert'></span> Alert Monitor</a></li>
 							</ul>"}
 
 					if (cartridge.access_mechanic)
 						dat += {"<h4>Mechanic Functions</h4>
 							<ul>
-							<li><a href='byond://?src=\ref[src];choice=Device Analyser'><img src=pda_scanner.png> [scanmode == SCANMODE_DEVICE ? "Disable" : "Enable" ] Device Analyser</a></li>
+							<li><a href='byond://?src=\ref[src];choice=Device Analyser'><span class='pda_icon pda_scanner'></span> [scanmode == SCANMODE_DEVICE ? "Disable" : "Enable" ] Device Analyser</a></li>
 							</ul>"}
 
 					if (cartridge.access_medical)
 
 						dat += {"<h4>Medical Functions</h4>
 							<ul>
-							<li><a href='byond://?src=\ref[src];choice=44'><img src=pda_medical.png> Medical Records</a></li>
-							<li><a href='byond://?src=\ref[src];choice=Medical Scan'><img src=pda_scanner.png> [scanmode == SCANMODE_MEDICAL ? "Disable" : "Enable"] Medical Scanner</a></li>
+							<li><a href='byond://?src=\ref[src];choice=44'><span class='pda_icon pda_medical'></span> Medical Records</a></li>
+							<li><a href='byond://?src=\ref[src];choice=Medical Scan'><span class='pda_icon pda_scanner'></span> [scanmode == SCANMODE_MEDICAL ? "Disable" : "Enable"] Medical Scanner</a></li>
 							</ul>"}
 					if (cartridge.access_security)
 
 						dat += {"<h4>Security Functions</h4>
 							<ul>
-							<li><a href='byond://?src=\ref[src];choice=45'><img src=pda_cuffs.png> Security Records</A></li>"}
+							<li><a href='byond://?src=\ref[src];choice=45'><span class='pda_icon pda_cuffs'></span> Security Records</A></li>"}
 					if(istype(cartridge.radio, /obj/item/radio/integrated/beepsky))
 
-						dat += {"<li><a href='byond://?src=\ref[src];choice=46'><img src=pda_cuffs.png> Security Bot Access</a></li>
+						dat += {"<li><a href='byond://?src=\ref[src];choice=46'><span class='pda_icon pda_cuffs'></span> Security Bot Access</a></li>
 							</ul>"}
 					else
 						dat += "</ul>"
@@ -716,8 +721,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 						dat += {"<h4>Quartermaster Functions:</h4>
 							<ul>
-							<li><a href='byond://?src=\ref[src];choice=47'><img src=pda_crate.png> Supply Records</A></li>
-							<li><a href='byond://?src=\ref[src];choice=48'><img src=pda_mule.png> Delivery Bot Control</A></li>
+							<li><a href='byond://?src=\ref[src];choice=47'><span class='pda_icon pda_crate'></span> Supply Records</A></li>
+							<li><a href='byond://?src=\ref[src];choice=48'><span class='pda_icon pda_mule'></span> Delivery Bot Control</A></li>
 							</ul>"}
 
 				dat += {"</ul>
@@ -725,20 +730,20 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					<ul>"}
 				if (cartridge)
 					if (cartridge.access_janitor)
-						dat += "<li><a href='byond://?src=\ref[src];choice=49'><img src=pda_bucket.png> Custodial Locator</a></li>"
+						dat += "<li><a href='byond://?src=\ref[src];choice=49'><span class='pda_icon pda_bucket'></span> Custodial Locator</a></li>"
 					if (istype(cartridge.radio, /obj/item/radio/integrated/signal))
-						dat += "<li><a href='byond://?src=\ref[src];choice=40'><img src=pda_signaler.png> Signaler System</a></li>"
+						dat += "<li><a href='byond://?src=\ref[src];choice=40'><span class='pda_icon pda_signaler'></span> Signaler System</a></li>"
 					if (cartridge.access_reagent_scanner)
-						dat += "<li><a href='byond://?src=\ref[src];choice=Reagent Scan'><img src=pda_reagent.png> [scanmode == SCANMODE_REAGENT ? "Disable" : "Enable"] Reagent Scanner</a></li>"
+						dat += "<li><a href='byond://?src=\ref[src];choice=Reagent Scan'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_REAGENT ? "Disable" : "Enable"] Reagent Scanner</a></li>"
 					if (cartridge.access_engine)
-						dat += "<li><a href='byond://?src=\ref[src];choice=Halogen Counter'><img src=pda_reagent.png> [scanmode == SCANMODE_HALOGEN ? "Disable" : "Enable"] Halogen Counter</a></li>"
+						dat += "<li><a href='byond://?src=\ref[src];choice=Halogen Counter'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_HALOGEN ? "Disable" : "Enable"] Halogen Counter</a></li>"
 					if (cartridge.access_atmos)
-						dat += "<li><a href='byond://?src=\ref[src];choice=Gas Scan'><img src=pda_reagent.png> [scanmode == SCANMODE_ATMOS ? "Disable" : "Enable"] Gas Scanner</a></li>"
+						dat += "<li><a href='byond://?src=\ref[src];choice=Gas Scan'><span class='pda_icon pda_reagent'></span> [scanmode == SCANMODE_ATMOS ? "Disable" : "Enable"] Gas Scanner</a></li>"
 					if (cartridge.access_remote_door)
-						dat += "<li><a href='byond://?src=\ref[src];choice=Toggle Door'><img src=pda_rdoor.png> Toggle Remote Door</a></li>"
+						dat += "<li><a href='byond://?src=\ref[src];choice=Toggle Door'><span class='pda_icon pda_rdoor'></span> Toggle Remote Door</a></li>"
 
-				dat += {"<li><a href='byond://?src=\ref[src];choice=3'><img src=pda_atmos.png> Atmospheric Scan</a></li>
-					<li><a href='byond://?src=\ref[src];choice=Light'><img src=pda_flashlight.png> [fon ? "Disable" : "Enable"] Flashlight</a></li>"}
+				dat += {"<li><a href='byond://?src=\ref[src];choice=3'><span class='pda_icon pda_atmos'></span> Atmospheric Scan</a></li>
+					<li><a href='byond://?src=\ref[src];choice=Light'><span class='pda_icon pda_flashlight'></span> [fon ? "Disable" : "Enable"] Flashlight</a></li>"}
 				if (pai)
 					if(pai.loc != src)
 						pai = null
@@ -750,17 +755,17 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 			if (1)
 
-				dat += {"<h4><img src=pda_notes.png> Notekeeper V2.1</h4>
+				dat += {"<h4><span class='pda_icon pda_notes'></span> Notekeeper V2.1</h4>
 					<a href='byond://?src=\ref[src];choice=Edit'> Edit</a><br>"}
 				dat += note
 
 			if (2)
 
-				dat += {"<h4><img src=pda_mail.png> SpaceMessenger V3.9.4</h4>
-					<a href='byond://?src=\ref[src];choice=Toggle Ringer'><img src=pda_bell.png> Ringer: [silent == 1 ? "Off" : "On"]</a> |
-					<a href='byond://?src=\ref[src];choice=Toggle Messenger'><img src=pda_mail.png> Send / Receive: [toff == 1 ? "Off" : "On"]</a> |
-					<a href='byond://?src=\ref[src];choice=Ringtone'><img src=pda_bell.png> Set Ringtone</a> |
-					<a href='byond://?src=\ref[src];choice=21'><img src=pda_mail.png> Messages</a><br>"}
+				dat += {"<h4><span class='pda_icon pda_mail'></span> SpaceMessenger V3.9.4</h4>
+					<a href='byond://?src=\ref[src];choice=Toggle Ringer'><span class='pda_icon pda_bell'></span> Ringer: [silent == 1 ? "Off" : "On"]</a> |
+					<a href='byond://?src=\ref[src];choice=Toggle Messenger'><span class='pda_icon pda_mail'></span> Send / Receive: [toff == 1 ? "Off" : "On"]</a> |
+					<a href='byond://?src=\ref[src];choice=Ringtone'><span class='pda_icon pda_bell'></span> Set Ringtone</a> |
+					<a href='byond://?src=\ref[src];choice=21'><span class='pda_icon pda_mail'></span> Messages</a><br>"}
 				if (istype(cartridge, /obj/item/weapon/cartridge/syndicate))
 					dat += "<b>[cartridge:shock_charges] detonation charges left.</b><HR>"
 				if (istype(cartridge, /obj/item/weapon/cartridge/clown))
@@ -769,7 +774,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					dat += "<b>[cartridge:mime_charges] viral files left.</b><HR>"
 
 
-				dat += {"<h4><img src=pda_menu.png> Detected PDAs</h4>
+				dat += {"<h4><span class='pda_icon pda_menu'></span> Detected PDAs</h4>
 					<ul>"}
 				var/count = 0
 
@@ -781,11 +786,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 							continue
 						dat += "<li><a href='byond://?src=\ref[src];choice=Message;target=\ref[P]'>[P]</a>"
 						if (id && !istype(P,/obj/item/device/pda/ai))
-							dat += " (<a href='byond://?src=\ref[src];choice=transferFunds;target=\ref[P]'><img src=pda_money.png>*Send Money*</a>)"
+							dat += " (<a href='byond://?src=\ref[src];choice=transferFunds;target=\ref[P]'><span class='pda_icon pda_money'></span>*Send Money*</a>)"
 						if (istype(cartridge, /obj/item/weapon/cartridge/syndicate) && P.detonate)
-							dat += " (<a href='byond://?src=\ref[src];choice=Detonate;target=\ref[P]'><img src=pda_boom.png>*Detonate*</a>)"
+							dat += " (<a href='byond://?src=\ref[src];choice=Detonate;target=\ref[P]'><span class='pda_icon pda_boom'></span>*Detonate*</a>)"
 						if (istype(cartridge, /obj/item/weapon/cartridge/clown))
-							dat += " (<a href='byond://?src=\ref[src];choice=Send Honk;target=\ref[P]'><img src=pda_honk.png>*Send Virus*</a>)"
+							dat += " (<a href='byond://?src=\ref[src];choice=Send Honk;target=\ref[P]'><span class='pda_icon pda_honk'></span>*Send Virus*</a>)"
 						if (istype(cartridge, /obj/item/weapon/cartridge/mime))
 							dat += " (<a href='byond://?src=\ref[src];choice=Send Silence;target=\ref[P]'>*Send Virus*</a>)"
 						dat += "</li>"
@@ -796,14 +801,14 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 			if(21)
 
-				dat += {"<h4><img src=pda_mail.png> SpaceMessenger V3.9.4</h4>
-					<a href='byond://?src=\ref[src];choice=Clear'><img src=pda_blank.png> Clear Messages</a>
-					<h4><img src=pda_mail.png> Messages</h4>"}
+				dat += {"<h4><span class='pda_icon pda_mail'></span> SpaceMessenger V3.9.4</h4>
+					<a href='byond://?src=\ref[src];choice=Clear'><span class='pda_icon pda_blank'></span> Clear Messages</a>
+					<h4><span class='pda_icon pda_mail'></span> Messages</h4>"}
 				dat += tnote
 				dat += "<br>"
 
 			if (3)
-				dat += "<h4><img src=pda_atmos.png> Atmospheric Readings</h4>"
+				dat += "<h4><span class='pda_icon pda_atmos'></span> Atmospheric Readings</h4>"
 
 				var/turf/T = get_turf(user.loc)
 				if (isnull(T))
@@ -834,24 +839,24 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 			if (5)
 
-				dat += {"<h4><img src=pda_chatroom.png> Nanotrasen Relay Chat</h4>
-					<h4><img src=pda_menu.png> Detected Channels</h4>: <li>"}
+				dat += {"<h4><span class='pda_icon pda_chatroom'></span> Nanotrasen Relay Chat</h4>
+					<h4><span class='pda_icon pda_menu'></span> Detected Channels</h4>: <li>"}
 				for(var/datum/chatroom/C in chatrooms)
 					dat += "<a href='byond://?src=\ref[src];pdachannel=[C.name]'>#[html_encode(lowertext(C.name))]"
 					if(C.password != "")
-						dat += " <img src=pda_locked.png>"
+						dat += " <span class='pda_icon pda_locked'></span>"
 					dat += "</li>"
 
 			if (41) //Allows everyone to access crew
 
-				dat += {"<h4><img src=pda_notes.png> Crew Manifest</h4>
+				dat += {"<h4><span class='pda_icon pda_notes'></span> Crew Manifest</h4>
 					Entries cannot be modified from this terminal.<br><br>"}
 				if(data_core)
 					dat += data_core.get_manifest(1) // make it monochrome
 				dat += "<br>"
 
 			if (50) //Current events.
-				dat += {"<h4><img src=pda_clock.png> Current Events</h4>
+				dat += {"<h4><span class='pda_icon pda_clock'></span> Current Events</h4>
 					Station Time: <b>[worldtime2text()]</b>.<br>
 					Empire Date: <b>[MM]/[DD]/[game_year]</b>.<br><br>
 					<b>Current Events,</b><br>
@@ -892,7 +897,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 			if (PDA_APP_BALANCECHECK)
 				var/datum/pda_app/balance_check/app = locate(/datum/pda_app/balance_check) in applications
-				dat += {"<h4><img src=[app.icon].png> Virtual Wallet and Balance Check Application</h4>"}
+				dat += {"<h4><span class='pda_icon [app.icon]'></span> Virtual Wallet and Balance Check Application</h4>"}
 				if(app)
 					if(!id)
 						dat += {"<i>Insert an ID card in the PDA to use this application.</i>"}
@@ -902,7 +907,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						dat += {"<hr>
 							<h5>Virtual Wallet</h5>
 							Owner: <b>[id.virtual_wallet.owner_name]</b><br>
-							Balance: <b>[id.virtual_wallet.money]</b>$  <u><a href='byond://?src=\ref[src];choice=printCurrency'><img src=[app.icon].png>Print Currency</a></u>
+							Balance: <b>[id.virtual_wallet.money]</b>$  <u><a href='byond://?src=\ref[src];choice=printCurrency'><span class='pda_icon [app.icon]'></span>Print Currency</a></u>
 							<h6>Transaction History</h6>
 							On [MM]/[DD]/[game_year]:
 							<ul>
@@ -1029,7 +1034,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					send_asset_list(user.client, C.assets)
 
 				var/datum/pda_app/snake/app = locate(/datum/pda_app/snake) in applications
-				dat += {"<h4><img src=[app.icon].png> Snake II  <a href='byond://?src=\ref[src];choice=snakeVolume;vChange=-1'><b>-</b></a><img src="snake_volume[app.volume].png"/><a href='byond://?src=\ref[src];choice=snakeVolume;vChange=1'><b>+</b></a></h4>"}
+				dat += {"<h4><span class='pda_icon [app.icon]'></span> Snake II  <a href='byond://?src=\ref[src];choice=snakeVolume;vChange=-1'><b>-</b></a><img src="snake_volume[app.volume].png"/><a href='byond://?src=\ref[src];choice=snakeVolume;vChange=1'><b>+</b></a></h4>"}
 				if(app)
 					dat += {"<br>
 						<div style="position: relative; left: 0; top: 0;">
@@ -1170,7 +1175,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					send_asset_list(user.client, C.assets)
 
 				var/datum/pda_app/minesweeper/app = locate(/datum/pda_app/minesweeper) in applications
-				dat += {"<h4><img src=[app.icon].png> Minesweeper</h4>"}
+				dat += {"<h4><span class='pda_icon [app.icon]'></span> Minesweeper</h4>"}
 				if(app)
 					dat += {"<br>
 						<div style="position: relative; left: 0; top: 0;">
@@ -1258,7 +1263,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					send_asset_list(user.client, C.assets)
 
 				var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
-				dat += {"<h4><img src=[app.icon].png> Spess Pets</h4>"}
+				dat += {"<h4><span class='pda_icon [app.icon]'></span> Spess Pets</h4>"}
 				if(app)
 					dat += {"<br>Name = [app.petname]<br>Level = [app.level]<br>
 						<div style="position: relative; left: 0; top: 0;">
@@ -1325,6 +1330,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				dat += cart
 
 	dat += "</body></html>"
+	dat = jointext(dat,"") //Optimize BYOND's shittiness by making "dat" actually a list of strings and join it all together afterwards! Yes, I'm serious, this is actually a big deal
+
 	user << browse(dat, "window=pda;size=400x444;border=1;can_resize=1;can_close=0;can_minimize=0")
 	onclose(user, "pda", src)
 
