@@ -1304,12 +1304,12 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 	if(!center)
 		return
 
-	dview_mob.forceMove(center)
+	dview_mob.loc = center
 
 	dview_mob.see_invisible = invis_flags
 
 	. = view(range, dview_mob)
-	dview_mob.forceMove(null)
+	dview_mob.loc = null
 
 /mob/dview
 	invisibility = 101
@@ -1585,3 +1585,23 @@ Game Mode config tags:
 	A.OnFired()
 	spawn()
 		A.process()
+
+
+//Increases delay as the server gets more overloaded,
+//as sleeps aren't cheap and sleeping only to wake up and sleep again is wasteful
+#define DELTA_CALC max(((max(world.tick_usage, world.cpu) / 100) * max(Master.sleep_delta,1)), 1)
+
+/proc/stoplag()
+	. = 0
+	var/i = 1
+	do
+		. += round(i*DELTA_CALC)
+		sleep(i*world.tick_lag*DELTA_CALC)
+		i *= 2
+	while (world.tick_usage > min(TICK_LIMIT_TO_RUN, CURRENT_TICKLIMIT))
+
+#undef DELTA_CALC
+
+
+/proc/stack_trace(message = "Getting a stack trace.")
+	CRASH(message)

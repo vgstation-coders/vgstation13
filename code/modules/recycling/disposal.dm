@@ -641,10 +641,16 @@
 
 // called when player tries to move while in a pipe
 /obj/structure/disposalholder/relaymove(mob/user as mob)
+	//testing("src.loc=[src.loc]")
+	//testing("user.stat=[user.stat]")
 	if (user.stat)
 		return
+	//testing("Passed statcheck")
 	if (src.loc)
-		for (var/mob/M in hearers(src.loc.loc))
+		for (var/mob/M in hearers(get_turf(src)))
+			if(M.clong_delayer.blocked()) continue
+			M.clong_delayer.setDelay(10)
+			//testing("SENDING CLONG")
 			to_chat(M, "<FONT size=[max(0, 5 - get_dist(src, M))]>CLONG, clong!</FONT>")
 
 	playsound(get_turf(src), 'sound/effects/clang.ogg', 50, 0, 0)

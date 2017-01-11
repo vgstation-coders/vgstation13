@@ -123,7 +123,7 @@
 /obj/item/delivery
 	desc = "A small wrapped package."
 	name = "small parcel"
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "deliverycrateSmall"
 	var/sortTag
 	flags = FPRINT

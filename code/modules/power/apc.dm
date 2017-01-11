@@ -1145,7 +1145,7 @@
 			equipment = autoset(equipment, 1)
 			lighting = autoset(lighting, 1)
 			environ = autoset(environ, 1)
-			if(cell.percent() > 75 && !areaMaster.poweralm && make_alerts)
+			if(cell.percent() > 35 && !areaMaster.poweralm && make_alerts) // 35% to prevent spamming alerts if it fluctuates
 				areaMaster.poweralert(1, src)
 
 		// now trickle-charge the cell

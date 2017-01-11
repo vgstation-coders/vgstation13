@@ -7,7 +7,7 @@
 
 /obj/item/weapon/storage
 	name = "storage"
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	w_class = W_CLASS_MEDIUM
 
 	// These two accept a string containing the type path and the following optional prefixes:

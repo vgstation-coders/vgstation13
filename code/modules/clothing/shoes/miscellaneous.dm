@@ -391,3 +391,10 @@
 	item_state = "workboots"
 	species_fit = list(VOX_SHAPED)
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/boots
+
+/obj/item/clothing/shoes/rottenshoes
+	name = "rotten shoes"
+	desc = "These shoes seem perfect for sneaking around."
+	icon_state = "rottenshoes"
+	item_state = "rottenshoes"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')

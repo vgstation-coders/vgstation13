@@ -172,6 +172,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	return heat_production
 
 /obj/proc/process()
+	set waitfor = FALSE
 	processing_objects.Remove(src)
 
 /obj/assume_air(datum/gas_mixture/giver)

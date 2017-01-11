@@ -21,6 +21,8 @@
 	var/icon = "empty"
 	var/name = "--------"
 	var/desc = null
+	var/pixel_x = 0
+	var/pixel_y = 0
 
 /datum/barsign/maltesefalcon
 	name = "Maltese Falcon"
@@ -62,6 +64,9 @@
 	var/datum/barsign/picked = barsigns[picked_name]
 	icon_state = picked.icon
 	name = picked.name
+	if(picked.pixel_x && picked.pixel_y)
+		pixel_x = picked.pixel_x * PIXEL_MULTIPLIER
+		pixel_y = picked.pixel_y * PIXEL_MULTIPLIER
 	if(picked.desc)
 		desc = picked.desc
 	else
