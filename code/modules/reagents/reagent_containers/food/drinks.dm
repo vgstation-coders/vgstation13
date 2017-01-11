@@ -781,7 +781,7 @@
 	desc = "A metal shaker to mix drinks in."
 	icon_state = "shaker"
 	origin_tech = Tc_MATERIALS + "=1"
-	amount_per_transfer_from_this = 10
+	amount_per_transfer_from_this = 5
 	volume = 100
 
 /obj/item/weapon/reagent_containers/food/drinks/thermos
@@ -789,7 +789,7 @@
 	desc = "A metal flask which insulates its contents from temperature - keeping hot beverages hot, and cold ones cold."
 	icon_state = "vacuumflask"
 	origin_tech = Tc_MATERIALS + "=1"
-	amount_per_transfer_from_this = 10
+	amount_per_transfer_from_this = 5
 	volume = 100
 
 /obj/item/weapon/reagent_containers/food/drinks/thermos/full/New()
@@ -805,7 +805,7 @@
 	melt_temperature = MELTPOINT_PLASTIC
 	starting_materials = list(MAT_PLASTIC = 500)
 	volume = 100
-	amount_per_transfer_from_this = 10
+	amount_per_transfer_from_this = 5
 
 /obj/item/weapon/reagent_containers/food/drinks/plastic/water
 	name = "water bottle"
@@ -877,7 +877,7 @@
 
 
 /obj/item/weapon/reagent_containers/food/drinks/bottle
-	amount_per_transfer_from_this = 10
+	amount_per_transfer_from_this = 5
 	volume = 100
 	starting_materials = list(MAT_GLASS = 500)
 	bottleheight = 31
