@@ -1172,7 +1172,7 @@
 		if(nullblock)
 			continue
 		C.ear_deaf += 50
-		C.show_message("<span class='warning'>The world around you suddenly becomes quiet.</span>")
+		C.show_message("<span class='notice'>The world around you suddenly becomes quiet.</span>")
 		affected++
 		if(prob(1))
 			C.sdisabilities |= DEAF
