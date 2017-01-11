@@ -4,7 +4,7 @@
 	icon = 'icons/obj/grenade.dmi'
 	icon_state = "chrono_grenade"
 	item_state = "flashbang"
-	timeless = TRUE
+	flags = FPRINT | TIMELESS
 	var/duration = 10 SECONDS
 	var/radius = 5		//in tiles
 

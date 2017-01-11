@@ -40,7 +40,6 @@ var/global/list/ghdel_profiling = list()
 	var/list/last_beamchecks // timings for beam checks.
 	var/ignoreinvert = 0
 	var/timestopped
-	var/timeless = FALSE	//whether the atom is unaffected by time effects
 
 	appearance_flags = TILE_BOUND
 
@@ -805,3 +804,11 @@ its easier to just keep the beam vertical.
 //Called when loaded by the map loader
 /atom/proc/spawned_by_map_element(datum/map_element/ME, list/objects)
 	return
+
+/atom/proc/toggle_timeless()
+	if(flags & TIMELESS)
+		flags &= ~TIMELESS
+		return 0
+	else
+		flags |= TIMELESS
+		return 1

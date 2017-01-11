@@ -125,14 +125,14 @@ var/global/list/falltempoverlays = list()
 		for(var/atom/movable/everything in T)
 			if(isliving(everything))
 				var/mob/living/L = everything
-				if(L == holder || L.timeless)
+				if(L == holder || L.flags & TIMELESS)
 					continue
 				affected += L
 				invertcolor(L)
 				spawn() recursive_timestop(L)
 				L.playsound_local(L, invocation == "ZA WARUDO" ? 'sound/effects/theworld2.ogg' : 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
 			else
-				if(everything.timeless)
+				if(everything.flags & TIMELESS)
 					continue
 				spawn() recursive_timestop(everything)
 				if(everything.ignoreinvert)
@@ -156,7 +156,7 @@ var/global/list/falltempoverlays = list()
 		affected |= A
 
 		if(A != holder)
-			if(!A.timeless)
+			if(!(A.flags & TIMELESS))
 				A.timestopped = 1
 
 		for (var/atom/B in A)
