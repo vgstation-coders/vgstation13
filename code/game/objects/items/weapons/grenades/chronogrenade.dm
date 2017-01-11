@@ -5,7 +5,7 @@
 	icon_state = "chrono_grenade"
 	item_state = "flashbang"
 	timeless = TRUE
-	var/duration = 10	//in seconds
+	var/duration = 10 SECONDS
 	var/radius = 5		//in tiles
 
 /obj/item/weapon/grenade/chronogrenade/prime()

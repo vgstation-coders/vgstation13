@@ -218,8 +218,8 @@ var/global/list/falltempoverlays = list()
 						0,0,-1,
 						1,1,1)
 
-/proc/timestop(atom/A, var/seconds, var/range)
-	if(!A || !seconds)
+/proc/timestop(atom/A, var/duration, var/range)
+	if(!A || !duration)
 		return
 	var/mob/caster = new
 	var/spell/aoe_turf/fall/fall = new /spell/aoe_turf/fall
@@ -232,7 +232,7 @@ var/global/list/falltempoverlays = list()
 	fall.invocation_type = SpI_NONE
 	fall.the_world_chance = 0
 	fall.range = range ? range : 7		//how big
-	fall.sleeptime = seconds SECONDS	//for how long
+	fall.sleeptime = duration			//for how long
 	caster.forceMove(get_turf(A))
 	spawn()
 		fall.perform(caster, skipcharge = 1)
