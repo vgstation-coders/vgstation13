@@ -145,6 +145,8 @@ var/explosion_shake_message_cooldown = 0
 
 			T.ex_act(dist)
 
+			CHECK_TICK
+
 		var/took = stop_watch(watch)
 		//You need to press the DebugGame verb to see these now....they were getting annoying and we've collected a fair bit of data. Just -test- changes  to explosion code using this please so we can compare
 		if(Debug2)
