@@ -62,7 +62,7 @@
 /mob/living/carbon/human/kick_act(mob/living/carbon/human/M)
 	M.delayNextAttack(20) //Kicks are slow
 
-	if((src == M) || ((M_CLUMSY in M.mutations) && prob(20))) //Kicking yourself (or being clumsy) = stun
+	if((src == M) || (M_CLUMSY in M.mutations) && prob(20)) //Kicking yourself (or being clumsy) = stun
 		M.visible_message("<span class='notice'>\The [M] trips while attempting to kick \the [src]!</span>", "<span class='userdanger'>While attempting to kick \the [src], you trip and fall!</span>")
 		M.Knockdown(rand(1,10))
 		return
@@ -146,7 +146,7 @@
 		LAssailant = M
 	log_attack("[M.name] ([M.ckey]) kicked by [src.name] ([src.ckey])")
 
-/mob/living/carbon/human/attack_hand(mob/living/carbon/human/M as mob)
+/mob/living/carbon/human/attack_hand(mob/living/carbon/human/M)
 	//M.delayNextAttack(10)
 	if (istype(loc, /turf) && istype(loc.loc, /area/start))
 		to_chat(M, "No attacking people at spawn, you jackass.")
@@ -164,57 +164,9 @@
 		return 0
 
 
-	if(M.gloves && istype(M.gloves,/obj/item/clothing/gloves))
-		var/obj/item/clothing/gloves/G = M.gloves
-		if(G.cell)
-			if(M.a_intent == I_HURT)//Stungloves. Any contact will stun the alien.
-				if(G.cell.charge >= 2500)
-					G.cell.use(2500)
-					visible_message("<span class='danger'>[M] touches [src] with the stun gloves!</span>")
-					M.attack_log += text("\[[time_stamp()]\] <font color='red'>Stungloved [src.name] ([src.ckey])</font>")
-					src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been stungloved by [M.name] ([M.ckey])</font>")
-					if(!iscarbon(M))
-						LAssailant = null
-					else
-						LAssailant = M
-
-					log_attack("<font color='red'>[M.name] ([M.ckey]) stungloved [src.name] ([src.ckey])</font>")
-
-					var/armorblock = run_armor_check(M.zone_sel.selecting, "energy")
-					apply_effects(5,5,0,0,5,0,0,armorblock)
-					return 1
-				else
-					to_chat(M, "<span class='warning'>Not enough charge! </span>")
-					visible_message("<span class='danger'>[src] has been touched with the stun gloves by [M]!</span>")
-				return
-
-		if(istype(M.gloves , /obj/item/clothing/gloves/boxing/hologlove))
-
-			var/damage = rand(0, 9)
-			if(!damage)
-				playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-				visible_message("<span class='danger'>[M] attempts to punch [src]!</span>")
-				return 0
-			var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
-			var/armor_block = run_armor_check(affecting, "melee")
-
-			if(M_HULK in M.mutations)
-				damage += 5
-
-			playsound(loc, "punch", 25, 1, -1)
-
-			visible_message("<span class='danger'>[M] punches [src]!</span>")
-
-			apply_damage(damage, HALLOSS, affecting, armor_block)
-			if(damage >= 9)
-				visible_message("<span class='danger'>[M] weakens [src]!</span>")
-				apply_effect(4, WEAKEN, armor_block)
-
-			return
-	else
-		if(istype(M,/mob/living/carbon))
-//			log_debug("No gloves, [M] is truing to infect [src]")
-			M.spread_disease_to(src, "Contact")
+	if(istype(M,/mob/living/carbon))
+//		log_debug("No gloves, [M] is truing to infect [src]")
+		M.spread_disease_to(src, "Contact")
 
 
 	switch(M.a_intent)
@@ -222,190 +174,17 @@
 			if(health >= config.health_threshold_crit)
 				help_shake_act(M)
 				return 1
-//			if(M.health < -75)	return 0
-
-			if(M.check_body_part_coverage(MOUTH))
-				to_chat(M, "<span class='notice'><B>Remove your [M.get_body_part_coverage(MOUTH)]!</B></span>")
-				return 0
-			if(src.check_body_part_coverage(MOUTH))
-				to_chat(M, "<span class='notice'><B>Remove their [src.get_body_part_coverage(MOUTH)]!</B></span>")
-				return 0
-
-			if (!cpr_time)
-				return 0
-
-			M.visible_message("<span class='danger'>\The [M] is trying perform CPR on \the [src]!</span>")
-
-			cpr_time = 0
-			if(do_after(M, src, 3 SECONDS))
-				adjustOxyLoss(-min(getOxyLoss(), 7))
-				M.visible_message("<span class='danger'>\The [M] performs CPR on \the [src]!</span>")
-				to_chat(src, "<span class='notice'>You feel a breath of fresh air enter your lungs. It feels good.</span>")
-				to_chat(M, "<span class='warning'>Repeat at least every 7 seconds.</span>")
-			cpr_time = 1
-
+			else if(ishuman(M))
+				M.perform_cpr(src)
 
 		if(I_GRAB)
-			if(M.grab_check(src))
-				return 0
-			if(w_uniform)
-				w_uniform.add_fingerprint(M)
-
-			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
-			if(locked_to)
-				to_chat(M, "<span class='notice'>You cannot grab [src], \he is buckled in!</span>")
-			if(!G)	//the grab will delete itself in New if affecting is anchored
-				return
-			M.put_in_active_hand(G)
-			grabbed_by += G
-			G.synch()
-			LAssailant = M
-
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-			visible_message("<span class='warning'>[M] grabs [src] passively!</span>")
-			return 1
+			return M.grab_mob(src)
 
 		if(I_HURT)
-			M.attack_log += text("\[[time_stamp()]\] <font color='red'>[M.species.attack_verb != "punches" ? "Slashed" : "Punched"] [src.name] ([src.ckey])</font>")
-			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been [M.species.attack_verb == "slashes" ? "slashed" : "punched"] by [M.name] ([M.ckey])</font>")
-			if(!iscarbon(M))
-				LAssailant = null
-			else
-				LAssailant = M
-
-			log_attack("[M.name] ([M.ckey]) [M.species.attack_verb] [src.name] ([src.ckey])")
-
-
-			var/damage = rand(0, M.species.max_hurt_damage)//BS12 EDIT // edited again by Iamgoofball to fix species attacks
-
-			if(!damage)
-				if(M.species.attack_verb == "punches")
-					playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-				else
-					playsound(loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
-
-				visible_message("<span class='danger'>[M] [M.species.attack_verb] towards [src], but misses!</span>")
-				return 0
-
-
-			var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
-			var/armor_block = run_armor_check(affecting, "melee")
-
-			if(M_HULK in M.mutations)
-				damage += 5
-
-			var/knockout = damage
-
-			if((M_CLAWS in M.mutations) && !istype(M.gloves))
-				damage += 3 //Claws mutation + no gloves (doesn't affect weaken chance)
-
-			if(istype(M.gloves)) //Attacker has gloves
-				var/obj/item/clothing/gloves/G = M.gloves
-				damage += G.damage_added //Increase damage by the gloves' damage modifier
-				knockout += G.bonus_knockout //Increase knockout chance by the gloves' knockout modifier
-
-			if(M.species.attack_verb == "punches")
-				playsound(loc, "punch", 25, 1, -1)
-			else
-				playsound(loc, 'sound/weapons/slice.ogg', 25, 1, -1)
-
-			visible_message("<span class='danger'>[M] [M.species.attack_verb] [src]!</span>")
-
-			if((knockout >= M.species.max_hurt_damage) && prob(50))
-				visible_message("<span class='danger'>[M] has knocked down [src]!</span>")
-				apply_effect(2, WEAKEN, armor_block)
-
-			if(M.species.punch_damage)
-				damage += M.species.punch_damage
-
-			apply_damage(damage, BRUTE, affecting, armor_block)
-
-			// Horror form can punch people so hard they learn how to fly.
-			if(M.species.punch_throw_range && prob(25))
-				visible_message("<span class='danger'>[src] is thrown by the force of the assault!</span>")
-				var/turf/T = get_turf(src)
-				var/turf/target
-				if(istype(T, /turf/space)) // if ended in space, then range is unlimited
-					target = get_edge_target_turf(T, M.dir)
-				else						// otherwise limit to 10 tiles
-					target = get_ranged_target_turf(T, M.dir, M.species.punch_throw_range)
-				src.throw_at(target,100,M.species.punch_throw_speed)
-
-			if(ishuman(M))
-				var/mob/living/carbon/human/H = M
-				if(H.zone_sel && H.zone_sel.selecting == "mouth")
-					var/chance = 0.5 * damage
-					if(M_HULK in H.mutations)
-						chance += 50
-					if(prob(chance))
-						knock_out_teeth(H)
-
+			return M.unarmed_attack_mob(src)
 
 		if(I_DISARM)
-			M.attack_log += text("\[[time_stamp()]\] <font color='red'>Disarmed [src.name] ([src.ckey])</font>")
-			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been disarmed by [M.name] ([M.ckey])</font>")
-
-			log_attack("[M.name] ([M.ckey]) disarmed [src.name] ([src.ckey])")
-
-			if(w_uniform)
-				w_uniform.add_fingerprint(M)
-			var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
-
-			for(var/obj/item/weapon/gun/G in held_items)
-				var/index = is_holding_item(G)
-				var/chance = (index == active_hand ? 40 : 20)
-
-				if (prob(chance))
-					visible_message("<spawn class=danger>[G], held by [src], goes off during struggle!")
-					var/list/turfs = list()
-					for(var/turf/T in view())
-						turfs += T
-					var/turf/target = pick(turfs)
-					return G.afterattack(target,src, "struggle" = 1)
-
-			var/randn = rand(1, 100)
-			if (randn <= 25)
-				apply_effect(4, WEAKEN, run_armor_check(affecting, "melee"))
-				playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-				visible_message("<span class='danger'>[M] has pushed [src]!</span>")
-				M.attack_log += text("\[[time_stamp()]\] <font color='red'>Pushed [src.name] ([src.ckey])</font>")
-				src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been pushed by [M.name] ([M.ckey])</font>")
-				if(!iscarbon(M))
-					LAssailant = null
-				else
-					LAssailant = M
-
-				log_attack("[M.name] ([M.ckey]) pushed [src.name] ([src.ckey])")
-				return
-
-			var/talked = 0	// BubbleWrap
-
-			if(randn <= 60)
-				//BubbleWrap: Disarming breaks a pull
-				if(pulling)
-					visible_message("<span class='danger'>[M] has broken [src]'s grip on [pulling]!</span>")
-					talked = 1
-					stop_pulling()
-
-				//BubbleWrap: Disarming also breaks a grab - this will also stop someone being choked, won't it?
-				for(var/obj/item/weapon/grab/G in held_items)
-					if(G.affecting)
-						visible_message("<span class='danger'>[M] has broken [src]'s grip on [G.affecting]!</span>")
-						talked = 1
-					spawn(1)
-						qdel(G)
-						G = null
-				//End BubbleWrap
-
-				if(!talked)	//BubbleWrap
-					drop_item()
-					visible_message("<span class='danger'>[M] has disarmed [src]!</span>")
-				playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-				return
-
-
-			playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
-			visible_message("<span class='danger'>[M] attempted to disarm [src]!</span>")
+			return M.disarm_mob(src)
 	return
 
 /mob/living/carbon/human/proc/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, inrange, params)

@@ -1,4 +1,4 @@
-var/global/datum/controller/gameticker/ticker
+var/datum/controller/gameticker/ticker
 
 #define GAME_STATE_PREGAME		1
 #define GAME_STATE_SETTING_UP	2
@@ -63,10 +63,7 @@ var/global/datum/controller/gameticker/ticker
 		"sound/music/starman.ogg",
 		))
 	login_music = fcopy_rsc(oursong)
-	// Wait for MC to get its shit together
-	while(!master_controller.initialized)
-		sleep(1) // Don't thrash the poor CPU
-		continue
+
 	do
 		var/delay_timetotal = 3000 //actually 5 minutes or incase this is changed from 3000, (time_in_seconds * 10)
 		pregame_timeleft = world.timeofday + delay_timetotal
@@ -218,12 +215,7 @@ var/global/datum/controller/gameticker/ticker
 		send2adminirc("Round has started with no admins online.")
 		send2admindiscord("**Round has started with no admins online.**", TRUE)
 
-	/*
-	supply_shuttle.process() 		//Start the supply shuttle regenerating points -- TLE
-	master_controller.process()		//Start master_controller.process()
-	lighting_controller.process()	//Start processing DynamicAreaLighting updates
-	*/
-	processScheduler.start()
+	Master.RoundStart()
 
 	if(config.sql_enabled)
 		spawn(3000)
@@ -698,3 +690,7 @@ var/global/datum/controller/gameticker/ticker
 		text += {"<br><img src="logo_[tempstate].png"> [winner]"}
 
 	return text
+
+
+/world/proc/has_round_started()
+	return ticker && ticker.current_state >= GAME_STATE_PLAYING

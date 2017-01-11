@@ -1,16 +1,3 @@
-#define SOFT_DM "digital messenger"
-#define SOFT_CM "crew manifest"
-#define SOFT_FL "flashlight"
-#define SOFT_RT "redundant threading"
-#define SOFT_RS "remote signaller"
-#define SOFT_WJ "wirejack"
-#define SOFT_CS "chem synth"
-#define SOFT_FS "food synth"
-#define SOFT_UT "universal translator"
-#define SOFT_MS "medical supplement"
-#define SOFT_SS "security supplement"
-#define SOFT_AS "atmosphere sensor"
-
 /mob/living/silicon/pai
 	name = "pAI"
 	icon = 'icons/obj/pda.dmi'
@@ -327,6 +314,13 @@
 					if("left")
 						O.intentleft_integrated_pai(P)
 
+/mob/living/silicon/pai/relaymove(dir)
+	if(incapacitated())
+		return
+	if(istype(card.loc, /obj))
+		var/obj/O = card.loc
+		if(O.integratedpai == card)
+			O.pAImove(src, dir)
 
 /atom/proc/attack_pai(mob/user as mob)
 	return

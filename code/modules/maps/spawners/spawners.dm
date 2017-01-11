@@ -814,6 +814,27 @@
 	chance = 5
 	to_spawn = list(/mob/living/simple_animal/hostile/humanoid/russian/ranged)
 
+/obj/map/spawner/space/vox/trader/spacesuit // for the vox outpost trader closets to spawn a random hardsuit. Each hardsuit has the same stats which are ofcourse very poor armor.
+ 	name = "trader spacesuit spawner"
+ 	icon_state = "space_supply"
+
+/obj/map/spawner/space/vox/trader/spacesuit/perform_spawn()
+	var/i = rand(1, 4) // 1 in 4 chance of spawning a single of listed below
+	switch (i)
+		if (1)
+			new /obj/item/clothing/suit/space/vox/civ/trader(src.loc) // standard brownsuit and helmet
+			new /obj/item/clothing/head/helmet/space/vox/civ/trader(src.loc)
+
+		if (2)
+			new /obj/item/clothing/suit/space/vox/civ/trader/carapace(src.loc) // carapace
+			new /obj/item/clothing/head/helmet/space/vox/civ/trader/carapace(src.loc)
+		if (3)
+			new /obj/item/clothing/suit/space/vox/civ/trader/medic(src.loc) // aqua coloured hardsuit
+			new /obj/item/clothing/head/helmet/space/vox/civ/trader/medic(src.loc)
+		if (4)
+			new /obj/item/clothing/suit/space/vox/civ/trader/stealth(src.loc) // black hardsuit. Not capable of any form of stealth systems or shit like that
+			new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src.loc)
+
 // Mobs ////////////////////////////////////////////////////////
 
 /obj/map/spawner/mobs/carp
@@ -856,13 +877,26 @@
 		/mob/living/simple_animal/hostile/giant_spider/nurse,
 		/mob/living/simple_animal/hostile/giant_spider/hunter,
 		)
-
+/obj/map/spawner/mobs/wolf
+	name = "wolf spawner"
+	icon_state = "mob_wolf"
+	amount = 7
+	to_spawn = list(
+		/mob/living/simple_animal/hostile/wolf,
+		/mob/living/simple_animal/hostile/wolf,
+		/mob/living/simple_animal/hostile/wolf,
+		/mob/living/simple_animal/hostile/wolf,
+		/mob/living/simple_animal/hostile/wolf/alpha,
+		/mob/living/simple_animal/hostile/wolf/alpha,
+		)
 /obj/map/spawner/mobs/humanoid/wiz
 	name = "wizard spawner"
 	icon_state = "mob_wiz"
 	amount = 2
 	chance = 50
 	to_spawn = list(/mob/living/simple_animal/hostile/humanoid/wizard)
+
+
 
 
 // Robutts /////////////////////////////////////////////////////
@@ -1137,3 +1171,47 @@
 	/obj/item/clothing/accessory/medal/gold/captain,
 	/obj/item/clothing/accessory/medal/gold/heroism
 )
+//Food spawners////////////////////////////////////
+/obj/map/spawner/food/voxfood //spawns food for the vox raiders
+	name = "vox food spawner"
+	icon_state = "food"
+	amount = 7
+	jiggle = 5
+	to_spawn = list (/obj/item/weapon/reagent_containers/food/snacks/hoboburger,
+	/obj/item/weapon/reagent_containers/food/snacks/hoboburger,
+	/obj/item/weapon/reagent_containers/food/snacks/sweetandsourpork,
+	/obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan,
+	/obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan,
+	/obj/item/weapon/reagent_containers/food/snacks/zhulongcaofan,
+	/obj/item/weapon/reagent_containers/food/snacks/porktenderloin,
+	/obj/item/weapon/reagent_containers/food/snacks/voxstew,
+	/obj/item/weapon/reagent_containers/food/snacks/woodapplejam,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/risenshiny,
+	/obj/item/weapon/reagent_containers/food/snacks/sweetandsourpork,
+	/obj/item/weapon/reagent_containers/food/snacks/sundayroast,
+	/obj/item/weapon/reagent_containers/food/snacks/pie/breadfruit,
+	/obj/item/weapon/reagent_containers/food/snacks/pie/breadfruit,
+	/obj/item/weapon/reagent_containers/food/snacks/garlicbread,
+	/obj/item/weapon/reagent_containers/food/snacks/garlicbread,
+	/obj/item/weapon/reagent_containers/food/snacks/mushnslush,
+	/obj/item/weapon/reagent_containers/food/snacks/candiedwoodapple,
+	/obj/item/weapon/reagent_containers/food/snacks/bacon,
+	/obj/item/weapon/reagent_containers/food/snacks/bacon,
+	/obj/item/weapon/reagent_containers/food/snacks/bacon
+)
+
+

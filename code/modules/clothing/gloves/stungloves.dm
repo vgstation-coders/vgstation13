@@ -1,3 +1,5 @@
+#define STUNGLOVES_CHARGE_COST 2500
+
 /obj/item/clothing/gloves/attackby(obj/item/weapon/W, mob/user)
 	if(istype(src, /obj/item/clothing/gloves/boxing))	//quick fix for stunglove overlay not working nicely with boxing gloves.
 		to_chat(user, "<span class='notice'>That won't work.</span>")//i'm not putting my lips on that!
@@ -59,3 +61,24 @@
 	if(ishuman(src.loc))
 		var/mob/living/carbon/human/H = src.loc
 		H.update_inv_gloves()
+
+/obj/item/clothing/gloves/Touch(atom/A, mob/living/user, prox)
+	if(!isliving(A))
+		return
+	if(!cell)
+		return
+
+	var/mob/living/L = A
+	if(prox == TRUE && user.a_intent == I_HURT)//Stungloves. Any contact will stun the alien.
+		visible_message("<span class='danger'>\The [A] has been touched with the stun gloves by [user]!</span>")
+
+		if(cell.charge >= STUNGLOVES_CHARGE_COST)
+			cell.charge -= STUNGLOVES_CHARGE_COST
+
+			add_logs(user, A, "stungloved", admin = TRUE)
+
+			var/armorblock = L.run_armor_check(user.zone_sel.selecting, "energy")
+			L.apply_effects(5,5,0,0,5,0,0,armorblock)
+
+		else
+			add_logs(user, A, "attempted to stunglove", admin = TRUE)

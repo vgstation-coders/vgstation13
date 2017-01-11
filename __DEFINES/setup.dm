@@ -80,7 +80,7 @@ var/global/disable_vents     = 0
 #define BODYTEMP_AUTORECOVERY_DIVISOR 0.5 //This is the divisor which handles how much of the temperature difference between the current body temperature and 310.15K (optimal temperature) humans auto-regenerate each tick. The higher the number, the slower the recovery. This is applied each tick, so long as the mob is alive.
 #define BODYTEMP_AUTORECOVERY_MAXIMUM 2.0 //Maximum amount of kelvin moved toward 310.15K per tick. So long as abs(310.15 - bodytemp) is more than 0.5 .
 
-#define BODYTEMP_COLD_DIVISOR 100 //Similar to the BODYTEMP_AUTORECOVERY_DIVISOR, but this is the divisor which is applied at the stage that follows autorecovery. This is the divisor which comes into play when the human's loc temperature is lower than their body temperature. Make it lower to lose bodytemp faster.
+#define BODYTEMP_COLD_DIVISOR 200 //Similar to the BODYTEMP_AUTORECOVERY_DIVISOR, but this is the divisor which is applied at the stage that follows autorecovery. This is the divisor which comes into play when the human's loc temperature is lower than their body temperature. Make it lower to lose bodytemp faster.
 
 #define PRESSUREFACTOR_NO_LINEAR 1.5  // Where growth of the pressure factor stops being linear
 #define COLD_PRESSUREFACTOR_MAX (PRESSUREFACTOR_NO_LINEAR)/((-1/PRESSUREFACTOR_NO_LINEAR)+1)    // The highest that heat loss can be multiplied by due to pressure. Depends on where non linear starts.
@@ -953,29 +953,28 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 	"CREED"
 	)
 
-//Species flags.
-#define NO_BLOOD 1
-#define NO_BREATHE 2
-#define NO_SCAN 4
-#define NO_PAIN 8
+//Generic species flags.
+#define NO_BREATHE 1
+#define NO_SCAN 2
+#define NO_PAIN 4
+#define IS_SLOW 8
+#define IS_PLANT 16
+#define IS_WHITELISTED 32
+#define RAD_ABSORB 64
+#define REQUIRE_LIGHT 128
+#define HYPOTHERMIA_IMMUNE 256
+#define PLASMA_IMMUNE 512
 
-#define HAS_SKIN_TONE 16
-#define HAS_LIPS 32
-#define HAS_UNDERWEAR 64
-#define HAS_TAIL 128
-
-#define IS_SLOW 256
-#define IS_PLANT 512
-#define IS_WHITELISTED 1024
-
-#define RAD_ABSORB 2048
-#define REQUIRE_LIGHT 4096
-
-#define CAN_BE_FAT 8192 // /vg/
-
-#define IS_BULKY 16384 //can't wear exosuits, gloves, masks, or hardsuits
-
-#define NO_SKIN 32768
+//Species anatomical flags.
+#define HAS_SKIN_TONE 1
+#define HAS_LIPS 2
+#define HAS_UNDERWEAR 4
+#define HAS_TAIL 8
+#define CAN_BE_FAT 16
+#define IS_BULKY 32 //can't wear exosuits, gloves, masks, or hardsuits
+#define NO_SKIN 64
+#define NO_BLOOD 128
+#define HAS_SWEAT_GLANDS 256
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\

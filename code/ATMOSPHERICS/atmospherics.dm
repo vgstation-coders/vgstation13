@@ -345,8 +345,11 @@ Pipelines + Other Objects -> Pipe network
 			if(target_move.return_network(target_move) != return_network(src))
 				user.remove_ventcrawl()
 				user.add_ventcrawl(target_move)
+			if (user.client.prefs.stumble && ((world.time - user.last_movement) > 5))
+				user.delayNextMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
 			user.forceMove(target_move)
 			user.client.eye = target_move //if we don't do this, Byond only updates the eye every tick - required for smooth movement
+			user.last_movement=world.time
 			if(world.time - user.last_played_vent > VENT_SOUND_DELAY)
 				user.last_played_vent = world.time
 				playsound(src, 'sound/machines/ventcrawl.ogg', 50, 1, -3)

@@ -20,6 +20,7 @@
 	var/list/data = null
 	var/volume = 0
 	var/nutriment_factor = 0
+	var/pain_resistance = 0
 	var/sport = 1 //High sport helps you show off on a treadmill. Multiplicative
 	var/custom_metabolism = REAGENTS_METABOLISM
 	var/custom_plant_metabolism = HYDRO_SPEED_MULTIPLIER
@@ -302,7 +303,7 @@
 	if(holder && holder.my_atom)
 		var/mob/living/carbon/human/H = holder.my_atom
 		if(istype(H))
-			if(H.species && H.species.flags & NO_BLOOD)
+			if(H.species && H.species.anatomy_flags & NO_BLOOD)
 				return 0
 	return 1
 
@@ -366,9 +367,7 @@
 
 	//Put out fire
 	if(method == TOUCH)
-		M.adjust_fire_stacks(-(volume / 10))
-		if(M.fire_stacks <= 0)
-			M.ExtinguishMob()
+		M.ExtinguishMob()
 
 	//Water now directly damages slimes instead of being a turf check
 	if(isslime(M))
@@ -377,15 +376,11 @@
 	//Greys treat water like acid
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(H.species.name == "Grey")
+		if(isgrey(H))
 			if(method == TOUCH)
 
-				if(H.wear_mask)
-					to_chat(H, "<span class='warning'>Your mask protects you from the water!</span>")
-					return
-
-				if(H.head)
-					to_chat(H, "<span class='warning'>Your helmet protects you from the water!</span>")
+				if(H.check_body_part_coverage(EYES|MOUTH))
+					to_chat(H, "<span class='warning'>Your face is protected from a splash of water!</span>")
 					return
 
 				if(M.acidable())
@@ -739,6 +734,7 @@
 	reagent_state = LIQUID
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.5
+	pain_resistance = 25
 
 /datum/reagent/inaprovaline/on_mob_life(var/mob/living/M, var/alien)
 
@@ -1408,21 +1404,12 @@
 /datum/reagent/paracetamol
 	name = "Paracetamol"
 	id = PARACETAMOL
-	description = "Most probably know this as Tylenol, but this chemical is a mild, simple painkiller."
+	description = "Most commonly know this as Tylenol, but this chemical is a mild, simple painkiller."
 	reagent_state = LIQUID
 	color = "#C855DC"
+	pain_resistance = 60
 	overdose_dam = 0
 	overdose = 0
-
-/datum/reagent/paracetamol/on_mob_life(var/mob/living/M)
-
-	if(..())
-		return 1
-
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		H.shock_stage--
-		H.traumatic_shock--
 
 /datum/reagent/mutagen
 	name = "Unstable mutagen"
@@ -1462,6 +1449,18 @@
 	description = "A simple, yet effective painkiller."
 	reagent_state = LIQUID
 	color = "#C8A5DC"
+	pain_resistance = 80
+	custom_metabolism = 0.1
+
+/datum/reagent/tramadol/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(iscarbon(M))
+		var/mob/living/carbon/C = M
+		if(C.pain_level < BASE_CARBON_PAIN_RESIST) //If we're already recovering from shock, let's speed the process up
+			C.pain_shock_stage = max(0, C.pain_shock_stage - 1)
 
 /datum/reagent/oxycodone
 	name = "Oxycodone"
@@ -1469,6 +1468,26 @@
 	description = "An effective and very addictive painkiller."
 	reagent_state = LIQUID
 	color = "#C805DC"
+	custom_metabolism = 0.05
+
+/datum/reagent/oxycodone/on_mob_life(var/mob/living/M)
+
+	if(..())
+		return 1
+
+	if(iscarbon(M))
+		var/mob/living/carbon/C = M
+		C.pain_numb = max(5, C.pain_numb)
+		C.pain_shock_stage = max(0, C.pain_shock_stage - 3) //We don't FEEL the shock now, but make it go away quick in case we run out of oxycodone.
+		if(!M.sleeping && prob(2))
+			to_chat(M, pick("<span class='numb'>You feel like you're floating...</span>", \
+							"<span class='numb'>You feel a little lightheaded... but it's okay.</span>", \
+							"<span class='numb'>Your face itches a little bit... and it feels so good to scratch it...</span>", \
+							"<span class='numb'>Your whole body buzzes slightly, but it doesn't seem to bother you...</span>", \
+							"<span class='numb'>You feel a little high of energy, and it makes you smile...</span>", \
+							"<span class='numb'>You nod to yourself... it's nothing, it just feels good to nod a little...</span>", \
+							"<span class='numb'>Hello?... Is there anybody in there?...</span>", \
+							"<span class='numb'>You feel... comfortably numb.</span>"))
 
 /datum/reagent/virus_food
 	name = "Virus Food"
@@ -2026,6 +2045,7 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.01
 	overdose = REAGENTS_OVERDOSE
+	pain_resistance = 40
 
 /datum/reagent/synaptizine/on_mob_life(var/mob/living/M)
 
@@ -2106,6 +2126,7 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	custom_metabolism = 0.05
 	overdose = REAGENTS_OVERDOSE
+	pain_resistance = 10
 
 /datum/reagent/alkysine/on_mob_life(var/mob/living/M)
 
@@ -3045,7 +3066,7 @@
 			M.adjustToxLoss(1)
 			M.Dizzy(5)
 			M.Jitter(5)
-			if(prob(5))
+			if(prob(5) && M.feels_pain())
 				to_chat(M, "<span class='warning'>Oh god, the pain!</span>")
 		if(25 to INFINITY)
 			if(ishuman(M)) //Does nothing to non-humans.
@@ -5029,7 +5050,7 @@
 	if(..())
 		return 1
 
-	empulse(get_turf(M), 1, 2, 0)
+	empulse(get_turf(M), 1, 2, 1)
 
 	return
 

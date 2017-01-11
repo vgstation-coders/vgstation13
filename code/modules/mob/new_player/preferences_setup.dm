@@ -138,6 +138,19 @@
 			clothes_s.Blend(new /icon('icons/mob/back.dmi', "satchel"), ICON_OVERLAY)
 	return clothes_s
 
+/proc/valid_sprite_accessories(var/gender_restriction, var/species_restriction, var/from_list)
+	. = list()
+	for(var/key in from_list)
+		var/datum/sprite_accessory/S = from_list[key]
+		if(species_restriction && !(species_restriction in S.species_allowed))
+			continue
+		if(gender_restriction)
+			if(gender_restriction == MALE && S.gender == FEMALE)
+				continue
+			if(gender_restriction == FEMALE && S.gender == MALE)
+				continue
+
+		.[key] = from_list[key]
 
 /datum/preferences/proc/update_preview_icon(var/for_observer=0)		//seriously. This is horrendous.
 	preview_icon_front = null
@@ -173,7 +186,7 @@
 		icobase = 'icons/mob/human_races/r_human.dmi'
 
 	var/fat=""
-	if(disabilities&DISABILITY_FLAG_FAT && current_species.flags & CAN_BE_FAT)
+	if(disabilities&DISABILITY_FLAG_FAT && current_species.anatomy_flags & CAN_BE_FAT)
 		fat="_fat"
 	preview_icon = new /icon(icobase, "torso_[g][fat]")
 	preview_icon.Blend(new /icon(icobase, "groin_[g]"), ICON_OVERLAY)
@@ -199,7 +212,7 @@
 		preview_icon.Blend(temp, ICON_OVERLAY)
 
 	// Skin tone
-	if(current_species && (current_species.flags & HAS_SKIN_TONE))
+	if(current_species && (current_species.anatomy_flags & HAS_SKIN_TONE))
 		if (s_tone >= 0)
 			preview_icon.Blend(rgb(s_tone, s_tone, s_tone), ICON_ADD)
 		else

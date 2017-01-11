@@ -1,4 +1,4 @@
-datum/fusion_reaction
+/datum/fusion_reaction
 	var/primary_reactant = ""
 	var/secondary_reactant = ""
 	var/energy_consumption = 0
@@ -6,27 +6,13 @@ datum/fusion_reaction
 	var/radiation = 0
 	var/list/products = list()
 
-/datum/controller/game_controller/var/list/fusion_reactions
 
-proc/get_fusion_reaction(var/primary_reactant, var/secondary_reactant)
-	if(!master_controller.fusion_reactions)
-		populate_fusion_reactions()
-	if(master_controller.fusion_reactions.Find(primary_reactant))
-		var/list/secondary_reactions = master_controller.fusion_reactions[primary_reactant]
-		if(secondary_reactions.Find(secondary_reactant))
-			return master_controller.fusion_reactions[primary_reactant][secondary_reactant]
+/proc/get_fusion_reaction(var/primary_reactant, var/secondary_reactant)
+	if (!SSrust || !SSrust.fusion_reactions)
+		CRASH("Some fucker tried to get a fusion reaction before the subsystem initialized. Calm down damnit.")
 
-proc/populate_fusion_reactions()
-	if(!master_controller.fusion_reactions)
-		master_controller.fusion_reactions = list()
-		for(var/cur_reaction_type in typesof(/datum/fusion_reaction) - /datum/fusion_reaction)
-			var/datum/fusion_reaction/cur_reaction = new cur_reaction_type()
-			if(!master_controller.fusion_reactions[cur_reaction.primary_reactant])
-				master_controller.fusion_reactions[cur_reaction.primary_reactant] = list()
-			master_controller.fusion_reactions[cur_reaction.primary_reactant][cur_reaction.secondary_reactant] = cur_reaction
-			if(!master_controller.fusion_reactions[cur_reaction.secondary_reactant])
-				master_controller.fusion_reactions[cur_reaction.secondary_reactant] = list()
-			master_controller.fusion_reactions[cur_reaction.secondary_reactant][cur_reaction.primary_reactant] = cur_reaction
+	return SSrust.get_fusion_reaction(primary_reactant, secondary_reactant)
+
 
 //Fake elements and fake reactions, but its nicer gameplay-wise
 //Deuterium
@@ -42,7 +28,7 @@ proc/populate_fusion_reactions()
 
 //Primary Production Reactions
 
-datum/fusion_reaction/tritium_deuterium
+/datum/fusion_reaction/tritium_deuterium
 	primary_reactant = "Tritium"
 	secondary_reactant = "Deuterium"
 	energy_consumption = 1
@@ -51,7 +37,7 @@ datum/fusion_reaction/tritium_deuterium
 
 //Secondary Production Reactions
 
-datum/fusion_reaction/deuterium_deuterium
+/datum/fusion_reaction/deuterium_deuterium
 	primary_reactant = "Deuterium"
 	secondary_reactant = "Deuterium"
 	energy_consumption = 1
@@ -59,7 +45,7 @@ datum/fusion_reaction/deuterium_deuterium
 	radiation = 1
 	products = list("Obdurium" = 2)
 
-datum/fusion_reaction/tritium_tritium
+/datum/fusion_reaction/tritium_tritium
 	primary_reactant = "Tritium"
 	secondary_reactant = "Tritium"
 	energy_consumption = 1
@@ -69,14 +55,14 @@ datum/fusion_reaction/tritium_tritium
 
 //Cleanup Reactions
 
-datum/fusion_reaction/rodinium6_obdurium
+/datum/fusion_reaction/rodinium6_obdurium
 	primary_reactant = "Rodinium-6"
 	secondary_reactant = "Obdurium"
 	energy_consumption = 1
 	energy_production = 2
 	radiation = 2
 
-datum/fusion_reaction/rodinium6_solonium
+/datum/fusion_reaction/rodinium6_solonium
 	primary_reactant = "Rodinium-6"
 	secondary_reactant = "Solonium"
 	energy_consumption = 1
@@ -85,7 +71,7 @@ datum/fusion_reaction/rodinium6_solonium
 
 //Breeder Reactions
 
-datum/fusion_reaction/dilithium_obdurium
+/datum/fusion_reaction/dilithium_obdurium
 	primary_reactant = "Dilithium"
 	secondary_reactant = "Obdurium"
 	energy_consumption = 1
@@ -93,7 +79,7 @@ datum/fusion_reaction/dilithium_obdurium
 	radiation = 3
 	products = list("Deuterium" = 1, "Dilithium" = 1)
 
-datum/fusion_reaction/dilithium_solonium
+/datum/fusion_reaction/dilithium_solonium
 	primary_reactant = "Dilithium"
 	secondary_reactant = "Solonium"
 	energy_consumption = 1
@@ -103,7 +89,7 @@ datum/fusion_reaction/dilithium_solonium
 
 //Breeder Inhibitor Reactions
 
-datum/fusion_reaction/stravium7_dilithium
+/datum/fusion_reaction/stravium7_dilithium
 	primary_reactant = "Stravium-7"
 	secondary_reactant = "Dilithium"
 	energy_consumption = 2
@@ -112,7 +98,7 @@ datum/fusion_reaction/stravium7_dilithium
 
 //Enhanced Breeder Reactions
 
-datum/fusion_reaction/trilithium_obdurium
+/datum/fusion_reaction/trilithium_obdurium
 	primary_reactant = "Trilithium"
 	secondary_reactant = "Obdurium"
 	energy_consumption = 1
@@ -120,7 +106,7 @@ datum/fusion_reaction/trilithium_obdurium
 	radiation = 5
 	products = list("Dilithium" = 1, "Trilithium" = 1, "Deuterium" = 1)
 
-datum/fusion_reaction/trilithium_solonium
+/datum/fusion_reaction/trilithium_solonium
 	primary_reactant = "Trilithium"
 	secondary_reactant = "Solonium"
 	energy_consumption = 1
@@ -130,28 +116,28 @@ datum/fusion_reaction/trilithium_solonium
 
 //Control Reactions
 
-datum/fusion_reaction/pergium_deuterium
+/datum/fusion_reaction/pergium_deuterium
 	primary_reactant = "Pergium"
 	secondary_reactant = "Deuterium"
 	energy_consumption = 5
 	energy_production = 0
 	radiation = 5
 
-datum/fusion_reaction/pergium_tritium
+/datum/fusion_reaction/pergium_tritium
 	primary_reactant = "Pergium"
 	secondary_reactant = "Tritium"
 	energy_consumption = 5
 	energy_production = 0
 	radiation = 5
 
-datum/fusion_reaction/pergium_deuterium
+/datum/fusion_reaction/pergium_deuterium
 	primary_reactant = "Pergium"
 	secondary_reactant = "Obdurium"
 	energy_consumption = 5
 	energy_production = 0
 	radiation = 5
 
-datum/fusion_reaction/pergium_tritium
+/datum/fusion_reaction/pergium_tritium
 	primary_reactant = "Pergium"
 	secondary_reactant = "Solonium"
 	energy_consumption = 5

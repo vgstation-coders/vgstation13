@@ -199,7 +199,7 @@ proc/get_space_area()
 #define tcheck(CPU,TOSLEEP)	if(world.cpu > CPU) sleep(calculateticks(TOSLEEP)) //Shorthand of checking and then sleeping a process based on world CPU
 
 #define FOR_DVIEW(type, range, center, invis_flags) \
-	dview_mob.forceMove(center);           \
+	dview_mob.loc = center;           \
 	dview_mob.see_invisible = invis_flags; \
 	for(type in view(range, dview_mob))
 
@@ -217,4 +217,4 @@ proc/get_space_area()
 #define is_in_valid_nest(egg) (isturf(egg.loc))
 
 
-#define CHECK_TICK if(world.tick_usage > 90) sleep(world.tick_lag)
+#define subtypesof(A) (typesof(A) - A)

@@ -13,8 +13,8 @@
 	var/spread_start = 100
 	var/spread_chance = 20
 
-/obj/effect/fire_blast/New(turf/T, var/damage = 0, var/current_step = 0, var/age = 1, var/pressure = 0, var/blast_temperature = 0, var/fire_duration)
-	..(T)
+/obj/effect/fire_blast/New(atom/A, var/damage = 0, var/current_step = 0, var/age = 1, var/pressure = 0, var/blast_temperature = 0, var/fire_duration)
+	..(A)
 	icon_state = "[rand(1,3)]"
 
 	blast_age = age
@@ -88,7 +88,7 @@
 				else
 					L.adjustFireLoss(adjusted_fire_damage)
 
-			for(var/obj/O in T)
+			for(var/obj/O in get_turf(A))
 				if(istype(O, /obj/structure/reagent_dispensers/fueltank))
 					var/obj/structure/reagent_dispensers/fueltank/F = O
 					if(blast_temperature >= 561.15) //561.15 is welderfuel's autoignition temperature.
@@ -96,7 +96,7 @@
 				else if(O.autoignition_temperature)
 					if(blast_temperature >= O.autoignition_temperature)
 						O.ignite(blast_temperature)
-			for(var/obj/effect/E in T)
+			for(var/obj/effect/E in get_turf(A))
 				if(istype(E, /obj/effect/blob))
 					var/obj/effect/blob/B = E
 					B.health -= (adjusted_fire_damage/10)
@@ -123,8 +123,8 @@
 	density = 0
 	w_type=NOT_RECYCLABLE
 
-/obj/effect/gas_puff/New(turf/T, var/datum/gas_mixture/stored_gas = null, var/type_of_gas)
-	..(T)
+/obj/effect/gas_puff/New(atom/A, var/datum/gas_mixture/stored_gas = null, var/type_of_gas)
+	..(A)
 
 	if(type_of_gas)
 		switch(type_of_gas)

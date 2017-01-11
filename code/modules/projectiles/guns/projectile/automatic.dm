@@ -78,7 +78,7 @@
 
 /obj/item/weapon/gun/projectile/automatic/mini_uzi
 	name = "Uzi"
-	desc = "A lightweight, fast firing gun, for when you want someone dead. Uses .45 rounds."
+	desc = "A lightweight, fast firing gun for when you definitely want someone dead. Uses .45 rounds."
 	icon_state = "mini-uzi"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
@@ -95,7 +95,7 @@
 
 /obj/item/weapon/gun/projectile/automatic/c20r
 	name = "\improper C-20r SMG"
-	desc = "A lightweight, fast firing gun, for when you REALLY need someone dead. Uses 12mm rounds. Has a 'Scarborough Arms - Per falcis, per pravitas' buttstamp"
+	desc = "A lightweight, fast firing gun for when you REALLY want someone dead. Uses 12mm rounds. Has a \"Scarborough Arms - Per falcis, per pravitas\" buttstamp."
 	icon_state = "c20r"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
 	item_state = "c20r"
@@ -170,7 +170,7 @@
 	icon_state = "l6[cover_open ? "open" : "closed"][stored_magazine ? round(getAmmo(), 25) : "-empty"]"
 
 
-/obj/item/weapon/gun/projectile/automatic/l6_saw/afterattack(atom/target as mob|obj|turf, mob/living/user as mob|obj, flag, params) //what I tried to do here is just add a check to see if the cover is open or not and add an icon_state change because I can't figure out how c-20rs do it with overlays
+/obj/item/weapon/gun/projectile/automatic/l6_saw/afterattack(atom/target as mob|obj|turf, mob/living/user as mob|obj, flag, params, struggle = 0) //what I tried to do here is just add a check to see if the cover is open or not and add an icon_state change because I can't figure out how c-20rs do it with overlays
 	if(cover_open)
 		to_chat(user, "<span class='notice'>[src]'s cover is open! Close it before firing!</span>")
 	else

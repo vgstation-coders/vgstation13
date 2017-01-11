@@ -129,7 +129,7 @@
 
 /obj/item/weapon/dualsaber/attack(target as mob, mob/living/user as mob)
 	..()
-	if((M_CLUMSY in user.mutations) && (wielded) &&prob(40))
+	if(clumsy_check(user) && (wielded) &&prob(40))
 		to_chat(user, "<span class='warning'>You twirl around a bit before losing your balance and impaling yourself on the [src].</span>")
 		user.take_organ_damage(20,25)
 		return
@@ -195,6 +195,8 @@
 			M.simple_message("<span class='notice'>You slipped on [src]!</span>",
 				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
 
+/obj/item/weapon/dualsaber/bananabunch/clumsy_check(mob/living/user)
+	return 0
 
 /*
  * High-Frequency Blade

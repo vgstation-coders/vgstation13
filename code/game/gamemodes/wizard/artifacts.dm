@@ -93,6 +93,12 @@
 		H.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 		to_chat(H, "<span class='notice'>The walls suddenly disappear.</span>")
 
+/datum/spellbook_artifact/cloakingcloak
+	name = "Cloak of Cloaking"
+	desc = "A delicate satin sheet that will render you invisible when you cover yourself with it. It is somewhat cumbersome, and running while underneath it is sure to cause you to trip."
+	abbreviation = "CC"
+	spawned_items = list(/obj/item/weapon/cloakingcloak)
+
 //SUMMON GUNS
 /datum/spellbook_artifact/summon_guns
 	name = "Summon Guns"
@@ -108,7 +114,7 @@
 
 	H.rightandwrong(0)
 	to_chat(H, "<span class='userdanger'>You have summoned guns.</span>")
-	
+
 //SUMMON MAGIC
 /datum/spellbook_artifact/summon_magic
 	name = "Summon Magic"

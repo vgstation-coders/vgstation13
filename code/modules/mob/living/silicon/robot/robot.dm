@@ -980,58 +980,18 @@
 				to_chat(usr, "You unlock your cover.")
 
 /mob/living/silicon/robot/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
-	if (!ticker)
-		to_chat(M, "You cannot attack people before the game has started.")
-		return
-
-	if (istype(loc, /turf) && istype(loc.loc, /area/start))
-		to_chat(M, "No attacking people at spawn, you jackass.")
-		return
 
 	switch(M.a_intent)
-
 		if (I_HELP)
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message(text("<span class='notice'>[M] caresses [src]'s plating with its scythe like arm.</span>"), 1)
+			visible_message("<span class='notice'>[M] caresses [src]'s plating with its scythe like arm.</span>")
 
 		if (I_GRAB)
-			if (M.grab_check(src))
-				return
-			var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab,M,src)
-
-			M.put_in_active_hand(G)
-
-			grabbed_by += G
-			G.synch()
-			playsound(loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-			for(var/mob/O in viewers(src, null))
-				if ((O.client && !( O.blinded )))
-					O.show_message(text("<span class='attack'>[] has grabbed [] passively!</span>", M, src), 1)
+			M.grab_mob(src)
 
 		if (I_HURT)
-			var/damage = rand(10, 20)
-			if (prob(90))
-				/*
-				if (M.class == "combat")
-					damage += 15
-					if(prob(20))
-						knockdown = max(knockdown,4)
-						stunned = max(stunned,4)
-				What is this?*/
-
-				playsound(loc, 'sound/weapons/slash.ogg', 25, 1, -1)
-				for(var/mob/O in viewers(src, null))
-					O.show_message(text("<span class='danger'>[] has slashed at []!</span>", M, src), 1)
+			if(M.unarmed_attack_mob(src))
 				if(prob(8))
 					flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
-				adjustBruteLoss(damage)
-				updatehealth()
-			else
-				playsound(loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>[] took a swipe at []!</span>", M, src), 1)
 
 		if (I_DISARM)
 			if(!(lying))
@@ -1040,101 +1000,21 @@
 					step(src,get_dir(M,src))
 					spawn(5) step(src,get_dir(M,src))
 					playsound(loc, 'sound/weapons/pierce.ogg', 50, 1, -1)
-					for(var/mob/O in viewers(src, null))
-						if ((O.client && !( O.blinded )))
-							O.show_message(text("<span class='danger'>[] has forced back []!</span>", M, src), 1)
+					visible_message("<span class='danger'>[M] has forced back [src]!</span>")
 				else
 					playsound(loc, 'sound/weapons/slashmiss.ogg', 25, 1, -1)
-					for(var/mob/O in viewers(src, null))
-						if ((O.client && !( O.blinded )))
-							O.show_message(text("<span class='danger'>[] attempted to force back []!</span>", M, src), 1)
+					visible_message("<span class='danger'>[M] attempted to force back [src]!</span>")
 	return
 
 
 
-/mob/living/silicon/robot/attack_slime(mob/living/carbon/slime/M as mob)
-	if (!ticker)
-		to_chat(M, "You cannot attack people before the game has started.")
-		return
+/mob/living/silicon/robot/attack_slime(mob/living/carbon/slime/M)
+	M.unarmed_attack_mob(src)
 
-	if(M.Victim)
-		return // can't attack while eating!
+/mob/living/silicon/robot/attack_animal(mob/living/simple_animal/M)
+	M.unarmed_attack_mob(src)
 
-	if (health > -100)
-
-		for(var/mob/O in viewers(src, null))
-			if ((O.client && !( O.blinded )))
-				O.show_message(text("<span class='danger'>The [M.name] glomps []!</span>", src), 1)
-		add_logs(M, src, "glomped on", 0)
-
-		var/damage = rand(1, 3)
-
-		if(istype(src, /mob/living/carbon/slime/adult))
-			damage = rand(20, 40)
-		else
-			damage = rand(5, 35)
-
-		damage = round(damage / 2) // borgs recieve half damage
-		adjustBruteLoss(damage)
-
-
-		if(M.powerlevel > 0)
-			var/stunprob = 10
-
-			switch(M.powerlevel)
-				if(1 to 2)
-					stunprob = 20
-				if(3 to 4)
-					stunprob = 30
-				if(5 to 6)
-					stunprob = 40
-				if(7 to 8)
-					stunprob = 60
-				if(9)
-					stunprob = 70
-				if(10)
-					stunprob = 95
-
-			if(prob(stunprob))
-				M.powerlevel -= 3
-				if(M.powerlevel < 0)
-					M.powerlevel = 0
-
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>The [M.name] has electrified []!</span>", src), 1)
-
-				flash_eyes(visual = 1, type = /obj/screen/fullscreen/flash/noise)
-
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-				s.set_up(5, 1, src)
-				s.start()
-
-				if (prob(stunprob) && M.powerlevel >= 8)
-					adjustBruteLoss(M.powerlevel * rand(6,10))
-
-
-		updatehealth()
-
-	return
-
-/mob/living/silicon/robot/attack_animal(mob/living/simple_animal/M as mob)
-	if(M.melee_damage_upper == 0)
-		M.emote("[M.friendly] [src]")
-	else
-		if(M.attack_sound)
-			playsound(loc, M.attack_sound, 50, 1, 1)
-		for(var/mob/O in viewers(src, null))
-			O.show_message("<span class='danger'>[M] [M.attacktext] [src]!</span>", 1)
-
-		add_logs(M, src, "attacked", admin = M.ckey ? TRUE : FALSE) //Only add this to the server logs if they're controlled by a player.
-
-		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-		adjustBruteLoss(damage)
-		updatehealth()
-
-
-/mob/living/silicon/robot/attack_hand(mob/user)
+/mob/living/silicon/robot/attack_hand(mob/living/user)
 
 	add_fingerprint(user)
 
@@ -1155,15 +1035,19 @@
 			cell_component.wrapped = null
 			cell_component.installed = 0
 			updateicon()
+			return
 		else if(cell_component.installed == -1)
 			cell_component.installed = 0
 			var/obj/item/broken_device = cell_component.wrapped
 			to_chat(user, "You remove \the [broken_device].")
 			user.put_in_active_hand(broken_device)
+			return
 
-	if (user.a_intent == I_HELP)
-		help_shake_act(user)
-		return
+	switch(user.a_intent)
+		if(I_HELP)
+			help_shake_act(user)
+		if(I_HURT)
+			user.unarmed_attack_mob(src)
 
 /mob/living/silicon/robot/proc/allowed(mob/M)
 	//check if it doesn't require any access at all

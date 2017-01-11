@@ -65,8 +65,7 @@
 
 	//List of weapons that secbots will not arrest for, also copypasted in secbot.dm and metaldetector.dm
 	var/safe_weapons = list(
-		/obj/item/weapon/gun/energy/laser/bluetag,
-		/obj/item/weapon/gun/energy/laser/redtag,
+		/obj/item/weapon/gun/energy/tag,
 		/obj/item/weapon/gun/energy/laser/practice,
 		/obj/item/weapon/gun/hookshot,
 		/obj/item/weapon/gun/energy/floragun,
@@ -772,18 +771,18 @@ Auto Patrol: []"},
 		threatcount = 0//They will not, however shoot at people who have guns, because it gets really fucking annoying
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/redtag))
 			threatcount += PERP_LEVEL_ARREST
-		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/laser/redtag))
+		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/tag/red))
 			threatcount += PERP_LEVEL_ARREST
-		if(istype(perp.belt, /obj/item/weapon/gun/energy/laser/redtag))
+		if(istype(perp.belt, /obj/item/weapon/gun/energy/tag/red))
 			threatcount += PERP_LEVEL_ARREST/2
 
 	if(src.lasercolor == "r")
 		threatcount = 0
 		if(istype(perp.wear_suit, /obj/item/clothing/suit/bluetag))
 			threatcount += PERP_LEVEL_ARREST
-		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/laser/bluetag))
+		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/tag/blue))
 			threatcount += PERP_LEVEL_ARREST
-		if(istype(perp.belt, /obj/item/weapon/gun/energy/laser/bluetag))
+		if(istype(perp.belt, /obj/item/weapon/gun/energy/tag/blue))
 			threatcount += PERP_LEVEL_ARREST/2
 
 	if(src.check_records)
@@ -840,10 +839,10 @@ Auto Patrol: []"},
 		var/obj/item/weapon/gun/energy/taser/G = new /obj/item/weapon/gun/energy/taser(Tsec)
 		G.power_supply.charge = 0
 	else if(lasercolor == "b")
-		var/obj/item/weapon/gun/energy/laser/bluetag/G = new /obj/item/weapon/gun/energy/laser/bluetag(Tsec)
+		var/obj/item/weapon/gun/energy/tag/blue/G = new /obj/item/weapon/gun/energy/tag/blue(Tsec)
 		G.power_supply.charge = 0
 	else if(lasercolor == "r")
-		var/obj/item/weapon/gun/energy/laser/redtag/G = new /obj/item/weapon/gun/energy/laser/redtag(Tsec)
+		var/obj/item/weapon/gun/energy/tag/red/G = new /obj/item/weapon/gun/energy/tag/red(Tsec)
 		G.power_supply.charge = 0
 
 	if (prob(50))
@@ -1034,11 +1033,11 @@ Auto Patrol: []"},
 
 			switch(lasercolor)
 				if("b")
-					if( !istype(W, /obj/item/weapon/gun/energy/laser/bluetag) )
+					if( !istype(W, /obj/item/weapon/gun/energy/tag/blue) )
 						return
 					name = "bluetag ED-209 assembly"
 				if("r")
-					if( !istype(W, /obj/item/weapon/gun/energy/laser/redtag) )
+					if( !istype(W, /obj/item/weapon/gun/energy/tag/red) )
 						return
 					name = "redtag ED-209 assembly"
 				if(null)

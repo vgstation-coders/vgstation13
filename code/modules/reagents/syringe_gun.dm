@@ -51,7 +51,7 @@
 
 /obj/item/weapon/gun/syringe/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
 	if(syringes.len)
-		if(M_CLUMSY in user.mutations)
+		if(clumsy_check(user))
 			if(prob(50))
 				to_chat(user, "<span class='warning'>You accidentally shoot yourself!</span>")
 				var/obj/item/weapon/reagent_containers/syringe/S = syringes[1]

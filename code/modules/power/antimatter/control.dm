@@ -176,6 +176,8 @@
 				"You secure the anchor bolts to the floor.", \
 				"You hear a ratchet")
 			src.anchored = 1
+			update_shield_icons = 2
+			check_shield_icons()
 			connect_to_network()
 		else if(!linked_shielding.len > 0)
 			playsound(get_turf(src), 'sound/items/Ratchet.ogg', 75, 1)
@@ -224,7 +226,8 @@
 		return 0
 	if(!AMS_linking && !AMS.link_control(src))
 		return 0
-	linked_shielding.Add(AMS)
+	if(!(AMS in linked_shielding))
+		linked_shielding.Add(AMS)
 	update_shield_icons = 1
 	return 1
 
@@ -264,12 +267,16 @@
 		return
 	shield_icon_delay = 1
 	if(update_shield_icons == 2)//2 means to clear everything and rebuild
+		for(var/obj/machinery/am_shielding/neighbor in cardinalrange(loc))
+			if(!neighbor.control_unit)
+				linked_shielding += neighbor
 		for(var/obj/machinery/am_shielding/AMS in linked_shielding)
 			if(AMS.processing)
 				AMS.shutdown_core()
 			AMS.control_unit = null
 			spawn(10)
 				AMS.controllerscan()
+				AMS.assimilate()
 		linked_shielding = list()
 
 	else

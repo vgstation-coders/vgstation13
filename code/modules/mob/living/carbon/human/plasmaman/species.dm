@@ -4,11 +4,9 @@
 	deform = 'icons/mob/human_races/r_plasmaman_pb.dmi'  // TODO: Need deform.
 	known_languages = list(LANGUAGE_CLATTER)
 	attack_verb = "punches"
-	has_sweat_glands = 0
 
-	//flags = IS_WHITELISTED /*| HAS_LIPS | HAS_TAIL | NO_EAT | NO_BREATHE | NON_GENDERED*/ | NO_BLOOD
-	// These things are just really, really griefy. IS_WHITELISTED removed for now - N3X
-	flags = NO_BLOOD|IS_WHITELISTED
+	flags = IS_WHITELISTED | PLASMA_IMMUNE
+	anatomy_flags = NO_BLOOD
 
 	//default_mutations=list(SKELETON) // This screws things up
 	primitive = /mob/living/carbon/monkey/skellington/plasma

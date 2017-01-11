@@ -140,23 +140,13 @@ var/savefile/panicfile
 	send2mainirc("Server starting up on [config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]")
 	send2maindiscord("**Server starting up** on `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`. Map is **[map.nameLong]**")
 
-	processScheduler = new
-	master_controller = new /datum/controller/game_controller()
-
 	spawn(1)
 		turfs = new/list(maxx*maxy*maxz)
 		world.log << "DEBUG: TURFS LIST LENGTH [turfs.len]"
 		build_turfs_list()
 
-		processScheduler.deferSetupFor(/datum/controller/process/ticker)
-		processScheduler.setup()
-
-		master_controller.setup()
-
-		setup_species()
-		setup_shuttles()
-
-		stat_collection.artifacts_discovered = 0 // Because artifacts during generation get counted otherwise!
+		spawn(9)
+			Master.Setup()
 
 	for(var/plugin_type in typesof(/plugin))
 		var/plugin/P = new plugin_type()
@@ -275,7 +265,7 @@ var/savefile/panicfile
 				fcopy(vote.chosen_map, filename)
 			sleep(60)
 
-	processScheduler.stop()
+	Master.Shutdown()
 	paperwork_stop()
 
 	spawn()

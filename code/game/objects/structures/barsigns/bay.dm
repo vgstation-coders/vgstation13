@@ -87,3 +87,58 @@
 /datum/barsign/bay/theredshirt
 	name = "The Redshirt"
 	icon = "theredshirt"
+
+
+/datum/barsign/bay/drunkcarp
+	name = "The Drunk Carp"
+	icon = "drunkcarp"
+
+
+/datum/barsign/bay/singulo
+	name = "The Singulo"
+	icon = "singulo"
+
+
+/datum/barsign/bay/willy
+	name = "Scotch Servin' Willys"
+	icon = "willy"
+
+
+/datum/barsign/bay/harmbaton
+	name = "The Harmbaton"
+	icon = "harmbaton"
+
+
+/datum/barsign/bay/bark
+	name = "The Bark"
+	icon = "bark"
+
+/datum/barsign/bay/topmen
+	name = "Top Men"
+	icon = "topmen"
+	pixel_x = -16
+	pixel_y = -31
+
+/datum/barsign/bay/spaceballgrille
+	name = "Spaceball Grille"
+	icon = "spaceballgrille"
+	pixel_x = -16
+	pixel_y = -31
+
+/datum/barsign/bay/clubee
+	name = "Club Bee"
+	icon = "clubee"
+	pixel_x = -16
+	pixel_y = -31
+
+///datum/barsign/bay/cybersylph
+//	name = "Cyber Sylph's"
+//	icon = "cybersylph"
+//	pixel_x = -16
+//	pixel_y = -32
+
+/datum/barsign/bay/thesun
+	name = "The Sun"
+	icon = "thesun"
+	pixel_x = -16
+	pixel_y = -31

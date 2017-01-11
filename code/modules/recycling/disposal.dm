@@ -554,7 +554,7 @@
 		AM.forceMove(src)
 		if(istype(AM, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = AM
-			if(((M_FAT in H.mutations) && (H.species && H.species.flags & CAN_BE_FAT)) || H.species.flags & IS_BULKY)		// is a human and fat?
+			if(((M_FAT in H.mutations) && (H.species && H.species.anatomy_flags & CAN_BE_FAT)) || H.species.anatomy_flags & IS_BULKY)		// is a human and fat?
 				has_fat_guy = 1			// set flag on holder
 		if(istype(AM, /obj/item/delivery/large) && !hasmob)
 			var/obj/item/delivery/large/T = AM
@@ -641,10 +641,16 @@
 
 // called when player tries to move while in a pipe
 /obj/structure/disposalholder/relaymove(mob/user as mob)
+	//testing("src.loc=[src.loc]")
+	//testing("user.stat=[user.stat]")
 	if (user.stat)
 		return
+	//testing("Passed statcheck")
 	if (src.loc)
-		for (var/mob/M in hearers(src.loc.loc))
+		for (var/mob/M in hearers(get_turf(src)))
+			if(M.clong_delayer.blocked()) continue
+			M.clong_delayer.setDelay(10)
+			//testing("SENDING CLONG")
 			to_chat(M, "<FONT size=[max(0, 5 - get_dist(src, M))]>CLONG, clong!</FONT>")
 
 	playsound(get_turf(src), 'sound/effects/clang.ogg', 50, 0, 0)

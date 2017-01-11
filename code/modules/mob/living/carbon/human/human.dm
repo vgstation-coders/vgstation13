@@ -242,34 +242,7 @@
 			stat("Spacepod Integrity", "[!S.health ? "0" : "[(S.health / initial(S.health)) * 100]"]%")
 
 /mob/living/carbon/human/attack_animal(mob/living/simple_animal/M as mob)
-	if(M.melee_damage_upper == 0)
-		M.emote("[M.friendly] [src]")
-	else
-
-		if(!iscarbon(M))
-			LAssailant = null
-		else
-			LAssailant = M
-		if(M.attack_sound)
-			playsound(loc, M.attack_sound, 50, 1, 1)
-
-		add_logs(M, src, "attacked", admin = M.ckey ? TRUE : FALSE) //Only add this to the server logs if they're controlled by a player.
-
-		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-		var/dam_zone = pick(organs_by_name)
-
-		if(M.zone_sel && M.zone_sel.selecting)
-			dam_zone = M.zone_sel.selecting
-
-		if(check_shields(damage)) //Shield check
-			return
-
-		var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
-		var/armor = run_armor_check(affecting, "melee") //Armor check
-
-		apply_damage(damage, M.melee_damage_type, affecting, armor)
-		src.visible_message("<span class='danger'>[M] [M.attacktext] [src] in \the [affecting.display_name]!</span>")
-
+	M.unarmed_attack_mob(src)
 
 /mob/living/carbon/human/proc/is_loyalty_implanted(mob/living/carbon/human/M)
 	for(var/L in M.contents)
@@ -280,74 +253,7 @@
 	return 0
 
 /mob/living/carbon/human/attack_slime(mob/living/carbon/slime/M as mob)
-	if(M.Victim)
-		return // can't attack while eating!
-
-	if (health > -100)
-
-		for(var/mob/O in viewers(src, null))
-			if ((O.client && !( O.blinded )))
-				O.show_message(text("<span class='danger'>The [M.name] glomps []!</span>", src), 1)
-		add_logs(M, src, "glomped on", 0)
-		var/damage = rand(1, 3)
-
-		if(istype(M, /mob/living/carbon/slime/adult))
-			damage = rand(10, 35)
-		else
-			damage = rand(5, 25)
-
-
-		var/dam_zone = pick(organs_by_name)
-
-		var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
-		var/armor_block = run_armor_check(affecting, "melee")
-		apply_damage(damage, BRUTE, affecting, armor_block)
-
-
-		if(M.powerlevel > 0)
-			var/stunprob = 10
-			var/power = M.powerlevel + rand(0,3)
-
-			switch(M.powerlevel)
-				if(1 to 2)
-					stunprob = 20
-				if(3 to 4)
-					stunprob = 30
-				if(5 to 6)
-					stunprob = 40
-				if(7 to 8)
-					stunprob = 60
-				if(9)
-					stunprob = 70
-				if(10)
-					stunprob = 95
-
-			if(prob(stunprob))
-				M.powerlevel -= 3
-				if(M.powerlevel < 0)
-					M.powerlevel = 0
-
-				for(var/mob/O in viewers(src, null))
-					if ((O.client && !( O.blinded )))
-						O.show_message(text("<span class='danger'>The [M.name] has shocked []!</span>", src), 1)
-
-				Knockdown(power)
-				if (stuttering < power)
-					stuttering = power
-				Stun(power)
-
-				var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
-				s.set_up(5, 1, src)
-				s.start()
-
-				if (prob(stunprob) && M.powerlevel >= 8)
-					adjustFireLoss(M.powerlevel * rand(6,10))
-
-
-		updatehealth()
-
-	return
-
+	M.unarmed_attack_mob(src)
 
 /mob/living/carbon/human/restrained()
 	if (timestopped)
@@ -1060,7 +966,7 @@
 	var/datum/organ/external/head/h = organs_by_name[LIMB_HEAD]
 	h.disfigured = 0
 
-	if(species && !(species.flags & NO_BLOOD))
+	if(species && !(species.anatomy_flags & NO_BLOOD))
 		vessel.add_reagent(BLOOD,560-vessel.total_volume)
 		fixblood()
 
@@ -1235,7 +1141,7 @@
 
 	selection.forceMove(get_turf(src))
 	affected.implants -= selection
-	shock_stage+=10
+	pain_shock_stage+=10
 
 	for(var/obj/item/weapon/O in pinned)
 		if(O == selection)
@@ -1483,16 +1389,16 @@
 		if(lasercolor == "b")//Lasertag turrets target the opposing team.
 			if(istype(wear_suit, /obj/item/clothing/suit/redtag))
 				threatcount += 4
-			if(find_held_item_by_type(/obj/item/weapon/gun/energy/laser/redtag))
+			if(find_held_item_by_type(/obj/item/weapon/gun/energy/tag/red))
 				threatcount += 4
-			if(istype(belt, /obj/item/weapon/gun/energy/laser/redtag))
+			if(istype(belt, /obj/item/weapon/gun/energy/tag/red))
 				threatcount += 2
 		if(lasercolor == "r")
 			if(istype(wear_suit, /obj/item/clothing/suit/bluetag))
 				threatcount += 4
-			if(find_held_item_by_type(/obj/item/weapon/gun/energy/laser/bluetag))
+			if(find_held_item_by_type(/obj/item/weapon/gun/energy/tag/blue))
 				threatcount += 4
-			if(istype(belt, /obj/item/weapon/gun/energy/laser/bluetag))
+			if(istype(belt, /obj/item/weapon/gun/energy/tag/blue))
 				threatcount += 2
 		return threatcount
 	//Check for ID
@@ -1753,10 +1659,13 @@
 	..()
 
 /mob/living/carbon/human/is_fat()
-	return (M_FAT in mutations) && (species && species.flags & CAN_BE_FAT)
+	return (M_FAT in mutations) && (species && species.anatomy_flags & CAN_BE_FAT)
 
 /mob/living/carbon/human/feels_pain()
 	if(!species)
 		return FALSE
-
-	return !(species.flags & NO_PAIN)
+	if(species.flags & NO_PAIN)
+		return FALSE
+	if(pain_numb)
+		return FALSE
+	return TRUE

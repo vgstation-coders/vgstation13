@@ -318,7 +318,7 @@ var/list/uplink_items = list()
 //IAA - Internal Affairs Agent
 /datum/uplink_item/jobspecific/briefcase_smg
 	name = "Concealed SMG"
-	desc = "A modified briefcase capable of storing and firing a gun under a false bottom. Starts with an internal SMG and 18 rounds. Use a screwdriver to pry away the false bottom and make modifications."
+	desc = "A modified briefcase capable of storing and firing a gun under a false bottom. Starts with an internal SMG and 18 rounds. Use a screwdriver to pry away the false bottom and make modifications. Distinguishable upon close examination due to the added weight."
 	item = /obj/item/weapon/storage/briefcase/false_bottomed/smg
 	cost = 12
 	job = list("Internal Affairs Agent")
@@ -362,7 +362,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/dangerous/revolver
 	name = "Fully Loaded Revolver"
-	desc = "A traditional handgun which fires .357 rounds. Has 7 chambers. Can down an unarmoured target with two shots."
+	desc = "A traditional handgun which fires .357 rounds. Has 7 chambers. Can down an unarmored target with two shots."
 	item = /obj/item/weapon/gun/projectile
 	cost = 13
 
@@ -411,7 +411,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/stealthy_weapons/para_pen
 	name = "Paralysis Pen"
-	desc = "A syringe disguised as a functional pen, filled with a neuromuscular-blocking drug that renders a target immobile on injection and makes them appear dead to observers and scanners. Side effects of the drug include noticeable drooling. The pen holds one dose of paralyzing agent, and cannot be refilled."
+	desc = "A syringe disguised as a functional pen, filled with a neuromuscular-blocking drug that renders a target immobile on injection and makes them appear dead to observers and scanners. Side effects of the drug include increased toxicity in the victim. The pen holds one dose of paralyzing agent, and cannot be refilled."
 	item = /obj/item/weapon/pen/paralysis
 	cost = 8
 

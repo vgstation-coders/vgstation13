@@ -148,7 +148,6 @@ var/list/admin_verbs_server = list(
 var/list/admin_verbs_debug = list(
 	/client/proc/gc_dump_hdl,
 	/client/proc/debug_pooling,
-	/client/proc/getSchedulerContext,
 	/client/proc/cmd_admin_list_open_jobs,
 	/proc/getbrokeninhands,
 	/client/proc/Debug2,
@@ -187,9 +186,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/check_convertables,
 	/client/proc/check_spiral,
 	/client/proc/cmd_admin_find_bad_blood_tracks,
-#ifdef PROFILE_MACHINES
-	/client/proc/cmd_admin_dump_macprofile,
-#endif
 	/client/proc/debugNatureMapGenerator,
 	/client/proc/callatomproc,
 	/client/proc/view_runtimes
@@ -1285,4 +1281,3 @@ var/list/admin_verbs_mod = list(
 	else
 		alert(src, "An external server error has occurred. Please report this.")
 		return 0
-

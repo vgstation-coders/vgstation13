@@ -4,8 +4,8 @@ sudo: false
 
 env:
     global:
-    - BYOND_MAJOR="510"
-    - BYOND_MINOR="1345"
+    - BYOND_MAJOR="511"
+    - BYOND_MINOR="1363"
     matrix:
     - DM_MAPFILE="tgstation"
     - DM_MAPFILE="metaclub"
@@ -27,8 +27,8 @@ addons:
       - libstdc++6:i386
 
 install:
-  - pip install --user PyYaml -q --download-cache $HOME/.pip-cache
-  - pip install --user beautifulsoup4 -q --download-cache $HOME/.pip-cache
+  - pip install --user PyYaml -q
+  - pip install --user beautifulsoup4 -q
 
 before_script:
   - chmod +x ./dm.sh

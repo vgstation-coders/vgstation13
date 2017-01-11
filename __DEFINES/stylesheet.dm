@@ -28,10 +28,10 @@ em						{font-style: normal;	font-weight: bold;}
 .centradio				{color: #5C5C8A;}
 .secradio				{color: #A30000;}
 .engradio				{color: #A66300;}
-.medradio				{color: #008160;}
+.medradio				{color: #3399CC;}
 .sciradio				{color: #993399;}
 .supradio				{color: #5F4519;}
-.serradio				{color: #3399CC;}
+.serradio				{color: #A17A4E;}
 .djradio				{color: #663300;}
 .binaryradio			{color: #300050;	font-family: 'Courier New', Courier, monospace;}
 .mommiradio				{color: navy;}
@@ -48,6 +48,7 @@ h1.alert, h2.alert		{color: #000000;}
 .warning				{color: #ff0000;	font-style: italic;}
 .sinister				{color: #800080;	font-weight: bold;	font-style: italic;} /* /vg/ */
 .blob					{color: #006221;	font-weight: bold;	font-style: italic;}
+.numb					{color: transparent;font-weight: bold;	text-shadow: 0 0 2px rgba(0,161,161,0.5);} /* blurry text */
 .confirm				{color: #00af3b;}
 .rose					{color: #ff5050;}
 .info					{color: #0000CC;}

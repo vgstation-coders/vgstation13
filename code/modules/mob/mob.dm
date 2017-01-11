@@ -4,19 +4,6 @@
 /mob
 	plane = MOB_PLANE
 
-/obj/screen/fuckstat
-	name = "Toggle Stat"
-	desc = "Fuck It"
-	icon = 'icons/fuckstat.dmi'
-	icon_state = "fuckstat"
-
-/obj/screen/fuckstat/Click()
-	var/mob/M = usr
-	if(!istype(M))
-		return
-	M.stat_fucked = !M.stat_fucked
-
-var/global/obj/screen/fuckstat/FUCK = new
 /mob/recycle(var/datum/materials)
 	return RECYK_BIOLOGICAL
 
@@ -423,6 +410,7 @@ var/global/obj/screen/fuckstat/FUCK = new
 	return 0
 
 /mob/proc/Life()
+	set waitfor = FALSE
 	if(timestopped)
 		return 0 //under effects of time magick
 	if(spell_masters && spell_masters.len)
@@ -670,7 +658,7 @@ var/list/slot_equipment_priority = list( \
 			if(slot_wear_mask)
 				if( !(slot_flags & SLOT_MASK) )
 					return 0
-//				if(H.species.flags & IS_BULKY)
+//				if(H.species.anatomy_flags & IS_BULKY)
 //					to_chat(H, "<span class='warning'>You can't get \the [src] to fasten around your thick head!</span>")
 //					return 0
 				if(H.wear_mask)
@@ -688,7 +676,7 @@ var/list/slot_equipment_priority = list( \
 			if(slot_wear_suit)
 				if( !(slot_flags & SLOT_OCLOTHING) )
 					return 0
-//				if(H.species.flags & IS_BULKY)
+//				if(H.species.anatomy_flags & IS_BULKY)
 //					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
 //					return 0
 				if(H.wear_suit)
@@ -700,7 +688,7 @@ var/list/slot_equipment_priority = list( \
 			if(slot_gloves)
 				if( !(slot_flags & SLOT_GLOVES) )
 					return 0
-//				if(H.species.flags & IS_BULKY)
+//				if(H.species.anatomy_flags & IS_BULKY)
 //					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky fingers!</span>")
 //					return 0
 				if(H.gloves)
@@ -712,7 +700,7 @@ var/list/slot_equipment_priority = list( \
 			if(slot_shoes)
 				if( !(slot_flags & SLOT_FEET) )
 					return 0
-//				if(H.species.flags & IS_BULKY)
+//				if(H.species.anatomy_flags & IS_BULKY)
 //					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky feet!</span>")
 //					return 0
 				if(H.shoes)
@@ -764,9 +752,9 @@ var/list/slot_equipment_priority = list( \
 			if(slot_w_uniform)
 				if( !(slot_flags & SLOT_ICLOTHING) )
 					return 0
-				if((M_FAT in H.mutations) && (H.species && H.species.flags & CAN_BE_FAT) && !(clothing_flags & ONESIZEFITSALL))
+				if((M_FAT in H.mutations) && (H.species && H.species.anatomy_flags & CAN_BE_FAT) && !(clothing_flags & ONESIZEFITSALL))
 					return 0
-//				if(H.species.flags & IS_BULKY && !(clothing_flags & ONESIZEFITSALL))
+//				if(H.species.anatomy_flags & IS_BULKY && !(clothing_flags & ONESIZEFITSALL))
 //					to_chat(H, "<span class='warning'>You can't get \the [src] to fit over your bulky exterior!</span>")
 //					return 0
 				if(H.w_uniform)
@@ -927,13 +915,19 @@ var/list/slot_equipment_priority = list( \
 	if(istype(A, /obj/effect/decal/point))
 		return 0
 
+	if(istype(A, /mob/living/simple_animal))
+		var/mob/living/simple_animal/pointed_at_mob = A
+		pointed_at_mob.pointed_at(src)
+
 	var/tile = get_turf(A)
 
 	if(!tile)
 		return 0
 
-	var/obj/point = new/obj/effect/decal/point(tile)
+	var/obj/effect/decal/point/point = new/obj/effect/decal/point(tile)
 	point.invisibility = invisibility
+	point.pointer = src
+	point.target = A
 	spawn(20)
 		if(point)
 			qdel(point)
@@ -1332,78 +1326,26 @@ var/list/slot_equipment_priority = list( \
 /mob/Stat()
 	..()
 
-	if(client && client.holder && client.inactivity < (1200))
+	if(client && client.holder && client.inactivity < 1200)
+		if(statpanel("MC"))
+			stat("Location:", "([x], [y], [z])")
+			stat("CPU:", "[world.cpu]")
+			stat("Instances:", "[world.contents.len]")
 
-		if (statpanel("Status"))	//not looking at that panel
-			stat(null, "Location:\t([x], [y], [z])")
-			stat(null, "CPU:\t[world.cpu]")
-			stat(null, "Instances:\t[world.contents.len]")
-			stat(null, FUCK)
-			if(!src.stat_fucked)
-				if (garbageCollector)
-					stat(null, "\tqdel - [garbageCollector.del_everything ? "off" : "on"]")
-					stat(null, "\ton queue - [garbageCollector.queue.len]")
-					stat(null, "\ttotal delete - [garbageCollector.dels_count]")
-					stat(null, "\tsoft delete - [soft_dels]")
-					stat(null, "\thard delete - [garbageCollector.hard_dels]")
-				else
-					stat(null, "Garbage Controller is not running.")
+			stat(null)
+			if(Master)
+				Master.stat_entry()
+			else
+				stat("Master Controller:", "ERROR")
+			if(Failsafe)
+				Failsafe.stat_entry()
+			else
+				stat("Failsafe Controller:", "ERROR")
+			if(Master)
+				stat(null)
+				for(var/datum/subsystem/SS in Master.subsystems)
+					SS.stat_entry()
 
-				if(processScheduler && processScheduler.getIsRunning())
-					var/datum/controller/process/process
-
-					process = processScheduler.getProcess("vote")
-					stat(null, "VOT\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("air")
-					stat(null, "AIR\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("sun")
-					stat(null, "SUN\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("ticker")
-					stat(null, "TIC\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("garbage")
-					stat(null, "GAR\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("lighting")
-					stat(null, "LIG\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("supply shuttle")
-					stat(null, "SUP\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("emergency shuttle")
-					stat(null, "EME\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("inactivity")
-					stat(null, "IAC\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("mob")
-					stat(null, "MOB([mob_list.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("disease")
-					stat(null, "DIS([active_diseases.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("machinery")
-					stat(null, "MAC([machines.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("power")
-					stat(null, "POM([power_machines.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("obj")
-					stat(null, "OBJ([processing_objects.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("pipenet")
-					stat(null, "PIP([pipe_networks.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("nanoui")
-					stat(null, "NAN([nanomanager.processing_uis.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-
-					process = processScheduler.getProcess("event")
-					stat(null, "EVE([events.len])\t - #[process.getTicks()]\t - [process.getLastRunTime()]")
-				else
-					stat(null, "processScheduler is not running.")
 	if(client && client.inactivity < (1200))
 		if(listed_turf)
 			if(get_dist(listed_turf,src) > 1)

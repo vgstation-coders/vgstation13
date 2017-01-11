@@ -95,7 +95,7 @@
 		..()
 
 /obj/item/weapon/melee/baton/attack_self(mob/user)
-	if(status && (M_CLUMSY in user.mutations) && prob(50))
+	if(status && clumsy_check(user) && prob(50))
 		user.simple_message("<span class='warning'>You grab the [src] on the wrong side.</span>",
 			"<span class='danger'>The [name] blasts you with its power!</span>")
 		user.Knockdown(stunforce*3)
@@ -120,7 +120,7 @@
 	add_fingerprint(user)
 
 /obj/item/weapon/melee/baton/attack(mob/M, mob/user)
-	if(status && (M_CLUMSY in user.mutations) && prob(50))
+	if(status && clumsy_check(user) && prob(50))
 		user.simple_message("<span class='danger'>You accidentally hit yourself with [src]!</span>",
 			"<span class='danger'>The [name] goes mad!</span>")
 		user.Knockdown(stunforce*3)

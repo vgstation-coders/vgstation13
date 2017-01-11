@@ -95,7 +95,7 @@
 	modePlayer += head_revolutionaries
 
 	if(emergency_shuttle)
-		emergency_shuttle.always_fake_recall = 1
+		emergency_shuttle.always_fake_recall = 0
 
 	spawn (rand(waittime_l, waittime_h))
 		if(!mixed)
@@ -145,11 +145,6 @@
 /datum/game_mode/revsquad/proc/equip_revsquad(mob/living/carbon/human/mob)
 	if(!istype(mob))
 		return
-
-	if (mob.mind)
-		if (mob.mind.assigned_role == "Clown")
-			to_chat(mob, "Your training has allowed you to overcome your clownish nature, allowing you to wield weapons without harming yourself.")
-			mob.mutations.Remove(M_CLUMSY)
 
 	var/obj/item/T = get_revsquad_item(mob)
 

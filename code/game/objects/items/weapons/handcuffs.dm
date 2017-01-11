@@ -29,11 +29,6 @@
 		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	if((M_CLUMSY in user.mutations) && prob(50))
-		to_chat(usr, "<span class='warning'>Uh... how do these things work?!</span>")
-		handcuffs_apply(M, user, TRUE)
-		return
-
 	if(M.handcuffed)
 		return
 
@@ -68,6 +63,10 @@
 			feedback_add_details("handcuffs", "C")
 		else
 			feedback_add_details("handcuffs", "H")
+
+		if(clumsy_check(user) && prob(50))
+			to_chat(user, "<span class='warning'>Uh... how do these things work?!</span>")
+			C = user
 
 		user.visible_message("<span class='danger'>\The [user] has put \the [src] on \the [C]!</span>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has put \the [src] on [C.name] ([C.ckey])</font>")
