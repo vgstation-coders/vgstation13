@@ -1033,7 +1033,7 @@ var/list/datum/dna/hivemind_bank = list()
 		to_chat(target, "<span class='info'>You feel a weird sensation in your ears.</span>")
 		return
 
-	to_chat(target, "<span class='notice'>Everything becomes quiet!</span>")
+	to_chat(target, "<span class='notice'>The world around you suddenly becomes quiet.</span>")
 	target.disabilities |= DEAF
 	spawn(300)
 		target.disabilities &= ~DEAF
