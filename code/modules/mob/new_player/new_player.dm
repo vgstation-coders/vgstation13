@@ -77,7 +77,7 @@
 		else
 			stat("Game Mode:", "[master_mode]")
 
-		if(master_controller.initialized)
+		if(SSticker.initialized)
 			if((ticker.current_state == GAME_STATE_PREGAME) && going)
 				stat("Time To Start:", (round(ticker.pregame_timeleft - world.timeofday) / 10)) //rounding because people freak out at decimals i guess
 			if((ticker.current_state == GAME_STATE_PREGAME) && !going)
@@ -85,7 +85,7 @@
 		else
 			stat("Time To Start:", "LOADING...")
 
-		if(master_controller.initialized && ticker.current_state == GAME_STATE_PREGAME)
+		if(SSticker.initialized && ticker.current_state == GAME_STATE_PREGAME)
 			stat("Players: [totalPlayers]", "Players Ready: [totalPlayersReady]")
 			totalPlayers = 0
 			totalPlayersReady = 0

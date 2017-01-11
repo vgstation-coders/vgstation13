@@ -200,6 +200,7 @@ Class Procs:
 	return PROJREACT_OBJS
 
 /obj/machinery/process() // If you dont use process or power why are you here
+	set waitfor = FALSE
 	return PROCESS_KILL
 
 /obj/machinery/emp_act(severity)
