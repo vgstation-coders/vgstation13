@@ -755,7 +755,7 @@ var/global/mulebot_count = 0
 
 // called from mob/living/carbon/human/Crossed() as well as .../alien/Crossed()
 /obj/machinery/bot/mulebot/proc/RunOverCreature(var/mob/living/H,var/bloodcolor)
-	if(coolingdown)
+	if(integratedpai && coolingdown)
 		return
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bot/mulebot/proc/RunOverCreature() called tick#: [world.time]")
 	src.visible_message("<span class='warning'>[src] drives over [H]!</span>")
