@@ -190,3 +190,45 @@
 		H.b_hair = color_b
 	H.update_hair()
 	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
+
+#define INVISIBLESPRAY "invisiblespray"
+
+/obj/item/weapon/invisible_spray
+	name = "can of invisible spray"
+	desc = "A can of... invisibility? The label reads: \"Wears off after five minutes.\""
+	icon = 'icons/obj/items.dmi'
+	icon_state = "invisible_spray"
+	flags = FPRINT
+	w_class = W_CLASS_SMALL
+	var/invisible_time = 5 MINUTES
+	var/sprays_left = 1
+
+/obj/item/weapon/invisible_spray/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if (!proximity_flag)
+		return 0
+	if(istype(target, /turf))
+		return
+	if(!sprays_left)
+		to_chat(user, "\The [src] is empty.")
+		return
+	if(target.invisibility || target.alpha <= 1)
+		to_chat(user, "\The [target] is already invisible!")
+		return
+	if(istype(target, /mob))
+		var/mob/M = target
+		M.alpha = 1	//to cloak immediately instead of on the next Life() tick
+		M.alphas[INVISIBLESPRAY] = 1
+		spawn(invisible_time)
+			M.alpha = initial(M.alpha)
+			M.alphas.Remove(INVISIBLESPRAY)
+	else
+		target.alpha = 1
+		spawn(invisible_time)
+			target.alpha = initial(target.alpha)
+	if(target == user)
+		to_chat(user, "You spray yourself with \the [src].")
+	else
+		to_chat(user, "You spray \the [target] with \the [src].")
+	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
+	sprays_left--
+	return 1
