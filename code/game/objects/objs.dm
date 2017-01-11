@@ -48,6 +48,11 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	if(src in processing_objects)
 		processing_objects -= src
 
+	if(integratedpai)
+		integratedpai.forceMove(get_turf(src))
+		integratedpai = null
+		verbs -= /obj/verb/remove_pai
+
 	..()
 
 /obj/item/proc/is_used_on(obj/O, mob/user)
