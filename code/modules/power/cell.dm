@@ -107,8 +107,8 @@
 	message_admins("LOG: Rigged power cell explosion, last touched by [fingerprintslast]")
 
 	explosion(T, devastation_range, heavy_impact_range, light_impact_range, flash_range)
-
-	spawn(1)
+	if(!gcDestroyed)
+		charge = 0
 		qdel(src)
 
 /obj/item/weapon/cell/proc/corrupt()
