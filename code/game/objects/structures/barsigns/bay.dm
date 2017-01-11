@@ -131,11 +131,11 @@
 	pixel_x = -16
 	pixel_y = -31
 
-/datum/barsign/bay/cybersylph
-	name = "Cyber Sylph's"
-	icon = "cybersylph"
-	pixel_x = -16
-	pixel_y = -32
+///datum/barsign/bay/cybersylph
+//	name = "Cyber Sylph's"
+//	icon = "cybersylph"
+//	pixel_x = -16
+//	pixel_y = -32
 
 /datum/barsign/bay/thesun
 	name = "The Sun"
