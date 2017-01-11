@@ -66,7 +66,7 @@ var/global/mulebot_count = 0
 
 	var/bloodiness = 0		// count of bloodiness
 	var/currentBloodColor = DEFAULT_BLOOD
-	var/run_over_cooldown = 2 SECONDS	//how often a pAI-controlled MULEbot can damage a mob by running over them
+	var/run_over_cooldown = 3 SECONDS	//how often a pAI-controlled MULEbot can damage a mob by running over them
 	var/coolingdown = FALSE
 
 /obj/machinery/bot/mulebot/New()
@@ -741,8 +741,12 @@ var/global/mulebot_count = 0
 			else
 				src.visible_message("<span class='warning'>[src] knocks over [M]!</span>")
 				M.stop_pulling()
-				M.Stun(8)
-				M.Knockdown(5)
+				if(integratedpai)
+					M.Stun(4)
+					M.Knockdown(2)
+				else
+					M.Stun(8)
+					M.Knockdown(5)
 				M.lying = 1
 	..()
 
@@ -757,6 +761,8 @@ var/global/mulebot_count = 0
 	src.visible_message("<span class='warning'>[src] drives over [H]!</span>")
 	playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1)
 	var/damage = rand(5,15)
+	if(integratedpai)
+		damage = round(damage/3.33)
 	H.apply_damage(2*damage, BRUTE, LIMB_HEAD)
 	H.apply_damage(2*damage, BRUTE, LIMB_CHEST)
 	H.apply_damage(0.5*damage, BRUTE, LIMB_LEFT_LEG)
