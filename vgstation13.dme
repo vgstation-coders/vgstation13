@@ -17,6 +17,7 @@
 #include "__DEFINES\global.dm"
 #include "__DEFINES\lighting.dm"
 #include "__DEFINES\limb_defines.dm"
+#include "__DEFINES\math.dm"
 #include "__DEFINES\pipes.dm"
 #include "__DEFINES\planes+layers.dm"
 #include "__DEFINES\reagents.dm"
