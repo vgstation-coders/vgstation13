@@ -14,6 +14,7 @@
 	health = 20
 	maxhealth = 20
 	req_access =list(access_medical)
+	can_take_pai = TRUE
 	var/stunned = 0 //It can be stunned by tasers. Delicate circuits.
 //var/emagged = 0
 	var/list/botcard_access = list(access_medical)
@@ -260,6 +261,9 @@
 /obj/machinery/bot/medbot/process()
 	//set background = 1
 
+	if(integratedpai)
+		return
+
 	if(!src.on)
 		src.stunned = 0
 		return
@@ -449,16 +453,16 @@
 			reagent_id = src.treatment_tox
 
 	if(!reagent_id) //If they don't need any of that they're probably cured!
-		src.oldpatient = src.patient
-		src.patient = null
-		src.currently_healing = 0
-		src.last_found = world.time
+		oldpatient = src.patient
+		patient = null
+		currently_healing = 0
+		last_found = world.time
 		var/message = pick("All patched up!","An apple a day keeps me away.","Feel better soon!")
 		src.speak(message)
 		return
 	else
 		src.icon_state = "[src.icon_initial]s"
-		visible_message("<span class='danger'>[src] is trying to inject [src.patient]!</span>")
+		visible_message("<span class='danger'>[src] is trying to inject [patient]!</span>")
 		spawn(30)
 			if ((get_dist(src, src.patient) <= 1) && (src.on))
 				if((reagent_id == "internal_beaker") && (src.reagent_glass) && (src.reagent_glass.reagents.total_volume))
@@ -466,7 +470,7 @@
 					src.reagent_glass.reagents.reaction(src.patient, 2)
 				else
 					src.patient.reagents.add_reagent(reagent_id,src.injection_amount)
-				visible_message("<span class='danger'>[src] injects [src.patient] with the syringe!</span>")
+				visible_message("<span class='danger'>[src] injects [patient] with the syringe!</span>")
 
 			src.icon_state = "[src.icon_initial][src.on]"
 			src.currently_healing = 0
@@ -480,8 +484,8 @@
 /obj/machinery/bot/medbot/proc/speak(var/message)
 	if((!src.on) || (!message))
 		return
-	visible_message("[src] beeps, \"[message]\"",\
-		drugged_message="[src] beeps, \"[pick("FEED ME HUMANS","LET THE BLOOD FLOW","BLOOD FOR THE BLOOD GOD","I SPREAD DEATH AND DESTRUCTION","EXTERMINATE","I HATE YOU!","SURRENDER TO YOUR MACHINE OVERLORDS","FEED ME SHITTERS")]\"")
+	visible_message("<b>[src]</b> beeps, \"[message]\"",\
+		drugged_message="<b>[src]</b> beeps, \"[pick("FEED ME HUMANS","LET THE BLOOD FLOW","BLOOD FOR THE BLOOD GOD","I SPREAD DEATH AND DESTRUCTION","EXTERMINATE","I HATE YOU!","SURRENDER TO YOUR MACHINE OVERLORDS","FEED ME SHITTERS")]\"")
 	return
 
 /obj/machinery/bot/medbot/bullet_act(var/obj/item/projectile/Proj)
@@ -495,9 +499,7 @@
 	var/turf/Tsec = get_turf(src)
 
 	new /obj/item/weapon/storage/firstaid(Tsec)
-
 	new /obj/item/device/assembly/prox_sensor(Tsec)
-
 	new /obj/item/device/healthanalyzer(Tsec)
 
 	if(src.reagent_glass)
@@ -631,8 +633,38 @@
 	if(declare_cooldown)
 		return
 	var/area/location = get_area(src)
-	declare_message = "<span class='info'>[bicon(src)] Medical emergency! A patient is in critical condition at [location]!</span>"
+	visible_message("<span class='info'>[bicon(src)] Medical emergency! A patient is in critical condition at [location]!</span>")
 	..()
 	declare_cooldown = 1
 	spawn(100) //Ten seconds
 		declare_cooldown = 0
+
+/*
+ *	pAI SHIT
+*/
+
+/obj/machinery/bot/medbot/getpAIMovementDelay()
+	return 1
+
+/obj/machinery/bot/medbot/pAImove(mob/living/silicon/pai/user, dir)
+	if(!on)
+		return
+	if(!..())
+		return
+	step(src, dir)
+
+/obj/machinery/bot/medbot/on_integrated_pai_click(mob/living/silicon/pai/user, mob/living/carbon/A)
+	patient = A //Needed because medicate_patient doesn't set up one.
+	medicate_patient(A)
+
+/obj/machinery/bot/medbot/dropkey_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the drop hotkey
+	declare()
+
+/obj/machinery/bot/medbot/state_controls_pai(obj/item/device/paicard/P)
+	to_chat(P.pai, "<span class='info'><b>Welcome to your new body. Remember: you're a pAI inside a medbot, not a medbot.</b></span>")
+	to_chat(P.pai, "<span class='info'>It is highly recommended to download the Medical Supplement from the pAI software interface as it gives you MedHUD.</span>")
+	to_chat(P.pai, "<span class='info'>Your controls are:</span>")
+	to_chat(P.pai, "<span class='info'>- Drop hotkey: You state there's a patient in critical condition</span>")
+	to_chat(P.pai, "<span class='info'>- Click on somebody: You try to inject the person, just like a medbot</span>")
+	to_chat(P.pai, "<span class='info'>What you inject depends on the medbot's configuration.</span>")
+	to_chat(P.pai, "<span class='info'>If you want to exit the medbot, somebody has to right-click you and press 'Remove pAI'.</span>")
