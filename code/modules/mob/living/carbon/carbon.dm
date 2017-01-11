@@ -9,12 +9,7 @@
 	..()
 	if(istype(AM, /mob/living/carbon) && prob(10))
 		src.spread_disease_to(AM, "Contact")
-	if(virus2.len)
-		for(var/I in virus2)
-			var/datum/disease2/disease/D = virus2[I]
-			if(D.effects.len)
-				for(var/datum/disease2/effect/E in D.effects)
-					E.on_touch(src, src, AM, BUMP)
+	handle_symptom_on_touch(src, AM, BUMP)
 	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/C = AM
 		C.handle_symptom_on_touch(src, AM, BUMP)
