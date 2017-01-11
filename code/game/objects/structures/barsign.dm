@@ -64,8 +64,9 @@
 	var/datum/barsign/picked = barsigns[picked_name]
 	icon_state = picked.icon
 	name = picked.name
-	pixel_x = picked.pixel_x
-	pixel_y = picked.pixel_y
+	if(picked.pixel_x && picked.pixel_y)
+		pixel_x = picked.pixel_x * PIXEL_MULTIPLIER
+		pixel_y = picked.pixel_y * PIXEL_MULTIPLIER
 	if(picked.desc)
 		desc = picked.desc
 	else
