@@ -271,7 +271,6 @@
 	penetration_dampening = 7
 
 	var/list/languages[0]
-	var/stat_fucked = 1
 	var/event/on_spellcast
 	var/event/on_uattack
 	var/event/on_logout

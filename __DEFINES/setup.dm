@@ -568,6 +568,7 @@ var/global/list/bad_changing_colour_ckeys = list()
 #define POWEROFF	4		// tbd
 #define MAINT		8			// under maintaince
 #define EMPED		16		// temporary broken by EMP pulse
+#define FORCEDISABLE 32 //forced to be off, such as by a random event
 
 //bitflags for door switches.
 #define OPEN	1

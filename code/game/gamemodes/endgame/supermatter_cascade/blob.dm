@@ -58,7 +58,7 @@
 						continue
 					qdel(A)
 					A = null
-				tcheck(80,1)
+				CHECK_TICK
 			T.ChangeTurf(type)
 			var/turf/unsimulated/wall/supermatter/SM = T
 			if(SM.avail_dirs)

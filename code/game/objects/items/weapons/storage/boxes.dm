@@ -22,6 +22,7 @@
 /obj/item/weapon/storage/box
 	name = "box"
 	desc = "It's just an ordinary box."
+	icon = 'icons/obj/storage/smallboxes.dmi'
 	icon_state = "box"
 	item_state = "syringe_kit"
 	foldable = /obj/item/stack/sheet/cardboard	//BubbleWrap
@@ -573,7 +574,6 @@
 // TODO Change this to a box/large. - N3X
 /obj/item/weapon/storage/box/lights
 	name = "replacement bulbs"
-	icon = 'icons/obj/storage.dmi'
 	icon_state = "light"
 	desc = "This box is shaped on the inside so that only light tubes and bulbs fit."
 	item_state = "syringe_kit"

@@ -22,22 +22,22 @@ var/const/AIRLOCK_WIRE_LIGHT = 2048
 	wire_count = 12
 	window_y = 570
 
-	New()
-		wire_names=list(
-			"[AIRLOCK_WIRE_IDSCAN]"        = "ID Scan",
-			"[AIRLOCK_WIRE_MAIN_POWER1]"   = "Main Power 1",
-			"[AIRLOCK_WIRE_MAIN_POWER2]"   = "Main Power 2",
-			"[AIRLOCK_WIRE_DOOR_BOLTS]"    = "Bolts",
-			"[AIRLOCK_WIRE_BACKUP_POWER1]" = "Backup Power 1",
-			"[AIRLOCK_WIRE_BACKUP_POWER2]" = "Backup Power 2",
-			"[AIRLOCK_WIRE_OPEN_DOOR]"     = "Open",
-			"[AIRLOCK_WIRE_AI_CONTROL]"    = "AI Control",
-			"[AIRLOCK_WIRE_ELECTRIFY]"     = "Electrify",
-			"[AIRLOCK_WIRE_SAFETY]"        = "Safety",
-			"[AIRLOCK_WIRE_SPEED]"         = "Speed",
-			"[AIRLOCK_WIRE_LIGHT]"         = "Lights",
-		)
-		..()
+/datum/wires/airlock/New()
+	wire_names=list(
+		"[AIRLOCK_WIRE_IDSCAN]"        = "ID Scan",
+		"[AIRLOCK_WIRE_MAIN_POWER1]"   = "Main Power 1",
+		"[AIRLOCK_WIRE_MAIN_POWER2]"   = "Main Power 2",
+		"[AIRLOCK_WIRE_DOOR_BOLTS]"    = "Bolts",
+		"[AIRLOCK_WIRE_BACKUP_POWER1]" = "Backup Power 1",
+		"[AIRLOCK_WIRE_BACKUP_POWER2]" = "Backup Power 2",
+		"[AIRLOCK_WIRE_OPEN_DOOR]"     = "Open",
+		"[AIRLOCK_WIRE_AI_CONTROL]"    = "AI Control",
+		"[AIRLOCK_WIRE_ELECTRIFY]"     = "Electrify",
+		"[AIRLOCK_WIRE_SAFETY]"        = "Safety",
+		"[AIRLOCK_WIRE_SPEED]"         = "Speed",
+		"[AIRLOCK_WIRE_LIGHT]"         = "Lights",
+	)
+	..()
 
 /datum/wires/airlock/CanUse(var/mob/living/L)
 	if(!..())

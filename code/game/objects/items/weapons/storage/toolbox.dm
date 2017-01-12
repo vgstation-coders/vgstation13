@@ -1,7 +1,7 @@
 /obj/item/weapon/storage/toolbox
 	name = "toolbox"
 	desc = "Danger. Very robust."
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "red"
 	item_state = "toolbox_red"
 	flags = FPRINT

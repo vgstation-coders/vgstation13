@@ -315,11 +315,10 @@ var/paperwork_library
 
 
 /obj/item/weapon/pen/paralysis/New()
-	var/datum/reagents/R = new/datum/reagents(50)
+	var/datum/reagents/R = new/datum/reagents(25)
 	reagents = R
 	R.my_atom = src
 	R.add_reagent(ZOMBIEPOWDER, 10)
-	R.add_reagent(IMPEDREZENE, 25)
 	R.add_reagent(CRYPTOBIOLIN, 15)
 	..()
 	return

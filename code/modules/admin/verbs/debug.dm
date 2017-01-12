@@ -1290,29 +1290,6 @@ Pressure: [env.return_pressure()]"}
 	to_chat(usr, "<span class='notice'>Dumped to [F]</span>")
 
 #ifdef PROFILE_MACHINES
-/client/proc/cmd_admin_dump_macprofile()
-	set category = "Debug"
-	set name = "Dump Machine and Object Profiling"
-
-	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
-	var/F =file("data/logs/profiling/[date_string]_machine_profiling.csv")
-	fdel(F)
-	F << "type,nanoseconds"
-	for(var/typepath in machine_profiling)
-		var/ns = machine_profiling[typepath]
-		F << "[typepath],[ns]"
-
-	to_chat(usr, "<span class='notice'>Dumped to [F]</span>")
-	var/FF = file("data/logs/profiling/[date_string]_object_profiling.csv")
-	fdel(FF)
-	FF << "type,nanoseconds"
-	for(var/typepath in object_profiling)
-		var/ns = object_profiling[typepath]
-		FF << "[typepath],[ns]"
-
-	to_chat(usr, "<span class='notice'>Dumped to [FF].</span>")
-
-
 /client/proc/cmd_admin_dump_machine_type_list()
 	set category = "Debug"
 	set name = "Dump Machine type list"

@@ -24,7 +24,7 @@ var/global/list/battery_online =	list(
 
 /obj/machinery/power/battery/update_icon()
 	overlays.len = 0
-	if(stat & BROKEN)
+	if(stat & (BROKEN | FORCEDISABLE | EMPED))
 		return
 
 	overlays += battery_online[online + 1]
@@ -86,7 +86,8 @@ var/global/list/battery_online =	list(
 	smes_output_max = initial(smes_output_max) + lasercount*25000
 
 /obj/machinery/power/battery/process()
-	if (stat & BROKEN)
+	if(stat & (BROKEN | FORCEDISABLE | EMPED))
+		last_charge = 0
 		return
 
 	if(infinite_power) //Only used for magical machines - BEWARE
@@ -297,23 +298,10 @@ var/global/list/battery_online =	list(
 
 
 /obj/machinery/power/battery/emp_act(severity)
-
-	var/old_online = online
-	var/old_charging = charging
-	var/old_output = output
-
-	online = 0
-	charging = 0
-	output = 0
 	charge = max(0, charge - 1e6/severity)
-
+	stat |= EMPED
 	spawn(100)
-		if(output == 0)
-			output = old_output
-		if(online == 0)
-			online = old_online
-		if(charging == 0)
-			charging = old_charging
+		stat &= ~EMPED
 	..()
 
 /proc/rate_control(var/S, var/V, var/C, var/Min=1, var/Max=5, var/Limit=null)
