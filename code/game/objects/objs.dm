@@ -49,7 +49,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		processing_objects -= src
 
 	if(integratedpai)
-		integratedpai.forceMove(get_turf(src))
+		qdel(integratedpai)
 		integratedpai = null
 		verbs -= /obj/verb/remove_pai
 
