@@ -215,16 +215,32 @@
 		to_chat(user, "\The [target] is already invisible!")
 		return
 	if(istype(target, /mob))
-		var/mob/M = target
-		M.alpha = 1	//to cloak immediately instead of on the next Life() tick
-		M.alphas[INVISIBLESPRAY] = 1
-		spawn(invisible_time)
-			M.alpha = initial(M.alpha)
-			M.alphas.Remove(INVISIBLESPRAY)
+		if(istype(target, /mob/living/carbon/human) || istype(target, /mob/living/carbon/monkey))
+			var/mob/living/carbon/C = target
+			C.body_alphas[INVISIBLESPRAY] = 1
+			C.regenerate_icons()
+			spawn(invisible_time)
+				if(C)
+					C.body_alphas.Remove(INVISIBLESPRAY)
+					C.regenerate_icons()
+		else
+			var/mob/M = target
+			M.alpha = 1	//to cloak immediately instead of on the next Life() tick
+			M.alphas[INVISIBLESPRAY] = 1
+			spawn(invisible_time)
+				if(M)
+					M.alpha = initial(M.alpha)
+					M.alphas.Remove(INVISIBLESPRAY)
 	else
 		target.alpha = 1
+		if(target.loc == user)
+			user.regenerate_icons()
 		spawn(invisible_time)
-			target.alpha = initial(target.alpha)
+			if(target)
+				target.alpha = initial(target.alpha)
+				if(ismob(target.loc))
+					var/mob/M = target.loc
+					M.regenerate_icons()
 	if(target == user)
 		to_chat(user, "You spray yourself with \the [src].")
 	else

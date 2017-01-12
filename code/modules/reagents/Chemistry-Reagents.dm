@@ -374,7 +374,13 @@
 			if(E)
 				E.multiplier = max(E.multiplier - rand(1,3), 1)
 				to_chat(C, "<span class='notice'>The water quenches your dry skin.</span>")
-
+			if(ishuman(C) || ismonkey(C))
+				if(C.body_alphas[INVISIBLESPRAY])
+					C.body_alphas.Remove(INVISIBLESPRAY)
+					C.regenerate_icons()
+		else if(M.alphas[INVISIBLESPRAY])
+			M.alpha = initial(M.alpha)
+			M.alphas.Remove(INVISIBLESPRAY)
 
 	//Water now directly damages slimes instead of being a turf check
 	if(isslime(M))
