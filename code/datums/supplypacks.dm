@@ -597,6 +597,20 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "neo-Russian crate"
 	group = "Clothing"
 	contraband = 1
+	
+/datum/supply_packs/russianclothing
+	name = "Russian clothing"
+	contains = list(/obj/item/clothing/head/squatter_hat,
+					/obj/item/clothing/under/squatter_outfit,
+					/obj/item/clothing/head/russobluecamohat,
+					/obj/item/clothing/under/russobluecamooutfit,
+					/obj/item/clothing/head/russofurhat,
+					/obj/item/clothing/suit/russofurcoat)
+	cost = 50
+	containertype = /obj/structure/closet/
+	containername = "Russian Clothing"
+	group = "Clothing"
+	contraband = 1
 //////SECURITY//////
 
 /datum/supply_packs/specialops
