@@ -806,9 +806,5 @@ its easier to just keep the beam vertical.
 	return
 
 /atom/proc/toggle_timeless()
-	if(flags & TIMELESS)
-		flags &= ~TIMELESS
-		return 0
-	else
-		flags |= TIMELESS
-		return 1
+	flags ^= TIMELESS
+	return flags & TIMELESS
