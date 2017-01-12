@@ -145,7 +145,7 @@
 /obj/item/weapon/inflatable_dispenser
 	name = "inflatables dispenser"
 	desc = "A hand-held device which allows rapid deployment and removal of inflatable structures."
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "inf_deployer"
 	w_class = W_CLASS_MEDIUM
 

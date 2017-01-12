@@ -35,8 +35,11 @@ NOTE: there are two lists of areas in the end of this file: centcom and station 
 	var/always_unpowered = 0	//this gets overriden to 1 for space in area/New()
 
 	var/power_equip = 1
+	var/old_power_equip = 1
 	var/power_light = 1
+	var/old_power_light = 1
 	var/power_environ = 1
+	var/old_power_environ = 1
 	var/music = null
 	var/used_equip = 0
 	var/used_light = 0

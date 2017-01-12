@@ -102,7 +102,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 
 /datum/game_mode/malfunction/process()
 	if(apcs >= 3 && malf_mode_declared)
-		AI_win_timeleft -= ((apcs / 6) * tickerProcess.getLastTickerTimeDuration()) //Victory timer now de-increments based on how many APCs are hacked. --NeoFite
+		AI_win_timeleft -= ((apcs / 6) * SSticker.getLastTickerTimeDuration()) //Victory timer now de-increments based on how many APCs are hacked. --NeoFite
 
 	..()
 

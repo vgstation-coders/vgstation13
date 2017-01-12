@@ -69,7 +69,7 @@
 		return
 
 	var/mob/living/L = A
-	if(user.a_intent == I_HURT)//Stungloves. Any contact will stun the alien.
+	if(prox == TRUE && user.a_intent == I_HURT)//Stungloves. Any contact will stun the alien.
 		visible_message("<span class='danger'>\The [A] has been touched with the stun gloves by [user]!</span>")
 
 		if(cell.charge >= STUNGLOVES_CHARGE_COST)

@@ -534,6 +534,7 @@ nanoui is used to open and update nano browser uis
   * @return nothing
   */
 /datum/nanoui/proc/process(update = 0)
+	set waitfor = FALSE
 	if (!src_object || !user)
 		close()
 		return

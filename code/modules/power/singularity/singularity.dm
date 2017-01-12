@@ -18,7 +18,7 @@
 	icon = 'icons/obj/singularity.dmi'
 	icon_state = "singularity_s1"
 	anchored = 1
-	density = 1
+	density = 0
 	layer = SINGULARITY_LAYER
 	plane = EFFECTS_PLANE
 	luminosity = 6
@@ -91,17 +91,19 @@
 /obj/machinery/singularity/Bumped(atom/A)
 	consume(A)
 
+/obj/machinery/singularity/Crossed(atom/movable/A)
+	consume(A)
+
 /obj/machinery/singularity/process()
-	eat()
 	dissipate()
 	check_energy()
 
 	if(current_size >= 3)
 		move()
 		pulse()
-
 		if(prob(event_chance)) //Chance for it to run a special event TODO: Come up with one or two more that fit.
 			event()
+	eat()
 
 /obj/machinery/singularity/attack_ai() //To prevent AIs from gibbing themselves when they click on one.
 	return
@@ -134,6 +136,9 @@
 	if(force_size)
 		temp_allowed_size = force_size
 
+	if(temp_allowed_size <= STAGE_FIVE && growing && is_near_shield())
+		move_away_from_shield()
+
 	switch(temp_allowed_size)
 		if(STAGE_ONE)
 			current_size = 1
@@ -141,6 +146,10 @@
 			icon_state = "singularity_s1"
 			pixel_x = 0
 			pixel_y = 0
+			bound_width = WORLD_ICON_SIZE
+			bound_x = 0
+			bound_height = WORLD_ICON_SIZE
+			bound_y = 0
 			grav_pull = 4
 			consume_range = 0
 			dissipate_delay = 10
@@ -150,12 +159,16 @@
 			if(chained)
 				overlays += image(icon = icon, icon_state = "chain_s1")
 			visible_message("<span class='notice'>\The [src] shrinks to a rather pitiful size.</span>")
-		if(STAGE_TWO) //1 to 3 does not check for the turfs if you put the gens right next to a 1x1 then its going to eat them.
+		if(STAGE_TWO)
 			current_size = 3
 			icon = 'icons/effects/96x96.dmi'
 			icon_state = "singularity_s3"
 			pixel_x = -32 * PIXEL_MULTIPLIER
 			pixel_y = -32 * PIXEL_MULTIPLIER
+			bound_width = 3 * WORLD_ICON_SIZE
+			bound_x = -WORLD_ICON_SIZE
+			bound_height = 3 * WORLD_ICON_SIZE
+			bound_y = -WORLD_ICON_SIZE
 			grav_pull = 6
 			consume_range = 1
 			dissipate_delay = 5
@@ -169,49 +182,59 @@
 			else
 				visible_message("<span class='notice'>\The [src] shrinks to a less powerful size.</span>")
 		if(STAGE_THREE)
-			if((check_turfs_in(1, 2)) && (check_turfs_in(2, 2)) && (check_turfs_in(4, 2)) && (check_turfs_in(8, 2)))
-				current_size = 5
-				icon = 'icons/effects/160x160.dmi'
-				icon_state = "singularity_s5"
-				pixel_x = -64 * PIXEL_MULTIPLIER
-				pixel_y = -64 * PIXEL_MULTIPLIER
-				grav_pull = 8
-				consume_range = 2
-				dissipate_delay = 4
-				dissipate_track = 0
-				dissipate_strength = 20
-				overlays = 0
-				if(chained)
-					overlays += image(icon = icon, icon_state = "chain_s5")
-				if(growing)
-					visible_message("<span class='notice'>\The [src] expands to a reasonable size.</span>")
-				else
-					visible_message("<span class='notice'>\The [src] has returned to a safe size.</span>")
+			current_size = 5
+			icon = 'icons/effects/160x160.dmi'
+			icon_state = "singularity_s5"
+			pixel_x = -64 * PIXEL_MULTIPLIER
+			pixel_y = -64 * PIXEL_MULTIPLIER
+			bound_width = 5 * WORLD_ICON_SIZE
+			bound_x = -2 * WORLD_ICON_SIZE
+			bound_height = 5 * WORLD_ICON_SIZE
+			bound_y = -2 * WORLD_ICON_SIZE
+			grav_pull = 8
+			consume_range = 2
+			dissipate_delay = 4
+			dissipate_track = 0
+			dissipate_strength = 20
+			overlays = 0
+			if(chained)
+				overlays += image(icon = icon, icon_state = "chain_s5")
+			if(growing)
+				visible_message("<span class='notice'>\The [src] expands to a reasonable size.</span>")
+			else
+				visible_message("<span class='notice'>\The [src] has returned to a safe size.</span>")
 		if(STAGE_FOUR)
-			if((check_turfs_in(1, 3)) && (check_turfs_in(2, 3)) && (check_turfs_in(4, 3)) && (check_turfs_in(8, 3)))
-				current_size = 7
-				icon = 'icons/effects/224x224.dmi'
-				icon_state = "singularity_s7"
-				pixel_x = -96 * PIXEL_MULTIPLIER
-				pixel_y = -96 * PIXEL_MULTIPLIER
-				grav_pull = 10
-				consume_range = 3
-				dissipate_delay = 10
-				dissipate_track = 0
-				dissipate_strength = 10
-				overlays = 0
-				if(chained)
-					overlays += image(icon = icon, icon_state = "chain_s7")
-				if(growing)
-					visible_message("<span class='warning'>\The [src] expands to a dangerous size.</span>")
-				else
-					visible_message("<span class='notice'>Miraculously, \the [src] shrinks back to a containable size.</span>")
-		if(STAGE_FIVE) //This one also lacks a check for gens because it eats everything.
+			current_size = 7
+			icon = 'icons/effects/224x224.dmi'
+			icon_state = "singularity_s7"
+			pixel_x = -96 * PIXEL_MULTIPLIER
+			pixel_y = -96 * PIXEL_MULTIPLIER
+			bound_width = 7 * WORLD_ICON_SIZE
+			bound_x = -3 * WORLD_ICON_SIZE
+			bound_height = 7 * WORLD_ICON_SIZE
+			bound_y = -3 * WORLD_ICON_SIZE
+			grav_pull = 10
+			consume_range = 3
+			dissipate_delay = 10
+			dissipate_track = 0
+			dissipate_strength = 10
+			overlays = 0
+			if(chained)
+				overlays += image(icon = icon, icon_state = "chain_s7")
+			if(growing)
+				visible_message("<span class='warning'>\The [src] expands to a dangerous size.</span>")
+			else
+				visible_message("<span class='notice'>Miraculously, \the [src] shrinks back to a containable size.</span>")
+		if(STAGE_FIVE)
 			current_size = 9
 			icon = 'icons/effects/288x288.dmi'
 			icon_state = "singularity_s9"
 			pixel_x = -128 * PIXEL_MULTIPLIER
 			pixel_y = -128 * PIXEL_MULTIPLIER
+			bound_width = 9 * WORLD_ICON_SIZE
+			bound_x = -4 * WORLD_ICON_SIZE
+			bound_height = 9 * WORLD_ICON_SIZE
+			bound_y = -4 * WORLD_ICON_SIZE
 			grav_pull = 10
 			consume_range = 4
 			dissipate = 0 //It cant go smaller due to energy loss.
@@ -233,6 +256,10 @@
 			icon_state = "singularity_s11" //Uh, whoever drew that, you know that black holes are supposed to look dark right? What's this, the clown's singulo?
 			pixel_x = -160 * PIXEL_MULTIPLIER
 			pixel_y = -160 * PIXEL_MULTIPLIER
+			bound_width = 11 * WORLD_ICON_SIZE
+			bound_x = -5 * WORLD_ICON_SIZE
+			bound_height = 11 * WORLD_ICON_SIZE
+			bound_y = -5 * WORLD_ICON_SIZE
 			grav_pull = 16
 			consume_range = 5
 			dissipate = 0 //It cant go smaller due to e loss
@@ -377,28 +404,20 @@
 		last_failed_movement = movement_dir
 	return 0
 
-/obj/machinery/singularity/proc/check_turfs_in(var/direction = 0, var/step = 0)
+/obj/machinery/singularity/proc/check_turfs_in(var/direction = 0, var/step = 0, var/startturf)
 	if(!direction)
 		return 0
 	var/steps = 0
 	if(!step)
-		switch(current_size)
-			if(1)
-				steps = 1
-			if(3)
-				steps = 3 //Yes this is right
-			if(5)
-				steps = 3
-			if(7)
-				steps = 4
-			if(9)
-				steps = 5
-			if(11)
-				steps = 6
+		steps = Ceiling(current_size/2)
 	else
 		steps = step
 	var/list/turfs = list()
-	var/turf/T = src.loc
+	var/turf/T
+	if(startturf)
+		T = get_turf(startturf)
+	else
+		T = get_turf(src)
 	for(var/i = 1 to steps)
 		T = get_step(T, direction)
 	if(!isturf(T))
@@ -448,6 +467,32 @@
 		if(S && S.active)
 			return 0
 	return 1
+
+/obj/machinery/singularity/proc/is_near_shield()
+	for(var/dir in cardinal)
+		if(!check_turfs_in(dir))
+			return 1
+	return 0
+
+/obj/machinery/singularity/proc/move_away_from_shield()
+
+	var/list/dirs_to_try = alldirs.Copy()
+	dirs_while_label:
+		while(dirs_to_try.len)
+			var/checkdir = pick(dirs_to_try)
+			if(!check_turfs_in(checkdir))
+				dirs_to_try -= checkdir
+				continue
+
+			var/newturf = get_step(src,checkdir)
+			for(var/dir in cardinal)
+				if(!check_turfs_in(dir, startturf = newturf))
+					dirs_to_try -= checkdir
+					continue dirs_while_label
+
+			step(src, checkdir)
+			return 1
+	return 0
 
 /obj/machinery/singularity/proc/event()
 	var/numb = pick(1, 2, 3, 4, 5, 6)
@@ -551,14 +596,15 @@
 	explosion(get_turf(src), dist, dist * 2, dist * 4)
 	qdel(src)
 
-/obj/machinery/singularity/singularity_act(var/other_size=0)
+/obj/machinery/singularity/singularity_act(var/other_size=0,var/obj/machinery/singularity/S)
+	if(S == src) //don't eat yourself idiot
+		return
 	if(other_size >= current_size)
 		var/gain = (energy/2)
 		var/dist = max((current_size - 2), 1)
 		explosion(src.loc,(dist),(dist*2),(dist*4))
 		qdel(src)
 		return(gain)
-	return
 
 /obj/machinery/singularity/shuttle_act() //Shuttles can't kill the singularity honk
 	return
@@ -572,7 +618,16 @@
 	..()
 	power_machines -= src
 
-/obj/machinery/singularity/bite_act()
+/obj/machinery/singularity/bite_act(mob/user)
+	consume(user)
+
+/obj/machinery/singularity/kick_act(mob/user)
+	consume(user)
 
 /obj/machinery/singularity/acidable()
 	return 0
+
+/obj/machinery/singularity/Move(newLoc, movedir)
+	if(timestopped)
+		return 0
+	return forceMove(get_step(src,movedir))

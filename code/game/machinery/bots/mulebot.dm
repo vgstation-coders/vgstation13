@@ -66,6 +66,8 @@ var/global/mulebot_count = 0
 
 	var/bloodiness = 0		// count of bloodiness
 	var/currentBloodColor = DEFAULT_BLOOD
+	var/run_over_cooldown = 3 SECONDS	//how often a pAI-controlled MULEbot can damage a mob by running over them
+	var/coolingdown = FALSE
 
 /obj/machinery/bot/mulebot/New()
 	..()
@@ -739,8 +741,12 @@ var/global/mulebot_count = 0
 			else
 				src.visible_message("<span class='warning'>[src] knocks over [M]!</span>")
 				M.stop_pulling()
-				M.Stun(8)
-				M.Knockdown(5)
+				if(integratedpai)
+					M.Stun(1)
+					M.Knockdown(1)
+				else
+					M.Stun(8)
+					M.Knockdown(5)
 				M.lying = 1
 	..()
 
@@ -749,10 +755,14 @@ var/global/mulebot_count = 0
 
 // called from mob/living/carbon/human/Crossed() as well as .../alien/Crossed()
 /obj/machinery/bot/mulebot/proc/RunOverCreature(var/mob/living/H,var/bloodcolor)
+	if(integratedpai && coolingdown)
+		return
 	//writepanic("[__FILE__].[__LINE__] ([src.type])([usr ? usr.ckey : ""])  \\/obj/machinery/bot/mulebot/proc/RunOverCreature() called tick#: [world.time]")
 	src.visible_message("<span class='warning'>[src] drives over [H]!</span>")
 	playsound(get_turf(src), 'sound/effects/splat.ogg', 50, 1)
 	var/damage = rand(5,15)
+	if(integratedpai)
+		damage = round(damage/3.33)
 	H.apply_damage(2*damage, BRUTE, LIMB_HEAD)
 	H.apply_damage(2*damage, BRUTE, LIMB_CHEST)
 	H.apply_damage(0.5*damage, BRUTE, LIMB_LEFT_LEG)
@@ -761,6 +771,13 @@ var/global/mulebot_count = 0
 	H.apply_damage(0.5*damage, BRUTE, LIMB_RIGHT_ARM)
 	bloodiness += 4
 	currentBloodColor=bloodcolor // For if species get different blood colors.
+	if(run_over_cooldown)
+		run_over_coolingdown()
+
+/obj/machinery/bot/mulebot/proc/run_over_coolingdown()
+	coolingdown = TRUE
+	spawn(run_over_cooldown)
+		coolingdown = FALSE
 
 // player on mulebot attempted to move
 /obj/machinery/bot/mulebot/relaymove(var/mob/user)

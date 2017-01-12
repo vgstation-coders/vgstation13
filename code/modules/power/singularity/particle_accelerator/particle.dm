@@ -5,10 +5,10 @@
 #define STRONG_PARTICLE_ENERGY (PARTICLE_ENERGY * 1.5)
 #define POWERFUL_PARTICLE_ENERGY (PARTICLE_ENERGY * 5)
 
-#define PARTICLE_RANGE 10
-#define WEAK_PARTICLE_RANGE 8
-#define STRONG_PARTICLE_RANGE 15
-#define POWERFUL_PARTICLE_RANGE 20
+#define PARTICLE_RANGE 16
+#define WEAK_PARTICLE_RANGE 12
+#define STRONG_PARTICLE_RANGE 20
+#define POWERFUL_PARTICLE_RANGE 25
 
 /obj/effect/accelerated_particle
 	name = "Accelerated Particles"
@@ -28,6 +28,11 @@
 	var/turf/source
 	var/movetotarget = 1
 
+/obj/effect/accelerated_particle/wide
+	icon = 'icons/obj/machines/96x96particles.dmi'
+	pixel_x = -WORLD_ICON_SIZE
+	pixel_y = -WORLD_ICON_SIZE
+
 /obj/effect/accelerated_particle/resetVariables()
 	..("movement_range", "target", "ionizing", "particle_type", "source", "movetotarget", args)
 	movement_range = PARTICLE_RANGE
@@ -38,34 +43,34 @@
 	movetotarget = 1
 
 
-/obj/effect/accelerated_particle/weak
+/obj/effect/accelerated_particle/wide/weak
 	movement_range = WEAK_PARTICLE_RANGE
 	energy = WEAK_PARTICLE_ENERGY
 	icon_state="particle0"
 
-/obj/effect/accelerated_particle/weak/resetVariables()
+/obj/effect/accelerated_particle/wide/weak/resetVariables()
 	..("energy", "movement_range")
 	movement_range = WEAK_PARTICLE_RANGE
 	energy = WEAK_PARTICLE_ENERGY
 
 
-/obj/effect/accelerated_particle/strong
+/obj/effect/accelerated_particle/wide/strong
 	movement_range = STRONG_PARTICLE_RANGE
 	energy = STRONG_PARTICLE_ENERGY
 	icon_state="particle2"
 
-/obj/effect/accelerated_particle/strong/resetVariables()
+/obj/effect/accelerated_particle/wide/strong/resetVariables()
 	..("energy", "movement_range")
 	energy = STRONG_PARTICLE_ENERGY
 	movement_range = STRONG_PARTICLE_RANGE
 
 
-/obj/effect/accelerated_particle/powerful
+/obj/effect/accelerated_particle/wide/powerful
 	movement_range = POWERFUL_PARTICLE_RANGE
 	energy = POWERFUL_PARTICLE_ENERGY
 	icon_state="particle3"
-	
-/obj/effect/accelerated_particle/powerful/resetVariables()
+
+/obj/effect/accelerated_particle/wide/powerful/resetVariables()
 	..("energy", "movement_range")
 	energy = POWERFUL_PARTICLE_ENERGY
 	movement_range = POWERFUL_PARTICLE_RANGE
@@ -76,9 +81,18 @@
 	src.forceMove(loc)
 	src.dir = dir
 
+/obj/effect/accelerated_particle/wide/New()
+	. = ..()
+	if(dir in list(EAST, WEST))
+		bound_height = 3 * WORLD_ICON_SIZE
+		bound_y = -WORLD_ICON_SIZE
+	else
+		bound_width = 3 * WORLD_ICON_SIZE
+		bound_x = -WORLD_ICON_SIZE
+
 /obj/effect/accelerated_particle/proc/startMove(move = 0)
-	if(movement_range > 20)
-		movement_range = 20
+	if(movement_range > 25)
+		movement_range = 25
 	if(move)
 		spawn(0)
 			move(1)
@@ -87,8 +101,9 @@
 	if (A)
 		if(ismob(A))
 			toxmob(A)
-		if((istype(A,/obj/machinery/the_singularitygen))||(istype(A,/obj/machinery/singularity/)))
-			A:energy += energy
+		if(istype(A,/obj/machinery/the_singularitygen))
+			var/obj/machinery/the_singularitygen/TSG = A
+			TSG.energy += energy
 		else if( istype(A,/obj/effect/rust_particle_catcher) )
 			var/obj/effect/rust_particle_catcher/collided_catcher = A
 			if(particle_type && particle_type != "neutron")
@@ -152,6 +167,10 @@
 	else
 		sleep(lag)
 		move(lag)
+
+/obj/effect/accelerated_particle/singularity_act()
+	. = energy
+	returnToPool(src)
 
 #undef PARTICLE_ENERGY
 #undef WEAK_PARTICLE_ENERGY

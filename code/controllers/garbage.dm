@@ -4,6 +4,8 @@
 //#define GC_DEBUG
 //#define GC_FINDREF
 
+/datum/var/gcDestroyed
+
 var/datum/garbage_collector/garbageCollector
 var/soft_dels = 0
 
@@ -150,14 +152,14 @@ world/loop_checks = 0
 			D.Destroy()
 
 		garbageCollector.addTrash(D)
-
+/*
 /datum/controller
 	var/processing = 0
 	var/iteration = 0
 	var/processing_interval = 0
 
 /datum/controller/proc/recover() // If we are replacing an existing controller (due to a crash) we attempt to preserve as much as we can.
-
+*/
 /*
  * Like Del(), but for qdel.
  * Called BEFORE qdel moves shit.

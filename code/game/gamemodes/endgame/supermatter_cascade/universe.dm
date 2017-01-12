@@ -56,13 +56,9 @@
 	suspend_alert = 1
 
 	AreaSet()
-	tcheck(80,1)
 	MiscSet()
-	tcheck(80,1)
 	APCSet()
-	tcheck(80,1)
 	OverlayAndAmbientSet()
-	tcheck(80,1)
 
 	// Disable Nar-Sie.
 	ticker.mode.eldergod=0
@@ -70,7 +66,7 @@
 	ticker.StartThematic("endgame")
 
 	PlayerSet()
-	tcheck(80,1)
+	CHECK_TICK
 	if(!endgame_exits.len)
 		message_admins("<span class='warning'><font size=7>SOMEBODY DIDNT PUT ENDGAME EXITS FOR THIS FUCKING MAP: [map.nameLong]</span></font>")
 	else
@@ -133,38 +129,31 @@
 					A.party=1
 
 		A.updateicon()
-		tcheck(80,1)
+		CHECK_TICK
 
 /datum/universal_state/supermatter_cascade/OverlayAndAmbientSet()
 	set waitfor = FALSE
-	var/count = 0
 	for(var/turf/T in turfs)
-		count++
-		if(!(count % 50000))
-			sleep(world.tick_lag)
 		if(istype(T, /turf/space))
 			T.overlays += image(icon = T.icon, icon_state = "end01")
 		else
 			if(T.z != map.zCentcomm)
 				T.underlays += "end01"
-		tcheck(80,1)
+		CHECK_TICK
 
 	for(var/datum/lighting_corner/C in global.all_lighting_corners)
 		if (!C.active)
 			continue
-			count++
-		if(!(count % 200000))
-			sleep(world.tick_lag)
 
 		if(C.z != map.zCentcomm)
 			C.update_lumcount(0.15, 0.5, 0)
-		tcheck(80,1)
+		CHECK_TICK
 
 /datum/universal_state/supermatter_cascade/proc/MiscSet()
 	for (var/obj/machinery/firealarm/alm in machines)
 		if (!(alm.stat & BROKEN))
 			alm.ex_act(2)
-		tcheck(80,1)
+		CHECK_TICK
 
 /datum/universal_state/supermatter_cascade/proc/APCSet()
 	for (var/obj/machinery/power/apc/APC in power_machines)
@@ -174,7 +163,7 @@
 				APC.cell.charge = 0
 			APC.emagged = 1
 			APC.queue_icon_update()
-		tcheck(80,1)
+		CHECK_TICK
 
 /datum/universal_state/supermatter_cascade/proc/PlayerSet()
 	for(var/datum/mind/M in player_list)
@@ -183,14 +172,14 @@
 		if(M.current.stat!=2)
 			M.current.Knockdown(10)
 			M.current.flash_eyes(visual = 1)
-		tcheck(80,1)
+		CHECK_TICK
 
 		var/failed_objectives=0
 		for(var/datum/objective/O in M.objectives)
 			O.blocked=O.type != /datum/objective/survive
 			if(O.blocked)
 				failed_objectives=1
-			tcheck(80,1)
+			CHECK_TICK
 
 		if(!locate(/datum/objective/survive) in M.objectives)
 			var/datum/objective/survive/live = new("Escape collapsing universe through the rift on the research output.")
@@ -291,4 +280,4 @@
 			A.icon_state = "ai"
 
 			to_chat(A, "<span class='danger'><FONT size = 3>The massive blast of energy has fried the systems that were malfunctioning.  You are no longer malfunctioning.</FONT></span>")
-		tcheck(80,1)
+		CHECK_TICK

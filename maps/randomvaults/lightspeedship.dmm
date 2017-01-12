@@ -190,9 +190,9 @@
 "dH" = (/obj/structure/table,/obj/item/weapon/circuitboard/airlock,/obj/item/weapon/circuitboard/airlock,/obj/item/weapon/circuitboard/airlock,/obj/item/weapon/circuitboard/airlock,/obj/item/weapon/circuitboard/airlock,/obj/item/weapon/circuitboard/airlock,/obj/item/weapon/circuitboard/airlock,/turf/simulated/floor{dir = 5; icon_state = "whitegreen"},/area/vault/lightship/Doormaint)
 "dI" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/turf/simulated/floor/plating,/area/vault/lightship/Doormaint)
 "dJ" = (/obj/machinery/recharge_station,/turf/simulated/floor{dir = 9; icon_state = "whitepurple"},/area/vault/lightship/dronebay)
-"dK" = (/obj/machinery/light_switch{dir = 1; pixel_y = 25},/mob/living/silicon/robot,/turf/simulated/floor{dir = 1; icon_state = "whitepurple"},/area/vault/lightship/dronebay)
-"dL" = (/obj/machinery/light{dir = 1},/mob/living/silicon/robot,/turf/simulated/floor{dir = 1; icon_state = "whitepurple"},/area/vault/lightship/dronebay)
-"dM" = (/mob/living/silicon/robot,/turf/simulated/floor{dir = 1; icon_state = "whitepurple"},/area/vault/lightship/dronebay)
+"dK" = (/obj/machinery/light_switch{dir = 1; pixel_y = 25},/obj/item/robot_parts/robot_suit,/turf/simulated/floor{dir = 1; icon_state = "whitepurple"},/area/vault/lightship/dronebay)
+"dL" = (/obj/machinery/light{dir = 1},/obj/item/robot_parts/robot_suit,/turf/simulated/floor{dir = 1; icon_state = "whitepurple"},/area/vault/lightship/dronebay)
+"dM" = (/obj/item/robot_parts/robot_suit,/turf/simulated/floor{dir = 1; icon_state = "whitepurple"},/area/vault/lightship/dronebay)
 "dN" = (/obj/machinery/recharge_station,/turf/simulated/floor{dir = 5; icon_state = "whitepurple"},/area/vault/lightship/dronebay)
 "dO" = (/turf/simulated/shuttle/wall{icon_state = "swall3"},/area/vault/lightship/cockpit)
 "dP" = (/obj/structure/largecrate/porcelain,/obj/machinery/light_switch{dir = 1; pixel_y = 25},/turf/simulated/floor{dir = 1; icon_state = "whiteredcorner"},/area/vault/lightship/cockpit)
@@ -413,7 +413,7 @@
 "hW" = (/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"},/turf/simulated/floor/plating,/area/vault/lightship/starboarddocking)
 "hX" = (/turf/simulated/shuttle/wall{icon_state = "swall7"},/area/vault/lightship/starboarddocking)
 "hY" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_f9"},/area/vault/lightship/shieldbattery)
-"hZ" = (/obj/structure/closet/coffin,/turf/simulated/floor/plating,/area/vault/lightship/nopowerstorage)
+"hZ" = (/obj/structure/closet/coffin,/obj/effect/landmark/corpse/engineer,/turf/simulated/floor/plating,/area/vault/lightship/nopowerstorage)
 "ia" = (/obj/structure/closet/coffin,/obj/machinery/light{dir = 1},/turf/simulated/floor/plating,/area/vault/lightship/nopowerstorage)
 "ib" = (/obj/structure/table,/obj/map/spawner/maint,/obj/machinery/light_switch{dir = 8; pixel_x = -25},/turf/simulated/floor/plating,/area/vault/lightship/maintenance)
 "ic" = (/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor/plating,/area/vault/lightship/maintenance)
@@ -421,31 +421,32 @@
 "ie" = (/obj/structure/dispenser,/turf/simulated/floor/plating,/area/vault/lightship/maintenance)
 "if" = (/obj/structure/table,/obj/item/weapon/tank/jetpack/oxygen,/obj/machinery/light{dir = 8},/turf/simulated/floor/plating,/area/vault/lightship/starboarddocking)
 "ig" = (/obj/machinery/light{dir = 4},/turf/simulated/floor/plating,/area/vault/lightship/starboarddocking)
-"ih" = (/obj/item/weapon/rack_parts,/obj/machinery/light{dir = 8},/turf/simulated/floor/plating,/area/vault/lightship/maintenance)
-"ii" = (/obj/map/spawner/mobs/bear{chance = 10},/turf/simulated/floor/plating,/area/vault/lightship/maintenance)
-"ij" = (/obj/machinery/portable_atmospherics/canister/oxygen,/turf/simulated/floor/plating,/area/vault/lightship/starboarddocking)
-"ik" = (/obj/machinery/floodlight,/turf/simulated/floor/plating,/area/vault/lightship/starboarddocking)
-"il" = (/obj/structure/shuttle/engine/propulsion/right{dir = 8},/turf/space,/area/vault/lightship/nopowerstorage)
-"im" = (/turf/simulated/shuttle/wall,/area/vault/lightship/nopowerstorage)
-"in" = (/mob/living/simple_animal/hostile/giant_spider/hunter/dead,/turf/simulated/floor/plating,/area/vault/lightship/nopowerstorage)
-"io" = (/obj/item/weapon/rack_parts,/turf/simulated/floor/plating,/area/vault/lightship/maintenance)
-"ip" = (/obj/structure/rack,/obj/item/clothing/under/rank/atmospheric_technician,/turf/simulated/floor/plating,/area/vault/lightship/maintenance)
-"iq" = (/obj/structure/rack,/obj/item/clothing/under/rank/engine_tech,/turf/simulated/floor/plating,/area/vault/lightship/maintenance)
-"ir" = (/obj/machinery/suit_storage_unit/standard_unit,/turf/simulated/floor/plating,/area/vault/lightship/maintenance)
-"is" = (/obj/machinery/suit_storage_unit/standard_unit,/obj/machinery/light,/turf/simulated/floor/plating,/area/vault/lightship/maintenance)
-"it" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_s5"},/area/vault/lightship/starboarddocking)
-"iu" = (/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/vault/lightship/starboarddocking)
-"iv" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/plating,/area/vault/lightship/starboarddocking)
-"iw" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/turf/simulated/floor/plating,/area/vault/lightship/starboarddocking)
-"ix" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_f9"},/area/vault/lightship/starboarddocking)
-"iy" = (/turf/simulated/shuttle/wall,/area/vault/lightship/maintenance)
-"iz" = (/turf/simulated/shuttle/wall{icon_state = "swall11"},/area/vault/lightship/maintenance)
-"iA" = (/mob/living/simple_animal/hostile/giant_spider/spiderling/salk,/turf/simulated/floor/plating,/area/vault/lightship/nopowerstorage)
-"iB" = (/obj/machinery/light_switch{dir = 1; pixel_y = 25},/turf/simulated/floor/plating,/area/vault/lightship/nopowerstorage)
-"iC" = (/obj/machinery/light{dir = 1},/turf/simulated/floor/plating,/area/vault/lightship/nopowerstorage)
-"iD" = (/obj/structure/closet/crate/critter,/turf/simulated/floor/plating,/area/vault/lightship/nopowerstorage)
-"iE" = (/turf/simulated/shuttle/wall{icon_state = "swall13"},/area/vault/lightship/nopowerstorage)
-"iF" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_f9"},/area/vault/lightship/nopowerstorage)
+"ih" = (/obj/structure/closet/coffin,/turf/simulated/floor/plating,/area/vault/lightship/nopowerstorage)
+"ii" = (/obj/item/weapon/rack_parts,/obj/machinery/light{dir = 8},/turf/simulated/floor/plating,/area/vault/lightship/maintenance)
+"ij" = (/obj/map/spawner/mobs/bear{chance = 10},/turf/simulated/floor/plating,/area/vault/lightship/maintenance)
+"ik" = (/obj/machinery/portable_atmospherics/canister/oxygen,/turf/simulated/floor/plating,/area/vault/lightship/starboarddocking)
+"il" = (/obj/machinery/floodlight,/turf/simulated/floor/plating,/area/vault/lightship/starboarddocking)
+"im" = (/obj/structure/shuttle/engine/propulsion/right{dir = 8},/turf/space,/area/vault/lightship/nopowerstorage)
+"in" = (/turf/simulated/shuttle/wall,/area/vault/lightship/nopowerstorage)
+"io" = (/mob/living/simple_animal/hostile/giant_spider/hunter/dead,/turf/simulated/floor/plating,/area/vault/lightship/nopowerstorage)
+"ip" = (/obj/item/weapon/rack_parts,/turf/simulated/floor/plating,/area/vault/lightship/maintenance)
+"iq" = (/obj/structure/rack,/obj/item/clothing/under/rank/atmospheric_technician,/turf/simulated/floor/plating,/area/vault/lightship/maintenance)
+"ir" = (/obj/structure/rack,/obj/item/clothing/under/rank/engine_tech,/turf/simulated/floor/plating,/area/vault/lightship/maintenance)
+"is" = (/obj/machinery/suit_storage_unit/standard_unit,/turf/simulated/floor/plating,/area/vault/lightship/maintenance)
+"it" = (/obj/machinery/suit_storage_unit/standard_unit,/obj/machinery/light,/turf/simulated/floor/plating,/area/vault/lightship/maintenance)
+"iu" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_s5"},/area/vault/lightship/starboarddocking)
+"iv" = (/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/vault/lightship/starboarddocking)
+"iw" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/plating,/area/vault/lightship/starboarddocking)
+"ix" = (/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/turf/simulated/floor/plating,/area/vault/lightship/starboarddocking)
+"iy" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_f9"},/area/vault/lightship/starboarddocking)
+"iz" = (/turf/simulated/shuttle/wall,/area/vault/lightship/maintenance)
+"iA" = (/turf/simulated/shuttle/wall{icon_state = "swall11"},/area/vault/lightship/maintenance)
+"iB" = (/mob/living/simple_animal/hostile/giant_spider/spiderling/salk,/turf/simulated/floor/plating,/area/vault/lightship/nopowerstorage)
+"iC" = (/obj/machinery/light_switch{dir = 1; pixel_y = 25},/turf/simulated/floor/plating,/area/vault/lightship/nopowerstorage)
+"iD" = (/obj/machinery/light{dir = 1},/turf/simulated/floor/plating,/area/vault/lightship/nopowerstorage)
+"iE" = (/obj/structure/closet/crate/critter,/turf/simulated/floor/plating,/area/vault/lightship/nopowerstorage)
+"iF" = (/turf/simulated/shuttle/wall{icon_state = "swall13"},/area/vault/lightship/nopowerstorage)
+"iG" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_f9"},/area/vault/lightship/nopowerstorage)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -471,10 +472,10 @@ aahfgmgGhghhhihjhkhlhmhmhnhmhmhohphphqfghrfLfLhshthuhvhvhwhahagBhchbhxaaaaaaaaaa
 aagFglgGhyhmhmhmhzhAhBhChDhEhFhGhHhIhJfghKhKhKhLhKhMhNhNhNhOhPhdhxaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaagFhQgmgmgmgmbobcbnbnhRbnbnbcbnbogmhShThUhVhWhUhXhNhNhOhYaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaagFgmglhZiaaKibbabaicidbaieaHbbglhSifhUhUhUighXhOhNhYaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaagFadhZaKihbabababaiibabaaKgFhSijhUhUhUikhXhYaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaailacawiminaKioipiqiqirisiriraKaaitiuiviwiviuixaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaailacaxaiaiiybnbnbnbnbnbnbnbnizaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaailacaxaiiAiniBaiiniCaiaiiniDasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaabaciEaeadadadadadadadadadadiFaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaagFadihaKiibabababaijbabaaKgFhSikhUhUhUilhXhYaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaimacawinioaKipiqiririsitisisaKaaiuiviwixiwiviyaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaimacaxaiaiizbnbnbnbnbnbnbnbniAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaimacaxaiiBioiCaiioiDaiaiioiEasaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaabaciFaeadadadadadadadadadadiGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 "}

@@ -76,6 +76,7 @@ obj/item/clothing/head/helmet/tactical/attack_self(mob/user)
 	flags = FPRINT
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 10, bomb = 25, bio = 10, rad = 0)
 	body_parts_covered = HEAD
+	species_fit = list()
 	siemens_coefficient = 0.8
 
 /obj/item/clothing/head/helmet/tactical/HoS/dermal

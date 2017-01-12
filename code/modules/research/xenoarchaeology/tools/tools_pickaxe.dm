@@ -103,7 +103,7 @@
 
 /obj/item/weapon/storage/box/excavation
 	name = "excavation pick set"
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "excavation"
 	desc = "A set of picks for excavation."
 	item_state = "syringe_kit"
