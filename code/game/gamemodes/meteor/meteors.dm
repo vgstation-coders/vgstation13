@@ -438,11 +438,10 @@ var/list/blob_candidates = list()
 	..()
 
 /obj/item/projectile/meteor/blob/core/do_blob_stuff(var/turf/T)
-	var/obj/effect/blob/core/C
 	if(blob_candidate && istype(blob_candidate.mob, /mob/dead/observer))
-		C = new(T, new_overmind = blob_candidate, no_morph = 1)
+		new/obj/effect/blob/core(T, new_overmind = blob_candidate, no_morph = 1)
 	else
-		C = new(T, no_morph = 1)
+		new/obj/effect/blob/core(T, no_morph = 1)
 	log_admin("Blob core meteor impacted at [formatJumpTo(loc)] controlled by [key_name(blob_candidate)].")
 	message_admins("Blob core meteor impacted at [formatJumpTo(loc)] controlled by [key_name(blob_candidate)].")
 
