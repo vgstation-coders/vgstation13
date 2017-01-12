@@ -361,6 +361,9 @@ var/list/all_doors = list()
 
 	if(!T)
 		T = get_turf(src)
+	if(!isturf(T))
+		return 0
+
 	update_heat_protection(T)
 	air_master.mark_for_update(T)
 
