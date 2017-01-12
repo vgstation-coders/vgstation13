@@ -79,12 +79,6 @@ a.popt {text-decoration: none;}
 	height: 30px;
 	padding: 8px 0 2px 0;
 }
-#pause {
-	position: fixed;
-	top: 0;
-	right: 80px;
-}
-
 #ping i {display: block; text-align: center;}
 #ping .ms {
 	display: block;
@@ -97,31 +91,23 @@ a.popt {text-decoration: none;}
 	top: 0;
 	right: 0;
 }
-#options a,
-#pause a
-{
-  background: #ddd;
-  height: 30px;
-  padding: 5px 0;
-  display: block;
-  color: #333;
-  text-decoration: none;
-  line-height: 28px;
-  border-top: 1px solid #b4b4b4;
+#options a {
+	background: #ddd;
+    height: 30px;
+	padding: 5px 0;
+	display: block;
+	color: #333;
+	text-decoration: none;
+    line-height: 28px;
+    border-top: 1px solid #b4b4b4;
 }
-#options a:hover,
-#pause a:hover
-{
-  background: #ccc;
-}
-#options .toggle,
-#pause .toggle
-{
-  width: 40px;
-  background: #ccc;
-  border-top: 0;
-  float: right;
-  text-align: center;
+#options a:hover {background: #ccc;}
+#options .toggle {
+	width: 40px;
+    background: #ccc;
+    border-top: 0;
+    float: right;
+    text-align: center;
 }
 #options .sub {clear: both; display: none; width: 160px;}
 #options .sub.scroll {overflow-y: scroll;}

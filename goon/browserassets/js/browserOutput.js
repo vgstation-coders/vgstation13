@@ -7,26 +7,20 @@
 //DEBUG STUFF
 var escaper = encodeURIComponent || escape;
 var decoder = decodeURIComponent || unescape;
-var debugMode = false; //document.location.href.indexOf("browserOutput.html") >= 0; // vg
-if(!debugMode) {
-  window.onerror = function(msg, url, line, col, error) {
-  	if (document.location.href.indexOf("proc=debug") <= 0) {
-  		var extra = !col ? '' : ' | column: ' + col;
-  		extra += !error ? '' : ' | error: ' + error;
-  		extra += !navigator.userAgent ? '' : ' | user agent: ' + navigator.userAgent;
-  		var debugLine = 'Error: ' + msg + ' | url: ' + url + ' | line: ' + line + extra;
-  		window.location = '?_src_=chat&proc=debug&param[error]='+escaper(debugLine);
-  	}
-  	return true;
-  };
-} else {
-  console.log("[DEBUG MODE] Errors will halt execution, runByond will not function.");
-}
+window.onerror = function(msg, url, line, col, error) {
+	if (document.location.href.indexOf("proc=debug") <= 0) {
+		var extra = !col ? '' : ' | column: ' + col;
+		extra += !error ? '' : ' | error: ' + error;
+		extra += !navigator.userAgent ? '' : ' | user agent: ' + navigator.userAgent;
+		var debugLine = 'Error: ' + msg + ' | url: ' + url + ' | line: ' + line + extra;
+		window.location = '?_src_=chat&proc=debug&param[error]='+escaper(debugLine);
+	}
+	return true;
+};
 
 //Globals
 window.status = 'Output';
 var $messages, $subOptions, $contextMenu, $filterMessages;
-var queue=[]; // FILO queue of messages stored during pause.
 var opts = {
 	//General
 	'messageCount': 0, //A count...of messages...
@@ -68,10 +62,7 @@ var opts = {
 	'clientData': [],
 
 	// List of macros in the 'hotkeymode' macro set.
-	'macros': {},
-
-	// vg: Is the chat paused?
-	'paused': false
+	'macros': {}
 };
 
 function outerHTML(el) {
@@ -157,37 +148,6 @@ function highlightTerms(el) {
 		el.innerHTML = newText;
 	}
 }
-
-// vg: Receives messages from the server.
-function externalOutput(message, flag) {
-	// Doing checks here so we don't queue messages we don't actually have.
-	if (typeof message === 'undefined') {
-		return;
-	}
-	if (typeof flag === 'undefined') {
-		flag = '';
-	}
-
-	if (flag !== 'internal') {
-		opts.lastPang = Date.now();
-	}
-
-	queue.push([message, flag]);
-
-	if (!opts.paused) {
-		readQueue();
-	}
-}
-
-function readQueue() {
-  var tuple=[];
-	for (var i=0;i<queue.length;i++)
-	{
-    tuple=queue[i];
-		output(tuple[0], tuple[1]);
-	}
-	queue=[];
-}
 //Send a message to the client
 function output(message, flag) {
 	if (typeof message === 'undefined') {
@@ -196,6 +156,9 @@ function output(message, flag) {
 	if (typeof flag === 'undefined') {
 		flag = '';
 	}
+
+	if (flag !== 'internal')
+		opts.lastPang = Date.now();
 
 	// Basically we url_encode twice server side so we can manually read the encoded version and actually do UTF-8.
 	// The replace for + is because FOR SOME REASON, BYOND replaces spaces with a + instead of %20, and a plus with %2b.
@@ -329,10 +292,7 @@ function internalOutput(message, flag)
 
 //Runs a route within byond, client or server side. Consider this "ehjax" for byond.
 function runByond(uri) {
-  if(debugMode) {
-    console.log("Would run "+uri);
-  } else
-    window.location = uri;
+	window.location = uri;
 }
 
 function setCookie(cname, cvalue, exdays) {
@@ -371,6 +331,7 @@ function changeMode(mode) {
 			opts.chatMode = mode;
 			break;
 		case 'console':
+
 			opts.chatMode = mode;
 			break;
 		case 'default':
@@ -440,7 +401,7 @@ function ehjaxCallback(data) {
 			dataJ = $.parseJSON(data);
 		} catch (e) {
 			//But...incorrect :sadtrombone:
-			window.onerror && window.onerror('JSON: '+e+'. '+data, 'browserOutput.html', 327);
+			window.onerror('JSON: '+e+'. '+data, 'browserOutput.html', 327);
 			return;
 		}
 		data = dataJ;
@@ -500,10 +461,6 @@ function createPopup(contents, width) {
 
 function toggleWasd(state) {
 	opts.wasd = (state == 'on' ? true : false);
-}
-
-function injectServerData(message) {
-  externalOutput(message);
 }
 
 /*****************************************
@@ -609,7 +566,7 @@ $(function() {
 			try {
 				dataJ = $.parseJSON(dataCookie);
 			} catch (e) {
-				window.onerror && window.onerror('JSON '+e+'. '+dataCookie, 'browserOutput.html', 434);
+				window.onerror('JSON '+e+'. '+dataCookie, 'browserOutput.html', 434);
 				return;
 			}
 			opts.clientData = dataJ;
@@ -872,20 +829,6 @@ $(function() {
 		setCookie('pingdisabled', (opts.pingDisabled ? 'true' : 'false'), 365);
 	});
 
-	$('#togglePause').click(function(e) {
-		if (opts.paused) {
-			$('#togglePause').html('<i class="icon-play"></i>')
-        .attr('title', 'Click to pause chat.');
-			opts.paused = false;
-      readQueue(); // Read and empty queue.
-		} else {
-			$('#togglePause').html('<i class="icon-pause"></i>')
-        .attr('title', 'Click to resume chat.');
-			opts.paused = true;
-		}
-		setCookie('paused', (opts.paused ? 'true' : 'false'), 365);
-	});
-
 	$('#saveLog').click(function(e) {
 		var saved = '';
 
@@ -998,11 +941,4 @@ $(function() {
 	}
 	$('#userBar').show();
 	opts.priorChatHeight = $(window).height();
-  if(debugMode) {
-    console.log("Beginning pang loop simulation.");
-  	setInterval(function() {
-      ehjaxCallback("pang");
-  		ehjaxCallback("<span class='game say'><span class='name'>Test Message</span> murmurs, \"This is a test message.\"</span>");
-  	}, 5000); //5 seconds
-  }
 });
