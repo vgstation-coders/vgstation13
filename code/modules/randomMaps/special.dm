@@ -70,7 +70,7 @@
 			area_object.contents.Add(T)
 			T.change_area(old_area, area_object)
 
-		tcheck(80,1)
+		CHECK_TICK
 
 	//Use the recursive division method: https://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_division_method
 	//Start with a single chamber and divide it into two chambers with a wall (which has an opening somewhere)

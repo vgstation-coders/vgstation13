@@ -35,18 +35,17 @@
 	if((src.last_shot + src.fire_delay) <= world.time)
 		src.last_shot = world.time
 		var/obj/effect/accelerated_particle/A = null
-		var/turf/T = get_step(src,dir)
+		var/turf/T = get_turf(src)
 		switch(strength)
 			if(0)
-				A = getFromPool(/obj/effect/accelerated_particle/weak,T)
+				A = getFromPool(/obj/effect/accelerated_particle/wide/weak,T,dir)
 			if(1)
-				A = getFromPool(/obj/effect/accelerated_particle,T)
+				A = getFromPool(/obj/effect/accelerated_particle/wide,T,dir)
 			if(2)
-				A = getFromPool(/obj/effect/accelerated_particle/strong,T)
+				A = getFromPool(/obj/effect/accelerated_particle/wide/strong,T,dir)
 			if(3)
-				A = getFromPool(/obj/effect/accelerated_particle/powerful,T)
+				A = getFromPool(/obj/effect/accelerated_particle/wide/powerful,T,dir)
 		if(A)
-			A.dir = src.dir
 			A.startMove(1)
 			return 1
 	return 0

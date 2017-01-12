@@ -1341,6 +1341,20 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	group = "Engineering"
 	access = access_ce
 
+/datum/supply_packs/portable_smes
+	contains = list(/obj/machinery/power/battery/portable,
+						/obj/item/weapon/circuitboard/battery_port,
+						/obj/item/weapon/stock_parts/capacitor,
+						/obj/item/weapon/stock_parts/capacitor,
+						/obj/item/weapon/stock_parts/capacitor,
+						/obj/item/weapon/stock_parts/console_screen)
+	name = "Portable SMES"
+	cost = 70
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "portable SMES crate"
+	group = "Engineering"
+	access = access_engine
+
 /datum/supply_packs/rcs_device
 	name = "Rapid Crate Sender Crate"
 	contains = list (/obj/item/weapon/rcs)

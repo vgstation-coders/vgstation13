@@ -1092,11 +1092,9 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 	var/spawn_name="spiderling"
 
 /datum/disease2/effect/spawn/activate(var/mob/living/carbon/mob)
-	//var/mob/living/carbon/human/H = mob
-	var/placemob = locate(mob.x + pick(1,-1), mob.y, mob.z)
 	playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
 
-	new spawn_type(placemob)
+	new spawn_type(get_turf(mob))
 	mob.emote("me",1,"vomits up a live [spawn_name]!")
 
 /datum/disease2/effect/spawn/roach

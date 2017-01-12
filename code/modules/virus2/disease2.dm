@@ -126,6 +126,7 @@ var/global/list/disease2_list = list()
 			src.cure(mob)
 			mob.antibodies |= src.antigen
 			log += "<br />[timestamp()] STAGEMAX ([stage])"
+			return
 		else
 			stage++
 			log += "<br />[timestamp()] NEXT STAGE ([stage])"

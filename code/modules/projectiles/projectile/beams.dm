@@ -285,10 +285,12 @@ var/list/beam_master = list()
 // Special laser the captains gun uses
 /obj/item/projectile/beam/captain
 	name = "captain laser"
+	icon_state = "laser_old"
 	damage = 40
 	linear_movement = 0
 
 /obj/item/projectile/beam/retro
+	icon_state = "laser_old"
 	linear_movement = 0
 
 /obj/item/projectile/beam/lightning

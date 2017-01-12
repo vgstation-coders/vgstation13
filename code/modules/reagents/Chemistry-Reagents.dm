@@ -3066,7 +3066,7 @@
 			M.adjustToxLoss(1)
 			M.Dizzy(5)
 			M.Jitter(5)
-			if(prob(5))
+			if(prob(5) && M.feels_pain())
 				to_chat(M, "<span class='warning'>Oh god, the pain!</span>")
 		if(25 to INFINITY)
 			if(ishuman(M)) //Does nothing to non-humans.

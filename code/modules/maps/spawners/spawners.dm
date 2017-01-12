@@ -814,6 +814,27 @@
 	chance = 5
 	to_spawn = list(/mob/living/simple_animal/hostile/humanoid/russian/ranged)
 
+/obj/map/spawner/space/vox/trader/spacesuit // for the vox outpost trader closets to spawn a random hardsuit. Each hardsuit has the same stats which are ofcourse very poor armor.
+ 	name = "trader spacesuit spawner"
+ 	icon_state = "space_supply"
+
+/obj/map/spawner/space/vox/trader/spacesuit/perform_spawn()
+	var/i = rand(1, 4) // 1 in 4 chance of spawning a single of listed below
+	switch (i)
+		if (1)
+			new /obj/item/clothing/suit/space/vox/civ/trader(src.loc) // standard brownsuit and helmet
+			new /obj/item/clothing/head/helmet/space/vox/civ/trader(src.loc)
+
+		if (2)
+			new /obj/item/clothing/suit/space/vox/civ/trader/carapace(src.loc) // carapace
+			new /obj/item/clothing/head/helmet/space/vox/civ/trader/carapace(src.loc)
+		if (3)
+			new /obj/item/clothing/suit/space/vox/civ/trader/medic(src.loc) // aqua coloured hardsuit
+			new /obj/item/clothing/head/helmet/space/vox/civ/trader/medic(src.loc)
+		if (4)
+			new /obj/item/clothing/suit/space/vox/civ/trader/stealth(src.loc) // black hardsuit. Not capable of any form of stealth systems or shit like that
+			new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src.loc)
+
 // Mobs ////////////////////////////////////////////////////////
 
 /obj/map/spawner/mobs/carp
@@ -1192,3 +1213,5 @@
 	/obj/item/weapon/reagent_containers/food/snacks/bacon,
 	/obj/item/weapon/reagent_containers/food/snacks/bacon
 )
+
+

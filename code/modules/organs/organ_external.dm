@@ -489,17 +489,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 //Updating wounds. Handles wound natural healing, internal bleedings and infections
 /datum/organ/external/proc/update_wounds()
 
-
 	if(!is_organic()) //Non-organic limbs don't heal or get worse
 		return
 
 	for(var/datum/wound/W in wounds)
-		//Wounds can disappear after 10 minutes at the earliest
-		if(W.damage <= 0 && W.created + 10 * 10 * 60 <= world.time)
-			wounds -= W
-			continue
-			//Let the GC handle the deletion of the wound
-
 		//Internal wounds get worse over time. Low temperatures (cryo) stop them.
 		if(W.internal && !W.is_treated() && owner.bodytemperature >= 170 && !(owner.species && owner.species.anatomy_flags & NO_BLOOD))
 			if(!owner.reagents.has_reagent(BICARIDINE) && !owner.reagents.has_reagent(INAPROVALINE) && !owner.reagents.has_reagent(CLOTTING_AGENT) && !owner.reagents.has_reagent(BIOFOAM))	//Bicard, inaprovaline, clotting agent, and biofoam stop internal wounds from growing bigger with time, and also slow bleeding
@@ -538,6 +531,12 @@ Note that amputating the affected organ does in fact remove the infection from t
 		if(W.germ_level > 0 && W.salved && prob(2))
 			W.germ_level = 0
 			W.disinfected = 1
+
+		if(W.damage <= 0)
+			//Since we're a HIGH ARRPEE codebase and we want LOTS OF FLAVORR we like to keep all the completely healed wounds sticking around for 10 minutes minimum, so they show up as bruises and scars in examine.
+			if(W.internal || W.created + 10 MINUTES <= world.time) //The exception to this is internal wounds, which are more of a special status and not really a wound at all in practice.
+				wounds -= W
+				continue //Let the GC handle the deletion of the wound
 
 	//Sync the organ's damage with its wounds
 	src.update_damages()
