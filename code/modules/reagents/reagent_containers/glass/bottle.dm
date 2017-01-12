@@ -443,14 +443,14 @@
 	..()
 	reagents.add_reagent(ALKYSINE, 10)
 
-/obj/item/weapon/reagent_containers/glass/bottle/peridaxonsmall
+/obj/item/weapon/reagent_containers/glass/bottle/peridaxon
 	name = "Peridaxon Bottle"
 	desc = "A small bottle. Contains peridaxon. Medicate cautiously."
 	icon = 'icons/obj/chemical.dmi'
 
-/obj/item/weapon/reagent_containers/glass/bottle/peridaxonsmall/New()
-		..()
-		reagents.add_reagent(PERIDAXON, 10)
+/obj/item/weapon/reagent_containers/glass/bottle/peridaxon/New()
+	..()
+	reagents.add_reagent(PERIDAXON, 30)
 
 /obj/item/weapon/reagent_containers/glass/bottle/nanitessmall
 	name = "Nanobots Bottle"
@@ -458,5 +458,5 @@
 	icon = 'icons/obj/chemical.dmi'
 
 /obj/item/weapon/reagent_containers/glass/bottle/nanitessmall/New()
-		..()
-		reagents.add_reagent(NANITES, 10)
+	..()
+	reagents.add_reagent(NANITES, 10)

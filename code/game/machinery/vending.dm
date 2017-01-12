@@ -43,6 +43,8 @@ var/global/num_vending_terminals = 1
 	var/shoot_chance = 2 //How often do we throw items?
 	var/datum/data/vending_product/currently_vending = null // A /datum/data/vending_product instance of what we're paying for right now.
 	// To be filled out at compile time
+	var/list/accepted_coins	= list()	// Accepted coins by the machine.
+
 	var/list/products	= list()	// For each, use the following pattern:
 	var/list/contraband	= list()	// list(/type/path = amount,/type/path2 = amount2)
 	var/list/premium 	= list()	// No specified amount = only one in stock
@@ -92,6 +94,11 @@ var/global/num_vending_terminals = 1
 	num_vending_machines++
 
 	overlays_vending[1] = "[icon_state]-panel"
+
+	accepted_coins = list(
+			/obj/item/weapon/coin,
+			/obj/item/weapon/reagent_containers/food/snacks/chococoin
+			) 
 
 	component_parts = newlist(\
 		/obj/item/weapon/circuitboard/vendomat,\
@@ -362,7 +369,7 @@ var/global/num_vending_terminals = 1
 		if(panel_open)
 			attack_hand(user)
 		return
-	else if(premium.len > 0 && iscoin(W))
+	else if(premium.len > 0 && is_type_in_list(W, accepted_coins))
 		if (isnull(coin))
 			if(user.drop_item(W, src))
 				coin = W
@@ -2393,6 +2400,9 @@ var/global/num_vending_terminals = 1
 
 /obj/machinery/vending/trader/New()
 	..()
+
+	accepted_coins = list(/obj/item/weapon/coin/trader)
+
 	premium = list(
 		/obj/item/weapon/storage/trader_marauder,
 		/obj/item/weapon/storage/backpack/holding,
@@ -2400,24 +2410,11 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/bluespace_crystal,
 		/obj/item/clothing/shoes/magboots/elite,
 		/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
-		/obj/item/weapon/reagent_containers/glass/bottle/peridaxonsmall,
+		/obj/item/weapon/reagent_containers/glass/bottle/peridaxon,
 		/obj/item/weapon/reagent_containers/glass/bottle/rezadone,
 		/obj/item/weapon/reagent_containers/glass/bottle/nanitessmall,	
 		)
 
-	for(var/random_items = 1 to 5)
+	for(var/random_items = 1 to premium.len - 4)
 		premium.Remove(pick(premium))
 	src.initialize()
-
-/obj/machinery/vending/trader/attackby(var/obj/item/W, var/mob/user) //This shitcode is needed.
-	if (iscoin(W))
-		if (istype(W, /obj/item/weapon/coin/trader))
-			if (isnull(coin))
-				if(user.drop_item(W, src))
-					coin = W
-					to_chat(user, "<span class='notice'>You insert a coin into [src].</span>")
-					src.updateUsrDialog()
-		else
-			to_chat(user, "<span class='notice'>It doesn't fit.</span>")
-		return
-	..()
