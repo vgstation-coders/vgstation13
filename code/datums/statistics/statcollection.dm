@@ -181,7 +181,7 @@
 	for(var/datum/mind/Mind in ticker.minds)
 		for(var/datum/objective/objective in Mind.objectives)
 			if(objective.explanation_text == "Free Objective")
-				statfile << "ANTAG_OBJ|[Mind.name]|[Mind.key]|[Mind.special_role]|FREE_OBJ"
+				statfile << STRIP_NEWLINE("ANTAG_OBJ|[Mind.name]|[Mind.key]|[Mind.special_role]|FREE_OBJ")
 			else if (objective.target)
 				statfile << STRIP_NEWLINE("ANTAG_OBJ|[Mind.name]|[Mind.key]|[Mind.special_role]|[objective.type]|[objective.target]|[objective.target.assigned_role]|[objective.target.name]|[objective.check_completion()]|[objective.explanation_text]")
 			else
@@ -214,7 +214,7 @@
 		uniquefilename = "[uniquefilename].dupe"
 	var/statfile = file("[STAT_OUTPUT_DIR]statistics_[filename_date].[uniquefilename].txt")
 
-	world << "Writing statistics to file"
+	to_chat(world, "Writing statistics to file")
 
 	var/start_time = world.realtime
 	Write_Header(statfile)
