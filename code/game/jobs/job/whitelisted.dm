@@ -45,6 +45,7 @@
 	H.equip_or_collect(new /obj/item/weapon/storage/box/donkpockets/random_amount(H.back), slot_in_backpack)
 	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/thermos/full(H.back), slot_in_backpack)
 	H.equip_or_collect(new /obj/item/weapon/storage/wallet/random(H.back), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/weapon/coin/trader(H.back), slot_in_backpack)
 
 	H.equip_or_collect(new /obj/item/device/radio(H), slot_belt)
 

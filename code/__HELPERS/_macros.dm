@@ -107,6 +107,8 @@
 
 #define iscoil(A) istype(A, /obj/item/stack/cable_coil)
 
+#define iscoin(A) is_type_in_list(A, list(/obj/item/weapon/coin, /obj/item/weapon/reagent_containers/food/snacks/chococoin))
+
 #define iswirecutter(A) istype(A, /obj/item/weapon/wirecutters)
 
 #define iswiretool(A) (iswirecutter(A) || ismultitool(A) || issignaler(A))

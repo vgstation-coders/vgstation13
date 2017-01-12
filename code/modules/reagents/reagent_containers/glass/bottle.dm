@@ -401,6 +401,33 @@
 		..()
 		reagents.add_reagent(FROSTOIL, 30)
 
+/obj/item/weapon/reagent_containers/glass/bottle/peridaxon
+	name = "Peridaxon Bottle"
+	desc = "A small bottle. Contains peridaxon. Medicate cautiously."
+	icon = 'icons/obj/chemical.dmi'
+
+	New()
+		..()
+		reagents.add_reagent(PERIDAXON, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/rezadone
+	name = "Rezadone Bottle"
+	desc = "A small bottle. Contains rezadone."
+	icon = 'icons/obj/chemical.dmi'
+
+	New()
+		..()
+		reagents.add_reagent(REZADONE, 30)
+
+/obj/item/weapon/reagent_containers/glass/bottle/nanites
+	name = "Nanobots Bottle"
+	desc = "A small bottle. You hear beeps and boops."
+	icon = 'icons/obj/chemical.dmi'
+
+	New()
+		..()
+		reagents.add_reagent(NANITES, 30)
+
 /obj/item/weapon/reagent_containers/glass/bottle/antisocial
 	//No special name or description
 
