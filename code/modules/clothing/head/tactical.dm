@@ -3,6 +3,7 @@
 	light_power = 1.5
 	var/obj/item/device/flashlight/flashlight = null
 	var/preattached = FALSE
+	species_fit = list()
 
 /obj/item/clothing/head/helmet/tactical/New()
 	..()
