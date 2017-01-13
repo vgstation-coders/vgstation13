@@ -2408,7 +2408,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/backpack/holding,
 		/obj/item/weapon/reagent_containers/glass/beaker/bluespace,
 		/obj/item/weapon/storage/bluespace_crystal,
-		/obj/item/clothing/shoes/magboots/elite,
+		//obj/item/clothing/shoes/magboots/elite,
 		/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
 		/obj/item/weapon/reagent_containers/glass/bottle/peridaxon,
 		/obj/item/weapon/reagent_containers/glass/bottle/rezadone,
