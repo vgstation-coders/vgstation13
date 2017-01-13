@@ -220,7 +220,7 @@
 				H.w_uniform.add_fingerprint(M)
 			if(M.zone_sel.selecting == "head" && !(S.status & ORGAN_DESTROYED))
 				M.visible_message( \
-					"<span class='notice'>[M] pats [src]'s a head.</span>", \
+					"<span class='notice'>[M] pats [src]'s head.</span>", \
 					"<span class='notice'>You pat [src]'s head.</span>", \
 					)
 			else if((M.zone_sel.selecting == "l_hand" && !(S.status & ORGAN_DESTROYED)) || (M.zone_sel.selecting == "r_hand" && !(S.status & ORGAN_DESTROYED)))
