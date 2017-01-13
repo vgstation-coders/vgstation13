@@ -277,15 +277,3 @@
 	if(isliving(user))
 		user.visible_message("<span class='warning'>[user] invades [M]'s personal space, thrusting [src] into their face insistently.</span>","<span class='warning'>You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.</span>")
 
-/obj/item/weapon/storage/box/holobadge
-	name = "holobadge box"
-	desc = "A box containing holobadges."
-
-/obj/item/weapon/storage/box/holobadge/New()
-	new /obj/item/clothing/accessory/holobadge(src)
-	new /obj/item/clothing/accessory/holobadge(src)
-	new /obj/item/clothing/accessory/holobadge(src)
-	new /obj/item/clothing/accessory/holobadge(src)
-	new /obj/item/clothing/accessory/holobadge/cord(src)
-	new /obj/item/clothing/accessory/holobadge/cord(src)
-	..()
