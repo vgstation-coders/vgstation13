@@ -1,11 +1,11 @@
 //MEDBOT
 //MEDBOT PATHFINDING
 //MEDBOT ASSEMBLY
-
+#define INJECTION_TIME 30
 
 /obj/machinery/bot/medbot
 	name = "Medibot"
-	desc = "A little medical robot. He looks somewhat underwhelmed."
+	desc = "A little medical robot. He looks somewhat underwhelmed. It has a slot for pAIs."
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "medibot0"
 	icon_initial = "medibot"
@@ -41,6 +41,9 @@
 	var/shut_up = 0 //self explanatory :)
 	var/declare_crit = 1 //If active, the bot will transmit a critical patient alert to MedHUD users.
 	var/declare_cooldown = 0 //Prevents spam of critical patient alerts.
+	var/pai_analyze_mode = FALSE //Used to switch between injecting people or analyzing them (for pAIs)
+	var/reagent_id = null
+
 	bot_type = MED_BOT
 
 /obj/machinery/bot/medbot/mysterious
@@ -419,8 +422,6 @@
 		src.last_found = world.time
 		return
 
-	var/reagent_id = null
-
 	//Use whatever is inside the loaded beaker. If there is one.
 	if((src.use_beaker) && (src.reagent_glass) && (src.reagent_glass.reagents.total_volume))
 		reagent_id = "internal_beaker"
@@ -463,23 +464,30 @@
 	else
 		src.icon_state = "[src.icon_initial]s"
 		visible_message("<span class='danger'>[src] is trying to inject [patient]!</span>")
-		spawn(30)
-			if ((get_dist(src, src.patient) <= 1) && (src.on))
-				if((reagent_id == "internal_beaker") && (src.reagent_glass) && (src.reagent_glass.reagents.total_volume))
-					src.reagent_glass.reagents.trans_to(src.patient,src.injection_amount) //Inject from beaker instead.
-					src.reagent_glass.reagents.reaction(src.patient, 2)
-				else
-					src.patient.reagents.add_reagent(reagent_id,src.injection_amount)
-				visible_message("<span class='danger'>[src] injects [patient] with the syringe!</span>")
 
-			src.icon_state = "[src.icon_initial][src.on]"
-			src.currently_healing = 0
-			return
+		if(integratedpai)
+			if(do_after(integratedpai.pai, src, INJECTION_TIME))
+				inject_patient()
+		else
+			spawn(INJECTION_TIME)
+				inject_patient()
 
 //	src.speak(reagent_id)
 	reagent_id = null
 	return
 
+/obj/machinery/bot/medbot/proc/inject_patient()
+	if ((get_dist(src, src.patient) <= 1) && (src.on))
+		if((reagent_id == "internal_beaker") && (src.reagent_glass) && (src.reagent_glass.reagents.total_volume))
+			src.reagent_glass.reagents.trans_to(src.patient,src.injection_amount) //Inject from beaker instead.
+			src.reagent_glass.reagents.reaction(src.patient, 2)
+		else
+			src.patient.reagents.add_reagent(reagent_id,src.injection_amount)
+		visible_message("<span class='danger'>[src] injects [src.patient] with the syringe!</span>")
+
+	src.icon_state = "[src.icon_initial][src.on]"
+	src.currently_healing = 0
+	return
 
 /obj/machinery/bot/medbot/proc/speak(var/message)
 	if((!src.on) || (!message))
@@ -633,6 +641,7 @@
 	if(declare_cooldown)
 		return
 	var/area/location = get_area(src)
+	declare_message = "<span class='info'>[bicon(src)] Medical emergency! A patient is in critical condition at [location]!</span>"
 	visible_message("<span class='info'>[bicon(src)] Medical emergency! A patient is in critical condition at [location]!</span>")
 	..()
 	declare_cooldown = 1
@@ -640,7 +649,7 @@
 		declare_cooldown = 0
 
 /*
- *	pAI SHIT
+ *	pAI SHIT, it uses the pAI framework in objs.dm. Check that code for further information
 */
 
 /obj/machinery/bot/medbot/getpAIMovementDelay()
@@ -654,17 +663,32 @@
 	step(src, dir)
 
 /obj/machinery/bot/medbot/on_integrated_pai_click(mob/living/silicon/pai/user, mob/living/carbon/A)
+	if(!Adjacent(A))
+		return
+
 	patient = A //Needed because medicate_patient doesn't set up one.
-	medicate_patient(A)
+
+	if(pai_analyze_mode)
+		medicate_patient(A)
+	else
+		if(istype(A, /mob/living/carbon))
+			healthanalyze(A, user, 1)
 
 /obj/machinery/bot/medbot/dropkey_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the drop hotkey
 	declare()
+
+/obj/machinery/bot/medbot/swapkey_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the swap_hand() hotkey
+	pai_analyze_mode = !pai_analyze_mode
+	pai_analyze_mode ? to_chat(user, "<span class='info'>You switch to inject mode.</span>") : to_chat(user, "<span class='info'>You switch to analyze mode.</span>")
 
 /obj/machinery/bot/medbot/state_controls_pai(obj/item/device/paicard/P)
 	to_chat(P.pai, "<span class='info'><b>Welcome to your new body. Remember: you're a pAI inside a medbot, not a medbot.</b></span>")
 	to_chat(P.pai, "<span class='info'>It is highly recommended to download the Medical Supplement from the pAI software interface as it gives you MedHUD.</span>")
 	to_chat(P.pai, "<span class='info'>Your controls are:</span>")
-	to_chat(P.pai, "<span class='info'>- Drop hotkey: You state there's a patient in critical condition</span>")
-	to_chat(P.pai, "<span class='info'>- Click on somebody: You try to inject the person, just like a medbot</span>")
-	to_chat(P.pai, "<span class='info'>What you inject depends on the medbot's configuration.</span>")
+	to_chat(P.pai, "<span class='info'>- (Q) Drop hotkey: You state there's a patient in critical condition</span>")
+	to_chat(P.pai, "<span class='info'>- (X) Swap hands:  You switch to inject or analyze mode.</span>")
+	to_chat(P.pai, "<span class='info'>- Click on somebody: Depending on your mode, you inject or analyze a person.</span>")
+	to_chat(P.pai, "<span class='info'>What you inject depends on the medbot's configuration. You can't modify it</span>")
 	to_chat(P.pai, "<span class='info'>If you want to exit the medbot, somebody has to right-click you and press 'Remove pAI'.</span>")
+
+#undefine
