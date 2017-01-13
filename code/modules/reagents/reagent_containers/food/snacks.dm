@@ -868,6 +868,17 @@
 	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/veggieburger
+	name = "veggie burger"
+	desc = "Technically vegetarian."
+	icon_state = "veggieburger"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/veggieburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/roburger
 	name = "roburger"
 	desc = "The lettuce is the only organic component. Beep."
