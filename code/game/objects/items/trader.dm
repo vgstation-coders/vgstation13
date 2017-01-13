@@ -5,12 +5,13 @@
 
 /obj/item/weapon/coin/trader
 	material=MAT_GOLD
-	name = "Trader coin"
+	name = "trader coin"
 	icon_state = "coin_mythril"
 
 /obj/item/weapon/storage/trader_marauder
-	name = "Box of Marauder circuits"
+	name = "box of Marauder circuits"
 	desc = "All in one box!"
+	icon = 'icons/obj/storage/smallboxes.dmi'
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 
@@ -22,8 +23,9 @@
 	new /obj/item/weapon/circuitboard/mecha/marauder/main(src)
 
 /obj/item/weapon/storage/bluespace_crystal
-	name = "Natural bluespace crystals box"
+	name = "natural bluespace crystals box"
 	desc = "Hmmm... it smells like tomato"
+	icon = 'icons/obj/storage/smallboxes.dmi'
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 
@@ -35,9 +37,9 @@
 
 /*/obj/structure/cage/with_random_slime
 	..()
-	
+
 	add_mob
 
 /mob/living/carbon/slime/proc/randomSlime()
-*/	
+*/
 
