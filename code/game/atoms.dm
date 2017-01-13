@@ -40,6 +40,7 @@ var/global/list/ghdel_profiling = list()
 	var/list/last_beamchecks // timings for beam checks.
 	var/ignoreinvert = 0
 	var/timestopped
+	var/timeless = FALSE	//whether the atom is unaffected by time effects
 
 	appearance_flags = TILE_BOUND
 
