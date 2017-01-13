@@ -2388,7 +2388,7 @@ var/global/num_vending_terminals = 1
 
 
 /obj/machinery/vending/trader	// Boxes are defined in trader.dm
-	name = "Jewvend"
+	name = "Trader Supply"
 	desc = "Its coin groove has been modified."
 	product_slogans = "Profits."
 	product_ads = "When you charge a customer $100, and he pays you by mistake $200, you have an ethical dilemma — should you tell your partner?"
