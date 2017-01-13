@@ -49,6 +49,11 @@
 			H.adjustToxLoss(-50)
 	..()
 
+/obj/item/weapon/reagent_containers/food/snacks/meat/diona
+	name = "leafy meat"
+	desc = "It's got an awful lot of protein for a vegetable."
+	icon_state = "diona_meat"
+
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken
 	name = "chicken meat"
 	desc = "This better be delicious."
