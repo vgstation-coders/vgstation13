@@ -20,7 +20,6 @@ var/list/lightning_sound = list('sound/effects/lightning/chainlightning1.ogg', '
 var/list/soulstone_sound = list('sound/hallucinations/far_noise.ogg', 'sound/hallucinations/veryfar_noise.ogg', 'sound/hallucinations/wail.ogg')
 var/list/fracture_sound = list('sound/effects/bonebreak1.ogg','sound/effects/bonebreak2.ogg','sound/effects/bonebreak3.ogg','sound/effects/bonebreak4.ogg')
 
-
 //var/list/gun_sound = list('sound/weapons/Gunshot.ogg', 'sound/weapons/Gunshot2.ogg','sound/weapons/Gunshot3.ogg','sound/weapons/Gunshot4.ogg')
 
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
