@@ -593,7 +593,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/under/neorussian,
 					/obj/item/clothing/shoes/jackboots/neorussian)
 	cost = 225
-	containertype = /obj/structure/closet/
+	containertype = /obj/structure/closet/crate
 	containername = "neo-Russian crate"
 	group = "Clothing"
 	contraband = 1
@@ -607,7 +607,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/head/russofurhat,
 					/obj/item/clothing/suit/russofurcoat)
 	cost = 50
-	containertype = /obj/structure/closet/
+	containertype = /obj/structure/closet/crate
 	containername = "Russian clothing crate"
 	group = "Clothing"
 	contraband = 1
