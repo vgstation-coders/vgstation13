@@ -48,7 +48,7 @@
 	track.humans.len = 0
 	track.others.len = 0
 
-	if(usr.stat == 2)
+	if(stat == 2)
 		return list()
 
 	for(var/mob/living/M in mob_list)
@@ -63,7 +63,9 @@
 			continue
 		if(M == usr)
 			continue
-		if(M.invisibility)//cloaked
+		if(see_invisible < M.invisibility) //cloaked
+			continue
+		if(M.alpha <= 1) //fully transparent
 			continue
 		if(M.digitalcamo)
 			continue
@@ -167,19 +169,21 @@
 		while (U.cameraFollow == target)
 			if (U.cameraFollow == null)
 				return
-			if (istype(target, /mob/living/carbon/human))
+
+			if(target.digitalcamo || (see_invisible < target.invisibility) || target.alpha <= 1)
+				to_chat(U, "Follow camera mode terminated.")
+				U.cameraFollow = null
+				return
+
+			if(istype(target, /mob/living/carbon/human))
 				var/mob/living/carbon/human/H = target
 				if(H.wear_id && istype(H.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
 					to_chat(U, "Follow camera mode terminated.")
 					U.cameraFollow = null
 					return
-				if(H.digitalcamo)
-					to_chat(U, "Follow camera mode terminated.")
-					U.cameraFollow = null
-					return
 
 			if(istype(target.loc,/obj/effect/dummy))
-				to_chat(U, "Follow camera mode ended.")
+				to_chat(U, "Follow camera mode terminated.")
 				U.cameraFollow = null
 				return
 
