@@ -670,7 +670,6 @@
 	for(var/i = 1 to 7)
 		new /obj/item/ornament/teardrop(src)
 
-<<<<<<< e4f2b50e661932acf349ecd3b524d09701b88f79
 /obj/item/weapon/storage/box/botanydisk
 	name = "flora disk box"
 	desc = "A box of flora data disks."
@@ -713,7 +712,6 @@
 	var/randomsprite = pick("a","b")
 	icon_state = "wizbox-[randomsprite]"
 
-=======
 /obj/item/weapon/storage/box/chrono_grenades
 	name = "box of chrono grenades"
 	desc = "A box of seven experimental chrono grenades."
@@ -723,4 +721,3 @@
 	..()
 	for(var/i = 1 to 7)
 		new /obj/item/weapon/grenade/chronogrenade(src)
->>>>>>> 392cd187549db7bdc512500379ddafc8c812e60b
