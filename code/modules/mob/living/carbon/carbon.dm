@@ -214,14 +214,27 @@
 				)
 		// BEGIN HUGCODE - N3X
 		else
+			var/datum/organ/external/S = src.get_organ(M.zone_sel.selecting)
 			if (istype(src,/mob/living/carbon/human) && src:w_uniform)
 				var/mob/living/carbon/human/H = src
 				H.w_uniform.add_fingerprint(M)
-			playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
-			M.visible_message( \
-				"<span class='notice'>[M] gives [src] a [pick("hug","warm embrace")].</span>", \
-				"<span class='notice'>You hug [src].</span>", \
-				)
+			if(M.zone_sel.selecting == "head" && !(S.status & ORGAN_DESTROYED))
+				M.visible_message( \
+					"<span class='notice'>[M] pats [src]'s head.</span>", \
+					"<span class='notice'>You pat [src]'s head.</span>", \
+					)
+			else if((M.zone_sel.selecting == "l_hand" && !(S.status & ORGAN_DESTROYED)) || (M.zone_sel.selecting == "r_hand" && !(S.status & ORGAN_DESTROYED)))
+				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+				M.visible_message( \
+					"<span class='notice'>[M] shake hands with [src].</span>", \
+					"<span class='notice'>You shake [src]'s hand.</span>", \
+					)
+			else
+				playsound(get_turf(src), 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
+				M.visible_message( \
+					"<span class='notice'>[M] gives [src] a [pick("hug","warm embrace")].</span>", \
+					"<span class='notice'>You hug [src].</span>", \
+					)
 			reagents.add_reagent(PARACETAMOL, 1)
 
 			share_contact_diseases(M)
