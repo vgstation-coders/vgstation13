@@ -1465,7 +1465,4 @@ Thanks.
 	if(override_blindness_check || !(disabilities & BLIND))
 		// flick("e_flash", flash)
 		overlay_fullscreen("flash", type)
-		// addtimer(src, "clear_fullscreen", 25, FALSE, "flash", 25)
-		spawn(25)
-			clear_fullscreen("flash", 25)
 		return 1
