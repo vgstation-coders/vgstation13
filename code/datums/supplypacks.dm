@@ -608,7 +608,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/suit/russofurcoat)
 	cost = 50
 	containertype = /obj/structure/closet/
-	containername = "Russian Clothing"
+	containername = "russian clothing crate"
 	group = "Clothing"
 	contraband = 1
 //////SECURITY//////
