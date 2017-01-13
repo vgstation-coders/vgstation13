@@ -9,7 +9,7 @@
 	icon_state = "coin_mythril"
 
 /obj/item/weapon/storage/trader_marauder
-	name = "Box of Marauder circuits"
+	name = "box of Marauder circuits"
 	desc = "All in one box!"
 	icon = 'icons/obj/storage/smallboxes.dmi'
 	icon_state = "box_of_doom"
@@ -23,7 +23,7 @@
 	new /obj/item/weapon/circuitboard/mecha/marauder/main(src)
 
 /obj/item/weapon/storage/bluespace_crystal
-	name = "Natural bluespace crystals box"
+	name = "natural bluespace crystals box"
 	desc = "Hmmm... it smells like tomato"
 	icon = 'icons/obj/storage/smallboxes.dmi'
 	icon_state = "box_of_doom"
