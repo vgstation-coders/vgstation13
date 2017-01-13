@@ -1279,7 +1279,11 @@ Thanks.
 	if(!meat_type)
 		return 0
 
-	var/obj/item/weapon/reagent_containers/food/snacks/meat/M = new meat_type(location)
+	var/obj/item/weapon/reagent_containers/food/snacks/meat/M
+	if(istype(src, /mob/living/carbon/human))
+		M = new meat_type(location, src)
+	else
+		M = new meat_type(location)
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/A = M
 
 	if(istype(A))
