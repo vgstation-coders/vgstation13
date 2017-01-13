@@ -500,6 +500,11 @@
 	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1, FLOUR = 15)
 	result = /obj/item/weapon/reagent_containers/food/snacks/baguette
 
+/datum/recipe/croissant
+	reagents = list("flour" = 5, "water" = 5, "milk" = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
+	result = /obj/item/weapon/reagent_containers/food/snacks/croissant
+
 // Asian ///////////////////////////////////////////////////////
 
 /datum/recipe/wingfangchu
