@@ -627,6 +627,7 @@
 #include "code\game\objects\items\ornaments.dm"
 #include "code\game\objects\items\shooting_range.dm"
 #include "code\game\objects\items\toys.dm"
+#include "code\game\objects\items\trader.dm"
 #include "code\game\objects\items\trash.dm"
 #include "code\game\objects\items\verb_holder.dm"
 #include "code\game\objects\items\vouchers.dm"
