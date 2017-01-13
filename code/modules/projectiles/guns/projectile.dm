@@ -19,7 +19,7 @@
 	var/obj/item/ammo_storage/magazine/stored_magazine = null
 	var/obj/item/ammo_casing/chambered = null
 	var/mag_type = ""
-	var/mag_drop_sound ='sound/weapons/magdrop_1.ogg'
+	var/mag_drop_sound ='sound/weapons/magdrop_1_delayed.ogg'
 
 	var/gun_flags = EMPTYCASINGS	//Yay, flags
 
