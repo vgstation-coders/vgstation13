@@ -771,6 +771,7 @@
 #include "code\game\objects\items\weapons\ai_modules\standard.dm"
 #include "code\game\objects\items\weapons\ai_modules\targetted.dm"
 #include "code\game\objects\items\weapons\grenades\chem_grenade.dm"
+#include "code\game\objects\items\weapons\grenades\chronogrenade.dm"
 #include "code\game\objects\items\weapons\grenades\clowngrenade.dm"
 #include "code\game\objects\items\weapons\grenades\emgrenade.dm"
 #include "code\game\objects\items\weapons\grenades\flashbang.dm"
