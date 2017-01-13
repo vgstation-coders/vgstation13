@@ -650,6 +650,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						var/datum/picture/P = photo
 						newMsg.img = P.fields["img"]
 						newMsg.img_info = P.fields["info"]
+					ejectPhoto()
 				feedback_inc("newscaster_stories",1)
 				for(var/datum/feed_channel/FC in news_network.network_channels)
 					if(FC.channel_name == src.channel_name)
@@ -946,7 +947,11 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				visible_message("<EM>[user.name]</EM> further abuses the shattered [src].")
 
 			else
-				if(istype(I, /obj/item/weapon) )
+				var/obj/item/weapon/photo/P = I
+				if(istype(P) && !photo && user.drop_item(P, src))
+					photo = P
+
+				else if(istype(I, /obj/item/weapon) )
 					var/obj/item/weapon/W = I
 					if(W.force <15)
 						visible_message("[user.name] hits the [src] with the [W] with no visible effect." )
