@@ -41,6 +41,8 @@
 		// Will not get called if the virus has never been activated.
 	proc/affect_mob_voice(var/datum/speech/speech)
 		// Called by /mob/living/carbon/human/treat_speech
+	proc/on_touch(var/mob/living/carbon/mob, var/toucher, var/touched, var/touch_type)
+		// Called when the sufferer of the symptom bumps, is bumped, or is touched by hand.
 
 // Most of the stuff below shouldn't be changed when you make a new effect.
 /datum/disease2/effect/New(var/datum/disease2/disease/D)
@@ -458,6 +460,49 @@
 	to_chat(mob, "<span class='warning'>You feel terrible.</span>")
 	affect_voice_active = 0
 	..()
+
+/datum/disease2/effect/butterfly_skin
+	name = "Epidermolysis Bullosa"
+	stage = 3
+	max_count = 1
+	var/skip = FALSE
+
+/datum/disease2/effect/butterfly_skin/activate(var/mob/living/carbon/mob,var/multiplier)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		if(H.species && (H.species.anatomy_flags & NO_SKIN))	//Can't have fragile skin if you don't have skin at all.
+			skip = TRUE
+			return
+	to_chat(mob, "<span class='warning'>Your skin feels a little fragile.</span>")
+
+/datum/disease2/effect/butterfly_skin/deactivate(var/mob/living/carbon/mob)
+	if(!skip)
+		to_chat(mob, "<span class='notice'>Your skin feels nice and durable again!.</span>")
+	..()
+
+/datum/disease2/effect/butterfly_skin/on_touch(var/mob/living/carbon/mob, var/toucher, var/touched, var/touch_type)
+	if(count && !skip)
+		var/datum/organ/external/E
+		if(ishuman(mob))
+			var/mob/living/carbon/human/H = mob
+			while(!E || (E.status & ORGAN_ROBOT) || (E.status & ORGAN_PEG))
+				E = pick(H.organs)
+		if(toucher == mob)
+			if(E)
+				to_chat(mob, "<span class='warning'>As you bump into \the [touched], some of the skin on your [E.display_name] shears off!</span>")
+				E.take_damage(10)
+			else
+				to_chat(mob, "<span class='warning'>As you bump into \the [touched], some of your skin shears off!</span>")
+				mob.apply_damage(10)
+		else
+			if(E)
+				to_chat(mob, "<span class='warning'>As \the [toucher] [touch_type == BUMP ? "bumps into" : "touches"] you, some of the skin on your [E.display_name] shears off!</span>")
+				to_chat(toucher, "<span class='danger'>As you [touch_type == BUMP ? "bump into" : "touch"] \the [mob], some of the skin on \his [E.display_name] shears off!</span>")
+				E.take_damage(10)
+			else
+				to_chat(mob, "<span class='warning'>As \the [toucher] [touch_type == BUMP ? "bumps into" : "touches"] you, some of your skin shears off!</span>")
+				to_chat(toucher, "<span class='danger'>As you [touch_type == BUMP ? "bump into" : "touch"] \the [mob], some of \his skin shears off!</span>")
+				mob.apply_damage(10)
 
 
 ////////////////////////STAGE 3/////////////////////////////////
