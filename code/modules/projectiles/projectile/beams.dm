@@ -922,7 +922,7 @@ var/list/beam_master = list()
 	..(A,dir)
 	whip = spawning_whip
 	user = whipper
-	if(!whip || !istype(whip) || !user || !istype(user))
+	if(!istype(whip) || !istype(user))
 		spawn()
 			returnToPool(src)
 
