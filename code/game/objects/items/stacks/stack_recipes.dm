@@ -241,3 +241,10 @@ var/global/list/datum/stack_recipe/cardboard_recipes = list (
 	new/datum/stack_recipe("eggbox",			/obj/item/weapon/storage/fancy/egg_box/empty			),
 	new/datum/stack_recipe("paper bin",			/obj/item/weapon/paper_bin/empty						),
 	)
+
+/* ========================================================================
+							LEATHER RECIPES
+======================================================================== */
+var/global/list/datum/stack_recipe/leather_recipes = list (
+	new/datum/stack_recipe("Bullwhip",	/obj/item/weapon/bullwhip,	10,	time = 100,),
+	)

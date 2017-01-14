@@ -286,7 +286,6 @@ obj/item/weapon/banhammer/admin
 	force = 15
 	throwforce = 0
 	w_class = W_CLASS_MEDIUM
-	sharpness = 1.2
 	attack_verb = list("whips", "lashes", "thrashes", "flagellates", "flogs")
 
 /obj/item/weapon/bullwhip/afterattack(atom/A, mob/living/user)
@@ -305,3 +304,8 @@ obj/item/weapon/banhammer/admin
 	spawn()
 		projectile.OnFired()
 		projectile.process()
+
+/obj/item/weapon/bullwhip/attack(mob/M, mob/user)
+	sharpness = 1.2	//a whip can only cut things when it is actually whipping
+	..()
+	sharpness = 0
