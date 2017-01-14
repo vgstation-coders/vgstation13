@@ -114,7 +114,7 @@
 
 	if(!occupant)
 		for(var/mob/M in src)//Failsafe so you can get mobs out
-			if(!(M.gcDestroyed))
+			if(!M.gcDestroyed)
 				M.forceMove(get_turf(src))
 
 /obj/machinery/dna_scannernew/verb/move_inside()
@@ -274,7 +274,7 @@
 	if(locked)
 		visible_message("Can't eject occupants while \the [src] is locked.")
 		return 0
-	if(!(occupant.gcDestroyed))
+	if(!occupant.gcDestroyed)
 		occupant.forceMove(exit)
 		occupant.reset_view()
 	occupant = null
