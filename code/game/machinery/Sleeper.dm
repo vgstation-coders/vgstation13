@@ -530,7 +530,7 @@
 		if(x in component_parts)
 			continue
 		x.forceMove(src.loc)
-	if(!(occupant.gcDestroyed))
+	if(!occupant.gcDestroyed)
 		occupant.forceMove(exit)
 		occupant.reset_view()
 	occupant = null
