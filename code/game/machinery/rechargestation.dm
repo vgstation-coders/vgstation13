@@ -238,7 +238,7 @@
 		return
 	//for(var/obj/O in src)
 	//	O.loc = src.loc
-	if(!(occupant.gcDestroyed))
+	if(!occupant.gcDestroyed)
 		if (occupant.client)
 			occupant.client.eye = occupant.client.mob
 			occupant.client.perspective = MOB_PERSPECTIVE
