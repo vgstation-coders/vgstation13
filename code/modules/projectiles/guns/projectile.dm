@@ -229,10 +229,13 @@
 /obj/item/weapon/gun/projectile/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, struggle = 0)
 	..()
 	if(!chambered && stored_magazine && !stored_magazine.ammo_count() && gun_flags &AUTOMAGDROP) //auto_mag_drop decides whether or not the mag is dropped once it empties
+		var/drop_me = stored_magazine // prevents dropping a fresh/different mag.
 		spawn(automagdrop_delay_time)
-			RemoveMag(user)
-			if(mag_drop_sound)
-				playsound(user, mag_drop_sound, 40, 1)
+			if(stored_magazine = drop_me)
+				RemoveMag(user)
+				if(mag_drop_sound)
+					playsound(user, mag_drop_sound, 40, 1)
+
 	return
 
 /obj/item/weapon/gun/projectile/examine(mob/user)
