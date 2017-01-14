@@ -669,17 +669,17 @@
 	patient = A //Needed because medicate_patient doesn't set up one.
 
 	if(pai_analyze_mode)
-		medicate_patient(A)
-	else
 		if(istype(A, /mob/living/carbon))
 			healthanalyze(A, user, 1)
+	else
+		medicate_patient(A)
 
 /obj/machinery/bot/medbot/dropkey_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the drop hotkey
 	declare()
 
 /obj/machinery/bot/medbot/swapkey_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI uses the swap_hand() hotkey
-	pai_analyze_mode = !pai_analyze_mode
 	pai_analyze_mode ? to_chat(user, "<span class='info'>You switch to inject mode.</span>") : to_chat(user, "<span class='info'>You switch to analyze mode.</span>")
+	pai_analyze_mode = !pai_analyze_mode
 
 /obj/machinery/bot/medbot/state_controls_pai(obj/item/device/paicard/P)
 	to_chat(P.pai, "<span class='info'><b>Welcome to your new body. Remember: you're a pAI inside a medbot, not a medbot.</b></span>")
