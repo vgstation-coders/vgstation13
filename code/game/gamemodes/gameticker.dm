@@ -61,6 +61,8 @@ var/datum/controller/gameticker/ticker
 		"sound/music/whatisthissong.ogg",
 		"sound/music/space_asshole.ogg",
 		"sound/music/starman.ogg",
+		"sound/music/dawsonschristian",
+		"sound/music/carmenmirandasghost"
 		))
 	login_music = fcopy_rsc(oursong)
 
