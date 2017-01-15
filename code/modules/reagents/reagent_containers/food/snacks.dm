@@ -4851,5 +4851,5 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/croissant/New()
 	..()
-	reagents.add_reagent("nutriment", 6)
+	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
