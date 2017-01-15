@@ -1669,3 +1669,58 @@
 	if(pain_numb)
 		return FALSE
 	return TRUE
+
+/mob/living/carbon/human/duplicate(atom/destination)
+	var/mob/living/carbon/human/dupe = ..()
+	var/looped_external_organs = FALSE
+	for(var/x in vars)
+		if(!exclude.Find(x)) // Important!
+			if(x == "species")
+				var/datum/species/S = vars[x]
+				dupe.set_species(S.name)
+				continue
+			if(x == "internal_organs")
+				dupe.internal_organs = list()
+				dupe.internal_organs_by_name = list()
+				for(var/j = 1, j <= internal_organs.len, j++)
+					var/datum/organ/internal/I = internal_organs[j]
+					var/datum/organ/internal/DI = I.duplicate(dupe)
+					dupe.internal_organs.Add(DI)
+					dupe.internal_organs_by_name[DI.name] = DI
+				continue
+			if(x == "organs")
+				dupe.organs = list()
+				dupe.organs_by_name = list()
+				for(var/j = 1, j <= organs.len, j++)
+					var/datum/organ/external/O = organs[j]
+					var/datum/organ/external/DO = O.duplicate(dupe)
+					dupe.organs.Add(DO)
+					dupe.organs_by_name[DO.name] = DO
+					DO.update_damages()
+				looped_external_organs = TRUE
+				continue
+			if(x == "grasp_organs")
+				spawn()
+					while(!looped_external_organs)
+						sleep(1)
+					dupe.grasp_organs = list()
+					for(var/i = 1, i <= grasp_organs.len, i++)
+						var/datum/organ/external/E = grasp_organs[i]
+						var/datum/organ/external/DE = dupe.organs_by_name[E.name]
+						dupe.grasp_organs.Add(DE)
+	for(var/i in organs_by_name)
+		var/datum/organ/external/E = organs_by_name[i]
+		if(E.parent)
+			var/datum/organ/external/EP = E.parent
+			var/datum/organ/external/ED = dupe.organs_by_name[E.name]
+			var/datum/organ/external/EPD = dupe.organs_by_name[EP.name]
+			ED.parent = EPD
+		if(E.children && E.children.len)
+			for(var/j in E.children)
+				var/datum/organ/external/C = j
+				var/datum/organ/external/CD = dupe.organs_by_name[C.name]
+				var/datum/organ/external/CPD = dupe.organs_by_name[E.name]
+				CPD.children = list()
+				CPD.children.Add(CD)
+	dupe.updatehealth()
+	dupe.regenerate_icons()

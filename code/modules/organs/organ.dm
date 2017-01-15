@@ -238,3 +238,39 @@
 
 	if(cancerous_growth <= 0) //No cancerous growth this tick, no effects
 		return 1
+
+/datum/organ/duplicate(mob/living/carbon/human/destination)
+	if(!istype(destination))
+		return
+	var/datum/organ/dupe = new type()
+
+	for(var/x in vars)
+		if(!exclude.Find(x)) // Important!
+			if(x == "owner")
+				dupe.owner = destination
+				continue
+			if(istype(vars[x], /datum))
+				continue
+			if(istype(vars[x], /list))
+				var/list/OL = vars[x]
+				var/list/DL = dupe.vars[x]
+				if(!DL || !OL)
+					if(!DL)
+						DL = list()
+					if(!OL)
+						OL = list()
+				if(OL && DL)
+					for(var/y in OL)
+						if(istext(y) || isnum(y))
+							if(!isnum(y) && OL[y])
+								DL[y] = OL[y]
+							else
+								for(var/i = 1, i <= OL.len, i++)
+									if(OL[i] == y)
+										DL.Add(y)
+										break
+						else
+							break
+			else
+				dupe.vars[x] = vars[x]
+	return dupe
