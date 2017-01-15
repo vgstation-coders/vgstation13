@@ -1180,6 +1180,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define I_CHEMS	   "chems"
 #define I_WIRES    "wires"
 #define I_GHOST    "poltergeist"
+#define I_ARTIFACT "artifacts"
+
 
 // delayNext() flags.
 #define DELAY_MOVE    1

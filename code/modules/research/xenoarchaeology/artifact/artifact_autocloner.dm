@@ -68,6 +68,7 @@
 			desc = "It's full of a bubbling viscous liquid, and is lit by a mysterious glow."
 			if(spawn_type)
 				new spawn_type(src.loc)
+				investigation_log(I_ARTIFACT, "|| spawned || [spawn_type].")
 				playsound(get_turf(src), 'sound/machines/heps.ogg', 50, 0)
 
 		//if we're getting close to finished, kick into overdrive power usage
