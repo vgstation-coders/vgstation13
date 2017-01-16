@@ -26,7 +26,7 @@
 
 /obj/effect/spider/attackby(var/obj/item/weapon/W, var/mob/user)
 	user.delayNextAttack(8)
-	if (~W.flags & NO_ATTACK_MSG))
+	if (~W.flags & NO_ATTACK_MSG)
 		if(W.attack_verb && W.attack_verb.len)
 			visible_message("<span class='warning'><b>[user] [pick(W.attack_verb)] \the [src] with \the [W].</b></span>")
 		else
