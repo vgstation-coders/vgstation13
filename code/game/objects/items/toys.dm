@@ -1139,7 +1139,29 @@
 		B.air_contents = new /datum/gas_mixture()
 		B.air_contents.volume = 12 //liters
 		B.air_contents.temperature = T20C
-		B.air_contents.carbon_dioxide = 0.5
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			var/datum/organ/internal/lungs/L = H.internal_organs_by_name["lungs"]
+			if(!L)
+				return
+			for(var/i in L.gasses)
+				if(istype(i, /datum/lung_gas/waste))
+					var/datum/lung_gas/waste/W = i
+					switch(W.id)
+						if("oxygen")
+							B.air_contents.adjust(o2 = 0.5)
+						if("carbon_dioxide")
+							B.air_contents.adjust(co2 = 0.5)
+						if("nitrogen")
+							B.air_contents.adjust(n2 = 0.5)
+						if("toxins")
+							B.air_contents.adjust(tx = 0.5)
+						if("/datum/gas/sleeping_agent")
+							var/datum/gas/sleeping_agent/S = new()
+							S.moles = 0.5
+							B.air_contents.adjust(traces = list(S))
+		else
+			B.air_contents.adjust(co2 = 0.5)
 	else
 		var/moles = ONE_ATMOSPHERE*12/(R_IDEAL_GAS_EQUATION*G.temperature)
 		B.air_contents = G.remove(moles)
