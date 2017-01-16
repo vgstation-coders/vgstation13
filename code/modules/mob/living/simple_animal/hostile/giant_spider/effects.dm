@@ -26,7 +26,7 @@
 
 /obj/effect/spider/attackby(var/obj/item/weapon/W, var/mob/user)
 	user.delayNextAttack(8)
-	if (!(~W.flags & NO_ATTACK_MSG))
+	if (~W.flags & NO_ATTACK_MSG))
 		if(W.attack_verb && W.attack_verb.len)
 			visible_message("<span class='warning'><b>[user] [pick(W.attack_verb)] \the [src] with \the [W].</b></span>")
 		else
@@ -56,7 +56,7 @@
 	else
 		var/atom/movable/I = pick(contents)
 		var/some_suffix = "thing"
-		if(I && ishuman(I))
+		if(I && ishuman())
 			some_suffix = "one"
 		user.visible_message("<span class='notice'>[user] rubs their hands all over \the [src]!</span>", \
 			"<span class='notice'>You rub your hands over \the [src] [I && ", you think you can feel some[some_suffix] in there!"]</span>")
