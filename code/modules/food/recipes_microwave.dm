@@ -143,6 +143,11 @@
 	items = list()
 	result = /obj/item/weapon/reagent_containers/food/snacks/jellyburger/cherry
 
+/datum/recipe/veggieburger
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/diona)
+	result = /obj/item/weapon/reagent_containers/food/snacks/veggieburger
+
 // Burger sliders //////////////////////////////////////////////
 
 /datum/recipe/sliders
@@ -499,6 +504,11 @@
 /datum/recipe/baguette
 	reagents = list(SODIUMCHLORIDE = 1, BLACKPEPPER = 1, FLOUR = 15)
 	result = /obj/item/weapon/reagent_containers/food/snacks/baguette
+
+/datum/recipe/croissant
+	reagents = list(FLOUR = 5, WATER = 5, MILK = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
+	result = /obj/item/weapon/reagent_containers/food/snacks/croissant
 
 // Asian ///////////////////////////////////////////////////////
 

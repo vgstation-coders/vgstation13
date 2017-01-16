@@ -868,6 +868,17 @@
 	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/veggieburger
+	name = "veggie burger"
+	desc = "Technically vegetarian."
+	icon_state = "veggieburger"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/veggieburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/roburger
 	name = "roburger"
 	desc = "The lettuce is the only organic component. Beep."
@@ -4832,3 +4843,13 @@
 	visible_message("<span class='warning'>\The [src] rattles maliciously!</span>")
 	if(loc.Adjacent(get_turf(O))) //Two reasons. First, prevent distance spooking. Second, don't move through border objects (windows)
 		Move(get_turf(O))
+
+/obj/item/weapon/reagent_containers/food/snacks/croissant
+	name = "croissant"
+	desc = "True French cuisine."
+	icon_state = "croissant"
+
+/obj/item/weapon/reagent_containers/food/snacks/croissant/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	bitesize = 2

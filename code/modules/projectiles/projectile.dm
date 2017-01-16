@@ -722,3 +722,5 @@ var/list/impact_master = list()
 	def_zone = tar_zone
 	spawn()
 		process()
+/obj/item/projectile/proc/apply_projectile_color(var/proj_color)
+	color = proj_color

@@ -49,6 +49,9 @@ var/global/datum/controller/vote/vote = new()
 	var/total_votes    = 0
 	var/weighted        = FALSE // Whether to use weighted voting.
 
+	// Jesus fuck some shitcode is breaking because it's sleeping and the SS doesn't like it.
+	var/lock = FALSE
+
 /datum/controller/vote/New()
 	. = ..()
 	src.data = list()
@@ -67,7 +70,10 @@ var/global/datum/controller/vote/vote = new()
 //	return
 
 /datum/controller/vote/proc/process()	//called by master_controller
+	if (lock)
+		return
 	if(mode)
+		lock = TRUE
 		// No more change mode votes after the game has started.
 		// 3 is GAME_STATE_PLAYING, but that #define is undefined for some reason
 		if(mode == "gamemode" && ticker.current_state >= 2)
@@ -88,6 +94,9 @@ var/global/datum/controller/vote/vote = new()
 			src.reset()
 		else
 			update(1)
+
+		lock = FALSE
+
 /datum/controller/vote/proc/reset()
 	initiator = null
 	time_remaining = 0
@@ -158,6 +167,7 @@ var/global/datum/controller/vote/vote = new()
 	return .
 
 /datum/controller/vote/proc/announce_result()
+	stack_trace("Fuck my shit up. Lock is \[[lock]]")
 	var/list/winners = get_result()
 	var/text
 	var/feedbackanswer

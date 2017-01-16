@@ -280,6 +280,8 @@ var/MAX_EXPLOSION_RANGE = 14
 #define OPENCONTAINER	8192  // is an open container for chemistry purposes
 #define	NOREACT 		16384 // Reagents don't react inside this container.
 
+#define TIMELESS		32768 // Immune to time manipulation.
+
 #define ALL ~0
 #define NONE 0
 

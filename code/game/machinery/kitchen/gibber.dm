@@ -197,8 +197,6 @@ obj/machinery/gibber/New()
 		drugged_message = "<span class='warning'>You hear a band performance.</span>")
 	src.operating = 1
 	update_icon()
-	var/sourcename = src.occupant.real_name
-	var/sourcejob = src.occupant.job
 	var/sourcenutriment = src.occupant.nutrition / 15
 	var/sourcetotalreagents
 
@@ -207,12 +205,9 @@ obj/machinery/gibber/New()
 
 	var/totalslabs = src.occupant.size
 
-	var/obj/item/weapon/reagent_containers/food/snacks/meat/human/allmeat[totalslabs]
+	var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
 	for (var/i=1 to totalslabs)
-		var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new
-		newmeat.name = sourcename + newmeat.name
-		newmeat.subjectname = sourcename
-		newmeat.subjectjob = sourcejob
+		var/obj/item/weapon/reagent_containers/food/snacks/meat/newmeat = new occupant.meat_type(null, occupant)
 		newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
 
 		if(src.occupant.reagents)
@@ -285,8 +280,6 @@ obj/machinery/gibber/New()
 	use_power(1000)
 	visible_message("<span class='warning'>You hear a loud squelchy grinding sound.</span>", \
 		drugged_message = "<span class='warning'>You hear a band performance.</span>")
-	var/sourcename = victim.real_name
-	var/sourcejob = victim.job
 	var/sourcenutriment = victim.nutrition / 15
 	var/sourcetotalreagents
 	if(victim.reagents)
@@ -298,12 +291,7 @@ obj/machinery/gibber/New()
 	for (var/i=1 to totalslabs)
 		var/obj/item/weapon/reagent_containers/food/snacks/meat/newmeat = null
 		if(istype(victim, /mob/living/carbon/human))
-			var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newhmeat = new /obj/item/weapon/reagent_containers/food/snacks/meat/human(src)
-			newhmeat.name = sourcename + newhmeat.name
-			newhmeat.subjectname = sourcename
-			newhmeat.subjectjob = sourcejob
-			newmeat = newhmeat
-
+			newmeat = new victim.meat_type(src, victim)
 		else
 			newmeat = victim.drop_meat(src)
 
