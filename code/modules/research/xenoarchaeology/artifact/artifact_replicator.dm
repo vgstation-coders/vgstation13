@@ -103,7 +103,7 @@
 			if(Proj.firer)
 				msg_admin_attack("[key_name(Proj.firer)] blew up [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)")
 			explosion(get_turf(src), -1, 2, 3, 3)
-			src.investigation_log(I_ARTIFACT, "|| blew up by a || [Proj.type] || fired by [Proj.firer ? "[key_name(Proj.firer)]" : "something"].")
+			src.investigation_log(I_ARTIFACT, "|| blew after taking damage from || [Proj.type] || fired by [Proj.firer ? "[key_name(Proj.firer)]" : "something"].")
 			qdel(src)
 
 /obj/machinery/replicator/attackby(var/obj/O, var/mob/user)
