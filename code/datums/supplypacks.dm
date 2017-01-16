@@ -597,7 +597,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "neo-Russian crate"
 	group = "Clothing"
 	contraband = 1
-	
+
 /datum/supply_packs/russianclothing
 	name = "Russian clothing"
 	contains = list(/obj/item/clothing/head/squatter_hat,
@@ -953,7 +953,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg,
-					/obj/item/weapon/reagent_containers/food/snacks/spidereggs)
+					/obj/item/weapon/reagent_containers/food/snacks/spidereggs,
+					/obj/item/weapon/reagent_containers/food/snacks/meat/diona,
+					/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat)
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure
 	containername = "trophy meats crate"
