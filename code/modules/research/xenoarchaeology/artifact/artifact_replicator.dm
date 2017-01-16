@@ -103,6 +103,7 @@
 			if(Proj.firer)
 				msg_admin_attack("[key_name(Proj.firer)] blew up [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)")
 			explosion(get_turf(src), -1, 2, 3, 3)
+			src.investigation_log(I_ARTIFACT, "|| blew up by a [Proj.type] || fired by [Proj.firer ? "[key_name(Proj.firer)]" : "something"].")
 			qdel(src)
 
 /obj/machinery/replicator/attackby(var/obj/O, var/mob/user)
@@ -113,6 +114,7 @@
 		src.visible_message("<span class='warning'>\The [user] damages \the [src] with \the [O].</span>")
 		if(prob(O.force/2))
 			msg_admin_attack("[user] blew up [src]/([formatJumpTo(src)]) with [O] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+			src.investigation_log(I_ARTIFACT, "|| blew up by [key_name(user)] || used [O] as weapon.")
 			explosion(get_turf(src), -1, 2, 3, 3)
 			qdel(src)
 	else
