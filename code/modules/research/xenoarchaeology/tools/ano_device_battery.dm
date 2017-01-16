@@ -103,6 +103,7 @@
 		if(inserted_battery && inserted_battery.battery_effect)
 			//make sure the effect is active
 			if(!inserted_battery.battery_effect.activated)
+				src.investigation_log(I_ARTIFACT, "|| anomaly battery effect([inserted_battery.battery_effect]) || timed by [key_name(usr)]")
 				inserted_battery.battery_effect.ToggleActivate(1)
 
 			//update the effect loc
@@ -174,7 +175,7 @@
 		activated = 1
 		timing = 0
 		if(!inserted_battery.battery_effect.activated)
-			src.investigation_log(I_ARTIFACT, "|| anomaly battery effect([inserted_battery.battery_effect]) || emission started by[key_name(usr)]")
+			src.investigation_log(I_ARTIFACT, "|| anomaly battery effect([inserted_battery.battery_effect]) || emission started by [key_name(usr)]")
 			inserted_battery.battery_effect.ToggleActivate(1)
 	if(href_list["shutdown"])
 		activated = 0
