@@ -2412,7 +2412,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
 		/obj/item/weapon/reagent_containers/glass/bottle/peridaxon,
 		/obj/item/weapon/reagent_containers/glass/bottle/rezadone,
-		/obj/item/weapon/reagent_containers/glass/bottle/nanitessmall,	
+		/obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall,	
 		)
 
 	for(var/random_items = 1 to premium.len - 4)
