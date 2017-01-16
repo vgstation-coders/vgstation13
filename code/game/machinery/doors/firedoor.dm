@@ -233,9 +233,23 @@ var/global/list/alert_overlays_global = list()
 			update_icon()
 			return
 
-	if( iscrowbar(C) || isEmag(C) || ( istype(C,/obj/item/weapon/fireaxe) && C.wielded ) )
+	if( iscrowbar(C) || ( istype(C,/obj/item/weapon/fireaxe) && C.wielded ) )
 		force_open(user, C)
 		return
+
+	if( isEmag(C) )
+		if ( density==1 )
+			flick("door_spark", src)
+			spawn(6)
+			force_open(user, C)
+			spawn(10)
+			blocked = TRUE
+			update_icon()
+			return
+		else
+			blocked = TRUE
+			update_icon()
+			return
 
 	if(blocked)
 		to_chat(user, "<span class='warning'>\The [src] is welded solid!</span>")
@@ -323,7 +337,6 @@ var/global/list/alert_overlays_global = list()
 		user.visible_message("<span class='attack'>\The [istype(user.loc,/obj/mecha) ? "[user.loc.name]" : "[user]"] pries at \the [src][istype(C) ? " with \a [C]" : ""], but \the [src] is welded in place!</span>",\
 		"You try to pry \the [src] [density ? "open" : "closed"], but it is welded in place!",\
 		"You hear someone struggle and metal straining.")
-		return
 
 	//thank you Tigercat2000
 	user.visible_message("<span class='attack'>\The [istype(user.loc,/obj/mecha) ? "[user.loc.name]" : "[user]"] forces \the [src] [density ? "open" : "closed"][istype(C) ? " with \a [C]" : ""]!</span>",\
