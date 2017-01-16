@@ -343,10 +343,10 @@ var/list/valid_secondary_effect_types = list(\
 	if(istype(M,/obj))
 		if(M:throwforce >= 10)
 			if(my_effect.trigger == TRIGGER_FORCE)
-				src.investigation_log(I_ARTIFACT, "|| primary effect([my_effect]) triggered by THROW FORCE([my_effect.trigger]) || Hit by [M] || thrown by [key_name(user)].")
+				src.investigation_log(I_ARTIFACT, "|| primary effect([my_effect]) triggered by THROW FORCE([my_effect.trigger]) || Hit by [M] || thrown by [key_name(usr)].")
 				my_effect.ToggleActivate()
 			if(secondary_effect && secondary_effect.trigger == TRIGGER_FORCE && prob(25))
-				src.investigation_log(I_ARTIFACT, "|| secondary effect([secondary_effect]) triggered by THROW FORCE([secondary_effect.trigger]) || Hit by [M] || thrown by [key_name(user)].")
+				src.investigation_log(I_ARTIFACT, "|| secondary effect([secondary_effect]) triggered by THROW FORCE([secondary_effect.trigger]) || Hit by [M] || thrown by [key_name(usr)].")
 				secondary_effect.ToggleActivate(0)
 	else if(ishuman(M) && !istype(M:gloves,/obj/item/clothing/gloves))
 		var/warn = 0
