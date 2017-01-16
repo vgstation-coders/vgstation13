@@ -654,7 +654,7 @@
 				for(var/datum/disease2/effect/E in D.effects)
 					if(istype(E, symptom_type))
 						if(E.count > 0)
-							return 1
+							return E
 
 /mob/living/carbon/proc/handle_symptom_on_touch(var/toucher, var/touched, var/touch_type)
 	if(virus2.len)

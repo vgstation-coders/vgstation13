@@ -824,7 +824,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 
 /datum/disease2/effect/butterfly_skin/deactivate(var/mob/living/carbon/mob)
 	if(!skip)
-		to_chat(mob, "<span class='notice'>Your skin feels nice and durable again!.</span>")
+		to_chat(mob, "<span class='notice'>Your skin feels nice and durable again!</span>")
 	..()
 
 /datum/disease2/effect/butterfly_skin/on_touch(var/mob/living/carbon/mob, var/toucher, var/touched, var/touch_type)
@@ -1243,6 +1243,104 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 		if (multiplier > 1)
 			multiplier -= 0.3 // The virus tempers expectations
 
+
+/datum/disease2/effect/thick_skin	//increases brute damage resistance, decreases thermal loss, and increases heat gained from calories burned, all scaling with the multiplier
+	name = "Harlequin Ichthyosis"	//also causes loss of sweat glands, difficulty breathing, and bleeding with a high multiplier
+	stage = 4
+	max_multiplier = 100
+	chance = 10
+	var/skip = FALSE
+	var/brute_mod_subtracted = 0
+	var/therm_loss_mod_subtracted = 0
+	var/cal_heat_mod_added = 0
+
+/datum/disease2/effect/thick_skin/activate(var/mob/living/carbon/mob)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		if(H.species && (H.species.anatomy_flags & NO_SKIN))	//Can't have thick skin if you don't have skin at all.
+			skip = TRUE
+			return
+	mob.brute_damage_modifier += brute_mod_subtracted
+	mob.thermal_loss_multiplier += therm_loss_mod_subtracted
+	mob.calorie_burning_heat_multiplier -= cal_heat_mod_added
+	brute_mod_subtracted = 0
+	therm_loss_mod_subtracted = 0
+	cal_heat_mod_added = 0
+	switch(multiplier)
+		if(1 to 30)
+			switch(multiplier)
+				if(1 to 10)
+					to_chat(mob, "<span class='warning'>Your skin feels a little thick.</span>")
+				if(11 to 20)
+					to_chat(mob, "<span class='warning'>Your skin feels a little dry.</span>")
+				if(21 to 30)
+					to_chat(mob, "<span class='warning'>Your skin is beginning to crack at the joints.</span>")
+			brute_mod_subtracted = 0.05
+			therm_loss_mod_subtracted = 0.5
+			cal_heat_mod_added = 5
+			if(ishuman(mob))
+				var/mob/living/carbon/human/H = mob
+				if(initial(H.species.anatomy_flags) & HAS_SWEAT_GLANDS)
+					H.species.anatomy_flags |= HAS_SWEAT_GLANDS
+		if(31 to 100)
+			switch(multiplier)
+				if(31 to 50)
+					switch(multiplier)
+						if(31 to 40)
+							to_chat(mob, "<span class='warning'>Your skin feels hard as a rock.</span>")
+						if(41 to 50)
+							to_chat(mob, "<span class='warning'>You feel warmer than usual.</span>")
+					brute_mod_subtracted = 0.1
+					therm_loss_mod_subtracted = 1
+					cal_heat_mod_added = 10
+				if(51 to 70)
+					switch(multiplier)
+						if(51 to 60)
+							to_chat(mob, "<span class='warning'>The cracks in your skin multiply, separating it into plates.</span>")
+						if(61 to 70)
+							to_chat(mob, "<span class='warning'>The cracks between the plates on your skin widen.</span>")
+					brute_mod_subtracted = 0.25
+					therm_loss_mod_subtracted = 1
+					cal_heat_mod_added = 10
+				if(71 to 100)
+					switch(multiplier)
+						if(71 to 80)
+							to_chat(mob, "<span class='warning'>The plates on your skin grow thicker.</span>")
+						if(81 to 100)
+							switch(multiplier)
+								if(81 to 90)
+									to_chat(mob, "<span class='warning'>The thickness of the plate on your chest is making it difficult to breathe.</span>")
+								if(91 to 100)
+									to_chat(mob, "<span class='warning'>The cracks in your skin are beginning to open into wounds.</span>")
+									if(ishuman(mob))
+										var/mob/living/carbon/human/H = mob
+										H.drip(10)
+							mob.losebreath += rand(1,5)
+					brute_mod_subtracted = 0.5
+					therm_loss_mod_subtracted = 1
+					cal_heat_mod_added = 20
+			if(ishuman(mob))
+				var/mob/living/carbon/human/H = mob
+				H.species.anatomy_flags &= ~HAS_SWEAT_GLANDS
+
+	mob.brute_damage_modifier -= brute_mod_subtracted
+	mob.thermal_loss_multiplier -= therm_loss_mod_subtracted
+	mob.calorie_burning_heat_multiplier += cal_heat_mod_added
+	mob.cap_calorie_burning_bodytemp = FALSE
+	multiplier = min(multiplier + 10, max_multiplier)
+
+/datum/disease2/effect/thick_skin/deactivate(var/mob/living/carbon/mob)
+	if(!skip)
+		mob.brute_damage_modifier += brute_mod_subtracted
+		mob.thermal_loss_multiplier += therm_loss_mod_subtracted
+		mob.calorie_burning_heat_multiplier -= cal_heat_mod_added
+		mob.cap_calorie_burning_bodytemp = initial(mob.cap_calorie_burning_bodytemp)
+		if(ishuman(mob))
+			var/mob/living/carbon/human/H = mob
+			if(initial(H.species.anatomy_flags) & HAS_SWEAT_GLANDS)
+				H.species.anatomy_flags |= HAS_SWEAT_GLANDS
+		to_chat(mob, "<span class='notice'>Your skin feels nice and smooth again!</span>")
+	..()
 
 
 ////////////////////////SPECIAL/////////////////////////////////
