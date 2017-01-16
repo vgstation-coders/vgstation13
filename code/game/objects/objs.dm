@@ -67,6 +67,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 
 /obj/attackby(obj/item/weapon/W, mob/user)
+	if(integratedpai)
+		to_chat(user, "<span class = 'notice'>There's already a Personal AI inserted.</span>")
+		return
+
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
 		if(user.drop_item(W))
 			to_chat(user, "You insert \the [W] into a slot in \the [src].")
