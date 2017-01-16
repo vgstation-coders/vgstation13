@@ -61,9 +61,10 @@
 
 	interpreter.container = src
 
-	interpreter.SetVar("PI",	 	3.141592653)	// value of pi
-	interpreter.SetVar("E",		 	2.718281828)	// value of e
-	interpreter.SetVar("SQURT2", 	1.414213562)	// value of the square root of 2
+	interpreter.SetVar("TAU",	 	TAU)			// value of tau
+	interpreter.SetVar("PI",	 	PI)				// value of pi
+	interpreter.SetVar("E",		 	E)				// value of e
+	interpreter.SetVar("SQURT2", 	Sqrt2)			// value of the square root of 2
 	interpreter.SetVar("FALSE", 	0)				// boolean shortcut to 0
 	interpreter.SetVar("false", 	0)				// boolean shortcut to 0
 	interpreter.SetVar("TRUE",		1)				// boolean shortcut to 1

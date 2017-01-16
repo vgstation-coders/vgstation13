@@ -63,17 +63,17 @@
 
 		if ("clap")
 			if (!src.restrained())
-				message = "<B>[src]</B> clangs its utility arms together in a crude simulation of applause."
+				message = "<B>[src]</B> claps."
 				m_type = HEARABLE
 		if ("flap")
 			if (!src.restrained())
-				message = "<B>[src]</B> flaps its utility arms as though they were wings."
-				m_type = VISIBLE
+				message = "<B>[src]</B> flaps his wings."
+				m_type = HEARABLE
 
 		if ("aflap")
 			if (!src.restrained())
-				message = "<B>[src]</B> flaps its utility arms ANGRILY!"
-				m_type = VISIBLE
+				message = "<B>[src]</B> flaps his wings ANGRILY!"
+				m_type = HEARABLE
 
 		if ("twitch")
 			message = "<B>[src]</B> twitches violently."
@@ -155,23 +155,6 @@
 			playsound(get_turf(src), 'sound/machines/twobeep.ogg', 50, 0)
 			m_type = VISIBLE
 
-		if("scream")
-			var/M = null
-			if(param)
-				for (var/mob/A in view(null, null))
-					if (param == A.name)
-						M = A
-						break
-			if(!M)
-				param = null
-
-			if (param)
-				message = "<B>[src]</B> vocalizes loudly at [param]!"
-			else
-				message = "<B>[src]</B> vocalizes loudly!"
-			playsound(src, get_sfx("moonbase"),50, 0)
-			m_type = VISIBLE
-
 		if("ping")
 			var/M = null
 			if(param)
@@ -224,31 +207,17 @@
 			else
 				to_chat(src, "You are not security.")
 
-		if ("vent")
-			if(world.time-lastvent >= 30 SECONDS)
-				var/robofart = "[pick("whirrs","chuffs","clicks")] [pick("quietly","softly","sadly","excitedly","energetically","angrily","plaintively")] then [pick("vents","exhausts","releases")]"
-				for(var/mob/living/carbon/human/M in loc)
-					if(M != src && (M.lying || M.resting))
-						if(isvox(M))
-							visible_message("<span class = 'warning'><b>[src]</b> [robofart] colorless cold gas in <b>[M]</b>'s face!</span>")
-							if (M.wear_mask || (M_NO_BREATH in M.mutations))
-								to_chat(src, "<span class = 'warning'><b>ERROR: Subject <b>[M]</b> seems unaffected.</span>")
-							else
-								if(M.reagents)
-									M.reagents.add_reagent(OXYGEN,rand(1,2))
-									add_logs(src, M, "gassed with oxygen", admin = 1)
-						else
-							visible_message("<span class = 'warning'><b>[src]</b> [robofart] harmless lukewarm gas in <b>[M]</b>'s face!</span>")
-				message = ("<B>[src]</B> [robofart].")
-				lastvent=world.time
-				playsound(get_turf(src), 'sound/machines/pressurehiss.ogg', 20, 0)
-				m_type = HEARABLE
-			else
-				message = ("<B>[src]</B>'s vents open, and nothing happens.")
-				m_type = VISIBLE
+		/*
+		if ("fart")
+			var/list/robotfarts = list("makes a farting noise","vents excess methane","shakes violently, then vents methane.")
+			var/robofart = pick(robotfarts)
+			message = "<B>[src]</B> [robofart]."
+			m_type = VISIBLE
+
+		*/
 
 		if ("help")
-			to_chat(src, "salute, bow-(none)/mob, clap, flap, aflap, twitch, twitch_s, nod, deathgasp, glare-(none)/mob, scream-(none)/mob, vent, stare-(none)/mob, look, beep, ping, \nbuzz, law, halt")
+			to_chat(src, "salute, bow-(none)/mob, clap, flap, aflap, twitch, twitch_s, nod, deathgasp, glare-(none)/mob, stare-(none)/mob, look, beep, ping, \nbuzz, law, halt")
 		else
 			to_chat(src, "<span class='notice'>Unusable emote '[act]'. Say *help for a list.</span>")
 

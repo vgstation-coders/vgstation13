@@ -5,12 +5,24 @@
 	desc = "A slab of meat."
 	icon_state = "meat"
 	food_flags = FOOD_MEAT | FOOD_SKELETON_FRIENDLY
+	var/subjectname = ""
+	var/subjectjob = null
 
 	var/obj/item/poisonsacs = null //This is what will contain the poison
 	New()
 		..()
 		reagents.add_reagent(NUTRIMENT, 3)
 		src.bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/New(atom/A, var/mob/M)
+	..(A)
+	if(M)
+		if(uppertext(M.name) != "UNKNOWN")
+			name = "[M.name] meat"
+		subjectname = M.name
+		if(istype(M, /mob/living/carbon/human))
+			var/mob/living/carbon/human/H = M
+			subjectjob = H.job
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/Destroy()
 	..()
@@ -33,9 +45,7 @@
 	desc = "A synthetic slab of flesh."
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/human
-	name = " meat" //Griffon McDumbass meat
-	var/subjectname = ""
-	var/subjectjob = null
+	name = "human meat"
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/human/after_consume(var/mob/user, var/datum/reagents/reagentreference)
 	if(!user)
@@ -48,6 +58,11 @@
 			H.heal_organ_damage(0, 50)
 			H.adjustToxLoss(-50)
 	..()
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/diona
+	name = "leafy meat"
+	desc = "It's got an awful lot of protein for a vegetable."
+	icon_state = "diona_meat"
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken
 	name = "chicken meat"

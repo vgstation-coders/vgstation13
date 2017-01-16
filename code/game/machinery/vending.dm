@@ -43,6 +43,8 @@ var/global/num_vending_terminals = 1
 	var/shoot_chance = 2 //How often do we throw items?
 	var/datum/data/vending_product/currently_vending = null // A /datum/data/vending_product instance of what we're paying for right now.
 	// To be filled out at compile time
+	var/list/accepted_coins	= list()	// Accepted coins by the machine.
+
 	var/list/products	= list()	// For each, use the following pattern:
 	var/list/contraband	= list()	// list(/type/path = amount,/type/path2 = amount2)
 	var/list/premium 	= list()	// No specified amount = only one in stock
@@ -92,6 +94,11 @@ var/global/num_vending_terminals = 1
 	num_vending_machines++
 
 	overlays_vending[1] = "[icon_state]-panel"
+
+	accepted_coins = list(
+			/obj/item/weapon/coin,
+			/obj/item/weapon/reagent_containers/food/snacks/chococoin
+			) 
 
 	component_parts = newlist(\
 		/obj/item/weapon/circuitboard/vendomat,\
@@ -362,7 +369,7 @@ var/global/num_vending_terminals = 1
 		if(panel_open)
 			attack_hand(user)
 		return
-	else if(premium.len > 0 && is_type_in_list(W, list(/obj/item/weapon/coin/, /obj/item/weapon/reagent_containers/food/snacks/chococoin)))
+	else if(premium.len > 0 && is_type_in_list(W, accepted_coins))
 		if (isnull(coin))
 			if(user.drop_item(W, src))
 				coin = W
@@ -2378,3 +2385,36 @@ var/global/num_vending_terminals = 1
  		/obj/item/clothing/suit/armor/knight/templar = 5,
 		)
 	pack = /obj/structure/vendomatpack/chapelvend
+
+
+/obj/machinery/vending/trader	// Boxes are defined in trader.dm
+	name = "Trader Supply"
+	desc = "Its coin groove has been modified."
+	product_slogans = "Profits."
+	product_ads = "When you charge a customer $100, and he pays you by mistake $200, you have an ethical dilemma — should you tell your partner?"
+	vend_reply = "Money money money!"
+	icon_state = "voxseed"
+	products = list (
+		/obj/item/weapon/storage/fancy/donut_box = 2,
+		)
+
+/obj/machinery/vending/trader/New()
+	..()
+
+	accepted_coins = list(/obj/item/weapon/coin/trader)
+
+	premium = list(
+		/obj/item/weapon/storage/trader_marauder,
+		/obj/item/weapon/storage/backpack/holding,
+		/obj/item/weapon/reagent_containers/glass/beaker/bluespace,
+		/obj/item/weapon/storage/bluespace_crystal,
+		//obj/item/clothing/shoes/magboots/elite,
+		/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
+		/obj/item/weapon/reagent_containers/glass/bottle/peridaxon,
+		/obj/item/weapon/reagent_containers/glass/bottle/rezadone,
+		/obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall,	
+		)
+
+	for(var/random_items = 1 to premium.len - 4)
+		premium.Remove(pick(premium))
+	src.initialize()

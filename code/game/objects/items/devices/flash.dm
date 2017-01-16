@@ -100,8 +100,6 @@
 			user.visible_message("<span class='notice'>[user] fails to blind [M] with the flash!</span>")
 		else
 			Subject.Knockdown(10)
-			Subject.flash_eyes(visual = 1, affect_silicon = 1)
-
 			if(user.mind && isrevhead(user)) // alien revhead when?
 				if(ishuman(Subject))
 					if(Subject.stat != DEAD)

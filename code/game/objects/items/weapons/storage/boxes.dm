@@ -76,7 +76,7 @@
 
 /obj/item/weapon/storage/box/survival/vox
 	icon_state = "box_vox"
-	
+
 /obj/item/weapon/storage/box/survival/vox/New()
 	..()
 	for(var/atom/A in src)
@@ -85,9 +85,9 @@
 	new /obj/item/weapon/tank/emergency_nitrogen(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 
-/obj/item/weapon/storage/box/survival/engineer	
+/obj/item/weapon/storage/box/survival/engineer
 	icon_state = "box_eva"
-	
+
 /obj/item/weapon/storage/box/survival/engineer/New()
 	..()
 	for(var/atom/A in src)
@@ -96,9 +96,9 @@
 	new /obj/item/weapon/tank/emergency_oxygen/engi(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 
-/obj/item/weapon/storage/box/survival/ert	
-	icon_state = "box_ERT"	
-	
+/obj/item/weapon/storage/box/survival/ert
+	icon_state = "box_ERT"
+
 /obj/item/weapon/storage/box/survival/ert/New()
 	..()
 	for(var/atom/A in src)
@@ -170,6 +170,7 @@
 /obj/item/weapon/storage/box/injectors
 	name = "\improper DNA injectors"
 	desc = "This box contains injectors it seems."
+	icon_state = "box_injector"
 
 /obj/item/weapon/storage/box/injectors/New()
 	..()
@@ -564,7 +565,7 @@
 /obj/item/weapon/storage/box/mugs
 	name = "box of mugs"
 	desc = "It's a box of mugs."
-	icon_state = "box"
+	icon_state = "box_mug"
 
 /obj/item/weapon/storage/box/mugs/New()
 	..()
@@ -668,3 +669,55 @@
 		qdel(A)
 	for(var/i = 1 to 7)
 		new /obj/item/ornament/teardrop(src)
+
+/obj/item/weapon/storage/box/botanydisk
+	name = "flora disk box"
+	desc = "A box of flora data disks."
+	icon_state = "botanydisk"
+
+/obj/item/weapon/storage/box/botanydisk/New()
+	..()
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/disk/botany(src)
+
+/obj/item/weapon/storage/box/holobadge
+	name = "holobadge box"
+	desc = "A box containing holobadges."
+	icon_state = "box_badge"
+
+/obj/item/weapon/storage/box/holobadge/New()
+	..()
+	for(var/i = 1 to 4)
+		new /obj/item/clothing/accessory/holobadge(src)
+	new /obj/item/clothing/accessory/holobadge/cord(src)
+	new /obj/item/clothing/accessory/holobadge/cord(src)
+
+/obj/item/weapon/storage/box/spellbook
+	name = "Spellbook Bundle"
+	desc = "High quality discount spells! This bundle is non-refundable. The end user is solely liable for any damages arising from misuse of these products."
+
+/obj/item/weapon/storage/box/spellbook/New()
+	..()
+	var/list/possible_books = typesof(/obj/item/weapon/spellbook/oneuse)
+	possible_books -= /obj/item/weapon/spellbook/oneuse
+	possible_books -= /obj/item/weapon/spellbook/oneuse/charge
+	for(var/i =1; i <= 7; i++)
+		var/randombook = pick(possible_books)
+		var/book = new randombook(src)
+		src.contents += book
+		possible_books -= randombook
+
+/obj/item/weapon/storage/box/spellbook/random/New()
+	..()
+	var/randomsprite = pick("a","b")
+	icon_state = "wizbox-[randomsprite]"
+
+/obj/item/weapon/storage/box/chrono_grenades
+	name = "box of chrono grenades"
+	desc = "A box of seven experimental chrono grenades."
+	icon_state = "chrono_grenade"
+
+/obj/item/weapon/storage/box/chrono_grenades/New()
+	..()
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/grenade/chronogrenade(src)

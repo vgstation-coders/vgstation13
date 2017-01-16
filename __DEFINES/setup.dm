@@ -35,8 +35,6 @@ var/global/disable_vents     = 0
 #define PIPING_LAYER_P_Y		-5*PIXEL_MULTIPLIER //same, but negative because they form a diagonal
 #define PIPING_LAYER_LCHANGE	0.05 //how much the layer var changes per increment
 
-#define PI 3.1415
-
 #define R_IDEAL_GAS_EQUATION	8.314 //kPa*L/(K*mol)
 #define ONE_ATMOSPHERE		101.325	//kPa
 #define MARS_ATMOSPHERE		0.6 //kPa
@@ -281,6 +279,8 @@ var/MAX_EXPLOSION_RANGE = 14
 
 #define OPENCONTAINER	8192  // is an open container for chemistry purposes
 #define	NOREACT 		16384 // Reagents don't react inside this container.
+
+#define TIMELESS		32768 // Immune to time manipulation.
 
 #define ALL ~0
 #define NONE 0
