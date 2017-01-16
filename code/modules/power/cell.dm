@@ -106,10 +106,10 @@
 	log_admin("LOG: Rigged power cell explosion, last touched by [fingerprintslast]")
 	message_admins("LOG: Rigged power cell explosion, last touched by [fingerprintslast]")
 
+	charge = 0
 	explosion(T, devastation_range, heavy_impact_range, light_impact_range, flash_range)
 
-	spawn(1)
-		qdel(src)
+	qdel(src)
 
 /obj/item/weapon/cell/proc/corrupt()
 	charge /= 2
