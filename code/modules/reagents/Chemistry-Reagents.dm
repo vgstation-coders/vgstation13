@@ -1460,7 +1460,7 @@
 	if(iscarbon(M))
 		var/mob/living/carbon/C = M
 		if(C.pain_level < BASE_CARBON_PAIN_RESIST) //If we're already recovering from shock, let's speed the process up
-			C.pain_shock_stage = max(0, C.pain_shock_stage - 1)
+			C.pain_shock_stage--
 
 /datum/reagent/oxycodone
 	name = "Oxycodone"
@@ -1478,7 +1478,7 @@
 	if(iscarbon(M))
 		var/mob/living/carbon/C = M
 		C.pain_numb = max(5, C.pain_numb)
-		C.pain_shock_stage = max(0, C.pain_shock_stage - 3) //We don't FEEL the shock now, but make it go away quick in case we run out of oxycodone.
+		C.pain_shock_stage -= 3 //We don't FEEL the shock now, but make it go away quick in case we run out of oxycodone.
 		if(!M.sleeping && prob(2))
 			to_chat(M, pick("<span class='numb'>You feel like you're floating...</span>", \
 							"<span class='numb'>You feel a little lightheaded... but it's okay.</span>", \

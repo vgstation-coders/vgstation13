@@ -292,8 +292,9 @@
 	else if(istype(O, /obj/item/weapon/paper) && user.drop_item(O, src.loc))
 		var/list/params_list = params2list(params)
 		if(O.loc == src.loc && params_list.len)
-			var/clamp_x = WORLD_ICON_SIZE/2
-			var/clamp_y = WORLD_ICON_SIZE/2
+			var/clamp_x = clicked.Width() / 2
+			var/clamp_y = clicked.Height() / 2
+			O.layer = BELOW_OBJ_LAYER //so it layers below the pills we'll be ejecting from the fridge. resets when picked up - i guess someone COULD drag the paper away but I'm not about to lose sleep over that
 			O.pixel_x = Clamp(text2num(params_list["icon-x"]) - clamp_x, -clamp_x, clamp_x)
 			O.pixel_y = Clamp(text2num(params_list["icon-y"]) - clamp_y, -clamp_y, clamp_y)
 			to_chat(user, "<span class='notice'>You hang \the [O.name] on the fridge.</span>")
@@ -303,6 +304,11 @@
 	piles = sortList(piles)
 	updateUsrDialog()
 	return 1
+
+/obj/machinery/smartfridge/var/icon/clicked //Because BYOND can't give us runtime icon access, this is basically just a click catcher
+/obj/machinery/smartfridge/New()
+	. = ..()
+	clicked = new/icon(src.icon, src.icon_state, src.dir)
 
 /obj/machinery/smartfridge/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
