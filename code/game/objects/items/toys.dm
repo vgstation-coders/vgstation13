@@ -1107,13 +1107,14 @@
 			col = chosen_col
 		else
 			col = rgb(rand(0,255),rand(0,255),rand(0,255))
-		icon += col
+		color = col
 		update_icon()
 
 /obj/item/toy/balloon/update_icon()
 	overlays.len = 0
-	var/image/shadow_overlay = image('icons/obj/toy.dmi', src, "[icon_state]_shadow")
-	overlays += shadow_overlay
+	var/image/shine_overlay = image('icons/obj/toy.dmi', src, "[icon_state]_shine")
+	shine_overlay.appearance_flags = RESET_COLOR
+	overlays += shine_overlay
 
 /obj/item/toy/balloon/attack_self(mob/user)
 	if(ishuman(user))
@@ -1186,14 +1187,25 @@
 
 /obj/item/toy/balloon/inflated/string/update_icon()
 	..()
+	var/image/string_overlay = image('icons/obj/toy.dmi', src, "balloon_string")
+	string_overlay.appearance_flags = RESET_COLOR
+	overlays += string_overlay
 	var/image/balleft = image('icons/mob/in-hand/left/toys.dmi', src, "[icon_state]")
-	var/image/balleftshadow = image('icons/mob/in-hand/left/toys.dmi', src, "[icon_state]_shadow")
+	var/image/balleftshine = image('icons/mob/in-hand/left/toys.dmi', src, "[icon_state]_shine")
+	var/image/balleftstring = image('icons/mob/in-hand/left/toys.dmi', src, "balloon_string")
 	var/image/balright = image('icons/mob/in-hand/right/toys.dmi', src, "[icon_state]")
-	var/image/balrightshadow = image('icons/mob/in-hand/right/toys.dmi', src, "[icon_state]_shadow")
-	balleft.icon += col
-	balright.icon += col
-	balleft.overlays += balleftshadow
-	balright.overlays += balrightshadow
+	var/image/balrightshine = image('icons/mob/in-hand/right/toys.dmi', src, "[icon_state]_shine")
+	var/image/balrightstring = image('icons/mob/in-hand/right/toys.dmi', src, "balloon_string")
+	balleftshine.appearance_flags = RESET_COLOR
+	balleftstring.appearance_flags = RESET_COLOR
+	balrightshine.appearance_flags = RESET_COLOR
+	balrightstring.appearance_flags = RESET_COLOR
+	balleft.color = col
+	balright.color = col
+	balleft.overlays += balleftshine
+	balleft.overlays += balleftstring
+	balright.overlays += balrightshine
+	balright.overlays += balrightstring
 	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = balleft
 	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = balright
 
