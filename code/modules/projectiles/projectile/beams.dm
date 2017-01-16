@@ -27,6 +27,8 @@ var/list/beam_master = list()
 	fire_sound = 'sound/weapons/Laser.ogg'
 	var/frequency = 1
 	var/wait = 0
+	var/beam_color= null
+
 
 /obj/item/projectile/beam/OnFired()	//if assigned, allows for code when the projectile gets fired
 	target = get_turf(original)
@@ -129,34 +131,36 @@ var/list/beam_master = list()
 			update_pixel()
 
 			//If the icon has not been added yet
-			if( !("[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]" in beam_master) )
+			if( !("[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]" in beam_master))
 				var/image/I = image(icon,"[icon_state]_pixel",13,target_dir) //Generate it.
+				if(beam_color)
+					I.color = beam_color
 				I.transform = turn(I.transform, target_angle+45)
 				I.pixel_x = PixelX
 				I.pixel_y = PixelY
 				I.plane = EFFECTS_PLANE
 				I.layer = PROJECTILE_LAYER
-				beam_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"] = I //And cache it!
+				beam_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"] = I //And cache it!
 
 			//Finally add the overlay
 			if(src.loc && target_dir)
-				src.loc.overlays += beam_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"]
+				src.loc.overlays += beam_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"]
 
 				//Add the turf to a list in the beam master so they can be cleaned up easily.
 				if(reference in beam_master)
 					var/list/turf_master = beam_master[reference]
-					if("[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]" in turf_master)
-						var/list/turfs = turf_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"]
+					if("[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]" in turf_master)
+						var/list/turfs = turf_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"]
 						turfs += loc
 					else
-						turf_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"] = list(loc)
+						turf_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"] = list(loc)
 				else
 					var/list/turfs = list()
-					turfs["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]"] = list(loc)
+					turfs["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"] = list(loc)
 					beam_master[reference] = turfs
 		else
 			//If the icon has not been added yet
-			if( !("[icon_state][target_dir]" in beam_master) )
+			if( !("[icon_state][target_dir]" in beam_master))
 				var/image/I = image(icon,icon_state,10,target_dir) //Generate it.
 				I.plane = EFFECTS_PLANE
 				I.layer = PROJECTILE_LAYER
@@ -874,9 +878,26 @@ var/list/beam_master = list()
 	else
 		return ..()
 
+/obj/item/projectile/beam/apply_projectile_color(var/color)
+	beam_color = color
+
 //Used by the pain mirror spell
 //Damage type and damage done varies
 /obj/item/projectile/beam/pain
 	name = "bolt of pain"
 	pass_flags = PASSALL //Go through everything
 	icon_state = "pain"
+
+/obj/item/projectile/beam/white
+	icon_state = "whitelaser"
+
+/obj/item/projectile/beam/rainbow/braindamage
+	damage = 5
+	icon_state = "whitelaser"
+
+/obj/item/projectile/beam/rainbow/braindamage/on_hit(var/atom/target, var/blocked = 0)
+	if(ishuman(target))
+		var/mob/living/carbon/human/victim = target
+		if(!(victim.mind && victim.mind.assigned_role == "Clown"))
+			victim.adjustBrainLoss(20)
+			victim.hallucination += 20

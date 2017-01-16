@@ -124,7 +124,8 @@
 
 	if(!occupant)
 		for(var/mob/M in src)//Failsafe so you can get mobs out
-			M.forceMove(get_turf(src))
+			if(!M.gcDestroyed)
+				M.forceMove(get_turf(src))
 
 /obj/machinery/dna_scannernew/verb/move_inside()
 	set src in oview(1)
@@ -152,7 +153,6 @@
 	src.occupant = usr
 	src.icon_state = "scanner_1"
 	src.add_fingerprint(usr)
-	return
 
 /obj/machinery/dna_scannernew/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
 	if(!ismob(O)) //mobs only
@@ -287,8 +287,9 @@
 	if(locked)
 		visible_message("Can't eject occupants while \the [src] is locked.")
 		return 0
-	occupant.forceMove(exit)
-	occupant.reset_view()
+	if(!occupant.gcDestroyed)
+		occupant.forceMove(exit)
+		occupant.reset_view()
 	occupant = null
 	icon_state = "scanner_0"
 

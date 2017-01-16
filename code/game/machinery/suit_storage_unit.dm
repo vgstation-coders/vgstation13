@@ -85,7 +85,7 @@
 	HELMET_TYPE = null
 	MASK_TYPE = null
 	BOOT_TYPE = null
- 
+
 /obj/machinery/suit_storage_unit/meteor_eod //Used for meteor rounds
 	SUIT_TYPE = /obj/item/clothing/suit/bomb_suit
 	HELMET_TYPE = /obj/item/clothing/head/bomb_hood
@@ -451,6 +451,12 @@
 		return
 
 	if (!src.OCCUPANT)
+		return
+
+	if(OCCUPANT.gcDestroyed)
+		update_icon()
+		isopen = 1
+		OCCUPANT = null
 		return
 //	for(var/obj/O in src)
 //		O.loc = src.loc

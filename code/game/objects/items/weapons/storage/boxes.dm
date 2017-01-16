@@ -712,3 +712,12 @@
 	var/randomsprite = pick("a","b")
 	icon_state = "wizbox-[randomsprite]"
 
+/obj/item/weapon/storage/box/chrono_grenades
+	name = "box of chrono grenades"
+	desc = "A box of seven experimental chrono grenades."
+	icon_state = "chrono_grenade"
+
+/obj/item/weapon/storage/box/chrono_grenades/New()
+	..()
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/grenade/chronogrenade(src)
