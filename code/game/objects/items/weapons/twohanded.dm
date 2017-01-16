@@ -277,12 +277,12 @@
 	name = "binoculars"
 	desc = "Used for long-distance surveillance."
 	icon_state = "binoculars"
-	item_state = "syringe_kit"
+	item_state = "binoculars"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	gender = PLURAL
 	flags = FPRINT | TWOHANDABLE
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_SMALL
-	var/backup_view = 7
 	var/event_key
 
 /obj/item/binoculars/proc/mob_moved(var/list/event_args, var/mob/holder)
@@ -293,15 +293,18 @@
 	if(wielded)
 		event_key = user.on_moved.Add(src, "mob_moved")
 		user.visible_message("\The [user] holds \the [src] up to \his eyes.","You hold \the [src] up to your eyes.")
+		item_state = "binoculars_wielded"
+		user.regenerate_icons()
 		if(user && user.client)
 			user.regenerate_icons()
 			var/client/C = user.client
-			backup_view = C.view
-			C.changeView(C.view * 2)
+			C.changeView(C.view + 7)
 	else
 		user.on_moved.Remove(event_key)
 		user.visible_message("\The [user] lowers \the [src].","You lower \the [src].")
+		item_state = "binoculars"
+		user.regenerate_icons()
 		if(user && user.client)
 			user.regenerate_icons()
 			var/client/C = user.client
-			C.changeView(backup_view)
+			C.changeView(C.view - 7)
