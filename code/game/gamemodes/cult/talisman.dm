@@ -201,7 +201,7 @@
 
 /obj/item/weapon/paper/talisman/proc/blind()
 	var/affected = 0
-	for(var/mob/living/carbon/C in view(2,usr))
+	for(var/mob/living/carbon/C in view(3,usr))
 		if (iscultist(C))
 			continue
 		nullblock = 0
@@ -231,7 +231,7 @@
 			continue
 		C.ear_deaf += 30
 		//talismans is weaker.
-		C.show_message("<span class='warning'>The world around you suddenly becomes quiet.</span>")
+		C.show_message("<span class='notice'>The world around you suddenly becomes quiet.</span>")
 		affected++
 	if(affected)
 		usr.whisper("Sti[pick("'","`")] kaliedir!")
