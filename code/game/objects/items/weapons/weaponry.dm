@@ -293,17 +293,10 @@ obj/item/weapon/banhammer/admin
 		user.delayNextAttack(10)
 		return
 	var/obj/item/projectile/beam/bullwhip/projectile = new(get_turf(user), get_dir(user, A), src, user)
-	projectile.original = A
-	projectile.starting = get_turf(user)
-	projectile.target = get_turf(A)
-	projectile.shot_from = user //fired from the user
-	projectile.current = projectile.original
-	projectile.yo = A.y - user.y
-	projectile.xo = A.x - user.x
-
-	spawn()
-		projectile.OnFired()
-		projectile.process()
+	var/targeting = "chest"
+	if(user.zone_sel)
+		targeting = user.zone_sel.selecting
+	projectile.launch_at(A,tar_zone = targeting,from = user)
 
 /obj/item/weapon/bullwhip/attack(mob/M, mob/user)
 	sharpness = 1.2	//a whip can only cut things when it is actually whipping

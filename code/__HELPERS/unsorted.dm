@@ -1606,7 +1606,7 @@ Game Mode config tags:
 /proc/stack_trace(message = "Getting a stack trace.")
 	CRASH(message)
 
-	
+
 /proc/get_exact_dist(atom/A, atom/B)	//returns the coordinate distance between the coordinates of the turfs of A and B
 	var/turf/T1 = A
 	var/turf/T2 = B
@@ -1614,4 +1614,4 @@ Game Mode config tags:
 		T1 = get_turf(A)
 	if(!istype(B))
 		T2 = get_turf(B)
-	return sqrt(((T2.x - T1.x) * (T2.x - T1.x)) + ((T2.y - T1.y) * (T2.y - T1.y)))
+	return sqrt(((T2.x - T1.x) ** 2) + ((T2.y - T1.y) ** 2))
