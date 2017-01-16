@@ -19,6 +19,7 @@
 
 /obj/structure/crystal/Destroy()
 	src.visible_message("<span class='danger'>[src] shatters!</span>")
+	src.investigation_log(I_ARTIFACT, "|| shattered by [key_name(usr)].")
 	if(prob(75))
 		getFromPool(/obj/item/weapon/shard/plasma, loc)
 	if(prob(50))
