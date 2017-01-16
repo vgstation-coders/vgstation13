@@ -394,9 +394,11 @@ var/list/valid_secondary_effect_types = list(\
 /obj/machinery/artifact/ex_act(severity)
 	switch(severity)
 		if(1.0)
+			src.investigation_log(I_ARTIFACT, "|| blew up by BOMB DAMAGE([severity]).")
 			qdel(src)
 		if(2.0)
 			if (prob(50))
+				src.investigation_log(I_ARTIFACT, "|| blew up by BOMB DAMAGE([severity]).")
 				qdel(src)
 			else
 				if(my_effect.trigger == TRIGGER_FORCE || my_effect.trigger == TRIGGER_HEAT)
