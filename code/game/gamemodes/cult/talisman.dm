@@ -201,7 +201,7 @@
 
 /obj/item/weapon/paper/talisman/proc/blind()
 	var/affected = 0
-	for(var/mob/living/carbon/C in view(2,usr))
+	for(var/mob/living/carbon/C in view(3,usr))
 		if (iscultist(C))
 			continue
 		nullblock = 0
