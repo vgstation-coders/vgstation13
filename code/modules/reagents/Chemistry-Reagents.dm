@@ -368,7 +368,7 @@
 	//Put out fire
 	if(method == TOUCH)
 		M.ExtinguishMob()
-		if(istype(M, /mob/living/carbon))
+		if(iscarbon(M))
 			var/mob/living/carbon/C = M
 			var/datum/disease2/effect/E = C.has_active_symptom(/datum/disease2/effect/thick_skin)
 			if(E)

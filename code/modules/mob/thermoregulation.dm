@@ -43,7 +43,7 @@
 
 	if(istype(src,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = src
-		if(!(H.species.anatomy_flags & HAS_SWEAT_GLANDS))
+		if(~H.species.anatomy_flags & HAS_SWEAT_GLANDS)
 			return 1
 
 	if(forcesweat && ticker && ticker.hardcore_mode)
