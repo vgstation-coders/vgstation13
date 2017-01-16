@@ -453,7 +453,7 @@
 	reagents.add_reagent(PERIDAXON, 30)
 
 /obj/item/weapon/reagent_containers/glass/bottle/nanitessmall
-	name = "Nanobots Bottle"
+	name = "Nanites Bottle"
 	desc = "A small bottle. You hear beeps and boops."
 	icon = 'icons/obj/chemical.dmi'
 
