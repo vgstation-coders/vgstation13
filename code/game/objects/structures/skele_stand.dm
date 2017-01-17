@@ -18,7 +18,7 @@
 			visible_message("\The [user] pushes on [src][thingy?" with \the [thingy]":""], giving the bones a good rattle.")
 		else
 			visible_message("\The [src] rattles on \his stand upon hitting [thingy?"\the [thingy]":"something"].")
-			playsound(get_turf(src), 'sound/effects/rattling_bones.ogg', 50, 0)
+		playsound(get_turf(src), 'sound/effects/rattling_bones.ogg', 50, 0)
 		last_rattle_time = world.time
 	else
 		return
