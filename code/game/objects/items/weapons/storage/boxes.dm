@@ -731,3 +731,13 @@
 	..()
 	for(var/i = 1 to 7)
 		new /obj/item/toy/balloon(src)
+
+/obj/item/weapon/storage/box/chrono_grenades/future
+	icon_state = "future_grenade"
+
+/obj/item/weapon/storage/box/chrono_grenades/future/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to 7)
+		new /obj/item/weapon/grenade/chronogrenade/future(src)
