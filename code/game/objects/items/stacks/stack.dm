@@ -291,7 +291,7 @@
 
 //Ported from -tg-station/#10973, credit to MrPerson
 /obj/item/stack/Crossed(obj/o)
-	if(src != o && istype(o, src.type) && !o.throwing)
+	if(isturf(loc) && src != o && istype(o, src.type) && !o.throwing)
 		merge(o)
 	return ..()
 
