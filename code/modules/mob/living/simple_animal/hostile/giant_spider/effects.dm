@@ -56,7 +56,7 @@
 	else
 		var/atom/movable/I = pick(contents)
 		var/some_suffix = "thing"
-		if(I && ishuman())
+		if(I && ishuman(I))
 			some_suffix = "one"
 		user.visible_message("<span class='notice'>[user] rubs their hands all over \the [src]!</span>", \
 			"<span class='notice'>You rub your hands over \the [src] [I && ", you think you can feel some[some_suffix] in there!"]</span>")
