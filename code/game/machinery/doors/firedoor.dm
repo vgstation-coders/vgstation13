@@ -242,7 +242,7 @@ var/global/list/alert_overlays_global = list()
 			flick("door_spark", src)
 			spawn(6)
 			force_open(user, C)
-			spawn(10)
+			spawn(8)
 			blocked = TRUE
 			update_icon()
 			return
