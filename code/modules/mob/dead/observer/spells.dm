@@ -88,4 +88,5 @@ var/global/list/boo_phrases_silicon=list(
 			if(isliving(A))
 				var/mob/living/L = A
 				L.reagents.add_reagent(ECTOPLASM, 1)
+				L.investigation_log(I_GHOST, "|| was given the hot ectoplasm dose by [key_name(holder)][holder.locked_to ? ", who was haunting [holder.locked_to]" : ""]")
 				return
