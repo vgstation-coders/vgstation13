@@ -1311,7 +1311,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 								if(81 to 90)
 									if(ishuman(mob))
 										var/mob/living/carbon/human/H = mob
-										if(!(H.flags & NO_BREATHE))
+										if(~H.flags & NO_BREATHE)
 											to_chat(mob, "<span class='warning'>The thickness of the plate on your chest is making it difficult to breathe.</span>")
 								if(91 to 100)
 									to_chat(mob, "<span class='warning'>The cracks in your skin are beginning to open into wounds.</span>")
