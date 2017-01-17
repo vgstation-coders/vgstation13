@@ -394,8 +394,8 @@ obj/item/weapon/circuitboard/rdserver
 	frame_desc = "Requires 2 Matter Bins, 1 Manipulator, 1 Micro-Laser and 1 Console Screen."
 	req_components = list(
 							"/obj/item/weapon/stock_parts/matter_bin" = 2,
-							"/obj/item/weapon/stock_parts/manipulator" = 1,
-							"/obj/item/weapon/stock_parts/micro_laser" = 1,
+							"/obj/item/weapon/stock_parts/manipulator" = 2,
+							"/obj/item/weapon/stock_parts/micro_laser" = 2,
 							"/obj/item/weapon/stock_parts/console_screen" = 1)
 
 /obj/item/weapon/circuitboard/podfab
