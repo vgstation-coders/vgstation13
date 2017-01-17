@@ -57,3 +57,35 @@ var/global/list/boo_phrases_silicon=list(
 		for(var/atom/A in T.contents)
 			if(A.can_spook())
 				A.spook(holder)
+
+/spell/aoe_turf/haunt
+	name = "Haunt"
+	desc = "Give the living a little help."
+
+	spell_flags = STATALLOWED | GHOSTCAST
+
+	school = "transmutation"
+	charge_max = 6000
+	invocation = ""
+	invocation_type = SpI_NONE
+	range = 0
+
+	override_base = "grey"
+	hud_state = "boo"
+
+/spell/aoe_turf/haunt/before_cast(list/targets, user)
+	. = ..()
+	for(var/turf/T in targets)
+		for(var/atom/A in T.contents)
+			if(isliving(A))
+				return
+	to_chat(user, "There is nothing living here.")
+	return list()
+
+/spell/aoe_turf/haunt/cast(list/targets)
+	for(var/turf/T in targets)
+		for(var/atom/A in T.contents)
+			if(isliving(A))
+				var/mob/living/L = A
+				L.reagents.add_reagent(ECTOPLASM, 1)
+				return
