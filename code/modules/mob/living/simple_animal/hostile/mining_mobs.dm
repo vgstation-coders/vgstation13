@@ -471,7 +471,8 @@ obj/item/asteroid/basilisk_hide/New()
 		var/spawndir = pick(directions)
 		directions -= spawndir
 		var/turf/T = get_step(src,spawndir)
-		new /obj/effect/goliath_tentacle(T)
+		if(!istype(T, /turf/space))
+			new /obj/effect/goliath_tentacle(T)
 	..()
 
 /obj/effect/goliath_tentacle/proc/Trip()
