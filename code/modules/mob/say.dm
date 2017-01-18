@@ -28,7 +28,7 @@
 		to_chat(usr, "<span class='danger'>Doing this will give us away!</span>")
 		return
 
-	message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
+	message = to_utf8(trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN)), src)
 
 	if(usr.stat == DEAD)
 		usr.emote_dead(message)

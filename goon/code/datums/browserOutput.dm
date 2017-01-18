@@ -97,6 +97,14 @@ For the main html chat area
 		if("analyzeClientData")
 			data = analyzeClientData(arglist(params))
 
+		if("encoding")
+			var/static/regex/RE = regex("windows-(874|1250|1251|1252|1253|1254|1255|1256|1257|1258)")
+			if (RE.Find(href_list["encoding"]))
+				world.log << "ENCODING RECEIVED: [href_list["encoding"]]"
+				owner.encoding = RE.group[1]
+			else
+				stack_trace("Unknown encoding received from client: \"[sanitize(href_list["encoding"])]\". Please report this as a bug.")
+
 	if(data)
 		ehjax_send(data = data)
 
