@@ -26,10 +26,11 @@
 
 /obj/effect/spider/attackby(var/obj/item/weapon/W, var/mob/user)
 	user.delayNextAttack(8)
-	if(W.attack_verb && W.attack_verb.len)
-		visible_message("<span class='warning'><B>[user] [pick(W.attack_verb)] \the [src] with \the [W].</span>")
-	else
-		visible_message("<span class='warning'><B>[user] attacks \the [src] with \the [W]</span>")
+	if (~W.flags & NO_ATTACK_MSG)
+		if(W.attack_verb && W.attack_verb.len)
+			visible_message("<span class='warning'><b>[user] [pick(W.attack_verb)] \the [src] with \the [W].</b></span>")
+		else
+			visible_message("<span class='warning'><b>[user] attacks \the [src] with \the [W].</b></span>")
 
 	var/damage = (W.is_hot() || W.is_sharp()) ? (W.force) : (W.force / SPIDERWEB_BRUTE_DIVISOR)
 
@@ -43,6 +44,23 @@
 
 	health -= damage
 	healthcheck()
+
+/obj/effect/spider/attack_hand(var/mob/living/carbon/human/user)
+	if(user.a_intent == I_HURT)
+		user.delayNextAttack(8)
+		user.visible_message("<span class='danger'>[user.name] claws at the [src]!</span>", \
+			"<span class='danger'>You claw at the [src]!</span>", \
+			"You hear something tear.")
+		health -= 2
+		healthcheck()
+	else
+		var/atom/movable/I = pick(contents)
+		var/some_suffix = "thing"
+		if(I && ishuman(I))
+			some_suffix = "one"
+		user.visible_message("<span class='notice'>[user] rubs their hands all over \the [src]!</span>", \
+			"<span class='notice'>You rub your hands over \the [src] [I && ", you think you can feel some[some_suffix] in there!"]</span>")
+
 
 /obj/effect/spider/bullet_act(var/obj/item/projectile/Proj)
 	..()
