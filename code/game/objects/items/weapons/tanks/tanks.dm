@@ -99,8 +99,8 @@
 		var/obj/item/device/analyzer/analyzer = W
 		user.show_message(analyzer.output_gas_scan(src.air_contents, src, 0), 1)
 		src.add_fingerprint(user)
-	else if (istype(W, /obj/item/clothing/gloves/latex) || istype(W, /obj/item/toy/balloon))
-		if(air_contents.return_pressure())
+	else if (istype(W, /obj/item/clothing/gloves/latex) || (istype(W, /obj/item/toy/balloon) && !istype(W, /obj/item/toy/balloon/inflated)))
+		if(air_contents.return_pressure() >= ONE_ATMOSPHERE)
 			to_chat(user, "You inflate \the [W] using \the [src].")
 			user.drop_item(W, force_drop = 1)
 			if(istype(W, /obj/item/toy/balloon))
