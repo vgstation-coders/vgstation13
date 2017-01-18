@@ -33,9 +33,9 @@
 			if(C.mob)
 				C.mob.see_fall(ourturf, range)
 		spawn(10)
-		for(var/client/C in clients)
-			if(C.mob)
-				C.mob.see_fall()
+			for(var/client/C in clients)
+				if(C.mob)
+					C.mob.see_fall()
 
 	playsound(A, 'sound/effects/fall.ogg', 100, 0, 0, 0, 0)
 
@@ -53,6 +53,6 @@
 			if(C.mob)
 				C.mob.see_fall(ourturf, range)
 		spawn(10)
-		for(var/client/C in clients)
-			if(C.mob)
-				C.mob.see_fall()
+			for(var/client/C in clients)
+				if(C.mob)
+					C.mob.see_fall()
