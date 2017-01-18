@@ -1244,6 +1244,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/device/healthanalyzer = 5,
 		/obj/item/weapon/reagent_containers/glass/beaker = 4,
 		/obj/item/weapon/reagent_containers/dropper = 2,
+		/obj/item/stack/medical/splint = 4,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/pill/tox = 3,
@@ -1288,6 +1289,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/stack/medical/ointment = 2,
 		/obj/item/weapon/reagent_containers/syringe/inaprovaline = 4,
 		/obj/item/device/healthanalyzer = 1,
+		/obj/item/stack/medical/splint = 1,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/syringe/antitoxin = 4,
