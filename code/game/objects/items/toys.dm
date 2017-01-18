@@ -1163,9 +1163,12 @@
 							B.air_contents.adjust(traces = list(S))
 		else
 			B.air_contents.adjust(co2 = 0.5)
+		B.air_contents.update_values()
 	else
 		var/moles = ONE_ATMOSPHERE*volume/(R_IDEAL_GAS_EQUATION*G.temperature)
 		B.air_contents = G.remove(moles)
+		B.air_contents.volume = volume
+		B.air_contents.update_values()
 	qdel(src)
 
 /obj/item/toy/balloon/inflated
@@ -1207,7 +1210,6 @@
 /obj/item/toy/balloon/inflated/string
 	desc = "An inflated balloon with a string hanging from it. You have an urge to pop it."
 	icon_state = "balloon_with_string"
-	var/datum/gas_mixture/air_contents = null
 	can_be_strung = FALSE
 
 /obj/item/toy/balloon/inflated/string/update_icon()
