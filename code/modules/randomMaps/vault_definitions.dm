@@ -125,7 +125,7 @@ var/list/existing_vaults = list()
 	file_path = "maps/randomvaults/research_facility.dmm"
 
 /datum/map_element/vault/supermarket
-	file_path = "maps/randomvaults/costco.dmm"
+	file_path = "maps/randomvaults/spessmart.dmm"
 
 /datum/map_element/vault/supermarket/initialize(list/objects)
 	..()

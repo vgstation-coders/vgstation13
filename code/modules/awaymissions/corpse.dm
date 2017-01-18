@@ -344,8 +344,8 @@
 	corpseidjob = "Roboticist"
 	corpseidaccess = "Roboticist"
 
-/obj/effect/landmark/corpse/roboticist/costco
-	corpseidjob = "Costco Roboticist"
+/obj/effect/landmark/corpse/roboticist/spessmart
+	corpseidjob = "Spessmart Roboticist"
 	generate_random_mob_name = 1
 	generate_random_appearance = 1
 	brute_dmg = 100

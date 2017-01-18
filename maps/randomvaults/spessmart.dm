@@ -97,20 +97,20 @@ var/list/shop_prices = list( //Cost in space credits
 //No guns sorry
 )
 
-var/list/circuitboard_prices = existing_typesof(/obj/item/weapon/circuitboard) - /obj/item/weapon/circuitboard/card/centcom //All circuit boards can be bought in Costco
+var/list/circuitboard_prices = existing_typesof(/obj/item/weapon/circuitboard) - /obj/item/weapon/circuitboard/card/centcom //All circuit boards can be bought in Spessmart
 
 var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/item/clothing/suit/space/ert) - typesof(/obj/item/clothing/head/helmet/space/ert) - list(/obj/item/clothing/suit/space/rig/elite, /obj/item/clothing/suit/space/rig/deathsquad, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/head/helmet/space/bomberman, /obj/item/clothing/suit/space/bomberman) //What in the world could go wrong
 
 /area/vault/supermarket
-	name = "Costco"
-	flags = NO_PORTALS
+	name = "Spessmart"
+	flags = NO_PORTALS | NO_TELEPORT
 
 /area/vault/supermarket/entrance
-	name = "Costco Entrance"
+	name = "Spessmart Entrance"
 	jammed = 1
 
 /area/vault/supermarket/shop
-	name = "Costco Store"
+	name = "Spessmart Store"
 	jammed = 2
 	icon_state = "green"
 
@@ -118,7 +118,7 @@ var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/i
 	var/lockdown = 0
 
 /area/vault/supermarket/restricted
-	name = "Costco Maintenance"
+	name = "Spessmart Maintenance"
 	jammed = 2
 	icon_state = "red"
 
@@ -200,7 +200,7 @@ var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/i
 		spawn()
 			S.close()
 
-	for(var/mob/living/simple_animal/hostile/costco_guardian/C in all_contents)
+	for(var/mob/living/simple_animal/hostile/spessmart_guardian/C in all_contents)
 		C.Retaliate()
 
 	src.firealert()
@@ -234,15 +234,15 @@ var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/i
 	robogibs(get_turf(src))
 	qdel(src)
 
-/obj/effect/costco_entrance
-	name = "Costco entrance marker"
+/obj/effect/spessmart_entrance
+	name = "Spessmart entrance marker"
 
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "toddler"
 
 	invisibility = INVISIBILITY_MAXIMUM
 
-/obj/effect/costco_entrance/Crossed(atom/movable/AM)
+/obj/effect/spessmart_entrance/Crossed(atom/movable/AM)
 	if(isliving(AM))
 		spawn(1)
 			for(var/cdir in alldirs)
@@ -260,11 +260,11 @@ var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/i
 
 	anchored = 1
 
-	faction = "costco"
+	faction = "spessmart"
 
 	var/list/directional_responses = list(
-	"1" = "Welcome to Costco. I love you.",
-	"2" = "Thank you for shopping at Costco, come again.",
+	"1" = "Shop smart, shop Spessmart.",
+	"2" = "Thank you for shopping at Spessmart, come again.",
 	)
 
 /mob/living/simple_animal/robot/robot_greeter/warner
@@ -274,8 +274,8 @@ var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/i
 	icon_state = "maximillion"
 
 	directional_responses = list(
-	"1" = "Please don't attempt to commit any crimes while in Costco. Any attempts of theft or vandalism will result in lockdown and termination.",
-	"2" = "Are you sure you didn't forget to pay for anything? Possessing a stolen item when leaving Costco is grounds for immediate termination.",
+	"1" = "Please don't attempt to commit any crimes while in Spessmart. Any attempts of theft or vandalism will result in lockdown and termination.",
+	"2" = "Are you sure you didn't forget to pay for anything? Possessing a stolen item when leaving Spessmart is grounds for immediate termination.",
 	)
 
 /mob/living/simple_animal/robot/robot_greeter/proc/greet(var/atom/movable/AM)
@@ -286,15 +286,15 @@ var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/i
 	name = "RulesBot"
 	desc = "To tell you the rules."
 
-	directional_responses = list("1" = "New customer! Are you acquainted with Costco's rules? Not following them will land you into deep trouble.")
+	directional_responses = list("1" = "New customer! Are you acquainted with Spessmart's rules? Not following them will land you into deep trouble.")
 
 	var/list/rules = list(
 	"Breaking any of these rules will result in termination of you and all of your suspected cooperators.",
 	"Rule number one: The customer is never right here.",
-	"Rule number two: Do not break, eat or otherwise damage any property of Costco. Food samples are an exception - eat them all you want.",
+	"Rule number two: Do not break, eat or otherwise damage any property of Spessmart. Food samples are an exception - eat them all you want.",
 	"Rule number three: Do not leave the shopping area with unpaid items, and do not attempt to remove any unpaid item from the shopping area. The only exception is the changing room - you are allowed to bring unpaid clothing into the changing room to try it on.",
-	"Rule number four: Do not attempt to access secure areas, unless you are a level 5 Costco employee.",
-	"That's it! Just remember these four rules, and as long as you don't break any of them, your experience at Costco will be top-notch!",
+	"Rule number four: Do not attempt to access secure areas, unless you are a level 5 Spessmart employee.",
+	"That's it! Just remember these four rules, and as long as you don't break any of them, your experience at Spessmart will be top-notch!",
 	)
 
 	var/last_rules = 0
@@ -321,7 +321,7 @@ var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/i
 	canmove = 0
 	intent = I_HURT
 
-	faction = "costco"
+	faction = "spessmart"
 
 	var/loaded_cash = 0
 	var/help_cd = 0
@@ -363,7 +363,7 @@ var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/i
 						say("[found_items.len] items, that will be $[price].00 space credits or [rand(0.1, 9999999.9)] bitcoins. Currently you only have [loaded_cash] credits inserted. Please insert more money or a check into the cash slot.")
 						visible_message("<span class='info'>\The [src]'s cash slot flashes.</span>")
 					else
-						say("[found_items.len] items for $[price].00 space credits. Change: $[loaded_cash - price].00 space credits. Thank you for shopping at Costco!")
+						say("[found_items.len] items for $[price].00 space credits. Change: $[loaded_cash - price].00 space credits. Thank you for shopping at Spessmart!")
 						for(var/obj/item/I in found_items)
 							shop.purchased(I)
 
@@ -373,7 +373,7 @@ var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/i
 							dispense_cash(loaded_cash - price, input_loc)
 							loaded_cash = 0
 				else
-					say("[found_items.len] items, free of charge. Thank you for shopping at Costco!")
+					say("[found_items.len] items, free of charge. Thank you for shopping at Spessmart!")
 					for(var/obj/item/I in found_items)
 						shop.purchased(I)
 			else
@@ -488,8 +488,8 @@ var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/i
 
 	return 1
 
-/mob/living/simple_animal/hostile/costco_guardian
-	name = "Costco MERC-Bot"
+/mob/living/simple_animal/hostile/spessmart_guardian
+	name = "Spessmart MERC-Bot"
 	desc = "Equipped with a ballistic weapon and a melee range shocker that is powerful enough to knock out a mega goliath through three layers of protection, this EMP-proof bot is not to be messed around with."
 
 	icon = 'icons/mob/robots.dmi'
@@ -526,28 +526,28 @@ var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/i
 	max_n2 = 0
 	minbodytemp = 0
 
-	faction = "costco"
+	faction = "spessmart"
 
 	var/alert_on_movement = 1 //If moved, trigger an alert and become agressive
 
-/mob/living/simple_animal/hostile/costco_guardian/New()
+/mob/living/simple_animal/hostile/spessmart_guardian/New()
 	..()
 
 	overlays.Add(image('icons/mob/robots.dmi', icon_state = "eyes-securitron"))
 
-/mob/living/simple_animal/hostile/costco_guardian/Die()
+/mob/living/simple_animal/hostile/spessmart_guardian/Die()
 	..()
 
 	robogibs(get_turf(src))
 	qdel(src)
 
-/mob/living/simple_animal/hostile/costco_guardian/Move()
+/mob/living/simple_animal/hostile/spessmart_guardian/Move()
 	if(alert_on_movement && !canmove)
 		Retaliate()
 
 	..()
 
-/mob/living/simple_animal/hostile/costco_guardian/proc/Retaliate()
+/mob/living/simple_animal/hostile/spessmart_guardian/proc/Retaliate()
 	if(timestopped)
 		spawn(5)
 			canmove = 1
@@ -558,7 +558,7 @@ var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/i
 
 			sleep(rand(1, 30))
 
-			var/phrase = pick("Costco law was broken. The punishment is death.", "Costco law is above everything. Prepare to die.", "Costco law is sacred. Die, heretic.", "Threat to Costco detected. Extermination protocol started.")
+			var/phrase = pick("Spessmart law was broken. The punishment is death.", "Spessmart law is above everything. Prepare to die.", "Spessmart law is sacred. Die, heretic.", "Threat to Spessmart detected. Extermination protocol started.")
 			say(phrase)
 
 	var/area/vault/supermarket/A = get_area(src)
@@ -566,15 +566,15 @@ var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/i
 		var/area/vault/supermarket/shop/AS = locate(/area/vault/supermarket/shop)
 		AS.on_theft()
 
-/mob/living/simple_animal/hostile/costco_guardian/secure_area/attack_hand(mob/user)
+/mob/living/simple_animal/hostile/spessmart_guardian/secure_area/attack_hand(mob/user)
 	if(user.a_intent == I_HELP)
-		say("[user.gender == FEMALE ? "Miss" : "Sir"], only Costco employees with level 5 access may access this area. If you are a Costco employee, please show me your ID card.")
+		say("[user.gender == FEMALE ? "Miss" : "Sir"], only Spessmart employees with level 5 access may access this area. If you are a Spessmart employee, please show me your ID card.")
 	else
 		return ..()
 
 ///////SPAWNER
 /obj/map/spawner/supermarket
-	name = "Costco spawner"
+	name = "Spessmart spawner"
 	amount = 4
 	chance = 50
 	jiggle = 10
