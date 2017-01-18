@@ -45,4 +45,4 @@
 
 /obj/structure/skele_stand/mrbones/New()
 	..()
-	gender = pick(MALE)
+	gender = MALE
