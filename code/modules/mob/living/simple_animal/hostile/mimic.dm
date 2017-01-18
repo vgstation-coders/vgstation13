@@ -361,7 +361,7 @@ var/global/list/item_mimic_disguises = list(
 	"medbay" = list(/obj/item/weapon/circular_saw, /obj/item/weapon/melee/defibrillator, /obj/item/weapon/surgicaldrill, /obj/item/weapon/hemostat, /obj/item/weapon/dnainjector/nofail/hulkmut,\
 				/obj/item/weapon/bonesetter, /obj/item/weapon/autopsy_scanner, /obj/item/weapon/FixOVein, /obj/item/stack/medical/ointment, /obj/item/weapon/storage/firstaid,\
 				/obj/item/weapon/gun/syringe/rapidsyringe, /obj/item/weapon/storage/firstaid/fire, /obj/item/weapon/storage/firstaid/o2, /obj/item/weapon/storage/firstaid/toxin,\
-				/obj/item/weapon/cautery, /obj/item/device/healthanalyzer, /obj/item/pizzabox/margherita, /obj/item/toy/balloon, /obj/item/weapon/coin/clown,\
+				/obj/item/weapon/cautery, /obj/item/device/healthanalyzer, /obj/item/pizzabox/margherita, /obj/item/toy/waterballoon, /obj/item/weapon/coin/clown,\
 				/obj/item/weapon/dice/d4, /obj/item/weapon/dice/d12, /obj/item/weapon/dice/d20, /obj/item/weapon/gun/gravitywell, /obj/item/weapon/harpoon), //Medbay and some common items
 
 	"security" = list(/obj/item/device/chameleon, /obj/item/weapon/card/emag, /obj/item/weapon/gun/energy/taser, /obj/item/weapon/melee/baton, /obj/item/weapon/tome,\

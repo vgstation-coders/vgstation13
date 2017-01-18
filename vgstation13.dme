@@ -623,7 +623,6 @@
 #include "code\game\objects\items\contraband.dm"
 #include "code\game\objects\items\crayons.dm"
 #include "code\game\objects\items\debug.dm"
-#include "code\game\objects\items\latexballoon.dm"
 #include "code\game\objects\items\mommiprints.dm"
 #include "code\game\objects\items\ornaments.dm"
 #include "code\game\objects\items\shooting_range.dm"

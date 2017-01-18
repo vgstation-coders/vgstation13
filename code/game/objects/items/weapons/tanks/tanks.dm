@@ -99,20 +99,23 @@
 		var/obj/item/device/analyzer/analyzer = W
 		user.show_message(analyzer.output_gas_scan(src.air_contents, src, 0), 1)
 		src.add_fingerprint(user)
-	else if (istype(W,/obj/item/latexballon))
-		var/obj/item/latexballon/LB = W
-		LB.blow(src)
-		src.add_fingerprint(user)
-	else if (istype(W, /obj/item/clothing/gloves/latex))
+	else if (istype(W, /obj/item/clothing/gloves/latex) || istype(W, /obj/item/toy/balloon))
 		if(air_contents.return_pressure())
 			to_chat(user, "You inflate \the [W] using \the [src].")
-			qdel(W)
-			var/obj/item/latexballon/LB1 = new (get_turf(user))
-			LB1.blow(src)
-			user.put_in_hands(LB1)
-			var/obj/item/latexballon/LB2 = new (get_turf(user))
-			LB2.blow(src)
-			user.put_in_hands(LB2)
+			user.drop_item(W, force_drop = 1)
+			if(istype(W, /obj/item/toy/balloon))
+				var/obj/item/toy/balloon/B = W
+				B.inflate(user, air_contents)
+				user.put_in_hands(B)
+			else
+				var/obj/item/toy/balloon/glove/B1 = new (get_turf(user))
+				B1.inflate(user, air_contents)
+				user.put_in_hands(B1)
+				var/obj/item/toy/balloon/glove/B2 = new (get_turf(user))
+				B2.inflate(user, air_contents)
+				user.put_in_hands(B2)
+			if(!W.gcDestroyed)
+				qdel(W)
 		else
 			to_chat(user, "<span class='warning'>There's no gas in the tank.</span>")
 

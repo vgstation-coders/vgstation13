@@ -25,21 +25,22 @@
 /*
  * Balloons
  */
-/obj/item/toy/balloon
+
+/obj/item/toy/waterballoon
 	name = "water balloon"
 	desc = "A translucent balloon. There's nothing in it."
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "waterballoon-e"
 	item_state = "balloon-empty"
 
-/obj/item/toy/balloon/New()
+/obj/item/toy/waterballoon/New()
 	. = ..()
 	create_reagents(10)
 
-/obj/item/toy/balloon/attack(mob/living/carbon/human/M as mob, mob/user as mob)
+/obj/item/toy/waterballoon/attack(mob/living/carbon/human/M as mob, mob/user as mob)
 	return
 
-/obj/item/toy/balloon/afterattack(atom/A as mob|obj, mob/user as mob)
+/obj/item/toy/waterballoon/afterattack(atom/A as mob|obj, mob/user as mob)
 	if (istype(A, /obj/structure/reagent_dispensers/watertank) && get_dist(src,A) <= 1)
 		A.reagents.trans_to(src, 10)
 		to_chat(user, "<span class = 'notice'>You fill the balloon with the contents of \the [A].</span>")
@@ -47,7 +48,7 @@
 		src.update_icon()
 	return
 
-/obj/item/toy/balloon/attackby(obj/O as obj, mob/user as mob)
+/obj/item/toy/waterballoon/attackby(obj/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/reagent_containers/glass))
 		if(O.reagents)
 			if(O.reagents.total_volume < 1)
@@ -65,7 +66,7 @@
 	src.update_icon()
 	return
 
-/obj/item/toy/balloon/throw_impact(atom/hit_atom)
+/obj/item/toy/waterballoon/throw_impact(atom/hit_atom)
 	if(src.reagents.total_volume >= 1)
 		src.visible_message("<span class = 'danger'>\The [src] bursts!</span>","You hear a pop and a splash.")
 		src.reagents.reaction(get_turf(hit_atom))
@@ -77,7 +78,7 @@
 				qdel(src)
 	return
 
-/obj/item/toy/balloon/update_icon()
+/obj/item/toy/waterballoon/update_icon()
 	if(src.reagents.total_volume >= 1)
 		icon_state = "waterballoon"
 		item_state = "balloon"
@@ -1086,3 +1087,201 @@
 	desc = "Small mechanical canary in a cage, does absolutely nothing of any importance!"
 	icon = 'icons/mob/animal.dmi'
 	icon_state = "canary"
+
+/obj/item/toy/balloon
+	name = "balloon"
+	desc = "A simple balloon."
+	icon = 'icons/obj/toy.dmi'
+	icon_state = "balloon_deflated"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toys.dmi', "right_hand" = 'icons/mob/in-hand/right/toys.dmi')
+	w_class = W_CLASS_TINY
+	force = 0
+	throwforce = 0
+	var/col = "#FFFFFF"
+	var/inflated_type = /obj/item/toy/balloon/inflated
+
+/obj/item/toy/balloon/New(atom/A, var/chosen_col)
+	..(A)
+	if(col)
+		if(chosen_col)
+			col = chosen_col
+		else
+			col = rgb(rand(0,255),rand(0,255),rand(0,255))
+		color = col
+		update_icon()
+
+/obj/item/toy/balloon/update_icon()
+	overlays.len = 0
+	var/image/shine_overlay = image('icons/obj/toy.dmi', src, "[icon_state]_shine")
+	shine_overlay.appearance_flags = RESET_COLOR
+	overlays += shine_overlay
+
+/obj/item/toy/balloon/attack_self(mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/haslungs = FALSE
+		for(var/I in H.internal_organs)
+			if(istype(I, /datum/organ/internal/lungs))
+				haslungs = TRUE
+		if((H.species && H.species.flags & NO_BREATHE) || !haslungs)
+			to_chat(user, "You can't blow up \the [src] without lungs!")
+			return
+	inflate(user)
+
+/obj/item/toy/balloon/proc/inflate(mob/user, datum/gas_mixture/G)
+	var/obj/item/toy/balloon/inflated/B = new inflated_type(get_turf(src), col)
+	if(user)
+		user.drop_item(src, force_drop = 1)
+		user.put_in_hands(B)
+		to_chat(user, "You blow up \the [src].")
+	playsound(src, 'sound/misc/balloon_inflate.ogg', 50, 1)
+	if(!G)
+		B.air_contents = new /datum/gas_mixture()
+		B.air_contents.volume = 12 //liters
+		B.air_contents.temperature = T20C
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			var/datum/organ/internal/lungs/L = H.internal_organs_by_name["lungs"]
+			if(!L)
+				return
+			for(var/i in L.gasses)
+				if(istype(i, /datum/lung_gas/waste))
+					var/datum/lung_gas/waste/W = i
+					switch(W.id)
+						if("oxygen")
+							B.air_contents.adjust(o2 = 0.5)
+						if("carbon_dioxide")
+							B.air_contents.adjust(co2 = 0.5)
+						if("nitrogen")
+							B.air_contents.adjust(n2 = 0.5)
+						if("toxins")
+							B.air_contents.adjust(tx = 0.5)
+						if("/datum/gas/sleeping_agent")
+							var/datum/gas/sleeping_agent/S = new()
+							S.moles = 0.5
+							B.air_contents.adjust(traces = list(S))
+		else
+			B.air_contents.adjust(co2 = 0.5)
+	else
+		var/moles = ONE_ATMOSPHERE*12/(R_IDEAL_GAS_EQUATION*G.temperature)
+		B.air_contents = G.remove(moles)
+	qdel(src)
+
+/obj/item/toy/balloon/inflated
+	desc = "An inflated balloon. You have an urge to pop it."
+	icon_state = "balloon"
+	w_class = W_CLASS_MEDIUM
+	var/datum/gas_mixture/air_contents = null
+	var/can_be_strung = TRUE
+
+/obj/item/toy/balloon/inflated/attack_self(mob/user)
+	return
+
+/obj/item/toy/balloon/inflated/attackby(obj/item/weapon/W, mob/user)
+	if(W.sharpness_flags & (SHARP_TIP|HOT_EDGE))
+		user.visible_message("<span class='warning'>\The [user] pops \the [src]!</span>","You pop \the [src].")
+		pop()
+		return
+	if(istype(W, /obj/item/stack/cable_coil) && can_be_strung)
+		var/obj/item/stack/cable_coil/C = W
+		C.use(1)
+		to_chat(user, "You tie some of \the [C] around the end of \the [src].")
+		new /obj/item/toy/balloon/inflated/string(get_turf(src), col)
+		qdel(src)
+
+/obj/item/toy/balloon/inflated/proc/pop()
+	playsound(src, 'sound/misc/balloon_pop.ogg', 100, 1)
+	if(air_contents)
+		loc.assume_air(air_contents)
+	qdel(src)
+
+/obj/item/toy/balloon/inflated/bullet_act()
+	pop()
+
+/obj/item/toy/balloon/inflated/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(exposed_temperature > T0C+100)
+		pop()
+
+/obj/item/toy/balloon/inflated/string
+	desc = "An inflated balloon with a string hanging from it. You have an urge to pop it."
+	icon_state = "balloon_with_string"
+	can_be_strung = FALSE
+
+/obj/item/toy/balloon/inflated/string/update_icon()
+	..()
+	var/image/string_overlay = image('icons/obj/toy.dmi', src, "balloon_string")
+	string_overlay.appearance_flags = RESET_COLOR
+	overlays += string_overlay
+	var/image/balleft = image('icons/mob/in-hand/left/toys.dmi', src, "[icon_state]")
+	var/image/balleftshine = image('icons/mob/in-hand/left/toys.dmi', src, "[icon_state]_shine")
+	var/image/balleftstring = image('icons/mob/in-hand/left/toys.dmi', src, "balloon_string")
+	var/image/balright = image('icons/mob/in-hand/right/toys.dmi', src, "[icon_state]")
+	var/image/balrightshine = image('icons/mob/in-hand/right/toys.dmi', src, "[icon_state]_shine")
+	var/image/balrightstring = image('icons/mob/in-hand/right/toys.dmi', src, "balloon_string")
+	balleftshine.appearance_flags = RESET_COLOR
+	balleftstring.appearance_flags = RESET_COLOR
+	balrightshine.appearance_flags = RESET_COLOR
+	balrightstring.appearance_flags = RESET_COLOR
+	balleft.color = col
+	balright.color = col
+	balleft.overlays += balleftshine
+	balleft.overlays += balleftstring
+	balright.overlays += balrightshine
+	balright.overlays += balrightstring
+	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = balleft
+	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = balright
+
+/obj/item/toy/balloon/glove
+	name = "latex glove"
+	desc = "A latex glove."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "latexballoon"
+	item_state = "lgloves"
+	col = null
+	inflated_type = /obj/item/toy/balloon/inflated/glove
+
+/obj/item/toy/balloon/inflated/glove
+	name = "latex glove balloon"
+	desc = "An inflated latex glove."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "latexballoon_blow"
+	item_state = "latexballon"
+	col = null
+	can_be_strung = FALSE
+
+/obj/item/toy/balloon/inflated/glove/attackby(obj/item/W, mob/user)
+	..()
+	if(istype(W, /obj/item/toy/balloon/inflated/glove) && !istype(src, /obj/item/toy/balloon/inflated/glove/pair))
+		var/obj/item/toy/balloon/inflated/glove/B = W
+		if(!air_contents || !B.air_contents)
+			return
+		to_chat(user, "You tie \the [src]s together.")
+		if(W.loc == user)
+			user.drop_item(W, force_drop = 1)
+		var/obj/item/toy/balloon/inflated/glove/pair/BB = new (get_turf(src))
+		BB.air_contents = air_contents
+		BB.air_contents.volume += B.air_contents.volume
+		BB.air_contents.merge(B.air_contents.remove_ratio(1))
+		if(loc == user)
+			user.drop_item(src, force_drop = 1)
+			user.put_in_hands(BB)
+		qdel(W)
+		qdel(src)
+
+/obj/item/toy/balloon/inflated/glove/pair
+	name = "pair of latex glove balloons"
+	desc = "A pair of inflated latex gloves."
+	icon_state = "latexballoon_pair"
+	item_state = "latexballon"
+
+/obj/item/toy/balloon/inflated/glove/pair/attackby(obj/item/W, mob/user)
+	..()
+	if(istype(W, /obj/item/toy/crayon/red))
+		to_chat(user, "You color \the [src] light red using \the [W].")
+		if(src.loc == user)
+			user.drop_item(src, force_drop = 1)
+			var/obj/item/clothing/gloves/anchor_arms/A = new (get_turf(user))
+			user.put_in_hands(A)
+		else
+			new /obj/item/clothing/gloves/anchor_arms(get_turf(src.loc))
+		qdel(src)
