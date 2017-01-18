@@ -1169,6 +1169,7 @@
 		B.air_contents = G.remove(moles)
 		B.air_contents.volume = volume
 		B.air_contents.update_values()
+		B.air_contents.react()
 	qdel(src)
 
 /obj/item/toy/balloon/inflated
@@ -1267,6 +1268,8 @@
 		BB.air_contents = air_contents
 		BB.air_contents.volume += B.air_contents.volume
 		BB.air_contents.merge(B.air_contents.remove_ratio(1))
+		BB.air_contents.update_values()
+		BB.air_contents.react()
 		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			user.put_in_hands(BB)
