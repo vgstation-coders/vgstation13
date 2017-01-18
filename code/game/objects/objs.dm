@@ -416,10 +416,10 @@ a {
 		machine.in_use = 1
 
 /** Returns 1 or 0 depending on whether the machine can be affixed to this position.
-  * Used to determine whether other density=1 things are on this tile.
-	* @param user Tool user
-	* @return bool Can affix here
-	*/
+ * Used to determine whether other density=1 things are on this tile.
+ * @param user Tool user
+ * @return bool Can affix here
+ */
 /obj/proc/canAffixHere(var/mob/user)
 	if(density==0 || can_affix_to_dense_turf)
 		return TRUE// Non-dense things just don't care. Same with can_affix_to_dense_turf=TRUE objects.
