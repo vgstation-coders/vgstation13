@@ -896,8 +896,16 @@
 	chance = 50
 	to_spawn = list(/mob/living/simple_animal/hostile/humanoid/wizard)
 
-
-
+/obj/map/spawner/mobs/medivault
+	name = "medivault spawner"
+	icon_state = "mob_medivault"
+	chance = 50
+	to_spawn = list(
+		/mob/living/simple_animal/hostile/monster/cyber_horror/Tajaran,
+		/mob/living/simple_animal/hostile/monster/cyber_horror,
+		/mob/living/simple_animal/hostile/necro/skeleton,
+		/mob/living/simple_animal/hostile/necro/zombie,
+		)
 
 // Robutts /////////////////////////////////////////////////////
 
