@@ -20,11 +20,9 @@
 	future_rift(src, duration, radius)
 	qdel(src)
 
-/proc/future_rift(atom/A, var/duration, var/range)	//Sends all non-timeless atoms in range duration time into the future.
+/proc/future_rift(atom/A, var/duration, var/range = 7)	//Sends all non-timeless atoms in range duration time into the future.
 	if(!A || !duration)
 		return
-	if(!range)
-		range = 7
 
 	var/turf/ourturf = get_turf(A)
 	var/list/targets = circlerangeturfs(A, range)
