@@ -1,6 +1,6 @@
 /obj/structure/skele_stand
 	name = "hanging skeleton model"
-	anchored = 1
+	anchored = 0
 	density = 1
 	icon = 'icons/obj/surgery.dmi'
 	icon_state = "hangskele"
@@ -17,7 +17,7 @@
 		if(user)
 			visible_message("\The [user] pushes on [src][thingy?" with \the [thingy]":""], giving the bones a good rattle.")
 		else
-			visible_message("\The [src] rattles on \his stand upon hitting [thingy?"\the [thingy]":"something"].")
+			visible_message("\The [src] rattles on \his stand upon being hit by [thingy?"\the [thingy]":"something"].")
 		playsound(get_turf(src), 'sound/effects/rattling_bones.ogg', 50, 0)
 		last_rattle_time = world.time
 	else
@@ -35,8 +35,8 @@
 /obj/structure/skele_stand/spook(mob/dead/observer/ghost)
 	if(last_rattle_time + rattle_cooldown <= world.time)
 		if(..(ghost, TRUE))
-			visible_message("\The [src] rattles [pick("ominously","violently")] on \his stand! Spooky.")
-			playsound(get_turf(src), 'sound/effects/rattling_bones.ogg', 60, 0)
+			visible_message("\The [src] rattles [pick("ominously","violently")] on \his stand! [pick("Spooky","Weird")].")
+			playsound(get_turf(src), 'sound/effects/rattling_bones.ogg', 50, 0)
 			last_rattle_time = world.time
 
 /obj/structure/skele_stand/mrbones
@@ -45,4 +45,4 @@
 
 /obj/structure/skele_stand/mrbones/New()
 	..()
-	gender = MALE
+	gender = pick(MALE)
