@@ -45,8 +45,6 @@
 	rightpod.forceMove(locate(x+1,y,z))
 	flick("duplicator_pad_deploying", leftpod)
 	flick("duplicator_pad_deploying", rightpod)
-//	leftpod.icon_state = "duplicator_pad_deploying"
-//	rightpod.icon_state = "duplicator_pad_deploying"
 	deployed = TRUE
 
 /obj/machinery/duplicator/proc/retract_pods()
@@ -133,9 +131,8 @@
 	if(istype(dupe, /datum) && dupe.vars)
 		for(var/x in vars)
 			if(!exclude.Find(x)) // Important!
-				if(istype(vars[x], /datum) || istype(vars[x], /event) || istype(vars[x], /client) || vars[x] == "ckey")
+				if(istype(vars[x], /datum) || istype(vars[x], /event) || istype(vars[x], /client) || x == "ckey" || x == "key")
 					continue
-				//to_chat(world, "NOW COPYING FROM [src] VAR [x]")
 				if(x == "contents")
 					var/atom/A = src
 					for(var/datum/D in A.contents)
@@ -177,7 +174,7 @@
 	var/turf/T = get_turf(src)
 	var/O = null
 	for(var/I in T.contents)
-		if(I != src && !istype(I, /atom/movable/lighting_overlay) && !istype(I, /mob/virtualhearer) && !istype(I, /obj/effect))
+		if(I != src && !istype(I, /atom/movable/lighting_overlay) && !istype(I, /mob/virtualhearer) && !istype(I, /obj/effect) && !istype(I, /mob/dead))
 			O = I
 	return O
 
@@ -185,7 +182,7 @@
 	var/turf/T = get_turf(src)
 	var/count = 0
 	for(var/I in T.contents)
-		if(I != src && !istype(I, /atom/movable/lighting_overlay) && !istype(I, /mob/virtualhearer) && !istype(I, /obj/effect))
+		if(I != src && !istype(I, /atom/movable/lighting_overlay) && !istype(I, /mob/virtualhearer) && !istype(I, /obj/effect) && !istype(I, /mob/dead))
 			count++
 	if(count)
 		return count - 1

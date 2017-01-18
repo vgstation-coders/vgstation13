@@ -1093,3 +1093,68 @@ var/global/list/image/blood_overlays = list()
 		return new shrapnel_type(src)
 	else
 		return 0
+
+/obj/item/duplicate(atom/destination)
+	var/obj/item/dupe = ..()
+
+	if(iscarbon(loc) && iscarbon(destination))
+		if(ishuman(loc) && ishuman(destination))
+			var/mob/living/carbon/human/originalH = loc
+			var/mob/living/carbon/human/dupeH = destination
+			if(originalH.wear_suit == src)
+				dupeH.wear_suit = dupe
+			if(originalH.w_uniform == src)
+				dupeH.w_uniform = dupe
+			if(originalH.gloves == src)
+				dupeH.gloves = dupe
+			if(originalH.glasses == src)
+				dupeH.glasses = dupe
+			if(originalH.ears == src)
+				dupeH.ears = dupe
+			if(originalH.wear_mask == src)
+				dupeH.wear_mask = dupe
+			if(originalH.head == src)
+				dupeH.head = dupe
+			if(originalH.shoes == src)
+				dupeH.shoes = dupe
+			if(originalH.wear_id == src)
+				dupeH.wear_id = dupe
+			if(originalH.belt == src)
+				dupeH.belt = dupe
+			if(originalH.back == src)
+				dupeH.back = dupe
+			if(originalH.handcuffed == src)
+				dupeH.handcuffed = dupe
+			if(originalH.legcuffed == src)
+				dupeH.legcuffed = dupe
+			if(originalH.r_store == src)
+				dupeH.r_store = dupe
+			if(originalH.l_store == src)
+				dupeH.l_store = dupe
+			if(originalH.s_store == src)
+				dupeH.s_store = dupe
+			for(var/i = 1 to originalH.held_items.len)
+				if(originalH.held_items[i] == src)
+					dupeH.put_in_hand(i, dupe)
+
+		if(ismonkey(loc) && ismonkey(destination))
+			var/mob/living/carbon/monkey/originalM = loc
+			var/mob/living/carbon/monkey/dupeM = destination
+			if(originalM.uniform == src)
+				dupeM.uniform = dupe
+			if(originalM.wear_mask == src)
+				dupeM.wear_mask = dupe
+			if(originalM.back == src)
+				dupeM.back = dupe
+			if(originalM.glasses == src)
+				dupeM.glasses = dupe
+			if(originalM.hat == src)
+				dupeM.hat = dupe
+			if(originalM.handcuffed == src)
+				dupeM.handcuffed = dupe
+			if(originalM.get_held_item_by_index(GRASP_RIGHT_HAND) == src)
+				dupeM.put_in_hand(GRASP_RIGHT_HAND, dupe)
+			if(originalM.get_held_item_by_index(GRASP_LEFT_HAND) == src)
+				dupeM.put_in_hand(GRASP_LEFT_HAND, dupe)
+
+	return dupe

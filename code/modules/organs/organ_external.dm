@@ -1205,6 +1205,17 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 	disfigured = 1
 
+/datum/organ/external/duplicate(mob/living/carbon/human/destination)
+	var/datum/organ/external/dupe = ..()
+
+	if(wounds)
+		dupe.wounds = list()
+		if(wounds.len)
+			for(var/datum/I in wounds)
+				var/datum/W = I.duplicate(dupe)
+				dupe.wounds.Add(W)
+	return dupe
+
 /****************************************************
 			   EXTERNAL ORGAN ITEMS
 ****************************************************/
