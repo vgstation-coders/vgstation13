@@ -436,13 +436,12 @@ obj/item/asteroid/basilisk_hide/New()
 	size = SIZE_BIG
 
 /mob/living/simple_animal/hostile/asteroid/goliath/OpenFire(atom/ttarget)
-	if(istype(ttarget))
-		visible_message("<span class='warning'>\The [src] digs its tentacles under \the [ttarget]!</span>")
-
-	playsound(loc, 'sound/weapons/whip.ogg', 50, 1, -1)
 	var/tturf = get_turf(ttarget)
-	new /obj/effect/goliath_tentacle/original(tturf)
-	ranged_cooldown = ranged_cooldown_cap
+	if(!istype(tturf, /turf/space) && istype(ttarget))
+		visible_message("<span class='warning'>\The [src] digs its tentacles under \the [ttarget]!</span>")
+		playsound(loc, 'sound/weapons/whip.ogg', 50, 1, -1)
+		new /obj/effect/goliath_tentacle/original(tturf)
+		ranged_cooldown = ranged_cooldown_cap
 	return
 
 /mob/living/simple_animal/hostile/asteroid/goliath/adjustBruteLoss(var/damage)
@@ -472,7 +471,8 @@ obj/item/asteroid/basilisk_hide/New()
 		var/spawndir = pick(directions)
 		directions -= spawndir
 		var/turf/T = get_step(src,spawndir)
-		new /obj/effect/goliath_tentacle(T)
+		if(!istype(T, /turf/space))
+			new /obj/effect/goliath_tentacle(T)
 	..()
 
 /obj/effect/goliath_tentacle/proc/Trip()
