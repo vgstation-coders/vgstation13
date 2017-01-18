@@ -101,7 +101,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 
 
 /datum/game_mode/malfunction/process()
-	if(apcs >= 3 && malf_mode_declared)
+	if(apcs >= 3 && malf_mode_declared && can_malf_ai_takeover())
 		AI_win_timeleft -= ((apcs / 6) * SSticker.getLastTickerTimeDuration()) //Victory timer now de-increments based on how many APCs are hacked. --NeoFite
 
 	..()
@@ -142,6 +142,12 @@ You should now be able to use your Explode spell to interface with the nuclear f
 			all_dead = 0
 	return all_dead
 
+/datum/game_mode/proc/can_malf_ai_takeover()
+	for(var/datum/mind/AI_mind in malf_ai) //if there happens to be more than one malfunctioning AI, there only needs to be one in the main station: the crew can just kill that one and the countdown stops while they get the rest
+		var/turf/T = get_turf(AI_mind.current)
+		if(T && (T.z == map.zMainStation))
+			return TRUE
+	return FALSE
 
 /datum/game_mode/malfunction/check_finished()
 	if (station_captured && !to_nuke_or_not_to_nuke)
