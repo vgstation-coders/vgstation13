@@ -392,7 +392,7 @@
 	var/armed = 0
 	var/obj/item/weapon/grenade/iedcasing/IED = null
 
-/obj/item/weapon/legcuffs/beartrap/primed
+/obj/item/weapon/legcuffs/beartrap/armed
 	armed = 1
 	icon_state = "beartrap1"
 
