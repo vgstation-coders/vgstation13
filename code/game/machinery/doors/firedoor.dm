@@ -237,6 +237,20 @@ var/global/list/alert_overlays_global = list()
 		force_open(user, C)
 		return
 
+	if( isEmag(C) )
+		if ( density==1 )
+			flick("door_spark", src)
+			spawn(6)
+			force_open(user, C)
+			spawn(8)
+			blocked = TRUE
+			update_icon()
+			return
+		else
+			blocked = TRUE
+			update_icon()
+			return
+
 	if(blocked)
 		to_chat(user, "<span class='warning'>\The [src] is welded solid!</span>")
 		return
