@@ -121,8 +121,12 @@ var/list/beam_master = list()
 			kill_count = 0
 		lastposition = loc
 		if(kill_count < 1)
-			returnToPool(src)
+			bullet_die()
 			return reference
+		if(travel_range)
+			if(get_exact_dist(starting, get_turf(src)) > travel_range)
+				bullet_die()
+				return reference
 		kill_count--
 		if(bump_original_check())
 			return reference
@@ -901,3 +905,32 @@ var/list/beam_master = list()
 		if(!(victim.mind && victim.mind.assigned_role == "Clown"))
 			victim.adjustBrainLoss(20)
 			victim.hallucination += 20
+
+/obj/item/projectile/beam/bullwhip
+	name = "bullwhip"
+	icon_state = "whip"
+	damage = 0
+	fire_sound = null
+	travel_range = 3
+	bounce_sound = "sound/weapons/whip_crack.ogg"
+	pass_flags = PASSTABLE
+	var/obj/item/weapon/bullwhip/whip = null
+	var/mob/user = null
+	var/has_played_sound = FALSE
+
+/obj/item/projectile/beam/bullwhip/New(atom/A, dir, var/spawning_whip, var/whipper)
+	..(A,dir)
+	whip = spawning_whip
+	user = whipper
+	if(!istype(whip) || !istype(user))
+		spawn()
+			returnToPool(src)
+
+/obj/item/projectile/beam/bullwhip/on_hit(var/atom/atarget)
+	whip.attack(atarget, user)
+	user.delayNextAttack(10)
+	has_played_sound = TRUE
+
+/obj/item/projectile/beam/bullwhip/OnDeath()
+	if(!has_played_sound && get_turf(src))
+		playsound(get_turf(src), bounce_sound, 30, 1)
