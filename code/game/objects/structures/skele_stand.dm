@@ -32,7 +32,17 @@
 /obj/structure/skele_stand/attackby(obj/item/weapon/W, mob/user)
 	rattle_bones(user, W)
 
+/obj/structure/skele_stand/spook(mob/dead/observer/ghost)
+	if(last_rattle_time + rattle_cooldown <= world.time)
+		if(..(ghost, TRUE))
+			visible_message("\The [src] rattles [pick("ominously","violently")] on \his stand! Spooky.")
+			playsound(get_turf(src), 'sound/effects/rattling_bones.ogg', 60, 0)
+			last_rattle_time = world.time
+
 /obj/structure/skele_stand/mrbones
   name = "Mr. Bones"
   desc = "The ride never ends!"
-  gender = MALE
+
+/obj/structure/skele_stand/mrbones/New()
+	..()
+	gender = pick(MALE)
