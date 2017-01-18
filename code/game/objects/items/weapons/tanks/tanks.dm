@@ -102,19 +102,15 @@
 	else if (istype(W, /obj/item/clothing/gloves/latex) || (istype(W, /obj/item/toy/balloon) && !istype(W, /obj/item/toy/balloon/inflated)))
 		if(air_contents.return_pressure() >= ONE_ATMOSPHERE)
 			to_chat(user, "You inflate \the [W] using \the [src].")
-			user.drop_item(W, force_drop = 1)
 			if(istype(W, /obj/item/toy/balloon))
 				var/obj/item/toy/balloon/B = W
 				B.inflate(user, air_contents)
-				user.put_in_hands(B)
 			else
+				user.drop_item(W, force_drop = 1)
 				var/obj/item/toy/balloon/glove/B1 = new (get_turf(user))
 				B1.inflate(user, air_contents)
-				user.put_in_hands(B1)
 				var/obj/item/toy/balloon/glove/B2 = new (get_turf(user))
 				B2.inflate(user, air_contents)
-				user.put_in_hands(B2)
-			if(!W.gcDestroyed)
 				qdel(W)
 		else
 			to_chat(user, "<span class='warning'>There's no gas in the tank.</span>")
