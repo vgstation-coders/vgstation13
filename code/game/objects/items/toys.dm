@@ -1099,6 +1099,7 @@
 	throwforce = 0
 	var/col = "#FFFFFF"
 	var/inflated_type = /obj/item/toy/balloon/inflated
+	var/volume = 12	//liters
 
 /obj/item/toy/balloon/New(atom/A, var/chosen_col)
 	..(A)
@@ -1137,7 +1138,7 @@
 	playsound(src, 'sound/misc/balloon_inflate.ogg', 50, 1)
 	if(!G)
 		B.air_contents = new /datum/gas_mixture()
-		B.air_contents.volume = 12 //liters
+		B.air_contents.volume = volume //liters
 		B.air_contents.temperature = T20C
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
@@ -1162,9 +1163,13 @@
 							B.air_contents.adjust(traces = list(S))
 		else
 			B.air_contents.adjust(co2 = 0.5)
+		B.air_contents.update_values()
 	else
-		var/moles = ONE_ATMOSPHERE*12/(R_IDEAL_GAS_EQUATION*G.temperature)
+		var/moles = ONE_ATMOSPHERE*volume/(R_IDEAL_GAS_EQUATION*G.temperature)
 		B.air_contents = G.remove(moles)
+		B.air_contents.volume = volume
+		B.air_contents.update_values()
+		B.air_contents.react()
 	qdel(src)
 
 /obj/item/toy/balloon/inflated
@@ -1186,7 +1191,8 @@
 		var/obj/item/stack/cable_coil/C = W
 		C.use(1)
 		to_chat(user, "You tie some of \the [C] around the end of \the [src].")
-		new /obj/item/toy/balloon/inflated/string(get_turf(src), col)
+		var/obj/item/toy/balloon/inflated/string/S = new (get_turf(src), col)
+		S.air_contents = air_contents
 		qdel(src)
 
 /obj/item/toy/balloon/inflated/proc/pop()
@@ -1262,6 +1268,8 @@
 		BB.air_contents = air_contents
 		BB.air_contents.volume += B.air_contents.volume
 		BB.air_contents.merge(B.air_contents.remove_ratio(1))
+		BB.air_contents.update_values()
+		BB.air_contents.react()
 		if(loc == user)
 			user.drop_item(src, force_drop = 1)
 			user.put_in_hands(BB)
