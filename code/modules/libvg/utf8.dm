@@ -9,4 +9,4 @@
 		if (M.client)
 			encoding = M.client.encoding
 
-	LIBVG("to_utf8", encoding, message)
+	return LIBVG("to_utf8", encoding, message)
