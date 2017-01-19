@@ -335,9 +335,7 @@ var/global/list/damage_icon_parts = list()
 			warning("Invalid h_style for [species.name]: [h_style]")
 
 	if(body_alphas.len)
-		var/lowest_alpha = 255
-		for(var/alpha_modification in body_alphas)
-			lowest_alpha = min(lowest_alpha,body_alphas[alpha_modification])
+		var/lowest_alpha = get_lowest_body_alpha()
 		face_standing -= rgb(0,0,0,lowest_alpha)
 
 	//overlays_standing[HAIR_LAYER]	= image(face_standing)
