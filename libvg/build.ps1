@@ -2,10 +2,14 @@
 if ($IsWindows -Or !(Test-Path variable:global:IsWindows))
 {
 	$target = "i686-pc-windows-msvc"
+	$filename = "libvg"
+	$ext = "dll"
 }
 elseif ($IsLinux)
 {
 	$target = "i686-unknown-linux-gnu"
+	$filename = "liblibvg"
+	$ext = "so"
 }
 else
 {
@@ -16,13 +20,12 @@ cargo build --release --target $target
 
 if ($?)
 {
-	if (Test-Path "../libvg.dll")
+	if (Test-Path "../libvg.$ext")
 	{
 		Write-Host "Deleting old version of libvg in the project root."
-		Remove-Item "../libvg.dll"
+		Remove-Item "../libvg.$ext"
 	}
-
-	Copy-Item "target/$target/release/libvg.dll" ".."
+	Copy-Item "target/$target/release/$filename.$ext" "../libvg.$ext"
 }
 else
 {
