@@ -34,6 +34,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/datum/delay_controller/pAImove_delayer = new(1, ARBITRARILY_LARGE_NUMBER)
 	var/pAImovement_delay = 0
 
+	// Can we wrench/weld this to a turf with a dense /obj on it?
+	var/can_affix_to_dense_turf=0
+
 /obj/New()
 	..()
 	if (auto_holomap && isturf(loc))
@@ -416,11 +419,29 @@ a {
 		machine._using += src
 		machine.in_use = 1
 
-/obj/proc/wrenchAnchor(var/mob/user, var/time_to_wrench=30) //proc to wrench an object that can be secured
+/** Returns 1 or 0 depending on whether the machine can be affixed to this position.
+ * Used to determine whether other density=1 things are on this tile.
+ * @param user Tool user
+ * @return bool Can affix here
+ */
+/obj/proc/canAffixHere(var/mob/user)
+	if(density==0 || can_affix_to_dense_turf)
+		return TRUE// Non-dense things just don't care. Same with can_affix_to_dense_turf=TRUE objects.
 	for(var/obj/other in loc) //ensure multiple things aren't anchored in one place
 		if(other.anchored == 1 && other.density == 1 && density && !anchored && !(other.flags & ON_BORDER))
 			to_chat(user, "\The [other] is already anchored in this location.")
-			return -1
+			return FALSE // NOPE
+	return TRUE
+
+/** Anchors shit to the deck via wrench.
+ * NOTE: WHOEVER CODED THIS IS AN ABSOLUTE FUCKING RETARD AND USES -1 AS FAIL INSTEAD OF 0.
+ * @param user The mob doing the wrenching
+ * @param time_to_wrench The time to complete the wrenchening
+ * @returns 1 on success, -1 on fail
+ */
+/obj/proc/wrenchAnchor(var/mob/user, var/time_to_wrench=30) //proc to wrench an object that can be secured
+	if(!canAffixHere(user))
+		return -1
 	if(!anchored)
 		if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
 			if(istype(src.loc, /turf/simulated/shuttle) && !can_wrench_shuttle()) //If on the shuttle and not wrenchable to shuttle
@@ -433,6 +454,8 @@ a {
 							"You begin to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.")
 	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 	if(do_after(user, src, time_to_wrench))
+		if(!canAffixHere(user))
+			return -1
 		anchored = !anchored
 		user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
 								"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",
