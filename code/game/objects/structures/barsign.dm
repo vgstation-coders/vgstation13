@@ -67,6 +67,9 @@
 	if(picked.pixel_x && picked.pixel_y)
 		pixel_x = picked.pixel_x * PIXEL_MULTIPLIER
 		pixel_y = picked.pixel_y * PIXEL_MULTIPLIER
+	else if(!picked.pixel_x && !picked.pixel_y)
+		pixel_x = 0
+		pixel_y = 0
 	if(picked.desc)
 		desc = picked.desc
 	else
