@@ -1757,5 +1757,21 @@ mob/proc/on_foot()
 /mob/acidable()
 	return 1
 
+/mob/actual_send_to_future(var/duration)
+	var/init_blinded = blinded
+	var/init_eye_blind = eye_blind
+	var/init_deaf = ear_deaf
+	overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
+	blinded = 1
+	eye_blind = 1
+	ear_deaf = 1
+
+	..()
+
+	blinded = init_blinded
+	eye_blind = init_eye_blind
+	ear_deaf = init_deaf
+	clear_fullscreen("blind")
+
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING
