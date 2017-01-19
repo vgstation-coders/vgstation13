@@ -36,9 +36,9 @@ before_script:
   - ./install-byond.sh
 
 script:
-  - cat maps/*.dmm | awk '/step_x =/ { exit 1 }'
-  - cat maps/*.dmm | awk '/step_y =/ { exit 1 }'
-  - cat maps/*.dmm | awk '/layer =/  { exit 1 }'
+  - find maps/ -name '*.dmm' -exec cat {} \; | awk '/step_x =/ { exit 1 }'
+  - find maps/ -name '*.dmm' -exec cat {} \; | awk '/step_y =/ { exit 1 }'
+  - find maps/ -name '*.dmm' -exec cat {} \; | awk '/layer =/  { exit 1 }'
   - python tools/ss13_genchangelog.py html/changelog.html html/changelogs --dry-run
   - source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
   - ./dm.sh -M${DM_MAPFILE} vgstation13.dme
