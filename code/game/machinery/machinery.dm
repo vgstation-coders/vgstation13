@@ -565,7 +565,7 @@ Class Procs:
 				return -1 //state set to 2, can't do it
 			else
 				// wrenchAnchor returns -1 on check failures, for some reason.
-				if(wrenchAnchor(user) == 1 && machine_flags && FIXED2WORK) //wrenches/unwrenches into place if possible, then updates the power and state if necessary
+				if(wrenchAnchor(user) == 1 && machine_flags & FIXED2WORK) //wrenches/unwrenches into place if possible, then updates the power and state if necessary
 					state = anchored
 					power_change() //updates us to turn on or off as necessary
 					return 1
