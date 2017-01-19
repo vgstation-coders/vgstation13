@@ -100,8 +100,7 @@
 	owner = null
 
 	if(L)
-		if(L.trigger == src)
-			L.trigger = null
+		L.trigger = null
 		L = null
 
 	..()
