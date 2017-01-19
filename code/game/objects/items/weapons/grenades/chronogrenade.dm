@@ -46,7 +46,8 @@
 				var/mob/M = everything
 				M.playsound_local(everything, 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
 	spawn(duration)
-		playsound(ourturf, 'sound/effects/fall.ogg', 100, 0, 0, 0, 0)
+		spawn(1)	//so that mobs deafened by the effect will still hear the sound when it ends
+			playsound(ourturf, 'sound/effects/fall.ogg', 100, 0, 0, 0, 0)
 		for(var/client/C in clients)
 			if(C.mob)
 				C.mob.see_fall(ourturf, range)
