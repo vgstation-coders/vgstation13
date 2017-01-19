@@ -14,10 +14,12 @@
 
 /obj/structure/skele_stand/proc/rattle_bones(mob/user, atom/thingy)
 	if(last_rattle_time + rattle_cooldown <= world.time)
-		if(user)
+		if(user && !isobserver(user))
 			visible_message("\The [user] pushes on [src][thingy?" with \the [thingy]":""], giving the bones a good rattle.")
+		else if(user && isobserver(user))
+			visible_message("\The [src] rattles [pick("ominously","violently")] on \his stand! [pick("Spooky","Weird")].")
 		else
-			visible_message("\The [src] rattles on \his stand upon being hit by [thingy?"\the [thingy]":"something"].")
+			visible_message("\The [src] rattles[thingy ? " upon being hit by \the [thingy]" : ""].")
 		playsound(get_turf(src), 'sound/effects/rattling_bones.ogg', 50, 0)
 		last_rattle_time = world.time
 	else
@@ -32,12 +34,8 @@
 /obj/structure/skele_stand/attackby(obj/item/weapon/W, mob/user)
 	rattle_bones(user, W)
 
-/obj/structure/skele_stand/spook(mob/dead/observer/ghost)
-	if(last_rattle_time + rattle_cooldown <= world.time)
-		if(..(ghost, TRUE))
-			visible_message("\The [src] rattles [pick("ominously","violently")] on \his stand! [pick("Spooky","Weird")].")
-			playsound(get_turf(src), 'sound/effects/rattling_bones.ogg', 50, 0)
-			last_rattle_time = world.time
+obj/structure/skele_stand/spook(mob/user)
+	rattle_bones(user, null)
 
 /obj/structure/skele_stand/mrbones
   name = "Mr. Bones"
