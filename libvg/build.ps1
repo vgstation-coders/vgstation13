@@ -1,3 +1,4 @@
+#!/usr/bin/env powershell
 # Assume that if IsWindows doesn't exist, we're on Windows.
 if ($IsWindows -Or !(Test-Path variable:global:IsWindows))
 {
