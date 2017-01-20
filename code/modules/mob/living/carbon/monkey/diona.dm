@@ -188,3 +188,17 @@
 
 /mob/living/carbon/monkey/diona/dexterity_check()
 	return 0
+
+/mob/living/carbon/monkey/diona/update_icons()
+	update_hud()
+	lying_prev = lying	//so we don't update overlays for lying/standing unless our stance changes again
+	overlays.len = 0
+	for(var/image/I in overlays_standing)
+		overlays += I
+
+	if(stat == DEAD)
+		icon_state = "[initial(icon_state)]_dead"
+	else if(lying || resting || stunned)
+		icon_state = "[initial(icon_state)]_sleep"
+	else
+		icon_state = "[initial(icon_state)]"
