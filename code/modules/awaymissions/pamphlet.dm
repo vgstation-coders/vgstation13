@@ -38,7 +38,7 @@
 	return
 
 /obj/item/weapon/paper/pamphlet/medivault
-	info = "<b>Welcome to the Nanotrasen Research and Medicial facility...</b></br>\
+	info = "<b>Welcome to the Nanotrasen Research and Medical facility...</b></br>\
 			If you are reading this pamphlet then congratulations on your recent reassignment \
 			to this new, state of the art medical facility! You'll be involved in exciting and \
 			ground-breaking research projects and together with other Nanotrasen Medical \
