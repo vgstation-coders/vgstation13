@@ -97,9 +97,10 @@ var/list/shop_prices = list( //Cost in space credits
 //No guns sorry
 )
 
-var/list/circuitboard_prices = existing_typesof(/obj/item/weapon/circuitboard) - /obj/item/weapon/circuitboard/card/centcom //All circuit boards can be bought in Spessmart
-
-var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/item/clothing/suit/space/ert) - typesof(/obj/item/clothing/head/helmet/space/ert) - list(/obj/item/clothing/suit/space/rig/elite, /obj/item/clothing/suit/space/rig/deathsquad, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/head/helmet/space/bomberman, /obj/item/clothing/suit/space/bomberman) //What in the world could go wrong
+var/list/circuitboards = existing_typesof(/obj/item/weapon/circuitboard) - /obj/item/weapon/circuitboard/card/centcom //All circuit boards can be bought in Spessmart
+var/list/circuitboard_prices = list()	//gets filled on initialize()
+var/list/clothing = existing_typesof(/obj/item/clothing) - typesof(/obj/item/clothing/suit/space/ert) - typesof(/obj/item/clothing/head/helmet/space/ert) - list(/obj/item/clothing/suit/space/rig/elite, /obj/item/clothing/suit/space/rig/deathsquad, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/head/helmet/space/bomberman, /obj/item/clothing/suit/space/bomberman) //What in the world could go wrong
+var/list/clothing_prices = list()	//gets filled on initialize()
 
 /area/vault/supermarket
 	name = "Spessmart"
@@ -116,6 +117,7 @@ var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/i
 
 	var/list/items = list()
 	var/lockdown = 0
+	var/destination_disks = 1	//number of complimentary Spessmart destination disks left to give
 
 /area/vault/supermarket/restricted
 	name = "Spessmart Maintenance"
@@ -123,12 +125,6 @@ var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/i
 	icon_state = "red"
 
 /area/vault/supermarket/shop/proc/initialize()
-	//Initialize prices
-	for(var/C in circuitboard_prices)
-		circuitboard_prices[C] = 75
-	for(var/C in clothing_prices)
-		clothing_prices[C] = 150
-
 	spawn()
 		/*
 		looping:
@@ -357,20 +353,24 @@ var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/i
 			if(found_items.len > 0)
 				if(price > 0)
 					if(loaded_cash == 0)
-						say("[found_items.len] items, that will be $[price].00 space credits or [rand(0.1, 9999999.9)] bitcoins. Please insert cash or a check into the cash slot.")
+						say("[found_items.len] items, that will be $[price].00 space credits. Please insert cash or a check into the cash slot.")
 						visible_message("<span class='info'>\The [src]'s cash slot flashes.</span>")
 					else if(loaded_cash < price)
-						say("[found_items.len] items, that will be $[price].00 space credits or [rand(0.1, 9999999.9)] bitcoins. Currently you only have [loaded_cash] credits inserted. Please insert more money or a check into the cash slot.")
+						say("[found_items.len] items, that will be $[price].00 space credits. Currently you only have [loaded_cash] credits inserted. Please insert more money or a check into the cash slot.")
 						visible_message("<span class='info'>\The [src]'s cash slot flashes.</span>")
 					else
 						say("[found_items.len] items for $[price].00 space credits. Change: $[loaded_cash - price].00 space credits. Thank you for shopping at Spessmart!")
 						for(var/obj/item/I in found_items)
 							shop.purchased(I)
+						if(shop.destination_disks > 0)
+							say("Please take this complimentary Spessmart shuttle destination disk as well. Shop smart, shop Spessmart!")
+							new /obj/item/weapon/disk/shuttle_coords/vault/supermarket(input_loc)
+							shop.destination_disks--
 
 						loaded_cash -= price
 
 						if(loaded_cash > 0)
-							dispense_cash(loaded_cash - price, input_loc)
+							dispense_cash(loaded_cash, input_loc)
 							loaded_cash = 0
 				else
 					say("[found_items.len] items, free of charge. Thank you for shopping at Spessmart!")
@@ -480,6 +480,9 @@ var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/i
 
 	if(S.reagents)
 		S.reagents.remove_any(S.reagents.total_volume * 0.8) //Samples have 20% of actual reagents
+
+	if(!S.reagents.total_volume)	//don't want to spawn samples that can't be eaten
+		return .()
 
 	last_spawned_sample = world.time
 
@@ -605,6 +608,9 @@ var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/i
 	return ..()
 
 /obj/map/spawner/supermarket/circuits/New()
+	if(!circuitboard_prices.len)
+		for(var/C in circuitboards)
+			circuitboard_prices[C] = 75
 	to_spawn = circuitboard_prices
 	return ..()
 
@@ -612,5 +618,16 @@ var/list/clothing_prices = existing_typesof(/obj/item/clothing) - typesof(/obj/i
 	amount = 6
 
 /obj/map/spawner/supermarket/clothing/New()
+	if(!clothing_prices.len)
+		for(var/C in clothing)
+			clothing_prices[C] = 150
 	to_spawn = clothing_prices
 	return ..()
+
+/obj/item/weapon/disk/shuttle_coords/vault/supermarket
+	name = "Spessmart shuttle destination disk"
+	desc = "Thank you for shopping at Spessmart, please come again!"
+	destination = /obj/docking_port/destination/vault/supermarket
+
+/obj/docking_port/destination/vault/supermarket
+	areaname = "Spessmart"
