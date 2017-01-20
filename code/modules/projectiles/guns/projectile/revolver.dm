@@ -233,3 +233,34 @@
 
 /obj/item/weapon/gun/projectile/russian/empty/New()
 	update_icon()
+
+/obj/item/weapon/gun/projectile/colt
+	name = "\improper Colt Single Action Army"
+	desc = "The greatest handgun ever made."
+	icon_state = "colt"
+	max_shells = 6
+	var/cocked = FALSE
+
+/obj/item/weapon/gun/projectile/colt/update_icon()
+	if(cocked)
+		icon_state = "colt_cocked"
+	else
+		icon_state = "colt"
+
+/obj/item/weapon/gun/projectile/colt/attack_self(mob/user, var/callparent = FALSE)
+	if(callparent)
+		return ..(user)
+	if(!cocked)
+		cocked = TRUE
+		update_icon()
+		to_chat(user, "You cock \the [src].")
+		playsound(user, 'sound/weapons/revolver_cock.ogg', 50, 1)
+
+/obj/item/weapon/gun/projectile/colt/AltClick(var/mob/user)
+	attack_self(user, TRUE)
+
+/obj/item/weapon/gun/projectile/colt/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, struggle = 0)
+	if(cocked)
+		..()
+		cocked = FALSE
+		update_icon()
