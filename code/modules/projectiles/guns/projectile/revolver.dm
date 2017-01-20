@@ -240,6 +240,8 @@
 	icon_state = "colt"
 	max_shells = 6
 	var/cocked = FALSE
+	var/last_spin = 0
+	var/spin_delay = 1 SECONDS	//let's not get crazy
 
 /obj/item/weapon/gun/projectile/colt/update_icon()
 	if(cocked)
@@ -250,7 +252,11 @@
 /obj/item/weapon/gun/projectile/colt/attack_self(mob/user, var/callparent = FALSE)
 	if(callparent)
 		return ..(user)
-	if(!cocked)
+	if(cocked)
+		if(!last_spin || (world.time - last_spin) >= spin_delay)
+			user.visible_message("\The [user] spins \the [src] around \his finger.","You spin \the [src] around your finger.")
+			last_spin = world.time
+	else
 		cocked = TRUE
 		update_icon()
 		to_chat(user, "You cock \the [src].")
