@@ -82,7 +82,8 @@ fn test_sanitize() {
     assert_eq!(sanitize("testing<>!", 1024), "testing&lt;&gt;!");
     assert_eq!(sanitize("testing\n\n\n<>!", 1024), "testing&lt;&gt;!");
     assert_eq!(sanitize("testing\n\u{0088}\n<>!", 1024), "testing&lt;&gt;!");
-    assert_eq!(sanitize("<script src='hacked.js'></script>icky ocky!\n<>!", 1024), "&lt;script src='hacked.js'&gt;&lt;/script&gt;icky ocky!&lt;&gt;!");
+    assert_eq!(sanitize("<script src='hacked.js'></script>icky ocky!\n<>!", 1024),
+               "&lt;script src='hacked.js'&gt;&lt;/script&gt;icky ocky!&lt;&gt;!");
     assert_eq!(sanitize("test", 3), "tes");
     assert_eq!(sanitize("\n\n\ntest", 3), "tes");
     assert_eq!(sanitize("\n\n\n>test", 3), "&gt;te");
