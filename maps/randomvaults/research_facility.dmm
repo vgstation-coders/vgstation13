@@ -146,17 +146,16 @@
 "cP" = (/turf/simulated/floor/wood{broken = 1; icon_state = "wood-broken3"},/area/vault/research)
 "cQ" = (/obj/structure/rack,/obj/item/clothing/suit/space/ancient,/obj/item/clothing/head/helmet/space/ancient,/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor{dir = 1; icon_state = "blue"},/area/vault/research)
 "cR" = (/obj/structure/dispenser/oxygen,/turf/simulated/floor{dir = 1; icon_state = "blue"},/area/vault/research)
-"cS" = (/turf/simulated/floor/airless,/area/vault/research)
-"cT" = (/obj/map/spawner/mobs/medivault,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/research)
-"cU" = (/obj/structure/table,/obj/item/stack/sheet/metal{amount = 50},/obj/item/stack/sheet/mineral/plastic{amount = 50},/obj/item/stack/sheet/glass/glass{amount = 50},/obj/structure/table,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/research)
-"cV" = (/obj/item/weapon/storage/toolbox/syndicate,/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor/carpet,/area/vault/research)
-"cW" = (/obj/effect/decal/cleanable/blood,/turf/simulated/floor/carpet,/area/vault/research)
-"cX" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/wood,/area/vault/research)
-"cY" = (/obj/machinery/door/airlock/external,/turf/simulated/floor,/area/vault/research)
-"cZ" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/electrical,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/research)
-"da" = (/obj/structure/table,/obj/structure/table,/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/research)
-"db" = (/obj/item/clothing/under/rank/centcom/officer,/obj/item/clothing/head/beret/centcom/officer,/turf/simulated/floor/carpet,/area/vault/research)
-"dc" = (/obj/structure/flora/pottedplant,/turf/simulated/floor/wood,/area/vault/research)
+"cS" = (/obj/map/spawner/mobs/medivault,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/research)
+"cT" = (/obj/structure/table,/obj/item/stack/sheet/metal{amount = 50},/obj/item/stack/sheet/mineral/plastic{amount = 50},/obj/item/stack/sheet/glass/glass{amount = 50},/obj/structure/table,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/research)
+"cU" = (/obj/item/weapon/storage/toolbox/syndicate,/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor/carpet,/area/vault/research)
+"cV" = (/obj/effect/decal/cleanable/blood,/turf/simulated/floor/carpet,/area/vault/research)
+"cW" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/wood,/area/vault/research)
+"cX" = (/obj/machinery/door/airlock/external,/turf/simulated/floor,/area/vault/research)
+"cY" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/electrical,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/research)
+"cZ" = (/obj/structure/table,/obj/structure/table,/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/research)
+"da" = (/obj/item/clothing/under/rank/centcom/officer,/obj/item/clothing/head/beret/centcom/officer,/turf/simulated/floor/carpet,/area/vault/research)
+"db" = (/obj/structure/flora/pottedplant,/turf/simulated/floor/wood,/area/vault/research)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -179,9 +178,9 @@ abaiabbycjckbybyclcmcncocococmbncpcmcqcmcmcmcmcmcrcsbBccciab
 abaiabctabababababcmcmcpcmcmcmaYcmcmcucmcpcmcmcmcvabcwbAciab
 abahabbyabcxcyczabcqababababcqabcAcAabcBcmcmcpcCcDabbAbAcEab
 abaiabbycFcGcHcIabbycJcKcLcMbyababababababababaJababcNcNcNab
-abaiaJckabababababbybycMcMcOcPabcQcRabcScScSabcTcUababababab
-abaiabbyabcVcWczabbybybybybybycXcmcmcYcScScSabcZdaabaaaaaaaa
-abaiabbycFdbcKcIabdcbzbyckbydcababababcScScSababababaaaaaaaa
-ababababababababababababababababaaaaaacScScSaaaaaaaaaaaaaaaa
+abaiaJckabababababbybycMcMcOcPabcQcRabaiaiaiabcScTababababab
+abaiabbyabcUcVczabbybybybybybycWcmcmcXaiaiaiabcYcZabaaaaaaaa
+abaiabbycFdacKcIabdbbzbyckbydbababababaiaiaiababababaaaaaaaa
+ababababababababababababababababaaaaaaaiaiaiaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 "}
