@@ -1506,6 +1506,13 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "motorized wheelchair crate"
 	access = access_cmo
 	group = "Medical"
+	
+/datum/supply_packs/skele_stand
+	name = "Hanging Skeleton Model crate"
+	cost = 30
+	containertype = /obj/structure/largecrate/skele_stand
+	containername = "hanging skeleton model crate"
+	group = "Medical"
 
 //////SCIENCE//////
 
