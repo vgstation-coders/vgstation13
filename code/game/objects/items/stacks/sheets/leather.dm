@@ -99,7 +99,7 @@
 	icon_state = "sheet-wetleather"
 	origin_tech = ""
 	var/wetness = 30 //Reduced when exposed to high temperautres
-	var/drying_threshold_temperature = 313.15 //Kelvin to start drying
+	var/drying_threshold_temperature = T0C + 40
 
 /obj/item/stack/sheet/wetleather/New()
 	..()
