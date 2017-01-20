@@ -75,7 +75,7 @@ obj/structure/ex_act(severity)
 
 /obj/structure/transit_tube_pod/New()
 	. = ..()
-	air_contents.oxygen = MOLES_O2STANDARD * 2
+	air_contents.oxygen = MOLES_O2STANDARD
 	air_contents.nitrogen = MOLES_N2STANDARD
 	air_contents.temperature = T20C
 
@@ -210,7 +210,7 @@ obj/structure/ex_act(severity)
 		open_animation()
 		sleep(OPEN_DURATION + 2)
 		pod_moving = 0
-		pod.mix_air()
+		//pod.mix_air()
 
 		if(automatic_launch_time)
 			var/const/wait_step = 5
