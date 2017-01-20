@@ -11,4 +11,4 @@ libc = "0.2.19"
 
 [lib]
 name = "libvg"
-crate-type = ["dylib"]
+# crate-type = ["dylib"]
