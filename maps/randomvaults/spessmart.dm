@@ -482,7 +482,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 		S.reagents.remove_any(S.reagents.total_volume * 0.8) //Samples have 20% of actual reagents
 
 	if(!S.reagents.total_volume)	//don't want to spawn samples that can't be eaten
-		return .()
+		S.reagents.add_reagent(NUTRIMENT, 1)
 
 	last_spawned_sample = world.time
 
