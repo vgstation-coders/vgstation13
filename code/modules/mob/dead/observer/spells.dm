@@ -58,6 +58,8 @@ var/global/list/boo_phrases_silicon=list(
 			if(A.can_spook())
 				A.spook(holder)
 
+var/list/has_haunted = list()
+
 /spell/aoe_turf/haunt
 	name = "Haunt"
 	desc = "Give the living a little help."
@@ -75,6 +77,11 @@ var/global/list/boo_phrases_silicon=list(
 
 /spell/aoe_turf/haunt/before_cast(list/targets, user)
 	. = ..()
+	var/mob/M = user
+	if(istype(M))
+		if(has_haunted[M.key] && (world.time - has_haunted[M.key]) < charge_max)
+			to_chat(user, "You don't yet have enough power to do that again.")
+			return list()
 	for(var/turf/T in targets)
 		for(var/atom/A in T.contents)
 			if(isliving(A))
@@ -89,4 +96,7 @@ var/global/list/boo_phrases_silicon=list(
 				var/mob/living/L = A
 				L.reagents.add_reagent(ECTOPLASM, 1)
 				L.investigation_log(I_GHOST, "|| was given the hot ectoplasm dose by [key_name(holder)][holder.locked_to ? ", who was haunting [holder.locked_to]" : ""]")
+				var/mob/M = holder
+				if(istype(M))
+					has_haunted[M.key] = world.time
 				return
