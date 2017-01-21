@@ -424,7 +424,7 @@
 		var/list/new_languages = list()
 		for(var/L in all_languages)
 			var/datum/language/lang = all_languages[L]
-			if(!(lang.flags & RESTRICTED) && !(lang in H.languages))
+			if(~lang.flags & RESTRICTED && !(lang in H.languages))
 				new_languages += lang.name
 
 		var/picked_lang = pick(new_languages)
