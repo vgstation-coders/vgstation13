@@ -79,7 +79,7 @@ obj/structure/ex_act(severity)
 	air_contents.nitrogen = MOLES_N2STANDARD
 	air_contents.temperature = T20C
 	air_contents.pressure = ONE_ATMOSPHERE
-	air_contents.total_moles = 103.934
+	air_contents.total_moles = MOLES_CELLSTANDARD
 
 	// Give auto tubes time to align before trying to start moving
 	spawn (5)
