@@ -838,6 +838,7 @@
 #include "code\game\objects\structures\lspace.dm"
 #include "code\game\objects\structures\mannequin.dm"
 #include "code\game\objects\structures\mirror.dm"
+#include "code\game\objects\structures\misc_structures.dm"
 #include "code\game\objects\structures\mop_bucket.dm"
 #include "code\game\objects\structures\morgue.dm"
 #include "code\game\objects\structures\musician.dm"

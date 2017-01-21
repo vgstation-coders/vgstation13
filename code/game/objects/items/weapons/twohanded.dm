@@ -263,6 +263,17 @@
 		user.update_inv_hands()
 	return
 
+/obj/item/weapon/spear/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(istype(W, /obj/item/weapon/organ/head))
+		var/obj/structure/headpole/H = new (get_turf(src), W)
+		user.drop_item(W, force_drop = 1)
+		W.forceMove(H)
+		if(loc == user)
+			user.drop_item(src, force_drop = 1)
+		H.spear = src
+		forceMove(H)
+
 /obj/item/weapon/spear/wooden
 	name = "steel spear"
 	desc = "An ancient weapon of an ancient design, with a smooth wooden handle and a sharp steel blade."
