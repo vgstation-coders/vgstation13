@@ -188,3 +188,30 @@
 
 /mob/living/carbon/monkey/diona/dexterity_check()
 	return 0
+
+/mob/living/carbon/monkey/diona/update_icons()
+	update_hud()
+	lying_prev = lying	//so we don't update overlays for lying/standing unless our stance changes again
+	overlays.len = 0
+	var/matrix/M = matrix()
+	for(var/image/I in overlays_standing)
+		overlays += I
+
+	if(stat == DEAD)
+		icon_state = "[initial(icon_state)]_dead"
+		src.transform = M
+	else if(resting)
+		icon_state = "[initial(icon_state)]_sleep"
+	else if(lying || stunned)
+		icon_state = "[initial(icon_state)]_sleep"
+		M.Turn(90)
+		M.Translate(1,-6)
+		src.transform = M
+	else
+		icon_state = "[initial(icon_state)]"
+		src.transform = M
+
+/mob/living/carbon/monkey/diona/death(gibbed)
+	..()
+	for (var/obj/item/I in get_all_slots())
+		drop_from_inventory(I) // Floating hat, mask and bag looks silly as fuck

@@ -142,27 +142,40 @@
 	return requisitioned
 
 // Since it's part of the revsquad type, this will not currently work with make antags. Which is fine because this is a variant on rev.
-/datum/game_mode/revsquad/proc/equip_revsquad(mob/living/carbon/human/mob)
-	if(!istype(mob))
+/datum/game_mode/revsquad/proc/equip_revsquad(mob/living/carbon/human/H)
+	if(!istype(H))
 		return
 
-	var/obj/item/T = get_revsquad_item(mob)
+	//Upgrade their standard encryption key to a shiny new Syndicate one! Thanks glorious benefactors
+	var/obj/item/I = H.get_item_by_slot(slot_ears)
+	if(istype(I, /obj/item/device/radio/headset))
+		var/obj/item/device/radio/headset/fancylisteningdevice = I
+
+		// Hard type check for standard encryption key
+		if(fancylisteningdevice.keyslot1.type == /obj/item/device/encryptionkey)
+			fancylisteningdevice.keyslot1 = new /obj/item/device/encryptionkey/syndicate
+			fancylisteningdevice.recalculateChannels()
+		else if(fancylisteningdevice.keyslot2.type == /obj/item/device/encryptionkey)
+			fancylisteningdevice.keyslot2 = new /obj/item/device/encryptionkey/syndicate
+			fancylisteningdevice.recalculateChannels()
+
+	var/obj/item/T = get_revsquad_item(H)
 
 	var/list/slots = list (
 		"backpack" = slot_in_backpack,
 		"left pocket" = slot_l_store,
 		"right pocket" = slot_r_store,
 	)
-	var/where = mob.equip_in_one_of_slots(T, slots, put_in_hand_if_fail = 0)
+	var/where = H.equip_in_one_of_slots(T, slots, put_in_hand_if_fail = 0)
 
 	if (!where)
-		to_chat(mob, "The Syndicate were unfortunately unable to get you any special equipment.")
+		to_chat(H, "The Syndicate were unfortunately unable to get you any special equipment.")
 	else
-		to_chat(mob, "The [T] in your [where] will help you to persuade the crew to join your cause.")
+		to_chat(H, "The [T] in your [where] will help you to persuade the crew to join your cause.")
 		if(istype(T, /obj/item/device/flash/revsquad))
 			var/obj/item/device/flash/revsquad/FR = T
-			to_chat(mob, "<span class = 'warning'>Your [FR] has [FR.limited_conversions] uses for conversions, and not all of your comrades have one like it. Use it wisely.</span>")
-		mob.update_icons()
+			to_chat(H, "<span class = 'warning'>Your [FR] has [FR.limited_conversions] uses for conversions, and not all of your comrades have one like it. Use it wisely.</span>")
+		H.update_icons()
 		stat_collection.revsquad.revsquad_items += T.name
 		return 1
 

@@ -845,6 +845,7 @@
 #include "code\game\objects\structures\popout_cake.dm"
 #include "code\game\objects\structures\safe.dm"
 #include "code\game\objects\structures\signs.dm"
+#include "code\game\objects\structures\skele_stand.dm"
 #include "code\game\objects\structures\support_rail.dm"
 #include "code\game\objects\structures\tables_racks.dm"
 #include "code\game\objects\structures\tank_dispenser.dm"
