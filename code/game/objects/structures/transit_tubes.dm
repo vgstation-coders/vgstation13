@@ -212,7 +212,7 @@ obj/structure/ex_act(severity)
 		open_animation()
 		sleep(OPEN_DURATION + 2)
 		pod_moving = 0
-		//pod.mix_air()
+		pod.mix_air()
 
 		if(automatic_launch_time)
 			var/const/wait_step = 5
