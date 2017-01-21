@@ -78,6 +78,8 @@ obj/structure/ex_act(severity)
 	air_contents.oxygen = MOLES_O2STANDARD
 	air_contents.nitrogen = MOLES_N2STANDARD
 	air_contents.temperature = T20C
+	air_contents.pressure = ONE_ATMOSPHERE
+	air_contents.total_moles = 103.934
 
 	// Give auto tubes time to align before trying to start moving
 	spawn (5)
@@ -369,6 +371,8 @@ obj/structure/ex_act(severity)
 	GM.nitrogen			= air_contents.nitrogen
 	GM.toxins			= air_contents.toxins
 	GM.temperature		= air_contents.temperature
+	GM.pressure			= air_contents.pressure
+	GM.total_moles		= air_contents.total_moles
 	return GM
 
 // For now, copying what I found in an unused FEA file (and almost identical in a
