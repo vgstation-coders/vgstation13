@@ -31,17 +31,23 @@
 	..()
 	if(istype(W, /obj/item/weapon/crowbar))
 		to_chat(user, "You pry \the [head] off \the [spear].")
+		if(head)
+			head.forceMove(get_turf(src))
+			head = null
+		if(spear)
+			spear.forceMove(get_turf(src))
+			spear = null
+		else
+			new /obj/item/weapon/spear(get_turf(src))
 		qdel(src)
 
 /obj/structure/headpole/Destroy()
 	if(head)
-		head.forceMove(get_turf(src))
+		qdel(head)
 		head = null
 	if(spear)
-		spear.forceMove(get_turf(src))
+		qdel(spear)
 		spear = null
-	else
-		new /obj/item/weapon/spear(get_turf(src))
 	if(display_head)
 		qdel(display_head)
 		display_head = null

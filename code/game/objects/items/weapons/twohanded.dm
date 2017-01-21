@@ -267,12 +267,10 @@
 	..()
 	if(istype(W, /obj/item/weapon/organ/head))
 		var/obj/structure/headpole/H = new (get_turf(src), W)
-		user.drop_item(W, force_drop = 1)
-		W.forceMove(H)
+		user.drop_item(W, H, force_drop = 1)
 		if(loc == user)
-			user.drop_item(src, force_drop = 1)
+			user.drop_item(src, H, force_drop = 1)
 		H.spear = src
-		forceMove(H)
 
 /obj/item/weapon/spear/wooden
 	name = "steel spear"
