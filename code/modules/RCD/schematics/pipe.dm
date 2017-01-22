@@ -169,7 +169,7 @@
 
 	to_chat(user, "Building pipe meter...")
 	playsound(get_turf(master), 'sound/machines/click.ogg', 50, 1)
-//	if(!do_after(user, A, 1))
+//	if(!do_after(user, A, 1))  this was the pipe delay code which had that annoying delay for making pipes
 	//	return 1
 
 	playsound(get_turf(master), 'sound/items/Deconstruct.ogg', 50, 1)
