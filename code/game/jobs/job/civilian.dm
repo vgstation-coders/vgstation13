@@ -429,7 +429,7 @@
 
 		var/picked_lang = pick(new_languages)
 		H.add_language(picked_lang)
-		to_chat(H, "Due to your well read nature, you find yourself versed in the language of [picked_lang].")
+		to_chat(H, "<span class = 'notice'>Due to your well read nature, you find yourself versed in the language of [picked_lang]. Check-Known-Languages under the IC tab to use it.</span>")
 		return 1
 
 
