@@ -212,7 +212,7 @@
 		to_chat(user,"<span class='info'>There is no cell loaded.</span>")
 
 /obj/item/device/crank_charger/attackby(obj/item/W, mob/user)
-	if(!stored && istype(W,/obj/item/weapon/cell))
+	if(!W.cant_drop && !stored && istype(W,/obj/item/weapon/cell))
 		stored = W
 		user.drop_item(W,src)
 		update_icon()
@@ -234,7 +234,6 @@
 
 /obj/item/device/crank_charger/attack_hand(mob/user)
 	if(stored && user.get_inactive_hand() == src)
-		stored.loc = user.loc
 		user.put_in_hands(stored)
 		stored = null
 		update_icon()
@@ -242,6 +241,7 @@
 		..()
 		
 /obj/item/device/crank_charger/Destroy()
+	..()
 	if(stored)
 		qdel(stored)
 		stored = null
