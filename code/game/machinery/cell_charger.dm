@@ -241,7 +241,7 @@
 		..()
 		
 /obj/item/device/crank_charger/Destroy()
-	..()
 	if(stored)
 		qdel(stored)
 		stored = null
+	..()
