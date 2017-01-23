@@ -67,6 +67,8 @@ var/list/valid_secondary_effect_types = list(\
 	var/datum/artifact_effect/my_effect
 	var/datum/artifact_effect/secondary_effect
 	var/being_used = 0
+	var/contained = 0
+	anchored = 0
 
 /obj/machinery/artifact/New()
 	..()
@@ -120,9 +122,9 @@ var/list/valid_secondary_effect_types = list(\
 	if(isnull(L) || !istype(L)) 	// We're inside a container or on null turf, either way stop processing effects
 		return
 
-	if(my_effect)
+	if(my_effect && !contained)
 		my_effect.process()
-	if(secondary_effect)
+	if(secondary_effect && !contained)
 		secondary_effect.process()
 
 	if(pulledby)

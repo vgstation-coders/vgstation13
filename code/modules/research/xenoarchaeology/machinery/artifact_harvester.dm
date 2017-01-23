@@ -11,9 +11,11 @@
 	var/harvesting = 0
 	var/obj/item/weapon/anobattery/inserted_battery
 	var/obj/machinery/artifact/cur_artifact
+	var/datum/artifact_effect/isolated_effect
 	var/obj/machinery/artifact_scanpad/owned_scanner = null
 	var/chargerate = 0
 	var/harvester = "" // Logs who started a harvest.
+	var/obj/effect/artifact_field/artifact_field
 
 /obj/machinery/artifact_harvester/New()
 	..()
@@ -53,15 +55,26 @@
 				dat += "Please wait. Energy dump in progress ([(inserted_battery.stored_charge/inserted_battery.capacity)*100]%).<br>"
 			dat += "<A href='?src=\ref[src];stopharvest=1'>Halt early</A><BR>"
 		else
+			if(artifact_field)
+				dat += "<b>Artifact energy signature ID:</b>[cur_artifact.my_effect.artifact_id == "" ? "???" : "[cur_artifact.my_effect.artifact_id]"]<BR>"
+				dat += "<A href='?src=\ref[src];alockoff=1'>Deactivate containment field</a><BR>"
+				dat += "<A href='?src=\ref[src];isolateeffect=1'>Isolate exotic particles</a><BR>"
+				if(isolated_effect)
+					dat += "<b>Isolated energy signature ID:</b>[isolated_effect.artifact_id == "" ? "???" : "[isolated_effect.artifact_id]"]<BR>"
+			else
+				dat += "<A href='?src=\ref[src];alockon=1'>Activate containment field</a><BR>"
+
 			if(inserted_battery)
 				dat += "<b>[inserted_battery.name]</b> inserted, charge level: [inserted_battery.stored_charge]/[inserted_battery.capacity] ([(inserted_battery.stored_charge/inserted_battery.capacity)*100]%)<BR>"
-				dat += "<b>Energy signature ID:</b>[inserted_battery.battery_effect.artifact_id == "" ? "???" : "[inserted_battery.battery_effect.artifact_id]"]<BR>"
+				dat += "<b>Battery energy signature ID:</b>[inserted_battery.battery_effect.artifact_id == "" ? "???" : "[inserted_battery.battery_effect.artifact_id]"]<BR>"
 				dat += "<A href='?src=\ref[src];ejectbattery=1'>Eject battery</a><BR>"
 				dat += "<A href='?src=\ref[src];drainbattery=1'>Drain battery of all charge</a><BR>"
-				dat += "<A href='?src=\ref[src];harvest=1'>Begin harvesting</a><BR>"
+				if(isolated_effect)
+					dat += "<A href='?src=\ref[src];harvest=1'>Begin harvesting</a><BR>"
 
 			else
 				dat += "No battery inserted.<BR>"
+
 	else
 		dat += "<B><font color=red>Unable to locate analysis pad.</font><BR></b>"
 	//
@@ -120,9 +133,65 @@
 
 	if(..())
 		return
+
 	if (href_list["harvest"])
 		harvester = usr
-		//locate artifact on analysis pad
+			//there should already be a battery inserted, but this is just in case
+		if(inserted_battery)
+			//see if we can clear out an old effect
+			//delete it when the ids match to account for duplicate ids having different effects				if(inserted_battery.battery_effect && inserted_battery.stored_charge <= 0)
+			qdel(inserted_battery.battery_effect)
+			inserted_battery.battery_effect = null
+
+			//only charge up
+			var/matching_id = 0
+			if(inserted_battery.battery_effect)
+				matching_id = (inserted_battery.battery_effect.artifact_id == isolated_effect.artifact_id)
+			var/matching_effecttype = 0
+			if(inserted_battery.battery_effect)
+				matching_effecttype = (inserted_battery.battery_effect.type == isolated_effect.type)
+			if(!inserted_battery.battery_effect || (matching_id && matching_effecttype))
+				chargerate = isolated_effect.chargelevelmax / isolated_effect.effectrange
+				harvesting = 1
+				use_power = 2
+				cur_artifact.anchored = 1
+				icon_state = "incubator_on"
+				var/message = "<b>[src]</b> states, \"Beginning artifact energy harvesting.\""
+				src.visible_message(message)
+
+				//duplicate the artifact's effect datum
+				if(!inserted_battery.battery_effect)
+					var/effecttype = isolated_effect.type
+					var/datum/artifact_effect/E = new effecttype(inserted_battery)
+
+					//duplicate it's unique settings
+					for(var/varname in list("chargelevelmax","artifact_id","effect","effectrange","effect_type","trigger"))
+						E.vars[varname] = isolated_effect.vars[varname]
+
+					//duplicate any effect-specific settings
+					if(isolated_effect.copy_for_battery && isolated_effect.copy_for_battery.len)
+						for(var/varname in isolated_effect.copy_for_battery)
+							E.vars[varname] = isolated_effect.vars[varname]
+
+					//copy the new datum into the battery
+					inserted_battery.battery_effect = E
+					inserted_battery.stored_charge = 0
+			else
+				var/message = "<b>[src]</b> states, \"Cannot harvest. Incompatible energy signatures detected.\""
+				src.visible_message(message)
+
+
+	if (href_list["stopharvest"])
+		if(harvesting)
+			if(harvesting < 0 && inserted_battery.battery_effect && inserted_battery.battery_effect.activated)
+				inserted_battery.battery_effect.ToggleActivate()
+			harvesting = 0
+			cur_artifact.anchored = 0
+			cur_artifact.being_used = 0
+			src.visible_message("<b>[name]</b> states, \"Activity interrupted.\"")
+			icon_state = "incubator"
+
+	if (href_list["alockon"])
 		cur_artifact = null
 		var/articount = 0
 		var/obj/machinery/artifact/analysed
@@ -143,78 +212,49 @@
 			mundane++
 			break
 		if(!analysed)
-			var/message = "<b>[src]</b> states, \"Cannot harvest, unable to analyse.\""
+			var/message = "<b>[src]</b> states, \"Cannot initialize field, no artifact detected.\""
 			src.visible_message(message)
 			return
-		if(analysed.being_used)
-			var/message = "<b>[src]</b> states, \"Cannot harvest. Too much interference.\""
-			src.visible_message(message)
 		else if(articount == 1 && !mundane)
 			cur_artifact = analysed
-			//there should already be a battery inserted, but this is just in case
-			if(inserted_battery)
-				//see if we can clear out an old effect
-				//delete it when the ids match to account for duplicate ids having different effects
-				if(inserted_battery.battery_effect && inserted_battery.stored_charge <= 0)
-					qdel(inserted_battery.battery_effect)
-					inserted_battery.battery_effect = null
 
-				//only charge up
-				var/matching_id = 0
-				if(inserted_battery.battery_effect)
-					matching_id = (inserted_battery.battery_effect.artifact_id == cur_artifact.my_effect.artifact_id)
-				var/matching_effecttype = 0
-				if(inserted_battery.battery_effect)
-					matching_effecttype = (inserted_battery.battery_effect.type == cur_artifact.my_effect.type)
-				if(!inserted_battery.battery_effect || (matching_id && matching_effecttype))
-					chargerate = cur_artifact.my_effect.chargelevelmax / cur_artifact.my_effect.effectrange
-					harvesting = 1
-					use_power = 2
-					cur_artifact.anchored = 1
-					cur_artifact.being_used = 1
-					icon_state = "incubator_on"
-					var/message = "<b>[src]</b> states, \"Beginning artifact energy harvesting.\""
-					src.visible_message(message)
+		var/turf/T = get_turf(owned_scanner)
+		artifact_field = new(T)
+		src.visible_message("<span class='notice'>[bicon(owned_scanner)] [owned_scanner] activates with a low hum.</span>")
+		cur_artifact.anchored = 1
+		cur_artifact.contained = 1
 
-					//duplicate the artifact's effect datum
-					if(!inserted_battery.battery_effect)
-						var/effecttype = cur_artifact.my_effect.type
-						var/datum/artifact_effect/E = new effecttype(inserted_battery)
-
-						//duplicate it's unique settings
-						for(var/varname in list("chargelevelmax","artifact_id","effect","effectrange","effect_type","trigger"))
-							E.vars[varname] = cur_artifact.my_effect.vars[varname]
-
-						//duplicate any effect-specific settings
-						if(cur_artifact.my_effect.copy_for_battery && cur_artifact.my_effect.copy_for_battery.len)
-							for(var/varname in cur_artifact.my_effect.copy_for_battery)
-								E.vars[varname] = cur_artifact.my_effect.vars[varname]
-
-						//copy the new datum into the battery
-						inserted_battery.battery_effect = E
-						inserted_battery.stored_charge = 0
-				else
-					var/message = "<b>[src]</b> states, \"Cannot harvest. Incompatible energy signatures detected.\""
-					src.visible_message(message)
-			else if(cur_artifact)
-				var/message = "<b>[src]</b> states, \"Cannot harvest. No battery inserted.\""
-				src.visible_message(message)
-		else if(articount > 1 || mundane)
-			var/message = "<b>[src]</b> states, \"Cannot harvest. Error isolating energy signature.\""
-			src.visible_message(message)
-		else if(!articount)
-			var/message = "<b>[src]</b> states, \"Cannot harvest. No noteworthy energy signature isolated.\""
-			src.visible_message(message)
-
-	if (href_list["stopharvest"])
-		if(harvesting)
-			if(harvesting < 0 && inserted_battery.battery_effect && inserted_battery.battery_effect.activated)
-				inserted_battery.battery_effect.ToggleActivate()
-			harvesting = 0
+	if (href_list["alockoff"])
+		src.visible_message("<span class='notice'>[bicon(owned_scanner)] [owned_scanner] deactivates with a gentle shudder.</span>")
+		qdel(artifact_field)
+		artifact_field = null
+		if(cur_artifact)
 			cur_artifact.anchored = 0
-			cur_artifact.being_used = 0
-			src.visible_message("<b>[name]</b> states, \"Activity interrupted.\"")
-			icon_state = "incubator"
+			cur_artifact.contained = 0
+			cur_artifact = null
+			isolated_effect = null
+
+	if (href_list["isolateeffect"])
+		isolated_effect = null
+		if (cur_artifact.secondary_effect)
+			if (cur_artifact.my_effect.activated && cur_artifact.secondary_effect.activated)
+				var/message = "<b>[src]</b> states, \"Cannot isolate exotic particles, interference detected.\""
+				src.visible_message(message)
+				return
+			else if (cur_artifact.secondary_effect.activated)
+				isolated_effect = cur_artifact.secondary_effect
+				var/message = "<b>[src]</b> states, \"Secondary effect isolated.\""
+				src.visible_message(message)
+				return
+		if (cur_artifact.my_effect.activated)
+			isolated_effect = isolated_effect
+			var/message = "<b>[src]</b> states, \"Primary effect isolated.\""
+			src.visible_message(message)
+			return
+		else
+			var/message = "<b>[src]</b> states, \"Cannot isolate exotic particles, none detected.\""
+			src.visible_message(message)
+			return
 
 	if (href_list["ejectbattery"])
 		src.inserted_battery.forceMove(src.loc)
@@ -230,7 +270,6 @@
 						inserted_battery.battery_effect.ToggleActivate(0)
 					harvesting = -1
 					use_power = 2
-					cur_artifact.anchored = 0
 					icon_state = "incubator_on"
 					var/message = "<b>[src]</b> states, \"Warning, battery charge dump commencing.\""
 					src.visible_message(message)
@@ -246,3 +285,11 @@
 		usr.unset_machine(src)
 
 	updateDialog()
+
+/obj/effect/artifact_field
+	name = "energy field"
+	icon = 'icons/effects/effects.dmi'
+	anchored = 1
+	density = 1
+	mouse_opacity = 0
+	icon_state = "shield2"
