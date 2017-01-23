@@ -214,8 +214,6 @@ By design, d1 is the smallest direction and d2 is the highest
 	src.add_fingerprint(user)
 
 /obj/structure/cable/attack_animal(mob/M)
-	var/turf/T = src.loc
-
 	if(isanimal(M))
 		if(ismouse(M))
 			M.delayNextAttack(10)

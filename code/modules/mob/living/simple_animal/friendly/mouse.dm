@@ -65,9 +65,10 @@
 		if(!(food_target in can_see))
 			food_target = null
 		if(food_target)
+			step_towards(src, food_target)
 			if(Adjacent(food_target))
 				food_target.attack_animal(src)
-			step_towards(src, food_target)
+
 
 /mob/living/simple_animal/mouse/New()
 	..()
