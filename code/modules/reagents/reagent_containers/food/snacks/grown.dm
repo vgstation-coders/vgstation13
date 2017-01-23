@@ -872,7 +872,7 @@
 	var/list/available_fruits = list()
 	var/switching = 0
 	var/current_path = null
-	var/counter = 1
+	var/counter = 10 // countdown to final grown
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New()
 	..()
@@ -889,42 +889,23 @@
 
 	verbs -= /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/verb/pick_leaf
 
-	randomize()
+	while(counter)
+		current_path = pick(available_fruits)
+		var/obj/item/weapon/reagent_containers/food/snacks/grown/G = current_path
+		icon_state = initial(G.icon_state)
+		if(get_turf(src))
+			playsound(get_turf(src), 'sound/misc/click.ogg', 50, 1)
+		sleep(1)
+		counter--
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/attackby(obj/item/weapon/W, mob/user)
-	if(switching)
-		if(!current_path)
-			return
-		switching = 0
-		var/N = rand(1,3)
-		if(get_turf(user))
-			switch(N)
-				if(1)
-					playsound(get_turf(user), 'sound/weapons/genhit1.ogg', 50, 1)
-				if(2)
-					playsound(get_turf(user), 'sound/weapons/genhit2.ogg', 50, 1)
-				if(3)
-					playsound(get_turf(user), 'sound/weapons/genhit3.ogg', 50, 1)
-		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
-		if(src.loc == user)
-			user.drop_item(src, force_drop = 1)
-			var/I = new current_path(get_turf(user))
-			user.put_in_hands(I)
-		else
-			new current_path(get_turf(src))
-		qdel(src)
+	if(get_turf(usr))
+		playsound(get_turf(usr), 'sound/effects/snap.ogg', 50, 1)
 
+	if(src.loc == usr)
+		usr.drop_item(src, force_drop = 1)
+		var/I = new current_path(get_turf(usr))
+		usr.put_in_hands(I)
+	else
+		new current_path(get_turf(src))
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/proc/randomize()
-	switching = 1
-	spawn()
-		while(switching)
-			current_path = available_fruits[counter]
-			var/obj/item/weapon/reagent_containers/food/snacks/grown/G = current_path
-			icon_state = initial(G.icon_state)
-			if(get_turf(src))
-				playsound(get_turf(src), 'sound/misc/click.ogg', 50, 1)
-			sleep(1)
-			if(counter == available_fruits.len)
-				counter = 0
-			counter++
+	qdel(src)
