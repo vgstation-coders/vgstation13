@@ -12,6 +12,7 @@
 	var/artifact_id = ""
 	var/list/copy_for_battery  //add any effect-specific variables you need copied for anomaly batteries as a list of strings
 	var/effect_type = 0
+	var/isolated = 0
 
 //0 = Unknown / none detectable
 //1 = Concentrated energy
@@ -54,18 +55,16 @@
 		else
 			activated = 1
 		if(reveal_toggle && holder)
-			if(istype(holder, /obj/machinery/artifact))
-				var/obj/machinery/artifact/A = holder
-				A.icon_state = "ano[A.icon_num][activated]"
 			var/display_msg
 			if(activated)
 				display_msg = pick("momentarily glows brightly!","distorts slightly for a moment!","flickers slightly!","vibrates!","shimmers slightly for a moment!")
 			else
 				display_msg = pick("grows dull!","fades in intensity!","suddenly becomes very still!","suddenly becomes very quiet!")
-			var/atom/toplevelholder = holder
-			while(!istype(toplevelholder.loc, /turf))
-				toplevelholder = toplevelholder.loc
+			var/atom/toplevelholder = get_holder_at_turf_level(holder)
 			toplevelholder.visible_message("<span class='warning'>[bicon(toplevelholder)] [toplevelholder] [display_msg]</span>")
+			if(istype(holder, /obj/machinery/artifact))
+				var/obj/machinery/artifact/A = holder
+				A.icon_state = "ano[A.icon_num][activated]"
 
 /datum/artifact_effect/proc/DoEffectTouch(var/mob/user)
 /datum/artifact_effect/proc/DoEffectAura(var/atom/holder)
@@ -109,3 +108,8 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 		protected += 0.1
 
 	return 1 - protected
+
+/datum/artifact_effect/proc/Blocked()
+	var/display_msg = "expells energy which is blocked by the containment field!"
+	var/atom/toplevelholder = get_holder_at_turf_level(holder)
+	toplevelholder.visible_message("<span class='warning'>[bicon(toplevelholder)] [toplevelholder] [display_msg]</span>")

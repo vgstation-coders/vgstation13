@@ -237,67 +237,70 @@
 			icon_state = "incubator"
 
 	if (href_list["alockon"])
-		cur_artifact = null
-		var/articount = 0
-		var/obj/machinery/artifact/analysed
-		for(var/obj/machinery/artifact/A in get_turf(owned_scanner))
-			analysed = A
-			articount++
+		if(!artifact_field)
+			cur_artifact = null
+			var/articount = 0
+			var/obj/machinery/artifact/analysed
+			for(var/obj/machinery/artifact/A in get_turf(owned_scanner))
+				analysed = A
+				articount++
 
-		var/mundane = 0
-		for(var/obj/O in get_turf(owned_scanner))
-			if(O.invisibility)
-				continue
-			if(!istype(O, /obj/machinery/artifact) && !istype(O, /obj/machinery/artifact_scanpad))
+			var/mundane = 0
+			for(var/obj/O in get_turf(owned_scanner))
+				if(O.invisibility)
+					continue
+				if(!istype(O, /obj/machinery/artifact) && !istype(O, /obj/machinery/artifact_scanpad))
+					mundane++
+					break
+			for(var/mob/O in get_turf(owned_scanner))
+				if(O.invisibility)
+					continue
 				mundane++
 				break
-		for(var/mob/O in get_turf(owned_scanner))
-			if(O.invisibility)
-				continue
-			mundane++
-			break
-		if(!analysed)
-			var/message = "<b>[src]</b> states, \"Cannot initialize field, no artifact detected.\""
-			src.visible_message(message)
-			return
-		else if(articount == 1 && !mundane)
-			cur_artifact = analysed
+			if(!analysed)
+				var/message = "<b>[src]</b> states, \"Cannot initialize field, no artifact detected.\""
+				src.visible_message(message)
+				return
+			else if(articount == 1 && !mundane)
+				cur_artifact = analysed
 
-		var/turf/T = get_turf(owned_scanner)
-		artifact_field = new(T)
-		src.visible_message("<span class='notice'>[bicon(owned_scanner)] [owned_scanner] activates with a low hum.</span>")
-		cur_artifact.anchored = 1
-		cur_artifact.contained = 1
-		cur_artifact.being_used = 1
+				var/turf/T = get_turf(owned_scanner)
+				artifact_field = new(T)
+				src.visible_message("<span class='notice'>[bicon(owned_scanner)] [owned_scanner] activates with a low hum.</span>")
+				cur_artifact.anchored = 1
+				cur_artifact.contained = 1
+				cur_artifact.being_used = 1
 
 	if (href_list["alockoff"])
-		src.visible_message("<span class='notice'>[bicon(owned_scanner)] [owned_scanner] deactivates with a gentle shudder.</span>")
-		qdel(artifact_field)
-		artifact_field = null
-		if(cur_artifact)
-			cur_artifact.anchored = 0
-			cur_artifact.being_used = 0
-			cur_artifact.contained = 0
-			cur_artifact = null
-			isolated_primary = null
-			isolated_secondary = null
+		if (artifact_field)
+			src.visible_message("<span class='notice'>[bicon(owned_scanner)] [owned_scanner] deactivates with a gentle shudder.</span>")
+			qdel(artifact_field)
+			artifact_field = null
+			if(cur_artifact)
+				cur_artifact.anchored = 0
+				cur_artifact.being_used = 0
+				cur_artifact.contained = 0
+				cur_artifact = null
+				isolated_primary = null
+				isolated_secondary = null
 
 	if (href_list["isolateeffect"])
-		isolated_primary = null
-		isolated_secondary = null
-		if (cur_artifact.my_effect.activated)
-			isolated_primary = cur_artifact.my_effect
-			var/message = "<b>[src]</b> states, \"Exotic particle signature ID: [cur_artifact.my_effect.artifact_id] successfully isolated.\""
-			src.visible_message(message)
-		if (cur_artifact.secondary_effect)
-			if (cur_artifact.secondary_effect.activated)
-				isolated_secondary = cur_artifact.secondary_effect
-				var/message = "<b>[src]</b> states, \"Exotic particle signature ID: [cur_artifact.secondary_effect.artifact_id] successfully isolated.\""
+		if (artifact_field)
+			isolated_primary = null
+			isolated_secondary = null
+			if (cur_artifact.my_effect.activated || cur_artifact.my_effect.isolated)
+				isolated_primary = cur_artifact.my_effect
+				var/message = "<b>[src]</b> states, \"Exotic particle signature ID: [cur_artifact.my_effect.artifact_id] successfully isolated.\""
 				src.visible_message(message)
-		if (!isolated_primary && !isolated_secondary)
-			var/message = "<b>[src]</b> states, \"Cannot isolate exotic particles, none detected.\""
-			src.visible_message(message)
-			return
+			if (cur_artifact.secondary_effect)
+				if (cur_artifact.secondary_effect.activated || cur_artifact.secondary_effect.isolated)
+					isolated_secondary = cur_artifact.secondary_effect
+					var/message = "<b>[src]</b> states, \"Exotic particle signature ID: [cur_artifact.secondary_effect.artifact_id] successfully isolated.\""
+					src.visible_message(message)
+			if (!isolated_primary && !isolated_secondary)
+				var/message = "<b>[src]</b> states, \"Cannot isolate exotic particles, none detected.\""
+				src.visible_message(message)
+				return
 
 	if (href_list["ejectbattery"])
 		src.inserted_battery.forceMove(src.loc)

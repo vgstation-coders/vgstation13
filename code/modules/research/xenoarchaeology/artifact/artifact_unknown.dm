@@ -273,10 +273,22 @@ var/list/valid_secondary_effect_types = list(\
 		secondary_effect.ToggleActivate(0)
 
 	if (my_effect.effect == EFFECT_TOUCH)
-		my_effect.DoEffectTouch(user)
+		if (contained)
+			my_effect.isolated = 1
+			my_effect.Blocked()
+			spawn(100)
+				my_effect.isolated = 0
+		else
+			my_effect.DoEffectTouch(user)
 
 	if(secondary_effect && secondary_effect.effect == EFFECT_TOUCH && secondary_effect.activated)
-		secondary_effect.DoEffectTouch(user)
+		if (contained)
+			secondary_effect.isolated = 1
+			secondary_effect.Blocked()
+			spawn(100)
+				secondary_effect.isolated = 0
+		else
+			secondary_effect.DoEffectTouch(user)
 
 /obj/machinery/artifact/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 
@@ -363,10 +375,22 @@ var/list/valid_secondary_effect_types = list(\
 			warn = 1
 
 		if (my_effect.effect == EFFECT_TOUCH && prob(50))
-			my_effect.DoEffectTouch(M)
+			if (contained)
+				my_effect.isolated = 1
+				my_effect.Blocked()
+				spawn(100)
+					my_effect.isolated = 0
+			else
+				my_effect.DoEffectTouch(M)
 			warn = 1
 		if(secondary_effect && secondary_effect.effect == EFFECT_TOUCH && secondary_effect.activated && prob(50))
-			secondary_effect.DoEffectTouch(M)
+			if (contained)
+				secondary_effect.isolated = 1
+				secondary_effect.Blocked()
+				spawn(100)
+					secondary_effect.isolated = 0
+			else
+				secondary_effect.DoEffectTouch(M)
 			warn = 1
 
 		if(warn)
