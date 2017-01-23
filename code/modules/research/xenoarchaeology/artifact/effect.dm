@@ -62,19 +62,15 @@
 				display_msg = pick("momentarily glows brightly!","distorts slightly for a moment!","flickers slightly!","vibrates!","shimmers slightly for a moment!")
 			else
 				display_msg = pick("grows dull!","fades in intensity!","suddenly becomes very still!","suddenly becomes very quiet!")
-			var/atom/toplevelholder = holder
-			while(!istype(toplevelholder.loc, /turf))
-				toplevelholder = get_holder_at_turf_level()
+			var/atom/toplevelholder = get_holder_at_turf_level(holder)
 			toplevelholder.visible_message("<span class='warning'>[bicon(toplevelholder)] [toplevelholder] [display_msg]</span>")
 		if(reveal_toggle == 2 && holder)
 			var/display_msg
 			if(activated)
-				display_msg = pick("rumbles slightly for a moment!","begins to shake!","blinks slightly!","whirrs!","sparks slightly")
+				display_msg = pick("rumbles slightly for a moment!","begins to shake!","blinks slightly!","starts to whirr!","sparks!")
 			else
-				display_msg = pick("quietens down!","settles to a stop!","fades in intensity!","goes dark!")
-			var/atom/toplevelholder = holder
-			while(!istype(toplevelholder.loc, /turf))
-				toplevelholder = get_holder_at_turf_level()
+				display_msg = pick("quietens down!","settles to a stop!","lets out a single beep!","goes dark!")
+			var/atom/toplevelholder = get_holder_at_turf_level(holder)
 			toplevelholder.visible_message("<span class='warning'>[bicon(toplevelholder)] [toplevelholder] [display_msg]</span>")
 
 /datum/artifact_effect/proc/DoEffectTouch(var/mob/user)
