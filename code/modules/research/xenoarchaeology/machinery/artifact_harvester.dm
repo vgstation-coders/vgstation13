@@ -56,8 +56,8 @@
 			dat += "<A href='?src=\ref[src];stopharvest=1'>Halt early</A><BR>"
 		else
 			if(artifact_field)
-				dat += "<b>Artifact energy signature ID:</b>[cur_artifact.my_effect.artifact_id == "" ? "???" : "[cur_artifact.my_effect.artifact_id]"]<BR>"
 				dat += "<A href='?src=\ref[src];alockoff=1'>Deactivate containment field</a><BR>"
+				dat += "<b>Artifact energy signature ID:</b>[cur_artifact.my_effect.artifact_id == "" ? "???" : "[cur_artifact.my_effect.artifact_id]"]<BR>"
 				dat += "<A href='?src=\ref[src];isolateeffect=1'>Isolate exotic particles</a><BR>"
 				if(isolated_effect)
 					dat += "<b>Isolated energy signature ID:</b>[isolated_effect.artifact_id == "" ? "???" : "[isolated_effect.artifact_id]"]<BR>"
@@ -97,8 +97,6 @@
 			inserted_battery.stored_charge = inserted_battery.capacity //Prevents overcharging
 			use_power = 1
 			harvesting = 0
-			cur_artifact.anchored = 0
-			cur_artifact.being_used = 0
 			src.visible_message("<b>[name]</b> states, \"Battery is full.\"")
 			src.investigation_log(I_ARTIFACT, "|| anomaly battery effect([inserted_battery.battery_effect]) || harvested by [key_name(harvester)]")
 			icon_state = "incubator"
@@ -123,7 +121,6 @@
 			use_power = 1
 			inserted_battery.stored_charge = 0
 			harvesting = 0
-			cur_artifact.anchored = 0
 			if(inserted_battery.battery_effect && inserted_battery.battery_effect.activated)
 				inserted_battery.battery_effect.ToggleActivate()
 			src.visible_message("<b>[name]</b> states, \"Battery dump completed.\"")
@@ -154,7 +151,6 @@
 				chargerate = isolated_effect.chargelevelmax / isolated_effect.effectrange
 				harvesting = 1
 				use_power = 2
-				cur_artifact.anchored = 1
 				icon_state = "incubator_on"
 				var/message = "<b>[src]</b> states, \"Beginning artifact energy harvesting.\""
 				src.visible_message(message)
@@ -186,8 +182,6 @@
 			if(harvesting < 0 && inserted_battery.battery_effect && inserted_battery.battery_effect.activated)
 				inserted_battery.battery_effect.ToggleActivate()
 			harvesting = 0
-			cur_artifact.anchored = 0
-			cur_artifact.being_used = 0
 			src.visible_message("<b>[name]</b> states, \"Activity interrupted.\"")
 			icon_state = "incubator"
 
@@ -223,6 +217,7 @@
 		src.visible_message("<span class='notice'>[bicon(owned_scanner)] [owned_scanner] activates with a low hum.</span>")
 		cur_artifact.anchored = 1
 		cur_artifact.contained = 1
+		cur_artifact.being_used = 1
 
 	if (href_list["alockoff"])
 		src.visible_message("<span class='notice'>[bicon(owned_scanner)] [owned_scanner] deactivates with a gentle shudder.</span>")
@@ -230,6 +225,7 @@
 		artifact_field = null
 		if(cur_artifact)
 			cur_artifact.anchored = 0
+			cur_artifact.being_used = 0
 			cur_artifact.contained = 0
 			cur_artifact = null
 			isolated_effect = null
@@ -243,12 +239,12 @@
 				return
 			else if (cur_artifact.secondary_effect.activated)
 				isolated_effect = cur_artifact.secondary_effect
-				var/message = "<b>[src]</b> states, \"Secondary effect isolated.\""
+				var/message = "<b>[src]</b> states, \"Exotic particles successfully isolated.\""
 				src.visible_message(message)
 				return
 		if (cur_artifact.my_effect.activated)
-			isolated_effect = isolated_effect
-			var/message = "<b>[src]</b> states, \"Primary effect isolated.\""
+			isolated_effect = cur_artifact.my_effect
+			var/message = "<b>[src]</b> states, \"Exotic particles successfully isolated.\""
 			src.visible_message(message)
 			return
 		else
@@ -259,8 +255,6 @@
 	if (href_list["ejectbattery"])
 		src.inserted_battery.forceMove(src.loc)
 		src.inserted_battery = null
-		if(cur_artifact)
-			cur_artifact.anchored = 0
 
 	if (href_list["drainbattery"])
 		if(inserted_battery)
