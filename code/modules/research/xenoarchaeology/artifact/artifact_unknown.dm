@@ -67,6 +67,8 @@ var/list/valid_secondary_effect_types = list(\
 	var/datum/artifact_effect/my_effect
 	var/datum/artifact_effect/secondary_effect
 	var/being_used = 0
+	var/contained = 0
+	anchored = 0
 
 /obj/machinery/artifact/New()
 	..()
@@ -120,9 +122,9 @@ var/list/valid_secondary_effect_types = list(\
 	if(isnull(L) || !istype(L)) 	// We're inside a container or on null turf, either way stop processing effects
 		return
 
-	if(my_effect)
+	if(my_effect && !contained)
 		my_effect.process()
-	if(secondary_effect)
+	if(secondary_effect && !contained)
 		secondary_effect.process()
 
 	if(pulledby)
@@ -271,10 +273,22 @@ var/list/valid_secondary_effect_types = list(\
 		secondary_effect.ToggleActivate(2)
 
 	if (my_effect.effect == EFFECT_TOUCH)
-		my_effect.DoEffectTouch(user)
+		if (contained)
+			my_effect.isolated = 1
+			my_effect.Blocked()
+			spawn(100)
+				my_effect.isolated = 0
+		else
+			my_effect.DoEffectTouch(user)
 
 	if(secondary_effect && secondary_effect.effect == EFFECT_TOUCH && secondary_effect.activated)
-		secondary_effect.DoEffectTouch(user)
+		if (contained)
+			secondary_effect.isolated = 1
+			secondary_effect.Blocked()
+			spawn(100)
+				secondary_effect.isolated = 0
+		else
+			secondary_effect.DoEffectTouch(user)
 
 /obj/machinery/artifact/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 
@@ -361,10 +375,22 @@ var/list/valid_secondary_effect_types = list(\
 			warn = 1
 
 		if (my_effect.effect == EFFECT_TOUCH && prob(50))
-			my_effect.DoEffectTouch(M)
+			if (contained)
+				my_effect.isolated = 1
+				my_effect.Blocked()
+				spawn(100)
+					my_effect.isolated = 0
+			else
+				my_effect.DoEffectTouch(M)
 			warn = 1
 		if(secondary_effect && secondary_effect.effect == EFFECT_TOUCH && secondary_effect.activated && prob(50))
-			secondary_effect.DoEffectTouch(M)
+			if (contained)
+				secondary_effect.isolated = 1
+				secondary_effect.Blocked()
+				spawn(100)
+					secondary_effect.isolated = 0
+			else
+				secondary_effect.DoEffectTouch(M)
 			warn = 1
 
 		if(warn)
