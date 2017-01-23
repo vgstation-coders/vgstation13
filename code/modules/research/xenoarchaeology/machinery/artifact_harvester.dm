@@ -11,7 +11,8 @@
 	var/harvesting = 0
 	var/obj/item/weapon/anobattery/inserted_battery
 	var/obj/machinery/artifact/cur_artifact
-	var/datum/artifact_effect/isolated_effect
+	var/datum/artifact_effect/isolated_primary
+	var/datum/artifact_effect/isolated_secondary
 	var/obj/machinery/artifact_scanpad/owned_scanner = null
 	var/chargerate = 0
 	var/harvester = "" // Logs who started a harvest.
@@ -59,8 +60,10 @@
 				dat += "<A href='?src=\ref[src];alockoff=1'>Deactivate containment field</a><BR>"
 				dat += "<b>Artifact energy signature ID:</b>[cur_artifact.my_effect.artifact_id == "" ? "???" : "[cur_artifact.my_effect.artifact_id]"]<BR>"
 				dat += "<A href='?src=\ref[src];isolateeffect=1'>Isolate exotic particles</a><BR>"
-				if(isolated_effect)
-					dat += "<b>Isolated energy signature ID:</b>[isolated_effect.artifact_id == "" ? "???" : "[isolated_effect.artifact_id]"]<BR>"
+				if(isolated_primary)
+					dat += "<b>Isolated energy signature ID:</b>[isolated_primary.artifact_id == "" ? "???" : "[isolated_primary.artifact_id]"]<BR>"
+				if(isolated_secondary)
+					dat += "<b>Isolated energy signature ID:</b>[isolated_secondary.artifact_id == "" ? "???" : "[isolated_secondary.artifact_id]"]<BR>"
 			else
 				dat += "<A href='?src=\ref[src];alockon=1'>Activate containment field</a><BR>"
 
@@ -69,8 +72,10 @@
 				dat += "<b>Battery energy signature ID:</b>[inserted_battery.battery_effect.artifact_id == "" ? "???" : "[inserted_battery.battery_effect.artifact_id]"]<BR>"
 				dat += "<A href='?src=\ref[src];ejectbattery=1'>Eject battery</a><BR>"
 				dat += "<A href='?src=\ref[src];drainbattery=1'>Drain battery of all charge</a><BR>"
-				if(isolated_effect)
-					dat += "<A href='?src=\ref[src];harvest=1'>Begin harvesting</a><BR>"
+				if(isolated_primary)
+					dat += "<A href='?src=\ref[src];harvestprimary=1'>Harvest signature ID: [isolated_primary.artifact_id]</a><BR>"
+				if(isolated_secondary)
+					dat += "<A href='?src=\ref[src];harvestsecondary=1'>Harvest signature ID: [isolated_secondary.artifact_id]</a><BR>"
 
 			else
 				dat += "No battery inserted.<BR>"
@@ -131,7 +136,7 @@
 	if(..())
 		return
 
-	if (href_list["harvest"])
+	if (href_list["harvestprimary"])
 		harvester = usr
 			//there should already be a battery inserted, but this is just in case
 		if(inserted_battery)
@@ -143,12 +148,12 @@
 			//only charge up
 			var/matching_id = 0
 			if(inserted_battery.battery_effect)
-				matching_id = (inserted_battery.battery_effect.artifact_id == isolated_effect.artifact_id)
+				matching_id = (inserted_battery.battery_effect.artifact_id == isolated_primary.artifact_id)
 			var/matching_effecttype = 0
 			if(inserted_battery.battery_effect)
-				matching_effecttype = (inserted_battery.battery_effect.type == isolated_effect.type)
+				matching_effecttype = (inserted_battery.battery_effect.type == isolated_primary.type)
 			if(!inserted_battery.battery_effect || (matching_id && matching_effecttype))
-				chargerate = isolated_effect.chargelevelmax / isolated_effect.effectrange
+				chargerate = isolated_primary.chargelevelmax / isolated_primary.effectrange
 				harvesting = 1
 				use_power = 2
 				icon_state = "incubator_on"
@@ -157,17 +162,17 @@
 
 				//duplicate the artifact's effect datum
 				if(!inserted_battery.battery_effect)
-					var/effecttype = isolated_effect.type
+					var/effecttype = isolated_primary.type
 					var/datum/artifact_effect/E = new effecttype(inserted_battery)
 
 					//duplicate it's unique settings
 					for(var/varname in list("chargelevelmax","artifact_id","effect","effectrange","effect_type","trigger"))
-						E.vars[varname] = isolated_effect.vars[varname]
+						E.vars[varname] = isolated_primary.vars[varname]
 
 					//duplicate any effect-specific settings
-					if(isolated_effect.copy_for_battery && isolated_effect.copy_for_battery.len)
-						for(var/varname in isolated_effect.copy_for_battery)
-							E.vars[varname] = isolated_effect.vars[varname]
+					if(isolated_primary.copy_for_battery && isolated_primary.copy_for_battery.len)
+						for(var/varname in isolated_primary.copy_for_battery)
+							E.vars[varname] = isolated_primary.vars[varname]
 
 					//copy the new datum into the battery
 					inserted_battery.battery_effect = E
@@ -176,6 +181,50 @@
 				var/message = "<b>[src]</b> states, \"Cannot harvest. Incompatible energy signatures detected.\""
 				src.visible_message(message)
 
+	if (href_list["harvestsecondary"])
+		harvester = usr
+			//there should already be a battery inserted, but this is just in case
+		if(inserted_battery)
+			//see if we can clear out an old effect
+			//delete it when the ids match to account for duplicate ids having different effects				if(inserted_battery.battery_effect && inserted_battery.stored_charge <= 0)
+			qdel(inserted_battery.battery_effect)
+			inserted_battery.battery_effect = null
+
+			//only charge up
+			var/matching_id = 0
+			if(inserted_battery.battery_effect)
+				matching_id = (inserted_battery.battery_effect.artifact_id == isolated_secondary.artifact_id)
+			var/matching_effecttype = 0
+			if(inserted_battery.battery_effect)
+				matching_effecttype = (inserted_battery.battery_effect.type == isolated_secondary.type)
+			if(!inserted_battery.battery_effect || (matching_id && matching_effecttype))
+				chargerate = isolated_secondary.chargelevelmax / isolated_secondary.effectrange
+				harvesting = 1
+				use_power = 2
+				icon_state = "incubator_on"
+				var/message = "<b>[src]</b> states, \"Beginning artifact energy harvesting.\""
+				src.visible_message(message)
+
+				//duplicate the artifact's effect datum
+				if(!inserted_battery.battery_effect)
+					var/effecttype = isolated_secondary.type
+					var/datum/artifact_effect/E = new effecttype(inserted_battery)
+
+					//duplicate it's unique settings
+					for(var/varname in list("chargelevelmax","artifact_id","effect","effectrange","effect_type","trigger"))
+						E.vars[varname] = isolated_secondary.vars[varname]
+
+					//duplicate any effect-specific settings
+					if(isolated_secondary.copy_for_battery && isolated_secondary.copy_for_battery.len)
+						for(var/varname in isolated_secondary.copy_for_battery)
+							E.vars[varname] = isolated_secondary.vars[varname]
+
+					//copy the new datum into the battery
+					inserted_battery.battery_effect = E
+					inserted_battery.stored_charge = 0
+			else
+				var/message = "<b>[src]</b> states, \"Cannot harvest. Incompatible energy signatures detected.\""
+				src.visible_message(message)
 
 	if (href_list["stopharvest"])
 		if(harvesting)
@@ -228,23 +277,20 @@
 			cur_artifact.being_used = 0
 			cur_artifact.contained = 0
 			cur_artifact = null
-			isolated_effect = null
+			isolated_primary = null
+			isolated_secondary = null
 
 	if (href_list["isolateeffect"])
-		isolated_effect = null
+		isolated_primary = null
+		isolated_secondary = null
 		if (cur_artifact.secondary_effect)
-			if (cur_artifact.my_effect.activated && cur_artifact.secondary_effect.activated)
-				var/message = "<b>[src]</b> states, \"Cannot isolate exotic particles, interference detected.\""
+			if (cur_artifact.secondary_effect.activated)
+				isolated_secondary = cur_artifact.secondary_effect
+				var/message = "<b>[src]</b> states, \"Exotic particle signature ID: [cur_artifact.secondary_effect.artifact_id] successfully isolated.\""
 				src.visible_message(message)
-				return
-			else if (cur_artifact.secondary_effect.activated)
-				isolated_effect = cur_artifact.secondary_effect
-				var/message = "<b>[src]</b> states, \"Exotic particles successfully isolated.\""
-				src.visible_message(message)
-				return
 		if (cur_artifact.my_effect.activated)
-			isolated_effect = cur_artifact.my_effect
-			var/message = "<b>[src]</b> states, \"Exotic particles successfully isolated.\""
+			isolated_primary = cur_artifact.my_effect
+			var/message = "<b>[src]</b> states, \"Exotic particle signature ID: [cur_artifact.my_effect.artifact_id] successfully isolated.\""
 			src.visible_message(message)
 			return
 		else
