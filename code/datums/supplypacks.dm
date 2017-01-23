@@ -1369,6 +1369,16 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "inflatable structures crate"
 	group = "Engineering"
 
+/datum/supply_packs/cables
+	name = "Cable Pack"
+	contains = list(/obj/item/weapon/storage/box/cable,
+					/obj/item/weapon/storage/box/cable,
+					/obj/item/weapon/storage/box/cable)
+	cost = 10
+	containertype = /obj/structure/closet/crate/engi
+	containername = "cables crate"
+	group = "Engineering"
+
 //////MEDICAL//////
 
 /datum/supply_packs/medical
