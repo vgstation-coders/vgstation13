@@ -4328,7 +4328,7 @@
 		counter--
 
 	if(get_turf(usr))
-		playsound(get_turf(usr), 'sound/effect/snap.ogg', 50, 1)
+		playsound(get_turf(usr), 'sound/effects/snap.ogg', 50, 1)
 
 	if(src.loc == usr)
 		usr.drop_item(src, force_drop = 1)
