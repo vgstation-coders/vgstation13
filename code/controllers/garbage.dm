@@ -167,18 +167,6 @@ world/loop_checks = 0
 /datum/proc/Destroy()
 	qdel(src, 1, 1)
 
-/client/proc/qdel_toggle()
-	set name = "Toggle qdel Behavior"
-	set desc = "Toggle qdel usage between normal and force del()."
-	set category = "Debug"
-
-	garbageCollector.del_everything = !garbageCollector.del_everything
-	to_chat(world, "<b>GC: qdel turned [garbageCollector.del_everything ? "off" : "on"].</b>")
-	log_admin("[key_name(usr)] turned qdel [garbageCollector.del_everything ? "off" : "on"].")
-	message_admins("<span class='notice'>[key_name(usr)] turned qdel [garbageCollector.del_everything ? "off" : "on"].</span>", 1)
-
-
-
 #ifdef GC_FINDREF
 /datum/garbage_collector/proc/LookForRefs(var/datum/D, var/datum/targ)
 	. = 0
