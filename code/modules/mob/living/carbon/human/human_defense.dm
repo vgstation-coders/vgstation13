@@ -76,10 +76,14 @@ emp_act
 /mob/living/carbon/human/proc/check_body_part_coverage(var/body_part_flags=0)
 	if(!body_part_flags)
 		return 0
+	var/parts_to_check = body_part_flags
 	for(var/obj/item/clothing/C in get_clothing_items())
 		if(!C)
 			continue
-		if(C.body_parts_covered & body_part_flags)
+		if((C.body_parts_covered & body_part_flags) == body_part_flags)
+			return 1
+		parts_to_check &= ~(C.body_parts_covered)
+		if(!parts_to_check)
 			return 1
 	return 0
 

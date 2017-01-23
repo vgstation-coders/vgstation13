@@ -222,7 +222,7 @@
 	wizard_garb = 1
 
 /obj/item/clothing/head/celtic/equipped(mob/living/carbon/human/H, head)
-	if(istype(H) && head == src)
+	if(istype(H) && H.get_item_by_slot(head) == src)
 		H.species.cold_level_1 = -1
 		H.species.cold_level_2 = -1
 		H.species.cold_level_3 = -1
@@ -234,6 +234,6 @@
 		user.species.cold_level_1 = initial(user.species.cold_level_1)
 		user.species.cold_level_2 = initial(user.species.cold_level_2)
 		user.species.cold_level_3 = initial(user.species.cold_level_3)
-		if (~initial(user.species.flags) & HYPOTHERMIA_IMMUNE)
+		if(~initial(user.species.flags) & HYPOTHERMIA_IMMUNE)
 			user.species.flags &= ~HYPOTHERMIA_IMMUNE
 		user.faction = initial(user.faction)

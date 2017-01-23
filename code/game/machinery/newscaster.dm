@@ -572,7 +572,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					/*for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)    //Let's add the new channel in all casters.
 						NEWSCASTER.channel_list += newChannel*/                     //Now that it is sane, get it into the list. -OBSOLETE
 					news_network.network_channels += newChannel                        //Adding channel to the global network
-					src.screen=5
+					src.screen = NEWSCASTER_MENU
 			src.updateUsrDialog()
 			//src.update_icon()
 
@@ -650,12 +650,13 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						var/datum/picture/P = photo
 						newMsg.img = P.fields["img"]
 						newMsg.img_info = P.fields["info"]
+					EjectPhoto()
 				feedback_inc("newscaster_stories",1)
 				for(var/datum/feed_channel/FC in news_network.network_channels)
 					if(FC.channel_name == src.channel_name)
 						FC.messages += newMsg                  //Adding message to the network's appropriate feed_channel
 						break
-				src.screen=NEWSCASTER_NEW_MESSAGE_SUCCESS
+				src.screen = NEWSCASTER_MENU
 				for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 					NEWSCASTER.newsAlert(src.channel_name)
 
@@ -946,7 +947,13 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				visible_message("<EM>[user.name]</EM> further abuses the shattered [src].")
 
 			else
-				if(istype(I, /obj/item/weapon) )
+				var/obj/item/weapon/photo/P = I
+				if(istype(P) && !photo && user.drop_item(P, src))
+					photo = P
+					to_chat(user, "<span class='notice'>You add \the [P] to \the [src].</span>")
+					src.updateUsrDialog()
+
+				else if(istype(I, /obj/item/weapon) )
 					var/obj/item/weapon/W = I
 					if(W.force <15)
 						visible_message("[user.name] hits the [src] with the [W] with no visible effect." )

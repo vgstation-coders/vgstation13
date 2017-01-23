@@ -296,7 +296,7 @@ obj/effect/bmode/buildholder/New()
 									if(areaAction == MASS_DELETE || (strict && thing.type == chosen) || istype(thing,chosen))
 										qdel(thing)
 									deletions++
-									tcheck(80,1)
+									CHECK_TICK
 								if(areaAction == MASS_DELETE)
 									T.ChangeTurf(get_base_turf(T.z))
 						else
@@ -321,12 +321,12 @@ obj/effect/bmode/buildholder/New()
 										var/atom/A = new whatfill(T)
 										A.dir = thing.dir
 										qdel(thing)
-										tcheck(80,1)
+										CHECK_TICK
 								else
 									var/obj/A = new whatfill(T)
 									if(istype(A))
 										A.dir = holder.builddir.dir
-						tcheck(80,1)
+						CHECK_TICK
 					if(deletions)
 						to_chat(usr, "<span class='info'>Successfully deleted [deletions] [chosen]'\s</span>")
 		if(3)
@@ -370,9 +370,9 @@ obj/effect/bmode/buildholder/New()
 								if(areaAction == MASS_DELETE || (strict && thing.type == chosen) || istype(thing,chosen))
 									setvar(holder.buildmode.varholder, holder.buildmode.valueholder, thing, reset)
 									edits++
-								tcheck(80,1)
+								CHECK_TICK
 						edits++
-						tcheck(80,1)
+						CHECK_TICK
 					if(edits)
 						to_chat(usr, "<span class='info'>Successfully edited [edits] [chosen]'\s</span>")
 		else
@@ -515,7 +515,7 @@ obj/effect/bmode/buildholder/New()
 											if(areaAction == MASS_DELETE || (strict && thing.type == chosen) || istype(thing,chosen))
 												qdel(thing)
 											deletions++
-											tcheck(80,1)
+											CHECK_TICK
 										if(areaAction == MASS_DELETE)
 											T.ChangeTurf(get_base_turf(T.z))
 								else
@@ -540,12 +540,12 @@ obj/effect/bmode/buildholder/New()
 												var/atom/A = new holder.buildmode.objholder(T)
 												A.dir = thing.dir
 												qdel(thing)
-												tcheck(80,1)
+												CHECK_TICK
 										else
 											var/obj/A = new holder.buildmode.objholder(T)
 											if(istype(A))
 												A.dir = holder.builddir.dir
-								tcheck(80,1)
+								CHECK_TICK
 							holder.fill_left = null
 							holder.fill_right = null
 							if(deletions)

@@ -68,6 +68,7 @@
 			desc = "It's full of a bubbling viscous liquid, and is lit by a mysterious glow."
 			if(spawn_type)
 				new spawn_type(src.loc)
+				investigation_log(I_ARTIFACT, "|| spawned a [spawn_type].")
 				playsound(get_turf(src), 'sound/machines/heps.ogg', 50, 0)
 
 		//if we're getting close to finished, kick into overdrive power usage
@@ -97,6 +98,7 @@
 			if(Proj.firer)
 				msg_admin_attack("[key_name(Proj.firer)] blew up [src]/([formatJumpTo(src)]) with a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[Proj.firer.x];Y=[Proj.firer.y];Z=[Proj.firer.z]'>JMP</a>)")
 			explosion(get_turf(src), 1, 2, 3, 3)
+			src.investigation_log(I_ARTIFACT, "|| blew up after taking damage from || [Proj.type] || fired by [Proj.firer ? "[key_name(Proj.firer)]" : "something"].")
 			qdel(src)
 
 /obj/machinery/auto_cloner/attackby(var/obj/O, var/mob/user)
@@ -108,6 +110,7 @@
 		if(prob(O.force/2))
 			msg_admin_attack("[user] blew up [src]/([formatJumpTo(src)]) with [O] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
 			explosion(get_turf(src), 1, 2, 3, 3)
+			src.investigation_log(I_ARTIFACT, "|| blew up after taking damage from || [O] || attacked by [key_name(user)].")
 			qdel(src)
 	else
 		src.visible_message("<span class='warning'>\The [user] taps \the [src] with \the [O].</span>")

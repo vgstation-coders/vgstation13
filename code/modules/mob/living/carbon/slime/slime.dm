@@ -586,34 +586,34 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	var/enhanced = 0 //has it been enhanced before?
 	var/primarytype = /mob/living/carbon/slime
 
-	attackby(obj/item/O as obj, mob/user as mob)
-		if(istype(O, /obj/item/weapon/slimesteroid2))
-			if(enhanced == 1)
-				to_chat(user, "<span class='warning'>This extract has already been enhanced!</span>")
-				return ..()
-			if(Uses == 0)
-				to_chat(user, "<span class='warning'>You can't enhance a used extract!</span>")
-				return ..()
-			to_chat(user, "You apply the enhancer. It now has triple the amount of uses.")
-			Uses = 3
-			enhanced = 1
-			qdel(O)
+/obj/item/slime_extract/attackby(obj/item/O as obj, mob/user as mob)
+	if(istype(O, /obj/item/weapon/slimesteroid2))
+		if(enhanced == 1)
+			to_chat(user, "<span class='warning'>This extract has already been enhanced!</span>")
+			return ..()
+		if(Uses == 0)
+			to_chat(user, "<span class='warning'>You can't enhance a used extract!</span>")
+			return ..()
+		to_chat(user, "You apply the enhancer. It now has triple the amount of uses.")
+		Uses = 3
+		enhanced = 1
+		qdel(O)
 
-		//slime res
-		if(istype(O, /obj/item/weapon/slimeres))
-			if(Uses == 0)
-				to_chat(user, "<span class='warning'>The solution doesn't work on used extracts!</span>")
-				return ..()
-			to_chat(user, "You splash the Slime Resurrection Serum onto the extract causing it to quiver and come to life.")
-			new primarytype(get_turf(src))
-			Uses--
-			qdel(O)
+	//slime res
+	if(istype(O, /obj/item/weapon/slimeres))
+		if(Uses == 0)
+			to_chat(user, "<span class='warning'>The solution doesn't work on used extracts!</span>")
+			return ..()
+		to_chat(user, "You splash the Slime Resurrection Serum onto the extract causing it to quiver and come to life.")
+		new primarytype(get_turf(src))
+		Uses--
+		qdel(O)
 
 /obj/item/slime_extract/New()
-		..()
-		var/datum/reagents/R = new/datum/reagents(100)
-		reagents = R
-		R.my_atom = src
+	..()
+	var/datum/reagents/R = new/datum/reagents(100)
+	reagents = R
+	R.my_atom = src
 
 /obj/item/slime_extract/grey
 	name = "grey slime extract"
@@ -980,73 +980,73 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	layer = RUNE_LAYER
 	var/list/mob/dead/observer/ghosts[0]
 
-	New()
-		..()
-		processing_objects.Add(src)
+/obj/effect/golem_rune/New()
+	..()
+	processing_objects.Add(src)
 
-	process()
-		if(ghosts.len>0)
-			icon_state = "golem2"
-		else
-			icon_state = "golem"
+/obj/effect/golem_rune/process()
+	if(ghosts.len>0)
+		icon_state = "golem2"
+	else
+		icon_state = "golem"
 
-	attack_hand(mob/living/user as mob)
-		var/mob/dead/observer/ghost
-		for(var/mob/dead/observer/O in src.loc)
-			if(!check_observer(O))
-				continue
-			ghost = O
-			break
-		if(!ghost)
-			to_chat(user, "The rune fizzles uselessly. There is no spirit nearby.")
-			return
-		var/mob/living/carbon/human/golem/G = new /mob/living/carbon/human/golem
-		G.real_name = G.species.makeName()
-		G.forceMove(src.loc) //we use move to get the entering procs - this fixes gravity
-		G.key = ghost.key
-		to_chat(G, "You are an adamantine golem. You move slowly, but are highly resistant to heat and cold as well as impervious to burn damage. You are unable to wear most clothing, but can still use most tools. Serve [user], and assist them in completing their goals at any cost.")
-		qdel (src)
-		if(ticker.mode.name == "sandbox")
-			G.CanBuild()
-			to_chat(G, "Sandbox tab enabled.")
+/obj/effect/golem_rune/attack_hand(mob/living/user as mob)
+	var/mob/dead/observer/ghost
+	for(var/mob/dead/observer/O in src.loc)
+		if(!check_observer(O))
+			continue
+		ghost = O
+		break
+	if(!ghost)
+		to_chat(user, "The rune fizzles uselessly. There is no spirit nearby.")
+		return
+	var/mob/living/carbon/human/golem/G = new /mob/living/carbon/human/golem
+	G.real_name = G.species.makeName()
+	G.forceMove(src.loc) //we use move to get the entering procs - this fixes gravity
+	G.key = ghost.key
+	to_chat(G, "You are an adamantine golem. You move slowly, but are highly resistant to heat and cold as well as impervious to burn damage. You are unable to wear most clothing, but can still use most tools. Serve [user], and assist them in completing their goals at any cost.")
+	qdel (src)
+	if(ticker.mode.name == "sandbox")
+		G.CanBuild()
+		to_chat(G, "Sandbox tab enabled.")
 
 
-	proc/announce_to_ghosts()
-		for(var/mob/dead/observer/O in player_list)
-			if(O.client)
-				var/area/A = get_area(src)
-				if(A)
-					to_chat(O, "<span class=\"recruit\">Golem rune created in [A.name]. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</span>")
+/obj/effect/golem_rune/proc/announce_to_ghosts()
+	for(var/mob/dead/observer/O in player_list)
+		if(O.client)
+			var/area/A = get_area(src)
+			if(A)
+				to_chat(O, "<span class=\"recruit\">Golem rune created in [A.name]. (<a href='?src=\ref[O];jump=\ref[src]'>Teleport</a> | <a href='?src=\ref[src];signup=\ref[O]'>Sign Up</a>)</span>")
 
-	Topic(href,href_list)
-		if("signup" in href_list)
-			var/mob/dead/observer/O = locate(href_list["signup"])
-			volunteer(O)
-
-	attack_ghost(var/mob/dead/observer/O)
-		if(!O)
-			return
+/obj/effect/golem_rune/Topic(href,href_list)
+	if("signup" in href_list)
+		var/mob/dead/observer/O = locate(href_list["signup"])
 		volunteer(O)
 
-	proc/check_observer(var/mob/dead/observer/O)
-		if(!O)
-			return 0
-		if(!O.client)
-			return 0
-		if(O.mind && O.mind.current && O.mind.current.stat != DEAD)
-			return 0
-		return 1
+/obj/effect/golem_rune/attack_ghost(var/mob/dead/observer/O)
+	if(!O)
+		return
+	volunteer(O)
 
-	proc/volunteer(var/mob/dead/observer/O)
-		if(O in ghosts)
-			ghosts.Remove(O)
-			to_chat(O, "<span class='warning'>You are no longer signed up to be a golem.</span>")
-		else
-			if(!check_observer(O))
-				to_chat(O, "<span class='warning'>You are not eligable.</span>")
-				return
-			ghosts.Add(O)
-			to_chat(O, "<span class='notice'>You are signed up to be a golem.</span>")
+/obj/effect/golem_rune/proc/check_observer(var/mob/dead/observer/O)
+	if(!O)
+		return 0
+	if(!O.client)
+		return 0
+	if(O.mind && O.mind.current && O.mind.current.stat != DEAD)
+		return 0
+	return 1
+
+/obj/effect/golem_rune/proc/volunteer(var/mob/dead/observer/O)
+	if(O in ghosts)
+		ghosts.Remove(O)
+		to_chat(O, "<span class='warning'>You are no longer signed up to be a golem.</span>")
+	else
+		if(!check_observer(O))
+			to_chat(O, "<span class='warning'>You are not eligable.</span>")
+			return
+		ghosts.Add(O)
+		to_chat(O, "<span class='notice'>You are signed up to be a golem.</span>")
 
 
 /mob/living/carbon/slime/has_eyes()

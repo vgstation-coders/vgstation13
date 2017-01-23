@@ -145,7 +145,7 @@
 /*
  * /vg/ charcoal
  */
-var/global/list/datum/stack_recipe/charcoal_recipes = list ()
+var/list/datum/stack_recipe/charcoal_recipes = list ()
 
 /obj/item/stack/sheet/charcoal	//N3X15
 	name = "charcoal"

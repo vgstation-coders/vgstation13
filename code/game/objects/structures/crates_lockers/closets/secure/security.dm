@@ -269,6 +269,7 @@
 		new /obj/item/weapon/gun/projectile/detective(src)
 		new /obj/item/clothing/accessory/holster/handgun/wornout(src)
 		new /obj/item/device/gps/secure(src)
+		new /obj/item/binoculars(src)
 		return
 
 /obj/structure/closet/secure_closet/detective/update_icon()

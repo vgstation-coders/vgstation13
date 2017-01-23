@@ -1,5 +1,5 @@
 /obj/item/weapon/reagent_containers/blood
-	name = "Bloodpack"
+	name = "\improper Bloodpack"
 	desc = "Contains blood used for transfusion."
 	icon = 'icons/obj/bloodpack.dmi'
 	icon_state = "empty"
@@ -10,14 +10,14 @@
 /obj/item/weapon/reagent_containers/blood/New()
 	..()
 	if(blood_type != null)
-		name = "[blood_type] Bloodpack"
+		name = "\improper[blood_type] Bloodpack"
 	reagents.add_reagent(BLOOD, 200, list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"=blood_type,"resistances"=null,"trace_chem"=null))
 	update_icon()
 
 /obj/item/weapon/reagent_containers/blood/on_reagent_change()
 	update_icon()
-	if(reagents.total_volume == 0 && name != "Empty Bloodback")
-		name = "Empty Bloodpack"
+	if(reagents.total_volume == 0 && name != "\improper Empty Bloodback")
+		name = "\improper Empty Bloodpack"
 		desc = "Seems pretty useless... Maybe if there were a way to fill it?"
 	else if (reagents.reagent_list.len > 0)
 		var/target_type = null
@@ -27,11 +27,11 @@
 				the_volume = A.volume
 				target_type = A.data["blood_type"]
 		if (target_type)
-			name = "[target_type] Bloodpack"
+			name = "\improper [target_type] Bloodpack"
 			desc = "A bloodpack filled with [target_type] blood."
 			blood_type = target_type
 		else
-			name = "Murky Bloodpack"
+			name = "\improper Murky Bloodpack"
 			desc = "A bloodpack that's clearly not filled with blood."
 
 /obj/item/weapon/reagent_containers/blood/update_icon()
@@ -85,7 +85,7 @@
 	blood_type = "O-"
 
 /obj/item/weapon/reagent_containers/blood/empty
-	name = "Empty Bloodpack"
+	name = "\improper Empty Bloodpack"
 	desc = "Seems pretty useless... Maybe if there were a way to fill it?"
 	icon_state = "empty"
 	New()
@@ -95,7 +95,7 @@
 		update_icon()
 
 /obj/item/weapon/reagent_containers/blood/chemo
-	name = "Phalanximine IV kit"
+	name = "\improper Phalanximine IV kit"
 	desc = "IV kit for chemotherapy."
 	icon = 'icons/obj/chemopack.dmi'
 	New()

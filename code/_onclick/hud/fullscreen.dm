@@ -7,15 +7,28 @@
 		screen = screens[category]
 		if(screen.type != type)
 			clear_fullscreen(category, FALSE)
-			return .()
+			return
+		else if(screen.clear_after_length)
+			screen = getFromPool(type)
 		else if(!severity || severity == screen.severity)
 			return null
 	else
 		screen = getFromPool(type)
 
-	screen.icon_state = "[initial(screen.icon_state)][severity]"
 	screen.severity = severity
-
+	if(screen.anim_state)
+		flick("[screen.anim_state][severity]",screen)
+		if(client)
+			client.screen += screen
+		if(screen.clear_after_length)
+			spawn(screen.clear_after_length)
+				if(client)
+					client.screen -= screen
+				qdel(screen)
+	else
+		screen.icon_state = "[initial(screen.icon_state)][severity]"
+	if(screen.clear_after_length)
+		return 1
 	screens[category] = screen
 	if(client)
 		client.screen += screen
@@ -67,6 +80,8 @@
 	plane = FULLSCREEN_PLANE
 	mouse_opacity = 0
 	var/severity = 0
+	var/anim_state
+	var/clear_after_length // also doubles as the length of the animation
 
 /obj/screen/fullscreen/Destroy()
 	severity = 0
@@ -104,12 +119,15 @@
 /obj/screen/fullscreen/flash
 	icon = 'icons/mob/screen1.dmi'
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
-	icon_state = "flash"
+	icon_state = "blank"
+	anim_state = "flash"
+	clear_after_length = 27
 
 /obj/screen/fullscreen/flash/noise
 	icon = 'icons/mob/screen1.dmi'
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
-	icon_state = "noise"
+	icon_state = "blank"
+	anim_state = "noise"
 
 /obj/screen/fullscreen/high
 	icon = 'icons/mob/screen1.dmi'

@@ -219,12 +219,12 @@
 			continue
 		x.forceMove(src.loc)
 
-	src.occupant.forceMove(exit)
-	src.occupant.reset_view()
-	src.occupant = null
+	if(!occupant.gcDestroyed)
+		occupant.forceMove(exit)
+		occupant.reset_view()
+	occupant = null
 	update_icon()
 	set_light(0)
-	return
 
 /obj/machinery/bodyscanner/crowbarDestroy(mob/user)
 	if(occupant)

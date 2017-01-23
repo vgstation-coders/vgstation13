@@ -376,15 +376,11 @@
 	//Greys treat water like acid
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
-		if(H.species.name == "Grey")
+		if(isgrey(H))
 			if(method == TOUCH)
 
-				if(H.wear_mask)
-					to_chat(H, "<span class='warning'>Your mask protects you from the water!</span>")
-					return
-
-				if(H.head)
-					to_chat(H, "<span class='warning'>Your helmet protects you from the water!</span>")
+				if(H.check_body_part_coverage(EYES|MOUTH))
+					to_chat(H, "<span class='warning'>Your face is protected from a splash of water!</span>")
 					return
 
 				if(M.acidable())
@@ -1464,7 +1460,7 @@
 	if(iscarbon(M))
 		var/mob/living/carbon/C = M
 		if(C.pain_level < BASE_CARBON_PAIN_RESIST) //If we're already recovering from shock, let's speed the process up
-			C.pain_shock_stage = max(0, C.pain_shock_stage - 1)
+			C.pain_shock_stage--
 
 /datum/reagent/oxycodone
 	name = "Oxycodone"
@@ -1482,7 +1478,7 @@
 	if(iscarbon(M))
 		var/mob/living/carbon/C = M
 		C.pain_numb = max(5, C.pain_numb)
-		C.pain_shock_stage = max(0, C.pain_shock_stage - 3) //We don't FEEL the shock now, but make it go away quick in case we run out of oxycodone.
+		C.pain_shock_stage -= 3 //We don't FEEL the shock now, but make it go away quick in case we run out of oxycodone.
 		if(!M.sleeping && prob(2))
 			to_chat(M, pick("<span class='numb'>You feel like you're floating...</span>", \
 							"<span class='numb'>You feel a little lightheaded... but it's okay.</span>", \
@@ -3070,7 +3066,7 @@
 			M.adjustToxLoss(1)
 			M.Dizzy(5)
 			M.Jitter(5)
-			if(prob(5))
+			if(prob(5) && M.feels_pain())
 				to_chat(M, "<span class='warning'>Oh god, the pain!</span>")
 		if(25 to INFINITY)
 			if(ishuman(M)) //Does nothing to non-humans.

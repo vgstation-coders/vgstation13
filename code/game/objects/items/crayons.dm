@@ -211,12 +211,15 @@ var/global/list/all_graffitis = list(
 
 /obj/item/toy/crayon/attack(mob/M as mob, mob/user as mob)
 	if(M == user)
-		to_chat(user, "You take a bite of the crayon. Delicious!")
+		user.visible_message("<span class='notice'>[user] bites a chunk out of \the [src].</span>", \
+			"<span class='notice'>You bite a chunk out of \the [src].</span>")
 		user.nutrition += 5
+		score["foodeaten"]++
 		if(uses)
 			uses -= 5
 			if(uses <= 0)
-				to_chat(user, "<span class='warning'>You ate your crayon!</span>")
+				user.visible_message("<span class='notice'>[user] swallows what was left of \the [src].</span>", \
+					"<span class='notice'>You finish eating \the [src].</span>")
 				qdel(src)
 	else
 		..()

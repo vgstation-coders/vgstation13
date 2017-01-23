@@ -67,7 +67,6 @@
 	h_style = "Bald"
 	..(new_loc, "Golem")
 	gender = NEUTER
-	meat_type = /obj/item/weapon/ore/diamond
 
 /mob/living/carbon/human/grue/New(var/new_loc, delay_ready_dna = 0)
 	h_style = "Bald"
@@ -1273,6 +1272,7 @@
 		src.see_invisible = SEE_INVISIBLE_LIVING
 	if((src.species.default_mutations.len > 0) || (src.species.default_blocks.len > 0))
 		src.do_deferred_species_setup = 1
+	meat_type = species.meat_type
 	spawn()
 		src.dna.species = new_species_name
 		src.species.handle_post_spawn(src)

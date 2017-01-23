@@ -122,16 +122,19 @@
 
 /obj/item/weapon/switchtool/proc/deploy(var/module)
 	if(!(module in stored_modules))
-		return
+		return FALSE
 
 	if(!stored_modules[module])
-		return
+		return FALSE
+	if(deployed)
+		return FALSE
 
 	playsound(get_turf(src), "sound/weapons/switchblade.ogg", 10, 1)
 	deployed = stored_modules[module]
 	deployed.cant_drop = 1
 	overlays += get_module_name(module)
 	w_class = max(w_class, deployed.w_class)
+	return TRUE
 
 /obj/item/weapon/switchtool/proc/choose_deploy(mob/user)
 	var/list/potential_modules = list()
@@ -156,8 +159,8 @@
 				if(get_module_name(checkmodule) == chosen_module)
 					true_module = checkmodule
 					break
-			deploy(true_module)
-			to_chat(user, "You deploy \the [deployed].")
+			if(deploy(true_module))
+				to_chat(user, "You deploy \the [deployed].")
 			return 1
 		return
 

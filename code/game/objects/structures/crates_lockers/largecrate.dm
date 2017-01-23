@@ -1,7 +1,7 @@
 /obj/structure/largecrate
 	name = "large crate"
 	desc = "A hefty wooden crate."
-	icon = 'icons/obj/storage.dmi'
+	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "densecrate"
 	density = 1
 	flags = FPRINT
@@ -83,4 +83,13 @@
 			var/obj/machinery/shower/S = new (loc)
 			S.anchored = 0
 			S.panel_open = 1
+	..()
+
+/obj/structure/largecrate/skele_stand
+	name = "hanging skeleton model crate"
+	icon_state = "lisacrate"
+
+/obj/structure/largecrate/skele_stand/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(iscrowbar(W))
+		new /obj/structure/skele_stand(loc)
 	..()

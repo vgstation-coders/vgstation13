@@ -198,11 +198,8 @@
 	set name = "pAI Suicide"
 	var/answer = input("REALLY kill yourself? This action can't be undone.", "Suicide", "No") in list ("Yes", "No")
 	if(answer == "Yes")
-		var/obj/item/device/paicard/card = loc
 		card.removePersonality()
-		var/turf/T = get_turf(card.loc)
-		for (var/mob/M in viewers(T))
-			visible_message("<span class='notice'>[src] flashes a message across its screen, \"Wiping core files. Please acquire a new personality to continue using pAI device functions.\"</span>")
+		src.visible_message("<span class='notice'>[src] flashes a message across its screen, \"Wiping core files. Please acquire a new personality to continue using pAI device functions.\"</span>")
 		log_attack("<font color='red'>[key_name(src)] used the suicide verb.</font>")
 		death(0)
 

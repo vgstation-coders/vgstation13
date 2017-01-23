@@ -125,13 +125,15 @@ var/global/list/falltempoverlays = list()
 		for(var/atom/movable/everything in T)
 			if(isliving(everything))
 				var/mob/living/L = everything
-				if(L == holder)
+				if(L == holder || L.flags & TIMELESS)
 					continue
 				affected += L
 				invertcolor(L)
 				spawn() recursive_timestop(L)
 				L.playsound_local(L, invocation == "ZA WARUDO" ? 'sound/effects/theworld2.ogg' : 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
 			else
+				if(everything.flags & TIMELESS)
+					continue
 				spawn() recursive_timestop(everything)
 				if(everything.ignoreinvert)
 					continue
@@ -154,7 +156,8 @@ var/global/list/falltempoverlays = list()
 		affected |= A
 
 		if(A != holder)
-			A.timestopped = 1
+			if(!(A.flags & TIMELESS))
+				A.timestopped = 1
 
 		for (var/atom/B in A)
 			if (!processed_list[B])
@@ -214,3 +217,23 @@ var/global/list/falltempoverlays = list()
 						0,-1,0,
 						0,0,-1,
 						1,1,1)
+
+/proc/timestop(atom/A, var/duration, var/range)
+	if(!A || !duration)
+		return
+	var/mob/caster = new
+	var/spell/aoe_turf/fall/fall = new /spell/aoe_turf/fall
+	caster.invisibility = 101
+	caster.density = 0
+	caster.anchored = 1
+	caster.flags = INVULNERABLE
+	caster.add_spell(fall)
+	fall.spell_flags = 0
+	fall.invocation_type = SpI_NONE
+	fall.the_world_chance = 0
+	fall.range = range ? range : 7		//how big
+	fall.sleeptime = duration			//for how long
+	caster.forceMove(get_turf(A))
+	spawn()
+		fall.perform(caster, skipcharge = 1)
+		qdel(caster)

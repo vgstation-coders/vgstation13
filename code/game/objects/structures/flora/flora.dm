@@ -1,7 +1,7 @@
 //trees
 /obj/structure/flora
 	name = "flora"
-	var/icon/clicked
+	var/icon/clicked //Because BYOND can't give us runtime icon access, this is basically just a click catcher
 
 /obj/structure/flora/New()
 	..()

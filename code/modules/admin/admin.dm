@@ -1336,29 +1336,28 @@ var/global/floorIsLava = 0
 /datum/admins/proc/output_ai_laws()
 	var/ai_number = 0
 	for(var/mob/living/silicon/S in mob_list)
-		ai_number++
-		if(isAI(S))
-			to_chat(usr, "<b>AI [key_name(S, usr)]'s laws:</b>")
-		else if(isrobot(S))
-			var/mob/living/silicon/robot/R = S
-			to_chat(usr, "<b>[isMoMMI(R) ? "Mobile-MMI" : "CYBORG"] [key_name(S, usr)] [R.connected_ai?"(Slaved to: [R.connected_ai])":"(Independant)"]: laws:</b>")
-		else if (ispAI(S))
-			var/mob/living/silicon/pai/pAI = S
-			to_chat(usr, "<b>pAI [key_name(S, usr)]'s laws (master: [pAI.master] ):</b>")
-		else
-			to_chat(usr, "<b>SOMETHING SILICON [key_name(S, usr)]'s laws:</b>")
+		if(!istype(S, /mob/living/silicon/decoy))
+			ai_number++
+			if(isAI(S))
+				to_chat(usr, "<b>AI [key_name(S, usr)]'s laws:</b>")
+			else if(isrobot(S))
+				var/mob/living/silicon/robot/R = S
+				to_chat(usr, "<b>[isMoMMI(R) ? "Mobile-MMI" : "CYBORG"] [key_name(S, usr)] [R.connected_ai?"(Slaved to: [R.connected_ai])":"(Independant)"]: laws:</b>")
+			else if (ispAI(S))
+				var/mob/living/silicon/pai/pAI = S
+				to_chat(usr, "<b>pAI [key_name(S, usr)]'s laws (master: [pAI.master] ):</b>")
+			else
+				to_chat(usr, "<b>SOMETHING SILICON [key_name(S, usr)]'s laws:</b>")
 
-		if(ispAI(S))
-			var/mob/living/silicon/pai/pAI = S
-			pAI.show_directives(usr)
-		else if (S.laws == null)
-			to_chat(usr, "[key_name(S, usr)]'s laws are null?? Contact a coder.")
-		else
-			S.laws.show_laws(usr)
-
+			if(ispAI(S))
+				var/mob/living/silicon/pai/pAI = S
+				pAI.show_directives(usr)
+			else if (S.laws == null)
+				to_chat(usr, "[key_name(S, usr)]'s laws are null?? Contact a coder.")
+			else
+				S.laws.show_laws(usr)
 	if(!ai_number)
 		to_chat(usr, "<b>No AIs located</b>")//Just so you know the thing is actually working and not just ignoring you.
-
 
 /client/proc/update_mob_sprite(mob/living/carbon/human/H as mob in mob_list)
 	set category = "Admin"

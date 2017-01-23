@@ -17,6 +17,7 @@
 	load_method = 2
 	mag_type = "/obj/item/ammo_storage/magazine/smg9mm"
 
+
 /obj/item/weapon/gun/projectile/automatic/isHandgun()
 	return FALSE
 
@@ -108,6 +109,7 @@
 	mag_type = "/obj/item/ammo_storage/magazine/a12mm/ops"
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
 	mag_drop_sound = 'sound/weapons/smg_empty_alarm.ogg'
+	automagdrop_delay_time = 0
 	load_method = 2
 
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS

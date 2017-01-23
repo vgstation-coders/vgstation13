@@ -169,7 +169,7 @@
 			src.toggle_power()
 			return
 		//emit some particles
-		for(var/obj/structure/particle_accelerator/particle_emitter/PE in connected_parts)
+		for(var/obj/structure/particle_accelerator/particle_emitter/center/PE in connected_parts)
 			if(PE)
 				PE.emit_particle(src.strength)
 	return
