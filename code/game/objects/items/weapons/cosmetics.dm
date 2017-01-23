@@ -200,6 +200,7 @@
 	icon_state = "invisible_spray"
 	flags = FPRINT
 	w_class = W_CLASS_SMALL
+	var/infinite = 0
 	var/invisible_time = 5 MINUTES
 	var/sprays_left = 1
 
@@ -219,28 +220,31 @@
 			var/mob/living/carbon/C = target
 			C.body_alphas[INVISIBLESPRAY] = 1
 			C.regenerate_icons()
-			spawn(invisible_time)
-				if(C)
-					C.body_alphas.Remove(INVISIBLESPRAY)
-					C.regenerate_icons()
+			if(!infinite)
+				spawn(invisible_time)
+					if(C)
+						C.body_alphas.Remove(INVISIBLESPRAY)
+						C.regenerate_icons()
 		else
 			var/mob/M = target
 			M.alpha = 1	//to cloak immediately instead of on the next Life() tick
 			M.alphas[INVISIBLESPRAY] = 1
-			spawn(invisible_time)
-				if(M)
-					M.alpha = initial(M.alpha)
-					M.alphas.Remove(INVISIBLESPRAY)
+			if(!infinite)
+				spawn(invisible_time)
+					if(M)
+						M.alpha = initial(M.alpha)
+						M.alphas.Remove(INVISIBLESPRAY)
 	else
 		target.alpha = 1
 		if(target.loc == user)
 			user.regenerate_icons()
-		spawn(invisible_time)
-			if(target)
-				target.alpha = initial(target.alpha)
-				if(ismob(target.loc))
-					var/mob/M = target.loc
-					M.regenerate_icons()
+		if(!infinite)
+			spawn(invisible_time)
+				if(target)
+					target.alpha = initial(target.alpha)
+					if(ismob(target.loc))
+						var/mob/M = target.loc
+						M.regenerate_icons()
 	if(target == user)
 		to_chat(user, "You spray yourself with \the [src].")
 	else
@@ -248,3 +252,7 @@
 	playsound(get_turf(src), 'sound/effects/spray2.ogg', 50, 1, -6)
 	sprays_left--
 	return 1
+
+/obj/item/weapon/invisible_spray/infinite
+	desc = "A can of... invisibility?"
+	infinite = 1

@@ -169,9 +169,9 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/invisible_spray
 	name = "Can of Invisible Spray"
-	desc = "Spray something to render it invisible for five minutes! One-time use."
-	item = /obj/item/weapon/invisible_spray
-	cost = 4
+	desc = "Spray something to render it invisible! One-time use."
+	item = /obj/item/weapon/invisible_spray/infinite
+	cost = 5
 	job = list("Clown", "Mime")
 
 /datum/uplink_item/jobspecific/advancedmime
