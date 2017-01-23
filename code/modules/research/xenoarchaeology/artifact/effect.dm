@@ -54,12 +54,24 @@
 			activated = 0
 		else
 			activated = 1
-		if(reveal_toggle && holder)
+
+		if(reveal_toggle == 1 && holder)
+			if(istype(holder, /obj/machinery/artifact))
+				var/obj/machinery/artifact/A = holder
+				A.icon_state = "ano[A.icon_num][activated]"
 			var/display_msg
 			if(activated)
 				display_msg = pick("momentarily glows brightly!","distorts slightly for a moment!","flickers slightly!","vibrates!","shimmers slightly for a moment!")
 			else
 				display_msg = pick("grows dull!","fades in intensity!","suddenly becomes very still!","suddenly becomes very quiet!")
+			var/atom/toplevelholder = get_holder_at_turf_level(holder)
+			toplevelholder.visible_message("<span class='warning'>[bicon(toplevelholder)] [toplevelholder] [display_msg]</span>")
+		if(reveal_toggle == 2 && holder)
+			var/display_msg
+			if(activated)
+				display_msg = pick("rumbles slightly for a moment!","begins to shake!","blinks slightly!","starts to whirr!","sparks!")
+			else
+				display_msg = pick("quietens down!","settles to a stop!","lets out a single beep!","goes dark!")
 			var/atom/toplevelholder = get_holder_at_turf_level(holder)
 			toplevelholder.visible_message("<span class='warning'>[bicon(toplevelholder)] [toplevelholder] [display_msg]</span>")
 			if(istype(holder, /obj/machinery/artifact))
