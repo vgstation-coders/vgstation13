@@ -141,9 +141,10 @@
 			//there should already be a battery inserted, but this is just in case
 		if(inserted_battery)
 			//see if we can clear out an old effect
-			//delete it when the ids match to account for duplicate ids having different effects				if(inserted_battery.battery_effect && inserted_battery.stored_charge <= 0)
-			qdel(inserted_battery.battery_effect)
-			inserted_battery.battery_effect = null
+			//delete it when the ids match to account for duplicate ids having different effects
+			if(inserted_battery.battery_effect && inserted_battery.stored_charge <= 0)
+				qdel(inserted_battery.battery_effect)
+				inserted_battery.battery_effect = null
 
 			//only charge up
 			var/matching_id = 0
@@ -186,9 +187,10 @@
 			//there should already be a battery inserted, but this is just in case
 		if(inserted_battery)
 			//see if we can clear out an old effect
-			//delete it when the ids match to account for duplicate ids having different effects				if(inserted_battery.battery_effect && inserted_battery.stored_charge <= 0)
-			qdel(inserted_battery.battery_effect)
-			inserted_battery.battery_effect = null
+			//delete it when the ids match to account for duplicate ids having different effects
+			if(inserted_battery.battery_effect && inserted_battery.stored_charge <= 0)
+				qdel(inserted_battery.battery_effect)
+				inserted_battery.battery_effect = null
 
 			//only charge up
 			var/matching_id = 0
@@ -283,17 +285,16 @@
 	if (href_list["isolateeffect"])
 		isolated_primary = null
 		isolated_secondary = null
+		if (cur_artifact.my_effect.activated)
+			isolated_primary = cur_artifact.my_effect
+			var/message = "<b>[src]</b> states, \"Exotic particle signature ID: [cur_artifact.my_effect.artifact_id] successfully isolated.\""
+			src.visible_message(message)
 		if (cur_artifact.secondary_effect)
 			if (cur_artifact.secondary_effect.activated)
 				isolated_secondary = cur_artifact.secondary_effect
 				var/message = "<b>[src]</b> states, \"Exotic particle signature ID: [cur_artifact.secondary_effect.artifact_id] successfully isolated.\""
 				src.visible_message(message)
-		if (cur_artifact.my_effect.activated)
-			isolated_primary = cur_artifact.my_effect
-			var/message = "<b>[src]</b> states, \"Exotic particle signature ID: [cur_artifact.my_effect.artifact_id] successfully isolated.\""
-			src.visible_message(message)
-			return
-		else
+		if (!isolated_primary && !isolated_secondary)
 			var/message = "<b>[src]</b> states, \"Cannot isolate exotic particles, none detected.\""
 			src.visible_message(message)
 			return
