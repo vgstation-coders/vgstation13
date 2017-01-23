@@ -30,6 +30,7 @@
 	size = SIZE_TINY
 	holder_type = /obj/item/weapon/holder/animal/mouse
 	held_items = list()
+	var/obj/item/weapon/reagent_containers/food/snacks/food_target //What food we're walking towards
 
 /mob/living/simple_animal/mouse/Life()
 	if(timestopped)
@@ -53,6 +54,21 @@
 		else if(prob(5))
 			emote("snuffles")
 
+
+	if(!isUnconscious())
+		var/list/can_see() = view(src, 5) //Decent radius, not too large so they're attracted across rooms, but large enough to attract them to mousetraps
+
+		if(!food_target)
+			for(var/obj/item/weapon/reagent_containers/food/snacks/C in can_see)
+				food_target = C
+				break
+		if(!(food_target in can_see))
+			food_target = null
+		if(food_target)
+			if(Adjacent(food_target))
+				food_target.attack_animal(src)
+			step_towards(src, food_target)
+
 /mob/living/simple_animal/mouse/New()
 	..()
 	if(config && config.uneducated_mice)
@@ -70,7 +86,6 @@
 	add_language(LANGUAGE_MOUSE)
 	default_language = all_languages[LANGUAGE_MOUSE]
 
-
 /mob/living/simple_animal/mouse/proc/splat()
 	src.health = 0
 	src.stat = DEAD
@@ -87,6 +102,7 @@
 	var/pipe = start_ventcrawl()
 	if(pipe)
 		handle_ventcrawl(pipe)
+
 
 //copy paste from alien/larva, if that func is updated please update this one also
 /mob/living/simple_animal/mouse/verb/hide()
@@ -136,7 +152,6 @@
 
 ///mob/living/simple_animal/mouse/restrained() //Hotfix to stop mice from doing things with MouseDrop
 //	return 1
-
 
 /mob/living/simple_animal/mouse/Crossed(AM as mob|obj)
 	if( ishuman(AM) )

@@ -418,8 +418,14 @@
 		return L
 
 /mob/living/proc/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
-	  return 0 // only carbon liveforms have this proc
-				// now with silicons
+	var/damage = shock_damage * siemens_coeff
+
+	if(damage <= 0)
+		damage = 0
+
+	adjustFireLoss(damage)
+
+	return damage
 
 /mob/living/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
