@@ -3,21 +3,10 @@ use encoding::all::WINDOWS_1252;
 use encoding::label::encoding_from_windows_code_page;
 use encoding::types::DecoderTrap;
 use libc;
+use std::cmp::{max, Ordering};
 use std::ffi::CStr;
 use std::slice;
 use std::ptr::null;
-
-unsafe fn decode(args: &[*const libc::c_char]) -> String {
-    let encoding = CStr::from_ptr(args[0])
-        .to_str()
-        .map(|encoding| {
-            encoding_from_windows_code_page(encoding.parse::<usize>().unwrap_or(1252))
-                .unwrap_or(WINDOWS_1252)
-        })
-        .unwrap_or(WINDOWS_1252);
-    let bytes = CStr::from_ptr(args[1]).to_bytes();
-    encoding.decode(bytes, DecoderTrap::Replace).unwrap_or("fuck".into())
-}
 
 /// Encodes a byte string to UTF-8, using the windows code page supplied.
 ///
@@ -55,6 +44,104 @@ pub extern "C" fn utf8_sanitize(n: libc::c_int,
     };
 
     return_to_byond(&text).unwrap_or(null())
+}
+
+/// Returns the length of a UTF-8 string.
+byond!(utf8_len: text; {
+    // Count an iterator over characters.
+    format!("{}", text.chars().count())
+});
+
+/// Returns the BYTE length of a UTF-8 string.
+byond!(utf8_len_bytes: text; {
+    // Count an iterator over characters.
+    format!("{}", text.len())
+});
+
+
+byond!(utf8_find: haystack, needle, start, end; {
+    // This happens often enough for a special case, probably.
+    if start == "1" && end == "0" {
+        match haystack.find(needle) {
+            Some(index) => {
+                // Determine true offset based on byte offset returned by find.
+                return format!("{}",
+                    haystack.char_indices()
+                    .position(|x| x.0 == index)
+                    .unwrap());
+            },
+            None => return "0".to_string()
+        }
+    }
+
+    match byte_bounds(haystack, start, end) {
+        Some((start, end)) => {
+            let ref sub = haystack[start .. end];
+            match sub.find(needle) {
+                Some(index) => format!("{}",
+                    haystack
+                    .char_indices()
+                    .position(|x| x.0 == index)
+                    .unwrap()),
+                None => "".to_string()
+            }
+        }
+        None => "0".to_string()
+    }
+});
+
+/// Function to get the byte bounds for copytext, findtext and replacetext.
+/// Goes by one-indexing and correctly handles negatives.
+#[allow(dead_code)]
+fn byte_bounds(text: &str, start: &str, end: &str) -> Option<(usize, usize)> {
+    // BYOND uses 1-indexing because of course it does...
+    // I would've made sick one liners out of this if the negative index stuff weren't a thing.
+    let mut start = start.parse::<isize>().unwrap_or(1);
+    let mut end = end.parse::<isize>().unwrap_or(0);
+
+    let char_count = text.chars().count() as isize;
+
+    start += if start < 0 { char_count } else { -1 };
+    let start = max(start, 0) as usize;
+
+    match end.cmp(&0) {
+        Ordering::Greater => {
+            end -= 1;
+        }
+        Ordering::Equal => {
+            end = char_count;
+        }
+        Ordering::Less => {
+            end += char_count;
+        }
+    }
+
+    let end = max(end, 0) as usize;
+
+    if end <= start {
+        // Signal "NOPE"
+        return None;
+    }
+
+    let mut iter = text.char_indices();
+
+    match (iter.nth(start), iter.nth(end - start - 1)) {
+        (Some((start, _)), Some((end, _))) => Some((start, end)),
+        (Some((start, _)), None) => Some((start, text.len())),
+        _ => None,
+    }
+}
+
+unsafe fn decode(args: &[*const libc::c_char]) -> String {
+    let encoding = CStr::from_ptr(args[0])
+        .to_str()
+        .map(|encoding| {
+            encoding_from_windows_code_page(encoding.parse::<usize>().unwrap_or(1252))
+                .unwrap_or(WINDOWS_1252)
+        })
+        .unwrap_or(WINDOWS_1252);
+    let bytes = CStr::from_ptr(args[1]).to_bytes();
+    encoding.decode(bytes, DecoderTrap::Replace).unwrap_or("fuck".into())
 }
 
 fn sanitize(text: &str, cap: usize) -> String {
@@ -110,4 +197,26 @@ fn test_utf8() {
     let both = [encoding.as_ptr(), test.as_ptr()];
 
     unsafe { assert_eq!(decode(&both), "Hн thйrй!") };
+}
+
+#[test]
+fn test_byte_bounds() {
+    assert_eq!(byte_bounds("abcdefgh", "1", "0"), Some((0, 8)));
+    assert_eq!(byte_bounds("abcdefgh", "0", "0"), Some((0, 8)));
+    assert_eq!(byte_bounds("abcdefgh", "-2", "0"), Some((6, 8)));
+    assert_eq!(byte_bounds("abcdefgh", "-4", "-2"), Some((4, 6)));
+    assert_eq!(byte_bounds("abcdefghijklmnopwrstuvwxyz", "-4", "-2"),
+               Some((22, 24)));
+    assert_eq!(byte_bounds("abcdefgh", "-20", "-2"), Some((0, 6)));
+    assert_eq!(byte_bounds("abcdefgh", "2", "1"), None);
+    assert_eq!(byte_bounds("àbçdéfgh", "1", "0"), Some((0, 11)));
+    assert_eq!(byte_bounds("àbç👏défgh", "2", "0"), Some((2, 15)));
+    assert_eq!(byte_bounds("👏àbç👏défgh", "2", "0"), Some((4, 19)));
+    assert_eq!(byte_bounds("abcdefgh", "20", "40"), None);
+    assert_eq!(byte_bounds("abcdefgh", "3", "40"), Some((2, 8)));
+}
+
+#[test]
+fn test_utf8_find() {
+    panic!("For fucks sake write the damn test already and stop fucking with RPDs.")
 }
