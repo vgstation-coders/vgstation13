@@ -266,11 +266,10 @@
 /obj/item/weapon/spear/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(istype(W, /obj/item/weapon/organ/head))
-		var/obj/structure/headpole/H = new (get_turf(src), W)
-		user.drop_item(W, H, force_drop = 1)
 		if(loc == user)
-			user.drop_item(src, H, force_drop = 1)
-		H.spear = src
+			user.drop_item(src, force_drop = 1)
+		var/obj/structure/headpole/H = new (get_turf(src), W, src)
+		user.drop_item(W, H, force_drop = 1)
 
 /obj/item/weapon/spear/wooden
 	name = "steel spear"
