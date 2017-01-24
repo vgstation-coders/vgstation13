@@ -37,6 +37,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	// Can we wrench/weld this to a turf with a dense /obj on it?
 	var/can_affix_to_dense_turf=0
 
+	var/has_been_invisible_sprayed = FALSE
+
 /obj/New()
 	..()
 	if (auto_holomap && isturf(loc))

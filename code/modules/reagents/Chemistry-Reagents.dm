@@ -436,6 +436,13 @@
 	if(..())
 		return 1
 
+	if(O.has_been_invisible_sprayed)
+		O.alpha = initial(O.alpha)
+		O.has_been_invisible_sprayed = FALSE
+		if(ismob(O.loc))
+			var/mob/M = O.loc
+			M.regenerate_icons()
+
 	var/turf/T = get_turf(O)
 	self.reaction_turf(T, volume)
 

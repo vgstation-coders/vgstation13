@@ -235,16 +235,20 @@
 						M.alpha = initial(M.alpha)
 						M.alphas.Remove(INVISIBLESPRAY)
 	else
-		target.alpha = 1
-		if(target.loc == user)
-			user.regenerate_icons()
-		if(!infinite)
-			spawn(invisible_time)
-				if(target)
-					target.alpha = initial(target.alpha)
-					if(ismob(target.loc))
-						var/mob/M = target.loc
-						M.regenerate_icons()
+		if(istype(target, /obj))
+			var/obj/O = target
+			O.alpha = 1
+			O.has_been_invisible_sprayed = TRUE
+			if(O.loc == user)
+				user.regenerate_icons()
+			if(!infinite)
+				spawn(invisible_time)
+					if(O)
+						O.alpha = initial(O.alpha)
+						O.has_been_invisible_sprayed = FALSE
+						if(ismob(O.loc))
+							var/mob/M = O.loc
+							M.regenerate_icons()
 	if(target == user)
 		to_chat(user, "You spray yourself with \the [src].")
 	else
