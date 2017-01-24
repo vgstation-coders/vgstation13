@@ -397,7 +397,11 @@ var/shuttle_call/shuttle_calls[0]
 		list("id"=SEC_LEVEL_BLUE,  "name"="Blue"),
 		//SEC_LEVEL_RED = list("name"="Red"),
 	)
-	data["ert_sent"] = "Emergency Response Team" in sent_strike_teams
+	var/sent = 0
+	if ("Emergency Response Team" in sent_strike_teams)
+		sent = 1
+
+	data["ert_sent"] = sent
 
 	var/msg_data[0]
 	for(var/i=1;i<=src.messagetext.len;i++)
