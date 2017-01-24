@@ -167,6 +167,13 @@ var/list/uplink_items = list()
 	cost = 18
 	job = list("Clown")
 
+/datum/uplink_item/jobspecific/livingballoons
+	name = "Box of Living Long Balloons"
+	desc = "Can be tied into living balloon animals, which will come to life and attack non-clowns if a balloon is popped near them."
+	item = /obj/item/weapon/storage/box/balloons/long/living
+	cost = 6
+	job = list("Clown")
+
 /datum/uplink_item/jobspecific/superglue
 	name = "1 Bottle of Superglue"
 	desc = "Considered illegal everywhere except for the Clown Planet, this water-resistant superglue can instantly bind human flesh to ANY material, permanently. One-time use."
