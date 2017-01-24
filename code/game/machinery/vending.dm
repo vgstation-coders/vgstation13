@@ -2407,14 +2407,15 @@ var/global/num_vending_terminals = 1
 
 	premium = list(
 		/obj/item/weapon/storage/trader_marauder,
-		/obj/item/weapon/storage/backpack/holding,
+		//obj/item/weapon/storage/backpack/holding, //Players did exactly what you would expect and bought them for their own use.  Keep in mind that an obj should be good but not so good they want it for themselves
 		/obj/item/weapon/reagent_containers/glass/beaker/bluespace,
 		/obj/item/weapon/storage/bluespace_crystal,
 		//obj/item/clothing/shoes/magboots/elite,
 		/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
 		/obj/item/weapon/reagent_containers/glass/bottle/peridaxon,
 		/obj/item/weapon/reagent_containers/glass/bottle/rezadone,
-		/obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall,	
+		/obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall,
+		/obj/item/clothing/shoes/clown_shoes/advanced,
 		)
 
 	for(var/random_items = 1 to premium.len - 4)
