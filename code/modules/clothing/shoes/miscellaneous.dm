@@ -146,6 +146,7 @@
 	icon_state = "superclown"
 	item_state = "superclown"
 	clothing_flags = NOSLIP
+	var/emagged = 0
 	var/list/sound_list = list(
 		"Clown squeak" = "clownstep",
 		"Bike horn" = 'sound/items/bikehorn.ogg',
@@ -176,7 +177,15 @@
 		"Mecha step" = 'sound/mecha/mechstep.ogg',
 		"Fart" = 'sound/misc/fart.ogg',
 		"Random" = CLOWNSHOES_RANDOM_SOUND)
+	var/list/emagged_sounds = list(
+		"OH GOD WHY" = 'sound/effects/adminhelp.ogg')
 	var/random_sound = 0
+
+/obj/item/clothing/shoes/clown_shoes/advanced/attackby(obj/item/W, mob/user)
+	if(isEmag(W) && Emag())
+		to_chat(user, "<span class='danger'>Oh god, why.</span>")
+		return TRUE
+	..()
 
 /obj/item/clothing/shoes/clown_shoes/advanced/attack_self(mob/user)
 	if(user.mind && user.mind.assigned_role != "Clown")
@@ -214,6 +223,13 @@
 	set name = "Change Sound"
 
 	return src.attack_self(usr)
+
+/obj/item/clothing/shoes/clown_shoes/advanced/proc/Emag()
+	if(emagged)
+		return FALSE
+	emagged = TRUE
+	sound_list.Add(emagged_sounds)
+	return TRUE
 
 /obj/item/clothing/shoes/clown_shoes/advanced/step_action()
 	if(ishuman(loc))
