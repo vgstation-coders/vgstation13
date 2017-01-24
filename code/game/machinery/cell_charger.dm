@@ -212,9 +212,8 @@
 		to_chat(user,"<span class='info'>There is no cell loaded.</span>")
 
 /obj/item/device/crank_charger/attackby(obj/item/W, mob/user)
-	if(!W.cant_drop && !stored && istype(W,/obj/item/weapon/cell))
+	if(!stored && istype(W,/obj/item/weapon/cell) && user.drop_item(W,src))
 		stored = W
-		user.drop_item(W,src)
 		update_icon()
 	else
 		..()
