@@ -194,6 +194,41 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "wooden planks crate"
 	group = "Supplies"
 
+/datum/supply_packs/plastic10
+	name = "20 Plastic Sheets"
+	contains = list(/obj/item/stack/sheet/mineral/plastic)
+	amount = 10
+	cost = 25
+	containertype = /obj/structure/closet/crate/engi
+	containername = "plastic sheets crate"
+	group = "Supplies"
+
+/datum/supply_packs/metal250
+	name = "250 Metal Sheets"
+	contains = list(/obj/item/stack/sheet/metal,
+					/obj/item/stack/sheet/metal,
+					/obj/item/stack/sheet/metal,
+					/obj/item/stack/sheet/metal,
+					/obj/item/stack/sheet/metal)
+	amount = 50
+	cost = 40
+	containertype = /obj/structure/closet/crate/engi
+	containername = "metal sheets crate"
+	group = "Supplies"
+
+/datum/supply_packs/glass250
+	name = "250 Glass Sheets"
+	contains = list(/obj/item/stack/sheet/glass/glass,
+					/obj/item/stack/sheet/glass/glass,
+					/obj/item/stack/sheet/glass/glass,
+					/obj/item/stack/sheet/glass/glass,
+					/obj/item/stack/sheet/glass/glass)
+	amount = 50
+	cost = 40
+	containertype = /obj/structure/closet/crate/engi
+	containername = "glass sheets crate"
+	group = "Supplies"
+
 /datum/supply_packs/carpet
 	name = "30 Carpet Tiles"
 	contains = list(/obj/item/stack/tile/carpet)
@@ -1506,7 +1541,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "motorized wheelchair crate"
 	access = access_cmo
 	group = "Medical"
-	
+
 /datum/supply_packs/skele_stand
 	name = "Hanging Skeleton Model crate"
 	cost = 30
