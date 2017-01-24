@@ -23,6 +23,7 @@ var/global/list/special_roles = list(
 	ROLE_VAMPIRE      = IS_MODE_COMPILED("vampire"),
 	ROLE_VOXRAIDER    = IS_MODE_COMPILED("heist"),
 	ROLE_WIZARD       = 1,
+	ROLE_COMMANDO	  = 1,
 )
 
 var/list/antag_roles = list(
@@ -37,6 +38,7 @@ var/list/antag_roles = list(
 	ROLE_VAMPIRE      = IS_MODE_COMPILED("vampire"),
 	ROLE_VOXRAIDER    = IS_MODE_COMPILED("heist"),
 	ROLE_WIZARD       = 1,
+	ROLE_COMMANDO	  = 1,
 //	"infested monkey" = IS_MODE_COMPILED("monkey"),
 )
 

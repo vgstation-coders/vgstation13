@@ -267,10 +267,6 @@ var/specops_shuttle_timeleft = 0
 		to_chat(user, "<span class='warning'>Access Denied.</span>")
 		return
 
-	if (sent_strike_team == 0 && send_emergency_team == 0)
-		to_chat(usr, "<span class='warning'>The strike team has not yet deployed.</span>")
-		return
-
 	if(..())
 		return
 
