@@ -141,7 +141,7 @@ unsafe fn decode(args: &[*const libc::c_char]) -> String {
         })
         .unwrap_or(WINDOWS_1252);
     let bytes = CStr::from_ptr(args[1]).to_bytes();
-    encoding.decode(bytes, DecoderTrap::Replace).unwrap_or("fuck".into())
+    encoding.decode(bytes, DecoderTrap::Replace).unwrap()
 }
 
 fn sanitize(text: &str, cap: usize) -> String {
