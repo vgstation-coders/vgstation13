@@ -1,8 +1,9 @@
 // QUALITY COPYPASTA
 /turf/unsimulated/wall/supermatter
-	name = "Supermatter Sea"
+	name = "Bluespace"
 	desc = "THE END IS right now actually."
-	icon_state = "supermatter"
+	icon = 'icons/turf/space.dmi'
+	icon_state = "bluespace"
 
 	//luminosity = 5
 	//light_color="#0066FF"
@@ -45,8 +46,7 @@
 
 	// EXPAND DONG
 	if(isturf(T))
-		// This is normally where a growth animation would occur
-//		new /obj/effect/overlay/bluespacify(T)
+		new /obj/effect/overlay/bluespacify(T)
 		spawn(10)
 			// Nom.
 			for(var/atom/movable/A in T)
