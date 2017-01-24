@@ -907,11 +907,11 @@
 		else
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=wizard;jobban4=\ref[M]'>[replacetext("Wizard", " ", "&nbsp")]</a></td>"
 
-		//ERT
-		if(jobban_isbanned(M, "Emergency Response Team") || isbanned_dept)
-			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Emergency Response Team;jobban4=\ref[M]'><font color=red>Emergency Response Team</font></a></td>"
+		//Strike Team
+		if(jobban_isbanned(M, "Strike Team") || isbanned_dept)
+			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Strike Team;jobban4=\ref[M]'><font color=red>Strike Team</font></a></td>"
 		else
-			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Emergency Response Team;jobban4=\ref[M]'>Emergency Response Team</a></td>"
+			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=Strike Team;jobban4=\ref[M]'>Strike Team</a></td>"
 
 
 		//Vox Raider
@@ -2559,10 +2559,26 @@
 				for(var/mob/living/carbon/human/H in mob_list)
 					spawn(0)
 						H.corgize()
-			if("striketeam")
-				if(usr.client.strike_team())
-					feedback_inc("admin_secrets_fun_used",1)
-					feedback_add_details("admin_secrets_fun_used","Strike")
+			if("striketeam-deathsquad")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","DeathQuad")
+				var/datum/striketeam/deathsquad/team = new /datum/striketeam/deathsquad()
+				team.trigger_strike(usr)
+			if("striketeam-ert")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","ERT")
+				var/datum/striketeam/ert/team = new /datum/striketeam/ert()
+				team.trigger_strike(usr)
+			if("striketeam-syndi")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","SyndiStrikeTeam")
+				var/datum/striketeam/syndicate/team = new /datum/striketeam/syndicate()
+				team.trigger_strike(usr)
+			if("striketeam-custom")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","CustomStrikeTeam")
+				var/datum/striketeam/custom/team = new /datum/striketeam/custom()
+				team.trigger_strike(usr)
 			if("tripleAI")
 				usr.client.triple_ai()
 				feedback_inc("admin_secrets_fun_used",1)
