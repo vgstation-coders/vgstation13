@@ -309,7 +309,6 @@
 
 	return 1
 
-
 /obj/machinery/power/supermatter/multitool_menu(var/mob/user, var/obj/item/device/multitool/P)
 	return {"
 	<b>Main</b>
@@ -330,10 +329,8 @@
 	else
 		damage += Proj.damage * config_bullet_energy
 
-
 /obj/machinery/power/supermatter/attack_paw(mob/user as mob)
 	return attack_hand(user)
-
 
 /obj/machinery/power/supermatter/attack_robot(mob/user as mob)
 	if(Adjacent(user))
@@ -360,7 +357,6 @@
 	to_chat(user, "<span class = \"info\">Damage: [format_num(damage)]</span>")// idfk what units we're using.
 
 	to_chat(user, "<span class = \"info\">Power: [format_num(power)]J</span>")// Same
-
 
 /obj/machinery/power/supermatter/attack_hand(mob/user as mob)
 	user.visible_message("<span class=\"warning\">\The [user] reaches out and touches \the [src], inducing a resonance... \his body starts to glow and bursts into flames before flashing into ash.</span>",\
@@ -390,11 +386,15 @@
 
 	playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
 
+	if(istype(W, /obj/item/weapon/holder))
+		var/obj/item/weapon/holder/H = W
+		if(H.stored_mob)
+			Consume(H.stored_mob)
+
 	user.drop_from_inventory(W)
 	Consume(W)
 
 	user.apply_effect(150, IRRADIATE)
-
 
 /obj/machinery/power/supermatter/Bumped(atom/AM as mob|obj)
 	if(istype(AM, /obj/machinery/power/supermatter))
@@ -415,16 +415,22 @@
 
 	playsound(get_turf(src), 'sound/effects/supermatter.ogg', 50, 1)
 
+	if(istype(AM, /obj/item/weapon/holder))
+		var/obj/item/weapon/holder/H = AM
+		if(H.stored_mob)
+			Consume(H.stored_mob)
 	Consume(AM)
-
 
 /obj/machinery/power/supermatter/proc/Consume(var/mob/living/user)
 	if(istype(user))
 		user.dust()
-		if(istype(user,/mob/living/simple_animal/mouse)) //>implying mice are going to follow the rules
+		if(ismouse(user)) //>implying mice are going to follow the rules
 			return
 		power += 200
 	else
+		if(istype(user, /obj/item/weapon/holder)) //STOP MAKING POWER OUT OF HOLDERS HOLY SHIT
+			qdel(user)
+			return
 		qdel(user)
 
 	power += 200
