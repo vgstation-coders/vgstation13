@@ -53,6 +53,8 @@
 
 	var/projectile_color = null
 
+	var/pai_safety = TRUE	//To allow the pAI to activate or deactivate firing capability
+
 /obj/item/weapon/gun/proc/ready_to_fire()
 	if(world.time >= last_fired + fire_delay)
 		last_fired = world.time
@@ -348,11 +350,13 @@
 /obj/item/weapon/gun/on_integrated_pai_click(mob/living/silicon/pai/user, var/atom/A)	//to allow any gun to be pAI-compatible, on a basic level, just by varediting
 	if(check_pai_can_fire(user))
 		Fire(A,user,use_shooter_turf = TRUE)
-	else
-		to_chat(user, "<span class='warning'>You can't aim the gun properly from this location!</span>")
 
 /obj/item/weapon/gun/proc/check_pai_can_fire(mob/living/silicon/pai/user)	//for various restrictions on when pAIs can fire a gun into which they're integrated
 	if(get_holder_of_type(user, /obj/structure/disposalpipe) || get_holder_of_type(user, /obj/machinery/atmospherics/pipe))	//can't fire the gun from inside pipes or disposal pipes
+		to_chat(user, "<span class='warning'>You can't aim \the [src] properly from this location!</span>")
+		return FALSE
+	else if(!pai_safety)
+		to_chat(user, "<span class='warning'>You're not connected to \the [src]'s firing mechanism!</span>")
 		return FALSE
 	else
 		return TRUE
