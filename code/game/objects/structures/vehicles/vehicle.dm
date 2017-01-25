@@ -325,6 +325,6 @@
 	if (loc == oldloc)
 		return
 	if(cart)
-		cart.Move(oldloc)
+		cart.forceMove(oldloc)
 
 /datum/locking_category/buckle/chair/vehicle

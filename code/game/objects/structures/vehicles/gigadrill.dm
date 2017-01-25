@@ -39,17 +39,12 @@
   else
     icon_state = "gigadrill"
 
-/obj/structure/bed/chair/vehicle/gigadrill/Bump(atom/A)
-	if(occupant && !drilling_turf)
-		if(istype(A, /turf/unsimulated/mineral))
-			var/turf/unsimulated/mineral/M = A
-			drilling_turf = get_turf(src)
-			anchored = 1
-			spawn(DRILL_TIME)
-			if(get_turf(src) == drilling_turf && occupant)
-				M.GetDrilled()
-				src.forceMove(M)
-			drilling_turf = null
-			anchored = 0
+/obj/structure/bed/chair/vehicle/gigadrill/proc/drill(atom/target)
+	if(!occupant)
+		return
+
+	if(istype(target, /turf/unsimulated/mineral))
+		var/turf/unsimulated/mineral/M = target
+		M.GetDrilled()
 
 #undef DRILL_TIME
