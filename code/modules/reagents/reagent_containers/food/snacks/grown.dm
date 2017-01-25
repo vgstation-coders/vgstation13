@@ -891,8 +891,6 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/attackby(obj/item/weapon/W, mob/user)
 	if(switching)
-		if(!current_path)
-			return
 		switching = 0
 		var/N = rand(1,3)
 		if(get_turf(user))
