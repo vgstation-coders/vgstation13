@@ -378,7 +378,7 @@
 	name = "packet of cinnamomum seeds"
 	seed_type = "cinnamomum"
 	vending_cat = "trees"
-	
+
 /obj/item/seeds/test
 	name = "packet of testing data seed"
 	seed_type = "test"
@@ -1571,7 +1571,9 @@
 	plant_icon = "nofruit"
 	chems = list(NOTHING = list(1,20))
 
+	immutable = 1
 	lifespan = 30
+	endurance = 30 // So you can't use cuttings to get more seeds
 	maturation = 5
 	production = 5
 	yield = 1
