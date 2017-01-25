@@ -586,9 +586,9 @@ var/list/beam_master = list()
 
 /obj/item/projectile/beam/xray/Bump(atom/A)
 	if(..())
-		damage -= 5
-		if(istype(A, /turf/simulated/wall/r_wall))
-			damage -= 5
+		damage -= 3
+		if(istype(A, /turf/simulated/wall/r_wall) || (istype(A, /obj/machinery/door/poddoor) && !istype(A, /obj/machinery/door/poddoor/shutters)))	//if we hit an rwall or blast doors, but not shutters, the beam dies
+			bullet_die()
 		if(damage <= 0)
 			bullet_die()
 
