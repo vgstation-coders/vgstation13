@@ -1,7 +1,8 @@
 /obj/cart/
 	name = "cart"
-	icon = 'goon/icons/vehicles.dmi'
+	icon = 'goon/icons/vehicles.dmi' //If you want to sprite a new cart, do it in 'icons/obj/vehicles.dmi'
 	icon_state = "flatbed"
+	density = 1
 	var/atom/movable/load = null
 	var/obj/cart/next_cart = null
 
@@ -27,6 +28,14 @@
 		else
 			to_chat(user, "\The [src] already has a cart connected to it!", "red")
 			return
+
+/obj/cart/Move()
+	var/oldloc = src.loc
+	..()
+	if (src.loc == oldloc)
+		return
+	if (next_cart)
+		next_cart.Move(oldloc)
 
 /*/obj/cart/MouseDrop(obj/over_object as obj, src_location, over_location)
 		..()

@@ -182,6 +182,8 @@
 		layer = ABOVE_OBJ_LAYER
 
 /obj/structure/bed/chair/vehicle/MouseDrop_T(var/atom/movable/C, mob/user)
+	..()
+
 	if (user.incapacitated() || !in_range(user, src) || !can_have_carts)
 		return
 
