@@ -1,3 +1,7 @@
+#define MOUSEFAT 500
+#define MOUSESTARVE 200
+#define MOVECOST 1
+#define STANDCOST 0.5
 /mob/living/simple_animal/mouse
 	name = "mouse"
 	real_name = "mouse"
@@ -31,7 +35,7 @@
 	holder_type = /obj/item/weapon/holder/animal/mouse
 	held_items = list()
 	var/obj/item/weapon/reagent_containers/food/snacks/food_target //What food we're walking towards
-
+	var/is_fat = 0
 /mob/living/simple_animal/mouse/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -54,6 +58,19 @@
 		else if(prob(5))
 			emote("snuffles")
 
+	if(nutrition >= MOUSEFAT && is_fat == 0)
+		is_fat = 1
+		speed = 5
+		meat_amount = initial(meat_amount) + 1
+	else if (nutrition <= 400 && is_fat == 1) //400 = default nutrition value
+		is_fat = 0
+		speed = initial(speed)
+		meat_amount = initial(meat_amount)
+	if(nutrition <= MOUSESTARVE && prob(10) && client)
+		to_chat(src, "<span class = 'warning'>You are starving!</span>")
+		health -= 1
+
+
 
 	if(!isUnconscious())
 		var/list/can_see() = view(src, 5) //Decent radius, not too large so they're attracted across rooms, but large enough to attract them to mousetraps
@@ -69,6 +86,11 @@
 			if(Adjacent(food_target))
 				food_target.attack_animal(src)
 
+		nutrition = max(0, nutrition - STANDCOST)
+
+/mob/living/simple_animal/mouse/Move()
+	..()
+	nutrition = max(0, nutrition - MOVECOST)
 
 /mob/living/simple_animal/mouse/New()
 	..()
@@ -86,6 +108,20 @@
 	desc = "It's a small [_color] rodent, often seen hiding in maintenance areas and making a nuisance of itself."
 	add_language(LANGUAGE_MOUSE)
 	default_language = all_languages[LANGUAGE_MOUSE]
+
+/mob/living/simple_animal/mouse/proc/nutrstats()
+	stat(null, "Nutrition level - [nutrition]")
+
+/mob/living/simple_animal/mouse/Stat()
+	..()
+	if(statpanel("Status"))
+		nutrstats()
+
+/mob/living/simple_animal/mouse/examine(mob/user)
+	..()
+	if(!isDead())
+		if(is_fat)
+			to_chat(user, "<span class='info'>It seems well fed.</span>")
 
 /mob/living/simple_animal/mouse/proc/splat()
 	src.health = 0

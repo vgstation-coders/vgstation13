@@ -338,6 +338,7 @@
 				to_chat(N, ("<span class='notice'>You nibble away at \the [src].</span>"))
 			N.health = min(N.health + 1, N.maxHealth)
 			bitecount += 0.25
+			N.nutrition += 5
 			if(bitecount >= ANIMALBITECOUNT)
 				qdel(src)
 
