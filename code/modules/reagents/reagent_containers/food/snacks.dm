@@ -4299,7 +4299,6 @@
 	var/list/available_snacks = list()
 	var/switching = 0
 	var/current_path = null
-	var/counter = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/New()
 	..()
@@ -4334,12 +4333,13 @@
 			if(3)
 				playsound(user, 'sound/weapons/genhit3.ogg', 50, 1)
 		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
+		var/obj/item/weapon/reagent_containers/food/snacks/chosen = rand(available_snacks)
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
-			var/I = new current_path(get_turf(user))
+			var/I = new chosen(get_turf(user))
 			user.put_in_hands(I)
 		else
-			new current_path(get_turf(src))
+			new chosen(get_turf(src))
 		qdel(src)
 
 
@@ -4347,14 +4347,10 @@
 	switching = 1
 	spawn()
 		while(switching)
-			current_path = available_snacks[counter]
-			var/obj/item/weapon/reagent_containers/food/snacks/S = current_path
+			var/obj/item/weapon/reagent_containers/food/snacks/S = rand(available_snacks)
 			icon_state = initial(S.icon_state)
 			playsound(src, 'sound/misc/click.ogg', 50, 1)
 			sleep(1)
-			if(counter == available_snacks.len)
-				counter = 0
-			counter++
 
 /obj/item/weapon/reagent_containers/food/snacks/sundayroast
 	name = "Sunday roast"
