@@ -587,6 +587,8 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/xray/Bump(atom/A)
 	if(..())
 		damage -= 5
+		if(istype(A, /turf/simulated/wall/r_wall))
+			damage -= 5
 		if(damage <= 0)
 			bullet_die()
 
