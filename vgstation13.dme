@@ -900,6 +900,7 @@
 #include "code\game\objects\structures\vehicles\vehicle.dm"
 #include "code\game\objects\structures\vehicles\wheelchair.dm"
 #include "code\game\objects\structures\vehicles\wizmobile.dm"
+#include "code\game\objects\structures\vehicles\carts\cargo.dm"
 #include "code\game\objects\structures\vehicles\carts\cart.dm"
 #include "code\game\objects\structures\vehicles\carts\mining_cart.dm"
 #include "code\game\shuttles\cargo.dm"

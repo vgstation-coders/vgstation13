@@ -42,7 +42,7 @@
 	var/datum/delay_controller/move_delayer = new(1, ARBITRARILY_LARGE_NUMBER) //See setup.dm, 12
 	var/movement_delay = 0 //Speed of the vehicle decreases as this value increases. Anything above 6 is slow, 1 is fast and 0 is very fast
 
-	var/obj/cart = null
+	var/obj/machinery/cart = null
 	var/can_have_carts = TRUE
 
 	var/mob/occupant
@@ -187,7 +187,7 @@
 	if (user.incapacitated() || !in_range(user, src) || !can_have_carts)
 		return
 
-	if (istype(C, /obj/cart))
+	if (istype(C, /obj/machinery/cart))
 		if(src == C) //So they cannot connect to themselves
 			return
 
