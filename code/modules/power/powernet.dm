@@ -356,6 +356,8 @@ var/global/powernets_broke = 0
 		PN_damage = PN.get_electrocute_damage()
 
 	if(cell)
+		if(cell.charge == 0)
+			return 0
 		cell_damage = cell.get_electrocute_damage()
 
 	var/shock_damage = 0

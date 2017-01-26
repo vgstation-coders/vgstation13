@@ -19,7 +19,11 @@
 		nutrition = max(nutrition - amount,0)
 		if((M_FAT in mutations))
 			heatmodifier = heatmodifier*2
-		bodytemperature = min(bodytemperature + (amount * heatmodifier), cached_max_temp)	// until we have a proper hyperthermia system
+		heatmodifier *= calorie_burning_heat_multiplier
+		if(cap_calorie_burning_bodytemp)
+			bodytemperature = min(bodytemperature + (amount * heatmodifier), cached_max_temp)	// until we have a proper hyperthermia system
+		else
+			bodytemperature = bodytemperature + (amount * heatmodifier)
 		return 1
 	else
 		return 0
@@ -36,13 +40,12 @@
 /mob/living/proc/sweat(var/amount,var/forcesweat = 0)
 	if((status_flags & GODMODE) || (flags & INVULNERABLE))
 		return 1
-	/* buggy as fug
+
 	if(istype(src,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = src
-		if(!H.species.anatomy_flags & HAS_SWEAT_GLANDS)
+		if(~H.species.anatomy_flags & HAS_SWEAT_GLANDS)
 			return 1
 
-	*/
 	if(forcesweat && ticker && ticker.hardcore_mode)
 		forcesweat = 0
 	var/sustenance = amount / 50
@@ -73,7 +76,7 @@
 			thermal_loss *= pressure_factor
 		thermal_loss	*= (get_skin_temperature() - loc_temp)		// Multiplied by the difference between you and the room temperature
 		thermal_loss	/= BODYTEMP_COLD_DIVISOR					// Divided by the cold_divisor
-		return thermal_loss
+		return thermal_loss * thermal_loss_multiplier
 	return 0
 
 /mob/living/proc/get_thermal_protection_flags()
