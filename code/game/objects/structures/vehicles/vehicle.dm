@@ -42,7 +42,7 @@
 	var/datum/delay_controller/move_delayer = new(1, ARBITRARILY_LARGE_NUMBER) //See setup.dm, 12
 	var/movement_delay = 0 //Speed of the vehicle decreases as this value increases. Anything above 6 is slow, 1 is fast and 0 is very fast
 
-	var/obj/machinery/cart = null
+	var/obj/machinery/cart/next_cart = null
 	var/can_have_carts = TRUE
 
 	var/mob/occupant
@@ -188,17 +188,19 @@
 		return
 
 	if (istype(C, /obj/machinery/cart))
-		if(src == C) //So they cannot connect to themselves
-			return
 
-		else if (!cart)
-			cart = C
+		if (!next_cart)
+			next_cart = C
+			next_cart.previous_cart = src
 			user.visible_message("[user] connects \the [C] to \the [src].", "You connect \the [C] to \the [src]")
+			playsound(get_turf(src), 'sound/misc/buckle_click.ogg', 50, 1)
 			return
 
-		else if (cart == C)
-			cart = null
+		else if (next_cart == C)
+			next_cart.previous_cart = null
+			next_cart = null
 			user.visible_message("[user] disconnects \the [C] to \the [src].", "You disconnect \the [C] to \the [src]")
+			playsound(get_turf(src), 'sound/misc/buckle_unclick.ogg', 50, 1)
 			return
 
 /obj/structure/bed/chair/vehicle/update_dir()
@@ -324,7 +326,7 @@
 	..()
 	if (loc == oldloc)
 		return
-	if(cart)
-		cart.forceMove(oldloc)
+	if(next_cart)
+		next_cart.Move(oldloc)
 
 /datum/locking_category/buckle/chair/vehicle
