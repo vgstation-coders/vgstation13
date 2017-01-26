@@ -1682,13 +1682,13 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 		<legend>Legend</legend>
 		<dl>
 			<dt>Never:</dt>
-			<dd>Automatically respond 'no' to all requests to become this role.</dd>
+			<dd>Decline this role for this round and all future rounds. You will not be polled again.</dd>
 			<dt>No:</dt>
-			<dd>Responds no to requests to become this role, with options to sign up to become it. Default.</dd>
+			<dd>Default. Decline this role for this round only.</dd>
 			<dt>Yes:</dt>
-			<dd>Responds yes to requests to become this role, with options to opt out of becoming it.</dd>
+			<dd>Accept this role for this round only.</dd>
 			<dt>Always:</dt>
-			<dd>Automatically respond 'yes' to all requests to become this role.</dd>
+			<dd>Accept this role for this round and all future rounds. You will not be polled again.</dd>
 		</dl>
 	</fieldset>
 

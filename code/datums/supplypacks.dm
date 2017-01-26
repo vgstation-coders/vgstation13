@@ -593,8 +593,22 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/under/neorussian,
 					/obj/item/clothing/shoes/jackboots/neorussian)
 	cost = 225
-	containertype = /obj/structure/closet/
+	containertype = /obj/structure/closet/crate
 	containername = "neo-Russian crate"
+	group = "Clothing"
+	contraband = 1
+
+/datum/supply_packs/russianclothing
+	name = "Russian clothing"
+	contains = list(/obj/item/clothing/head/squatter_hat,
+					/obj/item/clothing/under/squatter_outfit,
+					/obj/item/clothing/head/russobluecamohat,
+					/obj/item/clothing/under/russobluecamooutfit,
+					/obj/item/clothing/head/russofurhat,
+					/obj/item/clothing/suit/russofurcoat)
+	cost = 50
+	containertype = /obj/structure/closet/crate
+	containername = "russian clothing crate"
 	group = "Clothing"
 	contraband = 1
 //////SECURITY//////
@@ -939,7 +953,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh,
 					/obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg,
-					/obj/item/weapon/reagent_containers/food/snacks/spidereggs)
+					/obj/item/weapon/reagent_containers/food/snacks/spidereggs,
+					/obj/item/weapon/reagent_containers/food/snacks/meat/diona,
+					/obj/item/weapon/reagent_containers/food/snacks/meat/crabmeat)
 	cost = 30
 	containertype = /obj/structure/closet/crate/secure
 	containername = "trophy meats crate"
@@ -961,7 +977,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/reagent_containers/food/drinks/beer,
 					/obj/item/weapon/reagent_containers/food/drinks/beer,
 					/obj/item/device/maracas,
-					/obj/item/device/maracas)
+					/obj/item/device/maracas,
+					/obj/item/weapon/storage/box/balloons,
+					/obj/item/weapon/storage/box/balloons,
+					/obj/item/weapon/storage/box/balloons)
 	cost = 20
 	containertype = /obj/structure/closet/crate
 	containername = "party equipment crate"
@@ -1486,6 +1505,13 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = "/obj/structure/closet/crate/secure"
 	containername = "motorized wheelchair crate"
 	access = access_cmo
+	group = "Medical"
+	
+/datum/supply_packs/skele_stand
+	name = "Hanging Skeleton Model crate"
+	cost = 30
+	containertype = /obj/structure/largecrate/skele_stand
+	containername = "hanging skeleton model crate"
 	group = "Medical"
 
 //////SCIENCE//////

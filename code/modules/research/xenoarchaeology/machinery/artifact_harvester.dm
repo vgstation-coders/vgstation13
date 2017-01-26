@@ -13,6 +13,7 @@
 	var/obj/machinery/artifact/cur_artifact
 	var/obj/machinery/artifact_scanpad/owned_scanner = null
 	var/chargerate = 0
+	var/harvester = "" // Logs who started a harvest.
 
 /obj/machinery/artifact_harvester/New()
 	..()
@@ -86,6 +87,7 @@
 			cur_artifact.anchored = 0
 			cur_artifact.being_used = 0
 			src.visible_message("<b>[name]</b> states, \"Battery is full.\"")
+			src.investigation_log(I_ARTIFACT, "|| anomaly battery effect([inserted_battery.battery_effect]) || harvested by [key_name(harvester)]")
 			icon_state = "incubator"
 
 	else if(harvesting < 0)
@@ -119,6 +121,7 @@
 	if(..())
 		return
 	if (href_list["harvest"])
+		harvester = usr
 		//locate artifact on analysis pad
 		cur_artifact = null
 		var/articount = 0

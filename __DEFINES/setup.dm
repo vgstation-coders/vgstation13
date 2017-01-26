@@ -280,6 +280,8 @@ var/MAX_EXPLOSION_RANGE = 14
 #define OPENCONTAINER	8192  // is an open container for chemistry purposes
 #define	NOREACT 		16384 // Reagents don't react inside this container.
 
+#define TIMELESS		32768 // Immune to time manipulation.
+
 #define ALL ~0
 #define NONE 0
 
@@ -1178,6 +1180,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define I_CHEMS	   "chems"
 #define I_WIRES    "wires"
 #define I_GHOST    "poltergeist"
+#define I_ARTIFACT "artifacts"
+
 
 // delayNext() flags.
 #define DELAY_MOVE    1

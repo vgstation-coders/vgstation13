@@ -106,6 +106,7 @@ var/list/impact_master = list()
 	var/rotate = 1 //whether the projectile is rotated based on angle or not
 	var/superspeed = 0 //When set to 1, the projectile will travel at twice the normal speed
 	var/super_speed = 0 //This exists just for proper functionality
+	var/travel_range = 0	//if set, the projectile will be deleted when its distance from the firing location exceeds this
 
 /obj/item/projectile/New()
 	..()
@@ -138,7 +139,8 @@ var/list/impact_master = list()
 	L.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked) // add in AGONY!
 	if(jittery)
 		L.Jitter(jittery)
-	playsound(loc, hitsound, 35, 1)
+	if(!isnull(hitsound))
+		playsound(loc, hitsound, 35, 1)
 	return 1
 
 /obj/item/projectile/proc/check_fire(var/mob/living/target as mob, var/mob/living/user as mob)  //Checks if you can hit them or not.
@@ -285,7 +287,7 @@ var/list/impact_master = list()
 				impact_sound = 'sound/weapons/pierce.ogg'
 		else
 			impact_icon = "default_solid"
-			impact_sound = 'sound/items/metal_impact.ogg'
+			impact_sound = bounce_sound
 		var/PixelX = 0
 		var/PixelY = 0
 		switch(get_dir(src,A))
@@ -447,6 +449,10 @@ var/list/impact_master = list()
 	if(kill_count < 1)
 		bullet_die()
 		return 1
+	if(travel_range)
+		if(get_exact_dist(starting, get_turf(src)) > travel_range)
+			bullet_die()
+			return 1
 	kill_count--
 	total_steps++
 	if(error < 0)
@@ -722,3 +728,5 @@ var/list/impact_master = list()
 	def_zone = tar_zone
 	spawn()
 		process()
+/obj/item/projectile/proc/apply_projectile_color(var/proj_color)
+	color = proj_color

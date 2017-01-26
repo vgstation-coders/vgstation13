@@ -20,6 +20,7 @@
 	var/obj/item/ammo_casing/chambered = null
 	var/mag_type = ""
 	var/mag_drop_sound ='sound/weapons/magdrop_1.ogg'
+	var/automagdrop_delay_time = 5 // delays the automagdrop
 
 	var/gun_flags = EMPTYCASINGS	//Yay, flags
 
@@ -228,9 +229,13 @@
 /obj/item/weapon/gun/projectile/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, struggle = 0)
 	..()
 	if(!chambered && stored_magazine && !stored_magazine.ammo_count() && gun_flags &AUTOMAGDROP) //auto_mag_drop decides whether or not the mag is dropped once it empties
-		RemoveMag(user)
-		if(mag_drop_sound)
-			playsound(user, mag_drop_sound, 40, 1)
+		var/drop_me = stored_magazine // prevents dropping a fresh/different mag.
+		spawn(automagdrop_delay_time)
+			if(stored_magazine == drop_me)
+				RemoveMag(user)
+				if(mag_drop_sound)
+					playsound(user, mag_drop_sound, 40, 1)
+
 	return
 
 /obj/item/weapon/gun/projectile/examine(mob/user)

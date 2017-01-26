@@ -7,6 +7,7 @@
 	starting_materials = list(MAT_IRON = 15000)
 	w_type = RECYK_METAL
 	w_class = W_CLASS_MEDIUM // Rockets don't exactly fit in pockets and cardboard boxes last I heard, try your backpack
+	shrapnel_amount = 0
 
 /obj/item/ammo_casing/rocket_rpg/update_icon()
 	return

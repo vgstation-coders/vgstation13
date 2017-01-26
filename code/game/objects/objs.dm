@@ -34,6 +34,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	var/datum/delay_controller/pAImove_delayer = new(1, ARBITRARILY_LARGE_NUMBER)
 	var/pAImovement_delay = 0
 
+	// Can we wrench/weld this to a turf with a dense /obj on it?
+	var/can_affix_to_dense_turf=0
+
 /obj/New()
 	..()
 	if (auto_holomap && isturf(loc))
@@ -57,6 +60,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/item/proc/is_used_on(obj/O, mob/user)
 
+
 /obj/proc/install_pai(obj/item/device/paicard/P)
 	if(!P || !istype(P))
 		return 0
@@ -64,12 +68,21 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	integratedpai = P
 	verbs += /obj/verb/remove_pai
 
+
 /obj/attackby(obj/item/weapon/W, mob/user)
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
+		if(integratedpai)
+			to_chat(user, "<span class = 'notice'>There's already a Personal AI inserted.</span>")
+			return
+
 		if(user.drop_item(W))
 			to_chat(user, "You insert \the [W] into a slot in \the [src].")
 			install_pai(W)
+			state_controls_pai(W)
 			playsound(src, 'sound/misc/cartridge_in.ogg', 25)
+
+/obj/proc/state_controls_pai(obj/item/device/paicard/P) //text the pAI receives when is inserted into something. EXAMPLE: to_chat(P.pai, "Welcome to your new body")
+	return
 
 /obj/proc/attack_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI clicks on the object, or uses the attack_self() hotkey
 	return
@@ -406,11 +419,29 @@ a {
 		machine._using += src
 		machine.in_use = 1
 
-/obj/proc/wrenchAnchor(var/mob/user, var/time_to_wrench=30) //proc to wrench an object that can be secured
+/** Returns 1 or 0 depending on whether the machine can be affixed to this position.
+ * Used to determine whether other density=1 things are on this tile.
+ * @param user Tool user
+ * @return bool Can affix here
+ */
+/obj/proc/canAffixHere(var/mob/user)
+	if(density==0 || can_affix_to_dense_turf)
+		return TRUE// Non-dense things just don't care. Same with can_affix_to_dense_turf=TRUE objects.
 	for(var/obj/other in loc) //ensure multiple things aren't anchored in one place
 		if(other.anchored == 1 && other.density == 1 && density && !anchored && !(other.flags & ON_BORDER))
 			to_chat(user, "\The [other] is already anchored in this location.")
-			return -1
+			return FALSE // NOPE
+	return TRUE
+
+/** Anchors shit to the deck via wrench.
+ * NOTE: WHOEVER CODED THIS IS AN ABSOLUTE FUCKING RETARD AND USES -1 AS FAIL INSTEAD OF 0.
+ * @param user The mob doing the wrenching
+ * @param time_to_wrench The time to complete the wrenchening
+ * @returns 1 on success, -1 on fail
+ */
+/obj/proc/wrenchAnchor(var/mob/user, var/time_to_wrench=30) //proc to wrench an object that can be secured
+	if(!canAffixHere(user))
+		return -1
 	if(!anchored)
 		if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
 			if(istype(src.loc, /turf/simulated/shuttle) && !can_wrench_shuttle()) //If on the shuttle and not wrenchable to shuttle
@@ -423,6 +454,8 @@ a {
 							"You begin to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.")
 	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
 	if(do_after(user, src, time_to_wrench))
+		if(!canAffixHere(user))
+			return -1
 		anchored = !anchored
 		user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"]</span>",
 								"<span class='notice'>[bicon(src)] You [anchored ? "wrench" : "unwrench"] \the [src] [anchored ? "in place" : "from its fixture"].</span>",

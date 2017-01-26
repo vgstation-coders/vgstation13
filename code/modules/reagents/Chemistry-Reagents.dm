@@ -368,6 +368,13 @@
 	//Put out fire
 	if(method == TOUCH)
 		M.ExtinguishMob()
+		if(iscarbon(M))
+			var/mob/living/carbon/C = M
+			var/datum/disease2/effect/E = C.has_active_symptom(/datum/disease2/effect/thick_skin)
+			if(E)
+				E.multiplier = max(E.multiplier - rand(1,3), 1)
+				to_chat(C, "<span class='notice'>The water quenches your dry skin.</span>")
+
 
 	//Water now directly damages slimes instead of being a turf check
 	if(isslime(M))
@@ -1460,7 +1467,7 @@
 	if(iscarbon(M))
 		var/mob/living/carbon/C = M
 		if(C.pain_level < BASE_CARBON_PAIN_RESIST) //If we're already recovering from shock, let's speed the process up
-			C.pain_shock_stage = max(0, C.pain_shock_stage - 1)
+			C.pain_shock_stage--
 
 /datum/reagent/oxycodone
 	name = "Oxycodone"
@@ -1478,7 +1485,7 @@
 	if(iscarbon(M))
 		var/mob/living/carbon/C = M
 		C.pain_numb = max(5, C.pain_numb)
-		C.pain_shock_stage = max(0, C.pain_shock_stage - 3) //We don't FEEL the shock now, but make it go away quick in case we run out of oxycodone.
+		C.pain_shock_stage -= 3 //We don't FEEL the shock now, but make it go away quick in case we run out of oxycodone.
 		if(!M.sleeping && prob(2))
 			to_chat(M, pick("<span class='numb'>You feel like you're floating...</span>", \
 							"<span class='numb'>You feel a little lightheaded... but it's okay.</span>", \

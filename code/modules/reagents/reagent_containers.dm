@@ -286,7 +286,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 				if(!src.is_empty())
 					for (var/reagent_id in LOGGED_SPLASH_REAGENTS)
 						if (reagents.has_reagent(reagent_id))
-							add_gamelogs(user, "poured '[reagent_id]' onto \the [target]", admin = TRUE, tp_link = TRUE, span_class = "danger")
+							add_gamelogs(user, "poured '[reagent_id]' onto \the [target]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
 
 					// Splash the thing
 					splash_sub(reagents, target, splashable_units, user)

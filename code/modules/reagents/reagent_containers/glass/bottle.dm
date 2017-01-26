@@ -452,11 +452,11 @@
 	..()
 	reagents.add_reagent(PERIDAXON, 30)
 
-/obj/item/weapon/reagent_containers/glass/bottle/nanitessmall
+/obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall
 	name = "Nanobots Bottle"
 	desc = "A small bottle. You hear beeps and boops."
 	icon = 'icons/obj/chemical.dmi'
 
-/obj/item/weapon/reagent_containers/glass/bottle/nanitessmall/New()
+/obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall/New()
 	..()
-	reagents.add_reagent(NANITES, 10)
+	reagents.add_reagent(NANOBOTS, 10)
