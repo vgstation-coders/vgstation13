@@ -44,6 +44,17 @@
 		current_ammo--
 	update_icon()
 
+/obj/item/weapon/gun/banannon/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+	if(istype(user, /mob/living))
+		var/mob/living/M = user
+		if(!clumsy_check(M) && prob(50))
+			to_chat(M, "<span class='danger'>[src] blows up in your face.</span>")
+			M.take_organ_damage(0,20)
+			M.drop_item(src, force_drop = 1)
+			qdel(src)
+			return 0
+	return ..()
+
 /obj/item/weapon/gun/banannon/process_chambered()
 	if(in_chamber)
 		return 1

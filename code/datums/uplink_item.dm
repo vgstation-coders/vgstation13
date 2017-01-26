@@ -164,7 +164,7 @@ var/list/uplink_items = list()
 	name = "Banannon"
 	desc = "A fearsome example of clown technology, the armor-piercing discarding sabonanas fired by this weapon shed their peels in flight, increasing their damage and creating a slipping hazard."
 	item = /obj/item/weapon/gun/banannon
-	cost = 13
+	cost = 18
 	job = list("Clown")
 
 /datum/uplink_item/jobspecific/superglue
