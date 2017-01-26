@@ -957,7 +957,6 @@ var/global/mulebot_count = 0
 	if(!T.has_gravity())
 		return
 	step(src, dir)
-	user.last_movement=world.time
 
 /obj/machinery/bot/mulebot/on_integrated_pai_click(mob/living/silicon/pai/user, var/atom/movable/A)
 	if(!istype(A) || !Adjacent(A) || A.anchored)

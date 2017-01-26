@@ -661,7 +661,6 @@
 	if(!..())
 		return
 	step(src, dir)
-	user.last_movement=world.time
 
 /obj/machinery/bot/medbot/on_integrated_pai_click(mob/living/silicon/pai/user, mob/living/carbon/A)
 	if(!Adjacent(A))
