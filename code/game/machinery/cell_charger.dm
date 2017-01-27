@@ -180,6 +180,17 @@
 /datum/construction/reversible/crank_charger/action(atom/used_atom,mob/user)
 	return check_step(used_atom,user)
 
+/datum/construction/reversible/crank_charger/spawn_result(mob/user as mob)
+	if(result)
+		testing("[user] finished a [result]!")
+
+		new result(get_turf(holder))
+
+		qdel (holder)
+		holder = null
+
+	feedback_inc("crank_charger_created",1)
+
 /obj/item/device/crank_charger
 	name = "crank charger"
 	desc = "A device which employs mechanical energy (i.e.: spinning the crank) to restore electrical energy to a power cell."
