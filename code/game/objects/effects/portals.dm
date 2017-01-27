@@ -50,10 +50,9 @@
 
 	var/area/A = get_area(src)
 	if(A.flags & NO_PORTALS)
-		spawn()
-			visible_message("<span class='notice'>\The [src] dissipates into thin air.</span>")
-			target = null
-			qdel(src)
+		visible_message("<span class='notice'>\The [src] dissipates into thin air.</span>")
+		target = null
+		qdel(src)
 		return
 
 	spawn(lifespan)
