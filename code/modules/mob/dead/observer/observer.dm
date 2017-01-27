@@ -46,6 +46,8 @@
 	// Our new boo spell.
 	add_spell(new /spell/aoe_turf/boo, "grey_spell_ready")
 
+	add_spell(new /spell/aoe_turf/haunt, "grey_spell_ready")
+
 	can_reenter_corpse = flags & GHOST_CAN_REENTER
 	started_as_observer = flags & GHOST_IS_OBSERVER
 

@@ -165,6 +165,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 				blood_max = blood_max * 0.7
 			/*if(reagents.has_reagent(INAPROVALINE))
 				blood_max = blood_max * 0.7*/
+			if(reagents.has_reagent(ECTOPLASM))
+				blood_max *= 0.7
 		drip(blood_max)
 
 //Makes a blood drop, leaking amt units of blood from the mob
