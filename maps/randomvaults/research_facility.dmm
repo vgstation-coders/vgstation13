@@ -118,44 +118,43 @@
 "cn" = (/obj/structure/table,/obj/item/weapon/paper/pamphlet/medivault,/turf/simulated/floor,/area/vault/research)
 "co" = (/obj/structure/table,/turf/simulated/floor,/area/vault/research)
 "cp" = (/obj/effect/decal/cleanable/blood,/turf/simulated/floor,/area/vault/research)
-"cq" = (/obj/machinery/door/airlock/vault,/turf/space,/area/vault/research)
-"cr" = (/turf/simulated/floor{icon_state = "red"; dir = 5},/area/vault/research)
-"cs" = (/obj/machinery/door/airlock/security{name = "Armory"; req_access = null; req_access_txt = "3"},/turf/simulated/floor,/area/vault/research)
-"ct" = (/obj/machinery/door/airlock/glass_science,/turf/simulated/floor/wood,/area/vault/research)
-"cu" = (/obj/structure/sign/biohazard,/turf/simulated/wall/r_wall,/area/vault/research)
-"cv" = (/turf/simulated/floor{icon_state = "red"; dir = 4},/area/vault/research)
-"cw" = (/obj/structure/table,/obj/item/weapon/storage/lockbox/loyalty,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
-"cx" = (/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor/carpet,/area/vault/research)
-"cy" = (/obj/effect/landmark/corpse/doctor,/turf/simulated/floor/carpet,/area/vault/research)
-"cz" = (/obj/structure/closet/cabinet/medivault,/turf/simulated/floor/carpet,/area/vault/research)
-"cA" = (/obj/structure/rack,/obj/item/clothing/suit/bio_suit/virology,/obj/item/clothing/head/bio_hood/virology,/turf/simulated/floor,/area/vault/research)
-"cB" = (/obj/structure/flora/pottedplant,/turf/simulated/floor,/area/vault/research)
-"cC" = (/obj/effect/landmark/corpse/engineer,/turf/simulated/floor,/area/vault/research)
-"cD" = (/obj/structure/reagent_dispensers/fueltank,/turf/simulated/floor{icon_state = "red"; dir = 6},/area/vault/research)
-"cE" = (/obj/item/weapon/storage/box/emps,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
-"cF" = (/obj/machinery/door/airlock/research,/turf/simulated/floor/carpet,/area/vault/research)
-"cG" = (/obj/map/spawner/mobs/medivault,/turf/simulated/floor/carpet,/area/vault/research)
-"cH" = (/obj/item/weapon/storage/pill_bottle/dice,/turf/simulated/floor/carpet,/area/vault/research)
-"cI" = (/obj/structure/bed,/obj/item/weapon/bedsheet/green,/turf/simulated/floor/carpet,/area/vault/research)
-"cJ" = (/obj/machinery/door/window/plasma,/turf/simulated/floor/wood,/area/vault/research)
-"cK" = (/turf/simulated/floor/carpet,/area/vault/research)
-"cL" = (/obj/item/weapon/stool,/turf/simulated/floor/carpet,/area/vault/research)
-"cM" = (/obj/structure/table/woodentable,/turf/simulated/floor/carpet,/area/vault/research)
-"cN" = (/obj/machinery/suit_storage_unit/security,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
-"cO" = (/obj/structure/table/woodentable,/obj/item/weapon/phone,/turf/simulated/floor/carpet,/area/vault/research)
-"cP" = (/turf/simulated/floor/wood{broken = 1; icon_state = "wood-broken3"},/area/vault/research)
-"cQ" = (/obj/structure/rack,/obj/item/clothing/suit/space/ancient,/obj/item/clothing/head/helmet/space/ancient,/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor{dir = 1; icon_state = "blue"},/area/vault/research)
-"cR" = (/obj/structure/dispenser/oxygen,/turf/simulated/floor{dir = 1; icon_state = "blue"},/area/vault/research)
-"cS" = (/obj/map/spawner/mobs/medivault,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/research)
-"cT" = (/obj/structure/table,/obj/item/stack/sheet/metal{amount = 50},/obj/item/stack/sheet/mineral/plastic{amount = 50},/obj/item/stack/sheet/glass/glass{amount = 50},/obj/structure/table,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/research)
-"cU" = (/obj/item/weapon/storage/toolbox/syndicate,/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor/carpet,/area/vault/research)
-"cV" = (/obj/effect/decal/cleanable/blood,/turf/simulated/floor/carpet,/area/vault/research)
-"cW" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/wood,/area/vault/research)
-"cX" = (/obj/machinery/door/airlock/external,/turf/simulated/floor,/area/vault/research)
-"cY" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/electrical,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/research)
-"cZ" = (/obj/structure/table,/obj/structure/table,/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/research)
-"da" = (/obj/item/clothing/under/rank/centcom/officer,/obj/item/clothing/head/beret/centcom/officer,/turf/simulated/floor/carpet,/area/vault/research)
-"db" = (/obj/structure/flora/pottedplant,/turf/simulated/floor/wood,/area/vault/research)
+"cq" = (/turf/simulated/floor{icon_state = "red"; dir = 5},/area/vault/research)
+"cr" = (/obj/machinery/door/airlock/security{name = "Armory"; req_access = null; req_access_txt = "3"},/turf/simulated/floor,/area/vault/research)
+"cs" = (/obj/machinery/door/airlock/glass_science,/turf/simulated/floor/wood,/area/vault/research)
+"ct" = (/obj/structure/sign/biohazard,/turf/simulated/wall/r_wall,/area/vault/research)
+"cu" = (/turf/simulated/floor{icon_state = "red"; dir = 4},/area/vault/research)
+"cv" = (/obj/structure/table,/obj/item/weapon/storage/lockbox/loyalty,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
+"cw" = (/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor/carpet,/area/vault/research)
+"cx" = (/obj/effect/landmark/corpse/doctor,/turf/simulated/floor/carpet,/area/vault/research)
+"cy" = (/obj/structure/closet/cabinet/medivault,/turf/simulated/floor/carpet,/area/vault/research)
+"cz" = (/obj/structure/rack,/obj/item/clothing/suit/bio_suit/virology,/obj/item/clothing/head/bio_hood/virology,/turf/simulated/floor,/area/vault/research)
+"cA" = (/obj/structure/flora/pottedplant,/turf/simulated/floor,/area/vault/research)
+"cB" = (/obj/effect/landmark/corpse/engineer,/turf/simulated/floor,/area/vault/research)
+"cC" = (/obj/structure/reagent_dispensers/fueltank,/turf/simulated/floor{icon_state = "red"; dir = 6},/area/vault/research)
+"cD" = (/obj/item/weapon/storage/box/emps,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
+"cE" = (/obj/machinery/door/airlock/research,/turf/simulated/floor/carpet,/area/vault/research)
+"cF" = (/obj/map/spawner/mobs/medivault,/turf/simulated/floor/carpet,/area/vault/research)
+"cG" = (/obj/item/weapon/storage/pill_bottle/dice,/turf/simulated/floor/carpet,/area/vault/research)
+"cH" = (/obj/structure/bed,/obj/item/weapon/bedsheet/green,/turf/simulated/floor/carpet,/area/vault/research)
+"cI" = (/obj/machinery/door/window/plasma,/turf/simulated/floor/wood,/area/vault/research)
+"cJ" = (/turf/simulated/floor/carpet,/area/vault/research)
+"cK" = (/obj/item/weapon/stool,/turf/simulated/floor/carpet,/area/vault/research)
+"cL" = (/obj/structure/table/woodentable,/turf/simulated/floor/carpet,/area/vault/research)
+"cM" = (/obj/machinery/suit_storage_unit/security,/turf/simulated/floor{blocks_air = 1; icon_state = "dark"},/area/vault/research)
+"cN" = (/obj/structure/table/woodentable,/obj/item/weapon/phone,/turf/simulated/floor/carpet,/area/vault/research)
+"cO" = (/turf/simulated/floor/wood{broken = 1; icon_state = "wood-broken3"},/area/vault/research)
+"cP" = (/obj/structure/rack,/obj/item/clothing/suit/space/ancient,/obj/item/clothing/head/helmet/space/ancient,/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor{dir = 1; icon_state = "blue"},/area/vault/research)
+"cQ" = (/obj/structure/dispenser/oxygen,/turf/simulated/floor{dir = 1; icon_state = "blue"},/area/vault/research)
+"cR" = (/obj/map/spawner/mobs/medivault,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/research)
+"cS" = (/obj/structure/table,/obj/item/stack/sheet/metal{amount = 50},/obj/item/stack/sheet/mineral/plastic{amount = 50},/obj/item/stack/sheet/glass/glass{amount = 50},/obj/structure/table,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/research)
+"cT" = (/obj/item/weapon/storage/toolbox/syndicate,/obj/effect/decal/cleanable/cobweb,/turf/simulated/floor/carpet,/area/vault/research)
+"cU" = (/obj/effect/decal/cleanable/blood,/turf/simulated/floor/carpet,/area/vault/research)
+"cV" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/wood,/area/vault/research)
+"cW" = (/obj/machinery/door/airlock/external,/turf/simulated/floor,/area/vault/research)
+"cX" = (/obj/structure/table,/obj/item/weapon/storage/toolbox/electrical,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/research)
+"cY" = (/obj/structure/table,/obj/structure/table,/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor{dir = 9; icon_state = "yellowfull"},/area/vault/research)
+"cZ" = (/obj/item/clothing/under/rank/centcom/officer,/obj/item/clothing/head/beret/centcom/officer,/turf/simulated/floor/carpet,/area/vault/research)
+"da" = (/obj/structure/flora/pottedplant,/turf/simulated/floor/wood,/area/vault/research)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -174,13 +173,13 @@ abaiaJbybGbybHbyabbnboabbnboabbnboabbIbJbKbqbLaFbMabbcbfbNab
 abaiabbObPbQbRbyabaWbSabaWbcabbcbTabbUbqbVaFabbpbMabbCboabab
 abaiabbWbWbWbWbyabbgaTabbXaTabaWaTabbYbqbIbZabcacbabbAcccdab
 abaiabcebycfcgbyabababababababababababaCababababababchbAciab
-abaiabbycjckbybyclcmcncocococmbncpcmcqcmcmcmcmcmcrcsbBccciab
-abaiabctabababababcmcmcpcmcmcmaYcmcmcucmcpcmcmcmcvabcwbAciab
-abahabbyabcxcyczabcqababababcqabcAcAabcBcmcmcpcCcDabbAbAcEab
-abaiabbycFcGcHcIabbycJcKcLcMbyababababababababaJababcNcNcNab
-abaiaJckabababababbybycMcMcOcPabcQcRabaiaiaiabcScTababababab
-abaiabbyabcUcVczabbybybybybybycWcmcmcXaiaiaiabcYcZabaaaaaaaa
-abaiabbycFdacKcIabdbbzbyckbydbababababaiaiaiababababaaaaaaaa
+abaiabbycjckbybyclcmcncocococmbncpcmbncmcmcmcmcmcqcrbBccciab
+abaiabcsabababababcmcmcpcmcmcmaYcmcmctcmcpcmcmcmcuabcvbAciab
+abahabbyabcwcxcyabbnababababbnabczczabcAcmcmcpcBcCabbAbAcDab
+abaiabbycEcFcGcHabbycIcJcKcLbyababababababababaJababcMcMcMab
+abaiaJckabababababbybycLcLcNcOabcPcQabaiaiaiabcRcSababababab
+abaiabbyabcTcUcyabbybybybybybycVcmcmcWaiaiaiabcXcYabaaaaaaaa
+abaiabbycEcZcJcHabdabzbyckbydaababababaiaiaiababababaaaaaaaa
 ababababababababababababababababaaaaaaaiaiaiaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 "}
