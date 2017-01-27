@@ -1610,8 +1610,8 @@ Game Mode config tags:
 /proc/get_exact_dist(atom/A, atom/B)	//returns the coordinate distance between the coordinates of the turfs of A and B
 	var/turf/T1 = A
 	var/turf/T2 = B
-	if(!istype(A))
+	if(!istype(T1))
 		T1 = get_turf(A)
-	if(!istype(B))
+	if(!istype(T2))
 		T2 = get_turf(B)
 	return sqrt(((T2.x - T1.x) ** 2) + ((T2.y - T1.y) ** 2))
