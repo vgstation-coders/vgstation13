@@ -119,6 +119,4 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 	return 1 - protected
 
 /datum/artifact_effect/proc/Blocked()
-	var/display_msg = "expells energy which is blocked by the containment field!"
-	var/atom/toplevelholder = get_holder_at_turf_level(holder)
-	toplevelholder.visible_message("<span class='warning'>[bicon(toplevelholder)] [toplevelholder] [display_msg]</span>")
+	toplevelholder.visible_message("<span class='warning'>[bicon(get_holder_at_turf_level(holder))] [get_holder_at_turf_level(holder)] expells energy which is blocked by the containment field!</span>")

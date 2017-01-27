@@ -278,7 +278,7 @@ var/list/valid_secondary_effect_types = list(\
 		if (contained)
 			my_effect.isolated = 1
 			my_effect.Blocked()
-			spawn(100)
+			spawn(10 SECONDS)
 				my_effect.isolated = 0
 		else
 			my_effect.DoEffectTouch(user)
@@ -287,7 +287,7 @@ var/list/valid_secondary_effect_types = list(\
 		if (contained)
 			secondary_effect.isolated = 1
 			secondary_effect.Blocked()
-			spawn(100)
+			spawn(10 SECONDS)
 				secondary_effect.isolated = 0
 		else
 			secondary_effect.DoEffectTouch(user)
@@ -380,7 +380,7 @@ var/list/valid_secondary_effect_types = list(\
 			if (contained)
 				my_effect.isolated = 1
 				my_effect.Blocked()
-				spawn(100)
+				spawn(10 SECONDS)
 					my_effect.isolated = 0
 			else
 				my_effect.DoEffectTouch(M)
@@ -389,7 +389,7 @@ var/list/valid_secondary_effect_types = list(\
 			if (contained)
 				secondary_effect.isolated = 1
 				secondary_effect.Blocked()
-				spawn(100)
+				spawn(10 SECONDS)
 					secondary_effect.isolated = 0
 			else
 				secondary_effect.DoEffectTouch(M)
