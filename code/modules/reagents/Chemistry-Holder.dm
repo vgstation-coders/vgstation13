@@ -609,11 +609,10 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	return 0
 
 /datum/reagents/proc/has_any_reagents(var/list/input_reagents, var/amount = -1)		//returns true if any of the input reagents are found
-	var/has = FALSE
+	. = FALSE
 	for(var/i in input_reagents)
 		if(has_reagent(i, amount))
-			has = TRUE
-	return has
+			return TRUE
 
 /datum/reagents/proc/has_all_reagents(var/list/input_reagents, var/amount = -1)		//returns true if all of the input reagents are found
 	for(var/i in input_reagents)
