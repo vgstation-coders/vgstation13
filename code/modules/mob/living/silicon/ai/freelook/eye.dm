@@ -123,7 +123,10 @@
 	for(var/i = 0; i < max(user.sprint, initial); i += 20)
 		var/turf/step = get_turf(get_step(user.eyeobj, direct))
 		if(step)
+			if (user.client.prefs.stumble && ((world.time - user.last_movement) > 4))
+				user.delayNextMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
 			user.eyeobj.forceMove(step)
+	user.last_movement=world.time
 
 	user.cooldown = world.timeofday + 5
 	if(user.acceleration)

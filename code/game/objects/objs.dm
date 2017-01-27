@@ -119,9 +119,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/proc/pAImove(mob/living/silicon/pai/user, dir)					//called when integrated pAI attempts to move
 	if(pAImove_delayer.blocked())
+		user.last_movement=world.time
 		return 0
 	else
 		delayNextpAIMove(getpAIMovementDelay())
+		if (user.client.prefs.stumble && ((world.time - user.last_movement) > 5) && getpAIMovementDelay() < 2)
+			delayNextpAIMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
+		user.last_movement=world.time
 		return 1
 
 /obj/proc/getpAIMovementDelay()
