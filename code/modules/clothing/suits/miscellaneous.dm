@@ -493,7 +493,7 @@
 
 /obj/item/clothing/suit/storage/trader
 	name = "trader's coat"
-	desc = "A long trenchcoat with many pockets sown into the lining."
+	desc = "A long trenchcoat with many pockets sewn into the lining."
 	icon_state = "tradercoat"
 	item_state = "jensencoat"
 	blood_overlay_type = "coat"
