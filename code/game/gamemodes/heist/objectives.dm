@@ -155,7 +155,7 @@
 
 /*
  * salvage
- */
+ 
 
 /datum/objective/steal/salvage
 	target_category = "salvage"
@@ -226,3 +226,5 @@
 	typepath = /obj/item/stack/sheet/mineral/diamond
 	min = 20
 	max = 20
+
+	*/
