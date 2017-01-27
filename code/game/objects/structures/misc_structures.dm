@@ -7,7 +7,7 @@
 	anchored = 1
 	var/obj/item/weapon/spear/spear = null
 	var/obj/item/weapon/organ/head/head = null
-	var/obj/item/weapon/organ/head/display_head = null
+	var/image/display_head = null
 
 /obj/structure/headpole/New(atom/A, var/obj/item/weapon/organ/head/H, var/obj/item/weapon/spear/S)
 	..(A)
