@@ -1171,6 +1171,7 @@
 		B.air_contents.update_values()
 		B.air_contents.react()
 	qdel(src)
+	return B
 
 /obj/item/toy/balloon/inflated
 	desc = "An inflated balloon. You have an urge to pop it."
@@ -1293,3 +1294,34 @@
 		else
 			new /obj/item/clothing/gloves/anchor_arms(get_turf(src.loc))
 		qdel(src)
+
+/obj/item/toy/balloon/decoy
+	name = "inflatable decoy"
+	desc = "Use this to fool your enemies into thinking you're a balloon!"
+	icon_state = "decoy_balloon_deflated"
+	w_class = W_CLASS_TINY
+	col = null
+	inflated_type = /obj/item/toy/balloon/inflated/decoy
+	volume = 120	//liters
+
+/obj/item/toy/balloon/decoy/inflate(mob/user, datum/gas_mixture/G)
+	var/obj/item/toy/balloon/inflated/decoy/D = ..()
+	if(!istype(D))
+		return
+	user.drop_item(D, force_drop = 1)
+	D.name = user.name
+	D.desc = user.desc
+	D.appearance = user.appearance
+
+/obj/item/toy/balloon/inflated/decoy
+	desc = "An inflated decoy balloon."
+	icon_state = "decoy_balloon_deflated"
+	w_class = W_CLASS_GIANT
+	density = 1
+	can_be_strung = FALSE
+
+/obj/item/toy/balloon/inflated/decoy/attack_hand(mob/user)
+	return
+
+/obj/item/toy/balloon/inflated/decoy/attack_paw(mob/user)
+	return
