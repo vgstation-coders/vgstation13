@@ -131,6 +131,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("table parts", /obj/item/weapon/table_parts,                           2                                ),
 	new/datum/stack_recipe("rack parts",  /obj/item/weapon/rack_parts                                                              ),
 	new/datum/stack_recipe("closet",      /obj/structure/closet,                                  2, one_per_turf = 1, time = 15   ),
+	new/datum/stack_recipe("Metal crate",	/obj/structure/closet/crate, 2,	time = 15),
 	null,
 	new/datum/stack_recipe_list("airlock assemblies", list(
 		new/datum/stack_recipe("standard airlock assembly",      /obj/structure/door_assembly,                            4, time = 50, one_per_turf = 1, on_floor = 1),
@@ -184,7 +185,6 @@ var/list/datum/stack_recipe/metal_recipes = list (
 ======================================================================== */
 var/list/datum/stack_recipe/plasteel_recipes = list (
 	new/datum/stack_recipe("AI core",						/obj/structure/AIcore,								4,	time = 50,	one_per_turf = 1				),
-	new/datum/stack_recipe("Metal crate",					/obj/structure/closet/crate,						10,	time = 50,	one_per_turf = 1				),
 	new/datum/stack_recipe("Cage",							/obj/structure/cage,								6,  time = 100, one_per_turf = 1				),
 	new/datum/stack_recipe("RUST fuel assembly port frame",	/obj/item/mounted/frame/rust_fuel_assembly_port,	12,	time = 50,	one_per_turf = 1				),
 	new/datum/stack_recipe("RUST fuel compressor frame",	/obj/item/mounted/frame/rust_fuel_compressor,		12,	time = 50,	one_per_turf = 1				),
