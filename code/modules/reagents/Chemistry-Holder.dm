@@ -608,6 +608,18 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		return amount_cache[reagent] >= max(0,amount)
 	return 0
 
+/datum/reagents/proc/has_any_reagents(var/list/input_reagents, var/amount = -1)		//returns true if any of the input reagents are found
+	. = FALSE
+	for(var/i in input_reagents)
+		if(has_reagent(i, amount))
+			return TRUE
+
+/datum/reagents/proc/has_all_reagents(var/list/input_reagents, var/amount = -1)		//returns true if all of the input reagents are found
+	for(var/i in input_reagents)
+		if(!has_reagent(i, amount))
+			return FALSE
+	return TRUE
+
 /datum/reagents/proc/get_reagent(var/reagent, var/amount = -1)
 	// SLOWWWWWWW
 	for(var/A in reagent_list)
