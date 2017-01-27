@@ -96,6 +96,10 @@ var/image/list/w_overlays = list("wet" = image('icons/effects/water.dmi',icon_st
 /turf/simulated/floor/blob_act()
 	return
 
+/turf/simulated/floor/add_dust()
+	if(!(locate(/obj/effect/decal/cleanable/dirt) in contents))
+		getFromPool(/obj/effect/decal/cleanable/dirt,src)
+
 turf/simulated/floor/update_icon()
 	overlays -= floor_overlay
 

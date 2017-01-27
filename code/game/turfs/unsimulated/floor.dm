@@ -17,6 +17,10 @@
 /turf/unsimulated/floor/attack_paw(user as mob)
 	return src.attack_hand(user)
 
+/turf/unsimulated/floor/add_dust()
+	if(!(locate(/obj/effect/decal/cleanable/dirt) in contents))
+		new/obj/effect/decal/cleanable/dirt(src)
+
 /turf/unsimulated/floor/cultify()
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
 		name = "engraved floor"
