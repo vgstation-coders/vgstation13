@@ -154,7 +154,7 @@ mob/verb/test()
 	winset(hclient.client, "browser_\ref[src].browser", list2params(list("parent" = "browser_\ref[src]", "type" = "browser", "pos" = "0,0", "size" = "[width]x[height]", "anchor1" = "0,0", "anchor2" = "100,100", "use-title" = "true", "auto-format" = "false")))
 
 	sendAssets(hclient.client)
-	
+
 /datum/html_interface/proc/sendAssets(var/client/client)
 	send_asset(client, "jquery.min.js")
 	send_asset(client, "bootstrap.min.js")
@@ -244,7 +244,6 @@ mob/verb/test()
 			hclient.is_loaded = FALSE
 			hclient.client << output(replacetextEx(replacetextEx(file2text(default_html_file), "\[hsrc\]", "\ref[src]"), "</head>", "[head]</head>"), "browser_\ref[src].browser")
 			winshow(hclient.client, "browser_\ref[src]", TRUE)
-
 		while (hclient.client && hclient.active && !hclient.is_loaded) sleep(2)
 
 /datum/html_interface/proc/hide(datum/html_interface_client/hclient)

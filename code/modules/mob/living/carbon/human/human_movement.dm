@@ -124,7 +124,6 @@
 	return(prob_slip)
 
 /mob/living/carbon/human/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0)
-	var/old_z = src.z
 
 	. = ..(NewLoc, Dir, step_x, step_y)
 
@@ -132,9 +131,6 @@
 		return 0*/
 
 	if(.)
-		if (old_z != src.z)
-			crewmonitor.queueUpdate(old_z)
-		crewmonitor.queueUpdate(src.z)
 
 		if(shoes && istype(shoes, /obj/item/clothing/shoes))
 			var/obj/item/clothing/shoes/S = shoes

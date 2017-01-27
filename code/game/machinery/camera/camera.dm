@@ -80,8 +80,6 @@ var/list/camera_names=list()
 	if(!c_tag)
 		name_camera()
 	..()
-	if(adv_camera && adv_camera.initialized && !(src in adv_camera.camerasbyzlevel["[z]"]))
-		adv_camera.update(z, 0, src, adding=1)
 
 	update_hear()
 
@@ -113,9 +111,6 @@ var/list/camera_names=list()
 		assembly = null
 	wires = null
 	cameranet.removeCamera(src) //Will handle removal from the camera network and the chunks, so we don't need to worry about that
-	if(adv_camera)
-		for(var/key in adv_camera.camerasbyzlevel)
-			adv_camera.camerasbyzlevel[key] -= src
 	..()
 
 /obj/machinery/camera/emp_act(severity)
@@ -136,7 +131,6 @@ var/list/camera_names=list()
 			update_icon()
 			if(can_use())
 				cameranet.addCamera(src)
-				adv_camera.update(z, 0, src, adding=1)
 		for(var/mob/O in mob_list)
 			if (istype(O.machine, /obj/machinery/computer/security))
 				var/obj/machinery/computer/security/S = O.machine
@@ -327,22 +321,15 @@ var/list/camera_messages = list()
 				O.unset_machine()
 				O.reset_view(null)
 				to_chat(O, "The screen bursts into static.")
-	if(choice && can_use()) //camera reactivated
-		adv_camera.update(z, 0, src, adding=1)
-	else //either deactivated OR being destroyed
-		adv_camera.update(z, 0, src, adding=2)
 
 /obj/machinery/camera/proc/triggerCameraAlarm()
-	if(!alarm_on)
-		adv_camera.update(z, 0, src, adding=4) //1 is alarming, 0 is nothing wrong
+
 	alarm_on = 1
 	for(var/mob/living/silicon/S in mob_list)
 		S.triggerAlarm("Camera", areaMaster, list(src), src)
 
 
 /obj/machinery/camera/proc/cancelCameraAlarm()
-	if(alarm_on)
-		adv_camera.update(z, 0, src, adding=4) //1 is alarming, 0 is nothing wrong
 	alarm_on = 0
 	for(var/mob/living/silicon/S in mob_list)
 		S.cancelAlarm("Camera", areaMaster, src)

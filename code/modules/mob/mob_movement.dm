@@ -503,7 +503,7 @@
 			mob.delayNextMove(1)
 		if(INCORPOREAL_ETHEREAL) //Jaunting, without needing to be done through relaymove
 			var/turf/newLoc = get_step(mob,direct)
-			if(!(newLoc.flags & NOJAUNT))
+			if(!(newLoc.turf_flags & NOJAUNT))
 				mob.forceEnter(newLoc)
 				mob.dir = direct
 			else
