@@ -33,7 +33,9 @@
 	"Kawaii" = "selected_sound=sound/AI/animes.ogg&shiftpitch=0&volume=60",
     "Startup" = "selected_sound=sound/mecha/nominal.ogg&shiftpitch=0&volume=50",
     "Welding Noises" = "selected_sound=sound/items/Welder.ogg&shiftpitch=1&volume=55",
-	"Quack" = "selected_sound=sound/items/quack.ogg&shiftpitch=1&volume=50"
+	"Quack" = "selected_sound=sound/items/quack.ogg&shiftpitch=1&volume=50",
+	"Short Slide Whistle" = "selected_sound=sound/effects/slide_whistle_short.ogg&shiftpitch=1&volume=50",
+	"Long Slide Whistle" = "selected_sound=sound/effects/slide_whistle_long.ogg&shiftpitch=1&volume=50"
 	)
 
 /obj/item/device/soundsynth/verb/pick_sound()

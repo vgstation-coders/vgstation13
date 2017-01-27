@@ -421,6 +421,15 @@
 			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		else
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+		var/list/new_languages = list()
+		for(var/L in all_languages)
+			var/datum/language/lang = all_languages[L]
+			if(~lang.flags & RESTRICTED && !(lang in H.languages))
+				new_languages += lang.name
+
+		var/picked_lang = pick(new_languages)
+		H.add_language(picked_lang)
+		to_chat(H, "<span class = 'notice'>Due to your well read nature, you find yourself versed in the language of [picked_lang]. Check-Known-Languages under the IC tab to use it.</span>")
 		return 1
 
 

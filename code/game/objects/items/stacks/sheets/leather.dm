@@ -99,7 +99,15 @@
 	icon_state = "sheet-wetleather"
 	origin_tech = ""
 	var/wetness = 30 //Reduced when exposed to high temperautres
-	var/drying_threshold_temperature = 500 //Kelvin to start drying
+	var/drying_threshold_temperature = T0C + 40
+
+/obj/item/stack/sheet/wetleather/New()
+	..()
+	processing_objects.Add(src)
+
+/obj/item/stack/sheet/wetleather/Destroy()
+	processing_objects.Remove(src)
+	..()
 
 /obj/item/stack/sheet/leather
 	name = "leather"
@@ -137,12 +145,13 @@
 //Step two - washing..... it's actually in washing machine code.
 
 //Step three - drying
-/obj/item/stack/sheet/wetleather/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-	..()
-	if(exposed_temperature >= drying_threshold_temperature)
+/obj/item/stack/sheet/wetleather/process()
+	var/turf/location = get_turf(src)
+	if(!location)
+		return
+	var/datum/gas_mixture/environment = location.return_air()
+	if(environment.temperature >= drying_threshold_temperature)
 		wetness--
-		if(wetness == 0)
-
-			if(src.use(1))
-				drop_stack(/obj/item/stack/sheet/leather, src.loc, 1)
-				wetness = initial(wetness)
+		if(wetness <= 0)
+			if(src.use(amount))
+				drop_stack(/obj/item/stack/sheet/leather, src.loc, amount)

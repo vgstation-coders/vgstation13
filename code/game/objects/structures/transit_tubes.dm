@@ -75,9 +75,11 @@ obj/structure/ex_act(severity)
 
 /obj/structure/transit_tube_pod/New()
 	. = ..()
-	air_contents.oxygen = MOLES_O2STANDARD * 2
+	air_contents.oxygen = MOLES_O2STANDARD
 	air_contents.nitrogen = MOLES_N2STANDARD
 	air_contents.temperature = T20C
+	air_contents.pressure = ONE_ATMOSPHERE
+	air_contents.total_moles = MOLES_CELLSTANDARD
 
 	// Give auto tubes time to align before trying to start moving
 	spawn (5)
@@ -362,14 +364,9 @@ obj/structure/ex_act(severity)
 
 // Should I return a copy here? If the caller edits or del()s the returned
 //  datum, there might be problems if I don't...
+//	Shut up bitch, let's do it MY way
 /obj/structure/transit_tube_pod/return_air()
-	var/datum/gas_mixture/GM = new()
-	GM.oxygen			= air_contents.oxygen
-	GM.carbon_dioxide	= air_contents.carbon_dioxide
-	GM.nitrogen			= air_contents.nitrogen
-	GM.toxins			= air_contents.toxins
-	GM.temperature		= air_contents.temperature
-	return GM
+	return air_contents
 
 // For now, copying what I found in an unused FEA file (and almost identical in a
 //  used ZAS file). Means that assume_air and remove_air don't actually alter the

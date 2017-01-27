@@ -303,7 +303,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 						B = getFromPool(/obj/structure/boulder, src)
 						if(artifact_find)
 							B.artifact_find = artifact_find
-							B.investigation_log(I_ARTIFACT, "|| [B.artifact_find.artifact_find_type] || found by [key_name(user)].")
+							B.investigation_log(I_ARTIFACT, "|| [artifact_find.artifact_find_type] found by [key_name(user)].")
 					else
 						artifact_debris(1)
 
@@ -402,7 +402,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	//destroyed artifacts have weird, unpleasant effects
 	//make sure to destroy them before changing the turf though
 	if(artifact_find && artifact_fail)
-		investigation_log(I_ARTIFACT, "|| [artifact_find.artifact_find_type] || destroyed by [key_name(usr)].")
+		investigation_log(I_ARTIFACT, "|| [artifact_find.artifact_find_type] destroyed by [key_name(usr)].")
 		for(var/mob/living/M in range(src, 200))
 			to_chat(M, "<font color='red'><b>[pick("A high pitched [pick("keening","wailing","whistle")]","A rumbling noise like [pick("thunder","heavy machinery")]")] somehow penetrates your mind before fading away!</b></font>")
 			if(prob(50)) //pain
