@@ -15,6 +15,10 @@
 	var/max_ammo = 10
 	var/current_ammo = 10
 
+/obj/item/weapon/gun/banannon/New()
+	..()
+	chamber_if_possible()
+
 /obj/item/weapon/gun/banannon/update_icon()
 	if(current_ammo >= max_ammo)
 		icon_state = initial(icon_state)
@@ -27,7 +31,12 @@
 	..()
 	to_chat(user, "<span class='info'>It has [current_ammo] round\s remaining.</span>")
 
-/obj/item/weapon/gun/banannon/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/banannon/proc/chamber_if_possible()
+	if(current_ammo > 0)
+		if(!process_chambered())
+			in_chamber = new /obj/item/projectile/bullet/sabonana(src)
+
+/obj/item/weapon/gun/banannon/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
@@ -36,37 +45,33 @@
 		return
 	if(!current_ammo)
 		return click_empty(user)
-	if(in_chamber)
-		qdel(in_chamber)
-		in_chamber = null
-	in_chamber = new /obj/item/projectile/bullet/sabonana(src)
-	if(Fire(A,user,params, "struggle" = struggle))
+	chamber_if_possible()
+	if(Fire(A,user,params, struggle = struggle))
 		current_ammo--
+		chamber_if_possible()
 	update_icon()
 
-/obj/item/weapon/gun/banannon/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+/obj/item/weapon/gun/banannon/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(istype(user, /mob/living))
 		var/mob/living/M = user
 		if(!clumsy_check(M) && prob(50))
-			to_chat(M, "<span class='danger'>[src] blows up in your face.</span>")
+			to_chat(M, "<span class='danger'>\The [src] blows up in your face.</span>")
 			M.take_organ_damage(0,20)
-			M.drop_item(src, force_drop = 1)
 			qdel(src)
 			return 0
 	return ..()
 
 /obj/item/weapon/gun/banannon/process_chambered()
-	if(in_chamber)
-		return 1
-	return 0
+	return in_chamber
 
 /obj/item/weapon/gun/banannon/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/banana))
 		if(current_ammo >= max_ammo)
 			return
-		current_ammo++
-		playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
-		user.drop_item(W, force_drop = 1)
-		qdel(W)
-		update_icon()
+		if(user.drop_item(W))
+			current_ammo++
+			chamber_if_possible()
+			playsound(get_turf(src), 'sound/items/Deconstruct.ogg', 25, 1)
+			qdel(W)
+			update_icon()
