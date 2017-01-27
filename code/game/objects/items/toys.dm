@@ -1309,9 +1309,10 @@
 	if(!istype(D))
 		return
 	user.drop_item(D, force_drop = 1)
-	D.name = user.name
-	D.desc = user.desc
 	D.appearance = user.appearance
+	var/datum/log/L = new
+	user.examine(L)
+	D.desc = L.log
 
 /obj/item/toy/balloon/inflated/decoy
 	desc = "An inflated decoy balloon."
@@ -1319,6 +1320,10 @@
 	w_class = W_CLASS_GIANT
 	density = 1
 	can_be_strung = FALSE
+
+/obj/item/toy/balloon/inflated/decoy/examine(mob/user, var/size = "")
+	if(desc)
+		to_chat(user, desc)
 
 /obj/item/toy/balloon/inflated/decoy/attack_hand(mob/user)
 	return

@@ -62,7 +62,7 @@
 				t_him = "her"
 
 	var/distance = get_dist(user,src)
-	if(istype(user, /mob/dead/observer) || user.stat == 2) // ghosts can see anything
+	if(istype(user, /mob/dead/observer) || !istype(user) || user.stat == 2) // ghosts can see anything
 		distance = 1
 
 	msg += "<EM>[src.name]</EM>!\n"
@@ -207,7 +207,7 @@
 			user.visible_message("<span class='info'>[user] checks [src]'s pulse.</span>")
 
 			spawn(15)
-				if(user && distance <= 1 && !user.isUnconscious())
+				if(user && distance <= 1 && (!istype(user) || !user.isUnconscious()))
 					if(pulse == PULSE_NONE || (status_flags & FAKEDEATH))
 						to_chat(user, "<span class='deadsay'>[t_He] has no pulse[src.client ? "" : " and [t_his] soul has departed"]...</span>")
 					else
@@ -221,7 +221,7 @@
 		else
 			msg += "[t_He] [t_is] severely malnourished.\n"
 	else if(nutrition >= 500)
-		if(user.nutrition < 100)
+		if(istype(user) && user.nutrition < 100)
 			msg += "[t_He] [t_is] plump and delicious looking - Like a fat little piggy. A tasty piggy.\n"
 		else
 			msg += "[t_He] [t_is] quite chubby.\n"
@@ -476,7 +476,8 @@
 		msg += "\n[t_He] is [pose]"
 
 	to_chat(user, msg)
-	user.heard(src)
+	if(istype(user))
+		user.heard(src)
 
 //Helper procedure. Called by /mob/living/carbon/human/examine() and /mob/living/carbon/human/Topic() to determine HUD access to security and medical records.
 /proc/hasHUD(mob/M as mob, hudtype)
