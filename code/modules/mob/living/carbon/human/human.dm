@@ -690,6 +690,10 @@
 	else if (href_list["lookitem"])
 		var/obj/item/I = locate(href_list["lookitem"])
 		usr.examination(I)
+	else if (href_list["listitems"])
+		var/obj/item/I = locate(href_list["listitems"])
+		for(var/J in I.contents)
+			to_chat(usr, "<span class='info'>\A [J].</span>")
 	/*else if (href_list["lookmob"])
 		var/mob/M = locate(href_list["lookmob"])
 		usr.examination(M)*/
