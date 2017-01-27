@@ -1,12 +1,11 @@
 /obj/item/device/rcd/rpd
-	name				= "Rapid Piping Device (RPD)"
-	desc				= "A device used to rapidly pipe things."
-	icon_state			= "rpd"
+	name       = "\improper Rapid-Piping-Device (RPD)"
+	desc       = "A device used to rapidly pipe things."
+	icon_state = "rpd"
 
-	starting_materials	= list(MAT_IRON = 75000, MAT_GLASS = 37500)
+	starting_materials = list(MAT_IRON = 75000, MAT_GLASS = 37500)
 
-	schematics	= list(
-
+	schematics = list(
 		/* Utilities */
 		/datum/rcd_schematic/decon_pipes,
 		/datum/rcd_schematic/paint_pipes,
@@ -64,27 +63,8 @@
 		/datum/rcd_schematic/pipe/disposal/sort,
 		/datum/rcd_schematic/pipe/disposal/sort_wrap
 	)
-/obj/item/device/rcd/rpd/rebuild_ui()
-	var/dat = ""
 
-	dat += {"
-	<b>Selected:</b> <span id="selectedname"></span>
-	<h2>Options</h2>
-	<div id="schematic_options">
-	</div>
-	<h2>Available schematics</h2>
-	"}
-	for(var/cat in schematics)
-		dat += "<b>[cat]:</b><ul style='list-style-type:disc'>"
-		var/list/L = schematics[cat]
-		for(var/i = 1 to L.len)	//So we have the indexes.
-			var/datum/rcd_schematic/C = L[i]
-			dat += "<li><a href='?src=\ref[interface];cat=[cat];index=[i]'>[C.name]</a></li>"
-
-		dat += "</ul>"
-
-	interface.updateLayout(dat)
-
-	if(selected)
-		update_options_menu()
-		interface.updateContent("selectedname",			selected.name)
+/obj/item/device/rcd/rpd/examine(var/mob/user)
+	..()
+	to_chat(user, "<span class='notice'>To quickly scroll between directions of the selected schematic, use alt+mousewheel.")
+	to_chat(user, "<span class='notice'>To quickly scroll between layers, use shift+mousewheel.</span>")
