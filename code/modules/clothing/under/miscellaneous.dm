@@ -707,3 +707,10 @@
 	item_state = "rottensuit"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	_color = "rottensuit"
+
+/obj/item/clothing/under/medicalswimsuit
+	name = "medical swimsuit"
+	desc = "A fancy swimsuit with a similar colour scheme to that of the medical department"
+	icon_state = "medicalswimsuit"
+	item_state = "medicalswimsuit"
+	_color = "medicalswimsuit"

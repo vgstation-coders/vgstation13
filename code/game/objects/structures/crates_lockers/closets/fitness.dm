@@ -17,6 +17,7 @@
 	new /obj/item/clothing/under/swimsuit/blue(src)
 	new /obj/item/clothing/under/swimsuit/green(src)
 	new /obj/item/clothing/under/swimsuit/purple(src)
+	new /obj/item/clothing/under/medicalswimsuit(src)
 
 
 /obj/structure/closet/boxinggloves
