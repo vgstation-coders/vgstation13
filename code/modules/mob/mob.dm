@@ -1757,5 +1757,10 @@ mob/proc/on_foot()
 /mob/acidable()
 	return 1
 
+/mob/duplicate(atom/destination)
+	var/mob/dupe = ..()
+	dupe.regenerate_icons()
+	return dupe
+
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING
