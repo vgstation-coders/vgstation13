@@ -577,7 +577,7 @@
 			else
 				if(!stat)
 					if (!muzzled)
-						var/list/screamSound = list('sound/misc/malescream1.ogg', 'sound/misc/malescream2.ogg', 'sound/misc/malescream3.ogg', 'sound/misc/malescream4.ogg', 'sound/misc/malescream5.ogg', 'sound/misc/wilhelm.ogg', 'sound/misc/goofy.ogg')
+						var/list/screamSound = male_scream_sound
 						if (src.gender == FEMALE) //Females have their own screams. Trannys be damned.
 							screamSound = female_scream_sound
 						var/scream = pick(screamSound)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
