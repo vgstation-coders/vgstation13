@@ -1303,6 +1303,20 @@
 	col = null
 	inflated_type = /obj/item/toy/balloon/inflated/decoy
 	volume = 120	//liters
+	var/decoy_phrase = null
+
+/obj/item/toy/balloon/decoy/verb/record_phrase()
+	set name = "Record Decoy Phrase"
+	set category = "Object"
+	set src in usr
+
+	var/mob/M = usr
+	if(M.incapacitated())
+		return
+
+	var/N = input("Enter a stock phrase for your decoy to say:","[src]") as null|text
+	if(N)
+		decoy_phrase = N
 
 /obj/item/toy/balloon/decoy/inflate(mob/user, datum/gas_mixture/G)
 	var/obj/item/toy/balloon/inflated/decoy/D = ..()
@@ -1313,6 +1327,9 @@
 	var/datum/log/L = new
 	user.examine(L)
 	D.desc = L.log
+	qdel(L)
+	if(decoy_phrase)
+		D.decoy_phrase = decoy_phrase
 
 /obj/item/toy/balloon/inflated/decoy
 	desc = "An inflated decoy balloon."
@@ -1320,13 +1337,28 @@
 	w_class = W_CLASS_GIANT
 	density = 1
 	can_be_strung = FALSE
+	var/decoy_phrase = null
+	var/list/hit_sounds = list('sound/weapons/genhit1.ogg', 'sound/weapons/genhit2.ogg', 'sound/weapons/genhit3.ogg',\
+	'sound/weapons/punch1.ogg', 'sound/weapons/punch2.ogg', 'sound/weapons/punch3.ogg', 'sound/weapons/punch4.ogg')
 
 /obj/item/toy/balloon/inflated/decoy/examine(mob/user, var/size = "")
 	if(desc)
 		to_chat(user, desc)
 
+/obj/item/toy/balloon/inflated/attackby(obj/item/weapon/W, mob/user)
+	..()
+	if(!src.gcDestroyed)
+		attack_hand(user)
+
 /obj/item/toy/balloon/inflated/decoy/attack_hand(mob/user)
-	return
+	playsound(loc, pick(hit_sounds), 25, 1, -1)
+	if(decoy_phrase)
+		say(decoy_phrase)
+	animate(src, transform = turn(matrix(), -40), pixel_x = -9 * PIXEL_MULTIPLIER, time = 2)
+	animate(transform = turn(matrix(), 30), pixel_x = 6 * PIXEL_MULTIPLIER, time = 2)
+	animate(transform = turn(matrix(), -20), pixel_x = -4 * PIXEL_MULTIPLIER, time = 2)
+	animate(transform = turn(matrix(), 10), pixel_x = 2 * PIXEL_MULTIPLIER, time = 2)
+	animate(transform = null, pixel_x = 0, time = 2)
 
 /obj/item/toy/balloon/inflated/decoy/attack_paw(mob/user)
-	return
+	return attack_hand(user)
