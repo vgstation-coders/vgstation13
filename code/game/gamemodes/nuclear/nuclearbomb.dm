@@ -341,6 +341,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 	desc = "Better keep this safe."
 	icon_state = "nucleardisk"
 	item_state = "card-id"
+	flags = FPRINT | TIMELESS
 	w_class = W_CLASS_TINY
 	var/respawned = 0
 

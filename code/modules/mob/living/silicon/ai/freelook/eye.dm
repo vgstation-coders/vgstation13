@@ -10,7 +10,7 @@
 	var/list/visibleCameraChunks = list()
 	var/mob/living/silicon/ai/ai = null
 	var/high_res = 0
-	flags = HEAR_ALWAYS
+	flags = HEAR_ALWAYS | TIMELESS
 
 // Use this when setting the aiEye's location.
 // It will also stream the chunk that the new loc is in.

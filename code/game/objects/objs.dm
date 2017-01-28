@@ -546,3 +546,15 @@ a {
 	if(istype(user))
 		return (M_CLUMSY in user.mutations)
 	return 0
+
+/obj/actual_send_to_future(var/duration)
+	var/turf/current_turf = get_turf(src)
+	var/datum/current_loc = loc
+	forceMove(null)
+
+	..()
+
+	if(!current_loc.gcDestroyed)
+		forceMove(current_loc)
+	else
+		forceMove(current_turf)
