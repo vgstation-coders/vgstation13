@@ -81,8 +81,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			state_controls_pai(W)
 			playsound(src, 'sound/misc/cartridge_in.ogg', 25)
 
-/obj/proc/state_controls_pai(obj/item/device/paicard/P) //text the pAI receives when is inserted into something. EXAMPLE: to_chat(P.pai, "Welcome to your new body")
-	return
+/obj/proc/state_controls_pai(obj/item/device/paicard/P)			//text the pAI receives when is inserted into something. EXAMPLE: to_chat(P.pai, "Welcome to your new body")
+	if(P.pai)
+		return 1
+	return 0
 
 /obj/proc/attack_integrated_pai(mob/living/silicon/pai/user)	//called when integrated pAI clicks on the object, or uses the attack_self() hotkey
 	return
@@ -154,11 +156,17 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 		return
 
 	to_chat(M, "You eject \the [integratedpai] from \the [src].")
-	integratedpai.forceMove(get_turf(src))
-	M.put_in_hands(integratedpai)
-	integratedpai = null
+	M.put_in_hands(eject_integratedpai_if_present())
 	playsound(src, 'sound/misc/cartridge_out.ogg', 25)
-	verbs -= /obj/verb/remove_pai
+
+/obj/proc/eject_integratedpai_if_present()
+	if(integratedpai)
+		integratedpai.forceMove(get_turf(src))
+		verbs -= /obj/verb/remove_pai
+		var/obj/item/device/paicard/P = integratedpai
+		integratedpai = null
+		return P
+	return 0
 
 /obj/recycle(var/datum/materials/rec)
 	if(..())
