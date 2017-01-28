@@ -99,7 +99,7 @@
 		to_chat(user, "<span class='warning'>The [M] is too squishy to buckle in.</span>")
 		return
 
-	if(M == usr)
+	if(M == user)
 		M.visible_message(\
 			"<span class='notice'>[M.name] buckles in!</span>",\
 			"You buckle yourself to [src].",\

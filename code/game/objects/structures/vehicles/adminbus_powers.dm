@@ -219,24 +219,18 @@
 			bususer.gui_icons.adminbus_roadlights_1.icon_state = "icon_lights_1-off"
 			bususer.gui_icons.adminbus_roadlights_2.icon_state = "icon_lights_2-off"
 			lightsource.set_light(0)
-			if(roadlights == 1 || roadlights == 2)
-				overlays["roadlights"] = null
 			roadlights = 0
 		if(1)
 			bususer.gui_icons.adminbus_roadlights_0.icon_state = "icon_lights_0-off"
 			bususer.gui_icons.adminbus_roadlights_1.icon_state = "icon_lights_1-on"
 			bususer.gui_icons.adminbus_roadlights_2.icon_state = "icon_lights_2-off"
 			lightsource.set_light(2)
-			if(roadlights == 0)
-				overlays["roadlights"] = roadlights_image
 			roadlights = 1
 		if(2)
 			bususer.gui_icons.adminbus_roadlights_0.icon_state = "icon_lights_0-off"
 			bususer.gui_icons.adminbus_roadlights_1.icon_state = "icon_lights_1-off"
 			bususer.gui_icons.adminbus_roadlights_2.icon_state = "icon_lights_2-on"
 			lightsource.set_light(3)
-			if(roadlights == 0)
-				overlays["roadlights"] = roadlights_image
 			roadlights = 2
 
 	update_lightsource()

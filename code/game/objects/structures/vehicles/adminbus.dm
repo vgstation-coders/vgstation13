@@ -307,8 +307,11 @@
 	update_mob()
 	update_rearview()
 
+/obj/structure/bed/chair/vehicle/adminbus/can_buckle(mob/M, mob/user)
+	return 1
+
 /obj/structure/bed/chair/vehicle/adminbus/buckle_mob(mob/M, mob/user)
-	if(M != user|| !ismob(M)|| get_dist(src, user) > 1|| user.restrained()|| user.lying|| user.stat|| M.locked_to|| istype(user, /mob/living/silicon)|| destroyed)
+	if(M != user || !ismob(M) || !Adjacent(user) || user.restrained() || user.lying || user.stat || user.locked_to || destroyed || istype(user, /mob/living/silicon))
 		return
 
 	if(!(istype(user,/mob/living/carbon/human/dummy) || istype(user,/mob/living/simple_animal/corgi/Ian)))
