@@ -2,7 +2,7 @@
 	name = "cart"
 	icon = 'goon/icons/vehicles.dmi' //If you want to sprite a new cart, do it in 'icons/obj/vehicles.dmi'
 	icon_state = "flatbed"
-	density = 1
+	density = 0
 	var/obj/machinery/cart/next_cart = null
 	var/obj/machinery/cart/previous_cart = null
 
@@ -10,7 +10,7 @@
 	if (user.incapacitated() || !in_range(user, src))
 		return
 
-	if (!istype(C)|| C.anchored || get_dist(user, src) > 1 || get_dist(src, C) > 1 )
+	if (!istype(C) || get_dist(user, src) > 1 || get_dist(src, C) > 1 )
 		return
 
 	if (istype(C, /obj/machinery/cart) && in_range(C, src))

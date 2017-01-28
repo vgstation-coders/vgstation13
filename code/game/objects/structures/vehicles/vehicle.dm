@@ -192,14 +192,14 @@
 		if (!next_cart)
 			next_cart = C
 			next_cart.previous_cart = src
-			user.visible_message("[user] connects \the [C] to \the [src].", "You connect \the [C] to \the [src]")
+			user.visible_message("[user] connects [C] to [src].", "You connect [C] to [src]")
 			playsound(get_turf(src), 'sound/misc/buckle_click.ogg', 50, 1)
 			return
 
 		else if (next_cart == C)
 			next_cart.previous_cart = null
 			next_cart = null
-			user.visible_message("[user] disconnects \the [C] to \the [src].", "You disconnect \the [C] to \the [src]")
+			user.visible_message("[user] disconnects [C] to [src].", "You disconnect [C] to [src]")
 			playsound(get_turf(src), 'sound/misc/buckle_unclick.ogg', 50, 1)
 			return
 
