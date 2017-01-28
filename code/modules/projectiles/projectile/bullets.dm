@@ -799,3 +799,24 @@
 		return 1
 	return 0
 
+/obj/item/projectile/bullet/sabonana
+	name = "armor-piercing discarding sabonana"
+	icon_state = "sabonana_peel"
+	damage = 30
+	penetration = 10
+	var/peel_drop_chance = 4
+	var/peel_dropped = FALSE
+	fire_sound = 'sound/misc/slip.ogg'
+
+/obj/item/projectile/bullet/sabonana/process_step()
+	..()
+	if(!peel_dropped)
+		if(prob(peel_drop_chance))
+			return drop_peel()
+		peel_drop_chance *= 2
+
+/obj/item/projectile/bullet/sabonana/proc/drop_peel()
+	new /obj/item/weapon/bananapeel(get_turf(src))
+	icon_state = "sabonana"
+	damage *= 2
+	peel_dropped = TRUE
