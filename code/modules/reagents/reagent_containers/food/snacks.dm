@@ -4857,7 +4857,7 @@
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/poutine
-	name = "Poutine"
+	name = "poutine"
 	desc = "Fries, cheese & gravy. Your arteries will hate you for this."
 	icon_state = "poutine"
 	trash = /obj/item/trash/plate
