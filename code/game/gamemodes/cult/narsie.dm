@@ -47,7 +47,8 @@ var/global/list/narsie_list = list()
 	if(announce)
 		to_chat(world, "<font size='15' color='red'><b>[uppertext(name)] HAS RISEN</b></font>")
 		world << sound('sound/effects/wind/wind_5_1.ogg')
-		narsie_spawn_animation()
+		if(narnar)
+			narsie_spawn_animation()
 	if(!narsie_cometh)//so we don't initiate Hell more than one time.
 		if(istype(ticker.mode, /datum/game_mode/cult))
 			var/datum/game_mode/cult/mode_ticker = ticker.mode
