@@ -36,6 +36,13 @@
 	held_items = list()
 	var/obj/item/weapon/reagent_containers/food/snacks/food_target //What food we're walking towards
 	var/is_fat = 0
+	var/can_chew_wires = 0
+	var/disease_carrier = 0
+
+	var/list/datum/disease2/disease/virus2 = list() //For disease carrying
+	var/antibodies = 0
+
+
 /mob/living/simple_animal/mouse/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
@@ -55,6 +62,7 @@
 			stat = CONSCIOUS
 			icon_state = "mouse_[_color]"
 			wander = 1
+			speak_chance = initial(speak_chance)
 		else if(prob(5))
 			emote("snuffles")
 
@@ -86,6 +94,32 @@
 			if(Adjacent(food_target))
 				food_target.attack_animal(src)
 
+		if(prob(10))
+
+			if(!client)
+				if(can_chew_wires)
+					for(var/obj/structure/cable/C in can_see)
+						if(Adjacent(C))
+							C.attack_animal(src)
+							break
+						else
+							step_towards(src, C)
+							break
+				if(disease_carrier && virus2.len)
+					for(var/mob/living/carbon/human/H in can_see)
+						if(Adjacent(H))
+//							visible_message("[src] bites [H]")
+							H.attack_animal(src)
+							break
+						else
+							step_towards(src, H)
+							break
+			if(disease_carrier && virus2.len)
+				for(var/mob/living/M in view(1,src))
+//					visible_message("[src] breaths on [M]")
+					spread_disease_to(src,M, "Airborne") //Spreads it to humans, mice, and monkeys
+
+
 		nutrition = max(0, nutrition - STANDCOST)
 
 /mob/living/simple_animal/mouse/Move()
@@ -109,6 +143,11 @@
 	add_language(LANGUAGE_MOUSE)
 	default_language = all_languages[LANGUAGE_MOUSE]
 
+/mob/living/simple_animal/mouse/unarmed_attack_mob(mob/living/target)
+	..()
+	if(can_be_infected(target))
+		spread_disease_to(src, target, "Contact")
+
 /mob/living/simple_animal/mouse/proc/nutrstats()
 	stat(null, "Nutrition level - [nutrition]")
 
@@ -122,6 +161,10 @@
 	if(!isDead())
 		if(is_fat)
 			to_chat(user, "<span class='info'>It seems well fed.</span>")
+		if(can_chew_wires)
+			to_chat(user, "<span class='notice'>It seems a bit frazzled.</span>")
+		if(disease_carrier && virus2.len)
+			to_chat(user, "<span class='blob'>It seems unwell.</span>") //Blob class is snot green
 
 /mob/living/simple_animal/mouse/proc/splat()
 	src.health = 0
@@ -250,3 +293,9 @@
 		investigation_log(I_SINGULO,"has been consumed by a singularity")
 		gib()
 		return 0
+
+/mob/living/simple_animal/mouse/wire_biter
+	can_chew_wires = 1
+
+/mob/living/simple_animal/mouse/plague
+	disease_carrier = 1

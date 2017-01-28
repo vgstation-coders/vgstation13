@@ -216,12 +216,13 @@ By design, d1 is the smallest direction and d2 is the highest
 /obj/structure/cable/attack_animal(mob/M)
 	if(isanimal(M))
 		if(ismouse(M))
+			var/mob/living/simple_animal/mouse/N = M
 			M.delayNextAttack(10)
 			M.visible_message("<span class='danger'>[M] bites \the [src]!</span>", "<span class='userdanger'>You bite \the [src]!</span>")
 			shock(M, 50)
-			/*if(prob(5))
-				shock(M, 100)
-				cut(M, T)*/ // FUCK mice. - N3X
+			if(prob(5) && N.can_chew_wires)
+				var/turf/T = src.loc
+				cut(N, T)
 
 /obj/structure/cable/bite_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] bites \the [src]!</span>", "<span class='userdanger'>You bite \the [src]!</span></span>")
