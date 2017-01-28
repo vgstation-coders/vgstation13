@@ -2170,3 +2170,13 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom
 		)
 	result = /obj/item/weapon/reagent_containers/food/snacks/vanishingstew
+
+/datum/recipe/poutine
+	reagents = list(GRAVY = 5)
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/fries,
+		/obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/poutine
+
+

@@ -4855,3 +4855,15 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/poutine
+	name = "poutine"
+	desc = "Fries, cheese & gravy. Your arteries will hate you for this."
+	icon_state = "poutine"
+	trash = /obj/item/trash/plate
+	food_flags = FOOD_ANIMAL //cheese
+
+/obj/item/weapon/reagent_containers/food/snacks/poutine/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 8)
+	bitesize = 2
