@@ -26,13 +26,13 @@ proc/get_infection_chance(var/mob/living/M, var/vector = "Airborne")
 			if(istype(H:wear_suit, /obj/item/clothing/suit/bio_suit))
 				score += 35
 
-	log_debug("[M]'s resistance to [vector] viruses: [score]")
+//	log_debug("[M]'s resistance to [vector] viruses: [score]")
 	if(istype(M, /mob/living/simple_animal/mouse))
 		var/mob/living/simple_animal/mouse/MM = M
 		if(MM.disease_carrier)
 			return 1
 	if(prob((min(score, 100) - 100) ** 2 / 100))
-		log_debug("Infection got through")
+//		log_debug("Infection got through")
 		return 1
 	return 0
 
@@ -52,10 +52,10 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 //Attemptes to infect mob M with virus. Set forced to 1 to ignore protective clothing.  Returns 1 if successful.
 /proc/infect_virus2(var/mob/living/carbon/M,var/datum/disease2/disease/disease,var/forced = 0, var/notes="")
 	if(!istype(disease))
-		log_debug("Bad virus")
+//		log_debug("Bad virus")
 		return 0
-	if(!istype(M, /mob/living/carbon) && !istype(M, /mob/living/simple_animal/mouse))
-		log_debug("Bad mob")
+	if(!can_be_infected())
+//		log_debug("Bad mob")
 		return 0
 	if ("[disease.uniqueID]" in M.virus2)
 		return 0
@@ -75,7 +75,7 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 		var/datum/disease2/disease/D = disease.getcopy()
 		D.minormutate()
 //		log_debug("Adding virus")
-		log_debug("[key_name(M)] infected with [disease.uniqueID]: forced=[forced], notes=[notes].")
+//		log_debug("[key_name(M)] infected with [disease.uniqueID]: forced=[forced], notes=[notes].")
 		D.log += "<br />[timestamp()] Infected [key_name(M)] [notes]"
 		M.virus2["[D.uniqueID]"] = D
 		return 1
