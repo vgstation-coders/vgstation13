@@ -484,11 +484,17 @@ var/list/uplink_items = list()
 	item = /obj/item/device/chameleon
 	cost = 6
 
-/datum/uplink_item/stealthy_tools/chameleon_proj
+/datum/uplink_item/stealthy_tools/smoke_bombs
 	name = "Instant Smoke Bombs"
 	desc = "A package of eight instant-action smoke bombs, cleverly disguised as harmless snap-pops. The cover of smoke they create is large enough to cover most of a room. Pair well with thermal imaging glasses."
 	item = /obj/item/weapon/storage/box/syndie_kit/smokebombs
 	cost = 3
+
+/datum/uplink_item/stealthy_tools/decoy_balloon
+	name = "Decoy Balloon"
+	desc = "A balloon that looks just like you when inflated."
+	item = /obj/item/toy/balloon/decoy
+	cost = 1
 
 
 // DEVICE AND TOOLS
