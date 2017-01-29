@@ -204,10 +204,18 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 					wander_move(destination)
 					turns_since_move = 0
 
+	var/someone_in_earshot=0
+	if(!client && speak_chance && (ckey == null)) // Remove this if earshot is used elsewhere.
+		// All we're doing here is seeing if there's any CLIENTS nearby.
+		for(var/mob/M in get_hearers_in_view(7, src))
+			if(M.client)
+				someone_in_earshot=1
+				break
+
 	//Speaking
-	if(!client && speak_chance && (ckey == null))
-		if(rand(0,200) < speak_chance)
-			if(speak && speak.len)
+	if(!client && speak_chance && (ckey == null) && someone_in_earshot)
+		if(speak && speak.len)
+			if(rand(0,200) < speak_chance)
 				if((emote_hear && emote_hear.len) || (emote_see && emote_see.len))
 					var/length = speak.len
 					if(emote_hear && emote_hear.len)
