@@ -926,7 +926,8 @@
 			icon_state = initial(G.icon_state)
 			if(get_turf(src))
 				playsound(get_turf(src), 'sound/misc/click.ogg', 50, 1)
-			sleep(1)
+			sleep(4)
 			if(counter == available_fruits.len)
 				counter = 0
+				available_fruits = shuffle(available_fruits)
 			counter++
