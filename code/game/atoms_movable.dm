@@ -755,3 +755,21 @@
 	falltempoverlays -= src
 	ignoreinvert = initial(ignoreinvert)
 	invisibility = init_invisibility
+
+/atom/movable/proc/send_to_past(var/duration)
+	var/current_loc = loc
+	var/list/stored_vars = list()
+	for(var/x in vars)
+		if(!exclude.Find(x)) // Important!
+			stored_vars[x] = vars[x]
+
+	for(var/atom/movable/AM in contents)
+		AM.send_to_past(duration)
+
+	spawn(duration)
+		forceMove(current_loc)
+		for(var/x in stored_vars)
+			vars[x] = stored_vars[x]
+
+	//future plan: make /datum-level send_to_past() that does nothing, override for /atom/movable,
+	//then override for /datum/organ, THEN override for human so it can call send_to_past() on its organs.
