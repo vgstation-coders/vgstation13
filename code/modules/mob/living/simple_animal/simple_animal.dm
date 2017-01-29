@@ -207,7 +207,6 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/someone_in_earshot=0
 	if(!client && speak_chance && (ckey == null)) // Remove this if earshot is used elsewhere.
 		// All we're doing here is seeing if there's any CLIENTS nearby.
-		// HOWEVER, this returns virtualhearers, so we have to test their attached mobs/atoms.
 		for(var/mob/M in get_hearers_in_view(7, src))
 			if(M.client)
 				someone_in_earshot=1
