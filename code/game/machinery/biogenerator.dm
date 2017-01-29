@@ -180,14 +180,14 @@
 	result=/obj/item/stack/sheet/cardboard
 
 /datum/biogen_recipe/paper/giftwrap
-	cost=75
+	cost=25
 	id="giftwrap"
 	name="Gift Wrap"
 	other_amounts=list(5,10)
 	result=/obj/item/stack/package_wrap/gift
 
 /datum/biogen_recipe/paper/packagewrap
-	cost=100
+	cost=30
 	id="packagewrap"
 	name="Package Wrap"
 	other_amounts=list(5,10)
