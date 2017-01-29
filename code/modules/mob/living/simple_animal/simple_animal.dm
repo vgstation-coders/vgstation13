@@ -94,6 +94,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/life_tick = 0
 	var/list/colourmatrix = list()
 
+	var/custom_life_code=0
+
 /mob/living/simple_animal/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
 
@@ -142,172 +144,174 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return 0 //under effects of time magick
 	..()
 
-	//Health
-	if(stat == DEAD)
-		if(health > 0)
-			icon_state = icon_living
-			src.resurrect()
-			stat = CONSCIOUS
-			density = 1
-			update_canmove()
-		if(canRegenerate && !isRegenerating)
-			src.delayedRegen()
-		return 0
+	if(custom_life_code)
+
+		//Health
+		if(stat == DEAD)
+			if(health > 0)
+				icon_state = icon_living
+				src.resurrect()
+				stat = CONSCIOUS
+				density = 1
+				update_canmove()
+			if(canRegenerate && !isRegenerating)
+				src.delayedRegen()
+			return 0
 
 
-	if(health < 1 && stat != DEAD)
-		Die()
-		return 0
+		if(health < 1 && stat != DEAD)
+			Die()
+			return 0
 
-	life_tick++
+		life_tick++
 
-	health = min(health, maxHealth)
+		health = min(health, maxHealth)
 
-	if(stunned)
-		AdjustStunned(-1)
-	if(knockdown)
-		AdjustKnockdown(-1)
-	if(paralysis)
-		AdjustParalysis(-1)
+		if(stunned)
+			AdjustStunned(-1)
+		if(knockdown)
+			AdjustKnockdown(-1)
+		if(paralysis)
+			AdjustParalysis(-1)
 
-	//Eyes
-	if(sdisabilities & BLIND)	//disabled-blind, doesn't get better on its own
-		blinded = 1
-	else if(eye_blind)			//blindness, heals slowly over time
-		eye_blind = max(eye_blind-1,0)
-		blinded = 1
-	else if(eye_blurry)	//blurry eyes heal slowly
-		eye_blurry = max(eye_blurry-1, 0)
+		//Eyes
+		if(sdisabilities & BLIND)	//disabled-blind, doesn't get better on its own
+			blinded = 1
+		else if(eye_blind)			//blindness, heals slowly over time
+			eye_blind = max(eye_blind-1,0)
+			blinded = 1
+		else if(eye_blurry)	//blurry eyes heal slowly
+			eye_blurry = max(eye_blurry-1, 0)
 
-	//Ears
-	if(sdisabilities & DEAF)	//disabled-deaf, doesn't get better on its own
-		ear_deaf = max(ear_deaf, 1)
-	else if(ear_deaf)			//deafness, heals slowly over time
-		ear_deaf = max(ear_deaf-1, 0)
-	else if(ear_damage < 25)	//ear damage heals slowly under this threshold.
-		ear_damage = max(ear_damage-0.05, 0)
+		//Ears
+		if(sdisabilities & DEAF)	//disabled-deaf, doesn't get better on its own
+			ear_deaf = max(ear_deaf, 1)
+		else if(ear_deaf)			//deafness, heals slowly over time
+			ear_deaf = max(ear_deaf-1, 0)
+		else if(ear_damage < 25)	//ear damage heals slowly under this threshold.
+			ear_damage = max(ear_damage-0.05, 0)
 
-	confused = max(0, confused - 1)
+		confused = max(0, confused - 1)
 
-	if(purge)
-		purge -= 1
+		if(purge)
+			purge -= 1
 
-	isRegenerating = 0
+		isRegenerating = 0
 
-	//Movement
-	if((!client||deny_client_move) && !stop_automated_movement && wander && !anchored && (ckey == null) && !(flags & INVULNERABLE))
-		if(isturf(src.loc) && canmove)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
-			turns_since_move++
-			if(turns_since_move >= turns_per_move)
-				if(!(stop_automated_movement_when_pulled && pulledby)) //Some animals don't move when pulled
-					var/destination = get_step(src, pick(cardinal))
-					wander_move(destination)
-					turns_since_move = 0
+		//Movement
+		if((!client||deny_client_move) && !stop_automated_movement && wander && !anchored && (ckey == null) && !(flags & INVULNERABLE))
+			if(isturf(src.loc) && canmove)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
+				turns_since_move++
+				if(turns_since_move >= turns_per_move)
+					if(!(stop_automated_movement_when_pulled && pulledby)) //Some animals don't move when pulled
+						var/destination = get_step(src, pick(cardinal))
+						wander_move(destination)
+						turns_since_move = 0
 
-	//Speaking
-	if(!client && speak_chance && (ckey == null))
-		if(rand(0,200) < speak_chance)
-			if(speak && speak.len)
-				if((emote_hear && emote_hear.len) || (emote_see && emote_see.len))
-					var/length = speak.len
-					if(emote_hear && emote_hear.len)
-						length += emote_hear.len
-					if(emote_see && emote_see.len)
-						length += emote_see.len
-					var/randomValue = rand(1,length)
-					if(randomValue <= speak.len)
-						say(pick(speak))
+		//Speaking
+		if(!client && speak_chance && (ckey == null))
+			if(rand(0,200) < speak_chance)
+				if(speak && speak.len)
+					if((emote_hear && emote_hear.len) || (emote_see && emote_see.len))
+						var/length = speak.len
+						if(emote_hear && emote_hear.len)
+							length += emote_hear.len
+						if(emote_see && emote_see.len)
+							length += emote_see.len
+						var/randomValue = rand(1,length)
+						if(randomValue <= speak.len)
+							say(pick(speak))
+						else
+							randomValue -= speak.len
+							if(emote_see && randomValue <= emote_see.len)
+								emote(pick(emote_see),1)
+							else
+								emote(pick(emote_hear),2)
 					else
-						randomValue -= speak.len
-						if(emote_see && randomValue <= emote_see.len)
+						say(pick(speak))
+				else
+					if(!(emote_hear && emote_hear.len) && (emote_see && emote_see.len))
+						emote(pick(emote_see),1)
+					if((emote_hear && emote_hear.len) && !(emote_see && emote_see.len))
+						emote(pick(emote_hear),2)
+					if((emote_hear && emote_hear.len) && (emote_see && emote_see.len))
+						var/length = emote_hear.len + emote_see.len
+						var/pick = rand(1,length)
+						if(pick <= emote_see.len)
 							emote(pick(emote_see),1)
 						else
 							emote(pick(emote_hear),2)
-				else
-					say(pick(speak))
-			else
-				if(!(emote_hear && emote_hear.len) && (emote_see && emote_see.len))
-					emote(pick(emote_see),1)
-				if((emote_hear && emote_hear.len) && !(emote_see && emote_see.len))
-					emote(pick(emote_hear),2)
-				if((emote_hear && emote_hear.len) && (emote_see && emote_see.len))
-					var/length = emote_hear.len + emote_see.len
-					var/pick = rand(1,length)
-					if(pick <= emote_see.len)
-						emote(pick(emote_see),1)
+
+
+		//Atmos
+		if(flags & INVULNERABLE)
+			return 1
+
+		var/atmos_suitable = 1
+
+		var/atom/A = loc
+
+		if(isturf(A))
+			var/turf/T = A
+			var/datum/gas_mixture/Environment = T.return_air()
+
+			if(Environment)
+				if(abs(Environment.temperature - bodytemperature) > 40)
+					bodytemperature += ((Environment.temperature - bodytemperature) / 5)
+
+				if(min_oxy)
+					if(Environment.oxygen < min_oxy)
+						atmos_suitable = 0
+						oxygen_alert = 1
 					else
-						emote(pick(emote_hear),2)
+						oxygen_alert = 0
 
+				if(max_oxy)
+					if(Environment.oxygen > max_oxy)
+						atmos_suitable = 0
 
-	//Atmos
-	if(flags & INVULNERABLE)
-		return 1
+				if(min_tox)
+					if(Environment.toxins < min_tox)
+						atmos_suitable = 0
 
-	var/atmos_suitable = 1
+				if(max_tox)
+					if(Environment.toxins > max_tox)
+						atmos_suitable = 0
+						toxins_alert = 1
+					else
+						toxins_alert = 0
 
-	var/atom/A = loc
+				if(min_n2)
+					if(Environment.nitrogen < min_n2)
+						atmos_suitable = 0
 
-	if(isturf(A))
-		var/turf/T = A
-		var/datum/gas_mixture/Environment = T.return_air()
+				if(max_n2)
+					if(Environment.nitrogen > max_n2)
+						atmos_suitable = 0
 
-		if(Environment)
-			if(abs(Environment.temperature - bodytemperature) > 40)
-				bodytemperature += ((Environment.temperature - bodytemperature) / 5)
+				if(min_co2)
+					if(Environment.carbon_dioxide < min_co2)
+						atmos_suitable = 0
 
-			if(min_oxy)
-				if(Environment.oxygen < min_oxy)
-					atmos_suitable = 0
-					oxygen_alert = 1
-				else
-					oxygen_alert = 0
+				if(max_co2)
+					if(Environment.carbon_dioxide > max_co2)
+						atmos_suitable = 0
 
-			if(max_oxy)
-				if(Environment.oxygen > max_oxy)
-					atmos_suitable = 0
+		//Atmos effect
+		if(bodytemperature < minbodytemp)
+			fire_alert = 2
+			adjustBruteLoss(cold_damage_per_tick)
+		else if(bodytemperature > maxbodytemp)
+			fire_alert = 1
+			adjustBruteLoss(heat_damage_per_tick)
+		else
+			fire_alert = 0
 
-			if(min_tox)
-				if(Environment.toxins < min_tox)
-					atmos_suitable = 0
+		if(!atmos_suitable)
+			adjustBruteLoss(unsuitable_atoms_damage)
 
-			if(max_tox)
-				if(Environment.toxins > max_tox)
-					atmos_suitable = 0
-					toxins_alert = 1
-				else
-					toxins_alert = 0
-
-			if(min_n2)
-				if(Environment.nitrogen < min_n2)
-					atmos_suitable = 0
-
-			if(max_n2)
-				if(Environment.nitrogen > max_n2)
-					atmos_suitable = 0
-
-			if(min_co2)
-				if(Environment.carbon_dioxide < min_co2)
-					atmos_suitable = 0
-
-			if(max_co2)
-				if(Environment.carbon_dioxide > max_co2)
-					atmos_suitable = 0
-
-	//Atmos effect
-	if(bodytemperature < minbodytemp)
-		fire_alert = 2
-		adjustBruteLoss(cold_damage_per_tick)
-	else if(bodytemperature > maxbodytemp)
-		fire_alert = 1
-		adjustBruteLoss(heat_damage_per_tick)
-	else
-		fire_alert = 0
-
-	if(!atmos_suitable)
-		adjustBruteLoss(unsuitable_atoms_damage)
-
-	if(can_breed)
-		make_babies()
+		if(can_breed)
+			make_babies()
 
 	return 1
 

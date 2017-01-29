@@ -76,9 +76,10 @@
 	if (flags & INVULNERABLE)
 		bodytemperature = initial(bodytemperature)
 	if (monkeyizing)
-		return
+		return 0
 	if(!loc)
-		return	// Fixing a null error that occurs when the mob isn't found in the world -- TLE
+		return 0	// Fixing a null error that occurs when the mob isn't found in the world -- TLE
+	// Why the fuck is this handled here?
 	if(reagents && reagents.has_reagent(BUSTANUT))
 		if(!(M_HARDCORE in mutations))
 			mutations.Add(M_HARDCORE)
@@ -99,7 +100,7 @@
 	if(mind)
 		if(mind in ticker.mode.implanted)
 			if(implanting)
-				return
+				return 0
 //			to_chat(world, "[src.name]")
 			var/datum/mind/head = ticker.mode.implanted[mind]
 			//var/list/removal
@@ -115,6 +116,7 @@
 					special_role = null
 					to_chat(current, "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now..(You don't remember who enslaved you)</FONT></span>")
 				*/
+	return 1
 
 // Apply connect damage
 /mob/living/beam_connect(var/obj/effect/beam/B)
