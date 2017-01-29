@@ -33,66 +33,6 @@
 
 	explosion_block = 1
 
-	soundeffect = 'sound/machines/airlock.ogg'
-	var/pitch = 30
-
-// copy pasted from /obj/machinery/door and added playsound() in the middle
-/obj/machinery/door/unpowered/shuttle/open(var/forced=0)
-	if(!density)
-		return 1
-	if(operating > 0)
-		return
-	if(!ticker)
-		return 0
-	if(!operating)
-		operating = 1
-
-	set_opacity(0)
-	playsound(get_turf(src), soundeffect, pitch, 1)
-	door_animate("opening")
-	sleep(animation_delay)
-	layer = open_layer
-	density = 0
-	explosion_resistance = 0
-	update_icon()
-	set_opacity(0)
-	update_nearby_tiles()
-	//update_freelook_sight()
-
-	if(operating == 1)
-		operating = 0
-
-	return 1
-
-// copy pasted from /obj/machinery/door and added playsound() in the middle
-/obj/machinery/door/unpowered/shuttle/close(var/forced=0)
-	if (density || operating || jammed)
-		return
-	operating = 1
-
-	layer = closed_layer
-
-	density = 1
-	playsound(get_turf(src), soundeffect, pitch, 1)
-	door_animate("closing")
-	sleep(animation_delay)
-	update_icon()
-
-	if (!glass)
-		src.set_opacity(1)
-
-		var/obj/effect/beam/B = locate() in loc
-		if(B)
-			qdel(B)
-
-	// TODO: rework how fire works on doors
-	var/obj/fire/F = locate() in loc
-	if(F)
-		qdel(F)
-
-	update_nearby_tiles()
-	operating = 0
-
 /obj/machinery/door/unpowered/shuttle/cultify()
 	new /obj/machinery/door/mineral/wood(loc)
 	..()
