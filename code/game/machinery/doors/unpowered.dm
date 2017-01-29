@@ -33,6 +33,8 @@
 
 	explosion_block = 1
 
+	makes_noise = 1
+
 /obj/machinery/door/unpowered/shuttle/cultify()
 	new /obj/machinery/door/mineral/wood(loc)
 	..()
