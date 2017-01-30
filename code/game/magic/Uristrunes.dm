@@ -130,14 +130,15 @@ var/list/uristrune_cache = list()
 	var/finalblood = bloodcolor
 	var/list/blood_hsl = rgb2hsl(GetRedPart(bloodcolor),GetGreenPart(bloodcolor),GetBluePart(bloodcolor))
 	if(blood_hsl.len)
-		var/list/blood_rbg = hsl2rgb(blood_hsl[1],blood_hsl[2],128)//producing a color that is neither too bright nor too dark
-		if(blood_hsl.len)
-			finalblood = rgb(blood_rbg[1],blood_rbg[2],blood_rbg[3])
+		var/list/blood_rgb = hsl2rgb(blood_hsl[1],blood_hsl[2],50)//producing a color that is neither too bright nor too dark
+		if(blood_rgb.len)
+			finalblood = rgb(blood_rgb[1],blood_rgb[2],blood_rgb[3])
 
 	var/bc1 = finalblood
 	var/bc2 = finalblood
 	bc1 += "C8"
 	bc2 += "64"
+
 	I.SwapColor(rgb(0, 0, 0, 100), bc1)
 	I.SwapColor(rgb(0, 0, 0, 50), bc1)
 
