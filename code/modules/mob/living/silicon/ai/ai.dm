@@ -280,8 +280,8 @@ var/list/ai_list = list()
 			icon_state = "ai-royal"
 		if("Heartline")
 			icon_state = "ai-heartline"
-		if("Hades") 
-			icon_state = "ai-hades"	
+		if("Hades")
+			icon_state = "ai-hades"
 		if("Helios")
 			icon_state = "ai-helios"
 		if("Syndicat")
@@ -306,6 +306,8 @@ var/list/ai_list = list()
 			icon_state = "ai-murica"
 		if("President")
 			icon_state = "ai-pres"
+		if("Fort")
+			icon_state = "ai-boxfort"
 		else icon_state = "ai"
 	//else
 //			to_chat(usr, "You can only change your display once!")
