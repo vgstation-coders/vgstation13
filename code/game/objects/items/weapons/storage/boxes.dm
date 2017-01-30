@@ -741,3 +741,22 @@
 		qdel(A)
 	for(var/i = 1 to 7)
 		new /obj/item/weapon/grenade/chronogrenade/future(src)
+
+/obj/item/weapon/storage/box/balloons/long
+	name = "box of long balloons"
+	desc = "A box containing seven long balloons of various colors."
+	icon_state = "long_balloon_box"
+
+/obj/item/weapon/storage/box/balloons/long/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to 7)
+		new /obj/item/toy/balloon/long(src)
+
+/obj/item/weapon/storage/box/balloons/long/living/New()
+	..()
+	for(var/atom/A in src)
+		qdel(A)
+	for(var/i = 1 to 7)
+		new /obj/item/toy/balloon/long/living(src)
