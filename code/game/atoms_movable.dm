@@ -815,6 +815,7 @@
 					vars[x] = list()
 					continue
 			vars[x] = stored_vars[x]
+		update_icon()
 
 /datum/proc/reset_vars_after_duration(var/list/to_reset, var/duration, var/sending_to_past = FALSE)
 	if(!to_reset || !to_reset.len || !duration)
