@@ -213,6 +213,17 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	return amount
 */
 
+//Pretty straightforward, remove from all of our chemicals at once, as if transfering to a nonexistant container or something.
+/datum/reagents/proc/remove_all(var/amount=1)
+	amount = min(amount, src.total_volume)
+	var/part = amount / src.total_volume
+	for (var/datum/reagent/current_reagent in src.reagent_list)
+		if (!current_reagent)
+			continue
+		if(src.remove_reagent(current_reagent.id, current_reagent.volume * part))
+			. = 1 //We removed SOMETHING.
+	src.handle_reactions()
+
 /datum/reagents/proc/copy_to(var/obj/target, var/amount=1, var/multiplier=1, var/preserve_data=1)
 	if(!target)
 		return
