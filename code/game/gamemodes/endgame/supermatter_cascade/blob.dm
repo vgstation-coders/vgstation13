@@ -2,10 +2,12 @@
 /turf/unsimulated/wall/supermatter
 	name = "Supermatter Sea"
 	desc = "THE END IS right now actually."
-	icon_state = "supermatter"
+	icon='icons/turf/space.dmi'
+	icon_state = "bluespacecrystal1"
 
-	//luminosity = 5
-	//light_color="#0066FF"
+	light_range = 5
+	light_power = 2
+	light_color="#0066FF" 
 	layer = SUPERMATTER_WALL_LAYER
 	plane = LIGHTING_PLANE
 
@@ -16,6 +18,12 @@
 
 /turf/unsimulated/wall/supermatter/New()
 	processing_objects |= src
+	icon_state = "bluespacecrystal[rand(1,3)]"
+	var/nturns=pick(0,3)
+	if(nturns)
+		var/matrix/M = matrix()
+		M.Turn(90*nturns)
+		transform = M
 	return ..()
 
 /turf/unsimulated/wall/supermatter/Destroy()
