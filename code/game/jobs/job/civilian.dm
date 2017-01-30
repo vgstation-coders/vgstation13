@@ -477,7 +477,7 @@
 			H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
 		else
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
-				var/list/new_languages = list()
+		var/list/new_languages = list()
 		for(var/L in all_languages)
 			var/datum/language/lang = all_languages[L]
 			if(~lang.flags & RESTRICTED && !(lang in H.languages))
