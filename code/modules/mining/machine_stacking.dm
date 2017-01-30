@@ -210,8 +210,7 @@
 
 			stacks["[stackA.type]"] = stack
 			returnToPool(stackA)
-		//else if (istype(O, /obj/item/weapon/ore/slag))
-		//	returnToPool(O)
+
 		else
 			A.forceMove(out_T)
 
@@ -241,6 +240,7 @@
 	var/release_amount = min(stack.amount, stack_amt)
 
 	stacked.amount = release_amount
+	stacked.update_materials()
 	stacked.forceMove(out_T)
 	stack.amount -= release_amount
 

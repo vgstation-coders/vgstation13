@@ -237,6 +237,8 @@
 /obj/item/stack/proc/update_materials()
 	if(amount && starting_materials)
 		for(var/matID in starting_materials)
+			if(!materials)
+				materials = getFromPool(/datum/materials, src)
 			materials.storage[matID] = max(0, starting_materials[matID]*amount)
 	if(amount < 2)
 		gender = NEUTER

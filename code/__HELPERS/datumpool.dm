@@ -9,7 +9,7 @@
 /datum/var/disposed
 
 // Read-only or compile-time vars and special exceptions.
-/var/list/exclude = list("inhand_states", "loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z","group", "animate_movement")
+/var/list/exclude = list("inhand_states", "loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z","group", "animate_movement", "starting_materials")
 
 /var/global/list/masterdatumPool = new
 /var/global/list/pooledvariables = new
