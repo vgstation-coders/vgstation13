@@ -39,7 +39,7 @@
 
 	for(var/turf/T in targets)
 		for(var/atom/movable/everything in T)
-			if(everything.flags & TIMELESS)
+			if(everything.flags & TIMELESS || everything.being_sent_to_past)	//allowing future grenades to interact with past-tethered atoms would be a nightmare
 				continue
 			everything.send_to_future(duration)
 			if(ismob(everything))
@@ -59,7 +59,7 @@
 /obj/item/weapon/grenade/chronogrenade/past
 	desc = "This experimental weapon will, 30 seconds after detonation, reset everything in the local area at the time of detonation to its state at the time of detonation."
 	icon_state = "past_grenade"
-	duration = 30 SECONDS
+	duration = 10 SECONDS
 
 /obj/item/weapon/grenade/chronogrenade/past/prime()
 	past_rift(src, duration, radius)
@@ -84,7 +84,7 @@
 
 	for(var/turf/T in targets)
 		for(var/atom/movable/everything in T)
-			if(everything.flags & TIMELESS)
+			if(everything.flags & TIMELESS || everything.being_sent_to_past)	//no stacking past-tethering
 				continue
 			everything.send_to_past(duration)
 			if(ismob(everything))

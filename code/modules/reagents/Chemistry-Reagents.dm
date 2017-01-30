@@ -148,6 +148,32 @@
 /datum/reagent/proc/on_removal(var/data)
 	return 1
 
+/datum/reagent/send_to_past(var/duration)
+	var/list/resettable_vars = list(
+									"being_sent_to_past",
+									"name",
+									"id",
+									"description",
+									"holder",
+									"reagent_state",
+									"data",
+									"volume",
+									"gcDestroyed")
+	var/list/stored_vars = list()
+	for(var/x in resettable_vars)
+		if(istype(vars[x], /list))
+			var/list/L = vars[x]
+			stored_vars[x] = L.Copy()
+			continue
+		stored_vars[x] = vars[x]
+
+	being_sent_to_past = TRUE
+	spawn(duration)
+		for(var/x in stored_vars)
+			vars[x] = stored_vars[x]
+		var/datum/reagents/R = holder
+		R.reagent_list.Add(src)
+
 /datum/reagent/Destroy()
 	if(istype(holder))
 		holder.reagent_list -= src

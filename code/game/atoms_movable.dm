@@ -756,20 +756,82 @@
 	ignoreinvert = initial(ignoreinvert)
 	invisibility = init_invisibility
 
-/atom/movable/proc/send_to_past(var/duration)
+/datum/proc/send_to_past(var/duration)
+	return
+
+/datum/var/being_sent_to_past = FALSE
+
+/atom/movable/send_to_past(var/duration)
 	var/current_loc = loc
+	var/list/resettable_vars = list(
+									"being_sent_to_past",
+									"alpha",
+									"name",
+									"desc",
+									"dir",
+									"density",
+									"last_move",
+									"last_moved",
+									"anchored",
+									"move_speed",
+									"throw_speed",
+									"throw_range",
+									"locked_atoms",
+									"locked_to",
+									"gcDestroyed")
 	var/list/stored_vars = list()
-	for(var/x in vars)
-		if(!exclude.Find(x)) // Important!
-			stored_vars[x] = vars[x]
+	for(var/x in resettable_vars)
+		if(istype(vars[x], /list))
+			var/list/L = vars[x]
+			stored_vars[x] = L.Copy()
+			continue
+		stored_vars[x] = vars[x]
 
 	for(var/atom/movable/AM in contents)
 		AM.send_to_past(duration)
+	if(reagents)
+		reagents.send_to_past(duration)
 
+	being_sent_to_past = TRUE
 	spawn(duration)
+		if(istype(loc, /mob))
+			var/mob/M = loc
+			M.drop_item(src, force_drop = 1)
 		forceMove(current_loc)
 		for(var/x in stored_vars)
+			if(istype(stored_vars[x], /list))
+				var/list/L = stored_vars[x]
+				if(!L)
+					vars[x] = null
+					continue
+				else if(!L.len)
+					vars[x] = list()
+					continue
 			vars[x] = stored_vars[x]
 
-	//future plan: make /datum-level send_to_past() that does nothing, override for /atom/movable,
-	//then override for /datum/organ, THEN override for human so it can call send_to_past() on its organs.
+/datum/proc/reset_vars_after_duration(var/list/to_reset, var/duration, var/sending_to_past = FALSE)
+	if(!to_reset || !to_reset.len || !duration)
+		return
+	if(sending_to_past)
+		to_reset.Add("being_sent_to_past")
+	var/list/stored_vars = list()
+	for(var/x in to_reset)
+		if(istype(vars[x], /list))
+			var/list/L = vars[x]
+			stored_vars[x] = L.Copy()
+			continue
+		stored_vars[x] = vars[x]
+
+	if(sending_to_past)
+		being_sent_to_past = TRUE
+	spawn(duration)
+		for(var/x in stored_vars)
+			if(istype(stored_vars[x], /list))
+				var/list/L = stored_vars[x]
+				if(!L)
+					vars[x] = null
+					continue
+				else if(!L.len)
+					vars[x] = list()
+					continue
+			vars[x] = stored_vars[x]

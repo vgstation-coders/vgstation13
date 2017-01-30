@@ -748,3 +748,32 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 /atom/proc/create_reagents(const/max_vol)
 	reagents = new/datum/reagents(max_vol)
 	reagents.my_atom = src
+
+/datum/reagents/send_to_past(var/duration)
+	var/list/resettable_vars = list(
+									"being_sent_to_past",
+									"reagent_list",
+									"amount_cache",
+									"total_volume",
+									"maximum_volume",
+									"my_atom",
+									"gcDestroyed")
+	var/list/stored_vars = list()
+	for(var/x in resettable_vars)
+		if(istype(vars[x], /list))
+			var/list/L = vars[x]
+			stored_vars[x] = L.Copy()
+			continue
+		stored_vars[x] = vars[x]
+
+	for(var/y in reagent_list)
+		var/datum/reagent/R = y
+		R.send_to_past(duration)
+
+	being_sent_to_past = TRUE
+	spawn(duration)
+		for(var/x in stored_vars)
+			vars[x] = stored_vars[x]
+		if(my_atom)
+			var/atom/A = my_atom
+			A.reagents = src

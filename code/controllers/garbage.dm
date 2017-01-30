@@ -165,6 +165,8 @@ world/loop_checks = 0
  * Called BEFORE qdel moves shit.
  */
 /datum/proc/Destroy()
+	if(being_sent_to_past)
+		return
 	qdel(src, 1, 1)
 
 #ifdef GC_FINDREF
