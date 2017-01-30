@@ -783,6 +783,8 @@
 									"throw_range",
 									"locked_atoms",
 									"locked_to",
+									"timestopped",
+									"flags",
 									"gcDestroyed")
 	var/list/stored_vars = list()
 	for(var/x in resettable_vars)

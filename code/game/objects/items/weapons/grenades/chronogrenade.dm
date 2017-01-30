@@ -59,7 +59,7 @@
 /obj/item/weapon/grenade/chronogrenade/past
 	desc = "This experimental weapon will, 30 seconds after detonation, reset everything in the local area at the time of detonation to its state at the time of detonation."
 	icon_state = "past_grenade"
-	duration = 10 SECONDS
+	duration = 10 SECONDS	//DON'T FORGET TO CHANGE THIS TO 30 SECONDS BEFORE MERGE
 
 /obj/item/weapon/grenade/chronogrenade/past/prime()
 	past_rift(src, duration, radius)
