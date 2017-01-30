@@ -146,6 +146,9 @@ var/global/list/disease2_list = list()
 		for(var/mob/living/carbon/M in oview(1,mob))
 			if(airborne_can_reach(get_turf(mob), get_turf(M)))
 				infect_virus2(M,src, notes="(Airborne from [key_name(mob)])")
+		for(var/mob/living/simple_animal/mouse/MM in oview(1,mob))
+			if(airborne_can_reach(get_turf(mob), get_turf(MM)))
+				infect_virus2(MM,src, notes="(Airborne from [key_name(mob)])")
 
 	//fever
 	mob.bodytemperature = max(mob.bodytemperature, min(310+5*stage ,mob.bodytemperature+5*stage))

@@ -230,8 +230,9 @@
 
 /datum/disease2/effect/cough/activate(var/mob/living/carbon/mob)
 	mob.say("*cough")
-	for(var/mob/living/carbon/M in oview(2,mob))
-		mob.spread_disease_to(M)
+	for(var/mob/living/M in oview(2,mob))
+		if(can_be_infected(M))
+			spread_disease_to(src, M)
 
 
 /datum/disease2/effect/hungry

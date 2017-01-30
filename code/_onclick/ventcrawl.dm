@@ -75,6 +75,9 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 	return 1
 
 /mob/living/simple_animal/mouse/can_ventcrawl()
+	if(is_fat)
+		to_chat(src, "<span class='notice'>You can't quite fit in the pipe.</span>")
+		return 0
 	return 1
 
 /mob/living/simple_animal/spiderbot/can_ventcrawl()

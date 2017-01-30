@@ -1,4 +1,6 @@
 //Food items that are eaten normally and don't leave anything behind.
+#define ANIMALBITECOUNT 4
+
 
 /obj/item/weapon/reagent_containers/food/snacks
 	name = "snack"
@@ -314,7 +316,7 @@
 	if(isanimal(M))
 		if(iscorgi(M)) //Feeding food to a corgi
 			M.delayNextAttack(10)
-			if(bitecount >= 4) //This really, really shouldn't be hardcoded like this, but sure I guess
+			if(bitecount >= ANIMALBITECOUNT) //This really, really shouldn't be hardcoded like this, but sure I guess
 				M.visible_message("[M] [pick("burps from enjoyment", "yaps for more", "woofs twice", "looks at the area where \the [src] was")].", "<span class='notice'>You swallow up the last of \the [src].")
 				playsound(src.loc,'sound/items/eatfood.ogg', rand(10,50), 1)
 				var/mob/living/simple_animal/corgi/C = M
@@ -335,6 +337,10 @@
 			else
 				to_chat(N, ("<span class='notice'>You nibble away at \the [src].</span>"))
 			N.health = min(N.health + 1, N.maxHealth)
+			bitecount += 0.25
+			N.nutrition += 5
+			if(bitecount >= ANIMALBITECOUNT)
+				qdel(src)
 
 
 ////////////////////////////////////////////////////////////////////////////////
