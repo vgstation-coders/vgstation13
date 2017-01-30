@@ -256,7 +256,7 @@ var/list/all_doors = list()
 
 	layer = closed_layer
 
-	if (makes_noise):
+	if (makes_noise)
 		playsound(get_turf(src), soundeffect, soundpitch, 1)
 
 	density = 1
