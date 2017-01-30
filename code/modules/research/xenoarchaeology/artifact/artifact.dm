@@ -108,11 +108,10 @@
 				src.visible_message("<span class='danger'>[src] suddenly crumbles away.</span>")
 				if(artifact_find)
 					var/spawn_type = artifact_find.artifact_find_type
-					var/obj/O = new spawn_type(get_turf(src))
-					if(istype(O,/obj/machinery/artifact))
-						var/obj/machinery/artifact/X = O
-						if(X.my_effect)
-							X.my_effect.artifact_id = artifact_find.artifact_id
+					if (spawn_type == /obj/machinery/artifact)
+						new spawn_type(get_turf(src), artifact_find.artifact_id)
+					else
+						new spawn_type(get_turf(src))
 				else
 					to_chat(user, "<span class='notice'>[src] has been whittled away under your careful excavation, but there was nothing of interest inside.</span>")
 				returnToPool(src)
