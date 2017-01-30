@@ -21,6 +21,8 @@
 	var/to_nuke_or_not_to_nuke = 0
 	var/apcs = 0 //Adding dis to track how many APCs the AI hacks. --NeoFite
 
+	var/last_AI_warning_msg = 0 //I'm so sorry that this is a variable.
+
 
 /datum/game_mode/malfunction/announce()
 	to_chat(world, {"<B>The current game mode is - AI Malfunction!</B><br>
@@ -101,8 +103,15 @@ Once done, you will be able to interface with all systems, notably the onboard n
 
 
 /datum/game_mode/malfunction/process()
-	if(apcs >= 3 && malf_mode_declared)
-		AI_win_timeleft -= ((apcs / 6) * SSticker.getLastTickerTimeDuration()) //Victory timer now de-increments based on how many APCs are hacked. --NeoFite
+	if(apcs >= 3)
+		if(!can_malf_ai_takeover())
+			if(last_AI_warning_msg < world.time)
+				last_AI_warning_msg = world.time + (60 SECONDS)
+				for(var/datum/mind/AI_mind in malf_ai)
+					to_chat(AI_mind.current, "<span class='warning'>You are too far away from the station to fully access its subsystems. You will not be able to takeover from here.</span>")
+		else
+			if(malf_mode_declared)
+				AI_win_timeleft -= ((apcs / 6) * SSticker.getLastTickerTimeDuration()) //Victory timer de-increments based on how many APCs are hacked.
 
 	..()
 
@@ -142,6 +151,12 @@ You should now be able to use your Explode spell to interface with the nuclear f
 			all_dead = 0
 	return all_dead
 
+/datum/game_mode/proc/can_malf_ai_takeover()
+	for(var/datum/mind/AI_mind in malf_ai) //if there happens to be more than one malfunctioning AI, there only needs to be one in the main station: the crew can just kill that one and the countdown stops while they get the rest
+		var/turf/T = get_turf(AI_mind.current)
+		if(T && (T.z == map.zMainStation))
+			return TRUE
+	return FALSE
 
 /datum/game_mode/malfunction/check_finished()
 	if (station_captured && !to_nuke_or_not_to_nuke)

@@ -547,6 +547,25 @@
 	brute_dmg = 250
 	burn_dmg = 100
 
+/obj/effect/landmark/corpse/catbeast //only good catbeast is a dead one
+	name = "Test Subject"
+	generate_random_mob_name = 0
+	generate_random_appearance = 1
+	corpsegender = G_BOTH
+
+	corpseuniform = /obj/item/clothing/under/color/prisoner
+	corpsesuit = /obj/item/clothing/suit/straight_jacket
+	corpsemask = /obj/item/clothing/mask/muzzle
+	corpseglasses = /obj/item/clothing/glasses/sunglasses/blindfold
+
+/obj/effect/landmark/corpse/catbeast/createCorpse()
+	if(prob(50))
+		corpsemask = null
+	if(prob(50))
+		corpsesuit = null
+	if(prob(50))
+		corpseglasses = null
+
 #undef G_MALE
 #undef G_FEMALE
 #undef G_BOTH

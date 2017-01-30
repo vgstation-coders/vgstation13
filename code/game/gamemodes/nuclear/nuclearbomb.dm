@@ -270,12 +270,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 	return
 
 /obj/machinery/nuclearbomb/blob_act()
-	if (src.timing == -1.0)
-		return
-	else
-		return ..()
 	return
-
 
 #define NUKERANGE 80
 /obj/machinery/nuclearbomb/proc/explode()
@@ -346,6 +341,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 	desc = "Better keep this safe."
 	icon_state = "nucleardisk"
 	item_state = "card-id"
+	flags = FPRINT | TIMELESS
 	w_class = W_CLASS_TINY
 	var/respawned = 0
 

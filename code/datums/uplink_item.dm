@@ -160,6 +160,20 @@ var/list/uplink_items = list()
 	cost = 8
 	job = list("Clown")
 
+/datum/uplink_item/jobspecific/banannon
+	name = "Banannon"
+	desc = "A fearsome example of clown technology, the armor-piercing discarding sabonanas fired by this weapon shed their peels in flight, increasing their damage and creating a slipping hazard."
+	item = /obj/item/weapon/gun/banannon
+	cost = 18
+	job = list("Clown")
+
+/datum/uplink_item/jobspecific/livingballoons
+	name = "Box of Living Long Balloons"
+	desc = "Can be tied into living balloon animals, which will come to life and attack non-clowns if a balloon is popped near them."
+	item = /obj/item/weapon/storage/box/balloons/long/living
+	cost = 6
+	job = list("Clown")
+
 /datum/uplink_item/jobspecific/superglue
 	name = "1 Bottle of Superglue"
 	desc = "Considered illegal everywhere except for the Clown Planet, this water-resistant superglue can instantly bind human flesh to ANY material, permanently. One-time use."
@@ -477,11 +491,17 @@ var/list/uplink_items = list()
 	item = /obj/item/device/chameleon
 	cost = 6
 
-/datum/uplink_item/stealthy_tools/chameleon_proj
+/datum/uplink_item/stealthy_tools/smoke_bombs
 	name = "Instant Smoke Bombs"
 	desc = "A package of eight instant-action smoke bombs, cleverly disguised as harmless snap-pops. The cover of smoke they create is large enough to cover most of a room. Pair well with thermal imaging glasses."
 	item = /obj/item/weapon/storage/box/syndie_kit/smokebombs
 	cost = 3
+
+/datum/uplink_item/stealthy_tools/decoy_balloon
+	name = "Decoy Balloon"
+	desc = "A balloon that looks just like you when inflated."
+	item = /obj/item/toy/balloon/decoy
+	cost = 1
 
 
 // DEVICE AND TOOLS

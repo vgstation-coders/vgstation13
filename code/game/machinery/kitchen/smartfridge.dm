@@ -400,7 +400,13 @@
 
 /obj/machinery/smartfridge/Topic(href, href_list)
 	if(..())
-		return
+		return 1
+
+	if(href_list["close"])
+		if(usr.machine == src)
+			usr.unset_machine()
+		return 1
+
 	usr.set_machine(src)
 
 	var/N = href_list["pile"]

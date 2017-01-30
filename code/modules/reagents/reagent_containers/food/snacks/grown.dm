@@ -877,6 +877,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New()
 	..()
 	available_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown)
+	available_fruits = shuffle(available_fruits)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/verb/pick_leaf()
 	set name = "Pick no-fruit leaf"
@@ -917,6 +918,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/proc/randomize()
 	switching = 1
+	mouse_opacity = 2
 	spawn()
 		while(switching)
 			current_path = available_fruits[counter]

@@ -95,6 +95,7 @@ var/list/beam_master = list()
 	var/first = 1
 	var/tS = 0
 	while(src && src.loc)// only stop when we've hit something, or hit the end of the map
+		bumped = 0
 		if(first && timestopped)
 			tS = 1
 			timestopped = 0
@@ -578,7 +579,18 @@ var/list/beam_master = list()
 	name = "xray beam"
 	icon_state = "xray"
 	damage = 30
+	kill_count = 500
+	phase_type = PROJREACT_WALLS|PROJREACT_WINDOWS|PROJREACT_OBJS|PROJREACT_MOBS|PROJREACT_BLOB
+	penetration = -1
 	fire_sound = 'sound/weapons/laser3.ogg'
+
+/obj/item/projectile/beam/xray/Bump(atom/A)
+	if(..())
+		damage -= 3
+		if(istype(A, /turf/simulated/wall/r_wall) || (istype(A, /obj/machinery/door/poddoor) && !istype(A, /obj/machinery/door/poddoor/shutters)))	//if we hit an rwall or blast doors, but not shutters, the beam dies
+			bullet_die()
+		if(damage <= 0)
+			bullet_die()
 
 /obj/item/projectile/beam/pulse
 	name = "pulse"
@@ -934,3 +946,4 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/bullwhip/OnDeath()
 	if(!has_played_sound && get_turf(src))
 		playsound(get_turf(src), bounce_sound, 30, 1)
+		user.delayNextAttack(2)

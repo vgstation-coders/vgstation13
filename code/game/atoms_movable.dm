@@ -719,3 +719,39 @@
 
 /atom/movable/proc/can_apply_inertia()
 	return (!src.anchored && !(src.pulledby && src.pulledby.Adjacent(src)))
+
+/atom/movable/proc/send_to_future(var/duration)	//don't override this, only call it
+	spawn()
+		actual_send_to_future(duration)
+
+/atom/movable/proc/actual_send_to_future(var/duration)	//don't call this, only override it
+	var/init_invisibility = invisibility
+	var/init_invuln = flags & INVULNERABLE
+	var/init_density = density
+	var/init_anchored = anchored
+	var/init_timeless = flags & TIMELESS
+
+	invisibility = INVISIBILITY_MAXIMUM
+	flags |= INVULNERABLE
+	density = 0
+	anchored = 1
+	flags |= TIMELESS
+	if(!ignoreinvert)
+		invertcolor(src)
+	timestopped = 1
+
+	for(var/atom/movable/AM in contents)
+		AM.send_to_future(duration)
+
+	sleep(duration)
+	timestopped = 0
+	if(!init_invuln)
+		flags &= ~INVULNERABLE
+	density = init_density
+	anchored = init_anchored
+	if(!init_timeless)
+		flags &= ~TIMELESS
+	appearance = falltempoverlays[src]
+	falltempoverlays -= src
+	ignoreinvert = initial(ignoreinvert)
+	invisibility = init_invisibility

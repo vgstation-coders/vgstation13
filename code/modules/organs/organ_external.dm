@@ -495,7 +495,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	for(var/datum/wound/W in wounds)
 		//Internal wounds get worse over time. Low temperatures (cryo) stop them.
 		if(W.internal && !W.is_treated() && owner.bodytemperature >= 170 && !(owner.species && owner.species.anatomy_flags & NO_BLOOD))
-			if(!owner.reagents.has_reagent(BICARIDINE) && !owner.reagents.has_reagent(INAPROVALINE) && !owner.reagents.has_reagent(CLOTTING_AGENT) && !owner.reagents.has_reagent(BIOFOAM))	//Bicard, inaprovaline, clotting agent, and biofoam stop internal wounds from growing bigger with time, and also slow bleeding
+			if(!owner.reagents.has_any_reagents(list(BICARIDINE,INAPROVALINE,CLOTTING_AGENT,BIOFOAM)))	//Bicard, inaprovaline, clotting agent, and biofoam stop internal wounds from growing bigger with time, and also slow bleeding
 				W.open_wound(0.1 * wound_update_accuracy)
 				owner.vessel.remove_reagent(BLOOD, 0.05 * W.damage * wound_update_accuracy)
 
@@ -1405,7 +1405,7 @@ obj/item/weapon/organ/head/New(loc, mob/living/carbon/human/H)
 		qdel(src)
 		return
 	//Add (facial) hair.
-	if(H.f_style &&  !H.check_hidden_head_flags(HIDEBEARDHAIR))
+	if(H && H.f_style &&  !H.check_hidden_head_flags(HIDEBEARDHAIR))
 		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.f_style]
 		if(facial_hair_style)
 			var/icon/facial = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
@@ -1414,7 +1414,7 @@ obj/item/weapon/organ/head/New(loc, mob/living/carbon/human/H)
 
 			overlays.Add(facial) // icon.Blend(facial, ICON_OVERLAY)
 
-	if(H.h_style && !H.check_hidden_head_flags(HIDEHEADHAIR))
+	if(H && H.h_style && !H.check_hidden_head_flags(HIDEHEADHAIR))
 		var/datum/sprite_accessory/hair_style = hair_styles_list[H.h_style]
 		if(hair_style)
 			var/icon/hair = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
@@ -1437,23 +1437,25 @@ obj/item/weapon/organ/head/New(loc, mob/living/carbon/human/H)
 	//	if(H.gender == FEMALE)
 	//		H.icon_state = "head_f"
 	//	H.overlays += H.generate_head_icon()
-	transfer_identity(H)
+	if(H)
+		transfer_identity(H)
 
-	name = "[H.real_name]'s head"
+		name = "[H.real_name]'s head"
 
-	H.regenerate_icons()
+		H.regenerate_icons()
 
-	brainmob.stat = 2
-	brainmob.death()
+	if(brainmob)
+		brainmob.stat = 2
+		brainmob.death()
 
-	if(brainmob.mind && brainmob.mind.special_role == HIGHLANDER)
-		if(H.lastattacker && istype(H.lastattacker, /mob/living/carbon/human))
-			var/mob/living/carbon/human/L = H.lastattacker
-			if(L.mind && L.mind.special_role == HIGHLANDER)
-				L.revive(0)
-				to_chat(L, "<span class='notice'>You absorb \the [brainmob]'s power!</span>")
-				var/turf/T1 = get_turf(H)
-				make_tracker_effects(T1, L)
+		if(brainmob.mind && brainmob.mind.special_role == HIGHLANDER)
+			if(H.lastattacker && istype(H.lastattacker, /mob/living/carbon/human))
+				var/mob/living/carbon/human/L = H.lastattacker
+				if(L.mind && L.mind.special_role == HIGHLANDER)
+					L.revive(0)
+					to_chat(L, "<span class='notice'>You absorb \the [brainmob]'s power!</span>")
+					var/turf/T1 = get_turf(H)
+					make_tracker_effects(T1, L)
 
 obj/item/weapon/organ/head/proc/transfer_identity(var/mob/living/carbon/human/H)//Same deal as the regular brain proc. Used for human-->head
 	brainmob = new(src)

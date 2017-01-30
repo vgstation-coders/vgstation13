@@ -520,6 +520,7 @@
 	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 	s.set_up(3, 1, src)
 	s.start()
+	eject_integratedpai_if_present()
 	qdel(src)
 	return
 
@@ -682,13 +683,14 @@
 	pai_analyze_mode = !pai_analyze_mode
 
 /obj/machinery/bot/medbot/state_controls_pai(obj/item/device/paicard/P)
-	to_chat(P.pai, "<span class='info'><b>Welcome to your new body. Remember: you're a pAI inside a medbot, not a medbot.</b></span>")
-	to_chat(P.pai, "<span class='info'>It is highly recommended to download the Medical Supplement from the pAI software interface as it gives you MedHUD.</span>")
-	to_chat(P.pai, "<span class='info'>Your controls are:</span>")
-	to_chat(P.pai, "<span class='info'>- (Q) Drop hotkey: You state there's a patient in critical condition</span>")
-	to_chat(P.pai, "<span class='info'>- (X) Swap hands:  You switch to inject or analyze mode.</span>")
-	to_chat(P.pai, "<span class='info'>- Click on somebody: Depending on your mode, you inject or analyze a person.</span>")
-	to_chat(P.pai, "<span class='info'>What you inject depends on the medbot's configuration. You can't modify it</span>")
-	to_chat(P.pai, "<span class='info'>If you want to exit the medbot, somebody has to right-click you and press 'Remove pAI'.</span>")
+	if(..())
+		to_chat(P.pai, "<span class='info'><b>Welcome to your new body. Remember: you're a pAI inside a medbot, not a medbot.</b></span>")
+		to_chat(P.pai, "<span class='info'>It is highly recommended to download the Medical Supplement from the pAI software interface as it gives you MedHUD.</span>")
+		to_chat(P.pai, "<span class='info'>Your controls are:</span>")
+		to_chat(P.pai, "<span class='info'>- (Q) Drop hotkey: You state there's a patient in critical condition</span>")
+		to_chat(P.pai, "<span class='info'>- (X) Swap hands:  You switch to inject or analyze mode.</span>")
+		to_chat(P.pai, "<span class='info'>- Click on somebody: Depending on your mode, you inject or analyze a person.</span>")
+		to_chat(P.pai, "<span class='info'>What you inject depends on the medbot's configuration. You can't modify it</span>")
+		to_chat(P.pai, "<span class='info'>If you want to exit the medbot, somebody has to right-click you and press 'Remove pAI'.</span>")
 
 #undefine

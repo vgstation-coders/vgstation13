@@ -81,6 +81,8 @@ var/list/impact_master = list()
 	var/error = 0
 	var/target_angle = 0
 
+	var/lock_angle = 0
+
 	var/override_starting_X = 0
 	var/override_starting_Y = 0
 	var/override_target_X = 0
@@ -404,7 +406,8 @@ var/list/impact_master = list()
 		//If the icon has not been added yet
 		if( !("[icon_state]_angle[target_angle]" in bullet_master) )
 			var/icon/I = new(icon,"[icon_state]_pixel") //Generate it.
-			I.Turn(target_angle+45)
+			if(!lock_angle)
+				I.Turn(target_angle+45)
 			bullet_master["[icon_state]_angle[target_angle]"] = I //And cache it!
 		src.icon = bullet_master["[icon_state]_angle[target_angle]"]
 
@@ -629,7 +632,8 @@ var/list/impact_master = list()
 	if(linear_movement)
 		if( !("[icon_state][target_angle]" in bullet_master) )
 			var/icon/I = new(initial(icon),"[icon_state]_pixel")
-			I.Turn(target_angle+45)
+			if(!lock_angle)
+				I.Turn(target_angle+45)
 			bullet_master["[icon_state]_angle[target_angle]"] = I
 		src.icon = bullet_master["[icon_state]_angle[target_angle]"]
 

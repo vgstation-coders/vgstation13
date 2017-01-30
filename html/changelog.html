@@ -86,6 +86,73 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 		-->
 		<div class="commit sansserif">
 
+			<h2 class="date">2017.01.30</h2>
+			<h3 class="author">BobdaBiscuit updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The Large Artifact effect extractor can now extract secondary effects. The artifact must be inside the containment field with the effects you want to extract active, you can then isolate them and pick what one to put into a battery. The containment field as is blocks all artifact effects apart from darkness and forcefield.</li>
+				<li class="rscadd">Large Artifact secondary effects now show a message when toggled.</li>
+			</ul>
+
+			<h2 class="date">2017.01.29</h2>
+			<h3 class="author">DamianX updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Supply cyborgs can now use the mining scanner on ore boxes to check the contents.</li>
+			</ul>
+			<h3 class="author">N3X15 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Simple animals (including cyber horrors) check for proximity of clients before they speak, vastly reducing spam.</li>
+			</ul>
+			<h3 class="author">Shadowmech88 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added decoy balloons to traitor uplinks, with a price of 1 TC each.</li>
+			</ul>
+
+			<h2 class="date">2017.01.28</h2>
+			<h3 class="author">Aryuananime updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added Poutine recipe, food and sprite.</li>
+			</ul>
+			<h3 class="author">Shadowmech88 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixed pAIs being stunned forever after being hit by a flashbang.</li>
+				<li class="bugfix">Fixed pAIs not being ejected from a medbot when it gets destroyed..</li>
+				<li class="rscadd">Added the banannon, a new gun for traitor clowns.</li>
+				<li class="rscadd">Added a new variant of chrono grenades, which send everything in a five-tile radius around them ten seconds into the future.</li>
+			</ul>
+
+			<h2 class="date">2017.01.27</h2>
+			<h3 class="author">9600bauds updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Malfunctioning AIs may no longer just get someone to relocate their core to another z-level, doing so now makes the delta countdown stop until they get back.</li>
+			</ul>
+			<h3 class="author">BobdaBiscuit updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added "Pause after first step" functionality to integrated pAI bots and the AI Eye.</li>
+			</ul>
+			<h3 class="author">Intigracy updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">"The nuclear explosive device has been upgraded with anti-blob materials."</li>
+			</ul>
+			<h3 class="author">Probe1 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">"Steal" minerals is no longer an objective for heist.</li>
+			</ul>
+			<h3 class="author">Shadowmech88 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">A small attack delay is now applied when missing with a bullwhip.</li>
+				<li class="tweak">No-fruits and no-fruit pies now have mouse_opacity set to 2 while cycling, making every cycle have exactly the same clickable area. No more hunting specific pixels.</li>
+				<li class="tweak">Each no-fruit and no-fruit pie has its own randomly shuffled result list, through which it cycles uniformly. You can still predict a fruit's change, but you need to learn that specific fruit's cycle to do so.</li>
+				<li class="rscadd">Added a zone selection HUD object to pAIs.</li>
+				<li class="rscadd">pAIs inside a smart laser gun may now click the gun or use the Use hotkey to connect or disconnect themselves from the gun's firing mechanism, allowing them to prevent misfires.</li>
+				<li class="rscadd">X-ray beams now penetrate obstacles, decreasing in damage with each obstacle they penetrate.</li>
+				<li class="rscadd">Added two new more destructive variants of immovable rods, admin-spawn only, code courtesy of DeityLink.</li>
+				<li class="tweak">The volume of an immovable rod's impact sound is now based on the hearer's proximity to the impact, code courtesy of DeityLink.</li>
+			</ul>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Can now make crates out of 2 iron instead of 10 plasteel</li>
+			</ul>
+
 			<h2 class="date">2017.01.26</h2>
 			<h3 class="author">Shadowmech88 updated:</h3>
 			<ul class="changes bgimages16">
@@ -1452,52 +1519,6 @@ ADDING CREDITS?  EDIT templates/header.html (or footer.html if they're for old t
 				<li class="rscadd">certain zombie types can now open doors, bolt or weld doors to stop or delay this</li>
 				<li class="rscadd">Adds potential for zombification if a certain zombie type begins consuming a HUMAN corpse. Other species are exempt from this</li>
 				<li class="tweak">Fixes mobs revived via the staff of necromancy going after the user of the staff</li>
-			</ul>
-
-			<h2 class="date">2016.09.08</h2>
-			<h3 class="author">JustSumGuy updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Syndicate magboots and harmonicas worn in the mask slot are no longer invisible.</li>
-			</ul>
-			<h3 class="author">PJB3005 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="imageadd">Gave the pipe layer manifold a new sprite made by DragonBro, and made the individual pipes all separated so they all colour nicely.</li>
-				<li class="bugfix">Fixes a lot of bugs Celt made when he did his pipe colouration MR a year ago.</li>
-				<li class="bugfix">Pipes now use PLANES to appear below floor tiles. The result? layered pipes don't look weird when part of them is under a floor tile and part not.</li>
-				<li class="tweak">Applied the above technique to vents too, their bezel now appears underneath the floor if they're partially under it with layers, but the vent itself is always visible.</li>
-				<li class="bugfix">The icons of insulated pipe manifolds properly color depending on adjacent pipes now.</li>
-			</ul>
-
-			<h2 class="date">2016.09.07</h2>
-			<h3 class="author">Despotate updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">35 percent chance per cycle to stunt and damage plant in hydroponics tray is now correctly applied to trays with less than 10u water in them, rather than those with more than 10u water.</li>
-			</ul>
-			<h3 class="author">JMWTurner updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Xenoarchaeologist excavation lockers are now secure, and have new sprites.</li>
-				<li class="imageadd">Added belt icons for plastic bags.</li>
-				<li class="bugfix">Cameras no longer take pictures as you place them on a table.</li>
-			</ul>
-			<h3 class="author">Sood updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds a Babel Syndrome to the stage 4 virus symptoms. Causes subject to lose all knowledge of all languages but one randomly picked one from the global list of languages.</li>
-			</ul>
-
-			<h2 class="date">2016.09.06</h2>
-			<h3 class="author">JMWTurner updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added an Anomaly R&D tech tree. Anomaly levels can be researched by deconstructing small artifacts, or analysis reports of large artifacts.</li>
-			</ul>
-
-			<h2 class="date">2016.09.05</h2>
-			<h3 class="author">Icantthinkofanameritenow updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed C20r being unable to stun people.</li>
-			</ul>
-			<h3 class="author">JMWTurner updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added Sangria recipe and icons. 2 parts wine, 1 part orange juice, 1 part soda water.</li>
 			</ul>
 		</div>
 		<!--

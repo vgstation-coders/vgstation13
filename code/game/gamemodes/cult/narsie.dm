@@ -47,7 +47,8 @@ var/global/list/narsie_list = list()
 	if(announce)
 		to_chat(world, "<font size='15' color='red'><b>[uppertext(name)] HAS RISEN</b></font>")
 		world << sound('sound/effects/wind/wind_5_1.ogg')
-
+		if(narnar)
+			narsie_spawn_animation()
 	if(!narsie_cometh)//so we don't initiate Hell more than one time.
 		if(istype(ticker.mode, /datum/game_mode/cult))
 			var/datum/game_mode/cult/mode_ticker = ticker.mode
@@ -543,3 +544,11 @@ var/global/mr_clean_targets = list(
 		return
 	else
 		..()
+
+/obj/machinery/singularity/narsie/proc/narsie_spawn_animation()
+	icon = 'icons/obj/narsie_spawn_anim.dmi'
+	dir = SOUTH
+	flick("narsie_spawn_anim",src)
+	sleep(10)
+	icon = 'icons/obj/narsie.dmi'
+	icon_state = "narsie"

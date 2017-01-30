@@ -213,6 +213,17 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	return amount
 */
 
+//Pretty straightforward, remove from all of our chemicals at once, as if transfering to a nonexistant container or something.
+/datum/reagents/proc/remove_all(var/amount=1)
+	amount = min(amount, src.total_volume)
+	var/part = amount / src.total_volume
+	for (var/datum/reagent/current_reagent in src.reagent_list)
+		if (!current_reagent)
+			continue
+		if(src.remove_reagent(current_reagent.id, current_reagent.volume * part))
+			. = 1 //We removed SOMETHING.
+	src.handle_reactions()
+
 /datum/reagents/proc/copy_to(var/obj/target, var/amount=1, var/multiplier=1, var/preserve_data=1)
 	if(!target)
 		return
@@ -607,6 +618,18 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(reagent in amount_cache)
 		return amount_cache[reagent] >= max(0,amount)
 	return 0
+
+/datum/reagents/proc/has_any_reagents(var/list/input_reagents, var/amount = -1)		//returns true if any of the input reagents are found
+	. = FALSE
+	for(var/i in input_reagents)
+		if(has_reagent(i, amount))
+			return TRUE
+
+/datum/reagents/proc/has_all_reagents(var/list/input_reagents, var/amount = -1)		//returns true if all of the input reagents are found
+	for(var/i in input_reagents)
+		if(!has_reagent(i, amount))
+			return FALSE
+	return TRUE
 
 /datum/reagents/proc/get_reagent(var/reagent, var/amount = -1)
 	// SLOWWWWWWW
