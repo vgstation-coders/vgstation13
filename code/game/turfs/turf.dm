@@ -722,3 +722,9 @@
 	.=..()
 
 	src.map_element = ME
+
+/turf/send_to_past(var/duration)
+	var/current_type = type
+	spawn(duration)
+		ChangeTurf(current_type)
+

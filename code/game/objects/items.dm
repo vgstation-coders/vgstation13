@@ -1108,3 +1108,6 @@ var/global/list/image/blood_overlays = list()
 									"cant_drop")
 
 	reset_vars_after_duration(resettable_vars, duration)
+
+	spawn(duration + 1)
+		hud_layerise()

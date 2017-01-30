@@ -90,6 +90,7 @@
 			if(ismob(everything))
 				var/mob/M = everything
 				M.playsound_local(everything, 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
+		T.send_to_past(duration)
 	spawn(duration)
 		spawn(1)
 			playsound(ourturf, 'sound/effects/fall.ogg', 100, 0, 0, 0, 0)
