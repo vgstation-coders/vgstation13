@@ -86,7 +86,7 @@
 				if("o2")
 					treatment_oxy = DEXALIN
 		else
-			treatment_brute = BICARIDINE
+			treatment_brute = TRICORDRAZINE
 		src.botcard = new /obj/item/weapon/card/id(src)
 		if(isnull(src.botcard_access) || (src.botcard_access.len < 1))
 			var/datum/job/doctor/J = new/datum/job/doctor
