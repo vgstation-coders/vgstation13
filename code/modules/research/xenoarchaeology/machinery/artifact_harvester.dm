@@ -248,6 +248,7 @@
 				analysed = A
 				articount++
 
+/*
 			var/mundane = 0
 			for(var/obj/O in get_turf(owned_scanner))
 				if(O.invisibility)
@@ -260,11 +261,12 @@
 					continue
 				mundane++
 				break
+*/
 			if(!analysed)
 				var/message = "<b>[src]</b> states, \"Cannot initialize field, no artifact detected.\""
 				src.visible_message(message)
 				return
-			else if(articount == 1 && !mundane)
+			else if(articount == 1)
 				cur_artifact = analysed
 
 				var/turf/T = get_turf(owned_scanner)
