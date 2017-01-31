@@ -200,7 +200,7 @@
 	icon_state = "invisible_spray"
 	flags = FPRINT
 	w_class = W_CLASS_SMALL
-	var/infinite = 0
+	var/permanent = 0
 	var/invisible_time = 5 MINUTES
 	var/sprays_left = 1
 
@@ -220,7 +220,7 @@
 			var/mob/living/carbon/C = target
 			C.body_alphas[INVISIBLESPRAY] = 1
 			C.regenerate_icons()
-			if(!infinite)
+			if(!permanent)
 				spawn(invisible_time)
 					if(C)
 						C.body_alphas.Remove(INVISIBLESPRAY)
@@ -229,7 +229,7 @@
 			var/mob/M = target
 			M.alpha = 1	//to cloak immediately instead of on the next Life() tick
 			M.alphas[INVISIBLESPRAY] = 1
-			if(!infinite)
+			if(!permanent)
 				spawn(invisible_time)
 					if(M)
 						M.alpha = initial(M.alpha)
@@ -241,7 +241,7 @@
 			O.has_been_invisible_sprayed = TRUE
 			if(O.loc == user)
 				user.regenerate_icons()
-			if(!infinite)
+			if(!permanent)
 				spawn(invisible_time)
 					if(O)
 						O.alpha = initial(O.alpha)
@@ -257,6 +257,6 @@
 	sprays_left--
 	return 1
 
-/obj/item/weapon/invisible_spray/infinite
+/obj/item/weapon/invisible_spray/permanent
 	desc = "A can of... invisibility?"
-	infinite = 1
+	permanent = 1
