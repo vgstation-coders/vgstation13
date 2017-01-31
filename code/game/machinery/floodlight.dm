@@ -47,7 +47,7 @@
 /obj/machinery/floodlight/attack_hand(mob/user as mob)
 	if(panel_open && cell)
 		if(ishuman(user) || isMoMMI(user)) //Allow MoMMIs to do it, too
-			cell.forceMove(user.loc)
+			user.put_in_hands(cell)
 			cell.add_fingerprint(user)
 			cell.updateicon()
 			cell = null
@@ -85,11 +85,11 @@
 	if(istype(W, /obj/item/weapon/cell))
 		if(panel_open)
 			if(cell)
-				to_chat(user, "<span class='warning'>There already is a power cell already installed.</span>")
+				to_chat(user, "<span class='warning'>There is a power cell already installed.</span>")
 				return
 			else
 				if(user.drop_item(W, src))
 					cell = W
-					user.visible_message("<span class='notice'>[user] inserts \the [src] into \the [src].</span>", \
-					"<span class='notice'>You insert \the [src] into \the [src].</span>")
+					user.visible_message("<span class='notice'>[user] inserts \the [W] into \the [src].</span>", \
+					"<span class='notice'>You insert \the [W] into \the [src].</span>")
 					update_icon()
