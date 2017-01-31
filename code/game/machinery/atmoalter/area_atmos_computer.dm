@@ -1,182 +1,136 @@
 /obj/machinery/computer/area_atmos
-	name = "Area Air Control"
+	name = "Area Atmos Computer"
 	desc = "A computer used to control the stationary scrubbers and pumps in the area."
 	icon_state = "area_atmos"
 	circuit = "/obj/item/weapon/circuitboard/area_atmos"
 
 	var/list/connectedscrubbers = new()
-	var/status = ""
 
 	var/range = 25
 
 	light_color = LIGHT_COLOR_CYAN
 	light_range_on = 2
 
-	//Simple variable to prevent me from doing attack_hand in both this and the child computer
-	var/zone = "This computer is working on a wireless range, the range is currently limited to 25 meters."
+	var/zone_text = "This computer is working on a wireless range, the range is currently limited to 25 meters."
 
-	New()
-		..()
-		//So the scrubbers have time to spawn
-		spawn(10)
-			scanscrubbers()
+/obj/machinery/computer/area_atmos/New()
+	..()
+	//So the scrubbers have time to spawn
+	spawn(10)
+		scanscrubbers()
 
-	attack_ai(var/mob/user as mob)
-		src.add_hiddenprint(user)
-		return src.attack_hand(user)
+/obj/machinery/computer/area_atmos/proc/scanscrubbers()
+	connectedscrubbers = new()
 
-	attack_paw(var/mob/user as mob)
-		return
+	for(var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber in range(range, src.loc))
+		if(istype(scrubber))
+			connectedscrubbers += scrubber
 
-	attack_hand(var/mob/user as mob)
-		if(..(user))
-			return
-		src.add_fingerprint(usr)
-		var/dat = {"
-		<html>
-			<head>
-				<style type="text/css">
-					a.green:link
-					{
-						color:#00CC00;
-					}
-					a.green:visited
-					{
-						color:#00CC00;
-					}
-					a.green:hover
-					{
-						color:#00CC00;
-					}
-					a.green:active
-					{
-						color:#00CC00;
-					}
-					a.red:link
-					{
-						color:#FF0000;
-					}
-					a.red:visited
-					{
-						color:#FF0000;
-					}
-					a.red:hover
-					{
-						color:#FF0000;
-					}
-					a.red:active
-					{
-						color:#FF0000;
-					}
-				</style>
-			</head>
-			<body>
-				<center><h1>Area Air Control</h1></center>
-				<font color="red">[status]</font><br>
-				<a href="?src=\ref[src];scan=1">Scan</a>
-				<table border="1" width="90%">"}
+/obj/machinery/computer/area_atmos/attack_ai(var/mob/user as mob)
+	src.add_hiddenprint(user)
+	return src.attack_hand(user)
+
+/obj/machinery/computer/area_atmos/attack_paw(var/mob/user as mob)
+	return src.attack_hand(user)
+
+/obj/machinery/computer/area_atmos/attack_hand(var/mob/user as mob)
+	scanscrubbers()
+	return src.ui_interact(user)
+
+/obj/machinery/computer/area_atmos/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null)
+	var/data[0]
+	data["zone_text"] = zone_text
+	var/list/scrubbers = list()
+	if(connectedscrubbers.len)
 		for(var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber in connectedscrubbers)
-			dat += {"
-					<tr>
-						<td>[scrubber.name]</td>
-						<td width="150"><a class="green" href="?src=\ref[src];scrub=\ref[scrubber];toggle=1">Turn On</a> <a class="red" href="?src=\ref[src];scrub=\ref[scrubber];toggle=0">Turn Off</a></td>
-					</tr>"}
-
-		dat += {"
-				</table><br>
-				<i>[zone]</i>
-			</body>
-		</html>"}
-		user << browse("[dat]", "window=miningshuttle;size=400x400")
-		status = ""
-
-	Topic(href, href_list)
-		if(..())
-			return
-		usr.set_machine(src)
-		src.add_fingerprint(usr)
+			var/scrubber_info[0]
+			scrubber_info["id"] = scrubber.id
+			scrubber_info["full_name"] = scrubber.name
+			scrubber_info["pressure"] = scrubber.air_contents.pressure
+			scrubber_info["isOperating"] = scrubber.on
+			scrubbers += list(scrubber_info)
+	data["scrubbers"] = scrubbers
 
 
-		if(href_list["scan"])
-			scanscrubbers()
-		else if(href_list["toggle"])
-			var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber = locate(href_list["scrub"])
+	// update the ui if it exists, returns null if no ui is passed/found
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data)
+	if (!ui)
+		// the ui does not exist, so we'll create a new() one
+        // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
+		ui = new(user, src, ui_key, "area_atmos_computer.tmpl", "Area Atmos Computer", 300, 400)
+		// when the ui is first opened this is the data it will use
+		ui.set_initial_data(data)
+		// open the new ui window
+		ui.open()
+		// auto update every Master Controller tick
+		ui.set_auto_update(1)
 
-			if(!validscrubber(scrubber))
-				spawn(20)
-					status = "ERROR: Couldn't connect to scrubber! (timeout)"
-					connectedscrubbers -= scrubber
-					src.updateUsrDialog()
-				return
-
-			scrubber.on = text2num(href_list["toggle"])
-			scrubber.update_icon()
-
-	proc/validscrubber( var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber as obj )
-		if(!isobj(scrubber) || get_dist(scrubber.loc, src.loc) > src.range || scrubber.loc.z != src.loc.z)
-			return 0
-
+/obj/machinery/computer/area_atmos/Topic(href, href_list)
+	if(..())
+		return 0
+	if(href_list["close"])
+		if(usr.machine == src)
+			usr.unset_machine()
 		return 1
 
-	proc/scanscrubbers()
-		connectedscrubbers = new()
+	usr.set_machine(src)
+	src.add_fingerprint(usr)
 
-		var/found = 0
-		for(var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber in range(range, src.loc))
-			if(istype(scrubber))
-				found = 1
-				connectedscrubbers += scrubber
+	// the template actually can send a {'refresh': 1} update, but
+	// we don't give a shit because we do scanscrubbers() either way
 
-		if(!found)
-			status = "ERROR: No scrubber found!"
+	scanscrubbers()
+	if(href_list["toggle"])
+		var/scrubber_id = href_list["id"]
+		for (var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber in connectedscrubbers)
+			if(scrubber.id == text2num(scrubber_id))
+				if(validscrubber(scrubber))
+					scrubber.on = scrubber.on ? 0 : 1
+					scrubber.update_icon()
+					return 1
 
-		src.updateUsrDialog()
+/obj/machinery/computer/area_atmos/proc/validscrubber( var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber as obj )
+	if(!isobj(scrubber) || get_dist(scrubber.loc, src.loc) > src.range || scrubber.loc.z != src.loc.z)
+		return 0
+
+	return 1
 
 
 /obj/machinery/computer/area_atmos/area
-	zone = "This computer is working in a wired network limited to this area."
+	zone_text = "This computer is working in a wired network limited to this area."
 
-	validscrubber( var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber as obj )
-		if(!isobj(scrubber))
-			return 0
+/obj/machinery/computer/area_atmos/area/validscrubber( var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber as obj )
+	if(!isobj(scrubber))
+		return 0
 
-		/*
-		wow this is stupid, someone help me
-		*/
-		var/turf/T_src = get_turf(src)
-		if(!T_src.loc)
-			return 0
-		var/area/A_src = T_src.loc
+	/*
+	wow this is stupid, someone help me
+	*/
+	var/turf/T_src = get_turf(src)
+	if(!T_src.loc)
+		return 0
+	var/area/A_src = T_src.loc
 
-		var/turf/T_scrub = get_turf(scrubber)
-		if(!T_scrub.loc)
-			return 0
-		var/area/A_scrub = T_scrub.loc
+	var/turf/T_scrub = get_turf(scrubber)
+	if(!T_scrub.loc)
+		return 0
+	var/area/A_scrub = T_scrub.loc
 
-		if(A_scrub != A_src)
-			return 0
+	if(A_scrub != A_src)
+		return 0
 
-		return 1
+	return 1
 
-	scanscrubbers()
-		connectedscrubbers = new()
+/obj/machinery/computer/area_atmos/area/scanscrubbers()
+	connectedscrubbers = new()
 
-		var/found = 0
-
-		var/turf/T = get_turf(src)
-		if(!T.loc)
-			return
-		var/area/A = get_area_master(T)
-		for(var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber in machines)
-			var/turf/T2 = get_turf(scrubber)
-			if(T2 && T2.loc)
-				var/area/A2 = T2.loc
-				if(istype(A2) && A2 == A )
-					connectedscrubbers += scrubber
-					found = 1
-
-
-		if(!found)
-			status = "ERROR: No scrubber found!"
-
-		src.updateUsrDialog()
+	var/turf/T = get_turf(src)
+	if(!T.loc)
+		return
+	var/area/A = get_area_master(T)
+	for(var/obj/machinery/portable_atmospherics/scrubber/huge/scrubber in machines)
+		var/turf/T2 = get_turf(scrubber)
+		if(T2 && T2.loc)
+			var/area/A2 = T2.loc
+			if(istype(A2) && A2 == A )
+				connectedscrubbers += scrubber
