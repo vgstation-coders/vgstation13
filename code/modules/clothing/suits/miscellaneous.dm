@@ -495,7 +495,8 @@
 	name = "trader's coat"
 	desc = "A long trenchcoat with many pockets sewn into the lining."
 	icon_state = "tradercoat"
-	item_state = "jensencoat"
+	item_state = "tradercoat"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	blood_overlay_type = "coat"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	clothing_flags = ONESIZEFITSALL
