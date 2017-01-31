@@ -21,13 +21,15 @@
 		"medical",
 		"HoS",
 		"research",
+		"cargo",
 		"engineering",
 		"CMO",
 		"RD",
 		"CE",
 		"clown",
 		"mime",
-		"syndie" // yes no?
+		"syndie", // yes no?
+		"trader"
 	)
 	var/list/cent_card_skins = list(
 		"data",
