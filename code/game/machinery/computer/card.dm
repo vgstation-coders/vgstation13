@@ -28,8 +28,8 @@
 		"CE",
 		"clown",
 		"mime",
-		"syndie", // yes no?
-		"trader"
+		"syndie" // yes no?
+		//"trader" no
 	)
 	var/list/cent_card_skins = list(
 		"data",
