@@ -500,6 +500,7 @@
 	blood_overlay_type = "coat"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	clothing_flags = ONESIZEFITSALL
+	species_fit = list(VOX_SHAPED)
 	max_combined_w_class = 28
 	storage_slots = 14
 	action_button_name = "Show Wares"
