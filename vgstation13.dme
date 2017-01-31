@@ -11,6 +11,7 @@
 // END_PREFERENCES
 // BEGIN_INCLUDE
 #include "__DEFINES\archaeo_defines.dm"
+#include "__DEFINES\areas.dm"
 #include "__DEFINES\atom_locking.dm"
 #include "__DEFINES\atoms.dm"
 #include "__DEFINES\error_hander.dm"
@@ -2113,6 +2114,7 @@
 #include "maps\defficiency\pipes.dm"
 #include "maps\randomvaults\dance_revolution.dm"
 #include "maps\randomvaults\objects.dm"
+#include "maps\randomvaults\spessmart.dm"
 #include "maps\RandomZLevels\Academy.dm"
 #include "maps\RandomZLevels\challenge.dm"
 #include "maps\RandomZLevels\stationCollision.dm"
