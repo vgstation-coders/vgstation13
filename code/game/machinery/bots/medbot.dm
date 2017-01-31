@@ -473,13 +473,17 @@
 				inject_patient()
 
 /obj/machinery/bot/medbot/proc/inject_patient()
+	var/succesful_inject = 0
 	if ((get_dist(src, patient) <= 1) && (on))
 		if((reagent_id == "internal_beaker") && (reagent_glass) && (reagent_glass.reagents.total_volume))
 			reagent_glass.reagents.trans_to(patient,injection_amount) //Inject from beaker instead.
 			reagent_glass.reagents.reaction(patient, 2)
+			succesful_inject = 1
 		else
-			patient.reagents.add_reagent(reagent_id,injection_amount)
-
+			if(!patient.reagents.has_reagent(reagent_id) && !emagged) //Somebody got there first
+				patient.reagents.add_reagent(reagent_id,injection_amount)
+				succesful_inject = 1
+	if(succesful_inject)
 		visible_message("<span class='danger'>[src] injects [patient] with the syringe!</span>")
 
 	icon_state = "[icon_initial][on]"
