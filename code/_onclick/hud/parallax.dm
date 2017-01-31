@@ -13,6 +13,8 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 /obj/screen/parallax
 	var/base_offset_x = 0
 	var/base_offset_y = 0
+	var/accumulated_offset_x = 0
+	var/accumulated_offset_y = 0
 	mouse_opacity = 0
 	icon = 'icons/turf/space.dmi'
 	icon_state = "blank"
@@ -82,6 +84,8 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 			parallax_layer.base_offset_y = bgobj.base_offset_y
 			parallax_layer.parallax_speed = bgobj.parallax_speed
 			parallax_layer.screen_loc = bgobj.screen_loc
+			parallax_layer.accumulated_offset_x = bgobj.base_offset_x
+			parallax_layer.accumulated_offset_y = bgobj.base_offset_y
 			C.parallax += parallax_layer
 			if(bgobj.parallax_speed)
 				C.parallax_movable += parallax_layer
@@ -136,23 +140,23 @@ var/list/parallax_icon[(GRID_WIDTH**2)*3]
 	C.parallax_offset["horizontal"] = offsetx
 	C.parallax_offset["vertical"] = offsety
 
-	C.previous_turf = posobj
-
 	for(var/obj/screen/parallax/bgobj in C.parallax_movable)
-		var/accumulated_offset_x = bgobj.base_offset_x - round(offsetx * bgobj.parallax_speed * C.prefs.parallax_speed)
-		var/accumulated_offset_y = bgobj.base_offset_y - round(offsety * bgobj.parallax_speed * C.prefs.parallax_speed)
+		bgobj.accumulated_offset_x -= (posobj.x - C.previous_turf.x) * bgobj.parallax_speed * C.prefs.parallax_speed
+		bgobj.accumulated_offset_y -= (posobj.y - C.previous_turf.y) * bgobj.parallax_speed * C.prefs.parallax_speed
 
-		if(accumulated_offset_x > PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE)
-			accumulated_offset_x -= PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*GRID_WIDTH //3x3 grid, 15 tiles * 64 icon_size * 3 grid size
-		if(accumulated_offset_x < -(PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*2))
-			accumulated_offset_x += PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*GRID_WIDTH
+		if(bgobj.accumulated_offset_x > PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE)
+			bgobj.accumulated_offset_x -= PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*GRID_WIDTH //3x3 grid, 15 tiles * 64 icon_size * 3 grid size
+		if(bgobj.accumulated_offset_x < -(PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*2))
+			bgobj.accumulated_offset_x += PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*GRID_WIDTH
 
-		if(accumulated_offset_y > PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE)
-			accumulated_offset_y -= PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*GRID_WIDTH
-		if(accumulated_offset_y < -(PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*2))
-			accumulated_offset_y += PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*GRID_WIDTH
+		if(bgobj.accumulated_offset_y > PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE)
+			bgobj.accumulated_offset_y -= PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*GRID_WIDTH
+		if(bgobj.accumulated_offset_y < -(PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*2))
+			bgobj.accumulated_offset_y += PARALLAX_IMAGE_WIDTH*WORLD_ICON_SIZE*GRID_WIDTH
 
-		bgobj.screen_loc = "CENTER:[accumulated_offset_x],CENTER:[accumulated_offset_y]"
+		bgobj.screen_loc = "CENTER:[round(bgobj.accumulated_offset_x)],CENTER:[round(bgobj.accumulated_offset_y)]"
+
+	C.previous_turf = posobj
 
 //Parallax generation code below
 
