@@ -110,7 +110,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 			if(is_slot_hidden(wear_suit.body_parts_covered,HIDEJUMPSUIT))
 				return 1
 	return 0
-
+/*
 /mob/living/carbon/human/proc/suit_contamination()
 	//Runs over the things that can be contaminated and does so.
 	if(w_uniform)
@@ -119,6 +119,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 		shoes.contaminate()
 	if(gloves)
 		gloves.contaminate()
+*/
 
 /*
 /turf/Entered(atom/movable/Obj, atom/OldLoc)
