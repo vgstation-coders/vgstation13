@@ -18,7 +18,7 @@
 		if(info)
 			info += "<BR><BR>THIS MESSAGE WILL SELF-DESTRUCT IN [fuse_time/10] SECONDS"
 			updateinfolinks()
+			detonating = TRUE
 			spawn(fuse_time)
-				detonating = TRUE
 				explosion(get_turf(src), -1, 0, 2)
 				qdel(src)
