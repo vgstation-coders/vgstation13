@@ -120,7 +120,7 @@
 
 		if(mind)
 			switch(mind.special_role)
-				if("traitor","Syndicate")
+				if("traitor","Syndicate","Apprentice Candidate")
 					holder.icon_state = "hudsyndicate"
 				if("Revolutionary")
 					holder.icon_state = "hudrevolutionary"
@@ -136,6 +136,10 @@
 					holder.icon_state = "huddeathsquad"
 				if("Vampire") // TODO: Check this
 					holder.icon_state = "hudvampire"
+				if("VampThrall")
+					holder.icon_state = "vampthrall"
+				else//If we don't know what role they have but they have one.
+					holder.icon_state = "hudunknown1"
 
 			hud_list[SPECIALROLE_HUD] = holder
 	hud_updateflag = 0
