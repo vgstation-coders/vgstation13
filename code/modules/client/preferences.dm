@@ -409,7 +409,7 @@ var/const/MAX_SAVE_SLOTS = 8
 				}
 
 			function mouseUp(event,levelup,leveldown,rank){
-				if(event.button == 0)
+				if(event.button == 0 || event.button == 1)
 					{
 					//alert("left click " + levelup + " " + rank);
 					setJobPrefRedirect(1, rank);
@@ -424,7 +424,7 @@ var/const/MAX_SAVE_SLOTS = 8
 
 				return true;
 				}
-			</script>"}
+			</script>"} //the event.button == 1 check is brought to you by legacy IE running in wine
 
 
 	HTML += {"<center>
