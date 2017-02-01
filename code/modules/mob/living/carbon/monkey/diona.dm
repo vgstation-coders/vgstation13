@@ -162,29 +162,27 @@
 
 	src.visible_message("<span class='warning'>[src] flicks out a feeler and neatly steals a sample of [M]'s blood.</span>","<span class='warning'>You flick out a feeler and neatly steal a sample of [M]'s blood.</span>")
 	donors += M.real_name
+	var/progress = donors.len //Get value here so it isn't changed from under us
 	spawn(25)
-		update_progression()
+		update_progression(progress)
 
-/mob/living/carbon/monkey/diona/proc/update_progression()
+/mob/living/carbon/monkey/diona/proc/update_progression(var/progress)
 
-
-	if(!donors.len)
-		return
-
-	if(donors.len == 5)
-		ready_evolve = 1
-		to_chat(src, "<span class='good'>You feel ready to move on to your next stage of growth.</span>")
-	else if(donors.len == 4)
-		to_chat(src, "<span class='good'>You feel your vocal range expand, and realize you know how to speak with the creatures around you.</span>")
-		add_language(LANGUAGE_GALACTIC_COMMON)
-		default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
-	else if(donors.len == 3)
-		to_chat(src, "<span class='good'>More blood seeps into you, continuing to expand your growing collection of memories.</span>")
-	else if(donors.len == 2)
-		to_chat(src, "<span class='good'>You feel your awareness expand, and realize you know how to understand the creatures around you.</span>")
-		//say_understands() effectively lets us understand common language at this point
-	else
-		to_chat(src, "<span class='good'>The blood seeps into your small form, and you draw out the echoes of memories and personality from it, working them into your budding mind.</span>")
+	switch(progress) //Stop them from skipping levels
+		if(5)
+			ready_evolve = 1
+			to_chat(src, "<span class='good'>You feel ready to move on to your next stage of growth.</span>")
+		if(4)
+			to_chat(src, "<span class='good'>You feel your vocal range expand, and realize you know how to speak with the creatures around you.</span>")
+			add_language(LANGUAGE_GALACTIC_COMMON)
+			default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
+		if(3)
+			to_chat(src, "<span class='good'>More blood seeps into you, continuing to expand your growing collection of memories.</span>")
+		if(2)
+			to_chat(src, "<span class='good'>You feel your awareness expand, and realize you know how to understand the creatures around you.</span>")
+			//say_understands() effectively lets us understand common language at this point
+		if(1)
+			to_chat(src, "<span class='good'>The blood seeps into your small form, and you draw out the echoes of memories and personality from it, working them into your budding mind.</span>")
 
 /mob/living/carbon/monkey/diona/dexterity_check()
 	return 0
