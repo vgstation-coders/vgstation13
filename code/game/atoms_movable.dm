@@ -781,8 +781,6 @@
 									"move_speed",
 									"throw_speed",
 									"throw_range",
-									"locked_atoms",
-									"locked_to",
 									"timestopped",
 									"flags",
 									"gcDestroyed")
