@@ -1618,6 +1618,7 @@
 #include "code\modules\organs\internal\lungs\lung_gasses.dm"
 #include "code\modules\overlays\mobs.dm"
 #include "code\modules\paperwork\clipboard.dm"
+#include "code\modules\paperwork\explosive_paper.dm"
 #include "code\modules\paperwork\filingcabinet.dm"
 #include "code\modules\paperwork\folders.dm"
 #include "code\modules\paperwork\handlabeler.dm"
