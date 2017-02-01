@@ -442,10 +442,10 @@
 
 /mob/living/carbon/monkey/send_to_past(var/duration)
 	..()
-	var/list/resettable_vars = list(
-									"uniform",
-									"hat",
-									"glasses",
-									"wear_id")
+	var/static/list/resettable_vars = list(
+		"uniform",
+		"hat",
+		"glasses",
+		"wear_id")
 
 	reset_vars_after_duration(resettable_vars, duration)

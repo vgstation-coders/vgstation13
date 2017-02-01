@@ -571,9 +571,9 @@
 
 /obj/structure/window/send_to_past(var/duration)
 	..()
-	var/list/resettable_vars = list(
-									"health",
-									"d_state")
+	var/static/list/resettable_vars = list(
+		"health",
+		"d_state")
 
 	reset_vars_after_duration(resettable_vars, duration)
 

@@ -132,12 +132,12 @@
 
 /obj/item/weapon/cell/send_to_past(var/duration)
 	..()
-	var/list/resettable_vars = list(
-									"charge",
-									"rigged",
-									"minor_fault",
-									"brute_damage",
-									"electronics_damage")
+	var/static/list/resettable_vars = list(
+		"charge",
+		"rigged",
+		"minor_fault",
+		"brute_damage",
+		"electronics_damage")
 
 	reset_vars_after_duration(resettable_vars, duration)
 

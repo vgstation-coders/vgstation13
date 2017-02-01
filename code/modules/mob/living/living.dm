@@ -1514,22 +1514,22 @@ Thanks.
 
 /mob/living/send_to_past(var/duration)
 	..()
-	var/list/resettable_vars = list(
-									"maxHealth",
-									"health",
-									"bruteloss",
-									"oxyloss",
-									"toxloss",
-									"fireloss",
-									"cloneloss",
-									"brainloss",
-									"halloss",
-									"hallucination",
-									"meat_taken",
-									"on_fire",
-									"fire_stacks",
-									"specialsauce",
-									"silent",
-									"is_ventcrawling")
+	var/static/list/resettable_vars = list(
+		"maxHealth",
+		"health",
+		"bruteloss",
+		"oxyloss",
+		"toxloss",
+		"fireloss",
+		"cloneloss",
+		"brainloss",
+		"halloss",
+		"hallucination",
+		"meat_taken",
+		"on_fire",
+		"fire_stacks",
+		"specialsauce",
+		"silent",
+		"is_ventcrawling")
 
 	reset_vars_after_duration(resettable_vars, duration)

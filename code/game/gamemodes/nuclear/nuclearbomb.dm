@@ -338,12 +338,12 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 
 /obj/machinery/nuclearbomb/send_to_past(var/duration)
 	..()
-	var/list/resettable_vars = list(
-									"deployable",
-									"extended",
-									"timeleft",
-									"timing",
-									"safety")
+	var/static/list/resettable_vars = list(
+		"deployable",
+		"extended",
+		"timeleft",
+		"timing",
+		"safety")
 
 	reset_vars_after_duration(resettable_vars, duration)
 

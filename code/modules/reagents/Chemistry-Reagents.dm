@@ -149,16 +149,16 @@
 	return 1
 
 /datum/reagent/send_to_past(var/duration)
-	var/list/resettable_vars = list(
-									"being_sent_to_past",
-									"name",
-									"id",
-									"description",
-									"holder",
-									"reagent_state",
-									"data",
-									"volume",
-									"gcDestroyed")
+	var/static/list/resettable_vars = list(
+		"being_sent_to_past",
+		"name",
+		"id",
+		"description",
+		"holder",
+		"reagent_state",
+		"data",
+		"volume",
+		"gcDestroyed")
 	var/list/stored_vars = list()
 	for(var/x in resettable_vars)
 		if(istype(vars[x], /list))

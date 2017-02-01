@@ -527,9 +527,9 @@
 
 /obj/structure/table/send_to_past(var/duration)
 	..()
-	var/list/resettable_vars = list(
-									"flipped",
-									"health")
+	var/static/list/resettable_vars = list(
+		"flipped",
+		"health")
 
 	reset_vars_after_duration(resettable_vars, duration)
 

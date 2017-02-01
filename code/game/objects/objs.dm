@@ -563,8 +563,8 @@ a {
 
 /obj/send_to_past(var/duration)
 	..()
-	var/list/resettable_vars = list(
-									"sharpness",
-									"integratedpai")
+	var/static/list/resettable_vars = list(
+		"sharpness",
+		"integratedpai")
 
 	reset_vars_after_duration(resettable_vars, duration)

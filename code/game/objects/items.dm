@@ -1102,10 +1102,10 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/send_to_past(var/duration)
 	..()
-	var/list/resettable_vars = list(
-									"health",
-									"canremove",
-									"cant_drop")
+	var/static/list/resettable_vars = list(
+		"health",
+		"canremove",
+		"cant_drop")
 
 	reset_vars_after_duration(resettable_vars, duration)
 

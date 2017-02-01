@@ -344,11 +344,11 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/send_to_past(var/duration)
 	..()
-	var/list/resettable_vars = list(
-									"bitecount",
-									"eatverb",
-									"wrapped",
-									"deepfried")
+	var/static/list/resettable_vars = list(
+		"bitecount",
+		"eatverb",
+		"wrapped",
+		"deepfried")
 
 	reset_vars_after_duration(resettable_vars, duration)
 

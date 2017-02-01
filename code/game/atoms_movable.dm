@@ -763,27 +763,27 @@
 
 /atom/movable/send_to_past(var/duration)
 	var/current_loc = loc
-	var/list/resettable_vars = list(
-									"being_sent_to_past",
-									"invisibility",
-									"alpha",
-									"name",
-									"desc",
-									"dir",
-									"pixel_x",
-									"pixel_y",
-									"layer",
-									"transform",
-									"density",
-									"last_move",
-									"last_moved",
-									"anchored",
-									"move_speed",
-									"throw_speed",
-									"throw_range",
-									"timestopped",
-									"flags",
-									"gcDestroyed")
+	var/static/list/resettable_vars = list(
+		"being_sent_to_past",
+		"invisibility",
+		"alpha",
+		"name",
+		"desc",
+		"dir",
+		"pixel_x",
+		"pixel_y",
+		"layer",
+		"transform",
+		"density",
+		"last_move",
+		"last_moved",
+		"anchored",
+		"move_speed",
+		"throw_speed",
+		"throw_range",
+		"timestopped",
+		"flags",
+		"gcDestroyed")
 	var/list/stored_vars = list()
 	for(var/x in resettable_vars)
 		if(istype(vars[x], /list))

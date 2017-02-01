@@ -286,25 +286,25 @@ datum/wound/cut/massive
 #undef BLOODLOSS_SPEED_MULTIPLIER
 
 /datum/wound/send_to_past(var/duration)
-	var/list/resettable_vars = list(
-									"stages",
-									"current_stage",
-									"desc",
-									"damage",
-									"bleed_timer",
-									"min_damage",
-									"damage_type",
-									"needs_treatment",
-									"bandaged",
-									"clamped",
-									"salved",
-									"disinfected",
-									"created",
-									"amount",
-									"max_bleeding_stage",
-									"internal",
-									"germ_level",
-									"desc_list",
-									"damage_list")
+	var/static/list/resettable_vars = list(
+		"stages",
+		"current_stage",
+		"desc",
+		"damage",
+		"bleed_timer",
+		"min_damage",
+		"damage_type",
+		"needs_treatment",
+		"bandaged",
+		"clamped",
+		"salved",
+		"disinfected",
+		"created",
+		"amount",
+		"max_bleeding_stage",
+		"internal",
+		"germ_level",
+		"desc_list",
+		"damage_list")
 
 	reset_vars_after_duration(resettable_vars, duration, TRUE)

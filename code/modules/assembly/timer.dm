@@ -124,9 +124,9 @@
 
 /obj/item/device/assembly/timer/send_to_past(var/duration)
 	..()
-	var/list/resettable_vars = list(
-									"timing",
-									"time")
+	var/static/list/resettable_vars = list(
+		"timing",
+		"time")
 
 	reset_vars_after_duration(resettable_vars, duration)
 

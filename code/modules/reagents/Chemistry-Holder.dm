@@ -750,14 +750,14 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	reagents.my_atom = src
 
 /datum/reagents/send_to_past(var/duration)
-	var/list/resettable_vars = list(
-									"being_sent_to_past",
-									"reagent_list",
-									"amount_cache",
-									"total_volume",
-									"maximum_volume",
-									"my_atom",
-									"gcDestroyed")
+	var/static/list/resettable_vars = list(
+		"being_sent_to_past",
+		"reagent_list",
+		"amount_cache",
+		"total_volume",
+		"maximum_volume",
+		"my_atom",
+		"gcDestroyed")
 	var/list/stored_vars = list()
 	for(var/x in resettable_vars)
 		if(istype(vars[x], /list))

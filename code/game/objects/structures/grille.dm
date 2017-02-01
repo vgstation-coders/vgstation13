@@ -243,9 +243,9 @@
 
 /obj/structure/grille/send_to_past(var/duration)
 	..()
-	var/list/resettable_vars = list(
-									"health",
-									"broken")
+	var/static/list/resettable_vars = list(
+		"health",
+		"broken")
 
 	reset_vars_after_duration(resettable_vars, duration)
 
