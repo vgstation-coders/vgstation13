@@ -69,11 +69,13 @@
 	if(attack_delayer.blocked()) // This was next_move.  next_attack makes more sense.
 		return
 //	to_chat(world, "next_attack is [next_attack] and world.time is [world.time]")
-	if(istype(loc,/obj/mecha))
-		if(!locate(/turf) in list(A,A.loc)) // Prevents inventory from being drilled
+	if(istype(loc,/obj))
+		if(!locate(/turf) in list(A,A.loc))
 			return
-		var/obj/mecha/M = loc
-		return M.click_action(A,src)
+		var/obj/O = loc
+		. = O.click_action(A, src)
+		if(.)
+			return .
 
 	if(restrained())
 		RestrainedClickOn(A)

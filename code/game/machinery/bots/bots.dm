@@ -1,5 +1,7 @@
 // AI (i.e. game AI, not the AI player) controlled bots
 
+#define BOT_MOVE_HIGHEST	4
+
 /obj/machinery/bot
 	icon = 'icons/obj/aibots.dmi'
 	layer = MOB_LAYER
@@ -17,6 +19,9 @@
 	var/locked = 1
 	var/bot_type
 	var/declare_message = "" //What the bot will display to the HUD user.
+	var/obj/item/device/mmi/brain = null
+
+	machine_flags = SCREWTOGGLE | EMAGGABLE
 	#define SEC_BOT 1 // Secutritrons (Beepsky) and ED-209s
 	#define MULE_BOT 2 // MULEbots
 	#define FLOOR_BOT 3 // Floorbots
@@ -48,18 +53,20 @@
 	set_light(0)
 
 /obj/machinery/bot/proc/explode()
+	if(brain)
+		remove_brain()
 	qdel(src)
 
 /obj/machinery/bot/proc/healthcheck()
 	if (src.health <= 0)
 		src.explode()
 
-/obj/machinery/bot/proc/Emag(mob/user as mob)
+/obj/machinery/bot/emag(mob/user as mob)
 	if(locked)
 		locked = 0
 		emagged = 1
 		to_chat(user, "<span class='warning'>You remove [src]'s control restrictions. Opening up its maintenance panel and swiping again will cause [src] to malfunction.</span>")
-	if(!locked && open)
+	if(!locked && panel_open)
 		emagged = 2
 		to_chat(user, "<span class='warning'>You cause a malfunction in [src]'s behavioral matrix.</span>")
 
@@ -114,16 +121,52 @@
 		if(mobturf.z == myturf.z)
 			huduser.show_message(declare_message,1)
 
+/obj/machinery/bot/proc/add_brain(var/obj/item/device/mmi/newbrain)
+	brain = newbrain
+	if(brain.brainmob)
+		brain.brainmob.controlling = src
+		brain.brainmob.forceMove(src)
+		brain.brainmob.canmove = 1
+
+
+/obj/machinery/bot/proc/remove_brain()
+	brain.forceMove(get_turf(src))
+	if(brain.brainmob)
+		brain.brainmob.forceMove(brain)
+		brain.brainmob.controlling = null
+		brain.brainmob.canmove = 0
+	brain = null
+
+/obj/machinery/bot/Bump(atom/movable/M as mob|obj)
+	if ((istype(M, /obj/machinery/door)) && (!isnull(src.botcard)))
+		var/obj/machinery/door/D = M
+		if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(src.botcard))
+			D.open()
+			return 1
+	else if ((istype(M, /mob/living/)) && !(src.anchored || src.density))
+		src.forceMove(M.loc)
+		return 1
 
 /obj/machinery/bot/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(flags & INVULNERABLE)
 		return
+	if(istype(W, /obj/item/device/mmi))
+		var/obj/item/device/mmi/newbrain = W
+		if(newbrain.usable_brain() && panel_open && !brain)
+			user.drop_item(newbrain, src)
+			add_brain(newbrain)
+			user << "You install \the [brain] into \the [src]."
+			return 1
+	if(istype(W, /obj/item/weapon/crowbar))
+		if(panel_open && brain)
+			remove_brain()
+			user << "You pry out \the [src]'s brain."
+			return 1
 	if(!locked && (isscrewdriver(W) || iscrowbar(W)))
-		open = !open
-		to_chat(user, "<span class='notice'>Maintenance panel is now [src.open ? "opened" : "closed"].</span>")
+		return ..()
 	else if(istype(W, /obj/item/weapon/weldingtool))
 		if(health < maxhealth)
-			if(open)
+			if(panel_open)
 				health = min(maxhealth, health+10)
 				user.visible_message("<span class='danger'>[user] repairs [src]!</span>","<span class='notice'>You repair [src]!</span>")
 			else
@@ -131,9 +174,9 @@
 		else
 			to_chat(user, "<span class='notice'>[src] does not need a repair.</span>")
 	else if (istype(W, /obj/item/weapon/card/emag) && emagged < 2)
-		Emag(user)
+		return ..()
 	else
-		if(hasvar(W,"force") && hasvar(W,"damtype"))
+		if(isobj(W))
 			switch(W.damtype)
 				if("fire")
 					src.health -= W.force * fire_dam_coeff
@@ -208,6 +251,14 @@
 		if (was_on)
 			turn_on()
 
+/obj/machinery/bot/proc/return_speed() //higher speed means less delay
+	return 1
+
+/obj/machinery/bot/relaymove(mob/user,direction)
+	if(brain)
+		step(src, direction)
+		user.delayNextMove(BOT_MOVE_HIGHEST - return_speed())
+		return 1
 
 /obj/machinery/bot/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)

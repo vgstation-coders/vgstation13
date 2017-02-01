@@ -127,6 +127,7 @@ var/list/ai_list = list()
 		else
 			if (B.brainmob.mind)
 				B.brainmob.mind.transfer_to(src)
+			B.brainmob.controlling = src //the brain is in charge here
 
 			to_chat(src, "<B>You are playing the station's AI. The AI cannot move, but can interact with many objects while viewing them (through cameras).</B>")
 			to_chat(src, "<B>To look at other parts of the station, click on yourself to get a camera menu.</B>")
@@ -280,8 +281,8 @@ var/list/ai_list = list()
 			icon_state = "ai-royal"
 		if("Heartline")
 			icon_state = "ai-heartline"
-		if("Hades") 
-			icon_state = "ai-hades"	
+		if("Hades")
+			icon_state = "ai-hades"
 		if("Helios")
 			icon_state = "ai-helios"
 		if("Syndicat")

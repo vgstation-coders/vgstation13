@@ -66,6 +66,7 @@
 				new_mob.job = "Cyborg"
 				var/mob/living/silicon/robot/Robot = new_mob
 				Robot.mmi = new /obj/item/device/mmi(new_mob)
+				Robot.mmi.brainmob.controlling = Robot
 				Robot.mmi.transfer_identity(M)	//Does not transfer key/client.
 				Robot.languages |= M.languages
 				if(M.default_language)
@@ -77,6 +78,7 @@
 				new_mob.job = "MoMMI"
 				var/mob/living/silicon/robot/mommi/MoMMI = new_mob
 				MoMMI.mmi = new /obj/item/device/mmi(new_mob)
+				MoMMI.mmi.brainmob.controlling = MoMMI
 				MoMMI.mmi.transfer_identity(M)	//Does not transfer key/client.
 				MoMMI.languages |= M.languages
 				if(M.default_language)

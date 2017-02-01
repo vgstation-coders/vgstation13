@@ -123,6 +123,8 @@
 				if (!brain)
 					if (user.drop_item(P, src))
 						brain = P
+						if(brain.brainmob)
+							brain.brainmob.controlling = src
 						to_chat(user, "Added [P].")
 						icon_state = "3b"
 
