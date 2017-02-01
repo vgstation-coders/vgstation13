@@ -957,9 +957,13 @@ var/list/beam_master = list()
 	penetration = 0
 	pass_flags = PASSTABLE
 
-/obj/item/projectile/beam/liquid_stream/New()
-	..()
+/obj/item/projectile/beam/liquid_stream/New(atom/A, var/t_range)
+	..(A)
 	create_reagents(10)
+	if(t_range)
+		travel_range = t_range
+	else
+		travel_range = 0
 
 /obj/item/projectile/beam/liquid_stream/OnFired()
 	beam_color = mix_color_from_reagents(reagents.reagent_list)
@@ -983,5 +987,8 @@ var/list/beam_master = list()
 		splash_sub(reagents, A, reagents.total_volume)
 		return 1
 
-/obj/item/projectile/beam/liquid_stream/weak
-	travel_range = 3
+/obj/item/projectile/beam/liquid_stream/proc/adjust_strength(var/t_range)
+	if(t_range)
+		travel_range = t_range
+	else
+		travel_range = 0

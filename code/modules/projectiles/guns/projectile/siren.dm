@@ -103,6 +103,8 @@
 	max_reagents = 200
 	hard = -1
 	projectile_type = /obj/item/projectile/beam/liquid_stream
+	var/pumping = FALSE
+	var/pumps = 0
 
 /obj/item/weapon/gun/siren/supersoaker/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
 	if(flag)
@@ -113,7 +115,7 @@
 	if(reagents.total_volume < 10 && !in_chamber)
 		return click_empty(user)
 	if(!in_chamber)
-		in_chamber = new projectile_type(src)
+		in_chamber = new projectile_type(src, max(3+(round(pumps/2)),15))
 		reagents.trans_to(in_chamber, 10)
 	Fire(A,user,params, struggle = struggle)
 	if(reagents.total_volume >= 10)
@@ -121,15 +123,18 @@
 		reagents.trans_to(in_chamber, 10)
 
 /obj/item/weapon/gun/siren/supersoaker/attack_self(mob/user as mob)
-	if(!reagents.total_volume)
-		to_chat(user, "<span class='warning'>\The [src] is already empty.</span>")
-		return
-
-	reagents.clear_reagents()
-	to_chat(user, "<span class='notice'>You flush out the contents of \the [src].</span>")
-	if(in_chamber)
-		qdel(in_chamber)
-		in_chamber = null
+	if(!pumping)
+		if(pumps >= 24)
+			return
+		to_chat(user, "You pump \the [src].")
+		pumps++
+		pumping = TRUE
+		if(in_chamber)
+			var/obj/item/projectile/beam/liquid_stream/L = in_chamber
+			if(istype(L))
+				L.adjust_strength(max(3+(round(pumps/2)),15))
+		spawn(1)
+			pumping = FALSE
 
 /obj/item/weapon/gun/siren/supersoaker/pistol
 	name = "squirt gun"
@@ -140,3 +145,14 @@
 
 /obj/item/weapon/gun/siren/supersoaker/pistol/isHandgun()
 	return TRUE
+
+/obj/item/weapon/gun/siren/supersoaker/pistol/attack_self(mob/user as mob)
+	if(!reagents.total_volume)
+		to_chat(user, "<span class='warning'>\The [src] is already empty.</span>")
+		return
+
+	reagents.clear_reagents()
+	to_chat(user, "<span class='notice'>You flush out the contents of \the [src].</span>")
+	if(in_chamber)
+		qdel(in_chamber)
+		in_chamber = null
