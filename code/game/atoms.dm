@@ -808,3 +808,9 @@ its easier to just keep the beam vertical.
 /atom/proc/toggle_timeless()
 	flags ^= TIMELESS
 	return flags & TIMELESS
+
+/atom/proc/is_visible()
+	if(invisibility || alpha <= 1)
+		return FALSE
+	else
+		return TRUE

@@ -268,7 +268,7 @@
 
 	else
 		for(var/mob/M in active_cultists)
-			to_chat(M, "<span class='danger'>Nar-Sie has lost interest in this world.</span>")//narsie won't appear if a supermatter cascade has started
+			to_chat(M, "<span class='danger'>Nar-Sie has lost interest in this universe.</span>")//narsie won't appear if a supermatter cascade has started
 
 		return
 
