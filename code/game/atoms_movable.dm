@@ -759,7 +759,7 @@
 /datum/proc/send_to_past(var/duration)
 	return
 
-/datum/var/being_sent_to_past = FALSE
+/datum/var/being_sent_to_past
 
 /atom/movable/send_to_past(var/duration)
 	var/current_loc = loc
