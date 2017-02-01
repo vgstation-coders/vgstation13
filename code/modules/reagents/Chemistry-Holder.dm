@@ -758,22 +758,14 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		"maximum_volume",
 		"my_atom",
 		"gcDestroyed")
-	var/list/stored_vars = list()
-	for(var/x in resettable_vars)
-		if(istype(vars[x], /list))
-			var/list/L = vars[x]
-			stored_vars[x] = L.Copy()
-			continue
-		stored_vars[x] = vars[x]
+
+	reset_vars_after_duration(resettable_vars, duration, TRUE)
 
 	for(var/y in reagent_list)
 		var/datum/reagent/R = y
 		R.send_to_past(duration)
 
-	being_sent_to_past = TRUE
-	spawn(duration)
-		for(var/x in stored_vars)
-			vars[x] = stored_vars[x]
+	spawn(duration + 1)
 		if(my_atom)
 			var/atom/A = my_atom
 			A.reagents = src

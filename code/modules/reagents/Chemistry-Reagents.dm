@@ -159,18 +159,10 @@
 		"data",
 		"volume",
 		"gcDestroyed")
-	var/list/stored_vars = list()
-	for(var/x in resettable_vars)
-		if(istype(vars[x], /list))
-			var/list/L = vars[x]
-			stored_vars[x] = L.Copy()
-			continue
-		stored_vars[x] = vars[x]
 
-	being_sent_to_past = TRUE
-	spawn(duration)
-		for(var/x in stored_vars)
-			vars[x] = stored_vars[x]
+	reset_vars_after_duration(resettable_vars, duration, TRUE)
+
+	spawn(duration + 1)
 		var/datum/reagents/R = holder
 		R.reagent_list.Add(src)
 
