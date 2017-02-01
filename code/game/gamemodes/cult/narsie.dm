@@ -1,3 +1,6 @@
+/**
+WHEN YOU FUCK WITH THIS FILE, UPDATE THE SUPERMATTER PORTAL AS WELL.
+*/
 var/global/narsie_behaviour = "CultStation13"
 var/global/narsie_cometh = 0
 var/global/list/narsie_list = list()

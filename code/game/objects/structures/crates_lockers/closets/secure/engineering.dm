@@ -211,10 +211,11 @@
 
 /obj/structure/closet/crate/secure/large/reinforced/shard
 	name = "Supermatter Shard Crate"
+	var/payload = /obj/machinery/power/supermatter/shard
 	New()
 		..()
 		sleep(2)
-		new /obj/machinery/power/supermatter/shard(src)
+		new payload(src)
 
 /obj/structure/closet/crate/secure/large/reinforced/shard/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover,/obj/machinery/power/supermatter))
@@ -226,3 +227,8 @@
 		if(S.damage) //This is what I like to call predicting the metagame
 			return 0
 	return ..()
+
+
+/obj/structure/closet/crate/secure/large/reinforced/shard/crystal
+	name = "Supermatter Crystal Crate"
+	payload = /obj/machinery/power/supermatter
