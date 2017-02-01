@@ -168,6 +168,10 @@ world/loop_checks = 0
 		timestopped = 1
 		flags |= INVULNERABLE
 		flags |= TIMELESS
+		if(loc)
+			if(ismob(loc))
+				var/mob/M = loc
+				M.drop_item(src, force_drop = 1)
 		forceMove(null)
 		return 1
 /*
