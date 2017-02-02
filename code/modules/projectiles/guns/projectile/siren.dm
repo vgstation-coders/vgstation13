@@ -141,7 +141,6 @@
 	desc = "Fun for all ages!"
 	icon_state = "squirt_gun"
 	max_reagents = 50
-	projectile_type = /obj/item/projectile/beam/liquid_stream/weak
 
 /obj/item/weapon/gun/siren/supersoaker/pistol/isHandgun()
 	return TRUE
