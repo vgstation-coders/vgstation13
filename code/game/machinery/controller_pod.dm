@@ -36,7 +36,6 @@
 		brainmob = null
 	..()
 
-
 /obj/machinery/controller_pod/wrenchAnchor(mob/user)
 	if(occupant)
 		user << "You can't move \the [src], it's occupied!"
@@ -66,10 +65,12 @@
 			return 1
 		else
 			if(!nl_brain.brainmob)
-				user << "\The [nl_brain] doesn't have a usable intelligence to connect to."
+				to_chat(user, "\The [nl_brain] doesn't have a usable intelligence to connect to.")
 				return 1
 			if(brainmob && brainmob.controlling)
-				user << "\The [src] already has a neural target, you'll have to get rid of it first."
+				to_chat(user, "\The [src] already has a neural target, you'll have to get rid of it first.")
+				return 1
+			if(!anchored)
 				return 1
 			connect_brain(nl_brain.brainmob)
 			user.visible_message("[user] links \the [nl_brain] to \the [src]", "You link \the [nl_brain] to \the [src].")
@@ -108,15 +109,15 @@
 
 		if(brainmob.client)
 			brainmob.client.screen.Add(eject_button)
-		brainmob << "<span class='notice'>Neural link successfully established.</span>"
+		to_chat(brainmob, "<span class='notice'>Neural link successfully established.</span>")
 	else
 		if(occupant.client)
 			occupant.client.screen.Add(eject_button)
 		if(link_flags & CONTROLLER_VISUAL_LINK)
-			occupant << "<span class='notice'>Visual link successfully established.</span>"
+			to_chat(occupant, "<span class='notice'>Visual link successfully established.</span>")
 			occupant.reset_view(brainmob)
 		if(link_flags & CONTROLLER_AUDIO_LINK)
-			occupant << "<span class='notice'>Audio link successfully established.</span>"
+			to_chat(occupant, "<span class='notice'>Audio link successfully established.</span>")
 
 /obj/machinery/controller_pod/proc/eject_mob()
 	for(var/atom/movable/AM in src.contents)
@@ -124,10 +125,12 @@
 
 	if(brainmob)
 		if(brainmob.mind)
+			brainmob.client.screen.Remove(eject_button)
 			brainmob.mind.transfer_to(occupant)
 		else if(brainmob.controlling && istype(brainmob.controlling, /mob))
 			var/mob/M = brainmob.controlling
 			if(M.mind)
+				brainmob.client.screen.Remove(eject_button)
 				M.mind.transfer_to(occupant)
 
 	if(occupant && occupant.client)

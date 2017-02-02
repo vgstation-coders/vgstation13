@@ -204,7 +204,7 @@ Auto Patrol: []"},
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 	else
 		. = ..()
-	if(iswelder(W)) && user.a_intent != I_HURT) // Any intent but harm will heal, so we shouldn't get angry.
+	if(iswelder(W) && user.a_intent != I_HURT) // Any intent but harm will heal, so we shouldn't get angry.
 		return 1
 	if(!. && (W.force) && (!target) ) // Added check for welding tool to fix #2432. Welding tool behavior is handled in superclass.
 		threatlevel = user.assess_threat(src)
