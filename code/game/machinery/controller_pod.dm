@@ -95,6 +95,10 @@
 	if(!new_occupant || !istype(new_occupant))
 		return
 
+	if(!anchored)
+		to_chat(new_occupant, "<span class='notice'>[src] must be anchored to enter!</span>")
+		return
+
 	if(!brainmob)
 		new_occupant.show_message("\The [src] beeps: \"No intelligence connected!\"", 1)
 		return
@@ -116,6 +120,7 @@
 		if(link_flags & CONTROLLER_VISUAL_LINK)
 			to_chat(occupant, "<span class='notice'>Visual link successfully established.</span>")
 			occupant.reset_view(brainmob)
+			occupant.set_machine(src)
 		if(link_flags & CONTROLLER_AUDIO_LINK)
 			to_chat(occupant, "<span class='notice'>Audio link successfully established.</span>")
 
@@ -135,6 +140,8 @@
 
 	if(occupant && occupant.client)
 		occupant.client.screen.Remove(eject_button)
+
+	occupant.unset_machine()
 
 	occupant = null
 	icon_state = "pod_open"
@@ -192,6 +199,12 @@
 			return 1
 	eject_mob()
 
+/obj/machinery/controller_pod/check_eye(var/mob/user = occupant)
+	link_flags = occupant.get_neural_flags()
+	if (!(link_flags & CONTROLLER_VISUAL_LINK))
+		return null
+	user.reset_view(brainmob)
+	return 1
 
 ////// THE BUTTON
 
