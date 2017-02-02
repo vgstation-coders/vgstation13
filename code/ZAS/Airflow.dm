@@ -461,8 +461,8 @@ mob/living/carbon/human/airflow_hit(atom/A)
 	for(var/i in contents)
 		if(istype(i, /obj/item/airbag))
 			var/obj/item/airbag/airbag = i
-			airbag.deploy()
-			b_loss = 0	//this isn't working because I can't get airflow to actually throw me on test_tiny.dmm
+			airbag.deploy(src)
+			b_loss = 0
 			break
 
 	var/head_damage = ((b_loss/3)/100) * (100 - getarmor(LIMB_HEAD,"melee"))
