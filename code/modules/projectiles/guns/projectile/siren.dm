@@ -103,6 +103,7 @@
 	max_reagents = 200
 	hard = -1
 	projectile_type = /obj/item/projectile/beam/liquid_stream
+	clumsy_check = 0
 	var/pumping = FALSE
 	var/pumps = 0
 
