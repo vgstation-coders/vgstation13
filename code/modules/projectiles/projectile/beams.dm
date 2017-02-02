@@ -956,6 +956,7 @@ var/list/beam_master = list()
 	custom_impact = 1
 	penetration = 0
 	pass_flags = PASSTABLE
+	var/has_splashed = FALSE
 
 /obj/item/projectile/beam/liquid_stream/New(atom/A, var/t_range)
 	..(A)
@@ -985,7 +986,12 @@ var/list/beam_master = list()
 		else
 			splash_sub(reagents, get_turf(src), reagents.total_volume/2)
 		splash_sub(reagents, A, reagents.total_volume)
+		has_splashed = TRUE
 		return 1
+
+/obj/item/projectile/beam/liquid_stream/OnDeath()
+	if(!has_splashed && get_turf(src))
+		splash_sub(reagents, get_turf(src), reagents.total_volume)
 
 /obj/item/projectile/beam/liquid_stream/proc/adjust_strength(var/t_range)
 	if(t_range)
