@@ -204,7 +204,7 @@ Auto Patrol: []"},
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 	else
 		. = ..()
-	if(istype(W, /obj/item/weapon/weldingtool) && user.a_intent != I_HURT) // Any intent but harm will heal, so we shouldn't get angry.
+	if(iswelder(W)) && user.a_intent != I_HURT) // Any intent but harm will heal, so we shouldn't get angry.
 		return 1
 	if(!. && (W.force) && (!target) ) // Added check for welding tool to fix #2432. Welding tool behavior is handled in superclass.
 		threatlevel = user.assess_threat(src)
@@ -416,9 +416,9 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/secbot/proc/prox_stun(var/mob/target)
 	playsound(get_turf(src), 'sound/weapons/Egloves.ogg', 50, 1, -1)
-	if(istype(target, /mob/living/carbon))
+	if(iscarbon(target))
 		var/mob/living/carbon/M = target
-		if (istype(M, /mob/living/carbon/human))
+		if (ishuman(M))
 			if (M.stuttering < 10 && (!(M_HULK in M.mutations))  /*&& (!istype(M:wear_suit, /obj/item/clothing/suit/judgerobe))*/)
 				M.stuttering = 10
 			M.Stun(10)
@@ -432,7 +432,7 @@ Auto Patrol: []"},
 			var/area/location = get_area(src)
 			broadcast_security_hud_message("[src.name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] suspect <b>[target]</b> in <b>[location]</b>", src)
 		visible_message("<span class='danger'>[src.target] has been stunned by [src]!</span>")
-	else if(istype(target, /mob/living/simple_animal))
+	else if(isanimal(target))
 		visible_message("<span class='danger'>[src] beats [src.target] with the stun baton!</span>")
 		var/mob/living/simple_animal/S = src.target
 		if(S && istype(S))

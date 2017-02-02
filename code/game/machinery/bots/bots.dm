@@ -155,12 +155,12 @@
 		if(newbrain.usable_brain() && panel_open && !brain)
 			user.drop_item(newbrain, src)
 			add_brain(newbrain)
-			user << "You install \the [brain] into \the [src]."
+			to_chat(user, "<span class='notice'>You install \the [brain] into \the [src].</span>")
 			return 1
-	if(istype(W, /obj/item/weapon/crowbar))
+	if(iscrowbar(W))
 		if(panel_open && brain)
 			remove_brain()
-			user << "You pry out \the [src]'s brain."
+			to_chat(user, "<span class='notice'>You pry out \the [src]'s brain.</span>")
 			return 1
 	if(!locked && (isscrewdriver(W) || iscrowbar(W)))
 		return ..()
