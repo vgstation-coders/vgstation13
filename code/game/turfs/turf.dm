@@ -6,6 +6,7 @@
 
 	//for floors, use is_plating(), is_plasteel_floor() and is_light_floor()
 	var/intact = 1
+	var/turf_flags = 0
 
 	//properties for open tiles (/floor)
 	var/oxygen = 0
@@ -489,7 +490,7 @@
 			M.take_damage(100, "brute")
 
 /turf/proc/Bless()
-	flags |= NOJAUNT
+	turf_flags |= NOJAUNT
 
 /////////////////////////////////////////////////////////////////////////
 // Navigation procs

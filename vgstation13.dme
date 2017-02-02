@@ -1596,7 +1596,6 @@
 #include "code\modules\nano\JSON Writer.dm"
 #include "code\modules\nano\nanoexternal.dm"
 #include "code\modules\nano\nanomanager.dm"
-#include "code\modules\nano\nanomapgen.dm"
 #include "code\modules\nano\nanoui.dm"
 #include "code\modules\optics\photocollector.dm"
 #include "code\modules\optics\prism.dm"
