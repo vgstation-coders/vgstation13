@@ -26,7 +26,6 @@ var/datum/subsystem/more_init/SSmore_init
 	generateHoloMinimaps()
 	log_startup_progress("  Finished holominimaps in [stop_watch(watch)]s.")
 
-	buildcamlist()
 
 	if(config.media_base_url)
 		watch = start_watch()
@@ -36,27 +35,6 @@ var/datum/subsystem/more_init/SSmore_init
 	..()
 
 
-/datum/subsystem/more_init/proc/buildcamlist()
-	adv_camera.camerasbyzlevel = list()
-	for(var/key in adv_camera.zlevels)
-		adv_camera.camerasbyzlevel["[key]"] = list()
-	//camerasbyzlevel = list("1" = list(), "5" = list())
-	if(!istype(cameranet) || !istype(cameranet.cameras) || !cameranet.cameras.len)
-		world.log << "cameranet has not been initialized before us, finding cameras manually."
-		for(var/obj/machinery/camera/C in world) //can't use machines list because cameras are removed from it.
-			if(C.z == map.zMainStation || C.z == map.zAsteroid)
-				var/list/ourlist = adv_camera.camerasbyzlevel["[C.z]"]
-				ourlist += C
-	else
-		for(var/obj/machinery/camera/C in cameranet.cameras) //can't use machines list because cameras are removed from it.
-			if(C.z == map.zMainStation || C.z == map.zAsteroid)
-				var/list/ourlist = adv_camera.camerasbyzlevel["[C.z]"]
-				ourlist += C
-	for(var/key in adv_camera.camerasbyzlevel)
-		var/list/keylist = adv_camera.camerasbyzlevel[key]
-		world.log << "[key] has [keylist.len] entries"
-
-	adv_camera.initialized = 1
 
 
 /datum/subsystem/more_init/proc/cachedamageicons()

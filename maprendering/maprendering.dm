@@ -43,7 +43,7 @@
 					for(var/b = 1 to icon_size)
 						//Finding turf and all turf contents
 						var/turf/currentturf = locate(x+a,y+b,z)
-						if(!currentturf || (currentturf.flags & NO_MINIMAP))
+						if(!currentturf || (currentturf.turf_flags & NO_MINIMAP))
 							continue
 						var/list/allturfcontents = currentturf.contents.Copy()
 

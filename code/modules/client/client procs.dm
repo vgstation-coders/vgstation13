@@ -361,23 +361,29 @@
 		'html/panels.css',
 	)
 
+	// Send NanoUI resources to this client
+	spawn nanomanager.send_resources(src)
+
 	// Preload the crew monitor. This needs to be done due to BYOND bug http://www.byond.com/forum/?post=1487244
 	//The above bug report thing doesn't exist anymore so uh, whatever.
 	spawn
 		send_html_resources()
 
-	// Send NanoUI resources to this client
-	spawn nanomanager.send_resources(src)
 
 
 /client/proc/send_html_resources()
-	if(crewmonitor && minimapinit)
-		crewmonitor.sendResources(src)
-	if(adv_camera && minimapinit)
-		adv_camera.sendResources(src)
+	get_minimap_resources()
 	while(!vote || !vote.interface)
 		sleep(1)
 	vote.interface.sendAssets(src)
+
+/client/proc/get_minimap_resources()
+	for (var/z = 1 to world.maxz)
+		if(z == CENTCOMM_Z)
+			continue
+		if(fexists("[getMinimapFile(z)].png"))
+			var/F = file("[getMinimapFile(z)].png")
+			src << browse_rsc(F, "[map.nameShort][z].png")
 
 /proc/get_role_desire_str(var/rolepref)
 	switch(rolepref & ROLEPREF_VALMASK)
