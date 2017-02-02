@@ -54,25 +54,6 @@
 	if(!glass && cameranet)
 		cameranet.updateVisibility(src, 0)
 
-
-// ROBOT MOVEMENT
-
-// Update the portable camera everytime the Robot moves.
-// This might be laggy, comment it out if there are problems.
-/mob/living/silicon/robot/var/updating = 0
-
-/mob/living/silicon/robot/Move()
-	var/oldLoc = src.loc
-	. = ..()
-	if(.)
-		if(src.camera)
-			if(!updating)
-				updating = 1
-				spawn(BORG_CAMERA_BUFFER)
-					if(oldLoc != src.loc)
-						cameranet.updatePortableCamera(src.camera)
-					updating = 0
-
 // CAMERA
 
 // An addition to deactivate which removes/adds the camera from the chunk list based on if it works or not.

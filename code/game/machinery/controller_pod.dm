@@ -204,5 +204,6 @@
 	if(pod_master)
 		pod_master.eject_mob()
 
-/obj/screen/eject_button/pool_on_reset()
+/*/obj/screen/eject_button/pool_on_reset()
 	. = 0
+*/

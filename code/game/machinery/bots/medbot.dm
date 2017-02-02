@@ -485,7 +485,7 @@
 			src.reagent_glass.reagents.trans_to(C,src.injection_amount) //Inject from beaker instead.
 			src.reagent_glass.reagents.reaction(C, 2)
 		else
-			C.patient.reagents.add_reagent(reagent_id,src.injection_amount)
+			C.reagents.add_reagent(reagent_id,src.injection_amount)
 		visible_message("<span class='danger'>[src] injects [C] with the syringe!</span>")
 
 	src.icon_state = "[src.icon_initial][src.on]"

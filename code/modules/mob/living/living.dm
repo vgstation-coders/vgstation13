@@ -718,7 +718,7 @@ Thanks.
 			M.UpdateFeed(src)
 
 	if(T != loc)
-		handle_hookchain(direct)
+		handle_hookchain(Dir)
 
 	if(.)
 		for(var/obj/item/weapon/gun/G in targeted_by) //Handle moving out of the gunner's view.

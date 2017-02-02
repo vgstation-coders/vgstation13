@@ -223,7 +223,7 @@ Auto Patrol: []"},
 		src.target = H
 		src.mode = SECBOT_HUNT
 
-/obj/machinery/bot/secbot/Emag(mob/user as mob)
+/obj/machinery/bot/secbot/emag(mob/user as mob)
 	..()
 	if(panel_open && !locked)
 		if(user)
@@ -422,9 +422,9 @@ Auto Patrol: []"},
 			if (M.stuttering < 10 && (!(M_HULK in M.mutations))  /*&& (!istype(M:wear_suit, /obj/item/clothing/suit/judgerobe))*/)
 				M.stuttering = 10
 			M.Stun(10)
-			M.Weaken(10)
+			M.Knockdown(10)
 		else
-			M.Weaken(10)
+			M.Knockdown(10)
 			M.stuttering = 10
 			M.Stun(10)
 

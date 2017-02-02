@@ -844,12 +844,6 @@ Auto Patrol: []"},
 	else
 		..()
 
-/obj/machinery/bot/secbot/ed209/proc/check_for_weapons(var/obj/item/slot_item) //Unused anywhere, copypasted in secbot.dm
-	if(istype(slot_item, /obj/item/weapon/gun) || istype(slot_item, /obj/item/weapon/melee))
-		if(!(slot_item.type in safe_weapons))
-			return 1
-	return 0
-
 /obj/machinery/bot/secbot/ed209/declare()
 	var/area/location = get_area(src)
 	declare_message = "<span class='info'>[bicon(src)] [name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] scumbag <b>[target]</b> in <b>[location]</b></span>"
