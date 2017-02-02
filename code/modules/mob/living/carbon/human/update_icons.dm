@@ -667,7 +667,7 @@ var/global/list/damage_icon_parts = list()
 			if(S.glasses_icons)
 				standing.icon = S.glasses_icons
 
-		if(glasses.cover_hair)
+		if(istype(glasses) && glasses.cover_hair)
 			var/obj/Overlays/O = obj_overlays[GLASSES_OVER_HAIR_LAYER]
 			O.icon = standing
 			O.icon_state = standing.icon_state

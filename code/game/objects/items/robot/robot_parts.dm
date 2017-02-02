@@ -187,7 +187,7 @@
 			if(!M.brainmob)
 				to_chat(user, "<span class='warning'>Sticking an empty [W] into the frame would sort of defeat the purpose.</span>")
 				return
-			if(!M.brainmob.key)
+			if(!M.usable_brain())
 				if(!mind_can_reenter(M.brainmob.mind))
 					to_chat(user, "<span class='notice'>\The [W] is completely unresponsive; there's no point.</span>")
 					return
@@ -219,11 +219,13 @@
 				return
 
 			O.mmi = W
+			O.mmi.brainmob.controlling = O
 			O.invisibility = 0
 			O.custom_name = created_name
 			O.updatename("Default")
 
-			M.brainmob.mind.transfer_to(O)
+			if(M.brainmob.mind)
+				M.brainmob.mind.transfer_to(O)
 
 			if(O.mind && O.mind.special_role)
 				O.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")

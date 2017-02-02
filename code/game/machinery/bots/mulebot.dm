@@ -110,41 +110,25 @@ var/global/mulebot_count = 0
 
 // attack by item
 // emag : lock/unlock,
-// screwdriver: open/close hatch
+// screwdriver: panel_open/close hatch
 // cell: insert it
 // other: chance to knock rider off bot
 /obj/machinery/bot/mulebot/attackby(var/obj/item/I, var/mob/user)
-	if(istype(I,/obj/item/weapon/card/emag))
-		locked = !locked
-		to_chat(user, "<span class='notice'>You [locked ? "lock" : "unlock"] the mulebot's controls!</span>")
-		flick("[icon_initial]-emagged", src)
-		playsound(get_turf(src), 'sound/effects/sparks1.ogg', 100, 0)
+	. = ..()
+	if(.)
+		return .
 	else if(istype(I, /obj/item/weapon/card/id))
 		if(toggle_lock(user))
 			to_chat(user, "<span class='notice'>Controls [(locked ? "locked" : "unlocked")].</span>")
 
-	else if(istype(I,/obj/item/weapon/cell) && open && !cell)
+	else if(istype(I,/obj/item/weapon/cell) && panel_open && !cell)
 		var/obj/item/weapon/cell/C = I
 		if(user.drop_item(C, src))
 			cell = C
 			updateDialog()
 	else if(istype(I,/obj/item/weapon/wirecutters)||istype(I,/obj/item/device/multitool))
 		attack_hand(user)
-	else if(istype(I,/obj/item/weapon/screwdriver))
-		if(locked)
-			to_chat(user, "<span class='notice'>The maintenance hatch cannot be opened or closed while the controls are locked.</span>")
-			return
 
-		open = !open
-		if(open)
-			src.visible_message("[user] opens the maintenance hatch of [src]", "<span class='notice'>You open [src]'s maintenance hatch.</span>")
-			on = 0
-			icon_state="[icon_initial]-hatch"
-		else
-			src.visible_message("[user] closes the maintenance hatch of [src]", "<span class='notice'>You close [src]'s maintenance hatch.</span>")
-			icon_state = "[icon_initial]0"
-
-		updateDialog()
 	else if (iswrench(I))
 		if (src.health < maxhealth)
 			src.health = min(maxhealth, src.health+25)
@@ -160,10 +144,27 @@ var/global/mulebot_count = 0
 			user.visible_message("<span class='warning'>[user] knocks [load] off [src] with \the [I]!</span>", "<span class='warning'>You knock [load] off [src] with \the [I]!</span>")
 		else
 			to_chat(user, "You hit [src] with \the [I] but to no effect.")
-	else
-		..()
 	return
 
+/obj/machinery/bot/mulebot/emag(mob/user)
+	locked = !locked
+	user << "<span class='notice'>You [locked ? "lock" : "unlock"] the mulebot's controls!</span>"
+	flick("mulebot-emagged", src)
+	playsound(get_turf(src), 'sound/effects/sparks1.ogg', 100, 0)
+
+/obj/machinery/bot/mulebot/togglePanelOpen(var/obj/toggleitem, var/mob/user)
+	if(locked)
+		user << "<span class='notice'>The maintenance hatch cannot be opened or closed while the controls are locked.</span>"
+		return -1
+
+	. = ..()
+	if(. == 1)
+		if(panel_open)
+			on = 0
+			icon_state="mulebot-hatch"
+		else
+			icon_state = "mulebot0"
+		updateDialog()
 
 /obj/machinery/bot/mulebot/ex_act(var/severity)
 	unload(0)
@@ -203,7 +204,7 @@ var/global/mulebot_count = 0
 	dat += "ID: [suffix]<BR>"
 	dat += "Power: [on ? "On" : "Off"]<BR>"
 
-	if(!open)
+	if(!panel_open)
 
 		dat += "Status: "
 		switch(mode)
@@ -248,7 +249,7 @@ var/global/mulebot_count = 0
 
 	else
 		if(!ai)
-			dat += "The maintenance hatch is open.<BR><BR>"
+			dat += "The maintenance hatch is panel_open.<BR><BR>"
 			dat += "Power cell: "
 			if(cell)
 				dat += "<A href='byond://?src=\ref[src];op=cellremove'>Installed</A><BR>"
@@ -283,7 +284,7 @@ var/global/mulebot_count = 0
 			if("power")
 				if (src.on)
 					turn_off()
-				else if (cell && !open)
+				else if (cell && !panel_open)
 					if (!turn_on())
 						to_chat(usr, "<span class='warning'>You can't switch on [src].</span>")
 						return
@@ -294,7 +295,7 @@ var/global/mulebot_count = 0
 
 
 			if("cellremove")
-				if(open && cell && !usr.get_active_hand())
+				if(panel_open && cell && !usr.get_active_hand())
 					cell.updateicon()
 					usr.put_in_active_hand(cell)
 					cell.add_fingerprint(usr)
@@ -304,7 +305,7 @@ var/global/mulebot_count = 0
 					updateDialog()
 
 			if("cellinsert")
-				if(open && !cell)
+				if(panel_open && !cell)
 					var/obj/item/weapon/cell/C = usr.get_active_hand()
 					if(istype(C))
 						if(usr.drop_item(C, src))
@@ -383,7 +384,7 @@ var/global/mulebot_count = 0
 
 // returns true if the bot has power
 /obj/machinery/bot/mulebot/proc/has_power()
-	return !open && cell && cell.charge > 0 && wires.HasPower()
+	return !panel_open && cell && cell.charge > 0 && wires.HasPower()
 
 /obj/machinery/bot/mulebot/proc/toggle_lock(var/mob/user)
 	if(src.allowed(user))
@@ -425,7 +426,7 @@ var/global/mulebot_count = 0
 	if(!isturf(C.loc)) //To prevent the loading from stuff from someone's inventory, which wouldn't get handled properly.
 		return
 
-	if(get_dist(C, src) > 1 || load || !on)
+	if(get_dist(C, src) > 1 || load || (!on && !brain))
 		return
 	for(var/obj/structure/plasticflaps/P in src.loc)//Takes flaps into account
 		if(!Cross(C,P))
@@ -494,7 +495,7 @@ var/global/mulebot_count = 0
 	// with items dropping as mobs are loaded
 
 	for(var/atom/movable/AM in src)
-		if(AM == cell || AM == botcard || AM == integratedpai)
+		if(AM == cell || AM == botcard || AM == integratedpai || AM == brain || (brain && AM == brain.brainmob))
 			continue
 
 		AM.forceMove(src.loc)
@@ -507,13 +508,25 @@ var/global/mulebot_count = 0
 				M.client.eye = src
 	mode = 0
 
+/obj/machinery/bot/mulebot/click_action(atom/target, mob/user)
+	if(istype(target, /atom/movable) && !load)
+		load(target)
+	else
+		if(load)
+			unload(get_dir(src, target))
+	return 1
+
+/obj/machinery/bot/mulebot/return_speed()
+	return (wires.Motor1() ? 1 : 0) + (wires.Motor2() ? 2 : 0)
 
 /obj/machinery/bot/mulebot/process()
 	if(!has_power())
 		on = 0
 		return
+	if(brain)
+		return
 	if(on)
-		var/speed = (wires.Motor1() ? 1 : 0) + (wires.Motor2() ? 2 : 0)
+		var/speed = return_speed()
 //		to_chat(world, "speed: [speed]")
 		switch(speed)
 			if(0)
@@ -748,7 +761,10 @@ var/global/mulebot_count = 0
 					M.Stun(8)
 					M.Knockdown(5)
 				M.lying = 1
-	..()
+		else
+			..()
+	else
+		..()
 
 /obj/machinery/bot/mulebot/alter_health()
 	return get_turf(src)
@@ -785,7 +801,9 @@ var/global/mulebot_count = 0
 		return
 	if(load == user)
 		unload(0)
-	return
+		return
+	else
+		return ..()
 
 // receive a radio signal
 // used for control and beacon reception
@@ -939,7 +957,7 @@ var/global/mulebot_count = 0
 	var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
 	O.New(O.loc)
 	unload(0)
-	qdel(src)
+	..()
 
 /obj/machinery/bot/mulebot/getpAIMovementDelay()
 	return ((wires.Motor1() ? 1 : 0) + (wires.Motor2() ? 2 : 0) - 1) * 2

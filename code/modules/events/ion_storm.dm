@@ -168,7 +168,7 @@
 				bots -= bot
 				continue
 			if(prob(botEmagChance))
-				bot.Emag()
+				bot.emag()
 
 /datum/event/ionstorm/end()
 	active = 0

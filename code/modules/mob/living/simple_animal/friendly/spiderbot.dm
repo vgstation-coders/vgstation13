@@ -53,7 +53,7 @@
 		if(!B.brainmob)
 			to_chat(user, "<span class='warning'>Sticking an empty MMI into the frame would sort of defeat the purpose.</span>")
 			return
-		if(!B.brainmob.key)
+		if(!B.usable_brain())
 			if(!mind_can_reenter(B.brainmob.mind))
 				to_chat(user, "<span class='notice'>[O] is completely unresponsive; there's no point.</span>")
 				return
@@ -71,6 +71,8 @@
 		to_chat(user, "<span class='notice'>You install [O] in [src]!</span>")
 
 		src.mmi = O
+		if(mmi.brainmob)
+			mmi.brainmob.controlling = src
 		src.transfer_personality(O)
 		src.update_icon()
 		return 1

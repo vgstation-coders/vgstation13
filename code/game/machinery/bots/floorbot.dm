@@ -107,7 +107,7 @@ var/global/list/floorbot_targets=list()
 	var/dat
 	dat += "<TT><B>Automatic Station Floor Repairer v1.0</B></TT><BR><BR>"
 	dat += "Status: <A href='?src=\ref[src];operation=start'>[src.on ? "On" : "Off"]</A><BR>"
-	dat += "Maintenance panel panel is [src.open ? "opened" : "closed"]<BR>"
+	dat += "Maintenance panel panel is [src.panel_open ? "panel_opened" : "closed"]<BR>"
 	dat += "Tiles left: [src.amount]<BR>"
 	dat += "Behvaiour controls are [src.locked ? "locked" : "unlocked"]<BR>"
 	if(!src.locked || issilicon(user))
@@ -136,13 +136,13 @@ var/global/list/floorbot_targets=list()
 		to_chat(user, "<span class='notice'>You load [loaded] tiles into the floorbot. He now contains [src.amount] tiles.</span>")
 		src.updateicon()
 	else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
-		if(src.allowed(usr) && !open && !emagged)
+		if(src.allowed(usr) && !panel_open && !emagged)
 			src.locked = !src.locked
 			to_chat(user, "<span class='notice'>You [src.locked ? "lock" : "unlock"] the [src] behaviour controls.</span>")
 		else
 			if(emagged)
 				to_chat(user, "<span class='warning'>ERROR</span>")
-			if(open)
+			if(panel_open)
 				to_chat(user, "<span class='warning'>Please close the access panel before locking it.</span>")
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
@@ -150,9 +150,9 @@ var/global/list/floorbot_targets=list()
 	else
 		..()
 
-/obj/machinery/bot/floorbot/Emag(mob/user as mob)
+/obj/machinery/bot/floorbot/emag(mob/user as mob)
 	..()
-	if(open && !locked)
+	if(panel_open && !locked)
 		if(user)
 			to_chat(user, "<span class='notice'>The [src] buzzes and beeps.</span>")
 
@@ -215,6 +215,8 @@ var/global/list/floorbot_targets=list()
 	if(!src.on)
 		return
 	if(src.repairing)
+		return
+	if(brain)
 		return
 
 	if(prob(1))
@@ -404,6 +406,17 @@ var/global/list/floorbot_targets=list()
 				return 1
 	return 0
 
+/obj/machinery/bot/floorbot/click_action(var/atom/target, mob/user)
+	if(!target.Adjacent(src))
+		return 1
+	if(istype(target, /turf))
+		repair(target)
+	else if (istype(target, /obj/item/stack/tile/plasteel))
+		eattile(target)
+	else if (istype(target, /obj/item/stack/sheet/metal))
+		maketile(target)
+	return 1
+
 /obj/machinery/bot/floorbot/proc/repair(var/turf/target)
 	if(istype(target, /turf/space/))
 		if(isspace(target.loc))
@@ -419,15 +432,15 @@ var/global/list/floorbot_targets=list()
 		var/obj/item/stack/tile/plasteel/T = new /obj/item/stack/tile/plasteel
 		src.repairing = 1
 		spawn(50)
-			T.build(src.loc)
+			T.build(target)
 			src.repairing = 0
 			src.amount -= 1
 			src.updateicon()
 			src.anchored = 0
 			floorbot_targets -= src.target
 			src.target = null
-	else
-		var/turf/simulated/floor/F = src.loc
+	else if(istype(target, /turf/simulated/floor))
+		var/turf/simulated/floor/F = target
 		if(!F.broken && !F.burnt)
 			visible_message("<span class='warning'>[src] begins to improve the floor.</span>")
 			src.repairing = 1
@@ -597,13 +610,6 @@ var/global/list/floorbot_targets=list()
 	find_patrol_target()
 	return
 
-/obj/machinery/bot/floorbot/Bump(M as mob|obj) //Leave no door unopened!
-	if((istype(M, /obj/machinery/door)) && (!isnull(src.botcard)))
-		var/obj/machinery/door/D = M
-		if(!istype(D, /obj/machinery/door/firedoor) && D.check_access(src.botcard))
-			D.open()
-	return
-
 /obj/machinery/bot/floorbot/receive_signal(datum/signal/signal)
 	//log_admin("DEBUG \[[world.timeofday]\]: /obj/machinery/bot/secbot/receive_signal([signal.debug_print()])")
 	if(!on)
@@ -703,7 +709,7 @@ var/global/list/floorbot_targets=list()
 	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 	s.set_up(3, 1, src)
 	s.start()
-	qdel(src)
+	..()
 	return
 
 

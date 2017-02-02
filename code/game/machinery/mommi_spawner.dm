@@ -100,7 +100,7 @@
 				to_chat(user, "<span class='warning'>\The [mmi] appears to be devoid of any soul.</span>")
 				return 1
 
-			if(!mmi.brainmob.key)
+			if(!mmi.usable_brain())
 				if(!mind_can_reenter(mmi.brainmob.mind))
 					to_chat(user, "<span class='notice'>\The [src] indicates that their mind is completely unresponsive; there's no point.</span>")
 					return TRUE
@@ -165,6 +165,7 @@
 
 		if(use_mmi)
 			M.mmi = use_mmi
+			M.mmi.brainmob.controlling = M
 			use_mmi.forceMove(M)
 		M.Namepick()
 		M.updatename()

@@ -25,6 +25,13 @@
 /client/Northwest()
 	treat_hotkeys(NORTHWEST)
 
+/mob/Move(NewLoc, Dir)
+	if(isobj(src.loc) || ismob(src.loc))//Inside an object, tell it we moved
+		var/atom/O = src.loc
+		O.relaymove(src, Dir)
+		return //We aren't moving ourselves, so we don't return a value
+	return ..()
+
 /client/proc/treat_hotkeys(var/keypress)
 	keypress = turn(keypress, dir)
 	var/mob/living/silicon/pai/pai_override = null
@@ -305,10 +312,6 @@
 		if(!can_move_without_gravity && !mob.Process_Spacemove(0))
 			return 0
 
-	if(isobj(mob.loc) || ismob(mob.loc))//Inside an object, tell it we moved
-		var/atom/O = mob.loc
-		return O.relaymove(mob, dir)
-
 	if(isturf(mob.loc))
 		if(mob.restrained()) //Why being pulled while cuffed prevents you from moving
 			if(mob.grabbed_by.len)
@@ -403,6 +406,9 @@
 
 		if(mob.dir != old_dir)
 			mob.Facing()
+
+	else
+		return ..()
 
 ///Process_Grab()
 ///Called by client/Move()

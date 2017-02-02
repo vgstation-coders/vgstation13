@@ -482,6 +482,8 @@ a {
 	if(istype(M) && M.client && M.machine == src)
 		src.attack_self(M)
 
+/obj/proc/click_action(atom/target, mob/user)
+	return
 
 /obj/proc/alter_health()
 	return 1

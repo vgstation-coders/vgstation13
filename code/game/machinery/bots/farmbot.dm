@@ -69,13 +69,9 @@
 
 /obj/machinery/bot/farmbot/Bump(M as mob|obj) //Leave no door unopened!
 	spawn(0)
-		if ((istype(M, /obj/machinery/door)) && (!isnull(src.botcard)))
-			var/obj/machinery/door/D = M
-			if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(src.botcard))
-				D.open()
-				src.frustration = 0
-		return
-	return
+	. = ..()
+	if(.)
+		frustration = 0
 
 /obj/machinery/bot/farmbot/turn_on()
 	. = ..()
@@ -187,7 +183,7 @@
 	else
 		..()
 
-/obj/machinery/bot/farmbot/Emag(mob/user as mob)
+/obj/machinery/bot/farmbot/emag(mob/user as mob)
 	..()
 	if(user)
 		to_chat(user, "<span class='warning'>You short out [src]'s plant identifier circuits.</span>")
@@ -226,7 +222,7 @@
 	var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
 	s.set_up(3, 1, src)
 	s.start()
-	qdel(src)
+	..()
 	return
 
 /obj/machinery/bot/farmbot/process()
@@ -297,8 +293,8 @@
 	if ( mode == FARMBOT_MODE_REFILL )
 		refill()
 
-
-
+/obj/machinery/bot/farmbot/click_action(var/atom/target, mob/user) //You can't handle the farmbot
+	return
 
 /obj/machinery/bot/farmbot/proc/find_target()
 	if ( emagged ) //Find a human and help them!
