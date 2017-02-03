@@ -166,8 +166,7 @@ world/loop_checks = 0
 		density = 0
 		anchored = 1
 		timestopped = 1
-		flags |= INVULNERABLE
-		flags |= TIMELESS
+		flags |= INVULNERABLE | TIMELESS
 		if(loc)
 			if(ismob(loc))
 				var/mob/M = loc
