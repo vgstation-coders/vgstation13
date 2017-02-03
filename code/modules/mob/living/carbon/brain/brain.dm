@@ -13,7 +13,7 @@
 	icon_state = "brain1"
 	universal_speak = 1
 	universal_understand = 1
-	flags = HEAR
+	flags = HEAR | HEAR_ALWAYS
 
 	#define CONTROLLED_ROBOT_EYE	"#CF00EF"
 	var/atom/connected_to = null //if we're being controlled by something
