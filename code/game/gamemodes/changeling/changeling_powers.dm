@@ -947,7 +947,7 @@ var/list/datum/dna/hivemind_bank = list()
 		add_changeling_verb(verb_path)
 
 	to_chat(src, "<span class='notice'>We stealthily sting [T].</span>")
-	if(!T.mind || !T.mind.changeling || allow_self)
+	if(!T.mind || !T.mind.changeling || (allow_self && T == src))
 		return T	//T will be affected by the sting
 	to_chat(T, "<span class='warning'>You feel a tiny prick.</span>")
 	return
