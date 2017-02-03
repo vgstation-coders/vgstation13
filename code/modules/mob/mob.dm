@@ -1840,7 +1840,7 @@ mob/proc/on_foot()
 	spawn(duration + 1)
 		regenerate_icons()
 
-/mob/proc/transmogrify(var/target_type, var/offer_revert_spell = FALSE)
+/mob/proc/transmogrify(var/target_type, var/offer_revert_spell = FALSE)	//transforms the mob into a new member of the given mob type, while preserving the mob's body
 	if(!target_type)
 		if(transmogged_from)
 			transmogged_from.forceMove(loc)
@@ -1849,17 +1849,17 @@ mob/proc/on_foot()
 			transmogged_from.timestopped = 0
 			if(istype(transmogged_from, /mob/living/carbon))
 				var/mob/living/carbon/C = transmogged_from
-				if(C.wear_mask && istype(C.wear_mask, /obj/item/clothing/mask/morphing))
+				if(istype(C.get_item_by_slot(SLOT_MASK), /obj/item/clothing/mask/morphing))
 					C.drop_item(C.wear_mask, force_drop = 1)
 			transmogged_from = null
 			for(var/atom/movable/AM in contents)
 				AM.forceMove(get_turf(src))
 			qdel(src)
 		return
-	var/mob/M = new target_type(loc)
-	if(!istype(M))
-		qdel(M)
+	if(!ispath(target_type, /mob))
+		EXCEPTION(target_type)
 		return
+	var/mob/M = new target_type(loc)
 	M.transmogged_from = src
 	if(key)
 		M.key = key

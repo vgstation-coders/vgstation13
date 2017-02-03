@@ -8,12 +8,9 @@
 	w_class = W_CLASS_SMALL
 	var/target_type = null
 
-/obj/item/clothing/mask/morphing/equipped(M as mob, wear_mask)
-	if(target_type)
-		var/mob/living/carbon/C = M
-		if(!istype(C))
-			return
-		if(C.wear_mask == src)
+/obj/item/clothing/mask/morphing/equipped(mob/living/carbon/C, wear_mask)
+	if(target_type && istype(C))
+		if(C.get_item_by_slot(SLOT_MASK) == src)
 			if(target_type != C.type)
 				C.visible_message("<span class='danger'>As [C] puts on \the [src], \his body begins to shift and contort!</span>","<span class='danger'>As you put on \the [src], your body begins to shift and contort!</span>")
 				C.transmogrify(target_type, TRUE)
