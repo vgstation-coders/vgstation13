@@ -340,6 +340,8 @@ var/list/nest_locations = list()
 	move_to_delay = 4
 	maxHealth = 400
 	health = 400
+	gender = FEMALE
+	size = SIZE_HUGE
 	pixel_x = -16 * PIXEL_MULTIPLIER
 
 /obj/item/projectile/neurotox
