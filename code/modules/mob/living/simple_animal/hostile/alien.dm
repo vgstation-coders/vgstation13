@@ -281,6 +281,7 @@ var/list/nest_locations = list()
 	icon_dead = "alienq_dead"
 	health = 250
 	maxHealth = 250
+	gender = FEMALE
 	melee_damage_lower = 15
 	melee_damage_upper = 15
 	ranged = 1
@@ -340,7 +341,6 @@ var/list/nest_locations = list()
 	move_to_delay = 4
 	maxHealth = 400
 	health = 400
-	gender = FEMALE
 	size = SIZE_HUGE
 	pixel_x = -16 * PIXEL_MULTIPLIER
 
