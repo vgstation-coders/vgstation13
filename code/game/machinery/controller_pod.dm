@@ -16,6 +16,7 @@
 	anchored = 1
 
 	machine_flags = WRENCHMOVE | FIXED2WORK | EMAGGABLE
+	flags = HEAR
 
 	var/mob/living/occupant = null //the mob currently in the machine
 	var/mob/living/carbon/brain/brainmob = null //the mob we are connected to
@@ -142,6 +143,7 @@
 		occupant.client.screen.Remove(eject_button)
 
 	occupant.unset_machine()
+	occupant.reset_view()
 
 	occupant = null
 	icon_state = "pod_open"
@@ -177,13 +179,13 @@
 	brainmob = new_brain
 	new_brain.connected_to = src
 
-/obj/machinery/controller_pod/Hear(message, atom/movable/speaker, var/datum/language/speaking, raw_message, radio_freq)
-	if(speaker == occupant && !radio_freq && link_flags & CONTROLLER_AUDIO_LINK) //if we're speaking, no radio, with an earpiece
+/obj/machinery/controller_pod/Hear(var/datum/speech/speech, var/rendered_speech="")
+	if(speech.speaker == occupant && !speech.frequency && link_flags & CONTROLLER_AUDIO_LINK) //if we're speaking, no radio, with an earpiece
 		if(brainmob)
 			if(brainmob.controlling)
-				brainmob.controlling.say(message, 7, speaking)
+				brainmob.controlling.say(speech.message)
 			else
-				brainmob.say(message, 7, speaking)
+				brainmob.say(speech.message)
 	else
 		..()
 /obj/machinery/controller_pod/relaymove(mob/user, step_dir)

@@ -13,6 +13,7 @@
 	icon_state = "brain1"
 	universal_speak = 1
 	universal_understand = 1
+	flags = HEAR
 
 	#define CONTROLLED_ROBOT_EYE	"#CF00EF"
 	var/atom/connected_to = null //if we're being controlled by something
@@ -39,12 +40,12 @@
 		canmove = 0
 	return canmove
 
-/mob/living/carbon/brain/Hear(message, atom/movable/speaker, var/datum/language/speaking, raw_message, radio_freq)
+/mob/living/carbon/brain/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(connected_to)
 		if(istype(connected_to, /obj/machinery/controller_pod))
 			var/obj/machinery/controller_pod/pod = connected_to
 			if(pod.occupant && pod.link_flags & CONTROLLER_AUDIO_LINK)
-				return pod.occupant.Hear("<i>[message]</i>", speaker, speaking, raw_message, radio_freq)
+				return pod.occupant.Hear(speech, rendered_speech)
 	return ..()
 
 /mob/living/carbon/brain/say_understands(var/atom/movable/other)//Goddamn is this hackish, but this say code is so odd
