@@ -16,6 +16,7 @@
 #include "__DEFINES\error_hander.dm"
 #include "__DEFINES\game.dm"
 #include "__DEFINES\global.dm"
+#include "__DEFINES\hydro.dm"
 #include "__DEFINES\lighting.dm"
 #include "__DEFINES\limb_defines.dm"
 #include "__DEFINES\math.dm"

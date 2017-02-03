@@ -5,11 +5,13 @@
 // Data from the seeds carry over to these grown foods
 // ***********************************************************
 
+var/global/list/special_fruits = list()
 //Grown foods
 //Subclass so we can pass on values
 /obj/item/weapon/reagent_containers/food/snacks/grown/
 	var/plantname
 	var/potency = -1
+	var/hydroflags=0 // Used for no-fruit exclusion lists, at the moment
 	var/datum/seed/seed
 	icon = 'icons/obj/harvest.dmi'
 	New(newloc, newpotency)
@@ -18,6 +20,12 @@
 		..()
 		src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
 		src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
+
+/proc/get_special_fruits(var/filter=HYDRO_PREHISTORIC|HYDRO_VOX)
+	. = list()
+	for(var/type in existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown))
+		if((initial(type:hydroflags) & filter)>0)
+			. += type
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/New()
 	..()
@@ -791,6 +799,7 @@
 	icon_state = "chickenshroom"
 	filling_color = "F2E33A"
 	plantname = "chickenshroom"
+	hydroflags = HYDRO_VOX
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/garlic
 	name = "garlic"
@@ -798,6 +807,7 @@
 	icon_state = "garlic"
 	filling_color = "EDEDE1"
 	plantname = "garlic"
+	hydroflags = HYDRO_VOX
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/breadfruit
 	name = "breadfruit"
@@ -805,6 +815,7 @@
 	icon_state = "breadfruit"
 	filling_color = "EDEDE1"
 	plantname = "breadfruit"
+	hydroflags = HYDRO_VOX
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/woodapple
 	name = "woodapple"
@@ -814,6 +825,7 @@
 	icon_state = "woodapple"
 	filling_color = "857663"
 	plantname = "woodapple"
+	hydroflags = HYDRO_VOX
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/pitcher
 	name = "pitcher plant" //results in "slippery pitcher plant"
@@ -821,6 +833,7 @@
 	icon_state = "pitcher"
 	filling_color = "7E8507"
 	plantname = "pitcher"
+	hydroflags = HYDRO_VOX
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/aloe
 	name = "aloe vera"
@@ -828,6 +841,7 @@
 	icon_state = "aloe"
 	filling_color = "77BA9F"
 	plantname = "aloe"
+	hydroflags = HYDRO_VOX
 
 // *************************************
 // Complex Grown Object Defines -
@@ -862,6 +876,8 @@
 	playsound(get_turf(src), 'sound/effects/bang.ogg', 10, 1)
 	qdel(src)
 
+
+var/global/list/available_nofruit_fruits=null
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit
 	name = "no-fruit"
 	desc = "Any plant you want, at your fingertips."
@@ -869,13 +885,13 @@
 	potency = 15
 	filling_color = "#FFFCCC"
 	plantname = "nofruit"
-	var/list/available_fruits = list()
 	var/switching = 0
 	var/counter = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New()
 	..()
-	available_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown)
+	if(!available_nofruit_fruits)
+		available_nofruit_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown)-get_special_fruits()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/verb/pick_leaf()
 	set name = "Pick no-fruit leaf"
@@ -903,7 +919,7 @@
 				if(3)
 					playsound(get_turf(user), 'sound/weapons/genhit3.ogg', 50, 1)
 		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
-		var/current_path=pick(available_fruits)
+		var/current_path=pick(available_nofruit_fruits)
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/I = new current_path(get_turf(user))
