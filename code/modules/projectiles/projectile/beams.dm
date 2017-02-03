@@ -971,7 +971,7 @@ var/list/beam_master = list()
 	alpha = mix_alpha_from_reagents(reagents.reagent_list)
 	..()
 
-/obj/item/projectile/beam/liquid_stream/Bump(atom/A as mob|obj|turf|area)
+/obj/item/projectile/beam/liquid_stream/Bump(atom/A)
 	if(!A)
 		return
 	..()

@@ -104,7 +104,7 @@
 	hard = -1
 	projectile_type = /obj/item/projectile/beam/liquid_stream
 	clumsy_check = 0
-	var/pumping = FALSE
+	var/last_pump = 0
 	var/pumps = 0
 
 /obj/item/weapon/gun/siren/supersoaker/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
@@ -123,19 +123,17 @@
 		in_chamber = new projectile_type(src)
 		reagents.trans_to(in_chamber, 10)
 
-/obj/item/weapon/gun/siren/supersoaker/attack_self(mob/user as mob)
-	if(!pumping)
+/obj/item/weapon/gun/siren/supersoaker/attack_self(mob/user)
+	if(world.time - last_pump >= 1)
 		if(pumps >= 24)
 			return
 		to_chat(user, "You pump \the [src].")
 		pumps++
-		pumping = TRUE
+		last_pump = world.time
 		if(in_chamber)
 			var/obj/item/projectile/beam/liquid_stream/L = in_chamber
 			if(istype(L))
 				L.adjust_strength(max(3+(round(pumps/2)),15))
-		spawn(1)
-			pumping = FALSE
 
 /obj/item/weapon/gun/siren/supersoaker/pistol
 	name = "squirt gun"
@@ -146,7 +144,7 @@
 /obj/item/weapon/gun/siren/supersoaker/pistol/isHandgun()
 	return TRUE
 
-/obj/item/weapon/gun/siren/supersoaker/pistol/attack_self(mob/user as mob)
+/obj/item/weapon/gun/siren/supersoaker/pistol/attack_self(mob/user)
 	if(!reagents.total_volume)
 		to_chat(user, "<span class='warning'>\The [src] is already empty.</span>")
 		return
