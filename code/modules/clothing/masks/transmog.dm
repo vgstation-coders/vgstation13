@@ -36,6 +36,8 @@
 				T = new /obj/item/clothing/mask/morphing/lizard(get_turf(src))
 			else if(istype(W, /obj/item/stack/sheet/animalhide/xeno))
 				T = new /obj/item/clothing/mask/morphing/xeno(get_turf(src))
+			else if(istype(W, /obj/item/stack/sheet/animalhide/human))
+				T = new /obj/item/clothing/mask/morphing/human(get_turf(src))
 			if(T)
 				to_chat(user, "<span class='notice'>You wrap \the [W] around \the [src].</span>")
 				if(istype(W, /obj/item/stack/sheet/animalhide))

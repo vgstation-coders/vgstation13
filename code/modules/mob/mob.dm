@@ -1857,6 +1857,9 @@ mob/proc/on_foot()
 			qdel(src)
 		return
 	var/mob/M = new target_type(loc)
+	if(!istype(M))
+		qdel(M)
+		return
 	M.transmogged_from = src
 	if(key)
 		M.key = key
