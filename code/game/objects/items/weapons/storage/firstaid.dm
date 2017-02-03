@@ -297,7 +297,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 			new /obj/item/weapon/reagent_containers/pill/nanobot(src)
 
 /obj/item/weapon/storage/pill_bottle/sweets
-	name = "Bag of Sweets"
+	name = "bag of sweets"
 	desc = "Tasty!"
 	icon = 'icons/obj/candymachine.dmi'
 	icon_state = "candybag"
