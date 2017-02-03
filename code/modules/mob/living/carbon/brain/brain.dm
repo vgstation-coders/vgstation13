@@ -44,8 +44,11 @@
 	if(connected_to)
 		if(istype(connected_to, /obj/machinery/controller_pod))
 			var/obj/machinery/controller_pod/pod = connected_to
-			if(pod.occupant && pod.link_flags & CONTROLLER_AUDIO_LINK)
-				return pod.occupant.Hear(speech, rendered_speech)
+			if(pod.occupant && pod.link_flags & CONTROLLER_AUDIO_LINK && !speech.frequency)
+				//return pod.occupant.Hear(speech, rendered_speech)
+				var/rendered_message = speech.render_message()
+				rendered_message = "<i><span class='[speech.render_wrapper_classes()]'>Neural Link, [speech.name] <span class='message'>[rendered_message]</span></span></i>"
+				pod.occupant.show_message(rendered_message, 2)
 	return ..()
 
 /mob/living/carbon/brain/say_understands(var/atom/movable/other)//Goddamn is this hackish, but this say code is so odd
