@@ -4032,6 +4032,7 @@
 	name = "Potato Salad"
 	desc = "With 21st century technology, it could take as long as three days to make this."
 	icon_state = "potato_salad"
+	trash = /obj/item/trash/snack_bowl
 
 /obj/item/weapon/reagent_containers/food/snacks/potatosalad/New()
 	..()
@@ -4586,6 +4587,7 @@
 	desc = "Perfect for those occasions when engineering doesn't set up power."
 	icon_state = "midnightsnack"
 	bitesize = 2
+	trash = /obj/item/trash/snack_bowl
 
 /obj/item/weapon/reagent_containers/food/snacks/midnightsnack/New()
 	..()
@@ -4607,6 +4609,7 @@
 	desc = "Eating too much of this salad may cause you to want to cut off your own ear."
 	icon_state = "starrynight"
 	bitesize = 2
+	trash = /obj/item/trash/snack_bowl
 
 /obj/item/weapon/reagent_containers/food/snacks/starrynightsalad/New()
 	..()
@@ -4618,10 +4621,22 @@
 	desc = "Popular among cargo technicians who break into fruit crates."
 	icon_state = "fruitsalad"
 	bitesize = 2
+	trash = /obj/item/trash/snack_bowl
 
 /obj/item/weapon/reagent_containers/food/snacks/fruitsalad/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,4)
+
+/obj/item/weapon/reagent_containers/food/snacks/nofruitsalad
+	name = "no-fruit salad"
+	desc = "Attempting to make this meal cycle through other types of salad was prohibited by special council decision after six weeks of intensive debate at the central hub for Galatic International Trade."
+	icon_state = "nofruitsalad"
+	bitesize = 4
+	trash = /obj/item/trash/snack_bowl
+
+/obj/item/weapon/reagent_containers/food/snacks/nofruitsalad/New()
+	..()
+	reagents.add_reagent(NOTHING,20)
 
 /obj/item/weapon/reagent_containers/food/snacks/spicycoldnoodles
 	name = "spicy cold noodles"
