@@ -1889,6 +1889,7 @@
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_cultify.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_darkness.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_darkrevive.dm"
+#include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_deadharvest.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_dnaswitch.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_emp.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_forcefield.dm"
