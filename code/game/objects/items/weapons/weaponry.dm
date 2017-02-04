@@ -379,7 +379,7 @@ obj/item/weapon/banhammer/admin
 			var/obj/item/weapon/shard/S = blades[i]
 			var/break_chance = 15
 			if(istype(S, /obj/item/weapon/shard/plasma))
-				break_chance *= 0.75
+				break_chance = round(break_chance * 0.66)
 			if(prob(break_chance))
 				break_shard(S, i)
 	update_blades()
