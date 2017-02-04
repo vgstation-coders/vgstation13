@@ -314,6 +314,7 @@ obj/item/weapon/banhammer/admin
 	slot_flags = SLOT_BELT
 	force = 2
 	sharpness = 0
+	siemens_coefficient = 1
 	w_class = W_CLASS_MEDIUM
 	attack_verb = list("smacks")
 	var/list/blades = list(
@@ -364,6 +365,7 @@ obj/item/weapon/banhammer/admin
 		force = get_current_blade_count() * 2
 		sharpness = 2
 		attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "dices", "cleaves")
+		sharpness_flags = SHARP_BLADE | INSULATED_EDGE
 	else
 		name = initial(name)
 		desc = initial(desc)
@@ -371,6 +373,7 @@ obj/item/weapon/banhammer/admin
 		force = initial(force)
 		sharpness = initial(sharpness)
 		attack_verb = list("smacks")
+		sharpness_flags = 0
 
 /obj/item/weapon/macuahuitl/attack(mob/M, mob/user)
 	..()
