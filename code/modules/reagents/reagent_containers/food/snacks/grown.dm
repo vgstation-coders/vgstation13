@@ -24,7 +24,8 @@ var/global/list/special_fruits = list()
 /proc/get_special_fruits(var/filter=HYDRO_PREHISTORIC|HYDRO_VOX)
 	. = list()
 	for(var/type in existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown))
-		if((initial(type:hydroflags) & filter)>0)
+		var/obj/item/weapon/reagent_containers/food/snacks/grown/GT=type
+		if(initial(GT.hydroflags) & filter)
 			. += type
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/New()
