@@ -18,11 +18,11 @@
 #define REGENCOST 20
 
 #define MAXALPHADIST 7
-/* TODO: Pack mentality - Wolves will generally stick around the 'alpha', at least within 6 tiles, unless hunting
-		Have a hunger level that ticks down, similar to carbon mobs. If it gets too low, they'll try to hunt for food.
-			If it gets increasingly low, they'll start attacking each other except the alpha
+/* TODONE: Pack mentality - Wolves will generally stick around the 'alpha', at least within 6 tiles, unless hunting [x]
+		Have a hunger level that ticks down, similar to carbon mobs. If it gets too low, they'll try to hunt for food. [x]
+			If it gets increasingly low, they'll start attacking each other except the alpha [x]
 		Can feed them like space carp to 'tame' them [x]
-		Be able to point at them and then to elsewhere to 'instruct' them on where to go (To a turf, they go to that turf. To an animal, they attack that animal)
+		Be able to point at them and then to elsewhere to 'instruct' them on where to go (To a turf, they go to that turf. To an animal, they attack that animal) [x]
 */
 /mob/living/simple_animal/hostile/wolf
 	name = "wolf"
@@ -147,15 +147,14 @@
 				stop_automated_movement = 1
 				var/target_loc = mob_target.loc
 				var/self_loc = src.loc
-				spawn(50)
+				spawn(5 SECONDS)
 					if(mob_target.loc == target_loc && self_loc == src.loc) //Not moved
 						playsound(get_turf(src), 'sound/weapons/bite.ogg', 50, 1)
 						var/damage = rand(melee_damage_lower, melee_damage_upper)
 						mob_target.adjustBruteLoss(damage)
-						nutrition += (damage*3)
-					return
+						nutrition += damage*3
 			return
-	. =..()
+	return ..()
 
 /mob/living/simple_animal/hostile/wolf/attackby(obj/W, mob/user)
 	..()
@@ -163,17 +162,16 @@
 	if(!isDead() && istype(W, /obj/item/weapon/reagent_containers/food/snacks))
 		var/obj/item/weapon/reagent_containers/food/snacks/F = W
 
-		if((F.food_flags & FOOD_MEAT)) //Any meaty dish goes!
+		if(F.food_flags & FOOD_MEAT) //Any meaty dish goes!
 			playsound(get_turf(src),'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='info'>\The [src] gobbles up \the [W]!")
-			user.drop_item(F, force_drop = 1)
 			nutrition += 15
 			if(prob(25))
 				if(!pack_alpha)
 					pack_alpha = user
 					to_chat(user, "<span class='info'>You have gained \the [src]'s trust.</span>")
 					var/n_name = copytext(sanitize(input(user, "What would you like to name your new friend?", "Wolf Name", null) as text|null), 1, MAX_NAME_LEN)
-					if(n_name && !user.stat)
+					if(n_name && !user.incapacitated())
 						name = "[n_name]"
 					var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
 					heart.plane = ABOVE_HUMAN_PLANE
@@ -274,7 +272,7 @@
 
 
 		if((health < (maxHealth/2)) && nutrition >= REGENCOST)
-			health+=rand(1,3)
+			health += rand(1,3)
 			nutrition -= REGENCOST
 
 /mob/living/simple_animal/hostile/wolf/proc/handle_hunger()
@@ -306,7 +304,7 @@
 				to_chat(user, "<span class='warning'>It looks starving!</span>")
 		if(pack_alpha == user)
 			to_chat(user, "<span class='info'>It seems friendly to you.</span>")
-		var/remaining_health_percent = round(((health/maxHealth)*100))
+		var/remaining_health_percent = round((health/maxHealth)*100)
 		switch(remaining_health_percent)
 			if(100 to 60)
 				//Do nuthin
@@ -319,8 +317,8 @@
 			if(0 to -INFINITY)
 				to_chat(user, "<span class='warning'>It seems, well, dead.</span>")
 		switch(alpha_stance)
-			if(ALPHANONE)
-				//Nuthin
+			//if(ALPHANONE)
+				//Nuthin, was gonna have barking, but PJB got angry
 			if(ALPHAFOLLOW)
 				to_chat(user, "<span class='info'>They seem to be following someone.</span>")
 			if(ALPHAATTACK)

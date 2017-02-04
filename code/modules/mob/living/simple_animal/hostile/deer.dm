@@ -1,5 +1,5 @@
 /*
-TODO -
+TODONE -
 Have them evaluate mobs in their vicinity
 	If it's a deer, or disguised as a deer, do nothing
 	If it's a hostile mob, run away
@@ -51,11 +51,11 @@ Have them evaluate mobs in their vicinity
 
 		if(H.m_intent == "run") //Don't run while stalking deer
 			spook_prob = 70
-		if(istype (H:wear_suit, /obj/item/clothing/suit/leather/deer))
+		if(istype(H.get_item_by_slot(slot_wear_suit), /obj/item/clothing/suit/leather/deer))
 			spook_prob -= 10
-		if(istype(H:head, /obj/item/clothing/head/leather/deer))
+		if(istype(H.get_item_by_slot(slot_head), /obj/item/clothing/head/leather/deer))
 			spook_prob -= 10
-			if(istype (H:head, /obj/item/clothing/head/leather/deer/horned))
+			if(istype(H.get_item_by_slot(slot_head), /obj/item/clothing/head/leather/deer/horned))
 				spook_prob -= 10
 		for(var/obj/item/I in H.held_items)
 			if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/grown/apple))
@@ -106,7 +106,7 @@ Have them evaluate mobs in their vicinity
 
 		playsound(get_turf(src),'sound/items/eatfood.ogg', rand(10,50), 1)
 		visible_message("<span class='info'>\The [src] gobbles up \the [W]!")
-		user.drop_item(A, force_drop = 1)
+		//user.drop_item(A, force_drop = 1)
 
 		if(istype (W, /obj/item/weapon/reagent_containers/food/snacks/grown/goldapple))
 			icon_living = "deer_flower"
@@ -114,11 +114,11 @@ Have them evaluate mobs in their vicinity
 			icon_state = "deer_flower"
 
 		if(prob(25))
-			if(!(friends.Find(user)))
+			if(!friends.Find(user))
 				friends.Add(user)
 				to_chat(user, "<span class='info'>You have gained \the [src]'s trust.</span>")
 				var/n_name = copytext(sanitize(input(user, "What would you like to name your new friend?", "Wolf Name", null) as text|null), 1, MAX_NAME_LEN)
-				if(n_name && !user.stat)
+				if(n_name && !user.incapacitated())
 					name = "[n_name]"
 				var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
 				heart.plane = ABOVE_HUMAN_PLANE
