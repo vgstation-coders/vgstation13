@@ -136,10 +136,8 @@
 	for(var/turf/simulated/floor/T in orange(holder, 2))
 		randomturfs.Add(T)
 
-	if(istype(to_spawn, /mob/living/simple_animal/hostile))
-		var/mob/living/simple_animal/hostile/animal_spawn = to_spawn
-
-		new animal_spawn(pick(randomturfs))
+	if(ispath(to_spawn, /mob/living/simple_animal/hostile))
+		var/mob/living/simple_animal/hostile/animal_spawn = new to_spawn
 
 		if(controller)
 			animal_spawn.friends.Add(controller)
