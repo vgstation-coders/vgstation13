@@ -1578,6 +1578,7 @@
 	packet_icon = "seed-nofruit"
 	plant_icon = "nofruit"
 	chems = list(NOTHING = list(1,20))
+	immutable = 1
 
 	lifespan = 30
 	maturation = 5
@@ -1585,7 +1586,7 @@
 	yield = 1
 	potency = 10
 	water_consumption = 6
-	nutrient_consumption = 0.10
+	nutrient_consumption = 1
 	growth_stages = 4
 
 // Vox Food
