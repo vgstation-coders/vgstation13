@@ -213,7 +213,7 @@
 /obj/mecha/proc/drop_item()//Derpfix, but may be useful in future for engineering exosuits.
 	return
 
-/obj/mecha/Hear(var/datum/speech/speech, var/rendered_message="")
+/obj/mecha/radio/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(speech.speaker == occupant && radio.broadcasting)
 		radio.talk_into(speech)
  	return
