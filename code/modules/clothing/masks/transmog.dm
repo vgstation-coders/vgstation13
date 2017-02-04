@@ -7,6 +7,15 @@
 	body_parts_covered = FACE
 	w_class = W_CLASS_SMALL
 	var/target_type = null
+	var/list/skin_to_mask = list(
+		/obj/item/asteroid/goliath_hide			=	/obj/item/clothing/mask/morphing/goliath,
+		/obj/item/clothing/head/bearpelt/real	=	/obj/item/clothing/mask/morphing/bear,
+		/obj/item/stack/sheet/animalhide/corgi	=	/obj/item/clothing/mask/morphing/corgi,
+		/obj/item/stack/sheet/animalhide/cat	=	/obj/item/clothing/mask/morphing/cat,
+		/obj/item/stack/sheet/animalhide/monkey	=	/obj/item/clothing/mask/morphing/monkey,
+		/obj/item/stack/sheet/animalhide/lizard	=	/obj/item/clothing/mask/morphing/lizard,
+		/obj/item/stack/sheet/animalhide/xeno	=	/obj/item/clothing/mask/morphing/xeno,
+		/obj/item/stack/sheet/animalhide/human	=	/obj/item/clothing/mask/morphing/human)
 
 /obj/item/clothing/mask/morphing/equipped(mob/living/carbon/C, wear_mask)
 	if(target_type && istype(C))
@@ -17,35 +26,22 @@
 
 /obj/item/clothing/mask/morphing/attackby(obj/item/weapon/W, mob/user)
 	if(!target_type)
-		if(istype(W, /obj/item/stack/sheet/animalhide) || istype(W, /obj/item/asteroid/goliath_hide) || istype(W, /obj/item/clothing/head/bearpelt/real))
-			var/obj/item/clothing/mask/morphing/T
-			if(istype(W, /obj/item/asteroid/goliath_hide))
-				T = new /obj/item/clothing/mask/morphing/goliath(get_turf(src))
-			else if(istype(W, /obj/item/clothing/head/bearpelt/real))
-				T = new /obj/item/clothing/mask/morphing/bear(get_turf(src))
-			else if(istype(W, /obj/item/stack/sheet/animalhide/corgi))
-				T = new /obj/item/clothing/mask/morphing/corgi(get_turf(src))
-			else if(istype(W, /obj/item/stack/sheet/animalhide/cat))
-				T = new /obj/item/clothing/mask/morphing/cat(get_turf(src))
-			else if(istype(W, /obj/item/stack/sheet/animalhide/monkey))
-				T = new /obj/item/clothing/mask/morphing/monkey(get_turf(src))
-			else if(istype(W, /obj/item/stack/sheet/animalhide/lizard))
-				T = new /obj/item/clothing/mask/morphing/lizard(get_turf(src))
-			else if(istype(W, /obj/item/stack/sheet/animalhide/xeno))
-				T = new /obj/item/clothing/mask/morphing/xeno(get_turf(src))
-			else if(istype(W, /obj/item/stack/sheet/animalhide/human))
-				T = new /obj/item/clothing/mask/morphing/human(get_turf(src))
-			if(T)
-				to_chat(user, "<span class='notice'>You wrap \the [W] around \the [src].</span>")
-				if(istype(W, /obj/item/stack/sheet/animalhide))
-					var/obj/item/stack/sheet/animalhide/A = W
-					A.use(1)
-				else
-					qdel(W)
-				if(loc == user)
-					user.drop_item(src, force_drop = 1)
-					user.put_in_hands(T)
-				qdel(src)
+		var/obj/item/clothing/mask/morphing/T
+		for(var/i in skin_to_mask)
+			if(istype(W, i))
+				var/chosen_type = skin_to_mask[i]
+				T = new chosen_type(get_turf(src))
+		if(T)
+			to_chat(user, "<span class='notice'>You wrap \the [W] around \the [src].</span>")
+			if(istype(W, /obj/item/stack/sheet/animalhide))
+				var/obj/item/stack/sheet/animalhide/A = W
+				A.use(1)
+			else
+				qdel(W)
+			if(loc == user)
+				user.drop_item(src, force_drop = 1)
+				user.put_in_hands(T)
+			qdel(src)
 
 /obj/item/clothing/mask/morphing/spider
 	name = "mask of the spider"
