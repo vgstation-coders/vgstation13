@@ -121,7 +121,8 @@
 			if(prob(10) && get_infection_chance(src))
 //					log_debug("[src] : Exhaling some viruses")
 				for(var/mob/living/M in view(1,src))
-					spread_disease_to(src,M)
+					if(can_be_infected(M))
+						spread_disease_to(src,M)
 
 /mob/living/carbon/human/proc/get_breath_from_internal(volume_needed)
 	if(internal)
