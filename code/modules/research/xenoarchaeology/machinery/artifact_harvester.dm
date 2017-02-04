@@ -58,7 +58,7 @@
 		else
 			if(artifact_field)
 				dat += "<A href='?src=\ref[src];alockoff=1'>Deactivate containment field</a><BR>"
-				dat += "<b>Artifact energy signature ID:</b>[cur_artifact.my_effect.artifact_id == "" ? "???" : "[cur_artifact.my_effect.artifact_id]"]<BR>"
+				dat += "<b>Artifact energy signature ID:</b>[cur_artifact.artifact_id == "" ? "???" : "[cur_artifact.artifact_id]"]<BR>"
 				dat += "<A href='?src=\ref[src];isolateeffect=1'>Isolate exotic particles</a><BR>"
 				if(isolated_primary)
 					dat += "<b>Isolated energy signature ID:</b>[isolated_primary.artifact_id == "" ? "???" : "[isolated_primary.artifact_id]"]<BR>"
@@ -237,6 +237,7 @@
 			harvesting = 0
 			src.visible_message("<b>[name]</b> states, \"Activity interrupted.\"")
 			icon_state = "incubator"
+			src.investigation_log(I_ARTIFACT, "|| anomaly battery [inserted_battery.battery_effect.artifact_id] harvested by [key_name(harvester)]")
 
 	if (href_list["alockon"])
 		if(!artifact_field)
@@ -247,6 +248,7 @@
 				analysed = A
 				articount++
 
+/*
 			var/mundane = 0
 			for(var/obj/O in get_turf(owned_scanner))
 				if(O.invisibility)
@@ -259,11 +261,12 @@
 					continue
 				mundane++
 				break
+*/
 			if(!analysed)
 				var/message = "<b>[src]</b> states, \"Cannot initialize field, no artifact detected.\""
 				src.visible_message(message)
 				return
-			else if(articount == 1 && !mundane)
+			else if(articount == 1)
 				cur_artifact = analysed
 
 				var/turf/T = get_turf(owned_scanner)

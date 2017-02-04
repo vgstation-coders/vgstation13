@@ -68,20 +68,27 @@ var/list/valid_secondary_effect_types = list(\
 	var/datum/artifact_effect/secondary_effect
 	var/being_used = 0
 	var/contained = 0
+	var/artifact_id = ""
 	anchored = 0
 
-/obj/machinery/artifact/New()
+/obj/machinery/artifact/New(location, find_id)
 	..()
+	if(find_id)
+		artifact_id = find_id
+	else
+		artifact_id = "[pick("kappa","sigma","antaeres","beta","omicron","iota","epsilon","omega","gamma","delta","tau","alpha")]-[rand(100,999)]"
 
 	//setup primary effect - these are the main ones (mixed)
 	var/effecttype = pick(typesof(/datum/artifact_effect) - /datum/artifact_effect)
 	my_effect = new effecttype(src)
+	my_effect.artifact_id = "[artifact_id]a"
 	src.investigation_log(I_ARTIFACT, "|| spawned with a primary effect [my_effect.artifact_id]: [my_effect] || range: [my_effect.effectrange] || charge time: [my_effect.chargelevelmax] || trigger: [my_effect.trigger].")
 
 	//75% chance to have a secondary stealthy (and mostly bad) effect
 	if(prob(75))
 		effecttype = pick(typesof(/datum/artifact_effect) - /datum/artifact_effect)
 		secondary_effect = new effecttype(src)
+		secondary_effect.artifact_id = "[artifact_id]b"
 		src.investigation_log(I_ARTIFACT, "|| spawned with a secondary effect [secondary_effect.artifact_id]: [secondary_effect] || range: [secondary_effect.effectrange] || charge time: [secondary_effect.chargelevelmax] || trigger: [secondary_effect.trigger].")
 		if(prob(75))
 			src.investigation_log(I_ARTIFACT, "|| secondary effect [secondary_effect.artifact_id] starts triggered by default.")
