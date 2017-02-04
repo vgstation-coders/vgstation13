@@ -7,6 +7,7 @@
 	body_parts_covered = FACE
 	w_class = W_CLASS_SMALL
 	var/target_type = null
+	var/cursed = FALSE
 	var/list/skin_to_mask = list(
 		/obj/item/asteroid/goliath_hide			=	/obj/item/clothing/mask/morphing/goliath,
 		/obj/item/clothing/head/bearpelt/real	=	/obj/item/clothing/mask/morphing/bear,
@@ -22,7 +23,10 @@
 		if(C.get_item_by_slot(SLOT_MASK) == src)
 			if(target_type != C.type)
 				C.visible_message("<span class='danger'>As [C] puts on \the [src], \his body begins to shift and contort!</span>","<span class='danger'>As you put on \the [src], your body begins to shift and contort!</span>")
-				C.transmogrify(target_type, TRUE)
+				if(cursed)
+					C.transmogrify(target_type)
+				else
+					C.transmogrify(target_type, TRUE)
 
 /obj/item/clothing/mask/morphing/attackby(obj/item/weapon/W, mob/user)
 	if(!target_type)
