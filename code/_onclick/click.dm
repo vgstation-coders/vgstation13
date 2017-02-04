@@ -48,6 +48,10 @@
 		return
 
 	var/list/modifiers = params2list(params)
+	on_clickon.Invoke(list(
+		"modifiers" = modifiers,
+		"target" = A
+	))
 	if(modifiers["middle"])
 		MiddleClickOn(A)
 		return

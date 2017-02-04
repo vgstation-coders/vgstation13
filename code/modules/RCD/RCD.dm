@@ -160,7 +160,7 @@
 
 					favorites.Swap(index, index - 1)
 
-				rebuild_ui()
+				rebuild_favs()
 
 		return 1
 

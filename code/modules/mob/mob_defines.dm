@@ -275,6 +275,8 @@
 	var/event/on_uattack
 	var/event/on_logout
 	var/event/on_damaged
+	// Allows overiding click modifiers and such.
+	var/event/on_clickon
 
 	var/list/alphas = list()
 	var/spell_channeling

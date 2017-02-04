@@ -5,6 +5,8 @@
 
 	starting_materials = list(MAT_IRON = 75000, MAT_GLASS = 37500)
 
+	var/hook_key
+
 	schematics = list(
 		/* Utilities */
 		/datum/rcd_schematic/decon_pipes,
@@ -68,3 +70,26 @@
 	..()
 	to_chat(user, "<span class='notice'>To quickly scroll between directions of the selected schematic, use alt+mousewheel.")
 	to_chat(user, "<span class='notice'>To quickly scroll between layers, use shift+mousewheel.</span>")
+	to_chat(user, "<span class='notice'>Note that hotkeys like ctrl click do not work while the RPD is held in your active hand!</span>")
+
+/obj/item/device/rcd/rpd/pickup(var/mob/living/L)
+	..()
+	
+	hook_key = L.on_clickon.Add(src, "mob_onclickon")
+
+/obj/item/device/rcd/rpd/dropped(var/mob/living/L)
+	..()
+
+	L.on_clickon.Remove(hook_key)
+	hook_key = null
+
+// If the RPD is held, some modifiers are removed.
+// This is to prevent the mouse wheel bindings (which require alt and such)
+// From being a pain to use, because alt click intercepts regular clicks.
+/obj/item/device/rcd/rpd/proc/mob_onclickon(var/list/event_args, var/mob/living/L)
+	if (L.get_active_hand() != src)
+		return
+	
+	var/list/modifiers = event_args["modifiers"]
+	modifiers -= list("alt", "shift", "ctrl")
+	
