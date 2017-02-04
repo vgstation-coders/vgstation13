@@ -1849,7 +1849,7 @@ mob/proc/on_foot()
 			transmogged_from.timestopped = 0
 			if(istype(transmogged_from, /mob/living/carbon))
 				var/mob/living/carbon/C = transmogged_from
-				if(istype(C.get_item_by_slot(SLOT_MASK), /obj/item/clothing/mask/morphing))
+				if(istype(C.get_item_by_slot(slot_wear_mask), /obj/item/clothing/mask/morphing))
 					C.drop_item(C.wear_mask, force_drop = 1)
 			transmogged_from = null
 			for(var/atom/movable/AM in contents)
