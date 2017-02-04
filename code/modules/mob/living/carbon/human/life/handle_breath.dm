@@ -120,7 +120,7 @@
 		if(virus2 && virus2.len > 0)
 			if(prob(10) && get_infection_chance(src))
 //					log_debug("[src] : Exhaling some viruses")
-				for(var/mob/living/M in view(1,src))
+				for(var/mob/living/M in range(1,src))
 					if(can_be_infected(M))
 						spread_disease_to(src,M)
 

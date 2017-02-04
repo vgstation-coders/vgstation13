@@ -1595,6 +1595,21 @@
 		if(!(locate(/obj/effect/decal/cleanable/greenglow) in T))
 			new /obj/effect/decal/cleanable/greenglow(T)
 
+/datum/reagent/phazon
+	name = "Phazon"
+	id = PHAZON
+	description = "The properties of this rare metal are not well-known."
+	reagent_state = SOLID
+	color = "#5E02F8" //rgb: 94, 2, 248
+
+/datum/reagent/phazon/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	M.apply_effect(5, IRRADIATE, 0)
+	if(prob(20))
+		M.advanced_mutate()
+
 /datum/reagent/aluminum
 	name = "Aluminum"
 	id = ALUMINUM

@@ -3027,6 +3027,25 @@
 					to_chat(C, "<span class='danger'>A crate appears next to you. You think you can read \"[E.chosen_set]\" scribbled on it</span>")
 					U.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/weapons/emitter2.ogg',anim_plane = MOB_PLANE)
 				message_admins("[key_name_admin(usr)] distributed experimental guns to the entire crew")
+			if("create_artifact")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","CA")
+				var/answer = alert("Are you sure you want to create a custom artifact?",,"Yes","No")
+				if(answer == "Yes")
+					//Either have them as all random, or have custom artifacts
+					var/list/effects = typesof(/datum/artifact_effect)
+					effects.Remove(/datum/artifact_effect)
+					var/answer1 = alert("Just a primary, or primary and secondary effects?",,"Primary only","Primary and Secondary")
+					var/primary_effect = input(usr, "Which primary effect would you like?", "Primary effect") as null|anything in effects
+					var/secondary_effect
+					if(answer1 == "Primary and Secondary")
+						secondary_effect = input(usr, "Which secondary effect would you like?", "Secondary effect") as null|anything in effects
+					var/obj/machinery/artifact/custom = new /obj/machinery/artifact(get_turf(usr))
+					custom.my_effect = new primary_effect(custom)
+					if(secondary_effect)
+						custom.secondary_effect = new secondary_effect(custom)
+					message_admins("[key_name_admin(usr)] has created a custom artifact")
+
 			if("schoolgirl")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SG")
