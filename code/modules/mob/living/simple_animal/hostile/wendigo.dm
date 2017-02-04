@@ -1,12 +1,12 @@
-/*	TODO:
+/*	TODONE:
 	Let them evolve and heal from eating. Should a carbon they eat go over a certain damage threshold and
-	the wendigo is at full health. Strip and delete the corpse.
-	Human wendigo->1 eat->Wendigo->3 eat->Alpha Wendigo (Can only be ONE at any time)
+	the wendigo is at full health. Strip and delete the corpse. [x]
+	Human wendigo->1 eat->Wendigo->3 eat->Alpha Wendigo (Can only be ONE at any time) [x]
 	They don't like fire. Will stay away from fire (As far as their light radius -1) and won't target anyone
-	in vicinity of said fire
+	in vicinity of said fire [x]
 	Can mimic voices, steal poly code, and change it (Maybe just keep a log of people consumed,
-	and use their name plus shout for help)
-	Butcherable for one piece of meat only. When consumed (Don't use reagents) will begin to turn the person
+	and use their name plus shout for help) [x]
+	Butcherable for one piece of meat only. When consumed (Don't use reagents) will begin to turn the person [x]
 */
 #define HUMEVOLV 1
 #define EVOLEVOLV 3
@@ -63,18 +63,19 @@
 					mob_target.adjustBruteLoss(damage)
 					if(health < maxHealth)
 						health = min(maxHealth,(health+damage))
-					if(mob_target.health < -400)
+					if((ishuman(mob_target) && mob_target.health < -400) || (istype(mob_target,/mob/living/simple_animal) && mob_target.health <= 0))
 						visible_message("<span class = 'warning'>\The [src] is trying to eat \The [mob_target]!</span>","<span class = 'warning'>You hear crunching.</span>")
 						spawn(50)
 							if(mob_target.loc == target_loc && self_loc == src.loc)
 								if(ishuman(mob_target))
 									consumes += 1
 									names += mob_target.real_name
+								health = max(maxHealth, health + mob_target.maxHealth)
 								qdel(mob_target)
 
 
 			return
-	. =..()
+	return ..()
 
 /mob/living/simple_animal/hostile/wendigo/Life()
 	/*Check evolve like zombies, run away from fire,
@@ -88,7 +89,7 @@
 
 		for(var/obj/machinery/space_heater/campfire/fire in can_see)
 			var/dist = get_dist(src, fire)
-			if(dist < (fire.light_range*2))
+			if(dist < fire.light_range*2)
 				walk_away(src,fire,(fire.light_range*2),move_to_delay)
 
 
@@ -137,7 +138,6 @@
 /mob/living/simple_animal/hostile/wendigo/evolved/check_evolve()
 	if(consumes > EVOLEVOLV)
 		if(wendigo_alpha)
-			var/alpha_count = 0
 			for(var/mob/living/simple_animal/hostile/wendigo/alpha/A in wendigo_alpha)
 				var/datum/zLevel/L = get_z_level(A)
 				if(istype(L,/datum/zLevel/centcomm))
@@ -145,13 +145,10 @@
 				else
 					if(A.isDead())
 						continue
-					alpha_count += 1
-
-			if(alpha_count)
-				return
+					return //One exists, abort!
 
 			var/mob/living/simple_animal/hostile/wendigo/alpha/new_wendigo = new /mob/living/simple_animal/hostile/wendigo/alpha(src.loc)
-			new_wendigo.names = names
+			new_wendigo.names = names.Copy()
 			qdel(src)
 
 var/list/wendigo_alpha = list()
