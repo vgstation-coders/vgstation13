@@ -188,6 +188,27 @@
 	if (mob.reagents.get_reagent_amount(GYRO) < 1)
 		mob.reagents.add_reagent(GYRO, 1)
 
+/datum/disease2/effect/bee_vomit
+	name = "Melisso-Emeto Syndrome"
+	stage = 1
+	max_multiplier = 10
+
+/datum/disease2/effect/bee_vomit/activate(var/mob/living/carbon/mob)
+	if (mob.reagents.get_reagent_amount(HONEY) < 10+multiplier*2)
+		mob.reagents.add_reagent(HONEY, 1)
+
+	if((mob.reagents.get_reagent_amount(HONEY)>= 10+multiplier*2) && prob(10))
+		if(prob(25))
+			to_chat(mob, "<span class='warning'>You feel a buzzing in your throat</span>")
+		spawn(5 SECONDS)
+			var/turf/simulated/T = get_turf(mob)
+			if(prob(30))
+				playsound(T, 'sound/effects/splat.ogg', 50, 1)
+				mob.visible_message("<span class='warning'>[mob] spits out a bee!</span>","<span class='danger'>You throw up a bee!</span>")
+				T.add_vomit_floor(mob, 1, 1, 1)
+			for(var/i = 0 to multiplier)
+				new/mob/living/simple_animal/bee(get_turf(mob))
+
 
 ////////////////////////STAGE 2/////////////////////////////////
 
@@ -1345,8 +1366,6 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/carbon/mob)
 				H.species.anatomy_flags |= HAS_SWEAT_GLANDS
 		to_chat(mob, "<span class='notice'>Your skin feels nice and smooth again!</span>")
 	..()
-
-
 ////////////////////////SPECIAL/////////////////////////////////
 
 
