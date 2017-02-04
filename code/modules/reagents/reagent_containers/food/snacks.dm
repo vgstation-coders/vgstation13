@@ -4352,7 +4352,6 @@
 			current_path = available_snacks[counter]
 			var/obj/item/weapon/reagent_containers/food/snacks/S = current_path
 			icon_state = initial(S.icon_state)
-			playsound(src, 'sound/misc/click.ogg', 50, 1)
 			sleep(4)
 			if(counter == available_snacks.len)
 				counter = 0
