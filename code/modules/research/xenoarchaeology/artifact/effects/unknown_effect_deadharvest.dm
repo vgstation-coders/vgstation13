@@ -29,69 +29,71 @@
 			mob_spawn = list(/mob/living/simple_animal/hostile/monster/necromorph = 150,) //More necromorph mobs when?
 		if(4) //Randomized mobs
 			var/max_mobs = rand(3,7)
-			for(var/i=0,i<max_mobs,i++)
-				var/mob/living/simple_animal/mob_to_add = pick(typesof(/mob/living/simple_animal))
+			for(var/i=0 to max_mobs)
+				var/mob/living/simple_animal/mob_to_add = pick(existing_typesof(/mob/living/simple_animal))
 				var/mob_cost = rand(5,25)*10
 				mob_spawn += mob_to_add
 				mob_spawn[mob_to_add] = mob_cost
 
 /datum/artifact_effect/deadharvest/DoEffectTouch(var/mob/user)
-	if(holder)
-		if(user)
-			if(isliving(user))
-				if(can_be_controlled)
-					if(!controller)
-						to_chat(user, "<span class = 'sinister'>You feel a slight biting sensation, which subsides</span>")
-						controller = user
-						return
-					else
-						if(controller == user)
-							to_chat(user, "<span class = 'rose'>\The [holder] hums happily.</span>")
-							to_chat(user, "<span class = 'sinister'>[points]</span>")
-							return
+	if(!holder || !user)
+		return
+	if(isliving(user))
+		if(can_be_controlled)
+			if(!controller)
+				to_chat(user, "<span class = 'sinister'>You feel a slight biting sensation, which subsides.</span>")
+				controller = user
+				return
+			else
+				if(controller == user)
+					to_chat(user, "<span class = 'rose'>\The [holder] hums happily.</span>")
+					to_chat(user, "<span class = 'sinister'>[points]</span>")
+					return
 
-				harvest(user, 1)
-			spawn_creature()
+		harvest(user, 1)
+	spawn_creature()
 
 /datum/artifact_effect/deadharvest/DoEffectPulse() //Does it in waves, so sensible to heal associates
-	if(holder)
+	if(!holder)
+		return
+	spawn_creature()
+	for(var/mob/living/L in range(src.effectrange,holder))
+		if(L.isDead())
+			if(ishuman(L))
+				var/weakness = 1-GetAnomalySusceptibility(L)
+				if(prob(weakness * 100))
+					continue
+			harvest(L, heal_associates = 1)
+		else
+			if(ishuman(L))
+				var/weakness = GetAnomalySusceptibility(L)
+				if(prob(weakness * 100))
+					to_chat(L, "<span class = 'sinister'>You [pick("feel tingly","are overcome with a sense of dread","feel incomplete")].</span>")
+					continue
+
+
+
+/datum/artifact_effect/deadharvest/DoEffectAura() //Does it continuously, so not sensible to heal associates
+	if(!holder)
+		return
+
+	if(prob(10))
 		spawn_creature()
-		for(var/mob/living/L in range(src.effectrange,holder))
+
+	if(prob(50))
+		for (var/mob/living/L in range(src.effectrange*2, holder))
 			if(L.isDead())
 				if(ishuman(L))
 					var/weakness = 1-GetAnomalySusceptibility(L)
 					if(prob(weakness * 100))
 						continue
-				harvest(L, heal_associates = 1)
-			else
-				if(ishuman(L))
-					var/weakness = GetAnomalySusceptibility(L)
-					if(prob(weakness * 100))
-						to_chat(L, "<span class = 'sinister'>You [pick("feel tingly","are overcome with a sense of dread","feel incomplete")]</span>")
-
-						continue
-
-
-
-/datum/artifact_effect/deadharvest/DoEffectAura() //Does it continuously, so not sensible to heal associates
-	if(holder)
-		if(prob(10))
-			spawn_creature()
-
-		if(prob(50))
-			for (var/mob/living/L in range(src.effectrange*2, holder))
-				if(L.isDead())
-					if(ishuman(L))
-						var/weakness = 1-GetAnomalySusceptibility(L)
-						if(prob(weakness * 100))
-							continue
-					harvest(L)
+				harvest(L)
 
 /datum/artifact_effect/deadharvest/proc/harvest(var/mob/living/sacrifice, var/override, var/heal_associates)
 	if(!sacrifice)
 		return
 
-	if(!(sacrifice.isDead()) && !override) //No eating the living unless they come willingly
+	if(!sacrifice.isDead() && !override) //No eating the living unless they come willingly
 		return
 
 	for(var/mob/living/summons in mob_spawn)
