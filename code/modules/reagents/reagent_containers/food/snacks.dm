@@ -4304,6 +4304,7 @@
 	trash = /obj/item/trash/pietin
 	var/list/available_snacks = list()
 	var/switching = 0
+	var/current_path = null
 	var/counter = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/New()
@@ -4311,6 +4312,7 @@
 	reagents.add_reagent(NOTHING, 20)
 	bitesize = 10
 	available_snacks = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable)
+	available_snacks = shuffle(available_snacks)
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/verb/pick_leaf()
 	set name = "Pick no-fruit pie leaf"
@@ -4327,6 +4329,8 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/attackby(obj/item/weapon/W, mob/user)
 	if(switching)
+		if(!current_path)
+			return
 		switching = 0
 		var/N = rand(1,3)
 		switch(N)
@@ -4337,7 +4341,6 @@
 			if(3)
 				playsound(user, 'sound/weapons/genhit3.ogg', 50, 1)
 		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
-		var/current_path = pick(available_snacks)
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/I = new current_path(get_turf(user))
@@ -4350,8 +4353,16 @@
 /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/proc/randomize()
 	switching = 1
 	mouse_opacity = 2
-	icon_state = "nofruitcycle"
-	playsound(src, 'sound/misc/click.ogg', 50, 1)
+	spawn()
+		while(switching)
+			current_path = available_snacks[counter]
+			var/obj/item/weapon/reagent_containers/food/snacks/S = current_path
+			icon_state = initial(S.icon_state)
+			playsound(src, 'sound/misc/click.ogg', 50, 1)
+			sleep(1)
+			if(counter == available_snacks.len)
+				counter = 0
+			counter++
 
 /obj/item/weapon/reagent_containers/food/snacks/sundayroast
 	name = "Sunday roast"
