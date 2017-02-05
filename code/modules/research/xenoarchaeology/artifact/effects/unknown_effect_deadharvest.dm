@@ -137,7 +137,7 @@
 		randomturfs.Add(T)
 
 	if(ispath(to_spawn, /mob/living/simple_animal/hostile))
-		var/mob/living/simple_animal/hostile/animal_spawn = new to_spawn
+		var/mob/living/simple_animal/hostile/animal_spawn = new to_spawn(pick(randomturfs))
 
 		if(controller)
 			animal_spawn.friends.Add(controller)
