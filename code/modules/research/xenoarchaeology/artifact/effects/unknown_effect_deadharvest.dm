@@ -7,7 +7,7 @@
 
 /datum/artifact_effect/deadharvest/New()
 	..()
-	effect = pick(EFFECT_AURA, EFFECT_PULSE)
+	effect = pick(EFFECT_TOUCH, EFFECT_AURA, EFFECT_PULSE)
 	can_be_controlled = pick(0,1)
 	if(!mob_spawn.len)
 		new_mob_spawn_list()
@@ -43,14 +43,19 @@
 			if(!controller)
 				to_chat(user, "<span class = 'sinister'>You feel a slight biting sensation, which subsides.</span>")
 				controller = user
-				return
 			else
 				if(controller == user)
 					to_chat(user, "<span class = 'rose'>\The [holder] hums happily.</span>")
 					to_chat(user, "<span class = 'sinister'>[points]</span>")
-					return
 
 		harvest(user, 1)
+		for(var/mob/living/L in range(1,holder))
+			if(L.isDead())
+				if(ishuman(L))
+					var/weakness = 1-GetAnomalySusceptibility(L)
+					if(prob(weakness * 100))
+						continue
+				harvest(L)
 	spawn_creature()
 
 /datum/artifact_effect/deadharvest/DoEffectPulse() //Does it in waves, so sensible to heal associates
@@ -96,6 +101,9 @@
 	if(!sacrifice.isDead() && !override) //No eating the living unless they come willingly
 		return
 
+	if(can_be_controlled && controller == sacrifice)
+		return
+
 	for(var/mob/living/summons in mob_spawn)
 		if(istype(summons, sacrifice)) //No sacrificing things we've summoned
 			if(heal_associates)
@@ -136,11 +144,11 @@
 	for(var/turf/simulated/floor/T in orange(holder, 2))
 		randomturfs.Add(T)
 
+	var/mob/living/spawned_mob = new to_spawn(pick(randomturfs))
+
 	if(ispath(to_spawn, /mob/living/simple_animal/hostile))
-		var/mob/living/simple_animal/hostile/animal_spawn = new to_spawn
+		var/mob/living/simple_animal/hostile/animal_spawn = spawned_mob
 
 		if(controller)
 			animal_spawn.friends.Add(controller)
-	else
-		new to_spawn(pick(randomturfs))
 	new /obj/effect/gibspawner/generic(get_turf(holder))
