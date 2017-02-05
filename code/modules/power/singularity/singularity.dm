@@ -518,8 +518,8 @@
 	if(src.energy > 200)
 		radiation = round(((src.energy-150)/50)*5,1)
 		radiationmin = round((radiation/5),1)
-	for(var/mob/living/M in view(radrange, src.loc))
 		radiation = rand(radiationmin, radiation)
+	for(var/mob/living/M in view(radrange, src.loc))
 		M.apply_effect(radiation, IRRADIATE)
 	return
 
