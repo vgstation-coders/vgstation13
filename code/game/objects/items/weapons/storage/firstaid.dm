@@ -137,7 +137,7 @@
 	icon = 'icons/obj/chemical.dmi'
 	item_state = "contsolid"
 	w_class = W_CLASS_SMALL
-	can_only_hold = list("/obj/item/weapon/reagent_containers/pill","/obj/item/weapon/dice","/obj/item/weapon/paper")
+	can_only_hold = list("/obj/item/weapon/reagent_containers/pill","/obj/item/weapon/dice","/obj/item/weapon/paper", "/obj/item/weapon/reagent_containers/food/snacks/sweet")
 	allow_quick_gather = 1
 	use_to_pickup = 1
 	storage_slots = 14
@@ -295,3 +295,20 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 		..()
 		for (var/i = 1 to 5)
 			new /obj/item/weapon/reagent_containers/pill/nanobot(src)
+
+/obj/item/weapon/storage/pill_bottle/sweets
+	name = "bag of sweets"
+	desc = "Tasty!"
+	icon = 'icons/obj/candymachine.dmi'
+	icon_state = "candybag"
+	var/spawn_type = /obj/item/weapon/reagent_containers/food/snacks/sweet
+
+	/obj/item/weapon/storage/pill_bottle/sweets/New()
+		..()
+		overlays -= colour_overlay
+		colour_overlay = null
+		for (var/i = 1 to 10)
+			new spawn_type(src)
+
+/obj/item/weapon/storage/pill_bottle/sweets/strange
+	spawn_type = /obj/item/weapon/reagent_containers/food/snacks/sweet/strange

@@ -1669,3 +1669,38 @@
 	if(pain_numb)
 		return FALSE
 	return TRUE
+
+/mob/living/carbon/human/advanced_mutate()
+	..()
+	if(prob(10))
+		species.punch_damage = rand(1,5)
+	species.max_hurt_damage = rand(1,10)
+	if(prob(10))
+		species.breath_type = pick("oxygen","toxins","nitrogen","carbon_dioxide")
+
+	species.heat_level_3 = rand(800, 1200)
+	species.heat_level_2 = round(species.heat_level_3 / 2.5)
+	species.heat_level_1 = round(species.heat_level_2 / 1.11)
+	species.cold_level_1 = rand(160, 360)
+	species.cold_level_2 = round(species.cold_level_1 / 1.3)
+	species.cold_level_3 = round(species.cold_level_2 / 1.66)
+
+	if(prob(30))
+		species.darksight = rand(0,8)
+	species.hazard_high_pressure *= rand(5,20)/10
+	species.warning_high_pressure = round(species.hazard_high_pressure / 1.69)
+	species.hazard_low_pressure *= rand(5,20)/10
+	species.warning_low_pressure = round(species.hazard_low_pressure * 2.5)
+	if(prob(5))
+		species.warning_low_pressure = -1
+		species.hazard_low_pressure = -1
+
+	species.brute_mod *= rand(5,20)/10
+	species.burn_mod *= rand(5,20)/10
+
+	if(prob(5))
+		species.flags = rand(0,65535)
+	if(prob(5))
+		species.anatomy_flags = rand(0,65535)
+	if(prob(5))
+		species.chem_flags = rand(0,65535)

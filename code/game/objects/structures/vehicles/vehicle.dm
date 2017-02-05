@@ -113,7 +113,9 @@
 		return 0
 
 	//If we're in space or our area has no gravity...
-	var/turf/T = loc
+	var/turf/T = get_turf(loc)
+	if(!T)
+		return 0
 	if(!T.has_gravity())
 		// Block relaymove() if needed.
 		if(!Process_Spacemove(0))

@@ -169,7 +169,8 @@
 		if(/obj/machinery/artifact)
 			//the fun one
 			var/obj/machinery/artifact/A = scanned_obj
-			var/out = "Anomalous alien device - Composed of an unknown alloy, "
+			var/out = "Energy signature ID - [A.artifact_id]<br><br>"
+			out += "Anomalous alien device - Composed of an unknown alloy, "
 
 			//primary effect
 			if(A.my_effect)

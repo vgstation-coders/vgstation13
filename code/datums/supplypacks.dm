@@ -562,8 +562,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 
 /datum/supply_packs/plasmaman_supply
 	name = "Plasmaman supplies"
-	contains = list(/obj/item/clothing/suit/space/plasmaman/assistant,
-					/obj/item/clothing/head/helmet/space/plasmaman/assistant,
+	contains = list(/obj/item/clothing/suit/space/plasmaman,
+					/obj/item/clothing/head/helmet/space/plasmaman,
 					/obj/item/weapon/tank/plasma/plasmaman,
 					/obj/item/clothing/mask/breath)
 	cost = 100
