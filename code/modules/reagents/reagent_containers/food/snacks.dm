@@ -4312,7 +4312,6 @@
 	reagents.add_reagent(NOTHING, 20)
 	bitesize = 10
 	available_snacks = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable)
-	available_snacks = shuffle(available_snacks)
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/nofruitpie/verb/pick_leaf()
 	set name = "Pick no-fruit pie leaf"
