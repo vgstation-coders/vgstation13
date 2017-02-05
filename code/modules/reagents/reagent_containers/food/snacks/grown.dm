@@ -5,7 +5,7 @@
 // Data from the seeds carry over to these grown foods
 // ***********************************************************
 
-var/global/list/special_fruits = list()
+var/list/special_fruits = list()
 //Grown foods
 //Subclass so we can pass on values
 /obj/item/weapon/reagent_containers/food/snacks/grown/
@@ -23,10 +23,9 @@ var/global/list/special_fruits = list()
 
 /proc/get_special_fruits(var/filter=HYDRO_PREHISTORIC|HYDRO_VOX)
 	. = list()
-	for(var/type in existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown))
-		var/obj/item/weapon/reagent_containers/food/snacks/grown/GT = type
-		if(initial(GT.hydroflags) & filter)
-			. += type
+	for(var/T in existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown))
+		if(initial(T:hydroflags) & filter)
+			. += T
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/New()
 	..()
