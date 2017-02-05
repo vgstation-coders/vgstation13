@@ -871,8 +871,6 @@
 	plantname = "nofruit"
 	var/list/available_fruits = list()
 	var/switching = 0
-	var/current_path = null
-	var/counter = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New()
 	..()
@@ -894,8 +892,6 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/attackby(obj/item/weapon/W, mob/user)
 	if(switching)
-		if(!current_path)
-			return
 		switching = 0
 		var/N = rand(1,3)
 		if(get_turf(user))
@@ -907,12 +903,13 @@
 				if(3)
 					playsound(get_turf(user), 'sound/weapons/genhit3.ogg', 50, 1)
 		user.visible_message("[user] smacks \the [src] with \the [W].","You smack \the [src] with \the [W].")
+		var/obj/item/weapon/reagent_containers/food/snacks/grown/chosen = rand(available_fruits)
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
-			var/I = new current_path(get_turf(user))
+			var/I = new chosen(get_turf(user))
 			user.put_in_hands(I)
 		else
-			new current_path(get_turf(src))
+			new chosen(get_turf(src))
 		qdel(src)
 
 
@@ -921,12 +918,8 @@
 	mouse_opacity = 2
 	spawn()
 		while(switching)
-			current_path = available_fruits[counter]
-			var/obj/item/weapon/reagent_containers/food/snacks/grown/G = current_path
+			var/obj/item/weapon/reagent_containers/food/snacks/grown/G = rand(available_fruits)
 			icon_state = initial(G.icon_state)
 			if(get_turf(src))
 				playsound(get_turf(src), 'sound/misc/click.ogg', 50, 1)
 			sleep(1)
-			if(counter == available_fruits.len)
-				counter = 0
-			counter++
