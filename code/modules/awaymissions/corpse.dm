@@ -71,6 +71,9 @@
 
 	M.iscorpse = 1
 
+	M.pixel_x = src.pixel_x
+	M.pixel_y = src.pixel_y
+
 	if(generate_random_appearance)
 		M.dna.ResetSE()
 		M.dna.ResetUI()
@@ -199,6 +202,7 @@
 				W.access = list()
 		if(corpseidjob)
 			W.assignment = corpseidjob
+			W.name = "[W.name] ([W.assignment])"
 		W.registered_name = M.real_name
 		M.equip_to_slot_or_del(W, slot_wear_id)
 
@@ -329,6 +333,23 @@
 	corpseback = /obj/item/weapon/storage/backpack
 	corpseshoes = /obj/item/clothing/shoes/white
 	corpseid = 0
+
+/obj/effect/landmark/corpse/roboticist
+	name = "Roboticist"
+	corpseradio = /obj/item/device/radio/headset/headset_rob
+	corpseuniform = /obj/item/clothing/under/rank/roboticist
+	corpsesuit = /obj/item/clothing/suit/storage/labcoat/science
+	corpseshoes = /obj/item/clothing/shoes/white
+	corpseid = 1
+	corpseidjob = "Roboticist"
+	corpseidaccess = "Roboticist"
+
+/obj/effect/landmark/corpse/roboticist/spessmart
+	corpseidjob = "Spessmart Roboticist"
+	generate_random_mob_name = 1
+	generate_random_appearance = 1
+	brute_dmg = 100
+	toxin_dmg = 6
 
 /obj/effect/landmark/corpse/miner
 	corpseradio = /obj/item/device/radio/headset/headset_mining

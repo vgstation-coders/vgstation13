@@ -282,6 +282,10 @@ var/global/list/damage_icon_parts = list()
 	if(update_icons)
 		update_icons()
 
+	if(body_alphas.len)
+		var/lowest_alpha = get_lowest_body_alpha()
+		stand_icon -= rgb(0,0,0,lowest_alpha)
+
 	//tail
 	update_tail_showing(0)
 
@@ -329,6 +333,10 @@ var/global/list/damage_icon_parts = list()
 			face_standing.Blend(hair_s, ICON_OVERLAY)
 		else
 			warning("Invalid h_style for [species.name]: [h_style]")
+
+	if(body_alphas.len)
+		var/lowest_alpha = get_lowest_body_alpha()
+		face_standing -= rgb(0,0,0,lowest_alpha)
 
 	//overlays_standing[HAIR_LAYER]	= image(face_standing)
 	var/image/I = image(face_standing)
@@ -494,7 +502,7 @@ var/global/list/damage_icon_parts = list()
 /mob/living/carbon/human/update_inv_w_uniform(var/update_icons=1)
 
 	overlays -= obj_overlays[UNIFORM_LAYER]
-	if(w_uniform && istype(w_uniform, /obj/item/clothing/under) && !check_hidden_body_flags(HIDEJUMPSUIT))
+	if(w_uniform && istype(w_uniform, /obj/item/clothing/under) && !check_hidden_body_flags(HIDEJUMPSUIT) && w_uniform.is_visible())
 		w_uniform.screen_loc = ui_iclothing
 		var/obj/Overlays/O = obj_overlays[UNIFORM_LAYER]
 		O.overlays.len = 0
@@ -587,7 +595,7 @@ var/global/list/damage_icon_parts = list()
 	var/obj/Overlays/O = obj_overlays[GLOVES_LAYER]
 	O.overlays.len = 0
 	O.color = null
-	if(gloves && !check_hidden_body_flags(HIDEGLOVES))
+	if(gloves && !check_hidden_body_flags(HIDEGLOVES) && gloves.is_visible())
 
 
 		var/t_state = gloves.item_state
@@ -644,7 +652,7 @@ var/global/list/damage_icon_parts = list()
 /mob/living/carbon/human/update_inv_glasses(var/update_icons=1)
 	overlays -= obj_overlays[GLASSES_LAYER]
 	overlays -= obj_overlays[GLASSES_OVER_HAIR_LAYER]
-	if(glasses && !check_hidden_head_flags(HIDEEYES))
+	if(glasses && !check_hidden_head_flags(HIDEEYES) && glasses.is_visible())
 		var/image/standing = image("icon" = ((glasses.icon_override) ? glasses.icon_override : 'icons/mob/eyes.dmi'), "icon_state" = "[glasses.icon_state]")
 
 		var/obj/item/I = glasses
@@ -692,7 +700,7 @@ var/global/list/damage_icon_parts = list()
 /mob/living/carbon/human/update_inv_ears(var/update_icons=1)
 
 	overlays -= obj_overlays[EARS_LAYER]
-	if(ears && !check_hidden_head_flags(HIDEEARS))
+	if(ears && !check_hidden_head_flags(HIDEEARS) && ears.is_visible())
 		var/image/standing = image("icon" = ((ears.icon_override) ? ears.icon_override : 'icons/mob/ears.dmi'), "icon_state" = "[ears.icon_state]")
 
 		var/obj/item/I = ears
@@ -725,7 +733,7 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/update_inv_shoes(var/update_icons=1)
 	overlays -= obj_overlays[SHOES_LAYER]
-	if(shoes && !check_hidden_body_flags(HIDESHOES))
+	if(shoes && !check_hidden_body_flags(HIDESHOES) && shoes.is_visible())
 		var/obj/Overlays/O = obj_overlays[SHOES_LAYER]
 		O.icon = ((shoes.icon_override) ? shoes.icon_override : 'icons/mob/feet.dmi')
 		O.icon_state = shoes.icon_state
@@ -787,7 +795,7 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/update_inv_head(var/update_icons=1)
 	overlays -= obj_overlays[HEAD_LAYER]
-	if(head)
+	if(head && head.is_visible())
 		var/obj/Overlays/O = obj_overlays[HEAD_LAYER]
 		O.overlays.len = 0
 		head.screen_loc = ui_head		//TODO
@@ -834,7 +842,7 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/update_inv_belt(var/update_icons=1)
 	overlays -= obj_overlays[BELT_LAYER]
-	if(belt)
+	if(belt && belt.is_visible())
 		belt.screen_loc = ui_belt	//TODO
 		var/t_state = belt.item_state
 		if(!t_state)
@@ -871,7 +879,7 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/update_inv_wear_suit(var/update_icons=1)
 	overlays -= obj_overlays[SUIT_LAYER]
-	if( wear_suit && istype(wear_suit, /obj/item/clothing/suit) )	//TODO check this
+	if( wear_suit && istype(wear_suit, /obj/item/clothing/suit) && wear_suit.is_visible())	//TODO check this
 		wear_suit.screen_loc = ui_oclothing	//TODO
 		var/obj/Overlays/O = obj_overlays[SUIT_LAYER]
 		O.overlays.len = 0
@@ -936,7 +944,7 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/update_inv_wear_mask(var/update_icons=1)
 	overlays -= obj_overlays[FACEMASK_LAYER]
-	if( wear_mask && !check_hidden_head_flags(HIDEMASK))
+	if( wear_mask && !check_hidden_head_flags(HIDEMASK) && wear_mask.is_visible())
 		var/obj/Overlays/O = obj_overlays[FACEMASK_LAYER]
 		O.overlays.len = 0
 		wear_mask.screen_loc = ui_mask	//TODO
@@ -979,7 +987,7 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/update_inv_back(var/update_icons=1)
 	overlays -= obj_overlays[BACK_LAYER]
-	if(back)
+	if(back && back.is_visible())
 		back.screen_loc = ui_back	//TODO
 		var/image/standing	= image("icon" = ((back.icon_override) ? back.icon_override : 'icons/mob/back.dmi'), "icon_state" = "[back.icon_state]")
 
@@ -1021,7 +1029,7 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/update_inv_handcuffed(var/update_icons=1)
 	overlays -= obj_overlays[HANDCUFF_LAYER]
-	if(handcuffed)
+	if(handcuffed && handcuffed.is_visible())
 		drop_hands()
 		stop_pulling()	//TODO: should be handled elsewhere
 		var/obj/Overlays/O = obj_overlays[HANDCUFF_LAYER]
@@ -1034,7 +1042,7 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/update_inv_legcuffed(var/update_icons=1)
 	overlays -= obj_overlays[LEGCUFF_LAYER]
-	if(legcuffed)
+	if(legcuffed && legcuffed.is_visible())
 		var/obj/Overlays/O = obj_overlays[LEGCUFF_LAYER]
 		O.icon = 'icons/mob/mob.dmi'
 		O.icon_state = "legcuff1"
@@ -1063,7 +1071,7 @@ var/global/list/damage_icon_parts = list()
 
 	var/obj/item/I = get_held_item_by_index(index)
 
-	if(I)
+	if(I && I.is_visible())
 		var/t_state = I.item_state
 		var/t_inhand_state = I.inhand_states[get_direction_by_index(index)]
 		var/icon/check_dimensions = new(t_inhand_state)
@@ -1157,7 +1165,7 @@ var/global/list/damage_icon_parts = list()
 
 //lower cost way of updating the necessary human icons on equip and unequip
 /mob/living/carbon/human/proc/update_hidden_item_icons(var/obj/item/W)
-	if(!W)
+	if(!W || gcDestroyed)
 		return
 
 	if(is_slot_hidden(W.body_parts_covered,HIDEHEADHAIR) || is_slot_hidden(W.body_parts_covered,HIDEBEARDHAIR))

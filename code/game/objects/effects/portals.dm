@@ -47,6 +47,14 @@
 /obj/effect/portal/New(turf/loc,var/lifespan=300)
 	..()
 	playsound(loc,'sound/effects/portal_open.ogg',60,1)
+
+	var/area/A = get_area(src)
+	if(A.flags & NO_PORTALS)
+		visible_message("<span class='notice'>\The [src] dissipates into thin air.</span>")
+		target = null
+		qdel(src)
+		return
+
 	spawn(lifespan)
 		qdel(src)
 

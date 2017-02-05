@@ -26,6 +26,12 @@
 	qdel(src)
 
 /obj/item/bluespace_crystal/proc/blink_mob(var/mob/living/L)
+	var/area/A = get_area(src)
+
+	if(A.flags & NO_TELEPORT)
+		to_chat(L, "<span class='notice'>You feel strange.</span>")
+		return
+
 	do_teleport(L, get_turf(L), blink_range, asoundin = 'sound/effects/phasein.ogg')
 
 /obj/item/bluespace_crystal/throw_impact(atom/hit_atom)

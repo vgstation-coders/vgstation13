@@ -200,8 +200,7 @@ var/list/admin_verbs_rejuv = list(
 	/client/proc/respawn_character
 	)
 var/list/admin_verbs_polling = list(
-	/client/proc/create_poll,
-	/client/proc/remove_broken_polls
+	/client/proc/create_poll
 	)
 //verbs which can be hidden - needs work
 var/list/admin_verbs_hideable = list(
@@ -363,8 +362,7 @@ var/list/admin_verbs_mod = list(
 		/client/proc/splash,
 		/client/proc/cmd_admin_areatest,
 		/client/proc/readmin,
-		/client/proc/nanomapgen_DumpImage,
-		/client/proc/nanomapgen_DumpImageAll,
+		/proc/generateMiniMaps,
 		/client/proc/maprender
 		)
 

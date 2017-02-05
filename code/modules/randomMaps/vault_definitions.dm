@@ -25,7 +25,7 @@ var/list/existing_vaults = list()
 			if(new_turf.type != zlevel_base_turf_type) //And vault's base turf differs from zlevel's base turf
 				new_turf.ChangeTurf(zlevel_base_turf_type)
 
-		new_turf.flags |= NO_MINIMAP //Makes the spawned turfs invisible on minimaps
+		new_turf.turf_flags |= NO_MINIMAP //Makes the spawned turfs invisible on minimaps
 
 //How to create a new vault:
 //1) create a map in maps/randomVaults/
@@ -123,3 +123,12 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/research_facility
 	file_path = "maps/randomvaults/research_facility.dmm"
+
+/datum/map_element/vault/supermarket
+	file_path = "maps/randomvaults/spessmart.dmm"
+
+/datum/map_element/vault/supermarket/initialize(list/objects)
+	..()
+
+	var/area/vault/supermarket/shop/S = locate(/area/vault/supermarket/shop)
+	S.initialize()
