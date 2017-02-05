@@ -292,6 +292,7 @@ emp_act
 	if(!istype(T) || T.amount == 0)
 		return
 
+	var/datum/organ/external/head/head = get_organ(LIMB_HEAD)
 	if(!head || head.status & ORGAN_DESTROYED) //if they don't have a head then there's no teeth
 		return
 
