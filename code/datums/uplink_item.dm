@@ -405,6 +405,12 @@ var/list/uplink_items = list()
 	desc = "The esword is an edged weapon with a blade of pure energy. The sword is small enough to be pocketed when inactive. Activating it produces a loud, distinctive noise."
 	item = /obj/item/weapon/melee/energy/sword
 	cost = 8
+	
+/datum/uplink_item/dangerous/machete
+	name = "High-Frequency Machete"
+	desc = "A broad blade used either as an implement or in combat. When inactive can be used as an powerful throwing weapon and when activated packs damage is comparable to an Energy Sword."
+	item = /obj/item/weapon/melee/energy/hfmachete
+	cost = 8
 
 /datum/uplink_item/dangerous/emp
 	name = "5 EMP Grenades"
