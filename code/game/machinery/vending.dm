@@ -1645,7 +1645,6 @@ var/global/num_vending_terminals = 1
 		)
 	contraband = list(
 		/obj/item/seeds/eggyseed = 2,
-		/obj/item/seeds/nofruitseed = 2,
 		/obj/item/seeds/glowshroom = 2
 		)
 	premium = list(

@@ -173,9 +173,7 @@
 	spawntypes = list(
 		/obj/item/weapon/gun/energy/floragun=1,
 		//obj/item/seeds/novaflowerseed=2,
-		/obj/item/seeds/bluespacetomatoseed=2,
-		// /vg/:
-		/obj/item/seeds/nofruitseed=5
+		/obj/item/seeds/bluespacetomatoseed=2
 	)
 	fluffitems = list(
 		// /obj/structure/flora/kirbyplants=1,
