@@ -298,6 +298,7 @@
 
 	for(var/mob/living/l in range(src, round((power / 100) ** 0.25)))
 		var/rads = (power / 10) * sqrt(1/(max(get_dist(l, src), 1)))
+		rads = (rads - (rads*l.getarmor(null, "rad"))) // apply radiation blocking from users suit.
 		l.apply_effect(rads, IRRADIATE)
 
 	power -= (power/500)**3
