@@ -519,7 +519,7 @@
 		radiation = round(((src.energy-150)/50)*5,1)
 		radiationmin = round((radiation/5),1)
 	for(var/mob/living/M in view(radrange, src.loc))
-		radiation = (radiation - (rand(radiationmin, radiation)*M.getarmor(null, "rad")))
+		radiation = rand(radiationmin, radiation)
 		M.apply_effect(radiation, IRRADIATE)
 	return
 
