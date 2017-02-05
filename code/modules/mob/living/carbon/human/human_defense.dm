@@ -292,6 +292,9 @@ emp_act
 	if(!istype(T) || T.amount == 0)
 		return
 
+	if(!head || head.status & ORGAN_DESTROYED) //if they don't have a head then there's no teeth
+		return
+
 	var/amount = rand(1,3)
 	if(user)
 		if(M_HULK in L.mutations) //just like the mountain
