@@ -23,10 +23,9 @@ var/global/list/special_fruits = list()
 
 /proc/get_special_fruits(var/filter=HYDRO_PREHISTORIC|HYDRO_VOX)
 	. = list()
-	for(var/type in existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown))
-		var/obj/item/weapon/reagent_containers/food/snacks/grown/GT=type
-		if(initial(GT.hydroflags) & filter)
-			. += type
+	for(var/T in existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown))
+		if(initial(T:hydroflags) & filter)
+			. += T
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/New()
 	..()
@@ -891,6 +890,8 @@ var/global/list/available_nofruit_fruits=null
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New()
 	..()
+	//for(var/T in get_special_fruits())
+	//	testing("EXCLUDED GROWN [initial(T:icon_state)]")
 	if(!available_nofruit_fruits)
 		available_nofruit_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown)-get_special_fruits()
 
