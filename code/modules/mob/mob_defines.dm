@@ -281,6 +281,9 @@
 	var/list/alphas = list()
 	var/spell_channeling
 
+	var/see_in_dark_override = 0	//for general guaranteed modification of these variables
+	var/see_invisible_override = 0
+
 /mob/resetVariables()
 	..("callOnFace", "pinned", "embedded", "abilities", "grabbed_by", "requests", "mapobjs", "mutations", "spell_list", "viruses", "resistances", "radar_blips", "active_genes", "attack_log", "speak_emote", args)
 	callOnFace = list()
