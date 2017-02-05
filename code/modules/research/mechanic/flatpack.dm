@@ -147,6 +147,11 @@
 		if((stacked.len + stacking.stacked.len + 2) >= MAX_FLATPACK_STACKS) //how many flatpacks we can in a stack (including the bases)
 			to_chat(user, "You can't stack flatpacks that high.")
 			return
+		if(user.incapacitated() || !user.can_MouseDrop()) //make sure they can interact with it and it's adjacent
+			return
+		if(!ishuman(user) && !isrobot(user)) //check mob type
+			return
+
 		user.visible_message("[user] adds [stacking.stacked.len + 1] flatpack\s to the stack.",
 								"You add [stacking.stacked.len + 1] flatpack\s to the stack.")
 		add_stack(stacking)
